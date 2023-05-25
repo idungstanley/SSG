@@ -1,4 +1,4 @@
-import { ITaskFullList } from '../../../features/task/interface.tasks';
+import { ITaskFullList } from '../features/task/interface.tasks';
 
 export const generateLists = (tasks: ITaskFullList[]): Record<string, ITaskFullList[]> =>
   tasks.reduce((lists: Record<string, ITaskFullList[]>, task) => {

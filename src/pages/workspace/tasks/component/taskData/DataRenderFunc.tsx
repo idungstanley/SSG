@@ -6,7 +6,7 @@ import TaskPriority from './priority/index';
 import DateForTask from './taskDate/index';
 import TaskTag from './taskTag/index';
 import DropdownFieldWrapper from './dropdown/DropdownFieldWrapper';
-import { TaskValue } from '../../../../../components/Views/types/table';
+import { TaskValue } from '../../../../../features/task/interface.tasks';
 
 export interface tagItem {
   id: string;

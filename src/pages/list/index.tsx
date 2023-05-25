@@ -25,7 +25,7 @@ export function ListPage() {
 
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // set active entity name
+  // get list details to set active entity
   const { data: list } = UseGetListDetails({ activeItemId: listId, activeItemType: 'list' });
   const listName = list?.data.list.name ?? '';
 
@@ -65,7 +65,7 @@ export function ListPage() {
     };
   }, [hasNextPage]);
 
-  // update cords for modal
+  // update cords for modal on scroll
   const onScroll = useScroll(() => dispatch(setUpdateCords()));
 
   return (

@@ -2,46 +2,44 @@ import { useEffect, useMemo, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import Page from '../../components/Page';
-import { UseGetHubDetails } from '../../features/hubs/hubService';
 import { UseGetFullTaskList } from '../../features/task/taskService';
-import { setActiveEntityName, setActiveItem } from '../../features/workspace/workspaceSlice';
-import ActiveHub from '../../layout/components/MainLayout/extendedNavigation/ActiveParents/ActiveHub';
+import { UseGetWalletDetails } from '../../features/wallet/walletService';
+import { setActiveItem, setCurrentWalletName } from '../../features/workspace/workspaceSlice';
 import AdditionalHeader from '../../layout/components/MainLayout/Header/AdditionHeader';
-import PilotSection, { pilotConfig } from '../workspace/hubs/components/PilotSection';
+import { generateLists } from '../../utils';
 import ListNav from '../workspace/lists/components/renderlist/ListNav';
+import PilotSection, { pilotConfig } from '../workspace/wallet/components/PilotSection';
 import hubIcon from '../../assets/branding/hub.png';
+import ActiveHub from '../../layout/components/MainLayout/extendedNavigation/ActiveParents/ActiveHub';
 import FilterByAssigneesSliderOver from '../workspace/lists/components/renderlist/filters/FilterByAssigneesSliderOver';
-import { List } from '../../components/Views/ui/List/List';
+import ListFilter from '../workspace/lists/components/renderlist/listDetails/ListFilter';
 import { useScroll } from '../../hooks/useScroll';
 import { setUpdateCords } from '../../features/task/taskSlice';
-import { generateLists } from '../../utils';
+import { List } from '../../components/Views/ui/List/List';
 
-export default function HubPage() {
+export function WalletPage() {
   const dispatch = useAppDispatch();
-  const { hubId } = useParams();
-  const { activeEntityName } = useAppSelector((state) => state.workspace);
   const { filterTaskByAssigneeIds } = useAppSelector((state) => state.task);
+  const { walletId } = useParams();
   const containerRef = useRef<HTMLDivElement>(null);
-  const { data: hub } = UseGetHubDetails({ activeItemId: hubId, activeItemType: 'hub' });
 
-  // set entity name
+  // get wallet details to set active entity
+  const { data: wallet } = UseGetWalletDetails({ activeItemId: walletId, activeItemType: 'wallet' });
+  const walletName = wallet?.data.wallet.name ?? '';
+
   useEffect(() => {
-    if (hub) {
-      const hubName = hub.data.hub.name;
-      dispatch(setActiveItem({ activeItemId: hubId, activeItemType: 'hub', activeItemName: hubName }));
-      dispatch(setActiveEntityName(hubName));
+    if (wallet) {
+      dispatch(setActiveItem({ activeItemId: walletId, activeItemType: 'wallet', activeItemName: walletName }));
+      dispatch(setCurrentWalletName(walletName));
     }
-  }, [hub]);
+  }, [wallet]);
 
+  // get tasks
   const { data, hasNextPage, fetchNextPage } = UseGetFullTaskList({
-    itemId: hubId,
-    itemType: 'hub',
+    itemId: walletId,
+    itemType: 'wallet',
     assigneeUserId: filterTaskByAssigneeIds
   });
-
-  const tasks = useMemo(() => (data ? data.pages.flatMap((page) => page.data.tasks) : []), [data]);
-
-  const lists = useMemo(() => generateLists(tasks), [tasks]);
 
   // infinite scroll
   useEffect(() => {
@@ -66,6 +64,11 @@ export default function HubPage() {
     };
   }, [hasNextPage]);
 
+  const tasks = useMemo(() => (data ? data.pages.flatMap((page) => page.data.tasks) : []), [data]);
+
+  const lists = useMemo(() => generateLists(tasks), [tasks]);
+
+  // update cords for modal on scroll
   const onScroll = useScroll(() => dispatch(setUpdateCords()));
 
   return (
@@ -74,19 +77,7 @@ export default function HubPage() {
       <Page
         pilotConfig={pilotConfig}
         additionalHeader={<AdditionalHeader />}
-        header={
-          <section id="nav" className="capitalize" style={{ height: '50px' }}>
-            <ListNav
-              navName={activeEntityName}
-              viewsList="List"
-              viewsList1="Table"
-              viewsList2="Board"
-              viewsList3="Calender"
-              viewsList4="Map"
-              changeViews="View"
-            />
-          </section>
-        }
+        header={<ListNav navName={walletName} viewsList="List" viewsList2="Board" changeViews="View" />}
         extendedBar={{
           name: 'TASKS',
           children: <ActiveHub />,
@@ -94,17 +85,25 @@ export default function HubPage() {
         }}
         additional={<FilterByAssigneesSliderOver data={tasks} />}
       >
-        <section
-          onScroll={onScroll}
-          ref={containerRef}
-          style={{ minHeight: '0', maxHeight: '90vh' }}
-          className="w-full h-full p-4 space-y-10 overflow-y-scroll"
-        >
-          {/* lists */}
-          {Object.keys(lists).map((listId) => (
-            <List key={listId} tasks={lists[listId]} />
-          ))}
-        </section>
+        <>
+          {/* filters */}
+          <div className="w-full">
+            <ListFilter />
+          </div>
+
+          {/* main content */}
+          <section
+            onScroll={onScroll}
+            ref={containerRef}
+            style={{ minHeight: '0', maxHeight: '85vh' }}
+            className="w-full h-full p-4 space-y-10 overflow-y-scroll"
+          >
+            {/* lists */}
+            {Object.keys(lists).map((listId) => (
+              <List key={listId} tasks={lists[listId]} />
+            ))}
+          </section>
+        </>
       </Page>
     </>
   );

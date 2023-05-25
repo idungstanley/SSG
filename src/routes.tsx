@@ -67,6 +67,7 @@ import { WallchartPage } from './pages/calendar/pages/WallchartPage';
 import { useAppSelector } from './app/hooks';
 import HubPage from './pages/hub';
 import { ListPage } from './pages/list';
+import { WalletPage } from './pages/wallet';
 
 const inbox = [
   {
@@ -161,6 +162,8 @@ export const routes = (user: IUser | null) => {
         { path: 'tasks/newh/:hubId/t/:taskId', element: <HubPage /> },
         { path: 'tasks/newl/:listId', element: <ListPage /> },
         { path: 'tasks/newl/:listId/t/:taskId', element: <ListPage /> },
+        { path: 'tasks/neww/:walletId', element: <WalletPage /> },
+        { path: 'tasks/neww/:walletId/t/:taskId', element: <WalletPage /> },
         // =============================
         { path: 'tasks/h/:hubId', element: <RenderHubs /> },
         { path: 'tasks/h/:hubId/t/:taskId', element: <RenderHubs /> },
