@@ -66,6 +66,7 @@ import SubscribersSettings from './pages/settings/NotificationSettings/Subscribe
 import { WallchartPage } from './pages/calendar/pages/WallchartPage';
 import { useAppSelector } from './app/hooks';
 import HubPage from './pages/hub';
+import { ListPage } from './pages/list';
 
 const inbox = [
   {
@@ -155,8 +156,12 @@ export const routes = (user: IUser | null) => {
         { path: 'favorites', element: <Favorites /> },
         { path: 'goals', element: <Goals /> },
         { path: 'docs', element: <Docs /> },
+        // new view here ====================
         { path: 'tasks/newh/:hubId', element: <HubPage /> },
         { path: 'tasks/newh/:hubId/t/:taskId', element: <HubPage /> },
+        { path: 'tasks/newl/:listId', element: <ListPage /> },
+        { path: 'tasks/newl/:listId/t/:taskId', element: <ListPage /> },
+        // =============================
         { path: 'tasks/h/:hubId', element: <RenderHubs /> },
         { path: 'tasks/h/:hubId/t/:taskId', element: <RenderHubs /> },
         { path: 'tasks/w/:walletId', element: <RenderWallets /> },
