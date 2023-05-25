@@ -63,6 +63,7 @@ export function Table({ heads, data }: TableProps) {
     document.body.style.userSelect = '';
     setActiveIndex(null);
     removeListeners();
+    dispatch(setUpdateCords());
   };
 
   useEffect(() => {

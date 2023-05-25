@@ -13,6 +13,8 @@ import { generateLists } from './lib';
 import hubIcon from '../../assets/branding/hub.png';
 import FilterByAssigneesSliderOver from '../workspace/lists/components/renderlist/filters/FilterByAssigneesSliderOver';
 import { List } from './ui/List/List';
+import { useScroll } from '../../hooks/useScroll';
+import { setUpdateCords } from '../../features/task/taskSlice';
 
 export default function HubPage() {
   const dispatch = useAppDispatch();
@@ -63,6 +65,8 @@ export default function HubPage() {
     }
   }
 
+  const onScroll = useScroll(() => dispatch(setUpdateCords()));
+
   return (
     <>
       <PilotSection />
@@ -90,6 +94,7 @@ export default function HubPage() {
         additional={<FilterByAssigneesSliderOver data={tasks} />}
       >
         <section
+          onScroll={onScroll}
           ref={containerRef}
           style={{ minHeight: '0', maxHeight: '90vh' }}
           className="w-full h-full p-4 space-y-10 overflow-y-scroll"
