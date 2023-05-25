@@ -1,4 +1,4 @@
-import { Column } from '../../../types/hub';
+import { Column } from '../../../types/table';
 
 interface HeadProps {
   columns: Column[];

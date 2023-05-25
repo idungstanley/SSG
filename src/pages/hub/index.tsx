@@ -12,7 +12,7 @@ import ListNav from '../workspace/lists/components/renderlist/ListNav';
 import { generateLists } from './lib';
 import hubIcon from '../../assets/branding/hub.png';
 import FilterByAssigneesSliderOver from '../workspace/lists/components/renderlist/filters/FilterByAssigneesSliderOver';
-import { List } from './ui/List/List';
+import { List } from '../../components/Views/ui/List/List';
 import { useScroll } from '../../hooks/useScroll';
 import { setUpdateCords } from '../../features/task/taskSlice';
 

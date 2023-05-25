@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { useList } from '../../../../features/list/listService';
+import { Task } from '../../../../features/task/interface.tasks';
 import { generateColumns } from '../../lib/tableHeadUtils';
-import { Task } from '../../types/hub';
 import { Table } from '../Table/Table';
 
 interface ListProps {

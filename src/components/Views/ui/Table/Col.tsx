@@ -3,14 +3,14 @@ import { MdDragIndicator } from 'react-icons/md';
 import { useParams } from 'react-router-dom';
 import { ImyTaskData } from '../../../../features/task/taskSlice';
 import { cl } from '../../../../utils';
-import Assignee from '../../../workspace/tasks/assignTask/Assignee';
-import DropdownFieldWrapper from '../../../workspace/tasks/component/taskData/dropdown/DropdownFieldWrapper';
-import TaskPriority from '../../../workspace/tasks/component/taskData/priority';
-import TaskStatus from '../../../workspace/tasks/component/taskData/status';
-import DateForTask from '../../../workspace/tasks/component/taskData/taskDate';
-import TaskTag from '../../../workspace/tasks/component/taskData/taskTag';
-import { listColumnProps } from '../../../workspace/tasks/component/views/ListColumns';
-import { Task, TaskValue } from '../../types/hub';
+import Assignee from '../../../../pages/workspace/tasks/assignTask/Assignee';
+import DropdownFieldWrapper from '../../../../pages/workspace/tasks/component/taskData/dropdown/DropdownFieldWrapper';
+import TaskPriority from '../../../../pages/workspace/tasks/component/taskData/priority';
+import TaskStatus from '../../../../pages/workspace/tasks/component/taskData/status';
+import DateForTask from '../../../../pages/workspace/tasks/component/taskData/taskDate';
+import TaskTag from '../../../../pages/workspace/tasks/component/taskData/taskTag';
+import { listColumnProps } from '../../../../pages/workspace/tasks/component/views/ListColumns';
+import { Task, TaskValue } from '../../../../features/task/interface.tasks';
 
 interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   value: TaskValue;

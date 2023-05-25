@@ -16,7 +16,7 @@ import ListFilter from '../workspace/lists/components/renderlist/listDetails/Lis
 import { useScroll } from '../../hooks/useScroll';
 import { setUpdateCords } from '../../features/task/taskSlice';
 import TaskQuickAction from '../workspace/tasks/component/taskQuickActions/TaskQuickAction';
-import { List } from '../hub/ui/List/List';
+import { List } from '../../components/Views/ui/List/List';
 
 export function ListPage() {
   const dispatch = useAppDispatch();

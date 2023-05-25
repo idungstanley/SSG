@@ -174,3 +174,9 @@ export interface ITimeEntriesRes {
     };
   };
 }
+
+type ValueOf<T> = T[keyof T];
+
+export type Task = ImyTaskData | ITaskFullList;
+
+export type TaskValue = ValueOf<Task>;

@@ -1,7 +1,7 @@
 import { useRef } from 'react';
 import { IField } from '../../../features/list/list.interfaces';
-import { columnsHead, listColumnProps } from '../../workspace/tasks/component/views/ListColumns';
-import { Column } from '../types/hub';
+import { columnsHead, listColumnProps } from '../../../pages/workspace/tasks/component/views/ListColumns';
+import { Column } from '../types/table';
 
 function unique<T>(arr: T[]) {
   return [...new Set(arr)];
