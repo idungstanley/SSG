@@ -12,9 +12,11 @@ import { useAppSelector } from '../../../../app/hooks';
 export default function TeamMemberInvitesPage() {
   const dispatch = useDispatch();
 
-  const { teamMemberInvitesPaginationPage } = useAppSelector((state) => state.teamMemberInvite);
+  const { teamMemberInvitesPaginationPage, triggerGetTeammeberInvite } = useAppSelector(
+    (state) => state.teamMemberInvite
+  );
 
-  const { status, data } = useGetTeamMemberInvites(teamMemberInvitesPaginationPage);
+  const { status, data } = useGetTeamMemberInvites(teamMemberInvitesPaginationPage, triggerGetTeammeberInvite);
 
   const showInviteTeamMemberSlideOver = () => {
     dispatch(setInviteTeamMemberSlideOverVisibility(true));

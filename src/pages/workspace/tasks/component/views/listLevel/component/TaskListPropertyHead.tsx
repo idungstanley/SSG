@@ -28,11 +28,11 @@ export default function TaskListPropertyHead({ id, value, taskLength }: Property
   const [headerId, setheaderId] = useState<string>('');
   const sortAbles: string[] = ['Task', 'Start Date', 'End Date', 'Priority', 'Assignees'];
   const [querySwitch, setQuerySwitch] = useState<boolean>(false);
-  const handleSort = (header: string, id: string, order: 'asc' | 'desc') => {
+  const handleSort = (header: string, id: string | undefined, order: 'asc' | 'desc') => {
     const headerTxt = header === 'Assignees' ? 'assignee' : header === 'Task' ? 'name' : header.toLowerCase();
-    setheaderId(id);
+    setheaderId(id as string);
     if (sortArr.includes(headerTxt)) return setShowSortModal(!showSortModal);
-    dispatch(setSortArr([...sortArr, header]));
+    dispatch(setSortArr([...sortArr, header as string]));
     dispatch(setSortArray([...sortAbleArr, { dir: order, field: headerTxt }]));
     setQuerySwitch(!querySwitch);
   };
