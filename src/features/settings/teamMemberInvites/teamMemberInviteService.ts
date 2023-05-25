@@ -2,18 +2,25 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import requestNew from '../../../app/requestNew';
 import { IUser } from '../../auth/authSlice';
 import { ITeamMemberInviteRes, ITeamMemberInvitesReq } from './teamMemberInvites.interface';
+import { useAppDispatch } from '../../../app/hooks';
+import { SetTriggerGetTeammeberInvite } from './teamMemberInviteSlice';
 
 const inviteCode: string = JSON.parse(localStorage.getItem('teamMemberInviteCode') || '""') as string;
 
 // Get team member invites
-export const useGetTeamMemberInvites = (page: number) => {
+export const useGetTeamMemberInvites = (
+  page: number,
+  triggerGetTeammeberInvite: boolean,
+  name?: string,
+  dir?: string
+) => {
   const queryClient = useQueryClient();
+  const dispatch = useAppDispatch();
 
   return useQuery<ITeamMemberInvitesReq>(
     ['team_member_invites', { page }],
     async () => {
-      const url = 'settings/team-member-invites';
-
+      const url = `settings/team-member-invites?sorting[0][field]=${name}&sorting[0][dir]=${dir}`;
       return requestNew({
         url,
         method: 'GET',
@@ -23,10 +30,12 @@ export const useGetTeamMemberInvites = (page: number) => {
       });
     },
     {
+      enabled: triggerGetTeammeberInvite,
       onSuccess: (data) => {
         data.data.team_member_invites.map((teamMemberInvite) =>
           queryClient.setQueryData(['team_member_invite', teamMemberInvite.id], teamMemberInvite)
         );
+        dispatch(SetTriggerGetTeammeberInvite(true));
       }
     }
   );

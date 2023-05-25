@@ -2,9 +2,9 @@ import React from 'react';
 import { FaSortDown, FaSortUp } from 'react-icons/fa';
 
 interface ArrowUpDownProps {
-  id: string;
+  id?: string;
   value: string;
-  handleSort: (value: string, id: string, condition: 'asc' | 'desc') => void;
+  handleSort: (value: string, id: string | undefined, condition: 'asc' | 'desc') => void;
 }
 export default function RoundedArrowUpDown({ value, id, handleSort }: ArrowUpDownProps) {
   return (
