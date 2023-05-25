@@ -1,13 +1,15 @@
 import { ListColourProps } from '../../components/tasks/ListItem';
 import { ICheckListRes } from './../task/interface.tasks';
 
+export type Property = string[] | string | null;
+
 export interface IField {
   id: string;
   model: string;
   model_id: string;
   name: string;
   type: string;
-  properties: string[];
+  properties: Property;
   created_at: string;
 }
 
