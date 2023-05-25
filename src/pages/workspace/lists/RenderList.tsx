@@ -143,7 +143,6 @@ function RenderList() {
             )}
 
             {/* card */}
-
             <ul className="relative pl-6">
               <li className="overflow-x-scroll relative">
                 {listView && listId ? (

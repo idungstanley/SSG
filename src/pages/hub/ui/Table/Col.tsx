@@ -1,7 +1,6 @@
 import { TdHTMLAttributes } from 'react';
 import { MdDragIndicator } from 'react-icons/md';
 import { useParams } from 'react-router-dom';
-import { ITaskFullList } from '../../../../features/task/interface.tasks';
 import { ImyTaskData } from '../../../../features/task/taskSlice';
 import { cl } from '../../../../utils';
 import Assignee from '../../../workspace/tasks/assignTask/Assignee';
@@ -11,12 +10,12 @@ import TaskStatus from '../../../workspace/tasks/component/taskData/status';
 import DateForTask from '../../../workspace/tasks/component/taskData/taskDate';
 import TaskTag from '../../../workspace/tasks/component/taskData/taskTag';
 import { listColumnProps } from '../../../workspace/tasks/component/views/ListColumns';
-import { TaskFullListValue } from '../../types/hub';
+import { Task, TaskValue } from '../../types/hub';
 
 interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
-  value: TaskFullListValue;
+  value: TaskValue;
   field: Pick<listColumnProps, 'field'>['field'];
-  task: ITaskFullList;
+  task: Task;
   fieldId: string;
   sticky?: boolean;
 }
@@ -66,7 +65,7 @@ export function Col({ value, field, fieldId, sticky, task, ...props }: ColProps)
 
 // temporary component
 interface TaskNameProps {
-  task: ITaskFullList;
+  task: Task;
   bg: string;
 }
 

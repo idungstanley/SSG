@@ -1,14 +1,13 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { setShowPilotSideOver } from '../../../../features/general/slideOver/slideOverSlice';
-import { ITaskFullList } from '../../../../features/task/interface.tasks';
 import { setTaskIdForPilot } from '../../../../features/task/taskSlice';
 import { setActiveItem } from '../../../../features/workspace/workspaceSlice';
-import { Column } from '../../types/hub';
+import { Column, Task } from '../../types/hub';
 import { Col } from './Col';
 
 interface RowProps {
-  task: ITaskFullList;
+  task: Task;
   columns: Column[];
 }
 

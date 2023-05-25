@@ -1,3 +1,5 @@
+import { ITaskFullList } from '../../../features/task/interface.tasks';
+import { ImyTaskData } from '../../../features/task/taskSlice';
 import { listColumnProps } from '../../workspace/tasks/component/views/ListColumns';
 
 export interface Column extends listColumnProps {
@@ -6,4 +8,6 @@ export interface Column extends listColumnProps {
 
 type ValueOf<T> = T[keyof T];
 
-export type TaskFullListValue = ValueOf<ITaskFullList>;
+export type Task = ImyTaskData | ITaskFullList;
+
+export type TaskValue = ValueOf<Task>;

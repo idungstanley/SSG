@@ -1,18 +1,18 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useAppDispatch } from '../../../../app/hooks';
-import { ITaskFullList } from '../../../../features/task/interface.tasks';
 import { setUpdateCords } from '../../../../features/task/taskSlice';
 import { useScroll } from '../../../../hooks/useScroll';
 import { listColumnProps } from '../../../workspace/tasks/component/views/ListColumns';
 import { MAX_COL_WIDTH, MIN_COL_WIDTH } from '../../config';
 import { generateGrid } from '../../lib';
 import { createHeaders } from '../../lib/tableHeadUtils';
+import { Task } from '../../types/hub';
 import { Head } from './Head/Head';
 import { Row } from './Row';
 
 interface TableProps {
   heads: listColumnProps[];
-  data: ITaskFullList[];
+  data: Task[];
 }
 
 export function Table({ heads, data }: TableProps) {

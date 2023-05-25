@@ -1,4 +1,4 @@
-import { ICustomField, ImyTaskData } from '../../../../../features/task/taskSlice';
+import { ImyTaskData } from '../../../../../features/task/taskSlice';
 import Assignee from '../../assignTask/Assignee';
 import TaskStatus from './status/index';
 import TaskName from './taskName';
@@ -6,6 +6,7 @@ import TaskPriority from './priority/index';
 import DateForTask from './taskDate/index';
 import TaskTag from './taskTag/index';
 import DropdownFieldWrapper from './dropdown/DropdownFieldWrapper';
+import { TaskValue } from '../../../../hub/types/hub';
 
 export interface tagItem {
   id: string;
@@ -14,14 +15,7 @@ export interface tagItem {
 }
 
 export interface renderDataProps {
-  taskColField?:
-    | string
-    | number
-    | undefined
-    | tagItem[]
-    | null
-    | ICustomField[]
-    | Array<{ id: string; initials: string; colour: string }>;
+  taskColField?: TaskValue;
   col?: { field: string; id: string };
   task?: ImyTaskData | undefined;
   getSubTaskId?: string | null | undefined;
