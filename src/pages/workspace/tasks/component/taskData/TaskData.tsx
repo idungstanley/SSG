@@ -67,8 +67,8 @@ export default function TaskData({ task, listId }: TaskDataProps) {
   return (
     <div className={cl('w-full flex border-t border-b', taskBg)}>
       {/* sticky task name */}
-      <div
-        className="absolute group pointer-events-none left-6 -right-96 xl:right-0 z-50"
+      {/* <div
+        className="absolute group pointer-events-none left-6 right-0 z-50"
         style={{ zIndex: '60', overflow: 'visible !important' }}
       >
         {[...columnsHead, ...customFields]
@@ -84,7 +84,7 @@ export default function TaskData({ task, listId }: TaskDataProps) {
               />
             </div>
           ))}
-      </div>
+      </div> */}
 
       <div className="relative flex-grow">
         {/* task name (hidden, because we show sticky name) */}
@@ -98,7 +98,7 @@ export default function TaskData({ task, listId }: TaskDataProps) {
                   <div
                     key={col.id}
                     // style={{ minWidth: 240 }}
-                    className="text-xs font-medium capitalize opacity-0 cursor-pointer group"
+                    className="text-xs font-medium capitalize sticky left-0 cursor-pointer group"
                   >
                     <DataRenderFunc
                       taskColField={task?.[col.field]}

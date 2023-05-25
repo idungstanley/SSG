@@ -17,12 +17,15 @@ import WalletModal from '../wallet/components/modals/WalletModal';
 import ActiveTress from './components/ActiveTree/ActiveTress';
 import { BiSearch } from 'react-icons/bi';
 import { setIsSearchActive } from '../../../features/search/searchSlice';
+import { useParams } from 'react-router-dom';
 
 function Hubs() {
   const dispatch = useDispatch();
   const { showSidebar } = useAppSelector((state) => state.account);
   // const { toggleArchive } = useAppSelector((state) => state.hub);
   const { isSearchActive } = useAppSelector((state) => state.search);
+  const { listId, hubId, walletId } = useParams();
+
   // const { data, status } = useGetHubList({
   //   query: toggleArchive
   // });
@@ -49,6 +52,7 @@ function Hubs() {
       <PlaceItem
         label="TASKS"
         id="2"
+        isActiveLayoutCondition={!(!!listId || !!hubId || !!walletId)}
         icon={<BsListCheck className="w-4 h-4" style={{ color: '#BF00FFB2' }} />}
         midContent={<BiSearch onClick={(e) => toggleSearch(e)} className="w-4 h-4" style={{ color: '#BF00FFB2' }} />}
         searchStatus={isSearchActive}

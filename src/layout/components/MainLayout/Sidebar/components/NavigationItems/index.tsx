@@ -1,5 +1,5 @@
 import { ArrowDownIcon, ArrowUpIcon, Squares2X2Icon } from '@heroicons/react/24/outline';
-import { useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import favoriteIcon from '../../../../../../assets/branding/Favourite-icon.svg';
 import groupIcon from '../../../../../../assets/branding/Group.png';
 import homeIcon from '../../../../../../assets/icons/Home.svg';
@@ -20,6 +20,7 @@ import {
   useSensors
 } from '@dnd-kit/core';
 import { arrayMove, rectSortingStrategy, SortableContext, sortableKeyboardCoordinates } from '@dnd-kit/sortable';
+import { useNavigate } from 'react-router-dom';
 
 const showLessOrMore = [
   {
@@ -32,8 +33,21 @@ const showLessOrMore = [
   }
 ];
 
-export default function NavigationItems() {
+interface NavigationProps {
+  handleHotkeyClick: (value: string, e: React.MouseEvent<SVGElement, MouseEvent>) => void;
+  activeHotkeyIds: string[];
+  activeTabId: string | null;
+  setActiveTabId: React.Dispatch<React.SetStateAction<string | null>>;
+}
+
+export default function NavigationItems({
+  handleHotkeyClick,
+  activeHotkeyIds,
+  activeTabId,
+  setActiveTabId
+}: NavigationProps) {
   const { currentWorkspaceId } = useAppSelector((state) => state.auth);
+  const navigate = useNavigate();
 
   const navigation = [
     {
@@ -101,6 +115,21 @@ export default function NavigationItems() {
     }
   ];
 
+  const hotkeys = useMemo(
+    () => navigation.filter((i) => !activeHotkeyIds.includes(i.id)),
+    [activeHotkeyIds, navigation]
+  );
+  const pinnedNav = useMemo(
+    () => navigation.filter((i) => activeHotkeyIds.includes(i.id)),
+    [activeHotkeyIds, navigation]
+  );
+  useEffect(() => {
+    const activePinnedNav = navigation.find((i) => i.id === activeTabId);
+    if (activePinnedNav !== undefined) {
+      navigate(activePinnedNav.href);
+    }
+  }, [activeTabId]);
+
   const [showMore, setShowMore] = useState(false);
   const { showSidebar } = useAppSelector((state) => state.account);
   const sensors = useSensors(
@@ -110,10 +139,6 @@ export default function NavigationItems() {
     })
   );
   const idsFromLS = JSON.parse(localStorage.getItem('navItem') || '[]') as string[];
-  // const firstItem = navigation[0];
-  // const restOfItems = navigation.slice(1).sort((a, b) => idsFromLS.indexOf(a.id) - idsFromLS.indexOf(b.id));
-  // const sortedArray = [firstItem, ...restOfItems];
-  // const [items, setItems] = useState(sortedArray);
   const [items, setItems] = useState(navigation.sort((a, b) => idsFromLS.indexOf(a.id) - idsFromLS.indexOf(b.id)));
 
   const handleDragEnd = (e: DragEndEvent) => {
@@ -143,22 +168,31 @@ export default function NavigationItems() {
       <SortableContext strategy={rectSortingStrategy} items={items}>
         <section>
           <nav className="flex flex-col mt-1 items.center">
-            {navigation.map((item) => (
-              <NavigationItem key={item.name} item={item} isVisible={item.alwaysShow || showMore} />
+            {(showSidebar ? hotkeys : navigation).map((item) => (
+              <NavigationItem
+                handleHotkeyClick={handleHotkeyClick}
+                key={item.name}
+                item={item}
+                isVisible={pinnedNav.length > 1 && showSidebar ? true : item.alwaysShow || showMore}
+                activeTabId={activeTabId}
+                setActiveTabId={setActiveTabId}
+              />
             ))}
 
             {/* show less or more button */}
-            <div
-              onClick={() => setShowMore((prev) => !prev)}
-              className={cl(
-                !showSidebar ? 'justify-center pl-5' : 'gap-2 items-center pl-6',
-                'flex cursor-pointer gap-2 items-center p-2 w-full hover:text-gray-500 hover:bg-gray-100'
-              )}
-              style={{ height: '30px' }}
-            >
-              {showLessOrMore[showMore ? 0 : 1].icon}
-              {showSidebar ? <p className="ml-3 text-xs truncate">{showLessOrMore[showMore ? 0 : 1].name}</p> : null}
-            </div>
+            {(pinnedNav.length < 2 || !showSidebar) && (
+              <div
+                onClick={() => setShowMore((prev) => !prev)}
+                className={cl(
+                  !showSidebar ? 'justify-center pl-5' : 'gap-2 items-center pl-6',
+                  'flex cursor-pointer gap-2 items-center p-2 w-full hover:text-gray-500 hover:bg-gray-100'
+                )}
+                style={{ height: '30px' }}
+              >
+                {showLessOrMore[showMore ? 0 : 1].icon}
+                {showSidebar ? <p className="ml-3 text-xs truncate">{showLessOrMore[showMore ? 0 : 1].name}</p> : null}
+              </div>
+            )}
           </nav>
         </section>
       </SortableContext>

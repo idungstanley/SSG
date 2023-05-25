@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { MdDragIndicator } from 'react-icons/md';
 import { useSortable } from '@dnd-kit/sortable';
 import { useGetNotificationCountService } from '../../../../../../../features/general/notification/notificationService';
+import { VscPinned } from 'react-icons/vsc';
 
 interface NavigationItemProps {
   item: {
@@ -17,9 +18,12 @@ interface NavigationItemProps {
     id: string;
   };
   isVisible: boolean;
+  handleHotkeyClick: (value: string, event: React.MouseEvent<SVGElement, MouseEvent>) => void;
+  activeTabId: string | null;
+  setActiveTabId: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
-export default function NavigationItem({ item, isVisible }: NavigationItemProps) {
+export default function NavigationItem({ item, isVisible, handleHotkeyClick }: NavigationItemProps) {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { showSidebar } = useAppSelector((state) => state.account);
@@ -28,9 +32,10 @@ export default function NavigationItem({ item, isVisible }: NavigationItemProps)
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id
   });
+
   const { activePlaceName } = useAppSelector((state) => state.workspace);
   useGetNotificationCountService();
-  const handleClick = (name: string | null, link: string) => {
+  const handleClick = (name: string | null, link: string, id: string | null) => {
     dispatch(setActivePlaceName(name));
     dispatch(setShowExtendedBar(true));
     if (name !== 'Favorites') {
@@ -55,10 +60,10 @@ export default function NavigationItem({ item, isVisible }: NavigationItemProps)
     <div
       className={cl(
         activePlaceName === item.name ? 'hover:bg-green-200' : 'hover:bg-gray-100',
-        !showSidebar ? 'justify-center' : 'gap-2 items-center',
+        !showSidebar ? 'justify-center' : 'gap-2 items-center justify-between',
         'relative flex cursor-pointer p-2 w-full group'
       )}
-      onClick={() => handleClick(item.name, item.href)}
+      onClick={() => handleClick(item.name, item.href, item.id)}
       style={style}
     >
       {activePlaceName === item.name ? (
@@ -74,33 +79,41 @@ export default function NavigationItem({ item, isVisible }: NavigationItemProps)
       >
         <MdDragIndicator className="hover:text-fuchsia-500" />
       </span>
-      <span className="relative w-5 h-5">
-        {item.name === 'Notifications' && notificationCount > 0 && (
+      <div className={cl(!showSidebar ? 'justify-center' : 'gap-2 items-center', 'relative flex cursor-pointer')}>
+        <span className="relative w-5 h-5">
+          {item.name === 'Notifications' && notificationCount > 0 && (
+            <p
+              className="flex items-center justify-center px-0.5 h-3 w-3 absolute top-0 text-white bg-red-600"
+              style={{ fontSize: '8px', borderRadius: '50px', left: '10px' }}
+            >
+              {notificationCount}
+            </p>
+          )}
+          {item.icon || <img className="w-5 h-5" src={item.source} alt={item.name} />}
+        </span>
+        {showSidebar ? (
           <p
-            className="flex items-center justify-center px-0.5 h-3 w-3 absolute top-0 text-white bg-red-600"
-            style={{ fontSize: '8px', borderRadius: '50px', left: '10px' }}
+            className="ml-3 truncate"
+            style={{
+              fontSize: '13px',
+              lineHeight: '12px',
+              verticalAlign: 'baseline',
+              letterSpacing: 'normal',
+              fontStyle: 'normal',
+              fontWeight: '400',
+              textDecoration: 'none solid rgb(83,87,94)'
+            }}
           >
-            {notificationCount}
+            {item.name}
           </p>
-        )}
-        {item.icon || <img className="w-5 h-5" src={item.source} alt={item.name} />}
-      </span>
-      {showSidebar ? (
-        <p
-          className="ml-3 truncate"
-          style={{
-            fontSize: '13px',
-            lineHeight: '12px',
-            verticalAlign: 'baseline',
-            letterSpacing: 'normal',
-            fontStyle: 'normal',
-            fontWeight: '400',
-            textDecoration: 'none solid rgb(83,87,94)'
-          }}
-        >
-          {item.name}
-        </p>
-      ) : null}
+        ) : null}
+      </div>
+      {showSidebar && (
+        <VscPinned
+          onClick={(e) => handleHotkeyClick(item.id, e)}
+          className="opacity-0 cursor-pointer group-hover:opacity-100 hover:text-black"
+        />
+      )}
     </div>
   );
 }

@@ -32,7 +32,12 @@ interface WorkspaceProps {
   name: string;
 }
 
-export default function WorkspaceSettingsModal() {
+interface SettingsProps {
+  isDropdownActive?: boolean;
+  setDropDownActive?: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+export default function WorkspaceSettingsModal({ isDropdownActive, setDropDownActive }: SettingsProps) {
   const dispatch = useDispatch();
   const queryClient = useQueryClient();
   const navigate = useNavigate();
@@ -151,7 +156,7 @@ export default function WorkspaceSettingsModal() {
     <Menu as="div" className="relative inline-block text-left">
       <div onClick={() => dispatch(setFetchAllWorkspace(true))}>
         <Menu.Button>
-          <VscTriangleDown className="text-xs text-gray-400" />
+          <VscTriangleDown className="text-gray-400" style={{ fontSize: '8px' }} />
         </Menu.Button>
       </div>
 

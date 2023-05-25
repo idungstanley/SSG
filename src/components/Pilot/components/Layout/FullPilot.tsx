@@ -62,7 +62,7 @@ export default function FullPilot({ featureTabs, activeSection, setShowModal, sh
           </>
         }
       >
-        <p className="truncate capitalize text-xs font-semibold">
+        <p className="text-xs font-semibold capitalize truncate">
           {type} | <span className="font-normal">{title}</span>
         </p>
       </Header>
