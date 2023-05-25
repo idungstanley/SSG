@@ -3,7 +3,7 @@ import { HiOutlineUpload } from 'react-icons/hi';
 import { BsFillGrid3X3GapFill } from 'react-icons/bs';
 import { MdHelpOutline, MdTab } from 'react-icons/md';
 import { GetTimeEntriesService, useMediaStream } from '../../../../features/task/taskService';
-import { ILastMemory } from '../../../../features/workspace/workspace.interfaces';
+import { IRecorderLastMemory } from '../../../../features/workspace/workspace.interfaces';
 import { resetWorkSpace } from '../../../../features/workspace/workspaceSlice';
 import { useNavigate, useParams } from 'react-router-dom';
 import React, { useState } from 'react';
@@ -63,7 +63,7 @@ function BlinkerModal({ toggleFn }: BlinkerProps) {
   const { workSpaceLastMemory } = useAppSelector((state) => state.workspace);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { activeTabId, workSpaceId, hubId, listId } = workSpaceLastMemory as ILastMemory;
+  const { activeTabId, workSpaceId, hubId, listId } = workSpaceLastMemory as IRecorderLastMemory;
 
   const handleEntity = (): string => {
     return hubId !== '' ? `/${workSpaceId}/tasks/h/${hubId}` : `/${workSpaceId}/tasks/l/${listId}`;

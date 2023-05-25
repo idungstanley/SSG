@@ -105,7 +105,7 @@ export interface ITeamMembersRes {
   };
 }
 
-export interface ILastMemory {
+export interface IRecorderLastMemory {
   activeTabId: number | undefined;
   hubId: string | undefined;
   listId: string | undefined;

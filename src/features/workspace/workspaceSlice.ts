@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { dimensions } from '../../app/config/dimensions';
-import { ILastMemory } from './workspace.interfaces';
+import { IRecorderLastMemory } from './workspace.interfaces';
 
 const initialActivePlaceId: number | null = (JSON.parse(localStorage.getItem('activePlaceIdLocale') as string) ||
   null) as number | null;
@@ -47,7 +47,7 @@ interface workspaceState {
   activePlaceIdForNavigation: number | null | string;
   createWlLink: boolean;
   activeSubRecordsTabId: number | null;
-  workSpaceLastMemory: ILastMemory;
+  workSpaceLastMemory: IRecorderLastMemory;
 }
 
 const initialState: workspaceState = {
@@ -242,10 +242,10 @@ export const wsSlice = createSlice({
     toggleMute(state) {
       state.isMuted = !state.isMuted;
     },
-    setLastMemory(state, action: PayloadAction<ILastMemory>) {
+    setLastMemory(state, action: PayloadAction<IRecorderLastMemory>) {
       state.workSpaceLastMemory = action.payload;
     },
-    resetWorkSpace(state, action: PayloadAction<ILastMemory>) {
+    resetWorkSpace(state, action: PayloadAction<IRecorderLastMemory>) {
       const { activeTabId, hubId, listId } = action.payload;
       activeTabId
         ? (state.activeTabId = activeTabId)
