@@ -1,3 +1,4 @@
+import { filterBySearchValue } from './filterUtils';
 import { sortTasks, parseLabel } from './sortUtils';
 
-export { sortTasks, parseLabel };
+export { sortTasks, parseLabel, filterBySearchValue };

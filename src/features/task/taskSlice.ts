@@ -130,6 +130,7 @@ interface TaskState {
   updateCords: number;
   activeTaskColumn: ActiveTaskColumnProps;
   sortType: TaskKey;
+  searchValue: string;
 }
 
 const initialState: TaskState = {
@@ -182,13 +183,17 @@ const initialState: TaskState = {
   screenRecording: 'idle',
   updateCords: Date.now(),
   activeTaskColumn: { id: '', header: '' },
-  sortType: 'status'
+  sortType: 'status',
+  searchValue: ''
 };
 
 export const taskSlice = createSlice({
   name: 'task',
   initialState,
   reducers: {
+    setSearchValue(state, action: PayloadAction<string>) {
+      state.searchValue = action.payload;
+    },
     setSortType(state, action: PayloadAction<TaskKey>) {
       state.sortType = action.payload;
     },
@@ -376,6 +381,7 @@ export const taskSlice = createSlice({
 });
 
 export const {
+  setSearchValue,
   createTaskSlice,
   setTaskIdForPilot,
   checkIfTask,
