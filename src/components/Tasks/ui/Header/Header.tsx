@@ -1,3 +1,4 @@
+import { Assignee } from '../Assignee/Assignee';
 import { ChangeView } from '../ChangeView/ChangeView';
 import { Filter } from '../Filter/Filter';
 import { Search } from '../Search/Search';
@@ -11,6 +12,7 @@ export function Header() {
       <div className="flex space-x-3 items-center">
         <Sort />
         <Filter />
+        <Assignee />
         <Search />
       </div>
     </section>
