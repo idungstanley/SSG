@@ -131,6 +131,7 @@ interface TaskState {
   activeTaskColumn: ActiveTaskColumnProps;
   sortType: TaskKey;
   searchValue: string;
+  assigneeIds: string[];
 }
 
 const initialState: TaskState = {
@@ -184,13 +185,17 @@ const initialState: TaskState = {
   updateCords: Date.now(),
   activeTaskColumn: { id: '', header: '' },
   sortType: 'status',
-  searchValue: ''
+  searchValue: '',
+  assigneeIds: []
 };
 
 export const taskSlice = createSlice({
   name: 'task',
   initialState,
   reducers: {
+    setAssigneeIds(state, action: PayloadAction<string[]>) {
+      state.assigneeIds = action.payload;
+    },
     setSearchValue(state, action: PayloadAction<string>) {
       state.searchValue = action.payload;
     },
@@ -381,6 +386,7 @@ export const taskSlice = createSlice({
 });
 
 export const {
+  setAssigneeIds,
   setSearchValue,
   createTaskSlice,
   setTaskIdForPilot,
