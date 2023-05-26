@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { useAppSelector } from '../../../../app/hooks';
 import { useList } from '../../../../features/list/listService';
 import { Task } from '../../../../features/task/interface.tasks';
-import { sortTasks } from '../../../Tasks/lib';
+import { filterBySearchValue, sortTasks } from '../../../Tasks/lib';
 import { generateColumns } from '../../lib/tableHeadUtils';
 import { Table } from '../Table/Table';
 
@@ -18,7 +18,9 @@ export function List({ tasks }: ListProps) {
 
   const heads = useMemo(() => (data ? generateColumns(data.custom_fields) : null), [data]);
 
-  const { sortedTasks } = sortTasks(sortType, tasks);
+  const { filteredTasks } = filterBySearchValue(tasks);
+
+  const { sortedTasks } = sortTasks(sortType, filteredTasks);
 
   return (
     <div className="rounded-lg bg-purple-50 border-l-4 border-purple-500">
