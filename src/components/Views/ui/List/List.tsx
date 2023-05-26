@@ -16,9 +16,9 @@ export function List({ tasks }: ListProps) {
   const heads = useMemo(() => (data ? generateColumns(data.custom_fields) : null), [data]);
 
   return (
-    <div className="rounded-lg bg-purple-50 border-l-4 border-purple-500">
+    <div className="border-l-4 border-purple-500 rounded-lg bg-purple-50">
       <div className="flex">
-        <h1 className="rounded-br-md p-2 px-4 text-white text-sm bg-purple-500 w-fit">{listName}</h1>
+        <h1 className="p-2 px-4 text-sm text-white bg-purple-500 rounded-br-md w-fit">{listName}</h1>
       </div>
       {heads ? <Table heads={heads} data={tasks} /> : null}
     </div>

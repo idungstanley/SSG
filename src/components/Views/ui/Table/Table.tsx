@@ -92,13 +92,13 @@ export function Table({ heads, data }: TableProps) {
   const onScroll = useScroll(() => dispatch(setUpdateCords()));
 
   return (
-    <div className="relative overflow-hidden pl-6">
+    <div className="relative pl-6 overflow-hidden">
       <table
         onScroll={onScroll}
         style={{
           gridTemplateColumns: generateGrid(columns.length)
         }}
-        className="w-full overflow-x-scroll overflow-y-hidden grid"
+        className="grid w-full overflow-x-scroll overflow-y-hidden"
         ref={tableElement}
       >
         <Head columns={columns} mouseDown={onMouseDown} tableHeight={tableHeight} />
