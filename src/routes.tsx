@@ -54,7 +54,7 @@ import Directory from './pages/directory';
 import NotificationSettingsPage from './pages/settings/NotificationSettings/GeneralNotification/index';
 import UserSettings from './pages/settings/UserSettings/Pages/Settings';
 import CommunityPage from './pages/community';
-import UnderConstruction from './pages/settings/UserSettings/Pages/UnderConstruction';
+import UnderConstruction from './pages/settings/UserSettings/Pages/People';
 import SideBarSettings from './pages/settings/UserSettings/components/sidebar/SideBar';
 import CreateNewWorkspace from './pages/workspace/createWorkspace/NewWorkSpace';
 import LeaveTypesPage from './pages/calendar/pages/LeaveTypesPage';
@@ -68,6 +68,7 @@ import { useAppSelector } from './app/hooks';
 import HubPage from './pages/hub';
 import { ListPage } from './pages/list';
 import { WalletPage } from './pages/wallet';
+import PeopleProfile from './pages/settings/UserSettings/Pages/People';
 
 const inbox = [
   {
@@ -200,7 +201,7 @@ export const routes = (user: IUser | null) => {
       ),
       children: [
         { path: 'profile', element: <UserSettings /> },
-        { path: 'construction', element: <UnderConstruction /> },
+        { path: 'people', element: <PeopleProfile /> },
         { path: 'team-members', element: <TeamMembersPage /> },
         { path: 'workspaces', element: <WorkspaceSettings /> },
         {
