@@ -15,6 +15,7 @@ import { List } from '../../components/Views/ui/List/List';
 import { useScroll } from '../../hooks/useScroll';
 import { setUpdateCords } from '../../features/task/taskSlice';
 import { generateLists } from '../../utils';
+import { Header } from '../../components/Tasks';
 
 export default function HubPage() {
   const dispatch = useAppDispatch();
@@ -94,10 +95,11 @@ export default function HubPage() {
         }}
         additional={<FilterByAssigneesSliderOver data={tasks} />}
       >
+        <Header />
         <section
           onScroll={onScroll}
           ref={containerRef}
-          style={{ minHeight: '0', maxHeight: '90vh' }}
+          style={{ minHeight: '0', maxHeight: '85vh' }}
           className="w-full h-full p-4 space-y-10 overflow-y-scroll"
         >
           {/* lists */}

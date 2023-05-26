@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 // import { tagItem } from '../../pages/workspace/pilot/components/details/properties/subDetailsIndex/PropertyDetails';
 import { listColumnProps } from '../../pages/workspace/tasks/component/views/ListColumns';
 import { IField } from '../list/list.interfaces';
-import { IParent } from './interface.tasks';
+import { IParent, TaskKey } from './interface.tasks';
 import { SortOption } from '../../pages/workspace/tasks/component/views/listLevel/TaskListViews';
 
 export interface ICustomField {
@@ -129,6 +129,7 @@ interface TaskState {
   screenRecording: 'idle' | 'recording';
   updateCords: number;
   activeTaskColumn: ActiveTaskColumnProps;
+  sortType: TaskKey;
 }
 
 const initialState: TaskState = {
@@ -180,13 +181,17 @@ const initialState: TaskState = {
   timeSortArr: [],
   screenRecording: 'idle',
   updateCords: Date.now(),
-  activeTaskColumn: { id: '', header: '' }
+  activeTaskColumn: { id: '', header: '' },
+  sortType: 'status'
 };
 
 export const taskSlice = createSlice({
   name: 'task',
   initialState,
   reducers: {
+    setSortType(state, action: PayloadAction<TaskKey>) {
+      state.sortType = action.payload;
+    },
     createTaskSlice(state, action: PayloadAction<string>) {
       state.task.push(action.payload);
     },
@@ -416,6 +421,7 @@ export const {
   setTimeSortArr,
   setScreenRecording,
   setUpdateCords,
-  setActiveTaskColumn
+  setActiveTaskColumn,
+  setSortType
 } = taskSlice.actions;
 export default taskSlice.reducer;
