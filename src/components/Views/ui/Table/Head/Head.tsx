@@ -1,21 +1,26 @@
+import { parseLabel } from '../../../../Tasks/lib';
 import { Column } from '../../../types/table';
 
 interface HeadProps {
   columns: Column[];
   tableHeight: string | number;
   mouseDown: (i: number) => void;
+  label: string;
 }
 
-export function Head({ columns, tableHeight, mouseDown }: HeadProps) {
+export function Head({ columns, tableHeight, mouseDown, label }: HeadProps) {
+  const parsedLabel = parseLabel(label);
+
   return (
     <thead className="contents">
       <tr className="contents">
         {/* first sticky col */}
         <th style={{ zIndex: 2 }} className="sticky flex left-0 font-extrabold" ref={columns[0].ref}>
           <div className="bg-purple-50 flex items-center w-10"></div>
-          <span className="flex border-gray-200 bg-white opacity-90 w-full h-full mx-auto justify-center truncate p-4">
+          <p className="flex border-gray-200 bg-white opacity-90 w-full items-center mx-auto gap-3 truncate p-2">
+            <span className="bg-primary-200 py-1 px-2 rounded-xl">{parsedLabel}</span>
             {columns[0].value}
-          </span>
+          </p>
 
           <div
             style={{ height: tableHeight }}
@@ -27,8 +32,8 @@ export function Head({ columns, tableHeight, mouseDown }: HeadProps) {
         </th>
 
         {columns.slice(1).map(({ ref, value, id }, index) => (
-          <th key={id} className="relative font-extrabold p-4 bg-white opacity-90" ref={ref}>
-            <span className="flex justify-center truncate">{value}</span>
+          <th key={id} className="relative font-extrabold p-2 bg-white opacity-90" ref={ref}>
+            <p className="flex h-full w-full items-center justify-center my-auto truncate">{value}</p>
             <div
               className="block absolute cursor-move w-2 -right-1 top-0 idle"
               style={{ height: tableHeight }}
