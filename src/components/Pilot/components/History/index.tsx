@@ -12,6 +12,7 @@ export default function History() {
 
   const id = pilotSideOver.id;
   const type = pilotSideOver.type;
+  console.log(type);
 
   // ! implement pagination
   const { data: logs, status } = useGetItemHistory({ type, id });
