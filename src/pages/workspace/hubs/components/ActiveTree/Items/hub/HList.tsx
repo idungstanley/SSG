@@ -178,7 +178,7 @@ export default function HList({ hubs, leftMargin, taskType, level = 1 }: ListPro
               index={index}
               type={taskType === 'subhub' ? 'subhub' : 'hub'}
               topNumber={taskType === 'subhub' ? '80px' : '50px'}
-              zNumber={taskType === 'subhub' ? '100' : '110'}
+              zNumber={taskType === 'subhub' ? '20' : '30'}
             />
             {hub.children.length && showChildren ? (
               <HList hubs={hub.children} level={level + 1} taskType="subhub" leftMargin={false} />

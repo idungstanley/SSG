@@ -40,11 +40,11 @@ export default function DropdownField({ field, taskId }: DropdownModalProps) {
 
   return (
     <>
-      <div className="flex w-full h-full items-center justify-center">
+      <div className="flex items-center justify-center w-full h-full">
         <button
           type="button"
           onClick={() => setIsOpen(true)}
-          className="flex justify-center items-center focus:outline-none hover:text-gray-700 w-full"
+          className="flex items-center justify-center w-full focus:outline-none hover:text-gray-700"
         >
           <div ref={relativeRef}>{activeOption}</div>
         </button>
@@ -53,11 +53,11 @@ export default function DropdownField({ field, taskId }: DropdownModalProps) {
       <Transition appear show={isOpen} as="div">
         <Dialog as="div" className="relative z-10" onClose={closeModal}>
           <div style={{ ...cords }} className="fixed overflow-y-auto">
-            <div className="flex-col border px-2 w-fit h-fit py-1 rounded-md bg-white shadow-lg outline-none flex items-center justify-center text-center">
-              <p className="uppercase whitespace-nowrap bg-white pr-10 font-thin text-xs text-gray-400 pb-3 border-b">
+            <div className="flex flex-col items-center justify-center px-2 py-1 text-center bg-white border rounded-md shadow-lg outline-none w-fit h-fit">
+              <p className="pb-3 pr-10 text-xs font-thin text-gray-400 uppercase bg-white border-b whitespace-nowrap">
                 select an option
               </p>
-              <div className="space-y-2 pt-3 w-full">
+              <div className="w-full pt-3 space-y-2">
                 {Array.isArray(properties)
                   ? properties.map((option) => (
                       <button
