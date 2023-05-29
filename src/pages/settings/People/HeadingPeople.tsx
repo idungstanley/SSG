@@ -1,10 +1,10 @@
 import React from 'react';
-import { SimpleSectionHeading } from '../../../../../components';
-import SearchInput from '../../../../../components/SearchInput';
-import { setTeamMembersSearchQuery } from '../../../../../features/settings/teamMembers/teamMemberSlice';
-import { useGetTeamMembers } from '../../../../../features/settings/teamMembers/teamMemberService';
+import { SimpleSectionHeading } from '../../../components';
+import SearchInput from '../../../components/SearchInput';
+import { setTeamMembersSearchQuery } from '../../../features/settings/teamMembers/teamMemberSlice';
+import { useGetTeamMembers } from '../../../features/settings/teamMembers/teamMemberService';
 import { useDispatch } from 'react-redux';
-import { useAppSelector } from '../../../../../app/hooks';
+import { useAppSelector } from '../../../app/hooks';
 
 export default function HeadingPeople() {
   const { teamMembersPaginationPage, teamMembersSearchQuery } = useAppSelector((state) => state.teamMember);
