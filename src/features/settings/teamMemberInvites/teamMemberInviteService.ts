@@ -35,7 +35,7 @@ export const useGetTeamMemberInvites = (
         data.data.team_member_invites.map((teamMemberInvite) =>
           queryClient.setQueryData(['team_member_invite', teamMemberInvite.id], teamMemberInvite)
         );
-        dispatch(SetTriggerGetTeammeberInvite(true));
+        dispatch(SetTriggerGetTeammeberInvite(false));
       }
     }
   );
@@ -62,24 +62,32 @@ export const useGetTeamMemberInvite = (teamMemberInviteId: string) => {
 };
 
 //Accept team member invite
-export const useAcceptTeamMemberInvite = (acceptInviteTrigger: boolean) => {
-  return useQuery(
-    ['team_member_invite', inviteCode],
-    async () => {
-      const data = await requestNew<{ data: { user: IUser } }>({
-        url: `workspace/accept-invite/${inviteCode}`,
-        method: 'POST'
-      });
-      return data;
-    },
-    {
-      onSuccess: (data) => {
-        localStorage.setItem('user', JSON.stringify(data?.data.user));
-        localStorage.setItem('currentWorkspaceId', JSON.stringify(data?.data.user.default_workspace_id));
-      },
-      enabled: acceptInviteTrigger == true && inviteCode != null
-    }
-  );
+// export const useAcceptTeamMemberInvite = (acceptInviteTrigger: boolean) => {
+//   return useQuery(
+//     ['team_member_invite', inviteCode],
+//     async () => {
+//       const data = await requestNew<{ data: { user: IUser } }>({
+//         url: `workspace/accept-invite/${inviteCode}`,
+//         method: 'POST'
+//       });
+//       return data;
+//     },
+//     {
+//       onSuccess: (data) => {
+//         localStorage.setItem('user', JSON.stringify(data?.data.user));
+//         localStorage.setItem('currentWorkspaceId', JSON.stringify(data?.data.user.default_workspace_id));
+//       },
+//       enabled: acceptInviteTrigger === true && !!inviteCode
+//     }
+//   );
+// };
+
+export const useAcceptTeamMemberInvite = ({ invite }: { invite: string | undefined }) => {
+  const data = requestNew<{ data: { user: IUser } }>({
+    url: `workspace/accept-invite/${invite}`,
+    method: 'POST'
+  });
+  return data;
 };
 
 // Delete team member invite
