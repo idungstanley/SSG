@@ -3,11 +3,11 @@ import { IPilotTab } from '../../../../types';
 import { cl } from '../../../../utils';
 import { Modal } from './components/Modal';
 import { CheckIcon } from '@heroicons/react/24/outline';
+import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
+import { setActiveTabId } from '../../../../features/workspace/workspaceSlice';
 
 interface HotkeysListProps {
   tabs: IPilotTab[];
-  setActiveTabId: (i: number | null) => void;
-  activeTabId: number | null;
   showModal: boolean;
   setShowModal: (i: boolean) => void;
 }
@@ -16,14 +16,10 @@ const hotkeyIdsFromLS = JSON.parse(localStorage.getItem('hotkeys') ?? '[]') as n
 
 const HOTKEY_LIMIT = 3;
 
-export default function MinHotkeysList({
-  tabs,
-  setActiveTabId,
-  activeTabId,
-  showModal,
-  setShowModal
-}: HotkeysListProps) {
+export default function MinHotkeysList({ tabs, showModal, setShowModal }: HotkeysListProps) {
   const [activeHotkeyIds, setActiveHotkeyIds] = useState<number[]>(hotkeyIdsFromLS);
+  const { activeTabId } = useAppSelector((state) => state.workspace);
+  const dispatch = useAppDispatch();
 
   const hotkeys = useMemo(
     () => tabs.filter((i) => activeHotkeyIds.includes(i.id)).slice(0, HOTKEY_LIMIT),
@@ -48,7 +44,7 @@ export default function MinHotkeysList({
         <div className="flex flex-wrap gap-y-2 p-2 col-span-1 flex-col gap-2">
           {hotkeys.map((hotkey) => (
             <button
-              onClick={() => setActiveTabId(activeTabId === hotkey.id ? null : hotkey.id)}
+              onClick={() => dispatch(setActiveTabId(activeTabId === hotkey.id ? undefined : hotkey.id))}
               title={hotkey.label}
               className={cl(
                 activeTabId === hotkey.id ? 'text-primary-500' : 'text-gray-600',

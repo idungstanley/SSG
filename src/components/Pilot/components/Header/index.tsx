@@ -4,21 +4,21 @@ import { ChevronDoubleRightIcon } from '../../../../assets/icons';
 import { setShowPilotSideOver } from '../../../../features/general/slideOver/slideOverSlice';
 import { cl } from '../../../../utils';
 import Menu from '../HotKeys/components/Dropdown';
+import { setActiveTabId } from '../../../../features/workspace/workspaceSlice';
 
 interface HeaderProps {
-  setActiveTabId: (i: null | number) => void;
   isMinified: boolean;
   additionalNavItems?: ReactNode;
   children?: ReactNode;
   menu: ReactNode;
 }
 
-export default function Header({ menu, children, setActiveTabId, isMinified, additionalNavItems }: HeaderProps) {
+export default function Header({ menu, children, isMinified, additionalNavItems }: HeaderProps) {
   const dispatch = useAppDispatch();
   const { pilotSideOver } = useAppSelector((state) => state.slideOver);
 
   const togglePilot = () => {
-    setActiveTabId(null);
+    dispatch(setActiveTabId());
     dispatch(setShowPilotSideOver({ ...pilotSideOver, show: isMinified }));
   };
 

@@ -4,26 +4,24 @@ import { cl } from '../../../../utils';
 import MinHotkeysList from '../HotKeys/MinHotKeys';
 import MinTabs from '../Tabs/MinTabs';
 import Header from '../Header';
+import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
+import { setActiveTabId } from '../../../../features/workspace/workspaceSlice';
 
 interface MinPilotProps {
-  activeTabId: number | null;
   featureTabs: IPilotTab[];
-  setActiveTabId: (i: number | null) => void;
   activeSection?: IPilotSection;
   setShowModal: (i: boolean) => void;
   showModal: boolean;
 }
 
-export default function MinPilot({
-  activeTabId,
-  featureTabs,
-  setActiveTabId,
-  activeSection,
-  setShowModal,
-  showModal
-}: MinPilotProps) {
+export default function MinPilot({ featureTabs, activeSection, setShowModal, showModal }: MinPilotProps) {
+  const { activeTabId } = useAppSelector((state) => state.workspace);
+  const dispatch = useAppDispatch();
   return (
-    <div onMouseLeave={() => (activeTabId ? setActiveTabId(null) : undefined)} className="border-l relative divide-y">
+    <div
+      onMouseLeave={() => (activeTabId ? dispatch(setActiveTabId()) : undefined)}
+      className="border-l relative divide-y"
+    >
       <div
         style={{
           transform: `translateX(${activeTabId ? -13 : 100}%)`
@@ -36,17 +34,11 @@ export default function MinPilot({
         {activeSection?.element}
       </div>
 
-      <Header isMinified setActiveTabId={setActiveTabId} menu={<Header.Menu setShowModal={setShowModal} />} />
+      <Header isMinified menu={<Header.Menu setShowModal={setShowModal} />} />
 
-      <MinHotkeysList
-        tabs={featureTabs}
-        setShowModal={setShowModal}
-        showModal={showModal}
-        setActiveTabId={setActiveTabId}
-        activeTabId={activeTabId}
-      />
+      <MinHotkeysList tabs={featureTabs} setShowModal={setShowModal} showModal={showModal} />
 
-      <MinTabs tabs={featureTabs} activeTabId={activeTabId} setActiveTabId={setActiveTabId} />
+      <MinTabs tabs={featureTabs} />
     </div>
   );
 }
