@@ -106,7 +106,7 @@ export function Table({ heads, data, label }: TableProps) {
 
         <tbody className="contents">
           {data.map((i) => (
-            <Row columns={columns} task={i} key={i.id} />
+            <Row columns={columns} task={i} key={i?.id} />
           ))}
         </tbody>
       </table>
