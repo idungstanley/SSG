@@ -5,8 +5,6 @@ import { ITeamMemberInviteRes, ITeamMemberInvitesReq } from './teamMemberInvites
 import { useAppDispatch } from '../../../app/hooks';
 import { SetTriggerGetTeammeberInvite } from './teamMemberInviteSlice';
 
-// const inviteCode: string = JSON.parse(localStorage.getItem('teamMemberInviteCode') || '""') as string;
-
 // Get team member invites
 export const useGetTeamMemberInvites = (
   page: number,
