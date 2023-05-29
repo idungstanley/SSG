@@ -15,7 +15,7 @@ import FilterByAssigneesSliderOver from '../workspace/lists/components/renderlis
 import { useScroll } from '../../hooks/useScroll';
 import { setUpdateCords } from '../../features/task/taskSlice';
 import { List } from '../../components/Views/ui/List/List';
-import { Header } from '../../components/Tasks';
+import { Header } from '../../components/TasksHeader';
 
 export function WalletPage() {
   const dispatch = useAppDispatch();

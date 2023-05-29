@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { useAppSelector } from '../../../../app/hooks';
 import { useList } from '../../../../features/list/listService';
 import { Task } from '../../../../features/task/interface.tasks';
-import { filterByAssignee, filterBySearchValue, sortTasks } from '../../../Tasks/lib';
+import { filterByAssignee, filterBySearchValue, sortTasks } from '../../../TasksHeader/lib';
 import { generateColumns } from '../../lib/tableHeadUtils';
 import { Table } from '../Table/Table';
 

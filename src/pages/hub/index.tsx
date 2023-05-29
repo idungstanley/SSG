@@ -15,7 +15,7 @@ import { List } from '../../components/Views/ui/List/List';
 import { useScroll } from '../../hooks/useScroll';
 import { setUpdateCords } from '../../features/task/taskSlice';
 import { generateLists } from '../../utils';
-import { Header } from '../../components/Tasks';
+import { Header } from '../../components/TasksHeader';
 
 export default function HubPage() {
   const dispatch = useAppDispatch();

@@ -1,4 +1,4 @@
-import { parseLabel } from '../../../../Tasks/lib';
+import { parseLabel } from '../../../../TasksHeader/lib';
 import { Column } from '../../../types/table';
 
 interface HeadProps {

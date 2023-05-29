@@ -16,7 +16,7 @@ import { useScroll } from '../../hooks/useScroll';
 import { setUpdateCords } from '../../features/task/taskSlice';
 import TaskQuickAction from '../workspace/tasks/component/taskQuickActions/TaskQuickAction';
 import { List } from '../../components/Views/ui/List/List';
-import { Header } from '../../components/Tasks';
+import { Header } from '../../components/TasksHeader';
 
 export function ListPage() {
   const dispatch = useAppDispatch();
