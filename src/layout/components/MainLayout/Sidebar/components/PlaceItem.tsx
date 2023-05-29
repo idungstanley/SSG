@@ -59,7 +59,7 @@ export default function PlaceItem({
       : isActivePlace && activeItemId !== null && !searchStatus
       ? '#BF00FF08'
       : undefined,
-    zIndex: isDragging ? 1 : isActivePlace ? 2000 : undefined,
+    zIndex: isDragging ? 1 : isActivePlace ? 50 : undefined,
     height: '50px',
     paddingLeft: showSidebar ? '25px' : '20px'
   };
@@ -94,7 +94,7 @@ export default function PlaceItem({
             {...attributes}
             {...listeners}
           >
-            <MdDragIndicator className="hover:text-fuchsia-500 text-gray-400" />
+            <MdDragIndicator className="text-gray-400 hover:text-fuchsia-500" />
           </span>
           <div className="flex justify-between w-full">
             <div
