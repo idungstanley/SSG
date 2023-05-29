@@ -13,9 +13,10 @@ import { Row } from './Row';
 interface TableProps {
   heads: listColumnProps[];
   data: Task[];
+  label: string;
 }
 
-export function Table({ heads, data }: TableProps) {
+export function Table({ heads, data, label }: TableProps) {
   const dispatch = useAppDispatch();
   const [tableHeight, setTableHeight] = useState<string | number>('auto');
   const [activeIndex, setActiveIndex] = useState<null | number>(null);
@@ -101,7 +102,7 @@ export function Table({ heads, data }: TableProps) {
         className="w-full overflow-x-scroll overflow-y-hidden grid"
         ref={tableElement}
       >
-        <Head columns={columns} mouseDown={onMouseDown} tableHeight={tableHeight} />
+        <Head label={label} columns={columns} mouseDown={onMouseDown} tableHeight={tableHeight} />
 
         <tbody className="contents">
           {data.map((i) => (

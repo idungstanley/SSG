@@ -12,11 +12,11 @@ import ActiveHub from '../../layout/components/MainLayout/extendedNavigation/Act
 import hubIcon from '../../assets/branding/hub.png';
 import FilterByAssigneesSliderOver from '../workspace/lists/components/renderlist/filters/FilterByAssigneesSliderOver';
 import { ITaskFullList } from '../../features/task/interface.tasks';
-import ListFilter from '../workspace/lists/components/renderlist/listDetails/ListFilter';
 import { useScroll } from '../../hooks/useScroll';
 import { setUpdateCords } from '../../features/task/taskSlice';
 import TaskQuickAction from '../workspace/tasks/component/taskQuickActions/TaskQuickAction';
 import { List } from '../../components/Views/ui/List/List';
+import { Header } from '../../components/TasksHeader';
 
 export function ListPage() {
   const dispatch = useAppDispatch();
@@ -95,12 +95,7 @@ export function ListPage() {
         additional={<FilterByAssigneesSliderOver data={tasks as ITaskFullList[]} />}
       >
         <>
-          {/* filters */}
-          {listView && (
-            <div className="w-full">
-              <ListFilter />
-            </div>
-          )}
+          <Header />
 
           {/* main content */}
           <div

@@ -62,7 +62,7 @@ export default function DropdownField({ field, taskId }: DropdownModalProps) {
                   ? properties.map((option) => (
                       <button
                         key={option}
-                        onClick={() => handleClick(option as string)}
+                        onClick={() => handleClick(option)}
                         className={cl(
                           option === activeOption && 'bg-gray-100',
                           'text-gray-700 py-2 bg-white border w-full text-center block px-4 text-sm hover:bg-gray-100 hover:text-gray-900'
