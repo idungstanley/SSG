@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { useSortable } from '@dnd-kit/sortable';
 import { useGetNotificationCountService } from '../../../../../../../features/general/notification/notificationService';
 import { VscPinned } from 'react-icons/vsc';
-import { GrDrag } from 'react-icons/gr';
+import { MdDragIndicator } from 'react-icons/md';
 
 interface NavigationItemProps {
   item: {
@@ -77,7 +77,7 @@ export default function NavigationItem({ item, isVisible, handleHotkeyClick }: N
         {...attributes}
         {...listeners}
       >
-        <GrDrag className="text-gray-50 hover:text-fuchsia-500" />
+        <MdDragIndicator className="text-gray-400 hover:text-fuchsia-500" />
       </span>
       <div className={cl(!showSidebar ? 'justify-center' : 'gap-2 items-center', 'relative flex cursor-pointer')}>
         <span className="relative w-5 h-5">

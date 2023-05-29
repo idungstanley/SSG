@@ -94,7 +94,7 @@ export default function PlaceItem({
             {...attributes}
             {...listeners}
           >
-            <MdDragIndicator className="hover:text-fuchsia-500" />
+            <MdDragIndicator className="hover:text-fuchsia-500 text-gray-400" />
           </span>
           <div className="flex justify-between w-full">
             <div
