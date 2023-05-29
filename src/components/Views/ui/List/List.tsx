@@ -9,7 +9,7 @@ interface ListProps {
 }
 
 export function List({ tasks }: ListProps) {
-  const { data } = useList(tasks[0].list_id);
+  const { data } = useList(tasks[0].list_id as string);
 
   const listName = data?.name;
 
