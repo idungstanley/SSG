@@ -10,7 +10,6 @@ import ProgressBar from '../../../../layout/components/MainLayout/ProgressBar';
 export default function TeamMemberAcceptInvite() {
   const queryClient = useQueryClient();
   const { inviteCode } = useParams();
-  // const [acceptInviteTrigger, setAcceptInviteTrigger] = useState<boolean>(false);
   const token: string = JSON.parse(localStorage.getItem('accessToken') as string) as string;
 
   const acceptInvite = useMutation(useAcceptTeamMemberInvite, {
@@ -26,21 +25,12 @@ export default function TeamMemberAcceptInvite() {
     if (inviteCode) {
       localStorage.setItem('teamMemberInviteCode', JSON.stringify(inviteCode));
     }
-
-    // if (token) {
-    //   setAcceptInviteTrigger(true);
-    // }
   }, [inviteCode]);
-
-  // const { data } = useAcceptTeamMemberInvite(acceptInviteTrigger);
 
   const handleAcceptInvite = async () => {
     await acceptInvite.mutateAsync({
       invite: inviteCode
     });
-    // if (data?.data) {
-    //   localStorage.setItem('user', JSON.stringify(data?.data.user));
-    // }
   };
 
   return inviteCode ? (
