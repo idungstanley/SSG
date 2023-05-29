@@ -12,6 +12,8 @@ import {
 } from '../../../../features/task/taskService';
 import AvatarWithInitials from '../../../avatar/AvatarWithInitials';
 import { setTimerStatus } from '../../../../features/task/taskSlice';
+import { useParams } from 'react-router-dom';
+import { setTimerLastMemory } from '../../../../features/workspace/workspaceSlice';
 
 export interface User {
   initials: string;
@@ -23,12 +25,13 @@ export default function ClockInOut() {
     isBillable: false,
     description: ''
   });
-  const { activeItemId, activeItemType, activeItemName } = useAppSelector((state) => state.workspace);
+  const { activeItemId, activeItemType, activeItemName, activeTabId } = useAppSelector((state) => state.workspace);
   const { timerStatus } = useAppSelector((state) => state.task);
   const dispatch = useAppDispatch();
   const [time, setTime] = useState({ ms: 0, s: 0, m: 0, h: 0 });
   const [btnClicked, setBtnClicked] = useState(false);
   const [period, setPeriod] = useState<string | number | undefined>(undefined);
+  const { workSpaceId, listId, hubId } = useParams();
 
   useEffect(() => {
     reset();
@@ -54,6 +57,7 @@ export default function ClockInOut() {
     setBtnClicked(!btnClicked);
     RunTimer();
     setPeriod(window.setInterval(RunTimer, 10));
+    dispatch(setTimerLastMemory({ workSpaceId, hubId, listId, activeTabId }));
   };
   const stop = () => {
     mutation.mutate({

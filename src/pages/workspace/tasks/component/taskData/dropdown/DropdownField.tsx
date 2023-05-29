@@ -1,16 +1,15 @@
 import { Dialog, Transition } from '@headlessui/react';
 import { Fragment, useState } from 'react';
 import { useAppSelector } from '../../../../../../app/hooks';
+import { Property } from '../../../../../../features/list/list.interfaces';
 import { useUpdateEntityCustomFieldValue } from '../../../../../../features/list/listService';
 import { useAbsolute } from '../../../../../../hooks/useAbsolute';
 import { cl } from '../../../../../../utils';
 
 interface DropdownModalProps {
-  field: { properties: string; id: string; activeProperty: string };
+  field: { properties: Property; id: string; activeProperty: string };
   taskId: string;
 }
-
-const regex = /\w+/g;
 
 export default function DropdownField({ field, taskId }: DropdownModalProps) {
   const { updateCords } = useAppSelector((state) => state.task);
@@ -24,8 +23,7 @@ export default function DropdownField({ field, taskId }: DropdownModalProps) {
 
   const { cords, relativeRef } = useAbsolute(updateCords, 160);
 
-  const properties = field.properties.match(regex) as string[] | null;
-  const options = properties ? [...properties] : [];
+  const { properties } = field;
 
   const handleClick = (option: string) => {
     setActiveOption(option);
@@ -60,18 +58,20 @@ export default function DropdownField({ field, taskId }: DropdownModalProps) {
                 select an option
               </p>
               <div className="space-y-2 pt-3 w-full">
-                {options?.map((option) => (
-                  <button
-                    key={option}
-                    onClick={() => handleClick(option)}
-                    className={cl(
-                      option === activeOption && 'bg-gray-100',
-                      'text-gray-700 py-2 bg-white border w-full text-center block px-4 text-sm hover:bg-gray-100 hover:text-gray-900'
-                    )}
-                  >
-                    {option}
-                  </button>
-                ))}
+                {Array.isArray(properties)
+                  ? properties.map((option) => (
+                      <button
+                        key={option}
+                        onClick={() => handleClick(option as string)}
+                        className={cl(
+                          option === activeOption && 'bg-gray-100',
+                          'text-gray-700 py-2 bg-white border w-full text-center block px-4 text-sm hover:bg-gray-100 hover:text-gray-900'
+                        )}
+                      >
+                        {option}
+                      </button>
+                    ))
+                  : null}
               </div>
             </div>
           </div>

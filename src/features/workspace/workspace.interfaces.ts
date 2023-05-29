@@ -104,3 +104,17 @@ export interface ITeamMembersRes {
     team_members: ITeamMember[];
   };
 }
+
+export interface IRecorderLastMemory {
+  activeTabId: number | undefined;
+  hubId: string | undefined;
+  listId: string | undefined;
+  workSpaceId: string | undefined;
+}
+
+export interface ITimerLastMemory {
+  activeTabId: number | undefined;
+  hubId: string | undefined;
+  listId: string | undefined;
+  workSpaceId: string | undefined;
+}

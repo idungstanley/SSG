@@ -1,8 +1,9 @@
 import { useEffect, useMemo, useState } from 'react';
-import { useAppSelector } from '../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { IPilotSection, IPilotTab } from '../../types';
 import MinPilot from './components/Layout/MinPilot';
 import FullPilot from './components/Layout/FullPilot';
+import { setActiveTabId } from '../../features/workspace/workspaceSlice';
 
 export const TAB_LIMIT = 8;
 
@@ -11,17 +12,18 @@ interface PilotProps {
 }
 
 export default function Pilot({ pilotConfig }: PilotProps) {
-  // const dispatch = useAppDispatch();
-  const [activeTabId, setActiveTabId] = useState<null | number>(1);
+  const dispatch = useAppDispatch();
+  // const [activeTabId, setActiveTabId] = useState<null | number>(1);
   const [showModal, setShowModal] = useState(false);
   const { sections, tabs } = pilotConfig;
+  const { activeTabId } = useAppSelector((state) => state.workspace);
 
   const { show: showFullPilot, id } = useAppSelector((state) => state.slideOver.pilotSideOver);
 
   // set first tab as active on open full pilot
   useEffect(() => {
     if (showFullPilot && !activeTabId) {
-      setActiveTabId(1);
+      dispatch(setActiveTabId(1));
     }
   }, [showFullPilot]);
 
@@ -31,24 +33,10 @@ export default function Pilot({ pilotConfig }: PilotProps) {
   return id ? (
     <>
       {!showFullPilot ? (
-        <MinPilot
-          activeTabId={activeTabId}
-          featureTabs={tabs}
-          setActiveTabId={setActiveTabId}
-          activeSection={activeSection}
-          setShowModal={setShowModal}
-          showModal={showModal}
-        />
+        <MinPilot featureTabs={tabs} activeSection={activeSection} setShowModal={setShowModal} showModal={showModal} />
       ) : null}
 
-      <FullPilot
-        activeTabId={activeTabId}
-        featureTabs={tabs}
-        setActiveTabId={setActiveTabId}
-        activeSection={activeSection}
-        setShowModal={setShowModal}
-        showModal={showModal}
-      />
+      <FullPilot featureTabs={tabs} activeSection={activeSection} setShowModal={setShowModal} showModal={showModal} />
     </>
   ) : null;
 }

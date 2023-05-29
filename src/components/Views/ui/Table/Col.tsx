@@ -25,7 +25,7 @@ const ACTIVE_COL_BG = 'bg-primary-200 opacity-90';
 
 export function Col({ value, field, fieldId, sticky, task, ...props }: ColProps) {
   const { taskId } = useParams();
-  const COL_BG = taskId === task.id ? ACTIVE_COL_BG : DEFAULT_COL_BG;
+  const COL_BG = taskId === task?.id ? ACTIVE_COL_BG : DEFAULT_COL_BG;
 
   //  fields config
   const fields: Record<string, JSX.Element> = {

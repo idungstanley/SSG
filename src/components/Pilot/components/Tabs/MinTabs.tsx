@@ -1,10 +1,10 @@
 import React, { useMemo } from 'react';
 import { IPilotTab } from '../../../../types';
 import { cl } from '../../../../utils';
+import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
+import { setActiveTabId } from '../../../../features/workspace/workspaceSlice';
 
 interface TabsProps {
-  activeTabId: number | null;
-  setActiveTabId: (i: number | null) => void;
   tabs: IPilotTab[];
 }
 
@@ -12,14 +12,16 @@ const pilotFromLS = JSON.parse(localStorage.getItem('pilot') || '""') as { tabOr
 
 const tabIdsFromLS = pilotFromLS.tabOrder || [];
 
-export default function MinTabs({ activeTabId, setActiveTabId, tabs }: TabsProps) {
+export default function MinTabs({ tabs }: TabsProps) {
+  const { activeTabId } = useAppSelector((state) => state.workspace);
+  const dispatch = useAppDispatch();
   const tabItems = useMemo(
     () => tabs.sort((a, b) => tabIdsFromLS.indexOf(a.id) - tabIdsFromLS.indexOf(b.id)),
     [tabs, tabIdsFromLS]
   );
 
   const handleClick = (tabId: number) => {
-    setActiveTabId(activeTabId === tabId ? null : tabId);
+    dispatch(setActiveTabId(activeTabId === tabId ? undefined : tabId));
   };
 
   return (
