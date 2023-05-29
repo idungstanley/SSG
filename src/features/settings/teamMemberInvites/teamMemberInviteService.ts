@@ -5,7 +5,7 @@ import { ITeamMemberInviteRes, ITeamMemberInvitesReq } from './teamMemberInvites
 import { useAppDispatch } from '../../../app/hooks';
 import { SetTriggerGetTeammeberInvite } from './teamMemberInviteSlice';
 
-const inviteCode: string = JSON.parse(localStorage.getItem('teamMemberInviteCode') || '""') as string;
+// const inviteCode: string = JSON.parse(localStorage.getItem('teamMemberInviteCode') || '""') as string;
 
 // Get team member invites
 export const useGetTeamMemberInvites = (
@@ -62,26 +62,6 @@ export const useGetTeamMemberInvite = (teamMemberInviteId: string) => {
 };
 
 //Accept team member invite
-// export const useAcceptTeamMemberInvite = (acceptInviteTrigger: boolean) => {
-//   return useQuery(
-//     ['team_member_invite', inviteCode],
-//     async () => {
-//       const data = await requestNew<{ data: { user: IUser } }>({
-//         url: `workspace/accept-invite/${inviteCode}`,
-//         method: 'POST'
-//       });
-//       return data;
-//     },
-//     {
-//       onSuccess: (data) => {
-//         localStorage.setItem('user', JSON.stringify(data?.data.user));
-//         localStorage.setItem('currentWorkspaceId', JSON.stringify(data?.data.user.default_workspace_id));
-//       },
-//       enabled: acceptInviteTrigger === true && !!inviteCode
-//     }
-//   );
-// };
-
 export const useAcceptTeamMemberInvite = ({ invite }: { invite: string | undefined }) => {
   const data = requestNew<{ data: { user: IUser } }>({
     url: `workspace/accept-invite/${invite}`,
