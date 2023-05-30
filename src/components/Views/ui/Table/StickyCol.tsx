@@ -1,6 +1,6 @@
-import { ChevronDownIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
 import { TdHTMLAttributes } from 'react';
 import { MdDragIndicator } from 'react-icons/md';
+import { RxTriangleDown, RxTriangleRight } from 'react-icons/rx';
 import { useParams } from 'react-router-dom';
 import { Task } from '../../../../features/task/interface.tasks';
 import { cl } from '../../../../utils';
@@ -17,7 +17,11 @@ export function StickyCol({ showSubTasks, setShowSubTasks, task, paddingLeft = 0
   const { taskId } = useParams();
   const COL_BG = taskId === task.id ? ACTIVE_COL_BG : DEFAULT_COL_BG;
 
-  const onToggleDisplayingSubTasks = () => setShowSubTasks(!showSubTasks);
+  const onToggleDisplayingSubTasks = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.stopPropagation();
+    setShowSubTasks(!showSubTasks);
+  };
+
   return (
     <td
       className="sticky left-0 flex items-center justify-center text-sm font-medium text-center text-gray-900 cursor-pointer"
@@ -43,9 +47,9 @@ export function StickyCol({ showSubTasks, setShowSubTasks, task, paddingLeft = 0
       <div style={{ paddingLeft }} className={cl(COL_BG, 'border-t w-full h-full py-4 p-4 flex items-center')}>
         <button onClick={onToggleDisplayingSubTasks}>
           {showSubTasks ? (
-            <ChevronDownIcon className="w-4 h-4 text-gray-400" />
+            <RxTriangleDown className="w-4 h-4 text-gray-600" />
           ) : (
-            <ChevronRightIcon className="w-4 h-4 text-gray-400" />
+            <RxTriangleRight className="w-4 h-4 text-gray-600" />
           )}
         </button>
         <p>{task.name}</p>
