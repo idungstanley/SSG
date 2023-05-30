@@ -21,7 +21,7 @@ export function Row({ task, columns }: RowProps) {
   const { hubId } = useParams();
 
   const onClickTask = () => {
-    navigate(`/${currentWorkspaceId}/tasks/newh/${hubId}/t/${task?.id}`, { replace: true });
+    navigate(`/${currentWorkspaceId}/tasks/newh/${hubId}/t/${task.id}`, { replace: true });
     dispatch(
       setShowPilotSideOver({
         id: task.id,

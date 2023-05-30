@@ -10,15 +10,12 @@ import Help from '../Help';
 import { formikConfig } from '../../../../../components/Comments/components/componentType';
 import GoogleLogin from '../../GoogleLogin';
 import { useAppDispatch } from '../../../../../app/hooks';
-import { useAcceptTeamMemberInvite } from '../../../../../features/settings/teamMemberInvites/teamMemberInviteService';
 
 function RegisterPage() {
   const dispatch = useAppDispatch();
   const { inviteCode } = useParams();
-  const [acceptInviteTrigger, setAcceptInviteTrigger] = useState<boolean>(false);
 
   const { mutate: onRegister, data } = useRegisterService();
-  useAcceptTeamMemberInvite(acceptInviteTrigger);
 
   useEffect(() => {
     if (data) {
@@ -45,8 +42,6 @@ function RegisterPage() {
 
       if (workspaceInvite) {
         window.location.href = `/accept-invite/${workspaceInvite}`;
-        setAcceptInviteTrigger(true);
-        // localStorage.removeItem('teamMemberInviteCode');
       }
     }
   }, [data]);

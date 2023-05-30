@@ -54,7 +54,6 @@ import Directory from './pages/directory';
 import NotificationSettingsPage from './pages/settings/NotificationSettings/GeneralNotification/index';
 import UserSettings from './pages/settings/UserSettings/Pages/Settings';
 import CommunityPage from './pages/community';
-import UnderConstruction from './pages/settings/People';
 import SideBarSettings from './pages/settings/UserSettings/components/sidebar/SideBar';
 import CreateNewWorkspace from './pages/workspace/createWorkspace/NewWorkSpace';
 import LeaveTypesPage from './pages/calendar/pages/LeaveTypesPage';

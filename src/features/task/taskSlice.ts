@@ -2,8 +2,9 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 // import { tagItem } from '../../pages/workspace/pilot/components/details/properties/subDetailsIndex/PropertyDetails';
 import { listColumnProps } from '../../pages/workspace/tasks/component/views/ListColumns';
 import { IField } from '../list/list.interfaces';
-import { IParent } from './interface.tasks';
+import { IParent, TaskKey } from './interface.tasks';
 import { SortOption } from '../../pages/workspace/tasks/component/views/listLevel/TaskListViews';
+import RecordRTC from 'recordrtc';
 
 export interface ICustomField {
   id: string;
@@ -127,8 +128,13 @@ interface TaskState {
   timeArr: string[];
   timeSortArr: string[];
   screenRecording: 'idle' | 'recording';
+  recorder: RecordRTC | null;
+  stream: MediaStream | null;
   updateCords: number;
   activeTaskColumn: ActiveTaskColumnProps;
+  sortType: TaskKey;
+  searchValue: string;
+  assigneeIds: string[];
 }
 
 const initialState: TaskState = {
@@ -179,14 +185,28 @@ const initialState: TaskState = {
   timeArr: [],
   timeSortArr: [],
   screenRecording: 'idle',
+  stream: null,
+  recorder: null,
   updateCords: Date.now(),
-  activeTaskColumn: { id: '', header: '' }
+  activeTaskColumn: { id: '', header: '' },
+  sortType: 'status',
+  searchValue: '',
+  assigneeIds: []
 };
 
 export const taskSlice = createSlice({
   name: 'task',
   initialState,
   reducers: {
+    setAssigneeIds(state, action: PayloadAction<string[]>) {
+      state.assigneeIds = action.payload;
+    },
+    setSearchValue(state, action: PayloadAction<string>) {
+      state.searchValue = action.payload;
+    },
+    setSortType(state, action: PayloadAction<TaskKey>) {
+      state.sortType = action.payload;
+    },
     createTaskSlice(state, action: PayloadAction<string>) {
       state.task.push(action.payload);
     },
@@ -364,6 +384,11 @@ export const taskSlice = createSlice({
     setScreenRecording(state, action: PayloadAction<'idle' | 'recording'>) {
       state.screenRecording = action.payload;
     },
+    setScreenRecordingMedia(state, action: PayloadAction<{ recorder: RecordRTC | null; stream: MediaStream | null }>) {
+      const { recorder, stream } = action.payload;
+      state.stream = stream;
+      state.recorder = recorder;
+    },
     setUpdateCords(state) {
       state.updateCords = Date.now();
     }
@@ -371,6 +396,8 @@ export const taskSlice = createSlice({
 });
 
 export const {
+  setAssigneeIds,
+  setSearchValue,
   createTaskSlice,
   setTaskIdForPilot,
   checkIfTask,
@@ -415,7 +442,9 @@ export const {
   setTimeArr,
   setTimeSortArr,
   setScreenRecording,
+  setScreenRecordingMedia,
   setUpdateCords,
-  setActiveTaskColumn
+  setActiveTaskColumn,
+  setSortType
 } = taskSlice.actions;
 export default taskSlice.reducer;

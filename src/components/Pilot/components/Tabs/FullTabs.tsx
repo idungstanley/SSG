@@ -19,8 +19,6 @@ import ShowTabsLabelToggle from './components/ShowTabsLabelToggle';
 import Tab from './components/Tab';
 
 interface TabsProps {
-  activeTabId: number | null;
-  setActiveTabId: (i: number | null) => void;
   tabs: IPilotTab[];
 }
 
@@ -31,7 +29,7 @@ const showTabLabelFromLS = !!pilotFromLS.showTabLabel;
 const MIN = 100;
 const MAX = 200;
 
-export default function FullTabs({ activeTabId, setActiveTabId, tabs }: TabsProps) {
+export default function FullTabs({ tabs }: TabsProps) {
   const [showTabLabel, setShowTabLabel] = useState(showTabLabelFromLS);
   const [tabItems, setTabItems] = useState(
     tabs.sort((a, b) => tabIdsFromLS.indexOf(a.id) - tabIdsFromLS.indexOf(b.id)) // set tabs position as in localStorage
@@ -72,15 +70,7 @@ export default function FullTabs({ activeTabId, setActiveTabId, tabs }: TabsProp
       >
         <SortableProvider disableOverflow={disableOverflow} items={tabItems} setItems={setTabItems}>
           {tabItems.map((tab) => (
-            <Tab
-              key={tab.id}
-              id={tab.id}
-              icon={tab.icon}
-              label={tab.label}
-              activeTabId={activeTabId}
-              setActiveTabId={setActiveTabId}
-              showTabLabel={showTabLabel}
-            />
+            <Tab key={tab.id} id={tab.id} icon={tab.icon} label={tab.label} showTabLabel={showTabLabel} />
           ))}
         </SortableProvider>
       </nav>

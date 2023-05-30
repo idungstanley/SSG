@@ -25,7 +25,7 @@ const ACTIVE_COL_BG = 'bg-primary-200 opacity-90';
 
 export function Col({ value, field, fieldId, sticky, task, ...props }: ColProps) {
   const { taskId } = useParams();
-  const COL_BG = taskId === task?.id ? ACTIVE_COL_BG : DEFAULT_COL_BG;
+  const COL_BG = taskId === task.id ? ACTIVE_COL_BG : DEFAULT_COL_BG;
 
   //  fields config
   const fields: Record<string, JSX.Element> = {
@@ -48,7 +48,7 @@ export function Col({ value, field, fieldId, sticky, task, ...props }: ColProps)
 
   return sticky ? (
     <td
-      className="sticky cursor-pointer flex left-0 text-center justify-center items-center text-sm font-medium text-gray-900"
+      className="sticky left-0 flex items-center justify-center text-sm font-medium text-center text-gray-900 cursor-pointer"
       {...props}
     >
       {field in fields ? fields[field] : String(value)}
@@ -73,7 +73,7 @@ function TaskName({ task, bg }: TaskNameProps) {
   return (
     <>
       {/* change me */}
-      <div className="bg-purple-50 w-10 h-full flex items-center space-x-1">
+      <div className="flex items-center w-10 h-full space-x-1 bg-purple-50">
         <input
           type="checkbox"
           id="checked-checkbox"
