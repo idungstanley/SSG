@@ -17,4 +17,6 @@ export default function TaskInvite() {
       navigate(`/${taskWorkspace}/tasks/l/${taskDetails}/t/${taskInvite}`);
     }
   }, [taskDetails]);
+
+  return null;
 }
