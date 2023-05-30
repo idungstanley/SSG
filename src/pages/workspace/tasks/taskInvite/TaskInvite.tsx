@@ -12,9 +12,6 @@ export default function TaskInvite() {
   const { data: task } = getOneTaskServices({ task_id: taskInvite });
   const taskDetails = task?.data.task.list_id;
 
-  // if (taskDetails) {
-  //   navigate(`/${taskWorkspace}/tasks/l/${taskDetails}/t/${taskInvite}`);
-  // }
   useEffect(() => {
     if (taskDetails) {
       navigate(`/${taskWorkspace}/tasks/l/${taskDetails}/t/${taskInvite}`);
