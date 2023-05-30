@@ -3,11 +3,12 @@ import { IoChevronDownCircleOutline, IoChevronForwardCircleOutline } from 'react
 interface ChevronProps {
   onToggle: VoidFunction;
   active: boolean;
+  color?: string;
 }
 
-export function Chevron({ onToggle, active }: ChevronProps) {
+export function Chevron({ onToggle, active, color = 'text-gray-200' }: ChevronProps) {
   return (
-    <button type="button" className="text-gray-400" onClick={onToggle}>
+    <button type="button" className={color} onClick={onToggle}>
       {active ? (
         <IoChevronForwardCircleOutline className="w-4 h-4" />
       ) : (

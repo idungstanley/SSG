@@ -31,7 +31,7 @@ export function List({ tasks }: ListProps) {
     <div className="border-l-4 border-t-4 border-purple-500 rounded-lg bg-purple-50">
       <Label listName={listName} showTable={collapseTable} onClickChevron={() => setCollapseTable((prev) => !prev)} />
 
-      {collapseTable && heads ? (
+      {!collapseTable && heads ? (
         <div className="space-y-10">
           {Object.keys(sortedTasks).map((key) => (
             <Table label={key} key={key} heads={heads} data={sortedTasks[key]} />

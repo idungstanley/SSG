@@ -98,10 +98,15 @@ export function Table({ heads, data, label }: TableProps) {
     <div className="relative pl-6 overflow-hidden">
       <table
         onScroll={onScroll}
-        style={{
-          gridTemplateColumns: generateGrid(columns.length)
-        }}
-        className="grid w-full overflow-x-scroll overflow-y-hidden"
+        style={
+          !collapseTasks
+            ? {
+                display: 'grid',
+                gridTemplateColumns: generateGrid(columns.length)
+              }
+            : undefined
+        }
+        className="w-full overflow-x-scroll overflow-y-hidden"
         ref={tableElement}
       >
         <Head
