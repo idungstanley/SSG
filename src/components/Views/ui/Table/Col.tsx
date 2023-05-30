@@ -23,11 +23,10 @@ export function Col({ value, field, fieldId, task, ...props }: ColProps) {
   const { taskId } = useParams();
   const COL_BG = taskId === task.id ? ACTIVE_COL_BG : DEFAULT_COL_BG;
 
-  //  fields config
+  // fields config
   const fields: Record<string, JSX.Element> = {
     priority: <TaskPriority task={task as ImyTaskData} />,
     status: <TaskStatus taskColField={value} task={task as ImyTaskData} />,
-
     created_at: <DateForTask taskColField={value} />,
     updated_at: <DateForTask taskColField={value} />,
     dropdown: (

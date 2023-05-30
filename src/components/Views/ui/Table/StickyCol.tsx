@@ -27,7 +27,7 @@ export function StickyCol({ showSubTasks, setShowSubTasks, task, paddingLeft = 0
       className="sticky left-0 flex items-center justify-center text-sm font-medium text-center text-gray-900 cursor-pointer"
       {...props}
     >
-      {/* change me */}
+      {/* //! change me */}
       <div className="flex items-center w-10 h-full space-x-1 bg-purple-50">
         <input
           type="checkbox"
