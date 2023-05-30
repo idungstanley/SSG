@@ -11,6 +11,7 @@ import DateForTask from '../../../../pages/workspace/tasks/component/taskData/ta
 import TaskTag from '../../../../pages/workspace/tasks/component/taskData/taskTag';
 import { listColumnProps } from '../../../../pages/workspace/tasks/component/views/ListColumns';
 import { Task, TaskValue } from '../../../../features/task/interface.tasks';
+import { ChevronDownIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
 
 interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   value: TaskValue;
@@ -18,12 +19,14 @@ interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   task: Task;
   fieldId: string;
   sticky?: boolean;
+  showSubTasks: boolean;
+  setShowSubTasks: (i: boolean) => void;
 }
 
 const DEFAULT_COL_BG = 'bg-white opacity-90';
 const ACTIVE_COL_BG = 'bg-primary-200 opacity-90';
 
-export function Col({ value, field, fieldId, sticky, task, ...props }: ColProps) {
+export function Col({ value, field, showSubTasks, setShowSubTasks, fieldId, sticky, task, ...props }: ColProps) {
   const { taskId } = useParams();
   const COL_BG = taskId === task.id ? ACTIVE_COL_BG : DEFAULT_COL_BG;
 
@@ -31,7 +34,7 @@ export function Col({ value, field, fieldId, sticky, task, ...props }: ColProps)
   const fields: Record<string, JSX.Element> = {
     priority: <TaskPriority task={task as ImyTaskData} />,
     status: <TaskStatus taskColField={value} task={task as ImyTaskData} />,
-    name: <TaskName task={task} bg={COL_BG} />,
+    name: <TaskName showSubTasks={showSubTasks} setShowSubTasks={setShowSubTasks} task={task} bg={COL_BG} />,
     created_at: <DateForTask taskColField={value} />,
     updated_at: <DateForTask taskColField={value} />,
     dropdown: (
@@ -67,9 +70,13 @@ export function Col({ value, field, fieldId, sticky, task, ...props }: ColProps)
 interface TaskNameProps {
   task: Task;
   bg: string;
+  showSubTasks: boolean;
+  setShowSubTasks: (i: boolean) => void;
 }
 
-function TaskName({ task, bg }: TaskNameProps) {
+function TaskName({ task, bg, setShowSubTasks, showSubTasks }: TaskNameProps) {
+  const onToggleDisplayingSubTasks = () => setShowSubTasks(!showSubTasks);
+
   return (
     <>
       {/* change me */}
@@ -88,6 +95,14 @@ function TaskName({ task, bg }: TaskNameProps) {
 
         <MdDragIndicator className="text-lg text-gray-400 transition duration-200 opacity-0 cursor-move group-hover:opacity-100" />
       </div>
+
+      <button onClick={onToggleDisplayingSubTasks}>
+        {showSubTasks ? (
+          <ChevronDownIcon className="w-4 h-4 text-gray-400" />
+        ) : (
+          <ChevronRightIcon className="w-4 h-4 text-gray-400" />
+        )}
+      </button>
 
       <div className={cl(bg, 'border-t w-full h-full py-4 p-4')}>{task.name}</div>
     </>

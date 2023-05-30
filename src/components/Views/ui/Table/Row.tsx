@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { setShowPilotSideOver } from '../../../../features/general/slideOver/slideOverSlice';
@@ -6,6 +7,7 @@ import { setTaskIdForPilot } from '../../../../features/task/taskSlice';
 import { setActiveItem } from '../../../../features/workspace/workspaceSlice';
 import { Column } from '../../types/table';
 import { Col } from './Col';
+import { SubTasks } from './SubTasks';
 
 interface RowProps {
   task: Task;
@@ -19,6 +21,8 @@ export function Row({ task, columns }: RowProps) {
   const otherColumns = columns.slice(1);
   const { currentWorkspaceId } = useAppSelector((state) => state.auth);
   const { hubId } = useParams();
+
+  const [showSubTasks, setShowSubTasks] = useState(false);
 
   const onClickTask = () => {
     navigate(`/${currentWorkspaceId}/tasks/newh/${hubId}/t/${task.id}`, { replace: true });
@@ -42,9 +46,12 @@ export function Row({ task, columns }: RowProps) {
 
   return (
     <>
+      {/* current task */}
       <tr className="contents group">
         {/* first col sticky */}
         <Col
+          showSubTasks={showSubTasks}
+          setShowSubTasks={setShowSubTasks}
           onClick={onClickTask}
           fieldId={sticky.id}
           style={{ zIndex: 3 }}
@@ -56,6 +63,8 @@ export function Row({ task, columns }: RowProps) {
 
         {otherColumns.map((col) => (
           <Col
+            showSubTasks={showSubTasks}
+            setShowSubTasks={setShowSubTasks}
             fieldId={col.id}
             field={col.field}
             task={task}
@@ -65,6 +74,8 @@ export function Row({ task, columns }: RowProps) {
           />
         ))}
       </tr>
+
+      {showSubTasks ? <SubTasks parentId={task.id} columns={columns} /> : null}
     </>
   );
 }
