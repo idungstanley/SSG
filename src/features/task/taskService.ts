@@ -103,7 +103,7 @@ export const getOneTaskServices = ({ task_id }: { task_id: string | undefined | 
     },
     {
       // enabled: false
-      enabled: task_id != null && fetch
+      enabled: task_id != null
     }
   );
 };
