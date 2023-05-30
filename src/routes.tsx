@@ -67,7 +67,9 @@ import { useAppSelector } from './app/hooks';
 import HubPage from './pages/hub';
 import { ListPage } from './pages/list';
 import { WalletPage } from './pages/wallet';
-import PeopleProfile from './pages/settings/UserSettings/Pages/People';
+import PeopleProfile from './pages/settings/People';
+import Construction from './pages/settings/UserSettings/Pages/Construction';
+import TaskInvite from './pages/workspace/tasks/taskInvite/TaskInvite';
 
 const inbox = [
   {
@@ -119,6 +121,10 @@ export const routes = (user: IUser | null) => {
       ) : (
         <Navigate to="/auth/login" />
       )
+    },
+    {
+      path: ':taskWorkspace/tasks/t/:taskInvite',
+      element: <TaskInvite />
     },
     {
       path: '/:workSpaceId',
@@ -201,6 +207,7 @@ export const routes = (user: IUser | null) => {
       children: [
         { path: 'profile', element: <UserSettings /> },
         { path: 'people', element: <PeopleProfile /> },
+        { path: 'construction', element: <Construction /> },
         { path: 'team-members', element: <TeamMembersPage /> },
         { path: 'workspaces', element: <WorkspaceSettings /> },
         {
