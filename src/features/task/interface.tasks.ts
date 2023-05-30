@@ -175,6 +175,12 @@ export interface ITimeEntriesRes {
   };
 }
 
+export interface IDuration {
+  s: number;
+  m: number;
+  h: number;
+}
+
 type ValueOf<T> = T[keyof T];
 
 export type Task = ImyTaskData | ITaskFullList;
