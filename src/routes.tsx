@@ -124,7 +124,7 @@ export const routes = (user: IUser | null) => {
       )
     },
     {
-      path: '/t/:taskInvite',
+      path: ':taskWorkspace/t/:taskInvite',
       element: <TaskInvite />
     },
     {

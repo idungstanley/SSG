@@ -5,21 +5,19 @@ import { useAppSelector } from '../../../../app/hooks';
 
 export default function TaskInvite() {
   const navigate = useNavigate();
-  const { currentWorkspaceId } = useAppSelector((state) => state.auth);
 
   const { taskInvite } = useParams();
+  const { taskWorkspace } = useParams();
 
   const { data: task } = getOneTaskServices({ task_id: taskInvite });
   const taskDetails = task?.data.task.list_id;
 
-  console.log(taskDetails);
-
-  if (taskDetails) {
-    navigate(`/${currentWorkspaceId}/tasks/l/${taskDetails}/t/${taskInvite}`);
-  }
+  // if (taskDetails) {
+  //   navigate(`/${taskWorkspace}/tasks/l/${taskDetails}/t/${taskInvite}`);
+  // }
   useEffect(() => {
     if (taskDetails) {
-      navigate(`/${currentWorkspaceId}/tasks/l/${taskDetails}/t/${taskInvite}`);
+      navigate(`/${taskWorkspace}/tasks/l/${taskDetails}/t/${taskInvite}`);
     }
   }, [taskDetails]);
 
