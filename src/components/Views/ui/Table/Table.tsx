@@ -22,6 +22,8 @@ export function Table({ heads, data, label }: TableProps) {
   const [activeIndex, setActiveIndex] = useState<null | number>(null);
   const tableElement = useRef<HTMLTableElement>(null);
 
+  const [collapseTasks, setCollapseTasks] = useState(false);
+
   const columns = createHeaders(heads).filter((i) => !i.hidden);
 
   const mouseMove = useCallback(
@@ -102,13 +104,22 @@ export function Table({ heads, data, label }: TableProps) {
         className="grid w-full overflow-x-scroll overflow-y-hidden"
         ref={tableElement}
       >
-        <Head label={label} columns={columns} mouseDown={onMouseDown} tableHeight={tableHeight} />
+        <Head
+          collapseTasks={collapseTasks}
+          onToggleCollapseTasks={() => setCollapseTasks((prev) => !prev)}
+          label={label}
+          columns={columns}
+          mouseDown={onMouseDown}
+          tableHeight={tableHeight}
+        />
 
-        <tbody className="contents">
-          {data.map((i) => (
-            <Row columns={columns} task={i} key={i.id} />
-          ))}
-        </tbody>
+        {!collapseTasks ? (
+          <tbody className="contents">
+            {data.map((i) => (
+              <Row columns={columns} task={i} key={i.id} />
+            ))}
+          </tbody>
+        ) : null}
       </table>
     </div>
   );

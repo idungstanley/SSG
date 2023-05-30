@@ -7,7 +7,7 @@ interface ChevronProps {
 
 export function Chevron({ onToggle, active }: ChevronProps) {
   return (
-    <button type="button" onClick={onToggle}>
+    <button type="button" className="text-gray-400" onClick={onToggle}>
       {active ? (
         <IoChevronForwardCircleOutline className="w-4 h-4" />
       ) : (

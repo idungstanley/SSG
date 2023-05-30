@@ -15,7 +15,7 @@ export function List({ tasks }: ListProps) {
   const { sortType } = useAppSelector((state) => state.task);
   const { data } = useList(tasks[0].list_id);
 
-  const [showTable, setShowTable] = useState(true);
+  const [collapseTable, setCollapseTable] = useState(false);
 
   const listName = data?.name;
 
@@ -29,9 +29,9 @@ export function List({ tasks }: ListProps) {
 
   return (
     <div className="border-l-4 border-t-4 border-purple-500 rounded-lg bg-purple-50">
-      <Label listName={listName} showTable={showTable} onClickChevron={() => setShowTable((prev) => !prev)} />
+      <Label listName={listName} showTable={collapseTable} onClickChevron={() => setCollapseTable((prev) => !prev)} />
 
-      {showTable && heads ? (
+      {collapseTable && heads ? (
         <div className="space-y-10">
           {Object.keys(sortedTasks).map((key) => (
             <Table label={key} key={key} heads={heads} data={sortedTasks[key]} />
