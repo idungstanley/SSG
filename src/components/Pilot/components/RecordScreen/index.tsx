@@ -64,8 +64,8 @@ export default function RecordScreen() {
               key={item.id}
               onClick={() => dispatch(setActiveSubRecordTabId(item.id))}
               className={`relative flex justify-center flex-grow py-2 font-medium text-gray-500 transition cursor-pointer group hover:text-gray-700 border-y-2 ${
-                item.id === activeSubRecordsTabId && showPilot && 'rounded-t-lg bg-white'
-              } ${item.id != activeSubRecordsTabId && showPilot && 'rounded-b-lg bg-gray-400'}`}
+                item.id === activeSubRecordsTabId && 'rounded-t-lg bg-white'
+              } ${item.id != activeSubRecordsTabId && 'rounded-b-lg bg-gray-400'}`}
             >
               <span
                 className={`absolute left-2 text-gray-500 justify-center text-xl cursor-move opacity-0 group-hover:opacity-100 ${
