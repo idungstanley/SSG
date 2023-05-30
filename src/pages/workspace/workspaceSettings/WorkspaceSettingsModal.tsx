@@ -32,11 +32,6 @@ interface WorkspaceProps {
   name: string;
 }
 
-// interface SettingsProps {
-//   isDropdownActive?: boolean;
-//   setDropDownActive?: React.Dispatch<React.SetStateAction<boolean>>;
-// }
-
 export default function WorkspaceSettingsModal() {
   const dispatch = useDispatch();
   const queryClient = useQueryClient();
