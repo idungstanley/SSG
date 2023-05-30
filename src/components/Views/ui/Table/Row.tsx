@@ -5,6 +5,7 @@ import { setShowPilotSideOver } from '../../../../features/general/slideOver/sli
 import { Task } from '../../../../features/task/interface.tasks';
 import { setTaskIdForPilot } from '../../../../features/task/taskSlice';
 import { setActiveItem } from '../../../../features/workspace/workspaceSlice';
+import { DEFAULT_LEFT_PADDING } from '../../config';
 import { Column } from '../../types/table';
 import { Col } from './Col';
 import { SubTasks } from './SubTasks';
@@ -12,9 +13,10 @@ import { SubTasks } from './SubTasks';
 interface RowProps {
   task: Task;
   columns: Column[];
+  paddingLeft?: number;
 }
 
-export function Row({ task, columns }: RowProps) {
+export function Row({ task, columns, paddingLeft = 0 }: RowProps) {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const sticky = columns[0];
@@ -58,6 +60,7 @@ export function Row({ task, columns }: RowProps) {
           field={sticky.field}
           task={task}
           value={task[sticky.field]}
+          paddingLeft={paddingLeft}
           sticky
         />
 
@@ -75,7 +78,9 @@ export function Row({ task, columns }: RowProps) {
         ))}
       </tr>
 
-      {showSubTasks ? <SubTasks parentId={task.id} columns={columns} /> : null}
+      {showSubTasks ? (
+        <SubTasks paddingLeft={DEFAULT_LEFT_PADDING + paddingLeft} parentId={task.id} columns={columns} />
+      ) : null}
     </>
   );
 }
