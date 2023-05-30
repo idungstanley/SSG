@@ -8,6 +8,7 @@ import { setActiveItem } from '../../../../features/workspace/workspaceSlice';
 import { DEFAULT_LEFT_PADDING } from '../../config';
 import { Column } from '../../types/table';
 import { Col } from './Col';
+import { StickyCol } from './StickyCol';
 import { SubTasks } from './SubTasks';
 
 interface RowProps {
@@ -19,7 +20,7 @@ interface RowProps {
 export function Row({ task, columns, paddingLeft = 0 }: RowProps) {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const sticky = columns[0];
+
   const otherColumns = columns.slice(1);
   const { currentWorkspaceId } = useAppSelector((state) => state.auth);
   const { hubId } = useParams();
@@ -50,24 +51,17 @@ export function Row({ task, columns, paddingLeft = 0 }: RowProps) {
     <>
       {/* current task */}
       <tr className="contents group">
-        {/* first col sticky */}
-        <Col
+        <StickyCol
           showSubTasks={showSubTasks}
           setShowSubTasks={setShowSubTasks}
           onClick={onClickTask}
-          fieldId={sticky.id}
           style={{ zIndex: 3 }}
-          field={sticky.field}
           task={task}
-          value={task[sticky.field]}
           paddingLeft={paddingLeft}
-          sticky
         />
 
         {otherColumns.map((col) => (
           <Col
-            showSubTasks={showSubTasks}
-            setShowSubTasks={setShowSubTasks}
             fieldId={col.id}
             field={col.field}
             task={task}

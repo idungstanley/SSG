@@ -1,5 +1,4 @@
 import { TdHTMLAttributes } from 'react';
-import { MdDragIndicator } from 'react-icons/md';
 import { useParams } from 'react-router-dom';
 import { ImyTaskData } from '../../../../features/task/taskSlice';
 import { cl } from '../../../../utils';
@@ -11,33 +10,16 @@ import DateForTask from '../../../../pages/workspace/tasks/component/taskData/ta
 import TaskTag from '../../../../pages/workspace/tasks/component/taskData/taskTag';
 import { listColumnProps } from '../../../../pages/workspace/tasks/component/views/ListColumns';
 import { Task, TaskValue } from '../../../../features/task/interface.tasks';
-import { ChevronDownIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
+import { ACTIVE_COL_BG, DEFAULT_COL_BG } from '../../config';
 
 interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   value: TaskValue;
   field: Pick<listColumnProps, 'field'>['field'];
   task: Task;
   fieldId: string;
-  sticky?: boolean;
-  showSubTasks: boolean;
-  setShowSubTasks: (i: boolean) => void;
-  paddingLeft?: number;
 }
 
-const DEFAULT_COL_BG = 'bg-white opacity-90';
-const ACTIVE_COL_BG = 'bg-primary-200 opacity-90';
-
-export function Col({
-  value,
-  field,
-  showSubTasks,
-  setShowSubTasks,
-  fieldId,
-  sticky,
-  task,
-  paddingLeft = 0,
-  ...props
-}: ColProps) {
+export function Col({ value, field, fieldId, task, ...props }: ColProps) {
   const { taskId } = useParams();
   const COL_BG = taskId === task.id ? ACTIVE_COL_BG : DEFAULT_COL_BG;
 
@@ -45,15 +27,7 @@ export function Col({
   const fields: Record<string, JSX.Element> = {
     priority: <TaskPriority task={task as ImyTaskData} />,
     status: <TaskStatus taskColField={value} task={task as ImyTaskData} />,
-    name: (
-      <TaskName
-        paddingLeft={paddingLeft}
-        showSubTasks={showSubTasks}
-        setShowSubTasks={setShowSubTasks}
-        task={task}
-        bg={COL_BG}
-      />
-    ),
+
     created_at: <DateForTask taskColField={value} />,
     updated_at: <DateForTask taskColField={value} />,
     dropdown: (
@@ -68,64 +42,12 @@ export function Col({
     assignees: <Assignee task={task as ImyTaskData} itemId={task.id} option="task" />
   };
 
-  return sticky ? (
-    <td
-      className="sticky left-0 flex items-center justify-center text-sm font-medium text-center text-gray-900 cursor-pointer"
-      {...props}
-    >
-      {field in fields ? fields[field] : String(value)}
-    </td>
-  ) : (
+  return (
     <td
       className={cl(COL_BG, 'relative flex border-t justify-center items-center text-sm font-medium text-gray-900')}
       {...props}
     >
       {field in fields ? fields[field] : String(value)}
     </td>
-  );
-}
-
-// temporary component
-interface TaskNameProps {
-  task: Task;
-  bg: string;
-  showSubTasks: boolean;
-  setShowSubTasks: (i: boolean) => void;
-  paddingLeft: number;
-}
-
-function TaskName({ task, bg, setShowSubTasks, showSubTasks, paddingLeft }: TaskNameProps) {
-  const onToggleDisplayingSubTasks = () => setShowSubTasks(!showSubTasks);
-
-  return (
-    <>
-      {/* change me */}
-      <div className="flex items-center w-10 h-full space-x-1 bg-purple-50">
-        <input
-          type="checkbox"
-          id="checked-checkbox"
-          className="w-3 h-3 rounded-full opacity-0 cursor-pointer focus:outline-1 focus:ring-transparent group-hover:opacity-100 focus:border-2 focus:opacity-100"
-          // ref={setNodeRef}
-          // {...attributes}
-          // {...listeners}
-          // onClick={() => {
-          //   displayNav(task?.id as string);
-          // }}
-        />
-
-        <MdDragIndicator className="text-lg text-gray-400 transition duration-200 opacity-0 cursor-move group-hover:opacity-100" />
-      </div>
-
-      <div style={{ paddingLeft }} className={cl(bg, 'border-t w-full h-full py-4 p-4 flex items-center')}>
-        <button onClick={onToggleDisplayingSubTasks}>
-          {showSubTasks ? (
-            <ChevronDownIcon className="w-4 h-4 text-gray-400" />
-          ) : (
-            <ChevronRightIcon className="w-4 h-4 text-gray-400" />
-          )}
-        </button>
-        <p>{task.name}</p>
-      </div>
-    </>
   );
 }
