@@ -34,6 +34,12 @@ function LoginPage() {
           currentUserId: user_id
         })
       );
+
+      const workspaceInvite = JSON.parse(localStorage.getItem('teamMemberInviteCode') || '""') as string;
+
+      if (workspaceInvite) {
+        window.location.href = `/accept-invite/${workspaceInvite}`;
+      }
     }
   }, [data]);
 

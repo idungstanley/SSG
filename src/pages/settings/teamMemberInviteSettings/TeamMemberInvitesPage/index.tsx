@@ -8,6 +8,7 @@ import InviteTeamMemberSlideOver from './components/InviteTeamMemberSlideOver';
 import { setInviteTeamMemberSlideOverVisibility } from '../../../../features/general/slideOver/slideOverSlice';
 import { useGetTeamMemberInvites } from '../../../../features/settings/teamMemberInvites/teamMemberInviteService';
 import { useAppSelector } from '../../../../app/hooks';
+import { SetTriggerGetTeammeberInvite } from '../../../../features/settings/teamMemberInvites/teamMemberInviteSlice';
 
 export default function TeamMemberInvitesPage() {
   const dispatch = useDispatch();
@@ -21,6 +22,10 @@ export default function TeamMemberInvitesPage() {
   const showInviteTeamMemberSlideOver = () => {
     dispatch(setInviteTeamMemberSlideOverVisibility(true));
   };
+
+  React.useEffect(() => {
+    dispatch(SetTriggerGetTeammeberInvite(true));
+  }, []);
 
   return (
     <div className="h-full flex-1 flex flex-col overflow-hidden bg-gray-50">

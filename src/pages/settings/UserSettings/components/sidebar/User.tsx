@@ -161,6 +161,8 @@ function User() {
       localStorage.removeItem('user');
       localStorage.removeItem('accessToken');
       localStorage.removeItem('currentWorkspaceId');
+      localStorage.removeItem('teamMemberInviteCode');
+      localStorage.removeItem('currentUserId');
 
       dispatch(
         setAuthData({
@@ -172,6 +174,7 @@ function User() {
       );
 
       dispatch(logout());
+      navigate('/');
     }
   });
 

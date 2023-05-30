@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 // import { tagItem } from '../../pages/workspace/pilot/components/details/properties/subDetailsIndex/PropertyDetails';
 import { listColumnProps } from '../../pages/workspace/tasks/component/views/ListColumns';
 import { IField } from '../list/list.interfaces';
-import { IDuration, IParent } from './interface.tasks';
+import { IDuration, IParent, TaskKey } from './interface.tasks';
 import { SortOption } from '../../pages/workspace/tasks/component/views/listLevel/TaskListViews';
 import RecordRTC from 'recordrtc';
 
@@ -134,6 +134,9 @@ interface TaskState {
   activeTaskColumn: ActiveTaskColumnProps;
   duration: IDuration;
   period: number | undefined;
+  sortType: TaskKey;
+  searchValue: string;
+  assigneeIds: string[];
 }
 
 const initialState: TaskState = {
@@ -189,13 +192,25 @@ const initialState: TaskState = {
   updateCords: Date.now(),
   activeTaskColumn: { id: '', header: '' },
   duration: { s: 0, m: 0, h: 0 },
-  period: undefined
+  period: undefined,
+  sortType: 'status',
+  searchValue: '',
+  assigneeIds: []
 };
 
 export const taskSlice = createSlice({
   name: 'task',
   initialState,
   reducers: {
+    setAssigneeIds(state, action: PayloadAction<string[]>) {
+      state.assigneeIds = action.payload;
+    },
+    setSearchValue(state, action: PayloadAction<string>) {
+      state.searchValue = action.payload;
+    },
+    setSortType(state, action: PayloadAction<TaskKey>) {
+      state.sortType = action.payload;
+    },
     createTaskSlice(state, action: PayloadAction<string>) {
       state.task.push(action.payload);
     },
@@ -408,6 +423,8 @@ export const taskSlice = createSlice({
 });
 
 export const {
+  setAssigneeIds,
+  setSearchValue,
   createTaskSlice,
   setTaskIdForPilot,
   checkIfTask,
@@ -457,6 +474,7 @@ export const {
   setActiveTaskColumn,
   setUpdateTimerDuration,
   setStopTimer,
-  setTimerInterval
+  setTimerInterval,
+  setSortType
 } = taskSlice.actions;
 export default taskSlice.reducer;
