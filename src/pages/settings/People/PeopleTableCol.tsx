@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
-import { useAppSelector } from '../../../../../app/hooks';
+import { useAppSelector } from '../../../app/hooks';
 import { useDispatch } from 'react-redux';
 import {
   useGetTeamMembers,
   useDeactivateTeamMember,
   useRemoveTeamMember
-} from '../../../../../features/settings/teamMembers/teamMemberService';
-import { AvatarWithInitials } from '../../../../../components';
+} from '../../../features/settings/teamMembers/teamMemberService';
+import { AvatarWithInitials } from '../../../components';
 import { NoSymbolIcon, UserMinusIcon } from '@heroicons/react/24/outline';
-import { displayPrompt, setVisibility } from '../../../../../features/general/prompt/promptSlice';
-import ToolTip from '../../../../../components/Tooltip';
+import { displayPrompt, setVisibility } from '../../../features/general/prompt/promptSlice';
+import ToolTip from '../../../components/Tooltip';
 
 export default function PeopleTableCol() {
   const { teamMembersPaginationPage, teamMembersSearchQuery } = useAppSelector((state) => state.teamMember);
