@@ -1,10 +1,11 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { useAppSelector } from '../../../../app/hooks';
 import { useList } from '../../../../features/list/listService';
 import { Task } from '../../../../features/task/interface.tasks';
 import { filterByAssignee, filterBySearchValue, sortTasks } from '../../../TasksHeader/lib';
 import { generateColumns } from '../../lib/tableHeadUtils';
 import { Table } from '../Table/Table';
+import { Label } from './Label';
 
 interface ListProps {
   tasks: Task[];
@@ -13,6 +14,8 @@ interface ListProps {
 export function List({ tasks }: ListProps) {
   const { sortType } = useAppSelector((state) => state.task);
   const { data } = useList(tasks[0].list_id);
+
+  const [showTable, setShowTable] = useState(true);
 
   const listName = data?.name;
 
@@ -26,15 +29,9 @@ export function List({ tasks }: ListProps) {
 
   return (
     <div className="border-l-4 border-t-4 border-purple-500 rounded-lg bg-purple-50">
-      <div className="">
-        <div className="flex justify-between space-x-10 items-center">
-          <h1 className="p-2 px-4 text-sm text-white bg-purple-500 rounded-br-md w-fit">{listName}</h1>
+      <Label listName={listName} showTable={showTable} onClickChevron={() => setShowTable((prev) => !prev)} />
 
-          <button className="p-1 rounded-md bg-gray-200">click</button>
-        </div>
-      </div>
-
-      {heads ? (
+      {showTable && heads ? (
         <div className="space-y-10">
           {Object.keys(sortedTasks).map((key) => (
             <Table label={key} key={key} heads={heads} data={sortedTasks[key]} />
