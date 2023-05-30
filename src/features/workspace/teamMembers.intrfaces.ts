@@ -5,6 +5,9 @@ export interface ITeamMember {
     name: string;
     email: string;
     avatar_path: null | string;
+    color: string;
+    initials: string;
+    timezone: string;
   };
   name: string;
   role: {

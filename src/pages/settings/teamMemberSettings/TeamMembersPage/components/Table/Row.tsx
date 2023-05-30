@@ -20,6 +20,7 @@ export default function Row({ teamMemberId }: RowProps) {
 
   const { data: teamMember } = useGetTeamMember(teamMemberId);
   const { mutate: deactivateTeamMember } = useDeactivateTeamMember(teamMemberId);
+
   const { mutate: reactivateTeamMember } = useReactivateTeamMember(teamMemberId);
   const { mutate: removeTeamMember } = useRemoveTeamMember(teamMemberId);
 
@@ -99,7 +100,7 @@ export default function Row({ teamMemberId }: RowProps) {
         <div className="flex items-center">
           <div className="flex-shrink-0">
             <StatusDot
-              on={<AvatarWithInitials initials={teamMember.initials} backgroundColour={teamMember.colour} />}
+              on={<AvatarWithInitials initials={teamMember.user.initials} backgroundColour={teamMember.user.color} />}
             />
           </div>
           <div className="ml-4">

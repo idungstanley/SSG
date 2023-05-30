@@ -41,6 +41,8 @@ export default function UserSettingsModal({ setShowModal }: UserProps) {
       localStorage.removeItem('user');
       localStorage.removeItem('accessToken');
       localStorage.removeItem('currentWorkspaceId');
+      localStorage.removeItem('teamMemberInviteCode');
+      localStorage.removeItem('currentUserId');
 
       dispatch(
         setAuthData({
@@ -52,6 +54,7 @@ export default function UserSettingsModal({ setShowModal }: UserProps) {
       );
 
       dispatch(logout());
+      navigate('/');
     }
   });
 

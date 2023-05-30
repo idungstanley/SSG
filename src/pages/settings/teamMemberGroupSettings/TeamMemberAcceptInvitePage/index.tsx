@@ -15,6 +15,7 @@ export default function TeamMemberAcceptInvite() {
   const acceptInvite = useMutation(useAcceptTeamMemberInvite, {
     onSuccess: (data) => {
       queryClient.invalidateQueries();
+      localStorage.removeItem('teamMemberInviteCode');
       localStorage.setItem('user', JSON.stringify(data?.data.user));
       localStorage.setItem('currentWorkspaceId', JSON.stringify(data?.data.user.default_workspace_id));
       window.location.href = '/';
