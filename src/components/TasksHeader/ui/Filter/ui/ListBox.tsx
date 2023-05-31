@@ -16,8 +16,8 @@ interface ListBoxProps {
 export function ListBox({ values, selected, setSelected }: ListBoxProps) {
   return (
     <Listbox value={selected} onChange={setSelected}>
-      <div className="relative mt-1">
-        <Listbox.Button className="relative w-full flex-grow cursor-pointer border shadow-sm rounded-lg bg-white py-2 pl-3 pr-10 text-left">
+      <div className="relative">
+        <Listbox.Button className="whitespace-nowrap relative w-full flex-grow cursor-pointer border shadow-sm rounded-lg bg-white py-2 pl-3 pr-10 text-left">
           {/* value */}
           <SelectedValue selected={selected} />
 
@@ -60,7 +60,7 @@ export function ListBox({ values, selected, setSelected }: ListBoxProps) {
 }
 
 const SELECT_KEY = 'Select filter';
-const SELECT_OPTION = 'elect option';
+const SELECT_OPTION = 'Select option';
 
 function SelectedValue({ selected }: { selected: Selected }) {
   return (

@@ -32,6 +32,7 @@ export function List() {
           switch (type) {
             case 'key': {
               i.key = newValue as TaskKey;
+              i.values = [];
               break;
             }
             case 'option': {

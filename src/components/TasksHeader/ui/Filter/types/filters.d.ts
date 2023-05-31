@@ -1,3 +1,5 @@
+import { TaskKey } from '../../../../../features/task/interface.tasks';
+
 export type Filter = Record<TaskKey, FilterValues>;
 
 type Option = 'is' | 'not is' | 'is set';
@@ -14,4 +16,12 @@ export interface FilterValue {
   option: Option;
   values: Value[];
   key: TaskKey;
+}
+
+type ValueType = 'key' | 'option' | 'value';
+
+export interface onChangeProps {
+  newValue: Value | Option | TaskKey;
+  id: Id;
+  type: ValueType;
 }
