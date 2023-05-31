@@ -58,11 +58,13 @@ export function List() {
 
   return (
     <div className="space-y-4 w-full p-2">
-      {filters.map((filter) => (
-        <Item onDelete={onDelete} onChange={onChange} filter={filter} key={filter.key} />
+      {filters.map((filter, index) => (
+        <Item index={index} onDelete={onDelete} onChange={onChange} filter={filter} key={filter.key} />
       ))}
 
-      {showAddNewItem ? <AddNewItem onAdd={onAdd} onDelete={() => setShowAddNewItem(false)} /> : null}
+      {showAddNewItem ? (
+        <AddNewItem isFirst={filters.length === 0} onAdd={onAdd} onDelete={() => setShowAddNewItem(false)} />
+      ) : null}
 
       <button type="button" onClick={() => setShowAddNewItem(true)}>
         <p className="text-xs text-gray-500">+ Add filter</p>
