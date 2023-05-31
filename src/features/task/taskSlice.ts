@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 // import { tagItem } from '../../pages/workspace/pilot/components/details/properties/subDetailsIndex/PropertyDetails';
 import { listColumnProps } from '../../pages/workspace/tasks/component/views/ListColumns';
 import { IField } from '../list/list.interfaces';
-import { IParent, TaskKey } from './interface.tasks';
+import { IDuration, IParent, TaskKey } from './interface.tasks';
 import { SortOption } from '../../pages/workspace/tasks/component/views/listLevel/TaskListViews';
 import RecordRTC from 'recordrtc';
 
@@ -132,6 +132,8 @@ interface TaskState {
   stream: MediaStream | null;
   updateCords: number;
   activeTaskColumn: ActiveTaskColumnProps;
+  duration: IDuration;
+  period: number | undefined;
   sortType: TaskKey;
   searchValue: string;
   assigneeIds: string[];
@@ -189,6 +191,8 @@ const initialState: TaskState = {
   recorder: null,
   updateCords: Date.now(),
   activeTaskColumn: { id: '', header: '' },
+  duration: { s: 0, m: 0, h: 0 },
+  period: undefined,
   sortType: 'status',
   searchValue: '',
   assigneeIds: []
@@ -391,6 +395,29 @@ export const taskSlice = createSlice({
     },
     setUpdateCords(state) {
       state.updateCords = Date.now();
+    },
+    setUpdateTimerDuration(state, action: PayloadAction<IDuration>) {
+      // const timer = { ms: 0, s: 0, m: 0, h: 0 };
+      // if (timer.h >= 60) {
+      //   timer.h++;
+      //   timer.m = 0;
+      // }
+      // if (timer.s >= 60) {
+      //   timer.m++;
+      //   timer.s = 0;
+      // }
+      // if (timer.ms >= 100) {
+      //   timer.s++;
+      //   timer.ms = 0;
+      // }
+      // timer.ms++;
+      state.duration = action.payload;
+    },
+    setStopTimer(state) {
+      state.timerStatus = !state.timerStatus;
+    },
+    setTimerInterval(state, action: PayloadAction<number | undefined>) {
+      state.period = action.payload;
     }
   }
 });
@@ -445,6 +472,9 @@ export const {
   setScreenRecordingMedia,
   setUpdateCords,
   setActiveTaskColumn,
+  setUpdateTimerDuration,
+  setStopTimer,
+  setTimerInterval,
   setSortType
 } = taskSlice.actions;
 export default taskSlice.reducer;

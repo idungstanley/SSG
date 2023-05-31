@@ -2,13 +2,10 @@ import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { HiOutlineUpload } from 'react-icons/hi';
 import { BsFillGrid3X3GapFill } from 'react-icons/bs';
 import { MdHelpOutline, MdTab } from 'react-icons/md';
-import { GetTimeEntriesService } from '../../../../features/task/taskService';
 import { resetWorkSpace } from '../../../../features/workspace/workspaceSlice';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { IoAlarmSharp } from 'react-icons/io5';
-import moment from 'moment';
-import { ITimeEntriesRes } from '../../../../features/task/interface.tasks';
 import BlinkerModal from './HeaderModal';
 
 export const handleEntity = ({
@@ -24,20 +21,11 @@ export const handleEntity = ({
 };
 
 export default function AdditionalHeader() {
-  const { screenRecording } = useAppSelector((state) => state.task);
+  const { screenRecording, duration, timerStatus } = useAppSelector((state) => state.task);
   const [show, setShow] = useState<boolean>(false);
   const dispatch = useAppDispatch();
-  const {
-    activeItemId,
-    activeItemType,
-    activeTabId: tabsId,
-    timerLastMemory
-  } = useAppSelector((state) => state.workspace);
+  const { activeTabId: tabsId, timerLastMemory } = useAppSelector((state) => state.workspace);
   const navigate = useNavigate();
-  const { data: getEntries } = GetTimeEntriesService({
-    itemId: activeItemId,
-    trigger: activeItemType === 'subhub' ? 'hub' : activeItemType
-  });
 
   const { activeTabId, workSpaceId, hubId, listId } = timerLastMemory;
 
@@ -52,13 +40,19 @@ export default function AdditionalHeader() {
         Header
       </h1>
       <div className="flex space-x-2 items-center justify-center">
-        {tabsId !== 6 && (
+        {tabsId !== 6 && timerStatus && (
           <div
             className="flex items-center space-x-1 border border-purple-500 py-1 px-2 rounded-lg cursor-pointer"
             onClick={() => handleResetTimer()}
           >
             <IoAlarmSharp className="text-purple-500" />
-            <span>{moment.utc((getEntries as ITimeEntriesRes)?.data?.total_duration * 1000).format('HH:mm:ss')}</span>
+            <div className="items-center">
+              {duration.h < 10 ? `0${duration.h}` : duration.h}
+              {':'}
+              {duration.m < 10 ? `0${duration.m}` : duration.m}
+              {':'}
+              {duration.s < 10 ? `0${duration.s}` : duration.s}
+            </div>
           </div>
         )}
         <MdTab className="w-5 h-5" />
