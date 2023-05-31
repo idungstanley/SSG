@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react';
 import { useAppSelector } from '../../../../app/hooks';
 import { useList } from '../../../../features/list/listService';
 import { Task } from '../../../../features/task/interface.tasks';
-import { filterByAssignee, filterBySearchValue, sortTasks } from '../../../TasksHeader/lib';
+import { filterByAssignee, filterBySearchValue, filterByValues, sortTasks } from '../../../TasksHeader/lib';
 import { generateColumns } from '../../lib/tableHeadUtils';
 import { Table } from '../Table/Table';
 import { Label } from './Label';
@@ -25,7 +25,9 @@ export function List({ tasks }: ListProps) {
 
   const { filteredByAssignee } = filterByAssignee(filteredBySearch);
 
-  const { sortedTasks } = sortTasks(sortType, filteredByAssignee);
+  const { filteredByValues } = filterByValues(filteredByAssignee);
+
+  const { sortedTasks } = sortTasks(sortType, filteredByValues);
 
   return (
     <div className="border-l-4 border-t-4 border-purple-500 rounded-lg bg-purple-50">
