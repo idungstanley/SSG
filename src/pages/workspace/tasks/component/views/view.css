@@ -222,3 +222,19 @@ textarea {
 input:checked + .slider:before {
   transform: translateX(20px);
 }
+.pulsate {
+  animation: pulse-animation 1s infinite;
+}
+
+@keyframes pulse-animation {
+  0% {
+    box-shadow: 0 0 0 0px rgba(0, 0, 0, 0.6);
+    width: 2px;
+    height: 2px;
+  }
+  100% {
+    box-shadow: 0 0 0 6px rgba(0, 0, 0, 0);
+    width: 14px;
+    height: 14px;
+  }
+}

@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
-import { useUploadRecording } from '../../../../features/workspace/workspaceService';
-import { setRecording } from '../../../../features/workspace/workspaceSlice';
+import { setRecorderLastMemory, setRecording } from '../../../../features/workspace/workspaceSlice';
 import '../../../../pages/workspace/tasks/component/views/view.css';
-import RecordRTC from 'recordrtc';
-import { setScreenRecording } from '../../../../features/task/taskSlice';
+import { useMediaStream } from '../../../../features/task/taskService';
+import { BsFillRecord2Fill } from 'react-icons/bs';
+import { IoStopCircleSharp, IoVolumeHigh, IoVolumeMute } from 'react-icons/io5';
+import { useParams } from 'react-router-dom';
 
 export interface IFormData {
   append(name: string, value: Blob, fileName?: string): void;
@@ -12,48 +13,26 @@ export interface IFormData {
 }
 
 export default function Recording() {
-  const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
-  const { currentWorkspaceId, accessToken } = useAppSelector((state) => state.auth);
+  const { activeTabId, activeItemId, activeItemType, isMuted } = useAppSelector((state) => state.workspace);
+  const { recorder, stream } = useAppSelector((state) => state.task);
+  const { hubId, listId, workSpaceId } = useParams();
+
   const dispatch = useAppDispatch();
-  const [recorder, setRecorder] = useState<RecordRTC | null>();
-  const [stream, setStream] = useState<MediaStream | null>();
+  const {
+    handleStartStream,
+    handleStopStream,
+    handleToggleMute
+    // isStarting,
+    // isStopping,
+  } = useMediaStream();
   const { screenRecording } = useAppSelector((state) => state.task);
   const startRecording = async () => {
-    const mediaDevices = navigator.mediaDevices;
-    const audioConstraints: MediaTrackConstraints = {
-      echoCancellation: true,
-      noiseSuppression: true,
-      sampleRate: 44100
-    };
-    const videoStream: MediaStream = await mediaDevices.getDisplayMedia({
-      audio: audioConstraints,
-      video: true
-    });
-    const audioStream: MediaStream = await mediaDevices.getUserMedia({ audio: true });
-    const [videoTrack] = videoStream.getVideoTracks();
-    const [audioTrack] = audioStream.getAudioTracks();
-    const stream = new MediaStream([videoTrack, audioTrack]);
-    const recorder = new RecordRTC(stream, { type: 'video', mimeType: 'video/webm;codecs=vp9' });
-    await recorder.startRecording();
-    dispatch(setScreenRecording('recording'));
-    setRecorder(recorder as RecordRTC);
-    setStream(stream);
+    await handleStartStream();
+    dispatch(setRecorderLastMemory({ activeTabId, workSpaceId, listId, hubId }));
   };
-  const { mutate } = useUploadRecording();
-  const stopRecording = async () => {
-    recorder?.stopRecording();
-    const blob = recorder?.getBlob();
-    if (blob && currentWorkspaceId && accessToken && activeItemId && activeItemType) {
-      await mutate({
-        blob,
-        currentWorkspaceId,
-        accessToken,
-        activeItemId,
-        activeItemType
-      });
-      stream?.getTracks().map((track) => track.stop());
-      dispatch(setScreenRecording('idle'));
-    }
+
+  const stopRecording = () => {
+    handleStopStream({ stream, recorder });
   };
   useEffect(() => {
     if (screenRecording !== 'recording') {
@@ -67,16 +46,25 @@ export default function Recording() {
   }, [screenRecording]);
   return (
     <div>
-      {screenRecording == 'recording' ? (
+      {screenRecording === 'recording' ? (
         <>
-          <button onClick={stopRecording} className="screenRecording">
-            Stop Recording
-          </button>
+          <div className="screenRecording flex space-x-2">
+            <button onClick={() => handleToggleMute()} className="flex space-x-2 items-center justify-center">
+              {!isMuted ? <IoVolumeMute className="w-7 h-7" /> : <IoVolumeHigh className="w-7 h-7" />}
+            </button>
+            <button onClick={stopRecording} className="flex space-x-2 items-center justify-center">
+              <IoStopCircleSharp className="w-7 h-7" />
+              Stop Recording
+            </button>
+          </div>
         </>
       ) : (
         <>
           <div className="screenRecording flex flex-col">
-            <button onClick={startRecording}>Start Recording</button>
+            <button onClick={startRecording} className="flex space-x-2 items-center justify-center">
+              <BsFillRecord2Fill className="w-7 h-7" />
+              Start Recording
+            </button>
           </div>
         </>
       )}
