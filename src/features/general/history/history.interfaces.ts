@@ -12,7 +12,7 @@ export interface IActivityLog {
       name: string;
       color: string;
       initials: string;
-      avatar_path: null | string;
+      avatar_path: string;
     };
   };
   created_at: string;

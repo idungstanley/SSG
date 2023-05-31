@@ -1,25 +1,28 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useAppSelector } from '../../../../app/hooks';
 import FullScreenMessage from '../../../CenterMessage/FullScreenMessage';
 import { InitialsAvatar, Spinner } from '../../../../common';
 import { useGetItemHistory } from '../../../../features/general/history/historyService';
-import { OutputDateTime } from '../../../../app/helpers';
 import SectionArea from '../SectionArea';
 import { DocumentTextIcon } from '@heroicons/react/24/outline';
 import { BsFilter, BsThreeDots } from 'react-icons/bs';
 import { BiSearch } from 'react-icons/bi';
 import { AiFillPlusCircle } from 'react-icons/ai';
 import moment from 'moment';
+import AvatarWithImage from '../../../avatar/AvatarWithImage';
+import AvatarWithInitials from '../../../avatar/AvatarWithInitials';
+import { IActivityLog } from '../../../../features/general/history/history.interfaces';
 
 export default function History() {
   const { pilotSideOver } = useAppSelector((state) => state.slideOver);
+  const [showModal, setShow] = useState<boolean>(false);
 
   const id = pilotSideOver.id;
   const type = pilotSideOver.type;
 
   // ! implement pagination
   const { data: logs, status } = useGetItemHistory({ type, id });
-  console.log(logs);
+  // console.log(logs);
 
   return (
     <>
@@ -35,7 +38,10 @@ export default function History() {
           <BsFilter />
           <span className="capitalize text-xs">filter</span>
         </div>
-        <BsThreeDots />
+        <div className="relative">
+          <BsThreeDots onClick={() => setShow(!showModal)} />
+          {showModal && <HistoryModal model={logs} toggleFn={setShow} />}
+        </div>
       </div>
       <div className="relative h-full w-full mt-2">
         {/* status checking */}
@@ -49,8 +55,8 @@ export default function History() {
           !logs.length ? (
             <FullScreenMessage title="No logs yet" description="Do any action." />
           ) : (
-            <table className="absolute top-2 left-0 flex w-full h-full overflow-y-scroll flex-col divide-y divide-gray-200">
-              <thead className="w-full">
+            <table className="absolute top-2 left-0 flex w-full overflow-y-scroll flex-col border-l-4 border-yellow-600 rounded-lg">
+              <thead className="w-full border-b-2 border-blueGray-300 px-1 pb-1">
                 <tr className="w-full flex justify-between items-center">
                   <div className="flex w-2/3 space-x-10 capitalize">
                     <th>user</th>
@@ -72,19 +78,38 @@ export default function History() {
                 const duration = moment.duration(currentDate.diff(startDate));
                 const time = moment(created_at.substring(11, 19), 'HH:mm:ss').format('h:mm A');
                 return (
-                  <li key={activityLog.id} className="py-2 flex space-x-6 w-full items-center">
-                    <InitialsAvatar size={6} colour={user.color} initials={user.initials} />
-                    <div className="text-xs">
+                  <tr
+                    key={activityLog.id}
+                    className="py-1 flex space-x-6 w-full items-center border-b-2 border-blueGray-300 px-1"
+                  >
+                    <td>
+                      {user ? (
+                        user.avatar_path !== '' ? (
+                          <AvatarWithImage
+                            image_path={user && user.avatar_path}
+                            height="h-5"
+                            width="w-5"
+                            roundedStyle="circular"
+                          />
+                        ) : (
+                          <InitialsAvatar size={5} colour={user && user.color} initials={user && user.initials} />
+                        )
+                      ) : (
+                        <AvatarWithInitials initials="UN" height="h-5" width="w-5" roundedStyle="circular" />
+                      )}
+                    </td>
+                    <td className="text-xs">
                       <span>{duration.humanize()} ago</span>
-                    </div>
-                    <div className="">
+                    </td>
+                    <td className="">
                       <span className="text-xs">{time}</span>
-                    </div>
-
-                    <p className="text-gray-400 text-xs capitalize">
-                      {user.name} {category} {model}
-                    </p>
-                  </li>
+                    </td>
+                    {user && (
+                      <td className="text-gray-400 text-xs capitalize">
+                        {user.name} {category} {model}
+                      </td>
+                    )}
+                  </tr>
                 );
               })}
             </table>
@@ -92,5 +117,42 @@ export default function History() {
         ) : null}
       </div>
     </>
+  );
+}
+
+type HistoryModalProps = {
+  model: IActivityLog[] | undefined;
+  toggleFn: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
+function HistoryModal({ model, toggleFn }: HistoryModalProps) {
+  const [checkedStates, setCheckedStates] = useState<boolean[]>([]);
+
+  const handleChange = (index: number) => {
+    const newCheckedStates = [...checkedStates];
+    newCheckedStates[index] = !newCheckedStates[index];
+    setCheckedStates(newCheckedStates);
+  };
+
+  console.log(model);
+
+  return (
+    <div
+      className="flex flex-col space-y-2 bg-white absolute top-5 right-5 shadow-2xl rounded-lg w-56 max-h-96 z-50 p-2 overflow-auto"
+      onBlur={() => toggleFn(false)}
+    >
+      <div className="border-b-2">
+        <span className="text-sm capitalize">show all</span>
+      </div>
+      {model?.map((items, i) => (
+        <div key={items.id} className="capitalize py-1 flex justify-between">
+          <span>{items.model}</span>
+          <label className="switch">
+            <input type="checkbox" checked={checkedStates[i]} onChange={() => handleChange(i)} />
+            <span className={`slider ${checkedStates[i] ? 'checked' : ''}`}></span>
+          </label>
+        </div>
+      ))}
+    </div>
   );
 }
