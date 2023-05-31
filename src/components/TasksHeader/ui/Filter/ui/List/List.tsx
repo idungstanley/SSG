@@ -1,23 +1,7 @@
 import { useState } from 'react';
-import { TaskKey } from '../../../../../../features/task/interface.tasks';
-import { FilterValue, Id, Option, onChangeProps } from '../../types/filters';
+import { FilterValue, Id, Option, onChangeProps, Key } from '../../types/filters';
 import { AddNewItem } from './AddNewItem';
 import { Item } from './Item';
-
-// const mocked = [
-//   {
-//     id: 1685525669426,
-//     key: 'priority',
-//     values: ['important'],
-//     option: 'is'
-//   },
-//   {
-//     id: 1685525669427,
-//     key: 'status',
-//     values: ['completed'],
-//     option: 'not is'
-//   }
-// ];
 
 export function List() {
   const [showAddNewItem, setShowAddNewItem] = useState(false);
@@ -31,7 +15,7 @@ export function List() {
         if (i.id === id) {
           switch (type) {
             case 'key': {
-              i.key = newValue as TaskKey;
+              i.key = newValue as Key;
               i.values = [];
               break;
             }
@@ -52,7 +36,7 @@ export function List() {
       })
     );
 
-  const onAdd = (newValue: TaskKey) => {
+  const onAdd = (newValue: Key) => {
     setShowAddNewItem(false);
     setFilters((prev) => [...prev, { id: Date.now(), key: newValue, values: [], option: 'is' }]);
   };

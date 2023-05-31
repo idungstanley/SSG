@@ -1,8 +1,9 @@
 import { TaskKey } from '../../../../../features/task/interface.tasks';
 
-export type Filter = Record<TaskKey, FilterValues>;
+export type Filter = Record<Key, FilterValues>;
 
-type Option = 'is' | 'not is' | 'is set';
+type Option = 'is' | 'is not' | 'is set' | 'is not set';
+export type Key = Pick<TaskKey, 'priority', 'status'>;
 export type Value = string;
 export type Id = number;
 
