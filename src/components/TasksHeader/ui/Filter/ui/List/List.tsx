@@ -1,34 +1,37 @@
 import { useState } from 'react';
 import { TaskKey } from '../../../../../../features/task/interface.tasks';
-import { filterConfig } from '../../config/filterConfig';
-import { FilterValue, Value, Id, Option } from '../../types/filters';
-import { ListBox } from '../ListBox';
+import { FilterValue, Id, Option, onChangeProps } from '../../types/filters';
+import { AddNewItem } from './AddNewItem';
+import { Item } from './Item';
 
-type Type = 'key' | 'option' | 'value';
+// const mocked = [
+//   {
+//     id: 1685525669426,
+//     key: 'priority',
+//     values: ['important'],
+//     option: 'is'
+//   },
+//   {
+//     id: 1685525669427,
+//     key: 'status',
+//     values: ['completed'],
+//     option: 'not is'
+//   }
+// ];
 
 export function List() {
-  const [filters, setFilters] = useState<FilterValue[]>([
-    {
-      id: 1685525669426,
-      key: 'priority',
-      values: ['important'],
-      option: 'is'
-    },
-    {
-      id: 1685525669427,
-      key: 'status',
-      values: ['completed'],
-      option: 'not is'
-    }
-  ]);
+  const [showAddNewItem, setShowAddNewItem] = useState(false);
+  const [filters, setFilters] = useState<FilterValue[]>([]);
 
-  const onChange = ({ newValue, id, type }: { newValue: Value | Option | TaskKey; id: Id; type: Type }) => {
+  const onDelete = (id: Id) => setFilters((prev) => prev.filter((i) => i.id !== id));
+
+  const onChange = ({ newValue, id, type }: onChangeProps) =>
     setFilters((prev) =>
       prev.map((i) => {
         if (i.id === id) {
           switch (type) {
             case 'key': {
-              i.key = newValue;
+              i.key = newValue as TaskKey;
               break;
             }
             case 'option': {
@@ -38,6 +41,7 @@ export function List() {
             case 'value': {
               const isExists = i.values.includes(newValue);
               i.values = isExists ? [...i.values.filter((j) => j !== newValue)] : [...i.values, newValue];
+
               break;
             }
           }
@@ -46,45 +50,23 @@ export function List() {
         return i;
       })
     );
+
+  const onAdd = (newValue: TaskKey) => {
+    setShowAddNewItem(false);
+    setFilters((prev) => [...prev, { id: Date.now(), key: newValue, values: [], option: 'is' }]);
   };
 
   return (
     <div className="space-y-4 w-full p-2">
       {filters.map((filter) => (
-        <FilterItem onChange={onChange} filter={filter} key={filter.key} />
+        <Item onDelete={onDelete} onChange={onChange} filter={filter} key={filter.key} />
       ))}
-    </div>
-  );
-}
 
-interface FilterItemProps {
-  filter: FilterValue;
-  onChange: ({ newValue, id }: { newValue: Value | Option | TaskKey; id: Id; type: Type }) => void;
-}
+      {showAddNewItem ? <AddNewItem onAdd={onAdd} onDelete={() => setShowAddNewItem(false)} /> : null}
 
-function FilterItem({ filter, onChange }: FilterItemProps) {
-  return (
-    <div className="flex space-x-3 w-full items-center justify-between">
-      {/* key */}
-      <ListBox
-        setSelected={(newValue) => onChange({ newValue, id: filter.id, type: 'key' })}
-        selected={filter.key}
-        values={Object.keys(filterConfig)}
-      />
-
-      {/* option */}
-      <ListBox
-        setSelected={(newValue) => onChange({ newValue, id: filter.id, type: 'option' })}
-        selected={filter.option}
-        values={filterConfig[filter.key as TaskKey].options}
-      />
-
-      {/* value */}
-      <ListBox
-        setSelected={(newValue) => onChange({ newValue, id: filter.id, type: 'value' })}
-        selected={filter.values}
-        values={filterConfig[filter.key as TaskKey].values}
-      />
+      <button type="button" onClick={() => setShowAddNewItem(true)}>
+        <p className="text-xs text-gray-500">+ Add filter</p>
+      </button>
     </div>
   );
 }
