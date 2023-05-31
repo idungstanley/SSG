@@ -41,9 +41,15 @@ export const filterByValues = (tasks: Task[]) => {
           return !value;
         }
         case 'is': {
+          if (!filter.values.length) {
+            return true;
+          }
           return isString(value) ? filter.values.includes(value) : false;
         }
         case 'is not': {
+          if (!filter.values.length) {
+            return true;
+          }
           return isString(value) ? !filter.values.includes(value) : false;
         }
       }

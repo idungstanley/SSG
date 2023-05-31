@@ -26,25 +26,27 @@ export function Item({ filter, index }: ItemProps) {
       setFilters(
         filters.map((i) => {
           if (i.id === id) {
+            const newFilter = { ...i };
             switch (type) {
               case 'key': {
-                i.key = newValue as Key;
-                i.values = [];
+                newFilter.key = newValue as Key;
+                newFilter.values = [];
                 break;
               }
               case 'option': {
-                i.option = newValue as Option;
+                newFilter.option = newValue as Option;
                 break;
               }
               case 'value': {
-                const isExists = i.values.includes(newValue);
-                i.values = isExists ? [...i.values.filter((j) => j !== newValue)] : [...i.values, newValue];
-
+                const isExists = newFilter.values.includes(newValue);
+                newFilter.values = isExists
+                  ? [...newFilter.values.filter((j) => j !== newValue)]
+                  : [...newFilter.values, newValue];
                 break;
               }
             }
+            return newFilter;
           }
-
           return i;
         })
       )

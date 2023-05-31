@@ -17,7 +17,7 @@ export function ListBox({ values, selected, setSelected }: ListBoxProps) {
   return (
     <Listbox value={selected} onChange={setSelected}>
       <div className="relative">
-        <Listbox.Button className="whitespace-nowrap relative w-full flex-grow cursor-pointer border shadow-sm rounded-lg bg-white py-2 pl-3 pr-10 text-left">
+        <Listbox.Button className="whitespace-nowrap capitalize relative w-full flex-grow cursor-pointer border shadow-sm rounded-lg bg-white py-2 pl-3 pr-10 text-left">
           {/* value */}
           <SelectedValue selected={selected} />
 
@@ -40,7 +40,10 @@ export function ListBox({ values, selected, setSelected }: ListBoxProps) {
               >
                 <>
                   <span
-                    className={cl('block whitespace-nowrap', selected.includes(value) ? 'font-medium' : 'font-normal')}
+                    className={cl(
+                      'block whitespace-nowrap capitalize',
+                      selected.includes(value) ? 'font-medium' : 'font-normal'
+                    )}
                   >
                     {value}
                   </span>
@@ -66,14 +69,14 @@ function SelectedValue({ selected }: { selected: Selected }) {
   return (
     <>
       {isString(selected) ? (
-        <span className="block truncate">{selected === 'none' ? SELECT_KEY : selected}</span>
+        <span className="block">{selected === 'none' ? SELECT_KEY : selected}</span>
       ) : (
         <div className="flex items-center space-x-2">
           {selected.length === 0 ? (
             <p>{SELECT_OPTION}</p>
           ) : (
             selected.map((i) => (
-              <span key={i} className="block truncate">
+              <span key={i} className="block">
                 {i}
               </span>
             ))
