@@ -24,7 +24,7 @@ export function Head({ columns, tableHeight, collapseTasks, onToggleCollapseTask
             <span className="bg-primary-200 py-1 px-2 rounded-xl flex items-center space-x-1">
               <Chevron color="text-gray-500" active={collapseTasks} onToggle={onToggleCollapseTasks} />
 
-              <p>{parsedLabel}</p>
+              <span>{parsedLabel}</span>
             </span>
             {!collapseTasks ? columns[0].value : null}
           </p>

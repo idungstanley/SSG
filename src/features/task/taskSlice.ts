@@ -5,6 +5,7 @@ import { IField } from '../list/list.interfaces';
 import { IDuration, IParent, TaskKey } from './interface.tasks';
 import { SortOption } from '../../pages/workspace/tasks/component/views/listLevel/TaskListViews';
 import RecordRTC from 'recordrtc';
+import { FilterValue } from '../../components/TasksHeader/ui/Filter/types/filters';
 
 export interface ICustomField {
   id: string;
@@ -137,6 +138,7 @@ interface TaskState {
   sortType: TaskKey;
   searchValue: string;
   assigneeIds: string[];
+  filters: FilterValue[];
 }
 
 const initialState: TaskState = {
@@ -195,13 +197,17 @@ const initialState: TaskState = {
   period: undefined,
   sortType: 'status',
   searchValue: '',
-  assigneeIds: []
+  assigneeIds: [],
+  filters: []
 };
 
 export const taskSlice = createSlice({
   name: 'task',
   initialState,
   reducers: {
+    setFilters(state, action: PayloadAction<FilterValue[]>) {
+      state.filters = action.payload;
+    },
     setAssigneeIds(state, action: PayloadAction<string[]>) {
       state.assigneeIds = action.payload;
     },
@@ -423,6 +429,7 @@ export const taskSlice = createSlice({
 });
 
 export const {
+  setFilters,
   setAssigneeIds,
   setSearchValue,
   createTaskSlice,
