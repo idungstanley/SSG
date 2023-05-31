@@ -38,6 +38,7 @@ export default function AdditionalHeader() {
     itemId: activeItemId,
     trigger: activeItemType === 'subhub' ? 'hub' : activeItemType
   });
+  const { activeEntityName } = useAppSelector((state) => state.workspace);
 
   const { activeTabId, workSpaceId, hubId, listId } = timerLastMemory;
 
@@ -49,7 +50,7 @@ export default function AdditionalHeader() {
   return (
     <div className="w-full border-b flex justify-between items-center px-4" style={{ height: '50px' }}>
       <h1 style={{ height: '50px' }} className="text-center flex items-center">
-        Header
+        {activeEntityName}
       </h1>
       <div className="flex space-x-2 items-center justify-center">
         {tabsId !== 6 && (
