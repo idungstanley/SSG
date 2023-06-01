@@ -124,13 +124,12 @@ function RenderHubs() {
         header={
           <section id="nav" className="capitalize" style={{ height: '50px' }}>
             <ListNav
-              navName={activeEntityName}
               viewsList="List"
               viewsList1="Table"
               viewsList2="Board"
               viewsList3="Calender"
               viewsList4="Map"
-              changeViews="View"
+              changeViews="Show"
             />
           </section>
         }

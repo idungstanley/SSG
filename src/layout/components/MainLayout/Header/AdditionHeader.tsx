@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { IoAlarmSharp } from 'react-icons/io5';
 import BlinkerModal from './HeaderModal';
+import headerIcon from '../../../../assets/icons/headerIcon.png';
 
 export const handleEntity = ({
   workSpaceId,
@@ -26,6 +27,7 @@ export default function AdditionalHeader() {
   const dispatch = useAppDispatch();
   const { activeTabId: tabsId, timerLastMemory } = useAppSelector((state) => state.workspace);
   const navigate = useNavigate();
+  const { activeEntityName } = useAppSelector((state) => state.workspace);
 
   const { activeTabId, workSpaceId, hubId, listId } = timerLastMemory;
 
@@ -36,8 +38,8 @@ export default function AdditionalHeader() {
 
   return (
     <div className="w-full border-b flex justify-between items-center px-4" style={{ height: '50px' }}>
-      <h1 style={{ height: '50px' }} className="text-center flex items-center">
-        Header
+      <h1 style={{ height: '50px' }} className="text-center flex items-center space-x-1">
+        <img src={headerIcon} alt="" className="h-4 w-4" /> <span>{activeEntityName}</span>
       </h1>
       <div className="flex space-x-2 items-center justify-center">
         {tabsId !== 6 && timerStatus && (

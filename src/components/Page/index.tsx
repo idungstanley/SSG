@@ -11,7 +11,7 @@ import { isAllowIncreaseWidth } from '../../utils/widthUtils';
 import Pilot from '../Pilot';
 
 interface PageProps {
-  header: JSX.Element;
+  header?: JSX.Element;
   additionalHeader?: JSX.Element;
   children: ReactNode;
   additional?: JSX.Element;
