@@ -7,6 +7,7 @@ import { setTaskIdForPilot } from '../../../../features/task/taskSlice';
 import { setActiveItem } from '../../../../features/workspace/workspaceSlice';
 import { DEFAULT_LEFT_PADDING } from '../../config';
 import { Column } from '../../types/table';
+import { AddTask } from '../AddTask/AddTask';
 import { Col } from './Col';
 import { StickyCol } from './StickyCol';
 import { SubTasks } from './SubTasks';
@@ -20,7 +21,7 @@ interface RowProps {
 export function Row({ task, columns, paddingLeft = 0 }: RowProps) {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-
+  const [showNewTaskField, setShowNewTaskField] = useState(false);
   const otherColumns = columns.slice(1);
   const { currentWorkspaceId } = useAppSelector((state) => state.auth);
   const { hubId } = useParams();
@@ -52,6 +53,7 @@ export function Row({ task, columns, paddingLeft = 0 }: RowProps) {
       {/* current task */}
       <tr className="contents group">
         <StickyCol
+          setShowNewTaskField={setShowNewTaskField}
           showSubTasks={showSubTasks}
           setShowSubTasks={setShowSubTasks}
           onClick={onClickTask}
@@ -71,6 +73,14 @@ export function Row({ task, columns, paddingLeft = 0 }: RowProps) {
           />
         ))}
       </tr>
+
+      {showNewTaskField ? (
+        <AddTask
+          paddingLeft={DEFAULT_LEFT_PADDING + paddingLeft}
+          parentId={task.id}
+          onClose={() => setShowNewTaskField(false)}
+        />
+      ) : null}
 
       {showSubTasks ? (
         <SubTasks paddingLeft={DEFAULT_LEFT_PADDING + paddingLeft} parentId={task.id} columns={columns} />

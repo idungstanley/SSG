@@ -8,7 +8,6 @@ import { setActiveEntityName, setActiveItem } from '../../features/workspace/wor
 import ActiveHub from '../../layout/components/MainLayout/extendedNavigation/ActiveParents/ActiveHub';
 import AdditionalHeader from '../../layout/components/MainLayout/Header/AdditionHeader';
 import PilotSection, { pilotConfig } from '../workspace/hubs/components/PilotSection';
-import ListNav from '../workspace/lists/components/renderlist/ListNav';
 import hubIcon from '../../assets/branding/hub.png';
 import FilterByAssigneesSliderOver from '../workspace/lists/components/renderlist/filters/FilterByAssigneesSliderOver';
 import { List } from '../../components/Views/ui/List/List';
