@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { IoAlarmSharp } from 'react-icons/io5';
 import moment from 'moment';
+import headerIcon from '../../../../assets/icons/headerIcon.png';
 import { ITimeEntriesRes } from '../../../../features/task/interface.tasks';
 import BlinkerModal from './HeaderModal';
 
@@ -49,8 +50,8 @@ export default function AdditionalHeader() {
 
   return (
     <div className="w-full border-b flex justify-between items-center px-4" style={{ height: '50px' }}>
-      <h1 style={{ height: '50px' }} className="text-center flex items-center">
-        {activeEntityName}
+      <h1 style={{ height: '50px' }} className="text-center flex items-center space-x-1">
+        <img src={headerIcon} alt="" className="h-4 w-4" /> <span>{activeEntityName}</span>
       </h1>
       <div className="flex space-x-2 items-center justify-center">
         {tabsId !== 6 && (
