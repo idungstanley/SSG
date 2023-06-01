@@ -124,22 +124,23 @@ export function Table({ heads, data, label }: TableProps) {
             {data.map((i) => (
               <Row columns={columns} task={i} key={i.id} />
             ))}
+            {showNewTaskField ? (
+              <AddTask
+                columnsCount={columns.length - 1}
+                parentId={data[0].list_id}
+                isListParent
+                onClose={() => setShowNewTaskField(false)}
+              />
+            ) : null}
           </tbody>
         ) : null}
-      </table>
 
-      <>
         {!showNewTaskField ? (
-          <button
-            onClick={() => setShowNewTaskField(true)}
-            className="p-1.5 text-xs rounded-md cursor-pointer hover:bg-gray-300"
-          >
+          <button onClick={() => setShowNewTaskField(true)} className="p-1.5 text-left w-fit pl-10 text-xs">
             + New Task
           </button>
-        ) : (
-          <AddTask parentId={data[0].list_id} isListParent onClose={() => setShowNewTaskField(false)} />
-        )}
-      </>
+        ) : null}
+      </table>
     </div>
   );
 }

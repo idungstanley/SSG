@@ -76,6 +76,7 @@ export function Row({ task, columns, paddingLeft = 0 }: RowProps) {
 
       {showNewTaskField ? (
         <AddTask
+          columnsCount={columns.length - 1}
           paddingLeft={DEFAULT_LEFT_PADDING + paddingLeft}
           parentId={task.id}
           onClose={() => setShowNewTaskField(false)}

@@ -63,7 +63,7 @@ export function StickyCol({
         <p>{task.name}</p>
 
         {/* show create subtask field */}
-        <div className="absolute top-0 bottom-0 right-0 flex items-center justify-center">
+        <div className="absolute opacity-0 group-hover:opacity-100 top-0 bottom-0 right-0 flex items-center justify-center">
           <button className="p-1" onClick={() => setShowNewTaskField(true)}>
             @
           </button>
