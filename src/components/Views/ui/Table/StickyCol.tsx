@@ -1,4 +1,4 @@
-import { TdHTMLAttributes } from 'react';
+import { ReactNode, TdHTMLAttributes } from 'react';
 import { MdDragIndicator } from 'react-icons/md';
 import { RxTriangleDown, RxTriangleRight } from 'react-icons/rx';
 import { useParams } from 'react-router-dom';
@@ -8,20 +8,13 @@ import { ACTIVE_COL_BG, DEFAULT_COL_BG } from '../../config';
 
 interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   task: Task;
-  setShowNewTaskField: (i: boolean) => void;
+  children: ReactNode;
   showSubTasks: boolean;
   setShowSubTasks: (i: boolean) => void;
   paddingLeft?: number;
 }
 
-export function StickyCol({
-  showSubTasks,
-  setShowSubTasks,
-  setShowNewTaskField,
-  task,
-  paddingLeft = 0,
-  ...props
-}: ColProps) {
+export function StickyCol({ showSubTasks, setShowSubTasks, children, task, paddingLeft = 0, ...props }: ColProps) {
   const { taskId } = useParams();
   const COL_BG = taskId === task.id ? ACTIVE_COL_BG : DEFAULT_COL_BG;
 
@@ -62,12 +55,7 @@ export function StickyCol({
         </button>
         <p>{task.name}</p>
 
-        {/* show create subtask field */}
-        <div className="absolute opacity-0 group-hover:opacity-100 top-0 bottom-0 right-0 flex items-center justify-center">
-          <button className="p-1" onClick={() => setShowNewTaskField(true)}>
-            @
-          </button>
-        </div>
+        {children}
       </div>
     </td>
   );

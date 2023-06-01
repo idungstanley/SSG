@@ -29,7 +29,7 @@ export function Row({ task, columns, paddingLeft = 0 }: RowProps) {
   const [showSubTasks, setShowSubTasks] = useState(false);
 
   const onClickTask = () => {
-    navigate(`/${currentWorkspaceId}/tasks/newh/${hubId}/t/${task.id}`, { replace: true });
+    navigate(`/${currentWorkspaceId}/tasks/h/${hubId}/t/${task.id}`, { replace: true });
     dispatch(
       setShowPilotSideOver({
         id: task.id,
@@ -48,19 +48,30 @@ export function Row({ task, columns, paddingLeft = 0 }: RowProps) {
     );
   };
 
+  const onShowAddSubtaskField = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.stopPropagation();
+    setShowNewTaskField(true);
+  };
+
   return (
     <>
       {/* current task */}
       <tr className="contents group">
         <StickyCol
-          setShowNewTaskField={setShowNewTaskField}
           showSubTasks={showSubTasks}
           setShowSubTasks={setShowSubTasks}
           onClick={onClickTask}
           style={{ zIndex: 3 }}
           task={task}
           paddingLeft={paddingLeft}
-        />
+        >
+          {/* show create subtask field */}
+          <div className="absolute opacity-0 group-hover:opacity-100 top-0 bottom-0 right-0 flex items-center justify-center">
+            <button className="p-1" onClick={onShowAddSubtaskField}>
+              @
+            </button>
+          </div>
+        </StickyCol>
 
         {otherColumns.map((col) => (
           <Col
@@ -76,7 +87,7 @@ export function Row({ task, columns, paddingLeft = 0 }: RowProps) {
 
       {showNewTaskField ? (
         <AddTask
-          columnsCount={columns.length - 1}
+          columns={otherColumns}
           paddingLeft={DEFAULT_LEFT_PADDING + paddingLeft}
           parentId={task.id}
           onClose={() => setShowNewTaskField(false)}

@@ -1,16 +1,17 @@
 import { useRef } from 'react';
 import { useAddTask } from '../../../../features/task/taskService';
 import { cl } from '../../../../utils';
+import { Column } from '../../types/table';
 
 interface AddTaskFieldProps {
   onClose: VoidFunction;
   parentId: string;
   paddingLeft?: number;
   isListParent?: boolean;
-  columnsCount: number;
+  columns: Column[];
 }
 
-export function AddTask({ onClose, paddingLeft, parentId, isListParent, columnsCount }: AddTaskFieldProps) {
+export function AddTask({ onClose, paddingLeft, parentId, isListParent, columns }: AddTaskFieldProps) {
   const nameRef = useRef<HTMLInputElement>(null);
   const { mutate: onAdd } = useAddTask(!isListParent ? parentId : undefined);
 
@@ -23,6 +24,8 @@ export function AddTask({ onClose, paddingLeft, parentId, isListParent, columnsC
         isListParent: !!isListParent,
         id: parentId
       });
+
+      onClose();
     }
   };
 
@@ -47,7 +50,7 @@ export function AddTask({ onClose, paddingLeft, parentId, isListParent, columnsC
         </div>
       </td>
 
-      {[...Array(columnsCount)].map((_, index) => (
+      {columns.map((_, index) => (
         <td
           key={index}
           className="z-10 border-t bg-white w-full h-full opacity-90 flex items-center justify-center"

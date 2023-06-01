@@ -119,14 +119,17 @@ export function Table({ heads, data, label }: TableProps) {
           tableHeight={tableHeight}
         />
 
+        {/* rows */}
         {!collapseTasks ? (
           <tbody className="contents">
             {data.map((i) => (
               <Row columns={columns} task={i} key={i.id} />
             ))}
+
+            {/* add subtask field */}
             {showNewTaskField ? (
               <AddTask
-                columnsCount={columns.length - 1}
+                columns={columns.slice(1)}
                 parentId={data[0].list_id}
                 isListParent
                 onClose={() => setShowNewTaskField(false)}
@@ -135,6 +138,7 @@ export function Table({ heads, data, label }: TableProps) {
           </tbody>
         ) : null}
 
+        {/* add subtask button */}
         {!showNewTaskField ? (
           <button onClick={() => setShowNewTaskField(true)} className="p-1.5 text-left w-fit pl-10 text-xs">
             + New Task
