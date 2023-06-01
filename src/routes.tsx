@@ -163,7 +163,7 @@ export const routes = (user: IUser | null) => {
         { path: 'favorites', element: <Favorites /> },
         { path: 'goals', element: <Goals /> },
         { path: 'docs', element: <Docs /> },
-        // new view here revised to old ====================
+        // new view here  ====================
         { path: 'tasks/newh/:hubId', element: <HubPage /> },
         { path: 'tasks/newh/:hubId/t/:taskId', element: <HubPage /> },
         { path: 'tasks/newl/:listId', element: <ListPage /> },
@@ -182,8 +182,6 @@ export const routes = (user: IUser | null) => {
         { path: 'shared', element: <SharedPage /> },
         { path: 'search', element: <SearchPage /> },
         ...inbox
-
-        // new view now the default view
       ]
     },
     {
