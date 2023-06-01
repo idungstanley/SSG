@@ -95,12 +95,12 @@ export default function Palette({
 
   const editWalletColorMutation = useMutation(UseEditWalletService, {
     onSuccess: () => {
-      queryClient.invalidateQueries(['wallets-and-list']);
+      queryClient.invalidateQueries(['retrieve']);
     }
   });
   const editHubColorMutation = useMutation(useEditHubService, {
     onSuccess: () => {
-      queryClient.invalidateQueries(['hubs']);
+      queryClient.invalidateQueries(['retrieve']);
     }
   });
   const editListColorMutation = useMutation(UseEditListService, {
@@ -173,7 +173,7 @@ export default function Palette({
       style={{ zIndex: '999' }}
       ref={ref}
     >
-      <div className="flex flex-col z-40">
+      <div className="z-50 flex flex-col">
         {paletteType !== 'list' && <p className="justify-center">{title}</p>}
         {topContent}
         {paletteType === 'list' && (

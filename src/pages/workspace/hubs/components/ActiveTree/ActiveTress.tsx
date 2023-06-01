@@ -11,6 +11,7 @@ import HList from './Items/hub/HList';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import { setFilteredResults } from '../../../../../features/search/searchSlice';
 import { getHub } from '../../../../../features/hubs/hubSlice';
+import { isEqual } from 'lodash';
 
 export default function ActiveTress() {
   const [hubs, setHubs] = useState<Hub[]>([]);
@@ -28,14 +29,19 @@ export default function ActiveTress() {
   const fetchTree = hubs.length === 0 && fetch && (!!listId || !!hubId || !!walletId);
 
   const { data } = useGetHubs({ includeTree: fetchTree, hub_id: id, wallet_id: id, listId });
+  console.log(data, 'outside');
+  const previousData = JSON.parse(JSON.stringify(!!data));
 
   useEffect(() => {
     if (data) {
+      const isAnyItemChanged = !isEqual(data, previousData);
+      console.log(isAnyItemChanged);
       const incoming: InputData = {
         hubs: data.hubs ? [...data.hubs.map((i) => ({ ...i, children: [], wallets: [], lists: [] }))] : [],
         wallets: data.wallets ? [...data.wallets.map((i) => ({ ...i, children: [], lists: [] }))] : [],
         lists: data.lists ? [...data.lists.map((i) => ({ ...i, children: [] }))] : []
       };
+      console.log(incoming, 'inside');
 
       if (fetchTree) {
         setHubs(() => [...CreateTree(incoming)]);
@@ -69,7 +75,9 @@ export default function ActiveTress() {
                       return item;
                     }
                   },
-                  id || listId
+                  incoming.hubs.filter((item) => item.parent_id === null),
+                  id || listId,
+                  true
                 )
               ]
         );
@@ -79,10 +87,11 @@ export default function ActiveTress() {
 
   useEffect(() => {
     if (hubs) {
+      // console.log(hubs);
       dispatch(setFilteredResults(hubs));
       dispatch(getHub(hubs));
     }
-  }, [hubs]);
+  }, [hubs, data]);
 
   return (
     <div className="flex flex-col gap-2 space-x-2">
