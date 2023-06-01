@@ -28,11 +28,19 @@ export default function BlinkerModal({ toggleFn }: BlinkerProps) {
   };
   return (
     <div
-      className="flex flex-col w-64 rounded-lg shadow-2xl bg-warmGray-50 absolute right-1/2 z-50"
+      className="flex flex-col w-64 rounded-lg shadow-2xl bg-warmGray-50 absolute -right-5 z-50"
       tabIndex={0}
       onMouseLeave={() => toggleFn(false)}
     >
-      <span className="capitalize px-2 py-3 hover:bg-gray-300 cursor-pointer" onClick={() => stopRecording()}>
+      <span
+        className="capitalize px-2 py-3 hover:bg-gray-300 cursor-pointer"
+        onClick={() =>
+          handleStopStream({
+            recorder,
+            stream
+          })
+        }
+      >
         Stop Recording
       </span>
       <span
@@ -40,6 +48,9 @@ export default function BlinkerModal({ toggleFn }: BlinkerProps) {
         onClick={() => dispatch(resetWorkSpace({ activeTabId, workSpaceId, hubId, listId }))}
       >
         Return to Recording tab
+      </span>
+      <span className="capitalize px-2 py-3 hover:bg-gray-300 cursor-pointer" onClick={() => stopRecording()}>
+        Stop and Return to Recording tab
       </span>
     </div>
   );

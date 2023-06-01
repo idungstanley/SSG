@@ -7,6 +7,9 @@ const sidebarFromLS = JSON.parse(localStorage.getItem('sidebar') || '""') as
     }
   | undefined;
 const showSidebar = sidebarFromLS?.showSidebar;
+const INNER_WIDTH = window.innerWidth;
+//RELATIVE_WIDTH IN PIXEL.
+const COMMON_WIDTH = 1550;
 
 const PILOT_WIDTH = {
   DEFAULT: 25,
@@ -15,7 +18,7 @@ const PILOT_WIDTH = {
 } as const;
 
 const NAVIGATION_BAR_WIDTH = {
-  DEFAULT: 12,
+  DEFAULT: INNER_WIDTH <= COMMON_WIDTH ? 16 : 12,
   MAX: 20,
   MIN: 8
 } as const;

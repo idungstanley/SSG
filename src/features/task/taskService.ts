@@ -103,7 +103,7 @@ export const getOneTaskServices = ({ task_id }: { task_id: string | undefined | 
     },
     {
       // enabled: false
-      enabled: task_id != null && fetch
+      enabled: task_id != null
     }
   );
 };
@@ -287,6 +287,20 @@ export const getTaskListService = ({
     }
   );
 };
+
+export const useSubTasks = (parentId: string) =>
+  useQuery(
+    ['sub-tasks', parentId],
+    () =>
+      requestNew<ITaskListRes>({
+        url: 'tasks/list',
+        method: 'POST',
+        params: {
+          parent_id: parentId
+        }
+      }),
+    { enabled: !!parentId, select: (res) => res.data.tasks }
+  );
 
 export const getTaskListService2 = (query: { parentId: string | null | undefined }) => {
   const { workSpaceId } = useParams();

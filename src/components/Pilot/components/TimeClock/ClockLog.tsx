@@ -168,13 +168,15 @@ export default function ClockLog() {
               )}
             </thead>
             <tbody>
-              {getTaskEntries?.data?.time_entries?.map((entries: entriesProps) => {
-                const { id, initials, name } = entries.team_member.user;
-                const { id: teamId } = entries.team_member;
-                teamMember.push({ id, initials, name });
-                teamMemberId.push(teamId);
-                return <EntryList entries={entries} key={entries.id} switchHeader={headers} />;
-              })}
+              <div className="overflow-auto" style={{ maxHeight: '45rem' }}>
+                {getTaskEntries?.data?.time_entries?.map((entries: entriesProps) => {
+                  const { id, initials, name } = entries.team_member.user;
+                  const { id: teamId } = entries.team_member;
+                  teamMember.push({ id, initials, name });
+                  teamMemberId.push(teamId);
+                  return <EntryList entries={entries} key={entries.id} switchHeader={headers} />;
+                })}
+              </div>
             </tbody>
           </table>
         );
