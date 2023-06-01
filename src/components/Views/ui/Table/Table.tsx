@@ -7,6 +7,7 @@ import { listColumnProps } from '../../../../pages/workspace/tasks/component/vie
 import { MAX_COL_WIDTH, MIN_COL_WIDTH } from '../../config';
 import { generateGrid } from '../../lib';
 import { createHeaders } from '../../lib/tableHeadUtils';
+import { AddTask } from '../AddTask/AddTask';
 import { Head } from './Head/Head';
 import { Row } from './Row';
 
@@ -21,7 +22,7 @@ export function Table({ heads, data, label }: TableProps) {
   const [tableHeight, setTableHeight] = useState<string | number>('auto');
   const [activeIndex, setActiveIndex] = useState<null | number>(null);
   const tableElement = useRef<HTMLTableElement>(null);
-
+  const [showNewTaskField, setShowNewTaskField] = useState(false);
   const [collapseTasks, setCollapseTasks] = useState(false);
 
   const columns = createHeaders(heads).filter((i) => !i.hidden);
@@ -126,6 +127,19 @@ export function Table({ heads, data, label }: TableProps) {
           </tbody>
         ) : null}
       </table>
+
+      <>
+        {!showNewTaskField ? (
+          <button
+            onClick={() => setShowNewTaskField(true)}
+            className="p-1.5 text-xs rounded-md cursor-pointer hover:bg-gray-300"
+          >
+            + New Task
+          </button>
+        ) : (
+          <AddTask parentId={data[0].list_id} isListParent onClose={() => setShowNewTaskField(false)} />
+        )}
+      </>
     </div>
   );
 }

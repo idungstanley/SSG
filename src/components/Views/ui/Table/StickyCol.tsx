@@ -8,12 +8,20 @@ import { ACTIVE_COL_BG, DEFAULT_COL_BG } from '../../config';
 
 interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   task: Task;
+  setShowNewTaskField: (i: boolean) => void;
   showSubTasks: boolean;
   setShowSubTasks: (i: boolean) => void;
   paddingLeft?: number;
 }
 
-export function StickyCol({ showSubTasks, setShowSubTasks, task, paddingLeft = 0, ...props }: ColProps) {
+export function StickyCol({
+  showSubTasks,
+  setShowSubTasks,
+  setShowNewTaskField,
+  task,
+  paddingLeft = 0,
+  ...props
+}: ColProps) {
   const { taskId } = useParams();
   const COL_BG = taskId === task.id ? ACTIVE_COL_BG : DEFAULT_COL_BG;
 
@@ -44,7 +52,7 @@ export function StickyCol({ showSubTasks, setShowSubTasks, task, paddingLeft = 0
         <MdDragIndicator className="text-lg text-gray-400 transition duration-200 opacity-0 cursor-move group-hover:opacity-100" />
       </div>
 
-      <div style={{ paddingLeft }} className={cl(COL_BG, 'border-t w-full h-full py-4 p-4 flex items-center')}>
+      <div style={{ paddingLeft }} className={cl(COL_BG, 'relative border-t w-full h-full py-4 p-4 flex items-center')}>
         <button onClick={onToggleDisplayingSubTasks}>
           {showSubTasks ? (
             <RxTriangleDown className="w-4 h-4 text-gray-600" />
@@ -53,6 +61,13 @@ export function StickyCol({ showSubTasks, setShowSubTasks, task, paddingLeft = 0
           )}
         </button>
         <p>{task.name}</p>
+
+        {/* show create subtask field */}
+        <div className="absolute top-0 bottom-0 right-0 flex items-center justify-center">
+          <button className="p-1" onClick={() => setShowNewTaskField(true)}>
+            @
+          </button>
+        </div>
       </div>
     </td>
   );
