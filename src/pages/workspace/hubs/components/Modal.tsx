@@ -13,7 +13,7 @@ function Modal() {
   const { currHubId } = useAppSelector((state) => state.hub);
   const createHub = useMutation(createHubService, {
     onSuccess: () => {
-      queryClient.invalidateQueries();
+      queryClient.invalidateQueries(['retrieve']);
       dispatch(setCreateHubSlideOverVisibility(false));
       dispatch(setSubDropdownMenu(false));
       dispatch(

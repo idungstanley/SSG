@@ -42,7 +42,7 @@ export default function Toggle() {
         'z-20 text-indigo-900 cursor-pointer flex items-center',
         showSidebar ? 'pl-1' : 'pt-1 absolute left-14'
       )}
-      style={{ top: !showSidebar ? '62px' : '' }}
+      style={{ top: !showSidebar ? '70px' : '' }}
     >
       {!showSidebar ? (
         <ExpandIcon />

@@ -182,19 +182,19 @@ export default function NavigationItems({
             ))}
 
             {/* show less or more button */}
-            {(pinnedNav.length < 2 || !showSidebar) && (
-              <div
-                onClick={() => setShowMore((prev) => !prev)}
-                className={cl(
-                  !showSidebar ? 'justify-center pl-5' : 'gap-2 items-center pl-6',
-                  'flex cursor-pointer gap-2 items-center p-2 w-full hover:text-gray-500 hover:bg-gray-100'
-                )}
-                style={{ height: '30px' }}
-              >
-                {showLessOrMore[showMore ? 0 : 1].icon}
-                {showSidebar ? <p className="ml-3 text-xs truncate">{showLessOrMore[showMore ? 0 : 1].name}</p> : null}
-              </div>
-            )}
+            {/* {(pinnedNav.length < 2 || !showSidebar) && ( */}
+            <div
+              onClick={() => setShowMore((prev) => !prev)}
+              className={cl(
+                !showSidebar ? 'justify-center pl-5' : 'gap-2 items-center pl-6',
+                'flex cursor-pointer gap-2 items-center p-2 w-full hover:text-gray-500 hover:bg-gray-100'
+              )}
+              style={{ height: '30px' }}
+            >
+              {showLessOrMore[showMore ? 0 : 1].icon}
+              {showSidebar ? <p className="ml-3 text-xs truncate">{showLessOrMore[showMore ? 0 : 1].name}</p> : null}
+            </div>
+            {/* )} */}
           </nav>
         </section>
       </SortableContext>

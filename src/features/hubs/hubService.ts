@@ -53,7 +53,7 @@ export const useGetHubs = ({
   const isActiveList = listId && fetch ? `lists${`?parent_id=${listId}`}` : null;
 
   return useQuery(
-    [id ?? 'root', includeTree ? 'tree' : undefined],
+    ['retrieve', id ?? 'root', includeTree ? 'tree' : undefined],
     () =>
       requestNew<IHubsRes>({
         url: includeTree ? 'active-tree' : isActiveHub || isActiveWallet || isActiveList || 'hubs',
@@ -166,7 +166,7 @@ export const UseDeleteHubService = (data: { query: string | null | undefined; de
       // retry: false,
       onSuccess: () => {
         dispatch(setDelHub(false));
-        queryClient.invalidateQueries();
+        queryClient.invalidateQueries(['retrieve']);
       }
     }
   );
