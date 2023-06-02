@@ -164,7 +164,7 @@ export default function HList({ hubs, leftMargin, taskType, level = 1 }: ListPro
         <div
           key={hub.id}
           style={{ marginLeft: leftMargin ? 20 : 0 }}
-          className={cl('z-10', !showSidebar && 'overflow-hidden w-12')}
+          className={cl(!showSidebar && 'overflow-hidden w-12')}
         >
           <div className="relative flex flex-col">
             <HubItem
@@ -178,7 +178,7 @@ export default function HList({ hubs, leftMargin, taskType, level = 1 }: ListPro
               index={index}
               type={taskType === 'subhub' ? 'subhub' : 'hub'}
               topNumber={taskType === 'subhub' ? '80px' : '50px'}
-              zNumber={taskType === 'subhub' ? '20' : '30'}
+              zNumber={taskType === 'subhub' ? '3' : '4'}
             />
             {hub.children.length && showChildren ? (
               <HList hubs={hub.children} level={level + 1} taskType="subhub" leftMargin={false} />

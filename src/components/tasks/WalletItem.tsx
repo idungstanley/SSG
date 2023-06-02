@@ -46,7 +46,7 @@ export default function WalletItem({
 }: WalletItemProps) {
   const { activeItemId } = useAppSelector((state) => state.workspace);
   const { showMenuDropdown, SubMenuId } = useAppSelector((state) => state.hub);
-  const { paletteDropdown } = useAppSelector((state) => state.account);
+  const { paletteDropdown, lightBaseColor, baseColor } = useAppSelector((state) => state.account);
   const { paletteId, show } = paletteDropdown;
   const [paletteColor, setPaletteColor] = useState<string | undefined | ListColourProps>('');
   const { walletId } = useParams();
@@ -85,16 +85,18 @@ export default function WalletItem({
   return (
     <>
       <section
-        className={`flex items-center justify-between pr-1.5 text-sm group ${
+        className={`flex bg-white items-center justify-between pr-1.5 text-sm group ${
           wallet.id === activeItemId ? 'text-green-700 font-medium' : 'hover:bg-gray-100'
-        } ${isSticky && stickyButtonIndex === index ? 'sticky z-50 bg-white' : ''}`}
+        } ${isSticky && stickyButtonIndex === index ? 'sticky bg-white' : ''}`}
         onClick={() => handleShowSubWallet(wallet.id, index)}
         style={{
-          backgroundColor: `${wallet.id === walletId ? '#BF00FF21' : ''}`,
           top: isSticky ? topNumber : '',
-          zIndex: isSticky ? zNumber : '10'
+          zIndex: isSticky ? zNumber : '1'
         }}
       >
+        {wallet.id === walletId && (
+          <span className="absolute top-0 bottom-0 left-0 right-0" style={{ backgroundColor: lightBaseColor }} />
+        )}
         <div
           id="walletLeft"
           className="relative flex items-center justify-center"
@@ -103,7 +105,7 @@ export default function WalletItem({
           {wallet.id === walletId && (
             <span
               className="absolute top-0 bottom-0 left-0 w-0.5 rounded-r-lg"
-              style={{ backgroundColor: '#BF00FF' }}
+              style={{ backgroundColor: baseColor }}
             />
           )}
           {/* showsub1 */}

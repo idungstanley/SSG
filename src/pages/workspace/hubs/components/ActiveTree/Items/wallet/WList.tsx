@@ -105,7 +105,7 @@ export default function WList({
             stickyButtonIndex={stickyButtonIndex}
             index={index}
             topNumber={type === 'subwallet2' ? '140px' : '110px'}
-            zNumber={type === 'subwallet2' ? '10' : '15'}
+            zNumber={type === 'subwallet2' ? '1' : '2'}
           />
 
           {wallet.children.length && showSubWallet ? (

@@ -52,24 +52,26 @@ export default function Header({
       className={cl(
         'flex border-b gap-1',
         !showSidebar ? 'flex-col pb-3 items-center' : 'items-center',
-        hotkeys.length > 0 ? '' : 'py-2'
+        hotkeys.length > 0 && showSidebar ? '' : 'py-2'
       )}
       style={{ height: `${showSidebar ? '115px' : ''}` }}
     >
       <Link to="/">
-        <img className="w-16 h-16" src={MainLogo} alt="Workflow" />
+        <img className="h-16" style={{ width: '50px' }} src={MainLogo} alt="Workflow" />
       </Link>
-      {!showSidebar && <hr className="w-full my-1 mr-3" />}
-      <div className={`flex flex-grow flex-shrink-0 ${hotkeys.length > 0 ? 'flex-col space-y-4' : ''}`}>
+      {!showSidebar && <hr className="w-full my-1 mr-6" />}
+      <div
+        className={`flex flex-grow flex-shrink-0 ${!showSidebar && 'gap-2 flex-col'} ${
+          hotkeys.length > 0 && showSidebar ? 'flex-col space-y-4' : ''
+        }`}
+      >
         <WorkSpaceSelection />
-        <div
-          className={cl(
-            'flex',
-            !showSidebar ? 'flex-col items-center justify-center' : 'items-center',
-            hotkeys.length > 0 ? '' : 'pl-2'
-          )}
-        >
-          <div className={`flex items-center justify-between ${hotkeys.length > 0 ? 'flex-grow flex-shrink-0' : ''}`}>
+        <div className={cl('flex', !showSidebar ? 'flex-col items-center justify-center' : 'items-center pl-2')}>
+          <div
+            className={`flex items-center justify-between ${
+              hotkeys.length > 0 && showSidebar ? 'flex-grow flex-shrink-0' : ''
+            }`}
+          >
             {hotkeys.length > 0 && showSidebar && (
               <PinnedNavigationItem activeTabId={activeTabId} setActiveTabId={setActiveTabId} hotkeys={hotkeys} />
             )}

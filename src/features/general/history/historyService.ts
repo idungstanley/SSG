@@ -8,11 +8,12 @@ export const useGetItemHistory = (data: { type?: itemType; id?: string | null })
     ['history', data.id],
     () =>
       requestNew({
-        url: 'history',
-        method: 'GET',
+        url: 'activity-logs/list',
+        method: 'POST',
         params: {
-          type: data.type,
-          id: data.id
+          model: data.type,
+          // type: data.type,
+          model_id: data.id
         }
       }),
     {
