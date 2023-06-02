@@ -38,8 +38,11 @@ export default function AdditionalHeader() {
 
   return (
     <div className="w-full border-b flex justify-between items-center px-4" style={{ height: '50px' }}>
-      <h1 style={{ height: '50px' }} className="text-center flex items-center space-x-1">
-        <img src={headerIcon} alt="" className="h-4 w-4" /> <span>{activeEntityName}</span>
+      <h1 style={{ height: '50px' }} className="text-center flex items-center space-x-1 ml-4 space-x-3">
+        <p className="bg-gray-300 rounded-md p-1 ">
+          <img src={headerIcon} alt="" className="h-6 w-6" />
+        </p>
+        <span className="font-bold text-lg">{activeEntityName}</span>
       </h1>
       <div className="flex space-x-2 items-center justify-center">
         {tabsId !== 6 && timerStatus && (

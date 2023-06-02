@@ -8,10 +8,12 @@ import { EllipsisHorizontalCircleIcon } from '@heroicons/react/24/outline';
 import { BsListStars } from 'react-icons/bs';
 import { RxDividerVertical } from 'react-icons/rx';
 import { CiViewTable } from 'react-icons/ci';
-import ListViewSettingsModal from '../../../tasks/viewSettingsModal/ListViewSettingsModal';
+import ListViewSettingsModal from '../../../tasks/TaskSettingsModal/ViewsModal/ListViewSettingsModal';
 import { HiOutlinePlusSm } from 'react-icons/hi';
 import { MdOutlineSpaceDashboard } from 'react-icons/md';
 import { BiShow } from 'react-icons/bi';
+import ShowHideSettings from '../../../tasks/TaskSettingsModal/ShowSettingsModal/ShowHideSettings';
+import subtaskIcon from '../../../../../assets/icons/subtaskIcon.png';
 
 interface ListNavProps {
   navName?: string | null;
@@ -25,7 +27,7 @@ interface ListNavProps {
   buttonLabel?: string;
 }
 
-function ListNav({ viewsList, changeViews }: ListNavProps) {
+function ListNav({ viewsList, changeViews, viewsList1 }: ListNavProps) {
   const { showTaskNavigation, listView, tableView, boardView, calenderView, mapView } = useAppSelector(
     (state) => state.task
   );
@@ -84,8 +86,8 @@ function ListNav({ viewsList, changeViews }: ListNavProps) {
           <div className="flex pt-3 space-x-2">
             <div className="flex items-center justify-start space-x-1 " onClick={handleView}>
               <span className="flex">
-                <span className="viewSettingsParent space-x-1 flex items-center pb-2 pt-1 mb-2  text-sm  cursor-pointer bg-purple-100 rounded-sm ">
-                  <span>
+                <span className="viewSettingsParent space-x-1 flex items-center pb-2 pt-1 mb-2  text-sm  cursor-pointer bg-primary-50 rounded-sm ">
+                  <span className="mt-1">
                     <BsListStars className={'flex-shrink-0 w-5 h-4'} aria-hidden="true" />
                   </span>
                   <span className="group flex items-center text-sm  cursor-pointer gap-2 font-bold">
@@ -115,15 +117,26 @@ function ListNav({ viewsList, changeViews }: ListNavProps) {
                 <span className="group  flex items-center text-sm  cursor-pointer gap-2 font-bold">
                   {changeViews}
                   <span className="">
-                    {/* <ListViewSettingsModal
-                      viewSettings="Change View"
-                      comfortableView=""
-                      comfortableViewWrap=""
-                      compactViews=""
-                      compactViewsWrap=""
-                    /> */}
+                    <ShowHideSettings
+                      scrollByEachGroup="Scroll By Each Group"
+                      splitSubTask="Split Sub Task"
+                      verticalGridLines="Vertical Gridlines"
+                      entityLocation="Entity Location"
+                      subTaskParentsNames="Subtask Parent Names"
+                      closedSubtask="Closed Subtask"
+                      TaskInMultipleLists="Task In Multiple Lista"
+                      subTaskInMultipleLists="Subtask In Multiple Lists"
+                      emptyStatuses="Empty Statuses"
+                    />
                   </span>
                 </span>
+              </span>
+            </div>
+
+            <div className="flex items-center justify-start space-x-1 w-full">
+              <span className=" space-x-1 flex items-center pb-2 pt-1 mb-2  text-sm  cursor-pointer bg-gray-200 rounded-sm min-w-max px-1">
+                <img src={subtaskIcon} className=" " alt="subtaskIcon" />
+                <span className="flex items-center text-sm  cursor-pointer font-bold">{viewsList1}</span>
               </span>
             </div>
           </div>

@@ -147,15 +147,6 @@ textarea {
   background-color: #edecefcd;
 }
 
-@keyframes fadeInAnimation {
-  0% {
-    left: 0;
-  }
-  100% {
-    left: 10;
-  }
-}
-
 .recording-tag::-webkit-media-controls {
   display: flex;
   justify-content: flex-end;
@@ -180,6 +171,93 @@ textarea {
 
 .pulsate {
   animation: pulse-animation 1s infinite;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 40px;
+  height: 20px;
+}
+
+.switch .inputShow {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc !important;
+  border-radius: 20px;
+  transition: background-color 0.2s ease;
+  outline: 0.5px solid #ccc !important;
+}
+
+.slider.checked {
+  background-color: white !important;
+}
+.slider.checked::before {
+  background-color: #d559ff !important;
+}
+
+.slider:before {
+  position: absolute;
+  content: '';
+  height: 16px;
+  width: 16px;
+  left: 2px;
+  bottom: 2px;
+  background-color: white;
+  border-radius: 50%;
+  transition: transform 0.2s ease;
+}
+
+.input:checked + .slider:before {
+  transform: translateX(20px);
+}
+.pulsate {
+  animation: pulse-animation 1s infinite;
+}
+
+@keyframes pulse-animation {
+  0% {
+    box-shadow: 0 0 0 0px rgba(0, 0, 0, 0.6);
+    width: 2px;
+    height: 2px;
+  }
+  100% {
+    box-shadow: 0 0 0 6px rgba(0, 0, 0, 0);
+    width: 14px;
+    height: 14px;
+  }
+}
+
+@keyframes fadeInAnimation {
+  0% {
+    left: 0;
+  }
+  100% {
+    left: 10;
+  }
+}
+
+@keyframes pulse-animation {
+  0% {
+    box-shadow: 0 0 0 0px rgba(0, 0, 0, 0.6);
+    width: 2px;
+    height: 2px;
+  }
+  100% {
+    box-shadow: 0 0 0 6px rgba(0, 0, 0, 0);
+    width: 14px;
+    height: 14px;
+  }
 }
 
 @keyframes pulse-animation {
