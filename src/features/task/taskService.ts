@@ -32,14 +32,12 @@ export const useAddTask = (parentTaskId?: string) => {
 
   const id = hubId ?? walletId ?? listId;
   const type = hubId ? 'hub' : walletId ? 'wallet' : 'list';
+  console.log(['sub-tasks', parentTaskId]);
 
   return useMutation(addTask, {
     onSuccess: () => {
-      if (parentTaskId) {
-        queryClient.invalidateQueries(['sub-tasks', parentTaskId]);
-      } else {
-        queryClient.invalidateQueries(['task', id, type]);
-      }
+      queryClient.invalidateQueries(['task', id, type]);
+      queryClient.invalidateQueries(['sub-tasks', parentTaskId]);
     }
   });
 };

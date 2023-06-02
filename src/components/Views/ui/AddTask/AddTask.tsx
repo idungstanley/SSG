@@ -13,7 +13,7 @@ interface AddTaskFieldProps {
 
 export function AddTask({ onClose, paddingLeft, parentId, isListParent, columns }: AddTaskFieldProps) {
   const nameRef = useRef<HTMLInputElement>(null);
-  const { mutate: onAdd } = useAddTask(!isListParent ? parentId : undefined);
+  const { mutate: onAdd } = useAddTask(parentId);
 
   const onClickSave = () => {
     if (nameRef.current) {
@@ -31,9 +31,9 @@ export function AddTask({ onClose, paddingLeft, parentId, isListParent, columns 
 
   return (
     <tr className="contents group">
-      <td style={{ paddingLeft }} className="z-20 w-full flex items-center">
+      <td className="z-20 w-full flex items-center">
         <div className="h-full w-10 bg-primary-50"></div>
-        <div className="border-t flex items-center w-full h-12 bg-white opacity-90">
+        <div style={{ paddingLeft }} className="border-t flex items-center w-full h-12 bg-white opacity-90">
           <input
             ref={nameRef}
             required
@@ -44,7 +44,7 @@ export function AddTask({ onClose, paddingLeft, parentId, isListParent, columns 
             className="border-transparent text-sm appearance-none focus:border-transparent focus:ring-0 flex-grow"
           />
         </div>
-        <div className="absolute right-2 flex space-x-2">
+        <div className="absolute right-4 flex space-x-2">
           <Button onClick={onClickSave} primary label="Save" />
           <Button onClick={onClose} label="Cancel" />
         </div>

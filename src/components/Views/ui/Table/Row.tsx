@@ -54,6 +54,11 @@ export function Row({ task, columns, paddingLeft = 0 }: RowProps) {
     setShowNewTaskField(true);
   };
 
+  const onCloseAddTaskFIeld = () => {
+    setShowNewTaskField(false);
+    setShowSubTasks(true);
+  };
+
   return (
     <>
       {/* current task */}
@@ -91,7 +96,7 @@ export function Row({ task, columns, paddingLeft = 0 }: RowProps) {
           columns={otherColumns}
           paddingLeft={DEFAULT_LEFT_PADDING + paddingLeft}
           parentId={task.id}
-          onClose={() => setShowNewTaskField(false)}
+          onClose={onCloseAddTaskFIeld}
         />
       ) : null}
 
