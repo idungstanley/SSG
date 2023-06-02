@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
+import SubtasksIcon from '../../../../assets/icons/SubtasksIcon';
 import { setShowPilotSideOver } from '../../../../features/general/slideOver/slideOverSlice';
 import { Task } from '../../../../features/task/interface.tasks';
 import { setTaskIdForPilot } from '../../../../features/task/taskSlice';
@@ -68,7 +69,7 @@ export function Row({ task, columns, paddingLeft = 0 }: RowProps) {
           {/* show create subtask field */}
           <div className="absolute opacity-0 group-hover:opacity-100 top-0 bottom-0 right-0 flex items-center justify-center">
             <button className="p-1" onClick={onShowAddSubtaskField}>
-              @
+              <SubtasksIcon className="h-4 w-4" />
             </button>
           </div>
         </StickyCol>

@@ -8,6 +8,7 @@ import { MAX_COL_WIDTH, MIN_COL_WIDTH } from '../../config';
 import { generateGrid } from '../../lib';
 import { createHeaders } from '../../lib/tableHeadUtils';
 import { AddTask } from '../AddTask/AddTask';
+import CustomScrollbar from '../List/CustomScroll';
 import { Head } from './Head/Head';
 import { Row } from './Row';
 
@@ -96,7 +97,7 @@ export function Table({ heads, data, label }: TableProps) {
   const onScroll = useScroll(() => dispatch(setUpdateCords()));
 
   return (
-    <div className="relative pl-6 overflow-hidden">
+    <CustomScrollbar>
       <table
         onScroll={onScroll}
         style={
@@ -107,7 +108,7 @@ export function Table({ heads, data, label }: TableProps) {
               }
             : undefined
         }
-        className="w-full overflow-x-scroll overflow-y-hidden"
+        className="w-full"
         ref={tableElement}
       >
         <Head
@@ -140,11 +141,16 @@ export function Table({ heads, data, label }: TableProps) {
 
         {/* add subtask button */}
         {!showNewTaskField ? (
-          <button onClick={() => setShowNewTaskField(true)} className="p-1.5 text-left w-fit pl-10 text-xs">
-            + New Task
-          </button>
+          <div className="h-5">
+            <button
+              onClick={() => setShowNewTaskField(true)}
+              className="absolute pl-16 left-0 p-1.5 text-left w-fit text-xs"
+            >
+              + New Task
+            </button>
+          </div>
         ) : null}
       </table>
-    </div>
+    </CustomScrollbar>
   );
 }
