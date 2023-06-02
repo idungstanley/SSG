@@ -1,23 +1,43 @@
-import { useQuery } from '@tanstack/react-query';
-import { itemType } from '../../../types/index';
+import { useMutation } from '@tanstack/react-query';
 import requestNew from '../../../app/requestNew';
-import { IActivityLog, IHistoryRes } from './history.interfaces';
+import { IHistoryRes } from './history.interfaces';
+import { setActivityArray } from '../../workspace/workspaceSlice';
+import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 
-export const useGetItemHistory = (data: { type?: itemType; id?: string | null }) =>
-  useQuery<IHistoryRes, unknown, IActivityLog[]>(
-    ['history', data.id],
-    () =>
-      requestNew({
-        url: 'activity-logs/list',
-        method: 'POST',
-        params: {
-          model: data.type,
-          // type: data.type,
-          model_id: data.id
-        }
-      }),
-    {
-      enabled: !!data.type && !!data.id,
-      select: (res) => res.data.activity_logs
+// ...
+
+type GetItemHistoryData = {
+  logType: 'activity' | 'history';
+};
+
+export const useGetItemHistory = () => {
+  const dispatch = useAppDispatch();
+  const { pilotSideOver } = useAppSelector((state) => state.slideOver);
+
+  const id = pilotSideOver.id;
+  const type = pilotSideOver.type;
+
+  const getItemHistory = async (data: GetItemHistoryData) => {
+    const response = await requestNew<IHistoryRes>({
+      url: 'activity-logs/list',
+      method: 'POST',
+      data: {
+        model: type,
+        model_id: id,
+        type: data.logType !== undefined ? data.logType : null
+      }
+    });
+
+    return response.data.activity_logs;
+  };
+
+  const mutation = useMutation(getItemHistory, {
+    onSuccess: (data) => {
+      dispatch(setActivityArray(data));
     }
-  );
+  });
+
+  const { status } = mutation;
+
+  return { status, getItemHistory: mutation.mutate };
+};

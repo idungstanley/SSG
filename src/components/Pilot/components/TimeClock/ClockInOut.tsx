@@ -131,10 +131,6 @@ export default function ClockInOut() {
                     <AiOutlinePlayCircle className="text-green-500 cursor-pointer text-2xl" aria-hidden="true" />
                   </button>
                 )}
-                {/* <button onClick={start}>
-                     <AiOutlinePlayCircle className="text-green-500 cursor-pointer text-2xl" aria-hidden="true" />
-                  </button>
-                 )} */}
               </div>
               {/* timer goes here */}
               <div className="items-center">

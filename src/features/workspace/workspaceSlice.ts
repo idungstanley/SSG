@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { dimensions } from '../../app/config/dimensions';
 import { IRecorderLastMemory, ITimerLastMemory } from './workspace.interfaces';
+import { IActivityLog } from '../general/history/history.interfaces';
 
 const initialActivePlaceId: number | null = (JSON.parse(localStorage.getItem('activePlaceIdLocale') as string) ||
   null) as number | null;
@@ -49,6 +50,9 @@ interface workspaceState {
   activeSubRecordsTabId: number | null;
   recorderLastMemory: IRecorderLastMemory;
   timerLastMemory: ITimerLastMemory;
+  activityArray: IActivityLog[];
+  logType: 'activity' | 'history';
+  activeLogTab: 'activity' | 'history';
 }
 
 const initialState: workspaceState = {
@@ -94,7 +98,10 @@ const initialState: workspaceState = {
   createWlLink: false,
   activeSubRecordsTabId: 0,
   recorderLastMemory: { activeTabId: 0, workSpaceId: '', listId: '', hubId: '' },
-  timerLastMemory: { activeTabId: 0, workSpaceId: '', listId: '', hubId: '' }
+  timerLastMemory: { activeTabId: 0, workSpaceId: '', listId: '', hubId: '' },
+  activityArray: [],
+  logType: 'activity',
+  activeLogTab: 'activity'
 };
 
 export const wsSlice = createSlice({
@@ -259,6 +266,15 @@ export const wsSlice = createSlice({
         : listId
         ? (state.activeItemId = listId)
         : '';
+    },
+    setActivityArray(state, action: PayloadAction<IActivityLog[]>) {
+      state.activityArray = action.payload;
+    },
+    setLogType(state, action: PayloadAction<'activity' | 'history'>) {
+      state.logType = action.payload;
+    },
+    setActiveLogTab(state, action: PayloadAction<'activity' | 'history'>) {
+      state.activeLogTab = action.payload;
     }
   }
 });
@@ -305,7 +321,10 @@ export const {
   toggleMute,
   setRecorderLastMemory,
   setTimerLastMemory,
-  resetWorkSpace
+  resetWorkSpace,
+  setActivityArray,
+  setLogType,
+  setActiveLogTab
 } = wsSlice.actions;
 
 export default wsSlice.reducer;
