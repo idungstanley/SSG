@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import FullScreenMessage from '../../../CenterMessage/FullScreenMessage';
 import { InitialsAvatar, Spinner } from '../../../../common';
@@ -11,14 +11,19 @@ import { AiFillPlusCircle } from 'react-icons/ai';
 import moment from 'moment';
 import AvatarWithImage from '../../../avatar/AvatarWithImage';
 import AvatarWithInitials from '../../../avatar/AvatarWithInitials';
-import { IActivityLog } from '../../../../features/general/history/history.interfaces';
 import { SiGooglephotos } from 'react-icons/si';
 import ClipHistory from '../../../../assets/icons/ClipHistory.svg';
 import { setActiveLogTab } from '../../../../features/workspace/workspaceSlice';
-// import { setLogType } from '../../../../features/workspace/workspaceSlice';
+import { HistoryColModal } from './Modals';
+import { SlideButton } from '../../../SlideButton';
+
+export type componentModals = {
+  showHideColModal: boolean;
+  filterLogModal: boolean;
+};
 
 export default function History() {
-  const [showModal, setShow] = useState<boolean>(false);
+  const [showModal, setShow] = useState<componentModals>({ showHideColModal: false, filterLogModal: false });
   const dispatch = useAppDispatch();
 
   // ! implement pagination
@@ -64,13 +69,20 @@ export default function History() {
           <input type="text" className="rounded-2xl w-64 h-7 border-purple-500 px-6 text-xs" placeholder="Search..." />
           <BiSearch className="w-4 h-4 absolute left-2" />
         </div>
-        <div className="flex space-x-2 items-center bg-gray-200 h-5 border-purple-500 rounded-lg px-1">
+        <div
+          className="flex space-x-2 items-center bg-gray-200 h-5 border-purple-500 rounded-lg px-1 relative cursor-pointer"
+          onClick={(e) => {
+            setShow((prev) => ({ ...prev, filterLogModal: !prev.filterLogModal }));
+            e.stopPropagation();
+          }}
+        >
           <BsFilter />
           <span className="capitalize text-xs">filter</span>
+          {showModal.filterLogModal && <Historyfiltermodal />}
         </div>
         <div className="relative">
-          <BsThreeDots onClick={() => setShow(!showModal)} />
-          {showModal && <HistoryModal model={logs} toggleFn={setShow} />}
+          <BsThreeDots onClick={() => setShow((prev) => ({ ...prev, showHideColModal: !prev.showHideColModal }))} />
+          {showModal.showHideColModal && <HistoryColModal model={logs} toggleFn={setShow} />}
         </div>
       </div>
       <div className="relative h-full w-full mt-2">
@@ -152,57 +164,32 @@ export default function History() {
   );
 }
 
-type HistoryModalProps = {
-  model: IActivityLog[] | undefined;
-  toggleFn: React.Dispatch<React.SetStateAction<boolean>>;
-};
-
-function HistoryModal({ model, toggleFn }: HistoryModalProps) {
+function Historyfiltermodal() {
+  const filterkeys = ['date', 'time', 'user', 'type'];
   const [checkedStates, setCheckedStates] = useState<boolean[]>([]);
-  const modalRef = useRef<HTMLDivElement>(null);
-
-  const handleChange = (index: number) => {
+  const handleChange = (index: number): void => {
     const newCheckedStates = [...checkedStates];
     newCheckedStates[index] = !newCheckedStates[index];
     setCheckedStates(newCheckedStates);
   };
-
-  const handleCloseModal = (event: MouseEvent) => {
-    if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
-      toggleFn(false);
-    }
-  };
-
-  useEffect(() => {
-    document.addEventListener('mousedown', handleCloseModal);
-    return () => document.removeEventListener('mousedown', handleCloseModal);
-  }, []);
-
-  console.log(checkedStates);
-
-  // Convert the model array to a set to get unique values
-  const uniqueModelSet = new Set(model?.map((item) => item.model));
-
-  // Convert the set back to an array for rendering
-  const uniqueModelArray = Array.from(uniqueModelSet);
-
   return (
-    <div
-      className="flex flex-col space-y-2 bg-white absolute top-5 right-5 shadow-2xl rounded-lg w-56 max-h-96 z-50 p-2 overflow-auto"
-      ref={modalRef}
-    >
-      <div className="border-b-2">
-        <span className="text-sm capitalize">show all</span>
-      </div>
-      {uniqueModelArray.map((modelItem, i) => (
-        <div key={modelItem} className="capitalize py-1 flex justify-between">
-          <span>{modelItem}</span>
-          <label className="switch">
-            <input type="checkbox" checked={checkedStates[i]} onChange={() => handleChange(i)} />
-            <span className={`slider ${checkedStates[i] ? 'checked' : ''}`}></span>
-          </label>
+    <>
+      <div
+        className="flex flex-col space-y-2 bg-white absolute top-5 right-5 shadow-2xl rounded-lg w-96 max-h-96 z-50 p-2 overflow-auto"
+        onClick={(e) => {
+          e.stopPropagation(); // Stop event propagation
+        }}
+      >
+        <div className="flex space-x-2 py-3 border-b-2 capitalize">Filter by</div>
+        <div className="flex flex-col space-y-2 w-full">
+          {filterkeys.map((keys, index) => (
+            <p key={index} className="flex space-x-2 capitalize w-1/5">
+              <span className="w-1/2">{keys}</span>
+              <SlideButton state={checkedStates} changeFn={handleChange} index={index} />
+            </p>
+          ))}
         </div>
-      ))}
-    </div>
+      </div>
+    </>
   );
 }
