@@ -1,11 +1,15 @@
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
 import React, { useEffect, useRef } from 'react';
+import { useAppDispatch } from '../../../../app/hooks';
+import { setUpdateCords } from '../../../../features/task/taskSlice';
+import { useScroll } from '../../../../hooks/useScroll';
 
 interface CustomScrollbarProps {
   children: React.ReactNode;
 }
 
 function CustomScrollbar({ children }: CustomScrollbarProps) {
+  const dispatch = useAppDispatch();
   const scrollRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const thumbRef = useRef<HTMLDivElement>(null);
@@ -108,9 +112,11 @@ function CustomScrollbar({ children }: CustomScrollbarProps) {
     }
   };
 
+  const onScroll = useScroll(() => dispatch(setUpdateCords()));
+
   return (
     <div className="relative pl-6 overflow-hidden p-2">
-      <div className="overflow-x-auto scrollbar-hide" ref={scrollRef}>
+      <div onScroll={onScroll} className="overflow-x-auto scrollbar-hide" ref={scrollRef}>
         <div className="w-full" ref={contentRef}>
           {children}
         </div>

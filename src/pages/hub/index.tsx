@@ -11,8 +11,6 @@ import PilotSection, { pilotConfig } from '../workspace/hubs/components/PilotSec
 import hubIcon from '../../assets/branding/hub.png';
 import FilterByAssigneesSliderOver from '../workspace/lists/components/renderlist/filters/FilterByAssigneesSliderOver';
 import { List } from '../../components/Views/ui/List/List';
-import { useScroll } from '../../hooks/useScroll';
-import { setUpdateCords } from '../../features/task/taskSlice';
 import { generateLists } from '../../utils';
 import { Header } from '../../components/TasksHeader';
 
@@ -65,8 +63,6 @@ export default function HubPage() {
     };
   }, [hasNextPage]);
 
-  const onScroll = useScroll(() => dispatch(setUpdateCords()));
-
   return (
     <>
       <PilotSection />
@@ -82,7 +78,6 @@ export default function HubPage() {
       >
         <Header />
         <section
-          onScroll={onScroll}
           ref={containerRef}
           style={{ minHeight: '0', maxHeight: '83vh' }}
           className="w-full h-full p-4 space-y-10 overflow-y-scroll"
