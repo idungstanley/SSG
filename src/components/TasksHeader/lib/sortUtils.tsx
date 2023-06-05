@@ -1,12 +1,7 @@
 import { useAppSelector } from '../../../app/hooks';
 import { Task, TaskKey, TaskValue } from '../../../features/task/interface.tasks';
 
-const stringifyValue = (value: unknown) =>
-  value === null || value === undefined
-    ? String(value)
-    : typeof value === 'object'
-    ? JSON.stringify(value)
-    : String(value);
+const stringifyValue = (value: unknown) => (typeof value === 'object' ? JSON.stringify(value) : String(value));
 
 export const sortTasks = (key: TaskKey, tasks: Task[]) => {
   const sortedTasks: Record<string, Task[]> = {};

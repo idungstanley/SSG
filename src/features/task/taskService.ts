@@ -10,6 +10,38 @@ import { useUploadRecording } from '../workspace/workspaceService';
 import { useParams } from 'react-router-dom';
 import { toggleMute } from '../workspace/workspaceSlice';
 
+const addTask = (data: { name: string; id: string; isListParent: boolean }) => {
+  const { name, id, isListParent } = data;
+
+  const parentId = isListParent ? { list_id: id } : { parent_id: id };
+
+  const response = requestNew({
+    url: 'tasks',
+    method: 'POST',
+    data: {
+      name,
+      ...parentId
+    }
+  });
+  return response;
+};
+
+export const useAddTask = (parentTaskId?: string) => {
+  const queryClient = useQueryClient();
+  const { hubId, walletId, listId } = useParams();
+
+  const id = hubId ?? walletId ?? listId;
+  const type = hubId ? 'hub' : walletId ? 'wallet' : 'list';
+  console.log(['sub-tasks', parentTaskId]);
+
+  return useMutation(addTask, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['task', id, type]);
+      queryClient.invalidateQueries(['sub-tasks', parentTaskId]);
+    }
+  });
+};
+
 export const createTaskService = (data: {
   name: string;
   description?: string;
@@ -44,15 +76,15 @@ export const UseGetFullTaskList = ({
   const hub_id = itemType === 'hub' || itemType === 'subhub' ? itemId : null;
   const wallet_id = itemType == 'wallet' || itemType == 'subwallet' ? itemId : null;
   const assignees = assigneeUserId ? (assigneeUserId == 'unassigned' ? null : [assigneeUserId]) : null;
-  const { sortAbleArr } = useAppSelector((state) => state.task);
-  const sortArrUpdate = sortAbleArr.length <= 0 ? null : sortAbleArr;
+  // const { sortAbleArr } = useAppSelector((state) => state.task);
+  // const sortArrUpdate = sortAbleArr.length <= 0 ? null : sortAbleArr;
   const { workSpaceId } = useParams();
   const { currentWorkspaceId } = useAppSelector((state) => state.auth);
 
   const fetch = currentWorkspaceId == workSpaceId;
 
   return useInfiniteQuery(
-    ['task', itemId, itemType, assigneeUserId, sortArrUpdate],
+    ['task', itemId, itemType],
     async ({ pageParam = 0 }: { pageParam?: number }) => {
       return requestNew<IFullTaskRes>({
         url: 'tasks/full-list',
@@ -62,10 +94,10 @@ export const UseGetFullTaskList = ({
           hub_id,
           wallet_id,
           assignees
-        },
-        data: {
-          sorting: sortArrUpdate
         }
+        // data: {
+        //   sorting: sortArrUpdate
+        // }
       });
     },
     {
@@ -282,6 +314,20 @@ export const getTaskListService = ({
     }
   );
 };
+
+export const useSubTasks = (parentId: string) =>
+  useQuery(
+    ['sub-tasks', parentId],
+    () =>
+      requestNew<ITaskListRes>({
+        url: 'tasks/list',
+        method: 'POST',
+        params: {
+          parent_id: parentId
+        }
+      }),
+    { enabled: !!parentId, select: (res) => res.data.tasks }
+  );
 
 export const getTaskListService2 = (query: { parentId: string | null | undefined }) => {
   const { workSpaceId } = useParams();

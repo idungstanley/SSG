@@ -165,3 +165,18 @@ export const checkIfWorkspaceService = async () => {
   });
   return response;
 };
+
+export const getActivityLogs = () => {
+  const { activeItemType, activeItemId } = useAppSelector((state) => state.workspace);
+  return useQuery(['logs', activeItemId], async () => {
+    const data = await requestNew({
+      url: 'api/activity-logs/list',
+      method: 'POST',
+      body: {
+        model: activeItemType,
+        model_id: activeItemId
+      }
+    });
+    return data;
+  });
+};

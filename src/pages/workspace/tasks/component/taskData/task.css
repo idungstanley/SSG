@@ -47,7 +47,6 @@
 
 .viewSettings {
   display: none;
-  font-size: 25px;
 }
 
 .viewSettingsParent:hover .viewSettings {

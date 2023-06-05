@@ -1,10 +1,11 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { useAppSelector } from '../../../../app/hooks';
 import { useList } from '../../../../features/list/listService';
 import { Task } from '../../../../features/task/interface.tasks';
-import { filterByAssignee, filterBySearchValue, sortTasks } from '../../../TasksHeader/lib';
+import { filterByAssignee, filterBySearchValue, filterByValues, sortTasks } from '../../../TasksHeader/lib';
 import { generateColumns } from '../../lib/tableHeadUtils';
 import { Table } from '../Table/Table';
+import { Label } from './Label';
 
 interface ListProps {
   tasks: Task[];
@@ -14,6 +15,8 @@ export function List({ tasks }: ListProps) {
   const { sortType } = useAppSelector((state) => state.task);
   const { data } = useList(tasks[0].list_id);
 
+  const [collapseTable, setCollapseTable] = useState(false);
+
   const listName = data?.name;
 
   const heads = useMemo(() => (data ? generateColumns(data.custom_fields) : null), [data]);
@@ -22,15 +25,15 @@ export function List({ tasks }: ListProps) {
 
   const { filteredByAssignee } = filterByAssignee(filteredBySearch);
 
-  const { sortedTasks } = sortTasks(sortType, filteredByAssignee);
+  const { filteredByValues } = filterByValues(filteredByAssignee);
+
+  const { sortedTasks } = sortTasks(sortType, filteredByValues);
 
   return (
-    <div className="border-l-4 border-purple-500 rounded-lg bg-purple-50">
-      <div className="flex">
-        <h1 className="p-2 px-4 text-sm text-white bg-purple-500 rounded-br-md w-fit">{listName}</h1>
-      </div>
+    <div className="border-l-4 border-t-4 border-purple-500 rounded-lg bg-purple-50">
+      <Label listName={listName} showTable={collapseTable} onClickChevron={() => setCollapseTable((prev) => !prev)} />
 
-      {heads ? (
+      {!collapseTable && heads ? (
         <div className="space-y-10">
           {Object.keys(sortedTasks).map((key) => (
             <Table label={key} key={key} heads={heads} data={sortedTasks[key]} />

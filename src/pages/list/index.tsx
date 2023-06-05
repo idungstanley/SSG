@@ -99,7 +99,7 @@ export function ListPage() {
 
           {/* main content */}
           <div
-            style={{ minHeight: '0', maxHeight: '85vh' }}
+            style={{ minHeight: '0', maxHeight: '83vh' }}
             ref={containerRef}
             className="w-full h-full p-4 space-y-10 overflow-y-scroll"
             onScroll={onScroll}

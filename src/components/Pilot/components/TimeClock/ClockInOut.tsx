@@ -11,7 +11,7 @@ import {
   StartTimeEntryService
 } from '../../../../features/task/taskService';
 import AvatarWithInitials from '../../../avatar/AvatarWithInitials';
-import { setTimerStatus } from '../../../../features/task/taskSlice';
+import { setTimerInterval, setTimerStatus, setUpdateTimerDuration } from '../../../../features/task/taskSlice';
 import { useParams } from 'react-router-dom';
 import { setTimerLastMemory } from '../../../../features/workspace/workspaceSlice';
 
@@ -25,18 +25,14 @@ export default function ClockInOut() {
     isBillable: false,
     description: ''
   });
-  const { activeItemId, activeItemType, activeItemName, activeTabId } = useAppSelector((state) => state.workspace);
-  const { timerStatus } = useAppSelector((state) => state.task);
+  const { activeItemId, activeItemType, activeTabId } = useAppSelector((state) => state.workspace);
+  const { timerStatus, duration, period } = useAppSelector((state) => state.task);
   const dispatch = useAppDispatch();
-  const [time, setTime] = useState({ ms: 0, s: 0, m: 0, h: 0 });
-  const [btnClicked, setBtnClicked] = useState(false);
-  const [period, setPeriod] = useState<string | number | undefined>(undefined);
+  const [, setTime] = useState({ s: 0, m: 0, h: 0 });
+  const [, setBtnClicked] = useState(false);
+  // const [period, setPeriod] = useState<string | number | undefined>(undefined);
   const { workSpaceId, listId, hubId } = useParams();
 
-  useEffect(() => {
-    reset();
-    return reset();
-  }, [activeItemName]);
   const { initials } = JSON.parse(localStorage.getItem('user') as string) as User;
 
   const { data: getEntries } = GetTimeEntriesService({
@@ -52,11 +48,11 @@ export default function ClockInOut() {
       type: activeItemType === 'subhub' ? 'hub' : activeItemType
     });
     if (timerStatus) {
-      return setBtnClicked(!btnClicked);
+      return dispatch(setTimerStatus(false));
     }
-    setBtnClicked(!btnClicked);
+    dispatch(setTimerStatus(!timerStatus));
     RunTimer();
-    setPeriod(window.setInterval(RunTimer, 10));
+    dispatch(setTimerInterval(window.setInterval(RunTimer, 1000)));
     dispatch(setTimerLastMemory({ workSpaceId, hubId, listId, activeTabId }));
   };
   const stop = () => {
@@ -66,7 +62,10 @@ export default function ClockInOut() {
       is_Billable: data.isBillable
     });
     reset();
+    setTime({ s: 0, m: 0, h: 0 });
     dispatch(setTimerStatus(false));
+    dispatch(setTimerInterval());
+    clearInterval(period);
   };
 
   const handleEndTimeChange = (value: string) => {
@@ -76,29 +75,30 @@ export default function ClockInOut() {
   const reset = () => {
     clearInterval(period);
     setBtnClicked(false);
-    setTime({ ms: 0, s: 0, m: 0, h: 0 });
+    setTime({ s: 0, m: 0, h: 0 });
   };
 
-  let updateH = time.h,
-    updateM = time.m,
-    updateS = time.s,
-    updateMS = time.ms;
+  let updateH = duration.h,
+    updateM = duration.m,
+    updateS = duration.s;
   const RunTimer = () => {
-    if (updateM >= 60) {
+    if (updateM >= 59) {
       updateH++;
       updateM = 0;
     }
-    if (updateS >= 60) {
+    if (updateS >= 59) {
       updateM++;
       updateS = 0;
     }
-    if (updateMS >= 100) {
-      updateS++;
-      updateMS = 0;
-    }
-    updateMS++;
-    return setTime({ ms: updateMS, s: updateS, m: updateM, h: updateH });
+    updateS++;
+    return dispatch(setUpdateTimerDuration({ s: updateS, m: updateM, h: updateH }));
   };
+
+  useEffect(() => {
+    setTime(duration);
+  }, [dispatch]);
+
+  console.log(timerStatus);
 
   return (
     <div className="mt-6 p-2 rounded-t-md">
@@ -121,16 +121,11 @@ export default function ClockInOut() {
           <div id="entries" className="py-1 flex items-center justify-between">
             <div id="left" className="flex items-center space-x-1 cursor-pointer">
               <div className="mr-1">
-                {btnClicked ? (
-                  !btnClicked && !timerStatus ? (
-                    <button onClick={start}>
-                      <AiOutlinePlayCircle className="text-green-500 cursor-pointer text-2xl" aria-hidden="true" />
-                    </button>
-                  ) : (
-                    <button onClick={stop}>
-                      <BsStopCircle className="text-red-400 cursor-pointer text-2xl" aria-hidden="true" />
-                    </button>
-                  )
+                {timerStatus ? (
+                  // !btnClicked && !timerStatus ? (
+                  <button onClick={stop}>
+                    <BsStopCircle className="text-red-400 cursor-pointer text-2xl" aria-hidden="true" />
+                  </button>
                 ) : (
                   <button onClick={start}>
                     <AiOutlinePlayCircle className="text-green-500 cursor-pointer text-2xl" aria-hidden="true" />
@@ -139,11 +134,11 @@ export default function ClockInOut() {
               </div>
               {/* timer goes here */}
               <div className="items-center">
-                {time.h < 10 ? `0${time.h}` : time.h}
+                {duration.h < 10 ? `0${duration.h}` : duration.h}
                 {':'}
-                {time.m < 10 ? `0${time.m}` : time.m}
+                {duration.m < 10 ? `0${duration.m}` : duration.m}
                 {':'}
-                {time.s < 10 ? `0${time.s}` : time.s}
+                {duration.s < 10 ? `0${duration.s}` : duration.s}
               </div>
               <div className="flex items-center justify-start cursor-pointer -space-x-4">
                 <AvatarWithInitials height="h-7" width="w-7" initials={initials} />

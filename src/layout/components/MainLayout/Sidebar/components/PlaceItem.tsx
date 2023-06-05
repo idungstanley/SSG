@@ -34,7 +34,7 @@ export default function PlaceItem({
 }: PlaceItemProps) {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { showSidebar, lightBaseColor } = useAppSelector((state) => state.account);
+  const { showSidebar, lightBaseColor, baseColor } = useAppSelector((state) => state.account);
   const { hub } = useAppSelector((state) => state.hub);
   const { activeItemId } = useAppSelector((state) => state.workspace);
 
@@ -46,20 +46,20 @@ export default function PlaceItem({
   const isActivePlace = !onClick;
   const placeActive = isActivePlace && isActiveLayoutCondition;
 
-  const baseColor = '#BF00FFB2';
+  // const baseColor = '#BF00FFB2';
   const style = {
     transform: transform ? `translate(${transform.x}px, ${transform.y}px)` : undefined,
     transition,
     backgroundColor: isDragging
       ? '#f3f4f6'
       : placeActive
-      ? lightBaseColor
+      ? 'white'
       : isActivePlace
       ? 'white'
       : isActivePlace && activeItemId !== null && !searchStatus
       ? '#BF00FF08'
       : undefined,
-    zIndex: isDragging ? 1 : isActivePlace ? 50 : undefined,
+    zIndex: isDragging ? 1 : isActivePlace ? 10 : undefined,
     height: '50px',
     paddingLeft: showSidebar ? '25px' : '20px'
   };
@@ -84,7 +84,10 @@ export default function PlaceItem({
       onClick={isActivePlace ? resetSelectedPlace : onClick}
     >
       {placeActive && (
-        <span className="absolute top-0 bottom-0 left-0 w-0.5 rounded-r-lg" style={{ backgroundColor: '#BF00FF' }} />
+        <span className="absolute top-0 bottom-0 left-0 right-0" style={{ backgroundColor: lightBaseColor }} />
+      )}
+      {placeActive && (
+        <span className="absolute top-0 bottom-0 left-0 w-0.5 rounded-r-lg" style={{ backgroundColor: baseColor }} />
       )}
       {!searchStatus && (
         <div className="flex items-center">
@@ -107,7 +110,7 @@ export default function PlaceItem({
               <span
                 className={cl(
                   showSidebar ? 'block' : 'hidden',
-                  'w-full cursor-pointer uppercase truncate',
+                  'w-32 flex jusitfy-start cursor-pointer uppercase truncate',
                   isActivePlace ? 'font-black' : ''
                 )}
                 style={{
@@ -127,7 +130,6 @@ export default function PlaceItem({
                 {showSidebar && midContent}
                 {showSidebar && rightContent}
               </div>
-
               <span
                 onClick={isActivePlace ? resetSelectedPlace : onClick}
                 className={cl(showSidebar ? 'block' : 'hidden')}

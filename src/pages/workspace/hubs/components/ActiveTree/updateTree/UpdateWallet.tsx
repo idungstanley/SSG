@@ -4,7 +4,7 @@ import UpdateList from './UpdateList';
 export default function UpdateWallet(
   existingTree: Wallet[],
   updateFn: <T extends Wallet | List>(i: T) => T,
-  idToUpdate: string
+  idToUpdate?: string | null
 ): Wallet[] {
   return existingTree.map((wallet) => {
     if (wallet.id === idToUpdate) {

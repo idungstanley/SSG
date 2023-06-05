@@ -60,56 +60,58 @@ export default function VideoEntries() {
           <th className="capitalize font-bold">duration</th>
         </tr>
       </thead>
-      <tbody className="relative">
-        {data?.data.attachments.map((videoFile, index) => {
-          const { created_at, updated_at, file_format } = videoFile.physical_file;
-          const duration = new Date(updated_at).getTime() - new Date(created_at).getTime();
-          return (
-            <tr key={videoFile.id} className="flex space-x-8 border-b items-center p-2 relative">
-              <td>
-                <AvatarWithInitials initials="MD" width="w-5" height="h-5" />
-              </td>
-              <td className="relative" ref={targetElementRef}>
-                <video
-                  ref={(el) => (videoRefs.current[index] = el)}
-                  src={videoFile.path}
-                  height={60}
-                  width={100}
-                  tabIndex={0}
-                  className="recording-tag"
-                  onMouseEnter={() =>
-                    toggleControls({ index, showControls: true, videoElement: videoRefs.current[index] })
-                  }
-                  onEnded={() => setPlayToggle(false)}
-                />
-                {controlModal && hoverIndex === index && (
-                  <AdaptiveModal styles="" targetElementRef={targetElementRef} toggleFn={setModal}>
-                    <VideoControlModal
-                      index={index}
-                      videoElement={videoRefs.current[index]}
-                      videoId={videoFile.id}
-                      toggleFn={toggleControls}
-                      playToggleFn={setPlayToggle}
+      <tbody>
+        <div className="relative overflow-y-auto max-h-204">
+          {data?.data.attachments.map((videoFile, index) => {
+            const { created_at, updated_at, file_format } = videoFile.physical_file;
+            const duration = new Date(updated_at).getTime() - new Date(created_at).getTime();
+            return (
+              <tr key={videoFile.id} className="flex space-x-8 border-b items-center p-2 relative">
+                <td>
+                  <AvatarWithInitials initials="MD" width="w-5" height="h-5" />
+                </td>
+                <td className="relative" ref={targetElementRef}>
+                  <video
+                    ref={(el) => (videoRefs.current[index] = el)}
+                    src={videoFile.path}
+                    height={60}
+                    width={100}
+                    tabIndex={0}
+                    className="recording-tag"
+                    onMouseEnter={() =>
+                      toggleControls({ index, showControls: true, videoElement: videoRefs.current[index] })
+                    }
+                    onEnded={() => setPlayToggle(false)}
+                  />
+                  {controlModal && hoverIndex === index && (
+                    <AdaptiveModal styles="" targetElementRef={targetElementRef} toggleFn={setModal}>
+                      <VideoControlModal
+                        index={index}
+                        videoElement={videoRefs.current[index]}
+                        videoId={videoFile.id}
+                        toggleFn={toggleControls}
+                        playToggleFn={setPlayToggle}
+                      />
+                    </AdaptiveModal>
+                  )}
+                  {playToggle && hoverIndex === index ? (
+                    <RiStopFill
+                      className="absolute top-10 left-1 h-4 w-4 text-gray-200 cursor-pointer hover:text-gray-200"
+                      onClick={() => handlePlayBack(index)}
                     />
-                  </AdaptiveModal>
-                )}
-                {playToggle && hoverIndex === index ? (
-                  <RiStopFill
-                    className="absolute top-10 left-1 h-4 w-4 text-gray-200 cursor-pointer hover:text-gray-200"
-                    onClick={() => handlePlayBack(index)}
-                  />
-                ) : (
-                  <RiPlayFill
-                    className="absolute top-10 left-1 h-4 w-4 text-gray-200 cursor-pointer hover:text-gray-200"
-                    onClick={() => handlePlayBack(index)}
-                  />
-                )}
-              </td>
-              <td>{file_format.extension}</td>
-              <td>{moment(duration).format('HH:mm:ss')}</td>
-            </tr>
-          );
-        })}
+                  ) : (
+                    <RiPlayFill
+                      className="absolute top-10 left-1 h-4 w-4 text-gray-200 cursor-pointer hover:text-gray-200"
+                      onClick={() => handlePlayBack(index)}
+                    />
+                  )}
+                </td>
+                <td>{file_format.extension}</td>
+                <td>{moment(duration).format('HH:mm:ss')}</td>
+              </tr>
+            );
+          })}
+        </div>
       </tbody>
     </table>
   );

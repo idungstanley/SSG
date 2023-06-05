@@ -8,19 +8,15 @@ import { setActiveEntityName, setActiveItem } from '../../features/workspace/wor
 import ActiveHub from '../../layout/components/MainLayout/extendedNavigation/ActiveParents/ActiveHub';
 import AdditionalHeader from '../../layout/components/MainLayout/Header/AdditionHeader';
 import PilotSection, { pilotConfig } from '../workspace/hubs/components/PilotSection';
-import ListNav from '../workspace/lists/components/renderlist/ListNav';
 import hubIcon from '../../assets/branding/hub.png';
 import FilterByAssigneesSliderOver from '../workspace/lists/components/renderlist/filters/FilterByAssigneesSliderOver';
 import { List } from '../../components/Views/ui/List/List';
-import { useScroll } from '../../hooks/useScroll';
-import { setUpdateCords } from '../../features/task/taskSlice';
 import { generateLists } from '../../utils';
 import { Header } from '../../components/TasksHeader';
 
 export default function HubPage() {
   const dispatch = useAppDispatch();
   const { hubId } = useParams();
-  const { activeEntityName } = useAppSelector((state) => state.workspace);
   const { filterTaskByAssigneeIds } = useAppSelector((state) => state.task);
   const containerRef = useRef<HTMLDivElement>(null);
   const { data: hub } = UseGetHubDetails({ activeItemId: hubId, activeItemType: 'hub' });
@@ -67,27 +63,12 @@ export default function HubPage() {
     };
   }, [hasNextPage]);
 
-  const onScroll = useScroll(() => dispatch(setUpdateCords()));
-
   return (
     <>
       <PilotSection />
       <Page
         pilotConfig={pilotConfig}
         additionalHeader={<AdditionalHeader />}
-        header={
-          <section id="nav" className="capitalize" style={{ height: '50px' }}>
-            <ListNav
-              navName={activeEntityName}
-              viewsList="List"
-              viewsList1="Table"
-              viewsList2="Board"
-              viewsList3="Calender"
-              viewsList4="Map"
-              changeViews="View"
-            />
-          </section>
-        }
         extendedBar={{
           name: 'TASKS',
           children: <ActiveHub />,
@@ -97,9 +78,8 @@ export default function HubPage() {
       >
         <Header />
         <section
-          onScroll={onScroll}
           ref={containerRef}
-          style={{ minHeight: '0', maxHeight: '85vh' }}
+          style={{ minHeight: '0', maxHeight: '83vh' }}
           className="w-full h-full p-4 space-y-10 overflow-y-scroll"
         >
           {/* lists */}

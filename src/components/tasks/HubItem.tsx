@@ -47,7 +47,7 @@ export default function HubItem({
 }: TaskItemProps) {
   const dispatch = useAppDispatch();
   const { activeItemId } = useAppSelector((state) => state.workspace);
-  const { showSidebar } = useAppSelector((state) => state.account);
+  const { showSidebar, lightBaseColor, baseColor } = useAppSelector((state) => state.account);
   // const { openedHubId } = useAppSelector((state) => state.hub);
   const [uploadId, setUploadId] = useState<string | null | undefined>('');
   const { paletteDropdown } = useAppSelector((state) => state.account);
@@ -84,17 +84,19 @@ export default function HubItem({
   return (
     <>
       <div
-        className={`flex justify-between items-center group ${
-          item.id === activeItemId ? 'text-green-700 font-medium' : 'hover:bg-gray-100'
-        } ${isSticky && stickyButtonIndex === index ? 'sticky z-50 bg-white' : ''}`}
+        className={`flex bg-white truncate justify-between items-center group ${
+          item.id === activeItemId ? 'font-medium' : 'hover:bg-gray-100'
+        } ${isSticky && stickyButtonIndex === index ? 'sticky bg-white opacity-100' : ''}`}
         tabIndex={0}
         onClick={() => handleClick(item.id, index)}
         style={{
-          backgroundColor: `${item.id === hubId ? '#BF00FF21' : ''}`,
           top: isSticky && showSidebar ? topNumber : '',
-          zIndex: isSticky ? zNumber : '10'
+          zIndex: isSticky ? zNumber : '2'
         }}
       >
+        {item.id === hubId && (
+          <span className="absolute top-0 bottom-0 left-0 right-0" style={{ backgroundColor: lightBaseColor }} />
+        )}
         <div
           className={`relative flex items-center justify-between ${showSidebar ? 'pl-3' : 'pl-2.5'}`}
           style={{ height: '30px' }}
@@ -102,12 +104,12 @@ export default function HubItem({
           {item.id === hubId && (
             <span
               className="absolute top-0 bottom-0 left-0 w-0.5 rounded-r-lg"
-              style={{ backgroundColor: '#BF00FF' }}
+              style={{ backgroundColor: baseColor }}
             />
           )}
           <div
             role="button"
-            className="flex items-center py-1.5 mt-0.5 justify-start overflow-y-hidden text-sm"
+            className="flex truncate items-center py-1.5 mt-0.5 justify-start overflow-y-hidden text-sm"
             style={{ paddingLeft: type === 'subhub' && !showSidebar ? '5px' : type === 'subhub' ? '10px' : '' }}
           >
             {!collapseNavAndSubhub && (
@@ -142,7 +144,7 @@ export default function HubItem({
                 )}
               </div>
               <span className="ml-5 overflow-hidden">
-                <a
+                <p
                   className="capitalize truncate cursor-pointer"
                   style={{
                     fontSize: '13px',
@@ -153,7 +155,7 @@ export default function HubItem({
                   onClick={() => handleLocation(item.id, item.name, index)}
                 >
                   {item.name}
-                </a>
+                </p>
               </span>
             </div>
           </div>

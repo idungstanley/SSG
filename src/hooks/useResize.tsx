@@ -92,8 +92,8 @@ export function useResize({ dimensions, direction, defaultSize, storageKey }: Us
   function Dividers() {
     const params = {
       XL: {
-        root: 'top-0 w-2 -left-1 h-full',
-        firstDivider: 'top-0 left-0 w-0.5 h-full',
+        root: 'top-0 w-2 -left-1.5 h-full',
+        firstDivider: 'top-0 left-0.5 w-0.5 h-full',
         secondDivider: 'top-0 right-0 w-0.5 h-full'
       },
       YB: {
@@ -102,7 +102,7 @@ export function useResize({ dimensions, direction, defaultSize, storageKey }: Us
         secondDivider: ' bottom-0 left-0 h-0.5 w-full'
       },
       XR: {
-        root: 'top-0 w-2 -right-1 h-full',
+        root: 'top-0 w-2 -right-0.5 h-full',
         firstDivider: 'top-0 left-0 w-0.5 h-full',
         secondDivider: 'top-0 right-0 w-0.5 h-full'
       }
@@ -118,7 +118,7 @@ export function useResize({ dimensions, direction, defaultSize, storageKey }: Us
           className={cl(
             size === max ? '' : 'group-hover:opacity-100',
 
-            'absolute top-0 left-0 transition-all w-0.5 h-full opacity-0 bg-primary-300'
+            'absolute top-0 left-0.5 transition-all w-0.5 h-full opacity-0 bg-primary-300'
           )}
         />
         <div
