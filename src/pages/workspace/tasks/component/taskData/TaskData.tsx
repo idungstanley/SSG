@@ -38,10 +38,10 @@ export default function TaskData({ task, listId }: TaskDataProps) {
 
   const handleTaskPilot = (id: string, name: string) => {
     hubId
-      ? navigate(`/${currentWorkspaceId}/tasks/h/${hubId}/t/${id}`, { replace: true })
+      ? navigate(`/${currentWorkspaceId}/tasks/newh/${hubId}/t/${id}`, { replace: true })
       : walletId
-      ? navigate(`/${currentWorkspaceId}/tasks/w/${walletId}/t/${id}`, { replace: true })
-      : navigate(`/${currentWorkspaceId}/tasks/l/${listId}/t/${id}`, { replace: true });
+      ? navigate(`/${currentWorkspaceId}/tasks/neww/${walletId}/t/${id}`, { replace: true })
+      : navigate(`/${currentWorkspaceId}/tasks/newl/${listId}/t/${id}`, { replace: true });
     dispatch(
       setShowPilotSideOver({
         id: id,

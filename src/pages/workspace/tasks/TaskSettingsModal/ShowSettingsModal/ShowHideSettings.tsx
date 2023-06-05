@@ -1,30 +1,20 @@
 import React, { Fragment, useState } from 'react';
 import { Menu, Transition } from '@headlessui/react';
-import { BsChevronRight, BsListUl, BsPinAngle, BsThreeDots } from 'react-icons/bs';
-import { useAppDispatch } from '../../../../../app/hooks';
-import {
-  getCompactView,
-  getCompactViewWrap,
-  getComfortableView,
-  getComfortableViewWrap
-} from '../../../../../features/task/taskSlice';
-import { AiOutlineCaretDown, AiOutlineLineChart, AiOutlinePlus } from 'react-icons/ai';
-import { HiOutlineTable } from 'react-icons/hi';
-import { MdOutlineSpaceDashboard } from 'react-icons/md';
-import { BiCalendar, BiChevronRight } from 'react-icons/bi';
-import { RiMapPin5Line } from 'react-icons/ri';
-import { CgViewComfortable } from 'react-icons/cg';
-import { GiChart } from 'react-icons/gi';
+import { BsChevronRight } from 'react-icons/bs';
+import { AiOutlineCaretDown } from 'react-icons/ai';
 import { FiChevronRight } from 'react-icons/fi';
-import { CiEdit } from 'react-icons/ci';
-import listIcon from '../../../../../assets/icons/listIcon.png';
-import tableIcon from '../../../../../assets/icons/tableIcon.png';
-import boardIcon from '../../../../../assets/icons/boardIcon.png';
-import calenderIcon from '../../../../../assets/icons/calenderIcon.png';
-import timeChartIcon from '../../../../../assets/icons/timeChartIcon.png';
-import mapIcon from '../../../../../assets/icons/mapIcon.png';
-import gantIcon from '../../../../../assets/icons/gantIcon.png';
-import teamIcon from '../../../../../assets/icons/teamIcon.png';
+
+interface IShowHideSettings {
+  scrollByEachGroup: string;
+  splitSubTask: string;
+  verticalGridLines: string;
+  entityLocation: string;
+  subTaskParentsNames: string;
+  closedSubtask: string;
+  TaskInMultipleLists: string;
+  subTaskInMultipleLists: string;
+  emptyStatuses: string;
+}
 
 export default function ShowHideSettings({
   scrollByEachGroup,
@@ -36,23 +26,8 @@ export default function ShowHideSettings({
   TaskInMultipleLists,
   subTaskInMultipleLists,
   emptyStatuses
-}: {
-  scrollByEachGroup: string;
-  splitSubTask: string;
-  verticalGridLines: string;
-  entityLocation: string;
-  subTaskParentsNames: string;
-  closedSubtask: string;
-  TaskInMultipleLists: string;
-  subTaskInMultipleLists: string;
-  emptyStatuses: string;
-}) {
-  const dispatch = useAppDispatch();
-  const [viewId, setViewId] = useState<number | null>(null);
-  const [listView, setListView] = useState<boolean | null>(true);
-  const [activeView, setActiveView] = useState<number | null>(1);
+}: IShowHideSettings) {
   const [checkedStates, setCheckedStates] = useState<boolean[]>([]);
-
   const handleChange = (index: number) => {
     const newCheckedStates = [...checkedStates];
     newCheckedStates[index] = !newCheckedStates[index];
@@ -62,113 +37,54 @@ export default function ShowHideSettings({
   const ViewSettings = [
     {
       id: 2,
-      icon: <img src={tableIcon} alt="tableIcon" />,
       label: scrollByEachGroup,
-      handleClick: () => {
-        dispatch(getComfortableView(true));
-        dispatch(getComfortableViewWrap(false));
-        dispatch(getCompactView(false));
-        dispatch(getCompactViewWrap(false));
-      }
+      handleClick: () => console.log('clicked')
     },
     {
       id: 3,
-      icon: <img src={boardIcon} alt="boardIcon" />,
       label: splitSubTask,
-      handleClick: () => {
-        dispatch(getComfortableView(true));
-        dispatch(getComfortableViewWrap(false));
-        dispatch(getCompactView(false));
-        dispatch(getCompactViewWrap(false));
-      }
+      handleClick: () => console.log('clicked')
     },
     {
       id: 4,
-      icon: <img src={calenderIcon} alt="calenderIcon" />,
       label: verticalGridLines,
-      handleClick: () => {
-        dispatch(getComfortableView(false));
-        dispatch(getComfortableViewWrap(true));
-        dispatch(getCompactView(false));
-        dispatch(getCompactViewWrap(false));
-      }
+      handleClick: () => console.log('clicked')
     },
     {
       id: 5,
-      icon: <img src={timeChartIcon} alt="timeChartIcon" />,
       label: entityLocation,
-      handleClick: () => {
-        dispatch(getComfortableView(false));
-        dispatch(getComfortableViewWrap(false));
-        dispatch(getCompactView(true));
-        dispatch(getCompactViewWrap(false));
-      }
+      handleClick: () => console.log('clicked')
     },
     {
       id: 6,
-      icon: <img src={mapIcon} alt="mapIcon" />,
       label: subTaskParentsNames,
-      handleClick: () => {
-        dispatch(getComfortableView(false));
-        dispatch(getComfortableViewWrap(false));
-        dispatch(getCompactView(false));
-        dispatch(getCompactViewWrap(true));
-      }
+      handleClick: () => console.log('clicked')
     },
     {
       id: 7,
-      icon: <img src={gantIcon} alt="gantIcon" />,
       label: closedSubtask,
-      handleClick: () => {
-        dispatch(getComfortableView(false));
-        dispatch(getComfortableViewWrap(false));
-        dispatch(getCompactView(false));
-        dispatch(getCompactViewWrap(true));
-      }
+      handleClick: () => console.log('clicked')
     },
     {
       id: 8,
-      icon: <img src={teamIcon} alt="teamIcon" />,
       label: TaskInMultipleLists,
-      handleClick: () => {
-        dispatch(getComfortableView(false));
-        dispatch(getComfortableViewWrap(false));
-        dispatch(getCompactView(false));
-        dispatch(getCompactViewWrap(true));
-      }
+      handleClick: () => console.log('clicked')
     },
     {
       id: 9,
-      icon: <img src={teamIcon} alt="teamIcon" />,
       label: subTaskInMultipleLists,
-      handleClick: () => {
-        dispatch(getComfortableView(false));
-        dispatch(getComfortableViewWrap(false));
-        dispatch(getCompactView(false));
-        dispatch(getCompactViewWrap(true));
-      }
+      handleClick: () => console.log('clicked')
     },
     {
       id: 10,
-      icon: <img src={teamIcon} alt="teamIcon" />,
       label: emptyStatuses,
-      handleClick: () => {
-        dispatch(getComfortableView(false));
-        dispatch(getComfortableViewWrap(false));
-        dispatch(getCompactView(false));
-        dispatch(getCompactViewWrap(true));
-      }
+      handleClick: () => console.log('clicked')
     },
     {
       id: 11,
       icon: <FiChevronRight />,
       label: 'Wrap text',
-      handleClick: () => {
-        dispatch(getComfortableView(false));
-        dispatch(getComfortableViewWrap(false));
-        dispatch(getCompactView(false));
-        dispatch(getCompactViewWrap(true));
-      }
+      handleClick: () => console.log('clicked')
     }
   ];
 
@@ -193,7 +109,7 @@ export default function ShowHideSettings({
           style={{ zIndex: 61 }}
           className="origin-top-right absolute w-64 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none -ml-8 mt-6 "
         >
-          <p className="text-sm flex justify-center">CUSTOMIZE THIS VIEW</p>
+          <p className="text-sm flex justify-center pt-3">CUSTOMIZE THIS VIEW</p>
           <div className="relative flex justify-center flex-col mb-2">
             <p className="border-b-2 pt-3 "></p>
             <span
@@ -209,13 +125,7 @@ export default function ShowHideSettings({
           </div>
 
           {ViewSettings.map((View, index) => (
-            <Menu.Item
-              as="a"
-              key={View.id}
-              className="flex items-center py-2 text-sm text-black text-left w-full "
-              onClick={() => setActiveView(View.id)}
-              onMouseEnter={() => setViewId(View.id)}
-            >
+            <Menu.Item as="a" key={View.id} className="flex items-center py-2 text-sm text-black text-left w-full ">
               {View.label !== 'Wrap text' ? (
                 <button
                   onClick={View.handleClick}
