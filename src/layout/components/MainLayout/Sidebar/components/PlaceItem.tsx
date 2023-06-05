@@ -130,7 +130,6 @@ export default function PlaceItem({
                 {showSidebar && midContent}
                 {showSidebar && rightContent}
               </div>
-
               <span
                 onClick={isActivePlace ? resetSelectedPlace : onClick}
                 className={cl(showSidebar ? 'block' : 'hidden')}

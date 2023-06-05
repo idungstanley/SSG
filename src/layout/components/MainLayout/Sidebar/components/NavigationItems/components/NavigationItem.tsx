@@ -17,13 +17,12 @@ interface NavigationItemProps {
     icon?: JSX.Element;
     id: string;
   };
-  isVisible: boolean;
   handleHotkeyClick: (value: string, event: React.MouseEvent<SVGElement, MouseEvent>) => void;
   activeTabId: string | null;
   setActiveTabId: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
-export default function NavigationItem({ item, isVisible, handleHotkeyClick }: NavigationItemProps) {
+export default function NavigationItem({ item, handleHotkeyClick }: NavigationItemProps) {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { showSidebar } = useAppSelector((state) => state.account);
@@ -52,9 +51,9 @@ export default function NavigationItem({ item, isVisible, handleHotkeyClick }: N
     paddingLeft: showSidebar ? '24px' : '18px'
   };
 
-  if (!isVisible) {
-    return null;
-  }
+  // if (!isVisible) {
+  //   return null;
+  // }
 
   return (
     <div

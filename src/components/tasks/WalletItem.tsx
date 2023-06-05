@@ -86,7 +86,7 @@ export default function WalletItem({
     <>
       <section
         className={`flex bg-white items-center justify-between pr-1.5 text-sm group ${
-          wallet.id === activeItemId ? 'text-green-700 font-medium' : 'hover:bg-gray-100'
+          wallet.id === activeItemId ? 'font-medium' : 'hover:bg-gray-100'
         } ${isSticky && stickyButtonIndex === index ? 'sticky bg-white' : ''}`}
         onClick={() => handleShowSubWallet(wallet.id, index)}
         style={{

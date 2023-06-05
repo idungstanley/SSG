@@ -31,7 +31,7 @@ export interface ListColourProps {
 export default function ListItem({ list, paddingLeft }: ListItemProps) {
   const { activeItemId } = useAppSelector((state) => state.workspace);
   const { showMenuDropdown } = useAppSelector((state) => state.hub);
-  const { paletteDropdown } = useAppSelector((state) => state.account);
+  const { paletteDropdown, lightBaseColor, baseColor } = useAppSelector((state) => state.account);
   const { listColour } = useAppSelector((state) => state.list);
   const [activeShape, setActiveShape] = useState(list.shape);
   // const [listPaletteColor, setListPaletteColor] = useState<ListColourProps>();
@@ -97,16 +97,16 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
   return (
     <>
       <section
-        className={`relative flex items-center justify-between h-8 space-x-1 group ${
-          list.id === activeItemId ? 'bg-green-50 text-green-700 font-medium' : 'hover:bg-gray-100'
+        className={`relative flex items-center justify-between h-8 group ${
+          list.id === activeItemId ? 'font-medium' : 'hover:bg-gray-100'
         }`}
         style={{
           paddingLeft: `${paddingLeft}px`,
-          backgroundColor: `${list.id === activeItemId || list.id === listId ? '#BF00FF21' : ''}`
+          backgroundColor: `${list.id === activeItemId ? lightBaseColor : ''}`
         }}
       >
         {list.id === listId && (
-          <span className="absolute top-0 bottom-0 left-0 w-1 rounded-r-lg" style={{ backgroundColor: '#BF00FF' }} />
+          <span className="absolute top-0 bottom-0 left-0 w-1 rounded-r-lg" style={{ backgroundColor: baseColor }} />
         )}
         <div className="flex items-center space-x-1 capitalize truncate cursor-pointer">
           <div onClick={(e) => handleListColour(list.id, e)}>
