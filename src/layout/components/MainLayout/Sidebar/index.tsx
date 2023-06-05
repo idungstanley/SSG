@@ -74,7 +74,7 @@ export default function Sidebar() {
           width: sidebarWidthRD
         }}
         ref={blockRef}
-        className="relative flex flex-col gap-2 pr-1 border-r border-gray-300"
+        className="relative flex flex-col pr-1 border-r border-gray-300"
       >
         <Header
           activeHotkeyIds={activeHotkeyIds}

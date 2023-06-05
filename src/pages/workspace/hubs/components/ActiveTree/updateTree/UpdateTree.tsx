@@ -14,7 +14,6 @@ export default function UpdateTree(
   } else {
     existingTree;
   }
-  console.log(existingTree, 'existingTree');
 
   return existingTree.map((hub) => {
     if (hub.id === idToUpdate) {

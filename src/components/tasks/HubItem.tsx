@@ -85,7 +85,7 @@ export default function HubItem({
     <>
       <div
         className={`flex bg-white truncate justify-between items-center group ${
-          item.id === activeItemId ? 'text-green-700 font-medium' : 'hover:bg-gray-100'
+          item.id === activeItemId ? 'font-medium' : 'hover:bg-gray-100'
         } ${isSticky && stickyButtonIndex === index ? 'sticky bg-white opacity-100' : ''}`}
         tabIndex={0}
         onClick={() => handleClick(item.id, index)}
