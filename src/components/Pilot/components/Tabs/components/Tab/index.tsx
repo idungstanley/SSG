@@ -2,20 +2,22 @@ import { useSortable } from '@dnd-kit/sortable';
 import React from 'react';
 import { MdDragIndicator } from 'react-icons/md';
 import { cl } from '../../../../../../utils';
+import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
+import { setActiveTabId } from '../../../../../../features/workspace/workspaceSlice';
 
 interface TabProps {
   id: number;
   label: string;
   icon: JSX.Element;
-  activeTabId: number | null;
-  setActiveTabId: (i: number | null) => void;
   showTabLabel: boolean;
 }
 
-export default function Tab({ id, label, icon, activeTabId, setActiveTabId, showTabLabel }: TabProps) {
+export default function Tab({ id, label, icon, showTabLabel }: TabProps) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id
   });
+  const { activeTabId } = useAppSelector((state) => state.workspace);
+  const dispatch = useAppDispatch();
 
   const style = {
     transform: transform ? `translate(${transform.x}px, ${transform.y}px)` : undefined,
@@ -25,7 +27,7 @@ export default function Tab({ id, label, icon, activeTabId, setActiveTabId, show
   };
 
   const handleClick = (tabId: number) => {
-    setActiveTabId(activeTabId === tabId ? null : tabId);
+    dispatch(setActiveTabId(activeTabId === tabId ? undefined : tabId));
   };
 
   const isActiveTab = id === activeTabId;

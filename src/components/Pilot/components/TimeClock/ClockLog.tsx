@@ -168,13 +168,15 @@ export default function ClockLog() {
               )}
             </thead>
             <tbody>
-              {getTaskEntries?.data?.time_entries?.map((entries: entriesProps) => {
-                const { id, initials, name } = entries.team_member.user;
-                const { id: teamId } = entries.team_member;
-                teamMember.push({ id, initials, name });
-                teamMemberId.push(teamId);
-                return <EntryList entries={entries} key={entries.id} switchHeader={headers} />;
-              })}
+              <div className="overflow-auto" style={{ maxHeight: '45rem' }}>
+                {getTaskEntries?.data?.time_entries?.map((entries: entriesProps) => {
+                  const { id, initials, name } = entries.team_member.user;
+                  const { id: teamId } = entries.team_member;
+                  teamMember.push({ id, initials, name });
+                  teamMemberId.push(teamId);
+                  return <EntryList entries={entries} key={entries.id} switchHeader={headers} />;
+                })}
+              </div>
             </tbody>
           </table>
         );
@@ -183,45 +185,3 @@ export default function ClockLog() {
 
   return <div className="p-2">{renderItemEntries()}</div>;
 }
-
-// type UserSortParams = {
-//   arr: User[];
-//   toggleModalFn: React.Dispatch<React.SetStateAction<boolean>>;
-//   memberIds: string[];
-// };
-
-// function UserSortDropDown({ arr, toggleModalFn, memberIds }: UserSortParams) {
-//   const dispatch = useAppDispatch();
-//   const { timeSortArr } = useAppSelector((state) => state.task);
-//   const sortIds: string[] = [...new Set(memberIds)];
-
-//   const teamMember = arr.filter((obj, index, arr) => {
-//     return arr.findIndex((item) => item.id === obj.id) === index;
-//   });
-//   const handleSort = (id: number) => {
-//     dispatch(setTimeSortArr([...timeSortArr, sortIds[id]]));
-//   };
-//   return (
-//     <div tabIndex={0} onBlur={() => toggleModalFn(false)}>
-//       <div className="absolute z-50 bg-white rounded-md shadow-xl top-5 left-2 w-60 max-h-204">
-//         <div className="relative z-50 pb-2 my-2 border-b-2">
-//           <input type="text" className="pl-6 mx-auto text-sm w-52" placeholder="Search" />
-//           <FiSearch className="w-5 h-5 absolute left-5 top-2.5" />
-//         </div>
-//         <ul className="space-y-2 overflow-auto">
-//           {teamMember.map((el, index) => {
-//             return (
-//               <li
-//                 key={el.id}
-//                 className="flex items-center px-4 py-2 cursor-pointer alt-task"
-//                 onClick={() => handleSort(index)}
-//               >
-//                 {el.name}
-//               </li>
-//             );
-//           })}
-//         </ul>
-//       </div>
-//     </div>
-//   );
-// }

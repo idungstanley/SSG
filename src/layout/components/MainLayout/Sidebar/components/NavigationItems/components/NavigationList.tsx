@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { IoNotificationsOutline } from 'react-icons/io5';
 import { VscCalendar } from 'react-icons/vsc';
 import { cl } from '../../../../../../../utils';

@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { dimensions } from '../../app/config/dimensions';
+import { IRecorderLastMemory, ITimerLastMemory } from './workspace.interfaces';
 
 const initialActivePlaceId: number | null = (JSON.parse(localStorage.getItem('activePlaceIdLocale') as string) ||
   null) as number | null;
@@ -32,9 +33,10 @@ interface workspaceState {
   showAddHotKeyDropdown: boolean;
   showRemoveHotKeyDropdown: boolean;
   getRecording: { id: string | null; type: string | null };
+  isMuted: boolean;
   activeEntity: { id: string | null; type: string | null };
   showPilotListView: boolean;
-  activeTabId: number | null;
+  activeTabId: number | undefined;
   activeHotKeyTabId: number | null;
   activeSubCommunicationTabId: number | null;
   activeSubDetailsTabId: number | null;
@@ -45,6 +47,8 @@ interface workspaceState {
   activePlaceIdForNavigation: number | null | string;
   createWlLink: boolean;
   activeSubRecordsTabId: number | null;
+  recorderLastMemory: IRecorderLastMemory;
+  timerLastMemory: ITimerLastMemory;
 }
 
 const initialState: workspaceState = {
@@ -61,6 +65,7 @@ const initialState: workspaceState = {
   searchIsActive: false,
   isExtSearchActive: false,
   getRecording: { id: null, type: null },
+  isMuted: false,
   activeItemId: null,
   activeItemType: null,
   activeItemName: null,
@@ -87,7 +92,9 @@ const initialState: workspaceState = {
   activePlaceNameForNavigation: null,
   activePlaceIdForNavigation: null,
   createWlLink: false,
-  activeSubRecordsTabId: 0
+  activeSubRecordsTabId: 0,
+  recorderLastMemory: { activeTabId: 0, workSpaceId: '', listId: '', hubId: '' },
+  timerLastMemory: { activeTabId: 0, workSpaceId: '', listId: '', hubId: '' }
 };
 
 export const wsSlice = createSlice({
@@ -195,7 +202,7 @@ export const wsSlice = createSlice({
     setActiveSubDetailsTabId(state, action: PayloadAction<number | null>) {
       state.activeSubDetailsTabId = action.payload;
     },
-    setActiveTabId(state, action: PayloadAction<number | null>) {
+    setActiveTabId(state, action: PayloadAction<number | undefined>) {
       state.activeTabId = action.payload;
     },
     setActiveHotKeyId(state, action: PayloadAction<number | null>) {
@@ -233,6 +240,25 @@ export const wsSlice = createSlice({
     checkIfWs: (state) => state,
     setActiveSubRecordTabId(state, action: PayloadAction<number | null>) {
       state.activeSubRecordsTabId = action.payload;
+    },
+    toggleMute(state) {
+      state.isMuted = !state.isMuted;
+    },
+    setRecorderLastMemory(state, action: PayloadAction<IRecorderLastMemory>) {
+      state.recorderLastMemory = action.payload;
+    },
+    setTimerLastMemory(state, action: PayloadAction<ITimerLastMemory>) {
+      state.timerLastMemory = action.payload;
+    },
+    resetWorkSpace(state, action: PayloadAction<IRecorderLastMemory | ITimerLastMemory>) {
+      const { activeTabId, hubId, listId } = action.payload;
+      activeTabId
+        ? (state.activeTabId = activeTabId)
+        : hubId
+        ? (state.activeItemId = hubId)
+        : listId
+        ? (state.activeItemId = listId)
+        : '';
     }
   }
 });
@@ -275,7 +301,11 @@ export const {
   setActivePlaceForNav,
   setCreateWlLink,
   setFetchAllWorkspace,
-  setActiveSubRecordTabId
+  setActiveSubRecordTabId,
+  toggleMute,
+  setRecorderLastMemory,
+  setTimerLastMemory,
+  resetWorkSpace
 } = wsSlice.actions;
 
 export default wsSlice.reducer;

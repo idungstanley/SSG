@@ -2,8 +2,10 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 // import { tagItem } from '../../pages/workspace/pilot/components/details/properties/subDetailsIndex/PropertyDetails';
 import { listColumnProps } from '../../pages/workspace/tasks/component/views/ListColumns';
 import { IField } from '../list/list.interfaces';
-import { IParent } from './interface.tasks';
+import { IDuration, IParent, TaskKey } from './interface.tasks';
 import { SortOption } from '../../pages/workspace/tasks/component/views/listLevel/TaskListViews';
+import RecordRTC from 'recordrtc';
+import { FilterValue } from '../../components/TasksHeader/ui/Filter/types/filters';
 
 export interface ICustomField {
   id: string;
@@ -127,8 +129,16 @@ interface TaskState {
   timeArr: string[];
   timeSortArr: string[];
   screenRecording: 'idle' | 'recording';
+  recorder: RecordRTC | null;
+  stream: MediaStream | null;
   updateCords: number;
   activeTaskColumn: ActiveTaskColumnProps;
+  duration: IDuration;
+  period: number | undefined;
+  sortType: TaskKey;
+  searchValue: string;
+  assigneeIds: string[];
+  filters: FilterValue[];
 }
 
 const initialState: TaskState = {
@@ -179,14 +189,34 @@ const initialState: TaskState = {
   timeArr: [],
   timeSortArr: [],
   screenRecording: 'idle',
+  stream: null,
+  recorder: null,
   updateCords: Date.now(),
-  activeTaskColumn: { id: '', header: '' }
+  activeTaskColumn: { id: '', header: '' },
+  duration: { s: 0, m: 0, h: 0 },
+  period: undefined,
+  sortType: 'status',
+  searchValue: '',
+  assigneeIds: [],
+  filters: []
 };
 
 export const taskSlice = createSlice({
   name: 'task',
   initialState,
   reducers: {
+    setFilters(state, action: PayloadAction<FilterValue[]>) {
+      state.filters = action.payload;
+    },
+    setAssigneeIds(state, action: PayloadAction<string[]>) {
+      state.assigneeIds = action.payload;
+    },
+    setSearchValue(state, action: PayloadAction<string>) {
+      state.searchValue = action.payload;
+    },
+    setSortType(state, action: PayloadAction<TaskKey>) {
+      state.sortType = action.payload;
+    },
     createTaskSlice(state, action: PayloadAction<string>) {
       state.task.push(action.payload);
     },
@@ -364,13 +394,44 @@ export const taskSlice = createSlice({
     setScreenRecording(state, action: PayloadAction<'idle' | 'recording'>) {
       state.screenRecording = action.payload;
     },
+    setScreenRecordingMedia(state, action: PayloadAction<{ recorder: RecordRTC | null; stream: MediaStream | null }>) {
+      const { recorder, stream } = action.payload;
+      state.stream = stream;
+      state.recorder = recorder;
+    },
     setUpdateCords(state) {
       state.updateCords = Date.now();
+    },
+    setUpdateTimerDuration(state, action: PayloadAction<IDuration>) {
+      // const timer = { ms: 0, s: 0, m: 0, h: 0 };
+      // if (timer.h >= 60) {
+      //   timer.h++;
+      //   timer.m = 0;
+      // }
+      // if (timer.s >= 60) {
+      //   timer.m++;
+      //   timer.s = 0;
+      // }
+      // if (timer.ms >= 100) {
+      //   timer.s++;
+      //   timer.ms = 0;
+      // }
+      // timer.ms++;
+      state.duration = action.payload;
+    },
+    setStopTimer(state) {
+      state.timerStatus = !state.timerStatus;
+    },
+    setTimerInterval(state, action: PayloadAction<number | undefined>) {
+      state.period = action.payload;
     }
   }
 });
 
 export const {
+  setFilters,
+  setAssigneeIds,
+  setSearchValue,
   createTaskSlice,
   setTaskIdForPilot,
   checkIfTask,
@@ -415,7 +476,12 @@ export const {
   setTimeArr,
   setTimeSortArr,
   setScreenRecording,
+  setScreenRecordingMedia,
   setUpdateCords,
-  setActiveTaskColumn
+  setActiveTaskColumn,
+  setUpdateTimerDuration,
+  setStopTimer,
+  setTimerInterval,
+  setSortType
 } = taskSlice.actions;
 export default taskSlice.reducer;

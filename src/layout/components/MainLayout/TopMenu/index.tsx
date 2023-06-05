@@ -1,7 +1,7 @@
 import React from 'react';
 import { Disclosure } from '@headlessui/react';
 import { Bars3Icon, XMarkIcon, CogIcon, BellIcon } from '@heroicons/react/24/outline';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useMutation } from '@tanstack/react-query';
 import SearchInput from './SearchInput';
@@ -23,6 +23,7 @@ const navigation = [
 
 function TopMenu() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const leftMenuItems = [
     {
@@ -62,6 +63,8 @@ function TopMenu() {
       localStorage.removeItem('user');
       localStorage.removeItem('accessToken');
       localStorage.removeItem('currentWorkspaceId');
+      localStorage.removeItem('teamMemberInviteCode');
+      localStorage.removeItem('currentUserId');
 
       dispatch(
         setAuthData({
@@ -73,6 +76,7 @@ function TopMenu() {
       );
 
       dispatch(logout());
+      navigate('/');
     }
   });
 
@@ -84,6 +88,7 @@ function TopMenu() {
           style: 'danger',
           callback: () => {
             logoutMutation.mutate();
+            localStorage.removeItem('teamMemberInviteCode');
           }
         },
         {

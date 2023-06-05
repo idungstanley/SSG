@@ -110,7 +110,7 @@ export default function PlaceItem({
               <span
                 className={cl(
                   showSidebar ? 'block' : 'hidden',
-                  'w-full cursor-pointer uppercase truncate',
+                  'w-32 flex jusitfy-start cursor-pointer uppercase truncate',
                   isActivePlace ? 'font-black' : ''
                 )}
                 style={{

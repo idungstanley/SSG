@@ -43,7 +43,7 @@ export default function SubtabDrag({ id, icon, showPilot, activeSub, name, sourc
 
   return (
     <section
-      className={`flex flex-col w-full bg-white ${id === activeSub && showPilot ? 'rounded-t-lg bg-white' : ''}`}
+      className={`flex flex-col w-full bg-white ${id === activeSub ? 'rounded-t-lg bg-white' : ''}`}
       key={id}
       style={style}
     >
@@ -51,8 +51,8 @@ export default function SubtabDrag({ id, icon, showPilot, activeSub, name, sourc
         key={id}
         onClick={() => handleClick(id)}
         className={`relative flex justify-center flex-grow py-2 font-medium text-gray-500 transition cursor-pointer group hover:text-gray-700 border-y-2 ${
-          id === activeSub && showPilot && 'rounded-t-lg bg-white'
-        } ${id != activeSub && showPilot && 'rounded-b-lg bg-gray-400'}`}
+          id === activeSub && 'rounded-t-lg bg-white'
+        } ${id != activeSub && 'rounded-b-lg bg-gray-400'}`}
       >
         <span
           className={`absolute left-2 text-gray-500 justify-center text-xl cursor-move opacity-0 group-hover:opacity-100 ${

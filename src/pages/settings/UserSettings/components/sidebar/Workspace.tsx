@@ -25,7 +25,7 @@ function Workspace() {
       title: 'People',
       onClick: () => {
         dispatch(setActiveTab('People'));
-        navigate('construction');
+        navigate('people');
       }
     },
     {

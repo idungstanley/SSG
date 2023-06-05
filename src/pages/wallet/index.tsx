@@ -12,10 +12,10 @@ import PilotSection, { pilotConfig } from '../workspace/wallet/components/PilotS
 import hubIcon from '../../assets/branding/hub.png';
 import ActiveHub from '../../layout/components/MainLayout/extendedNavigation/ActiveParents/ActiveHub';
 import FilterByAssigneesSliderOver from '../workspace/lists/components/renderlist/filters/FilterByAssigneesSliderOver';
-import ListFilter from '../workspace/lists/components/renderlist/listDetails/ListFilter';
 import { useScroll } from '../../hooks/useScroll';
 import { setUpdateCords } from '../../features/task/taskSlice';
 import { List } from '../../components/Views/ui/List/List';
+import { Header } from '../../components/TasksHeader';
 
 export function WalletPage() {
   const dispatch = useAppDispatch();
@@ -86,16 +86,13 @@ export function WalletPage() {
         additional={<FilterByAssigneesSliderOver data={tasks} />}
       >
         <>
-          {/* filters */}
-          <div className="w-full">
-            <ListFilter />
-          </div>
+          <Header />
 
           {/* main content */}
           <section
             onScroll={onScroll}
             ref={containerRef}
-            style={{ minHeight: '0', maxHeight: '85vh' }}
+            style={{ minHeight: '0', maxHeight: '83vh' }}
             className="w-full h-full p-4 space-y-10 overflow-y-scroll"
           >
             {/* lists */}
