@@ -1,19 +1,12 @@
 import React from 'react';
 import Row from './Row';
 import { useGetTeamMemberInvites } from '../../../../../../features/settings/teamMemberInvites/teamMemberInviteService';
-import { useAppSelector, useAppDispatch } from '../../../../../../app/hooks';
-import { SetTriggerGetTeammeberInvite } from '../../../../../../features/settings/teamMemberInvites/teamMemberInviteSlice';
+import { useAppSelector } from '../../../../../../app/hooks';
 
 export default function Body() {
-  const dispatch = useAppDispatch();
-  React.useEffect(() => {
-    dispatch(SetTriggerGetTeammeberInvite(true));
-  }, []);
-  const { teamMemberInvitesPaginationPage, triggerGetTeammeberInvite } = useAppSelector(
-    (state) => state.teamMemberInvite
-  );
+  const { teamMemberInvitesPaginationPage } = useAppSelector((state) => state.teamMemberInvite);
 
-  const { status, data } = useGetTeamMemberInvites(teamMemberInvitesPaginationPage, triggerGetTeammeberInvite);
+  const { status, data } = useGetTeamMemberInvites(teamMemberInvitesPaginationPage);
 
   return (
     <tbody className="divide-y divide-gray-200 bg-white">

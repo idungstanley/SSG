@@ -2,23 +2,32 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import requestNew from '../../../app/requestNew';
 import { IUser } from '../../auth/authSlice';
 import { ITeamMemberInviteRes, ITeamMemberInvitesReq } from './teamMemberInvites.interface';
-import { useAppDispatch } from '../../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import { SetTriggerGetTeammeberInvite } from './teamMemberInviteSlice';
 
-// Get team member invites
-export const useGetTeamMemberInvites = (
-  page: number,
-  triggerGetTeammeberInvite: boolean,
-  name?: string,
-  dir?: string
-) => {
+type SortOption = {
+  [key: string]: string | 'asc' | 'desc';
+};
+
+type SortingParams = SortOption[];
+export const useGetTeamMemberInvites = (page: number) => {
   const queryClient = useQueryClient();
   const dispatch = useAppDispatch();
+  const { sortTeamInviteArr } = useAppSelector((state) => state.teamMemberInvite);
+  const sortArrUpdate: SortingParams = sortTeamInviteArr.length <= 0 ? [] : sortTeamInviteArr;
+
+  const serializedParams = sortArrUpdate
+    .map((sortField, index) =>
+      Object.keys(sortField)
+        .map((key) => `sorting[${index}][${encodeURIComponent(key)}]=${encodeURIComponent(sortField[key])}`)
+        .join('&')
+    )
+    .join('&');
 
   return useQuery<ITeamMemberInvitesReq>(
-    ['team_member_invites', { page }],
+    ['team_member_invites', { page, sortTeamInviteArr }],
     async () => {
-      const url = `settings/team-member-invites?sorting[0][field]=${name}&sorting[0][dir]=${dir}`;
+      const url = `settings/team-member-invites?${serializedParams}`;
       return requestNew({
         url,
         method: 'GET',
@@ -28,7 +37,6 @@ export const useGetTeamMemberInvites = (
       });
     },
     {
-      enabled: triggerGetTeammeberInvite,
       onSuccess: (data) => {
         data.data.team_member_invites.map((teamMemberInvite) =>
           queryClient.setQueryData(['team_member_invite', teamMemberInvite.id], teamMemberInvite)
@@ -110,7 +118,7 @@ export const createTeamMemberInviteService = async (data: {
   const response = requestNew({
     url: 'settings/team-member-invites',
     method: 'POST',
-    params: {
+    data: {
       email: data.email,
       name: data.name,
       team_member_role_key: data.teamMemberRoleKey

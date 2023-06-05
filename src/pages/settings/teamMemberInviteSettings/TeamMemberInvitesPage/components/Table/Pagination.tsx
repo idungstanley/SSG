@@ -11,11 +11,9 @@ import { useAppSelector } from '../../../../../../app/hooks';
 export default function Pagination() {
   const dispatch = useDispatch();
 
-  const { teamMemberInvitesPaginationPage, triggerGetTeammeberInvite } = useAppSelector(
-    (state) => state.teamMemberInvite
-  );
+  const { teamMemberInvitesPaginationPage } = useAppSelector((state) => state.teamMemberInvite);
 
-  const { data: response } = useGetTeamMemberInvites(teamMemberInvitesPaginationPage, triggerGetTeammeberInvite);
+  const { data: response } = useGetTeamMemberInvites(teamMemberInvitesPaginationPage);
   const goToPreviousPage = () => {
     dispatch(goToPreviousTeamMemberInvitesPage());
   };

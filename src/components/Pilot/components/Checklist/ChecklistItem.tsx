@@ -126,7 +126,7 @@ function ChecklistItem({ Item, checklistId }: checkListItemProps) {
 
               {item.tags.length > 0 && (
                 <div className="mr-4">
-                  <TaskTag taskColField={item.tags} entity_type="checklist_item" checklist_itemId={item.id} />{' '}
+                  <TaskTag taskColField={item.tags} entity_type="checklist_item" entity_id={item.id} />
                 </div>
               )}
 
