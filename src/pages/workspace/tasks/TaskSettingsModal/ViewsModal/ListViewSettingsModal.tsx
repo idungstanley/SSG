@@ -1,6 +1,6 @@
 import React, { Fragment, useState } from 'react';
 import { Menu, Transition } from '@headlessui/react';
-import { BsListUl, BsPinAngle, BsThreeDots } from 'react-icons/bs';
+import { BsPinAngle, BsThreeDots } from 'react-icons/bs';
 import { useAppDispatch } from '../../../../../app/hooks';
 import {
   getCompactView,
@@ -8,13 +8,13 @@ import {
   getComfortableView,
   getComfortableViewWrap
 } from '../../../../../features/task/taskSlice';
-import { AiOutlineCaretDown, AiOutlineLineChart, AiOutlinePlus } from 'react-icons/ai';
-import { HiOutlineTable } from 'react-icons/hi';
-import { MdOutlineSpaceDashboard } from 'react-icons/md';
-import { BiCalendar } from 'react-icons/bi';
-import { RiMapPin5Line } from 'react-icons/ri';
-import { CgViewComfortable } from 'react-icons/cg';
-import { GiChart } from 'react-icons/gi';
+import { AiOutlineCaretDown, AiOutlinePlus } from 'react-icons/ai';
+// import { HiOutlineTable } from 'react-icons/hi';
+// import { MdOutlineSpaceDashboard } from 'react-icons/md';
+// import { BiCalendar } from 'react-icons/bi';
+// import { RiMapPin5Line } from 'react-icons/ri';
+// import { CgViewComfortable } from 'react-icons/cg';
+// import { GiChart } from 'react-icons/gi';
 import { FiChevronRight } from 'react-icons/fi';
 import { CiEdit } from 'react-icons/ci';
 import listIcon from '../../../../../assets/icons/listIcon.png';
@@ -47,7 +47,7 @@ export default function ListViewSettingsModal({
 }) {
   const dispatch = useAppDispatch();
   const [viewId, setViewId] = useState<number | null>(null);
-  const [listView, setListView] = useState<boolean | null>(true);
+  const [listView] = useState<boolean | null>(true);
   const [activeView, setActiveView] = useState<number | null>(1);
 
   const ViewSettings = [
