@@ -1,0 +1,1 @@
+export { HistoryColModal } from './HistoryColModal';
