@@ -106,6 +106,16 @@ code {
 }
 
 .workspace-color-button:hover {
-    width: 48px !important;
-    height: 48px !important;
+  width: 48px !important;
+  height: 48px !important;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.scrollbar-hide {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 }
