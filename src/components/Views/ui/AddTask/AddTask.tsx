@@ -32,7 +32,7 @@ export function AddTask({ onClose, paddingLeft, parentId, isListParent, columns 
   return (
     <tr className="contents group">
       <td className="z-20 w-full flex items-center">
-        <div className="h-full w-10 bg-primary-50"></div>
+        <div className="h-full bg-primary-50"></div>
         <div style={{ paddingLeft }} className="border-t flex items-center w-full h-12 bg-white opacity-90">
           <input
             ref={nameRef}

@@ -25,11 +25,11 @@ export function StickyCol({ showSubTasks, setShowSubTasks, children, task, paddi
 
   return (
     <td
-      className="sticky left-0 flex items-center justify-center text-sm font-medium text-center text-gray-900 cursor-pointer"
+      className="sticky left-0 flex items-center justify-center text-sm font-medium text-center text-gray-900 cursor-pointer h-10"
       {...props}
     >
       {/* //! change me */}
-      <div className="flex items-center w-10 h-full space-x-1 bg-purple-50">
+      {/* <div className="flex items-center h-full space-x-1 bg-purple-50">
         <input
           type="checkbox"
           id="checked-checkbox"
@@ -43,7 +43,7 @@ export function StickyCol({ showSubTasks, setShowSubTasks, children, task, paddi
         />
 
         <MdDragIndicator className="text-lg text-gray-400 transition duration-200 opacity-0 cursor-move group-hover:opacity-100" />
-      </div>
+      </div> */}
 
       <div style={{ paddingLeft }} className={cl(COL_BG, 'relative border-t w-full h-full py-4 p-4 flex items-center')}>
         <button onClick={onToggleDisplayingSubTasks}>

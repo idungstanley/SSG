@@ -115,7 +115,7 @@ function CustomScrollbar({ children }: CustomScrollbarProps) {
   const onScroll = useScroll(() => dispatch(setUpdateCords()));
 
   return (
-    <div className="relative pl-6 overflow-hidden p-2">
+    <div className="relative overflow-hidden p-2 ">
       <div onScroll={onScroll} className="overflow-x-auto scrollbar-hide" ref={scrollRef}>
         <div className="w-full" ref={contentRef}>
           {children}
