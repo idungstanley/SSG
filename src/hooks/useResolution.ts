@@ -8,13 +8,11 @@ import {
 import { RESOLUTION_RELATIVE_WIDTH, RESOLUTION_TYPES } from '../app/config/resolution';
 import { useAppSelector } from '../app/hooks';
 import { isEqual } from 'lodash';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 const userSettingsData = localStorage.getItem('userSettingsData');
 
 const useResolution = () => {
   const { width } = useWindowSize();
-  const queryClient = useQueryClient();
 
   const { sidebarWidthRD } = useAppSelector((state) => state.workspace);
 
