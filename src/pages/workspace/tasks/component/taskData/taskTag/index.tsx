@@ -6,7 +6,7 @@ import { UseUpdateTagService, UseUnAssignTagService } from '../../../../../../fe
 import EditTagModal from '../../../../../../components/tags/EditTagModal';
 import { IoCloseSharp } from 'react-icons/io5';
 
-export default function TaskTag({ taskColField, task, checklist_itemId, entity_type }: renderDataProps) {
+export default function TaskTag({ taskColField, entity_id, entity_type }: renderDataProps) {
   const groupTags = (arr: tagItem[]) => {
     const { renameTagId, currentTaskIdForTag } = useAppSelector((state) => state.tag);
     const queryClient = useQueryClient();
@@ -44,7 +44,7 @@ export default function TaskTag({ taskColField, task, checklist_itemId, entity_t
                 <div className="">{groupTags(item)}</div>
               ) : (
                 <>
-                  {renameTagId == item.id && currentTaskIdForTag == task?.id ? (
+                  {renameTagId == item.id && currentTaskIdForTag == entity_id ? (
                     <form onSubmit={(e) => handleEditTagSubmit(e, item.id)}>
                       <input
                         type="text"
@@ -67,14 +67,14 @@ export default function TaskTag({ taskColField, task, checklist_itemId, entity_t
                           {item.name.length > 10 ? item.name.slice(0, 5) : item.name}
                         </p>
                       </div>
-                      <EditTagModal taskId={task?.id} tagId={item?.id} />
+                      <EditTagModal taskId={entity_id} tagId={item?.id} />
                       <button
                         className="pr-2 font-bold text-gray-300"
                         style={{ fontSize: '9px' }}
                         onClick={() =>
                           unAssignTagMutation.mutateAsync({
                             tagId: item.id,
-                            currentTaskIdForTag: entity_type === 'checklist_item' ? checklist_itemId : task?.id,
+                            currentTaskIdForTag: entity_id,
                             entity_type: entity_type
                           })
                         }
