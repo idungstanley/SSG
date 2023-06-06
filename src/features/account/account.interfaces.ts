@@ -14,7 +14,8 @@ export interface IAccountReq {
 
 export interface IUserParams {
   // add darkTheme or showArchived values
-  showPreview: string;
+  showPreview?: string;
+  sidebarWidth?: number;
 }
 
 export interface IUserState {
@@ -25,6 +26,7 @@ export interface IUserState {
 export interface IUserSettings {
   key: string;
   is_json: boolean;
+  resolution?: string | null;
   value: IUserParams;
   created_at: string;
   updated_at: string;

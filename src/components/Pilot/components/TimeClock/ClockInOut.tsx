@@ -101,34 +101,34 @@ export default function ClockInOut() {
   console.log(timerStatus);
 
   return (
-    <div className="mt-6 p-2 rounded-t-md">
+    <div className="p-2 mt-6 rounded-t-md">
       <div className="bg-gray-100">
-        <section id="body" className="bg-indigo-500 text-white rounded-b-md px-3 py-1">
-          <div id="taskUser" className="flex justify-between items-center text-xs font-normal h-10 py-3 cursor-pointer">
+        <section id="body" className="px-3 py-1 text-white bg-indigo-500 rounded-b-md">
+          <div id="taskUser" className="flex items-center justify-between h-10 py-3 text-xs font-normal cursor-pointer">
             <span>Tags: </span>
             {/* total time here */}
             <p>{moment.utc((getEntries as ITimeEntriesRes)?.data?.total_duration * 1000).format('HH:mm:ss')}</p>
           </div>
-          <div id="descNote" className="text-white w-full my-3">
+          <div id="descNote" className="w-full my-3 text-white">
             <input
               type="text"
               name="description"
               onChange={(e) => handleEndTimeChange(e.target.value)}
               placeholder="Enter a note"
-              className="border-0 shadow-sm rounded text-gray-600 w-full"
+              className="w-full text-gray-600 border-0 rounded shadow-sm"
             />
           </div>
-          <div id="entries" className="py-1 flex items-center justify-between">
+          <div id="entries" className="flex items-center justify-between py-1">
             <div id="left" className="flex items-center space-x-1 cursor-pointer">
               <div className="mr-1">
                 {timerStatus ? (
                   // !btnClicked && !timerStatus ? (
                   <button onClick={stop}>
-                    <BsStopCircle className="text-red-400 cursor-pointer text-2xl" aria-hidden="true" />
+                    <BsStopCircle className="text-2xl text-red-400 cursor-pointer" aria-hidden="true" />
                   </button>
                 ) : (
                   <button onClick={start}>
-                    <AiOutlinePlayCircle className="text-green-500 cursor-pointer text-2xl" aria-hidden="true" />
+                    <AiOutlinePlayCircle className="text-2xl text-green-500 cursor-pointer" aria-hidden="true" />
                   </button>
                 )}
               </div>
@@ -140,12 +140,12 @@ export default function ClockInOut() {
                 {':'}
                 {duration.s < 10 ? `0${duration.s}` : duration.s}
               </div>
-              <div className="flex items-center justify-start cursor-pointer -space-x-4">
+              <div className="flex items-center justify-start -space-x-4 cursor-pointer">
                 <AvatarWithInitials height="h-7" width="w-7" initials={initials} />
               </div>
             </div>
             <div id="right" className="flex items-center space-x-1">
-              <span className="border-dotted border-white border-2 rounded-full p-1 ml-1 flex items-center justify-center">
+              <span className="flex items-center justify-center p-1 ml-1 border-2 border-white border-dotted rounded-full">
                 <TagIcon className="h-5 text-white" aria-hidden="true" />
               </span>
               <CurrencyDollarIcon

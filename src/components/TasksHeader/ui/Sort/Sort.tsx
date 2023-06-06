@@ -8,13 +8,13 @@ import { setSortType } from '../../../../features/task/taskSlice';
 
 const options: Record<TaskKey, { icon: JSX.Element }> = {
   status: {
-    icon: <RiCheckboxBlankFill className="w-5 text-gray-400 h-5" aria-hidden="true" />
+    icon: <RiCheckboxBlankFill className="w-5 h-5 text-gray-400" aria-hidden="true" />
   },
   assignees: {
-    icon: <RiCheckboxBlankFill className="w-5 text-gray-400 h-5" aria-hidden="true" />
+    icon: <RiCheckboxBlankFill className="w-5 h-5 text-gray-400" aria-hidden="true" />
   },
   priority: {
-    icon: <RiCheckboxBlankFill className="w-5 text-gray-400 h-5" aria-hidden="true" />
+    icon: <RiCheckboxBlankFill className="w-5 h-5 text-gray-400" aria-hidden="true" />
   }
 };
 
@@ -27,16 +27,16 @@ export function Sort() {
   return (
     <Listbox value={sortType} onChange={setOption}>
       <div className="relative">
-        <Listbox.Button className="relative w-full text-primary-500 rounded-md cursor-pointer p-2 bg-primary-100 text-left outline-none focus:outline-none">
+        <Listbox.Button className="relative w-full p-2 text-left rounded-md outline-none cursor-pointer text-primary-500 bg-primary-100 focus:outline-none">
           <p className="block truncate">
             Group by: <span className="capitalize">{sortType}</span>
           </p>
-          {/* <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
-            <ChevronUpDownIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
+          {/* <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
+            <ChevronUpDownIcon className="w-5 h-5 text-gray-400" aria-hidden="true" />
           </span> */}
         </Listbox.Button>
         <Transition as={Fragment} leave="transition ease-in duration-100" leaveFrom="opacity-100" leaveTo="opacity-0">
-          <Listbox.Options className="absolute mt-1 z-10 max-h-60 overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+          <Listbox.Options className="absolute z-10 py-1 mt-1 overflow-auto text-base bg-white rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
             {Object.keys(options).map((option) => (
               <Listbox.Option
                 key={option}
@@ -49,7 +49,7 @@ export function Sort() {
               >
                 {({ selected }) => (
                   <>
-                    <div className="w-full flex space-x-3 items-center">
+                    <div className="flex items-center w-full space-x-3">
                       {options[option as TaskKey].icon}
 
                       <span className={`block truncate capitalize ${selected ? 'font-medium' : 'font-normal'}`}>
@@ -59,7 +59,7 @@ export function Sort() {
 
                     {selected ? (
                       <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-primary-500">
-                        <CheckIcon className="h-5 w-5" aria-hidden="true" />
+                        <CheckIcon className="w-5 h-5" aria-hidden="true" />
                       </span>
                     ) : null}
                   </>

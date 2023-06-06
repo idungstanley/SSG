@@ -53,7 +53,7 @@ export function Item({ filter, index }: ItemProps) {
     );
 
   return (
-    <div className="grid grid-rows-1 grid-cols-autoFrAutoFrAuto space-x-2 w-full items-center">
+    <div className="grid items-center w-full grid-rows-1 space-x-2 grid-cols-autoFrAutoFrAuto">
       <Label show={index === 0} />
 
       {/* key */}
@@ -84,7 +84,7 @@ export function Item({ filter, index }: ItemProps) {
 
       {/* delete button */}
       <button type="button" onClick={() => onDelete(id)}>
-        <TrashIcon className="w-5 h-5 cursor-pointer text-gray-400" aria-hidden="true" />
+        <TrashIcon className="w-5 h-5 text-gray-400 cursor-pointer" aria-hidden="true" />
       </button>
     </div>
   );

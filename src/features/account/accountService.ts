@@ -30,7 +30,18 @@ export const switchWorkspaceService = async (data: { workspaceId: string }) => {
   return response;
 };
 
-export const useGetUserSettingsKeys = (enabled: boolean) =>
+export const setResolution = async (data: { resolution: string }) => {
+  const response = requestNew<{ data: { resolution: string } }>({
+    url: '/settings',
+    method: 'PUT',
+    data: {
+      keys: [{ key: 'sidebar', resolution: data.resolution }]
+    }
+  });
+  return response;
+};
+
+export const useGetUserSettingsKeys = (enabled: boolean, resolution?: string | null) =>
   useQuery<IUserSettingsRes, unknown, IUserSettings>(
     ['user-settings'],
     () =>
@@ -38,21 +49,26 @@ export const useGetUserSettingsKeys = (enabled: boolean) =>
         url: 'user/settings',
         method: 'GET',
         params: {
-          keys: 'sidebar'
+          keys: 'sidebar',
+          resolution: resolution
         }
       }),
     {
-      enabled,
-      select: (res) => res.data.settings[0]
+      enabled: enabled,
+      select: (res) => res.data.settings[0],
+      onSuccess: (data) => {
+        console.log(data);
+        localStorage.setItem('userSettingsData', JSON.stringify(data));
+      }
     }
   );
 
-export const setUserSettingsKeys = (value: IUserParams) => {
+export const setUserSettingsKeys = (value: IUserParams, resolution?: string | null) => {
   const request = requestNew({
     url: 'user/settings',
     method: 'PUT',
     data: {
-      keys: [{ key: 'sidebar', value }]
+      keys: [{ key: 'sidebar', value, resolution: resolution }]
     }
   });
   return request;
