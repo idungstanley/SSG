@@ -11,6 +11,7 @@ import { dimensions } from '../../../../app/config/dimensions';
 import { useResize } from '../../../../hooks/useResize';
 import { isAllowIncreaseWidth } from '../../../../utils/widthUtils';
 import { NavigationList } from './components/NavigationItems/components/NavigationList';
+import useResolution from '../../../../hooks/useResolution';
 
 const MAX_SIDEBAR_WIDTH = dimensions.navigationBar.max;
 const MIN_SIDEBAR_WIDTH = dimensions.navigationBar.min;
@@ -18,6 +19,8 @@ const MIN_SIDEBAR_WIDTH = dimensions.navigationBar.min;
 export default function Sidebar() {
   const dispatch = useAppDispatch();
   const { extendedSidebarWidth, sidebarWidthRD, showExtendedBar } = useAppSelector((state) => state.workspace);
+  const resolution = useResolution();
+  console.log(resolution);
   const { showSidebar } = useAppSelector((state) => state.account);
 
   const { blockRef, Dividers, size } = useResize({

@@ -20,7 +20,6 @@ function PreviewSwitch() {
     if (data) {
       const value = JSON.parse(data?.value.showPreview || 'false') as boolean;
       dispatch(setAccountSettings({ ...settings, showPreview: value }));
-
       localStorage.setItem('showPreview', JSON.stringify(value));
     }
   }, [data]);

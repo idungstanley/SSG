@@ -36,7 +36,7 @@ export default function TeamMemberAcceptInvite() {
 
   return inviteCode ? (
     token ? (
-      <main className="flex min-h-full flex-col bg-white mx-auto w-full max-w-7xl flex-grow justify-center px-4 sm:px-6 lg:px-8 text-center">
+      <main className="flex flex-col justify-center flex-grow w-full min-h-full px-4 mx-auto text-center bg-white max-w-7xl sm:px-6 lg:px-8">
         <ProgressBar />
         <p className="mt-2 text-base text-gray-500">Click on this button to proceed into workspace</p>
         <div className="mt-6">

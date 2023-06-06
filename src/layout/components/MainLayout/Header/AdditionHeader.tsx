@@ -37,14 +37,14 @@ export default function AdditionalHeader() {
   };
 
   return (
-    <div className="w-full border-b flex justify-between items-center px-4" style={{ height: '50px' }}>
-      <h1 style={{ height: '50px' }} className="text-center flex items-center space-x-1">
-        <img src={headerIcon} alt="" className="h-4 w-4" /> <span>{activeEntityName}</span>
+    <div className="flex items-center justify-between w-full px-4 border-b" style={{ height: '50px' }}>
+      <h1 style={{ height: '50px' }} className="flex items-center space-x-1 text-center">
+        <img src={headerIcon} alt="" className="w-4 h-4" /> <span>{activeEntityName}</span>
       </h1>
-      <div className="flex space-x-2 items-center justify-center">
+      <div className="flex items-center justify-center space-x-2">
         {tabsId !== 6 && timerStatus && (
           <div
-            className="flex items-center space-x-1 border border-purple-500 py-1 px-2 rounded-lg cursor-pointer"
+            className="flex items-center px-2 py-1 space-x-1 border border-purple-500 rounded-lg cursor-pointer"
             onClick={() => handleResetTimer()}
           >
             <IoAlarmSharp className="text-purple-500" />
@@ -59,9 +59,9 @@ export default function AdditionalHeader() {
         )}
         <MdTab className="w-5 h-5" />
         {screenRecording === 'recording' && (
-          <div className="w-2 relative" onMouseEnter={() => setShow(!show)}>
-            <div className="border-red-600 rounded-full h-5 w-5 flex items-center justify-start">
-              <div className="pulsate w-3 rounded-full h-3 bg-red-600"></div>
+          <div className="relative w-2" onMouseEnter={() => setShow(!show)}>
+            <div className="flex items-center justify-start w-5 h-5 border-red-600 rounded-full">
+              <div className="w-3 h-3 bg-red-600 rounded-full pulsate"></div>
             </div>
             {show && <BlinkerModal toggleFn={setShow} />}
           </div>

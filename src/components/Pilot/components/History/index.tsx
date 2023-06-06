@@ -30,34 +30,34 @@ export default function History() {
         <div className="w-1/5">
           <SectionArea label="Logs" icon={<DocumentTextIcon className="w-4 h-4" />} />
         </div>
-        <div className="flex items-center relative">
-          <input type="text" className="rounded-2xl w-64 h-7 border-purple-500 px-6 text-xs" placeholder="Search..." />
-          <BiSearch className="w-4 h-4 absolute left-2" />
+        <div className="relative flex items-center">
+          <input type="text" className="w-64 px-6 text-xs border-purple-500 rounded-2xl h-7" placeholder="Search..." />
+          <BiSearch className="absolute w-4 h-4 left-2" />
         </div>
-        <div className="flex space-x-2 items-center bg-gray-200 h-5 border-purple-500 rounded-lg px-1">
+        <div className="flex items-center h-5 px-1 space-x-2 bg-gray-200 border-purple-500 rounded-lg">
           <BsFilter />
-          <span className="capitalize text-xs">filter</span>
+          <span className="text-xs capitalize">filter</span>
         </div>
         <div className="relative">
           <BsThreeDots onClick={() => setShow(!showModal)} />
           {showModal && <HistoryModal model={logs} toggleFn={setShow} />}
         </div>
       </div>
-      <div className="relative h-full w-full mt-2">
+      <div className="relative w-full h-full mt-2">
         {/* status checking */}
         {status === 'error' ? (
           <FullScreenMessage title="Oops, an error occurred :(" description="Please try again later." />
         ) : status === 'loading' ? (
-          <div className="mx-auto w-6 justify-center mt-12">
+          <div className="justify-center w-6 mx-auto mt-12">
             <Spinner size={8} color="#0F70B7" />
           </div>
         ) : logs ? (
           !logs.length ? (
             <FullScreenMessage title="No logs yet" description="Do any action." />
           ) : (
-            <table className="absolute top-2 left-0 flex w-full overflow-y-scroll flex-col border-l-4 border-yellow-600 rounded-lg">
-              <thead className="w-full border-b-2 border-blueGray-300 px-1 pb-1">
-                <tr className="w-full flex justify-between items-center">
+            <table className="absolute left-0 flex flex-col w-full overflow-y-scroll border-l-4 border-yellow-600 rounded-lg top-2">
+              <thead className="w-full px-1 pb-1 border-b-2 border-blueGray-300">
+                <tr className="flex items-center justify-between w-full">
                   <div className="flex w-2/3 space-x-10 capitalize">
                     <th>user</th>
                     <th>date</th>
@@ -80,7 +80,7 @@ export default function History() {
                 return (
                   <tr
                     key={activityLog.id}
-                    className="py-1 flex space-x-6 w-full items-center border-b-2 border-blueGray-300 px-1"
+                    className="flex items-center w-full px-1 py-1 space-x-6 border-b-2 border-blueGray-300"
                   >
                     <td>
                       {user ? (
@@ -105,7 +105,7 @@ export default function History() {
                       <span className="text-xs">{time}</span>
                     </td>
                     {user && (
-                      <td className="text-gray-400 text-xs capitalize">
+                      <td className="text-xs text-gray-400 capitalize">
                         {user.name} {category} {model}
                       </td>
                     )}
@@ -138,14 +138,14 @@ function HistoryModal({ model, toggleFn }: HistoryModalProps) {
 
   return (
     <div
-      className="flex flex-col space-y-2 bg-white absolute top-5 right-5 shadow-2xl rounded-lg w-56 max-h-96 z-50 p-2 overflow-auto"
+      className="absolute z-50 flex flex-col w-56 p-2 space-y-2 overflow-auto bg-white rounded-lg shadow-2xl top-5 right-5 max-h-96"
       onBlur={() => toggleFn(false)}
     >
       <div className="border-b-2">
         <span className="text-sm capitalize">show all</span>
       </div>
       {model?.map((items, i) => (
-        <div key={items.id} className="capitalize py-1 flex justify-between">
+        <div key={items.id} className="flex justify-between py-1 capitalize">
           <span>{items.model}</span>
           <label className="switch">
             <input type="checkbox" checked={checkedStates[i]} onChange={() => handleChange(i)} />
