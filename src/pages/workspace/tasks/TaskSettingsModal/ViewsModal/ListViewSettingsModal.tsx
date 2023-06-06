@@ -1,13 +1,13 @@
 import React, { Fragment, useState } from 'react';
 import { Menu, Transition } from '@headlessui/react';
 import { BsListUl, BsPinAngle, BsThreeDots } from 'react-icons/bs';
-import { useAppDispatch } from '../../../../app/hooks';
+import { useAppDispatch } from '../../../../../app/hooks';
 import {
   getCompactView,
   getCompactViewWrap,
   getComfortableView,
   getComfortableViewWrap
-} from '../../../../features/task/taskSlice';
+} from '../../../../../features/task/taskSlice';
 import { AiOutlineCaretDown, AiOutlineLineChart, AiOutlinePlus } from 'react-icons/ai';
 import { HiOutlineTable } from 'react-icons/hi';
 import { MdOutlineSpaceDashboard } from 'react-icons/md';
@@ -17,6 +17,14 @@ import { CgViewComfortable } from 'react-icons/cg';
 import { GiChart } from 'react-icons/gi';
 import { FiChevronRight } from 'react-icons/fi';
 import { CiEdit } from 'react-icons/ci';
+import listIcon from '../../../../../assets/icons/listIcon.png';
+import tableIcon from '../../../../../assets/icons/tableIcon.png';
+import boardIcon from '../../../../../assets/icons/boardIcon.png';
+import calenderIcon from '../../../../../assets/icons/calenderIcon.png';
+import timeChartIcon from '../../../../../assets/icons/timeChartIcon.png';
+import mapIcon from '../../../../../assets/icons/mapIcon.png';
+import gantIcon from '../../../../../assets/icons/gantIcon.png';
+import teamIcon from '../../../../../assets/icons/teamIcon.png';
 
 export default function ListViewSettingsModal({
   list,
@@ -45,13 +53,13 @@ export default function ListViewSettingsModal({
   const ViewSettings = [
     {
       id: 1,
-      icon: <BsListUl />,
+      icon: <img src={listIcon} alt="listIcon" />,
       label: list,
       handleClick: () => dispatch(getComfortableView(true))
     },
     {
       id: 2,
-      icon: <HiOutlineTable />,
+      icon: <img src={tableIcon} alt="tableIcon" />,
       label: table,
       handleClick: () => {
         dispatch(getComfortableView(true));
@@ -62,7 +70,7 @@ export default function ListViewSettingsModal({
     },
     {
       id: 3,
-      icon: <MdOutlineSpaceDashboard />,
+      icon: <img src={boardIcon} alt="boardIcon" />,
       label: board,
       handleClick: () => {
         dispatch(getComfortableView(true));
@@ -73,7 +81,7 @@ export default function ListViewSettingsModal({
     },
     {
       id: 4,
-      icon: <BiCalendar />,
+      icon: <img src={calenderIcon} alt="calenderIcon" />,
       label: calender,
       handleClick: () => {
         dispatch(getComfortableView(false));
@@ -84,7 +92,7 @@ export default function ListViewSettingsModal({
     },
     {
       id: 5,
-      icon: <AiOutlineLineChart />,
+      icon: <img src={timeChartIcon} alt="timeChartIcon" />,
       label: timeChart,
       handleClick: () => {
         dispatch(getComfortableView(false));
@@ -95,7 +103,7 @@ export default function ListViewSettingsModal({
     },
     {
       id: 6,
-      icon: <RiMapPin5Line />,
+      icon: <img src={mapIcon} alt="mapIcon" />,
       label: map,
       handleClick: () => {
         dispatch(getComfortableView(false));
@@ -106,7 +114,7 @@ export default function ListViewSettingsModal({
     },
     {
       id: 7,
-      icon: <CgViewComfortable />,
+      icon: <img src={gantIcon} alt="gantIcon" />,
       label: gantt,
       handleClick: () => {
         dispatch(getComfortableView(false));
@@ -117,7 +125,7 @@ export default function ListViewSettingsModal({
     },
     {
       id: 8,
-      icon: <GiChart />,
+      icon: <img src={teamIcon} alt="teamIcon" />,
       label: team,
       handleClick: () => {
         dispatch(getComfortableView(false));
@@ -143,9 +151,10 @@ export default function ListViewSettingsModal({
     <Menu>
       <div className="viewSettingsParent flex justify-center items-center">
         <Menu.Button>
-          <AiOutlineCaretDown className="text-pink-500" />
+          <AiOutlineCaretDown className="text-primary-400 h-2.5 w-3" />
         </Menu.Button>
       </div>
+
       <Transition
         as={Fragment}
         enter="transition ease-out duration-100"
@@ -157,7 +166,7 @@ export default function ListViewSettingsModal({
       >
         <Menu.Items
           style={{ zIndex: 61 }}
-          className="origin-top-right absolute mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none "
+          className="origin-top-right absolute mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none -ml-8 mt-6"
         >
           {ViewSettings.map((View) => (
             <Menu.Item
@@ -185,9 +194,9 @@ export default function ListViewSettingsModal({
                         : 'flex items-center pr-2 opacity-0'
                     }`}
                   >
-                    <BsPinAngle />
-                    <CiEdit />
-                    <BsThreeDots />
+                    <BsPinAngle onClick={(event) => event.stopPropagation()} />
+                    <CiEdit onClick={(event) => event.stopPropagation()} />
+                    <BsThreeDots onClick={(event) => event.stopPropagation()} />
                   </p>
                 </button>
               ) : (
