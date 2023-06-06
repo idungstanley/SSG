@@ -16,6 +16,7 @@ export function useResize({ dimensions, direction, defaultSize, storageKey }: Us
   const { min, max } = dimensions;
   const [size, setSize] = useState(defaultSize ?? min);
   const [isDrag, setIsDrag] = useState<boolean>(false);
+  const [isMouseUp, setIsMouseUp] = useState<boolean>(false);
   const handleMouseMoveXR = useCallback((e: MouseEvent) => {
     if (blockRef.current) {
       setIsDrag(true);
@@ -75,7 +76,7 @@ export function useResize({ dimensions, direction, defaultSize, storageKey }: Us
       const handleMouseMove =
         direction === 'XL' ? handleMouseMoveXL : direction === 'XR' ? handleMouseMoveXR : handleMouseMoveY;
 
-      setIsDrag(true);
+      setIsMouseUp(true);
       setSize(newSize);
 
       document.removeEventListener('mousemove', handleMouseMove);
@@ -145,6 +146,7 @@ export function useResize({ dimensions, direction, defaultSize, storageKey }: Us
     blockRef, // for resizable element
     Dividers, // dragging border
     size,
-    isDrag
+    isDrag,
+    isMouseUp
   };
 }

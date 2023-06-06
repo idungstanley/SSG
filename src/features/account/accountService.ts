@@ -1,6 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import requestNew from '../../app/requestNew';
 import { IAccountReq, IUserParams, IUserSettings, IUserSettingsRes } from './account.interfaces';
+import { SetUserSettingsData } from './accountSlice';
+import { useAppDispatch } from '../../app/hooks';
 
 // Get all user's workspaces
 export const useGetMyWorkspaces = () => {
@@ -42,6 +44,7 @@ export const setResolution = async (data: { resolution: string }) => {
 };
 
 export const useGetUserSettingsKeys = (enabled: boolean, resolution?: string | null) => {
+  const dispatch = useAppDispatch();
   return useQuery<IUserSettingsRes, unknown, IUserSettings>(
     ['user-settings'],
     () =>
@@ -57,8 +60,8 @@ export const useGetUserSettingsKeys = (enabled: boolean, resolution?: string | n
       enabled: enabled,
       select: (res) => res.data.settings[0],
       onSuccess: (data) => {
-        console.log(data);
         localStorage.setItem('userSettingsData', JSON.stringify(data));
+        dispatch(SetUserSettingsData(data.value));
       }
     }
   );
@@ -76,9 +79,6 @@ export const setUserSettingsKeys = (value: IUserParams, resolution?: string | nu
 };
 
 export const setUserSettingsData = (enabled: boolean, value: IUserParams, resolution?: string | null) => {
-  console.log(value);
-  const queryClient = useQueryClient();
-
   return useQuery<IUserSettingsRes, unknown, IUserSettings>(
     ['user-settings', { value }],
     () =>
@@ -90,11 +90,7 @@ export const setUserSettingsData = (enabled: boolean, value: IUserParams, resolu
         }
       }),
     {
-      enabled,
-      onSuccess: (data) => {
-        // queryClient.invalidateQueries(['user-settings']);
-        console.log(data);
-      }
+      enabled
     }
   );
 };

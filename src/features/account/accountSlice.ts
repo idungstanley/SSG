@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { IUserState } from './account.interfaces';
+import { IUserParams, IUserState } from './account.interfaces';
 
 const showPreviewFromLS = localStorage.getItem('showPreview') as string;
 
@@ -32,6 +32,7 @@ interface AccountState {
   scrollTop: string | number;
   baseColor: string;
   lightBaseColor: string;
+  userSettingsData?: IUserParams;
 }
 
 const initialState: AccountState = {
@@ -44,7 +45,8 @@ const initialState: AccountState = {
   userName: '',
   scrollTop: '',
   baseColor: '#BF00FFB2',
-  lightBaseColor: '#BF00FF21'
+  lightBaseColor: '#BF00FF21',
+  userSettingsData: undefined
 };
 
 export const accountSlice = createSlice({
@@ -53,6 +55,9 @@ export const accountSlice = createSlice({
   reducers: {
     setAccountSettings: (state, action: PayloadAction<IUserState>) => {
       state.settings = action.payload;
+    },
+    SetUserSettingsData: (state, action: PayloadAction<IUserParams>) => {
+      state.userSettingsData = action.payload;
     },
     setShowSidebar: (state, action: PayloadAction<boolean>) => {
       state.showSidebar = action.payload;
@@ -72,7 +77,14 @@ export const accountSlice = createSlice({
   }
 });
 
-export const { setAccountSettings, setScrollTop, setShowSidebar, setPaletteDropDown, setShowUploadImage, setUserName } =
-  accountSlice.actions;
+export const {
+  setAccountSettings,
+  setScrollTop,
+  setShowSidebar,
+  setPaletteDropDown,
+  setShowUploadImage,
+  setUserName,
+  SetUserSettingsData
+} = accountSlice.actions;
 
 export default accountSlice.reducer;
