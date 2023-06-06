@@ -8,7 +8,7 @@ interface AddTaskFieldProps {
   parentId: string;
   paddingLeft?: number;
   isListParent?: boolean;
-  columns: Column[];
+  columns?: Column[];
 }
 
 export function AddTask({ onClose, paddingLeft, parentId, isListParent, columns }: AddTaskFieldProps) {
@@ -31,7 +31,7 @@ export function AddTask({ onClose, paddingLeft, parentId, isListParent, columns 
 
   return (
     <tr className="contents group">
-      <td className="z-20 w-full flex items-center">
+      <td className="z-20 w-full flex items-center pl-5">
         <div className="h-full bg-primary-50"></div>
         <div style={{ paddingLeft }} className="border-t flex items-center w-full h-12 bg-white opacity-90">
           <input
@@ -50,7 +50,7 @@ export function AddTask({ onClose, paddingLeft, parentId, isListParent, columns 
         </div>
       </td>
 
-      {columns.map((_, index) => (
+      {columns?.map((_, index) => (
         <td
           key={index}
           className="z-10 border-t bg-white w-full h-full opacity-90 flex items-center justify-center"
