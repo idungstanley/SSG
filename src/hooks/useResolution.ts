@@ -1,17 +1,13 @@
-import { useEffect } from 'react';
 import useWindowSize from './useWindowSize';
-import {
-  setUserSettingsKeys,
-  useGetUserSettingsKeys,
-  useSetUserSettingsKeys
-} from '../features/account/accountService';
+import { setUserSettingsData, useGetUserSettingsKeys } from '../features/account/accountService';
 import { RESOLUTION_RELATIVE_WIDTH, RESOLUTION_TYPES } from '../app/config/resolution';
 import { useAppSelector } from '../app/hooks';
-import { isEqual } from 'lodash';
 
-const userSettingsData = localStorage.getItem('userSettingsData');
+interface UseResolutiontionProps {
+  isDrag: boolean;
+}
 
-const useResolution = () => {
+const useResolution = ({ isDrag }: UseResolutiontionProps) => {
   const { width } = useWindowSize();
 
   const { sidebarWidthRD } = useAppSelector((state) => state.workspace);
@@ -27,16 +23,15 @@ const useResolution = () => {
       return RESOLUTION_TYPES.DEFAULT;
     }
   };
+  console.log(isDrag);
 
   const resolution = getResolution(width);
-  const previousData = JSON.parse(JSON.stringify(!!sidebarWidthRD));
-  const isAnyItemChanged = !isEqual(sidebarWidthRD, previousData);
-  useEffect(() => {
-    setUserSettingsKeys({ sidebarWidth: sidebarWidthRD }, resolution);
-  }, [resolution, sidebarWidthRD]);
-  useSetUserSettingsKeys();
+  setUserSettingsData(isDrag, { sidebarWidth: sidebarWidthRD }, resolution);
+  // useEffect(() => {
+  // }, [resolution, sidebarWidthRD]);
+  // useSetUserSettingsKeys();
 
-  useGetUserSettingsKeys(!!userSettingsData || isAnyItemChanged, resolution);
+  useGetUserSettingsKeys(true, resolution);
 
   return resolution;
 };

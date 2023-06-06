@@ -1,5 +1,6 @@
 import { useCallback, useRef, useState } from 'react';
 import { cl } from '../utils';
+import { useQueryClient } from '@tanstack/react-query';
 
 interface UseResizeProps {
   dimensions: { min: number; max: number };
@@ -10,11 +11,14 @@ interface UseResizeProps {
 
 export function useResize({ dimensions, direction, defaultSize, storageKey }: UseResizeProps) {
   const blockRef = useRef<HTMLDivElement>(null);
+  const queryClient = useQueryClient();
+
   const { min, max } = dimensions;
   const [size, setSize] = useState(defaultSize ?? min);
-
+  const [isDrag, setIsDrag] = useState<boolean>(false);
   const handleMouseMoveXR = useCallback((e: MouseEvent) => {
     if (blockRef.current) {
+      setIsDrag(true);
       const mouseX = e.clientX;
       const widthFromLeftToCurrentBlock = Math.round(blockRef.current.getBoundingClientRect().right);
 
@@ -33,6 +37,7 @@ export function useResize({ dimensions, direction, defaultSize, storageKey }: Us
 
   const handleMouseMoveXL = useCallback((e: MouseEvent) => {
     if (blockRef.current) {
+      setIsDrag(true);
       const mouseX = e.clientX;
       const widthFromLeftToCurrentBlock = Math.round(blockRef.current.getBoundingClientRect().left);
 
@@ -48,6 +53,7 @@ export function useResize({ dimensions, direction, defaultSize, storageKey }: Us
 
   const handleMouseMoveY = useCallback((e: MouseEvent) => {
     if (blockRef.current) {
+      setIsDrag(true);
       const mouseY = e.clientY;
       const heightFromTopToCurrentBlock = Math.round(blockRef.current.getBoundingClientRect().top);
 
@@ -69,6 +75,7 @@ export function useResize({ dimensions, direction, defaultSize, storageKey }: Us
       const handleMouseMove =
         direction === 'XL' ? handleMouseMoveXL : direction === 'XR' ? handleMouseMoveXR : handleMouseMoveY;
 
+      setIsDrag(true);
       setSize(newSize);
 
       document.removeEventListener('mousemove', handleMouseMove);
@@ -76,10 +83,12 @@ export function useResize({ dimensions, direction, defaultSize, storageKey }: Us
 
       // add current size to localStorage
       localStorage.setItem(storageKey, JSON.stringify(newSize));
+      queryClient.invalidateQueries(['user-settings']);
     }
   }, []);
 
   const handleMouseDown = useCallback(() => {
+    setIsDrag(true);
     document.body.style.userSelect = 'none'; // disable selecting text
 
     const handleMouseMove =
@@ -135,6 +144,7 @@ export function useResize({ dimensions, direction, defaultSize, storageKey }: Us
   return {
     blockRef, // for resizable element
     Dividers, // dragging border
-    size
+    size,
+    isDrag
   };
 }

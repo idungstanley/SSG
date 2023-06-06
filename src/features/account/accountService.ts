@@ -41,8 +41,8 @@ export const setResolution = async (data: { resolution: string }) => {
   return response;
 };
 
-export const useGetUserSettingsKeys = (enabled: boolean, resolution?: string | null) =>
-  useQuery<IUserSettingsRes, unknown, IUserSettings>(
+export const useGetUserSettingsKeys = (enabled: boolean, resolution?: string | null) => {
+  return useQuery<IUserSettingsRes, unknown, IUserSettings>(
     ['user-settings'],
     () =>
       requestNew({
@@ -62,6 +62,7 @@ export const useGetUserSettingsKeys = (enabled: boolean, resolution?: string | n
       }
     }
   );
+};
 
 export const setUserSettingsKeys = (value: IUserParams, resolution?: string | null) => {
   const request = requestNew({
@@ -72,6 +73,30 @@ export const setUserSettingsKeys = (value: IUserParams, resolution?: string | nu
     }
   });
   return request;
+};
+
+export const setUserSettingsData = (enabled: boolean, value: IUserParams, resolution?: string | null) => {
+  console.log(value);
+  const queryClient = useQueryClient();
+
+  return useQuery<IUserSettingsRes, unknown, IUserSettings>(
+    ['user-settings', { value }],
+    () =>
+      requestNew({
+        url: 'user/settings',
+        method: 'PUT',
+        data: {
+          keys: [{ key: 'sidebar', value, resolution: resolution }]
+        }
+      }),
+    {
+      enabled,
+      onSuccess: (data) => {
+        // queryClient.invalidateQueries(['user-settings']);
+        console.log(data);
+      }
+    }
+  );
 };
 
 export const useSetUserSettingsKeys = () => {
