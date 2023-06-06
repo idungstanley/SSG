@@ -17,11 +17,6 @@ const useResolution = () => {
   const queryClient = useQueryClient();
 
   const { sidebarWidthRD } = useAppSelector((state) => state.workspace);
-  const getUserSettingsData = useMutation(useGetUserSettingsKeys, {
-    onSuccess: () => {
-      queryClient.invalidateQueries(['user-settings']);
-    }
-  });
 
   const getResolution = (windowWidth: number): string | null => {
     if (windowWidth <= RESOLUTION_RELATIVE_WIDTH.MOBILE) {
@@ -38,7 +33,6 @@ const useResolution = () => {
   const resolution = getResolution(width);
   const previousData = JSON.parse(JSON.stringify(!!sidebarWidthRD));
   const isAnyItemChanged = !isEqual(sidebarWidthRD, previousData);
-  console.log(sidebarWidthRD);
   useEffect(() => {
     setUserSettingsKeys({ sidebarWidth: sidebarWidthRD }, resolution);
   }, [resolution, sidebarWidthRD]);
