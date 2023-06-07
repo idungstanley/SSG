@@ -13,9 +13,6 @@ interface HeadProps {
 
 export function Head({ columns, tableHeight, collapseTasks, onToggleCollapseTasks, mouseDown, label }: HeadProps) {
   const parsedLabel = parseLabel(label);
-  const handleClick = (value: string) => {
-    console.log(value);
-  };
 
   return (
     <thead className="contents">
@@ -26,11 +23,9 @@ export function Head({ columns, tableHeight, collapseTasks, onToggleCollapseTask
           <p className="flex items-center w-full gap-3 p-2 -ml-2 truncate opacity-90">
             <span className="bg-primary-200 py-0.5 px-2 rounded-tr-md flex items-center space-x-1">
               <Chevron color="text-gray-500" active={collapseTasks} onToggle={onToggleCollapseTasks} />
-
               <span>{parsedLabel}</span>
             </span>
-            p
-            {!collapseTasks ? columns[0].value : null}
+            <p>{!collapseTasks ? columns[0].value : null}</p>
           </p>
 
           <div
