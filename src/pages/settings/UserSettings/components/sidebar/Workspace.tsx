@@ -32,16 +32,16 @@ function Workspace() {
       id: 3,
       title: 'Teams',
       child: [
+        // {
+        //   id: 1,
+        //   title: 'Team Members',
+        //   onClick: () => {
+        //     dispatch(setActiveTab('Team Members'));
+        //     navigate('team-members');
+        //   }
+        // },
         {
           id: 1,
-          title: 'Team Members',
-          onClick: () => {
-            dispatch(setActiveTab('Team Members'));
-            navigate('team-members');
-          }
-        },
-        {
-          id: 2,
           title: 'Team Member Invites',
           onClick: () => {
             dispatch(setActiveTab('Team Member Invites'));
@@ -49,7 +49,7 @@ function Workspace() {
           }
         },
         {
-          id: 3,
+          id: 2,
           title: 'Team Member Groups',
           onClick: () => {
             dispatch(setActiveTab('Team Member Groups'));
@@ -57,7 +57,7 @@ function Workspace() {
           }
         },
         {
-          id: 4,
+          id: 3,
           title: 'Permissions',
           onClick: () => {
             dispatch(setActiveTab('Permissions'));
