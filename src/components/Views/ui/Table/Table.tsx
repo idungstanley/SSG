@@ -144,7 +144,7 @@ export function Table({ heads, data, label }: TableProps) {
           <div className="h-5">
             <button
               onClick={() => setShowNewTaskField(true)}
-              className="absolute pl-16 left-0 p-1.5 text-left w-fit text-xs"
+              className="absolute left-0 p-1.5 pl-12 text-left w-fit text-xs "
             >
               + New Task
             </button>

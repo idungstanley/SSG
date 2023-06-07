@@ -37,13 +37,13 @@ function GroupAssignee({
   const [modalLoader, setModalLoader] = useState(true);
 
   const handleHoverIntervalMouseIn = (index: number) => {
-    setDisplayed((prev) => ({ ...prev, show: true, index }));
-    setTimeout(() => {
-      setHoverInterval(true);
-    }, 500);
-    setTimeout(() => {
-      setModalLoader(false);
-    }, 1000);
+    // setDisplayed((prev) => ({ ...prev, show: true, index }));
+    // setTimeout(() => {
+    //   setHoverInterval(true);
+    // }, 500);
+    // setTimeout(() => {
+    //   setModalLoader(false);
+    // }, 1000);
   };
 
   const handleHoverIntervalMouseOut = () => {

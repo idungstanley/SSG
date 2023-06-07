@@ -5,6 +5,11 @@ import { useParams } from 'react-router-dom';
 import { Task } from '../../../../features/task/interface.tasks';
 import { cl } from '../../../../utils';
 import { ACTIVE_COL_BG, DEFAULT_COL_BG } from '../../config';
+import subtask from '../../../../assets/icons/subtask.png';
+import todoIcon from '../../../../assets/icons/todoIcon.png';
+import completedIcon from '../../../../assets/icons/completedIcon.png';
+import archiveIcon from '../../../../assets/icons/archiveIcon.png';
+import { useSubTasks } from '../../../../features/task/taskService';
 
 interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   task: Task;
@@ -23,17 +28,20 @@ export function StickyCol({ showSubTasks, setShowSubTasks, children, task, paddi
     setShowSubTasks(!showSubTasks);
   };
 
+  const { data: subTasks } = useSubTasks(task.id);
+
   return (
     <td
-      className="sticky left-0 flex items-center justify-center text-sm font-medium text-center text-gray-900 cursor-pointer"
+      className="sticky left-0 flex items-center justify-center text-sm font-medium text-center text-gray-900 cursor-pointer h-10"
       {...props}
     >
       {/* //! change me */}
-      <div className="flex items-center w-10 h-full space-x-1 bg-purple-50">
+      <div className="flex items-center h-full bg-purple-50">
         <input
           type="checkbox"
           id="checked-checkbox"
-          className="w-3 h-3 rounded-full opacity-0 cursor-pointer focus:outline-1 focus:ring-transparent group-hover:opacity-100 focus:border-2 focus:opacity-100"
+          className="w-2 h-2 rounded-full opacity-0 cursor-pointer focus:outline-1 focus:ring-transparent group-hover:opacity-100 focus:border-2 focus:opacity-100 "
+          style={{ marginLeft: '-1px' }}
           // ref={setNodeRef}
           // {...attributes}
           // {...listeners}
@@ -42,17 +50,40 @@ export function StickyCol({ showSubTasks, setShowSubTasks, children, task, paddi
           // }}
         />
 
-        <MdDragIndicator className="text-lg text-gray-400 transition duration-200 opacity-0 cursor-move group-hover:opacity-100" />
+        <MdDragIndicator
+          className="text-lg text-gray-400 transition duration-200 opacity-0 cursor-move group-hover:opacity-100"
+          style={{ marginLeft: '-2px', marginRight: '-2.5px' }}
+        />
       </div>
 
-      <div style={{ paddingLeft }} className={cl(COL_BG, 'relative border-t w-full h-full py-4 p-4 flex items-center')}>
-        <button onClick={onToggleDisplayingSubTasks}>
+      <div
+        style={{ paddingLeft }}
+        className={cl(COL_BG, 'relative border-t w-full h-full py-4 p-4 flex items-center ')}
+      >
+        <button onClick={onToggleDisplayingSubTasks} className="">
           {showSubTasks ? (
-            <RxTriangleDown className="w-4 h-4 text-gray-600" />
+            <RxTriangleDown
+              className={`${subTasks?.length ? 'w-4 h-4 text-gray-600' : ' opacity-0 w-4 h-4 text-gray-600'}`}
+            />
           ) : (
-            <RxTriangleRight className="w-4 h-4 text-gray-600" />
+            <RxTriangleRight
+              className={`${subTasks?.length ? 'w-4 h-4 text-gray-600' : ' opacity-0 w-4 h-4 text-gray-600'}`}
+            />
           )}
         </button>
+
+        {task.status == 'in progress' ? (
+          <img src={subtask} alt="subtask" className="pr-1" />
+        ) : task.status == 'completed' ? (
+          <img src={completedIcon} alt="subtask" className="pr-1" />
+        ) : task.status == 'todo' ? (
+          <img src={todoIcon} alt="subtask" className="pr-1" />
+        ) : task.status == 'archived' ? (
+          <img src={archiveIcon} alt="subtask" className="pr-1" />
+        ) : (
+          <img src={todoIcon} alt="subtask" className="pr-1" />
+        )}
+
         <p>{task.name}</p>
 
         {children}
