@@ -27,7 +27,6 @@ export function Head({ columns, tableHeight, collapseTasks, onToggleCollapseTask
             </span>
             <p>{!collapseTasks ? columns[0].value : null}</p>
           </p>
-
           <div
             style={{ height: tableHeight }}
             onMouseDown={() => mouseDown(0)}
@@ -36,7 +35,6 @@ export function Head({ columns, tableHeight, collapseTasks, onToggleCollapseTask
             <div className="w-0.5 mx-auto h-full bg-gray-100" />
           </div>
         </th>
-
         {!collapseTasks
           ? columns.slice(1).map(({ ref, value, id }, index) => (
               <th key={id} className="relative p-2 -mb-1 font-extrabold opacity-90" ref={ref}>
