@@ -88,7 +88,7 @@ export default function SortModal({ toggleModal, setAnchorEl, anchorEl, handleCl
       });
     }
   };
-  console.log(filterDropDown);
+
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (modalRef.current && !modalRef.current.contains(event.target as Node)) {

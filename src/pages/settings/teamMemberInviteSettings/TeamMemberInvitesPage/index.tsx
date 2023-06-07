@@ -13,11 +13,9 @@ import { SetTriggerGetTeammeberInvite } from '../../../../features/settings/team
 export default function TeamMemberInvitesPage() {
   const dispatch = useDispatch();
 
-  const { teamMemberInvitesPaginationPage, triggerGetTeammeberInvite } = useAppSelector(
-    (state) => state.teamMemberInvite
-  );
+  const { teamMemberInvitesPaginationPage } = useAppSelector((state) => state.teamMemberInvite);
 
-  const { status, data } = useGetTeamMemberInvites(teamMemberInvitesPaginationPage, triggerGetTeammeberInvite);
+  const { status, data } = useGetTeamMemberInvites(teamMemberInvitesPaginationPage);
 
   const showInviteTeamMemberSlideOver = () => {
     dispatch(setInviteTeamMemberSlideOverVisibility(true));
@@ -29,20 +27,6 @@ export default function TeamMemberInvitesPage() {
 
   return (
     <div className="h-full flex-1 flex flex-col overflow-hidden bg-gray-50">
-      {/* <Breadcrumb
-        pages={[
-          {
-            name: 'Team members',
-            href: '/settings/team-members',
-            current: false,
-          },
-          {
-            name: 'Invites',
-            href: '/settings/team-members/invites',
-            current: true,
-          },
-        ]}
-      /> */}
       <main className="flex-1 flex flex-col h-full overflow-y-scroll pb-10 px-4 sm:px-6 lg:px-6">
         <div className="my-10">
           <SimpleSectionHeading

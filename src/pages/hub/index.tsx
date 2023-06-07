@@ -84,7 +84,9 @@ export default function HubPage() {
         >
           {/* lists */}
           {Object.keys(lists).map((listId) => (
-            <List key={listId} tasks={lists[listId]} />
+            <>
+              <List key={listId} tasks={lists[listId]} />
+            </>
           ))}
         </section>
       </Page>

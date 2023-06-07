@@ -119,11 +119,6 @@ export const UseGetFullTaskList = ({
 };
 
 export const getOneTaskServices = ({ task_id }: { task_id: string | undefined | null }) => {
-  const { workSpaceId } = useParams();
-  const { currentWorkspaceId } = useAppSelector((state) => state.auth);
-
-  const fetch = currentWorkspaceId == workSpaceId;
-
   return useQuery(
     ['task', { task_id: task_id }],
     async () => {

@@ -94,8 +94,8 @@ export function useReactivateTeamMember(teamMemberId: string) {
 // Remove team member
 export const removeTeamMemberService = async (data: { teamMemberId: string }) => {
   const response = requestNew({
-    url: `/settings/team-members/${data.teamMemberId}/remove`,
-    method: 'POST'
+    url: `/settings/team-members/${data.teamMemberId}`,
+    method: 'DELETE'
   });
   return response;
 };

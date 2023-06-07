@@ -19,10 +19,23 @@ export function Head({ columns, tableHeight, collapseTasks, onToggleCollapseTask
       <tr className="contents">
         {/* first sticky col */}
         <th style={{ zIndex: 2 }} className="sticky left-0 flex -mb-2 font-extrabold" ref={columns[0].ref}>
-          <div className="flex items-center w-10 bg-purple-50"></div>
-          <p className="flex items-center w-full gap-3 p-2 -ml-2 truncate opacity-90">
-            <span className="bg-primary-200 py-0.5 px-2 rounded-tr-md flex items-center space-x-1">
-              <Chevron color="text-gray-500" active={collapseTasks} onToggle={onToggleCollapseTasks} />
+          <div className="flex items-center bg-purple-50 " style={{ width: '22px' }}></div>
+          <p className="flex items-center w-full gap-3 py-2 truncate opacity-90">
+            <span
+              className={`py-0.5 px-2 rounded-tr-md flex items-center space-x-1 text-white ${
+                parsedLabel == 'todo'
+                  ? 'bg-gray-400'
+                  : parsedLabel == 'in progress'
+                  ? 'bg-purple-500'
+                  : parsedLabel == 'completed'
+                  ? 'bg-green-500'
+                  : parsedLabel == 'archived'
+                  ? 'bg-yellow-500'
+                  : 'bg-gray-400'
+              }`}
+            >
+              <Chevron color="text-white" active={collapseTasks} onToggle={onToggleCollapseTasks} />
+
               <span>{parsedLabel}</span>
             </span>
             <p>{!collapseTasks ? columns[0].value : null}</p>

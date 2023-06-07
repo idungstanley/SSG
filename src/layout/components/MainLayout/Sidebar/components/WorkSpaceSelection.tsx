@@ -5,7 +5,6 @@ import { Spinner } from '../../../../../common';
 import WorkspaceSettingsModal from '../../../../../pages/workspace/workspaceSettings/WorkspaceSettingsModal';
 import { dimensions } from '../../../../../app/config/dimensions';
 import { setFetchAllWorkspace } from '../../../../../features/workspace/workspaceSlice';
-import { useState } from 'react';
 
 const MIN_SIDEBAR_WIDTH = dimensions.navigationBar.min;
 
