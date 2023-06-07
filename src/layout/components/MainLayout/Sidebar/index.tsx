@@ -22,7 +22,7 @@ export default function Sidebar() {
   const { extendedSidebarWidth, sidebarWidthRD, showExtendedBar } = useAppSelector((state) => state.workspace);
   const { showSidebar, userSettingsData } = useAppSelector((state) => state.account);
 
-  const { blockRef, Dividers, size, isDrag, isMouseUp } = useResize({
+  const { blockRef, Dividers, size, isMouseUp } = useResize({
     dimensions: {
       min: MIN_SIDEBAR_WIDTH,
       max: MAX_SIDEBAR_WIDTH
