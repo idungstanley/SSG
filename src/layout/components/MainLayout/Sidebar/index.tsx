@@ -12,6 +12,7 @@ import { useResize } from '../../../../hooks/useResize';
 import { isAllowIncreaseWidth } from '../../../../utils/widthUtils';
 import { NavigationList } from './components/NavigationItems/components/NavigationList';
 import useResolution from '../../../../hooks/useResolution';
+import { setUserSettingsData, useGetUserSettingsKeys } from '../../../../features/account/accountService';
 
 const MAX_SIDEBAR_WIDTH = dimensions.navigationBar.max;
 const MIN_SIDEBAR_WIDTH = dimensions.navigationBar.min;
@@ -19,11 +20,9 @@ const MIN_SIDEBAR_WIDTH = dimensions.navigationBar.min;
 export default function Sidebar() {
   const dispatch = useAppDispatch();
   const { extendedSidebarWidth, sidebarWidthRD, showExtendedBar } = useAppSelector((state) => state.workspace);
-  const resolution = useResolution();
-  console.log(resolution);
-  const { showSidebar } = useAppSelector((state) => state.account);
+  const { showSidebar, userSettingsData } = useAppSelector((state) => state.account);
 
-  const { blockRef, Dividers, size } = useResize({
+  const { blockRef, Dividers, size, isMouseUp } = useResize({
     dimensions: {
       min: MIN_SIDEBAR_WIDTH,
       max: MAX_SIDEBAR_WIDTH
@@ -32,6 +31,9 @@ export default function Sidebar() {
     direction: 'XR',
     defaultSize: dimensions.navigationBar.default
   });
+  const resolution = useResolution();
+  setUserSettingsData(isMouseUp, { ...userSettingsData, sidebarWidth: sidebarWidthRD }, resolution);
+  useGetUserSettingsKeys(true, resolution);
   const [activeTabId, setActiveTabId] = useState<string | null>('');
   const hotkeyIdsFromLS = JSON.parse(localStorage.getItem('navhotkeys') ?? '[]') as string[];
 

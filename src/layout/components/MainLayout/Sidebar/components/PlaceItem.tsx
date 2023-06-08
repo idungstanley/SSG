@@ -60,8 +60,8 @@ export default function PlaceItem({
       ? '#BF00FF08'
       : undefined,
     zIndex: isDragging ? 1 : isActivePlace ? 10 : undefined,
-    height: '50px',
-    paddingLeft: showSidebar ? '25px' : '20px'
+    // height: '50px',
+    paddingLeft: searchStatus ? '25px' : undefined
   };
 
   const resetSelectedPlace = () => {
@@ -76,21 +76,30 @@ export default function PlaceItem({
     <li
       id={`${label}`}
       className={cl(
-        !isActivePlace ? 'relative' : isActivePlace && searchStatus ? undefined : 'sticky top-0',
-        'focus:flex hover:bg-gray-100 flex-col w-full flex justify-center group',
+        isActivePlace ? 'sticky top-0' : '',
+        'focus:flex hover:bg-gray-100 flex-col w-full group',
         bottomContent ? 'gap-2' : ''
       )}
       style={style}
       onClick={isActivePlace ? resetSelectedPlace : onClick}
     >
-      {placeActive && (
-        <span className="absolute top-0 bottom-0 left-0 right-0" style={{ backgroundColor: lightBaseColor }} />
-      )}
-      {placeActive && (
-        <span className="absolute top-0 bottom-0 left-0 w-0.5 rounded-r-lg" style={{ backgroundColor: baseColor }} />
-      )}
       {!searchStatus && (
-        <div className="flex items-center">
+        <div
+          className="relative flex items-center justify-center"
+          style={{ height: '50px', paddingLeft: showSidebar ? '25px' : '20px' }}
+        >
+          {placeActive && (
+            <span
+              className="absolute inset-0 z-0 before:content before:absolute before:inset-0"
+              style={{ backgroundColor: lightBaseColor }}
+            />
+          )}
+          {placeActive && (
+            <span
+              className="absolute top-0 bottom-0 left-0 w-0.5 rounded-r-lg"
+              style={{ backgroundColor: baseColor }}
+            />
+          )}
           <span
             className="absolute justify-center text-xl text-gray-500 opacity-0 cursor-move left-1 group-hover:opacity-100"
             ref={setNodeRef}
@@ -99,7 +108,7 @@ export default function PlaceItem({
           >
             <MdDragIndicator className="text-gray-400 hover:text-fuchsia-500" />
           </span>
-          <div className="flex justify-between w-full">
+          <div className="flex items-center justify-between w-full">
             <div
               className={cl(
                 'flex gap-5 items-center content-center self-center',
@@ -110,7 +119,7 @@ export default function PlaceItem({
               <span
                 className={cl(
                   showSidebar ? 'block' : 'hidden',
-                  'w-32 flex jusitfy-start cursor-pointer uppercase truncate',
+                  'w-32 text-left cursor-pointer uppercase truncate',
                   isActivePlace ? 'font-black' : ''
                 )}
                 style={{
@@ -125,7 +134,7 @@ export default function PlaceItem({
                 {label}
               </span>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="absolute right-0 flex items-center gap-2">
               <div className="flex items-center opacity-0 group-hover:opacity-100">
                 {showSidebar && midContent}
                 {showSidebar && rightContent}

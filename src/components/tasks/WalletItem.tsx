@@ -85,7 +85,7 @@ export default function WalletItem({
   return (
     <>
       <section
-        className={`flex bg-white items-center justify-between pr-1.5 text-sm group ${
+        className={`bg-white items-center pr-1.5 text-sm group ${
           wallet.id === activeItemId ? 'font-medium' : 'hover:bg-gray-100'
         } ${isSticky && stickyButtonIndex === index ? 'sticky bg-white' : ''}`}
         onClick={() => handleShowSubWallet(wallet.id, index)}
@@ -94,14 +94,17 @@ export default function WalletItem({
           zIndex: isSticky ? zNumber : '1'
         }}
       >
-        {wallet.id === walletId && (
-          <span className="absolute top-0 bottom-0 left-0 right-0" style={{ backgroundColor: lightBaseColor }} />
-        )}
         <div
           id="walletLeft"
-          className="relative flex items-center justify-center"
+          className="relative flex items-center"
           style={{ paddingLeft: `${paddingLeft}px`, height: '30px' }}
         >
+          {wallet.id === walletId && (
+            <span
+              className="absolute inset-0 z-0 before:content before:absolute before:inset-0"
+              style={{ backgroundColor: lightBaseColor }}
+            />
+          )}
           {wallet.id === walletId && (
             <span
               className="absolute top-0 bottom-0 left-0 w-0.5 rounded-r-lg"
@@ -145,18 +148,18 @@ export default function WalletItem({
               {wallet.name}
             </p>
           </div>
-        </div>
-        <div
-          id="walletRight"
-          className="flex items-center space-x-1 opacity-0 group-hover:opacity-100"
-          onClick={(e) => e.stopPropagation()}
-        >
-          <AiOutlineEllipsis
-            className="cursor-pointer"
-            onClick={(e) => handleWalletSettings(wallet.id, wallet.name, e)}
-            id="menusettings"
-          />
-          <AiOutlinePlus onClick={() => handleItemAction(wallet.id)} className="cursor-pointer" />
+          <div
+            id="walletRight"
+            className="absolute right-0 flex items-center space-x-1 opacity-0 group-hover:opacity-100"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <AiOutlineEllipsis
+              className="cursor-pointer"
+              onClick={(e) => handleWalletSettings(wallet.id, wallet.name, e)}
+              id="menusettings"
+            />
+            <AiOutlinePlus onClick={() => handleItemAction(wallet.id)} className="cursor-pointer" />
+          </div>
         </div>
       </section>
       {paletteId === wallet.id && show ? <Palette title="Wallet Colour" setPaletteColor={setPaletteColor} /> : null}
