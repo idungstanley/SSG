@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { cl } from '../../../../utils';
-import { setScrollTop } from '../../../../features/account/accountSlice';
 import { setSidebarWidthRD } from '../../../../features/workspace/workspaceSlice';
 import Header from './components/Header';
 import NavigationItems from './components/NavigationItems';
@@ -22,7 +21,7 @@ export default function Sidebar() {
   const { extendedSidebarWidth, sidebarWidthRD, showExtendedBar } = useAppSelector((state) => state.workspace);
   const { showSidebar, userSettingsData } = useAppSelector((state) => state.account);
 
-  const { blockRef, Dividers, size, isMouseUp } = useResize({
+  const { blockRef, Dividers, size, isMouseUp, isDrag } = useResize({
     dimensions: {
       min: MIN_SIDEBAR_WIDTH,
       max: MAX_SIDEBAR_WIDTH
@@ -65,10 +64,6 @@ export default function Sidebar() {
     dispatch(setSidebarWidthRD(isAllow ? size : showExtendedBar ? allowedSize - size : size));
   }, [size]);
 
-  const handleScroll = (event: React.UIEvent<HTMLElement, UIEvent>) => {
-    dispatch(setScrollTop(event.currentTarget.scrollTop));
-  };
-
   return (
     <aside className={cl('flex h-full text-center relative overflow-x-visible')}>
       <Dividers />
@@ -79,7 +74,7 @@ export default function Sidebar() {
           width: sidebarWidthRD
         }}
         ref={blockRef}
-        className="relative flex flex-col pr-1 border-r border-gray-300"
+        className={`relative flex flex-col pr-1 border-r ${isDrag ? 'border-gray-500' : 'border-gray-300'}`}
       >
         <Header
           activeHotkeyIds={activeHotkeyIds}
@@ -88,10 +83,7 @@ export default function Sidebar() {
           activeTabId={activeTabId}
           setActiveTabId={setActiveTabId}
         />
-        <section
-          className="relative h-full flex flex-col pr-1.5 overflow-y-auto overflow-x-hidden"
-          onScroll={(e) => handleScroll(e)}
-        >
+        <section className="relative h-full flex flex-col pr-1.5 overflow-y-auto overflow-x-hidden">
           {showSidebar ? <Search /> : null}
           <NavigationItems
             activeTabId={activeTabId}

@@ -76,15 +76,14 @@ export const UseGetFullTaskList = ({
   const hub_id = itemType === 'hub' || itemType === 'subhub' ? itemId : null;
   const wallet_id = itemType == 'wallet' || itemType == 'subwallet' ? itemId : null;
   const assignees = assigneeUserId ? (assigneeUserId == 'unassigned' ? null : [assigneeUserId]) : null;
-  // const { sortAbleArr } = useAppSelector((state) => state.task);
-  // const sortArrUpdate = sortAbleArr.length <= 0 ? null : sortAbleArr;
+  const { sortAbleArr } = useAppSelector((state) => state.task);
+  const sortArrUpdate = sortAbleArr.length <= 0 ? null : sortAbleArr;
   const { workSpaceId } = useParams();
   const { currentWorkspaceId } = useAppSelector((state) => state.auth);
-
   const fetch = currentWorkspaceId == workSpaceId;
 
   return useInfiniteQuery(
-    ['task', itemId, itemType],
+    ['task', itemId, itemType, sortArrUpdate],
     async ({ pageParam = 0 }: { pageParam?: number }) => {
       return requestNew<IFullTaskRes>({
         url: 'tasks/full-list',
@@ -94,10 +93,10 @@ export const UseGetFullTaskList = ({
           hub_id,
           wallet_id,
           assignees
+        },
+        data: {
+          sorting: sortArrUpdate
         }
-        // data: {
-        //   sorting: sortArrUpdate
-        // }
       });
     },
     {

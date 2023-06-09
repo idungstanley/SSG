@@ -3,7 +3,7 @@ import { useAppSelector } from '../../../../app/hooks';
 import { useList } from '../../../../features/list/listService';
 import { Task } from '../../../../features/task/interface.tasks';
 import { filterByAssignee, filterBySearchValue, filterByValues, sortTasks } from '../../../TasksHeader/lib';
-import { createHeaders, generateColumns } from '../../lib/tableHeadUtils';
+import { generateColumns } from '../../lib/tableHeadUtils';
 import { Table } from '../Table/Table';
 import { Label } from './Label';
 import { AddTask } from '../AddTask/AddTask';
@@ -34,7 +34,7 @@ export function List({ tasks }: ListProps) {
   const { sortedTasks } = sortTasks(sortType, filteredByValues);
 
   return (
-    <div className="border-l-4 border-t-4 border-purple-500 rounded-lg bg-purple-50">
+    <div className="border-t-4 border-l-4 border-purple-500 rounded-lg bg-purple-50">
       <Label listName={listName} showTable={collapseTable} onClickChevron={() => setCollapseTable((prev) => !prev)} />
 
       {!collapseTable && heads ? (
