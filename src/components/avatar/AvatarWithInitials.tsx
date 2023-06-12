@@ -36,7 +36,7 @@ function AvatarWithInitials({
         </span>
       </span>
       {badge && (
-        <img src={nonWatcherBadge} alt="" className="absolute bottom-1.5 h-3 w-3 z-20" style={{ left: '27px' }} />
+        <img src={nonWatcherBadge} alt="" className="absolute bottom-1 h-3 w-3 z-20" style={{ left: '25px' }} />
       )}
     </div>
   );
