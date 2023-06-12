@@ -23,7 +23,7 @@ function AvatarForOwner({
 }: AvatarWithInitialsProps) {
   return (
     <AssigneeCloth>
-      <div className="absolute" style={{ left: '1px', top: '1px' }}>
+      <div className="absolute" style={{ left: '2px', top: '2px' }}>
         <span
           className={`inline-flex items-center justify-center z-10 relative ${height} ${width} ${
             roundedStyle === 'circular' && 'rounded-full'
