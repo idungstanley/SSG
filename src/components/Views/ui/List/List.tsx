@@ -34,7 +34,7 @@ export function List({ tasks }: ListProps) {
   const { sortedTasks } = sortTasks(sortType, filteredByValues);
 
   return (
-    <div className="border-t-4 border-l-4 border-purple-500 rounded-lg bg-purple-50">
+    <div className="border-l-4 pt-1 border-t-4 border-purple-500 rounded-xl bg-purple-50">
       <Label listName={listName} showTable={collapseTable} onClickChevron={() => setCollapseTable((prev) => !prev)} />
 
       {!collapseTable && heads ? (

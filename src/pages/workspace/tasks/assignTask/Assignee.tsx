@@ -18,6 +18,7 @@ import { AiOutlineSearch } from 'react-icons/ai';
 import { useState } from 'react';
 import { ITeamMembersAndGroup } from '../../../../features/settings/teamMembersAndGroups.interfaces';
 import { useAppSelector } from '../../../../app/hooks';
+import AvatarForOwner from '../../../../components/avatar/AvatarForOwner';
 
 export default function Assignee({
   itemId,
@@ -109,7 +110,7 @@ export default function Assignee({
   return (
     <>
       {option === 'task' && (
-        <Button id="basic-button" style={{ marginLeft: '-25px' }}>
+        <Button id="basic-button">
           {assignees?.length ? (
             <div className="flex">
               <GroupAssignee data={assignees} itemId={itemId as string} handleClick={handleClick} />

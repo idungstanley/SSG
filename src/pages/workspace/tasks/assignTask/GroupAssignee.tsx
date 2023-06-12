@@ -4,7 +4,16 @@ import { AvatarWithInitials } from '../../../../components';
 import { UseUnassignTask } from '../../../../features/task/taskService';
 import PopAssignModal from './popAssignModal';
 import ToolTip from '../../../../components/Tooltip';
-import AvatarWithImage from '../../../../components/avatar/AvatarWithImage';
+import AvatarForOwner from '../../../../components/avatar/AvatarForOwner';
+
+interface InewData {
+  id: string | null | undefined;
+  initials: string;
+  colour: string | undefined;
+  name: string;
+  role: string;
+  avatar_path: string | null;
+}
 
 function GroupAssignee({
   data,
@@ -77,33 +86,19 @@ function GroupAssignee({
                 }}
                 onMouseLeave={() => handleHoverIntervalMouseOut()}
               >
-                <div
-                  key={newData.id}
-                  className=" flex items-center justify-center -ml-2.5 border-2 rounded-full relative    "
-                >
+                <div key={newData.id} className=" flex items-center justify-center -ml-2.5 rounded-full relative    ">
                   <ToolTip tooltip={newData.name}>
                     <span onClick={handleClick}>
-                      {newData.avatar_path ? (
-                        <AvatarWithImage
-                          image_path={newData.avatar_path}
-                          height={`${
-                            CompactView || CompactViewWrap ? 'CompactWithInitialsH' : 'ComfortableWithInitialsH'
-                          }`}
-                          width={`${
-                            CompactView || CompactViewWrap ? 'CompactWithInitialsW' : 'ComfortableWithInitialsW'
-                          }`}
-                        />
+                      {(newData as InewData).role == 'owner' ? (
+                        <AvatarForOwner initials="me" />
                       ) : (
-                        <AvatarWithInitials
-                          initials={newData.initials}
-                          backgroundColour={newData.colour}
-                          height={`${
-                            CompactView || CompactViewWrap ? 'CompactWithInitialsH' : 'ComfortableWithInitialsH'
-                          }`}
-                          width={`${
-                            CompactView || CompactViewWrap ? 'CompactWithInitialsW' : 'ComfortableWithInitialsW'
-                          }`}
-                        />
+                        <div className="border-2 border-red-400  rounded-full">
+                          <AvatarWithInitials
+                            initials={newData.initials}
+                            backgroundColour={newData.colour}
+                            badge={true}
+                          />
+                        </div>
                       )}
                     </span>
 
@@ -153,7 +148,7 @@ function GroupAssignee({
               index === 2 ? 'z-10' : 'z-0'
             } `}
           >
-            <div key={newData.id} className="flex items-center justify-center -ml-2.5 border-2 rounded-full relative">
+            <div key={newData.id} className="flex items-center justify-center -ml-2.5 rounded-full relative">
               <ToolTip tooltip={newData.name}>
                 <div
                   onMouseEnter={() => {
@@ -163,27 +158,16 @@ function GroupAssignee({
                   className="relative "
                 >
                   <span onClick={handleClick}>
-                    {newData.avatar_path ? (
-                      <AvatarWithImage
-                        image_path={newData.avatar_path}
-                        height={`${
-                          CompactView || CompactViewWrap ? 'CompactWithInitialsH' : 'ComfortableWithInitialsH'
-                        }`}
-                        width={`${
-                          CompactView || CompactViewWrap ? 'CompactWithInitialsW' : 'ComfortableWithInitialsW'
-                        }`}
-                      />
+                    {(newData as InewData).role == 'owner' ? (
+                      <AvatarForOwner initials={newData.initials} />
                     ) : (
-                      <AvatarWithInitials
-                        initials={newData.initials}
-                        backgroundColour={newData.colour}
-                        height={`${
-                          CompactView || CompactViewWrap ? 'CompactWithInitialsH' : 'ComfortableWithInitialsH'
-                        }`}
-                        width={`${
-                          CompactView || CompactViewWrap ? 'CompactWithInitialsW' : 'ComfortableWithInitialsW'
-                        }`}
-                      />
+                      <div className="border-2 border-red-400 rounded-full">
+                        <AvatarWithInitials
+                          initials={newData.initials}
+                          backgroundColour={newData.colour}
+                          badge={true}
+                        />
+                      </div>
                     )}
                   </span>
 
