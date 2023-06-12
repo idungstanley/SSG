@@ -25,12 +25,16 @@ export function Row({ task, columns, paddingLeft = 0 }: RowProps) {
   const [showNewTaskField, setShowNewTaskField] = useState(false);
   const otherColumns = columns.slice(1);
   const { currentWorkspaceId } = useAppSelector((state) => state.auth);
-  const { hubId } = useParams();
 
   const [showSubTasks, setShowSubTasks] = useState(false);
+  const { hubId, walletId, listId } = useParams();
 
   const onClickTask = () => {
-    navigate(`/${currentWorkspaceId}/tasks/h/${hubId}/t/${task.id}`, { replace: true });
+    hubId
+      ? navigate(`/${currentWorkspaceId}/tasks/h/${hubId}/t/${task.id}`, { replace: true })
+      : walletId
+      ? navigate(`/${currentWorkspaceId}/tasks/w/${walletId}/t/${task.id}`, { replace: true })
+      : navigate(`/${currentWorkspaceId}/tasks/l/${listId}/t/${task.id}`, { replace: true });
     dispatch(
       setShowPilotSideOver({
         id: task.id,
