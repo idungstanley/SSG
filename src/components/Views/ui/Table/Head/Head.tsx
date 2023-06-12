@@ -41,22 +41,21 @@ export function Head({
   };
   const [headerId, setheaderId] = useState<string>('');
   const [showSortModal, setShowSortModal] = useState<boolean>(false);
-  const [querySwitch, setQuerySwitch] = useState<boolean>(false);
   const { sortArr, sortAbleArr } = useAppSelector((state) => state.task);
   const { baseColor } = useAppSelector((state) => state.account);
+  const headerTxt = (title: string) =>
+    title === 'Assignees' ? 'assignee' : title === 'Task' ? 'name' : title?.toLowerCase();
+
   const handleSort = (header: string, id: string | undefined, order: 'asc' | 'desc') => {
-    const headerTxt = header === 'Assignees' ? 'assignee' : header === 'Task' ? 'name' : header.toLowerCase();
     setheaderId(id as string);
-    if (sortArr.includes(headerTxt)) return setShowSortModal(!showSortModal);
+    if (sortArr.includes(headerTxt(header))) return setShowSortModal(!showSortModal);
     dispatch(setSortArr([...sortArr, header as string]));
-    dispatch(setSortArray([...sortAbleArr, { dir: order, field: headerTxt }]));
-    setQuerySwitch(!querySwitch);
+    dispatch(setSortArray([...sortAbleArr, { dir: order, field: headerTxt(header) }]));
   };
 
   const handleRemoveFilter = (title?: string): void => {
-    const headerTxt = title === 'Assignees' ? 'assignee' : title === 'Task' ? 'name' : title?.toLowerCase();
     dispatch(setSortArr(sortArr.filter((el) => el !== title)));
-    dispatch(setSortArray(sortAbleArr.filter((el) => el.field !== headerTxt)));
+    dispatch(setSortArray(sortAbleArr.filter((el) => el.field !== headerTxt(title as string))));
   };
 
   const setOptions = (event: React.MouseEvent<HTMLSpanElement, MouseEvent>, id: string, header: string) => {
@@ -67,8 +66,7 @@ export function Head({
   };
 
   const dirCheck = (col: string): SortOption | undefined => {
-    const headerTxt = col === 'Assignees' ? 'assignee' : col === 'Task' ? 'name' : col.toLowerCase();
-    return sortAbleArr.find((el) => el.field === headerTxt);
+    return sortAbleArr.find((el) => el.field === headerTxt(col));
   };
 
   return (
@@ -142,7 +140,7 @@ export function Head({
               <th key={id} className="relative p-2 -mb-1 font-extrabold opacity-90" ref={ref}>
                 <div
                   className="flex items-center justify-center w-full h-full my-auto truncate cursor-pointer group"
-                  onClick={(e) => setOptions(e, columns[0].id, columns[0].value)}
+                  onClick={(e) => setOptions(e, id, value)}
                 >
                   {value}
                   {sortAbles.includes(value) && (
@@ -173,7 +171,7 @@ export function Head({
                 >
                   <div className="w-0.5 mx-auto h-full bg-gray-100" />
                 </div>
-                {showSortModal && headerId === id && (
+                {showSortModal && headerId === id && sortAbles.includes(value) && (
                   <SortModal
                     handleClose={handleClose}
                     anchorEl={anchorEl}

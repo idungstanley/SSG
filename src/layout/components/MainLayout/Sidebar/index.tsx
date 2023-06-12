@@ -19,6 +19,7 @@ const MIN_SIDEBAR_WIDTH = dimensions.navigationBar.min;
 export default function Sidebar() {
   const dispatch = useAppDispatch();
   const { extendedSidebarWidth, sidebarWidthRD, showExtendedBar } = useAppSelector((state) => state.workspace);
+  const key = 'sidebar';
   const { showSidebar, userSettingsData } = useAppSelector((state) => state.account);
 
   const { blockRef, Dividers, size, isMouseUp, isDrag } = useResize({
@@ -31,8 +32,8 @@ export default function Sidebar() {
     defaultSize: dimensions.navigationBar.default
   });
   const resolution = useResolution();
-  setUserSettingsData(isMouseUp, { ...userSettingsData, sidebarWidth: sidebarWidthRD }, resolution);
-  useGetUserSettingsKeys(true, resolution);
+  setUserSettingsData(isMouseUp, key, { ...userSettingsData, sidebarWidth: sidebarWidthRD }, resolution);
+  useGetUserSettingsKeys(true, key, resolution);
   const [activeTabId, setActiveTabId] = useState<string | null>('');
   const hotkeyIdsFromLS = JSON.parse(localStorage.getItem('navhotkeys') ?? '[]') as string[];
 

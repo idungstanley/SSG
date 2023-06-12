@@ -16,7 +16,6 @@ export function useResize({ dimensions, direction, defaultSize, storageKey }: Us
   const { min, max } = dimensions;
   const [size, setSize] = useState(defaultSize ?? min);
   const [isDrag, setIsDrag] = useState<boolean>(false);
-  console.log(isDrag);
   const [isMouseUp, setIsMouseUp] = useState<boolean>(false);
   const handleMouseMoveXR = useCallback((e: MouseEvent) => {
     if (blockRef.current) {
