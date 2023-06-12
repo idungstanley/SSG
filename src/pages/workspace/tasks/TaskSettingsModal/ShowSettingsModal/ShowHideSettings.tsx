@@ -38,53 +38,53 @@ export default function ShowHideSettings({
     {
       id: 2,
       label: scrollByEachGroup,
-      handleClick: () => console.log('clicked')
+      handleClick: () => null
     },
     {
       id: 3,
       label: splitSubTask,
-      handleClick: () => console.log('clicked')
+      handleClick: () => null
     },
     {
       id: 4,
       label: verticalGridLines,
-      handleClick: () => console.log('clicked')
+      handleClick: () => null
     },
     {
       id: 5,
       label: entityLocation,
-      handleClick: () => console.log('clicked')
+      handleClick: () => null
     },
     {
       id: 6,
       label: subTaskParentsNames,
-      handleClick: () => console.log('clicked')
+      handleClick: () => null
     },
     {
       id: 7,
       label: closedSubtask,
-      handleClick: () => console.log('clicked')
+      handleClick: () => null
     },
     {
       id: 8,
       label: TaskInMultipleLists,
-      handleClick: () => console.log('clicked')
+      handleClick: () => null
     },
     {
       id: 9,
       label: subTaskInMultipleLists,
-      handleClick: () => console.log('clicked')
+      handleClick: () => null
     },
     {
       id: 10,
       label: emptyStatuses,
-      handleClick: () => console.log('clicked')
+      handleClick: () => null
     },
     {
       id: 11,
       icon: <FiChevronRight />,
       label: 'Wrap text',
-      handleClick: () => console.log('clicked')
+      handleClick: () => null
     }
   ];
 

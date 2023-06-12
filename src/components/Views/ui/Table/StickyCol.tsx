@@ -5,11 +5,12 @@ import { useParams } from 'react-router-dom';
 import { Task } from '../../../../features/task/interface.tasks';
 import { cl } from '../../../../utils';
 import { ACTIVE_COL_BG, DEFAULT_COL_BG } from '../../config';
-import subtask from '../../../../assets/icons/subtask.png';
+import inprogressIcon from '../../../../assets/icons/inprogressIcon.png';
 import todoIcon from '../../../../assets/icons/todoIcon.png';
 import completedIcon from '../../../../assets/icons/completedIcon.png';
 import archiveIcon from '../../../../assets/icons/archiveIcon.png';
 import { useSubTasks } from '../../../../features/task/taskService';
+import StatusDropdown from '../../../status/StatusDropdown';
 
 interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   task: Task;
@@ -63,29 +64,16 @@ export function StickyCol({ showSubTasks, setShowSubTasks, children, task, paddi
         <button onClick={onToggleDisplayingSubTasks} className="">
           {showSubTasks ? (
             <RxTriangleDown
-              className={`${subTasks?.length ? 'w-4 h-4 text-gray-600' : ' opacity-0 w-4 h-4 text-gray-600'}`}
+              className={`${subTasks?.length ? 'w-4 h-4 text-gray-400' : ' opacity-0 w-4 h-4 text-gray-400'}`}
             />
           ) : (
             <RxTriangleRight
-              className={`${subTasks?.length ? 'w-4 h-4 text-gray-600' : ' opacity-0 w-4 h-4 text-gray-600'}`}
+              className={`${subTasks?.length ? 'w-4 h-4 text-gray-400' : ' opacity-0 w-4 h-4 text-gray-400'}`}
             />
           )}
         </button>
-
-        {task.status == 'in progress' ? (
-          <img src={subtask} alt="subtask" className="pr-1" />
-        ) : task.status == 'completed' ? (
-          <img src={completedIcon} alt="subtask" className="pr-1" />
-        ) : task.status == 'todo' ? (
-          <img src={todoIcon} alt="subtask" className="pr-1" />
-        ) : task.status == 'archived' ? (
-          <img src={archiveIcon} alt="subtask" className="pr-1" />
-        ) : (
-          <img src={todoIcon} alt="subtask" className="pr-1" />
-        )}
-
+        <StatusDropdown TaskCurrentStatus={task.status} />
         <p>{task.name}</p>
-
         {children}
       </div>
     </td>
