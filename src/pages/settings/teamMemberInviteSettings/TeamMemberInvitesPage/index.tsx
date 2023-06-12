@@ -20,10 +20,6 @@ export default function TeamMemberInvitesPage() {
     dispatch(setInviteTeamMemberSlideOverVisibility(true));
   };
 
-  // React.useEffect(() => {
-  //   dispatch(SetTriggerGetTeammeberInvite(true));
-  // }, []);
-
   return (
     <div className="h-full flex-1 flex flex-col overflow-hidden bg-gray-50">
       <main className="flex-1 flex flex-col h-full overflow-y-scroll pb-10 px-4 sm:px-6 lg:px-6">
