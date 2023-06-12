@@ -34,6 +34,7 @@ export interface EntryListProps {
 export default function EntryList({ entries, switchHeader }: EntryListProps) {
   const dispatch = useDispatch();
   const { openUpdateEntryId } = useAppSelector((state) => state.task);
+  const { date_format } = useAppSelector((state) => state.userSetting);
   const queryClient = useQueryClient();
   const headers = switchHeader;
   const { initials } = entries.team_member.user;
@@ -94,7 +95,7 @@ export default function EntryList({ entries, switchHeader }: EntryListProps) {
                 className="w-14 text-center"
                 style={{ cursor: 'default', fontSize: '9px', padding: '2px 0' }}
               >
-                {moment(entries.start_date).format('MMM D HH:mm')}
+                {moment(entries.start_date).format(`${date_format?.toUpperCase()} HH:mm`)}
               </td>
             );
           }
@@ -106,7 +107,7 @@ export default function EntryList({ entries, switchHeader }: EntryListProps) {
                 className="w-14 text-center"
                 style={{ cursor: 'default', fontSize: '9px', padding: '2px 0' }}
               >
-                {moment(entries.end_date).format('MMM D HH:mm')}
+                {moment(entries.end_date).format(`${date_format?.toUpperCase()} HH:mm`)}
               </td>
             );
           }

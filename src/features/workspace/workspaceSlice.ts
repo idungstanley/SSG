@@ -77,7 +77,7 @@ const initialState: workspaceState = {
   currentSubWalletId: null,
   currentWalletId: null,
   currentWalletName: null,
-  showPilot: false,
+  showPilot: true,
   showPilotIconView: false,
   showPilotListView: false,
   extendedSidebarWidth: dimensions.extendedBar.default,

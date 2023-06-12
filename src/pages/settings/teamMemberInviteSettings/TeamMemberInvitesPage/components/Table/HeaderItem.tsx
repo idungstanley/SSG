@@ -19,7 +19,15 @@ function HeaderItem({ value, index }: valueType) {
   const { sortTeamInviteArr, sortInvite } = useAppSelector((state) => state.teamMemberInvite);
   const { baseColor } = useAppSelector((state) => state.account);
   const handleSort = (val: string | undefined, id: string | undefined, con: string) => {
-    dispatch(setSortTeamInviteArr({ dir: con, field: val }));
+    let field: string | undefined = '';
+    if (val === 'invited at') {
+      field = 'invited_at';
+    } else if (val === 'expires at') {
+      field = 'expires_at';
+    } else {
+      field = val;
+    }
+    dispatch(setSortTeamInviteArr({ dir: con, field: field }));
     dispatch(setSortInvite([...sortInvite, val as string]));
   };
 
@@ -28,7 +36,7 @@ function HeaderItem({ value, index }: valueType) {
     dispatch(setRemoveSortTeamInvite(title));
   };
 
-  const sortAbles: string[] = ['name', 'email'];
+  const sortAbles: string[] = ['name', 'email', 'role', 'status', 'invited at', 'expires at'];
 
   const dirCheck = (col: string): SortOption | undefined => {
     const headerTxt = col === 'Assignees' ? 'assignee' : col === 'Task' ? 'name' : col.toLowerCase();
