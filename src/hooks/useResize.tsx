@@ -85,11 +85,11 @@ export function useResize({ dimensions, direction, defaultSize, storageKey }: Us
       // add current size to localStorage
       localStorage.setItem(storageKey, JSON.stringify(newSize));
       queryClient.invalidateQueries(['user-settings']);
+      setIsDrag(false);
     }
   }, []);
 
   const handleMouseDown = useCallback(() => {
-    setIsDrag(true);
     document.body.style.userSelect = 'none'; // disable selecting text
 
     const handleMouseMove =
@@ -128,8 +128,9 @@ export function useResize({ dimensions, direction, defaultSize, storageKey }: Us
           className={cl(
             size === max ? '' : 'group-hover:opacity-100',
 
-            'absolute top-0 left-0.5 transition-all w-0.5 h-full opacity-0 bg-primary-300'
+            'absolute top-0 transition-all w-0.5 h-full opacity-0 bg-primary-300'
           )}
+          style={{ left: '3px' }}
         />
         <div
           className={cl(

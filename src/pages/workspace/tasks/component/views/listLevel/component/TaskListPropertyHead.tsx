@@ -69,7 +69,6 @@ export default function TaskListPropertyHead({ id, value, taskLength }: Property
           onClick={(e) => setOptions(e, id, value)}
         >
           {value == 'Task' && <span className="mr-1 text-xs font-bold">{taskLength}</span>}
-
           {value}
         </span>
         {sortAbles.includes(value) && (

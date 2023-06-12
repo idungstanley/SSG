@@ -32,18 +32,7 @@ export const switchWorkspaceService = async (data: { workspaceId: string }) => {
   return response;
 };
 
-export const setResolution = async (data: { resolution: string }) => {
-  const response = requestNew<{ data: { resolution: string } }>({
-    url: '/settings',
-    method: 'PUT',
-    data: {
-      keys: [{ key: 'sidebar', resolution: data.resolution }]
-    }
-  });
-  return response;
-};
-
-export const useGetUserSettingsKeys = (enabled: boolean, resolution?: string | null) => {
+export const useGetUserSettingsKeys = (enabled: boolean, key: string, resolution?: string | null) => {
   const dispatch = useAppDispatch();
   return useQuery<IUserSettingsRes, unknown, IUserSettings>(
     ['user-settings'],
@@ -52,7 +41,7 @@ export const useGetUserSettingsKeys = (enabled: boolean, resolution?: string | n
         url: 'user/settings',
         method: 'GET',
         params: {
-          keys: 'sidebar',
+          keys: key,
           resolution: resolution
         }
       }),
@@ -61,7 +50,9 @@ export const useGetUserSettingsKeys = (enabled: boolean, resolution?: string | n
       select: (res) => res.data.settings[0],
       onSuccess: (data) => {
         localStorage.setItem('userSettingsData', JSON.stringify(data));
-        dispatch(SetUserSettingsData(data.value));
+        if (data.value) {
+          dispatch(SetUserSettingsData(data.value));
+        }
       }
     }
   );
@@ -78,7 +69,7 @@ export const setUserSettingsKeys = (value: IUserParams, resolution?: string | nu
   return request;
 };
 
-export const setUserSettingsData = (enabled: boolean, value: IUserParams, resolution?: string | null) => {
+export const setUserSettingsData = (enabled: boolean, key: string, value: IUserParams, resolution?: string | null) => {
   return useQuery<IUserSettingsRes, unknown, IUserSettings>(
     ['user-settings', { value }],
     () =>
@@ -86,7 +77,7 @@ export const setUserSettingsData = (enabled: boolean, value: IUserParams, resolu
         url: 'user/settings',
         method: 'PUT',
         data: {
-          keys: [{ key: 'sidebar', value, resolution: resolution }]
+          keys: [{ key: key, value, resolution: resolution }]
         }
       }),
     {

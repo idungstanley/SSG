@@ -48,7 +48,6 @@ export function ListPage() {
       const container = event.target as HTMLElement;
       const scrollDifference = container?.scrollHeight - container.scrollTop - container.clientHeight;
       const range = 1;
-
       if (scrollDifference <= range && scrollDifference >= -range && hasNextPage) {
         fetchNextPage();
       }
