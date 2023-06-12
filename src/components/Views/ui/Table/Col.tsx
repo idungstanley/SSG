@@ -6,11 +6,12 @@ import Assignee from '../../../../pages/workspace/tasks/assignTask/Assignee';
 import DropdownFieldWrapper from '../../../../pages/workspace/tasks/component/taskData/dropdown/DropdownFieldWrapper';
 import TaskPriority from '../../../../pages/workspace/tasks/component/taskData/priority';
 import TaskStatus from '../../../../pages/workspace/tasks/component/taskData/status';
-import DateForTask from '../../../../pages/workspace/tasks/component/taskData/taskDate';
+// import DateFormat from '../../../../pages/workspace/tasks/component/taskData/taskDate';
 import TaskTag from '../../../../pages/workspace/tasks/component/taskData/taskTag';
 import { listColumnProps } from '../../../../pages/workspace/tasks/component/views/ListColumns';
 import { Task, TaskValue } from '../../../../features/task/interface.tasks';
 import { ACTIVE_COL_BG, DEFAULT_COL_BG } from '../../config';
+import DateFormat from '../../../DateFormat';
 
 interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   value: TaskValue;
@@ -27,8 +28,8 @@ export function Col({ value, field, fieldId, task, ...props }: ColProps) {
   const fields: Record<string, JSX.Element> = {
     priority: <TaskPriority task={task as ImyTaskData} />,
     status: <TaskStatus taskColField={value} task={task as ImyTaskData} />,
-    created_at: <DateForTask taskColField={value} />,
-    updated_at: <DateForTask taskColField={value} />,
+    created_at: <DateFormat date={value as string} font="text-sm" />,
+    updated_at: <DateFormat date={value as string} font="text-sm" />,
     dropdown: (
       <DropdownFieldWrapper
         taskId={task.id}
