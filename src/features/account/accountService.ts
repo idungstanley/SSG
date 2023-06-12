@@ -1,6 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import requestNew from '../../app/requestNew';
 import { IAccountReq, IUserParams, IUserSettings, IUserSettingsRes } from './account.interfaces';
+import { SetUserSettingsData } from './accountSlice';
+import { useAppDispatch } from '../../app/hooks';
 
 // Get all user's workspaces
 export const useGetMyWorkspaces = () => {
@@ -30,32 +32,67 @@ export const switchWorkspaceService = async (data: { workspaceId: string }) => {
   return response;
 };
 
-export const useGetUserSettingsKeys = (enabled: boolean) =>
-  useQuery<IUserSettingsRes, unknown, IUserSettings>(
+export const setResolution = async (data: { resolution: string }) => {
+  const response = requestNew<{ data: { resolution: string } }>({
+    url: '/settings',
+    method: 'PUT',
+    data: {
+      keys: [{ key: 'sidebar', resolution: data.resolution }]
+    }
+  });
+  return response;
+};
+
+export const useGetUserSettingsKeys = (enabled: boolean, resolution?: string | null) => {
+  const dispatch = useAppDispatch();
+  return useQuery<IUserSettingsRes, unknown, IUserSettings>(
     ['user-settings'],
     () =>
       requestNew({
         url: 'user/settings',
         method: 'GET',
         params: {
-          keys: 'sidebar'
+          keys: 'sidebar',
+          resolution: resolution
         }
       }),
     {
-      enabled,
-      select: (res) => res.data.settings[0]
+      enabled: enabled,
+      select: (res) => res.data.settings[0],
+      onSuccess: (data) => {
+        localStorage.setItem('userSettingsData', JSON.stringify(data));
+        dispatch(SetUserSettingsData(data.value));
+      }
     }
   );
+};
 
-export const setUserSettingsKeys = (value: IUserParams) => {
+export const setUserSettingsKeys = (value: IUserParams, resolution?: string | null) => {
   const request = requestNew({
     url: 'user/settings',
     method: 'PUT',
     data: {
-      keys: [{ key: 'sidebar', value }]
+      keys: [{ key: 'sidebar', value, resolution: resolution }]
     }
   });
   return request;
+};
+
+export const setUserSettingsData = (enabled: boolean, value: IUserParams, resolution?: string | null) => {
+  return useQuery<IUserSettingsRes, unknown, IUserSettings>(
+    ['user-settings', { value }],
+    () =>
+      requestNew({
+        url: 'user/settings',
+        method: 'PUT',
+        data: {
+          keys: [{ key: 'sidebar', value, resolution: resolution }]
+        }
+      }),
+    {
+      enabled
+    }
+  );
 };
 
 export const useSetUserSettingsKeys = () => {

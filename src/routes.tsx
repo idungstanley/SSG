@@ -40,7 +40,7 @@ import Archived from './pages/inbox/InboxesPage/components/Archive';
 import Restore from './pages/inbox/InboxesPage/components/Restore';
 import Docs from './pages/workspace/docs';
 import RenderWallets from './pages/workspace/wallet/renderWallets/RenderWallets';
-import RenderList from './pages/workspace/lists/RenderList';
+// import RenderList from './pages/workspace/lists/RenderList';
 // import { IUser } from './types';
 import RenderTaskModal from './pages/workspace/tasks/component/RenderTaskModal';
 import NotFoundPage from './pages/NotFoundPage/NotFoundPage';
@@ -67,7 +67,7 @@ import { useAppSelector } from './app/hooks';
 import HubPage from './pages/hub';
 import { ListPage } from './pages/list';
 import { WalletPage } from './pages/wallet';
-import PeopleProfile from './pages/settings/People';
+// import PeopleProfile from './pages/settings/People';
 import Construction from './pages/settings/UserSettings/Pages/Construction';
 import TaskInvite from './pages/workspace/tasks/taskInvite/TaskInvite';
 
@@ -217,16 +217,16 @@ export const routes = (user: IUser | null) => {
       ),
       children: [
         { path: 'profile', element: <UserSettings /> },
-        { path: 'people', element: <PeopleProfile /> },
+        { path: 'people', element: <TeamMembersPage /> },
         { path: 'construction', element: <Construction /> },
-        { path: 'team-members', element: <TeamMembersPage /> },
+        // { path: 'team-members', element: <TeamMembersPage /> },
         { path: 'workspaces', element: <WorkspaceSettings /> },
         {
           path: 'notifications',
           element: <NotificationSettingsPage />
         },
         { path: 'team-members/invites', element: <TeamMemberInvitesPage /> },
-        { path: 'team-members', element: <TeamMembersPage /> },
+        // { path: 'team-members', element: <TeamMembersPage /> },
         { path: 'team-members/groups', element: <TeamMemberGroupsPage /> },
         { path: 'settings/permisions', element: <PermissionsPage /> },
         { path: 'subscribers', element: <SubscribersSettings /> },

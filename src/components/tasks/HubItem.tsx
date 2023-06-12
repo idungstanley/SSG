@@ -84,7 +84,7 @@ export default function HubItem({
   return (
     <>
       <div
-        className={`flex bg-white truncate justify-between items-center group ${
+        className={`bg-white truncate items-center group ${
           item.id === activeItemId ? 'font-medium' : 'hover:bg-gray-100'
         } ${isSticky && stickyButtonIndex === index ? 'sticky bg-white opacity-100' : ''}`}
         tabIndex={0}
@@ -94,13 +94,16 @@ export default function HubItem({
           zIndex: isSticky ? zNumber : '2'
         }}
       >
-        {item.id === hubId && (
-          <span className="absolute top-0 bottom-0 left-0 right-0" style={{ backgroundColor: lightBaseColor }} />
-        )}
         <div
           className={`relative flex items-center justify-between ${showSidebar ? 'pl-3' : 'pl-2.5'}`}
           style={{ height: '30px' }}
         >
+          {item.id === hubId && (
+            <span
+              className="absolute inset-0 z-0 before:content before:absolute before:inset-0"
+              style={{ backgroundColor: lightBaseColor }}
+            />
+          )}
           {item.id === hubId && (
             <span
               className="absolute top-0 bottom-0 left-0 w-0.5 rounded-r-lg"
@@ -159,19 +162,19 @@ export default function HubItem({
               </span>
             </div>
           </div>
-        </div>
-        <div
-          className="flex items-center pr-1 space-x-1 text-black opacity-0 group-hover:opacity-100"
-          onClick={(e) => e.stopPropagation()}
-        >
-          <AiOutlineEllipsis
-            onClick={(e) => {
-              handleHubSettings(item.id, item.name, e);
-            }}
-            className="cursor-pointer"
-            id="menusettings"
-          />
-          <AiOutlinePlus onClick={() => handleItemAction(item.id)} className="cursor-pointer" />
+          <div
+            className="absolute right-0 flex items-center pr-1 space-x-1 text-black opacity-0 group-hover:opacity-100"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <AiOutlineEllipsis
+              onClick={(e) => {
+                handleHubSettings(item.id, item.name, e);
+              }}
+              className="cursor-pointer"
+              id="menusettings"
+            />
+            <AiOutlinePlus onClick={() => handleItemAction(item.id)} className="cursor-pointer" />
+          </div>
         </div>
       </div>
       <UploadImage endpoint={`hubs/${uploadId}`} invalidateQuery={['hubs'] as InvalidateQueryFilters<unknown>} />
