@@ -73,19 +73,6 @@ export function ListPage() {
       <Page
         pilotConfig={pilotConfig}
         additionalHeader={<AdditionalHeader />}
-        header={
-          <section id="nav" className="capitalize" style={{ height: '50px' }}>
-            <ListNav
-              navName={listName}
-              viewsList="List"
-              viewsList1="Table"
-              viewsList2="Board"
-              viewsList3="Calender"
-              viewsList4="Map"
-              changeViews="View"
-            />
-          </section>
-        }
         extendedBar={{
           name: 'TASKS',
           children: <ActiveHub />,

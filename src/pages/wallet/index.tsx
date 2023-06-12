@@ -77,7 +77,6 @@ export function WalletPage() {
       <Page
         pilotConfig={pilotConfig}
         additionalHeader={<AdditionalHeader />}
-        header={<ListNav navName={walletName} viewsList="List" viewsList2="Board" changeViews="View" />}
         extendedBar={{
           name: 'TASKS',
           children: <ActiveHub />,

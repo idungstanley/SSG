@@ -36,7 +36,7 @@ export default function TaskTemplateData({ filteredTaskData }: ITaskTemplateData
                 className="absolute left-0 top-0 h-full w-1 rounded-l-md"
                 style={{ backgroundColor: '#78828d' }}
               ></div>
-              <div id="listTitle" className="flex items-center justify-between">
+              {/* <div id="listTitle" className="flex items-center justify-between">
                 <div className="group flex items-center justify-center " style={{ color: '#78828d', fontSize: '11px' }}>
                   <ChevronDownIcon className="flex-shrink-0 w-5 h-4" aria-hidden="true" />
 
@@ -88,9 +88,9 @@ export default function TaskTemplateData({ filteredTaskData }: ITaskTemplateData
                     Show Closed
                   </p>
                 </div>
-              </div>
+              </div> */}
               <section id="border">
-                <div className="inline-flex justify-center items-center w-full p-3 opacity-0 hover:opacity-100">
+                {/* <div className="inline-flex justify-center items-center w-full p-3 opacity-0 hover:opacity-100">
                   <hr className="my-2 w-full h-px bg-gray-300 border-0 dark:bg-gray-700" />
                   <span
                     className="absolute px-3 font-sm text-gray-400 -translate-x-1/2 dark:text-white dark:bg-gray-900 hover:text-blue-700 cursor-pointer text-xs"
@@ -98,7 +98,7 @@ export default function TaskTemplateData({ filteredTaskData }: ITaskTemplateData
                   >
                     Add New Status dot com
                   </span>
-                </div>
+                </div> */}
               </section>
               {createTaskFromTop && currentListId === filteredTaskData[value].key && (
                 <AddNewItem listId={filteredTaskData[value].key} />

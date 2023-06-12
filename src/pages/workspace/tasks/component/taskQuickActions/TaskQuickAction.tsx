@@ -17,7 +17,7 @@ export default function TaskQuickAction({ listDetailsData }: TaskQuickActionProp
 
   return (
     <>
-      <div id="listTitle" className="flex justify-between items-center">
+      {/* <div id="listTitle" className="flex justify-between items-center">
         <div className="flex items-center justify-center text-gray-400 group">
           <ChevronDownIcon className="flex-shrink-0 h-4 w-5" aria-hidden="true" />
           <p className="font-bold text-gray-700 dark:text-gray-400">{listDetailsData}</p>
@@ -65,7 +65,7 @@ export default function TaskQuickAction({ listDetailsData }: TaskQuickActionProp
             Add New Status dot com
           </span>
         </div>
-      </section>
+      </section> */}
       {createTaskFromTop && <AddNewItem listId={listId} />}
     </>
   );
