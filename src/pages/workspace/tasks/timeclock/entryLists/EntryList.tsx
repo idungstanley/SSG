@@ -9,6 +9,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 // import { User } from '../../../../../components/Pilot/components/TimeClock/ClockInOut';
 import { AvatarWithInitials } from '../../../../../components';
 import { Header } from '../../../../../components/Pilot/components/TimeClock/ClockLog';
+import DateFormat from '../../../../../components/DateFormat';
 export interface teamMember {
   id: string;
   user: {
@@ -89,12 +90,8 @@ export default function EntryList({ entries, switchHeader }: EntryListProps) {
 
           if (col.title === 'start date' && !col.hidden) {
             return (
-              <td
-                key={col.id}
-                className="w-14 text-center"
-                style={{ cursor: 'default', fontSize: '9px', padding: '2px 0' }}
-              >
-                {moment(entries.start_date).format('MMM D HH:mm')}
+              <td key={col.id} className="w-14 text-center" style={{ cursor: 'default', padding: '2px 0' }}>
+                <DateFormat date={entries.start_date} font="9px" />
               </td>
             );
           }
@@ -106,7 +103,7 @@ export default function EntryList({ entries, switchHeader }: EntryListProps) {
                 className="w-14 text-center"
                 style={{ cursor: 'default', fontSize: '9px', padding: '2px 0' }}
               >
-                {moment(entries.end_date).format('MMM D HH:mm')}
+                <DateFormat date={entries.end_date} font="9px" />
               </td>
             );
           }
