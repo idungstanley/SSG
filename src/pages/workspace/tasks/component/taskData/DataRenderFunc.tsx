@@ -3,10 +3,11 @@ import Assignee from '../../assignTask/Assignee';
 import TaskStatus from './status/index';
 import TaskName from './taskName';
 import TaskPriority from './priority/index';
-import DateForTask from './taskDate/index';
+// import DateFormat from './taskDate/index';
 import TaskTag from './taskTag/index';
 import DropdownFieldWrapper from './dropdown/DropdownFieldWrapper';
 import { TaskValue } from '../../../../../features/task/interface.tasks';
+import DateFormat from '../../../../../components/DateFormat/index';
 
 export interface tagItem {
   id: string;
@@ -48,7 +49,7 @@ export default function DataRenderFunc({
   } else if (col?.field == 'created_at' || col?.field == 'updated_at') {
     return (
       <div className="mt-2">
-        <DateForTask taskColField={taskColField} />
+        <DateFormat date={taskColField as string} font="text-sm" />
       </div>
     );
   } else if (col?.field == 'status') {
