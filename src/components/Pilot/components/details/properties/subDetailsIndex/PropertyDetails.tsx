@@ -83,10 +83,10 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     handleBlur();
-    if (hubId) {
-      await editHubMutation.mutateAsync({
+    if (taskId != undefined) {
+      await editTaskMutation.mutateAsync({
         name: title,
-        currHubId: Details?.id,
+        task_id: taskId,
         description
       });
     } else if (walletId != undefined) {
@@ -101,10 +101,10 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
         listId: Details?.id,
         description
       });
-    } else if (taskId != undefined) {
-      await editTaskMutation.mutateAsync({
+    } else if (hubId) {
+      await editHubMutation.mutateAsync({
         name: title,
-        task_id: Details?.id,
+        currHubId: Details?.id,
         description
       });
     }

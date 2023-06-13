@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { ChangeEvent, useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { AiOutlinePaperClip, AiOutlineFlag, AiOutlineEye } from 'react-icons/ai';
 import { BsTags, BsCalendar3 } from 'react-icons/bs';
@@ -33,10 +33,10 @@ function TaskModal() {
 
   const [formState, setFormState] = useState(defaultListFormState);
 
-  const handleTaskChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleTaskChange = (e: React.ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>) => {
     setFormState({
       ...formState,
-      [e.target.name]: e.target.value
+      [e?.target.name]: e?.target.value
     });
   };
 
@@ -81,7 +81,9 @@ function TaskModal() {
             <textarea
               placeholder="Description"
               name="description"
-              className="w-full h-32 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
+              value={description}
+              onChange={(e) => handleTaskChange(e)}
+              className="w-full h-32 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm text-gray-600"
             />
           </div>
           <div className=" mt-5 space-y-1 px-4 sm:space-y-0 sm:px-6 sm:py-5  flex justify-between items-center">

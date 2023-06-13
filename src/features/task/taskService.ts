@@ -32,7 +32,6 @@ export const useAddTask = (parentTaskId?: string) => {
 
   const id = hubId ?? walletId ?? listId;
   const type = hubId ? 'hub' : walletId ? 'wallet' : 'list';
-  console.log(['sub-tasks', parentTaskId]);
 
   return useMutation(addTask, {
     onSuccess: () => {
@@ -198,6 +197,7 @@ export const UseUpdateTaskService = ({
   });
   return response;
 };
+
 const updateTaskStatusService = ({ task_id, statusDataUpdate }: UpdateTaskProps) => {
   const url = `tasks/${task_id}`;
   const response = requestNew({
