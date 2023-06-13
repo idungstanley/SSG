@@ -1,16 +1,14 @@
-import { ReactNode, TdHTMLAttributes } from 'react';
+import { ReactNode, TdHTMLAttributes, useRef } from 'react';
 import { MdDragIndicator } from 'react-icons/md';
 import { RxTriangleDown, RxTriangleRight } from 'react-icons/rx';
 import { useParams } from 'react-router-dom';
 import { Task } from '../../../../features/task/interface.tasks';
 import { cl } from '../../../../utils';
 import { ACTIVE_COL_BG, DEFAULT_COL_BG } from '../../config';
-import inprogressIcon from '../../../../assets/icons/inprogressIcon.png';
-import todoIcon from '../../../../assets/icons/todoIcon.png';
-import completedIcon from '../../../../assets/icons/completedIcon.png';
 import archiveIcon from '../../../../assets/icons/archiveIcon.png';
-import { useSubTasks } from '../../../../features/task/taskService';
+import { UseUpdateTaskService, useSubTasks } from '../../../../features/task/taskService';
 import StatusDropdown from '../../../status/StatusDropdown';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   task: Task;
@@ -30,6 +28,22 @@ export function StickyCol({ showSubTasks, setShowSubTasks, children, task, paddi
   };
 
   const { data: subTasks } = useSubTasks(task.id);
+
+  const queryClient = useQueryClient();
+  const inputRef = useRef<HTMLInputElement | null>(null);
+
+  const editTaskMutation = useMutation(UseUpdateTaskService, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['task']);
+    }
+  });
+  const handleEditTask = async (e: React.KeyboardEvent<HTMLDivElement>, id: string | undefined) => {
+    e.preventDefault();
+    await editTaskMutation.mutateAsync({
+      name: inputRef.current?.innerText as string,
+      task_id: id
+    });
+  };
 
   return (
     <td
@@ -73,7 +87,13 @@ export function StickyCol({ showSubTasks, setShowSubTasks, children, task, paddi
           )}
         </button>
         <StatusDropdown TaskCurrentStatus={task.status} />
-        <p>{task.name}</p>
+        <p
+          contentEditable={true}
+          ref={inputRef}
+          onKeyDown={(e) => (e.key === 'Enter' ? handleEditTask(e, task?.id) : null)}
+        >
+          {task.name}
+        </p>
         {children}
       </div>
     </td>
