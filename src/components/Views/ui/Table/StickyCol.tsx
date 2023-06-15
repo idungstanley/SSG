@@ -1,15 +1,13 @@
-import { ReactNode, TdHTMLAttributes } from 'react';
+import { ReactNode, TdHTMLAttributes, useRef } from 'react';
 import { MdDragIndicator } from 'react-icons/md';
 import { RxTriangleDown, RxTriangleRight } from 'react-icons/rx';
-import { useNavigate, useParams } from 'react-router-dom';
-import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
-import { setShowPilotSideOver } from '../../../../features/general/slideOver/slideOverSlice';
+import { useParams } from 'react-router-dom';
 import { Task } from '../../../../features/task/interface.tasks';
-import { setTaskIdForPilot } from '../../../../features/task/taskSlice';
-import { setActiveItem } from '../../../../features/workspace/workspaceSlice';
 import { cl } from '../../../../utils';
-import StatusDropdown from '../../../status/StatusDropdown';
 import { ACTIVE_COL_BG, DEFAULT_COL_BG } from '../../config';
+import { UseUpdateTaskService } from '../../../../features/task/taskService';
+import StatusDropdown from '../../../status/StatusDropdown';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   task: Task;
@@ -17,22 +15,10 @@ interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   showSubTasks: boolean;
   setShowSubTasks: (i: boolean) => void;
   paddingLeft?: number;
-  tags: ReactNode;
 }
 
-export function StickyCol({
-  showSubTasks,
-  tags,
-  setShowSubTasks,
-  children,
-  task,
-  paddingLeft = 0,
-  ...props
-}: ColProps) {
-  const { currentWorkspaceId } = useAppSelector((state) => state.auth);
-  const dispatch = useAppDispatch();
-  const navigate = useNavigate();
-  const { taskId, hubId } = useParams();
+export function StickyCol({ showSubTasks, setShowSubTasks, children, task, paddingLeft = 0, ...props }: ColProps) {
+  const { taskId } = useParams();
   const COL_BG = taskId === task.id ? ACTIVE_COL_BG : DEFAULT_COL_BG;
 
   const onToggleDisplayingSubTasks = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
@@ -40,34 +26,29 @@ export function StickyCol({
     setShowSubTasks(!showSubTasks);
   };
 
-  const onClickTask = () => {
-    navigate(`/${currentWorkspaceId}/tasks/h/${hubId}/t/${task.id}`, { replace: true });
-    dispatch(
-      setShowPilotSideOver({
-        id: task.id,
-        type: 'task',
-        show: true,
-        title: task.name
-      })
-    );
-    dispatch(setTaskIdForPilot(task.id));
-    dispatch(
-      setActiveItem({
-        activeItemId: task.id,
-        activeItemType: 'task',
-        activeItemName: task.name
-      })
-    );
+  const queryClient = useQueryClient();
+  const inputRef = useRef<HTMLInputElement | null>(null);
+
+  const editTaskMutation = useMutation(UseUpdateTaskService, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['task']);
+    }
+  });
+  const handleEditTask = async (e: React.KeyboardEvent<HTMLDivElement>, id: string) => {
+    e.preventDefault();
+    await editTaskMutation.mutateAsync({
+      name: inputRef.current?.innerText as string,
+      task_id: id
+    });
   };
 
   return (
     <td
-      className="sticky left-0 flex items-start justify-start text-sm font-medium text-start text-gray-900 cursor-pointer"
-      onClick={onClickTask}
+      className="sticky left-0 flex items-center justify-center text-sm font-medium text-center text-gray-900 cursor-pointer h-10"
       {...props}
     >
-      {/* //TODO implement drag-and-drop */}
-      <div className="flex items-center w-10 h-full space-x-1 bg-purple-50">
+      {/* //! change me */}
+      <div className="flex items-center h-full bg-purple-50">
         <input
           type="checkbox"
           id="checked-checkbox"
@@ -93,19 +74,23 @@ export function StickyCol({
       >
         <button onClick={onToggleDisplayingSubTasks} className="">
           {showSubTasks ? (
-            <RxTriangleDown className="w-4 h-4 text-gray-600" />
+            <RxTriangleDown
+              className={`${task.has_descendants ? 'w-4 h-4 text-gray-400' : ' opacity-0 w-4 h-4 text-gray-400'}`}
+            />
           ) : (
-            <RxTriangleRight className="w-4 h-4 text-gray-600" />
+            <RxTriangleRight
+              className={`${task.has_descendants ? 'w-4 h-4 text-gray-400' : ' opacity-0 w-4 h-4 text-gray-400'}`}
+            />
           )}
         </button>
         <StatusDropdown TaskCurrentStatus={task.status} />
-
-        <div className="flex flex-col items-start justify-start space-y-1">
-          <p>{task.name}</p>
-
-          {tags}
-        </div>
-
+        <p
+          contentEditable={true}
+          ref={inputRef}
+          onKeyDown={(e) => (e.key === 'Enter' ? handleEditTask(e, task.id) : null)}
+        >
+          {task.name}
+        </p>
         {children}
       </div>
     </td>
