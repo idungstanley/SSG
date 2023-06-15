@@ -5,7 +5,8 @@ import { useParams } from 'react-router-dom';
 import { Task } from '../../../../features/task/interface.tasks';
 import { cl } from '../../../../utils';
 import { ACTIVE_COL_BG, DEFAULT_COL_BG } from '../../config';
-import { UseUpdateTaskService } from '../../../../features/task/taskService';
+import archiveIcon from '../../../../assets/icons/archiveIcon.png';
+import { UseUpdateTaskService, useSubTasks } from '../../../../features/task/taskService';
 import StatusDropdown from '../../../status/StatusDropdown';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
