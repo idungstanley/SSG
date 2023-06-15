@@ -5,8 +5,7 @@ import { useParams } from 'react-router-dom';
 import { Task } from '../../../../features/task/interface.tasks';
 import { cl } from '../../../../utils';
 import { ACTIVE_COL_BG, DEFAULT_COL_BG } from '../../config';
-import archiveIcon from '../../../../assets/icons/archiveIcon.png';
-import { UseUpdateTaskService, useSubTasks } from '../../../../features/task/taskService';
+import { UseUpdateTaskService } from '../../../../features/task/taskService';
 import StatusDropdown from '../../../status/StatusDropdown';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
@@ -27,8 +26,6 @@ export function StickyCol({ showSubTasks, setShowSubTasks, children, task, paddi
     setShowSubTasks(!showSubTasks);
   };
 
-  const { data: subTasks } = useSubTasks(task.id);
-
   const queryClient = useQueryClient();
   const inputRef = useRef<HTMLInputElement | null>(null);
 
@@ -37,7 +34,7 @@ export function StickyCol({ showSubTasks, setShowSubTasks, children, task, paddi
       queryClient.invalidateQueries(['task']);
     }
   });
-  const handleEditTask = async (e: React.KeyboardEvent<HTMLDivElement>, id: string | undefined) => {
+  const handleEditTask = async (e: React.KeyboardEvent<HTMLDivElement>, id: string) => {
     e.preventDefault();
     await editTaskMutation.mutateAsync({
       name: inputRef.current?.innerText as string,
@@ -78,11 +75,11 @@ export function StickyCol({ showSubTasks, setShowSubTasks, children, task, paddi
         <button onClick={onToggleDisplayingSubTasks} className="">
           {showSubTasks ? (
             <RxTriangleDown
-              className={`${subTasks?.length ? 'w-4 h-4 text-gray-400' : ' opacity-0 w-4 h-4 text-gray-400'}`}
+              className={`${task.has_descendants ? 'w-4 h-4 text-gray-400' : ' opacity-0 w-4 h-4 text-gray-400'}`}
             />
           ) : (
             <RxTriangleRight
-              className={`${subTasks?.length ? 'w-4 h-4 text-gray-400' : ' opacity-0 w-4 h-4 text-gray-400'}`}
+              className={`${task.has_descendants ? 'w-4 h-4 text-gray-400' : ' opacity-0 w-4 h-4 text-gray-400'}`}
             />
           )}
         </button>
@@ -90,7 +87,7 @@ export function StickyCol({ showSubTasks, setShowSubTasks, children, task, paddi
         <p
           contentEditable={true}
           ref={inputRef}
-          onKeyDown={(e) => (e.key === 'Enter' ? handleEditTask(e, task?.id) : null)}
+          onKeyDown={(e) => (e.key === 'Enter' ? handleEditTask(e, task.id) : null)}
         >
           {task.name}
         </p>
