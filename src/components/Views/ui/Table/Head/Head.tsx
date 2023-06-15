@@ -75,7 +75,7 @@ export function Head({
         {/* first sticky col */}
         <th style={{ zIndex: 2 }} className="sticky left-0 flex -mb-2 font-extrabold" ref={columns[0].ref}>
           <div className="flex items-center bg-purple-50 " style={{ width: '22px' }}></div>
-          <div className="flex items-center w-full gap-3 py-2 truncate group opacity-90">
+          <div className="flex dBlock items-center w-full gap-3 py-2 truncate group opacity-90">
             <span
               className={`py-0.5 px-2 rounded-tr-md flex items-center space-x-1 text-white ${
                 parsedLabel == 'todo'
@@ -139,7 +139,7 @@ export function Head({
           ? columns.slice(1).map(({ ref, value, id }, index) => (
               <th key={id} className="relative p-2 -mb-1 font-extrabold opacity-90" ref={ref}>
                 <div
-                  className="flex items-center justify-center w-full h-full my-auto truncate cursor-pointer group"
+                  className="flex dBlock items-center justify-center w-full h-full my-auto truncate cursor-pointer group"
                   onClick={(e) => setOptions(e, id, value)}
                 >
                   {value}
