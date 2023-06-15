@@ -119,18 +119,9 @@ export default function HList({ hubs, leftMargin, taskType, level = 1 }: ListPro
     }
     const isMatch = id === showChildren;
     dispatch(setOpenedHubId(id));
-    dispatch(setCreateWLID(id));
     dispatch(setShowHub(true));
     if (isMatch) {
       setShowChidren(null);
-      // if (!currentItemId) {
-      //   dispatch(
-      //     setCurrentItem({
-      //       currentItemId: id,
-      //       currentItemType: type
-      //     })
-      //   );
-      // }
     } else {
       setShowChidren(id);
     }
@@ -143,6 +134,7 @@ export default function HList({ hubs, leftMargin, taskType, level = 1 }: ListPro
   };
 
   const handleHubSettings = (id: string, name: string, e: React.MouseEvent<HTMLButtonElement | SVGElement>): void => {
+    dispatch(setCreateWLID(id));
     dispatch(getCurrHubId(id));
     dispatch(setCreateWlLink(false));
     dispatch(

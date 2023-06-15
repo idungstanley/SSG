@@ -91,13 +91,14 @@ export default function SubDropdown() {
     {
       id: 2,
       title:
-        (SubMenuType === 'wallet' ? 'Sub Wallet' : SubMenuType === 'subwallet2' ? 'Sub Wallet' : 'Wallet') ||
-        (showMenuDropdownType === 'wallet'
+        SubMenuType === 'wallet' ||
+        SubMenuType === 'subwallet2' ||
+        SubMenuType === 'subwallet2' ||
+        showMenuDropdownType === 'wallet' ||
+        showMenuDropdownType === 'subwallet2' ||
+        showMenuDropdownType === 'subwallet'
           ? 'Sub Wallet'
-          : showMenuDropdownType === 'subwallet2'
-          ? 'Sub Wallet'
-          : 'Wallet') ||
-        (showMenuDropdownType === 'subwallet' ? 'Sub Wallet' : 'Wallet'),
+          : 'Wallet',
       handleClick: () => {
         if (
           SubMenuType !== 'wallet' &&

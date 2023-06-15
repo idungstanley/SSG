@@ -3,7 +3,6 @@ import React from 'react';
 import { useAppSelector } from '../../../../../../../app/hooks';
 import MenuDropdown from '../../../../../../../components/Dropdown/MenuDropdown';
 import ListItem from '../../../../../../../components/tasks/ListItem';
-import { getTaskListService } from '../../../../../../../features/task/taskService';
 import { List } from '../../activetree.interfaces';
 export default function LList({
   list,
