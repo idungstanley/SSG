@@ -43,19 +43,38 @@ export function Head({
   const [showSortModal, setShowSortModal] = useState<boolean>(false);
   const { sortArr, sortAbleArr } = useAppSelector((state) => state.task);
   const { baseColor } = useAppSelector((state) => state.account);
+
   const headerTxt = (title: string) =>
     title === 'Assignees' ? 'assignee' : title === 'Task' ? 'name' : title?.toLowerCase();
 
   const handleSort = (header: string, id: string | undefined, order: 'asc' | 'desc') => {
     setheaderId(id as string);
     if (sortArr.includes(headerTxt(header))) return setShowSortModal(!showSortModal);
-    dispatch(setSortArr([...sortArr, header as string]));
-    dispatch(setSortArray([...sortAbleArr, { dir: order, field: headerTxt(header) }]));
+    const existingSortItem = sortAbleArr.findIndex((el) => el.field === headerTxt(header));
+    if (existingSortItem !== -1) {
+      const updatedSortArray = sortAbleArr.map((el) => (el.field === headerTxt(header) ? { ...el, dir: order } : el));
+      dispatch(setSortArray(updatedSortArray));
+    } else {
+      dispatch(setSortArr([...sortArr, header as string]));
+      dispatch(setSortArray([...sortAbleArr, { dir: order, field: headerTxt(header) }]));
+    }
   };
-
   const handleRemoveFilter = (title?: string): void => {
     dispatch(setSortArr(sortArr.filter((el) => el !== title)));
     dispatch(setSortArray(sortAbleArr.filter((el) => el.field !== headerTxt(title as string))));
+  };
+  const handleOrder = (e: React.MouseEvent<HTMLDivElement, MouseEvent>, propertyHeaderTxt?: string) => {
+    e.stopPropagation();
+    const existingSortItem = sortAbleArr?.findIndex((el) => el.field === propertyHeaderTxt);
+    const existingSortDir = sortAbleArr?.find((el) => el.field === propertyHeaderTxt);
+    console.log(existingSortDir);
+    if (existingSortItem !== -1 && existingSortDir?.dir === 'asc') {
+      const updatedSortArray = sortAbleArr?.map((el) => (el.field === propertyHeaderTxt ? { ...el, dir: 'desc' } : el));
+      dispatch(setSortArray(updatedSortArray as SortOption[]));
+    } else {
+      const updatedSortArray = sortAbleArr?.map((el) => (el.field === propertyHeaderTxt ? { ...el, dir: 'asc' } : el));
+      dispatch(setSortArray(updatedSortArray as SortOption[]));
+    }
   };
 
   const setOptions = (event: React.MouseEvent<HTMLSpanElement, MouseEvent>, id: string, header: string) => {
@@ -93,35 +112,38 @@ export function Head({
 
               <span>{parsedLabel}</span>
             </span>
-            <span onClick={(e) => setOptions(e, columns[0].id, columns[0].value)} className="cursor-pointer">
-              <span className="mr-0.5">{taskLength}</span>
-              {!collapseTasks ? columns[0].value : null}
-            </span>
-
-            {sortAbles.includes(columns[0].value) && (
-              <>
-                {sortArr.length >= 1 && sortArr.includes(columns[0].value) ? (
-                  ''
-                ) : (
-                  <RoundedArrowUpDown value={columns[0].value} id={columns[0].id} handleSort={handleSort} />
-                )}
-                {sortArr.includes(columns[0].value) && sortAbles.includes(columns[0].value) && (
-                  <SortDirectionCheck
-                    bgColor={baseColor}
-                    sortItemLength={sortArr.length}
-                    sortIndex={sortArr.indexOf(columns[0].value)}
-                    sortValue={columns[0].value}
-                    sortDesc={dirCheck(columns[0].value)?.dir === 'desc'}
-                    handleRemoveSortFn={handleRemoveFilter}
-                  />
-                )}
-              </>
-            )}
+            <div className="flex items-center border-y hover:bg-zinc-200 p-0.5 rounded-md space-x-1 border-x-2 border-transparent hover:border-gray-500">
+              <span onClick={(e) => setOptions(e, columns[0].id, columns[0].value)} className="cursor-pointer">
+                <span className="mr-1.5">{taskLength}</span>
+                {!collapseTasks ? columns[0].value : null}
+              </span>
+              {sortAbles.includes(columns[0].value) && (
+                <>
+                  {sortArr.length >= 1 && sortArr.includes(columns[0].value) ? (
+                    ''
+                  ) : (
+                    <RoundedArrowUpDown value={columns[0].value} id={columns[0].id} handleSort={handleSort} />
+                  )}
+                  {sortArr.includes(columns[0].value) && sortAbles.includes(columns[0].value) && (
+                    <SortDirectionCheck
+                      bgColor={baseColor}
+                      sortItemLength={sortArr.length}
+                      sortIndex={sortArr.indexOf(columns[0].value)}
+                      sortValue={columns[0].value}
+                      sortDesc={dirCheck(columns[0].value)?.dir === 'desc'}
+                      handleRemoveSortFn={handleRemoveFilter}
+                      propertyHeaderTxt={headerTxt(columns[0].value)}
+                      handleOrder={handleOrder}
+                    />
+                  )}
+                </>
+              )}
+            </div>
           </div>
           <div
             style={{ height: tableHeight }}
             onMouseDown={() => mouseDown(0)}
-            className="absolute top-0 block w-2 cursor-move -right-1 idle"
+            className="absolute top-0 block w-2 cursor-move right-2 idle"
           >
             <div className="w-0.5 mx-auto h-full bg-gray-100" />
           </div>
@@ -137,9 +159,13 @@ export function Head({
         </th>
         {!collapseTasks
           ? columns.slice(1).map(({ ref, value, id }, index) => (
-              <th key={id} className="relative p-2 -mb-1 font-extrabold opacity-90" ref={ref}>
+              <th key={id} className="relative w-full py-2 -mb-1 font-extrabold opacity-90" ref={ref}>
                 <div
-                  className="flex dBlock items-center justify-center w-full h-full my-auto truncate cursor-pointer group"
+                  className={`flex dBlock items-center justify-center w-full h-full my-auto cursor-pointer group  ${
+                    sortAbles.includes(value)
+                      ? 'hover:bg-zinc-200 p-0.5 border-y rounded-md space-x-1 border-x-2 border-transparent hover:border-gray-500'
+                      : ''
+                  }`}
                   onClick={(e) => setOptions(e, id, value)}
                 >
                   {value}
@@ -158,6 +184,8 @@ export function Head({
                           sortValue={value}
                           sortDesc={dirCheck(value)?.dir === 'desc'}
                           handleRemoveSortFn={handleRemoveFilter}
+                          propertyHeaderTxt={headerTxt(value)}
+                          handleOrder={handleOrder}
                         />
                       )}
                     </span>
@@ -165,7 +193,7 @@ export function Head({
                 </div>
 
                 <div
-                  className="absolute top-0 block w-2 cursor-move -right-1 idle"
+                  className="absolute top-0 block w-2 cursor-move -right-3 idle"
                   style={{ height: tableHeight }}
                   onMouseDown={() => mouseDown(index + 1)}
                 >
