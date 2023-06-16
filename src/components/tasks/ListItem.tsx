@@ -97,23 +97,24 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
   return (
     <>
       <section
-        className={`relative flex items-center justify-between h-8 group ${
+        className={`relative flex items-center justify-between group ${
           list.id === activeItemId ? 'font-medium' : 'hover:bg-gray-100'
         }`}
         style={{
           paddingLeft: `${paddingLeft}px`,
-          backgroundColor: `${list.id === activeItemId ? lightBaseColor : ''}`
+          height: '30px',
+          backgroundColor: `${list.id === listId ? lightBaseColor : ''}`
         }}
+        onClick={() => handleListLocation(list.id, list.name)}
       >
         {list.id === listId && (
-          <span className="absolute top-0 bottom-0 left-0 w-1 rounded-r-lg" style={{ backgroundColor: baseColor }} />
+          <span className="absolute top-0 bottom-0 left-0 rounded-r-lg w-0.5" style={{ backgroundColor: baseColor }} />
         )}
         <div className="flex items-center space-x-1 capitalize truncate cursor-pointer">
           <div onClick={(e) => handleListColour(list.id, e)}>
             <ListIconComponent shape={activeShape} innerColour={innerColour} outterColour={outerColour} />
           </div>
           <div
-            onClick={() => handleListLocation(list.id, list.name)}
             style={{
               fontSize: '13px',
               lineHeight: '15.56px',

@@ -48,7 +48,6 @@ export default function HubItem({
   const dispatch = useAppDispatch();
   const { activeItemId } = useAppSelector((state) => state.workspace);
   const { showSidebar, lightBaseColor, baseColor } = useAppSelector((state) => state.account);
-  // const { openedHubId } = useAppSelector((state) => state.hub);
   const [uploadId, setUploadId] = useState<string | null | undefined>('');
   const { paletteDropdown } = useAppSelector((state) => state.account);
   const [paletteColor, setPaletteColor] = useState<string | undefined | ListColourProps>(
