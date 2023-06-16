@@ -51,16 +51,6 @@ export const getListServices = (data: { Archived: boolean; walletId?: string | n
   );
 };
 
-// get list details
-// export const getListsDetailsService = (data: { queryKey: (string | undefined)[] }) => {
-//   const listID = data.queryKey[1];
-//   const response = requestNew({
-//     url: `lists/${listID}`,
-//     method: 'GET'
-//   });
-//   return response;
-// };
-
 //edit list
 export const UseEditListService = (data: {
   listName?: string;
