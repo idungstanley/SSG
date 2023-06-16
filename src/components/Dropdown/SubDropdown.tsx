@@ -52,7 +52,6 @@ export default function SubDropdown() {
           showEditWalletSlideOver === false &&
           showCreateListSlideOver === false
         ) {
-          // dispatch(setSubDropdownMenu(false));
           dispatch(
             getSubMenu({
               SubMenuId: null,
@@ -92,7 +91,6 @@ export default function SubDropdown() {
       id: 2,
       title:
         SubMenuType === 'wallet' ||
-        SubMenuType === 'subwallet2' ||
         SubMenuType === 'subwallet2' ||
         showMenuDropdownType === 'wallet' ||
         showMenuDropdownType === 'subwallet2' ||

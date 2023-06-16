@@ -30,7 +30,7 @@ export default function SortDirectionCheck({
   handleOrder
 }: SortDirectionProps) {
   return sortItemLength >= 1 ? (
-    <Tooltip title={sortDesc ? 'sort Z - A' : 'sort A - Z'} arrow>
+    <Tooltip title={sortDesc ? 'Sorting Z - A' : 'Sorting A - Z'} arrow>
       <div className="sortClose-group rounded-xl">
         <div
           className={
