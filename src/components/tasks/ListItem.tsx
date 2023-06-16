@@ -123,7 +123,6 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
             className="flex items-center gap-1 pl-4 capitalize truncate cursor-pointer"
           >
             {list.name}
-            <p>({list.taskCount})</p>
           </div>
         </div>
         {/* ends here */}

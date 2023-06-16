@@ -3,7 +3,7 @@ import { AiOutlineEllipsis, AiOutlinePlus } from 'react-icons/ai';
 import { FaFolder, FaFolderOpen } from 'react-icons/fa';
 import { VscTriangleDown, VscTriangleRight } from 'react-icons/vsc';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { closeMenu, getPrevName, getSubMenu, setshowMenuDropdown } from '../../features/hubs/hubSlice';
+import { closeMenu, getPrevName, getSubMenu, setCreateWLID, setshowMenuDropdown } from '../../features/hubs/hubSlice';
 import { setPaletteDropDown } from '../../features/account/accountSlice';
 import Palette from '../ColorPalette';
 import MenuDropdown from '../Dropdown/MenuDropdown';
@@ -67,6 +67,7 @@ export default function WalletItem({
   };
 
   const handleWalletSettings = (id: string, name: string, e: React.MouseEvent<SVGElement>) => {
+    dispatch(setCreateWLID(null));
     dispatch(setCreateWlLink(false));
     dispatch(
       setshowMenuDropdown({

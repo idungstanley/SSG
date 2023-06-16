@@ -13,7 +13,7 @@ export default function EditHubModal() {
   const { currHubId, prevName } = useAppSelector((state) => state.hub);
   const createHub = useMutation(useEditHubService, {
     onSuccess: () => {
-      queryClient.invalidateQueries();
+      queryClient.invalidateQueries(['retrieve']);
       dispatch(setEditHubSlideOverVisibility(false));
       dispatch(
         setshowMenuDropdown({
@@ -68,7 +68,7 @@ export default function EditHubModal() {
       headerTitle={showMenuDropdownType === 'hubs' ? ' Edit hub' : 'Edit subhub'}
       body={
         <div className="py-6 space-y-6 sm:py-0 sm:space-y-0 sm:divide-y sm:divide-gray-200">
-          <div className="space-y-1 px-4 sm:space-y-0 sm:px-6 sm:py-5">
+          <div className="px-4 space-y-1 sm:space-y-0 sm:px-6 sm:py-5">
             <Input
               label={showMenuDropdownType === 'hubs' ? 'Hub Name:' : 'Subhub Name:'}
               placeholder={showMenuDropdownType === 'hubs' ? 'Enter hub Name' : 'Enter SubHub Name'}
