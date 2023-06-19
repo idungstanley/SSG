@@ -61,6 +61,8 @@ export interface ICheckListRes {
 
 export type TagId = string;
 
+export type TaskId = string;
+
 export interface Tag {
   id: TagId;
   color: string;

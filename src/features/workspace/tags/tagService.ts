@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 // import { useAppDispatch } from '../../../app/hooks';
 import requestNew from '../../../app/requestNew';
 import { AddTagRes, ITagRes, TagsRes } from './tag.interfaces';
-import { Tag, TagId } from '../../task/interface.tasks';
+import { Tag, TagId, TaskId } from '../../task/interface.tasks';
 
 export const useTags = () => {
   return useQuery(
@@ -254,4 +254,34 @@ export const UseUnAssignTagFromTask = ({
       enabled: !!tagId
     }
   );
+};
+
+const unassignTag = (data: { tagId: TagId; entityId: TaskId; entityType: string }) => {
+  const { tagId, entityId, entityType } = data;
+
+  const response = requestNew({
+    url: 'tags/' + tagId + '/unassign',
+    method: 'POST',
+    data: {
+      type: entityType,
+      id: entityId
+    }
+  });
+  return response;
+};
+
+export const useUnassignTag = (entityId: string) => {
+  const queryClient = useQueryClient();
+  // const { hubId, walletId, listId } = useParams();
+
+  // const id = hubId ?? walletId ?? listId;
+  // const type = hubId ? 'hub' : walletId ? 'wallet' : 'list';
+  // const { filters } = generateFilters();
+
+  return useMutation(unassignTag, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['task']);
+      queryClient.invalidateQueries(['sub-tasks', entityId]);
+    }
+  });
 };
