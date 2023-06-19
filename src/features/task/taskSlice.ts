@@ -429,7 +429,7 @@ export const taskSlice = createSlice({
     setTimerInterval(state, action: PayloadAction<number | undefined>) {
       state.period = action.payload;
     },
-    setTaskSelectedDate(state, action: PayloadAction<ISelectedDate>) {
+    setTaskSelectedDate(state, action: PayloadAction<ISelectedDate | null>) {
       state.selectedDate = action.payload;
     },
     setHistoryMemory(state, action: PayloadAction<IHistoryFilterMemory>) {

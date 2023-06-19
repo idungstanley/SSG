@@ -22,14 +22,6 @@ interface DatePickerProps {
   toggleFn?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-// interface DateObject {
-//   currentMonth: boolean;
-//   date: Dayjs;
-//   today?: boolean;
-//   currentWeek?: boolean;
-//   isWeekend?: boolean;
-// }
-
 export type DateString = {
   start?: string;
   due?: string;
@@ -44,7 +36,6 @@ export default function DatePicker({ styles, range, toggleFn }: DatePickerProps)
   const { selectedDate } = useAppSelector((state) => state.workspace);
   const { selectedDate: taskTime } = useAppSelector((state) => state.task);
   const sectionRef = useRef<HTMLElement>(null);
-  const [, setString] = useState<DateString | null>(null);
   const [hoveredDate, setHovered] = useState<Dayjs | null>(null);
 
   const closeDateModal = () => {
@@ -55,7 +46,7 @@ export default function DatePicker({ styles, range, toggleFn }: DatePickerProps)
 
   const dates = generateDate();
   const groupedDates = groupDatesByDayOfWeek(dates);
-  const startDay = 1; // Wednesday (0 = Sunday, 1 = Monday, ..., 6 = Saturday)
+  const startDay = 0; // Wednesday (0 = Sunday, 1 = Monday, ..., 6 = Saturday)
   const sortedKeys = Object.keys(groupedDates).sort((a, b) => {
     const numericDayOfWeekA = parseInt(a, 10);
     const numericDayOfWeekB = parseInt(b, 10);
@@ -64,18 +55,16 @@ export default function DatePicker({ styles, range, toggleFn }: DatePickerProps)
     return adjustedDayOfWeekA - adjustedDayOfWeekB;
   });
   useEffect(() => {
-    if (selectedDate) {
-      const { date } = selectedDate;
+    if (!selectedDate?.date?.isSame(today, 'day')) {
       if (taskTime?.from) {
-        dispatch(setTaskSelectedDate({ from: taskTime.from, to: date }));
+        dispatch(setTaskSelectedDate({ from: taskTime.from, to: selectedDate?.date }));
       } else if (taskTime?.to) {
-        dispatch(setTaskSelectedDate({ from: undefined, to: undefined }));
+        dispatch(setTaskSelectedDate(null));
       } else {
-        dispatch(setTaskSelectedDate({ from: date }));
+        dispatch(setTaskSelectedDate({ from: selectedDate?.date }));
       }
     }
-    setString({ start: taskTime?.from?.format('DD/MM/YYYY'), due: taskTime?.to?.format('DD/MM/YYYY') });
-  }, [selectedDate]);
+  }, [selectedDate?.date]);
 
   return (
     <Modal open={true} hideBackdrop>
@@ -150,14 +139,19 @@ export default function DatePicker({ styles, range, toggleFn }: DatePickerProps)
                     <ul className="text-center grid place-content-center text-sm border-t p-0.5 space-y-1">
                       {sortedDates.map((date) => {
                         const isBlocked =
-                          (taskTime?.from &&
-                            taskTime.to &&
-                            ((date.date.isAfter(taskTime.from) && date.date.isBefore(taskTime.to)) ||
-                              (date.date.isBefore(taskTime.from) && date.date.isAfter(taskTime.to)))) ||
-                          (selectedDate &&
-                            hoveredDate &&
-                            ((date.date.isBefore(selectedDate.date) && date.date.isAfter(hoveredDate)) ||
-                              (date.date.isAfter(selectedDate.date) && date.date.isBefore(hoveredDate))));
+                          taskTime?.from &&
+                          taskTime.to &&
+                          (date.date.isSame(taskTime.from, 'day') || date.date.isAfter(taskTime.from, 'day')) &&
+                          date.date.isBefore(taskTime.to, 'day');
+
+                        const isHoverBlocked =
+                          taskTime?.from &&
+                          hoveredDate &&
+                          (date.date.isSame(taskTime.from, 'day') || date.date.isAfter(taskTime.from, 'day')) &&
+                          date.date.isBefore(hoveredDate, 'day');
+
+                        const isBlockedOrHoverBlocked = isBlocked || isHoverBlocked;
+
                         return (
                           <li
                             key={date.date.toISOString()}
@@ -169,7 +163,7 @@ export default function DatePicker({ styles, range, toggleFn }: DatePickerProps)
                               selectedDate?.date.date() === date.date.date()
                                 ? 'bg-purple-400 text-white brightness-150'
                                 : '',
-                              isBlocked ? 'bg-purple-400 text-white rounded-none' : ''
+                              isBlockedOrHoverBlocked ? 'bg-purple-400 text-white rounded-none' : ''
                             )}
                             onClick={() => {
                               dispatch(setSelectedDate({ date: date.date, dateType: 'from' }));
