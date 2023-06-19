@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 // import { tagItem } from '../../pages/workspace/pilot/components/details/properties/subDetailsIndex/PropertyDetails';
 import { listColumnProps } from '../../pages/workspace/tasks/component/views/ListColumns';
 import { IField } from '../list/list.interfaces';
-import { IDuration, IParent, TaskKey } from './interface.tasks';
+import { IDuration, IHistoryFilterMemory, IParent, ISelectedDate, TaskKey } from './interface.tasks';
 import { SortOption } from '../../pages/workspace/tasks/component/views/listLevel/TaskListViews';
 import RecordRTC from 'recordrtc';
 import { FilterValue } from '../../components/TasksHeader/ui/Filter/types/filters';
@@ -138,6 +138,8 @@ interface TaskState {
   sortType: TaskKey;
   searchValue: string;
   assigneeIds: string[];
+  selectedDate: ISelectedDate | null;
+  HistoryFilterMemory: IHistoryFilterMemory | null;
   filters: FilterValue[];
 }
 
@@ -198,7 +200,9 @@ const initialState: TaskState = {
   sortType: 'status',
   searchValue: '',
   assigneeIds: [],
-  filters: []
+  filters: [],
+  selectedDate: null,
+  HistoryFilterMemory: null
 };
 
 export const taskSlice = createSlice({
@@ -424,6 +428,12 @@ export const taskSlice = createSlice({
     },
     setTimerInterval(state, action: PayloadAction<number | undefined>) {
       state.period = action.payload;
+    },
+    setTaskSelectedDate(state, action: PayloadAction<ISelectedDate>) {
+      state.selectedDate = action.payload;
+    },
+    setHistoryMemory(state, action: PayloadAction<IHistoryFilterMemory>) {
+      state.HistoryFilterMemory = action.payload;
     }
   }
 });
@@ -482,6 +492,8 @@ export const {
   setUpdateTimerDuration,
   setStopTimer,
   setTimerInterval,
-  setSortType
+  setSortType,
+  setTaskSelectedDate,
+  setHistoryMemory
 } = taskSlice.actions;
 export default taskSlice.reducer;

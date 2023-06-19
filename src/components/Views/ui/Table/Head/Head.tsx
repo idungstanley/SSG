@@ -49,7 +49,6 @@ export function Head({
 
   const handleSort = (header: string, id: string | undefined, order: 'asc' | 'desc') => {
     setheaderId(id as string);
-    if (sortArr.includes(headerTxt(header))) return setShowSortModal(!showSortModal);
     const existingSortItem = sortAbleArr.findIndex((el) => el.field === headerTxt(header));
     if (existingSortItem !== -1) {
       const updatedSortArray = sortAbleArr.map((el) => (el.field === headerTxt(header) ? { ...el, dir: order } : el));
@@ -67,7 +66,6 @@ export function Head({
     e.stopPropagation();
     const existingSortItem = sortAbleArr?.findIndex((el) => el.field === propertyHeaderTxt);
     const existingSortDir = sortAbleArr?.find((el) => el.field === propertyHeaderTxt);
-    console.log(existingSortDir);
     if (existingSortItem !== -1 && existingSortDir?.dir === 'asc') {
       const updatedSortArray = sortAbleArr?.map((el) => (el.field === propertyHeaderTxt ? { ...el, dir: 'desc' } : el));
       dispatch(setSortArray(updatedSortArray as SortOption[]));
@@ -94,7 +92,7 @@ export function Head({
         {/* first sticky col */}
         <th style={{ zIndex: 2 }} className="sticky left-0 flex -mb-2 font-extrabold" ref={columns[0].ref}>
           <div className="flex items-center bg-purple-50 " style={{ width: '22px' }}></div>
-          <div className="flex items-center w-full gap-3 py-2 truncate group opacity-90">
+          <div className="flex items-center w-full gap-3 py-2 truncate dBlock group opacity-90">
             <span
               className={`py-0.5 px-2 rounded-tr-md flex items-center space-x-1 text-white ${
                 parsedLabel == 'todo'
@@ -112,7 +110,7 @@ export function Head({
 
               <span>{parsedLabel}</span>
             </span>
-            <div className="flex items-center border-y hover:bg-zinc-200 p-0.5 rounded-md space-x-1 border-x-2 border-transparent hover:border-gray-500">
+            <div className="flex items-center hover:bg-gray-200 p-0.5 rounded-md space-x-1  border-t-2 border-l-2 border-r-2 border-transparent hover:border-gray-600">
               <span onClick={(e) => setOptions(e, columns[0].id, columns[0].value)} className="cursor-pointer">
                 <span className="mr-1.5">{taskLength}</span>
                 {!collapseTasks ? columns[0].value : null}
@@ -147,7 +145,7 @@ export function Head({
           >
             <div className="w-0.5 mx-auto h-full bg-gray-100" />
           </div>
-          {showSortModal && headerId === columns[0].id && (
+          {headerId === columns[0].id && (
             <SortModal
               handleClose={handleClose}
               anchorEl={anchorEl}
@@ -161,9 +159,9 @@ export function Head({
           ? columns.slice(1).map(({ ref, value, id }, index) => (
               <th key={id} className="relative w-full py-2 -mb-1 font-extrabold opacity-90" ref={ref}>
                 <div
-                  className={`flex items-center justify-center w-full h-full my-auto cursor-pointer group  ${
+                  className={`flex dBlock items-center justify-center w-full h-full my-auto cursor-pointer group  ${
                     sortAbles.includes(value)
-                      ? 'hover:bg-zinc-200 p-0.5 border-y rounded-md space-x-1 border-x-2 border-transparent hover:border-gray-500'
+                      ? 'hover:bg-gray-200 p-0.5 rounded-md space-x-1 border-l-2 border-r-2 border-t-2 border-transparent hover:border-gray-500'
                       : ''
                   }`}
                   onClick={(e) => setOptions(e, id, value)}
@@ -199,7 +197,7 @@ export function Head({
                 >
                   <div className="w-0.5 mx-auto h-full bg-gray-100" />
                 </div>
-                {showSortModal && headerId === id && sortAbles.includes(value) && (
+                {headerId === id && sortAbles.includes(value) && (
                   <SortModal
                     handleClose={handleClose}
                     anchorEl={anchorEl}
