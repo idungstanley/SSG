@@ -7,6 +7,7 @@ import { Column } from '../../../types/table';
 import { Chevron } from '../../Chevron';
 import { setActiveTaskColumn, setSortArr, setSortArray } from '../../../../../features/task/taskSlice';
 import SortModal from '../../../../SortModal/SortModal';
+import statusbox from '../../../../../assets/icons/statusbox.svg';
 
 interface HeadProps {
   columns: Column[];
@@ -67,7 +68,6 @@ export function Head({
     e.stopPropagation();
     const existingSortItem = sortAbleArr?.findIndex((el) => el.field === propertyHeaderTxt);
     const existingSortDir = sortAbleArr?.find((el) => el.field === propertyHeaderTxt);
-    console.log(existingSortDir);
     if (existingSortItem !== -1 && existingSortDir?.dir === 'asc') {
       const updatedSortArray = sortAbleArr?.map((el) => (el.field === propertyHeaderTxt ? { ...el, dir: 'desc' } : el));
       dispatch(setSortArray(updatedSortArray as SortOption[]));
@@ -94,7 +94,7 @@ export function Head({
         {/* first sticky col */}
         <th style={{ zIndex: 2 }} className="sticky left-0 flex -mb-2 font-extrabold" ref={columns[0].ref}>
           <div className="flex items-center bg-purple-50 " style={{ width: '22px' }}></div>
-          <div className="flex items-center w-full gap-3 py-2 truncate group opacity-90">
+          <div className="flex dBlock items-center w-full gap-3 py-2 truncate group opacity-90">
             <span
               className={`py-0.5 px-2 rounded-tr-md flex items-center space-x-1 text-white ${
                 parsedLabel == 'todo'
@@ -111,6 +111,9 @@ export function Head({
               <Chevron color="text-white" active={collapseTasks} onToggle={onToggleCollapseTasks} />
 
               <span>{parsedLabel}</span>
+              <p className="opacity-0">
+                <img src={statusbox} alt="" />
+              </p>
             </span>
             <div className="flex items-center border-y hover:bg-zinc-200 p-0.5 rounded-md space-x-1 border-x-2 border-transparent hover:border-gray-500">
               <span onClick={(e) => setOptions(e, columns[0].id, columns[0].value)} className="cursor-pointer">
@@ -161,7 +164,7 @@ export function Head({
           ? columns.slice(1).map(({ ref, value, id }, index) => (
               <th key={id} className="relative w-full py-2 -mb-1 font-extrabold opacity-90" ref={ref}>
                 <div
-                  className={`flex items-center justify-center w-full h-full my-auto cursor-pointer group  ${
+                  className={`flex dBlock items-center justify-center w-full h-full my-auto cursor-pointer group  ${
                     sortAbles.includes(value)
                       ? 'hover:bg-zinc-200 p-0.5 border-y rounded-md space-x-1 border-x-2 border-transparent hover:border-gray-500'
                       : ''

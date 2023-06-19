@@ -54,6 +54,7 @@ export function StickyCol({
   return (
     <td
       className="sticky left-0 flex items-center justify-center text-sm font-medium text-center text-gray-900 cursor-pointer"
+      style={{ minHeight: '40px' }}
       {...props}
     >
       {/* //! change me */}
