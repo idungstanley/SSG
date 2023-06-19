@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import DatePicker from './DatePicker';
+import DatePicker from '../../../../../../DatePicker/DatePicker';
 
 type TableData = {
   start_date: string;
@@ -25,8 +25,8 @@ export default function MoreDetails(): JSX.Element {
   return (
     <div className="border border-gray-200 rounded-b">
       {showDataPicker ? (
-        <div className="relative">
-          <DatePicker />
+        <div>
+          <DatePicker toggleFn={setShowDatePicker} />
         </div>
       ) : null}
 
