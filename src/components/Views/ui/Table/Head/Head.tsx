@@ -50,7 +50,6 @@ export function Head({
 
   const handleSort = (header: string, id: string | undefined, order: 'asc' | 'desc') => {
     setheaderId(id as string);
-    if (sortArr.includes(headerTxt(header))) return setShowSortModal(!showSortModal);
     const existingSortItem = sortAbleArr.findIndex((el) => el.field === headerTxt(header));
     if (existingSortItem !== -1) {
       const updatedSortArray = sortAbleArr.map((el) => (el.field === headerTxt(header) ? { ...el, dir: order } : el));
@@ -115,7 +114,7 @@ export function Head({
                 <img src={statusbox} alt="" />
               </p>
             </span>
-            <div className="flex items-center border-y hover:bg-zinc-200 p-0.5 rounded-md space-x-1 border-x-2 border-transparent hover:border-gray-500">
+            <div className="flex items-center hover:bg-gray-200 p-0.5 rounded-md space-x-1  border-t-2 border-l-2 border-r-2 border-transparent hover:border-gray-600">
               <span onClick={(e) => setOptions(e, columns[0].id, columns[0].value)} className="cursor-pointer">
                 <span className="mr-1.5">{taskLength}</span>
                 {!collapseTasks ? columns[0].value : null}
@@ -150,7 +149,7 @@ export function Head({
           >
             <div className="w-0.5 mx-auto h-full bg-gray-100" />
           </div>
-          {showSortModal && headerId === columns[0].id && (
+          {headerId === columns[0].id && (
             <SortModal
               handleClose={handleClose}
               anchorEl={anchorEl}
@@ -166,7 +165,7 @@ export function Head({
                 <div
                   className={`flex dBlock items-center justify-center w-full h-full my-auto cursor-pointer group  ${
                     sortAbles.includes(value)
-                      ? 'hover:bg-zinc-200 p-0.5 border-y rounded-md space-x-1 border-x-2 border-transparent hover:border-gray-500'
+                      ? 'hover:bg-gray-200 p-0.5 rounded-md space-x-1 border-l-2 border-r-2 border-t-2 border-transparent hover:border-gray-500'
                       : ''
                   }`}
                   onClick={(e) => setOptions(e, id, value)}
@@ -202,7 +201,7 @@ export function Head({
                 >
                   <div className="w-0.5 mx-auto h-full bg-gray-100" />
                 </div>
-                {showSortModal && headerId === id && sortAbles.includes(value) && (
+                {headerId === id && sortAbles.includes(value) && (
                   <SortModal
                     handleClose={handleClose}
                     anchorEl={anchorEl}
