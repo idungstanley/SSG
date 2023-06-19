@@ -85,14 +85,17 @@ export function StickyCol({ showSubTasks, setShowSubTasks, children, task, paddi
           )}
         </button>
         <StatusDropdown TaskCurrentStatus={task.status} />
-        <p
-          className="text-left"
-          contentEditable={true}
-          ref={inputRef}
-          onKeyDown={(e) => (e.key === 'Enter' ? handleEditTask(e, task.id) : null)}
-        >
-          {task.name}
-        </p>
+        <div>
+          <p
+            className="text-left"
+            contentEditable={true}
+            ref={inputRef}
+            onKeyDown={(e) => (e.key === 'Enter' ? handleEditTask(e, task.id) : null)}
+          >
+            {task.name}
+          </p>
+        </div>
+
         {children}
       </div>
     </td>

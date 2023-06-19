@@ -7,6 +7,7 @@ import { Column } from '../../../types/table';
 import { Chevron } from '../../Chevron';
 import { setActiveTaskColumn, setSortArr, setSortArray } from '../../../../../features/task/taskSlice';
 import SortModal from '../../../../SortModal/SortModal';
+import statusbox from '../../../../../assets/icons/statusbox.svg';
 
 interface HeadProps {
   columns: Column[];
@@ -67,7 +68,6 @@ export function Head({
     e.stopPropagation();
     const existingSortItem = sortAbleArr?.findIndex((el) => el.field === propertyHeaderTxt);
     const existingSortDir = sortAbleArr?.find((el) => el.field === propertyHeaderTxt);
-    console.log(existingSortDir);
     if (existingSortItem !== -1 && existingSortDir?.dir === 'asc') {
       const updatedSortArray = sortAbleArr?.map((el) => (el.field === propertyHeaderTxt ? { ...el, dir: 'desc' } : el));
       dispatch(setSortArray(updatedSortArray as SortOption[]));
@@ -111,6 +111,9 @@ export function Head({
               <Chevron color="text-white" active={collapseTasks} onToggle={onToggleCollapseTasks} />
 
               <span>{parsedLabel}</span>
+              <p className="opacity-0">
+                <img src={statusbox} alt="" />
+              </p>
             </span>
             <div className="flex items-center border-y hover:bg-zinc-200 p-0.5 rounded-md space-x-1 border-x-2 border-transparent hover:border-gray-500">
               <span onClick={(e) => setOptions(e, columns[0].id, columns[0].value)} className="cursor-pointer">
