@@ -44,7 +44,8 @@ export function StickyCol({ showSubTasks, setShowSubTasks, children, task, paddi
 
   return (
     <td
-      className="sticky left-0 flex items-center justify-center text-sm font-medium text-center text-gray-900 cursor-pointer h-10"
+      className="sticky left-0 flex items-center justify-center text-sm font-medium text-center text-gray-900 cursor-pointer"
+      style={{ minHeight: '40px' }}
       {...props}
     >
       {/* //! change me */}
@@ -85,6 +86,7 @@ export function StickyCol({ showSubTasks, setShowSubTasks, children, task, paddi
         </button>
         <StatusDropdown TaskCurrentStatus={task.status} />
         <p
+          className="text-left"
           contentEditable={true}
           ref={inputRef}
           onKeyDown={(e) => (e.key === 'Enter' ? handleEditTask(e, task.id) : null)}
