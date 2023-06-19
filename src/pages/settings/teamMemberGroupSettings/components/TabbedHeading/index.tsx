@@ -21,13 +21,13 @@ function TabbedHeading({ selectedTabKey, actions }: TabbedHeadingProps) {
           name: 'General',
           count: null,
           current: selectedTabKey === 'general',
-          href: `${currentWorkspaceId}/settings/team-members/groups/${teamMemberGroupId}`
+          href: `/${currentWorkspaceId}/settings/team-members/groups/${teamMemberGroupId}`
         },
         {
           name: 'Members',
           count: null,
           current: selectedTabKey === 'members',
-          href: `${currentWorkspaceId}/settings/team-members/groups/${teamMemberGroupId}/members`
+          href: `/${currentWorkspaceId}/settings/team-members/groups/${teamMemberGroupId}/members`
         }
       ]}
       actions={actions}
