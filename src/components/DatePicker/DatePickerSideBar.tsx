@@ -6,6 +6,7 @@ import {
   weekends,
   weeks
 } from '../Pilot/components/details/properties/subDetailsIndex/components/calendar';
+import { setSelectedDate } from '../../features/workspace/workspaceSlice';
 
 interface DatePickerSideBarProp {
   currentDate: dayjs.Dayjs;
@@ -50,14 +51,34 @@ export function DatePickerSideBar({ currentDate }: DatePickerSideBarProp) {
       selectedWeekends = [nextWeekend.date, secondWeekend];
       if (durationType === 'weekend') {
         dispatch(setTaskSelectedDate({ from: selectedWeekends[0], to: selectedWeekends[0] }));
+        dispatch(setSelectedDate({ date: selectedWeekends[0] }));
         return selectedWeekends[0];
       } else {
         dispatch(setTaskSelectedDate({ from: selectedWeekends[1], to: selectedWeekends[1] }));
+        dispatch(setSelectedDate({ date: selectedWeekends[1] }));
         return selectedWeekends[1];
       }
     } else {
       // If either the next weekend or the 2nd weekend is not found, reset the selection
       selectedWeekends = [];
+    }
+  };
+
+  const handleDayClick = (type: string) => {
+    if (type === 'today') {
+      dispatch(
+        setTaskSelectedDate({
+          from: currentDate
+        })
+      );
+      dispatch(setSelectedDate({ date: currentDate }));
+    } else {
+      dispatch(
+        setTaskSelectedDate({
+          from: currentDate.add(1, 'day')
+        })
+      );
+      dispatch(setSelectedDate({ date: currentDate.add(1, 'day') }));
     }
   };
 
@@ -88,13 +109,7 @@ export function DatePickerSideBar({ currentDate }: DatePickerSideBarProp) {
     <div className="w-52 pt-1 space-y-4 border-r text-sm border-gray-200" style={{ height: '250px', fontSize: '12px' }}>
       <p
         className="font-semibold rounded-md hover:bg-gray-200 flex justify-between pr-1 w-full"
-        onClick={() =>
-          dispatch(
-            setTaskSelectedDate({
-              from: currentDate
-            })
-          )
-        }
+        onClick={() => handleDayClick('today')}
       >
         <span style={{ fontSize: '10px' }}>Today</span>
         <span style={{ fontSize: '10px' }} className="text-gray-400 text-right">
@@ -122,13 +137,7 @@ export function DatePickerSideBar({ currentDate }: DatePickerSideBarProp) {
       </p>
       <p
         className="font-semibold rounded-md hover:bg-gray-200 flex justify-between pr-1 w-full"
-        onClick={() =>
-          dispatch(
-            setTaskSelectedDate({
-              from: currentDate.add(1, 'days')
-            })
-          )
-        }
+        onClick={() => handleDayClick('tomorrow')}
       >
         <span style={{ fontSize: '10px' }}>Tomorrow</span>
         <span style={{ fontSize: '10px' }} className="text-gray-400 text-right">
@@ -166,7 +175,7 @@ export function DatePickerSideBar({ currentDate }: DatePickerSideBarProp) {
         className="font-semibold rounded-md hover:bg-gray-200 flex justify-between pr-1 w-full"
         onClick={() => handleWeekButtonClick(2)}
       >
-        <span style={{ fontSize: '10px' }}>Next Week</span>
+        <span style={{ fontSize: '10px' }}>2 Weeks</span>
         <span style={{ fontSize: '10px' }} className="text-gray-400 text-right">
           {dayjs(weeks(2)).format('ddd D')}
         </span>
