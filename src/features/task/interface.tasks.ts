@@ -59,6 +59,14 @@ export interface ICheckListRes {
   items: ICheckListItems[];
 }
 
+export type TagId = string;
+
+export interface Tag {
+  id: TagId;
+  color: string;
+  name: string;
+}
+
 export interface ITaskFullList {
   id: string;
   name: string;

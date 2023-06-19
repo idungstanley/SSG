@@ -15,9 +15,18 @@ interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   showSubTasks: boolean;
   setShowSubTasks: (i: boolean) => void;
   paddingLeft?: number;
+  tags: ReactNode;
 }
 
-export function StickyCol({ showSubTasks, setShowSubTasks, children, task, paddingLeft = 0, ...props }: ColProps) {
+export function StickyCol({
+  showSubTasks,
+  setShowSubTasks,
+  children,
+  tags,
+  task,
+  paddingLeft = 0,
+  ...props
+}: ColProps) {
   const { taskId } = useParams();
   const COL_BG = taskId === task.id ? ACTIVE_COL_BG : DEFAULT_COL_BG;
 
@@ -44,7 +53,7 @@ export function StickyCol({ showSubTasks, setShowSubTasks, children, task, paddi
 
   return (
     <td
-      className="sticky left-0 flex items-center justify-center text-sm font-medium text-center text-gray-900 cursor-pointer h-10"
+      className="sticky left-0 flex items-center justify-center text-sm font-medium text-center text-gray-900 cursor-pointer"
       {...props}
     >
       {/* //! change me */}
@@ -84,13 +93,17 @@ export function StickyCol({ showSubTasks, setShowSubTasks, children, task, paddi
           )}
         </button>
         <StatusDropdown TaskCurrentStatus={task.status} />
-        <p
-          contentEditable={true}
-          ref={inputRef}
-          onKeyDown={(e) => (e.key === 'Enter' ? handleEditTask(e, task.id) : null)}
-        >
-          {task.name}
-        </p>
+        <div className="flex flex-col items-start justify-start space-y-1">
+          <p
+            contentEditable={true}
+            ref={inputRef}
+            onKeyDown={(e) => (e.key === 'Enter' ? handleEditTask(e, task.id) : null)}
+          >
+            {task.name}
+          </p>
+
+          {tags}
+        </div>
         {children}
       </div>
     </td>

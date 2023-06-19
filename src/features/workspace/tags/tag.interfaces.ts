@@ -1,3 +1,5 @@
+import { Tag } from '../../task/interface.tasks';
+
 export interface ITags {
   id: string;
   name: string;
@@ -14,5 +16,18 @@ export interface ITagRes {
   data: {
     tags: ITags[];
     pagination: IPagination;
+  };
+}
+
+export interface TagsRes {
+  data: {
+    tags: Tag[];
+    pagination: IPagination;
+  };
+}
+
+export interface AddTagRes {
+  data: {
+    tag: Tag;
   };
 }

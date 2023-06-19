@@ -1,7 +1,20 @@
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 // import { useAppDispatch } from '../../../app/hooks';
 import requestNew from '../../../app/requestNew';
-import { ITagRes } from './tag.interfaces';
+import { AddTagRes, ITagRes, TagsRes } from './tag.interfaces';
+import { Tag, TagId } from '../../task/interface.tasks';
+
+export const useTags = () => {
+  return useQuery(
+    ['tags'],
+    () =>
+      requestNew<TagsRes>({
+        url: 'tags',
+        method: 'GET'
+      }),
+    { select: (res) => res.data.tags }
+  );
+};
 
 export const UseCreateTagService = ({ name }: { name: string }) => {
   const url = 'tags';
@@ -13,6 +26,120 @@ export const UseCreateTagService = ({ name }: { name: string }) => {
     }
   });
   return response;
+};
+
+const addTag = (data: { name: string; color: string }) => {
+  const response = requestNew<AddTagRes>({
+    url: 'tags',
+    method: 'POST',
+    data
+  });
+  return response;
+};
+
+export const useAddTag = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation(addTag, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['tags']);
+    }
+  });
+};
+
+const assignTag = (data: { tagId: TagId; entityId: string; entityType: string }) => {
+  const { tagId, entityId, entityType } = data;
+
+  const response = requestNew({
+    url: 'tags/' + tagId + '/assign',
+    method: 'POST',
+    data: {
+      type: entityType,
+      id: entityId,
+      color: 'purple'
+    }
+  });
+  return response;
+};
+
+export const useAssignTag = (taskId: string) => {
+  const queryClient = useQueryClient();
+  // const { hubId, walletId, listId } = useParams();
+
+  // const id = hubId ?? walletId ?? listId;
+  // const type = hubId ? 'hub' : walletId ? 'wallet' : 'list';
+  // const { filters } = generateFilters();
+
+  return useMutation(assignTag, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['task']);
+      queryClient.invalidateQueries(['sub-tasks', taskId]);
+      queryClient.invalidateQueries(['checklist']);
+    }
+  });
+};
+
+const deleteTag = (data: { tagId: TagId }) => {
+  const { tagId } = data;
+
+  const response = requestNew({
+    url: 'tags/' + tagId,
+    method: 'DELETE'
+  });
+  return response;
+};
+
+export const useDeleteTag = (entityId: string, entityType: string) => {
+  const queryClient = useQueryClient();
+  // const { hubId, walletId, listId } = useParams();
+
+  // const id = hubId ?? walletId ?? listId;
+  // const type = hubId ? 'hub' : walletId ? 'wallet' : 'list';
+  // const { filters } = generateFilters();
+
+  return useMutation(deleteTag, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['tags']);
+      queryClient.invalidateQueries(['task']);
+      entityType === 'task'
+        ? queryClient.invalidateQueries(['sub-tasks', entityId])
+        : queryClient.invalidateQueries(['checklists', entityId]);
+    }
+  });
+};
+
+const updateTag = (data: Pick<Tag, 'id'> & Partial<Omit<Tag, 'id'>>) => {
+  const { id, name, color } = data;
+  // const id = data.id;
+
+  const response = requestNew({
+    url: 'tags/' + id,
+    method: 'PUT',
+    data: {
+      name,
+      color
+    }
+  });
+  return response;
+};
+
+export const useUpdateTag = (entityId: string, entityType: string) => {
+  const queryClient = useQueryClient();
+  // const { hubId, walletId, listId } = useParams();
+
+  // const id = hubId ?? walletId ?? listId;
+  // const type = hubId ? 'hub' : walletId ? 'wallet' : 'list';
+  // const { filters } = generateFilters();
+
+  return useMutation(updateTag, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['tags']);
+      queryClient.invalidateQueries(['task']);
+      entityType === 'task'
+        ? queryClient.invalidateQueries(['sub-tasks', entityId])
+        : queryClient.invalidateQueries(['checklists', entityId]);
+    }
+  });
 };
 
 export const UseGetAllTagsService = () => {

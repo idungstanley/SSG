@@ -26,6 +26,12 @@ export interface ActiveTaskColumnProps {
   header: string;
 }
 
+export interface tagItem {
+  id: string;
+  name: string;
+  color: string;
+}
+
 export interface ImyTaskData {
   id: string;
   name: string;
