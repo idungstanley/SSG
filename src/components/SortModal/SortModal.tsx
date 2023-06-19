@@ -1,14 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { AiFillCaretRight, AiFillCaretDown, AiOutlineBgColors } from 'react-icons/ai';
+import { AiOutlineBgColors } from 'react-icons/ai';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import Menu from '@mui/material/Menu';
-// import MenuItem from '@mui/material/MenuItem';
-// import { useDispatch } from 'react-redux';
-// import { setSortArray } from '../../features/task/taskSlice';
 import Input from '../input/Input';
 import { BiHide, BiSearch } from 'react-icons/bi';
 import { BsSortAlphaDown, BsSortAlphaUp } from 'react-icons/bs';
-import { IoIosArrowDown, IoIosArrowUp, IoIosColorFilter } from 'react-icons/io';
+import { IoIosArrowDown, IoIosArrowForward, IoIosArrowUp, IoIosColorFilter } from 'react-icons/io';
 import { SortOption } from '../../pages/workspace/tasks/component/views/listLevel/TaskListViews';
 import SortDirectionCheck from '../../pages/workspace/tasks/component/views/listLevel/component/SortDirectionCheck';
 import { setSortArr, setSortArray } from '../../features/task/taskSlice';
@@ -29,6 +26,54 @@ type filterSwitch = {
   title: string;
   toggle: boolean;
 };
+
+const DropDownOptions = [
+  {
+    label: 'filter by color',
+    icon: <IoIosColorFilter />,
+    showArrow: true
+  },
+  {
+    label: 'filter by condition',
+    icon: <RiFilter2Line />,
+    showArrow: true
+  },
+  {
+    label: 'filter by values',
+    icon: <MdOutlineFilter1 />,
+    showArrow: true
+  },
+  {
+    label: 'Move Columns',
+    icon: <HiOutlineSwitchHorizontal />,
+    showArrow: true
+  },
+  {
+    label: 'Ajust Alignment',
+    icon: <TbAlignJustified />,
+    showArrow: true
+  },
+  {
+    label: 'Edit Fields',
+    icon: <MdEditNote />,
+    showArrow: false
+  },
+  {
+    label: 'Duplicate',
+    icon: <HiOutlineDuplicate />,
+    showArrow: false
+  },
+  {
+    label: 'Hide Columns',
+    icon: <BiHide />,
+    showArrow: false
+  },
+  {
+    label: 'Remove From List',
+    icon: <MdOutlineDeleteForever className="text-red-500" />,
+    showArrow: false
+  }
+];
 
 export default function SortModal({ toggleModal, setAnchorEl, anchorEl, handleClose, handleSortFn }: SortModalProps) {
   const modalRef = useRef<HTMLDivElement>(null);
@@ -59,22 +104,12 @@ export default function SortModal({ toggleModal, setAnchorEl, anchorEl, handleCl
     setSortDrChecker(false);
   }, [sortAbleArr, isSortCheckerDrRemoved]);
 
-  const handleRemoveFilter = (title?: string, sortCriteria?: string) => {
+  const handleRemoveFilter = (title?: string) => {
     const headerTxt = title === 'Assignees' ? 'assignee' : title === 'Task' ? 'name' : title?.toLowerCase();
-    if (hasDuplicate) {
-      dispatch(
-        setSortArray(
-          sortAbleArr.filter(
-            (el) => el.field !== headerTxt || !Object.prototype.hasOwnProperty.call(el, sortCriteria as PropertyKey)
-          )
-        )
-      );
-    } else {
-      setSortDrChecker(true);
-      setAnchorEl?.(null);
-      dispatch(setSortArray(sortAbleArr.filter((el) => el.field !== headerTxt)));
-      dispatch(setSortArr(sortArr.filter((el) => el !== title)));
-    }
+    setSortDrChecker(true);
+    setAnchorEl?.(null);
+    dispatch(setSortArray(sortAbleArr.filter((el) => el.field !== headerTxt)));
+    dispatch(setSortArr(sortArr.filter((el) => el !== title)));
   };
 
   const open = Boolean(anchorEl);
@@ -118,13 +153,13 @@ export default function SortModal({ toggleModal, setAnchorEl, anchorEl, handleCl
         style: {
           height: '350px',
           overflowY: 'auto',
-          width: '300px',
-          padding: '8px'
+          width: '250px',
+          padding: '0px 8px 8px 8px'
         }
       }}
     >
       <div className="flex flex-col" style={{ zIndex: '9999' }}>
-        <div>
+        <div className="sticky top-0 z-50 pt-2 bg-white">
           <Input
             name="SearchInput"
             placeholder="Search 'field name' Column"
@@ -132,18 +167,18 @@ export default function SortModal({ toggleModal, setAnchorEl, anchorEl, handleCl
             trailingIcon={<BiSearch />}
           />
         </div>
-        <div className="z-50 flex flex-col justify-start mt-2 space-y-1 capitalize">
-          <div className="flex items-center justify-between h-8 px-1 text-xs hover:bg-gray-200 group alt-task">
+        <div className="z-40 flex flex-col justify-start mt-2 space-y-1 overflow-y-visible capitalize">
+          <div className="flex items-center justify-between h-8 px-1 hover:bg-gray-200 group alt-task">
             <div className="flex items-center gap-1 ">
               {getOrder?.dir === 'desc' ? (
                 <>
                   <BsSortAlphaUp />
-                  <p className="text-xs">Sort Z - A</p>
+                  <p>Sort Z - A</p>
                 </>
               ) : (
                 <>
                   <BsSortAlphaDown />
-                  <p className="text-xs">Sort A - Z</p>
+                  <p>Sort A - Z</p>
                 </>
               )}
             </div>
@@ -160,12 +195,12 @@ export default function SortModal({ toggleModal, setAnchorEl, anchorEl, handleCl
               <div className="flex items-center">
                 <div className="flex flex-col items-center justify-center -space-y-1">
                   <IoIosArrowUp
-                    className="text-gray-400"
+                    className="text-gray-600"
                     style={{ color: getOrder?.dir == 'asc' ? baseColor : '' }}
                     onClick={() => handleSortFn(activeTaskColumn.header, activeTaskColumn.id, 'asc')}
                   />
                   <IoIosArrowDown
-                    className="text-gray-400"
+                    className="text-gray-600"
                     style={{ color: getOrder?.dir == 'desc' ? baseColor : '' }}
                     onClick={() => handleSortFn(activeTaskColumn.header, activeTaskColumn.id, 'desc')}
                   />
@@ -174,101 +209,44 @@ export default function SortModal({ toggleModal, setAnchorEl, anchorEl, handleCl
             </div>
           </div>
           {/* sort implementation */}
-          <div className="flex items-center justify-between h-8 px-1 text-xs hover:bg-gray-200">
+          <div className="flex items-center justify-between h-8 px-1 hover:bg-gray-200">
             <div className="flex items-center gap-1">
               <AiOutlineBgColors />
               <p>sort by color</p>
             </div>
             {!sortDropDown ? (
-              <AiFillCaretRight className="w-3 h-3 font-bold" onClick={(e) => switchBtns(e, 'sortBtn')} />
+              <IoIosArrowForward className="font-bold text-gray-600" onClick={(e) => switchBtns(e, 'sortBtn')} />
             ) : (
-              <AiFillCaretDown className="w-3 h-3 font-bold" onClick={(e) => switchBtns(e, 'sortBtn')} />
+              <IoIosArrowDown className="font-bold text-gray-600" onClick={(e) => switchBtns(e, 'sortBtn')} />
             )}
           </div>
           <hr />
           {/* filter implementation */}
           {/* <div className="flex flex-col space-y-1 capitalize p"> */}
-          <div className="flex items-center justify-between h-8 px-1 text-xs hover:bg-gray-200">
-            <div className="flex items-center gap-1">
-              <IoIosColorFilter />
-              <span>filter by color</span>
-            </div>
-            {!filterDropDown[0].toggle ? (
-              <AiFillCaretRight className="w-3 h-3 font-bold" onClick={(e) => switchBtns(e, 'color')} />
-            ) : (
-              <AiFillCaretDown className="w-3 h-3 font-bold" onClick={(e) => switchBtns(e, 'color')} />
-            )}
-          </div>
-          <div className="flex items-center justify-between h-8 px-1 text-xs hover:bg-gray-200">
-            <div className="flex items-center gap-1">
-              <RiFilter2Line />
-              <span>filter by condition</span>
-            </div>
-            {!filterDropDown[1].toggle ? (
-              <AiFillCaretRight className="w-3 h-3 font-bold" onClick={(e) => switchBtns(e, 'condition')} />
-            ) : (
-              <AiFillCaretDown className="w-3 h-3 font-bold" onClick={(e) => switchBtns(e, 'condition')} />
-            )}
-          </div>
-          <div className="flex items-center justify-between h-8 px-1 text-xs hover:bg-gray-200">
-            <div className="flex items-center gap-1">
-              <MdOutlineFilter1 />
-              <span>filter by values</span>
-            </div>
-            {!filterDropDown[2].toggle ? (
-              <AiFillCaretRight className="w-3 h-3 font-bold" onClick={(e) => switchBtns(e, 'value')} />
-            ) : (
-              <AiFillCaretDown className="w-3 h-3 font-bold" onClick={(e) => switchBtns(e, 'value')} />
-            )}
-          </div>
-          <hr />
-          <div className="flex items-center justify-between h-8 px-1 text-xs hover:bg-gray-200">
-            <div className="flex items-center gap-1">
-              <HiOutlineSwitchHorizontal />
-              <span>Move Columns</span>
-            </div>
-            {!filterDropDown[0].toggle ? (
-              <AiFillCaretRight className="w-3 h-3 font-bold" onClick={(e) => switchBtns(e, 'color')} />
-            ) : (
-              <AiFillCaretDown className="w-3 h-3 font-bold" onClick={(e) => switchBtns(e, 'color')} />
-            )}
-          </div>
-          <div className="flex items-center justify-between h-8 px-1 text-xs hover:bg-gray-200">
-            <div className="flex items-center gap-1">
-              <TbAlignJustified />
-              <span>Ajust Alignment</span>
-            </div>
-            {!filterDropDown[0].toggle ? (
-              <AiFillCaretRight className="w-3 h-3 font-bold" onClick={(e) => switchBtns(e, 'color')} />
-            ) : (
-              <AiFillCaretDown className="w-3 h-3 font-bold" onClick={(e) => switchBtns(e, 'color')} />
-            )}
-          </div>
-          <hr />
-          <div className="flex items-center justify-between h-8 px-1 text-xs hover:bg-gray-200">
-            <div className="flex items-center gap-1">
-              <MdEditNote />
-              <span>Edit Fields</span>
-            </div>
-          </div>
-          <div className="flex items-center justify-between h-8 px-1 text-xs hover:bg-gray-200">
-            <div className="flex items-center gap-1">
-              <HiOutlineDuplicate />
-              <span>Duplicate</span>
-            </div>
-          </div>
-          <div className="flex items-center justify-between h-8 px-1 text-xs hover:bg-gray-200">
-            <div className="flex items-center gap-1">
-              <BiHide />
-              <span>Hide Columns</span>
-            </div>
-          </div>
-          <div className="flex items-center justify-between h-8 px-1 text-xs text-red-500 hover:bg-gray-200">
-            <div className="flex items-center gap-1">
-              <MdOutlineDeleteForever />
-              <span>Remove From List</span>
-            </div>
-          </div>
+          <>
+            {DropDownOptions.map((item, index) => (
+              <div key={index}>
+                <div className="flex items-center justify-between h-8 px-1 hover:bg-gray-200">
+                  <div className="flex items-center gap-1">
+                    {item.icon}
+                    <span>{item.label}</span>
+                  </div>
+                  {item.showArrow && (
+                    <>
+                      {!filterDropDown[0].toggle ? (
+                        <IoIosArrowForward
+                          className="font-bold text-gray-600"
+                          onClick={(e) => switchBtns(e, 'color')}
+                        />
+                      ) : (
+                        <IoIosArrowDown className="font-bold text-gray-600" onClick={(e) => switchBtns(e, 'color')} />
+                      )}
+                    </>
+                  )}
+                </div>
+              </div>
+            ))}
+          </>
         </div>
       </div>
       {/* </div> */}
