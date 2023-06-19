@@ -52,7 +52,7 @@ export const columnsHead: listColumnProps[] = [
     id: '8',
     field: 'start_date',
     value: 'Start Date',
-    hidden: true
+    hidden: false
   },
   {
     id: '9',
