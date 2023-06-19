@@ -3,46 +3,92 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 import dayjs from 'dayjs';
 
-interface DateObject {
+export interface DateObject {
   currentMonth: boolean;
   date: dayjs.Dayjs;
   today?: boolean;
+  currentWeek?: boolean;
+  isWeekend?: boolean; // New key to indicate if the date is a weekend
+  dayOfWeek?: number;
 }
 
-export const generateDate = (month: number = dayjs().month(), year: number = dayjs().year()): DateObject[] => {
+export const generateDate = (
+  month: number = dayjs().month(),
+  year: number = dayjs().year(),
+  startOfWeek?: dayjs.Dayjs,
+  endOfWeek?: dayjs.Dayjs
+): DateObject[] => {
   const firstDateOfMonth = dayjs().year(year).month(month).startOf('month');
   const lastDateOfMonth = dayjs().year(year).month(month).endOf('month');
+  const currentDate = dayjs();
 
   const arrayOfDate: DateObject[] = [];
 
-  // create prefix date
-  for (let i = 0; i < firstDateOfMonth.day(); i++) {
-    const date = firstDateOfMonth.day(i);
+  // Calculate the start and end of the week
+  const startDate = startOfWeek || firstDateOfMonth.startOf('week');
+  const endDate = endOfWeek || lastDateOfMonth.endOf('week');
 
-    arrayOfDate.push({
-      currentMonth: false,
-      date
-    });
-  }
-
-  // generate current date
-  for (let i = firstDateOfMonth.date(); i <= lastDateOfMonth.date(); i++) {
+  // Add dates from the current month
+  for (let date = startDate; date.isBefore(endDate) || date.isSame(endDate, 'day'); date = date.add(1, 'day')) {
+    const isWeekend = date.day() === 0 || date.day() === 6;
+    const isCurrentWeek = isInCurrentWeek(date, startOfWeek, endOfWeek);
     arrayOfDate.push({
       currentMonth: true,
-      date: firstDateOfMonth.date(i),
-      today: firstDateOfMonth.date(i).toDate().toDateString() === dayjs().toDate().toDateString()
+      date,
+      today: date.toDate().toDateString() === currentDate.toDate().toDateString(),
+      currentWeek: isCurrentWeek,
+      isWeekend,
+      dayOfWeek: date.day()
     });
   }
 
-  const remaining = 42 - arrayOfDate.length;
-
-  for (let i = lastDateOfMonth.date() + 1; i <= lastDateOfMonth.date() + remaining; i++) {
-    arrayOfDate.push({
-      currentMonth: false,
-      date: lastDateOfMonth.date(i)
-    });
-  }
   return arrayOfDate;
+};
+
+const isInCurrentWeek = (date: dayjs.Dayjs, startOfWeek?: dayjs.Dayjs, endOfWeek?: dayjs.Dayjs): boolean => {
+  if (startOfWeek && endOfWeek) {
+    return (
+      date.isSame(startOfWeek, 'day') ||
+      date.isSame(endOfWeek, 'day') ||
+      (date.isAfter(startOfWeek, 'day') && date.isBefore(endOfWeek.add(1, 'day'), 'day'))
+    );
+  }
+
+  // Start of the current week
+  const defaultStartOfWeek = dayjs().startOf('week');
+
+  // End of the current week
+  const defaultEndOfWeek = dayjs().endOf('week');
+
+  return (
+    date.isSame(defaultStartOfWeek, 'day') ||
+    date.isSame(defaultEndOfWeek, 'day') ||
+    (date.isAfter(defaultStartOfWeek, 'day') && date.isBefore(defaultEndOfWeek.add(1, 'day'), 'day'))
+  );
+};
+
+export const groupDatesByDayOfWeek = (
+  dates: DateObject[]
+): {
+  [dayOfWeek: number]: { dates: DateObject[]; additionalData: { currentMonth: boolean } };
+} => {
+  const groupedDates: {
+    [dayOfWeek: number]: { dates: DateObject[]; additionalData: { currentMonth: boolean } };
+  } = {};
+
+  dates.forEach((date) => {
+    const dayOfWeek = date.date.day();
+    if (dayOfWeek in groupedDates) {
+      groupedDates[dayOfWeek].dates.push(date);
+    } else {
+      groupedDates[dayOfWeek] = {
+        dates: [date],
+        additionalData: { currentMonth: date.currentMonth }
+      };
+    }
+  });
+
+  return groupedDates;
 };
 
 export const months: string[] = [
