@@ -14,8 +14,7 @@ import AvatarWithInitials from '../../../avatar/AvatarWithInitials';
 import { SiGooglephotos } from 'react-icons/si';
 import ClipHistory from '../../../../assets/icons/ClipHistory.svg';
 import { setActiveLogTab } from '../../../../features/workspace/workspaceSlice';
-import { HistoryColModal } from './Modals';
-import { SlideButton } from '../../../SlideButton';
+import { HistoryColModal, HistoryfilterModal } from './Modals';
 
 export type componentModals = {
   showHideColModal: boolean;
@@ -30,7 +29,7 @@ export default function History() {
   const { status, getItemHistory } = useGetItemHistory();
   const { activityArray: logs, activeLogTab } = useAppSelector((state) => state.workspace);
   const { pilotSideOver } = useAppSelector((state) => state.slideOver);
-  // console.log(logs);
+  const { HistoryFilterMemory, selectedDate } = useAppSelector((state) => state.task);
 
   const handleClick = (type: 'activity' | 'history') => {
     getItemHistory({ logType: type });
@@ -43,6 +42,37 @@ export default function History() {
 
   return (
     <div className="flex flex-col gap-2">
+      <div className="flex items-center space-x-4 border-b-2 py-1">
+        <div className="w-1/5">
+          <SectionArea label="Logs" icon={<DocumentTextIcon className="w-4 h-4" />} />
+        </div>
+        <div className="relative flex items-center">
+          <input
+            type="text"
+            className="w-64 px-6 text-xs border-gray-400 focus:ring-purple-100 focus:ring focus:outline-none focus:border-0 rounded-2xl h-7"
+            placeholder="Search..."
+          />
+          <BiSearch className="absolute w-4 h-4 left-2" />
+        </div>
+        <div
+          className={
+            selectedDate || HistoryFilterMemory
+              ? 'flex space-x-2 items-center bg-purple-200 h-5 border-purple-500 rounded-lg px-1 relative cursor-pointer'
+              : 'flex space-x-2 items-center bg-gray-200 h-5 border-purple-500 rounded-lg px-1 relative cursor-pointer'
+          }
+          onClick={() => {
+            setShow((prev) => ({ ...prev, filterLogModal: !prev.filterLogModal }));
+          }}
+        >
+          <BsFilter />
+          <span className="capitalize text-xs">filter</span>
+          {showModal.filterLogModal && <HistoryfilterModal logData={logs} toggleFn={setShow} />}
+        </div>
+        <div className="relative">
+          <BsThreeDots onClick={() => setShow((prev) => ({ ...prev, showHideColModal: !prev.showHideColModal }))} />
+          {showModal.showHideColModal && <HistoryColModal model={logs} toggleFn={setShow} />}
+        </div>
+      </div>
       <div className="flex w-full space-x-1">
         <div
           className={`rounded-2xl w-1/2 flex justify-center items-center ${
@@ -59,30 +89,6 @@ export default function History() {
           onClick={() => handleClick('history')}
         >
           <img src={ClipHistory} alt="clipHistory_icon" />
-        </div>
-      </div>
-      <div className="flex items-center space-x-4">
-        <div className="w-1/5">
-          <SectionArea label="Logs" icon={<DocumentTextIcon className="w-4 h-4" />} />
-        </div>
-        <div className="relative flex items-center">
-          <input type="text" className="w-64 px-6 text-xs border-purple-500 rounded-2xl h-7" placeholder="Search..." />
-          <BiSearch className="absolute w-4 h-4 left-2" />
-        </div>
-        <div
-          className="relative flex items-center h-5 px-1 space-x-2 bg-gray-200 border-purple-500 rounded-lg cursor-pointer"
-          onClick={(e) => {
-            setShow((prev) => ({ ...prev, filterLogModal: !prev.filterLogModal }));
-            e.stopPropagation();
-          }}
-        >
-          <BsFilter />
-          <span className="text-xs capitalize">filter</span>
-          {showModal.filterLogModal && <Historyfiltermodal />}
-        </div>
-        <div className="relative">
-          <BsThreeDots onClick={() => setShow((prev) => ({ ...prev, showHideColModal: !prev.showHideColModal }))} />
-          {showModal.showHideColModal && <HistoryColModal model={logs} toggleFn={setShow} />}
         </div>
       </div>
       <div className="relative w-full h-full mt-2">
@@ -123,7 +129,7 @@ export default function History() {
                   return (
                     <tr
                       key={activityLog.id}
-                      className="flex items-center w-full px-1 py-1 space-x-6 border-b-2 border-blueGray-300"
+                      className="flex items-center w-full px-1 py-1 space-x-6 border-b border-t border-blueGray-300"
                     >
                       <td>
                         {user ? (
@@ -161,35 +167,5 @@ export default function History() {
         ) : null}
       </div>
     </div>
-  );
-}
-
-function Historyfiltermodal() {
-  const filterkeys = ['date', 'time', 'user', 'type'];
-  const [checkedStates, setCheckedStates] = useState<boolean[]>([]);
-  const handleChange = (index: number): void => {
-    const newCheckedStates = [...checkedStates];
-    newCheckedStates[index] = !newCheckedStates[index];
-    setCheckedStates(newCheckedStates);
-  };
-  return (
-    <>
-      <div
-        className="absolute z-50 flex flex-col p-2 space-y-2 overflow-auto bg-white rounded-lg shadow-2xl top-5 right-5 w-96 max-h-96"
-        onClick={(e) => {
-          e.stopPropagation(); // Stop event propagation
-        }}
-      >
-        <div className="flex py-3 space-x-2 capitalize border-b-2">Filter by</div>
-        <div className="flex flex-col w-full space-y-2">
-          {filterkeys.map((keys, index) => (
-            <p key={index} className="flex w-1/5 space-x-2 capitalize">
-              <span className="w-1/2">{keys}</span>
-              <SlideButton state={checkedStates} changeFn={handleChange} index={index} />
-            </p>
-          ))}
-        </div>
-      </div>
-    </>
   );
 }

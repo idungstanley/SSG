@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { dimensions } from '../../app/config/dimensions';
 import { IRecorderLastMemory, ITimerLastMemory } from './workspace.interfaces';
 import { IActivityLog } from '../general/history/history.interfaces';
+import dayjs, { Dayjs } from 'dayjs';
 
 const initialActivePlaceId: number | null = (JSON.parse(localStorage.getItem('activePlaceIdLocale') as string) ||
   null) as number | null;
@@ -53,6 +54,7 @@ interface workspaceState {
   activityArray: IActivityLog[];
   logType: 'activity' | 'history';
   activeLogTab: 'activity' | 'history';
+  selectedDate: { date: Dayjs; dateType?: string } | null;
 }
 
 const initialState: workspaceState = {
@@ -101,7 +103,8 @@ const initialState: workspaceState = {
   timerLastMemory: { activeTabId: 0, workSpaceId: '', listId: '', hubId: '' },
   activityArray: [],
   logType: 'activity',
-  activeLogTab: 'activity'
+  activeLogTab: 'activity',
+  selectedDate: { date: dayjs() }
 };
 
 export const wsSlice = createSlice({
@@ -275,6 +278,9 @@ export const wsSlice = createSlice({
     },
     setActiveLogTab(state, action: PayloadAction<'activity' | 'history'>) {
       state.activeLogTab = action.payload;
+    },
+    setSelectedDate(state, action: PayloadAction<{ date: Dayjs; dateType?: string } | null>) {
+      state.selectedDate = action.payload;
     }
   }
 });
@@ -324,7 +330,8 @@ export const {
   resetWorkSpace,
   setActivityArray,
   setLogType,
-  setActiveLogTab
+  setActiveLogTab,
+  setSelectedDate
 } = wsSlice.actions;
 
 export default wsSlice.reducer;
