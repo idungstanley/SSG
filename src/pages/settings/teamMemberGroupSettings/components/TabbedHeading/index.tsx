@@ -1,6 +1,7 @@
 import React, { ReactNode } from 'react';
 import { useParams } from 'react-router-dom';
 import { SectionHeadingWithTabs } from '../../../../../components';
+import { useAppSelector } from '../../../../../app/hooks';
 
 interface TabbedHeadingProps {
   selectedTabKey: string;
@@ -9,6 +10,7 @@ interface TabbedHeadingProps {
 
 function TabbedHeading({ selectedTabKey, actions }: TabbedHeadingProps) {
   const { teamMemberGroupId } = useParams();
+  const { currentWorkspaceId } = useAppSelector((state) => state.auth);
 
   return (
     <SectionHeadingWithTabs
@@ -19,13 +21,13 @@ function TabbedHeading({ selectedTabKey, actions }: TabbedHeadingProps) {
           name: 'General',
           count: null,
           current: selectedTabKey === 'general',
-          href: `/settings/team-members/groups/${teamMemberGroupId}`
+          href: `${currentWorkspaceId}/settings/team-members/groups/${teamMemberGroupId}`
         },
         {
           name: 'Members',
           count: null,
           current: selectedTabKey === 'members',
-          href: `/settings/team-members/groups/${teamMemberGroupId}/members`
+          href: `${currentWorkspaceId}/settings/team-members/groups/${teamMemberGroupId}/members`
         }
       ]}
       actions={actions}
