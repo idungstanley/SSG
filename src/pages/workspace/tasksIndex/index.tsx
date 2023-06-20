@@ -4,7 +4,6 @@ import { setShowPilotSideOver } from '../../../features/general/slideOver/slideO
 import { pilotListConfig } from '../pilot/components/createEntity/createList/pilotConfig';
 import { pilotWalletConfig } from '../pilot/components/createEntity/createWallet/pilotConfig';
 import { pilotHubConfig } from '../pilot/components/createEntity/createHub/pilotConfig';
-import ListNav from '../lists/components/renderlist/ListNav';
 import AdditionalHeader from '../../../layout/components/MainLayout/Header/AdditionHeader';
 import Page from '../../../components/Page';
 import { Header } from '../../../components/TasksHeader';
