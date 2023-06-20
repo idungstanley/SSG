@@ -43,10 +43,8 @@ export function Col({ value, field, fieldId, task, ...props }: ColProps) {
 
   return (
     <td
-      className={cl(
-        COL_BG,
-        'relative flex border-t justify-center items-center text-sm font-medium text-gray-900 h-10'
-      )}
+      className={cl(COL_BG, 'relative flex border-t justify-center items-center text-sm font-medium text-gray-900')}
+      style={{ minHeight: '40px' }}
       {...props}
     >
       {field in fields ? fields[field] : String(value)}

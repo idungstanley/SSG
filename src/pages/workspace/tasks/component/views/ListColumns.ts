@@ -64,7 +64,7 @@ export const columnsHead: listColumnProps[] = [
     id: '10',
     field: 'updated_at',
     value: 'Updated at',
-    hidden: false
+    hidden: true
   },
   {
     id: '11',
