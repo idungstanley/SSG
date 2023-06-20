@@ -570,17 +570,19 @@ export const RemoveWatcherService = ({ query }: { query: (string | null | undefi
 // Assign Checklist Item
 const AssignTask = ({
   taskId,
-  team_member_id
+  team_member_id,
+  teams
 }: {
   taskId: string | null | undefined;
   team_member_id: string | null;
+  teams: boolean;
 }) => {
   const request = requestNew({
-    url: '/assignee/assign',
+    url: teams ? '/group-assignee/assign' : '/assignee/assign',
     method: 'POST',
-    params: {
-      team_member_id: team_member_id,
+    data: {
       id: taskId,
+      ...(teams ? { team_member_group_id: team_member_id } : { team_member_id: team_member_id }),
       type: 'task'
     }
   });

@@ -49,7 +49,7 @@ export interface ICheckListItems {
   id: string;
   name: string;
   is_done: number;
-  assignees: [{ id: string; initials: string; colour: string; name: string; avatar_path: string | null }];
+  assignees: [{ id: string; initials: string; color: string; name: string; avatar_path: string | null }];
   group_assignees: [];
   tags: [];
 }
@@ -67,11 +67,11 @@ export interface ITaskFullList {
   avatar_path: string | null;
   list_id: string;
   parent_id: string | null;
-  priority: string | null | [{ id: string; initials: string; colour: string; name: string }];
+  priority: string | null | [{ id: string; initials: string; color: string; name: string }];
   status: string | null | undefined;
   start_date: string | null;
   end_date: string | null;
-  assignees?: [{ id: string; initials: string; colour: string; name: string; avatar_path: string | null }] | undefined;
+  assignees?: [{ id: string; initials: string; color: string; name: string; avatar_path: string | null }] | undefined;
   group_assignees?: [];
   custom_fields?: ICustomField[];
   tags?: [];
@@ -100,7 +100,7 @@ export interface ITaskFullList {
         name: string;
         parents: IParent;
       }
-    | [{ id: string; initials: string; colour: string; name: string }];
+    | [{ id: string; initials: string; color: string; name: string }];
 }
 
 export interface IGroupingAssignee {
