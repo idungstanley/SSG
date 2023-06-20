@@ -10,16 +10,18 @@ import { useUploadRecording } from '../workspace/workspaceService';
 import { useParams } from 'react-router-dom';
 import { toggleMute } from '../workspace/workspaceSlice';
 
-const addTask = (data: { name: string; id: string; isListParent: boolean }) => {
-  const { name, id, isListParent } = data;
+const addTask = (data: { name: string; id: string; isListParent: boolean; status?: string }) => {
+  const { name, id, isListParent, status } = data;
 
   const parentId = isListParent ? { list_id: id } : { parent_id: id };
+  const statusData = status ? status : 'todo';
 
   const response = requestNew({
     url: 'tasks',
     method: 'POST',
     data: {
       name,
+      status: statusData,
       ...parentId
     }
   });
@@ -35,7 +37,8 @@ export const useAddTask = (parentTaskId?: string) => {
 
   return useMutation(addTask, {
     onSuccess: () => {
-      queryClient.invalidateQueries(['task', id, type]);
+      // queryClient.invalidateQueries(['task', id, type]);
+      queryClient.invalidateQueries(['task']);
       queryClient.invalidateQueries(['sub-tasks', parentTaskId]);
     }
   });
