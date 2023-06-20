@@ -15,6 +15,8 @@ export default function TeamMemberGroupsPage() {
   const { teamMemberGroupsPaginationPage } = useAppSelector((state) => state.teamMemberGroup);
   const { status, data } = useGetTeamMemberGroups(teamMemberGroupsPaginationPage);
 
+  const { currentWorkspaceId } = useAppSelector((state) => state.auth);
+
   return (
     <>
       <div className="h-full flex-1 flex flex-col overflow-hidden bg-gray-50">
@@ -22,12 +24,12 @@ export default function TeamMemberGroupsPage() {
           pages={[
             {
               name: 'Team members',
-              href: '/settings/team-members',
+              href: `${currentWorkspaceId}/settings/team-members`,
               current: false
             },
             {
               name: 'Groups',
-              href: '/settings/team-members/groups',
+              href: `${currentWorkspaceId}/settings/team-members/groups`,
               current: true
             }
           ]}
