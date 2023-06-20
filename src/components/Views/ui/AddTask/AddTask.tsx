@@ -3,6 +3,8 @@ import { useAddTask } from '../../../../features/task/taskService';
 import { cl } from '../../../../utils';
 import { Column } from '../../types/table';
 import Assignee from '../../../../pages/workspace/tasks/assignTask/Assignee';
+import FaRegFloppyDisk from 'react-icons/fa';
+import { CiFloppyDisk } from 'react-icons/ci';
 
 interface AddTaskFieldProps {
   onClose: VoidFunction;
@@ -43,17 +45,21 @@ export function AddTask({ onClose, paddingLeft, parentId, status, isListParent, 
             minLength={2}
             type="text"
             autoFocus
+            onKeyDown={(e) => (e.key === 'Enter' ? onClickSave() : null)}
             placeholder="Enter task name"
             className="border-transparent text-sm appearance-none focus:border-transparent focus:ring-0 flex-grow"
           />
         </div>
 
-        <div className="absolute right-4 flex space-x-2">
+        <div className="absolute right-4 flex items-center space-x-2">
           <p>
             {/* <img src={unassignedIcon} alt="" /> */}
             <Assignee option="task" />
           </p>
-          <Button onClick={onClickSave} primary label="Save" />
+          <p>
+            <CiFloppyDisk onClick={onClickSave} className="h-8 w-8" />
+          </p>
+          {/* <Button onClick={onClickSave} primary label="Save" /> */}
           <Button onClick={onClose} label="Cancel" />
         </div>
       </td>
