@@ -52,6 +52,9 @@
 .dBlock:hover .dNone {
   display: block;
 }
+.dFlex:hover .viewSettings {
+  display: flex;
+}
 
 .viewSettings {
   display: none;

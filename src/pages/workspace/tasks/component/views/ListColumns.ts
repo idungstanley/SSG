@@ -34,7 +34,7 @@ export const columnsHead: listColumnProps[] = [
     id: '5',
     field: 'created_at',
     value: 'Created at',
-    hidden: false
+    hidden: true
   },
   {
     id: '6',
@@ -52,13 +52,13 @@ export const columnsHead: listColumnProps[] = [
     id: '8',
     field: 'start_date',
     value: 'Start Date',
-    hidden: false
+    hidden: true
   },
   {
     id: '9',
     field: 'end_date',
     value: 'End Date',
-    hidden: false
+    hidden: true
   },
   {
     id: '10',

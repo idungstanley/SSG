@@ -2,16 +2,18 @@ import { useRef } from 'react';
 import { useAddTask } from '../../../../features/task/taskService';
 import { cl } from '../../../../utils';
 import { Column } from '../../types/table';
+import Assignee from '../../../../pages/workspace/tasks/assignTask/Assignee';
 
 interface AddTaskFieldProps {
   onClose: VoidFunction;
   parentId: string;
+  status?: string;
   paddingLeft?: number;
   isListParent?: boolean;
   columns?: Column[];
 }
 
-export function AddTask({ onClose, paddingLeft, parentId, isListParent, columns }: AddTaskFieldProps) {
+export function AddTask({ onClose, paddingLeft, parentId, status, isListParent, columns }: AddTaskFieldProps) {
   const nameRef = useRef<HTMLInputElement>(null);
   const { mutate: onAdd } = useAddTask(parentId);
 
@@ -21,6 +23,7 @@ export function AddTask({ onClose, paddingLeft, parentId, isListParent, columns 
 
       onAdd({
         name,
+        status,
         isListParent: !!isListParent,
         id: parentId
       });
@@ -44,7 +47,12 @@ export function AddTask({ onClose, paddingLeft, parentId, isListParent, columns 
             className="border-transparent text-sm appearance-none focus:border-transparent focus:ring-0 flex-grow"
           />
         </div>
+
         <div className="absolute right-4 flex space-x-2">
+          <p>
+            {/* <img src={unassignedIcon} alt="" /> */}
+            <Assignee option="task" />
+          </p>
           <Button onClick={onClickSave} primary label="Save" />
           <Button onClick={onClose} label="Cancel" />
         </div>
