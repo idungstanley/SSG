@@ -29,6 +29,7 @@ export default function SubDropdown() {
   const navigate = useNavigate();
   const { showMenuDropdownType, showMenuDropdown, SubMenuType, SubMenuId } = useAppSelector((state) => state.hub);
   const { currentWorkspaceId } = useAppSelector((state) => state.auth);
+  const navLink = navLink;
 
   const {
     showCreateSubWalletSlideOver,
@@ -112,13 +113,13 @@ export default function SubDropdown() {
           dispatch(setCreateListSlideOverVisibility(false));
           dispatch(setCreateTaskSlideOverVisibility(false));
           dispatch(setCreateWalletSlideOverVisibility(true));
-          navigate(`/${currentWorkspaceId}` + '/tasks');
+          navigate(`/${currentWorkspaceId}` + navLink);
         } else {
           dispatch(setCreateHubSlideOverVisibility(false));
           dispatch(setCreateListSlideOverVisibility(false));
           dispatch(setCreateTaskSlideOverVisibility(false));
           dispatch(setCreateSubWalletSlideOverVisibility(true));
-          navigate(`/${currentWorkspaceId}` + '/tasks');
+          navigate(`/${currentWorkspaceId}` + navLink);
         }
       },
       icon: <FaFolder className="w-4 h-4" aria-hidden="true" />,
@@ -135,7 +136,7 @@ export default function SubDropdown() {
         dispatch(setCreateListSlideOverVisibility(false));
         dispatch(setCreateWalletSlideOverVisibility(false));
         dispatch(setCreateTaskSlideOverVisibility(true));
-        navigate(`/${currentWorkspaceId}` + '/tasks');
+        navigate(`/${currentWorkspaceId}` + navLink);
       },
       icon: <PlusIcon className="w-5 pt-2 text-gray-700 h-7" aria-hidden="true" />,
       isVisible: showMenuDropdownType == 'list' ? true : false
@@ -149,7 +150,7 @@ export default function SubDropdown() {
         dispatch(setCreateTaskSlideOverVisibility(false));
         dispatch(setCreateListSlideOverVisibility(true));
 
-        navigate(`/${currentWorkspaceId}` + '/tasks');
+        navigate(`/${currentWorkspaceId}` + navLink);
       },
       icon: <AiOutlineUnorderedList className="w-4 h-4" aria-hidden="true" />,
       isVisible: showMenuDropdownType === 'list' ? false : true
