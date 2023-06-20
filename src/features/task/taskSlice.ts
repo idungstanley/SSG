@@ -5,7 +5,7 @@ import { IField } from '../list/list.interfaces';
 import { IDuration, IHistoryFilterMemory, IParent, ISelectedDate, TaskKey } from './interface.tasks';
 import { SortOption } from '../../pages/workspace/tasks/component/views/listLevel/TaskListViews';
 import RecordRTC from 'recordrtc';
-import { FilterValue } from '../../components/TasksHeader/ui/Filter/types/filters';
+import { FilterWithId } from '../../components/TasksHeader/ui/Filter/types/filters';
 
 export interface ICustomField {
   id: string;
@@ -26,12 +26,6 @@ export interface ActiveTaskColumnProps {
   header: string;
 }
 
-export interface tagItem {
-  id: string;
-  name: string;
-  color: string;
-}
-
 export interface ImyTaskData {
   id: string;
   name: string;
@@ -48,13 +42,7 @@ export interface ImyTaskData {
   archived_at?: string | null;
   deleted_at?: string | null;
   custom_fields: ICustomField[];
-  [key: string]:
-    | ICustomField[]
-    | string
-    | number
-    | undefined
-    | null
-    | [{ id: string; initials: string; colour: string; name: string }];
+  list?: { id: string; name: string; parent: IParent };
 }
 
 export interface ImyTaskData2 {
@@ -146,7 +134,7 @@ interface TaskState {
   assigneeIds: string[];
   selectedDate: ISelectedDate | null;
   HistoryFilterMemory: IHistoryFilterMemory | null;
-  filters: FilterValue[];
+  filters: FilterWithId[];
 }
 
 const initialState: TaskState = {
@@ -215,7 +203,7 @@ export const taskSlice = createSlice({
   name: 'task',
   initialState,
   reducers: {
-    setFilters(state, action: PayloadAction<FilterValue[]>) {
+    setFilters(state, action: PayloadAction<FilterWithId[]>) {
       state.filters = action.payload;
     },
     setAssigneeIds(state, action: PayloadAction<string[]>) {
@@ -435,7 +423,7 @@ export const taskSlice = createSlice({
     setTimerInterval(state, action: PayloadAction<number | undefined>) {
       state.period = action.payload;
     },
-    setTaskSelectedDate(state, action: PayloadAction<ISelectedDate | null>) {
+    setTaskSelectedDate(state, action: PayloadAction<ISelectedDate>) {
       state.selectedDate = action.payload;
     },
     setHistoryMemory(state, action: PayloadAction<IHistoryFilterMemory>) {

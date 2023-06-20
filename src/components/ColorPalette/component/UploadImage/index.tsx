@@ -37,7 +37,7 @@ export default function UploadImage({ invalidateQuery, endpoint }: UploadFileMod
       }
     })
       .use(XHRUpload, {
-        metaFields: ['image', 'path'],
+        allowedMetaFields: ['image', 'path'],
         endpoint: '',
         bundle: false,
         headers: currentWorkspaceId
@@ -50,6 +50,7 @@ export default function UploadImage({ invalidateQuery, endpoint }: UploadFileMod
         formData: true,
         fieldName: 'image'
       })
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       .use(Webcam, {
         mirror: true,
         facingMode: 'user',
@@ -82,6 +83,7 @@ export default function UploadImage({ invalidateQuery, endpoint }: UploadFileMod
 
   return (
     <DashboardModal
+      id={String(Date.now())}
       uppy={uppy}
       closeModalOnClickOutside
       proudlyDisplayPoweredByUppy={false}

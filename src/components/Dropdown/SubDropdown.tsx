@@ -13,6 +13,7 @@ import {
   setCreateWalletSlideOverVisibility
 } from '../../features/general/slideOver/slideOverSlice';
 import { getSubMenu } from '../../features/hubs/hubSlice';
+import { useGetHubChildren } from '../../features/hubs/hubService';
 
 interface itemsType {
   id: number;
@@ -25,6 +26,13 @@ interface itemsType {
 export default function SubDropdown() {
   const dispatch = useDispatch();
   const { showMenuDropdownType, showMenuDropdown, SubMenuType, SubMenuId } = useAppSelector((state) => state.hub);
+
+  const { data } = useGetHubChildren({
+    query: SubMenuId,
+    enabled: showMenuDropdownType === 'hubs' || SubMenuType === 'hubs'
+  });
+
+  const isCreateWalletAndListAllowed = data?.data.hubs.length === 0;
 
   const {
     showCreateSubWalletSlideOver,
@@ -111,9 +119,10 @@ export default function SubDropdown() {
       },
       icon: <FaFolder className="w-4 h-4" aria-hidden="true" />,
       isVisible:
-        showMenuDropdownType == 'list' || showMenuDropdownType == 'subwallet3' || SubMenuType === 'subwallet3'
+        isCreateWalletAndListAllowed &&
+        (showMenuDropdownType == 'list' || showMenuDropdownType == 'subwallet3' || SubMenuType === 'subwallet3'
           ? false
-          : true
+          : true)
     },
     {
       id: 3,
@@ -131,7 +140,7 @@ export default function SubDropdown() {
         dispatch(setCreateListSlideOverVisibility(true));
       },
       icon: <AiOutlineUnorderedList className="w-4 h-4" aria-hidden="true" />,
-      isVisible: showMenuDropdownType === 'list' ? false : true
+      isVisible: showMenuDropdownType === 'list' ? false : true && isCreateWalletAndListAllowed
     },
     {
       id: 5,

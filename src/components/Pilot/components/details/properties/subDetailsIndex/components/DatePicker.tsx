@@ -1,25 +1,36 @@
-import dayjs from 'dayjs';
+import dayjs, { Dayjs } from 'dayjs';
 import React, { useState } from 'react';
 import { generateDate, months } from './calendar';
 import cn from './cn';
 import { GrFormNext, GrFormPrevious } from 'react-icons/gr';
 import { MdOutlineDateRange } from 'react-icons/md';
 
-export default function DatePicker() {
+interface DatePickerProps {
+  initialDate?: string;
+  onChange?: (i: string) => void;
+}
+
+export default function DatePicker({ initialDate, onChange }: DatePickerProps) {
   const days = ['SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA'];
   const currentDate = dayjs();
-  const [today, setToday] = useState(currentDate);
+  const [today, setToday] = useState(initialDate ? dayjs(initialDate) : currentDate);
   const [selectDate, setSelectDate] = useState(currentDate);
+
+  const handleChangeDate = (date: Dayjs) => {
+    setSelectDate(date);
+    onChange ? onChange(date.format('YYYY-MM-DD')) : null;
+  };
+
   return (
     <section
-      className="absolute z-50 w-5/6 mt-1 origin-top-right bg-white rounded-md shadow-lg  ring-1 ring-black ring-opacity-5 focus:outline-none right-14 bottom-2"
+      className="absolute top-10 z-50 mt-1 origin-top-right bg-white rounded-md shadow-lg  ring-1 ring-black ring-opacity-5 focus:outline-none right-0 bottom-2"
       style={{ height: '280px' }}
     >
       <div className="flex items-center justify-start w-full h-10 p-2 space-x-2 border border-gray-200">
         <MdOutlineDateRange className="w-4 h-4 font-light" />
         <p className="font-semibold">{selectDate.toDate().toDateString()}</p>
       </div>
-      <div className="flex items-center justify-center px-3" style={{ height: '250px' }}>
+      <div className="flex items-center justify-center px-3 bg-white" style={{ height: '250px' }}>
         <div className="w-40 pt-1 space-y-2 border-r border-gray-200" style={{ height: '250px', fontSize: '12px' }}>
           <p className="px-1 font-semibold rounded-md hover:bg-gray-200">Today </p>
           <p className="px-1 font-semibold rounded-md hover:bg-gray-200">Later</p>
@@ -30,7 +41,7 @@ export default function DatePicker() {
           <p className="px-1 font-semibold rounded-md hover:bg-gray-200">2 Weeks</p>
           <p className="px-1 font-semibold rounded-md hover:bg-gray-200">4 Weeks</p>
         </div>
-        <div className="p-2" style={{ height: '280px' }}>
+        <div className="p-2 bg-white" style={{ height: '280px' }}>
           <div className="flex items-center justify-between">
             <h1 className="select-none" style={{ fontSize: '14px', fontWeight: '500' }}>
               {months[today.month()]}, {today.year()}
@@ -71,7 +82,7 @@ export default function DatePicker() {
             })}
           </div>
 
-          <div className="grid h-10 grid-cols-7 ">
+          <div className="grid h-10 grid-cols-7 bg-white">
             {generateDate(today.month(), today.year()).map(({ date, currentMonth, today }, index) => {
               return (
                 <div key={index} className="text-center grid place-content-center text-sm border-t p-0.5">
@@ -84,9 +95,7 @@ export default function DatePicker() {
                         : '',
                       'h-5 w-5 rounded-full grid place-content-center hover:bg-purple-300 hover:text-white transition-all cursor-pointer select-none'
                     )}
-                    onClick={() => {
-                      setSelectDate(date);
-                    }}
+                    onClick={() => handleChangeDate(date)}
                   >
                     {date.date()}
                   </h1>

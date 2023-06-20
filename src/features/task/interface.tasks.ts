@@ -62,16 +62,16 @@ export interface ICheckListRes {
 
 export type TagId = string;
 
-export type TaskId = string;
-
 export interface Tag {
   id: TagId;
   color: string;
   name: string;
 }
 
+export type TaskId = string;
+
 export interface ITaskFullList {
-  id: string;
+  id: TaskId;
   name: string;
   description: string | null;
   avatar_path: string | null;
@@ -84,7 +84,7 @@ export interface ITaskFullList {
   assignees?: [{ id: string; initials: string; colour: string; name: string; avatar_path: string | null }] | undefined;
   group_assignees?: [];
   custom_fields?: ICustomField[];
-  tags?: [];
+  tags: Tag[];
   updated_at: string;
   created_at: string;
   archived_at: string | null;
@@ -96,21 +96,6 @@ export interface ITaskFullList {
     name: string;
     parents: IParent;
   };
-
-  [key: string]:
-    | string
-    | number
-    | undefined
-    | null
-    | []
-    | ICustomField[]
-    | ICheckListRes[]
-    | {
-        id: string;
-        name: string;
-        parents: IParent;
-      }
-    | [{ id: string; initials: string; colour: string; name: string }];
 }
 
 export interface IGroupingAssignee {
@@ -209,4 +194,10 @@ export type Task = ImyTaskData | ITaskFullList;
 
 export type TaskValue = ValueOf<Task>;
 
-export type TaskKey = keyof Pick<Task, 'status' | 'priority' | 'assignees'>;
+export type TaskKey = keyof Pick<
+  ITaskFullList,
+  'status' | 'priority' | 'assignees' | 'tags' | 'start_date' | 'end_date' | 'created_at'
+>;
+
+// remove this
+export type TaskKeyof = keyof Task;

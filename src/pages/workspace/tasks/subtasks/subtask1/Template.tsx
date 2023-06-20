@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux';
 import { ImyTaskData, setCurrentParentSubTaskId } from '../../../../../features/task/taskSlice';
 import { useAppSelector } from '../../../../../app/hooks';
 import DataRenderFunc from '../../component/taskData/DataRenderFunc';
+import { TaskKeyof } from '../../../../../features/task/interface.tasks';
 
 interface TemplateProps {
   task: ImyTaskData;
@@ -44,7 +45,7 @@ export default function Template({ task }: TemplateProps) {
                     !col.hidden && (
                       <div key={col.id} className="flex items-center capitalize ml-2 text-xs font-medium  group">
                         <DataRenderFunc
-                          taskColField={task[col.field]}
+                          taskColField={task[col.field as TaskKeyof]}
                           col={{ field: col.field, id: col.id }}
                           task={task}
                           getSubTaskId={showSubTask}
@@ -59,7 +60,7 @@ export default function Template({ task }: TemplateProps) {
                     !col.hidden && (
                       <div key={col.id} className="flex items-center capitalize ml-2 text-xs font-medium  group">
                         <DataRenderFunc
-                          taskColField={task[col.field]}
+                          taskColField={task[col.field as TaskKeyof]}
                           col={{ field: col.field, id: col.id }}
                           task={task}
                           getSubTaskId={showSubTask}
@@ -77,7 +78,7 @@ export default function Template({ task }: TemplateProps) {
                     !col.hidden && (
                       <div key={col.id} className="flex items-center capitalize text-xs font-medium  group">
                         <DataRenderFunc
-                          taskColField={task[col.field]}
+                          taskColField={task[col.field as TaskKeyof]}
                           col={{ field: col.field, id: col.id }}
                           task={task}
                           getSubTaskId={showSubTask}
@@ -92,7 +93,7 @@ export default function Template({ task }: TemplateProps) {
                     !col.hidden && (
                       <div key={col.id} className="flex items-center capitalize ml-2 text-xs font-medium  group">
                         <DataRenderFunc
-                          taskColField={task[col.field]}
+                          taskColField={task[col.field as TaskKeyof]}
                           col={{ field: col.field, id: col.id }}
                           task={task}
                           getSubTaskId={showSubTask}
@@ -116,7 +117,7 @@ export default function Template({ task }: TemplateProps) {
                       style={{ width: '50px' }}
                     >
                       <DataRenderFunc
-                        taskColField={task[col.field]}
+                        taskColField={task[col.field as TaskKeyof]}
                         col={{ field: col.field, id: col.id }}
                         task={task}
                         getSubTaskId={showSubTask}
@@ -136,7 +137,7 @@ export default function Template({ task }: TemplateProps) {
                       style={{ width: '50px' }}
                     >
                       <DataRenderFunc
-                        taskColField={task[col.field]}
+                        taskColField={task[col.field as TaskKeyof]}
                         col={{ field: col.field, id: col.id }}
                         task={task}
                         getSubTaskId={showSubTask}

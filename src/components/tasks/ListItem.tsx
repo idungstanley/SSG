@@ -12,6 +12,8 @@ import { setActiveEntity, setActiveEntityName, setActiveItem } from '../../featu
 import Palette from '../ColorPalette';
 import ListIconSelection from '../ColorPalette/component/ListIconSelection';
 import ListIconComponent from '../ItemsListInSidebar/components/ListIconComponent';
+import { useDroppable } from '@dnd-kit/core';
+import { cl } from '../../utils';
 
 interface ListItemProps {
   list: {
@@ -94,12 +96,19 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
     dispatch(setListPaletteColor(list?.color === null ? { innerColour: 'white', outerColour: 'black' } : color));
   };
 
+  const { isOver, setNodeRef } = useDroppable({
+    id: list.id
+  });
+
   return (
     <>
       <section
-        className={`relative flex items-center justify-between group ${
-          list.id === activeItemId ? 'font-medium' : 'hover:bg-gray-100'
-        }`}
+        className={cl(
+          'relative flex items-center justify-between h-8 group',
+          list.id === activeItemId ? 'font-medium' : 'hover:bg-gray-100',
+          isOver ? 'bg-primary-100 border-primary-500 shadow-inner shadow-primary-300' : ''
+        )}
+        ref={setNodeRef}
         style={{
           paddingLeft: `${paddingLeft}px`,
           height: '30px',

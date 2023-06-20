@@ -53,6 +53,7 @@ export default function GroupByStatusTemplate({ filteredTaskData }: ITaskTemplat
               | null
               | undefined;
             key?: string;
+            list?: string[];
             tasksByStatus: {
               [key: string]: ImyTaskData[];
             };
@@ -64,9 +65,9 @@ export default function GroupByStatusTemplate({ filteredTaskData }: ITaskTemplat
         const status = currentTask.status;
 
         if (status !== null && status !== undefined) {
-          if (!GroupedTaskByListID[listId]) {
+          if (!GroupedTaskByListID[listId] && 'list' in currentTask) {
             GroupedTaskByListID[listId] = {
-              groupListName: currentTask?.list,
+              groupListName: currentTask?.list?.name,
               key: listId,
               tasksByStatus: {}
             };

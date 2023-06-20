@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { useAppDispatch } from '../../../../app/hooks';
+import { DragOverlay } from '@dnd-kit/core';
+import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { Task } from '../../../../features/task/interface.tasks';
 import { setUpdateCords } from '../../../../features/task/taskSlice';
 import { useScroll } from '../../../../hooks/useScroll';
@@ -8,8 +9,9 @@ import { MAX_COL_WIDTH, MIN_COL_WIDTH } from '../../config';
 import { generateGrid } from '../../lib';
 import { createHeaders } from '../../lib/tableHeadUtils';
 import { AddTask } from '../AddTask/AddTask';
-import CustomScrollbar from '../List/CustomScroll';
+import { ScrollableContainer } from '../../../ScrollableContainer/ScrollableContainer';
 import { Head } from './Head/Head';
+import { OverlayRow } from './OverlayRow';
 import { Row } from './Row';
 
 interface TableProps {
@@ -27,6 +29,7 @@ export function Table({ heads, data, label }: TableProps) {
   const [collapseTasks, setCollapseTasks] = useState(false);
   const taskLength = data.length;
   const columns = createHeaders(heads).filter((i) => !i.hidden);
+  const { draggableTaskId } = useAppSelector((state) => state.list);
 
   const mouseMove = useCallback(
     (e: MouseEvent) => {
@@ -96,8 +99,17 @@ export function Table({ heads, data, label }: TableProps) {
 
   const onScroll = useScroll(() => dispatch(setUpdateCords()));
 
+  const draggableItem = draggableTaskId ? data.find((i) => i.id === draggableTaskId) : null;
+
   return (
-    <CustomScrollbar>
+    <ScrollableContainer onScroll={onScroll}>
+      {/* draggable item */}
+      {draggableItem ? (
+        <DragOverlay>
+          <OverlayRow columns={columns} task={draggableItem} />
+        </DragOverlay>
+      ) : null}
+
       <table
         onScroll={onScroll}
         style={
@@ -124,9 +136,11 @@ export function Table({ heads, data, label }: TableProps) {
         {/* rows */}
         {!collapseTasks ? (
           <tbody className="contents">
-            {data.map((i) => (
-              <Row columns={columns} task={i} key={i.id} />
-            ))}
+            {data.length > 0 ? (
+              data.map((i) => ('tags' in i ? <Row columns={columns} task={i} key={i.id} /> : null))
+            ) : (
+              <h1 className="p-5 text-center">No tasks</h1>
+            )}
 
             {/* add task field */}
 
@@ -147,13 +161,13 @@ export function Table({ heads, data, label }: TableProps) {
           <div className="h-5">
             <button
               onClick={() => setShowNewTaskField(true)}
-              className="absolute left-0 p-1.5 pl-12 text-left w-fit text-xs "
+              className="absolute left-0 p-1.5 pl-16 text-left w-fit text-xs"
             >
               + New Task
             </button>
           </div>
         ) : null}
       </table>
-    </CustomScrollbar>
+    </ScrollableContainer>
   );
 }

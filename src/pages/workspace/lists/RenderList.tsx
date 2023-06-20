@@ -13,13 +13,10 @@ import hubIcon from '../../../assets/branding/hub.png';
 import SubTask from '../tasks/subtasks/create/SubTask';
 import RenderSubTasks from '../tasks/subtasks/subtask1/RenderSubTasks';
 import ListFilter from './components/renderlist/listDetails/ListFilter';
-import Board from '../tasks/component/views/listLevel/TaskBoardView';
-import TaskTableView from '../tasks/component/views/listLevel/TaskTableView';
 import PageWrapper from '../../../components/Page';
 import PilotSection, { pilotConfig } from './components/PilotSection';
 import TaskCalenderTemplate from '../tasks/component/views/hubLevel/TaskCalenderTemplate';
 import FilterByAssigneesSliderOver from './components/renderlist/filters/FilterByAssigneesSliderOver';
-import { ITaskFullList } from '../../../features/task/interface.tasks';
 import { UseGetListDetails } from '../../../features/list/listService';
 import { setActiveEntityName, setActiveItem } from '../../../features/workspace/workspaceSlice';
 import TaskMapTemplate from '../tasks/component/views/hubLevel/TaskMapTemplate';
@@ -30,10 +27,7 @@ function RenderList() {
   const dispatch = useDispatch();
   const { listId } = useParams();
   const {
-    // myTaskData,
-    tableView,
     listView,
-    boardView,
     calenderView,
     mapView,
     addNewTaskItem,
@@ -44,11 +38,7 @@ function RenderList() {
   } = useAppSelector((state) => state.task);
   const { activeEntityName } = useAppSelector((state) => state.workspace);
 
-  const { pilotSideOver } = useAppSelector((state) => state.slideOver);
-
   const containerRef = useRef<HTMLDivElement>(null);
-
-  const { show } = pilotSideOver;
 
   const {
     data: listDetailsData, // isFetching,
@@ -114,7 +104,7 @@ function RenderList() {
           </section>
         }
         extendedBar={extendedObj}
-        additional={<FilterByAssigneesSliderOver data={paginatedTaskData as ITaskFullList[]} />}
+        additional={<FilterByAssigneesSliderOver />}
       >
         <>
           {listView && (
@@ -132,15 +122,15 @@ function RenderList() {
             {listView && <TaskQuickAction listDetailsData={activeEntityName} />}
 
             {/* task list logic */}
-            {tableView && closeTaskListView && <TaskTableView tasks={paginatedTaskData} />}
+            {/* {tableView && closeTaskListView && <TaskTableView tasks={paginatedTaskData} />} */}
 
             {/* BoardView */}
-            {boardView && <ListFilter />}
+            {/* {boardView && <ListFilter />}
             {boardView && (
               <div className={`" ml-10" ${show === false ? 'fgoverflow2' : 'fgoverflow'}`}>
                 {<Board tasks={paginatedTaskData} />}
               </div>
-            )}
+            )} */}
 
             {/* card */}
             <ul className="relative pl-6">

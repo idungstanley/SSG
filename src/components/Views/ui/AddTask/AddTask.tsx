@@ -10,7 +10,7 @@ interface AddTaskFieldProps {
   status?: string;
   paddingLeft?: number;
   isListParent?: boolean;
-  columns?: Column[];
+  columns: Column[];
 }
 
 export function AddTask({ onClose, paddingLeft, parentId, status, isListParent, columns }: AddTaskFieldProps) {
