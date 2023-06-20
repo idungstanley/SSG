@@ -6,6 +6,8 @@ import { setSelectedDate } from '../../features/workspace/workspaceSlice';
 import { setHistoryMemory, setTaskSelectedDate } from '../../features/task/taskSlice';
 import { BsCalendarEvent } from 'react-icons/bs';
 import dayjs from 'dayjs';
+import { createDynamicTimeComponent } from '../Pilot/components/details/properties/subDetailsIndex/components/calendar';
+import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 
 interface DatePickerManualDatesProps {
   range?: boolean;
@@ -54,20 +56,57 @@ export function DatePickerManualDates({ range }: DatePickerManualDatesProps) {
               onBlur={() => handleFilterDateDispatch('start')}
             />
             {selectedDate?.date && selectedDate.dateType === 'from' ? (
-              <input
-                type="time"
-                name="time"
-                value={HistoryFilterMemory?.time?.from ?? undefined}
-                className="w-24 h-3 rounded-lg text-xs border-purple-400"
-                onChange={(e) => {
-                  dispatch(
-                    setHistoryMemory({
-                      ...HistoryFilterMemory,
-                      time: { ...HistoryFilterMemory?.time, from: e.target.value }
-                    })
-                  );
-                }}
-              />
+              // <select
+              //   name=""
+              //   id=""
+              //   className="w-28 h-7 border-none rounded-md custom-select"
+              //   style={{ fontSize: '10px' }}
+              //   onChange={(e) => {
+              //     dispatch(
+              //       setHistoryMemory({
+              //         ...HistoryFilterMemory,
+              //         time: { ...HistoryFilterMemory?.time, from: e.target.value }
+              //       })
+              //     );
+              //   }}
+              // >
+              //   {createDynamicTimeComponent(15).map((timeEntries, index) => {
+              //     return (
+              //       <option key={index} value={timeEntries} className="text-xs">
+              //         {timeEntries}
+              //       </option>
+              //     );
+              //   })}
+              // </select>
+
+              <FormControl fullWidth>
+                <Select
+                  value={HistoryFilterMemory?.time?.from || ''}
+                  className="h-5"
+                  sx={{ width: '90%' }}
+                  onChange={(e) => {
+                    dispatch(
+                      setHistoryMemory({
+                        ...HistoryFilterMemory,
+                        time: { ...HistoryFilterMemory?.time, from: e.target.value }
+                      })
+                    );
+                  }}
+                  displayEmpty
+                  inputProps={{ 'aria-label': 'Without label' }}
+                >
+                  <MenuItem value="">
+                    <span style={{ fontSize: '10px' }}>Select Time</span>
+                  </MenuItem>
+                  {createDynamicTimeComponent(15).map((timeEntry, index) => {
+                    return (
+                      <MenuItem key={index} value={timeEntry}>
+                        <span style={{ fontSize: '10px' }}>{timeEntry}</span>
+                      </MenuItem>
+                    );
+                  })}
+                </Select>
+              </FormControl>
             ) : (
               (HistoryFilterMemory?.time?.from && `@${HistoryFilterMemory?.time?.from}`) ?? undefined
             )}
@@ -85,20 +124,34 @@ export function DatePickerManualDates({ range }: DatePickerManualDatesProps) {
               onBlur={() => handleFilterDateDispatch('due')}
             />
             {selectedDate?.date && selectedDate?.dateType === 'to' ? (
-              <input
-                type="time"
-                name="time"
-                value={HistoryFilterMemory?.time?.to ?? undefined}
-                className="w-24 h-5 rounded-lg text-xs border-purple-400"
-                onChange={(e) => {
-                  dispatch(
-                    setHistoryMemory({
-                      ...HistoryFilterMemory,
-                      time: { ...HistoryFilterMemory?.time, to: e.target.value }
-                    })
-                  );
-                }}
-              />
+              <FormControl fullWidth>
+                <Select
+                  value={HistoryFilterMemory?.time?.from || ''}
+                  className="h-5"
+                  sx={{ width: '90%' }}
+                  onChange={(e) => {
+                    dispatch(
+                      setHistoryMemory({
+                        ...HistoryFilterMemory,
+                        time: { ...HistoryFilterMemory?.time, to: e.target.value }
+                      })
+                    );
+                  }}
+                  displayEmpty
+                  inputProps={{ 'aria-label': 'Without label' }}
+                >
+                  <MenuItem value="">
+                    <span style={{ fontSize: '10px' }}>Select Time</span>
+                  </MenuItem>
+                  {createDynamicTimeComponent(15).map((timeEntry, index) => {
+                    return (
+                      <MenuItem key={index} value={timeEntry}>
+                        <span style={{ fontSize: '10px' }}>{timeEntry}</span>
+                      </MenuItem>
+                    );
+                  })}
+                </Select>
+              </FormControl>
             ) : (
               (HistoryFilterMemory?.time?.to && `@${HistoryFilterMemory?.time?.to}`) ?? undefined
             )}
