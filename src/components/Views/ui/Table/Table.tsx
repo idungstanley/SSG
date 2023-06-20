@@ -128,12 +128,14 @@ export function Table({ heads, data, label }: TableProps) {
               <Row columns={columns} task={i} key={i.id} />
             ))}
 
-            {/* add subtask field */}
+            {/* add task field */}
+
             {showNewTaskField ? (
               <AddTask
                 columns={columns.slice(1)}
                 parentId={data[0].list_id}
                 isListParent
+                status={label}
                 onClose={() => setShowNewTaskField(false)}
               />
             ) : null}

@@ -1,7 +1,12 @@
 import dayjs, { Dayjs } from 'dayjs';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { setHistoryMemory, setTaskSelectedDate } from '../../features/task/taskSlice';
-import { generateDate } from '../Pilot/components/details/properties/subDetailsIndex/components/calendar';
+import {
+  generateDate,
+  weekends,
+  weeks
+} from '../Pilot/components/details/properties/subDetailsIndex/components/calendar';
+import { setSelectedDate } from '../../features/workspace/workspaceSlice';
 
 interface DatePickerSideBarProp {
   currentDate: dayjs.Dayjs;
@@ -46,14 +51,34 @@ export function DatePickerSideBar({ currentDate }: DatePickerSideBarProp) {
       selectedWeekends = [nextWeekend.date, secondWeekend];
       if (durationType === 'weekend') {
         dispatch(setTaskSelectedDate({ from: selectedWeekends[0], to: selectedWeekends[0] }));
+        dispatch(setSelectedDate({ date: selectedWeekends[0] }));
         return selectedWeekends[0];
       } else {
         dispatch(setTaskSelectedDate({ from: selectedWeekends[1], to: selectedWeekends[1] }));
+        dispatch(setSelectedDate({ date: selectedWeekends[1] }));
         return selectedWeekends[1];
       }
     } else {
       // If either the next weekend or the 2nd weekend is not found, reset the selection
       selectedWeekends = [];
+    }
+  };
+
+  const handleDayClick = (type: string) => {
+    if (type === 'today') {
+      dispatch(
+        setTaskSelectedDate({
+          from: currentDate
+        })
+      );
+      dispatch(setSelectedDate({ date: currentDate }));
+    } else {
+      dispatch(
+        setTaskSelectedDate({
+          from: currentDate.add(1, 'day')
+        })
+      );
+      dispatch(setSelectedDate({ date: currentDate.add(1, 'day') }));
     }
   };
 
@@ -80,27 +105,19 @@ export function DatePickerSideBar({ currentDate }: DatePickerSideBarProp) {
     return firstSaturday;
   };
 
-  // useEffect(() => {
-  //   handleWeekendButtonClick('weekend');
-  //   handleWeekendButtonClick('next weekend');
-  // }, []);
-
   return (
-    <div className="w-40 pt-1 space-y-4 border-r text-sm border-gray-200" style={{ height: '250px', fontSize: '12px' }}>
+    <div className="w-52 pt-1 space-y-4 border-r text-sm border-gray-200" style={{ height: '250px', fontSize: '12px' }}>
       <p
-        className="px-1 font-semibold rounded-md hover:bg-gray-200"
-        onClick={() =>
-          dispatch(
-            setTaskSelectedDate({
-              from: currentDate
-            })
-          )
-        }
+        className="font-semibold rounded-md hover:bg-gray-200 flex justify-between pr-1 w-full"
+        onClick={() => handleDayClick('today')}
       >
-        <span>Today </span>
+        <span style={{ fontSize: '10px' }}>Today</span>
+        <span style={{ fontSize: '10px' }} className="text-gray-400 text-right">
+          {dayjs().format('ddd')}
+        </span>
       </p>
       <p
-        className="px-1 font-semibold rounded-md hover:bg-gray-200"
+        className="font-semibold rounded-md hover:bg-gray-200 flex justify-between pr-1 w-full"
         onClick={() =>
           dispatch(
             setHistoryMemory({
@@ -113,37 +130,55 @@ export function DatePickerSideBar({ currentDate }: DatePickerSideBarProp) {
           )
         }
       >
-        Later
+        <span style={{ fontSize: '10px' }}>Later</span>
+        <span style={{ fontSize: '10px' }} className="text-gray-400 text-right">
+          {dayjs().add(4, 'hour').format('h:mm A')}
+        </span>
       </p>
       <p
-        className="px-1 font-semibold rounded-md hover:bg-gray-200"
-        onClick={() =>
-          dispatch(
-            setTaskSelectedDate({
-              from: currentDate.add(1, 'days')
-            })
-          )
-        }
+        className="font-semibold rounded-md hover:bg-gray-200 flex justify-between pr-1 w-full"
+        onClick={() => handleDayClick('tomorrow')}
       >
-        Tomorrow
+        <span style={{ fontSize: '10px' }}>Tomorrow</span>
+        <span style={{ fontSize: '10px' }} className="text-gray-400 text-right">
+          {dayjs().add(1, 'day').format('ddd')}
+        </span>
       </p>
       <p
-        className="px-1 font-semibold rounded-md hover:bg-gray-200"
+        className="font-semibold rounded-md hover:bg-gray-200 flex justify-between pr-1 w-full"
         onClick={() => handleWeekendButtonClick('weekend')}
       >
-        This Weekend
+        <span style={{ fontSize: '10px' }}>This Weekend</span>
+        <span style={{ fontSize: '10px' }} className="text-gray-400 text-right">
+          {dayjs(weekends('weekend')[1]).format('ddd')}
+        </span>
       </p>
       <p
-        className="px-1 font-semibold rounded-md hover:bg-gray-200"
+        className="font-semibold rounded-md hover:bg-gray-200 flex justify-between pr-1 w-full"
         onClick={() => handleWeekendButtonClick('next weekend')}
       >
-        Next Weekend
+        <span style={{ fontSize: '10px' }}>Next Weekend</span>
+        <span style={{ fontSize: '10px' }} className="text-gray-400 text-right">
+          {dayjs(weekends('nweekend')[1]).format('ddd D')}
+        </span>
       </p>
-      <p className="px-1 font-semibold rounded-md hover:bg-gray-200" onClick={() => handleWeekButtonClick(1)}>
-        Next Week
+      <p
+        className="font-semibold rounded-md hover:bg-gray-200 flex justify-between pr-1 w-full"
+        onClick={() => handleWeekButtonClick(1)}
+      >
+        <span style={{ fontSize: '10px' }}>Next Week</span>
+        <span style={{ fontSize: '10px' }} className="text-gray-400 text-right">
+          {dayjs(weeks(1)).format('ddd D')}
+        </span>
       </p>
-      <p className="px-1 font-semibold rounded-md hover:bg-gray-200" onClick={() => handleWeekButtonClick(2)}>
-        2 Weeks
+      <p
+        className="font-semibold rounded-md hover:bg-gray-200 flex justify-between pr-1 w-full"
+        onClick={() => handleWeekButtonClick(2)}
+      >
+        <span style={{ fontSize: '10px' }}>2 Weeks</span>
+        <span style={{ fontSize: '10px' }} className="text-gray-400 text-right">
+          {dayjs(weeks(2)).format('ddd D')}
+        </span>
       </p>
     </div>
   );
