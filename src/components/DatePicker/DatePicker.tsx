@@ -58,10 +58,12 @@ export default function DatePicker({ styles, range, toggleFn }: DatePickerProps)
     if (!selectedDate?.date?.isSame(today, 'day')) {
       if (taskTime?.from) {
         dispatch(setTaskSelectedDate({ from: taskTime.from, to: selectedDate?.date }));
-      } else if (taskTime?.to) {
-        dispatch(setTaskSelectedDate(null));
       } else {
         dispatch(setTaskSelectedDate({ from: selectedDate?.date }));
+      }
+
+      if (taskTime?.to != undefined) {
+        dispatch(setTaskSelectedDate(null));
       }
     }
   }, [selectedDate?.date]);

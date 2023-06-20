@@ -3,11 +3,10 @@ import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { DateString } from './DatePicker';
 import moment from 'moment';
 import { setSelectedDate } from '../../features/workspace/workspaceSlice';
-import { setHistoryMemory, setTaskSelectedDate } from '../../features/task/taskSlice';
+import { setHistoryMemory } from '../../features/task/taskSlice';
 import { BsCalendarEvent } from 'react-icons/bs';
 import dayjs from 'dayjs';
 import { createDynamicTimeComponent } from '../Pilot/components/details/properties/subDetailsIndex/components/calendar';
-import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 import ReusableSelect from '../../utils/TimeDropDown';
 
 interface DatePickerManualDatesProps {
@@ -28,17 +27,9 @@ export function DatePickerManualDates({ range }: DatePickerManualDatesProps) {
     dateObject.isValid() ? dispatch(setSelectedDate({ date: dayjs(dateObject.toDate()), dateType })) : null;
   };
 
-  // useEffect(() => {
-  //   if (selectedDate?.dateType) {
-  //     const { date } = selectedDate;
-  //     if (date === null) {
-  //       dispatch(setTaskSelectedDate({ from: date }));
-  //     } else {
-  //       dispatch(setTaskSelectedDate({ to: date }));
-  //     }
-  //   }
-  //   setString({ start: taskTime?.from?.format('DD/MM/YYYY'), due: taskTime?.to?.format('DD/MM/YYYY') });
-  // }, [taskTime]);
+  useEffect(() => {
+    setString({ start: taskTime?.from?.format('DD/MM/YYYY'), due: taskTime?.to?.format('DD/MM/YYYY') });
+  }, [taskTime]);
 
   return (
     <div className="flex justify-between items-center p-2">
@@ -62,7 +53,7 @@ export function DatePickerManualDates({ range }: DatePickerManualDatesProps) {
                 options={createDynamicTimeComponent(15)}
                 placeholder="Select time"
                 value={HistoryFilterMemory?.time?.from || ''}
-                styles="h-5 w-11/12"
+                styles="h-4 w-11/12"
                 onChange={(e) => {
                   dispatch(
                     setHistoryMemory({
@@ -94,7 +85,7 @@ export function DatePickerManualDates({ range }: DatePickerManualDatesProps) {
                 options={createDynamicTimeComponent(15)}
                 placeholder="Select time"
                 value={HistoryFilterMemory?.time?.from || ''}
-                styles="h-5 w-11/12"
+                styles="h-4 w-11/12"
                 onChange={(e) => {
                   dispatch(
                     setHistoryMemory({
