@@ -1,22 +1,20 @@
 import React, { useState } from 'react';
+import { Button, Input } from '../../../../../../components';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { createListService } from '../../../../../features/list/listService';
-import { Button, Input, SlideOver } from '../../../../../components';
-import { useAppSelector } from '../../../../../app/hooks';
-import { setSubDropdownMenu, setshowMenuDropdown } from '../../../../../features/hubs/hubSlice';
-import { useDispatch } from 'react-redux';
-import { setCreateListSlideOverVisibility } from '../../../../../features/general/slideOver/slideOverSlice';
-import { setCreateWlLink } from '../../../../../features/workspace/workspaceSlice';
+import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
+import { setCreateListSlideOverVisibility } from '../../../../../../features/general/slideOver/slideOverSlice';
+import { setSubDropdownMenu, setshowMenuDropdown } from '../../../../../../features/hubs/hubSlice';
+import { setCreateWlLink } from '../../../../../../features/workspace/workspaceSlice';
+import { createListService } from '../../../../../../features/list/listService';
 
-function ListModal() {
+export default function CreateList() {
   const queryClient = useQueryClient();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   // const { currentItemId } = useAppSelector((state) => state.workspace);
   const { showMenuDropdown, showMenuDropdownType, SubMenuId, SubMenuType, createWLID } = useAppSelector(
     (state) => state.hub
   );
   const { createWlLink } = useAppSelector((state) => state.workspace);
-  const { showCreateListSlideOver } = useAppSelector((state) => state.slideOver);
 
   const createList = useMutation(createListService, {
     onSuccess: () => {
@@ -65,46 +63,27 @@ function ListModal() {
         (SubMenuType == 'subwallet3' ? SubMenuId : null)
     });
   };
-  const handleCloseSlider = () => {
-    dispatch(setCreateListSlideOverVisibility(false));
-    dispatch(setSubDropdownMenu(false));
-    dispatch(
-      setshowMenuDropdown({
-        showMenuDropdown: null
-      })
-    );
-  };
+
   return (
-    <SlideOver
-      show={false}
-      onClose={() => handleCloseSlider()}
-      headerTitle="Create List"
-      body={
-        <div className="py-6 space-y-6 sm:py-0 sm:space-y-0 sm:divide-y sm:divide-gray-200">
-          <div className="px-4 space-y-1 sm:space-y-0 sm:px-6 sm:py-5">
-            <Input
-              label="List Name"
-              placeholder="Enter list name"
-              name="name"
-              value={name}
-              type="text"
-              onChange={handleListChange}
-            />
-          </div>
-        </div>
-      }
-      footerButtons={
+    <div className="p-2">
+      <Input
+        label="Enter New List Name:"
+        placeholder="Enter List Name"
+        name="name"
+        value={name}
+        type="text"
+        onChange={handleListChange}
+      />
+      <div className="flex justify-end space-x-3 pt-2">
         <Button
           buttonStyle="primary"
           onClick={onSubmit}
           label="Create List"
           padding="py-2 px-4"
           height="h-10"
-          width="w-40"
+          width="w-20"
         />
-      }
-    />
+      </div>
+    </div>
   );
 }
-
-export default ListModal;

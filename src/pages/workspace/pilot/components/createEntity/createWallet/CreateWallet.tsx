@@ -1,20 +1,18 @@
 import React, { useState } from 'react';
+import { Button, Input } from '../../../../../../components';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { createWalletService } from '../../../../../features/wallet/walletService';
-import { Button, Input, SlideOver } from '../../../../../components';
-import { useAppSelector } from '../../../../../app/hooks';
-import { setCreateWalletSlideOverVisibility } from '../../../../../features/general/slideOver/slideOverSlice';
-import { setSubDropdownMenu, setshowMenuDropdown } from '../../../../../features/hubs/hubSlice';
-import { useDispatch } from 'react-redux';
-import { setCreateWlLink } from '../../../../../features/workspace/workspaceSlice';
+import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
+import { setCreateWalletSlideOverVisibility } from '../../../../../../features/general/slideOver/slideOverSlice';
+import { setSubDropdownMenu, setshowMenuDropdown } from '../../../../../../features/hubs/hubSlice';
+import { createWalletService } from '../../../../../../features/wallet/walletService';
+import { setCreateWlLink } from '../../../../../../features/workspace/workspaceSlice';
 
-function WalletModal() {
+export default function CreateWallet() {
   const queryClient = useQueryClient();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const { showMenuDropdownType, showMenuDropdown, SubMenuId, SubMenuType, createWLID } = useAppSelector(
     (state) => state.hub
   );
-  const { showCreateWalletSlideOver } = useAppSelector((state) => state.slideOver);
   const createWallet = useMutation(createWalletService, {
     onSuccess: () => {
       queryClient.invalidateQueries();
@@ -52,43 +50,26 @@ function WalletModal() {
         (SubMenuType == 'subwallet2' ? SubMenuId : null)
     });
   };
-
-  const handleCloseSlider = () => {
-    dispatch(setCreateWalletSlideOverVisibility(false));
-    dispatch(setSubDropdownMenu(false));
-    dispatch(setshowMenuDropdown({ showMenuDropdown: null, showMenuDropdownType: null }));
-  };
   return (
-    <SlideOver
-      show={false}
-      onClose={() => handleCloseSlider()}
-      headerTitle="Create wallet"
-      body={
-        <div className="py-6 space-y-6 sm:py-0 sm:space-y-0 sm:divide-y sm:divide-gray-200">
-          <div className="px-4 space-y-1 sm:space-y-0 sm:px-6 sm:py-5">
-            <Input
-              label="Wallet Name:"
-              placeholder="Enter wallet Name"
-              name="name"
-              value={name}
-              type="text"
-              onChange={handleWalletChange}
-            />
-          </div>
-        </div>
-      }
-      footerButtons={
+    <div className="p-2">
+      <Input
+        label="Enter New Wallet Name:"
+        placeholder="Enter Wallet Name"
+        name="name"
+        value={name}
+        type="text"
+        onChange={handleWalletChange}
+      />
+      <div className="flex justify-end space-x-3 pt-2">
         <Button
           buttonStyle="primary"
           onClick={onSubmit}
           label="Create Wallet"
           padding="py-2 px-4"
           height="h-10"
-          width="w-40"
+          width="w-20"
         />
-      }
-    />
+      </div>
+    </div>
   );
 }
-
-export default WalletModal;

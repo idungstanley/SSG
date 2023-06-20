@@ -4,7 +4,12 @@ import everythingIcon from '../../../assets/branding/everything-icon.png';
 import { useAppSelector } from '../../../app/hooks';
 import PlaceItem from '../../../layout/components/MainLayout/Sidebar/components/PlaceItem';
 import hubIcon from '../../../assets/branding/hub.svg';
-import { setCreateHubSlideOverVisibility } from '../../../features/general/slideOver/slideOverSlice';
+import {
+  setCreateHubSlideOverVisibility,
+  setCreateListSlideOverVisibility,
+  setCreateTaskSlideOverVisibility,
+  setCreateWalletSlideOverVisibility
+} from '../../../features/general/slideOver/slideOverSlice';
 import Dropdown from '../../../components/Dropdown/index';
 import SubHubModal from './components/SubHubModal';
 import Modal from './components/Modal';
@@ -17,33 +22,34 @@ import WalletModal from '../wallet/components/modals/WalletModal';
 import ActiveTress from './components/ActiveTree/ActiveTress';
 import { BiSearch } from 'react-icons/bi';
 import { setIsSearchActive } from '../../../features/search/searchSlice';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 function Hubs() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { showSidebar } = useAppSelector((state) => state.account);
-  // const { toggleArchive } = useAppSelector((state) => state.hub);
   const { isSearchActive } = useAppSelector((state) => state.search);
   const { listId, hubId, walletId } = useParams();
-
-  // const { data, status } = useGetHubList({
-  //   query: toggleArchive
-  // });
-
-  // if (status === 'success') {
-  //   dispatch(getHub(data?.data.hubs));
-  // }
-
   const toggleSearch = (e: React.MouseEvent<SVGElement, MouseEvent>) => {
     e.stopPropagation();
     dispatch(setIsSearchActive(true));
+  };
+
+  const { currentWorkspaceId } = useAppSelector((state) => state.auth);
+
+  const handleNavigateTask = () => {
+    dispatch(setCreateListSlideOverVisibility(false));
+    dispatch(setCreateTaskSlideOverVisibility(false));
+    dispatch(setCreateWalletSlideOverVisibility(false));
+    dispatch(setCreateHubSlideOverVisibility(true));
+    navigate(`/${currentWorkspaceId}` + '/tasks');
   };
 
   const configForDropdown = [
     {
       label: 'hub',
       icon: <img src={hubIcon} alt="Hub Icon" className="w-4 h-4" />,
-      onClick: () => dispatch(setCreateHubSlideOverVisibility(true))
+      onClick: () => handleNavigateTask()
     }
   ];
 

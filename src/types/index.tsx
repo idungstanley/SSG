@@ -36,7 +36,11 @@ export type itemType =
   | 'task'
   | 'wallet'
   | 'list'
-  | 'subWallet';
+  | 'subWallet'
+  | 'create_hub'
+  | 'create_wallet'
+  | 'create_list'
+  | 'create_task';
 
 export interface IPilotTab {
   id: number;
