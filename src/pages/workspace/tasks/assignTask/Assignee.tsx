@@ -75,7 +75,8 @@ export default function Assignee({
   const handleUnAssignTask = (id: string) => {
     onTaskUnassign({
       taskId: itemId,
-      team_member_id: id
+      team_member_id: id,
+      teams: teams
     });
   };
 
@@ -112,7 +113,7 @@ export default function Assignee({
         <Button id="basic-button">
           {assignees?.length ? (
             <div className="flex">
-              <GroupAssignee data={assignees} itemId={itemId as string} handleClick={handleClick} />
+              <GroupAssignee data={assignees} itemId={itemId as string} handleClick={handleClick} teams={teams} />
             </div>
           ) : (
             <span onClick={handleClick}>
@@ -130,7 +131,7 @@ export default function Assignee({
       {option === 'checklist' && (
         <Button id="basic-button" onClick={handleClick}>
           {checklistAssignedUserId?.length ? (
-            <GroupAssignee data={assigneeChecklistItem?.assignees} />
+            <GroupAssignee data={assigneeChecklistItem?.assignees} teams={teams} />
           ) : (
             <span>
               <CgProfile />

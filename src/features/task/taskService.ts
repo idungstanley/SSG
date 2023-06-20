@@ -603,16 +603,18 @@ export const UseTaskAssignService = () => {
 // Unassign Task
 const UnassignTask = ({
   taskId,
-  team_member_id
+  team_member_id,
+  teams
 }: {
   taskId: string | null | undefined;
   team_member_id: string | null;
+  teams: boolean;
 }) => {
   const request = requestNew({
-    url: '/assignee/unassign',
+    url: teams ? '/group-assignee/unassign' : '/assignee/unassign',
     method: 'POST',
-    params: {
-      team_member_id: team_member_id,
+    data: {
+      ...(teams ? { team_member_group_id: team_member_id } : { team_member_id: team_member_id }),
       id: taskId,
       type: 'task'
     }

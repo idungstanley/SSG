@@ -134,7 +134,7 @@ function Board({ tasks }: TaskDataProps) {
                           ) : (
                             <>
                               <div onClick={() => handleAssigneeModal(items.id)} className="flex cursor-pointer ">
-                                {groupAssignee(items.assignees)}
+                                {/* {groupAssignee(items.assignees)} */}
                                 <span className="absolute z-30 mt-10 shadow-2xl ">
                                   {toggleAssignCurrentTaskId == items?.id ? <AssignTask /> : null}
                                 </span>

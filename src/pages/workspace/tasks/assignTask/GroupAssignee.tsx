@@ -25,7 +25,8 @@ interface groupAssignee {
 function GroupAssignee({
   data,
   itemId,
-  handleClick
+  handleClick,
+  teams
 }: {
   data:
     | [{ id: string; initials: string; color: string; name: string; avatar_path: string | null }]
@@ -33,6 +34,7 @@ function GroupAssignee({
     | undefined;
   itemId?: string;
   handleClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  teams: boolean;
 }) {
   const { CompactView, CompactViewWrap } = useAppSelector((state) => state.task);
   const [displayed, setDisplayed] = useState<{
@@ -48,7 +50,8 @@ function GroupAssignee({
   const handleUnAssignTask = (id: string) => {
     onTaskUnassign({
       taskId: itemId,
-      team_member_id: id
+      team_member_id: id,
+      teams
     });
   };
 
@@ -125,12 +128,12 @@ function GroupAssignee({
             </div>
           ))}
           <span>
-            {(data as [{ id: string; initials: string; color: string }])?.length - 3 !== 0 ? (
+            {data?.length - 3 !== 0 ? (
               <span
                 className="-ml-3 border-white border-2 rounded-full bg-gray-100 "
                 style={{ padding: `${CompactView || CompactViewWrap ? '3px' : '7px'}` }}
               >
-                +{(data as [{ id: string; initials: string; color: string }])?.length - 3}
+                +{data?.length - 3}
               </span>
             ) : null}
           </span>

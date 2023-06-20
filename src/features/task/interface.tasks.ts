@@ -20,6 +20,7 @@ export interface TaskDataGroupingsProps {
       | string
       | number
       | [{ id: string; initials: string; colour: string; name: string }]
+      | { color: string; id: string; initials: string; name: string }[]
       | null
       | undefined;
     key?: string;

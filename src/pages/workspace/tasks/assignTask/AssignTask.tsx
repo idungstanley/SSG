@@ -65,7 +65,8 @@ export default function AssignTask({ option, item }: optionProps) {
   const handleAssignTask = (id: string) => {
     onTaskAssign({
       taskId: toggleAssignCurrentTaskId,
-      team_member_id: id
+      team_member_id: id,
+      teams: false
     });
   };
 
@@ -78,7 +79,8 @@ export default function AssignTask({ option, item }: optionProps) {
   const handleUnAssignTask = (id: string) => {
     onTaskUnassign({
       taskId: toggleAssignCurrentTaskId,
-      team_member_id: id
+      team_member_id: id,
+      teams: false
     });
   };
 
