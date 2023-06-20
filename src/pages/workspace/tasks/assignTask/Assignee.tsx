@@ -21,6 +21,7 @@ import { useGetTeamMemberGroups } from '../../../../features/settings/teamMember
 import { cl } from '../../../../utils';
 // import AvatarForOwner from '../../../../components/avatar/AvatarForOwner';
 import unassignedIcon from '../../../../assets/icons/unassignedIcon.png';
+import AvatarWithImage from '../../../../components/avatar/AvatarWithImage';
 
 export default function Assignee({
   itemId,
@@ -54,7 +55,6 @@ export default function Assignee({
   const { mutate: onCheklistItemUnassign } = UseChecklistItemUnassignee();
 
   const teamMembers = teams ? data?.data.team_member_groups : data?.data.team_members;
-
   // const assignees = task?.assignees;
   const assignees = [...(task?.assignees ?? []), ...(task?.group_assignees ?? [])];
 
@@ -233,12 +233,28 @@ export default function Assignee({
                           assignedUser?.includes(item.id) ? 'ring ring-green-500 ring-offset-2 rounded-full ' : null
                         }`}
                       >
-                        <AvatarWithInitials
-                          initials={teams ? item.initials : (item.user.initials as string)}
-                          backgroundColour={teams ? item.color : item.user.color}
-                          height="h-8"
-                          width="w-8"
-                        />
+                        {!teams ? (
+                          <div>
+                            {item.user.avatar_path == null && (
+                              <AvatarWithInitials
+                                initials={item.user.initials}
+                                backgroundColour={item.user.color}
+                                height="h-8"
+                                width="w-8"
+                              />
+                            )}
+                            {item.user.avatar_path && (
+                              <AvatarWithImage image_path={item.user.avatar_path} height="h-8" width="w-8" />
+                            )}
+                          </div>
+                        ) : (
+                          <AvatarWithInitials
+                            initials={item.initials}
+                            backgroundColour={item.color}
+                            height="h-8"
+                            width="w-8"
+                          />
+                        )}
                       </span>
                       <p className="text-sm text-black ">{teams ? item.name : item.user.name.toLocaleUpperCase()}</p>
                     </div>

@@ -10,6 +10,7 @@ export interface ITeamMembersAndGroup {
     id: string;
     email: string;
     initials: string;
+    avatar_path?: string | null;
   };
   initials: string;
   colour: string;

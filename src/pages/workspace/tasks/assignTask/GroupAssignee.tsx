@@ -5,6 +5,7 @@ import { UseUnassignTask } from '../../../../features/task/taskService';
 import PopAssignModal from './popAssignModal';
 import ToolTip from '../../../../components/Tooltip';
 import AvatarForOwner from '../../../../components/avatar/AvatarForOwner';
+import AvatarWithImage from '../../../../components/avatar/AvatarWithImage';
 
 interface InewData {
   id: string | null | undefined;
@@ -20,6 +21,7 @@ interface groupAssignee {
   id: string;
   initials: string;
   name: string;
+  avatar_path?: string | null;
 }
 
 function GroupAssignee({
@@ -155,15 +157,31 @@ function GroupAssignee({
                   onMouseLeave={() => handleHoverIntervalMouseOut()}
                   className="relative "
                 >
-                  <span onClick={handleClick}>
-                    {(newData as InewData).role == 'owner' ? (
-                      <AvatarForOwner initials={newData.initials} />
-                    ) : (
-                      <div className="border-2 border-red-400 rounded-full">
-                        <AvatarWithInitials initials={newData.initials} backgroundColour={newData.color} badge={true} />
-                      </div>
-                    )}
-                  </span>
+                  {newData.avatar_path == null ? (
+                    <span onClick={handleClick}>
+                      {(newData as InewData).role == 'owner' ? (
+                        <AvatarForOwner initials={newData.initials} />
+                      ) : (
+                        <div className="border-2 border-red-400 rounded-full">
+                          <AvatarWithInitials
+                            initials={newData.initials}
+                            backgroundColour={newData.color}
+                            badge={true}
+                          />
+                        </div>
+                      )}
+                    </span>
+                  ) : (
+                    <span onClick={handleClick}>
+                      {(newData as InewData).role == 'owner' ? (
+                        <AvatarForOwner initials={newData.initials} />
+                      ) : (
+                        <div className="border-2 border-red-400 rounded-full">
+                          <AvatarWithImage image_path={newData.avatar_path} height="h-8" width="w-8" />
+                        </div>
+                      )}
+                    </span>
+                  )}
 
                   {displayed.show && index == displayed?.index ? (
                     <button
