@@ -98,15 +98,18 @@ export default function Assignee({
     // setSearchInput(value);
     setSearchInput(value);
     if (searchInput !== '') {
-      const filtered = teamMembers?.filter((item) => {
-        return item.user.name.includes(searchInput);
-      });
+      const filtered = teamMembers?.filter((el) => el.user.name.toLowerCase().includes(value.toLowerCase()));
       setFilteredMembers(filtered);
     } else {
       setFilteredMembers(teamMembers);
     }
   };
-
+  // const handleMenuKeyDown = (event: React.KeyboardEvent<HTMLUListElement>) => {
+  //   event.stopPropagation();
+  // };
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    event.stopPropagation();
+  };
   return (
     <>
       {option === 'task' && (
@@ -157,12 +160,13 @@ export default function Assignee({
           }
         }}
       >
-        <section className="relative flex">
-          <AiOutlineSearch className="absolute w-5 h-5 right-3 top-3" />
+        <section className="relative flex items-center sticky top-2 bg-white z-10">
+          <AiOutlineSearch className="absolute w-5 h-5 right-3" />
           <input
             type="text"
             placeholder="Search..."
             className="w-11/12 m-auto p-2 border-0 focus:outline-none rounded-md"
+            onKeyDown={handleKeyDown}
             onChange={(e) => searchItem(e.target.value)}
           />
         </section>
