@@ -25,7 +25,7 @@ import AdditionalHeader from '../../../../../layout/components/MainLayout/Header
 
 function RenderHubs() {
   const [TaskDataGroupings, setTaskDataGroupings] = useState<TaskDataGroupingsProps | unknown>({});
-  const { activeEntityName, activeEntity } = useAppSelector((state) => state.workspace);
+  const { activeEntity } = useAppSelector((state) => state.workspace);
   const { groupByStatus, filterTaskByAssigneeIds } = useAppSelector((state) => state.task);
   const dispatch = useAppDispatch();
   const containerRef = useRef<HTMLDivElement>(null);

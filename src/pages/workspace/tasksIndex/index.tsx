@@ -1,27 +1,34 @@
 import React, { useEffect } from 'react';
-import Pilot from '../../../components/Pilot';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import { setShowPilotSideOver } from '../../../features/general/slideOver/slideOverSlice';
 import { pilotListConfig } from '../pilot/components/createEntity/createList/pilotConfig';
 import { pilotWalletConfig } from '../pilot/components/createEntity/createWallet/pilotConfig';
 import { pilotHubConfig } from '../pilot/components/createEntity/createHub/pilotConfig';
+import ListNav from '../lists/components/renderlist/ListNav';
+import AdditionalHeader from '../../../layout/components/MainLayout/Header/AdditionHeader';
+import Page from '../../../components/Page';
+import { Header } from '../../../components/TasksHeader';
 
 export default function TasksIndex() {
-  const pilotConfig = !!pilotListConfig || !!pilotWalletConfig || !!pilotHubConfig;
   const { showCreateHubSlideOver, showCreateWalletSlideOver } = useAppSelector((state) => state.slideOver);
 
   return (
-    <div className="relative grid w-full h-full grid-cols-frAuto">
+    <>
       <PilotSection />
-      <h1>Index for tasks under construction</h1>
-      {pilotConfig ? (
-        <Pilot
-          pilotConfig={
-            showCreateHubSlideOver ? pilotHubConfig : showCreateWalletSlideOver ? pilotWalletConfig : pilotListConfig
-          }
-        />
-      ) : null}
-    </div>
+      <Page
+        pilotConfig={
+          showCreateHubSlideOver ? pilotHubConfig : showCreateWalletSlideOver ? pilotWalletConfig : pilotListConfig
+        }
+        additionalHeader={<AdditionalHeader />}
+      >
+        <Header />
+        <section>
+          <div className="w-full h-full flex items-center justify-center">
+            <p>Under Construction</p>
+          </div>
+        </section>
+      </Page>
+    </>
   );
 }
 

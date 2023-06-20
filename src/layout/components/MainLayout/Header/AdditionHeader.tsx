@@ -42,7 +42,7 @@ export default function AdditionalHeader() {
         <p className="p-1 bg-gray-300 rounded-md ">
           <img src={headerIcon} alt="" className="w-6 h-6" />
         </p>
-        <span className="text-lg font-bold">{activeEntityName}</span>
+        <span className="text-lg font-bold">{activeEntityName || 'Under Construction'}</span>
       </h1>
       <div className="flex items-center justify-center space-x-2">
         {tabsId !== 6 && timerStatus && (
