@@ -199,7 +199,7 @@ export default function Assignee({
                       <div>
                         <AvatarWithInitials
                           initials={teams ? item.initials : (item.user.initials as string)}
-                          backgroundColour={item.colour}
+                          backgroundColour={teams ? item.color : item.user.color}
                           height="h-8"
                           width="w-8"
                         />
@@ -243,7 +243,7 @@ export default function Assignee({
                       >
                         <AvatarWithInitials
                           initials={teams ? item.initials : (item.user.initials as string)}
-                          backgroundColour={item.colour}
+                          backgroundColour={teams ? item.color : item.user.color}
                           height="h-8"
                           width="w-8"
                         />

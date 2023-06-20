@@ -1,9 +1,11 @@
 export interface ITeamMembersAndGroup {
+  color: string | undefined;
   id: string;
   name?: string;
   is_active?: boolean;
   invited_at: boolean;
   user: {
+    color: string | undefined;
     name: string;
     id: string;
     email: string;
