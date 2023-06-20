@@ -29,7 +29,7 @@ export default function SubDropdown() {
   const navigate = useNavigate();
   const { showMenuDropdownType, showMenuDropdown, SubMenuType, SubMenuId } = useAppSelector((state) => state.hub);
   const { currentWorkspaceId } = useAppSelector((state) => state.auth);
-  const navLink = navLink;
+  const navLink = '/tasks';
 
   const {
     showCreateSubWalletSlideOver,
