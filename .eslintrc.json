@@ -17,7 +17,8 @@
     "ecmaVersion": "latest",
     "sourceType": "module",
     "parser": "@typescript-eslint/parser",
-    "project": "./tsconfig.json",
+    "project": "./tsconfig.eslint.json",
+    "tsconfigRootDir": "./",
     "allowImportExportEverywhere": true
   },
   "plugins": ["react", "@typescript-eslint", "prettier"],
