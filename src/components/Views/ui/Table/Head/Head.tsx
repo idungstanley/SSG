@@ -37,7 +37,7 @@ export function Head({
 }: HeadProps) {
   const parsedLabel = parseLabel(label);
   const dispatch = useAppDispatch();
-  const sortAbles: string[] = ['Task', 'Start Date', 'End Date', 'Priority', 'Assignees'];
+  const sortAbles: string[] = ['Task', 'Updated at', 'Created at', 'Status', 'Priority', 'Assignees'];
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const handleClose = () => {
     setAnchorEl(null);
@@ -48,7 +48,15 @@ export function Head({
   const { baseColor } = useAppSelector((state) => state.account);
 
   const headerTxt = (title: string) =>
-    title === 'Assignees' ? 'assignee' : title === 'Task' ? 'name' : title?.toLowerCase();
+    title === 'Assignees'
+      ? 'assignee'
+      : title === 'Task'
+      ? 'name'
+      : title === 'Created at'
+      ? 'created_at'
+      : title === 'Updated at'
+      ? 'updated_at'
+      : title?.toLowerCase();
 
   const handleSort = (header: string, id: string | undefined, order: 'asc' | 'desc') => {
     setheaderId(id as string);
