@@ -3,8 +3,8 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import SubtasksIcon from '../../../../assets/icons/SubtasksIcon';
 import { setShowPilotSideOver } from '../../../../features/general/slideOver/slideOverSlice';
-import { Task } from '../../../../features/task/interface.tasks';
-import { setTaskIdForPilot } from '../../../../features/task/taskSlice';
+import { Tag, Task } from '../../../../features/task/interface.tasks';
+import { setTaskIdForPilot, tagItem } from '../../../../features/task/taskSlice';
 import { setActiveItem } from '../../../../features/workspace/workspaceSlice';
 import { DEFAULT_LEFT_PADDING } from '../../config';
 import { Column } from '../../types/table';
@@ -12,6 +12,8 @@ import { AddTask } from '../AddTask/AddTask';
 import { Col } from './Col';
 import { StickyCol } from './StickyCol';
 import { SubTasks } from './SubTasks';
+import TaskTag from '../../../Tag/ui/TaskTag';
+import { ManageTagsDropdown } from '../../../Tag/ui/ManageTagsDropdown/ui/ManageTagsDropdown';
 
 interface RowProps {
   task: Task;
@@ -74,10 +76,20 @@ export function Row({ task, columns, paddingLeft = 0 }: RowProps) {
           style={{ zIndex: 3 }}
           task={task}
           paddingLeft={paddingLeft}
+          tags={
+            'tags' in task ? <TaskTag tags={task.tags as tagItem[]} entity_id={task.id} entity_type="task" /> : null
+          }
         >
-          {/* show create subtask field */}
-          <div className="absolute opacity-0 group-hover:opacity-100 top-0 bottom-0 right-0 flex items-center justify-center">
-            <button className="p-1" onClick={onShowAddSubtaskField}>
+          {/* actions */}
+          <div className="absolute opacity-0 group-hover:opacity-100 top-0 bottom-0 right-0 flex space-x-1 items-center justify-center">
+            {/* tags */}
+
+            {'tags' in task ? (
+              <ManageTagsDropdown entityId={task.id} tagsArr={task.tags as Tag[]} entityType="task" />
+            ) : null}
+
+            {/* show create subtask field */}
+            <button className="p-1 border rounded-lg text-gray-400" onClick={onShowAddSubtaskField}>
               <SubtasksIcon className="h-4 w-4" />
             </button>
           </div>

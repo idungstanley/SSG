@@ -89,7 +89,16 @@ export default function SortModal({ toggleModal, setAnchorEl, anchorEl, handleCl
     { title: 'value', toggle: false }
   ]);
   const header = activeTaskColumn.header;
-  const headerTxt = header === 'Assignees' ? 'assignee' : header === 'Task' ? 'name' : header.toLowerCase();
+  const headerTxt =
+    header === 'Assignees'
+      ? 'assignee'
+      : header === 'Task'
+      ? 'name'
+      : header === 'Created at'
+      ? 'created_at'
+      : header === 'Updated at'
+      ? 'updated_at'
+      : header?.toLowerCase();
   const getOrder = sortAbleArr.find((item) => item.field === headerTxt);
 
   const hasDuplicate = sortAbleArr.some(

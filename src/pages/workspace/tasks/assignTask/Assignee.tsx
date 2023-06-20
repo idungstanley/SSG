@@ -2,7 +2,7 @@ import * as React from 'react';
 import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import { TrashIcon, UserPlusIcon } from '@heroicons/react/24/solid';
+import { TrashIcon } from '@heroicons/react/24/solid';
 import { UseTaskAssignService, UseUnassignTask } from '../../../../features/task/taskService';
 import { useGetTeamMembers } from '../../../../features/settings/teamMembers/teamMemberService';
 import { AvatarWithInitials } from '../../../../components';
@@ -17,10 +17,10 @@ import { ImyTaskData } from '../../../../features/task/taskSlice';
 import { AiOutlineSearch } from 'react-icons/ai';
 import { useState } from 'react';
 import { ITeamMembersAndGroup } from '../../../../features/settings/teamMembersAndGroups.interfaces';
-import { useAppSelector } from '../../../../app/hooks';
 import { useGetTeamMemberGroups } from '../../../../features/settings/teamMemberGroups/teamMemberGroupService';
 import { cl } from '../../../../utils';
 // import AvatarForOwner from '../../../../components/avatar/AvatarForOwner';
+import unassignedIcon from '../../../../assets/icons/unassignedIcon.png';
 
 export default function Assignee({
   itemId,
@@ -61,8 +61,6 @@ export default function Assignee({
   const assignedUser = assignees?.map(({ id }: { id: string }) => id);
 
   const checklistAssignedUserId = assigneeChecklistItem?.assignees.map(({ id }: { id: string }) => id);
-
-  const { CompactView, CompactViewWrap } = useAppSelector((state) => state.task);
 
   const handleAssignTask = (id: string) => {
     onTaskAssign({
@@ -117,13 +115,7 @@ export default function Assignee({
             </div>
           ) : (
             <span onClick={handleClick}>
-              <UserPlusIcon
-                className="text-xl text-gray-400 items-center justify-center cursor-pointer bor"
-                style={{
-                  width: ` ${CompactView || CompactViewWrap ? '20px' : '26px'}`
-                }}
-                aria-hidden="true"
-              />
+              <img src={unassignedIcon} alt="" />
             </span>
           )}
         </Button>

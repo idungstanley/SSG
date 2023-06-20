@@ -3,6 +3,9 @@ import React, { useEffect, useRef } from 'react';
 import { useAppDispatch } from '../../../../app/hooks';
 import { setUpdateCords } from '../../../../features/task/taskSlice';
 import { useScroll } from '../../../../hooks/useScroll';
+import { Column } from '../../types/table';
+import { generateGrid } from '../../lib';
+import { MAX_COL_WIDTH } from '../../config';
 
 interface CustomScrollbarProps {
   children: React.ReactNode;
@@ -122,7 +125,12 @@ function CustomScrollbar({ children }: CustomScrollbarProps) {
         </div>
       </div>
 
-      <div className="w-full grid grid-cols-2 mt-2">
+      <div
+        className="w-full grid grid-cols-2 mt-2"
+        // style={{
+        //   gridTemplateColumns: `minmax(${MAX_COL_WIDTH}%, 90%) minmax(10%, 100%)`
+        // }}
+      >
         <div></div>
 
         <div className="w-full flex items-center space-x-2">

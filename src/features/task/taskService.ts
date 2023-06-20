@@ -10,16 +10,18 @@ import { useUploadRecording } from '../workspace/workspaceService';
 import { useParams } from 'react-router-dom';
 import { toggleMute } from '../workspace/workspaceSlice';
 
-const addTask = (data: { name: string; id: string; isListParent: boolean }) => {
-  const { name, id, isListParent } = data;
+const addTask = (data: { name: string; id: string; isListParent: boolean; status?: string }) => {
+  const { name, id, isListParent, status } = data;
 
   const parentId = isListParent ? { list_id: id } : { parent_id: id };
+  const statusData = status ? status : 'todo';
 
   const response = requestNew({
     url: 'tasks',
     method: 'POST',
     data: {
       name,
+      status: statusData,
       ...parentId
     }
   });
@@ -35,7 +37,8 @@ export const useAddTask = (parentTaskId?: string) => {
 
   return useMutation(addTask, {
     onSuccess: () => {
-      queryClient.invalidateQueries(['task', id, type]);
+      // queryClient.invalidateQueries(['task', id, type]);
+      queryClient.invalidateQueries(['task']);
       queryClient.invalidateQueries(['sub-tasks', parentTaskId]);
     }
   });
@@ -210,33 +213,13 @@ const updateTaskStatusService = ({ task_id, statusDataUpdate }: UpdateTaskProps)
   });
   return response;
 };
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 
 export const UseUpdateTaskStatusService2 = () => {
   const queryClient = useQueryClient();
   return useMutation(updateTaskStatusService, {
     onSuccess: () => {
       queryClient.invalidateQueries(['task']);
-      // queryClient.setQueryData(['task'], (oldQueryData) => {
-      // return oldQueryData?.pages?.[0].data.tasks.map((task) => {
-      //   if (task.id == data.data.task.id) {
-      //     console.log(oldQueryData?.pages?.[0].data.tasks);
-      //     // return {
-      //     //   ...task,
-      //     //   status: data.data.task.status
-      //     // };
-      //   }
-      // });
-
-      // const newData = oldQueryData?.pages?.[0].data.tasks.filter((task) => {
-      //   return task.id !== data.data.task.id;
-      // });
-      // newData.push(data.data.task);
-      // return newData;
-      // });
+      queryClient.invalidateQueries(['sub-tasks']);
     }
   });
 };
@@ -596,6 +579,7 @@ export const UseTaskAssignService = () => {
     onSuccess: () => {
       dispatch(setToggleAssignCurrentTaskId(null));
       queryClient.invalidateQueries(['task']);
+      queryClient.invalidateQueries(['sub-tasks']);
     }
   });
 };
