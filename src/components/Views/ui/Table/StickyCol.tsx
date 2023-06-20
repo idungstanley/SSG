@@ -15,9 +15,18 @@ interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   showSubTasks: boolean;
   setShowSubTasks: (i: boolean) => void;
   paddingLeft?: number;
+  tags: ReactNode;
 }
 
-export function StickyCol({ showSubTasks, setShowSubTasks, children, task, paddingLeft = 0, ...props }: ColProps) {
+export function StickyCol({
+  showSubTasks,
+  setShowSubTasks,
+  children,
+  tags,
+  task,
+  paddingLeft = 0,
+  ...props
+}: ColProps) {
   const { taskId } = useParams();
   const COL_BG = taskId === task.id ? ACTIVE_COL_BG : DEFAULT_COL_BG;
 
@@ -85,17 +94,17 @@ export function StickyCol({ showSubTasks, setShowSubTasks, children, task, paddi
           )}
         </button>
         <StatusDropdown TaskCurrentStatus={task.status} />
-        <div>
+        <div className="flex flex-col items-start justify-start space-y-1">
           <p
-            className="text-left"
             contentEditable={true}
             ref={inputRef}
             onKeyDown={(e) => (e.key === 'Enter' ? handleEditTask(e, task.id) : null)}
           >
             {task.name}
           </p>
-        </div>
 
+          {tags}
+        </div>
         {children}
       </div>
     </td>
