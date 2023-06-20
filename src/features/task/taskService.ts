@@ -210,33 +210,13 @@ const updateTaskStatusService = ({ task_id, statusDataUpdate }: UpdateTaskProps)
   });
   return response;
 };
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 
 export const UseUpdateTaskStatusService2 = () => {
   const queryClient = useQueryClient();
   return useMutation(updateTaskStatusService, {
     onSuccess: () => {
       queryClient.invalidateQueries(['task']);
-      // queryClient.setQueryData(['task'], (oldQueryData) => {
-      // return oldQueryData?.pages?.[0].data.tasks.map((task) => {
-      //   if (task.id == data.data.task.id) {
-      //     console.log(oldQueryData?.pages?.[0].data.tasks);
-      //     // return {
-      //     //   ...task,
-      //     //   status: data.data.task.status
-      //     // };
-      //   }
-      // });
-
-      // const newData = oldQueryData?.pages?.[0].data.tasks.filter((task) => {
-      //   return task.id !== data.data.task.id;
-      // });
-      // newData.push(data.data.task);
-      // return newData;
-      // });
+      queryClient.invalidateQueries(['sub-tasks']);
     }
   });
 };
@@ -594,6 +574,7 @@ export const UseTaskAssignService = () => {
     onSuccess: () => {
       dispatch(setToggleAssignCurrentTaskId(null));
       queryClient.invalidateQueries(['task']);
+      queryClient.invalidateQueries(['sub-tasks']);
     }
   });
 };

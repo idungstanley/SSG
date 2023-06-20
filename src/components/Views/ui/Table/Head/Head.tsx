@@ -7,6 +7,7 @@ import { Column } from '../../../types/table';
 import { Chevron } from '../../Chevron';
 import { setActiveTaskColumn, setSortArr, setSortArray } from '../../../../../features/task/taskSlice';
 import SortModal from '../../../../SortModal/SortModal';
+import statusbox from '../../../../../assets/icons/statusbox.svg';
 
 interface HeadProps {
   columns: Column[];
@@ -34,7 +35,7 @@ export function Head({
 }: HeadProps) {
   const parsedLabel = parseLabel(label);
   const dispatch = useAppDispatch();
-  const sortAbles: string[] = ['Task', 'Start Date', 'End Date', 'Priority', 'Assignees'];
+  const sortAbles: string[] = ['Task', 'Updated at', 'Created at', 'Status', 'Priority', 'Assignees'];
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const handleClose = () => {
     setAnchorEl(null);
@@ -45,7 +46,15 @@ export function Head({
   const { baseColor } = useAppSelector((state) => state.account);
 
   const headerTxt = (title: string) =>
-    title === 'Assignees' ? 'assignee' : title === 'Task' ? 'name' : title?.toLowerCase();
+    title === 'Assignees'
+      ? 'assignee'
+      : title === 'Task'
+      ? 'name'
+      : title === 'Created at'
+      ? 'created_at'
+      : title === 'Updated at'
+      ? 'updated_at'
+      : title?.toLowerCase();
 
   const handleSort = (header: string, id: string | undefined, order: 'asc' | 'desc') => {
     setheaderId(id as string);
@@ -92,7 +101,7 @@ export function Head({
         {/* first sticky col */}
         <th style={{ zIndex: 2 }} className="sticky left-0 flex -mb-2 font-extrabold" ref={columns[0].ref}>
           <div className="flex items-center bg-purple-50 " style={{ width: '22px' }}></div>
-          <div className="flex items-center w-full gap-3 py-2 truncate dBlock group opacity-90">
+          <div className="flex dBlock items-center w-full gap-3 py-2 truncate group opacity-90">
             <span
               className={`py-0.5 px-2 rounded-tr-md flex items-center space-x-1 text-white ${
                 parsedLabel == 'todo'
@@ -109,6 +118,9 @@ export function Head({
               <Chevron color="text-white" active={collapseTasks} onToggle={onToggleCollapseTasks} />
 
               <span>{parsedLabel}</span>
+              <p className="opacity-0">
+                <img src={statusbox} alt="" />
+              </p>
             </span>
             <div className="flex items-center hover:bg-gray-200 p-0.5 rounded-md space-x-1  border-t-2 border-l-2 border-r-2 border-transparent hover:border-gray-600">
               <span onClick={(e) => setOptions(e, columns[0].id, columns[0].value)} className="cursor-pointer">

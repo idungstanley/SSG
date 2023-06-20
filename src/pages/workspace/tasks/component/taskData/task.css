@@ -45,6 +45,14 @@
   white-space: normal;
 }
 
+.dNone {
+  display: none;
+}
+
+.dBlock:hover .dNone {
+  display: block;
+}
+
 .viewSettings {
   display: none;
 }
