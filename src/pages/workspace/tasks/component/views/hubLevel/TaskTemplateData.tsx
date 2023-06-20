@@ -1,13 +1,8 @@
 import React, { Fragment } from 'react';
 import { useDispatch } from 'react-redux';
-import { CheckIcon, ChevronDownIcon, InformationCircleIcon } from '@heroicons/react/24/outline';
-import { setCreateTaskFromTop, setCurrentListId } from '../../../../../../features/list/listSlice';
+import { setCurrentListId } from '../../../../../../features/list/listSlice';
 import { useAppSelector } from '../../../../../../app/hooks';
 import TaskListViews from '../listLevel/TaskListViews';
-// import {
-//   ITaskFullListObj,
-//   KeyItemTypes,
-// } from '../../../../../features/task/interface.tasks';
 import TaskData from '../../taskData/TaskData';
 import { setAddNewTaskItem } from '../../../../../../features/task/taskSlice';
 import AddNewItem from '../../taskColumn/AddNewItem';

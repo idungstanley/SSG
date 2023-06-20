@@ -10,10 +10,10 @@ interface AddTaskFieldProps {
   status?: string;
   paddingLeft?: number;
   isListParent?: boolean;
-  columns: Column[];
+  columns?: Column[];
 }
 
-export function AddTask({ onClose, paddingLeft, parentId, status, isListParent, columns }: AddTaskFieldProps) {
+export function AddTask({ onClose, paddingLeft, parentId, isListParent, columns }: AddTaskFieldProps) {
   const nameRef = useRef<HTMLInputElement>(null);
   const { mutate: onAdd } = useAddTask(parentId);
 
@@ -23,7 +23,6 @@ export function AddTask({ onClose, paddingLeft, parentId, status, isListParent, 
 
       onAdd({
         name,
-        status,
         isListParent: !!isListParent,
         id: parentId
       });

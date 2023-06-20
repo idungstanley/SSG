@@ -96,10 +96,7 @@ export function StickyCol({
         {dragElement}
       </div>
 
-      <div
-        style={{ paddingLeft }}
-        className={cl(COL_BG, 'relative border-t w-full h-full py-4 p-4 flex items-center ')}
-      >
+      <div style={{ paddingLeft }} className={cl(COL_BG, 'relative border-t w-full h-10 py-4 p-4 flex items-center ')}>
         <button onClick={onToggleDisplayingSubTasks} className="">
           {showSubTasks ? (
             <RxTriangleDown className="w-4 h-4 text-gray-600" />
