@@ -21,7 +21,7 @@ interface PropertyDetailsProps {
   Details: IHubDetails | undefined | ITaskFullList | IListDetails;
 }
 export default function PropertyDetails({ Details }: PropertyDetailsProps) {
-  const [toggleSubTask, setToggleSubTask] = useState(false)
+  const [toggleSubTask, setToggleSubTask] = useState(false);
 
   return (
     <>
