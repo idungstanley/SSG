@@ -7,6 +7,7 @@
       "esnext",
       "ES2021.String"
     ],
+    "types": ["cypress"],
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
