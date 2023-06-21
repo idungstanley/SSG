@@ -59,7 +59,7 @@
     "start": "craco --openssl-legacy-provider start",
     "start:linux": "craco --openssl-legacy-provider start",
     "build": "craco --max_old_space_size=4096 build",
-    "test": "craco test",
+    "test": "cypress open",
     "eject": "react-scripts eject",
     "lint:check": "clear && eslint 'src/**/*.{ts,tsx,js}' --config .eslintrc.json",
     "ts:check": "clear && tsc --allowJS false --pretty --strict true",
