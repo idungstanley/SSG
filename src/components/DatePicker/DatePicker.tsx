@@ -63,7 +63,7 @@ export default function DatePicker({ styles, range, toggleFn }: DatePickerProps)
       }
 
       if (taskTime?.to != undefined) {
-        dispatch(setTaskSelectedDate(null));
+        // dispatch(setTaskSelectedDate(null));
       }
     }
   }, [selectedDate?.date]);

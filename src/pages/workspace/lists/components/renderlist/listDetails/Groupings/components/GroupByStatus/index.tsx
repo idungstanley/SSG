@@ -11,7 +11,6 @@ import { TaskDataGroupingsProps } from '../../../../../../../../../features/task
 import TaskListViews from '../../../../../../../tasks/component/views/listLevel/TaskListViews';
 import TaskData from '../../../../../../../tasks/component/taskData/TaskData';
 import SubTask from '../../../../../../../subtasks/subtask1/SubTask';
-import RenderSubTasks from '../../../../../../../tasks/subtasks/subtask1/RenderSubTasks';
 import { useAppSelector } from '../../../../../../../../../app/hooks';
 import AddNewItem from '../../../../../../../tasks/component/taskColumn/AddNewItem';
 import { setCreateTaskFromTop, setCurrentListId } from '../../../../../../../../../features/list/listSlice';
@@ -49,10 +48,11 @@ export default function GroupByStatusTemplate({ filteredTaskData }: ITaskTemplat
               | string
               | number
               | ICustomField[]
-              | [{ id: string; initials: string; colour: string; name: string }]
+              | [{ id: string; initials: string; color: string; name: string }]
               | null
               | undefined;
             key?: string;
+            list?: string[];
             tasksByStatus: {
               [key: string]: ImyTaskData[];
             };
@@ -64,13 +64,13 @@ export default function GroupByStatusTemplate({ filteredTaskData }: ITaskTemplat
         const status = currentTask.status;
 
         if (status !== null && status !== undefined) {
-          if (!GroupedTaskByListID[listId]) {
-            GroupedTaskByListID[listId] = {
-              groupListName: currentTask?.list,
-              key: listId,
-              tasksByStatus: {}
-            };
-          }
+          // if (!GroupedTaskByListID[listId]) {
+          //   GroupedTaskByListID[listId] = {
+          //     groupListName: currentTask?.list,
+          //     key: listId,
+          //     tasksByStatus: {}
+          //   };
+          // }
 
           if (!GroupedTaskByListID[listId].tasksByStatus[status]) {
             GroupedTaskByListID[listId].tasksByStatus[status] = [];
@@ -193,8 +193,6 @@ export default function GroupByStatusTemplate({ filteredTaskData }: ITaskTemplat
                         <SubTask parentTaskId={currentParentTaskId} />
                       </div>
                     ) : null}
-
-                    {getSubTaskId === task.id ? <RenderSubTasks /> : null}
                   </div>
                 ))}
               </li>

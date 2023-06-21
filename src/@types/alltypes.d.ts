@@ -4,3 +4,4 @@ declare module 'heroicons';
 declare module 'react-timecode';
 declare module 'react-timer-wrapper';
 declare module 'react-color';
+declare module 'cypress';

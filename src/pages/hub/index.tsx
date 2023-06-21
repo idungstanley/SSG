@@ -74,7 +74,7 @@ export default function HubPage() {
           children: <ActiveHub />,
           source: hubIcon
         }}
-        additional={<FilterByAssigneesSliderOver data={tasks} />}
+        additional={<FilterByAssigneesSliderOver />}
       >
         <Header />
         <section

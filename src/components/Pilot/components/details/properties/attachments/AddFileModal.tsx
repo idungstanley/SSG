@@ -37,7 +37,7 @@ export default function AddFileModal({ invalidateQuery, endpoint }: UploadFileMo
         allowedFileTypes: ['image/*']
       }
     }).use(XHRUpload, {
-      metaFields: ['image', 'path'],
+      allowedMetaFields: ['image', 'path'],
       endpoint: '',
       bundle: false,
       headers: currentWorkspaceId
@@ -75,6 +75,7 @@ export default function AddFileModal({ invalidateQuery, endpoint }: UploadFileMo
 
   return (
     <DashboardModal
+      id={String(Date.now())}
       uppy={uppy}
       closeModalOnClickOutside
       proudlyDisplayPoweredByUppy={false}

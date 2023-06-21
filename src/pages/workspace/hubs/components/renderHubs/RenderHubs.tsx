@@ -134,7 +134,7 @@ function RenderHubs() {
           </section>
         }
         extendedBar={extendedObj}
-        additional={<FilterByAssigneesSliderOver data={unFilteredTaskData as ITaskFullList[]} />}
+        additional={<FilterByAssigneesSliderOver />}
       >
         <section>
           <div className="w-full ">

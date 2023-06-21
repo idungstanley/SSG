@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState } from 'react';
 import { tagItem, renderDataProps } from '../DataRenderFunc';
 import { useAppSelector } from '../../../../../../app/hooks';
@@ -94,7 +95,7 @@ export default function TaskTag({ taskColField, entity_id, entity_type }: render
 
   return (
     <>
-      <div> {groupTags(taskColField as tagItem[])}</div>
+      <div> </div>
     </>
   );
 }

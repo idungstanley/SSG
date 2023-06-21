@@ -37,7 +37,8 @@ export default function UploadAvatar({ invalidateQuery, endpoint }: UploadFileMo
       }
     })
       .use(XHRUpload, {
-        metaFields: ['image', 'path'],
+        allowedMetaFields: ['image', 'path'],
+        // metaFields: ['image', 'path'],
         endpoint: '',
         bundle: false,
         headers: currentWorkspaceId
@@ -50,6 +51,7 @@ export default function UploadAvatar({ invalidateQuery, endpoint }: UploadFileMo
         formData: true,
         fieldName: 'avatar'
       })
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       .use(Webcam, {
         mirror: true,
         facingMode: 'user',
@@ -82,6 +84,7 @@ export default function UploadAvatar({ invalidateQuery, endpoint }: UploadFileMo
 
   return (
     <DashboardModal
+      id={String(Date.now())}
       uppy={uppy}
       closeModalOnClickOutside
       proudlyDisplayPoweredByUppy={false}

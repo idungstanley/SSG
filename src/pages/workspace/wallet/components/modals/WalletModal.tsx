@@ -41,10 +41,10 @@ function WalletModal() {
       name,
       hubID:
         (createWLID ? createWLID : null) ||
-        (showMenuDropdownType == 'hubs' ? showMenuDropdown : null) ||
-        (showMenuDropdownType == 'subhub' ? showMenuDropdown : null) ||
         (SubMenuType == 'hubs' ? SubMenuId : null) ||
-        (SubMenuType == 'subhub' ? SubMenuId : null),
+        (SubMenuType == 'subhub' ? SubMenuId : null) ||
+        (showMenuDropdownType == 'hubs' ? showMenuDropdown : null) ||
+        (showMenuDropdownType == 'subhub' ? showMenuDropdown : null),
       walletId:
         (showMenuDropdownType == 'wallet' && !createWLID ? showMenuDropdown : null) ||
         (showMenuDropdownType == 'subwallet2' ? showMenuDropdown : null) ||

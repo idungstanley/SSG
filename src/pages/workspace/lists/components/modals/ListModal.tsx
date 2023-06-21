@@ -52,10 +52,10 @@ function ListModal() {
       listName: name,
       hubId:
         (createWlLink ? createWLID : null) ||
-        (showMenuDropdownType == 'hubs' ? showMenuDropdown : null) ||
-        (showMenuDropdownType == 'subhub' ? showMenuDropdown : null) ||
         (SubMenuType == 'hubs' ? SubMenuId : null) ||
-        (SubMenuType == 'subhub' ? SubMenuId : null),
+        (SubMenuType == 'subhub' ? SubMenuId : null) ||
+        (showMenuDropdownType == 'hubs' ? showMenuDropdown : null) ||
+        (showMenuDropdownType == 'subhub' ? showMenuDropdown : null),
       walletId:
         (showMenuDropdownType == 'wallet' && !createWLID ? showMenuDropdown : null) ||
         (showMenuDropdownType == 'subwallet' ? showMenuDropdown : null) ||

@@ -7,7 +7,6 @@ import { UseGetWalletDetails } from '../../features/wallet/walletService';
 import { setActiveItem, setCurrentWalletName } from '../../features/workspace/workspaceSlice';
 import AdditionalHeader from '../../layout/components/MainLayout/Header/AdditionHeader';
 import { generateLists } from '../../utils';
-import ListNav from '../workspace/lists/components/renderlist/ListNav';
 import PilotSection, { pilotConfig } from '../workspace/wallet/components/PilotSection';
 import hubIcon from '../../assets/branding/hub.png';
 import ActiveHub from '../../layout/components/MainLayout/extendedNavigation/ActiveParents/ActiveHub';
@@ -82,7 +81,7 @@ export function WalletPage() {
           children: <ActiveHub />,
           source: hubIcon
         }}
-        additional={<FilterByAssigneesSliderOver data={tasks} />}
+        additional={<FilterByAssigneesSliderOver />}
       >
         <>
           <Header />

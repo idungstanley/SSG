@@ -1,18 +1,25 @@
 import React, { useState } from 'react';
 import { useQueryClient, useMutation } from '@tanstack/react-query';
 import { Button, Input, SlideOver } from '../../../../components';
-import { createHubService } from '../../../../features/hubs/hubService';
+import { createHubService, useGetHubChildren } from '../../../../features/hubs/hubService';
 import { useAppSelector } from '../../../../app/hooks';
 import { getCurrHubId, getSubMenu, setshowMenuDropdown, setSubDropdownMenu } from '../../../../features/hubs/hubSlice';
 import { useDispatch } from 'react-redux';
 import { setCreateSubHubSlideOverVisibility } from '../../../../features/general/slideOver/slideOverSlice';
 import { displayPrompt, setVisibility } from '../../../../features/general/prompt/promptSlice';
-import { IHubDetailResErr } from '../../../../features/hubs/hubs.interfaces';
+// import { IHubDetailResErr } from '../../../../features/hubs/hubs.interfaces';
 
 function SubHubModal() {
   const queryClient = useQueryClient();
   const dispatch = useDispatch();
   const { currHubId, SubMenuId, SubMenuType } = useAppSelector((state) => state.hub);
+
+  const { data } = useGetHubChildren({
+    query: SubMenuType === 'hubs' ? SubMenuId : currHubId
+  });
+
+  const isCreateAllowed = data?.data.wallets.length === 0 && data?.data.lists.length === 0;
+
   const createHub = useMutation(createHubService, {
     onSuccess: () => {
       queryClient.invalidateQueries();
@@ -30,34 +37,35 @@ function SubHubModal() {
           showMenuDropdown: null
         })
       );
-    },
-    onError: (data: IHubDetailResErr) => {
-      if (data?.data?.data.need_confirmation == true) {
-        dispatch(
-          displayPrompt('Create Subhub', 'Would move all entities in Hub to Subhub. Do you want to proceed?', [
-            {
-              label: 'Create Subhub',
-              style: 'danger',
-              callback: async () => {
-                await createHub.mutateAsync({
-                  name,
-                  currentWorkspaceId,
-                  currHubId: SubMenuType === 'hubs' ? SubMenuId : currHubId,
-                  confirmAction: 1
-                });
-              }
-            },
-            {
-              label: 'Cancel',
-              style: 'plain',
-              callback: () => {
-                dispatch(setVisibility(false));
-              }
-            }
-          ])
-        );
-      }
     }
+
+    // onError: (data: IHubDetailResErr) => {
+    //   if (data.data.data.need_confirmation === true) {
+    //     dispatch(
+    //       displayPrompt('Create Subhub', 'Would move all entities in Hub to Subhub. Do you want to proceed?', [
+    //         {
+    //           label: 'Create Subhub',
+    //           style: 'danger',
+    //           callback: async () => {
+    //             await createHub.mutateAsync({
+    //               name,
+    //               currentWorkspaceId,
+    //               currHubId: SubMenuType === 'hubs' ? SubMenuId : currHubId,
+    //               confirmAction: 1
+    //             });
+    //           }
+    //         },
+    //         {
+    //           label: 'Cancel',
+    //           style: 'plain',
+    //           callback: () => {
+    //             dispatch(setVisibility(false));
+    //           }
+    //         }
+    //       ])
+    //     );
+    //   }
+    // }
   });
 
   const handleCloseSlider = () => {
@@ -88,11 +96,38 @@ function SubHubModal() {
   const { name } = formState;
 
   const onSubmit = async () => {
-    await createHub.mutateAsync({
-      name,
-      currentWorkspaceId,
-      currHubId: SubMenuType === 'hubs' ? SubMenuId : currHubId
-    });
+    if (isCreateAllowed) {
+      await createHub.mutateAsync({
+        name,
+        currentWorkspaceId,
+        currHubId: SubMenuType === 'hubs' ? SubMenuId : currHubId,
+        confirmAction: 1
+      });
+    } else {
+      dispatch(
+        displayPrompt('Create Subhub', 'Would move all entities in Hub to Subhub. Do you want to proceed?', [
+          {
+            label: 'Create Subhub',
+            style: 'danger',
+            callback: async () => {
+              await createHub.mutateAsync({
+                name,
+                currentWorkspaceId,
+                currHubId: SubMenuType === 'hubs' ? SubMenuId : currHubId,
+                confirmAction: 1
+              });
+            }
+          },
+          {
+            label: 'Cancel',
+            style: 'plain',
+            callback: () => {
+              dispatch(setVisibility(false));
+            }
+          }
+        ])
+      );
+    }
   };
 
   const { showCreateSubHubSlideOver } = useAppSelector((state) => state.slideOver);

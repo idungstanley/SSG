@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { IUserParams, IUserState } from './account.interfaces';
+import { initialPlaces } from '../../layout/components/MainLayout/Sidebar/components/Places';
+import { IUserParams, IUserState, Place } from './account.interfaces';
 
 const showPreviewFromLS = localStorage.getItem('showPreview') as string;
 
@@ -7,6 +8,8 @@ const showPreviewFromLS = localStorage.getItem('showPreview') as string;
 //   JSON.parse(localStorage.getItem('sidebar') || '""');
 
 const sidebarFromLS = localStorage.getItem('sidebar');
+
+const idsFromLS = JSON.parse(localStorage.getItem('placeItem') || '[]') as string[];
 
 const showSidebar = sidebarFromLS
   ? (
@@ -33,6 +36,7 @@ interface AccountState {
   baseColor: string;
   lightBaseColor: string;
   userSettingsData?: IUserParams;
+  places: Place[];
 }
 
 const initialState: AccountState = {
@@ -46,13 +50,17 @@ const initialState: AccountState = {
   scrollTop: '',
   baseColor: '#BF00FFB2',
   lightBaseColor: '#BF00FF21',
-  userSettingsData: undefined
+  userSettingsData: undefined,
+  places: [...initialPlaces.sort((a, b) => idsFromLS.indexOf(a.id) - idsFromLS.indexOf(b.id))]
 };
 
 export const accountSlice = createSlice({
   name: 'chat',
   initialState,
   reducers: {
+    setPlaces: (state, action: PayloadAction<Place[]>) => {
+      state.places = action.payload;
+    },
     setAccountSettings: (state, action: PayloadAction<IUserState>) => {
       state.settings = action.payload;
     },
@@ -78,6 +86,7 @@ export const accountSlice = createSlice({
 });
 
 export const {
+  setPlaces,
   setAccountSettings,
   setScrollTop,
   setShowSidebar,
