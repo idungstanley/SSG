@@ -146,7 +146,7 @@ export function ScrollableContainer({ children, ...props }: CustomScrollableCont
   }
 
   return (
-    <div className="relative overflow-hidden w-full pl-6 p-2">
+    <div className="relative overflow-hidden w-full p-2">
       <div className="scrollbar-hide" ref={contentRef} {...props}>
         {children}
       </div>
