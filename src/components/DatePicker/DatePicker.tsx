@@ -33,12 +33,15 @@ export default function DatePicker({ styles, range, toggleFn }: DatePickerProps)
   const { selectedDate: taskTime } = useAppSelector((state) => state.task);
   const sectionRef = useRef<HTMLElement>(null);
   const [hoveredDate, setHovered] = useState<Dayjs | null>(null);
+  const [time, setTime] = useState<string>(dayjs().format('ddd DD MMM YYYY h:mm A'));
 
   const closeDateModal = () => {
     if (toggleFn) {
       toggleFn(false);
     }
   };
+
+  const calendarTime = () => setInterval(() => setTime(dayjs().format('ddd DD MMM YYYY h:mm A')), 60000);
 
   const dates = generateDate();
   const groupedDates = groupDatesByDayOfWeek(dates);
@@ -62,6 +65,8 @@ export default function DatePicker({ styles, range, toggleFn }: DatePickerProps)
         dispatch(setTaskSelectedDate(null));
       }
     }
+    calendarTime();
+    return () => document.addEventListener('visibilitychange', calendarTime);
   }, [selectedDate?.date]);
 
   return (
@@ -75,7 +80,6 @@ export default function DatePicker({ styles, range, toggleFn }: DatePickerProps)
         }
         style={{ height: '359px', width: '500px' }}
       >
-        <DatePickerManualDates range={range} />
         {/* Dynamic Dates section */}
         <div className="flex items-center justify-between w-full h-10 px-2 py-4 space-x-2 border border-gray-200">
           <div className="flex space-x-2 items-center">
@@ -85,6 +89,7 @@ export default function DatePicker({ styles, range, toggleFn }: DatePickerProps)
             </p>
           </div>
         </div>
+        <DatePickerManualDates range={range} />
         <div className="flex items-center justify-center px-3 border-b" style={{ height: '250px' }}>
           {!showRecurring ? (
             <DatePickerSideBar currentDate={currentDate} />
@@ -137,16 +142,24 @@ export default function DatePicker({ styles, range, toggleFn }: DatePickerProps)
                     <ul className="text-center grid place-content-center text-sm border-t p-0.5 space-y-4">
                       {sortedDates.map((date) => {
                         const isBlocked =
-                          taskTime?.from &&
-                          taskTime.to &&
-                          (date.date.isSame(taskTime.from, 'day') || date.date.isAfter(taskTime.from, 'day')) &&
-                          date.date.isBefore(taskTime.to, 'day');
+                          (taskTime?.from &&
+                            taskTime?.to &&
+                            (date.date.isSame(taskTime.from, 'day') || date.date.isAfter(taskTime.from, 'day')) &&
+                            date.date.isBefore(taskTime.to, 'day')) ||
+                          (taskTime?.from &&
+                            hoveredDate &&
+                            (date.date.isSame(taskTime.from, 'day') || date.date.isAfter(taskTime.from, 'day')) &&
+                            date.date.isBefore(hoveredDate, 'day'));
 
                         const isHoverBlocked =
-                          taskTime?.from &&
-                          hoveredDate &&
-                          (date.date.isSame(taskTime.from, 'day') || date.date.isAfter(taskTime.from, 'day')) &&
-                          date.date.isBefore(hoveredDate, 'day');
+                          (taskTime?.from &&
+                            taskTime?.to &&
+                            (date.date.isSame(taskTime.from, 'day') || date.date.isAfter(taskTime.from, 'day')) &&
+                            date.date.isBefore(taskTime.to, 'day')) ||
+                          (hoveredDate &&
+                            taskTime?.from &&
+                            (date.date.isSame(taskTime.from, 'day') || date.date.isAfter(taskTime.from, 'day')) &&
+                            date.date.isBefore(hoveredDate, 'day'));
 
                         const isBlockedOrHoverBlocked = isBlocked || isHoverBlocked;
 
@@ -189,21 +202,26 @@ export default function DatePicker({ styles, range, toggleFn }: DatePickerProps)
             </span>
             {showRecurring ? <IoIosArrowDown /> : <IoIosArrowUp />}
           </div>
-          <Button
-            onClick={closeDateModal}
-            variant="contained"
-            className="hover:bg-purple-600"
-            size={'small'}
-            sx={{
-              background: '#d559ff',
-              ':hover': { background: '#c128f5' },
-              height: '32px',
-              fontSize: '10px',
-              borderRadius: '0 0 6px 0'
-            }}
-          >
-            Close
-          </Button>
+          <div className="flex space-x-2">
+            <div className="flex items-center">
+              <span className="font-semibold text-xs italic">{time}</span>
+            </div>
+            <Button
+              onClick={closeDateModal}
+              variant="contained"
+              className="hover:bg-purple-600"
+              size={'small'}
+              sx={{
+                background: '#d559ff',
+                ':hover': { background: '#c128f5' },
+                height: '32px',
+                fontSize: '10px',
+                borderRadius: '0 0 6px 0'
+              }}
+            >
+              Close
+            </Button>
+          </div>
         </div>
       </section>
     </Modal>
