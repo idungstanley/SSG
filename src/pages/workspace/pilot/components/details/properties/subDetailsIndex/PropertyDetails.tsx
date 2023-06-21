@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { AiOutlinePlus } from 'react-icons/ai';
-import SubTask from '../../../../../tasks/subtasks/create/SubTask';
 import moment from 'moment';
 import ToolTip from '../../../../../../../components/Tooltip';
 // import Status from '../status/Status';
@@ -14,6 +13,7 @@ import { AvatarWithInitials } from '../../../../../../../components';
 import { IHubDetails } from '../../../../../../../features/hubs/hubs.interfaces';
 import { ITaskFullList } from '../../../../../../../features/task/interface.tasks';
 import { IListDetails } from '../../../../../../../features/list/list.interfaces';
+import SubTask from '../../../../../subtasks/subtask1/SubTask';
 
 export interface tagItem {
   id: string;

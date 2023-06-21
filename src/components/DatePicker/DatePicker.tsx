@@ -59,7 +59,7 @@ export default function DatePicker({ styles, range, toggleFn }: DatePickerProps)
       }
 
       if (taskTime?.to != undefined) {
-        // dispatch(setTaskSelectedDate(null));
+        dispatch(setTaskSelectedDate(null));
       }
     }
   }, [selectedDate?.date]);
@@ -156,11 +156,9 @@ export default function DatePicker({ styles, range, toggleFn }: DatePickerProps)
                             className={cn(
                               'h-6 w-6 rounded-full grid place-content-center hover:bg-purple-300 hover:text-white transition-all cursor-pointer select-none',
                               date.currentMonth ? '' : 'text-gray-500',
-                              date.today ? 'bg-red-400 text-white' : '',
+                              date.today ? 'bg-red-400 text-white rounded-full' : '',
                               date.currentWeek ? 'bg-gray-300 text-white' : '',
-                              selectedDate?.date.date() === date.date.date()
-                                ? 'bg-purple-400 text-white brightness-150'
-                                : '',
+                              selectedDate?.date.date() === date.date.date() ? 'bg-purple-400 text-white' : '',
                               isBlockedOrHoverBlocked ? 'bg-purple-400 text-white rounded-none' : ''
                             )}
                             onClick={() => {
