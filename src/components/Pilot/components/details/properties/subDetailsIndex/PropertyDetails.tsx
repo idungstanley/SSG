@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { AiOutlinePlus } from 'react-icons/ai';
 // import SubTask from '../../../../../../../tasks/subtasks/create/SubTask';
-import SubTask from '../../../../../../pages/workspace/subtasks/subtask1/SubTask';
 import moment from 'moment';
 // import Status from '../status/Status';
 // import Priority from '../priority/Priority';
@@ -228,7 +227,6 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
             <button className="text-xs text-gray-500  ">Subtask</button>
           </div>
         </div>
-        <div className="mt-4">{toggleSubTask && <SubTask />}</div>
       </section>
     </>
   );

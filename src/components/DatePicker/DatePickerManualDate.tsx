@@ -6,8 +6,9 @@ import { setSelectedDate } from '../../features/workspace/workspaceSlice';
 import { setHistoryMemory } from '../../features/task/taskSlice';
 import { BsCalendarEvent } from 'react-icons/bs';
 import dayjs from 'dayjs';
-import { createDynamicTimeComponent } from '../Pilot/components/details/properties/subDetailsIndex/components/calendar';
 import ReusableSelect from '../../utils/TimeDropDown';
+import { createDynamicTimeComponent } from '../../utils/calendar';
+import { CloseBtn } from '../Buttons/CloseButton';
 
 interface DatePickerManualDatesProps {
   range?: boolean;
@@ -38,15 +39,18 @@ export function DatePickerManualDates({ range }: DatePickerManualDatesProps) {
           {/* et Start Date Selection */}
           <label htmlFor="from" className="flex space-y-1 space-x-1 text-xs items-center">
             <BsCalendarEvent />
-            <input
-              type="text"
-              placeholder="Start Date"
-              className="w-28 h-4 rounded-md px-1 text-xs border-0 focus:outline-none custom-input"
-              value={dateString?.start ?? undefined}
-              onClick={() => setDateType('from')}
-              onChange={(e) => setString({ ...dateString, start: e.target.value })}
-              onBlur={() => handleFilterDateDispatch('start')}
-            />
+            <div className="relative">
+              <input
+                type="text"
+                placeholder="Start Date"
+                className="w-28 h-4 rounded-md px-1 text-xs border-0 focus:outline-none custom-input"
+                value={dateString?.start ?? undefined}
+                onClick={() => setDateType('from')}
+                onChange={(e) => setString({ ...dateString, start: e.target.value })}
+                onBlur={() => handleFilterDateDispatch('start')}
+              />
+              {selectedDate?.dateType === 'from' && <CloseBtn />}
+            </div>
             {selectedDate?.date && selectedDate.dateType === 'from' ? (
               <ReusableSelect
                 menuMaxHeight="300px"
@@ -70,15 +74,18 @@ export function DatePickerManualDates({ range }: DatePickerManualDatesProps) {
           {/* Set Due Date selection */}
           <label htmlFor="from" className="flex space-y-1 space-x-1 text-xs items-center">
             <BsCalendarEvent />
-            <input
-              type="text"
-              placeholder="Due Date"
-              className="w-28 h-4 rounded-md px-1 text-xs border-0 focus:outline-none custom-input"
-              value={dateString?.due ?? undefined}
-              onClick={() => setDateType('to')}
-              onChange={(e) => setString({ ...dateString, due: e.target.value })}
-              onBlur={() => handleFilterDateDispatch('due')}
-            />
+            <div className="relative">
+              <input
+                type="text"
+                placeholder="Due Date"
+                className="w-28 h-4 rounded-md px-1 text-xs border-0 focus:outline-none custom-input"
+                value={dateString?.due ?? undefined}
+                onClick={() => setDateType('to')}
+                onChange={(e) => setString({ ...dateString, due: e.target.value })}
+                onBlur={() => handleFilterDateDispatch('due')}
+              />
+              {selectedDate?.dateType === 'to' && <CloseBtn />}
+            </div>
             {selectedDate?.date && selectedDate?.dateType === 'to' ? (
               <ReusableSelect
                 menuMaxHeight="300px"

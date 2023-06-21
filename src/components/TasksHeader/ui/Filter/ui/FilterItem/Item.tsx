@@ -1,11 +1,8 @@
-import { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
-import { useGetTeamMembers } from '../../../../../../features/settings/teamMembers/teamMemberService';
 import { setFilters } from '../../../../../../features/task/taskSlice';
-import { filterConfig, unitValues } from '../../config/filterConfig';
-import { FilterId, FilterWithId, onChangeProps } from '../../types/filters';
+import { unitValues } from '../../config/filterConfig';
+import { FilterId, FilterOption, FilterWithId, onChangeProps } from '../../types/filters';
 import { Label } from './Label';
-import { useTags } from '../../../../../../features/workspace/tags/tagService';
 import { ListBox } from '../ListBox';
 import { modifyFilters } from '../../lib/filterUtils';
 import { DeleteItem } from './DeleteItem';
@@ -13,34 +10,12 @@ import { DeleteItem } from './DeleteItem';
 interface ItemProps {
   filter: FilterWithId;
   index: number;
+  initialFilters: FilterOption;
 }
 
-export function Item({ filter, index }: ItemProps) {
+export function Item({ filter, index, initialFilters }: ItemProps) {
   const dispatch = useAppDispatch();
   const { filters } = useAppSelector((state) => state.task);
-
-  const [initialFilters, setInitialFilters] = useState(filterConfig);
-
-  // set team members and tags to config
-  const { data: tags } = useTags();
-  const { data: members } = useGetTeamMembers({ query: '', page: 1 });
-
-  useEffect(() => {
-    const teamMembers = members?.data.team_members;
-
-    if (
-      teamMembers?.length &&
-      !initialFilters.assignees.values.length &&
-      tags?.length &&
-      !initialFilters.tags.values.length
-    ) {
-      setInitialFilters((prev) => ({
-        ...prev,
-        assignees: { ...prev.assignees, values: [...teamMembers.map((i) => ({ value: i.user.name, id: i.id }))] },
-        tags: { ...prev.tags, values: [...tags.map((i) => ({ value: i.name, id: i.id }))] }
-      }));
-    }
-  }, [members, tags]);
 
   const { key, values, operator, id } = filter;
 
@@ -62,11 +37,13 @@ export function Item({ filter, index }: ItemProps) {
       />
 
       {/* operator */}
-      <ListBox
-        setSelected={(newValue) => onChange({ newValue, id, type: 'operator' })}
-        selected={operator}
-        values={initialFilters[key].operators}
-      />
+      {initialFilters[key] ? (
+        <ListBox
+          setSelected={(newValue) => onChange({ newValue, id, type: 'operator' })}
+          selected={operator}
+          values={initialFilters[key].operators}
+        />
+      ) : null}
 
       {/* values */}
       {operator.requireValues ? (
