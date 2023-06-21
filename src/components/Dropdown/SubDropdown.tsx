@@ -109,15 +109,8 @@ export default function SubDropdown() {
           showMenuDropdownType !== 'wallet' &&
           showMenuDropdownType !== 'subwallet2'
         ) {
-          dispatch(setCreateHubSlideOverVisibility(false));
-          dispatch(setCreateListSlideOverVisibility(false));
-          dispatch(setCreateTaskSlideOverVisibility(false));
-          dispatch(setCreateWalletSlideOverVisibility(true));
           navigate(`/${currentWorkspaceId}` + navLink);
         } else {
-          dispatch(setCreateHubSlideOverVisibility(false));
-          dispatch(setCreateListSlideOverVisibility(false));
-          dispatch(setCreateTaskSlideOverVisibility(false));
           dispatch(setCreateSubWalletSlideOverVisibility(true));
           navigate(`/${currentWorkspaceId}` + navLink);
         }
@@ -132,9 +125,6 @@ export default function SubDropdown() {
       id: 3,
       title: 'Task',
       handleClick: () => {
-        dispatch(setCreateHubSlideOverVisibility(false));
-        dispatch(setCreateListSlideOverVisibility(false));
-        dispatch(setCreateWalletSlideOverVisibility(false));
         dispatch(setCreateTaskSlideOverVisibility(true));
         navigate(`/${currentWorkspaceId}` + navLink);
       },
@@ -145,9 +135,6 @@ export default function SubDropdown() {
       id: 4,
       title: 'List',
       handleClick: () => {
-        dispatch(setCreateHubSlideOverVisibility(false));
-        dispatch(setCreateWalletSlideOverVisibility(false));
-        dispatch(setCreateTaskSlideOverVisibility(false));
         dispatch(setCreateListSlideOverVisibility(true));
 
         navigate(`/${currentWorkspaceId}` + navLink);

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import everythingIcon from '../../../assets/branding/everything-icon.png';
 import { useAppSelector } from '../../../app/hooks';
@@ -10,7 +10,6 @@ import {
   setCreateTaskSlideOverVisibility,
   setCreateWalletSlideOverVisibility
 } from '../../../features/general/slideOver/slideOverSlice';
-import Dropdown from '../../../components/Dropdown/index';
 import SubHubModal from './components/SubHubModal';
 import Modal from './components/Modal';
 import { cl } from '../../../utils';
@@ -23,6 +22,11 @@ import ActiveTress from './components/ActiveTree/ActiveTress';
 import { BiSearch } from 'react-icons/bi';
 import { setIsSearchActive } from '../../../features/search/searchSlice';
 import { useNavigate, useParams } from 'react-router-dom';
+import DropdownWithoutHeader from '../../../components/Dropdown/DropdownWithoutHeader';
+import { AiFillFolderAdd } from 'react-icons/ai';
+import { RiPlayListAddFill } from 'react-icons/ri';
+import { PlusIcon } from '@heroicons/react/24/outline';
+import { setActiveEntityName } from '../../../features/workspace/workspaceSlice';
 
 function Hubs() {
   const dispatch = useDispatch();
@@ -34,22 +38,49 @@ function Hubs() {
     e.stopPropagation();
     dispatch(setIsSearchActive(true));
   };
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleOpenDropdown = (event: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
+    event.stopPropagation();
+    setAnchorEl(event.currentTarget);
+  };
 
   const { currentWorkspaceId } = useAppSelector((state) => state.auth);
 
   const handleNavigateTask = () => {
-    dispatch(setCreateListSlideOverVisibility(false));
-    dispatch(setCreateTaskSlideOverVisibility(false));
-    dispatch(setCreateWalletSlideOverVisibility(false));
     dispatch(setCreateHubSlideOverVisibility(true));
+    dispatch(setActiveEntityName('Under Construction'));
     navigate(`/${currentWorkspaceId}` + '/tasks');
   };
 
   const configForDropdown = [
     {
-      label: 'hub',
+      label: 'Create Hub',
       icon: <img src={hubIcon} alt="Hub Icon" className="w-4 h-4" />,
-      onClick: () => handleNavigateTask()
+      onclick: () => handleNavigateTask()
+    },
+    {
+      label: 'Create New SubHub',
+      icon: <img src={hubIcon} alt="Hub Icon" className="w-4 h-4" />,
+      onclick: () => handleNavigateTask()
+    },
+    {
+      label: 'Add New Wallet',
+      icon: <AiFillFolderAdd className="w-4 h-4" />,
+      onclick: () => handleNavigateTask()
+    },
+    {
+      label: 'Create New Subwallet',
+      icon: <AiFillFolderAdd className="w-4 h-4" />,
+      onclick: () => handleNavigateTask()
+    },
+    {
+      label: 'Create New List',
+      icon: <RiPlayListAddFill className="w-4 h-4" />,
+      onclick: () => handleNavigateTask()
     }
   ];
 
@@ -63,8 +94,8 @@ function Hubs() {
         midContent={<BiSearch onClick={(e) => toggleSearch(e)} className="w-4 h-4" style={{ color: '#BF00FFB2' }} />}
         searchStatus={isSearchActive}
         rightContent={
-          <div className="flex gap-2" onClick={(e) => e.stopPropagation()}>
-            <Dropdown config={configForDropdown} iconType="plus" iconColor="#BF00FFB2" />
+          <div className="flex gap-2" onClick={(e) => handleOpenDropdown(e)}>
+            <PlusIcon className="w-4 h-4" aria-hidden="true" />
           </div>
         }
       />
@@ -79,8 +110,13 @@ function Hubs() {
           <p className="block text-xs tracking-wider capitalize truncate">Everything</p>
         </div>
       </div>
+      <DropdownWithoutHeader
+        items={configForDropdown}
+        setAnchorEl={setAnchorEl}
+        anchorEl={anchorEl}
+        handleClose={handleClose}
+      />
       <ActiveTress />
-      {/* <ItemsListInSidebar items={data?.data.hubs} status={status} type="hub" /> */}
       <Modal />
       <SubHubModal />
       <SubWalletModal />
