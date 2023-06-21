@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useGetTeamMemberGroup } from '../../../../../../features/settings/teamMemberGroups/teamMemberGroupService';
 import { AvatarWithInitials } from '../../../../../../components';
 import { OutputDateTime } from '../../../../../../app/helpers';
+import { useAppSelector } from '../../../../../../app/hooks';
 
 interface RowProps {
   teamMemberGroupId: string;
@@ -10,6 +11,7 @@ interface RowProps {
 
 export default function Row({ teamMemberGroupId }: RowProps) {
   const { data: teamMemberGroup, status } = useGetTeamMemberGroup(teamMemberGroupId);
+  const { currentWorkspaceId } = useAppSelector((state) => state.auth);
 
   return status === 'success' && teamMemberGroup != null ? (
     <tr key={teamMemberGroup.id}>
@@ -20,7 +22,9 @@ export default function Row({ teamMemberGroupId }: RowProps) {
           </div>
           <div className="ml-4">
             <div className="font-medium text-gray-900">
-              <Link to={`/settings/team-members/groups/${teamMemberGroup.id}`}>{teamMemberGroup.name}</Link>
+              <Link to={`/${currentWorkspaceId}/settings/team-members/groups/${teamMemberGroup.id}`}>
+                {teamMemberGroup.name}
+              </Link>
             </div>
             <div className="text-gray-500">{`${teamMemberGroup.group_team_members.length} members`}</div>
           </div>

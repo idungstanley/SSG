@@ -1,3 +1,4 @@
+import { Dayjs } from 'dayjs';
 import { teamMember } from '../../pages/workspace/tasks/timeclock/entryLists/EntryList';
 import { ICustomField, ImyTaskData } from './taskSlice';
 
@@ -19,6 +20,7 @@ export interface TaskDataGroupingsProps {
       | string
       | number
       | [{ id: string; initials: string; colour: string; name: string }]
+      | { color: string; id: string; initials: string; name: string }[]
       | null
       | undefined;
     key?: string;
@@ -48,7 +50,7 @@ export interface ICheckListItems {
   id: string;
   name: string;
   is_done: number;
-  assignees: [{ id: string; initials: string; colour: string; name: string; avatar_path: string | null }];
+  assignees: [{ id: string; initials: string; color: string; name: string; avatar_path: string | null }];
   group_assignees: [];
   tags: [];
 }
@@ -59,6 +61,16 @@ export interface ICheckListRes {
   items: ICheckListItems[];
 }
 
+export type TagId = string;
+
+export type TaskId = string;
+
+export interface Tag {
+  id: TagId;
+  color: string;
+  name: string;
+}
+
 export interface ITaskFullList {
   id: string;
   name: string;
@@ -66,11 +78,11 @@ export interface ITaskFullList {
   avatar_path: string | null;
   list_id: string;
   parent_id: string | null;
-  priority: string | null | [{ id: string; initials: string; colour: string; name: string }];
+  priority: string | null | [{ id: string; initials: string; color: string; name: string }];
   status: string | null | undefined;
   start_date: string | null;
   end_date: string | null;
-  assignees?: [{ id: string; initials: string; colour: string; name: string; avatar_path: string | null }] | undefined;
+  assignees?: [{ id: string; initials: string; color: string; name: string; avatar_path: string | null }] | undefined;
   group_assignees?: [];
   custom_fields?: ICustomField[];
   tags?: [];
@@ -99,7 +111,7 @@ export interface ITaskFullList {
         name: string;
         parents: IParent;
       }
-    | [{ id: string; initials: string; colour: string; name: string }];
+    | [{ id: string; initials: string; color: string; name: string }];
 }
 
 export interface IGroupingAssignee {
@@ -179,6 +191,17 @@ export interface IDuration {
   s: number;
   m: number;
   h: number;
+}
+
+export interface ISelectedDate {
+  from?: Dayjs;
+  to?: Dayjs;
+}
+
+export interface IHistoryFilterMemory {
+  time?: { from?: string; to?: string };
+  user?: string;
+  btnCheckedStates?: boolean[];
 }
 
 type ValueOf<T> = T[keyof T];

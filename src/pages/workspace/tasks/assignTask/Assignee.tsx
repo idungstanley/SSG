@@ -2,7 +2,7 @@ import * as React from 'react';
 import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import { TrashIcon, UserPlusIcon } from '@heroicons/react/24/solid';
+import { TrashIcon } from '@heroicons/react/24/solid';
 import { UseTaskAssignService, UseUnassignTask } from '../../../../features/task/taskService';
 import { useGetTeamMembers } from '../../../../features/settings/teamMembers/teamMemberService';
 import { AvatarWithInitials } from '../../../../components';
@@ -17,8 +17,11 @@ import { ImyTaskData } from '../../../../features/task/taskSlice';
 import { AiOutlineSearch } from 'react-icons/ai';
 import { useState } from 'react';
 import { ITeamMembersAndGroup } from '../../../../features/settings/teamMembersAndGroups.interfaces';
-import { useAppSelector } from '../../../../app/hooks';
-import AvatarForOwner from '../../../../components/avatar/AvatarForOwner';
+import { useGetTeamMemberGroups } from '../../../../features/settings/teamMemberGroups/teamMemberGroupService';
+import { cl } from '../../../../utils';
+// import AvatarForOwner from '../../../../components/avatar/AvatarForOwner';
+import unassignedIcon from '../../../../assets/icons/unassignedIcon.png';
+import AvatarWithImage from '../../../../components/avatar/AvatarWithImage';
 
 export default function Assignee({
   itemId,
@@ -33,6 +36,7 @@ export default function Assignee({
 }) {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [searchInput, setSearchInput] = React.useState<string>('');
+  const [teams, setTeams] = React.useState<boolean>(false);
   const [filteredMembers, setFilteredMembers] = useState<ITeamMembersAndGroup[] | undefined>([]);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -43,40 +47,34 @@ export default function Assignee({
     setAnchorEl(null);
   };
   // Get Team Members
-  const { data } = useGetTeamMembers({
-    page: 0,
-    query: ''
-  });
-  // const { toggleAssignCurrentTaskId } = useAppSelector((state) => state.task);
+  const { data } = teams ? useGetTeamMemberGroups(0) : useGetTeamMembers({ page: 0, query: '' });
+
   const { mutate: onTaskAssign } = UseTaskAssignService();
   const { mutate: onTaskUnassign } = UseUnassignTask();
   const { mutate: onCheklistItemAssign } = UseChecklistItemAssignee();
   const { mutate: onCheklistItemUnassign } = UseChecklistItemUnassignee();
 
-  // const dispatch = useAppDispatch();
-  // const { toggleAssignCurrentTaskId } = useAppSelector((state) => state.task);
-
-  const teamMembers = data?.data.team_members;
-
-  const assignees = task?.assignees;
+  const teamMembers = teams ? data?.data.team_member_groups : data?.data.team_members;
+  // const assignees = task?.assignees;
+  const assignees = [...(task?.assignees ?? []), ...(task?.group_assignees ?? [])];
 
   const assignedUser = assignees?.map(({ id }: { id: string }) => id);
 
   const checklistAssignedUserId = assigneeChecklistItem?.assignees.map(({ id }: { id: string }) => id);
 
-  const { CompactView, CompactViewWrap } = useAppSelector((state) => state.task);
-
   const handleAssignTask = (id: string) => {
     onTaskAssign({
       taskId: itemId,
-      team_member_id: id
+      team_member_id: id,
+      teams: teams
     });
   };
 
   const handleUnAssignTask = (id: string) => {
     onTaskUnassign({
       taskId: itemId,
-      team_member_id: id
+      team_member_id: id,
+      teams: teams
     });
   };
 
@@ -95,35 +93,29 @@ export default function Assignee({
   };
 
   const searchItem = (value: string) => {
-    // setSearchInput(value);
     setSearchInput(value);
     if (searchInput !== '') {
-      const filtered = teamMembers?.filter((item) => {
-        return item.user.name.includes(searchInput);
-      });
+      const filtered = teamMembers?.filter((el) => el.user.name.toLowerCase().includes(value.toLowerCase()));
       setFilteredMembers(filtered);
     } else {
       setFilteredMembers(teamMembers);
     }
   };
 
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    event.stopPropagation();
+  };
   return (
     <>
       {option === 'task' && (
         <Button id="basic-button">
           {assignees?.length ? (
             <div className="flex">
-              <GroupAssignee data={assignees} itemId={itemId as string} handleClick={handleClick} />
+              <GroupAssignee data={assignees} itemId={itemId as string} handleClick={handleClick} teams={teams} />
             </div>
           ) : (
             <span onClick={handleClick}>
-              <UserPlusIcon
-                className="text-xl text-gray-400 items-center justify-center cursor-pointer"
-                style={{
-                  width: ` ${CompactView || CompactViewWrap ? '20px' : '26px'}`
-                }}
-                aria-hidden="true"
-              />
+              <img src={unassignedIcon} alt="" />
             </span>
           )}
         </Button>
@@ -131,7 +123,7 @@ export default function Assignee({
       {option === 'checklist' && (
         <Button id="basic-button" onClick={handleClick}>
           {checklistAssignedUserId?.length ? (
-            <GroupAssignee data={assigneeChecklistItem?.assignees} />
+            <GroupAssignee data={assigneeChecklistItem?.assignees} teams={teams} />
           ) : (
             <span>
               <CgProfile />
@@ -157,16 +149,30 @@ export default function Assignee({
           }
         }}
       >
-        <section className="relative flex">
-          <AiOutlineSearch className="absolute w-5 h-5 right-3 top-3" />
+        <section className="relative flex items-center sticky top-2 bg-white z-10">
+          <AiOutlineSearch className="absolute w-5 h-5 right-3" />
           <input
             type="text"
             placeholder="Search..."
             className="w-11/12 m-auto p-2 border-0 focus:outline-none rounded-md"
+            onKeyDown={handleKeyDown}
             onChange={(e) => searchItem(e.target.value)}
           />
         </section>
-
+        <div className="w-full flex justify-between items-center px-4 my-2 sticky top-12 bg-white z-10">
+          <p
+            className={cl('flex justify-center w-1/2 cursor-pointer', !teams ? 'border-b-2 border-fuchsia-600' : '')}
+            onClick={() => setTeams(!teams)}
+          >
+            Users
+          </p>
+          <p
+            className={cl('flex justify-center w-1/2 cursor-pointer', teams ? 'border-b-2 border-fuchsia-600' : '')}
+            onClick={() => setTeams(!teams)}
+          >
+            Teams
+          </p>
+        </div>
         {searchInput.length > 1
           ? filteredMembers?.map((item) => {
               return (
@@ -184,14 +190,14 @@ export default function Assignee({
                     >
                       <div>
                         <AvatarWithInitials
-                          initials={item.user.initials as string}
-                          backgroundColour={item.colour}
+                          initials={teams ? item.initials : (item.user.initials as string)}
+                          backgroundColour={teams ? item.color : item.user.color}
                           height="h-8"
                           width="w-8"
                         />
                       </div>
 
-                      <p className="text-sm text-black">{item.user.name.toLocaleUpperCase()}</p>
+                      <p className="text-sm text-black">{teams ? item.name : item.user.name.toLocaleUpperCase()}</p>
                     </div>
                     {assignedUser?.includes(item.id) || checklistAssignedUserId?.includes(item.id) ? (
                       <button
@@ -211,9 +217,9 @@ export default function Assignee({
           : teamMembers?.map((item) => {
               return (
                 <MenuItem key={item.id} onClick={handleClose} className="w-full">
-                  <div className="flex items-center justify-between cursor-pointer w-full  ">
+                  <div className="flex items-center justify-between cursor-pointer w-full">
                     <div
-                      className="relative flex items-center space-x-2 cursor-pointer "
+                      className="relative flex items-center space-x-2 cursor-pointer"
                       onClick={() =>
                         option === 'checklist'
                           ? handleAssignChecklist(item.id)
@@ -227,14 +233,30 @@ export default function Assignee({
                           assignedUser?.includes(item.id) ? 'ring ring-green-500 ring-offset-2 rounded-full ' : null
                         }`}
                       >
-                        <AvatarWithInitials
-                          initials={item.user.initials as string}
-                          backgroundColour={item.colour}
-                          height="h-8"
-                          width="w-8"
-                        />
+                        {!teams ? (
+                          <div>
+                            {item.user.avatar_path == null && (
+                              <AvatarWithInitials
+                                initials={item.user.initials}
+                                backgroundColour={item.user.color}
+                                height="h-8"
+                                width="w-8"
+                              />
+                            )}
+                            {item.user.avatar_path && (
+                              <AvatarWithImage image_path={item.user.avatar_path} height="h-8" width="w-8" />
+                            )}
+                          </div>
+                        ) : (
+                          <AvatarWithInitials
+                            initials={item.initials}
+                            backgroundColour={item.color}
+                            height="h-8"
+                            width="w-8"
+                          />
+                        )}
                       </span>
-                      <p className="text-sm text-black ">{item.user.name.toLocaleUpperCase()}</p>
+                      <p className="text-sm text-black ">{teams ? item.name : item.user.name.toLocaleUpperCase()}</p>
                     </div>
 
                     {assignedUser?.includes(item.id) || checklistAssignedUserId?.includes(item.id) ? (

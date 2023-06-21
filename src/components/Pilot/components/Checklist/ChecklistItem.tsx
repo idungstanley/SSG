@@ -13,11 +13,11 @@ import {
   setToggleAssignChecklistItemId,
   setTriggerItemtUpdate
 } from '../../../../features/task/checklist/checklistSlice';
-import TagModal from '../../../tags/TagModal';
 import { setCurrentTaskIdForTag } from '../../../../features/workspace/tags/tagSlice';
 import { ICheckListItems } from '../../../../features/task/interface.tasks';
 import Assignee from '../../../../pages/workspace/tasks/assignTask/Assignee';
 import TaskTag from '../../../../pages/workspace/tasks/component/taskData/taskTag';
+import { ManageTagsDropdown } from '../../../Tag/ui/ManageTagsDropdown/ui/ManageTagsDropdown';
 
 export interface checkListItemProps {
   Item: ICheckListItems[];
@@ -131,7 +131,7 @@ function ChecklistItem({ Item, checklistId }: checkListItemProps) {
               )}
 
               <span onClick={() => dispatch(setCurrentTaskIdForTag(item.id))}>
-                <TagModal entity_type="checklist_item" />
+                <ManageTagsDropdown tagsArr={item.tags} entityId={item.id} entityType="checklist_item" />
               </span>
               <div className="mx-1">
                 <ChecklistModal

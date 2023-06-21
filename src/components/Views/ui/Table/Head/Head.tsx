@@ -7,6 +7,9 @@ import { Column } from '../../../types/table';
 import { Chevron } from '../../Chevron';
 import { setActiveTaskColumn, setSortArr, setSortArray } from '../../../../../features/task/taskSlice';
 import SortModal from '../../../../SortModal/SortModal';
+import statusbox from '../../../../../assets/icons/statusbox.svg';
+import { CiEdit } from 'react-icons/ci';
+import { BsThreeDots } from 'react-icons/bs';
 
 interface HeadProps {
   columns: Column[];
@@ -100,9 +103,9 @@ export function Head({
         {/* first sticky col */}
         <th style={{ zIndex: 2 }} className="sticky left-0 flex -mb-2 font-extrabold" ref={columns[0].ref}>
           <div className="flex items-center bg-purple-50 " style={{ width: '22px' }}></div>
-          <div className="flex items-center w-full gap-3 py-2 truncate dBlock group opacity-90">
-            <span
-              className={`py-0.5 px-2 rounded-tr-md flex items-center space-x-1 text-white ${
+          <div className="flex dBlock items-center w-full gap-3 py-2 truncate group opacity-90">
+            <div
+              className={`py-0.5 px-2 rounded-tr-md flex items-center space-x-1 text-white dFlex ${
                 parsedLabel == 'todo'
                   ? 'bg-gray-400'
                   : parsedLabel == 'in progress'
@@ -114,10 +117,17 @@ export function Head({
                   : 'bg-gray-400'
               }`}
             >
-              <Chevron color="text-white" active={collapseTasks} onToggle={onToggleCollapseTasks} />
+              <p className="pt-0.5">
+                <Chevron color="text-white" active={collapseTasks} onToggle={onToggleCollapseTasks} />
+              </p>
 
-              <span>{parsedLabel}</span>
-            </span>
+              <span className="pb-1">{parsedLabel}</span>
+              <p className="flex items-center space-x-1 viewSettings">
+                <img src={statusbox} alt="" />
+                <CiEdit />
+                <BsThreeDots />
+              </p>
+            </div>
             <div className="flex items-center hover:bg-gray-200 p-0.5 rounded-md space-x-1  border-t-2 border-l-2 border-r-2 border-transparent hover:border-gray-600">
               <span onClick={(e) => setOptions(e, columns[0].id, columns[0].value)} className="cursor-pointer">
                 <span className="mr-1.5">{taskLength}</span>
