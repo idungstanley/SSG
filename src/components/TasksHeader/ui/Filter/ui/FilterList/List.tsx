@@ -21,9 +21,10 @@ export function List() {
   const { data: list } = useList(listId);
 
   useEffect(() => {
-    // set team members and tags to config
     const teamMembers = members?.data.team_members;
 
+    // set team members and tags to config
+    // check if not exist to prevent duplication
     if (
       teamMembers?.length &&
       !initialFilters.assignees.values.length &&
@@ -38,6 +39,7 @@ export function List() {
     }
 
     // set custom fields to config
+    // check if not exist to prevent duplication
     if (
       list?.custom_fields.length &&
       !initialFilters[list.custom_fields[0].name + SPECIAL_CHAR + 'cus_' + list.custom_fields[0].id]
@@ -60,8 +62,6 @@ export function List() {
       }));
     }
   }, [members, tags, list]);
-
-  console.log({ initialFilters, filters });
 
   return (
     <div className="space-y-4 w-full p-2">
