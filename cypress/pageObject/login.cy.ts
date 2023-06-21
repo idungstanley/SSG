@@ -1,7 +1,7 @@
 /// <reference types="cypress"/>
 export default class Login {
   navigate() {
-    return cy.visit('http://localhost:3001');
+    return cy.visit('http://localhost:3000');
   }
 
   signin_email(email) {
