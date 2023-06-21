@@ -7,7 +7,7 @@ interface AdditionalProps {
 }
 
 export const generateFilter = (key: FilterKey, props?: AdditionalProps): FilterWithId => ({
-  id: Date.now().toString(),
+  id: Date.now(),
   key,
   values: props?.initialValue ? [props.initialValue] : [],
   operator: filterConfig[key].operators[0] ?? operators.eq

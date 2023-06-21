@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
 import { useGetTeamMembers } from '../../../../../../features/settings/teamMembers/teamMemberService';
 import { setFilters } from '../../../../../../features/task/taskSlice';
-import { filterConfig, operators, unitValues } from '../../config/filterConfig';
+import { filterConfig, operators, SPECIAL_CHAR, unitValues } from '../../config/filterConfig';
 import { FilterId, FilterOption, FilterWithId, onChangeProps } from '../../types/filters';
 import { Label } from './Label';
 import { useTags } from '../../../../../../features/workspace/tags/tagService';
@@ -34,10 +34,11 @@ export function Item({ filter, index }: ItemProps) {
       const customFields: FilterOption = {};
       list.custom_fields.forEach((field) => {
         if (field.properties) {
-          customFields[field.name] = {
+          const name = field.name + SPECIAL_CHAR + 'cus_' + field.id;
+
+          customFields[name] = {
             operators: [operators.eq, operators.ne],
-            values: [...field.properties],
-            fieldId: field.id
+            values: [...field.properties]
           };
         }
       });

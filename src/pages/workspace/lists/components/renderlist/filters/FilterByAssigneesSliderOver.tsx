@@ -59,7 +59,7 @@ export default function FilterByAssigneesSliderOver() {
       }
     } else {
       // create assignees filter
-      dispatch(setFilters([...filters, generateFilter('assignees', newMemberObj)]));
+      dispatch(setFilters([...filters, generateFilter('assignees', { initialValue: newMemberObj })]));
     }
   };
 

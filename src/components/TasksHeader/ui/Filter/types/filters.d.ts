@@ -103,14 +103,12 @@ type FilterKey = TaskKey | string; // string for custom fields
 interface Filter {
   values: FilterValue[];
   operators: Operator[];
-  fieldId?: string;
   units?: Unit[];
 }
 
 export interface FilterWithId {
   id: FilterId;
   key: FilterKey;
-  isCustomField?: boolean;
   operator: Operator;
   values: FilterValue[];
 }
