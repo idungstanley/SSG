@@ -1,6 +1,5 @@
 import dayjs, { Dayjs } from 'dayjs';
 import React, { useEffect, useRef, useState } from 'react';
-import cn from '../Pilot/components/details/properties/subDetailsIndex/components/cn';
 import { GrFormNext, GrFormPrevious } from 'react-icons/gr';
 import { MdOutlineDateRange } from 'react-icons/md';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
@@ -10,11 +9,8 @@ import { DatePickerSideBar } from './DatePickerSideBar';
 import { DatePickerManualDates } from './DatePickerManualDate';
 import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io';
 import { setSelectedDate } from '../../features/workspace/workspaceSlice';
-import {
-  generateDate,
-  groupDatesByDayOfWeek,
-  months
-} from '../Pilot/components/details/properties/subDetailsIndex/components/calendar';
+import { generateDate, groupDatesByDayOfWeek, months } from '../../utils/calendar';
+import cn from '../../utils/cn';
 
 interface DatePickerProps {
   styles?: string;
