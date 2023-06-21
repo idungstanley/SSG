@@ -10,6 +10,7 @@ import { switchWorkspaceService } from '../../../features/account/accountService
 import { setCurrentWorkspace, switchWorkspace } from '../../../features/auth/authSlice';
 import { setMyWorkspacesSlideOverVisibility } from '../../../features/general/slideOver/slideOverSlice';
 import { useEffect } from 'react';
+import DragContext from './DragContext/DragContext';
 
 function MainLayout() {
   const { activeItemType, activeItemId } = useAppSelector((state) => state.workspace);
@@ -49,29 +50,31 @@ function MainLayout() {
     <div className={cl('h-full flex flex-col')}>
       <ProgressBar />
       {/* <TopMenu /> */}
-      <div className="flex h-full">
-        <div className="grid w-full h-full grid-rows-1 overflow-hidden grid-cols-autoFr">
-          <div className="relative h-full">
-            {/* show extended navigation button */}
-            {/* <OpenExtBtn /> */}
-            <Sidebar />
-          </div>
-          <div className="w-full h-full">
-            {/* <AdditionalHeader /> */}
-            <Header />
-            <div className="w-full h-full">
-              <Outlet />
+      <DragContext>
+        <div className="flex h-full">
+          <div className="grid w-full h-full grid-rows-1 overflow-hidden grid-cols-autoFr">
+            <div className="relative h-full">
+              {/* show extended navigation button */}
+              {/* <OpenExtBtn /> */}
+              <Sidebar />
             </div>
-            <AddFileModal
-              endpoint={`attachments?id=${activeItemId}?type=${activeItemType}`}
-              // endpoint={`attachments/${folderId || ''}`}
-              // activeItemId={activeItemId}
-              // activeType={activeItemType}
-              invalidateQuery={['attachments'] as InvalidateQueryFilters<unknown>}
-            />
+            <div className="w-full h-full">
+              {/* <AdditionalHeader /> */}
+              <Header />
+              <div className="w-full h-full">
+                <Outlet />
+              </div>
+              <AddFileModal
+                endpoint={`attachments?id=${activeItemId}?type=${activeItemType}`}
+                // endpoint={`attachments/${folderId || ''}`}
+                // activeItemId={activeItemId}
+                // activeType={activeItemType}
+                invalidateQuery={['attachments'] as InvalidateQueryFilters<unknown>}
+              />
+            </div>
           </div>
         </div>
-      </div>
+      </DragContext>
     </div>
   );
 }

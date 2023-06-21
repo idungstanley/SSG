@@ -1,12 +1,13 @@
 import React from 'react';
-import FolderIcon from '../assets/icons/fileFormats/folder.svg';
-import PDFIcon from '../assets/icons/fileFormats/pdf.svg';
-import JPGIcon from '../assets/icons/fileFormats/jpg.svg';
-import WordIcon from '../assets/icons/fileFormats/word.svg';
-import DocIcon from '../assets/icons/fileFormats/doc.svg';
-import TXTIcon from '../assets/icons/fileFormats/txt.svg';
-import ExcelIcon from '../assets/icons/fileFormats/xls.svg';
-import PPTIcon from '../assets/icons/fileFormats/ppt.svg';
+// ! change me
+import FolderIcon from '../assets/icons/cabinet.svg';
+import PDFIcon from '../assets/icons/cabinet.svg';
+import JPGIcon from '../assets/icons/cabinet.svg';
+import WordIcon from '../assets/icons/cabinet.svg';
+import DocIcon from '../assets/icons/cabinet.svg';
+import TXTIcon from '../assets/icons/cabinet.svg';
+import ExcelIcon from '../assets/icons/cabinet.svg';
+import PPTIcon from '../assets/icons/cabinet.svg';
 
 interface FileIconProps {
   extensionKey: string | undefined;

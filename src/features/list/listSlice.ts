@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { ListColourProps } from '../../components/tasks/ListItem';
+import { TaskId } from '../task/interface.tasks';
 
 interface ListState {
   list: string[];
@@ -10,6 +11,7 @@ interface ListState {
   toggleArchiveList: boolean;
   listColour: ListColourProps | undefined | string;
   editList: boolean;
+  draggableTaskId: null | TaskId;
 }
 
 const initialState: ListState = {
@@ -20,13 +22,17 @@ const initialState: ListState = {
   archiveList: false,
   toggleArchiveList: false,
   listColour: { innerColour: 'white', outerColour: 'black' },
-  editList: false
+  editList: false,
+  draggableTaskId: null
 };
 
 export const listSlice = createSlice({
   name: 'list',
   initialState,
   reducers: {
+    setDraggableItem: (state, action: PayloadAction<TaskId | null>) => {
+      state.draggableTaskId = action.payload;
+    },
     createList(state, action: PayloadAction<string>) {
       state.list.push(action.payload);
     },
@@ -60,6 +66,7 @@ export const listSlice = createSlice({
 });
 
 export const {
+  setDraggableItem,
   createList,
   checkIfList,
   getList,

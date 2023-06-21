@@ -14,6 +14,7 @@ import { BsArrowsAngleExpand } from 'react-icons/bs';
 import AssignTask from '../../../assignTask/AssignTask';
 import { MdOutlineDragIndicator } from 'react-icons/md';
 import { TaskDataProps } from '../../taskData/TaskData';
+import { Task, TaskKeyof } from '../../../../../../features/task/interface.tasks';
 
 function TaskTableView({ tasks }: TaskDataProps) {
   const { hideTask, taskColumns, toggleAssignCurrentTaskId } = useAppSelector((state) => state.task);
@@ -66,9 +67,10 @@ function TaskTableView({ tasks }: TaskDataProps) {
       | undefined
       | null
       | ICustomField[]
-      | Array<{ id: string; initials: string; colour: string; name: string }>,
+      | Array<{ id: string; initials: string; colour: string; name: string }>
+      | { color: string; id: string; initials: string; name: string }[],
     colfield: string,
-    task?: ImyTaskData
+    task?: Task
   ) => {
     if (
       colfield === 'assignees' &&
@@ -224,7 +226,7 @@ function TaskTableView({ tasks }: TaskDataProps) {
                           className="text-sm font-medium text-gray-800 whitespace-nowrap border-2 border-gray-300"
                           key={col.id}
                         >
-                          {renderData((task as ImyTaskData)[col.field], col.field, task) as ReactNode}
+                          {/* {task && (renderData(task[col.field], col.field, task) as ReactNode)} */}
                         </td>
                       )
                   )}

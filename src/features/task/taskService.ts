@@ -1,5 +1,5 @@
 import requestNew from '../../app/requestNew';
-import { IFullTaskRes, ITaskFullList, ITaskListRes, ITaskRes, ITimeEntriesRes } from './interface.tasks';
+import { IFullTaskRes, ITaskListRes, ITaskRes, ITimeEntriesRes, TaskId } from './interface.tasks';
 import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { setScreenRecording, setScreenRecordingMedia, setTimerStatus, setToggleAssignCurrentTaskId } from './taskSlice';
@@ -9,19 +9,55 @@ import RecordRTC from 'recordrtc';
 import { useUploadRecording } from '../workspace/workspaceService';
 import { useParams } from 'react-router-dom';
 import { toggleMute } from '../workspace/workspaceSlice';
+import { generateFilters } from '../../components/TasksHeader/lib/generateFilters';
 
-const addTask = (data: { name: string; id: string; isListParent: boolean; status?: string }) => {
-  const { name, id, isListParent, status } = data;
+const moveTask = (data: { taskId: TaskId; listId: string }) => {
+  const { taskId, listId } = data;
+
+  const response = requestNew({
+    url: 'tasks/' + taskId + '/move',
+    method: 'POST',
+    data: {
+      list_id: listId
+    }
+  });
+  return response;
+};
+
+export const useMoveTask = () => {
+  const queryClient = useQueryClient();
+  const { hubId, walletId, listId } = useParams();
+
+  const id = hubId ?? walletId ?? listId;
+  const type = hubId ? 'hub' : walletId ? 'wallet' : 'list';
+
+  const { filterTaskByAssigneeIds: assigneeUserId } = useAppSelector((state) => state.task);
+  const { sortAbleArr } = useAppSelector((state) => state.task);
+  const sortArrUpdate = sortAbleArr.length <= 0 ? null : sortAbleArr;
+
+  const { filters } = generateFilters();
+
+  return useMutation(moveTask, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['lists']);
+      queryClient.invalidateQueries(['task', { listId, assigneeUserId, sortArrUpdate, filters }]);
+      queryClient.invalidateQueries(['task', id, type]);
+      queryClient.invalidateQueries(['retrieve', id ?? 'root', 'tree']);
+      queryClient.invalidateQueries(['retrieve', id ?? 'root', undefined]);
+    }
+  });
+};
+
+const addTask = (data: { name: string; id: string; isListParent: boolean }) => {
+  const { name, id, isListParent } = data;
 
   const parentId = isListParent ? { list_id: id } : { parent_id: id };
-  const statusData = status ? status : 'todo';
 
   const response = requestNew({
     url: 'tasks',
     method: 'POST',
     data: {
       name,
-      status: statusData,
       ...parentId
     }
   });
@@ -37,8 +73,7 @@ export const useAddTask = (parentTaskId?: string) => {
 
   return useMutation(addTask, {
     onSuccess: () => {
-      // queryClient.invalidateQueries(['task', id, type]);
-      queryClient.invalidateQueries(['task']);
+      queryClient.invalidateQueries(['task', id, type]);
       queryClient.invalidateQueries(['sub-tasks', parentTaskId]);
     }
   });
@@ -80,12 +115,15 @@ export const UseGetFullTaskList = ({
   const assignees = assigneeUserId ? (assigneeUserId == 'unassigned' ? null : [assigneeUserId]) : null;
   const { sortAbleArr } = useAppSelector((state) => state.task);
   const sortArrUpdate = sortAbleArr.length <= 0 ? null : sortAbleArr;
+
   const { workSpaceId } = useParams();
   const { currentWorkspaceId } = useAppSelector((state) => state.auth);
   const fetch = currentWorkspaceId == workSpaceId;
 
+  const { filters } = generateFilters();
+
   return useInfiniteQuery(
-    ['task', itemId, itemType, sortArrUpdate],
+    ['task', itemId, itemType, filters, sortArrUpdate],
     async ({ pageParam = 0 }: { pageParam?: number }) => {
       return requestNew<IFullTaskRes>({
         url: 'tasks/full-list',
@@ -97,16 +135,16 @@ export const UseGetFullTaskList = ({
           assignees
         },
         data: {
+          filters,
           sorting: sortArrUpdate
         }
       });
     },
     {
+      keepPreviousData: true,
       enabled: fetch,
       onSuccess: (data) => {
-        data.pages.map((page) =>
-          page.data.tasks.map((task: ITaskFullList) => queryClient.setQueryData(['task', task.id], task))
-        );
+        data.pages.map((page) => page.data.tasks.map((task) => queryClient.setQueryData(['task', task.id], task)));
       },
       getNextPageParam: (lastPage) => {
         if (lastPage?.data?.paginator.has_more_pages) {
@@ -264,8 +302,10 @@ export const getTaskListService = ({
   const { currentWorkspaceId } = useAppSelector((state) => state.auth);
   const fetch = currentWorkspaceId == workSpaceId;
 
+  const { filters } = generateFilters();
+
   return useInfiniteQuery(
-    ['task', { listId: listId, assigneeUserId, sortArrUpdate }],
+    ['task', { listId, assigneeUserId, sortArrUpdate, filters }],
 
     async ({ pageParam = 0 }: { pageParam?: number }) => {
       return requestNew<ITaskListRes>({
@@ -277,7 +317,8 @@ export const getTaskListService = ({
           assignees
         },
         data: {
-          sorting: sortArrUpdate
+          sorting: sortArrUpdate,
+          filters
         }
       });
     },
@@ -553,17 +594,19 @@ export const RemoveWatcherService = ({ query }: { query: (string | null | undefi
 // Assign Checklist Item
 const AssignTask = ({
   taskId,
-  team_member_id
+  team_member_id,
+  teams
 }: {
   taskId: string | null | undefined;
   team_member_id: string | null;
+  teams: boolean;
 }) => {
   const request = requestNew({
-    url: '/assignee/assign',
+    url: teams ? '/group-assignee/assign' : '/assignee/assign',
     method: 'POST',
-    params: {
-      team_member_id: team_member_id,
+    data: {
       id: taskId,
+      ...(teams ? { team_member_group_id: team_member_id } : { team_member_id: team_member_id }),
       type: 'task'
     }
   });
@@ -585,16 +628,18 @@ export const UseTaskAssignService = () => {
 // Unassign Task
 const UnassignTask = ({
   taskId,
-  team_member_id
+  team_member_id,
+  teams
 }: {
   taskId: string | null | undefined;
   team_member_id: string | null;
+  teams: boolean;
 }) => {
   const request = requestNew({
-    url: '/assignee/unassign',
+    url: teams ? '/group-assignee/unassign' : '/assignee/unassign',
     method: 'POST',
-    params: {
-      team_member_id: team_member_id,
+    data: {
+      ...(teams ? { team_member_group_id: team_member_id } : { team_member_id: team_member_id }),
       id: taskId,
       type: 'task'
     }

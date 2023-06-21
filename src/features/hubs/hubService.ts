@@ -98,16 +98,20 @@ export const useGetHubList = ({ query }: { query: number | null }) => {
   );
 };
 
-export const useGetHubChildren = ({ query }: { query: string | null | undefined }) => {
+export const useGetHubChildren = ({ query, enabled }: { query: string | null | undefined; enabled?: boolean }) => {
   const hubId = query;
 
-  return useQuery(['hubs', hubId], async () => {
-    const data = await requestNew<IHubReq>({
-      url: `/hubs/${hubId}`,
-      method: 'GET'
-    });
-    return data;
-  });
+  return useQuery(
+    ['hubs', hubId],
+    async () => {
+      const data = await requestNew<IHubReq>({
+        url: `/hubs/${hubId}`,
+        method: 'GET'
+      });
+      return data;
+    },
+    { enabled: enabled ? enabled : !!hubId }
+  );
 };
 
 //get subhub

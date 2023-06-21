@@ -5,7 +5,7 @@ import { IField } from '../list/list.interfaces';
 import { IDuration, IHistoryFilterMemory, IParent, ISelectedDate, TaskKey } from './interface.tasks';
 import { SortOption } from '../../pages/workspace/tasks/component/views/listLevel/TaskListViews';
 import RecordRTC from 'recordrtc';
-import { FilterValue } from '../../components/TasksHeader/ui/Filter/types/filters';
+import { FilterWithId } from '../../components/TasksHeader/ui/Filter/types/filters';
 
 export interface ICustomField {
   id: string;
@@ -26,35 +26,29 @@ export interface ActiveTaskColumnProps {
   header: string;
 }
 
-export interface tagItem {
-  id: string;
-  name: string;
-  color: string;
-}
-
 export interface ImyTaskData {
   id: string;
   name: string;
   description: string | null;
   list_id: string;
   parent_id: string | null;
-  priority: string | null | [{ id: string; initials: string; colour: string; name: string }];
+  priority: string | null | [{ id: string; initials: string; color: string; name: string }];
   start_date: string | null;
   end_date: string | null;
   status?: string | null;
-  assignees?: [{ id: string; initials: string; colour: string; name: string; avatar_path: string | null }];
+  assignees?: [{ id: string; initials: string; color: string; name: string; avatar_path: string | null }];
+  group_assignees?: {
+    color: string;
+    id: string;
+    initials: string;
+    name: string;
+  }[];
   updated_at?: string;
   created_at?: string;
   archived_at?: string | null;
   deleted_at?: string | null;
   custom_fields: ICustomField[];
-  [key: string]:
-    | ICustomField[]
-    | string
-    | number
-    | undefined
-    | null
-    | [{ id: string; initials: string; colour: string; name: string }];
+  list?: { id: string; name: string; parent: IParent };
 }
 
 export interface ImyTaskData2 {
@@ -64,13 +58,13 @@ export interface ImyTaskData2 {
   list_id?: string;
   list?: { id: string; name: string; parent: IParent };
   parent_id?: string | null;
-  priority?: string | null | [{ id: string; initials: string; colour: string; name: string }];
+  priority?: string | null | [{ id: string; initials: string; color: string; name: string }];
   start_date?: string | null;
   end_date?: string | null;
   status?: string | null;
   tags?: [];
   directory_items?: [];
-  assignees?: [{ id: string; initials: string; colour: string; name: string }];
+  assignees?: [{ id: string; initials: string; color: string; name: string }];
   updated_at?: string;
   created_at?: string;
   group_assignees?: [];
@@ -84,7 +78,7 @@ export interface ImyTaskData2 {
     | { id: string; name: string; parent: IParent }
     | []
     | null
-    | [{ id: string; initials: string; colour: string; name: string }];
+    | [{ id: string; initials: string; color: string; name: string }];
 }
 
 interface TaskState {
@@ -146,7 +140,7 @@ interface TaskState {
   assigneeIds: string[];
   selectedDate: ISelectedDate | null;
   HistoryFilterMemory: IHistoryFilterMemory | null;
-  filters: FilterValue[];
+  filters: FilterWithId[];
 }
 
 const initialState: TaskState = {
@@ -215,7 +209,7 @@ export const taskSlice = createSlice({
   name: 'task',
   initialState,
   reducers: {
-    setFilters(state, action: PayloadAction<FilterValue[]>) {
+    setFilters(state, action: PayloadAction<FilterWithId[]>) {
       state.filters = action.payload;
     },
     setAssigneeIds(state, action: PayloadAction<string[]>) {
@@ -435,7 +429,7 @@ export const taskSlice = createSlice({
     setTimerInterval(state, action: PayloadAction<number | undefined>) {
       state.period = action.payload;
     },
-    setTaskSelectedDate(state, action: PayloadAction<ISelectedDate | null>) {
+    setTaskSelectedDate(state, action: PayloadAction<ISelectedDate>) {
       state.selectedDate = action.payload;
     },
     setHistoryMemory(state, action: PayloadAction<IHistoryFilterMemory>) {

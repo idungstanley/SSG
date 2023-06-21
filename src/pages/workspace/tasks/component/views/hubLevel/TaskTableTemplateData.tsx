@@ -13,6 +13,7 @@ import moment, { MomentInput } from 'moment';
 import { BsArrowsAngleExpand } from 'react-icons/bs';
 import AssignTask from '../../../assignTask/AssignTask';
 import { MdOutlineDragIndicator } from 'react-icons/md';
+// import { TaskKeyof } from '../../../../../../features/task/interface.tasks';
 
 export interface ITaskTemplateData {
   filteredTaskData: {
@@ -48,7 +49,7 @@ function TaskTableTemplateData({ filteredTaskData }: ITaskTemplateData) {
           {
             id: string;
             initials: string;
-            colour: string;
+            color: string;
             name: string;
           }
         ]
@@ -77,7 +78,7 @@ function TaskTableTemplateData({ filteredTaskData }: ITaskTemplateData) {
       | undefined
       | null
       | ICustomField[]
-      | Array<{ id: string; initials: string; colour: string; name: string }>,
+      | Array<{ id: string; initials: string; color: string; name: string }>,
     colfield: string,
     task?: ImyTaskData
   ) => {
@@ -87,12 +88,12 @@ function TaskTableTemplateData({ filteredTaskData }: ITaskTemplateData) {
         taskColField as Array<{
           id: string;
           initials: string;
-          colour: string;
+          color: string;
           name: string;
         }>
       ).length !== 0
     ) {
-      const taskColFieldSetType = taskColField as [{ id: string; initials: string; colour: string; name: string }];
+      const taskColFieldSetType = taskColField as [{ id: string; initials: string; color: string; name: string }];
       return (
         <>
           <div className="cursor-pointer flex " onClick={() => handleAssigneeModal(task?.id)}>
@@ -109,7 +110,7 @@ function TaskTableTemplateData({ filteredTaskData }: ITaskTemplateData) {
         taskColField as Array<{
           id: string;
           initials: string;
-          colour: string;
+          color: string;
         }>
       ).length === 0
     ) {
@@ -232,7 +233,7 @@ function TaskTableTemplateData({ filteredTaskData }: ITaskTemplateData) {
                             className="text-sm font-medium text-gray-800 whitespace-nowrap border-2 border-gray-300"
                             key={col.id}
                           >
-                            {renderData(task[col.field], col.field, task) as ReactNode}
+                            {/* {task && (renderData(task[col.field], col.field, task) as ReactNode)} */}
                           </td>
                         )
                     )}
