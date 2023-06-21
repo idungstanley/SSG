@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 import { AiOutlinePlus } from 'react-icons/ai';
 import moment from 'moment';
 import ToolTip from '../../../../../../../components/Tooltip';
-// import Status from '../status/Status';
-// import Priority from '../priority/Priority';
 import CustomReference from '../customReference/CustomReference';
 import EntitySettings from '../entitySettings/EntitySettings';
 import Share from '../share/Share';
@@ -13,7 +11,6 @@ import { AvatarWithInitials } from '../../../../../../../components';
 import { IHubDetails } from '../../../../../../../features/hubs/hubs.interfaces';
 import { ITaskFullList } from '../../../../../../../features/task/interface.tasks';
 import { IListDetails } from '../../../../../../../features/list/list.interfaces';
-import SubTask from '../../../../../subtasks/subtask1/SubTask';
 
 export interface tagItem {
   id: string;
@@ -24,35 +21,11 @@ interface PropertyDetailsProps {
   Details: IHubDetails | undefined | ITaskFullList | IListDetails;
 }
 export default function PropertyDetails({ Details }: PropertyDetailsProps) {
-  const [toggleSubTask, setToggleSubTask] = useState(false);
-  // const groupTags = (arr: tagItem[] | [tagItem[]]) => {
-  //   return arr?.map((item) => {
-  //     return Array.isArray(item) ? (
-  //       <span className="flex">{groupTags(item)}</span>
-  //     ) : (
-  //       <>
-  //         <span
-  //           className={`flex text-white p-0.5 text-center m-0.5 rounded-r-md ${
-  //             item.name.length > 10 ? 'object-contain' : 'w-20'
-  //           }`}
-  //           style={{ backgroundColor: `${item.color}` }}
-  //         >
-  //           {item.name}
-  //         </span>
-  //       </>
-  //     );
-  //   });
-  // };
+  const [toggleSubTask, setToggleSubTask] = useState(false)
 
   return (
     <>
       <div className="flex items-center justify-between p-2">
-        {/* <section className="flex items-center space-x-3">
-          <Status Details={Details} />
-          <ToolTip tooltip="Priority">
-            <Priority Details={Details} />
-          </ToolTip>
-        </section> */}
         <section className="z-0 flex items-center justify-center space-x-3">
           <CustomReference />
           <ToolTip tooltip="Share">
@@ -116,10 +89,9 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
             onClick={() => setToggleSubTask(!toggleSubTask)}
           >
             <AiOutlinePlus className="text-xs h-2.5" />
-            <button className="text-xs text-gray-500  ">Subtask</button>
+            <button className="text-xs text-gray-500  ">Subtask test</button>
           </div>
         </div>
-        <div className="mt-4">{toggleSubTask && <SubTask />}</div>
       </section>
     </>
   );
