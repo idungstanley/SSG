@@ -2185,26 +2185,26 @@
   dependencies:
     remove-accents "0.4.2"
 
-"@tanstack/query-core@4.29.14":
-  version "4.29.14"
-  resolved "https://registry.yarnpkg.com/@tanstack/query-core/-/query-core-4.29.14.tgz#569de51719a0f4445fabff775012d5c09a173b96"
-  integrity sha512-ElEAahtLWA7Y7c2Haw10KdEf2tx+XZl/Z8dmyWxZehxWK3TPL5qtXtb7kUEhvt/8u2cSP62fLxgh2qqzMMGnDQ==
+"@tanstack/query-core@4.29.15":
+  version "4.29.15"
+  resolved "https://registry.yarnpkg.com/@tanstack/query-core/-/query-core-4.29.15.tgz#6f8721341dbece517326a8e402d29ea3365538a8"
+  integrity sha512-Recc1d5rjHesKhzlH3Aw66v+vQxtB9OHEXP/vxgEcEJ0DwEpfe3EQ4id20vuBJHY2XRjfgWGmUs6ZgK6PSsTXA==
 
 "@tanstack/react-query-devtools@^4.0.8":
-  version "4.29.14"
-  resolved "https://registry.yarnpkg.com/@tanstack/react-query-devtools/-/react-query-devtools-4.29.14.tgz#8e4f35fa51949e6c66ca5eb7c182e331945c7777"
-  integrity sha512-2H4otgQiXJSU7z8HIPw6whm7xfaEA3ouoM2PrWTHs+DMFX0BbodhOfQeJxsjw5uq2oV1yln/DABLJjZoQmQbpQ==
+  version "4.29.15"
+  resolved "https://registry.yarnpkg.com/@tanstack/react-query-devtools/-/react-query-devtools-4.29.15.tgz#130de964efc6e4d551978f93952d12300fd686a2"
+  integrity sha512-Mtt0c4xNVuo8T6K5+wQZ8hgL8wme99M/+XPwgLDS34PjmTPJs7kWyUuweNyWQZZZsUpAts69k4Dssh+nB5rwsg==
   dependencies:
     "@tanstack/match-sorter-utils" "^8.7.0"
     superjson "^1.10.0"
     use-sync-external-store "^1.2.0"
 
 "@tanstack/react-query@^4.0.8":
-  version "4.29.14"
-  resolved "https://registry.yarnpkg.com/@tanstack/react-query/-/react-query-4.29.14.tgz#5e836d470c1c85d1aa3e53a6fc64f788dddb2ee5"
-  integrity sha512-wh4bd/QIy85YgTDBtj/7/9ZkpRX41QdZuUL8xKoSzuMCukXvAE1/oJ4p0F15lqQq9W3g2pgcbr2Aa+CNvqABhg==
+  version "4.29.15"
+  resolved "https://registry.yarnpkg.com/@tanstack/react-query/-/react-query-4.29.15.tgz#83598e46964185199c59757e6b9c63c15eff81c1"
+  integrity sha512-1zDkv95ljuJ623hhbYU8YIprPW2x6774kh3IQNEuZav62+S+Zr26uUOrE2zGRp9I1uO5Liw/0uYB3dWXQP5+3Q==
   dependencies:
-    "@tanstack/query-core" "4.29.14"
+    "@tanstack/query-core" "4.29.15"
     use-sync-external-store "^1.2.0"
 
 "@testing-library/dom@^8.5.0":
@@ -4504,9 +4504,9 @@ caniuse-api@^3.0.0:
     lodash.uniq "^4.5.0"
 
 caniuse-lite@^1.0.0, caniuse-lite@^1.0.30000981, caniuse-lite@^1.0.30001109, caniuse-lite@^1.0.30001125, caniuse-lite@^1.0.30001503:
-  version "1.0.30001504"
-  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001504.tgz#eaf77e5c852dfa5f82c4924468c30602ac53744a"
-  integrity sha512-5uo7eoOp2mKbWyfMXnGO9rJWOGU8duvzEiYITW+wivukL7yHH4gX9yuRaobu6El4jPxo6jKZfG+N6fB621GD/Q==
+  version "1.0.30001506"
+  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001506.tgz#35bd814b310a487970c585430e9e80ee23faf14b"
+  integrity sha512-6XNEcpygZMCKaufIcgpQNZNf00GEqc7VQON+9Rd0K1bMYo8xhMZRAo5zpbnbMNizi4YNgIDAFrdykWsvY3H4Hw==
 
 capture-exit@^2.0.0:
   version "2.0.0"
@@ -5405,58 +5405,10 @@ cyclist@^1.0.1:
   resolved "https://registry.yarnpkg.com/cyclist/-/cyclist-1.0.2.tgz#673b5f233bf34d8e602b949429f8171d9121bea3"
   integrity sha512-0sVXIohTfLqVIW3kb/0n6IiWF3Ifj5nm2XaSrLq2DI6fKIGa2fYAZdk917rUneaeLVpYfFcyXE2ft0fe3remsA==
 
-cypress@*:
+cypress@*, cypress@^12.14.0:
   version "12.15.0"
   resolved "https://registry.yarnpkg.com/cypress/-/cypress-12.15.0.tgz#06103529583c41f39712c6cfa6d9d09a01731760"
   integrity sha512-FqGbxsH+QgjStuTO9onXMIeF44eOrgVwPvlcvuzLIaePQMkl72YgBvpuHlBGRcrw3Q4SvqKfajN8iV5XWShAiQ==
-  dependencies:
-    "@cypress/request" "^2.88.10"
-    "@cypress/xvfb" "^1.2.4"
-    "@types/node" "^14.14.31"
-    "@types/sinonjs__fake-timers" "8.1.1"
-    "@types/sizzle" "^2.3.2"
-    arch "^2.2.0"
-    blob-util "^2.0.2"
-    bluebird "^3.7.2"
-    buffer "^5.6.0"
-    cachedir "^2.3.0"
-    chalk "^4.1.0"
-    check-more-types "^2.24.0"
-    cli-cursor "^3.1.0"
-    cli-table3 "~0.6.1"
-    commander "^6.2.1"
-    common-tags "^1.8.0"
-    dayjs "^1.10.4"
-    debug "^4.3.4"
-    enquirer "^2.3.6"
-    eventemitter2 "6.4.7"
-    execa "4.1.0"
-    executable "^4.1.1"
-    extract-zip "2.0.1"
-    figures "^3.2.0"
-    fs-extra "^9.1.0"
-    getos "^3.2.1"
-    is-ci "^3.0.0"
-    is-installed-globally "~0.4.0"
-    lazy-ass "^1.6.0"
-    listr2 "^3.8.3"
-    lodash "^4.17.21"
-    log-symbols "^4.0.0"
-    minimist "^1.2.8"
-    ospath "^1.2.2"
-    pretty-bytes "^5.6.0"
-    proxy-from-env "1.0.0"
-    request-progress "^3.0.0"
-    semver "^7.3.2"
-    supports-color "^8.1.1"
-    tmp "~0.2.1"
-    untildify "^4.0.0"
-    yauzl "^2.10.0"
-
-cypress@^12.14.0:
-  version "12.14.0"
-  resolved "https://registry.yarnpkg.com/cypress/-/cypress-12.14.0.tgz#37a19b85f5e9d881995e9fee1ddf41b3d3a623dd"
-  integrity sha512-HiLIXKXZaIT1RT7sw1sVPt+qKtis3uYNm6KwC4qoYjabwLKaqZlyS/P+uVvvlBNcHIwL/BC6nQZajpbUd7hOgQ==
   dependencies:
     "@cypress/request" "^2.88.10"
     "@cypress/xvfb" "^1.2.4"
@@ -5981,9 +5933,9 @@ ejs@^2.6.1:
   integrity sha512-7vmuyh5+kuUyJKePhQfRQBhXV5Ce+RnaeeQArKu1EAMpL3WbgMt5WG6uQZpEVvYSSsxMXRKOewtDk9RaTKXRlA==
 
 electron-to-chromium@^1.3.564, electron-to-chromium@^1.4.431:
-  version "1.4.434"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.434.tgz#4bdef7b5b18d8dac177ec0d31dab9f92eebf22a1"
-  integrity sha512-5Gvm09UZTQRaWrimRtWRO5rvaX6Kpk5WHAPKDa7A4Gj6NIPuJ8w8WNpnxCXdd+CJJt6RBU6tUw0KyULoW6XuHw==
+  version "1.4.435"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.435.tgz#761c34300603b9f1234f0b6155870d3002435db6"
+  integrity sha512-B0CBWVFhvoQCW/XtjRzgrmqcgVWg6RXOEM/dK59+wFV93BFGR6AeNKc4OyhM+T3IhJaOOG8o/V+33Y2mwJWtzw==
 
 elliptic@^6.5.3:
   version "6.5.4"
@@ -10502,9 +10454,9 @@ pinkie@^2.0.0:
   integrity sha512-MnUuEycAemtSaeFSjXKW/aroV7akBbY+Sv+RkyqFjgAe73F+MR0TBWKBRDkmfWq/HiFmdavfZ1G7h4SPZXaCSg==
 
 pirates@^4.0.1:
-  version "4.0.5"
-  resolved "https://registry.yarnpkg.com/pirates/-/pirates-4.0.5.tgz#feec352ea5c3268fb23a37c702ab1699f35a5f3b"
-  integrity sha512-8V9+HQPupnaXMA23c5hvl69zXvTwTzyAYasnkb0Tts4XvO4CliqONMOnvlq26rkhLC3nWDFBJf73LU1e1VZLaQ==
+  version "4.0.6"
+  resolved "https://registry.yarnpkg.com/pirates/-/pirates-4.0.6.tgz#3018ae32ecfcff6c29ba2267cbf21166ac1f36b9"
+  integrity sha512-saLsH7WeYYPiD25LDuLRRY/i+6HaPYr6G1OUlN39otzkSTxKnubR9RTxS3/Kk50s1g2JTgFwWQDQyplC5/SHZg==
 
 pkg-dir@^3.0.0:
   version "3.0.0"
