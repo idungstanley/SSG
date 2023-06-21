@@ -11,8 +11,6 @@ import TaskListViews from '../listLevel/TaskListViews';
 import TaskData from '../../taskData/TaskData';
 import { setAddNewTaskItem, ImyTaskData } from '../../../../../../features/task/taskSlice';
 // import AddNewItem from '../../taskColumn/AddNewItem';
-import SubTask from '../../../subtasks/create/SubTask';
-import RenderSubTasks from '../../../subtasks/subtask1/RenderSubTasks';
 import AddNewItem from '../../taskColumn/AddNewItem';
 import { useParams } from 'react-router-dom';
 
@@ -109,12 +107,6 @@ export default function TaskListLevelTemplate({ listTask }: { listTask: ImyTaskD
                 {listTask?.map((task) => (
                   <div className="group" key={task.id}>
                     <TaskData listId={task.list_id} task={task} />
-                    {currentParentTaskId === task.id ? (
-                      <div>
-                        <SubTask parentTaskId={currentParentTaskId} />
-                      </div>
-                    ) : null}
-                    {getSubTaskId === task.id ? <RenderSubTasks /> : null}
                   </div>
                 ))}
               </li>

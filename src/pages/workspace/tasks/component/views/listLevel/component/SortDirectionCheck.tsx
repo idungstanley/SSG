@@ -2,9 +2,6 @@ import { Tooltip } from '@mui/material';
 import React from 'react';
 import { AiOutlineClose } from 'react-icons/ai';
 import { RiArrowDownSFill, RiArrowUpSFill } from 'react-icons/ri';
-import { useAppDispatch, useAppSelector } from '../../../../../../../app/hooks';
-import { SortOption } from '../TaskListViews';
-import { setSortArray } from '../../../../../../../features/task/taskSlice';
 
 interface SortDirectionProps {
   bgColor: string;

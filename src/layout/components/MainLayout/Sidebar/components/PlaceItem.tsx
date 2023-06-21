@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react';
 import { FiChevronDown, FiChevronRight } from 'react-icons/fi';
 import { MdDragIndicator } from 'react-icons/md';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import { setActivePlaceId } from '../../../../../features/workspace/workspaceSlice';
 import { cl } from '../../../../../utils';
@@ -40,7 +40,8 @@ export default function PlaceItem({
 
   // const [stickyButtonIndex, setStickyButtonIndex] = useState<number | undefined>(-1);
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
-    id
+    id,
+    data: { isPlace: true }
   });
   const { currentWorkspaceId } = useAppSelector((state) => state.auth);
   const isActivePlace = !onClick;

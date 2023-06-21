@@ -7,25 +7,27 @@ export const sortTasks = (key: TaskKey, tasks: Task[]) => {
   const sortedTasks: Record<string, Task[]> = {};
 
   tasks.forEach((task) => {
-    const values = task[key];
+    if ('tags' in task) {
+      const values = task[key];
 
-    if (Array.isArray(values)) {
-      values.forEach((value) => {
-        const stringValue = stringifyValue(value);
+      if (Array.isArray(values)) {
+        values.forEach((value) => {
+          const stringValue = stringifyValue(value);
+
+          if (sortedTasks[stringValue]) {
+            sortedTasks[stringValue].push(task);
+          } else {
+            sortedTasks[stringValue] = [task];
+          }
+        });
+      } else {
+        const stringValue = stringifyValue(values);
 
         if (sortedTasks[stringValue]) {
           sortedTasks[stringValue].push(task);
         } else {
           sortedTasks[stringValue] = [task];
         }
-      });
-    } else {
-      const stringValue = stringifyValue(values);
-
-      if (sortedTasks[stringValue]) {
-        sortedTasks[stringValue].push(task);
-      } else {
-        sortedTasks[stringValue] = [task];
       }
     }
   });
@@ -54,7 +56,7 @@ export const parseLabel = (value: string): string => {
   switch (sortType) {
     case 'assignees': {
       if (typeof label === 'object' && 'name' in label) {
-        return label.name;
+        return label.name as TaskKey;
       } else {
         return DEFAULT;
       }

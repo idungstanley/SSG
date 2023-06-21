@@ -62,6 +62,7 @@ export default function UploadFileModal({ invalidateQuery, endpoint }: UploadFil
 
   return (
     <DashboardModal
+      id={String(Date.now())}
       uppy={uppy}
       closeModalOnClickOutside
       proudlyDisplayPoweredByUppy={false}

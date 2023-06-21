@@ -8,11 +8,12 @@ import { columnsHead } from '../views/ListColumns';
 import { useList } from '../../../../../features/list/listService';
 import { useNavigate, useParams } from 'react-router-dom';
 import { cl } from '../../../../../utils';
+import { Task, TaskKey } from '../../../../../features/task/interface.tasks';
 
 export interface TaskDataProps {
   listId?: string;
-  task?: ImyTaskData | undefined;
-  tasks?: (ImyTaskData | undefined)[] | undefined;
+  task: ImyTaskData;
+  tasks?: Task[];
 }
 
 export default function TaskData({ task, listId }: TaskDataProps) {
@@ -101,7 +102,7 @@ export default function TaskData({ task, listId }: TaskDataProps) {
                     className="text-xs font-medium capitalize sticky left-0 cursor-pointer group"
                   >
                     <DataRenderFunc
-                      taskColField={task?.[col.field]}
+                      taskColField={task[col.field as Exclude<TaskKey, 'tags'>]}
                       col={{ field: col.field, id: col.id }}
                       task={task}
                       getSubTaskId={getSubTaskId}
@@ -118,7 +119,7 @@ export default function TaskData({ task, listId }: TaskDataProps) {
                   !col.hidden && (
                     <div key={col.id} className="flex items-center w-32 text-xs font-medium capitalize group">
                       <DataRenderFunc
-                        taskColField={task?.[col.field]}
+                        taskColField={task[col.field as Exclude<TaskKey, 'tags'>]}
                         col={{ field: col.field, id: col.id }}
                         task={task}
                         getSubTaskId={getSubTaskId}
@@ -134,7 +135,7 @@ export default function TaskData({ task, listId }: TaskDataProps) {
                   !col.hidden && (
                     <div key={col.id} className="flex items-center w-32 text-xs font-medium capitalize group">
                       <DataRenderFunc
-                        taskColField={task?.[col.field]}
+                        taskColField={task[col.field as Exclude<TaskKey, 'tags'>]}
                         col={{ field: col.field, id: col.id }}
                         task={task}
                         getSubTaskId={getSubTaskId}
@@ -158,7 +159,7 @@ export default function TaskData({ task, listId }: TaskDataProps) {
                     className={cl('items-center flex py-px h-10 font-medium text-gray-400 uppercase group', taskBg)}
                   >
                     <DataRenderFunc
-                      taskColField={task?.[col.field]}
+                      taskColField={task[col.field as Exclude<TaskKey, 'tags'>]}
                       col={{ field: col.field, id: col.id }}
                       task={task}
                       getSubTaskId={getSubTaskId}
@@ -181,7 +182,7 @@ export default function TaskData({ task, listId }: TaskDataProps) {
                     )}
                   >
                     <DataRenderFunc
-                      taskColField={task?.[col.field]}
+                      taskColField={task[col.field as Exclude<TaskKey, 'tags'>]}
                       col={{ field: col.field, id: col.id }}
                       task={task}
                       getSubTaskId={getSubTaskId}

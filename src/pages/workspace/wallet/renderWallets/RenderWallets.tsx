@@ -107,7 +107,7 @@ function RenderWallets() {
         additionalHeader={<AdditionalHeader />}
         header={<ListNav navName={currentWalletName} viewsList="List" viewsList2="Board" changeViews="View" />}
         extendedBar={extendedObj}
-        additional={<FilterByAssigneesSliderOver data={unFilteredTaskData as ITaskFullList[]} />}
+        additional={<FilterByAssigneesSliderOver />}
       >
         <div className="pr-1 pt-0.5 w-full h-full">
           <div
