@@ -6,6 +6,7 @@ import { FaFolder } from 'react-icons/fa';
 import { AiOutlineUnorderedList } from 'react-icons/ai';
 import hubIcon from '../../assets/branding/hub.svg';
 import {
+  setCreateHubSlideOverVisibility,
   setCreateListSlideOverVisibility,
   setCreateSubHubSlideOverVisibility,
   setCreateSubWalletSlideOverVisibility,
@@ -13,7 +14,7 @@ import {
   setCreateWalletSlideOverVisibility
 } from '../../features/general/slideOver/slideOverSlice';
 import { getSubMenu } from '../../features/hubs/hubSlice';
-import { useGetHubChildren } from '../../features/hubs/hubService';
+import { useNavigate } from 'react-router-dom';
 
 interface itemsType {
   id: number;
@@ -25,14 +26,10 @@ interface itemsType {
 
 export default function SubDropdown() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { showMenuDropdownType, showMenuDropdown, SubMenuType, SubMenuId } = useAppSelector((state) => state.hub);
-
-  const { data } = useGetHubChildren({
-    query: SubMenuId,
-    enabled: showMenuDropdownType === 'hubs' || SubMenuType === 'hubs'
-  });
-
-  const isCreateWalletAndListAllowed = data?.data.hubs.length === 0;
+  const { currentWorkspaceId } = useAppSelector((state) => state.auth);
+  const navLink = '/tasks';
 
   const {
     showCreateSubWalletSlideOver,
@@ -112,23 +109,24 @@ export default function SubDropdown() {
           showMenuDropdownType !== 'wallet' &&
           showMenuDropdownType !== 'subwallet2'
         ) {
-          dispatch(setCreateWalletSlideOverVisibility(true));
+          navigate(`/${currentWorkspaceId}` + navLink);
         } else {
           dispatch(setCreateSubWalletSlideOverVisibility(true));
+          navigate(`/${currentWorkspaceId}` + navLink);
         }
       },
       icon: <FaFolder className="w-4 h-4" aria-hidden="true" />,
       isVisible:
-        isCreateWalletAndListAllowed &&
-        (showMenuDropdownType == 'list' || showMenuDropdownType == 'subwallet3' || SubMenuType === 'subwallet3'
+        showMenuDropdownType == 'list' || showMenuDropdownType == 'subwallet3' || SubMenuType === 'subwallet3'
           ? false
-          : true)
+          : true
     },
     {
       id: 3,
       title: 'Task',
       handleClick: () => {
         dispatch(setCreateTaskSlideOverVisibility(true));
+        navigate(`/${currentWorkspaceId}` + navLink);
       },
       icon: <PlusIcon className="w-5 pt-2 text-gray-700 h-7" aria-hidden="true" />,
       isVisible: showMenuDropdownType == 'list' ? true : false
@@ -138,9 +136,11 @@ export default function SubDropdown() {
       title: 'List',
       handleClick: () => {
         dispatch(setCreateListSlideOverVisibility(true));
+
+        navigate(`/${currentWorkspaceId}` + navLink);
       },
       icon: <AiOutlineUnorderedList className="w-4 h-4" aria-hidden="true" />,
-      isVisible: showMenuDropdownType === 'list' ? false : true && isCreateWalletAndListAllowed
+      isVisible: showMenuDropdownType === 'list' ? false : true
     },
     {
       id: 5,
