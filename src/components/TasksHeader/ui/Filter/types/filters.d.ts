@@ -97,7 +97,7 @@ export type OperatorOption = Record<OperatorKey, Operator>;
 
 type FilterValue = string | { id: string; value: string };
 type FilterId = number;
-type FilterKey = TaskKey;
+type FilterKey = TaskKey | string; // string for custom fields
 
 // filters
 interface Filter {

@@ -2,6 +2,7 @@ import { CheckIcon } from '@heroicons/react/24/outline';
 import { cl } from '../../../../../../../utils';
 import { isString, isArray } from '../../../../../../../utils/typeGuards';
 import { FilterValue, Operator, Unit } from '../../../types/filters';
+import { stringifyValue } from './SelectedValue';
 
 type Selected = FilterValue[] | Operator | string | Unit;
 type Value = FilterValue | Operator | string | Unit;
@@ -31,7 +32,7 @@ export function ListBoxItem({ value, selected }: ListBoxItemProps) {
     return (
       <>
         <span className={cl('block whitespace-nowrap capitalize', isSelected ? 'font-medium' : 'font-normal')}>
-          {value.replaceAll('_', ' ')}
+          {stringifyValue(value).replaceAll('_', ' ')}
         </span>
         {isSelected ? (
           <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-primary-600">
@@ -47,7 +48,7 @@ export function ListBoxItem({ value, selected }: ListBoxItemProps) {
     return (
       <>
         <span className={cl('block whitespace-nowrap capitalize', isSelected ? 'font-medium' : 'font-normal')}>
-          {isString(value) ? value : value.value}
+          {isString(value) ? stringifyValue(value) : stringifyValue(value.value)}
         </span>
         {isSelected ? (
           <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-primary-600">
@@ -62,7 +63,7 @@ export function ListBoxItem({ value, selected }: ListBoxItemProps) {
   return (
     <>
       <span className={cl('block whitespace-nowrap capitalize', isSelected ? 'font-medium' : 'font-normal')}>
-        {value.value}
+        {stringifyValue(value.value)}
       </span>
       {isSelected ? (
         <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-primary-600">

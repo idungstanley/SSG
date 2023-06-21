@@ -9,8 +9,6 @@ import {
 } from '../../../../../../../../../features/task/taskSlice';
 import { TaskDataGroupingsProps } from '../../../../../../../../../features/task/interface.tasks';
 import TaskListViews from '../../../../../../../tasks/component/views/listLevel/TaskListViews';
-import TaskData from '../../../../../../../tasks/component/taskData/TaskData';
-import SubTask from '../../../../../../../subtasks/subtask1/SubTask';
 import { useAppSelector } from '../../../../../../../../../app/hooks';
 import AddNewItem from '../../../../../../../tasks/component/taskColumn/AddNewItem';
 import { setCreateTaskFromTop, setCurrentListId } from '../../../../../../../../../features/list/listSlice';
@@ -19,7 +17,7 @@ import { useScroll } from '../../../../../../../../../hooks/useScroll';
 
 export default function GroupByStatusTemplate({ filteredTaskData }: ITaskTemplateData) {
   const [taskDataGroupingsByStatus, setTaskDataGroupingsByStatus] = useState<TaskDataGroupingsProps>({});
-  const { addNewTaskItem, currentParentTaskId, getSubTaskId } = useAppSelector((state) => state.task);
+  const { addNewTaskItem } = useAppSelector((state) => state.task);
   const { createTaskFromTop, currentListId } = useAppSelector((state) => state.list);
   const getTaskDataGrouping = useMemo(
     () => Object.keys(filteredTaskData)?.flatMap((data) => filteredTaskData[data].tasks),
@@ -186,14 +184,7 @@ export default function GroupByStatusTemplate({ filteredTaskData }: ITaskTemplat
                 />
 
                 {taskDataGroupingsByStatus[value].tasksByStatus[status].map((task) => (
-                  <div className="group" key={task.id}>
-                    <TaskData listId={task.list_id} task={task} />
-                    {currentParentTaskId === task.id ? (
-                      <div>
-                        <SubTask parentTaskId={currentParentTaskId} />
-                      </div>
-                    ) : null}
-                  </div>
+                  <div className="group" key={task.id}></div>
                 ))}
               </li>
             ))}

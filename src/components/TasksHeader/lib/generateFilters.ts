@@ -1,5 +1,6 @@
 import { useAppSelector } from '../../../app/hooks';
 import { isString } from '../../../utils/typeGuards';
+import { SPECIAL_CHAR } from '../ui/Filter/config/filterConfig';
 import { FilterKey, FilterValue } from '../ui/Filter/types/filters';
 
 const DATE_KEYS: Partial<FilterKey>[] = ['created_at', 'end_date', 'start_date'];
@@ -7,6 +8,8 @@ const DATE_KEYS: Partial<FilterKey>[] = ['created_at', 'end_date', 'start_date']
 const SPECIAL_KEYS: Partial<FilterKey>[] = ['assignees', 'tags', ...DATE_KEYS];
 
 const getValues = (values: FilterValue[]) => values.map((i) => (isString(i) ? i : i.id));
+
+const getKey = (i: string) => i.split(SPECIAL_CHAR)[1] ?? i.split(SPECIAL_CHAR)[0];
 
 export const generateFilters = () => {
   const { filters } = useAppSelector((state) => state.task);
@@ -40,7 +43,7 @@ export const generateFilters = () => {
         })),
 
         ...other.map((i) => ({
-          field: i.key,
+          field: getKey(i.key),
           op: i.operator.key,
           values: i.values.length ? getValues(i.values) : undefined
         }))
