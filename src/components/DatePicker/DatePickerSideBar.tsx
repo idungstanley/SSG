@@ -124,7 +124,7 @@ export function DatePickerSideBar({ currentDate }: DatePickerSideBarProp) {
               ...HistoryFilterMemory,
               time: {
                 ...HistoryFilterMemory?.time,
-                from: dayjs().add(1, 'hour').format('HH:mm')
+                from: dayjs().add(4, 'hour').format('h:mm A')
               }
             })
           )
