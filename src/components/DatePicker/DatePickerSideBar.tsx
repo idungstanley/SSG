@@ -1,12 +1,8 @@
 import dayjs, { Dayjs } from 'dayjs';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { setHistoryMemory, setTaskSelectedDate } from '../../features/task/taskSlice';
-import {
-  generateDate,
-  weekends,
-  weeks
-} from '../Pilot/components/details/properties/subDetailsIndex/components/calendar';
 import { setSelectedDate } from '../../features/workspace/workspaceSlice';
+import { generateDate, weekends, weeks } from '../../utils/calendar';
 
 interface DatePickerSideBarProp {
   currentDate: dayjs.Dayjs;

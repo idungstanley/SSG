@@ -1,6 +1,5 @@
 import dayjs, { Dayjs } from 'dayjs';
 import React, { useEffect, useRef, useState } from 'react';
-import cn from '../Pilot/components/details/properties/subDetailsIndex/components/cn';
 import { GrFormNext, GrFormPrevious } from 'react-icons/gr';
 import { MdOutlineDateRange } from 'react-icons/md';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
@@ -10,11 +9,8 @@ import { DatePickerSideBar } from './DatePickerSideBar';
 import { DatePickerManualDates } from './DatePickerManualDate';
 import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io';
 import { setSelectedDate } from '../../features/workspace/workspaceSlice';
-import {
-  generateDate,
-  groupDatesByDayOfWeek,
-  months
-} from '../Pilot/components/details/properties/subDetailsIndex/components/calendar';
+import { generateDate, groupDatesByDayOfWeek, months } from '../../utils/calendar';
+import cn from '../../utils/cn';
 
 interface DatePickerProps {
   styles?: string;
@@ -63,7 +59,7 @@ export default function DatePicker({ styles, range, toggleFn }: DatePickerProps)
       }
 
       if (taskTime?.to != undefined) {
-        // dispatch(setTaskSelectedDate(null));
+        dispatch(setTaskSelectedDate(null));
       }
     }
   }, [selectedDate?.date]);
@@ -160,11 +156,9 @@ export default function DatePicker({ styles, range, toggleFn }: DatePickerProps)
                             className={cn(
                               'h-6 w-6 rounded-full grid place-content-center hover:bg-purple-300 hover:text-white transition-all cursor-pointer select-none',
                               date.currentMonth ? '' : 'text-gray-500',
-                              date.today ? 'bg-red-400 text-white' : '',
+                              date.today ? 'bg-red-400 text-white rounded-full' : '',
                               date.currentWeek ? 'bg-gray-300 text-white' : '',
-                              selectedDate?.date.date() === date.date.date()
-                                ? 'bg-purple-400 text-white brightness-150'
-                                : '',
+                              selectedDate?.date.date() === date.date.date() ? 'bg-purple-400 text-white' : '',
                               isBlockedOrHoverBlocked ? 'bg-purple-400 text-white rounded-none' : ''
                             )}
                             onClick={() => {
