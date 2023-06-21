@@ -91,6 +91,47 @@ export const groupDatesByDayOfWeek = (
   return groupedDates;
 };
 
+export const createDynamicTimeComponent = (intervalInMinutes: number) => {
+  // Calculate the number of time elements to create
+  const totalElements = (24 * 60) / intervalInMinutes;
+
+  // Create an array to hold the time elements
+  const timeElements = [];
+
+  // Start with 12 midnight
+  let currentTime = dayjs().startOf('day');
+
+  // Generate the time elements
+  for (let i = 0; i < totalElements; i++) {
+    const formattedTime = currentTime.format('h:mm A');
+    timeElements.push(formattedTime);
+
+    // Increment the time by the given interval
+    currentTime = currentTime.add(intervalInMinutes, 'minute');
+  }
+
+  // Return the array of time elements
+  return timeElements;
+};
+
+export const weekends = (duration: string): dayjs.Dayjs[] => {
+  const currentDate = duration === 'weekend' ? dayjs() : dayjs().add(1, 'week');
+  const startOfWeek = currentDate.startOf('week');
+  const endOfWeek = currentDate.endOf('week');
+
+  const weekendDays = [];
+
+  for (let i = startOfWeek.day(); i <= endOfWeek.day(); i++) {
+    const day = currentDate.day(i);
+    if (day.day() === 0 || day.day() === 6) {
+      weekendDays.push(day);
+    }
+  } // Array of Day.js objects representing weekend days
+  return weekendDays;
+};
+
+export const weeks = (number: number) => dayjs().set('day', 2).add(number, 'week').startOf('week');
+
 export const months: string[] = [
   'January',
   'February',

@@ -280,6 +280,7 @@ export const wsSlice = createSlice({
       state.activeLogTab = action.payload;
     },
     setSelectedDate(state, action: PayloadAction<{ date: Dayjs; dateType?: string } | null>) {
+      console.log(action.payload);
       state.selectedDate = action.payload;
     }
   }
