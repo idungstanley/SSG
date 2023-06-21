@@ -66,7 +66,8 @@ function TaskTableView({ tasks }: TaskDataProps) {
       | undefined
       | null
       | ICustomField[]
-      | Array<{ id: string; initials: string; colour: string; name: string }>,
+      | Array<{ id: string; initials: string; colour: string; name: string }>
+      | { color: string; id: string; initials: string; name: string }[],
     colfield: string,
     task?: ImyTaskData
   ) => {

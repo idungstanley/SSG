@@ -65,7 +65,8 @@ export default function AssignTask({ option, item }: optionProps) {
   const handleAssignTask = (id: string) => {
     onTaskAssign({
       taskId: toggleAssignCurrentTaskId,
-      team_member_id: id
+      team_member_id: id,
+      teams: false
     });
   };
 
@@ -78,7 +79,8 @@ export default function AssignTask({ option, item }: optionProps) {
   const handleUnAssignTask = (id: string) => {
     onTaskUnassign({
       taskId: toggleAssignCurrentTaskId,
-      team_member_id: id
+      team_member_id: id,
+      teams: false
     });
   };
 
@@ -113,12 +115,7 @@ export default function AssignTask({ option, item }: optionProps) {
                     option === 'checklst_item' ? handleAssignChecklist(item.id) : handleAssignTask(item.id);
                   }}
                 >
-                  <AvatarWithInitials
-                    initials={item.initials}
-                    backgroundColour={item.colour}
-                    height="h-5"
-                    width="w-5"
-                  />
+                  <AvatarWithInitials initials={item.initials} backgroundColour={item.color} height="h-5" width="w-5" />
                   <p className="text-xs text-black">{item.user.name.toLocaleUpperCase()}</p>
                 </div>
                 {assignees?.includes(item.id) && option === 'checklst_item' ? (
