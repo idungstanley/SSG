@@ -3,7 +3,6 @@ import { useAddTask } from '../../../../features/task/taskService';
 import { cl } from '../../../../utils';
 import { Column } from '../../types/table';
 import Assignee from '../../../../pages/workspace/tasks/assignTask/Assignee';
-import FaRegFloppyDisk from 'react-icons/fa';
 import { CiFloppyDisk } from 'react-icons/ci';
 
 interface AddTaskFieldProps {
@@ -35,7 +34,7 @@ export function AddTask({ onClose, paddingLeft, parentId, isListParent, columns 
 
   return (
     <tr className="contents group">
-      <td className="z-20 w-full flex items-center pl-5">
+      <td className="z-20 w-full flex items-center pl-7">
         <div className="h-full bg-primary-50"></div>
         <div style={{ paddingLeft }} className="border-t flex items-center w-full h-12 bg-white opacity-90">
           <input
