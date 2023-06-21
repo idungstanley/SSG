@@ -2,13 +2,15 @@ import { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
 import { useGetTeamMembers } from '../../../../../../features/settings/teamMembers/teamMemberService';
 import { setFilters } from '../../../../../../features/task/taskSlice';
-import { filterConfig, unitValues } from '../../config/filterConfig';
-import { FilterId, FilterWithId, onChangeProps } from '../../types/filters';
+import { filterConfig, operators, unitValues } from '../../config/filterConfig';
+import { FilterId, FilterOption, FilterWithId, onChangeProps } from '../../types/filters';
 import { Label } from './Label';
 import { useTags } from '../../../../../../features/workspace/tags/tagService';
 import { ListBox } from '../ListBox';
 import { modifyFilters } from '../../lib/filterUtils';
 import { DeleteItem } from './DeleteItem';
+import { useParams } from 'react-router-dom';
+import { useList } from '../../../../../../features/list/listService';
 
 interface ItemProps {
   filter: FilterWithId;
@@ -18,13 +20,36 @@ interface ItemProps {
 export function Item({ filter, index }: ItemProps) {
   const dispatch = useAppDispatch();
   const { filters } = useAppSelector((state) => state.task);
+  const { listId } = useParams();
 
   const [initialFilters, setInitialFilters] = useState(filterConfig);
 
-  // set team members and tags to config
   const { data: tags } = useTags();
   const { data: members } = useGetTeamMembers({ query: '', page: 1 });
+  const { data: list } = useList(listId);
 
+  // set custom fields to config
+  useEffect(() => {
+    if (list) {
+      const customFields: FilterOption = {};
+      list.custom_fields.forEach((field) => {
+        if (field.properties) {
+          customFields[field.name] = {
+            operators: [operators.eq, operators.ne],
+            values: [...field.properties],
+            fieldId: field.id
+          };
+        }
+      });
+
+      setInitialFilters((prev) => ({
+        ...prev,
+        ...customFields
+      }));
+    }
+  }, [list]);
+
+  // set team members and tags to config
   useEffect(() => {
     const teamMembers = members?.data.team_members;
 

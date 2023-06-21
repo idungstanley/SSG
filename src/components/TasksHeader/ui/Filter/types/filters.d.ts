@@ -97,18 +97,20 @@ export type OperatorOption = Record<OperatorKey, Operator>;
 
 type FilterValue = string | { id: string; value: string };
 type FilterId = number;
-type FilterKey = TaskKey;
+type FilterKey = TaskKey | string; // string for custom fields
 
 // filters
 interface Filter {
   values: FilterValue[];
   operators: Operator[];
+  fieldId?: string;
   units?: Unit[];
 }
 
 export interface FilterWithId {
   id: FilterId;
   key: FilterKey;
+  isCustomField?: boolean;
   operator: Operator;
   values: FilterValue[];
 }

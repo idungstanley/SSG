@@ -1,7 +1,7 @@
 import { ListColourProps } from '../../components/tasks/ListItem';
 import { ICheckListRes } from './../task/interface.tasks';
 
-export type Property = string[] | string | null;
+export type Property = string[] | null;
 
 export interface IField {
   id: string;
