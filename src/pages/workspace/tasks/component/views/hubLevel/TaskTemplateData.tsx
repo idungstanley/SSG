@@ -6,8 +6,6 @@ import TaskListViews from '../listLevel/TaskListViews';
 import TaskData from '../../taskData/TaskData';
 import { setAddNewTaskItem } from '../../../../../../features/task/taskSlice';
 import AddNewItem from '../../taskColumn/AddNewItem';
-import SubTask from '../../../subtasks/create/SubTask';
-import RenderSubTasks from '../../../subtasks/subtask1/RenderSubTasks';
 import { ITaskTemplateData } from './TaskTableTemplateData';
 
 export default function TaskTemplateData({ filteredTaskData }: ITaskTemplateData) {
@@ -109,12 +107,6 @@ export default function TaskTemplateData({ filteredTaskData }: ITaskTemplateData
                   {filteredTaskData[value].tasks?.map((task) => (
                     <Fragment key={task.id}>
                       <TaskData task={task} listId={task.list_id} />
-                      {currentParentTaskId === task.id ? (
-                        <div>
-                          <SubTask parentTaskId={currentParentTaskId} />
-                        </div>
-                      ) : null}
-                      {getSubTaskId === task.id ? <RenderSubTasks /> : null}
                     </Fragment>
                   ))}
                 </div>

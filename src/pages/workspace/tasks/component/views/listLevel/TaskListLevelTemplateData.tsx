@@ -11,8 +11,6 @@ import { useAppSelector } from '../../../../../../app/hooks';
 import TaskData from '../../taskData/TaskData';
 import { setAddNewTaskItem } from '../../../../../../features/task/taskSlice';
 // import AddNewItem from '../../taskColumn/AddNewItem';
-import SubTask from '../../../subtasks/create/SubTask';
-import RenderSubTasks from '../../../subtasks/subtask1/RenderSubTasks';
 // import { ITaskTemplateData } from './TaskTableTemplateData';
 import { useParams } from 'react-router-dom';
 
@@ -113,12 +111,6 @@ export default function TaskListLevelTemplateData() {
                 {myTaskData.map((task) => (
                   <Fragment key={task.id}>
                     <TaskData listId={task.list_id} task={task} />
-                    {currentParentTaskId === task.id ? (
-                      <div>
-                        <SubTask parentTaskId={currentParentTaskId} />
-                      </div>
-                    ) : null}
-                    {getSubTaskId === task.id ? <RenderSubTasks /> : null}
                   </Fragment>
                 ))}
               </div>

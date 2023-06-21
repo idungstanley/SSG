@@ -10,8 +10,6 @@ import AddNewItem from '../tasks/component/taskColumn/AddNewItem';
 import TaskData from '../tasks/component/taskData/TaskData';
 import TaskQuickAction from '../tasks/component/taskQuickActions/TaskQuickAction';
 import hubIcon from '../../../assets/branding/hub.png';
-import SubTask from '../tasks/subtasks/create/SubTask';
-import RenderSubTasks from '../tasks/subtasks/subtask1/RenderSubTasks';
 import ListFilter from './components/renderlist/listDetails/ListFilter';
 import PageWrapper from '../../../components/Page';
 import PilotSection, { pilotConfig } from './components/PilotSection';
@@ -145,12 +143,6 @@ function RenderList() {
                     {paginatedTaskData?.map((task) => (
                       <div className="group" key={task?.id}>
                         {closeTaskListView && <TaskData listId={task?.list_id} task={task} />}
-                        {currentParentTaskId === task?.id ? (
-                          <div>
-                            <SubTask parentTaskId={currentParentTaskId} />
-                          </div>
-                        ) : null}
-                        {getSubTaskId === task?.id ? <RenderSubTasks /> : null}
                       </div>
                     ))}
                   </div>
