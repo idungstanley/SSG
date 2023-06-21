@@ -32,11 +32,17 @@ export interface ImyTaskData {
   description: string | null;
   list_id: string;
   parent_id: string | null;
-  priority: string | null | [{ id: string; initials: string; colour: string; name: string }];
+  priority: string | null | [{ id: string; initials: string; color: string; name: string }];
   start_date: string | null;
   end_date: string | null;
   status?: string | null;
-  assignees?: [{ id: string; initials: string; colour: string; name: string; avatar_path: string | null }];
+  assignees?: [{ id: string; initials: string; color: string; name: string; avatar_path: string | null }];
+  group_assignees?: {
+    color: string;
+    id: string;
+    initials: string;
+    name: string;
+  }[];
   updated_at?: string;
   created_at?: string;
   archived_at?: string | null;
@@ -52,13 +58,13 @@ export interface ImyTaskData2 {
   list_id?: string;
   list?: { id: string; name: string; parent: IParent };
   parent_id?: string | null;
-  priority?: string | null | [{ id: string; initials: string; colour: string; name: string }];
+  priority?: string | null | [{ id: string; initials: string; color: string; name: string }];
   start_date?: string | null;
   end_date?: string | null;
   status?: string | null;
   tags?: [];
   directory_items?: [];
-  assignees?: [{ id: string; initials: string; colour: string; name: string }];
+  assignees?: [{ id: string; initials: string; color: string; name: string }];
   updated_at?: string;
   created_at?: string;
   group_assignees?: [];
@@ -72,7 +78,7 @@ export interface ImyTaskData2 {
     | { id: string; name: string; parent: IParent }
     | []
     | null
-    | [{ id: string; initials: string; colour: string; name: string }];
+    | [{ id: string; initials: string; color: string; name: string }];
 }
 
 interface TaskState {

@@ -49,7 +49,7 @@ function TaskTableTemplateData({ filteredTaskData }: ITaskTemplateData) {
           {
             id: string;
             initials: string;
-            colour: string;
+            color: string;
             name: string;
           }
         ]
@@ -78,7 +78,7 @@ function TaskTableTemplateData({ filteredTaskData }: ITaskTemplateData) {
       | undefined
       | null
       | ICustomField[]
-      | Array<{ id: string; initials: string; colour: string; name: string }>,
+      | Array<{ id: string; initials: string; color: string; name: string }>,
     colfield: string,
     task?: ImyTaskData
   ) => {
@@ -88,12 +88,12 @@ function TaskTableTemplateData({ filteredTaskData }: ITaskTemplateData) {
         taskColField as Array<{
           id: string;
           initials: string;
-          colour: string;
+          color: string;
           name: string;
         }>
       ).length !== 0
     ) {
-      const taskColFieldSetType = taskColField as [{ id: string; initials: string; colour: string; name: string }];
+      const taskColFieldSetType = taskColField as [{ id: string; initials: string; color: string; name: string }];
       return (
         <>
           <div className="cursor-pointer flex " onClick={() => handleAssigneeModal(task?.id)}>
@@ -110,7 +110,7 @@ function TaskTableTemplateData({ filteredTaskData }: ITaskTemplateData) {
         taskColField as Array<{
           id: string;
           initials: string;
-          colour: string;
+          color: string;
         }>
       ).length === 0
     ) {

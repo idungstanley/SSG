@@ -107,6 +107,7 @@ export function StickyCol({
         <StatusDropdown TaskCurrentStatus={task.status} />
         <div className="flex flex-col items-start justify-start space-y-1">
           <p
+            className="flex text-left"
             contentEditable={true}
             ref={inputRef}
             onKeyDown={(e) => (e.key === 'Enter' ? handleEditTask(e, task.id) : null)}

@@ -49,7 +49,7 @@ export default function GroupByStatusTemplate({ filteredTaskData }: ITaskTemplat
               | string
               | number
               | ICustomField[]
-              | [{ id: string; initials: string; colour: string; name: string }]
+              | [{ id: string; initials: string; color: string; name: string }]
               | null
               | undefined;
             key?: string;
@@ -65,13 +65,13 @@ export default function GroupByStatusTemplate({ filteredTaskData }: ITaskTemplat
         const status = currentTask.status;
 
         if (status !== null && status !== undefined) {
-          if (!GroupedTaskByListID[listId] && 'list' in currentTask) {
-            GroupedTaskByListID[listId] = {
-              groupListName: currentTask?.list?.name,
-              key: listId,
-              tasksByStatus: {}
-            };
-          }
+          // if (!GroupedTaskByListID[listId]) {
+          //   GroupedTaskByListID[listId] = {
+          //     groupListName: currentTask?.list,
+          //     key: listId,
+          //     tasksByStatus: {}
+          //   };
+          // }
 
           if (!GroupedTaskByListID[listId].tasksByStatus[status]) {
             GroupedTaskByListID[listId].tasksByStatus[status] = [];
