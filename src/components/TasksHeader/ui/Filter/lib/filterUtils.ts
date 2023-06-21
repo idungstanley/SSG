@@ -1,12 +1,16 @@
 import { isString } from '../../../../../utils/typeGuards';
-import { filterConfig } from '../config/filterConfig';
+import { filterConfig, operators } from '../config/filterConfig';
 import { FilterKey, FilterValue, FilterWithId, onChangeProps, Operator, Unit } from '../types/filters';
 
-export const generateFilter = (key: FilterKey, initialValue?: FilterValue): FilterWithId => ({
-  id: Date.now(),
+interface AdditionalProps {
+  initialValue?: FilterValue;
+}
+
+export const generateFilter = (key: FilterKey, props?: AdditionalProps): FilterWithId => ({
+  id: Date.now().toString(),
   key,
-  values: initialValue ? [initialValue] : [],
-  operator: filterConfig[key].operators[0]
+  values: props?.initialValue ? [props.initialValue] : [],
+  operator: filterConfig[key].operators[0] ?? operators.eq
 });
 
 export const filterValueBySearchQuery = (value: FilterValue | Operator | Unit, query: string) =>

@@ -1,6 +1,8 @@
 import dayjs from 'dayjs';
 import { FilterOption, OperatorOption, Unit, UnitOption } from '../types/filters';
 
+export const SPECIAL_CHAR = '%%%';
+
 const units: UnitOption = {
   d: { key: 'd', value: 'days' },
   w: { key: 'w', value: 'weeks' },

@@ -55,7 +55,7 @@ export function Assignee() {
       }
     } else {
       // create assignee filters and set me
-      dispatch(setFilters([...filters, generateFilter('assignees', me)]));
+      dispatch(setFilters([...filters, generateFilter('assignees', { initialValue: me })]));
     }
   };
 
