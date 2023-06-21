@@ -18,9 +18,8 @@ export default function FilterByAssigneesSliderOver() {
   const members = data?.data.team_members ?? [];
   const { filters } = useAppSelector((state) => state.task);
 
-  const currentAssignees = filters.length
-    ? (filters.find((i) => i.key === 'assignees')?.values as { id: string; value: string }[])
-    : [];
+  const currentAssignees =
+    (filters.find((i) => i.key === 'assignees')?.values as { id: string; value: string }[]) ?? [];
 
   const onClickMember = (memberId: string, memberName: string) => {
     const isAssigneesInFilters = filters.find((i) => i.key === 'assignees');
@@ -134,7 +133,7 @@ export default function FilterByAssigneesSliderOver() {
                             </div>
 
                             <button>
-                              {currentAssignees.map((i) => i.id).includes(member.id) ? (
+                              {currentAssignees?.map((i) => i.id).includes(member.id) ? (
                                 <AiFillCheckCircle />
                               ) : (
                                 <AiOutlineCheckCircle />

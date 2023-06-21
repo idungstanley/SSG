@@ -10,7 +10,7 @@ export const generateFilter = (key: FilterKey, props?: AdditionalProps): FilterW
   id: Date.now(),
   key,
   values: props?.initialValue ? [props.initialValue] : [],
-  operator: filterConfig[key].operators[0] ?? operators.eq
+  operator: filterConfig[key]?.operators[0] ?? operators.eq
 });
 
 export const filterValueBySearchQuery = (value: FilterValue | Operator | Unit, query: string) =>
