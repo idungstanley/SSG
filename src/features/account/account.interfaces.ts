@@ -37,3 +37,12 @@ export interface IUserSettingsRes {
     settings: IUserSettings[];
   };
 }
+
+export interface Place {
+  name: string;
+  id: string;
+  place: JSX.Element;
+  icon?: JSX.Element;
+  link?: string;
+  source?: string;
+}

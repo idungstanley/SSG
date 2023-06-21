@@ -3,27 +3,61 @@ import { MdOutlinePersonOutline } from 'react-icons/md';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { setShowFilterByAssigneeSlideOver } from '../../../../features/general/slideOver/slideOverSlice';
 import { useGetTeamMembers } from '../../../../features/settings/teamMembers/teamMemberService';
-import { setAssigneeIds } from '../../../../features/task/taskSlice';
+import { setFilters } from '../../../../features/task/taskSlice';
 import { cl } from '../../../../utils';
+import { generateFilter } from '../Filter/lib/filterUtils';
 
 export function Assignee() {
   const dispatch = useAppDispatch();
   const { currentUserId } = useAppSelector((state) => state.auth);
   const { data } = useGetTeamMembers({ page: 1, query: '' });
   const { showFilterByAssigneeSlideOver } = useAppSelector((state) => state.slideOver);
-  const { assigneeIds } = useAppSelector((state) => state.task);
+  const { filters } = useAppSelector((state) => state.task);
 
   const members = data?.data.team_members ?? [];
 
   const currentMemberId = members.find((i) => i.user.id === currentUserId)?.id;
+  const currentMemberName = members.find((i) => i.user.id === currentUserId)?.user.name;
 
-  if (!currentMemberId) {
+  if (!currentMemberId || !currentMemberName) {
     return null;
   }
 
-  const isMe = assigneeIds[0] === currentMemberId;
+  const isMe = filters.length ? filters?.find((i) => i.key === 'assignees')?.values[0] === currentMemberId : false;
 
-  const onToggleMe = () => dispatch(setAssigneeIds(assigneeIds.length ? [] : [currentMemberId]));
+  const onToggleMe = () => {
+    const me = { id: currentMemberId, value: currentMemberName };
+
+    const isAssigneesInFilters = filters.find((i) => i.key === 'assignees');
+    if (isAssigneesInFilters) {
+      const assignees = filters.length
+        ? (filters.find((i) => i.key === 'assignees')?.values as { id: string; value: string }[])
+        : [];
+
+      const isMeInAssignees = assignees.map((i) => i.id).includes(currentMemberId);
+
+      if (isMeInAssignees) {
+        // remove assignees filter
+        dispatch(setFilters([...filters.filter((i) => i.key !== 'assignees')]));
+      } else {
+        // add me to assignees
+        dispatch(
+          setFilters([
+            ...filters.map((i) => {
+              if (i.key === 'assignees') {
+                return { ...i, values: [...i.values, me] };
+              }
+
+              return i;
+            })
+          ])
+        );
+      }
+    } else {
+      // create assignee filters and set me
+      dispatch(setFilters([...filters, generateFilter('assignees', me)]));
+    }
+  };
 
   return (
     <div className="flex rounded-2xl h-8 text-sm bg-gray-100">

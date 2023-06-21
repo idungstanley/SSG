@@ -1,73 +1,67 @@
-import React, { Fragment, useEffect, useState } from 'react';
+import { Fragment } from 'react';
 import { useAppSelector, useAppDispatch } from '../../../../../../app/hooks';
 import { Dialog, Transition } from '@headlessui/react';
 import { RxDoubleArrowRight } from 'react-icons/rx';
 import { setShowFilterByAssigneeSlideOver } from '../../../../../../features/general/slideOver/slideOverSlice';
 import AvatarWithInitials from '../../../../../../components/avatar/AvatarWithInitials';
 import { AiOutlineCheckCircle, AiFillCheckCircle } from 'react-icons/ai';
-import { ITaskFullList, TaskDataGroupingsAssigneeProps } from '../../../../../../features/task/interface.tasks';
-import { setFilterTaskByAssigneeIds } from '../../../../../../features/task/taskSlice';
+import { setFilters } from '../../../../../../features/task/taskSlice';
+import { useGetTeamMembers } from '../../../../../../features/settings/teamMembers/teamMemberService';
+import { generateFilter } from '../../../../../../components/TasksHeader/ui/Filter/lib/filterUtils';
 
-export default function FilterByAssigneesSliderOver({ data }: { data: ITaskFullList[] }) {
+export default function FilterByAssigneesSliderOver() {
   const dispatch = useAppDispatch();
   const { showFilterByAssigneeSlideOver } = useAppSelector((state) => state.slideOver);
   const onClose = () => dispatch(setShowFilterByAssigneeSlideOver(false));
-  const { filterTaskByAssigneeIds } = useAppSelector((state) => state.task);
 
-  const [TaskDataGroupingsAssignees, setTaskDataGroupingsAssignees] = useState<
-    TaskDataGroupingsAssigneeProps | undefined
-  >(undefined);
-  useEffect(() => {
-    const taskDataGroupedByAssignee = data?.reduce(
-      (
-        GroupedTaskByAssignee: {
-          [key: string]: {
-            assigneeName: string;
-            assigneeId?: string | null | undefined;
-            tasks: ITaskFullList[];
-          };
-        },
-        currentTask
-      ) => {
-        const assignees = currentTask.assignees;
+  const { data } = useGetTeamMembers({ page: 1, query: '' });
+  const members = data?.data.team_members ?? [];
+  const { filters } = useAppSelector((state) => state.task);
 
-        if (assignees !== null && assignees !== undefined && assignees.length > 0) {
-          assignees?.forEach((assignee) => {
-            const assigneeId = assignee.id;
-            if (!GroupedTaskByAssignee[assigneeId]) {
-              GroupedTaskByAssignee[assigneeId] = {
-                assigneeName: assignee.name,
-                assigneeId: assignee.id,
-                tasks: [] // create an empty tasks array for each assignee
-              };
-            }
+  const currentAssignees = filters.length
+    ? (filters.find((i) => i.key === 'assignees')?.values as { id: string; value: string }[])
+    : [];
 
-            GroupedTaskByAssignee[assigneeId].tasks.push(currentTask);
-          });
-        } else {
-          // handle tasks with no assignee
-          if (!GroupedTaskByAssignee['unassigned']) {
-            GroupedTaskByAssignee['unassigned'] = {
-              assigneeName: 'Unassigned',
-              assigneeId: 'unassigned',
-              tasks: [] // create an empty tasks array for unassigned tasks
-            };
-          }
+  const onClickMember = (memberId: string, memberName: string) => {
+    const isAssigneesInFilters = filters.find((i) => i.key === 'assignees');
 
-          GroupedTaskByAssignee['unassigned'].tasks.push(currentTask);
-        }
-
-        return GroupedTaskByAssignee;
-      },
-      {}
-    );
-
-    setTaskDataGroupingsAssignees(taskDataGroupedByAssignee as TaskDataGroupingsAssigneeProps);
-
-    return () => {
-      // cleanup function
+    const newMemberObj = {
+      value: memberName,
+      id: memberId
     };
-  }, [data, setTaskDataGroupingsAssignees]);
+
+    if (isAssigneesInFilters) {
+      const isMemberInAssignees = (isAssigneesInFilters.values as { id: string; value: string }[])
+        .map((i) => i.id)
+        .includes(memberId);
+
+      // add member or remove if exists
+      const newAssignees = isMemberInAssignees
+        ? currentAssignees.filter((i) => i.id !== memberId)
+        : [...currentAssignees, newMemberObj];
+
+      if (newAssignees.length === 0) {
+        // delete assignees filter if no one member
+        dispatch(setFilters([...filters.filter((i) => i.key !== 'assignees')]));
+      } else {
+        dispatch(
+          setFilters([
+            ...filters.map((filter) => {
+              if (filter.key === 'assignees') {
+                // return { ...filter, values: [] };
+                return { ...filter, values: [...newAssignees] };
+              }
+
+              return filter;
+            })
+          ])
+        );
+      }
+    } else {
+      // create assignees filter
+      dispatch(setFilters([...filters, generateFilter('assignees', newMemberObj)]));
+    }
+  };
 
   return (
     <Transition.Root show={!!showFilterByAssigneeSlideOver} as={Fragment}>
@@ -76,7 +70,7 @@ export default function FilterByAssigneesSliderOver({ data }: { data: ITaskFullL
 
         <div className="fixed inset-0 overflow-hidden">
           <div className="absolute inset-0  overflow-hidden">
-            <div className="pointer-events-none fixed inset-y-0 right-0 top-20 flex max-w-full pl-10">
+            <div className="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-10">
               <Transition.Child
                 as={Fragment}
                 enter="transform transition ease-in-out duration-500 sm:duration-700"
@@ -109,58 +103,45 @@ export default function FilterByAssigneesSliderOver({ data }: { data: ITaskFullL
                     </div>
 
                     <div className="relative mt-6 flex-1 px-4 sm:px-6">
-                      {/* {console.log(TaskDataGroupingsAssignees[value].assigneeName)} */}
                       <input type="text" placeholder="Search" className="w-full" />
                       <section>
                         <div id="header" className="flex justify-between items-center mt-5">
                           <p>Assignees</p>
                           <p>Select all</p>
                         </div>
-                        {TaskDataGroupingsAssignees
-                          ? Object.keys(TaskDataGroupingsAssignees).map((value) => (
-                              <section key={TaskDataGroupingsAssignees[value].assigneeId}>
-                                <div
-                                  className="flex justify-between cursor-pointer hover:bg-gray-200"
-                                  onClick={() => {
-                                    if (filterTaskByAssigneeIds == TaskDataGroupingsAssignees[value]?.assigneeId) {
-                                      dispatch(setFilterTaskByAssigneeIds(null));
-                                    } else {
-                                      dispatch(
-                                        setFilterTaskByAssigneeIds(TaskDataGroupingsAssignees[value]?.assigneeId)
-                                      );
-                                    }
-                                  }}
-                                >
-                                  <div className="flex space-x-3">
-                                    <AvatarWithInitials
-                                      initials={'ND'}
-                                      textColor={'white'}
-                                      height="h-8"
-                                      width="w-8"
-                                      backgroundColour={'blue'}
-                                      textSize={'8px'}
-                                    />
-                                    <div className="flex flex-col text-left">
-                                      <p className="capitalize" style={{ fontSize: '13px' }}>
-                                        {TaskDataGroupingsAssignees[value]?.assigneeName}
-                                      </p>
-                                      <p style={{ fontSize: '10px' }}>
-                                        {TaskDataGroupingsAssignees[value].tasks.length} tasks
-                                      </p>
-                                    </div>
-                                  </div>
 
-                                  <button>
-                                    {filterTaskByAssigneeIds == TaskDataGroupingsAssignees[value]?.assigneeId ? (
-                                      <AiFillCheckCircle />
-                                    ) : (
-                                      <AiOutlineCheckCircle />
-                                    )}
-                                  </button>
-                                </div>
-                              </section>
-                            ))
-                          : null}
+                        {members.map((member) => (
+                          <section
+                            onClick={() => onClickMember(member.id, member.user.name)}
+                            className="flex justify-between cursor-pointer hover:bg-gray-200"
+                            key={member.id}
+                          >
+                            <div className="flex space-x-3">
+                              <AvatarWithInitials
+                                initials={member.user.initials}
+                                textColor={'white'}
+                                height="h-8"
+                                width="w-8"
+                                backgroundColour={'blue'}
+                                textSize={'8px'}
+                              />
+                              <div className="flex flex-col text-left">
+                                <p className="capitalize" style={{ fontSize: '13px' }}>
+                                  {member.user.name}
+                                </p>
+                                <p style={{ fontSize: '10px' }}>{member.user.email}</p>
+                              </div>
+                            </div>
+
+                            <button>
+                              {currentAssignees.map((i) => i.id).includes(member.id) ? (
+                                <AiFillCheckCircle />
+                              ) : (
+                                <AiOutlineCheckCircle />
+                              )}
+                            </button>
+                          </section>
+                        ))}
                       </section>
                     </div>
                   </div>

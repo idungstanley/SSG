@@ -7,11 +7,9 @@ import { UseGetListDetails } from '../../features/list/listService';
 import PilotSection, { pilotConfig } from '../workspace/lists/components/PilotSection';
 import Page from '../../components/Page';
 import AdditionalHeader from '../../layout/components/MainLayout/Header/AdditionHeader';
-import ListNav from '../workspace/lists/components/renderlist/ListNav';
 import ActiveHub from '../../layout/components/MainLayout/extendedNavigation/ActiveParents/ActiveHub';
 import hubIcon from '../../assets/branding/hub.png';
 import FilterByAssigneesSliderOver from '../workspace/lists/components/renderlist/filters/FilterByAssigneesSliderOver';
-import { ITaskFullList } from '../../features/task/interface.tasks';
 import { useScroll } from '../../hooks/useScroll';
 import { setUpdateCords } from '../../features/task/taskSlice';
 import TaskQuickAction from '../workspace/tasks/component/taskQuickActions/TaskQuickAction';
@@ -78,7 +76,7 @@ export function ListPage() {
           children: <ActiveHub />,
           source: hubIcon
         }}
-        additional={<FilterByAssigneesSliderOver data={tasks as ITaskFullList[]} />}
+        additional={<FilterByAssigneesSliderOver />}
       >
         <>
           <Header />

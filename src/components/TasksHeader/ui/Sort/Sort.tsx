@@ -6,7 +6,10 @@ import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { TaskKey } from '../../../../features/task/interface.tasks';
 import { setSortType } from '../../../../features/task/taskSlice';
 
-const options: Record<TaskKey, { icon: JSX.Element }> = {
+type Key = Extract<TaskKey, 'status' | 'assignees' | 'priority'>;
+type Option = Record<Key, { icon: JSX.Element }>;
+
+const options: Option = {
   status: {
     icon: <RiCheckboxBlankFill className="w-5 h-5 text-gray-400" aria-hidden="true" />
   },
@@ -50,7 +53,7 @@ export function Sort() {
                 {({ selected }) => (
                   <>
                     <div className="flex items-center w-full space-x-3">
-                      {options[option as TaskKey].icon}
+                      {options[option as Key].icon}
 
                       <span className={`block truncate capitalize ${selected ? 'font-medium' : 'font-normal'}`}>
                         {option}

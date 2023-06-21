@@ -7,6 +7,7 @@ import { IWalletRes } from '../wallet/wallet.interfaces';
 import { IListDetailRes, listDetails } from './list.interfaces';
 import { useAppSelector } from '../../app/hooks';
 import { useParams } from 'react-router-dom';
+import { generateFilters } from '../../components/TasksHeader/lib/generateFilters';
 
 export const createListService = (data: { listName: string; hubId?: string | null; walletId?: string | null }) => {
   const response = requestNew({
@@ -193,6 +194,7 @@ export const useUpdateEntityCustomFieldValue = (listId?: string) => {
   const queryClient = useQueryClient();
   const { filterTaskByAssigneeIds } = useAppSelector((state) => state.task);
   const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
+  const { filters } = generateFilters();
 
   return useMutation(updateEntityCustomFieldValue, {
     onSuccess: () => {
@@ -200,7 +202,7 @@ export const useUpdateEntityCustomFieldValue = (listId?: string) => {
       queryClient.invalidateQueries(['task', activeItemId, activeItemType, filterTaskByAssigneeIds]);
       // }
       queryClient.invalidateQueries(['task', { listId }]);
-      queryClient.invalidateQueries(['task', listId, 'hub']);
+      queryClient.invalidateQueries(['task', listId, 'hub', filters]);
     }
   });
 };
