@@ -6,13 +6,18 @@ import { FaFolder } from 'react-icons/fa';
 import { AiOutlineUnorderedList } from 'react-icons/ai';
 import hubIcon from '../../assets/branding/hub.svg';
 import {
+  setCreateHubSlideOverVisibility,
   setCreateListSlideOverVisibility,
   setCreateSubHubSlideOverVisibility,
   setCreateSubWalletSlideOverVisibility,
   setCreateTaskSlideOverVisibility,
   setCreateWalletSlideOverVisibility
 } from '../../features/general/slideOver/slideOverSlice';
-import { getSubMenu } from '../../features/hubs/hubSlice';
+import { getSubMenu, setSubDropdownMenu } from '../../features/hubs/hubSlice';
+import { useNavigate, useParams } from 'react-router-dom';
+import { displayPrompt, setVisibility } from '../../features/general/prompt/promptSlice';
+import { setCreateEntityType } from '../../features/workspace/workspaceSlice';
+import { EntityType } from '../../utils/EntityTypes/EntityType';
 
 interface itemsType {
   id: number;
@@ -24,7 +29,37 @@ interface itemsType {
 
 export default function SubDropdown() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { listId, hubId, walletId } = useParams();
+  const AnyActiveEntity = !!listId || !!hubId || !!walletId;
   const { showMenuDropdownType, showMenuDropdown, SubMenuType, SubMenuId } = useAppSelector((state) => state.hub);
+  const { currentWorkspaceId } = useAppSelector((state) => state.auth);
+  const navLink = '/tasks';
+  const showPrompt = (entityType: string) => {
+    dispatch(
+      displayPrompt(`Create ${entityType}`, `Do you want to create your ${entityType} under this entity?`, [
+        {
+          label: 'Proceed To Create',
+          style: 'danger',
+          callback: () => {
+            if (AnyActiveEntity) {
+              console.log('stan');
+            } else {
+              dispatch(setCreateEntityType(entityType));
+              dispatch(setVisibility(false));
+            }
+          }
+        },
+        {
+          label: 'Cancel',
+          style: 'plain',
+          callback: () => {
+            dispatch(setVisibility(false));
+          }
+        }
+      ])
+    );
+  };
 
   const {
     showCreateSubWalletSlideOver,
@@ -52,7 +87,6 @@ export default function SubDropdown() {
           showEditWalletSlideOver === false &&
           showCreateListSlideOver === false
         ) {
-          // dispatch(setSubDropdownMenu(false));
           dispatch(
             getSubMenu({
               SubMenuId: null,
@@ -105,9 +139,16 @@ export default function SubDropdown() {
           showMenuDropdownType !== 'wallet' &&
           showMenuDropdownType !== 'subwallet2'
         ) {
-          dispatch(setCreateWalletSlideOverVisibility(true));
+          dispatch(setSubDropdownMenu(false));
+          dispatch(
+            getSubMenu({
+              SubMenuId: null,
+              SubMenuType: null
+            })
+          );
+          showPrompt(EntityType.wallet);
         } else {
-          dispatch(setCreateSubWalletSlideOverVisibility(true));
+          navigate(`/${currentWorkspaceId}` + navLink);
         }
       },
       icon: <FaFolder className="w-4 h-4" aria-hidden="true" />,
@@ -121,6 +162,7 @@ export default function SubDropdown() {
       title: 'Task',
       handleClick: () => {
         dispatch(setCreateTaskSlideOverVisibility(true));
+        navigate(`/${currentWorkspaceId}` + navLink);
       },
       icon: <PlusIcon className="w-5 pt-2 text-gray-700 h-7" aria-hidden="true" />,
       isVisible: showMenuDropdownType == 'list' ? true : false
@@ -129,7 +171,7 @@ export default function SubDropdown() {
       id: 4,
       title: 'List',
       handleClick: () => {
-        dispatch(setCreateListSlideOverVisibility(true));
+        showPrompt(EntityType.list);
       },
       icon: <AiOutlineUnorderedList className="w-4 h-4" aria-hidden="true" />,
       isVisible: showMenuDropdownType === 'list' ? false : true
