@@ -27,6 +27,9 @@ export default function CreateWallet() {
     name: ''
   };
 
+  const onClose = () => {
+    dispatch(setCreateWalletSlideOverVisibility(false));
+  };
   const [formState, setFormState] = useState(defaultWalletFormState);
 
   const handleWalletChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -60,7 +63,8 @@ export default function CreateWallet() {
         type="text"
         onChange={handleWalletChange}
       />
-      <div className="flex justify-end space-x-3 pt-2">
+      <div className="flex justify-between pt-2 space-x-3">
+        <Button buttonStyle="white" onClick={onClose} loading={false} label="Close" width={20} />
         <Button
           buttonStyle="primary"
           onClick={onSubmit}

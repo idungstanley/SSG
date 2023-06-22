@@ -5,15 +5,20 @@ import { pilotHubConfig } from '../pilot/components/createEntity/createHub/pilot
 import AdditionalHeader from '../../../layout/components/MainLayout/Header/AdditionHeader';
 import Page from '../../../components/Page';
 import { Header } from '../../../components/TasksHeader';
+import { pilotWalletConfig } from '../pilot/components/createEntity/createWallet/pilotConfig';
 
 export default function TasksIndex() {
+  const { showCreateHubSlideOver, showCreateWalletSlideOver } = useAppSelector((state) => state.slideOver);
   return (
     <>
       <PilotSection />
-      <Page pilotConfig={pilotHubConfig} additionalHeader={<AdditionalHeader />}>
+      <Page
+        pilotConfig={showCreateWalletSlideOver ? pilotWalletConfig : pilotHubConfig}
+        additionalHeader={<AdditionalHeader />}
+      >
         <Header />
         <section>
-          <div className="w-full h-full flex items-center justify-center">
+          <div className="flex items-center justify-center w-full h-full">
             <p>Under Construction</p>
           </div>
         </section>
@@ -24,12 +29,12 @@ export default function TasksIndex() {
 
 function PilotSection() {
   const dispatch = useAppDispatch();
-  const { showCreateHubSlideOver } = useAppSelector((state) => state.slideOver);
+  const { showCreateHubSlideOver, showCreateWalletSlideOver } = useAppSelector((state) => state.slideOver);
   // set data for pilot
   useEffect(() => {
-    const selectedItemType = 'create_hub';
+    const selectedItemType = 'Under Construction';
 
-    if (showCreateHubSlideOver) {
+    if (showCreateHubSlideOver || showCreateWalletSlideOver) {
       dispatch(
         setShowPilotSideOver({
           id: 'unknown',
@@ -38,7 +43,7 @@ function PilotSection() {
         })
       );
     }
-  }, [showCreateHubSlideOver]);
+  }, [showCreateHubSlideOver, showCreateWalletSlideOver]);
 
   return null;
 }

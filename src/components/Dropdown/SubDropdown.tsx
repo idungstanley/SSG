@@ -13,8 +13,9 @@ import {
   setCreateTaskSlideOverVisibility,
   setCreateWalletSlideOverVisibility
 } from '../../features/general/slideOver/slideOverSlice';
-import { getSubMenu } from '../../features/hubs/hubSlice';
-import { useNavigate } from 'react-router-dom';
+import { getSubMenu, setSubDropdownMenu } from '../../features/hubs/hubSlice';
+import { useNavigate, useParams } from 'react-router-dom';
+import { displayPrompt, setVisibility } from '../../features/general/prompt/promptSlice';
 
 interface itemsType {
   id: number;
@@ -27,6 +28,8 @@ interface itemsType {
 export default function SubDropdown() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { listId, hubId, walletId } = useParams();
+  const AnyActiveEntity = !!listId || !!hubId || !!walletId;
   const { showMenuDropdownType, showMenuDropdown, SubMenuType, SubMenuId } = useAppSelector((state) => state.hub);
   const { currentWorkspaceId } = useAppSelector((state) => state.auth);
   const navLink = '/tasks';
@@ -109,9 +112,36 @@ export default function SubDropdown() {
           showMenuDropdownType !== 'wallet' &&
           showMenuDropdownType !== 'subwallet2'
         ) {
-          navigate(`/${currentWorkspaceId}` + navLink);
+          dispatch(setSubDropdownMenu(false));
+          dispatch(
+            getSubMenu({
+              SubMenuId: null,
+              SubMenuType: null
+            })
+          );
+          dispatch(
+            displayPrompt('Create Wallet', 'Do you want to create your wallet under this entity?', [
+              {
+                label: 'Proceed To Create',
+                style: 'danger',
+                callback: async () => {
+                  if (AnyActiveEntity) {
+                    console.log('stan');
+                  } else {
+                    dispatch(setCreateWalletSlideOverVisibility(true));
+                  }
+                }
+              },
+              {
+                label: 'Cancel',
+                style: 'plain',
+                callback: () => {
+                  dispatch(setVisibility(false));
+                }
+              }
+            ])
+          );
         } else {
-          dispatch(setCreateSubWalletSlideOverVisibility(true));
           navigate(`/${currentWorkspaceId}` + navLink);
         }
       },

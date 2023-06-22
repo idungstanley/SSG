@@ -52,7 +52,7 @@ export default function DropdownWithoutHeader({ setAnchorEl, anchorEl, handleClo
         }
       }}
     >
-      <div className="relative text-left transform bg-white w-full">
+      <div className="relative w-full text-left text-gray-500 transform bg-white">
         {/* item list to show in dropdown*/}
         {items.map((item, index) => (
           <React.Fragment key={index}>

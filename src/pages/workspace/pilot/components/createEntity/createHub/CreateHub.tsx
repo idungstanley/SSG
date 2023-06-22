@@ -35,6 +35,9 @@ export default function CreateHub() {
       [e.target.name]: e.target.value
     }));
   };
+  const onClose = () => {
+    dispatch(setCreateHubSlideOverVisibility(false));
+  };
 
   const currentWorkspaceId: string | undefined = JSON.parse(
     localStorage.getItem('currentWorkspaceId') || '"'
@@ -58,7 +61,8 @@ export default function CreateHub() {
         type="text"
         onChange={handleHubChange}
       />
-      <div className="flex justify-end space-x-3 pt-2">
+      <div className="flex justify-between pt-2 space-x-3">
+        <Button buttonStyle="white" onClick={onClose} loading={false} label="Close" width={20} />
         <Button
           buttonStyle="primary"
           onClick={onSubmit}

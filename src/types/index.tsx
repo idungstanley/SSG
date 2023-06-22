@@ -40,7 +40,7 @@ export type itemType =
   | 'create_hub'
   | 'create_wallet'
   | 'create_list'
-  | 'create_task';
+  | 'Under Construction';
 
 export interface IPilotTab {
   id: number;

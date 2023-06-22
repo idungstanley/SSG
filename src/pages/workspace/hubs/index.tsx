@@ -95,7 +95,7 @@ function Hubs() {
         searchStatus={isSearchActive}
         rightContent={
           <div className="flex gap-2" onClick={(e) => handleOpenDropdown(e)}>
-            <PlusIcon className="w-4 h-4" aria-hidden="true" />
+            <PlusIcon className="w-4 h-4" style={{ color: '#BF00FFB2' }} aria-hidden="true" />
           </div>
         }
       />

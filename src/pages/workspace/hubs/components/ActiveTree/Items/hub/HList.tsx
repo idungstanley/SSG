@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ListProps } from '../../activetree.interfaces';
-// import HItem from './HItem';
+import { Hub, ListProps } from '../../activetree.interfaces';
 import WList from '../wallet/WList';
 import LList from '../list/LList';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -42,9 +41,22 @@ export default function HList({ hubs, leftMargin, taskType, level = 1 }: ListPro
   const { showSidebar } = useAppSelector((state) => state.account);
 
   const { showMenuDropdown, SubMenuId } = useAppSelector((state) => state.hub);
+  const { showCreateHubSlideOver } = useAppSelector((state) => state.slideOver);
   const [stickyButtonIndex, setStickyButtonIndex] = useState<number | undefined>(-1);
   const id = hubId || walletId || listId || currentItemId;
-
+  const hubsSpread = [
+    ...hubs,
+    {
+      name: 'Under Construction',
+      id: 'under construction',
+      wallets: [],
+      lists: [],
+      children: [],
+      color: 'blue',
+      path: null
+    }
+  ];
+  const hubsWithEntity = showCreateHubSlideOver ? (hubsSpread as Hub[]) : hubs;
   useEffect(() => {
     setShowChidren(id);
   }, []);
@@ -152,7 +164,7 @@ export default function HList({ hubs, leftMargin, taskType, level = 1 }: ListPro
   };
   return (
     <>
-      {hubs.map((hub, index) => (
+      {hubsWithEntity.map((hub, index) => (
         <div
           key={hub.id}
           style={{ marginLeft: leftMargin ? 20 : 0 }}
