@@ -29,6 +29,7 @@ import {
 import MenuDropdown from '../../../../../../../components/Dropdown/MenuDropdown';
 import SubDropdown from '../../../../../../../components/Dropdown/SubDropdown';
 import { cl } from '../../../../../../../utils';
+import { EntityType } from '../../../../../../../utils/EntityTypes/EntityType';
 
 export default function HList({ hubs, leftMargin, taskType, level = 1 }: ListProps) {
   const { hubId } = useParams();
@@ -37,11 +38,10 @@ export default function HList({ hubs, leftMargin, taskType, level = 1 }: ListPro
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [showChildren, setShowChidren] = useState<string | null | undefined>(null);
-  const { currentItemId, showExtendedBar } = useAppSelector((state) => state.workspace);
+  const { currentItemId, showExtendedBar, createEntityType } = useAppSelector((state) => state.workspace);
   const { showSidebar } = useAppSelector((state) => state.account);
 
   const { showMenuDropdown, SubMenuId } = useAppSelector((state) => state.hub);
-  const { showCreateHubSlideOver } = useAppSelector((state) => state.slideOver);
   const [stickyButtonIndex, setStickyButtonIndex] = useState<number | undefined>(-1);
   const id = hubId || walletId || listId || currentItemId;
   const hubsSpread = [
@@ -56,7 +56,7 @@ export default function HList({ hubs, leftMargin, taskType, level = 1 }: ListPro
       path: null
     }
   ];
-  const hubsWithEntity = showCreateHubSlideOver ? (hubsSpread as Hub[]) : hubs;
+  const hubsWithEntity = createEntityType === EntityType.hub ? (hubsSpread as Hub[]) : hubs;
   useEffect(() => {
     setShowChidren(id);
   }, []);

@@ -5,7 +5,7 @@ import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
 import { setCreateWalletSlideOverVisibility } from '../../../../../../features/general/slideOver/slideOverSlice';
 import { setSubDropdownMenu, setshowMenuDropdown } from '../../../../../../features/hubs/hubSlice';
 import { createWalletService } from '../../../../../../features/wallet/walletService';
-import { setCreateWlLink } from '../../../../../../features/workspace/workspaceSlice';
+import { setCreateEntityType, setCreateWlLink } from '../../../../../../features/workspace/workspaceSlice';
 
 export default function CreateWallet() {
   const queryClient = useQueryClient();
@@ -16,7 +16,7 @@ export default function CreateWallet() {
   const createWallet = useMutation(createWalletService, {
     onSuccess: () => {
       queryClient.invalidateQueries();
-      dispatch(setCreateWalletSlideOverVisibility(false));
+      dispatch(setCreateEntityType(null));
       dispatch(setSubDropdownMenu(false));
       dispatch(setshowMenuDropdown({ showMenuDropdown: null, showMenuDropdownType: null }));
       dispatch(setCreateWlLink(false));
@@ -28,7 +28,7 @@ export default function CreateWallet() {
   };
 
   const onClose = () => {
-    dispatch(setCreateWalletSlideOverVisibility(false));
+    dispatch(setCreateEntityType(null));
   };
   const [formState, setFormState] = useState(defaultWalletFormState);
 

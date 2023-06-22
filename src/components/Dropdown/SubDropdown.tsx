@@ -16,6 +16,8 @@ import {
 import { getSubMenu, setSubDropdownMenu } from '../../features/hubs/hubSlice';
 import { useNavigate, useParams } from 'react-router-dom';
 import { displayPrompt, setVisibility } from '../../features/general/prompt/promptSlice';
+import { setCreateEntityType } from '../../features/workspace/workspaceSlice';
+import { EntityType } from '../../utils/EntityTypes/EntityType';
 
 interface itemsType {
   id: number;
@@ -124,11 +126,12 @@ export default function SubDropdown() {
               {
                 label: 'Proceed To Create',
                 style: 'danger',
-                callback: async () => {
+                callback: () => {
                   if (AnyActiveEntity) {
                     console.log('stan');
                   } else {
-                    dispatch(setCreateWalletSlideOverVisibility(true));
+                    dispatch(setCreateEntityType(EntityType.wallet));
+                    dispatch(setVisibility(false));
                   }
                 }
               },

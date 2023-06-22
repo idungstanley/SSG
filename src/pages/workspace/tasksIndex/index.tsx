@@ -6,14 +6,15 @@ import AdditionalHeader from '../../../layout/components/MainLayout/Header/Addit
 import Page from '../../../components/Page';
 import { Header } from '../../../components/TasksHeader';
 import { pilotWalletConfig } from '../pilot/components/createEntity/createWallet/pilotConfig';
+import { EntityType } from '../../../utils/EntityTypes/EntityType';
 
 export default function TasksIndex() {
-  const { showCreateHubSlideOver, showCreateWalletSlideOver } = useAppSelector((state) => state.slideOver);
+  const { createEntityType } = useAppSelector((state) => state.workspace);
   return (
     <>
       <PilotSection />
       <Page
-        pilotConfig={showCreateWalletSlideOver ? pilotWalletConfig : pilotHubConfig}
+        pilotConfig={createEntityType === EntityType.wallet ? pilotWalletConfig : pilotHubConfig}
         additionalHeader={<AdditionalHeader />}
       >
         <Header />
@@ -29,12 +30,12 @@ export default function TasksIndex() {
 
 function PilotSection() {
   const dispatch = useAppDispatch();
-  const { showCreateHubSlideOver, showCreateWalletSlideOver } = useAppSelector((state) => state.slideOver);
+  const { createEntityType } = useAppSelector((state) => state.workspace);
   // set data for pilot
   useEffect(() => {
     const selectedItemType = 'Under Construction';
 
-    if (showCreateHubSlideOver || showCreateWalletSlideOver) {
+    if (createEntityType == EntityType.hub || EntityType.wallet) {
       dispatch(
         setShowPilotSideOver({
           id: 'unknown',
@@ -43,7 +44,7 @@ function PilotSection() {
         })
       );
     }
-  }, [showCreateHubSlideOver, showCreateWalletSlideOver]);
+  }, [createEntityType]);
 
   return null;
 }

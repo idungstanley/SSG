@@ -5,6 +5,7 @@ import { useAppDispatch } from '../../../../../../app/hooks';
 import { createHubService } from '../../../../../../features/hubs/hubService';
 import { setCreateHubSlideOverVisibility } from '../../../../../../features/general/slideOver/slideOverSlice';
 import { setSubDropdownMenu, setshowMenuDropdown } from '../../../../../../features/hubs/hubSlice';
+import { setCreateEntityType } from '../../../../../../features/workspace/workspaceSlice';
 
 export default function CreateHub() {
   const queryClient = useQueryClient();
@@ -12,7 +13,7 @@ export default function CreateHub() {
   const createHub = useMutation(createHubService, {
     onSuccess: () => {
       queryClient.invalidateQueries(['retrieve']);
-      dispatch(setCreateHubSlideOverVisibility(false));
+      dispatch(setCreateEntityType(null));
       dispatch(setSubDropdownMenu(false));
       dispatch(
         setshowMenuDropdown({
@@ -36,7 +37,7 @@ export default function CreateHub() {
     }));
   };
   const onClose = () => {
-    dispatch(setCreateHubSlideOverVisibility(false));
+    dispatch(setCreateEntityType(null));
   };
 
   const currentWorkspaceId: string | undefined = JSON.parse(
