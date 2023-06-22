@@ -62,7 +62,7 @@ function Hubs() {
     {
       label: 'Create New SubHub',
       icon: <img src={hubIcon} alt="Hub Icon" className="w-4 h-4 text-base" />,
-      onclick: () => handleNavigateTask(EntityType.subhub)
+      onclick: () => handleNavigateTask(EntityType.hub)
     },
     {
       label: 'Add New Wallet',
@@ -72,7 +72,7 @@ function Hubs() {
     {
       label: 'Create New Subwallet',
       icon: <AiFillFolderAdd className="w-4 h-4 text-base" />,
-      onclick: () => handleNavigateTask(EntityType.subwallet)
+      onclick: () => handleNavigateTask(EntityType.wallet)
     },
     {
       label: 'Create New List',
