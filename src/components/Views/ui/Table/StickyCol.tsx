@@ -109,6 +109,7 @@ export function StickyCol({
           <p
             className="flex text-left"
             contentEditable={true}
+            suppressContentEditableWarning={true}
             ref={inputRef}
             onKeyDown={(e) => (e.key === 'Enter' ? handleEditTask(e, task.id) : null)}
           >
