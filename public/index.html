@@ -5,7 +5,7 @@
     <link rel="icon" type="image/png" href="/favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#000000" />
-    <meta name="description" id="metaDescription" content="" />
+    <meta name="description" id="metaDescription" content="Dev Alsoit.io" />
     <link rel="apple-touch-icon" href="/favicon.png" />
 
     <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
@@ -24,11 +24,10 @@
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
-    <title id="title-env"></title>
+    <title id="title-env">Dev Alsoit.io</title>
     <script>
-      document.getElementById('title-env').innerText = process.env.REACT_APP_ENV_TITLE;
-       document.getElementById("metaDescription").setAttribute("content",
-        process.env.REACT_APP_ENV_TITLE );
+      document.getElementById('title-env').innerText = process.env.REACT_APP_ENV_TITLE || 'Dev Alsoit.io';
+      document.getElementById('metaDescription').setAttribute('content', process.env.REACT_APP_ENV_TITLE);
     </script>
   </head>
   <body class="h-full overflow-hidden">
@@ -46,4 +45,3 @@
     -->
   </body>
 </html>
-
