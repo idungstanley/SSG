@@ -31,9 +31,10 @@ export default function DatePicker({ styles, range, toggleFn }: DatePickerProps)
   const [showRecurring, setRecurring] = useState<boolean>(false);
   const { selectedDate } = useAppSelector((state) => state.workspace);
   const { selectedDate: taskTime } = useAppSelector((state) => state.task);
+  const { date_format } = useAppSelector((state) => state.userSetting);
   const sectionRef = useRef<HTMLElement>(null);
   const [hoveredDate, setHovered] = useState<Dayjs | null>(null);
-  const [time, setTime] = useState<string>(dayjs().format('ddd DD MMM YYYY h:mm A'));
+  const [time, setTime] = useState<string>(dayjs().format(`${date_format?.toUpperCase()} h:mm A`));
 
   const closeDateModal = () => {
     if (toggleFn) {
@@ -41,7 +42,7 @@ export default function DatePicker({ styles, range, toggleFn }: DatePickerProps)
     }
   };
 
-  const calendarTime = () => setInterval(() => setTime(dayjs().format('ddd DD MMM YYYY h:mm A')), 60000);
+  const calendarTime = () => setInterval(() => setTime(dayjs().format(`${date_format?.toUpperCase()} h:mm A`)), 60000);
 
   const dates = generateDate();
   const groupedDates = groupDatesByDayOfWeek(dates);

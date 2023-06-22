@@ -17,13 +17,13 @@ interface DatePickerManualDatesProps {
 export function DatePickerManualDates({ range }: DatePickerManualDatesProps) {
   const { HistoryFilterMemory, selectedDate: taskTime } = useAppSelector((state) => state.task);
   const { selectedDate } = useAppSelector((state) => state.workspace);
+  const { date_format } = useAppSelector((state) => state.userSetting);
   const [dateType, setDateType] = useState<'from' | 'to' | undefined>();
   const [dateString, setString] = useState<DateString | null>(null);
   const dispatch = useAppDispatch();
 
   const handleFilterDateDispatch = (type: 'start' | 'due') => {
-    const dateObject =
-      type === 'start' ? moment(dateString?.start, 'DD/MM/YYYY') : moment(dateString?.due, 'DD/MM/YYYY');
+    const dateObject = type === 'start' ? moment(dateString?.start, date_format) : moment(dateString?.due, date_format);
 
     dateObject.isValid() ? dispatch(setSelectedDate({ date: dayjs(dateObject.toDate()), dateType })) : null;
   };
@@ -41,7 +41,7 @@ export function DatePickerManualDates({ range }: DatePickerManualDatesProps) {
   };
 
   useEffect(() => {
-    setString({ start: taskTime?.from?.format('DD/MM/YYYY'), due: taskTime?.to?.format('DD/MM/YYYY') });
+    setString({ start: taskTime?.from?.format(date_format), due: taskTime?.to?.format(date_format) });
   }, [taskTime]);
 
   return (
