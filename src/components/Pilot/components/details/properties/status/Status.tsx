@@ -62,9 +62,9 @@ export default function Status({ Details }: StatusDetailsProps) {
 
   const handleStatusMessage = (status: string | null | undefined) => {
     if (status === 'new') {
-      return 'todo';
+      return 'to do';
     } else if (!status) {
-      return 'todo';
+      return 'to do';
     } else {
       return status;
     }

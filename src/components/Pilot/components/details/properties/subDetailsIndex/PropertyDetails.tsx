@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 import { AiOutlinePlus } from 'react-icons/ai';
 // import SubTask from '../../../../../../../tasks/subtasks/create/SubTask';
 import moment from 'moment';
-// import Status from '../status/Status';
-// import Priority from '../priority/Priority';
 import CustomReference from '../customReference/CustomReference';
 import EntitySettings from '../entitySettings/EntitySettings';
 import Share from '../share/Share';
@@ -32,7 +30,7 @@ export interface tagItem {
   color: string;
 }
 interface PropertyDetailsProps {
-  Details: IHubDetails | undefined | ITaskFullList | IListDetails | IWalletDetails;
+  Details?: IHubDetails | ITaskFullList | IListDetails | IWalletDetails;
 }
 export default function PropertyDetails({ Details }: PropertyDetailsProps) {
   const [toggleSubTask, setToggleSubTask] = useState(false);

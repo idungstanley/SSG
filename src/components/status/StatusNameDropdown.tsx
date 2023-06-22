@@ -17,7 +17,7 @@ interface statusType {
 
 interface StatusDropdownProps {
   TaskCurrentStatus: Status;
-  statusName?: string | null;
+  statusName?: Status;
 }
 
 export default function StatusNameDropdown({ TaskCurrentStatus, statusName }: StatusDropdownProps) {
@@ -71,29 +71,30 @@ export default function StatusNameDropdown({ TaskCurrentStatus, statusName }: St
     mutate(updateStatusMutation);
   };
 
-  const setStatusColor = (status: Status) => {
-    if (status.name === 'new' || status.name === 'to do') {
+  const setStatusColor = (value: string) => {
+    const status = value.toLocaleLowerCase();
+    if (status === 'new' || status === 'to do') {
       return (
         <p className="text-white capitalize" aria-hidden="true">
-          {statusName}
+          {status}
         </p>
       );
-    } else if (status.name === 'in progress') {
+    } else if (status === 'in progress') {
       return (
         <p className=" text-white whitespace-nowrap capitalize" aria-hidden="true">
-          {statusName}
+          {status}
         </p>
       );
-    } else if (status.name === 'completed') {
+    } else if (status === 'completed') {
       return (
         <p className="text-white capitalize" aria-hidden="true">
-          {statusName}
+          {status}
         </p>
       );
-    } else if (status.name === 'archived') {
+    } else if (status === 'archived') {
       return (
         <p className="text-white capitalize" aria-hidden="true">
-          {statusName}
+          {status}
         </p>
       );
     }
@@ -117,7 +118,7 @@ export default function StatusNameDropdown({ TaskCurrentStatus, statusName }: St
             onClick={() => setIsOpen(true)}
             className="flex text-sm justify-center items-center focus:outline-none hover:text-gray-700 w-full"
           >
-            <div ref={relativeRef}>{setStatusColor(TaskCurrentStatus)}</div>
+            <div ref={relativeRef}>{setStatusColor(TaskCurrentStatus.name)}</div>
           </button>
         </ToolTip>
       </div>
@@ -131,7 +132,7 @@ export default function StatusNameDropdown({ TaskCurrentStatus, statusName }: St
                   key={i.id}
                   type="button"
                   className={cl(
-                    statusName?.toLowerCase() === i.title.toLowerCase() ? `bg-${i.bg}-200` : '',
+                    statusName?.name.toLowerCase() === i.title.toLowerCase() ? `bg-${i.bg}-200` : '',
                     'flex items-center px-4 py-2 text-sm text-gray-600 text-left space-x-2 w-full'
                   )}
                   onClick={i.handleClick}
