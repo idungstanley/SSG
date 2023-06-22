@@ -1,17 +1,19 @@
-const DEFAULT_BUTTON = {
-  backgroundColor: '#f4f4f4',
-  borderRadius: '5px',
-  textColor: '#424242',
+const COMMON_STYLES = {
   padding: '0 2px',
+  borderRadius: '5px',
   marginRight: '10px'
 };
 
+const DEFAULT_BUTTON = {
+  ...COMMON_STYLES,
+  backgroundColor: '#f4f4f4',
+  textColor: '#424242'
+};
+
 const ACTIVE_BUTTON = {
+  ...COMMON_STYLES,
   backgroundColor: '#f9e6ff',
-  borderRadius: '5px',
-  textColor: '#bf01fe',
-  padding: '0 2px',
-  marginRight: '10px'
+  textColor: '#bf01fe'
 };
 
 export { DEFAULT_BUTTON, ACTIVE_BUTTON };
