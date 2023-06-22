@@ -3,7 +3,7 @@ import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { DateString } from './DatePicker';
 import moment from 'moment';
 import { setSelectedDate } from '../../features/workspace/workspaceSlice';
-import { setHistoryMemory } from '../../features/task/taskSlice';
+import { setHistoryMemory, setTaskSelectedDate } from '../../features/task/taskSlice';
 import { BsCalendarEvent } from 'react-icons/bs';
 import dayjs from 'dayjs';
 import ReusableSelect from '../../utils/TimeDropDown';
@@ -28,6 +28,18 @@ export function DatePickerManualDates({ range }: DatePickerManualDatesProps) {
     dateObject.isValid() ? dispatch(setSelectedDate({ date: dayjs(dateObject.toDate()), dateType })) : null;
   };
 
+  const clearDatesFilter = (point: 'from' | 'to') => {
+    if (point === 'from') {
+      dispatch(setTaskSelectedDate({ to: selectedDate?.date }));
+      setString((prev) => ({ ...prev, due: prev?.due }));
+    }
+    if (point === 'to') {
+      dispatch(setTaskSelectedDate({ from: taskTime?.from }));
+      setString((prev) => ({ ...prev, start: prev?.start }));
+    }
+    dispatch(setSelectedDate(null));
+  };
+
   useEffect(() => {
     setString({ start: taskTime?.from?.format('DD/MM/YYYY'), due: taskTime?.to?.format('DD/MM/YYYY') });
   }, [taskTime]);
@@ -49,7 +61,7 @@ export function DatePickerManualDates({ range }: DatePickerManualDatesProps) {
                 onChange={(e) => setString({ ...dateString, start: e.target.value })}
                 onBlur={() => handleFilterDateDispatch('start')}
               />
-              {selectedDate?.dateType === 'from' && <CloseBtn />}
+              {selectedDate?.dateType === 'from' && <CloseBtn clearFn={() => clearDatesFilter('from')} />}
             </div>
             {selectedDate?.date && selectedDate.dateType === 'from' ? (
               <ReusableSelect
@@ -84,7 +96,7 @@ export function DatePickerManualDates({ range }: DatePickerManualDatesProps) {
                 onChange={(e) => setString({ ...dateString, due: e.target.value })}
                 onBlur={() => handleFilterDateDispatch('due')}
               />
-              {selectedDate?.dateType === 'to' && <CloseBtn />}
+              {selectedDate?.dateType === 'to' && <CloseBtn clearFn={() => clearDatesFilter('to')} />}
             </div>
             {selectedDate?.date && selectedDate?.dateType === 'to' ? (
               <ReusableSelect
