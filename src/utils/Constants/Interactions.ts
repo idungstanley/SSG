@@ -13,3 +13,5 @@ const activeButton = {
   padding: '0 2px',
   marginRight: '10px'
 };
+
+export { Defaultbutton, activeButton };
