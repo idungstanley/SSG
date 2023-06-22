@@ -45,20 +45,21 @@ export default function DropdownWithoutHeader({ setAnchorEl, anchorEl, handleClo
       className="rounded-md shadow-2xl"
       PaperProps={{
         style: {
-          height: '230px',
+          height: '250px',
           overflowY: 'auto',
           width: '250px',
           padding: '0 8px'
         }
       }}
     >
-      <div className="relative w-full text-left text-gray-500 transform bg-white">
+      <div className="relative w-full text-base text-left transform bg-white">
         {/* item list to show in dropdown*/}
         {items.map((item, index) => (
           <React.Fragment key={index}>
             <div
-              className="flex cursor-pointer p-2 my-1 gap-2 ml-0.5 hover:bg-gray-200 rounded-md"
+              className="flex items-center cursor-pointer p-2 my-1 gap-2 ml-0.5 hover:bg-gray-200 rounded-md"
               onClick={item.onclick}
+              style={{ color: '#4e5258' }}
             >
               <span>{item.icon}</span>
               <span>{item.label}</span>

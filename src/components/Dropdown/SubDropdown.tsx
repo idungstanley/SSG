@@ -6,18 +6,13 @@ import { FaFolder } from 'react-icons/fa';
 import { AiOutlineUnorderedList } from 'react-icons/ai';
 import hubIcon from '../../assets/branding/hub.svg';
 import {
-  setCreateHubSlideOverVisibility,
   setCreateListSlideOverVisibility,
   setCreateSubHubSlideOverVisibility,
   setCreateSubWalletSlideOverVisibility,
   setCreateTaskSlideOverVisibility,
   setCreateWalletSlideOverVisibility
 } from '../../features/general/slideOver/slideOverSlice';
-import { getSubMenu, setSubDropdownMenu } from '../../features/hubs/hubSlice';
-import { useNavigate, useParams } from 'react-router-dom';
-import { displayPrompt, setVisibility } from '../../features/general/prompt/promptSlice';
-import { setCreateEntityType } from '../../features/workspace/workspaceSlice';
-import { EntityType } from '../../utils/EntityTypes/EntityType';
+import { getSubMenu } from '../../features/hubs/hubSlice';
 
 interface itemsType {
   id: number;
@@ -29,12 +24,7 @@ interface itemsType {
 
 export default function SubDropdown() {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const { listId, hubId, walletId } = useParams();
-  const AnyActiveEntity = !!listId || !!hubId || !!walletId;
   const { showMenuDropdownType, showMenuDropdown, SubMenuType, SubMenuId } = useAppSelector((state) => state.hub);
-  const { currentWorkspaceId } = useAppSelector((state) => state.auth);
-  const navLink = '/tasks';
 
   const {
     showCreateSubWalletSlideOver,
@@ -62,6 +52,7 @@ export default function SubDropdown() {
           showEditWalletSlideOver === false &&
           showCreateListSlideOver === false
         ) {
+          // dispatch(setSubDropdownMenu(false));
           dispatch(
             getSubMenu({
               SubMenuId: null,
@@ -114,38 +105,9 @@ export default function SubDropdown() {
           showMenuDropdownType !== 'wallet' &&
           showMenuDropdownType !== 'subwallet2'
         ) {
-          dispatch(setSubDropdownMenu(false));
-          dispatch(
-            getSubMenu({
-              SubMenuId: null,
-              SubMenuType: null
-            })
-          );
-          dispatch(
-            displayPrompt('Create Wallet', 'Do you want to create your wallet under this entity?', [
-              {
-                label: 'Proceed To Create',
-                style: 'danger',
-                callback: () => {
-                  if (AnyActiveEntity) {
-                    console.log('stan');
-                  } else {
-                    dispatch(setCreateEntityType(EntityType.wallet));
-                    dispatch(setVisibility(false));
-                  }
-                }
-              },
-              {
-                label: 'Cancel',
-                style: 'plain',
-                callback: () => {
-                  dispatch(setVisibility(false));
-                }
-              }
-            ])
-          );
+          dispatch(setCreateWalletSlideOverVisibility(true));
         } else {
-          navigate(`/${currentWorkspaceId}` + navLink);
+          dispatch(setCreateSubWalletSlideOverVisibility(true));
         }
       },
       icon: <FaFolder className="w-4 h-4" aria-hidden="true" />,
@@ -159,7 +121,6 @@ export default function SubDropdown() {
       title: 'Task',
       handleClick: () => {
         dispatch(setCreateTaskSlideOverVisibility(true));
-        navigate(`/${currentWorkspaceId}` + navLink);
       },
       icon: <PlusIcon className="w-5 pt-2 text-gray-700 h-7" aria-hidden="true" />,
       isVisible: showMenuDropdownType == 'list' ? true : false
@@ -169,8 +130,6 @@ export default function SubDropdown() {
       title: 'List',
       handleClick: () => {
         dispatch(setCreateListSlideOverVisibility(true));
-
-        navigate(`/${currentWorkspaceId}` + navLink);
       },
       icon: <AiOutlineUnorderedList className="w-4 h-4" aria-hidden="true" />,
       isVisible: showMenuDropdownType === 'list' ? false : true

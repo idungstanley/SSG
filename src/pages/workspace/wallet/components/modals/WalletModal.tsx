@@ -60,7 +60,7 @@ function WalletModal() {
   };
   return (
     <SlideOver
-      show={false}
+      show={showCreateWalletSlideOver}
       onClose={() => handleCloseSlider()}
       headerTitle="Create wallet"
       body={

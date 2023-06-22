@@ -76,7 +76,7 @@ function ListModal() {
   };
   return (
     <SlideOver
-      show={false}
+      show={showCreateListSlideOver}
       onClose={() => handleCloseSlider()}
       headerTitle="Create List"
       body={

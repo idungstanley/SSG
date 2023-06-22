@@ -56,27 +56,27 @@ function Hubs() {
   const configForDropdown = [
     {
       label: 'Create Hub',
-      icon: <img src={hubIcon} alt="Hub Icon" className="w-4 h-4" />,
+      icon: <img src={hubIcon} alt="Hub Icon" className="w-4 h-4 text-base" />,
       onclick: () => handleNavigateTask(EntityType.hub)
     },
     {
       label: 'Create New SubHub',
-      icon: <img src={hubIcon} alt="Hub Icon" className="w-4 h-4" />,
+      icon: <img src={hubIcon} alt="Hub Icon" className="w-4 h-4 text-base" />,
       onclick: () => handleNavigateTask(EntityType.subhub)
     },
     {
       label: 'Add New Wallet',
-      icon: <AiFillFolderAdd className="w-4 h-4" />,
+      icon: <AiFillFolderAdd className="w-4 h-4 text-base" />,
       onclick: () => handleNavigateTask(EntityType.wallet)
     },
     {
       label: 'Create New Subwallet',
-      icon: <AiFillFolderAdd className="w-4 h-4" />,
+      icon: <AiFillFolderAdd className="w-4 h-4 text-base" />,
       onclick: () => handleNavigateTask(EntityType.subwallet)
     },
     {
       label: 'Create New List',
-      icon: <RiPlayListAddFill className="w-4 h-4" />,
+      icon: <RiPlayListAddFill className="w-4 h-4 text-base" />,
       onclick: () => handleNavigateTask(EntityType.list)
     }
   ];
