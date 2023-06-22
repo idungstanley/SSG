@@ -69,6 +69,18 @@ export interface Tag {
   name: string;
 }
 
+export interface Status {
+  id: string;
+  name: string;
+  color: string;
+  position: string;
+  type: 'open' | string;
+  model_id: string;
+  model_type: 'hub' | string;
+  updated_at: string;
+  created_at: string;
+}
+
 export type TaskId = string;
 
 export interface ITaskFullList {
@@ -79,7 +91,7 @@ export interface ITaskFullList {
   list_id: string;
   parent_id: string | null;
   priority: string | null | [{ id: string; initials: string; color: string; name: string }];
-  status: string | null | undefined;
+  status: Status;
   start_date: string | null;
   end_date: string | null;
   assignees?: [{ id: string; initials: string; color: string; name: string; avatar_path: string | null }] | undefined;
