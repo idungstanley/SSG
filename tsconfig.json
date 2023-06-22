@@ -1,13 +1,7 @@
 {
   "compilerOptions": {
     "target": "es2015",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext",
-      "ES2021.String"
-    ],
-    "types": ["cypress"],
+    "lib": ["dom", "dom.iterable", "esnext", "ES2021.String"],
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
@@ -23,7 +17,5 @@
     "jsx": "react-jsx",
     "noImplicitAny": true
   },
-  "include": [
-    "src"
-  ]
+  "include": ["src"]
 }
