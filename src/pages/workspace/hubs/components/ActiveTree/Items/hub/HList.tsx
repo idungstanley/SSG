@@ -43,12 +43,14 @@ export default function HList({ hubs, leftMargin, taskType, level = 1 }: ListPro
 
   const { showMenuDropdown, SubMenuId } = useAppSelector((state) => state.hub);
   const [stickyButtonIndex, setStickyButtonIndex] = useState<number | undefined>(-1);
+  const hubCreationStatus = 'Under Construction';
   const id = hubId || walletId || listId || currentItemId;
+
   const hubsSpread = [
     ...hubs,
     {
-      name: 'Under Construction',
-      id: 'under construction',
+      name: hubCreationStatus,
+      id: hubCreationStatus,
       wallets: [],
       lists: [],
       children: [],
