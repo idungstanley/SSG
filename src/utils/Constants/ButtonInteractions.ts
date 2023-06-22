@@ -1,4 +1,4 @@
-const Defaultbutton = {
+const defaultbutton = {
   backgroundColor: '#f4f4f4',
   borderRadius: '5px',
   textColor: '#424242',
@@ -14,4 +14,4 @@ const activeButton = {
   marginRight: '10px'
 };
 
-export { Defaultbutton, activeButton };
+export { defaultbutton, activeButton };
