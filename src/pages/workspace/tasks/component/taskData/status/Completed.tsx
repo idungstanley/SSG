@@ -16,7 +16,7 @@ export default function Completed({ taskColField, task }: renderDataProps) {
       className="capitalize text-xs font-medium bg-green-500 text-white px-1 w-full items-center text-center h-full top-0 flex flex-col justify-center"
       onClick={() => handleTaskStatus(task?.id as string)}
     >
-      <StatusNameDropdown TaskCurrentStatus={task?.status} statusName={taskColField as string} />
+      {task ? <StatusNameDropdown TaskCurrentStatus={task.status} statusName={taskColField as string} /> : null}
     </div>
   );
 }

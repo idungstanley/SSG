@@ -15,7 +15,7 @@ export default function Todo({ taskColField, task }: renderDataProps) {
       className="w-full flex flex-col items-center justify-center h-full text-xs font-medium text-center text-white capitalize bg-gray-400"
       onClick={() => handleTaskStatus(task?.id as string)}
     >
-      <StatusNameDropdown TaskCurrentStatus={task?.status} statusName={taskColField as string} />
+      {task ? <StatusNameDropdown TaskCurrentStatus={task.status} statusName={taskColField as string} /> : null}
     </div>
   );
 }

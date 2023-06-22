@@ -15,7 +15,7 @@ export default function InProgress({ taskColField, task }: renderDataProps) {
       className="w-full items-center top-0 flex flex-col justify-center h-full px-1 text-xs font-medium text-center text-white capitalize bg-purple-500"
       onClick={() => handleTaskStatus(task?.id as string)}
     >
-      <StatusNameDropdown TaskCurrentStatus={task?.status} statusName={taskColField as string} />
+      {task ? <StatusNameDropdown TaskCurrentStatus={task.status} statusName={taskColField as string} /> : null}
     </div>
   );
 }

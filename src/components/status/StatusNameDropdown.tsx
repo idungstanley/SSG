@@ -6,6 +6,7 @@ import { useAppSelector } from '../../app/hooks';
 import { UseUpdateTaskStatusService2 } from '../../features/task/taskService';
 import ToolTip from '../Tooltip';
 import { useAbsolute } from '../../hooks/useAbsolute';
+import { Status } from '../../features/task/interface.tasks';
 interface statusType {
   id: number;
   title: string;
@@ -15,7 +16,7 @@ interface statusType {
 }
 
 interface StatusDropdownProps {
-  TaskCurrentStatus: string | null | undefined | [{ id: string; initials: string; colour: string }];
+  TaskCurrentStatus: Status;
   statusName?: string | null;
 }
 
@@ -70,26 +71,26 @@ export default function StatusNameDropdown({ TaskCurrentStatus, statusName }: St
     mutate(updateStatusMutation);
   };
 
-  const setStatusColor = (status: string | null | undefined | [{ id: string; initials: string; colour: string }]) => {
-    if (status == 'new' || status == 'todo') {
+  const setStatusColor = (status: Status) => {
+    if (status.name === 'new' || status.name === 'to do') {
       return (
         <p className="text-white capitalize" aria-hidden="true">
           {statusName}
         </p>
       );
-    } else if (status == 'in progress') {
+    } else if (status.name === 'in progress') {
       return (
         <p className=" text-white whitespace-nowrap capitalize" aria-hidden="true">
           {statusName}
         </p>
       );
-    } else if (status == 'completed') {
+    } else if (status.name === 'completed') {
       return (
         <p className="text-white capitalize" aria-hidden="true">
           {statusName}
         </p>
       );
-    } else if (status == 'archived') {
+    } else if (status.name === 'archived') {
       return (
         <p className="text-white capitalize" aria-hidden="true">
           {statusName}
@@ -110,7 +111,7 @@ export default function StatusNameDropdown({ TaskCurrentStatus, statusName }: St
   return (
     <>
       <div>
-        <ToolTip tooltip={TaskCurrentStatus as string}>
+        <ToolTip tooltip={TaskCurrentStatus.name}>
           <button
             type="button"
             onClick={() => setIsOpen(true)}
@@ -124,7 +125,7 @@ export default function StatusNameDropdown({ TaskCurrentStatus, statusName }: St
       <Transition appear show={isOpen} as="div">
         <Dialog as="div" className="relative z-10" onClose={closeModal}>
           <div style={{ ...cords }} className="fixed overflow-y-auto">
-            <div className="flex-col border px-2 w-fit h-fit py-1 outline-none flex items-center justify-center text-center mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none">
+            <div className="flex-col border px-2 h-fit py-1 outline-none flex items-center justify-center text-center mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none">
               {statusList.map((i) => (
                 <button
                   key={i.id}

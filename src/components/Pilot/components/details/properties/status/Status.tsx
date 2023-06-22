@@ -8,9 +8,10 @@ import { UseUpdateTaskStatusService2 } from '../../../../../../features/task/tas
 import { ITaskFullList } from '../../../../../../features/task/interface.tasks';
 import { IHubDetails } from '../../../../../../features/hubs/hubs.interfaces';
 import { IListDetails } from '../../../../../../features/list/list.interfaces';
+import { IWalletDetails } from '../../../../../../features/wallet/wallet.interfaces';
 
 interface StatusDetailsProps {
-  Details: IHubDetails | undefined | ITaskFullList | IListDetails;
+  Details: IHubDetails | undefined | ITaskFullList | IListDetails | IWalletDetails;
 }
 
 export default function Status({ Details }: StatusDetailsProps) {

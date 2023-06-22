@@ -23,6 +23,7 @@ import { UseEditListService } from '../../../../../../features/list/listService'
 import MoreDetails from './components/MoreDetails';
 import { IListDetails } from '../../../../../../features/list/list.interfaces';
 import { useParams } from 'react-router-dom';
+import { IWalletDetails } from '../../../../../../features/wallet/wallet.interfaces';
 // import { useParams } from 'react-router-dom';
 
 export interface tagItem {
@@ -31,7 +32,7 @@ export interface tagItem {
   color: string;
 }
 interface PropertyDetailsProps {
-  Details: IHubDetails | undefined | ITaskFullList | IListDetails;
+  Details: IHubDetails | undefined | ITaskFullList | IListDetails | IWalletDetails;
 }
 export default function PropertyDetails({ Details }: PropertyDetailsProps) {
   const [toggleSubTask, setToggleSubTask] = useState(false);
