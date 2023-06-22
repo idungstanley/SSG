@@ -6,6 +6,7 @@ import { useAppSelector } from '../../app/hooks';
 import { UseUpdateTaskStatusService2 } from '../../features/task/taskService';
 import ToolTip from '../Tooltip';
 import { useAbsolute } from '../../hooks/useAbsolute';
+import { Status } from '../../features/task/interface.tasks';
 interface statusType {
   id: number;
   title: string;
@@ -15,8 +16,8 @@ interface statusType {
 }
 
 interface StatusDropdownProps {
-  TaskCurrentStatus: string | null | undefined | [{ id: string; initials: string; colour: string }];
-  statusName?: string | null;
+  TaskCurrentStatus: Status;
+  statusName?: Status;
 }
 
 export default function StatusNameDropdown({ TaskCurrentStatus, statusName }: StatusDropdownProps) {
@@ -70,29 +71,30 @@ export default function StatusNameDropdown({ TaskCurrentStatus, statusName }: St
     mutate(updateStatusMutation);
   };
 
-  const setStatusColor = (status: string | null | undefined | [{ id: string; initials: string; colour: string }]) => {
-    if (status == 'new' || status == 'todo') {
+  const setStatusColor = (value: string) => {
+    const status = value.toLocaleLowerCase();
+    if (status === 'new' || status === 'to do') {
       return (
         <p className="text-white capitalize" aria-hidden="true">
-          {statusName}
+          {status}
         </p>
       );
-    } else if (status == 'in progress') {
+    } else if (status === 'in progress') {
       return (
         <p className=" text-white whitespace-nowrap capitalize" aria-hidden="true">
-          {statusName}
+          {status}
         </p>
       );
-    } else if (status == 'completed') {
+    } else if (status === 'completed') {
       return (
         <p className="text-white capitalize" aria-hidden="true">
-          {statusName}
+          {status}
         </p>
       );
-    } else if (status == 'archived') {
+    } else if (status === 'archived') {
       return (
         <p className="text-white capitalize" aria-hidden="true">
-          {statusName}
+          {status}
         </p>
       );
     }
@@ -110,13 +112,13 @@ export default function StatusNameDropdown({ TaskCurrentStatus, statusName }: St
   return (
     <>
       <div>
-        <ToolTip tooltip={TaskCurrentStatus as string}>
+        <ToolTip tooltip={TaskCurrentStatus.name}>
           <button
             type="button"
             onClick={() => setIsOpen(true)}
             className="flex text-sm justify-center items-center focus:outline-none hover:text-gray-700 w-full"
           >
-            <div ref={relativeRef}>{setStatusColor(TaskCurrentStatus)}</div>
+            <div ref={relativeRef}>{setStatusColor(TaskCurrentStatus.name)}</div>
           </button>
         </ToolTip>
       </div>
@@ -124,13 +126,13 @@ export default function StatusNameDropdown({ TaskCurrentStatus, statusName }: St
       <Transition appear show={isOpen} as="div">
         <Dialog as="div" className="relative z-10" onClose={closeModal}>
           <div style={{ ...cords }} className="fixed overflow-y-auto">
-            <div className="flex-col border px-2 w-fit h-fit py-1 outline-none flex items-center justify-center text-center mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none">
+            <div className="flex-col border px-2 h-fit py-1 outline-none flex items-center justify-center text-center mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none">
               {statusList.map((i) => (
                 <button
                   key={i.id}
                   type="button"
                   className={cl(
-                    statusName?.toLowerCase() === i.title.toLowerCase() ? `bg-${i.bg}-200` : '',
+                    statusName?.name.toLowerCase() === i.title.toLowerCase() ? `bg-${i.bg}-200` : '',
                     'flex items-center px-4 py-2 text-sm text-gray-600 text-left space-x-2 w-full'
                   )}
                   onClick={i.handleClick}

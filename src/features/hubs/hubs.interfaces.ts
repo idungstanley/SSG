@@ -1,3 +1,5 @@
+import { Status } from '../task/interface.tasks';
+
 export interface IHub {
   id: string;
   name: string;
@@ -24,7 +26,7 @@ export interface IHubDetails {
   directory_items: [];
   checklists: [];
   tags?: [];
-  status?: string | null | undefined;
+  status: Status;
   priority?: string | null | undefined;
 }
 

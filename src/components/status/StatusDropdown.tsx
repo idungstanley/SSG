@@ -10,6 +10,7 @@ import completedIcon from '../../assets/icons/completedIcon.png';
 import archiveIcon from '../../assets/icons/archiveIcon.png';
 import ToolTip from '../Tooltip';
 import { useAbsolute } from '../../hooks/useAbsolute';
+import { Status } from '../../features/task/interface.tasks';
 interface statusType {
   id: number;
   title: string;
@@ -19,7 +20,7 @@ interface statusType {
 }
 
 interface StatusDropdownProps {
-  TaskCurrentStatus: string | null | undefined | [{ id: string; initials: string; colour: string }];
+  TaskCurrentStatus: Status;
   statusName?: string | null;
 }
 
@@ -74,26 +75,26 @@ export default function StatusDropdown({ TaskCurrentStatus, statusName }: Status
     mutate(updateStatusMutation);
   };
 
-  const setStatusColor = (status: string | null | undefined | [{ id: string; initials: string; colour: string }]) => {
-    if (status == 'new' || status == 'todo') {
+  const setStatusColor = (status: Status) => {
+    if (status.name === 'new' || status.name === 'to do') {
       return (
         <p>
           <img src={todoIcon} alt="subtask" className="pr-1" />
         </p>
       );
-    } else if (status == 'in progress') {
+    } else if (status.name === 'in progress') {
       return (
         <p className=" text-white whitespace-nowrap capitalize" aria-hidden="true">
           <img src={inprogressIcon} alt="subtask" className="pr-1" />
         </p>
       );
-    } else if (status == 'completed') {
+    } else if (status.name === 'completed') {
       return (
         <p>
           <img src={completedIcon} alt="subtask" className="pr-1" />
         </p>
       );
-    } else if (status == 'archived') {
+    } else if (status.name === 'archived') {
       return (
         <p>
           <img src={archiveIcon} alt="subtask" className="pr-1" />
@@ -114,7 +115,7 @@ export default function StatusDropdown({ TaskCurrentStatus, statusName }: Status
   return (
     <>
       <div>
-        <ToolTip tooltip={TaskCurrentStatus as string}>
+        <ToolTip tooltip={TaskCurrentStatus.name}>
           <button
             type="button"
             onClick={() => setIsOpen(true)}
@@ -128,7 +129,7 @@ export default function StatusDropdown({ TaskCurrentStatus, statusName }: Status
       <Transition appear show={isOpen} as="div">
         <Dialog as="div" className="relative z-10" onClose={closeModal}>
           <div style={{ ...cords }} className="fixed overflow-y-auto">
-            <div className="flex-col border px-2 w-fit h-fit py-1 outline-none flex items-center justify-center text-center mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none">
+            <div className="flex-col border px-2 h-fit py-1 outline-none flex items-center justify-center text-center mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none">
               {statusList.map((i) => (
                 <button
                   key={i.id}
@@ -137,7 +138,7 @@ export default function StatusDropdown({ TaskCurrentStatus, statusName }: Status
                     statusName?.toLowerCase() === i.title.toLowerCase() ? `bg-${i.bg}-200` : '',
                     'flex items-center px-4 py-2 text-sm text-gray-600 text-left space-x-2 w-full'
                   )}
-                  onClick={(e) => i.handleClick()}
+                  onClick={() => i.handleClick()}
                 >
                   <p>
                     <RiCheckboxBlankFill

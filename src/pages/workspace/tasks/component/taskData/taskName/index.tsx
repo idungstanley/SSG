@@ -145,7 +145,7 @@ export default function TaskName({
       </div>
       <div className="flex group items-center">
         <p onClick={() => handleTaskStatus(task?.id as string)} className="relative pt-1 pr-1">
-          <StatusDropdown TaskCurrentStatus={task?.status} />
+          {task ? <StatusDropdown TaskCurrentStatus={task.status} /> : null}
         </p>
         <div
           contentEditable={true}
