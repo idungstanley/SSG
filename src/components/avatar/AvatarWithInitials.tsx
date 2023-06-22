@@ -1,5 +1,4 @@
 import React from 'react';
-import assigneeCloth from '../../assets/icons/assigneeCloth.svg';
 import nonWatcherBadge from '../../assets/icons/nonWatcherBadge.svg';
 
 interface AvatarWithInitialsProps {
