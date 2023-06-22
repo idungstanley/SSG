@@ -13,6 +13,7 @@
     "plugin:cypress/recommended"
   ],
   "overrides": [],
+  "ignorePatterns": ["cypress", "cypress.config.ts"],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "ecmaVersion": "latest",
