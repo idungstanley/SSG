@@ -1,4 +1,4 @@
-export const MIN_COL_WIDTH = 120;
+export const MIN_COL_WIDTH = 100;
 export const MAX_COL_WIDTH = 50;
 export const DEFAULT_COL_WIDTH = 120;
 export const DEFAULT_LEFT_PADDING = 26;

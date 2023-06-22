@@ -65,7 +65,7 @@ function Modal() {
   const { showCreateHubSlideOver } = useAppSelector((state) => state.slideOver);
   return (
     <SlideOver
-      show={showCreateHubSlideOver}
+      show={false}
       onClose={() => handleCloseSlider()}
       headerTitle="Create A New Hub"
       body={
