@@ -33,7 +33,7 @@ function ListNav({ viewsList, changeViews, viewsList1 }: ListNavProps) {
         style={{ padding: '1px 15px 2px 15px', height: '50px' }}
       >
         <section className="flex items-center justify-start">
-          <div className="flex pt-3 space-x-2">
+          <div className="flex items-center space-x-2">
             <ListViews viewsList={viewsList as string} />
             <ListShow changeViews={changeViews as string} />
             <ListSubtasks viewsList1={viewsList1 as string} />

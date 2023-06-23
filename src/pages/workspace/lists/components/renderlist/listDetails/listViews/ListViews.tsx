@@ -1,12 +1,14 @@
 import React from 'react';
 import { BsListStars } from 'react-icons/bs';
 import ListViewSettingsModal from '../../../../../tasks/TaskSettingsModal/ViewsModal/ListViewSettingsModal';
+import Button from '../../../../../../../components/Buttons/Button';
 
 export default function ListViews({ viewsList }: { viewsList: string }) {
   return (
     <div className="flex items-center justify-start space-x-1 ">
       <span className="flex">
-        <span className="viewSettingsParent space-x-1 flex items-center pb-2 pt-1 mb-2  text-sm  cursor-pointer bg-primary-50 rounded-sm ">
+        {/* <span className="viewSettingsParent space-x-1 flex items-center pb-2 pt-1 mb-2  text-sm  cursor-pointer bg-primary-50 rounded-sm "> */}
+        <Button active={true}>
           <span className="mt-1">
             <BsListStars className={'flex-shrink-0 w-5 h-4'} aria-hidden="true" />
           </span>
@@ -25,7 +27,8 @@ export default function ListViews({ viewsList }: { viewsList: string }) {
               />
             </span>
           </span>
-        </span>
+        </Button>
+        {/* </span> */}
       </span>
     </div>
   );
