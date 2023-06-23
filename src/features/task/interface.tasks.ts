@@ -1,4 +1,4 @@
-import { Dayjs } from 'dayjs';
+import dayjs, { Dayjs } from 'dayjs';
 import { teamMember } from '../../pages/workspace/tasks/timeclock/entryLists/EntryList';
 import { ICustomField, ImyTaskData } from './taskSlice';
 
@@ -199,6 +199,8 @@ export interface IHistoryFilterMemory {
   time?: { from?: string; to?: string };
   user?: string;
   btnCheckedStates?: boolean[];
+  timePoint?: string;
+  hoveredDate?: dayjs.Dayjs | null;
 }
 
 type ValueOf<T> = T[keyof T];

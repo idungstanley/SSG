@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { GrFormNext, GrFormPrevious } from 'react-icons/gr';
 import { MdOutlineDateRange } from 'react-icons/md';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { setTaskSelectedDate } from '../../features/task/taskSlice';
+import { setFilterDateString, setHistoryMemory, setTaskSelectedDate } from '../../features/task/taskSlice';
 import { Button, Modal } from '@mui/material';
 import { DatePickerSideBar } from './DatePickerSideBar';
 import { DatePickerManualDates } from './DatePickerManualDate';
@@ -30,10 +30,11 @@ export default function DatePicker({ styles, range, toggleFn }: DatePickerProps)
   const [today, setToday] = useState(currentDate);
   const [showRecurring, setRecurring] = useState<boolean>(false);
   const { selectedDate } = useAppSelector((state) => state.workspace);
-  const { selectedDate: taskTime } = useAppSelector((state) => state.task);
+  const { date_format } = useAppSelector((state) => state.userSetting);
+  const { selectedDate: taskTime, HistoryFilterMemory, FilterDateString } = useAppSelector((state) => state.task);
   const sectionRef = useRef<HTMLElement>(null);
-  const [hoveredDate, setHovered] = useState<Dayjs | null>(null);
-  const [time, setTime] = useState<string>(dayjs().format('ddd DD MMM YYYY h:mm A'));
+  const [hoveredDate, setHovered] = useState<Dayjs | null | undefined>(HistoryFilterMemory?.hoveredDate);
+  const [time, setTime] = useState<string>(dayjs().format(`${date_format?.toUpperCase()} h:mm A`));
 
   const closeDateModal = () => {
     if (toggleFn) {
@@ -41,7 +42,19 @@ export default function DatePicker({ styles, range, toggleFn }: DatePickerProps)
     }
   };
 
-  const calendarTime = () => setInterval(() => setTime(dayjs().format('ddd DD MMM YYYY h:mm A')), 60000);
+  const calendarTime = () => setInterval(() => setTime(dayjs().format(`${date_format?.toUpperCase()} h:mm A`)), 60000);
+
+  const handleClick = (date: dayjs.Dayjs) => {
+    dispatch(setSelectedDate({ date: date, dateType: 'from' }));
+    if (taskTime?.from) dispatch(setHistoryMemory({ ...HistoryFilterMemory, timePoint: 'to' }));
+  };
+
+  const handleHover = (date?: dayjs.Dayjs) => {
+    if (date) {
+      setHovered(date);
+      setHistoryMemory({ ...HistoryFilterMemory, hoveredDate: date });
+    }
+  };
 
   const dates = generateDate();
   const groupedDates = groupDatesByDayOfWeek(dates);
@@ -56,18 +69,24 @@ export default function DatePicker({ styles, range, toggleFn }: DatePickerProps)
   useEffect(() => {
     if (!selectedDate?.date?.isSame(today, 'day')) {
       if (taskTime?.from) {
-        dispatch(setTaskSelectedDate({ from: taskTime.from, to: selectedDate?.date }));
+        dispatch(setTaskSelectedDate({ ...taskTime, to: selectedDate?.date }));
+        dispatch(setFilterDateString({ ...FilterDateString, due: dayjs(selectedDate?.date).format('DD/MM/YYYY') }));
       } else {
         dispatch(setTaskSelectedDate({ from: selectedDate?.date }));
+        dispatch(setFilterDateString({ ...FilterDateString, start: dayjs(selectedDate?.date).format('DD/MM/YYYY') }));
       }
 
-      if (taskTime?.to != undefined) {
-        dispatch(setTaskSelectedDate(null));
-      }
+      // if (taskTime?.to != undefined) {
+      //   dispatch(setTaskSelectedDate(null));
+      // }
     }
     calendarTime();
     return () => document.addEventListener('visibilitychange', calendarTime);
   }, [selectedDate?.date]);
+
+  // useEffect(() => {
+  //   setHovered(HistoryFilterMemory?.hoveredDate);
+  // }, []);
 
   return (
     <Modal open={true} hideBackdrop>
@@ -174,11 +193,8 @@ export default function DatePicker({ styles, range, toggleFn }: DatePickerProps)
                               selectedDate?.date.date() === date.date.date() ? 'bg-purple-400 text-white' : '',
                               isBlockedOrHoverBlocked ? 'bg-purple-400 text-white rounded-none' : ''
                             )}
-                            onClick={() => {
-                              dispatch(setSelectedDate({ date: date.date, dateType: 'from' }));
-                            }}
-                            onMouseEnter={() => setHovered(date.date)}
-                            onMouseLeave={() => setHovered(null)}
+                            onClick={() => handleClick(date.date)}
+                            onMouseEnter={() => handleHover(date.date)}
                           >
                             {date.date.format('DD')}
                           </li>
