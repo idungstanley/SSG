@@ -184,34 +184,35 @@ export function StickyCol({
 
       {task.id == null && (
         <td
-          className="sticky left-0 flex items-center justify-center text-sm font-medium text-center text-gray-900 cursor-pointer"
-          style={{ minHeight: '40px' }}
+          className="sticky left-0 flex items-start justify-start text-sm font-medium text-start text-gray-900 cursor-pointer"
+          onClick={onClickTask}
           {...props}
         >
-          {/* //! change me */}
-          <div className="flex items-center h-full bg-purple-50">
+          <div className="flex items-center w-10 h-full space-x-1 bg-purple-50">
             <input
               type="checkbox"
               id="checked-checkbox"
-              className="w-2 h-2 rounded-full opacity-0 cursor-pointer focus:outline-1 focus:ring-transparent  focus:border-2 focus:opacity-100 "
+              className="w-2 h-2 rounded-full opacity-0 cursor-pointer focus:outline-1 focus:ring-transparent group-hover:opacity-100 focus:border-2 focus:opacity-100 "
               style={{ marginLeft: '-1px' }}
-              // ref={setNodeRef}
-              // {...attributes}
-              // {...listeners}
-              // onClick={() => {
-              //   displayNav(task?.id as string);
-              // }}
+              ref={setNodeRef}
+              {...attributes}
+              {...listeners}
+              onClick={() => {
+                displayNav(task?.id as string);
+              }}
             />
 
+            {dragElement}
+
             <MdDragIndicator
-              className="text-lg text-gray-400 transition duration-200 opacity-0 cursor-move "
+              className="text-lg text-gray-400 transition duration-200 opacity-0 cursor-move group-hover:opacity-100"
               style={{ marginLeft: '-2px', marginRight: '-2.5px' }}
             />
           </div>
 
           <div
             style={{ paddingLeft }}
-            className={cl(COL_BG, 'relative border-t w-full h-full py-4 p-4 flex items-center ')}
+            className={cl(COL_BG, 'relative border-t w-full h-10 py-4 p-4 flex items-center ')}
           >
             <div className="space-x-1 pl-4 pr-2">
               <button
@@ -225,14 +226,13 @@ export function StickyCol({
               </button>
             </div>
 
-            <StatusDropdown TaskCurrentStatus={task.status as IStatus} />
+            <StatusDropdown TaskCurrentStatus={task.status} />
             <div className="flex flex-col items-start justify-start space-y-1">
               <p
                 className="flex text-left"
                 contentEditable={true}
-                suppressContentEditableWarning={true}
                 ref={inputRef}
-                onKeyDown={(e) => (e.key === 'Enter' ? handleOnSave(e, task.id) : null)}
+                onKeyDown={(e) => (e.key === 'Enter' ? handleEditTask(e, task.id) : null)}
               >
                 {task.name}
               </p>

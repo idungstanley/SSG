@@ -1,5 +1,5 @@
 import { useAppSelector } from '../../../app/hooks';
-import { Task, TaskKey, TaskValue } from '../../../features/task/interface.tasks';
+import { IStatus, Task, TaskKey, TaskValue } from '../../../features/task/interface.tasks';
 
 const stringifyValue = (value: unknown) => (typeof value === 'object' ? JSON.stringify(value) : String(value));
 
@@ -8,7 +8,7 @@ export const sortTasks = (key: TaskKey, tasks: Task[]) => {
 
   tasks.forEach((task) => {
     if ('tags' in task) {
-      const values = task[key];
+      const values = (task[key] as IStatus)?.name;
 
       if (Array.isArray(values)) {
         values.forEach((value) => {
