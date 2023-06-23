@@ -69,6 +69,18 @@ export interface Tag {
   name: string;
 }
 
+export interface IStatus {
+  color: string;
+  created_at: string;
+  id: string;
+  model_id: string;
+  model_type: string;
+  name: string;
+  position: string;
+  type: string;
+  updated_at: string;
+}
+
 export interface Status {
   id: string;
   name: string;
@@ -91,7 +103,8 @@ export interface ITaskFullList {
   list_id: string;
   parent_id: string | null;
   priority: string | null | [{ id: string; initials: string; color: string; name: string }];
-  status: Status;
+  status: IStatus;
+  has_descendants: boolean;
   start_date: string | null;
   end_date: string | null;
   assignees?: [{ id: string; initials: string; color: string; name: string; avatar_path: string | null }] | undefined;

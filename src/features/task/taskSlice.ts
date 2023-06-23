@@ -34,6 +34,7 @@ export interface ImyTaskData {
   parent_id: string | null;
   priority: string | null | [{ id: string; initials: string; color: string; name: string }];
   start_date: string | null;
+  has_descendants: boolean;
   end_date: string | null;
   status: Status;
   assignees?: [{ id: string; initials: string; color: string; name: string; avatar_path: string | null }];
