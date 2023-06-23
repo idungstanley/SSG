@@ -76,25 +76,25 @@ export default function StatusDropdown({ TaskCurrentStatus, statusName }: Status
   };
 
   const setStatusColor = (status: Status) => {
-    if (status.name === 'new' || status.name === 'to do') {
+    if (status.name === 'new' || status.name === 'To do') {
       return (
         <p>
           <img src={todoIcon} alt="subtask" className="pr-1" />
         </p>
       );
-    } else if (status.name === 'in progress') {
+    } else if (status.name === 'In progress') {
       return (
         <p className=" text-white whitespace-nowrap capitalize" aria-hidden="true">
           <img src={inprogressIcon} alt="subtask" className="pr-1" />
         </p>
       );
-    } else if (status.name === 'completed') {
+    } else if (status.name === 'Completed') {
       return (
         <p>
           <img src={completedIcon} alt="subtask" className="pr-1" />
         </p>
       );
-    } else if (status.name === 'archived') {
+    } else if (status.name === 'Archived') {
       return (
         <p>
           <img src={archiveIcon} alt="subtask" className="pr-1" />

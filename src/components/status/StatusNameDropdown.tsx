@@ -72,29 +72,28 @@ export default function StatusNameDropdown({ TaskCurrentStatus, statusName }: St
   };
 
   const setStatusColor = (value: string) => {
-    const status = value.toLocaleLowerCase();
-    if (status === 'new' || status === 'to do') {
+    if (value === 'new' || value === 'To do') {
       return (
         <p className="text-white capitalize" aria-hidden="true">
-          {status}
+          {value}
         </p>
       );
-    } else if (status === 'in progress') {
+    } else if (value === 'In progress') {
       return (
         <p className=" text-white whitespace-nowrap capitalize" aria-hidden="true">
-          {status}
+          {value}
         </p>
       );
-    } else if (status === 'completed') {
+    } else if (value === 'Completed') {
       return (
         <p className="text-white capitalize" aria-hidden="true">
-          {status}
+          {value}
         </p>
       );
-    } else if (status === 'archived') {
+    } else if (value === 'Archived') {
       return (
         <p className="text-white capitalize" aria-hidden="true">
-          {status}
+          {value}
         </p>
       );
     }

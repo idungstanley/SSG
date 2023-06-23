@@ -5,7 +5,7 @@ import Apps from '../../../assets/icons/any_app.svg';
 import PmTools from '../../../assets/icons/pm-tool.png';
 import { InputAvatar } from '../../../components';
 import { avatarBg, companySizeBtn } from './colors';
-import { GoPrimitiveDot } from 'react-icons/go';
+// import { GoPrimitiveDot } from 'react-icons/go';
 import { cl } from '../../../utils';
 import { useSelector } from 'react-redux';
 import { useMutation } from '@tanstack/react-query';
@@ -13,6 +13,7 @@ import { selectCurrentUser, setCurrentUser, setCurrentWorkspace } from '../../..
 import { createWorkspaceService } from '../../../features/workspace/workspaceService';
 import { useAppDispatch } from '../../../app/hooks';
 import { IoIosWarning } from 'react-icons/io';
+import { VscTriangleRight } from 'react-icons/vsc';
 
 interface currentPageProps {
   name: boolean;
@@ -307,49 +308,49 @@ function CreateNewWorkspace() {
             className="flex items-center fixed bottom-0 justify-center absolute w-4/5 m-auto"
             style={{ height: '20vh' }}
           >
-            <GoPrimitiveDot
+            <VscTriangleRight
               className={cl(
                 currentPage.name ? 'bg-fuchsia-600' : 'bg-gray-300',
                 'w-8 h-8 cursor-pointer rounded-full text-transparent mx-2'
               )}
               onClick={() => setCurrentPage({ ...initPage, name: true })}
             />
-            <GoPrimitiveDot
+            <VscTriangleRight
               className={cl(
                 currentPage.color ? 'bg-fuchsia-600' : 'bg-gray-300',
                 'w-8 h-8 cursor-pointer rounded-full text-transparent mx-2'
               )}
               onClick={() => setCurrentPage({ ...initPage, color: true })}
             />
-            <GoPrimitiveDot
+            <VscTriangleRight
               className={cl(
                 currentPage.size ? 'bg-fuchsia-600' : 'bg-gray-300',
                 'w-8 h-8 cursor-pointer rounded-full text-transparent mx-2'
               )}
               onClick={() => setCurrentPage({ ...initPage, size: true })}
             />
-            <GoPrimitiveDot
+            <VscTriangleRight
               className={cl(
                 currentPage.email ? 'bg-fuchsia-600' : 'bg-gray-300',
                 'w-8 h-8 cursor-pointer rounded-full text-transparent mx-2'
               )}
               onClick={() => setCurrentPage({ ...initPage, email: true })}
             />
-            <GoPrimitiveDot
+            <VscTriangleRight
               className={cl(
                 currentPage.apps ? 'bg-fuchsia-600' : 'bg-gray-300',
                 'w-8 h-8 cursor-pointer rounded-full text-transparent mx-2'
               )}
               onClick={() => setCurrentPage({ ...initPage, apps: true })}
             />
-            <GoPrimitiveDot
+            <VscTriangleRight
               className={cl(
                 currentPage.pm_tools ? 'bg-fuchsia-600' : 'bg-gray-300',
                 'w-8 h-8 cursor-pointer rounded-full text-transparent mx-2'
               )}
               onClick={() => setCurrentPage({ ...initPage, pm_tools: true })}
             />
-            <GoPrimitiveDot
+            <VscTriangleRight
               className={cl(
                 currentPage.completed ? 'bg-fuchsia-600' : 'bg-gray-300',
                 'w-8 h-8 cursor-pointer rounded-full text-transparent mx-2'

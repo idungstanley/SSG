@@ -106,13 +106,13 @@ export function Head({
           <div className="flex dBlock items-center w-full gap-3 py-2 truncate group opacity-90">
             <div
               className={`py-0.5 px-2 rounded-tr-md flex items-center space-x-1 text-white dFlex ${
-                parsedLabel == 'todo'
+                parsedLabel == 'To first-line:do'
                   ? 'bg-gray-400'
-                  : parsedLabel == 'in progress'
+                  : parsedLabel == 'In progress'
                   ? 'bg-purple-500'
-                  : parsedLabel == 'completed'
+                  : parsedLabel == 'Completed'
                   ? 'bg-green-500'
-                  : parsedLabel == 'archived'
+                  : parsedLabel == 'Archived'
                   ? 'bg-yellow-500'
                   : 'bg-gray-400'
               }`}
