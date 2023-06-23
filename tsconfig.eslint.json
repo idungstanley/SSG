@@ -1,5 +1,5 @@
 {
   "extends": "./tsconfig.json",
-  "exclude": ["node_modules", "dist", "coverage", "src/__tests__", "**/*.test.ts", "cypress/*.cy.ts"],
-  "include": ["src"]
+  "exclude": ["node_modules", "dist", "coverage"],
+  "include": ["src", "cypress"]
 }

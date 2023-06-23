@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ListProps } from '../../activetree.interfaces';
-// import HItem from './HItem';
+import { Hub, ListProps } from '../../activetree.interfaces';
 import WList from '../wallet/WList';
 import LList from '../list/LList';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -30,6 +29,7 @@ import {
 import MenuDropdown from '../../../../../../../components/Dropdown/MenuDropdown';
 import SubDropdown from '../../../../../../../components/Dropdown/SubDropdown';
 import { cl } from '../../../../../../../utils';
+import { EntityType } from '../../../../../../../utils/EntityTypes/EntityType';
 
 export default function HList({ hubs, leftMargin, taskType, level = 1 }: ListProps) {
   const { hubId } = useParams();
@@ -38,13 +38,27 @@ export default function HList({ hubs, leftMargin, taskType, level = 1 }: ListPro
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [showChildren, setShowChidren] = useState<string | null | undefined>(null);
-  const { currentItemId, showExtendedBar } = useAppSelector((state) => state.workspace);
+  const { currentItemId, showExtendedBar, createEntityType } = useAppSelector((state) => state.workspace);
   const { showSidebar } = useAppSelector((state) => state.account);
 
   const { showMenuDropdown, SubMenuId } = useAppSelector((state) => state.hub);
   const [stickyButtonIndex, setStickyButtonIndex] = useState<number | undefined>(-1);
+  const hubCreationStatus = 'Under Construction';
   const id = hubId || walletId || listId || currentItemId;
 
+  const hubsSpread = [
+    ...hubs,
+    {
+      name: hubCreationStatus,
+      id: hubCreationStatus,
+      wallets: [],
+      lists: [],
+      children: [],
+      color: 'blue',
+      path: null
+    }
+  ];
+  const hubsWithEntity = createEntityType === EntityType.hub ? (hubsSpread as Hub[]) : hubs;
   useEffect(() => {
     setShowChidren(id);
   }, []);
@@ -152,7 +166,7 @@ export default function HList({ hubs, leftMargin, taskType, level = 1 }: ListPro
   };
   return (
     <>
-      {hubs.map((hub, index) => (
+      {hubsWithEntity.map((hub, index) => (
         <div
           key={hub.id}
           style={{ marginLeft: leftMargin ? 20 : 0 }}

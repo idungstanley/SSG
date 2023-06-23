@@ -1,6 +1,6 @@
 import { ImyTaskData } from '../../../../../features/task/taskSlice';
 import Assignee from '../../assignTask/Assignee';
-import TaskStatus from './status/index';
+// import TaskStatus from './status/index';
 import TaskName from './taskName';
 import TaskPriority from './priority/index';
 // import DateFormat from './taskDate/index';
@@ -53,11 +53,7 @@ export default function DataRenderFunc({
       </div>
     );
   } else if (col?.field == 'status') {
-    return (
-      <div>
-        <TaskStatus taskColField={taskColField} task={task} />
-      </div>
-    );
+    return <div>{/* <TaskStatus taskColField={taskColField} task={task} /> */}</div>;
   } else if (col?.field === 'name') {
     return (
       <TaskName

@@ -7,7 +7,7 @@ import DropdownFieldWrapper from '../../../../pages/workspace/tasks/component/ta
 import TaskPriority from '../../../../pages/workspace/tasks/component/taskData/priority';
 import TaskStatus from '../../../../pages/workspace/tasks/component/taskData/status';
 import { listColumnProps } from '../../../../pages/workspace/tasks/component/views/ListColumns';
-import { Task, TaskValue } from '../../../../features/task/interface.tasks';
+import { Status, Task, TaskValue } from '../../../../features/task/interface.tasks';
 import { ACTIVE_COL_BG, DEFAULT_COL_BG } from '../../config';
 import DateFormat from '../../../DateFormat';
 
@@ -25,7 +25,7 @@ export function Col({ value, field, fieldId, task, ...props }: ColProps) {
   // fields config
   const fields: Record<string, JSX.Element> = {
     priority: <TaskPriority task={task as ImyTaskData} />,
-    status: <TaskStatus taskColField={value} task={task as ImyTaskData} />,
+    status: value ? <TaskStatus taskColField={value as Status} task={task as ImyTaskData} /> : <></>,
     created_at: <DateFormat date={value as string} font="text-sm" />,
     updated_at: <DateFormat date={value as string} font="text-sm" />,
     dropdown: (

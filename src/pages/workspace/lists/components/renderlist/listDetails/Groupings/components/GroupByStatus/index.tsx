@@ -70,11 +70,11 @@ export default function GroupByStatusTemplate({ filteredTaskData }: ITaskTemplat
           //   };
           // }
 
-          if (!GroupedTaskByListID[listId].tasksByStatus[status]) {
-            GroupedTaskByListID[listId].tasksByStatus[status] = [];
+          if (!GroupedTaskByListID[listId].tasksByStatus[status.id]) {
+            GroupedTaskByListID[listId].tasksByStatus[status.id] = [];
           }
 
-          GroupedTaskByListID[listId].tasksByStatus[status].push(currentTask);
+          GroupedTaskByListID[listId].tasksByStatus[status.id].push(currentTask);
         }
 
         return GroupedTaskByListID;

@@ -20,6 +20,8 @@ interface PageProps {
 }
 
 export default function Page({ header, additionalHeader, children, additional, pilotConfig, extendedBar }: PageProps) {
+  const { showCreateHubSlideOver } = useAppSelector((state) => state.slideOver);
+
   return (
     <main className="grid w-full h-full grid-cols-autoFr">
       {extendedBar ? (
@@ -37,7 +39,12 @@ export default function Page({ header, additionalHeader, children, additional, p
         <div className="relative grid w-full h-full grid-cols-frAuto">
           <div className="overflow-scroll">{children}</div>
 
-          {pilotConfig ? <Pilot pilotConfig={pilotConfig} /> : null}
+          <span>
+            {showCreateHubSlideOver && (
+              <div className="absolute inset-0 top-0 left-0 transition-opacity bg-gray-300 bg-opacity-75"></div>
+            )}
+            {pilotConfig ? <Pilot pilotConfig={pilotConfig} /> : null}
+          </span>
         </div>
       </section>
 

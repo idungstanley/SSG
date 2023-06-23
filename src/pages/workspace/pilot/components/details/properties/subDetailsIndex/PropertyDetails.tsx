@@ -11,6 +11,7 @@ import { AvatarWithInitials } from '../../../../../../../components';
 import { IHubDetails } from '../../../../../../../features/hubs/hubs.interfaces';
 import { ITaskFullList } from '../../../../../../../features/task/interface.tasks';
 import { IListDetails } from '../../../../../../../features/list/list.interfaces';
+import { IWalletDetails } from '../../../../../../../features/wallet/wallet.interfaces';
 
 export interface tagItem {
   id: string;
@@ -18,7 +19,7 @@ export interface tagItem {
   color: string;
 }
 interface PropertyDetailsProps {
-  Details: IHubDetails | undefined | ITaskFullList | IListDetails;
+  Details: IHubDetails | undefined | ITaskFullList | IListDetails | IWalletDetails;
 }
 export default function PropertyDetails({ Details }: PropertyDetailsProps) {
   const [toggleSubTask, setToggleSubTask] = useState(false);

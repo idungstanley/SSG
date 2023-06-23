@@ -30,6 +30,7 @@ interface workspaceState {
   currentSubWalletId: string | null;
   currentWalletName: string | null | undefined;
   showPilot: boolean;
+  createEntityType: null | string;
   sidebarWidthRD: number;
   showPilotIconView: boolean;
   showAddHotKeyDropdown: boolean;
@@ -75,6 +76,7 @@ const initialState: workspaceState = {
   activeItemId: null,
   activeItemType: null,
   activeItemName: null,
+  createEntityType: null,
   activeEntityName: null,
   currentSubWalletId: null,
   currentWalletId: null,
@@ -165,6 +167,9 @@ export const wsSlice = createSlice({
     },
     setActiveEntity(state, action: PayloadAction<{ id: string | null; type: string | null }>) {
       state.activeEntity = action.payload;
+    },
+    setCreateEntityType(state, action: PayloadAction<null | string>) {
+      state.createEntityType = action.payload;
     },
     setShowHub(state, action: PayloadAction<boolean>) {
       state.showHub = action.payload;
@@ -295,6 +300,7 @@ export const {
   setActivePlaceId,
   setShowHub,
   setShowWallet,
+  setCreateEntityType,
   setShowMenuDropDown,
   setShowModal,
   setSearchIsActive,

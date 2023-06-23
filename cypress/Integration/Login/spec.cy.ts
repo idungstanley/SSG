@@ -1,6 +1,6 @@
 /// <reference types="cypress"/>
-import { testData } from '../fixtures/testData';
-import Login from '../pageObject/login.cy';
+import { testData } from '../../Fixtures/testData';
+import Login from '../../PageObject/Login/login.cy';
 
 describe('template spec', () => {
   const login = new Login();

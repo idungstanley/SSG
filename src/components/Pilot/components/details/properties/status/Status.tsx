@@ -8,9 +8,10 @@ import { UseUpdateTaskStatusService2 } from '../../../../../../features/task/tas
 import { ITaskFullList } from '../../../../../../features/task/interface.tasks';
 import { IHubDetails } from '../../../../../../features/hubs/hubs.interfaces';
 import { IListDetails } from '../../../../../../features/list/list.interfaces';
+import { IWalletDetails } from '../../../../../../features/wallet/wallet.interfaces';
 
 interface StatusDetailsProps {
-  Details: IHubDetails | undefined | ITaskFullList | IListDetails;
+  Details: IHubDetails | undefined | ITaskFullList | IListDetails | IWalletDetails;
 }
 
 export default function Status({ Details }: StatusDetailsProps) {
@@ -44,13 +45,15 @@ export default function Status({ Details }: StatusDetailsProps) {
   };
 
   const handleStatusBg = () => {
-    if (StatusData == 'todo') {
+    const statusName = StatusData?.name;
+
+    if (statusName == 'to do') {
       setStatusBg('gray');
-    } else if (StatusData == 'in progress') {
+    } else if (statusName == 'in progress') {
       setStatusBg('purple');
-    } else if (StatusData == 'archived') {
+    } else if (statusName == 'archived') {
       setStatusBg('yellow');
-    } else if (StatusData == 'completed') {
+    } else if (statusName == 'completed') {
       setStatusBg('green');
     } else {
       setStatusBg('gray');
@@ -59,9 +62,9 @@ export default function Status({ Details }: StatusDetailsProps) {
 
   const handleStatusMessage = (status: string | null | undefined) => {
     if (status === 'new') {
-      return 'todo';
+      return 'to do';
     } else if (!status) {
-      return 'todo';
+      return 'to do';
     } else {
       return status;
     }
@@ -79,7 +82,7 @@ export default function Status({ Details }: StatusDetailsProps) {
               className={`p-2 bg-${statusBg}-300 text-black text-xs border-white rounded-l-md capitalize cursor-pointer object-contain h-8`}
               onClick={() => handleStatusModal()}
             >
-              {handleStatusMessage(Details.status)}
+              {handleStatusMessage(Details.status.name)}
             </button>
           </ToolTip>
         ) : null}

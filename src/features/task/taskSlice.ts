@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 // import { tagItem } from '../../pages/workspace/pilot/components/details/properties/subDetailsIndex/PropertyDetails';
 import { listColumnProps } from '../../pages/workspace/tasks/component/views/ListColumns';
 import { IField } from '../list/list.interfaces';
-import { IDuration, IHistoryFilterMemory, IParent, ISelectedDate, TaskKey } from './interface.tasks';
+import { IDuration, IHistoryFilterMemory, IParent, ISelectedDate, Status, TaskKey } from './interface.tasks';
 import { SortOption } from '../../pages/workspace/tasks/component/views/listLevel/TaskListViews';
 import RecordRTC from 'recordrtc';
 import { FilterWithId } from '../../components/TasksHeader/ui/Filter/types/filters';
@@ -35,7 +35,7 @@ export interface ImyTaskData {
   priority: string | null | [{ id: string; initials: string; color: string; name: string }];
   start_date: string | null;
   end_date: string | null;
-  status?: string | null;
+  status: Status;
   assignees?: [{ id: string; initials: string; color: string; name: string; avatar_path: string | null }];
   group_assignees?: {
     color: string;

@@ -18,7 +18,9 @@ import { VscChecklist, VscScreenFull } from 'react-icons/vsc';
 import Checklists from '../../../../../components/Pilot/components/Checklist/Checklist';
 import Details from '../../../../../components/Pilot/components/details/Details';
 import TimeClock from './components/TimeClock';
+import hubIcon from '../../../../../assets/branding/hub.svg';
 import RecordScreen from '../../../../../components/Pilot/components/RecordScreen';
+import CreateWallet from '../../../pilot/components/createEntity/createWallet/CreateWallet';
 
 const sections = [
   {
@@ -52,6 +54,10 @@ const sections = [
   {
     id: 8,
     element: <RecordScreen />
+  },
+  {
+    id: 9,
+    element: <CreateWallet />
   }
 ];
 
@@ -95,6 +101,11 @@ const tabs = [
     id: 8,
     label: 'Screen Record',
     icon: <VscScreenFull className="w-4 h-4" />
+  },
+  {
+    id: 9,
+    label: 'Create Sub Hub',
+    icon: <img src={hubIcon} alt="Hub Icon" className="w-4 h-4" />
   }
 ];
 

@@ -36,7 +36,8 @@ export default function FullPilot({ featureTabs, activeSection, setShowModal, sh
     <div
       ref={blockRef}
       style={{
-        width: showFullPilot ? pilotWidthFromLS : undefined
+        width: showFullPilot ? pilotWidthFromLS : undefined,
+        height: '100%'
       }}
       className={cl(
         showFullPilot ? 'relative translate-x-0' : 'w-96 absolute top-0 translate-x-full z-10',
