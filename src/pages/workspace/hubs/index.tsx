@@ -22,6 +22,9 @@ import { PlusIcon } from '@heroicons/react/24/outline';
 import { setActiveEntityName, setCreateEntityType } from '../../../features/workspace/workspaceSlice';
 import DropdownWithoutHeader from '../../../components/Dropdown/DropdownWithoutHeader';
 import { EntityType } from '../../../utils/EntityTypes/EntityType';
+import AddWalletIcon from '../../../assets/icons/AddWallet';
+import AddHubIcon from '../../../assets/icons/AddHub';
+import AddListIcon from '../../../assets/icons/AddList';
 
 function Hubs() {
   const dispatch = useDispatch();
@@ -56,27 +59,27 @@ function Hubs() {
   const configForDropdown = [
     {
       label: 'Create Hub',
-      icon: <img src={hubIcon} alt="Hub Icon" className="w-4 h-4 text-base" />,
+      icon: <AddHubIcon />,
       onclick: () => handleNavigateTask(EntityType.hub)
     },
     {
       label: 'Create New SubHub',
-      icon: <img src={hubIcon} alt="Hub Icon" className="w-4 h-4 text-base" />,
+      icon: <AddHubIcon />,
       onclick: () => handleNavigateTask(EntityType.hub)
     },
     {
       label: 'Add New Wallet',
-      icon: <AiFillFolderAdd className="w-4 h-4 text-base" />,
+      icon: <AddWalletIcon />,
       onclick: () => handleNavigateTask(EntityType.wallet)
     },
     {
       label: 'Create New Subwallet',
-      icon: <AiFillFolderAdd className="w-4 h-4 text-base" />,
+      icon: <AddWalletIcon />,
       onclick: () => handleNavigateTask(EntityType.wallet)
     },
     {
       label: 'Create New List',
-      icon: <RiPlayListAddFill className="w-4 h-4 text-base" />,
+      icon: <AddListIcon />,
       onclick: () => handleNavigateTask(EntityType.list)
     }
   ];
