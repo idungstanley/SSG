@@ -3,6 +3,7 @@ import { Hub } from '../../pages/workspace/hubs/components/ActiveTree/activetree
 
 interface HubState {
   hub: Hub[];
+  selectedTreeDetails: { name: null | string; id: string | null };
   currHubId: string | null;
   currSubHubId: string | null;
   currSubHubIdType: string | null;
@@ -56,7 +57,8 @@ const initialState: HubState = {
   editHub: false,
   openedHubId: [],
   parentHubExt: { id: null, type: null },
-  subHubExt: { id: null, type: null }
+  subHubExt: { id: null, type: null },
+  selectedTreeDetails: { name: null, id: null }
 };
 
 export const hubSlice = createSlice({
@@ -65,6 +67,9 @@ export const hubSlice = createSlice({
   reducers: {
     createHub(state, action: PayloadAction<Hub>) {
       state.hub.push(action.payload);
+    },
+    setSelectedTreeDetails(state, action: PayloadAction<{ name: string | null; id: string | null }>) {
+      state.selectedTreeDetails = action.payload;
     },
     getHub(state, action: PayloadAction<Hub[]>) {
       state.hub = action.payload;
@@ -187,6 +192,7 @@ export const {
   setCreateWLID,
   setEditHub,
   setParentHubExt,
-  setSubHubExt
+  setSubHubExt,
+  setSelectedTreeDetails
 } = hubSlice.actions;
 export default hubSlice.reducer;

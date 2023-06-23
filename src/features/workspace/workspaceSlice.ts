@@ -56,6 +56,7 @@ interface workspaceState {
   logType: 'activity' | 'history';
   activeLogTab: 'activity' | 'history';
   selectedDate: { date: Dayjs; dateType?: string } | null;
+  showTreeInput: boolean;
 }
 
 const initialState: workspaceState = {
@@ -106,7 +107,8 @@ const initialState: workspaceState = {
   activityArray: [],
   logType: 'activity',
   activeLogTab: 'activity',
-  selectedDate: { date: dayjs() }
+  selectedDate: { date: dayjs() },
+  showTreeInput: false
 };
 
 export const wsSlice = createSlice({
@@ -118,6 +120,9 @@ export const wsSlice = createSlice({
     },
     setPilotWidth(state, action: PayloadAction<number>) {
       state.pilotWidth = action.payload;
+    },
+    setShowTreeInput(state, action: PayloadAction<boolean>) {
+      state.showTreeInput = action.payload;
     },
     setShowPilot(state, action: PayloadAction<boolean>) {
       state.showPilot = action.payload;
@@ -338,7 +343,8 @@ export const {
   setActivityArray,
   setLogType,
   setActiveLogTab,
-  setSelectedDate
+  setSelectedDate,
+  setShowTreeInput
 } = wsSlice.actions;
 
 export default wsSlice.reducer;

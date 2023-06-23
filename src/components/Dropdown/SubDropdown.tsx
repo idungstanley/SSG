@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { DocumentDuplicateIcon, StarIcon, PlusIcon, LinkIcon, SwatchIcon } from '@heroicons/react/24/outline';
 import { useAppSelector } from '../../app/hooks';
 import { useDispatch } from 'react-redux';
@@ -6,18 +6,18 @@ import { FaFolder } from 'react-icons/fa';
 import { AiOutlineUnorderedList } from 'react-icons/ai';
 import hubIcon from '../../assets/branding/hub.svg';
 import {
-  setCreateHubSlideOverVisibility,
-  setCreateListSlideOverVisibility,
   setCreateSubHubSlideOverVisibility,
-  setCreateSubWalletSlideOverVisibility,
-  setCreateTaskSlideOverVisibility,
-  setCreateWalletSlideOverVisibility
+  setCreateTaskSlideOverVisibility
 } from '../../features/general/slideOver/slideOverSlice';
 import { getSubMenu, setSubDropdownMenu } from '../../features/hubs/hubSlice';
 import { useNavigate, useParams } from 'react-router-dom';
 import { displayPrompt, setVisibility } from '../../features/general/prompt/promptSlice';
-import { setCreateEntityType } from '../../features/workspace/workspaceSlice';
+import { setCreateEntityType, setShowTreeInput } from '../../features/workspace/workspaceSlice';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
+import { CiSearch } from 'react-icons/ci';
+import { BiRightArrowCircle } from 'react-icons/bi';
+import { useGetHubs, useGetTree } from '../../features/hubs/hubService';
+import ActiveTreeSearch from '../ActiveTree/ActiveTreeSearch';
 
 interface itemsType {
   id: number;
@@ -34,7 +34,26 @@ export default function SubDropdown() {
   const AnyActiveEntity = !!listId || !!hubId || !!walletId;
   const { showMenuDropdownType, showMenuDropdown, SubMenuType, SubMenuId } = useAppSelector((state) => state.hub);
   const { currentWorkspaceId } = useAppSelector((state) => state.auth);
+  const { showTreeInput } = useAppSelector((state) => state.workspace);
+  const { show } = useAppSelector((state) => state.prompt);
+  const [lastClicked, setLastClicked] = useState<string>('');
+  const [fetchTree, setFetchTree] = useState<boolean>(false);
+  const hubIdToFetch = SubMenuType === 'hubs' || SubMenuType === 'subhub' ? SubMenuId : null;
+  const walletIdToFetch = SubMenuType === 'wallet' ? SubMenuId : null;
+  const listIdToFetch = SubMenuType === 'list' ? SubMenuId : null;
+  const fetchId = hubIdToFetch || walletIdToFetch || listIdToFetch;
+  const { data } = useGetTree({
+    includeTree: fetchTree,
+    hub_id: hubIdToFetch,
+    wallet_id: walletIdToFetch,
+    listId: listIdToFetch
+  });
+  console.log(data);
   const navLink = '/tasks';
+
+  const handleFetch = () => {
+    setFetchTree((prev) => !prev);
+  };
   const showPrompt = (entityType: string) => {
     dispatch(
       displayPrompt(`Create ${entityType}`, `Do you want to create your ${entityType} under this entity?`, [
@@ -51,10 +70,11 @@ export default function SubDropdown() {
           }
         },
         {
-          label: 'Cancel',
+          label: 'Choose Location',
           style: 'plain',
           callback: () => {
             dispatch(setVisibility(false));
+            dispatch(setShowTreeInput(true));
           }
         }
       ])
@@ -85,7 +105,8 @@ export default function SubDropdown() {
           showEditHubSlideOver === false &&
           showEditListSlideOver === false &&
           showEditWalletSlideOver === false &&
-          showCreateListSlideOver === false
+          showCreateListSlideOver === false &&
+          show === true
         ) {
           dispatch(
             getSubMenu({
@@ -101,6 +122,7 @@ export default function SubDropdown() {
       document.removeEventListener('click', checkClickedOutSide);
     };
   }, [
+    show,
     SubMenuId,
     showCreateSubWalletSlideOver,
     showCreateHubSlideOver,
@@ -118,6 +140,7 @@ export default function SubDropdown() {
       title: 'Sub Hub',
       handleClick: () => {
         dispatch(setCreateSubHubSlideOverVisibility(true));
+        setLastClicked('Sub Hub');
       },
       icon: <img src={hubIcon} alt="" className="w-4 h-4" />,
       isVisible: showMenuDropdownType == 'hubs' ? true : false || SubMenuType == 'hubs' ? true : false
@@ -139,14 +162,15 @@ export default function SubDropdown() {
           showMenuDropdownType !== 'wallet' &&
           showMenuDropdownType !== 'subwallet2'
         ) {
-          dispatch(setSubDropdownMenu(false));
-          dispatch(
-            getSubMenu({
-              SubMenuId: null,
-              SubMenuType: null
-            })
-          );
+          // dispatch(setSubDropdownMenu(false));
+          // dispatch(
+          //   getSubMenu({
+          //     SubMenuId: null,
+          //     SubMenuType: null
+          //   })
+          // );
           showPrompt(EntityType.wallet);
+          setLastClicked('Wallet');
         } else {
           navigate(`/${currentWorkspaceId}` + navLink);
         }
@@ -163,6 +187,7 @@ export default function SubDropdown() {
       handleClick: () => {
         dispatch(setCreateTaskSlideOverVisibility(true));
         navigate(`/${currentWorkspaceId}` + navLink);
+        setLastClicked('Task');
       },
       icon: <PlusIcon className="w-5 pt-2 text-gray-700 h-7" aria-hidden="true" />,
       isVisible: showMenuDropdownType == 'list' ? true : false
@@ -172,6 +197,7 @@ export default function SubDropdown() {
       title: 'List',
       handleClick: () => {
         showPrompt(EntityType.list);
+        setLastClicked('List');
       },
       icon: <AiOutlineUnorderedList className="w-4 h-4" aria-hidden="true" />,
       isVisible: showMenuDropdownType === 'list' ? false : true
@@ -222,6 +248,11 @@ export default function SubDropdown() {
               >
                 {item.icon}
                 <p>{item.title}</p>
+              </div>
+              <div>
+                {showTreeInput && lastClicked === item.title && (
+                  <ActiveTreeSearch data={data} handleFetch={handleFetch} fetchTree={fetchTree} id={fetchId} />
+                )}
               </div>
             </div>
           ) : null
