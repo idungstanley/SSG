@@ -12,18 +12,31 @@ import { MdDragIndicator } from 'react-icons/md';
 import { ManageTagsDropdown } from '../../../Tag/ui/ManageTagsDropdown/ui/ManageTagsDropdown';
 import TaskTag from '../../../Tag/ui/TaskTag';
 import { tagItem } from '../../../../pages/workspace/tasks/component/taskData/DataRenderFunc';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
+import { setShowPilotSideOver } from '../../../../features/general/slideOver/slideOverSlice';
+import { setTaskIdForPilot } from '../../../../features/task/taskSlice';
+import { setActiveItem } from '../../../../features/workspace/workspaceSlice';
+import { Tags } from '../../../Tag';
 
 interface RowProps {
   task: Task;
   columns: Column[];
   paddingLeft?: number;
+  parentId?: string;
+  handleClose?: VoidFunction;
 }
 
-export function Row({ task, columns, paddingLeft = 0 }: RowProps) {
+export function Row({ task, columns, paddingLeft = 0, parentId, handleClose }: RowProps) {
   const [showNewTaskField, setShowNewTaskField] = useState(false);
   const otherColumns = columns.slice(1);
 
   const [showSubTasks, setShowSubTasks] = useState(false);
+
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const { hubId, walletId, listId } = useParams();
+  const { currentWorkspaceId } = useAppSelector((state) => state.auth);
 
   const onShowAddSubtaskField = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.stopPropagation();
@@ -44,6 +57,32 @@ export function Row({ task, columns, paddingLeft = 0 }: RowProps) {
     opacity: transform ? 0 : 100
   };
 
+  const onClickTask = () => {
+    if (task.id !== null) {
+      hubId
+        ? navigate(`/${currentWorkspaceId}/tasks/h/${hubId}/t/${task.id}`, { replace: true })
+        : walletId
+        ? navigate(`/${currentWorkspaceId}/tasks/w/${walletId}/t/${task.id}`, { replace: true })
+        : navigate(`/${currentWorkspaceId}/tasks/l/${listId}/t/${task.id}`, { replace: true });
+      dispatch(
+        setShowPilotSideOver({
+          id: task.id,
+          type: 'task',
+          show: true,
+          title: task.name
+        })
+      );
+      dispatch(setTaskIdForPilot(task.id));
+      dispatch(
+        setActiveItem({
+          activeItemId: task.id,
+          activeItemType: 'task',
+          activeItemName: task.name
+        })
+      );
+    }
+  };
+
   return (
     <>
       {/* current task */}
@@ -51,12 +90,13 @@ export function Row({ task, columns, paddingLeft = 0 }: RowProps) {
         <StickyCol
           showSubTasks={showSubTasks}
           setShowSubTasks={setShowSubTasks}
+          onClick={onClickTask}
           style={{ zIndex: 3 }}
           task={task}
+          parentId={parentId as string}
+          onClose={handleClose as VoidFunction}
           paddingLeft={paddingLeft}
-          tags={
-            'tags' in task ? <TaskTag tags={task.tags as tagItem[]} entity_id={task.id} entity_type="task" /> : null
-          }
+          tags={'tags' in task ? <Tags tags={task.tags} taskId={task.id} /> : null}
           dragElement={
             <span ref={setNodeRef} {...listeners} {...attributes}>
               <MdDragIndicator
