@@ -29,7 +29,7 @@ export default function History() {
   const { status, getItemHistory } = useGetItemHistory();
   const { activityArray: logs, activeLogTab } = useAppSelector((state) => state.workspace);
   const { pilotSideOver } = useAppSelector((state) => state.slideOver);
-  const { HistoryFilterMemory, selectedDate } = useAppSelector((state) => state.task);
+  const { selectedDate } = useAppSelector((state) => state.task);
 
   const handleClick = (type: 'activity' | 'history') => {
     getItemHistory({ logType: type });
@@ -56,7 +56,7 @@ export default function History() {
         </div>
         <div
           className={
-            selectedDate || HistoryFilterMemory
+            selectedDate?.from || selectedDate?.to
               ? 'flex space-x-2 items-center bg-purple-200 h-5 border-purple-500 rounded-lg px-1 relative cursor-pointer'
               : 'flex space-x-2 items-center bg-gray-200 h-5 border-purple-500 rounded-lg px-1 relative cursor-pointer'
           }

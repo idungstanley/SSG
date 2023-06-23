@@ -1,42 +1,70 @@
-import { FormControl, MenuItem, Select, SelectChangeEvent } from '@mui/material';
-import React, { ReactNode } from 'react';
+import React, { useState } from 'react';
 
 type Option = string; // Change this type to match the type of your options
 
 interface ReusableSelectProps {
-  value: string;
-  onChange: (event: SelectChangeEvent<string>, child: ReactNode) => void;
-  placeholder: string;
+  value?: string;
+  onclick: (option: string) => void;
   options: Option[];
-  menuMaxHeight: string;
-  styles: string;
 }
 
-function ReusableSelect({ value, onChange, placeholder, options, menuMaxHeight, styles }: ReusableSelectProps) {
+function ReusableSelect({ value, onclick, options }: ReusableSelectProps) {
+  const [dropped, setDrop] = useState<boolean>(false);
+  const [editing, setEditing] = useState<boolean>(false);
+
+  const handleClick = (option: string) => {
+    onclick(option);
+    setEditing(false);
+  };
+
+  const handleEdit = () => {
+    if (value) {
+      setEditing(true);
+      setDrop(true);
+    } else {
+      setDrop(true);
+    }
+  };
+
+  const handleBlur = () => {
+    setEditing(false);
+    setDrop(false);
+  };
+
   return (
-    <FormControl fullWidth>
-      <Select
-        value={value}
-        className={styles}
-        onChange={onChange}
-        displayEmpty
-        inputProps={{ 'aria-label': 'Without label' }}
-        MenuProps={{
-          PaperProps: {
-            sx: { maxHeight: menuMaxHeight }
-          }
-        }}
-      >
-        <MenuItem value="">
-          <span style={{ fontSize: '10px' }}>{placeholder}</span>
-        </MenuItem>
-        {options.map((option, index) => (
-          <MenuItem key={index} value={option}>
-            <span style={{ fontSize: '10px' }}>{option}</span>
-          </MenuItem>
-        ))}
-      </Select>
-    </FormControl>
+    <div className="rounded-md relative">
+      {!editing && (
+        <div className="text-xs italic" onClick={handleEdit}>
+          {value ? value : 'Set Time'}
+        </div>
+      )}
+      {dropped && !value && (
+        <div className="flex flex-col space-y-2" tabIndex={0} onBlur={handleBlur}>
+          <span className="text-xs italic">Set Time</span>
+          <ul className="absolute top-2 max-h-52 w-24 overflow-y-scroll flex flex-col space-y-2 py-1 bg-white shadow-2xl rounded-md">
+            <li className="text-xs italic bg-gray-300 text-white">Select time</li>
+            {options.map((option, index) => (
+              <li
+                onClick={() => handleClick(option)}
+                key={index}
+                className="text-xs hover:bg-purple-400 hover:text-white px-2 rounded-md"
+              >
+                {option}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+      {editing && (
+        <input
+          type="text"
+          value={value}
+          onBlur={handleBlur}
+          onChange={(e) => onclick(e.target.value)}
+          className="text-xs italic w-24 h-4 rounded-md border-purple-400"
+        />
+      )}
+    </div>
   );
 }
 

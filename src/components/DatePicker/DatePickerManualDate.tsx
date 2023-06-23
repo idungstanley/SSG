@@ -3,7 +3,7 @@ import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { DateString } from './DatePicker';
 import moment from 'moment';
 import { setSelectedDate } from '../../features/workspace/workspaceSlice';
-import { setHistoryMemory, setTaskSelectedDate } from '../../features/task/taskSlice';
+import { setFilterDateString, setHistoryMemory, setTaskSelectedDate } from '../../features/task/taskSlice';
 import { BsCalendarEvent } from 'react-icons/bs';
 import dayjs from 'dayjs';
 import ReusableSelect from '../../utils/TimeDropDown';
@@ -15,7 +15,7 @@ interface DatePickerManualDatesProps {
 }
 
 export function DatePickerManualDates({ range }: DatePickerManualDatesProps) {
-  const { HistoryFilterMemory, selectedDate: taskTime } = useAppSelector((state) => state.task);
+  const { HistoryFilterMemory, selectedDate: taskTime, FilterDateString } = useAppSelector((state) => state.task);
   const { selectedDate } = useAppSelector((state) => state.workspace);
   const { date_format } = useAppSelector((state) => state.userSetting);
   const [dateType, setDateType] = useState<'from' | 'to' | undefined>();
@@ -24,20 +24,34 @@ export function DatePickerManualDates({ range }: DatePickerManualDatesProps) {
 
   const handleFilterDateDispatch = (type: 'start' | 'due') => {
     const dateObject = type === 'start' ? moment(dateString?.start, date_format) : moment(dateString?.due, date_format);
+    type === 'start'
+      ? dispatch(setHistoryMemory({ ...HistoryFilterMemory, timePoint: 'from' }))
+      : dispatch(setHistoryMemory({ ...HistoryFilterMemory, timePoint: 'to' }));
 
     dateObject.isValid() ? dispatch(setSelectedDate({ date: dayjs(dateObject.toDate()), dateType })) : null;
   };
 
   const clearDatesFilter = (point: 'from' | 'to') => {
     if (point === 'from') {
-      dispatch(setTaskSelectedDate({ to: selectedDate?.date }));
-      setString((prev) => ({ ...prev, due: prev?.due }));
+      dispatch(setTaskSelectedDate({ to: taskTime?.to }));
+      setFilterDateString({ ...FilterDateString, start: undefined });
     }
     if (point === 'to') {
       dispatch(setTaskSelectedDate({ from: taskTime?.from }));
-      setString((prev) => ({ ...prev, start: prev?.start }));
+      setString((prev) => ({ ...prev, due: undefined }));
     }
     dispatch(setSelectedDate(null));
+  };
+  const clearFiltertimes = (point: 'from' | 'to') => {
+    point == 'to'
+      ? setHistoryMemory({
+          ...HistoryFilterMemory,
+          time: { ...HistoryFilterMemory?.time, from: HistoryFilterMemory?.time?.from }
+        })
+      : setHistoryMemory({
+          ...HistoryFilterMemory,
+          time: { ...HistoryFilterMemory?.time, to: HistoryFilterMemory?.time?.to }
+        });
   };
 
   useEffect(() => {
@@ -56,25 +70,25 @@ export function DatePickerManualDates({ range }: DatePickerManualDatesProps) {
                 type="text"
                 placeholder="Start Date"
                 className="w-28 h-4 rounded-md px-1 text-xs border-0 focus:outline-none custom-input"
-                value={dateString?.start ?? undefined}
+                value={FilterDateString?.start ?? undefined}
                 onClick={() => setDateType('from')}
-                onChange={(e) => setString({ ...dateString, start: e.target.value })}
+                onChange={(e) => setFilterDateString({ ...FilterDateString, start: e.target.value })}
                 onBlur={() => handleFilterDateDispatch('start')}
               />
               {selectedDate?.dateType === 'from' && <CloseBtn clearFn={() => clearDatesFilter('from')} />}
             </div>
-            {selectedDate?.date && selectedDate.dateType === 'from' ? (
+            {selectedDate?.date && selectedDate?.dateType === 'from' ? (
               <ReusableSelect
-                menuMaxHeight="300px"
                 options={createDynamicTimeComponent(15)}
-                placeholder="Select time"
                 value={HistoryFilterMemory?.time?.from || ''}
-                styles="h-4 w-11/12"
-                onChange={(e) => {
+                onclick={(e: string) => {
                   dispatch(
                     setHistoryMemory({
                       ...HistoryFilterMemory,
-                      time: { ...HistoryFilterMemory?.time, from: e.target.value }
+                      time: {
+                        ...HistoryFilterMemory?.time,
+                        from: e
+                      }
                     })
                   );
                 }}
@@ -91,25 +105,25 @@ export function DatePickerManualDates({ range }: DatePickerManualDatesProps) {
                 type="text"
                 placeholder="Due Date"
                 className="w-28 h-4 rounded-md px-1 text-xs border-0 focus:outline-none custom-input"
-                value={dateString?.due ?? undefined}
+                value={FilterDateString?.due ?? undefined}
                 onClick={() => setDateType('to')}
-                onChange={(e) => setString({ ...dateString, due: e.target.value })}
+                onChange={(e) => setFilterDateString({ ...FilterDateString, due: e.target.value })}
                 onBlur={() => handleFilterDateDispatch('due')}
               />
-              {selectedDate?.dateType === 'to' && <CloseBtn clearFn={() => clearDatesFilter('to')} />}
+              {HistoryFilterMemory?.timePoint === 'to' && <CloseBtn clearFn={() => clearDatesFilter('to')} />}
             </div>
-            {selectedDate?.date && selectedDate?.dateType === 'to' ? (
+            {selectedDate?.date && HistoryFilterMemory?.timePoint === 'to' ? (
               <ReusableSelect
-                menuMaxHeight="300px"
                 options={createDynamicTimeComponent(15)}
-                placeholder="Select time"
-                value={HistoryFilterMemory?.time?.from || ''}
-                styles="h-4 w-11/12"
-                onChange={(e) => {
+                value={HistoryFilterMemory?.time?.to || ''}
+                onclick={(e: string) => {
                   dispatch(
                     setHistoryMemory({
                       ...HistoryFilterMemory,
-                      time: { ...HistoryFilterMemory?.time, to: e.target.value }
+                      time: {
+                        ...HistoryFilterMemory?.time,
+                        to: e
+                      }
                     })
                   );
                 }}
