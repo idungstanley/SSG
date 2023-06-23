@@ -159,9 +159,13 @@ export function StickyCol({
           >
             <button onClick={onToggleDisplayingSubTasks} className="">
               {showSubTasks ? (
-                <RxTriangleDown className="w-4 h-4 text-gray-600" />
+                <RxTriangleDown
+                  className={`${task.has_descendants ? 'w-4 h-4 text-gray-400' : ' opacity-0 w-4 h-4 text-gray-400'}`}
+                />
               ) : (
-                <RxTriangleRight className="w-4 h-4 text-gray-600" />
+                <RxTriangleRight
+                  className={`${task.has_descendants ? 'w-4 h-4 text-gray-400' : ' opacity-0 w-4 h-4 text-gray-400'}`}
+                />
               )}
             </button>
             <StatusDropdown TaskCurrentStatus={task.status} />
