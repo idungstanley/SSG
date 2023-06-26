@@ -1,10 +1,10 @@
 import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
 import { setFilterFields } from '../../../../../../features/task/taskSlice';
 import { unitValues } from '../../config/filterConfig';
-import { FilterId, FilterOption, FilterWithId, onChangeProps } from '../../types/filters';
+import { FilterId, FilterOption, FilterWithId, onChangeProps, onSelectOrDeselectAllProps } from '../../types/filters';
 import { Label } from './Label';
 import { ListBox } from '../ListBox';
-import { modifyFilters } from '../../lib/filterUtils';
+import { modifyFilters, selectOrDeselectAllFilter } from '../../lib/filterUtils';
 import { DeleteItem } from './DeleteItem';
 
 interface ItemProps {
@@ -26,6 +26,9 @@ export function Item({ filter, index, initialFilters }: ItemProps) {
   const onChange = (data: onChangeProps) => {
     dispatch(setFilterFields(modifyFilters(data, filters)));
   };
+
+  const onSelectOrDeselectAll = ({ type }: Pick<onSelectOrDeselectAllProps, 'type'>) =>
+    dispatch(setFilterFields(selectOrDeselectAllFilter({ type, newValues: initialFilters[key].values, id }, filters)));
 
   return (
     <div className="flex items-center w-full space-x-2">
@@ -53,6 +56,7 @@ export function Item({ filter, index, initialFilters }: ItemProps) {
           setSelected={(newValue) => onChange({ newValue, id, type: 'value' })}
           selected={values}
           values={initialFilters[key].values}
+          onSelectOrDeselectAll={onSelectOrDeselectAll}
           showSearch
         />
       ) : null}
