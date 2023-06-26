@@ -77,7 +77,7 @@ export function Item({ filter, index, initialFilters }: ItemProps) {
         <ListBox.Date onChange={(newValue) => onChange({ newValue, id, type: 'start' })} value={operator.start} />
       ) : null}
 
-      <DeleteItem onClick={() => onDelete(id)} />
+      <DeleteItem id={id} />
     </div>
   );
 }

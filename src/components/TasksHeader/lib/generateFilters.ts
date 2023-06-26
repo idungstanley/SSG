@@ -12,7 +12,9 @@ const getValues = (values: FilterValue[]) => values.map((i) => (isString(i) ? i 
 const getKey = (i: string) => i.split(SPECIAL_CHAR)[1] ?? i.split(SPECIAL_CHAR)[0];
 
 export const generateFilters = () => {
-  const { filters } = useAppSelector((state) => state.task);
+  const {
+    filters: { fields: filters }
+  } = useAppSelector((state) => state.task);
 
   const assignee = filters.find((i) => i.key === 'assignees');
   const tags = filters.find((i) => i.key === 'tags');
