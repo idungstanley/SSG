@@ -10,8 +10,6 @@ import { SubTasks } from './SubTasks';
 import { useDraggable } from '@dnd-kit/core';
 import { MdDragIndicator } from 'react-icons/md';
 import { ManageTagsDropdown } from '../../../Tag/ui/ManageTagsDropdown/ui/ManageTagsDropdown';
-import TaskTag from '../../../Tag/ui/TaskTag';
-import { tagItem } from '../../../../pages/workspace/tasks/component/taskData/DataRenderFunc';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { setShowPilotSideOver } from '../../../../features/general/slideOver/slideOverSlice';
