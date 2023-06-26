@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { DragOverlay } from '@dnd-kit/core';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
-import { Task } from '../../../../features/task/interface.tasks';
+import { ITaskFullList, Task } from '../../../../features/task/interface.tasks';
 import { setUpdateCords } from '../../../../features/task/taskSlice';
 import { useScroll } from '../../../../hooks/useScroll';
 import { listColumnProps } from '../../../../pages/workspace/tasks/component/views/ListColumns';
@@ -61,6 +61,38 @@ export function Table({ heads, data, label }: TableProps) {
     [activeIndex, columns]
   );
 
+  const spreadData = [
+    ...data,
+    {
+      archived_at: null,
+      assignees: [],
+      checklists: [],
+      created_at: Date.now,
+      custom_fields: [],
+      deleted_at: null,
+      description: null,
+      directory_items: [],
+      end_date: null,
+      group_assignees: [],
+      id: null,
+      list_id: null,
+      main_list_id: '',
+      name: 'Add Task',
+      parent_id: null,
+      position: 125,
+      priority: 'low',
+      short_id: '6ba291cf',
+      start_date: null,
+      status: { name: label },
+      tags: [],
+      time_entries_duration: 0,
+      updated_at: '2023-06-20T07:39:37.000000Z',
+      watchers_count: 0
+    }
+  ];
+
+  const dataSpread = showNewTaskField ? spreadData : data;
+
   const removeListeners = () => {
     window.removeEventListener('mousemove', mouseMove);
     window.removeEventListener('mouseup', removeListeners);
@@ -95,6 +127,9 @@ export function Table({ heads, data, label }: TableProps) {
   const onMouseDown = (index: number) => {
     document.body.style.userSelect = 'none';
     setActiveIndex(index);
+  };
+  const handleClose = () => {
+    setShowNewTaskField(false);
   };
 
   const onScroll = useScroll(() => dispatch(setUpdateCords()));
@@ -136,23 +171,21 @@ export function Table({ heads, data, label }: TableProps) {
         {/* rows */}
         {!collapseTasks ? (
           <tbody className="contents">
-            {data.length > 0 ? (
-              data.map((i) => ('tags' in i ? <Row columns={columns} task={i} key={i.id} /> : null))
+            {dataSpread.length ? (
+              dataSpread.map((i) =>
+                'tags' in i ? (
+                  <Row
+                    columns={columns}
+                    task={i as ITaskFullList}
+                    key={i.id}
+                    parentId={data[0].list_id}
+                    handleClose={handleClose}
+                  />
+                ) : null
+              )
             ) : (
               <h1 className="p-5 text-center">No tasks</h1>
             )}
-
-            {/* add task field */}
-
-            {showNewTaskField ? (
-              <AddTask
-                columns={columns.slice(1)}
-                parentId={data[0].list_id}
-                isListParent
-                status={label}
-                onClose={() => setShowNewTaskField(false)}
-              />
-            ) : null}
           </tbody>
         ) : null}
 

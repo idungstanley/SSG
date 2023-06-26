@@ -7,25 +7,25 @@ import { ImyTaskData } from '../../../../../../features/task/taskSlice';
 import { Status } from '../../../../../../features/task/interface.tasks';
 
 export default function TaskStatus({ taskColField, task }: { task?: ImyTaskData; taskColField: Status }) {
-  if (taskColField.name == 'completed') {
+  if (taskColField.name == 'Completed') {
     return (
       <>
         <Completed taskColField={taskColField} task={task} />
       </>
     );
-  } else if (taskColField.name == 'in progress') {
+  } else if (taskColField.name == 'In progress') {
     return (
       <>
         <InProgress taskColField={taskColField} task={task} />
       </>
     );
-  } else if (taskColField.name == 'archived') {
+  } else if (taskColField.name == 'Archived') {
     return (
       <>
         <Archived taskColField={taskColField} task={task} />
       </>
     );
-  } else if (taskColField.name == 'to do') {
+  } else if (taskColField.name == 'To do') {
     return (
       <>
         <Todo taskColField={taskColField} task={task} />
