@@ -3,17 +3,17 @@ import { MdOutlinePersonOutline } from 'react-icons/md';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { setShowFilterByAssigneeSlideOver } from '../../../../features/general/slideOver/slideOverSlice';
 import { useGetTeamMembers } from '../../../../features/settings/teamMembers/teamMemberService';
-import { setFilters } from '../../../../features/task/taskSlice';
-import { cl } from '../../../../utils';
 import { generateFilter } from '../Filter/lib/filterUtils';
 import Button from '../../../Buttons/Button';
+import { setFilterFields } from '../../../../features/task/taskSlice';
 
 export function Assignee() {
   const dispatch = useAppDispatch();
   const { currentUserId } = useAppSelector((state) => state.auth);
   const { data } = useGetTeamMembers({ page: 1, query: '' });
-  const { showFilterByAssigneeSlideOver } = useAppSelector((state) => state.slideOver);
-  const { filters } = useAppSelector((state) => state.task);
+  const {
+    filters: { fields: filters }
+  } = useAppSelector((state) => state.task);
 
   const members = data?.data.team_members ?? [];
 
@@ -39,11 +39,11 @@ export function Assignee() {
 
       if (isMeInAssignees) {
         // remove assignees filter
-        dispatch(setFilters([...filters.filter((i) => i.key !== 'assignees')]));
+        dispatch(setFilterFields([...filters.filter((i) => i.key !== 'assignees')]));
       } else {
         // add me to assignees
         dispatch(
-          setFilters([
+          setFilterFields([
             ...filters.map((i) => {
               if (i.key === 'assignees') {
                 return { ...i, values: [...i.values, me] };
@@ -56,37 +56,17 @@ export function Assignee() {
       }
     } else {
       // create assignee filters and set me
-      dispatch(setFilters([...filters, generateFilter('assignees', { initialValue: me })]));
+      dispatch(setFilterFields([...filters, generateFilter('assignees', { initialValue: me })]));
     }
   };
 
   return (
     <div className="flex items-center rounded-2xl h-8 text-sm">
-      {/* <button
-        onClick={onToggleMe}
-        className={cl(
-          isMe ? 'bg-primary-200 hover:bg-primary-300' : '',
-          'flex items-center gap-1 cursor-pointer hover:bg-gray-300 p-1 rounded-2xl'
-        )}
-      >
-        <MdOutlinePersonOutline className="w-4 h-4" />
-        <span>Me</span>
-      </button> */}
       <Button active={isMe} onClick={onToggleMe}>
         <MdOutlinePersonOutline className="w-4 h-4" />
         <span>Me</span>
       </Button>
 
-      {/* <button
-        className={cl(
-          'flex items-center gap-1 cursor-pointer hover:bg-gray-300 p-1 rounded-2xl',
-          showFilterByAssigneeSlideOver ? 'bg-primary-100 text-white' : ''
-        )}
-        onClick={() => dispatch(setShowFilterByAssigneeSlideOver(true))}
-      >
-        <IoPeopleOutline className="w-4 h-4" />
-        <span>Assignee</span>
-      </button> */}
       <Button active={isMe} onClick={() => dispatch(setShowFilterByAssigneeSlideOver(true))}>
         <IoPeopleOutline className="w-4 h-4" />
         <span>Assignee</span>

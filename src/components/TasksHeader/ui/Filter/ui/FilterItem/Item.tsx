@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
-import { setFilters } from '../../../../../../features/task/taskSlice';
+import { setFilterFields } from '../../../../../../features/task/taskSlice';
 import { unitValues } from '../../config/filterConfig';
 import { FilterId, FilterOption, FilterWithId, onChangeProps } from '../../types/filters';
 import { Label } from './Label';
@@ -15,14 +15,16 @@ interface ItemProps {
 
 export function Item({ filter, index, initialFilters }: ItemProps) {
   const dispatch = useAppDispatch();
-  const { filters } = useAppSelector((state) => state.task);
+  const {
+    filters: { fields: filters }
+  } = useAppSelector((state) => state.task);
 
   const { key, values, operator, id } = filter;
 
-  const onDelete = (id: FilterId) => dispatch(setFilters(filters.filter((i) => i.id !== id)));
+  const onDelete = (id: FilterId) => dispatch(setFilterFields(filters.filter((i) => i.id !== id)));
 
   const onChange = (data: onChangeProps) => {
-    dispatch(setFilters(modifyFilters(data, filters)));
+    dispatch(setFilterFields(modifyFilters(data, filters)));
   };
 
   return (
@@ -77,7 +79,7 @@ export function Item({ filter, index, initialFilters }: ItemProps) {
         <ListBox.Date onChange={(newValue) => onChange({ newValue, id, type: 'start' })} value={operator.start} />
       ) : null}
 
-      <DeleteItem id={id} />
+      <DeleteItem onClick={() => onDelete(id)} />
     </div>
   );
 }
