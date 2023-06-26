@@ -6,6 +6,7 @@ import { useGetTeamMembers } from '../../../../features/settings/teamMembers/tea
 import { setFilters } from '../../../../features/task/taskSlice';
 import { cl } from '../../../../utils';
 import { generateFilter } from '../Filter/lib/filterUtils';
+import Button from '../../../Buttons/Button';
 
 export function Assignee() {
   const dispatch = useAppDispatch();
@@ -60,8 +61,8 @@ export function Assignee() {
   };
 
   return (
-    <div className="flex rounded-2xl h-8 text-sm bg-gray-100">
-      <button
+    <div className="flex items-center rounded-2xl h-8 text-sm">
+      {/* <button
         onClick={onToggleMe}
         className={cl(
           isMe ? 'bg-primary-200 hover:bg-primary-300' : '',
@@ -70,9 +71,13 @@ export function Assignee() {
       >
         <MdOutlinePersonOutline className="w-4 h-4" />
         <span>Me</span>
-      </button>
+      </button> */}
+      <Button active={isMe} onClick={onToggleMe}>
+        <MdOutlinePersonOutline className="w-4 h-4" />
+        <span>Me</span>
+      </Button>
 
-      <button
+      {/* <button
         className={cl(
           'flex items-center gap-1 cursor-pointer hover:bg-gray-300 p-1 rounded-2xl',
           showFilterByAssigneeSlideOver ? 'bg-primary-100 text-white' : ''
@@ -81,7 +86,11 @@ export function Assignee() {
       >
         <IoPeopleOutline className="w-4 h-4" />
         <span>Assignee</span>
-      </button>
+      </button> */}
+      <Button active={isMe} onClick={() => dispatch(setShowFilterByAssigneeSlideOver(true))}>
+        <IoPeopleOutline className="w-4 h-4" />
+        <span>Assignee</span>
+      </Button>
     </div>
   );
 }
