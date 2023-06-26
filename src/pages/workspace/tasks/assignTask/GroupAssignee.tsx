@@ -59,12 +59,16 @@ function GroupAssignee({
 
   const [hoverInterval, setHoverInterval] = useState(false);
   const [modalLoader, setModalLoader] = useState(true);
+  const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLDivElement>(null);
 
-  const handleHoverIntervalMouseIn = (index: number) => {
-    setDisplayed((prev) => ({ ...prev, show: true, index }));
+  const handleHoverIntervalMouseIn = (index: number, event: React.MouseEvent<HTMLDivElement>) => {
+    setAnchorEl(event.currentTarget);
     setTimeout(() => {
+      setDisplayed((prev) => ({ ...prev, show: true, index }));
       setHoverInterval(true);
-    }, 500);
+      setIsMenuOpen(true);
+    }, 1000);
     setTimeout(() => {
       setModalLoader(false);
     }, 1000);
@@ -72,8 +76,16 @@ function GroupAssignee({
 
   const handleHoverIntervalMouseOut = () => {
     setDisplayed((prev) => ({ ...prev, show: false, index: null }));
+    setAnchorEl(null);
+    handleClose();
     setHoverInterval(false);
     setModalLoader(true);
+  };
+
+  const handleClose = () => {
+    setDisplayed((prev) => ({ ...prev, show: false, index: null }));
+    setIsMenuOpen(false);
+    setAnchorEl(null);
   };
 
   return (
@@ -86,12 +98,12 @@ function GroupAssignee({
               className={`scaleBigger ${index === 0 ? ' z-30   ' : ''} ${index === 1 ? 'z-20 ' : ''} ${
                 index === 2 ? 'z-10' : 'z-0'
               }  `}
-              onMouseEnter={() => {
-                handleHoverIntervalMouseIn(index);
+              onMouseEnter={(e) => {
+                handleHoverIntervalMouseIn(index, e);
               }}
               onMouseLeave={() => handleHoverIntervalMouseOut()}
             >
-              <div key={newData.id} className=" flex items-center justify-center -ml-2.5 rounded-full relative    ">
+              <div key={newData.id} className=" flex items-center justify-center -ml-2.5 rounded-full relative ">
                 <ToolTip tooltip={newData.name}>
                   <span onClick={handleClick}>
                     {(newData as InewData).role == 'owner' ? (
@@ -105,7 +117,7 @@ function GroupAssignee({
 
                   {displayed.show && index == displayed?.index && (
                     <button
-                      className="absolute top-0 right-0 border h-3 w-3 rounded-full bg-gray-500  text-white hover:bg-purple-700 "
+                      className="absolute top-0 right-0 border h-3 w-3 rounded-full bg-gray-500 text-white hover:bg-purple-700 "
                       style={{
                         fontSize: '6px'
                       }}
@@ -117,16 +129,17 @@ function GroupAssignee({
                 </ToolTip>
               </div>
 
+              {/* <div className="absolute z-50"> */}
               {hoverInterval && displayed.show && index == displayed?.index && (
                 <PopAssignModal
                   modalLoader={modalLoader}
                   spinnerSize={20}
-                  roundedStyle="circular"
-                  height="h-20"
-                  width="w-20"
                   currHoveredOnUser={newData.id ?? ''}
+                  anchorEl={anchorEl}
+                  handleClose={handleClose}
                 />
               )}
+              {/* </div> */}
             </div>
           ))}
           <span>
@@ -151,8 +164,8 @@ function GroupAssignee({
             <div key={newData.id} className="flex items-center justify-center -ml-2.5 rounded-full relative">
               <ToolTip tooltip={newData.name}>
                 <div
-                  onMouseEnter={() => {
-                    handleHoverIntervalMouseIn(index);
+                  onMouseEnter={(e) => {
+                    handleHoverIntervalMouseIn(index, e);
                   }}
                   onMouseLeave={() => handleHoverIntervalMouseOut()}
                   className="relative "
@@ -197,16 +210,17 @@ function GroupAssignee({
                     <span className="absolute top-0 right-0 border h-2 w-2 bg-green-500 rounded-full"></span>
                   )}
 
+                  {/* <div className="absolute z-50"> */}
                   {hoverInterval && displayed.show && index == displayed?.index && (
                     <PopAssignModal
                       modalLoader={modalLoader}
                       spinnerSize={20}
-                      roundedStyle="circular"
-                      height="h-20"
-                      width="w-20"
                       currHoveredOnUser={newData.id ?? ''}
+                      anchorEl={anchorEl}
+                      handleClose={handleClose}
                     />
                   )}
+                  {/* </div> */}
                 </div>
               </ToolTip>
             </div>
