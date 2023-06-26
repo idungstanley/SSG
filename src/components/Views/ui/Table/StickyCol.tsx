@@ -150,7 +150,7 @@ export function StickyCol({
               type="checkbox"
               id="checked-checkbox"
               className="w-2 h-2 rounded-full opacity-0 cursor-pointer focus:outline-1 focus:ring-transparent group-hover:opacity-100 focus:border-2 focus:opacity-100 "
-              style={{ marginLeft: '-0.5px' }}
+              style={{ marginLeft: '-0.3px' }}
               ref={setNodeRef}
               {...attributes}
               {...listeners}
