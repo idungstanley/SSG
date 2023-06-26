@@ -1,4 +1,6 @@
 import dayjs, { Dayjs } from 'dayjs';
+import timezone from 'dayjs/plugin/timezone';
+import utc from 'dayjs/plugin/utc';
 import React, { useEffect, useRef, useState } from 'react';
 import { GrFormNext, GrFormPrevious } from 'react-icons/gr';
 import { MdOutlineDateRange } from 'react-icons/md';
@@ -22,19 +24,20 @@ export type DateString = {
   start?: string;
   due?: string;
 };
-
 export default function DatePicker({ styles, range, toggleFn }: DatePickerProps) {
+  dayjs.extend(timezone);
+  dayjs.extend(utc);
   const dispatch = useAppDispatch();
   const days = ['SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA'];
   const currentDate = dayjs();
   const [today, setToday] = useState(currentDate);
   const [showRecurring, setRecurring] = useState<boolean>(false);
   const { selectedDate } = useAppSelector((state) => state.workspace);
-  const { date_format } = useAppSelector((state) => state.userSetting);
+  const { date_format, timezone: zone } = useAppSelector((state) => state.userSetting);
   const { selectedDate: taskTime, HistoryFilterMemory, FilterDateString } = useAppSelector((state) => state.task);
   const sectionRef = useRef<HTMLElement>(null);
   const [hoveredDate, setHovered] = useState<Dayjs | null | undefined>(HistoryFilterMemory?.hoveredDate);
-  const [time, setTime] = useState<string>(dayjs().format(`${date_format?.toUpperCase()} h:mm A`));
+  const [time, setTime] = useState<string>(dayjs().tz(zone).format(`${date_format?.toUpperCase()} h:mm A`));
 
   const closeDateModal = () => {
     if (toggleFn) {
@@ -70,10 +73,10 @@ export default function DatePicker({ styles, range, toggleFn }: DatePickerProps)
     if (!selectedDate?.date?.isSame(today, 'day')) {
       if (taskTime?.from) {
         dispatch(setTaskSelectedDate({ ...taskTime, to: selectedDate?.date }));
-        dispatch(setFilterDateString({ ...FilterDateString, due: dayjs(selectedDate?.date).format('DD/MM/YYYY') }));
+        // dispatch(setFilterDateString({ ...FilterDateString, due: dayjs(selectedDate?.date).format('DD/MM/YYYY') }));
       } else {
         dispatch(setTaskSelectedDate({ from: selectedDate?.date }));
-        dispatch(setFilterDateString({ ...FilterDateString, start: dayjs(selectedDate?.date).format('DD/MM/YYYY') }));
+        // dispatch(setFilterDateString({ ...FilterDateString, start: dayjs(selectedDate?.date).format('DD/MM/YYYY') }));
       }
 
       // if (taskTime?.to != undefined) {
@@ -83,10 +86,6 @@ export default function DatePicker({ styles, range, toggleFn }: DatePickerProps)
     calendarTime();
     return () => document.addEventListener('visibilitychange', calendarTime);
   }, [selectedDate?.date]);
-
-  // useEffect(() => {
-  //   setHovered(HistoryFilterMemory?.hoveredDate);
-  // }, []);
 
   return (
     <Modal open={true} hideBackdrop>
@@ -161,24 +160,16 @@ export default function DatePicker({ styles, range, toggleFn }: DatePickerProps)
                     <ul className="text-center grid place-content-center text-sm border-t p-0.5 space-y-4">
                       {sortedDates.map((date) => {
                         const isBlocked =
-                          (taskTime?.from &&
-                            taskTime?.to &&
-                            (date.date.isSame(taskTime.from, 'day') || date.date.isAfter(taskTime.from, 'day')) &&
-                            date.date.isBefore(taskTime.to, 'day')) ||
-                          (taskTime?.from &&
-                            hoveredDate &&
-                            (date.date.isSame(taskTime.from, 'day') || date.date.isAfter(taskTime.from, 'day')) &&
-                            date.date.isBefore(hoveredDate, 'day'));
+                          taskTime?.from &&
+                          taskTime?.to &&
+                          (date.date.isSame(taskTime.from, 'day') || date.date.isAfter(taskTime.from, 'day')) &&
+                          date.date.isBefore(taskTime.to, 'day');
 
                         const isHoverBlocked =
-                          (taskTime?.from &&
-                            taskTime?.to &&
-                            (date.date.isSame(taskTime.from, 'day') || date.date.isAfter(taskTime.from, 'day')) &&
-                            date.date.isBefore(taskTime.to, 'day')) ||
-                          (hoveredDate &&
-                            taskTime?.from &&
-                            (date.date.isSame(taskTime.from, 'day') || date.date.isAfter(taskTime.from, 'day')) &&
-                            date.date.isBefore(hoveredDate, 'day'));
+                          hoveredDate &&
+                          taskTime?.from &&
+                          (date.date.isSame(taskTime.from, 'day') || date.date.isAfter(taskTime.from, 'day')) &&
+                          date.date.isBefore(hoveredDate, 'day');
 
                         const isBlockedOrHoverBlocked = isBlocked || isHoverBlocked;
 
@@ -195,6 +186,7 @@ export default function DatePicker({ styles, range, toggleFn }: DatePickerProps)
                             )}
                             onClick={() => handleClick(date.date)}
                             onMouseEnter={() => handleHover(date.date)}
+                            onMouseLeave={() => setHovered(null)}
                           >
                             {date.date.format('DD')}
                           </li>
