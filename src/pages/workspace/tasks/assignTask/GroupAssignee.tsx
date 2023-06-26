@@ -61,14 +61,16 @@ function GroupAssignee({
   const [modalLoader, setModalLoader] = useState(true);
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLDivElement>(null);
+  const [hoverTimeout, setHoverTimeout] = useState<NodeJS.Timeout | null>(null);
 
   const handleHoverIntervalMouseIn = (index: number, event: React.MouseEvent<HTMLDivElement>) => {
     setAnchorEl(event.currentTarget);
-    setTimeout(() => {
+    const timeoutId = setTimeout(() => {
       setDisplayed((prev) => ({ ...prev, show: true, index }));
       setHoverInterval(true);
       setIsMenuOpen(true);
     }, 1000);
+    setHoverTimeout(timeoutId); // Save the timeout ID to cancel it later if needed
     setTimeout(() => {
       setModalLoader(false);
     }, 1000);
@@ -86,6 +88,9 @@ function GroupAssignee({
     setDisplayed((prev) => ({ ...prev, show: false, index: null }));
     setIsMenuOpen(false);
     setAnchorEl(null);
+    if (hoverTimeout) {
+      clearTimeout(hoverTimeout);
+    }
   };
 
   return (

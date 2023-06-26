@@ -10,21 +10,18 @@ import { AvatarWithInitials } from '../../../../components';
 export function PopAssignModal({
   modalLoader,
   currHoveredOnUser,
-  // open,
   anchorEl,
   handleClose
 }: {
   modalLoader: boolean;
   spinnerSize: number;
   currHoveredOnUser: string | undefined | React.Key;
-  // open: boolean;
   anchorEl: HTMLDivElement | null;
   handleClose: () => void;
 }) {
   const { data } = useCommunity();
   const filteredUser = useMemo(() => data?.team_members.filter((users) => users.id == currHoveredOnUser), [data]);
 
-  // const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   return (
     <Menu
