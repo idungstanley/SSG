@@ -17,13 +17,14 @@ interface DatePickerManualDatesProps {
 export function DatePickerManualDates({ range }: DatePickerManualDatesProps) {
   const { HistoryFilterMemory, selectedDate: taskTime, FilterDateString } = useAppSelector((state) => state.task);
   const { selectedDate } = useAppSelector((state) => state.workspace);
-  const { date_format } = useAppSelector((state) => state.userSetting);
+  const { date_format, timezone } = useAppSelector((state) => state.userSetting);
   const [dateType, setDateType] = useState<'from' | 'to' | undefined>();
   const [dateString, setString] = useState<DateString | null>(null);
   const dispatch = useAppDispatch();
 
   const handleFilterDateDispatch = (type: 'start' | 'due') => {
-    const dateObject = type === 'start' ? moment(dateString?.start, date_format) : moment(dateString?.due, date_format);
+    const dateObject = type === 'start' ? moment(dateString?.start) : moment(dateString?.due);
+    console.log(dateObject);
     type === 'start'
       ? dispatch(setHistoryMemory({ ...HistoryFilterMemory, timePoint: 'from' }))
       : dispatch(setHistoryMemory({ ...HistoryFilterMemory, timePoint: 'to' }));
@@ -34,10 +35,13 @@ export function DatePickerManualDates({ range }: DatePickerManualDatesProps) {
   const clearDatesFilter = (point: 'from' | 'to') => {
     if (point === 'from') {
       dispatch(setTaskSelectedDate({ to: taskTime?.to }));
+      dispatch(setHistoryMemory({ ...HistoryFilterMemory, timePoint: 'to' }));
       setFilterDateString({ ...FilterDateString, start: undefined });
     }
     if (point === 'to') {
       dispatch(setTaskSelectedDate({ from: taskTime?.from }));
+      dispatch(setHistoryMemory({ ...HistoryFilterMemory, timePoint: 'from' }));
+      setFilterDateString({ ...FilterDateString, due: undefined });
       setString((prev) => ({ ...prev, due: undefined }));
     }
     dispatch(setSelectedDate(null));
@@ -55,7 +59,12 @@ export function DatePickerManualDates({ range }: DatePickerManualDatesProps) {
   };
 
   useEffect(() => {
-    setString({ start: taskTime?.from?.format(date_format), due: taskTime?.to?.format(date_format) });
+    if (taskTime) {
+      setString({
+        start: taskTime?.from?.format(date_format?.toUpperCase()),
+        due: taskTime?.to?.format(date_format?.toUpperCase())
+      });
+    }
   }, [taskTime]);
 
   return (
@@ -70,16 +79,17 @@ export function DatePickerManualDates({ range }: DatePickerManualDatesProps) {
                 type="text"
                 placeholder="Start Date"
                 className="w-28 h-4 rounded-md px-1 text-xs border-0 focus:outline-none custom-input"
-                value={FilterDateString?.start ?? undefined}
+                value={dateString?.start ?? undefined}
                 onClick={() => setDateType('from')}
-                onChange={(e) => setFilterDateString({ ...FilterDateString, start: e.target.value })}
+                onChange={(e) => setString({ ...dateString, start: e.target.value })}
                 onBlur={() => handleFilterDateDispatch('start')}
               />
-              {selectedDate?.dateType === 'from' && <CloseBtn clearFn={() => clearDatesFilter('from')} />}
+              {selectedDate?.dateType === 'from' ||
+                (HistoryFilterMemory?.timePoint === 'from' && <CloseBtn clearFn={() => clearDatesFilter('from')} />)}
             </div>
             {selectedDate?.date && selectedDate?.dateType === 'from' ? (
               <ReusableSelect
-                options={createDynamicTimeComponent(15)}
+                options={createDynamicTimeComponent(15, timezone)}
                 value={HistoryFilterMemory?.time?.from || ''}
                 onclick={(e: string) => {
                   dispatch(
@@ -105,16 +115,16 @@ export function DatePickerManualDates({ range }: DatePickerManualDatesProps) {
                 type="text"
                 placeholder="Due Date"
                 className="w-28 h-4 rounded-md px-1 text-xs border-0 focus:outline-none custom-input"
-                value={FilterDateString?.due ?? undefined}
+                value={dateString?.due ?? undefined}
                 onClick={() => setDateType('to')}
-                onChange={(e) => setFilterDateString({ ...FilterDateString, due: e.target.value })}
+                onChange={(e) => setString({ ...dateString, due: e.target.value })}
                 onBlur={() => handleFilterDateDispatch('due')}
               />
               {HistoryFilterMemory?.timePoint === 'to' && <CloseBtn clearFn={() => clearDatesFilter('to')} />}
             </div>
             {selectedDate?.date && HistoryFilterMemory?.timePoint === 'to' ? (
               <ReusableSelect
-                options={createDynamicTimeComponent(15)}
+                options={createDynamicTimeComponent(15, timezone)}
                 value={HistoryFilterMemory?.time?.to || ''}
                 onclick={(e: string) => {
                   dispatch(
