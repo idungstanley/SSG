@@ -24,7 +24,7 @@ export function AddNewItem({ onHideNewItem, initialFilters }: AddNewItemProps) {
 
   return (
     <div className="flex items-center w-full space-x-2">
-      <Label show={filters.length === 0} />
+      <Label isButton={filters.length > 0} disabled={filters.length > 2} />
 
       <ListBox
         setSelected={(newValue) => onAdd(newValue as FilterKey)}

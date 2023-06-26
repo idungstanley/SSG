@@ -29,7 +29,7 @@ export function Item({ filter, index, initialFilters }: ItemProps) {
 
   return (
     <div className="flex items-center w-full space-x-2">
-      <Label show={index === 0} />
+      <Label isButton={index !== 0} disabled={index > 1} />
 
       {/* key */}
       <ListBox
