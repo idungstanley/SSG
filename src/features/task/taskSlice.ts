@@ -144,6 +144,7 @@ interface TaskState {
   HistoryFilterMemory: IHistoryFilterMemory | null;
   filters: FilterWithId[];
   FilterDateString: DateString | null;
+  statusId: string;
 }
 
 const initialState: TaskState = {
@@ -206,7 +207,8 @@ const initialState: TaskState = {
   filters: [],
   selectedDate: null,
   HistoryFilterMemory: null,
-  FilterDateString: null
+  FilterDateString: null,
+  statusId: ''
 };
 
 export const taskSlice = createSlice({
@@ -218,6 +220,9 @@ export const taskSlice = createSlice({
     },
     setAssigneeIds(state, action: PayloadAction<string[]>) {
       state.assigneeIds = action.payload;
+    },
+    setStatusId(state, action: PayloadAction<string>) {
+      state.statusId = action.payload;
     },
     setSearchValue(state, action: PayloadAction<string>) {
       state.searchValue = action.payload;
@@ -448,6 +453,7 @@ export const taskSlice = createSlice({
 export const {
   setFilters,
   setAssigneeIds,
+  setStatusId,
   setSearchValue,
   createTaskSlice,
   setTaskIdForPilot,

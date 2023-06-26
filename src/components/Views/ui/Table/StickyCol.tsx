@@ -1,4 +1,4 @@
-import { ReactNode, TdHTMLAttributes, useRef } from 'react';
+import { ReactNode, TdHTMLAttributes, useRef, useState } from 'react';
 import { RxTriangleDown, RxTriangleRight } from 'react-icons/rx';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
@@ -14,6 +14,9 @@ import { setActiveItem } from '../../../../features/workspace/workspaceSlice';
 import { useSortable } from '@dnd-kit/sortable';
 import { UniqueIdentifier } from '@dnd-kit/core';
 import { MdDragIndicator } from 'react-icons/md';
+import { ITask_statuses } from '../../../../features/list/list.interfaces';
+import { UseGetListDetails } from '../../../../features/list/listService';
+import { ImCancelCircle } from 'react-icons/im';
 
 interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   task: Task;
@@ -21,6 +24,7 @@ interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   showSubTasks?: boolean;
   setShowSubTasks: (i: boolean) => void;
   paddingLeft?: number;
+  task_status?: string;
   tags: ReactNode;
   dragElement?: ReactNode;
   parentId?: string;
@@ -33,6 +37,7 @@ export function StickyCol({
   children,
   tags,
   parentId,
+  task_status,
   onClose,
   task,
   paddingLeft = 0,
@@ -46,8 +51,15 @@ export function StickyCol({
   const COL_BG = taskId === task.id ? ACTIVE_COL_BG : DEFAULT_COL_BG;
 
   const { mutate: onAdd } = useAddTask(parentId);
-  const { currTeamMemberId } = useAppSelector((state) => state.task);
+  const { currTeamMemberId, statusId } = useAppSelector((state) => state.task);
   const { showTaskNavigation } = useAppSelector((state) => state.task);
+  const { data: list } = UseGetListDetails({ activeItemId: parentId, activeItemType: 'list' });
+
+  list?.data.list.task_statuses.map((statusObj: ITask_statuses) => {
+    if (statusObj?.name == task_status) {
+      // console.log('task_statusId', statusObj);
+    }
+  });
 
   const onClickTask = () => {
     navigate(`/${currentWorkspaceId}/tasks/h/${hubId}/t/${task.id}`, { replace: true });
@@ -110,7 +122,9 @@ export function StickyCol({
       onAdd({
         name,
         isListParent: true,
-        id: parentId as string
+        id: parentId as string,
+        assignees: [currTeamMemberId] as string[],
+        task_status_id: statusId as string
       });
     }
   };
@@ -144,13 +158,7 @@ export function StickyCol({
                 displayNav(task?.id as string);
               }}
             />
-
             {dragElement}
-
-            <MdDragIndicator
-              className="text-lg text-gray-400 transition duration-200 opacity-0 cursor-move group-hover:opacity-100"
-              style={{ marginLeft: '-2px', marginRight: '-2.5px' }}
-            />
           </div>
 
           <div
@@ -169,7 +177,7 @@ export function StickyCol({
               )}
             </button>
             <StatusDropdown TaskCurrentStatus={task.status} />
-            <div className="flex flex-col items-start justify-start space-y-1">
+            <div className="flex flex-col items-start justify-start space-y-1 pl-2">
               <p
                 className="flex text-left"
                 contentEditable={true}
@@ -218,20 +226,21 @@ export function StickyCol({
             style={{ paddingLeft }}
             className={cl(COL_BG, 'relative border-t w-full h-10 py-4 p-4 flex items-center ')}
           >
-            <div className="space-x-1 pl-4 pr-2">
+            <div className="flex space-x-1 pl-4 pr-2 ">
               <button
                 onClick={(e) => handleOnSave(e as React.MouseEvent<HTMLButtonElement, MouseEvent>, task.id)}
                 className="p-0.5 text-white rounded-sm bg-lime-600"
               >
                 Save
               </button>
-              <button onClick={onClose} className="p-0.5 text-white rounded-sm bg-red-600">
+              <ImCancelCircle onClick={onClose} className="h-8 w-8" />
+              {/* <button onClick={onClose} className="p-0.5 text-white rounded-sm bg-red-600">
                 Cancel
-              </button>
+              </button> */}
             </div>
 
             <StatusDropdown TaskCurrentStatus={task.status} />
-            <div className="flex flex-col items-start justify-start space-y-1">
+            <div className="flex flex-col items-start justify-start space-y-1 pl-2">
               <p
                 className="flex text-left"
                 contentEditable={true}

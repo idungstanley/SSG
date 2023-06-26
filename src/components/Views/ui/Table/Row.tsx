@@ -24,10 +24,11 @@ interface RowProps {
   columns: Column[];
   paddingLeft?: number;
   parentId?: string;
+  task_status?: string;
   handleClose?: VoidFunction;
 }
 
-export function Row({ task, columns, paddingLeft = 0, parentId, handleClose }: RowProps) {
+export function Row({ task, columns, paddingLeft = 0, parentId, task_status, handleClose }: RowProps) {
   const [showNewTaskField, setShowNewTaskField] = useState(false);
   const otherColumns = columns.slice(1);
 
@@ -94,6 +95,7 @@ export function Row({ task, columns, paddingLeft = 0, parentId, handleClose }: R
           style={{ zIndex: 3 }}
           task={task}
           parentId={parentId as string}
+          task_status={task_status as string}
           onClose={handleClose as VoidFunction}
           paddingLeft={paddingLeft}
           tags={'tags' in task ? <Tags tags={task.tags} taskId={task.id} /> : null}

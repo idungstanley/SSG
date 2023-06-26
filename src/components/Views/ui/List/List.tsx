@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { useAppSelector } from '../../../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { useList } from '../../../../features/list/listService';
 import { Task } from '../../../../features/task/interface.tasks';
 import { filterByAssignee, filterBySearchValue, sortTasks } from '../../../TasksHeader/lib';
@@ -7,6 +7,7 @@ import { generateColumns } from '../../lib/tableHeadUtils';
 import { Table } from '../Table/Table';
 import { Label } from './Label';
 import { AddTask } from '../AddTask/AddTask';
+import { setCurrTeamMemId } from '../../../../features/task/taskSlice';
 
 interface ListProps {
   tasks: Task[];
@@ -15,6 +16,7 @@ interface ListProps {
 export function List({ tasks }: ListProps) {
   const { sortType } = useAppSelector((state) => state.task);
   const { data } = useList(tasks[0].list_id);
+  const dispatch = useAppDispatch();
 
   const [collapseTable, setCollapseTable] = useState(false);
   const [showNewTaskField, setShowNewTaskField] = useState(false);
@@ -29,15 +31,19 @@ export function List({ tasks }: ListProps) {
 
   const { sortedTasks } = sortTasks(sortType, filteredByAssignee);
 
+  const handleClose = () => {
+    setShowNewTaskField(false);
+    dispatch(setCurrTeamMemId(null));
+  };
+
   return (
     <div className="border-l-4 pt-1 border-t-4 border-purple-500 rounded-xl bg-purple-50">
       <Label listName={listName} showTable={collapseTable} onClickChevron={() => setCollapseTable((prev) => !prev)} />
-
       {!collapseTable && heads ? (
         <div className="relative ">
           {showNewTaskField ? (
             <div className="pl-2">
-              <AddTask parentId={data?.id as string} isListParent onClose={() => setShowNewTaskField(false)} />
+              <AddTask parentId={data?.id as string} isListParent onClose={() => handleClose()} />
             </div>
           ) : null}
           {!showNewTaskField ? (

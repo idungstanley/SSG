@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { DragOverlay } from '@dnd-kit/core';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { ITaskFullList, Task } from '../../../../features/task/interface.tasks';
-import { setUpdateCords } from '../../../../features/task/taskSlice';
+import { setCurrTeamMemId, setStatusId, setUpdateCords } from '../../../../features/task/taskSlice';
 import { useScroll } from '../../../../hooks/useScroll';
 import { listColumnProps } from '../../../../pages/workspace/tasks/component/views/ListColumns';
 import { MAX_COL_WIDTH, MIN_COL_WIDTH } from '../../config';
@@ -13,6 +13,8 @@ import { ScrollableContainer } from '../../../ScrollableContainer/ScrollableCont
 import { Head } from './Head/Head';
 import { OverlayRow } from './OverlayRow';
 import { Row } from './Row';
+import { UseGetListDetails } from '../../../../features/list/listService';
+import { ITask_statuses } from '../../../../features/list/list.interfaces';
 
 interface TableProps {
   heads: listColumnProps[];
@@ -30,6 +32,9 @@ export function Table({ heads, data, label }: TableProps) {
   const taskLength = data.length;
   const columns = createHeaders(heads).filter((i) => !i.hidden);
   const { draggableTaskId } = useAppSelector((state) => state.list);
+  const [listId, setListId] = useState<string>('');
+
+  const { data: list } = UseGetListDetails({ activeItemId: listId, activeItemType: 'list' });
 
   const mouseMove = useCallback(
     (e: MouseEvent) => {
@@ -61,7 +66,7 @@ export function Table({ heads, data, label }: TableProps) {
     [activeIndex, columns]
   );
 
-  const spreadData = [
+  const newTaskObj = [
     ...data,
     {
       archived_at: null,
@@ -91,7 +96,20 @@ export function Table({ heads, data, label }: TableProps) {
     }
   ];
 
-  const dataSpread = showNewTaskField ? spreadData : data;
+  const dataSpread = showNewTaskField ? newTaskObj : data;
+
+  // get exact statusID
+  // const [statusId, setStatusId] = useState<string>('');
+  useEffect(() => {
+    const statusObj: ITask_statuses | undefined = list?.data.list.task_statuses.find(
+      (statusObj: ITask_statuses) => statusObj?.name === dataSpread[0].status.name
+    );
+
+    if (statusObj) {
+      const newStatusId: string = statusObj.id;
+      dispatch(setStatusId(newStatusId));
+    }
+  }, [listId, showNewTaskField]);
 
   const removeListeners = () => {
     window.removeEventListener('mousemove', mouseMove);
@@ -130,6 +148,12 @@ export function Table({ heads, data, label }: TableProps) {
   };
   const handleClose = () => {
     setShowNewTaskField(false);
+    dispatch(setCurrTeamMemId(null));
+  };
+
+  const handleToggleNewTask = () => {
+    setShowNewTaskField(true);
+    setListId(data[0].list_id);
   };
 
   const onScroll = useScroll(() => dispatch(setUpdateCords()));
@@ -179,6 +203,7 @@ export function Table({ heads, data, label }: TableProps) {
                     task={i as ITaskFullList}
                     key={i.id}
                     parentId={data[0].list_id}
+                    task_status={dataSpread[0].status.name}
                     handleClose={handleClose}
                   />
                 ) : null
@@ -193,7 +218,7 @@ export function Table({ heads, data, label }: TableProps) {
         {!showNewTaskField ? (
           <div className="h-5">
             <button
-              onClick={() => setShowNewTaskField(true)}
+              onClick={() => handleToggleNewTask()}
               className="absolute left-0 p-1.5 pl-16 text-left w-fit text-xs"
             >
               + New Task
