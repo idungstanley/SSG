@@ -145,7 +145,7 @@ export function StickyCol({
           onClick={onClickTask}
           {...props}
         >
-          <div className="flex items-center w-10 h-full space-x-1 bg-purple-50">
+          <div className="flex items-center h-full space-x-1 bg-purple-50">
             <input
               type="checkbox"
               id="checked-checkbox"
@@ -161,10 +161,7 @@ export function StickyCol({
             {dragElement}
           </div>
 
-          <div
-            style={{ paddingLeft }}
-            className={cl(COL_BG, 'relative border-t w-full h-10 py-4 p-4 flex items-center ')}
-          >
+          <div style={{ paddingLeft }} className={cl(COL_BG, 'relative border-t w-full h-10 py-4 flex items-center ')}>
             <button onClick={onToggleDisplayingSubTasks} className="">
               {showSubTasks ? (
                 <RxTriangleDown
@@ -200,7 +197,7 @@ export function StickyCol({
           onClick={onClickTask}
           {...props}
         >
-          <div className="flex items-center w-10 h-full space-x-1 bg-purple-50">
+          <div className="flex items-center h-full space-x-1 bg-purple-50">
             <input
               type="checkbox"
               id="checked-checkbox"
