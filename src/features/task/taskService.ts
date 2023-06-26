@@ -48,8 +48,14 @@ export const useMoveTask = () => {
   });
 };
 
-const addTask = (data: { name: string; id: string; isListParent: boolean }) => {
-  const { name, id, isListParent } = data;
+const addTask = (data: {
+  name: string;
+  id: string;
+  isListParent: boolean;
+  task_status_id: string;
+  assignees?: string[];
+}) => {
+  const { name, id, isListParent, task_status_id, assignees } = data;
 
   const parentId = isListParent ? { list_id: id } : { parent_id: id };
 
@@ -58,7 +64,9 @@ const addTask = (data: { name: string; id: string; isListParent: boolean }) => {
     method: 'POST',
     data: {
       name,
-      ...parentId
+      ...parentId,
+      assignees,
+      task_status_id
     }
   });
   return response;

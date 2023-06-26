@@ -102,7 +102,7 @@ export function Head({
       <tr className="contents">
         {/* first sticky col */}
         <th style={{ zIndex: 2 }} className="sticky left-0 flex -mb-2 font-extrabold" ref={columns[0].ref}>
-          <div className="flex items-center bg-purple-50 " style={{ width: '40px' }}></div>
+          <div className="flex items-center bg-purple-50 " style={{ width: '22px' }}></div>
           <div className="flex dBlock items-center w-full gap-3 py-2 truncate group opacity-90">
             <div
               className={`py-0.5 px-2 rounded-tr-md flex items-center space-x-1 text-white dFlex ${

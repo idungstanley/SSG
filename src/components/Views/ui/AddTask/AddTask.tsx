@@ -1,9 +1,13 @@
-import { useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useAddTask } from '../../../../features/task/taskService';
 import { cl } from '../../../../utils';
 import { Column } from '../../types/table';
 import Assignee from '../../../../pages/workspace/tasks/assignTask/Assignee';
 import { CiFloppyDisk } from 'react-icons/ci';
+import { UseGetListDetails } from '../../../../features/list/listService';
+import { ITask_statuses } from '../../../../features/list/list.interfaces';
+import { ImCancelCircle } from 'react-icons/im';
+import { useAppSelector } from '../../../../app/hooks';
 
 interface AddTaskFieldProps {
   onClose: VoidFunction;
@@ -18,6 +22,21 @@ export function AddTask({ onClose, paddingLeft, parentId, isListParent, columns 
   const nameRef = useRef<HTMLInputElement>(null);
   const { mutate: onAdd } = useAddTask(parentId);
 
+  const { data: list } = UseGetListDetails({ activeItemId: parentId, activeItemType: 'list' });
+  const { currTeamMemberId } = useAppSelector((state) => state.task);
+
+  const [statusId, setStatusId] = useState<string>('');
+  useEffect(() => {
+    const statusObj: ITask_statuses | undefined = list?.data.list.task_statuses.find(
+      (statusObj: ITask_statuses) => statusObj?.name === 'To do'
+    );
+
+    if (statusObj) {
+      const newStatusId: string = statusObj.id;
+      setStatusId(newStatusId);
+    }
+  }, []);
+
   const onClickSave = () => {
     if (nameRef.current) {
       const name = nameRef.current.value;
@@ -25,7 +44,9 @@ export function AddTask({ onClose, paddingLeft, parentId, isListParent, columns 
       onAdd({
         name,
         isListParent: !!isListParent,
-        id: parentId
+        id: parentId,
+        assignees: [currTeamMemberId] as string[],
+        task_status_id: statusId as string
       });
 
       onClose();
@@ -52,13 +73,12 @@ export function AddTask({ onClose, paddingLeft, parentId, isListParent, columns 
         <div className="absolute right-4 flex items-center space-x-2">
           <p>
             {/* <img src={unassignedIcon} alt="" /> */}
-            <Assignee option="task" />
+            <Assignee option="getTeamId" />
           </p>
           <p>
             <CiFloppyDisk onClick={onClickSave} className="h-8 w-8" />
           </p>
-          {/* <Button onClick={onClickSave} primary label="Save" /> */}
-          <Button onClick={onClose} label="Cancel" />
+          <ImCancelCircle onClick={onClose} className="h-8 w-8" />
         </div>
       </td>
 
