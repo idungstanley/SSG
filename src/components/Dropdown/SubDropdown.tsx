@@ -7,14 +7,9 @@ import { AiOutlineUnorderedList } from 'react-icons/ai';
 import hubIcon from '../../assets/branding/hub.svg';
 import { setCreateTaskSlideOverVisibility } from '../../features/general/slideOver/slideOverSlice';
 import { getSubMenu, setEntityToCreate } from '../../features/hubs/hubSlice';
-import { useNavigate, useParams } from 'react-router-dom';
-import { displayPrompt, setVisibility } from '../../features/general/prompt/promptSlice';
-import {
-  setActiveSubHubManagerTabId,
-  setActiveTabId,
-  setCreateEntityType,
-  setShowTreeInput
-} from '../../features/workspace/workspaceSlice';
+import { useNavigate } from 'react-router-dom';
+import { setVisibility } from '../../features/general/prompt/promptSlice';
+import { setActiveSubHubManagerTabId, setActiveTabId, setShowTreeInput } from '../../features/workspace/workspaceSlice';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
 import { useGetTree } from '../../features/hubs/hubService';
 import ActiveTreeSearch from '../ActiveTree/ActiveTreeSearch';
@@ -37,8 +32,6 @@ interface optionsProps {
 export default function SubDropdown() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { listId, hubId, walletId } = useParams();
-  const AnyActiveEntity = !!listId || !!hubId || !!walletId;
   const { showMenuDropdownType, selectedTreeDetails, entityToCreate, showMenuDropdown, SubMenuType, SubMenuId } =
     useAppSelector((state) => state.hub);
   const { currentWorkspaceId } = useAppSelector((state) => state.auth);
@@ -61,39 +54,6 @@ export default function SubDropdown() {
 
   const handleFetch = () => {
     setFetchTree((prev) => !prev);
-  };
-  const showPrompt = (entityType: string) => {
-    dispatch(
-      displayPrompt(`Create ${entityType}`, `Do you want to create your ${entityType} under this entity?`, [
-        {
-          label: 'Proceed To Create',
-          style: 'danger',
-          callback: () => {
-            if (AnyActiveEntity) {
-              if (entityToCreate === EntityType.hub || entityToCreate === EntityType.subHub) {
-                dispatch(setActiveSubHubManagerTabId(1));
-              } else if (entityToCreate === EntityType.wallet) {
-                dispatch(setActiveSubHubManagerTabId(2));
-              } else if (entityToCreate === EntityType.list) {
-                dispatch(setActiveSubHubManagerTabId(3));
-              }
-              dispatch(setVisibility(false));
-            } else {
-              dispatch(setCreateEntityType(entityType));
-              dispatch(setVisibility(false));
-            }
-          }
-        },
-        {
-          label: 'Choose Location',
-          style: 'plain',
-          callback: () => {
-            dispatch(setVisibility(false));
-            dispatch(setShowTreeInput(true));
-          }
-        }
-      ])
-    );
   };
 
   const {

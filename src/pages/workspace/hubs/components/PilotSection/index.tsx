@@ -104,7 +104,7 @@ const tabs = [
   },
   {
     id: 9,
-    label: 'Hub Manager',
+    label: 'Entity Manager',
     icon: <img src={hubIcon} alt="Hub Icon" className="w-4 h-4" />
   }
 ];

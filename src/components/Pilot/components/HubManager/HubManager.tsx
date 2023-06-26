@@ -20,7 +20,7 @@ export default function HubManager() {
   );
   return (
     <>
-      <SectionArea label="Hub Manager" icon={<img src={hubIcon} alt="Hub Icon" className="w-4 h-4" />} />
+      <SectionArea label="Entity Manager" icon={<img src={hubIcon} alt="Hub Icon" className="w-4 h-4" />} />
       <section className="flex flex-col overflow-y-scroll h-fit mb-11 ">
         <HubManagerSubTab />
         <div>{selectedSubSection ? selectedSubSection.element : null}</div>
