@@ -21,7 +21,7 @@ export function ListBox({ values, selected, setSelected, showSearch, onSelectOrD
   const [query, setQuery] = useState('');
 
   const showSelectAll = !!onSelectOrDeselectAll;
-  const [selectAll, setSelectAll] = useState(false);
+  const [selectAll, setSelectAll] = useState(true);
 
   const onToggleSelect = () => {
     if (onSelectOrDeselectAll) {
@@ -68,8 +68,8 @@ export function ListBox({ values, selected, setSelected, showSearch, onSelectOrD
 
             {/* additional options */}
             {showSelectAll ? (
-              <div className="flex w-full py-2 px-1 justify-between items-center">
-                <button onClick={onToggleSelect} className="text-primary-500 text-lg">
+              <div className="flex w-full p-1 justify-between items-center">
+                <button onClick={onToggleSelect} className="text-primary-500 text-sm">
                   {selectAll ? 'Select All' : 'Deselect All'}
                 </button>
               </div>
