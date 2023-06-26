@@ -20,9 +20,10 @@ interface TreeProps {
     | undefined;
   fetchTree: boolean;
   id?: string | null;
+  setToggleTree?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export default function ActiveTreeDataFormater({ data, fetchTree, id }: TreeProps) {
+export default function ActiveTreeDataFormater({ data, fetchTree, id, setToggleTree }: TreeProps) {
   const [hubs, setHubs] = useState<Hub[]>([]);
   const dispatch = useAppDispatch();
 
@@ -77,14 +78,13 @@ export default function ActiveTreeDataFormater({ data, fetchTree, id }: TreeProp
 
   useEffect(() => {
     if (hubs) {
-      console.log(hubs);
       dispatch(getHub(hubs));
     }
   }, [hubs, data]);
 
   return hubs.length !== 0 ? (
-    <div className="overflow-y-scroll absolute space-x-2 w-52 p-1 bg-white rounded-md shadow-2xl border border-gray-100 ml-2 h-64">
-      <ActiveTreeList hubs={hubs} />
+    <div className="absolute h-64 p-1 ml-2 space-x-2 overflow-y-scroll bg-white border border-gray-100 rounded-md shadow-2xl w-96">
+      <ActiveTreeList hubs={hubs} setToggleTree={setToggleTree} />
     </div>
   ) : null;
 }

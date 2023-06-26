@@ -5,18 +5,17 @@ import { useDispatch } from 'react-redux';
 import { FaFolder } from 'react-icons/fa';
 import { AiOutlineUnorderedList } from 'react-icons/ai';
 import hubIcon from '../../assets/branding/hub.svg';
-import {
-  setCreateSubHubSlideOverVisibility,
-  setCreateTaskSlideOverVisibility
-} from '../../features/general/slideOver/slideOverSlice';
-import { getSubMenu, setSubDropdownMenu } from '../../features/hubs/hubSlice';
+import { setCreateTaskSlideOverVisibility } from '../../features/general/slideOver/slideOverSlice';
+import { getSubMenu, setEntityToCreate } from '../../features/hubs/hubSlice';
 import { useNavigate, useParams } from 'react-router-dom';
 import { displayPrompt, setVisibility } from '../../features/general/prompt/promptSlice';
-import { setCreateEntityType, setShowTreeInput } from '../../features/workspace/workspaceSlice';
+import {
+  setActiveSubHubManagerTabId,
+  setCreateEntityType,
+  setShowTreeInput
+} from '../../features/workspace/workspaceSlice';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
-import { CiSearch } from 'react-icons/ci';
-import { BiRightArrowCircle } from 'react-icons/bi';
-import { useGetHubs, useGetTree } from '../../features/hubs/hubService';
+import { useGetTree } from '../../features/hubs/hubService';
 import ActiveTreeSearch from '../ActiveTree/ActiveTreeSearch';
 
 interface itemsType {
@@ -32,7 +31,9 @@ export default function SubDropdown() {
   const navigate = useNavigate();
   const { listId, hubId, walletId } = useParams();
   const AnyActiveEntity = !!listId || !!hubId || !!walletId;
-  const { showMenuDropdownType, showMenuDropdown, SubMenuType, SubMenuId } = useAppSelector((state) => state.hub);
+  const { showMenuDropdownType, entityToCreate, showMenuDropdown, SubMenuType, SubMenuId } = useAppSelector(
+    (state) => state.hub
+  );
   const { currentWorkspaceId } = useAppSelector((state) => state.auth);
   const { showTreeInput } = useAppSelector((state) => state.workspace);
   const { show } = useAppSelector((state) => state.prompt);
@@ -48,7 +49,6 @@ export default function SubDropdown() {
     wallet_id: walletIdToFetch,
     listId: listIdToFetch
   });
-  console.log(data);
   const navLink = '/tasks';
 
   const handleFetch = () => {
@@ -62,7 +62,14 @@ export default function SubDropdown() {
           style: 'danger',
           callback: () => {
             if (AnyActiveEntity) {
-              console.log('stan');
+              if (entityToCreate === EntityType.hub || entityToCreate === EntityType.subHub) {
+                dispatch(setActiveSubHubManagerTabId(1));
+              } else if (entityToCreate === EntityType.wallet) {
+                dispatch(setActiveSubHubManagerTabId(2));
+              } else if (entityToCreate === EntityType.list) {
+                dispatch(setActiveSubHubManagerTabId(3));
+              }
+              dispatch(setVisibility(false));
             } else {
               dispatch(setCreateEntityType(entityType));
               dispatch(setVisibility(false));
@@ -106,14 +113,16 @@ export default function SubDropdown() {
           showEditListSlideOver === false &&
           showEditWalletSlideOver === false &&
           showCreateListSlideOver === false &&
-          show === true
+          show === false
         ) {
-          dispatch(
-            getSubMenu({
-              SubMenuId: null,
-              SubMenuType: null
-            })
-          );
+          if (showTreeInput === false && show === false) {
+            dispatch(
+              getSubMenu({
+                SubMenuId: null,
+                SubMenuType: null
+              })
+            );
+          }
         }
       }
     };
@@ -122,6 +131,7 @@ export default function SubDropdown() {
       document.removeEventListener('click', checkClickedOutSide);
     };
   }, [
+    showTreeInput,
     show,
     SubMenuId,
     showCreateSubWalletSlideOver,
@@ -139,8 +149,9 @@ export default function SubDropdown() {
       id: 1,
       title: 'Sub Hub',
       handleClick: () => {
-        dispatch(setCreateSubHubSlideOverVisibility(true));
+        dispatch(setEntityToCreate(EntityType.subHub));
         setLastClicked('Sub Hub');
+        showPrompt(EntityType.subHub);
       },
       icon: <img src={hubIcon} alt="" className="w-4 h-4" />,
       isVisible: showMenuDropdownType == 'hubs' ? true : false || SubMenuType == 'hubs' ? true : false
@@ -169,6 +180,7 @@ export default function SubDropdown() {
           //     SubMenuType: null
           //   })
           // );
+          dispatch(setEntityToCreate(EntityType.wallet));
           showPrompt(EntityType.wallet);
           setLastClicked('Wallet');
         } else {
@@ -198,6 +210,8 @@ export default function SubDropdown() {
       handleClick: () => {
         showPrompt(EntityType.list);
         setLastClicked('List');
+        dispatch(setEntityToCreate(EntityType.list));
+        showPrompt(EntityType.list);
       },
       icon: <AiOutlineUnorderedList className="w-4 h-4" aria-hidden="true" />,
       isVisible: showMenuDropdownType === 'list' ? false : true

@@ -1,21 +1,23 @@
-import React, { useState } from 'react';
-import WList from '../../pages/workspace/hubs/components/ActiveTree/Items/wallet/WList';
+import React from 'react';
 import LList from '../../pages/workspace/hubs/components/ActiveTree/Items/list/LList';
 import { Hub } from '../../pages/workspace/hubs/components/ActiveTree/activetree.interfaces';
 import AvatarWithInitials from '../avatar/AvatarWithInitials';
 import { FaFolder } from 'react-icons/fa';
-import { useAppDispatch } from '../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { setSelectedTreeDetails } from '../../features/hubs/hubSlice';
+import { EntityType } from '../../utils/EntityTypes/EntityType';
 
 interface hubsProps {
   hubs: Hub[];
   paddingLeft?: string;
+  setToggleTree?: React.Dispatch<React.SetStateAction<boolean>>;
 }
-export default function ActiveTreeList({ hubs, paddingLeft }: hubsProps) {
+export default function ActiveTreeList({ hubs, paddingLeft, setToggleTree }: hubsProps) {
   const dispatch = useAppDispatch();
 
-  const handleTabClick = (id: string, name: string) => {
-    dispatch(setSelectedTreeDetails({ name: name, id: id }));
+  const handleTabClick = (id: string, name: string, type: string) => {
+    dispatch(setSelectedTreeDetails({ name, id, type }));
+    setToggleTree?.(false);
   };
   return (
     <>
@@ -23,7 +25,7 @@ export default function ActiveTreeList({ hubs, paddingLeft }: hubsProps) {
         <div key={hub.id} className="my-1 cursor-pointer">
           <div
             className={`relative flex items-center hover:bg-gray-200 p-1 rounded-md ${paddingLeft}`}
-            onClick={() => handleTabClick(hub.id, hub.name)}
+            onClick={() => handleTabClick(hub.id, hub.name, EntityType.hub)}
           >
             <div className="flex items-center justify-center w-5 h-5">
               {hub.path !== null ? (
@@ -57,7 +59,9 @@ export default function ActiveTreeList({ hubs, paddingLeft }: hubsProps) {
               </p>
             </span>
           </div>
-          {hub.children.length ? <ActiveTreeList hubs={hub.children} paddingLeft="pl-4" /> : null}
+          {hub.children.length ? (
+            <ActiveTreeList setToggleTree={setToggleTree} hubs={hub.children} paddingLeft="pl-4" />
+          ) : null}
           {
             <div>
               {hub.wallets.length

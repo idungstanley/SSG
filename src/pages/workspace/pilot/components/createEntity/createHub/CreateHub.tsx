@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
 import { Button, Input } from '../../../../../../components';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useAppDispatch } from '../../../../../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
 import { createHubService } from '../../../../../../features/hubs/hubService';
-import { setCreateHubSlideOverVisibility } from '../../../../../../features/general/slideOver/slideOverSlice';
 import { setSubDropdownMenu, setshowMenuDropdown } from '../../../../../../features/hubs/hubSlice';
 import { setCreateEntityType } from '../../../../../../features/workspace/workspaceSlice';
+import { EntityType } from '../../../../../../utils/EntityTypes/EntityType';
 
 export default function CreateHub() {
   const queryClient = useQueryClient();
   const dispatch = useAppDispatch();
+  const { selectedTreeDetails } = useAppSelector((state) => state.hub);
+  const { type, id } = selectedTreeDetails;
   const createHub = useMutation(createHubService, {
     onSuccess: () => {
       queryClient.invalidateQueries(['retrieve']);
@@ -49,7 +51,8 @@ export default function CreateHub() {
   const onSubmit = async () => {
     await createHub.mutateAsync({
       name,
-      currentWorkspaceId
+      currentWorkspaceId,
+      currHubId: type === EntityType.hub ? id : null
     });
   };
   return (

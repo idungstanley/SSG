@@ -42,6 +42,7 @@ interface workspaceState {
   activeTabId: number | undefined;
   activeHotKeyTabId: number | null;
   activeSubCommunicationTabId: number | null;
+  activeSubHubManagerTabId: number | null;
   activeSubDetailsTabId: number | null;
   activeSubTimeClockTabId: number | null;
   activeSubChecklistTabId: number | null;
@@ -91,6 +92,7 @@ const initialState: workspaceState = {
   activeHotKeyTabId: 0,
   activeSubDetailsTabId: 1,
   activeSubTimeClockTabId: 0,
+  activeSubHubManagerTabId: 0,
   activeSubCommunicationTabId: 1,
   activeSubChecklistTabId: 2,
   fetchAllWorkspace: false,
@@ -222,6 +224,9 @@ export const wsSlice = createSlice({
     setActiveSubDetailsTabId(state, action: PayloadAction<number | null>) {
       state.activeSubDetailsTabId = action.payload;
     },
+    setActiveSubHubManagerTabId(state, action: PayloadAction<number | null>) {
+      state.activeSubHubManagerTabId = action.payload;
+    },
     setActiveTabId(state, action: PayloadAction<number | undefined>) {
       state.activeTabId = action.payload;
     },
@@ -290,7 +295,6 @@ export const wsSlice = createSlice({
       state.activeLogTab = action.payload;
     },
     setSelectedDate(state, action: PayloadAction<{ date: Dayjs; dateType?: string } | null>) {
-      console.log(action.payload);
       state.selectedDate = action.payload;
     }
   }
@@ -344,7 +348,8 @@ export const {
   setLogType,
   setActiveLogTab,
   setSelectedDate,
-  setShowTreeInput
+  setShowTreeInput,
+  setActiveSubHubManagerTabId
 } = wsSlice.actions;
 
 export default wsSlice.reducer;

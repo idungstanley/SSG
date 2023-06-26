@@ -23,6 +23,7 @@ import {
   setCreateWLID,
   setOpenedHubId,
   setParentHubExt,
+  setSelectedTreeDetails,
   setshowMenuDropdown,
   setSubHubExt
 } from '../../../../../../../features/hubs/hubSlice';
@@ -148,6 +149,7 @@ export default function HList({ hubs, leftMargin, taskType, level = 1 }: ListPro
   };
 
   const handleHubSettings = (id: string, name: string, e: React.MouseEvent<HTMLButtonElement | SVGElement>): void => {
+    dispatch(setSelectedTreeDetails({ name, id, type: EntityType.hub }));
     dispatch(setCreateWLID(id));
     dispatch(getCurrHubId(id));
     dispatch(setCreateWlLink(false));

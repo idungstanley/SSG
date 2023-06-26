@@ -72,7 +72,7 @@ export function HistoryfilterModal({ logData, toggleFn }: HistoryfiltermodalProp
                 (keys.main === 'date' ? (
                   <div className="flex space-x-2 items-center w-4/5">
                     <label htmlFor={`${keys.main}1`} className="w-full">
-                      {dateEntries && (
+                      {dateEntries && checkedStates[0] && (
                         <DatePicker
                           styles="absolute z-50 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none right-12 top-64"
                           range={true}

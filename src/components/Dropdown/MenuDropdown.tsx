@@ -69,6 +69,10 @@ export default function MenuDropdown() {
     showCreateListSlideOver
   } = useAppSelector((state) => state.slideOver);
   const { delWallet, archiveWallet } = useAppSelector((state) => state.wallet);
+  const { show } = useAppSelector((state) => state.prompt);
+
+  const { showTreeInput } = useAppSelector((state) => state.workspace);
+
   const { delList, archiveList } = useAppSelector((state) => state.list);
   const ref = useRef<HTMLInputElement>(null);
   useEffect(() => {
@@ -85,7 +89,7 @@ export default function MenuDropdown() {
           showEditWalletSlideOver === false &&
           showCreateListSlideOver === false
         ) {
-          if (SubDropdownMenu === true) {
+          if (SubDropdownMenu === true && showTreeInput === false && show === false) {
             dispatch(setSubDropdownMenu(false));
           } else {
             dispatch(setshowMenuDropdown({ showMenuDropdown: null, showMenuDropdownType: null }));
@@ -98,6 +102,8 @@ export default function MenuDropdown() {
       document.removeEventListener('click', checkClickedOutSide);
     };
   }, [
+    showTreeInput,
+    show,
     SubDropdownMenu,
     showCreateSubWalletSlideOver,
     showCreateHubSlideOver,

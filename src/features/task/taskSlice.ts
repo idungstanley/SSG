@@ -6,6 +6,7 @@ import { IDuration, IHistoryFilterMemory, IParent, ISelectedDate, Status, TaskKe
 import { SortOption } from '../../pages/workspace/tasks/component/views/listLevel/TaskListViews';
 import RecordRTC from 'recordrtc';
 import { FilterWithId } from '../../components/TasksHeader/ui/Filter/types/filters';
+import { DateString } from '../../components/DatePicker/DatePicker';
 
 export interface ICustomField {
   id: string;
@@ -34,6 +35,7 @@ export interface ImyTaskData {
   parent_id: string | null;
   priority: string | null | [{ id: string; initials: string; color: string; name: string }];
   start_date: string | null;
+  has_descendants: boolean;
   end_date: string | null;
   status: Status;
   assignees?: [{ id: string; initials: string; color: string; name: string; avatar_path: string | null }];
@@ -141,6 +143,7 @@ interface TaskState {
   selectedDate: ISelectedDate | null;
   HistoryFilterMemory: IHistoryFilterMemory | null;
   filters: FilterWithId[];
+  FilterDateString: DateString | null;
 }
 
 const initialState: TaskState = {
@@ -202,7 +205,8 @@ const initialState: TaskState = {
   assigneeIds: [],
   filters: [],
   selectedDate: null,
-  HistoryFilterMemory: null
+  HistoryFilterMemory: null,
+  FilterDateString: null
 };
 
 export const taskSlice = createSlice({
@@ -434,6 +438,9 @@ export const taskSlice = createSlice({
     },
     setHistoryMemory(state, action: PayloadAction<IHistoryFilterMemory>) {
       state.HistoryFilterMemory = action.payload;
+    },
+    setFilterDateString(state, action: PayloadAction<DateString | null>) {
+      state.FilterDateString = action.payload;
     }
   }
 });
@@ -494,6 +501,7 @@ export const {
   setTimerInterval,
   setSortType,
   setTaskSelectedDate,
-  setHistoryMemory
+  setHistoryMemory,
+  setFilterDateString
 } = taskSlice.actions;
 export default taskSlice.reducer;

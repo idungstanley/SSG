@@ -20,7 +20,7 @@ import Details from '../../../../../components/Pilot/components/details/Details'
 import TimeClock from './components/TimeClock';
 import hubIcon from '../../../../../assets/branding/hub.svg';
 import RecordScreen from '../../../../../components/Pilot/components/RecordScreen';
-import CreateWallet from '../../../pilot/components/createEntity/createWallet/CreateWallet';
+import HubManager from '../../../../../components/Pilot/components/HubManager/HubManager';
 
 const sections = [
   {
@@ -57,7 +57,7 @@ const sections = [
   },
   {
     id: 9,
-    element: <CreateWallet />
+    element: <HubManager />
   }
 ];
 
@@ -104,7 +104,7 @@ const tabs = [
   },
   {
     id: 9,
-    label: 'Create Sub Hub',
+    label: 'Hub Manager',
     icon: <img src={hubIcon} alt="Hub Icon" className="w-4 h-4" />
   }
 ];
