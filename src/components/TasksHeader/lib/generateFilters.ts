@@ -13,7 +13,7 @@ const getKey = (i: string) => i.split(SPECIAL_CHAR)[1] ?? i.split(SPECIAL_CHAR)[
 
 export const generateFilters = () => {
   const {
-    filters: { fields: filters }
+    filters: { fields: filters, option: op }
   } = useAppSelector((state) => state.task);
 
   const assignee = filters.find((i) => i.key === 'assignees');
@@ -25,6 +25,7 @@ export const generateFilters = () => {
 
   return {
     filters: {
+      op,
       assignees: assignee ? (assignee.values.length ? getValues(assignee.values) : assignee.operator.key) : undefined,
       fields: [
         tags
