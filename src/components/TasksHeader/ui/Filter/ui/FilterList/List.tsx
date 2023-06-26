@@ -67,8 +67,8 @@ export function List() {
 
   return (
     <div className="space-y-4 w-full p-2">
-      {filters.map((filter, index) => (
-        <Item initialFilters={initialFilters} index={index} filter={filter} key={filter.key} />
+      {filters.map((filter) => (
+        <Item initialFilters={initialFilters} filter={filter} key={filter.key} />
       ))}
 
       {showAddNewItem ? (

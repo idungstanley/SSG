@@ -69,7 +69,7 @@ export function ListBox({ values, selected, setSelected, showSearch, onSelectOrD
             {/* additional options */}
             {showSelectAll ? (
               <div className="flex w-full p-1 justify-between items-center">
-                <button onClick={onToggleSelect} className="text-primary-500 text-sm">
+                <button onClick={onToggleSelect} className="text-primary-500 text-xs">
                   {selectAll ? 'Select All' : 'Deselect All'}
                 </button>
               </div>
