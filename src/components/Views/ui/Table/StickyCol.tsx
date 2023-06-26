@@ -150,7 +150,7 @@ export function StickyCol({
               type="checkbox"
               id="checked-checkbox"
               className="w-2 h-2 rounded-full opacity-0 cursor-pointer focus:outline-1 focus:ring-transparent group-hover:opacity-100 focus:border-2 focus:opacity-100 "
-              style={{ marginLeft: '-1px' }}
+              style={{ marginLeft: '-0.5px' }}
               ref={setNodeRef}
               {...attributes}
               {...listeners}
@@ -197,7 +197,7 @@ export function StickyCol({
           onClick={onClickTask}
           {...props}
         >
-          <div className="flex items-center h-full space-x-1 bg-purple-50">
+          <div className="flex items-center h-full space-x-1 bg-purple-50 opacity-0">
             <input
               type="checkbox"
               id="checked-checkbox"
@@ -212,11 +212,6 @@ export function StickyCol({
             />
 
             {dragElement}
-
-            <MdDragIndicator
-              className="text-lg text-gray-400 transition duration-200 opacity-0 cursor-move group-hover:opacity-100"
-              style={{ marginLeft: '-2px', marginRight: '-2.5px' }}
-            />
           </div>
 
           <div

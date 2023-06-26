@@ -103,7 +103,7 @@ export function Row({ task, columns, paddingLeft = 0, parentId, task_status, han
             <span ref={setNodeRef} {...listeners} {...attributes}>
               <MdDragIndicator
                 className="text-lg text-gray-400 transition duration-200 opacity-0 cursor-move group-hover:opacity-100"
-                style={{ marginLeft: '-2px', marginRight: '-2.5px' }}
+                style={{ marginLeft: '-6px', marginRight: '-2.5px' }}
               />
             </span>
           }
