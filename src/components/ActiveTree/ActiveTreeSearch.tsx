@@ -47,7 +47,7 @@ export default function ActiveTreeSearch({ data, handleFetch, fetchTree, id }: A
     );
   };
   return (
-    <div>
+    <div className="relative">
       <button
         type="button"
         className="relative flex items-center w-full p-1 px-1 mt-2 mb-1 transition duration-300 rounded-md cursor-pointer group"

@@ -11,12 +11,14 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { displayPrompt, setVisibility } from '../../features/general/prompt/promptSlice';
 import {
   setActiveSubHubManagerTabId,
+  setActiveTabId,
   setCreateEntityType,
   setShowTreeInput
 } from '../../features/workspace/workspaceSlice';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
 import { useGetTree } from '../../features/hubs/hubService';
 import ActiveTreeSearch from '../ActiveTree/ActiveTreeSearch';
+import Button from '../Button';
 
 interface itemsType {
   id: number;
@@ -25,17 +27,23 @@ interface itemsType {
   handleClick: () => void;
   isVisible: boolean;
 }
+interface optionsProps {
+  label: string | null;
+  style?: string;
+  callback: () => void;
+  bgColor?: string;
+}
 
 export default function SubDropdown() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { listId, hubId, walletId } = useParams();
   const AnyActiveEntity = !!listId || !!hubId || !!walletId;
-  const { showMenuDropdownType, entityToCreate, showMenuDropdown, SubMenuType, SubMenuId } = useAppSelector(
-    (state) => state.hub
-  );
+  const { showMenuDropdownType, selectedTreeDetails, entityToCreate, showMenuDropdown, SubMenuType, SubMenuId } =
+    useAppSelector((state) => state.hub);
   const { currentWorkspaceId } = useAppSelector((state) => state.auth);
   const { showTreeInput } = useAppSelector((state) => state.workspace);
+  const { lightBaseColor } = useAppSelector((state) => state.account);
   const { show } = useAppSelector((state) => state.prompt);
   const [lastClicked, setLastClicked] = useState<string>('');
   const [fetchTree, setFetchTree] = useState<boolean>(false);
@@ -144,6 +152,49 @@ export default function SubDropdown() {
     showEditWalletSlideOver,
     showCreateListSlideOver
   ]);
+
+  const options = [
+    {
+      label: 'Cancel',
+      style: 'danger',
+      callback: () => {
+        dispatch(
+          getSubMenu({
+            SubMenuId: null,
+            SubMenuType: null
+          })
+        );
+      }
+    },
+    {
+      label: 'Choose Location',
+      style: 'white',
+      callback: () => {
+        dispatch(setVisibility(false));
+        dispatch(setShowTreeInput(true));
+      }
+    },
+    {
+      label: 'Proceed',
+      bgColor: lightBaseColor,
+      callback: () => {
+        dispatch(setActiveTabId(9));
+        if (entityToCreate === EntityType.hub || entityToCreate === EntityType.subHub) {
+          dispatch(setActiveSubHubManagerTabId(1));
+        } else if (entityToCreate === EntityType.wallet) {
+          dispatch(setActiveSubHubManagerTabId(2));
+        } else if (entityToCreate === EntityType.list) {
+          dispatch(setActiveSubHubManagerTabId(3));
+        }
+        dispatch(
+          getSubMenu({
+            SubMenuId: null,
+            SubMenuType: null
+          })
+        );
+      }
+    }
+  ];
   const itemsList: itemsType[] = [
     {
       id: 1,
@@ -151,7 +202,6 @@ export default function SubDropdown() {
       handleClick: () => {
         dispatch(setEntityToCreate(EntityType.subHub));
         setLastClicked('Sub Hub');
-        showPrompt(EntityType.subHub);
       },
       icon: <img src={hubIcon} alt="" className="w-4 h-4" />,
       isVisible: showMenuDropdownType == 'hubs' ? true : false || SubMenuType == 'hubs' ? true : false
@@ -173,15 +223,7 @@ export default function SubDropdown() {
           showMenuDropdownType !== 'wallet' &&
           showMenuDropdownType !== 'subwallet2'
         ) {
-          // dispatch(setSubDropdownMenu(false));
-          // dispatch(
-          //   getSubMenu({
-          //     SubMenuId: null,
-          //     SubMenuType: null
-          //   })
-          // );
           dispatch(setEntityToCreate(EntityType.wallet));
-          showPrompt(EntityType.wallet);
           setLastClicked('Wallet');
         } else {
           navigate(`/${currentWorkspaceId}` + navLink);
@@ -208,10 +250,8 @@ export default function SubDropdown() {
       id: 4,
       title: 'List',
       handleClick: () => {
-        showPrompt(EntityType.list);
         setLastClicked('List');
         dispatch(setEntityToCreate(EntityType.list));
-        showPrompt(EntityType.list);
       },
       icon: <AiOutlineUnorderedList className="w-4 h-4" aria-hidden="true" />,
       isVisible: showMenuDropdownType === 'list' ? false : true
@@ -248,11 +288,31 @@ export default function SubDropdown() {
   return (
     <div className="" ref={ref}>
       <div
-        className={`fixed w-56 p-2 origin-top-right bg-white rounded-md top-2/4 ring-1 ring-black ring-opacity-5 focus:outline-none ${
+        className={`fixed w-80 p-2 origin-top-right bg-white rounded-md top-2/4 ring-1 ring-black ring-opacity-5 focus:outline-none ${
           showMenuDropdown == null ? 'left-56' : 'left-96'
         }`}
         style={{ boxShadow: '0 1px 10px #00000040', minWidth: '200px', zIndex: '999' }}
       >
+        {lastClicked && (
+          <div className="mb-2">
+            <span>
+              Do you want to create your {lastClicked} under{' '}
+              <span className="font-black capitalize">{selectedTreeDetails.name}?</span>
+            </span>
+            <div className="p-2 flex gap-2 h-10 bg-gray-50 items-center">
+              {options.map((option: optionsProps) => (
+                <div key={option.label}>
+                  <Button
+                    label={option.label}
+                    bgColor={option.bgColor}
+                    onClick={option.callback}
+                    buttonStyle={option.style}
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
         {itemsList.map((item) =>
           item.isVisible ? (
             <div key={item.id}>
