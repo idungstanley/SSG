@@ -63,12 +63,12 @@ export default function HList({ hubs, leftMargin, taskType, level = 1 }: ListPro
   useEffect(() => {
     setShowChidren(id);
   }, []);
-  const parentType = 'hub';
+  const parentType = EntityType.hub;
   const subType = 'subhub';
   const handleLocation = (id: string, name: string, index?: number) => {
     if (level === 1) {
       dispatch(setSubHubExt({ id: null, type: null }));
-      dispatch(setParentHubExt({ id: id, type: parentType }));
+      dispatch(setParentHubExt({ id: id, type: EntityType.hub }));
       dispatch(
         getCurrSubHubId({
           currSubHubId: null,
@@ -118,7 +118,7 @@ export default function HList({ hubs, leftMargin, taskType, level = 1 }: ListPro
   };
 
   const handleClick = (id: string, index?: number) => {
-    if (taskType === 'hub') {
+    if (taskType === EntityType.hub) {
       dispatch(setSubHubExt({ id: null, type: null }));
       dispatch(setParentHubExt({ id: id, type: taskType }));
     } else {
@@ -183,7 +183,7 @@ export default function HList({ hubs, leftMargin, taskType, level = 1 }: ListPro
               isSticky={stickyButtonIndex !== undefined && stickyButtonIndex !== null && stickyButtonIndex <= index}
               stickyButtonIndex={stickyButtonIndex}
               index={index}
-              type={taskType === 'subhub' ? 'subhub' : 'hub'}
+              type={taskType === 'subhub' ? 'subhub' : EntityType.hub}
               topNumber={taskType === 'subhub' ? '80px' : '50px'}
               zNumber={taskType === 'subhub' ? '4' : '5'}
             />
@@ -198,11 +198,15 @@ export default function HList({ hubs, leftMargin, taskType, level = 1 }: ListPro
                     leftMargin={false}
                     topNumber={hub.parent_id ? 110 : 80}
                     type="wallet"
-                    paddingLeft={`${taskType === 'hub' ? '33' : '35'}`}
+                    paddingLeft={`${taskType === EntityType.hub ? '33' : '35'}`}
                   />
                 ) : null}
                 {hub.lists.length && showChildren && !showExtendedBar ? (
-                  <LList list={hub.lists} leftMargin={false} paddingLeft={`${taskType === 'hub' ? '48' : '50'}`} />
+                  <LList
+                    list={hub.lists}
+                    leftMargin={false}
+                    paddingLeft={`${taskType === EntityType.hub ? '48' : '50'}`}
+                  />
                 ) : null}
                 {showMenuDropdown === hub.id && showSidebar ? <MenuDropdown /> : null}
                 {SubMenuId === hub.id && showSidebar ? <SubDropdown /> : null}

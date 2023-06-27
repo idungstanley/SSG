@@ -72,9 +72,7 @@ export default function ActiveTress() {
                       return item;
                     }
                   },
-                  incoming.hubs.filter((item) => item.parent_id === null),
-                  id || listId,
-                  isAnyItemChanged
+                  id || listId
                 )
               ]
         );
