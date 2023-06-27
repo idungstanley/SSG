@@ -8,7 +8,6 @@ import { listColumnProps } from '../../../../pages/workspace/tasks/component/vie
 import { MAX_COL_WIDTH, MIN_COL_WIDTH } from '../../config';
 import { generateGrid } from '../../lib';
 import { createHeaders } from '../../lib/tableHeadUtils';
-import { AddTask } from '../AddTask/AddTask';
 import { ScrollableContainer } from '../../../ScrollableContainer/ScrollableContainer';
 import { Head } from './Head/Head';
 import { OverlayRow } from './OverlayRow';
@@ -72,7 +71,7 @@ export function Table({ heads, data, label }: TableProps) {
       archived_at: null,
       assignees: [],
       checklists: [],
-      created_at: Date.now,
+      created_at: Date.now(),
       custom_fields: [],
       deleted_at: null,
       description: null,
@@ -86,12 +85,12 @@ export function Table({ heads, data, label }: TableProps) {
       parent_id: null,
       position: 125,
       priority: 'low',
-      short_id: '6ba291cf',
+      short_id: '',
       start_date: null,
       status: { name: label },
       tags: [],
       time_entries_duration: 0,
-      updated_at: '2023-06-20T07:39:37.000000Z',
+      updated_at: '',
       watchers_count: 0
     }
   ];
@@ -99,8 +98,8 @@ export function Table({ heads, data, label }: TableProps) {
   const dataSpread = showNewTaskField ? newTaskObj : data;
 
   // get exact statusID
-  // const [statusId, setStatusId] = useState<string>('');
   useEffect(() => {
+    setListId(data[0].list_id);
     const statusObj: ITask_statuses | undefined = list?.data.list.task_statuses.find(
       (statusObj: ITask_statuses) => statusObj?.name === dataSpread[0].status.name
     );
@@ -153,7 +152,6 @@ export function Table({ heads, data, label }: TableProps) {
 
   const handleToggleNewTask = () => {
     setShowNewTaskField(true);
-    setListId(data[0].list_id);
   };
 
   const onScroll = useScroll(() => dispatch(setUpdateCords()));
@@ -203,6 +201,7 @@ export function Table({ heads, data, label }: TableProps) {
                       columns={columns}
                       task={i as ITaskFullList}
                       key={i.id}
+                      isListParent={true}
                       parentId={data[0].list_id}
                       task_status={dataSpread[0].status.name}
                       handleClose={handleClose}

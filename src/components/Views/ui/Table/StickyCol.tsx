@@ -25,6 +25,7 @@ interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   setShowSubTasks: (i: boolean) => void;
   paddingLeft?: number;
   task_status?: string;
+  isListParent: boolean;
   tags: ReactNode;
   dragElement?: ReactNode;
   parentId?: string;
@@ -37,6 +38,7 @@ export function StickyCol({
   children,
   tags,
   parentId,
+  isListParent,
   task_status,
   onClose,
   task,
@@ -53,13 +55,6 @@ export function StickyCol({
   const { mutate: onAdd } = useAddTask(parentId);
   const { currTeamMemberId, statusId } = useAppSelector((state) => state.task);
   const { showTaskNavigation } = useAppSelector((state) => state.task);
-  const { data: list } = UseGetListDetails({ activeItemId: parentId, activeItemType: 'list' });
-
-  list?.data.list.task_statuses.map((statusObj: ITask_statuses) => {
-    if (statusObj?.name == task_status) {
-      // console.log('task_statusId', statusObj);
-    }
-  });
 
   const onClickTask = () => {
     navigate(`/${currentWorkspaceId}/tasks/h/${hubId}/t/${task.id}`, { replace: true });
@@ -107,7 +102,7 @@ export function StickyCol({
     e: React.KeyboardEvent<HTMLDivElement> | React.MouseEvent<HTMLButtonElement, MouseEvent>,
     id: string
   ) => {
-    if (id !== null) {
+    if (id !== '0') {
       handleEditTask(e as React.KeyboardEvent<HTMLDivElement>, id);
     } else {
       onClickSave();
@@ -121,7 +116,7 @@ export function StickyCol({
 
       onAdd({
         name,
-        isListParent: true,
+        isListParent: isListParent,
         id: parentId as string,
         assignees: [currTeamMemberId] as string[],
         task_status_id: statusId as string

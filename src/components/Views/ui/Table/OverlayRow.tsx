@@ -27,6 +27,7 @@ export function OverlayRow({ task, columns }: OverlayRowProps) {
         setShowSubTasks={() => ({})}
         style={{ zIndex: 10 }}
         task={task}
+        isListParent={false}
         paddingLeft={0}
         tags={'tags' in task ? <TaskTag tags={task.tags as tagItem[]} entity_id={task.id} entity_type="task" /> : null}
         dragElement={

@@ -14,7 +14,7 @@ export function SubTasks({ parentId, columns, paddingLeft }: SubTasksProps) {
   return (
     <>
       {tasks?.map((i) => (
-        <Row paddingLeft={paddingLeft} columns={columns} task={i} key={i.id} />
+        <Row paddingLeft={paddingLeft} columns={columns} task={i} key={i.id} isListParent={false} />
       ))}
     </>
   );

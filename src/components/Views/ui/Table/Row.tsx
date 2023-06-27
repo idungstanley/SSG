@@ -23,11 +23,12 @@ interface RowProps {
   columns: Column[];
   paddingLeft?: number;
   parentId?: string;
+  isListParent: boolean;
   task_status?: string;
   handleClose?: VoidFunction;
 }
 
-export function Row({ task, columns, paddingLeft = 0, parentId, task_status, handleClose }: RowProps) {
+export function Row({ task, columns, paddingLeft = 0, parentId, task_status, isListParent, handleClose }: RowProps) {
   const [showNewTaskField, setShowNewTaskField] = useState(false);
   const otherColumns = columns.slice(1);
   const [showSubTasks, setShowSubTasks] = useState(false);
@@ -129,6 +130,7 @@ export function Row({ task, columns, paddingLeft = 0, parentId, task_status, han
           setShowSubTasks={setShowSubTasks}
           onClick={onClickTask}
           style={{ zIndex: 3 }}
+          isListParent={isListParent}
           task={task}
           parentId={parentId as string}
           task_status={task_status as string}
@@ -175,8 +177,9 @@ export function Row({ task, columns, paddingLeft = 0, parentId, task_status, han
           task={newSubTask}
           columns={columns}
           paddingLeft={0}
-          parentId={parentId}
-          task_status={task_status}
+          isListParent={false}
+          parentId={task.id}
+          task_status={task.status.id}
           handleClose={handleClose}
         />
       ) : null}
