@@ -14,19 +14,22 @@ import {
   setShowHub
 } from '../../../../../../../features/workspace/workspaceSlice';
 import { setWalletItem } from '../../../../../../../features/wallet/walletSlice';
+import { EntityType } from '../../../../../../../utils/EntityTypes/EntityType';
 
 export default function WList({
   wallets,
   leftMargin,
   paddingLeft,
   type,
-  level = 1
+  level = 1,
+  topNumber
 }: {
   wallets: Wallet[];
   leftMargin: boolean;
   paddingLeft: string | number;
   type: string;
   level?: number;
+  topNumber: number;
 }) {
   const dispatch = useAppDispatch();
   const [showSubWallet, setShowSubWallet] = useState<string | null>(null);
@@ -34,7 +37,6 @@ export default function WList({
   const [stickyButtonIndex, setStickyButtonIndex] = useState<number | undefined>(-1);
   const navigate = useNavigate();
   const { walletId } = useParams();
-
   useEffect(() => {
     if (walletId) {
       setShowSubWallet(walletId);
@@ -52,7 +54,7 @@ export default function WList({
     dispatch(
       setWalletItem({
         currentWalletParentId: id,
-        currentWalletParentType: 'wallet'
+        currentWalletParentType: EntityType.wallet
       })
     );
     dispatch(setActiveEntityName(name));
@@ -63,7 +65,7 @@ export default function WList({
         activeItemName: name
       })
     );
-    dispatch(setActiveEntity({ id: id, type: 'wallet' }));
+    dispatch(setActiveEntity({ id: id, type: EntityType.wallet }));
     dispatch(setCurrentWalletName(name));
     dispatch(setCurrentWalletId(id));
   };
@@ -78,13 +80,13 @@ export default function WList({
       dispatch(
         setCurrentItem({
           currentItemId: id,
-          currentItemType: 'wallet'
+          currentItemType: EntityType.wallet
         })
       );
       dispatch(
         setWalletItem({
           currentWalletParentId: id,
-          currentWalletParentType: 'wallet'
+          currentWalletParentType: EntityType.wallet
         })
       );
     }
@@ -96,7 +98,7 @@ export default function WList({
         <div key={wallet.id} style={{ marginLeft: leftMargin ? 20 : 0 }}>
           <WalletItem
             wallet={wallet}
-            walletType={level === 1 ? 'wallet' : level === 2 ? 'subwallet2' : 'subwallet3'}
+            walletType={level === 1 ? EntityType.wallet : level === 2 ? 'subwallet2' : 'subwallet3'}
             handleLocation={handleLocation}
             handleShowSubWallet={handleShowSubWallet}
             showSubWallet={showSubWallet}
@@ -104,10 +106,9 @@ export default function WList({
             isSticky={stickyButtonIndex !== undefined && stickyButtonIndex !== null && stickyButtonIndex <= index}
             stickyButtonIndex={stickyButtonIndex}
             index={index}
-            topNumber={type === 'subwallet2' ? '140px' : '110px'}
-            zNumber={type === 'subwallet2' ? '1' : '2'}
+            topNumber={topNumber}
+            zNumber={level === 1 ? '3' : level === 2 ? '2' : '1'}
           />
-
           {wallet.children.length && showSubWallet ? (
             <WList
               wallets={wallet.children}
@@ -115,6 +116,7 @@ export default function WList({
               type="subwallet2"
               paddingLeft={Number(paddingLeft) + 15}
               level={level + 1}
+              topNumber={topNumber + 30}
             />
           ) : null}
           {wallet.lists.length && showSubWallet && !showExtendedBar ? (

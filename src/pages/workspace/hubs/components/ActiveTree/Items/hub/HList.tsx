@@ -65,7 +65,6 @@ export default function HList({ hubs, leftMargin, taskType, level = 1 }: ListPro
   }, []);
   const parentType = 'hub';
   const subType = 'subhub';
-
   const handleLocation = (id: string, name: string, index?: number) => {
     if (level === 1) {
       dispatch(setSubHubExt({ id: null, type: null }));
@@ -186,7 +185,7 @@ export default function HList({ hubs, leftMargin, taskType, level = 1 }: ListPro
               index={index}
               type={taskType === 'subhub' ? 'subhub' : 'hub'}
               topNumber={taskType === 'subhub' ? '80px' : '50px'}
-              zNumber={taskType === 'subhub' ? '3' : '4'}
+              zNumber={taskType === 'subhub' ? '4' : '5'}
             />
             {hub.children.length && showChildren ? (
               <HList hubs={hub.children} level={level + 1} taskType="subhub" leftMargin={false} />
@@ -197,6 +196,7 @@ export default function HList({ hubs, leftMargin, taskType, level = 1 }: ListPro
                   <WList
                     wallets={hub.wallets}
                     leftMargin={false}
+                    topNumber={hub.parent_id ? 110 : 80}
                     type="wallet"
                     paddingLeft={`${taskType === 'hub' ? '33' : '35'}`}
                   />
