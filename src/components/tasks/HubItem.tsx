@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { AiOutlineEllipsis, AiOutlinePlus } from 'react-icons/ai';
 import { VscTriangleDown, VscTriangleRight } from 'react-icons/vsc';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { getSubMenu } from '../../features/hubs/hubSlice';
+import { getPrevName, getSubMenu, setSelectedTreeDetails } from '../../features/hubs/hubSlice';
 import { setPaletteDropDown } from '../../features/account/accountSlice';
 import AvatarWithInitials from '../avatar/AvatarWithInitials';
 import Palette from '../ColorPalette';
@@ -12,6 +12,7 @@ import { setCreateWlLink } from '../../features/workspace/workspaceSlice';
 import SearchIconUpload from '../ColorPalette/component/SearchIconUpload';
 import { ListColourProps } from './ListItem';
 import { useParams } from 'react-router-dom';
+import { EntityType } from '../../utils/EntityTypes/EntityType';
 
 interface TaskItemProps {
   item: {
@@ -70,7 +71,9 @@ export default function HubItem({
     setUploadId(paletteId);
   }, [paletteId]);
 
-  const handleItemAction = (id: string) => {
+  const handleItemAction = (id: string, name?: string | null) => {
+    dispatch(getPrevName(name as string));
+    dispatch(setSelectedTreeDetails({ name, id, type: EntityType.hub }));
     dispatch(setCreateWlLink(false));
     dispatch(
       getSubMenu({
@@ -172,7 +175,7 @@ export default function HubItem({
               className="cursor-pointer"
               id="menusettings"
             />
-            <AiOutlinePlus onClick={() => handleItemAction(item.id)} className="cursor-pointer" />
+            <AiOutlinePlus onClick={() => handleItemAction(item.id, item.name)} className="cursor-pointer" />
           </div>
         </div>
       </div>

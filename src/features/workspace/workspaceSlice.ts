@@ -42,6 +42,7 @@ interface workspaceState {
   activeTabId: number | undefined;
   activeHotKeyTabId: number | null;
   activeSubCommunicationTabId: number | null;
+  activeSubHubManagerTabId: number | null;
   activeSubDetailsTabId: number | null;
   activeSubTimeClockTabId: number | null;
   activeSubChecklistTabId: number | null;
@@ -56,6 +57,7 @@ interface workspaceState {
   logType: 'activity' | 'history';
   activeLogTab: 'activity' | 'history';
   selectedDate: { date: Dayjs; dateType?: string } | null;
+  showTreeInput: boolean;
 }
 
 const initialState: workspaceState = {
@@ -90,6 +92,7 @@ const initialState: workspaceState = {
   activeHotKeyTabId: 0,
   activeSubDetailsTabId: 1,
   activeSubTimeClockTabId: 0,
+  activeSubHubManagerTabId: 0,
   activeSubCommunicationTabId: 1,
   activeSubChecklistTabId: 2,
   fetchAllWorkspace: false,
@@ -106,7 +109,8 @@ const initialState: workspaceState = {
   activityArray: [],
   logType: 'activity',
   activeLogTab: 'activity',
-  selectedDate: { date: dayjs() }
+  selectedDate: { date: dayjs() },
+  showTreeInput: false
 };
 
 export const wsSlice = createSlice({
@@ -118,6 +122,9 @@ export const wsSlice = createSlice({
     },
     setPilotWidth(state, action: PayloadAction<number>) {
       state.pilotWidth = action.payload;
+    },
+    setShowTreeInput(state, action: PayloadAction<boolean>) {
+      state.showTreeInput = action.payload;
     },
     setShowPilot(state, action: PayloadAction<boolean>) {
       state.showPilot = action.payload;
@@ -216,6 +223,9 @@ export const wsSlice = createSlice({
     },
     setActiveSubDetailsTabId(state, action: PayloadAction<number | null>) {
       state.activeSubDetailsTabId = action.payload;
+    },
+    setActiveSubHubManagerTabId(state, action: PayloadAction<number | null>) {
+      state.activeSubHubManagerTabId = action.payload;
     },
     setActiveTabId(state, action: PayloadAction<number | undefined>) {
       state.activeTabId = action.payload;
@@ -337,7 +347,9 @@ export const {
   setActivityArray,
   setLogType,
   setActiveLogTab,
-  setSelectedDate
+  setSelectedDate,
+  setShowTreeInput,
+  setActiveSubHubManagerTabId
 } = wsSlice.actions;
 
 export default wsSlice.reducer;

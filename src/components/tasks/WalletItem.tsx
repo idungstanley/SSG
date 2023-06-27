@@ -3,7 +3,14 @@ import { AiOutlineEllipsis, AiOutlinePlus } from 'react-icons/ai';
 import { FaFolder, FaFolderOpen } from 'react-icons/fa';
 import { VscTriangleDown, VscTriangleRight } from 'react-icons/vsc';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { closeMenu, getPrevName, getSubMenu, setCreateWLID, setshowMenuDropdown } from '../../features/hubs/hubSlice';
+import {
+  closeMenu,
+  getPrevName,
+  getSubMenu,
+  setCreateWLID,
+  setSelectedTreeDetails,
+  setshowMenuDropdown
+} from '../../features/hubs/hubSlice';
 import { setPaletteDropDown } from '../../features/account/accountSlice';
 import Palette from '../ColorPalette';
 import MenuDropdown from '../Dropdown/MenuDropdown';
@@ -11,6 +18,7 @@ import SubDropdown from '../Dropdown/SubDropdown';
 import { setCreateWlLink } from '../../features/workspace/workspaceSlice';
 import { ListColourProps } from './ListItem';
 import { useParams } from 'react-router-dom';
+import { EntityType } from '../../utils/EntityTypes/EntityType';
 
 interface WalletItemProps {
   handleShowSubWallet: (id: string, index?: number) => void;
@@ -51,7 +59,8 @@ export default function WalletItem({
   const [paletteColor, setPaletteColor] = useState<string | undefined | ListColourProps>('');
   const { walletId } = useParams();
   const dispatch = useAppDispatch();
-  const handleItemAction = (id: string) => {
+  const handleItemAction = (id: string, name: string | null) => {
+    dispatch(setSelectedTreeDetails({ name, id, type: EntityType.wallet }));
     dispatch(setCreateWlLink(false));
     dispatch(
       getSubMenu({
@@ -67,6 +76,7 @@ export default function WalletItem({
   };
 
   const handleWalletSettings = (id: string, name: string, e: React.MouseEvent<SVGElement>) => {
+    dispatch(setSelectedTreeDetails({ name, id, type: EntityType.wallet }));
     dispatch(setCreateWLID(null));
     dispatch(setCreateWlLink(false));
     dispatch(
@@ -159,7 +169,7 @@ export default function WalletItem({
               onClick={(e) => handleWalletSettings(wallet.id, wallet.name, e)}
               id="menusettings"
             />
-            <AiOutlinePlus onClick={() => handleItemAction(wallet.id)} className="cursor-pointer" />
+            <AiOutlinePlus onClick={() => handleItemAction(wallet.id, wallet.name)} className="cursor-pointer" />
           </div>
         </div>
       </section>

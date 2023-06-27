@@ -100,7 +100,7 @@ export default function DatePicker({ styles, range, toggleFn }: DatePickerProps)
       >
         {/* Dynamic Dates section */}
         <div className="flex items-center justify-between w-full h-10 px-2 py-4 space-x-2 border border-gray-200">
-          <div className="flex space-x-2 items-center">
+          <div className="flex items-center space-x-2">
             <MdOutlineDateRange className="w-4 h-4 font-light" />
             <p className="font-semibold">
               {dayjs(selectedDate?.date.toDate().toISOString()).format('ddd, MMM DD, YYYY')}
@@ -112,7 +112,7 @@ export default function DatePicker({ styles, range, toggleFn }: DatePickerProps)
           {!showRecurring ? (
             <DatePickerSideBar currentDate={currentDate} />
           ) : (
-            <div className="grid place-content-center text-sm font-semibold w-40 border-r h-full border-gray-200">
+            <div className="grid w-40 h-full text-sm font-semibold border-r border-gray-200 place-content-center">
               Coming soon!!!
             </div>
           )}
@@ -130,7 +130,7 @@ export default function DatePicker({ styles, range, toggleFn }: DatePickerProps)
                   }}
                 />
                 <h1
-                  className="p-2 transition-all rounded-md cursor-pointer  hover:scale-105 hover:bg-gray-200"
+                  className="p-2 transition-all rounded-md cursor-pointer hover:scale-105 hover:bg-gray-200"
                   onClick={() => {
                     setToday(currentDate);
                   }}
@@ -145,7 +145,7 @@ export default function DatePicker({ styles, range, toggleFn }: DatePickerProps)
                 />
               </div>
             </div>
-            <div className="flex text-center h-10 space-x-6">
+            <div className="flex h-10 space-x-6 text-center">
               {sortedKeys.map((dayOfWeek) => {
                 const numericDayOfWeek = parseInt(dayOfWeek, 10); // Convert dayOfWeek to a number
                 const sortedDates = groupedDates[numericDayOfWeek].dates.sort((a, b) => {
@@ -199,9 +199,9 @@ export default function DatePicker({ styles, range, toggleFn }: DatePickerProps)
             </div>
           </div>
         </div>
-        <div className="flex justify-between items-center w-full">
+        <div className="flex items-center justify-between w-full">
           <div
-            className="flex items-center justify-between px-1 border h-8 cursor-pointer w-32"
+            className="flex items-center justify-between w-32 h-8 px-1 border cursor-pointer"
             style={{ width: '133px' }}
             onClick={() => setRecurring(!showRecurring)}
           >
@@ -212,7 +212,7 @@ export default function DatePicker({ styles, range, toggleFn }: DatePickerProps)
           </div>
           <div className="flex space-x-2">
             <div className="flex items-center">
-              <span className="font-semibold text-xs italic">{time}</span>
+              <span className="text-xs italic font-semibold">{time}</span>
             </div>
             <Button
               onClick={closeDateModal}
