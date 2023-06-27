@@ -22,7 +22,7 @@ export function DatePickerManualDates({ range }: DatePickerManualDatesProps) {
   const [dateString, setString] = useState<DateString | null>(null);
   const dispatch = useAppDispatch();
 
-  const handleFilterDateDispatch = (event: ChangeEvent<HTMLDivElement>) => {
+  const handleFilterDateDispatch = () => {
     const type = (selectedDate?.dateType && selectedDate.dateType) ?? 'start';
     const dateObject =
       type === 'start'
@@ -31,8 +31,16 @@ export function DatePickerManualDates({ range }: DatePickerManualDatesProps) {
     type === 'start'
       ? dispatch(setHistoryMemory({ ...HistoryFilterMemory, timePoint: 'start' }))
       : dispatch(setHistoryMemory({ ...HistoryFilterMemory, timePoint: 'due' }));
-
     dateObject.isValid() ? dispatch(setSelectedDate({ date: dayjs(dateObject.toDate()), dateType })) : null;
+  };
+
+  const handleChange = (event: ChangeEvent<HTMLDivElement>, point: string) => {
+    // console.log(event.target.textContent, point);
+    if (point === 'from') {
+      setString((prev) => ({ ...prev, start: event.target.textContent as string }));
+    } else {
+      setString((prev) => ({ ...prev, due: event.target.textContent as string }));
+    }
   };
 
   const clearDatesFilter = (point: 'start' | 'due') => {
@@ -83,8 +91,10 @@ export function DatePickerManualDates({ range }: DatePickerManualDatesProps) {
               <div
                 className="w-28 h-4 px-1 text-xs"
                 contentEditable
-                onBlur={() => handleFilterDateDispatch}
+                suppressContentEditableWarning
+                onBlur={handleFilterDateDispatch}
                 onClick={() => dispatch(setHistoryMemory({ ...HistoryFilterMemory, timePoint: 'start' }))}
+                onInput={(e: ChangeEvent<HTMLDivElement>) => handleChange(e, 'from')}
               >
                 {(taskTime?.from && dayjs(taskTime?.from).format(date_format?.toUpperCase())) ?? 'Start Date'}
               </div>
@@ -124,7 +134,14 @@ export function DatePickerManualDates({ range }: DatePickerManualDatesProps) {
           <label htmlFor="from" className="flex space-y-1 space-x-1 text-xs items-center">
             <BsCalendarEvent />
             <div className="relative">
-              <div className="w-28 h-4 px-1 text-xs" contentEditable onBlur={() => handleFilterDateDispatch}>
+              <div
+                className="w-28 h-4 px-1 text-xs"
+                contentEditable
+                suppressContentEditableWarning
+                onBlur={handleFilterDateDispatch}
+                onClick={() => dispatch(setHistoryMemory({ ...HistoryFilterMemory, timePoint: 'start' }))}
+                onInput={(e: ChangeEvent<HTMLDivElement>) => handleChange(e, 'to')}
+              >
                 {dateString?.due ?? 'Due Date'}
               </div>
               {/* <input

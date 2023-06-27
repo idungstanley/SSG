@@ -32,7 +32,7 @@ export default function DatePicker({ styles, range, toggleFn }: DatePickerProps)
   const [today, setToday] = useState(currentDate);
   const [showRecurring, setRecurring] = useState<boolean>(false);
   const { selectedDate } = useAppSelector((state) => state.workspace);
-  const { date_format, timezone: zone } = useAppSelector((state) => state.userSetting);
+  const { timezone: zone } = useAppSelector((state) => state.userSetting);
   const { selectedDate: taskTime, HistoryFilterMemory } = useAppSelector((state) => state.task);
   const sectionRef = useRef<HTMLElement>(null);
   const [hoveredDate, setHovered] = useState<Dayjs | null | undefined>(HistoryFilterMemory?.hoveredDate);
@@ -61,7 +61,7 @@ export default function DatePicker({ styles, range, toggleFn }: DatePickerProps)
 
     if (HistoryFilterMemory?.timePoint && HistoryFilterMemory.timePoint === 'start') {
       dispatch(setSelectedDate({ date: date, dateType: 'start' }));
-      dispatch(setTaskSelectedDate({ ...taskTime, from: date }));
+      dispatch(setTaskSelectedDate({ from: date }));
       dispatch(setHistoryMemory({ ...HistoryFilterMemory, timePoint: 'due' }));
     }
   };
