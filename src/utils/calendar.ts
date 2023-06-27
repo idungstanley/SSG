@@ -1,4 +1,9 @@
 import dayjs from 'dayjs';
+import timezone from 'dayjs/plugin/timezone';
+import utc from 'dayjs/plugin/utc';
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 export interface DateObject {
   currentMonth: boolean;
@@ -88,7 +93,7 @@ export const groupDatesByDayOfWeek = (
   return groupedDates;
 };
 
-export const createDynamicTimeComponent = (intervalInMinutes: number) => {
+export const createDynamicTimeComponent = (intervalInMinutes: number, format?: string) => {
   // Calculate the number of time elements to create
   const totalElements = (24 * 60) / intervalInMinutes;
 
@@ -96,7 +101,7 @@ export const createDynamicTimeComponent = (intervalInMinutes: number) => {
   const timeElements = [];
 
   // Start with 12 midnight
-  let currentTime = dayjs().startOf('day');
+  let currentTime = dayjs().startOf('day').tz(format);
 
   // Generate the time elements
   for (let i = 0; i < totalElements; i++) {

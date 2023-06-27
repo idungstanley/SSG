@@ -2,12 +2,20 @@ import { Menu, Transition } from '@headlessui/react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import { Fragment } from 'react';
 import { List } from './ui/FilterList/List';
+import Button from '../../../Buttons/Button';
+import Icons from '../../../Icons/Icons';
+import Filter from '../../../../assets/icons/filter_alt.svg';
 
 export function FilterDropdown() {
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
-        <Menu.Button className="inline-flex px-4 py-2 text-sm text-gay-500">Filter</Menu.Button>
+        <Menu.Button className="inline-flex text-sm text-gay-500">
+          <Button active={false}>
+            <Icons src={Filter} />
+            Filter
+          </Button>
+        </Menu.Button>
       </div>
       <Transition
         as={Fragment}

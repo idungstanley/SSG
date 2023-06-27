@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import dayjs from 'dayjs';
 
 type Option = string; // Change this type to match the type of your options
 
@@ -31,6 +32,8 @@ function ReusableSelect({ value, onclick, options }: ReusableSelectProps) {
     setDrop(false);
   };
 
+  const currentOrFutureTime = value || dayjs().add(5, 'minutes').format('h:mm A');
+
   return (
     <div className="rounded-md relative">
       {!editing && (
@@ -47,7 +50,9 @@ function ReusableSelect({ value, onclick, options }: ReusableSelectProps) {
               <li
                 onClick={() => handleClick(option)}
                 key={index}
-                className="text-xs hover:bg-purple-400 hover:text-white px-2 rounded-md"
+                className={`text-xs px-2 rounded-md ${
+                  currentOrFutureTime === option ? 'bg-yellow-200' : 'hover:bg-purple-400 hover:text-white'
+                }`}
               >
                 {option}
               </li>
