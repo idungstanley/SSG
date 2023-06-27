@@ -1,5 +1,4 @@
 import React from 'react';
-import { BiShow } from 'react-icons/bi';
 import ShowHideSettings from '../../../../../tasks/TaskSettingsModal/ShowSettingsModal/ShowHideSettings';
 import Button from '../../../../../../../components/Buttons/Button';
 import Show from '../../../../../../../assets/icons/Watchers.svg';
