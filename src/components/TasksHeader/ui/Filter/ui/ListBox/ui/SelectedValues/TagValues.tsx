@@ -14,7 +14,7 @@ interface TagValuesProps {
 
 export function TagValues({ values }: TagValuesProps) {
   return (
-    <div className="flex items-center h-5 max-w-5 gap-1">
+    <div className="flex items-center h-5 gap-1">
       {values.length === 0 ? (
         <span className="block">{SELECT_VALUE}</span>
       ) : (

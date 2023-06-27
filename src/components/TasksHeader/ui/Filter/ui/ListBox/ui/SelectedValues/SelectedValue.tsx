@@ -7,7 +7,7 @@ import { TagValue, TagValues } from './TagValues';
 
 interface SelectedValueProps {
   value: FilterValue[] | Operator | string | Unit;
-  key?: FilterKey;
+  filterKey?: FilterKey;
 }
 
 export const SELECT_KEY = 'Select filter';
@@ -15,8 +15,12 @@ export const SELECT_VALUE = 'Select option';
 
 export const stringifyValue = (i: string) => i.split(SPECIAL_CHAR)[0];
 
-export function SelectedValue({ value, key }: SelectedValueProps) {
-  switch (key) {
+export function SelectedValue({ value, filterKey }: SelectedValueProps) {
+  if (!filterKey) {
+    return <Default value={value} />;
+  }
+
+  switch (filterKey) {
     case 'priority': {
       return <PriorityValues values={value as string[]} />;
     }

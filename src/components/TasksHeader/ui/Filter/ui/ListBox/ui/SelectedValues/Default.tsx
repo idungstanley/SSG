@@ -15,7 +15,7 @@ export function Default({ value }: DefaultProps) {
     const title = value.map((i) => (isString(i) ? stringifyValue(i) : stringifyValue(i.value))).join(', ');
 
     return (
-      <div title={title} className="flex items-center h-5 max-w-5 gap-1">
+      <div title={title} className="flex items-center h-5 gap-1">
         {value.length === 0 ? (
           <span className="block">{SELECT_VALUE}</span>
         ) : (
