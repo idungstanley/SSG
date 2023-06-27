@@ -232,7 +232,7 @@ export function StickyCol({
                 className="flex text-left"
                 contentEditable={true}
                 ref={inputRef}
-                onKeyDown={(e) => (e.key === 'Enter' ? handleEditTask(e, task.id) : null)}
+                onKeyDown={(e) => (e.key === 'Enter' ? handleOnSave(e, task.id) : null)}
               >
                 {task.name}
               </p>
