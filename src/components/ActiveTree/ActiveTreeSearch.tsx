@@ -7,6 +7,7 @@ import ActiveTreeDataFormater from './ActiveTreeDataFormater';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { setActiveSubHubManagerTabId, setActiveTabId } from '../../features/workspace/workspaceSlice';
 import { getSubMenu } from '../../features/hubs/hubSlice';
+import { EntityManagerTabsId, PilotTabsId } from '../../utils/PilotUtils';
 
 interface ActiveTreeSearchProps {
   handleFetch: () => void;
@@ -31,13 +32,13 @@ export default function ActiveTreeSearch({ data, handleFetch, fetchTree, id }: A
   };
 
   const directToPilot = () => {
-    dispatch(setActiveTabId(9));
+    dispatch(setActiveTabId(PilotTabsId.entityManager));
     if (entityToCreate === EntityType.hub || entityToCreate === EntityType.subHub) {
-      dispatch(setActiveSubHubManagerTabId(1));
+      dispatch(setActiveSubHubManagerTabId(EntityManagerTabsId.hub));
     } else if (entityToCreate === EntityType.wallet) {
-      dispatch(setActiveSubHubManagerTabId(2));
+      dispatch(setActiveSubHubManagerTabId(EntityManagerTabsId.wallet));
     } else if (entityToCreate === EntityType.list) {
-      dispatch(setActiveSubHubManagerTabId(3));
+      dispatch(setActiveSubHubManagerTabId(EntityManagerTabsId.list));
     }
     dispatch(
       getSubMenu({

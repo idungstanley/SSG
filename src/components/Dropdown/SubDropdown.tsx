@@ -14,6 +14,7 @@ import { EntityType } from '../../utils/EntityTypes/EntityType';
 import { useGetTree } from '../../features/hubs/hubService';
 import ActiveTreeSearch from '../ActiveTree/ActiveTreeSearch';
 import Button from '../Button';
+import { EntityManagerTabsId, PilotTabsId } from '../../utils/PilotUtils';
 
 interface itemsType {
   id: number;
@@ -138,13 +139,13 @@ export default function SubDropdown() {
       label: 'Proceed',
       bgColor: lightBaseColor,
       callback: () => {
-        dispatch(setActiveTabId(9));
+        dispatch(setActiveTabId(PilotTabsId.entityManager));
         if (entityToCreate === EntityType.hub || entityToCreate === EntityType.subHub) {
-          dispatch(setActiveSubHubManagerTabId(1));
+          dispatch(setActiveSubHubManagerTabId(EntityManagerTabsId.hub));
         } else if (entityToCreate === EntityType.wallet) {
-          dispatch(setActiveSubHubManagerTabId(2));
+          dispatch(setActiveSubHubManagerTabId(EntityManagerTabsId.wallet));
         } else if (entityToCreate === EntityType.list) {
-          dispatch(setActiveSubHubManagerTabId(3));
+          dispatch(setActiveSubHubManagerTabId(EntityManagerTabsId.list));
         }
         dispatch(
           getSubMenu({
