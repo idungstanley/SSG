@@ -139,7 +139,7 @@ export function StickyCol({
 
   return (
     <>
-      {task.id !== null && (
+      {task.id !== '0' && (
         <td
           className="sticky left-0 flex items-start justify-start text-sm font-medium text-start text-gray-900 cursor-pointer"
           onClick={onClickTask}
@@ -191,7 +191,7 @@ export function StickyCol({
         </td>
       )}
 
-      {task.id == null && (
+      {task.id === '0' && (
         <td
           className="sticky left-0 flex items-start justify-start text-sm font-medium text-start text-gray-900 cursor-pointer"
           onClick={onClickTask}
@@ -225,7 +225,7 @@ export function StickyCol({
               >
                 Save
               </button>
-              <ImCancelCircle onClick={onClose} className="h-8 w-8" />
+              <ImCancelCircle onClick={onClose} className="h-6 w-6" />
               {/* <button onClick={onClose} className="p-0.5 text-white rounded-sm bg-red-600">
                 Cancel
               </button> */}

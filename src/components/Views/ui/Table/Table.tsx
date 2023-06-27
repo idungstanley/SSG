@@ -79,7 +79,7 @@ export function Table({ heads, data, label }: TableProps) {
       directory_items: [],
       end_date: null,
       group_assignees: [],
-      id: null,
+      id: '0',
       list_id: null,
       main_list_id: '',
       name: 'Add Task',
@@ -169,63 +169,65 @@ export function Table({ heads, data, label }: TableProps) {
         </DragOverlay>
       ) : null}
 
-      <table
-        onScroll={onScroll}
-        style={
-          !collapseTasks
-            ? {
-                display: 'grid',
-                gridTemplateColumns: generateGrid(columns.length)
-              }
-            : undefined
-        }
-        className="w-full"
-        ref={tableElement}
-      >
-        <Head
-          collapseTasks={collapseTasks}
-          taskLength={taskLength}
-          onToggleCollapseTasks={() => setCollapseTasks((prev) => !prev)}
-          label={label}
-          columns={columns}
-          mouseDown={onMouseDown}
-          tableHeight={tableHeight}
-        />
+      <div className="table-container">
+        <table
+          onScroll={onScroll}
+          style={
+            !collapseTasks
+              ? {
+                  display: 'grid',
+                  gridTemplateColumns: generateGrid(columns.length)
+                }
+              : undefined
+          }
+          className="w-full"
+          ref={tableElement}
+        >
+          <Head
+            collapseTasks={collapseTasks}
+            taskLength={taskLength}
+            onToggleCollapseTasks={() => setCollapseTasks((prev) => !prev)}
+            label={label}
+            columns={columns}
+            mouseDown={onMouseDown}
+            tableHeight={tableHeight}
+          />
 
-        {/* rows */}
-        {!collapseTasks ? (
-          <tbody className="contents">
-            {dataSpread.length ? (
-              dataSpread.map((i) =>
-                'tags' in i ? (
-                  <Row
-                    columns={columns}
-                    task={i as ITaskFullList}
-                    key={i.id}
-                    parentId={data[0].list_id}
-                    task_status={dataSpread[0].status.name}
-                    handleClose={handleClose}
-                  />
-                ) : null
-              )
-            ) : (
-              <h1 className="p-5 text-center">No tasks</h1>
-            )}
-          </tbody>
-        ) : null}
+          {/* rows */}
+          {!collapseTasks ? (
+            <tbody className="contents">
+              {dataSpread.length ? (
+                dataSpread.map((i) =>
+                  'tags' in i ? (
+                    <Row
+                      columns={columns}
+                      task={i as ITaskFullList}
+                      key={i.id}
+                      parentId={data[0].list_id}
+                      task_status={dataSpread[0].status.name}
+                      handleClose={handleClose}
+                    />
+                  ) : null
+                )
+              ) : (
+                <h1 className="p-5 text-center">No tasks</h1>
+              )}
+            </tbody>
+          ) : null}
 
-        {/* add subtask button */}
-        {!showNewTaskField ? (
-          <div className="h-5">
-            <button
-              onClick={() => handleToggleNewTask()}
-              className="absolute left-0 p-1.5 pl-16 text-left w-fit text-xs"
-            >
-              + New Task
-            </button>
-          </div>
-        ) : null}
-      </table>
+          {/* add subtask button */}
+          {!showNewTaskField ? (
+            <div className="h-5">
+              <button
+                onClick={() => handleToggleNewTask()}
+                className="absolute left-0 p-1.5 pl-16 text-left w-fit text-xs"
+              >
+                + New Task
+              </button>
+            </div>
+          ) : null}
+        </table>
+      </div>
     </ScrollableContainer>
   );
 }

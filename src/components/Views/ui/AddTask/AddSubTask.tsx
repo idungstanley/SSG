@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import SubtasksIcon from '../../../../assets/icons/SubtasksIcon';
-import { IStatus, ITaskFullList, Tag, Task } from '../../../../features/task/interface.tasks';
+import { IStatus, Tag, Task } from '../../../../features/task/interface.tasks';
 import { DEFAULT_LEFT_PADDING } from '../../config';
 import { Column } from '../../types/table';
 import { AddTask } from '../AddTask/AddTask';
-import { Col } from './Col';
-import { StickyCol } from './StickyCol';
-import { SubTasks } from './SubTasks';
+import { Col } from '../Table/Col';
+import { StickyCol } from '../Table/StickyCol';
+import { SubTasks } from '../Table/SubTasks';
 import { useDraggable } from '@dnd-kit/core';
 import { MdDragIndicator } from 'react-icons/md';
 import { ManageTagsDropdown } from '../../../Tag/ui/ManageTagsDropdown/ui/ManageTagsDropdown';
@@ -16,7 +16,6 @@ import { setShowPilotSideOver } from '../../../../features/general/slideOver/sli
 import { setTaskIdForPilot } from '../../../../features/task/taskSlice';
 import { setActiveItem } from '../../../../features/workspace/workspaceSlice';
 import { Tags } from '../../../Tag';
-import { AddSubTask } from '../AddTask/AddSubTask';
 
 interface RowProps {
   task: Task;
@@ -27,48 +26,10 @@ interface RowProps {
   handleClose?: VoidFunction;
 }
 
-export function Row({ task, columns, paddingLeft = 0, parentId, task_status, handleClose }: RowProps) {
+export function AddSubTask({ task, columns, paddingLeft = 0, parentId, task_status, handleClose }: RowProps) {
   const [showNewTaskField, setShowNewTaskField] = useState(false);
   const otherColumns = columns.slice(1);
   const [showSubTasks, setShowSubTasks] = useState(false);
-
-  const newSubTask: ITaskFullList = {
-    archived_at: null,
-    assignees: undefined,
-    avatar_path: 'rwfrwef',
-    created_at: '2023-03-13T12:43:57.000000Z',
-    custom_fields: [],
-    deleted_at: null,
-    description: null,
-    directory_items: [],
-    end_date: null,
-    group_assignees: [],
-    has_descendants: false,
-    id: '0',
-    list: {
-      id: 'a7ffe74c-af2a-41b7-89a9-f2762dd32f8b',
-      name: 'LW',
-      parents: { hubs: Array(1), wallets: Array(1), lists: Array(1) }
-    },
-    list_id: 'a7ffe74c-af2a-41b7-89a9-f2762dd32f8b',
-    name: 'Add Subtask',
-    parent_id: null,
-    priority: 'low',
-    start_date: null,
-    status: {
-      color: '#a5a5a5',
-      created_at: '2023-06-22T07:42:47.000000Z',
-      id: '13a9c751-409f-4ec9-a8e6-ee707ee27aaf',
-      model_id: '25cb5066-c707-4288-ba04-52c486574a87',
-      model_type: 'hub',
-      name: 'To do',
-      position: '0',
-      type: 'open',
-      updated_at: '2023-06-22T07:42:50.000000Z'
-    },
-    tags: [],
-    updated_at: '2023-06-22T07:42:47.000000Z'
-  };
 
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -77,11 +38,11 @@ export function Row({ task, columns, paddingLeft = 0, parentId, task_status, han
 
   const onShowAddSubtaskField = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.stopPropagation();
-    setShowNewTaskField(!showNewTaskField);
+    // setShowNewTaskField(true);
   };
 
   const onCloseAddTaskFIeld = () => {
-    setShowNewTaskField(false);
+    // setShowNewTaskField(false);
     setShowSubTasks(true);
   };
 
@@ -127,9 +88,9 @@ export function Row({ task, columns, paddingLeft = 0, parentId, task_status, han
         <StickyCol
           showSubTasks={showSubTasks}
           setShowSubTasks={setShowSubTasks}
-          onClick={onClickTask}
           style={{ zIndex: 3 }}
           task={task}
+          onClick={onClickTask}
           parentId={parentId as string}
           task_status={task_status as string}
           onClose={handleClose as VoidFunction}
@@ -171,13 +132,11 @@ export function Row({ task, columns, paddingLeft = 0, parentId, task_status, han
       </tr>
 
       {showNewTaskField ? (
-        <AddSubTask
-          task={newSubTask}
-          columns={columns}
-          paddingLeft={0}
-          parentId={parentId}
-          task_status={task_status}
-          handleClose={handleClose}
+        <AddTask
+          columns={otherColumns}
+          paddingLeft={DEFAULT_LEFT_PADDING + paddingLeft}
+          parentId={task.id}
+          onClose={onCloseAddTaskFIeld}
         />
       ) : null}
 
