@@ -61,6 +61,7 @@ export function Item({ filter, initialFilters }: ItemProps) {
           onSelectOrDeselectAll={onSelectOrDeselectAll}
           showSearch
           controlledOptionsDisplay
+          key={key}
         />
       ) : null}
 
