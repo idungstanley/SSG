@@ -1,5 +1,6 @@
 import { SPECIAL_CHAR } from '../../../../config/filterConfig';
 import { FilterKey, FilterValue, Operator, Unit } from '../../../../types/filters';
+import { AssigneeValue, AssigneeValues } from './AssigneeValues';
 import { Default } from './Default';
 import { PriorityValues } from './PriorityValues';
 import { TagValue, TagValues } from './TagValues';
@@ -21,6 +22,9 @@ export function SelectedValue({ value, key }: SelectedValueProps) {
     }
     case 'tags': {
       return <TagValues values={value as TagValue[]} />;
+    }
+    case 'assignees': {
+      return <AssigneeValues values={value as AssigneeValue[]} />;
     }
     default: {
       return <Default value={value} />;
