@@ -3,15 +3,16 @@ import { XMarkIcon } from '@heroicons/react/24/outline';
 import { Fragment } from 'react';
 import { List } from './ui/FilterList/List';
 import Button from '../../../Buttons/Button';
-import { RiFilter2Line } from 'react-icons/ri';
+import Icons from '../../../Icons/Icons';
+import Filter from '../../../../assets/icons/filter_alt.svg';
 
 export function FilterDropdown() {
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
-        <Menu.Button className="inline-flex px-4 py-2 text-sm text-gay-500">
+        <Menu.Button className="inline-flex text-sm text-gay-500">
           <Button active={false}>
-            <RiFilter2Line className="w-4 h-4" />
+            <Icons src={Filter} />
             Filter
           </Button>
         </Menu.Button>

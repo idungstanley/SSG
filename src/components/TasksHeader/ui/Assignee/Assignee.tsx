@@ -1,10 +1,11 @@
-import { IoPeopleOutline } from 'react-icons/io5';
-import { MdOutlinePersonOutline } from 'react-icons/md';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { setShowFilterByAssigneeSlideOver } from '../../../../features/general/slideOver/slideOverSlice';
 import { useGetTeamMembers } from '../../../../features/settings/teamMembers/teamMemberService';
 import { generateFilter } from '../Filter/lib/filterUtils';
 import Button from '../../../Buttons/Button';
+import Me from '../../../../assets/icons/me(1).svg';
+import AssigneeIcon from '../../../../assets/icons/Assignee.svg';
+import Icons from '../../../Icons/Icons';
 import { setFilterFields } from '../../../../features/task/taskSlice';
 
 export function Assignee() {
@@ -63,12 +64,12 @@ export function Assignee() {
   return (
     <div className="flex items-center rounded-2xl h-8 text-sm">
       <Button active={isMe} onClick={onToggleMe}>
-        <MdOutlinePersonOutline className="w-4 h-4" />
+        <Icons src={Me} />
         <span>Me</span>
       </Button>
 
       <Button active={isMe} onClick={() => dispatch(setShowFilterByAssigneeSlideOver(true))}>
-        <IoPeopleOutline className="w-4 h-4" />
+        <Icons src={AssigneeIcon} />
         <span>Assignee</span>
       </Button>
     </div>
