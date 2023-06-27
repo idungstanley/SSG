@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { useEffect, useRef, useState } from 'react';
 import { useAddTask } from '../../../../features/task/taskService';
 import { cl } from '../../../../utils';
