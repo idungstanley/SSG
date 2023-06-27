@@ -27,12 +27,7 @@ export function List() {
 
     // set team members and tags to config
     // check if not exist to prevent duplication
-    if (
-      teamMembers?.length &&
-      !initialFilters.assignees.values.length &&
-      tags?.length &&
-      !initialFilters.tags.values.length
-    ) {
+    if (teamMembers?.length && tags?.length) {
       setInitialFilters((prev) => ({
         ...prev,
         assignees: { ...prev.assignees, values: [...teamMembers.map((i) => ({ value: i.user.name, id: i.id }))] },
@@ -42,10 +37,7 @@ export function List() {
 
     // set custom fields to config
     // check if not exist to prevent duplication
-    if (
-      list?.custom_fields.length &&
-      !initialFilters[list.custom_fields[0].name + SPECIAL_CHAR + 'cus_' + list.custom_fields[0].id]
-    ) {
+    if (list?.custom_fields.length) {
       const customFields: FilterOption = {};
       list.custom_fields.forEach((field) => {
         if (field.properties) {
@@ -67,8 +59,8 @@ export function List() {
 
   return (
     <div className="space-y-4 w-full p-2">
-      {filters.map((filter, index) => (
-        <Item initialFilters={initialFilters} index={index} filter={filter} key={filter.key} />
+      {filters.map((filter) => (
+        <Item initialFilters={initialFilters} filter={filter} key={filter.key} />
       ))}
 
       {showAddNewItem ? (

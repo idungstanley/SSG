@@ -18,9 +18,9 @@ export function Label({ disabled, isButton }: LabelProps) {
   return isButton ? (
     <button
       disabled={disabled}
-      onClick={onToggle}
+      onClick={!disabled ? onToggle : undefined}
       className={cl(
-        disabled ? 'bg-white' : 'bg-gray-100 text-gray-400',
+        disabled ? 'bg-gray-100 text-gray-400' : 'bg-white',
         'relative w-12 flex justify-center uppercase cursor-pointer whitespace-nowrap rounded-lg border py-2 text-left shadow-sm'
       )}
     >

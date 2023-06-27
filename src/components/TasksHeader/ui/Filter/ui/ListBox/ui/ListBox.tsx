@@ -1,6 +1,6 @@
 import { Fragment, useState } from 'react';
 import { Listbox, Transition } from '@headlessui/react';
-import { FilterValue, Operator, Unit } from '../../../types/filters';
+import { FilterValue, onSelectOrDeselectAllProps, Operator, Unit } from '../../../types/filters';
 import { cl } from '../../../../../../../utils';
 import { SelectedValue } from './SelectedValue';
 import { ListBoxItem } from './Item';
@@ -14,10 +14,23 @@ interface ListBoxProps {
   selected: FilterValue[] | Operator | string | Unit;
   setSelected: (i: FilterValue[] | Operator | string) => void;
   showSearch?: boolean;
+  onSelectOrDeselectAll?: (data: Pick<onSelectOrDeselectAllProps, 'type'>) => void;
 }
 
-export function ListBox({ values, selected, setSelected, showSearch }: ListBoxProps) {
+export function ListBox({ values, selected, setSelected, showSearch, onSelectOrDeselectAll }: ListBoxProps) {
   const [query, setQuery] = useState('');
+
+  const showSelectAll = !!onSelectOrDeselectAll;
+  const [selectAll, setSelectAll] = useState(true);
+
+  const onToggleSelect = () => {
+    if (onSelectOrDeselectAll) {
+      const type = selectAll ? 'select' : 'deselect';
+      onSelectOrDeselectAll({ type });
+
+      setSelectAll((prev) => !prev);
+    }
+  };
 
   const filteredValues =
     showSearch && query.length > 0
@@ -50,6 +63,15 @@ export function ListBox({ values, selected, setSelected, showSearch }: ListBoxPr
                   placeholder="Search..."
                   autoFocus
                 />
+              </div>
+            ) : null}
+
+            {/* additional options */}
+            {showSelectAll ? (
+              <div className="flex w-full p-1 justify-between items-center">
+                <button onClick={onToggleSelect} className="text-primary-500 text-xs">
+                  {selectAll ? 'Select All' : 'Deselect All'}
+                </button>
               </div>
             ) : null}
 
