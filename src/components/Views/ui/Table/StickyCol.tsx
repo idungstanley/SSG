@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { ReactNode, TdHTMLAttributes, useRef, useState } from 'react';
 import { RxTriangleDown, RxTriangleRight } from 'react-icons/rx';
 import { useNavigate, useParams } from 'react-router-dom';
