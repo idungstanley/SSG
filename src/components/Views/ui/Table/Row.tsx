@@ -83,7 +83,7 @@ export function Row({ task, columns, paddingLeft = 0, parentId, task_status, isL
 
   const onCloseAddTaskFIeld = () => {
     setShowNewTaskField(false);
-    setShowSubTasks(true);
+    // setShowSubTasks(true);
   };
 
   const { attributes, listeners, setNodeRef, transform } = useDraggable({
@@ -180,7 +180,7 @@ export function Row({ task, columns, paddingLeft = 0, parentId, task_status, isL
           isListParent={false}
           parentId={task.id}
           task_status={task.status.id}
-          handleClose={handleClose}
+          handleClose={onCloseAddTaskFIeld}
         />
       ) : null}
 

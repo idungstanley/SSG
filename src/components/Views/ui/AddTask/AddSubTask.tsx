@@ -24,7 +24,7 @@ interface RowProps {
   parentId?: string;
   isListParent: boolean;
   task_status?: string;
-  handleClose?: VoidFunction;
+  handleClose?: () => void | void;
 }
 
 export function AddSubTask({
@@ -103,7 +103,7 @@ export function AddSubTask({
           onClick={onClickTask}
           parentId={parentId as string}
           task_status={task_status as string}
-          onClose={handleClose as VoidFunction}
+          onClose={handleClose}
           paddingLeft={paddingLeft}
           tags={'tags' in task ? <Tags tags={task.tags} taskId={task.id} /> : null}
           dragElement={
