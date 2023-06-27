@@ -17,7 +17,7 @@ interface ListBoxProps {
   showSearch?: boolean;
   onSelectOrDeselectAll?: (data: Pick<onSelectOrDeselectAllProps, 'type'>) => void;
   controlledOptionsDisplay?: true;
-  key?: FilterKey;
+  filterKey?: FilterKey;
 }
 
 export function ListBox({
@@ -27,7 +27,7 @@ export function ListBox({
   showSearch,
   onSelectOrDeselectAll,
   controlledOptionsDisplay,
-  key
+  filterKey
 }: ListBoxProps) {
   const [query, setQuery] = useState('');
   const [showOptions, setShowOptions] = useState(false);
@@ -57,7 +57,7 @@ export function ListBox({
           onClick={isDefined(controlledOptionsDisplay) ? () => setShowOptions((prev) => !prev) : undefined}
           className="whitespace-nowrap capitalize relative w-full flex-grow cursor-pointer border shadow-sm rounded-lg bg-white py-2 pl-3 pr-10 text-left"
         >
-          <SelectedValue key={key} value={selected} />
+          <SelectedValue filterKey={filterKey} value={selected} />
 
           <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
             <ChevronDownIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
@@ -70,7 +70,7 @@ export function ListBox({
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <div className='className="absolute left-0 z-10 mt-1 h-72 rounded-md bg-white p-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"'>
+          <div className="absolute z-10 flex flex-col mt-1 max-h-72 rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
             <Listbox.Options className="overflow-auto h-full w-full">
               {/* search */}
               {showSearch ? (
@@ -86,7 +86,6 @@ export function ListBox({
                   />
                 </div>
               ) : null}
-
               {/* additional options */}
               {showSelectAll ? (
                 <div className="flex w-full p-1 justify-between items-center">
@@ -100,12 +99,11 @@ export function ListBox({
               {filteredValues.map((value, index) => (
                 <Listbox.Option
                   key={index}
-                  className={({ active }) =>
-                    cl(
-                      'relative cursor-default text-left select-none py-2 pr-10 pl-4 w-full whitespace-nowrap rounded-md',
-                      active ? 'bg-primary-100 text-primary-700' : 'text-gray-900'
-                    )
-                  }
+                  className={cl(
+                    'relative cursor-pointer text-left select-none py-2 pr-10 pl-4 w-full whitespace-nowrap rounded-md',
+                    'hover:bg-primary-100 hover:text-primary-700',
+                    'text-gray-900'
+                  )}
                   value={value}
                 >
                   <ListBoxItem selected={selected} value={value} />
@@ -115,16 +113,16 @@ export function ListBox({
 
             {/* buttons to manage dropdown visibility */}
             {controlledOptionsDisplay ? (
-              <div className="w-full flex items-center justify-between space-x-2 mt-2">
+              <div className="w-full flex items-center justify-between space-x-2 mt-3 px-2">
                 <button
                   onClick={() => setShowOptions(false)}
-                  className="border bg-gray-500 px-4 py-2 text-xs text-white"
+                  className="border bg-gray-200 px-4 py-2 text-xs text-gray-700"
                 >
                   Cancel
                 </button>
                 <button
                   onClick={() => setShowOptions(false)}
-                  className="border bg-primary-500 px-4 py-2 text-xs text-white"
+                  className="border bg-primary-200 px-4 py-2 text-xs text-primary-700"
                 >
                   Confirm
                 </button>
