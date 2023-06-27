@@ -53,10 +53,8 @@ export function StickyCol({
   const COL_BG = taskId === task.id ? ACTIVE_COL_BG : DEFAULT_COL_BG;
 
   const { mutate: onAdd } = useAddTask(parentId);
-  const { currTeamMemberId, statusId } = useAppSelector((state) => state.task);
+  const { currTeamMemberId } = useAppSelector((state) => state.task);
   const { showTaskNavigation } = useAppSelector((state) => state.task);
-
-  console.log('statusId', statusId);
 
   const onClickTask = () => {
     navigate(`/${currentWorkspaceId}/tasks/h/${hubId}/t/${task.id}`, { replace: true });
