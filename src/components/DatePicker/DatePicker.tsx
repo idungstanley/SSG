@@ -8,7 +8,6 @@ import { setHistoryMemory, setTaskSelectedDate } from '../../features/task/taskS
 import { Button, Modal } from '@mui/material';
 import { DatePickerSideBar } from './DatePickerSideBar';
 import { DatePickerManualDates } from './DatePickerManualDate';
-import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io';
 import { setSelectedDate } from '../../features/workspace/workspaceSlice';
 import { generateDate, groupDatesByDayOfWeek, months } from '../../utils/calendar';
 import cn from '../../utils/cn';
@@ -30,7 +29,6 @@ export default function DatePicker({ styles, range, toggleFn }: DatePickerProps)
   const days = ['SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA'];
   const currentDate = dayjs();
   const [today, setToday] = useState(currentDate);
-  const [showRecurring, setRecurring] = useState<boolean>(false);
   const { selectedDate } = useAppSelector((state) => state.workspace);
   const { timezone: zone } = useAppSelector((state) => state.userSetting);
   const { selectedDate: taskTime, HistoryFilterMemory } = useAppSelector((state) => state.task);
@@ -98,19 +96,13 @@ export default function DatePicker({ styles, range, toggleFn }: DatePickerProps)
           styles ??
           'absolute z-50 mt-1 shadow-2xl bg-white rounded-md ring-1 ring-black ring-opacity-5 focus:outline-none top-56 right-12'
         }
-        style={{ height: '359px', width: '500px' }}
+        style={{ height: '380px', width: '510px' }}
       >
         <DatePickerManualDates range={range} />
-        <div className="flex items-center justify-center px-3 border-b" style={{ height: '275px' }}>
-          {!showRecurring ? (
-            <DatePickerSideBar currentDate={currentDate} />
-          ) : (
-            <div className="grid w-40 h-full text-sm font-semibold border-r border-gray-200 place-content-center">
-              Coming soon!!!
-            </div>
-          )}
+        <div className="flex items-center justify-center px-3 border-b" style={{ height: '295px' }}>
+          <DatePickerSideBar currentDate={currentDate} />
 
-          <div className="p-2" style={{ height: '280px' }}>
+          <div className="p-1" style={{ height: '290px' }}>
             <div className="flex items-center justify-between">
               <h1 className="select-none" style={{ fontSize: '14px', fontWeight: '500' }}>
                 {months[today.month()]}, {today.year()}
@@ -148,9 +140,9 @@ export default function DatePicker({ styles, range, toggleFn }: DatePickerProps)
                   return a.date.isBefore(b.date) ? -1 : 1;
                 });
                 return (
-                  <div key={numericDayOfWeek} className="flex flex-col space-y-3">
+                  <div key={numericDayOfWeek} className="flex flex-col space-y-5">
                     <h3>{days[numericDayOfWeek]}</h3>
-                    <ul className="text-center grid place-content-center text-sm border-t p-0.5 space-y-4">
+                    <ul className="text-center grid place-content-center text-sm border-t p-0.5 space-y-5">
                       {sortedDates.map((date) => {
                         const isBlocked =
                           taskTime?.from &&
@@ -177,11 +169,10 @@ export default function DatePicker({ styles, range, toggleFn }: DatePickerProps)
                             key={date.date.toISOString()}
                             className={cn(
                               'h-6 w-6 rounded-full grid place-content-center hover:bg-purple-300 hover:text-white transition-all cursor-pointer select-none',
-                              date.currentMonth ? '' : 'text-gray-500',
+                              date.currentMonth ? '' : 'text-gray-300',
                               date.today ? 'bg-red-400 text-white rounded-full' : '',
-                              date.currentWeek ? 'bg-gray-300 text-white' : '',
                               isSelected ? 'bg-purple-400 text-white' : '',
-                              isBlockedOrHoverBlocked ? 'bg-purple-400 text-white rounded-none' : ''
+                              isBlockedOrHoverBlocked ? 'bg-purple-400 text-white rounded-none w-full' : ''
                             )}
                             onClick={() => handleClick(date.date)}
                             onMouseEnter={() => handleHover(date.date)}
@@ -198,36 +189,43 @@ export default function DatePicker({ styles, range, toggleFn }: DatePickerProps)
             </div>
           </div>
         </div>
-        <div className="flex items-center justify-between w-full">
-          <div
-            className="flex items-center justify-between w-32 h-8 px-1 border cursor-pointer"
-            style={{ width: '133px' }}
-            onClick={() => setRecurring(!showRecurring)}
-          >
-            <span className="ml-2 text-xs font-semibold" style={{ fontSize: '10px' }}>
-              Recurring
-            </span>
-            {showRecurring ? <IoIosArrowDown /> : <IoIosArrowUp />}
-          </div>
+        <div className="flex items-center justify-end w-full">
           <div className="flex space-x-2">
             <div className="flex items-center">
               <span className="text-xs italic font-semibold">{time}</span>
             </div>
-            <Button
-              onClick={closeDateModal}
-              variant="contained"
-              className="hover:bg-purple-600"
-              size={'small'}
-              sx={{
-                background: '#d559ff',
-                ':hover': { background: '#c128f5' },
-                height: '32px',
-                fontSize: '10px',
-                borderRadius: '0 0 6px 0'
-              }}
-            >
-              Close
-            </Button>
+            <div className="flex space-x-1">
+              <Button
+                onClick={closeDateModal}
+                variant="contained"
+                className="hover:bg-purple-600"
+                size={'small'}
+                sx={{
+                  background: '#d559ff',
+                  ':hover': { background: '#c128f5' },
+                  height: '32px',
+                  fontSize: '10px',
+                  borderRadius: '0 0 0 0'
+                }}
+              >
+                Confirm
+              </Button>
+              <Button
+                onClick={closeDateModal}
+                variant="contained"
+                className="hover:bg-purple-600"
+                size={'small'}
+                sx={{
+                  background: '#d559aa',
+                  ':hover': { background: '#c128a9' },
+                  height: '32px',
+                  fontSize: '10px',
+                  borderRadius: '0 0 6px 0'
+                }}
+              >
+                Close
+              </Button>
+            </div>
           </div>
         </div>
       </section>
