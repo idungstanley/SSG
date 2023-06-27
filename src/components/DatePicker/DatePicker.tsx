@@ -166,6 +166,12 @@ export default function DatePicker({ styles, range, toggleFn }: DatePickerProps)
 
                         const isBlockedOrHoverBlocked = isBlocked || isHoverBlocked;
 
+                        const isSelected =
+                          selectedDate?.date &&
+                          date.date.isSame(selectedDate.date, 'day') && // Compare full date, including month and year
+                          date.date.month() === today.month() && // Compare month
+                          date.date.year() === today.year(); // Compare year
+
                         return (
                           <li
                             key={date.date.toISOString()}
@@ -174,7 +180,7 @@ export default function DatePicker({ styles, range, toggleFn }: DatePickerProps)
                               date.currentMonth ? '' : 'text-gray-500',
                               date.today ? 'bg-red-400 text-white rounded-full' : '',
                               date.currentWeek ? 'bg-gray-300 text-white' : '',
-                              selectedDate?.date.date() === date.date.date() ? 'bg-purple-400 text-white' : '',
+                              isSelected ? 'bg-purple-400 text-white' : '',
                               isBlockedOrHoverBlocked ? 'bg-purple-400 text-white rounded-none' : ''
                             )}
                             onClick={() => handleClick(date.date)}
