@@ -1,8 +1,8 @@
 import { Fragment, useState } from 'react';
 import { Listbox, Transition } from '@headlessui/react';
-import { FilterValue, onSelectOrDeselectAllProps, Operator, Unit } from '../../../types/filters';
+import { FilterKey, FilterValue, onSelectOrDeselectAllProps, Operator, Unit } from '../../../types/filters';
 import { cl } from '../../../../../../../utils';
-import { SelectedValue } from './SelectedValue';
+import { SelectedValue } from './SelectedValues/SelectedValue';
 import { ListBoxItem } from './Item';
 import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import { filterValueBySearchQuery } from '../../../lib/filterUtils';
@@ -17,6 +17,7 @@ interface ListBoxProps {
   showSearch?: boolean;
   onSelectOrDeselectAll?: (data: Pick<onSelectOrDeselectAllProps, 'type'>) => void;
   controlledOptionsDisplay?: true;
+  key?: FilterKey;
 }
 
 export function ListBox({
@@ -25,7 +26,8 @@ export function ListBox({
   setSelected,
   showSearch,
   onSelectOrDeselectAll,
-  controlledOptionsDisplay
+  controlledOptionsDisplay,
+  key
 }: ListBoxProps) {
   const [query, setQuery] = useState('');
   const [showOptions, setShowOptions] = useState(false);
@@ -55,7 +57,7 @@ export function ListBox({
           onClick={isDefined(controlledOptionsDisplay) ? () => setShowOptions((prev) => !prev) : undefined}
           className="whitespace-nowrap capitalize relative w-full flex-grow cursor-pointer border shadow-sm rounded-lg bg-white py-2 pl-3 pr-10 text-left"
         >
-          <SelectedValue value={selected} />
+          <SelectedValue key={key} value={selected} />
 
           <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
             <ChevronDownIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />

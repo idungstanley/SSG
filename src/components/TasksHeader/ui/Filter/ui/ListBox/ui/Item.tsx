@@ -2,7 +2,7 @@ import { CheckIcon } from '@heroicons/react/24/outline';
 import { cl } from '../../../../../../../utils';
 import { isString, isArray } from '../../../../../../../utils/typeGuards';
 import { FilterValue, Operator, Unit } from '../../../types/filters';
-import { stringifyValue } from './SelectedValue';
+import { stringifyValue } from './SelectedValues/SelectedValue';
 
 type Selected = FilterValue[] | Operator | string | Unit;
 type Value = FilterValue | Operator | string | Unit;
