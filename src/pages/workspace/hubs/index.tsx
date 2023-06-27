@@ -3,7 +3,6 @@ import { useDispatch } from 'react-redux';
 import everythingIcon from '../../../assets/branding/everything-icon.png';
 import { useAppSelector } from '../../../app/hooks';
 import PlaceItem from '../../../layout/components/MainLayout/Sidebar/components/PlaceItem';
-import hubIcon from '../../../assets/branding/hub.svg';
 import SubHubModal from './components/SubHubModal';
 import Modal from './components/Modal';
 import { cl } from '../../../utils';
@@ -16,15 +15,19 @@ import ActiveTress from './components/ActiveTree/ActiveTress';
 import { BiSearch } from 'react-icons/bi';
 import { setIsSearchActive } from '../../../features/search/searchSlice';
 import { useNavigate, useParams } from 'react-router-dom';
-import { AiFillFolderAdd } from 'react-icons/ai';
-import { RiPlayListAddFill } from 'react-icons/ri';
 import { PlusIcon } from '@heroicons/react/24/outline';
-import { setActiveEntityName, setCreateEntityType } from '../../../features/workspace/workspaceSlice';
+import {
+  setActiveEntityName,
+  setActiveSubHubManagerTabId,
+  setActiveTabId,
+  setCreateEntityType
+} from '../../../features/workspace/workspaceSlice';
 import DropdownWithoutHeader from '../../../components/Dropdown/DropdownWithoutHeader';
 import { EntityType } from '../../../utils/EntityTypes/EntityType';
 import AddWalletIcon from '../../../assets/icons/AddWallet';
 import AddHubIcon from '../../../assets/icons/AddHub';
 import AddListIcon from '../../../assets/icons/AddList';
+import { setSelectedTreeDetails } from '../../../features/hubs/hubSlice';
 
 function Hubs() {
   const dispatch = useDispatch();
@@ -45,6 +48,7 @@ function Hubs() {
   const handleOpenDropdown = (event: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
     event.stopPropagation();
     setAnchorEl(event.currentTarget);
+    dispatch(setSelectedTreeDetails({ name: null, id: null, type: null }));
   };
 
   const handleNavigateTask = (type: string) => {
@@ -52,6 +56,8 @@ function Hubs() {
     dispatch(setActiveEntityName('Under Construction'));
     if (type === EntityType.hub) {
       navigate(`/${currentWorkspaceId}` + '/tasks');
+      dispatch(setActiveTabId(9));
+      dispatch(setActiveSubHubManagerTabId(1));
     }
     setAnchorEl(null);
   };

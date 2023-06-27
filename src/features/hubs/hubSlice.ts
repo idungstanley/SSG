@@ -3,6 +3,8 @@ import { Hub } from '../../pages/workspace/hubs/components/ActiveTree/activetree
 
 interface HubState {
   hub: Hub[];
+  selectedTreeDetails: { name: null | string | undefined; id: string | null; type: null | string };
+  toggleTree: boolean;
   currHubId: string | null;
   currSubHubId: string | null;
   currSubHubIdType: string | null;
@@ -17,6 +19,7 @@ interface HubState {
   showMenuDropdown: string | null | undefined;
   showMenuDropdownType: string | null | undefined;
   SubDropdownMenu: boolean;
+  entityToCreate: string | null;
   SubMenuId: string | null | undefined;
   SubMenuType: string | null | undefined;
   hubParentId: string | null;
@@ -56,7 +59,10 @@ const initialState: HubState = {
   editHub: false,
   openedHubId: [],
   parentHubExt: { id: null, type: null },
-  subHubExt: { id: null, type: null }
+  subHubExt: { id: null, type: null },
+  selectedTreeDetails: { name: null, id: null, type: null },
+  toggleTree: false,
+  entityToCreate: null
 };
 
 export const hubSlice = createSlice({
@@ -66,11 +72,20 @@ export const hubSlice = createSlice({
     createHub(state, action: PayloadAction<Hub>) {
       state.hub.push(action.payload);
     },
+    setSelectedTreeDetails(
+      state,
+      action: PayloadAction<{ name: string | null | undefined; id: string | null; type: string | null }>
+    ) {
+      state.selectedTreeDetails = action.payload;
+    },
     getHub(state, action: PayloadAction<Hub[]>) {
       state.hub = action.payload;
     },
     setDelHub(state, action: PayloadAction<boolean>) {
       state.delHub = action.payload;
+    },
+    setToggleTree(state, action: PayloadAction<boolean>) {
+      state.toggleTree = action.payload;
     },
     setEditHub(state, action: PayloadAction<boolean>) {
       state.editHub = action.payload;
@@ -86,6 +101,9 @@ export const hubSlice = createSlice({
     },
     getCurrHubId(state, action: PayloadAction<string | null>) {
       state.currHubId = action.payload;
+    },
+    setEntityToCreate(state, action: PayloadAction<string | null>) {
+      state.entityToCreate = action.payload;
     },
     setCreateWLID(state, action: PayloadAction<string | null>) {
       state.createWLID = action.payload;
@@ -169,6 +187,7 @@ export const {
   getCurrSubHubId,
   setDelHub,
   getSubMenu,
+  setToggleTree,
   setShowSubItems,
   setArchiveHub,
   setShowSidebarSettings,
@@ -187,6 +206,8 @@ export const {
   setCreateWLID,
   setEditHub,
   setParentHubExt,
-  setSubHubExt
+  setSubHubExt,
+  setSelectedTreeDetails,
+  setEntityToCreate
 } = hubSlice.actions;
 export default hubSlice.reducer;

@@ -2,17 +2,16 @@ import React, { useState } from 'react';
 import { Button, Input } from '../../../../../../components';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
-import { setCreateWalletSlideOverVisibility } from '../../../../../../features/general/slideOver/slideOverSlice';
 import { setSubDropdownMenu, setshowMenuDropdown } from '../../../../../../features/hubs/hubSlice';
 import { createWalletService } from '../../../../../../features/wallet/walletService';
 import { setCreateEntityType, setCreateWlLink } from '../../../../../../features/workspace/workspaceSlice';
+import { EntityType } from '../../../../../../utils/EntityTypes/EntityType';
 
 export default function CreateWallet() {
   const queryClient = useQueryClient();
   const dispatch = useAppDispatch();
-  const { showMenuDropdownType, showMenuDropdown, SubMenuId, SubMenuType, createWLID } = useAppSelector(
-    (state) => state.hub
-  );
+  const { createWLID, selectedTreeDetails } = useAppSelector((state) => state.hub);
+  const { type, id } = selectedTreeDetails;
   const createWallet = useMutation(createWalletService, {
     onSuccess: () => {
       queryClient.invalidateQueries();
@@ -40,17 +39,8 @@ export default function CreateWallet() {
   const onSubmit = async () => {
     await createWallet.mutateAsync({
       name,
-      hubID:
-        (createWLID ? createWLID : null) ||
-        (showMenuDropdownType == 'hubs' ? showMenuDropdown : null) ||
-        (showMenuDropdownType == 'subhub' ? showMenuDropdown : null) ||
-        (SubMenuType == 'hubs' ? SubMenuId : null) ||
-        (SubMenuType == 'subhub' ? SubMenuId : null),
-      walletId:
-        (showMenuDropdownType == 'wallet' && !createWLID ? showMenuDropdown : null) ||
-        (showMenuDropdownType == 'subwallet2' ? showMenuDropdown : null) ||
-        (SubMenuType == 'wallet' ? SubMenuId : null) ||
-        (SubMenuType == 'subwallet2' ? SubMenuId : null)
+      hubID: (createWLID ? createWLID : null) || type === EntityType.hub ? id : null,
+      walletId: type === EntityType.wallet ? id : null
     });
   };
   return (

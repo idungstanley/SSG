@@ -8,6 +8,7 @@ export interface IHub {
   archived_at: string | null;
   deleted_at: string | null;
   created_at: string;
+  color?: string | null;
   updated_at: string;
 }
 
