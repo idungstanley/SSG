@@ -13,7 +13,7 @@ export default function ListViews({ viewsList }: { viewsList: string }) {
           <span className="font-bold" style={{ fontSize: '13px' }}>
             {viewsList}
           </span>
-          <span className="group cursor-pointer gap-2 font-bold">
+          <span className="group cursor-pointer gap-2">
             <ListViewSettingsModal
               list="List"
               table="Table"

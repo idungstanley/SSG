@@ -14,7 +14,7 @@ export default function ListShow({ changeViews }: { changeViews: string }) {
         <span className="font-bold" style={{ fontSize: '13px' }}>
           {changeViews}
         </span>
-        <span className="group cursor-pointer gap-2 font-bold">
+        <span className="group cursor-pointer gap-2">
           <ShowHideSettings
             scrollByEachGroup="Scroll By Each Group"
             splitSubTask="Split Sub Task"

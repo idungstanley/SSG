@@ -19,6 +19,7 @@ interface ButtonProps {
   borderLeft?: boolean;
   borderRight?: boolean;
   value?: string | number | readonly string[] | undefined;
+  bgColor?: string;
 }
 
 function Button({
@@ -37,7 +38,8 @@ function Button({
   roundedRight = true,
   borderLeft = true,
   borderRight = true,
-  value
+  value,
+  bgColor
 }: ButtonProps) {
   let buttonClassName;
   let hoverBackgroundColor;
@@ -90,6 +92,7 @@ function Button({
         disabled || loading ? ('opacity-50' as string) : (hoverBackgroundColor as string),
         `${buttonClassName} ${width} ${height} ${padding} inline-flex items-center justify-center`
       )}
+      style={{ backgroundColor: bgColor }}
     >
       {loading ? (
         <div className="items-center justify-center w-full -mt-1">

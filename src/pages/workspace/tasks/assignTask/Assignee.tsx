@@ -2,7 +2,7 @@ import * as React from 'react';
 import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import { TrashIcon } from '@heroicons/react/24/solid';
+import { TrashIcon, UserPlusIcon } from '@heroicons/react/24/solid';
 import { UseTaskAssignService, UseUnassignTask } from '../../../../features/task/taskService';
 import { useGetTeamMembers } from '../../../../features/settings/teamMembers/teamMemberService';
 import { AvatarWithInitials } from '../../../../components';
@@ -13,15 +13,15 @@ import {
 } from '../../../../features/task/checklist/checklistService';
 import { ICheckListItems } from '../../../../features/task/interface.tasks';
 import { CgProfile } from 'react-icons/cg';
-import { ImyTaskData } from '../../../../features/task/taskSlice';
+import { ImyTaskData, setCurrTeamMemId } from '../../../../features/task/taskSlice';
 import { AiOutlineSearch } from 'react-icons/ai';
 import { useState } from 'react';
 import { ITeamMembersAndGroup } from '../../../../features/settings/teamMembersAndGroups.interfaces';
 import { useGetTeamMemberGroups } from '../../../../features/settings/teamMemberGroups/teamMemberGroupService';
 import { cl } from '../../../../utils';
 // import AvatarForOwner from '../../../../components/avatar/AvatarForOwner';
-import unassignedIcon from '../../../../assets/icons/unassignedIcon.png';
 import AvatarWithImage from '../../../../components/avatar/AvatarWithImage';
+import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 
 export default function Assignee({
   itemId,
@@ -53,6 +53,10 @@ export default function Assignee({
   const { mutate: onTaskUnassign } = UseUnassignTask();
   const { mutate: onCheklistItemAssign } = UseChecklistItemAssignee();
   const { mutate: onCheklistItemUnassign } = UseChecklistItemUnassignee();
+  const dispatch = useAppDispatch();
+  const { currTeamMemberId } = useAppSelector((state) => state.task);
+
+  const userObj = data?.data.team_members.find((userObj) => userObj?.id === currTeamMemberId);
 
   const teamMembers = teams ? data?.data.team_member_groups : data?.data.team_members;
   // const assignees = task?.assignees;
@@ -68,6 +72,10 @@ export default function Assignee({
       team_member_id: id,
       teams: teams
     });
+  };
+
+  const handleTeamMemberId = (id: string) => {
+    dispatch(setCurrTeamMemId(id));
   };
 
   const handleUnAssignTask = (id: string) => {
@@ -115,7 +123,34 @@ export default function Assignee({
             </div>
           ) : (
             <span onClick={handleClick}>
-              <img src={unassignedIcon} alt="" />
+              <UserPlusIcon
+                className="text-xl text-gray-400 items-center justify-center cursor-pointer"
+                style={{
+                  width: '26px'
+                }}
+                aria-hidden="true"
+              />
+            </span>
+          )}
+        </Button>
+      )}
+      {option === 'getTeamId' && (
+        <Button id="basic-button">
+          {userObj ? (
+            <div className="">
+              <Button className="border-2 border-red-400  rounded-full" onClick={handleClick}>
+                <AvatarWithInitials initials={userObj.user.initials} backgroundColour={userObj.color} badge={true} />
+              </Button>
+            </div>
+          ) : (
+            <span onClick={handleClick}>
+              <UserPlusIcon
+                className="text-xl text-gray-400 items-center justify-center cursor-pointer"
+                style={{
+                  width: '26px'
+                }}
+                aria-hidden="true"
+              />
             </span>
           )}
         </Button>
@@ -185,6 +220,8 @@ export default function Assignee({
                           ? handleAssignChecklist(item.id)
                           : option === 'task'
                           ? handleAssignTask(item.id)
+                          : option == 'getTeamId'
+                          ? handleTeamMemberId(item.id)
                           : null
                       }
                     >
@@ -225,6 +262,8 @@ export default function Assignee({
                           ? handleAssignChecklist(item.id)
                           : option === 'task'
                           ? handleAssignTask(item.id)
+                          : option == 'getTeamId'
+                          ? handleTeamMemberId(item.id)
                           : null
                       }
                     >

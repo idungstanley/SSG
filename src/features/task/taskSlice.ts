@@ -5,8 +5,13 @@ import { IField } from '../list/list.interfaces';
 import { IDuration, IHistoryFilterMemory, IParent, ISelectedDate, Status, TaskKey } from './interface.tasks';
 import { SortOption } from '../../pages/workspace/tasks/component/views/listLevel/TaskListViews';
 import RecordRTC from 'recordrtc';
-import { FilterWithId } from '../../components/TasksHeader/ui/Filter/types/filters';
+import {
+  FilterFieldsWithOption,
+  FiltersOption,
+  FilterWithId
+} from '../../components/TasksHeader/ui/Filter/types/filters';
 import { DateString } from '../../components/DatePicker/DatePicker';
+import { DEFAULT_FILTERS_OPTION } from '../../components/TasksHeader/ui/Filter/config/filterConfig';
 
 export interface ICustomField {
   id: string;
@@ -142,8 +147,9 @@ interface TaskState {
   assigneeIds: string[];
   selectedDate: ISelectedDate | null;
   HistoryFilterMemory: IHistoryFilterMemory | null;
-  filters: FilterWithId[];
+  filters: FilterFieldsWithOption;
   FilterDateString: DateString | null;
+  statusId: string;
 }
 
 const initialState: TaskState = {
@@ -203,21 +209,31 @@ const initialState: TaskState = {
   sortType: 'status',
   searchValue: '',
   assigneeIds: [],
-  filters: [],
+  filters: {
+    fields: [],
+    option: DEFAULT_FILTERS_OPTION
+  },
   selectedDate: null,
   HistoryFilterMemory: null,
-  FilterDateString: null
+  FilterDateString: null,
+  statusId: ''
 };
 
 export const taskSlice = createSlice({
   name: 'task',
   initialState,
   reducers: {
-    setFilters(state, action: PayloadAction<FilterWithId[]>) {
-      state.filters = action.payload;
+    setFilterFields(state, action: PayloadAction<FilterWithId[]>) {
+      state.filters = { ...state.filters, fields: action.payload };
+    },
+    setFilterOption(state, action: PayloadAction<FiltersOption>) {
+      state.filters = { ...state.filters, option: action.payload };
     },
     setAssigneeIds(state, action: PayloadAction<string[]>) {
       state.assigneeIds = action.payload;
+    },
+    setStatusId(state, action: PayloadAction<string>) {
+      state.statusId = action.payload;
     },
     setSearchValue(state, action: PayloadAction<string>) {
       state.searchValue = action.payload;
@@ -446,8 +462,10 @@ export const taskSlice = createSlice({
 });
 
 export const {
-  setFilters,
+  setFilterFields,
+  setFilterOption,
   setAssigneeIds,
+  setStatusId,
   setSearchValue,
   createTaskSlice,
   setTaskIdForPilot,

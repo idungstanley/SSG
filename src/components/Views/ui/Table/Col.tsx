@@ -36,7 +36,9 @@ export function Col({ value, field, fieldId, task, ...props }: ColProps) {
         taskCustomFields={task.custom_fields}
       />
     ),
-    assignees: <Assignee task={task as ImyTaskData} itemId={task.id} option="task" />
+    assignees: (
+      <Assignee task={task as ImyTaskData} itemId={task.id} option={`${task.id !== null ? 'task' : 'getTeamId'}`} />
+    )
   };
 
   return (

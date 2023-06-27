@@ -5,7 +5,8 @@ import { useDispatch } from 'react-redux';
 import {
   setActiveSubChecklistTabId,
   setActiveSubCommunicationTabId,
-  setActiveSubDetailsTabId
+  setActiveSubDetailsTabId,
+  setActiveSubHubManagerTabId
 } from '../../../../../features/workspace/workspaceSlice';
 
 interface TabProps {
@@ -38,6 +39,8 @@ export default function SubtabDrag({ id, icon, showPilot, activeSub, name, sourc
       dispatch(setActiveSubDetailsTabId(id));
     } else if (name === 'Checklist') {
       dispatch(setActiveSubChecklistTabId(id));
+    } else if (name === 'hubmanager') {
+      dispatch(setActiveSubHubManagerTabId(id));
     }
   };
 

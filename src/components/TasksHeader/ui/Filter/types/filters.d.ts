@@ -8,6 +8,12 @@ export interface onChangeProps {
   type: ValueType;
 }
 
+export interface onSelectOrDeselectAllProps {
+  newValues: FilterValue[];
+  id: Id;
+  type: 'select' | 'deselect';
+}
+
 // operators
 type OperatorValue =
   | 'is'
@@ -104,6 +110,13 @@ interface Filter {
   values: FilterValue[];
   operators: Operator[];
   units?: Unit[];
+}
+
+export type FiltersOption = 'and' | 'or';
+
+export interface FilterFieldsWithOption {
+  fields: FilterWithId[];
+  option: FiltersOption;
 }
 
 export interface FilterWithId {

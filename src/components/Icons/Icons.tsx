@@ -6,7 +6,7 @@ interface IconProps {
 function Icons({ src }: IconProps) {
   return (
     <div className="w-5 h-5">
-      <img src={src} alt="" className="w-full h-full" />
+      <img src={src} alt="" className="w-full h-full text-red" style={{ fill: 'red' }} />
     </div>
   );
 }

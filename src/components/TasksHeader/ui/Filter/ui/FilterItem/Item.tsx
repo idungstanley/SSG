@@ -1,33 +1,40 @@
 import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
-import { setFilters } from '../../../../../../features/task/taskSlice';
+import { setFilterFields } from '../../../../../../features/task/taskSlice';
 import { unitValues } from '../../config/filterConfig';
-import { FilterId, FilterOption, FilterWithId, onChangeProps } from '../../types/filters';
+import { FilterId, FilterOption, FilterWithId, onChangeProps, onSelectOrDeselectAllProps } from '../../types/filters';
 import { Label } from './Label';
 import { ListBox } from '../ListBox';
-import { modifyFilters } from '../../lib/filterUtils';
+import { modifyFilters, selectOrDeselectAllFilter } from '../../lib/filterUtils';
 import { DeleteItem } from './DeleteItem';
 
 interface ItemProps {
   filter: FilterWithId;
-  index: number;
   initialFilters: FilterOption;
 }
 
-export function Item({ filter, index, initialFilters }: ItemProps) {
+export function Item({ filter, initialFilters }: ItemProps) {
   const dispatch = useAppDispatch();
-  const { filters } = useAppSelector((state) => state.task);
+  const {
+    filters: { fields: filters }
+  } = useAppSelector((state) => state.task);
 
   const { key, values, operator, id } = filter;
 
-  const onDelete = (id: FilterId) => dispatch(setFilters(filters.filter((i) => i.id !== id)));
+  const onDelete = (id: FilterId) => dispatch(setFilterFields(filters.filter((i) => i.id !== id)));
 
   const onChange = (data: onChangeProps) => {
-    dispatch(setFilters(modifyFilters(data, filters)));
+    dispatch(setFilterFields(modifyFilters(data, filters)));
   };
+
+  const onSelectOrDeselectAll = ({ type }: Pick<onSelectOrDeselectAllProps, 'type'>) =>
+    dispatch(setFilterFields(selectOrDeselectAllFilter({ type, newValues: initialFilters[key].values, id }, filters)));
 
   return (
     <div className="flex items-center w-full space-x-2">
-      <Label show={index === 0} />
+      <Label
+        isButton={filters.findIndex((i) => i.id === id) !== 0}
+        disabled={filters.findIndex((i) => i.id === id) > 1}
+      />
 
       {/* key */}
       <ListBox
@@ -51,6 +58,7 @@ export function Item({ filter, index, initialFilters }: ItemProps) {
           setSelected={(newValue) => onChange({ newValue, id, type: 'value' })}
           selected={values}
           values={initialFilters[key].values}
+          onSelectOrDeselectAll={onSelectOrDeselectAll}
           showSearch
         />
       ) : null}

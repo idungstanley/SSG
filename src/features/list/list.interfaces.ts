@@ -13,6 +13,18 @@ export interface IField {
   created_at: string;
 }
 
+export interface ITask_statuses {
+  color: string;
+  created_at: string;
+  id: string;
+  model_id: string;
+  model_type: string;
+  name: string;
+  position: string;
+  type: string;
+  updated_at: string;
+}
+
 export interface IListDetails {
   id: string;
   name: string;
@@ -22,6 +34,7 @@ export interface IListDetails {
   wallet_id: string | null;
   parent_id: null | string;
   updated_at: string;
+  task_statuses: ITask_statuses[];
   created_at: string;
   archived_at: null | string;
   deleted_at: null | string;
