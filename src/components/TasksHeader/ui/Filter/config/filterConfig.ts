@@ -2,6 +2,7 @@ import dayjs from 'dayjs';
 import { FilterOption, OperatorOption, Unit, UnitOption } from '../types/filters';
 
 export const SPECIAL_CHAR = '%%%';
+export const DEFAULT_FILTERS_OPTION = 'and';
 
 const units: UnitOption = {
   d: { key: 'd', value: 'days' },

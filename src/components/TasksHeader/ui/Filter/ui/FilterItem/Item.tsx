@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
-import { setFilters } from '../../../../../../features/task/taskSlice';
+import { setFilterFields } from '../../../../../../features/task/taskSlice';
 import { unitValues } from '../../config/filterConfig';
 import { FilterId, FilterOption, FilterWithId, onChangeProps } from '../../types/filters';
 import { Label } from './Label';
@@ -15,19 +15,21 @@ interface ItemProps {
 
 export function Item({ filter, index, initialFilters }: ItemProps) {
   const dispatch = useAppDispatch();
-  const { filters } = useAppSelector((state) => state.task);
+  const {
+    filters: { fields: filters }
+  } = useAppSelector((state) => state.task);
 
   const { key, values, operator, id } = filter;
 
-  const onDelete = (id: FilterId) => dispatch(setFilters(filters.filter((i) => i.id !== id)));
+  const onDelete = (id: FilterId) => dispatch(setFilterFields(filters.filter((i) => i.id !== id)));
 
   const onChange = (data: onChangeProps) => {
-    dispatch(setFilters(modifyFilters(data, filters)));
+    dispatch(setFilterFields(modifyFilters(data, filters)));
   };
 
   return (
     <div className="flex items-center w-full space-x-2">
-      <Label show={index === 0} />
+      <Label isButton={index !== 0} disabled={index > 1} />
 
       {/* key */}
       <ListBox

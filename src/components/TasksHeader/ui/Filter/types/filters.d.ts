@@ -106,6 +106,13 @@ interface Filter {
   units?: Unit[];
 }
 
+export type FiltersOption = 'and' | 'or';
+
+export interface FilterFieldsWithOption {
+  fields: FilterWithId[];
+  option: FiltersOption;
+}
+
 export interface FilterWithId {
   id: FilterId;
   key: FilterKey;

@@ -11,7 +11,9 @@ import { FilterOption } from '../../types/filters';
 
 export function List() {
   const [showAddNewItem, setShowAddNewItem] = useState(false);
-  const { filters } = useAppSelector((state) => state.task);
+  const {
+    filters: { fields: filters }
+  } = useAppSelector((state) => state.task);
 
   const [initialFilters, setInitialFilters] = useState(filterConfig);
 
