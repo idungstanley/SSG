@@ -3,9 +3,8 @@ import timezone from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
 import React, { useEffect, useRef, useState } from 'react';
 import { GrFormNext, GrFormPrevious } from 'react-icons/gr';
-import { MdOutlineDateRange } from 'react-icons/md';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { setFilterDateString, setHistoryMemory, setTaskSelectedDate } from '../../features/task/taskSlice';
+import { setHistoryMemory, setTaskSelectedDate } from '../../features/task/taskSlice';
 import { Button, Modal } from '@mui/material';
 import { DatePickerSideBar } from './DatePickerSideBar';
 import { DatePickerManualDates } from './DatePickerManualDate';
@@ -34,10 +33,10 @@ export default function DatePicker({ styles, range, toggleFn }: DatePickerProps)
   const [showRecurring, setRecurring] = useState<boolean>(false);
   const { selectedDate } = useAppSelector((state) => state.workspace);
   const { date_format, timezone: zone } = useAppSelector((state) => state.userSetting);
-  const { selectedDate: taskTime, HistoryFilterMemory, FilterDateString } = useAppSelector((state) => state.task);
+  const { selectedDate: taskTime, HistoryFilterMemory } = useAppSelector((state) => state.task);
   const sectionRef = useRef<HTMLElement>(null);
   const [hoveredDate, setHovered] = useState<Dayjs | null | undefined>(HistoryFilterMemory?.hoveredDate);
-  const [time, setTime] = useState<string>(dayjs().tz(zone).format(`${date_format?.toUpperCase()} h:mm A`));
+  const [time, setTime] = useState<string>(dayjs().tz(zone).format('ddd, DD MMM YYYY h:mm A'));
 
   const closeDateModal = () => {
     if (toggleFn) {
@@ -48,8 +47,25 @@ export default function DatePicker({ styles, range, toggleFn }: DatePickerProps)
   const calendarTime = () => setInterval(() => setTime(dayjs().format(`${date_format?.toUpperCase()} h:mm A`)), 60000);
 
   const handleClick = (date: dayjs.Dayjs) => {
-    dispatch(setSelectedDate({ date: date, dateType: 'from' }));
-    if (taskTime?.from) dispatch(setHistoryMemory({ ...HistoryFilterMemory, timePoint: 'to' }));
+    if (!selectedDate?.dateType) {
+      dispatch(setSelectedDate({ date: date, dateType: 'start' }));
+      if (!date.isSame(today, 'day')) {
+        dispatch(setTaskSelectedDate({ from: date }));
+        dispatch(setHistoryMemory({ ...HistoryFilterMemory, timePoint: 'due' }));
+      }
+    }
+
+    if (HistoryFilterMemory?.timePoint && HistoryFilterMemory.timePoint === 'due') {
+      dispatch(setSelectedDate({ date: date, dateType: 'due' }));
+      dispatch(setTaskSelectedDate({ ...taskTime, to: date }));
+      dispatch(setHistoryMemory({ ...HistoryFilterMemory, timePoint: 'start' }));
+    }
+
+    if (HistoryFilterMemory?.timePoint && HistoryFilterMemory.timePoint === 'start') {
+      dispatch(setSelectedDate({ date: date, dateType: 'start' }));
+      dispatch(setTaskSelectedDate({ ...taskTime, from: date }));
+      dispatch(setHistoryMemory({ ...HistoryFilterMemory, timePoint: 'due' }));
+    }
   };
 
   const handleHover = (date?: dayjs.Dayjs) => {
@@ -69,23 +85,11 @@ export default function DatePicker({ styles, range, toggleFn }: DatePickerProps)
     const adjustedDayOfWeekB = (numericDayOfWeekB - startDay + 7) % 7;
     return adjustedDayOfWeekA - adjustedDayOfWeekB;
   });
-  useEffect(() => {
-    if (!selectedDate?.date?.isSame(today, 'day')) {
-      if (taskTime?.from) {
-        dispatch(setTaskSelectedDate({ ...taskTime, to: selectedDate?.date }));
-        // dispatch(setFilterDateString({ ...FilterDateString, due: dayjs(selectedDate?.date).format('DD/MM/YYYY') }));
-      } else {
-        dispatch(setTaskSelectedDate({ from: selectedDate?.date }));
-        // dispatch(setFilterDateString({ ...FilterDateString, start: dayjs(selectedDate?.date).format('DD/MM/YYYY') }));
-      }
 
-      // if (taskTime?.to != undefined) {
-      //   dispatch(setTaskSelectedDate(null));
-      // }
-    }
+  useEffect(() => {
     calendarTime();
     return () => document.addEventListener('visibilitychange', calendarTime);
-  }, [selectedDate?.date]);
+  }, []);
 
   return (
     <Modal open={true} hideBackdrop>
@@ -99,14 +103,14 @@ export default function DatePicker({ styles, range, toggleFn }: DatePickerProps)
         style={{ height: '359px', width: '500px' }}
       >
         {/* Dynamic Dates section */}
-        <div className="flex items-center justify-between w-full h-10 px-2 py-4 space-x-2 border border-gray-200">
-          <div className="flex items-center space-x-2">
+        {/* <div className="flex items-center justify-between w-full h-10 px-2 py-4 space-x-2 border border-gray-200">
+          <div className="flex space-x-2 items-center">
             <MdOutlineDateRange className="w-4 h-4 font-light" />
             <p className="font-semibold">
               {dayjs(selectedDate?.date.toDate().toISOString()).format('ddd, MMM DD, YYYY')}
             </p>
           </div>
-        </div>
+        </div> */}
         <DatePickerManualDates range={range} />
         <div className="flex items-center justify-center px-3 border-b" style={{ height: '250px' }}>
           {!showRecurring ? (
