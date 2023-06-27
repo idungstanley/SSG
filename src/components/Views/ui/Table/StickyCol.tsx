@@ -56,6 +56,8 @@ export function StickyCol({
   const { currTeamMemberId, statusId } = useAppSelector((state) => state.task);
   const { showTaskNavigation } = useAppSelector((state) => state.task);
 
+  console.log('statusId', statusId);
+
   const onClickTask = () => {
     navigate(`/${currentWorkspaceId}/tasks/h/${hubId}/t/${task.id}`, { replace: true });
     dispatch(
@@ -119,7 +121,7 @@ export function StickyCol({
         isListParent: isListParent,
         id: parentId as string,
         assignees: [currTeamMemberId] as string[],
-        task_status_id: statusId as string
+        task_status_id: task_status as string
       });
     }
   };

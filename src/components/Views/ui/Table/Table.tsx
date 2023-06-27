@@ -32,6 +32,7 @@ export function Table({ heads, data, label }: TableProps) {
   const columns = createHeaders(heads).filter((i) => !i.hidden);
   const { draggableTaskId } = useAppSelector((state) => state.list);
   const [listId, setListId] = useState<string>('');
+  const { statusId } = useAppSelector((state) => state.task);
 
   const { data: list } = UseGetListDetails({ activeItemId: listId, activeItemType: 'list' });
 
@@ -203,7 +204,7 @@ export function Table({ heads, data, label }: TableProps) {
                       key={i.id}
                       isListParent={true}
                       parentId={data[0].list_id}
-                      task_status={dataSpread[0].status.name}
+                      task_status={statusId}
                       handleClose={handleClose}
                     />
                   ) : null
