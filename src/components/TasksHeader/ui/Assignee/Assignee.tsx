@@ -1,18 +1,18 @@
-import { IoPeopleOutline } from 'react-icons/io5';
-import { MdOutlinePersonOutline } from 'react-icons/md';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { setShowFilterByAssigneeSlideOver } from '../../../../features/general/slideOver/slideOverSlice';
 import { useGetTeamMembers } from '../../../../features/settings/teamMembers/teamMemberService';
 import { setFilters } from '../../../../features/task/taskSlice';
-import { cl } from '../../../../utils';
 import { generateFilter } from '../Filter/lib/filterUtils';
 import Button from '../../../Buttons/Button';
+import Me from '../../../../assets/icons/me(1).svg';
+import AssigneeIcon from '../../../../assets/icons/Assignee.svg';
+import Icons from '../../../Icons/Icons';
 
 export function Assignee() {
   const dispatch = useAppDispatch();
   const { currentUserId } = useAppSelector((state) => state.auth);
   const { data } = useGetTeamMembers({ page: 1, query: '' });
-  const { showFilterByAssigneeSlideOver } = useAppSelector((state) => state.slideOver);
+  // const { showFilterByAssigneeSlideOver } = useAppSelector((state) => state.slideOver);
   const { filters } = useAppSelector((state) => state.task);
 
   const members = data?.data.team_members ?? [];
@@ -73,7 +73,7 @@ export function Assignee() {
         <span>Me</span>
       </button> */}
       <Button active={isMe} onClick={onToggleMe}>
-        <MdOutlinePersonOutline className="w-4 h-4" />
+        <Icons src={Me} />
         <span>Me</span>
       </Button>
 
@@ -88,7 +88,7 @@ export function Assignee() {
         <span>Assignee</span>
       </button> */}
       <Button active={isMe} onClick={() => dispatch(setShowFilterByAssigneeSlideOver(true))}>
-        <IoPeopleOutline className="w-4 h-4" />
+        <Icons src={AssigneeIcon} />
         <span>Assignee</span>
       </Button>
     </div>

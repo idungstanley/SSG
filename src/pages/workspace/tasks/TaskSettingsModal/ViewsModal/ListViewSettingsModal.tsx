@@ -8,13 +8,7 @@ import {
   getComfortableView,
   getComfortableViewWrap
 } from '../../../../../features/task/taskSlice';
-import { AiOutlineCaretDown, AiOutlinePlus } from 'react-icons/ai';
-// import { HiOutlineTable } from 'react-icons/hi';
-// import { MdOutlineSpaceDashboard } from 'react-icons/md';
-// import { BiCalendar } from 'react-icons/bi';
-// import { RiMapPin5Line } from 'react-icons/ri';
-// import { CgViewComfortable } from 'react-icons/cg';
-// import { GiChart } from 'react-icons/gi';
+import { AiOutlinePlus } from 'react-icons/ai';
 import { FiChevronRight } from 'react-icons/fi';
 import { CiEdit } from 'react-icons/ci';
 import listIcon from '../../../../../assets/icons/listIcon.png';
@@ -25,6 +19,8 @@ import timeChartIcon from '../../../../../assets/icons/timeChartIcon.png';
 import mapIcon from '../../../../../assets/icons/mapIcon.png';
 import gantIcon from '../../../../../assets/icons/gantIcon.png';
 import teamIcon from '../../../../../assets/icons/teamIcon.png';
+import Icons from '../../../../../components/Icons/Icons';
+import DropdownArrow from '../../../../../assets/icons/arrow_drop_down.svg';
 
 export default function ListViewSettingsModal({
   list,
@@ -151,7 +147,7 @@ export default function ListViewSettingsModal({
     <Menu>
       <div className="viewSettingsParent flex justify-center items-center">
         <Menu.Button>
-          <AiOutlineCaretDown className="text-primary-400 h-2.5 w-3" />
+          <Icons src={DropdownArrow} />
         </Menu.Button>
       </div>
 

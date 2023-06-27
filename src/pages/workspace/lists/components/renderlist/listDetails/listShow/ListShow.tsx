@@ -2,30 +2,31 @@ import React from 'react';
 import { BiShow } from 'react-icons/bi';
 import ShowHideSettings from '../../../../../tasks/TaskSettingsModal/ShowSettingsModal/ShowHideSettings';
 import Button from '../../../../../../../components/Buttons/Button';
+import Show from '../../../../../../../assets/icons/Watchers.svg';
+import Icons from '../../../../../../../components/Icons/Icons';
 
 export default function ListShow({ changeViews }: { changeViews: string }) {
   return (
     <div className="flex items-center justify-start space-x-1">
-      {/* <span className=" space-x-1 flex items-center pb-2 pt-1 mb-2  text-sm  cursor-pointer bg-gray-200 rounded-sm"> */}
       <Button active={false}>
         <span>
-          <BiShow className="flex-shrink-0 w-5 h-4" aria-hidden="true" />
+          <Icons src={Show} />
         </span>
-        <span className="group  flex items-center text-sm  cursor-pointer gap-2 font-bold">
+        <span className="font-bold" style={{ fontSize: '13px' }}>
           {changeViews}
-          <span className="">
-            <ShowHideSettings
-              scrollByEachGroup="Scroll By Each Group"
-              splitSubTask="Split Sub Task"
-              verticalGridLines="Vertical Gridlines"
-              entityLocation="Entity Location"
-              subTaskParentsNames="Subtask Parent Names"
-              closedSubtask="Closed Subtask"
-              TaskInMultipleLists="Task In Multiple Lista"
-              subTaskInMultipleLists="Subtask In Multiple Lists"
-              emptyStatuses="Empty Statuses"
-            />
-          </span>
+        </span>
+        <span className="group cursor-pointer gap-2 font-bold">
+          <ShowHideSettings
+            scrollByEachGroup="Scroll By Each Group"
+            splitSubTask="Split Sub Task"
+            verticalGridLines="Vertical Gridlines"
+            entityLocation="Entity Location"
+            subTaskParentsNames="Subtask Parent Names"
+            closedSubtask="Closed Subtask"
+            TaskInMultipleLists="Task In Multiple Lista"
+            subTaskInMultipleLists="Subtask In Multiple Lists"
+            emptyStatuses="Empty Statuses"
+          />
         </span>
       </Button>
       {/* </span> */}
