@@ -35,8 +35,8 @@ export function Row({ task, columns, paddingLeft = 0, parentId, task_status, han
   const newSubTask: ITaskFullList = {
     archived_at: null,
     assignees: undefined,
-    avatar_path: 'rwfrwef',
-    created_at: '2023-03-13T12:43:57.000000Z',
+    avatar_path: '',
+    created_at: '',
     custom_fields: [],
     deleted_at: null,
     description: null,
@@ -46,28 +46,28 @@ export function Row({ task, columns, paddingLeft = 0, parentId, task_status, han
     has_descendants: false,
     id: '0',
     list: {
-      id: 'a7ffe74c-af2a-41b7-89a9-f2762dd32f8b',
-      name: 'LW',
-      parents: { hubs: Array(1), wallets: Array(1), lists: Array(1) }
+      id: '',
+      name: '',
+      parents: { hubs: [], wallets: [], lists: [] }
     },
-    list_id: 'a7ffe74c-af2a-41b7-89a9-f2762dd32f8b',
+    list_id: '',
     name: 'Add Subtask',
     parent_id: null,
     priority: 'low',
     start_date: null,
     status: {
-      color: '#a5a5a5',
-      created_at: '2023-06-22T07:42:47.000000Z',
-      id: '13a9c751-409f-4ec9-a8e6-ee707ee27aaf',
-      model_id: '25cb5066-c707-4288-ba04-52c486574a87',
-      model_type: 'hub',
-      name: 'To do',
-      position: '0',
-      type: 'open',
-      updated_at: '2023-06-22T07:42:50.000000Z'
+      color: '',
+      created_at: '',
+      id: '',
+      model_id: '',
+      model_type: '',
+      name: '',
+      position: '',
+      type: '',
+      updated_at: ''
     },
     tags: [],
-    updated_at: '2023-06-22T07:42:47.000000Z'
+    updated_at: ''
   };
 
   const navigate = useNavigate();
