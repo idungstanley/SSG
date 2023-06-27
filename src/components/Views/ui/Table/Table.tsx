@@ -34,7 +34,6 @@ export function Table({ heads, data, label }: TableProps) {
   const columns = createHeaders(heads).filter((i) => !i.hidden);
   const { draggableTaskId } = useAppSelector((state) => state.list);
   const [listId, setListId] = useState<string>('');
-
   const { data: list } = UseGetListDetails({ activeItemId: listId, activeItemType: 'list' });
 
   const mouseMove = useCallback(
