@@ -46,12 +46,11 @@ export const operators: OperatorOption = {
 };
 
 const priorityValues = ['low', 'normal', 'hight', 'urgent'];
-const statusValues = ['todo', 'in progress', 'completed', 'archived'];
 export const unitValues: Unit[] = [units.d, units.m, units.w, units.y];
 
 export const filterConfig: FilterOption = {
   priority: { values: [...priorityValues], operators: [operators.eq, operators.ne] },
-  status: { values: [...statusValues], operators: [operators.eq, operators.ne] },
+  status: { values: [], operators: [operators.eq, operators.ne] }, // dynamic
   assignees: { operators: [operators.eq, operators.ns, operators.set], values: [] }, // dynamic
   tags: { operators: [operators.eq, operators.ns, operators.set], values: [] }, // dynamic
   start_date: {
