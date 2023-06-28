@@ -15,7 +15,9 @@ export default function Todo({ taskColField, task }: { task?: ImyTaskData; taskC
       className="w-full flex flex-col items-center justify-center h-full text-xs font-medium text-center text-white capitalize bg-gray-400"
       onClick={() => handleTaskStatus(task?.id as string)}
     >
-      {task ? <StatusNameDropdown TaskCurrentStatus={task.status} statusName={taskColField} /> : null}
+      {task ? (
+        <StatusNameDropdown TaskCurrentStatus={task.status} statusName={taskColField} parentId={task.list_id} />
+      ) : null}
     </div>
   );
 }
