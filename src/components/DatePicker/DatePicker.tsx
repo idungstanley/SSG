@@ -46,19 +46,19 @@ export default function DatePicker({ styles, range, toggleFn }: DatePickerProps)
 
   const handleClick = (date: dayjs.Dayjs) => {
     if (!selectedDate?.dateType) {
-      dispatch(setSelectedDate({ date: date, dateType: 'start' }));
+      dispatch(setSelectedDate({ date: date, dateType: 'due' }));
       dispatch(setTaskSelectedDate({ from: date }));
       dispatch(setHistoryMemory({ ...HistoryFilterMemory, timePoint: 'due' }));
     }
 
     if (HistoryFilterMemory?.timePoint && HistoryFilterMemory.timePoint === 'due') {
-      dispatch(setSelectedDate({ date: date, dateType: 'due' }));
+      dispatch(setSelectedDate({ date: date, dateType: 'start' }));
       dispatch(setTaskSelectedDate({ ...taskTime, to: date }));
       dispatch(setHistoryMemory({ ...HistoryFilterMemory, timePoint: 'start' }));
     }
 
     if (HistoryFilterMemory?.timePoint && HistoryFilterMemory.timePoint === 'start') {
-      dispatch(setSelectedDate({ date: date, dateType: 'start' }));
+      dispatch(setSelectedDate({ date: date, dateType: 'due' }));
       dispatch(setTaskSelectedDate({ from: date }));
       dispatch(setHistoryMemory({ ...HistoryFilterMemory, timePoint: 'due' }));
     }
@@ -102,12 +102,12 @@ export default function DatePicker({ styles, range, toggleFn }: DatePickerProps)
         <div className="flex items-center justify-center px-3 border-b" style={{ height: '295px' }}>
           <DatePickerSideBar currentDate={currentDate} />
 
-          <div className="p-1" style={{ height: '290px' }}>
+          <div className="p-1 " style={{ height: '290px' }}>
             <div className="flex items-center justify-between">
               <h1 className="select-none" style={{ fontSize: '14px', fontWeight: '500' }}>
                 {months[today.month()]}, {today.year()}
               </h1>
-              <div className="flex items-center gap-3 ">
+              <div className="flex items-center gap-3">
                 <GrFormPrevious
                   className="w-5 h-5 transition-all cursor-pointer hover:scale-105"
                   onClick={() => {
@@ -142,47 +142,50 @@ export default function DatePicker({ styles, range, toggleFn }: DatePickerProps)
                 return (
                   <div key={numericDayOfWeek} className="flex flex-col space-y-5">
                     <h3>{days[numericDayOfWeek]}</h3>
-                    <ul className="text-center grid place-content-center text-sm border-t p-0.5 space-y-5">
-                      {sortedDates.map((date) => {
-                        const isBlocked =
-                          taskTime?.from &&
-                          taskTime?.to &&
-                          (date.date.isSame(taskTime.from, 'day') || date.date.isAfter(taskTime.from, 'day')) &&
-                          date.date.isBefore(taskTime.to, 'day');
+                    <div className="">
+                      <ul className="text-center grid place-content-center text-sm border-t p-0.5 space-y-5">
+                        {sortedDates.map((date) => {
+                          const isBlocked =
+                            (taskTime?.from &&
+                              taskTime?.to &&
+                              (date.date.isSame(taskTime.from, 'day') || date.date.isAfter(taskTime.from, 'day')) &&
+                              date.date.isBefore(taskTime.to, 'day')) ||
+                            date.date.isSame(taskTime?.to, 'day');
 
-                        const isHoverBlocked =
-                          hoveredDate &&
-                          taskTime?.from &&
-                          (date.date.isSame(taskTime.from, 'day') || date.date.isAfter(taskTime.from, 'day')) &&
-                          date.date.isBefore(hoveredDate, 'day');
+                          const isHoverBlocked =
+                            hoveredDate &&
+                            taskTime?.from &&
+                            (date.date.isSame(taskTime.from, 'day') || date.date.isAfter(taskTime.from, 'day')) &&
+                            date.date.isBefore(hoveredDate, 'day');
 
-                        const isBlockedOrHoverBlocked = isBlocked || isHoverBlocked;
+                          const isBlockedOrHoverBlocked = isBlocked || isHoverBlocked;
 
-                        const isSelected =
-                          selectedDate?.date &&
-                          date.date.isSame(selectedDate.date, 'day') && // Compare full date, including month and year
-                          date.date.month() === today.month() && // Compare month
-                          date.date.year() === today.year(); // Compare year
+                          const isSelected =
+                            selectedDate?.date &&
+                            date.date.isSame(selectedDate.date, 'day') && // Compare full date, including month and year
+                            date.date.month() === today.month() && // Compare month
+                            date.date.year() === today.year(); // Compare year
 
-                        return (
-                          <li
-                            key={date.date.toISOString()}
-                            className={cn(
-                              'h-6 w-6 rounded-full grid place-content-center hover:bg-purple-300 hover:text-white transition-all cursor-pointer select-none',
-                              date.currentMonth ? '' : 'text-gray-300',
-                              date.today ? 'bg-red-400 text-white rounded-full' : '',
-                              isSelected ? 'bg-purple-400 text-white' : '',
-                              isBlockedOrHoverBlocked ? 'bg-purple-400 text-white rounded-none w-full' : ''
-                            )}
-                            onClick={() => handleClick(date.date)}
-                            onMouseEnter={() => handleHover(date.date)}
-                            onMouseLeave={() => setHovered(null)}
-                          >
-                            {date.date.format('DD')}
-                          </li>
-                        );
-                      })}
-                    </ul>
+                          return (
+                            <li
+                              key={date.date.toISOString()}
+                              className={cn(
+                                'h-6 w-6 rounded-full grid place-content-center hover:bg-purple-300 hover:text-white transition-all cursor-pointer select-none',
+                                date.currentMonth ? '' : 'text-gray-300',
+                                date.today ? 'bg-red-400 text-white rounded-full' : '',
+                                isSelected ? 'bg-purple-400 text-white' : '',
+                                isBlockedOrHoverBlocked ? 'bg-purple-400 text-white rounded-none w-full' : ''
+                              )}
+                              onClick={() => handleClick(date.date)}
+                              onMouseEnter={() => handleHover(date.date)}
+                              onMouseLeave={() => setHovered(null)}
+                            >
+                              {date.date.format('DD')}
+                            </li>
+                          );
+                        })}
+                      </ul>
+                    </div>
                   </div>
                 );
               })}
