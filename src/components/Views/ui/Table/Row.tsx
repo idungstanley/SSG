@@ -62,7 +62,7 @@ export function Row({ task, columns, paddingLeft = 0, parentId, task_status, isL
       id: '',
       model_id: '',
       model_type: '',
-      name: '',
+      name: task.status.name,
       position: '',
       type: '',
       updated_at: ''

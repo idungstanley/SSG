@@ -7,6 +7,7 @@ import { UseUpdateTaskStatusService2 } from '../../features/task/taskService';
 import ToolTip from '../Tooltip';
 import { useAbsolute } from '../../hooks/useAbsolute';
 import { Status } from '../../features/task/interface.tasks';
+import { UseGetListDetails } from '../../features/list/listService';
 interface statusType {
   id: number;
   title: string;
@@ -18,15 +19,26 @@ interface statusType {
 interface StatusDropdownProps {
   TaskCurrentStatus: Status;
   statusName?: Status;
+  parentId?: string;
 }
 
-export default function StatusNameDropdown({ TaskCurrentStatus, statusName }: StatusDropdownProps) {
+export default function StatusNameDropdown({ TaskCurrentStatus, statusName, parentId }: StatusDropdownProps) {
+  const { currentTaskStatusId } = useAppSelector((state) => state.task);
+  const { data: list } = UseGetListDetails({ activeItemId: parentId, activeItemType: 'list' });
+
+  const task_status_id = (status: string) =>
+    list?.data.list.task_statuses.map((statuses) => {
+      if (statuses.name == status) {
+        handleUpdateTaskStatus(statuses.id);
+      }
+    });
+
   const statusList: statusType[] = [
     {
       id: 1,
       title: 'Todo',
       handleClick: () => {
-        handleUpdateTaskStatus('todo');
+        task_status_id('To do');
       },
       color: '#d3d3d3',
       bg: 'gray'
@@ -35,7 +47,7 @@ export default function StatusNameDropdown({ TaskCurrentStatus, statusName }: St
       id: 2,
       title: 'In Progress',
       handleClick: () => {
-        handleUpdateTaskStatus('in progress');
+        task_status_id('In progress');
       },
       color: '#a875ff',
       bg: 'purple'
@@ -44,7 +56,7 @@ export default function StatusNameDropdown({ TaskCurrentStatus, statusName }: St
       id: 3,
       title: 'Archived',
       handleClick: () => {
-        handleUpdateTaskStatus('archived');
+        task_status_id('Archived');
       },
       color: '#f7cb04',
       bg: 'yellow'
@@ -53,13 +65,12 @@ export default function StatusNameDropdown({ TaskCurrentStatus, statusName }: St
       id: 4,
       title: 'Completed',
       handleClick: () => {
-        handleUpdateTaskStatus('completed');
+        task_status_id('Completed');
       },
       color: '#6bc951',
       bg: 'green'
     }
   ];
-  const { currentTaskStatusId } = useAppSelector((state) => state.task);
 
   const { mutate } = UseUpdateTaskStatusService2();
 
