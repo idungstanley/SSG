@@ -168,6 +168,7 @@ export default function HubItem({
             className="absolute right-0 flex items-center pr-1 space-x-1 text-black opacity-0 group-hover:opacity-100"
             onClick={(e) => e.stopPropagation()}
           >
+            <AiOutlinePlus onClick={() => handleItemAction(item.id, item.name)} className="cursor-pointer" />
             <AiOutlineEllipsis
               onClick={(e) => {
                 handleHubSettings(item.id, item.name, e);
@@ -175,7 +176,6 @@ export default function HubItem({
               className="cursor-pointer"
               id="menusettings"
             />
-            <AiOutlinePlus onClick={() => handleItemAction(item.id, item.name)} className="cursor-pointer" />
           </div>
         </div>
       </div>

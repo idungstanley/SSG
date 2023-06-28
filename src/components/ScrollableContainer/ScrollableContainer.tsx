@@ -154,7 +154,7 @@ export function ScrollableContainer({ children, ...props }: CustomScrollableCont
         <div />
 
         <div className="flex items-center space-x-2">
-          <div className="flex mr-2">
+          <div className="flex gap-1 ml-2 bg-gray-100 rounded">
             <button
               className="flex items-center justify-center w-4 h-4 bg-gray-200 rounded-full"
               onClick={() => handleScrollButton('left')}

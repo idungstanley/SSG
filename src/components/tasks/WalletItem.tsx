@@ -164,12 +164,12 @@ export default function WalletItem({
             className="absolute right-0 flex items-center space-x-1 opacity-0 group-hover:opacity-100"
             onClick={(e) => e.stopPropagation()}
           >
+            <AiOutlinePlus onClick={() => handleItemAction(wallet.id, wallet.name)} className="cursor-pointer" />
             <AiOutlineEllipsis
               className="cursor-pointer"
               onClick={(e) => handleWalletSettings(wallet.id, wallet.name, e)}
               id="menusettings"
             />
-            <AiOutlinePlus onClick={() => handleItemAction(wallet.id, wallet.name)} className="cursor-pointer" />
           </div>
         </div>
       </section>
