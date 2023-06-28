@@ -60,6 +60,8 @@ export function Item({ filter, initialFilters }: ItemProps) {
           values={initialFilters[key].values}
           onSelectOrDeselectAll={onSelectOrDeselectAll}
           showSearch
+          controlledOptionsDisplay
+          filterKey={key}
         />
       ) : null}
 

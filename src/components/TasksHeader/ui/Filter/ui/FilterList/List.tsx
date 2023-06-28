@@ -30,8 +30,18 @@ export function List() {
     if (teamMembers?.length && tags?.length) {
       setInitialFilters((prev) => ({
         ...prev,
-        assignees: { ...prev.assignees, values: [...teamMembers.map((i) => ({ value: i.user.name, id: i.id }))] },
-        tags: { ...prev.tags, values: [...tags.map((i) => ({ value: i.name, id: i.id }))] }
+        assignees: {
+          ...prev.assignees,
+          values: [
+            ...teamMembers.map((i) => ({
+              value: i.user.name,
+              id: i.id,
+              color: i.user.color,
+              initials: i.user.initials
+            }))
+          ]
+        },
+        tags: { ...prev.tags, values: [...tags.map((i) => ({ value: i.name, id: i.id, color: i.color }))] }
       }));
     }
 
