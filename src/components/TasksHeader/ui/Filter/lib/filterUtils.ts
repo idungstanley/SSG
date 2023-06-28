@@ -86,3 +86,10 @@ export const selectOrDeselectAllFilter = (
 
     return i;
   });
+
+export const filterUniqueValues = (initialValues: FilterValue[], existingValues: FilterValue[]) => {
+  // create array of values or id's
+  const adjustedExistingValues = existingValues.map((i) => (isString(i) ? i : i.id));
+
+  return initialValues.filter((i) => !adjustedExistingValues.includes(isString(i) ? i : i.id));
+};

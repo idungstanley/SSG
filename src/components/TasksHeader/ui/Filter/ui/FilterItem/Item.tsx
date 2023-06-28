@@ -4,7 +4,7 @@ import { ADDITIONAL_OPERATORS, unitValues } from '../../config/filterConfig';
 import { FilterId, FilterOption, FilterWithId, onChangeProps, onSelectOrDeselectAllProps } from '../../types/filters';
 import { Label } from './Label';
 import { ListBox } from '../ListBox';
-import { modifyFilters, selectOrDeselectAllFilter } from '../../lib/filterUtils';
+import { filterUniqueValues, modifyFilters, selectOrDeselectAllFilter } from '../../lib/filterUtils';
 import { DeleteItem } from './DeleteItem';
 import { useState } from 'react';
 
@@ -61,14 +61,14 @@ export function Item({ filter, initialFilters }: ItemProps) {
         <ListBox
           setSelected={(newValue) => onChange({ newValue, id, type: 'value' })}
           selected={values}
-          values={initialFilters[key].values}
+          values={filterUniqueValues(initialFilters[key].values, values)}
           onSelectOrDeselectAll={onSelectOrDeselectAll}
           showSearch
           controlledOptionsDisplay
           filterKey={key}
         >
           {/* show additional option only for number of values 2 or more */}
-          {initialFilters[key].values.length > 1 ? (
+          {values.length > 1 ? (
             <ListBox.Additional
               selected={additionalOperator}
               setSelected={setAdditionalOperator}
