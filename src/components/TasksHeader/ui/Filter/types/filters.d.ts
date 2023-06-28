@@ -8,6 +8,12 @@ export interface onChangeProps {
   type: ValueType;
 }
 
+export interface onSelectOrDeselectAllProps {
+  newValues: FilterValue[];
+  id: Id;
+  type: 'select' | 'deselect';
+}
+
 // operators
 type OperatorValue =
   | 'is'
@@ -95,7 +101,7 @@ interface Operator {
 
 export type OperatorOption = Record<OperatorKey, Operator>;
 
-type FilterValue = string | { id: string; value: string };
+type FilterValue = string | { id: string; value: string; color?: string; initials?: string };
 type FilterId = number;
 type FilterKey = TaskKey | string; // string for custom fields
 
@@ -104,6 +110,13 @@ interface Filter {
   values: FilterValue[];
   operators: Operator[];
   units?: Unit[];
+}
+
+export type FiltersOption = 'and' | 'or';
+
+export interface FilterFieldsWithOption {
+  fields: FilterWithId[];
+  option: FiltersOption;
 }
 
 export interface FilterWithId {
