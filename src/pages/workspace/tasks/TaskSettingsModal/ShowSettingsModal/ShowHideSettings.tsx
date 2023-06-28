@@ -1,8 +1,9 @@
 import React, { Fragment, useState } from 'react';
 import { Menu, Transition } from '@headlessui/react';
 import { BsChevronRight } from 'react-icons/bs';
-import { AiOutlineCaretDown } from 'react-icons/ai';
 import { FiChevronRight } from 'react-icons/fi';
+import Icons from '../../../../../components/Icons/Icons';
+import DropDown from '../../../../../assets/icons/arrow_drop_down_black.svg';
 
 interface IShowHideSettings {
   scrollByEachGroup: string;
@@ -92,7 +93,7 @@ export default function ShowHideSettings({
     <Menu>
       <div className="viewSettingsParent flex justify-center items-center">
         <Menu.Button>
-          <AiOutlineCaretDown className="text-gray-500 h-2.5 w-3" />
+          <Icons src={DropDown} />
         </Menu.Button>
       </div>
 

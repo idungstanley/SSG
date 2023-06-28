@@ -44,15 +44,13 @@ export default function DatePicker({ styles, range, toggleFn }: DatePickerProps)
     }
   };
 
-  const calendarTime = () => setInterval(() => setTime(dayjs().format(`${date_format?.toUpperCase()} h:mm A`)), 60000);
+  const calendarTime = () => setInterval(() => setTime(dayjs().format('ddd, DD MMM YYYY h:mm A')), 60000);
 
   const handleClick = (date: dayjs.Dayjs) => {
     if (!selectedDate?.dateType) {
       dispatch(setSelectedDate({ date: date, dateType: 'start' }));
-      if (!date.isSame(today, 'day')) {
-        dispatch(setTaskSelectedDate({ from: date }));
-        dispatch(setHistoryMemory({ ...HistoryFilterMemory, timePoint: 'due' }));
-      }
+      dispatch(setTaskSelectedDate({ from: date }));
+      dispatch(setHistoryMemory({ ...HistoryFilterMemory, timePoint: 'due' }));
     }
 
     if (HistoryFilterMemory?.timePoint && HistoryFilterMemory.timePoint === 'due') {
@@ -75,7 +73,7 @@ export default function DatePicker({ styles, range, toggleFn }: DatePickerProps)
     }
   };
 
-  const dates = generateDate();
+  const dates = generateDate(today.month());
   const groupedDates = groupDatesByDayOfWeek(dates);
   const startDay = 0; // Wednesday (0 = Sunday, 1 = Monday, ..., 6 = Saturday)
   const sortedKeys = Object.keys(groupedDates).sort((a, b) => {
@@ -102,17 +100,8 @@ export default function DatePicker({ styles, range, toggleFn }: DatePickerProps)
         }
         style={{ height: '359px', width: '500px' }}
       >
-        {/* Dynamic Dates section */}
-        {/* <div className="flex items-center justify-between w-full h-10 px-2 py-4 space-x-2 border border-gray-200">
-          <div className="flex space-x-2 items-center">
-            <MdOutlineDateRange className="w-4 h-4 font-light" />
-            <p className="font-semibold">
-              {dayjs(selectedDate?.date.toDate().toISOString()).format('ddd, MMM DD, YYYY')}
-            </p>
-          </div>
-        </div> */}
         <DatePickerManualDates range={range} />
-        <div className="flex items-center justify-center px-3 border-b" style={{ height: '250px' }}>
+        <div className="flex items-center justify-center px-3 border-b" style={{ height: '275px' }}>
           {!showRecurring ? (
             <DatePickerSideBar currentDate={currentDate} />
           ) : (
@@ -177,6 +166,12 @@ export default function DatePicker({ styles, range, toggleFn }: DatePickerProps)
 
                         const isBlockedOrHoverBlocked = isBlocked || isHoverBlocked;
 
+                        const isSelected =
+                          selectedDate?.date &&
+                          date.date.isSame(selectedDate.date, 'day') && // Compare full date, including month and year
+                          date.date.month() === today.month() && // Compare month
+                          date.date.year() === today.year(); // Compare year
+
                         return (
                           <li
                             key={date.date.toISOString()}
@@ -185,7 +180,7 @@ export default function DatePicker({ styles, range, toggleFn }: DatePickerProps)
                               date.currentMonth ? '' : 'text-gray-500',
                               date.today ? 'bg-red-400 text-white rounded-full' : '',
                               date.currentWeek ? 'bg-gray-300 text-white' : '',
-                              selectedDate?.date.date() === date.date.date() ? 'bg-purple-400 text-white' : '',
+                              isSelected ? 'bg-purple-400 text-white' : '',
                               isBlockedOrHoverBlocked ? 'bg-purple-400 text-white rounded-none' : ''
                             )}
                             onClick={() => handleClick(date.date)}
