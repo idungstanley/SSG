@@ -36,6 +36,11 @@ export default function StatusNameDropdown({ TaskCurrentStatus, statusName, pare
     mutate(updateStatusMutation);
   };
 
+  const sortedStatuses = list?.data.list.task_statuses.sort((a, b) => {
+    const positionA = typeof a.position === 'number' ? a.position : 0;
+    const positionB = typeof b.position === 'number' ? b.position : 0;
+    return positionA - positionB;
+  });
   const [isOpen, setIsOpen] = useState(false);
 
   function closeModal() {
@@ -63,7 +68,7 @@ export default function StatusNameDropdown({ TaskCurrentStatus, statusName, pare
         <Dialog as="div" className="relative z-10" onClose={closeModal}>
           <div style={{ ...cords }} className="fixed overflow-y-auto">
             <div className="flex-col border px-2 h-fit py-1 outline-none flex items-center justify-center text-center mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none">
-              {list?.data.list.task_statuses.map((statuses) => (
+              {sortedStatuses?.map((statuses) => (
                 <button
                   key={statuses.id}
                   type="button"
