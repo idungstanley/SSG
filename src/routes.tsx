@@ -182,17 +182,6 @@ export const routes = (user: IUser | null) => {
         { path: 'shared', element: <SharedPage /> },
         { path: 'search', element: <SearchPage /> },
         ...inbox
-        // { path: 'tasks/h/:hubId', element: <RenderHubs /> },
-        // { path: 'tasks/h/:hubId/t/:taskId', element: <RenderHubs /> },
-        // { path: 'tasks/w/:walletId', element: <RenderWallets /> },
-        // { path: 'tasks/w/:walletId/t/:taskId', element: <RenderWallets /> },
-        // { path: 'tasks/l/:listId', element: <RenderList /> },
-        // { path: 'tasks/l/:listId/t/:taskId', element: <RenderList /> },
-        // { path: 't/:taskId', element: <RenderTaskModal /> },
-        // ...inbox,
-        // { path: 'shared', element: <SharedPage /> },
-        // { path: 'search', element: <SearchPage /> },
-        // ...inbox
       ]
     },
     {

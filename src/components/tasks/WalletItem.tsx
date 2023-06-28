@@ -35,7 +35,7 @@ interface WalletItemProps {
   walletType: string;
   index?: number;
   isSticky?: boolean;
-  topNumber?: string;
+  topNumber?: number;
   zNumber?: string;
   stickyButtonIndex?: number | undefined;
 }
@@ -49,7 +49,7 @@ export default function WalletItem({
   index,
   isSticky,
   stickyButtonIndex,
-  topNumber = '0',
+  topNumber = 0,
   zNumber
 }: WalletItemProps) {
   const { activeItemId } = useAppSelector((state) => state.workspace);
@@ -101,7 +101,7 @@ export default function WalletItem({
         } ${isSticky && stickyButtonIndex === index ? 'sticky bg-white' : ''}`}
         onClick={() => handleShowSubWallet(wallet.id, index)}
         style={{
-          top: isSticky ? topNumber : '',
+          top: isSticky ? `${topNumber}px` : '',
           zIndex: isSticky ? zNumber : '1'
         }}
       >
