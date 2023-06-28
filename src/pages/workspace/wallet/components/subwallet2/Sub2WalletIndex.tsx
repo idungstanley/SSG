@@ -8,6 +8,7 @@ import { useAppSelector } from '../../../../../app/hooks';
 import WalletItem from '../../../../../components/tasks/WalletItem';
 import ListItem from '../../../../../components/tasks/ListItem';
 import LastListIndex from './LastListIndex';
+import { IList } from '../../../../../features/hubs/hubs.interfaces';
 
 interface SubWalletIndexProps {
   paddingLeft?: string | number;
@@ -65,7 +66,7 @@ function SubWalletIndex({ paddingLeft = '32', currWalId }: SubWalletIndexProps) 
           ) : null}
         </div>
       ))}
-      {subwallet?.data?.lists.map((list: dataProps) => (
+      {subwallet?.data?.lists.map((list: IList) => (
         <div key={list.id}>
           <ListItem list={list} paddingLeft={Number(paddingLeft) + 15} />
           {showMenuDropdown === list.id ? <MenuDropdown /> : null}

@@ -50,6 +50,7 @@ export interface IWallet {
   hub_id: string;
   parent_id: null | string;
   updated_at: string;
+  tasks_count: number;
   created_at: string;
   archived_at: null | string;
   deleted_at: null | string;
@@ -63,6 +64,7 @@ export interface IList {
   deleted_at: null | string;
   id: string;
   name: string;
+  tasks_count: number;
   updated_at: string;
   created_at: string;
 }
