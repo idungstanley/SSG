@@ -43,7 +43,7 @@ export function List() {
           ]
         },
         tags: { ...prev.tags, values: [...tags.map((i) => ({ value: i.name, id: i.id, color: i.color }))] },
-        status: { ...prev.status, values: [...taskStatuses.map((i) => i.name.toLowerCase())] }
+        status: { ...prev.status, values: [...taskStatuses.map((i) => ({ value: i.name.toLowerCase(), id: i.id }))] }
       }));
     }
 
