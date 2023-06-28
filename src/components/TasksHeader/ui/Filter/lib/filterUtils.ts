@@ -1,6 +1,7 @@
 import { isString } from '../../../../../utils/typeGuards';
 import { filterConfig, operators } from '../config/filterConfig';
 import {
+  FilterId,
   FilterKey,
   FilterValue,
   FilterWithId,
@@ -87,9 +88,17 @@ export const selectOrDeselectAllFilter = (
     return i;
   });
 
-export const filterUniqueValues = (initialValues: FilterValue[], existingValues: FilterValue[]) => {
+export const filterUniqueValues = (
+  initialValues: FilterValue[],
+  existingValues: FilterWithId[],
+  id: FilterId,
+  key: FilterKey
+) => {
   // create array of values or id's
-  const adjustedExistingValues = existingValues.map((i) => (isString(i) ? i : i.id));
+  const adjustedExistingValues = existingValues
+    .filter((i) => i.id !== id && i.key === key)
+    .map((i) => i.values)
+    .flat();
 
   return initialValues.filter((i) => !adjustedExistingValues.includes(isString(i) ? i : i.id));
 };

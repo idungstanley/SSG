@@ -9,7 +9,7 @@ interface AdditionalListBoxProps {
 
 export function AdditionalListBox({ selected, setSelected, values }: AdditionalListBoxProps) {
   return (
-    <div className="absolute top-0 right-1.5">
+    <div className="absolute top-0.5 right-1.5 z-10">
       <Listbox value={selected} onChange={setSelected}>
         <div className="relative mt-1 text-xs">
           <Listbox.Button className="relative w-full cursor-default rounded-lg bg-white p-1 text-left focus:outline-none border focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300">

@@ -61,7 +61,7 @@ export function Item({ filter, initialFilters }: ItemProps) {
         <ListBox
           setSelected={(newValue) => onChange({ newValue, id, type: 'value' })}
           selected={values}
-          values={filterUniqueValues(initialFilters[key].values, values)}
+          values={filterUniqueValues(initialFilters[key].values, filters, id, key)}
           onSelectOrDeselectAll={onSelectOrDeselectAll}
           showSearch
           controlledOptionsDisplay
