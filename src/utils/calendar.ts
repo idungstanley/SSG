@@ -27,8 +27,24 @@ export const generateDate = (
   const arrayOfDate: DateObject[] = [];
 
   // Calculate the start and end of the week
-  const startDate = startOfWeek || firstDateOfMonth.startOf('week');
-  const endDate = endOfWeek || lastDateOfMonth.endOf('week');
+  const startDate = startOfWeek || firstDateOfMonth.startOf('month'); // Adjusted to start from the first day of the week
+  const endDate = endOfWeek || lastDateOfMonth.endOf('week'); // Adjusted to end on the last day of the week
+
+  // Add dates from the previous month
+  const prevMonthLastDate = firstDateOfMonth.subtract(1, 'day');
+  const prevMonthStartDate = prevMonthLastDate.startOf('week');
+
+  for (let date = prevMonthStartDate; date.isBefore(firstDateOfMonth); date = date.add(1, 'day')) {
+    const isWeekend = date.day() === 0 || date.day() === 6;
+    arrayOfDate.push({
+      currentMonth: false, // Set currentMonth to false for dates from the previous month
+      date,
+      today: false,
+      currentWeek: false,
+      isWeekend,
+      dayOfWeek: date.day()
+    });
+  }
 
   // Add dates from the current month
   for (let date = startDate; date.isBefore(endDate) || date.isSame(endDate, 'day'); date = date.add(1, 'day')) {
@@ -39,6 +55,22 @@ export const generateDate = (
       date,
       today: date.toDate().toDateString() === currentDate.toDate().toDateString(),
       currentWeek: isCurrentWeek,
+      isWeekend,
+      dayOfWeek: date.day()
+    });
+  }
+
+  // Add dates from the next month
+  const nextMonthFirstDate = lastDateOfMonth.add(1, 'day');
+  const nextMonthEndDate = nextMonthFirstDate.endOf('week');
+
+  for (let date = nextMonthFirstDate; date.isBefore(nextMonthEndDate); date = date.add(1, 'day')) {
+    const isWeekend = date.day() === 0 || date.day() === 6;
+    arrayOfDate.push({
+      currentMonth: false, // Set currentMonth to false for dates from the next month
+      date,
+      today: false,
+      currentWeek: false,
       isWeekend,
       dayOfWeek: date.day()
     });
