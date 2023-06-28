@@ -4,6 +4,8 @@ import { FilterOption, OperatorOption, Unit, UnitOption } from '../types/filters
 export const SPECIAL_CHAR = '%%%';
 export const DEFAULT_FILTERS_OPTION = 'and';
 
+export const ADDITIONAL_OPERATORS = ['any', 'all'];
+
 const units: UnitOption = {
   d: { key: 'd', value: 'days' },
   w: { key: 'w', value: 'weeks' },

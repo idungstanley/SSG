@@ -1,11 +1,12 @@
 import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
 import { setFilterFields } from '../../../../../../features/task/taskSlice';
-import { unitValues } from '../../config/filterConfig';
+import { ADDITIONAL_OPERATORS, unitValues } from '../../config/filterConfig';
 import { FilterId, FilterOption, FilterWithId, onChangeProps, onSelectOrDeselectAllProps } from '../../types/filters';
 import { Label } from './Label';
 import { ListBox } from '../ListBox';
 import { modifyFilters, selectOrDeselectAllFilter } from '../../lib/filterUtils';
 import { DeleteItem } from './DeleteItem';
+import { useState } from 'react';
 
 interface ItemProps {
   filter: FilterWithId;
@@ -17,6 +18,9 @@ export function Item({ filter, initialFilters }: ItemProps) {
   const {
     filters: { fields: filters }
   } = useAppSelector((state) => state.task);
+
+  // ? mocked because the backend is not yet supported. must be in the filters state
+  const [additionalOperator, setAdditionalOperator] = useState(ADDITIONAL_OPERATORS[0]);
 
   const { key, values, operator, id } = filter;
 
@@ -62,7 +66,16 @@ export function Item({ filter, initialFilters }: ItemProps) {
           showSearch
           controlledOptionsDisplay
           filterKey={key}
-        />
+        >
+          {/* show additional option only for number of values 2 or more */}
+          {initialFilters[key].values.length > 1 ? (
+            <ListBox.Additional
+              selected={additionalOperator}
+              setSelected={setAdditionalOperator}
+              values={ADDITIONAL_OPERATORS}
+            />
+          ) : null}
+        </ListBox>
       ) : null}
 
       {/* count */}
