@@ -72,7 +72,7 @@ export default function Sidebar() {
       {/* sidebar */}
       <section
         style={{
-          width: userSettingsData?.sidebarWidth || sidebarWidthRD
+          width: showSidebar ? userSettingsData?.sidebarWidth : sidebarWidthRD
         }}
         ref={blockRef}
         className={`relative flex flex-col pr-1 border-r ${isDrag ? 'border-gray-500' : 'border-gray-300'}`}

@@ -6,14 +6,14 @@ import { setCreateListSlideOverVisibility } from '../../../../../../features/gen
 import { setSubDropdownMenu, setshowMenuDropdown } from '../../../../../../features/hubs/hubSlice';
 import { setCreateWlLink } from '../../../../../../features/workspace/workspaceSlice';
 import { createListService } from '../../../../../../features/list/listService';
+import { EntityType } from '../../../../../../utils/EntityTypes/EntityType';
 
 export default function CreateList() {
   const queryClient = useQueryClient();
   const dispatch = useAppDispatch();
   // const { currentItemId } = useAppSelector((state) => state.workspace);
-  const { showMenuDropdown, showMenuDropdownType, SubMenuId, SubMenuType, createWLID } = useAppSelector(
-    (state) => state.hub
-  );
+  const { selectedTreeDetails, createWLID } = useAppSelector((state) => state.hub);
+  const { type, id } = selectedTreeDetails;
   const { createWlLink } = useAppSelector((state) => state.workspace);
 
   const createList = useMutation(createListService, {
@@ -48,19 +48,8 @@ export default function CreateList() {
   const onSubmit = async () => {
     await createList.mutateAsync({
       listName: name,
-      hubId:
-        (createWlLink ? createWLID : null) ||
-        (showMenuDropdownType == 'hubs' ? showMenuDropdown : null) ||
-        (showMenuDropdownType == 'subhub' ? showMenuDropdown : null) ||
-        (SubMenuType == 'hubs' ? SubMenuId : null) ||
-        (SubMenuType == 'subhub' ? SubMenuId : null),
-      walletId:
-        (showMenuDropdownType == 'wallet' && !createWLID ? showMenuDropdown : null) ||
-        (showMenuDropdownType == 'subwallet' ? showMenuDropdown : null) ||
-        (showMenuDropdownType == 'subwallet3' ? showMenuDropdown : null) ||
-        (SubMenuType == 'wallet' ? SubMenuId : null) ||
-        (SubMenuType == 'subwallet2' ? SubMenuId : null) ||
-        (SubMenuType == 'subwallet3' ? SubMenuId : null)
+      hubId: (createWlLink ? createWLID : null) || type === EntityType.hub ? id : null,
+      walletId: type === EntityType.wallet ? id : null
     });
   };
 

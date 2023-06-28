@@ -16,7 +16,13 @@ export default function Archived({ taskColField, task }: renderDataProps) {
       className="flex flex-col w-full items-center justify-center h-full px-1 text-xs font-medium text-center text-white capitalize bg-yellow-500"
       onClick={() => handleTaskStatus(task?.id as string)}
     >
-      {task ? <StatusNameDropdown TaskCurrentStatus={task.status} statusName={taskColField as Status} /> : null}
+      {task ? (
+        <StatusNameDropdown
+          TaskCurrentStatus={task.status}
+          statusName={taskColField as Status}
+          parentId={task.list_id}
+        />
+      ) : null}
     </div>
   );
 }
