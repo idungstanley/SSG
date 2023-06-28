@@ -36,10 +36,11 @@ export default function WList({
   const { showExtendedBar } = useAppSelector((state) => state.workspace);
   const [stickyButtonIndex, setStickyButtonIndex] = useState<number | undefined>(-1);
   const navigate = useNavigate();
-  const { walletId } = useParams();
+  const { walletId, listId } = useParams();
+  const id = walletId || listId;
   useEffect(() => {
-    if (walletId) {
-      setShowSubWallet(walletId);
+    if (id) {
+      setShowSubWallet(id);
     }
   }, []);
 

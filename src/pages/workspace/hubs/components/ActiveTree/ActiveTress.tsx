@@ -72,7 +72,7 @@ export default function ActiveTress() {
                       return item;
                     }
                   },
-                  id || listId
+                  listId || id
                 )
               ]
         );
