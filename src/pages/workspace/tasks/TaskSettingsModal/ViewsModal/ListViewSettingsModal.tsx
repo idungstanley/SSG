@@ -145,7 +145,7 @@ export default function ListViewSettingsModal({
 
   return (
     <Menu>
-      <div className="viewSettingsParent flex justify-center items-center">
+      <div className="flex items-center justify-center viewSettingsParent">
         <Menu.Button>
           <Icons src={DropdownArrow} />
         </Menu.Button>
@@ -162,7 +162,7 @@ export default function ListViewSettingsModal({
       >
         <Menu.Items
           style={{ zIndex: 61 }}
-          className="origin-top-right absolute mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none -ml-8 mt-6"
+          className="absolute w-48 mt-2 mt-6 -ml-8 origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
         >
           {ViewSettings.map((View) => (
             <Menu.Item
@@ -179,8 +179,8 @@ export default function ListViewSettingsModal({
               onMouseEnter={() => setViewId(View.id)}
             >
               {View.label !== 'Create New View' ? (
-                <button onClick={View.handleClick} className=" flex justify-between items-center w-full group ">
-                  <p className="flex items-center space-x-2 pl-2 text-md">
+                <button onClick={View.handleClick} className="flex items-center justify-between w-full  group">
+                  <p className="flex items-center pl-2 space-x-2 text-md">
                     <span className="p-0.5">{View.icon}</span> <span>{View.label}</span>
                   </p>
                   <p
@@ -197,7 +197,7 @@ export default function ListViewSettingsModal({
                 </button>
               ) : (
                 <button onClick={View.handleClick}>
-                  <p className="flex items-center space-x-2 border-t-2 pl-2 py-2">
+                  <p className="flex items-center py-2 pl-2 space-x-2 border-t-2">
                     <span className="bg-primary-200 p-0.5 ">
                       <AiOutlinePlus className=" text-primary-500" />
                     </span>
