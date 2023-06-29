@@ -56,11 +56,9 @@ export default function AdditionalHeader() {
           >
             <IoAlarmSharp className="text-purple-500" />
             <div className="items-center">
-              {duration.h < 10 ? `0${duration.h}` : duration.h}
-              {':'}
-              {duration.m < 10 ? `0${duration.m}` : duration.m}
-              {':'}
-              {duration.s < 10 ? `0${duration.s}` : duration.s}
+              {`${String(duration.h).padStart(2, '0')}:${String(duration.m).padStart(2, '0')}:${String(
+                duration.s
+              ).padStart(2, '0')}`}
             </div>
           </div>
         )}

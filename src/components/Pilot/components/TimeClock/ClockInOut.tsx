@@ -73,22 +73,17 @@ export default function ClockInOut() {
     ) {
       return (
         <div className="items-center">
-          {duration.h < 10 ? `0${duration.h}` : duration.h}
-          {':'}
-          {duration.m < 10 ? `0${duration.m}` : duration.m}
-          {':'}
-          {duration.s < 10 ? `0${duration.s}` : duration.s}
+          {`${String(duration.h).padStart(2, '0')}:${String(duration.m).padStart(2, '0')}:${String(duration.s).padStart(
+            2,
+            '0'
+          )}`}
         </div>
       );
     }
 
     return (
       <div className="items-center">
-        {time.h < 10 ? `0${time.h}` : time.h}
-        {':'}
-        {time.m < 10 ? `0${time.m}` : time.m}
-        {':'}
-        {time.s < 10 ? `0${time.s}` : time.s}
+        {`${String(time.h).padStart(2, '0')}:${String(time.m).padStart(2, '0')}:${String(time.s).padStart(2, '0')}`}
       </div>
     );
   }
