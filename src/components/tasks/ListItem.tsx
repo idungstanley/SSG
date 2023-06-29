@@ -5,7 +5,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { setPaletteDropDown } from '../../features/account/accountSlice';
 // import ListIcon from '../../assets/icons/ListIcon';
-import { closeMenu, getPrevName, setshowMenuDropdown } from '../../features/hubs/hubSlice';
+import { closeMenu, getPrevName, setSideBarCreateTaskListId, setshowMenuDropdown } from '../../features/hubs/hubSlice';
 import { UseEditListService } from '../../features/list/listService';
 import { setListPaletteColor } from '../../features/list/listSlice';
 import { setActiveEntity, setActiveEntityName, setActiveItem } from '../../features/workspace/workspaceSlice';
@@ -76,6 +76,7 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
   };
 
   const handleListSettings = (id: string, name: string, e: React.MouseEvent<HTMLButtonElement | SVGElement>) => {
+    dispatch(setSideBarCreateTaskListId(id));
     dispatch(
       setshowMenuDropdown({
         showMenuDropdown: id,
