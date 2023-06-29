@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { DragOverlay } from '@dnd-kit/core';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { ITaskFullList, Task } from '../../../../features/task/interface.tasks';
-import { setCurrTeamMemId, setStatusId, setUpdateCords } from '../../../../features/task/taskSlice';
+import { setCurrTaskListId, setCurrTeamMemId, setStatusId, setUpdateCords } from '../../../../features/task/taskSlice';
 import { useScroll } from '../../../../hooks/useScroll';
 import { listColumnProps } from '../../../../pages/workspace/tasks/component/views/ListColumns';
 import { MAX_COL_WIDTH, MIN_COL_WIDTH } from '../../config';
@@ -101,6 +101,7 @@ export function Table({ heads, data, label }: TableProps) {
   // get exact statusID
   useEffect(() => {
     setListId(data[0].list_id);
+    dispatch(setCurrTaskListId(data[0].list_id));
     const statusObj: ITask_statuses | undefined = list?.data.list.task_statuses.find(
       (statusObj: ITask_statuses) => statusObj?.name === dataSpread[0].status.name
     );
@@ -203,7 +204,7 @@ export function Table({ heads, data, label }: TableProps) {
                       task={i as ITaskFullList}
                       key={i.id}
                       isListParent={true}
-                      parentId={data[0].list_id}
+                      parentId={listId}
                       task_status={statusId}
                       handleClose={handleClose}
                     />

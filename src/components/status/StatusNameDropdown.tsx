@@ -8,23 +8,15 @@ import ToolTip from '../Tooltip';
 import { useAbsolute } from '../../hooks/useAbsolute';
 import { Status } from '../../features/task/interface.tasks';
 import { UseGetListDetails } from '../../features/list/listService';
-interface statusType {
-  id: number;
-  title: string;
-  handleClick: () => void;
-  color: string;
-  bg: string;
-}
 
 interface StatusDropdownProps {
   TaskCurrentStatus: Status;
   statusName?: Status;
-  parentId?: string;
 }
 
-export default function StatusNameDropdown({ TaskCurrentStatus, statusName, parentId }: StatusDropdownProps) {
-  const { currentTaskStatusId } = useAppSelector((state) => state.task);
-  const { data: list } = UseGetListDetails({ activeItemId: parentId, activeItemType: 'list' });
+export default function StatusNameDropdown({ TaskCurrentStatus, statusName }: StatusDropdownProps) {
+  const { currentTaskStatusId, currTaskListId } = useAppSelector((state) => state.task);
+  const { data: list } = UseGetListDetails({ activeItemId: currTaskListId, activeItemType: 'list' });
 
   const { mutate } = UseUpdateTaskStatusService2();
 
