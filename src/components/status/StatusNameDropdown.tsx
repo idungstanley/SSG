@@ -20,10 +20,10 @@ export default function StatusNameDropdown({ TaskCurrentStatus, statusName }: St
 
   const { mutate } = UseUpdateTaskStatusService2();
 
-  const handleUpdateTaskStatus = (status: string) => {
+  const handleUpdateTaskStatus = (statusId: string) => {
     const updateStatusMutation = {
       task_id: currentTaskStatusId,
-      statusDataUpdate: status
+      statusDataUpdate: statusId
     };
     mutate(updateStatusMutation);
   };

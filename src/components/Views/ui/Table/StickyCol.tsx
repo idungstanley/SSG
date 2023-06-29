@@ -9,7 +9,12 @@ import { UseUpdateTaskService, useAddTask } from '../../../../features/task/task
 import StatusDropdown from '../../../status/StatusDropdown';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { setShowPilotSideOver } from '../../../../features/general/slideOver/slideOverSlice';
-import { setCurrentTaskId, setShowTaskNavigation, setTaskIdForPilot } from '../../../../features/task/taskSlice';
+import {
+  setCurrentTaskId,
+  setCurrentTaskStatusId,
+  setShowTaskNavigation,
+  setTaskIdForPilot
+} from '../../../../features/task/taskSlice';
 import { setActiveItem } from '../../../../features/workspace/workspaceSlice';
 import { useSortable } from '@dnd-kit/sortable';
 import { UniqueIdentifier } from '@dnd-kit/core';
@@ -168,7 +173,9 @@ export function StickyCol({
                 />
               )}
             </button>
-            <StatusDropdown TaskCurrentStatus={task.status} />
+            <div onClick={() => dispatch(setCurrentTaskStatusId(task.id as string))}>
+              <StatusDropdown TaskCurrentStatus={task.status} />
+            </div>
             <div className="flex flex-col items-start justify-start space-y-1 pl-2">
               <p
                 className="flex text-left"
