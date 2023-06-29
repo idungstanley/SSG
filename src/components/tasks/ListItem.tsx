@@ -75,14 +75,11 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
       });
     }
   };
-  const handleClick = (label: string) => {
-    console.log(`Clicked: ${label}`);
-  };
 
   const tooltipItems = [
-    { label: 'Todo', count: 1, onClick: () => handleClick('Item 1') },
-    { label: 'In Progress', count: 1, onClick: () => handleClick('Item 2') },
-    { label: 'Completed', count: 1, onClick: () => handleClick('Item 3') }
+    { label: 'Todo', count: 1, onClick: () => ({}) },
+    { label: 'In Progress', count: 1, onClick: () => ({}) },
+    { label: 'Completed', count: 1, onClick: () => ({}) }
   ];
 
   const handleListSettings = (id: string, name: string, e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
@@ -109,8 +106,6 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
   const { isOver, setNodeRef } = useDroppable({
     id: list.id
   });
-
-  console.log(list);
 
   return (
     <>
