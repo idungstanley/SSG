@@ -24,7 +24,6 @@ import { useSortable } from '@dnd-kit/sortable';
 import ToolTip from '../../../../../../components/Tooltip/Tooltip';
 import { useParams } from 'react-router-dom';
 import { cl } from '../../../../../../utils';
-import ToolTip from '../../../../../../components/Tooltip';
 
 export default function TaskName({
   taskColField,
