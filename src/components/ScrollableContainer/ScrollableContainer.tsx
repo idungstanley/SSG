@@ -154,12 +154,20 @@ export function ScrollableContainer({ children, ...props }: CustomScrollableCont
         <div />
 
         <div className="flex items-center space-x-2">
-          <button
-            className="flex items-center justify-center w-4 h-4 bg-gray-200 rounded-full"
-            onClick={() => handleScrollButton('left')}
-          >
-            <ChevronLeftIcon className="w-3 h-3 text-gray-700" />
-          </button>
+          <div className="flex gap-1 ml-2 bg-gray-100 rounded">
+            <button
+              className="flex items-center justify-center w-4 h-4 bg-gray-200 rounded-full"
+              onClick={() => handleScrollButton('left')}
+            >
+              <ChevronLeftIcon className="w-3 h-3 text-gray-700" />
+            </button>
+            <button
+              className="flex items-center justify-center w-4 h-4 bg-gray-200 rounded-full"
+              onClick={() => handleScrollButton('right')}
+            >
+              <ChevronRightIcon className="w-3 h-3 text-gray-700" />
+            </button>
+          </div>
 
           <div className="relative flex-grow block w-full h-3">
             <div
@@ -177,12 +185,20 @@ export function ScrollableContainer({ children, ...props }: CustomScrollableCont
               }}
             ></div>
           </div>
-          <button
-            className="flex items-center justify-center w-4 h-4 bg-gray-200 rounded-full"
-            onClick={() => handleScrollButton('right')}
-          >
-            <ChevronRightIcon className="w-3 h-3 text-gray-700" />
-          </button>
+          <div className="flex gap-1 ml-2 bg-gray-100 rounded">
+            <button
+              className="flex items-center justify-center w-4 h-4 bg-gray-200 rounded-full"
+              onClick={() => handleScrollButton('left')}
+            >
+              <ChevronLeftIcon className="w-3 h-3 text-gray-700" />
+            </button>
+            <button
+              className="flex items-center justify-center w-4 h-4 bg-gray-200 rounded-full"
+              onClick={() => handleScrollButton('right')}
+            >
+              <ChevronRightIcon className="w-3 h-3 text-gray-700" />
+            </button>
+          </div>
         </div>
       </div>
     </div>
