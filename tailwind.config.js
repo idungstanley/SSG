@@ -12,7 +12,10 @@ module.exports = {
       },
       colors: {
         ...colors,
-        primary: colors.fuchsia
+        primary: colors.fuchsia,
+        'alsoit-bg': '#f4f4f4',
+        'alsoit-bg-hover': '#BF00FF21',
+        'alsoit-bg-active': '#BF00FF21'
       },
       gridTemplateColumns: {
         sidebarItem: 'auto 1fr auto',

@@ -22,7 +22,6 @@ interface AssigneeItem {
 
 function AssigneeItem({ item, option, entity_id, teams, handleClose, isAssigned }: AssigneeItem) {
   const dispatch = useAppDispatch();
-
   const { mutate: onCheklistItemAssign } = UseChecklistItemAssignee();
   const handleAssignChecklist = (id: string) => {
     onCheklistItemAssign({
