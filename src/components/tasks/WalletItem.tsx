@@ -19,6 +19,8 @@ import { setCreateWlLink } from '../../features/workspace/workspaceSlice';
 import { ListColourProps } from './ListItem';
 import { useParams } from 'react-router-dom';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
+import PlusIcon from '../../assets/icons/PlusIcon';
+import ThreeDotIcon from '../../assets/icons/ThreeDotIcon';
 
 interface WalletItemProps {
   handleShowSubWallet: (id: string, index?: number) => void;
@@ -75,7 +77,7 @@ export default function WalletItem({
     dispatch(setPaletteDropDown({ show: true, paletteId: id, paletteType: 'wallet' }));
   };
 
-  const handleWalletSettings = (id: string, name: string, e: React.MouseEvent<SVGElement>) => {
+  const handleWalletSettings = (id: string, name: string, e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
     dispatch(setSelectedTreeDetails({ name, id, type: EntityType.wallet }));
     dispatch(setCreateWLID(null));
     dispatch(setCreateWlLink(false));
@@ -96,7 +98,7 @@ export default function WalletItem({
   return (
     <>
       <section
-        className={`bg-white items-center pr-1.5 text-sm group ${
+        className={`bg-white items-center truncate text-sm group ${
           wallet.id === activeItemId ? 'font-medium' : 'hover:bg-gray-100'
         } ${isSticky && stickyButtonIndex === index ? 'sticky bg-white' : ''}`}
         onClick={() => handleShowSubWallet(wallet.id, index)}
@@ -161,15 +163,19 @@ export default function WalletItem({
           </div>
           <div
             id="walletRight"
-            className="absolute right-0 flex items-center space-x-1 opacity-0 group-hover:opacity-100"
+            className="absolute right-0 flex items-center pr-1 space-x-1 opacity-0 group-hover:opacity-100"
             onClick={(e) => e.stopPropagation()}
           >
-            <AiOutlinePlus onClick={() => handleItemAction(wallet.id, wallet.name)} className="cursor-pointer" />
-            <AiOutlineEllipsis
+            <span onClick={() => handleItemAction(wallet.id, wallet.name)} className="cursor-pointer">
+              <PlusIcon />
+            </span>
+            <span
               className="cursor-pointer"
               onClick={(e) => handleWalletSettings(wallet.id, wallet.name, e)}
               id="menusettings"
-            />
+            >
+              <ThreeDotIcon />
+            </span>
           </div>
         </div>
       </section>

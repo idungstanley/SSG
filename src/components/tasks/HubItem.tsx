@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { AiOutlineEllipsis, AiOutlinePlus } from 'react-icons/ai';
 import { VscTriangleDown, VscTriangleRight } from 'react-icons/vsc';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { getPrevName, getSubMenu, setSelectedTreeDetails } from '../../features/hubs/hubSlice';
@@ -13,6 +12,8 @@ import SearchIconUpload from '../ColorPalette/component/SearchIconUpload';
 import { ListColourProps } from './ListItem';
 import { useParams } from 'react-router-dom';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
+import PlusIcon from '../../assets/icons/PlusIcon';
+import ThreeDotIcon from '../../assets/icons/ThreeDotIcon';
 
 interface TaskItemProps {
   item: {
@@ -25,7 +26,7 @@ interface TaskItemProps {
   handleClick: (id: string, index?: number) => void;
   showChildren: string | null | undefined;
   handleLocation: (id: string, name: string, index?: number) => void;
-  handleHubSettings: (id: string, name: string, e: React.MouseEvent<SVGElement>) => void;
+  handleHubSettings: (id: string, name: string, e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => void;
   index?: number;
   isSticky?: boolean;
   type: string;
@@ -168,14 +169,18 @@ export default function HubItem({
             className="absolute right-0 flex items-center pr-1 space-x-1 text-black opacity-0 group-hover:opacity-100"
             onClick={(e) => e.stopPropagation()}
           >
-            <AiOutlinePlus onClick={() => handleItemAction(item.id, item.name)} className="cursor-pointer" />
-            <AiOutlineEllipsis
+            <span onClick={() => handleItemAction(item.id, item.name)} className="cursor-pointer">
+              <PlusIcon />
+            </span>
+            <span
               onClick={(e) => {
                 handleHubSettings(item.id, item.name, e);
               }}
               className="cursor-pointer"
               id="menusettings"
-            />
+            >
+              <ThreeDotIcon />
+            </span>
           </div>
         </div>
       </div>
