@@ -58,8 +58,7 @@ export function StickyCol({
   const COL_BG = taskId === task.id ? ACTIVE_COL_BG : DEFAULT_COL_BG;
 
   const { mutate: onAdd } = useAddTask(parentId);
-  const { currTeamMemberId } = useAppSelector((state) => state.task);
-  const { showTaskNavigation } = useAppSelector((state) => state.task);
+  const { currTeamMemberId, showTaskNavigation, singleLineView } = useAppSelector((state) => state.task);
 
   const onClickTask = () => {
     navigate(`/${currentWorkspaceId}/tasks/h/${hubId}/t/${task.id}`, { replace: true });
@@ -161,7 +160,10 @@ export function StickyCol({
             {dragElement}
           </div>
 
-          <div style={{ paddingLeft }} className={cl(COL_BG, 'relative border-t w-full h-10 py-4 flex items-center ')}>
+          <div
+            style={{ paddingLeft, minHeight: '40px' }}
+            className={cl(COL_BG, 'relative border-t w-full py-4 flex items-center ')}
+          >
             <button onClick={onToggleDisplayingSubTasks} className="">
               {showSubTasks ? (
                 <RxTriangleDown
@@ -183,7 +185,11 @@ export function StickyCol({
                 ref={inputRef}
                 onKeyDown={(e) => (e.key === 'Enter' ? handleEditTask(e, task.id) : null)}
               >
-                {task.name}
+                {task.name.length > 50 && singleLineView ? (
+                  <span className="whitespace-nowrap">{task.name.substring(0, 40)}...</span>
+                ) : (
+                  <span>{task.name}</span>
+                )}
               </p>
 
               {tags}
