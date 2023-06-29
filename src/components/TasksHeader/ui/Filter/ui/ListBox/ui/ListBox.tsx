@@ -1,4 +1,4 @@
-import { Fragment, ReactNode, useState } from 'react';
+import { Fragment, ReactNode, useEffect, useState } from 'react';
 import { Listbox, Transition } from '@headlessui/react';
 import { FilterKey, FilterValue, onSelectOrDeselectAllProps, Operator, Unit } from '../../../types/filters';
 import { cl } from '../../../../../../../utils';
@@ -42,17 +42,39 @@ export function ListBox({
   const [query, setQuery] = useState('');
   const [showOptions, setShowOptions] = useState(false);
   const showSelectAll = !!onSelectOrDeselectAll;
-  const [selectAll, setSelectAll] = useState(true);
+  const [selectAll, setSelectAll] = useState<'select' | 'deselect'>('select');
   const [prevState, setPrevState] = useState<{ state: FilterValue[]; isSet: boolean }>(DEFAULT_PREV_STATE);
+
+  // manage select and deselect values
+  useEffect(() => {
+    if (!showSelectAll) {
+      return;
+    }
+
+    const selectedValues = selected as FilterValue[];
+    const availableValues = values as FilterValue[];
+
+    if (
+      selectedValues.length !== 0 &&
+      availableValues.length !== 0 &&
+      selectedValues.length === availableValues.length &&
+      selectAll === 'select'
+    ) {
+      setSelectAll('deselect');
+    }
+
+    if (selectedValues.length < availableValues.length && selectAll === 'deselect') {
+      setSelectAll('select');
+    }
+  }, [selected, values, selectAll]);
 
   const resetPrevState = () => setPrevState(DEFAULT_PREV_STATE);
 
   const onToggleSelect = () => {
     if (onSelectOrDeselectAll) {
-      const type = selectAll ? 'select' : 'deselect';
-      onSelectOrDeselectAll({ type });
+      onSelectOrDeselectAll({ type: selectAll });
 
-      setSelectAll((prev) => !prev);
+      setSelectAll(selectAll === 'select' ? 'deselect' : 'select');
     }
   };
 
@@ -110,7 +132,7 @@ export function ListBox({
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <div className="absolute w-96 z-10 flex flex-col mt-1 max-h-72 rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+          <div className="absolute right-0 w-80 z-10 flex flex-col mt-1 max-h-72 rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
             <Listbox.Options className="overflow-auto h-full w-full">
               {/* search */}
               {showSearch ? (
@@ -130,7 +152,7 @@ export function ListBox({
               {showSelectAll ? (
                 <div className="flex w-full p-1 justify-between items-center">
                   <button onClick={onToggleSelect} className="text-primary-500 text-xs">
-                    {selectAll ? 'Select All' : 'Deselect All'}
+                    {selectAll === 'select' ? 'Select All' : 'Deselect All'}
                   </button>
                 </div>
               ) : null}
