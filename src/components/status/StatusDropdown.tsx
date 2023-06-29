@@ -8,7 +8,7 @@ import inprogressIcon from '../../assets/icons/inprogressIcon.png';
 import todoIcon from '../../assets/icons/todoIcon.png';
 import completedIcon from '../../assets/icons/completedIcon.png';
 import archiveIcon from '../../assets/icons/archiveIcon.png';
-import ToolTip from '../Tooltip';
+import ToolTip from '../Tooltip/Tooltip';
 import { useAbsolute } from '../../hooks/useAbsolute';
 import { Status } from '../../features/task/interface.tasks';
 interface statusType {

@@ -9,7 +9,7 @@ interface ToolTipProps {
 
 export default function ToolTip({ children, tooltip }: ToolTipProps) {
   return (
-    <div data-tooltip={tooltip} className="tooltip z-50 inline-block cursor-pointer">
+    <div data-tooltip={tooltip} className="z-50 inline-block cursor-pointer tooltip">
       {children}
     </div>
   );

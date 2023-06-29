@@ -7,7 +7,7 @@ import { Spinner } from '../../../common';
 import { CiSearch } from 'react-icons/ci';
 import { CgSortAz } from 'react-icons/cg';
 import { AiOutlinePlus } from 'react-icons/ai';
-import ToolTip from '../../Tooltip';
+import ToolTip from '../../Tooltip/Tooltip';
 import { setShowCreateChatSideOver } from '../../../features/chat/chatSlice';
 
 interface ChatsListProps {

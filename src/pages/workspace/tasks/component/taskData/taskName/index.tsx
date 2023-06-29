@@ -21,7 +21,7 @@ import { setCurrentTaskIdForTag } from '../../../../../../features/workspace/tag
 import ArrowRigt from '../../../../../../assets/branding/ArrowRigt.svg';
 import ArrowDown from '../../../../../../assets/branding/ArrowRigt.svg';
 import { useSortable } from '@dnd-kit/sortable';
-import ToolTip from '../../../../../../components/Tooltip';
+import ToolTip from '../../../../../../components/Tooltip/Tooltip';
 import { useParams } from 'react-router-dom';
 import { cl } from '../../../../../../utils';
 

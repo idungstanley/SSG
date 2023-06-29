@@ -14,6 +14,7 @@ import ListIconSelection from '../ColorPalette/component/ListIconSelection';
 import ListIconComponent from '../ItemsListInSidebar/components/ListIconComponent';
 import { useDroppable } from '@dnd-kit/core';
 import { cl } from '../../utils';
+import InteractiveTooltip from '../Tooltip/InteractiveTooltip';
 
 interface ListItemProps {
   list: {
@@ -74,6 +75,15 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
       });
     }
   };
+  const handleClick = (label: string) => {
+    console.log(`Clicked: ${label}`);
+  };
+
+  const tooltipItems = [
+    { label: 'Item 1', onClick: () => handleClick('Item 1') },
+    { label: 'Item 2', onClick: () => handleClick('Item 2') },
+    { label: 'Item 3', onClick: () => handleClick('Item 3') }
+  ];
 
   const handleListSettings = (id: string, name: string, e: React.MouseEvent<HTMLButtonElement | SVGElement>) => {
     dispatch(
@@ -139,12 +149,24 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
         {/* ends here */}
         <div className="flex items-center gap-1">
           {list.tasks_count > 0 && (
-            <span
-              className="w-auto px-2 border border-gray-400 rounded"
-              style={{ fontSize: '10px', color: listId === list.id ? (baseColor as string) : undefined }}
+            <InteractiveTooltip
+              content={
+                <ul className="space-y-2">
+                  {tooltipItems.map((item, index) => (
+                    <li key={index} className="cursor-pointer hover:text-blue-500" onClick={item.onClick}>
+                      {item.label}
+                    </li>
+                  ))}
+                </ul>
+              }
             >
-              {list.tasks_count}
-            </span>
+              <span
+                className="w-auto px-2 border border-gray-400 rounded"
+                style={{ fontSize: '10px', color: listId === list.id ? (baseColor as string) : undefined }}
+              >
+                {list.tasks_count}
+              </span>
+            </InteractiveTooltip>
           )}
           <button
             type="button"

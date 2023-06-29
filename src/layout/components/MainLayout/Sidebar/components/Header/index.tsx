@@ -10,7 +10,7 @@ import { Modal } from '../../../../../../components/Pilot/components/HotKeys/com
 import PinnedNavigationItem, { NavigationList } from '../NavigationItems/components/NavigationList';
 import { VscPinned } from 'react-icons/vsc';
 import { BsFillPinFill } from 'react-icons/bs';
-import ToolTip from '../../../../../../components/Tooltip';
+import ToolTip from '../../../../../../components/Tooltip/Tooltip';
 
 interface HeaderProps {
   handleHotkeyClick: (

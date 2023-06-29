@@ -3,7 +3,7 @@ import React, { Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import { useAppSelector } from '../../app/hooks';
 import { cl } from '../../utils';
-import ToolTip from '../Tooltip';
+import ToolTip from '../Tooltip/Tooltip';
 
 interface MenuWithTransitionProps {
   icon: JSX.Element;
