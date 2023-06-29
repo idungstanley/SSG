@@ -21,6 +21,8 @@ export default function ListIconComponent({
   isOutterFrameActive,
   isInnerFrameActive
 }: Props) {
+  const Square = 'square';
+  const Circle = 'circle';
   const TwoSquare = 'two-square';
   const TwoCircle = 'two-circle';
   const SquareInCircle = 'square-in-circle';
@@ -35,9 +37,9 @@ export default function ListIconComponent({
           >
             <span
               className={`w-3 h-3 border border-current ${
-                shape === TwoCircle || shape === SquareInCircle
+                shape === TwoCircle || shape === SquareInCircle || shape === Circle
                   ? 'rounded-full'
-                  : shape === TwoSquare || shape === CircleInSquare
+                  : shape === TwoSquare || shape === CircleInSquare || shape === Square
                   ? ''
                   : 'rounded-full'
               }`}
@@ -46,31 +48,33 @@ export default function ListIconComponent({
               }}
             ></span>
           </button>
-          <button
-            className={`${isInnerFrameActive && 'bg-green-200'} flex items-center justify-center p-1 `}
-            onClick={innerFrameClick}
-          >
-            <span
-              className={`w-3 h-3 border border-current ${
-                shape === TwoSquare || shape === SquareInCircle
-                  ? ''
-                  : shape === TwoCircle || shape === CircleInSquare
-                  ? 'rounded-full'
-                  : ''
-              }`}
-              style={{
-                backgroundColor: innerColour ? innerColour : 'white'
-              }}
-            ></span>
-          </button>
+          {shape !== Circle && shape !== Square && (
+            <button
+              className={`${isInnerFrameActive && 'bg-green-200'} flex items-center justify-center p-1 `}
+              onClick={innerFrameClick}
+            >
+              <span
+                className={`w-3 h-3 border border-current ${
+                  shape === TwoSquare || shape === SquareInCircle
+                    ? ''
+                    : shape === TwoCircle || shape === CircleInSquare
+                    ? 'rounded-full'
+                    : ''
+                }`}
+                style={{
+                  backgroundColor: innerColour ? innerColour : 'white'
+                }}
+              ></span>
+            </button>
+          )}
         </div>
       ) : (
         <div className="flex items-center justify-center">
           <span
             className={`flex items-center justify-center w-3 h-3 ${
-              shape === TwoCircle || shape === SquareInCircle
+              shape === TwoCircle || shape === SquareInCircle || shape === Circle
                 ? 'rounded-full'
-                : shape === TwoSquare || shape === CircleInSquare
+                : shape === TwoSquare || shape === CircleInSquare || shape === Square
                 ? ''
                 : 'rounded-full'
             }`}
@@ -79,11 +83,11 @@ export default function ListIconComponent({
             }}
           >
             <span
-              className={`w-1.5 h-1.5 ${
+              className={`${
                 shape === TwoSquare || shape === SquareInCircle
-                  ? ''
+                  ? 'w-1.5 h-1.5'
                   : shape === TwoCircle || shape === CircleInSquare
-                  ? 'rounded-full'
+                  ? 'rounded-full w-1.5 h-1.5'
                   : ''
               }`}
               style={{
