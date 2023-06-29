@@ -21,8 +21,8 @@ export default function ListIconComponent({
   isOutterFrameActive,
   isInnerFrameActive
 }: Props) {
-  const Square = 'solid-square';
-  const Circle = 'solid-circle';
+  const SolidSquare = 'solid-square';
+  const SolidCircle = 'solid-circle';
   const TwoSquare = 'two-square';
   const TwoCircle = 'two-circle';
   const SquareInCircle = 'square-in-circle';
@@ -37,9 +37,9 @@ export default function ListIconComponent({
           >
             <span
               className={`w-3 h-3 border border-current ${
-                shape === TwoCircle || shape === SquareInCircle || shape === Circle
+                shape === TwoCircle || shape === SquareInCircle || shape === SolidCircle
                   ? 'rounded-full'
-                  : shape === TwoSquare || shape === CircleInSquare || shape === Square
+                  : shape === TwoSquare || shape === CircleInSquare || shape === SolidSquare
                   ? ''
                   : 'rounded-full'
               }`}
@@ -48,7 +48,7 @@ export default function ListIconComponent({
               }}
             ></span>
           </button>
-          {shape !== Circle && shape !== Square && (
+          {shape !== SolidCircle && shape !== SolidSquare && (
             <button
               className={`${isInnerFrameActive && 'bg-green-200'} flex items-center justify-center p-1 `}
               onClick={innerFrameClick}
@@ -72,9 +72,9 @@ export default function ListIconComponent({
         <div className="flex items-center justify-center">
           <span
             className={`flex items-center justify-center w-3 h-3 ${
-              shape === TwoCircle || shape === SquareInCircle || shape === Circle
+              shape === TwoCircle || shape === SquareInCircle || shape === SolidCircle
                 ? 'rounded-full'
-                : shape === TwoSquare || shape === CircleInSquare || shape === Square
+                : shape === TwoSquare || shape === CircleInSquare || shape === SolidSquare
                 ? ''
                 : 'rounded-full'
             }`}
