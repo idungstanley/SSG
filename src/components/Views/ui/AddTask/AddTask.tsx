@@ -26,11 +26,12 @@ export function AddTask({ onClose, paddingLeft, parentId, isListParent, columns 
   const { currTeamMemberId } = useAppSelector((state) => state.task);
 
   const [statusId, setStatusId] = useState<string>('');
-  useEffect(() => {
-    const statusObj: ITask_statuses | undefined = list?.data.list.task_statuses.find(
-      (statusObj: ITask_statuses) => statusObj?.name === 'To do'
-    );
 
+  useEffect(() => {
+    const minPosition = Math.min(...(list?.data.list.task_statuses.map((status) => status.position) || []));
+    const statusObj: ITask_statuses | undefined = list?.data.list.task_statuses.find(
+      (statusObj: ITask_statuses) => statusObj.position === minPosition
+    );
     if (statusObj) {
       const newStatusId: string = statusObj.id;
       setStatusId(newStatusId);

@@ -21,7 +21,7 @@ export interface ITask_statuses {
   model_id: string;
   model_type: string;
   name: string;
-  position: string;
+  position: number;
   type: string;
   updated_at: string;
 }

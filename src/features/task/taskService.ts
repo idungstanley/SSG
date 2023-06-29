@@ -89,6 +89,7 @@ export const useAddTask = (parentTaskId?: string) => {
 
 export const createTaskService = (data: {
   name: string;
+  task_status_id?: string;
   description?: string;
   showMenuDropdown?: string | null;
   getListId?: string;
@@ -100,6 +101,7 @@ export const createTaskService = (data: {
     data: {
       name: data.name,
       description: data.description,
+      task_status_id: data.task_status_id,
       list_id: data.showMenuDropdown || data.getListId,
       parent_id: data.parentTaskId
     }
