@@ -10,6 +10,7 @@ import { useUploadRecording } from '../workspace/workspaceService';
 import { useParams } from 'react-router-dom';
 import { toggleMute } from '../workspace/workspaceSlice';
 import { generateFilters } from '../../components/TasksHeader/lib/generateFilters';
+import moment from 'moment-timezone';
 
 const moveTask = (data: { taskId: TaskId; listId: string }) => {
   const { taskId, listId } = data;
@@ -401,6 +402,28 @@ export const createTimeEntriesService = (data: { queryKey: (string | undefined)[
     }
   });
   return response;
+};
+
+export const getCurrentTime = () => {
+  const { timezone } = useAppSelector((state) => state.userSetting);
+  const response = requestNew({
+    method: 'GET',
+    url: 'time-entries/current'
+  });
+  // Assuming you have the moment.js library included in your project
+
+  const givenDateString = '2023-06-29 07:59:25';
+  const givenDate = moment(givenDateString, 'YYYY-MM-DD HH:mm:ss', timezone);
+  const currentDate = moment();
+  const duration1 = moment.duration(currentDate.diff(givenDate));
+
+  // Access the duration components
+  const days = duration1.days();
+  const hours = duration1.hours();
+  const minutes = duration1.minutes();
+  const seconds = duration1.seconds();
+
+  console.log(`Duration: ${days} days, ${hours} hours, ${minutes} minutes, ${seconds} seconds`, response);
 };
 
 export const StartTimeEntryService = () => {

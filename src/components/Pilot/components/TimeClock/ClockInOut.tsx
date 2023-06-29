@@ -1,4 +1,4 @@
-import moment from 'moment';
+import moment from 'moment-timezone';
 import React, { useEffect, useState } from 'react';
 import { BsStopCircle } from 'react-icons/bs';
 import { AiOutlinePlayCircle } from 'react-icons/ai';
@@ -25,15 +25,13 @@ export default function ClockInOut() {
     isBillable: false,
     description: ''
   });
-  const { activeItemId, activeItemType, activeTabId } = useAppSelector((state) => state.workspace);
+  const { activeItemId, activeItemType, activeTabId, timerLastMemory } = useAppSelector((state) => state.workspace);
   const { timerStatus, duration, period } = useAppSelector((state) => state.task);
+  const { initials } = useAppSelector((state) => state.userSetting);
   const dispatch = useAppDispatch();
-  const [, setTime] = useState({ s: 0, m: 0, h: 0 });
+  const [time, setTime] = useState({ s: 0, m: 0, h: 0 });
   const [, setBtnClicked] = useState(false);
-  // const [period, setPeriod] = useState<string | number | undefined>(undefined);
   const { workSpaceId, listId, hubId } = useParams();
-
-  const { initials } = JSON.parse(localStorage.getItem('user') as string) as User;
 
   const { data: getEntries } = GetTimeEntriesService({
     itemId: activeItemId,
@@ -68,6 +66,35 @@ export default function ClockInOut() {
     clearInterval(period);
   };
 
+  function timerCheck() {
+    if (
+      (activeItemType === 'hub' || activeItemType === 'list') &&
+      (activeItemId === timerLastMemory.hubId || activeItemId === timerLastMemory.listId)
+    ) {
+      return (
+        <div className="items-center">
+          {duration.h < 10 ? `0${duration.h}` : duration.h}
+          {':'}
+          {duration.m < 10 ? `0${duration.m}` : duration.m}
+          {':'}
+          {duration.s < 10 ? `0${duration.s}` : duration.s}
+        </div>
+      );
+    }
+
+    return (
+      <div className="items-center">
+        {time.h < 10 ? `0${time.h}` : time.h}
+        {':'}
+        {time.m < 10 ? `0${time.m}` : time.m}
+        {':'}
+        {time.s < 10 ? `0${time.s}` : time.s}
+      </div>
+    );
+  }
+
+  const sameEntity = () => activeItemId === (timerLastMemory.hubId || timerLastMemory.listId);
+
   const handleEndTimeChange = (value: string) => {
     setData((prev) => ({ ...prev, isBillable: data.isBillable, description: value }));
   };
@@ -78,9 +105,9 @@ export default function ClockInOut() {
     setTime({ s: 0, m: 0, h: 0 });
   };
 
-  let updateH = duration.h,
-    updateM = duration.m,
-    updateS = duration.s;
+  let updateH = 0,
+    updateM = 0,
+    updateS = 0;
   const RunTimer = () => {
     if (updateM >= 59) {
       updateH++;
@@ -91,14 +118,9 @@ export default function ClockInOut() {
       updateS = 0;
     }
     updateS++;
+    setTime({ h: updateH, m: updateM, s: updateS });
     return dispatch(setUpdateTimerDuration({ s: updateS, m: updateM, h: updateH }));
   };
-
-  useEffect(() => {
-    setTime(duration);
-  }, [dispatch]);
-
-  console.log(timerStatus);
 
   return (
     <div className="p-2 mt-6 rounded-t-md">
@@ -121,7 +143,7 @@ export default function ClockInOut() {
           <div id="entries" className="flex items-center justify-between py-1">
             <div id="left" className="flex items-center space-x-1 cursor-pointer">
               <div className="mr-1">
-                {timerStatus ? (
+                {timerStatus && sameEntity() ? (
                   // !btnClicked && !timerStatus ? (
                   <button onClick={stop}>
                     <BsStopCircle className="text-2xl text-red-400 cursor-pointer" aria-hidden="true" />
@@ -133,15 +155,9 @@ export default function ClockInOut() {
                 )}
               </div>
               {/* timer goes here */}
-              <div className="items-center">
-                {duration.h < 10 ? `0${duration.h}` : duration.h}
-                {':'}
-                {duration.m < 10 ? `0${duration.m}` : duration.m}
-                {':'}
-                {duration.s < 10 ? `0${duration.s}` : duration.s}
-              </div>
+              {timerCheck()}
               <div className="flex items-center justify-start -space-x-4 cursor-pointer">
-                <AvatarWithInitials height="h-7" width="w-7" initials={initials} />
+                <AvatarWithInitials height="h-7" width="w-7" initials={initials ?? ''} />
               </div>
             </div>
             <div id="right" className="flex items-center space-x-1">
