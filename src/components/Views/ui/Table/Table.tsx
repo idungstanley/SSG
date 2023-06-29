@@ -66,6 +66,7 @@ export function Table({ heads, data, label }: TableProps) {
     [activeIndex, columns]
   );
 
+  // New task template
   const newTaskObj = [
     ...data,
     {
@@ -188,6 +189,7 @@ export function Table({ heads, data, label }: TableProps) {
             taskLength={taskLength}
             onToggleCollapseTasks={() => setCollapseTasks((prev) => !prev)}
             label={label}
+            headerStatusColor={data[0].status.color as string}
             columns={columns}
             mouseDown={onMouseDown}
             tableHeight={tableHeight}
