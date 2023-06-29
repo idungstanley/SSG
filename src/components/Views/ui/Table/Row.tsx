@@ -17,6 +17,7 @@ import { setTaskIdForPilot } from '../../../../features/task/taskSlice';
 import { setActiveItem } from '../../../../features/workspace/workspaceSlice';
 import { Tags } from '../../../Tag';
 import { AddSubTask } from '../AddTask/AddSubTask';
+import TaskTag from '../../../Tag/ui/TaskTag';
 
 interface RowProps {
   task: Task;
@@ -136,7 +137,7 @@ export function Row({ task, columns, paddingLeft = 0, parentId, task_status, isL
           task_status={task_status as string}
           onClose={handleClose as VoidFunction}
           paddingLeft={paddingLeft}
-          tags={'tags' in task ? <Tags tags={task.tags} taskId={task.id} /> : null}
+          tags={'tags' in task ? <TaskTag tags={task.tags} entity_id={task.id} entity_type="task" /> : null}
           dragElement={
             <span ref={setNodeRef} {...listeners} {...attributes}>
               <MdDragIndicator
