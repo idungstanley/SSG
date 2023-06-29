@@ -166,7 +166,7 @@ export default function HubItem({
           </div>
           {showSidebar && (
             <div
-              className="absolute right-0 flex items-center pr-1 space-x-1 text-black opacity-0 group-hover:opacity-100"
+              className="absolute right-0 flex items-center pr-1 space-x-1 text-black opacity-0 group-hover:opacity-100 hover:text-fuchsia-500"
               onClick={(e) => e.stopPropagation()}
             >
               <AiOutlinePlus onClick={() => handleItemAction(item.id, item.name)} className="cursor-pointer" />

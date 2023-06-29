@@ -154,7 +154,7 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
           >
             {/* <TaskDropdown /> */}
             <AiOutlineEllipsis
-              className="text-xl cursor-pointer"
+              className="text-xl cursor-pointer hover:text-fuchsia-500"
               id="menusettings"
               onClick={(e) => handleListSettings(list.id, list.name, e)}
             />

@@ -162,7 +162,7 @@ export default function WalletItem({
           {showSidebar && (
             <div
               id="walletRight"
-              className="absolute right-0 flex items-center space-x-1 opacity-0 group-hover:opacity-100"
+              className="absolute right-0 flex items-center space-x-1 opacity-0 group-hover:opacity-100 hover:text-fuchsia-500"
               onClick={(e) => e.stopPropagation()}
             >
               <AiOutlinePlus onClick={() => handleItemAction(wallet.id, wallet.name)} className="cursor-pointer" />
