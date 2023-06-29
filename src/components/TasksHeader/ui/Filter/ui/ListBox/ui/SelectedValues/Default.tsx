@@ -1,17 +1,12 @@
-import { isArray, isString } from '../../../../../../../utils/typeGuards';
-import { SPECIAL_CHAR } from '../../../config/filterConfig';
-import { FilterValue, Operator, Unit } from '../../../types/filters';
+import { isArray, isString } from '../../../../../../../../utils/typeGuards';
+import { FilterValue, Operator, Unit } from '../../../../types/filters';
+import { SELECT_KEY, SELECT_VALUE, stringifyValue } from './SelectedValue';
 
-interface SelectedValueProps {
+interface DefaultProps {
   value: FilterValue[] | Operator | string | Unit;
 }
 
-const SELECT_KEY = 'Select filter';
-const SELECT_VALUE = 'Select option';
-
-export const stringifyValue = (i: string) => i.split(SPECIAL_CHAR)[0];
-
-export function SelectedValue({ value }: SelectedValueProps) {
+export function Default({ value }: DefaultProps) {
   if (isString(value)) {
     return <span className="block">{value === 'none' ? SELECT_KEY : stringifyValue(value).replaceAll('_', ' ')}</span>;
   }
@@ -20,7 +15,7 @@ export function SelectedValue({ value }: SelectedValueProps) {
     const title = value.map((i) => (isString(i) ? stringifyValue(i) : stringifyValue(i.value))).join(', ');
 
     return (
-      <div title={title} className="flex items-center h-5 max-w-5 gap-1">
+      <div title={title} className="flex items-center h-5 gap-1">
         {value.length === 0 ? (
           <span className="block">{SELECT_VALUE}</span>
         ) : (

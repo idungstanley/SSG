@@ -2,6 +2,9 @@ import dayjs from 'dayjs';
 import { FilterOption, OperatorOption, Unit, UnitOption } from '../types/filters';
 
 export const SPECIAL_CHAR = '%%%';
+export const DEFAULT_FILTERS_OPTION = 'and';
+
+export const ADDITIONAL_OPERATORS = ['any', 'all'];
 
 const units: UnitOption = {
   d: { key: 'd', value: 'days' },
@@ -43,12 +46,11 @@ export const operators: OperatorOption = {
 };
 
 const priorityValues = ['low', 'normal', 'hight', 'urgent'];
-const statusValues = ['todo', 'in progress', 'completed', 'archived'];
 export const unitValues: Unit[] = [units.d, units.m, units.w, units.y];
 
 export const filterConfig: FilterOption = {
   priority: { values: [...priorityValues], operators: [operators.eq, operators.ne] },
-  status: { values: [...statusValues], operators: [operators.eq, operators.ne] },
+  status: { values: [], operators: [operators.eq, operators.ne] }, // dynamic
   assignees: { operators: [operators.eq, operators.ns, operators.set], values: [] }, // dynamic
   tags: { operators: [operators.eq, operators.ns, operators.set], values: [] }, // dynamic
   start_date: {

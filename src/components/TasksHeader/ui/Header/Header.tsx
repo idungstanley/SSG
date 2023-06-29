@@ -6,10 +6,10 @@ import { Sort } from '../Sort/Sort';
 
 export function Header() {
   return (
-    <section className="p-1.5 h-12 w-full flex items-center justify-between space-x-3 border-b">
+    <section className="p-1.5 h-12 w-full flex items-center justify-between border-b">
       <ChangeView />
 
-      <div className="flex space-x-3 items-center">
+      <div className="flex items-center justify-end">
         <Sort />
         <FilterDropdown />
         <Assignee />

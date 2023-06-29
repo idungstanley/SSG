@@ -6,6 +6,8 @@ import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { TaskKey } from '../../../../features/task/interface.tasks';
 import { setSortType } from '../../../../features/task/taskSlice';
 import Button from '../../../Buttons/Button';
+import Icons from '../../../Icons/Icons';
+import GroupBy from '../../../../assets/icons/layers.svg';
 
 type Key = Extract<TaskKey, 'status' | 'assignees' | 'priority'>;
 type Option = Record<Key, { icon: JSX.Element }>;
@@ -33,13 +35,11 @@ export function Sort() {
       <div className="relative">
         <Listbox.Button className="relative w-full rounded-md outline-none cursor-pointer">
           <Button active={true}>
+            <Icons src={GroupBy} />
             <p className="block truncate">
               Group by: <span className="capitalize">{sortType}</span>
             </p>
           </Button>
-          {/* <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
-            <ChevronUpDownIcon className="w-5 h-5 text-gray-400" aria-hidden="true" />
-          </span> */}
         </Listbox.Button>
         <Transition as={Fragment} leave="transition ease-in duration-100" leaveFrom="opacity-100" leaveTo="opacity-0">
           <Listbox.Options className="absolute z-10 py-1 mt-1 overflow-auto text-base bg-white rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">

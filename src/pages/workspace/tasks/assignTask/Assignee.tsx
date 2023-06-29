@@ -1,27 +1,19 @@
 import * as React from 'react';
 import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
-import { TrashIcon, UserPlusIcon } from '@heroicons/react/24/solid';
-import { UseTaskAssignService, UseUnassignTask } from '../../../../features/task/taskService';
+import { UserPlusIcon } from '@heroicons/react/24/solid';
 import { useGetTeamMembers } from '../../../../features/settings/teamMembers/teamMemberService';
 import { AvatarWithInitials } from '../../../../components';
 import GroupAssignee from './GroupAssignee';
-import {
-  UseChecklistItemAssignee,
-  UseChecklistItemUnassignee
-} from '../../../../features/task/checklist/checklistService';
 import { ICheckListItems } from '../../../../features/task/interface.tasks';
-import { CgProfile } from 'react-icons/cg';
-import { ImyTaskData, setCurrTeamMemId } from '../../../../features/task/taskSlice';
+import { ImyTaskData } from '../../../../features/task/taskSlice';
 import { AiOutlineSearch } from 'react-icons/ai';
 import { useState } from 'react';
 import { ITeamMembersAndGroup } from '../../../../features/settings/teamMembersAndGroups.interfaces';
 import { useGetTeamMemberGroups } from '../../../../features/settings/teamMemberGroups/teamMemberGroupService';
 import { cl } from '../../../../utils';
-// import AvatarForOwner from '../../../../components/avatar/AvatarForOwner';
-import AvatarWithImage from '../../../../components/avatar/AvatarWithImage';
-import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
+import { useAppSelector } from '../../../../app/hooks';
+import AssigneeItem from './AssigneeItem';
 
 export default function Assignee({
   itemId,
@@ -48,15 +40,9 @@ export default function Assignee({
   };
   // Get Team Members
   const { data } = teams ? useGetTeamMemberGroups(0) : useGetTeamMembers({ page: 0, query: '' });
-
-  const { mutate: onTaskAssign } = UseTaskAssignService();
-  const { mutate: onTaskUnassign } = UseUnassignTask();
-  const { mutate: onCheklistItemAssign } = UseChecklistItemAssignee();
-  const { mutate: onCheklistItemUnassign } = UseChecklistItemUnassignee();
-  const dispatch = useAppDispatch();
   const { currTeamMemberId } = useAppSelector((state) => state.task);
 
-  const userObj = data?.data.team_members.find((userObj) => userObj?.id === currTeamMemberId);
+  const userObj = data?.data.team_members?.find((userObj) => userObj?.id === currTeamMemberId);
 
   const teamMembers = teams ? data?.data.team_member_groups : data?.data.team_members;
   // const assignees = task?.assignees;
@@ -65,40 +51,6 @@ export default function Assignee({
   const assignedUser = assignees?.map(({ id }: { id: string }) => id);
 
   const checklistAssignedUserId = assigneeChecklistItem?.assignees.map(({ id }: { id: string }) => id);
-
-  const handleAssignTask = (id: string) => {
-    onTaskAssign({
-      taskId: itemId,
-      team_member_id: id,
-      teams: teams
-    });
-  };
-
-  const handleTeamMemberId = (id: string) => {
-    dispatch(setCurrTeamMemId(id));
-  };
-
-  const handleUnAssignTask = (id: string) => {
-    onTaskUnassign({
-      taskId: itemId,
-      team_member_id: id,
-      teams: teams
-    });
-  };
-
-  const handleAssignChecklist = (id: string) => {
-    onCheklistItemAssign({
-      itemId: itemId,
-      team_member_id: id
-    });
-  };
-
-  const handleUnAssignChecklistItem = (id: string) => {
-    onCheklistItemUnassign({
-      itemId: itemId,
-      team_member_id: id
-    });
-  };
 
   const searchItem = (value: string) => {
     setSearchInput(value);
@@ -115,7 +67,7 @@ export default function Assignee({
   };
   return (
     <>
-      {option === 'task' && (
+      {option !== 'getTeamId' && (
         <Button id="basic-button">
           {assignees?.length ? (
             <div className="flex">
@@ -155,17 +107,6 @@ export default function Assignee({
           )}
         </Button>
       )}
-      {option === 'checklist' && (
-        <Button id="basic-button" onClick={handleClick}>
-          {checklistAssignedUserId?.length ? (
-            <GroupAssignee data={assigneeChecklistItem?.assignees} teams={teams} />
-          ) : (
-            <span>
-              <CgProfile />
-            </span>
-          )}
-        </Button>
-      )}
       <Menu
         id="basic-menu"
         anchorEl={anchorEl}
@@ -178,9 +119,9 @@ export default function Assignee({
         className="ml-10"
         PaperProps={{
           style: {
-            height: 300,
+            height: 400,
             overflowY: 'auto',
-            width: '300px'
+            width: '350px'
           }
         }}
       >
@@ -211,111 +152,30 @@ export default function Assignee({
         {searchInput.length > 1
           ? filteredMembers?.map((item) => {
               return (
-                <MenuItem key={item.id} onClick={handleClose} className="w-full ">
-                  <div className="flex items-center justify-between cursor-pointer w-full">
-                    <div
-                      className="relative flex items-center space-x-2 cursor-pointer"
-                      onClick={() =>
-                        option === 'checklist'
-                          ? handleAssignChecklist(item.id)
-                          : option === 'task'
-                          ? handleAssignTask(item.id)
-                          : option == 'getTeamId'
-                          ? handleTeamMemberId(item.id)
-                          : null
-                      }
-                    >
-                      <div>
-                        <AvatarWithInitials
-                          initials={teams ? item.initials : (item.user.initials as string)}
-                          backgroundColour={teams ? item.color : item.user.color}
-                          height="h-8"
-                          width="w-8"
-                        />
-                      </div>
-
-                      <p className="text-sm text-black">{teams ? item.name : item.user.name.toLocaleUpperCase()}</p>
-                    </div>
-                    {assignedUser?.includes(item.id) || checklistAssignedUserId?.includes(item.id) ? (
-                      <button
-                        type="button"
-                        className="mx-2"
-                        onClick={() =>
-                          option == 'task' ? handleUnAssignTask(item.id) : handleUnAssignChecklistItem(item.id)
-                        }
-                      >
-                        <TrashIcon className="w-4 h-4 text-gray-500 cursor-pointer" />
-                      </button>
-                    ) : null}
-                  </div>
-                </MenuItem>
+                <AssigneeItem
+                  key={item.id}
+                  item={item}
+                  option={option}
+                  entity_id={itemId}
+                  teams={teams}
+                  handleClose={handleClose}
+                  isAssigned={assignedUser?.includes(item.id) || checklistAssignedUserId?.includes(item.id)}
+                />
               );
             })
           : teamMembers?.map((item) => {
               return (
-                <MenuItem key={item.id} onClick={handleClose} className="w-full">
-                  <div className="flex items-center justify-between cursor-pointer w-full">
-                    <div
-                      className="relative flex items-center space-x-2 cursor-pointer"
-                      onClick={() =>
-                        option === 'checklist'
-                          ? handleAssignChecklist(item.id)
-                          : option === 'task'
-                          ? handleAssignTask(item.id)
-                          : option == 'getTeamId'
-                          ? handleTeamMemberId(item.id)
-                          : null
-                      }
-                    >
-                      <span
-                        className={`${
-                          assignedUser?.includes(item.id) ? 'ring ring-green-500 ring-offset-2 rounded-full ' : null
-                        }`}
-                      >
-                        {!teams ? (
-                          <div>
-                            {item.user.avatar_path == null && (
-                              <AvatarWithInitials
-                                initials={item.user.initials}
-                                backgroundColour={item.user.color}
-                                height="h-8"
-                                width="w-8"
-                              />
-                            )}
-                            {item.user.avatar_path && (
-                              <AvatarWithImage image_path={item.user.avatar_path} height="h-8" width="w-8" />
-                            )}
-                          </div>
-                        ) : (
-                          <AvatarWithInitials
-                            initials={item.initials}
-                            backgroundColour={item.color}
-                            height="h-8"
-                            width="w-8"
-                          />
-                        )}
-                      </span>
-                      <p className="text-sm text-black ">{teams ? item.name : item.user.name.toLocaleUpperCase()}</p>
-                    </div>
-
-                    {assignedUser?.includes(item.id) || checklistAssignedUserId?.includes(item.id) ? (
-                      <button
-                        type="button"
-                        className="mx-2"
-                        onClick={() =>
-                          option == 'task' ? handleUnAssignTask(item.id) : handleUnAssignChecklistItem(item.id)
-                        }
-                      >
-                        <TrashIcon className="w-4 h-4 text-gray-500 cursor-pointer" />
-                      </button>
-                    ) : null}
-                  </div>
-                </MenuItem>
+                <AssigneeItem
+                  key={item.id}
+                  item={item}
+                  option={option}
+                  entity_id={itemId}
+                  teams={teams}
+                  handleClose={handleClose}
+                  isAssigned={assignedUser?.includes(item.id) || checklistAssignedUserId?.includes(item.id)}
+                />
               );
             })}
-
-        {/* <MenuItem onClick={handleClose}>My account</MenuItem>
-        <MenuItem onClick={handleClose}>Logout</MenuItem> */}
       </Menu>
     </>
   );

@@ -1,33 +1,44 @@
 import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
-import { setFilters } from '../../../../../../features/task/taskSlice';
-import { unitValues } from '../../config/filterConfig';
-import { FilterId, FilterOption, FilterWithId, onChangeProps } from '../../types/filters';
+import { setFilterFields } from '../../../../../../features/task/taskSlice';
+import { ADDITIONAL_OPERATORS, unitValues } from '../../config/filterConfig';
+import { FilterId, FilterOption, FilterWithId, onChangeProps, onSelectOrDeselectAllProps } from '../../types/filters';
 import { Label } from './Label';
 import { ListBox } from '../ListBox';
-import { modifyFilters } from '../../lib/filterUtils';
+import { filterUniqueValues, modifyFilters, selectOrDeselectAllFilter } from '../../lib/filterUtils';
 import { DeleteItem } from './DeleteItem';
+import { useState } from 'react';
 
 interface ItemProps {
   filter: FilterWithId;
-  index: number;
   initialFilters: FilterOption;
 }
 
-export function Item({ filter, index, initialFilters }: ItemProps) {
+export function Item({ filter, initialFilters }: ItemProps) {
   const dispatch = useAppDispatch();
-  const { filters } = useAppSelector((state) => state.task);
+  const {
+    filters: { fields: filters }
+  } = useAppSelector((state) => state.task);
+
+  // ? mocked because the backend is not yet supported. must be in the filters state
+  const [additionalOperator, setAdditionalOperator] = useState(ADDITIONAL_OPERATORS[0]);
 
   const { key, values, operator, id } = filter;
 
-  const onDelete = (id: FilterId) => dispatch(setFilters(filters.filter((i) => i.id !== id)));
+  const onDelete = (id: FilterId) => dispatch(setFilterFields(filters.filter((i) => i.id !== id)));
 
   const onChange = (data: onChangeProps) => {
-    dispatch(setFilters(modifyFilters(data, filters)));
+    dispatch(setFilterFields(modifyFilters(data, filters)));
   };
+
+  const onSelectOrDeselectAll = ({ type }: Pick<onSelectOrDeselectAllProps, 'type'>) =>
+    dispatch(setFilterFields(selectOrDeselectAllFilter({ type, newValues: initialFilters[key].values, id }, filters)));
 
   return (
     <div className="flex items-center w-full space-x-2">
-      <Label show={index === 0} />
+      <Label
+        isButton={filters.findIndex((i) => i.id === id) !== 0}
+        disabled={filters.findIndex((i) => i.id === id) > 1}
+      />
 
       {/* key */}
       <ListBox
@@ -50,9 +61,21 @@ export function Item({ filter, index, initialFilters }: ItemProps) {
         <ListBox
           setSelected={(newValue) => onChange({ newValue, id, type: 'value' })}
           selected={values}
-          values={initialFilters[key].values}
+          values={filterUniqueValues(initialFilters[key].values, filters, id, key)}
+          onSelectOrDeselectAll={onSelectOrDeselectAll}
           showSearch
-        />
+          controlledOptionsDisplay
+          filterKey={key}
+        >
+          {/* show additional option only for number of values 2 or more */}
+          {values.length > 1 ? (
+            <ListBox.Additional
+              selected={additionalOperator}
+              setSelected={setAdditionalOperator}
+              values={ADDITIONAL_OPERATORS}
+            />
+          ) : null}
+        </ListBox>
       ) : null}
 
       {/* count */}
