@@ -21,8 +21,8 @@ export default function ListIconComponent({
   isOutterFrameActive,
   isInnerFrameActive
 }: Props) {
-  const Square = 'square';
-  const Circle = 'circle';
+  const Square = 'solid-square';
+  const Circle = 'solid-circle';
   const TwoSquare = 'two-square';
   const TwoCircle = 'two-circle';
   const SquareInCircle = 'square-in-circle';
