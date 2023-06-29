@@ -80,9 +80,9 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
   };
 
   const tooltipItems = [
-    { label: 'Item 1', onClick: () => handleClick('Item 1') },
-    { label: 'Item 2', onClick: () => handleClick('Item 2') },
-    { label: 'Item 3', onClick: () => handleClick('Item 3') }
+    { label: 'Todo', count: 1, onClick: () => handleClick('Item 1') },
+    { label: 'In Progress', count: 1, onClick: () => handleClick('Item 2') },
+    { label: 'Completed', count: 1, onClick: () => handleClick('Item 3') }
   ];
 
   const handleListSettings = (id: string, name: string, e: React.MouseEvent<HTMLButtonElement | SVGElement>) => {
@@ -109,6 +109,8 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
   const { isOver, setNodeRef } = useDroppable({
     id: list.id
   });
+
+  console.log(list);
 
   return (
     <>
@@ -151,10 +153,20 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
           {list.tasks_count > 0 && (
             <InteractiveTooltip
               content={
-                <ul className="space-y-2">
+                <ul className="space-y-2 w-28">
+                  <span className="flex items-center justify-between cursor-pointer hover:text-blue-500">
+                    <p>Tasks</p>
+                    <p>({list.tasks_count})</p>
+                  </span>
+                  <hr />
                   {tooltipItems.map((item, index) => (
-                    <li key={index} className="cursor-pointer hover:text-blue-500" onClick={item.onClick}>
-                      {item.label}
+                    <li
+                      key={index}
+                      className="flex items-center justify-between cursor-pointer hover:text-blue-500"
+                      onClick={item.onClick}
+                    >
+                      <p>{item.label}</p>
+                      <p>({item.count})</p>
                     </li>
                   ))}
                 </ul>

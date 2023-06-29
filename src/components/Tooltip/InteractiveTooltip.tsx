@@ -1,4 +1,4 @@
-import react, { ReactElement, ReactNode, useState } from 'react';
+import { ReactElement, ReactNode, useState } from 'react';
 
 interface TooltipProps {
   children: ReactNode;
@@ -7,16 +7,27 @@ interface TooltipProps {
 export default function InteractiveTooltip({ children, content }: TooltipProps) {
   const [isTooltipOpen, setIsTooltipOpen] = useState<boolean>(false);
 
-  const handleToggleTooltip = () => {
-    setIsTooltipOpen(!isTooltipOpen);
+  const handleOpenTooltip = () => {
+    setIsTooltipOpen(true);
+  };
+
+  const handleCloseTooltip = () => {
+    setIsTooltipOpen(false);
+  };
+
+  const handleTooltipClick = (e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent click event from closing the tooltip
   };
 
   return (
-    <div className="relative inline-block" onMouseEnter={handleToggleTooltip} onMouseLeave={handleToggleTooltip}>
-      {isTooltipOpen && <div className="absolute z-10 p-2 text-gray-800 bg-gray-200 rounded shadow-lg">{content}</div>}
-      <div className="inline-block px-4 py-2 font-medium text-gray-800 rounded cursor-pointer hover:bg-gray-300">
-        {children}
-      </div>
+    <div className="relative inline-block" onMouseEnter={handleOpenTooltip} onMouseLeave={handleCloseTooltip}>
+      {isTooltipOpen && (
+        <div className="absolute z-10 -top-36 -right-7" onClick={(e) => handleTooltipClick(e)}>
+          <div className="w-auto p-2 text-white bg-black rounded shadow-lg">{content}</div>
+          <div className="absolute left-0 right-0 w-2 h-2 ml-auto mr-auto -mt-1 transform rotate-45 bg-black"></div>
+        </div>
+      )}
+      <div className="inline-block rounded cursor-pointer">{children}</div>
     </div>
   );
 }
