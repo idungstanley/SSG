@@ -88,7 +88,7 @@ export function Table({ heads, data, label }: TableProps) {
       priority: 'low',
       short_id: '',
       start_date: null,
-      status: { name: label },
+      status: { name: label, color: data[0].status.color },
       tags: [],
       time_entries_duration: 0,
       updated_at: '',
