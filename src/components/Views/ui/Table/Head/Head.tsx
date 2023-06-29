@@ -17,6 +17,7 @@ interface HeadProps {
   mouseDown: (i: number) => void;
   label: string;
   collapseTasks: boolean;
+  headerStatusColor?: string;
   taskLength: number;
   onToggleCollapseTasks: VoidFunction;
 }
@@ -31,6 +32,7 @@ export function Head({
   tableHeight,
   taskLength,
   collapseTasks,
+  headerStatusColor,
   onToggleCollapseTasks,
   mouseDown,
   label
@@ -105,17 +107,8 @@ export function Head({
           <div className="flex items-center bg-purple-50 " style={{ width: '22px' }}></div>
           <div className="flex items-center w-full gap-3 py-2 truncate dBlock group opacity-90">
             <div
-              className={`py-0.5 px-2 rounded-tr-md flex items-center space-x-1 text-white dFlex ${
-                parsedLabel == 'To first-line:do'
-                  ? 'bg-gray-400'
-                  : parsedLabel == 'In progress'
-                  ? 'bg-purple-500'
-                  : parsedLabel == 'Completed'
-                  ? 'bg-green-500'
-                  : parsedLabel == 'Archived'
-                  ? 'bg-yellow-500'
-                  : 'bg-gray-400'
-              }`}
+              className="py-0.5 px-2 rounded-tr-md flex items-center space-x-1 text-white dFlex "
+              style={{ backgroundColor: headerStatusColor }}
             >
               <p className="pt-0.5">
                 <Chevron color="text-white" active={collapseTasks} onToggle={onToggleCollapseTasks} />

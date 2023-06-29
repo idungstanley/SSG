@@ -57,7 +57,7 @@ export function Row({ task, columns, paddingLeft = 0, parentId, task_status, isL
     priority: 'low',
     start_date: null,
     status: {
-      color: '',
+      color: task.status.color,
       created_at: '',
       id: '',
       model_id: '',

@@ -164,19 +164,21 @@ export default function HubItem({
               </span>
             </div>
           </div>
-          <div
-            className="absolute right-0 flex items-center pr-1 space-x-1 text-black opacity-0 group-hover:opacity-100"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <AiOutlineEllipsis
-              onClick={(e) => {
-                handleHubSettings(item.id, item.name, e);
-              }}
-              className="cursor-pointer"
-              id="menusettings"
-            />
-            <AiOutlinePlus onClick={() => handleItemAction(item.id, item.name)} className="cursor-pointer" />
-          </div>
+          {showSidebar && (
+            <div
+              className="absolute right-0 flex items-center pr-1 space-x-1 text-black opacity-0 group-hover:opacity-100 hover:text-fuchsia-500"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <AiOutlinePlus onClick={() => handleItemAction(item.id, item.name)} className="cursor-pointer" />
+              <AiOutlineEllipsis
+                onClick={(e) => {
+                  handleHubSettings(item.id, item.name, e);
+                }}
+                className="text-xl cursor-pointer"
+                id="menusettings"
+              />
+            </div>
+          )}
         </div>
       </div>
       <UploadImage endpoint={`hubs/${uploadId}`} invalidateQuery={['hubs'] as InvalidateQueryFilters<unknown>} />

@@ -54,7 +54,7 @@ export default function WalletItem({
 }: WalletItemProps) {
   const { activeItemId } = useAppSelector((state) => state.workspace);
   const { showMenuDropdown, SubMenuId } = useAppSelector((state) => state.hub);
-  const { paletteDropdown, lightBaseColor, baseColor } = useAppSelector((state) => state.account);
+  const { paletteDropdown, lightBaseColor, baseColor, showSidebar } = useAppSelector((state) => state.account);
   const { paletteId, show } = paletteDropdown;
   const [paletteColor, setPaletteColor] = useState<string | undefined | ListColourProps>('');
   const { walletId } = useParams();
@@ -159,18 +159,20 @@ export default function WalletItem({
               {wallet.name}
             </p>
           </div>
-          <div
-            id="walletRight"
-            className="absolute right-0 flex items-center space-x-1 opacity-0 group-hover:opacity-100"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <AiOutlineEllipsis
-              className="cursor-pointer"
-              onClick={(e) => handleWalletSettings(wallet.id, wallet.name, e)}
-              id="menusettings"
-            />
-            <AiOutlinePlus onClick={() => handleItemAction(wallet.id, wallet.name)} className="cursor-pointer" />
-          </div>
+          {showSidebar && (
+            <div
+              id="walletRight"
+              className="absolute right-0 flex items-center space-x-1 opacity-0 group-hover:opacity-100 hover:text-fuchsia-500"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <AiOutlinePlus onClick={() => handleItemAction(wallet.id, wallet.name)} className="cursor-pointer" />
+              <AiOutlineEllipsis
+                className="text-xl cursor-pointer"
+                onClick={(e) => handleWalletSettings(wallet.id, wallet.name, e)}
+                id="menusettings"
+              />
+            </div>
+          )}
         </div>
       </section>
       {paletteId === wallet.id && show ? <Palette title="Wallet Colour" setPaletteColor={setPaletteColor} /> : null}

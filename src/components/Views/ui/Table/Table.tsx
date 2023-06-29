@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { DragOverlay } from '@dnd-kit/core';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { ITaskFullList, Task } from '../../../../features/task/interface.tasks';
-import { setCurrTeamMemId, setStatusId, setUpdateCords } from '../../../../features/task/taskSlice';
+import { setCurrTaskListId, setCurrTeamMemId, setStatusId, setUpdateCords } from '../../../../features/task/taskSlice';
 import { useScroll } from '../../../../hooks/useScroll';
 import { listColumnProps } from '../../../../pages/workspace/tasks/component/views/ListColumns';
 import { MAX_COL_WIDTH, MIN_COL_WIDTH } from '../../config';
@@ -66,6 +66,7 @@ export function Table({ heads, data, label }: TableProps) {
     [activeIndex, columns]
   );
 
+  // New task template
   const newTaskObj = [
     ...data,
     {
@@ -88,7 +89,7 @@ export function Table({ heads, data, label }: TableProps) {
       priority: 'low',
       short_id: '',
       start_date: null,
-      status: { name: label },
+      status: { name: label, color: data[0].status.color },
       tags: [],
       time_entries_duration: 0,
       updated_at: '',
@@ -101,6 +102,7 @@ export function Table({ heads, data, label }: TableProps) {
   // get exact statusID
   useEffect(() => {
     setListId(data[0].list_id);
+    dispatch(setCurrTaskListId(data[0].list_id));
     const statusObj: ITask_statuses | undefined = list?.data.list.task_statuses.find(
       (statusObj: ITask_statuses) => statusObj?.name === dataSpread[0].status.name
     );
@@ -187,6 +189,7 @@ export function Table({ heads, data, label }: TableProps) {
             taskLength={taskLength}
             onToggleCollapseTasks={() => setCollapseTasks((prev) => !prev)}
             label={label}
+            headerStatusColor={data[0].status.color as string}
             columns={columns}
             mouseDown={onMouseDown}
             tableHeight={tableHeight}
@@ -203,7 +206,7 @@ export function Table({ heads, data, label }: TableProps) {
                       task={i as ITaskFullList}
                       key={i.id}
                       isListParent={true}
-                      parentId={data[0].list_id}
+                      parentId={listId}
                       task_status={statusId}
                       handleClose={handleClose}
                     />

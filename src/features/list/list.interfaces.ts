@@ -1,4 +1,5 @@
 import { ListColourProps } from '../../components/tasks/ListItem';
+import { IList } from '../hubs/hubs.interfaces';
 import { ICheckListRes } from './../task/interface.tasks';
 
 export type Property = string[] | null;
@@ -58,6 +59,6 @@ export interface IListDetailRes {
 }
 export interface listDetails {
   data: {
-    lists: listProps[];
+    lists: IList[];
   };
 }

@@ -49,7 +49,7 @@ export function DatePickerSideBar({ currentDate }: DatePickerSideBarProp) {
     if (nextWeekend && secondWeekend) {
       selectedWeekends = [nextWeekend.date, secondWeekend];
       if (durationType === 'weekend') {
-        dispatch(setTaskSelectedDate({ from: selectedWeekends[0], to: selectedWeekends[0] }));
+        dispatch(setTaskSelectedDate({ from: selectedWeekends[0], to: selectedWeekends[1] }));
         dispatch(setSelectedDate({ date: selectedWeekends[0] }));
         return selectedWeekends[0];
       } else {
@@ -110,16 +110,15 @@ export function DatePickerSideBar({ currentDate }: DatePickerSideBarProp) {
   };
 
   return (
-    <div className="w-56 py-1 space-y-2 border-r text-sm border-gray-200" style={{ height: '250px', fontSize: '12px' }}>
-      <div
-        className="font-semibold rounded-md hover:bg-gray-200 flex justify-between pr-1 w-full mb-6"
-        onClick={() => setRecurring(!showRecurring)}
-      >
-        <span style={{ fontSize: '10px' }}>Recurring</span>
+    <div className="w-52 border-r text-sm border-gray-200" style={{ height: '250px', fontSize: '12px' }}>
+      <div className="flex justify-between p-1 w-full" onClick={() => setRecurring(!showRecurring)}>
+        <span style={{ fontSize: '12px' }} className="font-extrabold">
+          Recurring
+        </span>
         {showRecurring ? <IoIosArrowDown /> : <IoIosArrowUp />}
       </div>
       <p
-        className="font-semibold rounded-md hover:bg-gray-200 flex justify-between pr-1 w-full"
+        className="font-extrabold rounded-md hover:bg-gray-200 flex justify-between px-2 py-0.5 w-full"
         onClick={() => handleDayClick('today')}
       >
         <span style={{ fontSize: '10px' }}>Today</span>
@@ -128,7 +127,7 @@ export function DatePickerSideBar({ currentDate }: DatePickerSideBarProp) {
         </span>
       </p>
       <p
-        className="font-semibold rounded-md hover:bg-gray-200 flex justify-between pr-1 w-full"
+        className="font-extrabold rounded-md hover:bg-gray-200 flex justify-between px-2 py-1 w-full"
         onClick={() =>
           dispatch(
             setHistoryMemory({
@@ -147,7 +146,7 @@ export function DatePickerSideBar({ currentDate }: DatePickerSideBarProp) {
         </span>
       </p>
       <p
-        className="font-semibold rounded-md hover:bg-gray-200 flex justify-between pr-1 w-full"
+        className="font-extrabold rounded-md hover:bg-gray-200 flex justify-between px-2 py-1 w-full"
         onClick={() => handleDayClick('tomorrow')}
       >
         <span style={{ fontSize: '10px' }}>Tomorrow</span>
@@ -156,7 +155,7 @@ export function DatePickerSideBar({ currentDate }: DatePickerSideBarProp) {
         </span>
       </p>
       <p
-        className="font-semibold rounded-md hover:bg-gray-200 flex justify-between pr-1 w-full"
+        className="font-extrabold rounded-md hover:bg-gray-200 flex justify-between px-2 py-1 w-full"
         onClick={() => handleWeekendButtonClick('weekend')}
       >
         <span style={{ fontSize: '10px' }}>This Weekend</span>
@@ -165,7 +164,7 @@ export function DatePickerSideBar({ currentDate }: DatePickerSideBarProp) {
         </span>
       </p>
       <p
-        className="font-semibold rounded-md hover:bg-gray-200 flex justify-between pr-1 w-full"
+        className="font-extrabold rounded-md hover:bg-gray-200 flex justify-between px-2 py-1 w-full"
         onClick={() => handleWeekendButtonClick('next weekend')}
       >
         <span style={{ fontSize: '10px' }}>Next Weekend</span>
@@ -174,7 +173,7 @@ export function DatePickerSideBar({ currentDate }: DatePickerSideBarProp) {
         </span>
       </p>
       <p
-        className="font-semibold rounded-md hover:bg-gray-200 flex justify-between pr-1 w-full"
+        className="font-extrabold rounded-md hover:bg-gray-200 flex justify-between px-2 py-1 w-full"
         onClick={() => handleWeekClick()}
       >
         <span style={{ fontSize: '10px' }}>Next Week</span>
@@ -183,7 +182,7 @@ export function DatePickerSideBar({ currentDate }: DatePickerSideBarProp) {
         </span>
       </p>
       <p
-        className="font-semibold rounded-md hover:bg-gray-200 flex justify-between pr-1 w-full"
+        className="font-extrabold rounded-md hover:bg-gray-200 flex justify-between px-2 py-1 w-full"
         onClick={() => handleWeekButtonClick(1)}
       >
         <span style={{ fontSize: '10px' }}>Next Work Week</span>
@@ -192,7 +191,7 @@ export function DatePickerSideBar({ currentDate }: DatePickerSideBarProp) {
         </span>
       </p>
       <p
-        className="font-semibold rounded-md hover:bg-gray-200 flex justify-between pr-1 w-full"
+        className="font-extrabold rounded-md hover:bg-gray-200 flex justify-between px-2 py-1 w-full"
         onClick={() => handleWeekButtonClick(2)}
       >
         <span style={{ fontSize: '10px' }}>Next 2 Work Weeks</span>
