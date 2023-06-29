@@ -82,6 +82,13 @@ export default function DatePicker({ styles, range, toggleFn }: DatePickerProps)
     return adjustedDayOfWeekA - adjustedDayOfWeekB;
   });
 
+  // const handleSubmit = () => {
+  //   const data = {
+  //     date: taskTime,
+
+  //   }
+  // }
+
   useEffect(() => {
     calendarTime();
     return () => document.addEventListener('visibilitychange', calendarTime);
@@ -96,10 +103,10 @@ export default function DatePicker({ styles, range, toggleFn }: DatePickerProps)
           styles ??
           'absolute z-50 mt-1 shadow-2xl bg-white rounded-md ring-1 ring-black ring-opacity-5 focus:outline-none top-56 right-12'
         }
-        style={{ height: '380px', width: '510px' }}
+        style={{ height: '359px', width: '462px' }}
       >
         <DatePickerManualDates range={range} />
-        <div className="flex items-center justify-center px-3 border-b" style={{ height: '295px' }}>
+        <div className="flex items-center justify-center px-3 border-b" style={{ height: '275px' }}>
           <DatePickerSideBar currentDate={currentDate} />
 
           <div className="p-1 " style={{ height: '290px' }}>
@@ -130,7 +137,7 @@ export default function DatePicker({ styles, range, toggleFn }: DatePickerProps)
                 />
               </div>
             </div>
-            <div className="flex h-10 space-x-6 text-center">
+            <div className="flex h-10 space-x-5 text-center">
               {sortedKeys.map((dayOfWeek) => {
                 const numericDayOfWeek = parseInt(dayOfWeek, 10); // Convert dayOfWeek to a number
                 const sortedDates = groupedDates[numericDayOfWeek].dates.sort((a, b) => {
@@ -140,10 +147,10 @@ export default function DatePicker({ styles, range, toggleFn }: DatePickerProps)
                   return a.date.isBefore(b.date) ? -1 : 1;
                 });
                 return (
-                  <div key={numericDayOfWeek} className="flex flex-col space-y-5">
+                  <div key={numericDayOfWeek} className="flex flex-col space-y-3">
                     <h3>{days[numericDayOfWeek]}</h3>
                     <div className="">
-                      <ul className="text-center grid place-content-center text-sm border-t p-0.5 space-y-5">
+                      <ul className="flex flex-col space-y-5 text-center text-sm border-t p-0.5">
                         {sortedDates.map((date) => {
                           const isBlocked =
                             (taskTime?.from &&
@@ -170,7 +177,7 @@ export default function DatePicker({ styles, range, toggleFn }: DatePickerProps)
                             <li
                               key={date.date.toISOString()}
                               className={cn(
-                                'h-6 w-6 rounded-full grid place-content-center hover:bg-purple-300 hover:text-white transition-all cursor-pointer select-none',
+                                'rounded-full p-0.5 hover:bg-purple-300 hover:text-white transition-all cursor-pointer select-none font-bold',
                                 date.currentMonth ? '' : 'text-gray-300',
                                 date.today ? 'bg-red-400 text-white rounded-full' : '',
                                 isSelected ? 'bg-purple-400 text-white' : '',
