@@ -2,13 +2,12 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { DragOverlay } from '@dnd-kit/core';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { ITaskFullList, Task } from '../../../../features/task/interface.tasks';
-import { setCurrTeamMemId, setStatusId, setUpdateCords } from '../../../../features/task/taskSlice';
+import { setCurrTaskListId, setCurrTeamMemId, setStatusId, setUpdateCords } from '../../../../features/task/taskSlice';
 import { useScroll } from '../../../../hooks/useScroll';
 import { listColumnProps } from '../../../../pages/workspace/tasks/component/views/ListColumns';
 import { MAX_COL_WIDTH, MIN_COL_WIDTH } from '../../config';
 import { generateGrid } from '../../lib';
 import { createHeaders } from '../../lib/tableHeadUtils';
-import { AddTask } from '../AddTask/AddTask';
 import { ScrollableContainer } from '../../../ScrollableContainer/ScrollableContainer';
 import { Head } from './Head/Head';
 import { OverlayRow } from './OverlayRow';
@@ -33,6 +32,8 @@ export function Table({ heads, data, label }: TableProps) {
   const columns = createHeaders(heads).filter((i) => !i.hidden);
   const { draggableTaskId } = useAppSelector((state) => state.list);
   const [listId, setListId] = useState<string>('');
+  const { statusId } = useAppSelector((state) => state.task);
+
   const { data: list } = UseGetListDetails({ activeItemId: listId, activeItemType: 'list' });
 
   const mouseMove = useCallback(
@@ -65,32 +66,33 @@ export function Table({ heads, data, label }: TableProps) {
     [activeIndex, columns]
   );
 
+  // New task template
   const newTaskObj = [
     ...data,
     {
       archived_at: null,
       assignees: [],
       checklists: [],
-      created_at: Date.now,
+      created_at: Date.now(),
       custom_fields: [],
       deleted_at: null,
       description: null,
       directory_items: [],
       end_date: null,
       group_assignees: [],
-      id: null,
+      id: '0',
       list_id: null,
       main_list_id: '',
       name: 'Add Task',
       parent_id: null,
       position: 125,
       priority: 'low',
-      short_id: '6ba291cf',
+      short_id: '',
       start_date: null,
-      status: { name: label },
+      status: { name: label, color: data[0].status.color },
       tags: [],
       time_entries_duration: 0,
-      updated_at: '2023-06-20T07:39:37.000000Z',
+      updated_at: '',
       watchers_count: 0
     }
   ];
@@ -98,8 +100,9 @@ export function Table({ heads, data, label }: TableProps) {
   const dataSpread = showNewTaskField ? newTaskObj : data;
 
   // get exact statusID
-  // const [statusId, setStatusId] = useState<string>('');
   useEffect(() => {
+    setListId(data[0].list_id);
+    dispatch(setCurrTaskListId(data[0].list_id));
     const statusObj: ITask_statuses | undefined = list?.data.list.task_statuses.find(
       (statusObj: ITask_statuses) => statusObj?.name === dataSpread[0].status.name
     );
@@ -152,7 +155,6 @@ export function Table({ heads, data, label }: TableProps) {
 
   const handleToggleNewTask = () => {
     setShowNewTaskField(true);
-    setListId(data[0].list_id);
   };
 
   const onScroll = useScroll(() => dispatch(setUpdateCords()));
@@ -168,63 +170,67 @@ export function Table({ heads, data, label }: TableProps) {
         </DragOverlay>
       ) : null}
 
-      <table
-        onScroll={onScroll}
-        style={
-          !collapseTasks
-            ? {
-                display: 'grid',
-                gridTemplateColumns: generateGrid(columns.length)
-              }
-            : undefined
-        }
-        className="w-full"
-        ref={tableElement}
-      >
-        <Head
-          collapseTasks={collapseTasks}
-          taskLength={taskLength}
-          onToggleCollapseTasks={() => setCollapseTasks((prev) => !prev)}
-          label={label}
-          columns={columns}
-          mouseDown={onMouseDown}
-          tableHeight={tableHeight}
-        />
+      <div className="table-container">
+        <table
+          onScroll={onScroll}
+          style={
+            !collapseTasks
+              ? {
+                  display: 'grid',
+                  gridTemplateColumns: generateGrid(columns.length)
+                }
+              : undefined
+          }
+          className="w-full"
+          ref={tableElement}
+        >
+          <Head
+            collapseTasks={collapseTasks}
+            taskLength={taskLength}
+            onToggleCollapseTasks={() => setCollapseTasks((prev) => !prev)}
+            label={label}
+            headerStatusColor={data[0].status.color as string}
+            columns={columns}
+            mouseDown={onMouseDown}
+            tableHeight={tableHeight}
+          />
 
-        {/* rows */}
-        {!collapseTasks ? (
-          <tbody className="contents">
-            {dataSpread.length ? (
-              dataSpread.map((i) =>
-                'tags' in i ? (
-                  <Row
-                    columns={columns}
-                    task={i as ITaskFullList}
-                    key={i.id}
-                    parentId={data[0].list_id}
-                    task_status={dataSpread[0].status.name}
-                    handleClose={handleClose}
-                  />
-                ) : null
-              )
-            ) : (
-              <h1 className="p-5 text-center">No tasks</h1>
-            )}
-          </tbody>
-        ) : null}
+          {/* rows */}
+          {!collapseTasks ? (
+            <tbody className="contents">
+              {dataSpread.length ? (
+                dataSpread.map((i) =>
+                  'tags' in i ? (
+                    <Row
+                      columns={columns}
+                      task={i as ITaskFullList}
+                      key={i.id}
+                      isListParent={true}
+                      parentId={listId}
+                      task_status={statusId}
+                      handleClose={handleClose}
+                    />
+                  ) : null
+                )
+              ) : (
+                <h1 className="p-5 text-center">No tasks</h1>
+              )}
+            </tbody>
+          ) : null}
 
-        {/* add subtask button */}
-        {!showNewTaskField ? (
-          <div className="h-5">
-            <button
-              onClick={() => handleToggleNewTask()}
-              className="absolute left-0 p-1.5 pl-16 text-left w-fit text-xs"
-            >
-              + New Task
-            </button>
-          </div>
-        ) : null}
-      </table>
+          {/* add subtask button */}
+          {!showNewTaskField ? (
+            <div className="h-5">
+              <button
+                onClick={() => handleToggleNewTask()}
+                className="absolute left-0 p-1.5 pl-16 text-left w-fit text-xs"
+              >
+                + New Task
+              </button>
+            </div>
+          ) : null}
+        </table>
+      </div>
     </ScrollableContainer>
   );
 }

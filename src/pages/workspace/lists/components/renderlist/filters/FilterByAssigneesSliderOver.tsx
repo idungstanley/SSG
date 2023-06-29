@@ -5,7 +5,7 @@ import { RxDoubleArrowRight } from 'react-icons/rx';
 import { setShowFilterByAssigneeSlideOver } from '../../../../../../features/general/slideOver/slideOverSlice';
 import AvatarWithInitials from '../../../../../../components/avatar/AvatarWithInitials';
 import { AiOutlineCheckCircle, AiFillCheckCircle } from 'react-icons/ai';
-import { setFilters } from '../../../../../../features/task/taskSlice';
+import { setFilterFields } from '../../../../../../features/task/taskSlice';
 import { useGetTeamMembers } from '../../../../../../features/settings/teamMembers/teamMemberService';
 import { generateFilter } from '../../../../../../components/TasksHeader/ui/Filter/lib/filterUtils';
 
@@ -16,7 +16,9 @@ export default function FilterByAssigneesSliderOver() {
 
   const { data } = useGetTeamMembers({ page: 1, query: '' });
   const members = data?.data.team_members ?? [];
-  const { filters } = useAppSelector((state) => state.task);
+  const {
+    filters: { fields: filters }
+  } = useAppSelector((state) => state.task);
 
   const currentAssignees =
     (filters.find((i) => i.key === 'assignees')?.values as { id: string; value: string }[]) ?? [];
@@ -41,10 +43,10 @@ export default function FilterByAssigneesSliderOver() {
 
       if (newAssignees.length === 0) {
         // delete assignees filter if no one member
-        dispatch(setFilters([...filters.filter((i) => i.key !== 'assignees')]));
+        dispatch(setFilterFields([...filters.filter((i) => i.key !== 'assignees')]));
       } else {
         dispatch(
-          setFilters([
+          setFilterFields([
             ...filters.map((filter) => {
               if (filter.key === 'assignees') {
                 // return { ...filter, values: [] };
@@ -58,7 +60,7 @@ export default function FilterByAssigneesSliderOver() {
       }
     } else {
       // create assignees filter
-      dispatch(setFilters([...filters, generateFilter('assignees', { initialValue: newMemberObj })]));
+      dispatch(setFilterFields([...filters, generateFilter('assignees', { initialValue: newMemberObj })]));
     }
   };
 

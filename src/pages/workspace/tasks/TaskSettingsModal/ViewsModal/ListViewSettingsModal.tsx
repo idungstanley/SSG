@@ -8,13 +8,7 @@ import {
   getComfortableView,
   getComfortableViewWrap
 } from '../../../../../features/task/taskSlice';
-import { AiOutlineCaretDown, AiOutlinePlus } from 'react-icons/ai';
-// import { HiOutlineTable } from 'react-icons/hi';
-// import { MdOutlineSpaceDashboard } from 'react-icons/md';
-// import { BiCalendar } from 'react-icons/bi';
-// import { RiMapPin5Line } from 'react-icons/ri';
-// import { CgViewComfortable } from 'react-icons/cg';
-// import { GiChart } from 'react-icons/gi';
+import { AiOutlinePlus } from 'react-icons/ai';
 import { FiChevronRight } from 'react-icons/fi';
 import { CiEdit } from 'react-icons/ci';
 import listIcon from '../../../../../assets/icons/listIcon.png';
@@ -25,6 +19,8 @@ import timeChartIcon from '../../../../../assets/icons/timeChartIcon.png';
 import mapIcon from '../../../../../assets/icons/mapIcon.png';
 import gantIcon from '../../../../../assets/icons/gantIcon.png';
 import teamIcon from '../../../../../assets/icons/teamIcon.png';
+import Icons from '../../../../../components/Icons/Icons';
+import DropdownArrow from '../../../../../assets/icons/arrow_drop_down.svg';
 
 export default function ListViewSettingsModal({
   list,
@@ -149,9 +145,9 @@ export default function ListViewSettingsModal({
 
   return (
     <Menu>
-      <div className="viewSettingsParent flex justify-center items-center">
+      <div className="flex items-center justify-center viewSettingsParent">
         <Menu.Button>
-          <AiOutlineCaretDown className="text-primary-400 h-2.5 w-3" />
+          <Icons src={DropdownArrow} />
         </Menu.Button>
       </div>
 
@@ -166,7 +162,7 @@ export default function ListViewSettingsModal({
       >
         <Menu.Items
           style={{ zIndex: 61 }}
-          className="origin-top-right absolute mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none -ml-8 mt-6"
+          className="absolute w-48 mt-2 mt-6 -ml-8 origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
         >
           {ViewSettings.map((View) => (
             <Menu.Item
@@ -183,8 +179,8 @@ export default function ListViewSettingsModal({
               onMouseEnter={() => setViewId(View.id)}
             >
               {View.label !== 'Create New View' ? (
-                <button onClick={View.handleClick} className=" flex justify-between items-center w-full group ">
-                  <p className="flex items-center space-x-2 pl-2 text-md">
+                <button onClick={View.handleClick} className="flex items-center justify-between w-full  group">
+                  <p className="flex items-center pl-2 space-x-2 text-md">
                     <span className="p-0.5">{View.icon}</span> <span>{View.label}</span>
                   </p>
                   <p
@@ -201,7 +197,7 @@ export default function ListViewSettingsModal({
                 </button>
               ) : (
                 <button onClick={View.handleClick}>
-                  <p className="flex items-center space-x-2 border-t-2 pl-2 py-2">
+                  <p className="flex items-center py-2 pl-2 space-x-2 border-t-2">
                     <span className="bg-primary-200 p-0.5 ">
                       <AiOutlinePlus className=" text-primary-500" />
                     </span>

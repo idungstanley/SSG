@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import SubtasksIcon from '../../../../assets/icons/SubtasksIcon';
-import { Tag, Task } from '../../../../features/task/interface.tasks';
+import { IStatus, ITaskFullList, Tag, Task } from '../../../../features/task/interface.tasks';
 import { DEFAULT_LEFT_PADDING } from '../../config';
 import { Column } from '../../types/table';
 import { AddTask } from '../AddTask/AddTask';
@@ -16,21 +16,60 @@ import { setShowPilotSideOver } from '../../../../features/general/slideOver/sli
 import { setTaskIdForPilot } from '../../../../features/task/taskSlice';
 import { setActiveItem } from '../../../../features/workspace/workspaceSlice';
 import { Tags } from '../../../Tag';
+import { AddSubTask } from '../AddTask/AddSubTask';
 
 interface RowProps {
   task: Task;
   columns: Column[];
   paddingLeft?: number;
   parentId?: string;
+  isListParent: boolean;
   task_status?: string;
   handleClose?: VoidFunction;
 }
 
-export function Row({ task, columns, paddingLeft = 0, parentId, task_status, handleClose }: RowProps) {
+export function Row({ task, columns, paddingLeft = 0, parentId, task_status, isListParent, handleClose }: RowProps) {
   const [showNewTaskField, setShowNewTaskField] = useState(false);
   const otherColumns = columns.slice(1);
-
   const [showSubTasks, setShowSubTasks] = useState(false);
+
+  const newSubTask: ITaskFullList = {
+    archived_at: null,
+    assignees: undefined,
+    avatar_path: '',
+    created_at: '',
+    custom_fields: [],
+    deleted_at: null,
+    description: null,
+    directory_items: [],
+    end_date: null,
+    group_assignees: [],
+    has_descendants: false,
+    id: '0',
+    list: {
+      id: '',
+      name: '',
+      parents: { hubs: [], wallets: [], lists: [] }
+    },
+    list_id: '',
+    name: 'Add Subtask',
+    parent_id: null,
+    priority: 'low',
+    start_date: null,
+    status: {
+      color: task.status.color,
+      created_at: '',
+      id: '',
+      model_id: '',
+      model_type: '',
+      name: task.status.name,
+      position: '',
+      type: '',
+      updated_at: ''
+    },
+    tags: [],
+    updated_at: ''
+  };
 
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -39,12 +78,12 @@ export function Row({ task, columns, paddingLeft = 0, parentId, task_status, han
 
   const onShowAddSubtaskField = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.stopPropagation();
-    setShowNewTaskField(true);
+    setShowNewTaskField(!showNewTaskField);
   };
 
   const onCloseAddTaskFIeld = () => {
     setShowNewTaskField(false);
-    setShowSubTasks(true);
+    // setShowSubTasks(true);
   };
 
   const { attributes, listeners, setNodeRef, transform } = useDraggable({
@@ -57,7 +96,7 @@ export function Row({ task, columns, paddingLeft = 0, parentId, task_status, han
   };
 
   const onClickTask = () => {
-    if (task.id !== null) {
+    if (task.id !== '0') {
       hubId
         ? navigate(`/${currentWorkspaceId}/tasks/h/${hubId}/t/${task.id}`, { replace: true })
         : walletId
@@ -91,6 +130,7 @@ export function Row({ task, columns, paddingLeft = 0, parentId, task_status, han
           setShowSubTasks={setShowSubTasks}
           onClick={onClickTask}
           style={{ zIndex: 3 }}
+          isListParent={isListParent}
           task={task}
           parentId={parentId as string}
           task_status={task_status as string}
@@ -133,11 +173,14 @@ export function Row({ task, columns, paddingLeft = 0, parentId, task_status, han
       </tr>
 
       {showNewTaskField ? (
-        <AddTask
-          columns={otherColumns}
-          paddingLeft={DEFAULT_LEFT_PADDING + paddingLeft}
+        <AddSubTask
+          task={newSubTask}
+          columns={columns}
+          paddingLeft={0}
+          isListParent={false}
           parentId={task.id}
-          onClose={onCloseAddTaskFIeld}
+          task_status={task.status.id}
+          handleClose={onCloseAddTaskFIeld}
         />
       ) : null}
 

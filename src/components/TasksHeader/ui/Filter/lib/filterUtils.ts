@@ -1,6 +1,15 @@
 import { isString } from '../../../../../utils/typeGuards';
 import { filterConfig, operators } from '../config/filterConfig';
-import { FilterKey, FilterValue, FilterWithId, onChangeProps, Operator, Unit } from '../types/filters';
+import {
+  FilterId,
+  FilterKey,
+  FilterValue,
+  FilterWithId,
+  onChangeProps,
+  onSelectOrDeselectAllProps,
+  Operator,
+  Unit
+} from '../types/filters';
 
 interface AdditionalProps {
   initialValue?: FilterValue;
@@ -63,3 +72,33 @@ export const modifyFilters = ({ newValue, id, type }: onChangeProps, filters: Fi
     }
     return i;
   });
+
+export const selectOrDeselectAllFilter = (
+  { newValues, id, type }: onSelectOrDeselectAllProps,
+  filters: FilterWithId[]
+) =>
+  filters.map((i) => {
+    if (i.id === id) {
+      const newFilter = { ...i };
+
+      const updatedValues = type === 'deselect' ? [] : [...newValues];
+      return { ...newFilter, values: updatedValues };
+    }
+
+    return i;
+  });
+
+export const filterUniqueValues = (
+  initialValues: FilterValue[],
+  existingValues: FilterWithId[],
+  id: FilterId,
+  key: FilterKey
+) => {
+  // create array of values or id's
+  const adjustedExistingValues = existingValues
+    .filter((i) => i.id !== id && i.key === key)
+    .map((i) => i.values)
+    .flat();
+
+  return initialValues.filter((i) => !adjustedExistingValues.includes(isString(i) ? i : i.id));
+};

@@ -4,103 +4,28 @@ import { cl } from '../../utils';
 import { RiCheckboxBlankFill } from 'react-icons/ri';
 import { useAppSelector } from '../../app/hooks';
 import { UseUpdateTaskStatusService2 } from '../../features/task/taskService';
-import inprogressIcon from '../../assets/icons/inprogressIcon.png';
-import todoIcon from '../../assets/icons/todoIcon.png';
-import completedIcon from '../../assets/icons/completedIcon.png';
-import archiveIcon from '../../assets/icons/archiveIcon.png';
-import ToolTip from '../Tooltip/Tooltip';
 import { useAbsolute } from '../../hooks/useAbsolute';
 import { Status } from '../../features/task/interface.tasks';
-interface statusType {
-  id: number;
-  title: string;
-  handleClick: () => void;
-  color: string;
-  bg: string;
-}
+import StatusIconComp from '../../assets/icons/StatusIconComp';
+import { UseGetListDetails } from '../../features/list/listService';
+import ToolTip from '../Tooltip/Tooltip';
 
 interface StatusDropdownProps {
   TaskCurrentStatus: Status;
-  statusName?: string | null;
 }
 
-export default function StatusDropdown({ TaskCurrentStatus, statusName }: StatusDropdownProps) {
-  const statusList: statusType[] = [
-    {
-      id: 1,
-      title: 'Todo',
-      handleClick: () => {
-        handleUpdateTaskStatus('todo');
-      },
-      color: '#d3d3d3',
-      bg: 'gray'
-    },
-    {
-      id: 2,
-      title: 'In Progress',
-      handleClick: () => {
-        handleUpdateTaskStatus('in progress');
-      },
-      color: '#a875ff',
-      bg: 'purple'
-    },
-    {
-      id: 3,
-      title: 'Archived',
-      handleClick: () => {
-        handleUpdateTaskStatus('archived');
-      },
-      color: '#f7cb04',
-      bg: 'yellow'
-    },
-    {
-      id: 4,
-      title: 'Completed',
-      handleClick: () => {
-        handleUpdateTaskStatus('completed');
-      },
-      color: '#6bc951',
-      bg: 'green'
-    }
-  ];
-  const { currentTaskStatusId } = useAppSelector((state) => state.task);
+export default function StatusDropdown({ TaskCurrentStatus }: StatusDropdownProps) {
+  const { currentTaskStatusId, currTaskListId } = useAppSelector((state) => state.task);
+  const { data: list } = UseGetListDetails({ activeItemId: currTaskListId, activeItemType: 'list' });
 
   const { mutate } = UseUpdateTaskStatusService2();
 
-  const handleUpdateTaskStatus = (status: string) => {
+  const handleUpdateTaskStatus = (statusId: string) => {
     const updateStatusMutation = {
       task_id: currentTaskStatusId,
-      statusDataUpdate: status
+      statusDataUpdate: statusId
     };
     mutate(updateStatusMutation);
-  };
-
-  const setStatusColor = (status: Status) => {
-    if (status.name === 'new' || status.name === 'To do') {
-      return (
-        <p>
-          <img src={todoIcon} alt="subtask" className="pr-1" />
-        </p>
-      );
-    } else if (status.name === 'In progress') {
-      return (
-        <p className=" text-white whitespace-nowrap capitalize" aria-hidden="true">
-          <img src={inprogressIcon} alt="subtask" className="pr-1" />
-        </p>
-      );
-    } else if (status.name === 'Completed') {
-      return (
-        <p>
-          <img src={completedIcon} alt="subtask" className="pr-1" />
-        </p>
-      );
-    } else if (status.name === 'Archived') {
-      return (
-        <p>
-          <img src={archiveIcon} alt="subtask" className="pr-1" />
-        </p>
-      );
-    }
   };
 
   const [isOpen, setIsOpen] = useState(false);
@@ -108,6 +33,12 @@ export default function StatusDropdown({ TaskCurrentStatus, statusName }: Status
   function closeModal() {
     setIsOpen(false);
   }
+
+  const sortedStatuses = list?.data.list.task_statuses.sort((a, b) => {
+    const positionA = typeof a.position === 'number' ? a.position : 0;
+    const positionB = typeof b.position === 'number' ? b.position : 0;
+    return positionA - positionB;
+  });
 
   const { updateCords } = useAppSelector((state) => state.task);
   const { cords, relativeRef } = useAbsolute(updateCords, 200);
@@ -119,9 +50,11 @@ export default function StatusDropdown({ TaskCurrentStatus, statusName }: Status
           <button
             type="button"
             onClick={() => setIsOpen(true)}
-            className="flex text-sm justify-center items-center focus:outline-none hover:text-gray-700 w-full"
+            className="flex items-center justify-center w-full text-sm focus:outline-none hover:text-gray-700"
           >
-            <div ref={relativeRef}>{setStatusColor(TaskCurrentStatus)}</div>
+            <div ref={relativeRef}>
+              <StatusIconComp color={TaskCurrentStatus.color} />
+            </div>
           </button>
         </ToolTip>
       </div>
@@ -129,25 +62,27 @@ export default function StatusDropdown({ TaskCurrentStatus, statusName }: Status
       <Transition appear show={isOpen} as="div">
         <Dialog as="div" className="relative z-10" onClose={closeModal}>
           <div style={{ ...cords }} className="fixed overflow-y-auto">
-            <div className="flex-col border px-2 h-fit py-1 outline-none flex items-center justify-center text-center mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none">
-              {statusList.map((i) => (
+            <div className="flex flex-col items-center justify-center w-48 px-2 py-1 mt-2 text-center bg-white border divide-y divide-gray-100 rounded-md shadow-lg outline-none h-fit ring-1 ring-black ring-opacity-5 focus:outline-none">
+              {sortedStatuses?.map((statuses) => (
                 <button
-                  key={i.id}
+                  key={statuses.id}
                   type="button"
                   className={cl(
-                    statusName?.toLowerCase() === i.title.toLowerCase() ? `bg-${i.bg}-200` : '',
+                    TaskCurrentStatus?.name.toLowerCase() === statuses.name.toLowerCase()
+                      ? `bg-${statuses.color}-200`
+                      : '',
                     'flex items-center px-4 py-2 text-sm text-gray-600 text-left space-x-2 w-full'
                   )}
-                  onClick={() => i.handleClick()}
+                  onClick={() => handleUpdateTaskStatus(statuses.id)}
                 >
                   <p>
                     <RiCheckboxBlankFill
                       className="pl-px text-xs "
                       aria-hidden="true"
-                      style={{ color: `${i.color}` }}
+                      style={{ color: `${statuses.color}` }}
                     />
                   </p>
-                  <p>{i.title}</p>
+                  <p>{statuses.name}</p>
                 </button>
               ))}
             </div>

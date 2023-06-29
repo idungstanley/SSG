@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useAppSelector } from '../../../../../../app/hooks';
-import { useList } from '../../../../../../features/list/listService';
+import { useList, useTaskStatuses } from '../../../../../../features/list/listService';
 import { useTags } from '../../../../../../features/workspace/tags/tagService';
 import { filterConfig, operators, SPECIAL_CHAR } from '../../config/filterConfig';
 import { AddNewItem } from '../AddNewItem';
@@ -11,7 +11,9 @@ import { FilterOption } from '../../types/filters';
 
 export function List() {
   const [showAddNewItem, setShowAddNewItem] = useState(false);
-  const { filters } = useAppSelector((state) => state.task);
+  const {
+    filters: { fields: filters }
+  } = useAppSelector((state) => state.task);
 
   const [initialFilters, setInitialFilters] = useState(filterConfig);
 
@@ -19,31 +21,35 @@ export function List() {
   const { data: tags } = useTags();
   const { data: members } = useGetTeamMembers({ query: '', page: 1 });
   const { data: list } = useList(listId);
+  const taskStatuses = useTaskStatuses();
 
   useEffect(() => {
     const teamMembers = members?.data.team_members;
 
     // set team members and tags to config
     // check if not exist to prevent duplication
-    if (
-      teamMembers?.length &&
-      !initialFilters.assignees.values.length &&
-      tags?.length &&
-      !initialFilters.tags.values.length
-    ) {
+    if (teamMembers?.length && tags?.length && taskStatuses) {
       setInitialFilters((prev) => ({
         ...prev,
-        assignees: { ...prev.assignees, values: [...teamMembers.map((i) => ({ value: i.user.name, id: i.id }))] },
-        tags: { ...prev.tags, values: [...tags.map((i) => ({ value: i.name, id: i.id }))] }
+        assignees: {
+          ...prev.assignees,
+          values: [
+            ...teamMembers.map((i) => ({
+              value: i.user.name,
+              id: i.id,
+              color: i.user.color,
+              initials: i.user.initials
+            }))
+          ]
+        },
+        tags: { ...prev.tags, values: [...tags.map((i) => ({ value: i.name, id: i.id, color: i.color }))] },
+        status: { ...prev.status, values: [...taskStatuses.map((i) => ({ value: i.name.toLowerCase(), id: i.id }))] }
       }));
     }
 
     // set custom fields to config
     // check if not exist to prevent duplication
-    if (
-      list?.custom_fields.length &&
-      !initialFilters[list.custom_fields[0].name + SPECIAL_CHAR + 'cus_' + list.custom_fields[0].id]
-    ) {
+    if (list?.custom_fields.length) {
       const customFields: FilterOption = {};
       list.custom_fields.forEach((field) => {
         if (field.properties) {
@@ -65,8 +71,8 @@ export function List() {
 
   return (
     <div className="space-y-4 w-full p-2">
-      {filters.map((filter, index) => (
-        <Item initialFilters={initialFilters} index={index} filter={filter} key={filter.key} />
+      {filters.map((filter) => (
+        <Item initialFilters={initialFilters} filter={filter} key={filter.key} />
       ))}
 
       {showAddNewItem ? (

@@ -78,7 +78,7 @@ export function AddTask({ onClose, paddingLeft, parentId, isListParent, columns 
           <p>
             <CiFloppyDisk onClick={onClickSave} className="h-8 w-8" />
           </p>
-          <ImCancelCircle onClick={onClose} className="h-8 w-8" />
+          <ImCancelCircle onClick={onClose} className="h-6 w-6" />
         </div>
       </td>
 

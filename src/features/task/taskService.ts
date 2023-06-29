@@ -253,7 +253,7 @@ const updateTaskStatusService = ({ task_id, statusDataUpdate }: UpdateTaskProps)
     url,
     method: 'PUT',
     params: {
-      status: statusDataUpdate
+      task_status_id: statusDataUpdate
       // priority: priorityDataUpdate,
     }
   });

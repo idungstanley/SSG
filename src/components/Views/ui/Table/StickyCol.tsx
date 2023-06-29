@@ -9,7 +9,12 @@ import { UseUpdateTaskService, useAddTask } from '../../../../features/task/task
 import StatusDropdown from '../../../status/StatusDropdown';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { setShowPilotSideOver } from '../../../../features/general/slideOver/slideOverSlice';
-import { setCurrentTaskId, setShowTaskNavigation, setTaskIdForPilot } from '../../../../features/task/taskSlice';
+import {
+  setCurrentTaskId,
+  setCurrentTaskStatusId,
+  setShowTaskNavigation,
+  setTaskIdForPilot
+} from '../../../../features/task/taskSlice';
 import { setActiveItem } from '../../../../features/workspace/workspaceSlice';
 import { useSortable } from '@dnd-kit/sortable';
 import { UniqueIdentifier } from '@dnd-kit/core';
@@ -25,6 +30,7 @@ interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   setShowSubTasks: (i: boolean) => void;
   paddingLeft?: number;
   task_status?: string;
+  isListParent: boolean;
   tags: ReactNode;
   dragElement?: ReactNode;
   parentId?: string;
@@ -37,6 +43,7 @@ export function StickyCol({
   children,
   tags,
   parentId,
+  isListParent,
   task_status,
   onClose,
   task,
@@ -51,15 +58,8 @@ export function StickyCol({
   const COL_BG = taskId === task.id ? ACTIVE_COL_BG : DEFAULT_COL_BG;
 
   const { mutate: onAdd } = useAddTask(parentId);
-  const { currTeamMemberId, statusId } = useAppSelector((state) => state.task);
+  const { currTeamMemberId } = useAppSelector((state) => state.task);
   const { showTaskNavigation } = useAppSelector((state) => state.task);
-  const { data: list } = UseGetListDetails({ activeItemId: parentId, activeItemType: 'list' });
-
-  list?.data.list.task_statuses.map((statusObj: ITask_statuses) => {
-    if (statusObj?.name == task_status) {
-      // console.log('task_statusId', statusObj);
-    }
-  });
 
   const onClickTask = () => {
     navigate(`/${currentWorkspaceId}/tasks/h/${hubId}/t/${task.id}`, { replace: true });
@@ -107,7 +107,7 @@ export function StickyCol({
     e: React.KeyboardEvent<HTMLDivElement> | React.MouseEvent<HTMLButtonElement, MouseEvent>,
     id: string
   ) => {
-    if (id !== null) {
+    if (id !== '0') {
       handleEditTask(e as React.KeyboardEvent<HTMLDivElement>, id);
     } else {
       onClickSave();
@@ -121,10 +121,10 @@ export function StickyCol({
 
       onAdd({
         name,
-        isListParent: true,
+        isListParent: isListParent,
         id: parentId as string,
         assignees: [currTeamMemberId] as string[],
-        task_status_id: statusId as string
+        task_status_id: task_status as string
       });
     }
   };
@@ -139,7 +139,7 @@ export function StickyCol({
 
   return (
     <>
-      {task.id !== null && (
+      {task.id !== '0' && (
         <td
           className="sticky left-0 flex items-start justify-start text-sm font-medium text-start text-gray-900 cursor-pointer"
           onClick={onClickTask}
@@ -173,7 +173,9 @@ export function StickyCol({
                 />
               )}
             </button>
-            <StatusDropdown TaskCurrentStatus={task.status} />
+            <div onClick={() => dispatch(setCurrentTaskStatusId(task.id as string))}>
+              <StatusDropdown TaskCurrentStatus={task.status} />
+            </div>
             <div className="flex flex-col items-start justify-start space-y-1 pl-2">
               <p
                 className="flex text-left"
@@ -191,7 +193,7 @@ export function StickyCol({
         </td>
       )}
 
-      {task.id == null && (
+      {task.id === '0' && (
         <td
           className="sticky left-0 flex items-start justify-start text-sm font-medium text-start text-gray-900 cursor-pointer"
           onClick={onClickTask}
@@ -225,7 +227,7 @@ export function StickyCol({
               >
                 Save
               </button>
-              <ImCancelCircle onClick={onClose} className="h-8 w-8" />
+              <ImCancelCircle onClick={onClose} className="h-6 w-6" />
               {/* <button onClick={onClose} className="p-0.5 text-white rounded-sm bg-red-600">
                 Cancel
               </button> */}
@@ -237,7 +239,7 @@ export function StickyCol({
                 className="flex text-left"
                 contentEditable={true}
                 ref={inputRef}
-                onKeyDown={(e) => (e.key === 'Enter' ? handleEditTask(e, task.id) : null)}
+                onKeyDown={(e) => (e.key === 'Enter' ? handleOnSave(e, task.id) : null)}
               >
                 {task.name}
               </p>

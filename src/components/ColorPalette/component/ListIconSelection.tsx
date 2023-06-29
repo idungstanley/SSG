@@ -7,8 +7,8 @@ interface ItemProps {
 }
 export default function ListIconSelection({ activeShape, handleSelection }: ItemProps) {
   const listIconDetails = [
-    { shape: 'circle' },
-    { shape: 'square' },
+    { shape: 'solid-circle' },
+    { shape: 'solid-square' },
     { shape: 'two-circle' },
     { shape: 'two-square' },
     { shape: 'square-in-circle' },
