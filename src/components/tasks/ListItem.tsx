@@ -14,6 +14,7 @@ import ListIconSelection from '../ColorPalette/component/ListIconSelection';
 import ListIconComponent from '../ItemsListInSidebar/components/ListIconComponent';
 import { useDroppable } from '@dnd-kit/core';
 import { cl } from '../../utils';
+import ThreeDotIcon from '../../assets/icons/ThreeDotIcon';
 
 interface ListItemProps {
   list: {
@@ -75,7 +76,7 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
     }
   };
 
-  const handleListSettings = (id: string, name: string, e: React.MouseEvent<HTMLButtonElement | SVGElement>) => {
+  const handleListSettings = (id: string, name: string, e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
     dispatch(
       setshowMenuDropdown({
         showMenuDropdown: id,
@@ -149,15 +150,17 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
           <button
             type="button"
             id="listright"
-            className="flex items-center justify-end space-x-1 opacity-0 group-hover:opacity-100"
+            className="flex items-center justify-end pr-1 space-x-1 opacity-0 group-hover:opacity-100"
             onClick={(e) => e.stopPropagation()}
           >
             {/* <TaskDropdown /> */}
-            <AiOutlineEllipsis
-              className="text-xl cursor-pointer hover:text-fuchsia-500"
+            <span
+              className="cursor-pointer"
               id="menusettings"
               onClick={(e) => handleListSettings(list.id, list.name, e)}
-            />
+            >
+              <ThreeDotIcon />
+            </span>
           </button>
         </div>
       </section>

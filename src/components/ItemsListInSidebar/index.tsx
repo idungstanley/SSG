@@ -100,7 +100,7 @@ export default function ItemsListInSidebar({ items, status, type }: ItemsListInS
     }
   };
 
-  const handleHubSettings = (id: string, name: string, e: React.MouseEvent<HTMLButtonElement | SVGElement>): void => {
+  const handleHubSettings = (id: string, name: string, e: React.MouseEvent<HTMLSpanElement, MouseEvent>): void => {
     dispatch(getCurrHubId(id));
     dispatch(setCreateWlLink(false));
     dispatch(
