@@ -1,3 +1,4 @@
+import { ITask_statuses } from '../list/list.interfaces';
 import { Status } from '../task/interface.tasks';
 
 export interface IHub {
@@ -29,6 +30,7 @@ export interface IHubDetails {
   tags?: [];
   status: Status;
   priority?: string | null | undefined;
+  task_statuses: ITask_statuses[];
 }
 
 export interface IHubDetailRes {

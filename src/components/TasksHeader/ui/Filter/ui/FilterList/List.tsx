@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useAppSelector } from '../../../../../../app/hooks';
-import { useList } from '../../../../../../features/list/listService';
+import { useList, useTaskStatuses } from '../../../../../../features/list/listService';
 import { useTags } from '../../../../../../features/workspace/tags/tagService';
 import { filterConfig, operators, SPECIAL_CHAR } from '../../config/filterConfig';
 import { AddNewItem } from '../AddNewItem';
@@ -21,13 +21,14 @@ export function List() {
   const { data: tags } = useTags();
   const { data: members } = useGetTeamMembers({ query: '', page: 1 });
   const { data: list } = useList(listId);
+  const taskStatuses = useTaskStatuses();
 
   useEffect(() => {
     const teamMembers = members?.data.team_members;
 
     // set team members and tags to config
     // check if not exist to prevent duplication
-    if (teamMembers?.length && tags?.length) {
+    if (teamMembers?.length && tags?.length && taskStatuses) {
       setInitialFilters((prev) => ({
         ...prev,
         assignees: {
@@ -41,7 +42,8 @@ export function List() {
             }))
           ]
         },
-        tags: { ...prev.tags, values: [...tags.map((i) => ({ value: i.name, id: i.id, color: i.color }))] }
+        tags: { ...prev.tags, values: [...tags.map((i) => ({ value: i.name, id: i.id, color: i.color }))] },
+        status: { ...prev.status, values: [...taskStatuses.map((i) => ({ value: i.name.toLowerCase(), id: i.id }))] }
       }));
     }
 
