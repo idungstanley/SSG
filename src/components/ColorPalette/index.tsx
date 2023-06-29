@@ -67,7 +67,7 @@ export default function Palette({
     'pink',
     'black',
     'orange',
-    'cream',
+    '#ed45kc',
     '#ED1500',
     'magenta',
     '#5CEE4F',
