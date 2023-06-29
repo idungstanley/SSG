@@ -14,6 +14,7 @@ import ListIconSelection from '../ColorPalette/component/ListIconSelection';
 import ListIconComponent from '../ItemsListInSidebar/components/ListIconComponent';
 import { useDroppable } from '@dnd-kit/core';
 import { cl } from '../../utils';
+import ThreeDotIcon from '../../assets/icons/ThreeDotIcon';
 
 interface ListItemProps {
   list: {
@@ -21,7 +22,7 @@ interface ListItemProps {
     name: string;
     color?: ListColourProps | string;
     shape?: string;
-    taskCount?: number;
+    tasks_count: number;
   };
   paddingLeft: string | number;
   parentId?: string | null;
@@ -75,7 +76,7 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
     }
   };
 
-  const handleListSettings = (id: string, name: string, e: React.MouseEvent<HTMLButtonElement | SVGElement>) => {
+  const handleListSettings = (id: string, name: string, e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
     dispatch(setSideBarCreateTaskListId(id));
     dispatch(
       setshowMenuDropdown({
@@ -129,7 +130,8 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
               fontSize: '13px',
               lineHeight: '15.56px',
               verticalAlign: 'baseline',
-              letterSpacing: '0.28px'
+              letterSpacing: '0.28px',
+              color: listId === list.id ? (baseColor as string) : undefined
             }}
             className="flex items-center gap-1 pl-4 capitalize truncate cursor-pointer"
           >
@@ -137,19 +139,31 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
           </div>
         </div>
         {/* ends here */}
-        <button
-          type="button"
-          id="listright"
-          className="flex items-center justify-end space-x-1 opacity-0 group-hover:opacity-100"
-          onClick={(e) => e.stopPropagation()}
-        >
-          {/* <TaskDropdown /> */}
-          <AiOutlineEllipsis
-            className="cursor-pointer"
-            id="menusettings"
-            onClick={(e) => handleListSettings(list.id, list.name, e)}
-          />
-        </button>
+        <div className="flex items-center gap-1">
+          {list.tasks_count > 0 && (
+            <span
+              className="w-auto px-2 border border-gray-400 rounded"
+              style={{ fontSize: '10px', color: listId === list.id ? (baseColor as string) : undefined }}
+            >
+              {list.tasks_count}
+            </span>
+          )}
+          <button
+            type="button"
+            id="listright"
+            className="flex items-center justify-end pr-1 space-x-1 opacity-0 group-hover:opacity-100"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* <TaskDropdown /> */}
+            <span
+              className="cursor-pointer"
+              id="menusettings"
+              onClick={(e) => handleListSettings(list.id, list.name, e)}
+            >
+              <ThreeDotIcon />
+            </span>
+          </button>
+        </div>
       </section>
       {paletteId == list.id && show ? (
         <Palette

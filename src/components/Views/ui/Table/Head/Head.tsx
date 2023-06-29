@@ -105,7 +105,7 @@ export function Head({
         {/* first sticky col */}
         <th style={{ zIndex: 2 }} className="sticky left-0 flex -mb-2 font-extrabold" ref={columns[0].ref}>
           <div className="flex items-center bg-purple-50 " style={{ width: '22px' }}></div>
-          <div className="flex dBlock items-center w-full gap-3 py-2 truncate group opacity-90">
+          <div className="flex items-center w-full gap-3 py-2 truncate dBlock group opacity-90">
             <div
               className="py-0.5 px-2 rounded-tr-md flex items-center space-x-1 text-white dFlex "
               style={{ backgroundColor: headerStatusColor }}
@@ -175,9 +175,8 @@ export function Head({
                       ? 'hover:bg-gray-200 p-0.5 rounded-md space-x-1 border-l-2 border-r-2 border-t-2 border-transparent hover:border-gray-500'
                       : ''
                   }`}
-                  onClick={(e) => setOptions(e, id, value)}
                 >
-                  {value}
+                  <span onClick={(e) => setOptions(e, id, value)}>{value}</span>
                   {sortAbles.includes(value) && (
                     <span className="ml-0.5">
                       {sortArr.length >= 1 && sortArr.includes(value) ? (

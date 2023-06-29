@@ -19,6 +19,8 @@ import { setCreateWlLink } from '../../features/workspace/workspaceSlice';
 import { ListColourProps } from './ListItem';
 import { useParams } from 'react-router-dom';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
+import PlusIcon from '../../assets/icons/PlusIcon';
+import ThreeDotIcon from '../../assets/icons/ThreeDotIcon';
 
 interface WalletItemProps {
   handleShowSubWallet: (id: string, index?: number) => void;
@@ -35,7 +37,7 @@ interface WalletItemProps {
   walletType: string;
   index?: number;
   isSticky?: boolean;
-  topNumber?: string;
+  topNumber?: number;
   zNumber?: string;
   stickyButtonIndex?: number | undefined;
 }
@@ -49,12 +51,12 @@ export default function WalletItem({
   index,
   isSticky,
   stickyButtonIndex,
-  topNumber = '0',
+  topNumber = 0,
   zNumber
 }: WalletItemProps) {
   const { activeItemId } = useAppSelector((state) => state.workspace);
   const { showMenuDropdown, SubMenuId } = useAppSelector((state) => state.hub);
-  const { paletteDropdown, lightBaseColor, baseColor } = useAppSelector((state) => state.account);
+  const { paletteDropdown, lightBaseColor, baseColor, showSidebar } = useAppSelector((state) => state.account);
   const { paletteId, show } = paletteDropdown;
   const [paletteColor, setPaletteColor] = useState<string | undefined | ListColourProps>('');
   const { walletId } = useParams();
@@ -75,7 +77,7 @@ export default function WalletItem({
     dispatch(setPaletteDropDown({ show: true, paletteId: id, paletteType: 'wallet' }));
   };
 
-  const handleWalletSettings = (id: string, name: string, e: React.MouseEvent<SVGElement>) => {
+  const handleWalletSettings = (id: string, name: string, e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
     dispatch(setSelectedTreeDetails({ name, id, type: EntityType.wallet }));
     dispatch(setCreateWLID(null));
     dispatch(setCreateWlLink(false));
@@ -96,12 +98,12 @@ export default function WalletItem({
   return (
     <>
       <section
-        className={`bg-white items-center pr-1.5 text-sm group ${
+        className={`bg-white items-center truncate text-sm group ${
           wallet.id === activeItemId ? 'font-medium' : 'hover:bg-gray-100'
         } ${isSticky && stickyButtonIndex === index ? 'sticky bg-white' : ''}`}
         onClick={() => handleShowSubWallet(wallet.id, index)}
         style={{
-          top: isSticky ? topNumber : '',
+          top: isSticky ? `${topNumber}px` : '',
           zIndex: isSticky ? zNumber : '1'
         }}
       >
@@ -159,18 +161,24 @@ export default function WalletItem({
               {wallet.name}
             </p>
           </div>
-          <div
-            id="walletRight"
-            className="absolute right-0 flex items-center space-x-1 opacity-0 group-hover:opacity-100"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <AiOutlineEllipsis
-              className="cursor-pointer"
-              onClick={(e) => handleWalletSettings(wallet.id, wallet.name, e)}
-              id="menusettings"
-            />
-            <AiOutlinePlus onClick={() => handleItemAction(wallet.id, wallet.name)} className="cursor-pointer" />
-          </div>
+          {showSidebar && (
+            <div
+              id="walletRight"
+              className="absolute right-0 flex items-center pr-1 space-x-1 opacity-0 group-hover:opacity-100 hover:text-fuchsia-500"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <span onClick={() => handleItemAction(wallet.id, wallet.name)} className="cursor-pointer">
+                <PlusIcon />
+              </span>
+              <span
+                className="cursor-pointer"
+                onClick={(e) => handleWalletSettings(wallet.id, wallet.name, e)}
+                id="menusettings"
+              >
+                <ThreeDotIcon />
+              </span>
+            </div>
+          )}
         </div>
       </section>
       {paletteId === wallet.id && show ? <Palette title="Wallet Colour" setPaletteColor={setPaletteColor} /> : null}

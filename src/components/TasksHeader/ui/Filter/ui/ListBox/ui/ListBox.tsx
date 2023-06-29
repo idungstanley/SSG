@@ -1,4 +1,4 @@
-import { Fragment, useState } from 'react';
+import { Fragment, ReactNode, useState } from 'react';
 import { Listbox, Transition } from '@headlessui/react';
 import { FilterKey, FilterValue, onSelectOrDeselectAllProps, Operator, Unit } from '../../../types/filters';
 import { cl } from '../../../../../../../utils';
@@ -9,6 +9,7 @@ import { filterValueBySearchQuery } from '../../../lib/filterUtils';
 import { Input } from './Input';
 import { Date } from './Date';
 import { isDefined } from '../../../../../../../utils/typeGuards';
+import { AdditionalListBox } from './AdditionalListBox';
 
 interface ListBoxProps {
   values: FilterValue[] | Operator[] | string[] | Unit[];
@@ -18,6 +19,7 @@ interface ListBoxProps {
   onSelectOrDeselectAll?: (data: Pick<onSelectOrDeselectAllProps, 'type'>) => void;
   controlledOptionsDisplay?: true;
   filterKey?: FilterKey;
+  children?: ReactNode;
 }
 
 export function ListBox({
@@ -27,7 +29,8 @@ export function ListBox({
   showSearch,
   onSelectOrDeselectAll,
   controlledOptionsDisplay,
-  filterKey
+  filterKey,
+  children
 }: ListBoxProps) {
   const [query, setQuery] = useState('');
   const [showOptions, setShowOptions] = useState(false);
@@ -63,6 +66,10 @@ export function ListBox({
             <ChevronDownIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
           </span>
         </Listbox.Button>
+
+        {/* additional option */}
+        {children}
+
         <Transition
           show={isDefined(controlledOptionsDisplay) ? showOptions : undefined}
           as={Fragment}
@@ -137,3 +144,4 @@ export function ListBox({
 
 ListBox.Input = Input;
 ListBox.Date = Date;
+ListBox.Additional = AdditionalListBox;

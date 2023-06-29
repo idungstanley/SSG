@@ -8,6 +8,7 @@ import { IListDetailRes, listDetails } from './list.interfaces';
 import { useAppSelector } from '../../app/hooks';
 import { useParams } from 'react-router-dom';
 import { generateFilters } from '../../components/TasksHeader/lib/generateFilters';
+import { UseGetHubDetails } from '../hubs/hubService';
 
 export const createListService = (data: { listName: string; hubId?: string | null; walletId?: string | null }) => {
   const response = requestNew({
@@ -221,4 +222,18 @@ export const useList = (listId?: string) => {
       }),
     { enabled: !!listId && fetch, select: (res) => res.data.list }
   );
+};
+
+export const useTaskStatuses = () => {
+  const { hubId, listId } = useParams();
+
+  if (listId) {
+    const { data } = useList(listId);
+
+    return data?.task_statuses;
+  } else if (hubId) {
+    const { data } = UseGetHubDetails({ activeItemId: hubId, activeItemType: 'hub' });
+
+    return data?.data.hub.task_statuses;
+  }
 };

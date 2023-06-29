@@ -19,6 +19,8 @@ import { VscChecklist, VscScreenFull } from 'react-icons/vsc';
 import Details from '../../../../../components/Pilot/components/details/Details';
 import TimeClock from './TimeClock/index';
 import RecordScreen from '../../../../../components/Pilot/components/RecordScreen';
+import hubIcon from '../../../../../assets/branding/hub.svg';
+import HubManager from '../../../../../components/Pilot/components/HubManager/HubManager';
 
 const sections = [
   {
@@ -52,6 +54,10 @@ const sections = [
   {
     id: 8,
     element: <RecordScreen />
+  },
+  {
+    id: 9,
+    element: <HubManager />
   }
 ];
 
@@ -95,6 +101,11 @@ const tabs = [
     id: 8,
     label: 'Screen Record',
     icon: <VscScreenFull className="w-4 h-4" />
+  },
+  {
+    id: 9,
+    label: 'Entity Manager',
+    icon: <img src={hubIcon} alt="Hub Icon" className="w-4 h-4" />
   }
 ];
 

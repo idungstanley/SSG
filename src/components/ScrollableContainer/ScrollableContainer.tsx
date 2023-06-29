@@ -146,29 +146,37 @@ export function ScrollableContainer({ children, ...props }: CustomScrollableCont
   }
 
   return (
-    <div className="relative overflow-hidden w-full p-2">
+    <div className="relative w-full p-2 overflow-hidden">
       <div className="scrollbar-hide" ref={contentRef} {...props}>
         {children}
       </div>
-      <div className="grid grid-cols-2 w-full mt-2">
+      <div className="grid w-full grid-cols-2 mt-2">
         <div />
 
-        <div className="flex space-x-2 items-center">
-          <button
-            className="w-4 h-4 flex items-center bg-gray-200 justify-center rounded-full"
-            onClick={() => handleScrollButton('left')}
-          >
-            <ChevronLeftIcon className="w-3 h-3 text-gray-700" />
-          </button>
+        <div className="flex items-center space-x-2">
+          <div className="flex gap-1 ml-2 bg-gray-100 rounded">
+            <button
+              className="flex items-center justify-center w-4 h-4 bg-gray-200 rounded-full"
+              onClick={() => handleScrollButton('left')}
+            >
+              <ChevronLeftIcon className="w-3 h-3 text-gray-700" />
+            </button>
+            <button
+              className="flex items-center justify-center w-4 h-4 bg-gray-200 rounded-full"
+              onClick={() => handleScrollButton('right')}
+            >
+              <ChevronRightIcon className="w-3 h-3 text-gray-700" />
+            </button>
+          </div>
 
-          <div className="block relative h-3 w-full flex-grow">
+          <div className="relative flex-grow block w-full h-3">
             <div
-              className="top-0 absolute bottom-0 cursor-pointer h-3 w-full bg-transparent rounded-xl"
+              className="absolute top-0 bottom-0 w-full h-3 bg-transparent cursor-pointer rounded-xl"
               ref={scrollTrackRef}
               onClick={handleTrackClick}
             ></div>
             <div
-              className="h-3 absolute bg-gray-400 rounded-xl cursor-pointer"
+              className="absolute h-3 bg-gray-400 cursor-pointer rounded-xl"
               ref={scrollThumbRef}
               onMouseDown={handleThumbMousedown}
               style={{
@@ -177,13 +185,20 @@ export function ScrollableContainer({ children, ...props }: CustomScrollableCont
               }}
             ></div>
           </div>
-
-          <button
-            className="w-4 h-4 flex items-center bg-gray-200 justify-center rounded-full"
-            onClick={() => handleScrollButton('right')}
-          >
-            <ChevronRightIcon className="w-3 h-3 text-gray-700" />
-          </button>
+          <div className="flex gap-1 ml-2 bg-gray-100 rounded">
+            <button
+              className="flex items-center justify-center w-4 h-4 bg-gray-200 rounded-full"
+              onClick={() => handleScrollButton('left')}
+            >
+              <ChevronLeftIcon className="w-3 h-3 text-gray-700" />
+            </button>
+            <button
+              className="flex items-center justify-center w-4 h-4 bg-gray-200 rounded-full"
+              onClick={() => handleScrollButton('right')}
+            >
+              <ChevronRightIcon className="w-3 h-3 text-gray-700" />
+            </button>
+          </div>
         </div>
       </div>
     </div>

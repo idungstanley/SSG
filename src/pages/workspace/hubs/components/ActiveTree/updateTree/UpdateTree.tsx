@@ -5,14 +5,10 @@ import UpdateList from './UpdateList';
 export default function UpdateTree(
   existingTree: Hub[],
   updateFn: <T extends Hub | Wallet | List>(i: T) => T,
-  updatedData: Hub[],
-  idToUpdate?: string | null,
-  dataChanged?: boolean
+  idToUpdate?: string | null
 ): Hub[] {
-  if (!idToUpdate && dataChanged) {
-    return updatedData;
-  } else {
-    existingTree;
+  if (!idToUpdate) {
+    return existingTree;
   }
 
   return existingTree.map((hub) => {
@@ -21,7 +17,7 @@ export default function UpdateTree(
     } else if (hub.children.length) {
       return {
         ...hub,
-        children: UpdateTree(hub.children, updateFn, updatedData, idToUpdate)
+        children: UpdateTree(hub.children, updateFn, idToUpdate)
       };
     } else if (hub.wallets.length) {
       return {

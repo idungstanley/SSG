@@ -1,3 +1,4 @@
+import { ITask_statuses } from '../list/list.interfaces';
 import { Status } from '../task/interface.tasks';
 
 export interface IHub {
@@ -29,6 +30,7 @@ export interface IHubDetails {
   tags?: [];
   status: Status;
   priority?: string | null | undefined;
+  task_statuses: ITask_statuses[];
 }
 
 export interface IHubDetailRes {
@@ -50,6 +52,7 @@ export interface IWallet {
   hub_id: string;
   parent_id: null | string;
   updated_at: string;
+  tasks_count: number;
   created_at: string;
   archived_at: null | string;
   deleted_at: null | string;
@@ -63,6 +66,7 @@ export interface IList {
   deleted_at: null | string;
   id: string;
   name: string;
+  tasks_count: number;
   updated_at: string;
   created_at: string;
 }
