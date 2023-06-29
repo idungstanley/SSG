@@ -96,6 +96,8 @@ export function StickyCol({
     id: task?.id as UniqueIdentifier
   });
 
+  const [eitableContent, setEitableContent] = useState(false);
+
   const editTaskMutation = useMutation(UseUpdateTaskService, {
     onSuccess: () => {
       queryClient.invalidateQueries(['task']);
@@ -181,7 +183,8 @@ export function StickyCol({
             <div className="flex flex-col items-start justify-start space-y-1 pl-2">
               <p
                 className="flex text-left"
-                contentEditable={true}
+                contentEditable={eitableContent && !singleLineView}
+                onClick={() => setEitableContent(true)}
                 ref={inputRef}
                 onKeyDown={(e) => (e.key === 'Enter' ? handleEditTask(e, task.id) : null)}
               >
