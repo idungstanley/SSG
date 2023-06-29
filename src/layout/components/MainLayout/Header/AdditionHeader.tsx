@@ -25,9 +25,13 @@ export default function AdditionalHeader() {
   const { screenRecording, duration, timerStatus } = useAppSelector((state) => state.task);
   const [show, setShow] = useState<boolean>(false);
   const dispatch = useAppDispatch();
-  const { activeTabId: tabsId, timerLastMemory } = useAppSelector((state) => state.workspace);
+  const { activeTabId: tabsId, timerLastMemory, activeItemId } = useAppSelector((state) => state.workspace);
   const navigate = useNavigate();
   const { activeEntityName } = useAppSelector((state) => state.workspace);
+
+  const sameEntity = () => activeItemId === (timerLastMemory.hubId || timerLastMemory.listId);
+
+  const timeBlinkerCheck = () => (timerStatus && sameEntity() && tabsId !== 6) || (!sameEntity() && timerStatus);
 
   const { activeTabId, workSpaceId, hubId, listId } = timerLastMemory;
 
@@ -38,25 +42,23 @@ export default function AdditionalHeader() {
 
   return (
     <div className="flex items-center justify-between w-full px-4 border-b" style={{ height: '50px' }}>
-      <h1 style={{ height: '50px' }} className="flex items-center ml-4 space-x-1 space-x-3 text-center">
+      <h1 style={{ height: '50px' }} className="flex items-center ml-4 space-x-3 text-center">
         <p className="p-1 bg-gray-300 rounded-md ">
           <img src={headerIcon} alt="" className="w-6 h-6" />
         </p>
         <span className="text-lg font-bold">{activeEntityName}</span>
       </h1>
       <div className="flex items-center justify-center space-x-2">
-        {tabsId !== 6 && timerStatus && (
+        {timeBlinkerCheck() && (
           <div
             className="flex items-center px-2 py-1 space-x-1 border border-purple-500 rounded-lg cursor-pointer"
             onClick={() => handleResetTimer()}
           >
             <IoAlarmSharp className="text-purple-500" />
             <div className="items-center">
-              {duration.h < 10 ? `0${duration.h}` : duration.h}
-              {':'}
-              {duration.m < 10 ? `0${duration.m}` : duration.m}
-              {':'}
-              {duration.s < 10 ? `0${duration.s}` : duration.s}
+              {`${String(duration.h).padStart(2, '0')}:${String(duration.m).padStart(2, '0')}:${String(
+                duration.s
+              ).padStart(2, '0')}`}
             </div>
           </div>
         )}
