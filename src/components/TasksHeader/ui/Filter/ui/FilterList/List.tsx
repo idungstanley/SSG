@@ -70,7 +70,7 @@ export function List() {
   }, [members, tags, list]);
 
   return (
-    <div className="space-y-4 w-full p-2">
+    <div className="w-full p-2 space-y-4">
       {filters.map((filter) => (
         <Item initialFilters={initialFilters} filter={filter} key={filter.key} />
       ))}

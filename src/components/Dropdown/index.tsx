@@ -6,7 +6,7 @@ import { EllipsisHorizontalIcon, PlusIcon } from '@heroicons/react/24/outline';
 
 interface IDropdownItem {
   label: string;
-  onClick?: () => void;
+  onClick?: (e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => void;
   link?: string;
   icon: JSX.Element;
 }
