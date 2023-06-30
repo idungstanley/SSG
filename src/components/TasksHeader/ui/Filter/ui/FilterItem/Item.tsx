@@ -1,10 +1,17 @@
 import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
 import { setFilterFields } from '../../../../../../features/task/taskSlice';
 import { ADDITIONAL_OPERATORS, unitValues } from '../../config/filterConfig';
-import { FilterId, FilterOption, FilterWithId, onChangeProps, onSelectOrDeselectAllProps } from '../../types/filters';
+import {
+  FilterId,
+  FilterOption,
+  FilterValue,
+  FilterWithId,
+  onChangeProps,
+  onSelectOrDeselectAllProps
+} from '../../types/filters';
 import { Label } from './Label';
 import { ListBox } from '../ListBox';
-import { filterUniqueValues, modifyFilters, selectOrDeselectAllFilter } from '../../lib/filterUtils';
+import { filterUniqueValues, modifyFilters, selectOrDeselectAllFilter, undoChanges } from '../../lib/filterUtils';
 import { DeleteItem } from './DeleteItem';
 import { useState } from 'react';
 
@@ -32,6 +39,9 @@ export function Item({ filter, initialFilters }: ItemProps) {
 
   const onSelectOrDeselectAll = ({ type }: Pick<onSelectOrDeselectAllProps, 'type'>) =>
     dispatch(setFilterFields(selectOrDeselectAllFilter({ type, newValues: initialFilters[key].values, id }, filters)));
+
+  const onUndoChanges = (prevState: FilterValue[]) =>
+    dispatch(setFilterFields(undoChanges({ prevState, id }, filters)));
 
   return (
     <div className="flex items-center w-full space-x-2">
@@ -63,6 +73,7 @@ export function Item({ filter, initialFilters }: ItemProps) {
           selected={values}
           values={filterUniqueValues(initialFilters[key].values, filters, id, key)}
           onSelectOrDeselectAll={onSelectOrDeselectAll}
+          onUndoChanges={onUndoChanges}
           showSearch
           controlledOptionsDisplay
           filterKey={key}
