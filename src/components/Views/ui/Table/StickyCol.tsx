@@ -58,8 +58,7 @@ export function StickyCol({
   const COL_BG = taskId === task.id ? ACTIVE_COL_BG : DEFAULT_COL_BG;
 
   const { mutate: onAdd } = useAddTask(parentId);
-  const { currTeamMemberId } = useAppSelector((state) => state.task);
-  const { showTaskNavigation } = useAppSelector((state) => state.task);
+  const { currTeamMemberId, showTaskNavigation, singleLineView } = useAppSelector((state) => state.task);
 
   const onClickTask = () => {
     navigate(`/${currentWorkspaceId}/tasks/h/${hubId}/t/${task.id}`, { replace: true });
@@ -96,6 +95,8 @@ export function StickyCol({
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: task?.id as UniqueIdentifier
   });
+
+  const [eitableContent, setEitableContent] = useState(false);
 
   const editTaskMutation = useMutation(UseUpdateTaskService, {
     onSuccess: () => {
@@ -161,7 +162,10 @@ export function StickyCol({
             {dragElement}
           </div>
 
-          <div style={{ paddingLeft }} className={cl(COL_BG, 'relative border-t w-full h-10 py-4 flex items-center ')}>
+          <div
+            style={{ paddingLeft, minHeight: '40px' }}
+            className={cl(COL_BG, 'relative border-t w-full py-4 flex items-center ')}
+          >
             <button onClick={onToggleDisplayingSubTasks} className="">
               {showSubTasks ? (
                 <RxTriangleDown
@@ -179,11 +183,16 @@ export function StickyCol({
             <div className="flex flex-col items-start justify-start space-y-1 pl-2">
               <p
                 className="flex text-left"
-                contentEditable={true}
+                contentEditable={eitableContent && !singleLineView}
+                onClick={() => setEitableContent(true)}
                 ref={inputRef}
                 onKeyDown={(e) => (e.key === 'Enter' ? handleEditTask(e, task.id) : null)}
               >
-                {task.name}
+                {task.name.length > 50 && singleLineView ? (
+                  <span className="whitespace-nowrap">{task.name.substring(0, 40)}...</span>
+                ) : (
+                  <span>{task.name}</span>
+                )}
               </p>
 
               {tags}
