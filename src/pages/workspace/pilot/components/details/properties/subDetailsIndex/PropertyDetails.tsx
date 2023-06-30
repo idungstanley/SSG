@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { AiOutlinePlus } from 'react-icons/ai';
 import moment from 'moment';
-import ToolTip from '../../../../../../../components/Tooltip';
+import ToolTip from '../../../../../../../components/Tooltip/Tooltip';
 import CustomReference from '../customReference/CustomReference';
 import EntitySettings from '../entitySettings/EntitySettings';
 import Share from '../share/Share';

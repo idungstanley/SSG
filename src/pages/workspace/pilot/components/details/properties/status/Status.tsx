@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { MdArrowRight } from 'react-icons/md';
 import { AiOutlineCheck } from 'react-icons/ai';
-import ToolTip from '../../../../../../../components/Tooltip';
+import ToolTip from '../../../../../../../components/Tooltip/Tooltip';
 import { useDispatch } from 'react-redux';
 import { setUpdateStatusModalId } from '../../../../../../../features/task/taskSlice';
 import { UseUpdateTaskStatusService2 } from '../../../../../../../features/task/taskService';

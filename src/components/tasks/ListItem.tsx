@@ -1,6 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import React, { useState } from 'react';
-import { AiOutlineEllipsis } from 'react-icons/ai';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { setPaletteDropDown } from '../../features/account/accountSlice';
@@ -14,6 +13,7 @@ import ListIconSelection from '../ColorPalette/component/ListIconSelection';
 import ListIconComponent from '../ItemsListInSidebar/components/ListIconComponent';
 import { useDroppable } from '@dnd-kit/core';
 import { cl } from '../../utils';
+import InteractiveTooltip from '../Tooltip/InteractiveTooltip';
 import ThreeDotIcon from '../../assets/icons/ThreeDotIcon';
 
 interface ListItemProps {
@@ -75,6 +75,12 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
       });
     }
   };
+
+  const tooltipItems = [
+    { label: 'Todo', count: 1, onClick: () => ({}) },
+    { label: 'In Progress', count: 1, onClick: () => ({}) },
+    { label: 'Completed', count: 1, onClick: () => ({}) }
+  ];
 
   const handleListSettings = (id: string, name: string, e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
     dispatch(setSideBarCreateTaskListId(id));
@@ -141,12 +147,34 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
         {/* ends here */}
         <div className="flex items-center gap-1">
           {list.tasks_count > 0 && (
-            <span
-              className="w-auto px-2 border border-gray-400 rounded"
-              style={{ fontSize: '10px', color: listId === list.id ? (baseColor as string) : undefined }}
+            <InteractiveTooltip
+              content={
+                <ul className="space-y-2 w-28">
+                  <span className="flex items-center justify-between cursor-pointer hover:text-blue-500">
+                    <p>Tasks</p>
+                    <p>({list.tasks_count})</p>
+                  </span>
+                  <hr />
+                  {tooltipItems.map((item, index) => (
+                    <li
+                      key={index}
+                      className="flex items-center justify-between cursor-pointer hover:text-blue-500"
+                      onClick={item.onClick}
+                    >
+                      <p>{item.label}</p>
+                      <p>({item.count})</p>
+                    </li>
+                  ))}
+                </ul>
+              }
             >
-              {list.tasks_count}
-            </span>
+              <span
+                className="w-auto px-2 border border-gray-400 rounded"
+                style={{ fontSize: '10px', color: listId === list.id ? (baseColor as string) : undefined }}
+              >
+                {list.tasks_count}
+              </span>
+            </InteractiveTooltip>
           )}
           <button
             type="button"

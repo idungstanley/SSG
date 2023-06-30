@@ -8,7 +8,7 @@ import Share from '../share/Share';
 import Assignees from '../assignees/Assignees';
 import Subscribers from '../subscribers/Subscribers';
 import AvatarWithInitials from '../../../../../avatar/AvatarWithInitials';
-import ToolTip from '../../../../../Tooltip';
+import ToolTip from '../../../../../Tooltip/Tooltip';
 import { ITaskFullList } from '../../../../../../features/task/interface.tasks';
 import { IHubDetails } from '../../../../../../features/hubs/hubs.interfaces';
 import { useMutation, useQueryClient } from '@tanstack/react-query';

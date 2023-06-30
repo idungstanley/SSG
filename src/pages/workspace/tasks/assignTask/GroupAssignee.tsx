@@ -3,7 +3,7 @@ import { useAppSelector } from '../../../../app/hooks';
 import { AvatarWithInitials } from '../../../../components';
 import { UseUnassignTask } from '../../../../features/task/taskService';
 import PopAssignModal from './popAssignModal';
-import ToolTip from '../../../../components/Tooltip';
+import ToolTip from '../../../../components/Tooltip/Tooltip';
 import AvatarForOwner from '../../../../components/avatar/AvatarForOwner';
 import AvatarWithImage from '../../../../components/avatar/AvatarWithImage';
 

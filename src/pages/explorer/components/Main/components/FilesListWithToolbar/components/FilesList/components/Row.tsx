@@ -10,7 +10,7 @@ import {
 } from '../../../../../../../../../features/explorer/explorerSlice';
 import { useGetExplorerFile } from '../../../../../../../../../features/explorer/explorerService';
 import { EyeIcon, ArrowsUpDownIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
-import ToolTip from '../../../../../../../../../components/Tooltip';
+import ToolTip from '../../../../../../../../../components/Tooltip/Tooltip';
 import { cl } from '../../../../../../../../../utils';
 
 interface RowProps {
