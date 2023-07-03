@@ -39,9 +39,14 @@ export default function ClockInOut() {
     itemId: activeItemId,
     trigger: activeItemType === 'subhub' ? 'hub' : activeItemType
   });
+  // Get currently active timers
+  const { data: getCurrent } = GetTimeEntriesService({
+    itemId: activeItemId,
+    trigger: activeItemType === 'subhub' ? 'hub' : activeItemType,
+    is_active: 1
+  });
   const mutation = EndTimeEntriesService();
   const { mutate } = StartTimeEntryService();
-  runTimer({ isRunning: isRunning, setTime: setTime });
 
   const start = () => {
     mutate({
@@ -54,11 +59,6 @@ export default function ClockInOut() {
     dispatch(setTimerStatus(!timerStatus));
     setRunning(true);
     dispatch(setTimerLastMemory({ workSpaceId, hubId, listId, activeTabId }));
-    period &&
-      localStorage.setItem(
-        'lastActiveTimerData',
-        JSON.stringify({ period: period, workSpaceId, hubId, listId, activeTabId })
-      );
   };
 
   const stop = () => {
@@ -71,9 +71,9 @@ export default function ClockInOut() {
     setTime({ s: 0, m: 0, h: 0 });
     setRunning(false);
     dispatch(setTimerStatus(false));
-    dispatch(setTimerInterval());
     clearInterval(period);
-    localStorage.removeItem('lastActiveTimerData');
+    dispatch(setTimerInterval(undefined));
+    // localStorage.removeItem('lastActiveTimerData');
   };
 
   function timerCheck() {
@@ -123,6 +123,12 @@ export default function ClockInOut() {
     setBtnClicked(false);
     setTime({ s: 0, m: 0, h: 0 });
   };
+
+  const RunTimer = runTimer({ isRunning: isRunning, setTime: setTime });
+
+  useEffect(() => {
+    RunTimer;
+  }, [isRunning]);
 
   // let updateH = 0,
   //   updateM = 0,
@@ -223,15 +229,18 @@ interface TimerProps {
 
 export function runTimer({ isRunning, isActiveInterval, setTime }: TimerProps) {
   const dispatch = useAppDispatch();
-  const { duration } = useAppSelector((state) => state.task);
+  const { duration, period } = useAppSelector((state) => state.task);
+  console.log(period);
 
   useEffect(() => {
     let updateH = duration.h;
     let updateM = duration.m;
     let updateS = duration.s;
 
-    const interval = window.setInterval(() => {
-      if (isRunning) {
+    let interval: number | undefined;
+
+    if (isRunning) {
+      interval = window.setInterval(() => {
         if (updateM >= 59) {
           updateH++;
           updateM = 0;
@@ -244,8 +253,9 @@ export function runTimer({ isRunning, isActiveInterval, setTime }: TimerProps) {
 
         setTime && setTime({ h: updateH, m: updateM, s: updateS });
         dispatch(setUpdateTimerDuration({ s: updateS, m: updateM, h: updateH }));
-      }
-    }, 1000);
+      }, 1000);
+    }
+
     !isActiveInterval && dispatch(setTimerInterval(interval));
   }, [isRunning, dispatch]);
 }

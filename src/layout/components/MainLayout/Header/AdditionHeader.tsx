@@ -3,7 +3,7 @@ import { HiOutlineUpload } from 'react-icons/hi';
 import { BsFillGrid3X3GapFill } from 'react-icons/bs';
 import { MdHelpOutline, MdTab } from 'react-icons/md';
 import { resetWorkSpace } from '../../../../features/workspace/workspaceSlice';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { IoAlarmSharp } from 'react-icons/io5';
 import BlinkerModal from './HeaderModal';
@@ -16,8 +16,8 @@ export const handleEntity = ({
   listId
 }: {
   workSpaceId: string | undefined;
-  hubId: string | undefined;
-  listId: string | undefined;
+  hubId: string | undefined | null;
+  listId: string | undefined | null;
 }): string => {
   return hubId !== '' ? `/${workSpaceId}/tasks/h/${hubId}` : `/${workSpaceId}/tasks/l/${listId}`;
 };
@@ -29,8 +29,9 @@ export default function AdditionalHeader() {
   const dispatch = useAppDispatch();
   const { activeTabId: tabsId, timerLastMemory, activeItemId } = useAppSelector((state) => state.workspace);
   const navigate = useNavigate();
+  const { workSpaceId: workspaceId } = useParams();
   const { activeEntityName } = useAppSelector((state) => state.workspace);
-  const { refetch } = useCurrentTime();
+  const { refetch } = useCurrentTime({ workspaceId });
 
   const localData = localStorage.getItem('lastActiveTimerData');
   const activePeriod: { period: number } = localData && JSON.parse(localData);

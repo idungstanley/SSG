@@ -413,13 +413,15 @@ export const createTimeEntriesService = (data: { queryKey: (string | undefined)[
   return response;
 };
 
-export const useCurrentTime = () => {
+export const useCurrentTime = ({ workspaceId }: { workspaceId?: string }) => {
   const dispatch = useAppDispatch();
   const { timezone } = useAppSelector((state) => state.userSetting);
   const { data, isLoading, isError, refetch } = useQuery(
     ['timeData'],
     async () => {
-      const response = await requestNew<{ data: { time_entry: { start_date: string } } } | undefined>({
+      const response = await requestNew<
+        { data: { time_entry: { start_date: string; model_type: string; model_id: string } } } | undefined
+      >({
         method: 'GET',
         url: 'time-entries/current'
       });
@@ -429,9 +431,6 @@ export const useCurrentTime = () => {
       onSuccess: (data) => {
         const dateData = data?.data;
         const dateString = dateData?.time_entry;
-        const localData = localStorage.getItem('lastActiveTimerData');
-        const lastTimerData: { workSpaceId: string; hubId: string; listId: string; activeTabId: number } =
-          localData && JSON.parse(localData);
 
         if (dateString) {
           const givenDate = moment(dateString?.start_date, 'YYYY-MM-DD HH:mm:ss', timezone);
@@ -439,7 +438,14 @@ export const useCurrentTime = () => {
           const duration = moment.duration(currentDate.diff(givenDate));
           dispatch(setTimerStatus(true));
           dispatch(setUpdateTimerDuration({ s: duration.seconds(), m: duration.minutes(), h: duration.hours() - 1 }));
-          dispatch(setTimerLastMemory(lastTimerData));
+          dispatch(
+            setTimerLastMemory({
+              hubId: dateString.model_type === 'hub' ? dateString.model_id : null,
+              activeTabId: 6,
+              listId: dateString.model_type === 'list' ? dateString.model_id : null,
+              workSpaceId: workspaceId
+            })
+          );
         }
       }
     }
@@ -500,15 +506,17 @@ export const EndTimeEntriesService = () => {
 
 export const GetTimeEntriesService = ({
   itemId,
-  trigger
+  trigger,
+  is_active
 }: {
   itemId: string | null | undefined;
   trigger: string | null | undefined;
+  is_active?: number;
 }) => {
   const { timeSortArr } = useAppSelector((state) => state.task);
   const updatesortArr = timeSortArr.length === 0 ? null : timeSortArr;
   return useQuery(
-    ['timeclock', { itemId: itemId }, updatesortArr],
+    ['timeclock', { itemId: itemId }, updatesortArr, is_active],
     async () => {
       const data = await requestNew<ITimeEntriesRes | undefined>({
         url: 'time-entries',
@@ -516,7 +524,8 @@ export const GetTimeEntriesService = ({
         params: {
           type: trigger,
           id: itemId,
-          team_member_ids: updatesortArr
+          team_member_ids: updatesortArr,
+          is_active: is_active
         }
       });
       return data;
