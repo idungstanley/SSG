@@ -98,6 +98,14 @@ export default function SubDropdown() {
       }
     },
     {
+      label: 'Choose Location',
+      style: 'white',
+      callback: () => {
+        dispatch(setVisibility(false));
+        dispatch(setShowTreeInput(true));
+      }
+    },
+    {
       label: 'Proceed',
       bgColor: lightBaseColor,
       callback: () => {
