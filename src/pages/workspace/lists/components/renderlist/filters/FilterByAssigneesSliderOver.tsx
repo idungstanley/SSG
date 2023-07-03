@@ -70,8 +70,8 @@ export default function FilterByAssigneesSliderOver() {
         <div className="fixed inset-0" />
 
         <div className="fixed inset-0 overflow-hidden">
-          <div className="absolute inset-0  overflow-hidden">
-            <div className="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-10">
+          <div className="absolute inset-0 overflow-hidden">
+            <div className="fixed inset-y-0 right-0 flex max-w-full pl-10 pointer-events-none">
               <Transition.Child
                 as={Fragment}
                 enter="transform transition ease-in-out duration-500 sm:duration-700"
@@ -81,21 +81,21 @@ export default function FilterByAssigneesSliderOver() {
                 leaveFrom="translate-x-0"
                 leaveTo="translate-x-full"
               >
-                <Dialog.Panel className="pointer-events-auto w-80 mt-10 border-2 border-gray-200 max-w-md">
-                  <div className="flex h-full flex-col overflow-y-scroll bg-white py-6 shadow-xl">
+                <Dialog.Panel className="max-w-md mt-10 border-2 border-gray-200 pointer-events-auto w-80">
+                  <div className="flex flex-col h-full py-6 overflow-y-scroll bg-white shadow-xl">
                     <div className="px-4 sm:px-6">
                       <div className="flex items-start justify-between">
                         <Dialog.Title className="text-lg ">
                           <p className="text-gray-900">Assignees</p>
                         </Dialog.Title>
-                        <div className="ml-3 flex h-7 items-center">
+                        <div className="flex items-center ml-3 h-7">
                           <button
                             type="button"
-                            className="rounded-md bg-white cursor-pointer text-gray-400 hover:text-gray-500 focus:outline-none ring-0 focus:ring-0"
+                            className="text-gray-400 bg-white rounded-md cursor-pointer hover:text-gray-500 focus:outline-none ring-0 focus:ring-0"
                             onClick={onClose}
                           >
                             <span className="sr-only">Close panel</span>
-                            <button className="text-purple-300 text-lg">
+                            <button className="text-lg text-purple-300">
                               <RxDoubleArrowRight />
                             </button>
                           </button>
@@ -103,10 +103,10 @@ export default function FilterByAssigneesSliderOver() {
                       </div>
                     </div>
 
-                    <div className="relative mt-6 flex-1 px-4 sm:px-6">
+                    <div className="relative flex-1 px-4 mt-6 sm:px-6">
                       <input type="text" placeholder="Search" className="w-full" />
                       <section>
-                        <div id="header" className="flex justify-between items-center mt-5">
+                        <div id="header" className="flex items-center justify-between mt-5">
                           <p>Assignees</p>
                           <p>Select all</p>
                         </div>
