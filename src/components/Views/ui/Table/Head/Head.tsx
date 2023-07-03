@@ -104,7 +104,7 @@ export function Head({
       <tr className="contents">
         {/* first sticky col */}
         <th style={{ zIndex: 2 }} className="sticky left-0 flex items-center -mb-2 font-extrabold" ref={columns[0].ref}>
-          <p className="pt-0.5">
+          <p className="">
             <Chevron color={headerStatusColor} active={collapseTasks} onToggle={onToggleCollapseTasks} />
           </p>
           <div className="flex items-center bg-purple-50 " style={{ width: '5px' }}></div>

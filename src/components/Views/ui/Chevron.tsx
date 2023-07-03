@@ -21,7 +21,7 @@ export function Chevron({ onToggle, active, color }: ChevronProps) {
       onMouseLeave={(e: MouseEvent<HTMLButtonElement>) => {
         const target = e.target as HTMLButtonElement;
         target.style.background = '';
-        target.style.color = '';
+        target.style.color = color as string;
       }}
     >
       {active ? (

@@ -56,7 +56,7 @@ export function StickyCol({
   const COL_BG = taskId === task.id ? ACTIVE_COL_BG : DEFAULT_COL_BG;
 
   const { mutate: onAdd } = useAddTask(parentId);
-  const { currTeamMemberId, showTaskNavigation, singleLineView } = useAppSelector((state) => state.task);
+  const { currTeamMemberId, showTaskNavigation, singleLineView, taskUpperCase } = useAppSelector((state) => state.task);
 
   const onClickTask = () => {
     navigate(`/${currentWorkspaceId}/tasks/h/${hubId}/t/${task.id}`, { replace: true });
@@ -77,6 +77,8 @@ export function StickyCol({
       })
     );
   };
+
+  console.log(taskUpperCase);
 
   const onToggleDisplayingSubTasks = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.stopPropagation();
@@ -111,6 +113,40 @@ export function StickyCol({
       onClickSave();
     }
   };
+
+  function capitalizeTitle(title: string) {
+    const lowercaseWords = [
+      'a',
+      'an',
+      'the',
+      'and',
+      'but',
+      'or',
+      'for',
+      'nor',
+      'on',
+      'is',
+      'at',
+      'to',
+      'from',
+      'by',
+      'in',
+      'out',
+      'over',
+      'with'
+    ];
+
+    const words = title.toLowerCase().split(' ');
+
+    const capitalizedWords = words.map((word, index) => {
+      if (index === 0 || !lowercaseWords.includes(word)) {
+        return word.charAt(0).toUpperCase() + word.slice(1);
+      }
+      return word;
+    });
+
+    return capitalizedWords.join(' ');
+  }
 
   const onClickSave = () => {
     if (inputRef.current?.innerText) {
@@ -185,9 +221,14 @@ export function StickyCol({
                 onKeyDown={(e) => (e.key === 'Enter' ? handleEditTask(e, task.id) : null)}
               >
                 {task.name.length > 50 && singleLineView ? (
-                  <span className="whitespace-nowrap">{task.name.substring(0, 40)}...</span>
+                  <span className="whitespace-nowrap">
+                    {taskUpperCase
+                      ? task.name.substring(0, 40).toUpperCase()
+                      : capitalizeTitle(task.name).substring(0, 40)}
+                    ...
+                  </span>
                 ) : (
-                  <span>{task.name}</span>
+                  <span>{taskUpperCase ? task.name.toUpperCase() : capitalizeTitle(task.name)}</span>
                 )}
               </p>
 
