@@ -6,7 +6,7 @@ import { FaFolder } from 'react-icons/fa';
 import { AiOutlineUnorderedList } from 'react-icons/ai';
 import hubIcon from '../../assets/branding/hub.svg';
 import { setCreateTaskSlideOverVisibility } from '../../features/general/slideOver/slideOverSlice';
-import { getSubMenu, setEntityToCreate } from '../../features/hubs/hubSlice';
+import { getSubMenu, setEntityToCreate, setSubDropdownMenu } from '../../features/hubs/hubSlice';
 import { useNavigate } from 'react-router-dom';
 import { setVisibility } from '../../features/general/prompt/promptSlice';
 import { setActiveSubHubManagerTabId, setActiveTabId, setShowTreeInput } from '../../features/workspace/workspaceSlice';
@@ -119,6 +119,7 @@ export default function SubDropdown() {
       label: 'Cancel',
       style: 'danger',
       callback: () => {
+        dispatch(setSubDropdownMenu(false));
         dispatch(
           getSubMenu({
             SubMenuId: null,
@@ -260,7 +261,7 @@ export default function SubDropdown() {
               Do you want to create your {lastClicked} under{' '}
               <span className="font-black capitalize">{selectedTreeDetails.name}?</span>
             </span>
-            <div className="p-2 flex gap-2 h-10 bg-gray-50 items-center">
+            <div className="flex items-center h-10 gap-2 p-2 bg-gray-50">
               {options.map((option: optionsProps) => (
                 <div key={option.label}>
                   <Button
