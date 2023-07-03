@@ -41,7 +41,6 @@ export default function HList({ hubs, leftMargin, taskType, level = 1 }: ListPro
   const [showChildren, setShowChidren] = useState<string | null | undefined>(null);
   const { currentItemId, showExtendedBar, createEntityType } = useAppSelector((state) => state.workspace);
   const { showSidebar } = useAppSelector((state) => state.account);
-
   const { showMenuDropdown, SubMenuId } = useAppSelector((state) => state.hub);
   const [stickyButtonIndex, setStickyButtonIndex] = useState<number | undefined>(-1);
   const hubCreationStatus = 'New Hub Under Construction';
