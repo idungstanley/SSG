@@ -90,7 +90,7 @@ export function StickyCol({
   const queryClient = useQueryClient();
   const inputRef = useRef<HTMLInputElement | null>(null);
 
-  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
+  const { attributes, listeners, setNodeRef } = useSortable({
     id: task?.id as UniqueIdentifier
   });
 

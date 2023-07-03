@@ -10,7 +10,7 @@ export function FilterDropdown() {
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
-        <Menu.Button className="inline-flex text-sm text-gay-500">
+        <Menu.Button className="inline-flex text-gay-500">
           <Button active={false}>
             <Icons src={Filter} />
             Filter
