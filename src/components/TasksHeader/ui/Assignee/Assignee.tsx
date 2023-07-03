@@ -62,7 +62,7 @@ export function Assignee() {
   };
 
   return (
-    <div className="flex items-center rounded-2xl h-8 text-sm">
+    <div className="flex items-center h-8 text-sm rounded-2xl">
       <Button active={isMe} onClick={onToggleMe}>
         <Icons src={Me} />
         <span>Me</span>

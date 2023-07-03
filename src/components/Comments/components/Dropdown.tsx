@@ -29,7 +29,7 @@ export default function Dropdown({ show, setShowDropdown, setSelectedUsers, sele
         {' '}
       </div>
 
-      <div className="absolute z-10 mt-0 w-48 overflow-x-scroll top-20 right-0 border bg-white rounded-xl">
+      <div className="absolute right-0 z-10 w-48 mt-0 overflow-x-scroll bg-white border top-20 rounded-xl">
         <XMarkIcon
           onClick={() => setShowDropdown(false)}
           className="absolute w-6 h-6 text-black transition-all duration-300 rounded-full cursor-pointer top-1 right-1"

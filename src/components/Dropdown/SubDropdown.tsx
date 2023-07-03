@@ -6,7 +6,7 @@ import { FaFolder } from 'react-icons/fa';
 import { AiOutlineUnorderedList } from 'react-icons/ai';
 import hubIcon from '../../assets/branding/hub.svg';
 import { setCreateTaskSlideOverVisibility } from '../../features/general/slideOver/slideOverSlice';
-import { getSubMenu, setEntityToCreate } from '../../features/hubs/hubSlice';
+import { getSubMenu, setEntityToCreate, setSubDropdownMenu } from '../../features/hubs/hubSlice';
 import { useNavigate } from 'react-router-dom';
 import { setActiveSubHubManagerTabId, setActiveTabId } from '../../features/workspace/workspaceSlice';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
@@ -87,6 +87,7 @@ export default function SubDropdown() {
       label: 'Cancel',
       style: 'danger',
       callback: () => {
+        dispatch(setSubDropdownMenu(false));
         dispatch(
           getSubMenu({
             SubMenuId: null,
