@@ -7,13 +7,11 @@ const COMMON_STYLES = {
 
 const DEFAULT_BUTTON = {
   ...COMMON_STYLES,
-  // backgroundColor: '#f4f4f4',
   color: '#424242'
 };
 
 const ACTIVE_BUTTON = {
   ...COMMON_STYLES,
-  // backgroundColor: '#f9e6ff',
   color: '#bf01fe'
 };
 
