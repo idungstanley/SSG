@@ -21,7 +21,6 @@ import TimeClock from './TimeClock/index';
 import RecordScreen from '../../../../../components/Pilot/components/RecordScreen';
 import hubIcon from '../../../../../assets/branding/hub.svg';
 import HubManager from '../../../../../components/Pilot/components/HubManager/HubManager';
-import { getCurrentTime } from '../../../../../features/task/taskService';
 
 const sections = [
   {
@@ -116,8 +115,7 @@ export default function PilotSection() {
   const dispatch = useAppDispatch();
 
   const { listId } = useParams();
-  const { activeItemName, activeItemId } = useAppSelector((state) => state.workspace);
-  const timeRecord = getCurrentTime();
+  const { activeItemName } = useAppSelector((state) => state.workspace);
 
   // useEffect(() => {
   //   timeRecord;
