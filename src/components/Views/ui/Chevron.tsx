@@ -1,3 +1,4 @@
+import { MouseEvent } from 'react';
 import { IoChevronDownCircleOutline, IoChevronForwardCircleOutline } from 'react-icons/io5';
 
 interface ChevronProps {
@@ -6,13 +7,27 @@ interface ChevronProps {
   color?: string;
 }
 
-export function Chevron({ onToggle, active, color = 'text-gray-200' }: ChevronProps) {
+export function Chevron({ onToggle, active, color }: ChevronProps) {
   return (
-    <button type="button" className={color} onClick={onToggle}>
+    <button
+      type="button"
+      onClick={onToggle}
+      style={{ color }}
+      onMouseEnter={(e: MouseEvent<HTMLButtonElement>) => {
+        const target = e.target as HTMLButtonElement;
+        target.style.background = color as string;
+        target.style.color = 'white';
+      }}
+      onMouseLeave={(e: MouseEvent<HTMLButtonElement>) => {
+        const target = e.target as HTMLButtonElement;
+        target.style.background = '';
+        target.style.color = '';
+      }}
+    >
       {active ? (
-        <IoChevronForwardCircleOutline className="w-4 h-4" />
+        <IoChevronForwardCircleOutline className="w-4 h-4 rounded-full" />
       ) : (
-        <IoChevronDownCircleOutline className="w-4 h-4" />
+        <IoChevronDownCircleOutline className="w-4 h-4 rounded-full" />
       )}
     </button>
   );
