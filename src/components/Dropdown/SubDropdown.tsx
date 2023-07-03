@@ -234,7 +234,7 @@ export default function SubDropdown() {
         )}
         {lastClicked && (
           <div className="mb-2">
-            <span className="mb-2 flex p-2 text-start whitespace-nowrap truncate">
+            <span className="mb-2 p-2 text-start truncate w-64">
               {`Do you want to create your ${lastClicked} under ${selectedTreeDetails.name}`}
             </span>
             <div className="p-2 flex gap-2 items-center justify-between">
