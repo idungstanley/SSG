@@ -90,7 +90,7 @@ export function ListPage() {
           >
             {listView && <TaskQuickAction listDetailsData={listName} />}
 
-            {tasks.length ? <List tasks={tasks} /> : null}
+            {tasks.length ? <List tasks={tasks} /> : []}
           </div>
         </>
       </Page>

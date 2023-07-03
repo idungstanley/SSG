@@ -1,5 +1,5 @@
 import { CgClose } from 'react-icons/cg';
-import ToolTip from '../Tooltip';
+import ToolTip from '../Tooltip/Tooltip';
 
 interface closeBtnProps {
   clearFn: () => void;

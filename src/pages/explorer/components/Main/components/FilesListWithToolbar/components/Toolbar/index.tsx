@@ -8,7 +8,7 @@ import {
 } from '@heroicons/react/24/outline';
 import { useAppDispatch, useAppSelector } from '../../../../../../../../app/hooks';
 import { IStringifiedFile } from '../FilesList';
-import Tooltip from '../../../../../../../../components/Tooltip';
+import Tooltip from '../../../../../../../../components/Tooltip/Tooltip';
 import { useMultipleDeleteFiles } from '../../../../../../../../features/explorer/explorerService';
 import { useParams } from 'react-router-dom';
 import { resetSelectedFiles } from '../../../../../../../../features/explorer/explorerSlice';

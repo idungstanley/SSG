@@ -101,6 +101,7 @@ interface TaskState {
   listView: boolean;
   comfortableView: boolean;
   comfortableViewWrap: boolean;
+  singleLineView: boolean;
   CompactView: boolean;
   CompactViewWrap: boolean;
   tableView: boolean;
@@ -167,6 +168,7 @@ const initialState: TaskState = {
   listView: true,
   comfortableView: true,
   comfortableViewWrap: false,
+  singleLineView: false,
   CompactView: false,
   CompactViewWrap: false,
   tableView: false,
@@ -303,6 +305,9 @@ export const taskSlice = createSlice({
     },
     getCompactView(state, action: PayloadAction<boolean>) {
       state.CompactView = action.payload;
+    },
+    getSingleLineView(state, action: PayloadAction<boolean>) {
+      state.singleLineView = action.payload;
     },
     getCompactViewWrap(state, action: PayloadAction<boolean>) {
       state.CompactViewWrap = action.payload;
@@ -474,6 +479,7 @@ export const {
   getListView,
   getComfortableView,
   getComfortableViewWrap,
+  getSingleLineView,
   getCompactView,
   getCompactViewWrap,
   getTableView,

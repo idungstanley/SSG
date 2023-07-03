@@ -26,7 +26,12 @@ export const generateFilters = () => {
   return {
     filters: {
       op,
-      assignees: assignee ? (assignee.values.length ? getValues(assignee.values) : assignee.operator.key) : undefined,
+      assignees:
+        assignee && assignee.operator.key !== 'eq'
+          ? assignee.values.length
+            ? getValues(assignee.values)
+            : assignee.operator.key
+          : undefined,
       fields: [
         tags
           ? {

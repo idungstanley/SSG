@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState } from 'react';
+import React, { ChangeEvent, useEffect, useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { AiOutlinePaperClip, AiOutlineFlag, AiOutlineEye } from 'react-icons/ai';
 import { BsTags, BsCalendar3 } from 'react-icons/bs';
@@ -8,12 +8,31 @@ import { setSubDropdownMenu, setshowMenuDropdown } from '../../../../features/hu
 import { useDispatch } from 'react-redux';
 import { setCreateTaskSlideOverVisibility } from '../../../../features/general/slideOver/slideOverSlice';
 import { useAppSelector } from '../../../../app/hooks';
+import { UseGetListDetails } from '../../../../features/list/listService';
+import { ITask_statuses } from '../../../../features/list/list.interfaces';
 
 function TaskModal() {
   const queryClient = useQueryClient();
   const dispatch = useDispatch();
   const { showMenuDropdown } = useAppSelector((state) => state.hub);
   const { showCreateTaskSlideOver } = useAppSelector((state) => state.slideOver);
+  const { sideBarCreateTaskListId } = useAppSelector((state) => state.hub);
+
+  const { data: list } = UseGetListDetails({ activeItemId: sideBarCreateTaskListId, activeItemType: 'list' });
+
+  const [statusId, setStatusId] = useState<string>('');
+
+  useEffect(() => {
+    const minPosition = Math.min(...(list?.data.list.task_statuses.map((status) => status.position) || []));
+    const statusObj: ITask_statuses | undefined = list?.data.list.task_statuses.find(
+      (statusObj: ITask_statuses) => statusObj.position === minPosition
+    );
+    if (statusObj) {
+      const newStatusId: string = statusObj.id;
+      setStatusId(newStatusId);
+    }
+  }, [sideBarCreateTaskListId]);
+
   const createTask = useMutation(createTaskService, {
     onSuccess: () => {
       queryClient.invalidateQueries();
@@ -46,6 +65,7 @@ function TaskModal() {
     await createTask.mutateAsync({
       name,
       description,
+      task_status_id: statusId,
       showMenuDropdown
     });
   };

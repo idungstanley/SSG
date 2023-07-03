@@ -9,7 +9,7 @@ import { setVisibility, displayPrompt } from '../../../../../features/general/pr
 import { logout, setAuthData } from '../../../../../features/auth/authSlice';
 import { useNavigate } from 'react-router-dom';
 import { useAppSelector } from '../../../../../app/hooks';
-import ToolTip from '../../../../../components/Tooltip';
+import ToolTip from '../../../../../components/Tooltip/Tooltip';
 import { VscTriangleDown } from 'react-icons/vsc';
 
 interface UserSettingsType {
