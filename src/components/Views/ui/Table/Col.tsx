@@ -6,11 +6,11 @@ import Assignee from '../../../../pages/workspace/tasks/assignTask/Assignee';
 import DropdownFieldWrapper from '../../../../pages/workspace/tasks/component/taskData/dropdown/DropdownFieldWrapper';
 import TaskPriority from '../../../../pages/workspace/tasks/component/taskData/priority';
 import { listColumnProps } from '../../../../pages/workspace/tasks/component/views/ListColumns';
-import { Status, Task, TaskValue } from '../../../../features/task/interface.tasks';
+import { Task, TaskValue } from '../../../../features/task/interface.tasks';
 import { ACTIVE_COL_BG, DEFAULT_COL_BG } from '../../config';
 import DateFormat from '../../../DateFormat';
 import StatusNameDropdown from '../../../status/StatusNameDropdown';
-import { useAppDispatch } from '../../../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 
 interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   value: TaskValue;
@@ -22,6 +22,7 @@ interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
 export function Col({ value, field, fieldId, task, ...props }: ColProps) {
   const { taskId } = useParams();
   const COL_BG = taskId === task.id ? ACTIVE_COL_BG : DEFAULT_COL_BG;
+  const { singleLineView } = useAppSelector((state) => state.task);
 
   const dispatch = useAppDispatch();
 
@@ -59,7 +60,7 @@ export function Col({ value, field, fieldId, task, ...props }: ColProps) {
       <td
         className={cl(COL_BG, 'relative flex border-t justify-center items-center text-sm font-medium text-gray-900')}
         {...props}
-        style={{ minHeight: '40px' }}
+        style={{ minHeight: '42px', height: singleLineView ? '42px' : '' }}
       >
         {field in fields ? fields[field] : String(value)}
       </td>
