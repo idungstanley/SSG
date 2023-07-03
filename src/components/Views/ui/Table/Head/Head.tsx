@@ -103,17 +103,16 @@ export function Head({
     <thead className="contents">
       <tr className="contents">
         {/* first sticky col */}
-        <th style={{ zIndex: 2 }} className="sticky left-0 flex -mb-2 font-extrabold" ref={columns[0].ref}>
-          <div className="flex items-center bg-purple-50 " style={{ width: '22px' }}></div>
+        <th style={{ zIndex: 2 }} className="sticky left-0 flex items-center -mb-2 font-extrabold" ref={columns[0].ref}>
+          <p className="pt-0.5">
+            <Chevron color={headerStatusColor} active={collapseTasks} onToggle={onToggleCollapseTasks} />
+          </p>
+          <div className="flex items-center bg-purple-50 " style={{ width: '5px' }}></div>
           <div className="flex items-center w-full gap-3 py-2 truncate dBlock group opacity-90">
             <div
               className="py-0.5 px-2 rounded-tr-md flex items-center space-x-1 text-white dFlex "
               style={{ backgroundColor: headerStatusColor }}
             >
-              <p className="pt-0.5">
-                <Chevron color="text-white" active={collapseTasks} onToggle={onToggleCollapseTasks} />
-              </p>
-
               <span className="pb-1">{parsedLabel}</span>
               <p className="flex items-center space-x-1 viewSettings">
                 <img src={statusbox} alt="" />

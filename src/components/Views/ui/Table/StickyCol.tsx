@@ -1,8 +1,7 @@
 import { ReactNode, TdHTMLAttributes, useRef, useState } from 'react';
-import { RxTriangleDown, RxTriangleRight } from 'react-icons/rx';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
-import { IStatus, Task } from '../../../../features/task/interface.tasks';
+import { Task } from '../../../../features/task/interface.tasks';
 import { cl } from '../../../../utils';
 import { ACTIVE_COL_BG, DEFAULT_COL_BG } from '../../config';
 import { UseUpdateTaskService, useAddTask } from '../../../../features/task/taskService';
@@ -18,10 +17,9 @@ import {
 import { setActiveItem } from '../../../../features/workspace/workspaceSlice';
 import { useSortable } from '@dnd-kit/sortable';
 import { UniqueIdentifier } from '@dnd-kit/core';
-import { MdDragIndicator } from 'react-icons/md';
-import { ITask_statuses } from '../../../../features/list/list.interfaces';
-import { UseGetListDetails } from '../../../../features/list/listService';
 import { ImCancelCircle } from 'react-icons/im';
+import CloseSubtask from '../../../../assets/icons/CloseSubtask';
+import OpenSubtask from '../../../../assets/icons/OpenSubtask';
 
 interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   task: Task;
@@ -163,18 +161,18 @@ export function StickyCol({
           </div>
 
           <div
-            style={{ paddingLeft, minHeight: '40px' }}
+            style={{ paddingLeft, minHeight: '42px', height: singleLineView ? '42px' : '' }}
             className={cl(COL_BG, 'relative border-t w-full py-4 flex items-center ')}
           >
-            <button onClick={onToggleDisplayingSubTasks} className="">
+            <button onClick={onToggleDisplayingSubTasks} className="pl-1">
               {showSubTasks ? (
-                <RxTriangleDown
-                  className={`${task.has_descendants ? 'w-4 h-4 text-gray-400' : ' opacity-0 w-4 h-4 text-gray-400'}`}
-                />
+                <div className={`${task.has_descendants ? 'w-3 h-3' : ' opacity-0 w-3 h-3 '}`}>
+                  <CloseSubtask />
+                </div>
               ) : (
-                <RxTriangleRight
-                  className={`${task.has_descendants ? 'w-4 h-4 text-gray-400' : ' opacity-0 w-4 h-4 text-gray-400'}`}
-                />
+                <div className={`${task.has_descendants ? 'w-3 h-3' : ' opacity-0 w-3 h-3 '}`}>
+                  <OpenSubtask />
+                </div>
               )}
             </button>
             <div onClick={() => dispatch(setCurrentTaskStatusId(task.id as string))}>
@@ -221,7 +219,6 @@ export function StickyCol({
                 displayNav(task?.id as string);
               }}
             />
-
             {dragElement}
           </div>
 
@@ -241,7 +238,6 @@ export function StickyCol({
                 Cancel
               </button> */}
             </div>
-
             <StatusDropdown TaskCurrentStatus={task.status} />
             <div className="flex flex-col items-start justify-start space-y-1 pl-2">
               <p
