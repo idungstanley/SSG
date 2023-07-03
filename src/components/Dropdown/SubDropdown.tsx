@@ -227,7 +227,7 @@ export default function SubDropdown() {
                 onClick={item.handleClick}
               >
                 {item.icon}
-                <p>{lastClicked ? 'Create ' + item.title : item.title}</p>
+                <p>{lastClicked ? 'Create Entity' : item.title}</p>
               </div>
             </div>
           ) : null
