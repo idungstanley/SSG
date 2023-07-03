@@ -1,5 +1,5 @@
 import React from 'react';
-import ToolTip from '../../../../../Tooltip';
+import ToolTip from '../../../../../Tooltip/Tooltip';
 
 export default function CustomReference() {
   return (

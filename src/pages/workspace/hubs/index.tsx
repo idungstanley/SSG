@@ -15,7 +15,6 @@ import ActiveTress from './components/ActiveTree/ActiveTress';
 import { BiSearch } from 'react-icons/bi';
 import { setIsSearchActive } from '../../../features/search/searchSlice';
 import { useNavigate, useParams } from 'react-router-dom';
-import { PlusIcon } from '@heroicons/react/24/outline';
 import {
   setActiveEntityName,
   setActiveSubHubManagerTabId,
@@ -28,6 +27,8 @@ import AddWalletIcon from '../../../assets/icons/AddWallet';
 import AddHubIcon from '../../../assets/icons/AddHub';
 import AddListIcon from '../../../assets/icons/AddList';
 import { setSelectedTreeDetails } from '../../../features/hubs/hubSlice';
+import Dropdown from '../../../components/Dropdown/index';
+import PlusIcon from '../../../assets/icons/PlusIcon';
 
 function Hubs() {
   const dispatch = useDispatch();
@@ -46,7 +47,7 @@ function Hubs() {
   };
 
   const handleOpenDropdown = (event: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
-    event.stopPropagation();
+    console.log('stan');
     setAnchorEl(event.currentTarget);
     dispatch(setSelectedTreeDetails({ name: null, id: null, type: null }));
   };
@@ -64,29 +65,37 @@ function Hubs() {
 
   const configForDropdown = [
     {
-      label: 'Create Hub',
+      label: 'Hub',
       icon: <AddHubIcon />,
       onclick: () => handleNavigateTask(EntityType.hub)
     },
     {
-      label: 'Create New SubHub',
+      label: 'SubHub',
       icon: <AddHubIcon />,
       onclick: () => handleNavigateTask(EntityType.hub)
     },
     {
-      label: 'Add New Wallet',
+      label: 'Wallet',
       icon: <AddWalletIcon />,
       onclick: () => handleNavigateTask(EntityType.wallet)
     },
     {
-      label: 'Create New Subwallet',
+      label: 'Subwallet',
       icon: <AddWalletIcon />,
       onclick: () => handleNavigateTask(EntityType.wallet)
     },
     {
-      label: 'Create New List',
+      label: 'List',
       icon: <AddListIcon />,
       onclick: () => handleNavigateTask(EntityType.list)
+    }
+  ];
+
+  const taskCreate = [
+    {
+      label: 'Create New',
+      icon: <PlusIcon />,
+      onClick: (e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => handleOpenDropdown(e)
     }
   ];
 
@@ -100,8 +109,8 @@ function Hubs() {
         midContent={<BiSearch onClick={(e) => toggleSearch(e)} className="w-4 h-4" style={{ color: '#BF00FFB2' }} />}
         searchStatus={isSearchActive}
         rightContent={
-          <div className="flex gap-2" onClick={(e) => handleOpenDropdown(e)}>
-            <PlusIcon className="w-4 h-4" style={{ color: '#BF00FFB2' }} aria-hidden="true" />
+          <div className="flex gap-2" onClick={(e) => e.stopPropagation()}>
+            <Dropdown config={taskCreate} iconType="plus" iconColor="#BF00FFB2" />
           </div>
         }
       />

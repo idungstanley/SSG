@@ -89,7 +89,7 @@ export default function MenuDropdown() {
           showEditWalletSlideOver === false &&
           showCreateListSlideOver === false
         ) {
-          if (SubDropdownMenu === true && showTreeInput === false && show === false) {
+          if (SubDropdownMenu === true) {
             dispatch(setSubDropdownMenu(false));
           } else {
             dispatch(setshowMenuDropdown({ showMenuDropdown: null, showMenuDropdownType: null }));
@@ -102,8 +102,6 @@ export default function MenuDropdown() {
       document.removeEventListener('click', checkClickedOutSide);
     };
   }, [
-    showTreeInput,
-    show,
     SubDropdownMenu,
     showCreateSubWalletSlideOver,
     showCreateHubSlideOver,

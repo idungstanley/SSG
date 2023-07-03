@@ -1,5 +1,4 @@
-import { ReactNode, TdHTMLAttributes, useRef } from 'react';
-import { RxTriangleDown, RxTriangleRight } from 'react-icons/rx';
+import { ReactNode, TdHTMLAttributes, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { Task } from '../../../../features/task/interface.tasks';
@@ -19,6 +18,8 @@ import { setActiveItem } from '../../../../features/workspace/workspaceSlice';
 import { useSortable } from '@dnd-kit/sortable';
 import { UniqueIdentifier } from '@dnd-kit/core';
 import { ImCancelCircle } from 'react-icons/im';
+import CloseSubtask from '../../../../assets/icons/CloseSubtask';
+import OpenSubtask from '../../../../assets/icons/OpenSubtask';
 
 interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   task: Task;
@@ -55,8 +56,7 @@ export function StickyCol({
   const COL_BG = taskId === task.id ? ACTIVE_COL_BG : DEFAULT_COL_BG;
 
   const { mutate: onAdd } = useAddTask(parentId);
-  const { currTeamMemberId } = useAppSelector((state) => state.task);
-  const { showTaskNavigation } = useAppSelector((state) => state.task);
+  const { currTeamMemberId, showTaskNavigation, singleLineView } = useAppSelector((state) => state.task);
 
   const onClickTask = () => {
     navigate(`/${currentWorkspaceId}/tasks/h/${hubId}/t/${task.id}`, { replace: true });
@@ -94,6 +94,7 @@ export function StickyCol({
     id: task?.id as UniqueIdentifier
   });
 
+  const [eitableContent, setEitableContent] = useState(false);
   const editTaskMutation = useMutation(UseUpdateTaskService, {
     onSuccess: () => {
       queryClient.invalidateQueries(['task']);
@@ -108,7 +109,6 @@ export function StickyCol({
       handleEditTask(e as React.KeyboardEvent<HTMLDivElement>, id);
     } else {
       onClickSave();
-      onClose && onClose();
     }
   };
 
@@ -158,16 +158,19 @@ export function StickyCol({
             {dragElement}
           </div>
 
-          <div style={{ paddingLeft }} className={cl(COL_BG, 'relative border-t w-full h-10 py-4 flex items-center ')}>
-            <button onClick={onToggleDisplayingSubTasks} className="">
+          <div
+            style={{ paddingLeft, minHeight: '42px', height: singleLineView ? '42px' : '' }}
+            className={cl(COL_BG, 'relative border-t w-full py-4 flex items-center ')}
+          >
+            <button onClick={onToggleDisplayingSubTasks} className="pl-1">
               {showSubTasks ? (
-                <RxTriangleDown
-                  className={`${task.has_descendants ? 'w-4 h-4 text-gray-400' : ' opacity-0 w-4 h-4 text-gray-400'}`}
-                />
+                <div className={`${task.has_descendants ? 'w-3 h-3' : ' opacity-0 w-3 h-3 '}`}>
+                  <CloseSubtask />
+                </div>
               ) : (
-                <RxTriangleRight
-                  className={`${task.has_descendants ? 'w-4 h-4 text-gray-400' : ' opacity-0 w-4 h-4 text-gray-400'}`}
-                />
+                <div className={`${task.has_descendants ? 'w-3 h-3' : ' opacity-0 w-3 h-3 '}`}>
+                  <OpenSubtask />
+                </div>
               )}
             </button>
             <div onClick={() => dispatch(setCurrentTaskStatusId(task.id as string))}>
@@ -176,11 +179,16 @@ export function StickyCol({
             <div className="flex flex-col items-start justify-start space-y-1 pl-2">
               <p
                 className="flex text-left"
-                contentEditable={true}
+                contentEditable={eitableContent && !singleLineView}
+                onClick={() => setEitableContent(true)}
                 ref={inputRef}
                 onKeyDown={(e) => (e.key === 'Enter' ? handleEditTask(e, task.id) : null)}
               >
-                {task.name}
+                {task.name.length > 50 && singleLineView ? (
+                  <span className="whitespace-nowrap">{task.name.substring(0, 40)}...</span>
+                ) : (
+                  <span>{task.name}</span>
+                )}
               </p>
 
               {tags}
@@ -209,7 +217,6 @@ export function StickyCol({
                 displayNav(task?.id as string);
               }}
             />
-
             {dragElement}
           </div>
 
@@ -229,7 +236,6 @@ export function StickyCol({
                 Cancel
               </button> */}
             </div>
-
             <StatusDropdown TaskCurrentStatus={task.status} />
             <div className="flex flex-col items-start justify-start space-y-1 pl-2">
               <p

@@ -21,7 +21,7 @@ import { setCurrentTaskIdForTag } from '../../../../../../features/workspace/tag
 import ArrowRigt from '../../../../../../assets/branding/ArrowRigt.svg';
 import ArrowDown from '../../../../../../assets/branding/ArrowRigt.svg';
 import { useSortable } from '@dnd-kit/sortable';
-import ToolTip from '../../../../../../components/Tooltip';
+import ToolTip from '../../../../../../components/Tooltip/Tooltip';
 import { useParams } from 'react-router-dom';
 import { cl } from '../../../../../../utils';
 
@@ -106,11 +106,11 @@ export default function TaskName({
       className={cl('sticky w-72 mr-4 pl-1 text-gray-900 opacity-95 left-0 flex items-center', taskBg)}
       style={style}
     >
-      <div className="flex items-center absolute -left-6">
+      <div className="absolute flex items-center -left-6">
         <input
           type="checkbox"
           id="checked-checkbox"
-          className="w-3 h-3 rounded-full opacity-0 cursor-pointer focus:outline-1 focus:ring-transparent group-hover:opacity-100 focus:border-2 focus:opacity-100 z-50"
+          className="z-50 w-3 h-3 rounded-full opacity-0 cursor-pointer focus:outline-1 focus:ring-transparent group-hover:opacity-100 focus:border-2 focus:opacity-100"
           ref={setNodeRef}
           {...attributes}
           {...listeners}
@@ -143,7 +143,7 @@ export default function TaskName({
           </span>
         )}
       </div>
-      <div className="flex group items-center">
+      <div className="flex items-center group">
         <p onClick={() => handleTaskStatus(task?.id as string)} className="relative pt-1 pr-1">
           {task ? <StatusDropdown TaskCurrentStatus={task.status} /> : null}
         </p>

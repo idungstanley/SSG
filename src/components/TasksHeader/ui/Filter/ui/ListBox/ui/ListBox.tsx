@@ -1,4 +1,4 @@
-import { Fragment, ReactNode, useState } from 'react';
+import { Fragment, ReactNode, useEffect, useState } from 'react';
 import { Listbox, Transition } from '@headlessui/react';
 import { FilterKey, FilterValue, onSelectOrDeselectAllProps, Operator, Unit } from '../../../types/filters';
 import { cl } from '../../../../../../../utils';
@@ -18,9 +18,15 @@ interface ListBoxProps {
   showSearch?: boolean;
   onSelectOrDeselectAll?: (data: Pick<onSelectOrDeselectAllProps, 'type'>) => void;
   controlledOptionsDisplay?: true;
+  onUndoChanges?: (i: FilterValue[]) => void;
   filterKey?: FilterKey;
   children?: ReactNode;
 }
+
+const DEFAULT_PREV_STATE = {
+  state: [],
+  isSet: false
+};
 
 export function ListBox({
   values,
@@ -30,19 +36,68 @@ export function ListBox({
   onSelectOrDeselectAll,
   controlledOptionsDisplay,
   filterKey,
+  onUndoChanges,
   children
 }: ListBoxProps) {
   const [query, setQuery] = useState('');
   const [showOptions, setShowOptions] = useState(false);
   const showSelectAll = !!onSelectOrDeselectAll;
-  const [selectAll, setSelectAll] = useState(true);
+  const [selectAll, setSelectAll] = useState<'select' | 'deselect'>('select');
+  const [prevState, setPrevState] = useState<{ state: FilterValue[]; isSet: boolean }>(DEFAULT_PREV_STATE);
+
+  // manage select and deselect values
+  useEffect(() => {
+    if (!showSelectAll) {
+      return;
+    }
+
+    const selectedValues = selected as FilterValue[];
+    const availableValues = values as FilterValue[];
+
+    if (
+      selectedValues.length !== 0 &&
+      availableValues.length !== 0 &&
+      selectedValues.length === availableValues.length &&
+      selectAll === 'select'
+    ) {
+      setSelectAll('deselect');
+    }
+
+    if (selectedValues.length < availableValues.length && selectAll === 'deselect') {
+      setSelectAll('select');
+    }
+  }, [selected, values, selectAll]);
+
+  const resetPrevState = () => setPrevState(DEFAULT_PREV_STATE);
 
   const onToggleSelect = () => {
     if (onSelectOrDeselectAll) {
-      const type = selectAll ? 'select' : 'deselect';
-      onSelectOrDeselectAll({ type });
+      onSelectOrDeselectAll({ type: selectAll });
 
-      setSelectAll((prev) => !prev);
+      setSelectAll(selectAll === 'select' ? 'deselect' : 'select');
+    }
+  };
+
+  const onClickCancel = () => {
+    if (onUndoChanges) {
+      onUndoChanges(prevState.state);
+    }
+  };
+
+  const onClickConfirm = () => {
+    setShowOptions(false);
+    resetPrevState();
+  };
+
+  const onClickField = () => {
+    setShowOptions((prev) => !prev);
+
+    if (!prevState.isSet) {
+      // set prev state on mount
+      setPrevState({ state: selected as FilterValue[], isSet: true });
+    } else {
+      // clear prev state on unmount
+      resetPrevState();
     }
   };
 
@@ -57,13 +112,13 @@ export function ListBox({
     <Listbox value={selected} onChange={setSelected}>
       <div className="relative flex-grow">
         <Listbox.Button
-          onClick={isDefined(controlledOptionsDisplay) ? () => setShowOptions((prev) => !prev) : undefined}
+          onClick={isDefined(controlledOptionsDisplay) ? onClickField : undefined}
           className="whitespace-nowrap capitalize relative w-full flex-grow cursor-pointer border shadow-sm rounded-lg bg-white py-2 pl-3 pr-10 text-left"
         >
           <SelectedValue filterKey={filterKey} value={selected} />
 
           <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
-            <ChevronDownIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
+            <ChevronDownIcon className="h-5 w-5 text-gray-400" aria-hidden />
           </span>
         </Listbox.Button>
 
@@ -77,7 +132,7 @@ export function ListBox({
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <div className="absolute z-10 flex flex-col mt-1 max-h-72 rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+          <div className="absolute right-0 w-80 z-10 flex flex-col mt-1 max-h-72 rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
             <Listbox.Options className="overflow-auto h-full w-full">
               {/* search */}
               {showSearch ? (
@@ -97,7 +152,7 @@ export function ListBox({
               {showSelectAll ? (
                 <div className="flex w-full p-1 justify-between items-center">
                   <button onClick={onToggleSelect} className="text-primary-500 text-xs">
-                    {selectAll ? 'Select All' : 'Deselect All'}
+                    {selectAll === 'select' ? 'Select All' : 'Deselect All'}
                   </button>
                 </div>
               ) : null}
@@ -122,15 +177,13 @@ export function ListBox({
             {controlledOptionsDisplay ? (
               <div className="w-full flex items-center justify-between space-x-2 mt-3 px-2">
                 <button
-                  onClick={() => setShowOptions(false)}
+                  disabled={!prevState.isSet}
+                  onClick={onClickCancel}
                   className="border bg-gray-200 px-4 py-2 text-xs text-gray-700"
                 >
                   Cancel
                 </button>
-                <button
-                  onClick={() => setShowOptions(false)}
-                  className="border bg-primary-200 px-4 py-2 text-xs text-primary-700"
-                >
+                <button onClick={onClickConfirm} className="border bg-primary-200 px-4 py-2 text-xs text-primary-700">
                   Confirm
                 </button>
               </div>

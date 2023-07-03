@@ -7,16 +7,18 @@ interface ItemProps {
 }
 export default function ListIconSelection({ activeShape, handleSelection }: ItemProps) {
   const listIconDetails = [
-    { id: 1, shape: 'two-square' },
-    { id: 2, shape: 'two-circle' },
-    { id: 3, shape: 'circle-in-square' },
-    { id: 4, shape: 'square-in-circle' }
+    { shape: 'solid-circle' },
+    { shape: 'solid-square' },
+    { shape: 'two-circle' },
+    { shape: 'two-square' },
+    { shape: 'square-in-circle' },
+    { shape: 'circle-in-square' }
   ];
 
-  const listIcons = listIconDetails.map((icon) => {
+  const listIcons = listIconDetails.map((icon, index) => {
     return (
       <span
-        key={icon.id}
+        key={index}
         onClick={() => handleSelection(icon.shape)}
         className={`${activeShape === icon.shape ? 'bg-red-400 rounded-md' : ''} cursor-pointer flex items-center p-1`}
       >

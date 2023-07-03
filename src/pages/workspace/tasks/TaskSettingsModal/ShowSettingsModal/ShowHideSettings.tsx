@@ -4,6 +4,8 @@ import { BsChevronRight } from 'react-icons/bs';
 import { FiChevronRight } from 'react-icons/fi';
 import Icons from '../../../../../components/Icons/Icons';
 import DropDown from '../../../../../assets/icons/arrow_drop_down_black.svg';
+import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
+import { getCompactView, getSingleLineView } from '../../../../../features/task/taskSlice';
 
 interface IShowHideSettings {
   scrollByEachGroup: string;
@@ -29,10 +31,20 @@ export default function ShowHideSettings({
   emptyStatuses
 }: IShowHideSettings) {
   const [checkedStates, setCheckedStates] = useState<boolean[]>([]);
-  const handleChange = (index: number) => {
+
+  const dispatch = useAppDispatch();
+  const { singleLineView, CompactView } = useAppSelector((state) => state.task);
+
+  const handleChange = (viewMode: string, index: number) => {
     const newCheckedStates = [...checkedStates];
     newCheckedStates[index] = !newCheckedStates[index];
     setCheckedStates(newCheckedStates);
+
+    if (viewMode == 'Single Line mode') {
+      dispatch(getSingleLineView(!singleLineView));
+    } else if (viewMode == 'Compact mode') {
+      dispatch(getCompactView(!CompactView));
+    }
   };
 
   const ViewSettings = [
@@ -84,7 +96,13 @@ export default function ShowHideSettings({
     {
       id: 11,
       icon: <FiChevronRight />,
-      label: 'Wrap text',
+      label: 'Single Line mode',
+      handleClick: () => null
+    },
+    {
+      id: 12,
+      icon: <FiChevronRight />,
+      label: 'Compact mode',
       handleClick: () => null
     }
   ];
@@ -127,7 +145,7 @@ export default function ShowHideSettings({
 
           {ViewSettings.map((View, index) => (
             <Menu.Item as="a" key={View.id} className="flex items-center py-2 text-sm text-black text-left w-full ">
-              {View.label !== 'Wrap text' ? (
+              {View.label !== 'Single Line mode' ? (
                 <button
                   onClick={View.handleClick}
                   className={`${
@@ -143,7 +161,7 @@ export default function ShowHideSettings({
                         className="inputShow"
                         type="checkbox"
                         checked={checkedStates[index]}
-                        onChange={() => handleChange(index)}
+                        onChange={() => handleChange(View.label, index)}
                       />
                       <div className={`slider ${checkedStates[index] ? 'checked' : ''}`}></div>
                     </label>
@@ -161,7 +179,7 @@ export default function ShowHideSettings({
                         className="inputShow"
                         type="checkbox"
                         checked={checkedStates[index]}
-                        onChange={() => handleChange(index)}
+                        onChange={() => handleChange(View.label, index)}
                       />
                       <div className={`slider ${checkedStates[index] ? 'checked' : ''}`}></div>
                     </label>

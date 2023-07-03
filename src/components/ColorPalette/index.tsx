@@ -67,7 +67,7 @@ export default function Palette({
     'pink',
     'black',
     'orange',
-    'white',
+    'gray',
     '#ED1500',
     'magenta',
     '#5CEE4F',
@@ -126,8 +126,7 @@ export default function Palette({
 
   const style = {
     height: '15px',
-    width: '15px',
-    border: '1px solid black'
+    width: '15px'
   };
 
   const handleClick = (color?: string | ListColourProps) => {

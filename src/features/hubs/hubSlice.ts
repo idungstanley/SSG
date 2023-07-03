@@ -18,6 +18,7 @@ interface HubState {
   subHubExt: { id: string | null; type: string | null };
   showMenuDropdown: string | null | undefined;
   showMenuDropdownType: string | null | undefined;
+  sideBarCreateTaskListId: string | null;
   SubDropdownMenu: boolean;
   entityToCreate: string | null;
   SubMenuId: string | null | undefined;
@@ -46,6 +47,7 @@ const initialState: HubState = {
   toggleArchive: 0,
   showMenuDropdown: null,
   showMenuDropdownType: null,
+  sideBarCreateTaskListId: null,
   SubDropdownMenu: false,
   SubMenuId: null,
   SubMenuType: null,
@@ -131,6 +133,9 @@ export const hubSlice = createSlice({
     setToggleArchive(state, action: PayloadAction<number>) {
       state.toggleArchive = action.payload;
     },
+    setSideBarCreateTaskListId(state, action: PayloadAction<string | null>) {
+      state.sideBarCreateTaskListId = action.payload;
+    },
     setshowMenuDropdown(
       state,
       action: PayloadAction<{
@@ -193,6 +198,7 @@ export const {
   setShowSidebarSettings,
   setToggleArchive,
   setShowEditHubModal,
+  setSideBarCreateTaskListId,
   setshowMenuDropdown,
   setSubDropdownMenu,
   setHubParentId,

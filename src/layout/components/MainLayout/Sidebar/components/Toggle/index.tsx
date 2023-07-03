@@ -5,7 +5,7 @@ import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
 import { cl } from '../../../../../../utils';
 import CompactIcon from '../../../../../../assets/icons/CompactIcon';
 import { setShowExtendedBar, setSidebarWidthRD } from '../../../../../../features/workspace/workspaceSlice';
-import ToolTip from '../../../../../../components/Tooltip';
+import ToolTip from '../../../../../../components/Tooltip/Tooltip';
 import { dimensions } from '../../../../../../app/config/dimensions';
 import ExpandIcon from '../../../../../../assets/icons/ExpandIcon';
 

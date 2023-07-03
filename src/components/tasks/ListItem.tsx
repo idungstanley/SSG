@@ -1,11 +1,10 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import React, { useState } from 'react';
-import { AiOutlineEllipsis } from 'react-icons/ai';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { setPaletteDropDown } from '../../features/account/accountSlice';
 // import ListIcon from '../../assets/icons/ListIcon';
-import { closeMenu, getPrevName, setshowMenuDropdown } from '../../features/hubs/hubSlice';
+import { closeMenu, getPrevName, setSideBarCreateTaskListId, setshowMenuDropdown } from '../../features/hubs/hubSlice';
 import { UseEditListService } from '../../features/list/listService';
 import { setListPaletteColor } from '../../features/list/listSlice';
 import { setActiveEntity, setActiveEntityName, setActiveItem } from '../../features/workspace/workspaceSlice';
@@ -14,6 +13,8 @@ import ListIconSelection from '../ColorPalette/component/ListIconSelection';
 import ListIconComponent from '../ItemsListInSidebar/components/ListIconComponent';
 import { useDroppable } from '@dnd-kit/core';
 import { cl } from '../../utils';
+import InteractiveTooltip from '../Tooltip/InteractiveTooltip';
+import ThreeDotIcon from '../../assets/icons/ThreeDotIcon';
 
 interface ListItemProps {
   list: {
@@ -75,7 +76,14 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
     }
   };
 
-  const handleListSettings = (id: string, name: string, e: React.MouseEvent<HTMLButtonElement | SVGElement>) => {
+  const tooltipItems = [
+    { label: 'Todo', count: 1, onClick: () => ({}) },
+    { label: 'In Progress', count: 1, onClick: () => ({}) },
+    { label: 'Completed', count: 1, onClick: () => ({}) }
+  ];
+
+  const handleListSettings = (id: string, name: string, e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
+    dispatch(setSideBarCreateTaskListId(id));
     dispatch(
       setshowMenuDropdown({
         showMenuDropdown: id,
@@ -139,25 +147,49 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
         {/* ends here */}
         <div className="flex items-center gap-1">
           {list.tasks_count > 0 && (
-            <span
-              className="w-auto px-2 border border-gray-400 rounded"
-              style={{ fontSize: '10px', color: listId === list.id ? (baseColor as string) : undefined }}
+            <InteractiveTooltip
+              content={
+                <ul className="space-y-2 w-28">
+                  <span className="flex items-center justify-between cursor-pointer hover:text-blue-500">
+                    <p>Tasks</p>
+                    <p>({list.tasks_count})</p>
+                  </span>
+                  <hr />
+                  {tooltipItems.map((item, index) => (
+                    <li
+                      key={index}
+                      className="flex items-center justify-between cursor-pointer hover:text-blue-500"
+                      onClick={item.onClick}
+                    >
+                      <p>{item.label}</p>
+                      <p>({item.count})</p>
+                    </li>
+                  ))}
+                </ul>
+              }
             >
-              {list.tasks_count}
-            </span>
+              <span
+                className="w-auto px-2 border border-gray-400 rounded"
+                style={{ fontSize: '10px', color: listId === list.id ? (baseColor as string) : undefined }}
+              >
+                {list.tasks_count}
+              </span>
+            </InteractiveTooltip>
           )}
           <button
             type="button"
             id="listright"
-            className="flex items-center justify-end space-x-1 opacity-0 group-hover:opacity-100"
+            className="flex items-center justify-end pr-1 space-x-1 opacity-0 group-hover:opacity-100"
             onClick={(e) => e.stopPropagation()}
           >
             {/* <TaskDropdown /> */}
-            <AiOutlineEllipsis
-              className="text-xl cursor-pointer hover:text-fuchsia-500"
+            <span
+              className="cursor-pointer"
               id="menusettings"
               onClick={(e) => handleListSettings(list.id, list.name, e)}
-            />
+            >
+              <ThreeDotIcon />
+            </span>
           </button>
         </div>
       </section>

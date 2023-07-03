@@ -3,7 +3,7 @@ import { BiSearch } from 'react-icons/bi';
 import { IoClose } from 'react-icons/io5';
 import { VscSettings } from 'react-icons/vsc';
 import { useAppDispatch } from '../../../../../../app/hooks';
-import ToolTip from '../../../../../../components/Tooltip';
+import ToolTip from '../../../../../../components/Tooltip/Tooltip';
 import { setFilteredResults } from '../../../../../../features/search/searchSlice';
 import { Hub } from '../../../../../../pages/workspace/hubs/components/ActiveTree/activetree.interfaces';
 

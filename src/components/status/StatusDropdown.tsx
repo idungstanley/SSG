@@ -4,11 +4,11 @@ import { cl } from '../../utils';
 import { RiCheckboxBlankFill } from 'react-icons/ri';
 import { useAppSelector } from '../../app/hooks';
 import { UseUpdateTaskStatusService2 } from '../../features/task/taskService';
-import ToolTip from '../Tooltip';
 import { useAbsolute } from '../../hooks/useAbsolute';
 import { Status } from '../../features/task/interface.tasks';
 import StatusIconComp from '../../assets/icons/StatusIconComp';
 import { UseGetListDetails } from '../../features/list/listService';
+import ToolTip from '../Tooltip/Tooltip';
 
 interface StatusDropdownProps {
   TaskCurrentStatus: Status;
@@ -50,7 +50,7 @@ export default function StatusDropdown({ TaskCurrentStatus }: StatusDropdownProp
           <button
             type="button"
             onClick={() => setIsOpen(true)}
-            className="flex text-sm justify-center items-center focus:outline-none hover:text-gray-700 w-full"
+            className="flex items-center justify-center w-full text-sm focus:outline-none hover:text-gray-700"
           >
             <div ref={relativeRef}>
               <StatusIconComp color={TaskCurrentStatus.color} />
@@ -62,7 +62,7 @@ export default function StatusDropdown({ TaskCurrentStatus }: StatusDropdownProp
       <Transition appear show={isOpen} as="div">
         <Dialog as="div" className="relative z-10" onClose={closeModal}>
           <div style={{ ...cords }} className="fixed overflow-y-auto">
-            <div className="flex-col border px-2 h-fit py-1 outline-none flex items-center justify-center text-center mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none">
+            <div className="flex flex-col items-center justify-center w-48 px-2 py-1 mt-2 text-center bg-white border divide-y divide-gray-100 rounded-md shadow-lg outline-none h-fit ring-1 ring-black ring-opacity-5 focus:outline-none">
               {sortedStatuses?.map((statuses) => (
                 <button
                   key={statuses.id}

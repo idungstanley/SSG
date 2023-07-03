@@ -65,6 +65,7 @@ export default function HList({ hubs, leftMargin, taskType, level = 1 }: ListPro
   }, []);
   const parentType = EntityType.hub;
   const subType = 'subhub';
+
   const handleLocation = (id: string, name: string, index?: number) => {
     if (level === 1) {
       dispatch(setSubHubExt({ id: null, type: null }));
@@ -147,7 +148,7 @@ export default function HList({ hubs, leftMargin, taskType, level = 1 }: ListPro
     );
   };
 
-  const handleHubSettings = (id: string, name: string, e: React.MouseEvent<HTMLButtonElement | SVGElement>): void => {
+  const handleHubSettings = (id: string, name: string, e: React.MouseEvent<HTMLSpanElement, MouseEvent>): void => {
     dispatch(setSelectedTreeDetails({ name, id, type: EntityType.hub }));
     dispatch(setCreateWLID(id));
     dispatch(getCurrHubId(id));
