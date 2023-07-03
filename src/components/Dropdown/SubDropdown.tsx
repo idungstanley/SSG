@@ -8,12 +8,13 @@ import hubIcon from '../../assets/branding/hub.svg';
 import { setCreateTaskSlideOverVisibility } from '../../features/general/slideOver/slideOverSlice';
 import { getSubMenu, setEntityToCreate, setSubDropdownMenu } from '../../features/hubs/hubSlice';
 import { useNavigate } from 'react-router-dom';
-import { setActiveSubHubManagerTabId, setActiveTabId } from '../../features/workspace/workspaceSlice';
+import { setActiveSubHubManagerTabId, setActiveTabId, setShowTreeInput } from '../../features/workspace/workspaceSlice';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
 import { useGetTree } from '../../features/hubs/hubService';
 import ActiveTreeSearch from '../ActiveTree/ActiveTreeSearch';
 import Button from '../Button';
 import { EntityManagerTabsId, PilotTabsId } from '../../utils/PilotUtils';
+import { setVisibility } from '../../features/general/prompt/promptSlice';
 
 interface itemsType {
   id: number;
@@ -66,7 +67,7 @@ export default function SubDropdown() {
   useEffect(() => {
     const checkClickedOutSide = (e: MouseEvent): void => {
       if (SubMenuId != null && ref.current && !ref.current.contains(e.target as HTMLButtonElement)) {
-        if (showTreeInput === false && show === false) {
+        if (lastClicked !== '') {
           dispatch(
             getSubMenu({
               SubMenuId: null,
@@ -94,6 +95,14 @@ export default function SubDropdown() {
             SubMenuType: null
           })
         );
+      }
+    },
+    {
+      label: 'Choose Location',
+      style: 'white',
+      callback: () => {
+        dispatch(setVisibility(false));
+        dispatch(setShowTreeInput(true));
       }
     },
     {
@@ -207,10 +216,11 @@ export default function SubDropdown() {
       isVisible: true
     }
   ];
+
   return (
     <div className="" ref={ref}>
       <div
-        className={`fixed w-80 p-2 origin-top-right bg-white rounded-md top-2/4 ring-1 ring-black ring-opacity-5 focus:outline-none ${
+        className={`fixed w-96 p-2 origin-top-right bg-white rounded-md top-2/4 ring-1 ring-black ring-opacity-5 focus:outline-none ${
           showMenuDropdown == null ? 'left-56' : 'left-96'
         }`}
         style={{ boxShadow: '0 1px 10px #00000040', minWidth: '200px', zIndex: '999' }}
@@ -219,7 +229,9 @@ export default function SubDropdown() {
           (lastClicked === '' || lastClicked === item.title) && item.isVisible ? (
             <div key={item.id}>
               <div
-                className="flex items-center p-2 space-x-2 text-sm text-left text-gray-600 rounded-md cursor-pointer hover:bg-gray-200"
+                className={`flex items-center p-2 space-x-2 text-sm text-left text-gray-600  ${
+                  lastClicked ? '' : 'hover:bg-gray-200 rounded-md cursor-pointer'
+                }`}
                 onClick={item.handleClick}
               >
                 {item.icon}
@@ -230,14 +242,14 @@ export default function SubDropdown() {
         )}
         {lastClicked && (
           <div className="mb-2">
-            <span className="text-start">
-              Do you want to create your {lastClicked} under
-              <span className="font-black capitalize"> {selectedTreeDetails.name}?</span>
+            <span className="mb-2 flex p-2 text-start whitespace-nowrap truncate">
+              {`Do you want to create your ${lastClicked} under ${selectedTreeDetails.name}`}
             </span>
-            <div className="p-2 flex gap-2 h-10 items-center justify-between">
+            <div className="p-2 flex gap-2 items-center justify-between">
               {options.map((option: optionsProps) => (
                 <div key={option.label}>
                   <Button
+                    height="h-8"
                     label={option.label}
                     bgColor={option.bgColor}
                     onClick={option.callback}
@@ -247,7 +259,9 @@ export default function SubDropdown() {
               ))}
             </div>
             <div>
-              <ActiveTreeSearch data={data} handleFetch={handleFetch} fetchTree={fetchTree} id={fetchId} />
+              {showTreeInput && (
+                <ActiveTreeSearch data={data} handleFetch={handleFetch} fetchTree={fetchTree} id={fetchId} />
+              )}
             </div>
           </div>
         )}
