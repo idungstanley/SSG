@@ -8,8 +8,7 @@ import hubIcon from '../../assets/branding/hub.svg';
 import { setCreateTaskSlideOverVisibility } from '../../features/general/slideOver/slideOverSlice';
 import { getSubMenu, setEntityToCreate } from '../../features/hubs/hubSlice';
 import { useNavigate } from 'react-router-dom';
-import { setVisibility } from '../../features/general/prompt/promptSlice';
-import { setActiveSubHubManagerTabId, setActiveTabId, setShowTreeInput } from '../../features/workspace/workspaceSlice';
+import { setActiveSubHubManagerTabId, setActiveTabId } from '../../features/workspace/workspaceSlice';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
 import { useGetTree } from '../../features/hubs/hubService';
 import ActiveTreeSearch from '../ActiveTree/ActiveTreeSearch';
@@ -41,10 +40,16 @@ export default function SubDropdown() {
   const { show } = useAppSelector((state) => state.prompt);
   const [lastClicked, setLastClicked] = useState<string>('');
   const [fetchTree, setFetchTree] = useState<boolean>(false);
-  const hubIdToFetch = SubMenuType === 'hubs' || SubMenuType === 'subhub' ? SubMenuId : null;
-  const walletIdToFetch = SubMenuType === 'wallet' ? SubMenuId : null;
+  const hubIdToFetch =
+    SubMenuType === 'hubs' || SubMenuType === 'subhub'
+      ? SubMenuId
+      : showMenuDropdownType === 'hubs' || showMenuDropdownType === 'subhub'
+      ? showMenuDropdown
+      : null;
+  const walletIdToFetch =
+    SubMenuType === 'wallet' ? SubMenuId : showMenuDropdownType === 'wallet' ? showMenuDropdown : null;
   const listIdToFetch = SubMenuType === 'list' ? SubMenuId : null;
-  const fetchId = hubIdToFetch || walletIdToFetch || listIdToFetch;
+  const fetchId = showMenuDropdown || SubMenuId;
   const { data } = useGetTree({
     includeTree: fetchTree,
     hub_id: hubIdToFetch,
@@ -57,41 +62,17 @@ export default function SubDropdown() {
     setFetchTree((prev) => !prev);
   };
 
-  const {
-    showCreateSubWalletSlideOver,
-    showEditHubSlideOver,
-    showEditListSlideOver,
-    showEditWalletSlideOver,
-    showCreateHubSlideOver,
-    showCreateSubHubSlideOver,
-    showCreateWalletSlideOver,
-    showCreateTaskSlideOver,
-    showCreateListSlideOver
-  } = useAppSelector((state) => state.slideOver);
   const ref = useRef<HTMLInputElement>(null);
   useEffect(() => {
     const checkClickedOutSide = (e: MouseEvent): void => {
       if (SubMenuId != null && ref.current && !ref.current.contains(e.target as HTMLButtonElement)) {
-        if (
-          showCreateSubWalletSlideOver === false &&
-          showCreateHubSlideOver === false &&
-          showCreateSubHubSlideOver === false &&
-          showCreateWalletSlideOver === false &&
-          showCreateTaskSlideOver === false &&
-          showEditHubSlideOver === false &&
-          showEditListSlideOver === false &&
-          showEditWalletSlideOver === false &&
-          showCreateListSlideOver === false &&
-          show === false
-        ) {
-          if (showTreeInput === false && show === false) {
-            dispatch(
-              getSubMenu({
-                SubMenuId: null,
-                SubMenuType: null
-              })
-            );
-          }
+        if (showTreeInput === false && show === false) {
+          dispatch(
+            getSubMenu({
+              SubMenuId: null,
+              SubMenuType: null
+            })
+          );
         }
       }
     };
@@ -99,20 +80,7 @@ export default function SubDropdown() {
     return () => {
       document.removeEventListener('click', checkClickedOutSide);
     };
-  }, [
-    showTreeInput,
-    show,
-    SubMenuId,
-    showCreateSubWalletSlideOver,
-    showCreateHubSlideOver,
-    showCreateSubHubSlideOver,
-    showCreateWalletSlideOver,
-    showCreateTaskSlideOver,
-    showEditHubSlideOver,
-    showEditListSlideOver,
-    showEditWalletSlideOver,
-    showCreateListSlideOver
-  ]);
+  }, [SubMenuId]);
 
   const options = [
     {
@@ -125,14 +93,6 @@ export default function SubDropdown() {
             SubMenuType: null
           })
         );
-      }
-    },
-    {
-      label: 'Choose Location',
-      style: 'white',
-      callback: () => {
-        dispatch(setVisibility(false));
-        dispatch(setShowTreeInput(true));
       }
     },
     {
@@ -254,13 +214,26 @@ export default function SubDropdown() {
         }`}
         style={{ boxShadow: '0 1px 10px #00000040', minWidth: '200px', zIndex: '999' }}
       >
+        {itemsList.map((item) =>
+          (lastClicked === '' || lastClicked === item.title) && item.isVisible ? (
+            <div key={item.id}>
+              <div
+                className="flex items-center p-2 space-x-2 text-sm text-left text-gray-600 rounded-md cursor-pointer hover:bg-gray-200"
+                onClick={item.handleClick}
+              >
+                {item.icon}
+                <p>{lastClicked ? 'Create ' + item.title : item.title}</p>
+              </div>
+            </div>
+          ) : null
+        )}
         {lastClicked && (
           <div className="mb-2">
-            <span>
-              Do you want to create your {lastClicked} under{' '}
-              <span className="font-black capitalize">{selectedTreeDetails.name}?</span>
+            <span className="text-start">
+              Do you want to create your {lastClicked} under
+              <span className="font-black capitalize"> {selectedTreeDetails.name}?</span>
             </span>
-            <div className="p-2 flex gap-2 h-10 bg-gray-50 items-center">
+            <div className="p-2 flex gap-2 h-10 items-center justify-between">
               {options.map((option: optionsProps) => (
                 <div key={option.label}>
                   <Button
@@ -272,25 +245,10 @@ export default function SubDropdown() {
                 </div>
               ))}
             </div>
-          </div>
-        )}
-        {itemsList.map((item) =>
-          item.isVisible ? (
-            <div key={item.id}>
-              <div
-                className="flex items-center p-2 space-x-2 text-sm text-left text-gray-600 rounded-md cursor-pointer hover:bg-gray-200"
-                onClick={item.handleClick}
-              >
-                {item.icon}
-                <p>{item.title}</p>
-              </div>
-              <div>
-                {showTreeInput && lastClicked === item.title && (
-                  <ActiveTreeSearch data={data} handleFetch={handleFetch} fetchTree={fetchTree} id={fetchId} />
-                )}
-              </div>
+            <div>
+              <ActiveTreeSearch data={data} handleFetch={handleFetch} fetchTree={fetchTree} id={fetchId} />
             </div>
-          ) : null
+          </div>
         )}
       </div>
     </div>
