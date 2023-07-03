@@ -95,7 +95,6 @@ export function StickyCol({
   });
 
   const [eitableContent, setEitableContent] = useState(false);
-
   const editTaskMutation = useMutation(UseUpdateTaskService, {
     onSuccess: () => {
       queryClient.invalidateQueries(['task']);
@@ -110,7 +109,6 @@ export function StickyCol({
       handleEditTask(e as React.KeyboardEvent<HTMLDivElement>, id);
     } else {
       onClickSave();
-      onClose && onClose();
     }
   };
 
