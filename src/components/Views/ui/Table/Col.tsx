@@ -22,7 +22,7 @@ interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
 export function Col({ value, field, fieldId, task, ...props }: ColProps) {
   const { taskId } = useParams();
   const COL_BG = taskId === task.id ? ACTIVE_COL_BG : DEFAULT_COL_BG;
-  const { singleLineView } = useAppSelector((state) => state.task);
+  const { singleLineView, verticalGrid } = useAppSelector((state) => state.task);
 
   const dispatch = useAppDispatch();
 
@@ -58,7 +58,12 @@ export function Col({ value, field, fieldId, task, ...props }: ColProps) {
   return (
     <>
       <td
-        className={cl(COL_BG, 'relative flex border-t justify-center items-center text-sm font-medium text-gray-900')}
+        className={cl(
+          COL_BG,
+          `relative flex border-t ${
+            verticalGrid && 'border-r'
+          } justify-center items-center text-sm font-medium text-gray-900`
+        )}
         {...props}
         style={{ minHeight: '42px', height: singleLineView ? '42px' : '' }}
       >

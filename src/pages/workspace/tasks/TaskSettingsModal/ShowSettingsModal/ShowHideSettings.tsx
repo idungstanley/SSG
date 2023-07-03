@@ -5,7 +5,7 @@ import { FiChevronRight } from 'react-icons/fi';
 import Icons from '../../../../../components/Icons/Icons';
 import DropDown from '../../../../../assets/icons/arrow_drop_down_black.svg';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
-import { getCompactView, getSingleLineView } from '../../../../../features/task/taskSlice';
+import { getCompactView, getSingleLineView, getVerticalGrid } from '../../../../../features/task/taskSlice';
 
 interface IShowHideSettings {
   scrollByEachGroup: string;
@@ -33,7 +33,7 @@ export default function ShowHideSettings({
   const [checkedStates, setCheckedStates] = useState<boolean[]>([]);
 
   const dispatch = useAppDispatch();
-  const { singleLineView, CompactView } = useAppSelector((state) => state.task);
+  const { singleLineView, CompactView, verticalGrid } = useAppSelector((state) => state.task);
 
   const handleChange = (viewMode: string, index: number) => {
     const newCheckedStates = [...checkedStates];
@@ -44,6 +44,8 @@ export default function ShowHideSettings({
       dispatch(getSingleLineView(!singleLineView));
     } else if (viewMode == 'Compact mode') {
       dispatch(getCompactView(!CompactView));
+    } else if (viewMode == 'Vertical Gridlines') {
+      dispatch(getVerticalGrid(!verticalGrid));
     }
   };
 

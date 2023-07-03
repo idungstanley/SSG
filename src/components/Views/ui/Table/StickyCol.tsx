@@ -56,7 +56,7 @@ export function StickyCol({
   const COL_BG = taskId === task.id ? ACTIVE_COL_BG : DEFAULT_COL_BG;
 
   const { mutate: onAdd } = useAddTask(parentId);
-  const { currTeamMemberId, showTaskNavigation, singleLineView } = useAppSelector((state) => state.task);
+  const { currTeamMemberId, showTaskNavigation, singleLineView, verticalGrid } = useAppSelector((state) => state.task);
 
   const onClickTask = () => {
     navigate(`/${currentWorkspaceId}/tasks/h/${hubId}/t/${task.id}`, { replace: true });
@@ -160,7 +160,7 @@ export function StickyCol({
 
           <div
             style={{ paddingLeft, minHeight: '42px', height: singleLineView ? '42px' : '' }}
-            className={cl(COL_BG, 'relative border-t w-full py-4 flex items-center ')}
+            className={cl(COL_BG, `relative border-t ${verticalGrid && 'border-r'} w-full py-4 flex items-center `)}
           >
             <button onClick={onToggleDisplayingSubTasks} className="pl-1">
               {showSubTasks ? (
@@ -222,7 +222,10 @@ export function StickyCol({
 
           <div
             style={{ paddingLeft }}
-            className={cl(COL_BG, 'relative border-t w-full h-10 py-4 p-4 flex items-center ')}
+            className={cl(
+              COL_BG,
+              `relative border-t ${verticalGrid && 'border-r'} w-full h-10 py-4 p-4 flex items-center `
+            )}
           >
             <div className="flex space-x-1 pl-4 pr-2 ">
               <button
