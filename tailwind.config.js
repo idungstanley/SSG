@@ -13,9 +13,13 @@ module.exports = {
       colors: {
         ...colors,
         primary: colors.fuchsia,
-        'alsoit-bg': '#f4f4f4',
-        'alsoit-bg-hover': '#BF00FF21',
-        'alsoit-bg-active': '#BF00FF21'
+        'alsoit-gray-bg': '#F4F4F4',
+        'alsoit-gray-bg-hover': '#F9E6FF',
+        'alsoit-gray-bg-active': '#F9E6FF',
+        'alsoit-white-bg-hover': '#F4F4F4',
+        'alsoit-white-bg-active': '#F4F4F4',
+        'alsoit-text': '#424242',
+        'alsoit-text-active': '#BF01FE'
       },
       gridTemplateColumns: {
         sidebarItem: 'auto 1fr auto',
@@ -44,6 +48,11 @@ module.exports = {
       minWidth: {
         134: '26.8rem'
       }
+    },
+    fontSize: {
+      'alsoit-text-sm': '0.5rem', // 8px
+      'alsoit-text-md': '0.625rem', // 10px
+      'alsoit-text-lg': '0.813rem' // 13px
     }
   },
   variants: {

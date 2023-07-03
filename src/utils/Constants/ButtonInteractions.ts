@@ -2,8 +2,7 @@ const COMMON_STYLES = {
   padding: '0 2px',
   borderRadius: '5px',
   marginRight: '10px',
-  height: '30px',
-  fontSize: '13px'
+  height: '30px'
 };
 
 const DEFAULT_BUTTON = {

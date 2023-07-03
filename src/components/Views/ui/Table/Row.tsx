@@ -1,9 +1,8 @@
 import { useState } from 'react';
 import SubtasksIcon from '../../../../assets/icons/SubtasksIcon';
-import { IStatus, ITaskFullList, Tag, Task } from '../../../../features/task/interface.tasks';
+import { ITaskFullList, Tag, Task } from '../../../../features/task/interface.tasks';
 import { DEFAULT_LEFT_PADDING } from '../../config';
 import { Column } from '../../types/table';
-import { AddTask } from '../AddTask/AddTask';
 import { Col } from './Col';
 import { StickyCol } from './StickyCol';
 import { SubTasks } from './SubTasks';
@@ -15,7 +14,6 @@ import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { setShowPilotSideOver } from '../../../../features/general/slideOver/slideOverSlice';
 import { setTaskIdForPilot } from '../../../../features/task/taskSlice';
 import { setActiveItem } from '../../../../features/workspace/workspaceSlice';
-import { Tags } from '../../../Tag';
 import { AddSubTask } from '../AddTask/AddSubTask';
 import TaskTag from '../../../Tag/ui/TaskTag';
 
@@ -130,7 +128,7 @@ export function Row({ task, columns, paddingLeft = 0, parentId, task_status, isL
           showSubTasks={showSubTasks}
           setShowSubTasks={setShowSubTasks}
           onClick={onClickTask}
-          style={{ zIndex: 3 }}
+          style={{ zIndex: 1 }}
           isListParent={isListParent}
           task={task}
           parentId={parentId as string}
@@ -168,7 +166,7 @@ export function Row({ task, columns, paddingLeft = 0, parentId, task_status, isL
             task={task}
             value={task[col.field as keyof Task]}
             key={col.id}
-            style={{ zIndex: 2 }}
+            style={{ zIndex: 0 }}
           />
         ))}
       </tr>

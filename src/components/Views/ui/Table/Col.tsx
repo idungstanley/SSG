@@ -1,4 +1,4 @@
-import { MouseEventHandler, TdHTMLAttributes } from 'react';
+import { TdHTMLAttributes } from 'react';
 import { useParams } from 'react-router-dom';
 import { ImyTaskData, setCurrentTaskStatusId } from '../../../../features/task/taskSlice';
 import { cl } from '../../../../utils';
@@ -6,7 +6,7 @@ import Assignee from '../../../../pages/workspace/tasks/assignTask/Assignee';
 import DropdownFieldWrapper from '../../../../pages/workspace/tasks/component/taskData/dropdown/DropdownFieldWrapper';
 import TaskPriority from '../../../../pages/workspace/tasks/component/taskData/priority';
 import { listColumnProps } from '../../../../pages/workspace/tasks/component/views/ListColumns';
-import { Status, Task, TaskValue } from '../../../../features/task/interface.tasks';
+import { Task, TaskValue } from '../../../../features/task/interface.tasks';
 import { ACTIVE_COL_BG, DEFAULT_COL_BG } from '../../config';
 import DateFormat from '../../../DateFormat';
 import StatusNameDropdown from '../../../status/StatusNameDropdown';

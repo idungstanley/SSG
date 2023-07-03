@@ -14,7 +14,10 @@ function Button({ active, children, onClick }: buttonComponentProps) {
     <div>
       <button
         style={style}
-        className={cl('flex items-center', active ? 'bg-alsoit-bg-hover' : 'bg-alsoit-bg hover:bg-alsoit-bg-hover')}
+        className={cl(
+          'flex items-center font-semibold',
+          active ? 'bg-alsoit-gray-bg-hover' : 'bg-alsoit-gray-bg hover:bg-alsoit-gray-bg-hover'
+        )}
         onClick={onClick}
       >
         {children}

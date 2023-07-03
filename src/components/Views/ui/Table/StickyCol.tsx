@@ -1,8 +1,8 @@
-import { ReactNode, TdHTMLAttributes, useRef, useState } from 'react';
+import { ReactNode, TdHTMLAttributes, useRef } from 'react';
 import { RxTriangleDown, RxTriangleRight } from 'react-icons/rx';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
-import { IStatus, Task } from '../../../../features/task/interface.tasks';
+import { Task } from '../../../../features/task/interface.tasks';
 import { cl } from '../../../../utils';
 import { ACTIVE_COL_BG, DEFAULT_COL_BG } from '../../config';
 import { UseUpdateTaskService, useAddTask } from '../../../../features/task/taskService';
@@ -18,9 +18,6 @@ import {
 import { setActiveItem } from '../../../../features/workspace/workspaceSlice';
 import { useSortable } from '@dnd-kit/sortable';
 import { UniqueIdentifier } from '@dnd-kit/core';
-import { MdDragIndicator } from 'react-icons/md';
-import { ITask_statuses } from '../../../../features/list/list.interfaces';
-import { UseGetListDetails } from '../../../../features/list/listService';
 import { ImCancelCircle } from 'react-icons/im';
 
 interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
@@ -93,7 +90,7 @@ export function StickyCol({
   const queryClient = useQueryClient();
   const inputRef = useRef<HTMLInputElement | null>(null);
 
-  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
+  const { attributes, listeners, setNodeRef } = useSortable({
     id: task?.id as UniqueIdentifier
   });
 
