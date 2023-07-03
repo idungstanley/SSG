@@ -241,21 +241,14 @@ export function runTimer({ isRunning, isActiveInterval, setTime }: TimerProps) {
 
     if (isRunning) {
       interval = window.setInterval(() => {
-        if (updateM >= 59) {
-          updateH++;
-          updateM = 0;
-        }
-        if (updateS >= 59) {
-          updateM++;
-          updateS = 0;
-        }
-        updateS++;
+        updateS = (updateS + 1) % 60;
+        updateM = (updateM + (updateS === 0 ? 1 : 0)) % 60;
+        updateH = (updateH + (updateM === 0 && updateS === 0 ? 1 : 0)) % 24;
 
         setTime && setTime({ h: updateH, m: updateM, s: updateS });
         dispatch(setUpdateTimerDuration({ s: updateS, m: updateM, h: updateH }));
       }, 1000);
     }
-
     !isActiveInterval && dispatch(setTimerInterval(interval));
   }, [isRunning, dispatch]);
 }
