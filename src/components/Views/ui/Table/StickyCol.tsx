@@ -20,7 +20,7 @@ import { UniqueIdentifier } from '@dnd-kit/core';
 import { ImCancelCircle } from 'react-icons/im';
 import CloseSubtask from '../../../../assets/icons/CloseSubtask';
 import OpenSubtask from '../../../../assets/icons/OpenSubtask';
-import { titleCase } from 'title-case';
+import { Capitalize } from '../../../../utils/NoCapWords/Capitalize';
 
 interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   task: Task;
@@ -189,11 +189,11 @@ export function StickyCol({
               >
                 {task.name.length > 50 && singleLineView ? (
                   <span className="whitespace-nowrap">
-                    {taskUpperCase ? task.name.substring(0, 40).toUpperCase() : titleCase(task.name).substring(0, 40)}
+                    {taskUpperCase ? task.name.substring(0, 40).toUpperCase() : Capitalize(task.name).substring(0, 40)}
                     ...
                   </span>
                 ) : (
-                  <span>{taskUpperCase ? task.name.toUpperCase() : titleCase(task.name)}</span>
+                  <span>{taskUpperCase ? task.name.toUpperCase() : Capitalize(task.name)}</span>
                 )}
               </p>
 
