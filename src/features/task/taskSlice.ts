@@ -105,6 +105,7 @@ interface TaskState {
   singleLineView: boolean;
   CompactView: boolean;
   taskUpperCase: boolean;
+  verticalGridlinesTask: boolean;
   CompactViewWrap: boolean;
   tableView: boolean;
   boardView: boolean;
@@ -144,6 +145,7 @@ interface TaskState {
   updateCords: number;
   activeTaskColumn: ActiveTaskColumnProps;
   duration: IDuration;
+  fetchedTime: { h: number; m: number; s: number } | null;
   period: number | undefined;
   sortType: TaskKey;
   searchValue: string;
@@ -172,6 +174,7 @@ const initialState: TaskState = {
   singleLineView: false,
   verticalGrid: false,
   taskUpperCase: false,
+  verticalGridlinesTask: false,
   CompactView: false,
   CompactViewWrap: false,
   tableView: false,
@@ -212,6 +215,7 @@ const initialState: TaskState = {
   updateCords: Date.now(),
   activeTaskColumn: { id: '', header: '' },
   duration: { s: 0, m: 0, h: 0 },
+  fetchedTime: null,
   period: undefined,
   sortType: 'status',
   searchValue: '',
@@ -310,6 +314,9 @@ export const taskSlice = createSlice({
     },
     getTaskUpperCase(state, action: PayloadAction<boolean>) {
       state.taskUpperCase = action.payload;
+    },
+    getVerticalGridlinesTask(state, action: PayloadAction<boolean>) {
+      state.verticalGridlinesTask = action.payload;
     },
     getSingleLineView(state, action: PayloadAction<boolean>) {
       state.singleLineView = action.payload;
@@ -447,20 +454,6 @@ export const taskSlice = createSlice({
       state.updateCords = Date.now();
     },
     setUpdateTimerDuration(state, action: PayloadAction<IDuration>) {
-      // const timer = { ms: 0, s: 0, m: 0, h: 0 };
-      // if (timer.h >= 60) {
-      //   timer.h++;
-      //   timer.m = 0;
-      // }
-      // if (timer.s >= 60) {
-      //   timer.m++;
-      //   timer.s = 0;
-      // }
-      // if (timer.ms >= 100) {
-      //   timer.s++;
-      //   timer.ms = 0;
-      // }
-      // timer.ms++;
       state.duration = action.payload;
     },
     setStopTimer(state) {
@@ -477,6 +470,9 @@ export const taskSlice = createSlice({
     },
     setFilterDateString(state, action: PayloadAction<DateString | null>) {
       state.FilterDateString = action.payload;
+    },
+    setFetchedTime(state, action: PayloadAction<{ h: number; m: number; s: number } | null>) {
+      state.fetchedTime = action.payload;
     }
   }
 });
@@ -501,6 +497,7 @@ export const {
   getVerticalGrid,
   getSingleLineView,
   getTaskUpperCase,
+  getVerticalGridlinesTask,
   getCompactView,
   getCompactViewWrap,
   getTableView,
@@ -539,6 +536,7 @@ export const {
   setUpdateCords,
   setActiveTaskColumn,
   setUpdateTimerDuration,
+  setFetchedTime,
   setStopTimer,
   setTimerInterval,
   setSortType,
