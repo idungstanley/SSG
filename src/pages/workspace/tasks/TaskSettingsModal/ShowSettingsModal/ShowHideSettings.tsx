@@ -9,6 +9,7 @@ import {
   getCompactView,
   getSingleLineView,
   getTaskUpperCase,
+  getVerticalGrid,
   getVerticalGridlinesTask
 } from '../../../../../features/task/taskSlice';
 
@@ -38,7 +39,9 @@ export default function ShowHideSettings({
   const [checkedStates, setCheckedStates] = useState<boolean[]>([]);
 
   const dispatch = useAppDispatch();
-  const { singleLineView, CompactView, taskUpperCase, verticalGridlinesTask } = useAppSelector((state) => state.task);
+  const { singleLineView, CompactView, verticalGrid, taskUpperCase, verticalGridlinesTask } = useAppSelector(
+    (state) => state.task
+  );
 
   const handleChange = (viewMode: string, index: number) => {
     const newCheckedStates = [...checkedStates];
@@ -49,6 +52,8 @@ export default function ShowHideSettings({
       dispatch(getSingleLineView(!singleLineView));
     } else if (viewMode == 'Compact mode') {
       dispatch(getCompactView(!CompactView));
+    } else if (viewMode == 'Vertical Gridlines') {
+      dispatch(getVerticalGrid(!verticalGrid));
     } else if (viewMode == 'Upper Case') {
       dispatch(getTaskUpperCase(!taskUpperCase));
     } else if (viewMode == 'Vertical GridLines Task') {
