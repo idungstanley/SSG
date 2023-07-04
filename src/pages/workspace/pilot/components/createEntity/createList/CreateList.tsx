@@ -62,6 +62,7 @@ export default function CreateList() {
   const onSubmit = async () => {
     await createList.mutateAsync({
       listName: name,
+      color: { outerColour: paletteColor as string, innerColour: undefined },
       hubId: (createWlLink ? createWLID : null) || type === EntityType.hub ? id : null,
       walletId: type === EntityType.wallet ? id : null
     });
@@ -70,7 +71,7 @@ export default function CreateList() {
   return (
     <div className="p-2 overflow-y-auto h-auto" style={{ maxHeight: '420px' }}>
       <div className="flex flex-col mb-2">
-        <span className="font-bold">Create A Hub</span>
+        <span className="font-bold">Create A List</span>
         <span className="font-medium">Allows you manage all entities within the workspace</span>
       </div>
       <div className="flex flex-col border border-gray-200 alsoit-gray-bg p-4 rounded space-y-2">
@@ -100,11 +101,17 @@ export default function CreateList() {
             height="5"
             width="5"
           />
-          <Checkbox checked={false} onChange={() => ({})} description="Host other entities" height="5" width="5" />
-          <Checkbox checked={false} onChange={() => ({})} description="Host other entities" height="5" width="5" />
+          <Checkbox
+            checked={false}
+            onChange={() => ({})}
+            description="Ability for all team members to create task"
+            height="5"
+            width="5"
+          />
+          <Checkbox checked={false} onChange={() => ({})} description="Show list to everyone" height="5" width="5" />
         </div>
         <div className="relative ml-24 mt-32">
-          {showPalette ? <Palette title="Hub Colour" setPaletteColor={setPaletteColor} /> : null}
+          {showPalette ? <Palette title="List Colour" setPaletteColor={setPaletteColor} /> : null}
         </div>
       </div>
       <div className="flex justify-between pt-2 space-x-3">
