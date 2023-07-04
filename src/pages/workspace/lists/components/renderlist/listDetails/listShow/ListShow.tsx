@@ -11,9 +11,7 @@ export default function ListShow({ changeViews }: { changeViews: string }) {
         <span>
           <Icons src={Show} />
         </span>
-        <span className="font-bold" style={{ fontSize: '13px' }}>
-          {changeViews}
-        </span>
+        <p>{changeViews}</p>
         <span className="group cursor-pointer gap-2">
           <ShowHideSettings
             scrollByEachGroup="Scroll By Each Group"

@@ -16,14 +16,14 @@ export function Search() {
   }, 500);
 
   return (
-    <div className="relative border p-2 text-gray-500 items-center flex">
+    <div className="relative border p-1 text-gray-500 items-center flex">
       <MagnifyingGlassIcon className="w-5 h-5" />
 
       <input
         onChange={onChange}
         ref={inputRef}
         type="text"
-        className="block w-full h-5 rounded-md text-sm border-0 text-gray-700 ring-0 focus:ring-0 focus:outline-0 appearance-none"
+        className="block w-full h-5 alsoit-radius text-alsoit-text-lg border-0 text-gray-700 ring-0 focus:ring-0 focus:outline-0 appearance-none"
         placeholder="Search task"
       />
       <EllipsisHorizontalIcon className="w-5 h-5" />
