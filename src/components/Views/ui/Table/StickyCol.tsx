@@ -20,7 +20,7 @@ import { UniqueIdentifier } from '@dnd-kit/core';
 import { ImCancelCircle } from 'react-icons/im';
 import CloseSubtask from '../../../../assets/icons/CloseSubtask';
 import OpenSubtask from '../../../../assets/icons/OpenSubtask';
-import { NoCapsWord } from '../../../../utils/NoCapsWord/NoCapsWord';
+import { titleCase } from 'title-case';
 
 interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   task: Task;
@@ -113,18 +113,6 @@ export function StickyCol({
     }
   };
 
-  function capitalizeTitle(title: string) {
-    const words = title.toLowerCase().split(' ');
-    const capitalizedWords = words.map((word, index) => {
-      if (index === 0 || !NoCapsWord.includes(word)) {
-        return word.charAt(0).toUpperCase() + word.slice(1);
-      }
-      return word;
-    });
-
-    return capitalizedWords.join(' ');
-  }
-
   const onClickSave = () => {
     if (inputRef.current?.innerText) {
       const name = inputRef.current?.innerText;
@@ -199,13 +187,11 @@ export function StickyCol({
               >
                 {task.name.length > 50 && singleLineView ? (
                   <span className="whitespace-nowrap">
-                    {taskUpperCase
-                      ? task.name.substring(0, 40).toUpperCase()
-                      : capitalizeTitle(task.name).substring(0, 40)}
+                    {taskUpperCase ? task.name.substring(0, 40).toUpperCase() : titleCase(task.name).substring(0, 40)}
                     ...
                   </span>
                 ) : (
-                  <span>{taskUpperCase ? task.name.toUpperCase() : capitalizeTitle(task.name)}</span>
+                  <span>{taskUpperCase ? task.name.toUpperCase() : titleCase(task.name)}</span>
                 )}
               </p>
 
