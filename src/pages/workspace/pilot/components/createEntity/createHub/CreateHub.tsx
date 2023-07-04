@@ -62,7 +62,6 @@ export default function CreateHub() {
     setShowPalette((prev) => !prev);
   };
 
-  console.log(paletteColor);
   const currentWorkspaceId: string | undefined = JSON.parse(
     localStorage.getItem('currentWorkspaceId') || '"'
   ) as string;
@@ -83,7 +82,7 @@ export default function CreateHub() {
         <span className="font-bold">Create A Hub</span>
         <span className="font-medium">Allows you manage all entities within the workspace</span>
       </div>
-      <div className="flex flex-col border border-gray-200 bg-gray-200 p-4 rounded space-y-2">
+      <div className="flex flex-col border border-gray-200 alsoit-gray-bg p-4 rounded space-y-2">
         <div className="flex relative">
           <Input placeholder="Hub Name" name="name" value={name} type="text" onChange={handleHubChange} />
           <div
