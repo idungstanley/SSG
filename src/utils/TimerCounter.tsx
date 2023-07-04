@@ -10,7 +10,7 @@ interface TimerProps {
 
 export function runTimer({ isRunning, setTime }: TimerProps) {
   const dispatch = useAppDispatch();
-  const { duration, timerStatus } = useAppSelector((state) => state.task);
+  const { duration } = useAppSelector((state) => state.task);
 
   useEffect(() => {
     let updateH = duration.h;

@@ -180,11 +180,11 @@ export default function ClockInOut() {
               </div>
               {/* timer goes here */}
               {timerCheck()}
-              <div className="flex items-center justify-start -space-x-4 cursor-pointer">
+              <div className="flex items-center justify-start -space-x-3 cursor-pointer">
                 {getCurrent?.data.time_entries.map((entry) => {
                   const { team_member } = entry;
                   return (
-                    <div key={entry.id} className="flex -space-x-2">
+                    <div key={entry.id} className="flex">
                       <AvatarWithInitials height="h-7" width="w-7" initials={team_member.user.initials ?? initials} />
                     </div>
                   );
@@ -213,16 +213,16 @@ export default function ClockInOut() {
           {getCurrent?.data.time_entries && getCurrent?.data.time_entries.length > 0 ? (
             <div>
               <table className="w-full">
-                <thead className="flex justify-start space-x-28 py-1 items-center border-b-2 border-gray-300">
-                  <th>User</th>
-                  <th>Duration</th>
+                <thead className="flex justify-start py-1 items-center border-b-2 border-gray-300">
+                  <th className="w-1/2 text-start">User</th>
+                  <th className="w-1/2 text-start">Duration</th>
                 </thead>
                 <tbody className="w-full">
                   {getCurrent.data.time_entries.map((entry) => {
                     return (
-                      <tr key={entry.id} className="space-x-4 flex py-2 border-b-2 items-center">
-                        <td className="text-sm text-gray-600">{entry.team_member.user.name}</td>
-                        <td className="text-sm text-gray-600">
+                      <tr key={entry.id} className="space-x-4 flex py-2 border-b-2 items-center w-full">
+                        <td className="text-sm text-gray-600 w-1/2">{entry.team_member.user.name}</td>
+                        <td className="text-sm text-gray-600 w-1/2">
                           within {moment.duration(moment().diff(entry.start_date)).humanize()} ago
                         </td>
                         <td className="text-sm text-gray-600">{entry.description}</td>
