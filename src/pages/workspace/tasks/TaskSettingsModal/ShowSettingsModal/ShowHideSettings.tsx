@@ -5,7 +5,12 @@ import { FiChevronRight } from 'react-icons/fi';
 import Icons from '../../../../../components/Icons/Icons';
 import DropDown from '../../../../../assets/icons/arrow_drop_down_black.svg';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
-import { getCompactView, getSingleLineView, getVerticalGrid } from '../../../../../features/task/taskSlice';
+import {
+  getCompactView,
+  getSingleLineView,
+  getTaskUpperCase,
+  getVerticalGrid
+} from '../../../../../features/task/taskSlice';
 
 interface IShowHideSettings {
   scrollByEachGroup: string;
@@ -33,7 +38,7 @@ export default function ShowHideSettings({
   const [checkedStates, setCheckedStates] = useState<boolean[]>([]);
 
   const dispatch = useAppDispatch();
-  const { singleLineView, CompactView, verticalGrid } = useAppSelector((state) => state.task);
+  const { singleLineView, CompactView, verticalGrid, taskUpperCase } = useAppSelector((state) => state.task);
 
   const handleChange = (viewMode: string, index: number) => {
     const newCheckedStates = [...checkedStates];
@@ -46,66 +51,61 @@ export default function ShowHideSettings({
       dispatch(getCompactView(!CompactView));
     } else if (viewMode == 'Vertical Gridlines') {
       dispatch(getVerticalGrid(!verticalGrid));
+    } else if (viewMode == 'Upper Case') {
+      dispatch(getTaskUpperCase(!taskUpperCase));
     }
   };
 
   const ViewSettings = [
     {
       id: 2,
-      label: scrollByEachGroup,
-      handleClick: () => null
+      label: scrollByEachGroup
     },
     {
       id: 3,
-      label: splitSubTask,
-      handleClick: () => null
+      label: splitSubTask
     },
     {
       id: 4,
-      label: verticalGridLines,
-      handleClick: () => null
+      label: verticalGridLines
     },
     {
       id: 5,
-      label: entityLocation,
-      handleClick: () => null
+      label: 'Upper Case'
     },
     {
       id: 6,
-      label: subTaskParentsNames,
-      handleClick: () => null
+      label: entityLocation
     },
     {
       id: 7,
-      label: closedSubtask,
-      handleClick: () => null
+      label: subTaskParentsNames
     },
     {
       id: 8,
-      label: TaskInMultipleLists,
-      handleClick: () => null
+      label: closedSubtask
     },
     {
       id: 9,
-      label: subTaskInMultipleLists,
-      handleClick: () => null
+      label: TaskInMultipleLists
     },
     {
       id: 10,
-      label: emptyStatuses,
-      handleClick: () => null
+      label: subTaskInMultipleLists
     },
     {
       id: 11,
-      icon: <FiChevronRight />,
-      label: 'Single Line mode',
-      handleClick: () => null
+      label: emptyStatuses
     },
     {
       id: 12,
       icon: <FiChevronRight />,
-      label: 'Compact mode',
-      handleClick: () => null
+      label: 'Single Line mode'
+    },
+    {
+      id: 13,
+      icon: <FiChevronRight />,
+      label: 'Compact mode'
     }
   ];
 
@@ -149,9 +149,8 @@ export default function ShowHideSettings({
             <Menu.Item as="a" key={View.id} className="flex items-center py-2 text-sm text-black text-left w-full ">
               {View.label !== 'Single Line mode' ? (
                 <button
-                  onClick={View.handleClick}
                   className={`${
-                    View.id == 4
+                    View.id == 5
                       ? ' flex justify-between items-center w-full group border-b-2 pb-4'
                       : ' flex justify-between items-center w-full group '
                   }`}
@@ -170,10 +169,7 @@ export default function ShowHideSettings({
                   </p>
                 </button>
               ) : (
-                <button
-                  onClick={View.handleClick}
-                  className=" flex justify-between items-center w-full group border-t-2 pt-2"
-                >
+                <button className=" flex justify-between items-center w-full group border-t-2 pt-2">
                   <p className="flex items-center space-x-2 pl-2 text-md whitespace-nowrap">{View.label}</p>
                   <p className="flex items-center pr-2 ">
                     <label className="switch" onClick={(event) => event.stopPropagation()}>

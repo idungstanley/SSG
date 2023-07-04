@@ -6,11 +6,19 @@ import { createHubService } from '../../../../../../features/hubs/hubService';
 import { setSubDropdownMenu, setshowMenuDropdown } from '../../../../../../features/hubs/hubSlice';
 import { setCreateEntityType } from '../../../../../../features/workspace/workspaceSlice';
 import { EntityType } from '../../../../../../utils/EntityTypes/EntityType';
+import { avatarBg } from '../../../../createWorkspace/colors';
+
+interface formProps {
+  name: string;
+  color: string | undefined;
+}
 
 export default function CreateHub() {
   const queryClient = useQueryClient();
   const dispatch = useAppDispatch();
+  const [activeColour, setActiveColour] = useState<string | undefined>('');
   const { selectedTreeDetails } = useAppSelector((state) => state.hub);
+
   const { type, id } = selectedTreeDetails;
   const createHub = useMutation(createHubService, {
     onSuccess: () => {
@@ -27,10 +35,11 @@ export default function CreateHub() {
   });
 
   const defaultHubFormState = {
-    name: ''
+    name: '',
+    color: ''
   };
 
-  const [formState, setFormState] = useState(defaultHubFormState);
+  const [formState, setFormState] = useState<formProps>(defaultHubFormState);
 
   const handleHubChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormState((prevState) => ({
@@ -42,15 +51,21 @@ export default function CreateHub() {
     dispatch(setCreateEntityType(null));
   };
 
+  const handleColourSelection = (colour?: string) => {
+    setFormState({ ...formState, color: colour });
+    setActiveColour(colour);
+  };
+
   const currentWorkspaceId: string | undefined = JSON.parse(
     localStorage.getItem('currentWorkspaceId') || '"'
   ) as string;
 
-  const { name } = formState;
+  const { name, color } = formState;
 
   const onSubmit = async () => {
     await createHub.mutateAsync({
       name,
+      color,
       currentWorkspaceId,
       currHubId: type === EntityType.hub ? id : null
     });
@@ -65,6 +80,25 @@ export default function CreateHub() {
         type="text"
         onChange={handleHubChange}
       />
+      <div className="grid grid-cols-7 gap-6 my-4 border border-inherit p-2">
+        {avatarBg.map(({ colour }) => {
+          return (
+            <div
+              key={colour}
+              className={`w-6 h-6 flex items-center justify-center ${
+                activeColour === colour ? 'border border-gray-600 rounded' : ''
+              }`}
+            >
+              <button
+                type="button"
+                className="rounded w-5 h-5"
+                style={{ backgroundColor: colour }}
+                onClick={() => handleColourSelection(colour)}
+              />
+            </div>
+          );
+        })}
+      </div>
       <div className="flex justify-between pt-2 space-x-3">
         <Button buttonStyle="white" onClick={onClose} loading={false} label="Close" width={20} />
         <Button

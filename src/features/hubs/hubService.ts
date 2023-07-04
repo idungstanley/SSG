@@ -6,9 +6,11 @@ import requestNew from '../../app/requestNew';
 import { IResponseGetHubs, IHubReq, IFavoritesRes, IHubDetailRes, IHubsRes } from './hubs.interfaces';
 import { closeMenu, setShowFavEditInput, setTriggerFavUpdate } from './hubSlice';
 import { setArchiveHub, setDelHub } from './hubSlice';
+import { ListColourProps } from '../../components/tasks/ListItem';
 
 export const createHubService = (data: {
   name: string;
+  color?: string;
   currHubId?: string | null;
   currentWorkspaceId?: string;
   confirmAction?: number | undefined;
@@ -18,6 +20,7 @@ export const createHubService = (data: {
     method: 'POST',
     data: {
       name: data.name,
+      color: data.color,
       current_workspace_id: data.currentWorkspaceId,
       parent_id: data.currHubId,
       confirm: data.confirmAction

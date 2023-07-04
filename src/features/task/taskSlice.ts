@@ -104,6 +104,7 @@ interface TaskState {
   verticalGrid: boolean;
   singleLineView: boolean;
   CompactView: boolean;
+  taskUpperCase: boolean;
   CompactViewWrap: boolean;
   tableView: boolean;
   boardView: boolean;
@@ -170,6 +171,7 @@ const initialState: TaskState = {
   comfortableViewWrap: false,
   singleLineView: false,
   verticalGrid: false,
+  taskUpperCase: false,
   CompactView: false,
   CompactViewWrap: false,
   tableView: false,
@@ -305,6 +307,9 @@ export const taskSlice = createSlice({
     },
     getCompactView(state, action: PayloadAction<boolean>) {
       state.CompactView = action.payload;
+    },
+    getTaskUpperCase(state, action: PayloadAction<boolean>) {
+      state.taskUpperCase = action.payload;
     },
     getSingleLineView(state, action: PayloadAction<boolean>) {
       state.singleLineView = action.payload;
@@ -495,6 +500,7 @@ export const {
   getComfortableViewWrap,
   getVerticalGrid,
   getSingleLineView,
+  getTaskUpperCase,
   getCompactView,
   getCompactViewWrap,
   getTableView,

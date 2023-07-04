@@ -1,4 +1,4 @@
-import { MouseEventHandler, TdHTMLAttributes } from 'react';
+import { TdHTMLAttributes } from 'react';
 import { useParams } from 'react-router-dom';
 import { ImyTaskData, setCurrentTaskStatusId } from '../../../../features/task/taskSlice';
 import { cl } from '../../../../utils';

@@ -20,6 +20,7 @@ import { UniqueIdentifier } from '@dnd-kit/core';
 import { ImCancelCircle } from 'react-icons/im';
 import CloseSubtask from '../../../../assets/icons/CloseSubtask';
 import OpenSubtask from '../../../../assets/icons/OpenSubtask';
+import { titleCase } from 'title-case';
 
 interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   task: Task;
@@ -56,7 +57,9 @@ export function StickyCol({
   const COL_BG = taskId === task.id ? ACTIVE_COL_BG : DEFAULT_COL_BG;
 
   const { mutate: onAdd } = useAddTask(parentId);
-  const { currTeamMemberId, showTaskNavigation, singleLineView, verticalGrid } = useAppSelector((state) => state.task);
+  const { currTeamMemberId, showTaskNavigation, singleLineView, verticalGrid, taskUpperCase } = useAppSelector(
+    (state) => state.task
+  );
 
   const onClickTask = () => {
     navigate(`/${currentWorkspaceId}/tasks/h/${hubId}/t/${task.id}`, { replace: true });
@@ -90,7 +93,7 @@ export function StickyCol({
   const queryClient = useQueryClient();
   const inputRef = useRef<HTMLInputElement | null>(null);
 
-  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
+  const { attributes, listeners, setNodeRef } = useSortable({
     id: task?.id as UniqueIdentifier
   });
 
@@ -185,9 +188,12 @@ export function StickyCol({
                 onKeyDown={(e) => (e.key === 'Enter' ? handleEditTask(e, task.id) : null)}
               >
                 {task.name.length > 50 && singleLineView ? (
-                  <span className="whitespace-nowrap">{task.name.substring(0, 40)}...</span>
+                  <span className="whitespace-nowrap">
+                    {taskUpperCase ? task.name.substring(0, 40).toUpperCase() : titleCase(task.name).substring(0, 40)}
+                    ...
+                  </span>
                 ) : (
-                  <span>{task.name}</span>
+                  <span>{taskUpperCase ? task.name.toUpperCase() : titleCase(task.name)}</span>
                 )}
               </p>
 
