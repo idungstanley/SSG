@@ -3,7 +3,7 @@ import TemplatesIcon from '../../../../../assets/icons/Templates';
 
 function Header() {
   return (
-    <div>
+    <div className="w-full">
       <div className="border-2 flex items-center text-center py-1 bg-white">
         <TemplatesIcon />
         <h1 className="text-base-xl mx-4">Templates</h1>
