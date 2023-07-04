@@ -22,6 +22,8 @@ import hubIcon from '../../../../../assets/branding/hub.svg';
 import RecordScreen from '../../../../../components/Pilot/components/RecordScreen';
 import HubManager from '../../../../../components/Pilot/components/HubManager/HubManager';
 import { getCurrentTime } from '../../../../../features/task/taskService';
+import TemplatesIcon from '../../../../../assets/icons/Templates';
+import Templates from '../../../../../components/Pilot/components/Templates';
 
 const sections = [
   {
@@ -59,6 +61,10 @@ const sections = [
   {
     id: 9,
     element: <HubManager />
+  },
+  {
+    id: 10,
+    element: <Templates />
   }
 ];
 
@@ -107,6 +113,11 @@ const tabs = [
     id: 9,
     label: 'Entity Manager',
     icon: <img src={hubIcon} alt="Hub Icon" className="w-4 h-4" />
+  },
+  {
+    id: 10,
+    label: 'Templates',
+    icon: <TemplatesIcon />
   }
 ];
 
