@@ -4,7 +4,6 @@ import TimeSubTab from './TimeSubTab';
 import ClockInOut from '../../../../../../components/Pilot/components/TimeClock/ClockInOut';
 import ClockLog from '../../../../../../components/Pilot/components/TimeClock/ClockLog';
 import ClockPreferences from '../../../../../../components/Pilot/components/TimeClock/ClockPreferences';
-import { getCurrentTime } from '../../../../../../features/task/taskService';
 
 export const TimeClockOptions = [
   {
@@ -26,12 +25,6 @@ export default function TimeClock() {
     () => TimeClockOptions.find((option) => option.id === activeSubTimeClockTabId),
     [activeSubTimeClockTabId]
   );
-
-  const timeRecord = getCurrentTime();
-
-  useEffect(() => {
-    timeRecord;
-  }, [activeItemId]);
   return (
     <section className="flex flex-col h-full">
       {showPilot && <TimeSubTab />}

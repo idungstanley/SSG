@@ -57,43 +57,16 @@ export default function MenuDropdown() {
     showMenuDropdownType
     // triggerAddToFav,
   } = useAppSelector((state) => state.hub);
-  const {
-    showCreateSubWalletSlideOver,
-    showCreateHubSlideOver,
-    showCreateSubHubSlideOver,
-    showCreateTaskSlideOver,
-    showCreateWalletSlideOver,
-    showEditHubSlideOver,
-    showEditListSlideOver,
-    showEditWalletSlideOver,
-    showCreateListSlideOver
-  } = useAppSelector((state) => state.slideOver);
   const { delWallet, archiveWallet } = useAppSelector((state) => state.wallet);
-  const { show } = useAppSelector((state) => state.prompt);
-
-  const { showTreeInput } = useAppSelector((state) => state.workspace);
-
   const { delList, archiveList } = useAppSelector((state) => state.list);
   const ref = useRef<HTMLInputElement>(null);
   useEffect(() => {
     const checkClickedOutSide = (e: MouseEvent) => {
       if (showMenuDropdown != null && ref.current && e.target && !ref.current.contains(e.target as Node)) {
-        if (
-          showCreateSubWalletSlideOver === false &&
-          showCreateHubSlideOver === false &&
-          showCreateSubHubSlideOver === false &&
-          showCreateWalletSlideOver === false &&
-          showCreateTaskSlideOver === false &&
-          showEditHubSlideOver === false &&
-          showEditListSlideOver === false &&
-          showEditWalletSlideOver === false &&
-          showCreateListSlideOver === false
-        ) {
-          if (SubDropdownMenu === true) {
-            dispatch(setSubDropdownMenu(false));
-          } else {
-            dispatch(setshowMenuDropdown({ showMenuDropdown: null, showMenuDropdownType: null }));
-          }
+        if (SubDropdownMenu === true) {
+          dispatch(setSubDropdownMenu(false));
+        } else {
+          dispatch(setshowMenuDropdown({ showMenuDropdown: null, showMenuDropdownType: null }));
         }
       }
     };
@@ -101,18 +74,7 @@ export default function MenuDropdown() {
     return () => {
       document.removeEventListener('click', checkClickedOutSide);
     };
-  }, [
-    SubDropdownMenu,
-    showCreateSubWalletSlideOver,
-    showCreateHubSlideOver,
-    showCreateSubHubSlideOver,
-    showCreateWalletSlideOver,
-    showCreateTaskSlideOver,
-    showEditHubSlideOver,
-    showEditListSlideOver,
-    showEditWalletSlideOver,
-    showCreateListSlideOver
-  ]);
+  }, [SubDropdownMenu]);
 
   //delete-entity
   //hubs and subhubs

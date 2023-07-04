@@ -20,6 +20,7 @@ import { UniqueIdentifier } from '@dnd-kit/core';
 import { ImCancelCircle } from 'react-icons/im';
 import CloseSubtask from '../../../../assets/icons/CloseSubtask';
 import OpenSubtask from '../../../../assets/icons/OpenSubtask';
+import { Capitalize } from '../../../../utils/NoCapWords/Capitalize';
 
 interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   task: Task;
@@ -56,7 +57,8 @@ export function StickyCol({
   const COL_BG = taskId === task.id ? ACTIVE_COL_BG : DEFAULT_COL_BG;
 
   const { mutate: onAdd } = useAddTask(parentId);
-  const { currTeamMemberId, showTaskNavigation, singleLineView } = useAppSelector((state) => state.task);
+  const { currTeamMemberId, showTaskNavigation, singleLineView, verticalGrid, taskUpperCase, verticalGridlinesTask } =
+    useAppSelector((state) => state.task);
 
   const onClickTask = () => {
     navigate(`/${currentWorkspaceId}/tasks/h/${hubId}/t/${task.id}`, { replace: true });
@@ -160,7 +162,12 @@ export function StickyCol({
 
           <div
             style={{ paddingLeft, minHeight: '42px', height: singleLineView ? '42px' : '' }}
-            className={cl(COL_BG, 'relative border-t w-full py-4 flex items-center ')}
+            className={cl(
+              COL_BG,
+              `relative border-t ${verticalGrid && 'border-r'} ${
+                verticalGridlinesTask && 'border-r'
+              } w-full py-4 flex items-center `
+            )}
           >
             <button onClick={onToggleDisplayingSubTasks} className="pl-1">
               {showSubTasks ? (
@@ -185,9 +192,12 @@ export function StickyCol({
                 onKeyDown={(e) => (e.key === 'Enter' ? handleEditTask(e, task.id) : null)}
               >
                 {task.name.length > 50 && singleLineView ? (
-                  <span className="whitespace-nowrap">{task.name.substring(0, 40)}...</span>
+                  <span className="whitespace-nowrap">
+                    {taskUpperCase ? task.name.substring(0, 40).toUpperCase() : Capitalize(task.name).substring(0, 40)}
+                    ...
+                  </span>
                 ) : (
-                  <span>{task.name}</span>
+                  <span>{taskUpperCase ? task.name.toUpperCase() : Capitalize(task.name)}</span>
                 )}
               </p>
 
@@ -222,7 +232,10 @@ export function StickyCol({
 
           <div
             style={{ paddingLeft }}
-            className={cl(COL_BG, 'relative border-t w-full h-10 py-4 p-4 flex items-center ')}
+            className={cl(
+              COL_BG,
+              `relative border-t ${verticalGrid && 'border-r'} w-full h-10 py-4 p-4 flex items-center `
+            )}
           >
             <div className="flex space-x-1 pl-4 pr-2 ">
               <button

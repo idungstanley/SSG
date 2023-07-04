@@ -101,8 +101,11 @@ interface TaskState {
   listView: boolean;
   comfortableView: boolean;
   comfortableViewWrap: boolean;
+  verticalGrid: boolean;
   singleLineView: boolean;
   CompactView: boolean;
+  taskUpperCase: boolean;
+  verticalGridlinesTask: boolean;
   CompactViewWrap: boolean;
   tableView: boolean;
   boardView: boolean;
@@ -142,6 +145,7 @@ interface TaskState {
   updateCords: number;
   activeTaskColumn: ActiveTaskColumnProps;
   duration: IDuration;
+  fetchedTime: { h: number; m: number; s: number } | null;
   period: number | undefined;
   sortType: TaskKey;
   searchValue: string;
@@ -168,6 +172,9 @@ const initialState: TaskState = {
   comfortableView: true,
   comfortableViewWrap: false,
   singleLineView: false,
+  verticalGrid: false,
+  taskUpperCase: false,
+  verticalGridlinesTask: false,
   CompactView: false,
   CompactViewWrap: false,
   tableView: false,
@@ -208,6 +215,7 @@ const initialState: TaskState = {
   updateCords: Date.now(),
   activeTaskColumn: { id: '', header: '' },
   duration: { s: 0, m: 0, h: 0 },
+  fetchedTime: null,
   period: undefined,
   sortType: 'status',
   searchValue: '',
@@ -304,8 +312,17 @@ export const taskSlice = createSlice({
     getCompactView(state, action: PayloadAction<boolean>) {
       state.CompactView = action.payload;
     },
+    getTaskUpperCase(state, action: PayloadAction<boolean>) {
+      state.taskUpperCase = action.payload;
+    },
+    getVerticalGridlinesTask(state, action: PayloadAction<boolean>) {
+      state.verticalGridlinesTask = action.payload;
+    },
     getSingleLineView(state, action: PayloadAction<boolean>) {
       state.singleLineView = action.payload;
+    },
+    getVerticalGrid(state, action: PayloadAction<boolean>) {
+      state.verticalGrid = action.payload;
     },
     getCompactViewWrap(state, action: PayloadAction<boolean>) {
       state.CompactViewWrap = action.payload;
@@ -437,20 +454,6 @@ export const taskSlice = createSlice({
       state.updateCords = Date.now();
     },
     setUpdateTimerDuration(state, action: PayloadAction<IDuration>) {
-      // const timer = { ms: 0, s: 0, m: 0, h: 0 };
-      // if (timer.h >= 60) {
-      //   timer.h++;
-      //   timer.m = 0;
-      // }
-      // if (timer.s >= 60) {
-      //   timer.m++;
-      //   timer.s = 0;
-      // }
-      // if (timer.ms >= 100) {
-      //   timer.s++;
-      //   timer.ms = 0;
-      // }
-      // timer.ms++;
       state.duration = action.payload;
     },
     setStopTimer(state) {
@@ -467,6 +470,9 @@ export const taskSlice = createSlice({
     },
     setFilterDateString(state, action: PayloadAction<DateString | null>) {
       state.FilterDateString = action.payload;
+    },
+    setFetchedTime(state, action: PayloadAction<{ h: number; m: number; s: number } | null>) {
+      state.fetchedTime = action.payload;
     }
   }
 });
@@ -488,7 +494,10 @@ export const {
   getListView,
   getComfortableView,
   getComfortableViewWrap,
+  getVerticalGrid,
   getSingleLineView,
+  getTaskUpperCase,
+  getVerticalGridlinesTask,
   getCompactView,
   getCompactViewWrap,
   getTableView,
@@ -527,6 +536,7 @@ export const {
   setUpdateCords,
   setActiveTaskColumn,
   setUpdateTimerDuration,
+  setFetchedTime,
   setStopTimer,
   setTimerInterval,
   setSortType,
