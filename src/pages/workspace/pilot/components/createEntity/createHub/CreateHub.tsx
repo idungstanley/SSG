@@ -2,11 +2,18 @@ import React, { useState } from 'react';
 import { Button, Input } from '../../../../../../components';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
-import { createHubService } from '../../../../../../features/hubs/hubService';
-import { setSubDropdownMenu, setshowMenuDropdown } from '../../../../../../features/hubs/hubSlice';
+import { createHubService, useGetHubChildren } from '../../../../../../features/hubs/hubService';
+import {
+  getCurrHubId,
+  getSubMenu,
+  setSubDropdownMenu,
+  setshowMenuDropdown
+} from '../../../../../../features/hubs/hubSlice';
 import { setCreateEntityType } from '../../../../../../features/workspace/workspaceSlice';
 import { EntityType } from '../../../../../../utils/EntityTypes/EntityType';
 import { avatarBg } from '../../../../createWorkspace/colors';
+import { displayPrompt, setVisibility } from '../../../../../../features/general/prompt/promptSlice';
+import { IHubDetailResErr } from '../../../../../../features/hubs/hubs.interfaces';
 
 interface formProps {
   name: string;
@@ -17,7 +24,13 @@ export default function CreateHub() {
   const queryClient = useQueryClient();
   const dispatch = useAppDispatch();
   const [activeColour, setActiveColour] = useState<string | undefined>('');
-  const { selectedTreeDetails } = useAppSelector((state) => state.hub);
+  const { selectedTreeDetails, currHubId, SubMenuId, SubMenuType } = useAppSelector((state) => state.hub);
+
+  const { data } = useGetHubChildren({
+    query: selectedTreeDetails.type === 'hub' ? selectedTreeDetails.id : currHubId
+  });
+
+  const isCreateAllowed = data?.data.wallets.length === 0 && data?.data.lists.length === 0;
 
   const { type, id } = selectedTreeDetails;
   const createHub = useMutation(createHubService, {
@@ -26,11 +39,44 @@ export default function CreateHub() {
       dispatch(setCreateEntityType(null));
       dispatch(setSubDropdownMenu(false));
       dispatch(
+        getSubMenu({
+          SubMenuId: null
+        })
+      );
+      dispatch(getCurrHubId(null));
+      dispatch(
         setshowMenuDropdown({
           showMenuDropdown: null
         })
       );
       setFormState(defaultHubFormState);
+    },
+    onError: (data: IHubDetailResErr) => {
+      if (data.data.data.need_confirmation === true) {
+        dispatch(
+          displayPrompt('Create Subhub', 'Would move all entities in Hub to Subhub. Do you want to proceed?', [
+            {
+              label: 'Create Subhub',
+              style: 'danger',
+              callback: async () => {
+                await createHub.mutateAsync({
+                  name,
+                  currentWorkspaceId,
+                  currHubId: SubMenuType === 'hubs' ? SubMenuId : currHubId,
+                  confirmAction: 1
+                });
+              }
+            },
+            {
+              label: 'Cancel',
+              style: 'plain',
+              callback: () => {
+                dispatch(setVisibility(false));
+              }
+            }
+          ])
+        );
+      }
     }
   });
 
@@ -63,12 +109,45 @@ export default function CreateHub() {
   const { name, color } = formState;
 
   const onSubmit = async () => {
-    await createHub.mutateAsync({
-      name,
-      color,
-      currentWorkspaceId,
-      currHubId: type === EntityType.hub ? id : null
-    });
+    if (currHubId === null) {
+      await createHub.mutateAsync({
+        name,
+        color,
+        currentWorkspaceId,
+        currHubId: type === EntityType.hub ? id : null
+      });
+    } else if (isCreateAllowed) {
+      await createHub.mutateAsync({
+        name,
+        color,
+        currentWorkspaceId,
+        currHubId: type === EntityType.hub ? id : null
+      });
+    } else {
+      dispatch(
+        displayPrompt('Create Subhub', 'Would move all entities in Hub to Subhub. Do you want to proceed?', [
+          {
+            label: 'Create Subhub',
+            style: 'danger',
+            callback: async () => {
+              await createHub.mutateAsync({
+                name,
+                currentWorkspaceId,
+                currHubId: SubMenuType === 'hubs' ? SubMenuId : currHubId,
+                confirmAction: 1
+              });
+            }
+          },
+          {
+            label: 'Cancel',
+            style: 'plain',
+            callback: () => {
+              dispatch(setVisibility(false));
+            }
+          }
+        ])
+      );
+    }
   };
   return (
     <div className="p-2">
