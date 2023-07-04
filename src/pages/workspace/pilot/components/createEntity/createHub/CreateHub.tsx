@@ -9,6 +9,9 @@ import { EntityType } from '../../../../../../utils/EntityTypes/EntityType';
 import { avatarBg } from '../../../../createWorkspace/colors';
 import Assignee from '../../../../tasks/assignTask/Assignee';
 import Wand from '../../../../../../assets/icons/Wand';
+import ArrowDown from '../../../../../../assets/icons/ArrowDown';
+import Palette from '../../../../../../components/ColorPalette';
+import { ListColourProps } from '../../../../../../components/tasks/ListItem';
 
 interface formProps {
   name: string;
@@ -18,7 +21,8 @@ interface formProps {
 export default function CreateHub() {
   const queryClient = useQueryClient();
   const dispatch = useAppDispatch();
-  const [activeColour, setActiveColour] = useState<string | undefined>('');
+  const [paletteColor, setPaletteColor] = useState<string | ListColourProps | undefined>('');
+  const [showPalette, setShowPalette] = useState<boolean>(false);
   const { selectedTreeDetails } = useAppSelector((state) => state.hub);
 
   const { type, id } = selectedTreeDetails;
@@ -53,26 +57,22 @@ export default function CreateHub() {
     dispatch(setCreateEntityType(null));
   };
 
-  const handleColourSelection = (
-    e: React.MouseEvent<HTMLDivElement | HTMLButtonElement, MouseEvent>,
-    colour?: string
-  ) => {
+  const handleShowPalette = (e: React.MouseEvent<HTMLDivElement | HTMLButtonElement, MouseEvent>) => {
     e.stopPropagation();
-    console.log('stan');
-    setFormState({ ...formState, color: colour });
-    setActiveColour(colour);
+    setShowPalette((prev) => !prev);
   };
 
+  console.log(paletteColor);
   const currentWorkspaceId: string | undefined = JSON.parse(
     localStorage.getItem('currentWorkspaceId') || '"'
   ) as string;
 
-  const { name, color } = formState;
+  const { name } = formState;
 
   const onSubmit = async () => {
     await createHub.mutateAsync({
       name,
-      color,
+      color: paletteColor as string,
       currentWorkspaceId,
       currHubId: type === EntityType.hub ? id : null
     });
@@ -84,21 +84,18 @@ export default function CreateHub() {
         <span className="font-medium">Allows you manage all entities within the workspace</span>
       </div>
       <div className="flex flex-col border border-gray-200 bg-gray-200 p-4 rounded space-y-2">
-        <Input
-          placeholder="Hub Name"
-          name="name"
-          value={name}
-          type="text"
-          onChange={handleHubChange}
-          trailingIcon={
-            <div className="cursor-pointer flex items-center" onClick={(e) => handleColourSelection(e)}>
-              <Wand />
-            </div>
-          }
-        />
+        <div className="flex relative">
+          <Input placeholder="Hub Name" name="name" value={name} type="text" onChange={handleHubChange} />
+          <div
+            className="absolute cursor-pointer flex items-center right-2 top-3"
+            onClick={(e) => handleShowPalette(e)}
+          >
+            <Wand />
+          </div>
+        </div>
         <div className="flex h-10 p-1 w-full border bg-white rounded justify-between items-center">
           <span>Manage this Hub with other application</span>
-          <Assignee option="share" />
+          <ArrowDown />
         </div>
         <div className="flex h-10 p-1 w-full border bg-white rounded justify-between items-center">
           <span>Share with public</span>
@@ -116,24 +113,8 @@ export default function CreateHub() {
           <Checkbox checked={false} onChange={() => ({})} description="Host other entities" height="5" width="5" />
           <Checkbox checked={false} onChange={() => ({})} description="Host other entities" height="5" width="5" />
         </div>
-        <div className="grid grid-cols-7 gap-6 my-4 border border-inherit p-2">
-          {avatarBg.map(({ colour }) => {
-            return (
-              <div
-                key={colour}
-                className={`w-6 h-6 flex items-center justify-center ${
-                  activeColour === colour ? 'border border-gray-600 rounded' : ''
-                }`}
-              >
-                <button
-                  type="button"
-                  className="rounded w-5 h-5"
-                  style={{ backgroundColor: colour }}
-                  onClick={(e) => handleColourSelection(e, colour)}
-                />
-              </div>
-            );
-          })}
+        <div className="relative ml-24 mt-32">
+          {showPalette ? <Palette title="Hub Colour" setPaletteColor={setPaletteColor} /> : null}
         </div>
       </div>
       <div className="flex justify-between pt-2 space-x-3">
