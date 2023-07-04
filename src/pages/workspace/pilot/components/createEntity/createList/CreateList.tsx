@@ -74,7 +74,7 @@ export default function CreateList() {
         <span className="font-bold">Create A List</span>
         <span className="font-medium">Allows you manage all entities within the workspace</span>
       </div>
-      <div className="flex flex-col border border-gray-200 alsoit-gray-bg p-4 rounded space-y-2">
+      <div className="flex flex-col border border-gray-200 bg-alsoit-gray-bg p-4 rounded space-y-2">
         <div className="flex relative">
           <Input placeholder="Hub Name" name="name" value={name} type="text" onChange={handleListChange} />
           <div
