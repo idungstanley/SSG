@@ -3,11 +3,12 @@ import { HiOutlineUpload } from 'react-icons/hi';
 import { BsFillGrid3X3GapFill } from 'react-icons/bs';
 import { MdHelpOutline, MdTab } from 'react-icons/md';
 import { resetWorkSpace } from '../../../../features/workspace/workspaceSlice';
-import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 import { IoAlarmSharp } from 'react-icons/io5';
 import BlinkerModal from './HeaderModal';
 import headerIcon from '../../../../assets/icons/headerIcon.png';
+import { useCurrentTime } from '../../../../features/task/taskService';
 
 export const handleEntity = ({
   workSpaceId,
@@ -15,8 +16,8 @@ export const handleEntity = ({
   listId
 }: {
   workSpaceId: string | undefined;
-  hubId: string | undefined;
-  listId: string | undefined;
+  hubId: string | undefined | null;
+  listId: string | undefined | null;
 }): string => {
   return hubId !== '' ? `/${workSpaceId}/tasks/h/${hubId}` : `/${workSpaceId}/tasks/l/${listId}`;
 };
@@ -24,10 +25,16 @@ export const handleEntity = ({
 export default function AdditionalHeader() {
   const { screenRecording, duration, timerStatus } = useAppSelector((state) => state.task);
   const [show, setShow] = useState<boolean>(false);
+  const [isVisible, setIsVisible] = useState<boolean>(true);
   const dispatch = useAppDispatch();
   const { activeTabId: tabsId, timerLastMemory, activeItemId } = useAppSelector((state) => state.workspace);
   const navigate = useNavigate();
+  const { workSpaceId: workspaceId } = useParams();
   const { activeEntityName } = useAppSelector((state) => state.workspace);
+  const { refetch } = useCurrentTime({ workspaceId });
+
+  const localData = localStorage.getItem('lastActiveTimerData');
+  const activePeriod: { period: number } = localData && JSON.parse(localData);
 
   const sameEntity = () => activeItemId === (timerLastMemory.hubId || timerLastMemory.listId);
 
@@ -39,6 +46,29 @@ export default function AdditionalHeader() {
     dispatch(resetWorkSpace({ activeTabId, workSpaceId, hubId, listId }));
     navigate(handleEntity({ workSpaceId, hubId, listId }), { replace: true });
   };
+
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible') {
+        setIsVisible(true);
+      } else {
+        setIsVisible(false);
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (isVisible) {
+      if (activePeriod) clearTimeout(activePeriod.period);
+      refetch();
+    }
+  }, [isVisible, refetch]);
 
   return (
     <div className="flex items-center justify-between w-full px-4 border-b" style={{ height: '50px' }}>

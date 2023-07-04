@@ -2,15 +2,22 @@ import requestNew from '../../app/requestNew';
 import { IFullTaskRes, ITaskListRes, ITaskRes, ITimeEntriesRes, TaskId } from './interface.tasks';
 import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { setScreenRecording, setScreenRecordingMedia, setTimerStatus, setToggleAssignCurrentTaskId } from './taskSlice';
+import {
+  setScreenRecording,
+  setScreenRecordingMedia,
+  setTimerStatus,
+  setToggleAssignCurrentTaskId,
+  setUpdateTimerDuration
+} from './taskSlice';
 import { UpdateTaskProps } from './interface.tasks';
 import { IWatchersRes } from '../general/watchers/watchers.interface';
 import RecordRTC from 'recordrtc';
 import { useUploadRecording } from '../workspace/workspaceService';
 import { useParams } from 'react-router-dom';
-import { toggleMute } from '../workspace/workspaceSlice';
+import { setTimerLastMemory, toggleMute } from '../workspace/workspaceSlice';
 import { generateFilters } from '../../components/TasksHeader/lib/generateFilters';
 import moment from 'moment-timezone';
+import { runTimer } from '../../components/Pilot/components/TimeClock/ClockInOut';
 
 const moveTask = (data: { taskId: TaskId; listId: string }) => {
   const { taskId, listId } = data;
@@ -406,26 +413,46 @@ export const createTimeEntriesService = (data: { queryKey: (string | undefined)[
   return response;
 };
 
-export const getCurrentTime = () => {
+export const useCurrentTime = ({ workspaceId }: { workspaceId?: string }) => {
+  const dispatch = useAppDispatch();
   const { timezone } = useAppSelector((state) => state.userSetting);
-  const response = requestNew({
-    method: 'GET',
-    url: 'time-entries/current'
-  });
-  // Assuming you have the moment.js library included in your project
+  const { data, isLoading, isError, refetch } = useQuery(
+    ['timeData'],
+    async () => {
+      const response = await requestNew<
+        { data: { time_entry: { start_date: string; model_type: string; model_id: string } } } | undefined
+      >({
+        method: 'GET',
+        url: 'time-entries/current'
+      });
+      return response; // Access the 'data' property of the response
+    },
+    {
+      onSuccess: (data) => {
+        const dateData = data?.data;
+        const dateString = dateData?.time_entry;
 
-  const givenDateString = '2023-06-29 07:59:25';
-  const givenDate = moment(givenDateString, 'YYYY-MM-DD HH:mm:ss', timezone);
-  const currentDate = moment();
-  const duration1 = moment.duration(currentDate.diff(givenDate));
+        if (dateString) {
+          const givenDate = moment(dateString?.start_date, 'YYYY-MM-DD HH:mm:ss', timezone);
+          const currentDate = moment();
+          const duration = moment.duration(currentDate.diff(givenDate));
+          dispatch(setTimerStatus(true));
+          dispatch(setUpdateTimerDuration({ s: duration.seconds(), m: duration.minutes(), h: duration.hours() - 1 }));
+          dispatch(
+            setTimerLastMemory({
+              hubId: dateString.model_type === 'hub' ? dateString.model_id : null,
+              activeTabId: 6,
+              listId: dateString.model_type === 'list' ? dateString.model_id : null,
+              workSpaceId: workspaceId
+            })
+          );
+        }
+      }
+    }
+  );
+  runTimer({ isRunning: !!data?.data.time_entry });
 
-  // Access the duration components
-  const days = duration1.days();
-  const hours = duration1.hours();
-  const minutes = duration1.minutes();
-  const seconds = duration1.seconds();
-
-  console.log(`Duration: ${days} days, ${hours} hours, ${minutes} minutes, ${seconds} seconds`, response);
+  return { data, isLoading, isError, refetch };
 };
 
 export const StartTimeEntryService = () => {
@@ -479,15 +506,17 @@ export const EndTimeEntriesService = () => {
 
 export const GetTimeEntriesService = ({
   itemId,
-  trigger
+  trigger,
+  is_active
 }: {
   itemId: string | null | undefined;
   trigger: string | null | undefined;
+  is_active?: number;
 }) => {
   const { timeSortArr } = useAppSelector((state) => state.task);
   const updatesortArr = timeSortArr.length === 0 ? null : timeSortArr;
   return useQuery(
-    ['timeclock', { itemId: itemId }, updatesortArr],
+    ['timeclock', { itemId: itemId }, updatesortArr, is_active],
     async () => {
       const data = await requestNew<ITimeEntriesRes | undefined>({
         url: 'time-entries',
@@ -495,7 +524,8 @@ export const GetTimeEntriesService = ({
         params: {
           type: trigger,
           id: itemId,
-          team_member_ids: updatesortArr
+          team_member_ids: updatesortArr,
+          is_active: is_active
         }
       });
       return data;
