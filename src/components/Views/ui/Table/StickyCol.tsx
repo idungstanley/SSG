@@ -20,6 +20,7 @@ import { UniqueIdentifier } from '@dnd-kit/core';
 import { ImCancelCircle } from 'react-icons/im';
 import CloseSubtask from '../../../../assets/icons/CloseSubtask';
 import OpenSubtask from '../../../../assets/icons/OpenSubtask';
+import { NoCapsWord } from '../../../../utils/NoCapsWord/NoCapsWord';
 
 interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   task: Task;
@@ -78,8 +79,6 @@ export function StickyCol({
     );
   };
 
-  console.log(taskUpperCase);
-
   const onToggleDisplayingSubTasks = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.stopPropagation();
     setShowSubTasks(!showSubTasks);
@@ -115,31 +114,9 @@ export function StickyCol({
   };
 
   function capitalizeTitle(title: string) {
-    const lowercaseWords = [
-      'a',
-      'an',
-      'the',
-      'and',
-      'but',
-      'or',
-      'for',
-      'nor',
-      'on',
-      'is',
-      'at',
-      'to',
-      'from',
-      'by',
-      'in',
-      'out',
-      'over',
-      'with'
-    ];
-
     const words = title.toLowerCase().split(' ');
-
     const capitalizedWords = words.map((word, index) => {
-      if (index === 0 || !lowercaseWords.includes(word)) {
+      if (index === 0 || !NoCapsWord.includes(word)) {
         return word.charAt(0).toUpperCase() + word.slice(1);
       }
       return word;

@@ -1,4 +1,4 @@
-import { MouseEvent } from 'react';
+import { MouseEvent, useState } from 'react';
 import { IoChevronDownCircleOutline, IoChevronForwardCircleOutline } from 'react-icons/io5';
 
 interface ChevronProps {
@@ -8,21 +8,23 @@ interface ChevronProps {
 }
 
 export function Chevron({ onToggle, active, color }: ChevronProps) {
+  const [isHovered, setIsHovered] = useState(false);
+
+  const defaultStyle = {
+    color: isHovered ? 'white' : color,
+    backgroundColor: isHovered ? color : ''
+  };
+
   return (
     <button
       type="button"
       onClick={onToggle}
-      style={{ color }}
-      onMouseEnter={(e: MouseEvent<HTMLButtonElement>) => {
-        const target = e.target as HTMLButtonElement;
-        target.style.background = color as string;
-        target.style.color = 'white';
+      style={{
+        ...defaultStyle
       }}
-      onMouseLeave={(e: MouseEvent<HTMLButtonElement>) => {
-        const target = e.target as HTMLButtonElement;
-        target.style.background = '';
-        target.style.color = color as string;
-      }}
+      className="rounded-full"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
     >
       {active ? (
         <IoChevronForwardCircleOutline className="w-4 h-4 rounded-full" />
