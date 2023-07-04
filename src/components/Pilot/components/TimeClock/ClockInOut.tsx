@@ -1,5 +1,5 @@
 import moment from 'moment-timezone';
-import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { BsStopCircle } from 'react-icons/bs';
 import { AiOutlinePlayCircle } from 'react-icons/ai';
 import { CurrencyDollarIcon, TagIcon } from '@heroicons/react/24/outline';
@@ -11,13 +11,13 @@ import {
   StartTimeEntryService
 } from '../../../../features/task/taskService';
 import AvatarWithInitials from '../../../avatar/AvatarWithInitials';
-import { setTimerInterval, setTimerStatus, setUpdateTimerDuration } from '../../../../features/task/taskSlice';
+import { setTimerInterval, setTimerStatus } from '../../../../features/task/taskSlice';
 import { useParams } from 'react-router-dom';
 import { setTimerLastMemory } from '../../../../features/workspace/workspaceSlice';
+import { runTimer } from '../../../../utils/TimerCounter';
 
 export interface User {
   initials: string;
-  // add other properties as needed
 }
 
 export default function ClockInOut() {
@@ -39,6 +39,7 @@ export default function ClockInOut() {
     itemId: activeItemId,
     trigger: activeItemType === 'subhub' ? 'hub' : activeItemType
   });
+
   // Get currently active timers
   const { data: getCurrent } = GetTimeEntriesService({
     itemId: activeItemId,
@@ -73,7 +74,6 @@ export default function ClockInOut() {
     dispatch(setTimerStatus(false));
     clearInterval(period);
     dispatch(setTimerInterval(undefined));
-    // localStorage.removeItem('lastActiveTimerData');
   };
 
   function timerCheck() {
@@ -130,23 +130,6 @@ export default function ClockInOut() {
     RunTimer;
   }, [isRunning]);
 
-  // let updateH = 0,
-  //   updateM = 0,
-  //   updateS = 0;
-  // const RunTimer = () => {
-  //   if (updateM >= 59) {
-  //     updateH++;
-  //     updateM = 0;
-  //   }
-  //   if (updateS >= 59) {
-  //     updateM++;
-  //     updateS = 0;
-  //   }
-  //   updateS++;
-  //   setTime({ h: updateH, m: updateM, s: updateS });
-  //   return dispatch(setUpdateTimerDuration({ s: updateS, m: updateM, h: updateH }));
-  // };
-
   return (
     <div className="p-2 mt-6 rounded-t-md">
       <div className="bg-gray-100">
@@ -167,15 +150,18 @@ export default function ClockInOut() {
           </div>
           <div id="entries" className="flex items-center justify-between py-1">
             <div id="left" className="flex items-center space-x-1 cursor-pointer">
-              <div className="mr-1 relative">
+              <div className="mr-1 relative flex items-center">
                 {timerStatus && sameEntity() ? (
                   // !btnClicked && !timerStatus ? (
                   <button onClick={stop}>
-                    <BsStopCircle className="text-2xl text-red-400 cursor-pointer" aria-hidden="true" />
+                    <BsStopCircle className="text-2xl h-4 w-4 text-red-400 cursor-pointer" aria-hidden="true" />
                   </button>
                 ) : (
                   <button onClick={() => activeTimerCheck()}>
-                    <AiOutlinePlayCircle className="text-2xl text-green-500 cursor-pointer" aria-hidden="true" />
+                    <AiOutlinePlayCircle
+                      className="text-2xl h-4 w-4 text-green-500 cursor-pointer"
+                      aria-hidden="true"
+                    />
                   </button>
                 )}
                 {prompt && (
@@ -195,7 +181,14 @@ export default function ClockInOut() {
               {/* timer goes here */}
               {timerCheck()}
               <div className="flex items-center justify-start -space-x-4 cursor-pointer">
-                <AvatarWithInitials height="h-7" width="w-7" initials={initials ?? ''} />
+                {getCurrent?.data.time_entries.map((entry) => {
+                  const { team_member } = entry;
+                  return (
+                    <div key={entry.id} className="flex -space-x-2">
+                      <AvatarWithInitials height="h-7" width="w-7" initials={team_member.user.initials ?? initials} />
+                    </div>
+                  );
+                })}
               </div>
             </div>
             <div id="right" className="flex items-center space-x-1">
@@ -216,39 +209,34 @@ export default function ClockInOut() {
             </div>
           </div>
         </section>
+        <div className="w-full p-2 my-4">
+          {getCurrent?.data.time_entries && getCurrent?.data.time_entries.length > 0 ? (
+            <div>
+              <table className="w-full">
+                <thead className="flex justify-start space-x-28 py-1 items-center border-b-2 border-gray-300">
+                  <th>User</th>
+                  <th>Duration</th>
+                </thead>
+                <tbody className="w-full">
+                  {getCurrent.data.time_entries.map((entry) => {
+                    return (
+                      <tr key={entry.id} className="space-x-4 flex py-2 border-b-2 items-center">
+                        <td className="text-sm text-gray-600">{entry.team_member.user.name}</td>
+                        <td className="text-sm text-gray-600">
+                          within {moment.duration(moment().diff(entry.start_date)).humanize()} ago
+                        </td>
+                        <td className="text-sm text-gray-600">{entry.description}</td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <div className="text-gray-600 text-center">No active timer found for this entity</div>
+          )}
+        </div>
       </div>
     </div>
   );
-}
-
-interface TimerProps {
-  isRunning: boolean;
-  isActiveInterval?: boolean;
-  setTime?: Dispatch<SetStateAction<{ s: number; m: number; h: number }>>;
-}
-
-export function runTimer({ isRunning, isActiveInterval, setTime }: TimerProps) {
-  const dispatch = useAppDispatch();
-  const { duration, period } = useAppSelector((state) => state.task);
-  console.log(period);
-
-  useEffect(() => {
-    let updateH = duration.h;
-    let updateM = duration.m;
-    let updateS = duration.s;
-
-    let interval: number | undefined;
-
-    if (isRunning) {
-      interval = window.setInterval(() => {
-        updateS = (updateS + 1) % 60;
-        updateM = (updateM + (updateS === 0 ? 1 : 0)) % 60;
-        updateH = (updateH + (updateM === 0 && updateS === 0 ? 1 : 0)) % 24;
-
-        setTime && setTime({ h: updateH, m: updateM, s: updateS });
-        dispatch(setUpdateTimerDuration({ s: updateS, m: updateM, h: updateH }));
-      }, 1000);
-    }
-    !isActiveInterval && dispatch(setTimerInterval(interval));
-  }, [isRunning, dispatch]);
 }
