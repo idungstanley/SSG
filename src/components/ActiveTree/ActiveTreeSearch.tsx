@@ -59,7 +59,7 @@ export default function ActiveTreeSearch({ data, handleFetch, fetchTree, id }: A
         >
           <div className="flex items-center justify-between" onClick={() => fetchAndToggle()}>
             <CiSearch className="mr-2 text-lg hover:text-fuchsia-500" />
-            {selectedTreeDetails.name && <p>{selectedTreeDetails.name}</p>}
+            <p>{selectedTreeDetails.name ? selectedTreeDetails.name : 'Choose Location'}</p>
           </div>
           <BiRightArrowCircle className="mr-6 text-lg hover:text-fuchsia-500" onClick={() => directToPilot()} />
         </div>

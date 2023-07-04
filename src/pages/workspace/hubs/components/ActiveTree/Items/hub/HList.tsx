@@ -44,7 +44,7 @@ export default function HList({ hubs, leftMargin, taskType, level = 1 }: ListPro
 
   const { showMenuDropdown, SubMenuId } = useAppSelector((state) => state.hub);
   const [stickyButtonIndex, setStickyButtonIndex] = useState<number | undefined>(-1);
-  const hubCreationStatus = 'Under Construction';
+  const hubCreationStatus = 'New Hub Under Construction';
   const id = hubId || walletId || listId || currentItemId;
 
   const hubsSpread = [
@@ -151,7 +151,7 @@ export default function HList({ hubs, leftMargin, taskType, level = 1 }: ListPro
   const handleHubSettings = (id: string, name: string, e: React.MouseEvent<HTMLSpanElement, MouseEvent>): void => {
     dispatch(setSelectedTreeDetails({ name, id, type: EntityType.hub }));
     dispatch(setCreateWLID(id));
-    dispatch(getCurrHubId(id));
+    // dispatch(getCurrHubId(id));
     dispatch(setCreateWlLink(false));
     dispatch(
       setshowMenuDropdown({
