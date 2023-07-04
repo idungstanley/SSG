@@ -10,6 +10,7 @@ import ArrowDown from '../../../../../../assets/icons/ArrowDown';
 import Wand from '../../../../../../assets/icons/Wand';
 import Assignee from '../../../../tasks/assignTask/Assignee';
 import Palette from '../../../../../../components/ColorPalette';
+import { ListColourProps } from '../../../../../../components/tasks/ListItem';
 
 export default function CreateWallet() {
   const queryClient = useQueryClient();
@@ -91,7 +92,7 @@ export default function CreateWallet() {
           <Checkbox checked={false} onChange={() => ({})} description="Host other entities" height="5" width="5" />
         </div>
         <div className="relative ml-24 mt-32">
-          {showPalette ? <Palette title="Hub Colour" setPaletteColor={setPaletteColor} /> : null}
+          {showPalette ? <Palette title="Wallet Colour" setPaletteColor={setPaletteColor} /> : null}
         </div>
       </div>
       <div className="flex justify-between pt-2 space-x-3">
