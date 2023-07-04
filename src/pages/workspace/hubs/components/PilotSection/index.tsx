@@ -21,7 +21,6 @@ import TimeClock from './components/TimeClock';
 import hubIcon from '../../../../../assets/branding/hub.svg';
 import RecordScreen from '../../../../../components/Pilot/components/RecordScreen';
 import HubManager from '../../../../../components/Pilot/components/HubManager/HubManager';
-import { getCurrentTime } from '../../../../../features/task/taskService';
 import TemplatesIcon from '../../../../../assets/icons/Templates';
 import Templates from '../../../../../components/Pilot/components/Templates';
 
