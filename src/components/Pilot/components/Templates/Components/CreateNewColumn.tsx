@@ -8,7 +8,7 @@ import CreateDropdownField from './CreateDropdownField';
 function CreateNewColumn() {
   const [activeBtn, setActiveBtn] = useState('1');
   return (
-    <div className="w-full h-full">
+    <div className="w-full">
       <section className="w-full flex justify-center my-2">
         <span className="font-semibold ">
           Create a <button className="text-fuchsia-600 hover:text-blue-600">New directory template</button> or choose
