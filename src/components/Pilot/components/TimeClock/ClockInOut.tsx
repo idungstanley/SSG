@@ -12,8 +12,9 @@ import {
 } from '../../../../features/task/taskService';
 import AvatarWithInitials from '../../../avatar/AvatarWithInitials';
 import { setTimerInterval, setTimerStatus, setUpdateTimerDuration } from '../../../../features/task/taskSlice';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { setTimerLastMemory } from '../../../../features/workspace/workspaceSlice';
+import { handleEntity } from '../../../../layout/components/MainLayout/Header/AdditionHeader';
 
 export interface User {
   initials: string;
@@ -21,6 +22,7 @@ export interface User {
 }
 
 export default function ClockInOut() {
+  const navigate = useNavigate();
   const [data, setData] = useState({
     isBillable: false,
     description: ''
@@ -33,6 +35,7 @@ export default function ClockInOut() {
   const [time, setTime] = useState({ s: 0, m: 0, h: 0 });
   const [, setBtnClicked] = useState(false);
   const [prompt, setPrompt] = useState(false);
+  const [newTimer, setNewtimer] = useState(false);
   const { workSpaceId, listId, hubId } = useParams();
 
   const { data: getEntries } = GetTimeEntriesService({
@@ -110,6 +113,7 @@ export default function ClockInOut() {
   const handleTimeSwitch = () => {
     stop();
     setPrompt(false);
+    setNewtimer(!newTimer);
   };
 
   const sameEntity = () => activeItemId === (timerLastMemory.hubId || timerLastMemory.listId);
@@ -129,6 +133,12 @@ export default function ClockInOut() {
   useEffect(() => {
     RunTimer;
   }, [isRunning]);
+
+  useEffect(() => {
+    if (newTimer) {
+      start();
+    }
+  }, [newTimer]);
 
   // let updateH = 0,
   //   updateM = 0,
@@ -179,14 +189,22 @@ export default function ClockInOut() {
                   </button>
                 )}
                 {prompt && (
-                  <div className="absolute p-2 rounded-lg shadow-2xl flex flex-col space-y-1 bg-gray-100 z-50 min-w-max">
-                    <span className="text-center text-gray-700">Another Timer Already Running</span>
+                  <div className="absolute p-2 rounded-lg shadow-2xl flex flex-col space-y-1 bg-gray-100 z-50 w-72">
+                    <span className="text-center text-gray-700">
+                      Another Timer Already Running would want to stop the active timer and contionue here?
+                    </span>
                     <div className="flex w-full space-x-1 justify-end">
                       <button
                         className="bg-purple-500 hover:bg-purple-600 text-white p-1 rounded-lg font-bold"
                         onClick={() => handleTimeSwitch()}
                       >
-                        Stop Active Timer
+                        Yes
+                      </button>
+                      <button
+                        className="bg-purple-500 hover:bg-purple-600 text-white p-1 rounded-lg font-bold"
+                        onClick={() => setPrompt(false)}
+                      >
+                        No
                       </button>
                     </div>
                   </div>
@@ -230,7 +248,6 @@ interface TimerProps {
 export function runTimer({ isRunning, isActiveInterval, setTime }: TimerProps) {
   const dispatch = useAppDispatch();
   const { duration, period } = useAppSelector((state) => state.task);
-  console.log(period);
 
   useEffect(() => {
     let updateH = duration.h;
