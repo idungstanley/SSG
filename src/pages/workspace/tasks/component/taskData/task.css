@@ -69,5 +69,18 @@
   border-radius: 4px;
 }
 
-/* Resizeable table */
+.table-container table .tdListV,
+.tdListVNoSticky {
+  border-top: 1px solid #bf01fe;
+  border-bottom: 1px solid #bf01fe;
+}
 
+/* Style left border of the first column */
+.table-container table .tdListV {
+  border-left: 4px solid #bf01fe;
+}
+
+/* Style right border of the last column */
+.table-container table .tdListVNoSticky:last-child {
+  border-right: 1px solid #bf01fe;
+}

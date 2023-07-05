@@ -57,8 +57,17 @@ export function StickyCol({
   const COL_BG = taskId === task.id ? ACTIVE_COL_BG : DEFAULT_COL_BG;
 
   const { mutate: onAdd } = useAddTask(parentId);
-  const { currTeamMemberId, showTaskNavigation, singleLineView, verticalGrid, taskUpperCase, verticalGridlinesTask } =
-    useAppSelector((state) => state.task);
+  const {
+    currTeamMemberId,
+    showTaskNavigation,
+    singleLineView,
+    verticalGrid,
+    taskUpperCase,
+    verticalGridlinesTask,
+    currentTaskId
+  } = useAppSelector((state) => state.task);
+
+  // console.log(currentTaskId);
 
   const onClickTask = () => {
     navigate(`/${currentWorkspaceId}/tasks/h/${hubId}/t/${task.id}`, { replace: true });
@@ -150,21 +159,20 @@ export function StickyCol({
               id="checked-checkbox"
               className="w-2 h-2 rounded-full opacity-0 cursor-pointer focus:outline-1 focus:ring-transparent  focus:border-2 focus:opacity-100 group-hover:opacity-100"
               style={{ marginLeft: '-0.3px' }}
-              ref={setNodeRef}
-              {...attributes}
-              {...listeners}
               onClick={() => {
                 displayNav(task?.id as string);
               }}
             />
-            {dragElement}
+            <div ref={setNodeRef} {...attributes} {...listeners}>
+              {dragElement}
+            </div>
           </div>
 
           <div
             style={{ paddingLeft, minHeight: '42px', height: singleLineView ? '42px' : '' }}
             className={cl(
               COL_BG,
-              `relative border-t ${verticalGrid && 'border-r'} ${
+              `relative border-t ${currentTaskId == task.id && 'tdListV'} ${verticalGrid && 'border-r'} ${
                 verticalGridlinesTask && 'border-r'
               } w-full py-4 flex items-center `
             )}
@@ -217,15 +225,8 @@ export function StickyCol({
           <div className="flex items-center h-full space-x-1 bg-purple-50 opacity-0">
             <input
               type="checkbox"
-              id="checked-checkbox"
               className="w-2 h-2 rounded-full opacity-0 cursor-pointer focus:outline-1 focus:ring-transparent group-hover:opacity-100 focus:border-2 focus:opacity-100 "
               style={{ marginLeft: '-1px' }}
-              ref={setNodeRef}
-              {...attributes}
-              {...listeners}
-              onClick={() => {
-                displayNav(task?.id as string);
-              }}
             />
             {dragElement}
           </div>
@@ -245,9 +246,6 @@ export function StickyCol({
                 Save
               </button>
               <ImCancelCircle onClick={onClose} className="h-6 w-6" />
-              {/* <button onClick={onClose} className="p-0.5 text-white rounded-sm bg-red-600">
-                Cancel
-              </button> */}
             </div>
             <StatusDropdown TaskCurrentStatus={task.status} />
             <div className="flex flex-col items-start justify-start space-y-1 pl-2">

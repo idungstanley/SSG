@@ -97,7 +97,7 @@ interface TaskState {
   myTaskData: ImyTaskData[];
   taskColumns: listColumnProps[];
   hideTask: listColumnProps[];
-  current_task_id: string | null;
+  currentTaskId: string | null;
   listView: boolean;
   comfortableView: boolean;
   comfortableViewWrap: boolean;
@@ -167,7 +167,7 @@ const initialState: TaskState = {
   myTaskData: [],
   taskColumns: [],
   hideTask: [],
-  current_task_id: null,
+  currentTaskId: null,
   listView: true,
   comfortableView: true,
   comfortableViewWrap: false,
@@ -365,7 +365,7 @@ export const taskSlice = createSlice({
     },
 
     setCurrentTaskId(state, action: PayloadAction<string | null>) {
-      state.current_task_id = action.payload;
+      state.currentTaskId = action.payload;
     },
     setCloseTaskListView(state, action: PayloadAction<boolean>) {
       state.closeTaskListView = action.payload;
