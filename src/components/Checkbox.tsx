@@ -5,11 +5,11 @@ interface CheckboxProps {
   checked: boolean;
   onChange: () => void;
   name?: string;
-  height: string;
-  width: string;
-  loading: boolean;
-  disabled: boolean;
-  spinnerSize: number;
+  height?: string;
+  width?: string;
+  loading?: boolean;
+  disabled?: boolean;
+  spinnerSize?: number;
   label?: string | null;
   description?: string | null;
 }
@@ -61,6 +61,9 @@ function Checkbox({
           </label>
           {description && <p className="text-gray-500">{description}</p>}
         </div>
+      )}
+      {label === undefined && description && (
+        <div className="ml-2  -mt-0.2">{description && <p className="capitalize">{description}</p>}</div>
       )}
     </div>
   );
