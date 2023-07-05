@@ -47,7 +47,6 @@ function Hubs() {
   };
 
   const handleOpenDropdown = (event: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
-    console.log('stan');
     setAnchorEl(event.currentTarget);
     dispatch(setSelectedTreeDetails({ name: null, id: null, type: null }));
   };

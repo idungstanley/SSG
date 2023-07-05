@@ -10,12 +10,18 @@ import { useParams } from 'react-router-dom';
 import { generateFilters } from '../../components/TasksHeader/lib/generateFilters';
 import { UseGetHubDetails } from '../hubs/hubService';
 
-export const createListService = (data: { listName: string; hubId?: string | null; walletId?: string | null }) => {
+export const createListService = (data: {
+  listName: string;
+  hubId?: string | null;
+  walletId?: string | null;
+  color?: { outerColour?: string; innerColour?: string };
+}) => {
   const response = requestNew({
     url: 'lists',
     method: 'POST',
     data: {
       name: data.listName,
+      color: data.color,
       hub_id: data.hubId,
       wallet_id: data.walletId
     }
