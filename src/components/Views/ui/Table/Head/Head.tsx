@@ -151,9 +151,9 @@ export function Head({
           <div
             style={{ height: tableHeight }}
             onMouseDown={() => mouseDown(0)}
-            className="absolute top-0 block w-2 cursor-move right-2 idle"
+            className="absolute top-0 w-2 cursor-move right-2 idle hidden"
           >
-            <div className="w-0.5 mx-auto h-full bg-gray-100" />
+            <div className="w-0.5 mx-auto h-full bg-gray-50" />
           </div>
           {headerId === columns[0].id && (
             <SortModal
