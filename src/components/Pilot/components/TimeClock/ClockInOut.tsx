@@ -11,7 +11,7 @@ import {
   StartTimeEntryService
 } from '../../../../features/task/taskService';
 import AvatarWithInitials from '../../../avatar/AvatarWithInitials';
-import { setTimerInterval, setTimerStatus } from '../../../../features/task/taskSlice';
+import { setTimerInterval, setTimerStatus, setUpdateTimerDuration } from '../../../../features/task/taskSlice';
 import { useParams } from 'react-router-dom';
 import { setTimerLastMemory } from '../../../../features/workspace/workspaceSlice';
 import { runTimer } from '../../../../utils/TimerCounter';
@@ -74,6 +74,7 @@ export default function ClockInOut() {
     setRunning(false);
     dispatch(setTimerStatus(false));
     clearInterval(period);
+    dispatch(setUpdateTimerDuration({ s: 0, m: 0, h: 0 }));
     dispatch(setTimerInterval(undefined));
   };
 
@@ -133,7 +134,7 @@ export default function ClockInOut() {
   }, [isRunning]);
 
   useEffect(() => {
-    start();
+    newTimer && start();
   }, [newTimer]);
 
   return (
