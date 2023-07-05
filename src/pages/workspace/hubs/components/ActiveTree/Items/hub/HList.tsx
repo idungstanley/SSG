@@ -30,6 +30,7 @@ import MenuDropdown from '../../../../../../../components/Dropdown/MenuDropdown'
 import SubDropdown from '../../../../../../../components/Dropdown/SubDropdown';
 import { cl } from '../../../../../../../utils';
 import { EntityType } from '../../../../../../../utils/EntityTypes/EntityType';
+import { Capitalize } from '../../../../../../../utils/NoCapWords/Capitalize';
 
 export default function HList({ hubs, leftMargin, taskType, level = 1 }: ListProps) {
   const { hubId } = useParams();
@@ -42,7 +43,8 @@ export default function HList({ hubs, leftMargin, taskType, level = 1 }: ListPro
   const { showSidebar } = useAppSelector((state) => state.account);
   const { showMenuDropdown, SubMenuId, entityToCreate } = useAppSelector((state) => state.hub);
   const [stickyButtonIndex, setStickyButtonIndex] = useState<number | undefined>(-1);
-  const hubCreationStatus = 'New' + entityToCreate + 'Under Construction';
+  const CapitalizeType = Capitalize(entityToCreate);
+  const hubCreationStatus = 'New ' + CapitalizeType + ' Under Construction';
   const id = hubId || walletId || listId || currentItemId;
 
   const dummyHub = {
