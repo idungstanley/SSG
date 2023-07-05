@@ -236,11 +236,11 @@ export default function ClockInOut() {
                   {getCurrent.data.time_entries.map((entry) => {
                     return (
                       <tr key={entry.id} className="space-x-4 flex py-2 border-b-2 items-center w-full">
-                        <td className="text-sm text-gray-600 w-1/2">{entry.team_member.user.name}</td>
-                        <td className="text-sm text-gray-600 w-1/2">
+                        <td className="text-alsoit-text-sm text-gray-600 w-1/2">{entry.team_member.user.name}</td>
+                        <td className="text-alsoit-text-sm text-gray-600 w-1/2">
                           within {moment.duration(moment().diff(entry.start_date)).humanize()} ago
                         </td>
-                        <td className="text-sm text-gray-600">{entry.description}</td>
+                        <td className="text-alsoit-text-sm text-gray-600">{entry.description}</td>
                       </tr>
                     );
                   })}
