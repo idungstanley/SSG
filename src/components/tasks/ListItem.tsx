@@ -127,7 +127,7 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
         {list.id === listId && (
           <span className="absolute top-0 bottom-0 left-0 rounded-r-lg w-0.5" style={{ backgroundColor: baseColor }} />
         )}
-        <div className="flex items-center space-x-1 capitalize truncate cursor-pointer">
+        <div className="flex overflow-hidden items-center space-x-1 capitalize cursor-pointer">
           <div onClick={(e) => handleListColour(list.id, e)}>
             <ListIconComponent
               shape={activeShape ? activeShape : 'solid-circle'}
@@ -143,7 +143,7 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
               letterSpacing: '0.28px',
               color: listId === list.id ? (baseColor as string) : undefined
             }}
-            className="flex items-center gap-1 pl-4 capitalize truncate cursor-pointer"
+            className="pl-4 truncate capitalize cursor-pointer"
           >
             {list.name}
           </div>
