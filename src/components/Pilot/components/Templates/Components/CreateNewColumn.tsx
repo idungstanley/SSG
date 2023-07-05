@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { cl } from '../../../../../utils';
-import ColumnTypeDropdown from './ColumnTypeDropdown';
-import Picker from '../../../../../assets/icons/Picker';
-import Pin from '../../../../../assets/icons/Pin';
-import CreateDropdownField from './CreateDropdownField';
+// import ColumnTypeDropdown from './ColumnTypeDropdown';
+// import Picker from '../../../../../assets/icons/Picker';
+// import Pin from '../../../../../assets/icons/Pin';
+// import CreateDropdownField from './CreateDropdownField';
 import { useAppSelector } from '../../../../../app/hooks';
+import NewColumn from './NewColumn';
+import ShowHide from './ShowHide';
 
 function CreateNewColumn() {
   const [activeBtn, setActiveBtn] = useState('1');
@@ -53,48 +55,8 @@ function CreateNewColumn() {
                   </button>
                 </div>
               </div>
-              <div className="flex justify-between items-center my-4">
-                <div>
-                  <p className="text-alsoit-text-sm">FIELD REF</p>
-                  <div className="w-10 h-6 border-0 text-alsoit-text-md flex justify-center bg-white items-center">
-                    1
-                  </div>
-                </div>
-                <div>
-                  <p className="text-alsoit-text-sm">FIELD NAME</p>
-                  <div
-                    style={{ width: '200px' }}
-                    className="h-6 border-0 text-alsoit-text-md flex bg-white items-center"
-                  >
-                    <input
-                      type="text"
-                      className="border-0 focus:border-0 active:border-0 h-6"
-                      style={{ width: '160px' }}
-                    />
-                    <div className="flex gap-0.5 justify-center w-full">
-                      <Picker />
-                      <hr />
-                      <Pin />
-                    </div>
-                  </div>
-                </div>
-                <div>
-                  <p className="text-alsoit-text-sm">FIELD TYPE</p>
-                  <ColumnTypeDropdown />
-                </div>
-              </div>
-              <CreateDropdownField />
-              <div className="flex justify-between w-full my-4">
-                <button className="bg-white text-red-600 p-0.5 border-2 border-red-600 rounded">Cancel</button>
-                <div className="flex gap-1">
-                  <button className="bg-white text-fuchsia-600 p-0.5 border-2 border-fuchsia-600 rounded">
-                    Add Field
-                  </button>
-                  <button className="bg-white text-fuchsia-600 p-0.5 border-2 border-fuchsia-600 rounded">
-                    Save to
-                  </button>
-                </div>
-              </div>
+              {activeBtn === '1' && <NewColumn />}
+              {activeBtn === '2' && <ShowHide />}
             </div>
           </section>
         );

@@ -75,7 +75,7 @@ export function PopAssignModal({
               </section>
 
               <div className="flex space-y-1.5 flex-col items-start">
-                <span className="text-2xl subpixel-antialiased text-black text-decoration-thickness:1px;">
+                <span className="text-3xl subpixel-antialiased text-black text-decoration-thickness:1px;">
                   {userData.user.name}
                 </span>
                 <div className="space-x-2 flex items-center">
