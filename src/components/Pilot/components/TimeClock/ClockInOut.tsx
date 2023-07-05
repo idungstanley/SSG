@@ -132,6 +132,10 @@ export default function ClockInOut() {
     RunTimer;
   }, [isRunning]);
 
+  useEffect(() => {
+    start();
+  }, [newTimer]);
+
   return (
     <div className="p-2 mt-6 rounded-t-md">
       <div className="bg-gray-100">
@@ -167,22 +171,22 @@ export default function ClockInOut() {
                   </button>
                 )}
                 {prompt && (
-                  <div className="absolute p-2 rounded-lg shadow-2xl flex flex-col space-y-1 bg-gray-100 z-50 w-72">
+                  <div className="absolute top-5 p-2 rounded-lg shadow-2xl flex flex-col space-y-1 bg-gray-100 z-50 w-72">
                     <span className="text-center text-gray-700">
-                      Another Timer Already Running would want to stop the active timer and contionue here?
+                      Another Timer Already Running would you want to stop the active timer and continue here?
                     </span>
                     <div className="flex w-full space-x-1 justify-end">
-                      <button
-                        className="bg-purple-500 hover:bg-purple-600 text-white p-1 rounded-lg font-bold"
-                        onClick={() => handleTimeSwitch()}
-                      >
-                        Yes
-                      </button>
                       <button
                         className="bg-purple-500 hover:bg-purple-600 text-white p-1 rounded-lg font-bold"
                         onClick={() => setPrompt(false)}
                       >
                         No
+                      </button>
+                      <button
+                        className="bg-purple-500 hover:bg-purple-600 text-white p-1 rounded-lg font-bold"
+                        onClick={() => handleTimeSwitch()}
+                      >
+                        Yes
                       </button>
                     </div>
                   </div>
