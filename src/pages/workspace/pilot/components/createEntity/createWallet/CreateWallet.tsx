@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Button, Checkbox, Input } from '../../../../../../components';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
-import { setSubDropdownMenu, setshowMenuDropdown } from '../../../../../../features/hubs/hubSlice';
+import { setEntityToCreate, setSubDropdownMenu, setshowMenuDropdown } from '../../../../../../features/hubs/hubSlice';
 import { createWalletService } from '../../../../../../features/wallet/walletService';
 import { setCreateEntityType, setCreateWlLink } from '../../../../../../features/workspace/workspaceSlice';
 import { EntityType } from '../../../../../../utils/EntityTypes/EntityType';
@@ -26,15 +26,18 @@ export default function CreateWallet() {
       dispatch(setSubDropdownMenu(false));
       dispatch(setshowMenuDropdown({ showMenuDropdown: null, showMenuDropdownType: null }));
       dispatch(setCreateWlLink(false));
+      dispatch(setCreateEntityType(null));
+      dispatch(setEntityToCreate(null));
     }
   });
-
+  console.log(paletteColor);
   const defaultWalletFormState = {
     name: ''
   };
 
   const onClose = () => {
     dispatch(setCreateEntityType(null));
+    dispatch(setEntityToCreate(null));
   };
   const [formState, setFormState] = useState(defaultWalletFormState);
 
