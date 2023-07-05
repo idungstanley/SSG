@@ -129,7 +129,11 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
         )}
         <div className="flex items-center space-x-1 capitalize truncate cursor-pointer">
           <div onClick={(e) => handleListColour(list.id, e)}>
-            <ListIconComponent shape={activeShape} innerColour={innerColour} outterColour={outerColour} />
+            <ListIconComponent
+              shape={activeShape ? activeShape : 'solid-circle'}
+              innerColour={innerColour}
+              outterColour={outerColour}
+            />
           </div>
           <div
             style={{
