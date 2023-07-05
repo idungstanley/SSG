@@ -178,13 +178,13 @@ export default function ClockInOut() {
                     </span>
                     <div className="flex w-full space-x-1 justify-end">
                       <button
-                        className="bg-purple-500 hover:bg-purple-600 text-white p-1 rounded-lg font-bold"
+                        className="bg-alsoit-text hover:bg-alsoit-text-active text-white p-1 rounded-lg font-bold"
                         onClick={() => setPrompt(false)}
                       >
                         No
                       </button>
                       <button
-                        className="bg-purple-500 hover:bg-purple-600 text-white p-1 rounded-lg font-bold"
+                        className="bg-alsoit-text-active hover:bg-purple-600 text-white p-1 rounded-lg font-bold"
                         onClick={() => handleTimeSwitch()}
                       >
                         Yes
