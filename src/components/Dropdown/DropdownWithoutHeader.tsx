@@ -1,5 +1,8 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Menu from '@mui/material/Menu';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import ActiveTreeSearch from '../ActiveTree/ActiveTreeSearch';
+import { useGetHubs, useGetTree } from '../../features/hubs/hubService';
 
 interface ItemProps {
   label: string;
@@ -15,8 +18,15 @@ interface ModalProps {
 }
 export default function DropdownWithoutHeader({ setAnchorEl, anchorEl, handleClose, items }: ModalProps) {
   const modalRef = useRef<HTMLDivElement>(null);
-
+  const { createEntityType } = useAppSelector((state) => state.workspace);
+  // const { showMenuDropdown, SubMenuId } = useAppSelector((state) => state.hub);
   const open = Boolean(anchorEl);
+  const [fetchTree, setFetchTree] = useState<boolean>(false);
+  const { data: allHubs } = useGetHubs({ includeTree: false });
+
+  const handleFetch = () => {
+    setFetchTree((prev) => !prev);
+  };
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -45,14 +55,14 @@ export default function DropdownWithoutHeader({ setAnchorEl, anchorEl, handleClo
       className="rounded-md shadow-2xl"
       PaperProps={{
         style: {
-          height: '250px',
+          height: '230px',
           overflowY: 'auto',
           width: '250px',
           padding: '0 8px'
         }
       }}
     >
-      <div className="relative w-full text-base text-left transform bg-white">
+      <div className="absolute w-full text-base text-left transform bg-white">
         {/* item list to show in dropdown*/}
         {items.map((item, index) => (
           <React.Fragment key={index}>
@@ -65,6 +75,9 @@ export default function DropdownWithoutHeader({ setAnchorEl, anchorEl, handleClo
               <span>{item.label}</span>
             </div>
             {(index + 1) % 2 === 0 && index !== items.length - 1 && <hr />}
+            {createEntityType === item.label.toLowerCase() && (
+              <ActiveTreeSearch data={allHubs} handleFetch={handleFetch} fetchTree={fetchTree} />
+            )}
           </React.Fragment>
         ))}
       </div>

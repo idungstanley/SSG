@@ -31,6 +31,7 @@ interface workspaceState {
   currentWalletName: string | null | undefined;
   showPilot: boolean;
   createEntityType: null | string;
+  showIndependentPilot: boolean;
   sidebarWidthRD: number;
   showPilotIconView: boolean;
   showAddHotKeyDropdown: boolean;
@@ -70,6 +71,7 @@ const initialState: workspaceState = {
   showHub: false,
   showWallet: false,
   showMenuDropDown: false,
+  showIndependentPilot: false,
   showModal: false,
   searchIsActive: false,
   isExtSearchActive: false,
@@ -180,6 +182,9 @@ export const wsSlice = createSlice({
     },
     setShowHub(state, action: PayloadAction<boolean>) {
       state.showHub = action.payload;
+    },
+    setShowIndependentPilot(state, action: PayloadAction<boolean>) {
+      state.showIndependentPilot = action.payload;
     },
     setSidebarWidthRD(state, action: PayloadAction<number>) {
       state.sidebarWidthRD = action.payload;
@@ -349,6 +354,7 @@ export const {
   setActiveLogTab,
   setSelectedDate,
   setShowTreeInput,
+  setShowIndependentPilot,
   setActiveSubHubManagerTabId
 } = wsSlice.actions;
 

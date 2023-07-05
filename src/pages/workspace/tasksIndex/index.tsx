@@ -6,6 +6,7 @@ import Page from '../../../components/Page';
 import { Header } from '../../../components/TasksHeader';
 import { EntityType } from '../../../utils/EntityTypes/EntityType';
 import { pilotConfig } from '../hubs/components/PilotSection';
+import { useParams } from 'react-router-dom';
 
 export default function TasksIndex() {
   return (
@@ -25,12 +26,14 @@ export default function TasksIndex() {
 
 function PilotSection() {
   const dispatch = useAppDispatch();
-  const { createEntityType } = useAppSelector((state) => state.workspace);
+  const { createEntityType, showIndependentPilot } = useAppSelector((state) => state.workspace);
+  const { listId, hubId, walletId } = useParams();
+  const isEntityActive = !!listId || !!hubId || !!walletId;
   // set data for pilot
   useEffect(() => {
     const selectedItemType = 'Under Construction';
 
-    if (createEntityType == EntityType.hub || EntityType.wallet) {
+    if (createEntityType !== null || (!isEntityActive && showIndependentPilot)) {
       dispatch(
         setShowPilotSideOver({
           id: 'unknown',
@@ -39,7 +42,7 @@ function PilotSection() {
         })
       );
     }
-  }, [createEntityType]);
+  }, [createEntityType, isEntityActive, showIndependentPilot]);
 
   return null;
 }
