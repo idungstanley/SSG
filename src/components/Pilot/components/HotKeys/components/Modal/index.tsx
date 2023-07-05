@@ -29,7 +29,7 @@ export function Modal({ showModal, setShowModal, position = 'top-20 right-3', ch
             >
               {showModal ? (
                 <Dialog.Panel
-                  className={`relative p-2 overflow-visible text-left transform bg-white border rounded-lg shadow-xl istransition-all w-52 ${width}`}
+                  className={`relative p-2 overflow-visible text-left transform bg-white border rounded-lg shadow-xl istransition-all ${width}`}
                 >
                   {/* header */}
                   <div className="flex justify-end">
