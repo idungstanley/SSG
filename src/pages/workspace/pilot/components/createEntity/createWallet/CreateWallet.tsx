@@ -61,9 +61,9 @@ export default function CreateWallet() {
         <span className="font-bold">Create A Wallet</span>
         <span className="font-medium">Allows you manage all entities within the workspace</span>
       </div>
-      <div className="flex flex-col border border-gray-200 alsoit-gray-bg p-4 rounded space-y-2">
+      <div className="flex flex-col border border-gray-200 bg-alsoit-gray-bg p-4 rounded space-y-2">
         <div className="flex relative">
-          <Input placeholder="Hub Name" name="name" value={name} type="text" onChange={handleWalletChange} />
+          <Input placeholder="Wallet Name" name="name" value={name} type="text" onChange={handleWalletChange} />
           <div
             className="absolute cursor-pointer flex items-center right-2 top-3"
             onClick={(e) => handleShowPalette(e)}
@@ -72,7 +72,7 @@ export default function CreateWallet() {
           </div>
         </div>
         <div className="flex h-10 p-1 w-full border bg-white rounded justify-between items-center">
-          <span>Manage this Hub with other application</span>
+          <span>Manage this Wallet with other application</span>
           <ArrowDown />
         </div>
         <div className="flex h-10 p-1 w-full border bg-white rounded justify-between items-center">
@@ -100,10 +100,10 @@ export default function CreateWallet() {
         <Button
           buttonStyle="primary"
           onClick={onSubmit}
-          label="Create Hub"
+          label="Create Wallet"
           padding="py-2 px-2"
           height="h-7"
-          width="w-24"
+          width="w-28"
         />
       </div>
     </div>

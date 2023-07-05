@@ -7,9 +7,10 @@ interface ModalProps {
   setShowModal: (i: boolean) => void;
   children: ReactNode;
   position?: string;
+  width?: string;
 }
 
-export function Modal({ showModal, setShowModal, position = 'top-20 right-3', children }: ModalProps) {
+export function Modal({ showModal, setShowModal, position = 'top-20 right-3', children, width = 'w-52' }: ModalProps) {
   const onClose = () => setShowModal(false);
 
   return (
@@ -27,7 +28,9 @@ export function Modal({ showModal, setShowModal, position = 'top-20 right-3', ch
               leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
             >
               {showModal ? (
-                <Dialog.Panel className="relative p-2 overflow-visible text-left transform bg-white border rounded-lg shadow-xl istransition-all w-52">
+                <Dialog.Panel
+                  className={`relative p-2 overflow-visible text-left transform bg-white border rounded-lg shadow-xl istransition-all w-52 ${width}`}
+                >
                   {/* header */}
                   <div className="flex justify-end">
                     <button
