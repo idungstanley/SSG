@@ -42,7 +42,7 @@ export default function HList({ hubs, leftMargin, taskType, level = 1 }: ListPro
   const { showSidebar } = useAppSelector((state) => state.account);
   const { showMenuDropdown, SubMenuId, entityToCreate } = useAppSelector((state) => state.hub);
   const [stickyButtonIndex, setStickyButtonIndex] = useState<number | undefined>(-1);
-  const hubCreationStatus = 'New Hub Under Construction';
+  const hubCreationStatus = 'New' + entityToCreate + 'Under Construction';
   const id = hubId || walletId || listId || currentItemId;
 
   const dummyHub = {
