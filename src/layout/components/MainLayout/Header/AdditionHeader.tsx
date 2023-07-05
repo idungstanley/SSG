@@ -33,9 +33,6 @@ export default function AdditionalHeader() {
   const { activeEntityName } = useAppSelector((state) => state.workspace);
   const { refetch } = useCurrentTime({ workspaceId });
 
-  const localData = localStorage.getItem('lastActiveTimerData');
-  const activePeriod: { period: number } = localData && JSON.parse(localData);
-
   const sameEntity = () => activeItemId === (timerLastMemory.hubId || timerLastMemory.listId);
 
   const timeBlinkerCheck = () => (timerStatus && sameEntity() && tabsId !== 6) || (!sameEntity() && timerStatus);
@@ -65,7 +62,7 @@ export default function AdditionalHeader() {
 
   useEffect(() => {
     if (isVisible) {
-      if (activePeriod) clearTimeout(activePeriod.period);
+      // if (period) clearTimeout(period);
       refetch();
     }
   }, [isVisible, refetch]);

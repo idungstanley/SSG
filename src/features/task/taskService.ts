@@ -17,7 +17,7 @@ import { useParams } from 'react-router-dom';
 import { setTimerLastMemory, toggleMute } from '../workspace/workspaceSlice';
 import { generateFilters } from '../../components/TasksHeader/lib/generateFilters';
 import moment from 'moment-timezone';
-import { runTimer } from '../../components/Pilot/components/TimeClock/ClockInOut';
+import { runTimer } from '../../utils/TimerCounter';
 
 const moveTask = (data: { taskId: TaskId; listId: string }) => {
   const { taskId, listId } = data;
