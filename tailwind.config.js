@@ -52,13 +52,13 @@ module.exports = {
       }
     },
     fontSize: {
-      ...defaultTheme.fontSize,
+      ...defaultTheme.fontSize, // add default tailwind classes
       'alsoit-text-sm': '0.5rem', // 8px
       'alsoit-text-md': '0.625rem', // 10px
       'alsoit-text-lg': '0.813rem' // 13px
     },
     borderWidth: {
-      ...defaultTheme.borderWidth,
+      ...defaultTheme.borderWidth, // add default tailwind classes
       'alsoit-border-sm': '0.5px',
       'alsoit-border-base': '1px'
     }
