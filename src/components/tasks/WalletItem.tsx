@@ -109,7 +109,7 @@ export default function WalletItem({
       >
         <div
           id="walletLeft"
-          className="relative flex-1 flex truncate items-center"
+          className="relative flex items-center flex-1 truncate"
           style={{ paddingLeft: `${paddingLeft}px`, height: '30px' }}
         >
           {wallet.id === walletId && (
@@ -146,7 +146,7 @@ export default function WalletItem({
           </div>
           <div
             onClick={() => handleLocation(wallet.id, wallet.name, index)}
-            className="cursor-pointer truncate hover:underline hover:decoration-dashed"
+            className="truncate cursor-pointer hover:underline hover:decoration-dashed"
             style={{ marginLeft: '17px' }}
           >
             <p
@@ -164,7 +164,7 @@ export default function WalletItem({
           {showSidebar && (
             <div
               id="walletRight"
-              className="ml-auto flex items-center pr-1 space-x-2 opacity-0 group-hover:opacity-100 hover:text-fuchsia-500"
+              className="relative flex items-center pr-1 ml-auto space-x-2 opacity-0 z-1 group-hover:opacity-100 hover:text-fuchsia-500"
               onClick={(e) => e.stopPropagation()}
             >
               <span onClick={() => handleItemAction(wallet.id, wallet.name)} className="cursor-pointer">
