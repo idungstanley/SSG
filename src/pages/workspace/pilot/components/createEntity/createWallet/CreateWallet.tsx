@@ -104,7 +104,7 @@ export default function CreateWallet() {
         </div>
       </div>
       <div className="flex justify-between pt-2 space-x-3">
-        <Button buttonStyle="white" onClick={onClose} loading={false} label="Close" width={20} height="h-7" />
+        <Button buttonStyle="white" onClick={onClose} loading={false} label="Cancel" width={20} height="h-7" />
         <Button
           buttonStyle="primary"
           onClick={onSubmit}
