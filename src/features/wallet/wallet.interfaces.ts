@@ -1,3 +1,5 @@
+import { IField } from '../list/list.interfaces';
+
 export interface ICreateWallet {
   id: string;
   name: string;
@@ -42,6 +44,7 @@ export interface IWalletDetails {
   description: null;
   directory_items: [];
   checklists: [];
+  custom_fields: IField[];
 }
 
 export interface IWalletDetailRes {

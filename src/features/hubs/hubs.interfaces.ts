@@ -1,4 +1,4 @@
-import { ITask_statuses } from '../list/list.interfaces';
+import { IField, ITask_statuses } from '../list/list.interfaces';
 import { Status } from '../task/interface.tasks';
 
 export interface IHub {
@@ -31,6 +31,7 @@ export interface IHubDetails {
   status: Status;
   priority?: string | null | undefined;
   task_statuses: ITask_statuses[];
+  custom_fields: IField[];
 }
 
 export interface IHubDetailRes {

@@ -9,6 +9,9 @@ import { Label } from './Label';
 import { AddTask } from '../AddTask/AddTask';
 import { getTaskColumns, setCurrTeamMemId } from '../../../../features/task/taskSlice';
 import { columnsHead, listColumnProps } from '../../../../pages/workspace/tasks/component/views/ListColumns';
+import { useParams } from 'react-router-dom';
+import { UseGetWalletDetails } from '../../../../features/wallet/walletService';
+import { UseGetHubDetails } from '../../../../features/hubs/hubService';
 
 interface ListProps {
   tasks: Task[];
@@ -21,19 +24,40 @@ export type SortOption = {
 };
 
 export function List({ tasks }: ListProps) {
+  const { hubId, walletId, listId, taskId } = useParams();
+  // hubId;
   const [columns, setColumns] = useState<listColumnProps[] | undefined>(undefined);
   const { sortType } = useAppSelector((state) => state.task);
   const { data } = useList(tasks[0].list_id);
+
   const dispatch = useAppDispatch();
+
+  const { data: hub } = UseGetHubDetails({
+    activeItemId: hubId,
+    activeItemType: 'hub'
+  });
+  const { data: wallet } = UseGetWalletDetails({
+    activeItemId: walletId,
+    activeItemType: 'wallet'
+  });
+  const { data: list } = useList(tasks[0].list_id);
+
+  const custom_fields = listId
+    ? list?.custom_fields
+    : walletId
+    ? wallet?.data.wallet.custom_fields
+    : hubId
+    ? hub?.data.hub.custom_fields
+    : null;
 
   const { taskColumns, hideTask } = useAppSelector((state) => state.task);
 
   useEffect(() => {
-    if (!data) {
+    if (!custom_fields) {
       return;
     }
 
-    const customFieldNames = data.custom_fields.map((i) => ({
+    const customFieldNames = custom_fields?.map((i) => ({
       value: i.name,
       id: i.id,
       field: i.type,
@@ -50,7 +74,7 @@ export function List({ tasks }: ListProps) {
 
   const listName = data?.name;
 
-  const heads = useMemo(() => (data ? generateColumns(data.custom_fields) : null), [data]);
+  // const heads = useMemo(() => (data ? generateColumns(data.custom_fields) : null), [data]);
 
   const { filteredBySearch } = filterBySearchValue(tasks);
 
