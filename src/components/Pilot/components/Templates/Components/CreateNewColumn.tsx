@@ -1,9 +1,5 @@
 import React, { useState } from 'react';
 import { cl } from '../../../../../utils';
-// import ColumnTypeDropdown from './ColumnTypeDropdown';
-// import Picker from '../../../../../assets/icons/Picker';
-// import Pin from '../../../../../assets/icons/Pin';
-// import CreateDropdownField from './CreateDropdownField';
 import { useAppSelector } from '../../../../../app/hooks';
 import NewColumn from './NewColumn';
 import ShowHide from './ShowHide';

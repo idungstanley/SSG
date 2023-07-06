@@ -14,7 +14,7 @@ export const createListService = (data: {
   listName: string;
   hubId?: string | null;
   walletId?: string | null;
-  color?: { outerColour?: string; innerColour?: string };
+  color?: { outerColour?: string; innerColour?: string } | string;
 }) => {
   const response = requestNew({
     url: 'lists',

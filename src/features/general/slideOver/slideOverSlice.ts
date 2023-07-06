@@ -30,7 +30,7 @@ type Share = {
 export type Pilot = {
   show: boolean;
   id?: string;
-  type?: itemType;
+  type?: itemType | string;
   title?: string;
 };
 type PilotHub = {

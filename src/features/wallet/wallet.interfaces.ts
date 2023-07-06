@@ -8,6 +8,7 @@ export interface ICreateWallet {
   updated_at: string;
   created_at: string;
   archived_at: null;
+  color?: string;
   deleted_at: null;
 }
 

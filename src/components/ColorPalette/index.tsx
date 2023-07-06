@@ -41,7 +41,6 @@ export default function Palette({
   const [isInnerFrameActive, setIsInnerFrameActive] = useState<boolean>(false);
   const [displayColorPicker, setDisplayColorPicker] = useState<boolean>(false);
   const [customColor, setCustomColor] = useState<string>('');
-  const [activeColor, setActiveColor] = useState<string | ListColourProps | undefined>('');
 
   const ref = useRef<HTMLInputElement>(null);
   const handleEditColor = (state: boolean) => {
@@ -160,19 +159,12 @@ export default function Palette({
           }
         });
       }
-    } else {
-      setPaletteColor?.(color);
     }
-    setActiveColor(color);
+    setPaletteColor?.(color);
   };
 
   const colorBoxes = palette.map((c) => (
-    <div
-      style={{ backgroundColor: `${c}`, ...style }}
-      key={c}
-      className={`rounded ${activeColor === c ? 'border border-gray-500 p-0.5' : ''}`}
-      onClick={() => handleClick(c)}
-    ></div>
+    <div style={{ backgroundColor: `${c}`, ...style }} key={c} className="rounded" onClick={() => handleClick(c)}></div>
   ));
 
   return (

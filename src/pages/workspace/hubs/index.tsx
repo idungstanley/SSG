@@ -4,7 +4,6 @@ import everythingIcon from '../../../assets/branding/everything-icon.png';
 import { useAppSelector } from '../../../app/hooks';
 import PlaceItem from '../../../layout/components/MainLayout/Sidebar/components/PlaceItem';
 import SubHubModal from './components/SubHubModal';
-import Modal from './components/Modal';
 import { cl } from '../../../utils';
 import SubWalletModal from '../wallet/components/modals/SubWalletModal';
 import ListModal from '../lists/components/modals/ListModal';
@@ -26,9 +25,13 @@ import { EntityType } from '../../../utils/EntityTypes/EntityType';
 import AddWalletIcon from '../../../assets/icons/AddWallet';
 import AddHubIcon from '../../../assets/icons/AddHub';
 import AddListIcon from '../../../assets/icons/AddList';
-import { setSelectedTreeDetails } from '../../../features/hubs/hubSlice';
-import Dropdown from '../../../components/Dropdown/index';
+import { setEntityToCreate, setSelectedTreeDetails } from '../../../features/hubs/hubSlice';
+import DropdownWithIcon from '../../../components/Dropdown/index';
 import PlusIcon from '../../../assets/icons/PlusIcon';
+import ActiveTreeSearch from '../../../components/ActiveTree/ActiveTreeSearch';
+import { useGetHubs } from '../../../features/hubs/hubService';
+import { Modal } from '../../../components/Pilot/components/HotKeys/components/Modal';
+import { Capitalize } from '../../../utils/NoCapWords/Capitalize';
 
 function Hubs() {
   const dispatch = useDispatch();
@@ -36,30 +39,41 @@ function Hubs() {
   const { showSidebar } = useAppSelector((state) => state.account);
   const { isSearchActive } = useAppSelector((state) => state.search);
   const { listId, hubId, walletId } = useParams();
+  const [showModal, setShowModal] = useState<boolean>(false);
   const { currentWorkspaceId } = useAppSelector((state) => state.auth);
+  const { createEntityType } = useAppSelector((state) => state.workspace);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [fetchTree, setFetchTree] = useState<boolean>(false);
+  const { data: allHubs } = useGetHubs({ includeTree: false });
+
+  const handleFetch = () => {
+    setFetchTree((prev) => !prev);
+  };
+
   const toggleSearch = (e: React.MouseEvent<SVGElement, MouseEvent>) => {
     e.stopPropagation();
     dispatch(setIsSearchActive(true));
   };
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const handleClose = () => {
-    setAnchorEl(null);
+    setShowModal(false);
   };
 
-  const handleOpenDropdown = (event: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
-    setAnchorEl(event.currentTarget);
+  const handleOpenDropdown = () => {
+    setShowModal(true);
     dispatch(setSelectedTreeDetails({ name: null, id: null, type: null }));
   };
 
   const handleNavigateTask = (type: string) => {
+    const CapitalizeType = Capitalize(type);
     dispatch(setCreateEntityType(type));
-    dispatch(setActiveEntityName('Under Construction'));
+    dispatch(setEntityToCreate(type));
+    dispatch(setActiveEntityName('New ' + CapitalizeType + ' Under Construction'));
     if (type === EntityType.hub) {
+      setShowModal(false);
       navigate(`/${currentWorkspaceId}` + '/tasks');
       dispatch(setActiveTabId(9));
       dispatch(setActiveSubHubManagerTabId(1));
     }
-    setAnchorEl(null);
   };
 
   const configForDropdown = [
@@ -71,7 +85,7 @@ function Hubs() {
     {
       label: 'SubHub',
       icon: <AddHubIcon />,
-      onclick: () => handleNavigateTask(EntityType.hub)
+      onclick: () => handleNavigateTask(EntityType.subHub)
     },
     {
       label: 'Wallet',
@@ -81,7 +95,7 @@ function Hubs() {
     {
       label: 'Subwallet',
       icon: <AddWalletIcon />,
-      onclick: () => handleNavigateTask(EntityType.wallet)
+      onclick: () => handleNavigateTask(EntityType.subWallet)
     },
     {
       label: 'List',
@@ -94,7 +108,7 @@ function Hubs() {
     {
       label: 'Create New',
       icon: <PlusIcon />,
-      onClick: (e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => handleOpenDropdown(e)
+      onClick: () => handleOpenDropdown()
     }
   ];
 
@@ -109,7 +123,7 @@ function Hubs() {
         searchStatus={isSearchActive}
         rightContent={
           <div className="flex gap-2" onClick={(e) => e.stopPropagation()}>
-            <Dropdown config={taskCreate} iconType="plus" iconColor="#BF00FFB2" />
+            <DropdownWithIcon config={taskCreate} iconType="plus" iconColor="#BF00FFB2" />
           </div>
         }
       />
@@ -124,6 +138,29 @@ function Hubs() {
           <p className="block text-xs tracking-wider capitalize truncate">Everything</p>
         </div>
       </div>
+      <Modal setShowModal={setShowModal} position="left-44 top-72" showModal={showModal} width="w-64">
+        {configForDropdown.map((item, index) => (
+          <React.Fragment key={index}>
+            <div
+              className="flex cursor-pointer my-1 gap-2 ml-0.5 rounded-md relative  gap-10 text-gray-500 items-center py-1 px-2 hover:bg-gray-100 cursor-pointer w-full"
+              onClick={item.onclick}
+            >
+              <span>{item.icon}</span>
+              <span>{item.label}</span>
+            </div>
+            {(index + 1) % 2 === 0 && index !== configForDropdown.length - 1 && <hr />}
+            {createEntityType === item.label.toLowerCase() && createEntityType !== EntityType.hub && (
+              <ActiveTreeSearch
+                data={allHubs}
+                handleFetch={handleFetch}
+                fetchTree={fetchTree}
+                closeDropdown={setShowModal}
+              />
+            )}
+          </React.Fragment>
+        ))}
+      </Modal>
+
       <DropdownWithoutHeader
         items={configForDropdown}
         setAnchorEl={setAnchorEl}
@@ -131,7 +168,6 @@ function Hubs() {
         handleClose={handleClose}
       />
       <ActiveTress />
-      <Modal />
       <SubHubModal />
       <SubWalletModal />
       <ListModal />

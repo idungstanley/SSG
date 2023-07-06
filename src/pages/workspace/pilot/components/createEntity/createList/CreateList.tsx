@@ -3,7 +3,7 @@ import { Button, Checkbox, Input } from '../../../../../../components';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
 import { setCreateListSlideOverVisibility } from '../../../../../../features/general/slideOver/slideOverSlice';
-import { setSubDropdownMenu, setshowMenuDropdown } from '../../../../../../features/hubs/hubSlice';
+import { setEntityToCreate, setSubDropdownMenu, setshowMenuDropdown } from '../../../../../../features/hubs/hubSlice';
 import { setCreateEntityType, setCreateWlLink } from '../../../../../../features/workspace/workspaceSlice';
 import { createListService } from '../../../../../../features/list/listService';
 import { EntityType } from '../../../../../../utils/EntityTypes/EntityType';
@@ -35,6 +35,8 @@ export default function CreateList() {
         })
       );
       dispatch(setCreateWlLink(false));
+      dispatch(setCreateEntityType(null));
+      dispatch(setEntityToCreate(null));
     }
   });
 
@@ -43,6 +45,7 @@ export default function CreateList() {
   };
   const onClose = () => {
     dispatch(setCreateEntityType(null));
+    dispatch(setEntityToCreate(null));
   };
 
   const [formState, setFormState] = useState(defaultListFormState);
@@ -58,11 +61,12 @@ export default function CreateList() {
     e.stopPropagation();
     setShowPalette((prev) => !prev);
   };
+  const jsonColorString = JSON.stringify({ outerColour: paletteColor as string, innerColour: undefined });
   const { name } = formState;
   const onSubmit = async () => {
     await createList.mutateAsync({
       listName: name,
-      color: { outerColour: paletteColor as string, innerColour: undefined },
+      color: jsonColorString,
       hubId: (createWlLink ? createWLID : null) || type === EntityType.hub ? id : null,
       walletId: type === EntityType.wallet ? id : null
     });
@@ -74,9 +78,9 @@ export default function CreateList() {
         <span className="font-bold">Create A List</span>
         <span className="font-medium">Allows you manage all entities within the workspace</span>
       </div>
-      <div className="flex flex-col border border-gray-200 bg-alsoit-gray-bg p-4 rounded space-y-2">
+      <div className="flex flex-col border border-gray-200 bg-alsoit-gray-50 p-4 rounded space-y-2">
         <div className="flex relative">
-          <Input placeholder="Hub Name" name="name" value={name} type="text" onChange={handleListChange} />
+          <Input placeholder="List Name" name="name" value={name} type="text" onChange={handleListChange} />
           <div
             className="absolute cursor-pointer flex items-center right-2 top-3"
             onClick={(e) => handleShowPalette(e)}
@@ -85,7 +89,7 @@ export default function CreateList() {
           </div>
         </div>
         <div className="flex h-10 p-1 w-full border bg-white rounded justify-between items-center">
-          <span>Manage this Hub with other application</span>
+          <span>Manage this List with other application</span>
           <ArrowDown />
         </div>
         <div className="flex h-10 p-1 w-full border bg-white rounded justify-between items-center">
@@ -119,7 +123,7 @@ export default function CreateList() {
         <Button
           buttonStyle="primary"
           onClick={onSubmit}
-          label="Create Hub"
+          label="Create List"
           padding="py-2 px-2"
           height="h-7"
           width="w-24"
