@@ -7,9 +7,12 @@ import { IoAlarmSharp } from 'react-icons/io5';
 import BlinkerModal from './RecordBlinkerOptions';
 import headerIcon from '../../../../assets/icons/headerIcon.png';
 import { useCurrentTime } from '../../../../features/task/taskService';
+import dayjs from 'dayjs';
+import timezone from 'dayjs/plugin/timezone';
+import utc from 'dayjs/plugin/utc';
 import HeaderModal from '../../../../components/Header/HeaderModal';
 import TimerModal from './TimerOptions';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 export const handleEntity = ({
   workSpaceId,
@@ -24,14 +27,21 @@ export const handleEntity = ({
 };
 
 export default function AdditionalHeader() {
+  dayjs.extend(timezone);
+  dayjs.extend(utc);
   const { screenRecording, duration, timerStatus } = useAppSelector((state) => state.task);
   const [recordBlinker, setRecordBlinker] = useState<boolean>(false);
   const [timerModal, setTimerModal] = useState<boolean>(false);
   const [isVisible, setIsVisible] = useState<boolean>(true);
   const { activeTabId: tabsId, timerLastMemory, activeItemId } = useAppSelector((state) => state.workspace);
+  const { timezone: zone } = useAppSelector((state) => state.userSetting);
+  const navigate = useNavigate();
   const { workSpaceId: workspaceId } = useParams();
   const { activeEntityName } = useAppSelector((state) => state.workspace);
   const { refetch } = useCurrentTime({ workspaceId });
+  const [headerClock, setClock] = useState<string>(dayjs().format('DD/MM/YYYY HH:mm'));
+
+  const HeaderClockFn = () => window.setInterval(() => setClock(dayjs().format('DD/MM/YYYY HH:mm')), 6000);
 
   const sameEntity = () => activeItemId === (timerLastMemory.hubId || timerLastMemory.listId);
 
@@ -59,6 +69,12 @@ export default function AdditionalHeader() {
       refetch();
     }
   }, [isVisible, refetch]);
+
+  useEffect(() => {
+    HeaderClockFn();
+
+    return () => document.addEventListener('visibilitychange', HeaderClockFn);
+  }, []);
 
   return (
     <div className="flex items-center justify-between w-full px-4 border-b" style={{ height: '50px' }}>
@@ -102,6 +118,9 @@ export default function AdditionalHeader() {
         )}
         <HiOutlineUpload className="w-5 h-5" />
         <BsFillGrid3X3GapFill className="w-5 h-5" />
+        <span className="w-32 font-semibold text-alsoit-text-lg text-alsoit-text border border-alsoit-text rounded-md p-0.5 flex justify-center cursor-pointer">
+          {headerClock}
+        </span>
         <MdHelpOutline className="w-5 h-5" />
       </div>
     </div>
