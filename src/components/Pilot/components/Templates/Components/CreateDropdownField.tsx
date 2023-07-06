@@ -32,7 +32,7 @@ function CreateDropdownField() {
           <div className="relative" key={i.id}>
             <label
               htmlFor={`input_${i.id}`}
-              className="block text-alsoit-text-md font-medium text-gray-400 uppercase mb-1"
+              className="block text-alsoit-gray-300-md font-medium text-gray-400 uppercase mb-1"
             >{`OPTION ${index + 1}`}</label>
 
             <input
@@ -43,7 +43,7 @@ function CreateDropdownField() {
               name={`input_${index + 1}`}
               value={i.value}
               onChange={(event) => handleInputChange(event, i.id)}
-              className="block w-full rounded-md border-0 py-1 text-gray-900 shadow-sm ring-1 ring-inset placeholder-gray-300 ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 text-alsoit-text-md sm:text-sm sm:leading-6"
+              className="block w-full rounded-md border-0 py-1 text-gray-900 shadow-sm ring-1 ring-inset placeholder-gray-300 ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 text-alsoit-gray-300-md sm:text-sm sm:leading-6"
             />
 
             <button onClick={() => handleRemoveOption(i.id)} className="absolute top-7 right-1">

@@ -86,8 +86,13 @@ export default function CreateHub() {
         <span className="font-bold">Create A Hub</span>
         <span className="font-medium">Allows you manage all entities within the workspace</span>
       </div>
+<<<<<<< HEAD
       <div className="flex flex-col p-4 space-y-2 border border-gray-200 rounded bg-alsoit-gray-bg">
         <div className="relative flex">
+=======
+      <div className="flex flex-col border border-gray-200 bg-alsoit-gray-50 p-4 rounded space-y-2">
+        <div className="flex relative">
+>>>>>>> b9c9338b90168aaa0dafd3c09bdbed46e7a24ac0
           <Input placeholder="Hub Name" name="name" value={name} type="text" onChange={handleHubChange} />
           <div
             className="absolute flex items-center cursor-pointer right-2 top-3"

@@ -146,7 +146,7 @@ export function Row({ task, columns, paddingLeft = 0, parentId, task_status, isL
           }
         >
           {/* actions */}
-          <div className="absolute opacity-0 group-hover:opacity-100 top-0 bottom-0 right-0 flex space-x-1 items-center justify-center">
+          <div className="absolute opacity-0 group-hover:opacity-100 top-0 bottom-0 right-0 flex space-x-1 mr-1 items-center justify-center">
             {/* tags */}
             {'tags' in task ? (
               <ManageTagsDropdown entityId={task.id} tagsArr={task.tags as Tag[]} entityType="task" />
