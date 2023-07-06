@@ -12,7 +12,8 @@ import timezone from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
 import HeaderModal from '../../../../components/Header/HeaderModal';
 import TimerModal from './TimerOptions';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import DatePicker from '../../../../components/DatePicker/DatePicker';
 
 export const handleEntity = ({
   workSpaceId,
@@ -32,11 +33,17 @@ export default function AdditionalHeader() {
   const [timerModal, setTimerModal] = useState<boolean>(false);
   const [isVisible, setIsVisible] = useState<boolean>(true);
   const { activeTabId: tabsId, timerLastMemory, activeItemId } = useAppSelector((state) => state.workspace);
-  const navigate = useNavigate();
+  const { timezone: zone } = useAppSelector((state) => state.userSetting);
+  const [clockModal, setClockModal] = useState<boolean>(false);
+  const [HeaderClock, setClock] = useState<string>(dayjs().format('DD-MM-YYYY hh:mm'));
   const { workSpaceId: workspaceId } = useParams();
   const { activeEntityName } = useAppSelector((state) => state.workspace);
   const { refetch } = useCurrentTime({ workspaceId });
 
+  const headerClockFn = () =>
+    window.setInterval(() => {
+      setClock(dayjs().format('DD-MM-YYYY hh:mm'));
+    }, 6000);
   const sameEntity = () => activeItemId === (timerLastMemory.hubId || timerLastMemory.listId);
 
   const timeBlinkerCheck = () => (timerStatus && sameEntity() && tabsId !== 6) || (!sameEntity() && timerStatus);
@@ -59,10 +66,15 @@ export default function AdditionalHeader() {
 
   useEffect(() => {
     if (isVisible) {
-      // if (period) clearTimeout(period);
       refetch();
     }
   }, [isVisible, refetch]);
+
+  useEffect(() => {
+    headerClockFn();
+
+    return () => document.addEventListener('visibilitychange', headerClockFn);
+  }, []);
 
   return (
     <div className="flex items-center justify-between w-full px-4 border-b" style={{ height: '50px' }}>
@@ -106,7 +118,55 @@ export default function AdditionalHeader() {
         )}
         <HiOutlineUpload className="w-5 h-5" />
         <BsFillGrid3X3GapFill className="w-5 h-5" />
+        <div
+          className="relative w-16 font-semibold text-alsoit-text-lg text-alsoit-text border-alsoit-border-base border-alsoit-text rounded-md p-0.5 flex justify-center flex-col space-y-0 cursor-pointer"
+          onMouseEnter={() => setClockModal(!clockModal)}
+        >
+          <span className="text-center text-alsoit-text-md">
+            {dayjs(HeaderClock, 'DD-MM-YYYY hh:mm').format('DD-MM-YYYY')}
+          </span>
+          <span className="text-center text-alsoit-text-md">
+            {dayjs(HeaderClock, 'DD-MM-YYYY hh:mm').format('hh:mm')}
+          </span>
+          {clockModal && (
+            <HeaderModal toggleFn={setClockModal} styles="top-7 right-28">
+              <HeaderTimeModal />
+            </HeaderModal>
+          )}
+        </div>
         <MdHelpOutline className="w-5 h-5" />
+      </div>
+    </div>
+  );
+}
+
+function HeaderTimeModal() {
+  const [time, setTime] = useState<string>(dayjs().format('hh:mm:ss'));
+
+  const timeUpdateFn = () => window.setInterval(() => setTime(dayjs().format('hh:mm:ss')), 1000);
+
+  useEffect(() => {
+    timeUpdateFn();
+
+    return () => document.addEventListener('visibilitychange', timeUpdateFn);
+  }, []);
+  return (
+    <div className="flex flex-col space-y-4 w-134 z-50 bg-alsoit-gray-50 h-screen">
+      <div className="flex justify-start flex-col space-y-2 w-full border-b border-alsoit-gray-300 px-4 py-6">
+        <span style={{ fontSize: '35px', padding: '0 0 8px 0' }}>{time}</span>
+        {dayjs().format('dddd MMMM D, YYYY')}
+      </div>
+      <div className="border-b border-alsoit-gray-300 px-4 py-6">
+        <p className="text-center">Calendar Goes here</p>
+      </div>
+      <div className="w-full flex flex-col space-y-2 px-4 py-6">
+        <span className="font-semibold text-alsoit-text-lg">Schedule</span>
+        <input
+          type="text"
+          className="w-72 h-6 text-alsoit-text-md rounded border-alsoit-border-base px-1"
+          placeholder="search..."
+        />
+        <span className="italic text-alsoit-text-md font-semibold">No activity found for the selected time</span>
       </div>
     </div>
   );
