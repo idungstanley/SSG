@@ -13,13 +13,15 @@ module.exports = {
       colors: {
         ...colors,
         primary: colors.fuchsia,
-        'alsoit-gray-bg': '#F4F4F4',
-        'alsoit-gray-bg-hover': '#F9E6FF',
-        'alsoit-gray-bg-active': '#F9E6FF',
-        'alsoit-white-bg-hover': '#F4F4F4',
-        'alsoit-white-bg-active': '#F4F4F4',
-        'alsoit-text': '#424242',
-        'alsoit-text-active': '#BF01FE'
+        'alsoit-gray-50': '#F4F4F4',
+        'alsoit-gray-75': '#B2B2B2',
+        'alsoit-gray-200': '#626262',
+        'alsoit-gray-300': '#424242',
+        'alsoit-purple-50': '#F9E6FF',
+        'alsoit-purple-300': '#BF01FE',
+        'alsoit-success': '#19D03A',
+        'alsoit-warning': '#ffde66',
+        'alsoit-danger': '#FF0000'
       },
       gridTemplateColumns: {
         sidebarItem: 'auto 1fr auto',
@@ -50,9 +52,15 @@ module.exports = {
       }
     },
     fontSize: {
+      ...defaultTheme.fontSize,
       'alsoit-text-sm': '0.5rem', // 8px
       'alsoit-text-md': '0.625rem', // 10px
       'alsoit-text-lg': '0.813rem' // 13px
+    },
+    borderWidth: {
+      ...defaultTheme.borderWidth,
+      'alsoit-border-sm': '0.5px',
+      'alsoit-border-base': '1px'
     }
   },
   variants: {
