@@ -56,7 +56,7 @@ export default function ShowHideSettings({
       dispatch(getVerticalGrid(!verticalGrid));
     } else if (viewMode == 'Upper Case') {
       dispatch(getTaskUpperCase(!taskUpperCase));
-    } else if (viewMode == 'Vertical GridLines Task') {
+    } else if (viewMode == 'Task GridLines') {
       dispatch(getVerticalGridlinesTask(!verticalGridlinesTask));
     }
   };
@@ -76,7 +76,7 @@ export default function ShowHideSettings({
     },
     {
       id: 5,
-      label: 'Vertical GridLines Task'
+      label: 'Task GridLines'
     },
     {
       id: 6,

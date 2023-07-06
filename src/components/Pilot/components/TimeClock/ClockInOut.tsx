@@ -11,7 +11,7 @@ import {
   StartTimeEntryService
 } from '../../../../features/task/taskService';
 import AvatarWithInitials from '../../../avatar/AvatarWithInitials';
-import { setTimerInterval, setTimerStatus } from '../../../../features/task/taskSlice';
+import { setTimerInterval, setTimerStatus, setUpdateTimerDuration } from '../../../../features/task/taskSlice';
 import { useParams } from 'react-router-dom';
 import { setTimerLastMemory } from '../../../../features/workspace/workspaceSlice';
 import { runTimer } from '../../../../utils/TimerCounter';
@@ -33,6 +33,7 @@ export default function ClockInOut() {
   const [time, setTime] = useState({ s: 0, m: 0, h: 0 });
   const [, setBtnClicked] = useState(false);
   const [prompt, setPrompt] = useState(false);
+  const [newTimer, setNewtimer] = useState(false);
   const { workSpaceId, listId, hubId } = useParams();
 
   const { data: getEntries } = GetTimeEntriesService({
@@ -73,6 +74,7 @@ export default function ClockInOut() {
     setRunning(false);
     dispatch(setTimerStatus(false));
     clearInterval(period);
+    dispatch(setUpdateTimerDuration({ s: 0, m: 0, h: 0 }));
     dispatch(setTimerInterval(undefined));
   };
 
@@ -110,6 +112,7 @@ export default function ClockInOut() {
   const handleTimeSwitch = () => {
     stop();
     setPrompt(false);
+    setNewtimer(!newTimer);
   };
 
   const sameEntity = () => activeItemId === (timerLastMemory.hubId || timerLastMemory.listId);
@@ -129,6 +132,10 @@ export default function ClockInOut() {
   useEffect(() => {
     RunTimer;
   }, [isRunning]);
+
+  useEffect(() => {
+    newTimer && start();
+  }, [newTimer]);
 
   return (
     <div className="p-2 mt-6 rounded-t-md">
@@ -165,14 +172,22 @@ export default function ClockInOut() {
                   </button>
                 )}
                 {prompt && (
-                  <div className="absolute p-2 rounded-lg shadow-2xl flex flex-col space-y-1 bg-gray-100 z-50 min-w-max">
-                    <span className="text-center text-gray-700">Another Timer Already Running</span>
+                  <div className="absolute top-5 p-2 rounded-lg shadow-2xl flex flex-col space-y-1 bg-gray-100 z-50 w-72">
+                    <span className="text-center text-gray-700">
+                      Another Timer Already Running would you want to stop the active timer and continue here?
+                    </span>
                     <div className="flex w-full space-x-1 justify-end">
                       <button
-                        className="bg-purple-500 hover:bg-purple-600 text-white p-1 rounded-lg font-bold"
+                        className="bg-alsoit-text hover:bg-alsoit-text-active text-white p-1 rounded-lg font-bold"
+                        onClick={() => setPrompt(false)}
+                      >
+                        No
+                      </button>
+                      <button
+                        className="bg-alsoit-text-active hover:bg-purple-600 text-white p-1 rounded-lg font-bold"
                         onClick={() => handleTimeSwitch()}
                       >
-                        Stop Active Timer
+                        Yes
                       </button>
                     </div>
                   </div>
@@ -221,11 +236,13 @@ export default function ClockInOut() {
                   {getCurrent.data.time_entries.map((entry) => {
                     return (
                       <tr key={entry.id} className="space-x-4 flex py-2 border-b-2 items-center w-full">
-                        <td className="text-sm text-gray-600 w-1/2">{entry.team_member.user.name}</td>
-                        <td className="text-sm text-gray-600 w-1/2">
+                        <td className="text-alsoit-text-lg font-semibold text-alsoit-text w-1/2">
+                          {entry.team_member.user.name}
+                        </td>
+                        <td className="text-alsoit-text-lg font-semibold text-alsoit-text w-1/2">
                           within {moment.duration(moment().diff(entry.start_date)).humanize()} ago
                         </td>
-                        <td className="text-sm text-gray-600">{entry.description}</td>
+                        <td className="text-alsoit-text-lg font-semibold text-alsoit-text">{entry.description}</td>
                       </tr>
                     );
                   })}
@@ -233,7 +250,7 @@ export default function ClockInOut() {
               </table>
             </div>
           ) : (
-            <div className="text-gray-600 text-center">No active timer found for this entity</div>
+            <div className="text-alsoit-text font-semibold text-center">No active timer found for this entity</div>
           )}
         </div>
       </div>
