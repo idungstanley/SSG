@@ -15,6 +15,7 @@ import { useDroppable } from '@dnd-kit/core';
 import { cl } from '../../utils';
 import InteractiveTooltip from '../Tooltip/InteractiveTooltip';
 import ThreeDotIcon from '../../assets/icons/ThreeDotIcon';
+import { Tooltip } from '@mui/material';
 
 interface ListItemProps {
   list: {
@@ -127,7 +128,7 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
         {list.id === listId && (
           <span className="absolute top-0 bottom-0 left-0 rounded-r-lg w-0.5" style={{ backgroundColor: baseColor }} />
         )}
-        <div className="flex items-center space-x-1 capitalize truncate cursor-pointer">
+        <div className="flex items-center space-x-1 overflow-hidden capitalize cursor-pointer">
           <div onClick={(e) => handleListColour(list.id, e)}>
             <ListIconComponent
               shape={activeShape ? activeShape : 'solid-circle'}
@@ -135,18 +136,20 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
               outterColour={outerColour}
             />
           </div>
-          <div
-            style={{
-              fontSize: '13px',
-              lineHeight: '15.56px',
-              verticalAlign: 'baseline',
-              letterSpacing: '0.28px',
-              color: listId === list.id ? (baseColor as string) : undefined
-            }}
-            className="flex items-center gap-1 pl-4 capitalize truncate cursor-pointer"
-          >
-            {list.name}
-          </div>
+          <Tooltip title={list.name} arrow placement="top">
+            <div
+              style={{
+                fontSize: '13px',
+                lineHeight: '15.56px',
+                verticalAlign: 'baseline',
+                letterSpacing: '0.28px',
+                color: listId === list.id ? (baseColor as string) : undefined
+              }}
+              className="pl-4 capitalize truncate cursor-pointer"
+            >
+              {list.name}
+            </div>
+          </Tooltip>
         </div>
         {/* ends here */}
         <div className="flex items-center gap-1">
