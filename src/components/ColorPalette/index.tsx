@@ -160,6 +160,7 @@ export default function Palette({
         });
       }
     }
+    setPaletteColor?.(color);
   };
 
   const colorBoxes = palette.map((c) => (

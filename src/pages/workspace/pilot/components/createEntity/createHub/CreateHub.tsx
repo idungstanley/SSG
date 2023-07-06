@@ -3,7 +3,7 @@ import { Button, Checkbox, Input } from '../../../../../../components';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
 import { createHubService } from '../../../../../../features/hubs/hubService';
-import { setSubDropdownMenu, setshowMenuDropdown } from '../../../../../../features/hubs/hubSlice';
+import { setEntityToCreate, setSubDropdownMenu, setshowMenuDropdown } from '../../../../../../features/hubs/hubSlice';
 import { setCreateEntityType } from '../../../../../../features/workspace/workspaceSlice';
 import { EntityType } from '../../../../../../utils/EntityTypes/EntityType';
 import Assignee from '../../../../tasks/assignTask/Assignee';
@@ -35,6 +35,8 @@ export default function CreateHub() {
           showMenuDropdown: null
         })
       );
+      dispatch(setCreateEntityType(null));
+      dispatch(setEntityToCreate(null));
       setFormState(defaultHubFormState);
     }
   });
@@ -54,6 +56,7 @@ export default function CreateHub() {
   };
   const onClose = () => {
     dispatch(setCreateEntityType(null));
+    dispatch(setEntityToCreate(null));
   };
 
   const handleShowPalette = (e: React.MouseEvent<HTMLDivElement | HTMLButtonElement, MouseEvent>) => {
@@ -81,7 +84,7 @@ export default function CreateHub() {
         <span className="font-bold">Create A Hub</span>
         <span className="font-medium">Allows you manage all entities within the workspace</span>
       </div>
-      <div className="flex flex-col border border-gray-200 bg-alsoit-gray-bg p-4 rounded space-y-2">
+      <div className="flex flex-col border border-gray-200 bg-alsoit-gray-50 p-4 rounded space-y-2">
         <div className="flex relative">
           <Input placeholder="Hub Name" name="name" value={name} type="text" onChange={handleHubChange} />
           <div
