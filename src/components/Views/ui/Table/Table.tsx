@@ -30,8 +30,6 @@ export function Table({ heads, data, label }: TableProps) {
   const [collapseTasks, setCollapseTasks] = useState(false);
   const taskLength = data.length;
 
-  const { taskColumns, hideTask } = useAppSelector((state) => state.task);
-
   const columns = createHeaders(heads).filter((i) => !i.hidden);
 
   // const columns = createHeaders(heads).filter((i) => !i.hidden);

@@ -1,9 +1,9 @@
-import { useMemo, useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { useList } from '../../../../features/list/listService';
 import { Task } from '../../../../features/task/interface.tasks';
 import { filterByAssignee, filterBySearchValue, sortTasks } from '../../../TasksHeader/lib';
-import { generateColumns } from '../../lib/tableHeadUtils';
+// import { generateColumns } from '../../lib/tableHeadUtils';
 import { Table } from '../Table/Table';
 import { Label } from './Label';
 import { AddTask } from '../AddTask/AddTask';
@@ -24,7 +24,7 @@ export type SortOption = {
 };
 
 export function List({ tasks }: ListProps) {
-  const { hubId, walletId, listId, taskId } = useParams();
+  const { hubId, walletId, listId } = useParams();
   // hubId;
   const [columns, setColumns] = useState<listColumnProps[] | undefined>(undefined);
   const { sortType } = useAppSelector((state) => state.task);
