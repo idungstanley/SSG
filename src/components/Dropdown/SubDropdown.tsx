@@ -38,7 +38,6 @@ export default function SubDropdown() {
   const { currentWorkspaceId } = useAppSelector((state) => state.auth);
   const { showTreeInput } = useAppSelector((state) => state.workspace);
   const { lightBaseColor } = useAppSelector((state) => state.account);
-  const { show } = useAppSelector((state) => state.prompt);
   const [lastClicked, setLastClicked] = useState<string>('');
   const [fetchTree, setFetchTree] = useState<boolean>(false);
   const hubIdToFetch =
@@ -242,10 +241,10 @@ export default function SubDropdown() {
         )}
         {lastClicked && (
           <div className="mb-2">
-            <span className="mb-2 p-2 text-start truncate w-64">
+            <span className="w-64 p-2 mb-2 truncate text-start">
               {`Do you want to create your ${lastClicked} under ${selectedTreeDetails.name}`}
             </span>
-            <div className="p-2 flex gap-2 items-center justify-between">
+            <div className="flex items-center justify-between gap-2 p-2">
               {options.map((option: optionsProps) => (
                 <div key={option.label}>
                   <Button
