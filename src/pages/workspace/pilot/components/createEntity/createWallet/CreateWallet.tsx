@@ -61,7 +61,7 @@ export default function CreateWallet() {
         <span className="font-bold">Create A Wallet</span>
         <span className="font-medium">Allows you manage all entities within the workspace</span>
       </div>
-      <div className="flex flex-col border border-gray-200 bg-alsoit-gray-bg p-4 rounded space-y-2">
+      <div className="flex flex-col border border-alsoit-gray-200 bg-alsoit-gray-50 p-4 rounded space-y-2">
         <div className="flex relative">
           <Input placeholder="Wallet Name" name="name" value={name} type="text" onChange={handleWalletChange} />
           <div

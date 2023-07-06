@@ -117,7 +117,7 @@ export default function ColumnTypeDropdown() {
         style={{ width: '180px' }}
       >
         <DropdownIcon />
-        <p className="text-black text-alsoit-text-md font-semibold">Dropdown</p>
+        <p className="text-black text-alsoit-gray-300-md font-semibold">Dropdown</p>
       </div>
       <Menu
         id="basic-menu"
@@ -147,7 +147,7 @@ export default function ColumnTypeDropdown() {
           return (
             <MenuItem key={item.id} onClick={handleClose}>
               <span className="mx-1"> {item.icon}</span>
-              <p className="text-alsoit-text-lg">{item.title}</p>
+              <p className="text-alsoit-gray-300-lg">{item.title}</p>
             </MenuItem>
           );
         })}
