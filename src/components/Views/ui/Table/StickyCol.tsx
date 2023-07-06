@@ -99,7 +99,6 @@ export function StickyCol({
     setShowSubTasks(!showSubTasks);
   };
   const displayNav = (id: string) => {
-    dispatch(setShowTaskNavigation(!showTaskNavigation));
     dispatch(setCurrentTaskId(id));
   };
 
@@ -150,8 +149,6 @@ export function StickyCol({
     });
   };
 
-  console.log('isChecked', isChecked);
-
   return (
     <>
       {task.id !== '0' && (
@@ -183,9 +180,9 @@ export function StickyCol({
             onClick={onClickTask}
             className={cl(
               COL_BG,
-              `relative border-t ${currentTaskId == task.id && 'tdListV'} ${verticalGrid && 'border-r'} ${
-                verticalGridlinesTask && 'border-r'
-              } w-full py-4 flex items-center `
+              `relative border-t ${currentTaskId == task.id && showTaskNavigation && 'tdListV'} ${
+                verticalGrid && 'border-r'
+              } ${verticalGridlinesTask && 'border-r'} w-full py-4 flex items-center `
             )}
           >
             <button onClick={onToggleDisplayingSubTasks} className="pl-1">
