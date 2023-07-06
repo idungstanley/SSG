@@ -5,11 +5,7 @@ import { resetWorkSpace } from '../../../../features/workspace/workspaceSlice';
 import { handleEntity } from './AdditionHeader';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 
-interface BlinkerProps {
-  toggleFn: React.Dispatch<React.SetStateAction<boolean>>;
-}
-
-export default function BlinkerModal({ toggleFn }: BlinkerProps) {
+export default function BlinkerModal() {
   const { recorder, stream } = useAppSelector((state) => state.task);
   const { recorderLastMemory } = useAppSelector((state) => state.workspace);
   const dispatch = useAppDispatch();
@@ -27,11 +23,7 @@ export default function BlinkerModal({ toggleFn }: BlinkerProps) {
     navigate(handleEntity({ workSpaceId, hubId, listId }), { replace: true });
   };
   return (
-    <div
-      className="flex flex-col w-64 rounded-lg shadow-2xl bg-warmGray-50 absolute -right-5 z-50"
-      tabIndex={0}
-      onMouseLeave={() => toggleFn(false)}
-    >
+    <div className="flex flex-col w-full">
       <span
         className="capitalize px-2 py-3 hover:bg-gray-300 cursor-pointer"
         onClick={() =>

@@ -20,9 +20,10 @@ interface ActiveTreeSearchProps {
     | undefined;
   fetchTree: boolean;
   id?: string | null;
+  closeDropdown?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export default function ActiveTreeSearch({ data, handleFetch, fetchTree, id }: ActiveTreeSearchProps) {
+export default function ActiveTreeSearch({ data, handleFetch, fetchTree, id, closeDropdown }: ActiveTreeSearchProps) {
   const [toggleTree, setToggleTree] = useState<boolean>(false);
   const { selectedTreeDetails, entityToCreate } = useAppSelector((state) => state.hub);
   const dispatch = useAppDispatch();
@@ -35,7 +36,7 @@ export default function ActiveTreeSearch({ data, handleFetch, fetchTree, id }: A
     dispatch(setActiveTabId(PilotTabsId.entityManager));
     if (entityToCreate === EntityType.hub || entityToCreate === EntityType.subHub) {
       dispatch(setActiveSubHubManagerTabId(EntityManagerTabsId.hub));
-    } else if (entityToCreate === EntityType.wallet) {
+    } else if (entityToCreate === EntityType.wallet || entityToCreate === EntityType.subWallet) {
       dispatch(setActiveSubHubManagerTabId(EntityManagerTabsId.wallet));
     } else if (entityToCreate === EntityType.list) {
       dispatch(setActiveSubHubManagerTabId(EntityManagerTabsId.list));
@@ -46,6 +47,7 @@ export default function ActiveTreeSearch({ data, handleFetch, fetchTree, id }: A
         SubMenuType: null
       })
     );
+    closeDropdown?.(false);
   };
   return (
     <div className="relative">

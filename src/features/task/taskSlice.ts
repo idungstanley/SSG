@@ -156,6 +156,7 @@ interface TaskState {
   FilterDateString: DateString | null;
   statusId: string;
   currTaskListId: string;
+  newColInstance: [{ id: number; value: string }];
 }
 
 const initialState: TaskState = {
@@ -228,7 +229,8 @@ const initialState: TaskState = {
   HistoryFilterMemory: null,
   FilterDateString: null,
   statusId: '',
-  currTaskListId: ''
+  currTaskListId: '',
+  newColInstance: [{ id: 1, value: '' }]
 };
 
 export const taskSlice = createSlice({
@@ -473,6 +475,9 @@ export const taskSlice = createSlice({
     },
     setFetchedTime(state, action: PayloadAction<{ h: number; m: number; s: number } | null>) {
       state.fetchedTime = action.payload;
+    },
+    setNewColInstance(state, action: PayloadAction<{ id: number; value: string }>) {
+      state.newColInstance.push(action.payload);
     }
   }
 });
@@ -542,6 +547,7 @@ export const {
   setSortType,
   setTaskSelectedDate,
   setHistoryMemory,
-  setFilterDateString
+  setFilterDateString,
+  setNewColInstance
 } = taskSlice.actions;
 export default taskSlice.reducer;
