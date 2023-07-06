@@ -3,7 +3,7 @@ import { Button, Checkbox, Input } from '../../../../../../components';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
 import { setCreateListSlideOverVisibility } from '../../../../../../features/general/slideOver/slideOverSlice';
-import { setSubDropdownMenu, setshowMenuDropdown } from '../../../../../../features/hubs/hubSlice';
+import { setEntityToCreate, setSubDropdownMenu, setshowMenuDropdown } from '../../../../../../features/hubs/hubSlice';
 import { setCreateEntityType, setCreateWlLink } from '../../../../../../features/workspace/workspaceSlice';
 import { createListService } from '../../../../../../features/list/listService';
 import { EntityType } from '../../../../../../utils/EntityTypes/EntityType';
@@ -35,6 +35,8 @@ export default function CreateList() {
         })
       );
       dispatch(setCreateWlLink(false));
+      dispatch(setCreateEntityType(null));
+      dispatch(setEntityToCreate(null));
     }
   });
 
@@ -43,6 +45,7 @@ export default function CreateList() {
   };
   const onClose = () => {
     dispatch(setCreateEntityType(null));
+    dispatch(setEntityToCreate(null));
   };
 
   const [formState, setFormState] = useState(defaultListFormState);

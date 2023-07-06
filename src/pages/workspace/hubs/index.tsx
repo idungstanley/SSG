@@ -31,6 +31,7 @@ import PlusIcon from '../../../assets/icons/PlusIcon';
 import ActiveTreeSearch from '../../../components/ActiveTree/ActiveTreeSearch';
 import { useGetHubs } from '../../../features/hubs/hubService';
 import { Modal } from '../../../components/Pilot/components/HotKeys/components/Modal';
+import { Capitalize } from '../../../utils/NoCapWords/Capitalize';
 
 function Hubs() {
   const dispatch = useDispatch();
@@ -63,9 +64,10 @@ function Hubs() {
   };
 
   const handleNavigateTask = (type: string) => {
+    const CapitalizeType = Capitalize(type);
     dispatch(setCreateEntityType(type));
     dispatch(setEntityToCreate(type));
-    dispatch(setActiveEntityName('Under Construction'));
+    dispatch(setActiveEntityName('New ' + CapitalizeType + ' Under Construction'));
     if (type === EntityType.hub) {
       setShowModal(false);
       navigate(`/${currentWorkspaceId}` + '/tasks');

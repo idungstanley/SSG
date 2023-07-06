@@ -3,7 +3,7 @@ import { Button, Checkbox, Input } from '../../../../../../components';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
 import { createHubService } from '../../../../../../features/hubs/hubService';
-import { setSubDropdownMenu, setshowMenuDropdown } from '../../../../../../features/hubs/hubSlice';
+import { setEntityToCreate, setSubDropdownMenu, setshowMenuDropdown } from '../../../../../../features/hubs/hubSlice';
 import { setCreateEntityType } from '../../../../../../features/workspace/workspaceSlice';
 import { EntityType } from '../../../../../../utils/EntityTypes/EntityType';
 import Assignee from '../../../../tasks/assignTask/Assignee';
@@ -35,6 +35,8 @@ export default function CreateHub() {
           showMenuDropdown: null
         })
       );
+      dispatch(setCreateEntityType(null));
+      dispatch(setEntityToCreate(null));
       setFormState(defaultHubFormState);
     }
   });
@@ -54,6 +56,7 @@ export default function CreateHub() {
   };
   const onClose = () => {
     dispatch(setCreateEntityType(null));
+    dispatch(setEntityToCreate(null));
   };
 
   const handleShowPalette = (e: React.MouseEvent<HTMLDivElement | HTMLButtonElement, MouseEvent>) => {

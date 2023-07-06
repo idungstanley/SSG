@@ -9,6 +9,7 @@ import { setCreateTaskSlideOverVisibility } from '../../features/general/slideOv
 import { getSubMenu, setEntityToCreate, setSubDropdownMenu } from '../../features/hubs/hubSlice';
 import { useNavigate, useParams } from 'react-router-dom';
 import {
+  setActiveEntityName,
   setActiveSubHubManagerTabId,
   setActiveTabId,
   setShowIndependentPilot,
@@ -20,6 +21,7 @@ import ActiveTreeSearch from '../ActiveTree/ActiveTreeSearch';
 import Button from '../Button';
 import { EntityManagerTabsId, PilotTabsId } from '../../utils/PilotUtils';
 import { setVisibility } from '../../features/general/prompt/promptSlice';
+import { Capitalize } from '../../utils/NoCapWords/Capitalize';
 
 interface itemsType {
   id: number;
@@ -64,6 +66,7 @@ export default function SubDropdown() {
     listId: listIdToFetch
   });
   const navLink = '/tasks';
+  const CapitalizeType = Capitalize(lastClicked);
 
   const handleFetch = () => {
     setFetchTree((prev) => !prev);
@@ -115,6 +118,9 @@ export default function SubDropdown() {
       label: 'Proceed',
       bgColor: lightBaseColor,
       callback: () => {
+        if (!isEntityActive) {
+          dispatch(setActiveEntityName('New ' + CapitalizeType + ' Under Construction'));
+        }
         dispatch(setShowIndependentPilot(true));
         dispatch(setActiveTabId(PilotTabsId.entityManager));
         if (entityToCreate === EntityType.hub || entityToCreate === EntityType.subHub) {
