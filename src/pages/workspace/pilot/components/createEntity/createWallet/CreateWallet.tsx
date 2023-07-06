@@ -35,7 +35,6 @@ export default function CreateWallet() {
       dispatch(setEntityToCreate(null));
     }
   });
-  console.log(paletteColor);
   const defaultWalletFormState = {
     name: ''
   };
