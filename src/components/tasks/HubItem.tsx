@@ -14,6 +14,7 @@ import { useParams } from 'react-router-dom';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
 import PlusIcon from '../../assets/icons/PlusIcon';
 import ThreeDotIcon from '../../assets/icons/ThreeDotIcon';
+import { Tooltip } from '@mui/material';
 
 interface TaskItemProps {
   item: {
@@ -150,18 +151,20 @@ export default function HubItem({
                 )}
               </div>
               <span className="ml-5 overflow-hidden">
-                <p
-                  className="capitalize truncate cursor-pointer"
-                  style={{
-                    fontSize: '13px',
-                    lineHeight: '15.56px',
-                    verticalAlign: 'baseline',
-                    letterSpacing: '0.28px'
-                  }}
-                  onClick={() => handleLocation(item.id, item.name, index)}
-                >
-                  {item.name}
-                </p>
+                <Tooltip title={item.name} arrow placement="top">
+                  <p
+                    className="capitalize truncate cursor-pointer"
+                    style={{
+                      fontSize: '13px',
+                      lineHeight: '15.56px',
+                      verticalAlign: 'baseline',
+                      letterSpacing: '0.28px'
+                    }}
+                    onClick={() => handleLocation(item.id, item.name, index)}
+                  >
+                    {item.name}
+                  </p>
+                </Tooltip>
               </span>
             </div>
           </div>

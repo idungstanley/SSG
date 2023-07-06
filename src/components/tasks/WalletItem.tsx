@@ -21,6 +21,7 @@ import { useParams } from 'react-router-dom';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
 import PlusIcon from '../../assets/icons/PlusIcon';
 import ThreeDotIcon from '../../assets/icons/ThreeDotIcon';
+import { Tooltip } from '@mui/material';
 
 interface WalletItemProps {
   handleShowSubWallet: (id: string, index?: number) => void;
@@ -149,17 +150,19 @@ export default function WalletItem({
             className="truncate cursor-pointer hover:underline hover:decoration-dashed"
             style={{ marginLeft: '17px' }}
           >
-            <p
-              className="capitalize truncate cursor-pointer"
-              style={{
-                fontSize: '13px',
-                lineHeight: '15.56px',
-                verticalAlign: 'baseline',
-                letterSpacing: '0.28px'
-              }}
-            >
-              {wallet.name}
-            </p>
+            <Tooltip title={wallet.name} arrow placement="top">
+              <p
+                className="capitalize truncate cursor-pointer"
+                style={{
+                  fontSize: '13px',
+                  lineHeight: '15.56px',
+                  verticalAlign: 'baseline',
+                  letterSpacing: '0.28px'
+                }}
+              >
+                {wallet.name}
+              </p>
+            </Tooltip>
           </div>
           {showSidebar && (
             <div
