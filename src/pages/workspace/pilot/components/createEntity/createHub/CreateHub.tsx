@@ -4,7 +4,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
 import { createHubService } from '../../../../../../features/hubs/hubService';
 import { setEntityToCreate, setSubDropdownMenu, setshowMenuDropdown } from '../../../../../../features/hubs/hubSlice';
-import { setCreateEntityType } from '../../../../../../features/workspace/workspaceSlice';
+import { setCreateEntityType, setShowOverlay } from '../../../../../../features/workspace/workspaceSlice';
 import { EntityType } from '../../../../../../utils/EntityTypes/EntityType';
 import Assignee from '../../../../tasks/assignTask/Assignee';
 import Wand from '../../../../../../assets/icons/Wand';
@@ -30,6 +30,7 @@ export default function CreateHub() {
       queryClient.invalidateQueries(['retrieve']);
       dispatch(setCreateEntityType(null));
       dispatch(setSubDropdownMenu(false));
+      dispatch(setShowOverlay(false));
       dispatch(
         setshowMenuDropdown({
           showMenuDropdown: null
@@ -56,6 +57,7 @@ export default function CreateHub() {
   };
   const onClose = () => {
     dispatch(setCreateEntityType(null));
+    dispatch(setShowOverlay(false));
     dispatch(setEntityToCreate(null));
   };
 
@@ -79,26 +81,26 @@ export default function CreateHub() {
     });
   };
   return (
-    <div className="p-2 overflow-y-auto h-auto" style={{ maxHeight: '420px' }}>
+    <div className="h-auto p-2 overflow-y-auto" style={{ maxHeight: '420px' }}>
       <div className="flex flex-col mb-2">
         <span className="font-bold">Create A Hub</span>
         <span className="font-medium">Allows you manage all entities within the workspace</span>
       </div>
-      <div className="flex flex-col border border-gray-200 bg-alsoit-gray-bg p-4 rounded space-y-2">
-        <div className="flex relative">
+      <div className="flex flex-col p-4 space-y-2 border border-gray-200 rounded bg-alsoit-gray-bg">
+        <div className="relative flex">
           <Input placeholder="Hub Name" name="name" value={name} type="text" onChange={handleHubChange} />
           <div
-            className="absolute cursor-pointer flex items-center right-2 top-3"
+            className="absolute flex items-center cursor-pointer right-2 top-3"
             onClick={(e) => handleShowPalette(e)}
           >
             <Wand />
           </div>
         </div>
-        <div className="flex h-10 p-1 w-full border bg-white rounded justify-between items-center">
+        <div className="flex items-center justify-between w-full h-10 p-1 bg-white border rounded">
           <span>Manage this Hub with other application</span>
           <ArrowDown />
         </div>
-        <div className="flex h-10 p-1 w-full border bg-white rounded justify-between items-center">
+        <div className="flex items-center justify-between w-full h-10 p-1 bg-white border rounded">
           <span>Share with public</span>
           <Assignee option="share" />
         </div>
@@ -114,7 +116,7 @@ export default function CreateHub() {
           <Checkbox checked={false} onChange={() => ({})} description="Host other entities" height="5" width="5" />
           <Checkbox checked={false} onChange={() => ({})} description="Host other entities" height="5" width="5" />
         </div>
-        <div className="relative ml-24 mt-32">
+        <div className="relative mt-32 ml-24">
           {showPalette ? <Palette title="Hub Colour" setPaletteColor={setPaletteColor} /> : null}
         </div>
       </div>

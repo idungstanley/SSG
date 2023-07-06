@@ -31,6 +31,7 @@ export default function FullPilot({ featureTabs, activeSection, setShowModal, sh
   });
 
   const { show: showFullPilot, title, type } = useAppSelector((state) => state.slideOver.pilotSideOver);
+  const { showOverlay } = useAppSelector((state) => state.workspace);
 
   return (
     <div
@@ -44,34 +45,43 @@ export default function FullPilot({ featureTabs, activeSection, setShowModal, sh
         'right-0 border-l bottom-0 overflow-y-scroll mb-10 pb-6 transform bg-white grid grid-rows-autoAutoAutoFr grid-col-1 transition-transform duration-500'
       )}
     >
-      {showFullPilot ? <Dividers /> : null}
+      <div className="relative">
+        {showFullPilot ? <Dividers /> : null}
 
-      <Header
-        isMinified={false}
-        menu={<Header.Menu setShowModal={setShowModal} />}
-        additionalNavItems={
-          <>
-            <EditPageIcon className="w-4 h-4" />
+        <Header
+          isMinified={false}
+          menu={<Header.Menu setShowModal={setShowModal} />}
+          additionalNavItems={
+            <>
+              <EditPageIcon className="w-4 h-4" />
 
-            <UploadIcon className="w-4 h-4" />
+              <UploadIcon className="w-4 h-4" />
 
-            <CopyIcon className="w-6 h-6" />
+              <CopyIcon className="w-6 h-6" />
 
-            <ShareIcon className="w-4 h-4" />
+              <ShareIcon className="w-4 h-4" />
 
-            <PrintIcon className="w-4 h-4" />
-          </>
-        }
-      >
-        <p className="text-xs font-semibold capitalize truncate">
-          {type} | <span className="font-normal">{title}</span>
-        </p>
-      </Header>
+              <PrintIcon className="w-4 h-4" />
+            </>
+          }
+        >
+          <p className="text-xs font-semibold capitalize truncate">
+            {type} | <span className="font-normal">{title}</span>
+          </p>
+        </Header>
 
-      <FullHotkeysList tabs={featureTabs} setShowModal={setShowModal} showModal={showModal} />
+        <FullHotkeysList tabs={featureTabs} setShowModal={setShowModal} showModal={showModal} />
 
-      <FullTabs tabs={featureTabs} />
+        <FullTabs tabs={featureTabs} />
 
+        <div
+          className={`absolute top-0 left-0 right-0 bottom-0 ${showOverlay ? 'block' : 'hidden'}`}
+          style={{
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+            pointerEvents: showOverlay ? 'auto' : 'none'
+          }}
+        />
+      </div>
       {activeSection?.element}
     </div>
   );
