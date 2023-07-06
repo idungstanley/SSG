@@ -127,7 +127,7 @@ export function Row({ task, columns, paddingLeft = 0, parentId, task_status, isL
         <StickyCol
           showSubTasks={showSubTasks}
           setShowSubTasks={setShowSubTasks}
-          onClick={onClickTask}
+          // onClick={onClickTask}
           style={{ zIndex: 1 }}
           isListParent={isListParent}
           task={task}

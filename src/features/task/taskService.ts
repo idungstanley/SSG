@@ -95,6 +95,14 @@ export const useAddTask = (parentTaskId?: string) => {
   });
 };
 
+export const deleteTask = (data: { taskId: string | null }) => {
+  const request = requestNew({
+    url: `tasks/${data.taskId}`,
+    method: 'DELETE'
+  });
+  return request;
+};
+
 export const createTaskService = (data: {
   name: string;
   task_status_id?: string;

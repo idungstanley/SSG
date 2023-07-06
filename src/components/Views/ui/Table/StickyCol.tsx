@@ -53,7 +53,7 @@ export function StickyCol({
   const { currentWorkspaceId } = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { taskId, hubId } = useParams();
+  const { taskId, hubId, walletId, listId } = useParams();
   const COL_BG = taskId === task.id ? ACTIVE_COL_BG : DEFAULT_COL_BG;
 
   const { mutate: onAdd } = useAddTask(parentId);
@@ -67,26 +67,30 @@ export function StickyCol({
     currentTaskId
   } = useAppSelector((state) => state.task);
 
-  // console.log(currentTaskId);
-
   const onClickTask = () => {
-    navigate(`/${currentWorkspaceId}/tasks/h/${hubId}/t/${task.id}`, { replace: true });
-    dispatch(
-      setShowPilotSideOver({
-        id: task.id,
-        type: 'task',
-        show: true,
-        title: task.name
-      })
-    );
-    dispatch(setTaskIdForPilot(task.id));
-    dispatch(
-      setActiveItem({
-        activeItemId: task.id,
-        activeItemType: 'task',
-        activeItemName: task.name
-      })
-    );
+    if (task.id !== '0') {
+      hubId
+        ? navigate(`/${currentWorkspaceId}/tasks/h/${hubId}/t/${task.id}`, { replace: true })
+        : walletId
+        ? navigate(`/${currentWorkspaceId}/tasks/w/${walletId}/t/${task.id}`, { replace: true })
+        : navigate(`/${currentWorkspaceId}/tasks/l/${listId}/t/${task.id}`, { replace: true });
+      dispatch(
+        setShowPilotSideOver({
+          id: task.id,
+          type: 'task',
+          show: true,
+          title: task.name
+        })
+      );
+      dispatch(setTaskIdForPilot(task.id));
+      dispatch(
+        setActiveItem({
+          activeItemId: task.id,
+          activeItemType: 'task',
+          activeItemName: task.name
+        })
+      );
+    }
   };
 
   const onToggleDisplayingSubTasks = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
@@ -150,7 +154,6 @@ export function StickyCol({
       {task.id !== '0' && (
         <td
           className="sticky left-0 flex items-start justify-start text-sm font-medium text-start text-gray-900 cursor-pointer"
-          onClick={onClickTask}
           {...props}
         >
           <div className="flex items-center h-full space-x-1 bg-purple-50">
@@ -167,9 +170,9 @@ export function StickyCol({
               {dragElement}
             </div>
           </div>
-
           <div
             style={{ paddingLeft, minHeight: '42px', height: singleLineView ? '42px' : '' }}
+            onClick={onClickTask}
             className={cl(
               COL_BG,
               `relative border-t ${currentTaskId == task.id && 'tdListV'} ${verticalGrid && 'border-r'} ${
@@ -219,7 +222,6 @@ export function StickyCol({
       {task.id === '0' && (
         <td
           className="sticky left-0 flex items-start justify-start text-sm font-medium text-start text-gray-900 cursor-pointer"
-          onClick={onClickTask}
           {...props}
         >
           <div className="flex items-center h-full space-x-1 bg-purple-50 opacity-0">
