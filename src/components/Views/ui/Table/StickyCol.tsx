@@ -55,6 +55,7 @@ export function StickyCol({
   const navigate = useNavigate();
   const { taskId, hubId, walletId, listId } = useParams();
   const COL_BG = taskId === task.id ? ACTIVE_COL_BG : DEFAULT_COL_BG;
+  const [isChecked, setIsChecked] = useState(false);
 
   const { mutate: onAdd } = useAddTask(parentId);
   const {
@@ -149,6 +150,8 @@ export function StickyCol({
     });
   };
 
+  console.log('isChecked', isChecked);
+
   return (
     <>
       {task.id !== '0' && (
@@ -159,9 +162,14 @@ export function StickyCol({
           <div className="flex items-center h-full space-x-1 bg-purple-50">
             <input
               type="checkbox"
+              checked={isChecked}
               id="checked-checkbox"
               className="w-2 h-2 rounded-full opacity-0 cursor-pointer focus:outline-1 focus:ring-transparent  focus:border-2 focus:opacity-100 group-hover:opacity-100"
               style={{ marginLeft: '-0.3px' }}
+              onChange={(e) => {
+                dispatch(setShowTaskNavigation(e.target.checked));
+                setIsChecked(e.target.checked);
+              }}
               onClick={() => {
                 displayNav(task?.id as string);
               }}
