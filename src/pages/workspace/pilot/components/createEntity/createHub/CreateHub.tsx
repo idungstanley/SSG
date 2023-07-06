@@ -128,7 +128,7 @@ export default function CreateHub() {
           label="Create Hub"
           padding="py-2 px-2"
           height="h-7"
-          width="w-24"
+          width="w-28"
         />
       </div>
     </div>
