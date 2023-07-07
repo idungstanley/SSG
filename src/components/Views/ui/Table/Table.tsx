@@ -29,7 +29,11 @@ export function Table({ heads, data, label }: TableProps) {
   const [showNewTaskField, setShowNewTaskField] = useState(false);
   const [collapseTasks, setCollapseTasks] = useState(false);
   const taskLength = data.length;
+
   const columns = createHeaders(heads).filter((i) => !i.hidden);
+
+  // const columns = createHeaders(heads).filter((i) => !i.hidden);
+
   const { draggableTaskId } = useAppSelector((state) => state.list);
   const [listId, setListId] = useState<string>('');
   const { statusId } = useAppSelector((state) => state.task);
@@ -193,6 +197,7 @@ export function Table({ heads, data, label }: TableProps) {
             columns={columns}
             mouseDown={onMouseDown}
             tableHeight={tableHeight}
+            listId={data[0].list_id}
           />
 
           {/* rows */}
