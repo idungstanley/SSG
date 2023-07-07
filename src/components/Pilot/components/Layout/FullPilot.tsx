@@ -29,6 +29,7 @@ export default function FullPilot({ featureTabs, activeSection, setShowModal, sh
     storageKey: LS_PILOT_KEY,
     direction: 'XL'
   });
+  const { showOverlay } = useAppSelector((state) => state.workspace);
 
   const { show: showFullPilot, title, type } = useAppSelector((state) => state.slideOver.pilotSideOver);
 
@@ -41,38 +42,41 @@ export default function FullPilot({ featureTabs, activeSection, setShowModal, sh
       }}
       className={cl(
         showFullPilot ? 'relative translate-x-0' : 'w-96 absolute top-0 translate-x-full z-10',
-        'right-0 border-l bottom-0 overflow-y-scroll mb-10 pb-6 transform bg-white grid grid-rows-autoAutoAutoFr grid-col-1 transition-transform duration-500'
+        !showOverlay ? 'border-l overflow-y-scroll' : '',
+        'right-0  bottom-0 mb-10 pb-6 transform bg-white flex flex-col transition-transform duration-500'
       )}
     >
       {showFullPilot ? <Dividers /> : null}
+      <div className="relative grid grid-rows-autoAutoAutoFr grid-col-1">
+        {showOverlay && <div className="absolute inset-0 top-0 left-0 z-10 bg-black opacity-50" />}
 
-      <Header
-        isMinified={false}
-        menu={<Header.Menu setShowModal={setShowModal} />}
-        additionalNavItems={
-          <>
-            <EditPageIcon className="w-4 h-4" />
+        <Header
+          isMinified={false}
+          menu={<Header.Menu setShowModal={setShowModal} />}
+          additionalNavItems={
+            <>
+              <EditPageIcon className="w-4 h-4" />
 
-            <UploadIcon className="w-4 h-4" />
+              <UploadIcon className="w-4 h-4" />
 
-            <CopyIcon className="w-6 h-6" />
+              <CopyIcon className="w-6 h-6" />
 
-            <ShareIcon className="w-4 h-4" />
+              <ShareIcon className="w-4 h-4" />
 
-            <PrintIcon className="w-4 h-4" />
-          </>
-        }
-      >
-        <p className="text-xs font-semibold capitalize truncate">
-          {type} | <span className="font-normal">{title}</span>
-        </p>
-      </Header>
+              <PrintIcon className="w-4 h-4" />
+            </>
+          }
+        >
+          <p className="text-xs font-semibold capitalize truncate">
+            {type} | <span className="font-normal">{title}</span>
+          </p>
+        </Header>
 
-      <FullHotkeysList tabs={featureTabs} setShowModal={setShowModal} showModal={showModal} />
+        <FullHotkeysList tabs={featureTabs} setShowModal={setShowModal} showModal={showModal} />
 
-      <FullTabs tabs={featureTabs} />
-
-      {activeSection?.element}
+        <FullTabs tabs={featureTabs} />
+      </div>
+      <div className="relative z-50">{activeSection?.element}</div>
     </div>
   );
 }

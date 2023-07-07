@@ -111,11 +111,7 @@ export default function ColumnTypeDropdown() {
 
   return (
     <div>
-      <div
-        onClick={handleClick}
-        className="bg-white h-6 flex items-center justify-center cursor-pointer"
-        style={{ width: '180px' }}
-      >
+      <div onClick={handleClick} className="bg-white h-6 flex items-center justify-center cursor-pointer w-full">
         <DropdownIcon />
         <p className="text-black text-alsoit-gray-300-md font-semibold">Dropdown</p>
       </div>

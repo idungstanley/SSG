@@ -18,7 +18,8 @@ import {
   setActiveEntityName,
   setActiveSubHubManagerTabId,
   setActiveTabId,
-  setCreateEntityType
+  setCreateEntityType,
+  setShowOverlay
 } from '../../../features/workspace/workspaceSlice';
 import DropdownWithoutHeader from '../../../components/Dropdown/DropdownWithoutHeader';
 import { EntityType } from '../../../utils/EntityTypes/EntityType';
@@ -72,6 +73,7 @@ function Hubs() {
       setShowModal(false);
       navigate(`/${currentWorkspaceId}` + '/tasks');
       dispatch(setActiveTabId(9));
+      dispatch(setShowOverlay(true));
       dispatch(setActiveSubHubManagerTabId(1));
     }
   };

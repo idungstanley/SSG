@@ -1,4 +1,4 @@
-import { ReactNode, TdHTMLAttributes, useRef, useState } from 'react';
+import { ReactNode, TdHTMLAttributes, useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { Task } from '../../../../features/task/interface.tasks';
@@ -94,6 +94,20 @@ export function StickyCol({
         })
       );
     }
+  };
+
+  useEffect(() => {
+    const { current } = inputRef;
+    current?.focus();
+    selectText(current);
+  }, []);
+
+  const selectText = (element: Node | null) => {
+    const selection = window.getSelection();
+    const range = document.createRange();
+    range.selectNodeContents(element as Node);
+    selection?.removeAllRanges();
+    selection?.addRange(range);
   };
 
   const onToggleDisplayingSubTasks = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {

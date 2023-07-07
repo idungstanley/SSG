@@ -41,6 +41,7 @@ interface workspaceState {
   activeEntity: { id: string | null; type: string | null };
   showPilotListView: boolean;
   activeTabId: number | undefined;
+  showOverlay: boolean;
   activeHotKeyTabId: number | null;
   activeSubCommunicationTabId: number | null;
   activeSubHubManagerTabId: number | null;
@@ -69,6 +70,7 @@ const initialState: workspaceState = {
   activePlaceName: null,
   pilotWidth: 400,
   showHub: false,
+  showOverlay: false,
   showWallet: false,
   showMenuDropDown: false,
   showIndependentPilot: false,
@@ -127,6 +129,9 @@ export const wsSlice = createSlice({
     },
     setShowTreeInput(state, action: PayloadAction<boolean>) {
       state.showTreeInput = action.payload;
+    },
+    setShowOverlay(state, action: PayloadAction<boolean>) {
+      state.showOverlay = action.payload;
     },
     setShowPilot(state, action: PayloadAction<boolean>) {
       state.showPilot = action.payload;
@@ -320,6 +325,7 @@ export const {
   setSearchIsActive,
   setIsExtSearchActive,
   setActiveItem,
+  setShowOverlay,
   setActiveEntityName,
   setCurrentWalletId,
   setCurrenSubtWalletId,

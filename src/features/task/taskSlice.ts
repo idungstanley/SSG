@@ -157,6 +157,8 @@ interface TaskState {
   statusId: string;
   currTaskListId: string;
   newColInstance: [{ id: number; value: string }];
+  listIdForCustom: string | undefined;
+  listViewHeads: listColumnProps[];
 }
 
 const initialState: TaskState = {
@@ -230,7 +232,9 @@ const initialState: TaskState = {
   FilterDateString: null,
   statusId: '',
   currTaskListId: '',
-  newColInstance: [{ id: 1, value: '' }]
+  newColInstance: [{ id: 1, value: '' }],
+  listIdForCustom: '',
+  listViewHeads: []
 };
 
 export const taskSlice = createSlice({
@@ -478,6 +482,12 @@ export const taskSlice = createSlice({
     },
     setNewColInstance(state, action: PayloadAction<{ id: number; value: string }>) {
       state.newColInstance.push(action.payload);
+    },
+    setListIdForCustom(state, action: PayloadAction<string | undefined>) {
+      state.listIdForCustom = action.payload;
+    },
+    setHeads(state, action: PayloadAction<listColumnProps[]>) {
+      state.listViewHeads = action.payload;
     }
   }
 });
@@ -548,6 +558,8 @@ export const {
   setTaskSelectedDate,
   setHistoryMemory,
   setFilterDateString,
-  setNewColInstance
+  setNewColInstance,
+  setListIdForCustom,
+  setHeads
 } = taskSlice.actions;
 export default taskSlice.reducer;

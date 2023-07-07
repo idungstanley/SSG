@@ -20,10 +20,11 @@ interface PageProps {
 }
 
 export default function Page({ header, additionalHeader, children, additional, pilotConfig, extendedBar }: PageProps) {
-  const { showCreateHubSlideOver } = useAppSelector((state) => state.slideOver);
+  const { showOverlay } = useAppSelector((state) => state.workspace);
 
   return (
     <main className="grid w-full h-full grid-cols-autoFr">
+      {showOverlay && <div className="absolute inset-0 top-0 left-0 z-40 bg-black opacity-50" />}
       {extendedBar ? (
         <ExtendedBar name={extendedBar.name} icon={extendedBar.icon} source={extendedBar.source}>
           {extendedBar.children}
@@ -39,10 +40,7 @@ export default function Page({ header, additionalHeader, children, additional, p
         <div className="relative grid w-full h-full grid-cols-frAuto">
           <div className="overflow-scroll">{children}</div>
 
-          <span>
-            {showCreateHubSlideOver && (
-              <div className="absolute inset-0 top-0 left-0 transition-opacity bg-gray-300 bg-opacity-75"></div>
-            )}
+          <span className={`${showOverlay && 'relative z-50'}`}>
             {pilotConfig ? <Pilot pilotConfig={pilotConfig} /> : null}
           </span>
         </div>
@@ -105,7 +103,7 @@ function ExtendedBar({ children, name, icon, source }: ExtendedBarProps) {
         onClick={() => handleToggle()}
         className={cl(
           show ? 'bg-green-400 top-2 border-green-400' : 'bg-white top-4 border-inherit',
-          'absolute z-50 border-2 rounded-full cursor-pointer -right-2'
+          'absolute z-10 border-2 rounded-full cursor-pointer -right-2'
         )}
       >
         {show ? <RiArrowLeftSLine className="text-sm text-white" /> : <RiArrowRightSLine className="text-xs" />}

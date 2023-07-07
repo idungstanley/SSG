@@ -5,11 +5,17 @@ import SortDirectionCheck from '../../../../../pages/workspace/tasks/component/v
 import { parseLabel } from '../../../../TasksHeader/lib';
 import { Column } from '../../../types/table';
 import { Chevron } from '../../Chevron';
-import { setActiveTaskColumn, setSortArr, setSortArray } from '../../../../../features/task/taskSlice';
+import {
+  setActiveTaskColumn,
+  setListIdForCustom,
+  setSortArr,
+  setSortArray
+} from '../../../../../features/task/taskSlice';
 import SortModal from '../../../../SortModal/SortModal';
 import statusbox from '../../../../../assets/icons/statusbox.svg';
 import { CiEdit } from 'react-icons/ci';
 import { BsThreeDots } from 'react-icons/bs';
+import { FiPlusCircle } from 'react-icons/fi';
 
 interface HeadProps {
   columns: Column[];
@@ -20,6 +26,7 @@ interface HeadProps {
   headerStatusColor?: string;
   taskLength: number;
   onToggleCollapseTasks: VoidFunction;
+  listId: string | undefined;
 }
 
 export type SortOption = {
@@ -35,7 +42,8 @@ export function Head({
   headerStatusColor,
   onToggleCollapseTasks,
   mouseDown,
-  label
+  label,
+  listId
 }: HeadProps) {
   const parsedLabel = parseLabel(label);
   const dispatch = useAppDispatch();
@@ -99,7 +107,7 @@ export function Head({
     return sortAbleArr.find((el) => el.field === headerTxt(col));
   };
 
-  return (
+  return columns.length > 0 ? (
     <thead className="contents">
       <tr className="contents">
         {/* first sticky col */}
@@ -148,13 +156,10 @@ export function Head({
               )}
             </div>
           </div>
-          <div
-            style={{ height: tableHeight }}
-            onMouseDown={() => mouseDown(0)}
-            className="absolute top-0 w-2 cursor-move right-2 idle hidden"
-          >
-            <div className="w-0.5 mx-auto h-full bg-gray-50" />
-          </div>
+          <FiPlusCircle
+            className="w-4 h-4 font-black AddColumnDropdownButton"
+            onClick={() => dispatch(setListIdForCustom(listId))}
+          />
           {headerId === columns[0].id && (
             <SortModal
               handleClose={handleClose}
@@ -220,5 +225,5 @@ export function Head({
           : null}
       </tr>
     </thead>
-  );
+  ) : null;
 }

@@ -5,7 +5,7 @@ import { EntityType } from '../../utils/EntityTypes/EntityType';
 import { IHub, IList, IWallet } from '../../features/hubs/hubs.interfaces';
 import ActiveTreeDataFormater from './ActiveTreeDataFormater';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { setActiveSubHubManagerTabId, setActiveTabId } from '../../features/workspace/workspaceSlice';
+import { setActiveSubHubManagerTabId, setActiveTabId, setShowOverlay } from '../../features/workspace/workspaceSlice';
 import { getSubMenu } from '../../features/hubs/hubSlice';
 import { EntityManagerTabsId, PilotTabsId } from '../../utils/PilotUtils';
 
@@ -34,6 +34,7 @@ export default function ActiveTreeSearch({ data, handleFetch, fetchTree, id, clo
 
   const directToPilot = () => {
     dispatch(setActiveTabId(PilotTabsId.entityManager));
+    dispatch(setShowOverlay(true));
     if (entityToCreate === EntityType.hub || entityToCreate === EntityType.subHub) {
       dispatch(setActiveSubHubManagerTabId(EntityManagerTabsId.hub));
     } else if (entityToCreate === EntityType.wallet || entityToCreate === EntityType.subWallet) {

@@ -1,7 +1,7 @@
 import React from 'react';
-import ItemsListInSidebar from '../../../components/ItemsListInSidebar';
 import { useGetActiveInboxes } from '../../../features/inbox/inboxesService';
 import CreateInboxSlideOver from '../../inbox/InboxesPage/components/CreateInboxSlideOver';
+import HList from '../hubs/components/ActiveTree/Items/hub/HList';
 
 function InboxData() {
   const { data: dt, status } = useGetActiveInboxes();
@@ -11,7 +11,6 @@ function InboxData() {
   return (
     <div className="space-y-4">
       <CreateInboxSlideOver />
-      <ItemsListInSidebar items={data} status={status} type="inbox" />
     </div>
   );
 }

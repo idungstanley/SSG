@@ -6,7 +6,6 @@ import requestNew from '../../app/requestNew';
 import { IResponseGetHubs, IHubReq, IFavoritesRes, IHubDetailRes, IHubsRes } from './hubs.interfaces';
 import { closeMenu, setShowFavEditInput, setTriggerFavUpdate } from './hubSlice';
 import { setArchiveHub, setDelHub } from './hubSlice';
-import { ListColourProps } from '../../components/tasks/ListItem';
 
 export const createHubService = (data: {
   name: string;
