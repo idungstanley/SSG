@@ -9,7 +9,7 @@ interface HeaderModalprops {
 function HeaderModal({ toggleFn, children, styles }: HeaderModalprops) {
   return (
     <div
-      className={`w-64 rounded-lg shadow-2xl bg-warmGray-50 absolute z-50 ${styles}`}
+      className={`w-64 rounded-lg shadow-2xl bg-alsoit-gray-50 absolute z-50 ${styles}`}
       tabIndex={0}
       onMouseLeave={() => toggleFn(false)}
     >
