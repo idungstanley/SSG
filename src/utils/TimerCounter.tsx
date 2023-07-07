@@ -10,7 +10,7 @@ interface TimerProps {
 
 export function runTimer({ isRunning, setTime }: TimerProps) {
   const dispatch = useAppDispatch();
-  const { duration } = useAppSelector((state) => state.task);
+  const { duration, timerStatus } = useAppSelector((state) => state.task);
 
   useEffect(() => {
     let updateH = duration.h;
@@ -29,6 +29,6 @@ export function runTimer({ isRunning, setTime }: TimerProps) {
         dispatch(setUpdateTimerDuration({ s: updateS, m: updateM, h: updateH }));
       }, 1000);
     }
-    isRunning && dispatch(setTimerInterval(interval));
+    !timerStatus && isRunning && dispatch(setTimerInterval(interval));
   }, [isRunning, dispatch]);
 }
