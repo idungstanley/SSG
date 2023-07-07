@@ -123,10 +123,10 @@ export default function AdditionalHeader() {
           onMouseEnter={() => setClockModal(!clockModal)}
         >
           <span className="text-center text-alsoit-text-md">
-            {dayjs(HeaderClock, 'DD-MM-YYYY hh:mm').format('DD-MM-YYYY')}
+            {dayjs(HeaderClock, 'DD-MM-YYYY hh:mm').format('hh:mm')}
           </span>
           <span className="text-center text-alsoit-text-md">
-            {dayjs(HeaderClock, 'DD-MM-YYYY hh:mm').format('hh:mm')}
+            {dayjs(HeaderClock, 'DD-MM-YYYY hh:mm').format('DD-MM-YYYY')}
           </span>
           {clockModal && (
             <HeaderModal toggleFn={setClockModal} styles="top-7 right-28">
