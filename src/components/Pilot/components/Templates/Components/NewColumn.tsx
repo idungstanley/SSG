@@ -8,22 +8,26 @@ function NewColumn() {
   return (
     <div>
       <div className="flex justify-between items-center my-4">
-        <div>
+        <div style={{ width: '12%' }}>
           <p className="text-alsoit-text-sm">FIELD REF</p>
-          <div className="w-10 h-6 border-0 text-alsoit-text-md flex justify-center bg-white items-center">1</div>
+          <div className="h-6 border-0 text-alsoit-text-md flex justify-center bg-white items-center">1</div>
         </div>
-        <div>
+        <div className="w-2/5">
           <p className="text-alsoit-text-sm">FIELD NAME</p>
-          <div style={{ width: '200px' }} className="h-6 border-0 text-alsoit-text-md flex bg-white items-center">
-            <input type="text" className="border-0 focus:border-0 active:border-0 h-6" style={{ width: '160px' }} />
-            <div className="flex gap-0.5 justify-center w-full">
+          <div className="w-full h-6 border-0 text-alsoit-text-md flex bg-white items-center">
+            <input
+              style={{ width: '90%' }}
+              type="text"
+              className="text-alsoit-text-sm border-0 focus:border-0 active:border-0 h-6"
+            />
+            <div className="flex gap-0.5 justify-center">
               <Picker />
               <hr />
               <Pin />
             </div>
           </div>
         </div>
-        <div>
+        <div className="w-2/5">
           <p className="text-alsoit-text-sm">FIELD TYPE</p>
           <ColumnTypeDropdown />
         </div>
