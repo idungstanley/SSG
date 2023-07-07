@@ -123,7 +123,7 @@ export default function CreateHub() {
         currentWorkspaceId,
         currHubId: type === EntityType.hub ? id : null
       });
-    } else {
+    } else if (!isCreateAllowed) {
       dispatch(
         displayPrompt('Create Subhub', 'Would move all entities in Hub to Subhub. Do you want to proceed?', [
           {
@@ -159,7 +159,7 @@ export default function CreateHub() {
         type="text"
         onChange={handleHubChange}
       />
-      <div className="grid grid-cols-7 gap-6 my-4 border border-inherit p-2">
+      <div className="grid grid-cols-7 gap-6 p-2 my-4 border border-inherit">
         {avatarBg.map(({ colour }) => {
           return (
             <div
@@ -170,7 +170,7 @@ export default function CreateHub() {
             >
               <button
                 type="button"
-                className="rounded w-5 h-5"
+                className="w-5 h-5 rounded"
                 style={{ backgroundColor: colour }}
                 onClick={() => handleColourSelection(colour)}
               />
