@@ -202,27 +202,28 @@ export function StickyCol({
               <StatusDropdown TaskCurrentStatus={task.status} />
             </div>
             <div className="flex flex-col items-start justify-start space-y-1 pl-2">
-              <InteractiveTooltip content={<p>{task.name}</p>}>
-                <p
-                  className="flex text-left"
-                  contentEditable={eitableContent && !singleLineView}
-                  onClick={() => setEitableContent(true)}
-                  ref={inputRef}
-                  onKeyDown={(e) => (e.key === 'Enter' ? handleEditTask(e, task.id) : null)}
-                >
-                  {task.name.length > 50 && singleLineView ? (
-                    <span className="whitespace-nowrap">
-                      {taskUpperCase
-                        ? task.name.substring(0, 40).toUpperCase()
-                        : Capitalize(task.name).substring(0, 40)}
-                      ...
-                    </span>
-                  ) : (
-                    <span>{taskUpperCase ? task.name.toUpperCase() : Capitalize(task.name)}</span>
-                  )}
-                </p>
-              </InteractiveTooltip>
-
+              <p
+                className="flex text-left"
+                contentEditable={eitableContent && !singleLineView}
+                onClick={() => setEitableContent(true)}
+                ref={inputRef}
+                onKeyDown={(e) => (e.key === 'Enter' ? handleEditTask(e, task.id) : null)}
+              >
+                {task.name.length > 50 && singleLineView ? (
+                  <>
+                    <InteractiveTooltip content={<p>{task.name}</p>}>
+                      <span className="whitespace-nowrap">
+                        {taskUpperCase
+                          ? task.name.substring(0, 40).toUpperCase()
+                          : Capitalize(task.name).substring(0, 40)}
+                        ...
+                      </span>
+                    </InteractiveTooltip>
+                  </>
+                ) : (
+                  <span>{taskUpperCase ? task.name.toUpperCase() : Capitalize(task.name)}</span>
+                )}
+              </p>
               {tags}
             </div>
             {children}
