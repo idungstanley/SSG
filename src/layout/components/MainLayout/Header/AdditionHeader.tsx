@@ -8,12 +8,9 @@ import BlinkerModal from './RecordBlinkerOptions';
 import headerIcon from '../../../../assets/icons/headerIcon.png';
 import { useCurrentTime } from '../../../../features/task/taskService';
 import dayjs from 'dayjs';
-import timezone from 'dayjs/plugin/timezone';
-import utc from 'dayjs/plugin/utc';
 import HeaderModal from '../../../../components/Header/HeaderModal';
 import TimerModal from './TimerOptions';
 import { useParams } from 'react-router-dom';
-import DatePicker from '../../../../components/DatePicker/DatePicker';
 
 export const handleEntity = ({
   workSpaceId,
@@ -36,6 +33,11 @@ export default function AdditionalHeader() {
   const { timezone: zone } = useAppSelector((state) => state.userSetting);
   const [clockModal, setClockModal] = useState<boolean>(false);
   const [HeaderClock, setClock] = useState<string>(dayjs().format('DD-MM-YYYY hh:mm'));
+  const [showClock, setShowClock] = useState<{ show: boolean; withDay: boolean; showMinimal: boolean }>({
+    show: true,
+    withDay: false,
+    showMinimal: false
+  });
   const { workSpaceId: workspaceId } = useParams();
   const { activeEntityName } = useAppSelector((state) => state.workspace);
   const { refetch } = useCurrentTime({ workspaceId });
@@ -82,22 +84,22 @@ export default function AdditionalHeader() {
         <p className="p-1 bg-gray-300 rounded-md ">
           <img src={headerIcon} alt="" className="w-6 h-6" />
         </p>
-        <span className="text-lg font-bold">{activeEntityName}</span>
+        <span className="text-alsoit-text-lg font-bold">{activeEntityName}</span>
       </h1>
       <div className="relative flex items-center justify-center space-x-2">
         {timeBlinkerCheck() && (
           <div
-            className="flex items-center px-2 py-1 space-x-1 border border-purple-500 rounded-lg cursor-pointer"
+            className="flex items-center px-2 py-1 space-x-1 border border-alsoit-purple-300 rounded-lg cursor-pointer"
             onMouseEnter={() => setTimerModal(!timerModal)}
           >
-            <IoAlarmSharp className="text-purple-500" />
+            <IoAlarmSharp className="text-alsoit-purple-300" />
             <div className="items-center">
               {`${String(duration.h).padStart(2, '0')}:${String(duration.m).padStart(2, '0')}:${String(
                 duration.s
               ).padStart(2, '0')}`}
             </div>
             {timerModal && (
-              <HeaderModal toggleFn={setTimerModal} styles="top-8 -right-4">
+              <HeaderModal toggleFn={setTimerModal} styles="top-8 right-1">
                 <TimerModal />
               </HeaderModal>
             )}
@@ -106,8 +108,8 @@ export default function AdditionalHeader() {
         <MdTab className="w-5 h-5" />
         {screenRecording === 'recording' && (
           <div className="relative w-2" onMouseEnter={() => setRecordBlinker(!recordBlinker)}>
-            <div className="flex items-center justify-start w-5 h-5 border-red-600 rounded-full">
-              <div className="w-3 h-3 bg-red-600 rounded-full pulsate"></div>
+            <div className="flex items-center justify-start w-5 h-5 border-alsoit-danger rounded-full">
+              <div className="w-3 h-3 bg-alsoit-danger rounded-full pulsate"></div>
             </div>
             {recordBlinker && (
               <HeaderModal toggleFn={setRecordBlinker}>
@@ -118,9 +120,12 @@ export default function AdditionalHeader() {
         )}
         <HiOutlineUpload className="w-5 h-5" />
         <BsFillGrid3X3GapFill className="w-5 h-5" />
+        {/* <ToolTip tooltip={dayjs().format('MMMM DD, YYYY')}> */}
         <div
           className="relative w-16 font-semibold text-alsoit-text-lg text-alsoit-text border-alsoit-border-base border-alsoit-text rounded-md p-0.5 flex justify-center flex-col space-y-0 cursor-pointer"
-          onMouseEnter={() => setClockModal(!clockModal)}
+          onClick={() => setClockModal(!clockModal)}
+          onMouseEnter={() => setShowClock((prev) => ({ ...prev, showMinimal: true }))}
+          onMouseLeave={() => setShowClock((prev) => ({ ...prev, showMinimal: false }))}
         >
           <span className="text-center text-alsoit-text-md">
             {dayjs(HeaderClock, 'DD-MM-YYYY hh:mm').format('hh:mm')}
@@ -133,6 +138,13 @@ export default function AdditionalHeader() {
               <HeaderTimeModal />
             </HeaderModal>
           )}
+          {showClock.showMinimal && !clockModal && (
+            <HeaderModal toggleFn={setClockModal} styles="top-10 -left-4">
+              <span className="bg-alsoit-gray-50 font-semibold text-alsoit-text-lg shadow-lg p-1 rounded border-alsoit-border-base border-alsoit-gray-75">
+                {dayjs().format('ddd MMMM DD, YYYY')}
+              </span>
+            </HeaderModal>
+          )}
         </div>
         <MdHelpOutline className="w-5 h-5" />
       </div>
@@ -141,9 +153,9 @@ export default function AdditionalHeader() {
 }
 
 function HeaderTimeModal() {
-  const [time, setTime] = useState<string>(dayjs().format('hh:mm:ss'));
+  const [time, setTime] = useState<string>(dayjs().format('hh:mm:ss a'));
 
-  const timeUpdateFn = () => window.setInterval(() => setTime(dayjs().format('hh:mm:ss')), 1000);
+  const timeUpdateFn = () => window.setInterval(() => setTime(dayjs().format('hh:mm:ss a')), 1000);
 
   useEffect(() => {
     timeUpdateFn();
@@ -151,7 +163,7 @@ function HeaderTimeModal() {
     return () => document.addEventListener('visibilitychange', timeUpdateFn);
   }, []);
   return (
-    <div className="flex flex-col space-y-4 w-134 z-50 bg-alsoit-gray-50 h-screen">
+    <div className="flex flex-col space-y-4 w-134 z-50 bg-alsoit-gray-50 h-screen transition-transform opacity-100 transform translate-y-0 delay-700">
       <div className="flex justify-start flex-col space-y-2 w-full border-b border-alsoit-gray-300 px-4 py-6">
         <span style={{ fontSize: '35px', padding: '0 0 8px 0' }}>{time}</span>
         {dayjs().format('dddd MMMM D, YYYY')}

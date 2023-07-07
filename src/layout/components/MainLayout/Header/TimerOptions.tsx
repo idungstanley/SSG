@@ -14,12 +14,17 @@ export default function TimerModal() {
     navigate(handleEntity({ workSpaceId, hubId, listId }), { replace: true });
   };
   return (
-    <div className="flex flex-col w-full">
-      <span className="capitalize px-2 py-3 hover:bg-gray-300 cursor-pointer">Stop Timer</span>
-      <span className="capitalize px-2 py-3 hover:bg-gray-300 cursor-pointer" onClick={() => handleResetTimer()}>
+    <div className="flex flex-col w-full bg-alsoit-gray-50">
+      <span className="px-2 py-3 border-b-alsoit-border-base hover:text-white hover:bg-alsoit-gray-75 cursor-pointer">
+        Stop Timer
+      </span>
+      <span
+        className="px-2 py-3 hover:text-white hover:bg-alsoit-gray-75 cursor-pointer"
+        onClick={() => handleResetTimer()}
+      >
         Return to Active Timer tab
       </span>
-      {/* <span className="capitalize px-2 py-3 hover:bg-gray-300 cursor-pointer" onClick={() => handleResetTimer()}>
+      {/* <span className="px-2 py-3 border-b-alsoit-border-base hover:text-white hover:bg-alsoit-gray-75 cursor-pointer" onClick={() => handleResetTimer()}>
         Stop and Return to Active Timer tab
       </span> */}
     </div>
