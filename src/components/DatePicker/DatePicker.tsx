@@ -9,12 +9,15 @@ import { Button, Modal } from '@mui/material';
 import { DatePickerSideBar } from './DatePickerSideBar';
 import { DatePickerManualDates } from './DatePickerManualDate';
 import { setSelectedDate } from '../../features/workspace/workspaceSlice';
-import { generateDate, groupDatesByDayOfWeek, months } from '../../utils/calendar';
+import { DateObject, generateDate, groupDatesByDayOfWeek, months } from '../../utils/calendar';
 import cn from '../../utils/cn';
+import { ISelectedDate } from '../../features/task/interface.tasks';
 
 interface DatePickerProps {
   styles?: string;
   range?: boolean;
+  height?: string;
+  width?: string;
   toggleFn?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
@@ -22,7 +25,7 @@ export type DateString = {
   start?: string;
   due?: string;
 };
-export default function DatePicker({ styles, range, toggleFn }: DatePickerProps) {
+export default function DatePicker({ styles, width, height, range, toggleFn }: DatePickerProps) {
   dayjs.extend(timezone);
   dayjs.extend(utc);
   const dispatch = useAppDispatch();
@@ -82,13 +85,6 @@ export default function DatePicker({ styles, range, toggleFn }: DatePickerProps)
     return adjustedDayOfWeekA - adjustedDayOfWeekB;
   });
 
-  // const handleSubmit = () => {
-  //   const data = {
-  //     date: taskTime,
-
-  //   }
-  // }
-
   useEffect(() => {
     calendarTime();
     return () => document.addEventListener('visibilitychange', calendarTime);
@@ -103,7 +99,7 @@ export default function DatePicker({ styles, range, toggleFn }: DatePickerProps)
           styles ??
           'absolute z-50 mt-1 shadow-2xl bg-white rounded-md ring-1 ring-black ring-opacity-5 focus:outline-none top-56 right-12'
         }
-        style={{ height: '359px', width: '462px' }}
+        style={{ height: height ?? '359px', width: width ?? '462px' }}
       >
         <DatePickerManualDates range={range} />
         <div className="flex items-center justify-center px-3 border-b" style={{ height: '275px' }}>
@@ -240,5 +236,88 @@ export default function DatePicker({ styles, range, toggleFn }: DatePickerProps)
         </div>
       </section>
     </Modal>
+  );
+}
+
+interface TimePickerprops {
+  sortedDates: DateObject[];
+  taskTime: ISelectedDate | null;
+  today: dayjs.Dayjs;
+}
+
+function TimePicker({ sortedDates, taskTime, today }: TimePickerprops) {
+  const dispatch = useAppDispatch();
+  const { HistoryFilterMemory } = useAppSelector((state) => state.task);
+  const { selectedDate } = useAppSelector((state) => state.workspace);
+  const [hoveredDate, setHovered] = useState<Dayjs | null | undefined>(HistoryFilterMemory?.hoveredDate);
+  const handleClick = (date: dayjs.Dayjs) => {
+    if (!selectedDate?.dateType) {
+      dispatch(setSelectedDate({ date: date, dateType: 'due' }));
+      dispatch(setTaskSelectedDate({ from: date }));
+      dispatch(setHistoryMemory({ ...HistoryFilterMemory, timePoint: 'due' }));
+    }
+
+    if (HistoryFilterMemory?.timePoint && HistoryFilterMemory.timePoint === 'due') {
+      dispatch(setSelectedDate({ date: date, dateType: 'start' }));
+      dispatch(setTaskSelectedDate({ ...taskTime, to: date }));
+      dispatch(setHistoryMemory({ ...HistoryFilterMemory, timePoint: 'start' }));
+    }
+
+    if (HistoryFilterMemory?.timePoint && HistoryFilterMemory.timePoint === 'start') {
+      dispatch(setSelectedDate({ date: date, dateType: 'due' }));
+      dispatch(setTaskSelectedDate({ from: date }));
+      dispatch(setHistoryMemory({ ...HistoryFilterMemory, timePoint: 'due' }));
+    }
+  };
+
+  const handleHover = (date?: dayjs.Dayjs) => {
+    if (date) {
+      setHovered(date);
+      setHistoryMemory({ ...HistoryFilterMemory, hoveredDate: date });
+    }
+  };
+  return (
+    <>
+      {sortedDates.map((date) => {
+        const isBlocked =
+          (taskTime?.from &&
+            taskTime?.to &&
+            (date.date.isSame(taskTime.from, 'day') || date.date.isAfter(taskTime.from, 'day')) &&
+            date.date.isBefore(taskTime.to, 'day')) ||
+          date.date.isSame(taskTime?.to, 'day');
+
+        const isHoverBlocked =
+          hoveredDate &&
+          taskTime?.from &&
+          (date.date.isSame(taskTime.from, 'day') || date.date.isAfter(taskTime.from, 'day')) &&
+          date.date.isBefore(hoveredDate, 'day');
+
+        const isBlockedOrHoverBlocked = isBlocked || isHoverBlocked;
+
+        const isSelected =
+          selectedDate?.date &&
+          date.date.isSame(selectedDate.date, 'day') && // Compare full date, including month and year
+          date.date.month() === today.month() && // Compare month
+          date.date.year() === today.year(); // Compare year
+
+        return (
+          <li
+            key={date.date.toISOString()}
+            className={cn(
+              'rounded-full p-0.5 hover:bg-purple-300 hover:text-white transition-all cursor-pointer select-none font-bold',
+              date.currentMonth ? '' : 'text-gray-300',
+              date.today ? 'bg-red-400 text-white rounded-full' : '',
+              isSelected ? 'bg-purple-400 text-white' : '',
+              isBlockedOrHoverBlocked ? 'bg-purple-400 text-white rounded-none w-full' : ''
+            )}
+            onClick={() => handleClick(date.date)}
+            onMouseEnter={() => handleHover(date.date)}
+            onMouseLeave={() => setHovered(null)}
+          >
+            {date.date.format('DD')}
+          </li>
+        );
+      })}
+    </>
   );
 }

@@ -20,7 +20,7 @@ export const TimeClockOptions = [
   }
 ];
 export default function TimeClock() {
-  const { activeSubTimeClockTabId, showPilot, activeItemId } = useAppSelector((state) => state.workspace);
+  const { activeSubTimeClockTabId, showPilot } = useAppSelector((state) => state.workspace);
   const selectedSubSection = useMemo(
     () => TimeClockOptions.find((option) => option.id === activeSubTimeClockTabId),
     [activeSubTimeClockTabId]
