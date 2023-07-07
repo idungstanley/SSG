@@ -29,9 +29,9 @@ export default function FullPilot({ featureTabs, activeSection, setShowModal, sh
     storageKey: LS_PILOT_KEY,
     direction: 'XL'
   });
+  const { showOverlay } = useAppSelector((state) => state.workspace);
 
   const { show: showFullPilot, title, type } = useAppSelector((state) => state.slideOver.pilotSideOver);
-  const { showOverlay } = useAppSelector((state) => state.workspace);
 
   return (
     <div
@@ -41,17 +41,14 @@ export default function FullPilot({ featureTabs, activeSection, setShowModal, sh
         height: '100%'
       }}
       className={cl(
-        showFullPilot ? 'relative translate-x-0 flex flex-col' : 'w-96 absolute top-0 translate-x-full z-10',
-        'mb-10 pb-6 ',
-        showOverlay ? '' : 'border-l overflow-y-scroll'
+        showFullPilot ? 'relative translate-x-0' : 'w-96 absolute top-0 translate-x-full z-10',
+        !showOverlay ? 'border-l overflow-y-scroll' : '',
+        'right-0  bottom-0 mb-10 pb-6 transform bg-white flex flex-col transition-transform duration-500'
       )}
     >
-      <div
-        className={cl(
-          'right-0 bottom-0  transform bg-white grid grid-rows-autoAutoAutoFr grid-col-1 transition-transform duration-500'
-        )}
-      >
-        {showFullPilot ? <Dividers /> : null}
+      {showFullPilot ? <Dividers /> : null}
+      <div className="relative grid grid-rows-autoAutoAutoFr grid-col-1">
+        {showOverlay && <div className="absolute inset-0 top-0 left-0 z-10 bg-black opacity-50" />}
 
         <Header
           isMinified={false}
@@ -78,16 +75,8 @@ export default function FullPilot({ featureTabs, activeSection, setShowModal, sh
         <FullHotkeysList tabs={featureTabs} setShowModal={setShowModal} showModal={showModal} />
 
         <FullTabs tabs={featureTabs} />
-
-        <div
-          className={`absolute top-0 left-0 right-0 bottom-0 ${showOverlay ? 'block' : 'hidden'}`}
-          style={{
-            backgroundColor: 'rgba(0, 0, 0, 0.5)',
-            pointerEvents: showOverlay ? 'auto' : 'none'
-          }}
-        />
       </div>
-      {activeSection?.element}
+      <div className="relative z-50">{activeSection?.element}</div>
     </div>
   );
 }
