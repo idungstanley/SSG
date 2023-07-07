@@ -64,32 +64,6 @@ export function AddSubTask({
     opacity: transform ? 0 : 100
   };
 
-  const onClickTask = () => {
-    if (task.id !== '0') {
-      hubId
-        ? navigate(`/${currentWorkspaceId}/tasks/h/${hubId}/t/${task.id}`, { replace: true })
-        : walletId
-        ? navigate(`/${currentWorkspaceId}/tasks/w/${walletId}/t/${task.id}`, { replace: true })
-        : navigate(`/${currentWorkspaceId}/tasks/l/${listId}/t/${task.id}`, { replace: true });
-      dispatch(
-        setShowPilotSideOver({
-          id: task.id,
-          type: 'task',
-          show: true,
-          title: task.name
-        })
-      );
-      dispatch(setTaskIdForPilot(task.id));
-      dispatch(
-        setActiveItem({
-          activeItemId: task.id,
-          activeItemType: 'task',
-          activeItemName: task.name
-        })
-      );
-    }
-  };
-
   return (
     <>
       {/* current task */}
@@ -100,7 +74,6 @@ export function AddSubTask({
           style={{ zIndex: 3 }}
           task={task}
           isListParent={isListParent}
-          onClick={onClickTask}
           parentId={parentId as string}
           task_status={task_status as string}
           onClose={handleClose}

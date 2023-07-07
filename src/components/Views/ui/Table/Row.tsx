@@ -94,32 +94,6 @@ export function Row({ task, columns, paddingLeft = 0, parentId, task_status, isL
     opacity: transform ? 0 : 100
   };
 
-  const onClickTask = () => {
-    if (task.id !== '0') {
-      hubId
-        ? navigate(`/${currentWorkspaceId}/tasks/h/${hubId}/t/${task.id}`, { replace: true })
-        : walletId
-        ? navigate(`/${currentWorkspaceId}/tasks/w/${walletId}/t/${task.id}`, { replace: true })
-        : navigate(`/${currentWorkspaceId}/tasks/l/${listId}/t/${task.id}`, { replace: true });
-      dispatch(
-        setShowPilotSideOver({
-          id: task.id,
-          type: 'task',
-          show: true,
-          title: task.name
-        })
-      );
-      dispatch(setTaskIdForPilot(task.id));
-      dispatch(
-        setActiveItem({
-          activeItemId: task.id,
-          activeItemType: 'task',
-          activeItemName: task.name
-        })
-      );
-    }
-  };
-
   return (
     <>
       {/* current task */}
@@ -127,7 +101,6 @@ export function Row({ task, columns, paddingLeft = 0, parentId, task_status, isL
         <StickyCol
           showSubTasks={showSubTasks}
           setShowSubTasks={setShowSubTasks}
-          // onClick={onClickTask}
           style={{ zIndex: 1 }}
           isListParent={isListParent}
           task={task}
