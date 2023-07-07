@@ -64,7 +64,7 @@ export function List({ tasks }: ListProps) {
       hidden: false
     }));
 
-    const newColumns = unique([...columnsHead, ...customFieldNames]);
+    const newColumns = unique([...columnsHead]);
     dispatch(getTaskColumns(newColumns));
     setColumns(newColumns);
   }, [data]);

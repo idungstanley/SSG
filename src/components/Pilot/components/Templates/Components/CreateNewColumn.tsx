@@ -10,7 +10,7 @@ function CreateNewColumn() {
   return (
     <div className="w-full">
       <section className="w-full flex justify-center my-2">
-        <span className="font-semibold ">
+        <span className="font-semibold">
           Create a <button className="text-fuchsia-600 hover:text-blue-600">New directory template</button> or choose
           from <button className="text-fuchsia-600 text-sm hover:text-blue-600"> the templates library</button>
         </span>
