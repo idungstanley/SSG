@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import SubtasksIcon from '../../../../assets/icons/SubtasksIcon';
-import { IStatus, Tag, Task } from '../../../../features/task/interface.tasks';
+import { Tag, Task } from '../../../../features/task/interface.tasks';
 import { DEFAULT_LEFT_PADDING } from '../../config';
 import { Column } from '../../types/table';
 import { AddTask } from '../AddTask/AddTask';

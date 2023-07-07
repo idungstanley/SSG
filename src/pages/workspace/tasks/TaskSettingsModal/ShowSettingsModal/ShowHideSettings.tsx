@@ -65,7 +65,8 @@ export default function ShowHideSettings({
     const handleCheckboxChange = () => {
       setCheckedStates((prev: boolean[]) => {
         const newState = [...prev];
-        newState[11] = true;
+        const singleLineIndex = ViewSettings.length - 2;
+        newState[singleLineIndex] = true;
         return newState;
       });
     };

@@ -23,6 +23,7 @@ import OpenSubtask from '../../../../assets/icons/OpenSubtask';
 import { Capitalize } from '../../../../utils/NoCapWords/Capitalize';
 import ToolTip from '../../../Tooltip/Tooltip';
 import InteractiveTooltip from '../../../Tooltip/InteractiveTooltip';
+import HeaderModal from '../../../Header/HeaderModal';
 
 interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   task: Task;
@@ -58,7 +59,7 @@ export function StickyCol({
   const { taskId, hubId, walletId, listId } = useParams();
   const COL_BG = taskId === task.id ? ACTIVE_COL_BG : DEFAULT_COL_BG;
   const [isChecked, setIsChecked] = useState(false);
-
+  const [close, setClose] = useState(false);
   const { mutate: onAdd } = useAddTask(parentId);
   const {
     currTeamMemberId,

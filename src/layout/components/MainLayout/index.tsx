@@ -11,7 +11,6 @@ import { setCurrentWorkspace, switchWorkspace } from '../../../features/auth/aut
 import { setMyWorkspacesSlideOverVisibility } from '../../../features/general/slideOver/slideOverSlice';
 import { useEffect } from 'react';
 import DragContext from './DragContext/DragContext';
-import TaskMenu from '../../../pages/workspace/tasks/component/taskMenu/TaskMenu';
 
 function MainLayout() {
   const { activeItemType, activeItemId } = useAppSelector((state) => state.workspace);
@@ -20,7 +19,6 @@ function MainLayout() {
 
   const queryClient = useQueryClient();
   const dispatch = useAppDispatch();
-  const { showTaskNavigation } = useAppSelector((state) => state.task);
 
   const switchWorkspaceMutation = useMutation(switchWorkspaceService, {
     onSuccess: (data) => {
@@ -50,21 +48,12 @@ function MainLayout() {
 
   return (
     <div className={cl('h-full flex flex-col')}>
-      {/* {showTaskNavigation && (
-        <div className="w-full p-2 absolute z-50">
-          <span className="w-12/12 transition duration-300 ease-in-out ">
-            <TaskMenu />
-          </span>
-        </div>
-      )} */}
       <ProgressBar />
       {/* <TopMenu /> */}
       <DragContext>
         <div className="flex h-full">
           <div className="grid w-full h-full grid-rows-1 overflow-hidden grid-cols-autoFr">
             <div className="relative h-full">
-              {/* show extended navigation button */}
-              {/* <OpenExtBtn /> */}
               <Sidebar />
             </div>
             <div className="w-full h-full">
@@ -75,9 +64,6 @@ function MainLayout() {
               </div>
               <AddFileModal
                 endpoint={`attachments?id=${activeItemId}?type=${activeItemType}`}
-                // endpoint={`attachments/${folderId || ''}`}
-                // activeItemId={activeItemId}
-                // activeType={activeItemType}
                 invalidateQuery={['attachments'] as InvalidateQueryFilters<unknown>}
               />
             </div>
