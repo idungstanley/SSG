@@ -134,7 +134,7 @@ export default function AdditionalHeader() {
             {dayjs(HeaderClock, 'DD-MM-YYYY hh:mm').format('DD-MM-YYYY')}
           </span>
           {clockModal && (
-            <HeaderModal toggleFn={setClockModal} styles="top-7">
+            <HeaderModal toggleFn={setClockModal} styles="top-7 right-28">
               <HeaderTimeModal />
             </HeaderModal>
           )}
@@ -163,7 +163,7 @@ function HeaderTimeModal() {
     return () => document.addEventListener('visibilitychange', timeUpdateFn);
   }, []);
   return (
-    <div className="flex flex-col space-y-4 w-134 z-50 bg-alsoit-gray-50 h-screen">
+    <div className="flex flex-col space-y-4 w-134 z-50 bg-alsoit-gray-50 h-screen transition-transform opacity-100 transform translate-y-0 delay-700">
       <div className="flex justify-start flex-col space-y-2 w-full border-b border-alsoit-gray-300 px-4 py-6">
         <span style={{ fontSize: '35px', padding: '0 0 8px 0' }}>{time}</span>
         {dayjs().format('dddd MMMM D, YYYY')}
