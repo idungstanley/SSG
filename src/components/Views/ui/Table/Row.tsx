@@ -9,11 +9,6 @@ import { SubTasks } from './SubTasks';
 import { useDraggable } from '@dnd-kit/core';
 import { MdDragIndicator } from 'react-icons/md';
 import { ManageTagsDropdown } from '../../../Tag/ui/ManageTagsDropdown/ui/ManageTagsDropdown';
-import { useNavigate, useParams } from 'react-router-dom';
-import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
-import { setShowPilotSideOver } from '../../../../features/general/slideOver/slideOverSlice';
-import { setTaskIdForPilot } from '../../../../features/task/taskSlice';
-import { setActiveItem } from '../../../../features/workspace/workspaceSlice';
 import { AddSubTask } from '../AddTask/AddSubTask';
 import TaskTag from '../../../Tag/ui/TaskTag';
 
@@ -69,11 +64,6 @@ export function Row({ task, columns, paddingLeft = 0, parentId, task_status, isL
     tags: [],
     updated_at: ''
   };
-
-  const navigate = useNavigate();
-  const dispatch = useAppDispatch();
-  const { hubId, walletId, listId } = useParams();
-  const { currentWorkspaceId } = useAppSelector((state) => state.auth);
 
   const onShowAddSubtaskField = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.stopPropagation();
