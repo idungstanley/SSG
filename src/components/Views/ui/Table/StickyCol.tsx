@@ -211,7 +211,7 @@ export function StickyCol({
               >
                 {task.name.length > 50 && singleLineView ? (
                   <>
-                    <InteractiveTooltip content={<p>{task.name}</p>}>
+                    <InteractiveTooltip content={<p>{task.name}</p>} top="-top-28">
                       <span className="whitespace-nowrap">
                         {taskUpperCase
                           ? task.name.substring(0, 40).toUpperCase()
