@@ -13,6 +13,7 @@ import {
   setActiveSubHubManagerTabId,
   setActiveTabId,
   setShowIndependentPilot,
+  setShowOverlay,
   setShowTreeInput
 } from '../../features/workspace/workspaceSlice';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
@@ -121,6 +122,7 @@ export default function SubDropdown() {
         if (!isEntityActive) {
           dispatch(setActiveEntityName('New ' + CapitalizeType + ' Under Construction'));
         }
+        dispatch(setShowOverlay(true));
         dispatch(setShowIndependentPilot(true));
         dispatch(setActiveTabId(PilotTabsId.entityManager));
         if (entityToCreate === EntityType.hub || entityToCreate === EntityType.subHub) {
@@ -255,10 +257,10 @@ export default function SubDropdown() {
         )}
         {lastClicked && (
           <div className="mb-2">
-            <span className="mb-2 flex whitespace-normal p-2 text-start truncate">
+            <span className="flex p-2 mb-2 truncate whitespace-normal text-start">
               {`Do you want to create your ${lastClicked} under ${selectedTreeDetails.name}`}
             </span>
-            <div className="p-2 flex gap-2 items-center justify-between">
+            <div className="flex items-center justify-between gap-2 p-2">
               {options.map((option: optionsProps) => (
                 <div key={option.label}>
                   <Button
