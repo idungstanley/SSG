@@ -8,12 +8,9 @@ import BlinkerModal from './RecordBlinkerOptions';
 import headerIcon from '../../../../assets/icons/headerIcon.png';
 import { useCurrentTime } from '../../../../features/task/taskService';
 import dayjs from 'dayjs';
-import timezone from 'dayjs/plugin/timezone';
-import utc from 'dayjs/plugin/utc';
 import HeaderModal from '../../../../components/Header/HeaderModal';
 import TimerModal from './TimerOptions';
 import { useParams } from 'react-router-dom';
-import DatePicker from '../../../../components/DatePicker/DatePicker';
 
 export const handleEntity = ({
   workSpaceId,
@@ -36,6 +33,11 @@ export default function AdditionalHeader() {
   const { timezone: zone } = useAppSelector((state) => state.userSetting);
   const [clockModal, setClockModal] = useState<boolean>(false);
   const [HeaderClock, setClock] = useState<string>(dayjs().format('DD-MM-YYYY hh:mm'));
+  const [showClock, setShowClock] = useState<{ show: boolean; withDay: boolean; showMinimal: boolean }>({
+    show: true,
+    withDay: false,
+    showMinimal: false
+  });
   const { workSpaceId: workspaceId } = useParams();
   const { activeEntityName } = useAppSelector((state) => state.workspace);
   const { refetch } = useCurrentTime({ workspaceId });
@@ -97,7 +99,7 @@ export default function AdditionalHeader() {
               ).padStart(2, '0')}`}
             </div>
             {timerModal && (
-              <HeaderModal toggleFn={setTimerModal} styles="top-8 -right-4">
+              <HeaderModal toggleFn={setTimerModal} styles="top-8 right-1">
                 <TimerModal />
               </HeaderModal>
             )}
@@ -118,9 +120,12 @@ export default function AdditionalHeader() {
         )}
         <HiOutlineUpload className="w-5 h-5" />
         <BsFillGrid3X3GapFill className="w-5 h-5" />
+        {/* <ToolTip tooltip={dayjs().format('MMMM DD, YYYY')}> */}
         <div
           className="relative w-16 font-semibold text-alsoit-text-lg text-alsoit-text border-alsoit-border-base border-alsoit-text rounded-md p-0.5 flex justify-center flex-col space-y-0 cursor-pointer"
-          onMouseEnter={() => setClockModal(!clockModal)}
+          onClick={() => setClockModal(!clockModal)}
+          onMouseEnter={() => setShowClock((prev) => ({ ...prev, showMinimal: true }))}
+          onMouseLeave={() => setShowClock((prev) => ({ ...prev, showMinimal: false }))}
         >
           <span className="text-center text-alsoit-text-md">
             {dayjs(HeaderClock, 'DD-MM-YYYY hh:mm').format('hh:mm')}
@@ -129,8 +134,15 @@ export default function AdditionalHeader() {
             {dayjs(HeaderClock, 'DD-MM-YYYY hh:mm').format('DD-MM-YYYY')}
           </span>
           {clockModal && (
-            <HeaderModal toggleFn={setClockModal} styles="top-7 right-28">
+            <HeaderModal toggleFn={setClockModal} styles="top-7">
               <HeaderTimeModal />
+            </HeaderModal>
+          )}
+          {showClock.showMinimal && !clockModal && (
+            <HeaderModal toggleFn={setClockModal} styles="top-10 -left-4">
+              <span className="bg-alsoit-gray-50 font-semibold text-alsoit-text-lg shadow-lg p-1 rounded border-alsoit-border-base border-alsoit-gray-75">
+                {dayjs().format('ddd MMMM DD, YYYY')}
+              </span>
             </HeaderModal>
           )}
         </div>
@@ -141,9 +153,9 @@ export default function AdditionalHeader() {
 }
 
 function HeaderTimeModal() {
-  const [time, setTime] = useState<string>(dayjs().format('hh:mm:ss'));
+  const [time, setTime] = useState<string>(dayjs().format('hh:mm:ss a'));
 
-  const timeUpdateFn = () => window.setInterval(() => setTime(dayjs().format('hh:mm:ss')), 1000);
+  const timeUpdateFn = () => window.setInterval(() => setTime(dayjs().format('hh:mm:ss a')), 1000);
 
   useEffect(() => {
     timeUpdateFn();
