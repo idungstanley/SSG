@@ -172,7 +172,7 @@ const initialState: TaskState = {
   listView: true,
   comfortableView: true,
   comfortableViewWrap: false,
-  singleLineView: false,
+  singleLineView: true,
   verticalGrid: false,
   taskUpperCase: false,
   verticalGridlinesTask: false,

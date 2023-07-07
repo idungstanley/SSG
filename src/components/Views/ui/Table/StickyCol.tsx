@@ -21,6 +21,8 @@ import { ImCancelCircle } from 'react-icons/im';
 import CloseSubtask from '../../../../assets/icons/CloseSubtask';
 import OpenSubtask from '../../../../assets/icons/OpenSubtask';
 import { Capitalize } from '../../../../utils/NoCapWords/Capitalize';
+import ToolTip from '../../../Tooltip/Tooltip';
+import InteractiveTooltip from '../../../Tooltip/InteractiveTooltip';
 
 interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   task: Task;
@@ -200,22 +202,26 @@ export function StickyCol({
               <StatusDropdown TaskCurrentStatus={task.status} />
             </div>
             <div className="flex flex-col items-start justify-start space-y-1 pl-2">
-              <p
-                className="flex text-left"
-                contentEditable={eitableContent && !singleLineView}
-                onClick={() => setEitableContent(true)}
-                ref={inputRef}
-                onKeyDown={(e) => (e.key === 'Enter' ? handleEditTask(e, task.id) : null)}
-              >
-                {task.name.length > 50 && singleLineView ? (
-                  <span className="whitespace-nowrap">
-                    {taskUpperCase ? task.name.substring(0, 40).toUpperCase() : Capitalize(task.name).substring(0, 40)}
-                    ...
-                  </span>
-                ) : (
-                  <span>{taskUpperCase ? task.name.toUpperCase() : Capitalize(task.name)}</span>
-                )}
-              </p>
+              <InteractiveTooltip content={<p>{task.name}</p>}>
+                <p
+                  className="flex text-left"
+                  contentEditable={eitableContent && !singleLineView}
+                  onClick={() => setEitableContent(true)}
+                  ref={inputRef}
+                  onKeyDown={(e) => (e.key === 'Enter' ? handleEditTask(e, task.id) : null)}
+                >
+                  {task.name.length > 50 && singleLineView ? (
+                    <span className="whitespace-nowrap">
+                      {taskUpperCase
+                        ? task.name.substring(0, 40).toUpperCase()
+                        : Capitalize(task.name).substring(0, 40)}
+                      ...
+                    </span>
+                  ) : (
+                    <span>{taskUpperCase ? task.name.toUpperCase() : Capitalize(task.name)}</span>
+                  )}
+                </p>
+              </InteractiveTooltip>
 
               {tags}
             </div>
