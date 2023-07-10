@@ -3,7 +3,7 @@ import { HiOutlineUpload } from 'react-icons/hi';
 import { BsFillGrid3X3GapFill } from 'react-icons/bs';
 import { MdHelpOutline, MdTab } from 'react-icons/md';
 import { useEffect, useState } from 'react';
-import { IoAlarmSharp } from 'react-icons/io5';
+import { IoAlarmSharp, IoArrowDown, IoArrowUp } from 'react-icons/io5';
 import BlinkerModal from './RecordBlinkerOptions';
 import headerIcon from '../../../../assets/icons/headerIcon.png';
 import { useCurrentTime } from '../../../../features/task/taskService';
@@ -11,6 +11,7 @@ import dayjs from 'dayjs';
 import HeaderModal from '../../../../components/Header/HeaderModal';
 import TimerModal from './TimerOptions';
 import { useParams } from 'react-router-dom';
+import { ArrowUpIcon } from '@heroicons/react/24/outline';
 
 export const handleEntity = ({
   workSpaceId,
@@ -92,12 +93,17 @@ export default function AdditionalHeader() {
             className="flex items-center px-2 py-1 space-x-1 border border-alsoit-purple-300 rounded-lg cursor-pointer"
             onMouseEnter={() => setTimerModal(!timerModal)}
           >
-            <IoAlarmSharp className="text-alsoit-purple-300" />
+            <IoAlarmSharp className="text-alsoit-purple-300 w-4 h-4" />
             <div className="items-center">
               {`${String(duration.h).padStart(2, '0')}:${String(duration.m).padStart(2, '0')}:${String(
                 duration.s
               ).padStart(2, '0')}`}
             </div>
+            {timerModal ? (
+              <IoArrowUp className="text-alsoit-purple-300 w-4 h-3" />
+            ) : (
+              <IoArrowDown className="text-alsoit-purple-300 w-4 h-3" />
+            )}
             {timerModal && (
               <HeaderModal toggleFn={setTimerModal} styles="top-8 right-1">
                 <TimerModal />
