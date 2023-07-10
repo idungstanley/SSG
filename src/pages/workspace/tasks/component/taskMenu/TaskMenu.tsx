@@ -18,7 +18,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { setSelectedTasksArray, setShowTaskNavigation } from '../../../../../features/task/taskSlice';
 
 export default function TaskMenu() {
-  const { currentTaskId, selectedTasksArray } = useAppSelector((state) => state.task);
+  const { selectedTasksArray } = useAppSelector((state) => state.task);
   const queryClient = useQueryClient();
   const dispatch = useDispatch();
 

@@ -23,6 +23,7 @@ import CloseSubtask from '../../../../assets/icons/CloseSubtask';
 import OpenSubtask from '../../../../assets/icons/OpenSubtask';
 import { Capitalize } from '../../../../utils/NoCapWords/Capitalize';
 import InteractiveTooltip from '../../../Tooltip/InteractiveTooltip';
+import RoundedCheckbox from '../../../Checkbox/RoundedCheckbox';
 
 interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   task: Task;
@@ -175,17 +176,7 @@ export function StickyCol({
           {...props}
         >
           <div className="flex items-center h-full space-x-1 bg-purple-50">
-            <input
-              type="checkbox"
-              checked={isChecked}
-              id="checked-checkbox"
-              className="w-2 h-2 rounded-full opacity-0 cursor-pointer focus:outline-1 focus:ring-transparent  focus:border-2 focus:opacity-100 group-hover:opacity-100"
-              style={{ marginLeft: '-0.3px' }}
-              onChange={onChange}
-              onClick={() => {
-                displayNav(task?.id as string);
-              }}
-            />
+            <RoundedCheckbox onChange={onChange} isChecked={isChecked} />
             <div ref={setNodeRef} {...attributes} {...listeners}>
               {dragElement}
             </div>
