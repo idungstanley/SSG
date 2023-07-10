@@ -12,6 +12,7 @@ export function Assignee() {
   const dispatch = useAppDispatch();
   const { currentUserId } = useAppSelector((state) => state.auth);
   const { assigneeIds } = useAppSelector((state) => state.task);
+  const { showFilterByAssigneeSlideOver } = useAppSelector((state) => state.slideOver);
   const { data } = useGetTeamMembers({ page: 1, query: '' });
   const {
     filters: { fields: filters }
@@ -71,7 +72,7 @@ export function Assignee() {
         <Me active={forMe} />
         <span>Me</span>
       </Button>
-      <Button active={false} onClick={() => dispatch(setShowFilterByAssigneeSlideOver(true))}>
+      <Button active={showFilterByAssigneeSlideOver} onClick={() => dispatch(setShowFilterByAssigneeSlideOver(true))}>
         <Icons src={AssigneeIcon} />
         <span>Assignee</span>
       </Button>
