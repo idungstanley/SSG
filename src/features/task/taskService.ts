@@ -18,6 +18,7 @@ import { setTimerLastMemory, toggleMute } from '../workspace/workspaceSlice';
 import { generateFilters } from '../../components/TasksHeader/lib/generateFilters';
 import moment from 'moment-timezone';
 import { runTimer } from '../../utils/TimerCounter';
+import Duration from '../../utils/TimerDuration';
 
 const moveTask = (data: { taskId: TaskId; listId: string }) => {
   const { taskId, listId } = data;
@@ -433,9 +434,7 @@ export const useCurrentTime = ({ workspaceId }: { workspaceId?: string }) => {
         const dateString = dateData?.time_entry;
 
         if (dateString) {
-          const givenDate = moment(dateString?.start_date, 'YYYY-MM-DD HH:mm:ss', timezone);
-          const currentDate = moment();
-          const duration = moment.duration(currentDate.diff(givenDate));
+          const duration = Duration({ dateString, timezone });
           dispatch(setTimerStatus(true));
           dispatch(setUpdateTimerDuration({ s: duration.seconds(), m: duration.minutes(), h: duration.hours() - 1 }));
           dispatch(
