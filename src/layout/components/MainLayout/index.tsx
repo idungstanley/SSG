@@ -54,8 +54,6 @@ function MainLayout() {
         <div className="flex h-full">
           <div className="grid w-full h-full grid-rows-1 overflow-hidden grid-cols-autoFr">
             <div className="relative h-full">
-              {/* show extended navigation button */}
-              {/* <OpenExtBtn /> */}
               <Sidebar />
             </div>
             <div className="w-full h-full">
@@ -66,9 +64,6 @@ function MainLayout() {
               </div>
               <AddFileModal
                 endpoint={`attachments?id=${activeItemId}?type=${activeItemType}`}
-                // endpoint={`attachments/${folderId || ''}`}
-                // activeItemId={activeItemId}
-                // activeType={activeItemType}
                 invalidateQuery={['attachments'] as InvalidateQueryFilters<unknown>}
               />
             </div>

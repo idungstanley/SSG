@@ -9,11 +9,6 @@ import { SubTasks } from './SubTasks';
 import { useDraggable } from '@dnd-kit/core';
 import { MdDragIndicator } from 'react-icons/md';
 import { ManageTagsDropdown } from '../../../Tag/ui/ManageTagsDropdown/ui/ManageTagsDropdown';
-import { useNavigate, useParams } from 'react-router-dom';
-import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
-import { setShowPilotSideOver } from '../../../../features/general/slideOver/slideOverSlice';
-import { setTaskIdForPilot } from '../../../../features/task/taskSlice';
-import { setActiveItem } from '../../../../features/workspace/workspaceSlice';
 import { AddSubTask } from '../AddTask/AddSubTask';
 import TaskTag from '../../../Tag/ui/TaskTag';
 
@@ -70,11 +65,6 @@ export function Row({ task, columns, paddingLeft = 0, parentId, task_status, isL
     updated_at: ''
   };
 
-  const navigate = useNavigate();
-  const dispatch = useAppDispatch();
-  const { hubId, walletId, listId } = useParams();
-  const { currentWorkspaceId } = useAppSelector((state) => state.auth);
-
   const onShowAddSubtaskField = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.stopPropagation();
     setShowNewTaskField(!showNewTaskField);
@@ -94,32 +84,6 @@ export function Row({ task, columns, paddingLeft = 0, parentId, task_status, isL
     opacity: transform ? 0 : 100
   };
 
-  const onClickTask = () => {
-    if (task.id !== '0') {
-      hubId
-        ? navigate(`/${currentWorkspaceId}/tasks/h/${hubId}/t/${task.id}`, { replace: true })
-        : walletId
-        ? navigate(`/${currentWorkspaceId}/tasks/w/${walletId}/t/${task.id}`, { replace: true })
-        : navigate(`/${currentWorkspaceId}/tasks/l/${listId}/t/${task.id}`, { replace: true });
-      dispatch(
-        setShowPilotSideOver({
-          id: task.id,
-          type: 'task',
-          show: true,
-          title: task.name
-        })
-      );
-      dispatch(setTaskIdForPilot(task.id));
-      dispatch(
-        setActiveItem({
-          activeItemId: task.id,
-          activeItemType: 'task',
-          activeItemName: task.name
-        })
-      );
-    }
-  };
-
   return (
     <>
       {/* current task */}
@@ -127,7 +91,6 @@ export function Row({ task, columns, paddingLeft = 0, parentId, task_status, isL
         <StickyCol
           showSubTasks={showSubTasks}
           setShowSubTasks={setShowSubTasks}
-          onClick={onClickTask}
           style={{ zIndex: 1 }}
           isListParent={isListParent}
           task={task}
