@@ -1,5 +1,4 @@
 import { DetailedHTMLProps, SVGAttributes } from 'react';
-
 /* eslint-disable max-len */
 type Props = DetailedHTMLProps<SVGAttributes<SVGSVGElement>, SVGSVGElement>;
 
