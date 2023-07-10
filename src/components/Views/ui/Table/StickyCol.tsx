@@ -155,8 +155,6 @@ export function StickyCol({
     isSelected ? setIsChecked(true) : setIsChecked(false);
   }, [selectedTasksArray]);
 
-  const isSelected = selectedTasksArray.includes(task.id);
-
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const isChecked = e.target.checked;
     dispatch(setShowTaskNavigation(isChecked));
@@ -184,9 +182,9 @@ export function StickyCol({
           <div className="flex items-center h-full space-x-1 bg-purple-50">
             <RoundedCheckbox
               onChange={onChange}
-              isChecked={isChecked ? isChecked : false}
+              isChecked={isChecked}
               styles={`w-4 h-4 rounded-full ${
-                !isSelected && 'opacity-0'
+                selectedTasksArray.length > 0 ? 'opacity-100' : 'opacity-0'
               } cursor-pointer focus:outline-1 focus:ring-transparent  focus:border-2 focus:opacity-100 group-hover:opacity-100`}
             />
             <div ref={setNodeRef} {...attributes} {...listeners}>
@@ -198,7 +196,7 @@ export function StickyCol({
             onClick={onClickTask}
             className={cl(
               COL_BG,
-              `relative border-t ${isSelected && 'tdListV'} ${verticalGrid && 'border-r'} ${
+              `relative border-t ${isChecked && 'tdListV'} ${verticalGrid && 'border-r'} ${
                 verticalGridlinesTask && 'border-r'
               } w-full py-4 flex items-center `
             )}
