@@ -5,6 +5,7 @@ import { List } from './ui/FilterList/List';
 import Button from '../../../Buttons/Button';
 import Icons from '../../../Icons/Icons';
 import Filter from '../../../../assets/icons/filter_alt.svg';
+import ArrowDownClosed from '../../../../assets/icons/ArrowDownClosed';
 
 export function FilterDropdown() {
   return (
@@ -14,6 +15,7 @@ export function FilterDropdown() {
           <Button active={false}>
             <Icons src={Filter} />
             Filter
+            <ArrowDownClosed />
           </Button>
         </Menu.Button>
       </div>

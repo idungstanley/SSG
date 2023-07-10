@@ -7,6 +7,7 @@ import Me from '../../../../assets/icons/me(1).svg';
 import AssigneeIcon from '../../../../assets/icons/Assignee.svg';
 import Icons from '../../../Icons/Icons';
 import { setFilterFields } from '../../../../features/task/taskSlice';
+import ArrowDownClosed from '../../../../assets/icons/ArrowDownClosed';
 
 export function Assignee() {
   const dispatch = useAppDispatch();
@@ -71,6 +72,7 @@ export function Assignee() {
       <Button active={isMe} onClick={() => dispatch(setShowFilterByAssigneeSlideOver(true))}>
         <Icons src={AssigneeIcon} />
         <span>Assignee</span>
+        <ArrowDownClosed />
       </Button>
     </div>
   );

@@ -8,6 +8,7 @@ import { setSortType } from '../../../../features/task/taskSlice';
 import Button from '../../../Buttons/Button';
 import Icons from '../../../Icons/Icons';
 import GroupBy from '../../../../assets/icons/layers.svg';
+import ArrowDownClosed from '../../../../assets/icons/ArrowDownClosed';
 
 type Key = Extract<TaskKey, 'status' | 'assignees' | 'priority'>;
 type Option = Record<Key, { icon: JSX.Element }>;
@@ -39,6 +40,7 @@ export function Sort() {
             <p className="block truncate">
               Group by: <span className="capitalize">{sortType}</span>
             </p>
+            <ArrowDownClosed active={true} />
           </Button>
         </Listbox.Button>
         <Transition as={Fragment} leave="transition ease-in duration-100" leaveFrom="opacity-100" leaveTo="opacity-0">
