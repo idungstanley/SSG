@@ -9,7 +9,7 @@ export default function Search() {
     <>
       <button
         type="button"
-        className="relative flex items-center w-full p-1 px-6 mt-2 mb-1 transition duration-300 rounded-md cursor-pointer group"
+        className="relative flex items-center w-full p-1 px-6 mt-2 mb-1 transition duration-300 rounded cursor-pointer group"
         onClick={() => setCommandSearchModal(true)}
       >
         <div
