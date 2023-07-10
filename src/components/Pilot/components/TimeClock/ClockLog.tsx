@@ -185,5 +185,5 @@ export default function ClockLog() {
       }
   };
 
-  return <div className="p-2">{renderItemEntries()}</div>;
+  return <div className="p-2">{renderItemEntries()} </div>;
 }
