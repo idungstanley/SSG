@@ -10,7 +10,7 @@ import DateFormat from '../../../../../components/DateFormat';
 import ToolTip from '../../../../../components/Tooltip/Tooltip';
 import EditIcon from '../../../../../assets/icons/Common/Edit';
 import moment from 'moment-timezone';
-import TrashIcon from '../../../../../assets/icons/Common/delete';
+import TrashIcon from '../../../../../assets/icons/Common/Delete';
 export interface teamMember {
   id: string;
   user: {
