@@ -164,6 +164,7 @@ export default function HList({ hubs, leftMargin, taskType, level = 1 }: ListPro
       }
     }
   };
+
   return (
     <>
       {hubsWithEntity.map((hub, index) => (
@@ -186,7 +187,7 @@ export default function HList({ hubs, leftMargin, taskType, level = 1 }: ListPro
               topNumber={taskType === 'subhub' ? '80px' : '50px'}
               zNumber={taskType === 'subhub' ? '4' : '5'}
             />
-            {hub.children.length && showChildren ? (
+            {hub.children.length && showChildren === hub.id ? (
               <HList
                 hubs={(entityToCreate === EntityType.subHub ? [...hub.children, dummyHub] : hub.children) as Hub[]}
                 level={level + 1}
@@ -196,7 +197,7 @@ export default function HList({ hubs, leftMargin, taskType, level = 1 }: ListPro
             ) : null}
             {showSidebar && (
               <div>
-                {hub.wallets.length && showChildren ? (
+                {hub.wallets.length && showChildren === hub.id ? (
                   <WList
                     wallets={hub.wallets}
                     leftMargin={false}
@@ -205,7 +206,7 @@ export default function HList({ hubs, leftMargin, taskType, level = 1 }: ListPro
                     paddingLeft={`${taskType === EntityType.hub ? '33' : '35'}`}
                   />
                 ) : null}
-                {hub.lists.length && showChildren && !showExtendedBar ? (
+                {hub.lists.length && showChildren === hub.id && !showExtendedBar ? (
                   <LList
                     list={hub.lists}
                     leftMargin={false}
