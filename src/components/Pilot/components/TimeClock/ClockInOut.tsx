@@ -206,15 +206,14 @@ export default function ClockInOut() {
                   <AvatarWithInitials height="h-4" width="w-4" initials={initials ?? 'UN'} />
                 </div>
                 {activeTrackers?.map((trackers) => {
-                  const duration = Duration({ dateString: trackers });
+                  const { hours, minutes, seconds } = Duration({ dateString: trackers });
                   const { initials } = trackers.team_member.user;
                   return (
                     <div key={trackers.id} className="flex space-x-2 space-y-1 items-center w-44 h-72 overflow-y-auto">
                       <div className="">
-                        {`${String(duration.hours() - 1).padStart(2, '0')}:${String(duration.minutes()).padStart(
-                          2,
-                          '0'
-                        )}:${String(duration.seconds()).padStart(2, '0')}`}
+                        {`${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(
+                          seconds
+                        ).padStart(2, '0')}`}
                       </div>
                       <AvatarWithInitials height="h-4" width="w-4" textSize="text-alsoit-text-sm" initials={initials} />
                     </div>

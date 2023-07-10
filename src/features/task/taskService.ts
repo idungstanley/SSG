@@ -16,7 +16,6 @@ import { useUploadRecording } from '../workspace/workspaceService';
 import { useParams } from 'react-router-dom';
 import { setTimerLastMemory, toggleMute } from '../workspace/workspaceSlice';
 import { generateFilters } from '../../components/TasksHeader/lib/generateFilters';
-import moment from 'moment-timezone';
 import { runTimer } from '../../utils/TimerCounter';
 import Duration from '../../utils/TimerDuration';
 
@@ -445,9 +444,9 @@ export const useCurrentTime = ({ workspaceId }: { workspaceId?: string }) => {
         const dateString = dateData?.time_entry;
 
         if (dateString) {
-          const duration = Duration({ dateString, timezone });
+          const { hours, minutes, seconds } = Duration({ dateString, timezone });
           dispatch(setTimerStatus(true));
-          dispatch(setUpdateTimerDuration({ s: duration.seconds(), m: duration.minutes(), h: duration.hours() - 1 }));
+          dispatch(setUpdateTimerDuration({ s: seconds, m: minutes, h: hours }));
           dispatch(
             setTimerLastMemory({
               hubId: dateString.model_type === 'hub' ? dateString.model_id : null,
