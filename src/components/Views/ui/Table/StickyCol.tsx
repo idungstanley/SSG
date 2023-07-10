@@ -22,9 +22,7 @@ import { ImCancelCircle } from 'react-icons/im';
 import CloseSubtask from '../../../../assets/icons/CloseSubtask';
 import OpenSubtask from '../../../../assets/icons/OpenSubtask';
 import { Capitalize } from '../../../../utils/NoCapWords/Capitalize';
-import ToolTip from '../../../Tooltip/Tooltip';
 import InteractiveTooltip from '../../../Tooltip/InteractiveTooltip';
-import HeaderModal from '../../../Header/HeaderModal';
 
 interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   task: Task;
@@ -61,16 +59,8 @@ export function StickyCol({
   const COL_BG = taskId === task.id ? ACTIVE_COL_BG : DEFAULT_COL_BG;
   const [isChecked, setIsChecked] = useState(false);
   const { mutate: onAdd } = useAddTask(parentId);
-  const {
-    currTeamMemberId,
-    showTaskNavigation,
-    singleLineView,
-    verticalGrid,
-    taskUpperCase,
-    selectedTasksArray,
-    verticalGridlinesTask,
-    currentTaskId
-  } = useAppSelector((state) => state.task);
+  const { currTeamMemberId, singleLineView, verticalGrid, taskUpperCase, selectedTasksArray, verticalGridlinesTask } =
+    useAppSelector((state) => state.task);
 
   const onClickTask = () => {
     if (task.id !== '0') {
@@ -97,6 +87,7 @@ export function StickyCol({
       );
     }
   };
+
   useEffect(() => {
     const { current } = inputRef;
     current?.focus();
@@ -158,10 +149,7 @@ export function StickyCol({
     });
   };
 
-  // Before the return statement
-
   const isSelected = selectedTasksArray.includes(task.id);
-  // Inside the onChange event handler of the checkbox input
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const isChecked = e.target.checked;
     dispatch(setShowTaskNavigation(isChecked));
@@ -176,7 +164,6 @@ export function StickyCol({
       const updatedTaskIds = selectedTasksArray.filter((id: string) => id !== task.id);
       dispatch(setSelectedTasksArray(updatedTaskIds));
     }
-
     setIsChecked(isChecked);
   };
 
