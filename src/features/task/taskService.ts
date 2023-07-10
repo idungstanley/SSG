@@ -96,6 +96,17 @@ export const useAddTask = (parentTaskId?: string) => {
   });
 };
 
+export const deleteTask = (data: { selectedTasksArray: string[] }) => {
+  const request = requestNew({
+    url: 'tasks/multiple/delete',
+    method: 'POST',
+    data: {
+      ids: data.selectedTasksArray
+    }
+  });
+  return request;
+};
+
 export const createTaskService = (data: {
   name: string;
   task_status_id?: string;

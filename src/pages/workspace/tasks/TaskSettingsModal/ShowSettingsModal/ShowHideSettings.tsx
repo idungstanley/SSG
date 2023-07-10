@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import { Menu, Transition } from '@headlessui/react';
 import { BsChevronRight } from 'react-icons/bs';
 import { FiChevronRight } from 'react-icons/fi';
@@ -60,6 +60,18 @@ export default function ShowHideSettings({
       dispatch(getVerticalGridlinesTask(!verticalGridlinesTask));
     }
   };
+
+  useEffect(() => {
+    const handleCheckboxChange = () => {
+      setCheckedStates((prev: boolean[]) => {
+        const newState = [...prev];
+        const singleLineIndex = ViewSettings.length - 2;
+        newState[singleLineIndex] = true;
+        return newState;
+      });
+    };
+    handleCheckboxChange();
+  }, []);
 
   const ViewSettings = [
     {
