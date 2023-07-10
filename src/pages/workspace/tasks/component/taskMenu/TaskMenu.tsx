@@ -16,6 +16,7 @@ import { useDispatch } from 'react-redux';
 import { displayPrompt, setVisibility } from '../../../../../features/general/prompt/promptSlice';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { setSelectedTasksArray, setShowTaskNavigation } from '../../../../../features/task/taskSlice';
+import RoundedCheckbox from '../../../../../components/Checkbox/RoundedCheckbox';
 
 export default function TaskMenu() {
   const { selectedTasksArray } = useAppSelector((state) => state.task);
@@ -157,8 +158,14 @@ export default function TaskMenu() {
         className="abolute flex justify-between items-center w-12/12 h-11 bg-gray-800"
         style={{ transition: 'linear', transitionDelay: '100s' }}
       >
-        <div className="pl-5">
-          <input type="checkbox" value="checked" />
+        <div className="pl-5 space-x-2">
+          <RoundedCheckbox
+            styles="rounded-full"
+            isChecked={true}
+            onChange={() => {
+              dispatch(setSelectedTasksArray([]));
+            }}
+          />
           <span className="text-white text-xs">{selectedTasksArray.length} Selected</span>
         </div>
 

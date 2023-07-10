@@ -2,17 +2,19 @@ import React from 'react';
 
 export default function RoundedCheckbox({
   onChange,
-  isChecked
+  isChecked,
+  styles
 }: {
   onChange: React.ChangeEventHandler<HTMLInputElement>;
   isChecked: boolean;
+  styles: string;
 }) {
   return (
     <input
       type="checkbox"
       checked={isChecked}
       id="checked-checkbox"
-      className="w-2 h-2 rounded-full opacity-0 cursor-pointer focus:outline-1 focus:ring-transparent  focus:border-2 focus:opacity-100 group-hover:opacity-100"
+      className={styles}
       style={{ marginLeft: '-0.3px' }}
       onChange={onChange}
       // onClick={() => {
