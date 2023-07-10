@@ -15,6 +15,7 @@ import { setTimerInterval, setTimerStatus, setUpdateTimerDuration } from '../../
 import { useParams } from 'react-router-dom';
 import { setTimerLastMemory } from '../../../../features/workspace/workspaceSlice';
 import { runTimer } from '../../../../utils/TimerCounter';
+import Duration from '../../../../utils/TimerDuration';
 
 export interface User {
   initials: string;
@@ -28,6 +29,7 @@ export default function ClockInOut() {
   const { activeItemId, activeItemType, activeTabId, timerLastMemory } = useAppSelector((state) => state.workspace);
   const { timerStatus, duration, period } = useAppSelector((state) => state.task);
   const { initials } = useAppSelector((state) => state.userSetting);
+  const { currentUserId } = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
   const [isRunning, setRunning] = useState(false);
   const [time, setTime] = useState({ s: 0, m: 0, h: 0 });
@@ -127,6 +129,10 @@ export default function ClockInOut() {
     setTime({ s: 0, m: 0, h: 0 });
   };
 
+  const activeTrackers = getCurrent?.data.time_entries.filter(
+    (tracker) => tracker.team_member.user.id !== currentUserId
+  );
+
   const RunTimer = runTimer({ isRunning: isRunning, setTime: setTime });
 
   useEffect(() => {
@@ -157,7 +163,7 @@ export default function ClockInOut() {
           </div>
           <div id="entries" className="flex items-center justify-between py-1">
             <div id="left" className="flex items-center space-x-1 cursor-pointer">
-              <div className="mr-1 relative flex items-center">
+              <div className="mr-1 relative flex items-start">
                 {timerStatus && sameEntity() ? (
                   // !btnClicked && !timerStatus ? (
                   <button onClick={stop}>
@@ -194,13 +200,23 @@ export default function ClockInOut() {
                 )}
               </div>
               {/* timer goes here */}
-              {timerCheck()}
-              <div className="flex items-center justify-start -space-x-3 cursor-pointer">
-                {getCurrent?.data.time_entries.map((entry) => {
-                  const { team_member } = entry;
+              <div className="flex flex-col space-y-1">
+                <div className="flex space-x-2 items-center">
+                  {timerCheck()}
+                  <AvatarWithInitials height="h-4" width="w-4" initials={initials ?? 'UN'} />
+                </div>
+                {activeTrackers?.map((trackers) => {
+                  const duration = Duration({ dateString: trackers });
+                  const { initials } = trackers.team_member.user;
                   return (
-                    <div key={entry.id} className="flex">
-                      <AvatarWithInitials height="h-7" width="w-7" initials={team_member.user.initials ?? initials} />
+                    <div key={trackers.id} className="flex space-x-2 space-y-1 items-center w-44 h-72 overflow-y-auto">
+                      <div className="">
+                        {`${String(duration.hours() - 1).padStart(2, '0')}:${String(duration.minutes()).padStart(
+                          2,
+                          '0'
+                        )}:${String(duration.seconds()).padStart(2, '0')}`}
+                      </div>
+                      <AvatarWithInitials height="h-4" width="w-4" textSize="text-alsoit-text-sm" initials={initials} />
                     </div>
                   );
                 })}
