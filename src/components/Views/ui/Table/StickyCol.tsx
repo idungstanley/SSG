@@ -11,6 +11,7 @@ import { setShowPilotSideOver } from '../../../../features/general/slideOver/sli
 import {
   setCurrentTaskId,
   setCurrentTaskStatusId,
+  setSelectedTasksArray,
   setShowTaskNavigation,
   setTaskIdForPilot
 } from '../../../../features/task/taskSlice';
@@ -59,7 +60,6 @@ export function StickyCol({
   const { taskId, hubId, walletId, listId } = useParams();
   const COL_BG = taskId === task.id ? ACTIVE_COL_BG : DEFAULT_COL_BG;
   const [isChecked, setIsChecked] = useState(false);
-  const [close, setClose] = useState(false);
   const { mutate: onAdd } = useAddTask(parentId);
   const {
     currTeamMemberId,
@@ -67,6 +67,7 @@ export function StickyCol({
     singleLineView,
     verticalGrid,
     taskUpperCase,
+    selectedTasksArray,
     verticalGridlinesTask,
     currentTaskId
   } = useAppSelector((state) => state.task);
@@ -96,13 +97,11 @@ export function StickyCol({
       );
     }
   };
-
   useEffect(() => {
     const { current } = inputRef;
     current?.focus();
     selectText(current);
   }, []);
-
   const selectText = (element: Node | null) => {
     const selection = window.getSelection();
     const range = document.createRange();
@@ -110,7 +109,6 @@ export function StickyCol({
     selection?.removeAllRanges();
     selection?.addRange(range);
   };
-
   const onToggleDisplayingSubTasks = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.stopPropagation();
     setShowSubTasks(!showSubTasks);
@@ -118,21 +116,17 @@ export function StickyCol({
   const displayNav = (id: string) => {
     dispatch(setCurrentTaskId(id));
   };
-
   const queryClient = useQueryClient();
   const inputRef = useRef<HTMLInputElement | null>(null);
-
   const { attributes, listeners, setNodeRef } = useSortable({
     id: task?.id as UniqueIdentifier
   });
-
   const [eitableContent, setEitableContent] = useState(false);
   const editTaskMutation = useMutation(UseUpdateTaskService, {
     onSuccess: () => {
       queryClient.invalidateQueries(['task']);
     }
   });
-
   const handleOnSave = async (
     e: React.KeyboardEvent<HTMLDivElement> | React.MouseEvent<HTMLButtonElement, MouseEvent>,
     id: string
@@ -143,7 +137,6 @@ export function StickyCol({
       onClickSave();
     }
   };
-
   const onClickSave = () => {
     if (inputRef.current?.innerText) {
       const name = inputRef.current?.innerText;
@@ -157,13 +150,34 @@ export function StickyCol({
       });
     }
   };
-
   const handleEditTask = async (e: React.KeyboardEvent<HTMLDivElement>, id: string) => {
     e.preventDefault();
     await editTaskMutation.mutateAsync({
       name: inputRef.current?.innerText as string,
       task_id: id
     });
+  };
+
+  // Before the return statement
+
+  const isSelected = selectedTasksArray.includes(task.id);
+  // Inside the onChange event handler of the checkbox input
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const isChecked = e.target.checked;
+    dispatch(setShowTaskNavigation(isChecked));
+    if (isChecked) {
+      // Add the task ID to the selectedTasksArray array if it's not already present
+      if (!selectedTasksArray.includes(task.id)) {
+        const updatedTaskIds = [...selectedTasksArray, task.id];
+        dispatch(setSelectedTasksArray(updatedTaskIds));
+      }
+    } else {
+      // Remove the task ID from the selectedTasksArray array
+      const updatedTaskIds = selectedTasksArray.filter((id: string) => id !== task.id);
+      dispatch(setSelectedTasksArray(updatedTaskIds));
+    }
+
+    setIsChecked(isChecked);
   };
 
   return (
@@ -180,10 +194,7 @@ export function StickyCol({
               id="checked-checkbox"
               className="w-2 h-2 rounded-full opacity-0 cursor-pointer focus:outline-1 focus:ring-transparent  focus:border-2 focus:opacity-100 group-hover:opacity-100"
               style={{ marginLeft: '-0.3px' }}
-              onChange={(e) => {
-                dispatch(setShowTaskNavigation(e.target.checked));
-                setIsChecked(e.target.checked);
-              }}
+              onChange={onChange}
               onClick={() => {
                 displayNav(task?.id as string);
               }}
@@ -197,9 +208,9 @@ export function StickyCol({
             onClick={onClickTask}
             className={cl(
               COL_BG,
-              `relative border-t ${currentTaskId == task.id && showTaskNavigation && 'tdListV'} ${
-                verticalGrid && 'border-r'
-              } ${verticalGridlinesTask && 'border-r'} w-full py-4 flex items-center `
+              `relative border-t ${isSelected && 'tdListV'} ${verticalGrid && 'border-r'} ${
+                verticalGridlinesTask && 'border-r'
+              } w-full py-4 flex items-center `
             )}
           >
             <button onClick={onToggleDisplayingSubTasks} className="pl-1">

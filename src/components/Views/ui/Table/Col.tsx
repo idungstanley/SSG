@@ -22,7 +22,10 @@ interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
 export function Col({ value, field, fieldId, task, ...props }: ColProps) {
   const { taskId } = useParams();
   const COL_BG = taskId === task.id ? ACTIVE_COL_BG : DEFAULT_COL_BG;
-  const { singleLineView, verticalGrid, currentTaskId, showTaskNavigation } = useAppSelector((state) => state.task);
+  const { singleLineView, verticalGrid, currentTaskId, showTaskNavigation, selectedTasksArray } = useAppSelector(
+    (state) => state.task
+  );
+  const isSelected = selectedTasksArray.includes(task.id);
 
   const dispatch = useAppDispatch();
 
@@ -60,7 +63,7 @@ export function Col({ value, field, fieldId, task, ...props }: ColProps) {
       <td
         className={cl(
           COL_BG,
-          `relative flex border-t ${currentTaskId == task.id && showTaskNavigation && 'tdListVNoSticky'} ${
+          `relative flex border-t ${isSelected && 'tdListVNoSticky'} ${
             verticalGrid && 'border-r'
           } justify-center items-center text-sm font-medium text-gray-900 `
         )}

@@ -15,15 +15,16 @@ import { deleteTask } from '../../../../../features/task/taskService';
 import { useDispatch } from 'react-redux';
 import { displayPrompt, setVisibility } from '../../../../../features/general/prompt/promptSlice';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { setShowTaskNavigation } from '../../../../../features/task/taskSlice';
+import { setSelectedTasksArray, setShowTaskNavigation } from '../../../../../features/task/taskSlice';
 
 export default function TaskMenu() {
-  const { currentTaskId } = useAppSelector((state) => state.task);
+  const { currentTaskId, selectedTasksArray } = useAppSelector((state) => state.task);
   const queryClient = useQueryClient();
   const dispatch = useDispatch();
 
   const useDeleteTask = useMutation(deleteTask, {
     onSuccess: () => {
+      dispatch(setSelectedTasksArray([]));
       queryClient.invalidateQueries(['task']);
     }
   });
@@ -122,7 +123,7 @@ export default function TaskMenu() {
     {
       id: 16,
       icons: <MdDeleteForever />,
-      handleClick: (id: string) => {
+      handleClick: () => {
         dispatch(
           displayPrompt('Delete task', 'Would you like delete this task from the workspace?', [
             {
@@ -130,7 +131,7 @@ export default function TaskMenu() {
               style: 'danger',
               callback: () => {
                 useDeleteTask.mutateAsync({
-                  taskId: id
+                  selectedTasksArray: selectedTasksArray
                 });
                 dispatch(setVisibility(false));
                 dispatch(setShowTaskNavigation(false));
@@ -158,7 +159,7 @@ export default function TaskMenu() {
       >
         <div className="pl-5">
           <input type="checkbox" value="checked" />
-          <span className="text-white text-xs">1 Selected</span>
+          <span className="text-white text-xs">{selectedTasksArray.length} Selected</span>
         </div>
 
         <div className="flex">
@@ -166,7 +167,7 @@ export default function TaskMenu() {
             <>
               <p
                 className="flex items-center px-2 cursor-pointer mt-0 text-white text-lg"
-                onClick={() => menu.handleClick(currentTaskId as string)}
+                onClick={() => menu.handleClick()}
                 key={menu.id}
               >
                 {menu.icons}

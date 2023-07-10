@@ -98,6 +98,7 @@ interface TaskState {
   taskColumns: listColumnProps[];
   hideTask: listColumnProps[];
   currentTaskId: string | null;
+  selectedTasksArray: string[];
   listView: boolean;
   comfortableView: boolean;
   comfortableViewWrap: boolean;
@@ -175,6 +176,7 @@ const initialState: TaskState = {
   comfortableView: true,
   comfortableViewWrap: false,
   singleLineView: true,
+  selectedTasksArray: [],
   verticalGrid: false,
   taskUpperCase: false,
   verticalGridlinesTask: false,
@@ -323,6 +325,9 @@ export const taskSlice = createSlice({
     },
     getVerticalGridlinesTask(state, action: PayloadAction<boolean>) {
       state.verticalGridlinesTask = action.payload;
+    },
+    setSelectedTasksArray(state, action: PayloadAction<string[]>) {
+      state.selectedTasksArray = action.payload;
     },
     getSingleLineView(state, action: PayloadAction<boolean>) {
       state.singleLineView = action.payload;
@@ -523,6 +528,7 @@ export const {
   setShowTaskNavigation,
   setRmWatcher,
   setCurrentTaskId,
+  setSelectedTasksArray,
   setAddNewTaskItem,
   setCloseTaskListView,
   setToggleAssignCurrentTaskId,

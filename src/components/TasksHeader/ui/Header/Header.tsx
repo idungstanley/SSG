@@ -7,11 +7,11 @@ import { Search } from '../Search/Search';
 import { Sort } from '../Sort/Sort';
 
 export function Header() {
-  const { showTaskNavigation } = useAppSelector((state) => state.task);
+  const { showTaskNavigation, selectedTasksArray } = useAppSelector((state) => state.task);
 
   return (
     <>
-      {showTaskNavigation && (
+      {selectedTasksArray.length > 0 && (
         <div className="w-full p-2 absolute z-50">
           <span className="w-12/12 transition duration-300 ease-in-out ">
             <TaskMenu />
