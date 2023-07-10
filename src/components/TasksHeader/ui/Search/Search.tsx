@@ -23,7 +23,7 @@ export function Search() {
         onChange={onChange}
         ref={inputRef}
         type="text"
-        className="block w-full h-5 alsoit-radius text-alsoit-text-lg border-0 text-gray-700 ring-0 focus:ring-0 focus:outline-0 appearance-none"
+        className="block w-full h-5 alsoit-radius text-alsoit-gray-300-lg border-0 text-gray-700 ring-0 focus:ring-0 focus:outline-0 appearance-none"
         placeholder="Search task"
       />
       <EllipsisHorizontalIcon className="w-5 h-5" />

@@ -7,14 +7,22 @@ import { AiOutlineUnorderedList } from 'react-icons/ai';
 import hubIcon from '../../assets/branding/hub.svg';
 import { setCreateTaskSlideOverVisibility } from '../../features/general/slideOver/slideOverSlice';
 import { getSubMenu, setEntityToCreate, setSubDropdownMenu } from '../../features/hubs/hubSlice';
-import { useNavigate } from 'react-router-dom';
-import { setActiveSubHubManagerTabId, setActiveTabId, setShowTreeInput } from '../../features/workspace/workspaceSlice';
+import { useNavigate, useParams } from 'react-router-dom';
+import {
+  setActiveEntityName,
+  setActiveSubHubManagerTabId,
+  setActiveTabId,
+  setShowIndependentPilot,
+  setShowOverlay,
+  setShowTreeInput
+} from '../../features/workspace/workspaceSlice';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
 import { useGetTree } from '../../features/hubs/hubService';
 import ActiveTreeSearch from '../ActiveTree/ActiveTreeSearch';
 import Button from '../Button';
 import { EntityManagerTabsId, PilotTabsId } from '../../utils/PilotUtils';
 import { setVisibility } from '../../features/general/prompt/promptSlice';
+import { Capitalize } from '../../utils/NoCapWords/Capitalize';
 
 interface itemsType {
   id: number;
@@ -40,6 +48,8 @@ export default function SubDropdown() {
   const { lightBaseColor } = useAppSelector((state) => state.account);
   const [lastClicked, setLastClicked] = useState<string>('');
   const [fetchTree, setFetchTree] = useState<boolean>(false);
+  const { listId, hubId, walletId } = useParams();
+  const isEntityActive = !!listId || !!hubId || !!walletId;
   const hubIdToFetch =
     SubMenuType === 'hubs' || SubMenuType === 'subhub'
       ? SubMenuId
@@ -57,6 +67,7 @@ export default function SubDropdown() {
     listId: listIdToFetch
   });
   const navLink = '/tasks';
+  const CapitalizeType = Capitalize(lastClicked);
 
   const handleFetch = () => {
     setFetchTree((prev) => !prev);
@@ -108,6 +119,11 @@ export default function SubDropdown() {
       label: 'Proceed',
       bgColor: lightBaseColor,
       callback: () => {
+        if (!isEntityActive) {
+          dispatch(setActiveEntityName('New ' + CapitalizeType + ' Under Construction'));
+        }
+        dispatch(setShowOverlay(true));
+        dispatch(setShowIndependentPilot(true));
         dispatch(setActiveTabId(PilotTabsId.entityManager));
         if (entityToCreate === EntityType.hub || entityToCreate === EntityType.subHub) {
           dispatch(setActiveSubHubManagerTabId(EntityManagerTabsId.hub));
@@ -241,7 +257,7 @@ export default function SubDropdown() {
         )}
         {lastClicked && (
           <div className="mb-2">
-            <span className="w-64 p-2 mb-2 truncate text-start">
+            <span className="flex p-2 mb-2 truncate whitespace-normal text-start">
               {`Do you want to create your ${lastClicked} under ${selectedTreeDetails.name}`}
             </span>
             <div className="flex items-center justify-between gap-2 p-2">

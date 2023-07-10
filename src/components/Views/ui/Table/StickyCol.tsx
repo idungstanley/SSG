@@ -1,4 +1,4 @@
-import { ReactNode, TdHTMLAttributes, useRef, useState } from 'react';
+import { ReactNode, TdHTMLAttributes, useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { Task } from '../../../../features/task/interface.tasks';
@@ -20,7 +20,7 @@ import { UniqueIdentifier } from '@dnd-kit/core';
 import { ImCancelCircle } from 'react-icons/im';
 import CloseSubtask from '../../../../assets/icons/CloseSubtask';
 import OpenSubtask from '../../../../assets/icons/OpenSubtask';
-import { titleCase } from 'title-case';
+import { Capitalize } from '../../../../utils/NoCapWords/Capitalize';
 
 interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   task: Task;
@@ -57,7 +57,8 @@ export function StickyCol({
   const COL_BG = taskId === task.id ? ACTIVE_COL_BG : DEFAULT_COL_BG;
 
   const { mutate: onAdd } = useAddTask(parentId);
-  const { currTeamMemberId, showTaskNavigation, singleLineView, taskUpperCase } = useAppSelector((state) => state.task);
+  const { currTeamMemberId, showTaskNavigation, singleLineView, verticalGrid, taskUpperCase, verticalGridlinesTask } =
+    useAppSelector((state) => state.task);
 
   const onClickTask = () => {
     navigate(`/${currentWorkspaceId}/tasks/h/${hubId}/t/${task.id}`, { replace: true });
@@ -77,6 +78,20 @@ export function StickyCol({
         activeItemName: task.name
       })
     );
+  };
+
+  useEffect(() => {
+    const { current } = inputRef;
+    current?.focus();
+    selectText(current);
+  }, []);
+
+  const selectText = (element: Node | null) => {
+    const selection = window.getSelection();
+    const range = document.createRange();
+    range.selectNodeContents(element as Node);
+    selection?.removeAllRanges();
+    selection?.addRange(range);
   };
 
   const onToggleDisplayingSubTasks = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
@@ -161,7 +176,12 @@ export function StickyCol({
 
           <div
             style={{ paddingLeft, minHeight: '42px', height: singleLineView ? '42px' : '' }}
-            className={cl(COL_BG, 'relative border-t w-full py-4 flex items-center ')}
+            className={cl(
+              COL_BG,
+              `relative border-t ${verticalGrid && 'border-r'} ${
+                verticalGridlinesTask && 'border-r'
+              } w-full py-4 flex items-center `
+            )}
           >
             <button onClick={onToggleDisplayingSubTasks} className="pl-1">
               {showSubTasks ? (
@@ -187,11 +207,11 @@ export function StickyCol({
               >
                 {task.name.length > 50 && singleLineView ? (
                   <span className="whitespace-nowrap">
-                    {taskUpperCase ? task.name.substring(0, 40).toUpperCase() : titleCase(task.name).substring(0, 40)}
+                    {taskUpperCase ? task.name.substring(0, 40).toUpperCase() : Capitalize(task.name).substring(0, 40)}
                     ...
                   </span>
                 ) : (
-                  <span>{taskUpperCase ? task.name.toUpperCase() : titleCase(task.name)}</span>
+                  <span>{taskUpperCase ? task.name.toUpperCase() : Capitalize(task.name)}</span>
                 )}
               </p>
 
@@ -226,7 +246,10 @@ export function StickyCol({
 
           <div
             style={{ paddingLeft }}
-            className={cl(COL_BG, 'relative border-t w-full h-10 py-4 p-4 flex items-center ')}
+            className={cl(
+              COL_BG,
+              `relative border-t ${verticalGrid && 'border-r'} w-full h-10 py-4 p-4 flex items-center `
+            )}
           >
             <div className="flex space-x-1 pl-4 pr-2 ">
               <button

@@ -6,10 +6,10 @@ import { useDispatch } from 'react-redux';
 import { useAppSelector } from '../../../../../app/hooks';
 import { DeleteTimeEntriesService } from '../../../../../features/task/taskService';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-// import { User } from '../../../../../components/Pilot/components/TimeClock/ClockInOut';
 import { AvatarWithInitials } from '../../../../../components';
 import { Header } from '../../../../../components/Pilot/components/TimeClock/ClockLog';
 import DateFormat from '../../../../../components/DateFormat';
+import ToolTip from '../../../../../components/Tooltip/Tooltip';
 export interface teamMember {
   id: string;
   user: {
@@ -37,7 +37,7 @@ export default function EntryList({ entries, switchHeader }: EntryListProps) {
   const { openUpdateEntryId } = useAppSelector((state) => state.task);
   const queryClient = useQueryClient();
   const headers = switchHeader;
-  const { initials } = entries.team_member.user;
+  const { initials, name } = entries.team_member.user;
 
   const handledelete = useMutation(DeleteTimeEntriesService, {
     onSuccess: () => {
@@ -71,7 +71,9 @@ export default function EntryList({ entries, switchHeader }: EntryListProps) {
           if (col.title === 'user' && !col.hidden) {
             return (
               <td key={col.id} className="flex w-10 items-center justify-start cursor-pointer py-1">
-                <AvatarWithInitials height="h-5" width="w-5" initials={initials} />
+                <ToolTip tooltip={name}>
+                  <AvatarWithInitials height="h-5" width="w-5" initials={initials} />
+                </ToolTip>
               </td>
             );
           }

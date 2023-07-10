@@ -5,12 +5,18 @@ import { setArchiveWallet, setDeleteWallet } from './walletSlice';
 import { closeMenu } from '../hubs/hubSlice';
 import { ICreateWallet, IWalletDetailRes, IWalletRes } from './wallet.interfaces';
 
-export const createWalletService = (data: { name: string; hubID?: string | null; walletId?: string | null }) => {
+export const createWalletService = (data: {
+  name: string;
+  hubID?: string | null;
+  walletId?: string | null;
+  color?: string;
+}) => {
   const response = requestNew<ICreateWallet>({
     url: 'wallets',
     method: 'POST',
     data: {
       name: data.name,
+      color: data.color,
       hub_id: data.hubID,
       parent_id: data.walletId
     }

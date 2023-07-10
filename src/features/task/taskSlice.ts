@@ -101,9 +101,11 @@ interface TaskState {
   listView: boolean;
   comfortableView: boolean;
   comfortableViewWrap: boolean;
+  verticalGrid: boolean;
   singleLineView: boolean;
   CompactView: boolean;
   taskUpperCase: boolean;
+  verticalGridlinesTask: boolean;
   CompactViewWrap: boolean;
   tableView: boolean;
   boardView: boolean;
@@ -143,6 +145,7 @@ interface TaskState {
   updateCords: number;
   activeTaskColumn: ActiveTaskColumnProps;
   duration: IDuration;
+  fetchedTime: { h: number; m: number; s: number } | null;
   period: number | undefined;
   sortType: TaskKey;
   searchValue: string;
@@ -153,6 +156,9 @@ interface TaskState {
   FilterDateString: DateString | null;
   statusId: string;
   currTaskListId: string;
+  newColInstance: [{ id: number; value: string }];
+  listIdForCustom: string | undefined;
+  listViewHeads: listColumnProps[];
 }
 
 const initialState: TaskState = {
@@ -169,7 +175,9 @@ const initialState: TaskState = {
   comfortableView: true,
   comfortableViewWrap: false,
   singleLineView: false,
+  verticalGrid: false,
   taskUpperCase: false,
+  verticalGridlinesTask: false,
   CompactView: false,
   CompactViewWrap: false,
   tableView: false,
@@ -210,6 +218,7 @@ const initialState: TaskState = {
   updateCords: Date.now(),
   activeTaskColumn: { id: '', header: '' },
   duration: { s: 0, m: 0, h: 0 },
+  fetchedTime: null,
   period: undefined,
   sortType: 'status',
   searchValue: '',
@@ -222,7 +231,10 @@ const initialState: TaskState = {
   HistoryFilterMemory: null,
   FilterDateString: null,
   statusId: '',
-  currTaskListId: ''
+  currTaskListId: '',
+  newColInstance: [{ id: 1, value: '' }],
+  listIdForCustom: '',
+  listViewHeads: []
 };
 
 export const taskSlice = createSlice({
@@ -309,8 +321,14 @@ export const taskSlice = createSlice({
     getTaskUpperCase(state, action: PayloadAction<boolean>) {
       state.taskUpperCase = action.payload;
     },
+    getVerticalGridlinesTask(state, action: PayloadAction<boolean>) {
+      state.verticalGridlinesTask = action.payload;
+    },
     getSingleLineView(state, action: PayloadAction<boolean>) {
       state.singleLineView = action.payload;
+    },
+    getVerticalGrid(state, action: PayloadAction<boolean>) {
+      state.verticalGrid = action.payload;
     },
     getCompactViewWrap(state, action: PayloadAction<boolean>) {
       state.CompactViewWrap = action.payload;
@@ -442,20 +460,6 @@ export const taskSlice = createSlice({
       state.updateCords = Date.now();
     },
     setUpdateTimerDuration(state, action: PayloadAction<IDuration>) {
-      // const timer = { ms: 0, s: 0, m: 0, h: 0 };
-      // if (timer.h >= 60) {
-      //   timer.h++;
-      //   timer.m = 0;
-      // }
-      // if (timer.s >= 60) {
-      //   timer.m++;
-      //   timer.s = 0;
-      // }
-      // if (timer.ms >= 100) {
-      //   timer.s++;
-      //   timer.ms = 0;
-      // }
-      // timer.ms++;
       state.duration = action.payload;
     },
     setStopTimer(state) {
@@ -472,6 +476,18 @@ export const taskSlice = createSlice({
     },
     setFilterDateString(state, action: PayloadAction<DateString | null>) {
       state.FilterDateString = action.payload;
+    },
+    setFetchedTime(state, action: PayloadAction<{ h: number; m: number; s: number } | null>) {
+      state.fetchedTime = action.payload;
+    },
+    setNewColInstance(state, action: PayloadAction<{ id: number; value: string }>) {
+      state.newColInstance.push(action.payload);
+    },
+    setListIdForCustom(state, action: PayloadAction<string | undefined>) {
+      state.listIdForCustom = action.payload;
+    },
+    setHeads(state, action: PayloadAction<listColumnProps[]>) {
+      state.listViewHeads = action.payload;
     }
   }
 });
@@ -493,8 +509,10 @@ export const {
   getListView,
   getComfortableView,
   getComfortableViewWrap,
+  getVerticalGrid,
   getSingleLineView,
   getTaskUpperCase,
+  getVerticalGridlinesTask,
   getCompactView,
   getCompactViewWrap,
   getTableView,
@@ -533,11 +551,15 @@ export const {
   setUpdateCords,
   setActiveTaskColumn,
   setUpdateTimerDuration,
+  setFetchedTime,
   setStopTimer,
   setTimerInterval,
   setSortType,
   setTaskSelectedDate,
   setHistoryMemory,
-  setFilterDateString
+  setFilterDateString,
+  setNewColInstance,
+  setListIdForCustom,
+  setHeads
 } = taskSlice.actions;
 export default taskSlice.reducer;

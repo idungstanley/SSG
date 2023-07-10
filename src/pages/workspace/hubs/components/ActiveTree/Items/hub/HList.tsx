@@ -17,7 +17,6 @@ import {
 } from '../../../../../../../features/workspace/workspaceSlice';
 import {
   closeMenu,
-  getCurrHubId,
   getCurrSubHubId,
   getPrevName,
   setCreateWLID,
@@ -31,6 +30,7 @@ import MenuDropdown from '../../../../../../../components/Dropdown/MenuDropdown'
 import SubDropdown from '../../../../../../../components/Dropdown/SubDropdown';
 import { cl } from '../../../../../../../utils';
 import { EntityType } from '../../../../../../../utils/EntityTypes/EntityType';
+import { Capitalize } from '../../../../../../../utils/NoCapWords/Capitalize';
 
 export default function HList({ hubs, leftMargin, taskType, level = 1 }: ListProps) {
   const { hubId } = useParams();
@@ -41,23 +41,22 @@ export default function HList({ hubs, leftMargin, taskType, level = 1 }: ListPro
   const [showChildren, setShowChidren] = useState<string | null | undefined>(null);
   const { currentItemId, showExtendedBar, createEntityType } = useAppSelector((state) => state.workspace);
   const { showSidebar } = useAppSelector((state) => state.account);
-  const { showMenuDropdown, SubMenuId } = useAppSelector((state) => state.hub);
+  const { showMenuDropdown, SubMenuId, entityToCreate } = useAppSelector((state) => state.hub);
   const [stickyButtonIndex, setStickyButtonIndex] = useState<number | undefined>(-1);
-  const hubCreationStatus = 'New Hub Under Construction';
+  const CapitalizeType = Capitalize(entityToCreate);
+  const hubCreationStatus = 'New ' + CapitalizeType + ' Under Construction';
   const id = hubId || walletId || listId || currentItemId;
 
-  const hubsSpread = [
-    ...hubs,
-    {
-      name: hubCreationStatus,
-      id: hubCreationStatus,
-      wallets: [],
-      lists: [],
-      children: [],
-      color: 'blue',
-      path: null
-    }
-  ];
+  const dummyHub = {
+    name: hubCreationStatus,
+    id: hubCreationStatus,
+    wallets: [],
+    lists: [],
+    children: [],
+    color: 'blue',
+    path: null
+  };
+  const hubsSpread = [...hubs, dummyHub];
   const hubsWithEntity = createEntityType === EntityType.hub ? (hubsSpread as Hub[]) : hubs;
   useEffect(() => {
     setShowChidren(id);
@@ -188,7 +187,12 @@ export default function HList({ hubs, leftMargin, taskType, level = 1 }: ListPro
               zNumber={taskType === 'subhub' ? '4' : '5'}
             />
             {hub.children.length && showChildren ? (
-              <HList hubs={hub.children} level={level + 1} taskType="subhub" leftMargin={false} />
+              <HList
+                hubs={(entityToCreate === EntityType.subHub ? [...hub.children, dummyHub] : hub.children) as Hub[]}
+                level={level + 1}
+                taskType="subhub"
+                leftMargin={false}
+              />
             ) : null}
             {showSidebar && (
               <div>

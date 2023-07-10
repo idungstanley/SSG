@@ -119,7 +119,6 @@ export default function CreateDropdownFieldModal({ show, setShow, listId }: Crea
                 onChange={(event) => handleInputChange(event, i.id)}
                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset placeholder-gray-300 ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               />
-
               <button onClick={() => handleRemoveOption(i.id)} className="absolute top-7 right-1">
                 <TrashIcon className="w-5 h-5 text-gray-300 cursor-pointer hover:text-primary-300 transition" />
               </button>

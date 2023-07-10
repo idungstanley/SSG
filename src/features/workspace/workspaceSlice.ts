@@ -31,6 +31,7 @@ interface workspaceState {
   currentWalletName: string | null | undefined;
   showPilot: boolean;
   createEntityType: null | string;
+  showIndependentPilot: boolean;
   sidebarWidthRD: number;
   showPilotIconView: boolean;
   showAddHotKeyDropdown: boolean;
@@ -40,6 +41,7 @@ interface workspaceState {
   activeEntity: { id: string | null; type: string | null };
   showPilotListView: boolean;
   activeTabId: number | undefined;
+  showOverlay: boolean;
   activeHotKeyTabId: number | null;
   activeSubCommunicationTabId: number | null;
   activeSubHubManagerTabId: number | null;
@@ -68,8 +70,10 @@ const initialState: workspaceState = {
   activePlaceName: null,
   pilotWidth: 400,
   showHub: false,
+  showOverlay: false,
   showWallet: false,
   showMenuDropDown: false,
+  showIndependentPilot: false,
   showModal: false,
   searchIsActive: false,
   isExtSearchActive: false,
@@ -126,6 +130,9 @@ export const wsSlice = createSlice({
     setShowTreeInput(state, action: PayloadAction<boolean>) {
       state.showTreeInput = action.payload;
     },
+    setShowOverlay(state, action: PayloadAction<boolean>) {
+      state.showOverlay = action.payload;
+    },
     setShowPilot(state, action: PayloadAction<boolean>) {
       state.showPilot = action.payload;
     },
@@ -180,6 +187,9 @@ export const wsSlice = createSlice({
     },
     setShowHub(state, action: PayloadAction<boolean>) {
       state.showHub = action.payload;
+    },
+    setShowIndependentPilot(state, action: PayloadAction<boolean>) {
+      state.showIndependentPilot = action.payload;
     },
     setSidebarWidthRD(state, action: PayloadAction<number>) {
       state.sidebarWidthRD = action.payload;
@@ -315,6 +325,7 @@ export const {
   setSearchIsActive,
   setIsExtSearchActive,
   setActiveItem,
+  setShowOverlay,
   setActiveEntityName,
   setCurrentWalletId,
   setCurrenSubtWalletId,
@@ -349,6 +360,7 @@ export const {
   setActiveLogTab,
   setSelectedDate,
   setShowTreeInput,
+  setShowIndependentPilot,
   setActiveSubHubManagerTabId
 } = wsSlice.actions;
 

@@ -5,7 +5,13 @@ import { FiChevronRight } from 'react-icons/fi';
 import Icons from '../../../../../components/Icons/Icons';
 import DropDown from '../../../../../assets/icons/arrow_drop_down_black.svg';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
-import { getCompactView, getSingleLineView, getTaskUpperCase } from '../../../../../features/task/taskSlice';
+import {
+  getCompactView,
+  getSingleLineView,
+  getTaskUpperCase,
+  getVerticalGrid,
+  getVerticalGridlinesTask
+} from '../../../../../features/task/taskSlice';
 
 interface IShowHideSettings {
   scrollByEachGroup: string;
@@ -33,7 +39,9 @@ export default function ShowHideSettings({
   const [checkedStates, setCheckedStates] = useState<boolean[]>([]);
 
   const dispatch = useAppDispatch();
-  const { singleLineView, CompactView, taskUpperCase } = useAppSelector((state) => state.task);
+  const { singleLineView, CompactView, verticalGrid, taskUpperCase, verticalGridlinesTask } = useAppSelector(
+    (state) => state.task
+  );
 
   const handleChange = (viewMode: string, index: number) => {
     const newCheckedStates = [...checkedStates];
@@ -44,8 +52,12 @@ export default function ShowHideSettings({
       dispatch(getSingleLineView(!singleLineView));
     } else if (viewMode == 'Compact mode') {
       dispatch(getCompactView(!CompactView));
+    } else if (viewMode == 'Vertical Gridlines') {
+      dispatch(getVerticalGrid(!verticalGrid));
     } else if (viewMode == 'Upper Case') {
       dispatch(getTaskUpperCase(!taskUpperCase));
+    } else if (viewMode == 'Task GridLines') {
+      dispatch(getVerticalGridlinesTask(!verticalGridlinesTask));
     }
   };
 
@@ -64,39 +76,43 @@ export default function ShowHideSettings({
     },
     {
       id: 5,
-      label: 'Upper Case'
+      label: 'Task GridLines'
     },
     {
       id: 6,
-      label: entityLocation
+      label: 'Upper Case'
     },
     {
       id: 7,
-      label: subTaskParentsNames
+      label: entityLocation
     },
     {
       id: 8,
-      label: closedSubtask
+      label: subTaskParentsNames
     },
     {
       id: 9,
-      label: TaskInMultipleLists
+      label: closedSubtask
     },
     {
       id: 10,
-      label: subTaskInMultipleLists
+      label: TaskInMultipleLists
     },
     {
       id: 11,
-      label: emptyStatuses
+      label: subTaskInMultipleLists
     },
     {
       id: 12,
+      label: emptyStatuses
+    },
+    {
+      id: 13,
       icon: <FiChevronRight />,
       label: 'Single Line mode'
     },
     {
-      id: 13,
+      id: 14,
       icon: <FiChevronRight />,
       label: 'Compact mode'
     }
@@ -143,7 +159,7 @@ export default function ShowHideSettings({
               {View.label !== 'Single Line mode' ? (
                 <button
                   className={`${
-                    View.id == 5
+                    View.id == 6
                       ? ' flex justify-between items-center w-full group border-b-2 pb-4'
                       : ' flex justify-between items-center w-full group '
                   }`}

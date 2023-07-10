@@ -14,10 +14,10 @@ import AvatarWithInitials from '../../../avatar/AvatarWithInitials';
 import { setTimerInterval, setTimerStatus, setUpdateTimerDuration } from '../../../../features/task/taskSlice';
 import { useParams } from 'react-router-dom';
 import { setTimerLastMemory } from '../../../../features/workspace/workspaceSlice';
+import { runTimer } from '../../../../utils/TimerCounter';
 
 export interface User {
   initials: string;
-  // add other properties as needed
 }
 
 export default function ClockInOut() {
@@ -29,13 +29,23 @@ export default function ClockInOut() {
   const { timerStatus, duration, period } = useAppSelector((state) => state.task);
   const { initials } = useAppSelector((state) => state.userSetting);
   const dispatch = useAppDispatch();
+  const [isRunning, setRunning] = useState(false);
   const [time, setTime] = useState({ s: 0, m: 0, h: 0 });
   const [, setBtnClicked] = useState(false);
+  const [prompt, setPrompt] = useState(false);
+  const [newTimer, setNewtimer] = useState(false);
   const { workSpaceId, listId, hubId } = useParams();
 
   const { data: getEntries } = GetTimeEntriesService({
     itemId: activeItemId,
     trigger: activeItemType === 'subhub' ? 'hub' : activeItemType
+  });
+
+  // Get currently active timers
+  const { data: getCurrent } = GetTimeEntriesService({
+    itemId: activeItemId,
+    trigger: activeItemType === 'subhub' ? 'hub' : activeItemType,
+    is_active: 1
   });
   const mutation = EndTimeEntriesService();
   const { mutate } = StartTimeEntryService();
@@ -49,10 +59,10 @@ export default function ClockInOut() {
       return dispatch(setTimerStatus(false));
     }
     dispatch(setTimerStatus(!timerStatus));
-    RunTimer();
-    dispatch(setTimerInterval(window.setInterval(RunTimer, 1000)));
+    setRunning(true);
     dispatch(setTimerLastMemory({ workSpaceId, hubId, listId, activeTabId }));
   };
+
   const stop = () => {
     mutation.mutate({
       id: activeItemId,
@@ -61,9 +71,11 @@ export default function ClockInOut() {
     });
     reset();
     setTime({ s: 0, m: 0, h: 0 });
+    setRunning(false);
     dispatch(setTimerStatus(false));
-    dispatch(setTimerInterval());
     clearInterval(period);
+    dispatch(setUpdateTimerDuration({ s: 0, m: 0, h: 0 }));
+    dispatch(setTimerInterval(undefined));
   };
 
   function timerCheck() {
@@ -88,6 +100,21 @@ export default function ClockInOut() {
     );
   }
 
+  const activeTimerCheck = () => {
+    if (timerStatus) {
+      setPrompt(true);
+    } else {
+      start();
+      setPrompt(false);
+    }
+  };
+
+  const handleTimeSwitch = () => {
+    stop();
+    setPrompt(false);
+    setNewtimer(!newTimer);
+  };
+
   const sameEntity = () => activeItemId === (timerLastMemory.hubId || timerLastMemory.listId);
 
   const handleEndTimeChange = (value: string) => {
@@ -100,22 +127,15 @@ export default function ClockInOut() {
     setTime({ s: 0, m: 0, h: 0 });
   };
 
-  let updateH = 0,
-    updateM = 0,
-    updateS = 0;
-  const RunTimer = () => {
-    if (updateM >= 59) {
-      updateH++;
-      updateM = 0;
-    }
-    if (updateS >= 59) {
-      updateM++;
-      updateS = 0;
-    }
-    updateS++;
-    setTime({ h: updateH, m: updateM, s: updateS });
-    return dispatch(setUpdateTimerDuration({ s: updateS, m: updateM, h: updateH }));
-  };
+  const RunTimer = runTimer({ isRunning: isRunning, setTime: setTime });
+
+  useEffect(() => {
+    RunTimer;
+  }, [isRunning]);
+
+  useEffect(() => {
+    newTimer && start();
+  }, [newTimer]);
 
   return (
     <div className="p-2 mt-6 rounded-t-md">
@@ -137,22 +157,53 @@ export default function ClockInOut() {
           </div>
           <div id="entries" className="flex items-center justify-between py-1">
             <div id="left" className="flex items-center space-x-1 cursor-pointer">
-              <div className="mr-1">
+              <div className="mr-1 relative flex items-center">
                 {timerStatus && sameEntity() ? (
                   // !btnClicked && !timerStatus ? (
                   <button onClick={stop}>
-                    <BsStopCircle className="text-2xl text-red-400 cursor-pointer" aria-hidden="true" />
+                    <BsStopCircle className="text-2xl h-4 w-4 text-red-400 cursor-pointer" aria-hidden="true" />
                   </button>
                 ) : (
-                  <button onClick={start}>
-                    <AiOutlinePlayCircle className="text-2xl text-green-500 cursor-pointer" aria-hidden="true" />
+                  <button onClick={() => activeTimerCheck()}>
+                    <AiOutlinePlayCircle
+                      className="text-2xl h-4 w-4 text-green-500 cursor-pointer"
+                      aria-hidden="true"
+                    />
                   </button>
+                )}
+                {prompt && (
+                  <div className="absolute top-5 p-2 rounded-lg shadow-2xl flex flex-col space-y-1 bg-gray-100 z-50 w-72">
+                    <span className="text-center text-gray-700">
+                      Another Timer Already Running would you want to stop the active timer and continue here?
+                    </span>
+                    <div className="flex w-full space-x-1 justify-end">
+                      <button
+                        className="bg-alsoit-text hover:bg-alsoit-text-active text-white p-1 rounded-lg font-bold"
+                        onClick={() => setPrompt(false)}
+                      >
+                        No
+                      </button>
+                      <button
+                        className="bg-alsoit-text-active hover:bg-purple-600 text-white p-1 rounded-lg font-bold"
+                        onClick={() => handleTimeSwitch()}
+                      >
+                        Yes
+                      </button>
+                    </div>
+                  </div>
                 )}
               </div>
               {/* timer goes here */}
               {timerCheck()}
-              <div className="flex items-center justify-start -space-x-4 cursor-pointer">
-                <AvatarWithInitials height="h-7" width="w-7" initials={initials ?? ''} />
+              <div className="flex items-center justify-start -space-x-3 cursor-pointer">
+                {getCurrent?.data.time_entries.map((entry) => {
+                  const { team_member } = entry;
+                  return (
+                    <div key={entry.id} className="flex">
+                      <AvatarWithInitials height="h-7" width="w-7" initials={team_member.user.initials ?? initials} />
+                    </div>
+                  );
+                })}
               </div>
             </div>
             <div id="right" className="flex items-center space-x-1">
@@ -173,6 +224,35 @@ export default function ClockInOut() {
             </div>
           </div>
         </section>
+        <div className="w-full p-2 my-4">
+          {getCurrent?.data.time_entries && getCurrent?.data.time_entries.length > 0 ? (
+            <div>
+              <table className="w-full">
+                <thead className="flex justify-start py-1 items-center border-b-2 border-gray-300">
+                  <th className="w-1/2 text-start">User</th>
+                  <th className="w-1/2 text-start">Duration</th>
+                </thead>
+                <tbody className="w-full">
+                  {getCurrent.data.time_entries.map((entry) => {
+                    return (
+                      <tr key={entry.id} className="space-x-4 flex py-2 border-b-2 items-center w-full">
+                        <td className="text-alsoit-text-lg font-semibold text-alsoit-text w-1/2">
+                          {entry.team_member.user.name}
+                        </td>
+                        <td className="text-alsoit-text-lg font-semibold text-alsoit-text w-1/2">
+                          within {moment.duration(moment().diff(entry.start_date)).humanize()} ago
+                        </td>
+                        <td className="text-alsoit-text-lg font-semibold text-alsoit-text">{entry.description}</td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <div className="text-alsoit-text font-semibold text-center">No active timer found for this entity</div>
+          )}
+        </div>
       </div>
     </div>
   );
