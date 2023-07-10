@@ -15,6 +15,7 @@ import { setTimerInterval, setTimerStatus, setUpdateTimerDuration } from '../../
 import { useParams } from 'react-router-dom';
 import { setTimerLastMemory } from '../../../../features/workspace/workspaceSlice';
 import { runTimer } from '../../../../utils/TimerCounter';
+import ClockLog from './ClockLog';
 
 export interface User {
   initials: string;
@@ -225,33 +226,7 @@ export default function ClockInOut() {
           </div>
         </section>
         <div className="w-full p-2 my-4">
-          {getCurrent?.data.time_entries && getCurrent?.data.time_entries.length > 0 ? (
-            <div>
-              <table className="w-full">
-                <thead className="flex justify-start py-1 items-center border-b-2 border-gray-300">
-                  <th className="w-1/2 text-start">User</th>
-                  <th className="w-1/2 text-start">Duration</th>
-                </thead>
-                <tbody className="w-full">
-                  {getCurrent.data.time_entries.map((entry) => {
-                    return (
-                      <tr key={entry.id} className="space-x-4 flex py-2 border-b-2 items-center w-full">
-                        <td className="text-alsoit-text-lg font-semibold text-alsoit-text w-1/2">
-                          {entry.team_member.user.name}
-                        </td>
-                        <td className="text-alsoit-text-lg font-semibold text-alsoit-text w-1/2">
-                          within {moment.duration(moment().diff(entry.start_date)).humanize()} ago
-                        </td>
-                        <td className="text-alsoit-text-lg font-semibold text-alsoit-text">{entry.description}</td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
-          ) : (
-            <div className="text-alsoit-text font-semibold text-center">No active timer found for this entity</div>
-          )}
+          <ClockLog />
         </div>
       </div>
     </div>

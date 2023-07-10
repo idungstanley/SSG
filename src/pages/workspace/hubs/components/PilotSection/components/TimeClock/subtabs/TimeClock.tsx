@@ -11,10 +11,6 @@ export const TimeClockOptions = [
     element: <ClockInOut />
   },
   {
-    id: 1,
-    element: <ClockLog />
-  },
-  {
     id: 2,
     element: <ClockPreferences />
   }
