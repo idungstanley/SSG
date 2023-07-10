@@ -71,7 +71,7 @@ export function Assignee() {
         <Me active={forMe} />
         <span>Me</span>
       </Button>
-      <Button active={true} onClick={() => dispatch(setShowFilterByAssigneeSlideOver(true))}>
+      <Button active={false} onClick={() => dispatch(setShowFilterByAssigneeSlideOver(true))}>
         <Icons src={AssigneeIcon} />
         <span>Assignee</span>
       </Button>
