@@ -9,7 +9,7 @@ export default function Search() {
     <>
       <button
         type="button"
-        className="relative flex items-center w-full p-1 px-6 mt-2 mb-1 transition duration-300 rounded-md cursor-pointer group"
+        className="relative flex items-center w-full p-1 px-6 mt-2 mb-1 transition duration-300 cursor-pointer group"
         onClick={() => setCommandSearchModal(true)}
       >
         <div
@@ -23,7 +23,7 @@ export default function Search() {
           <p className="mr-14">Ctrl+k</p>
         </div>
         <input
-          className="w-full h-8 pl-3 text-xs border-gray-400 rounded-2xl group-hover:border-fuchsia-500 group-hover:text-primary-400"
+          className="w-full h-8 pl-3 text-xs border-gray-400 rounded group-hover:border-fuchsia-500 group-hover:text-primary-400"
           disabled
           type="text"
         />
