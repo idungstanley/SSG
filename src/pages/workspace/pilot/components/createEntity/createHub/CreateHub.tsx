@@ -2,8 +2,14 @@ import React, { useState } from 'react';
 import { Button, Checkbox, Input } from '../../../../../../components';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
-import { createHubService } from '../../../../../../features/hubs/hubService';
-import { setEntityToCreate, setSubDropdownMenu, setshowMenuDropdown } from '../../../../../../features/hubs/hubSlice';
+import { createHubService, useGetHubChildren } from '../../../../../../features/hubs/hubService';
+import {
+  getCurrHubId,
+  getSubMenu,
+  setEntityToCreate,
+  setSubDropdownMenu,
+  setshowMenuDropdown
+} from '../../../../../../features/hubs/hubSlice';
 import { setCreateEntityType, setShowOverlay } from '../../../../../../features/workspace/workspaceSlice';
 import { EntityType } from '../../../../../../utils/EntityTypes/EntityType';
 import Assignee from '../../../../tasks/assignTask/Assignee';
@@ -11,6 +17,7 @@ import Wand from '../../../../../../assets/icons/Wand';
 import ArrowDown from '../../../../../../assets/icons/ArrowDown';
 import Palette from '../../../../../../components/ColorPalette';
 import { ListColourProps } from '../../../../../../components/tasks/ListItem';
+import { displayPrompt, setVisibility } from '../../../../../../features/general/prompt/promptSlice';
 
 interface formProps {
   name: string;
@@ -22,7 +29,7 @@ export default function CreateHub() {
   const dispatch = useAppDispatch();
   const [paletteColor, setPaletteColor] = useState<string | ListColourProps | undefined>('');
   const [showPalette, setShowPalette] = useState<boolean>(false);
-  const { selectedTreeDetails } = useAppSelector((state) => state.hub);
+  const { selectedTreeDetails, SubMenuType, SubMenuId, currHubId } = useAppSelector((state) => state.hub);
 
   const { type, id } = selectedTreeDetails;
   const createHub = useMutation(createHubService, {
@@ -32,10 +39,17 @@ export default function CreateHub() {
       dispatch(setSubDropdownMenu(false));
       dispatch(setShowOverlay(false));
       dispatch(
+        getSubMenu({
+          SubMenuId: null
+        })
+      );
+      dispatch(getCurrHubId(null));
+      dispatch(
         setshowMenuDropdown({
           showMenuDropdown: null
         })
       );
+      dispatch(setVisibility(false));
       dispatch(setCreateEntityType(null));
       dispatch(setEntityToCreate(null));
       setFormState(defaultHubFormState);
@@ -69,16 +83,48 @@ export default function CreateHub() {
   const currentWorkspaceId: string | undefined = JSON.parse(
     localStorage.getItem('currentWorkspaceId') || '"'
   ) as string;
+  const { data } = useGetHubChildren({
+    query: type === 'hub' ? id : currHubId
+  });
 
+  const isCreateAllowed = !!data && (data?.data.wallets?.length > 0 || data?.data?.lists?.length > 0);
   const { name } = formState;
 
   const onSubmit = async () => {
-    await createHub.mutateAsync({
-      name,
-      color: paletteColor as string,
-      currentWorkspaceId,
-      currHubId: type === EntityType.hub ? id : null
-    });
+    try {
+      await createHub.mutateAsync({
+        name,
+        color: paletteColor as string,
+        currentWorkspaceId,
+        currHubId: type === EntityType.hub ? id : null
+      });
+    } catch {
+      if (isCreateAllowed) {
+        dispatch(
+          displayPrompt('Create Subhub', 'Would move all entities in Hub to Subhub. Do you want to proceed?', [
+            {
+              label: 'Create Subhub',
+              style: 'danger',
+              callback: async () => {
+                await createHub.mutateAsync({
+                  name,
+                  currentWorkspaceId,
+                  currHubId: id,
+                  confirmAction: 1
+                });
+              }
+            },
+            {
+              label: 'Cancel',
+              style: 'plain',
+              callback: () => {
+                dispatch(setVisibility(false));
+              }
+            }
+          ])
+        );
+      }
+    }
   };
   return (
     <div className="w-full h-auto p-2 overflow-y-auto" style={{ maxHeight: '420px' }}>
