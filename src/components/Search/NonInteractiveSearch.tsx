@@ -10,7 +10,7 @@ export default function NonInteractiveSearch({ children, setAction, modal }: Sea
     <>
       <button
         type="button"
-        className="relative flex items-center w-full p-1 px-6 mt-2 mb-1 transition duration-300 rounded-md cursor-pointer focus:outline-0 group"
+        className="relative flex items-center w-full p-1 px-3 mt-2 mb-1 transition duration-300 rounded-md cursor-pointer focus:outline-0 group"
         onClick={() => setAction(true)}
       >
         {children}

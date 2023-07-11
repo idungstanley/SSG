@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { dimensions } from '../../app/config/dimensions';
-import { IRecorderLastMemory, ITimerLastMemory } from './workspace.interfaces';
+import { IRecorderLastMemory, ITimerLastMemory, IWorkspaceRes } from './workspace.interfaces';
 import { IActivityLog } from '../general/history/history.interfaces';
 import dayjs, { Dayjs } from 'dayjs';
 
@@ -60,6 +60,7 @@ interface workspaceState {
   activeLogTab: 'activity' | 'history';
   selectedDate: { date: Dayjs; dateType?: string } | null;
   showTreeInput: boolean;
+  workspaceData: undefined | IWorkspaceRes;
 }
 
 const initialState: workspaceState = {
@@ -107,6 +108,7 @@ const initialState: workspaceState = {
   activePlaceNameForNavigation: null,
   activePlaceIdForNavigation: null,
   createWlLink: false,
+  workspaceData: undefined,
   activeSubRecordsTabId: 0,
   recorderLastMemory: { activeTabId: 0, workSpaceId: '', listId: '', hubId: '' },
   timerLastMemory: { activeTabId: 0, workSpaceId: '', listId: '', hubId: '' },
@@ -184,6 +186,9 @@ export const wsSlice = createSlice({
     },
     setCreateEntityType(state, action: PayloadAction<null | string>) {
       state.createEntityType = action.payload;
+    },
+    setWorkspaceData(state, action: PayloadAction<undefined | IWorkspaceRes>) {
+      state.workspaceData = action.payload;
     },
     setShowHub(state, action: PayloadAction<boolean>) {
       state.showHub = action.payload;
@@ -353,6 +358,7 @@ export const {
   setActiveSubRecordTabId,
   toggleMute,
   setRecorderLastMemory,
+  setWorkspaceData,
   setTimerLastMemory,
   resetWorkSpace,
   setActivityArray,
