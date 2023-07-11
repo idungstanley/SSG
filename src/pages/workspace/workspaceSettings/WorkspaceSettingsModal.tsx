@@ -216,78 +216,41 @@ export default function WorkspaceSettingsModal() {
                 </div>
               )}
               <div className="h-40 overflow-y-auto">
-                {searchInput.length > 1
-                  ? filteredResults?.map((i: WorkspaceProps) => (
-                      <Menu.Item key={i.id}>
-                        {({ active }) => (
-                          <div
-                            className={cl(
-                              active ? 'bg-gray-200' : '',
-                              'flex items-center px-4 py-2 mt-1 justify-between rounded-md mr-1'
-                            )}
-                          >
-                            <div
-                              className={cl('flex items-center space-x-1 text-sm text-gray-600 text-left w-full')}
-                              onClick={() => onSwitchWorkspace(i.id)}
-                            >
-                              <div>
-                                <AvatarWithInitials
-                                  initials={i.initials.toUpperCase()}
-                                  height="h-5"
-                                  width="w-5"
-                                  roundedStyle="rounded"
-                                  backgroundColour={i.color}
-                                />
-                              </div>
-                              <p className="capitalize truncate" style={{ fontSize: '10px' }}>
-                                {i.name}
-                              </p>
-                            </div>
-                            {pinnedIds.includes(i.id) ? (
-                              <BsPinFill className="mr-1" onClick={(e) => togglePin(i.id, e)} />
-                            ) : (
-                              <BsPinAngle className="mr-1" onClick={(e) => togglePin(i.id, e)} />
-                            )}
-                          </div>
+                {filteredResults?.map((i: WorkspaceProps) => (
+                  <Menu.Item key={i.id}>
+                    {({ active }) => (
+                      <div
+                        className={cl(
+                          active ? 'bg-gray-200' : '',
+                          'flex items-center px-4 py-2 mt-1 justify-between rounded-md mr-1'
                         )}
-                      </Menu.Item>
-                    ))
-                  : sortedItems?.map((i: WorkspaceProps) => (
-                      <Menu.Item key={i.id}>
-                        {({ active }) => (
-                          <div
-                            className={cl(
-                              active ? 'bg-gray-200' : '',
-                              'flex items-center px-4 py-2 mt-1 justify-between rounded-md mr-1'
-                            )}
-                          >
-                            <button
-                              type="button"
-                              className={cl('flex items-center space-x-1  text-sm text-gray-600 text-left w-full')}
-                              onClick={() => onSwitchWorkspace(i.id)}
-                            >
-                              <div>
-                                <AvatarWithInitials
-                                  initials={i.initials.toUpperCase()}
-                                  height="h-5"
-                                  width="w-5"
-                                  roundedStyle="rounded"
-                                  backgroundColour={i.color}
-                                />
-                              </div>
-                              <p className="capitalize truncate" style={{ fontSize: '10px' }}>
-                                {i.name}
-                              </p>
-                            </button>
-                            {pinnedIds.includes(i.id) ? (
-                              <BsPinFill className="mr-1" onClick={(e) => togglePin(i.id, e)} />
-                            ) : (
-                              <BsPinAngle className="mr-1" onClick={(e) => togglePin(i.id, e)} />
-                            )}
+                      >
+                        <div
+                          className={cl('flex items-center space-x-1 text-sm text-gray-600 text-left w-full')}
+                          onClick={() => onSwitchWorkspace(i.id)}
+                        >
+                          <div>
+                            <AvatarWithInitials
+                              initials={i.initials.toUpperCase()}
+                              height="h-5"
+                              width="w-5"
+                              roundedStyle="rounded"
+                              backgroundColour={i.color}
+                            />
                           </div>
+                          <p className="capitalize truncate" style={{ fontSize: '10px' }}>
+                            {i.name}
+                          </p>
+                        </div>
+                        {pinnedIds.includes(i.id) ? (
+                          <BsPinFill className="mr-1" onClick={(e) => togglePin(i.id, e)} />
+                        ) : (
+                          <BsPinAngle className="mr-1" onClick={(e) => togglePin(i.id, e)} />
                         )}
-                      </Menu.Item>
-                    ))}
+                      </div>
+                    )}
+                  </Menu.Item>
+                ))}
               </div>
             </div>
           </section>
