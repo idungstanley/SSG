@@ -90,7 +90,7 @@ export const useAddTask = (parentTaskId?: string) => {
   return useMutation(addTask, {
     onSuccess: () => {
       queryClient.invalidateQueries(['task', id, type]);
-      queryClient.invalidateQueries(['sub-tasks', parentTaskId]);
+      queryClient.invalidateQueries(['sub-tasks']);
     }
   });
 };
