@@ -97,7 +97,8 @@ interface TaskState {
   myTaskData: ImyTaskData[];
   taskColumns: listColumnProps[];
   hideTask: listColumnProps[];
-  current_task_id: string | null;
+  currentTaskId: string | null;
+  selectedTasksArray: string[];
   listView: boolean;
   comfortableView: boolean;
   comfortableViewWrap: boolean;
@@ -170,11 +171,12 @@ const initialState: TaskState = {
   myTaskData: [],
   taskColumns: [],
   hideTask: [],
-  current_task_id: null,
+  currentTaskId: null,
   listView: true,
   comfortableView: true,
   comfortableViewWrap: false,
-  singleLineView: false,
+  singleLineView: true,
+  selectedTasksArray: [],
   verticalGrid: false,
   taskUpperCase: false,
   verticalGridlinesTask: false,
@@ -324,6 +326,9 @@ export const taskSlice = createSlice({
     getVerticalGridlinesTask(state, action: PayloadAction<boolean>) {
       state.verticalGridlinesTask = action.payload;
     },
+    setSelectedTasksArray(state, action: PayloadAction<string[]>) {
+      state.selectedTasksArray = action.payload;
+    },
     getSingleLineView(state, action: PayloadAction<boolean>) {
       state.singleLineView = action.payload;
     },
@@ -371,7 +376,7 @@ export const taskSlice = createSlice({
     },
 
     setCurrentTaskId(state, action: PayloadAction<string | null>) {
-      state.current_task_id = action.payload;
+      state.currentTaskId = action.payload;
     },
     setCloseTaskListView(state, action: PayloadAction<boolean>) {
       state.closeTaskListView = action.payload;
@@ -523,6 +528,7 @@ export const {
   setShowTaskNavigation,
   setRmWatcher,
   setCurrentTaskId,
+  setSelectedTasksArray,
   setAddNewTaskItem,
   setCloseTaskListView,
   setToggleAssignCurrentTaskId,

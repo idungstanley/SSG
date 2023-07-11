@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import SubtasksIcon from '../../../../assets/icons/SubtasksIcon';
-import { IStatus, Tag, Task } from '../../../../features/task/interface.tasks';
+import { Tag, Task } from '../../../../features/task/interface.tasks';
 import { DEFAULT_LEFT_PADDING } from '../../config';
 import { Column } from '../../types/table';
 import { AddTask } from '../AddTask/AddTask';
@@ -10,11 +10,6 @@ import { SubTasks } from '../Table/SubTasks';
 import { useDraggable } from '@dnd-kit/core';
 import { MdDragIndicator } from 'react-icons/md';
 import { ManageTagsDropdown } from '../../../Tag/ui/ManageTagsDropdown/ui/ManageTagsDropdown';
-import { useNavigate, useParams } from 'react-router-dom';
-import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
-import { setShowPilotSideOver } from '../../../../features/general/slideOver/slideOverSlice';
-import { setTaskIdForPilot } from '../../../../features/task/taskSlice';
-import { setActiveItem } from '../../../../features/workspace/workspaceSlice';
 import { Tags } from '../../../Tag';
 
 interface RowProps {
@@ -36,14 +31,9 @@ export function AddSubTask({
   isListParent,
   handleClose
 }: RowProps) {
-  const [showNewTaskField, setShowNewTaskField] = useState(false);
+  const [showNewTaskField] = useState(false);
   const otherColumns = columns.slice(1);
   const [showSubTasks, setShowSubTasks] = useState(false);
-
-  const navigate = useNavigate();
-  const dispatch = useAppDispatch();
-  const { hubId, walletId, listId } = useParams();
-  const { currentWorkspaceId } = useAppSelector((state) => state.auth);
 
   const onShowAddSubtaskField = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.stopPropagation();
@@ -64,32 +54,6 @@ export function AddSubTask({
     opacity: transform ? 0 : 100
   };
 
-  const onClickTask = () => {
-    if (task.id !== '0') {
-      hubId
-        ? navigate(`/${currentWorkspaceId}/tasks/h/${hubId}/t/${task.id}`, { replace: true })
-        : walletId
-        ? navigate(`/${currentWorkspaceId}/tasks/w/${walletId}/t/${task.id}`, { replace: true })
-        : navigate(`/${currentWorkspaceId}/tasks/l/${listId}/t/${task.id}`, { replace: true });
-      dispatch(
-        setShowPilotSideOver({
-          id: task.id,
-          type: 'task',
-          show: true,
-          title: task.name
-        })
-      );
-      dispatch(setTaskIdForPilot(task.id));
-      dispatch(
-        setActiveItem({
-          activeItemId: task.id,
-          activeItemType: 'task',
-          activeItemName: task.name
-        })
-      );
-    }
-  };
-
   return (
     <>
       {/* current task */}
@@ -100,7 +64,6 @@ export function AddSubTask({
           style={{ zIndex: 3 }}
           task={task}
           isListParent={isListParent}
-          onClick={onClickTask}
           parentId={parentId as string}
           task_status={task_status as string}
           onClose={handleClose}

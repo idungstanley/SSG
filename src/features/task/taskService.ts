@@ -90,9 +90,20 @@ export const useAddTask = (parentTaskId?: string) => {
   return useMutation(addTask, {
     onSuccess: () => {
       queryClient.invalidateQueries(['task', id, type]);
-      queryClient.invalidateQueries(['sub-tasks', parentTaskId]);
+      queryClient.invalidateQueries(['sub-tasks']);
     }
   });
+};
+
+export const deleteTask = (data: { selectedTasksArray: string[] }) => {
+  const request = requestNew({
+    url: 'tasks/multiple/delete',
+    method: 'POST',
+    data: {
+      ids: data.selectedTasksArray
+    }
+  });
+  return request;
 };
 
 export const createTaskService = (data: {

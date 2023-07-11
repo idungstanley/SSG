@@ -11,7 +11,7 @@ export function Chevron({ onToggle, active, color }: ChevronProps) {
   const [isHovered, setIsHovered] = useState(false);
 
   const defaultStyle = {
-    color: isHovered ? 'white' : color,
+    color: isHovered ? 'white' : 'white',
     backgroundColor: isHovered ? color : ''
   };
 

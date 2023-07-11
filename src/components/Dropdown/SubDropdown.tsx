@@ -68,6 +68,7 @@ export default function SubDropdown() {
   });
   const navLink = '/tasks';
   const CapitalizeType = Capitalize(lastClicked);
+  console.log(lastClicked);
 
   const handleFetch = () => {
     setFetchTree((prev) => !prev);
@@ -163,17 +164,8 @@ export default function SubDropdown() {
           ? 'Sub Wallet'
           : 'Wallet',
       handleClick: () => {
-        if (
-          SubMenuType !== 'wallet' &&
-          SubMenuType !== 'subwallet2' &&
-          showMenuDropdownType !== 'wallet' &&
-          showMenuDropdownType !== 'subwallet2'
-        ) {
-          dispatch(setEntityToCreate(EntityType.wallet));
-          setLastClicked('Wallet');
-        } else {
-          navigate(`/${currentWorkspaceId}` + navLink);
-        }
+        dispatch(setEntityToCreate(EntityType.wallet));
+        setLastClicked(selectedTreeDetails.type === EntityType.wallet ? 'Sub Wallet' : 'Wallet');
       },
       icon: <FaFolder className="w-4 h-4" aria-hidden="true" />,
       isVisible:

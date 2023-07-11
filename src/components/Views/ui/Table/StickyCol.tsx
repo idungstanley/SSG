@@ -11,6 +11,7 @@ import { setShowPilotSideOver } from '../../../../features/general/slideOver/sli
 import {
   setCurrentTaskId,
   setCurrentTaskStatusId,
+  setSelectedTasksArray,
   setShowTaskNavigation,
   setTaskIdForPilot
 } from '../../../../features/task/taskSlice';
@@ -21,6 +22,9 @@ import { ImCancelCircle } from 'react-icons/im';
 import CloseSubtask from '../../../../assets/icons/CloseSubtask';
 import OpenSubtask from '../../../../assets/icons/OpenSubtask';
 import { Capitalize } from '../../../../utils/NoCapWords/Capitalize';
+import InteractiveTooltip from '../../../Tooltip/InteractiveTooltip';
+import RoundedCheckbox from '../../../Checkbox/RoundedCheckbox';
+import ToolTip from '../../../Tooltip/Tooltip';
 
 interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   task: Task;
@@ -53,31 +57,37 @@ export function StickyCol({
   const { currentWorkspaceId } = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { taskId, hubId } = useParams();
+  const { taskId, hubId, walletId, listId } = useParams();
   const COL_BG = taskId === task.id ? ACTIVE_COL_BG : DEFAULT_COL_BG;
-
+  const [isChecked, setIsChecked] = useState(false);
   const { mutate: onAdd } = useAddTask(parentId);
-  const { currTeamMemberId, showTaskNavigation, singleLineView, verticalGrid, taskUpperCase, verticalGridlinesTask } =
+  const { currTeamMemberId, singleLineView, verticalGrid, taskUpperCase, selectedTasksArray, verticalGridlinesTask } =
     useAppSelector((state) => state.task);
 
   const onClickTask = () => {
-    navigate(`/${currentWorkspaceId}/tasks/h/${hubId}/t/${task.id}`, { replace: true });
-    dispatch(
-      setShowPilotSideOver({
-        id: task.id,
-        type: 'task',
-        show: true,
-        title: task.name
-      })
-    );
-    dispatch(setTaskIdForPilot(task.id));
-    dispatch(
-      setActiveItem({
-        activeItemId: task.id,
-        activeItemType: 'task',
-        activeItemName: task.name
-      })
-    );
+    if (task.id !== '0') {
+      hubId
+        ? navigate(`/${currentWorkspaceId}/tasks/h/${hubId}/t/${task.id}`, { replace: true })
+        : walletId
+        ? navigate(`/${currentWorkspaceId}/tasks/w/${walletId}/t/${task.id}`, { replace: true })
+        : navigate(`/${currentWorkspaceId}/tasks/l/${listId}/t/${task.id}`, { replace: true });
+      dispatch(
+        setShowPilotSideOver({
+          id: task.id,
+          type: 'task',
+          show: true,
+          title: task.name
+        })
+      );
+      dispatch(setTaskIdForPilot(task.id));
+      dispatch(
+        setActiveItem({
+          activeItemId: task.id,
+          activeItemType: 'task',
+          activeItemName: task.name
+        })
+      );
+    }
   };
 
   useEffect(() => {
@@ -85,7 +95,6 @@ export function StickyCol({
     current?.focus();
     selectText(current);
   }, []);
-
   const selectText = (element: Node | null) => {
     const selection = window.getSelection();
     const range = document.createRange();
@@ -93,30 +102,21 @@ export function StickyCol({
     selection?.removeAllRanges();
     selection?.addRange(range);
   };
-
   const onToggleDisplayingSubTasks = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.stopPropagation();
     setShowSubTasks(!showSubTasks);
   };
-  const displayNav = (id: string) => {
-    dispatch(setShowTaskNavigation(!showTaskNavigation));
-    dispatch(setCurrentTaskId(id));
-  };
-
   const queryClient = useQueryClient();
   const inputRef = useRef<HTMLInputElement | null>(null);
-
   const { attributes, listeners, setNodeRef } = useSortable({
     id: task?.id as UniqueIdentifier
   });
-
   const [eitableContent, setEitableContent] = useState(false);
   const editTaskMutation = useMutation(UseUpdateTaskService, {
     onSuccess: () => {
       queryClient.invalidateQueries(['task']);
     }
   });
-
   const handleOnSave = async (
     e: React.KeyboardEvent<HTMLDivElement> | React.MouseEvent<HTMLButtonElement, MouseEvent>,
     id: string
@@ -127,7 +127,6 @@ export function StickyCol({
       onClickSave();
     }
   };
-
   const onClickSave = () => {
     if (inputRef.current?.innerText) {
       const name = inputRef.current?.innerText;
@@ -141,7 +140,6 @@ export function StickyCol({
       });
     }
   };
-
   const handleEditTask = async (e: React.KeyboardEvent<HTMLDivElement>, id: string) => {
     e.preventDefault();
     await editTaskMutation.mutateAsync({
@@ -150,35 +148,53 @@ export function StickyCol({
     });
   };
 
+  useEffect(() => {
+    const isSelected = selectedTasksArray.includes(task.id);
+    isSelected ? setIsChecked(true) : setIsChecked(false);
+  }, [selectedTasksArray]);
+
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const isChecked = e.target.checked;
+    dispatch(setShowTaskNavigation(isChecked));
+    if (isChecked) {
+      // Add the task ID to the selectedTasksArray array if it's not already present
+      if (!selectedTasksArray.includes(task.id)) {
+        const updatedTaskIds = [...selectedTasksArray, task.id];
+        dispatch(setSelectedTasksArray(updatedTaskIds));
+      }
+    } else {
+      // Remove the task ID from the selectedTasksArray array
+      const updatedTaskIds = selectedTasksArray.filter((id: string) => id !== task.id);
+      dispatch(setSelectedTasksArray(updatedTaskIds));
+    }
+    setIsChecked(isChecked);
+  };
+
   return (
     <>
       {task.id !== '0' && (
         <td
           className="sticky left-0 flex items-start justify-start text-sm font-medium text-start text-gray-900 cursor-pointer"
-          onClick={onClickTask}
           {...props}
         >
-          <div className="flex items-center h-full space-x-1 bg-purple-50">
-            <input
-              type="checkbox"
-              id="checked-checkbox"
-              className="w-2 h-2 rounded-full opacity-0 cursor-pointer focus:outline-1 focus:ring-transparent  focus:border-2 focus:opacity-100 group-hover:opacity-100"
-              style={{ marginLeft: '-0.3px' }}
-              ref={setNodeRef}
-              {...attributes}
-              {...listeners}
-              onClick={() => {
-                displayNav(task?.id as string);
-              }}
+          <div className="flex items-center h-full space-x-1 ">
+            <RoundedCheckbox
+              onChange={onChange}
+              isChecked={isChecked}
+              styles={`w-4 h-4 rounded-full ${
+                selectedTasksArray.length > 0 ? 'opacity-100' : 'opacity-0'
+              } cursor-pointer focus:outline-1 focus:ring-transparent  focus:border-2 focus:opacity-100 group-hover:opacity-100`}
             />
-            {dragElement}
+            <div ref={setNodeRef} {...attributes} {...listeners} className="pr-2">
+              {dragElement}
+            </div>
           </div>
-
           <div
             style={{ paddingLeft, minHeight: '42px', height: singleLineView ? '42px' : '' }}
+            onClick={onClickTask}
             className={cl(
               COL_BG,
-              `relative border-t ${verticalGrid && 'border-r'} ${
+              `relative border-t ${isChecked && 'tdListV'} ${verticalGrid && 'border-r'} ${
                 verticalGridlinesTask && 'border-r'
               } w-full py-4 flex items-center `
             )}
@@ -206,15 +222,20 @@ export function StickyCol({
                 onKeyDown={(e) => (e.key === 'Enter' ? handleEditTask(e, task.id) : null)}
               >
                 {task.name.length > 50 && singleLineView ? (
-                  <span className="whitespace-nowrap">
-                    {taskUpperCase ? task.name.substring(0, 40).toUpperCase() : Capitalize(task.name).substring(0, 40)}
-                    ...
-                  </span>
+                  <>
+                    <InteractiveTooltip content={<p>{task.name}</p>} top="-top-28">
+                      <span className="whitespace-nowrap">
+                        {taskUpperCase
+                          ? task.name.substring(0, 40).toUpperCase()
+                          : Capitalize(task.name).substring(0, 40)}
+                        ...
+                      </span>
+                    </InteractiveTooltip>
+                  </>
                 ) : (
                   <span>{taskUpperCase ? task.name.toUpperCase() : Capitalize(task.name)}</span>
                 )}
               </p>
-
               {tags}
             </div>
             {children}
@@ -225,23 +246,19 @@ export function StickyCol({
       {task.id === '0' && (
         <td
           className="sticky left-0 flex items-start justify-start text-sm font-medium text-start text-gray-900 cursor-pointer"
-          onClick={onClickTask}
           {...props}
         >
-          <div className="flex items-center h-full space-x-1 bg-purple-50 opacity-0">
-            <input
-              type="checkbox"
-              id="checked-checkbox"
-              className="w-2 h-2 rounded-full opacity-0 cursor-pointer focus:outline-1 focus:ring-transparent group-hover:opacity-100 focus:border-2 focus:opacity-100 "
-              style={{ marginLeft: '-1px' }}
-              ref={setNodeRef}
-              {...attributes}
-              {...listeners}
-              onClick={() => {
-                displayNav(task?.id as string);
-              }}
+          <div className="flex items-center h-full space-x-1 opacity-0">
+            <RoundedCheckbox
+              onChange={onChange}
+              isChecked={isChecked}
+              styles={`w-4 h-4 rounded-full ${
+                selectedTasksArray.length > 0 ? 'opacity-100' : 'opacity-0'
+              } cursor-pointer focus:outline-1 focus:ring-transparent  focus:border-2 focus:opacity-100 group-hover:opacity-100`}
             />
-            {dragElement}
+            <div ref={setNodeRef} {...attributes} {...listeners} className="pr-2">
+              {dragElement}
+            </div>
           </div>
 
           <div
@@ -251,19 +268,20 @@ export function StickyCol({
               `relative border-t ${verticalGrid && 'border-r'} w-full h-10 py-4 p-4 flex items-center `
             )}
           >
-            <div className="flex space-x-1 pl-4 pr-2 ">
+            <div className="flex space-x-1 -mt-7 ml-1 absolute">
+              <ToolTip tooltip="Cancel">
+                <ImCancelCircle onClick={onClose} className="h-3 w-3" />
+              </ToolTip>
               <button
                 onClick={(e) => handleOnSave(e as React.MouseEvent<HTMLButtonElement, MouseEvent>, task.id)}
-                className="p-0.5 text-white rounded-sm bg-lime-600"
+                className="p-0.5 text-white text-sm w-10 h-3 rounded-sm bg-lime-600 flex items-center"
               >
                 Save
               </button>
-              <ImCancelCircle onClick={onClose} className="h-6 w-6" />
-              {/* <button onClick={onClose} className="p-0.5 text-white rounded-sm bg-red-600">
-                Cancel
-              </button> */}
             </div>
-            <StatusDropdown TaskCurrentStatus={task.status} />
+            <div className="ml-4">
+              <StatusDropdown TaskCurrentStatus={task.status} />
+            </div>
             <div className="flex flex-col items-start justify-start space-y-1 pl-2">
               <p
                 className="flex text-left"
