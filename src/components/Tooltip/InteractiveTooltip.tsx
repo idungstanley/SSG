@@ -1,5 +1,4 @@
 import { ReactElement, ReactNode, useState } from 'react';
-
 interface TooltipProps {
   children: ReactNode;
   content: ReactElement;

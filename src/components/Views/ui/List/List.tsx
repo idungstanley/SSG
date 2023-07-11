@@ -88,7 +88,7 @@ export function List({ tasks }: ListProps) {
   };
 
   return (
-    <div className="border-l-4 pt-1 border-t-4 border-purple-500 rounded-xl bg-purple-50">
+    <div className="pt-1 border-t-4 border-l-4 border-purple-500 rounded-xl bg-purple-50">
       <Label listName={listName} showTable={collapseTable} onClickChevron={() => setCollapseTable((prev) => !prev)} />
       {!collapseTable && columns ? (
         <div className="relative ">
