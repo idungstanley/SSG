@@ -19,7 +19,7 @@ import timeChartIcon from '../../../../../assets/icons/timeChartIcon.png';
 import mapIcon from '../../../../../assets/icons/mapIcon.png';
 import gantIcon from '../../../../../assets/icons/gantIcon.png';
 import teamIcon from '../../../../../assets/icons/teamIcon.png';
-import ArrowDownClosed from '../../../../../assets/icons/ArrowDownClosed';
+import ArrowDownFilled from '../../../../../assets/icons/ArrowDownFilled';
 
 export default function ListViewSettingsModal({
   list,
@@ -146,7 +146,7 @@ export default function ListViewSettingsModal({
     <Menu>
       <div className="flex items-center justify-center viewSettingsParent">
         <Menu.Button>
-          <ArrowDownClosed active={true} />
+          <ArrowDownFilled active={true} />
         </Menu.Button>
       </div>
 

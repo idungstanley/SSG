@@ -1,13 +1,11 @@
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
-import { setShowFilterByAssigneeSlideOver } from '../../../../features/general/slideOver/slideOverSlice';
 import { useGetTeamMembers } from '../../../../features/settings/teamMembers/teamMemberService';
 import { generateFilter } from '../Filter/lib/filterUtils';
 import Button from '../../../Buttons/Button';
 import Me from '../../../../assets/icons/me(1).svg';
-import AssigneeIcon from '../../../../assets/icons/Assignee.svg';
 import Icons from '../../../Icons/Icons';
 import { setFilterFields } from '../../../../features/task/taskSlice';
-import ArrowDownClosed from '../../../../assets/icons/ArrowDownClosed';
+import FilterByAssigneeModal from './FilterByAssigneeModal';
 
 export function Assignee() {
   const dispatch = useAppDispatch();
@@ -16,6 +14,11 @@ export function Assignee() {
   const {
     filters: { fields: filters }
   } = useAppSelector((state) => state.task);
+
+  const currentAssignees =
+    (filters.find((i) => i.key === 'assignees')?.values as { id: string; value: string }[]) ?? [];
+
+  const isAssignee = currentAssignees.length ? true : false;
 
   const members = data?.data.team_members ?? [];
 
@@ -69,10 +72,8 @@ export function Assignee() {
         <span>Me</span>
       </Button>
 
-      <Button active={isMe} onClick={() => dispatch(setShowFilterByAssigneeSlideOver(true))}>
-        <Icons src={AssigneeIcon} />
-        <span>Assignee</span>
-        <ArrowDownClosed />
+      <Button active={isAssignee}>
+        <FilterByAssigneeModal />
       </Button>
     </div>
   );
