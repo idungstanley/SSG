@@ -15,7 +15,7 @@ import { setTimerInterval, setTimerStatus, setUpdateTimerDuration } from '../../
 import { useParams } from 'react-router-dom';
 import { setTimerLastMemory } from '../../../../features/workspace/workspaceSlice';
 import { runTimer } from '../../../../utils/TimerCounter';
-import ManualTimeAdd from '../../../../assets/icons/TimeClock/ManualTimeAdd';
+import ManualTimeAdd from '../../../../assets/icons/ManualTimeAdd';
 import DatePicker from '../../../DatePicker/DatePicker';
 
 export interface User {
@@ -142,9 +142,12 @@ export default function ClockInOut() {
 
   return (
     <div className="p-2 mt-6 rounded-t-md">
-      <div className="bg-gray-100">
+      <div className="bg-alsoit-gray-75">
         <section id="body" className="px-3 py-1 text-white bg-indigo-500 rounded-b-md">
-          <div id="taskUser" className="flex items-center justify-between h-10 py-3 text-xs font-normal cursor-pointer">
+          <div
+            id="taskUser"
+            className="flex items-center justify-between h-10 py-3 text-alsoit-text-lg font-semibold cursor-pointer"
+          >
             <span>Tags: </span>
             {/* total time here */}
             <p>{moment.utc((getEntries as ITimeEntriesRes)?.data?.total_duration * 1000).format('HH:mm:ss')}</p>
@@ -155,32 +158,29 @@ export default function ClockInOut() {
               name="description"
               onChange={(e) => handleEndTimeChange(e.target.value)}
               placeholder="Enter a note"
-              className="w-full text-gray-600 border-0 rounded shadow-sm"
+              className="w-full text-alsoit-gray-300 border-0 rounded shadow-sm"
             />
           </div>
           <div id="entries" className="flex items-center justify-between py-1">
             <div id="left" className="flex items-center space-x-1 cursor-pointer">
               <div className="mr-1 relative flex items-center">
-                <div className="relative">
-                  <ManualTimeAdd className="text-2xl h-5 w-6 cursor-pointer" onClick={() => setManual(!manualTime)} />
+                <div className="relative" onClick={() => setManual(!manualTime)}>
+                  <ManualTimeAdd />
                   {manualTime && <DatePicker toggleFn={setManual} range />}
                 </div>
                 {timerStatus && sameEntity() ? (
                   // !btnClicked && !timerStatus ? (
                   <button onClick={stop}>
-                    <BsStopCircle className="text-2xl h-4 w-4 text-red-400 cursor-pointer" aria-hidden="true" />
+                    <BsStopCircle className="h-4 w-4 text-red-400 cursor-pointer" aria-hidden="true" />
                   </button>
                 ) : (
                   <button onClick={() => activeTimerCheck()}>
-                    <AiOutlinePlayCircle
-                      className="text-2xl h-4 w-4 text-green-500 cursor-pointer"
-                      aria-hidden="true"
-                    />
+                    <AiOutlinePlayCircle className="h-4 w-4 text-alsoit-success cursor-pointer" aria-hidden="true" />
                   </button>
                 )}
                 {prompt && (
-                  <div className="absolute top-5 p-2 rounded-lg shadow-2xl flex flex-col space-y-1 bg-gray-100 z-50 w-72">
-                    <span className="text-center text-gray-700">
+                  <div className="absolute top-5 p-2 rounded-lg shadow-2xl flex flex-col space-y-1 bg-alsoit-gray-75 z-50 w-72">
+                    <span className="text-center text-alsoit-gray-300">
                       Another Timer Already Running would you want to stop the active timer and continue here?
                     </span>
                     <div className="flex w-full space-x-1 justify-end">
@@ -220,8 +220,8 @@ export default function ClockInOut() {
               <CurrencyDollarIcon
                 className={`${
                   data.isBillable
-                    ? 'bg-green-400 rounded-full h-9  text-white cursor-pointer text-xl'
-                    : 'text-white cursor-pointer text-xl rounded-full h-9'
+                    ? 'bg-green-400 rounded-full h-9  text-white cursor-pointer text-alsoit-text-lg'
+                    : 'text-white cursor-pointer text-alsoit-text-lg rounded-full h-9'
                 }`}
                 aria-hidden="true"
                 onClick={() =>
@@ -231,35 +231,6 @@ export default function ClockInOut() {
             </div>
           </div>
         </section>
-        <div className="w-full p-2 my-4">
-          {getCurrent?.data.time_entries && getCurrent?.data.time_entries.length > 0 ? (
-            <div>
-              <table className="w-full">
-                <thead className="flex justify-start py-1 items-center border-b-2 border-gray-300">
-                  <th className="w-1/2 text-start">User</th>
-                  <th className="w-1/2 text-start">Duration</th>
-                </thead>
-                <tbody className="w-full">
-                  {getCurrent.data.time_entries.map((entry) => {
-                    return (
-                      <tr key={entry.id} className="space-x-4 flex py-2 border-b-2 items-center w-full">
-                        <td className="text-alsoit-text-lg font-semibold text-alsoit-text w-1/2">
-                          {entry.team_member.user.name}
-                        </td>
-                        <td className="text-alsoit-text-lg font-semibold text-alsoit-text w-1/2">
-                          within {moment.duration(moment().diff(entry.start_date)).humanize()} ago
-                        </td>
-                        <td className="text-alsoit-text-lg font-semibold text-alsoit-text">{entry.description}</td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
-          ) : (
-            <div className="text-alsoit-text font-semibold text-center">No active timer found for this entity</div>
-          )}
-        </div>
       </div>
     </div>
   );
