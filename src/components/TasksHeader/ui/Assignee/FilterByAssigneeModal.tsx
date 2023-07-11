@@ -1,6 +1,5 @@
 import React, { Fragment, useRef } from 'react';
 import { Menu, Transition } from '@headlessui/react';
-import Icons from '../../../Icons/Icons';
 import ArrowDownFilled from '../../../../assets/icons/ArrowDownFilled';
 import { useGetTeamMembers } from '../../../../features/settings/teamMembers/teamMemberService';
 import { useAppSelector, useAppDispatch } from '../../../../app/hooks';
