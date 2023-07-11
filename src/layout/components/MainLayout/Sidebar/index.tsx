@@ -103,7 +103,7 @@ export default function Sidebar() {
               >
                 <div className="flex items-center justify-between">
                   <SearchIcon />
-                  <p className="ml-0.5">Search</p>
+                  <p className="ml-1">Search</p>
                 </div>
                 <p className="mr-14">Ctrl+k</p>
               </div>
