@@ -27,9 +27,7 @@ export function Assignee() {
     return null;
   }
 
-  // const isMe = filters.length ? filters?.find((i) => i.key === 'assignees')?.values[0] === currentMemberId : false;
-
-  const forMe = assigneeIds[0] === currentMemberId;
+  const forMe = assigneeIds.includes(currentMemberId);
 
   const onToggleMe = () => {
     const me = { id: currentMemberId, value: currentMemberName };
