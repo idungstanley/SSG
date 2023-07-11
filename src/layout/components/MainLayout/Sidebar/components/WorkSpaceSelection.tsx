@@ -186,21 +186,21 @@ function WorkSpaceSelection() {
         <ModalDropdown showModal={showModal} setShowModal={setShowModal} position="left-28 top-14">
           <section className="flex flex-col">
             <div className="pt-3">
-              <h4 className="px-4 font-bold capitalize truncate " style={{ fontSize: '11px' }}>
+              <h4 className="px-4 font-bold capitalize truncate font-alsoit-text-md">
                 {workSpaceData?.data.workspace.name}
               </h4>
               <hr />
               {workspaceSettingsList?.map((i, index) => (
                 <div
                   key={index}
-                  className="flex items-center w-full px-4 py-2 mt-0.5 text-xs text-gray-600 rounded-md cursor-pointer hover:bg-gray-200"
+                  className="flex items-center w-full px-4 py-2 mt-0.5 text-xs text-alsoit-gray-300 rounded-md cursor-pointer hover:bg-alsoit-gray-50"
                   onClick={i.handleClick}
                 >
                   <div className="flex ">
                     {i.title}
                     {i.title == 'People' ? (
                       <button
-                        className="ml-5 flex items-center bg-purple-400 cursor-pointer p-0.5 rounded-md space-x-1"
+                        className="ml-5 flex items-center bg-alsoit-purple-50 cursor-pointer p-0.5 rounded-md space-x-1"
                         onClick={() => handleInvite()}
                       >
                         <MdOutlineGroupAdd className="w-4 h-4 test-sm" /> <p>Invite</p>
@@ -235,12 +235,12 @@ function WorkSpaceSelection() {
                     {({ active }) => (
                       <div
                         className={cl(
-                          active ? 'bg-gray-200' : '',
+                          active ? 'bg-alsoit-gray-50' : '',
                           'flex items-center px-4 py-2 mt-1 justify-between rounded-md mr-1'
                         )}
                       >
                         <div
-                          className={cl('flex items-center space-x-1 text-sm text-gray-600 text-left w-full')}
+                          className={cl('flex items-center space-x-1 text-sm text-alsoit-gray-300 text-left w-full')}
                           onClick={() => onSwitchWorkspace(i.id)}
                         >
                           <div>

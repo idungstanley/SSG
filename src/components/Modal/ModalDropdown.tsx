@@ -18,7 +18,7 @@ export function ModalDropdown({
 }: ModalProps) {
   return (
     <Transition.Root show={showModal} as={Fragment}>
-      <Dialog as="div" className="relative" style={{ zIndex: '20000' }} onClose={setShowModal}>
+      <Dialog as="div" className="relative z-50" onClose={setShowModal}>
         <div className={`fixed z-10 ${position}`}>
           <div className="flex items-end justify-center p-4 text-center sm:items-center sm:p-0">
             <Transition.Child
