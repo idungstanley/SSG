@@ -24,6 +24,7 @@ import OpenSubtask from '../../../../assets/icons/OpenSubtask';
 import { Capitalize } from '../../../../utils/NoCapWords/Capitalize';
 import InteractiveTooltip from '../../../Tooltip/InteractiveTooltip';
 import RoundedCheckbox from '../../../Checkbox/RoundedCheckbox';
+import ToolTip from '../../../Tooltip/Tooltip';
 
 interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   task: Task;
@@ -176,7 +177,7 @@ export function StickyCol({
           className="sticky left-0 flex items-start justify-start text-sm font-medium text-start text-gray-900 cursor-pointer"
           {...props}
         >
-          <div className="flex items-center h-full space-x-1 bg-purple-50">
+          <div className="flex items-center h-full space-x-1 ">
             <RoundedCheckbox
               onChange={onChange}
               isChecked={isChecked}
@@ -184,7 +185,7 @@ export function StickyCol({
                 selectedTasksArray.length > 0 ? 'opacity-100' : 'opacity-0'
               } cursor-pointer focus:outline-1 focus:ring-transparent  focus:border-2 focus:opacity-100 group-hover:opacity-100`}
             />
-            <div ref={setNodeRef} {...attributes} {...listeners}>
+            <div ref={setNodeRef} {...attributes} {...listeners} className="pr-2">
               {dragElement}
             </div>
           </div>
@@ -247,13 +248,17 @@ export function StickyCol({
           className="sticky left-0 flex items-start justify-start text-sm font-medium text-start text-gray-900 cursor-pointer"
           {...props}
         >
-          <div className="flex items-center h-full space-x-1 bg-purple-50 opacity-0">
-            <input
-              type="checkbox"
-              className="w-2 h-2 rounded-full opacity-0 cursor-pointer focus:outline-1 focus:ring-transparent group-hover:opacity-100 focus:border-2 focus:opacity-100 "
-              style={{ marginLeft: '-1px' }}
+          <div className="flex items-center h-full space-x-1 opacity-0">
+            <RoundedCheckbox
+              onChange={onChange}
+              isChecked={isChecked}
+              styles={`w-4 h-4 rounded-full ${
+                selectedTasksArray.length > 0 ? 'opacity-100' : 'opacity-0'
+              } cursor-pointer focus:outline-1 focus:ring-transparent  focus:border-2 focus:opacity-100 group-hover:opacity-100`}
             />
-            {dragElement}
+            <div ref={setNodeRef} {...attributes} {...listeners} className="pr-2">
+              {dragElement}
+            </div>
           </div>
 
           <div
@@ -263,16 +268,20 @@ export function StickyCol({
               `relative border-t ${verticalGrid && 'border-r'} w-full h-10 py-4 p-4 flex items-center `
             )}
           >
-            <div className="flex space-x-1 pl-4 pr-2 ">
+            <div className="flex space-x-1 -mt-7 ml-1 absolute">
+              <ToolTip tooltip="Cancel">
+                <ImCancelCircle onClick={onClose} className="h-3 w-3" />
+              </ToolTip>
               <button
                 onClick={(e) => handleOnSave(e as React.MouseEvent<HTMLButtonElement, MouseEvent>, task.id)}
-                className="p-0.5 text-white rounded-sm bg-lime-600"
+                className="p-0.5 text-white text-sm w-10 h-3 rounded-sm bg-lime-600 flex items-center"
               >
                 Save
               </button>
-              <ImCancelCircle onClick={onClose} className="h-6 w-6" />
             </div>
-            <StatusDropdown TaskCurrentStatus={task.status} />
+            <div className="ml-4">
+              <StatusDropdown TaskCurrentStatus={task.status} />
+            </div>
             <div className="flex flex-col items-start justify-start space-y-1 pl-2">
               <p
                 className="flex text-left"
