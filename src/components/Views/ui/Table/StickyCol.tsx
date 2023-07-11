@@ -105,9 +105,6 @@ export function StickyCol({
     e.stopPropagation();
     setShowSubTasks(!showSubTasks);
   };
-  const displayNav = (id: string) => {
-    dispatch(setCurrentTaskId(id));
-  };
   const queryClient = useQueryClient();
   const inputRef = useRef<HTMLInputElement | null>(null);
   const { attributes, listeners, setNodeRef } = useSortable({

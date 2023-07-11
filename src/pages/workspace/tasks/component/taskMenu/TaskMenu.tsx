@@ -187,6 +187,14 @@ export default function TaskMenu() {
           <input type="text" placeholder="type '/' for commands" className="h-8 rounded bg-transparent text-xs  " />
         </div>
       </div>
+      <div className="flex justify-center">
+        <p
+          className=" bg-gray-800 text-white p-2 rounded-3xl border border-white -mt-1 cursor-pointer"
+          onClick={() => dispatch(setSelectedTasksArray([]))}
+        >
+          <span className="text-gray-300 ">X</span> Dismiss
+        </p>
+      </div>
     </div>
   );
 }
