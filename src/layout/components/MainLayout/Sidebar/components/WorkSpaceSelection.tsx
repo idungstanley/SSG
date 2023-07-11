@@ -154,7 +154,9 @@ function WorkSpaceSelection() {
 
   return status == 'success' ? (
     <div
-      className={`${showSidebar ? 'rounded border border-alsoit-gray-75 p-0.5 h-6 cursor-pointer flex flex-grow' : ''} `}
+      className={`${
+        showSidebar ? 'rounded border border-alsoit-gray-75 p-0.5 h-6 cursor-pointer flex flex-grow' : ''
+      } `}
       onClick={() => setShowModal((prev) => !prev)}
     >
       <div className="flex items-center justify-between w-full" onClick={() => dispatch(setFetchAllWorkspace(true))}>
