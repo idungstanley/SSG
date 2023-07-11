@@ -177,7 +177,7 @@ export function StickyCol({
           className="sticky left-0 flex items-start justify-start text-sm font-medium text-start text-gray-900 cursor-pointer"
           {...props}
         >
-          <div className="flex items-center h-full space-x-1 bg-purple-50 ">
+          <div className="flex items-center h-full space-x-1 ">
             <RoundedCheckbox
               onChange={onChange}
               isChecked={isChecked}
@@ -248,7 +248,7 @@ export function StickyCol({
           className="sticky left-0 flex items-start justify-start text-sm font-medium text-start text-gray-900 cursor-pointer"
           {...props}
         >
-          <div className="flex items-center h-full space-x-1 bg-purple-50 opacity-0">
+          <div className="flex items-center h-full space-x-1 opacity-0">
             <RoundedCheckbox
               onChange={onChange}
               isChecked={isChecked}
