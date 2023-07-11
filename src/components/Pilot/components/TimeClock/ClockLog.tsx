@@ -6,7 +6,6 @@ import { useState } from 'react';
 import { GiCheckMark } from 'react-icons/gi';
 import { FaSort } from 'react-icons/fa';
 import { setTimeArr, setTimeSortArr } from '../../../../features/task/taskSlice';
-import { AiFillCaretUp, AiOutlineClose } from 'react-icons/ai';
 import { UserSortDropDown } from './TimeUserSortDropDown';
 import PlusCircle from '../../../../assets/icons/TimeClock/AddCircle';
 import CancelIcon from '../../../../assets/icons/Common/Cancel';
