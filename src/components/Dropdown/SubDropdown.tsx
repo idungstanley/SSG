@@ -68,8 +68,6 @@ export default function SubDropdown() {
   });
   const navLink = '/tasks';
   const CapitalizeType = Capitalize(lastClicked);
-  console.log(lastClicked);
-
   const handleFetch = () => {
     setFetchTree((prev) => !prev);
   };
