@@ -15,6 +15,8 @@ import { setTimerInterval, setTimerStatus, setUpdateTimerDuration } from '../../
 import { useParams } from 'react-router-dom';
 import { setTimerLastMemory } from '../../../../features/workspace/workspaceSlice';
 import { runTimer } from '../../../../utils/TimerCounter';
+import ManualTimeAdd from '../../../../assets/icons/TimeClock/ManualTimeAdd';
+import DatePicker from '../../../DatePicker/DatePicker';
 
 export interface User {
   initials: string;
@@ -34,6 +36,7 @@ export default function ClockInOut() {
   const [, setBtnClicked] = useState(false);
   const [prompt, setPrompt] = useState(false);
   const [newTimer, setNewtimer] = useState(false);
+  const [manualTime, setManual] = useState(false);
   const { workSpaceId, listId, hubId } = useParams();
 
   const { data: getEntries } = GetTimeEntriesService({
@@ -158,6 +161,10 @@ export default function ClockInOut() {
           <div id="entries" className="flex items-center justify-between py-1">
             <div id="left" className="flex items-center space-x-1 cursor-pointer">
               <div className="mr-1 relative flex items-center">
+                <div className="relative">
+                  <ManualTimeAdd className="text-2xl h-5 w-6 cursor-pointer" onClick={() => setManual(!manualTime)} />
+                  {manualTime && <DatePicker toggleFn={setManual} range />}
+                </div>
                 {timerStatus && sameEntity() ? (
                   // !btnClicked && !timerStatus ? (
                   <button onClick={stop}>
