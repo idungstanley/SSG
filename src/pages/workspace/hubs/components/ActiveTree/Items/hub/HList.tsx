@@ -33,9 +33,7 @@ import { EntityType } from '../../../../../../../utils/EntityTypes/EntityType';
 import { Capitalize } from '../../../../../../../utils/NoCapWords/Capitalize';
 
 export default function HList({ hubs, leftMargin, taskType, level = 1 }: ListProps) {
-  const { hubId } = useParams();
-  const { walletId } = useParams();
-  const { listId } = useParams();
+  const { hubId, walletId, listId } = useParams();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [showChildren, setShowChidren] = useState<string | null | undefined>(null);
@@ -43,6 +41,7 @@ export default function HList({ hubs, leftMargin, taskType, level = 1 }: ListPro
   const { showSidebar } = useAppSelector((state) => state.account);
   const { showMenuDropdown, SubMenuId, entityToCreate } = useAppSelector((state) => state.hub);
   const [stickyButtonIndex, setStickyButtonIndex] = useState<number | undefined>(-1);
+  const [openedSubhubsIds, setOpenedSubhubIds] = useState<string[]>([]);
   const CapitalizeType = Capitalize(entityToCreate);
   const hubCreationStatus = 'New ' + CapitalizeType + ' Under Construction';
   const id = hubId || walletId || listId || currentItemId;
@@ -56,13 +55,16 @@ export default function HList({ hubs, leftMargin, taskType, level = 1 }: ListPro
     color: 'blue',
     path: null
   };
+
   const hubsSpread = [...hubs, dummyHub];
   const hubsWithEntity = createEntityType === EntityType.hub ? (hubsSpread as Hub[]) : hubs;
+
   useEffect(() => {
     setShowChidren(id);
   }, []);
+
   const parentType = EntityType.hub;
-  const subType = 'subhub';
+  const subType = EntityType.subHub;
 
   const handleLocation = (id: string, name: string, index?: number) => {
     if (level === 1) {
@@ -130,14 +132,24 @@ export default function HList({ hubs, leftMargin, taskType, level = 1 }: ListPro
         replace: true
       });
     }
-    const isMatch = id === showChildren;
+
     dispatch(setOpenedHubId(id));
     dispatch(setShowHub(true));
-    if (isMatch) {
+    if (id === showChildren) {
       setShowChidren(null);
     } else {
       setShowChidren(id);
     }
+    if (taskType === EntityType.subHub) {
+      if (openedSubhubsIds.includes(id)) {
+        setOpenedSubhubIds([...openedSubhubsIds.filter((subhubId) => subhubId !== id)]);
+        setShowChidren(null);
+      } else {
+        setOpenedSubhubIds([...openedSubhubsIds, id]);
+        setShowChidren(id);
+      }
+    }
+
     dispatch(
       setCurrentItem({
         currentItemId: id,
@@ -154,7 +166,7 @@ export default function HList({ hubs, leftMargin, taskType, level = 1 }: ListPro
     dispatch(
       setshowMenuDropdown({
         showMenuDropdown: id,
-        showMenuDropdownType: taskType === 'subhub' ? 'subhub' : 'hubs'
+        showMenuDropdownType: taskType === EntityType.subHub ? EntityType.subHub : 'hubs'
       })
     );
     dispatch(getPrevName(name));
@@ -166,11 +178,10 @@ export default function HList({ hubs, leftMargin, taskType, level = 1 }: ListPro
   };
 
   const isCanBeOpen = (id: string) => {
-    let canToBeOpen = false;
-    if (showChildren === id || taskType === 'subhub') {
-      canToBeOpen = true;
+    if (showChildren === id || (taskType === EntityType.subHub && openedSubhubsIds.includes(id))) {
+      return true;
     }
-    return canToBeOpen;
+    return false;
   };
 
   return (
@@ -191,15 +202,15 @@ export default function HList({ hubs, leftMargin, taskType, level = 1 }: ListPro
               isSticky={stickyButtonIndex !== undefined && stickyButtonIndex !== null && stickyButtonIndex <= index}
               stickyButtonIndex={stickyButtonIndex}
               index={index}
-              type={taskType === 'subhub' ? 'subhub' : EntityType.hub}
-              topNumber={taskType === 'subhub' ? '80px' : '50px'}
-              zNumber={taskType === 'subhub' ? '4' : '5'}
+              type={taskType === EntityType.subHub ? EntityType.subHub : EntityType.hub}
+              topNumber={taskType === EntityType.subHub ? '80px' : '50px'}
+              zNumber={taskType === EntityType.subHub ? '4' : '5'}
             />
             {hub.children.length && isCanBeOpen(hub.id) ? (
               <HList
                 hubs={(entityToCreate === EntityType.subHub ? [...hub.children, dummyHub] : hub.children) as Hub[]}
                 level={level + 1}
-                taskType="subhub"
+                taskType={EntityType.subHub}
                 leftMargin={false}
               />
             ) : null}
