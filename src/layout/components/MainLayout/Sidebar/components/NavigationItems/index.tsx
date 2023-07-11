@@ -8,7 +8,6 @@ import { useAppSelector } from '../../../../../../app/hooks';
 import NavigationItem from './components/NavigationItem';
 import { HiOutlineLibrary, HiOutlineUserGroup } from 'react-icons/hi';
 import { CgTemplate } from 'react-icons/cg';
-import { IoNotificationsOutline } from 'react-icons/io5';
 import { VscCalendar } from 'react-icons/vsc';
 import {
   closestCenter,
@@ -21,6 +20,7 @@ import {
 } from '@dnd-kit/core';
 import { arrayMove, rectSortingStrategy, SortableContext, sortableKeyboardCoordinates } from '@dnd-kit/sortable';
 import { useNavigate } from 'react-router-dom';
+import NotificationIcon from '../../../../../../assets/icons/NotificationIcon';
 
 const showLessOrMore = [
   {
@@ -61,7 +61,7 @@ export default function NavigationItems({
       id: '2',
       name: 'Notifications',
       href: `/${currentWorkspaceId}/notification`,
-      icon: <IoNotificationsOutline className="w-5 h-5" aria-hidden="true" />,
+      icon: <NotificationIcon />,
       alwaysShow: true
     },
     {

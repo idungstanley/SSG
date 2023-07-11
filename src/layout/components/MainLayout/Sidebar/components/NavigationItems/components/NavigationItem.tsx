@@ -79,7 +79,7 @@ export default function NavigationItem({ item, handleHotkeyClick }: NavigationIt
         <MdDragIndicator className="text-gray-400 hover:text-fuchsia-500" />
       </span>
       <div className={cl(!showSidebar ? 'justify-center' : 'gap-2 items-center', 'relative flex cursor-pointer')}>
-        <span className="relative w-5 h-5">
+        <span className="relative flex items-center justify-center w-5 h-5">
           {item.name === 'Notifications' && notificationCount > 0 && (
             <p
               className="flex items-center justify-center px-0.5 h-3 w-3 absolute top-0 text-white bg-red-600"
