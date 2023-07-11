@@ -11,6 +11,7 @@ import { MdDragIndicator } from 'react-icons/md';
 import { ManageTagsDropdown } from '../../../Tag/ui/ManageTagsDropdown/ui/ManageTagsDropdown';
 import { AddSubTask } from '../AddTask/AddSubTask';
 import TaskTag from '../../../Tag/ui/TaskTag';
+import dradnddrop from '../../../../assets/icons/dradnddrop.svg';
 
 interface RowProps {
   task: Task;
@@ -101,9 +102,10 @@ export function Row({ task, columns, paddingLeft = 0, parentId, task_status, isL
           tags={'tags' in task ? <TaskTag tags={task.tags} entity_id={task.id} entity_type="task" /> : null}
           dragElement={
             <span ref={setNodeRef} {...listeners} {...attributes}>
-              <MdDragIndicator
+              <img
+                src={dradnddrop}
+                alt="drabable"
                 className="text-lg text-gray-400 transition duration-200 opacity-0 cursor-move group-hover:opacity-100"
-                style={{ marginLeft: '-6px', marginRight: '-2.5px' }}
               />
             </span>
           }

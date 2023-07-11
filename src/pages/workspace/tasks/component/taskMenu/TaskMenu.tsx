@@ -16,9 +16,10 @@ import { useDispatch } from 'react-redux';
 import { displayPrompt, setVisibility } from '../../../../../features/general/prompt/promptSlice';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { setSelectedTasksArray, setShowTaskNavigation } from '../../../../../features/task/taskSlice';
+import RoundedCheckbox from '../../../../../components/Checkbox/RoundedCheckbox';
 
 export default function TaskMenu() {
-  const { currentTaskId, selectedTasksArray } = useAppSelector((state) => state.task);
+  const { selectedTasksArray } = useAppSelector((state) => state.task);
   const queryClient = useQueryClient();
   const dispatch = useDispatch();
 
@@ -157,8 +158,14 @@ export default function TaskMenu() {
         className="abolute flex justify-between items-center w-12/12 h-11 bg-gray-800"
         style={{ transition: 'linear', transitionDelay: '100s' }}
       >
-        <div className="pl-5">
-          <input type="checkbox" value="checked" />
+        <div className="pl-5 space-x-2">
+          <RoundedCheckbox
+            styles="rounded-full"
+            isChecked={true}
+            onChange={() => {
+              dispatch(setSelectedTasksArray([]));
+            }}
+          />
           <span className="text-white text-xs">{selectedTasksArray.length} Selected</span>
         </div>
 
@@ -179,6 +186,14 @@ export default function TaskMenu() {
           <MdFileCopy className="text-white text-lg" />
           <input type="text" placeholder="type '/' for commands" className="h-8 rounded bg-transparent text-xs  " />
         </div>
+      </div>
+      <div className="flex justify-center">
+        <p
+          className=" bg-gray-800 text-white p-2 rounded-3xl border border-white -mt-1 cursor-pointer"
+          onClick={() => dispatch(setSelectedTasksArray([]))}
+        >
+          <span className="text-gray-300 ">X</span> Dismiss
+        </p>
       </div>
     </div>
   );

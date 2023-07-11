@@ -22,9 +22,8 @@ import { ImCancelCircle } from 'react-icons/im';
 import CloseSubtask from '../../../../assets/icons/CloseSubtask';
 import OpenSubtask from '../../../../assets/icons/OpenSubtask';
 import { Capitalize } from '../../../../utils/NoCapWords/Capitalize';
-import ToolTip from '../../../Tooltip/Tooltip';
 import InteractiveTooltip from '../../../Tooltip/InteractiveTooltip';
-import HeaderModal from '../../../Header/HeaderModal';
+import RoundedCheckbox from '../../../Checkbox/RoundedCheckbox';
 
 interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   task: Task;
@@ -61,16 +60,8 @@ export function StickyCol({
   const COL_BG = taskId === task.id ? ACTIVE_COL_BG : DEFAULT_COL_BG;
   const [isChecked, setIsChecked] = useState(false);
   const { mutate: onAdd } = useAddTask(parentId);
-  const {
-    currTeamMemberId,
-    showTaskNavigation,
-    singleLineView,
-    verticalGrid,
-    taskUpperCase,
-    selectedTasksArray,
-    verticalGridlinesTask,
-    currentTaskId
-  } = useAppSelector((state) => state.task);
+  const { currTeamMemberId, singleLineView, verticalGrid, taskUpperCase, selectedTasksArray, verticalGridlinesTask } =
+    useAppSelector((state) => state.task);
 
   const onClickTask = () => {
     if (task.id !== '0') {
@@ -97,6 +88,7 @@ export function StickyCol({
       );
     }
   };
+
   useEffect(() => {
     const { current } = inputRef;
     current?.focus();
@@ -112,9 +104,6 @@ export function StickyCol({
   const onToggleDisplayingSubTasks = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.stopPropagation();
     setShowSubTasks(!showSubTasks);
-  };
-  const displayNav = (id: string) => {
-    dispatch(setCurrentTaskId(id));
   };
   const queryClient = useQueryClient();
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -158,10 +147,11 @@ export function StickyCol({
     });
   };
 
-  // Before the return statement
+  useEffect(() => {
+    const isSelected = selectedTasksArray.includes(task.id);
+    isSelected ? setIsChecked(true) : setIsChecked(false);
+  }, [selectedTasksArray]);
 
-  const isSelected = selectedTasksArray.includes(task.id);
-  // Inside the onChange event handler of the checkbox input
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const isChecked = e.target.checked;
     dispatch(setShowTaskNavigation(isChecked));
@@ -176,7 +166,6 @@ export function StickyCol({
       const updatedTaskIds = selectedTasksArray.filter((id: string) => id !== task.id);
       dispatch(setSelectedTasksArray(updatedTaskIds));
     }
-
     setIsChecked(isChecked);
   };
 
@@ -188,16 +177,12 @@ export function StickyCol({
           {...props}
         >
           <div className="flex items-center h-full space-x-1 bg-purple-50">
-            <input
-              type="checkbox"
-              checked={isChecked}
-              id="checked-checkbox"
-              className="w-2 h-2 rounded-full opacity-0 cursor-pointer focus:outline-1 focus:ring-transparent  focus:border-2 focus:opacity-100 group-hover:opacity-100"
-              style={{ marginLeft: '-0.3px' }}
+            <RoundedCheckbox
               onChange={onChange}
-              onClick={() => {
-                displayNav(task?.id as string);
-              }}
+              isChecked={isChecked}
+              styles={`w-4 h-4 rounded-full ${
+                selectedTasksArray.length > 0 ? 'opacity-100' : 'opacity-0'
+              } cursor-pointer focus:outline-1 focus:ring-transparent  focus:border-2 focus:opacity-100 group-hover:opacity-100`}
             />
             <div ref={setNodeRef} {...attributes} {...listeners}>
               {dragElement}
@@ -208,7 +193,7 @@ export function StickyCol({
             onClick={onClickTask}
             className={cl(
               COL_BG,
-              `relative border-t ${isSelected && 'tdListV'} ${verticalGrid && 'border-r'} ${
+              `relative border-t ${isChecked && 'tdListV'} ${verticalGrid && 'border-r'} ${
                 verticalGridlinesTask && 'border-r'
               } w-full py-4 flex items-center `
             )}
