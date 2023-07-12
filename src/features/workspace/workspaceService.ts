@@ -2,7 +2,7 @@ import requestNew from '../../app/requestNew';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { IAllWorkspacesRes, IAttachments, IWorkspaceRes } from './workspace.interfaces';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { setFetchAllWorkspace } from './workspaceSlice';
+import { setFetchAllWorkspace, setWorkspaceData } from './workspaceSlice';
 import { IFormData } from '../../components/Pilot/components/RecordScreen/Recording';
 
 interface IData {
@@ -128,13 +128,23 @@ export const deleteUploadedAttachment = async (data: { id: string }) => {
 };
 
 export const getWorkspaceService = () => {
-  return useQuery(['workspace'], async () => {
-    const data = await requestNew<IWorkspaceRes | undefined>({
-      url: 'workspace',
-      method: 'GET'
-    });
-    return data;
-  });
+  const dispatch = useAppDispatch();
+
+  return useQuery(
+    ['workspace'],
+    async () => {
+      const data = await requestNew<IWorkspaceRes | undefined>({
+        url: 'workspace',
+        method: 'GET'
+      });
+      return data;
+    },
+    {
+      onSuccess: (data) => {
+        dispatch(setWorkspaceData(data));
+      }
+    }
+  );
 };
 
 export const getAllWorkSpaceService = () => {

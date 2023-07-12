@@ -2,13 +2,17 @@ import React, { useMemo } from 'react';
 import { useAppSelector } from '../../../../../../../app/hooks';
 import TimeSubTab from './TimeSubTab';
 import ClockInOut from '../../../../../../../components/Pilot/components/TimeClock/ClockInOut';
-import ClockLog from '../../../../../../../components/Pilot/components/TimeClock/ClockLog';
 import ClockPreferences from '../../../../../../../components/Pilot/components/TimeClock/ClockPreferences';
+import ManualTimeAddDialog from '../../../../../../../components/Pilot/components/TimeClock/ManualTimeDialog';
 
 export const TimeClockOptions = [
   {
     id: 0,
     element: <ClockInOut />
+  },
+  {
+    id: 1,
+    element: <ManualTimeAddDialog />
   },
   {
     id: 2,

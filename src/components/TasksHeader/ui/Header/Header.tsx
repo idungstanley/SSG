@@ -7,7 +7,7 @@ import { Search } from '../Search/Search';
 import { Sort } from '../Sort/Sort';
 
 export function Header() {
-  const { showTaskNavigation, selectedTasksArray } = useAppSelector((state) => state.task);
+  const { selectedTasksArray } = useAppSelector((state) => state.task);
 
   return (
     <>
