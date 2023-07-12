@@ -444,7 +444,7 @@ export const useCurrentTime = ({ workspaceId }: { workspaceId?: string }) => {
         const dateString = dateData?.time_entry;
 
         if (dateString) {
-          const { hours, minutes, seconds } = Duration({ dateString, timezone });
+          const { hours, minutes, seconds } = Duration({ dateString });
           dispatch(setTimerStatus(true));
           dispatch(setUpdateTimerDuration({ s: seconds, m: minutes, h: hours }));
           dispatch(
