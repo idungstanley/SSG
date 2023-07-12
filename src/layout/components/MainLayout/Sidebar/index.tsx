@@ -5,13 +5,15 @@ import { setSidebarWidthRD } from '../../../../features/workspace/workspaceSlice
 import Header from './components/Header';
 import NavigationItems from './components/NavigationItems';
 import Places from './components/Places';
-import Search from './components/Search';
 import { dimensions } from '../../../../app/config/dimensions';
 import { useResize } from '../../../../hooks/useResize';
 import { isAllowIncreaseWidth } from '../../../../utils/widthUtils';
 import { NavigationList } from './components/NavigationItems/components/NavigationList';
 import useResolution from '../../../../hooks/useResolution';
 import { setUserSettingsData, useGetUserSettingsKeys } from '../../../../features/account/accountService';
+import NonInteractiveSearch from '../../../../components/Search/NonInteractiveSearch';
+import CommandSearchModal from './components/CommandSearchModal';
+import SearchIcon from '../../../../assets/icons/SearchIcon';
 
 const MAX_SIDEBAR_WIDTH = dimensions.navigationBar.max;
 const MIN_SIDEBAR_WIDTH = dimensions.navigationBar.min;
@@ -21,7 +23,7 @@ export default function Sidebar() {
   const { extendedSidebarWidth, sidebarWidthRD, showExtendedBar } = useAppSelector((state) => state.workspace);
   const key = 'sidebar';
   const { showSidebar, userSettingsData } = useAppSelector((state) => state.account);
-
+  const [commandSearchModal, setCommandSearchModal] = useState<boolean>(false);
   const { blockRef, Dividers, size, isMouseUp, isDrag } = useResize({
     dimensions: {
       min: MIN_SIDEBAR_WIDTH,
@@ -85,7 +87,28 @@ export default function Sidebar() {
           setActiveTabId={setActiveTabId}
         />
         <section className="relative h-full flex flex-col pr-1.5 overflow-y-auto overflow-x-hidden">
-          {showSidebar ? <Search /> : null}
+          {showSidebar ? (
+            <NonInteractiveSearch
+              setAction={setCommandSearchModal}
+              modal={
+                <CommandSearchModal
+                  commandSearchVisible={commandSearchModal}
+                  onCloseCommandSearchModal={() => setCommandSearchModal(false)}
+                />
+              }
+            >
+              <div
+                className="absolute flex items-center justify-between w-auto w-full font-bold tracking-wider text-gray-400 grow left-6 hover:text-fuchsia-500"
+                style={{ fontSize: '13px' }}
+              >
+                <div className="flex items-center justify-between">
+                  <SearchIcon />
+                  <p className="ml-2">Search</p>
+                </div>
+                <p className="mr-14">Ctrl+k</p>
+              </div>
+            </NonInteractiveSearch>
+          ) : null}
           <NavigationItems
             activeTabId={activeTabId}
             setActiveTabId={setActiveTabId}
