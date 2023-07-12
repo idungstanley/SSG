@@ -33,13 +33,13 @@ import { EntityType } from '../../../../../../../utils/EntityTypes/EntityType';
 import { Capitalize } from '../../../../../../../utils/NoCapWords/Capitalize';
 
 export default function HList({ hubs, leftMargin, taskType, level = 1 }: ListProps) {
-  const { hubId, walletId, listId } = useParams();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const [showChildren, setShowChidren] = useState<string | null | undefined>(null);
+  const { hubId, walletId, listId } = useParams();
   const { currentItemId, showExtendedBar, createEntityType } = useAppSelector((state) => state.workspace);
-  const { showSidebar } = useAppSelector((state) => state.account);
   const { showMenuDropdown, SubMenuId, entityToCreate } = useAppSelector((state) => state.hub);
+  const { showSidebar } = useAppSelector((state) => state.account);
+  const [showChildren, setShowChidren] = useState<string | null | undefined>(null);
   const [stickyButtonIndex, setStickyButtonIndex] = useState<number | undefined>(-1);
   const [openedSubhubsIds, setOpenedSubhubIds] = useState<string[]>([]);
   const CapitalizeType = Capitalize(entityToCreate);

@@ -16,28 +16,25 @@ import {
 import { setWalletItem } from '../../../../../../../features/wallet/walletSlice';
 import { EntityType } from '../../../../../../../utils/EntityTypes/EntityType';
 
-export default function WList({
-  wallets,
-  leftMargin,
-  paddingLeft,
-  type,
-  level = 1,
-  topNumber
-}: {
+interface IWListProps {
   wallets: Wallet[];
   leftMargin: boolean;
   paddingLeft: string | number;
   type: string;
   level?: number;
   topNumber: number;
-}) {
+}
+
+export default function WList({ wallets, leftMargin, paddingLeft, type, level = 1, topNumber }: IWListProps) {
   const dispatch = useAppDispatch();
-  const [showSubWallet, setShowSubWallet] = useState<string | null>(null);
-  const { showExtendedBar } = useAppSelector((state) => state.workspace);
-  const [stickyButtonIndex, setStickyButtonIndex] = useState<number | undefined>(-1);
   const navigate = useNavigate();
   const { walletId, listId } = useParams();
+  const { showExtendedBar } = useAppSelector((state) => state.workspace);
+  const [showSubWallet, setShowSubWallet] = useState<string | null>(null);
+  const [stickyButtonIndex, setStickyButtonIndex] = useState<number | undefined>(-1);
+
   const id = walletId || listId;
+
   useEffect(() => {
     if (id) {
       setShowSubWallet(id);
@@ -51,7 +48,6 @@ export default function WList({
       replace: true
     });
     setShowSubWallet(id);
-    dispatch(setCurrentWalletId(id));
     dispatch(
       setWalletItem({
         currentWalletParentId: id,
@@ -66,7 +62,7 @@ export default function WList({
         activeItemName: name
       })
     );
-    dispatch(setActiveEntity({ id: id, type: EntityType.wallet }));
+    dispatch(setActiveEntity({ id, type: EntityType.wallet }));
     dispatch(setCurrentWalletName(name));
     dispatch(setCurrentWalletId(id));
   };

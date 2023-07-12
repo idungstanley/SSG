@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { AiOutlineEllipsis, AiOutlinePlus } from 'react-icons/ai';
 import { FaFolder, FaFolderOpen } from 'react-icons/fa';
 import { VscTriangleDown, VscTriangleRight } from 'react-icons/vsc';
@@ -24,14 +24,13 @@ import ThreeDotIcon from '../../assets/icons/ThreeDotIcon';
 import { Tooltip } from '@mui/material';
 
 interface WalletItemProps {
-  handleShowSubWallet: (id: string, index?: number) => void;
-  handleLocation: (id: string, name: string, index?: number) => void;
   wallet: {
     id: string;
     name: string;
     color?: string;
     parent_id?: string | null;
     hub_id?: string;
+    has_descendants?: number;
   };
   showSubWallet: string | null;
   paddingLeft: string | number;
@@ -41,27 +40,30 @@ interface WalletItemProps {
   topNumber?: number;
   zNumber?: string;
   stickyButtonIndex?: number | undefined;
+  handleShowSubWallet: (id: string, index?: number) => void;
+  handleLocation: (id: string, name: string, index?: number) => void;
 }
 export default function WalletItem({
-  handleShowSubWallet,
   wallet,
   showSubWallet,
-  handleLocation,
   paddingLeft,
   walletType,
   index,
   isSticky,
   stickyButtonIndex,
   topNumber = 0,
-  zNumber
+  zNumber,
+  handleShowSubWallet,
+  handleLocation
 }: WalletItemProps) {
+  const dispatch = useAppDispatch();
   const { activeItemId } = useAppSelector((state) => state.workspace);
   const { showMenuDropdown, SubMenuId } = useAppSelector((state) => state.hub);
   const { paletteDropdown, lightBaseColor, baseColor, showSidebar } = useAppSelector((state) => state.account);
   const { paletteId, show } = paletteDropdown;
-  const [paletteColor, setPaletteColor] = useState<string | undefined | ListColourProps>('');
   const { walletId } = useParams();
-  const dispatch = useAppDispatch();
+  const [paletteColor, setPaletteColor] = useState<string | undefined | ListColourProps>('');
+
   const handleItemAction = (id: string, name: string | null) => {
     dispatch(setSelectedTreeDetails({ name, id, type: EntityType.wallet }));
     dispatch(setCreateWlLink(false));
@@ -72,7 +74,7 @@ export default function WalletItem({
       })
     );
   };
-  // const parentId = wallet.parent_id || wallet.hub_id;
+
   const handleWalletColour = (id: string, e: React.MouseEvent<SVGElement>) => {
     e.stopPropagation();
     dispatch(setPaletteDropDown({ show: true, paletteId: id, paletteType: 'wallet' }));
@@ -93,6 +95,46 @@ export default function WalletItem({
       if ((e.target as HTMLButtonElement).id == 'menusettings') {
         dispatch(closeMenu());
       }
+    }
+  };
+
+  const renderOpenFolder = () => {
+    return (
+      <FaFolderOpen
+        color={paletteColor === '' ? wallet.color : (paletteColor as string)}
+        onClick={(e) => handleWalletColour(wallet.id, e)}
+      />
+    );
+  };
+
+  const renderCloseFolder = () => {
+    return (
+      <FaFolder
+        color={paletteColor === '' ? wallet.color : (paletteColor as string)}
+        onClick={(e) => handleWalletColour(wallet.id, e)}
+      />
+    );
+  };
+
+  const renderIcons = (showSubWallet: string | null) => {
+    if (wallet?.has_descendants) {
+      if (showSubWallet) {
+        return (
+          <>
+            <VscTriangleDown className="flex-shrink-0 h-2" aria-hidden="true" color="rgba(72, 67, 67, 0.64)" />
+            {renderOpenFolder()}
+          </>
+        );
+      } else {
+        return (
+          <>
+            <VscTriangleRight className="flex-shrink-0 h-2" aria-hidden="true" color="rgba(72, 67, 67, 0.64)" />
+            {renderCloseFolder()}
+          </>
+        );
+      }
+    } else {
+      return renderCloseFolder();
     }
   };
 
@@ -126,25 +168,7 @@ export default function WalletItem({
             />
           )}
           {/* showsub1 */}
-          <div className="flex items-center">
-            {showSubWallet === wallet.id ? (
-              <>
-                <VscTriangleDown className="flex-shrink-0 h-2" aria-hidden="true" color="rgba(72, 67, 67, 0.64)" />
-                <FaFolderOpen
-                  color={paletteColor === '' ? wallet.color : (paletteColor as string)}
-                  onClick={(e) => handleWalletColour(wallet.id, e)}
-                />
-              </>
-            ) : (
-              <>
-                <VscTriangleRight className="flex-shrink-0 h-2" aria-hidden="true" color="#BBBDC0" />
-                <FaFolder
-                  color={paletteColor === '' ? wallet.color : (paletteColor as string)}
-                  onClick={(e) => handleWalletColour(wallet.id, e)}
-                />
-              </>
-            )}
-          </div>
+          <div className="flex items-center">{renderIcons(showSubWallet)}</div>
           <div
             onClick={() => handleLocation(wallet.id, wallet.name, index)}
             className="truncate cursor-pointer hover:underline hover:decoration-dashed"
