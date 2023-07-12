@@ -4,6 +4,7 @@ import DateStringFix from '../../../../utils/ManualTimeFix';
 import dayjs from 'dayjs';
 import CurrencyIcon from '../../../../assets/icons/CurrencyIcon';
 import TagIcon from '../../../../assets/icons/DotCircleTagIcon';
+import { useState } from 'react';
 
 interface ManualTimeAddProps {
   start_date: dayjs.Dayjs;
@@ -13,6 +14,11 @@ interface ManualTimeAddProps {
 }
 
 export default function ManualTimeAddDialog() {
+  const [interactions, setInteractions] = useState<{ tag: boolean; currency: boolean }>({
+    tag: false,
+    currency: false
+  });
+
   return (
     <>
       <section id="body" className="px-3 py-1 text-white bg-indigo-500 rounded-b-md">
@@ -36,8 +42,40 @@ export default function ManualTimeAddDialog() {
               <span className="font-semibold text-alsoit-text-lg">Today</span>
             </div>
             <div className="flex space-x-2 justify-end">
-              <CurrencyIcon dimensions={{ height: 35, width: 40 }} />
-              <TagIcon dimensions={{ height: 35, width: 40 }} />
+              <div
+                className="cursor-pointer"
+                onMouseEnter={() =>
+                  setInteractions((prev) => ({
+                    ...prev,
+                    tag: true
+                  }))
+                }
+                onMouseLeave={() =>
+                  setInteractions((prev) => ({
+                    ...prev,
+                    tag: false
+                  }))
+                }
+              >
+                <TagIcon dimensions={{ height: 35, width: 40 }} active={interactions.tag} />
+              </div>
+              <div
+                className="cursor-pointer"
+                onMouseEnter={() =>
+                  setInteractions((prev) => ({
+                    ...prev,
+                    currency: true
+                  }))
+                }
+                onMouseLeave={() =>
+                  setInteractions((prev) => ({
+                    ...prev,
+                    currency: false
+                  }))
+                }
+              >
+                <CurrencyIcon dimensions={{ height: 35, width: 40 }} active={interactions.currency} />
+              </div>
             </div>
           </div>
           <div className="flex justify-end items-center w-full">
