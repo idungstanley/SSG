@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import { Menu, Transition } from '@headlessui/react';
 import { BsChevronRight } from 'react-icons/bs';
 import { FiChevronRight } from 'react-icons/fi';
@@ -12,6 +12,7 @@ import {
   getVerticalGrid,
   getVerticalGridlinesTask
 } from '../../../../../features/task/taskSlice';
+import { useSwitchSettings } from './SwitchSettings';
 
 interface IShowHideSettings {
   scrollByEachGroup: string;
@@ -38,27 +39,13 @@ export default function ShowHideSettings({
 }: IShowHideSettings) {
   const [checkedStates, setCheckedStates] = useState<boolean[]>([]);
 
-  const dispatch = useAppDispatch();
-  const { singleLineView, CompactView, verticalGrid, taskUpperCase, verticalGridlinesTask } = useAppSelector(
-    (state) => state.task
-  );
+  const switchSettings = useSwitchSettings();
 
   const handleChange = (viewMode: string, index: number) => {
     const newCheckedStates = [...checkedStates];
     newCheckedStates[index] = !newCheckedStates[index];
     setCheckedStates(newCheckedStates);
-
-    if (viewMode == 'Single Line mode') {
-      dispatch(getSingleLineView(!singleLineView));
-    } else if (viewMode == 'Compact mode') {
-      dispatch(getCompactView(!CompactView));
-    } else if (viewMode == 'Vertical Gridlines') {
-      dispatch(getVerticalGrid(!verticalGrid));
-    } else if (viewMode == 'Upper Case') {
-      dispatch(getTaskUpperCase(!taskUpperCase));
-    } else if (viewMode == 'Task GridLines') {
-      dispatch(getVerticalGridlinesTask(!verticalGridlinesTask));
-    }
+    switchSettings(viewMode);
   };
 
   const ViewSettings = [
@@ -109,7 +96,7 @@ export default function ShowHideSettings({
     {
       id: 13,
       icon: <FiChevronRight />,
-      label: 'Single Line mode'
+      label: 'Remove Single Line mode'
     },
     {
       id: 14,
@@ -156,7 +143,7 @@ export default function ShowHideSettings({
 
           {ViewSettings.map((View, index) => (
             <Menu.Item as="a" key={View.id} className="flex items-center py-2 text-sm text-black text-left w-full ">
-              {View.label !== 'Single Line mode' ? (
+              {View.label !== 'Remove Single Line mode' ? (
                 <button
                   className={`${
                     View.id == 6

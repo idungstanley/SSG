@@ -1,10 +1,18 @@
 import { ReactElement, ReactNode, useState } from 'react';
-
 interface TooltipProps {
   children: ReactNode;
   content: ReactElement;
+  top?: string;
+  right?: string;
+  zIndex?: string;
 }
-export default function InteractiveTooltip({ children, content }: TooltipProps) {
+export default function InteractiveTooltip({
+  children,
+  content,
+  top = '-top-36',
+  right = '-right-7',
+  zIndex = 'z-50'
+}: TooltipProps) {
   const [isTooltipOpen, setIsTooltipOpen] = useState<boolean>(false);
 
   const handleOpenTooltip = () => {
@@ -22,7 +30,7 @@ export default function InteractiveTooltip({ children, content }: TooltipProps) 
   return (
     <div className="relative inline-block" onMouseEnter={handleOpenTooltip} onMouseLeave={handleCloseTooltip}>
       {isTooltipOpen && (
-        <div className="absolute z-10 -top-36 -right-7" onClick={(e) => handleTooltipClick(e)}>
+        <div className={`absolute ${zIndex} ${top} ${right} `} onClick={(e) => handleTooltipClick(e)}>
           <div className="w-auto p-2 text-white rounded shadow-lg" style={{ backgroundColor: '#424242' }}>
             {content}
           </div>
@@ -32,7 +40,7 @@ export default function InteractiveTooltip({ children, content }: TooltipProps) 
           ></div>
         </div>
       )}
-      <div className="inline-block rounded cursor-pointer">{children}</div>
+      <div className=" rounded cursor-pointer">{children}</div>
     </div>
   );
 }

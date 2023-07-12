@@ -30,6 +30,17 @@ import { TfiTicket } from 'react-icons/tfi';
 import Tickets from '../../../../../pages/workspace/tickets';
 import CrManager from '../../../../../pages/workspace/crManager';
 import WorkInsights from '../../../../../pages/workspace/tracker';
+import IntraysIcons from '../../../../../assets/icons/IntraysIcons';
+import TaskIcon from '../../../../../assets/icons/TaskIcon';
+import CabinetIcon from '../../../../../assets/icons/CabinetIcon';
+import FormsIcon from '../../../../../assets/icons/FormsIcon';
+import InsightsIcon from '../../../../../assets/icons/InsightsIcon';
+import AlsoHrIcon from '../../../../../assets/icons/AlsoHrIcon';
+import RouteIcon from '../../../../../assets/icons/RouteIcon';
+import CommerceIcon from '../../../../../assets/icons/CommerceIcon';
+import CrManagerIcon from '../../../../../assets/icons/CrManagerIcon';
+import TicketsIcon from '../../../../../assets/icons/TicketsIcon';
+import EmailIcon from '../../../../../assets/icons/EmailIcon';
 
 interface Place {
   name: string;
@@ -45,71 +56,71 @@ export const initialPlaces: Place[] = [
     name: 'Email',
     id: '1',
     place: <Email />,
-    icon: <MdAlternateEmail className="w-4 h-4" />
+    icon: <EmailIcon />
   },
   {
     name: 'TASKS',
     id: '2',
     place: <Hubs />,
-    icon: <BsListCheck className="w-4 h-4" />,
+    icon: <TaskIcon />,
     link: '/tasks'
   },
   {
     name: 'In-tray',
     id: '3',
     place: <Inbox />,
-    icon: <HiOutlineInbox className="w-4 h-4" />
+    icon: <IntraysIcons />
   },
   {
     name: 'Cabinet',
     id: '4',
     place: <ExtendedBar />,
-    source: cabinetIcon,
+    icon: <CabinetIcon />,
     link: '/explorer'
   },
   {
     name: 'Forms',
     id: '5',
     place: <Files />,
-    icon: <DocumentTextIcon className="w-4 h-4" />
+    icon: <FormsIcon />
   },
   {
     name: 'WORK INSIGHTS',
     id: '6',
     place: <WorkInsights />,
-    icon: <MdInsights className="w-4 h-4" />
+    icon: <InsightsIcon />
   },
   {
     name: 'ROUTEPLAN',
     id: '7',
     place: <RoutePlanner />,
-    icon: <CiRoute className="w-4 h-4" />
+    icon: <RouteIcon />
   },
   {
     name: 'Also HR',
     id: '8',
     place: <AlsoHr />,
-    icon: <FaHandsHelping className="w-4 h-4" />,
+    icon: <AlsoHrIcon />,
     link: '/calendar'
   },
   {
     name: 'TICKETS',
     id: '9',
     place: <Tickets />,
-    icon: <TfiTicket className="w-4 h-4" />
+    icon: <TicketsIcon />
   },
   {
     name: 'CR MANAGER',
     id: '10',
     place: <CrManager />,
-    icon: <MdOutlineManageAccounts className="w-4 h-4" />,
+    icon: <CrManagerIcon />,
     link: 'calendar'
   },
   {
     name: 'Commerce',
     id: '11',
     place: <Commerce />,
-    icon: <IoBusinessOutline className="w-4 h-4" />
+    icon: <CommerceIcon />
   }
 ];
 
