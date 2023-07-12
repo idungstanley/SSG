@@ -17,6 +17,7 @@ import { setTimerLastMemory } from '../../../../features/workspace/workspaceSlic
 import { runTimer } from '../../../../utils/TimerCounter';
 import ManualTimeAdd from '../../../../assets/icons/ManualTimeAdd';
 import DatePicker from '../../../DatePicker/DatePicker';
+import { ManualTimeAddDialog } from './ManualTimeDialog';
 
 export interface User {
   initials: string;
@@ -28,7 +29,7 @@ export default function ClockInOut() {
     description: ''
   });
   const { activeItemId, activeItemType, activeTabId, timerLastMemory } = useAppSelector((state) => state.workspace);
-  const { timerStatus, duration, period } = useAppSelector((state) => state.task);
+  const { timerStatus, duration, period, selectedDate, HistoryFilterMemory } = useAppSelector((state) => state.task);
   const { initials } = useAppSelector((state) => state.userSetting);
   const dispatch = useAppDispatch();
   const [isRunning, setRunning] = useState(false);
@@ -231,6 +232,14 @@ export default function ClockInOut() {
             </div>
           </div>
         </section>
+        {selectedDate?.from && selectedDate?.to && (
+          <ManualTimeAddDialog
+            start_date={selectedDate.from}
+            end_date={selectedDate.to}
+            start_time={HistoryFilterMemory?.time?.from}
+            end_time={HistoryFilterMemory?.time?.to}
+          />
+        )}
       </div>
     </div>
   );

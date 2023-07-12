@@ -18,6 +18,7 @@ import { setTimerLastMemory, toggleMute } from '../workspace/workspaceSlice';
 import { generateFilters } from '../../components/TasksHeader/lib/generateFilters';
 import moment from 'moment-timezone';
 import { runTimer } from '../../utils/TimerCounter';
+import DateStringFix from '../../utils/ManualTimeFix';
 
 const moveTask = (data: { taskId: TaskId; listId: string }) => {
   const { taskId, listId } = data;
@@ -422,6 +423,39 @@ export const createTimeEntriesService = (data: { queryKey: (string | undefined)[
     }
   });
   return response;
+};
+
+export const createManualTimeEntry = () => {
+  const queryClient = useQueryClient();
+  const mutation = useMutation(
+    async ({
+      start_date,
+      end_date,
+      type,
+      id
+    }: {
+      start_date: string | undefined;
+      end_date: string | undefined;
+      type: string | undefined;
+      id: string | undefined;
+    }) => {
+      const response = await requestNew({
+        url: 'time-entries',
+        method: 'POST',
+        data: {
+          start_date,
+          end_date,
+          type,
+          id
+        }
+      });
+      return response;
+    },
+    {
+      onSuccess: () => queryClient.invalidateQueries(['timeclock'])
+    }
+  );
+  return mutation;
 };
 
 export const useCurrentTime = ({ workspaceId }: { workspaceId?: string }) => {
