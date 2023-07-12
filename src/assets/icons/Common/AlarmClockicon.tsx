@@ -1,21 +1,27 @@
 import { DetailedHTMLProps, SVGAttributes } from 'react';
 
 /* eslint-disable max-len */
-type Props = DetailedHTMLProps<SVGAttributes<SVGSVGElement>, SVGSVGElement>;
+interface Props {
+  active: boolean;
+  dimensions?: {
+    height: number;
+    width: number;
+  };
+}
 
-export default function AlarmClockIcon({ ...props }: Props | undefined) {
+export default function AlarmClockIcon({ active, dimensions }: Props) {
   return (
-    <svg {...props} width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
       <mask
         id="mask0_1561_1125"
         style={{ maskType: 'alpha' }}
         maskUnits="userSpaceOnUse"
         x="0"
         y="0"
-        width="20"
-        height="20"
+        width={dimensions?.width ?? '20'}
+        height={dimensions?.height ?? '20'}
       >
-        <rect width="20" height="20" fill="#D9D9D9" />
+        <rect width={dimensions?.width ?? '20'} height={dimensions?.height ?? '20'} fill="#D9D9D9" />
       </mask>
       <g mask="url(#mask0_1561_1125)">
         <path
