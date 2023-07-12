@@ -102,7 +102,7 @@ export function StickyCol({
     const { current } = inputRef;
     current?.focus();
     selectText(current);
-  }, []);
+  }, [eitableContent]);
 
   const selectText = (element: Node | null) => {
     const selection = window.getSelection();
@@ -119,7 +119,7 @@ export function StickyCol({
 
   const editTaskMutation = useMutation(UseUpdateTaskService, {
     onSuccess: () => {
-      dispatch(getSingleLineView(true));
+      // dispatch(getSingleLineView(true));
       queryClient.invalidateQueries(['task']);
     }
   });
@@ -131,6 +131,7 @@ export function StickyCol({
       handleEditTask(e as React.KeyboardEvent<HTMLDivElement>, id);
     } else {
       onClickSave();
+      onClose && onClose();
     }
   };
   const onClickSave = () => {
@@ -198,6 +199,7 @@ export function StickyCol({
           <div
             style={{ paddingLeft, minHeight: '42px', height: singleLineView ? '42px' : '' }}
             onClick={onClickTask}
+            onDoubleClick={() => setEitableContent(true)}
             className={cl(
               COL_BG,
               `relative border-t ${isChecked && 'tdListV'} ${verticalGrid && 'border-r'} ${
@@ -220,31 +222,47 @@ export function StickyCol({
               <StatusDropdown TaskCurrentStatus={task.status} />
             </div>
             <div className="flex flex-col items-start justify-start space-y-1 pl-2">
-              <p
-                className="flex text-left"
-                contentEditable={eitableContent && !singleLineView}
-                onDoubleClick={() => {
-                  dispatch(getSingleLineView(false));
-                  setEitableContent(true);
-                }}
+              <div
+                className="flex text-left relative"
+                contentEditable={eitableContent}
                 ref={inputRef}
                 onKeyDown={(e) => (e.key === 'Enter' ? handleEditTask(e, task.id) : null)}
               >
                 {task.name.length > 50 && singleLineView ? (
                   <>
                     <InteractiveTooltip content={<p>{task.name}</p>} top="-top-28">
-                      <span className="whitespace-nowrap">
-                        {taskUpperCase
-                          ? task.name.substring(0, 40).toUpperCase()
-                          : Capitalize(task.name).substring(0, 40)}
-                        ...
-                      </span>
+                      {!eitableContent ? (
+                        <div
+                          className=""
+                          style={{
+                            maxWidth: '300px',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                            whiteSpace: 'nowrap'
+                          }}
+                        >
+                          {taskUpperCase ? task.name.toUpperCase() : Capitalize(task.name)}
+                          ...
+                        </div>
+                      ) : (
+                        <div
+                          className=""
+                          style={{
+                            maxWidth: '300px',
+                            overflow: 'hidden',
+                            // textOverflow: 'ellipsis',
+                            whiteSpace: 'nowrap'
+                          }}
+                        >
+                          {taskUpperCase ? task.name.toUpperCase() : Capitalize(task.name)}
+                        </div>
+                      )}
                     </InteractiveTooltip>
                   </>
                 ) : (
                   <span>{taskUpperCase ? task.name.toUpperCase() : Capitalize(task.name)}</span>
                 )}
-              </p>
+              </div>
               {tags}
             </div>
             {children}
