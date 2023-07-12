@@ -18,6 +18,7 @@ import { setTimerLastMemory, toggleMute } from '../workspace/workspaceSlice';
 import { generateFilters } from '../../components/TasksHeader/lib/generateFilters';
 import { runTimer } from '../../utils/TimerCounter';
 import Duration from '../../utils/TimerDuration';
+import DateStringFix from '../../utils/ManualTimeFix';
 
 const moveTask = (data: { taskId: TaskId; listId: string }) => {
   const { taskId, listId } = data;
@@ -84,13 +85,13 @@ export const useAddTask = (parentTaskId?: string) => {
   const queryClient = useQueryClient();
   const { hubId, walletId, listId } = useParams();
 
-  const id = hubId ?? walletId ?? listId;
-  const type = hubId ? 'hub' : walletId ? 'wallet' : 'list';
+  // const id = hubId ?? walletId ?? listId;
+  // const type = hubId ? 'hub' : walletId ? 'wallet' : 'list';
 
   return useMutation(addTask, {
     onSuccess: () => {
-      queryClient.invalidateQueries(['task', id, type]);
-      queryClient.invalidateQueries(['sub-tasks', parentTaskId]);
+      queryClient.invalidateQueries(['task']);
+      queryClient.invalidateQueries(['sub-tasks']);
     }
   });
 };
@@ -424,9 +425,41 @@ export const createTimeEntriesService = (data: { queryKey: (string | undefined)[
   return response;
 };
 
+export const createManualTimeEntry = () => {
+  const queryClient = useQueryClient();
+  const mutation = useMutation(
+    async ({
+      start_date,
+      end_date,
+      type,
+      id
+    }: {
+      start_date: string | undefined;
+      end_date: string | undefined;
+      type: string | undefined;
+      id: string | undefined;
+    }) => {
+      const response = await requestNew({
+        url: 'time-entries',
+        method: 'POST',
+        data: {
+          start_date,
+          end_date,
+          type,
+          id
+        }
+      });
+      return response;
+    },
+    {
+      onSuccess: () => queryClient.invalidateQueries(['timeclock'])
+    }
+  );
+  return mutation;
+};
+
 export const useCurrentTime = ({ workspaceId }: { workspaceId?: string }) => {
   const dispatch = useAppDispatch();
-  const { timezone } = useAppSelector((state) => state.userSetting);
   const { data, isLoading, isError, refetch } = useQuery(
     ['timeData'],
     async () => {

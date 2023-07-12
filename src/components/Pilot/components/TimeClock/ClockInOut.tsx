@@ -145,9 +145,12 @@ export default function ClockInOut() {
 
   return (
     <div className="p-2 mt-6 rounded-t-md">
-      <div className="bg-gray-100">
+      <div className="bg-alsoit-gray-75">
         <section id="body" className="px-3 py-1 text-white bg-indigo-500 rounded-b-md">
-          <div id="taskUser" className="flex items-center justify-between h-10 py-3 text-xs font-normal cursor-pointer">
+          <div
+            id="taskUser"
+            className="flex items-center justify-between h-10 py-3 text-alsoit-text-lg font-semibold cursor-pointer"
+          >
             <span>Tags: </span>
             {/* total time here */}
             <p>{moment.utc((getEntries as ITimeEntriesRes)?.data?.total_duration * 1000).format('HH:mm:ss')}</p>
@@ -158,28 +161,24 @@ export default function ClockInOut() {
               name="description"
               onChange={(e) => handleEndTimeChange(e.target.value)}
               placeholder="Enter a note"
-              className="w-full text-gray-600 border-0 rounded shadow-sm"
+              className="w-full text-alsoit-gray-300 border-0 rounded shadow-sm"
             />
           </div>
           <div id="entries" className="flex items-center justify-between py-1">
             <div id="left" className="flex items-center space-x-1 cursor-pointer">
               <div className="mr-1 relative flex items-start">
                 {timerStatus && sameEntity() ? (
-                  // !btnClicked && !timerStatus ? (
                   <button onClick={stop}>
-                    <BsStopCircle className="text-2xl h-4 w-4 text-red-400 cursor-pointer" aria-hidden="true" />
+                    <BsStopCircle className="h-4 w-4 text-red-400 cursor-pointer" aria-hidden="true" />
                   </button>
                 ) : (
                   <button onClick={() => activeTimerCheck()}>
-                    <AiOutlinePlayCircle
-                      className="text-2xl h-4 w-4 text-green-500 cursor-pointer"
-                      aria-hidden="true"
-                    />
+                    <AiOutlinePlayCircle className="h-4 w-4 text-alsoit-success cursor-pointer" aria-hidden="true" />
                   </button>
                 )}
                 {prompt && (
-                  <div className="absolute top-5 p-2 rounded-lg shadow-2xl flex flex-col space-y-1 bg-gray-100 z-50 w-72">
-                    <span className="text-center text-gray-700">
+                  <div className="absolute top-5 p-2 rounded-lg shadow-2xl flex flex-col space-y-1 bg-alsoit-gray-75 z-50 w-72">
+                    <span className="text-center text-alsoit-gray-300">
                       Another Timer Already Running would you want to stop the active timer and continue here?
                     </span>
                     <div className="flex w-full space-x-1 justify-end">
@@ -228,8 +227,8 @@ export default function ClockInOut() {
               <CurrencyDollarIcon
                 className={`${
                   data.isBillable
-                    ? 'bg-green-400 rounded-full h-9  text-white cursor-pointer text-xl'
-                    : 'text-white cursor-pointer text-xl rounded-full h-9'
+                    ? 'bg-alsoit-success rounded-full h-9  text-alsoit-gray-50 cursor-pointer text-alsoit-text-lg'
+                    : 'text-alsoit-gray-50 cursor-pointer text-alsoit-text-lg rounded-full h-9'
                 }`}
                 aria-hidden="true"
                 onClick={() =>

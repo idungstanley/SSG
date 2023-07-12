@@ -8,6 +8,8 @@ import { cl } from '../../../../../utils';
 import { useSortable } from '@dnd-kit/sortable';
 import SearchTaskView from './Search/SearchTaskView';
 import { setIsSearchActive } from '../../../../../features/search/searchSlice';
+import ArrowRight from '../../../../../assets/icons/ArrowRight';
+import ArrowOpenDown from '../../../../../assets/icons/ArrowOpenDown';
 
 interface PlaceItemProps {
   label: string;
@@ -112,7 +114,7 @@ export default function PlaceItem({
           <div className="flex items-center justify-between w-full">
             <div
               className={cl(
-                'flex gap-5 items-center content-center self-center',
+                'flex gap-5 items-center content-center self-center ml-0.5',
                 isActivePlace ? 'justify-center text-black font-extrabold' : ''
               )}
             >
@@ -142,13 +144,9 @@ export default function PlaceItem({
               </div>
               <span
                 onClick={isActivePlace ? resetSelectedPlace : onClick}
-                className={cl(showSidebar ? 'block' : 'hidden')}
+                className={cl(showSidebar ? 'block mr-3' : 'hidden')}
               >
-                {isActivePlace ? (
-                  <FiChevronDown className="w-5 h-5 text-gray-500 cursor-pointer" style={{ color: baseColor }} />
-                ) : (
-                  <FiChevronRight className="w-5 h-5 text-gray-500 cursor-pointer" />
-                )}
+                {isActivePlace ? <ArrowOpenDown /> : <ArrowRight />}
               </span>
             </div>
           </div>
