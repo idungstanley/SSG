@@ -12,6 +12,7 @@ import {
   getVerticalGrid,
   getVerticalGridlinesTask
 } from '../../../../../features/task/taskSlice';
+import { useSwitchSettings } from './SwitchSettings';
 
 interface IShowHideSettings {
   scrollByEachGroup: string;
@@ -38,27 +39,13 @@ export default function ShowHideSettings({
 }: IShowHideSettings) {
   const [checkedStates, setCheckedStates] = useState<boolean[]>([]);
 
-  const dispatch = useAppDispatch();
-  const { singleLineView, CompactView, verticalGrid, taskUpperCase, verticalGridlinesTask } = useAppSelector(
-    (state) => state.task
-  );
+  const switchSettings = useSwitchSettings();
 
   const handleChange = (viewMode: string, index: number) => {
     const newCheckedStates = [...checkedStates];
     newCheckedStates[index] = !newCheckedStates[index];
     setCheckedStates(newCheckedStates);
-
-    if (viewMode == 'Single Line mode') {
-      dispatch(getSingleLineView(!singleLineView));
-    } else if (viewMode == 'Compact mode') {
-      dispatch(getCompactView(!CompactView));
-    } else if (viewMode == 'Vertical Gridlines') {
-      dispatch(getVerticalGrid(!verticalGrid));
-    } else if (viewMode == 'Upper Case') {
-      dispatch(getTaskUpperCase(!taskUpperCase));
-    } else if (viewMode == 'Task GridLines') {
-      dispatch(getVerticalGridlinesTask(!verticalGridlinesTask));
-    }
+    switchSettings(viewMode);
   };
 
   useEffect(() => {

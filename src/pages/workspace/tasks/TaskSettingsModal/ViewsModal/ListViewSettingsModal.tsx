@@ -19,8 +19,7 @@ import timeChartIcon from '../../../../../assets/icons/timeChartIcon.png';
 import mapIcon from '../../../../../assets/icons/mapIcon.png';
 import gantIcon from '../../../../../assets/icons/gantIcon.png';
 import teamIcon from '../../../../../assets/icons/teamIcon.png';
-import Icons from '../../../../../components/Icons/Icons';
-import DropdownArrow from '../../../../../assets/icons/arrow_drop_down.svg';
+import ArrowDownFilled from '../../../../../assets/icons/ArrowDownFilled';
 
 export default function ListViewSettingsModal({
   list,
@@ -147,7 +146,7 @@ export default function ListViewSettingsModal({
     <Menu>
       <div className="flex items-center justify-center viewSettingsParent">
         <Menu.Button>
-          <Icons src={DropdownArrow} />
+          <ArrowDownFilled active={true} />
         </Menu.Button>
       </div>
 

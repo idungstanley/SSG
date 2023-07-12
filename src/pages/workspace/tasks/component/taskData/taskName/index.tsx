@@ -119,7 +119,7 @@ export default function TaskName({
           }}
         />
 
-        <MdDragIndicator className="left-0 text-lg text-gray-400 transition duration-200 opacity-0 cursor-move group-hover:opacity-100" />
+        {/* <MdDragIndicator className="left-0 text-lg text-gray-400 transition duration-200 opacity-0 cursor-move group-hover:opacity-100" /> */}
       </div>
       <div onClick={() => (handleGetSubTask ? handleGetSubTask(task?.id) : null)} className="items-center">
         {task?.id == getSubTaskId ? (
