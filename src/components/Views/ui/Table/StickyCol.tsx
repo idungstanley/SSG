@@ -9,6 +9,7 @@ import StatusDropdown from '../../../status/StatusDropdown';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { setShowPilotSideOver } from '../../../../features/general/slideOver/slideOverSlice';
 import {
+  getSingleLineView,
   setCurrentTaskId,
   setCurrentTaskStatusId,
   setSelectedTasksArray,
@@ -64,6 +65,13 @@ export function StickyCol({
   const { currTeamMemberId, singleLineView, verticalGrid, taskUpperCase, selectedTasksArray, verticalGridlinesTask } =
     useAppSelector((state) => state.task);
 
+  const queryClient = useQueryClient();
+  const inputRef = useRef<HTMLInputElement | null>(null);
+  const { attributes, listeners, setNodeRef } = useSortable({
+    id: task?.id as UniqueIdentifier
+  });
+  const [eitableContent, setEitableContent] = useState(false);
+
   const onClickTask = () => {
     if (task.id !== '0') {
       hubId
@@ -95,6 +103,7 @@ export function StickyCol({
     current?.focus();
     selectText(current);
   }, []);
+
   const selectText = (element: Node | null) => {
     const selection = window.getSelection();
     const range = document.createRange();
@@ -102,18 +111,15 @@ export function StickyCol({
     selection?.removeAllRanges();
     selection?.addRange(range);
   };
+
   const onToggleDisplayingSubTasks = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.stopPropagation();
     setShowSubTasks(!showSubTasks);
   };
-  const queryClient = useQueryClient();
-  const inputRef = useRef<HTMLInputElement | null>(null);
-  const { attributes, listeners, setNodeRef } = useSortable({
-    id: task?.id as UniqueIdentifier
-  });
-  const [eitableContent, setEitableContent] = useState(false);
+
   const editTaskMutation = useMutation(UseUpdateTaskService, {
     onSuccess: () => {
+      dispatch(getSingleLineView(true));
       queryClient.invalidateQueries(['task']);
     }
   });
@@ -183,7 +189,7 @@ export function StickyCol({
               isChecked={isChecked}
               styles={`w-4 h-4 rounded-full ${
                 selectedTasksArray.length > 0 ? 'opacity-100' : 'opacity-0'
-              } cursor-pointer focus:outline-1 focus:ring-transparent  focus:border-2 focus:opacity-100 group-hover:opacity-100`}
+              } cursor-pointer focus:outline-1 focus:ring-transparent  focus:border-2 focus:opacity-100 group-hover:opacity-100 text-alsoit-purple-300`}
             />
             <div ref={setNodeRef} {...attributes} {...listeners} className="pr-2">
               {dragElement}
@@ -217,7 +223,10 @@ export function StickyCol({
               <p
                 className="flex text-left"
                 contentEditable={eitableContent && !singleLineView}
-                onClick={() => setEitableContent(true)}
+                onDoubleClick={() => {
+                  dispatch(getSingleLineView(false));
+                  setEitableContent(true);
+                }}
                 ref={inputRef}
                 onKeyDown={(e) => (e.key === 'Enter' ? handleEditTask(e, task.id) : null)}
               >
