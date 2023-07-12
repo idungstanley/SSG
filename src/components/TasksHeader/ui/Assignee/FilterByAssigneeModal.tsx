@@ -100,7 +100,7 @@ export default function FilterByAssigneeModal() {
             />
             <EllipsisHorizontalIcon className="w-5 h-5" />
           </div>
-          {members.map((member) => (
+          {[...members, ...members].map((member) => (
             <section
               className="flex items-center py-2 px-4 text-alsoit-text-md text-black text-left w-full justify-between cursor-pointer hover:bg-gray-200"
               key={member.id}
