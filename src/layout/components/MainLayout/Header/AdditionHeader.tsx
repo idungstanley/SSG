@@ -10,9 +10,9 @@ import dayjs from 'dayjs';
 import HeaderModal from '../../../../components/Header/HeaderModal';
 import TimerModal from './TimerOptions';
 import { useParams } from 'react-router-dom';
-import ArrowCaretDown from '../../../../assets/icons/Common/ArrowCaretDown';
-import ArrowCaretUp from '../../../../assets/icons/Common/ArrowCaretUp';
-import AlarmClockIcon from '../../../../assets/icons/Common/AlarmClockicon';
+import ArrowCaretUp from '../../../../assets/icons/ArrowCaretUp';
+import AlarmClockIcon from '../../../../assets/icons/AlarmClockicon';
+import ArrowCaretDown from '../../../../assets/icons/ArrowCaretDown';
 
 export const handleEntity = ({
   workSpaceId,
@@ -39,6 +39,11 @@ export default function AdditionalHeader() {
     show: true,
     withDay: false,
     showMinimal: false
+  });
+  const [iconToggle, setIconToggle] = useState<{ alarmIcon: boolean; arrowUp: boolean; arrowDown: boolean }>({
+    alarmIcon: false,
+    arrowUp: false,
+    arrowDown: false
   });
   const { workSpaceId: workspaceId } = useParams();
   const { activeEntityName } = useAppSelector((state) => state.workspace);
@@ -94,16 +99,61 @@ export default function AdditionalHeader() {
             className="flex items-center px-2 py-1 space-x-1 border border-alsoit-purple-300 rounded-lg cursor-pointer"
             onMouseEnter={() => setTimerModal(!timerModal)}
           >
-            <AlarmClockIcon className="text-alsoit-purple-300 w-4 h-4" />
+            <div
+              onMouseEnter={() =>
+                setIconToggle((prev) => ({
+                  ...prev,
+                  alarmIcon: true
+                }))
+              }
+              onMouseLeave={() =>
+                setIconToggle((prev) => ({
+                  ...prev,
+                  alarmIcon: false
+                }))
+              }
+            >
+              <AlarmClockIcon active={iconToggle.alarmIcon} />
+            </div>
             <div className="items-center">
               {`${String(duration.h).padStart(2, '0')}:${String(duration.m).padStart(2, '0')}:${String(
                 duration.s
               ).padStart(2, '0')}`}
             </div>
             {timerModal ? (
-              <ArrowCaretUp className="text-alsoit-purple-300 w-4 h-3" />
+              <div
+                onMouseEnter={() =>
+                  setIconToggle((prev) => ({
+                    ...prev,
+                    arrowUp: true
+                  }))
+                }
+                onMouseLeave={() =>
+                  setIconToggle((prev) => ({
+                    ...prev,
+                    arrowUp: false
+                  }))
+                }
+              >
+                <ArrowCaretUp active={iconToggle.arrowUp} />
+              </div>
             ) : (
-              <ArrowCaretDown className="text-alsoit-purple-300 w-4 h-3" />
+              <div
+                onMouseEnter={() =>
+                  setIconToggle((prev) => ({
+                    ...prev,
+                    arrowDown: true
+                  }))
+                }
+                onMouseLeave={() =>
+                  setIconToggle((prev) => ({
+                    ...prev,
+                    arrowUp: false
+                  }))
+                }
+              >
+                <ArrowCaretDown active={iconToggle.arrowDown} />
+              </div>
             )}
             {timerModal && (
               <HeaderModal toggleFn={setTimerModal} styles="top-8 right-1">
