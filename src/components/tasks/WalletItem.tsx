@@ -1,5 +1,4 @@
-import React, { useState, useMemo } from 'react';
-import { AiOutlineEllipsis, AiOutlinePlus } from 'react-icons/ai';
+import React, { useState } from 'react';
 import { FaFolder, FaFolderOpen } from 'react-icons/fa';
 import { VscTriangleDown, VscTriangleRight } from 'react-icons/vsc';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
