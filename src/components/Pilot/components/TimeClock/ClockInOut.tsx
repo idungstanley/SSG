@@ -140,7 +140,7 @@ export default function ClockInOut() {
 
   return (
     <div className="p-2 mt-6 rounded-t-md">
-      <div className="bg-alsoit-gray-75">
+      <div className="bg-alsoit-gray-50">
         <section id="body" className="px-3 py-1 text-white bg-indigo-500 rounded-b-md">
           <div
             id="taskUser"
