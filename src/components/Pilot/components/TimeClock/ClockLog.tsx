@@ -94,7 +94,7 @@ export default function ClockLog() {
                           <>
                             {headerId === '' && (
                               <FaSort
-                                className="w-3 h-3 text-sm text-gray-100 transition duration-200 bg-alsoit-gray-200 rounded-full opacity-0 cursor-pointer group-hover:opacity-100 "
+                                className="w-3 h-3 text-alsoit-text-lg text-alsoit-gray-50 transition duration-200 bg-alsoit-gray-200 rounded-full opacity-0 cursor-pointer group-hover:opacity-100 "
                                 onClick={() => handleSort(col.title, col.id)}
                               />
                             )}

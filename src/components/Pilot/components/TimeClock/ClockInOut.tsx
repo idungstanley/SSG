@@ -140,8 +140,8 @@ export default function ClockInOut() {
 
   return (
     <div className="p-2 mt-6 rounded-t-md">
-      <div className="bg-gray-100">
-        <section id="body" className="px-3 py-1 text-white bg-indigo-500 rounded-b-md">
+      <div className="bg-alsoit-gray-50">
+        <section id="body" className="px-3 py-1 text-white bg-indigo-300 rounded-b-md shadow-2xl">
           <div id="taskUser" className="flex items-center justify-between h-10 py-3 text-xs font-normal cursor-pointer">
             <span>Tags: </span>
             {/* total time here */}
@@ -173,8 +173,8 @@ export default function ClockInOut() {
                   </button>
                 )}
                 {prompt && (
-                  <div className="absolute top-5 p-2 rounded-lg shadow-2xl flex flex-col space-y-1 bg-gray-100 z-50 w-72">
-                    <span className="text-center text-gray-700">
+                  <div className="absolute top-5 p-2 rounded-lg shadow-2xl flex flex-col space-y-1 bg-alsoit-gray-50 z-50 w-72">
+                    <span className="text-center text-alsoit-gray-300">
                       Another Timer Already Running would you want to stop the active timer and continue here?
                     </span>
                     <div className="flex w-full space-x-1 justify-end">
@@ -214,7 +214,7 @@ export default function ClockInOut() {
               <CurrencyDollarIcon
                 className={`${
                   data.isBillable
-                    ? 'bg-green-400 rounded-full h-9  text-white cursor-pointer text-xl'
+                    ? 'bg-alsoit-success rounded-full h-9  text-white cursor-pointer text-xl'
                     : 'text-white cursor-pointer text-xl rounded-full h-9'
                 }`}
                 aria-hidden="true"
