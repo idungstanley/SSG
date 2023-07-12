@@ -119,7 +119,7 @@ export function StickyCol({
 
   const editTaskMutation = useMutation(UseUpdateTaskService, {
     onSuccess: () => {
-      // dispatch(getSingleLineView(true));
+      // setEitableContent(false);
       queryClient.invalidateQueries(['task']);
     }
   });
@@ -250,7 +250,6 @@ export function StickyCol({
                           style={{
                             maxWidth: '300px',
                             overflow: 'hidden',
-                            // textOverflow: 'ellipsis',
                             whiteSpace: 'nowrap'
                           }}
                         >
