@@ -22,15 +22,17 @@ import TemplateIcon from '../../../../../../assets/icons/TemplateIcon';
 import GoalIcon from '../../../../../../assets/icons/GoalIcon';
 import DashboardIcon from '../../../../../../assets/icons/DashboardIcon';
 import { AvatarWithInitials } from '../../../../../../components';
+import ArrowDownwardIcon from '../../../../../../assets/icons/ArrowDownwardIcon';
+import ArrowUpwardIcon from '../../../../../../assets/icons/ArrowUpwardIcon';
 
 const showLessOrMore = [
   {
     name: 'Show Less',
-    icon: <ArrowUpIcon className="w-5 h-5" aria-hidden="true" />
+    icon: <ArrowUpwardIcon />
   },
   {
     name: 'Show More',
-    icon: <ArrowDownIcon className="w-5 h-5" aria-hidden="true" />
+    icon: <ArrowDownwardIcon />
   }
 ];
 
@@ -197,7 +199,7 @@ export default function NavigationItems({
             <div
               onClick={() => setShowAll((prev) => !prev)}
               className={cl(
-                !showSidebar ? 'justify-center pl-5' : 'gap-2 items-center pl-6',
+                !showSidebar ? 'justify-center pl-5' : 'gap-2 items-center pl-7',
                 'flex cursor-pointer gap-2 items-center p-2 w-full hover:text-gray-500 hover:bg-gray-100'
               )}
               style={{ height: '30px' }}
