@@ -14,7 +14,7 @@ export function useSwitchSettings() {
   );
 
   const switchSettings = (viewMode: string) => {
-    if (viewMode === 'Single Line mode') {
+    if (viewMode === 'Remove Single Line mode') {
       dispatch(getSingleLineView(!singleLineView));
     } else if (viewMode === 'Compact mode') {
       dispatch(getCompactView(!CompactView));

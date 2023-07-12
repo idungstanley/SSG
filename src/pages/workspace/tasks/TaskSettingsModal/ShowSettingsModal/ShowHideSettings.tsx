@@ -48,18 +48,6 @@ export default function ShowHideSettings({
     switchSettings(viewMode);
   };
 
-  useEffect(() => {
-    const handleCheckboxChange = () => {
-      setCheckedStates((prev: boolean[]) => {
-        const newState = [...prev];
-        const singleLineIndex = ViewSettings.length - 2;
-        newState[singleLineIndex] = true;
-        return newState;
-      });
-    };
-    handleCheckboxChange();
-  }, []);
-
   const ViewSettings = [
     {
       id: 2,
@@ -108,7 +96,7 @@ export default function ShowHideSettings({
     {
       id: 13,
       icon: <FiChevronRight />,
-      label: 'Single Line mode'
+      label: 'Remove Single Line mode'
     },
     {
       id: 14,
@@ -155,7 +143,7 @@ export default function ShowHideSettings({
 
           {ViewSettings.map((View, index) => (
             <Menu.Item as="a" key={View.id} className="flex items-center py-2 text-sm text-black text-left w-full ">
-              {View.label !== 'Single Line mode' ? (
+              {View.label !== 'Remove Single Line mode' ? (
                 <button
                   className={`${
                     View.id == 6

@@ -40,7 +40,7 @@ export default function InteractiveTooltip({
           ></div>
         </div>
       )}
-      <div className="inline-block rounded cursor-pointer">{children}</div>
+      <div className=" rounded cursor-pointer">{children}</div>
     </div>
   );
 }
