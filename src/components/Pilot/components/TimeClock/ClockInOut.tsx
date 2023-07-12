@@ -15,8 +15,6 @@ import { setTimerInterval, setTimerStatus, setUpdateTimerDuration } from '../../
 import { useParams } from 'react-router-dom';
 import { setTimerLastMemory } from '../../../../features/workspace/workspaceSlice';
 import { runTimer } from '../../../../utils/TimerCounter';
-import ManualTimeAdd from '../../../../assets/icons/ManualTimeAdd';
-import DatePicker from '../../../DatePicker/DatePicker';
 
 export interface User {
   initials: string;
@@ -36,7 +34,6 @@ export default function ClockInOut() {
   const [, setBtnClicked] = useState(false);
   const [prompt, setPrompt] = useState(false);
   const [newTimer, setNewtimer] = useState(false);
-  const [manualTime, setManual] = useState(false);
   const { workSpaceId, listId, hubId } = useParams();
 
   const { data: getEntries } = GetTimeEntriesService({
@@ -164,12 +161,7 @@ export default function ClockInOut() {
           <div id="entries" className="flex items-center justify-between py-1">
             <div id="left" className="flex items-center space-x-1 cursor-pointer">
               <div className="mr-1 relative flex items-center">
-                <div className="relative" onClick={() => setManual(!manualTime)}>
-                  <ManualTimeAdd />
-                  {manualTime && <DatePicker toggleFn={setManual} range />}
-                </div>
                 {timerStatus && sameEntity() ? (
-                  // !btnClicked && !timerStatus ? (
                   <button onClick={stop}>
                     <BsStopCircle className="h-4 w-4 text-red-400 cursor-pointer" aria-hidden="true" />
                   </button>
@@ -220,8 +212,8 @@ export default function ClockInOut() {
               <CurrencyDollarIcon
                 className={`${
                   data.isBillable
-                    ? 'bg-green-400 rounded-full h-9  text-white cursor-pointer text-alsoit-text-lg'
-                    : 'text-white cursor-pointer text-alsoit-text-lg rounded-full h-9'
+                    ? 'bg-alsoit-success rounded-full h-9  text-alsoit-gray-50 cursor-pointer text-alsoit-text-lg'
+                    : 'text-alsoit-gray-50 cursor-pointer text-alsoit-text-lg rounded-full h-9'
                 }`}
                 aria-hidden="true"
                 onClick={() =>
