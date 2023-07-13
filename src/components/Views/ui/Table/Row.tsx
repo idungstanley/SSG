@@ -6,7 +6,7 @@ import { Column } from '../../types/table';
 import { Col } from './Col';
 import { StickyCol } from './StickyCol';
 import { SubTasks } from './SubTasks';
-import { useDraggable } from '@dnd-kit/core';
+import { useDraggable, useDroppable } from '@dnd-kit/core';
 import { MdDragIndicator } from 'react-icons/md';
 import { ManageTagsDropdown } from '../../../Tag/ui/ManageTagsDropdown/ui/ManageTagsDropdown';
 import { AddSubTask } from '../AddTask/AddSubTask';
@@ -89,6 +89,10 @@ export function Row({ task, columns, paddingLeft = 0, parentId, task_status, isL
     id: task.id
   });
 
+  const { isOver, setNodeRef: droppableRef } = useDroppable({
+    id: 'Root'
+  });
+
   // hide element if is currently grabbing
   const style = {
     opacity: transform ? 0 : 100
@@ -98,7 +102,7 @@ export function Row({ task, columns, paddingLeft = 0, parentId, task_status, isL
     <>
       {/* current task */}
 
-      <tr style={style} className="contents group">
+      <tr style={style} className="contents group" ref={droppableRef}>
         <StickyCol
           showSubTasks={showSubTasks}
           setShowSubTasks={setShowSubTasks}

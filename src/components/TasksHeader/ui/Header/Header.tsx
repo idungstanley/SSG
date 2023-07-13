@@ -1,3 +1,4 @@
+import { useDroppable } from '@dnd-kit/core';
 import { useAppSelector } from '../../../../app/hooks';
 import TaskMenu from '../../../../pages/workspace/tasks/component/taskMenu/TaskMenu';
 import { Assignee } from '../Assignee/Assignee';
@@ -9,6 +10,14 @@ import { Sort } from '../Sort/Sort';
 export function Header() {
   const { selectedTasksArray } = useAppSelector((state) => state.task);
 
+  // const { attributes, listeners, setNodeRef, transform } = useDraggable({
+  //   id: 'Drag'
+  // });
+
+  const { isOver, setNodeRef: droppableRef } = useDroppable({
+    id: 'Root'
+  });
+
   return (
     <>
       {selectedTasksArray.length > 0 && (
@@ -18,7 +27,7 @@ export function Header() {
           </span>
         </div>
       )}
-      <section className="p-1.5 h-12 w-full flex items-center justify-between border-b">
+      <section className="p-1.5 h-12 w-full flex items-center justify-between border-b" ref={droppableRef}>
         <ChangeView />
 
         <div className="flex items-center justify-end">

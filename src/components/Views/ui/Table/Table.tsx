@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { DragOverlay } from '@dnd-kit/core';
+import { DragOverlay, useDroppable } from '@dnd-kit/core';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { ITaskFullList, Task } from '../../../../features/task/interface.tasks';
 import { setCurrTaskListId, setCurrTeamMemId, setStatusId, setUpdateCords } from '../../../../features/task/taskSlice';
@@ -164,6 +164,14 @@ export function Table({ heads, data, label }: TableProps) {
   const onScroll = useScroll(() => dispatch(setUpdateCords()));
 
   const draggableItem = draggableTaskId ? data.find((i) => i.id === draggableTaskId) : null;
+
+  // Droppable attributes
+  const { isOver, setNodeRef } = useDroppable({
+    id: 'task.id',
+    data: {
+      isTask: true
+    }
+  });
 
   return (
     <ScrollableContainer onScroll={onScroll}>

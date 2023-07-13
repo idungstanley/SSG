@@ -40,6 +40,8 @@ export default function DragContext({ children }: DragContextProps) {
 
     const isPlace = over?.data.current?.isPlace && active?.data.current?.isPlace;
 
+    console.log(over);
+
     // drag and drop places
     if (isPlace) {
       if (active.id !== over?.id) {

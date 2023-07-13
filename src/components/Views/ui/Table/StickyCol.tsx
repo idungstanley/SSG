@@ -18,7 +18,7 @@ import {
 } from '../../../../features/task/taskSlice';
 import { setActiveItem } from '../../../../features/workspace/workspaceSlice';
 import { useSortable } from '@dnd-kit/sortable';
-import { UniqueIdentifier } from '@dnd-kit/core';
+import { UniqueIdentifier, useDroppable } from '@dnd-kit/core';
 import { ImCancelCircle } from 'react-icons/im';
 import CloseSubtask from '../../../../assets/icons/CloseSubtask';
 import OpenSubtask from '../../../../assets/icons/OpenSubtask';
