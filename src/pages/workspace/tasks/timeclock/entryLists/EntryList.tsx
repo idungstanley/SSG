@@ -8,9 +8,10 @@ import { AvatarWithInitials } from '../../../../../components';
 import { Header } from '../../../../../components/Pilot/components/TimeClock/ClockLog';
 import DateFormat from '../../../../../components/DateFormat';
 import ToolTip from '../../../../../components/Tooltip/Tooltip';
-import EditIcon from '../../../../../assets/icons/Common/Edit';
+import EditIcon from '../../../../../assets/icons/Edit';
 import moment from 'moment-timezone';
-import TrashIcon from '../../../../../assets/icons/Common/delete';
+import TrashIcon from '../../../../../assets/icons/delete';
+import { useState } from 'react';
 export interface teamMember {
   id: string;
   user: {
@@ -39,6 +40,10 @@ export default function EntryList({ entries, switchHeader }: EntryListProps) {
   const queryClient = useQueryClient();
   const headers = switchHeader;
   const { initials, name } = entries.team_member.user;
+  const [iconToggle, setIconToggle] = useState<{ editIcon: boolean; trashIcon: boolean }>({
+    editIcon: false,
+    trashIcon: false
+  });
 
   const handledelete = useMutation(DeleteTimeEntriesService, {
     onSuccess: () => {
@@ -122,13 +127,43 @@ export default function EntryList({ entries, switchHeader }: EntryListProps) {
       </div>
       <div id="right" className="flex items-center space-x-2 relative">
         <button type="button" onClick={() => handleUpdateEntry(entries.id)}>
-          <EditIcon className="flex-shrink-0 h-3 w-5 text-alsoit-gray-200" aria-hidden="true" />
+          <div
+            onMouseEnter={() =>
+              setIconToggle((prev) => ({
+                ...prev,
+                editIcon: true
+              }))
+            }
+            onMouseLeave={() =>
+              setIconToggle((prev) => ({
+                ...prev,
+                editIcon: false
+              }))
+            }
+          >
+            <EditIcon active={iconToggle.editIcon} dimensions={{ width: 20, height: 12 }} aria-hidden="true" />
+          </div>
         </button>
         {openUpdateEntryId == entries.id ? (
           <UpdateTimeEntryDropdown time_entry_id={entries.id} billable={entries.is_billable} />
         ) : null}
         <button type="button" onClick={() => handledelete.mutateAsync({ timeEntryDeleteTriggerId: entries.id })}>
-          <TrashIcon className="flex-shrink-0 h-3 w-5 text-alsoit-danger" aria-hidden="true" />
+          <div
+            onMouseEnter={() =>
+              setIconToggle((prev) => ({
+                ...prev,
+                trashIcon: true
+              }))
+            }
+            onMouseLeave={() =>
+              setIconToggle((prev) => ({
+                ...prev,
+                trashIcon: false
+              }))
+            }
+          >
+            <TrashIcon active={iconToggle.trashIcon} dimensions={{ width: 20, height: 12 }} aria-hidden="true" />
+          </div>
         </button>
       </div>
     </tr>
