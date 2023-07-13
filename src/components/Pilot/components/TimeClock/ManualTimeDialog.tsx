@@ -1,45 +1,78 @@
 import moment from 'moment-timezone';
 import { useAppSelector } from '../../../../app/hooks';
 import DateStringFix from '../../../../utils/ManualTimeFix';
-import dayjs from 'dayjs';
 import CurrencyIcon from '../../../../assets/icons/CurrencyIcon';
 import TagIcon from '../../../../assets/icons/DotCircleTagIcon';
-import { useState } from 'react';
+import { ChangeEvent, useState } from 'react';
+import { createManualTimeEntry } from '../../../../features/task/taskService';
 
-interface ManualTimeAddProps {
-  start_date: dayjs.Dayjs;
-  end_date: dayjs.Dayjs;
-  start_time?: string;
-  end_time?: string;
-}
+// interface ManualTimeAddProps {
+//   start_date: dayjs.Dayjs;
+//   end_date: dayjs.Dayjs;
+//   start_time?: string;
+//   end_time?: string;
+// }
 
 export default function ManualTimeAddDialog() {
+  const { activeItemId: id, activeItemType: type } = useAppSelector((state) => state.workspace);
+  const { timezone, date_format } = useAppSelector((state) => state.userSetting);
+  const { mutate } = createManualTimeEntry();
+  const [data, setData] = useState<{ [key: string]: string }>({
+    start_time: '9:00 AM',
+    end_time: '9:00 PM'
+  });
+
+  const timeStamp = (time: string) =>
+    moment(
+      DateStringFix({
+        timeStamp: moment().format(date_format?.toUpperCase()),
+        timeString: time,
+        timeZone: timezone
+      })
+    ).format('YYYY-MM-DD HH:mm:ss');
+
   const [interactions, setInteractions] = useState<{ tag: boolean; currency: boolean }>({
     tag: false,
     currency: false
   });
+  const handleSubmit = () => {
+    mutate({
+      end_date: timeStamp(data.end_time),
+      start_date: timeStamp(data.start_time),
+      id,
+      type
+    });
+  };
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    return setData({ ...data, [e.target.name]: e.target.value });
+  };
 
   return (
     <>
-      <section id="body" className="px-3 py-1 text-white bg-indigo-500 rounded-b-md">
+      <section id="body" className="px-3 py-2 text-white bg-indigo-300 shadow-2xl rounded-b-md mt-6">
         <div className="flex flex-col space-y-2 px-1">
           <div className="flex space-x-2 justify-center my-4">
             <input
               type="text"
-              className="bg-indigo-400 text-alsoit-gray-50 brightness-100 font-semibold border-none outline-none rounded"
-              value="9:30 AM"
+              name="start_time"
+              className="bg-alsoit-gray-50 text-alsoit-gray-75 font-semibold border-none outline-none rounded"
+              value={data.start_time}
+              onChange={(e) => handleChange(e)}
             />
             <span className="flex items-center font-bold text-alsoit-text-lg">-</span>
             <input
               type="text"
-              className="bg-indigo-400 text-alsoit-gray-50 brightness-100 font-semibold border-none outline-none rounded"
-              value="9:30 AM"
+              name="end_time"
+              className="bg-alsoit-gray-50 text-alsoit-gray-75 font-semibold border-none outline-none rounded"
+              value={data.end_time}
+              onChange={(e) => handleChange(e)}
             />
           </div>
           <div className="flex justify-between w-full px-1">
             <div className="flex space-x-1">
-              <span className="text-alsoit-text-lg text-alsoit-gray-50 font-semibold">When: </span>
-              <span className="font-semibold text-alsoit-text-lg">Today</span>
+              <span className="text-alsoit-text-lg text-alsoit-gray-200 font-semibold">When: </span>
+              <span className="font-semibold text-alsoit-gray-200 text-alsoit-text-lg">Today</span>
             </div>
             <div className="flex space-x-2 justify-end">
               <div
@@ -83,7 +116,10 @@ export default function ManualTimeAddDialog() {
               <button className="bg-alsoit-gray-200 hover:bg-alsoit-text-active text-white p-1 rounded-lg font-bold">
                 Cancel
               </button>
-              <button className="bg-alsoit-purple-300 hover:bg-purple-600 text-white p-1 rounded-lg font-bold">
+              <button
+                className="bg-alsoit-purple-300 hover:bg-purple-600 text-white p-1 rounded-lg font-bold"
+                onClick={() => handleSubmit()}
+              >
                 Confirm
               </button>
             </div>
