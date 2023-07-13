@@ -25,7 +25,7 @@ interface TaskItemProps {
     parent_id?: string | null;
     has_descendants?: number;
   };
-  showChildren: string | null | undefined;
+  showChildren: boolean;
   index?: number;
   isSticky?: boolean;
   type: string;
@@ -129,7 +129,7 @@ export default function HubItem({
           >
             {!collapseNavAndSubhub && item?.has_descendants ? (
               <div>
-                {showChildren === item.id ? (
+                {showChildren ? (
                   <span className="flex flex-col">
                     <VscTriangleDown className="flex-shrink-0 h-2" aria-hidden="true" color="rgba(72, 67, 67, 0.64)" />
                   </span>

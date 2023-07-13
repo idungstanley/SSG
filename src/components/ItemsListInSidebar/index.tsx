@@ -124,7 +124,7 @@ export default function ItemsListInSidebar({ items, status, type }: ItemsListInS
           <HubItem
             item={i}
             handleClick={handleClick}
-            showChildren={showChildren}
+            showChildren={!!showChildren}
             handleHubSettings={handleHubSettings}
             handleLocation={handleLocation}
             type="hub"
