@@ -1,5 +1,3 @@
-import moment from 'moment';
-import { PencilIcon, TrashIcon } from '@heroicons/react/24/outline';
 import UpdateTimeEntryDropdown from './UpdateTimeEntryDropdown';
 import { setUpdateEntries } from '../../../../../features/task/taskSlice';
 import { useDispatch } from 'react-redux';
@@ -10,6 +8,9 @@ import { AvatarWithInitials } from '../../../../../components';
 import { Header } from '../../../../../components/Pilot/components/TimeClock/ClockLog';
 import DateFormat from '../../../../../components/DateFormat';
 import ToolTip from '../../../../../components/Tooltip/Tooltip';
+import EditIcon from '../../../../../assets/icons/Common/Edit';
+import moment from 'moment-timezone';
+import TrashIcon from '../../../../../assets/icons/Common/delete';
 export interface teamMember {
   id: string;
   user: {
@@ -66,7 +67,7 @@ export default function EntryList({ entries, switchHeader }: EntryListProps) {
 
   return (
     <tr key={entries.id} id="getTimeEntries" className="flex items-center justify-between px-3 border-b">
-      <div id="left" className="flex items-center space-x-2 text-xs">
+      <div id="left" className="flex items-center space-x-2">
         {headers.map((col) => {
           if (col.title === 'user' && !col.hidden) {
             return (
@@ -80,11 +81,7 @@ export default function EntryList({ entries, switchHeader }: EntryListProps) {
 
           if (col.title === 'duration' && !col.hidden) {
             return (
-              <td
-                key={col.id}
-                className="w-14 text-center"
-                style={{ cursor: 'default', fontSize: '10px', padding: '2px 0' }}
-              >
+              <td key={col.id} className="w-14 text-center text-alsoit-text-md font-semibold cursor-default py-1">
                 {moment.utc(entries.duration * 1000).format('HH:mm:ss')}
               </td>
             );
@@ -92,8 +89,8 @@ export default function EntryList({ entries, switchHeader }: EntryListProps) {
 
           if (col.title === 'start date' && !col.hidden) {
             return (
-              <td key={col.id} className="w-14 text-center" style={{ cursor: 'default', padding: '2px 0' }}>
-                <DateFormat date={entries.start_date} font="9px" />
+              <td key={col.id} className="w-14 text-center font-semibold text-alsoit-gray-300 cursor-default py-1">
+                <DateFormat date={entries.start_date} font="10px" />
               </td>
             );
           }
@@ -102,10 +99,10 @@ export default function EntryList({ entries, switchHeader }: EntryListProps) {
             return (
               <td
                 key={col.id}
-                className="w-14 text-center"
-                style={{ cursor: 'default', fontSize: '9px', padding: '2px 0' }}
+                className="w-14 text-center font-semibold text-alsoit-gray-300"
+                style={{ cursor: 'default', padding: '2px 0' }}
               >
-                <DateFormat date={entries.end_date} font="9px" />
+                <DateFormat date={entries.end_date} font="10px" />
               </td>
             );
           }
@@ -114,8 +111,7 @@ export default function EntryList({ entries, switchHeader }: EntryListProps) {
             return (
               <td
                 key={col.id}
-                className="w-14"
-                style={{ cursor: 'default', fontSize: '9px', padding: '2px 0' }}
+                className="w-14 text-alsoit-text-md font-semibold cursor-default py-1"
                 title={entries.description}
               >
                 {entries.description && entries.description.slice(0, 5) + '...'}
@@ -126,13 +122,13 @@ export default function EntryList({ entries, switchHeader }: EntryListProps) {
       </div>
       <div id="right" className="flex items-center space-x-2 relative">
         <button type="button" onClick={() => handleUpdateEntry(entries.id)}>
-          <PencilIcon className="flex-shrink-0 h-3 w-5 text-gray-400" aria-hidden="true" />
+          <EditIcon className="flex-shrink-0 h-3 w-5 text-alsoit-gray-200" aria-hidden="true" />
         </button>
         {openUpdateEntryId == entries.id ? (
           <UpdateTimeEntryDropdown time_entry_id={entries.id} billable={entries.is_billable} />
         ) : null}
         <button type="button" onClick={() => handledelete.mutateAsync({ timeEntryDeleteTriggerId: entries.id })}>
-          <TrashIcon className="flex-shrink-0 h-3 w-5 text-red-400" aria-hidden="true" />
+          <TrashIcon className="flex-shrink-0 h-3 w-5 text-alsoit-danger" aria-hidden="true" />
         </button>
       </div>
     </tr>
