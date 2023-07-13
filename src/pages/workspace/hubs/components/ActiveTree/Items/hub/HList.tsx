@@ -31,7 +31,7 @@ import SubDropdown from '../../../../../../../components/Dropdown/SubDropdown';
 import { cl } from '../../../../../../../utils';
 import { EntityType } from '../../../../../../../utils/EntityTypes/EntityType';
 import { Capitalize } from '../../../../../../../utils/NoCapWords/Capitalize';
-import SubHubList from './SubHList';
+import SubHList from './SubHList';
 
 export default function HList({ hubs }: ListProps) {
   const dispatch = useAppDispatch();
@@ -177,7 +177,7 @@ export default function HList({ hubs }: ListProps) {
               topNumber="50px"
               zNumber="5"
             />
-            {hub.children.length && isCanBeOpen(hub.id) ? <SubHubList hubs={hub.children as Hub[]} /> : null}
+            {hub.children.length && isCanBeOpen(hub.id) ? <SubHList hubs={hub.children as Hub[]} /> : null}
             {showSidebar && (
               <div>
                 {hub.wallets.length && showChildren && isCanBeOpen(hub.id) ? (
