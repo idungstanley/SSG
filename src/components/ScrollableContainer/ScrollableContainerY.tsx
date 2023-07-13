@@ -1,7 +1,5 @@
 import { ChevronUpIcon, ChevronDownIcon } from '@heroicons/react/24/outline';
 import React, { useState, useEffect, useRef, useCallback, ReactNode, HTMLAttributes } from 'react';
-import { useAppSelector } from '../../app/hooks';
-
 interface CustomScrollableContainerProps extends HTMLAttributes<HTMLDivElement> {
   children: ReactNode;
 }
