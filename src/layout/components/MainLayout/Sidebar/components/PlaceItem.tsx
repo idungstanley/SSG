@@ -39,8 +39,6 @@ export default function PlaceItem({
   const { showSidebar, lightBaseColor, baseColor } = useAppSelector((state) => state.account);
   const { hub } = useAppSelector((state) => state.hub);
   const { activeItemId } = useAppSelector((state) => state.workspace);
-
-  // const [stickyButtonIndex, setStickyButtonIndex] = useState<number | undefined>(-1);
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id,
     data: { isPlace: true }
