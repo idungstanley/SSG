@@ -35,7 +35,7 @@ export default function ClockInOut() {
   const [, setBtnClicked] = useState(false);
   const [prompt, setPrompt] = useState(false);
   const [newTimer, setNewtimer] = useState(false);
-  const { workSpaceId, listId, hubId } = useParams();
+  const { workSpaceId, hubId, listId, taskId } = useParams();
 
   const { data: getEntries } = GetTimeEntriesService({
     itemId: activeItemId,
@@ -61,7 +61,7 @@ export default function ClockInOut() {
     }
     dispatch(setTimerStatus(!timerStatus));
     setRunning(true);
-    dispatch(setTimerLastMemory({ workSpaceId, hubId, listId, activeTabId }));
+    dispatch(setTimerLastMemory({ workSpaceId, hubId, listId, taskId, activeTabId }));
   };
 
   const stop = () => {
@@ -76,7 +76,7 @@ export default function ClockInOut() {
     dispatch(setTimerStatus(false));
     clearInterval(period);
     dispatch(setUpdateTimerDuration({ s: 0, m: 0, h: 0 }));
-    dispatch(setTimerInterval(undefined));
+    dispatch(setTimerInterval());
   };
 
   function timerCheck() {
@@ -116,8 +116,7 @@ export default function ClockInOut() {
     setNewtimer(!newTimer);
   };
 
-  const sameEntity = () => activeItemId === (timerLastMemory.hubId || timerLastMemory.listId);
-
+  const sameEntity = () => activeItemId === (timerLastMemory.taskId || timerLastMemory.hubId || timerLastMemory.listId);
   const handleEndTimeChange = (value: string) => {
     setData((prev) => ({ ...prev, isBillable: data.isBillable, description: value }));
   };

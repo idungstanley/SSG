@@ -8,10 +8,11 @@ export default function TimerModal() {
   const navigate = useNavigate();
   const { timerLastMemory } = useAppSelector((state) => state.workspace);
 
-  const { activeTabId, workSpaceId, hubId, listId } = timerLastMemory;
+  const { activeTabId, workSpaceId, hubId, listId, taskId } = timerLastMemory;
+
   const handleResetTimer = () => {
-    dispatch(resetWorkSpace({ activeTabId, workSpaceId, hubId, listId }));
-    navigate(handleEntity({ workSpaceId, hubId, listId }), { replace: true });
+    dispatch(resetWorkSpace({ activeTabId, workSpaceId, hubId, listId, taskId }));
+    navigate(handleEntity({ workSpaceId, hubId, listId, taskId }), { replace: true });
   };
   return (
     <div className="flex flex-col w-full bg-alsoit-gray-50">

@@ -488,6 +488,7 @@ export const useCurrentTime = ({ workspaceId }: { workspaceId?: string }) => {
               hubId: dateString.model_type === 'hub' ? dateString.model_id : null,
               activeTabId: 6,
               listId: dateString.model_type === 'list' ? dateString.model_id : null,
+              taskId: dateString.model_type === 'task' ? dateString.model_id : null,
               workSpaceId: workspaceId
             })
           );
