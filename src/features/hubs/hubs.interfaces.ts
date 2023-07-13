@@ -11,6 +11,7 @@ export interface IHub {
   created_at: string;
   color?: string | null;
   updated_at: string;
+  has_descendants: number;
 }
 
 export interface IHubDetails {
@@ -57,6 +58,7 @@ export interface IWallet {
   created_at: string;
   archived_at: null | string;
   deleted_at: null | string;
+  has_descendants: number;
 }
 
 export interface IList {

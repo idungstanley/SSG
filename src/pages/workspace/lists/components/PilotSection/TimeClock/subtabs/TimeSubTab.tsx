@@ -14,12 +14,6 @@ export const TimeClockOptions = [
     isVisible: false
   },
   {
-    id: 1,
-    name: 'Clock Logs',
-    icon: <FaBusinessTime />,
-    isVisible: false
-  },
-  {
     id: 2,
     name: 'Clock Preference',
     icon: <MdOutlineMoreTime />,

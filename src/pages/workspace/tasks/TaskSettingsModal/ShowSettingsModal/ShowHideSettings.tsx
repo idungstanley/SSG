@@ -1,17 +1,9 @@
-import React, { Fragment, useEffect, useState } from 'react';
+import React, { Fragment, useState } from 'react';
 import { Menu, Transition } from '@headlessui/react';
 import { BsChevronRight } from 'react-icons/bs';
 import { FiChevronRight } from 'react-icons/fi';
 import Icons from '../../../../../components/Icons/Icons';
 import DropDown from '../../../../../assets/icons/arrow_drop_down_black.svg';
-import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
-import {
-  getCompactView,
-  getSingleLineView,
-  getTaskUpperCase,
-  getVerticalGrid,
-  getVerticalGridlinesTask
-} from '../../../../../features/task/taskSlice';
 import { useSwitchSettings } from './SwitchSettings';
 
 interface IShowHideSettings {
@@ -124,7 +116,7 @@ export default function ShowHideSettings({
       >
         <Menu.Items
           style={{ zIndex: 61 }}
-          className="origin-top-right absolute w-64 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none -ml-8 mt-6 "
+          className="origin-top-right absolute w-64 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none -ml-8 mt-6"
         >
           <p className="text-sm flex justify-center pt-3">CUSTOMIZE THIS VIEW</p>
           <div className="relative flex justify-center flex-col mb-2">

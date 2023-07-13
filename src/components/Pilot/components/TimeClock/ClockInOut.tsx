@@ -16,6 +16,7 @@ import { useParams } from 'react-router-dom';
 import { setTimerLastMemory } from '../../../../features/workspace/workspaceSlice';
 import { runTimer } from '../../../../utils/TimerCounter';
 import Duration from '../../../../utils/TimerDuration';
+import ClockLog from './ClockLog';
 
 export interface User {
   initials: string;
@@ -145,7 +146,7 @@ export default function ClockInOut() {
 
   return (
     <div className="p-2 mt-6 rounded-t-md">
-      <div className="bg-alsoit-gray-75">
+      <div className="bg-alsoit-gray-50">
         <section id="body" className="px-3 py-1 text-white bg-indigo-500 rounded-b-md">
           <div
             id="taskUser"
@@ -238,6 +239,9 @@ export default function ClockInOut() {
             </div>
           </div>
         </section>
+        <div className="w-full p-2 my-4">
+          <ClockLog />
+        </div>
       </div>
     </div>
   );

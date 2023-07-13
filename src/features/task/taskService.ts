@@ -436,8 +436,8 @@ export const createManualTimeEntry = () => {
     }: {
       start_date: string | undefined;
       end_date: string | undefined;
-      type: string | undefined;
-      id: string | undefined;
+      type: string | null | undefined;
+      id: string | null | undefined;
     }) => {
       const response = await requestNew({
         url: 'time-entries',

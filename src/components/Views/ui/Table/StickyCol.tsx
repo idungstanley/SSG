@@ -56,6 +56,7 @@ export function StickyCol({
   ...props
 }: ColProps) {
   const { currentWorkspaceId } = useAppSelector((state) => state.auth);
+  const { activeItemId } = useAppSelector((state) => state.workspace);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { taskId, hubId, walletId, listId } = useParams();
@@ -123,6 +124,7 @@ export function StickyCol({
       queryClient.invalidateQueries(['task']);
     }
   });
+
   const handleOnSave = async (
     e: React.KeyboardEvent<HTMLDivElement> | React.MouseEvent<HTMLButtonElement, MouseEvent>,
     id: string
@@ -134,6 +136,7 @@ export function StickyCol({
       onClose && onClose();
     }
   };
+
   const onClickSave = () => {
     if (inputRef.current?.innerText) {
       const name = inputRef.current?.innerText;
@@ -147,6 +150,7 @@ export function StickyCol({
       });
     }
   };
+
   const handleEditTask = async (e: React.KeyboardEvent<HTMLDivElement>, id: string) => {
     e.preventDefault();
     await editTaskMutation.mutateAsync({
@@ -230,33 +234,33 @@ export function StickyCol({
               >
                 {task.name.length > 50 && singleLineView ? (
                   <>
-                    <InteractiveTooltip content={<p>{task.name}</p>} top="-top-28">
-                      {!eitableContent ? (
-                        <div
-                          className=""
-                          style={{
-                            maxWidth: '300px',
-                            overflow: 'hidden',
-                            textOverflow: 'ellipsis',
-                            whiteSpace: 'nowrap'
-                          }}
-                        >
-                          {taskUpperCase ? task.name.toUpperCase() : Capitalize(task.name)}
-                          ...
-                        </div>
-                      ) : (
-                        <div
-                          className=""
-                          style={{
-                            maxWidth: '300px',
-                            overflow: 'hidden',
-                            whiteSpace: 'nowrap'
-                          }}
-                        >
-                          {taskUpperCase ? task.name.toUpperCase() : Capitalize(task.name)}
-                        </div>
-                      )}
-                    </InteractiveTooltip>
+                    {/* <InteractiveTooltip content={<p>{task.name}</p>} top="-top-28"> */}
+                    {!eitableContent ? (
+                      <div
+                        className=""
+                        style={{
+                          maxWidth: '300px',
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                          whiteSpace: 'nowrap'
+                        }}
+                      >
+                        {taskUpperCase ? task.name.toUpperCase() : Capitalize(task.name)}
+                        ...
+                      </div>
+                    ) : (
+                      <div
+                        className=""
+                        style={{
+                          maxWidth: '300px',
+                          overflow: 'hidden',
+                          whiteSpace: 'nowrap'
+                        }}
+                      >
+                        {taskUpperCase ? task.name.toUpperCase() : Capitalize(task.name)}
+                      </div>
+                    )}
+                    {/* </InteractiveTooltip> */}
                   </>
                 ) : (
                   <span>{taskUpperCase ? task.name.toUpperCase() : Capitalize(task.name)}</span>
