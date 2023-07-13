@@ -39,6 +39,7 @@ interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   dragElement?: ReactNode;
   parentId?: string;
   onClose?: VoidFunction;
+  isOver?: boolean;
 }
 
 export function StickyCol({
@@ -53,6 +54,7 @@ export function StickyCol({
   task,
   paddingLeft = 0,
   dragElement,
+  isOver,
   ...props
 }: ColProps) {
   const { currentWorkspaceId } = useAppSelector((state) => state.auth);
@@ -204,7 +206,8 @@ export function StickyCol({
               COL_BG,
               `relative border-t ${isChecked && 'tdListV'} ${verticalGrid && 'border-r'} ${
                 verticalGridlinesTask && 'border-r'
-              } w-full py-4 flex items-center `
+              } w-full py-4 flex items-center `,
+              isOver ? 'border-2 border-green-500' : ''
             )}
           >
             <button onClick={onToggleDisplayingSubTasks} className="pl-1">

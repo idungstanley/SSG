@@ -90,7 +90,10 @@ export function Row({ task, columns, paddingLeft = 0, parentId, task_status, isL
   });
 
   const { isOver, setNodeRef: droppableRef } = useDroppable({
-    id: 'Root'
+    id: '',
+    data: {
+      msg: 'Hello world'
+    }
   });
 
   // hide element if is currently grabbing
