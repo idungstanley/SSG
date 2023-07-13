@@ -99,7 +99,7 @@ export default function NavigationItem({ item, handleHotkeyClick }: NavigationIt
               verticalAlign: 'baseline',
               letterSpacing: 'normal',
               fontStyle: 'normal',
-              fontWeight: '400',
+              fontWeight: '600',
               textDecoration: 'none solid rgb(83,87,94)'
             }}
           >
