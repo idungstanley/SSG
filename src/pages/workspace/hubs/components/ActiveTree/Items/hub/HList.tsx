@@ -10,24 +10,16 @@ import {
   setActiveEntityName,
   setActiveItem,
   setActiveTabId,
-  setCreateWlLink,
   setCurrentItem,
   setShowHub,
   setShowPilot
 } from '../../../../../../../features/workspace/workspaceSlice';
 import {
-  closeMenu,
   getCurrSubHubId,
-  getPrevName,
-  setCreateWLID,
   setOpenedHubId,
   setParentHubExt,
-  setSelectedTreeDetails,
-  setshowMenuDropdown,
   setSubHubExt
 } from '../../../../../../../features/hubs/hubSlice';
-import MenuDropdown from '../../../../../../../components/Dropdown/MenuDropdown';
-import SubDropdown from '../../../../../../../components/Dropdown/SubDropdown';
 import { cl } from '../../../../../../../utils';
 import { EntityType } from '../../../../../../../utils/EntityTypes/EntityType';
 import { Capitalize } from '../../../../../../../utils/NoCapWords/Capitalize';
@@ -38,7 +30,7 @@ export default function HList({ hubs }: ListProps) {
   const navigate = useNavigate();
   const { hubId, walletId, listId } = useParams();
   const { currentItemId, showExtendedBar, createEntityType } = useAppSelector((state) => state.workspace);
-  const { showMenuDropdown, SubMenuId, entityToCreate } = useAppSelector((state) => state.hub);
+  const { entityToCreate } = useAppSelector((state) => state.hub);
   const { showSidebar } = useAppSelector((state) => state.account);
   const [showChildren, setShowChidren] = useState<string | null | undefined>(null);
   const [stickyButtonIndex, setStickyButtonIndex] = useState<number | undefined>(-1);
@@ -129,25 +121,6 @@ export default function HList({ hubs }: ListProps) {
     );
   };
 
-  const handleHubSettings = (id: string, name: string, e: React.MouseEvent<HTMLSpanElement, MouseEvent>): void => {
-    dispatch(setSelectedTreeDetails({ name, id, type: EntityType.hub }));
-    dispatch(setCreateWLID(id));
-    // dispatch(getCurrHubId(id));
-    dispatch(setCreateWlLink(false));
-    dispatch(
-      setshowMenuDropdown({
-        showMenuDropdown: id,
-        showMenuDropdownType: 'hubs'
-      })
-    );
-    dispatch(getPrevName(name));
-    if (showMenuDropdown != null) {
-      if ((e.target as HTMLButtonElement).id == 'menusettings') {
-        dispatch(closeMenu());
-      }
-    }
-  };
-
   const isCanBeOpen = (id: string) => {
     if (openedNewHubId) {
       return openedNewHubId === id;
@@ -168,7 +141,6 @@ export default function HList({ hubs }: ListProps) {
                   showChildren &&
                   isCanBeOpen(hub.id)) as boolean
               }
-              handleHubSettings={handleHubSettings}
               handleLocation={handleLocation}
               isSticky={stickyButtonIndex !== undefined && stickyButtonIndex !== null && stickyButtonIndex <= index}
               stickyButtonIndex={stickyButtonIndex}
@@ -192,8 +164,6 @@ export default function HList({ hubs }: ListProps) {
                 {hub.lists.length && showChildren && isCanBeOpen(hub.id) && !showExtendedBar ? (
                   <LList list={hub.lists} leftMargin={false} paddingLeft="48" />
                 ) : null}
-                {showMenuDropdown === hub.id && showSidebar ? <MenuDropdown /> : null}
-                {SubMenuId === hub.id && showSidebar ? <SubDropdown /> : null}
               </div>
             )}
           </div>

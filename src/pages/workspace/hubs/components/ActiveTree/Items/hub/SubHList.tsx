@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Hub, ListProps } from '../../activetree.interfaces';
+import { ListProps } from '../../activetree.interfaces';
 import WList from '../wallet/WList';
 import LList from '../list/LList';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -10,27 +10,15 @@ import {
   setActiveEntityName,
   setActiveItem,
   setActiveTabId,
-  setCreateWlLink,
   setCurrentItem,
   setShowHub,
   setShowPilot
 } from '../../../../../../../features/workspace/workspaceSlice';
-import {
-  closeMenu,
-  getCurrSubHubId,
-  getPrevName,
-  setCreateWLID,
-  setOpenedHubId,
-  setParentHubExt,
-  setSelectedTreeDetails,
-  setshowMenuDropdown,
-  setSubHubExt
-} from '../../../../../../../features/hubs/hubSlice';
+import { getCurrSubHubId, setOpenedHubId, setSubHubExt } from '../../../../../../../features/hubs/hubSlice';
 import MenuDropdown from '../../../../../../../components/Dropdown/MenuDropdown';
 import SubDropdown from '../../../../../../../components/Dropdown/SubDropdown';
 import { cl } from '../../../../../../../utils';
 import { EntityType } from '../../../../../../../utils/EntityTypes/EntityType';
-import { Capitalize } from '../../../../../../../utils/NoCapWords/Capitalize';
 
 export default function SubHubList({ hubs }: ListProps) {
   const dispatch = useAppDispatch();
@@ -42,22 +30,7 @@ export default function SubHubList({ hubs }: ListProps) {
   const [showChildren, setShowChidren] = useState<string | null | undefined>(null);
   const [stickyButtonIndex, setStickyButtonIndex] = useState<number | undefined>(-1);
   const [openedSubhubsIds, setOpenedSubhubIds] = useState<string[]>([]);
-  const CapitalizeType = Capitalize(entityToCreate);
-  const hubCreationStatus = 'New ' + CapitalizeType + ' Under Construction';
   const id = hubId || walletId || listId || currentItemId;
-
-  const dummyHub = {
-    name: hubCreationStatus,
-    id: hubCreationStatus,
-    wallets: [],
-    lists: [],
-    children: [],
-    color: 'blue',
-    path: null
-  };
-
-  const hubsSpread = [...hubs, dummyHub];
-  const hubsWithEntity = createEntityType === EntityType.hub ? (hubsSpread as Hub[]) : hubs;
 
   useEffect(() => {
     setShowChidren(id);
@@ -135,25 +108,6 @@ export default function SubHubList({ hubs }: ListProps) {
     );
   };
 
-  const handleHubSettings = (id: string, name: string, e: React.MouseEvent<HTMLSpanElement, MouseEvent>): void => {
-    dispatch(setSelectedTreeDetails({ name, id, type: EntityType.hub }));
-    dispatch(setCreateWLID(id));
-    // dispatch(getCurrHubId(id));
-    dispatch(setCreateWlLink(false));
-    dispatch(
-      setshowMenuDropdown({
-        showMenuDropdown: id,
-        showMenuDropdownType: EntityType.subHub
-      })
-    );
-    dispatch(getPrevName(name));
-    if (showMenuDropdown != null) {
-      if ((e.target as HTMLButtonElement).id == 'menusettings') {
-        dispatch(closeMenu());
-      }
-    }
-  };
-
   const isCanBeOpen = (id: string) => {
     if (openedSubhubsIds.length) {
       return openedSubhubsIds.includes(id);
@@ -170,7 +124,6 @@ export default function SubHubList({ hubs }: ListProps) {
               item={hub}
               handleClick={handleClick}
               showChildren={((hub.wallets.length || hub.lists.length) && isCanBeOpen(hub.id)) as boolean}
-              handleHubSettings={handleHubSettings}
               handleLocation={handleLocation}
               isSticky={stickyButtonIndex !== undefined && stickyButtonIndex !== null && stickyButtonIndex <= index}
               stickyButtonIndex={stickyButtonIndex}
@@ -193,8 +146,6 @@ export default function SubHubList({ hubs }: ListProps) {
                 {hub.lists.length && isCanBeOpen(hub.id) && !showExtendedBar ? (
                   <LList list={hub.lists} leftMargin={false} paddingLeft="50" />
                 ) : null}
-                {showMenuDropdown === hub.id && showSidebar ? <MenuDropdown /> : null}
-                {SubMenuId === hub.id && showSidebar ? <SubDropdown /> : null}
               </div>
             )}
           </div>

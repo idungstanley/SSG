@@ -1,20 +1,9 @@
-import React, { MouseEvent, useState } from 'react';
+import React, { useState } from 'react';
 import { useGetSubHub } from '../../../features/hubs/hubService';
 import { useAppSelector } from '../../../app/hooks';
 import { useDispatch } from 'react-redux';
-import {
-  closeMenu,
-  getCurrHubId,
-  getCurrSubHubId,
-  getPrevName,
-  setCreateWLID,
-  setHubParentId,
-  setshowMenuDropdown,
-  setSubHubExt
-} from '../../../features/hubs/hubSlice';
-import MenuDropdown from '../../Dropdown/MenuDropdown';
+import { getCurrSubHubId, setCreateWLID, setHubParentId, setSubHubExt } from '../../../features/hubs/hubSlice';
 import SHubDropdownList from '../../ItemsListInSidebar/components/SHubDropdownList';
-import SubDropdown from '../../Dropdown/SubDropdown';
 import {
   setActiveEntity,
   setActiveEntityName,
@@ -63,23 +52,6 @@ export default function SubHubIndex() {
     }
   };
 
-  const handleShowMenu = (id: string, name: string, e: MouseEvent) => {
-    dispatch(getCurrHubId(id));
-
-    dispatch(
-      setshowMenuDropdown({
-        showMenuDropdown: id,
-        showMenuDropdownType: 'subhub'
-      })
-    );
-    dispatch(getPrevName(name));
-    if (showMenuDropdown != null) {
-      if ((e.target as HTMLButtonElement).id == 'menusettings') {
-        dispatch(closeMenu());
-      }
-    }
-  };
-
   const handleLocation = (id: string, name: string) => {
     dispatch(setSubHubExt({ id: id, type: type }));
     dispatch(setShowHub(true));
@@ -113,12 +85,9 @@ export default function SubHubIndex() {
               handleClick={handleClick}
               showChildren={!!showSubChildren}
               handleLocation={handleLocation}
-              handleHubSettings={handleShowMenu}
               type="subhub"
             />
             {subHubExtId === subhub.id ? <SHubDropdownList /> : null}
-            {showMenuDropdown === subhub.id ? <MenuDropdown /> : null}
-            {SubMenuId === subhub.id ? <SubDropdown /> : null}
           </div>
         ))}
     </div>
