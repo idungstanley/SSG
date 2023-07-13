@@ -43,7 +43,6 @@ export default function AdditionalHeader() {
   const { workSpaceId: workspaceId } = useParams();
   const { activeEntityName } = useAppSelector((state) => state.workspace);
   const { refetch } = useCurrentTime({ workspaceId });
-  // console.log(moment('13-07-2023 07:52', 'DD-MM-YYYY HH:mm').format('hh:mm'));
 
   const headerClockFn = () =>
     window.setInterval(() => {
