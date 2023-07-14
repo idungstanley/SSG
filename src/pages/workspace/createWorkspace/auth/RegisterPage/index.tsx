@@ -17,6 +17,8 @@ function RegisterPage() {
 
   const { mutate: onRegister, data } = useRegisterService();
 
+  const visitingRoute = localStorage.getItem('visitingRoute') ?? undefined;
+
   useEffect(() => {
     if (data) {
       const { user } = data.data;
@@ -42,6 +44,9 @@ function RegisterPage() {
 
       if (workspaceInvite) {
         window.location.href = `/accept-invite/${workspaceInvite}`;
+      } else if (visitingRoute) {
+        window.location.href = visitingRoute;
+        localStorage.removeItem('visitingRoute');
       }
     }
   }, [data]);

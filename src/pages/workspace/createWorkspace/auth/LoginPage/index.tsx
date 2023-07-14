@@ -11,6 +11,7 @@ import GoogleLogin from '../../GoogleLogin';
 
 function LoginPage() {
   const dispatch = useAppDispatch();
+  const visitingRoute = localStorage.getItem('visitingRoute') ?? undefined;
 
   const { mutate: onLogin, data } = useLoginService();
 
@@ -39,6 +40,9 @@ function LoginPage() {
 
       if (workspaceInvite) {
         window.location.href = `/accept-invite/${workspaceInvite}`;
+      } else if (visitingRoute) {
+        window.location.href = visitingRoute;
+        localStorage.removeItem('visitingRoute');
       }
     }
   }, [data]);
