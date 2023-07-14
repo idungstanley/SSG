@@ -8,15 +8,15 @@ interface DurationProps {
 }
 
 function Duration({ dateString }: DurationProps) {
-  const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-  const givenDate = moment.tz(dateString?.start_date, 'YYYY-MM-DD HH:mm:ss', timezone);
-  const currentDate = moment().tz(timezone);
+  const currentDate = moment();
+  const givenDate = moment.utc(dateString.start_date);
   const duration = moment.duration(currentDate.diff(givenDate));
-  return {
-    hours: duration.hours() - 1,
-    minutes: duration.minutes(),
-    seconds: duration.seconds()
-  };
+
+  const hours = duration.hours();
+  const minutes = duration.minutes();
+  const seconds = duration.seconds();
+
+  return { hours, minutes, seconds };
 }
 
 export default Duration;
