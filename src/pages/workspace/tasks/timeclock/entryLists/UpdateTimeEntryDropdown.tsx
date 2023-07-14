@@ -53,9 +53,9 @@ function UpdateTimeEntryDropdown({ time_entry_id, billable }: UpdateTimeEntryDro
   };
 
   return (
-    <div className="absolute -left-64 top-8 z-50 -mt-3 w-60 rounded-md shadow-lg bg-gray-100">
+    <div className="absolute -left-64 top-8 z-50 -mt-3 w-60 rounded-md shadow-lg bg-alsoit-gay-50">
       <section className="">
-        <div className="flex justify-between items-center px-3 py-3 text-xs">
+        <div className="flex justify-between items-center px-3 py-3 text-alsoit-text-lg">
           <p>Edit Session</p>
           <button type="button" onClick={() => dispatch(setUpdateEntries({ openUpdateEntryId: null }))}>
             X
@@ -68,23 +68,23 @@ function UpdateTimeEntryDropdown({ time_entry_id, billable }: UpdateTimeEntryDro
             name="description"
             value={description}
             onChange={handleUpdateTimeChange}
-            className="border-0 shadow-sm rounded text-gray-600 w-full mx-auto"
+            className="border-0 shadow-sm rounded text-alsoit-gray-300 w-full mx-auto"
           />
         </div>
-        <div id="billable" className="flex items-center justify-start space-x-1 text-sm px-3">
+        <div id="billable" className="flex items-center justify-start space-x-1 text-alsoit-text-lg px-3">
           <CurrencyDollarIcon
             className={`${
               isBillable
-                ? 'bg-green-400 rounded-full h-7  text-white cursor-pointer text-xl'
-                : 'text-gray-300 cursor-pointer text-xl rounded-full h-7'
+                ? 'bg-alsoit-success rounded-full h-7  text-white cursor-pointer text-alsoit-text-lg'
+                : 'text-alsoit-gray-200 cursor-pointer text-alsoit-text-lg rounded-full h-7'
             }`}
             aria-hidden="true"
             onClick={() => setIsBillable(!isBillable)}
           />
-          <p className="text-gray-400">Billable</p>
+          <p className="text-alsoit-gray-200">Billable</p>
         </div>
         <div id="startDate" className="flex items-center justify-start space-x-1 px-4 py-2">
-          <CalendarIcon className="text-gray-400 w-4 h-4" aria-hidden="true" />
+          <CalendarIcon className="text-alsoit-gray-200 w-4 h-4" aria-hidden="true" />
           <input
             type="text"
             name="start_date"
@@ -95,7 +95,7 @@ function UpdateTimeEntryDropdown({ time_entry_id, billable }: UpdateTimeEntryDro
           />
         </div>
         <div id="endDate" className="flex items-center justify-start space-x-1 px-4 py-2">
-          <CalendarIcon className="text-gray-400 w-4 h-4" aria-hidden="true" />
+          <CalendarIcon className="text-alsoit-gray-200 w-4 h-4" aria-hidden="true" />
           <input
             type="text"
             placeholder="HH:MM:SS"

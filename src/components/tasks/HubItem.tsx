@@ -23,30 +23,31 @@ interface TaskItemProps {
     path?: string | null;
     color?: string | null;
     parent_id?: string | null;
+    has_descendants?: number;
   };
-  handleClick: (id: string, index?: number) => void;
   showChildren: string | null | undefined;
-  handleLocation: (id: string, name: string, index?: number) => void;
-  handleHubSettings: (id: string, name: string, e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => void;
   index?: number;
   isSticky?: boolean;
   type: string;
   topNumber?: string;
   zNumber?: string;
   stickyButtonIndex?: number | undefined;
+  handleClick: (id: string, index?: number) => void;
+  handleLocation: (id: string, name: string, index?: number) => void;
+  handleHubSettings: (id: string, name: string, e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => void;
 }
 export default function HubItem({
-  handleClick,
   item,
-  handleLocation,
-  handleHubSettings,
   showChildren,
   type,
   index,
   isSticky,
   stickyButtonIndex,
   topNumber = '0',
-  zNumber
+  zNumber,
+  handleClick,
+  handleLocation,
+  handleHubSettings
 }: TaskItemProps) {
   const dispatch = useAppDispatch();
   const { activeItemId } = useAppSelector((state) => state.workspace);
@@ -54,10 +55,10 @@ export default function HubItem({
   const [uploadId, setUploadId] = useState<string | null | undefined>('');
   const { paletteDropdown } = useAppSelector((state) => state.account);
   const [paletteColor, setPaletteColor] = useState<string | undefined | ListColourProps>(
-    type === 'hub' ? 'blue' : 'orange'
+    type === EntityType.hub ? 'blue' : 'orange'
   );
 
-  const collapseNavAndSubhub = !showSidebar && type === 'subhub';
+  const collapseNavAndSubhub = !showSidebar && type === EntityType.subHub;
 
   const { hubId } = useParams();
   const { paletteId, show } = paletteDropdown;
@@ -65,7 +66,7 @@ export default function HubItem({
   const handleHubColour = (id: string, e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     if (showSidebar) {
       e.stopPropagation();
-      dispatch(setPaletteDropDown({ show: true, paletteId: id, paletteType: 'hub' }));
+      dispatch(setPaletteDropDown({ show: true, paletteId: id, paletteType: EntityType.hub }));
     }
   };
 
@@ -80,9 +81,13 @@ export default function HubItem({
     dispatch(
       getSubMenu({
         SubMenuId: id,
-        SubMenuType: type == 'hub' ? 'hubs' : 'subhub'
+        SubMenuType: type == EntityType.hub ? 'hubs' : EntityType.subHub
       })
     );
+  };
+
+  const renderEmptyArrowBlock = () => {
+    return <div className="pl-3.5" />;
   };
 
   return (
@@ -117,9 +122,12 @@ export default function HubItem({
           <div
             role="button"
             className="flex truncate items-center py-1.5 mt-0.5 justify-start overflow-y-hidden text-sm"
-            style={{ paddingLeft: type === 'subhub' && !showSidebar ? '5px' : type === 'subhub' ? '10px' : '' }}
+            style={{
+              marginLeft: type === EntityType.subHub && !showSidebar ? '-14px' : type === EntityType.subHub ? '0' : '',
+              paddingLeft: type === EntityType.subHub && !showSidebar ? '5px' : type === EntityType.subHub ? '10px' : ''
+            }}
           >
-            {!collapseNavAndSubhub && (
+            {!collapseNavAndSubhub && item?.has_descendants ? (
               <div>
                 {showChildren === item.id ? (
                   <span className="flex flex-col">
@@ -129,6 +137,8 @@ export default function HubItem({
                   <VscTriangleRight className="flex-shrink-0 h-2" aria-hidden="true" color="#BBBDC0" />
                 )}
               </div>
+            ) : (
+              renderEmptyArrowBlock()
             )}
 
             <div className={`flex items-center flex-1 min-w-0 ${collapseNavAndSubhub && 'ml-3'}`}>

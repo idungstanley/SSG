@@ -34,7 +34,7 @@ function AvatarForOwner({
             {initials}
           </span>
         </span>
-        <img src={watcherBadge} alt="" className="absolute bottom-0.5 h-3 w-3 z-20" style={{ left: '22px' }} />
+        <img src={watcherBadge} alt="" className="absolute h-2 w-2 z-5" style={{ left: '23px', bottom: '1px' }} />
       </div>
     </AssigneeCloth>
   );

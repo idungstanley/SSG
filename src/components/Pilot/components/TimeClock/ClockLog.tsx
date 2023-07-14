@@ -1,4 +1,3 @@
-import { FiPlusCircle } from 'react-icons/fi';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { GetTimeEntriesService } from '../../../../features/task/taskService';
 import EntryList, { entriesProps } from '../../../../pages/workspace/tasks/timeclock/entryLists/EntryList';
@@ -7,8 +6,10 @@ import { useState } from 'react';
 import { GiCheckMark } from 'react-icons/gi';
 import { FaSort } from 'react-icons/fa';
 import { setTimeArr, setTimeSortArr } from '../../../../features/task/taskSlice';
-import { AiFillCaretUp, AiOutlineClose } from 'react-icons/ai';
 import { UserSortDropDown } from './TimeUserSortDropDown';
+import PlusCircle from '../../../../assets/icons/TimeClock/AddCircle';
+import CancelIcon from '../../../../assets/icons/Common/Cancel';
+import ArrowCaretUp from '../../../../assets/icons/Common/ArrowCaretUp';
 
 export type Header = {
   title: string;
@@ -80,7 +81,7 @@ export default function ClockLog() {
                     !col.hidden && (
                       <th
                         key={col.id}
-                        className="flex justify-center w-12 gap-1 font-bold capitalize cursor-default group reloative"
+                        className="flex justify-center w-12 gap-1 capitalize cursor-default group reloative text-alsoit-text-sm font-semibold"
                         style={{ fontSize: '9px' }}
                       >
                         <span
@@ -93,29 +94,29 @@ export default function ClockLog() {
                           <>
                             {headerId === '' && (
                               <FaSort
-                                className="w-3 h-3 text-sm text-gray-100 transition duration-200 bg-gray-400 rounded-full opacity-0 cursor-pointer group-hover:opacity-100 "
+                                className="w-3 h-3 text-alsoit-text-lg text-alsoit-gray-50 transition duration-200 bg-alsoit-gray-200 rounded-full opacity-0 cursor-pointer group-hover:opacity-100 "
                                 onClick={() => handleSort(col.title, col.id)}
                               />
                             )}
                             {timeArr.includes(col.title) && (
                               <div className="rounded-full sortClose-group">
-                                <div className="relative flex items-center justify-center w-4 h-4 space-x-1 text-xs font-medium text-white uppercase bg-red-400 rounded-full cursor-pointer group">
+                                <div className="relative flex items-center justify-center w-4 h-4 space-x-1 text-alsoit-text-lg font-medium text-white uppercase bg-alsoit-danger rounded-full cursor-pointer group">
                                   <div className="font-bold cursor-pointer hover:text-clip" style={{ fontSize: '8px' }}>
                                     <>
                                       {timeArr.length === 1 ? (
-                                        <AiFillCaretUp />
+                                        <ArrowCaretUp />
                                       ) : (
                                         <span className="flex gap-1">
                                           {timeArr.indexOf(col.title) + 1}
-                                          <AiFillCaretUp />
+                                          <ArrowCaretUp />
                                         </span>
                                       )}
                                     </>
                                   </div>
                                 </div>
-                                <AiOutlineClose
+                                <CancelIcon
                                   onClick={() => handleRemoveFilter(col.title)}
-                                  className="w-3 h-3 m-1 font-bold text-white cursor-pointer sortClose"
+                                  className="w-3 h-3 m-1 font-semibold text-white cursor-pointer sortClose"
                                 />
                               </div>
                             )}
@@ -133,7 +134,7 @@ export default function ClockLog() {
                   );
                 })}
               </tr>
-              <FiPlusCircle
+              <PlusCircle
                 className="absolute w-4 h-4 font-black cursor-pointer AddColumnDropdownButton right-4"
                 onClick={() => setShowModal(!showModal)}
               />
@@ -183,5 +184,5 @@ export default function ClockLog() {
       }
   };
 
-  return <div className="p-2">{renderItemEntries()}</div>;
+  return <div className="p-2">{renderItemEntries()} </div>;
 }

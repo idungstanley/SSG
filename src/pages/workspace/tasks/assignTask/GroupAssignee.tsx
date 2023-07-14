@@ -130,6 +130,19 @@ function GroupAssignee({
                   )}
                 </ToolTip>
               </div>
+              {displayed.show && index == displayed?.index ? (
+                <button
+                  className="absolute top-0 right-0 border h-3 w-3 rounded-full bg-gray-500 text-white hover:bg-purple-700"
+                  style={{
+                    fontSize: '6px'
+                  }}
+                  onClick={() => handleUnAssignTask(newData.id as string)}
+                >
+                  X
+                </button>
+              ) : (
+                <span className="absolute top-0 right-0 border h-2 w-2 bg-green-500 rounded-full"></span>
+              )}
 
               {/* <div className="absolute z-50"> */}
               {hoverInterval && displayed.show && index == displayed?.index && (

@@ -27,7 +27,7 @@ export const generateFilters = () => {
     filters: {
       op,
       assignees:
-        assignee && assignee.operator.key !== 'eq'
+        assignee && assignee.operator.key === 'eq'
           ? assignee.values.length
             ? getValues(assignee.values)
             : assignee.operator.key
