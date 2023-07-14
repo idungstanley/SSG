@@ -84,8 +84,10 @@ export default function ClockInOut() {
 
   function timerCheck() {
     if (
-      (activeItemType === 'hub' || activeItemType === 'list') &&
-      (activeItemId === timerLastMemory.hubId || activeItemId === timerLastMemory.listId)
+      (activeItemType === 'hub' || activeItemType === 'list' || activeItemType === 'task') &&
+      (activeItemId === timerLastMemory.hubId ||
+        activeItemId === timerLastMemory.listId ||
+        activeItemId === timerLastMemory.taskId)
     ) {
       return (
         <div className="items-center">

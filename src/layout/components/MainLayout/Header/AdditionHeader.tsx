@@ -64,7 +64,7 @@ export default function AdditionalHeader() {
     window.setInterval(() => {
       setClock(dayjs().format('DD-MM-YYYY hh:mm'));
     }, 6000);
-  const sameEntity = () => activeItemId === (timerLastMemory.hubId || timerLastMemory.listId);
+  const sameEntity = () => activeItemId === (timerLastMemory.hubId || timerLastMemory.listId || timerLastMemory.taskId);
 
   const timeBlinkerCheck = () => (timerStatus && sameEntity() && tabsId !== 6) || (!sameEntity() && timerStatus);
 
@@ -168,7 +168,7 @@ export default function AdditionalHeader() {
               </div>
             )}
             {timerModal && (
-              <HeaderModal toggleFn={setTimerModal} styles="top-12 right-1">
+              <HeaderModal toggleFn={setTimerModal} styles="top-8 right-1">
                 <TimerModal />
               </HeaderModal>
             )}
