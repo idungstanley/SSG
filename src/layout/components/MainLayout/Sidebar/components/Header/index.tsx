@@ -50,14 +50,14 @@ export default function Header({
   return (
     <div
       className={cl(
-        'flex border-b gap-1 px-1',
+        'flex border-b gap-2 px-2',
         !showSidebar ? 'flex-col pb-3 items-center' : 'items-center',
-        hotkeys.length > 0 && showSidebar ? '' : 'py-2'
+        hotkeys.length > 0 && showSidebar ? '' : 'py-4'
       )}
       style={{ height: `${showSidebar ? '115px' : ''}` }}
     >
       <Link to="/" className="flex-shrink-0">
-        <img className="flex-shrink-0 h-16" style={{ width: '50px' }} src={MainLogo} alt="Workflow" />
+        <img className="flex-shrink-0 h-16" style={{ width: '60px' }} src={MainLogo} alt="Workflow" />
       </Link>
       {!showSidebar && <hr className="w-full my-1 mr-6" />}
       <div

@@ -64,7 +64,7 @@ function WorkSpaceSelection() {
   const sortedItems = [...pinnedItems, ...unpinnedItems];
   useEffect(() => {
     setFilteredResults(sortedItems);
-  }, [sortedItems]);
+  }, [showModal, AllMyWorkSpace]);
   const searchItem = (value: string) => {
     setSearchInput(value);
     if (searchInput !== '') {
@@ -155,7 +155,7 @@ function WorkSpaceSelection() {
   return status == 'success' ? (
     <div
       className={`${
-        showSidebar ? 'rounded border border-alsoit-gray-75 p-0.5 h-6 cursor-pointer flex flex-grow' : ''
+        showSidebar ? 'rounded-md border border-alsoit-gray-75 p-0.5 h-8 cursor-pointer flex flex-grow' : ''
       } `}
       onClick={() => setShowModal((prev) => !prev)}
     >
@@ -170,15 +170,15 @@ function WorkSpaceSelection() {
                 .join('')
                 .toUpperCase() as string
             }
-            height="h-5"
-            width="w-5"
+            height="h-6"
+            width="w-6"
             backgroundColour={workspaceColor}
             roundedStyle="rounded"
             textColor="white"
           />
           {showSidebar && (
-            <p className="truncate" style={{ fontSize: '8px' }}>
-              {sidebarWidthRD === MIN_SIDEBAR_WIDTH ? truncateName : joinName}
+            <p className="truncate" style={{ fontSize: '10px', fontWeight: '600' }}>
+              {sidebarWidthRD === MIN_SIDEBAR_WIDTH ? truncateName : workspaceName}
             </p>
           )}
         </div>
