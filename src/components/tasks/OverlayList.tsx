@@ -5,8 +5,6 @@ import ListIconComponent from '../ItemsListInSidebar/components/ListIconComponen
 import ThreeDotIcon from '../../assets/icons/ThreeDotIcon';
 import { ListColourProps } from './ListItem';
 import { useAppSelector } from '../../app/hooks';
-import { generateGrid } from '../Views/lib';
-
 interface ListItemProps {
   list: {
     id: string;
