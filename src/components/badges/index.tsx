@@ -2,6 +2,7 @@ import React from 'react';
 import Description from './Description';
 import AttachFile from './AttachFile';
 import SubtaskWithCount from './SubtaskWithCount';
+import Checklist from './Checklist';
 
 export default function Badges() {
   return (
@@ -9,6 +10,7 @@ export default function Badges() {
       <Description />
       <AttachFile />
       <SubtaskWithCount />
+      <Checklist />
     </div>
   );
 }
