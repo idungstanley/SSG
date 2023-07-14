@@ -17,7 +17,7 @@ import { setActiveEntity, setActiveEntityName, setActiveItem } from '../../featu
 import Palette from '../ColorPalette';
 import ListIconSelection from '../ColorPalette/component/ListIconSelection';
 import ListIconComponent from '../ItemsListInSidebar/components/ListIconComponent';
-import { useDroppable } from '@dnd-kit/core';
+import { useDraggable, useDroppable } from '@dnd-kit/core';
 import { cl } from '../../utils';
 import InteractiveTooltip from '../Tooltip/InteractiveTooltip';
 import ThreeDotIcon from '../../assets/icons/ThreeDotIcon';
@@ -139,7 +139,22 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
   };
 
   const { isOver, setNodeRef } = useDroppable({
-    id: list.id
+    id: list.id,
+    data: {
+      isOverList: true
+    }
+  });
+
+  const {
+    attributes,
+    listeners,
+    setNodeRef: draggableRef,
+    transform
+  } = useDraggable({
+    id: list.id,
+    data: {
+      isList: true
+    }
   });
 
   return (
@@ -154,14 +169,20 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
         style={{
           paddingLeft: `${paddingLeft}px`,
           height: '30px',
-          backgroundColor: `${list.id === listId ? lightBaseColor : ''}`
+          backgroundColor: `${list.id === listId ? lightBaseColor : ''}`,
+          opacity: transform ? 0 : 100
         }}
         onClick={() => handleListLocation(list.id, list.name)}
       >
         {list.id === listId && (
           <span className="absolute top-0 bottom-0 left-0 rounded-r-lg w-0.5" style={{ backgroundColor: baseColor }} />
         )}
-        <div className="absolute left-2 rounded-r-lg w-0.5 opacity-0 group-hover:opacity-100">
+        <div
+          className="absolute left-2 rounded-r-lg w-0.5 opacity-0 group-hover:opacity-100 cursor-move"
+          ref={draggableRef}
+          {...listeners}
+          {...attributes}
+        >
           <Drag />
         </div>
         <div className="flex items-center space-x-1 overflow-hidden capitalize cursor-pointer">

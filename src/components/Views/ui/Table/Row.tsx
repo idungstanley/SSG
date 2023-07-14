@@ -87,7 +87,10 @@ export function Row({ task, columns, paddingLeft = 0, parentId, task_status, isL
   };
 
   const { attributes, listeners, setNodeRef, transform } = useDraggable({
-    id: task.id
+    id: task.id,
+    data: {
+      isTask: true
+    }
   });
 
   // hide element if is currently grabbing

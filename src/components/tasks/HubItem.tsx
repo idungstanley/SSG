@@ -24,6 +24,7 @@ import ThreeDotIcon from '../../assets/icons/ThreeDotIcon';
 import { Tooltip } from '@mui/material';
 import MenuDropdown from '../Dropdown/MenuDropdown';
 import SubDropdown from '../Dropdown/SubDropdown';
+import { useDroppable } from '@dnd-kit/core';
 
 interface TaskItemProps {
   item: {
@@ -146,12 +147,22 @@ export default function HubItem({
     return <div className="pl-3.5" />;
   };
 
+  const { isOver, setNodeRef } = useDroppable({
+    id: item.id,
+    data: {
+      isOverHub: true
+    }
+  });
+
   return (
     <>
       <div
         className={`bg-white truncate items-center group ${
           item.id === activeItemId ? 'font-medium' : 'hover:bg-gray-100'
-        } ${isSticky && stickyButtonIndex === index ? 'sticky bg-white opacity-100' : ''}`}
+        } ${isSticky && stickyButtonIndex === index ? 'sticky bg-white opacity-100' : ''} ${
+          isOver ? 'bg-primary-100 border-primary-500 shadow-inner shadow-primary-300' : ''
+        } `}
+        ref={setNodeRef}
         tabIndex={0}
         onClick={() => handleClick(item.id, index)}
         style={{

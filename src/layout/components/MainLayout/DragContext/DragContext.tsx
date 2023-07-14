@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { DndContext, DragEndEvent, DragStartEvent } from '@dnd-kit/core';
+import { DndContext, DragEndEvent, DragStartEvent, UniqueIdentifier } from '@dnd-kit/core';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { setDraggableItem } from '../../../../features/list/listSlice';
 import { useMoveTask } from '../../../../features/task/taskService';
@@ -7,6 +7,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { generateFilters } from '../../../../components/TasksHeader/lib/generateFilters';
 import { setPlaces } from '../../../../features/account/accountSlice';
 import { arrayMove } from '@dnd-kit/sortable';
+import { useMoveListService } from '../../../../features/list/listService';
 
 interface DragContextProps {
   children: ReactNode;
@@ -24,6 +25,7 @@ export default function DragContext({ children }: DragContextProps) {
   const { places } = useAppSelector((state) => state.account);
 
   const { mutate: onMove } = useMoveTask();
+  const { mutate: onMoveList } = useMoveListService();
 
   // set active task id to store
   const onDragStart = (e: DragStartEvent) => {
@@ -34,30 +36,17 @@ export default function DragContext({ children }: DragContextProps) {
 
   const onDragEnd = (e: DragEndEvent) => {
     const { over, active } = e;
-
     const overId = over?.id as string;
     const activeId = active?.id as string;
-
     const isPlace = over?.data.current?.isPlace && active?.data.current?.isPlace;
-
+    const isTaskToList = over?.data.current?.isOverList && active?.data.current?.isTask;
+    const isListToHub = over?.data.current?.isOverHub && active?.data.current?.isList;
+    const isListToWallet = over?.data.current?.isOverWallet && active?.data.current?.isList;
     // drag and drop places
     if (isPlace) {
-      if (active.id !== over?.id) {
-        const findActive = places.find((i) => i.id === active.id);
-        const findOver = places.find((i) => i.id === over?.id);
-
-        if (findActive && findOver) {
-          const oldIndex = places.indexOf(findActive);
-          const newIndex = places.indexOf(findOver);
-
-          const sortArray = arrayMove(places, oldIndex, newIndex);
-
-          localStorage.setItem('placeItem', JSON.stringify([...sortArray.map((i) => i.id)]));
-
-          dispatch(setPlaces(sortArray));
-        }
-      }
-    } else {
+      handleMovePlace(active.id, over?.id);
+    }
+    if (isTaskToList) {
       // drag and drop tasks
       if (overId && activeId) {
         onMove({
@@ -65,10 +54,41 @@ export default function DragContext({ children }: DragContextProps) {
           listId: overId
         });
       }
-
       // reset dragging item
       dispatch(setDraggableItem(null));
       queryClient.invalidateQueries(['task', { listId: overId, assigneeUserId, sortArrUpdate, filters }]);
+    }
+    if (isListToHub) {
+      onMoveList({
+        listId: activeId,
+        hubId: overId,
+        type: 'hub'
+      });
+    }
+    if (isListToWallet) {
+      onMoveList({
+        listId: activeId,
+        hubId: overId,
+        type: 'wallet'
+      });
+    }
+  };
+
+  const handleMovePlace = (activeId: UniqueIdentifier, overId: UniqueIdentifier) => {
+    if (activeId !== overId) {
+      const findActive = places.find((i) => i.id === activeId);
+      const findOver = places.find((i) => i.id === overId);
+
+      if (findActive && findOver) {
+        const oldIndex = places.indexOf(findActive);
+        const newIndex = places.indexOf(findOver);
+
+        const sortArray = arrayMove(places, oldIndex, newIndex);
+
+        localStorage.setItem('placeItem', JSON.stringify([...sortArray.map((i) => i.id)]));
+
+        dispatch(setPlaces(sortArray));
+      }
     }
   };
 
