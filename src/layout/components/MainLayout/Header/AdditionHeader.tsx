@@ -40,6 +40,7 @@ export default function AdditionalHeader() {
   const [timerModal, setTimerModal] = useState<boolean>(false);
   const [isVisible, setIsVisible] = useState<boolean>(true);
   const { activeTabId: tabsId, timerLastMemory, activeItemId } = useAppSelector((state) => state.workspace);
+  const { period } = useAppSelector((state) => state.task);
   const { timezone: zone } = useAppSelector((state) => state.userSetting);
   const [clockModal, setClockModal] = useState<boolean>(false);
   const [HeaderClock, setClock] = useState<string>(dayjs().format('DD-MM-YYYY hh:mm'));
@@ -83,6 +84,7 @@ export default function AdditionalHeader() {
 
   useEffect(() => {
     if (isVisible) {
+      if (period) clearInterval(period);
       refetch();
     }
   }, [isVisible, refetch]);
@@ -164,7 +166,7 @@ export default function AdditionalHeader() {
               </div>
             )}
             {timerModal && (
-              <HeaderModal toggleFn={setTimerModal} styles="top-8 right-1">
+              <HeaderModal toggleFn={setTimerModal} styles="top-12 right-1">
                 <TimerModal />
               </HeaderModal>
             )}

@@ -11,7 +11,12 @@ import {
   StartTimeEntryService
 } from '../../../../features/task/taskService';
 import AvatarWithInitials from '../../../avatar/AvatarWithInitials';
-import { setTimerInterval, setTimerStatus, setUpdateTimerDuration } from '../../../../features/task/taskSlice';
+import {
+  setTimerDetails,
+  setTimerInterval,
+  setTimerStatus,
+  setUpdateTimerDuration
+} from '../../../../features/task/taskSlice';
 import { useParams } from 'react-router-dom';
 import { setTimerLastMemory } from '../../../../features/workspace/workspaceSlice';
 import { runTimer } from '../../../../utils/TimerCounter';
@@ -22,12 +27,8 @@ export interface User {
 }
 
 export default function ClockInOut() {
-  const [data, setData] = useState({
-    isBillable: false,
-    description: ''
-  });
   const { activeItemId, activeItemType, activeTabId, timerLastMemory } = useAppSelector((state) => state.workspace);
-  const { timerStatus, duration, period } = useAppSelector((state) => state.task);
+  const { timerStatus, duration, period, timerDetails } = useAppSelector((state) => state.task);
   const { initials } = useAppSelector((state) => state.userSetting);
   const dispatch = useAppDispatch();
   const [isRunning, setRunning] = useState(false);
@@ -67,8 +68,8 @@ export default function ClockInOut() {
   const stop = () => {
     mutation.mutate({
       id: activeItemId,
-      description: data.description,
-      is_Billable: data.isBillable
+      description: timerDetails.description,
+      is_Billable: timerDetails.isBillable
     });
     reset();
     setTime({ s: 0, m: 0, h: 0 });
@@ -118,7 +119,7 @@ export default function ClockInOut() {
 
   const sameEntity = () => activeItemId === (timerLastMemory.taskId || timerLastMemory.hubId || timerLastMemory.listId);
   const handleEndTimeChange = (value: string) => {
-    setData((prev) => ({ ...prev, isBillable: data.isBillable, description: value }));
+    dispatch(setTimerDetails({ ...timerDetails, isBillable: timerDetails.isBillable, description: value }));
   };
 
   const reset = () => {
@@ -211,14 +212,12 @@ export default function ClockInOut() {
               </span>
               <CurrencyDollarIcon
                 className={`${
-                  data.isBillable
+                  timerDetails.isBillable
                     ? 'bg-alsoit-success rounded-full h-9  text-alsoit-gray-50 cursor-pointer text-alsoit-text-lg'
                     : 'text-alsoit-gray-50 cursor-pointer text-alsoit-text-lg rounded-full h-9'
                 }`}
                 aria-hidden="true"
-                onClick={() =>
-                  setData((prev) => ({ ...prev, isBillable: !data.isBillable, description: data.description }))
-                }
+                onClick={() => dispatch(setTimerDetails({ ...timerDetails, isBillable: !timerDetails.isBillable }))}
               />
             </div>
           </div>
