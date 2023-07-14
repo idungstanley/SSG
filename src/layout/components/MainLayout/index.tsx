@@ -1,4 +1,4 @@
-import { Outlet, useParams } from 'react-router-dom';
+import { Outlet, useLocation, useNavigate, useParams } from 'react-router-dom';
 import ProgressBar from './ProgressBar';
 import Sidebar from './Sidebar';
 import { cl } from '../../../utils';
@@ -7,15 +7,18 @@ import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import AddFileModal from '../../../components/Pilot/components/details/properties/attachments/AddFileModal';
 import { InvalidateQueryFilters, useMutation, useQueryClient } from '@tanstack/react-query';
 import { switchWorkspaceService } from '../../../features/account/accountService';
-import { setCurrentWorkspace, switchWorkspace } from '../../../features/auth/authSlice';
+import { selectCurrentUser, setCurrentWorkspace, switchWorkspace } from '../../../features/auth/authSlice';
 import { setMyWorkspacesSlideOverVisibility } from '../../../features/general/slideOver/slideOverSlice';
 import { useEffect } from 'react';
 import DragContext from './DragContext/DragContext';
 
 function MainLayout() {
+  const location = useLocation();
+  const navigate = useNavigate();
   const { activeItemType, activeItemId } = useAppSelector((state) => state.workspace);
   const { workSpaceId } = useParams();
   const { currentWorkspaceId } = useAppSelector((state) => state.auth);
+  const user = useAppSelector(selectCurrentUser);
 
   const queryClient = useQueryClient();
   const dispatch = useAppDispatch();
@@ -41,12 +44,17 @@ function MainLayout() {
   };
 
   useEffect(() => {
-    if (workSpaceId != currentWorkspaceId) {
-      onSwitchWorkspace();
+    if (user) {
+      if (workSpaceId != currentWorkspaceId) {
+        onSwitchWorkspace();
+      }
+    } else {
+      localStorage.setItem('visitingRoute', location.pathname);
+      navigate('/auth/login');
     }
   }, []);
 
-  return (
+  return workSpaceId === currentWorkspaceId ? (
     <div className={cl('h-full flex flex-col')}>
       <ProgressBar />
       {/* <TopMenu /> */}
@@ -71,7 +79,7 @@ function MainLayout() {
         </div>
       </DragContext>
     </div>
-  );
+  ) : null;
 }
 
 export default MainLayout;

@@ -63,15 +63,38 @@ export default function WalletItem({
   const { walletId } = useParams();
   const [paletteColor, setPaletteColor] = useState<string | undefined | ListColourProps>('');
 
-  const handleItemAction = (id: string, name: string | null) => {
-    dispatch(setSelectedTreeDetails({ name, id, type: EntityType.wallet }));
-    dispatch(setCreateWlLink(false));
+  const closeSubMenu = () => {
     dispatch(
       getSubMenu({
-        SubMenuId: id,
-        SubMenuType: walletType
+        SubMenuId: null,
+        SubMenuType: null
       })
     );
+  };
+
+  const closeMenuDropdown = () => {
+    dispatch(
+      setshowMenuDropdown({
+        showMenuDropdown: null,
+        showMenuDropdownType: null
+      })
+    );
+  };
+
+  const handleItemAction = (id: string, name: string | null) => {
+    if (id === SubMenuId) {
+      closeSubMenu();
+    } else {
+      closeMenuDropdown();
+      dispatch(setSelectedTreeDetails({ name, id, type: EntityType.wallet }));
+      dispatch(setCreateWlLink(false));
+      dispatch(
+        getSubMenu({
+          SubMenuId: id,
+          SubMenuType: walletType
+        })
+      );
+    }
   };
 
   const handleWalletColour = (id: string, e: React.MouseEvent<SVGElement>) => {
@@ -83,12 +106,17 @@ export default function WalletItem({
     dispatch(setSelectedTreeDetails({ name, id, type: EntityType.wallet }));
     dispatch(setCreateWLID(null));
     dispatch(setCreateWlLink(false));
-    dispatch(
-      setshowMenuDropdown({
-        showMenuDropdown: id,
-        showMenuDropdownType: walletType
-      })
-    );
+    if (id === showMenuDropdown) {
+      closeMenuDropdown();
+    } else {
+      closeSubMenu();
+      dispatch(
+        setshowMenuDropdown({
+          showMenuDropdown: id,
+          showMenuDropdownType: walletType
+        })
+      );
+    }
     dispatch(getPrevName(name));
     if (showMenuDropdown != null) {
       if ((e.target as HTMLButtonElement).id == 'menusettings') {

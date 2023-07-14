@@ -50,26 +50,26 @@ export default function Header({
   return (
     <div
       className={cl(
-        'flex border-b gap-1',
+        'flex border-b gap-2 px-2',
         !showSidebar ? 'flex-col pb-3 items-center' : 'items-center',
-        hotkeys.length > 0 && showSidebar ? '' : 'py-2'
+        hotkeys.length > 0 && showSidebar ? '' : 'py-4'
       )}
       style={{ height: `${showSidebar ? '115px' : ''}` }}
     >
-      <Link to="/">
-        <img className="h-16" style={{ width: '50px' }} src={MainLogo} alt="Workflow" />
+      <Link to="/" className="flex-shrink-0">
+        <img className="flex-shrink-0 h-16" style={{ width: '60px' }} src={MainLogo} alt="Workflow" />
       </Link>
       {!showSidebar && <hr className="w-full my-1 mr-6" />}
       <div
         className={`flex flex-grow flex-shrink-0 ${!showSidebar && 'gap-2 flex-col'} ${
-          hotkeys.length > 0 && showSidebar ? 'flex-col space-y-4' : ''
+          showSidebar ? 'flex-col space-y-4' : ''
         }`}
       >
         <WorkSpaceSelection />
         <div className={cl('flex', !showSidebar ? 'flex-col items-center justify-center' : 'items-center pl-2')}>
           <div
-            className={`flex items-center justify-between ${
-              hotkeys.length > 0 && showSidebar ? 'flex-grow flex-shrink-0' : ''
+            className={`flex items-center flex-grow flex-shrink-0 ${
+              hotkeys.length > 0 && showSidebar ? 'justify-between' : 'justify-end'
             }`}
           >
             {hotkeys.length > 0 && showSidebar && (

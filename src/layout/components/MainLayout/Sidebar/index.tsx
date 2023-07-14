@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { cl } from '../../../../utils';
 import { setSidebarWidthRD } from '../../../../features/workspace/workspaceSlice';
@@ -14,6 +14,9 @@ import { setUserSettingsData, useGetUserSettingsKeys } from '../../../../feature
 import NonInteractiveSearch from '../../../../components/Search/NonInteractiveSearch';
 import CommandSearchModal from './components/CommandSearchModal';
 import SearchIcon from '../../../../assets/icons/SearchIcon';
+import { setUpdateCords } from '../../../../features/hubs/hubSlice';
+import { useScroll } from '../../../../hooks/useScroll';
+import { ScrollableContainerY } from '../../../../components/ScrollableContainer/ScrollableContainerY';
 
 const MAX_SIDEBAR_WIDTH = dimensions.navigationBar.max;
 const MIN_SIDEBAR_WIDTH = dimensions.navigationBar.min;
@@ -22,6 +25,7 @@ export default function Sidebar() {
   const dispatch = useAppDispatch();
   const { extendedSidebarWidth, sidebarWidthRD, showExtendedBar } = useAppSelector((state) => state.workspace);
   const key = 'sidebar';
+  const useref = useRef<HTMLElement>(null);
   const { showSidebar, userSettingsData } = useAppSelector((state) => state.account);
   const [commandSearchModal, setCommandSearchModal] = useState<boolean>(false);
   const { blockRef, Dividers, size, isMouseUp, isDrag } = useResize({
@@ -66,6 +70,7 @@ export default function Sidebar() {
     const { isAllow, allowedSize } = isAllowIncreaseWidth(size, extendedSidebarWidth);
     dispatch(setSidebarWidthRD(isAllow ? size : showExtendedBar ? allowedSize - size : size));
   }, [size]);
+  const onScroll = useScroll(() => dispatch(setUpdateCords()));
 
   return (
     <aside className={cl('flex h-full text-center relative overflow-x-visible')}>
@@ -86,7 +91,7 @@ export default function Sidebar() {
           activeTabId={activeTabId}
           setActiveTabId={setActiveTabId}
         />
-        <section className="relative h-full flex flex-col pr-1.5 overflow-y-auto overflow-x-hidden">
+        <ScrollableContainerY onScroll={onScroll}>
           {showSidebar ? (
             <NonInteractiveSearch
               setAction={setCommandSearchModal}
@@ -116,7 +121,7 @@ export default function Sidebar() {
             handleHotkeyClick={handleHotkeyClick}
           />
           <Places />
-        </section>
+        </ScrollableContainerY>
       </section>
     </aside>
   );
