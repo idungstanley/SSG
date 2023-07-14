@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import SubtasksIcon from '../../../../assets/icons/SubtasksIcon';
 import { ITaskFullList, Tag, Task } from '../../../../features/task/interface.tasks';
 import { DEFAULT_LEFT_PADDING } from '../../config';
@@ -12,6 +12,8 @@ import { ManageTagsDropdown } from '../../../Tag/ui/ManageTagsDropdown/ui/Manage
 import { AddSubTask } from '../AddTask/AddSubTask';
 import TaskTag from '../../../Tag/ui/TaskTag';
 import dradnddrop from '../../../../assets/icons/dradnddrop.svg';
+import { useAppSelector } from '../../../../app/hooks';
+import Effect from '../../../../assets/icons/Effect';
 
 interface RowProps {
   task: Task;
@@ -27,6 +29,14 @@ export function Row({ task, columns, paddingLeft = 0, parentId, task_status, isL
   const [showNewTaskField, setShowNewTaskField] = useState(false);
   const otherColumns = columns.slice(1);
   const [showSubTasks, setShowSubTasks] = useState(false);
+
+  // const selectedRef = useRef<HTMLTableRowElement>(null);
+  // useEffect(() => {
+  //   // Scroll to the selected item when the component mounts
+  //   if (selectedRef.current) {
+  //     selectedRef.current.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  //   }
+  // }, []);
 
   const newSubTask: ITaskFullList = {
     archived_at: null,
@@ -88,6 +98,7 @@ export function Row({ task, columns, paddingLeft = 0, parentId, task_status, isL
   return (
     <>
       {/* current task */}
+
       <tr style={style} className="contents group">
         <StickyCol
           showSubTasks={showSubTasks}
@@ -112,6 +123,11 @@ export function Row({ task, columns, paddingLeft = 0, parentId, task_status, isL
         >
           {/* actions */}
           <div className="absolute opacity-0 group-hover:opacity-100 top-0 bottom-0 right-0 flex space-x-1 mr-1 items-center justify-center">
+            {/* effects */}
+            <button className="p-1 border rounded-lg text-gray-400" onClick={(e) => e.stopPropagation()}>
+              <Effect />
+            </button>
+
             {/* tags */}
             {'tags' in task ? (
               <ManageTagsDropdown entityId={task.id} tagsArr={task.tags as Tag[]} entityType="task" />

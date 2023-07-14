@@ -1,15 +1,10 @@
-import { ArrowDownIcon, ArrowUpIcon, Squares2X2Icon } from '@heroicons/react/24/outline';
+import { ArrowDownIcon, ArrowUpIcon } from '@heroicons/react/24/outline';
 import React, { useEffect, useMemo, useState } from 'react';
 import favoriteIcon from '../../../../../../assets/branding/Favourite-icon.svg';
-import groupIcon from '../../../../../../assets/branding/Group.png';
 import homeIcon from '../../../../../../assets/icons/Home.svg';
 import { cl } from '../../../../../../utils';
 import { useAppSelector } from '../../../../../../app/hooks';
 import NavigationItem from './components/NavigationItem';
-import { HiOutlineLibrary, HiOutlineUserGroup } from 'react-icons/hi';
-import { CgTemplate } from 'react-icons/cg';
-import { IoNotificationsOutline } from 'react-icons/io5';
-import { VscCalendar } from 'react-icons/vsc';
 import {
   closestCenter,
   DndContext,
@@ -21,15 +16,23 @@ import {
 } from '@dnd-kit/core';
 import { arrayMove, rectSortingStrategy, SortableContext, sortableKeyboardCoordinates } from '@dnd-kit/sortable';
 import { useNavigate } from 'react-router-dom';
+import NotificationIcon from '../../../../../../assets/icons/NotificationIcon';
+import CalendarIcon from '../../../../../../assets/icons/CalendarIcon';
+import TemplateIcon from '../../../../../../assets/icons/TemplateIcon';
+import GoalIcon from '../../../../../../assets/icons/GoalIcon';
+import DashboardIcon from '../../../../../../assets/icons/DashboardIcon';
+import { AvatarWithInitials } from '../../../../../../components';
+import ArrowDownwardIcon from '../../../../../../assets/icons/ArrowDownwardIcon';
+import ArrowUpwardIcon from '../../../../../../assets/icons/ArrowUpwardIcon';
 
 const showLessOrMore = [
   {
     name: 'Show Less',
-    icon: <ArrowUpIcon className="w-5 h-5" aria-hidden="true" />
+    icon: <ArrowUpwardIcon />
   },
   {
     name: 'Show More',
-    icon: <ArrowDownIcon className="w-5 h-5" aria-hidden="true" />
+    icon: <ArrowDownwardIcon />
   }
 ];
 
@@ -47,7 +50,10 @@ export default function NavigationItems({
   setActiveTabId
 }: NavigationProps) {
   const { currentWorkspaceId } = useAppSelector((state) => state.auth);
+  const { workspaceData } = useAppSelector((state) => state.workspace);
   const navigate = useNavigate();
+  const workspaceName = workspaceData?.data?.workspace.name;
+  const workspaceColor = workspaceData?.data?.workspace.color as string;
 
   const navigation = [
     {
@@ -61,53 +67,62 @@ export default function NavigationItems({
       id: '2',
       name: 'Notifications',
       href: `/${currentWorkspaceId}/notification`,
-      icon: <IoNotificationsOutline className="w-5 h-5" aria-hidden="true" />,
+      icon: <NotificationIcon />,
       alwaysShow: true
     },
     {
       id: '3',
       name: 'Calendar',
       href: `/${currentWorkspaceId}/calendar`,
-      icon: <VscCalendar className="w-5 h-5" aria-hidden="true" />,
+      icon: <CalendarIcon />,
       alwaysShow: false
     },
     {
       id: '4',
       name: 'Community',
       href: `/${currentWorkspaceId}/community`,
-      icon: <HiOutlineUserGroup className="w-5 h-5" aria-hidden="true" />,
+      icon: (
+        <AvatarWithInitials
+          initials={
+            workspaceName
+              ?.split(' ')
+              .slice(0, 2)
+              .map((word) => word[0])
+              .join('')
+              .toUpperCase() as string
+          }
+          height="h-5"
+          width="w-5"
+          backgroundColour={workspaceColor}
+          roundedStyle="rounded"
+          textColor="white"
+        />
+      ),
       alwaysShow: false
     },
     {
       id: '5',
-      name: 'Library',
+      name: 'Template Center',
       href: `/${currentWorkspaceId}/directory`,
-      icon: <HiOutlineLibrary className="w-5 h-5" aria-hidden="true" />,
+      icon: <TemplateIcon />,
       alwaysShow: false
     },
     {
       id: '6',
-      name: 'Template',
-      href: `/${currentWorkspaceId}/template`,
-      icon: <CgTemplate className="w-5 h-5" aria-hidden="true" />,
+      name: 'Goals',
+      href: `/${currentWorkspaceId}/goals`,
+      icon: <GoalIcon />,
       alwaysShow: false
     },
     {
       id: '7',
-      name: 'Goals',
-      href: `/${currentWorkspaceId}/goals`,
-      source: groupIcon,
+      name: 'Dashboards',
+      href: `/${currentWorkspaceId}/dashboard`,
+      icon: <DashboardIcon />,
       alwaysShow: false
     },
     {
       id: '8',
-      name: 'Dashboards',
-      href: `/${currentWorkspaceId}/dashboard`,
-      icon: <Squares2X2Icon className="w-5 h-5" aria-hidden="true" />,
-      alwaysShow: false
-    },
-    {
-      id: '9',
       name: 'Favorites',
       href: `${currentWorkspaceId}/favorites`,
       source: favoriteIcon,
@@ -184,10 +199,10 @@ export default function NavigationItems({
             <div
               onClick={() => setShowAll((prev) => !prev)}
               className={cl(
-                !showSidebar ? 'justify-center pl-5' : 'gap-2 items-center pl-6',
+                !showSidebar ? 'justify-center pl-5' : 'gap-2 items-center pl-7',
                 'flex cursor-pointer gap-2 items-center p-2 w-full hover:text-gray-500 hover:bg-gray-100'
               )}
-              style={{ height: '30px' }}
+              style={{ height: '30px', fontWeight: '600' }}
             >
               {showLessOrMore[showAll ? 0 : 1].icon}
               {showSidebar ? <p className="ml-3 text-xs truncate">{showLessOrMore[showAll ? 0 : 1].name}</p> : null}

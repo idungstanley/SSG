@@ -160,7 +160,7 @@ export default function TaskMenu() {
       >
         <div className="pl-5 space-x-2">
           <RoundedCheckbox
-            styles="rounded-full"
+            styles="rounded-full text-alsoit-purple-300"
             isChecked={true}
             onChange={() => {
               dispatch(setSelectedTasksArray([]));

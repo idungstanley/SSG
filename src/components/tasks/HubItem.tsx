@@ -1,7 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { VscTriangleDown, VscTriangleRight } from 'react-icons/vsc';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { getPrevName, getSubMenu, setSelectedTreeDetails } from '../../features/hubs/hubSlice';
+import {
+  closeMenu,
+  getPrevName,
+  getSubMenu,
+  setCreateWLID,
+  setSelectedTreeDetails,
+  setshowMenuDropdown
+} from '../../features/hubs/hubSlice';
 import { setPaletteDropDown } from '../../features/account/accountSlice';
 import AvatarWithInitials from '../avatar/AvatarWithInitials';
 import Palette from '../ColorPalette';
@@ -15,6 +22,8 @@ import { EntityType } from '../../utils/EntityTypes/EntityType';
 import PlusIcon from '../../assets/icons/PlusIcon';
 import ThreeDotIcon from '../../assets/icons/ThreeDotIcon';
 import { Tooltip } from '@mui/material';
+import MenuDropdown from '../Dropdown/MenuDropdown';
+import SubDropdown from '../Dropdown/SubDropdown';
 
 interface TaskItemProps {
   item: {
@@ -23,41 +32,41 @@ interface TaskItemProps {
     path?: string | null;
     color?: string | null;
     parent_id?: string | null;
+    has_descendants?: number;
   };
-  handleClick: (id: string, index?: number) => void;
-  showChildren: string | null | undefined;
-  handleLocation: (id: string, name: string, index?: number) => void;
-  handleHubSettings: (id: string, name: string, e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => void;
+  showChildren: boolean;
   index?: number;
   isSticky?: boolean;
   type: string;
   topNumber?: string;
   zNumber?: string;
   stickyButtonIndex?: number | undefined;
+  handleClick: (id: string, index?: number) => void;
+  handleLocation: (id: string, name: string, index?: number) => void;
 }
 export default function HubItem({
-  handleClick,
   item,
-  handleLocation,
-  handleHubSettings,
   showChildren,
   type,
   index,
   isSticky,
   stickyButtonIndex,
   topNumber = '0',
-  zNumber
+  zNumber,
+  handleClick,
+  handleLocation
 }: TaskItemProps) {
   const dispatch = useAppDispatch();
   const { activeItemId } = useAppSelector((state) => state.workspace);
-  const { showSidebar, lightBaseColor, baseColor } = useAppSelector((state) => state.account);
-  const [uploadId, setUploadId] = useState<string | null | undefined>('');
   const { paletteDropdown } = useAppSelector((state) => state.account);
+  const { showSidebar, lightBaseColor, baseColor } = useAppSelector((state) => state.account);
+  const { showMenuDropdown, SubMenuId } = useAppSelector((state) => state.hub);
+  const [uploadId, setUploadId] = useState<string | null | undefined>('');
   const [paletteColor, setPaletteColor] = useState<string | undefined | ListColourProps>(
-    type === 'hub' ? 'blue' : 'orange'
+    type === EntityType.hub ? 'blue' : 'orange'
   );
 
-  const collapseNavAndSubhub = !showSidebar && type === 'subhub';
+  const collapseNavAndSubhub = !showSidebar && type === EntityType.subHub;
 
   const { hubId } = useParams();
   const { paletteId, show } = paletteDropdown;
@@ -65,7 +74,7 @@ export default function HubItem({
   const handleHubColour = (id: string, e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     if (showSidebar) {
       e.stopPropagation();
-      dispatch(setPaletteDropDown({ show: true, paletteId: id, paletteType: 'hub' }));
+      dispatch(setPaletteDropDown({ show: true, paletteId: id, paletteType: EntityType.hub }));
     }
   };
 
@@ -73,16 +82,68 @@ export default function HubItem({
     setUploadId(paletteId);
   }, [paletteId]);
 
+  const closeSubMenu = () => {
+    dispatch(
+      getSubMenu({
+        SubMenuId: null,
+        SubMenuType: null
+      })
+    );
+  };
+
+  const closeMenuDropdown = () => {
+    dispatch(
+      setshowMenuDropdown({
+        showMenuDropdown: null,
+        showMenuDropdownType: null
+      })
+    );
+  };
+
   const handleItemAction = (id: string, name?: string | null) => {
     dispatch(getPrevName(name as string));
     dispatch(setSelectedTreeDetails({ name, id, type: EntityType.hub }));
     dispatch(setCreateWlLink(false));
-    dispatch(
-      getSubMenu({
-        SubMenuId: id,
-        SubMenuType: type == 'hub' ? 'hubs' : 'subhub'
-      })
-    );
+    if (id === SubMenuId) {
+      closeSubMenu();
+    } else {
+      closeMenuDropdown();
+      dispatch(
+        getSubMenu({
+          SubMenuId: id,
+          SubMenuType: type == EntityType.hub ? 'hubs' : EntityType.subHub
+        })
+      );
+    }
+  };
+
+  const handleHubSettings = (id: string, name: string, e: React.MouseEvent<HTMLSpanElement, MouseEvent>): void => {
+    dispatch(setSelectedTreeDetails({ name, id, type: EntityType.hub }));
+    dispatch(setCreateWLID(id));
+    // dispatch(getCurrHubId(id));
+    dispatch(setCreateWlLink(false));
+    if (id === showMenuDropdown) {
+      closeMenuDropdown();
+    } else {
+      closeSubMenu();
+      dispatch(
+        setshowMenuDropdown({
+          showMenuDropdown: id,
+          showMenuDropdownType: EntityType.subHub
+        })
+      );
+    }
+
+    dispatch(getPrevName(name));
+    if (showMenuDropdown != null) {
+      if ((e.target as HTMLButtonElement).id == 'menusettings') {
+        dispatch(closeMenu());
+      }
+    }
+  };
+
+  const renderEmptyArrowBlock = () => {
+    return <div className="pl-3.5" />;
   };
 
   return (
@@ -117,11 +178,14 @@ export default function HubItem({
           <div
             role="button"
             className="flex truncate items-center py-1.5 mt-0.5 justify-start overflow-y-hidden text-sm"
-            style={{ paddingLeft: type === 'subhub' && !showSidebar ? '5px' : type === 'subhub' ? '10px' : '' }}
+            style={{
+              marginLeft: type === EntityType.subHub && !showSidebar ? '-14px' : type === EntityType.subHub ? '0' : '',
+              paddingLeft: type === EntityType.subHub && !showSidebar ? '5px' : type === EntityType.subHub ? '10px' : ''
+            }}
           >
-            {!collapseNavAndSubhub && (
+            {!collapseNavAndSubhub && item?.has_descendants ? (
               <div>
-                {showChildren === item.id ? (
+                {showChildren ? (
                   <span className="flex flex-col">
                     <VscTriangleDown className="flex-shrink-0 h-2" aria-hidden="true" color="rgba(72, 67, 67, 0.64)" />
                   </span>
@@ -129,6 +193,8 @@ export default function HubItem({
                   <VscTriangleRight className="flex-shrink-0 h-2" aria-hidden="true" color="#BBBDC0" />
                 )}
               </div>
+            ) : (
+              renderEmptyArrowBlock()
             )}
 
             <div className={`flex items-center flex-1 min-w-0 ${collapseNavAndSubhub && 'ml-3'}`}>
@@ -193,6 +259,8 @@ export default function HubItem({
       {paletteId == item.id && show ? (
         <Palette title="Hub Colour" setPaletteColor={setPaletteColor} bottomContent={<SearchIconUpload />} />
       ) : null}
+      {showMenuDropdown === item.id && showSidebar ? <MenuDropdown /> : null}
+      {SubMenuId === item.id && showSidebar ? <SubDropdown /> : null}
     </>
   );
 }

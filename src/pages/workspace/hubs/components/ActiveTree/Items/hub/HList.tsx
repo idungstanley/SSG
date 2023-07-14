@@ -10,39 +10,31 @@ import {
   setActiveEntityName,
   setActiveItem,
   setActiveTabId,
-  setCreateWlLink,
   setCurrentItem,
   setShowHub,
   setShowPilot
 } from '../../../../../../../features/workspace/workspaceSlice';
 import {
-  closeMenu,
   getCurrSubHubId,
-  getPrevName,
-  setCreateWLID,
   setOpenedHubId,
   setParentHubExt,
-  setSelectedTreeDetails,
-  setshowMenuDropdown,
   setSubHubExt
 } from '../../../../../../../features/hubs/hubSlice';
-import MenuDropdown from '../../../../../../../components/Dropdown/MenuDropdown';
-import SubDropdown from '../../../../../../../components/Dropdown/SubDropdown';
 import { cl } from '../../../../../../../utils';
 import { EntityType } from '../../../../../../../utils/EntityTypes/EntityType';
 import { Capitalize } from '../../../../../../../utils/NoCapWords/Capitalize';
+import SubHList from './SubHList';
 
-export default function HList({ hubs, leftMargin, taskType, level = 1 }: ListProps) {
-  const { hubId } = useParams();
-  const { walletId } = useParams();
-  const { listId } = useParams();
+export default function HList({ hubs }: ListProps) {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const [showChildren, setShowChidren] = useState<string | null | undefined>(null);
+  const { hubId, walletId, listId } = useParams();
   const { currentItemId, showExtendedBar, createEntityType } = useAppSelector((state) => state.workspace);
+  const { entityToCreate } = useAppSelector((state) => state.hub);
   const { showSidebar } = useAppSelector((state) => state.account);
-  const { showMenuDropdown, SubMenuId, entityToCreate } = useAppSelector((state) => state.hub);
+  const [showChildren, setShowChidren] = useState<string | null | undefined>(null);
   const [stickyButtonIndex, setStickyButtonIndex] = useState<number | undefined>(-1);
+  const [openedNewHubId, setOpenedNewHubId] = useState<string>('');
   const CapitalizeType = Capitalize(entityToCreate);
   const hubCreationStatus = 'New ' + CapitalizeType + ' Under Construction';
   const id = hubId || walletId || listId || currentItemId;
@@ -56,51 +48,34 @@ export default function HList({ hubs, leftMargin, taskType, level = 1 }: ListPro
     color: 'blue',
     path: null
   };
+
   const hubsSpread = [...hubs, dummyHub];
   const hubsWithEntity = createEntityType === EntityType.hub ? (hubsSpread as Hub[]) : hubs;
+
   useEffect(() => {
     setShowChidren(id);
   }, []);
-  const parentType = EntityType.hub;
-  const subType = 'subhub';
 
   const handleLocation = (id: string, name: string, index?: number) => {
-    if (level === 1) {
-      dispatch(setSubHubExt({ id: null, type: null }));
-      dispatch(setParentHubExt({ id: id, type: EntityType.hub }));
-      dispatch(
-        getCurrSubHubId({
-          currSubHubId: null,
-          currSubHubIdType: null
-        })
-      );
-      dispatch(
-        setActiveItem({
-          activeItemId: id,
-          activeItemType: parentType,
-          activeItemName: name
-        })
-      );
-    } else if (level === 2) {
-      dispatch(
-        setActiveItem({
-          activeItemId: id,
-          activeItemType: subType,
-          activeItemName: name
-        })
-      );
-      dispatch(setSubHubExt({ id: id, type: subType }));
-      dispatch(
-        getCurrSubHubId({
-          currSubHubId: id,
-          currSubHubIdType: subType
-        })
-      );
-    }
+    dispatch(setSubHubExt({ id: null, type: null }));
+    dispatch(setParentHubExt({ id: id, type: EntityType.hub }));
+    dispatch(
+      getCurrSubHubId({
+        currSubHubId: null,
+        currSubHubIdType: null
+      })
+    );
+    dispatch(
+      setActiveItem({
+        activeItemId: id,
+        activeItemType: EntityType.hub,
+        activeItemName: name
+      })
+    );
     setStickyButtonIndex(index === stickyButtonIndex ? -1 : index);
     dispatch(setActiveEntityName(name));
     setShowChidren(id);
-    dispatch(setActiveEntity({ id: id, type: taskType }));
+    dispatch(setActiveEntity({ id: id, type: EntityType.hub }));
     dispatch(setShowPilot(true));
     dispatch(setActiveTabId(4));
     navigate(`tasks/h/${id}`, {
@@ -110,19 +85,15 @@ export default function HList({ hubs, leftMargin, taskType, level = 1 }: ListPro
       'hubDetailsStorage',
       JSON.stringify({
         activeItemId: id,
-        activeItemType: taskType,
+        activeItemType: EntityType.hub,
         activeItemName: name
       })
     );
   };
 
   const handleClick = (id: string, index?: number) => {
-    if (taskType === EntityType.hub) {
-      dispatch(setSubHubExt({ id: null, type: null }));
-      dispatch(setParentHubExt({ id: id, type: taskType }));
-    } else {
-      dispatch(setSubHubExt({ id: id, type: taskType }));
-    }
+    dispatch(setSubHubExt({ id: null, type: null }));
+    dispatch(setParentHubExt({ id, type: EntityType.hub }));
 
     setStickyButtonIndex(index === stickyButtonIndex ? -1 : index);
     if (!showSidebar) {
@@ -130,90 +101,69 @@ export default function HList({ hubs, leftMargin, taskType, level = 1 }: ListPro
         replace: true
       });
     }
-    const isMatch = id === showChildren;
+
     dispatch(setOpenedHubId(id));
     dispatch(setShowHub(true));
-    if (isMatch) {
+
+    if (id === openedNewHubId) {
       setShowChidren(null);
+      setOpenedNewHubId('');
     } else {
       setShowChidren(id);
+      setOpenedNewHubId(id);
     }
+
     dispatch(
       setCurrentItem({
         currentItemId: id,
-        currentItemType: parentType
+        currentItemType: EntityType.hub
       })
     );
   };
 
-  const handleHubSettings = (id: string, name: string, e: React.MouseEvent<HTMLSpanElement, MouseEvent>): void => {
-    dispatch(setSelectedTreeDetails({ name, id, type: EntityType.hub }));
-    dispatch(setCreateWLID(id));
-    // dispatch(getCurrHubId(id));
-    dispatch(setCreateWlLink(false));
-    dispatch(
-      setshowMenuDropdown({
-        showMenuDropdown: id,
-        showMenuDropdownType: taskType === 'subhub' ? 'subhub' : 'hubs'
-      })
-    );
-    dispatch(getPrevName(name));
-    if (showMenuDropdown != null) {
-      if ((e.target as HTMLButtonElement).id == 'menusettings') {
-        dispatch(closeMenu());
-      }
+  const isCanBeOpen = (id: string) => {
+    if (openedNewHubId) {
+      return openedNewHubId === id;
     }
+    return !!showChildren;
   };
+
   return (
     <>
       {hubsWithEntity.map((hub, index) => (
-        <div
-          key={hub.id}
-          style={{ marginLeft: leftMargin ? 20 : 0 }}
-          className={cl(!showSidebar && 'overflow-hidden w-12')}
-        >
+        <div key={hub.id} className={cl(!showSidebar && 'overflow-hidden w-12')}>
           <div className="relative flex flex-col">
             <HubItem
               item={hub}
               handleClick={handleClick}
-              showChildren={showChildren}
-              handleHubSettings={handleHubSettings}
+              showChildren={
+                ((hub.children.length || hub.wallets.length || hub.lists.length) &&
+                  showChildren &&
+                  isCanBeOpen(hub.id)) as boolean
+              }
               handleLocation={handleLocation}
               isSticky={stickyButtonIndex !== undefined && stickyButtonIndex !== null && stickyButtonIndex <= index}
               stickyButtonIndex={stickyButtonIndex}
               index={index}
-              type={taskType === 'subhub' ? 'subhub' : EntityType.hub}
-              topNumber={taskType === 'subhub' ? '80px' : '50px'}
-              zNumber={taskType === 'subhub' ? '4' : '5'}
+              type={EntityType.hub}
+              topNumber="50px"
+              zNumber="5"
             />
-            {hub.children.length && showChildren ? (
-              <HList
-                hubs={(entityToCreate === EntityType.subHub ? [...hub.children, dummyHub] : hub.children) as Hub[]}
-                level={level + 1}
-                taskType="subhub"
-                leftMargin={false}
-              />
-            ) : null}
+            {hub.children.length && isCanBeOpen(hub.id) ? <SubHList hubs={hub.children as Hub[]} /> : null}
             {showSidebar && (
               <div>
-                {hub.wallets.length && showChildren ? (
+                {hub.wallets.length && showChildren && isCanBeOpen(hub.id) ? (
                   <WList
                     wallets={hub.wallets}
                     leftMargin={false}
                     topNumber={hub.parent_id ? 110 : 80}
                     type="wallet"
-                    paddingLeft={`${taskType === EntityType.hub ? '33' : '35'}`}
+                    paddingLeft="33"
                   />
                 ) : null}
-                {hub.lists.length && showChildren && !showExtendedBar ? (
-                  <LList
-                    list={hub.lists}
-                    leftMargin={false}
-                    paddingLeft={`${taskType === EntityType.hub ? '48' : '50'}`}
-                  />
+                {hub.lists.length && showChildren && isCanBeOpen(hub.id) && !showExtendedBar ? (
+                  <LList list={hub.lists} leftMargin={false} paddingLeft="48" />
                 ) : null}
-                {showMenuDropdown === hub.id && showSidebar ? <MenuDropdown /> : null}
-                {SubMenuId === hub.id && showSidebar ? <SubDropdown /> : null}
               </div>
             )}
           </div>

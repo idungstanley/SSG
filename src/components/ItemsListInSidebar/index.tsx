@@ -100,23 +100,6 @@ export default function ItemsListInSidebar({ items, status, type }: ItemsListInS
     }
   };
 
-  const handleHubSettings = (id: string, name: string, e: React.MouseEvent<HTMLSpanElement, MouseEvent>): void => {
-    dispatch(getCurrHubId(id));
-    dispatch(setCreateWlLink(false));
-    dispatch(
-      setshowMenuDropdown({
-        showMenuDropdown: id,
-        showMenuDropdownType: 'hubs'
-      })
-    );
-    dispatch(getPrevName(name));
-    if (showMenuDropdown != null) {
-      if ((e.target as HTMLButtonElement).id == 'menusettings') {
-        dispatch(closeMenu());
-      }
-    }
-  };
-
   return status === 'success' ? (
     <ul className={cl('z-20', !showSidebar && 'overflow-x-hidden w-12')}>
       {items?.map((i: { id: string; name: string; path?: string | null; parent_id?: string | null }) => (
@@ -124,14 +107,11 @@ export default function ItemsListInSidebar({ items, status, type }: ItemsListInS
           <HubItem
             item={i}
             handleClick={handleClick}
-            showChildren={showChildren}
-            handleHubSettings={handleHubSettings}
+            showChildren={!!showChildren}
             handleLocation={handleLocation}
             type="hub"
           />
           {showChildren === i.id && showSidebar ? <DropdownList /> : null}
-          {showMenuDropdown === i.id && showSidebar ? <MenuDropdown /> : null}
-          {SubMenuId === i.id && showSidebar ? <SubDropdown /> : null}
         </li>
       ))}
     </ul>

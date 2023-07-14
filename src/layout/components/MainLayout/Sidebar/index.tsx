@@ -1,17 +1,22 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { cl } from '../../../../utils';
 import { setSidebarWidthRD } from '../../../../features/workspace/workspaceSlice';
 import Header from './components/Header';
 import NavigationItems from './components/NavigationItems';
 import Places from './components/Places';
-import Search from './components/Search';
 import { dimensions } from '../../../../app/config/dimensions';
 import { useResize } from '../../../../hooks/useResize';
 import { isAllowIncreaseWidth } from '../../../../utils/widthUtils';
 import { NavigationList } from './components/NavigationItems/components/NavigationList';
 import useResolution from '../../../../hooks/useResolution';
 import { setUserSettingsData, useGetUserSettingsKeys } from '../../../../features/account/accountService';
+import NonInteractiveSearch from '../../../../components/Search/NonInteractiveSearch';
+import CommandSearchModal from './components/CommandSearchModal';
+import SearchIcon from '../../../../assets/icons/SearchIcon';
+import { setUpdateCords } from '../../../../features/hubs/hubSlice';
+import { useScroll } from '../../../../hooks/useScroll';
+import { ScrollableContainerY } from '../../../../components/ScrollableContainer/ScrollableContainerY';
 
 const MAX_SIDEBAR_WIDTH = dimensions.navigationBar.max;
 const MIN_SIDEBAR_WIDTH = dimensions.navigationBar.min;
@@ -20,8 +25,9 @@ export default function Sidebar() {
   const dispatch = useAppDispatch();
   const { extendedSidebarWidth, sidebarWidthRD, showExtendedBar } = useAppSelector((state) => state.workspace);
   const key = 'sidebar';
+  const useref = useRef<HTMLElement>(null);
   const { showSidebar, userSettingsData } = useAppSelector((state) => state.account);
-
+  const [commandSearchModal, setCommandSearchModal] = useState<boolean>(false);
   const { blockRef, Dividers, size, isMouseUp, isDrag } = useResize({
     dimensions: {
       min: MIN_SIDEBAR_WIDTH,
@@ -64,6 +70,7 @@ export default function Sidebar() {
     const { isAllow, allowedSize } = isAllowIncreaseWidth(size, extendedSidebarWidth);
     dispatch(setSidebarWidthRD(isAllow ? size : showExtendedBar ? allowedSize - size : size));
   }, [size]);
+  const onScroll = useScroll(() => dispatch(setUpdateCords()));
 
   return (
     <aside className={cl('flex h-full text-center relative overflow-x-visible')}>
@@ -84,8 +91,29 @@ export default function Sidebar() {
           activeTabId={activeTabId}
           setActiveTabId={setActiveTabId}
         />
-        <section className="relative h-full flex flex-col pr-1.5 overflow-y-auto overflow-x-hidden">
-          {showSidebar ? <Search /> : null}
+        <ScrollableContainerY onScroll={onScroll}>
+          {showSidebar ? (
+            <NonInteractiveSearch
+              setAction={setCommandSearchModal}
+              modal={
+                <CommandSearchModal
+                  commandSearchVisible={commandSearchModal}
+                  onCloseCommandSearchModal={() => setCommandSearchModal(false)}
+                />
+              }
+            >
+              <div
+                className="absolute flex items-center justify-between w-auto w-full font-bold tracking-wider text-gray-400 grow left-6 hover:text-fuchsia-500"
+                style={{ fontSize: '13px' }}
+              >
+                <div className="flex items-center justify-between">
+                  <SearchIcon />
+                  <p className="ml-2">Search</p>
+                </div>
+                <p className="mr-14">Ctrl+k</p>
+              </div>
+            </NonInteractiveSearch>
+          ) : null}
           <NavigationItems
             activeTabId={activeTabId}
             setActiveTabId={setActiveTabId}
@@ -93,7 +121,7 @@ export default function Sidebar() {
             handleHotkeyClick={handleHotkeyClick}
           />
           <Places />
-        </section>
+        </ScrollableContainerY>
       </section>
     </aside>
   );

@@ -9,6 +9,7 @@ import StatusDropdown from '../../../status/StatusDropdown';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { setShowPilotSideOver } from '../../../../features/general/slideOver/slideOverSlice';
 import {
+  getSingleLineView,
   setCurrentTaskId,
   setCurrentTaskStatusId,
   setSelectedTasksArray,
@@ -25,6 +26,9 @@ import { Capitalize } from '../../../../utils/NoCapWords/Capitalize';
 import InteractiveTooltip from '../../../Tooltip/InteractiveTooltip';
 import RoundedCheckbox from '../../../Checkbox/RoundedCheckbox';
 import ToolTip from '../../../Tooltip/Tooltip';
+import Comment from '../../../badges/Description';
+import Description from '../../../badges/Description';
+import Badges from '../../../badges';
 
 interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   task: Task;
@@ -55,6 +59,7 @@ export function StickyCol({
   ...props
 }: ColProps) {
   const { currentWorkspaceId } = useAppSelector((state) => state.auth);
+  const { activeItemId } = useAppSelector((state) => state.workspace);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { taskId, hubId, walletId, listId } = useParams();
@@ -63,6 +68,13 @@ export function StickyCol({
   const { mutate: onAdd } = useAddTask(parentId);
   const { currTeamMemberId, singleLineView, verticalGrid, taskUpperCase, selectedTasksArray, verticalGridlinesTask } =
     useAppSelector((state) => state.task);
+
+  const queryClient = useQueryClient();
+  const inputRef = useRef<HTMLInputElement | null>(null);
+  const { attributes, listeners, setNodeRef } = useSortable({
+    id: task?.id as UniqueIdentifier
+  });
+  const [eitableContent, setEitableContent] = useState(false);
 
   const onClickTask = () => {
     if (task.id !== '0') {
@@ -94,7 +106,8 @@ export function StickyCol({
     const { current } = inputRef;
     current?.focus();
     selectText(current);
-  }, []);
+  }, [eitableContent]);
+
   const selectText = (element: Node | null) => {
     const selection = window.getSelection();
     const range = document.createRange();
@@ -102,21 +115,19 @@ export function StickyCol({
     selection?.removeAllRanges();
     selection?.addRange(range);
   };
+
   const onToggleDisplayingSubTasks = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.stopPropagation();
     setShowSubTasks(!showSubTasks);
   };
-  const queryClient = useQueryClient();
-  const inputRef = useRef<HTMLInputElement | null>(null);
-  const { attributes, listeners, setNodeRef } = useSortable({
-    id: task?.id as UniqueIdentifier
-  });
-  const [eitableContent, setEitableContent] = useState(false);
+
   const editTaskMutation = useMutation(UseUpdateTaskService, {
     onSuccess: () => {
+      // setEitableContent(false);
       queryClient.invalidateQueries(['task']);
     }
   });
+
   const handleOnSave = async (
     e: React.KeyboardEvent<HTMLDivElement> | React.MouseEvent<HTMLButtonElement, MouseEvent>,
     id: string
@@ -125,8 +136,10 @@ export function StickyCol({
       handleEditTask(e as React.KeyboardEvent<HTMLDivElement>, id);
     } else {
       onClickSave();
+      onClose && onClose();
     }
   };
+
   const onClickSave = () => {
     if (inputRef.current?.innerText) {
       const name = inputRef.current?.innerText;
@@ -140,6 +153,7 @@ export function StickyCol({
       });
     }
   };
+
   const handleEditTask = async (e: React.KeyboardEvent<HTMLDivElement>, id: string) => {
     e.preventDefault();
     await editTaskMutation.mutateAsync({
@@ -183,7 +197,7 @@ export function StickyCol({
               isChecked={isChecked}
               styles={`w-4 h-4 rounded-full ${
                 selectedTasksArray.length > 0 ? 'opacity-100' : 'opacity-0'
-              } cursor-pointer focus:outline-1 focus:ring-transparent  focus:border-2 focus:opacity-100 group-hover:opacity-100`}
+              } cursor-pointer focus:outline-1 focus:ring-transparent  focus:border-2 focus:opacity-100 group-hover:opacity-100 text-alsoit-purple-300`}
             />
             <div ref={setNodeRef} {...attributes} {...listeners} className="pr-2">
               {dragElement}
@@ -192,6 +206,7 @@ export function StickyCol({
           <div
             style={{ paddingLeft, minHeight: '42px', height: singleLineView ? '42px' : '' }}
             onClick={onClickTask}
+            onDoubleClick={() => setEitableContent(true)}
             className={cl(
               COL_BG,
               `relative border-t ${isChecked && 'tdListV'} ${verticalGrid && 'border-r'} ${
@@ -214,28 +229,52 @@ export function StickyCol({
               <StatusDropdown TaskCurrentStatus={task.status} />
             </div>
             <div className="flex flex-col items-start justify-start space-y-1 pl-2">
-              <p
-                className="flex text-left"
-                contentEditable={eitableContent && !singleLineView}
-                onClick={() => setEitableContent(true)}
+              <div
+                className="flex text-left items-center relative"
+                contentEditable={eitableContent}
                 ref={inputRef}
                 onKeyDown={(e) => (e.key === 'Enter' ? handleEditTask(e, task.id) : null)}
               >
                 {task.name.length > 50 && singleLineView ? (
                   <>
-                    <InteractiveTooltip content={<p>{task.name}</p>} top="-top-28">
-                      <span className="whitespace-nowrap">
-                        {taskUpperCase
-                          ? task.name.substring(0, 40).toUpperCase()
-                          : Capitalize(task.name).substring(0, 40)}
+                    {/* <InteractiveTooltip content={<p>{task.name}</p>} top="-top-28"> */}
+                    {!eitableContent ? (
+                      <div
+                        className=""
+                        style={{
+                          maxWidth: '300px',
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                          whiteSpace: 'nowrap'
+                        }}
+                      >
+                        {taskUpperCase ? task.name.toUpperCase() : Capitalize(task.name)}
                         ...
-                      </span>
-                    </InteractiveTooltip>
+                      </div>
+                    ) : (
+                      <div
+                        className=""
+                        style={{
+                          maxWidth: '300px',
+                          overflow: 'hidden',
+                          whiteSpace: 'nowrap'
+                        }}
+                      >
+                        {taskUpperCase ? task.name.toUpperCase() : Capitalize(task.name)}
+                      </div>
+                    )}
+                    {/* </InteractiveTooltip> */}
                   </>
                 ) : (
                   <span>{taskUpperCase ? task.name.toUpperCase() : Capitalize(task.name)}</span>
                 )}
-              </p>
+
+                {/* non default badges here */}
+                {/* <div onClick={(e) => e.stopPropagation()} className="pl-3">
+                  <Badges />
+                </div> */}
+              </div>
+
               {tags}
             </div>
             {children}
