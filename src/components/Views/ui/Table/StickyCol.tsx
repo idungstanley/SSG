@@ -26,6 +26,9 @@ import { Capitalize } from '../../../../utils/NoCapWords/Capitalize';
 import InteractiveTooltip from '../../../Tooltip/InteractiveTooltip';
 import RoundedCheckbox from '../../../Checkbox/RoundedCheckbox';
 import ToolTip from '../../../Tooltip/Tooltip';
+import Comment from '../../../badges/Description';
+import Description from '../../../badges/Description';
+import Badges from '../../../badges';
 
 interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   task: Task;
@@ -227,7 +230,7 @@ export function StickyCol({
             </div>
             <div className="flex flex-col items-start justify-start space-y-1 pl-2">
               <div
-                className="flex text-left relative"
+                className="flex text-left items-center relative"
                 contentEditable={eitableContent}
                 ref={inputRef}
                 onKeyDown={(e) => (e.key === 'Enter' ? handleEditTask(e, task.id) : null)}
@@ -265,7 +268,13 @@ export function StickyCol({
                 ) : (
                   <span>{taskUpperCase ? task.name.toUpperCase() : Capitalize(task.name)}</span>
                 )}
+
+                {/* non default badges here */}
+                <div onClick={(e) => e.stopPropagation()} className="pl-3">
+                  <Badges />
+                </div>
               </div>
+
               {tags}
             </div>
             {children}
