@@ -23,6 +23,7 @@ import InteractiveTooltip from '../Tooltip/InteractiveTooltip';
 import ThreeDotIcon from '../../assets/icons/ThreeDotIcon';
 import { Tooltip } from '@mui/material';
 import MenuDropdown from '../Dropdown/MenuDropdown';
+import Drag from '../../assets/icons/Drag';
 
 interface ListItemProps {
   list: {
@@ -160,6 +161,9 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
         {list.id === listId && (
           <span className="absolute top-0 bottom-0 left-0 rounded-r-lg w-0.5" style={{ backgroundColor: baseColor }} />
         )}
+        <div className="absolute left-2 rounded-r-lg w-0.5 opacity-0 group-hover:opacity-100">
+          <Drag />
+        </div>
         <div className="flex items-center space-x-1 overflow-hidden capitalize cursor-pointer">
           <div onClick={(e) => handleListColour(list.id, e)}>
             <ListIconComponent
