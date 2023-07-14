@@ -16,8 +16,8 @@ import { useUploadRecording } from '../workspace/workspaceService';
 import { useParams } from 'react-router-dom';
 import { setTimerLastMemory, toggleMute } from '../workspace/workspaceSlice';
 import { generateFilters } from '../../components/TasksHeader/lib/generateFilters';
-import moment from 'moment-timezone';
 import { runTimer } from '../../utils/TimerCounter';
+import Duration from '../../utils/TimerDuration';
 import DateStringFix from '../../utils/ManualTimeFix';
 
 const moveTask = (data: { taskId: TaskId; listId: string }) => {
@@ -460,7 +460,6 @@ export const createManualTimeEntry = () => {
 
 export const useCurrentTime = ({ workspaceId }: { workspaceId?: string }) => {
   const dispatch = useAppDispatch();
-  const { timezone } = useAppSelector((state) => state.userSetting);
   const { data, isLoading, isError, refetch } = useQuery(
     ['timeData'],
     async () => {
@@ -478,11 +477,9 @@ export const useCurrentTime = ({ workspaceId }: { workspaceId?: string }) => {
         const dateString = dateData?.time_entry;
 
         if (dateString) {
-          const givenDate = moment(dateString?.start_date, 'YYYY-MM-DD HH:mm:ss', timezone);
-          const currentDate = moment();
-          const duration = moment.duration(currentDate.diff(givenDate));
+          const { hours, minutes, seconds } = Duration({ dateString });
           dispatch(setTimerStatus(true));
-          dispatch(setUpdateTimerDuration({ s: duration.seconds(), m: duration.minutes(), h: duration.hours() - 1 }));
+          dispatch(setUpdateTimerDuration({ s: seconds, m: minutes, h: hours }));
           dispatch(
             setTimerLastMemory({
               hubId: dateString.model_type === 'hub' ? dateString.model_id : null,

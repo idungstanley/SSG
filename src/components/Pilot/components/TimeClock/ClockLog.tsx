@@ -7,9 +7,9 @@ import { GiCheckMark } from 'react-icons/gi';
 import { FaSort } from 'react-icons/fa';
 import { setTimeArr, setTimeSortArr } from '../../../../features/task/taskSlice';
 import { UserSortDropDown } from './TimeUserSortDropDown';
-import PlusCircle from '../../../../assets/icons/TimeClock/AddCircle';
-import CancelIcon from '../../../../assets/icons/Common/Cancel';
-import ArrowCaretUp from '../../../../assets/icons/Common/ArrowCaretUp';
+import PlusCircle from '../../../../assets/icons/AddCircle';
+import CancelIcon from '../../../../assets/icons/Cancel';
+import ArrowCaretUp from '../../../../assets/icons/ArrowCaretUp';
 
 export type Header = {
   title: string;
@@ -38,6 +38,10 @@ export default function ClockLog() {
     { title: 'end date', id: '4', hidden: false },
     { title: 'description', id: '5', hidden: true }
   ]);
+  const [icontoggle, setIconToggle] = useState<{ cancelIcon: boolean; plusIcon: boolean }>({
+    cancelIcon: false,
+    plusIcon: false
+  });
   const [showModal, setShowModal] = useState<boolean>(false);
   const [headerId, setHeaderId] = useState<string>('');
   const [showSortModal, setShowSortModal] = useState<boolean>(false);
@@ -74,7 +78,7 @@ export default function ClockLog() {
       } else {
         return (
           <table className="relative w-full">
-            <thead className="relative flex items-center pb-2 space-x-1 text-xs border-b border-gray-400 font-extralight">
+            <thead className="relative flex items-center justify-between pb-2 space-x-1 text-xs border-b border-gray-400 font-extralight">
               <tr className="flex items-center w-9/12 space-x-4">
                 {headers.map((col) => {
                   return (
@@ -82,7 +86,6 @@ export default function ClockLog() {
                       <th
                         key={col.id}
                         className="flex justify-center w-12 gap-1 capitalize cursor-default group reloative text-alsoit-text-sm font-semibold"
-                        style={{ fontSize: '9px' }}
                       >
                         <span
                           className="cursor-pointer"
@@ -104,20 +107,34 @@ export default function ClockLog() {
                                   <div className="font-bold cursor-pointer hover:text-clip" style={{ fontSize: '8px' }}>
                                     <>
                                       {timeArr.length === 1 ? (
-                                        <ArrowCaretUp />
+                                        <ArrowCaretUp active={false} />
                                       ) : (
                                         <span className="flex gap-1">
                                           {timeArr.indexOf(col.title) + 1}
-                                          <ArrowCaretUp />
+                                          <ArrowCaretUp active={false} />
                                         </span>
                                       )}
                                     </>
                                   </div>
                                 </div>
-                                <CancelIcon
+                                <div
+                                  className="w-4 h-4"
                                   onClick={() => handleRemoveFilter(col.title)}
-                                  className="w-3 h-3 m-1 font-semibold text-white cursor-pointer sortClose"
-                                />
+                                  onMouseEnter={() =>
+                                    setIconToggle((prev) => ({
+                                      ...prev,
+                                      cancelIcon: true
+                                    }))
+                                  }
+                                  onMouseLeave={() =>
+                                    setIconToggle((prev) => ({
+                                      ...prev,
+                                      cancelIcon: false
+                                    }))
+                                  }
+                                >
+                                  <CancelIcon active={icontoggle.cancelIcon} dimensions={{ width: 12, height: 12 }} />
+                                </div>
                               </div>
                             )}
                           </>
@@ -134,10 +151,23 @@ export default function ClockLog() {
                   );
                 })}
               </tr>
-              <PlusCircle
-                className="absolute w-4 h-4 font-black cursor-pointer AddColumnDropdownButton right-4"
+              <div
                 onClick={() => setShowModal(!showModal)}
-              />
+                onMouseEnter={() =>
+                  setIconToggle((prev) => ({
+                    ...prev,
+                    plusIcon: true
+                  }))
+                }
+                onMouseLeave={() =>
+                  setIconToggle((prev) => ({
+                    ...prev,
+                    plusIcon: false
+                  }))
+                }
+              >
+                <PlusCircle active={icontoggle.plusIcon} dimensions={{ width: 20, height: 20 }} />
+              </div>
               {showModal && (
                 <div
                   className="absolute bg-white shadow-md w-44 top-10 right-10"
