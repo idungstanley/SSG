@@ -18,7 +18,7 @@ import {
 } from '../../../../features/task/taskSlice';
 import { setActiveItem } from '../../../../features/workspace/workspaceSlice';
 import { useSortable } from '@dnd-kit/sortable';
-import { UniqueIdentifier } from '@dnd-kit/core';
+import { UniqueIdentifier, useDroppable } from '@dnd-kit/core';
 import { ImCancelCircle } from 'react-icons/im';
 import CloseSubtask from '../../../../assets/icons/CloseSubtask';
 import OpenSubtask from '../../../../assets/icons/OpenSubtask';
@@ -42,6 +42,7 @@ interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   dragElement?: ReactNode;
   parentId?: string;
   onClose?: VoidFunction;
+  isOver?: boolean;
 }
 
 export function StickyCol({
@@ -56,6 +57,7 @@ export function StickyCol({
   task,
   paddingLeft = 0,
   dragElement,
+  isOver,
   ...props
 }: ColProps) {
   const { currentWorkspaceId } = useAppSelector((state) => state.auth);
@@ -211,7 +213,8 @@ export function StickyCol({
               COL_BG,
               `relative border-t ${isChecked && 'tdListV'} ${verticalGrid && 'border-r'} ${
                 verticalGridlinesTask && 'border-r'
-              } w-full py-4 flex items-center `
+              } w-full py-4 flex items-center `,
+              isOver ? 'border-2 border-green-500' : ''
             )}
           >
             <button onClick={onToggleDisplayingSubTasks} className="pl-1">
