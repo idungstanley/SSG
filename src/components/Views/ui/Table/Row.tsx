@@ -14,6 +14,7 @@ import TaskTag from '../../../Tag/ui/TaskTag';
 import dradnddrop from '../../../../assets/icons/dradnddrop.svg';
 import { useAppSelector } from '../../../../app/hooks';
 import Effect from '../../../../assets/icons/Effect';
+import Ehance from '../../../badges/Ehance';
 
 interface RowProps {
   task: Task;
@@ -136,6 +137,10 @@ export function Row({ task, columns, paddingLeft = 0, parentId, task_status, isL
             {/* show create subtask field */}
             <button className="p-1 border rounded-lg text-gray-400" onClick={onShowAddSubtaskField}>
               <SubtasksIcon className="h-4 w-4" />
+            </button>
+
+            <button className="p-1 pl-4  text-gray-400" onClick={(e) => e.stopPropagation()}>
+              <Ehance />
             </button>
           </div>
         </StickyCol>

@@ -7,7 +7,7 @@ import DropdownFieldWrapper from '../../../../pages/workspace/tasks/component/ta
 import TaskPriority from '../../../../pages/workspace/tasks/component/taskData/priority';
 import { listColumnProps } from '../../../../pages/workspace/tasks/component/views/ListColumns';
 import { Task, TaskValue } from '../../../../features/task/interface.tasks';
-import { ACTIVE_COL_BG, DEFAULT_COL_BG } from '../../config';
+import { DEFAULT_COL_BG } from '../../config';
 import DateFormat from '../../../DateFormat';
 import StatusNameDropdown from '../../../status/StatusNameDropdown';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
@@ -21,7 +21,7 @@ interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
 
 export function Col({ value, field, fieldId, task, ...props }: ColProps) {
   const { taskId } = useParams();
-  const COL_BG = taskId === task.id ? ACTIVE_COL_BG : DEFAULT_COL_BG;
+  const ACTIVE_TASK = taskId === task.id ? 'tdListVNoSticky' : DEFAULT_COL_BG;
   const { singleLineView, verticalGrid, currentTaskId, showTaskNavigation, selectedTasksArray } = useAppSelector(
     (state) => state.task
   );
@@ -62,7 +62,7 @@ export function Col({ value, field, fieldId, task, ...props }: ColProps) {
     <>
       <td
         className={cl(
-          COL_BG,
+          ACTIVE_TASK,
           `relative flex border-t ${isSelected && 'tdListVNoSticky'} ${
             verticalGrid && 'border-r'
           } justify-center items-center text-sm font-medium text-gray-900 `
