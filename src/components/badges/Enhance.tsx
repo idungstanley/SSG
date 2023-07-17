@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { DetailedHTMLProps, SVGAttributes } from 'react';
 
-export default function Ehance() {
+type Props = DetailedHTMLProps<SVGAttributes<SVGSVGElement>, SVGSVGElement>;
+
+export default function Enhance({ ...props }: Props) {
   return (
     <div>
-      <svg width="21" height="20" viewBox="0 0 21 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <svg {...props} width="21" height="20" viewBox="0 0 21 20" fill="none" xmlns="http://www.w3.org/2000/svg">
         <mask
           id="mask0_11717_25791"
           style={{ maskType: 'alpha' }}
