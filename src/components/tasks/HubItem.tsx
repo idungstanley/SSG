@@ -24,7 +24,8 @@ import ThreeDotIcon from '../../assets/icons/ThreeDotIcon';
 import { Tooltip } from '@mui/material';
 import MenuDropdown from '../Dropdown/MenuDropdown';
 import SubDropdown from '../Dropdown/SubDropdown';
-import { useDroppable } from '@dnd-kit/core';
+import { useDraggable, useDroppable } from '@dnd-kit/core';
+import Drag from '../../assets/icons/Drag';
 
 interface TaskItemProps {
   item: {
@@ -154,6 +155,18 @@ export default function HubItem({
     }
   });
 
+  const {
+    attributes,
+    listeners,
+    setNodeRef: draggableRef,
+    transform
+  } = useDraggable({
+    id: item.id,
+    data: {
+      isHub: true
+    }
+  });
+
   return (
     <>
       <div
@@ -167,7 +180,8 @@ export default function HubItem({
         onClick={() => handleClick(item.id, index)}
         style={{
           top: isSticky && showSidebar ? topNumber : '',
-          zIndex: isSticky ? zNumber : '2'
+          zIndex: isSticky ? zNumber : '2',
+          opacity: transform ? 0 : 100
         }}
       >
         <div
@@ -186,12 +200,22 @@ export default function HubItem({
               style={{ backgroundColor: baseColor }}
             />
           )}
+
+          <div
+            className="absolute left-2 rounded-r-lg opacity-0 group-hover:opacity-100 cursor-move"
+            ref={draggableRef}
+            {...listeners}
+            {...attributes}
+          >
+            <Drag />
+          </div>
           <div
             role="button"
             className="flex truncate items-center py-1.5 mt-0.5 justify-start overflow-y-hidden text-sm"
             style={{
               marginLeft: type === EntityType.subHub && !showSidebar ? '-14px' : type === EntityType.subHub ? '0' : '',
-              paddingLeft: type === EntityType.subHub && !showSidebar ? '5px' : type === EntityType.subHub ? '10px' : ''
+              paddingLeft:
+                type === EntityType.subHub && !showSidebar ? '5px' : type === EntityType.subHub ? '15px' : '5px'
             }}
           >
             {!collapseNavAndSubhub && item?.has_descendants ? (

@@ -46,6 +46,8 @@ export const useMoveListService = () => {
 
   return useMutation(moveList, {
     onSuccess: () => {
+      queryClient.invalidateQueries(['hub']);
+      queryClient.invalidateQueries(['sub-hub']);
       queryClient.invalidateQueries(['lists']);
       queryClient.invalidateQueries(['task', { listId, assigneeUserId, sortArrUpdate, filters }]);
       queryClient.invalidateQueries(['task', id, type]);

@@ -14,8 +14,8 @@ interface SubTasksProps {
 export function SubTasks({ parentId, columns, paddingLeft }: SubTasksProps) {
   const { data: tasks } = useSubTasks(parentId);
 
-  const { draggableTaskId } = useAppSelector((state) => state.list);
-  const draggableItem = draggableTaskId ? tasks?.find((i) => i.id === draggableTaskId) : null;
+  const { draggableItemId } = useAppSelector((state) => state.list);
+  const draggableItem = draggableItemId ? tasks?.find((i) => i.id === draggableItemId) : null;
   return (
     <>
       {draggableItem ? (

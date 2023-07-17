@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import Drag from '../../assets/icons/Drag';
-import { cl } from '../../utils';
 import ListIconComponent from '../ItemsListInSidebar/components/ListIconComponent';
 import ThreeDotIcon from '../../assets/icons/ThreeDotIcon';
 import { ListColourProps } from './ListItem';

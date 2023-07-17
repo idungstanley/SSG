@@ -8,6 +8,8 @@ import { generateFilters } from '../../../../components/TasksHeader/lib/generate
 import { setPlaces } from '../../../../features/account/accountSlice';
 import { arrayMove } from '@dnd-kit/sortable';
 import { useMoveListService } from '../../../../features/list/listService';
+import { useMoveHubsService } from '../../../../features/hubs/hubService';
+import { useMoveWalletsService } from '../../../../features/wallet/walletService';
 
 interface DragContextProps {
   children: ReactNode;
@@ -26,6 +28,8 @@ export default function DragContext({ children }: DragContextProps) {
 
   const { mutate: onMove } = useMoveTask();
   const { mutate: onMoveList } = useMoveListService();
+  const { mutate: onMoveHub } = useMoveHubsService();
+  const { mutate: onMoveWallet } = useMoveWalletsService();
 
   // set active task id to store
   const onDragStart = (e: DragStartEvent) => {
@@ -42,6 +46,14 @@ export default function DragContext({ children }: DragContextProps) {
     const isTaskToList = over?.data.current?.isOverList && active?.data.current?.isTask;
     const isListToHub = over?.data.current?.isOverHub && active?.data.current?.isList;
     const isListToWallet = over?.data.current?.isOverWallet && active?.data.current?.isList;
+
+    const isTaskToTask = over?.data.current?.isOverTask && active?.data.current?.isTask;
+
+    const isHubToHub = over?.data.current?.isOverHub && active?.data.current?.isHub;
+
+    const isWalletToWallet = over?.data.current?.isOverWallet && active?.data.current?.isWallet;
+
+    const isWalletToHub = over?.data.current?.isOverHub && active?.data.current?.isWallet;
     // drag and drop places
     if (isPlace) {
       handleMovePlace(active.id, over?.id);
@@ -51,7 +63,8 @@ export default function DragContext({ children }: DragContextProps) {
       if (overId && activeId) {
         onMove({
           taskId: activeId,
-          listId: overId
+          listId: overId,
+          overType: 'list'
         });
       }
       // reset dragging item
@@ -64,6 +77,7 @@ export default function DragContext({ children }: DragContextProps) {
         hubId: overId,
         type: 'hub'
       });
+      dispatch(setDraggableItem(null));
     }
     if (isListToWallet) {
       onMoveList({
@@ -71,6 +85,44 @@ export default function DragContext({ children }: DragContextProps) {
         hubId: overId,
         type: 'wallet'
       });
+      dispatch(setDraggableItem(null));
+    }
+    if (isTaskToTask) {
+      if (activeId !== overId) {
+        onMove({
+          taskId: activeId,
+          listId: overId,
+          overType: 'task'
+        });
+        dispatch(setDraggableItem(null));
+      }
+    }
+
+    if (isHubToHub) {
+      if (activeId !== overId) {
+        onMoveHub({
+          parent_id: overId,
+          hubId: activeId
+        });
+      }
+    }
+    if (isWalletToWallet) {
+      if (activeId !== overId) {
+        onMoveWallet({
+          walletId: activeId,
+          parent_id: overId,
+          overType: 'wallet'
+        });
+      }
+    }
+    if (isWalletToHub) {
+      if (activeId !== overId) {
+        onMoveWallet({
+          walletId: activeId,
+          hubId: overId,
+          overType: 'hub'
+        });
+      }
     }
   };
 

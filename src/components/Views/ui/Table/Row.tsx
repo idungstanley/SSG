@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 import SubtasksIcon from '../../../../assets/icons/SubtasksIcon';
 import { ITaskFullList, Tag, Task } from '../../../../features/task/interface.tasks';
 import { DEFAULT_LEFT_PADDING } from '../../config';
@@ -6,13 +6,11 @@ import { Column } from '../../types/table';
 import { Col } from './Col';
 import { StickyCol } from './StickyCol';
 import { SubTasks } from './SubTasks';
-import { useDraggable, useDroppable } from '@dnd-kit/core';
-import { MdDragIndicator } from 'react-icons/md';
+import { useDraggable } from '@dnd-kit/core';
 import { ManageTagsDropdown } from '../../../Tag/ui/ManageTagsDropdown/ui/ManageTagsDropdown';
 import { AddSubTask } from '../AddTask/AddSubTask';
 import TaskTag from '../../../Tag/ui/TaskTag';
 import dradnddrop from '../../../../assets/icons/dradnddrop.svg';
-import { useAppSelector } from '../../../../app/hooks';
 import Effect from '../../../../assets/icons/Effect';
 
 interface RowProps {
@@ -93,13 +91,6 @@ export function Row({ task, columns, paddingLeft = 0, parentId, task_status, isL
     }
   });
 
-  const { isOver, setNodeRef: droppableRef } = useDroppable({
-    id: '',
-    data: {
-      msg: 'Hello world'
-    }
-  });
-
   // hide element if is currently grabbing
   const style = {
     opacity: transform ? 0 : 100
@@ -109,7 +100,7 @@ export function Row({ task, columns, paddingLeft = 0, parentId, task_status, isL
     <>
       {/* current task */}
 
-      <tr style={style} className="contents group" ref={droppableRef}>
+      <tr style={style} className="contents group">
         <StickyCol
           showSubTasks={showSubTasks}
           setShowSubTasks={setShowSubTasks}

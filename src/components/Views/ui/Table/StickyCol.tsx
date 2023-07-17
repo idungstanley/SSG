@@ -9,26 +9,19 @@ import StatusDropdown from '../../../status/StatusDropdown';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { setShowPilotSideOver } from '../../../../features/general/slideOver/slideOverSlice';
 import {
-  getSingleLineView,
-  setCurrentTaskId,
   setCurrentTaskStatusId,
   setSelectedTasksArray,
   setShowTaskNavigation,
   setTaskIdForPilot
 } from '../../../../features/task/taskSlice';
 import { setActiveItem } from '../../../../features/workspace/workspaceSlice';
-import { useSortable } from '@dnd-kit/sortable';
-import { UniqueIdentifier, useDroppable } from '@dnd-kit/core';
+import { UniqueIdentifier, useDraggable, useDroppable } from '@dnd-kit/core';
 import { ImCancelCircle } from 'react-icons/im';
 import CloseSubtask from '../../../../assets/icons/CloseSubtask';
 import OpenSubtask from '../../../../assets/icons/OpenSubtask';
 import { Capitalize } from '../../../../utils/NoCapWords/Capitalize';
-import InteractiveTooltip from '../../../Tooltip/InteractiveTooltip';
 import RoundedCheckbox from '../../../Checkbox/RoundedCheckbox';
 import ToolTip from '../../../Tooltip/Tooltip';
-import Comment from '../../../badges/Description';
-import Description from '../../../badges/Description';
-import Badges from '../../../badges';
 
 interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   task: Task;
@@ -57,11 +50,9 @@ export function StickyCol({
   task,
   paddingLeft = 0,
   dragElement,
-  isOver,
   ...props
 }: ColProps) {
   const { currentWorkspaceId } = useAppSelector((state) => state.auth);
-  const { activeItemId } = useAppSelector((state) => state.workspace);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { taskId, hubId, walletId, listId } = useParams();
@@ -73,8 +64,11 @@ export function StickyCol({
 
   const queryClient = useQueryClient();
   const inputRef = useRef<HTMLInputElement | null>(null);
-  const { attributes, listeners, setNodeRef } = useSortable({
-    id: task?.id as UniqueIdentifier
+  const { attributes, listeners, setNodeRef } = useDraggable({
+    id: task?.id as UniqueIdentifier,
+    data: {
+      isTask: true
+    }
   });
   const [eitableContent, setEitableContent] = useState(false);
 
@@ -186,8 +180,15 @@ export function StickyCol({
     setIsChecked(isChecked);
   };
 
+  const { isOver, setNodeRef: droppabbleRef } = useDroppable({
+    id: task.id,
+    data: {
+      isOverTask: true
+    }
+  });
+
   return (
-    <>
+    <div ref={droppabbleRef}>
       {task.id !== '0' && (
         <td
           className="sticky left-0 flex items-start justify-start text-sm font-medium text-start text-gray-900 cursor-pointer"
@@ -214,7 +215,7 @@ export function StickyCol({
               `relative border-t ${isChecked && 'tdListV'} ${verticalGrid && 'border-r'} ${
                 verticalGridlinesTask && 'border-r'
               } w-full py-4 flex items-center `,
-              isOver ? 'border-2 border-green-500' : ''
+              isOver ? 'border-y-2 border-alsoit-purple-300' : ''
             )}
           >
             <button onClick={onToggleDisplayingSubTasks} className="pl-1">
@@ -337,6 +338,6 @@ export function StickyCol({
           </div>
         </td>
       )}
-    </>
+    </div>
   );
 }
