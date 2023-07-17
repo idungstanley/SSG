@@ -16,6 +16,7 @@ import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import Effect from '../../../../assets/icons/Effect';
 import Enhance from '../../../badges/Enhance';
 import { setShowNewTaskField, setShowNewTaskId } from '../../../../features/task/taskSlice';
+import ToolTip from '../../../Tooltip/Tooltip';
 
 interface RowProps {
   task: Task;
@@ -137,9 +138,13 @@ export function Row({ task, columns, paddingLeft = 0, parentId, task_status, isL
             ) : null}
 
             {/* show create subtask field */}
-            <button className="p-1 border rounded-md " onClick={(e) => onShowAddSubtaskField(e, task.id)}>
-              <SubtasksIcon className="h-3 w-3" />
-            </button>
+            {task.descendants_count < 1 && (
+              <ToolTip tooltip="Subtask">
+                <button className="p-1 border rounded-md " onClick={(e) => onShowAddSubtaskField(e, task.id)}>
+                  <SubtasksIcon className="h-3 w-3" />
+                </button>
+              </ToolTip>
+            )}
 
             <button className="p-1 pl-4  " onClick={(e) => e.stopPropagation()}>
               <Enhance className="h-3 w-3" />
