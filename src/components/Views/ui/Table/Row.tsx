@@ -125,8 +125,8 @@ export function Row({ task, columns, paddingLeft = 0, parentId, task_status, isL
           {/* actions */}
           <div className="absolute opacity-0 group-hover:opacity-100 top-0 bottom-0 right-0 flex space-x-1 mr-1 items-center justify-center">
             {/* effects */}
-            <button className="p-1 border rounded-lg " onClick={(e) => e.stopPropagation()}>
-              <Effect className="h-4 w-4" />
+            <button className="p-1 border rounded-md " onClick={(e) => e.stopPropagation()}>
+              <Effect className="h-3 w-3" />
             </button>
 
             {/* tags */}
@@ -135,12 +135,12 @@ export function Row({ task, columns, paddingLeft = 0, parentId, task_status, isL
             ) : null}
 
             {/* show create subtask field */}
-            <button className="p-1 border rounded-lg " onClick={onShowAddSubtaskField}>
-              <SubtasksIcon className="h-4 w-4" />
+            <button className="p-1 border rounded-md " onClick={onShowAddSubtaskField}>
+              <SubtasksIcon className="h-3 w-3" />
             </button>
 
             <button className="p-1 pl-4  " onClick={(e) => e.stopPropagation()}>
-              <Enhance className="h-4 w-4" />
+              <Enhance className="h-3 w-3" />
             </button>
           </div>
         </StickyCol>

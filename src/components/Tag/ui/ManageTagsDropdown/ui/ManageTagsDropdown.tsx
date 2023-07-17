@@ -45,10 +45,10 @@ export function ManageTagsDropdown({ tagsArr, entityId, entityType }: ManageTags
         <button
           type="button"
           onClick={onClickOpenDropdown}
-          className="p-1 border rounded-lg bg-transparent text-gray-400 hover:text-gray-700"
+          className="p-1 border rounded-md bg-transparent text-gray-400 hover:text-gray-700"
         >
           <div ref={relativeRef}>
-            <TagIcon className="h-4 w-4" />
+            <TagIcon className="h-3 w-3" />
           </div>
         </button>
       </div>

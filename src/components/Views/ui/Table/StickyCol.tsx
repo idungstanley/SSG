@@ -271,7 +271,7 @@ export function StickyCol({
 
                 {/* non default badges here */}
                 <div onClick={(e) => e.stopPropagation()} className="pl-3">
-                  <Badges />
+                  <Badges task={task} />
                 </div>
               </div>
 
