@@ -15,7 +15,7 @@ export default function SectionArea({ icon, label, children }: SectionAreaProps)
 
   return (
     <div className="py-2 px-2 flex flex-col gap-2 justify-start w-full border-b text-black">
-      <div className="flex">
+      <div className="flex space-x-1 items-center">
         {icon}
         <p className="font-medium">{label}</p>
       </div>
