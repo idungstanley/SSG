@@ -1,5 +1,6 @@
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
+import MiniDatePicker from '../../../../components/DatePicker/MiniCalendar';
 
 export default function HeaderTimeModal() {
   const [time, setTime] = useState<string>(dayjs().format('hh:mm:ss a'));
@@ -18,7 +19,7 @@ export default function HeaderTimeModal() {
         {dayjs().format('dddd MMMM D, YYYY')}
       </div>
       <div className="border-b border-alsoit-gray-300 px-4 py-6">
-        <p className="text-center">Calendar Goes here</p>
+        <MiniDatePicker />
       </div>
       <div className="w-full flex flex-col space-y-2 px-4 py-6">
         <span className="font-semibold text-alsoit-text-lg">Schedule</span>
