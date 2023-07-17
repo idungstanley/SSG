@@ -49,9 +49,7 @@ export function ManageTagsDropdown({ tagsArr, entityId, entityType }: ManageTags
           className="p-1 border rounded-md bg-transparent text-gray-400 hover:text-gray-700"
         >
           <div ref={relativeRef}>
-            <ToolTip tooltip="Tags">
-              <TagIcon className="h-3 w-3" />
-            </ToolTip>
+            <TagIcon className="h-3 w-3" />
           </div>
         </button>
       </div>

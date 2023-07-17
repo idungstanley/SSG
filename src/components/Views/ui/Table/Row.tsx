@@ -136,7 +136,9 @@ export function Row({ task, columns, paddingLeft = 0, parentId, task_status, isL
 
             {/* tags */}
             {'tags' in task ? (
-              <ManageTagsDropdown entityId={task.id} tagsArr={task.tags as Tag[]} entityType="task" />
+              <ToolTip tooltip="Tags">
+                <ManageTagsDropdown entityId={task.id} tagsArr={task.tags as Tag[]} entityType="task" />
+              </ToolTip>
             ) : null}
 
             {/* show create subtask field */}
