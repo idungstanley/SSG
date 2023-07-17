@@ -234,6 +234,7 @@ export function StickyCol({
                 contentEditable={eitableContent}
                 ref={inputRef}
                 onKeyDown={(e) => (e.key === 'Enter' ? handleEditTask(e, task.id) : null)}
+                suppressContentEditableWarning={true}
               >
                 {task.name.length > 50 && singleLineView ? (
                   <>

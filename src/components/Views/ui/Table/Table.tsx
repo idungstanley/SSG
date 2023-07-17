@@ -225,14 +225,11 @@ export function Table({ heads, data, label }: TableProps) {
 
           {/* add subtask button */}
           {!showNewTaskField ? (
-            <div className="h-5">
-              <button
-                onClick={() => handleToggleNewTask()}
-                className="absolute left-0 p-1.5 pl-16 text-left w-fit text-xs"
-              >
-                + New Task
-              </button>
-            </div>
+            <tbody className="h-5">
+              <tr onClick={() => handleToggleNewTask()} className="absolute left-0 p-1.5 pl-16 text-left w-fit text-xs">
+                <td>+ New Task</td>
+              </tr>
+            </tbody>
           ) : null}
         </table>
       </div>
