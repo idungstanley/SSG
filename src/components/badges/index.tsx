@@ -46,10 +46,11 @@ export default function Badges({ task }: BadgeTask) {
           </button>
         </ToolTip>
       )}
-
-      {/* <button className="p-1 border rounded-md ">
-        <Checklist />
-      </button> */}
+      {/* <ToolTip tooltip="Checklist">
+        <button className="p-1 border rounded-md ">
+          <Checklist />
+        </button>
+      </ToolTip> */}
     </div>
   );
 }
