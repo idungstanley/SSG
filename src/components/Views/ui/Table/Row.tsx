@@ -12,9 +12,10 @@ import { ManageTagsDropdown } from '../../../Tag/ui/ManageTagsDropdown/ui/Manage
 import { AddSubTask } from '../AddTask/AddSubTask';
 import TaskTag from '../../../Tag/ui/TaskTag';
 import dradnddrop from '../../../../assets/icons/dradnddrop.svg';
-import { useAppSelector } from '../../../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import Effect from '../../../../assets/icons/Effect';
 import Enhance from '../../../badges/Enhance';
+import { setShowNewTaskField, setShowNewTaskId } from '../../../../features/task/taskSlice';
 
 interface RowProps {
   task: Task;
@@ -27,17 +28,11 @@ interface RowProps {
 }
 
 export function Row({ task, columns, paddingLeft = 0, parentId, task_status, isListParent, handleClose }: RowProps) {
-  const [showNewTaskField, setShowNewTaskField] = useState(false);
   const otherColumns = columns.slice(1);
   const [showSubTasks, setShowSubTasks] = useState(false);
+  const { showNewTaskField, showNewTaskId } = useAppSelector((state) => state.task);
 
-  // const selectedRef = useRef<HTMLTableRowElement>(null);
-  // useEffect(() => {
-  //   // Scroll to the selected item when the component mounts
-  //   if (selectedRef.current) {
-  //     selectedRef.current.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-  //   }
-  // }, []);
+  const dispatch = useAppDispatch();
 
   const newSubTask: ITaskFullList = {
     archived_at: null,
@@ -46,6 +41,7 @@ export function Row({ task, columns, paddingLeft = 0, parentId, task_status, isL
     created_at: '',
     custom_fields: [],
     deleted_at: null,
+    descendants_count: 0,
     description: null,
     directory_items: [],
     end_date: null,
@@ -77,14 +73,20 @@ export function Row({ task, columns, paddingLeft = 0, parentId, task_status, isL
     updated_at: ''
   };
 
-  const onShowAddSubtaskField = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+  const onShowAddSubtaskField = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, taskId: string) => {
     e.stopPropagation();
-    setShowNewTaskField(!showNewTaskField);
+    if (showNewTaskField) {
+      dispatch(setShowNewTaskId(''));
+      dispatch(setShowNewTaskField(false));
+    } else {
+      dispatch(setShowNewTaskId(taskId));
+      dispatch(setShowNewTaskField(true));
+    }
   };
 
   const onCloseAddTaskFIeld = () => {
-    setShowNewTaskField(false);
-    // setShowSubTasks(true);
+    dispatch(setShowNewTaskId(''));
+    dispatch(setShowNewTaskField(false));
   };
 
   const { attributes, listeners, setNodeRef, transform } = useDraggable({
@@ -135,7 +137,7 @@ export function Row({ task, columns, paddingLeft = 0, parentId, task_status, isL
             ) : null}
 
             {/* show create subtask field */}
-            <button className="p-1 border rounded-md " onClick={onShowAddSubtaskField}>
+            <button className="p-1 border rounded-md " onClick={(e) => onShowAddSubtaskField(e, task.id)}>
               <SubtasksIcon className="h-3 w-3" />
             </button>
 
@@ -157,7 +159,7 @@ export function Row({ task, columns, paddingLeft = 0, parentId, task_status, isL
         ))}
       </tr>
 
-      {showNewTaskField ? (
+      {showNewTaskField && showNewTaskId == task.id ? (
         <AddSubTask
           task={newSubTask}
           columns={columns}

@@ -123,7 +123,6 @@ export function StickyCol({
 
   const editTaskMutation = useMutation(UseUpdateTaskService, {
     onSuccess: () => {
-      // setEitableContent(false);
       queryClient.invalidateQueries(['task']);
     }
   });
@@ -216,11 +215,11 @@ export function StickyCol({
           >
             <button onClick={onToggleDisplayingSubTasks} className="pl-1">
               {showSubTasks ? (
-                <div className={`${task.has_descendants ? 'w-3 h-3' : ' opacity-0 w-3 h-3 '}`}>
+                <div className={`${task.descendants_count > 0 ? 'w-3 h-3' : ' opacity-0 w-3 h-3 '}`}>
                   <CloseSubtask />
                 </div>
               ) : (
-                <div className={`${task.has_descendants ? 'w-3 h-3' : ' opacity-0 w-3 h-3 '}`}>
+                <div className={`${task.descendants_count > 0 ? 'w-3 h-3' : ' opacity-0 w-3 h-3 '}`}>
                   <OpenSubtask />
                 </div>
               )}
