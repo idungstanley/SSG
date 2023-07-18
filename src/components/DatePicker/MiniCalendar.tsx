@@ -3,8 +3,12 @@ import { useMemo, useState } from 'react';
 import { changeDateMonth, getCalendarRows } from '../../utils/calendar';
 import ArrowRight from '../../assets/icons/ArrowRight';
 import ArrowLeft from '../../assets/icons/ArrowLeft';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { setSelectedDate } from '../../features/workspace/workspaceSlice';
+import { setHistoryMemory, setTaskSelectedDate } from '../../features/task/taskSlice';
 
 export default function MiniDatePicker() {
+  const dispatch = useAppDispatch();
   const [today, setToday] = useState(dayjs());
   const [shownDate, setShownDate] = useState<dayjs.Dayjs>(today);
   const [iconToggle, setIconToggle] = useState<{ rightIcon: boolean; leftIcon: boolean }>({
@@ -14,6 +18,8 @@ export default function MiniDatePicker() {
   const [selectedStart, setSelectedStart] = useState<dayjs.Dayjs | null>(null);
   const [selectedEnd, setSelectedEnd] = useState<dayjs.Dayjs | null>(null);
   const [hoveredDate, setHoveredDate] = useState<dayjs.Dayjs | null>(null);
+  const { HistoryFilterMemory, selectedDate: taskTime } = useAppSelector((state) => state.task);
+  const { selectedDate } = useAppSelector((state) => state.workspace);
 
   const handleSelectDate = (value: dayjs.Dayjs) => {
     if (!selectedStart) {
@@ -28,6 +34,26 @@ export default function MiniDatePicker() {
     } else {
       setSelectedStart(value);
       setSelectedEnd(null);
+    }
+  };
+
+  const handleClick = (date: dayjs.Dayjs) => {
+    if (!selectedDate?.dateType) {
+      dispatch(setSelectedDate({ date: date, dateType: 'due' }));
+      dispatch(setTaskSelectedDate({ from: date }));
+      dispatch(setHistoryMemory({ ...HistoryFilterMemory, timePoint: 'due' }));
+    }
+
+    if (HistoryFilterMemory?.timePoint && HistoryFilterMemory.timePoint === 'due') {
+      dispatch(setSelectedDate({ date: date, dateType: 'start' }));
+      dispatch(setTaskSelectedDate({ ...taskTime, to: date }));
+      dispatch(setHistoryMemory({ ...HistoryFilterMemory, timePoint: 'start' }));
+    }
+
+    if (HistoryFilterMemory?.timePoint && HistoryFilterMemory.timePoint === 'start') {
+      dispatch(setSelectedDate({ date: date, dateType: 'due' }));
+      dispatch(setTaskSelectedDate({ from: date }));
+      dispatch(setHistoryMemory({ ...HistoryFilterMemory, timePoint: 'due' }));
     }
   };
 
@@ -60,13 +86,25 @@ export default function MiniDatePicker() {
   };
 
   const isDateInRange = (value: dayjs.Dayjs) => {
-    if (!selectedStart || !hoveredDate) {
+    if (!selectedStart) {
       return false;
     }
-    return (
-      (value.isAfter(selectedStart) || value.isSame(selectedStart, 'day')) &&
-      (value.isBefore(hoveredDate) || value.isSame(hoveredDate, 'day'))
-    );
+
+    if (selectedEnd) {
+      return (
+        (value.isAfter(selectedStart) || value.isSame(selectedStart, 'day')) &&
+        (value.isBefore(selectedEnd) || value.isSame(selectedEnd, 'day'))
+      );
+    }
+
+    if (hoveredDate) {
+      return (
+        (value.isAfter(selectedStart) || value.isSame(selectedStart, 'day')) &&
+        (value.isBefore(hoveredDate) || value.isSame(hoveredDate, 'day'))
+      );
+    }
+
+    return false;
   };
 
   const rows = useMemo(() => getCalendarRows(shownDate), [shownDate]);
@@ -112,7 +150,7 @@ export default function MiniDatePicker() {
             <div key={rowIndex} className="flex justify-center space-x-5 my-2">
               {cells.map(({ text, value }, i) => (
                 <div
-                  key={`${text} - ${i}`}
+                  key={`${text}-${i}`}
                   className={`w-5 h-5 flex justify-center items-center rounded-full p-4 text-sm font-semibold cursor-pointer ${
                     isStartDate(value)
                       ? 'bg-blue-600 text-white'
@@ -120,12 +158,15 @@ export default function MiniDatePicker() {
                       ? 'bg-blue-600 text-white'
                       : isDateInRange(value)
                       ? 'bg-blue-600 text-white'
+                      : hoveredDate && value.isSame(hoveredDate, 'day') && !selectedEnd
+                      ? 'bg-blue-200'
                       : ''
                   } ${value.month() !== today.month() ? 'text-gray-300' : 'text-gray-600'} ${
                     today.date() === value.date() && 'bg-blue-400 text-white'
                   }`}
-                  onClick={() => handleSelectDate(value)}
+                  onClick={() => handleClick(value)}
                   onMouseEnter={() => handleHoverDate(value)}
+                  onMouseLeave={() => setHoveredDate(null)}
                 >
                   {text}
                 </div>

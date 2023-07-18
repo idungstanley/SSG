@@ -2,14 +2,13 @@ import dayjs, { Dayjs } from 'dayjs';
 import timezone from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
 import React, { useEffect, useRef, useState } from 'react';
-import { GrFormNext, GrFormPrevious } from 'react-icons/gr';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { setHistoryMemory, setTaskSelectedDate } from '../../features/task/taskSlice';
 import { Button, Modal } from '@mui/material';
 import { DatePickerSideBar } from './DatePickerSideBar';
 import { DatePickerManualDates } from './DatePickerManualDate';
 import { setSelectedDate } from '../../features/workspace/workspaceSlice';
-import { DateObject, generateDate, groupDatesByDayOfWeek, months } from '../../utils/calendar';
+import { DateObject } from '../../utils/calendar';
 import cn from '../../utils/cn';
 import { ISelectedDate } from '../../features/task/interface.tasks';
 import MiniDatePicker from './MiniCalendar';
@@ -30,9 +29,7 @@ export default function DatePicker({ styles, width, height, range, toggleFn }: D
   dayjs.extend(timezone);
   dayjs.extend(utc);
   const dispatch = useAppDispatch();
-  const days = ['SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA'];
   const currentDate = dayjs();
-  const [today, setToday] = useState(currentDate);
   const { selectedDate } = useAppSelector((state) => state.workspace);
   const { timezone: zone } = useAppSelector((state) => state.userSetting);
   const { selectedDate: taskTime, HistoryFilterMemory } = useAppSelector((state) => state.task);
@@ -74,17 +71,6 @@ export default function DatePicker({ styles, width, height, range, toggleFn }: D
       setHistoryMemory({ ...HistoryFilterMemory, hoveredDate: date });
     }
   };
-
-  const dates = generateDate(today.month());
-  const groupedDates = groupDatesByDayOfWeek(dates);
-  const startDay = 0; // Wednesday (0 = Sunday, 1 = Monday, ..., 6 = Saturday)
-  const sortedKeys = Object.keys(groupedDates).sort((a, b) => {
-    const numericDayOfWeekA = parseInt(a, 10);
-    const numericDayOfWeekB = parseInt(b, 10);
-    const adjustedDayOfWeekA = (numericDayOfWeekA - startDay + 7) % 7;
-    const adjustedDayOfWeekB = (numericDayOfWeekB - startDay + 7) % 7;
-    return adjustedDayOfWeekA - adjustedDayOfWeekB;
-  });
 
   useEffect(() => {
     calendarTime();
