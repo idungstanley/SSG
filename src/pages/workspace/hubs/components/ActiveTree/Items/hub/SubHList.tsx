@@ -17,13 +17,14 @@ import {
 import { getCurrSubHubId, setOpenedHubId, setSubHubExt } from '../../../../../../../features/hubs/hubSlice';
 import { cl } from '../../../../../../../utils';
 import { EntityType } from '../../../../../../../utils/EntityTypes/EntityType';
+import HubItemOverlay from '../../../../../../../components/tasks/HubItemOverLay';
+import { DragOverlay } from '@dnd-kit/core';
 
 export default function SubHubList({ hubs }: ListProps) {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { hubId, walletId, listId } = useParams();
-  const { currentItemId, showExtendedBar, createEntityType } = useAppSelector((state) => state.workspace);
-  const { showMenuDropdown, SubMenuId, entityToCreate } = useAppSelector((state) => state.hub);
+  const { currentItemId, showExtendedBar } = useAppSelector((state) => state.workspace);
   const { showSidebar } = useAppSelector((state) => state.account);
   const [showChildren, setShowChidren] = useState<string | null | undefined>(null);
   const [stickyButtonIndex, setStickyButtonIndex] = useState<number | undefined>(-1);
@@ -113,8 +114,16 @@ export default function SubHubList({ hubs }: ListProps) {
     return !!showChildren;
   };
 
+  const { draggableItemId } = useAppSelector((state) => state.list);
+  const draggableItem = draggableItemId ? hubs.find((i) => i.id === draggableItemId) : null;
+
   return (
     <>
+      {draggableItem ? (
+        <DragOverlay>
+          <HubItemOverlay item={draggableItem} type="subhub" />
+        </DragOverlay>
+      ) : null}
       {hubs.map((hub, index) => (
         <div key={hub.id} className={cl(!showSidebar && 'overflow-hidden w-12')}>
           <div className="relative flex flex-col">

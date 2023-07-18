@@ -9,26 +9,19 @@ import StatusDropdown from '../../../status/StatusDropdown';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { setShowPilotSideOver } from '../../../../features/general/slideOver/slideOverSlice';
 import {
-  getSingleLineView,
-  setCurrentTaskId,
   setCurrentTaskStatusId,
   setSelectedTasksArray,
   setShowTaskNavigation,
   setTaskIdForPilot
 } from '../../../../features/task/taskSlice';
 import { setActiveItem } from '../../../../features/workspace/workspaceSlice';
-import { useSortable } from '@dnd-kit/sortable';
-import { UniqueIdentifier } from '@dnd-kit/core';
+import { UniqueIdentifier, useDraggable, useDroppable } from '@dnd-kit/core';
 import { ImCancelCircle } from 'react-icons/im';
 import CloseSubtask from '../../../../assets/icons/CloseSubtask';
 import OpenSubtask from '../../../../assets/icons/OpenSubtask';
 import { Capitalize } from '../../../../utils/NoCapWords/Capitalize';
-import InteractiveTooltip from '../../../Tooltip/InteractiveTooltip';
 import RoundedCheckbox from '../../../Checkbox/RoundedCheckbox';
 import ToolTip from '../../../Tooltip/Tooltip';
-import Comment from '../../../badges/Description';
-import Description from '../../../badges/Description';
-import Badges from '../../../badges';
 
 interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   task: Task;
@@ -42,6 +35,7 @@ interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   dragElement?: ReactNode;
   parentId?: string;
   onClose?: VoidFunction;
+  isOver?: boolean;
 }
 
 export function StickyCol({
@@ -59,11 +53,10 @@ export function StickyCol({
   ...props
 }: ColProps) {
   const { currentWorkspaceId } = useAppSelector((state) => state.auth);
-  const { activeItemId } = useAppSelector((state) => state.workspace);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { taskId, hubId, walletId, listId } = useParams();
-  const COL_BG = taskId === task.id ? ACTIVE_COL_BG : DEFAULT_COL_BG;
+  const ACTIVE_TASK = taskId === task.id ? 'tdListV' : DEFAULT_COL_BG;
   const [isChecked, setIsChecked] = useState(false);
   const { mutate: onAdd } = useAddTask(parentId);
   const { currTeamMemberId, singleLineView, verticalGrid, taskUpperCase, selectedTasksArray, verticalGridlinesTask } =
@@ -71,8 +64,11 @@ export function StickyCol({
 
   const queryClient = useQueryClient();
   const inputRef = useRef<HTMLInputElement | null>(null);
-  const { attributes, listeners, setNodeRef } = useSortable({
-    id: task?.id as UniqueIdentifier
+  const { attributes, listeners, setNodeRef } = useDraggable({
+    id: task?.id as UniqueIdentifier,
+    data: {
+      isTask: true
+    }
   });
   const [eitableContent, setEitableContent] = useState(false);
 
@@ -184,8 +180,15 @@ export function StickyCol({
     setIsChecked(isChecked);
   };
 
+  const { isOver, setNodeRef: droppabbleRef } = useDroppable({
+    id: task.id,
+    data: {
+      isOverTask: true
+    }
+  });
+
   return (
-    <>
+    <div ref={droppabbleRef}>
       {task.id !== '0' && (
         <td
           className="sticky left-0 flex items-start justify-start text-sm font-medium text-start text-gray-900 cursor-pointer"
@@ -208,10 +211,11 @@ export function StickyCol({
             onClick={onClickTask}
             onDoubleClick={() => setEitableContent(true)}
             className={cl(
-              COL_BG,
+              ACTIVE_TASK,
               `relative border-t ${isChecked && 'tdListV'} ${verticalGrid && 'border-r'} ${
                 verticalGridlinesTask && 'border-r'
-              } w-full py-4 flex items-center `
+              } w-full py-4 flex items-center `,
+              isOver ? 'border-y-2 border-alsoit-purple-300' : ''
             )}
           >
             <button onClick={onToggleDisplayingSubTasks} className="pl-1">
@@ -234,6 +238,7 @@ export function StickyCol({
                 contentEditable={eitableContent}
                 ref={inputRef}
                 onKeyDown={(e) => (e.key === 'Enter' ? handleEditTask(e, task.id) : null)}
+                suppressContentEditableWarning={true}
               >
                 {task.name.length > 50 && singleLineView ? (
                   <>
@@ -270,9 +275,9 @@ export function StickyCol({
                 )}
 
                 {/* non default badges here */}
-                {/* <div onClick={(e) => e.stopPropagation()} className="pl-3">
+                <div onClick={(e) => e.stopPropagation()} className="pl-3">
                   <Badges />
-                </div> */}
+                </div>
               </div>
 
               {tags}
@@ -303,7 +308,7 @@ export function StickyCol({
           <div
             style={{ paddingLeft }}
             className={cl(
-              COL_BG,
+              ACTIVE_TASK,
               `relative border-t ${verticalGrid && 'border-r'} w-full h-10 py-4 p-4 flex items-center `
             )}
           >
@@ -334,6 +339,6 @@ export function StickyCol({
           </div>
         </td>
       )}
-    </>
+    </div>
   );
 }

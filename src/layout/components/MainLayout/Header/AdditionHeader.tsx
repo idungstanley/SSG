@@ -19,13 +19,21 @@ import ArrowCaretDown from '../../../../assets/icons/ArrowCaretDown';
 export const handleEntity = ({
   workSpaceId,
   hubId,
-  listId
+  listId,
+  taskId
 }: {
   workSpaceId: string | undefined;
   hubId: string | undefined | null;
   listId: string | undefined | null;
+  taskId: string | undefined | null;
 }): string => {
-  return hubId !== '' ? `/${workSpaceId}/tasks/h/${hubId}` : `/${workSpaceId}/tasks/l/${listId}`;
+  return hubId
+    ? `/${workSpaceId}/tasks/h/${hubId}`
+    : !taskId
+    ? `/${workSpaceId}/tasks/l/${listId}`
+    : !listId
+    ? `/${workSpaceId}/tasks/h/${hubId}/t/${taskId}`
+    : `/${workSpaceId}/tasks/l/${listId}/t/${taskId}`;
 };
 
 export default function AdditionalHeader() {
@@ -34,6 +42,7 @@ export default function AdditionalHeader() {
   const [timerModal, setTimerModal] = useState<boolean>(false);
   const [isVisible, setIsVisible] = useState<boolean>(true);
   const { activeTabId: tabsId, timerLastMemory, activeItemId } = useAppSelector((state) => state.workspace);
+  const { period } = useAppSelector((state) => state.task);
   const { timezone: zone } = useAppSelector((state) => state.userSetting);
   const [clockModal, setClockModal] = useState<boolean>(false);
   const [HeaderClock, setClock] = useState<string>(dayjs().format('DD-MM-YYYY hh:mm'));
@@ -55,7 +64,7 @@ export default function AdditionalHeader() {
     window.setInterval(() => {
       setClock(dayjs().format('DD-MM-YYYY hh:mm'));
     }, 6000);
-  const sameEntity = () => activeItemId === (timerLastMemory.hubId || timerLastMemory.listId);
+  const sameEntity = () => activeItemId === (timerLastMemory.hubId || timerLastMemory.listId || timerLastMemory.taskId);
 
   const timeBlinkerCheck = () => (timerStatus && sameEntity() && tabsId !== 6) || (!sameEntity() && timerStatus);
 
@@ -77,6 +86,7 @@ export default function AdditionalHeader() {
 
   useEffect(() => {
     if (isVisible) {
+      if (period) clearInterval(period);
       refetch();
     }
   }, [isVisible, refetch]);

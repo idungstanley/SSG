@@ -15,6 +15,8 @@ import { setWalletItem } from '../../../features/wallet/walletSlice';
 import { getWalletServices } from '../../../features/wallet/walletService';
 import { useGetHubWallet } from '../../../features/hubs/hubService';
 import WalletItem from '../../tasks/WalletItem';
+import { DragOverlay } from '@dnd-kit/core';
+import HubItemOverlay from '../../tasks/HubItemOverLay';
 // import CreateWL from '../../tasks/CreateWL';
 
 interface WalletIndexProps {
@@ -85,11 +87,19 @@ function WalletIndex({ showHubList, getCurrentHubId, paddingLeft }: WalletIndexP
     }
   };
 
+  const { draggableItemId } = useAppSelector((state) => state.list);
+  const draggableItem = draggableItemId ? walletData?.data.wallets.find((i) => i.id === draggableItemId) : null;
+
   return walletAndListData?.data?.wallets != null ? (
     <div id="createWallet" className={`${showHubList ? 'block' : 'hidden'}`}>
       {/* {walletAndListData?.data.lists.length === 0 &&
         walletAndListData?.data.wallets.length === 0 &&
         data?.data?.hubs.length === 0 && <CreateWL paddingLeft={Number(paddingLeft) + 25} />} */}
+      {draggableItem ? (
+        <DragOverlay>
+          <HubItemOverlay item={draggableItem} type="wallet" />
+        </DragOverlay>
+      ) : null}
       {walletData?.data.wallets.length !== 0 &&
         walletData?.data.wallets.map((wallet: dataProps) => (
           <div key={wallet.id}>
