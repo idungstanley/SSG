@@ -22,6 +22,7 @@ import OpenSubtask from '../../../../assets/icons/OpenSubtask';
 import { Capitalize } from '../../../../utils/NoCapWords/Capitalize';
 import RoundedCheckbox from '../../../Checkbox/RoundedCheckbox';
 import ToolTip from '../../../Tooltip/Tooltip';
+import Badges from '../../../badges';
 
 interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   task: Task;
