@@ -12,7 +12,7 @@ function Button({ active, children, onClick }: buttonComponentProps) {
   const style = active ? ACTIVE_BUTTON : DEFAULT_BUTTON;
   return (
     <div>
-      <button
+      <div
         style={style}
         className={cl(
           'flex items-center font-semibold',
@@ -21,7 +21,7 @@ function Button({ active, children, onClick }: buttonComponentProps) {
         onClick={onClick}
       >
         {children}
-      </button>
+      </div>
     </div>
   );
 }
