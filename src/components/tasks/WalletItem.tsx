@@ -21,6 +21,8 @@ import { EntityType } from '../../utils/EntityTypes/EntityType';
 import PlusIcon from '../../assets/icons/PlusIcon';
 import ThreeDotIcon from '../../assets/icons/ThreeDotIcon';
 import { Tooltip } from '@mui/material';
+import { useDraggable, useDroppable } from '@dnd-kit/core';
+import Drag from '../../assets/icons/Drag';
 
 interface WalletItemProps {
   wallet: {
@@ -63,15 +65,38 @@ export default function WalletItem({
   const { walletId } = useParams();
   const [paletteColor, setPaletteColor] = useState<string | undefined | ListColourProps>('');
 
-  const handleItemAction = (id: string, name: string | null) => {
-    dispatch(setSelectedTreeDetails({ name, id, type: EntityType.wallet }));
-    dispatch(setCreateWlLink(false));
+  const closeSubMenu = () => {
     dispatch(
       getSubMenu({
-        SubMenuId: id,
-        SubMenuType: walletType
+        SubMenuId: null,
+        SubMenuType: null
       })
     );
+  };
+
+  const closeMenuDropdown = () => {
+    dispatch(
+      setshowMenuDropdown({
+        showMenuDropdown: null,
+        showMenuDropdownType: null
+      })
+    );
+  };
+
+  const handleItemAction = (id: string, name: string | null) => {
+    if (id === SubMenuId) {
+      closeSubMenu();
+    } else {
+      closeMenuDropdown();
+      dispatch(setSelectedTreeDetails({ name, id, type: EntityType.wallet }));
+      dispatch(setCreateWlLink(false));
+      dispatch(
+        getSubMenu({
+          SubMenuId: id,
+          SubMenuType: walletType
+        })
+      );
+    }
   };
 
   const handleWalletColour = (id: string, e: React.MouseEvent<SVGElement>) => {
@@ -83,12 +108,17 @@ export default function WalletItem({
     dispatch(setSelectedTreeDetails({ name, id, type: EntityType.wallet }));
     dispatch(setCreateWLID(null));
     dispatch(setCreateWlLink(false));
-    dispatch(
-      setshowMenuDropdown({
-        showMenuDropdown: id,
-        showMenuDropdownType: walletType
-      })
-    );
+    if (id === showMenuDropdown) {
+      closeMenuDropdown();
+    } else {
+      closeSubMenu();
+      dispatch(
+        setshowMenuDropdown({
+          showMenuDropdown: id,
+          showMenuDropdownType: walletType
+        })
+      );
+    }
     dispatch(getPrevName(name));
     if (showMenuDropdown != null) {
       if ((e.target as HTMLButtonElement).id == 'menusettings') {
@@ -137,16 +167,39 @@ export default function WalletItem({
     }
   };
 
+  const { isOver, setNodeRef } = useDroppable({
+    id: wallet.id,
+    data: {
+      isOverWallet: true
+    }
+  });
+
+  const {
+    attributes,
+    listeners,
+    setNodeRef: draggableRef,
+    transform
+  } = useDraggable({
+    id: wallet.id,
+    data: {
+      isWallet: true
+    }
+  });
+
   return (
     <>
       <section
         className={`bg-white items-center truncate text-sm group ${
           wallet.id === activeItemId ? 'font-medium' : 'hover:bg-gray-100'
-        } ${isSticky && stickyButtonIndex === index ? 'sticky bg-white' : ''}`}
+        } ${isSticky && stickyButtonIndex === index ? 'sticky bg-white' : ''} ${
+          isOver ? 'bg-primary-100 border-primary-500 shadow-inner shadow-primary-300' : ''
+        }`}
+        ref={setNodeRef}
         onClick={() => handleShowSubWallet(wallet.id, index)}
         style={{
           top: isSticky ? `${topNumber}px` : '',
-          zIndex: isSticky ? zNumber : '1'
+          zIndex: isSticky ? zNumber : '1',
+          opacity: transform ? 0 : 100
         }}
       >
         <div
@@ -166,6 +219,14 @@ export default function WalletItem({
               style={{ backgroundColor: baseColor }}
             />
           )}
+          <div
+            className="absolute left-2 rounded-r-lg w-0.5 opacity-0 group-hover:opacity-100 cursor-move"
+            ref={draggableRef}
+            {...listeners}
+            {...attributes}
+          >
+            <Drag />
+          </div>
           {/* showsub1 */}
           <div className="flex items-center">{renderIcons(showSubWallet)}</div>
           <div

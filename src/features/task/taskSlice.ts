@@ -2,7 +2,15 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 // import { tagItem } from '../../pages/workspace/pilot/components/details/properties/subDetailsIndex/PropertyDetails';
 import { listColumnProps } from '../../pages/workspace/tasks/component/views/ListColumns';
 import { IField } from '../list/list.interfaces';
-import { IDuration, IHistoryFilterMemory, IParent, ISelectedDate, Status, TaskKey } from './interface.tasks';
+import {
+  IDuration,
+  IHistoryFilterMemory,
+  IParent,
+  ISelectedDate,
+  ITimerDetails,
+  Status,
+  TaskKey
+} from './interface.tasks';
 import { SortOption } from '../../pages/workspace/tasks/component/views/listLevel/TaskListViews';
 import RecordRTC from 'recordrtc';
 import {
@@ -148,6 +156,7 @@ interface TaskState {
   stream: MediaStream | null;
   updateCords: number;
   activeTaskColumn: ActiveTaskColumnProps;
+  timerDetails: ITimerDetails;
   duration: IDuration;
   fetchedTime: { h: number; m: number; s: number } | null;
   period: number | undefined;
@@ -224,6 +233,7 @@ const initialState: TaskState = {
   recorder: null,
   updateCords: Date.now(),
   activeTaskColumn: { id: '', header: '' },
+  timerDetails: { description: '', isBillable: false },
   duration: { s: 0, m: 0, h: 0 },
   fetchedTime: null,
   period: undefined,
@@ -481,6 +491,9 @@ export const taskSlice = createSlice({
     setStopTimer(state) {
       state.timerStatus = !state.timerStatus;
     },
+    setTimerDetails(state, action: PayloadAction<ITimerDetails>) {
+      state.timerDetails = action.payload;
+    },
     setTimerInterval(state, action: PayloadAction<number | undefined>) {
       state.period = action.payload;
     },
@@ -560,6 +573,7 @@ export const {
   setGroupByStatus,
   setShowTaskUploadModal,
   setTimerStatus,
+  setTimerDetails,
   setFilterTaskByAssigneeIds,
   setSortArray,
   setSortArr,

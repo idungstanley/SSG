@@ -7,9 +7,9 @@ import { GiCheckMark } from 'react-icons/gi';
 import { FaSort } from 'react-icons/fa';
 import { setTimeArr, setTimeSortArr } from '../../../../features/task/taskSlice';
 import { UserSortDropDown } from './TimeUserSortDropDown';
-import PlusCircle from '../../../../assets/icons/TimeClock/AddCircle';
-import CancelIcon from '../../../../assets/icons/Common/Cancel';
-import ArrowCaretUp from '../../../../assets/icons/Common/ArrowCaretUp';
+import PlusCircle from '../../../../assets/icons/AddCircle';
+import CancelIcon from '../../../../assets/icons/Cancel';
+import ArrowCaretUp from '../../../../assets/icons/ArrowCaretUp';
 
 export type Header = {
   title: string;
@@ -38,6 +38,10 @@ export default function ClockLog() {
     { title: 'end date', id: '4', hidden: false },
     { title: 'description', id: '5', hidden: true }
   ]);
+  const [icontoggle, setIconToggle] = useState<{ cancelIcon: boolean; plusIcon: boolean }>({
+    cancelIcon: false,
+    plusIcon: false
+  });
   const [showModal, setShowModal] = useState<boolean>(false);
   const [headerId, setHeaderId] = useState<string>('');
   const [showSortModal, setShowSortModal] = useState<boolean>(false);
@@ -68,21 +72,20 @@ export default function ClockLog() {
   const checkedField = headers.some((el) => el.hidden);
 
   const renderItemEntries = () => {
-    if (getTaskEntries?.data.time_entries)
-      if (getTaskEntries?.data.time_entries.length == 0) {
-        return <NoEntriesFound />;
-      } else {
-        return (
+    if (getTaskEntries?.data.time_entries && getTaskEntries?.data.time_entries.length === 0) {
+      return <NoEntriesFound />;
+    } else {
+      return (
+        <div className="p-2">
           <table className="relative w-full">
-            <thead className="relative flex items-center pb-2 space-x-1 text-xs border-b border-gray-400 font-extralight">
+            <thead className="relative flex items-center justify-between pb-2 space-x-1 text-xs border-b border-gray-400 font-extralight">
               <tr className="flex items-center w-9/12 space-x-4">
                 {headers.map((col) => {
                   return (
                     !col.hidden && (
                       <th
                         key={col.id}
-                        className="flex justify-center w-12 gap-1 capitalize cursor-default group reloative text-alsoit-text-sm font-semibold"
-                        style={{ fontSize: '9px' }}
+                        className="flex justify-center w-12 gap-1 capitalize cursor-default group relative text-alsoit-text-sm font-semibold"
                       >
                         <span
                           className="cursor-pointer"
@@ -94,7 +97,7 @@ export default function ClockLog() {
                           <>
                             {headerId === '' && (
                               <FaSort
-                                className="w-3 h-3 text-alsoit-text-lg text-alsoit-gray-50 transition duration-200 bg-alsoit-gray-200 rounded-full opacity-0 cursor-pointer group-hover:opacity-100 "
+                                className="w-3 h-3 text-alsoit-text-lg text-alsoit-gray-50 transition duration-200 bg-alsoit-gray-200 rounded-full opacity-0 cursor-pointer group-hover:opacity-100"
                                 onClick={() => handleSort(col.title, col.id)}
                               />
                             )}
@@ -104,20 +107,34 @@ export default function ClockLog() {
                                   <div className="font-bold cursor-pointer hover:text-clip" style={{ fontSize: '8px' }}>
                                     <>
                                       {timeArr.length === 1 ? (
-                                        <ArrowCaretUp />
+                                        <ArrowCaretUp active={false} />
                                       ) : (
                                         <span className="flex gap-1">
                                           {timeArr.indexOf(col.title) + 1}
-                                          <ArrowCaretUp />
+                                          <ArrowCaretUp active={false} />
                                         </span>
                                       )}
                                     </>
                                   </div>
                                 </div>
-                                <CancelIcon
+                                <div
+                                  className="w-4 h-4"
                                   onClick={() => handleRemoveFilter(col.title)}
-                                  className="w-3 h-3 m-1 font-semibold text-white cursor-pointer sortClose"
-                                />
+                                  onMouseEnter={() =>
+                                    setIconToggle((prev) => ({
+                                      ...prev,
+                                      cancelIcon: true
+                                    }))
+                                  }
+                                  onMouseLeave={() =>
+                                    setIconToggle((prev) => ({
+                                      ...prev,
+                                      cancelIcon: false
+                                    }))
+                                  }
+                                >
+                                  <CancelIcon active={icontoggle.cancelIcon} dimensions={{ width: 12, height: 12 }} />
+                                </div>
                               </div>
                             )}
                           </>
@@ -134,55 +151,70 @@ export default function ClockLog() {
                   );
                 })}
               </tr>
-              <PlusCircle
-                className="absolute w-4 h-4 font-black cursor-pointer AddColumnDropdownButton right-4"
-                onClick={() => setShowModal(!showModal)}
-              />
-              {showModal && (
-                <div
-                  className="absolute bg-white shadow-md w-44 top-10 right-10"
-                  tabIndex={0}
-                  onBlur={() => setShowModal(!showModal)}
-                >
-                  <ul className="flex flex-col px-4 py-6 space-y-2">
-                    <li
-                      className="flex gap-1 py-1 capitalize border-b cursor-pointer"
-                      onClick={() => handleShowAllColumns()}
-                    >
-                      <input type="checkbox" checked={checkedField ? false : true} />
-                      show all
-                    </li>
-                    {headers.map((header) => {
-                      return (
-                        <li
-                          className="flex justify-between py-1 capitalize border-b cursor-pointer"
-                          key={header.id}
-                          onClick={() => handleColumnHide(header.id)}
-                        >
-                          {header.title}
-                          {!header.hidden && <GiCheckMark />}
-                        </li>
-                      );
-                    })}
-                  </ul>
-                </div>
-              )}
             </thead>
             <tbody>
-              <div className="overflow-auto" style={{ maxHeight: '45rem' }}>
-                {getTaskEntries?.data?.time_entries?.map((entries: entriesProps) => {
-                  const { id, initials, name } = entries.team_member.user;
-                  const { id: teamId } = entries.team_member;
-                  teamMember.push({ id, initials, name });
-                  teamMemberId.push(teamId);
-                  return <EntryList entries={entries} key={entries.id} switchHeader={headers} />;
-                })}
-              </div>
+              <tr>
+                <th colSpan={headers.filter((header) => !header.hidden).length}>
+                  <div
+                    className="flex items-center justify-end mb-2"
+                    onClick={() => setShowModal(!showModal)}
+                    onMouseEnter={() =>
+                      setIconToggle((prev) => ({
+                        ...prev,
+                        plusIcon: true
+                      }))
+                    }
+                    onMouseLeave={() =>
+                      setIconToggle((prev) => ({
+                        ...prev,
+                        plusIcon: false
+                      }))
+                    }
+                  >
+                    <PlusCircle active={icontoggle.plusIcon} dimensions={{ width: 20, height: 20 }} />
+                  </div>
+                  {showModal && (
+                    <div
+                      className="absolute bg-white shadow-md w-44 top-10 right-10"
+                      tabIndex={0}
+                      onBlur={() => setShowModal(!showModal)}
+                    >
+                      <ul className="flex flex-col px-4 py-6 space-y-2">
+                        <li
+                          className="flex gap-1 py-1 capitalize border-b cursor-pointer"
+                          onClick={() => handleShowAllColumns()}
+                        >
+                          <input type="checkbox" checked={!checkedField} />
+                          show all
+                        </li>
+                        {headers.map((header) => (
+                          <li
+                            className="flex justify-between py-1 capitalize border-b cursor-pointer"
+                            key={header.id}
+                            onClick={() => handleColumnHide(header.id)}
+                          >
+                            {header.title}
+                            {!header.hidden && <GiCheckMark />}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                </th>
+              </tr>
+              {getTaskEntries?.data?.time_entries?.map((entries: entriesProps) => {
+                const { id, initials, name } = entries.team_member.user;
+                const { id: teamId } = entries.team_member;
+                teamMember.push({ id, initials, name });
+                teamMemberId.push(teamId);
+                return <EntryList entries={entries} key={entries.id} switchHeader={headers} />;
+              })}
             </tbody>
           </table>
-        );
-      }
+        </div>
+      );
+    }
   };
 
-  return <div className="p-2">{renderItemEntries()} </div>;
+  return renderItemEntries();
 }

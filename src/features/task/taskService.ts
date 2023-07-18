@@ -16,19 +16,23 @@ import { useUploadRecording } from '../workspace/workspaceService';
 import { useParams } from 'react-router-dom';
 import { setTimerLastMemory, toggleMute } from '../workspace/workspaceSlice';
 import { generateFilters } from '../../components/TasksHeader/lib/generateFilters';
-import moment from 'moment-timezone';
 import { runTimer } from '../../utils/TimerCounter';
-import DateStringFix from '../../utils/ManualTimeFix';
+import Duration from '../../utils/TimerDuration';
 
-const moveTask = (data: { taskId: TaskId; listId: string }) => {
-  const { taskId, listId } = data;
-
+const moveTask = (data: { taskId: TaskId; listId: string; overType: string }) => {
+  const { taskId, listId, overType } = data;
+  let requestData = {};
+  if (overType == 'list') {
+    requestData = {
+      list_id: listId
+    };
+  } else {
+    requestData = { parent_id: listId };
+  }
   const response = requestNew({
     url: 'tasks/' + taskId + '/move',
     method: 'POST',
-    data: {
-      list_id: listId
-    }
+    data: requestData
   });
   return response;
 };
@@ -83,7 +87,6 @@ const addTask = (data: {
 
 export const useAddTask = (parentTaskId?: string) => {
   const queryClient = useQueryClient();
-  const { hubId, walletId, listId } = useParams();
 
   // const id = hubId ?? walletId ?? listId;
   // const type = hubId ? 'hub' : walletId ? 'wallet' : 'list';
@@ -460,7 +463,6 @@ export const createManualTimeEntry = () => {
 
 export const useCurrentTime = ({ workspaceId }: { workspaceId?: string }) => {
   const dispatch = useAppDispatch();
-  const { timezone } = useAppSelector((state) => state.userSetting);
   const { data, isLoading, isError, refetch } = useQuery(
     ['timeData'],
     async () => {
@@ -478,16 +480,15 @@ export const useCurrentTime = ({ workspaceId }: { workspaceId?: string }) => {
         const dateString = dateData?.time_entry;
 
         if (dateString) {
-          const givenDate = moment(dateString?.start_date, 'YYYY-MM-DD HH:mm:ss', timezone);
-          const currentDate = moment();
-          const duration = moment.duration(currentDate.diff(givenDate));
+          const { hours, minutes, seconds } = Duration({ dateString });
           dispatch(setTimerStatus(true));
-          dispatch(setUpdateTimerDuration({ s: duration.seconds(), m: duration.minutes(), h: duration.hours() - 1 }));
+          dispatch(setUpdateTimerDuration({ s: seconds, m: minutes, h: hours }));
           dispatch(
             setTimerLastMemory({
               hubId: dateString.model_type === 'hub' ? dateString.model_id : null,
               activeTabId: 6,
               listId: dateString.model_type === 'list' ? dateString.model_id : null,
+              taskId: dateString.model_type === 'task' ? dateString.model_id : null,
               workSpaceId: workspaceId
             })
           );

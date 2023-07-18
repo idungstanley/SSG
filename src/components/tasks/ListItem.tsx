@@ -4,18 +4,26 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { setPaletteDropDown } from '../../features/account/accountSlice';
 // import ListIcon from '../../assets/icons/ListIcon';
-import { closeMenu, getPrevName, setSideBarCreateTaskListId, setshowMenuDropdown } from '../../features/hubs/hubSlice';
+import {
+  closeMenu,
+  getPrevName,
+  getSubMenu,
+  setSideBarCreateTaskListId,
+  setshowMenuDropdown
+} from '../../features/hubs/hubSlice';
 import { UseEditListService } from '../../features/list/listService';
 import { setListPaletteColor } from '../../features/list/listSlice';
 import { setActiveEntity, setActiveEntityName, setActiveItem } from '../../features/workspace/workspaceSlice';
 import Palette from '../ColorPalette';
 import ListIconSelection from '../ColorPalette/component/ListIconSelection';
 import ListIconComponent from '../ItemsListInSidebar/components/ListIconComponent';
-import { useDroppable } from '@dnd-kit/core';
+import { useDraggable, useDroppable } from '@dnd-kit/core';
 import { cl } from '../../utils';
 import InteractiveTooltip from '../Tooltip/InteractiveTooltip';
 import ThreeDotIcon from '../../assets/icons/ThreeDotIcon';
 import { Tooltip } from '@mui/material';
+import MenuDropdown from '../Dropdown/MenuDropdown';
+import Drag from '../../assets/icons/Drag';
 
 interface ListItemProps {
   list: {
@@ -33,21 +41,23 @@ export interface ListColourProps {
   outerColour?: string;
 }
 export default function ListItem({ list, paddingLeft }: ListItemProps) {
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const { listId } = useParams();
+  const queryClient = useQueryClient();
   const { activeItemId } = useAppSelector((state) => state.workspace);
   const { showMenuDropdown } = useAppSelector((state) => state.hub);
   const { paletteDropdown, lightBaseColor, baseColor } = useAppSelector((state) => state.account);
   const { listColour } = useAppSelector((state) => state.list);
+
   const [activeShape, setActiveShape] = useState(list.shape);
   // const [listPaletteColor, setListPaletteColor] = useState<ListColourProps>();
   const { paletteId, show, paletteType } = paletteDropdown;
-  const dispatch = useAppDispatch();
-  const navigate = useNavigate();
-  const queryClient = useQueryClient();
   const color: ListColourProps = JSON.parse(list.color as string) as ListColourProps;
   const innerColour = list?.color ? (color.innerColour as string) : (listColour as ListColourProps)?.innerColour;
   const outerColour = list?.color ? (color.outerColour as string) : (listColour as ListColourProps)?.outerColour;
   const listComboColour = { innerColour, outerColour };
-  const { listId } = useParams();
+
   const editListColorMutation = useMutation(UseEditListService, {
     onSuccess: () => {
       queryClient.invalidateQueries(['lists']);
@@ -83,14 +93,37 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
     { label: 'Completed', count: 1, onClick: () => ({}) }
   ];
 
-  const handleListSettings = (id: string, name: string, e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
-    dispatch(setSideBarCreateTaskListId(id));
+  const closeMenuDropdown = () => {
     dispatch(
       setshowMenuDropdown({
-        showMenuDropdown: id,
-        showMenuDropdownType: 'list'
+        showMenuDropdown: null,
+        showMenuDropdownType: null
       })
     );
+  };
+
+  const closeSubMenu = () => {
+    dispatch(
+      getSubMenu({
+        SubMenuId: null,
+        SubMenuType: null
+      })
+    );
+  };
+
+  const handleListSettings = (id: string, name: string, e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
+    dispatch(setSideBarCreateTaskListId(id));
+    if (id === showMenuDropdown) {
+      closeMenuDropdown();
+    } else {
+      closeSubMenu();
+      dispatch(
+        setshowMenuDropdown({
+          showMenuDropdown: id,
+          showMenuDropdownType: 'list'
+        })
+      );
+    }
     dispatch(getPrevName(name));
     if (showMenuDropdown != null) {
       if ((e.target as HTMLButtonElement).id == 'menusettings') {
@@ -106,7 +139,22 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
   };
 
   const { isOver, setNodeRef } = useDroppable({
-    id: list.id
+    id: list.id,
+    data: {
+      isOverList: true
+    }
+  });
+
+  const {
+    attributes,
+    listeners,
+    setNodeRef: draggableRef,
+    transform
+  } = useDraggable({
+    id: list.id,
+    data: {
+      isList: true
+    }
   });
 
   return (
@@ -121,13 +169,22 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
         style={{
           paddingLeft: `${paddingLeft}px`,
           height: '30px',
-          backgroundColor: `${list.id === listId ? lightBaseColor : ''}`
+          backgroundColor: `${list.id === listId ? lightBaseColor : ''}`,
+          opacity: transform ? 0 : 100
         }}
         onClick={() => handleListLocation(list.id, list.name)}
       >
         {list.id === listId && (
           <span className="absolute top-0 bottom-0 left-0 rounded-r-lg w-0.5" style={{ backgroundColor: baseColor }} />
         )}
+        <div
+          className="absolute left-2 rounded-r-lg w-0.5 opacity-0 group-hover:opacity-100 cursor-move"
+          ref={draggableRef}
+          {...listeners}
+          {...attributes}
+        >
+          <Drag />
+        </div>
         <div className="flex items-center space-x-1 overflow-hidden capitalize cursor-pointer">
           <div onClick={(e) => handleListColour(list.id, e)}>
             <ListIconComponent
@@ -208,6 +265,7 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
           shape={activeShape}
         />
       ) : null}
+      {showMenuDropdown === list.id ? <MenuDropdown /> : null}
     </>
   );
 }

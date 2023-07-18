@@ -6,6 +6,45 @@ import requestNew from '../../app/requestNew';
 import { IResponseGetHubs, IHubReq, IFavoritesRes, IHubDetailRes, IHubsRes } from './hubs.interfaces';
 import { closeMenu, setShowFavEditInput, setTriggerFavUpdate } from './hubSlice';
 import { setArchiveHub, setDelHub } from './hubSlice';
+import { generateFilters } from '../../components/TasksHeader/lib/generateFilters';
+
+const moveHub = (data: { parent_id: string; hubId: string }) => {
+  const { hubId, parent_id } = data;
+  const response = requestNew({
+    url: 'hubs/' + hubId + '/move',
+    method: 'POST',
+    data: {
+      parent_id: parent_id
+    }
+  });
+  return response;
+};
+
+export const useMoveHubsService = () => {
+  const queryClient = useQueryClient();
+  const { hubId, walletId, listId } = useParams();
+
+  const id = hubId ?? walletId ?? listId;
+  const type = hubId ? 'hub' : walletId ? 'wallet' : 'list';
+
+  const { filterTaskByAssigneeIds: assigneeUserId } = useAppSelector((state) => state.task);
+  const { sortAbleArr } = useAppSelector((state) => state.task);
+  const sortArrUpdate = sortAbleArr.length <= 0 ? null : sortAbleArr;
+
+  const { filters } = generateFilters();
+
+  return useMutation(moveHub, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['hub']);
+      queryClient.invalidateQueries(['sub-hub']);
+      queryClient.invalidateQueries(['task']);
+      queryClient.invalidateQueries(['task', { listId, assigneeUserId, sortArrUpdate, filters }]);
+      queryClient.invalidateQueries(['task', id, type]);
+      queryClient.invalidateQueries(['retrieve', id ?? 'root', 'tree']);
+      queryClient.invalidateQueries(['retrieve', id ?? 'root', undefined]);
+    }
+  });
+};
 
 export const createHubService = (data: {
   name: string;

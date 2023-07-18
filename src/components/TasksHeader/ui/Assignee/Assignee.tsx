@@ -2,14 +2,14 @@ import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { useGetTeamMembers } from '../../../../features/settings/teamMembers/teamMemberService';
 import { generateFilter } from '../Filter/lib/filterUtils';
 import Button from '../../../Buttons/Button';
-import Me from '../../../../assets/icons/me(1).svg';
-import Icons from '../../../Icons/Icons';
-import { setFilterFields } from '../../../../features/task/taskSlice';
+import { setAssigneeIds, setFilterFields } from '../../../../features/task/taskSlice';
+import Me from '../../../../assets/icons/Me';
 import FilterByAssigneeModal from './FilterByAssigneeModal';
 
 export function Assignee() {
   const dispatch = useAppDispatch();
   const { currentUserId } = useAppSelector((state) => state.auth);
+  const { assigneeIds } = useAppSelector((state) => state.task);
   const { data } = useGetTeamMembers({ page: 1, query: '' });
   const {
     filters: { fields: filters }
@@ -29,12 +29,14 @@ export function Assignee() {
     return null;
   }
 
-  const isMe = filters.length ? filters?.find((i) => i.key === 'assignees')?.values[0] === currentMemberId : false;
+  const forMe = assigneeIds.includes(currentMemberId);
 
   const onToggleMe = () => {
     const me = { id: currentMemberId, value: currentMemberName };
 
     const isAssigneesInFilters = filters.find((i) => i.key === 'assignees');
+    dispatch(setAssigneeIds(assigneeIds.length ? [] : [currentMemberId]));
+
     if (isAssigneesInFilters) {
       const assignees = filters.length
         ? (filters.find((i) => i.key === 'assignees')?.values as { id: string; value: string }[])
@@ -53,7 +55,6 @@ export function Assignee() {
               if (i.key === 'assignees') {
                 return { ...i, values: [...i.values, me] };
               }
-
               return i;
             })
           ])
@@ -67,8 +68,8 @@ export function Assignee() {
 
   return (
     <div className="flex items-center rounded-2xl h-8">
-      <Button active={isMe} onClick={onToggleMe}>
-        <Icons src={Me} />
+      <Button active={forMe} onClick={onToggleMe}>
+        <Me active={forMe} />
         <span>Me</span>
       </Button>
 

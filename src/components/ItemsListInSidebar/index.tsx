@@ -6,19 +6,16 @@ import {
   setActiveEntityName,
   setActiveItem,
   setActiveTabId,
-  setCreateWlLink,
   setCurrentItem,
   setShowHub,
   setShowPilot
 } from '../../features/workspace/workspaceSlice';
 import DropdownList from './components/DropdownList';
-import MenuDropdown from '../Dropdown/MenuDropdown';
 import FullScreenMessage from '../CenterMessage/FullScreenMessage';
 import { useAppSelector } from '../../app/hooks';
 import { IInbox } from '../../features/inbox/inbox.interfaces';
 import { IHub } from '../../features/hubs/hubs.interfaces';
-import { closeMenu, getCurrHubId, getPrevName, setCreateWLID, setshowMenuDropdown } from '../../features/hubs/hubSlice';
-import SubDropdown from '../Dropdown/SubDropdown';
+import { setCreateWLID } from '../../features/hubs/hubSlice';
 import { useNavigate } from 'react-router-dom';
 import { cl } from '../../utils';
 import HubItem from '../tasks/HubItem';
@@ -35,10 +32,6 @@ export default function ItemsListInSidebar({ items, status, type }: ItemsListInS
   const [showChildren, setShowChidren] = useState<string | null>(null);
   const { currentItemId } = useAppSelector((state) => state.workspace);
   const { showSidebar } = useAppSelector((state) => state.account);
-
-  // const { currentWorkspaceId } = useAppSelector((state) => state.auth);
-
-  const { showMenuDropdown, SubMenuId } = useAppSelector((state) => state.hub);
 
   if (status === 'error') {
     return (
@@ -100,23 +93,6 @@ export default function ItemsListInSidebar({ items, status, type }: ItemsListInS
     }
   };
 
-  const handleHubSettings = (id: string, name: string, e: React.MouseEvent<HTMLSpanElement, MouseEvent>): void => {
-    dispatch(getCurrHubId(id));
-    dispatch(setCreateWlLink(false));
-    dispatch(
-      setshowMenuDropdown({
-        showMenuDropdown: id,
-        showMenuDropdownType: 'hubs'
-      })
-    );
-    dispatch(getPrevName(name));
-    if (showMenuDropdown != null) {
-      if ((e.target as HTMLButtonElement).id == 'menusettings') {
-        dispatch(closeMenu());
-      }
-    }
-  };
-
   return status === 'success' ? (
     <ul className={cl('z-20', !showSidebar && 'overflow-x-hidden w-12')}>
       {items?.map((i: { id: string; name: string; path?: string | null; parent_id?: string | null }) => (
@@ -124,14 +100,11 @@ export default function ItemsListInSidebar({ items, status, type }: ItemsListInS
           <HubItem
             item={i}
             handleClick={handleClick}
-            showChildren={showChildren}
-            handleHubSettings={handleHubSettings}
+            showChildren={!!showChildren}
             handleLocation={handleLocation}
             type="hub"
           />
           {showChildren === i.id && showSidebar ? <DropdownList /> : null}
-          {showMenuDropdown === i.id && showSidebar ? <MenuDropdown /> : null}
-          {SubMenuId === i.id && showSidebar ? <SubDropdown /> : null}
         </li>
       ))}
     </ul>

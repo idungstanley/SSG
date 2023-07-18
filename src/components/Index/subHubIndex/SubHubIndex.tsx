@@ -1,20 +1,9 @@
-import React, { MouseEvent, useState } from 'react';
+import React, { useState } from 'react';
 import { useGetSubHub } from '../../../features/hubs/hubService';
 import { useAppSelector } from '../../../app/hooks';
 import { useDispatch } from 'react-redux';
-import {
-  closeMenu,
-  getCurrHubId,
-  getCurrSubHubId,
-  getPrevName,
-  setCreateWLID,
-  setHubParentId,
-  setshowMenuDropdown,
-  setSubHubExt
-} from '../../../features/hubs/hubSlice';
-import MenuDropdown from '../../Dropdown/MenuDropdown';
+import { getCurrSubHubId, setCreateWLID, setHubParentId, setSubHubExt } from '../../../features/hubs/hubSlice';
 import SHubDropdownList from '../../ItemsListInSidebar/components/SHubDropdownList';
-import SubDropdown from '../../Dropdown/SubDropdown';
 import {
   setActiveEntity,
   setActiveEntityName,
@@ -24,6 +13,8 @@ import {
 // import { useNavigate } from 'react-router-dom';
 import HubItem from '../../tasks/HubItem';
 import { setShowPilotSideOver } from '../../../features/general/slideOver/slideOverSlice';
+import { DragOverlay } from '@dnd-kit/core';
+import HubItemOverlay from '../../tasks/HubItemOverLay';
 
 export default function SubHubIndex() {
   const dispatch = useDispatch();
@@ -38,7 +29,7 @@ export default function SubHubIndex() {
   if (status === 'success') {
     data?.data?.hubs.map(({ parent_id }) => dispatch(setHubParentId(parent_id)));
   }
-  const { hubParentId, subHubExt, showMenuDropdown, SubMenuId } = useAppSelector((state) => state.hub);
+  const { hubParentId, subHubExt } = useAppSelector((state) => state.hub);
   const { id: subHubExtId } = subHubExt;
 
   const handleClick = (id: string) => {
@@ -60,23 +51,6 @@ export default function SubHubIndex() {
     );
     if (showSubChildren === id) {
       return setShowSubChidren(null);
-    }
-  };
-
-  const handleShowMenu = (id: string, name: string, e: MouseEvent) => {
-    dispatch(getCurrHubId(id));
-
-    dispatch(
-      setshowMenuDropdown({
-        showMenuDropdown: id,
-        showMenuDropdownType: 'subhub'
-      })
-    );
-    dispatch(getPrevName(name));
-    if (showMenuDropdown != null) {
-      if ((e.target as HTMLButtonElement).id == 'menusettings') {
-        dispatch(closeMenu());
-      }
     }
   };
 
@@ -103,22 +77,26 @@ export default function SubHubIndex() {
     dispatch(setActiveEntity({ id: id, type: 'hub' }));
   };
 
+  const { draggableItemId } = useAppSelector((state) => state.list);
+  const draggableItem = draggableItemId ? data?.data?.hubs.find((i) => i.id === draggableItemId) : null;
   return currentItemId === hubParentId ? (
     <div id="subhub">
+      {draggableItem ? (
+        <DragOverlay>
+          <HubItemOverlay item={draggableItem} type="subhub" />
+        </DragOverlay>
+      ) : null}
       {data?.data?.hubs.length !== 0 &&
         data?.data?.hubs.map((subhub) => (
           <div key={subhub.id}>
             <HubItem
               item={subhub}
               handleClick={handleClick}
-              showChildren={showSubChildren}
+              showChildren={!!showSubChildren}
               handleLocation={handleLocation}
-              handleHubSettings={handleShowMenu}
               type="subhub"
             />
             {subHubExtId === subhub.id ? <SHubDropdownList /> : null}
-            {showMenuDropdown === subhub.id ? <MenuDropdown /> : null}
-            {SubMenuId === subhub.id ? <SubDropdown /> : null}
           </div>
         ))}
     </div>

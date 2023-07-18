@@ -12,6 +12,7 @@ import { columnsHead, listColumnProps } from '../../../../pages/workspace/tasks/
 import { useParams } from 'react-router-dom';
 import { UseGetWalletDetails } from '../../../../features/wallet/walletService';
 import { UseGetHubDetails } from '../../../../features/hubs/hubService';
+import { cl } from '../../../../utils';
 
 interface ListProps {
   tasks: Task[];
@@ -99,7 +100,7 @@ export function List({ tasks }: ListProps) {
           ) : null}
           {!showNewTaskField ? (
             <div className="h-5">
-              <button onClick={() => setShowNewTaskField(true)} className=" p-1.5 pl-14 text-left w-fit text-xs ">
+              <button onClick={() => setShowNewTaskField(true)} className={cl('p-1.5 pl-14 text-left w-fit text-xs')}>
                 + New Task
               </button>
             </div>

@@ -11,10 +11,16 @@ import {
   StartTimeEntryService
 } from '../../../../features/task/taskService';
 import AvatarWithInitials from '../../../avatar/AvatarWithInitials';
-import { setTimerInterval, setTimerStatus, setUpdateTimerDuration } from '../../../../features/task/taskSlice';
+import {
+  setTimerDetails,
+  setTimerInterval,
+  setTimerStatus,
+  setUpdateTimerDuration
+} from '../../../../features/task/taskSlice';
 import { useParams } from 'react-router-dom';
 import { setTimerLastMemory } from '../../../../features/workspace/workspaceSlice';
 import { runTimer } from '../../../../utils/TimerCounter';
+import Duration from '../../../../utils/TimerDuration';
 import ClockLog from './ClockLog';
 
 export interface User {
@@ -22,20 +28,17 @@ export interface User {
 }
 
 export default function ClockInOut() {
-  const [data, setData] = useState({
-    isBillable: false,
-    description: ''
-  });
   const { activeItemId, activeItemType, activeTabId, timerLastMemory } = useAppSelector((state) => state.workspace);
-  const { timerStatus, duration, period } = useAppSelector((state) => state.task);
+  const { timerStatus, duration, period, timerDetails } = useAppSelector((state) => state.task);
   const { initials } = useAppSelector((state) => state.userSetting);
+  const { currentUserId } = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
   const [isRunning, setRunning] = useState(false);
   const [time, setTime] = useState({ s: 0, m: 0, h: 0 });
   const [, setBtnClicked] = useState(false);
   const [prompt, setPrompt] = useState(false);
   const [newTimer, setNewtimer] = useState(false);
-  const { workSpaceId, listId, hubId } = useParams();
+  const { workSpaceId, hubId, listId, taskId } = useParams();
 
   const { data: getEntries } = GetTimeEntriesService({
     itemId: activeItemId,
@@ -61,14 +64,14 @@ export default function ClockInOut() {
     }
     dispatch(setTimerStatus(!timerStatus));
     setRunning(true);
-    dispatch(setTimerLastMemory({ workSpaceId, hubId, listId, activeTabId }));
+    dispatch(setTimerLastMemory({ workSpaceId, hubId, listId, taskId, activeTabId }));
   };
 
   const stop = () => {
     mutation.mutate({
       id: activeItemId,
-      description: data.description,
-      is_Billable: data.isBillable
+      description: timerDetails.description,
+      is_Billable: timerDetails.isBillable
     });
     reset();
     setTime({ s: 0, m: 0, h: 0 });
@@ -76,13 +79,15 @@ export default function ClockInOut() {
     dispatch(setTimerStatus(false));
     clearInterval(period);
     dispatch(setUpdateTimerDuration({ s: 0, m: 0, h: 0 }));
-    dispatch(setTimerInterval(undefined));
+    dispatch(setTimerInterval());
   };
 
   function timerCheck() {
     if (
-      (activeItemType === 'hub' || activeItemType === 'list') &&
-      (activeItemId === timerLastMemory.hubId || activeItemId === timerLastMemory.listId)
+      (activeItemType === 'hub' || activeItemType === 'list' || activeItemType === 'task') &&
+      (activeItemId === timerLastMemory.hubId ||
+        activeItemId === timerLastMemory.listId ||
+        activeItemId === timerLastMemory.taskId)
     ) {
       return (
         <div className="items-center">
@@ -116,10 +121,9 @@ export default function ClockInOut() {
     setNewtimer(!newTimer);
   };
 
-  const sameEntity = () => activeItemId === (timerLastMemory.hubId || timerLastMemory.listId);
-
+  const sameEntity = () => activeItemId === (timerLastMemory.taskId || timerLastMemory.hubId || timerLastMemory.listId);
   const handleEndTimeChange = (value: string) => {
-    setData((prev) => ({ ...prev, isBillable: data.isBillable, description: value }));
+    dispatch(setTimerDetails({ ...timerDetails, isBillable: timerDetails.isBillable, description: value }));
   };
 
   const reset = () => {
@@ -127,6 +131,10 @@ export default function ClockInOut() {
     setBtnClicked(false);
     setTime({ s: 0, m: 0, h: 0 });
   };
+
+  const activeTrackers = getCurrent?.data.time_entries.filter(
+    (tracker) => tracker.team_member.user.id !== currentUserId
+  );
 
   const RunTimer = runTimer({ isRunning: isRunning, setTime: setTime });
 
@@ -161,7 +169,7 @@ export default function ClockInOut() {
           </div>
           <div id="entries" className="flex items-center justify-between py-1">
             <div id="left" className="flex items-center space-x-1 cursor-pointer">
-              <div className="mr-1 relative flex items-center">
+              <div className="mr-1 relative flex items-start">
                 {timerStatus && sameEntity() ? (
                   <button onClick={stop}>
                     <BsStopCircle className="h-4 w-4 text-red-400 cursor-pointer" aria-hidden="true" />
@@ -194,13 +202,22 @@ export default function ClockInOut() {
                 )}
               </div>
               {/* timer goes here */}
-              {timerCheck()}
-              <div className="flex items-center justify-start -space-x-3 cursor-pointer">
-                {getCurrent?.data.time_entries.map((entry) => {
-                  const { team_member } = entry;
+              <div className="flex flex-col space-y-1">
+                <div className="flex space-x-2 items-center">
+                  {timerCheck()}
+                  <AvatarWithInitials height="h-4" width="w-4" initials={initials ?? 'UN'} />
+                </div>
+                {activeTrackers?.map((trackers) => {
+                  const { hours, minutes, seconds } = Duration({ dateString: trackers });
+                  const { initials } = trackers.team_member.user;
                   return (
-                    <div key={entry.id} className="flex">
-                      <AvatarWithInitials height="h-7" width="w-7" initials={team_member.user.initials ?? initials} />
+                    <div key={trackers.id} className="flex space-x-2 space-y-1 items-center w-44 h-72 overflow-y-auto">
+                      <div className="">
+                        {`${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(
+                          seconds
+                        ).padStart(2, '0')}`}
+                      </div>
+                      <AvatarWithInitials height="h-4" width="w-4" textSize="text-alsoit-text-sm" initials={initials} />
                     </div>
                   );
                 })}
@@ -212,14 +229,12 @@ export default function ClockInOut() {
               </span>
               <CurrencyDollarIcon
                 className={`${
-                  data.isBillable
+                  timerDetails.isBillable
                     ? 'bg-alsoit-success rounded-full h-9  text-alsoit-gray-50 cursor-pointer text-alsoit-text-lg'
                     : 'text-alsoit-gray-50 cursor-pointer text-alsoit-text-lg rounded-full h-9'
                 }`}
                 aria-hidden="true"
-                onClick={() =>
-                  setData((prev) => ({ ...prev, isBillable: !data.isBillable, description: data.description }))
-                }
+                onClick={() => dispatch(setTimerDetails({ ...timerDetails, isBillable: !timerDetails.isBillable }))}
               />
             </div>
           </div>

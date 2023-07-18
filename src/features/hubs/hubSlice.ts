@@ -9,6 +9,7 @@ interface HubState {
   currSubHubId: string | null;
   currSubHubIdType: string | null;
   delHub: boolean;
+  updateCords: number;
   showSubItems: boolean;
   showEditHubModal: boolean;
   archiveHub: boolean;
@@ -51,6 +52,7 @@ const initialState: HubState = {
   SubDropdownMenu: false,
   SubMenuId: null,
   SubMenuType: null,
+  updateCords: Date.now(),
   hubParentId: null,
   refType: null,
   prevName: '',
@@ -162,6 +164,9 @@ export const hubSlice = createSlice({
     getPrevName(state, action: PayloadAction<string>) {
       state.prevName = action.payload;
     },
+    setUpdateCords(state) {
+      state.updateCords = Date.now();
+    },
     setShowFavEditInput(state, action: PayloadAction<string | null>) {
       state.showFavEditInput = action.payload;
     },
@@ -198,6 +203,7 @@ export const {
   setShowSidebarSettings,
   setToggleArchive,
   setShowEditHubModal,
+  setUpdateCords,
   setSideBarCreateTaskListId,
   setshowMenuDropdown,
   setSubDropdownMenu,
