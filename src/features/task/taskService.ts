@@ -18,17 +18,21 @@ import { setTimerLastMemory, toggleMute } from '../workspace/workspaceSlice';
 import { generateFilters } from '../../components/TasksHeader/lib/generateFilters';
 import { runTimer } from '../../utils/TimerCounter';
 import Duration from '../../utils/TimerDuration';
-import DateStringFix from '../../utils/ManualTimeFix';
 
-const moveTask = (data: { taskId: TaskId; listId: string }) => {
-  const { taskId, listId } = data;
-
+const moveTask = (data: { taskId: TaskId; listId: string; overType: string }) => {
+  const { taskId, listId, overType } = data;
+  let requestData = {};
+  if (overType == 'list') {
+    requestData = {
+      list_id: listId
+    };
+  } else {
+    requestData = { parent_id: listId };
+  }
   const response = requestNew({
     url: 'tasks/' + taskId + '/move',
     method: 'POST',
-    data: {
-      list_id: listId
-    }
+    data: requestData
   });
   return response;
 };
@@ -83,7 +87,6 @@ const addTask = (data: {
 
 export const useAddTask = (parentTaskId?: string) => {
   const queryClient = useQueryClient();
-  const { hubId, walletId, listId } = useParams();
 
   // const id = hubId ?? walletId ?? listId;
   // const type = hubId ? 'hub' : walletId ? 'wallet' : 'list';

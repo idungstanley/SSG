@@ -9,6 +9,9 @@ import { useAppSelector } from '../../../../../app/hooks';
 import WalletItem from '../../../../../components/tasks/WalletItem';
 import ListItem from '../../../../../components/tasks/ListItem';
 import { IList } from '../../../../../features/hubs/hubs.interfaces';
+import { DragOverlay } from '@dnd-kit/core';
+import OverlayList from '../../../../../components/tasks/OverlayList';
+import HubItemOverlay from '../../../../../components/tasks/HubItemOverLay';
 
 interface SubWalletIndexProps {
   paddingLeft?: string | number;
@@ -22,6 +25,8 @@ interface dataProps {
 function SubWalletIndex({ paddingLeft = '30' }: SubWalletIndexProps) {
   const dispatch = useDispatch();
   const { currentWalletParentId, toggleArchiveWallet } = useAppSelector((state) => state.wallet);
+
+  const { draggableItemId } = useAppSelector((state) => state.list);
 
   const [showSubWallet2, setShowSubWallet2] = useState<string | null>(null);
   const [currWalId, setCurrWalId] = useState('');
@@ -48,8 +53,22 @@ function SubWalletIndex({ paddingLeft = '30' }: SubWalletIndexProps) {
     setCurrWalId(id);
   };
 
+  const draggableItem = draggableItemId ? subwallet?.data?.lists.find((i: IList) => i.id === draggableItemId) : null;
+
+  const draggableWallet = draggableItemId ? subwallet?.data?.wallets.find((i) => i.id === draggableItemId) : null;
+
   return (
     <div>
+      {draggableItem ? (
+        <DragOverlay>
+          <OverlayList list={draggableItem} />
+        </DragOverlay>
+      ) : null}
+      {draggableWallet ? (
+        <DragOverlay>
+          <HubItemOverlay item={draggableWallet} type="wallet" />
+        </DragOverlay>
+      ) : null}
       {subwallet?.data?.wallets.map((wallet: dataProps) => (
         <div key={wallet.id}>
           <WalletItem

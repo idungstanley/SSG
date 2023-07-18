@@ -15,6 +15,8 @@ import {
 } from '../../../../../../../features/workspace/workspaceSlice';
 import { setWalletItem } from '../../../../../../../features/wallet/walletSlice';
 import { EntityType } from '../../../../../../../utils/EntityTypes/EntityType';
+import { DragOverlay } from '@dnd-kit/core';
+import HubItemOverlay from '../../../../../../../components/tasks/HubItemOverLay';
 
 interface IWListProps {
   wallets: Wallet[];
@@ -89,8 +91,16 @@ export default function WList({ wallets, leftMargin, paddingLeft, type, level = 
     }
   };
 
+  const { draggableItemId } = useAppSelector((state) => state.list);
+  const draggableItem = draggableItemId ? wallets.find((i) => i.id === draggableItemId) : null;
+
   return (
     <>
+      {draggableItem ? (
+        <DragOverlay>
+          <HubItemOverlay item={draggableItem} type="subhub" />
+        </DragOverlay>
+      ) : null}
       {wallets.map((wallet, index) => (
         <div key={wallet.id} style={{ marginLeft: leftMargin ? 20 : 0 }}>
           <WalletItem
