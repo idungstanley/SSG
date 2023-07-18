@@ -24,6 +24,8 @@ import { cl } from '../../../../../../../utils';
 import { EntityType } from '../../../../../../../utils/EntityTypes/EntityType';
 import { Capitalize } from '../../../../../../../utils/NoCapWords/Capitalize';
 import SubHList from './SubHList';
+import { DragOverlay } from '@dnd-kit/core';
+import HubItemOverlay from '../../../../../../../components/tasks/HubItemOverLay';
 
 export default function HList({ hubs }: ListProps) {
   const dispatch = useAppDispatch();
@@ -128,8 +130,16 @@ export default function HList({ hubs }: ListProps) {
     return !!showChildren;
   };
 
+  const { draggableItemId } = useAppSelector((state) => state.list);
+  const draggableItem = draggableItemId ? hubs.find((i) => i.id === draggableItemId) : null;
+
   return (
     <>
+      {draggableItem ? (
+        <DragOverlay>
+          <HubItemOverlay item={draggableItem} type="hub" />
+        </DragOverlay>
+      ) : null}
       {hubsWithEntity.map((hub, index) => (
         <div key={hub.id} className={cl(!showSidebar && 'overflow-hidden w-12')}>
           <div className="relative flex flex-col">

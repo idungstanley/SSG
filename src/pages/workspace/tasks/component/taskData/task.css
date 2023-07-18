@@ -71,6 +71,7 @@
 
 .table-container table .tdListV,
 .tdListVNoSticky {
+  background-color: white;
   border-top: 1px solid #bf01fe;
   border-bottom: 1px solid #bf01fe;
 }

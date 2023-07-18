@@ -46,7 +46,10 @@ export function AddSubTask({
   };
 
   const { attributes, listeners, setNodeRef, transform } = useDraggable({
-    id: task.id
+    id: task.id,
+    data: {
+      isTask: true
+    }
   });
 
   // hide element if is currently grabbing

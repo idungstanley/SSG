@@ -10,6 +10,53 @@ import { useParams } from 'react-router-dom';
 import { generateFilters } from '../../components/TasksHeader/lib/generateFilters';
 import { UseGetHubDetails } from '../hubs/hubService';
 
+const moveList = (data: { listId: string; hubId: string; type: string }) => {
+  const { hubId, listId, type } = data;
+  let requestData = {};
+
+  if (type == 'hub') {
+    requestData = {
+      hub_id: hubId
+    };
+  } else {
+    requestData = {
+      wallet_id: hubId
+    };
+  }
+  const response = requestNew({
+    url: 'lists/' + listId + '/move',
+    method: 'POST',
+    data: requestData
+  });
+  return response;
+};
+
+export const useMoveListService = () => {
+  const queryClient = useQueryClient();
+  const { hubId, walletId, listId } = useParams();
+
+  const id = hubId ?? walletId ?? listId;
+  const type = hubId ? 'hub' : walletId ? 'wallet' : 'list';
+
+  const { filterTaskByAssigneeIds: assigneeUserId } = useAppSelector((state) => state.task);
+  const { sortAbleArr } = useAppSelector((state) => state.task);
+  const sortArrUpdate = sortAbleArr.length <= 0 ? null : sortAbleArr;
+
+  const { filters } = generateFilters();
+
+  return useMutation(moveList, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['hub']);
+      queryClient.invalidateQueries(['sub-hub']);
+      queryClient.invalidateQueries(['lists']);
+      queryClient.invalidateQueries(['task', { listId, assigneeUserId, sortArrUpdate, filters }]);
+      queryClient.invalidateQueries(['task', id, type]);
+      queryClient.invalidateQueries(['retrieve', id ?? 'root', 'tree']);
+      queryClient.invalidateQueries(['retrieve', id ?? 'root', undefined]);
+    }
+  });
+};
+
 export const createListService = (data: {
   listName: string;
   hubId?: string | null;

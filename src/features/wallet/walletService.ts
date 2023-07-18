@@ -1,9 +1,49 @@
 import { useDispatch } from 'react-redux';
 import requestNew from '../../app/requestNew';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { setArchiveWallet, setDeleteWallet } from './walletSlice';
 import { closeMenu } from '../hubs/hubSlice';
 import { ICreateWallet, IWalletDetailRes, IWalletRes } from './wallet.interfaces';
+import { useParams } from 'react-router-dom';
+import { useAppSelector } from '../../app/hooks';
+import { generateFilters } from '../../components/TasksHeader/lib/generateFilters';
+
+const moveWallet = (data: { parent_id?: string; walletId?: string; hubId?: string; overType: string }) => {
+  const { walletId, parent_id, overType, hubId } = data;
+
+  const requestData = overType === 'wallet' ? { parent_id } : { hubId };
+
+  const response = requestNew({
+    url: 'wallets/' + walletId + '/move',
+    method: 'POST',
+    data: requestData
+  });
+
+  return response;
+};
+
+export const useMoveWalletsService = () => {
+  const queryClient = useQueryClient();
+  const { hubId, walletId, listId } = useParams();
+
+  const id = hubId ?? walletId ?? listId;
+  const type = hubId ? 'hub' : walletId ? 'wallet' : 'list';
+
+  const { filterTaskByAssigneeIds: assigneeUserId } = useAppSelector((state) => state.task);
+  const { sortAbleArr } = useAppSelector((state) => state.task);
+  const sortArrUpdate = sortAbleArr.length <= 0 ? null : sortAbleArr;
+
+  const { filters } = generateFilters();
+
+  return useMutation(moveWallet, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['task', { listId, assigneeUserId, sortArrUpdate, filters }]);
+      queryClient.invalidateQueries(['task', id, type]);
+      queryClient.invalidateQueries(['retrieve', id ?? 'root', 'tree']);
+      queryClient.invalidateQueries(['retrieve', id ?? 'root', undefined]);
+    }
+  });
+};
 
 export const createWalletService = (data: {
   name: string;

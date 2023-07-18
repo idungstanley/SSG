@@ -105,7 +105,7 @@ function GroupAssignee({
               }}
               onMouseLeave={() => handleHoverIntervalMouseOut()}
             >
-              <div key={newData.id} className=" flex items-center justify-center -ml-2.5 rounded-full relative ">
+              <div className=" flex items-center justify-center -ml-2.5 rounded-full relative ">
                 <ToolTip tooltip={newData.name}>
                   <span onClick={handleClick}>
                     {(newData as InewData).role == 'owner' ? (
@@ -176,7 +176,7 @@ function GroupAssignee({
               index === 2 ? 'z-10' : 'z-0'
             } `}
           >
-            <div key={newData.id} className="flex items-center justify-center -ml-2.5 rounded-full relative">
+            <div className="flex items-center justify-center -ml-2.5 rounded-full relative">
               <ToolTip tooltip={newData.name}>
                 <div
                   onMouseEnter={(e) => {
