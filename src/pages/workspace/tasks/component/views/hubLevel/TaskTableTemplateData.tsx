@@ -28,8 +28,9 @@ export interface ITaskTemplateData {
 [];
 
 function TaskTableTemplateData({ filteredTaskData }: ITaskTemplateData) {
-  const { hideTask, taskColumns, toggleAssignCurrentTaskId } = useAppSelector((state) => state.task);
   const dispatch = useAppDispatch();
+
+  const { hideTask, taskColumns, toggleAssignCurrentTaskId } = useAppSelector((state) => state.task);
 
   const handleAssigneeModal = (id: string | undefined) => {
     if (toggleAssignCurrentTaskId == id) {

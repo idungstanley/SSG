@@ -37,12 +37,13 @@ import { Capitalize } from '../../../utils/NoCapWords/Capitalize';
 function Hubs() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { showSidebar } = useAppSelector((state) => state.account);
-  const { isSearchActive } = useAppSelector((state) => state.search);
   const { listId, hubId, walletId } = useParams();
-  const [showModal, setShowModal] = useState<boolean>(false);
+
+  const { showSidebar } = useAppSelector((state) => state.account);
   const { currentWorkspaceId } = useAppSelector((state) => state.auth);
+  const { isSearchActive } = useAppSelector((state) => state.search);
   const { createEntityType } = useAppSelector((state) => state.workspace);
+  const [showModal, setShowModal] = useState<boolean>(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [fetchTree, setFetchTree] = useState<boolean>(false);
   const { data: allHubs } = useGetHubs({ includeTree: false });

@@ -6,19 +6,16 @@ import {
   setActiveEntityName,
   setActiveItem,
   setActiveTabId,
-  setCreateWlLink,
   setCurrentItem,
   setShowHub,
   setShowPilot
 } from '../../features/workspace/workspaceSlice';
 import DropdownList from './components/DropdownList';
-import MenuDropdown from '../Dropdown/MenuDropdown';
 import FullScreenMessage from '../CenterMessage/FullScreenMessage';
 import { useAppSelector } from '../../app/hooks';
 import { IInbox } from '../../features/inbox/inbox.interfaces';
 import { IHub } from '../../features/hubs/hubs.interfaces';
-import { closeMenu, getCurrHubId, getPrevName, setCreateWLID, setshowMenuDropdown } from '../../features/hubs/hubSlice';
-import SubDropdown from '../Dropdown/SubDropdown';
+import { setCreateWLID } from '../../features/hubs/hubSlice';
 import { useNavigate } from 'react-router-dom';
 import { cl } from '../../utils';
 import HubItem from '../tasks/HubItem';
@@ -37,8 +34,6 @@ export default function ItemsListInSidebar({ items, status, type }: ItemsListInS
   const { showSidebar } = useAppSelector((state) => state.account);
 
   // const { currentWorkspaceId } = useAppSelector((state) => state.auth);
-
-  const { showMenuDropdown, SubMenuId } = useAppSelector((state) => state.hub);
 
   if (status === 'error') {
     return (

@@ -103,7 +103,7 @@ export default function SubHubList({ hubs }: ListProps) {
     dispatch(
       setCurrentItem({
         currentItemId: id,
-        currentItemType: EntityType.subHub
+        currentItemType: EntityType.hub
       })
     );
   };
