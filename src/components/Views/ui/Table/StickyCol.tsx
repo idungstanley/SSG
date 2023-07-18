@@ -56,7 +56,7 @@ export function StickyCol({
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { taskId, hubId, walletId, listId } = useParams();
-  const COL_BG = taskId === task.id ? ACTIVE_COL_BG : DEFAULT_COL_BG;
+  const ACTIVE_TASK = taskId === task.id ? 'tdListV' : DEFAULT_COL_BG;
   const [isChecked, setIsChecked] = useState(false);
   const { mutate: onAdd } = useAddTask(parentId);
   const { currTeamMemberId, singleLineView, verticalGrid, taskUpperCase, selectedTasksArray, verticalGridlinesTask } =
@@ -211,7 +211,7 @@ export function StickyCol({
             onClick={onClickTask}
             onDoubleClick={() => setEitableContent(true)}
             className={cl(
-              COL_BG,
+              ACTIVE_TASK,
               `relative border-t ${isChecked && 'tdListV'} ${verticalGrid && 'border-r'} ${
                 verticalGridlinesTask && 'border-r'
               } w-full py-4 flex items-center `,
@@ -274,9 +274,9 @@ export function StickyCol({
                 )}
 
                 {/* non default badges here */}
-                {/* <div onClick={(e) => e.stopPropagation()} className="pl-3">
+                <div onClick={(e) => e.stopPropagation()} className="pl-3">
                   <Badges />
-                </div> */}
+                </div>
               </div>
 
               {tags}
@@ -307,7 +307,7 @@ export function StickyCol({
           <div
             style={{ paddingLeft }}
             className={cl(
-              COL_BG,
+              ACTIVE_TASK,
               `relative border-t ${verticalGrid && 'border-r'} w-full h-10 py-4 p-4 flex items-center `
             )}
           >

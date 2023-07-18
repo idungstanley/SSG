@@ -12,6 +12,7 @@ import { AddSubTask } from '../AddTask/AddSubTask';
 import TaskTag from '../../../Tag/ui/TaskTag';
 import dradnddrop from '../../../../assets/icons/dradnddrop.svg';
 import Effect from '../../../../assets/icons/Effect';
+import Enhance from '../../../badges/Enhance';
 
 interface RowProps {
   task: Task;
@@ -125,8 +126,8 @@ export function Row({ task, columns, paddingLeft = 0, parentId, task_status, isL
           {/* actions */}
           <div className="absolute opacity-0 group-hover:opacity-100 top-0 bottom-0 right-0 flex space-x-1 mr-1 items-center justify-center">
             {/* effects */}
-            <button className="p-1 border rounded-lg text-gray-400" onClick={(e) => e.stopPropagation()}>
-              <Effect />
+            <button className="p-1 border rounded-lg " onClick={(e) => e.stopPropagation()}>
+              <Effect className="h-4 w-4" />
             </button>
 
             {/* tags */}
@@ -135,8 +136,12 @@ export function Row({ task, columns, paddingLeft = 0, parentId, task_status, isL
             ) : null}
 
             {/* show create subtask field */}
-            <button className="p-1 border rounded-lg text-gray-400" onClick={onShowAddSubtaskField}>
+            <button className="p-1 border rounded-lg " onClick={onShowAddSubtaskField}>
               <SubtasksIcon className="h-4 w-4" />
+            </button>
+
+            <button className="p-1 pl-4  " onClick={(e) => e.stopPropagation()}>
+              <Enhance className="h-4 w-4" />
             </button>
           </div>
         </StickyCol>
