@@ -15,8 +15,6 @@ import {
   setShowPilot
 } from '../../../../../../../features/workspace/workspaceSlice';
 import { getCurrSubHubId, setOpenedHubId, setSubHubExt } from '../../../../../../../features/hubs/hubSlice';
-import MenuDropdown from '../../../../../../../components/Dropdown/MenuDropdown';
-import SubDropdown from '../../../../../../../components/Dropdown/SubDropdown';
 import { cl } from '../../../../../../../utils';
 import { EntityType } from '../../../../../../../utils/EntityTypes/EntityType';
 
@@ -103,7 +101,7 @@ export default function SubHubList({ hubs }: ListProps) {
     dispatch(
       setCurrentItem({
         currentItemId: id,
-        currentItemType: EntityType.subHub
+        currentItemType: EntityType.hub
       })
     );
   };
