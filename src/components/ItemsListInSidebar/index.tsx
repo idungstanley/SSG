@@ -33,8 +33,6 @@ export default function ItemsListInSidebar({ items, status, type }: ItemsListInS
   const { currentItemId } = useAppSelector((state) => state.workspace);
   const { showSidebar } = useAppSelector((state) => state.account);
 
-  // const { currentWorkspaceId } = useAppSelector((state) => state.auth);
-
   if (status === 'error') {
     return (
       <FullScreenMessage title="Oops, an error occurred :(" description="Please try again later." showOneThirdMessage />

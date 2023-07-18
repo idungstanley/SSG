@@ -34,7 +34,7 @@ export function Table({ heads, data, label }: TableProps) {
 
   // const columns = createHeaders(heads).filter((i) => !i.hidden);
 
-  const { draggableTaskId } = useAppSelector((state) => state.list);
+  const { draggableItemId } = useAppSelector((state) => state.list);
   const [listId, setListId] = useState<string>('');
   const { statusId } = useAppSelector((state) => state.task);
 
@@ -163,7 +163,7 @@ export function Table({ heads, data, label }: TableProps) {
 
   const onScroll = useScroll(() => dispatch(setUpdateCords()));
 
-  const draggableItem = draggableTaskId ? data.find((i) => i.id === draggableTaskId) : null;
+  const draggableItem = draggableItemId ? data.find((i) => i.id === draggableItemId) : null;
 
   return (
     <ScrollableContainer onScroll={onScroll}>
@@ -225,14 +225,11 @@ export function Table({ heads, data, label }: TableProps) {
 
           {/* add subtask button */}
           {!showNewTaskField ? (
-            <div className="h-5">
-              <button
-                onClick={() => handleToggleNewTask()}
-                className="absolute left-0 p-1.5 pl-16 text-left w-fit text-xs"
-              >
-                + New Task
-              </button>
-            </div>
+            <tbody className="h-5">
+              <tr onClick={() => handleToggleNewTask()} className="absolute left-0 p-1.5 pl-16 text-left w-fit text-xs">
+                <td>+ New Task</td>
+              </tr>
+            </tbody>
           ) : null}
         </table>
       </div>

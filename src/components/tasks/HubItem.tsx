@@ -24,6 +24,8 @@ import ThreeDotIcon from '../../assets/icons/ThreeDotIcon';
 import { Tooltip } from '@mui/material';
 import MenuDropdown from '../Dropdown/MenuDropdown';
 import SubDropdown from '../Dropdown/SubDropdown';
+import { useDraggable, useDroppable } from '@dnd-kit/core';
+import Drag from '../../assets/icons/Drag';
 
 interface TaskItemProps {
   item: {
@@ -146,17 +148,40 @@ export default function HubItem({
     return <div className="pl-3.5" />;
   };
 
+  const { isOver, setNodeRef } = useDroppable({
+    id: item.id,
+    data: {
+      isOverHub: true
+    }
+  });
+
+  const {
+    attributes,
+    listeners,
+    setNodeRef: draggableRef,
+    transform
+  } = useDraggable({
+    id: item.id,
+    data: {
+      isHub: true
+    }
+  });
+
   return (
     <>
       <div
         className={`bg-white truncate items-center group ${
           item.id === activeItemId ? 'font-medium' : 'hover:bg-gray-100'
-        } ${isSticky && stickyButtonIndex === index ? 'sticky bg-white opacity-100' : ''}`}
+        } ${isSticky && stickyButtonIndex === index ? 'sticky bg-white opacity-100' : ''} ${
+          isOver ? 'bg-primary-100 border-primary-500 shadow-inner shadow-primary-300' : ''
+        } `}
+        ref={setNodeRef}
         tabIndex={0}
         onClick={() => handleClick(item.id, index)}
         style={{
           top: isSticky && showSidebar ? topNumber : '',
-          zIndex: isSticky ? zNumber : '2'
+          zIndex: isSticky ? zNumber : '2',
+          opacity: transform ? 0 : 100
         }}
       >
         <div
@@ -175,12 +200,22 @@ export default function HubItem({
               style={{ backgroundColor: baseColor }}
             />
           )}
+
+          <div
+            className="absolute left-2 rounded-r-lg opacity-0 group-hover:opacity-100 cursor-move"
+            ref={draggableRef}
+            {...listeners}
+            {...attributes}
+          >
+            <Drag />
+          </div>
           <div
             role="button"
             className="flex truncate items-center py-1.5 mt-0.5 justify-start overflow-y-hidden text-sm"
             style={{
               marginLeft: type === EntityType.subHub && !showSidebar ? '-14px' : type === EntityType.subHub ? '0' : '',
-              paddingLeft: type === EntityType.subHub && !showSidebar ? '5px' : type === EntityType.subHub ? '10px' : ''
+              paddingLeft:
+                type === EntityType.subHub && !showSidebar ? '5px' : type === EntityType.subHub ? '15px' : '5px'
             }}
           >
             {!collapseNavAndSubhub && item?.has_descendants ? (
