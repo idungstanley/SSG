@@ -197,6 +197,11 @@ export interface ITimeEntriesRes {
   };
 }
 
+export interface ITimerDetails {
+  isBillable: boolean;
+  description: string;
+}
+
 export interface IDuration {
   s: number;
   m: number;

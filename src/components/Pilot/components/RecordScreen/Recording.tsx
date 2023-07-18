@@ -15,7 +15,7 @@ export interface IFormData {
 export default function Recording() {
   const { activeTabId, activeItemId, activeItemType, isMuted } = useAppSelector((state) => state.workspace);
   const { recorder, stream } = useAppSelector((state) => state.task);
-  const { hubId, listId, workSpaceId } = useParams();
+  const { hubId, listId, workSpaceId, taskId } = useParams();
 
   const dispatch = useAppDispatch();
   const {
@@ -28,7 +28,7 @@ export default function Recording() {
   const { screenRecording } = useAppSelector((state) => state.task);
   const startRecording = async () => {
     await handleStartStream();
-    dispatch(setRecorderLastMemory({ activeTabId, workSpaceId, listId, hubId }));
+    dispatch(setRecorderLastMemory({ activeTabId, workSpaceId, listId, hubId, taskId }));
   };
 
   const stopRecording = () => {
