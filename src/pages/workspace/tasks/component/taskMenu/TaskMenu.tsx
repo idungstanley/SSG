@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { MdFileCopy } from 'react-icons/md';
 // import TaskIcons from './taskIcons';
 import { useAppSelector } from '../../../../../app/hooks';
@@ -22,6 +22,15 @@ export default function TaskMenu() {
   const { selectedTasksArray } = useAppSelector((state) => state.task);
   const queryClient = useQueryClient();
   const dispatch = useDispatch();
+
+  const [isVisible, setIsVisible] = useState(false);
+  useEffect(() => {
+    if (selectedTasksArray.length > 0) {
+      setIsVisible(true);
+    } else {
+      setIsVisible(false);
+    }
+  }, [selectedTasksArray]);
 
   const useDeleteTask = useMutation(deleteTask, {
     onSuccess: () => {
@@ -153,7 +162,7 @@ export default function TaskMenu() {
   ];
 
   return (
-    <div className="overflow-hidden -mt-1.5 z-100">
+    <div className={`overflow-hidden ${isVisible ? 'slide-in' : 'slide-out'} z-100`}>
       <div
         className="abolute flex justify-between items-center w-12/12 h-11 bg-gray-800"
         style={{ transition: 'linear', transitionDelay: '100s' }}
