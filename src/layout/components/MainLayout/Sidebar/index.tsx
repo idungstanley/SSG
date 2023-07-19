@@ -16,7 +16,7 @@ import CommandSearchModal from './components/CommandSearchModal';
 import SearchIcon from '../../../../assets/icons/SearchIcon';
 import { setUpdateCords } from '../../../../features/hubs/hubSlice';
 import { useScroll } from '../../../../hooks/useScroll';
-import { ScrollableContainerY } from '../../../../components/ScrollableContainer/ScrollableContainerY';
+import { ScrollableContainer } from '../../../../components/ScrollableContainer/ScrollableContainer';
 
 const MAX_SIDEBAR_WIDTH = dimensions.navigationBar.max;
 const MIN_SIDEBAR_WIDTH = dimensions.navigationBar.min;
@@ -91,7 +91,7 @@ export default function Sidebar() {
           activeTabId={activeTabId}
           setActiveTabId={setActiveTabId}
         />
-        <ScrollableContainerY onScroll={onScroll}>
+        <ScrollableContainer scrollDirection="y" onScroll={onScroll}>
           {showSidebar ? (
             <NonInteractiveSearch
               setAction={setCommandSearchModal}
@@ -121,7 +121,7 @@ export default function Sidebar() {
             handleHotkeyClick={handleHotkeyClick}
           />
           <Places />
-        </ScrollableContainerY>
+        </ScrollableContainer>
       </section>
     </aside>
   );

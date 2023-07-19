@@ -152,7 +152,7 @@ export default function ClockInOut() {
         <section id="body" className="px-3 py-1 text-white bg-indigo-500 rounded-b-md">
           <div
             id="taskUser"
-            className="flex items-center justify-between h-10 py-3 text-alsoit-text-lg font-semibold cursor-pointer"
+            className="flex items-center justify-between h-10 py-3 font-semibold cursor-pointer text-alsoit-text-lg"
           >
             <span>Tags: </span>
             {/* total time here */}
@@ -164,35 +164,35 @@ export default function ClockInOut() {
               name="description"
               onChange={(e) => handleEndTimeChange(e.target.value)}
               placeholder="Enter a note"
-              className="w-full text-alsoit-gray-300 border-0 rounded shadow-sm"
+              className="w-full border-0 rounded shadow-sm text-alsoit-gray-300"
             />
           </div>
           <div id="entries" className="flex items-center justify-between py-1">
             <div id="left" className="flex items-center space-x-1 cursor-pointer">
-              <div className="mr-1 relative flex items-start">
+              <div className="relative flex items-start mr-1">
                 {timerStatus && sameEntity() ? (
                   <button onClick={stop}>
-                    <BsStopCircle className="h-4 w-4 text-red-400 cursor-pointer" aria-hidden="true" />
+                    <BsStopCircle className="w-4 h-4 text-red-400 cursor-pointer" aria-hidden="true" />
                   </button>
                 ) : (
                   <button onClick={() => activeTimerCheck()}>
-                    <AiOutlinePlayCircle className="h-4 w-4 text-alsoit-success cursor-pointer" aria-hidden="true" />
+                    <AiOutlinePlayCircle className="w-4 h-4 cursor-pointer text-alsoit-success" aria-hidden="true" />
                   </button>
                 )}
                 {prompt && (
-                  <div className="absolute top-5 p-2 rounded-lg shadow-2xl flex flex-col space-y-1 bg-alsoit-gray-75 z-50 w-72">
+                  <div className="absolute z-50 flex flex-col p-2 space-y-1 rounded-lg shadow-2xl top-5 bg-alsoit-gray-75 w-72">
                     <span className="text-center text-alsoit-gray-300">
                       Another Timer Already Running would you want to stop the active timer and continue here?
                     </span>
-                    <div className="flex w-full space-x-1 justify-end">
+                    <div className="flex justify-end w-full space-x-1">
                       <button
-                        className="bg-alsoit-text hover:bg-alsoit-text-active text-white p-1 rounded-lg font-bold"
+                        className="p-1 font-bold text-white rounded-lg bg-alsoit-text hover:bg-alsoit-text-active"
                         onClick={() => setPrompt(false)}
                       >
                         No
                       </button>
                       <button
-                        className="bg-alsoit-text-active hover:bg-purple-600 text-white p-1 rounded-lg font-bold"
+                        className="p-1 font-bold text-white rounded-lg bg-alsoit-text-active hover:bg-purple-600"
                         onClick={() => handleTimeSwitch()}
                       >
                         Yes
@@ -203,7 +203,7 @@ export default function ClockInOut() {
               </div>
               {/* timer goes here */}
               <div className="flex flex-col space-y-1">
-                <div className="flex space-x-2 items-center">
+                <div className="flex items-center space-x-2">
                   {timerCheck()}
                   <AvatarWithInitials height="h-4" width="w-4" initials={initials ?? 'UN'} />
                 </div>
@@ -211,7 +211,7 @@ export default function ClockInOut() {
                   const { hours, minutes, seconds } = Duration({ dateString: trackers });
                   const { initials } = trackers.team_member.user;
                   return (
-                    <div key={trackers.id} className="flex space-x-2 space-y-1 items-center w-44 h-72 overflow-y-auto">
+                    <div key={trackers.id} className="flex items-center space-x-2 space-y-1 overflow-y-auto w-44 h-72">
                       <div className="">
                         {`${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(
                           seconds

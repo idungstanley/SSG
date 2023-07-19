@@ -1,14 +1,15 @@
-import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
+import { ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon, ChevronUpIcon } from '@heroicons/react/24/outline';
 import React, { useState, useEffect, useRef, useCallback, ReactNode, HTMLAttributes } from 'react';
 import { useAppSelector } from '../../app/hooks';
 
 interface CustomScrollableContainerProps extends HTMLAttributes<HTMLDivElement> {
   children: ReactNode;
+  scrollDirection: 'x' | 'y';
 }
 
 const DEFAULT_THUMB_WIDTH = 20;
 
-export function ScrollableContainer({ children, ...props }: CustomScrollableContainerProps) {
+export function ScrollableContainer({ children, scrollDirection, ...props }: CustomScrollableContainerProps) {
   const contentRef = useRef<HTMLDivElement>(null);
   const scrollTrackRef = useRef<HTMLDivElement>(null);
   const scrollThumbRef = useRef<HTMLDivElement>(null);
@@ -25,17 +26,32 @@ export function ScrollableContainer({ children, ...props }: CustomScrollableCont
       const { current: trackCurrent } = scrollTrackRef;
       const { current: contentCurrent } = contentRef;
       if (trackCurrent && contentCurrent) {
-        const { clientX } = e;
+        const { clientX, clientY } = e;
         const target = e.target as HTMLDivElement;
         const rect = target.getBoundingClientRect();
-        const trackTop = rect.left;
+        const trackLeft = rect.left;
+        const trackTop = rect.top;
         const thumbOffset = -(thumbWidth / 2);
-        const clickRatio = (clientX - trackTop + thumbOffset) / trackCurrent.clientWidth;
-        const scrollAmount = Math.floor(clickRatio * contentCurrent.scrollWidth);
-        contentCurrent.scrollTo({
-          left: scrollAmount,
-          behavior: 'smooth'
-        });
+        let clickRatio;
+        if (scrollDirection === 'x') {
+          clickRatio = (clientX - trackLeft + thumbOffset) / trackCurrent.clientWidth;
+        } else {
+          clickRatio = (clientY - trackTop + thumbOffset) / trackCurrent.clientHeight;
+        }
+        const scrollAmount = Math.floor(
+          clickRatio * (scrollDirection === 'x' ? contentCurrent.scrollWidth : contentCurrent.scrollHeight)
+        );
+        if (scrollDirection === 'x') {
+          contentCurrent.scrollTo({
+            left: scrollAmount,
+            behavior: 'smooth'
+          });
+        } else {
+          contentCurrent.scrollTo({
+            top: scrollAmount,
+            behavior: 'smooth'
+          });
+        }
       }
     },
     [thumbWidth]
@@ -45,19 +61,35 @@ export function ScrollableContainer({ children, ...props }: CustomScrollableCont
     if (!contentRef.current || !scrollTrackRef.current || !scrollThumbRef.current) {
       return;
     }
-    const { scrollLeft: contentTop, scrollWidth: contentHeight } = contentRef.current;
-    const { clientWidth: trackHeight } = scrollTrackRef.current;
-    let newTop = (+contentTop / +contentHeight) * trackHeight;
-    newTop = Math.min(newTop, trackHeight - thumbWidth);
+    const {
+      scrollLeft: contentLeft,
+      scrollTop: contentTop,
+      scrollWidth: contentWidth,
+      scrollHeight: contentHeight
+    } = contentRef.current;
+    const { clientWidth: trackWidth, clientHeight: trackHeight } = scrollTrackRef.current;
+    let newLeft, newTop;
+    if (scrollDirection === 'x') {
+      newLeft = (+contentLeft / +contentWidth) * trackWidth;
+      newLeft = Math.min(newLeft, trackWidth - thumbWidth);
+    } else {
+      newTop = (+contentTop / +contentHeight) * trackHeight;
+      newTop = Math.min(newTop, trackHeight - thumbWidth);
+    }
     const thumb = scrollThumbRef.current;
-    thumb.style.left = `${newTop}px`;
+    if (scrollDirection === 'x') {
+      thumb.style.left = `${newLeft}px`;
+    } else {
+      thumb.style.top = `${newTop}px`;
+    }
   }, []);
 
   const handleThumbMousedown = useCallback((e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     e.preventDefault();
     e.stopPropagation();
-    setScrollStartPosition(e.clientX);
-    if (contentRef.current) setInitialScrollTop(contentRef.current.scrollLeft);
+    setScrollStartPosition(scrollDirection === 'x' ? e.clientX : e.clientY);
+    if (contentRef.current)
+      setInitialScrollTop(scrollDirection === 'x' ? contentRef.current.scrollLeft : contentRef.current.scrollTop);
     setIsDragging(true);
   }, []);
 
@@ -77,12 +109,28 @@ export function ScrollableContainer({ children, ...props }: CustomScrollableCont
       e.preventDefault();
       e.stopPropagation();
       if (isDragging && contentRef.current && scrollStartPosition) {
-        const { scrollWidth: contentScrollHeight, offsetWidth: contentOffsetHeight } = contentRef.current;
+        const {
+          scrollWidth: contentWidth,
+          scrollHeight: contentHeight,
+          offsetWidth: contentOffsetWidth,
+          offsetHeight: contentOffsetHeight
+        } = contentRef.current;
 
-        const deltaY = (e.clientX - scrollStartPosition) * (contentOffsetHeight / thumbWidth);
-        const newScrollTop = Math.min(initialScrollTop + deltaY, contentScrollHeight - contentOffsetHeight);
+        const delta = scrollDirection === 'x' ? e.clientX - scrollStartPosition : e.clientY - scrollStartPosition;
+        let newScroll;
+        if (scrollDirection === 'x') {
+          const deltaX = delta * (contentOffsetWidth / thumbWidth);
+          newScroll = Math.min(initialScrollTop + deltaX, contentWidth - contentOffsetWidth);
+        } else {
+          const deltaY = delta * (contentOffsetHeight / thumbWidth);
+          newScroll = Math.min(initialScrollTop + deltaY, contentHeight - contentOffsetHeight);
+        }
 
-        contentRef.current.scrollLeft = newScrollTop;
+        if (scrollDirection === 'x') {
+          contentRef.current.scrollLeft = newScroll;
+        } else {
+          contentRef.current.scrollTop = newScroll;
+        }
       }
     },
     [isDragging, scrollStartPosition, thumbWidth]
@@ -90,20 +138,29 @@ export function ScrollableContainer({ children, ...props }: CustomScrollableCont
 
   // update size is pilot is visible / invisible
   const { show: showFullPilot } = useAppSelector((state) => state.slideOver.pilotSideOver);
+  const { showMore, currentItemId, activeItemId, showHub } = useAppSelector((state) => state.workspace);
+  const { openedHubId } = useAppSelector((state) => state.hub);
+
+  const initialActivePlaceId: number | null = (JSON.parse(localStorage.getItem('activePlaceIdLocale') as string) ||
+    null) as number | null;
 
   // If the content and the scrollbar track exist, use a ResizeObserver to adjust height of thumb and listen for scroll event to move the thumb
   useEffect(() => {
     const handleResize = (ref: HTMLDivElement, trackSize: number) => {
-      const { clientWidth, scrollWidth } = ref;
-      setThumbWidth(Math.max((clientWidth / scrollWidth) * trackSize, DEFAULT_THUMB_WIDTH));
+      const { clientWidth, scrollWidth, clientHeight, scrollHeight } = ref;
+      if (scrollDirection === 'x') {
+        setThumbWidth(Math.max((clientWidth / scrollWidth) * trackSize, DEFAULT_THUMB_WIDTH));
+      } else {
+        setThumbWidth(Math.max((clientHeight / scrollHeight) * trackSize, DEFAULT_THUMB_WIDTH));
+      }
     };
 
     const calculateThumbSize = () => {
       if (contentRef.current && scrollTrackRef.current) {
         const ref = contentRef.current;
-        const { clientWidth: trackSize } = scrollTrackRef.current;
+        const { clientWidth: trackWidth, clientHeight: trackHeight } = scrollTrackRef.current;
         observer.current = new ResizeObserver(() => {
-          handleResize(ref, trackSize);
+          handleResize(ref, scrollDirection === 'x' ? trackWidth : trackHeight);
         });
         observer.current.observe(ref);
         ref.addEventListener('scroll', handleThumbPosition);
@@ -121,7 +178,7 @@ export function ScrollableContainer({ children, ...props }: CustomScrollableCont
     return () => {
       window.removeEventListener('resize', calculateThumbSize);
     };
-  }, [showFullPilot]);
+  }, [showFullPilot, initialActivePlaceId, showHub, showMore, currentItemId, activeItemId, openedHubId]);
 
   // Listen for mouse events to handle scrolling by dragging the thumb
   useEffect(() => {
@@ -136,67 +193,110 @@ export function ScrollableContainer({ children, ...props }: CustomScrollableCont
   }, [handleThumbMousemove, handleThumbMouseup]);
 
   // scroll buttons
-  function handleScrollButton(direction: 'left' | 'right') {
+  function handleScrollButton(direction: 'left' | 'right' | 'up' | 'down') {
     if (contentRef.current) {
       const width = contentRef.current.offsetWidth;
-      const scrollAmount = direction === 'left' ? 0 : width;
+      let scrollAmount;
+      if (scrollDirection === 'x') {
+        scrollAmount = direction === 'left' ? 0 : width;
+      } else {
+        scrollAmount = direction === 'down' ? 200 : -200;
+      }
 
-      contentRef.current.scrollTo({ left: scrollAmount, behavior: 'smooth' });
+      if (scrollDirection === 'x') {
+        contentRef.current.scrollTo({ left: scrollAmount, behavior: 'smooth' });
+      } else {
+        contentRef.current.scrollTo({ top: scrollAmount, behavior: 'smooth' });
+      }
     }
   }
 
   return (
-    <div className="relative w-full p-2 overflow-hidden">
-      <div className="scrollbar-hide" ref={contentRef} {...props}>
+    <div className={`relative w-full overflow-hidden ${scrollDirection === 'y' ? 'pr-1 flex' : 'p-2'}`}>
+      <div className={`scrollbar-hide ${scrollDirection === 'y' ? 'grow mr-1' : ''}`} ref={contentRef} {...props}>
         {children}
       </div>
-      <div className="grid w-full grid-cols-2 mt-2">
+      <div
+        className={` mt-2 group ${
+          scrollDirection === 'y' ? 'flex flex-col w-4 items-center border-l ' : 'grid w-full grid-cols-2'
+        }`}
+      >
         <div />
 
-        <div className="flex items-center space-x-2">
-          <div className="flex gap-1 ml-2 bg-gray-100 rounded">
+        <div className={`flex items-center space-x-2 ${scrollDirection === 'y' ? 'flex-col h-full' : 'flex-row'}`}>
+          <div
+            className={`flex gap-1 ml-2 bg-gray-100 opacity-0 group-hover:opacity-100 rounded ${
+              scrollDirection === 'y' ? 'flex-col' : 'flex-row'
+            }`}
+          >
             <button
-              className="flex items-center justify-center w-4 h-4 bg-gray-200 rounded-full"
-              onClick={() => handleScrollButton('left')}
+              className="flex items-center justify-center w-3 h-3 bg-gray-200 rounded-full"
+              onClick={() => handleScrollButton(scrollDirection === 'y' ? 'up' : 'left')}
             >
-              <ChevronLeftIcon className="w-3 h-3 text-gray-700" />
+              {scrollDirection === 'y' ? (
+                <ChevronUpIcon className="w-2 h-2 text-gray-700" />
+              ) : (
+                <ChevronLeftIcon className="w-2 h-2 text-gray-700" />
+              )}
             </button>
             <button
-              className="flex items-center justify-center w-4 h-4 bg-gray-200 rounded-full"
-              onClick={() => handleScrollButton('right')}
+              className="flex items-center justify-center w-3 h-3 bg-gray-200 rounded-full"
+              onClick={() => handleScrollButton(scrollDirection === 'y' ? 'down' : 'right')}
             >
-              <ChevronRightIcon className="w-3 h-3 text-gray-700" />
+              {scrollDirection === 'y' ? (
+                <ChevronDownIcon className="w-2 h-2 text-gray-700" />
+              ) : (
+                <ChevronRightIcon className="w-2 h-2 text-gray-700" />
+              )}
             </button>
           </div>
-
-          <div className="relative flex-grow block w-full h-3">
+          <div
+            className={`relative flex flex-grow block ${scrollDirection === 'y' ? 'w-2 items-center' : ' w-full h-3'}`}
+          >
             <div
-              className="absolute top-0 bottom-0 w-full h-3 bg-transparent cursor-pointer rounded-xl"
+              className={`absolute top-0 bottom-0 bg-transparent cursor-pointer rounded-xl ${
+                scrollDirection === 'y' ? 'w-2' : ' w-full h-3'
+              }`}
               ref={scrollTrackRef}
               onClick={handleTrackClick}
             ></div>
             <div
-              className="absolute h-3 bg-gray-400 cursor-pointer rounded-xl"
+              className={`absolute bg-alsoit-gray-75 hover:bg-alsoit-gray-300 cursor-pointer rounded-xl ${
+                scrollDirection === 'y' ? 'w-2' : ' w-full h-3'
+              }`}
               ref={scrollThumbRef}
               onMouseDown={handleThumbMousedown}
               style={{
-                width: `${thumbWidth}px`,
+                height: scrollDirection === 'y' ? `${thumbWidth}px` : '',
+                width: scrollDirection === 'x' ? `${thumbWidth}px` : '',
                 cursor: isDragging ? 'grabbing' : 'grab'
               }}
             ></div>
           </div>
-          <div className="flex gap-1 ml-2 bg-gray-100 rounded">
+          <div
+            className={`flex gap-1 ml-2 bg-gray-100 opacity-0 group-hover:opacity-100 rounded ${
+              scrollDirection === 'y' ? 'flex-col' : 'flex-row'
+            }`}
+          >
             <button
-              className="flex items-center justify-center w-4 h-4 bg-gray-200 rounded-full"
-              onClick={() => handleScrollButton('left')}
+              className="flex items-center justify-center w-3 h-3 bg-gray-200 rounded-full"
+              onClick={() => handleScrollButton(scrollDirection === 'y' ? 'up' : 'left')}
             >
-              <ChevronLeftIcon className="w-3 h-3 text-gray-700" />
+              {scrollDirection === 'y' ? (
+                <ChevronUpIcon className="w-2 h-2 text-gray-700" />
+              ) : (
+                <ChevronLeftIcon className="w-2 h-2 text-gray-700" />
+              )}
             </button>
             <button
-              className="flex items-center justify-center w-4 h-4 bg-gray-200 rounded-full"
-              onClick={() => handleScrollButton('right')}
+              className="flex items-center justify-center w-3 h-3 bg-gray-200 rounded-full"
+              onClick={() => handleScrollButton(scrollDirection === 'y' ? 'down' : 'right')}
             >
-              <ChevronRightIcon className="w-3 h-3 text-gray-700" />
+              {scrollDirection === 'y' ? (
+                <ChevronDownIcon className="w-2 h-2 text-gray-700" />
+              ) : (
+                <ChevronRightIcon className="w-2 h-2 text-gray-700" />
+              )}
             </button>
           </div>
         </div>

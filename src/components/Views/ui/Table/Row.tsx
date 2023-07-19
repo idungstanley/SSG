@@ -13,6 +13,9 @@ import TaskTag from '../../../Tag/ui/TaskTag';
 import dradnddrop from '../../../../assets/icons/dradnddrop.svg';
 import Effect from '../../../../assets/icons/Effect';
 import Enhance from '../../../badges/Enhance';
+import { setShowNewTaskField, setShowNewTaskId } from '../../../../features/task/taskSlice';
+import ToolTip from '../../../Tooltip/Tooltip';
+import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 
 interface RowProps {
   task: Task;
@@ -25,17 +28,11 @@ interface RowProps {
 }
 
 export function Row({ task, columns, paddingLeft = 0, parentId, task_status, isListParent, handleClose }: RowProps) {
-  const [showNewTaskField, setShowNewTaskField] = useState(false);
   const otherColumns = columns.slice(1);
   const [showSubTasks, setShowSubTasks] = useState(false);
+  const { showNewTaskField, showNewTaskId } = useAppSelector((state) => state.task);
 
-  // const selectedRef = useRef<HTMLTableRowElement>(null);
-  // useEffect(() => {
-  //   // Scroll to the selected item when the component mounts
-  //   if (selectedRef.current) {
-  //     selectedRef.current.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-  //   }
-  // }, []);
+  const dispatch = useAppDispatch();
 
   const newSubTask: ITaskFullList = {
     archived_at: null,
@@ -44,6 +41,7 @@ export function Row({ task, columns, paddingLeft = 0, parentId, task_status, isL
     created_at: '',
     custom_fields: [],
     deleted_at: null,
+    descendants_count: 0,
     description: null,
     directory_items: [],
     end_date: null,
@@ -75,14 +73,20 @@ export function Row({ task, columns, paddingLeft = 0, parentId, task_status, isL
     updated_at: ''
   };
 
-  const onShowAddSubtaskField = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+  const onShowAddSubtaskField = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, taskId: string) => {
     e.stopPropagation();
-    setShowNewTaskField(!showNewTaskField);
+    if (showNewTaskField) {
+      dispatch(setShowNewTaskId(''));
+      dispatch(setShowNewTaskField(false));
+    } else {
+      dispatch(setShowNewTaskId(taskId));
+      dispatch(setShowNewTaskField(true));
+    }
   };
 
   const onCloseAddTaskFIeld = () => {
-    setShowNewTaskField(false);
-    // setShowSubTasks(true);
+    dispatch(setShowNewTaskId(''));
+    dispatch(setShowNewTaskField(false));
   };
 
   const { attributes, listeners, setNodeRef, transform } = useDraggable({
@@ -126,23 +130,32 @@ export function Row({ task, columns, paddingLeft = 0, parentId, task_status, isL
           {/* actions */}
           <div className="absolute opacity-0 group-hover:opacity-100 top-0 bottom-0 right-0 flex space-x-1 mr-1 items-center justify-center">
             {/* effects */}
-            <button className="p-1 border rounded-lg " onClick={(e) => e.stopPropagation()}>
-              <Effect className="h-4 w-4" />
-            </button>
+            <ToolTip tooltip="Apply Effects">
+              <button className="p-1 border rounded-md " onClick={(e) => e.stopPropagation()}>
+                <Effect className="h-3 w-3" />
+              </button>
+            </ToolTip>
 
             {/* tags */}
             {'tags' in task ? (
-              <ManageTagsDropdown entityId={task.id} tagsArr={task.tags as Tag[]} entityType="task" />
+              <ToolTip tooltip="Tags">
+                <ManageTagsDropdown entityId={task.id} tagsArr={task.tags as Tag[]} entityType="task" />
+              </ToolTip>
             ) : null}
 
             {/* show create subtask field */}
-            <button className="p-1 border rounded-lg " onClick={onShowAddSubtaskField}>
-              <SubtasksIcon className="h-4 w-4" />
-            </button>
-
-            <button className="p-1 pl-4  " onClick={(e) => e.stopPropagation()}>
-              <Enhance className="h-4 w-4" />
-            </button>
+            {task.descendants_count < 1 && (
+              <ToolTip tooltip="Subtask">
+                <button className="p-1 border rounded-md " onClick={(e) => onShowAddSubtaskField(e, task.id)}>
+                  <SubtasksIcon className="h-3 w-3" />
+                </button>
+              </ToolTip>
+            )}
+            <ToolTip tooltip="Enhance View">
+              <button className="p-1 pl-4  " onClick={(e) => e.stopPropagation()}>
+                <Enhance className="h-3 w-3" />
+              </button>
+            </ToolTip>
           </div>
         </StickyCol>
 
@@ -158,7 +171,7 @@ export function Row({ task, columns, paddingLeft = 0, parentId, task_status, isL
         ))}
       </tr>
 
-      {showNewTaskField ? (
+      {showNewTaskField && showNewTaskId == task.id ? (
         <AddSubTask
           task={newSubTask}
           columns={columns}

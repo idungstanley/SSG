@@ -166,7 +166,7 @@ export function Table({ heads, data, label }: TableProps) {
   const draggableItem = draggableItemId ? data.find((i) => i.id === draggableItemId) : null;
 
   return (
-    <ScrollableContainer onScroll={onScroll}>
+    <ScrollableContainer scrollDirection="x" onScroll={onScroll}>
       {/* draggable item */}
       {draggableItem ? (
         <DragOverlay>

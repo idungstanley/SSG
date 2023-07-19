@@ -11,13 +11,6 @@ export function Header() {
 
   return (
     <>
-      {selectedTasksArray.length > 0 && (
-        <div className="w-full p-2 absolute z-50">
-          <span className="w-12/12 transition duration-300 ease-in-out ">
-            <TaskMenu />
-          </span>
-        </div>
-      )}
       <section className="p-1.5 h-12 w-full flex items-center justify-between border-b">
         <ChangeView />
 
@@ -28,6 +21,13 @@ export function Header() {
           <Search />
         </div>
       </section>
+      {selectedTasksArray.length > 0 && (
+        <div className="w-full p-2  z-50">
+          <span className="w-12/12 transition duration-300 ease-in-out ">
+            <TaskMenu />
+          </span>
+        </div>
+      )}
     </>
   );
 }
