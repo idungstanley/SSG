@@ -22,6 +22,7 @@ import OpenSubtask from '../../../../assets/icons/OpenSubtask';
 import { Capitalize } from '../../../../utils/NoCapWords/Capitalize';
 import RoundedCheckbox from '../../../Checkbox/RoundedCheckbox';
 import ToolTip from '../../../Tooltip/Tooltip';
+import Badges from '../../../badges';
 
 interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   task: Task;
@@ -119,7 +120,6 @@ export function StickyCol({
 
   const editTaskMutation = useMutation(UseUpdateTaskService, {
     onSuccess: () => {
-      // setEitableContent(false);
       queryClient.invalidateQueries(['task']);
     }
   });
@@ -220,11 +220,11 @@ export function StickyCol({
           >
             <button onClick={onToggleDisplayingSubTasks} className="pl-1">
               {showSubTasks ? (
-                <div className={`${task.has_descendants ? 'w-3 h-3' : ' opacity-0 w-3 h-3 '}`}>
+                <div className={`${task.descendants_count > 0 ? 'w-3 h-3' : ' opacity-0 w-3 h-3 '}`}>
                   <CloseSubtask />
                 </div>
               ) : (
-                <div className={`${task.has_descendants ? 'w-3 h-3' : ' opacity-0 w-3 h-3 '}`}>
+                <div className={`${task.descendants_count > 0 ? 'w-3 h-3' : ' opacity-0 w-3 h-3 '}`}>
                   <OpenSubtask />
                 </div>
               )}
@@ -276,7 +276,7 @@ export function StickyCol({
 
                 {/* non default badges here */}
                 <div onClick={(e) => e.stopPropagation()} className="pl-3">
-                  <Badges />
+                  <Badges task={task} />
                 </div>
               </div>
 

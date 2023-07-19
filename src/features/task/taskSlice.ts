@@ -48,6 +48,7 @@ export interface ImyTaskData {
   parent_id: string | null;
   priority: string | null | [{ id: string; initials: string; color: string; name: string }];
   start_date: string | null;
+  descendants_count: number;
   has_descendants: boolean;
   end_date: string | null;
   status: Status;
@@ -111,6 +112,8 @@ interface TaskState {
   comfortableView: boolean;
   comfortableViewWrap: boolean;
   verticalGrid: boolean;
+  showNewTaskField: boolean;
+  showNewTaskId: string;
   singleLineView: boolean;
   CompactView: boolean;
   taskUpperCase: boolean;
@@ -184,6 +187,8 @@ const initialState: TaskState = {
   listView: true,
   comfortableView: true,
   comfortableViewWrap: false,
+  showNewTaskField: false,
+  showNewTaskId: '',
   singleLineView: true,
   selectedTasksArray: [],
   verticalGrid: false,
@@ -329,6 +334,12 @@ export const taskSlice = createSlice({
     },
     getCompactView(state, action: PayloadAction<boolean>) {
       state.CompactView = action.payload;
+    },
+    setShowNewTaskField(state, action: PayloadAction<boolean>) {
+      state.showNewTaskField = action.payload;
+    },
+    setShowNewTaskId(state, action: PayloadAction<string>) {
+      state.showNewTaskId = action.payload;
     },
     getTaskUpperCase(state, action: PayloadAction<boolean>) {
       state.taskUpperCase = action.payload;
@@ -539,6 +550,8 @@ export const {
   getMapView,
   setTaskStatus,
   setShowTaskNavigation,
+  setShowNewTaskField,
+  setShowNewTaskId,
   setRmWatcher,
   setCurrentTaskId,
   setSelectedTasksArray,

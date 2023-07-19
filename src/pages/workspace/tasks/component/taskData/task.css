@@ -85,3 +85,13 @@
 .table-container table .tdListVNoSticky:last-child {
   border-right: 1px solid #bf01fe;
 }
+
+.slide-in {
+  transition: transform 1s ease;
+  transform: translateY(0%);
+}
+
+.slide-out {
+  transition: transform 1s ease;
+  transform: translateY(-100%);
+}
