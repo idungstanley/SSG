@@ -10,6 +10,7 @@ import { useAppDispatch } from '../../../../app/hooks';
 import { setCurrTeamMemId } from '../../../../features/task/taskSlice';
 import AvatarWithImage from '../../../../components/avatar/AvatarWithImage';
 import { TrashIcon } from '@heroicons/react/24/outline';
+import { Capitalize } from '../../../../utils/NoCapWords/Capitalize';
 
 interface AssigneeItem {
   item: ITeamMembersAndGroup;
@@ -91,7 +92,7 @@ function AssigneeItem({ item, option, entity_id, teams, handleClose, isAssigned 
           )}
         </span>
         <p className="text-sm text-black truncate hover:text-clip">
-          {teams ? item.name : item.user.name.toLocaleUpperCase()}
+          {Capitalize(teams ? (item.name as string | null) : item.user.name)}
         </p>
       </div>
 
