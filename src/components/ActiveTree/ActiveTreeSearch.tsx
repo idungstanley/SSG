@@ -21,7 +21,7 @@ interface ActiveTreeSearchProps {
 
 export default function ActiveTreeSearch({ closeDropdown }: ActiveTreeSearchProps) {
   const dispatch = useAppDispatch();
-  const { listId, hubId, walletId, workSpaceId } = useParams();
+  const { listId, workSpaceId } = useParams();
 
   const { currentWorkspaceId } = useAppSelector((state) => state.auth);
   const { currentItemId } = useAppSelector((state) => state.workspace);
@@ -31,7 +31,7 @@ export default function ActiveTreeSearch({ closeDropdown }: ActiveTreeSearchProp
   const [toggleTree, setToggleTree] = useState<boolean>(false);
 
   const fetch = currentWorkspaceId == workSpaceId;
-  const fetchTree = hubs.length === 0 && fetch && (!!listId || !!hubId || !!walletId);
+  const fetchTree = hubs.length === 0 && fetch;
   const id = currentItemId;
 
   const { data } = useGetHubs({ includeTree: fetchTree, hub_id: id, wallet_id: id, listId });

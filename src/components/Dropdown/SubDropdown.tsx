@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { DocumentDuplicateIcon, StarIcon, PlusIcon, LinkIcon, SwatchIcon } from '@heroicons/react/24/outline';
 import { useAppSelector } from '../../app/hooks';
 import { useDispatch } from 'react-redux';
@@ -12,6 +12,7 @@ import {
   setActiveEntityName,
   setActiveSubHubManagerTabId,
   setActiveTabId,
+  setLastActiveItem,
   setShowIndependentPilot,
   setShowOverlay,
   setShowTreeInput
@@ -45,10 +46,8 @@ export default function SubDropdown() {
   const { currentWorkspaceId } = useAppSelector((state) => state.auth);
   const { showMenuDropdownType, selectedTreeDetails, entityToCreate, showMenuDropdown, SubMenuType, SubMenuId } =
     useAppSelector((state) => state.hub);
-  const { showTreeInput } = useAppSelector((state) => state.workspace);
+  const { showTreeInput, lastActiveItem } = useAppSelector((state) => state.workspace);
   const { lightBaseColor } = useAppSelector((state) => state.account);
-
-  const [lastClicked, setLastClicked] = useState<string>('');
 
   const isEntityActive = !!listId || !!hubId || !!walletId;
 
@@ -57,7 +56,7 @@ export default function SubDropdown() {
   useEffect(() => {
     const checkClickedOutSide = (e: MouseEvent): void => {
       if (SubMenuId != null && ref.current && !ref.current.contains(e.target as HTMLButtonElement)) {
-        if (lastClicked !== '') {
+        if (lastActiveItem !== '') {
           dispatch(
             getSubMenu({
               SubMenuId: null,
@@ -79,7 +78,7 @@ export default function SubDropdown() {
       style: 'danger',
       callback: () => {
         dispatch(setSubDropdownMenu(false));
-        setLastClicked('');
+        dispatch(setLastActiveItem(''));
         dispatch(setShowTreeInput(false));
         dispatch(
           getSubMenu({
@@ -102,7 +101,7 @@ export default function SubDropdown() {
       bgColor: lightBaseColor,
       callback: () => {
         if (!isEntityActive) {
-          dispatch(setActiveEntityName(`New ${Capitalize(lastClicked as string)} Under Construction`));
+          dispatch(setActiveEntityName(`New ${Capitalize(lastActiveItem as string)} Under Construction`));
         }
         dispatch(setShowOverlay(true));
         dispatch(setShowIndependentPilot(true));
@@ -130,7 +129,7 @@ export default function SubDropdown() {
       title: 'Sub Hub',
       handleClick: () => {
         dispatch(setEntityToCreate(EntityType.subHub));
-        setLastClicked('Sub Hub');
+        dispatch(setLastActiveItem('Sub Hub'));
       },
       icon: <img src={hubIcon} alt="" className="w-4 h-4" />,
       isVisible: showMenuDropdownType == 'hubs' ? true : false || SubMenuType == 'hubs' ? true : false
@@ -147,7 +146,7 @@ export default function SubDropdown() {
           : 'Wallet',
       handleClick: () => {
         dispatch(setEntityToCreate(EntityType.wallet));
-        setLastClicked(selectedTreeDetails.type === EntityType.wallet ? 'Sub Wallet' : 'Wallet');
+        dispatch(setLastActiveItem(selectedTreeDetails.type === EntityType.wallet ? 'Sub Wallet' : 'Wallet'));
       },
       icon: <FaFolder className="w-4 h-4" aria-hidden="true" />,
       isVisible:
@@ -161,7 +160,7 @@ export default function SubDropdown() {
       handleClick: () => {
         dispatch(setCreateTaskSlideOverVisibility(true));
         navigate(`/${currentWorkspaceId}/tasks`);
-        setLastClicked('Task');
+        dispatch(setLastActiveItem('Task'));
       },
       icon: <PlusIcon className="w-5 pt-2 text-gray-700 h-7" aria-hidden="true" />,
       isVisible: showMenuDropdownType == 'list' ? true : false
@@ -170,7 +169,7 @@ export default function SubDropdown() {
       id: 4,
       title: 'List',
       handleClick: () => {
-        setLastClicked('List');
+        dispatch(setLastActiveItem('List'));
         dispatch(setEntityToCreate(EntityType.list));
       },
       icon: <AiOutlineUnorderedList className="w-4 h-4" aria-hidden="true" />,
@@ -215,24 +214,24 @@ export default function SubDropdown() {
         style={{ boxShadow: '0 1px 10px #00000040', minWidth: '200px', zIndex: '999' }}
       >
         {itemsList.map((item) =>
-          (lastClicked === '' || lastClicked === item.title) && item.isVisible ? (
+          (lastActiveItem === '' || lastActiveItem === item.title) && item.isVisible ? (
             <div key={item.id}>
               <div
                 className={`flex items-center p-2 space-x-2 text-sm text-left text-gray-600  ${
-                  lastClicked ? '' : 'hover:bg-gray-200 rounded-md cursor-pointer'
+                  lastActiveItem ? '' : 'hover:bg-gray-200 rounded-md cursor-pointer'
                 }`}
                 onClick={item.handleClick}
               >
                 {item.icon}
-                <p>{lastClicked ? 'Create Entity' : item.title}</p>
+                <p>{lastActiveItem ? 'Create Entity' : item.title}</p>
               </div>
             </div>
           ) : null
         )}
-        {lastClicked && (
+        {lastActiveItem && (
           <div className="mb-2">
             <span className="flex p-2 mb-2 truncate whitespace-normal text-start">
-              {`Do you want to create your ${lastClicked} under ${selectedTreeDetails.name}`}
+              {`Do you want to create your ${lastActiveItem} under ${selectedTreeDetails.name}`}
             </span>
             <div className="flex items-center justify-between gap-2 p-2">
               {options.map((option: optionsProps) => (

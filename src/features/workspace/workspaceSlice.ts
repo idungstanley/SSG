@@ -61,6 +61,7 @@ interface workspaceState {
   selectedDate: { date: Dayjs; dateType?: string } | null;
   showTreeInput: boolean;
   workspaceData: undefined | IWorkspaceRes;
+  lastActiveItem: string;
 }
 
 const initialState: workspaceState = {
@@ -116,7 +117,8 @@ const initialState: workspaceState = {
   logType: 'activity',
   activeLogTab: 'activity',
   selectedDate: { date: dayjs() },
-  showTreeInput: false
+  showTreeInput: false,
+  lastActiveItem: ''
 };
 
 export const wsSlice = createSlice({
@@ -311,6 +313,9 @@ export const wsSlice = createSlice({
     },
     setSelectedDate(state, action: PayloadAction<{ date: Dayjs; dateType?: string } | null>) {
       state.selectedDate = action.payload;
+    },
+    setLastActiveItem(state, action: PayloadAction<string>) {
+      state.lastActiveItem = action.payload;
     }
   }
 });
@@ -367,7 +372,8 @@ export const {
   setSelectedDate,
   setShowTreeInput,
   setShowIndependentPilot,
-  setActiveSubHubManagerTabId
+  setActiveSubHubManagerTabId,
+  setLastActiveItem
 } = wsSlice.actions;
 
 export default wsSlice.reducer;
