@@ -9,33 +9,15 @@ import { setHistoryMemory, setTaskSelectedDate } from '../../features/task/taskS
 
 export default function MiniDatePicker() {
   const dispatch = useAppDispatch();
-  const [today, setToday] = useState(dayjs());
+  const [today] = useState(dayjs());
   const [shownDate, setShownDate] = useState<dayjs.Dayjs>(today);
   const [iconToggle, setIconToggle] = useState<{ rightIcon: boolean; leftIcon: boolean }>({
     rightIcon: false,
     leftIcon: false
   });
-  const [selectedStart, setSelectedStart] = useState<dayjs.Dayjs | null>(null);
-  const [selectedEnd, setSelectedEnd] = useState<dayjs.Dayjs | null>(null);
   const [hoveredDate, setHoveredDate] = useState<dayjs.Dayjs | null>(null);
   const { HistoryFilterMemory, selectedDate: taskTime } = useAppSelector((state) => state.task);
   const { selectedDate } = useAppSelector((state) => state.workspace);
-
-  const handleSelectDate = (value: dayjs.Dayjs) => {
-    if (!selectedStart) {
-      setSelectedStart(value);
-    } else if (!selectedEnd) {
-      if (value.isSame(selectedStart) || value.isAfter(selectedStart)) {
-        setSelectedEnd(value);
-      } else {
-        setSelectedEnd(selectedStart);
-        setSelectedStart(value);
-      }
-    } else {
-      setSelectedStart(value);
-      setSelectedEnd(null);
-    }
-  };
 
   const handleClick = (date: dayjs.Dayjs) => {
     if (!selectedDate?.dateType) {
@@ -58,13 +40,13 @@ export default function MiniDatePicker() {
   };
 
   const handleHoverDate = (value: dayjs.Dayjs) => {
-    if (selectedStart && !selectedEnd) {
-      if (value.isSame(selectedStart) || value.isAfter(selectedStart)) {
+    if (taskTime?.from && !taskTime?.to) {
+      if (value.isSame(taskTime?.from) || value.isAfter(taskTime?.from)) {
         setHoveredDate(value);
       } else {
         setHoveredDate(null);
       }
-    } else if (selectedStart && selectedEnd && value.isAfter(selectedStart) && value.isBefore(selectedEnd)) {
+    } else if (taskTime?.from && taskTime?.to && value.isAfter(taskTime?.from) && value.isBefore(taskTime?.to)) {
       setHoveredDate(value);
     } else {
       setHoveredDate(null);
@@ -72,34 +54,34 @@ export default function MiniDatePicker() {
   };
 
   const isStartDate = (value: dayjs.Dayjs) => {
-    if (!selectedStart) {
+    if (!taskTime?.from) {
       return false;
     }
-    return value.isSame(selectedStart, 'day');
+    return value.isSame(taskTime.from, 'day');
   };
 
   const isEndDate = (value: dayjs.Dayjs) => {
-    if (!selectedEnd) {
+    if (!taskTime?.to) {
       return false;
     }
-    return value.isSame(selectedEnd, 'day');
+    return value.isSame(taskTime?.to, 'day');
   };
 
   const isDateInRange = (value: dayjs.Dayjs) => {
-    if (!selectedStart) {
+    if (!taskTime?.from) {
       return false;
     }
 
-    if (selectedEnd) {
+    if (taskTime?.to) {
       return (
-        (value.isAfter(selectedStart) || value.isSame(selectedStart, 'day')) &&
-        (value.isBefore(selectedEnd) || value.isSame(selectedEnd, 'day'))
+        (value.isAfter(taskTime?.from) || value.isSame(taskTime?.from, 'day')) &&
+        (value.isBefore(taskTime?.to) || value.isSame(taskTime?.to, 'day'))
       );
     }
 
     if (hoveredDate) {
       return (
-        (value.isAfter(selectedStart) || value.isSame(selectedStart, 'day')) &&
+        (value.isAfter(taskTime?.from) || value.isSame(taskTime?.from, 'day')) &&
         (value.isBefore(hoveredDate) || value.isSame(hoveredDate, 'day'))
       );
     }
@@ -158,7 +140,7 @@ export default function MiniDatePicker() {
                       ? 'bg-blue-600 text-white'
                       : isDateInRange(value)
                       ? 'bg-blue-600 text-white'
-                      : hoveredDate && value.isSame(hoveredDate, 'day') && !selectedEnd
+                      : hoveredDate && value.isSame(hoveredDate, 'day') && !taskTime?.to
                       ? 'bg-blue-200'
                       : ''
                   } ${value.month() !== today.month() ? 'text-gray-300' : 'text-gray-600'} ${

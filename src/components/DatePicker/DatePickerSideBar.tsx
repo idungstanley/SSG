@@ -3,8 +3,8 @@ import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { setHistoryMemory, setTaskSelectedDate } from '../../features/task/taskSlice';
 import { setSelectedDate } from '../../features/workspace/workspaceSlice';
 import { generateDate, weekends, weeks } from '../../utils/calendar';
-import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io';
 import { useState } from 'react';
+import ThreeDotIcon from '../../assets/icons/ThreeDotIcon';
 
 interface DatePickerSideBarProp {
   currentDate: dayjs.Dayjs;
@@ -12,6 +12,9 @@ interface DatePickerSideBarProp {
 
 export function DatePickerSideBar({ currentDate }: DatePickerSideBarProp) {
   const dispatch = useAppDispatch();
+  const [iconToggle, setIconToggle] = useState<{ threeDotIcon: boolean }>({
+    threeDotIcon: false
+  });
   const [showRecurring, setRecurring] = useState<boolean>(false);
   const { HistoryFilterMemory } = useAppSelector((state) => state.task);
   let selectedStartOfWeek: Dayjs | null = null;
@@ -111,9 +114,15 @@ export function DatePickerSideBar({ currentDate }: DatePickerSideBarProp) {
 
   return (
     <div className="border-r text-sm border-gray-200">
-      <div className="flex justify-between w-full" onClick={() => setRecurring(!showRecurring)}>
+      <div className="flex justify-between w-full px-2" onClick={() => setRecurring(!showRecurring)}>
         <span className="font-extrabold text-alsoit-text-lg">Recurring</span>
-        {showRecurring ? <IoIosArrowDown /> : <IoIosArrowUp />}
+        <div
+          className="cursor-pointer"
+          onMouseEnter={() => setIconToggle((prev) => ({ ...prev, threeDotIcon: true }))}
+          onMouseLeave={() => setIconToggle((prev) => ({ ...prev, threeDotIcon: false }))}
+        >
+          <ThreeDotIcon active={iconToggle.threeDotIcon} />
+        </div>
       </div>
       <div className="flex flex-col space-y-2">
         <p
