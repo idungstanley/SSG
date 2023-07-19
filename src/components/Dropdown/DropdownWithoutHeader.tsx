@@ -1,8 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import Menu from '@mui/material/Menu';
-import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { useAppSelector } from '../../app/hooks';
 import ActiveTreeSearch from '../ActiveTree/ActiveTreeSearch';
-import { useGetHubs, useGetTree } from '../../features/hubs/hubService';
 
 interface ItemProps {
   label: string;
@@ -10,23 +9,22 @@ interface ItemProps {
   onclick: () => void;
 }
 
-interface ModalProps {
+interface IDropdownWithoutHeaderProps {
+  items: ItemProps[];
   anchorEl: HTMLElement | null;
   handleClose: () => void;
   setAnchorEl: React.Dispatch<React.SetStateAction<HTMLElement | null>>;
-  items: ItemProps[];
 }
-export default function DropdownWithoutHeader({ setAnchorEl, anchorEl, handleClose, items }: ModalProps) {
-  const modalRef = useRef<HTMLDivElement>(null);
+export default function DropdownWithoutHeader({
+  items,
+  anchorEl,
+  handleClose,
+  setAnchorEl
+}: IDropdownWithoutHeaderProps) {
   const { createEntityType } = useAppSelector((state) => state.workspace);
-  // const { showMenuDropdown, SubMenuId } = useAppSelector((state) => state.hub);
-  const open = Boolean(anchorEl);
-  const [fetchTree, setFetchTree] = useState<boolean>(false);
-  const { data: allHubs } = useGetHubs({ includeTree: false });
 
-  const handleFetch = () => {
-    setFetchTree((prev) => !prev);
-  };
+  const open = Boolean(anchorEl);
+  const modalRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -34,9 +32,7 @@ export default function DropdownWithoutHeader({ setAnchorEl, anchorEl, handleClo
         setAnchorEl(null);
       }
     };
-
     document.addEventListener('click', handleClickOutside);
-
     return () => {
       document.removeEventListener('click', handleClickOutside);
     };
@@ -75,9 +71,7 @@ export default function DropdownWithoutHeader({ setAnchorEl, anchorEl, handleClo
               <span>{item.label}</span>
             </div>
             {(index + 1) % 2 === 0 && index !== items.length - 1 && <hr />}
-            {createEntityType === item.label.toLowerCase() && (
-              <ActiveTreeSearch data={allHubs} handleFetch={handleFetch} fetchTree={fetchTree} />
-            )}
+            {createEntityType === item.label.toLowerCase() && <ActiveTreeSearch />}
           </React.Fragment>
         ))}
       </div>

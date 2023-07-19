@@ -1,34 +1,100 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BiRightArrowCircle } from 'react-icons/bi';
 import { CiSearch } from 'react-icons/ci';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
-import { IHub, IList, IWallet } from '../../features/hubs/hubs.interfaces';
-import ActiveTreeDataFormater from './ActiveTreeDataFormater';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { setActiveSubHubManagerTabId, setActiveTabId, setShowOverlay } from '../../features/workspace/workspaceSlice';
-import { getSubMenu } from '../../features/hubs/hubSlice';
+import { getHub, getSubMenu } from '../../features/hubs/hubSlice';
 import { EntityManagerTabsId, PilotTabsId } from '../../utils/PilotUtils';
+import { Hub, InputData } from '../../pages/workspace/hubs/components/ActiveTree/activetree.interfaces';
+import ActiveTreeDataFormater from './ActiveTreeDataFormater';
+import { useGetHubs } from '../../features/hubs/hubService';
+import { useParams } from 'react-router';
+import { isEqual } from 'lodash';
+import CreateTree from '../../pages/workspace/hubs/components/ActiveTree/CreateTree';
+import UpdateTree from '../../pages/workspace/hubs/components/ActiveTree/updateTree/UpdateTree';
+import { setFilteredResults } from '../../features/search/searchSlice';
 
 interface ActiveTreeSearchProps {
-  handleFetch: () => void;
-  data:
-    | {
-        hubs: IHub[];
-        wallets: IWallet[];
-        lists: IList[];
-      }
-    | undefined;
-  fetchTree: boolean;
-  id?: string | null;
   closeDropdown?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export default function ActiveTreeSearch({ data, handleFetch, fetchTree, id, closeDropdown }: ActiveTreeSearchProps) {
-  const [toggleTree, setToggleTree] = useState<boolean>(false);
-  const { selectedTreeDetails, entityToCreate } = useAppSelector((state) => state.hub);
+export default function ActiveTreeSearch({ closeDropdown }: ActiveTreeSearchProps) {
   const dispatch = useAppDispatch();
+  const { listId, hubId, walletId, workSpaceId } = useParams();
+
+  const { currentWorkspaceId } = useAppSelector((state) => state.auth);
+  const { currentItemId } = useAppSelector((state) => state.workspace);
+  const { selectedTreeDetails, entityToCreate, hub } = useAppSelector((state) => state.hub);
+
+  const [hubs, setHubs] = useState<Hub[]>(hub.length ? hub : []);
+  const [toggleTree, setToggleTree] = useState<boolean>(false);
+
+  const fetch = currentWorkspaceId == workSpaceId;
+  const fetchTree = hubs.length === 0 && fetch && (!!listId || !!hubId || !!walletId);
+  const id = currentItemId;
+
+  const { data } = useGetHubs({ includeTree: fetchTree, hub_id: id, wallet_id: id, listId });
+
+  const previousData = JSON.parse(JSON.stringify(!!data));
+
+  useEffect(() => {
+    if (data) {
+      const isAnyItemChanged = !isEqual(data, previousData);
+      const incoming: InputData = {
+        hubs: data.hubs ? [...data.hubs.map((i) => ({ ...i, children: [], wallets: [], lists: [] }))] : [],
+        wallets: data.wallets ? [...data.wallets.map((i) => ({ ...i, children: [], lists: [] }))] : [],
+        lists: data.lists ? [...data.lists.map((i) => ({ ...i, children: [] }))] : []
+      };
+
+      if (fetchTree) {
+        setHubs(() => [...CreateTree(incoming)]);
+      } else {
+        setHubs((prev) =>
+          !prev.length
+            ? [...incoming.hubs]
+            : [
+                ...UpdateTree(
+                  hubs,
+                  (item) => {
+                    if ('wallets' in item && 'lists' in item) {
+                      return {
+                        ...item,
+                        children: [...incoming.hubs],
+                        wallets: [...incoming.wallets],
+                        lists: [...incoming.lists]
+                      };
+                    } else if ('lists' in item) {
+                      return {
+                        ...item,
+                        children: [...incoming.wallets],
+                        lists: [...incoming.lists]
+                      };
+                    } else if ('children' in item) {
+                      return {
+                        ...item,
+                        children: [...incoming.lists]
+                      };
+                    } else {
+                      return item;
+                    }
+                  },
+                  listId || id
+                )
+              ]
+        );
+      }
+    }
+  }, [data]);
+
+  useEffect(() => {
+    if (hubs) {
+      dispatch(setFilteredResults(hubs));
+      dispatch(getHub(hubs));
+    }
+  }, [hubs, data]);
+
   const fetchAndToggle = () => {
-    handleFetch();
     setToggleTree((prev) => !prev);
   };
 
@@ -50,6 +116,7 @@ export default function ActiveTreeSearch({ data, handleFetch, fetchTree, id, clo
     );
     closeDropdown?.(false);
   };
+
   return (
     <div className="relative">
       <button
@@ -72,7 +139,7 @@ export default function ActiveTreeSearch({ data, handleFetch, fetchTree, id, clo
           type="text"
         />
       </button>
-      {toggleTree && <ActiveTreeDataFormater setToggleTree={setToggleTree} data={data} fetchTree={fetchTree} id={id} />}
+      {toggleTree && <ActiveTreeDataFormater data={hubs} setToggleTree={setToggleTree} />}
     </div>
   );
 }

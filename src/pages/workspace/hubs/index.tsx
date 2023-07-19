@@ -30,7 +30,6 @@ import { setEntityToCreate, setSelectedTreeDetails } from '../../../features/hub
 import DropdownWithIcon from '../../../components/Dropdown/index';
 import PlusIcon from '../../../assets/icons/PlusIcon';
 import ActiveTreeSearch from '../../../components/ActiveTree/ActiveTreeSearch';
-import { useGetHubs } from '../../../features/hubs/hubService';
 import { Modal } from '../../../components/Pilot/components/HotKeys/components/Modal';
 import { Capitalize } from '../../../utils/NoCapWords/Capitalize';
 
@@ -43,14 +42,9 @@ function Hubs() {
   const { currentWorkspaceId } = useAppSelector((state) => state.auth);
   const { isSearchActive } = useAppSelector((state) => state.search);
   const { createEntityType } = useAppSelector((state) => state.workspace);
+
   const [showModal, setShowModal] = useState<boolean>(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [fetchTree, setFetchTree] = useState<boolean>(false);
-  const { data: allHubs } = useGetHubs({ includeTree: false });
-
-  const handleFetch = () => {
-    setFetchTree((prev) => !prev);
-  };
 
   const toggleSearch = (e: React.MouseEvent<SVGElement, MouseEvent>) => {
     e.stopPropagation();
@@ -153,12 +147,7 @@ function Hubs() {
             </div>
             {(index + 1) % 2 === 0 && index !== configForDropdown.length - 1 && <hr />}
             {createEntityType === item.label.toLowerCase() && createEntityType !== EntityType.hub && (
-              <ActiveTreeSearch
-                data={allHubs}
-                handleFetch={handleFetch}
-                fetchTree={fetchTree}
-                closeDropdown={setShowModal}
-              />
+              <ActiveTreeSearch />
             )}
           </React.Fragment>
         ))}

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { DocumentDuplicateIcon, StarIcon, PlusIcon, LinkIcon, SwatchIcon } from '@heroicons/react/24/outline';
 import { useAppSelector } from '../../app/hooks';
 import { useDispatch } from 'react-redux';
@@ -17,7 +17,6 @@ import {
   setShowTreeInput
 } from '../../features/workspace/workspaceSlice';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
-import { useGetTree } from '../../features/hubs/hubService';
 import ActiveTreeSearch from '../ActiveTree/ActiveTreeSearch';
 import Button from '../Button';
 import { EntityManagerTabsId, PilotTabsId } from '../../utils/PilotUtils';
@@ -41,38 +40,20 @@ interface optionsProps {
 export default function SubDropdown() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { listId, hubId, walletId } = useParams();
+
+  const { currentWorkspaceId } = useAppSelector((state) => state.auth);
   const { showMenuDropdownType, selectedTreeDetails, entityToCreate, showMenuDropdown, SubMenuType, SubMenuId } =
     useAppSelector((state) => state.hub);
-  const { currentWorkspaceId } = useAppSelector((state) => state.auth);
   const { showTreeInput } = useAppSelector((state) => state.workspace);
   const { lightBaseColor } = useAppSelector((state) => state.account);
+
   const [lastClicked, setLastClicked] = useState<string>('');
-  const [fetchTree, setFetchTree] = useState<boolean>(false);
-  const { listId, hubId, walletId } = useParams();
+
   const isEntityActive = !!listId || !!hubId || !!walletId;
-  const hubIdToFetch =
-    SubMenuType === 'hubs' || SubMenuType === 'subhub'
-      ? SubMenuId
-      : showMenuDropdownType === 'hubs' || showMenuDropdownType === 'subhub'
-      ? showMenuDropdown
-      : null;
-  const walletIdToFetch =
-    SubMenuType === 'wallet' ? SubMenuId : showMenuDropdownType === 'wallet' ? showMenuDropdown : null;
-  const listIdToFetch = SubMenuType === 'list' ? SubMenuId : null;
-  const fetchId = showMenuDropdown || SubMenuId;
-  const { data } = useGetTree({
-    includeTree: fetchTree,
-    hub_id: hubIdToFetch,
-    wallet_id: walletIdToFetch,
-    listId: listIdToFetch
-  });
-  const navLink = '/tasks';
-  const CapitalizeType = Capitalize(lastClicked);
-  const handleFetch = () => {
-    setFetchTree((prev) => !prev);
-  };
 
   const ref = useRef<HTMLInputElement>(null);
+
   useEffect(() => {
     const checkClickedOutSide = (e: MouseEvent): void => {
       if (SubMenuId != null && ref.current && !ref.current.contains(e.target as HTMLButtonElement)) {
@@ -98,6 +79,8 @@ export default function SubDropdown() {
       style: 'danger',
       callback: () => {
         dispatch(setSubDropdownMenu(false));
+        setLastClicked('');
+        dispatch(setShowTreeInput(false));
         dispatch(
           getSubMenu({
             SubMenuId: null,
@@ -111,7 +94,7 @@ export default function SubDropdown() {
       style: 'white',
       callback: () => {
         dispatch(setVisibility(false));
-        dispatch(setShowTreeInput(true));
+        dispatch(setShowTreeInput(!showTreeInput));
       }
     },
     {
@@ -119,7 +102,7 @@ export default function SubDropdown() {
       bgColor: lightBaseColor,
       callback: () => {
         if (!isEntityActive) {
-          dispatch(setActiveEntityName('New ' + CapitalizeType + ' Under Construction'));
+          dispatch(setActiveEntityName(`New ${Capitalize(lastClicked as string)} Under Construction`));
         }
         dispatch(setShowOverlay(true));
         dispatch(setShowIndependentPilot(true));
@@ -140,6 +123,7 @@ export default function SubDropdown() {
       }
     }
   ];
+
   const itemsList: itemsType[] = [
     {
       id: 1,
@@ -176,7 +160,7 @@ export default function SubDropdown() {
       title: 'Task',
       handleClick: () => {
         dispatch(setCreateTaskSlideOverVisibility(true));
-        navigate(`/${currentWorkspaceId}` + navLink);
+        navigate(`/${currentWorkspaceId}/tasks`);
         setLastClicked('Task');
       },
       icon: <PlusIcon className="w-5 pt-2 text-gray-700 h-7" aria-hidden="true" />,
@@ -263,11 +247,7 @@ export default function SubDropdown() {
                 </div>
               ))}
             </div>
-            <div>
-              {showTreeInput && (
-                <ActiveTreeSearch data={data} handleFetch={handleFetch} fetchTree={fetchTree} id={fetchId} />
-              )}
-            </div>
+            <div>{showTreeInput && <ActiveTreeSearch />}</div>
           </div>
         )}
       </div>
