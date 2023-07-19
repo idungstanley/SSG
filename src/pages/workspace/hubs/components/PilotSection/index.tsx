@@ -23,6 +23,8 @@ import RecordScreen from '../../../../../components/Pilot/components/RecordScree
 import HubManager from '../../../../../components/Pilot/components/HubManager/HubManager';
 import TemplatesIcon from '../../../../../assets/icons/Templates';
 import Templates from '../../../../../components/Pilot/components/Templates';
+import Calendar from '../../../../../components/Pilot/components/Calendar';
+import CalendarIcon from '../../../../../assets/icons/CalendarIcon';
 
 const sections = [
   {
@@ -64,6 +66,10 @@ const sections = [
   {
     id: 10,
     element: <Templates />
+  },
+  {
+    id: 11,
+    element: <Calendar />
   }
 ];
 
@@ -117,6 +123,11 @@ const tabs = [
     id: 10,
     label: 'Templates',
     icon: <TemplatesIcon />
+  },
+  {
+    id: 11,
+    label: 'Calendar',
+    icon: <CalendarIcon active />
   }
 ];
 

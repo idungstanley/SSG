@@ -74,7 +74,7 @@ export default function NavigationItems({
       id: '3',
       name: 'Calendar',
       href: `/${currentWorkspaceId}/calendar`,
-      icon: <CalendarIcon />,
+      icon: <CalendarIcon active />,
       alwaysShow: false
     },
     {
