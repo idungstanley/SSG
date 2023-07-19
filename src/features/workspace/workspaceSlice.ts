@@ -61,6 +61,7 @@ interface workspaceState {
   selectedDate: { date: Dayjs; dateType?: string } | null;
   showTreeInput: boolean;
   workspaceData: undefined | IWorkspaceRes;
+  showMore: boolean;
 }
 
 const initialState: workspaceState = {
@@ -116,7 +117,8 @@ const initialState: workspaceState = {
   logType: 'activity',
   activeLogTab: 'activity',
   selectedDate: { date: dayjs() },
-  showTreeInput: false
+  showTreeInput: false,
+  showMore: false
 };
 
 export const wsSlice = createSlice({
@@ -131,6 +133,9 @@ export const wsSlice = createSlice({
     },
     setShowTreeInput(state, action: PayloadAction<boolean>) {
       state.showTreeInput = action.payload;
+    },
+    setShowMore(state, action: PayloadAction<boolean>) {
+      state.showMore = action.payload;
     },
     setShowOverlay(state, action: PayloadAction<boolean>) {
       state.showOverlay = action.payload;
@@ -327,6 +332,7 @@ export const {
   setCreateEntityType,
   setShowMenuDropDown,
   setShowModal,
+  setShowMore,
   setSearchIsActive,
   setIsExtSearchActive,
   setActiveItem,
