@@ -14,6 +14,8 @@ import { useGetTeamMemberGroups } from '../../../../features/settings/teamMember
 import { cl } from '../../../../utils';
 import { useAppSelector } from '../../../../app/hooks';
 import AssigneeItem from './AssigneeItem';
+import AlsoitMenuDropdown from '../../../../components/DropDowns';
+import RoundedCheckbox from '../../../../components/Checkbox/RoundedCheckbox';
 
 export default function Assignee({
   itemId,
@@ -30,7 +32,6 @@ export default function Assignee({
   const [searchInput, setSearchInput] = React.useState<string>('');
   const [teams, setTeams] = React.useState<boolean>(false);
   const [filteredMembers, setFilteredMembers] = useState<ITeamMembersAndGroup[] | undefined>([]);
-  const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -68,7 +69,7 @@ export default function Assignee({
   return (
     <>
       {option !== 'getTeamId' && (
-        <Button id="basic-button">
+        <>
           {assignees?.length ? (
             <div className="flex">
               <GroupAssignee data={assignees} itemId={itemId as string} handleClick={handleClick} teams={teams} />
@@ -84,15 +85,15 @@ export default function Assignee({
               />
             </span>
           )}
-        </Button>
+        </>
       )}
       {option === 'getTeamId' && (
-        <Button id="basic-button">
+        <div id="basic-button">
           {userObj ? (
             <div className="">
-              <Button className="border-2 border-red-400  rounded-full" onClick={handleClick}>
+              <button className="border-2 border-red-400  rounded-full" onClick={handleClick}>
                 <AvatarWithInitials initials={userObj.user.initials} backgroundColour={userObj.color} badge={true} />
-              </Button>
+              </button>
             </div>
           ) : (
             <span onClick={handleClick}>
@@ -105,9 +106,90 @@ export default function Assignee({
               />
             </span>
           )}
-        </Button>
+        </div>
       )}
-      <Menu
+      <AlsoitMenuDropdown handleClose={handleClose} anchorEl={anchorEl as HTMLDivElement | null}>
+        <div className="" style={{ width: '232px', maxHeight: '400px' }}>
+          <section className="relative flex items-center sticky top-2 bg-white z-10">
+            <AiOutlineSearch className="absolute w-5 h-5 right-3" />
+            <input
+              type="text"
+              placeholder="Search..."
+              className="w-11/12 m-auto p-2 border-0 focus:outline-none rounded-md"
+              onKeyDown={handleKeyDown}
+              onChange={(e) => searchItem(e.target.value)}
+            />
+          </section>
+          <div className="w-full justify-between items-center px-4 my-2 sticky top-12 bg-white z-10">
+            <div className="flex justify-between">
+              <p
+                className={cl(
+                  'flex justify-center w-1/2 cursor-pointer',
+                  !teams ? 'border-b-2 border-fuchsia-600' : ''
+                )}
+                onClick={() => setTeams(!teams)}
+              >
+                Users
+              </p>
+              <RoundedCheckbox
+                onChange={() => setTeams(!teams)}
+                isChecked={!teams}
+                styles="w-3 h-3 rounded-full cursor-pointer focus:outline-1 focus:ring-transparent  focus:border-2 focus:opacity-100 group-hover:opacity-100 text-alsoit-purple-300"
+              />
+            </div>
+            <div className="flex justify-between">
+              <p
+                className={cl(
+                  'flex justify-center w-1/2 cursor-pointer',
+                  !teams ? 'border-b-2 border-fuchsia-600' : ''
+                )}
+                onClick={() => setTeams(!teams)}
+              >
+                Users
+              </p>
+              <RoundedCheckbox
+                onChange={() => setTeams(!teams)}
+                isChecked={!teams}
+                styles="w-3 h-3 rounded-full cursor-pointer focus:outline-1 focus:ring-transparent  focus:border-2 focus:opacity-100 group-hover:opacity-100 text-alsoit-purple-300"
+              />
+            </div>
+            <p
+              className={cl('flex justify-center w-1/2 cursor-pointer', teams ? 'border-b-2 border-fuchsia-600' : '')}
+              onClick={() => setTeams(!teams)}
+            >
+              Teams
+            </p>
+          </div>
+          {searchInput.length > 1
+            ? filteredMembers?.map((item) => {
+                return (
+                  <AssigneeItem
+                    key={item.id}
+                    item={item}
+                    option={option}
+                    entity_id={itemId}
+                    teams={teams}
+                    handleClose={handleClose}
+                    isAssigned={assignedUser?.includes(item.id) || checklistAssignedUserId?.includes(item.id)}
+                  />
+                );
+              })
+            : teamMembers?.map((item) => {
+                return (
+                  <AssigneeItem
+                    key={item.id}
+                    item={item}
+                    option={option}
+                    entity_id={itemId}
+                    teams={teams}
+                    handleClose={handleClose}
+                    isAssigned={assignedUser?.includes(item.id) || checklistAssignedUserId?.includes(item.id)}
+                  />
+                );
+              })}
+        </div>
+      </AlsoitMenuDropdown>
+      {/* <Menu
         id="basic-menu"
         anchorEl={anchorEl}
         open={open}
@@ -176,7 +258,7 @@ export default function Assignee({
                 />
               );
             })}
-      </Menu>
+      </Menu> */}
     </>
   );
 }
