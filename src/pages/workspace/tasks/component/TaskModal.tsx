@@ -24,9 +24,6 @@ function TaskModal() {
 
   const [statusId, setStatusId] = useState<string>('');
 
-  console.log('statusId', statusId);
-  console.log(list);
-
   useEffect(() => {
     const minPosition = Math.min(...(list?.data.list.task_statuses.map((status) => status.position) || []));
     const statusObj: ITask_statuses | undefined = list?.data.list.task_statuses.find(
@@ -40,7 +37,7 @@ function TaskModal() {
 
   const createTask = useMutation(createTaskService, {
     onSuccess: () => {
-      queryClient.invalidateQueries();
+      queryClient.invalidateQueries(['task']);
       dispatch(setCreateTaskSlideOverVisibility(false));
       dispatch(setSubDropdownMenu(false));
       dispatch(
