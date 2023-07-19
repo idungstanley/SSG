@@ -16,13 +16,16 @@ function TaskModal() {
   const dispatch = useDispatch();
   const { showMenuDropdown, listIdCreateTask } = useAppSelector((state) => state.hub);
   const { showCreateTaskSlideOver } = useAppSelector((state) => state.slideOver);
-  const { sideBarCreateTaskListId } = useAppSelector((state) => state.hub);
 
-  const { data: list } = UseGetListDetails({ activeItemId: sideBarCreateTaskListId, activeItemType: 'list' });
-
-  console.log(listIdCreateTask);
+  const { data: list } = UseGetListDetails({
+    activeItemId: listIdCreateTask,
+    activeItemType: 'list'
+  });
 
   const [statusId, setStatusId] = useState<string>('');
+
+  console.log('statusId', statusId);
+  console.log(list);
 
   useEffect(() => {
     const minPosition = Math.min(...(list?.data.list.task_statuses.map((status) => status.position) || []));
@@ -33,7 +36,7 @@ function TaskModal() {
       const newStatusId: string = statusObj.id;
       setStatusId(newStatusId);
     }
-  }, [sideBarCreateTaskListId]);
+  }, [listIdCreateTask, list]);
 
   const createTask = useMutation(createTaskService, {
     onSuccess: () => {
