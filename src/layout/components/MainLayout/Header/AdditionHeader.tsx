@@ -109,7 +109,7 @@ export default function AdditionalHeader() {
         {timeBlinkerCheck() && (
           <div
             className="flex items-center px-2 py-1 space-x-1 border border-alsoit-purple-300 rounded-lg cursor-pointer"
-            onMouseEnter={() => setTimerModal(!timerModal)}
+            onClick={() => setTimerModal(!timerModal)}
           >
             <div
               onMouseEnter={() =>
@@ -134,6 +134,7 @@ export default function AdditionalHeader() {
             </div>
             {timerModal ? (
               <div
+                className="flex items-center"
                 onMouseEnter={() =>
                   setIconToggle((prev) => ({
                     ...prev,
@@ -151,6 +152,7 @@ export default function AdditionalHeader() {
               </div>
             ) : (
               <div
+                className="flex items-center"
                 onMouseEnter={() =>
                   setIconToggle((prev) => ({
                     ...prev,
