@@ -250,8 +250,6 @@ function CustomSuggestion() {
     setValue({ ...value, [e.target.name]: e.target.value });
   };
 
-  console.log(value);
-
   return (
     <div className="flex flex-col space-y-4 my-6 items-center justify-center">
       <label htmlFor="type" className="text-alsoit-text-lg px-2 text-left font-semibold">
@@ -279,7 +277,9 @@ function CustomSuggestion() {
         />
       </label>
       <div>
-        <button className="p-1 text-white bg-alsoit-purple-300 hover:bg-purple-700 rounded-md">Create</button>
+        <button className="p-1 text-white bg-alsoit-purple-300 hover:bg-purple-400 cursor-pointer rounded-md">
+          Create
+        </button>
       </div>
     </div>
   );
