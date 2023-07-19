@@ -1,6 +1,4 @@
 import * as React from 'react';
-import Button from '@mui/material/Button';
-import Menu from '@mui/material/Menu';
 import { UserPlusIcon } from '@heroicons/react/24/solid';
 import { useGetTeamMembers } from '../../../../features/settings/teamMembers/teamMemberService';
 import { AvatarWithInitials } from '../../../../components';
@@ -15,7 +13,6 @@ import { cl } from '../../../../utils';
 import { useAppSelector } from '../../../../app/hooks';
 import AssigneeItem from './AssigneeItem';
 import AlsoitMenuDropdown from '../../../../components/DropDowns';
-import RoundedCheckbox from '../../../../components/Checkbox/RoundedCheckbox';
 
 export default function Assignee({
   itemId,
@@ -109,7 +106,7 @@ export default function Assignee({
         </div>
       )}
       <AlsoitMenuDropdown handleClose={handleClose} anchorEl={anchorEl as HTMLDivElement | null}>
-        <div className="" style={{ width: '232px', maxHeight: '400px' }}>
+        <div className="overflow-scroll" style={{ maxHeight: '400px' }}>
           <section className="relative flex items-center sticky top-2 bg-white z-10">
             <AiOutlineSearch className="absolute w-5 h-5 right-3" />
             <input
@@ -120,39 +117,13 @@ export default function Assignee({
               onChange={(e) => searchItem(e.target.value)}
             />
           </section>
-          <div className="w-full justify-between items-center px-4 my-2 sticky top-12 bg-white z-10">
-            <div className="flex justify-between">
-              <p
-                className={cl(
-                  'flex justify-center w-1/2 cursor-pointer',
-                  !teams ? 'border-b-2 border-fuchsia-600' : ''
-                )}
-                onClick={() => setTeams(!teams)}
-              >
-                Users
-              </p>
-              <RoundedCheckbox
-                onChange={() => setTeams(!teams)}
-                isChecked={!teams}
-                styles="w-3 h-3 rounded-full cursor-pointer focus:outline-1 focus:ring-transparent  focus:border-2 focus:opacity-100 group-hover:opacity-100 text-alsoit-purple-300"
-              />
-            </div>
-            <div className="flex justify-between">
-              <p
-                className={cl(
-                  'flex justify-center w-1/2 cursor-pointer',
-                  !teams ? 'border-b-2 border-fuchsia-600' : ''
-                )}
-                onClick={() => setTeams(!teams)}
-              >
-                Users
-              </p>
-              <RoundedCheckbox
-                onChange={() => setTeams(!teams)}
-                isChecked={!teams}
-                styles="w-3 h-3 rounded-full cursor-pointer focus:outline-1 focus:ring-transparent  focus:border-2 focus:opacity-100 group-hover:opacity-100 text-alsoit-purple-300"
-              />
-            </div>
+          <div className="w-full flex justify-between items-center px-4 my-2 sticky top-12 bg-white z-10">
+            <p
+              className={cl('flex justify-center w-1/2 cursor-pointer', !teams ? 'border-b-2 border-fuchsia-600' : '')}
+              onClick={() => setTeams(!teams)}
+            >
+              Users
+            </p>
             <p
               className={cl('flex justify-center w-1/2 cursor-pointer', teams ? 'border-b-2 border-fuchsia-600' : '')}
               onClick={() => setTeams(!teams)}
@@ -189,76 +160,6 @@ export default function Assignee({
               })}
         </div>
       </AlsoitMenuDropdown>
-      {/* <Menu
-        id="basic-menu"
-        anchorEl={anchorEl}
-        open={open}
-        onClose={handleClose}
-        autoFocus={false}
-        MenuListProps={{
-          'aria-labelledby': 'basic-button'
-        }}
-        className="ml-10"
-        PaperProps={{
-          style: {
-            height: 400,
-            overflowY: 'auto',
-            width: '350px'
-          }
-        }}
-      >
-        <section className="relative flex items-center sticky top-2 bg-white z-10">
-          <AiOutlineSearch className="absolute w-5 h-5 right-3" />
-          <input
-            type="text"
-            placeholder="Search..."
-            className="w-11/12 m-auto p-2 border-0 focus:outline-none rounded-md"
-            onKeyDown={handleKeyDown}
-            onChange={(e) => searchItem(e.target.value)}
-          />
-        </section>
-        <div className="w-full flex justify-between items-center px-4 my-2 sticky top-12 bg-white z-10">
-          <p
-            className={cl('flex justify-center w-1/2 cursor-pointer', !teams ? 'border-b-2 border-fuchsia-600' : '')}
-            onClick={() => setTeams(!teams)}
-          >
-            Users
-          </p>
-          <p
-            className={cl('flex justify-center w-1/2 cursor-pointer', teams ? 'border-b-2 border-fuchsia-600' : '')}
-            onClick={() => setTeams(!teams)}
-          >
-            Teams
-          </p>
-        </div>
-        {searchInput.length > 1
-          ? filteredMembers?.map((item) => {
-              return (
-                <AssigneeItem
-                  key={item.id}
-                  item={item}
-                  option={option}
-                  entity_id={itemId}
-                  teams={teams}
-                  handleClose={handleClose}
-                  isAssigned={assignedUser?.includes(item.id) || checklistAssignedUserId?.includes(item.id)}
-                />
-              );
-            })
-          : teamMembers?.map((item) => {
-              return (
-                <AssigneeItem
-                  key={item.id}
-                  item={item}
-                  option={option}
-                  entity_id={itemId}
-                  teams={teams}
-                  handleClose={handleClose}
-                  isAssigned={assignedUser?.includes(item.id) || checklistAssignedUserId?.includes(item.id)}
-                />
-              );
-            })}
-      </Menu> */}
     </>
   );
 }
