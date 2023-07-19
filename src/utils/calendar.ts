@@ -1,4 +1,4 @@
-import dayjs from 'dayjs';
+import dayjs, { Dayjs } from 'dayjs';
 import timezone from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
 
@@ -180,3 +180,85 @@ export const months: string[] = [
   'November',
   'December'
 ];
+
+// our interface for a single cell
+export interface ICalendarCell {
+  text: string;
+  value: Dayjs;
+}
+
+export function changeDateMonth(date: Dayjs, isNextMonth: boolean): Dayjs {
+  // should decrease year
+  if (date.month() === 0 && !isNextMonth) {
+    return date.set('year', date.year() - 1).set('month', 11);
+  }
+
+  // should increase year
+  if (date.month() === 11 && isNextMonth) {
+    return date.set('year', date.year() + 1).set('month', 0);
+  }
+
+  // add or subtract
+  return date.add(isNextMonth ? 1 : -1, 'month');
+}
+
+export function getCalendarCells(
+  date: Dayjs,
+  startOfWeek = 0 // Default to Sunday as the start of the week (0 for Sunday, 1 for Monday, and so on)
+): ICalendarCell[] {
+  const daysInMonth = date.daysInMonth();
+  const startOfMonth = date.startOf('month');
+  const startDayOfWeek = startOfMonth.day();
+  const offset = (startDayOfWeek - startOfWeek + 7) % 7; // Calculate the offset based on the start of the week
+  const calendarCells: ICalendarCell[] = [];
+
+  const prepareCell = (date: Dayjs, dayNumber: number) => {
+    return {
+      text: String(dayNumber),
+      value: date.clone().set('date', dayNumber)
+    };
+  };
+
+  // Add empty cells for the days before the start of the month
+  for (let i = 0; i < offset; i++) {
+    const prevMonth = startOfMonth.subtract(1, 'month');
+    const prevMonthDays = prevMonth.daysInMonth();
+    const dayNumber = prevMonthDays - offset + i + 1;
+    calendarCells.push(prepareCell(prevMonth, dayNumber));
+  }
+
+  // Add cells for the days in the current month
+  for (let i = 0; i < daysInMonth; i++) {
+    calendarCells.push(prepareCell(startOfMonth, i + 1));
+    startOfMonth.add(1, 'day');
+  }
+
+  // Calculate the remaining cells needed to fill the rows
+  const remainingCells = 7 - (calendarCells.length % 7);
+
+  // Add cells for the days in the next month
+  if (remainingCells < 7) {
+    const nextMonth = startOfMonth.clone().add(1, 'month');
+    for (let i = 0; i < remainingCells; i++) {
+      calendarCells.push(prepareCell(nextMonth, i + 1));
+      nextMonth.add(1, 'day');
+    }
+  }
+
+  return calendarCells;
+}
+
+export function getCalendarRows(
+  date: Dayjs,
+  startOfWeek = 0 // Default to Sunday as the start of the week (0 for Sunday, 1 for Monday, and so on)
+): Array<ICalendarCell[]> {
+  const cells = getCalendarCells(date, startOfWeek);
+  const rows: Array<ICalendarCell[]> = [];
+
+  // split one array into chunks
+  for (let i = 0; i < cells.length; i += 7) {
+    rows.push(cells.slice(i, i + 7));
+  }
+
+  return rows;
+}

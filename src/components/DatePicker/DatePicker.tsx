@@ -12,6 +12,7 @@ import { setSelectedDate } from '../../features/workspace/workspaceSlice';
 import { DateObject, generateDate, groupDatesByDayOfWeek, months } from '../../utils/calendar';
 import cn from '../../utils/cn';
 import { ISelectedDate } from '../../features/task/interface.tasks';
+import MiniDatePicker from './MiniCalendar';
 
 interface DatePickerProps {
   styles?: string;
@@ -99,100 +100,15 @@ export default function DatePicker({ styles, width, height, range, toggleFn }: D
           styles ??
           'absolute z-50 mt-1 shadow-2xl bg-white rounded-md ring-1 ring-black ring-opacity-5 focus:outline-none top-56 right-12'
         }
-        style={{ height: height ?? '359px', width: width ?? '462px' }}
+        style={{ height: height ?? '425px', width: width ?? '540px' }}
       >
         <DatePickerManualDates range={range} />
-        <div className="flex items-center justify-center px-3 border-b" style={{ height: '275px' }}>
-          <DatePickerSideBar currentDate={currentDate} />
-
-          <div className="p-1 " style={{ height: '290px' }}>
-            <div className="flex items-center justify-between">
-              <h1 className="select-none" style={{ fontSize: '14px', fontWeight: '500' }}>
-                {months[today.month()]}, {today.year()}
-              </h1>
-              <div className="flex items-center gap-3">
-                <GrFormPrevious
-                  className="w-5 h-5 transition-all cursor-pointer hover:scale-105"
-                  onClick={() => {
-                    setToday(today.month(today.month() - 1));
-                  }}
-                />
-                <h1
-                  className="p-2 transition-all rounded-md cursor-pointer hover:scale-105 hover:bg-gray-200"
-                  onClick={() => {
-                    setToday(currentDate);
-                  }}
-                >
-                  Today
-                </h1>
-                <GrFormNext
-                  className="w-5 h-5 transition-all cursor-pointer hover:scale-105"
-                  onClick={() => {
-                    setToday(today.month(today.month() + 1));
-                  }}
-                />
-              </div>
-            </div>
-            <div className="flex h-10 space-x-5 text-center">
-              {sortedKeys.map((dayOfWeek) => {
-                const numericDayOfWeek = parseInt(dayOfWeek, 10); // Convert dayOfWeek to a number
-                const sortedDates = groupedDates[numericDayOfWeek].dates.sort((a, b) => {
-                  if (a.date.isSame(b.date, 'day')) {
-                    return 0;
-                  }
-                  return a.date.isBefore(b.date) ? -1 : 1;
-                });
-                return (
-                  <div key={numericDayOfWeek} className="flex flex-col space-y-3">
-                    <h3>{days[numericDayOfWeek]}</h3>
-                    <div className="">
-                      <ul className="flex flex-col space-y-5 text-center text-sm border-t p-0.5">
-                        {sortedDates.map((date) => {
-                          const isBlocked =
-                            (taskTime?.from &&
-                              taskTime?.to &&
-                              (date.date.isSame(taskTime.from, 'day') || date.date.isAfter(taskTime.from, 'day')) &&
-                              date.date.isBefore(taskTime.to, 'day')) ||
-                            date.date.isSame(taskTime?.to, 'day');
-
-                          const isHoverBlocked =
-                            hoveredDate &&
-                            taskTime?.from &&
-                            (date.date.isSame(taskTime.from, 'day') || date.date.isAfter(taskTime.from, 'day')) &&
-                            date.date.isBefore(hoveredDate, 'day');
-
-                          const isBlockedOrHoverBlocked = isBlocked || isHoverBlocked;
-
-                          const isSelected =
-                            selectedDate?.date &&
-                            date.date.isSame(selectedDate.date, 'day') && // Compare full date, including month and year
-                            date.date.month() === today.month() && // Compare month
-                            date.date.year() === today.year(); // Compare year
-
-                          return (
-                            <li
-                              key={date.date.toISOString()}
-                              className={cn(
-                                'rounded-full p-0.5 hover:bg-purple-300 hover:text-white transition-all cursor-pointer select-none font-bold',
-                                date.currentMonth ? '' : 'text-gray-300',
-                                date.today ? 'bg-red-400 text-white rounded-full' : '',
-                                isSelected ? 'bg-purple-400 text-white' : '',
-                                isBlockedOrHoverBlocked ? 'bg-purple-400 text-white rounded-none w-full' : ''
-                              )}
-                              onClick={() => handleClick(date.date)}
-                              onMouseEnter={() => handleHover(date.date)}
-                              onMouseLeave={() => setHovered(null)}
-                            >
-                              {date.date.format('DD')}
-                            </li>
-                          );
-                        })}
-                      </ul>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
+        <div className="flex border-b" style={{ height: '340px' }}>
+          <div className="w-1/3">
+            <DatePickerSideBar currentDate={currentDate} />
+          </div>
+          <div>
+            <MiniDatePicker />
           </div>
         </div>
         <div className="flex items-center justify-end w-full">
