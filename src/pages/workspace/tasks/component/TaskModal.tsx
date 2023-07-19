@@ -14,11 +14,13 @@ import { ITask_statuses } from '../../../../features/list/list.interfaces';
 function TaskModal() {
   const queryClient = useQueryClient();
   const dispatch = useDispatch();
-  const { showMenuDropdown } = useAppSelector((state) => state.hub);
+  const { showMenuDropdown, listIdCreateTask } = useAppSelector((state) => state.hub);
   const { showCreateTaskSlideOver } = useAppSelector((state) => state.slideOver);
-  const { sideBarCreateTaskListId } = useAppSelector((state) => state.hub);
 
-  const { data: list } = UseGetListDetails({ activeItemId: sideBarCreateTaskListId, activeItemType: 'list' });
+  const { data: list } = UseGetListDetails({
+    activeItemId: listIdCreateTask,
+    activeItemType: 'list'
+  });
 
   const [statusId, setStatusId] = useState<string>('');
 
@@ -31,11 +33,11 @@ function TaskModal() {
       const newStatusId: string = statusObj.id;
       setStatusId(newStatusId);
     }
-  }, [sideBarCreateTaskListId]);
+  }, [listIdCreateTask, list]);
 
   const createTask = useMutation(createTaskService, {
     onSuccess: () => {
-      queryClient.invalidateQueries();
+      queryClient.invalidateQueries(['task']);
       dispatch(setCreateTaskSlideOverVisibility(false));
       dispatch(setSubDropdownMenu(false));
       dispatch(
@@ -66,7 +68,7 @@ function TaskModal() {
       name,
       description,
       task_status_id: statusId,
-      showMenuDropdown
+      showMenuDropdown: listIdCreateTask
     });
   };
 
@@ -102,7 +104,7 @@ function TaskModal() {
               placeholder="Description"
               name="description"
               value={description}
-              onChange={(e) => handleTaskChange(e)}
+              onChange={handleTaskChange}
               className="w-full h-32 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm text-gray-600"
             />
           </div>
