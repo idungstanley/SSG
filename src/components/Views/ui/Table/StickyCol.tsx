@@ -120,7 +120,6 @@ export function StickyCol({
 
   const editTaskMutation = useMutation(UseUpdateTaskService, {
     onSuccess: () => {
-      // setEitableContent(false);
       queryClient.invalidateQueries(['task']);
     }
   });
@@ -192,7 +191,7 @@ export function StickyCol({
     <div ref={droppabbleRef}>
       {task.id !== '0' && (
         <td
-          className="sticky left-0 flex items-start justify-start text-sm font-medium text-start text-gray-900 cursor-pointer"
+          className="sticky left-0 flex items-start justify-start text-sm font-medium text-gray-900 cursor-pointer text-start"
           {...props}
         >
           <div className="flex items-center h-full space-x-1 ">
@@ -221,11 +220,11 @@ export function StickyCol({
           >
             <button onClick={onToggleDisplayingSubTasks} className="pl-1">
               {showSubTasks ? (
-                <div className={`${task.has_descendants ? 'w-3 h-3' : ' opacity-0 w-3 h-3 '}`}>
+                <div className={`${task.descendants_count > 0 ? 'w-3 h-3' : ' opacity-0 w-3 h-3 '}`}>
                   <CloseSubtask />
                 </div>
               ) : (
-                <div className={`${task.has_descendants ? 'w-3 h-3' : ' opacity-0 w-3 h-3 '}`}>
+                <div className={`${task.descendants_count > 0 ? 'w-3 h-3' : ' opacity-0 w-3 h-3 '}`}>
                   <OpenSubtask />
                 </div>
               )}
@@ -233,9 +232,9 @@ export function StickyCol({
             <div onClick={() => dispatch(setCurrentTaskStatusId(task.id as string))}>
               <StatusDropdown TaskCurrentStatus={task.status} />
             </div>
-            <div className="flex flex-col items-start justify-start space-y-1 pl-2">
+            <div className="flex flex-col items-start justify-start pl-2 space-y-1">
               <div
-                className="flex text-left items-center relative"
+                className="relative flex items-center text-left"
                 contentEditable={eitableContent}
                 ref={inputRef}
                 onKeyDown={(e) => (e.key === 'Enter' ? handleEditTask(e, task.id) : null)}
@@ -277,7 +276,7 @@ export function StickyCol({
 
                 {/* non default badges here */}
                 <div onClick={(e) => e.stopPropagation()} className="pl-3">
-                  <Badges />
+                  <Badges task={task} />
                 </div>
               </div>
 
@@ -290,7 +289,7 @@ export function StickyCol({
 
       {task.id === '0' && (
         <td
-          className="sticky left-0 flex items-start justify-start text-sm font-medium text-start text-gray-900 cursor-pointer"
+          className="sticky left-0 flex items-start justify-start text-sm font-medium text-gray-900 cursor-pointer text-start"
           {...props}
         >
           <div className="flex items-center h-full space-x-1 opacity-0">
@@ -313,9 +312,9 @@ export function StickyCol({
               `relative border-t ${verticalGrid && 'border-r'} w-full h-10 py-4 p-4 flex items-center `
             )}
           >
-            <div className="flex space-x-1 -mt-7 ml-1 absolute">
+            <div className="absolute flex ml-1 space-x-1 -mt-7">
               <ToolTip tooltip="Cancel">
-                <ImCancelCircle onClick={onClose} className="h-3 w-3" />
+                <ImCancelCircle onClick={onClose} className="w-3 h-3" />
               </ToolTip>
               <button
                 onClick={(e) => handleOnSave(e as React.MouseEvent<HTMLButtonElement, MouseEvent>, task.id)}
@@ -327,7 +326,7 @@ export function StickyCol({
             <div className="ml-4">
               <StatusDropdown TaskCurrentStatus={task.status} />
             </div>
-            <div className="flex flex-col items-start justify-start space-y-1 pl-2">
+            <div className="flex flex-col items-start justify-start pl-2 space-y-1">
               <p
                 className="flex text-left"
                 contentEditable={true}

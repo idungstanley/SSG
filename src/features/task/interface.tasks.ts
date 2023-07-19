@@ -105,6 +105,7 @@ export interface ITaskFullList {
   priority: string | null | [{ id: string; initials: string; color: string; name: string }];
   status: IStatus;
   has_descendants: boolean;
+  descendants_count: number;
   start_date: string | null;
   end_date: string | null;
   assignees?: [{ id: string; initials: string; color: string; name: string; avatar_path: string | null }] | undefined;

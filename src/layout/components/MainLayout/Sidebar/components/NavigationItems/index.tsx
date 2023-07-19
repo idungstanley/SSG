@@ -3,7 +3,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import favoriteIcon from '../../../../../../assets/branding/Favourite-icon.svg';
 import homeIcon from '../../../../../../assets/icons/Home.svg';
 import { cl } from '../../../../../../utils';
-import { useAppSelector } from '../../../../../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
 import NavigationItem from './components/NavigationItem';
 import {
   closestCenter,
@@ -24,6 +24,7 @@ import DashboardIcon from '../../../../../../assets/icons/DashboardIcon';
 import { AvatarWithInitials } from '../../../../../../components';
 import ArrowDownwardIcon from '../../../../../../assets/icons/ArrowDownwardIcon';
 import ArrowUpwardIcon from '../../../../../../assets/icons/ArrowUpwardIcon';
+import { setShowMore } from '../../../../../../features/workspace/workspaceSlice';
 
 const showLessOrMore = [
   {
@@ -50,10 +51,14 @@ export default function NavigationItems({
   setActiveTabId
 }: NavigationProps) {
   const { currentWorkspaceId } = useAppSelector((state) => state.auth);
-  const { workspaceData } = useAppSelector((state) => state.workspace);
+  const { workspaceData, showMore } = useAppSelector((state) => state.workspace);
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const workspaceName = workspaceData?.data?.workspace.name;
   const workspaceColor = workspaceData?.data?.workspace.color as string;
+  const handleToggleMore = () => {
+    dispatch(setShowMore(!showMore));
+  };
 
   const navigation = [
     {
@@ -74,7 +79,7 @@ export default function NavigationItems({
       id: '3',
       name: 'Calendar',
       href: `/${currentWorkspaceId}/calendar`,
-      icon: <CalendarIcon />,
+      icon: <CalendarIcon active />,
       alwaysShow: false
     },
     {
@@ -141,7 +146,6 @@ export default function NavigationItems({
     }
   }, [activeTabId]);
 
-  const [showAll, setShowAll] = useState<boolean>(false);
   const { showSidebar } = useAppSelector((state) => state.account);
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -153,8 +157,8 @@ export default function NavigationItems({
   const [items, setItems] = useState(
     (showSidebar ? hotkeys : navigation).sort((a, b) => idsFromLS.indexOf(a.id) - idsFromLS.indexOf(b.id))
   );
-  const displayNavItems = showAll ? navigation : navigation.slice(0, 3);
-  const displayPinnedItems = showAll ? hotkeys : hotkeys.slice(0, 3);
+  const displayNavItems = showMore ? navigation : navigation.slice(0, 3);
+  const displayPinnedItems = showMore ? hotkeys : hotkeys.slice(0, 3);
 
   const handleDragEnd = (e: DragEndEvent) => {
     const { active, over } = e;
@@ -188,7 +192,7 @@ export default function NavigationItems({
                 handleHotkeyClick={handleHotkeyClick}
                 key={item.name}
                 item={item}
-                // isVisible={pinnedNav.length > 1 && showSidebar ? true : item.alwaysShow || showAll}
+                // isVisible={pinnedNav.length > 1 && showSidebar ? true : item.alwaysShow || showMore}
                 activeTabId={activeTabId}
                 setActiveTabId={setActiveTabId}
               />
@@ -197,15 +201,15 @@ export default function NavigationItems({
             {/* show less or more button */}
             {/* {(pinnedNav.length < 2 || !showSidebar) && ( */}
             <div
-              onClick={() => setShowAll((prev) => !prev)}
+              onClick={handleToggleMore}
               className={cl(
                 !showSidebar ? 'justify-center pl-5' : 'gap-2 items-center pl-7',
                 'flex cursor-pointer gap-2 items-center p-2 w-full hover:text-gray-500 hover:bg-gray-100'
               )}
               style={{ height: '30px', fontWeight: '600' }}
             >
-              {showLessOrMore[showAll ? 0 : 1].icon}
-              {showSidebar ? <p className="ml-3 text-xs truncate">{showLessOrMore[showAll ? 0 : 1].name}</p> : null}
+              {showLessOrMore[showMore ? 0 : 1].icon}
+              {showSidebar ? <p className="ml-3 text-xs truncate">{showLessOrMore[showMore ? 0 : 1].name}</p> : null}
             </div>
             {/* )} */}
           </nav>
