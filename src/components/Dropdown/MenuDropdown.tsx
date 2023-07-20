@@ -60,12 +60,12 @@ export default function MenuDropdown() {
   const { delWallet, archiveWallet } = useAppSelector((state) => state.wallet);
   const { delList, archiveList } = useAppSelector((state) => state.list);
   const ref = useRef<HTMLInputElement>(null);
+
   useEffect(() => {
     const checkClickedOutSide = (e: MouseEvent) => {
       if (showMenuDropdown != null && ref.current && e.target && !ref.current.contains(e.target as Node)) {
-        if (SubDropdownMenu === true) {
+        if (!SubDropdownMenu) {
           dispatch(setSubDropdownMenu(false));
-        } else {
           dispatch(setshowMenuDropdown({ showMenuDropdown: null, showMenuDropdownType: null }));
         }
       }
@@ -74,7 +74,7 @@ export default function MenuDropdown() {
     return () => {
       document.removeEventListener('click', checkClickedOutSide);
     };
-  }, [SubDropdownMenu]);
+  }, [SubDropdownMenu, showMenuDropdown]);
 
   //delete-entity
   //hubs and subhubs
