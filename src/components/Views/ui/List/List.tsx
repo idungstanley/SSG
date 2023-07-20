@@ -99,9 +99,9 @@ export function List({ tasks }: ListProps) {
             </div>
           ) : null}
           {!showNewTaskField ? (
-            <div className="h-5">
+            <div className="h-5 alsoit-gray-300 font-semibold">
               <button onClick={() => setShowNewTaskField(true)} className={cl('p-1.5 pl-14 text-left w-fit text-xs')}>
-                + New Task
+                + NEW TASK
               </button>
             </div>
           ) : null}
