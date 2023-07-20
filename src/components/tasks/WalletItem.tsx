@@ -33,7 +33,7 @@ interface WalletItemProps {
     hub_id?: string;
     has_descendants?: number;
   };
-  showSubWallet: string | null;
+  showSubWallet: boolean;
   paddingLeft: string | number;
   walletType: string;
   index?: number;
@@ -145,7 +145,7 @@ export default function WalletItem({
     );
   };
 
-  const renderIcons = (showSubWallet: string | null) => {
+  const renderIcons = (showSubWallet: boolean) => {
     if (wallet?.has_descendants) {
       if (showSubWallet) {
         return (
@@ -163,7 +163,7 @@ export default function WalletItem({
         );
       }
     } else {
-      return renderCloseFolder();
+      return <div className="pl-4">{renderCloseFolder()}</div>;
     }
   };
 

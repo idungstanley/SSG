@@ -20,6 +20,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   color: #4e5258;
   font-size: 13px;
+  font-weight: 600;
 }
 
 html {

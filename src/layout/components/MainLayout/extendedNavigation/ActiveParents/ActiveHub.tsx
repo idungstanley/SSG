@@ -23,14 +23,15 @@ import { setParentHubExt, setSubHubExt } from '../../../../../features/hubs/hubS
 
 export default function ActiveHub() {
   const dispatch = useAppDispatch();
-  const hubType = 'hub';
+  const navigate = useNavigate();
+
   const { currentItemId, activeItemId, activeItemType, currentWalletId } = useAppSelector((state) => state.workspace);
   const { parentHubExt } = useAppSelector((state) => state.hub);
-  const { id: parentHubId } = parentHubExt;
+  const hubType = 'hub';
   // const { id: parentHubId, type: parentHubType } = ;
-  const navigate = useNavigate();
-  const walletD = useGetHubWallet(currentItemId);
-  const walletData = walletD?.data?.data.wallets;
+  const walletId = useGetHubWallet(currentItemId);
+  const { id: parentHubId } = parentHubExt;
+  const walletData = walletId?.data?.data.wallets;
   const { data: subwallet } = getWalletService(currentWalletId);
   const { data: subHub } = useGetSubHub({
     parentId: parentHubId

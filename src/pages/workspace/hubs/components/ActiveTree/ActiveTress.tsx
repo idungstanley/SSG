@@ -25,6 +25,7 @@ export default function ActiveTress() {
   const fetch = currentWorkspaceId == workSpaceId;
   const fetchTree = hubs.length === 0 && fetch && (!!listId || !!hubId || !!walletId);
   const id = currentItemId;
+
   const { data } = useGetHubs({ includeTree: fetchTree, hub_id: id, wallet_id: id, listId });
   const previousData = JSON.parse(JSON.stringify(!!data));
 
@@ -79,7 +80,6 @@ export default function ActiveTress() {
 
   useEffect(() => {
     if (hubs) {
-      // console.log(hubs);
       dispatch(setFilteredResults(hubs));
       dispatch(getHub(hubs));
     }

@@ -1,22 +1,25 @@
 import React, { useState } from 'react';
-import LList from '../../pages/workspace/hubs/components/ActiveTree/Items/list/LList';
 import { Hub } from '../../pages/workspace/hubs/components/ActiveTree/activetree.interfaces';
-import AvatarWithInitials from '../avatar/AvatarWithInitials';
-import { FaFolder } from 'react-icons/fa';
-import { useAppDispatch } from '../../app/hooks';
-import { setSelectedTreeDetails } from '../../features/hubs/hubSlice';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { setOpenedHubId, setParentHubExt, setSelectedTreeDetails, setSubHubExt } from '../../features/hubs/hubSlice';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
-import { VscTriangleDown, VscTriangleRight } from 'react-icons/vsc';
+import { setCurrentItem, setShowHub } from '../../features/workspace/workspaceSlice';
+import SearchHubItem from '../tasks/SearchHubItem';
+import SearchSubHList from '../../pages/workspace/hubs/components/ActiveTree/Items/hub/SearchSubHList';
+import SearchWList from '../../pages/workspace/hubs/components/ActiveTree/Items/wallet/SearchWList';
+import SearchLList from '../../pages/workspace/hubs/components/ActiveTree/Items/list/SearchLList';
 
 interface hubsProps {
   hubs: Hub[];
-  paddingLeft?: string;
   setToggleTree?: React.Dispatch<React.SetStateAction<boolean>>;
-  level?: number;
 }
-export default function ActiveTreeList({ hubs, paddingLeft, setToggleTree, level = 1 }: hubsProps) {
+export default function ActiveTreeList({ hubs, setToggleTree }: hubsProps) {
   const dispatch = useAppDispatch();
-  const [showChildren, setShowChidren] = useState<boolean>(false);
+
+  const { lastActiveItem } = useAppSelector((state) => state.workspace);
+
+  const [showChildren, setShowChidren] = useState<string | null | undefined>('');
+  const [openedNewHubId, setOpenedNewHubId] = useState<string>('');
 
   const handleTabClick = (
     e: React.MouseEvent<HTMLParagraphElement, MouseEvent>,
@@ -28,81 +31,79 @@ export default function ActiveTreeList({ hubs, paddingLeft, setToggleTree, level
     dispatch(setSelectedTreeDetails({ name, id, type }));
     setToggleTree?.(false);
   };
-  const handleShowChildren = () => {
-    setShowChidren((prev) => !prev);
+
+  const handleClick = (id: string) => {
+    dispatch(setSubHubExt({ id: null, type: null }));
+    dispatch(setParentHubExt({ id, type: EntityType.hub }));
+
+    dispatch(setOpenedHubId(id));
+    dispatch(setShowHub(true));
+
+    if (id === openedNewHubId) {
+      setShowChidren(null);
+      setOpenedNewHubId('');
+    } else {
+      setShowChidren(id);
+      setOpenedNewHubId(id);
+    }
+
+    dispatch(
+      setCurrentItem({
+        currentItemId: id,
+        currentItemType: EntityType.hub
+      })
+    );
   };
+
+  const isCanBeOpen = (id: string) => {
+    if (openedNewHubId) {
+      return openedNewHubId === id;
+    }
+    return !!showChildren;
+  };
+
   return (
     <>
       {hubs.map((hub) => (
-        <div key={hub.id} className="my-2 cursor-pointer">
-          <div
-            className={`relative flex items-center hover:bg-gray-200 p-1 rounded-md ${paddingLeft} ${
-              hub.children.length > 0 ? '' : 'pl-4'
-            }`}
-            onClick={() => handleShowChildren()}
-          >
-            {hub.children.length > 0 && (
-              <div>
-                {showChildren ? (
-                  <span className="flex flex-col">
-                    <VscTriangleDown className="flex-shrink-0 h-2" aria-hidden="true" color="rgba(72, 67, 67, 0.64)" />
-                  </span>
-                ) : (
-                  <VscTriangleRight className="flex-shrink-0 h-2" aria-hidden="true" color="#BBBDC0" />
-                )}
-              </div>
-            )}
-            <div className="flex items-center justify-center w-5 h-5">
-              {hub.path !== null ? (
-                <img src={hub.path} alt="hubs image" className="w-full h-full rounded" />
-              ) : (
-                <AvatarWithInitials
-                  initials={hub.name
-                    .split(' ')
-                    .slice(0, 2)
-                    .map((word) => word[0])
-                    .join('')
-                    .toUpperCase()}
-                  height="h-5"
-                  width="w-5"
-                  backgroundColour={hub.color !== null ? hub.color : 'blue'}
-                  roundedStyle="rounded"
+        <div key={hub.id}>
+          <div className="relative flex flex-col">
+            <SearchHubItem
+              item={hub}
+              handleClick={handleClick}
+              handleTabClick={handleTabClick}
+              showChildren={
+                ((hub.children.length || hub.wallets.length || hub.lists.length) &&
+                  showChildren &&
+                  isCanBeOpen(hub.id)) as boolean
+              }
+              type={EntityType.hub}
+            />
+            {hub.children.length && isCanBeOpen(hub.id) ? (
+              <SearchSubHList hubs={hub.children as Hub[]} handleTabClick={handleTabClick} />
+            ) : null}
+            <div
+              style={
+                lastActiveItem === 'Sub Hub' || lastActiveItem === 'Wallet'
+                  ? { opacity: '0.5', pointerEvents: 'none' }
+                  : {}
+              }
+            >
+              {hub.wallets.length && showChildren && isCanBeOpen(hub.id) ? (
+                <SearchWList
+                  wallets={hub.wallets}
+                  leftMargin={false}
+                  type="wallet"
+                  paddingLeft="33"
+                  handleTabClick={handleTabClick}
                 />
-              )}
+              ) : null}
             </div>
-            <span className="ml-5 overflow-hidden">
-              <p
-                className="capitalize truncate cursor-pointer"
-                style={{
-                  fontSize: '13px',
-                  lineHeight: '15.56px',
-                  verticalAlign: 'baseline',
-                  letterSpacing: '0.28px'
-                }}
-                onClick={(e) => handleTabClick(e, hub.id, hub.name, EntityType.hub)}
-              >
-                {hub.name}
-              </p>
-            </span>
+            <div style={{ opacity: '0.5', pointerEvents: 'none' }}>
+              {hub.lists.length && showChildren && isCanBeOpen(hub.id) ? (
+                <SearchLList list={hub.lists} leftMargin={false} paddingLeft="48" />
+              ) : null}
+            </div>
           </div>
-          {hub.children.length && showChildren ? (
-            <ActiveTreeList paddingLeft="pl-6" level={level + 1} setToggleTree={setToggleTree} hubs={hub.children} />
-          ) : null}
-          {
-            <div>
-              {hub.wallets.length
-                ? hub.wallets.map((wallet) => (
-                    <div key={wallet.id}>
-                      <div className="flex">
-                        <FaFolder />
-                        {wallet.name}
-                      </div>
-                    </div>
-                  ))
-                : null}
-              {hub.lists.length ? <LList list={hub.lists} leftMargin={false} paddingLeft={10} /> : null}
-            </div>
-          }
         </div>
       ))}
     </>

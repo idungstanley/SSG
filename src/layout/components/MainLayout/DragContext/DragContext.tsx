@@ -43,7 +43,7 @@ export default function DragContext({ children }: DragContextProps) {
     const overId = over?.id as string;
     const activeId = active?.id as string;
     const isPlace = over?.data.current?.isPlace && active?.data.current?.isPlace;
-    const isTaskToList = over?.data.current?.isOverList && active?.data.current?.isTask;
+    const isTaskToList = over?.data.current?.isOverList && active?.data.current?.isTask && !over?.data.current?.isTask;
     const isListToHub = over?.data.current?.isOverHub && active?.data.current?.isList;
     const isListToWallet = over?.data.current?.isOverWallet && active?.data.current?.isList;
 

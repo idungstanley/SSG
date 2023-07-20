@@ -209,7 +209,7 @@ export default function NavigationItems({
               style={{ height: '30px', fontWeight: '600' }}
             >
               {showLessOrMore[showMore ? 0 : 1].icon}
-              {showSidebar ? <p className="ml-3 text-xs truncate">{showLessOrMore[showMore ? 0 : 1].name}</p> : null}
+              {showSidebar ? <p className="ml-4 text-xs truncate">{showLessOrMore[showMore ? 0 : 1].name}</p> : null}
             </div>
             {/* )} */}
           </nav>
