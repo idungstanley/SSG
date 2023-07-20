@@ -4,12 +4,13 @@ import { AiOutlinePaperClip, AiOutlineFlag, AiOutlineEye } from 'react-icons/ai'
 import { BsTags, BsCalendar3 } from 'react-icons/bs';
 import { createTaskService } from '../../../../features/task/taskService';
 import { Button, Input, SlideOver } from '../../../../components';
-import { setSubDropdownMenu, setshowMenuDropdown } from '../../../../features/hubs/hubSlice';
+import { getSubMenu, setSubDropdownMenu, setshowMenuDropdown } from '../../../../features/hubs/hubSlice';
 import { useDispatch } from 'react-redux';
 import { setCreateTaskSlideOverVisibility } from '../../../../features/general/slideOver/slideOverSlice';
 import { useAppSelector } from '../../../../app/hooks';
 import { UseGetListDetails } from '../../../../features/list/listService';
 import { ITask_statuses } from '../../../../features/list/list.interfaces';
+import { setLastActiveItem, setShowTreeInput } from '../../../../features/workspace/workspaceSlice';
 
 function TaskModal() {
   const queryClient = useQueryClient();
@@ -64,6 +65,15 @@ function TaskModal() {
   const { name, description } = formState;
 
   const onSubmit = async () => {
+    dispatch(setSubDropdownMenu(false));
+    dispatch(setLastActiveItem(''));
+    dispatch(setShowTreeInput(false));
+    dispatch(
+      getSubMenu({
+        SubMenuId: null,
+        SubMenuType: null
+      })
+    );
     await createTask.mutateAsync({
       name,
       description,
