@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import everythingIcon from '../../../assets/branding/everything-icon.png';
 import { useAppSelector } from '../../../app/hooks';
 import PlaceItem from '../../../layout/components/MainLayout/Sidebar/components/PlaceItem';
 import SubHubModal from './components/SubHubModal';
@@ -33,6 +32,7 @@ import ActiveTreeSearch from '../../../components/ActiveTree/ActiveTreeSearch';
 import { useGetHubs } from '../../../features/hubs/hubService';
 import { Modal } from '../../../components/Pilot/components/HotKeys/components/Modal';
 import { Capitalize } from '../../../utils/NoCapWords/Capitalize';
+import EverythingIcon from '../../../assets/icons/EverythingIcon';
 
 function Hubs() {
   const dispatch = useDispatch();
@@ -135,8 +135,8 @@ function Hubs() {
           'flex items-center justify-between hover:bg-gray-100'
         )}
       >
-        <div className="flex items-center content-center self-center py-2">
-          <img src={everythingIcon} alt="Hub Icon" className={showSidebar ? 'w-5 h-5 mr-5' : 'h-5 w-5 mr-5'} />
+        <div className="flex items-center content-center self-center gap-6 py-2">
+          <EverythingIcon />
           <p className="block text-xs tracking-wider capitalize truncate">Everything</p>
         </div>
       </div>

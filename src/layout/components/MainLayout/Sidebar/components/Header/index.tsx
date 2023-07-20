@@ -11,6 +11,7 @@ import PinnedNavigationItem, { NavigationList } from '../NavigationItems/compone
 import { VscPinned } from 'react-icons/vsc';
 import { BsFillPinFill } from 'react-icons/bs';
 import ToolTip from '../../../../../../components/Tooltip/Tooltip';
+import AlsoitIcon from '../../../../../../assets/icons/AlsoitIcon';
 
 interface HeaderProps {
   handleHotkeyClick: (
@@ -49,24 +50,20 @@ export default function Header({
   const { showSidebar } = useAppSelector((state) => state.account);
   return (
     <div
-      className={cl(
-        'flex border-b gap-2 px-2',
-        !showSidebar ? 'flex-col pb-3 items-center' : 'items-center',
-        hotkeys.length > 0 && showSidebar ? '' : 'py-4'
-      )}
+      className={cl('flex border-b gap-2 px-2', !showSidebar ? 'flex-col pb-3 items-center' : 'items-center py-4')}
       style={{ height: `${showSidebar ? '115px' : ''}` }}
     >
       <Link to="/" className="flex-shrink-0">
-        <img className="flex-shrink-0 h-16" style={{ width: '60px' }} src={MainLogo} alt="Workflow" />
+        <AlsoitIcon />
       </Link>
       {!showSidebar && <hr className="w-full my-1 mr-6" />}
       <div
         className={`flex flex-grow flex-shrink-0 ${!showSidebar && 'gap-2 flex-col'} ${
-          showSidebar ? 'flex-col space-y-4' : ''
+          showSidebar ? 'flex-col space-y-3' : ''
         }`}
       >
         <WorkSpaceSelection />
-        <div className={cl('flex', !showSidebar ? 'flex-col items-center justify-center' : 'items-center pl-2')}>
+        <div className={cl('flex', !showSidebar ? 'flex-col items-center justify-center' : 'items-center')}>
           <div
             className={`flex items-center flex-grow flex-shrink-0 ${
               hotkeys.length > 0 && showSidebar ? 'justify-between' : 'justify-end'

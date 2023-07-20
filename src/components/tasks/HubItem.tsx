@@ -170,11 +170,9 @@ export default function HubItem({
   return (
     <>
       <div
-        className={`bg-white truncate items-center group ${
-          item.id === activeItemId ? 'font-medium' : 'hover:bg-gray-100'
-        } ${isSticky && stickyButtonIndex === index ? 'sticky bg-white opacity-100' : ''} ${
-          isOver ? 'bg-primary-100 border-primary-500 shadow-inner shadow-primary-300' : ''
-        } `}
+        className={`bg-white truncate items-center group ${item.id !== activeItemId && 'hover:bg-gray-100'} ${
+          isSticky && stickyButtonIndex === index ? 'sticky bg-white opacity-100' : ''
+        } ${isOver ? 'bg-primary-100 border-primary-500 shadow-inner shadow-primary-300' : ''} `}
         ref={setNodeRef}
         tabIndex={0}
         onClick={() => handleClick(item.id, index)}
@@ -185,7 +183,7 @@ export default function HubItem({
         }}
       >
         <div
-          className={`relative flex items-center justify-between ${showSidebar ? 'pl-3' : 'pl-2.5'}`}
+          className={`relative flex items-center justify-between ${showSidebar ? 'pl-1' : 'pl-2.5'}`}
           style={{ height: '30px' }}
         >
           {item.id === hubId && (
@@ -202,7 +200,7 @@ export default function HubItem({
           )}
 
           <div
-            className="absolute left-2 rounded-r-lg opacity-0 group-hover:opacity-100 cursor-move"
+            className="absolute rounded-r-lg opacity-0 cursor-move left-0.5 group-hover:opacity-100"
             ref={draggableRef}
             {...listeners}
             {...attributes}
@@ -232,7 +230,7 @@ export default function HubItem({
               renderEmptyArrowBlock()
             )}
 
-            <div className={`flex items-center flex-1 min-w-0 ${collapseNavAndSubhub && 'ml-3'}`}>
+            <div className={`flex items-center flex-1 min-w-0 gap-1 ${collapseNavAndSubhub && 'ml-3'}`}>
               <div onClick={(e) => handleHubColour(item.id, e)} className="flex items-center justify-center w-5 h-5">
                 {item.path !== null ? (
                   <img src={item.path} alt="hubs image" className="w-full h-full rounded" />
