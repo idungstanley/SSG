@@ -81,7 +81,13 @@ export default function ActiveTreeList({ hubs, setToggleTree }: hubsProps) {
             {hub.children.length && isCanBeOpen(hub.id) ? (
               <SearchSubHList hubs={hub.children as Hub[]} handleTabClick={handleTabClick} />
             ) : null}
-            <div style={lastActiveItem === 'Sub Hub' ? { opacity: '0.5', pointerEvents: 'none' } : {}}>
+            <div
+              style={
+                lastActiveItem === 'Sub Hub' || lastActiveItem === 'Wallet'
+                  ? { opacity: '0.5', pointerEvents: 'none' }
+                  : {}
+              }
+            >
               {hub.wallets.length && showChildren && isCanBeOpen(hub.id) ? (
                 <SearchWList
                   wallets={hub.wallets}
