@@ -88,6 +88,13 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
       });
     }
   };
+  const handleClickScroll = (targetId: string) => {
+    const element = document.getElementById(targetId);
+    if (element) {
+      // 👇 Will scroll smoothly to the top of the next section
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
   const tooltipItems = data?.data.task_status_counts;
 
@@ -222,7 +229,7 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
                       <li
                         key={index}
                         className="flex items-center justify-between cursor-pointer hover:text-blue-500"
-                        onClick={() => ({})}
+                        onClick={() => handleClickScroll(item.task_status.name)}
                       >
                         <p>{item.task_status.name}</p>
                         <p>({item.tasks_count})</p>
