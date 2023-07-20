@@ -159,7 +159,7 @@ export default function SubDropdown() {
       title: 'Task',
       handleClick: () => {
         dispatch(setCreateTaskSlideOverVisibility(true));
-        navigate(`/${currentWorkspaceId}/tasks`);
+        // navigate(`/${currentWorkspaceId}/tasks`);
         dispatch(setLastActiveItem('Task'));
       },
       icon: <PlusIcon className="w-5 pt-2 text-gray-700 h-7" aria-hidden="true" />,

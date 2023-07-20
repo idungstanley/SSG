@@ -11,7 +11,7 @@ import { generateFilters } from '../../components/TasksHeader/lib/generateFilter
 const moveWallet = (data: { parent_id?: string; walletId?: string; hubId?: string; overType: string }) => {
   const { walletId, parent_id, overType, hubId } = data;
 
-  const requestData = overType === 'wallet' ? { parent_id } : { hubId };
+  const requestData = overType === 'wallet' ? { parent_id } : { hub_id: hubId };
 
   const response = requestNew({
     url: 'wallets/' + walletId + '/move',

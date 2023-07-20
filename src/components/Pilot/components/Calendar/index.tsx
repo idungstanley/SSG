@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import CalendarIcon from '../../../../assets/icons/CalendarIcon';
 import SectionArea from '../SectionArea';
+import MiniDatePicker from '../../../DatePicker/MiniCalendar';
 
 export default function Calendar() {
   const [iconToggle, setIconToggle] = useState(false);
@@ -14,8 +15,8 @@ export default function Calendar() {
           />
         </div>
       </div>
-      <div className="flex justify-center w-full">
-        <span>Calendar Goes Here</span>
+      <div className="flex justify-center w-full px-2 pt-6">
+        <MiniDatePicker />
       </div>
     </div>
   );

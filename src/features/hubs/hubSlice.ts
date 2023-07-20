@@ -19,6 +19,7 @@ interface HubState {
   subHubExt: { id: string | null; type: string | null };
   showMenuDropdown: string | null | undefined;
   showMenuDropdownType: string | null | undefined;
+  listIdCreateTask: string;
   sideBarCreateTaskListId: string | null;
   SubDropdownMenu: boolean;
   entityToCreate: string | null;
@@ -49,6 +50,7 @@ const initialState: HubState = {
   showMenuDropdown: null,
   showMenuDropdownType: null,
   sideBarCreateTaskListId: null,
+  listIdCreateTask: '',
   SubDropdownMenu: false,
   SubMenuId: null,
   SubMenuType: null,
@@ -90,6 +92,9 @@ export const hubSlice = createSlice({
     },
     setToggleTree(state, action: PayloadAction<boolean>) {
       state.toggleTree = action.payload;
+    },
+    setListIdCreateTask(state, action: PayloadAction<string>) {
+      state.listIdCreateTask = action.payload;
     },
     setEditHub(state, action: PayloadAction<boolean>) {
       state.editHub = action.payload;
@@ -206,6 +211,7 @@ export const {
   setUpdateCords,
   setSideBarCreateTaskListId,
   setshowMenuDropdown,
+  setListIdCreateTask,
   setSubDropdownMenu,
   setHubParentId,
   setOpenedHubId,

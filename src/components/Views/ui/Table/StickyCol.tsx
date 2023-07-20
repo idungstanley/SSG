@@ -191,7 +191,7 @@ export function StickyCol({
     <div ref={droppabbleRef}>
       {task.id !== '0' && (
         <td
-          className="sticky left-0 flex items-start justify-start text-sm font-medium text-gray-900 cursor-pointer text-start"
+          className="sticky left-0 flex items-center justify-start text-sm font-medium text-gray-900 cursor-pointer text-start"
           {...props}
         >
           <div className="flex items-center h-full space-x-1 ">
