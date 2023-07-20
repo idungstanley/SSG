@@ -27,22 +27,22 @@ export default function SearchWList({ wallets, leftMargin, paddingLeft, level = 
   const { walletId, listId } = useParams();
   const { showExtendedBar } = useAppSelector((state) => state.workspace);
 
-  const [showSubWallet, setShowSubWallet] = useState<string | null>(null);
+  const [showSubWallet, setShowSubWallet] = useState<string[]>([]);
 
   const id = walletId || listId;
 
   useEffect(() => {
     if (id) {
-      setShowSubWallet(id);
+      setShowSubWallet((prev) => [...prev, id]);
     }
   }, []);
 
   const handleShowSubWallet = (id: string) => {
-    if (showSubWallet === id) {
-      setShowSubWallet(null);
+    if (showSubWallet.includes(id)) {
+      setShowSubWallet((prev) => prev.filter((item) => item !== id));
     } else {
       dispatch(setCurrentWalletId(id));
-      setShowSubWallet(id);
+      setShowSubWallet((prev) => [...prev, id]);
       dispatch(
         setCurrentItem({
           currentItemId: id,
@@ -67,10 +67,10 @@ export default function SearchWList({ wallets, leftMargin, paddingLeft, level = 
             walletType={level === 1 ? EntityType.wallet : level === 2 ? 'subwallet2' : 'subwallet3'}
             handleShowSubWallet={handleShowSubWallet}
             handleTabClick={handleTabClick}
-            showSubWallet={showSubWallet}
+            showSubWallet={showSubWallet.includes(wallet.id)}
             paddingLeft={paddingLeft}
           />
-          {wallet.children.length && showSubWallet ? (
+          {wallet.children.length && showSubWallet.includes(wallet.id) ? (
             <SearchWList
               wallets={wallet.children}
               leftMargin={false}
@@ -81,7 +81,7 @@ export default function SearchWList({ wallets, leftMargin, paddingLeft, level = 
             />
           ) : null}
           <div style={{ opacity: '0.5', pointerEvents: 'none' }}>
-            {wallet.lists.length && showSubWallet && !showExtendedBar ? (
+            {wallet.lists.length && showSubWallet.includes(wallet.id) && !showExtendedBar ? (
               <SearchLList list={wallet.lists} leftMargin={false} paddingLeft={Number(paddingLeft) + 32} />
             ) : null}
           </div>

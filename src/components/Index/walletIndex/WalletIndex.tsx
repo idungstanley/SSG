@@ -33,15 +33,16 @@ export interface dataProps {
 
 function WalletIndex({ showHubList, getCurrentHubId, paddingLeft }: WalletIndexProps) {
   const dispatch = useDispatch();
-  const [showSubWallet, setShowSubWallet] = useState<string | null>(null);
+
+  const [showSubWallet, setShowSubWallet] = useState<string[]>([]);
   const { toggleArchiveWallet } = useAppSelector((state) => state.wallet);
+
   const { data: walletAndListData } = useGetHubWallet(getCurrentHubId);
-  // console.log(walletAndListData);
+
   const { data: walletData } = getWalletServices({
     hubId: getCurrentHubId,
     Archived: toggleArchiveWallet
   });
-  // console.log(walletData);
   // const { currentItemId } = useAppSelector((state) => state.workspace);
   // const { data } = useGetSubHub({
   //   parentId: currentItemId
@@ -51,7 +52,7 @@ function WalletIndex({ showHubList, getCurrentHubId, paddingLeft }: WalletIndexP
     const type = 'wallet';
     dispatch(setShowHub(true));
     navigate(`tasks/w/${id}`);
-    setShowSubWallet(id);
+    setShowSubWallet((prev) => [...prev, id]);
     dispatch(setCurrentWalletId(id));
     dispatch(
       setWalletItem({
@@ -73,11 +74,11 @@ function WalletIndex({ showHubList, getCurrentHubId, paddingLeft }: WalletIndexP
   };
 
   const handleShowSubWallet = (id: string) => {
-    if (showSubWallet === id) {
-      setShowSubWallet(null);
+    if (showSubWallet.includes(id)) {
+      setShowSubWallet((prev) => prev.filter((item) => item !== id));
     } else {
       dispatch(setCurrentWalletId(id));
-      setShowSubWallet(id);
+      setShowSubWallet((prev) => [...prev, id]);
       dispatch(
         setWalletItem({
           currentWalletParentId: id,
@@ -108,10 +109,12 @@ function WalletIndex({ showHubList, getCurrentHubId, paddingLeft }: WalletIndexP
               walletType="wallet"
               handleLocation={handleLocation}
               handleShowSubWallet={handleShowSubWallet}
-              showSubWallet={showSubWallet}
+              showSubWallet={showSubWallet.includes(wallet.id)}
               paddingLeft={paddingLeft}
             />
-            <div>{showSubWallet === wallet.id ? <SubWalletIndex paddingLeft={Number(paddingLeft) + 15} /> : null}</div>
+            <div>
+              {showSubWallet.includes(wallet.id) ? <SubWalletIndex paddingLeft={Number(paddingLeft) + 15} /> : null}
+            </div>
           </div>
         ))}
     </div>
