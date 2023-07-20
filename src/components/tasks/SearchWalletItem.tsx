@@ -13,7 +13,7 @@ interface WalletItemProps {
     hub_id?: string;
     has_descendants?: number;
   };
-  showSubWallet: string | null;
+  showSubWallet: boolean;
   paddingLeft: string | number;
   walletType: string;
   handleShowSubWallet: (id: string, index?: number) => void;
@@ -41,7 +41,7 @@ export default function SearchWalletItem({
     return <FaFolder color={wallet.color} />;
   };
 
-  const renderIcons = (showSubWallet: string | null) => {
+  const renderIcons = (showSubWallet: boolean) => {
     if (wallet?.has_descendants) {
       if (showSubWallet) {
         return (
