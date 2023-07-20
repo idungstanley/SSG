@@ -127,7 +127,7 @@ const tabs = [
   {
     id: 11,
     label: 'Calendar',
-    icon: <CalendarIcon active />
+    icon: <CalendarIcon active={false} />
   }
 ];
 

@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { Task } from '../../../../features/task/interface.tasks';
 import { cl } from '../../../../utils';
-import { ACTIVE_COL_BG, DEFAULT_COL_BG } from '../../config';
+import { DEFAULT_COL_BG } from '../../config';
 import { UseUpdateTaskService, useAddTask } from '../../../../features/task/taskService';
 import StatusDropdown from '../../../status/StatusDropdown';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -191,7 +191,7 @@ export function StickyCol({
     <div ref={droppabbleRef}>
       {task.id !== '0' && (
         <td
-          className="sticky left-0 flex items-start justify-start text-sm font-medium text-gray-900 cursor-pointer text-start"
+          className="sticky left-0 flex items-center justify-start text-sm font-medium text-gray-900 cursor-pointer text-start"
           {...props}
         >
           <div className="flex items-center h-full space-x-1 ">
@@ -240,39 +240,41 @@ export function StickyCol({
                 onKeyDown={(e) => (e.key === 'Enter' ? handleEditTask(e, task.id) : null)}
                 suppressContentEditableWarning={true}
               >
-                {task.name.length > 50 && singleLineView ? (
-                  <>
-                    {/* <InteractiveTooltip content={<p>{task.name}</p>} top="-top-28"> */}
-                    {!eitableContent ? (
-                      <div
-                        className=""
-                        style={{
-                          maxWidth: '300px',
-                          overflow: 'hidden',
-                          textOverflow: 'ellipsis',
-                          whiteSpace: 'nowrap'
-                        }}
-                      >
-                        {taskUpperCase ? task.name.toUpperCase() : Capitalize(task.name)}
-                        ...
-                      </div>
-                    ) : (
-                      <div
-                        className=""
-                        style={{
-                          maxWidth: '300px',
-                          overflow: 'hidden',
-                          whiteSpace: 'nowrap'
-                        }}
-                      >
-                        {taskUpperCase ? task.name.toUpperCase() : Capitalize(task.name)}
-                      </div>
-                    )}
-                    {/* </InteractiveTooltip> */}
-                  </>
-                ) : (
-                  <span>{taskUpperCase ? task.name.toUpperCase() : Capitalize(task.name)}</span>
-                )}
+                <div className="font-semibold alsoit-gray-300">
+                  {task.name.length > 50 && singleLineView ? (
+                    <div>
+                      {/* <InteractiveTooltip content={<p>{task.name}</p>} top="-top-28"> */}
+                      {!eitableContent ? (
+                        <div
+                          className=""
+                          style={{
+                            maxWidth: '300px',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                            whiteSpace: 'nowrap'
+                          }}
+                        >
+                          {taskUpperCase ? task.name.toUpperCase() : Capitalize(task.name)}
+                          ...
+                        </div>
+                      ) : (
+                        <div
+                          className=""
+                          style={{
+                            maxWidth: '300px',
+                            overflow: 'hidden',
+                            whiteSpace: 'nowrap'
+                          }}
+                        >
+                          {taskUpperCase ? task.name.toUpperCase() : Capitalize(task.name)}
+                        </div>
+                      )}
+                      {/* </InteractiveTooltip> */}
+                    </div>
+                  ) : (
+                    <span>{taskUpperCase ? task.name.toUpperCase() : Capitalize(task.name)}</span>
+                  )}
+                </div>
 
                 {/* non default badges here */}
                 <div onClick={(e) => e.stopPropagation()} className="pl-3">

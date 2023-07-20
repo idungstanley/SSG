@@ -112,7 +112,7 @@ export default function PlaceItem({
           <div className="flex items-center justify-between w-full">
             <div
               className={cl(
-                'flex gap-5 items-center content-center self-center ml-0.5',
+                'flex gap-4 items-center content-center self-center ml-0.5',
                 isActivePlace ? 'justify-center text-black font-extrabold' : ''
               )}
             >

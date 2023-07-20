@@ -27,7 +27,7 @@ function SubWalletIndex({ paddingLeft = '32', currWalId }: SubWalletIndexProps) 
   const dispatch = useDispatch();
   const { toggleArchiveWallet } = useAppSelector((state) => state.wallet);
 
-  const [showSubWallet3, setShowSubWallet3] = useState<string | null>(null);
+  const [showSubWallet, setShowSubWallet] = useState<string[]>([]);
   const [finalParentId, setFinalWalletParentId] = useState('');
   const { data: subwallet } = getWalletServices({
     Archived: toggleArchiveWallet,
@@ -36,11 +36,12 @@ function SubWalletIndex({ paddingLeft = '32', currWalId }: SubWalletIndexProps) 
   const { showMenuDropdown } = useAppSelector((state) => state.hub);
 
   const handleShowSubWallet = (id: string) => {
-    if (showSubWallet3 === id) {
-      return setShowSubWallet3(null);
+    if (showSubWallet.includes(id)) {
+      setShowSubWallet((prev) => prev.filter((item) => item !== id));
+    } else {
+      setFinalWalletParentId(id);
+      setShowSubWallet((prev) => [...prev, id]);
     }
-    setFinalWalletParentId(id);
-    setShowSubWallet3(id);
   };
 
   const navigate = useNavigate();
@@ -78,9 +79,9 @@ function SubWalletIndex({ paddingLeft = '32', currWalId }: SubWalletIndexProps) 
             handleLocation={handleLocation}
             handleShowSubWallet={handleShowSubWallet}
             paddingLeft={paddingLeft}
-            showSubWallet={showSubWallet3}
+            showSubWallet={showSubWallet.includes(wallet.id)}
           />
-          {showSubWallet3 === wallet.id ? (
+          {showSubWallet.includes(wallet.id) ? (
             <LastListIndex finalParentId={finalParentId} paddingLeft={Number(paddingLeft) + 13} />
           ) : null}
         </div>

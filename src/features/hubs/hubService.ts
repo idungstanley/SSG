@@ -115,37 +115,6 @@ export const useGetHubs = ({
   );
 };
 
-export const useGetTree = ({
-  includeTree,
-  hub_id,
-  wallet_id,
-  listId
-}: {
-  includeTree?: boolean;
-  hub_id?: string | null;
-  wallet_id?: string | null;
-  listId?: string | null;
-}) => {
-  return useQuery(
-    ['tree'],
-    () =>
-      requestNew<IHubsRes>({
-        url: 'active-tree',
-        method: 'GET',
-        params: {
-          hub_id: hub_id,
-          list_id: listId,
-          wallet_id: wallet_id
-        }
-      }),
-    {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-      select: (res) => res.data,
-      enabled: includeTree
-    }
-  );
-};
-
 // get all hubs
 export const useGetHubList = ({ query }: { query: number | null }) => {
   const queryClient = useQueryClient();

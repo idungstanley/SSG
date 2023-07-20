@@ -71,10 +71,10 @@ export function ScrollableContainer({ children, scrollDirection, ...props }: Cus
     let newLeft, newTop;
     if (scrollDirection === 'x') {
       newLeft = (+contentLeft / +contentWidth) * trackWidth;
-      newLeft = Math.min(newLeft, trackWidth - thumbWidth);
+      newLeft = Math.min(newLeft, trackWidth - thumbWidth) - 35;
     } else {
       newTop = (+contentTop / +contentHeight) * trackHeight;
-      newTop = Math.min(newTop, trackHeight - thumbWidth);
+      newTop = Math.min(newTop, trackHeight - thumbWidth) - 27;
     }
     const thumb = scrollThumbRef.current;
     if (scrollDirection === 'x') {
@@ -138,7 +138,7 @@ export function ScrollableContainer({ children, scrollDirection, ...props }: Cus
 
   // update size is pilot is visible / invisible
   const { show: showFullPilot } = useAppSelector((state) => state.slideOver.pilotSideOver);
-  const { showMore, currentItemId, activeItemId, showHub } = useAppSelector((state) => state.workspace);
+  const { showMore, currentItemId, activeItemId, showHub, activePlaceId } = useAppSelector((state) => state.workspace);
   const { openedHubId } = useAppSelector((state) => state.hub);
 
   const initialActivePlaceId: number | null = (JSON.parse(localStorage.getItem('activePlaceIdLocale') as string) ||
@@ -149,9 +149,11 @@ export function ScrollableContainer({ children, scrollDirection, ...props }: Cus
     const handleResize = (ref: HTMLDivElement, trackSize: number) => {
       const { clientWidth, scrollWidth, clientHeight, scrollHeight } = ref;
       if (scrollDirection === 'x') {
-        setThumbWidth(Math.max((clientWidth / scrollWidth) * trackSize, DEFAULT_THUMB_WIDTH));
+        const THUMB_WIDTH = (clientWidth / scrollWidth) * trackSize;
+        setThumbWidth(Math.max(THUMB_WIDTH + 65, DEFAULT_THUMB_WIDTH));
       } else {
-        setThumbWidth(Math.max((clientHeight / scrollHeight) * trackSize, DEFAULT_THUMB_WIDTH));
+        const THUMB_HEIGHT = (clientHeight / scrollHeight) * trackSize;
+        setThumbWidth(Math.max(THUMB_HEIGHT + 27, DEFAULT_THUMB_WIDTH));
       }
     };
 
@@ -178,7 +180,7 @@ export function ScrollableContainer({ children, scrollDirection, ...props }: Cus
     return () => {
       window.removeEventListener('resize', calculateThumbSize);
     };
-  }, [showFullPilot, initialActivePlaceId, showHub, showMore, currentItemId, activeItemId, openedHubId]);
+  }, [showFullPilot, initialActivePlaceId, showHub, showMore, currentItemId, activeItemId, openedHubId, activePlaceId]);
 
   // Listen for mouse events to handle scrolling by dragging the thumb
   useEffect(() => {
@@ -196,11 +198,12 @@ export function ScrollableContainer({ children, scrollDirection, ...props }: Cus
   function handleScrollButton(direction: 'left' | 'right' | 'up' | 'down') {
     if (contentRef.current) {
       const width = contentRef.current.offsetWidth;
+      const height = contentRef.current.offsetHeight;
       let scrollAmount;
       if (scrollDirection === 'x') {
         scrollAmount = direction === 'left' ? 0 : width;
       } else {
-        scrollAmount = direction === 'down' ? 200 : -200;
+        scrollAmount = direction === 'up' ? 0 : height;
       }
 
       if (scrollDirection === 'x') {
@@ -218,14 +221,14 @@ export function ScrollableContainer({ children, scrollDirection, ...props }: Cus
       </div>
       <div
         className={` mt-2 group ${
-          scrollDirection === 'y' ? 'flex flex-col w-4 items-center border-l ' : 'grid w-full grid-cols-2'
+          scrollDirection === 'y' ? 'flex flex-col w-4 items-center' : 'grid w-full grid-cols-2'
         }`}
       >
         <div />
 
-        <div className={`flex items-center space-x-2 ${scrollDirection === 'y' ? 'flex-col h-full' : 'flex-row'}`}>
+        <div className={`flex items-center space-x-2 mb-4 ${scrollDirection === 'y' ? 'flex-col h-full' : 'flex-row'}`}>
           <div
-            className={`flex gap-1 ml-2 bg-gray-100 opacity-0 group-hover:opacity-100 rounded ${
+            className={`flex z-10 gap-1.5 ml-2 bg-transparent opacity-0 group-hover:opacity-100 rounded-md ${
               scrollDirection === 'y' ? 'flex-col' : 'flex-row'
             }`}
           >
@@ -251,18 +254,18 @@ export function ScrollableContainer({ children, scrollDirection, ...props }: Cus
             </button>
           </div>
           <div
-            className={`relative flex flex-grow block ${scrollDirection === 'y' ? 'w-2 items-center' : ' w-full h-3'}`}
+            className={`relative flex flex-grow block ${scrollDirection === 'y' ? 'w-3 items-center' : ' w-full h-3'}`}
           >
             <div
-              className={`absolute top-0 bottom-0 bg-transparent cursor-pointer rounded-xl ${
-                scrollDirection === 'y' ? 'w-2' : ' w-full h-3'
+              className={`absolute top-0 -bottom-7 bg-transparent cursor-pointer rounded-xl ${
+                scrollDirection === 'y' ? 'w-3' : ' w-full h-3 -right-12'
               }`}
               ref={scrollTrackRef}
               onClick={handleTrackClick}
             ></div>
             <div
               className={`absolute bg-alsoit-gray-75 hover:bg-alsoit-gray-300 cursor-pointer rounded-xl ${
-                scrollDirection === 'y' ? 'w-2' : ' w-full h-3'
+                scrollDirection === 'y' ? 'w-3' : ' w-full h-3'
               }`}
               ref={scrollThumbRef}
               onMouseDown={handleThumbMousedown}
@@ -274,7 +277,7 @@ export function ScrollableContainer({ children, scrollDirection, ...props }: Cus
             ></div>
           </div>
           <div
-            className={`flex gap-1 ml-2 bg-gray-100 opacity-0 group-hover:opacity-100 rounded ${
+            className={`flex z-10 gap-1.5 ml-2 bg-transparent opacity-0 group-hover:opacity-100 rounded-md ${
               scrollDirection === 'y' ? 'flex-col' : 'flex-row'
             }`}
           >

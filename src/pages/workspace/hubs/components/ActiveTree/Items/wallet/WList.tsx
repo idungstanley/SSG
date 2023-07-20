@@ -32,14 +32,15 @@ export default function WList({ wallets, leftMargin, paddingLeft, type, level = 
   const navigate = useNavigate();
   const { walletId, listId } = useParams();
   const { showExtendedBar } = useAppSelector((state) => state.workspace);
-  const [showSubWallet, setShowSubWallet] = useState<string | null>(null);
+
+  const [showSubWallet, setShowSubWallet] = useState<string[]>([]);
   const [stickyButtonIndex, setStickyButtonIndex] = useState<number | undefined>(-1);
 
   const id = walletId || listId;
 
   useEffect(() => {
     if (id) {
-      setShowSubWallet(id);
+      setShowSubWallet((prev) => [...prev, id]);
     }
   }, []);
 
@@ -49,7 +50,11 @@ export default function WList({ wallets, leftMargin, paddingLeft, type, level = 
     navigate(`tasks/w/${id}`, {
       replace: true
     });
-    setShowSubWallet(id);
+    if (showSubWallet.includes(id)) {
+      setShowSubWallet((prev) => prev.filter((item) => item !== id));
+    } else {
+      setShowSubWallet((prev) => [...prev, id]);
+    }
     dispatch(
       setWalletItem({
         currentWalletParentId: id,
@@ -71,11 +76,10 @@ export default function WList({ wallets, leftMargin, paddingLeft, type, level = 
 
   const handleShowSubWallet = (id: string, index?: number) => {
     setStickyButtonIndex(index === stickyButtonIndex ? -1 : index);
-    if (showSubWallet === id) {
-      setShowSubWallet(null);
+    if (showSubWallet.includes(id)) {
+      setShowSubWallet((prev) => prev.filter((item) => item !== id));
     } else {
-      dispatch(setCurrentWalletId(id));
-      setShowSubWallet(id);
+      setShowSubWallet((prev) => [...prev, id]);
       dispatch(
         setCurrentItem({
           currentItemId: id,
@@ -108,7 +112,7 @@ export default function WList({ wallets, leftMargin, paddingLeft, type, level = 
             walletType={level === 1 ? EntityType.wallet : level === 2 ? 'subwallet2' : 'subwallet3'}
             handleLocation={handleLocation}
             handleShowSubWallet={handleShowSubWallet}
-            showSubWallet={showSubWallet}
+            showSubWallet={showSubWallet.includes(wallet.id)}
             paddingLeft={paddingLeft}
             isSticky={stickyButtonIndex !== undefined && stickyButtonIndex !== null && stickyButtonIndex <= index}
             stickyButtonIndex={stickyButtonIndex}
@@ -116,7 +120,7 @@ export default function WList({ wallets, leftMargin, paddingLeft, type, level = 
             topNumber={topNumber}
             zNumber={level === 1 ? '3' : level === 2 ? '2' : '1'}
           />
-          {wallet.children.length && showSubWallet ? (
+          {wallet.children.length && showSubWallet.includes(wallet.id) ? (
             <WList
               wallets={wallet.children}
               leftMargin={false}
@@ -126,7 +130,7 @@ export default function WList({ wallets, leftMargin, paddingLeft, type, level = 
               topNumber={topNumber + 30}
             />
           ) : null}
-          {wallet.lists.length && showSubWallet && !showExtendedBar ? (
+          {wallet.lists.length && showSubWallet.includes(wallet.id) && !showExtendedBar ? (
             <LList list={wallet.lists} leftMargin={false} paddingLeft={Number(paddingLeft) + 32} />
           ) : null}
         </div>

@@ -8,6 +8,7 @@ import {
   closeMenu,
   getPrevName,
   getSubMenu,
+  setListIdCreateTask,
   setSideBarCreateTaskListId,
   setshowMenuDropdown
 } from '../../features/hubs/hubSlice';
@@ -117,6 +118,7 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
   };
 
   const handleListSettings = (id: string, name: string, e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
+    dispatch(setListIdCreateTask(id));
     dispatch(setSideBarCreateTaskListId(id));
     if (id === showMenuDropdown) {
       closeMenuDropdown();

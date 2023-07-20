@@ -28,7 +28,7 @@ function SubWalletIndex({ paddingLeft = '30' }: SubWalletIndexProps) {
 
   const { draggableItemId } = useAppSelector((state) => state.list);
 
-  const [showSubWallet2, setShowSubWallet2] = useState<string | null>(null);
+  const [showSubWallet, setShowSubWallet] = useState<string[]>([]);
   const [currWalId, setCurrWalId] = useState('');
   const { data: subwallet } = getWalletServices({
     Archived: toggleArchiveWallet,
@@ -37,10 +37,11 @@ function SubWalletIndex({ paddingLeft = '30' }: SubWalletIndexProps) {
   const { showMenuDropdown } = useAppSelector((state) => state.hub);
 
   const handleShowSubWallet = (id: string) => {
-    setShowSubWallet2(id);
-    setCurrWalId(id);
-    if (showSubWallet2 === id) {
-      return setShowSubWallet2(null);
+    if (showSubWallet.includes(id)) {
+      setShowSubWallet((prev) => prev.filter((item) => item !== id));
+    } else {
+      setShowSubWallet((prev) => [...prev, id]);
+      setCurrWalId(id);
     }
   };
 
@@ -49,7 +50,7 @@ function SubWalletIndex({ paddingLeft = '30' }: SubWalletIndexProps) {
     dispatch(setShowHub(true));
     navigate(`tasks/w/${id}`);
     dispatch(setActiveItem({ activeItemType: type, activeItemId: id }));
-    setShowSubWallet2(id);
+    setShowSubWallet((prev) => [...prev, id]);
     setCurrWalId(id);
   };
 
@@ -77,10 +78,10 @@ function SubWalletIndex({ paddingLeft = '30' }: SubWalletIndexProps) {
             handleLocation={handleLocation}
             handleShowSubWallet={handleShowSubWallet}
             paddingLeft={paddingLeft}
-            showSubWallet={showSubWallet2}
+            showSubWallet={showSubWallet.includes(wallet.id)}
           />
           <div>
-            {showSubWallet2 === wallet.id ? (
+            {showSubWallet.includes(wallet.id) ? (
               <Sub2WalletIndex currWalId={currWalId} paddingLeft={Number(paddingLeft) + 15} />
             ) : null}
           </div>
