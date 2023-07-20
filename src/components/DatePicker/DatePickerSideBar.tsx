@@ -150,8 +150,8 @@ export function DatePickerSideBar({ currentDate }: DatePickerSideBarProp) {
   };
 
   return (
-    <div className="border-r text-sm border-gray-200 h-full overflow-auto">
-      <div className="flex justify-between items-center w-full px-2">
+    <div className="border-r text-sm border-gray-200 h-full">
+      <div className="border-b-2 flex justify-between items-center w-full px-2">
         <span className="font-extrabold text-alsoit-text-lg">Recurring</span>
         <div
           onClick={() => setRecurring(!showRecurring)}
@@ -165,7 +165,7 @@ export function DatePickerSideBar({ currentDate }: DatePickerSideBarProp) {
       {showRecurring ? (
         <CustomSuggestion setRecurring={setRecurring} />
       ) : (
-        <div className="flex flex-col space-y-2">
+        <div className="flex flex-col space-y-2 h-80 overflow-auto">
           <p
             className="font-extrabold rounded-md hover:bg-alsoit-gray-75 hover:text-white text-xl flex justify-between px-2 py-0.5 w-full group"
             onClick={() => handleDayClick('today')}

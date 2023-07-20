@@ -73,14 +73,14 @@ export default function DatePicker({ styles, width, height, range, toggleFn }: D
                 className="hover:bg-purple-600"
                 size={'small'}
                 sx={{
-                  background: '#d559ff',
-                  ':hover': { background: '#c128f5' },
+                  background: '#d559aa',
+                  ':hover': { background: '#c128a9' },
                   height: '32px',
                   fontSize: '10px',
                   borderRadius: '0 0 0 0'
                 }}
               >
-                Confirm
+                Close
               </Button>
               <Button
                 onClick={closeDateModal}
@@ -88,14 +88,14 @@ export default function DatePicker({ styles, width, height, range, toggleFn }: D
                 className="hover:bg-purple-600"
                 size={'small'}
                 sx={{
-                  background: '#d559aa',
-                  ':hover': { background: '#c128a9' },
+                  background: '#d559ff',
+                  ':hover': { background: '#c128f5' },
                   height: '32px',
                   fontSize: '10px',
                   borderRadius: '0 0 6px 0'
                 }}
               >
-                Close
+                Confirm
               </Button>
             </div>
           </div>
