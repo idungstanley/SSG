@@ -5,12 +5,13 @@ import { setSelectedDate } from '../../features/workspace/workspaceSlice';
 import { generateDate, weekends, weeks } from '../../utils/calendar';
 import { useState } from 'react';
 import ThreeDotIcon from '../../assets/icons/ThreeDotIcon';
+import CustomSuggestion from './CustomSuggestions';
 
 interface DatePickerSideBarProp {
   currentDate: dayjs.Dayjs;
 }
 
-type extraFields = {
+export type extraFields = {
   label: string;
   type: string;
   depth: number;
@@ -18,12 +19,11 @@ type extraFields = {
 
 export function DatePickerSideBar({ currentDate }: DatePickerSideBarProp) {
   const dispatch = useAppDispatch();
-  const customSuggestionField: extraFields[] = [];
   const [iconToggle, setIconToggle] = useState<{ threeDotIcon: boolean }>({
     threeDotIcon: false
   });
   const [showRecurring, setRecurring] = useState<boolean>(false);
-  const { HistoryFilterMemory } = useAppSelector((state) => state.task);
+  const { HistoryFilterMemory, customSuggestionField } = useAppSelector((state) => state.task);
   let selectedStartOfWeek: Dayjs | null = null;
   let selectedEndOfWeek: Dayjs | null = null;
 
@@ -31,11 +31,13 @@ export function DatePickerSideBar({ currentDate }: DatePickerSideBarProp) {
     if (field.type === 'week') {
       return (
         <p
-          className="font-extrabold rounded-md hover:bg-alsoit-gray-75 hover:text-white text-xl flex justify-between px-2 py-0.5 w-full"
+          className="font-extrabold rounded-md hover:bg-alsoit-gray-75 hover:text-white text-xl flex justify-between px-2 py-0.5 w-full group"
           onClick={() => handleWeekButtonClick(field.depth)}
         >
-          <span>`Next ${field.depth} weeks`</span>
-          <span>{dayjs(weeks(field.depth)).format('ddd D')}</span>
+          <span className="text-alsoit-text-md font-extrabold">Next {field.depth} weeks</span>
+          <span className="text-alsoit-gray-200 group-hover:text-white text-right text-alsoit-text-md">
+            {dayjs(weeks(field.depth)).format('ddd D MMM')}
+          </span>
         </p>
       );
     }
@@ -43,11 +45,13 @@ export function DatePickerSideBar({ currentDate }: DatePickerSideBarProp) {
     if (field.type === 'month') {
       return (
         <p
-          className="font-extrabold rounded-md hover:bg-alsoit-gray-75 hover:text-white text-xl flex justify-between px-2 py-0.5 w-full"
+          className="font-extrabold rounded-md hover:bg-alsoit-gray-75 hover:text-white text-xl flex justify-between px-2 py-0.5 w-full group"
           onClick={() => handleWeekButtonClick(field.depth * 4)}
         >
-          <span>`Next ${field.depth} months`</span>
-          <span>{dayjs(weeks(field.depth)).format('ddd D, MMM')}</span>
+          <span className="text-alsoit-text-md font-extrabold">Next {field.depth} months</span>
+          <span className="text-alsoit-gray-200 group-hover:text-white text-right text-alsoit-text-md">
+            {dayjs().add(field.depth, 'months').format('ddd D, MMM')}
+          </span>
         </p>
       );
     }
@@ -146,8 +150,8 @@ export function DatePickerSideBar({ currentDate }: DatePickerSideBarProp) {
   };
 
   return (
-    <div className="border-r text-sm border-gray-200">
-      <div className="flex justify-between w-full px-2">
+    <div className="border-r text-sm border-gray-200 h-full overflow-auto">
+      <div className="flex justify-between items-center w-full px-2">
         <span className="font-extrabold text-alsoit-text-lg">Recurring</span>
         <div
           onClick={() => setRecurring(!showRecurring)}
@@ -159,18 +163,20 @@ export function DatePickerSideBar({ currentDate }: DatePickerSideBarProp) {
         </div>
       </div>
       {showRecurring ? (
-        <CustomSuggestion />
+        <CustomSuggestion setRecurring={setRecurring} />
       ) : (
         <div className="flex flex-col space-y-2">
           <p
-            className="font-extrabold rounded-md hover:bg-alsoit-gray-75 hover:text-white text-xl flex justify-between px-2 py-0.5 w-full"
+            className="font-extrabold rounded-md hover:bg-alsoit-gray-75 hover:text-white text-xl flex justify-between px-2 py-0.5 w-full group"
             onClick={() => handleDayClick('today')}
           >
             <span className="text-alsoit-text-md font-extrabold">Today</span>
-            <span className="text-gray-400 text-right text-alsoit-text-md">{dayjs().format('ddd')}</span>
+            <span className="text-alsoit-gray-200 group-hover:text-white text-right text-alsoit-text-md">
+              {dayjs().format('ddd')}
+            </span>
           </p>
           <p
-            className="font-extrabold rounded-md hover:bg-alsoit-gray-75 hover:text-white text-xl flex justify-between px-2 py-0.5 w-full"
+            className="font-extrabold rounded-md hover:bg-alsoit-gray-75 hover:text-white text-xl flex justify-between px-2 py-0.5 w-full group"
             onClick={() =>
               dispatch(
                 setHistoryMemory({
@@ -184,103 +190,69 @@ export function DatePickerSideBar({ currentDate }: DatePickerSideBarProp) {
             }
           >
             <span className="text-alsoit-text-md font-extrabold">Later</span>
-            <span className="text-gray-400 text-right text-alsoit-text-md">
+            <span className="text-alsoit-gray-200 group-hover:text-white text-right text-alsoit-text-md">
               {dayjs().add(4, 'hour').format('h:mm A')}
             </span>
           </p>
           <p
-            className="font-extrabold rounded-md hover:bg-alsoit-gray-75 hover:text-white text-xl flex justify-between px-2 py-0.5 w-full"
+            className="font-extrabold rounded-md hover:bg-alsoit-gray-75 hover:text-white text-xl flex justify-between px-2 py-0.5 w-full group"
             onClick={() => handleDayClick('tomorrow')}
           >
             <span className="text-alsoit-text-md font-extrabold">Tomorrow</span>
-            <span className="text-gray-400 text-right text-alsoit-text-md">{dayjs().add(1, 'day').format('ddd')}</span>
+            <span className="text-alsoit-gray-200 group-hover:text-white text-right text-alsoit-text-md">
+              {dayjs().add(1, 'day').format('ddd')}
+            </span>
           </p>
           <p
-            className="font-extrabold rounded-md hover:bg-alsoit-gray-75 hover:text-white text-xl flex justify-between px-2 py-0.5 w-full"
+            className="font-extrabold rounded-md hover:bg-alsoit-gray-75 hover:text-white text-xl flex justify-between px-2 py-0.5 w-full group"
             onClick={() => handleWeekendButtonClick('weekend')}
           >
             <span className="text-alsoit-text-md font-extrabold">This Weekend</span>
-            <span className="text-gray-400 text-right text-alsoit-text-md">
+            <span className="text-alsoit-gray-200 group-hover:text-white text-right text-alsoit-text-md">
               {dayjs(weekends('weekend')[1]).format('ddd')}
             </span>
           </p>
           <p
-            className="font-extrabold rounded-md hover:bg-alsoit-gray-75 hover:text-white text-xl flex justify-between px-2 py-0.5 w-full"
+            className="font-extrabold rounded-md hover:bg-alsoit-gray-75 hover:text-white text-xl flex justify-between px-2 py-0.5 w-full group"
             onClick={() => handleWeekendButtonClick('next weekend')}
           >
             <span className="text-alsoit-text-md font-extrabold">Next Weekend</span>
-            <span className="text-gray-400 text-right text-alsoit-text-md">
+            <span className="text-alsoit-gray-200 group-hover:text-white text-right text-alsoit-text-md">
               {dayjs(weekends('nweekend')[1]).format('ddd D')}
             </span>
           </p>
           <p
-            className="font-extrabold rounded-md hover:bg-alsoit-gray-75 hover:text-white text-xl flex justify-between px-2 py-0.5 w-full"
+            className="font-extrabold rounded-md hover:bg-alsoit-gray-75 hover:text-white text-xl flex justify-between px-2 py-0.5 w-full group"
             onClick={() => handleWeekClick()}
           >
             <span className="text-alsoit-text-md font-extrabold">Next Week</span>
-            <span className="text-gray-400 text-right text-alsoit-text-md">
+            <span className="text-alsoit-gray-200 group-hover:text-white text-right text-alsoit-text-md">
               {dayjs().add(8, 'days').format('ddd D')}
             </span>
           </p>
           <p
-            className="font-extrabold rounded-md hover:bg-alsoit-gray-75 hover:text-white text-xl flex justify-between px-2 py-0.5 w-full"
+            className="font-extrabold rounded-md hover:bg-alsoit-gray-75 hover:text-white text-xl flex justify-between px-2 py-0.5 w-full group"
             onClick={() => handleWeekButtonClick(1)}
           >
             <span className="text-alsoit-text-md font-extrabold">Next Work Week</span>
-            <span className="text-gray-400 text-right text-alsoit-text-md">{dayjs(weeks(1)).format('ddd D')}</span>
+            <span className="text-alsoit-gray-200 group-hover:text-white text-right text-alsoit-text-md">
+              {dayjs(weeks(1)).format('ddd D')}
+            </span>
           </p>
           <p
-            className="font-extrabold rounded-md hover:bg-alsoit-gray-75 hover:text-white text-xl flex justify-between px-2 py-0.5 w-full"
+            className="font-extrabold rounded-md hover:bg-alsoit-gray-75 hover:text-white text-xl flex justify-between px-2 py-0.5 w-full group"
             onClick={() => handleWeekButtonClick(2)}
           >
             <span className="text-alsoit-text-md font-extrabold">Next 2 Work Weeks</span>
-            <span className="text-gray-400 text-right text-alsoit-text-md">{dayjs(weeks(2)).format('ddd D')}</span>
+            <span className="text-alsoit-gray-200 group-hover:text-white text-right text-alsoit-text-md">
+              {dayjs(weeks(2)).format('ddd D')}
+            </span>
           </p>
-          {customSuggestionField.map((field) => customSuggestion(field))}
+          {customSuggestionField.map((field) => {
+            return customSuggestion(field);
+          })}
         </div>
       )}
-    </div>
-  );
-}
-
-function CustomSuggestion() {
-  const [value, setValue] = useState<{ [key: string]: string | number }>();
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    setValue({ ...value, [e.target.name]: e.target.value });
-  };
-
-  return (
-    <div className="flex flex-col space-y-4 my-6 items-center justify-center">
-      <label htmlFor="type" className="text-alsoit-text-lg px-2 text-left font-semibold">
-        Type of field
-        <select
-          name="type"
-          id="type"
-          className="w-36 h-8 rounded-md border-none text-alsoit-text-md"
-          onChange={handleChange}
-        >
-          <option value="">Type of field</option>
-          <option value="month">Months</option>
-          <option value="week">Weeks</option>
-        </select>
-      </label>
-      <label htmlFor="depth" className="text-alsoit-text-lg px-2 text-left font-semibold">
-        Depth of Addition
-        <input
-          type="number"
-          id="depth"
-          name="depth"
-          className="w-36 h-7 rounded-md text-alsoit-text-md"
-          placeholder="2 for 2 weeks"
-          onChange={handleChange}
-        />
-      </label>
-      <div>
-        <button className="p-1 text-white bg-alsoit-purple-300 hover:bg-purple-400 cursor-pointer rounded-md">
-          Create
-        </button>
-      </div>
     </div>
   );
 }

@@ -50,11 +50,11 @@ export default function DatePicker({ styles, width, height, range, toggleFn }: D
           styles ??
           'absolute z-50 mt-1 shadow-2xl bg-white rounded-md ring-1 ring-black ring-opacity-5 focus:outline-none top-56 right-12'
         }
-        style={{ height: height ?? '425px', width: width ?? '540px' }}
+        style={{ height: height ?? '425px', width: width ?? '550px' }}
       >
         <DatePickerManualDates range={range} />
         <div className="flex border-b" style={{ height: '340px' }}>
-          <div className="w-1/3">
+          <div className="w-1/3 h-full">
             <DatePickerSideBar currentDate={currentDate} />
           </div>
           <div>
