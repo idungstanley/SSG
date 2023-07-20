@@ -32,6 +32,7 @@ export default function WList({ wallets, leftMargin, paddingLeft, type, level = 
   const navigate = useNavigate();
   const { walletId, listId } = useParams();
   const { showExtendedBar } = useAppSelector((state) => state.workspace);
+
   const [showSubWallet, setShowSubWallet] = useState<string | null>(null);
   const [stickyButtonIndex, setStickyButtonIndex] = useState<number | undefined>(-1);
 
