@@ -13,6 +13,7 @@ import { useParams } from 'react-router-dom';
 import { UseGetWalletDetails } from '../../../../features/wallet/walletService';
 import { UseGetHubDetails } from '../../../../features/hubs/hubService';
 import { cl } from '../../../../utils';
+import { useDroppable } from '@dnd-kit/core';
 
 interface ListProps {
   tasks: Task[];
@@ -65,7 +66,7 @@ export function List({ tasks }: ListProps) {
       hidden: false
     }));
 
-    const newColumns = unique([...columnsHead]);
+    const newColumns = unique([...columnsHead, ...customFieldNames]);
     dispatch(getTaskColumns(newColumns));
     setColumns(newColumns);
   }, [data]);
@@ -88,8 +89,15 @@ export function List({ tasks }: ListProps) {
     dispatch(setCurrTeamMemId(null));
   };
 
+  const { setNodeRef } = useDroppable({
+    id: tasks[0].list_id,
+    data: {
+      isOverList: true
+    }
+  });
+
   return (
-    <div className="pt-1 border-t-4 border-l-4 border-purple-500 rounded-xl bg-purple-50">
+    <div className="pt-1 border-t-4 border-l-4 border-purple-500 rounded-xl bg-purple-50" ref={setNodeRef}>
       <Label listName={listName} showTable={collapseTable} onClickChevron={() => setCollapseTable((prev) => !prev)} />
       {!collapseTable && columns ? (
         <div className="relative ">
