@@ -63,7 +63,13 @@ export default function CustomSuggestion({ setRecurring }: CustomSuggestionProps
       </label>
       {error.monthErr && <span className="text-alsoit-text-sm text-alsoit-danger text-center">{error.monthErr}</span>}
       {error.weekErr && <span className="text-alsoit-text-sm text-alsoit-danger text-center">{error.weekErr}</span>}
-      <div>
+      <div className="flex space-x-2">
+        <button
+          className="p-1 text-white bg-alsoit-gray-200 hover:bg-alsoit-gray-75 cursor-pointer rounded-md"
+          onClick={() => setRecurring && setRecurring(false)}
+        >
+          Cancel
+        </button>
         <button
           className="p-1 text-white bg-alsoit-purple-300 hover:bg-purple-400 cursor-pointer rounded-md"
           onClick={() => handleClick()}
