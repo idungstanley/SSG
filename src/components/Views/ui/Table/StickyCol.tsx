@@ -23,6 +23,7 @@ import { Capitalize } from '../../../../utils/NoCapWords/Capitalize';
 import RoundedCheckbox from '../../../Checkbox/RoundedCheckbox';
 import ToolTip from '../../../Tooltip/Tooltip';
 import Badges from '../../../badges';
+import DetailsOnHover from '../../../Dropdown/DetailsOnHover/DetailsOnHover';
 
 interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   task: Task;
@@ -245,17 +246,25 @@ export function StickyCol({
                     <div>
                       {/* <InteractiveTooltip content={<p>{task.name}</p>} top="-top-28"> */}
                       {!eitableContent ? (
-                        <div
-                          className=""
-                          style={{
-                            maxWidth: '300px',
-                            overflow: 'hidden',
-                            textOverflow: 'ellipsis',
-                            whiteSpace: 'nowrap'
-                          }}
-                        >
-                          {taskUpperCase ? task.name.toUpperCase() : Capitalize(task.name)}
-                        </div>
+                        <>
+                          <DetailsOnHover
+                            hoverElement={
+                              <div
+                                className=""
+                                style={{
+                                  maxWidth: '300px',
+                                  overflow: 'hidden',
+                                  textOverflow: 'ellipsis',
+                                  whiteSpace: 'nowrap'
+                                }}
+                              >
+                                {taskUpperCase ? task.name.toUpperCase() : Capitalize(task.name)}
+                              </div>
+                            }
+                            content={<div>{taskUpperCase ? task.name.toUpperCase() : Capitalize(task.name)}</div>}
+                            additionalStyles={{ backgroundColor: 'black', color: 'white' }}
+                          />
+                        </>
                       ) : (
                         <div
                           className=""
