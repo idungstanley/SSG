@@ -90,6 +90,13 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
     }
   };
   const handleClickScroll = (targetId: string) => {
+    navigate(`tasks/l/${list.id}`);
+    dispatch(
+      setActiveItem({
+        activeItemType: 'list',
+        activeItemId: list.id
+      })
+    );
     const element = document.getElementById(targetId);
     if (element) {
       // 👇 Will scroll smoothly to the top of the next section

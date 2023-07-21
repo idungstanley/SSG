@@ -9,7 +9,7 @@ interface TooltipProps {
 export default function InteractiveTooltip({
   children,
   content,
-  top = '-top-32',
+  top = '-top-36',
   right = '-right-4',
   zIndex = 'z-50'
 }: TooltipProps) {
@@ -32,7 +32,7 @@ export default function InteractiveTooltip({
         ></div>
       </div>
 
-      <div className="rounded cursor-pointer ">{children}</div>
+      <div className="rounded cursor-pointer">{children}</div>
     </div>
   );
 }
