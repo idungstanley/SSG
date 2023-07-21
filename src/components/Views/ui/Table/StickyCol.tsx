@@ -241,10 +241,9 @@ export function StickyCol({
                 onKeyDown={(e) => (e.key === 'Enter' ? handleEditTask(e, task.id) : null)}
                 suppressContentEditableWarning={true}
               >
-                <div className="font-semibold alsoit-gray-300">
+                <div className="font-semibold alsoit-gray-300 text-alsoit-text-lg">
                   {task.name.length > 50 && singleLineView ? (
                     <div>
-                      {/* <InteractiveTooltip content={<p>{task.name}</p>} top="-top-28"> */}
                       {!eitableContent ? (
                         <>
                           <DetailsOnHover
@@ -254,6 +253,7 @@ export function StickyCol({
                                 style={{
                                   maxWidth: '300px',
                                   overflow: 'hidden',
+                                  // fontWeight: 'lighter',
                                   textOverflow: 'ellipsis',
                                   whiteSpace: 'nowrap'
                                 }}
@@ -277,7 +277,6 @@ export function StickyCol({
                           {taskUpperCase ? task.name.toUpperCase() : Capitalize(task.name)}
                         </div>
                       )}
-                      {/* </InteractiveTooltip> */}
                     </div>
                   ) : (
                     <span>{taskUpperCase ? task.name.toUpperCase() : Capitalize(task.name)}</span>
