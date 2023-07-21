@@ -205,7 +205,7 @@ export default function AdditionalHeader() {
             {moment(HeaderClock, 'DD-MM-YYYY hh:mm').format(date_format?.toUpperCase() ?? 'MM-DD-YYYY')}
           </span>
           {clockModal && (
-            <HeaderModal toggleFn={setClockModal} styles="top-10 right-28">
+            <HeaderModal toggleFn={setClockModal} styles="top-10 -right-5">
               <HeaderTimeModal />
             </HeaderModal>
           )}
