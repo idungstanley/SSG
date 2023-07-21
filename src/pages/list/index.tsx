@@ -44,9 +44,11 @@ export function ListPage() {
   useEffect(() => {
     function handleScroll(event: UIEvent | Event) {
       const container = event.target as HTMLElement;
-      const scrollDifference = container?.scrollHeight - container.scrollTop - container.clientHeight;
+      const twoThirdsOfScroll = 0.66;
+      const scrollDifference =
+        container?.scrollHeight * twoThirdsOfScroll - container.scrollTop - container.clientHeight;
       const range = 1;
-      if (scrollDifference <= range && scrollDifference >= -range && hasNextPage) {
+      if (scrollDifference <= range && hasNextPage) {
         fetchNextPage();
       }
     }
