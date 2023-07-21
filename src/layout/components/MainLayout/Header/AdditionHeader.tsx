@@ -191,7 +191,7 @@ export default function AdditionalHeader() {
         )}
         <HiOutlineUpload className="w-5 h-5" />
         <BsFillGrid3X3GapFill className="w-5 h-5" />
-        {/* <ToolTip tooltip={dayjs().format('MMMM DD, YYYY')}> */}
+        <MdHelpOutline className="w-5 h-5" />
         <div
           className="relative w-16 font-semibold text-alsoit-text-lg text-alsoit-text border-alsoit-border-base border-alsoit-text rounded-md p-0.5 flex justify-center flex-col space-y-0 cursor-pointer"
           onClick={() => setClockModal(!clockModal)}
@@ -205,7 +205,7 @@ export default function AdditionalHeader() {
             {moment(HeaderClock, 'DD-MM-YYYY hh:mm').format(date_format?.toUpperCase() ?? 'MM-DD-YYYY')}
           </span>
           {clockModal && (
-            <HeaderModal toggleFn={setClockModal} styles="top-7 right-28">
+            <HeaderModal toggleFn={setClockModal} styles="top-10 right-28">
               <HeaderTimeModal />
             </HeaderModal>
           )}
@@ -218,7 +218,6 @@ export default function AdditionalHeader() {
             </HeaderModal>
           )}
         </div>
-        <MdHelpOutline className="w-5 h-5" />
       </div>
     </div>
   );

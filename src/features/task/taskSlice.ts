@@ -4,6 +4,7 @@ import { listColumnProps } from '../../pages/workspace/tasks/component/views/Lis
 import { IField } from '../list/list.interfaces';
 import {
   IDuration,
+  IExtraFields,
   IHistoryFilterMemory,
   IParent,
   ISelectedDate,
@@ -172,6 +173,7 @@ interface TaskState {
   newColInstance: [{ id: number; value: string }];
   listIdForCustom: string | undefined;
   listViewHeads: listColumnProps[];
+  customSuggestionField: IExtraFields[];
 }
 
 const initialState: TaskState = {
@@ -251,7 +253,8 @@ const initialState: TaskState = {
   currTaskListId: '',
   newColInstance: [{ id: 1, value: '' }],
   listIdForCustom: '',
-  listViewHeads: []
+  listViewHeads: [],
+  customSuggestionField: []
 };
 
 export const taskSlice = createSlice({
@@ -517,6 +520,9 @@ export const taskSlice = createSlice({
     },
     setHeads(state, action: PayloadAction<listColumnProps[]>) {
       state.listViewHeads = action.payload;
+    },
+    setCustomSuggetionsField(state, action: PayloadAction<IExtraFields>) {
+      state.customSuggestionField = [...state.customSuggestionField, action.payload];
     }
   }
 });
@@ -593,6 +599,7 @@ export const {
   setFilterDateString,
   setNewColInstance,
   setListIdForCustom,
-  setHeads
+  setHeads,
+  setCustomSuggetionsField
 } = taskSlice.actions;
 export default taskSlice.reducer;
