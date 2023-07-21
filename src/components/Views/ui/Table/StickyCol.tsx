@@ -255,7 +255,6 @@ export function StickyCol({
                           }}
                         >
                           {taskUpperCase ? task.name.toUpperCase() : Capitalize(task.name)}
-                          ...
                         </div>
                       ) : (
                         <div
