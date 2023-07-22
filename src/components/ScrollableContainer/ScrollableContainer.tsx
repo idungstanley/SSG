@@ -6,7 +6,6 @@ interface CustomScrollableContainerProps extends HTMLAttributes<HTMLDivElement> 
   children: ReactNode;
   scrollDirection: 'x' | 'y';
 }
-
 const DEFAULT_THUMB_WIDTH = 20;
 
 export function ScrollableContainer({ children, scrollDirection, ...props }: CustomScrollableContainerProps) {
@@ -18,7 +17,6 @@ export function ScrollableContainer({ children, scrollDirection, ...props }: Cus
   const [scrollStartPosition, setScrollStartPosition] = useState<number | null>(null);
   const [initialScrollTop, setInitialScrollTop] = useState<number>(0);
   const [isDragging, setIsDragging] = useState(false);
-
   const handleTrackClick = useCallback(
     (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
       e.preventDefault();
