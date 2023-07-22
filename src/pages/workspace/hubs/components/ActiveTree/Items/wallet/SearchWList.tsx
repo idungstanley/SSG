@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Wallet } from '../../activetree.interfaces';
 import { useAppDispatch, useAppSelector } from '../../../../../../../app/hooks';
-import { useParams } from 'react-router-dom';
 import { setCurrentItem, setCurrentWalletId } from '../../../../../../../features/workspace/workspaceSlice';
 import { setWalletItem } from '../../../../../../../features/wallet/walletSlice';
 import { EntityType } from '../../../../../../../utils/EntityTypes/EntityType';
@@ -24,18 +23,9 @@ interface IWListProps {
 
 export default function SearchWList({ wallets, leftMargin, paddingLeft, level = 1, handleTabClick }: IWListProps) {
   const dispatch = useAppDispatch();
-  const { walletId, listId } = useParams();
   const { showExtendedBar } = useAppSelector((state) => state.workspace);
 
   const [showSubWallet, setShowSubWallet] = useState<string[]>([]);
-
-  const id = walletId || listId;
-
-  useEffect(() => {
-    if (id) {
-      setShowSubWallet((prev) => [...prev, id]);
-    }
-  }, []);
 
   const handleShowSubWallet = (id: string) => {
     if (showSubWallet.includes(id)) {

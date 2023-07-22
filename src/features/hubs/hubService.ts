@@ -71,40 +71,54 @@ export const useGetHubs = ({
   includeTree,
   hub_id,
   wallet_id,
-  listId
+  list_id
 }: {
   includeTree?: boolean;
   hub_id?: string | null;
   wallet_id?: string | null;
-  listId?: string;
+  list_id?: string;
 }) => {
   const { currentWorkspaceId } = useAppSelector((state) => state.auth);
-  const id = hub_id || wallet_id || listId;
-  const { hubId, walletId, workSpaceId } = useParams();
   const { currentItemType, activeItemType } = useAppSelector((state) => state.workspace);
+  const { hubId, walletId, listId, workSpaceId } = useParams();
+  const id = hub_id || wallet_id || list_id;
 
   const fetch = currentWorkspaceId == workSpaceId;
 
-  const isActiveHub =
-    hub_id && (currentItemType === 'hub' || activeItemType === 'hub') && fetch ? `hubs${'/' + hub_id}` : null;
-  const isActiveWallet =
-    wallet_id && (currentItemType === 'wallet' || activeItemType === 'wallet') && fetch
-      ? `wallets${`?parent_id=${wallet_id}`}`
-      : null;
-  const isActiveList = listId && fetch ? `lists${`?parent_id=${listId}`}` : null;
+  let activeHub: string | null = null;
+  let activeWallet: string | null = null;
+  let activeList: string | null = null;
+
+  (() => {
+    if (fetch) {
+      if (hub_id && (currentItemType === 'hub' || activeItemType === 'hub')) {
+        activeHub = `hubs/${hub_id}`;
+      } else if (wallet_id && (currentItemType === 'wallet' || activeItemType === 'wallet')) {
+        activeWallet = `wallets?parent_id=${wallet_id}`;
+      } else if (listId) {
+        activeList = `lists?parent_id=${list_id}`;
+      }
+    }
+  })();
+
+  const createURL = () => {
+    if (includeTree) {
+      return 'active-tree';
+    }
+    return activeHub || activeWallet || activeList || 'hubs';
+  };
 
   return useQuery(
     ['retrieve', id ?? 'root', includeTree ? 'tree' : undefined],
     () =>
       requestNew<IHubsRes>({
-        url: includeTree ? 'active-tree' : isActiveHub || isActiveWallet || isActiveList || 'hubs',
-
+        url: createURL(),
         method: 'GET',
         params: includeTree
           ? {
               hub_id: hubId,
-              list_id: listId,
-              wallet_id: walletId
+              wallet_id: walletId,
+              list_id: listId
             }
           : undefined
       }),
