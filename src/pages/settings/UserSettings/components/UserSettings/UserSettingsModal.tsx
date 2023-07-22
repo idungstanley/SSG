@@ -11,6 +11,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAppSelector } from '../../../../../app/hooks';
 import ToolTip from '../../../../../components/Tooltip/Tooltip';
 import { VscTriangleDown } from 'react-icons/vsc';
+import ArrowDownFilled from '../../../../../assets/icons/ArrowDownFilled';
 
 interface UserSettingsType {
   id: number;
@@ -133,14 +134,16 @@ export default function UserSettingsModal({ setShowModal }: UserProps) {
       <div>
         <Menu.Button>
           <ToolTip tooltip="User Settings">
-            <div className="flex">
+            <div className="relative flex mr-2">
               <AvatarWithInitials
                 initials={userData?.initials.toUpperCase() as string}
                 height="h-5"
                 width="w-5"
                 backgroundColour={userData?.color as string | undefined}
               />
-              <VscTriangleDown className="mt-3 text-gray-400" style={{ fontSize: '8px' }} />
+              <span className="absolute -bottom-2 left-3">
+                <ArrowDownFilled />
+              </span>
             </div>
           </ToolTip>
         </Menu.Button>

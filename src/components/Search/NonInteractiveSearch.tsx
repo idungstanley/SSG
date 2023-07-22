@@ -15,7 +15,7 @@ export default function NonInteractiveSearch({ children, setAction, modal }: Sea
       >
         {children}
         <input
-          className="w-full h-8 pl-3 text-xs border-transparent border-none rounded-lg bg-alsoit-gray-50 group-hover:border-fuchsia-500 focus:border-transparent focus:ring-0 group-hover:text-primary-400"
+          className="w-full h-10 pl-3 text-xs border-transparent border-none rounded-lg bg-alsoit-gray-50 group-hover:border-fuchsia-500 focus:border-transparent focus:ring-0 group-hover:text-primary-400"
           disabled
           type="text"
         />

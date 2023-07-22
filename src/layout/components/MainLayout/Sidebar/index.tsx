@@ -82,7 +82,7 @@ export default function Sidebar() {
           width: showSidebar ? userSettingsData?.sidebarWidth : sidebarWidthRD
         }}
         ref={blockRef}
-        className={`relative flex flex-col pr-1 border-r ${isDrag ? 'border-gray-500' : 'border-gray-300'}`}
+        className={`relative flex flex-col border-r ${isDrag ? 'border-gray-500' : 'border-gray-300'}`}
       >
         <Header
           activeHotkeyIds={activeHotkeyIds}
@@ -92,35 +92,37 @@ export default function Sidebar() {
           setActiveTabId={setActiveTabId}
         />
         <ScrollableContainer scrollDirection="y" onScroll={onScroll}>
-          {showSidebar ? (
-            <NonInteractiveSearch
-              setAction={setCommandSearchModal}
-              modal={
-                <CommandSearchModal
-                  commandSearchVisible={commandSearchModal}
-                  onCloseCommandSearchModal={() => setCommandSearchModal(false)}
-                />
-              }
-            >
-              <div
-                className="absolute flex items-center justify-between w-auto w-full font-bold tracking-wider text-gray-400 grow left-6 hover:text-fuchsia-500"
-                style={{ fontSize: '13px' }}
+          <section className="overflow-x-hidden">
+            {showSidebar ? (
+              <NonInteractiveSearch
+                setAction={setCommandSearchModal}
+                modal={
+                  <CommandSearchModal
+                    commandSearchVisible={commandSearchModal}
+                    onCloseCommandSearchModal={() => setCommandSearchModal(false)}
+                  />
+                }
               >
-                <div className="flex items-center justify-between">
-                  <SearchIcon />
-                  <p className="ml-2">Search</p>
+                <div
+                  className="absolute flex items-center justify-between w-auto w-full font-bold tracking-wider text-gray-400 grow left-6 hover:text-fuchsia-500"
+                  style={{ fontSize: '13px' }}
+                >
+                  <div className="flex items-center justify-between">
+                    <SearchIcon />
+                    <p className="ml-2">Search</p>
+                  </div>
+                  <p className="mr-14">Ctrl+k</p>
                 </div>
-                <p className="mr-14">Ctrl+k</p>
-              </div>
-            </NonInteractiveSearch>
-          ) : null}
-          <NavigationItems
-            activeTabId={activeTabId}
-            setActiveTabId={setActiveTabId}
-            activeHotkeyIds={activeHotkeyIds}
-            handleHotkeyClick={handleHotkeyClick}
-          />
-          <Places />
+              </NonInteractiveSearch>
+            ) : null}
+            <NavigationItems
+              activeTabId={activeTabId}
+              setActiveTabId={setActiveTabId}
+              activeHotkeyIds={activeHotkeyIds}
+              handleHotkeyClick={handleHotkeyClick}
+            />
+            <Places />
+          </section>
         </ScrollableContainer>
       </section>
     </aside>
