@@ -8,6 +8,7 @@ import dayjs from 'dayjs';
 import ReusableSelect from '../../utils/TimeDropDown';
 import { createDynamicTimeComponent } from '../../utils/calendar';
 import { CloseBtn } from '../Buttons/CloseButton';
+import CalendarIcon from '../../assets/icons/CalendarIcon';
 
 interface DatePickerManualDatesProps {
   range?: boolean;
@@ -19,6 +20,10 @@ export function DatePickerManualDates({ range }: DatePickerManualDatesProps) {
   const { date_format, timezone } = useAppSelector((state) => state.userSetting);
   const [dateType, setDateType] = useState<string | undefined>();
   const [dateString, setString] = useState<DateString | null>(null);
+  const [iconToggle, setIconToggle] = useState<{ startIcon: boolean; dueIcon: boolean }>({
+    dueIcon: false,
+    startIcon: false
+  });
   const dispatch = useAppDispatch();
 
   const handleFilterDateDispatch = () => {
@@ -40,7 +45,6 @@ export function DatePickerManualDates({ range }: DatePickerManualDatesProps) {
   };
 
   const handleChange = (event: ChangeEvent<HTMLDivElement>, point: string) => {
-    // console.log(event.target.textContent, point);
     if (point === 'from') {
       setString((prev) => ({ ...prev, start: event.target.textContent as string }));
     } else {
@@ -86,12 +90,27 @@ export function DatePickerManualDates({ range }: DatePickerManualDatesProps) {
   }, [taskTime, selectedDate]);
 
   return (
-    <div className="flex justify-between items-center px-2 py-4">
+    <div className="flex justify-between items-center px-2 py-4 border-b-2">
       {range ? (
         <div className="w-full grid grid-cols-2 place-self-center">
           {/* et Start Date Selection */}
           <label htmlFor="from" className="flex space-y-1 space-x-1 text-xs items-center">
-            <BsCalendarEvent />
+            <div
+              onMouseEnter={() =>
+                setIconToggle((prev) => ({
+                  ...prev,
+                  startIcon: true
+                }))
+              }
+              onMouseLeave={() =>
+                setIconToggle((prev) => ({
+                  ...prev,
+                  startIcon: false
+                }))
+              }
+            >
+              <CalendarIcon active={iconToggle.startIcon} />
+            </div>
             <div className="relative flex">
               <div
                 className="w-28 h-4 px-1 text-xs"
@@ -103,9 +122,9 @@ export function DatePickerManualDates({ range }: DatePickerManualDatesProps) {
               >
                 {(taskTime?.from && dayjs(taskTime?.from).format(date_format?.toUpperCase())) ?? 'Start Date'}
               </div>
-              {HistoryFilterMemory?.timePoint === 'start' && <CloseBtn clearFn={() => clearDatesFilter('start')} />}
+              {taskTime?.from && <CloseBtn clearFn={() => clearDatesFilter('start')} />}
             </div>
-            {selectedDate?.date && selectedDate?.dateType === 'start' ? (
+            {selectedDate?.date && taskTime?.from ? (
               <ReusableSelect
                 options={createDynamicTimeComponent(15, timezone)}
                 value={HistoryFilterMemory?.time?.from || ''}
@@ -127,7 +146,22 @@ export function DatePickerManualDates({ range }: DatePickerManualDatesProps) {
           </label>
           {/* Set Due Date selection */}
           <label htmlFor="from" className="flex space-y-1 space-x-1 text-xs items-center">
-            <BsCalendarEvent />
+            <div
+              onMouseEnter={() =>
+                setIconToggle((prev) => ({
+                  ...prev,
+                  startIcon: true
+                }))
+              }
+              onMouseLeave={() =>
+                setIconToggle((prev) => ({
+                  ...prev,
+                  startIcon: false
+                }))
+              }
+            >
+              <CalendarIcon active={iconToggle.dueIcon} />
+            </div>
             <div className="relative">
               <div
                 className="w-28 h-4 px-1 text-xs"
@@ -139,9 +173,9 @@ export function DatePickerManualDates({ range }: DatePickerManualDatesProps) {
               >
                 {(taskTime?.to && taskTime.to.format(date_format?.toUpperCase())) ?? 'Due Date'}
               </div>
-              {HistoryFilterMemory?.timePoint === 'start' && <CloseBtn clearFn={() => clearDatesFilter('due')} />}
+              {taskTime?.to && <CloseBtn clearFn={() => clearDatesFilter('due')} />}
             </div>
-            {selectedDate?.date && HistoryFilterMemory?.timePoint === 'start' ? (
+            {selectedDate?.date && taskTime?.to ? (
               <ReusableSelect
                 options={createDynamicTimeComponent(15, timezone)}
                 value={HistoryFilterMemory?.time?.to || ''}
@@ -165,7 +199,7 @@ export function DatePickerManualDates({ range }: DatePickerManualDatesProps) {
       ) : (
         // Default Set date
         <label htmlFor="from" className="flex space-y-1 space-x-1 text-xs items-center">
-          <BsCalendarEvent />
+          <CalendarIcon active />
           <input
             type="text"
             placeholder="Set Date"

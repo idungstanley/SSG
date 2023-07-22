@@ -13,7 +13,7 @@ export default function HeaderTimeModal() {
     return () => document.addEventListener('visibilitychange', timeUpdateFn);
   }, []);
   return (
-    <div className="flex flex-col space-y-4 w-134 z-50 bg-alsoit-gray-50 h-screen transition-transform opacity-100 transform translate-y-0 delay-700">
+    <div className="flex flex-col space-y-4 w-96 z-50 bg-alsoit-gray-50 h-4/6 opacity-0 transform transition-transform opacity-100 translate-y-0 delay-700">
       <div className="flex justify-start flex-col space-y-2 w-full border-b border-alsoit-gray-300 px-4 py-6">
         <span style={{ fontSize: '35px', padding: '0 0 8px 0' }}>{time}</span>
         {dayjs().format('dddd MMMM D, YYYY')}

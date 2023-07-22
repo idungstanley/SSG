@@ -222,6 +222,12 @@ export interface IHistoryFilterMemory {
   hoveredDate?: dayjs.Dayjs | null;
 }
 
+export interface IExtraFields {
+  label: string;
+  type: string;
+  depth: number;
+}
+
 type ValueOf<T> = T[keyof T];
 
 export type Task = ImyTaskData | ITaskFullList;
