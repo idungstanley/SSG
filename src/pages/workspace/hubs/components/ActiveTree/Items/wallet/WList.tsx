@@ -39,8 +39,10 @@ export default function WList({ wallets, leftMargin, paddingLeft, type, level = 
   const id = walletId || listId;
 
   useEffect(() => {
-    if (id) {
-      setShowSubWallet((prev) => [...prev, id]);
+    for (const wallet of wallets) {
+      if (id && (wallet.children.length || wallet.lists.length)) {
+        setShowSubWallet((prev) => [...prev, wallet.id]);
+      }
     }
   }, []);
 
@@ -124,7 +126,7 @@ export default function WList({ wallets, leftMargin, paddingLeft, type, level = 
             <WList
               wallets={wallet.children}
               leftMargin={false}
-              type="subwallet2"
+              type={level === 2 ? 'subwallet2' : 'subwallet3'}
               paddingLeft={Number(paddingLeft) + 15}
               level={level + 1}
               topNumber={topNumber + 30}
