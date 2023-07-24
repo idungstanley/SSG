@@ -205,7 +205,7 @@ export default function AdditionalHeader() {
             {moment(HeaderClock, 'DD-MM-YYYY hh:mm').format('DD-MM-YYYY')}
           </span>
           {clockModal && (
-            <HeaderModal toggleFn={setClockModal} styles="top-10 right-28">
+            <HeaderModal clickAway={true} toggleFn={setClockModal} styles="top-10 right-28">
               <HeaderTimeModal />
             </HeaderModal>
           )}
