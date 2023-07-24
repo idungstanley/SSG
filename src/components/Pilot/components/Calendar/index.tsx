@@ -3,8 +3,9 @@ import CalendarIcon from '../../../../assets/icons/CalendarIcon';
 import SectionArea from '../SectionArea';
 import MiniDatePicker from '../../../DatePicker/MiniCalendar';
 import { useParams } from 'react-router-dom';
-import { useAppSelector } from '../../../../app/hooks';
 import { getTaskListService } from '../../../../features/task/taskService';
+import { useAppSelector } from '../../../../app/hooks';
+import Agenda from './Agenda';
 
 export default function Calendar() {
   const [iconToggle, setIconToggle] = useState(false);
@@ -28,6 +29,7 @@ export default function Calendar() {
       <div className="flex justify-center w-full px-2 pt-6">
         <MiniDatePicker />
       </div>
+      {entityTaskData?.length && <Agenda entityTaskData={entityTaskData} />}
     </div>
   );
 }
