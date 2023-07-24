@@ -1,0 +1,97 @@
+.tooltip {
+  position: relative;
+  box-sizing: border-box;
+  z-index: 9999;
+}
+
+/* .tooltip::before,
+.tooltip::after {
+  width:auto;
+  --scale: 0;
+  --arrow-size: 0px;
+  --tooltip-color: #333;
+  position: absolute;
+  top: -0.15rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(var(--translate-y, 0))
+    scale(var(--scale));
+  transition: 100ms transform;
+  transform-origin: bottom center;
+}
+.tooltip::after {
+  content: ' ';
+  width: 0;
+  height: 1px;
+  border-style: solid;
+  border-width: 6px 6.5px 0 6.5px;
+  border-color: #333 transparent transparent transparent;
+  position: absolute;
+  left: 50%;
+  top: -1;
+}
+
+.tooltip::before {
+  font-size: 8px;
+  --translate-y: calc(-100% - var(--arrow-size));
+  content: attr(data-tooltip);
+  color: white;
+  white-space: nowrap;
+  padding: 0 0.4rem;
+  border-radius: 0.1rem;
+  text-align: center;
+  background: var(--tooltip-color);
+  z-index: 999;
+}
+
+.tooltip:hover::before,
+.tooltip:hover::after {
+  --scale: 1;
+} */
+
+.tooltip::before,
+.tooltip::after {
+  --scale: 0;
+  --arrow-size: 10px;
+  --tooltip-color: #333;
+  width: auto;
+  position: absolute;
+  top: -0.25rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(var(--translate-y, 0)) scale(var(--scale));
+  transition: 150ms transform;
+  transform-origin: bottom center;
+  z-index: 9999;
+}
+
+.tooltip::before {
+  font-size: 10px;
+  font-weight: 300;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  --translate-y: calc(-100% - var(--arrow-size));
+  content: attr(data-tooltip);
+  color: white;
+  padding: 0.2rem;
+  border-radius: 0.3rem;
+  white-space: nowrap;
+  text-align: center;
+  background: var(--tooltip-color);
+  z-index: 9999;
+}
+
+.tooltip:hover::before,
+.tooltip:hover::after {
+  --scale: 1;
+  z-index: 9999;
+}
+
+.tooltip::after {
+  --translate-y: calc(-1 * var(--arrow-size));
+  content: '';
+  border: var(--arrow-size) solid transparent;
+  width: 0;
+  border-width: 6px 6.5px 0 6.5px;
+  border-top-color: var(--tooltip-color);
+  transform-origin: top center;
+  height: 1px;
+  z-index: 9999;
+}

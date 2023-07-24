@@ -1,0 +1,123 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('./Spinner.css');
+@import url('./Tooltip.css');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@500&family=Montserrat&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell',
+    'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: #4e5258;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+}
+
+.pg-viewer-wrapper .pg-viewer #docx .document-container {
+  padding: 0;
+  width: auto;
+  margin: 0;
+  height: auto;
+  overflow-y: visible;
+}
+
+.rotateimg180 {
+  -webkit-transform: rotate(180deg);
+  -moz-transform: rotate(180deg);
+  -ms-transform: rotate(180deg);
+  -o-transform: rotate(180deg);
+  transform: rotate(180deg);
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 4px;
+  padding: 0 20px;
+  background-color: #fff;
+  border: rgb(189, 189, 189);
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #b4b4b4e9;
+  border-radius: 30px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #797979e9;
+  cursor: pointer;
+  /* width: 10px; */
+}
+
+.color {
+  display: flex;
+  justify-content: center !important;
+  align-items: center;
+  width: 64px;
+  height: 64px;
+}
+
+/* .color_theme {
+  width: 32px;
+  height: 32px;
+} */
+
+.color_theme:hover {
+  animation-name: grow;
+  animation-duration: 0.2s;
+  animation-fill-mode: forwards;
+}
+
+@keyframes grow {
+  from {
+    width: 40px;
+    height: 40px;
+  }
+  to {
+    width: 64px;
+    height: 64px;
+  }
+}
+
+.create-workspace {
+  background-image: url('../assets/icons/workspace_bg.webp');
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.workspace-color-button:hover {
+  width: 48px !important;
+  height: 48px !important;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.scrollbar-hide {
+  overflow: auto;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
