@@ -1,9 +1,19 @@
 import dayjs from 'dayjs';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import MiniDatePicker from '../../../../components/DatePicker/MiniCalendar';
+import { useParams } from 'react-router-dom';
+import { useAppSelector } from '../../../../app/hooks';
+import { getTaskListService } from '../../../../features/task/taskService';
+import Agenda from '../../../../components/Pilot/components/Calendar/Agenda';
 
 export default function HeaderTimeModal() {
   const [time, setTime] = useState<string>(dayjs().format('hh:mm:ss a'));
+  const { listId } = useParams();
+  const { filterTaskByAssigneeIds } = useAppSelector((state) => state.task);
+
+  const { data } = getTaskListService({ listId, assigneeUserId: filterTaskByAssigneeIds });
+
+  const entityTaskData = useMemo(() => data?.pages.flatMap((page) => page.data.tasks), [data]);
 
   const timeUpdateFn = () => window.setInterval(() => setTime(dayjs().format('hh:mm:ss a')), 1000);
 
@@ -28,7 +38,8 @@ export default function HeaderTimeModal() {
           className="w-72 h-6 text-alsoit-text-md rounded border-alsoit-border-base px-1"
           placeholder="search..."
         />
-        <span className="italic text-alsoit-text-md font-semibold">No activity found for the selected time</span>
+        {entityTaskData?.length && <Agenda entityTaskData={entityTaskData} />}
+        {/* <span className="italic text-alsoit-text-md font-semibold">No activity found for the selected time</span> */}
       </div>
     </div>
   );
