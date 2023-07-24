@@ -12,7 +12,7 @@ import {
   setSideBarCreateTaskListId,
   setshowMenuDropdown
 } from '../../features/hubs/hubSlice';
-import { UseEditListService } from '../../features/list/listService';
+import { GetTaskListCount, UseEditListService } from '../../features/list/listService';
 import { setListPaletteColor } from '../../features/list/listSlice';
 import { setActiveEntity, setActiveEntityName, setActiveItem } from '../../features/workspace/workspaceSlice';
 import Palette from '../ColorPalette';
@@ -46,6 +46,7 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
   const navigate = useNavigate();
   const { listId } = useParams();
   const queryClient = useQueryClient();
+  const [getCount, setGetCount] = useState<boolean>(false);
   const { activeItemId } = useAppSelector((state) => state.workspace);
   const { showMenuDropdown } = useAppSelector((state) => state.hub);
   const { paletteDropdown, lightBaseColor, baseColor } = useAppSelector((state) => state.account);
@@ -64,6 +65,7 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
       queryClient.invalidateQueries(['lists']);
     }
   });
+  const { data } = GetTaskListCount({ query: list.id, fetchTaskCount: getCount });
   // function for the list shape selection
   const handleListLocation = (id: string, name: string) => {
     dispatch(setActiveEntityName(name));
@@ -87,12 +89,22 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
       });
     }
   };
+  const handleClickScroll = (targetId: string) => {
+    navigate(`tasks/l/${list.id}`);
+    dispatch(
+      setActiveItem({
+        activeItemType: 'list',
+        activeItemId: list.id
+      })
+    );
+    const element = document.getElementById(targetId);
+    if (element) {
+      // 👇 Will scroll smoothly to the top of the next section
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
-  const tooltipItems = [
-    { label: 'Todo', count: 1, onClick: () => ({}) },
-    { label: 'In Progress', count: 1, onClick: () => ({}) },
-    { label: 'Completed', count: 1, onClick: () => ({}) }
-  ];
+  const tooltipItems = data?.data.task_status_counts;
 
   const closeMenuDropdown = () => {
     dispatch(
@@ -221,22 +233,25 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
                     <p>({list.tasks_count})</p>
                   </span>
                   <hr />
-                  {tooltipItems.map((item, index) => (
-                    <li
-                      key={index}
-                      className="flex items-center justify-between cursor-pointer hover:text-blue-500"
-                      onClick={item.onClick}
-                    >
-                      <p>{item.label}</p>
-                      <p>({item.count})</p>
-                    </li>
-                  ))}
+                  {tooltipItems &&
+                    tooltipItems.map((item, index) => (
+                      <li
+                        key={index}
+                        className="flex items-center justify-between cursor-pointer hover:text-blue-500"
+                        onClick={() => handleClickScroll(item.task_status.name)}
+                      >
+                        <p>{item.task_status.name}</p>
+                        <p>({item.tasks_count})</p>
+                      </li>
+                    ))}
                 </ul>
               }
             >
               <span
                 className="w-auto px-2 border border-gray-400 rounded"
                 style={{ fontSize: '10px', color: listId === list.id ? (baseColor as string) : undefined }}
+                onMouseEnter={() => setGetCount(() => true)}
+                onMouseLeave={() => setGetCount(() => false)}
               >
                 {list.tasks_count}
               </span>

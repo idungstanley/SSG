@@ -22,7 +22,7 @@ export default function CreateList() {
   const dispatch = useAppDispatch();
   // const { currentItemId } = useAppSelector((state) => state.workspace);
   const { selectedTreeDetails, createWLID } = useAppSelector((state) => state.hub);
-  const [paletteColor, setPaletteColor] = useState<string | ListColourProps | undefined>('');
+  const [paletteColor, setPaletteColor] = useState<string | ListColourProps | undefined>('black');
   const [showPalette, setShowPalette] = useState<boolean>(false);
   const { type, id } = selectedTreeDetails;
   const { createWlLink } = useAppSelector((state) => state.workspace);

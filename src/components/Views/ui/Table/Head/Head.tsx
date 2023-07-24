@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import RoundedArrowUpDown from '../../../../../pages/workspace/tasks/component/views/listLevel/component/RoundedArrowUpDown';
 import SortDirectionCheck from '../../../../../pages/workspace/tasks/component/views/listLevel/component/SortDirectionCheck';
@@ -47,11 +47,15 @@ export function Head({
 }: HeadProps) {
   const parsedLabel = parseLabel(label);
   const dispatch = useAppDispatch();
+  const scrollToRef = useRef(null);
   const sortAbles: string[] = ['Task', 'Updated at', 'Created at', 'Status', 'Priority', 'Assignees'];
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const handleClose = () => {
     setAnchorEl(null);
   };
+  if (scrollToRef.current) {
+    console.log((scrollToRef.current as HTMLElement)?.textContent);
+  }
   const [headerId, setheaderId] = useState<string>('');
   const [showSortModal, setShowSortModal] = useState<boolean>(false);
   const { sortArr, sortAbleArr } = useAppSelector((state) => state.task);
@@ -121,7 +125,7 @@ export function Head({
               <p className="">
                 <Chevron color={headerStatusColor} active={collapseTasks} onToggle={onToggleCollapseTasks} />
               </p>
-              <span className="pb-1" style={{ fontSize: '11px', WebkitTextStroke: '0.5px' }}>
+              <span ref={scrollToRef} className="pb-1" style={{ fontSize: '11px', WebkitTextStroke: '0.5px' }}>
                 {parsedLabel}
               </span>
               <p className="flex items-center space-x-1 viewSettings">
@@ -131,7 +135,7 @@ export function Head({
               </p>
             </div>
             <div
-              className="flex items-center hover:bg-gray-200 p-0.5 rounded-md space-x-1  border-t-2 border-l-2 border-r-2 border-transparent hover:border-gray-600 text-alsoit-gray-300 font-semibold"
+              className="flex items-center hover:bg-gray-200 p-0.5 rounded-md space-x-1  border-t-2 border-l-2 border-r-2 border-transparent hover:border-gray-600 text-alsoit-gray-200 font-semibold"
               style={{ fontSize: '11px', WebkitTextStroke: '0.5px' }}
             >
               <span onClick={(e) => setOptions(e, columns[0].id, columns[0].value)} className="cursor-pointer">
@@ -179,7 +183,7 @@ export function Head({
           ? columns.slice(1).map(({ ref, value, id }, index) => (
               <th key={id} className="relative w-full py-2 -mb-1 font-extrabold opacity-90 " ref={ref}>
                 <div
-                  className={`text-alsoit-gray-300 font-semibold flex dBlock items-center justify-center w-full h-full my-auto cursor-pointer group  ${
+                  className={`text-alsoit-gray-200 font-semibold flex dBlock items-center justify-center w-full h-full my-auto cursor-pointer group  ${
                     sortAbles.includes(value)
                       ? 'hover:bg-gray-200 p-0.5 rounded-md space-x-1 border-l-2 border-r-2 border-t-2 border-transparent hover:border-gray-500'
                       : ''

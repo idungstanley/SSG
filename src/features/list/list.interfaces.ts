@@ -14,6 +14,16 @@ export interface IField {
   created_at: string;
 }
 
+export interface taskCountFields {
+  created_at: string;
+  id: string;
+  list_id: string;
+  task_status: { id: string; name: string; color: string; position: number; type: string };
+  task_status_id: string;
+  tasks_count: number;
+  updated_at: string;
+}
+
 export interface ITask_statuses {
   color: string;
   created_at: string;

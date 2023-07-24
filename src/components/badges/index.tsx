@@ -8,8 +8,9 @@ import InteractiveTooltip from '../Tooltip/InteractiveTooltip';
 import ToolTip from '../Tooltip/Tooltip';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { setShowNewTaskField, setShowNewTaskId } from '../../features/task/taskSlice';
+import DetailsOnHover from '../Dropdown/DetailsOnHover/DetailsOnHover';
 
-interface BadgeTask extends TdHTMLAttributes<HTMLTableCellElement> {
+export interface BadgeTask extends TdHTMLAttributes<HTMLTableCellElement> {
   task: Task;
 }
 export default function Badges({ task }: BadgeTask) {
@@ -28,11 +29,16 @@ export default function Badges({ task }: BadgeTask) {
   return (
     <div className="flex items-center space-x-1">
       {task.description && (
-        <InteractiveTooltip content={<p>{task.description}</p>} top="-top-14" right="-right-3">
-          <button className="p-1 border rounded-md ">
-            <Description />
-          </button>
-        </InteractiveTooltip>
+        <>
+          <DetailsOnHover
+            content={<p>{task.description}</p>}
+            hoverElement={
+              <button className="p-1 border rounded-md ">
+                <Description />
+              </button>
+            }
+          />
+        </>
       )}
       <ToolTip tooltip="Attach File">
         <button className="p-1 border rounded-md">
@@ -43,14 +49,10 @@ export default function Badges({ task }: BadgeTask) {
         <ToolTip tooltip="Subtask">
           <button className="p-1 border rounded-md " onClick={(e) => onShowAddSubtaskField(e, task.id)}>
             <SubtaskWithCount />
+            <p className="alsoit-text-sm h-2 w-2 absolute left-5 bottom-3.5">{task.descendants_count}</p>
           </button>
         </ToolTip>
       )}
-      {/* <ToolTip tooltip="Checklist">
-        <button className="p-1 border rounded-md ">
-          <Checklist />
-        </button>
-      </ToolTip> */}
     </div>
   );
 }
