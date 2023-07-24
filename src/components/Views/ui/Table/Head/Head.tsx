@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import RoundedArrowUpDown from '../../../../../pages/workspace/tasks/component/views/listLevel/component/RoundedArrowUpDown';
 import SortDirectionCheck from '../../../../../pages/workspace/tasks/component/views/listLevel/component/SortDirectionCheck';
@@ -47,11 +47,15 @@ export function Head({
 }: HeadProps) {
   const parsedLabel = parseLabel(label);
   const dispatch = useAppDispatch();
+  const scrollToRef = useRef(null);
   const sortAbles: string[] = ['Task', 'Updated at', 'Created at', 'Status', 'Priority', 'Assignees'];
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const handleClose = () => {
     setAnchorEl(null);
   };
+  if (scrollToRef.current) {
+    console.log((scrollToRef.current as HTMLElement)?.textContent);
+  }
   const [headerId, setheaderId] = useState<string>('');
   const [showSortModal, setShowSortModal] = useState<boolean>(false);
   const { sortArr, sortAbleArr } = useAppSelector((state) => state.task);
@@ -121,7 +125,7 @@ export function Head({
               <p className="">
                 <Chevron color={headerStatusColor} active={collapseTasks} onToggle={onToggleCollapseTasks} />
               </p>
-              <span className="pb-1" style={{ fontSize: '11px', WebkitTextStroke: '0.5px' }}>
+              <span ref={scrollToRef} className="pb-1" style={{ fontSize: '11px', WebkitTextStroke: '0.5px' }}>
                 {parsedLabel}
               </span>
               <p className="flex items-center space-x-1 viewSettings">

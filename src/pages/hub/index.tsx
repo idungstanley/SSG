@@ -39,7 +39,6 @@ export default function HubPage() {
   const tasks = useMemo(() => (data ? data.pages.flatMap((page) => page.data.tasks) : []), [data]);
 
   const lists = useMemo(() => generateLists(tasks), [tasks]);
-
   // infinite scroll
   useEffect(() => {
     function handleScroll(event: Event) {
