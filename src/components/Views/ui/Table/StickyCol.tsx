@@ -23,6 +23,7 @@ import { Capitalize } from '../../../../utils/NoCapWords/Capitalize';
 import RoundedCheckbox from '../../../Checkbox/RoundedCheckbox';
 import ToolTip from '../../../Tooltip/Tooltip';
 import Badges from '../../../badges';
+import DetailsOnHover from '../../../Dropdown/DetailsOnHover/DetailsOnHover';
 
 interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   task: Task;
@@ -240,22 +241,30 @@ export function StickyCol({
                 onKeyDown={(e) => (e.key === 'Enter' ? handleEditTask(e, task.id) : null)}
                 suppressContentEditableWarning={true}
               >
-                <div className="font-semibold alsoit-gray-300">
+                <div className="font-semibold alsoit-gray-300 text-alsoit-text-lg">
                   {task.name.length > 50 && singleLineView ? (
                     <div>
-                      {/* <InteractiveTooltip content={<p>{task.name}</p>} top="-top-28"> */}
                       {!eitableContent ? (
-                        <div
-                          className=""
-                          style={{
-                            maxWidth: '300px',
-                            overflow: 'hidden',
-                            textOverflow: 'ellipsis',
-                            whiteSpace: 'nowrap'
-                          }}
-                        >
-                          {taskUpperCase ? task.name.toUpperCase() : Capitalize(task.name)}
-                        </div>
+                        <>
+                          <DetailsOnHover
+                            hoverElement={
+                              <div
+                                className=""
+                                style={{
+                                  maxWidth: '300px',
+                                  overflow: 'hidden',
+                                  // fontWeight: 'lighter',
+                                  textOverflow: 'ellipsis',
+                                  whiteSpace: 'nowrap'
+                                }}
+                              >
+                                {taskUpperCase ? task.name.toUpperCase() : Capitalize(task.name)}
+                              </div>
+                            }
+                            content={<div>{taskUpperCase ? task.name.toUpperCase() : Capitalize(task.name)}</div>}
+                            additionalStyles={{ backgroundColor: 'black', color: 'white' }}
+                          />
+                        </>
                       ) : (
                         <div
                           className=""
@@ -268,7 +277,6 @@ export function StickyCol({
                           {taskUpperCase ? task.name.toUpperCase() : Capitalize(task.name)}
                         </div>
                       )}
-                      {/* </InteractiveTooltip> */}
                     </div>
                   ) : (
                     <span>{taskUpperCase ? task.name.toUpperCase() : Capitalize(task.name)}</span>

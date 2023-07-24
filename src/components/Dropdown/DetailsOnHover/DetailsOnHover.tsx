@@ -6,12 +6,10 @@ import Description from '../../badges/Description';
 interface DetailsOnHoverProps {
   hoverElement?: React.ReactNode;
   content: React.ReactElement;
-  top?: string;
-  right?: string;
-  zIndex?: string;
+  additionalStyles?: { [key: string]: string };
 }
 
-export default function DetailsOnHover({ content, hoverElement }: DetailsOnHoverProps) {
+export default function DetailsOnHover({ content, hoverElement, additionalStyles }: DetailsOnHoverProps) {
   const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
 
   const handlePopoverOpen = (event: React.MouseEvent<HTMLElement>) => {
@@ -51,7 +49,7 @@ export default function DetailsOnHover({ content, hoverElement }: DetailsOnHover
         onClose={handlePopoverClose}
         disableRestoreFocus
       >
-        <Typography sx={{ p: 1, maxWidth: '300px' }}>{content}</Typography>
+        <Typography sx={{ p: 1, maxWidth: '300px', ...additionalStyles }}>{content}</Typography>
       </Popover>
     </div>
   );
