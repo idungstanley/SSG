@@ -4,11 +4,17 @@ import { useDispatch } from 'react-redux';
 import { setArchiveList, setDeleteList } from './listSlice';
 import { closeMenu } from '../hubs/hubSlice';
 import { IWalletRes } from '../wallet/wallet.interfaces';
-import { IListDetailRes, listDetails } from './list.interfaces';
+import { IListDetailRes, listDetails, taskCountFields } from './list.interfaces';
 import { useAppSelector } from '../../app/hooks';
 import { useParams } from 'react-router-dom';
 import { generateFilters } from '../../components/TasksHeader/lib/generateFilters';
 import { UseGetHubDetails } from '../hubs/hubService';
+
+interface TaskCountProps {
+  data: {
+    task_status_counts: taskCountFields[];
+  };
+}
 
 const moveList = (data: { listId: string; hubId: string; type: string }) => {
   const { hubId, listId, type } = data;
@@ -146,6 +152,28 @@ export const UseDeleteListService = (data: { query: string | null | undefined; d
       onSuccess: () => {
         queryClient.invalidateQueries();
         dispatch(setDeleteList(false));
+      }
+    }
+  );
+};
+
+export const GetTaskListCount = (value: { query: string; fetchTaskCount: boolean }) => {
+  const dispatch = useDispatch();
+  const listId = value.query;
+  const queryClient = useQueryClient();
+  return useQuery(
+    ['task-count', { listId }],
+    async () => {
+      const data = await requestNew({
+        url: `lists/${listId}/task-status-counts`,
+        method: 'GET'
+      });
+      return data;
+    },
+    {
+      enabled: value.fetchTaskCount,
+      onSuccess: (data: TaskCountProps) => {
+        console.log(data.data.task_status_counts);
       }
     }
   );

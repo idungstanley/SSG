@@ -6,7 +6,6 @@ interface CustomScrollableContainerProps extends HTMLAttributes<HTMLDivElement> 
   children: ReactNode;
   scrollDirection: 'x' | 'y';
 }
-
 const DEFAULT_THUMB_WIDTH = 20;
 
 export function ScrollableContainer({ children, scrollDirection, ...props }: CustomScrollableContainerProps) {
@@ -18,7 +17,6 @@ export function ScrollableContainer({ children, scrollDirection, ...props }: Cus
   const [scrollStartPosition, setScrollStartPosition] = useState<number | null>(null);
   const [initialScrollTop, setInitialScrollTop] = useState<number>(0);
   const [isDragging, setIsDragging] = useState(false);
-
   const handleTrackClick = useCallback(
     (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
       e.preventDefault();
@@ -226,10 +224,10 @@ export function ScrollableContainer({ children, scrollDirection, ...props }: Cus
       >
         <div />
 
-        <div className={`flex items-center space-x-2 mb-4 ${scrollDirection === 'y' ? 'flex-col h-full' : 'flex-row'}`}>
+        <div className={`flex items-center mb-4 ${scrollDirection === 'y' ? 'flex-col h-full' : 'flex-row space-x-2'}`}>
           <div
-            className={`flex z-10 gap-1.5 ml-2 bg-transparent opacity-0 group-hover:opacity-100 rounded-md ${
-              scrollDirection === 'y' ? 'flex-col' : 'flex-row'
+            className={`flex z-10 gap-1.5 bg-transparent opacity-0 group-hover:opacity-100 rounded-md ${
+              scrollDirection === 'y' ? 'flex-col' : 'flex-row ml-2'
             }`}
           >
             <button
@@ -277,8 +275,8 @@ export function ScrollableContainer({ children, scrollDirection, ...props }: Cus
             ></div>
           </div>
           <div
-            className={`flex z-10 gap-1.5 ml-2 bg-transparent opacity-0 group-hover:opacity-100 rounded-md ${
-              scrollDirection === 'y' ? 'flex-col' : 'flex-row'
+            className={`flex z-10 gap-1.5 bg-transparent opacity-0 group-hover:opacity-100 rounded-md ${
+              scrollDirection === 'y' ? 'flex-col' : 'flex-row ml-2'
             }`}
           >
             <button

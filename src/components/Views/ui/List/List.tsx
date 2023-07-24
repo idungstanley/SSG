@@ -67,6 +67,7 @@ export function List({ tasks }: ListProps) {
     }));
 
     const newColumns = unique([...columnsHead, ...customFieldNames]);
+
     dispatch(getTaskColumns(newColumns));
     setColumns(newColumns);
   }, [data]);
@@ -83,6 +84,7 @@ export function List({ tasks }: ListProps) {
   const { filteredByAssignee } = filterByAssignee(filteredBySearch);
 
   const { sortedTasks } = sortTasks(sortType, filteredByAssignee);
+  console.log(sortedTasks);
 
   const handleClose = () => {
     setShowNewTaskField(false);
@@ -107,7 +109,7 @@ export function List({ tasks }: ListProps) {
             </div>
           ) : null}
           {!showNewTaskField ? (
-            <div className="h-5 alsoit-gray-300 font-semibold">
+            <div className="h-5 font-semibold alsoit-gray-300">
               <button onClick={() => setShowNewTaskField(true)} className={cl('p-1.5 pl-14 text-left w-fit text-xs')}>
                 + NEW TASK
               </button>

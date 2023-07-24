@@ -174,7 +174,7 @@ export function Table({ heads, data, label }: TableProps) {
         </DragOverlay>
       ) : null}
 
-      <div className="table-container">
+      <div className="table-container" id={label}>
         <table
           onScroll={onScroll}
           style={

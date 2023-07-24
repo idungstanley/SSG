@@ -11,14 +11,11 @@ export default function Calendar() {
   const [iconToggle, setIconToggle] = useState(false);
   const { listId } = useParams();
   const { filterTaskByAssigneeIds } = useAppSelector((state) => state.task);
-  const { selectedDate } = useAppSelector((state) => state.workspace);
 
   const { data } = getTaskListService({ listId, assigneeUserId: filterTaskByAssigneeIds });
 
   const entityTaskData = useMemo(() => data?.pages.flatMap((page) => page.data.tasks), [data]);
 
-  const checkSchedule = () =>
-    entityTaskData?.find((task) => selectedDate?.date.format('YYYY-MM-DD') === task.start_date);
   return (
     <div className="flex flex-col space-y-2">
       <div className="flex items-center w-full border-b-alsoit-border-base">

@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Hub, InputData } from './activetree.interfaces';
@@ -11,7 +8,6 @@ import HList from './Items/hub/HList';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import { setFilteredResults } from '../../../../../features/search/searchSlice';
 import { getHub } from '../../../../../features/hubs/hubSlice';
-import { isEqual } from 'lodash';
 
 export default function ActiveTress() {
   const dispatch = useAppDispatch();
@@ -23,15 +19,13 @@ export default function ActiveTress() {
   const [hubs, setHubs] = useState<Hub[]>([]);
 
   const fetch = currentWorkspaceId == workSpaceId;
-  const fetchTree = hubs.length === 0 && fetch && (!!listId || !!hubId || !!walletId);
+  const fetchTree = !hubs.length && fetch && (!!hubId || !!walletId || !!listId);
   const id = currentItemId;
 
-  const { data } = useGetHubs({ includeTree: fetchTree, hub_id: id, wallet_id: id, listId });
-  const previousData = JSON.parse(JSON.stringify(!!data));
+  const { data } = useGetHubs({ includeTree: fetchTree, hub_id: id, wallet_id: id, list_id: listId });
 
   useEffect(() => {
     if (data) {
-      const isAnyItemChanged = !isEqual(data, previousData);
       const incoming: InputData = {
         hubs: data.hubs ? [...data.hubs.map((i) => ({ ...i, children: [], wallets: [], lists: [] }))] : [],
         wallets: data.wallets ? [...data.wallets.map((i) => ({ ...i, children: [], lists: [] }))] : [],
@@ -70,7 +64,7 @@ export default function ActiveTress() {
                       return item;
                     }
                   },
-                  listId || id
+                  id || listId
                 )
               ]
         );
