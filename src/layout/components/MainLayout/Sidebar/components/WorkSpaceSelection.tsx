@@ -18,7 +18,7 @@ import { CiSearch } from 'react-icons/ci';
 import { BsPinAngle, BsPinFill } from 'react-icons/bs';
 import { Menu } from '@headlessui/react';
 import { cl } from '../../../../../utils';
-import { VscTriangleDown } from 'react-icons/vsc';
+import ArrowDownFilled from '../../../../../assets/icons/ArrowDownFilled';
 
 const MIN_SIDEBAR_WIDTH = dimensions.navigationBar.min;
 interface workspaceSettingsListType {
@@ -182,7 +182,7 @@ function WorkSpaceSelection() {
             </p>
           )}
         </div>
-        <VscTriangleDown className="text-gray-400" style={{ fontSize: '8px' }} />
+        <ArrowDownFilled />
       </div>
       {showModal && (
         <ModalDropdown showModal={showModal} setShowModal={setShowModal} position="left-28 top-14">
