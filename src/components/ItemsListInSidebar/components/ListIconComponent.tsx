@@ -79,7 +79,7 @@ export default function ListIconComponent({
                 : 'rounded-full'
             }`}
             style={{
-              backgroundColor: outterColour
+              backgroundColor: outterColour ? outterColour : 'black'
             }}
           >
             <span
