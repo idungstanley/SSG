@@ -10,7 +10,6 @@ import { Hub, InputData } from '../../pages/workspace/hubs/components/ActiveTree
 import ActiveTreeDataFormater from './ActiveTreeDataFormater';
 import { useGetHubs } from '../../features/hubs/hubService';
 import { useParams } from 'react-router';
-import { isEqual } from 'lodash';
 import CreateTree from '../../pages/workspace/hubs/components/ActiveTree/CreateTree';
 import UpdateTree from '../../pages/workspace/hubs/components/ActiveTree/updateTree/UpdateTree';
 import { setFilteredResults } from '../../features/search/searchSlice';
@@ -31,16 +30,13 @@ export default function ActiveTreeSearch({ closeDropdown }: ActiveTreeSearchProp
   const [toggleTree, setToggleTree] = useState<boolean>(false);
 
   const fetch = currentWorkspaceId == workSpaceId;
-  const fetchTree = hubs.length === 0 && fetch;
+  const fetchTree = !hubs.length && fetch;
   const id = currentItemId;
 
-  const { data } = useGetHubs({ includeTree: fetchTree, hub_id: id, wallet_id: id, listId });
-
-  const previousData = JSON.parse(JSON.stringify(!!data));
+  const { data } = useGetHubs({ includeTree: fetchTree, hub_id: id, wallet_id: id, list_id: listId });
 
   useEffect(() => {
     if (data) {
-      const isAnyItemChanged = !isEqual(data, previousData);
       const incoming: InputData = {
         hubs: data.hubs ? [...data.hubs.map((i) => ({ ...i, children: [], wallets: [], lists: [] }))] : [],
         wallets: data.wallets ? [...data.wallets.map((i) => ({ ...i, children: [], lists: [] }))] : [],
@@ -79,7 +75,7 @@ export default function ActiveTreeSearch({ closeDropdown }: ActiveTreeSearchProp
                       return item;
                     }
                   },
-                  listId || id
+                  id || listId
                 )
               ]
         );
