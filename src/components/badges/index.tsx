@@ -29,22 +29,23 @@ export default function Badges({ task }: BadgeTask) {
   return (
     <div className="flex items-center space-x-1">
       {task.description && (
-        <>
-          <DetailsOnHover
-            content={<p>{task.description}</p>}
-            hoverElement={
-              <button className="p-1 border rounded-md ">
-                <Description />
-              </button>
-            }
-          />
-        </>
+        <DetailsOnHover
+          content={<p>{task.description}</p>}
+          hoverElement={
+            <button className="p-1 border rounded-md ">
+              <Description />
+            </button>
+          }
+        />
       )}
-      <ToolTip tooltip="Attach File">
-        <button className="p-1 border rounded-md">
-          <AttachFile />
-        </button>
-      </ToolTip>
+      {task.has_attachments && (
+        <ToolTip tooltip="Attach File">
+          <button className="p-1 border rounded-md">
+            <AttachFile />
+          </button>
+        </ToolTip>
+      )}
+
       {task.descendants_count > 0 && (
         <ToolTip tooltip="Subtask">
           <button className="p-1 border rounded-md " onClick={(e) => onShowAddSubtaskField(e, task.id)}>
