@@ -233,9 +233,9 @@ export function StickyCol({
             <div onClick={() => dispatch(setCurrentTaskStatusId(task.id as string))}>
               <StatusDropdown TaskCurrentStatus={task.status} />
             </div>
-            <div className="flex flex-col items-start justify-start pl-2 space-y-1">
+            <div className="flex flex-col flex-grow items-start justify-start pl-2 space-y-1">
               <div
-                className="relative flex items-center text-left"
+                className="relative flex w-full items-center text-left"
                 contentEditable={eitableContent}
                 ref={inputRef}
                 onKeyDown={(e) => (e.key === 'Enter' ? handleEditTask(e, task.id) : null)}
@@ -284,14 +284,13 @@ export function StickyCol({
                 </div>
 
                 {/* non default badges here */}
-                <div onClick={(e) => e.stopPropagation()} className="pl-3">
+                <div onClick={(e) => e.stopPropagation()} className="pl-3 flex flex-grow justify-between">
                   <Badges task={task} />
+                  {children}
                 </div>
               </div>
-
               {tags}
             </div>
-            {children}
           </div>
         </td>
       )}
