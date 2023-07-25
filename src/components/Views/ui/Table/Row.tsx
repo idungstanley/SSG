@@ -42,6 +42,7 @@ export function Row({ task, columns, paddingLeft = 0, parentId, task_status, isL
     custom_fields: [],
     deleted_at: null,
     descendants_count: 0,
+    has_attachments: false,
     description: null,
     directory_items: [],
     end_date: null,
