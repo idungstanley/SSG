@@ -233,7 +233,7 @@ export function ScrollableContainer({ children, scrollDirection, ...props }: Cus
             className={`flex items-center mb-4 ${scrollDirection === 'y' ? 'flex-col h-full' : 'flex-row space-x-2'}`}
           >
             <div
-              className={`flex z-10 gap-1.5 bg-gray-100 bg-opacity-50 opacity-0 group-hover:opacity-100 rounded-md ${
+              className={`flex z-10 gap-1.5 bg-alsoit-gray-50 bg-opacity-75 opacity-0 group-hover:opacity-100 rounded-md ${
                 scrollDirection === 'y' ? 'flex-col' : 'flex-row ml-2'
               }`}
             >
@@ -284,7 +284,7 @@ export function ScrollableContainer({ children, scrollDirection, ...props }: Cus
               ></div>
             </div>
             <div
-              className={`flex z-10 gap-1.5 bg-gray-100 bg-opacity-75 opacity-0 group-hover:opacity-100 rounded-md ${
+              className={`flex z-10 gap-1.5 bg-alsoit-gray-50 bg-opacity-75 opacity-0 group-hover:opacity-100 rounded-md ${
                 scrollDirection === 'y' ? 'flex-col' : 'flex-row ml-2'
               }`}
             >
