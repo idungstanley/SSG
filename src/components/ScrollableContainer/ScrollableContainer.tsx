@@ -15,6 +15,8 @@ export function ScrollableContainer({ children, scrollDirection, ...props }: Cus
   const observer = useRef<ResizeObserver | null>(null);
   const [thumbWidth, setThumbWidth] = useState(DEFAULT_THUMB_WIDTH);
   const [isThumbVisible, setIsThumbVisible] = useState(true);
+  const [topPosition, setTopPosition] = useState<number>(0);
+  const [leftPosition, setLeftPosition] = useState<number>(0);
   const [scrollStartPosition, setScrollStartPosition] = useState<number | null>(null);
   const [initialScrollTop, setInitialScrollTop] = useState<number>(0);
   const [isDragging, setIsDragging] = useState(false);
@@ -71,9 +73,11 @@ export function ScrollableContainer({ children, scrollDirection, ...props }: Cus
     if (scrollDirection === 'x') {
       newLeft = (+contentLeft / +contentWidth) * trackWidth;
       newLeft = Math.min(newLeft, trackWidth - thumbWidth) - 35;
+      setLeftPosition(newLeft);
     } else {
       newTop = (+contentTop / +contentHeight) * trackHeight;
       newTop = Math.min(newTop, trackHeight - thumbWidth) - 27;
+      setTopPosition(newTop);
     }
     const thumb = scrollThumbRef.current;
     if (scrollDirection === 'x') {
@@ -229,7 +233,7 @@ export function ScrollableContainer({ children, scrollDirection, ...props }: Cus
             className={`flex items-center mb-4 ${scrollDirection === 'y' ? 'flex-col h-full' : 'flex-row space-x-2'}`}
           >
             <div
-              className={`flex z-10 gap-1.5 bg-transparent opacity-0 group-hover:opacity-100 rounded-md ${
+              className={`flex z-10 gap-1.5 bg-gray-100 bg-opacity-50 opacity-0 group-hover:opacity-100 rounded-md ${
                 scrollDirection === 'y' ? 'flex-col' : 'flex-row ml-2'
               }`}
             >
@@ -280,7 +284,7 @@ export function ScrollableContainer({ children, scrollDirection, ...props }: Cus
               ></div>
             </div>
             <div
-              className={`flex z-10 gap-1.5 bg-transparent opacity-0 group-hover:opacity-100 rounded-md ${
+              className={`flex z-10 gap-1.5 bg-gray-100 bg-opacity-75 opacity-0 group-hover:opacity-100 rounded-md ${
                 scrollDirection === 'y' ? 'flex-col' : 'flex-row ml-2'
               }`}
             >
