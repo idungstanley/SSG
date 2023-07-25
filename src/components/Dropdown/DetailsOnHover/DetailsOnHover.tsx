@@ -23,14 +23,15 @@ export default function DetailsOnHover({ content, hoverElement, additionalStyles
 
   return (
     <div>
-      <Typography
+      <div
         aria-owns={open ? 'mouse-over-popover' : undefined}
         aria-haspopup="true"
         onMouseEnter={handlePopoverOpen}
         onMouseLeave={handlePopoverClose}
+        className="font-semibold alsoit-gray-300 text-alsoit-text-lg flex items-center"
       >
         {hoverElement ? hoverElement : content}
-      </Typography>
+      </div>
       <Popover
         id="mouse-over-popover"
         sx={{

@@ -235,7 +235,7 @@ export function StickyCol({
             </div>
             <div className="flex flex-col flex-grow items-start justify-start pl-2 space-y-1">
               <div
-                className="relative flex w-full items-center text-left"
+                className="relative flex w-full mt-1 items-center text-left"
                 contentEditable={eitableContent}
                 ref={inputRef}
                 onKeyDown={(e) => (e.key === 'Enter' ? handleEditTask(e, task.id) : null)}
@@ -245,31 +245,29 @@ export function StickyCol({
                   {task.name.length > 50 && singleLineView ? (
                     <div>
                       {!eitableContent ? (
-                        <>
-                          <DetailsOnHover
-                            hoverElement={
-                              <div
-                                className=""
-                                style={{
-                                  maxWidth: '300px',
-                                  overflow: 'hidden',
-                                  // fontWeight: 'lighter',
-                                  textOverflow: 'ellipsis',
-                                  whiteSpace: 'nowrap'
-                                }}
-                              >
-                                {taskUpperCase ? task.name.toUpperCase() : Capitalize(task.name)}
-                              </div>
-                            }
-                            content={<div>{taskUpperCase ? task.name.toUpperCase() : Capitalize(task.name)}</div>}
-                            additionalStyles={{ backgroundColor: 'black', color: 'white' }}
-                          />
-                        </>
+                        <DetailsOnHover
+                          hoverElement={
+                            <div
+                              className=""
+                              style={{
+                                maxWidth: '200px',
+                                overflow: 'hidden',
+                                // fontWeight: 'lighter',
+                                textOverflow: 'ellipsis',
+                                whiteSpace: 'nowrap'
+                              }}
+                            >
+                              {taskUpperCase ? task.name.toUpperCase() : Capitalize(task.name)}
+                            </div>
+                          }
+                          content={<div>{taskUpperCase ? task.name.toUpperCase() : Capitalize(task.name)}</div>}
+                          additionalStyles={{ backgroundColor: 'black', color: 'white' }}
+                        />
                       ) : (
                         <div
                           className=""
                           style={{
-                            maxWidth: '300px',
+                            maxWidth: '200px',
                             overflow: 'hidden',
                             whiteSpace: 'nowrap'
                           }}
@@ -282,10 +280,11 @@ export function StickyCol({
                     <span>{taskUpperCase ? task.name.toUpperCase() : Capitalize(task.name)}</span>
                   )}
                 </div>
-
                 {/* non default badges here */}
                 <div onClick={(e) => e.stopPropagation()} className="pl-3 flex flex-grow justify-between">
                   <Badges task={task} />
+
+                  {/*  default badges here */}
                   {children}
                 </div>
               </div>

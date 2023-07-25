@@ -10,12 +10,12 @@ import { useDraggable } from '@dnd-kit/core';
 import { ManageTagsDropdown } from '../../../Tag/ui/ManageTagsDropdown/ui/ManageTagsDropdown';
 import { AddSubTask } from '../AddTask/AddSubTask';
 import TaskTag from '../../../Tag/ui/TaskTag';
-import dradnddrop from '../../../../assets/icons/dradnddrop.svg';
 import Effect from '../../../../assets/icons/Effect';
 import Enhance from '../../../badges/Enhance';
 import { setShowNewTaskField, setShowNewTaskId } from '../../../../features/task/taskSlice';
 import ToolTip from '../../../Tooltip/Tooltip';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
+import Dradnddrop from '../../../../assets/icons/Dradnddrop';
 
 interface RowProps {
   task: Task;
@@ -119,13 +119,11 @@ export function Row({ task, columns, paddingLeft = 0, parentId, task_status, isL
           paddingLeft={paddingLeft}
           tags={'tags' in task ? <TaskTag tags={task.tags} entity_id={task.id} entity_type="task" /> : null}
           dragElement={
-            <span ref={setNodeRef} {...listeners} {...attributes}>
-              <img
-                src={dradnddrop}
-                alt="drabable"
-                className="text-lg text-gray-400 transition duration-200 opacity-0 cursor-move group-hover:opacity-100"
-              />
-            </span>
+            <div ref={setNodeRef} {...listeners} {...attributes}>
+              <div className="text-lg text-gray-400 transition duration-200 opacity-0 cursor-move group-hover:opacity-100">
+                <Dradnddrop />
+              </div>
+            </div>
           }
         >
           {/* actions */}
