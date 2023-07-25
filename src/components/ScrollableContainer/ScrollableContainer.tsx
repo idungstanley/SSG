@@ -256,19 +256,19 @@ export function ScrollableContainer({ children, scrollDirection, ...props }: Cus
             </div>
             <div
               className={`relative flex flex-grow block ${
-                scrollDirection === 'y' ? 'w-3 items-center' : ' w-full h-3'
+                scrollDirection === 'y' ? 'w-2 hover:w-3 items-center' : ' w-full hover:h-3 h-2'
               }`}
             >
               <div
                 className={`absolute top-0 -bottom-7 bg-transparent cursor-pointer rounded-xl ${
-                  scrollDirection === 'y' ? 'w-3' : ' w-full h-3 -right-12'
+                  scrollDirection === 'y' ? 'w-2 hover:w-3' : ' w-full h-2 hover:h-3 -right-12'
                 }`}
                 ref={scrollTrackRef}
                 onClick={handleTrackClick}
               ></div>
               <div
                 className={`absolute bg-alsoit-gray-75 hover:bg-alsoit-gray-300 cursor-pointer rounded-xl ${
-                  scrollDirection === 'y' ? 'w-3' : ' w-full h-3'
+                  scrollDirection === 'y' ? 'w-2 hover:w-3' : ' w-full h-2 hover:h-3'
                 }`}
                 ref={scrollThumbRef}
                 onMouseDown={handleThumbMousedown}
