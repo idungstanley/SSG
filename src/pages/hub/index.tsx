@@ -13,6 +13,7 @@ import FilterByAssigneesSliderOver from '../workspace/lists/components/renderlis
 import { List } from '../../components/Views/ui/List/List';
 import { generateLists } from '../../utils';
 import { Header } from '../../components/TasksHeader';
+import { ScrollableContainer } from '../../components/ScrollableContainer/ScrollableContainer';
 
 export default function HubPage() {
   const dispatch = useAppDispatch();
@@ -76,18 +77,20 @@ export default function HubPage() {
         additional={<FilterByAssigneesSliderOver />}
       >
         <Header />
-        <section
-          ref={containerRef}
-          style={{ minHeight: '0', maxHeight: '83vh' }}
-          className="w-full h-full p-4 space-y-10 overflow-y-scroll"
-        >
-          {/* lists */}
-          {Object.keys(lists).map((listId) => (
-            <div key={listId}>
-              <List tasks={lists[listId]} />
-            </div>
-          ))}
-        </section>
+        <ScrollableContainer scrollDirection="y">
+          <section
+            ref={containerRef}
+            style={{ minHeight: '0', maxHeight: '83vh' }}
+            className="w-full h-full p-4 space-y-10"
+          >
+            {/* lists */}
+            {Object.keys(lists).map((listId) => (
+              <div key={listId}>
+                <List tasks={lists[listId]} />
+              </div>
+            ))}
+          </section>
+        </ScrollableContainer>
       </Page>
     </>
   );
