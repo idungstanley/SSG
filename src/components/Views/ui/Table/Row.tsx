@@ -106,7 +106,7 @@ export function Row({ task, columns, paddingLeft = 0, parentId, task_status, isL
     <>
       {/* current task */}
 
-      <tr style={style} className="contents group">
+      <tr style={style} className="contents group dNFlex">
         <StickyCol
           showSubTasks={showSubTasks}
           setShowSubTasks={setShowSubTasks}
@@ -127,7 +127,7 @@ export function Row({ task, columns, paddingLeft = 0, parentId, task_status, isL
           }
         >
           {/* actions */}
-          <div className=" opacity-0 group-hover:opacity-100 flex space-x-1 mr-1 items-center justify-center">
+          <div className=" dNone flex space-x-1 mr-1 items-center justify-center">
             {/* effects */}
             <ToolTip tooltip="Apply Effects">
               <button className="p-1 border rounded-md " onClick={(e) => e.stopPropagation()}>
