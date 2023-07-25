@@ -29,7 +29,7 @@ export default function CreateHub() {
   const dispatch = useAppDispatch();
   const [paletteColor, setPaletteColor] = useState<string | ListColourProps | undefined>('');
   const [showPalette, setShowPalette] = useState<boolean>(false);
-  const { selectedTreeDetails, SubMenuType, SubMenuId, currHubId } = useAppSelector((state) => state.hub);
+  const { selectedTreeDetails, currHubId } = useAppSelector((state) => state.hub);
 
   const { type, id } = selectedTreeDetails;
   const createHub = useMutation(createHubService, {

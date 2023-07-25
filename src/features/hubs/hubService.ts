@@ -7,6 +7,7 @@ import { IResponseGetHubs, IHubReq, IFavoritesRes, IHubDetailRes, IHubsRes } fro
 import { closeMenu, setShowFavEditInput, setTriggerFavUpdate } from './hubSlice';
 import { setArchiveHub, setDelHub } from './hubSlice';
 import { generateFilters } from '../../components/TasksHeader/lib/generateFilters';
+import { EntityType } from '../../utils/EntityTypes/EntityType';
 
 const moveHub = (data: { parent_id: string; hubId: string }) => {
   const { hubId, parent_id } = data;
@@ -79,7 +80,7 @@ export const useGetHubs = ({
   list_id?: string;
 }) => {
   const { currentWorkspaceId } = useAppSelector((state) => state.auth);
-  const { currentItemType, activeItemType } = useAppSelector((state) => state.workspace);
+  const { currentItemType } = useAppSelector((state) => state.workspace);
   const { hubId, walletId, listId, workSpaceId } = useParams();
   const id = hub_id || wallet_id || list_id;
 
@@ -91,9 +92,9 @@ export const useGetHubs = ({
 
   (() => {
     if (fetch) {
-      if (hub_id && (currentItemType === 'hub' || activeItemType === 'hub')) {
+      if (hub_id && currentItemType === EntityType.hub) {
         activeHub = `hubs/${hub_id}`;
-      } else if (wallet_id && (currentItemType === 'wallet' || activeItemType === 'wallet')) {
+      } else if (wallet_id && currentItemType === EntityType.wallet) {
         activeWallet = `wallets?parent_id=${wallet_id}`;
       } else if (listId) {
         activeList = `lists?parent_id=${list_id}`;
@@ -109,7 +110,7 @@ export const useGetHubs = ({
   };
 
   return useQuery(
-    ['retrieve', id ?? 'root', includeTree ? 'tree' : undefined],
+    ['retrieve', id ? id : 'root', includeTree ? 'tree' : undefined],
     () =>
       requestNew<IHubsRes>({
         url: createURL(),
