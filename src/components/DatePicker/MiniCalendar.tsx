@@ -144,7 +144,7 @@ export default function MiniDatePicker() {
                       ? 'bg-blue-200'
                       : ''
                   } ${value.month() !== today.month() ? 'text-gray-300' : 'text-gray-600'} ${
-                    today.date() === value.date() && 'bg-blue-400 text-white'
+                    today.date() === value.date() && today.month() === value.month() && 'bg-blue-400 text-white'
                   }`}
                   onClick={() => handleClick(value)}
                   onMouseEnter={() => handleHoverDate(value)}
