@@ -5,6 +5,7 @@ import { FiChevronRight } from 'react-icons/fi';
 import Icons from '../../../../../components/Icons/Icons';
 import DropDown from '../../../../../assets/icons/arrow_drop_down_black.svg';
 import { useSwitchSettings } from './SwitchSettings';
+import { Label } from '../../../../../components/TasksHeader/ui/Filter/ui/FilterItem/Label';
 
 interface IShowHideSettings {
   scrollByEachGroup: string;
@@ -138,12 +139,20 @@ export default function ShowHideSettings({
               {View.label !== 'Remove Single Line mode' ? (
                 <button
                   className={`${
-                    View.id == 6
-                      ? ' flex justify-between items-center w-full group border-b-2 pb-4'
+                    View.label == 'Upper Case'
+                      ? ' flex justify-between items-center w-full group border-y-2 py-4'
                       : ' flex justify-between items-center w-full group '
                   }`}
                 >
                   <p className="flex items-center space-x-2 pl-2 text-md whitespace-nowrap">{View.label}</p>
+                  {View.label == 'Upper Case' && (
+                    <p
+                      className="absolute text-xs text-gray-400 text-center w-2/6 bg-white border border-gray-100 px-1"
+                      style={{ top: '226px', right: '90px' }}
+                    >
+                      TEXT
+                    </p>
+                  )}
                   <p className="flex items-center pr-2 ">
                     <label className="switch" onClick={(event) => event.stopPropagation()}>
                       <input
