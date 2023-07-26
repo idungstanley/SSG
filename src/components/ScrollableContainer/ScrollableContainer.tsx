@@ -141,9 +141,15 @@ export function ScrollableContainer({ children, scrollDirection, ...props }: Cus
 
   // update size is pilot is visible / invisible
   const { show: showFullPilot } = useAppSelector((state) => state.slideOver.pilotSideOver);
-  const { showMore, currentItemId, activeItemId, showHub, activePlaceId } = useAppSelector((state) => state.workspace);
+  const { showMore, currentItemId, showTabLabel, isResize, activeItemId, showHub, activePlaceId } = useAppSelector(
+    (state) => state.workspace
+  );
   const { openedHubId } = useAppSelector((state) => state.hub);
-
+  const pilotFromLS = JSON.parse(localStorage.getItem('pilot') || '""') as {
+    tabOrder: number[];
+    showTabLabel: boolean;
+  };
+  const showTabLabelFromLS = !!pilotFromLS.showTabLabel;
   const initialActivePlaceId: number | null = (JSON.parse(localStorage.getItem('activePlaceIdLocale') as string) ||
     null) as number | null;
 
@@ -182,7 +188,19 @@ export function ScrollableContainer({ children, scrollDirection, ...props }: Cus
     return () => {
       window.removeEventListener('resize', calculateThumbSize);
     };
-  }, [showFullPilot, initialActivePlaceId, showHub, showMore, currentItemId, activeItemId, openedHubId, activePlaceId]);
+  }, [
+    showFullPilot,
+    isResize,
+    initialActivePlaceId,
+    showTabLabel,
+    showTabLabelFromLS,
+    showHub,
+    showMore,
+    currentItemId,
+    activeItemId,
+    openedHubId,
+    activePlaceId
+  ]);
 
   // Listen for mouse events to handle scrolling by dragging the thumb
   useEffect(() => {

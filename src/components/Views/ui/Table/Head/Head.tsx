@@ -53,9 +53,6 @@ export function Head({
   const handleClose = () => {
     setAnchorEl(null);
   };
-  if (scrollToRef.current) {
-    console.log((scrollToRef.current as HTMLElement)?.textContent);
-  }
   const [headerId, setheaderId] = useState<string>('');
   const [showSortModal, setShowSortModal] = useState<boolean>(false);
   const { sortArr, sortAbleArr } = useAppSelector((state) => state.task);
