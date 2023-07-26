@@ -19,7 +19,7 @@ import { Header } from '../../components/TasksHeader';
 export function WalletPage() {
   const dispatch = useAppDispatch();
   const { filterTaskByAssigneeIds } = useAppSelector((state) => state.task);
-  const { walletId } = useParams();
+  const { walletId, taskId } = useParams();
   const containerRef = useRef<HTMLDivElement>(null);
 
   // get wallet details to set active entity
@@ -27,7 +27,7 @@ export function WalletPage() {
   const walletName = wallet?.data.wallet.name ?? '';
 
   useEffect(() => {
-    if (wallet) {
+    if (wallet && !taskId) {
       dispatch(setActiveItem({ activeItemId: walletId, activeItemType: 'wallet', activeItemName: walletName }));
       dispatch(setCurrentWalletName(walletName));
     }

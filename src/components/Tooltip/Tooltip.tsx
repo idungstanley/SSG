@@ -1,16 +1,18 @@
-import React, { ReactNode } from 'react';
+import { Tooltip, TooltipProps, styled, tooltipClasses } from '@mui/material';
+import React, { PropsWithChildren } from 'react';
 // import { cl } from '../utils';
 
-interface ToolTipProps {
-  children: ReactNode;
-  tooltip?: string;
-  position?: string;
-}
+type CustomToolTipProps = PropsWithChildren<TooltipProps & { color?: string }>;
 
-export default function ToolTip({ children, tooltip }: ToolTipProps) {
-  return (
-    <div data-tooltip={tooltip} className="z-30 inline-block cursor-pointer tooltip">
-      {children}
-    </div>
-  );
-}
+const ToolTip = styled(({ className, color, ...props }: CustomToolTipProps) => (
+  <Tooltip {...props} arrow classes={{ popper: className }} />
+))(({ color, ...props }) => ({
+  [`& .${tooltipClasses.arrow}`]: {
+    color: color || props.theme.palette.common.black
+  },
+  [`& .${tooltipClasses.tooltip}`]: {
+    backgroundColor: color || props.theme.palette.common.black
+  }
+}));
+
+export default ToolTip;
