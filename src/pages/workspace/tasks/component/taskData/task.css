@@ -49,9 +49,14 @@
   display: none;
 }
 
+.dNFlex:hover .dNone {
+  display: flex;
+}
+
 .dBlock:hover .dNone {
   display: block;
 }
+
 .dFlex:hover .viewSettings {
   display: flex;
 }

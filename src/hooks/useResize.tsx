@@ -1,6 +1,8 @@
 import { useCallback, useRef, useState } from 'react';
 import { cl } from '../utils';
 import { useQueryClient } from '@tanstack/react-query';
+import { useAppDispatch } from '../app/hooks';
+import { setIsResize } from '../features/workspace/workspaceSlice';
 
 interface UseResizeProps {
   dimensions: { min: number; max: number };
@@ -12,6 +14,7 @@ interface UseResizeProps {
 export function useResize({ dimensions, direction, defaultSize, storageKey }: UseResizeProps) {
   const blockRef = useRef<HTMLDivElement>(null);
   const queryClient = useQueryClient();
+  const dispatch = useAppDispatch();
 
   const { min, max } = dimensions;
   const [size, setSize] = useState(defaultSize ?? min);
@@ -20,6 +23,7 @@ export function useResize({ dimensions, direction, defaultSize, storageKey }: Us
   const handleMouseMoveXR = useCallback((e: MouseEvent) => {
     if (blockRef.current) {
       setIsDrag(true);
+      dispatch(setIsResize(true));
       const mouseX = e.clientX;
       const widthFromLeftToCurrentBlock = Math.round(blockRef.current.getBoundingClientRect().right);
 
@@ -39,6 +43,7 @@ export function useResize({ dimensions, direction, defaultSize, storageKey }: Us
   const handleMouseMoveXL = useCallback((e: MouseEvent) => {
     if (blockRef.current) {
       setIsDrag(true);
+      dispatch(setIsResize(true));
       const mouseX = e.clientX;
       const widthFromLeftToCurrentBlock = Math.round(blockRef.current.getBoundingClientRect().left);
 
@@ -55,6 +60,7 @@ export function useResize({ dimensions, direction, defaultSize, storageKey }: Us
   const handleMouseMoveY = useCallback((e: MouseEvent) => {
     if (blockRef.current) {
       setIsDrag(true);
+      dispatch(setIsResize(true));
       const mouseY = e.clientY;
       const heightFromTopToCurrentBlock = Math.round(blockRef.current.getBoundingClientRect().top);
 
@@ -86,6 +92,7 @@ export function useResize({ dimensions, direction, defaultSize, storageKey }: Us
       localStorage.setItem(storageKey, JSON.stringify(newSize));
       queryClient.invalidateQueries(['user-settings']);
       setIsDrag(false);
+      dispatch(setIsResize(false));
     }
   }, []);
 

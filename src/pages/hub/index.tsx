@@ -17,14 +17,14 @@ import { ScrollableContainer } from '../../components/ScrollableContainer/Scroll
 
 export default function HubPage() {
   const dispatch = useAppDispatch();
-  const { hubId } = useParams();
+  const { hubId, taskId } = useParams();
   const { filterTaskByAssigneeIds } = useAppSelector((state) => state.task);
   const containerRef = useRef<HTMLDivElement>(null);
   const { data: hub } = UseGetHubDetails({ activeItemId: hubId, activeItemType: 'hub' });
 
   // set entity name
   useEffect(() => {
-    if (hub) {
+    if (hub && !taskId) {
       const hubName = hub.data.hub.name;
       dispatch(setActiveItem({ activeItemId: hubId, activeItemType: 'hub', activeItemName: hubName }));
       dispatch(setActiveEntityName(hubName));

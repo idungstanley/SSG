@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 // import { useAppSelector } from '../../../../../app/hooks';
 import { UseGetHubDetails } from '../../../../../features/hubs/hubService';
 import { UseGetWalletDetails } from '../../../../../features/wallet/walletService';
@@ -6,9 +6,12 @@ import { UseGetListDetails } from '../../../../../features/list/listService';
 import { getOneTaskServices } from '../../../../../features/task/taskService';
 import PropertyDetails from './subDetailsIndex/PropertyDetails';
 import { useParams } from 'react-router-dom';
+import { setActiveItem } from '../../../../../features/workspace/workspaceSlice';
+import { useAppDispatch } from '../../../../../app/hooks';
 
 export default function DetailsIndex() {
   // const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
+  const dispatch = useAppDispatch();
 
   const { hubId, walletId, listId, taskId } = useParams();
 
@@ -31,8 +34,20 @@ export default function DetailsIndex() {
 
   const taskDetails = task?.data.task;
 
+  useEffect(() => {
+    if (taskId && (hubId || walletId || listId)) {
+      dispatch(
+        setActiveItem({
+          activeItemId: taskDetails?.id,
+          activeItemType: 'task',
+          activeItemName: taskDetails?.name
+        })
+      );
+    }
+  }, [taskDetails]);
+
   const showDetailsType = () => {
-    if (taskId !== undefined) {
+    if (taskId && (hubId || walletId || listId)) {
       return <PropertyDetails Details={taskDetails} key={taskDetails?.id} />;
     } else if (hubId) {
       return <PropertyDetails Details={hub?.data.hub} key={hub?.data.hub.id} />;
