@@ -1,5 +1,12 @@
 import { ReactNode } from 'react';
-import { DndContext, DragEndEvent, DragStartEvent, UniqueIdentifier } from '@dnd-kit/core';
+import {
+  DndContext,
+  DragEndEvent,
+  DragStartEvent,
+  UniqueIdentifier,
+  closestCenter,
+  closestCorners
+} from '@dnd-kit/core';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { setDraggableItem } from '../../../../features/list/listSlice';
 import { useMoveTask } from '../../../../features/task/taskService';
@@ -34,7 +41,6 @@ export default function DragContext({ children }: DragContextProps) {
   // set active task id to store
   const onDragStart = (e: DragStartEvent) => {
     const id = e.active.id as string;
-
     dispatch(setDraggableItem(id));
   };
 

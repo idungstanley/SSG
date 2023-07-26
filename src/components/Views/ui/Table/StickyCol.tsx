@@ -24,6 +24,7 @@ import RoundedCheckbox from '../../../Checkbox/RoundedCheckbox';
 import ToolTip from '../../../Tooltip/Tooltip';
 import Badges from '../../../badges';
 import DetailsOnHover from '../../../Dropdown/DetailsOnHover/DetailsOnHover';
+import DragContext from '../../../../layout/components/MainLayout/DragContext/DragContext';
 
 interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   task: Task;
@@ -189,7 +190,7 @@ export function StickyCol({
   });
 
   return (
-    <div ref={droppabbleRef}>
+    <div>
       {task.id !== '0' && (
         <td
           className="sticky left-0 flex items-center justify-start text-sm font-medium text-gray-900 cursor-pointer text-start"
@@ -203,9 +204,11 @@ export function StickyCol({
                 selectedTasksArray.length > 0 ? 'opacity-100' : 'opacity-0'
               } cursor-pointer focus:outline-1 focus:ring-transparent  focus:border-2 focus:opacity-100 group-hover:opacity-100 text-alsoit-purple-300`}
             />
-            <div ref={setNodeRef} {...attributes} {...listeners} className="pr-2">
-              {dragElement}
-            </div>
+            <DragContext>
+              <div ref={setNodeRef} {...attributes} {...listeners} className="pr-2">
+                {dragElement}
+              </div>
+            </DragContext>
           </div>
           <div
             style={{ paddingLeft, minHeight: '42px', height: singleLineView ? '42px' : '' }}
@@ -213,10 +216,10 @@ export function StickyCol({
             onDoubleClick={() => setEitableContent(true)}
             className={cl(
               ACTIVE_TASK,
-              `relative border-t ${isChecked && 'tdListV'} ${verticalGrid && 'border-r'} ${
+              `relative ${isChecked && 'tdListV'} ${verticalGrid && 'border-r'} ${
                 verticalGridlinesTask && 'border-r'
               } w-full py-4 flex items-center `,
-              isOver ? 'border-y-2 border-alsoit-purple-300' : ''
+              isOver ? 'border-b-2 border-alsoit-purple-300' : ''
             )}
           >
             <button onClick={onToggleDisplayingSubTasks} className="pl-1">
@@ -241,7 +244,7 @@ export function StickyCol({
                 onKeyDown={(e) => (e.key === 'Enter' ? handleEditTask(e, task.id) : null)}
                 suppressContentEditableWarning={true}
               >
-                <div className="font-semibold alsoit-gray-300 text-alsoit-text-lg">
+                <div className="font-semibold alsoit-gray-300 text-alsoit-text-lg" ref={droppabbleRef}>
                   {task.name.length > 50 && singleLineView ? (
                     <div>
                       {!eitableContent ? (
