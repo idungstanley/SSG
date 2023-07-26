@@ -47,7 +47,7 @@ export default function Toggle() {
       {!showSidebar ? (
         <ExpandIcon />
       ) : (
-        <ToolTip tooltip="Collapse Sidebar">
+        <ToolTip title="Collapse Sidebar">
           <CompactIcon />
         </ToolTip>
       )}

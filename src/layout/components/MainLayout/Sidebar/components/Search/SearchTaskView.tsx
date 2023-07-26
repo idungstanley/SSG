@@ -48,10 +48,10 @@ export default function SearchTaskView({ handleCloseSearchView, placeHolder, ite
         style={{ fontSize: '13px' }}
       />
       <div className="flex absolute right-3 top-2.5" data-tooltip-target="tooltip-default" style={{ color: baseColor }}>
-        <ToolTip tooltip="Advance Filter">
+        <ToolTip title="Advance Filter">
           <VscSettings className="w-6 h-4 cursor-pointer hover:text-fuchsia-600" />
         </ToolTip>
-        <ToolTip tooltip="close search">
+        <ToolTip title="close search">
           <IoClose className="w-6 h-4 cursor-pointer hover:text-fuchsia-600" onClick={handleCloseSearchView} />
         </ToolTip>
       </div>

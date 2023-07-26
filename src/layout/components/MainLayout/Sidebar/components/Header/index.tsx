@@ -99,7 +99,7 @@ export default function Header({
                 {activeHotkeyIds.includes(tab.id) && <BsFillPinFill className="w-4 h-4" aria-hidden="true" />}
                 {!activeHotkeyIds.includes(tab.id) &&
                   (hotkeys.length >= 4 ? (
-                    <ToolTip tooltip="Exceeded pin limit">
+                    <ToolTip title="Exceeded pin limit">
                       <VscPinned className="w-4 h-4" aria-hidden="true" />
                     </ToolTip>
                   ) : (

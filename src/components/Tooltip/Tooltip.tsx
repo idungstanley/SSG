@@ -4,7 +4,7 @@ import React, { PropsWithChildren } from 'react';
 
 type CustomToolTipProps = PropsWithChildren<TooltipProps & { color?: string }>;
 
-const ToolTip = styled(({ className, color, ...props }: CustomToolTipProps) => (
+const ToolTip = styled(({ className, ...props }: CustomToolTipProps) => (
   <Tooltip {...props} arrow classes={{ popper: className }} />
 ))(({ color, ...props }) => ({
   [`& .${tooltipClasses.arrow}`]: {

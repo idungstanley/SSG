@@ -39,7 +39,7 @@ export default function ChatsList({ selectChat }: ChatsListProps) {
         <p className="flex justify-between items-center mr-4 gap-2">
           <CiSearch className="h-5 w-5" aria-hidden="true" />
           <CgSortAz className="h-5 w-5" aria-hidden="true" />
-          <ToolTip tooltip="Create chat">
+          <ToolTip title="Create chat">
             <button
               onClick={() => dispatch(setShowCreateChatSideOver(true))}
               type="button"

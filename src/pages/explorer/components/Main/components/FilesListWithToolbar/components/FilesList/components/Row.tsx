@@ -99,7 +99,7 @@ export default function Row({ fileId }: RowProps) {
       {/* show eye icon if preview toggle enabled */}
       {!showPreview ? (
         <td>
-          <ToolTip tooltip={fastPreview.fileId ? 'Hide preview' : 'Show preview'}>
+          <ToolTip title={fastPreview.fileId ? 'Hide preview' : 'Show preview'}>
             <span
               onClick={() =>
                 dispatch(
