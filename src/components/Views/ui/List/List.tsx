@@ -84,7 +84,6 @@ export function List({ tasks }: ListProps) {
   const { filteredByAssignee } = filterByAssignee(filteredBySearch);
 
   const { sortedTasks } = sortTasks(sortType, filteredByAssignee);
-
   const handleClose = () => {
     setShowNewTaskField(false);
     dispatch(setCurrTeamMemId(null));

@@ -32,6 +32,7 @@ export default function FullPilot({ featureTabs, activeSection, setShowModal, sh
   const { showOverlay } = useAppSelector((state) => state.workspace);
 
   const { show: showFullPilot, title, type } = useAppSelector((state) => state.slideOver.pilotSideOver);
+  const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
 
   return (
     <div
@@ -68,7 +69,7 @@ export default function FullPilot({ featureTabs, activeSection, setShowModal, sh
           }
         >
           <p className="text-xs font-semibold capitalize truncate">
-            {type} | <span className="font-normal">{title}</span>
+            {activeItemType} | <span className="font-normal">{title}</span>
           </p>
         </Header>
 
