@@ -133,7 +133,7 @@ export default function MiniDatePicker() {
               {cells.map(({ text, value }, i) => (
                 <div
                   key={`${text}-${i}`}
-                  className={`w-5 h-5 flex justify-center items-center rounded-full p-4 text-sm font-semibold cursor-pointer ${
+                  className={`w-5 h-5 flex justify-center items-center rounded-full p-4 text-alsoit-text-lg font-semibold cursor-pointer ${
                     isStartDate(value)
                       ? 'bg-blue-600 text-white'
                       : isEndDate(value)
@@ -143,7 +143,7 @@ export default function MiniDatePicker() {
                       : hoveredDate && value.isSame(hoveredDate, 'day') && !taskTime?.to
                       ? 'bg-blue-200'
                       : ''
-                  } ${value.month() !== today.month() ? 'text-gray-300' : 'text-gray-600'} ${
+                  } ${value.month() !== today.month() ? 'text-alsoit-gray-75' : 'text-alsoit-gray-200'} ${
                     today.date() === value.date() && today.month() === value.month() && 'bg-blue-400 text-white'
                   }`}
                   onClick={() => handleClick(value)}
