@@ -16,26 +16,6 @@ import ArrowCaretUp from '../../../../assets/icons/ArrowCaretUp';
 import AlarmClockIcon from '../../../../assets/icons/AlarmClockicon';
 import ArrowCaretDown from '../../../../assets/icons/ArrowCaretDown';
 
-export const handleEntity = ({
-  workSpaceId,
-  hubId,
-  listId,
-  taskId
-}: {
-  workSpaceId: string | undefined;
-  hubId: string | undefined | null;
-  listId: string | undefined | null;
-  taskId: string | undefined | null;
-}): string => {
-  return hubId
-    ? `/${workSpaceId}/tasks/h/${hubId}`
-    : !taskId
-    ? `/${workSpaceId}/tasks/l/${listId}`
-    : !listId
-    ? `/${workSpaceId}/tasks/h/${hubId}/t/${taskId}`
-    : `/${workSpaceId}/tasks/l/${listId}/t/${taskId}`;
-};
-
 export default function AdditionalHeader() {
   const { screenRecording, duration, timerStatus } = useAppSelector((state) => state.task);
   const [recordBlinker, setRecordBlinker] = useState<boolean>(false);
