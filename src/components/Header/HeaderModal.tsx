@@ -9,9 +9,6 @@ interface HeaderModalprops {
 
 function HeaderModal({ toggleFn, clickAway, children, styles }: HeaderModalprops) {
   const modalRef = useRef<HTMLDivElement>(null);
-  // const handleClick = (event: MouseEvent) => {
-  //   event.stopPropagation();
-  // };
 
   useEffect(() => {
     const handleOutsideClick = (event: MouseEvent) => {
