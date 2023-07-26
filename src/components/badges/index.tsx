@@ -4,7 +4,6 @@ import AttachFile from './AttachFile';
 import SubtaskWithCount from './SubtaskWithCount';
 import Checklist from './Checklist';
 import { Task } from '../../features/task/interface.tasks';
-import InteractiveTooltip from '../Tooltip/InteractiveTooltip';
 import ToolTip from '../Tooltip/Tooltip';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { setShowNewTaskField, setShowNewTaskId } from '../../features/task/taskSlice';
