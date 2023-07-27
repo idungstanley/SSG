@@ -1,13 +1,5 @@
 import { ReactNode } from 'react';
-import {
-  DndContext,
-  DragEndEvent,
-  DragOverEvent,
-  DragStartEvent,
-  UniqueIdentifier,
-  closestCenter,
-  closestCorners
-} from '@dnd-kit/core';
+import { DndContext, DragEndEvent, DragOverEvent, DragStartEvent, UniqueIdentifier } from '@dnd-kit/core';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { setDragOverItem, setDraggableItem } from '../../../../features/list/listSlice';
 import { useMoveTask } from '../../../../features/task/taskService';
