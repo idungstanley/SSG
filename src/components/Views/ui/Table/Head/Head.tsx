@@ -13,9 +13,15 @@ import {
 } from '../../../../../features/task/taskSlice';
 import SortModal from '../../../../SortModal/SortModal';
 import statusbox from '../../../../../assets/icons/statusbox.svg';
-import { CiEdit } from 'react-icons/ci';
+import { CiEdit, CiSettings } from 'react-icons/ci';
 import { BsThreeDots } from 'react-icons/bs';
 import { FiPlusCircle } from 'react-icons/fi';
+import { ModalDropdown } from '../../../../Modal/ModalDropdown';
+import { PencilIcon } from '@heroicons/react/24/outline';
+import PlusIcon from '../../../../../assets/icons/PlusIcon';
+import { TbAlignJustified } from 'react-icons/tb';
+import { MdEditNote } from 'react-icons/md';
+import { BiHide } from 'react-icons/bi';
 
 interface HeadProps {
   columns: Column[];
@@ -57,6 +63,7 @@ export function Head({
     console.log((scrollToRef.current as HTMLElement)?.textContent);
   }
   const [headerId, setheaderId] = useState<string>('');
+  const [showStatusDropdown, setShowStatusDropdown] = useState<boolean>(false);
   const [showSortModal, setShowSortModal] = useState<boolean>(false);
   const { sortArr, sortAbleArr } = useAppSelector((state) => state.task);
   const { baseColor } = useAppSelector((state) => state.account);
@@ -111,6 +118,16 @@ export function Head({
     return sortAbleArr.find((el) => el.field === headerTxt(col));
   };
 
+  const statusDropdownOptions = [
+    { label: 'Rename', icon: <PencilIcon className="w-4 h-4" aria-hidden="true" />, handleClick: () => ({}) },
+    { label: 'New status', icon: <PlusIcon />, handleClick: () => ({}) },
+    { label: 'Select all', icon: <TbAlignJustified />, handleClick: () => ({}) },
+    { label: 'Collapse group', icon: <MdEditNote />, handleClick: () => ({}) },
+    { label: 'Collapse all groups', icon: <MdEditNote />, handleClick: () => ({}) },
+    { label: 'Hide status', icon: <BiHide />, handleClick: () => ({}) },
+    { label: 'Manage statuses', icon: <CiSettings />, handleClick: () => ({}) }
+  ];
+
   return columns.length > 0 ? (
     <thead className="contents">
       <tr className="contents ">
@@ -119,7 +136,7 @@ export function Head({
           <div className="flex items-center " style={{ width: '38px' }}></div>
           <div className="flex items-center w-full gap-3 py-2 truncate dBlock group opacity-90">
             <div
-              className="py-0.5 px-2 rounded-tr-md -mb-1 flex items-center space-x-1 text-white dFlex "
+              className="py-0.5 relative px-2 rounded-tr-md -mb-1 flex items-center space-x-1 text-white dFlex "
               style={{ backgroundColor: headerStatusColor }}
             >
               <p className="">
@@ -131,8 +148,29 @@ export function Head({
               <p className="flex items-center space-x-1 viewSettings">
                 <img src={statusbox} alt="" />
                 <CiEdit />
-                <BsThreeDots />
+                <BsThreeDots className="cursor-pointer" onClick={() => setShowStatusDropdown((prev) => !prev)} />
               </p>
+              <ModalDropdown
+                showModal={showStatusDropdown}
+                setShowModal={setShowStatusDropdown}
+                position="left-96 top-56"
+              >
+                <div className="flex flex-col p-1 space-y-2">
+                  <p className="text-alsoit-gray-75">Group Options</p>
+                  <div className="flex flex-col space-y-2">
+                    {statusDropdownOptions.map((item, index) => (
+                      <div
+                        className="flex items-center gap-2 p-1 rounded cursor-pointer hover:bg-alsoit-gray-50"
+                        key={index}
+                        onClick={item.handleClick}
+                      >
+                        <p>{item.icon}</p>
+                        <p>{item.label}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </ModalDropdown>
             </div>
             <div
               className="flex items-center hover:bg-gray-200 p-0.5 rounded-md space-x-1  border-t-2 border-l-2 border-r-2 border-transparent hover:border-gray-600 text-alsoit-gray-200 font-semibold"
