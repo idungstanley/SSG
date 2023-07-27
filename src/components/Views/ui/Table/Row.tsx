@@ -10,12 +10,12 @@ import { useDraggable } from '@dnd-kit/core';
 import { ManageTagsDropdown } from '../../../Tag/ui/ManageTagsDropdown/ui/ManageTagsDropdown';
 import { AddSubTask } from '../AddTask/AddSubTask';
 import TaskTag from '../../../Tag/ui/TaskTag';
-import dradnddrop from '../../../../assets/icons/dradnddrop.svg';
 import Effect from '../../../../assets/icons/Effect';
 import Enhance from '../../../badges/Enhance';
 import { setShowNewTaskField, setShowNewTaskId } from '../../../../features/task/taskSlice';
 import ToolTip from '../../../Tooltip/Tooltip';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
+import Dradnddrop from '../../../../assets/icons/Dradnddrop';
 
 interface RowProps {
   task: Task;
@@ -42,6 +42,7 @@ export function Row({ task, columns, paddingLeft = 0, parentId, task_status, isL
     custom_fields: [],
     deleted_at: null,
     descendants_count: 0,
+    has_attachments: false,
     description: null,
     directory_items: [],
     end_date: null,
@@ -105,7 +106,7 @@ export function Row({ task, columns, paddingLeft = 0, parentId, task_status, isL
     <>
       {/* current task */}
 
-      <tr style={style} className="contents group">
+      <tr style={style} className="contents group dNFlex">
         <StickyCol
           showSubTasks={showSubTasks}
           setShowSubTasks={setShowSubTasks}
@@ -118,17 +119,15 @@ export function Row({ task, columns, paddingLeft = 0, parentId, task_status, isL
           paddingLeft={paddingLeft}
           tags={'tags' in task ? <TaskTag tags={task.tags} entity_id={task.id} entity_type="task" /> : null}
           dragElement={
-            <span ref={setNodeRef} {...listeners} {...attributes}>
-              <img
-                src={dradnddrop}
-                alt="drabable"
-                className="text-lg text-gray-400 transition duration-200 opacity-0 cursor-move group-hover:opacity-100"
-              />
-            </span>
+            <div ref={setNodeRef} {...listeners} {...attributes}>
+              <div className="text-lg text-gray-400 transition duration-200 opacity-0 cursor-move group-hover:opacity-100">
+                <Dradnddrop />
+              </div>
+            </div>
           }
         >
           {/* actions */}
-          <div className="absolute opacity-0 group-hover:opacity-100 top-0 bottom-0 right-0 flex space-x-1 mr-1 items-center justify-center">
+          <div className=" dNone flex space-x-1 mr-1 items-center justify-center">
             {/* effects */}
             <ToolTip tooltip="Apply Effects">
               <button className="p-1 border rounded-md " onClick={(e) => e.stopPropagation()}>

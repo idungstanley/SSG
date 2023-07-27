@@ -51,6 +51,7 @@ export interface ImyTaskData {
   start_date: string | null;
   descendants_count: number;
   has_descendants: boolean;
+  has_attachments: boolean;
   end_date: string | null;
   status: Status;
   assignees?: [{ id: string; initials: string; color: string; name: string; avatar_path: string | null }];

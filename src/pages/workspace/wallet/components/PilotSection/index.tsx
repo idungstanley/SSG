@@ -23,6 +23,8 @@ import HubManager from '../../../../../components/Pilot/components/HubManager/Hu
 import hubIcon from '../../../../../assets/branding/hub.svg';
 import Templates from '../../../../../components/Pilot/components/Templates';
 import TemplatesIcon from '../../../../../assets/icons/Templates';
+import Calendar from '../../../../../components/Pilot/components/Calendar';
+import CalendarIcon from '../../../../../assets/icons/CalendarIcon';
 
 const sections = [
   {
@@ -64,6 +66,10 @@ const sections = [
   {
     id: 10,
     element: <Templates />
+  },
+  {
+    id: 11,
+    element: <Calendar />
   }
 ];
 
@@ -117,6 +123,11 @@ const tabs = [
     id: 10,
     label: 'Templates',
     icon: <TemplatesIcon />
+  },
+  {
+    id: 11,
+    label: 'Calendar',
+    icon: <CalendarIcon active={false} />
   }
 ];
 

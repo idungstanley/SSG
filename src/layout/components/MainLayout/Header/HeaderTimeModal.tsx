@@ -4,7 +4,7 @@ import MiniDatePicker from '../../../../components/DatePicker/MiniCalendar';
 import { useParams } from 'react-router-dom';
 import { useAppSelector } from '../../../../app/hooks';
 import { getTaskListService } from '../../../../features/task/taskService';
-import Agenda from '../../../../components/Pilot/components/Calendar/Agenda';
+// import Agenda from '../../../../components/Pilot/components/Calendar/Agenda';
 
 export default function HeaderTimeModal() {
   const [time, setTime] = useState<string>(dayjs().format('hh:mm:ss a'));
@@ -38,7 +38,7 @@ export default function HeaderTimeModal() {
           className="w-72 h-6 text-alsoit-text-md rounded border-alsoit-border-base px-1"
           placeholder="search..."
         />
-        {entityTaskData?.length && <Agenda entityTaskData={entityTaskData} />}
+        {/* {entityTaskData?.length && <Agenda entityTaskData={entityTaskData} />} */}
         {/* <span className="italic text-alsoit-text-md font-semibold">No activity found for the selected time</span> */}
       </div>
     </div>

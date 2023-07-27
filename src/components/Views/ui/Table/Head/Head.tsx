@@ -59,9 +59,6 @@ export function Head({
   const handleClose = () => {
     setAnchorEl(null);
   };
-  if (scrollToRef.current) {
-    console.log((scrollToRef.current as HTMLElement)?.textContent);
-  }
   const [headerId, setheaderId] = useState<string>('');
   const [showStatusDropdown, setShowStatusDropdown] = useState<boolean>(false);
   const [showSortModal, setShowSortModal] = useState<boolean>(false);
