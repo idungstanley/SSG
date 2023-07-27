@@ -214,7 +214,7 @@ export function StickyCol({
             onDoubleClick={() => setEitableContent(true)}
             className={cl(
               ACTIVE_TASK,
-              `relative border-t ${isChecked && 'tdListV'} ${verticalGrid && 'border-r'} ${
+              ` border-t ${isChecked && 'tdListV'} ${verticalGrid && 'border-r'} ${
                 verticalGridlinesTask && 'border-r'
               } w-full py-4 flex items-center `,
               isOver ? 'border-y-2 border-alsoit-purple-300' : ''
@@ -236,7 +236,7 @@ export function StickyCol({
             </div>
             <div className="flex flex-col flex-grow items-start justify-start pl-2 space-y-1">
               <div
-                className="relative flex w-full mt-1 items-center text-left"
+                className=" flex w-full mt-1 items-center text-left"
                 onKeyDown={(e) => (e.key === 'Enter' ? handleEditTask(e, task.id) : null)}
                 suppressContentEditableWarning={true}
               >
@@ -279,7 +279,6 @@ export function StickyCol({
                 {/* non default badges here */}
                 <div onClick={(e) => e.stopPropagation()} className="pl-3 flex flex-grow justify-between">
                   <Badges task={task} />
-
                   {/*  default badges here */}
                   {children}
                 </div>

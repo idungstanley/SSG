@@ -11,8 +11,8 @@ export function Chevron({ onToggle, active, color }: ChevronProps) {
   const [isHovered, setIsHovered] = useState(false);
 
   const defaultStyle = {
-    color: isHovered ? 'white' : 'white',
-    backgroundColor: isHovered ? color : ''
+    color: isHovered ? color : 'white',
+    backgroundColor: isHovered ? 'white' : color
   };
 
   return (
@@ -29,7 +29,7 @@ export function Chevron({ onToggle, active, color }: ChevronProps) {
       {active ? (
         <IoChevronForwardCircleOutline className="w-4 h-4 rounded-full" />
       ) : (
-        <IoChevronDownCircleOutline className="w-4 h-4 rounded-full" />
+        <IoChevronDownCircleOutline className="w-4 h-4 rounded-full " />
       )}
     </button>
   );
