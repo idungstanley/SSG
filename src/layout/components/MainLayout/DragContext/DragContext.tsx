@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
-import { DndContext, DragEndEvent, DragStartEvent, UniqueIdentifier } from '@dnd-kit/core';
+import { DndContext, DragEndEvent, DragOverEvent, DragStartEvent, UniqueIdentifier } from '@dnd-kit/core';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
-import { setDraggableItem } from '../../../../features/list/listSlice';
+import { setDragOverItem, setDraggableItem } from '../../../../features/list/listSlice';
 import { useMoveTask } from '../../../../features/task/taskService';
 import { useQueryClient } from '@tanstack/react-query';
 import { generateFilters } from '../../../../components/TasksHeader/lib/generateFilters';
@@ -34,11 +34,11 @@ export default function DragContext({ children }: DragContextProps) {
   // set active task id to store
   const onDragStart = (e: DragStartEvent) => {
     const id = e.active.id as string;
-
     dispatch(setDraggableItem(id));
   };
 
   const onDragEnd = (e: DragEndEvent) => {
+    dispatch(setDragOverItem(null));
     const { over, active } = e;
     const overId = over?.id as string;
     const activeId = active?.id as string;
@@ -144,8 +144,13 @@ export default function DragContext({ children }: DragContextProps) {
     }
   };
 
+  const onDragOver = (e: DragOverEvent) => {
+    const id = e.over?.id as string;
+    dispatch(setDragOverItem(id));
+  };
+
   return (
-    <DndContext onDragStart={onDragStart} onDragEnd={onDragEnd}>
+    <DndContext onDragStart={onDragStart} onDragEnd={onDragEnd} onDragOver={onDragOver}>
       {children}
     </DndContext>
   );
