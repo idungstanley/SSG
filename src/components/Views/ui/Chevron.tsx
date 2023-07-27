@@ -5,14 +5,15 @@ interface ChevronProps {
   onToggle: VoidFunction;
   active: boolean;
   color?: string;
+  hoverBg?: string;
 }
 
-export function Chevron({ onToggle, active, color }: ChevronProps) {
+export function Chevron({ onToggle, active, color, hoverBg }: ChevronProps) {
   const [isHovered, setIsHovered] = useState(false);
 
   const defaultStyle = {
     color: isHovered ? color : 'white',
-    backgroundColor: isHovered ? 'white' : color
+    backgroundColor: isHovered ? hoverBg : color
   };
 
   return (

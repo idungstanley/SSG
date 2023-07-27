@@ -137,7 +137,12 @@ export function Head({
               style={{ backgroundColor: headerStatusColor }}
             >
               <p className="">
-                <Chevron color={headerStatusColor} active={collapseTasks} onToggle={onToggleCollapseTasks} />
+                <Chevron
+                  color={headerStatusColor}
+                  active={collapseTasks}
+                  onToggle={onToggleCollapseTasks}
+                  hoverBg="white"
+                />
               </p>
               <span ref={scrollToRef} className="pb-1" style={{ fontSize: '11px', WebkitTextStroke: '0.5px' }}>
                 {parsedLabel}
