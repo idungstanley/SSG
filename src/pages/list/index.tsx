@@ -18,7 +18,7 @@ import { Header } from '../../components/TasksHeader';
 
 export function ListPage() {
   const dispatch = useAppDispatch();
-  const { listId } = useParams();
+  const { listId, taskId } = useParams();
   const { listView, filterTaskByAssigneeIds } = useAppSelector((state) => state.task);
 
   const containerRef = useRef<HTMLDivElement>(null);
@@ -29,7 +29,7 @@ export function ListPage() {
 
   useEffect(() => {
     if (list) {
-      if (listId) {
+      if (listId && !taskId) {
         dispatch(setActiveItem({ activeItemId: listId, activeItemType: 'list', activeItemName: listName }));
         dispatch(setActiveEntityName(listName));
       }

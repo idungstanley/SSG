@@ -14,6 +14,15 @@ interface InewData {
   name: string;
   role: string;
   avatar_path: string | null;
+  user?: {
+    avatar_path: string | null;
+    color: string;
+    email: string;
+    id: string;
+    initials: string;
+    name: string;
+    timezone: string;
+  };
 }
 
 interface groupAssignee {
@@ -30,10 +39,7 @@ function GroupAssignee({
   handleClick,
   teams
 }: {
-  data:
-    | [{ id: string; initials: string; color: string; name: string; avatar_path: string | null }]
-    | groupAssignee[]
-    | undefined;
+  data: InewData[] | groupAssignee[] | undefined;
   itemId?: string;
   handleClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
   teams: boolean;
@@ -46,6 +52,8 @@ function GroupAssignee({
     show: false,
     index: null
   });
+
+  console.log(data);
 
   const { mutate: onTaskUnassign } = UseUnassignTask();
 
@@ -112,7 +120,19 @@ function GroupAssignee({
                       <AvatarForOwner initials="me" />
                     ) : (
                       <div className="border-2 border-red-400  rounded-full">
-                        <AvatarWithInitials initials={newData.initials} backgroundColour={newData.color} badge={true} />
+                        <AvatarWithInitials
+                          initials={
+                            (newData as InewData).user
+                              ? ((newData as InewData)?.user?.initials as string)
+                              : (newData.initials as string)
+                          }
+                          backgroundColour={
+                            (newData as InewData).user
+                              ? ((newData as InewData)?.user?.color as string)
+                              : (newData.color as string)
+                          }
+                          badge={true}
+                        />
                       </div>
                     )}
                   </span>
@@ -192,8 +212,16 @@ function GroupAssignee({
                       ) : (
                         <div className="border-2 border-red-400 rounded-full">
                           <AvatarWithInitials
-                            initials={newData.initials}
-                            backgroundColour={newData.color}
+                            initials={
+                              (newData as InewData).user
+                                ? ((newData as InewData)?.user?.initials as string)
+                                : (newData.initials as string)
+                            }
+                            backgroundColour={
+                              (newData as InewData).user
+                                ? ((newData as InewData)?.user?.color as string)
+                                : (newData.color as string)
+                            }
                             badge={true}
                           />
                         </div>
