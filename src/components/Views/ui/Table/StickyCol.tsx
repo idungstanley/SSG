@@ -216,10 +216,10 @@ export function StickyCol({
             onDoubleClick={() => setEitableContent(true)}
             className={cl(
               ACTIVE_TASK,
-              ` border-t ${isChecked && 'tdListV'} ${verticalGrid && 'border-r'} ${
+              ` ${isChecked && 'tdListV'} ${verticalGrid && 'border-r'} ${
                 verticalGridlinesTask && 'border-r'
               } w-full py-4 flex items-center `,
-              isOver && draggableItemId !== dragOverItemId ? 'border-b-2 border-alsoit-purple-300' : ''
+              isOver && draggableItemId !== dragOverItemId ? 'border-b-2 border-alsoit-purple-300' : 'border-t'
             )}
           >
             <button onClick={onToggleDisplayingSubTasks} className="pl-1">
