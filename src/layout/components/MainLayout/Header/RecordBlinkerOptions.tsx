@@ -2,8 +2,8 @@ import { useNavigate } from 'react-router-dom';
 import { useMediaStream } from '../../../../features/task/taskService';
 import { IRecorderLastMemory } from '../../../../features/workspace/workspace.interfaces';
 import { resetWorkSpace } from '../../../../features/workspace/workspaceSlice';
-import { handleEntity } from './AdditionHeader';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
+import { handleEntity } from '../../../../utils/EntityTypes/EntitySwitch';
 
 export default function BlinkerModal() {
   const { recorder, stream } = useAppSelector((state) => state.task);

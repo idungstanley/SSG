@@ -51,5 +51,6 @@ export interface IWalletDetails {
 export interface IWalletDetailRes {
   data: {
     wallet: IWalletDetails;
+    lists: [];
   };
 }

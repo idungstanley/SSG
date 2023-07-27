@@ -175,13 +175,12 @@ export function Table({ heads, data, label }: TableProps) {
 
   return (
     <ScrollableContainer scrollDirection="x" onScroll={onScroll}>
-      {/* draggable item */}
+      {/* draggable item */}{' '}
       {draggableItem ? (
         <DragOverlay>
           <OverlayRow columns={columns} task={draggableItem} />
         </DragOverlay>
       ) : null}
-
       <div className="table-container" id={label}>
         <table
           onScroll={onScroll}

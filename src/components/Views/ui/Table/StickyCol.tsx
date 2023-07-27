@@ -189,8 +189,10 @@ export function StickyCol({
     }
   });
 
+  const { dragOverItemId, draggableItemId } = useAppSelector((state) => state.list);
+
   return (
-    <div ref={droppabbleRef}>
+    <div>
       {task.id !== '0' && (
         <td
           className="sticky left-0 flex items-center justify-start text-sm font-medium text-gray-900 cursor-pointer text-start"
@@ -217,7 +219,7 @@ export function StickyCol({
               ` border-t ${isChecked && 'tdListV'} ${verticalGrid && 'border-r'} ${
                 verticalGridlinesTask && 'border-r'
               } w-full py-4 flex items-center `,
-              isOver ? 'border-y-2 border-alsoit-purple-300' : ''
+              isOver && draggableItemId !== dragOverItemId ? 'border-b-2 border-alsoit-purple-300' : ''
             )}
           >
             <button onClick={onToggleDisplayingSubTasks} className="pl-1">
@@ -242,7 +244,7 @@ export function StickyCol({
               >
                 <div className="font-semibold alsoit-gray-300 text-alsoit-text-lg">
                   {singleLineView ? (
-                    <div contentEditable={eitableContent} ref={inputRef}>
+                    <div contentEditable={eitableContent} ref={droppabbleRef}>
                       {!eitableContent ? (
                         <DetailsOnHover
                           hoverElement={

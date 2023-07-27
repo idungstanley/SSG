@@ -58,7 +58,7 @@ export function PopAssignModal({
                     <div>
                       <AvatarWithInitials
                         initials={userData.user.initials}
-                        backgroundColour={userData.colour}
+                        backgroundColour={userData.user.color}
                         height="h-24"
                         width="w-24"
                         textSize="30px"

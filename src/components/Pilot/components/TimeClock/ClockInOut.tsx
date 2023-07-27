@@ -90,7 +90,7 @@ export default function ClockInOut() {
         activeItemId === timerLastMemory.taskId)
     ) {
       return (
-        <div className="items-center">
+        <div className="items-center text-alsoit-text-md">
           {`${String(duration.h).padStart(2, '0')}:${String(duration.m).padStart(2, '0')}:${String(duration.s).padStart(
             2,
             '0'
@@ -100,7 +100,7 @@ export default function ClockInOut() {
     }
 
     return (
-      <div className="items-center">
+      <div className="items-center text-alsoit-text-md">
         {`${String(time.h).padStart(2, '0')}:${String(time.m).padStart(2, '0')}:${String(time.s).padStart(2, '0')}`}
       </div>
     );
@@ -211,8 +211,8 @@ export default function ClockInOut() {
                   const { hours, minutes, seconds } = Duration({ dateString: trackers });
                   const { initials } = trackers.team_member.user;
                   return (
-                    <div key={trackers.id} className="flex items-center space-x-2 space-y-1 overflow-y-auto w-44 h-72">
-                      <div className="">
+                    <div key={trackers.id} className="flex items-center space-x-2 space-y-1 overflow-y-auto w-44 h-min">
+                      <div className="text-alsoit-text-md">
                         {`${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(
                           seconds
                         ).padStart(2, '0')}`}
