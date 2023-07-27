@@ -128,6 +128,7 @@ interface TaskState {
   taskStatus: string | null;
   showTaskNavigation: boolean;
   addNewTaskItem: boolean;
+  hilightNewTask: boolean;
   closeTaskListView: boolean;
   toggleAssignCurrentTaskId: string | null | undefined;
   currentParentTaskId: string | null;
@@ -193,6 +194,7 @@ const initialState: TaskState = {
   showNewTaskField: false,
   showNewTaskId: '',
   singleLineView: true,
+  hilightNewTask: false,
   selectedTasksArray: [],
   verticalGrid: false,
   taskUpperCase: false,
@@ -338,6 +340,9 @@ export const taskSlice = createSlice({
     },
     getCompactView(state, action: PayloadAction<boolean>) {
       state.CompactView = action.payload;
+    },
+    setHilightNewTask(state, action: PayloadAction<boolean>) {
+      state.hilightNewTask = action.payload;
     },
     setShowNewTaskField(state, action: PayloadAction<boolean>) {
       state.showNewTaskField = action.payload;
@@ -554,6 +559,7 @@ export const {
   getTableView,
   getBoardView,
   getCalendeView,
+  setHilightNewTask,
   getMapView,
   setTaskStatus,
   setShowTaskNavigation,

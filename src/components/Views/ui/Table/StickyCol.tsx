@@ -63,6 +63,7 @@ export function StickyCol({
   const { mutate: onAdd } = useAddTask(parentId);
   const { currTeamMemberId, singleLineView, verticalGrid, taskUpperCase, selectedTasksArray, verticalGridlinesTask } =
     useAppSelector((state) => state.task);
+  const { hilightNewTask } = useAppSelector((state) => state.task);
 
   const queryClient = useQueryClient();
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -103,7 +104,7 @@ export function StickyCol({
   useEffect(() => {
     const { current } = inputRef;
     current?.focus();
-    selectText(current);
+    if (eitableContent || hilightNewTask) selectText(current);
   }, [eitableContent]);
 
   const selectText = (element: Node | null) => {
@@ -236,23 +237,19 @@ export function StickyCol({
             <div className="flex flex-col flex-grow items-start justify-start pl-2 space-y-1">
               <div
                 className="relative flex w-full mt-1 items-center text-left"
-                contentEditable={eitableContent}
-                ref={inputRef}
                 onKeyDown={(e) => (e.key === 'Enter' ? handleEditTask(e, task.id) : null)}
                 suppressContentEditableWarning={true}
               >
                 <div className="font-semibold alsoit-gray-300 text-alsoit-text-lg">
-                  {task.name.length > 50 && singleLineView ? (
-                    <div>
+                  {singleLineView ? (
+                    <div contentEditable={eitableContent} ref={inputRef}>
                       {!eitableContent ? (
                         <DetailsOnHover
                           hoverElement={
                             <div
-                              className=""
                               style={{
                                 maxWidth: '200px',
                                 overflow: 'hidden',
-                                // fontWeight: 'lighter',
                                 textOverflow: 'ellipsis',
                                 whiteSpace: 'nowrap'
                               }}
@@ -265,7 +262,6 @@ export function StickyCol({
                         />
                       ) : (
                         <div
-                          className=""
                           style={{
                             maxWidth: '200px',
                             overflow: 'hidden',
@@ -277,7 +273,7 @@ export function StickyCol({
                       )}
                     </div>
                   ) : (
-                    <span>{taskUpperCase ? task.name.toUpperCase() : Capitalize(task.name)}</span>
+                    <div>{taskUpperCase ? task.name.toUpperCase() : Capitalize(task.name)}</div>
                   )}
                 </div>
                 {/* non default badges here */}
