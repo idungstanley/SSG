@@ -21,6 +21,7 @@ interface workspaceState {
   pilotWidth: number;
   showHub: boolean;
   fetchAllWorkspace: boolean;
+  isManageStatus: boolean;
   showWallet: boolean;
   extendedSidebarWidth: number;
   isResize: boolean;
@@ -84,6 +85,7 @@ const initialState: workspaceState = {
   showOverlay: false,
   showTabLabel: showTabLabelFromLS,
   showWallet: false,
+  isManageStatus: false,
   showMenuDropDown: false,
   showIndependentPilot: false,
   showModal: false,
@@ -144,6 +146,9 @@ export const wsSlice = createSlice({
     },
     setShowTreeInput(state, action: PayloadAction<boolean>) {
       state.showTreeInput = action.payload;
+    },
+    setIsManageStatus(state, action: PayloadAction<boolean>) {
+      state.isManageStatus = action.payload;
     },
     setShowTabLabel(state, action: PayloadAction<boolean>) {
       state.showTabLabel = action.payload;
@@ -396,6 +401,7 @@ export const {
   setShowIndependentPilot,
   setActiveSubHubManagerTabId,
   setLastActiveItem,
+  setIsManageStatus,
   setShowTabLabel
 } = wsSlice.actions;
 
