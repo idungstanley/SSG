@@ -234,7 +234,7 @@ export function Table({ heads, data, label }: TableProps) {
           {!showNewTaskField ? (
             <tbody className="h-5">
               <tr onClick={() => handleToggleNewTask()} className="absolute left-0 p-1.5 pl-16 text-left w-fit text-xs">
-                <td className="font-semibold alsoit-gray-300">+ New Task</td>
+                <td className="font-semibold alsoit-gray-300 cursor-pointer">+ New Task</td>
               </tr>
             </tbody>
           ) : null}
