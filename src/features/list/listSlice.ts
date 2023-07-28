@@ -12,6 +12,7 @@ interface ListState {
   listColour: ListColourProps | undefined | string;
   editList: boolean;
   draggableItemId: null | TaskId;
+  dragOverItemId: null | string;
 }
 
 const initialState: ListState = {
@@ -23,7 +24,8 @@ const initialState: ListState = {
   toggleArchiveList: false,
   listColour: { innerColour: 'white', outerColour: 'black' },
   editList: false,
-  draggableItemId: null
+  draggableItemId: null,
+  dragOverItemId: null
 };
 
 export const listSlice = createSlice({
@@ -32,6 +34,9 @@ export const listSlice = createSlice({
   reducers: {
     setDraggableItem: (state, action: PayloadAction<TaskId | null>) => {
       state.draggableItemId = action.payload;
+    },
+    setDragOverItem: (state, action: PayloadAction<TaskId | null>) => {
+      state.dragOverItemId = action.payload;
     },
     createList(state, action: PayloadAction<string>) {
       state.list.push(action.payload);
@@ -76,6 +81,7 @@ export const {
   setArchiveList,
   setToggleArchiveList,
   setListPaletteColor,
-  setEditList
+  setEditList,
+  setDragOverItem
 } = listSlice.actions;
 export default listSlice.reducer;
