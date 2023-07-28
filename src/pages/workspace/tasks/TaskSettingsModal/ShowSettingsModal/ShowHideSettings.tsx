@@ -56,7 +56,7 @@ export default function ShowHideSettings({
     },
     {
       id: 5,
-      label: 'Task GridLines'
+      label: 'Title Vertical Grid Line'
     },
     {
       id: 6,
