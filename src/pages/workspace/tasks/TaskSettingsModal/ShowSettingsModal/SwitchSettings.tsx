@@ -18,7 +18,7 @@ export function useSwitchSettings() {
       dispatch(getSingleLineView(!singleLineView));
     } else if (viewMode === 'Compact mode') {
       dispatch(getCompactView(!CompactView));
-    } else if (viewMode === 'Vertical Gridlines') {
+    } else if (viewMode === 'Property Vertical Grid Line') {
       dispatch(getVerticalGrid(!verticalGrid));
     } else if (viewMode === 'Upper Case') {
       dispatch(getTaskUpperCase(!taskUpperCase));

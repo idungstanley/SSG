@@ -16,7 +16,7 @@ export default function ListShow({ changeViews }: { changeViews: string }) {
           <ShowHideSettings
             scrollByEachGroup="Scroll By Each Group"
             splitSubTask="Split Sub Task"
-            verticalGridLines="Vertical Gridlines"
+            verticalGridLines="Property Vertical Grid Line"
             entityLocation="Entity Location"
             subTaskParentsNames="Subtask Parent Names"
             closedSubtask="Closed Subtask"
