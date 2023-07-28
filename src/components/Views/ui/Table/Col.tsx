@@ -62,7 +62,9 @@ export function Col({ value, field, fieldId, task, ...props }: ColProps) {
     <>
       <td
         className={cl(
-          dragOverItemId === task.id && draggableItemId !== dragOverItemId && 'border-b-2 border-alsoit-purple-300',
+          dragOverItemId === task.id && draggableItemId !== dragOverItemId
+            ? 'border-b-2 border-alsoit-purple-300'
+            : 'border-t',
           ACTIVE_TASK,
           `relative flex ${isSelected && 'tdListVNoSticky'} ${
             verticalGrid && 'border-r'

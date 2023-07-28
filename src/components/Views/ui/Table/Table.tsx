@@ -2,7 +2,13 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { DragOverlay } from '@dnd-kit/core';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { ITaskFullList, Task } from '../../../../features/task/interface.tasks';
-import { setCurrTaskListId, setCurrTeamMemId, setStatusId, setUpdateCords } from '../../../../features/task/taskSlice';
+import {
+  setCurrTaskListId,
+  setCurrTeamMemId,
+  setHilightNewTask,
+  setStatusId,
+  setUpdateCords
+} from '../../../../features/task/taskSlice';
 import { useScroll } from '../../../../hooks/useScroll';
 import { listColumnProps } from '../../../../pages/workspace/tasks/component/views/ListColumns';
 import { MAX_COL_WIDTH, MIN_COL_WIDTH } from '../../config';
@@ -155,10 +161,12 @@ export function Table({ heads, data, label }: TableProps) {
   const handleClose = () => {
     setShowNewTaskField(false);
     dispatch(setCurrTeamMemId(null));
+    dispatch(setHilightNewTask(true));
   };
 
   const handleToggleNewTask = () => {
     setShowNewTaskField(true);
+    dispatch(setHilightNewTask(true));
   };
 
   const onScroll = useScroll(() => dispatch(setUpdateCords()));
@@ -226,7 +234,7 @@ export function Table({ heads, data, label }: TableProps) {
           {!showNewTaskField ? (
             <tbody className="h-5">
               <tr onClick={() => handleToggleNewTask()} className="absolute left-0 p-1.5 pl-16 text-left w-fit text-xs">
-                <td className="font-semibold alsoit-gray-300">+ New Task</td>
+                <td className="font-semibold alsoit-gray-300 cursor-pointer">+ New Task</td>
               </tr>
             </tbody>
           ) : null}
