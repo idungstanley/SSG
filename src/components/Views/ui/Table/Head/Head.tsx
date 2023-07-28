@@ -147,11 +147,13 @@ export function Head({
               <span ref={scrollToRef} className="pb-1" style={{ fontSize: '11px', WebkitTextStroke: '0.5px' }}>
                 {parsedLabel}
               </span>
-              <p className="flex items-center space-x-1 viewSettings">
+              <div className=" items-center space-x-1 viewSettings">
                 <img src={statusbox} alt="" />
-                <CiEdit />
-                <BsThreeDots className="cursor-pointer" onClick={() => setShowStatusDropdown((prev) => !prev)} />
-              </p>
+                <p>
+                  <CiEdit />
+                  <BsThreeDots className="cursor-pointer" onClick={() => setShowStatusDropdown((prev) => !prev)} />
+                </p>
+              </div>
               <ModalDropdown
                 showModal={showStatusDropdown}
                 setShowModal={setShowStatusDropdown}
