@@ -147,7 +147,7 @@ export function Head({
               <span ref={scrollToRef} className="pb-1" style={{ fontSize: '11px', WebkitTextStroke: '0.5px' }}>
                 {parsedLabel}
               </span>
-              <div className=" items-center space-x-1 viewSettings">
+              <div className=" items-center space-x-1 viewSettings" onClick={(e) => e.stopPropagation()}>
                 <img src={statusbox} alt="" />
                 <p>
                   <CiEdit />

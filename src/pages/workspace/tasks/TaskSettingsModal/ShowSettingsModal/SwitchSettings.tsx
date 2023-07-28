@@ -22,7 +22,7 @@ export function useSwitchSettings() {
       dispatch(getVerticalGrid(!verticalGrid));
     } else if (viewMode === 'Upper Case') {
       dispatch(getTaskUpperCase(!taskUpperCase));
-    } else if (viewMode === 'Task GridLines') {
+    } else if (viewMode === 'Title Vertical Grid Line') {
       dispatch(getVerticalGridlinesTask(!verticalGridlinesTask));
     }
   };
