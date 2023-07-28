@@ -3,11 +3,9 @@ import CalendarIcon from '../../../../assets/icons/CalendarIcon';
 import SectionArea from '../SectionArea';
 import MiniDatePicker from '../../../DatePicker/MiniCalendar';
 import { useParams } from 'react-router-dom';
-import { getTaskListService } from '../../../../features/task/taskService';
+import { UseGetFullTaskList, getTaskListService } from '../../../../features/task/taskService';
 import { useAppSelector } from '../../../../app/hooks';
 // import Agenda from './Agenda';
-import { UseGetWalletDetails } from '../../../../features/wallet/walletService';
-import { UseGetHubDetails } from '../../../../features/hubs/hubService';
 
 export default function Calendar() {
   const [iconToggle, setIconToggle] = useState(false);
@@ -16,28 +14,41 @@ export default function Calendar() {
   const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
 
   const { data: list } = getTaskListService({ listId, assigneeUserId: filterTaskByAssigneeIds });
+  const { data: taskList } = UseGetFullTaskList({ itemId: activeItemId, itemType: activeItemType });
 
-  const { data: wallet } = UseGetWalletDetails({ activeItemId, activeItemType });
+  const entityHubData = () => {
+    if (activeItemType === 'hub' || activeItemType === 'wallet')
+      return taskList?.pages.flatMap((data) => data.data.tasks);
+  };
 
-  const { data: hub } = UseGetHubDetails({
-    activeItemId: hubId,
-    activeItemType: 'hub'
-  });
+  // type guards
+  // const isMyTaskData = (data: ImyTaskData | IWalletDetails | IHubDetails): data is ImyTaskData => {
+  //   return (data as ImyTaskData).start_date !== undefined && (data as ImyTaskData).end_date !== undefined;
+  // };
 
   const entityTaskData = useMemo(() => {
-    if (listId) {
-      return list?.pages.flatMap((page) => page.data.tasks);
+    if (listId && list) {
+      return list?.pages[0].data.tasks;
     }
-    if (walletId) {
-      return [wallet?.data.wallet];
-    }
-    if (hubId) {
-      return [hub?.data.hub];
+    if (walletId || (hubId && taskList)) {
+      return entityHubData();
     }
     return [];
-  }, [listId, list]);
+  }, [listId, list, entityHubData]);
 
-  console.log(entityTaskData);
+  const filterFields = entityTaskData && [
+    ...entityTaskData
+      .flatMap((item) => {
+        const custom_fields = item?.custom_fields;
+        return custom_fields || [];
+      })
+      .filter((field) => field !== undefined),
+    {
+      start_date: '2023-05-01',
+      end_date: '2023-05-01'
+    }
+  ];
+  console.log(filterFields);
   return (
     <div className="flex flex-col space-y-2">
       <div className="flex items-center w-full border-b-alsoit-border-base">

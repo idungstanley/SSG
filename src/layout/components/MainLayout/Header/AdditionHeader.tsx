@@ -185,12 +185,12 @@ export default function AdditionalHeader() {
             {moment(HeaderClock, 'DD-MM-YYYY hh:mm').format(date_format?.toUpperCase() ?? 'MM-DD-YYYY')}
           </span>
           {clockModal && (
-            <HeaderModal clickAway={true} toggleFn={setClockModal} styles="top-10 right-28">
+            <HeaderModal clickAway={true} toggleFn={setClockModal} styles="top-10 right-32 w-44">
               <HeaderTimeModal />
             </HeaderModal>
           )}
           {showClock.showMinimal && !clockModal && (
-            <HeaderModal toggleFn={setClockModal} styles="top-10 -right-9 h-16 w-32">
+            <HeaderModal toggleFn={setClockModal} styles="top-10 -right-5 h-12 w-28">
               <span className="bg-alsoit-gray-50 font-semibold text-alsoit-text-lg shadow-lg rounded border-alsoit-border-base border-alsoit-gray-75 text-center">
                 <p>{dayjs().format('DD MMMM, YYYY')}</p>
                 <p>{dayjs().format('dddd')}</p>
