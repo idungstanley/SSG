@@ -98,7 +98,7 @@ export default function MiniDatePicker() {
   return (
     <div className="w-full flex flex-col space-y-4 justify-center items-center">
       <div className="flex flex-col space-y-2 w-full justify-center">
-        <div className="flex justify-between px-2">
+        <div className="flex justify-between">
           <span className="text-alsoit-text-lg font-semibold">{today.format('MMMM, YYYY')}</span>
           <div className="flex space-x-4 items-center">
             <span
@@ -120,16 +120,16 @@ export default function MiniDatePicker() {
             </span>
           </div>
         </div>
-        <div className="w-full flex justify-center space-x-6">
+        <div className="w-full flex justify-center space-x-4">
           {rows[0].map(({ value }, i) => (
             <div key={i} className="px-1.5">
               {value.format('dd')}
             </div>
           ))}
         </div>
-        <div className="flex flex-col justify-center w-96 mx-auto">
+        <div className="flex flex-col justify-center w-full mx-auto">
           {rows.map((cells, rowIndex) => (
-            <div key={rowIndex} className="flex justify-center space-x-5 my-2">
+            <div key={rowIndex} className="flex justify-center space-x-3 my-2">
               {cells.map(({ text, value }, i) => (
                 <div
                   key={`${text}-${i}`}
