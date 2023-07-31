@@ -24,6 +24,7 @@ export default function InteractiveTooltip({
 
   const handleCloseTooltip = () => {
     // Delay the closure to give time for interaction
+    setIsTooltipOpen(false);
     tooltipTimeout.current = window.setTimeout(() => {
       setIsTooltipOpen(false);
     }, 200); // Adjust this delay time as needed (e.g., 200ms)
@@ -39,12 +40,12 @@ export default function InteractiveTooltip({
     <div
       className="relative inline-block transition-all duration-100 ease-out delay-300 group"
       onMouseEnter={handleOpenTooltip}
-      onMouseLeave={handleCloseTooltip}
     >
       {isTooltipOpen && (
         <div
           className={`absolute transition-all scale-0 group-hover:scale-100 ease-out delay-300 duration-100 ${zIndex} ${top} ${right} `}
           onClick={(e) => handleTooltipClick(e)}
+          onMouseLeave={handleCloseTooltip}
         >
           <div className="w-auto p-2 text-white rounded shadow-lg" style={{ backgroundColor: '#424242' }}>
             {content}
