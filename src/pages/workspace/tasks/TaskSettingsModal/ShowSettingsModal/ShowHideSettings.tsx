@@ -117,7 +117,7 @@ export default function ShowHideSettings({
       >
         <Menu.Items
           style={{ zIndex: 61 }}
-          className="origin-top-right absolute w-64 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none -ml-8 mt-6"
+          className="origin-top-right absolute w-64 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none -ml-14 mt-3"
         >
           <p className="text-sm flex justify-center pt-3">CUSTOMIZE THIS VIEW</p>
           <div className="relative flex justify-center flex-col mb-2">
@@ -147,8 +147,8 @@ export default function ShowHideSettings({
                   <p className="flex items-center space-x-2 pl-2 text-md whitespace-nowrap">{View.label}</p>
                   {View.label == 'Upper Case' && (
                     <p
-                      className="absolute text-xs text-gray-400 text-center w-2/6 bg-white border border-gray-100 px-1"
-                      style={{ top: '226px', right: '90px' }}
+                      className="absolute text-gray-400 text-center w-2/6 bg-white border border-gray-100 px-1"
+                      style={{ top: '226px', right: '90px', fontSize: '8px' }}
                     >
                       TEXT
                     </p>
