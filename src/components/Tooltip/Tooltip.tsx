@@ -1,17 +1,15 @@
 import { Tooltip, TooltipProps, styled, tooltipClasses } from '@mui/material';
-import React, { PropsWithChildren } from 'react';
+import React from 'react';
 // import { cl } from '../utils';
 
-type CustomToolTipProps = PropsWithChildren<TooltipProps & { color?: string }>;
-
-const ToolTip = styled(({ className, ...props }: CustomToolTipProps) => (
+const ToolTip = styled(({ className, ...props }: TooltipProps) => (
   <Tooltip {...props} arrow classes={{ popper: className }} />
-))(({ color, ...props }) => ({
+))(({ theme }) => ({
   [`& .${tooltipClasses.arrow}`]: {
-    color: color || props.theme.palette.common.black
+    color: theme.palette.common.black
   },
   [`& .${tooltipClasses.tooltip}`]: {
-    backgroundColor: color || props.theme.palette.common.black
+    backgroundColor: theme.palette.common.black
   }
 }));
 
