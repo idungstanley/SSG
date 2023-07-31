@@ -5,14 +5,15 @@ interface ChevronProps {
   onToggle: VoidFunction;
   active: boolean;
   color?: string;
+  hoverBg?: string;
 }
 
-export function Chevron({ onToggle, active, color }: ChevronProps) {
+export function Chevron({ onToggle, active, color, hoverBg }: ChevronProps) {
   const [isHovered, setIsHovered] = useState(false);
 
   const defaultStyle = {
-    color: isHovered ? 'white' : 'white',
-    backgroundColor: isHovered ? color : ''
+    color: isHovered ? color : 'white',
+    backgroundColor: isHovered ? hoverBg : color
   };
 
   return (
@@ -29,7 +30,7 @@ export function Chevron({ onToggle, active, color }: ChevronProps) {
       {active ? (
         <IoChevronForwardCircleOutline className="w-4 h-4 rounded-full" />
       ) : (
-        <IoChevronDownCircleOutline className="w-4 h-4 rounded-full" />
+        <IoChevronDownCircleOutline className="w-4 h-4 rounded-full " />
       )}
     </button>
   );

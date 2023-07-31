@@ -31,7 +31,7 @@ export function DatePickerSideBar({ currentDate }: DatePickerSideBarProp) {
     if (field.type === 'week') {
       return (
         <p
-          className="font-extrabold rounded-md hover:bg-alsoit-gray-75 hover:text-white text-xl flex justify-between px-2 py-0.5 w-full group"
+          className="font-extrabold rounded-md border hover:bg-alsoit-gray-75 hover:text-white text-xl flex justify-between px-2 py-0.5 w-full group"
           onClick={() => handleWeekButtonClick(field.depth)}
         >
           <span className="text-alsoit-text-md font-extrabold">Next {field.depth} weeks</span>
@@ -150,8 +150,8 @@ export function DatePickerSideBar({ currentDate }: DatePickerSideBarProp) {
   };
 
   return (
-    <div className="border-r text-sm border-gray-200 h-full">
-      <div className="border-b-2 flex justify-between items-center w-full px-2">
+    <div className="my-4 mx-2 p-2 rounded-md border-2" style={{ height: '94%' }}>
+      <div className="flex justify-between items-center w-full p-2">
         <span className="font-extrabold text-alsoit-text-lg">Recurring</span>
         <div
           onClick={() => setRecurring(!showRecurring)}
@@ -165,9 +165,9 @@ export function DatePickerSideBar({ currentDate }: DatePickerSideBarProp) {
       {showRecurring ? (
         <CustomSuggestion setRecurring={setRecurring} />
       ) : (
-        <div className="flex flex-col space-y-2 h-80 overflow-auto">
+        <div className="flex flex-col space-y-2 overflow-auto w-full mt-1" style={{ height: '340px' }}>
           <p
-            className="font-extrabold rounded-md hover:bg-alsoit-gray-75 hover:text-white text-xl flex justify-between px-2 py-0.5 w-full group"
+            className="font-extrabold rounded-md border hover:bg-alsoit-gray-75 hover:text-white text-xl flex justify-between px-2 py-0.5 w-full group"
             onClick={() => handleDayClick('today')}
           >
             <span className="text-alsoit-text-md font-extrabold">Today</span>
@@ -176,7 +176,7 @@ export function DatePickerSideBar({ currentDate }: DatePickerSideBarProp) {
             </span>
           </p>
           <p
-            className="font-extrabold rounded-md hover:bg-alsoit-gray-75 hover:text-white text-xl flex justify-between px-2 py-0.5 w-full group"
+            className="font-extrabold rounded-md border hover:bg-alsoit-gray-75 hover:text-white text-xl flex justify-between px-2 py-0.5 w-full group"
             onClick={() =>
               dispatch(
                 setHistoryMemory({
@@ -195,7 +195,7 @@ export function DatePickerSideBar({ currentDate }: DatePickerSideBarProp) {
             </span>
           </p>
           <p
-            className="font-extrabold rounded-md hover:bg-alsoit-gray-75 hover:text-white text-xl flex justify-between px-2 py-0.5 w-full group"
+            className="font-extrabold rounded-md border hover:bg-alsoit-gray-75 hover:text-white text-xl flex justify-between px-2 py-0.5 w-full group"
             onClick={() => handleDayClick('tomorrow')}
           >
             <span className="text-alsoit-text-md font-extrabold">Tomorrow</span>
@@ -204,7 +204,7 @@ export function DatePickerSideBar({ currentDate }: DatePickerSideBarProp) {
             </span>
           </p>
           <p
-            className="font-extrabold rounded-md hover:bg-alsoit-gray-75 hover:text-white text-xl flex justify-between px-2 py-0.5 w-full group"
+            className="font-extrabold rounded-md border hover:bg-alsoit-gray-75 hover:text-white text-xl flex justify-between px-2 py-0.5 w-full group"
             onClick={() => handleWeekendButtonClick('weekend')}
           >
             <span className="text-alsoit-text-md font-extrabold">This Weekend</span>
@@ -213,7 +213,7 @@ export function DatePickerSideBar({ currentDate }: DatePickerSideBarProp) {
             </span>
           </p>
           <p
-            className="font-extrabold rounded-md hover:bg-alsoit-gray-75 hover:text-white text-xl flex justify-between px-2 py-0.5 w-full group"
+            className="font-extrabold rounded-md border hover:bg-alsoit-gray-75 hover:text-white text-xl flex justify-between px-2 py-0.5 w-full group"
             onClick={() => handleWeekendButtonClick('next weekend')}
           >
             <span className="text-alsoit-text-md font-extrabold">Next Weekend</span>
@@ -222,7 +222,7 @@ export function DatePickerSideBar({ currentDate }: DatePickerSideBarProp) {
             </span>
           </p>
           <p
-            className="font-extrabold rounded-md hover:bg-alsoit-gray-75 hover:text-white text-xl flex justify-between px-2 py-0.5 w-full group"
+            className="font-extrabold rounded-md border hover:bg-alsoit-gray-75 hover:text-white text-xl flex justify-between px-2 py-0.5 w-full group"
             onClick={() => handleWeekClick()}
           >
             <span className="text-alsoit-text-md font-extrabold">Next Week</span>
@@ -231,7 +231,7 @@ export function DatePickerSideBar({ currentDate }: DatePickerSideBarProp) {
             </span>
           </p>
           <p
-            className="font-extrabold rounded-md hover:bg-alsoit-gray-75 hover:text-white text-xl flex justify-between px-2 py-0.5 w-full group"
+            className="font-extrabold rounded-md border hover:bg-alsoit-gray-75 hover:text-white text-xl flex justify-between px-2 py-0.5 w-full group"
             onClick={() => handleWeekButtonClick(1)}
           >
             <span className="text-alsoit-text-md font-extrabold">Next Work Week</span>
@@ -240,7 +240,7 @@ export function DatePickerSideBar({ currentDate }: DatePickerSideBarProp) {
             </span>
           </p>
           <p
-            className="font-extrabold rounded-md hover:bg-alsoit-gray-75 hover:text-white text-xl flex justify-between px-2 py-0.5 w-full group"
+            className="font-extrabold rounded-md border hover:bg-alsoit-gray-75 hover:text-white text-xl flex justify-between px-2 py-0.5 w-full group"
             onClick={() => handleWeekButtonClick(2)}
           >
             <span className="text-alsoit-text-md font-extrabold">Next 2 Work Weeks</span>

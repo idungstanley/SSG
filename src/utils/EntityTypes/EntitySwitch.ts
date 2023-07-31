@@ -1,5 +1,3 @@
-import { useAppDispatch } from '../../app/hooks';
-
 export const handleEntity = ({
   workSpaceId,
   hubId,

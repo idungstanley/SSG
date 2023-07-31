@@ -12,7 +12,7 @@ export default function CustomSuggestion({ setRecurring }: CustomSuggestionProps
     depth: 0,
     type: ''
   });
-  const [error, setError] = useState<{ monthErr: string; weekErr: string }>({
+  const [error, setError] = useState<{ monthErr: string; weekErr: string; numberErr?: string }>({
     monthErr: '',
     weekErr: ''
   });
@@ -23,14 +23,15 @@ export default function CustomSuggestion({ setRecurring }: CustomSuggestionProps
 
   const handleClick = () => {
     const { type, depth } = value as { type: string; depth: number };
-    if ((type === 'month' && depth <= 12 && depth > 0) || (type === 'week' && depth <= 5 && depth > 0)) {
+    if (!Number(depth)) return setError((prev) => ({ ...prev, numberErr: 'Only number values allowed for depth' }));
+    if ((type === 'month' && depth > 0) || (type === 'week' && depth > 0)) {
       dispatch(setCustomSuggetionsField({ depth, type, label: `${depth} ${type}}` }));
       setError({ monthErr: '', weekErr: '' });
       setRecurring && setRecurring(false);
     } else {
       type === 'month'
-        ? setError({ ...error, monthErr: 'Months depth can not be greater than 12 or less than 1' })
-        : setError({ ...error, weekErr: 'Week depth can not be more than 5 or less than 1' });
+        ? setError({ ...error, monthErr: 'Months depth can not be less than 1' })
+        : setError({ ...error, weekErr: 'Week depth can not be less than 1' });
     }
   };
 
@@ -56,13 +57,13 @@ export default function CustomSuggestion({ setRecurring }: CustomSuggestionProps
           id="depth"
           name="depth"
           className="w-36 h-7 rounded-md text-alsoit-text-md"
-          placeholder="2 for 2 weeks"
+          placeholder={value['type'] === 'week' ? '2 for 2 weeks' : '2 for 2 months'}
           onChange={(e) => handleChange(e)}
-          // style={{ appearance: 'none' }}
         />
       </label>
       {error.monthErr && <span className="text-alsoit-text-sm text-alsoit-danger text-center">{error.monthErr}</span>}
       {error.weekErr && <span className="text-alsoit-text-sm text-alsoit-danger text-center">{error.weekErr}</span>}
+      {error.numberErr && <span className="text-alsoit-text-sm text-alsoit-danger text-center">{error.numberErr}</span>}
       <div className="flex space-x-2">
         <button
           className="p-1 text-white bg-alsoit-gray-200 hover:bg-alsoit-gray-75 cursor-pointer rounded-md"

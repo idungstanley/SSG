@@ -15,7 +15,7 @@ import { deleteListManager } from '../../managers/List';
 
 interface TaskCountProps {
   data: {
-    task_status_counts: taskCountFields[];
+    task_statuses: taskCountFields[];
   };
 }
 
@@ -181,7 +181,7 @@ export const GetTaskListCount = (value: { query: string; fetchTaskCount: boolean
     {
       enabled: value.fetchTaskCount,
       onSuccess: (data: TaskCountProps) => {
-        console.log(data.data.task_status_counts);
+        console.log(data.data.task_statuses);
       }
     }
   );
