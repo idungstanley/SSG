@@ -1,11 +1,11 @@
 import dayjs from 'dayjs';
 import { useMemo, useState } from 'react';
 import { changeDateMonth, getCalendarRows } from '../../utils/calendar';
-import ArrowRight from '../../assets/icons/ArrowRight';
-import ArrowLeft from '../../assets/icons/ArrowLeft';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { setSelectedDate } from '../../features/workspace/workspaceSlice';
 import { setHistoryMemory, setTaskSelectedDate } from '../../features/task/taskSlice';
+import CircleArrowLeft from '../../assets/icons/CircleArrowLeft';
+import CircleArrowRight from '../../assets/icons/CircleArrowRight';
 
 export default function MiniDatePicker() {
   const dispatch = useAppDispatch();
@@ -99,23 +99,23 @@ export default function MiniDatePicker() {
     <div className="w-full flex flex-col space-y-4 justify-center items-center my-2">
       <div className="flex flex-col space-y-2 w-full justify-center">
         <div className="flex justify-end my-1">
-          <div className="flex space-x-4 items-center">
+          <div className="flex space-x-2 items-center">
+            <span>{shownDate.format('MMMM')}</span>
             <span
               className="font-bold text-xs cursor-pointer"
               onClick={() => handleIconClick(false)}
               onMouseEnter={() => setIconToggle((prev) => ({ ...prev, leftIcon: true }))}
               onMouseLeave={() => setIconToggle((prev) => ({ ...prev, leftIcon: false }))}
             >
-              <ArrowLeft active={iconToggle.leftIcon} />
+              <CircleArrowLeft active={iconToggle.leftIcon} />
             </span>
-            <span>{shownDate.format('MMMM')}</span>
             <span
               className="font-bold text-xs cursor-pointer"
               onClick={() => handleIconClick(true)}
               onMouseEnter={() => setIconToggle((prev) => ({ ...prev, rightIcon: true }))}
               onMouseLeave={() => setIconToggle((prev) => ({ ...prev, rightIcon: false }))}
             >
-              <ArrowRight active={iconToggle.rightIcon} />
+              <CircleArrowRight active={iconToggle.rightIcon} />
             </span>
           </div>
         </div>
