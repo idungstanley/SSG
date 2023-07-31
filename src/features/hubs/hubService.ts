@@ -3,11 +3,13 @@ import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import requestNew from '../../app/requestNew';
-import { IResponseGetHubs, IHubReq, IFavoritesRes, IHubDetailRes, IHubsRes } from './hubs.interfaces';
-import { closeMenu, setShowFavEditInput, setTriggerFavUpdate } from './hubSlice';
+import { IResponseGetHubs, IHubReq, IFavoritesRes, IHubDetailRes, IHubsRes, IHub } from './hubs.interfaces';
+import { closeMenu, getHub, setShowFavEditInput, setTriggerFavUpdate } from './hubSlice';
 import { setArchiveHub, setDelHub } from './hubSlice';
 import { generateFilters } from '../../components/TasksHeader/lib/generateFilters';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
+import { setFilteredResults } from '../search/searchSlice';
+import { deleteHubManager } from '../../managers/Hub';
 
 const moveHub = (data: { parent_id: string; hubId: string }) => {
   const { hubId, parent_id } = data;
@@ -186,6 +188,11 @@ export const useGetSubHub = ({ parentId }: { parentId: string | null }) => {
 };
 
 //edit a hub
+interface IResponseHub {
+  data: {
+    hub: IHub;
+  };
+}
 export const useEditHubService = (data: {
   name?: string;
   currentWorkspaceId?: string;
@@ -193,7 +200,7 @@ export const useEditHubService = (data: {
   description?: string | null | undefined;
   color?: string | null | { innerColour?: string; outterColour?: string };
 }) => {
-  const response = requestNew({
+  const response = requestNew<IResponseHub>({
     url: `hubs/${data.currHubId}`,
     method: 'POST',
     params: {
@@ -207,10 +214,10 @@ export const useEditHubService = (data: {
 };
 
 //Delete a Hub
-export const UseDeleteHubService = (data: { query: string | null | undefined; delHub: boolean }) => {
+export const UseDeleteHubService = (data: { id: string | null | undefined; delHub: boolean }) => {
   const dispatch = useDispatch();
-  const hubid = data.query;
-  const queryClient = useQueryClient();
+  const hubid = data.id;
+  const { hub } = useAppSelector((state) => state.hub);
   return useQuery(
     ['hubs'],
     async () => {
@@ -226,7 +233,9 @@ export const UseDeleteHubService = (data: { query: string | null | undefined; de
       // retry: false,
       onSuccess: () => {
         dispatch(setDelHub(false));
-        queryClient.invalidateQueries(['retrieve']);
+        const updatedTree = deleteHubManager(hubid as string, hub);
+        dispatch(getHub(updatedTree));
+        dispatch(setFilteredResults(updatedTree));
       }
     }
   );
