@@ -5,7 +5,6 @@ import { FiChevronRight } from 'react-icons/fi';
 import Icons from '../../../../../components/Icons/Icons';
 import DropDown from '../../../../../assets/icons/arrow_drop_down_black.svg';
 import { useSwitchSettings } from './SwitchSettings';
-import { Label } from '../../../../../components/TasksHeader/ui/Filter/ui/FilterItem/Label';
 
 interface IShowHideSettings {
   scrollByEachGroup: string;
@@ -103,10 +102,15 @@ export default function ShowHideSettings({
       setCheckedStates((prev: boolean[]) => {
         const newState = [...prev];
         const singleLineIndex = ViewSettings.findIndex((item) => item.label === 'Single Line mode');
+        const TitleVerticalGridLineIndex = ViewSettings.findIndex((item) => item.label === 'Title Vertical Grid Line');
+
         newState[singleLineIndex] = true;
+        newState[TitleVerticalGridLineIndex] = true;
+
         return newState;
       });
     };
+
     handleCheckboxChange();
   }, []);
 
