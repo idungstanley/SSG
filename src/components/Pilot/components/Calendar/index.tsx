@@ -3,19 +3,52 @@ import CalendarIcon from '../../../../assets/icons/CalendarIcon';
 import SectionArea from '../SectionArea';
 import MiniDatePicker from '../../../DatePicker/MiniCalendar';
 import { useParams } from 'react-router-dom';
-import { getTaskListService } from '../../../../features/task/taskService';
+import { UseGetFullTaskList, getTaskListService } from '../../../../features/task/taskService';
 import { useAppSelector } from '../../../../app/hooks';
-import Agenda from './Agenda';
+// import Agenda from './Agenda';
 
 export default function Calendar() {
   const [iconToggle, setIconToggle] = useState(false);
-  const { listId } = useParams();
+  const { listId, walletId, hubId } = useParams();
   const { filterTaskByAssigneeIds } = useAppSelector((state) => state.task);
+  const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
 
-  const { data } = getTaskListService({ listId, assigneeUserId: filterTaskByAssigneeIds });
+  const { data: list } = getTaskListService({ listId, assigneeUserId: filterTaskByAssigneeIds });
+  const { data: taskList } = UseGetFullTaskList({ itemId: activeItemId, itemType: activeItemType });
 
-  const entityTaskData = useMemo(() => data?.pages.flatMap((page) => page.data.tasks), [data]);
+  const entityHubData = () => {
+    if (activeItemType === 'hub' || activeItemType === 'wallet')
+      return taskList?.pages.flatMap((data) => data.data.tasks);
+  };
 
+  // type guards
+  // const isMyTaskData = (data: ImyTaskData | IWalletDetails | IHubDetails): data is ImyTaskData => {
+  //   return (data as ImyTaskData).start_date !== undefined && (data as ImyTaskData).end_date !== undefined;
+  // };
+
+  const entityTaskData = useMemo(() => {
+    if (listId && list) {
+      return list?.pages[0].data.tasks;
+    }
+    if (walletId || (hubId && taskList)) {
+      return entityHubData();
+    }
+    return [];
+  }, [listId, list, entityHubData]);
+
+  const filterFields = entityTaskData && [
+    ...entityTaskData
+      .flatMap((item) => {
+        const custom_fields = item?.custom_fields;
+        return custom_fields || [];
+      })
+      .filter((field) => field !== undefined),
+    {
+      start_date: '2023-05-01',
+      end_date: '2023-05-01'
+    }
+  ];
+  console.log(filterFields);
   return (
     <div className="flex flex-col space-y-2">
       <div className="flex items-center w-full border-b-alsoit-border-base">
@@ -29,7 +62,7 @@ export default function Calendar() {
       <div className="flex justify-center w-full px-2 pt-6">
         <MiniDatePicker />
       </div>
-      {entityTaskData?.length && <Agenda entityTaskData={entityTaskData} />}
+      {/* {entityTaskData?.length && <Agenda entityTaskData={entityTaskData} />} */}
     </div>
   );
 }

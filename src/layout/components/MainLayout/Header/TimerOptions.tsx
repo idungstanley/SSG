@@ -1,9 +1,9 @@
 import { useNavigate } from 'react-router-dom';
 import { resetWorkSpace } from '../../../../features/workspace/workspaceSlice';
-import { handleEntity } from './AdditionHeader';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { EndTimeEntriesService } from '../../../../features/task/taskService';
 import { setTimerInterval, setTimerStatus, setUpdateTimerDuration } from '../../../../features/task/taskSlice';
+import { handleEntity } from '../../../../utils/EntityTypes/EntitySwitch';
 
 export default function TimerModal() {
   const dispatch = useAppDispatch();

@@ -21,10 +21,9 @@ interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
 
 export function Col({ value, field, fieldId, task, ...props }: ColProps) {
   const { taskId } = useParams();
+  const { dragOverItemId, draggableItemId } = useAppSelector((state) => state.list);
   const ACTIVE_TASK = taskId === task.id ? 'tdListVNoSticky' : DEFAULT_COL_BG;
-  const { singleLineView, verticalGrid, currentTaskId, showTaskNavigation, selectedTasksArray } = useAppSelector(
-    (state) => state.task
-  );
+  const { singleLineView, verticalGrid, selectedTasksArray } = useAppSelector((state) => state.task);
   const isSelected = selectedTasksArray.includes(task.id);
 
   const dispatch = useAppDispatch();
@@ -63,8 +62,11 @@ export function Col({ value, field, fieldId, task, ...props }: ColProps) {
     <>
       <td
         className={cl(
+          dragOverItemId === task.id && draggableItemId !== dragOverItemId
+            ? 'border-b-2 border-alsoit-purple-300'
+            : 'border-t',
           ACTIVE_TASK,
-          `relative flex border-t ${isSelected && 'tdListVNoSticky'} ${
+          `relative flex ${isSelected && 'tdListVNoSticky'} ${
             verticalGrid && 'border-r'
           } justify-center items-center text-sm font-medium text-gray-900 `
         )}

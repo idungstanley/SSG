@@ -80,6 +80,7 @@ export interface ITeamMember {
     email: string;
     avatar_path: null | string;
     initials: string;
+    color?: string;
   };
   role: {
     key: string;
@@ -88,7 +89,7 @@ export interface ITeamMember {
   last_activity_at: string;
   invited_at: string;
   accepted_invite_at: string;
-  colour: string;
+  color: string;
   initials: string;
   is_active: boolean;
   created_at: string;

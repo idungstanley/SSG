@@ -141,7 +141,7 @@ export default function EntryList({ entries, switchHeader }: EntryListProps) {
               }))
             }
           >
-            <EditIcon active={iconToggle.editIcon} dimensions={{ width: 20, height: 12 }} aria-hidden="true" />
+            <EditIcon active={iconToggle.editIcon} dimensions={{ width: 20, height: 20 }} aria-hidden="true" />
           </div>
         </button>
         {openUpdateEntryId == entries.id ? (
@@ -162,7 +162,7 @@ export default function EntryList({ entries, switchHeader }: EntryListProps) {
               }))
             }
           >
-            <TrashIcon active={iconToggle.trashIcon} dimensions={{ width: 20, height: 12 }} aria-hidden="true" />
+            <TrashIcon active={iconToggle.trashIcon} dimensions={{ width: 20, height: 20 }} aria-hidden="true" />
           </div>
         </button>
       </td>

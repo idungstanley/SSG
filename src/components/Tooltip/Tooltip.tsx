@@ -3,7 +3,7 @@ import React from 'react';
 // import { cl } from '../utils';
 
 const ToolTip = styled(({ className, ...props }: TooltipProps) => (
-  <Tooltip {...props} arrow classes={{ popper: className }} />
+  <Tooltip {...props} arrow classes={{ popper: className }} placement="top" />
 ))(({ theme }) => ({
   [`& .${tooltipClasses.arrow}`]: {
     color: theme.palette.common.black

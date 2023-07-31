@@ -5,6 +5,7 @@ import { FiChevronRight } from 'react-icons/fi';
 import Icons from '../../../../../components/Icons/Icons';
 import DropDown from '../../../../../assets/icons/arrow_drop_down_black.svg';
 import { useSwitchSettings } from './SwitchSettings';
+import { Label } from '../../../../../components/TasksHeader/ui/Filter/ui/FilterItem/Label';
 
 interface IShowHideSettings {
   scrollByEachGroup: string;
@@ -55,7 +56,7 @@ export default function ShowHideSettings({
     },
     {
       id: 5,
-      label: 'Task GridLines'
+      label: 'Title Vertical Grid Line'
     },
     {
       id: 6,
@@ -116,7 +117,7 @@ export default function ShowHideSettings({
       >
         <Menu.Items
           style={{ zIndex: 61 }}
-          className="origin-top-right absolute w-64 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none -ml-8 mt-6"
+          className="origin-top-right absolute w-64 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none -ml-14 mt-3"
         >
           <p className="text-sm flex justify-center pt-3">CUSTOMIZE THIS VIEW</p>
           <div className="relative flex justify-center flex-col mb-2">
@@ -138,12 +139,20 @@ export default function ShowHideSettings({
               {View.label !== 'Remove Single Line mode' ? (
                 <button
                   className={`${
-                    View.id == 6
-                      ? ' flex justify-between items-center w-full group border-b-2 pb-4'
+                    View.label == 'Upper Case'
+                      ? ' flex justify-between items-center w-full group border-y-2 py-4'
                       : ' flex justify-between items-center w-full group '
                   }`}
                 >
                   <p className="flex items-center space-x-2 pl-2 text-md whitespace-nowrap">{View.label}</p>
+                  {View.label == 'Upper Case' && (
+                    <p
+                      className="absolute text-gray-400 text-center w-2/6 bg-white border border-gray-100 px-1"
+                      style={{ top: '226px', right: '90px', fontSize: '8px' }}
+                    >
+                      TEXT
+                    </p>
+                  )}
                   <p className="flex items-center pr-2 ">
                     <label className="switch" onClick={(event) => event.stopPropagation()}>
                       <input
