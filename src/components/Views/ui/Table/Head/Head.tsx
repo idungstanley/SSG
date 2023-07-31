@@ -155,24 +155,27 @@ export function Head({
               className="py-0.5 relative px-2 rounded-tr-md -mb-1 flex items-center space-x-1 text-white dFlex "
               style={{ backgroundColor: headerStatusColor }}
             >
-              <p className="">
-                <Chevron
-                  color={headerStatusColor}
-                  active={collapseTasks}
-                  onToggle={onToggleCollapseTasks}
-                  hoverBg="white"
-                />
-              </p>
-              <span ref={scrollToRef} className="pb-1" style={{ fontSize: '11px', WebkitTextStroke: '0.5px' }}>
-                {parsedLabel}
-              </span>
-              <div className=" items-center space-x-1 viewSettings" onClick={(e) => e.stopPropagation()}>
-                <img src={statusbox} alt="" />
-                <p>
+              <div>
+                <div className=" items-center space-x-1 viewSettings" onClick={(e) => e.stopPropagation()}>
+                  <img src={statusbox} alt="" />
                   <CiEdit />
                   <BsThreeDots className="cursor-pointer" onClick={() => setShowStatusDropdown((prev) => !prev)} />
-                </p>
+                </div>
+                <div className="flex">
+                  <p>
+                    <Chevron
+                      color={headerStatusColor}
+                      active={collapseTasks}
+                      onToggle={onToggleCollapseTasks}
+                      hoverBg="white"
+                    />
+                  </p>
+                  <span ref={scrollToRef} className="pb-1" style={{ fontSize: '11px', WebkitTextStroke: '0.5px' }}>
+                    {parsedLabel}
+                  </span>
+                </div>
               </div>
+
               <ModalDropdown
                 showModal={showStatusDropdown}
                 setShowModal={setShowStatusDropdown}
