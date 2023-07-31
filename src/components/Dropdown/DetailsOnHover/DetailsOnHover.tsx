@@ -29,6 +29,7 @@ export default function DetailsOnHover({ content, hoverElement, additionalStyles
         onMouseEnter={handlePopoverOpen}
         onMouseLeave={handlePopoverClose}
         className="font-semibold alsoit-gray-300 text-alsoit-text-lg flex items-center"
+        // style={{ maxWidth: '40%' }}
       >
         {hoverElement ? hoverElement : content}
       </div>

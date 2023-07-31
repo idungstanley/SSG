@@ -22,6 +22,7 @@ import PlusIcon from '../../../../../assets/icons/PlusIcon';
 import { TbAlignJustified } from 'react-icons/tb';
 import { MdEditNote } from 'react-icons/md';
 import { BiHide } from 'react-icons/bi';
+import { setIsManageStatus } from '../../../../../features/workspace/workspaceSlice';
 
 interface HeadProps {
   columns: Column[];
@@ -64,6 +65,7 @@ export function Head({
   const [showSortModal, setShowSortModal] = useState<boolean>(false);
   const { sortArr, sortAbleArr } = useAppSelector((state) => state.task);
   const { baseColor } = useAppSelector((state) => state.account);
+  const { isManageStatus } = useAppSelector((state) => state.workspace);
 
   const headerTxt = (title: string) =>
     title === 'Assignees'
@@ -111,6 +113,10 @@ export function Head({
     setAnchorEl(event.currentTarget);
   };
 
+  const handleCloseManageStatus = () => {
+    dispatch(setIsManageStatus);
+  };
+
   const dirCheck = (col: string): SortOption | undefined => {
     return sortAbleArr.find((el) => el.field === headerTxt(col));
   };
@@ -121,8 +127,21 @@ export function Head({
     { label: 'Select all', icon: <TbAlignJustified />, handleClick: () => ({}) },
     { label: 'Collapse group', icon: <MdEditNote />, handleClick: () => ({}) },
     { label: 'Collapse all groups', icon: <MdEditNote />, handleClick: () => ({}) },
-    { label: 'Hide status', icon: <BiHide />, handleClick: () => ({}) },
-    { label: 'Manage statuses', icon: <CiSettings />, handleClick: () => ({}) }
+    {
+      label: 'Hide status',
+      icon: <BiHide />,
+      handleClick: () => {
+        dispatch(setIsManageStatus(!isManageStatus));
+      }
+    },
+    {
+      label: 'Manage statuses',
+      icon: <CiSettings />,
+      handleClick: () => {
+        dispatch(setIsManageStatus(!isManageStatus));
+        setShowStatusDropdown(false);
+      }
+    }
   ];
 
   return columns.length > 0 ? (
@@ -136,17 +155,27 @@ export function Head({
               className="py-0.5 relative px-2 rounded-tr-md -mb-1 flex items-center space-x-1 text-white dFlex "
               style={{ backgroundColor: headerStatusColor }}
             >
-              <p className="">
-                <Chevron color={headerStatusColor} active={collapseTasks} onToggle={onToggleCollapseTasks} />
-              </p>
-              <span ref={scrollToRef} className="pb-1" style={{ fontSize: '11px', WebkitTextStroke: '0.5px' }}>
-                {parsedLabel}
-              </span>
-              <p className="flex items-center space-x-1 viewSettings">
-                <img src={statusbox} alt="" />
-                <CiEdit />
-                <BsThreeDots className="cursor-pointer" onClick={() => setShowStatusDropdown((prev) => !prev)} />
-              </p>
+              <div>
+                <div className=" items-center space-x-1 viewSettings" onClick={(e) => e.stopPropagation()}>
+                  <img src={statusbox} alt="" />
+                  <CiEdit />
+                  <BsThreeDots className="cursor-pointer" onClick={() => setShowStatusDropdown((prev) => !prev)} />
+                </div>
+                <div className="flex">
+                  <p>
+                    <Chevron
+                      color={headerStatusColor}
+                      active={collapseTasks}
+                      onToggle={onToggleCollapseTasks}
+                      hoverBg="white"
+                    />
+                  </p>
+                  <span ref={scrollToRef} className="pb-1" style={{ fontSize: '11px', WebkitTextStroke: '0.5px' }}>
+                    {parsedLabel}
+                  </span>
+                </div>
+              </div>
+
               <ModalDropdown
                 showModal={showStatusDropdown}
                 setShowModal={setShowStatusDropdown}
@@ -248,7 +277,6 @@ export function Head({
                     </span>
                   )}
                 </div>
-
                 <div
                   className="absolute top-0 block w-2 cursor-move -right-3 idle"
                   style={{ height: tableHeight }}

@@ -17,10 +17,11 @@ export interface IField {
 export interface taskCountFields {
   created_at: string;
   id: string;
+  name: string;
   list_id: string;
   task_status: { id: string; name: string; color: string; position: number; type: string };
   task_status_id: string;
-  tasks_count: number;
+  task_status_counts: number;
   updated_at: string;
 }
 

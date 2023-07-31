@@ -161,7 +161,7 @@ export default function ListViewSettingsModal({
       >
         <Menu.Items
           style={{ zIndex: 61 }}
-          className="absolute w-48 mt-2 mt-6 -ml-8 origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+          className="absolute w-48 mt-3 -ml-12 origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
         >
           {ViewSettings.map((View) => (
             <Menu.Item
