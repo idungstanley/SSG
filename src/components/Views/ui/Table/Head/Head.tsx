@@ -137,7 +137,7 @@ export function Head({
               style={{ backgroundColor: headerStatusColor }}
             >
               <div>
-                <div className=" items-center space-x-1 viewSettings" onClick={(e) => e.stopPropagation()}>
+                <div className=" items-center ml-0.5 space-x-1 viewSettings" onClick={(e) => e.stopPropagation()}>
                   <img src={statusbox} alt="" />
                   <CiEdit />
                   <BsThreeDots className="cursor-pointer" onClick={() => setShowStatusDropdown((prev) => !prev)} />
