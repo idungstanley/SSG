@@ -12,7 +12,7 @@ import { UseGetHubDetails } from '../hubs/hubService';
 
 interface TaskCountProps {
   data: {
-    task_status_counts: taskCountFields[];
+    task_statuses: taskCountFields[];
   };
 }
 
@@ -158,9 +158,7 @@ export const UseDeleteListService = (data: { query: string | null | undefined; d
 };
 
 export const GetTaskListCount = (value: { query: string; fetchTaskCount: boolean }) => {
-  const dispatch = useDispatch();
   const listId = value.query;
-  const queryClient = useQueryClient();
   return useQuery(
     ['task-count', { listId }],
     async () => {
@@ -173,7 +171,7 @@ export const GetTaskListCount = (value: { query: string; fetchTaskCount: boolean
     {
       enabled: value.fetchTaskCount,
       onSuccess: (data: TaskCountProps) => {
-        console.log(data.data.task_status_counts);
+        console.log(data.data.task_statuses);
       }
     }
   );
