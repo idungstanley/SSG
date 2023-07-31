@@ -96,10 +96,9 @@ export default function MiniDatePicker() {
   };
 
   return (
-    <div className="w-full flex flex-col space-y-4 justify-center items-center">
+    <div className="w-full flex flex-col space-y-4 justify-center items-center my-2">
       <div className="flex flex-col space-y-2 w-full justify-center">
-        <div className="flex justify-between">
-          <span className="text-alsoit-text-lg font-semibold">{today.format('MMMM, YYYY')}</span>
+        <div className="flex justify-end my-1">
           <div className="flex space-x-4 items-center">
             <span
               className="font-bold text-xs cursor-pointer"
@@ -122,18 +121,18 @@ export default function MiniDatePicker() {
         </div>
         <div className="w-full flex justify-center space-x-4">
           {rows[0].map(({ value }, i) => (
-            <div key={i} className="px-1.5">
+            <div key={i} className="px-1.5 bg-alsoit-gray-50 rounded-md p-1">
               {value.format('dd')}
             </div>
           ))}
         </div>
         <div className="flex flex-col justify-center w-full mx-auto">
           {rows.map((cells, rowIndex) => (
-            <div key={rowIndex} className="flex justify-center space-x-3 my-2">
+            <div key={rowIndex} className="flex justify-center space-x-3 my-1">
               {cells.map(({ text, value }, i) => (
                 <div
                   key={`${text}-${i}`}
-                  className={`w-5 h-5 flex justify-center items-center rounded-full p-4 text-alsoit-text-lg font-semibold cursor-pointer ${
+                  className={`w-5 h-5 flex justify-center items-center rounded-md p-4 text-alsoit-text-lg font-semibold cursor-pointer ${
                     isStartDate(value)
                       ? 'bg-blue-600 text-white'
                       : isEndDate(value)
@@ -144,7 +143,9 @@ export default function MiniDatePicker() {
                       ? 'bg-blue-200'
                       : ''
                   } ${value.month() !== today.month() ? 'text-alsoit-gray-75' : 'text-alsoit-gray-200'} ${
-                    today.date() === value.date() && today.month() === value.month() && 'bg-blue-400 text-white'
+                    today.date() === value.date() &&
+                    today.month() === value.month() &&
+                    'bg-alsoit-purple-300 text-white'
                   }`}
                   onClick={() => handleClick(value)}
                   onMouseEnter={() => handleHoverDate(value)}
