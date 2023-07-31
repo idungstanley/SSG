@@ -49,7 +49,7 @@ export default function Badges({ task }: BadgeTask) {
 
         {task.descendants_count > 0 && (
           <ToolTip tooltip="Subtask">
-            <button className="p-1 border rounded-md " onClick={(e) => onShowAddSubtaskField(e, task.id)}>
+            <button className="relative p-1 border rounded-md" onClick={(e) => onShowAddSubtaskField(e, task.id)}>
               <SubtaskWithCount />
               <p className="alsoit-text-sm h-2 w-2 absolute left-5 bottom-3.5">{task.descendants_count}</p>
             </button>
