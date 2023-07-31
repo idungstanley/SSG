@@ -2,9 +2,10 @@ import React, { Fragment, useEffect, useState } from 'react';
 import { Menu, Transition } from '@headlessui/react';
 import { BsChevronRight } from 'react-icons/bs';
 import { FiChevronRight } from 'react-icons/fi';
-import Icons from '../../../../../components/Icons/Icons';
-import DropDown from '../../../../../assets/icons/arrow_drop_down_black.svg';
 import { useSwitchSettings } from './SwitchSettings';
+import ShowIcon from '../../../../../assets/icons/ShowIcon';
+import ArrowDrop from '../../../../../assets/icons/ArrowDrop';
+import Button from '../../../../../components/Buttons/Button';
 
 interface IShowHideSettings {
   scrollByEachGroup: string;
@@ -30,6 +31,8 @@ export default function ShowHideSettings({
   emptyStatuses
 }: IShowHideSettings) {
   const [checkedStates, setCheckedStates] = useState<boolean[]>([]);
+  const [isAnyactive, setIsAnyactive] = useState<boolean>();
+  const isActiveColor = isAnyactive ? '#BF01FE' : 'black';
 
   const switchSettings = useSwitchSettings();
 
@@ -98,6 +101,11 @@ export default function ShowHideSettings({
   ];
 
   useEffect(() => {
+    const isAnyTrue = checkedStates.some((value) => value === true);
+    setIsAnyactive(isAnyTrue);
+  }, [checkedStates]);
+
+  useEffect(() => {
     const handleCheckboxChange = () => {
       setCheckedStates((prev: boolean[]) => {
         const newState = [...prev];
@@ -116,9 +124,11 @@ export default function ShowHideSettings({
 
   return (
     <Menu>
-      <div className="viewSettingsParent flex justify-center items-center">
-        <Menu.Button>
-          <Icons src={DropDown} />
+      <div className={`viewSettingsParent flex justify-center items-center text-${isAnyactive && 'alsoit-purple-50'}`}>
+        <Menu.Button className="flex ml-1">
+          <Button active={isAnyactive as boolean}>
+            <ShowIcon color={isActiveColor} /> <span>Show</span> <ArrowDrop color={isActiveColor} />
+          </Button>
         </Menu.Button>
       </div>
 
@@ -133,7 +143,7 @@ export default function ShowHideSettings({
       >
         <Menu.Items
           style={{ zIndex: 61 }}
-          className="origin-top-right absolute w-64 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none -ml-14 mt-3"
+          className="origin-top-right absolute w-64 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none  mt-3"
         >
           <p className="text-sm flex justify-center pt-3">CUSTOMIZE THIS VIEW</p>
           <div className="relative flex justify-center flex-col mb-2">

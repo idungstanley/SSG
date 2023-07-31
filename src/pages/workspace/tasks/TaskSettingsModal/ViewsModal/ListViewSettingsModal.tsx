@@ -20,8 +20,12 @@ import mapIcon from '../../../../../assets/icons/mapIcon.png';
 import gantIcon from '../../../../../assets/icons/gantIcon.png';
 import teamIcon from '../../../../../assets/icons/teamIcon.png';
 import ArrowDownFilled from '../../../../../assets/icons/ArrowDownFilled';
+import Button from '../../../../../components/Buttons/Button';
+import Icons from '../../../../../components/Icons/Icons';
+import List from '../../../../../assets/icons/list.svg';
 
 export default function ListViewSettingsModal({
+  isActive,
   list,
   table,
   board,
@@ -31,6 +35,7 @@ export default function ListViewSettingsModal({
   gantt,
   team
 }: {
+  isActive: string;
   list: string;
   table: string;
   board: string;
@@ -146,7 +151,9 @@ export default function ListViewSettingsModal({
     <Menu>
       <div className="flex items-center justify-center viewSettingsParent">
         <Menu.Button>
-          <ArrowDownFilled active={true} />
+          <Button active={true}>
+            <Icons src={List} /> <span>{isActive}</span> <ArrowDownFilled active={true} />
+          </Button>
         </Menu.Button>
       </div>
 
@@ -161,7 +168,7 @@ export default function ListViewSettingsModal({
       >
         <Menu.Items
           style={{ zIndex: 61 }}
-          className="absolute w-48 mt-3 -ml-12 origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+          className="absolute w-48 mt-3 origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
         >
           {ViewSettings.map((View) => (
             <Menu.Item
