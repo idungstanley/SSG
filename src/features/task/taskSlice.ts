@@ -198,7 +198,7 @@ const initialState: TaskState = {
   selectedTasksArray: [],
   verticalGrid: false,
   taskUpperCase: false,
-  verticalGridlinesTask: false,
+  verticalGridlinesTask: true,
   CompactView: false,
   CompactViewWrap: false,
   tableView: false,
