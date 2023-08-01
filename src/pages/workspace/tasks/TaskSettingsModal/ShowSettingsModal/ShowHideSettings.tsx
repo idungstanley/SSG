@@ -1,11 +1,10 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import { Menu, Transition } from '@headlessui/react';
 import { BsChevronRight } from 'react-icons/bs';
 import { FiChevronRight } from 'react-icons/fi';
 import Icons from '../../../../../components/Icons/Icons';
 import DropDown from '../../../../../assets/icons/arrow_drop_down_black.svg';
 import { useSwitchSettings } from './SwitchSettings';
-import { Label } from '../../../../../components/TasksHeader/ui/Filter/ui/FilterItem/Label';
 
 interface IShowHideSettings {
   scrollByEachGroup: string;
@@ -89,7 +88,7 @@ export default function ShowHideSettings({
     {
       id: 13,
       icon: <FiChevronRight />,
-      label: 'Remove Single Line mode'
+      label: 'Single Line mode'
     },
     {
       id: 14,
@@ -97,6 +96,23 @@ export default function ShowHideSettings({
       label: 'Compact mode'
     }
   ];
+
+  useEffect(() => {
+    const handleCheckboxChange = () => {
+      setCheckedStates((prev: boolean[]) => {
+        const newState = [...prev];
+        const singleLineIndex = ViewSettings.findIndex((item) => item.label === 'Single Line mode');
+        const TitleVerticalGridLineIndex = ViewSettings.findIndex((item) => item.label === 'Title Vertical Grid Line');
+
+        newState[singleLineIndex] = true;
+        newState[TitleVerticalGridLineIndex] = true;
+
+        return newState;
+      });
+    };
+
+    handleCheckboxChange();
+  }, []);
 
   return (
     <Menu>
@@ -136,7 +152,7 @@ export default function ShowHideSettings({
 
           {ViewSettings.map((View, index) => (
             <Menu.Item as="a" key={View.id} className="flex items-center py-2 text-sm text-black text-left w-full ">
-              {View.label !== 'Remove Single Line mode' ? (
+              {View.label !== ' Single Line mode' ? (
                 <button
                   className={`${
                     View.label == 'Upper Case'

@@ -69,6 +69,7 @@ export interface IList {
   deleted_at: null | string;
   id: string;
   name: string;
+  color: string;
   tasks_count: number;
   updated_at: string;
   created_at: string;

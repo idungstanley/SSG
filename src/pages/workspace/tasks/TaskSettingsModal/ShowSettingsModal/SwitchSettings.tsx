@@ -14,16 +14,25 @@ export function useSwitchSettings() {
   );
 
   const switchSettings = (viewMode: string) => {
-    if (viewMode === 'Remove Single Line mode') {
-      dispatch(getSingleLineView(!singleLineView));
-    } else if (viewMode === 'Compact mode') {
-      dispatch(getCompactView(!CompactView));
-    } else if (viewMode === 'Property Vertical Grid Line') {
-      dispatch(getVerticalGrid(!verticalGrid));
-    } else if (viewMode === 'Upper Case') {
-      dispatch(getTaskUpperCase(!taskUpperCase));
-    } else if (viewMode === 'Title Vertical Grid Line') {
-      dispatch(getVerticalGridlinesTask(!verticalGridlinesTask));
+    switch (viewMode) {
+      case 'Single Line mode':
+        dispatch(getSingleLineView(!singleLineView));
+        break;
+      case 'Compact mode':
+        dispatch(getCompactView(!CompactView));
+        break;
+      case 'Property Vertical Grid Line':
+        dispatch(getVerticalGrid(!verticalGrid));
+        break;
+      case 'Upper Case':
+        dispatch(getTaskUpperCase(!taskUpperCase));
+        break;
+      case 'Title Vertical Grid Line':
+        dispatch(getVerticalGridlinesTask(!verticalGridlinesTask));
+        break;
+      default:
+        // If none of the cases match, do something else or nothing.
+        break;
     }
   };
 

@@ -45,7 +45,7 @@ export default function StatusNameDropdown({ TaskCurrentStatus, statusName }: St
   return (
     <>
       <div>
-        <ToolTip tooltip={TaskCurrentStatus.name}>
+        <ToolTip title={TaskCurrentStatus.name}>
           <button
             type="button"
             onClick={() => setIsOpen(true)}

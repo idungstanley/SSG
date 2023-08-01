@@ -101,7 +101,7 @@ function GroupAssignee({
   return (
     <>
       {data && data?.length >= 5 ? (
-        <div className="flex items-center justify-center relative">
+        <div className="relative flex items-center justify-center">
           {data?.slice(0, 3).map((newData, index: number) => (
             <div
               key={newData.id}
@@ -114,45 +114,38 @@ function GroupAssignee({
               onMouseLeave={() => handleHoverIntervalMouseOut()}
             >
               <div className=" flex items-center justify-center -ml-2.5 rounded-full relative ">
-                <ToolTip tooltip={newData.name}>
-                  <span onClick={handleClick}>
-                    {(newData as InewData).role == 'owner' ? (
-                      <AvatarForOwner initials="me" />
-                    ) : (
-                      <div className="border-2 border-red-400  rounded-full">
-                        <AvatarWithInitials
-                          initials={
-                            (newData as InewData).user
-                              ? ((newData as InewData)?.user?.initials as string)
-                              : (newData.initials as string)
-                          }
-                          backgroundColour={
-                            (newData as InewData).user
-                              ? ((newData as InewData)?.user?.color as string)
-                              : (newData.color as string)
-                          }
-                          badge={true}
-                        />
-                      </div>
+                <ToolTip title={newData.name}>
+                  <div>
+                    <span onClick={handleClick}>
+                      {(newData as InewData).role == 'owner' ? (
+                        <AvatarForOwner initials="me" />
+                      ) : (
+                        <div className="border-2 border-red-400 rounded-full">
+                          <AvatarWithInitials
+                            initials={newData.initials}
+                            backgroundColour={newData.color}
+                            badge={true}
+                          />
+                        </div>
+                      )}
+                    </span>
+                    {displayed.show && index == displayed?.index && (
+                      <button
+                        className="absolute top-0 right-0 w-3 h-3 text-white bg-gray-500 border rounded-full hover:bg-purple-700 "
+                        style={{
+                          fontSize: '6px'
+                        }}
+                        onClick={() => handleUnAssignTask(newData.id as string)}
+                      >
+                        X
+                      </button>
                     )}
-                  </span>
-
-                  {displayed.show && index == displayed?.index && (
-                    <button
-                      className="absolute top-0 right-0 border h-3 w-3 rounded-full bg-gray-500 text-white hover:bg-purple-700 "
-                      style={{
-                        fontSize: '6px'
-                      }}
-                      onClick={() => handleUnAssignTask(newData.id as string)}
-                    >
-                      X
-                    </button>
-                  )}
+                  </div>
                 </ToolTip>
               </div>
               {displayed.show && index == displayed?.index ? (
                 <button
-                  className="absolute top-0 right-0 border h-3 w-3 rounded-full bg-gray-500 text-white hover:bg-purple-700"
+                  className="absolute top-0 right-0 w-3 h-3 text-white bg-gray-500 border rounded-full hover:bg-purple-700"
                   style={{
                     fontSize: '6px'
                   }}
@@ -161,7 +154,7 @@ function GroupAssignee({
                   X
                 </button>
               ) : (
-                <span className="absolute top-0 right-0 border h-2 w-2 bg-green-500 rounded-full"></span>
+                <span className="absolute top-0 right-0 w-2 h-2 bg-green-500 border rounded-full"></span>
               )}
 
               {/* <div className="absolute z-50"> */}
@@ -180,7 +173,7 @@ function GroupAssignee({
           <span>
             {data?.length - 3 !== 0 ? (
               <span
-                className="-ml-3 border-white border-2 rounded-full bg-gray-100 "
+                className="-ml-3 bg-gray-100 border-2 border-white rounded-full "
                 style={{ padding: `${CompactView || CompactViewWrap ? '3px' : '7px'}` }}
               >
                 +{data?.length - 3}
@@ -197,7 +190,7 @@ function GroupAssignee({
             } `}
           >
             <div className="flex items-center justify-center -ml-2.5 rounded-full relative">
-              <ToolTip tooltip={newData.name}>
+              <ToolTip title={newData.name}>
                 <div
                   onMouseEnter={(e) => {
                     handleHoverIntervalMouseIn(index, e);
@@ -241,7 +234,7 @@ function GroupAssignee({
 
                   {displayed.show && index == displayed?.index ? (
                     <button
-                      className="absolute top-0 right-0 border h-3 w-3 rounded-full bg-gray-500 text-white hover:bg-purple-700"
+                      className="absolute top-0 right-0 w-3 h-3 text-white bg-gray-500 border rounded-full hover:bg-purple-700"
                       style={{
                         fontSize: '6px'
                       }}
@@ -250,7 +243,7 @@ function GroupAssignee({
                       X
                     </button>
                   ) : (
-                    <span className="absolute top-0 right-0 border h-2 w-2 bg-green-500 rounded-full"></span>
+                    <span className="absolute top-0 right-0 w-2 h-2 bg-green-500 border rounded-full"></span>
                   )}
 
                   {/* <div className="absolute z-50"> */}

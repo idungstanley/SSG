@@ -3,7 +3,7 @@ import { Wallet } from '../../activetree.interfaces';
 import LList from '../list/LList';
 import WalletItem from '../../../../../../../components/tasks/WalletItem';
 import { useAppDispatch, useAppSelector } from '../../../../../../../app/hooks';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import {
   setActiveEntity,
   setActiveEntityName,
@@ -30,21 +30,19 @@ interface IWListProps {
 export default function WList({ wallets, leftMargin, paddingLeft, type, level = 1, topNumber }: IWListProps) {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { walletId, listId } = useParams();
   const { showExtendedBar } = useAppSelector((state) => state.workspace);
 
   const [showSubWallet, setShowSubWallet] = useState<string[]>([]);
   const [stickyButtonIndex, setStickyButtonIndex] = useState<number | undefined>(-1);
 
-  const id = walletId || listId;
-
   useEffect(() => {
+    setShowSubWallet([]);
     for (const wallet of wallets) {
-      if (id && (wallet.children.length || wallet.lists.length)) {
+      if (wallet.children.length || wallet.lists.length) {
         setShowSubWallet((prev) => [...prev, wallet.id]);
       }
     }
-  }, []);
+  }, [wallets]);
 
   const handleLocation = (id: string, name: string, index?: number) => {
     setStickyButtonIndex(index === stickyButtonIndex ? -1 : index);
@@ -126,7 +124,7 @@ export default function WList({ wallets, leftMargin, paddingLeft, type, level = 
             <WList
               wallets={wallet.children}
               leftMargin={false}
-              type={level === 2 ? 'subwallet2' : 'subwallet3'}
+              type={level === 1 ? 'subwallet2' : 'subwallet3'}
               paddingLeft={Number(paddingLeft) + 15}
               level={level + 1}
               topNumber={topNumber + 30}

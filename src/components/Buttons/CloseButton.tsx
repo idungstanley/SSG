@@ -12,8 +12,8 @@ export function CloseBtn({ clearFn, size }: closeBtnProps) {
       className={`absolute left-20 top-0 flex items-center bg-red-500 rounded-full p-1 cursor-pointer ${size}`}
       onClick={clearFn}
     >
-      <ToolTip tooltip="clear filters">
-        <CgClose className="text-white font-semibold" />
+      <ToolTip title="clear filters">
+        <CgClose className="w-2 h-2 font-semibold text-white" />
       </ToolTip>
     </div>
   );
