@@ -3,10 +3,13 @@ import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import requestNew from '../../app/requestNew';
-import { IResponseGetHubs, IHubReq, IFavoritesRes, IHubDetailRes, IHubsRes } from './hubs.interfaces';
-import { closeMenu, setShowFavEditInput, setTriggerFavUpdate } from './hubSlice';
+import { IResponseGetHubs, IHubReq, IFavoritesRes, IHubDetailRes, IHubsRes, IHub } from './hubs.interfaces';
+import { closeMenu, getHub, setShowFavEditInput, setTriggerFavUpdate } from './hubSlice';
 import { setArchiveHub, setDelHub } from './hubSlice';
 import { generateFilters } from '../../components/TasksHeader/lib/generateFilters';
+import { EntityType } from '../../utils/EntityTypes/EntityType';
+import { setFilteredResults } from '../search/searchSlice';
+import { deleteHubManager } from '../../managers/Hub';
 
 const moveHub = (data: { parent_id: string; hubId: string }) => {
   const { hubId, parent_id } = data;
@@ -79,7 +82,7 @@ export const useGetHubs = ({
   list_id?: string;
 }) => {
   const { currentWorkspaceId } = useAppSelector((state) => state.auth);
-  const { currentItemType, activeItemType } = useAppSelector((state) => state.workspace);
+  const { currentItemType } = useAppSelector((state) => state.workspace);
   const { hubId, walletId, listId, workSpaceId } = useParams();
   const id = hub_id || wallet_id || list_id;
 
@@ -91,9 +94,9 @@ export const useGetHubs = ({
 
   (() => {
     if (fetch) {
-      if (hub_id && (currentItemType === 'hub' || activeItemType === 'hub')) {
+      if (hub_id && currentItemType === EntityType.hub) {
         activeHub = `hubs/${hub_id}`;
-      } else if (wallet_id && (currentItemType === 'wallet' || activeItemType === 'wallet')) {
+      } else if (wallet_id && currentItemType === EntityType.wallet) {
         activeWallet = `wallets?parent_id=${wallet_id}`;
       } else if (listId) {
         activeList = `lists?parent_id=${list_id}`;
@@ -109,7 +112,7 @@ export const useGetHubs = ({
   };
 
   return useQuery(
-    ['retrieve', id ?? 'root', includeTree ? 'tree' : undefined],
+    ['retrieve', id ? id : 'root', includeTree ? 'tree' : undefined],
     () =>
       requestNew<IHubsRes>({
         url: createURL(),
@@ -185,6 +188,11 @@ export const useGetSubHub = ({ parentId }: { parentId: string | null }) => {
 };
 
 //edit a hub
+interface IResponseHub {
+  data: {
+    hub: IHub;
+  };
+}
 export const useEditHubService = (data: {
   name?: string;
   currentWorkspaceId?: string;
@@ -192,7 +200,7 @@ export const useEditHubService = (data: {
   description?: string | null | undefined;
   color?: string | null | { innerColour?: string; outterColour?: string };
 }) => {
-  const response = requestNew({
+  const response = requestNew<IResponseHub>({
     url: `hubs/${data.currHubId}`,
     method: 'POST',
     params: {
@@ -206,10 +214,10 @@ export const useEditHubService = (data: {
 };
 
 //Delete a Hub
-export const UseDeleteHubService = (data: { query: string | null | undefined; delHub: boolean }) => {
+export const UseDeleteHubService = (data: { id: string | null | undefined; delHub: boolean }) => {
   const dispatch = useDispatch();
-  const hubid = data.query;
-  const queryClient = useQueryClient();
+  const hubid = data.id;
+  const { hub } = useAppSelector((state) => state.hub);
   return useQuery(
     ['hubs'],
     async () => {
@@ -225,7 +233,9 @@ export const UseDeleteHubService = (data: { query: string | null | undefined; de
       // retry: false,
       onSuccess: () => {
         dispatch(setDelHub(false));
-        queryClient.invalidateQueries(['retrieve']);
+        const updatedTree = deleteHubManager(hubid as string, hub);
+        dispatch(getHub(updatedTree));
+        dispatch(setFilteredResults(updatedTree));
       }
     }
   );

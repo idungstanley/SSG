@@ -23,7 +23,7 @@ export default function MenuWithTransition({ icon, menuItems, tooltip }: MenuWit
     <Menu as="div" className="relative">
       <div>
         <Menu.Button className="flex items-center p-1 text-sm text-gray-400 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
-          <ToolTip tooltip={tooltip}>{icon}</ToolTip>
+          <ToolTip title={tooltip}>{icon}</ToolTip>
         </Menu.Button>
       </div>
       <Transition
