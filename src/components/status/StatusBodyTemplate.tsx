@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import ThreeDotIcon from '../../assets/icons/ThreeDotIcon';
 import { IoMdCheckmark } from 'react-icons/io';
 import AlsoitMenuDropdown from '../DropDowns';
@@ -37,7 +37,14 @@ export default function StatusBodyTemplate({ item, index }: ItemProps) {
   };
 
   const showStatusEditDropdownOptions = [
-    { label: 'Edit Status', icon: <PencilIcon className="w-4 h-4" aria-hidden="true" />, handleClick: () => ({}) },
+    {
+      label: 'Edit Status',
+      icon: <PencilIcon className="w-4 h-4" aria-hidden="true" />,
+      handleClick: () => {
+        setShowStatusEditDropdown(null);
+        setEditableContent(true);
+      }
+    },
     { label: 'Change Color', icon: <BiSolidColorFill />, handleClick: () => ({}) },
     {
       label: 'Delete status',
