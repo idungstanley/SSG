@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import { Menu, Transition } from '@headlessui/react';
 import { BsChevronRight } from 'react-icons/bs';
 import { FiChevronRight } from 'react-icons/fi';
@@ -89,7 +89,7 @@ export default function ShowHideSettings({
     {
       id: 13,
       icon: <FiChevronRight />,
-      label: 'Remove Single Line mode'
+      label: 'Single Line mode'
     },
     {
       id: 14,
@@ -97,6 +97,18 @@ export default function ShowHideSettings({
       label: 'Compact mode'
     }
   ];
+
+  useEffect(() => {
+    const handleCheckboxChange = () => {
+      setCheckedStates((prev: boolean[]) => {
+        const newState = [...prev];
+        const singleLineIndex = ViewSettings.findIndex((item) => item.label === 'Single Line mode');
+        newState[singleLineIndex] = true;
+        return newState;
+      });
+    };
+    handleCheckboxChange();
+  }, []);
 
   return (
     <Menu>
@@ -136,7 +148,7 @@ export default function ShowHideSettings({
 
           {ViewSettings.map((View, index) => (
             <Menu.Item as="a" key={View.id} className="flex items-center py-2 text-sm text-black text-left w-full ">
-              {View.label !== 'Remove Single Line mode' ? (
+              {View.label !== ' Single Line mode' ? (
                 <button
                   className={`${
                     View.label == 'Upper Case'
