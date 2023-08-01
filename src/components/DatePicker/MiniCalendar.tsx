@@ -7,7 +7,11 @@ import { setHistoryMemory, setTaskSelectedDate } from '../../features/task/taskS
 import CircleArrowLeft from '../../assets/icons/CircleArrowLeft';
 import CircleArrowRight from '../../assets/icons/CircleArrowRight';
 
-export default function MiniDatePicker() {
+type Props = {
+  range?: boolean;
+};
+
+export default function MiniDatePicker({ range }: Props) {
   const dispatch = useAppDispatch();
   const [today] = useState(dayjs());
   const [shownDate, setShownDate] = useState<dayjs.Dayjs>(today);
@@ -20,13 +24,13 @@ export default function MiniDatePicker() {
   const { selectedDate } = useAppSelector((state) => state.workspace);
 
   const handleClick = (date: dayjs.Dayjs) => {
-    if (!selectedDate?.dateType) {
+    if (!selectedDate?.dateType || (taskTime?.from && !range)) {
       dispatch(setSelectedDate({ date: date, dateType: 'due' }));
       dispatch(setTaskSelectedDate({ from: date }));
       dispatch(setHistoryMemory({ ...HistoryFilterMemory, timePoint: 'due' }));
     }
 
-    if (HistoryFilterMemory?.timePoint && HistoryFilterMemory.timePoint === 'due') {
+    if (HistoryFilterMemory?.timePoint && HistoryFilterMemory.timePoint === 'due' && range) {
       dispatch(setSelectedDate({ date: date, dateType: 'start' }));
       dispatch(setTaskSelectedDate({ ...taskTime, to: date }));
       dispatch(setHistoryMemory({ ...HistoryFilterMemory, timePoint: 'start' }));
@@ -54,10 +58,10 @@ export default function MiniDatePicker() {
   };
 
   const isStartDate = (value: dayjs.Dayjs) => {
-    if (!taskTime?.from) {
+    if (!taskTime?.from || !selectedDate?.date) {
       return false;
     }
-    return value.isSame(taskTime.from, 'day');
+    return value.isSame(taskTime.from, 'day') || value.isSame(selectedDate.date, 'day');
   };
 
   const isEndDate = (value: dayjs.Dayjs) => {
@@ -135,9 +139,9 @@ export default function MiniDatePicker() {
                   className={`w-5 h-5 flex justify-center items-center rounded-md p-4 text-alsoit-text-lg font-semibold cursor-pointer ${
                     isStartDate(value)
                       ? 'bg-blue-600 text-white'
-                      : isEndDate(value)
+                      : isEndDate(value) && range
                       ? 'bg-blue-600 text-white'
-                      : isDateInRange(value)
+                      : isDateInRange(value) && range
                       ? 'bg-blue-600 text-white'
                       : hoveredDate && value.isSame(hoveredDate, 'day') && !taskTime?.to
                       ? 'bg-blue-200'
