@@ -8,7 +8,7 @@ import { BiSolidColorFill } from 'react-icons/bi';
 
 interface ItemProps {
   item: {
-    label: string;
+    label?: string;
     color: string;
     model_type: string;
   };
