@@ -1,7 +1,7 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { cl } from '../../../../utils';
-import { setIsManageStatus, setSidebarWidthRD } from '../../../../features/workspace/workspaceSlice';
+import { setSidebarWidthRD } from '../../../../features/workspace/workspaceSlice';
 import Header from './components/Header';
 import NavigationItems from './components/NavigationItems';
 import Places from './components/Places';
@@ -17,20 +17,10 @@ import SearchIcon from '../../../../assets/icons/SearchIcon';
 import { setUpdateCords } from '../../../../features/hubs/hubSlice';
 import { useScroll } from '../../../../hooks/useScroll';
 import { ScrollableContainer } from '../../../../components/ScrollableContainer/ScrollableContainer';
-import ModalOverlay from '../../../../components/Modal/ModalOverlay';
-import { Button } from '../../../../components';
-import PlusIcon from '../../../../assets/icons/PlusIcon';
+import StatusManagement from '../../../../components/status/StatusManagement';
 
 const MAX_SIDEBAR_WIDTH = dimensions.navigationBar.max;
 const MIN_SIDEBAR_WIDTH = dimensions.navigationBar.min;
-
-const statusTabOptions = [{ label: 'Use Space Statuses' }, { label: 'Custom' }];
-
-const statusTypes = [
-  { label: 'To do', color: 'grey', model_type: 'open' },
-  { label: 'In Progress', color: 'purple', model_type: 'custom' },
-  { label: 'Completed', color: 'green', model_type: 'closed' }
-];
 
 export default function Sidebar() {
   const dispatch = useAppDispatch();
@@ -38,8 +28,6 @@ export default function Sidebar() {
   const key = 'sidebar';
   const { showSidebar, userSettingsData } = useAppSelector((state) => state.account);
   const [commandSearchModal, setCommandSearchModal] = useState<boolean>(false);
-  const { isManageStatus } = useAppSelector((state) => state.workspace);
-  const [activeStatusTab, setActiveStatusTab] = useState<string>(statusTabOptions[0].label);
 
   const { blockRef, Dividers, size, isMouseUp, isDrag } = useResize({
     dimensions: {
@@ -55,9 +43,6 @@ export default function Sidebar() {
   useGetUserSettingsKeys(true, key, resolution);
   const [activeTabId, setActiveTabId] = useState<string | null>('');
   const hotkeyIdsFromLS = JSON.parse(localStorage.getItem('navhotkeys') ?? '[]') as string[];
-  const handleCloseManageStatus = () => {
-    dispatch(setIsManageStatus(!isManageStatus));
-  };
   const [activeHotkeyIds, setActiveHotkeyIds] = useState<string[]>(hotkeyIdsFromLS);
 
   const hotkeys = useMemo(
@@ -139,64 +124,7 @@ export default function Sidebar() {
             <Places />
           </section>
         </ScrollableContainer>
-        <ModalOverlay isModalVisible={isManageStatus} onCloseModal={handleCloseManageStatus}>
-          <section className="flex flex-col p-4" style={{ height: '450px' }}>
-            <div>
-              <h1>Edit statuses for List</h1>
-            </div>
-            <div className="grid grid-cols-2 gap-4 mt-8">
-              <div className="flex flex-col space-y-3">
-                {statusTabOptions.map((item, index) => (
-                  <span
-                    key={index}
-                    onClick={() => setActiveStatusTab(item.label)}
-                    className={`flex p-1 cursor-pointer justify-items-start  ${
-                      activeStatusTab === item.label ? 'bg-alsoit-purple-300 text-white rounded' : ''
-                    }`}
-                  >
-                    {item.label}
-                  </span>
-                ))}
-              </div>
-              {activeStatusTab === statusTabOptions[0].label ? (
-                <div className="flex flex-col space-y-2">
-                  {statusTypes.map((item, index) => (
-                    <span
-                      key={index}
-                      className="flex items-center gap-2 p-1 text-white border rounded cursor-pointer justify-items-start"
-                    >
-                      <span className="w-4 h-4 rounded" style={{ backgroundColor: item.color }}></span>
-                      <span style={{ color: item.color }}>{item.label}</span>
-                    </span>
-                  ))}
-                </div>
-              ) : (
-                <div className="flex flex-col space-y-6">
-                  {statusTypes.map((item, index) => (
-                    <div className="space-y-2" key={index}>
-                      <p className="flex uppercase justify-items-start">{item.model_type + ' STATUSES'}</p>
-                      <span
-                        key={index}
-                        className="flex items-center gap-2 p-1 border rounded cursor-pointer justify-items-start"
-                      >
-                        <span className="w-4 h-4 rounded" style={{ backgroundColor: item.color }}></span>
-                        <span style={{ color: item.color }}>{item.label}</span>
-                      </span>
-                      {item.label === 'To do' && (
-                        <span className="flex justify-items-start">
-                          <Button icon={<PlusIcon />} label="Add Status" buttonStyle="base" />
-                        </span>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-            <div className="mt-auto">
-              <Button label="Save" buttonStyle="base" width="w-full" />
-            </div>
-          </section>
-        </ModalOverlay>
+        <StatusManagement />
       </section>
     </aside>
   );
