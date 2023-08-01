@@ -188,7 +188,7 @@ export function DatePickerManualDates({ range }: DatePickerManualDatesProps) {
         // Default Set date
         <label
           htmlFor="from"
-          className="flex space-y-1 space-x-1 text-xs items-center w-60 border border-alsoit-purple-300 p-1 rounded-md"
+          className="flex space-y-1 space-x-1 text-xs items-center w-36 border border-alsoit-purple-300 p-1 rounded-md"
         >
           <div className="bg-alsoit-purple-300 rounded-md p-1">
             <CalendarIcon active={iconToggle.startIcon} fixed />
