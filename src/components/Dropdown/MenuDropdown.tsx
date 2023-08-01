@@ -62,13 +62,17 @@ export default function MenuDropdown() {
     hub
     // triggerAddToFav,
   } = useAppSelector((state) => state.hub);
+  const { showEditHubSlideOver, showEditWalletSlideOver, showEditListSlideOver } = useAppSelector(
+    (state) => state.slideOver
+  );
   const { archiveWallet } = useAppSelector((state) => state.wallet);
   const { archiveList } = useAppSelector((state) => state.list);
   const ref = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
+    const isOpenModal = showEditHubSlideOver || showEditWalletSlideOver || showEditListSlideOver;
     const checkClickedOutSide = (e: MouseEvent) => {
-      if (showMenuDropdown && ref.current && e.target && !ref.current.contains(e.target as Node)) {
+      if (showMenuDropdown && !isOpenModal && ref.current && e.target && !ref.current.contains(e.target as Node)) {
         if (!SubDropdownMenu) {
           dispatch(setSubDropdownMenu(false));
           dispatch(setshowMenuDropdown({ showMenuDropdown: null, showMenuDropdownType: null }));
@@ -79,7 +83,7 @@ export default function MenuDropdown() {
     return () => {
       document.removeEventListener('click', checkClickedOutSide);
     };
-  }, [SubDropdownMenu, showMenuDropdown]);
+  }, [SubDropdownMenu, showMenuDropdown, showEditHubSlideOver, showEditWalletSlideOver, showEditListSlideOver]);
 
   //delete-entity
   //hubs and subhubs
