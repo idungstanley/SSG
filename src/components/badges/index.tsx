@@ -36,6 +36,7 @@ export default function Badges({ task }: BadgeTask) {
                 <Description />
               </button>
             }
+            additionalStyles={{ minHeight: '150px', minWidth: '300px' }}
           />
         )}
 
