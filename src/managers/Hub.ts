@@ -57,7 +57,5 @@ export const createHubManager = (parentId: string | null, hubs: Hub[], newHubFro
   } else {
     updatedTree = [...updatedTree, newHub];
   }
-
-  console.log('createHubManager', updatedTree);
   return updatedTree;
 };

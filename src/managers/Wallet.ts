@@ -22,7 +22,6 @@ export const deleteWalletManager = (id: string, hubs: Hub[]) => {
   };
 
   const updatedTree = findParentOfEntity('wallet', id, hubs, deleteWallet as <IWallet>(item: IWallet) => IWallet);
-  console.log('deleteWalletManager', updatedTree);
   return updatedTree;
 };
 
@@ -57,6 +56,5 @@ export const createWalletManager = (
   const id = hubId ? hubId : parentId ? parentId : '';
   const type = parentId ? 'wallet' : 'hub';
   const updatedTree = findCurrentEntity(type, id, hubs, createWallet as <IWallet>(item: IWallet) => IWallet);
-  console.log('createWalletManager', updatedTree);
   return updatedTree;
 };

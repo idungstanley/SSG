@@ -22,7 +22,6 @@ export const deleteListManager = (id: string, hubs: Hub[]) => {
   };
 
   const updatedTree = findParentOfEntity('list', id, hubs, deleteList as <IList>(item: IList) => IList);
-  console.log('deleteListManager', hubs);
   return updatedTree;
 };
 
@@ -38,6 +37,5 @@ export const createListManager = (walletId: string | null, parentId: string | nu
   const id = walletId ? walletId : parentId ? parentId : '';
   const type = walletId ? 'wallet' : 'hub';
   const updatedTree = findCurrentEntity(type, id, hubs, createList as <IList>(item: IList) => IList);
-  console.log('createListManager', hubs);
   return updatedTree;
 };

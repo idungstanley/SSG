@@ -285,11 +285,12 @@ export default function MenuDropdown() {
       id: 16,
       title: 'Delete',
       handleClick: () => {
+        console.log(showMenuDropdownType);
         if (showMenuDropdownType == 'hubs' || showMenuDropdownType == 'subhub') {
           deleteHubMutation.mutateAsync({
             id: showMenuDropdown
           });
-        } else if (showMenuDropdownType == 'wallet' || showMenuDropdownType == 'subwallet') {
+        } else if (showMenuDropdownType?.length && showMenuDropdownType.includes('wallet')) {
           deleteWalletMutation.mutateAsync({
             id: showMenuDropdown
           });
