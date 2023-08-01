@@ -106,6 +106,8 @@ export interface ITaskFullList {
   status: IStatus;
   has_descendants: boolean;
   descendants_count: number;
+  checklist_items_count: number;
+  checklist_done_items_count: number;
   has_attachments: boolean;
   start_date: string | null;
   end_date: string | null;
