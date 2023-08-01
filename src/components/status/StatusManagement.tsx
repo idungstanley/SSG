@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import ModalOverlay from '../Modal/ModalOverlay';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { setIsManageStatus } from '../../features/workspace/workspaceSlice';
@@ -17,6 +17,7 @@ const statusTypes = [
 
 export default function StatusManagement() {
   const dispatch = useAppDispatch();
+  const wrapperRef = useRef<HTMLInputElement>(null);
   const { isManageStatus } = useAppSelector((state) => state.workspace);
   const [activeStatusTab, setActiveStatusTab] = useState<string>(statusTabOptions[0].label);
 
@@ -84,6 +85,7 @@ export default function StatusManagement() {
                     key={index}
                     className="flex items-center gap-2 p-1 border rounded cursor-pointer justify-items-start border-alsoit-gray-75"
                     onClick={() => handleToggleEditableContent(index)}
+                    ref={wrapperRef}
                   >
                     <span className="w-3 h-3 ml-4 rounded" style={{ backgroundColor: item.color }}></span>
                     <span contentEditable={editableStates[index]} style={{ color: item.color }} className="uppercase">
