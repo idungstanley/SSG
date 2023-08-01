@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { changeDateMonth, getCalendarRows } from '../../utils/calendar';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { setSelectedDate } from '../../features/workspace/workspaceSlice';
@@ -94,6 +94,12 @@ export default function MiniDatePicker() {
   const handleIconClick = (isNextMonth: boolean) => {
     setShownDate(changeDateMonth(shownDate, isNextMonth));
   };
+
+  useEffect(() => {
+    if (taskTime?.from) {
+      setShownDate(taskTime.from);
+    }
+  }, [taskTime]);
 
   return (
     <div className="w-full flex flex-col space-y-4 justify-center items-center my-2">
