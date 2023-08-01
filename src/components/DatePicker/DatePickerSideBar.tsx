@@ -6,6 +6,11 @@ import { generateDate, weekends, weeks } from '../../utils/calendar';
 import { useState } from 'react';
 import ThreeDotIcon from '../../assets/icons/ThreeDotIcon';
 import CustomSuggestion from './CustomSuggestions';
+import ArrowCaretDown from '../../assets/icons/ArrowCaretDown';
+import ArrowCaretUp from '../../assets/icons/ArrowCaretUp';
+import ArrowDown from '../../assets/icons/ArrowDown';
+import ArrowUpwardIcon from '../../assets/icons/ArrowUpwardIcon';
+import ArrowUp from '../../assets/icons/ArrowUp';
 
 interface DatePickerSideBarProp {
   currentDate: dayjs.Dayjs;
@@ -152,10 +157,15 @@ export function DatePickerSideBar({ currentDate }: DatePickerSideBarProp) {
   return (
     <div className="my-4 mx-2 p-2 rounded-md border-2" style={{ height: '94%' }}>
       <div className="flex justify-between items-center w-full p-2">
-        <span className="font-extrabold text-alsoit-text-lg">Recurring</span>
         <div
           onClick={() => setRecurring(!showRecurring)}
-          className="cursor-pointer"
+          className="font-extrabold text-alsoit-text-lg cursor-pointer flex items-center space-x-2"
+        >
+          <span>Recurring</span>
+          <ArrowDown active />
+        </div>
+        <div
+          className="cursor-pointer flex"
           onMouseEnter={() => setIconToggle((prev) => ({ ...prev, threeDotIcon: true }))}
           onMouseLeave={() => setIconToggle((prev) => ({ ...prev, threeDotIcon: false }))}
         >
