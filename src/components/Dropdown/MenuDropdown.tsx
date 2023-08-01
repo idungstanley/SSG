@@ -17,7 +17,7 @@ import {
   ArrowDownIcon,
   PencilSquareIcon
 } from '@heroicons/react/24/outline';
-import { setArchiveHub, setDelHub, setshowMenuDropdown, setSubDropdownMenu } from '../../features/hubs/hubSlice';
+import { getHub, setArchiveHub, setshowMenuDropdown, setSubDropdownMenu } from '../../features/hubs/hubSlice';
 import EditHubModal from '../../pages/workspace/hubs/components/EditHubModal';
 import SubDropdown from './SubDropdown';
 import {
@@ -33,10 +33,15 @@ import {
 } from '../../features/general/slideOver/slideOverSlice';
 import EditListModal from '../../pages/workspace/lists/components/modals/EditListModal';
 import EditWalletModal from '../../pages/workspace/wallet/components/modals/EditWalletModal';
-import { setArchiveWallet, setDeleteWallet } from '../../features/wallet/walletSlice';
+import { setArchiveWallet } from '../../features/wallet/walletSlice';
 import { UseArchiveWalletService, UseDeleteWalletService } from '../../features/wallet/walletService';
-import { setArchiveList, setDeleteList } from '../../features/list/listSlice';
+import { setArchiveList } from '../../features/list/listSlice';
 import { UseArchiveListService, UseDeleteListService } from '../../features/list/listService';
+import { useMutation } from '@tanstack/react-query';
+import { deleteListManager } from '../../managers/List';
+import { setFilteredResults } from '../../features/search/searchSlice';
+import { deleteWalletManager } from '../../managers/Wallet';
+import { deleteHubManager } from '../../managers/Hub';
 // import { setTriggerAddToFav } from "../../features/hubs/hubSlice";
 
 interface itemsType {
@@ -51,14 +56,14 @@ export default function MenuDropdown() {
   const dispatch = useDispatch();
   const {
     SubDropdownMenu,
-    delHub,
     archiveHub,
     showMenuDropdown,
-    showMenuDropdownType
+    showMenuDropdownType,
+    hub
     // triggerAddToFav,
   } = useAppSelector((state) => state.hub);
-  const { delWallet, archiveWallet } = useAppSelector((state) => state.wallet);
-  const { delList, archiveList } = useAppSelector((state) => state.list);
+  const { archiveWallet } = useAppSelector((state) => state.wallet);
+  const { archiveList } = useAppSelector((state) => state.list);
   const ref = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -78,21 +83,30 @@ export default function MenuDropdown() {
 
   //delete-entity
   //hubs and subhubs
-  UseDeleteHubService({
-    id: showMenuDropdown,
-    delHub
+  const deleteHubMutation = useMutation(UseDeleteHubService, {
+    onSuccess: () => {
+      const updatedTree = deleteHubManager(showMenuDropdown as string, hub);
+      dispatch(getHub(updatedTree));
+      dispatch(setFilteredResults(updatedTree));
+    }
   });
 
   //wallets and subwallets
-  UseDeleteWalletService({
-    id: showMenuDropdown,
-    delWallet
+  const deleteWalletMutation = useMutation(UseDeleteWalletService, {
+    onSuccess: () => {
+      const updatedTree = deleteWalletManager(showMenuDropdown as string, hub);
+      dispatch(getHub(updatedTree));
+      dispatch(setFilteredResults(updatedTree));
+    }
   });
 
   //lists
-  UseDeleteListService({
-    id: showMenuDropdown,
-    delList
+  const deleteListMutation = useMutation(UseDeleteListService, {
+    onSuccess: () => {
+      const updatedTree = deleteListManager(showMenuDropdown as string, hub);
+      dispatch(getHub(updatedTree));
+      dispatch(setFilteredResults(updatedTree));
+    }
   });
 
   //archive entities
@@ -272,11 +286,17 @@ export default function MenuDropdown() {
       title: 'Delete',
       handleClick: () => {
         if (showMenuDropdownType == 'hubs' || showMenuDropdownType == 'subhub') {
-          dispatch(setDelHub(true));
+          deleteHubMutation.mutateAsync({
+            id: showMenuDropdown
+          });
         } else if (showMenuDropdownType == 'wallet' || showMenuDropdownType == 'subwallet') {
-          dispatch(setDeleteWallet(true));
+          deleteWalletMutation.mutateAsync({
+            id: showMenuDropdown
+          });
         } else {
-          dispatch(setDeleteList(true));
+          deleteListMutation.mutateAsync({
+            id: showMenuDropdown
+          });
         }
       },
       icon: <TrashIcon className="w-4 h-4 text-red-500" aria-hidden="true" />,
