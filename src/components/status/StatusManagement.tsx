@@ -5,6 +5,7 @@ import { setIsManageStatus } from '../../features/workspace/workspaceSlice';
 import Button from '../Button';
 import PlusIcon from '../../assets/icons/PlusIcon';
 import StatusBodyTemplate from './StatusBodyTemplate';
+import Input from '../input/Input';
 
 const statusTabOptions = [{ label: 'Use Space Statuses' }, { label: 'Custom' }];
 
@@ -18,8 +19,12 @@ export default function StatusManagement() {
   const dispatch = useAppDispatch();
   const { isManageStatus } = useAppSelector((state) => state.workspace);
   const [activeStatusTab, setActiveStatusTab] = useState<string>(statusTabOptions[0].label);
+  const [addStatus, setAddStatus] = useState<boolean>(false);
   const handleCloseManageStatus = () => {
     dispatch(setIsManageStatus(!isManageStatus));
+  };
+  const handleSaveNewStatus = () => {
+    setAddStatus(false);
   };
 
   return (
@@ -62,9 +67,20 @@ export default function StatusManagement() {
                 <div className="space-y-2" key={index}>
                   <p className="flex uppercase justify-items-start">{item.model_type + ' STATUSES'}</p>
                   <StatusBodyTemplate index={index} item={item} />
-                  {item.label === 'To do' && (
-                    <span className="flex justify-items-start">
+                  {item.model_type === 'open' && !addStatus && (
+                    <span className="flex justify-items-start" onClick={() => setAddStatus(true)}>
                       <Button height="h-8" icon={<PlusIcon />} label="Add Status" buttonStyle="base" />
+                    </span>
+                  )}
+                  {item.model_type === 'open' && addStatus && (
+                    <span className="flex justify-items-start">
+                      <Input
+                        trailingIcon={<PlusIcon />}
+                        placeholder="Type Status name"
+                        name="Status"
+                        onChange={() => ({})}
+                        trailingClick={handleSaveNewStatus}
+                      />
                     </span>
                   )}
                 </div>
