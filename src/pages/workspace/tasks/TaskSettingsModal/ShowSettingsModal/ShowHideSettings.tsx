@@ -162,7 +162,7 @@ export default function ShowHideSettings({
 
           {ViewSettings.map((View, index) => (
             <Menu.Item as="a" key={View.id} className="flex items-center py-2 text-sm text-black text-left w-full ">
-              {View.label !== ' Single Line mode' ? (
+              {View.label !== 'Single Line mode' ? (
                 <button
                   className={`${
                     View.label == 'Upper Case'
