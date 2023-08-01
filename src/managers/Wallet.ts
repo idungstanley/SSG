@@ -2,17 +2,20 @@ import { IWallet } from '../features/wallet/wallet.interfaces';
 import { Hub, Wallet } from '../pages/workspace/hubs/components/ActiveTree/activetree.interfaces';
 import { findParentOfEntity, findCurrentEntity } from './SearchAndUpdate';
 
-export const changeWalletColorManager = (id: string, hubs: Hub[], color: unknown) => {
-  const updateColor = (item: IWallet) => {
+export const changeWalletManager = (id: string, hubs: Hub[], walletFromResponse: IWallet) => {
+  const updateWallet = (item: IWallet) => {
     let newWallet = { ...item };
+    const { name, color, description } = walletFromResponse;
     newWallet = {
       ...newWallet,
-      color: JSON.stringify(color)
+      name,
+      color,
+      description: description || ''
     };
     return newWallet;
   };
 
-  const updatedTree = findCurrentEntity('wallet', id, hubs, updateColor as <IWallet>(item: IWallet) => IWallet);
+  const updatedTree = findCurrentEntity('wallet', id, hubs, updateWallet as <IWallet>(item: IWallet) => IWallet);
   return updatedTree;
 };
 

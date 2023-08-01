@@ -12,6 +12,8 @@ export interface IHub {
   color?: string | null;
   updated_at: string;
   has_descendants: number;
+  current_workspace_id: string;
+  description: string;
 }
 
 export interface IHubDetails {
@@ -73,6 +75,8 @@ export interface IList {
   tasks_count: number;
   updated_at: string;
   created_at: string;
+  shape: string;
+  description: string;
 }
 
 export interface IResponseCreateHubs {

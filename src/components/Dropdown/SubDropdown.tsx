@@ -55,7 +55,7 @@ export default function SubDropdown() {
 
   useEffect(() => {
     const checkClickedOutSide = (e: MouseEvent): void => {
-      if (SubMenuId != null && ref.current && !ref.current.contains(e.target as HTMLButtonElement)) {
+      if (SubMenuId && ref.current && !ref.current.contains(e.target as HTMLButtonElement)) {
         if (lastActiveItem !== '') {
           dispatch(
             getSubMenu({

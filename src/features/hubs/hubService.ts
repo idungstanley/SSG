@@ -192,7 +192,8 @@ export const useGetSubHub = ({ parentId }: { parentId: string | null }) => {
 };
 
 //edit a hub
-export const useEditHubService = (data: {
+export const UseEditHubService = (data: {
+  hubId?: string | null;
   name?: string;
   currentWorkspaceId?: string;
   currHubId?: string | null;
@@ -200,7 +201,7 @@ export const useEditHubService = (data: {
   color?: string | null | { innerColour?: string; outterColour?: string };
 }) => {
   const response = requestNew<IResponseHub>({
-    url: `hubs/${data.currHubId}`,
+    url: `hubs/${data.hubId}`,
     method: 'POST',
     params: {
       name: data.name,

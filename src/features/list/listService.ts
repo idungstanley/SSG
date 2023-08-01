@@ -124,7 +124,7 @@ export const UseEditListService = (data: {
   listName?: string;
   listId?: string | null;
   description?: string | null | undefined;
-  colour?: string | null | { innerColour?: string; outerColour?: string };
+  color?: string | null | { innerColour?: string; outerColour?: string };
   shape?: string;
 }) => {
   const response = requestNew<IResponseList>({
@@ -132,7 +132,7 @@ export const UseEditListService = (data: {
     method: 'PUT',
     params: {
       name: data.listName,
-      color: data.colour,
+      color: data.color,
       shape: data.shape,
       description: data.description
     }

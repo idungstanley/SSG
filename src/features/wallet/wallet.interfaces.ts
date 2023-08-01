@@ -13,6 +13,7 @@ export interface IWallet {
   deleted_at: null;
   children: IWallet[];
   lists: IList[];
+  description: string;
 }
 
 export interface IWalletRes {

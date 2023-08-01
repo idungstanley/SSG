@@ -104,16 +104,16 @@ export const getWalletServices = (data: { hubId?: string | null; Archived?: bool
 //edit wallet
 export const UseEditWalletService = (data: {
   walletName?: string;
-  WalletId?: string | null;
+  walletId?: string | null;
   description?: string | null | undefined;
-  walletColor?: string | null | { innerColour?: string; outterColour?: string };
+  color?: string | null | { innerColour?: string; outterColour?: string };
 }) => {
   const response = requestNew<IResponseWallet>({
-    url: `wallets/${data.WalletId}`,
+    url: `wallets/${data.walletId}`,
     method: 'PUT',
     params: {
       name: data.walletName,
-      color: data.walletColor,
+      color: data.color,
       description: data.description
     }
   });

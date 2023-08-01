@@ -68,7 +68,7 @@ export default function MenuDropdown() {
 
   useEffect(() => {
     const checkClickedOutSide = (e: MouseEvent) => {
-      if (showMenuDropdown != null && ref.current && e.target && !ref.current.contains(e.target as Node)) {
+      if (showMenuDropdown && ref.current && e.target && !ref.current.contains(e.target as Node)) {
         if (!SubDropdownMenu) {
           dispatch(setSubDropdownMenu(false));
           dispatch(setshowMenuDropdown({ showMenuDropdown: null, showMenuDropdownType: null }));
@@ -152,7 +152,7 @@ export default function MenuDropdown() {
       handleClick: () => {
         if (showMenuDropdownType == 'hubs' || showMenuDropdownType == 'subhub') {
           dispatch(setEditHubSlideOverVisibility(true));
-        } else if (showMenuDropdownType == 'wallet' || showMenuDropdownType == 'subwallet') {
+        } else if (showMenuDropdownType?.includes('wallet')) {
           dispatch(setEditWalletSlideOverVisibility(true));
         } else {
           dispatch(setEditListSlideOverVisibility(true));
@@ -243,7 +243,7 @@ export default function MenuDropdown() {
       handleClick: () => {
         if (showMenuDropdownType == 'hubs' || showMenuDropdownType == 'subhubs') {
           dispatch(setArchiveHub(true));
-        } else if (showMenuDropdownType == 'wallet' || showMenuDropdownType == 'subwallet') {
+        } else if (showMenuDropdownType?.includes('wallet')) {
           dispatch(setArchiveWallet(true));
         } else {
           dispatch(setArchiveList(true));
@@ -285,12 +285,11 @@ export default function MenuDropdown() {
       id: 16,
       title: 'Delete',
       handleClick: () => {
-        console.log(showMenuDropdownType);
         if (showMenuDropdownType == 'hubs' || showMenuDropdownType == 'subhub') {
           deleteHubMutation.mutateAsync({
             id: showMenuDropdown
           });
-        } else if (showMenuDropdownType?.length && showMenuDropdownType.includes('wallet')) {
+        } else if (showMenuDropdownType?.includes('wallet')) {
           deleteWalletMutation.mutateAsync({
             id: showMenuDropdown
           });
