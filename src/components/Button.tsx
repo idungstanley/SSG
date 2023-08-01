@@ -59,6 +59,9 @@ function Button({
   } else if (buttonStyle === 'white') {
     hoverBackgroundColor = 'hover:bg-gray-50';
     buttonClassName = 'border border-gray-300 shadow-sm text-sm font-medium text-gray-700 bg-white focus:outline-none';
+  } else if (buttonStyle === 'base') {
+    hoverBackgroundColor = 'hover:bg-alsoit-purple-300';
+    buttonClassName = 'border border-gray-300 shadow-sm font-medium text-white bg-alsoit-purple-300 focus:outline-none';
   }
 
   if (ringOnFocus === true) {

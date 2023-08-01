@@ -79,19 +79,19 @@ export default function MenuDropdown() {
   //delete-entity
   //hubs and subhubs
   UseDeleteHubService({
-    query: showMenuDropdown,
+    id: showMenuDropdown,
     delHub
   });
 
   //wallets and subwallets
   UseDeleteWalletService({
-    query: showMenuDropdown,
+    id: showMenuDropdown,
     delWallet
   });
 
   //lists
   UseDeleteListService({
-    query: showMenuDropdown,
+    id: showMenuDropdown,
     delList
   });
 
@@ -285,7 +285,7 @@ export default function MenuDropdown() {
   ];
 
   return (
-    <div className="" ref={ref}>
+    <div ref={ref}>
       <div
         className="fixed w-auto p-2 origin-top-right bg-white rounded-md top-2/4 left-56 ring-1 ring-black ring-opacity-5 focus:outline-none"
         style={{

@@ -14,6 +14,9 @@ export function ScrollableContainer({ children, scrollDirection, ...props }: Cus
   const scrollThumbRef = useRef<HTMLDivElement>(null);
   const observer = useRef<ResizeObserver | null>(null);
   const [thumbWidth, setThumbWidth] = useState(DEFAULT_THUMB_WIDTH);
+  const [isThumbVisible, setIsThumbVisible] = useState(true);
+  const [topPosition, setTopPosition] = useState<number>(0);
+  const [leftPosition, setLeftPosition] = useState<number>(0);
   const [scrollStartPosition, setScrollStartPosition] = useState<number | null>(null);
   const [initialScrollTop, setInitialScrollTop] = useState<number>(0);
   const [isDragging, setIsDragging] = useState(false);
@@ -70,9 +73,11 @@ export function ScrollableContainer({ children, scrollDirection, ...props }: Cus
     if (scrollDirection === 'x') {
       newLeft = (+contentLeft / +contentWidth) * trackWidth;
       newLeft = Math.min(newLeft, trackWidth - thumbWidth) - 35;
+      setLeftPosition(newLeft);
     } else {
       newTop = (+contentTop / +contentHeight) * trackHeight;
       newTop = Math.min(newTop, trackHeight - thumbWidth) - 27;
+      setTopPosition(newTop);
     }
     const thumb = scrollThumbRef.current;
     if (scrollDirection === 'x') {
@@ -136,9 +141,15 @@ export function ScrollableContainer({ children, scrollDirection, ...props }: Cus
 
   // update size is pilot is visible / invisible
   const { show: showFullPilot } = useAppSelector((state) => state.slideOver.pilotSideOver);
-  const { showMore, currentItemId, activeItemId, showHub, activePlaceId } = useAppSelector((state) => state.workspace);
+  const { showMore, currentItemId, showTabLabel, isResize, activeItemId, showHub, activePlaceId } = useAppSelector(
+    (state) => state.workspace
+  );
   const { openedHubId } = useAppSelector((state) => state.hub);
-
+  const pilotFromLS = JSON.parse(localStorage.getItem('pilot') || '""') as {
+    tabOrder: number[];
+    showTabLabel: boolean;
+  };
+  const showTabLabelFromLS = !!pilotFromLS.showTabLabel;
   const initialActivePlaceId: number | null = (JSON.parse(localStorage.getItem('activePlaceIdLocale') as string) ||
     null) as number | null;
 
@@ -149,9 +160,11 @@ export function ScrollableContainer({ children, scrollDirection, ...props }: Cus
       if (scrollDirection === 'x') {
         const THUMB_WIDTH = (clientWidth / scrollWidth) * trackSize;
         setThumbWidth(Math.max(THUMB_WIDTH + 65, DEFAULT_THUMB_WIDTH));
+        setIsThumbVisible(scrollWidth > clientWidth); // Check if the content width is greater than the track width
       } else {
         const THUMB_HEIGHT = (clientHeight / scrollHeight) * trackSize;
         setThumbWidth(Math.max(THUMB_HEIGHT + 27, DEFAULT_THUMB_WIDTH));
+        setIsThumbVisible(scrollHeight > clientHeight); // Check if the content height is greater than the track height
       }
     };
 
@@ -170,15 +183,24 @@ export function ScrollableContainer({ children, scrollDirection, ...props }: Cus
         };
       }
     };
-
     calculateThumbSize();
-
     window.addEventListener('resize', calculateThumbSize);
-
     return () => {
       window.removeEventListener('resize', calculateThumbSize);
     };
-  }, [showFullPilot, initialActivePlaceId, showHub, showMore, currentItemId, activeItemId, openedHubId, activePlaceId]);
+  }, [
+    showFullPilot,
+    isResize,
+    initialActivePlaceId,
+    showTabLabel,
+    showTabLabelFromLS,
+    showHub,
+    showMore,
+    currentItemId,
+    activeItemId,
+    openedHubId,
+    activePlaceId
+  ]);
 
   // Listen for mouse events to handle scrolling by dragging the thumb
   useEffect(() => {
@@ -217,91 +239,97 @@ export function ScrollableContainer({ children, scrollDirection, ...props }: Cus
       <div className={`scrollbar-hide ${scrollDirection === 'y' ? 'grow mr-1' : ''}`} ref={contentRef} {...props}>
         {children}
       </div>
-      <div
-        className={` mt-2 group ${
-          scrollDirection === 'y' ? 'flex flex-col w-4 items-center' : 'grid w-full grid-cols-2'
-        }`}
-      >
-        <div />
+      {isThumbVisible && (
+        <div
+          className={` mt-2 group ${
+            scrollDirection === 'y' ? 'flex flex-col w-4 items-center' : 'grid w-full grid-cols-2'
+          }`}
+        >
+          <div />
 
-        <div className={`flex items-center mb-4 ${scrollDirection === 'y' ? 'flex-col h-full' : 'flex-row space-x-2'}`}>
           <div
-            className={`flex z-10 gap-1.5 bg-transparent opacity-0 group-hover:opacity-100 rounded-md ${
-              scrollDirection === 'y' ? 'flex-col' : 'flex-row ml-2'
-            }`}
-          >
-            <button
-              className="flex items-center justify-center w-3 h-3 bg-gray-200 rounded-full"
-              onClick={() => handleScrollButton(scrollDirection === 'y' ? 'up' : 'left')}
-            >
-              {scrollDirection === 'y' ? (
-                <ChevronUpIcon className="w-2 h-2 text-gray-700" />
-              ) : (
-                <ChevronLeftIcon className="w-2 h-2 text-gray-700" />
-              )}
-            </button>
-            <button
-              className="flex items-center justify-center w-3 h-3 bg-gray-200 rounded-full"
-              onClick={() => handleScrollButton(scrollDirection === 'y' ? 'down' : 'right')}
-            >
-              {scrollDirection === 'y' ? (
-                <ChevronDownIcon className="w-2 h-2 text-gray-700" />
-              ) : (
-                <ChevronRightIcon className="w-2 h-2 text-gray-700" />
-              )}
-            </button>
-          </div>
-          <div
-            className={`relative flex flex-grow block ${scrollDirection === 'y' ? 'w-3 items-center' : ' w-full h-3'}`}
+            className={`flex items-center mb-4 ${scrollDirection === 'y' ? 'flex-col h-full' : 'flex-row space-x-2'}`}
           >
             <div
-              className={`absolute top-0 -bottom-7 bg-transparent cursor-pointer rounded-xl ${
-                scrollDirection === 'y' ? 'w-3' : ' w-full h-3 -right-12'
+              className={`flex z-10 gap-1.5 bg-alsoit-gray-50 bg-opacity-75 opacity-0 group-hover:opacity-100 rounded-md ${
+                scrollDirection === 'y' ? 'flex-col' : 'flex-row ml-2'
               }`}
-              ref={scrollTrackRef}
-              onClick={handleTrackClick}
-            ></div>
+            >
+              <button
+                className="flex items-center justify-center w-3 h-3 bg-gray-200 rounded-full"
+                onClick={() => handleScrollButton(scrollDirection === 'y' ? 'up' : 'left')}
+              >
+                {scrollDirection === 'y' ? (
+                  <ChevronUpIcon className="w-2 h-2 text-gray-700" />
+                ) : (
+                  <ChevronLeftIcon className="w-2 h-2 text-gray-700" />
+                )}
+              </button>
+              <button
+                className="flex items-center justify-center w-3 h-3 bg-gray-200 rounded-full"
+                onClick={() => handleScrollButton(scrollDirection === 'y' ? 'down' : 'right')}
+              >
+                {scrollDirection === 'y' ? (
+                  <ChevronDownIcon className="w-2 h-2 text-gray-700" />
+                ) : (
+                  <ChevronRightIcon className="w-2 h-2 text-gray-700" />
+                )}
+              </button>
+            </div>
             <div
-              className={`absolute bg-alsoit-gray-75 hover:bg-alsoit-gray-300 cursor-pointer rounded-xl ${
-                scrollDirection === 'y' ? 'w-3' : ' w-full h-3'
+              className={`relative flex flex-grow block ${
+                scrollDirection === 'y' ? 'w-2 hover:w-3 items-center' : ' w-full hover:h-3 h-2'
               }`}
-              ref={scrollThumbRef}
-              onMouseDown={handleThumbMousedown}
-              style={{
-                height: scrollDirection === 'y' ? `${thumbWidth}px` : '',
-                width: scrollDirection === 'x' ? `${thumbWidth}px` : '',
-                cursor: isDragging ? 'grabbing' : 'grab'
-              }}
-            ></div>
-          </div>
-          <div
-            className={`flex z-10 gap-1.5 bg-transparent opacity-0 group-hover:opacity-100 rounded-md ${
-              scrollDirection === 'y' ? 'flex-col' : 'flex-row ml-2'
-            }`}
-          >
-            <button
-              className="flex items-center justify-center w-3 h-3 bg-gray-200 rounded-full"
-              onClick={() => handleScrollButton(scrollDirection === 'y' ? 'up' : 'left')}
             >
-              {scrollDirection === 'y' ? (
-                <ChevronUpIcon className="w-2 h-2 text-gray-700" />
-              ) : (
-                <ChevronLeftIcon className="w-2 h-2 text-gray-700" />
-              )}
-            </button>
-            <button
-              className="flex items-center justify-center w-3 h-3 bg-gray-200 rounded-full"
-              onClick={() => handleScrollButton(scrollDirection === 'y' ? 'down' : 'right')}
+              <div
+                className={`absolute top-0 -bottom-7 bg-transparent cursor-pointer rounded-xl ${
+                  scrollDirection === 'y' ? 'w-2 hover:w-3' : ' w-full h-2 hover:h-3 -right-12'
+                }`}
+                ref={scrollTrackRef}
+                onClick={handleTrackClick}
+              ></div>
+              <div
+                className={`absolute bg-alsoit-gray-75 hover:bg-alsoit-gray-300 cursor-pointer rounded-xl ${
+                  scrollDirection === 'y' ? 'w-2 hover:w-3' : ' w-full h-2 hover:h-3'
+                }`}
+                ref={scrollThumbRef}
+                onMouseDown={handleThumbMousedown}
+                style={{
+                  height: scrollDirection === 'y' ? `${thumbWidth}px` : '',
+                  width: scrollDirection === 'x' ? `${thumbWidth}px` : '',
+                  cursor: isDragging ? 'grabbing' : 'grab'
+                }}
+              ></div>
+            </div>
+            <div
+              className={`flex z-10 gap-1.5 bg-alsoit-gray-50 bg-opacity-75 opacity-0 group-hover:opacity-100 rounded-md ${
+                scrollDirection === 'y' ? 'flex-col' : 'flex-row ml-2'
+              }`}
             >
-              {scrollDirection === 'y' ? (
-                <ChevronDownIcon className="w-2 h-2 text-gray-700" />
-              ) : (
-                <ChevronRightIcon className="w-2 h-2 text-gray-700" />
-              )}
-            </button>
+              <button
+                className="flex items-center justify-center w-3 h-3 bg-gray-200 rounded-full"
+                onClick={() => handleScrollButton(scrollDirection === 'y' ? 'up' : 'left')}
+              >
+                {scrollDirection === 'y' ? (
+                  <ChevronUpIcon className="w-2 h-2 text-gray-700" />
+                ) : (
+                  <ChevronLeftIcon className="w-2 h-2 text-gray-700" />
+                )}
+              </button>
+              <button
+                className="flex items-center justify-center w-3 h-3 bg-gray-200 rounded-full"
+                onClick={() => handleScrollButton(scrollDirection === 'y' ? 'down' : 'right')}
+              >
+                {scrollDirection === 'y' ? (
+                  <ChevronDownIcon className="w-2 h-2 text-gray-700" />
+                ) : (
+                  <ChevronRightIcon className="w-2 h-2 text-gray-700" />
+                )}
+              </button>
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }

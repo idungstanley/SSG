@@ -20,7 +20,7 @@ export function OverlayRow({ task, columns }: OverlayRowProps) {
   return (
     <div
       style={{ minWidth: 500, display: 'grid', gridTemplateColumns: generateGrid(columns.length) }}
-      className="items-center bg-white h-10"
+      className="items-center bg-white h-10 opacity-75"
     >
       <StickyCol
         showSubTasks={false}

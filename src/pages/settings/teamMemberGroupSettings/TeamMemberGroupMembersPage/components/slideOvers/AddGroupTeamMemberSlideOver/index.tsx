@@ -71,7 +71,7 @@ function AddGroupTeamMemberSlideOver() {
             height="h-6"
             width="w-6"
             initials={teamMember.initials}
-            backgroundColour={teamMember.colour}
+            backgroundColour={teamMember.color}
             textSize="text-xs"
           />
         );

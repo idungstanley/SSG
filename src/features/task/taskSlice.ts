@@ -51,6 +51,7 @@ export interface ImyTaskData {
   start_date: string | null;
   descendants_count: number;
   has_descendants: boolean;
+  has_attachments: boolean;
   end_date: string | null;
   status: Status;
   assignees?: [{ id: string; initials: string; color: string; name: string; avatar_path: string | null }];
@@ -127,6 +128,7 @@ interface TaskState {
   taskStatus: string | null;
   showTaskNavigation: boolean;
   addNewTaskItem: boolean;
+  hilightNewTask: boolean;
   closeTaskListView: boolean;
   toggleAssignCurrentTaskId: string | null | undefined;
   currentParentTaskId: string | null;
@@ -192,10 +194,11 @@ const initialState: TaskState = {
   showNewTaskField: false,
   showNewTaskId: '',
   singleLineView: true,
+  hilightNewTask: false,
   selectedTasksArray: [],
   verticalGrid: false,
   taskUpperCase: false,
-  verticalGridlinesTask: false,
+  verticalGridlinesTask: true,
   CompactView: false,
   CompactViewWrap: false,
   tableView: false,
@@ -337,6 +340,9 @@ export const taskSlice = createSlice({
     },
     getCompactView(state, action: PayloadAction<boolean>) {
       state.CompactView = action.payload;
+    },
+    setHilightNewTask(state, action: PayloadAction<boolean>) {
+      state.hilightNewTask = action.payload;
     },
     setShowNewTaskField(state, action: PayloadAction<boolean>) {
       state.showNewTaskField = action.payload;
@@ -553,6 +559,7 @@ export const {
   getTableView,
   getBoardView,
   getCalendeView,
+  setHilightNewTask,
   getMapView,
   setTaskStatus,
   setShowTaskNavigation,

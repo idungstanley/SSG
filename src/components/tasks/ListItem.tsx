@@ -104,7 +104,8 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
     }
   };
 
-  const tooltipItems = data?.data.task_status_counts;
+  const tooltipItems = data?.data.task_statuses;
+  console.log(tooltipItems);
 
   const closeMenuDropdown = () => {
     dispatch(
@@ -238,10 +239,10 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
                       <li
                         key={index}
                         className="flex items-center justify-between cursor-pointer hover:text-blue-500"
-                        onClick={() => handleClickScroll(item.task_status.name)}
+                        onClick={() => handleClickScroll(item.name)}
                       >
-                        <p>{item.task_status.name}</p>
-                        <p>({item.tasks_count})</p>
+                        <p>{item.name}</p>
+                        <p>({item.task_status_counts})</p>
                       </li>
                     ))}
                 </ul>

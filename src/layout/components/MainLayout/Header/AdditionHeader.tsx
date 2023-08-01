@@ -16,26 +16,6 @@ import ArrowCaretUp from '../../../../assets/icons/ArrowCaretUp';
 import AlarmClockIcon from '../../../../assets/icons/AlarmClockicon';
 import ArrowCaretDown from '../../../../assets/icons/ArrowCaretDown';
 
-export const handleEntity = ({
-  workSpaceId,
-  hubId,
-  listId,
-  taskId
-}: {
-  workSpaceId: string | undefined;
-  hubId: string | undefined | null;
-  listId: string | undefined | null;
-  taskId: string | undefined | null;
-}): string => {
-  return hubId
-    ? `/${workSpaceId}/tasks/h/${hubId}`
-    : !taskId
-    ? `/${workSpaceId}/tasks/l/${listId}`
-    : !listId
-    ? `/${workSpaceId}/tasks/h/${hubId}/t/${taskId}`
-    : `/${workSpaceId}/tasks/l/${listId}/t/${taskId}`;
-};
-
 export default function AdditionalHeader() {
   const { screenRecording, duration, timerStatus } = useAppSelector((state) => state.task);
   const [recordBlinker, setRecordBlinker] = useState<boolean>(false);
@@ -43,7 +23,7 @@ export default function AdditionalHeader() {
   const [isVisible, setIsVisible] = useState<boolean>(true);
   const { activeTabId: tabsId, timerLastMemory, activeItemId } = useAppSelector((state) => state.workspace);
   const { period } = useAppSelector((state) => state.task);
-  const { timezone: zone } = useAppSelector((state) => state.userSetting);
+  const { timezone: zone, date_format } = useAppSelector((state) => state.userSetting);
   const [clockModal, setClockModal] = useState<boolean>(false);
   const [HeaderClock, setClock] = useState<string>(dayjs().format('DD-MM-YYYY hh:mm'));
   const [showClock, setShowClock] = useState<{ show: boolean; withDay: boolean; showMinimal: boolean }>({
@@ -202,17 +182,18 @@ export default function AdditionalHeader() {
             {moment(HeaderClock, 'DD-MM-YYYY hh:mm').format('hh:mm')}
           </span>
           <span className="text-center text-alsoit-text-md">
-            {moment(HeaderClock, 'DD-MM-YYYY hh:mm').format('DD-MM-YYYY')}
+            {moment(HeaderClock, 'DD-MM-YYYY hh:mm').format(date_format?.toUpperCase() ?? 'MM-DD-YYYY')}
           </span>
           {clockModal && (
-            <HeaderModal clickAway={true} toggleFn={setClockModal} styles="top-10 right-28">
+            <HeaderModal clickAway={true} toggleFn={setClockModal} styles="top-10 right-32 w-44">
               <HeaderTimeModal />
             </HeaderModal>
           )}
           {showClock.showMinimal && !clockModal && (
-            <HeaderModal toggleFn={setClockModal} styles="top-10 -left-4">
-              <span className="bg-alsoit-gray-50 font-semibold text-alsoit-text-lg shadow-lg p-1 rounded border-alsoit-border-base border-alsoit-gray-75">
-                {dayjs().format('ddd MMMM DD, YYYY')}
+            <HeaderModal toggleFn={setClockModal} styles="top-10 -right-5 h-12 w-28">
+              <span className="bg-alsoit-gray-50 font-semibold text-alsoit-text-lg shadow-lg rounded border-alsoit-border-base border-alsoit-gray-75 text-center">
+                <p>{dayjs().format('DD MMMM, YYYY')}</p>
+                <p>{dayjs().format('dddd')}</p>
               </span>
             </HeaderModal>
           )}

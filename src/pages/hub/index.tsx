@@ -13,17 +13,18 @@ import FilterByAssigneesSliderOver from '../workspace/lists/components/renderlis
 import { List } from '../../components/Views/ui/List/List';
 import { generateLists } from '../../utils';
 import { Header } from '../../components/TasksHeader';
+import { ScrollableContainer } from '../../components/ScrollableContainer/ScrollableContainer';
 
 export default function HubPage() {
   const dispatch = useAppDispatch();
-  const { hubId } = useParams();
+  const { hubId, taskId } = useParams();
   const { filterTaskByAssigneeIds } = useAppSelector((state) => state.task);
   const containerRef = useRef<HTMLDivElement>(null);
   const { data: hub } = UseGetHubDetails({ activeItemId: hubId, activeItemType: 'hub' });
 
   // set entity name
   useEffect(() => {
-    if (hub) {
+    if (hub && !taskId) {
       const hubName = hub.data.hub.name;
       dispatch(setActiveItem({ activeItemId: hubId, activeItemType: 'hub', activeItemName: hubName }));
       dispatch(setActiveEntityName(hubName));
@@ -76,18 +77,20 @@ export default function HubPage() {
         additional={<FilterByAssigneesSliderOver />}
       >
         <Header />
-        <section
-          ref={containerRef}
-          style={{ minHeight: '0', maxHeight: '83vh' }}
-          className="w-full h-full p-4 space-y-10 overflow-y-scroll"
-        >
-          {/* lists */}
-          {Object.keys(lists).map((listId) => (
-            <div key={listId}>
-              <List tasks={lists[listId]} />
-            </div>
-          ))}
-        </section>
+        <ScrollableContainer scrollDirection="y">
+          <section
+            ref={containerRef}
+            style={{ minHeight: '0', maxHeight: '83vh' }}
+            className="w-full h-full p-4 space-y-10"
+          >
+            {/* lists */}
+            {Object.keys(lists).map((listId) => (
+              <div key={listId}>
+                <List tasks={lists[listId]} />
+              </div>
+            ))}
+          </section>
+        </ScrollableContainer>
       </Page>
     </>
   );

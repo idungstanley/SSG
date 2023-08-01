@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { AiOutlinePlus } from 'react-icons/ai';
 // import SubTask from '../../../../../../../tasks/subtasks/create/SubTask';
 import moment from 'moment';
@@ -22,6 +22,8 @@ import MoreDetails from './components/MoreDetails';
 import { IListDetails } from '../../../../../../features/list/list.interfaces';
 import { useParams } from 'react-router-dom';
 import { IWalletDetails } from '../../../../../../features/wallet/wallet.interfaces';
+import { setActiveItem } from '../../../../../../features/workspace/workspaceSlice';
+import { useAppDispatch } from '../../../../../../app/hooks';
 // import { useParams } from 'react-router-dom';
 
 export interface tagItem {
@@ -31,8 +33,9 @@ export interface tagItem {
 }
 interface PropertyDetailsProps {
   Details?: IHubDetails | ITaskFullList | IListDetails | IWalletDetails;
+  type?: string;
 }
-export default function PropertyDetails({ Details }: PropertyDetailsProps) {
+export default function PropertyDetails({ Details, type }: PropertyDetailsProps) {
   const [toggleSubTask, setToggleSubTask] = useState(false);
   const [editingTitle, setEditingTitle] = useState(false);
   const [editingDescription, setEditingDescription] = useState(false);
@@ -113,24 +116,24 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
       <div className="flex items-center justify-between p-2">
         <section className="flex items-center space-x-3">
           <Status Details={Details} />
-          <ToolTip tooltip="Priority">
+          <ToolTip title="Priority">
             <Priority Details={Details} />
           </ToolTip>
         </section>
         <section className="z-0 flex items-center justify-center space-x-3">
           <CustomReference />
-          <ToolTip tooltip="Share">
+          <ToolTip title="Share">
             <Share taskId={Details?.id} taskName={title} />
           </ToolTip>
           <EntitySettings />
         </section>
       </div>
       <section className="flex items-center mt-3 space-x-2">
-        <ToolTip tooltip="Assignees">
+        <ToolTip title="Assignees">
           <Assignees />
         </ToolTip>
         <span className=" text-gray-300">|</span>
-        <ToolTip tooltip="Subscribers">
+        <ToolTip title="Subscribers">
           <Subscribers />
         </ToolTip>
         <span className="text-gray-300">|</span>
