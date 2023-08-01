@@ -7,6 +7,7 @@ import ToolTip from '../Tooltip/Tooltip';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { setShowNewTaskField, setShowNewTaskId } from '../../features/task/taskSlice';
 import DetailsOnHover from '../Dropdown/DetailsOnHover/DetailsOnHover';
+import Checklist from './Checklist';
 
 export interface BadgeTask extends TdHTMLAttributes<HTMLTableCellElement> {
   task: Task;
@@ -57,8 +58,8 @@ export default function Badges({ task }: BadgeTask) {
           </ToolTip>
         )}
         {task.checklist_items_count > 0 && (
-          <ToolTip tooltip="Checklist">
-            <button className="p-1 border rounded-md " onClick={(e) => onShowAddSubtaskField(e, task.id)}>
+          <ToolTip title="Checklist">
+            <button className="relative p-1 border rounded-md " onClick={(e) => onShowAddSubtaskField(e, task.id)}>
               <Checklist />
               <p className="alsoit-text-sm h-2 w-2 absolute left-5" style={{ fontSize: '9px', bottom: '12.2px' }}>
                 {task.checklist_done_items_count}/{task.checklist_items_count}
