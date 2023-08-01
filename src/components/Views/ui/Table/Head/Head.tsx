@@ -230,7 +230,7 @@ export function Head({
             </div>
           </div>
           <FiPlusCircle
-            className="w-4 h-4 font-black AddColumnDropdownButton"
+            className="w-4 h-4 font-black AddColumnDropdownButton mr-2"
             onClick={() => dispatch(setListIdForCustom(listId))}
           />
           {headerId === columns[0].id && (
