@@ -1,8 +1,7 @@
-import React, { TdHTMLAttributes, useState } from 'react';
+import React, { TdHTMLAttributes } from 'react';
 import Description from './Description';
 import AttachFile from './AttachFile';
 import SubtaskWithCount from './SubtaskWithCount';
-import Checklist from './Checklist';
 import { Task } from '../../features/task/interface.tasks';
 import ToolTip from '../Tooltip/Tooltip';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
