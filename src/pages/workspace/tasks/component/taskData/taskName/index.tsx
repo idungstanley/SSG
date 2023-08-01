@@ -185,7 +185,7 @@ export default function TaskName({
         </div>
         <p id="iconWrapper" className="flex items-center ml-1 space-x-1 opacity-0 group-hover:opacity-100 ">
           {!ShowPlusIcon && (
-            <ToolTip tooltip="Add subtask">
+            <ToolTip title="Add subtask">
               <span className="cursor-pointer bg-white  border rounded flex justify-center align-center p-0.5">
                 <PlusIcon
                   className="w-3 text-gray-500 "
@@ -196,7 +196,7 @@ export default function TaskName({
             </ToolTip>
           )}
           {/* tag here */}
-          <ToolTip tooltip="Add Tag">
+          <ToolTip title="Add Tag">
             <button onClick={() => dispatch(setCurrentTaskIdForTag(task?.id))}>
               <TagModal entity_type="task" />
             </button>

@@ -77,7 +77,7 @@ export default function EntryList({ entries, switchHeader }: EntryListProps) {
         if (col.title === 'user' && !col.hidden) {
           return (
             <td key={col.id} className="flex w-10 items-center justify-start cursor-pointer py-1">
-              <ToolTip tooltip={name}>
+              <ToolTip title={name}>
                 <AvatarWithInitials height="h-5" width="w-5" initials={initials} />
               </ToolTip>
             </td>

@@ -129,7 +129,7 @@ export function Row({ task, columns, paddingLeft = 0, parentId, task_status, isL
           {/* actions */}
           <div className="flex items-center justify-center mr-1 space-x-1 dNone">
             {/* effects */}
-            <ToolTip tooltip="Apply Effects">
+            <ToolTip title="Apply Effects">
               <button className="p-1 border rounded-md " onClick={(e) => e.stopPropagation()}>
                 <Effect className="w-3 h-3" />
               </button>
@@ -137,20 +137,20 @@ export function Row({ task, columns, paddingLeft = 0, parentId, task_status, isL
 
             {/* tags */}
             {'tags' in task ? (
-              <ToolTip tooltip="Tags">
+              <ToolTip title="Tags">
                 <ManageTagsDropdown entityId={task.id} tagsArr={task.tags as Tag[]} entityType="task" />
               </ToolTip>
             ) : null}
 
             {/* show create subtask field */}
             {task.descendants_count < 1 && (
-              <ToolTip tooltip="Subtask">
+              <ToolTip title="Subtask">
                 <button className="p-1 border rounded-md " onClick={(e) => onShowAddSubtaskField(e, task.id)}>
                   <SubtasksIcon className="w-3 h-3" />
                 </button>
               </ToolTip>
             )}
-            <ToolTip tooltip="Enhance View">
+            <ToolTip title="Enhance View">
               <button className="p-1 pl-4 " onClick={(e) => e.stopPropagation()}>
                 <Enhance className="w-3 h-3" />
               </button>

@@ -26,7 +26,7 @@ export default function Nav({ activeTabId, setActiveTabId }: NavProps) {
     <div className="h-full flex flex-col items-center border-r w-20 p-2 gap-10 bg-gray-400">
       <div className="flex flex-col items-center gap-2">
         {navItems.map((tab) => (
-          <ToolTip key={tab.id} tooltip={tab.label}>
+          <ToolTip key={tab.id} title={tab.label}>
             <button
               onClick={() => setActiveTabId(tab.id)}
               type="button"

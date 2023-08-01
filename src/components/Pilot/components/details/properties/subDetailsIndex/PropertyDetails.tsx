@@ -116,24 +116,24 @@ export default function PropertyDetails({ Details, type }: PropertyDetailsProps)
       <div className="flex items-center justify-between p-2">
         <section className="flex items-center space-x-3">
           <Status Details={Details} />
-          <ToolTip tooltip="Priority">
+          <ToolTip title="Priority">
             <Priority Details={Details} />
           </ToolTip>
         </section>
         <section className="z-0 flex items-center justify-center space-x-3">
           <CustomReference />
-          <ToolTip tooltip="Share">
+          <ToolTip title="Share">
             <Share taskId={Details?.id} taskName={title} />
           </ToolTip>
           <EntitySettings />
         </section>
       </div>
       <section className="flex items-center mt-3 space-x-2">
-        <ToolTip tooltip="Assignees">
+        <ToolTip title="Assignees">
           <Assignees />
         </ToolTip>
         <span className=" text-gray-300">|</span>
-        <ToolTip tooltip="Subscribers">
+        <ToolTip title="Subscribers">
           <Subscribers />
         </ToolTip>
         <span className="text-gray-300">|</span>

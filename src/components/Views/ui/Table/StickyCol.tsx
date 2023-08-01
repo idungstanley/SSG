@@ -318,7 +318,7 @@ export function StickyCol({
             )}
           >
             <div className="absolute flex ml-1 space-x-1 -mt-7">
-              <ToolTip tooltip="Cancel">
+              <ToolTip title="Cancel">
                 <ImCancelCircle onClick={onClose} className="w-3 h-3" />
               </ToolTip>
               <button
