@@ -1,14 +1,12 @@
 import { useDispatch } from 'react-redux';
 import requestNew from '../../app/requestNew';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { setArchiveWallet, setDeleteWallet } from './walletSlice';
-import { closeMenu, getHub } from '../hubs/hubSlice';
-import { ICreateWallet, IWallet, IWalletDetailRes, IWalletRes } from './wallet.interfaces';
+import { setArchiveWallet } from './walletSlice';
+import { closeMenu } from '../hubs/hubSlice';
+import { IWallet, IWalletDetailRes, IWalletRes } from './wallet.interfaces';
 import { useParams } from 'react-router-dom';
 import { useAppSelector } from '../../app/hooks';
 import { generateFilters } from '../../components/TasksHeader/lib/generateFilters';
-import { setFilteredResults } from '../search/searchSlice';
-import { deleteWalletManager } from '../../managers/Wallet';
 
 interface IResponseWallet {
   data: {
@@ -59,7 +57,7 @@ export const createWalletService = (data: {
   walletId?: string | null;
   color?: string;
 }) => {
-  const response = requestNew<ICreateWallet>({
+  const response = requestNew<IResponseWallet>({
     url: 'wallets',
     method: 'POST',
     data: {
@@ -123,29 +121,13 @@ export const UseEditWalletService = (data: {
 };
 
 //del wallet
-export const UseDeleteWalletService = (data: { id: string | null | undefined; delWallet: boolean }) => {
-  const dispatch = useDispatch();
+export const UseDeleteWalletService = (data: { id: string | null | undefined }) => {
   const walletId = data.id;
-  const { hub } = useAppSelector((state) => state.hub);
-  return useQuery(
-    ['wallets'],
-    async () => {
-      const data = await requestNew<IResponseWallet>({
-        url: `wallets/${walletId}`,
-        method: 'DELETE'
-      });
-      return data;
-    },
-    {
-      enabled: data.delWallet,
-      onSuccess: () => {
-        dispatch(setDeleteWallet(false));
-        const updatedTree = deleteWalletManager(walletId as string, hub);
-        dispatch(getHub(updatedTree));
-        dispatch(setFilteredResults(updatedTree));
-      }
-    }
-  );
+  const response = requestNew<IResponseWallet>({
+    url: `wallets/${walletId}`,
+    method: 'DELETE'
+  });
+  return response;
 };
 
 //archive wallet

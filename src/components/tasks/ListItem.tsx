@@ -105,7 +105,6 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
   };
 
   const tooltipItems = data?.data.task_statuses;
-  console.log(tooltipItems);
 
   const closeMenuDropdown = () => {
     dispatch(

@@ -107,7 +107,7 @@ export default function SubDropdown() {
         dispatch(setShowIndependentPilot(true));
         dispatch(setActiveTabId(PilotTabsId.entityManager));
         dispatch(setVisibility(false));
-        dispatch(setShowTreeInput(!showTreeInput));
+        dispatch(setShowTreeInput(false));
         dispatch(setSubDropdownMenu(false));
         dispatch(setLastActiveItem(''));
         if (entityToCreate === EntityType.hub || entityToCreate === EntityType.subHub) {

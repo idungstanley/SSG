@@ -1,8 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import requestNew from '../../app/requestNew';
 import { useDispatch } from 'react-redux';
-import { setArchiveList, setDeleteList } from './listSlice';
-import { closeMenu, getHub } from '../hubs/hubSlice';
+import { setArchiveList } from './listSlice';
+import { closeMenu } from '../hubs/hubSlice';
 import { IWalletRes } from '../wallet/wallet.interfaces';
 import { IListDetailRes, listDetails, taskCountFields } from './list.interfaces';
 import { useAppSelector } from '../../app/hooks';
@@ -10,12 +10,16 @@ import { useParams } from 'react-router-dom';
 import { generateFilters } from '../../components/TasksHeader/lib/generateFilters';
 import { UseGetHubDetails } from '../hubs/hubService';
 import { IList } from '../hubs/hubs.interfaces';
-import { setFilteredResults } from '../search/searchSlice';
-import { deleteListManager } from '../../managers/List';
 
 interface TaskCountProps {
   data: {
     task_statuses: taskCountFields[];
+  };
+}
+
+interface IResponseList {
+  data: {
+    list: IList;
   };
 }
 
@@ -72,7 +76,7 @@ export const createListService = (data: {
   walletId?: string | null;
   color?: { outerColour?: string; innerColour?: string } | string;
 }) => {
-  const response = requestNew({
+  const response = requestNew<IResponseList>({
     url: 'lists',
     method: 'POST',
     data: {
@@ -116,11 +120,6 @@ export const getListServices = (data: { Archived: boolean; walletId?: string | n
 };
 
 //edit list
-interface IResponseList {
-  data: {
-    list: IList;
-  };
-}
 export const UseEditListService = (data: {
   listName?: string;
   listId?: string | null;
@@ -142,29 +141,13 @@ export const UseEditListService = (data: {
 };
 
 //del lists
-export const UseDeleteListService = (data: { id: string | null | undefined; delList: boolean }) => {
-  const dispatch = useDispatch();
+export const UseDeleteListService = (data: { id: string | null | undefined }) => {
   const listId = data.id;
-  const { hub } = useAppSelector((state) => state.hub);
-  return useQuery(
-    ['lists'],
-    async () => {
-      const data = await requestNew({
-        url: `lists/${listId}`,
-        method: 'DELETE'
-      });
-      return data;
-    },
-    {
-      enabled: data.delList,
-      onSuccess: () => {
-        dispatch(setDeleteList(false));
-        const updatedTree = deleteListManager(listId as string, hub);
-        dispatch(getHub(updatedTree));
-        dispatch(setFilteredResults(updatedTree));
-      }
-    }
-  );
+  const response = requestNew<IResponseList>({
+    url: `lists/${listId}`,
+    method: 'DELETE'
+  });
+  return response;
 };
 
 export const GetTaskListCount = (value: { query: string; fetchTaskCount: boolean }) => {

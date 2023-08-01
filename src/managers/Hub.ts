@@ -33,3 +33,31 @@ export const deleteHubManager = (id: string, hubs: Hub[]) => {
   updatedTree = findParentOfEntity('hub', id, hubs, deleteHub as <IHub>(item: IHub) => IHub);
   return updatedTree;
 };
+
+export const createHubManager = (parentId: string | null, hubs: Hub[], newHubFromData: IHub) => {
+  const newHub = {
+    ...newHubFromData,
+    children: [],
+    wallets: [],
+    lists: []
+  };
+
+  const createHub = (parent: Hub) => {
+    const newParent = { ...parent } as Hub;
+    return {
+      ...newParent,
+      children: [...newParent.children, newHub]
+    };
+  };
+
+  let updatedTree = [...hubs];
+
+  if (parentId) {
+    updatedTree = findCurrentEntity('hub', parentId, hubs, createHub as <IHub>(item: IHub) => IHub);
+  } else {
+    updatedTree = [...updatedTree, newHub];
+  }
+
+  console.log('createHubManager', updatedTree);
+  return updatedTree;
+};
