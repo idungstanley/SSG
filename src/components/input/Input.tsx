@@ -12,6 +12,7 @@ interface InputDataTypes {
   leadingIcon?: string | JSX.Element;
   trailingIcon?: string | JSX.Element;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  trailingClick?: () => void;
 }
 function Input({
   label,
@@ -24,8 +25,14 @@ function Input({
   value,
   onChange,
   leadingIcon,
-  trailingIcon
+  trailingIcon,
+  trailingClick
 }: InputDataTypes) {
+  const handleTrailingIconClick = () => {
+    if (trailingClick) {
+      trailingClick();
+    }
+  };
   return (
     <div className="w-full">
       {label && (
@@ -58,7 +65,12 @@ function Input({
         />
 
         {trailingIcon && (
-          <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">{trailingIcon}</div>
+          <div
+            className="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer"
+            onClick={handleTrailingIconClick}
+          >
+            {trailingIcon}
+          </div>
         )}
       </div>
       {hint && <p className="mt-2 text-sm text-gray-500">{hint}</p>}
