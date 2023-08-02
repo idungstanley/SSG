@@ -185,7 +185,7 @@ export function Row({ task, columns, paddingLeft = 0, parentId, task_status, isL
         />
       ) : null}
 
-      {showSubTasks || toggleAllSubtask ? (
+      {showSubTasks ? (
         <SubTasks paddingLeft={DEFAULT_LEFT_PADDING + paddingLeft} parentId={task.id} columns={columns} />
       ) : null}
     </>
