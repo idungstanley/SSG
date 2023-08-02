@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import dayjs from 'dayjs';
 import ArrowCaretDown from '../assets/icons/ArrowCaretDown';
 
@@ -26,7 +26,7 @@ function ReusableSelect({ value, onclick, options }: ReusableSelectProps) {
     if (listRef.current && activeItem) {
       const activeElement = listRef.current.querySelector(`li[data-value="${activeItem}"]`);
       if (activeElement) {
-        activeElement.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+        activeElement.scrollIntoView({ block: 'center', inline: 'nearest' });
       }
     }
   }, [dropped, activeItem]);
@@ -52,8 +52,10 @@ function ReusableSelect({ value, onclick, options }: ReusableSelectProps) {
   };
 
   const handleCloseModal = (value?: 15 | 30) => {
-    value && setTimeInterval(value);
-    setDrop((prev) => ({ ...prev, timeInterval: !prev.timeInterval }));
+    if (value) {
+      setTimeInterval(value);
+      setDrop((prev) => ({ ...prev, timeInterval: !prev.timeInterval }));
+    }
   };
 
   function findNearestTime(currentTime: dayjs.Dayjs, timeOptions: Option[]): string {
@@ -96,7 +98,7 @@ function ReusableSelect({ value, onclick, options }: ReusableSelectProps) {
               <span className="font-semibold">Time Interval</span>
               <div
                 className="w-max flex items-center bg-alsoit-gray-50 p-2 rounded-lg"
-                onClick={() => handleCloseModal}
+                onClick={() => setDrop((prev) => ({ ...prev, timeInterval: !prev.timeInterval }))}
               >
                 <span>{timeInterval} mins</span>
                 <ArrowCaretDown active />
@@ -123,11 +125,25 @@ function ReusableSelect({ value, onclick, options }: ReusableSelectProps) {
                 onClick={() => handleClick(option)}
                 key={index}
                 data-value={option}
-                className={`text-alsoit-text-sm px-2 rounded-md ${
-                  activeItem === option ? 'bg-yellow-200' : 'hover:bg-purple-400 hover:text-white'
+                className={`text-alsoit-text-lg font-semibold py-2 flex space-x-2 items-center px-2 rounded-md ${
+                  activeItem === option ? 'bg-alsoit-purple-50' : 'hover:bg-purple-400 hover:text-white'
                 }`}
               >
-                {option}
+                <input
+                  checked={activeItem === option}
+                  type="radio"
+                  id="myRadio"
+                  name="myRadioGroup"
+                  className="hidden"
+                />
+                <label
+                  htmlFor="myRadio"
+                  className="inline-block p-2 border border-alsoit-purple-300 rounded-full cursor-pointer text-purple-600"
+                >
+                  {/* {option} */}
+                </label>
+                {/* <input checked={activeItem === option} type="radio" /> */}
+                <span className="font-semibold">{option}</span>
               </li>
             ))}
           </ul>
