@@ -235,7 +235,7 @@ export function StickyCol({
                   <CloseSubtask />
                 </div>
               ) : (
-                <div className={`${task.descendants_count > 0 ? 'w-3 h-3' : ' opacity-0 w-3 h-3 '}`}>
+                <div className={`${task.descendants_count > 0 ? 'w-3 h-3' : ' opacity-0 w-3 h-3'}`}>
                   <OpenSubtask />
                 </div>
               )}
