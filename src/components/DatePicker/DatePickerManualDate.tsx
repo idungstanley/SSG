@@ -165,6 +165,7 @@ export function DatePickerManualDates({ range }: DatePickerManualDatesProps) {
               <ReusableSelect
                 options={createDynamicTimeComponent(15, timezone)}
                 value={HistoryFilterMemory?.time?.to || ''}
+                style="-left-44 top-2"
                 onclick={(e: string) => {
                   dispatch(
                     setHistoryMemory({

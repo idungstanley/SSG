@@ -8,9 +8,10 @@ interface ReusableSelectProps {
   value?: string;
   onclick: (option: string) => void;
   options: Option[];
+  style?: string;
 }
 
-function ReusableSelect({ value, onclick, options }: ReusableSelectProps) {
+function ReusableSelect({ value, onclick, options, style }: ReusableSelectProps) {
   const [dropped, setDrop] = useState<{ container: boolean; timeInterval: boolean }>({
     container: false,
     timeInterval: false
@@ -83,12 +84,12 @@ function ReusableSelect({ value, onclick, options }: ReusableSelectProps) {
   return (
     <div className="rounded-md relative">
       {!editing && (
-        <div className="text-alsoit-text-sm italic" onClick={handleEdit}>
+        <div className="text-alsoit-text-sm" onClick={handleEdit}>
           {value ? value : 'Set Time'}
         </div>
       )}
       {dropped.container && !value && (
-        <div className="flex flex-col space-y-2 w-60" tabIndex={0} onBlur={handleBlur}>
+        <div className={`relative flex flex-col space-y-2 w-60 ${style}`} tabIndex={0} onBlur={handleBlur}>
           <span className="text-alsoit-text-sm italic">Set Time</span>
           <ul
             className="absolute top-2 max-h-72 w-11/12 overflow-y-scroll flex flex-col space-y-2 p-4 bg-white shadow-2xl rounded-md"
