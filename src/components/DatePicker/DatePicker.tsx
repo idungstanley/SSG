@@ -60,7 +60,7 @@ export default function DatePicker({ styles, width, height, range, toggleFn }: D
             <DatePickerManualDates range={range} />
           </div>
           <div>
-            <MiniDatePicker />
+            <MiniDatePicker range={range} />
           </div>
           <DatePickerFooter closeDateModal={closeDateModal} time={time} />
         </div>

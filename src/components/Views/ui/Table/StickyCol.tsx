@@ -241,11 +241,10 @@ export function StickyCol({
                 className=" flex w-full mt-1 items-center text-left"
                 onKeyDown={(e) => (e.key === 'Enter' ? handleEditTask(e, task.id) : null)}
                 ref={droppabbleRef}
-                suppressContentEditableWarning={true}
               >
                 <div className="font-semibold alsoit-gray-300 text-alsoit-text-lg">
                   {singleLineView ? (
-                    <div contentEditable={eitableContent} ref={inputRef}>
+                    <div contentEditable={eitableContent} suppressContentEditableWarning={true} ref={inputRef}>
                       {!eitableContent ? (
                         <DetailsOnHover
                           hoverElement={

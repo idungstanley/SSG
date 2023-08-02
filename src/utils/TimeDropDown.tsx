@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import dayjs from 'dayjs';
 import ArrowCaretDown from '../assets/icons/ArrowCaretDown';
-import { number } from 'yup';
 
 type Option = string; // Change this type to match the type of your options
 
@@ -18,9 +17,23 @@ function ReusableSelect({ value, onclick, options }: ReusableSelectProps) {
   });
   const [editing, setEditing] = useState<boolean>(false);
   const [timeInterval, setTimeInterval] = useState<15 | 30>(15);
+  const currentOrFutureTime = value || findNearestTime(dayjs(), options);
+  const [activeItem, setActiveItem] = useState<string | null>(currentOrFutureTime);
+  const listRef = useRef<HTMLUListElement>(null);
+
+  useEffect(() => {
+    // Scroll to show the active item
+    if (listRef.current && activeItem) {
+      const activeElement = listRef.current.querySelector(`li[data-value="${activeItem}"]`);
+      if (activeElement) {
+        activeElement.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+      }
+    }
+  }, [dropped, activeItem]);
 
   const handleClick = (option: string) => {
     onclick(option);
+    setActiveItem(option);
     setEditing(false);
   };
 
@@ -43,7 +56,27 @@ function ReusableSelect({ value, onclick, options }: ReusableSelectProps) {
     setDrop((prev) => ({ ...prev, timeInterval: !prev.timeInterval }));
   };
 
-  const currentOrFutureTime = value || dayjs().add(5, 'minutes').format('h:mm A');
+  function findNearestTime(currentTime: dayjs.Dayjs, timeOptions: Option[]): string {
+    const currentTimeMoment = dayjs(currentTime);
+    const currentDateString = currentTimeMoment.format('YYYY-MM-DD');
+    const currentTimeMinutes = currentTimeMoment.diff(dayjs().startOf('day'), 'minutes');
+
+    let nearestTime = timeOptions[0];
+    let nearestDiff = Math.abs(
+      currentTimeMinutes - dayjs(currentDateString + ' ' + nearestTime).diff(dayjs().startOf('day'), 'minutes')
+    );
+
+    for (const option of timeOptions) {
+      const optionMinutes = dayjs(currentDateString + ' ' + option).diff(dayjs().startOf('day'), 'minutes');
+      const diff = Math.abs(currentTimeMinutes - optionMinutes);
+      if (diff < nearestDiff) {
+        nearestTime = option;
+        nearestDiff = diff;
+      }
+    }
+
+    return nearestTime;
+  }
 
   return (
     <div className="rounded-md relative">
@@ -55,7 +88,10 @@ function ReusableSelect({ value, onclick, options }: ReusableSelectProps) {
       {dropped.container && !value && (
         <div className="flex flex-col space-y-2 w-60" tabIndex={0} onBlur={handleBlur}>
           <span className="text-alsoit-text-sm italic">Set Time</span>
-          <ul className="absolute top-2 max-h-72 w-11/12 overflow-y-scroll flex flex-col space-y-2 p-4 bg-white shadow-2xl rounded-md">
+          <ul
+            className="absolute top-2 max-h-72 w-11/12 overflow-y-scroll flex flex-col space-y-2 p-4 bg-white shadow-2xl rounded-md"
+            ref={listRef}
+          >
             <li className="flex justify-between items-center relative">
               <span className="font-semibold">Time Interval</span>
               <div
@@ -86,8 +122,9 @@ function ReusableSelect({ value, onclick, options }: ReusableSelectProps) {
               <li
                 onClick={() => handleClick(option)}
                 key={index}
+                data-value={option}
                 className={`text-alsoit-text-sm px-2 rounded-md ${
-                  currentOrFutureTime === option ? 'bg-yellow-200' : 'hover:bg-purple-400 hover:text-white'
+                  activeItem === option ? 'bg-yellow-200' : 'hover:bg-purple-400 hover:text-white'
                 }`}
               >
                 {option}

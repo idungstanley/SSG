@@ -1,9 +1,14 @@
 import React, { useState } from 'react';
 import { Button, Checkbox, Input } from '../../../../../../components';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
 import { setCreateListSlideOverVisibility } from '../../../../../../features/general/slideOver/slideOverSlice';
-import { setEntityToCreate, setSubDropdownMenu, setshowMenuDropdown } from '../../../../../../features/hubs/hubSlice';
+import {
+  getHub,
+  setEntityToCreate,
+  setSubDropdownMenu,
+  setshowMenuDropdown
+} from '../../../../../../features/hubs/hubSlice';
 import {
   setCreateEntityType,
   setCreateWlLink,
@@ -16,20 +21,22 @@ import Assignee from '../../../../tasks/assignTask/Assignee';
 import ArrowDown from '../../../../../../assets/icons/ArrowDown';
 import Wand from '../../../../../../assets/icons/Wand';
 import { ListColourProps } from '../../../../../../components/tasks/ListItem';
+import { createListManager } from '../../../../../../managers/List';
+import { setFilteredResults } from '../../../../../../features/search/searchSlice';
 
 export default function CreateList() {
-  const queryClient = useQueryClient();
   const dispatch = useAppDispatch();
   // const { currentItemId } = useAppSelector((state) => state.workspace);
-  const { selectedTreeDetails, createWLID } = useAppSelector((state) => state.hub);
-  const [paletteColor, setPaletteColor] = useState<string | ListColourProps | undefined>('black');
-  const [showPalette, setShowPalette] = useState<boolean>(false);
-  const { type, id } = selectedTreeDetails;
+  const { selectedTreeDetails, createWLID, hub } = useAppSelector((state) => state.hub);
   const { createWlLink } = useAppSelector((state) => state.workspace);
 
+  const [paletteColor, setPaletteColor] = useState<string | ListColourProps | undefined>('black');
+  const [showPalette, setShowPalette] = useState<boolean>(false);
+
+  const { type, id } = selectedTreeDetails;
+
   const createList = useMutation(createListService, {
-    onSuccess: () => {
-      queryClient.invalidateQueries();
+    onSuccess: (data) => {
       dispatch(setCreateListSlideOverVisibility(false));
       dispatch(setShowOverlay(false));
       dispatch(setSubDropdownMenu(false));
@@ -42,6 +49,10 @@ export default function CreateList() {
       dispatch(setCreateWlLink(false));
       dispatch(setCreateEntityType(null));
       dispatch(setEntityToCreate(null));
+      const list = data.data.list;
+      const updatedTree = createListManager(list.wallet_id as string, list.hub_id as string, hub, list);
+      dispatch(getHub(updatedTree));
+      dispatch(setFilteredResults(updatedTree));
     }
   });
 

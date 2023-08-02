@@ -42,6 +42,8 @@ export function Row({ task, columns, paddingLeft = 0, parentId, task_status, isL
     custom_fields: [],
     deleted_at: null,
     descendants_count: 0,
+    checklist_items_count: 0,
+    checklist_done_items_count: 0,
     has_attachments: false,
     description: null,
     directory_items: [],
@@ -127,7 +129,7 @@ export function Row({ task, columns, paddingLeft = 0, parentId, task_status, isL
           }
         >
           {/* actions */}
-          <div className="flex items-center justify-center mr-1 space-x-1 dNone">
+          <div className="opacity-0 group-hover:opacity-100 flex items-center justify-center mr-1 space-x-1">
             {/* effects */}
             <ToolTip title="Apply Effects">
               <button className="p-1 border rounded-md " onClick={(e) => e.stopPropagation()}>

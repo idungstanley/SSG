@@ -133,7 +133,7 @@ export const createDynamicTimeComponent = (intervalInMinutes: number, format?: s
   const timeElements = [];
 
   // Start with 12 midnight
-  let currentTime = dayjs().startOf('day').tz(format);
+  let currentTime = dayjs().tz(format).set('hour', 0).set('minute', 0);
 
   // Generate the time elements
   for (let i = 0; i < totalElements; i++) {
