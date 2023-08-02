@@ -17,7 +17,7 @@ export default function AddNewItem({ listId }: AddNewItemProps) {
   const queryClient = useQueryClient();
   const [isEditInputVisible, setIsEditInputVisible] = useState(false);
   const createTask = useMutation(createTaskService, {
-    onSuccess: () => {
+    onSuccess: (data) => {
       queryClient.invalidateQueries(['task']);
       dispatch(setAddNewTaskItem(false));
       dispatch(setCreateTaskFromTop(false));
