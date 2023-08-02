@@ -138,11 +138,12 @@ function ReusableSelect({ value, onclick, options }: ReusableSelectProps) {
                 />
                 <label
                   htmlFor="myRadio"
-                  className="inline-block p-2 border border-alsoit-purple-300 rounded-full cursor-pointer text-purple-600"
-                >
-                  {/* {option} */}
-                </label>
-                {/* <input checked={activeItem === option} type="radio" /> */}
+                  className={
+                    activeItem === option
+                      ? 'bg-alsoit-purple-300 inline-block p-2 border border-alsoit-purple-300 rounded-full cursor-pointer text-purple-600'
+                      : 'inline-block p-2 border border-alsoit-purple-300 rounded-full cursor-pointer text-purple-600'
+                  }
+                ></label>
                 <span className="font-semibold">{option}</span>
               </li>
             ))}
