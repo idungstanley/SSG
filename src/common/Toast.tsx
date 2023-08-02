@@ -14,6 +14,7 @@ interface ToastProps {
 }
 
 export default function Toast({ type = 'success', title, body, showClose = true, toastId }: ToastProps) {
+  console.log(toastId);
   if (title === 'Query data cannot be undefined' || !title) {
     return null;
   }
