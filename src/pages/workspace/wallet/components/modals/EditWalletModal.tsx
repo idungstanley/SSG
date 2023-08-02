@@ -1,21 +1,23 @@
 import React, { useState } from 'react';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import { UseEditWalletService } from '../../../../../features/wallet/walletService';
 import { Button, Input, SlideOver } from '../../../../../components';
 import { useAppSelector } from '../../../../../app/hooks';
 import { setEditWalletSlideOverVisibility } from '../../../../../features/general/slideOver/slideOverSlice';
-import { setSubDropdownMenu, setshowMenuDropdown } from '../../../../../features/hubs/hubSlice';
+import { getHub, setSubDropdownMenu, setshowMenuDropdown } from '../../../../../features/hubs/hubSlice';
 import { useDispatch } from 'react-redux';
+import { changeWalletManager } from '../../../../../managers/Wallet';
+import { setFilteredResults } from '../../../../../features/search/searchSlice';
 
 function EditWalletModal() {
-  const queryClient = useQueryClient();
   const dispatch = useDispatch();
-  const { showMenuDropdownType, showMenuDropdown } = useAppSelector((state) => state.hub);
+
+  const { showMenuDropdownType, showMenuDropdown, prevName, hub } = useAppSelector((state) => state.hub);
+
   const { showEditWalletSlideOver } = useAppSelector((state) => state.slideOver);
-  const { prevName } = useAppSelector((state) => state.hub);
+
   const editWallet = useMutation(UseEditWalletService, {
-    onSuccess: () => {
-      queryClient.invalidateQueries();
+    onSuccess: (data) => {
       dispatch(setEditWalletSlideOverVisibility(false));
       dispatch(setSubDropdownMenu(false));
       dispatch(
@@ -23,6 +25,10 @@ function EditWalletModal() {
           showMenuDropdown: null
         })
       );
+      const wallet = data.data.wallet;
+      const updatedTree = changeWalletManager(wallet.id as string, hub, wallet);
+      dispatch(getHub(updatedTree));
+      dispatch(setFilteredResults(updatedTree));
     }
   });
 
@@ -41,7 +47,7 @@ function EditWalletModal() {
   const onSubmit = async () => {
     await editWallet.mutateAsync({
       walletName: name,
-      WalletId: showMenuDropdown
+      walletId: showMenuDropdown
     });
   };
 

@@ -129,7 +129,7 @@ export function Row({ task, columns, paddingLeft = 0, parentId, task_status, isL
           }
         >
           {/* actions */}
-          <div className="flex items-center justify-center mr-1 space-x-1 dNone">
+          <div className="opacity-0 group-hover:opacity-100 flex items-center justify-center mr-1 space-x-1">
             {/* effects */}
             <ToolTip title="Apply Effects">
               <button className="p-1 border rounded-md " onClick={(e) => e.stopPropagation()}>

@@ -2,17 +2,21 @@ import { IHub } from '../features/hubs/hubs.interfaces';
 import { Hub } from '../pages/workspace/hubs/components/ActiveTree/activetree.interfaces';
 import { findCurrentEntity, findParentOfEntity } from './SearchAndUpdate';
 
-export const changeHubColorManager = (id: string, hubs: Hub[], color: string) => {
-  const updateColor = (item: IHub) => {
-    let newWallet = { ...item };
-    newWallet = {
-      ...newWallet,
-      color: color
+export const changeHubManager = (id: string, hubs: Hub[], hubFromResponse: IHub) => {
+  const updateHub = (item: IHub) => {
+    let newHub = { ...item };
+    const { name, color, current_workspace_id, description } = hubFromResponse;
+    newHub = {
+      ...newHub,
+      name,
+      color,
+      current_workspace_id: current_workspace_id || '',
+      description: description || ''
     };
-    return newWallet;
+    return newHub;
   };
 
-  const updatedTree = findCurrentEntity('hub', id, hubs, updateColor as <IHub>(item: IHub) => IHub);
+  const updatedTree = findCurrentEntity('hub', id, hubs, updateHub as <IHub>(item: IHub) => IHub);
   return updatedTree;
 };
 
@@ -31,5 +35,31 @@ export const deleteHubManager = (id: string, hubs: Hub[]) => {
   }
 
   updatedTree = findParentOfEntity('hub', id, hubs, deleteHub as <IHub>(item: IHub) => IHub);
+  return updatedTree;
+};
+
+export const createHubManager = (parentId: string | null, hubs: Hub[], newHubFromData: IHub) => {
+  const newHub = {
+    ...newHubFromData,
+    children: [],
+    wallets: [],
+    lists: []
+  };
+
+  const createHub = (parent: Hub) => {
+    const newParent = { ...parent } as Hub;
+    return {
+      ...newParent,
+      children: [...newParent.children, newHub]
+    };
+  };
+
+  let updatedTree = [...hubs];
+
+  if (parentId) {
+    updatedTree = findCurrentEntity('hub', parentId, hubs, createHub as <IHub>(item: IHub) => IHub);
+  } else {
+    updatedTree = [...updatedTree, newHub];
+  }
   return updatedTree;
 };
