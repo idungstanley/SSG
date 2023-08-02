@@ -1,11 +1,10 @@
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import ModalOverlay from '../Modal/ModalOverlay';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { setIsManageStatus } from '../../features/workspace/workspaceSlice';
 import Button from '../Button';
 import PlusIcon from '../../assets/icons/PlusIcon';
-import ThreeDotIcon from '../../assets/icons/ThreeDotIcon';
-import { IoMdCheckmark } from 'react-icons/io';
+import StatusBodyTemplate from './StatusBodyTemplate';
 
 const statusTabOptions = [{ label: 'Use Space Statuses' }, { label: 'Custom' }];
 
@@ -17,29 +16,10 @@ const statusTypes = [
 
 export default function StatusManagement() {
   const dispatch = useAppDispatch();
-  const wrapperRef = useRef<HTMLInputElement>(null);
   const { isManageStatus } = useAppSelector((state) => state.workspace);
   const [activeStatusTab, setActiveStatusTab] = useState<string>(statusTabOptions[0].label);
-
-  const [editableStates, setEditableStates] = useState<boolean[]>(statusTypes.map(() => false));
-
-  const handleToggleEditableContent = (index: number) => {
-    // Create a new array with the same values as editableStates
-    const newEditableStates = [...editableStates];
-    // Toggle the editable state for the clicked status item
-    newEditableStates[index] = true;
-    setEditableStates(newEditableStates);
-  };
   const handleCloseManageStatus = () => {
     dispatch(setIsManageStatus(!isManageStatus));
-  };
-
-  const handleSaveEditableContent = (e: React.MouseEvent<HTMLSpanElement, MouseEvent>, index: number) => {
-    e.stopPropagation();
-    const newEditableStates = [...editableStates];
-    // Toggle the editable state for the clicked status item
-    newEditableStates[index] = false;
-    setEditableStates(newEditableStates);
   };
 
   return (
@@ -81,27 +61,7 @@ export default function StatusManagement() {
               {statusTypes.map((item, index) => (
                 <div className="space-y-2" key={index}>
                   <p className="flex uppercase justify-items-start">{item.model_type + ' STATUSES'}</p>
-                  <span
-                    key={index}
-                    className="flex items-center gap-2 p-1 border rounded cursor-pointer justify-items-start border-alsoit-gray-75"
-                    onClick={() => handleToggleEditableContent(index)}
-                    ref={wrapperRef}
-                  >
-                    <span className="w-3 h-3 ml-4 rounded" style={{ backgroundColor: item.color }}></span>
-                    <span contentEditable={editableStates[index]} style={{ color: item.color }} className="uppercase">
-                      {item.label}
-                    </span>
-                    {!editableStates[index] && (
-                      <span className="ml-auto" onClick={(e) => e.stopPropagation()}>
-                        <ThreeDotIcon />
-                      </span>
-                    )}
-                    {editableStates[index] && (
-                      <span className="ml-auto text-green-400" onClick={(e) => handleSaveEditableContent(e, index)}>
-                        <IoMdCheckmark />
-                      </span>
-                    )}
-                  </span>
+                  <StatusBodyTemplate index={index} item={item} />
                   {item.label === 'To do' && (
                     <span className="flex justify-items-start">
                       <Button height="h-8" icon={<PlusIcon />} label="Add Status" buttonStyle="base" />
