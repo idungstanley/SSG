@@ -20,8 +20,10 @@ module.exports = {
         'alsoit-purple-50': '#F9E6FF',
         'alsoit-purple-300': '#BF01FE',
         'alsoit-success': '#19D03A',
+        'alsoit-success-50': '#E6FAE9',
         'alsoit-warning': '#ffde66',
-        'alsoit-danger': '#FF0000'
+        'alsoit-danger': '#FF0000',
+        'alsoit-danger-50': '#FFDEDE'
       },
       gridTemplateColumns: {
         sidebarItem: 'auto 1fr auto',

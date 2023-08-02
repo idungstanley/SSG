@@ -48,7 +48,6 @@ export default function Calendar() {
       end_date: '2023-05-01'
     }
   ];
-  console.log(filterFields);
   return (
     <div className="flex flex-col space-y-2">
       <div className="flex items-center w-full border-b-alsoit-border-base">
