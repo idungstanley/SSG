@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import dayjs from 'dayjs';
+import ArrowCaretDown from '../assets/icons/ArrowCaretDown';
+import { number } from 'yup';
 
 type Option = string; // Change this type to match the type of your options
 
@@ -10,8 +12,12 @@ interface ReusableSelectProps {
 }
 
 function ReusableSelect({ value, onclick, options }: ReusableSelectProps) {
-  const [dropped, setDrop] = useState<boolean>(false);
+  const [dropped, setDrop] = useState<{ container: boolean; timeInterval: boolean }>({
+    container: false,
+    timeInterval: false
+  });
   const [editing, setEditing] = useState<boolean>(false);
+  const [timeInterval, setTimeInterval] = useState<15 | 30>(15);
 
   const handleClick = (option: string) => {
     onclick(option);
@@ -21,15 +27,20 @@ function ReusableSelect({ value, onclick, options }: ReusableSelectProps) {
   const handleEdit = () => {
     if (value) {
       setEditing(true);
-      setDrop(true);
+      setDrop((prev) => ({ ...prev, container: true }));
     } else {
-      setDrop(true);
+      setDrop((prev) => ({ ...prev, container: true }));
     }
   };
 
   const handleBlur = () => {
     setEditing(false);
-    setDrop(false);
+    setDrop((prev) => ({ ...prev, container: false }));
+  };
+
+  const handleCloseModal = (value?: 15 | 30) => {
+    value && setTimeInterval(value);
+    setDrop((prev) => ({ ...prev, timeInterval: !prev.timeInterval }));
   };
 
   const currentOrFutureTime = value || dayjs().add(5, 'minutes').format('h:mm A');
@@ -41,11 +52,36 @@ function ReusableSelect({ value, onclick, options }: ReusableSelectProps) {
           {value ? value : 'Set Time'}
         </div>
       )}
-      {dropped && !value && (
-        <div className="flex flex-col space-y-2" tabIndex={0} onBlur={handleBlur}>
+      {dropped.container && !value && (
+        <div className="flex flex-col space-y-2 w-60" tabIndex={0} onBlur={handleBlur}>
           <span className="text-alsoit-text-sm italic">Set Time</span>
-          <ul className="absolute top-2 max-h-52 w-28 overflow-y-scroll flex flex-col space-y-2 py-1 bg-white shadow-2xl rounded-md">
-            <li className="text-xs italic bg-alsoit-gray-200 text-white">Select time</li>
+          <ul className="absolute top-2 max-h-72 w-11/12 overflow-y-scroll flex flex-col space-y-2 p-4 bg-white shadow-2xl rounded-md">
+            <li className="flex justify-between items-center relative">
+              <span className="font-semibold">Time Interval</span>
+              <div
+                className="w-max flex items-center bg-alsoit-gray-50 p-2 rounded-lg"
+                onClick={() => handleCloseModal}
+              >
+                <span>{timeInterval} mins</span>
+                <ArrowCaretDown active />
+              </div>
+              {dropped.timeInterval && (
+                <div className="bg-alsoit-gray-50 flex flex-col space-y-2 shadow-lg w-20 p-1 absolute top-8 right-0">
+                  <span
+                    onClick={() => handleCloseModal(15)}
+                    className="w-full cursor-pointer rounded bg-alsoit-gray-50 shadow font-semibold p-1 hover:bg-alsoit-gray-75 hover:text-white text-alsoit-gray-200"
+                  >
+                    15 Mins
+                  </span>
+                  <span
+                    onClick={() => handleCloseModal(30)}
+                    className="w-full cursor-pointer rounded bg-alsoit-gray-50 shadow font-semibold p-1 hover:bg-alsoit-gray-75 hover:text-white text-alsoit-gray-200"
+                  >
+                    30 Mins
+                  </span>
+                </div>
+              )}
+            </li>
             {options.map((option, index) => (
               <li
                 onClick={() => handleClick(option)}
