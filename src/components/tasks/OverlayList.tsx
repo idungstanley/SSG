@@ -4,14 +4,9 @@ import ListIconComponent from '../ItemsListInSidebar/components/ListIconComponen
 import ThreeDotIcon from '../../assets/icons/ThreeDotIcon';
 import { ListColourProps } from './ListItem';
 import { useAppSelector } from '../../app/hooks';
+import { IList } from '../../features/hubs/hubs.interfaces';
 interface ListItemProps {
-  list: {
-    id: string;
-    name: string;
-    color?: ListColourProps | string;
-    shape?: string;
-    tasks_count: number;
-  };
+  list: IList;
   parentId?: string | null;
 }
 function OverlayList({ list }: ListItemProps) {

@@ -1,25 +1,31 @@
 import React, { useState } from 'react';
-import { useQueryClient, useMutation } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import { Button, Input, SlideOver } from '../../../../components';
-import { useEditHubService } from '../../../../features/hubs/hubService';
+import { UseEditHubService } from '../../../../features/hubs/hubService';
 import { useAppSelector } from '../../../../app/hooks';
 import { useDispatch } from 'react-redux';
-import { setshowMenuDropdown } from '../../../../features/hubs/hubSlice';
+import { getHub, setshowMenuDropdown } from '../../../../features/hubs/hubSlice';
 import { setEditHubSlideOverVisibility } from '../../../../features/general/slideOver/slideOverSlice';
+import { setFilteredResults } from '../../../../features/search/searchSlice';
+import { changeHubManager } from '../../../../managers/Hub';
 
 export default function EditHubModal() {
-  const queryClient = useQueryClient();
   const dispatch = useDispatch();
-  const { currHubId, prevName } = useAppSelector((state) => state.hub);
-  const createHub = useMutation(useEditHubService, {
-    onSuccess: () => {
-      queryClient.invalidateQueries(['retrieve']);
+
+  const { showMenuDropdown, prevName, hub } = useAppSelector((state) => state.hub);
+
+  const updateHub = useMutation(UseEditHubService, {
+    onSuccess: (data) => {
       dispatch(setEditHubSlideOverVisibility(false));
       dispatch(
         setshowMenuDropdown({
           showMenuDropdown: null
         })
       );
+      const hubData = data.data.hub;
+      const updatedTree = changeHubManager(hubData.id as string, hub, hubData);
+      dispatch(getHub(updatedTree));
+      dispatch(setFilteredResults(updatedTree));
     }
   });
 
@@ -43,10 +49,10 @@ export default function EditHubModal() {
   const { name } = formState;
 
   const onSubmit = async () => {
-    await createHub.mutateAsync({
+    await updateHub.mutateAsync({
+      hubId: showMenuDropdown,
       name,
-      currentWorkspaceId,
-      currHubId
+      currentWorkspaceId
     });
   };
 

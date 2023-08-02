@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { Button, Checkbox, Input } from '../../../../../../components';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
 import { createHubService, useGetHubChildren } from '../../../../../../features/hubs/hubService';
 import {
   getCurrHubId,
+  getHub,
   getSubMenu,
   setEntityToCreate,
   setSubDropdownMenu,
@@ -18,6 +19,8 @@ import ArrowDown from '../../../../../../assets/icons/ArrowDown';
 import Palette from '../../../../../../components/ColorPalette';
 import { ListColourProps } from '../../../../../../components/tasks/ListItem';
 import { displayPrompt, setVisibility } from '../../../../../../features/general/prompt/promptSlice';
+import { createHubManager } from '../../../../../../managers/Hub';
+import { setFilteredResults } from '../../../../../../features/search/searchSlice';
 
 interface formProps {
   name: string;
@@ -25,16 +28,16 @@ interface formProps {
 }
 
 export default function CreateHub() {
-  const queryClient = useQueryClient();
   const dispatch = useAppDispatch();
+
+  const { selectedTreeDetails, currHubId, hub } = useAppSelector((state) => state.hub);
+
   const [paletteColor, setPaletteColor] = useState<string | ListColourProps | undefined>('');
   const [showPalette, setShowPalette] = useState<boolean>(false);
-  const { selectedTreeDetails, currHubId } = useAppSelector((state) => state.hub);
 
   const { type, id } = selectedTreeDetails;
   const createHub = useMutation(createHubService, {
-    onSuccess: () => {
-      queryClient.invalidateQueries(['retrieve']);
+    onSuccess: (data) => {
       dispatch(setCreateEntityType(null));
       dispatch(setSubDropdownMenu(false));
       dispatch(setShowOverlay(false));
@@ -53,6 +56,10 @@ export default function CreateHub() {
       dispatch(setCreateEntityType(null));
       dispatch(setEntityToCreate(null));
       setFormState(defaultHubFormState);
+      const hubFromResponse = data.data.hub;
+      const updatedTree = createHubManager(hubFromResponse.parent_id, hub, hubFromResponse);
+      dispatch(getHub(updatedTree));
+      dispatch(setFilteredResults(updatedTree));
     }
   });
 

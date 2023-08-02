@@ -1,8 +1,13 @@
 import React, { useState } from 'react';
 import { Button, Checkbox, Input } from '../../../../../../components';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
-import { setEntityToCreate, setSubDropdownMenu, setshowMenuDropdown } from '../../../../../../features/hubs/hubSlice';
+import {
+  getHub,
+  setEntityToCreate,
+  setSubDropdownMenu,
+  setshowMenuDropdown
+} from '../../../../../../features/hubs/hubSlice';
 import { createWalletService } from '../../../../../../features/wallet/walletService';
 import {
   setCreateEntityType,
@@ -15,17 +20,20 @@ import Wand from '../../../../../../assets/icons/Wand';
 import Assignee from '../../../../tasks/assignTask/Assignee';
 import Palette from '../../../../../../components/ColorPalette';
 import { ListColourProps } from '../../../../../../components/tasks/ListItem';
+import { createWalletManager } from '../../../../../../managers/Wallet';
+import { setFilteredResults } from '../../../../../../features/search/searchSlice';
 
 export default function CreateWallet() {
-  const queryClient = useQueryClient();
   const dispatch = useAppDispatch();
-  const { createWLID, selectedTreeDetails } = useAppSelector((state) => state.hub);
+  const { createWLID, selectedTreeDetails, hub } = useAppSelector((state) => state.hub);
+
   const [paletteColor, setPaletteColor] = useState<string | ListColourProps | undefined>('');
   const [showPalette, setShowPalette] = useState<boolean>(false);
+
   const { type, id } = selectedTreeDetails;
+
   const createWallet = useMutation(createWalletService, {
-    onSuccess: () => {
-      queryClient.invalidateQueries();
+    onSuccess: (data) => {
       dispatch(setCreateEntityType(null));
       dispatch(setSubDropdownMenu(false));
       dispatch(setShowOverlay(false));
@@ -33,6 +41,10 @@ export default function CreateWallet() {
       dispatch(setCreateWlLink(false));
       dispatch(setCreateEntityType(null));
       dispatch(setEntityToCreate(null));
+      const wallet = data.data.wallet;
+      const updatedTree = createWalletManager(wallet.hub_id, wallet.parent_id, hub, wallet);
+      dispatch(getHub(updatedTree));
+      dispatch(setFilteredResults(updatedTree));
     }
   });
   const defaultWalletFormState = {
