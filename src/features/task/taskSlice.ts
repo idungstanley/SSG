@@ -119,6 +119,7 @@ interface TaskState {
   showNewTaskField: boolean;
   showNewTaskId: string;
   singleLineView: boolean;
+  toggleAllSubtask: boolean;
   CompactView: boolean;
   taskUpperCase: boolean;
   verticalGridlinesTask: boolean;
@@ -200,6 +201,7 @@ const initialState: TaskState = {
   selectedTasksArray: [],
   verticalGrid: false,
   taskUpperCase: false,
+  toggleAllSubtask: false,
   verticalGridlinesTask: true,
   CompactView: false,
   CompactViewWrap: false,
@@ -345,6 +347,9 @@ export const taskSlice = createSlice({
     },
     setHilightNewTask(state, action: PayloadAction<boolean>) {
       state.hilightNewTask = action.payload;
+    },
+    setToggleAllSubtask(state, action: PayloadAction<boolean>) {
+      state.toggleAllSubtask = action.payload;
     },
     setShowNewTaskField(state, action: PayloadAction<boolean>) {
       state.showNewTaskField = action.payload;
@@ -569,6 +574,7 @@ export const {
   setShowNewTaskId,
   setRmWatcher,
   setCurrentTaskId,
+  setToggleAllSubtask,
   setSelectedTasksArray,
   setAddNewTaskItem,
   setCloseTaskListView,
