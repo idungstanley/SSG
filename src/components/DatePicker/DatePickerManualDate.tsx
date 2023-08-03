@@ -93,7 +93,7 @@ export function DatePickerManualDates({ range }: DatePickerManualDatesProps) {
     <div className="flex justify-between items-center py-1">
       {range ? (
         <div className="w-full grid grid-cols-2 place-self-center space-x-2">
-          {/* et Start Date Selection */}
+          {/* Set Start Date Selection */}
           <label
             htmlFor="from"
             className="flex space-y-1 space-x-1 text-xs items-center w-32 border border-alsoit-purple-300 rounded-md p-0.5"
