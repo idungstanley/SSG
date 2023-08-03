@@ -61,9 +61,16 @@ export function StickyCol({
   const ACTIVE_TASK = taskId === task.id ? 'tdListV' : DEFAULT_COL_BG;
   const [isChecked, setIsChecked] = useState(false);
   const { mutate: onAdd } = useAddTask(parentId);
-  const { currTeamMemberId, singleLineView, verticalGrid, taskUpperCase, selectedTasksArray, verticalGridlinesTask } =
-    useAppSelector((state) => state.task);
-  const { hilightNewTask } = useAppSelector((state) => state.task);
+  const {
+    currTeamMemberId,
+    singleLineView,
+    verticalGrid,
+    taskUpperCase,
+    selectedTasksArray,
+    verticalGridlinesTask,
+    hilightNewTask,
+    toggleAllSubtask
+  } = useAppSelector((state) => state.task);
 
   const queryClient = useQueryClient();
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -223,12 +230,12 @@ export function StickyCol({
             )}
           >
             <button onClick={onToggleDisplayingSubTasks} className="pl-1">
-              {showSubTasks ? (
+              {showSubTasks || toggleAllSubtask ? (
                 <div className={`${task.descendants_count > 0 ? 'w-3 h-3' : ' opacity-0 w-3 h-3 '}`}>
                   <CloseSubtask />
                 </div>
               ) : (
-                <div className={`${task.descendants_count > 0 ? 'w-3 h-3' : ' opacity-0 w-3 h-3 '}`}>
+                <div className={`${task.descendants_count > 0 ? 'w-3 h-3' : ' opacity-0 w-3 h-3'}`}>
                   <OpenSubtask />
                 </div>
               )}
