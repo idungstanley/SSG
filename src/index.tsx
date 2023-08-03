@@ -43,7 +43,6 @@ const onError = (error: unknown): unknown => {
 const onSuccess = (data: unknown): unknown => {
   let title: string;
   let body: string;
-
   const typedSuccess = data as ISuccessRequest;
 
   if (!typedSuccess?.message?.title) {

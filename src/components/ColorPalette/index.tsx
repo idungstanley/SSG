@@ -1,7 +1,7 @@
-import { useMutation } from '@tanstack/react-query';
 import React, { useEffect, useRef, useState } from 'react';
+import { useMutation } from '@tanstack/react-query';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { useEditHubService } from '../../features/hubs/hubService';
+import { UseEditHubService } from '../../features/hubs/hubService';
 import { UseEditWalletService } from '../../features/wallet/walletService';
 import { UseEditListService } from '../../features/list/listService';
 import { setPaletteDropDown } from '../../features/account/accountSlice';
@@ -11,13 +11,12 @@ import { ChromePicker } from 'react-color';
 import ListIconComponent from '../ItemsListInSidebar/components/ListIconComponent';
 import { ListColourProps } from '../tasks/ListItem';
 import { setListPaletteColor } from '../../features/list/listSlice';
-import { changeListColorManager } from '../../managers/List';
+import { changeListManager } from '../../managers/List';
 import { getHub } from '../../features/hubs/hubSlice';
 import { setFilteredResults } from '../../features/search/searchSlice';
-import { changeWalletColorManager } from '../../managers/Wallet';
-import { changeHubColorManager } from '../../managers/Hub';
-import { palette } from '../../utils/Colors';
 import ColorPalette from './component/ColorPalette';
+import { changeWalletManager } from '../../managers/Wallet';
+import { changeHubManager } from '../../managers/Hub';
 
 interface PaletteProps {
   title?: string;
@@ -68,10 +67,10 @@ export default function PaletteManager({
     setIsOutterFrameActive(false);
   };
 
-  const editHubColorMutation = useMutation(useEditHubService, {
+  const editHubColorMutation = useMutation(UseEditHubService, {
     onSuccess: (data) => {
       const hubData = data.data.hub;
-      const updatedTree = changeHubColorManager(hubData.id as string, hub, hubData.color as string);
+      const updatedTree = changeHubManager(hubData.id as string, hub, hubData);
       dispatch(getHub(updatedTree));
       dispatch(setFilteredResults(updatedTree));
     }
@@ -80,7 +79,7 @@ export default function PaletteManager({
   const editWalletColorMutation = useMutation(UseEditWalletService, {
     onSuccess: (data) => {
       const wallet = data.data.wallet;
-      const updatedTree = changeWalletColorManager(wallet.id as string, hub, wallet.color);
+      const updatedTree = changeWalletManager(wallet.id as string, hub, wallet);
       dispatch(getHub(updatedTree));
       dispatch(setFilteredResults(updatedTree));
     }
@@ -89,7 +88,7 @@ export default function PaletteManager({
   const editListColorMutation = useMutation(UseEditListService, {
     onSuccess: (data) => {
       const list = data.data.list;
-      const updatedTree = changeListColorManager(list.id as string, hub, JSON.parse(list.color));
+      const updatedTree = changeListManager(list.id as string, hub, list);
       dispatch(getHub(updatedTree));
       dispatch(setFilteredResults(updatedTree));
     }
@@ -113,24 +112,24 @@ export default function PaletteManager({
   const handleClick = (color?: string | ListColourProps) => {
     if (paletteType === 'hub') {
       editHubColorMutation.mutateAsync({
-        currHubId: paletteId,
-        color: color
+        hubId: paletteId,
+        color
       });
     } else if (paletteType === 'wallet') {
       editWalletColorMutation.mutateAsync({
-        WalletId: paletteId,
-        walletColor: color
+        walletId: paletteId,
+        color
       });
     } else if (paletteType === 'list') {
       if (isOutterFrameActive) {
         editListColorMutation.mutateAsync({
           listId: paletteId,
-          colour: { outerColour: color as string, innerColour: listComboColour?.innerColour }
+          color: { outerColour: color as string, innerColour: listComboColour?.innerColour }
         });
       } else if (isInnerFrameActive) {
         editListColorMutation.mutateAsync({
           listId: paletteId,
-          colour: {
+          color: {
             outerColour: listComboColour?.outerColour,
             innerColour: color as string
           }

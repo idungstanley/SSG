@@ -3,17 +3,14 @@ import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { setHistoryMemory, setTaskSelectedDate } from '../../features/task/taskSlice';
 import { setSelectedDate } from '../../features/workspace/workspaceSlice';
 import { generateDate, weekends, weeks } from '../../utils/calendar';
-import { useState } from 'react';
-import ThreeDotIcon from '../../assets/icons/ThreeDotIcon';
+import { Dispatch, SetStateAction, useState } from 'react';
 import CustomSuggestion from './CustomSuggestions';
-import ArrowCaretDown from '../../assets/icons/ArrowCaretDown';
-import ArrowCaretUp from '../../assets/icons/ArrowCaretUp';
 import ArrowDown from '../../assets/icons/ArrowDown';
-import ArrowUpwardIcon from '../../assets/icons/ArrowUpwardIcon';
-import ArrowUp from '../../assets/icons/ArrowUp';
+import DoubleArrowLeft from '../../assets/icons/DoubleArrowLeft';
 
 interface DatePickerSideBarProp {
   currentDate: dayjs.Dayjs;
+  setOpenSideBar: Dispatch<SetStateAction<boolean>>;
 }
 
 export type extraFields = {
@@ -22,10 +19,10 @@ export type extraFields = {
   depth: number;
 };
 
-export function DatePickerSideBar({ currentDate }: DatePickerSideBarProp) {
+export function DatePickerSideBar({ currentDate, setOpenSideBar }: DatePickerSideBarProp) {
   const dispatch = useAppDispatch();
   const [iconToggle, setIconToggle] = useState<{ threeDotIcon: boolean }>({
-    threeDotIcon: false
+    threeDotIcon: true
   });
   const [showRecurring, setRecurring] = useState<boolean>(false);
   const { HistoryFilterMemory, customSuggestionField } = useAppSelector((state) => state.task);
@@ -168,8 +165,9 @@ export function DatePickerSideBar({ currentDate }: DatePickerSideBarProp) {
           className="cursor-pointer flex"
           onMouseEnter={() => setIconToggle((prev) => ({ ...prev, threeDotIcon: true }))}
           onMouseLeave={() => setIconToggle((prev) => ({ ...prev, threeDotIcon: false }))}
+          onClick={() => setOpenSideBar(false)}
         >
-          <ThreeDotIcon active={iconToggle.threeDotIcon} />
+          <DoubleArrowLeft active={iconToggle.threeDotIcon} />
         </div>
       </div>
       {showRecurring ? (

@@ -6,7 +6,6 @@ interface ListState {
   list: string[];
   currentListId: string | null | undefined;
   createTaskFromTop: boolean;
-  delList: boolean;
   archiveList: boolean;
   toggleArchiveList: boolean;
   listColour: ListColourProps | undefined | string;
@@ -19,7 +18,6 @@ const initialState: ListState = {
   list: [],
   currentListId: null,
   createTaskFromTop: false,
-  delList: false,
   archiveList: false,
   toggleArchiveList: false,
   listColour: { innerColour: 'white', outerColour: 'black' },
@@ -57,9 +55,6 @@ export const listSlice = createSlice({
     setToggleArchiveList(state, action: PayloadAction<boolean>) {
       state.toggleArchiveList = action.payload;
     },
-    setDeleteList(state, action: PayloadAction<boolean>) {
-      state.delList = action.payload;
-    },
     setCurrentListId(state, action: PayloadAction<string | null | undefined>) {
       state.currentListId = action.payload;
     },
@@ -77,7 +72,6 @@ export const {
   getList,
   setCurrentListId,
   setCreateTaskFromTop,
-  setDeleteList,
   setArchiveList,
   setToggleArchiveList,
   setListPaletteColor,

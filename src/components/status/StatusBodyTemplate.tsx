@@ -4,9 +4,9 @@ import { IoMdCheckmark } from 'react-icons/io';
 import AlsoitMenuDropdown from '../DropDowns';
 import { PencilIcon } from '@heroicons/react/24/outline';
 import { AiOutlineDelete } from 'react-icons/ai';
-import { BiSolidColorFill } from 'react-icons/bi';
 import ColorPalette from '../ColorPalette/component/ColorPalette';
 import { ListColourProps } from '../tasks/ListItem';
+import { MdInvertColors } from 'react-icons/md';
 
 interface ItemProps {
   label?: string;
@@ -73,7 +73,7 @@ export default function StatusBodyTemplate({ item, index, setStatusTypesState }:
         setEditableContent(true);
       }
     },
-    { label: 'Change Color', icon: <BiSolidColorFill />, handleClick: () => ({}) },
+    { label: 'Change Color', icon: <MdInvertColors />, handleClick: () => ({}) },
     {
       label: 'Delete status',
       icon: <AiOutlineDelete />,

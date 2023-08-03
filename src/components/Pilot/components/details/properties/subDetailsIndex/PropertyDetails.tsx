@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { AiOutlinePlus } from 'react-icons/ai';
-// import SubTask from '../../../../../../../tasks/subtasks/create/SubTask';
 import moment from 'moment';
 import CustomReference from '../customReference/CustomReference';
 import EntitySettings from '../entitySettings/EntitySettings';
@@ -15,16 +14,13 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { UseUpdateTaskService } from '../../../../../../features/task/taskService';
 import Status from '../status/Status';
 import Priority from '../priority/Priority';
-import { useEditHubService } from '../../../../../../features/hubs/hubService';
+import { UseEditHubService } from '../../../../../../features/hubs/hubService';
 import { UseEditWalletService } from '../../../../../../features/wallet/walletService';
 import { UseEditListService } from '../../../../../../features/list/listService';
 import MoreDetails from './components/MoreDetails';
 import { IListDetails } from '../../../../../../features/list/list.interfaces';
 import { useParams } from 'react-router-dom';
 import { IWalletDetails } from '../../../../../../features/wallet/wallet.interfaces';
-import { setActiveItem } from '../../../../../../features/workspace/workspaceSlice';
-import { useAppDispatch } from '../../../../../../app/hooks';
-// import { useParams } from 'react-router-dom';
 
 export interface tagItem {
   id: string;
@@ -36,12 +32,13 @@ interface PropertyDetailsProps {
   type?: string;
 }
 export default function PropertyDetails({ Details, type }: PropertyDetailsProps) {
+  const queryClient = useQueryClient();
+
   const [toggleSubTask, setToggleSubTask] = useState(false);
   const [editingTitle, setEditingTitle] = useState(false);
   const [editingDescription, setEditingDescription] = useState(false);
   const [title, setTitle] = useState<string>(Details?.name as string);
   const [description, setDescription] = useState<string | null>(Details?.description || null);
-  const queryClient = useQueryClient();
 
   const { hubId, walletId, listId, taskId } = useParams();
 
@@ -51,7 +48,7 @@ export default function PropertyDetails({ Details, type }: PropertyDetailsProps)
     }
   });
 
-  const editHubMutation = useMutation(useEditHubService, {
+  const editHubMutation = useMutation(UseEditHubService, {
     onSuccess: () => {
       queryClient.invalidateQueries(['hub-details']);
     }
@@ -93,7 +90,7 @@ export default function PropertyDetails({ Details, type }: PropertyDetailsProps)
     } else if (walletId != undefined) {
       await editWalletMutation.mutateAsync({
         walletName: title,
-        WalletId: Details?.id,
+        walletId: Details?.id,
         description
       });
     } else if (listId != undefined) {
@@ -105,7 +102,7 @@ export default function PropertyDetails({ Details, type }: PropertyDetailsProps)
     } else if (hubId) {
       await editHubMutation.mutateAsync({
         name: title,
-        currHubId: Details?.id,
+        hubId: Details?.id,
         description
       });
     }

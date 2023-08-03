@@ -20,7 +20,7 @@ export function DatePickerManualDates({ range }: DatePickerManualDatesProps) {
   const { date_format, timezone } = useAppSelector((state) => state.userSetting);
   const [dateType, setDateType] = useState<string | undefined>();
   const [dateString, setString] = useState<DateString | null>(null);
-  const [iconToggle, setIconToggle] = useState<{ startIcon: boolean; dueIcon: boolean }>({
+  const [iconToggle] = useState<{ startIcon: boolean; dueIcon: boolean }>({
     dueIcon: false,
     startIcon: false
   });
@@ -93,27 +93,13 @@ export function DatePickerManualDates({ range }: DatePickerManualDatesProps) {
     <div className="flex justify-between items-center py-1">
       {range ? (
         <div className="w-full grid grid-cols-2 place-self-center space-x-2">
-          {/* et Start Date Selection */}
+          {/* Set Start Date Selection */}
           <label
             htmlFor="from"
             className="flex space-y-1 space-x-1 text-xs items-center w-32 border border-alsoit-purple-300 rounded-md p-0.5"
           >
-            <div
-              className="bg-alsoit-purple-300 rounded-md p-1"
-              onMouseEnter={() =>
-                setIconToggle((prev) => ({
-                  ...prev,
-                  startIcon: true
-                }))
-              }
-              onMouseLeave={() =>
-                setIconToggle((prev) => ({
-                  ...prev,
-                  startIcon: false
-                }))
-              }
-            >
-              <CalendarIcon active={iconToggle.startIcon} />
+            <div className="bg-alsoit-purple-300 rounded-md p-1">
+              <CalendarIcon active={iconToggle.startIcon} fixed />
             </div>
             <div className="relative flex">
               <div
@@ -155,22 +141,8 @@ export function DatePickerManualDates({ range }: DatePickerManualDatesProps) {
             htmlFor="to"
             className="flex space-y-1 space-x-1 text-xs items-center border border-alsoit-purple-300 rounded-md p-1 w-32"
           >
-            <div
-              className="bg-alsoit-purple-300 rounded-md p-1"
-              onMouseEnter={() =>
-                setIconToggle((prev) => ({
-                  ...prev,
-                  startIcon: true
-                }))
-              }
-              onMouseLeave={() =>
-                setIconToggle((prev) => ({
-                  ...prev,
-                  startIcon: false
-                }))
-              }
-            >
-              <CalendarIcon active={iconToggle.dueIcon} />
+            <div className="bg-alsoit-purple-300 rounded-md p-1">
+              <CalendarIcon active={iconToggle.dueIcon} fixed />
             </div>
             <div className="relative">
               <div
@@ -193,6 +165,7 @@ export function DatePickerManualDates({ range }: DatePickerManualDatesProps) {
               <ReusableSelect
                 options={createDynamicTimeComponent(15, timezone)}
                 value={HistoryFilterMemory?.time?.to || ''}
+                style="-left-44 top-2"
                 onclick={(e: string) => {
                   dispatch(
                     setHistoryMemory({
@@ -216,24 +189,10 @@ export function DatePickerManualDates({ range }: DatePickerManualDatesProps) {
         // Default Set date
         <label
           htmlFor="from"
-          className="flex space-y-1 space-x-1 text-xs items-center w-60 border border-alsoit-purple-300 p-1 rounded-md"
+          className="flex space-y-1 space-x-1 text-xs items-center w-36 border border-alsoit-purple-300 p-1 rounded-md"
         >
-          <div
-            className="bg-alsoit-purple-300 rounded-md p-1"
-            onMouseEnter={() =>
-              setIconToggle((prev) => ({
-                ...prev,
-                startIcon: true
-              }))
-            }
-            onMouseLeave={() =>
-              setIconToggle((prev) => ({
-                ...prev,
-                startIcon: false
-              }))
-            }
-          >
-            <CalendarIcon active={iconToggle.startIcon} />
+          <div className="bg-alsoit-purple-300 rounded-md p-1">
+            <CalendarIcon active={iconToggle.startIcon} fixed />
           </div>
           <div className="relative">
             <div

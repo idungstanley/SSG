@@ -8,7 +8,6 @@ interface HubState {
   currHubId: string | null;
   currSubHubId: string | null;
   currSubHubIdType: string | null;
-  delHub: boolean;
   updateCords: number;
   showSubItems: boolean;
   showEditHubModal: boolean;
@@ -41,7 +40,6 @@ const initialState: HubState = {
   currHubId: null,
   currSubHubId: null,
   currSubHubIdType: null,
-  delHub: false,
   showEditHubModal: false,
   showSubItems: false,
   archiveHub: false,
@@ -86,9 +84,6 @@ export const hubSlice = createSlice({
     },
     getHub(state, action: PayloadAction<Hub[]>) {
       state.hub = action.payload;
-    },
-    setDelHub(state, action: PayloadAction<boolean>) {
-      state.delHub = action.payload;
     },
     setToggleTree(state, action: PayloadAction<boolean>) {
       state.toggleTree = action.payload;
@@ -200,7 +195,6 @@ export const {
   chechIfHub,
   getCurrHubId,
   getCurrSubHubId,
-  setDelHub,
   getSubMenu,
   setToggleTree,
   setShowSubItems,

@@ -14,7 +14,7 @@ import { listColumnProps } from '../../../../pages/workspace/tasks/component/vie
 import { MAX_COL_WIDTH, MIN_COL_WIDTH } from '../../config';
 import { generateGrid } from '../../lib';
 import { createHeaders } from '../../lib/tableHeadUtils';
-import { ScrollableContainer } from '../../../ScrollableContainer/ScrollableContainer';
+import { ScrollableHorizontalListsContainer } from '../../../ScrollableContainer/ScrollableHorizontalListsContainer';
 import { Head } from './Head/Head';
 import { OverlayRow } from './OverlayRow';
 import { Row } from './Row';
@@ -174,7 +174,7 @@ export function Table({ heads, data, label }: TableProps) {
   const draggableItem = draggableItemId ? data.find((i) => i.id === draggableItemId) : null;
 
   return (
-    <ScrollableContainer scrollDirection="x" onScroll={onScroll}>
+    <ScrollableHorizontalListsContainer onScroll={onScroll}>
       {/* draggable item */}{' '}
       {draggableItem ? (
         <DragOverlay>
@@ -240,6 +240,6 @@ export function Table({ heads, data, label }: TableProps) {
           ) : null}
         </table>
       </div>
-    </ScrollableContainer>
+    </ScrollableHorizontalListsContainer>
   );
 }

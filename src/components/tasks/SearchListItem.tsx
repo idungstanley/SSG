@@ -3,15 +3,10 @@ import { useParams } from 'react-router-dom';
 import { useAppSelector } from '../../app/hooks';
 import ListIconComponent from '../ItemsListInSidebar/components/ListIconComponent';
 import { cl } from '../../utils';
+import { IList } from '../../features/hubs/hubs.interfaces';
 
 interface ListItemProps {
-  list: {
-    id: string;
-    name: string;
-    color?: ListColourProps | string;
-    shape?: string;
-    tasks_count: number;
-  };
+  list: IList;
   paddingLeft: string | number;
   parentId?: string | null;
 }

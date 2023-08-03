@@ -7,6 +7,8 @@ import { Button, Modal } from '@mui/material';
 import { DatePickerSideBar } from './DatePickerSideBar';
 import { DatePickerManualDates } from './DatePickerManualDate';
 import MiniDatePicker from './MiniCalendar';
+import LeftPanelOpen from '../../assets/icons/LeftPanelOpen';
+import ArrowDown from '../../assets/icons/ArrowDown';
 
 interface DatePickerProps {
   styles?: string;
@@ -27,6 +29,7 @@ export default function DatePicker({ styles, width, height, range, toggleFn }: D
   const { timezone: zone } = useAppSelector((state) => state.userSetting);
   const sectionRef = useRef<HTMLElement>(null);
   const [time, setTime] = useState<string>(dayjs().tz(zone).format('ddd, DD MMM YYYY h:mm A'));
+  const [openSideBar, setOpenSideBar] = useState<boolean>(false);
 
   const closeDateModal = () => {
     if (toggleFn) {
@@ -48,21 +51,28 @@ export default function DatePicker({ styles, width, height, range, toggleFn }: D
         ref={sectionRef}
         className={
           styles ??
-          'absolute z-50 mt-1 shadow-2xl bg-white rounded-md ring-1 ring-black ring-opacity-5 focus:outline-none top-56 right-12 flex'
+          'absolute z-50 mt-1 shadow-2xl bg-white rounded-md ring-1 ring-black ring-opacity-5 focus:outline-none top-56 right-12 flex justify-center'
         }
-        style={{ height: height ?? '425px', width: width ?? '550px' }}
+        style={{ height: height ?? '425px', width: openSideBar ? width ?? '550px' : '360px' }}
       >
-        <div className="w-5/12 h-full">
-          <DatePickerSideBar currentDate={currentDate} />
-        </div>
+        {openSideBar && (
+          <div className="w-5/12 h-full">
+            <DatePickerSideBar setOpenSideBar={setOpenSideBar} currentDate={currentDate} />
+          </div>
+        )}
         <div className="flex flex-col mt-3" style={{ height: '340px' }}>
-          <div className="flex justify-end">
+          <div className={!openSideBar ? 'flex justify-between items-center' : 'flex justify-end items-center'}>
+            {!openSideBar && (
+              <div className="cursor-pointer" onClick={() => setOpenSideBar(true)}>
+                <LeftPanelOpen active dimensions={{ height: 35, width: 35 }} />
+              </div>
+            )}
             <DatePickerManualDates range={range} />
           </div>
           <div>
-            <MiniDatePicker />
+            <MiniDatePicker range={range} />
           </div>
-          <DatePickerFooter closeDateModal={closeDateModal} time={time} />
+          <DatePickerFooter miniMode={openSideBar} closeDateModal={closeDateModal} time={time} />
         </div>
       </section>
     </Modal>
@@ -72,15 +82,23 @@ export default function DatePicker({ styles, width, height, range, toggleFn }: D
 interface DatePickerFooterProps {
   time: string;
   closeDateModal: () => void;
+  miniMode: boolean;
 }
 
-function DatePickerFooter({ closeDateModal, time }: DatePickerFooterProps) {
+function DatePickerFooter({ closeDateModal, time, miniMode }: DatePickerFooterProps) {
   return (
     <div className="flex items-center justify-end w-full">
-      <div className="flex space-x-2">
-        <div className="flex items-center">
-          <span className="text-xs italic font-semibold">{time}</span>
-        </div>
+      <div className="flex justify-between w-full">
+        {!miniMode ? (
+          <div className="font-extrabold text-alsoit-text-lg cursor-pointer flex items-center space-x-2">
+            <span>Set Recurring</span>
+            <ArrowDown active />
+          </div>
+        ) : (
+          <div className="flex items-center">
+            <span className="text-xs italic font-semibold">{time}</span>
+          </div>
+        )}
         <div className="flex space-x-1">
           <Button
             onClick={closeDateModal}
