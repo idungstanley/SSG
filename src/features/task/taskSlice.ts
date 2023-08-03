@@ -179,6 +179,7 @@ interface TaskState {
   listIdForCustom: string | undefined;
   listViewHeads: listColumnProps[];
   customSuggestionField: IExtraFields[];
+  newTaskData: ImyTaskData | undefined;
 }
 
 const initialState: TaskState = {
@@ -261,7 +262,8 @@ const initialState: TaskState = {
   newColInstance: [{ id: 1, value: '' }],
   listIdForCustom: '',
   listViewHeads: [],
-  customSuggestionField: []
+  customSuggestionField: [],
+  newTaskData: undefined
 };
 
 export const taskSlice = createSlice({
@@ -536,6 +538,9 @@ export const taskSlice = createSlice({
     },
     setCustomSuggetionsField(state, action: PayloadAction<IExtraFields>) {
       state.customSuggestionField = [...state.customSuggestionField, action.payload];
+    },
+    setNewTask(state, action: PayloadAction<ImyTaskData>) {
+      state.newTaskData = action.payload;
     }
   }
 });
@@ -615,6 +620,7 @@ export const {
   setNewColInstance,
   setListIdForCustom,
   setHeads,
-  setCustomSuggetionsField
+  setCustomSuggetionsField,
+  setNewTask
 } = taskSlice.actions;
 export default taskSlice.reducer;

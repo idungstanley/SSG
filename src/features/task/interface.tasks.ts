@@ -244,3 +244,9 @@ export type TaskKey = keyof Pick<
 
 // remove this
 export type TaskKeyof = keyof Task;
+
+export interface newTaskDataRes {
+  data: {
+    task: ImyTaskData;
+  };
+}
