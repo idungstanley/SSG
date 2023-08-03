@@ -53,8 +53,6 @@ function GroupAssignee({
     index: null
   });
 
-  console.log(data);
-
   const { mutate: onTaskUnassign } = UseUnassignTask();
 
   const handleUnAssignTask = (id: string) => {

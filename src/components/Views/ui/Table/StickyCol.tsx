@@ -61,9 +61,16 @@ export function StickyCol({
   const ACTIVE_TASK = taskId === task.id ? 'tdListV' : DEFAULT_COL_BG;
   const [isChecked, setIsChecked] = useState(false);
   const { mutate: onAdd } = useAddTask(parentId);
-  const { currTeamMemberId, singleLineView, verticalGrid, taskUpperCase, selectedTasksArray, verticalGridlinesTask } =
-    useAppSelector((state) => state.task);
-  const { hilightNewTask } = useAppSelector((state) => state.task);
+  const {
+    currTeamMemberId,
+    singleLineView,
+    verticalGrid,
+    taskUpperCase,
+    selectedTasksArray,
+    verticalGridlinesTask,
+    hilightNewTask,
+    toggleAllSubtask
+  } = useAppSelector((state) => state.task);
 
   const queryClient = useQueryClient();
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -192,10 +199,10 @@ export function StickyCol({
   const { dragOverItemId, draggableItemId } = useAppSelector((state) => state.list);
 
   return (
-    <div>
+    <div className="sticky left-0 z-10">
       {task.id !== '0' && (
         <td
-          className="sticky left-0 flex items-center justify-start text-sm font-medium text-gray-900 cursor-pointer text-start"
+          className="flex items-center justify-start text-sm font-medium text-gray-900 cursor-pointer text-start"
           {...props}
         >
           <div className="flex items-center h-full space-x-1 ">
@@ -223,12 +230,12 @@ export function StickyCol({
             )}
           >
             <button onClick={onToggleDisplayingSubTasks} className="pl-1">
-              {showSubTasks ? (
+              {showSubTasks || toggleAllSubtask ? (
                 <div className={`${task.descendants_count > 0 ? 'w-3 h-3' : ' opacity-0 w-3 h-3 '}`}>
                   <CloseSubtask />
                 </div>
               ) : (
-                <div className={`${task.descendants_count > 0 ? 'w-3 h-3' : ' opacity-0 w-3 h-3 '}`}>
+                <div className={`${task.descendants_count > 0 ? 'w-3 h-3' : ' opacity-0 w-3 h-3'}`}>
                   <OpenSubtask />
                 </div>
               )}

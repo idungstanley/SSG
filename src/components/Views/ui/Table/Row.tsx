@@ -31,6 +31,7 @@ export function Row({ task, columns, paddingLeft = 0, parentId, task_status, isL
   const otherColumns = columns.slice(1);
   const [showSubTasks, setShowSubTasks] = useState(false);
   const { showNewTaskField, showNewTaskId } = useAppSelector((state) => state.task);
+  const { toggleAllSubtask } = useAppSelector((state) => state.task);
 
   const dispatch = useAppDispatch();
 

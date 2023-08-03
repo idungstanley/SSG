@@ -1,8 +1,9 @@
 import requestNew from '../../app/requestNew';
-import { IFullTaskRes, ITaskListRes, ITaskRes, ITimeEntriesRes, TaskId } from './interface.tasks';
+import { IFullTaskRes, ITaskListRes, ITaskRes, ITimeEntriesRes, TaskId, newTaskDataRes } from './interface.tasks';
 import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import {
+  setNewTask,
   setScreenRecording,
   setScreenRecordingMedia,
   setTimerStatus,
@@ -72,7 +73,7 @@ const addTask = (data: {
 
   const parentId = isListParent ? { list_id: id } : { parent_id: id };
 
-  const response = requestNew({
+  const response = requestNew<newTaskDataRes>({
     url: 'tasks',
     method: 'POST',
     data: {
@@ -87,14 +88,15 @@ const addTask = (data: {
 
 export const useAddTask = (parentTaskId?: string) => {
   const queryClient = useQueryClient();
-
+  const dispatch = useAppDispatch();
   // const id = hubId ?? walletId ?? listId;
   // const type = hubId ? 'hub' : walletId ? 'wallet' : 'list';
 
   return useMutation(addTask, {
-    onSuccess: () => {
+    onSuccess: (data: newTaskDataRes) => {
       queryClient.invalidateQueries(['task']);
       queryClient.invalidateQueries(['sub-tasks']);
+      dispatch(setNewTask(data.data.task));
     }
   });
 };

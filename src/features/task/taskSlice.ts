@@ -119,6 +119,7 @@ interface TaskState {
   showNewTaskField: boolean;
   showNewTaskId: string;
   singleLineView: boolean;
+  toggleAllSubtask: boolean;
   CompactView: boolean;
   taskUpperCase: boolean;
   verticalGridlinesTask: boolean;
@@ -178,6 +179,7 @@ interface TaskState {
   listIdForCustom: string | undefined;
   listViewHeads: listColumnProps[];
   customSuggestionField: IExtraFields[];
+  newTaskData: ImyTaskData | undefined;
 }
 
 const initialState: TaskState = {
@@ -200,6 +202,7 @@ const initialState: TaskState = {
   selectedTasksArray: [],
   verticalGrid: false,
   taskUpperCase: false,
+  toggleAllSubtask: false,
   verticalGridlinesTask: true,
   CompactView: false,
   CompactViewWrap: false,
@@ -259,7 +262,8 @@ const initialState: TaskState = {
   newColInstance: [{ id: 1, value: '' }],
   listIdForCustom: '',
   listViewHeads: [],
-  customSuggestionField: []
+  customSuggestionField: [],
+  newTaskData: undefined
 };
 
 export const taskSlice = createSlice({
@@ -345,6 +349,9 @@ export const taskSlice = createSlice({
     },
     setHilightNewTask(state, action: PayloadAction<boolean>) {
       state.hilightNewTask = action.payload;
+    },
+    setToggleAllSubtask(state, action: PayloadAction<boolean>) {
+      state.toggleAllSubtask = action.payload;
     },
     setShowNewTaskField(state, action: PayloadAction<boolean>) {
       state.showNewTaskField = action.payload;
@@ -531,6 +538,9 @@ export const taskSlice = createSlice({
     },
     setCustomSuggetionsField(state, action: PayloadAction<IExtraFields>) {
       state.customSuggestionField = [...state.customSuggestionField, action.payload];
+    },
+    setNewTask(state, action: PayloadAction<ImyTaskData>) {
+      state.newTaskData = action.payload;
     }
   }
 });
@@ -569,6 +579,7 @@ export const {
   setShowNewTaskId,
   setRmWatcher,
   setCurrentTaskId,
+  setToggleAllSubtask,
   setSelectedTasksArray,
   setAddNewTaskItem,
   setCloseTaskListView,
@@ -609,6 +620,7 @@ export const {
   setNewColInstance,
   setListIdForCustom,
   setHeads,
-  setCustomSuggetionsField
+  setCustomSuggetionsField,
+  setNewTask
 } = taskSlice.actions;
 export default taskSlice.reducer;
