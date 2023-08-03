@@ -1,8 +1,5 @@
 import React from 'react';
 import ListViewSettingsModal from '../../../../../tasks/TaskSettingsModal/ViewsModal/ListViewSettingsModal';
-import Button from '../../../../../../../components/Buttons/Button';
-import Icons from '../../../../../../../components/Icons/Icons';
-import List from '../../../../../../../assets/icons/list.svg';
 
 export default function ListViews({ viewsList }: { viewsList: string }) {
   return (
