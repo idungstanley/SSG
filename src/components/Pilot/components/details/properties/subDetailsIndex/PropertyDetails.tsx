@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { AiOutlinePlus } from 'react-icons/ai';
-// import SubTask from '../../../../../../../tasks/subtasks/create/SubTask';
 import moment from 'moment';
 import CustomReference from '../customReference/CustomReference';
 import EntitySettings from '../entitySettings/EntitySettings';
@@ -15,14 +14,13 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { UseUpdateTaskService } from '../../../../../../features/task/taskService';
 import Status from '../status/Status';
 import Priority from '../priority/Priority';
-import { useEditHubService } from '../../../../../../features/hubs/hubService';
+import { UseEditHubService } from '../../../../../../features/hubs/hubService';
 import { UseEditWalletService } from '../../../../../../features/wallet/walletService';
 import { UseEditListService } from '../../../../../../features/list/listService';
 import MoreDetails from './components/MoreDetails';
 import { IListDetails } from '../../../../../../features/list/list.interfaces';
 import { useParams } from 'react-router-dom';
 import { IWalletDetails } from '../../../../../../features/wallet/wallet.interfaces';
-// import { useParams } from 'react-router-dom';
 
 export interface tagItem {
   id: string;
@@ -31,14 +29,16 @@ export interface tagItem {
 }
 interface PropertyDetailsProps {
   Details?: IHubDetails | ITaskFullList | IListDetails | IWalletDetails;
+  type?: string;
 }
-export default function PropertyDetails({ Details }: PropertyDetailsProps) {
+export default function PropertyDetails({ Details, type }: PropertyDetailsProps) {
+  const queryClient = useQueryClient();
+
   const [toggleSubTask, setToggleSubTask] = useState(false);
   const [editingTitle, setEditingTitle] = useState(false);
   const [editingDescription, setEditingDescription] = useState(false);
   const [title, setTitle] = useState<string>(Details?.name as string);
   const [description, setDescription] = useState<string | null>(Details?.description || null);
-  const queryClient = useQueryClient();
 
   const { hubId, walletId, listId, taskId } = useParams();
 
@@ -48,7 +48,7 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
     }
   });
 
-  const editHubMutation = useMutation(useEditHubService, {
+  const editHubMutation = useMutation(UseEditHubService, {
     onSuccess: () => {
       queryClient.invalidateQueries(['hub-details']);
     }
@@ -90,7 +90,7 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
     } else if (walletId != undefined) {
       await editWalletMutation.mutateAsync({
         walletName: title,
-        WalletId: Details?.id,
+        walletId: Details?.id,
         description
       });
     } else if (listId != undefined) {
@@ -102,7 +102,7 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
     } else if (hubId) {
       await editHubMutation.mutateAsync({
         name: title,
-        currHubId: Details?.id,
+        hubId: Details?.id,
         description
       });
     }
@@ -113,24 +113,24 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
       <div className="flex items-center justify-between p-2">
         <section className="flex items-center space-x-3">
           <Status Details={Details} />
-          <ToolTip tooltip="Priority">
+          <ToolTip title="Priority">
             <Priority Details={Details} />
           </ToolTip>
         </section>
         <section className="z-0 flex items-center justify-center space-x-3">
           <CustomReference />
-          <ToolTip tooltip="Share">
+          <ToolTip title="Share">
             <Share taskId={Details?.id} taskName={title} />
           </ToolTip>
           <EntitySettings />
         </section>
       </div>
       <section className="flex items-center mt-3 space-x-2">
-        <ToolTip tooltip="Assignees">
+        <ToolTip title="Assignees">
           <Assignees />
         </ToolTip>
         <span className=" text-gray-300">|</span>
-        <ToolTip tooltip="Subscribers">
+        <ToolTip title="Subscribers">
           <Subscribers />
         </ToolTip>
         <span className="text-gray-300">|</span>

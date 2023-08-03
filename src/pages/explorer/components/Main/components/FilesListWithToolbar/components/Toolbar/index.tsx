@@ -96,7 +96,7 @@ export default function Toolbar({ data, query, setQuery }: ToolbarProps) {
         {/* file actions */}
         <div className="flex items-center gap-4 pt-1">
           {leftItems.map((button) => (
-            <Tooltip key={button.label} tooltip={button.label}>
+            <Tooltip key={button.label} title={button.label}>
               <button
                 disabled={button.disabled}
                 className={button.disabled ? 'text-gray-300' : 'text-gray-500'}
@@ -112,7 +112,7 @@ export default function Toolbar({ data, query, setQuery }: ToolbarProps) {
         {/* right items */}
         <div className="flex items-center gap-3">
           {/* search */}
-          <Tooltip tooltip={showSearch ? 'Hide search' : 'Show search'}>
+          <Tooltip title={showSearch ? 'Hide search' : 'Show search'}>
             {showSearch ? (
               <MagnifyingGlassMinusIcon onClick={() => setShowSearch(false)} className="w-5 h-5 text-gray-500" />
             ) : (
@@ -121,7 +121,7 @@ export default function Toolbar({ data, query, setQuery }: ToolbarProps) {
           </Tooltip>
 
           {/* sort */}
-          <Tooltip tooltip="Sorting">
+          <Tooltip title="Sorting">
             <Sorting />
           </Tooltip>
           {/* badge (items length and current index) */}
@@ -136,7 +136,7 @@ export default function Toolbar({ data, query, setQuery }: ToolbarProps) {
           </div>
 
           {/* trash icon */}
-          <Tooltip tooltip="Delete">
+          <Tooltip title="Delete">
             <button
               disabled={selectedIds.length === 0}
               className={selectedIds.length === 0 ? 'text-gray-300 pt-1' : 'text-gray-500 pt-1'}

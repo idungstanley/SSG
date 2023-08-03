@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { cl } from '../../../../utils';
 import { setSidebarWidthRD } from '../../../../features/workspace/workspaceSlice';
@@ -17,6 +17,7 @@ import SearchIcon from '../../../../assets/icons/SearchIcon';
 import { setUpdateCords } from '../../../../features/hubs/hubSlice';
 import { useScroll } from '../../../../hooks/useScroll';
 import { ScrollableContainer } from '../../../../components/ScrollableContainer/ScrollableContainer';
+import StatusManagement from '../../../../components/status/StatusManagement';
 
 const MAX_SIDEBAR_WIDTH = dimensions.navigationBar.max;
 const MIN_SIDEBAR_WIDTH = dimensions.navigationBar.min;
@@ -25,9 +26,9 @@ export default function Sidebar() {
   const dispatch = useAppDispatch();
   const { extendedSidebarWidth, sidebarWidthRD, showExtendedBar } = useAppSelector((state) => state.workspace);
   const key = 'sidebar';
-  const useref = useRef<HTMLElement>(null);
   const { showSidebar, userSettingsData } = useAppSelector((state) => state.account);
   const [commandSearchModal, setCommandSearchModal] = useState<boolean>(false);
+
   const { blockRef, Dividers, size, isMouseUp, isDrag } = useResize({
     dimensions: {
       min: MIN_SIDEBAR_WIDTH,
@@ -42,7 +43,6 @@ export default function Sidebar() {
   useGetUserSettingsKeys(true, key, resolution);
   const [activeTabId, setActiveTabId] = useState<string | null>('');
   const hotkeyIdsFromLS = JSON.parse(localStorage.getItem('navhotkeys') ?? '[]') as string[];
-
   const [activeHotkeyIds, setActiveHotkeyIds] = useState<string[]>(hotkeyIdsFromLS);
 
   const hotkeys = useMemo(
@@ -124,6 +124,7 @@ export default function Sidebar() {
             <Places />
           </section>
         </ScrollableContainer>
+        <StatusManagement />
       </section>
     </aside>
   );

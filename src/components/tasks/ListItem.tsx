@@ -25,15 +25,10 @@ import ThreeDotIcon from '../../assets/icons/ThreeDotIcon';
 import { Tooltip } from '@mui/material';
 import MenuDropdown from '../Dropdown/MenuDropdown';
 import Drag from '../../assets/icons/Drag';
+import { IList } from '../../features/hubs/hubs.interfaces';
 
 interface ListItemProps {
-  list: {
-    id: string;
-    name: string;
-    color?: ListColourProps | string;
-    shape?: string;
-    tasks_count: number;
-  };
+  list: IList;
   paddingLeft: string | number;
   parentId?: string | null;
 }
@@ -104,7 +99,7 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
     }
   };
 
-  const tooltipItems = data?.data.task_status_counts;
+  const tooltipItems = data?.data.task_statuses;
 
   const closeMenuDropdown = () => {
     dispatch(
@@ -238,10 +233,10 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
                       <li
                         key={index}
                         className="flex items-center justify-between cursor-pointer hover:text-blue-500"
-                        onClick={() => handleClickScroll(item.task_status.name)}
+                        onClick={() => handleClickScroll(item.name)}
                       >
-                        <p>{item.task_status.name}</p>
-                        <p>({item.tasks_count})</p>
+                        <p>{item.name}</p>
+                        <p>({item.task_status_counts})</p>
                       </li>
                     ))}
                 </ul>

@@ -77,7 +77,7 @@ export default function EntryList({ entries, switchHeader }: EntryListProps) {
         if (col.title === 'user' && !col.hidden) {
           return (
             <td key={col.id} className="flex w-10 items-center justify-start cursor-pointer py-1">
-              <ToolTip tooltip={name}>
+              <ToolTip title={name}>
                 <AvatarWithInitials height="h-5" width="w-5" initials={initials} />
               </ToolTip>
             </td>
@@ -141,7 +141,7 @@ export default function EntryList({ entries, switchHeader }: EntryListProps) {
               }))
             }
           >
-            <EditIcon active={iconToggle.editIcon} dimensions={{ width: 20, height: 12 }} aria-hidden="true" />
+            <EditIcon active={iconToggle.editIcon} dimensions={{ width: 20, height: 20 }} aria-hidden="true" />
           </div>
         </button>
         {openUpdateEntryId == entries.id ? (
@@ -162,7 +162,7 @@ export default function EntryList({ entries, switchHeader }: EntryListProps) {
               }))
             }
           >
-            <TrashIcon active={iconToggle.trashIcon} dimensions={{ width: 20, height: 12 }} aria-hidden="true" />
+            <TrashIcon active={iconToggle.trashIcon} dimensions={{ width: 20, height: 20 }} aria-hidden="true" />
           </div>
         </button>
       </td>

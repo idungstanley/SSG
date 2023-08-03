@@ -6,24 +6,24 @@ interface ListState {
   list: string[];
   currentListId: string | null | undefined;
   createTaskFromTop: boolean;
-  delList: boolean;
   archiveList: boolean;
   toggleArchiveList: boolean;
   listColour: ListColourProps | undefined | string;
   editList: boolean;
   draggableItemId: null | TaskId;
+  dragOverItemId: null | string;
 }
 
 const initialState: ListState = {
   list: [],
   currentListId: null,
   createTaskFromTop: false,
-  delList: false,
   archiveList: false,
   toggleArchiveList: false,
   listColour: { innerColour: 'white', outerColour: 'black' },
   editList: false,
-  draggableItemId: null
+  draggableItemId: null,
+  dragOverItemId: null
 };
 
 export const listSlice = createSlice({
@@ -32,6 +32,9 @@ export const listSlice = createSlice({
   reducers: {
     setDraggableItem: (state, action: PayloadAction<TaskId | null>) => {
       state.draggableItemId = action.payload;
+    },
+    setDragOverItem: (state, action: PayloadAction<TaskId | null>) => {
+      state.dragOverItemId = action.payload;
     },
     createList(state, action: PayloadAction<string>) {
       state.list.push(action.payload);
@@ -52,9 +55,6 @@ export const listSlice = createSlice({
     setToggleArchiveList(state, action: PayloadAction<boolean>) {
       state.toggleArchiveList = action.payload;
     },
-    setDeleteList(state, action: PayloadAction<boolean>) {
-      state.delList = action.payload;
-    },
     setCurrentListId(state, action: PayloadAction<string | null | undefined>) {
       state.currentListId = action.payload;
     },
@@ -72,10 +72,10 @@ export const {
   getList,
   setCurrentListId,
   setCreateTaskFromTop,
-  setDeleteList,
   setArchiveList,
   setToggleArchiveList,
   setListPaletteColor,
-  setEditList
+  setEditList,
+  setDragOverItem
 } = listSlice.actions;
 export default listSlice.reducer;

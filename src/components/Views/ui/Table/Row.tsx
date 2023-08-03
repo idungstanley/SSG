@@ -10,12 +10,12 @@ import { useDraggable } from '@dnd-kit/core';
 import { ManageTagsDropdown } from '../../../Tag/ui/ManageTagsDropdown/ui/ManageTagsDropdown';
 import { AddSubTask } from '../AddTask/AddSubTask';
 import TaskTag from '../../../Tag/ui/TaskTag';
-import dradnddrop from '../../../../assets/icons/dradnddrop.svg';
 import Effect from '../../../../assets/icons/Effect';
 import Enhance from '../../../badges/Enhance';
 import { setShowNewTaskField, setShowNewTaskId } from '../../../../features/task/taskSlice';
 import ToolTip from '../../../Tooltip/Tooltip';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
+import Dradnddrop from '../../../../assets/icons/Dradnddrop';
 
 interface RowProps {
   task: Task;
@@ -42,6 +42,8 @@ export function Row({ task, columns, paddingLeft = 0, parentId, task_status, isL
     custom_fields: [],
     deleted_at: null,
     descendants_count: 0,
+    checklist_items_count: 0,
+    checklist_done_items_count: 0,
     has_attachments: false,
     description: null,
     directory_items: [],
@@ -106,7 +108,7 @@ export function Row({ task, columns, paddingLeft = 0, parentId, task_status, isL
     <>
       {/* current task */}
 
-      <tr style={style} className="contents group">
+      <tr style={style} className="contents group dNFlex">
         <StickyCol
           showSubTasks={showSubTasks}
           setShowSubTasks={setShowSubTasks}
@@ -119,42 +121,40 @@ export function Row({ task, columns, paddingLeft = 0, parentId, task_status, isL
           paddingLeft={paddingLeft}
           tags={'tags' in task ? <TaskTag tags={task.tags} entity_id={task.id} entity_type="task" /> : null}
           dragElement={
-            <span ref={setNodeRef} {...listeners} {...attributes}>
-              <img
-                src={dradnddrop}
-                alt="drabable"
-                className="text-lg text-gray-400 transition duration-200 opacity-0 cursor-move group-hover:opacity-100"
-              />
-            </span>
+            <div ref={setNodeRef} {...listeners} {...attributes}>
+              <div className="text-lg text-gray-400 transition duration-200 opacity-0 cursor-move group-hover:opacity-100">
+                <Dradnddrop />
+              </div>
+            </div>
           }
         >
           {/* actions */}
-          <div className=" opacity-0 group-hover:opacity-100 flex space-x-1 mr-1 items-center justify-center">
+          <div className="opacity-0 group-hover:opacity-100 flex items-center justify-center mr-1 space-x-1">
             {/* effects */}
-            <ToolTip tooltip="Apply Effects">
+            <ToolTip title="Apply Effects">
               <button className="p-1 border rounded-md " onClick={(e) => e.stopPropagation()}>
-                <Effect className="h-3 w-3" />
+                <Effect className="w-3 h-3" />
               </button>
             </ToolTip>
 
             {/* tags */}
             {'tags' in task ? (
-              <ToolTip tooltip="Tags">
+              <ToolTip title="Tags">
                 <ManageTagsDropdown entityId={task.id} tagsArr={task.tags as Tag[]} entityType="task" />
               </ToolTip>
             ) : null}
 
             {/* show create subtask field */}
             {task.descendants_count < 1 && (
-              <ToolTip tooltip="Subtask">
+              <ToolTip title="Subtask">
                 <button className="p-1 border rounded-md " onClick={(e) => onShowAddSubtaskField(e, task.id)}>
-                  <SubtasksIcon className="h-3 w-3" />
+                  <SubtasksIcon className="w-3 h-3" />
                 </button>
               </ToolTip>
             )}
-            <ToolTip tooltip="Enhance View">
-              <button className="p-1 pl-4  " onClick={(e) => e.stopPropagation()}>
-                <Enhance className="h-3 w-3" />
+            <ToolTip title="Enhance View">
+              <button className="p-1 pl-4 " onClick={(e) => e.stopPropagation()}>
+                <Enhance className="w-3 h-3" />
               </button>
             </ToolTip>
           </div>

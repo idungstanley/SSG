@@ -1,7 +1,7 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
 import React, { useEffect, useRef, useState } from 'react';
+import { useMutation } from '@tanstack/react-query';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { useEditHubService } from '../../features/hubs/hubService';
+import { UseEditHubService } from '../../features/hubs/hubService';
 import { UseEditWalletService } from '../../features/wallet/walletService';
 import { UseEditListService } from '../../features/list/listService';
 import { setPaletteDropDown } from '../../features/account/accountSlice';
@@ -11,6 +11,11 @@ import { ChromePicker } from 'react-color';
 import ListIconComponent from '../ItemsListInSidebar/components/ListIconComponent';
 import { ListColourProps } from '../tasks/ListItem';
 import { setListPaletteColor } from '../../features/list/listSlice';
+import { changeListManager } from '../../managers/List';
+import { getHub } from '../../features/hubs/hubSlice';
+import { setFilteredResults } from '../../features/search/searchSlice';
+import { changeWalletManager } from '../../managers/Wallet';
+import { changeHubManager } from '../../managers/Hub';
 
 interface PaletteProps {
   title?: string;
@@ -36,7 +41,9 @@ export default function Palette({
   const { paletteDropdown } = useAppSelector((state) => state.account);
   const { paletteId, paletteType } = paletteDropdown;
   const dispatch = useAppDispatch();
-  const queryClient = useQueryClient();
+
+  const { hub } = useAppSelector((state) => state.hub);
+
   const [isOutterFrameActive, setIsOutterFrameActive] = useState<boolean>(true);
   const [isInnerFrameActive, setIsInnerFrameActive] = useState<boolean>(false);
   const [displayColorPicker, setDisplayColorPicker] = useState<boolean>(false);
@@ -93,19 +100,30 @@ export default function Palette({
     '#CC951B'
   ];
 
+  const editHubColorMutation = useMutation(UseEditHubService, {
+    onSuccess: (data) => {
+      const hubData = data.data.hub;
+      const updatedTree = changeHubManager(hubData.id as string, hub, hubData);
+      dispatch(getHub(updatedTree));
+      dispatch(setFilteredResults(updatedTree));
+    }
+  });
+
   const editWalletColorMutation = useMutation(UseEditWalletService, {
-    onSuccess: () => {
-      queryClient.invalidateQueries(['retrieve']);
+    onSuccess: (data) => {
+      const wallet = data.data.wallet;
+      const updatedTree = changeWalletManager(wallet.id as string, hub, wallet);
+      dispatch(getHub(updatedTree));
+      dispatch(setFilteredResults(updatedTree));
     }
   });
-  const editHubColorMutation = useMutation(useEditHubService, {
-    onSuccess: () => {
-      queryClient.invalidateQueries(['retrieve']);
-    }
-  });
+
   const editListColorMutation = useMutation(UseEditListService, {
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['wallets-and-list'] });
+    onSuccess: (data) => {
+      const list = data.data.list;
+      const updatedTree = changeListManager(list.id as string, hub, list);
+      dispatch(getHub(updatedTree));
+      dispatch(setFilteredResults(updatedTree));
     }
   });
 
@@ -132,28 +150,24 @@ export default function Palette({
   const handleClick = (color?: string | ListColourProps) => {
     if (paletteType === 'hub') {
       editHubColorMutation.mutateAsync({
-        currHubId: paletteId,
-        color: color
+        hubId: paletteId,
+        color
       });
-      setPaletteColor?.(color);
-      dispatch(setPaletteDropDown({ ...paletteDropdown, show: false }));
     } else if (paletteType === 'wallet') {
       editWalletColorMutation.mutateAsync({
-        WalletId: paletteId,
-        walletColor: color
+        walletId: paletteId,
+        color
       });
-      setPaletteColor?.(color);
-      dispatch(setPaletteDropDown({ ...paletteDropdown, show: false }));
     } else if (paletteType === 'list') {
       if (isOutterFrameActive) {
         editListColorMutation.mutateAsync({
           listId: paletteId,
-          colour: { outerColour: color as string, innerColour: listComboColour?.innerColour }
+          color: { outerColour: color as string, innerColour: listComboColour?.innerColour }
         });
       } else if (isInnerFrameActive) {
         editListColorMutation.mutateAsync({
           listId: paletteId,
-          colour: {
+          color: {
             outerColour: listComboColour?.outerColour,
             innerColour: color as string
           }
@@ -161,6 +175,7 @@ export default function Palette({
       }
     }
     setPaletteColor?.(color);
+    dispatch(setPaletteDropDown({ ...paletteDropdown, show: false }));
   };
 
   const colorBoxes = palette.map((c) => (

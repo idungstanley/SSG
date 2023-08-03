@@ -1,10 +1,11 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import { Menu, Transition } from '@headlessui/react';
 import { BsChevronRight } from 'react-icons/bs';
 import { FiChevronRight } from 'react-icons/fi';
-import Icons from '../../../../../components/Icons/Icons';
-import DropDown from '../../../../../assets/icons/arrow_drop_down_black.svg';
 import { useSwitchSettings } from './SwitchSettings';
+import ShowIcon from '../../../../../assets/icons/ShowIcon';
+import ArrowDrop from '../../../../../assets/icons/ArrowDrop';
+import Button from '../../../../../components/Buttons/Button';
 
 interface IShowHideSettings {
   scrollByEachGroup: string;
@@ -30,6 +31,8 @@ export default function ShowHideSettings({
   emptyStatuses
 }: IShowHideSettings) {
   const [checkedStates, setCheckedStates] = useState<boolean[]>([]);
+  const [isAnyactive, setIsAnyactive] = useState<boolean>();
+  const isActiveColor = isAnyactive ? '#BF01FE' : 'black';
 
   const switchSettings = useSwitchSettings();
 
@@ -55,7 +58,7 @@ export default function ShowHideSettings({
     },
     {
       id: 5,
-      label: 'Task GridLines'
+      label: 'Title Vertical Grid Line'
     },
     {
       id: 6,
@@ -88,7 +91,7 @@ export default function ShowHideSettings({
     {
       id: 13,
       icon: <FiChevronRight />,
-      label: 'Remove Single Line mode'
+      label: 'Single Line mode'
     },
     {
       id: 14,
@@ -97,11 +100,35 @@ export default function ShowHideSettings({
     }
   ];
 
+  useEffect(() => {
+    const isAnyTrue = checkedStates.some((value) => value === true);
+    setIsAnyactive(isAnyTrue);
+  }, [checkedStates]);
+
+  useEffect(() => {
+    const handleCheckboxChange = () => {
+      setCheckedStates((prev: boolean[]) => {
+        const newState = [...prev];
+        const singleLineIndex = ViewSettings.findIndex((item) => item.label === 'Single Line mode');
+        const TitleVerticalGridLineIndex = ViewSettings.findIndex((item) => item.label === 'Title Vertical Grid Line');
+
+        newState[singleLineIndex] = true;
+        newState[TitleVerticalGridLineIndex] = true;
+
+        return newState;
+      });
+    };
+
+    handleCheckboxChange();
+  }, []);
+
   return (
     <Menu>
-      <div className="viewSettingsParent flex justify-center items-center">
-        <Menu.Button>
-          <Icons src={DropDown} />
+      <div className={`viewSettingsParent flex justify-center items-center text-${isAnyactive && 'alsoit-purple-50'}`}>
+        <Menu.Button className="flex ml-1">
+          <Button active={isAnyactive as boolean}>
+            <ShowIcon color={isActiveColor} /> <span>Show</span> <ArrowDrop color={isActiveColor} />
+          </Button>
         </Menu.Button>
       </div>
 
@@ -116,7 +143,7 @@ export default function ShowHideSettings({
       >
         <Menu.Items
           style={{ zIndex: 61 }}
-          className="origin-top-right absolute w-64 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none -ml-8 mt-6"
+          className="origin-top-right absolute w-64 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none  mt-3"
         >
           <p className="text-sm flex justify-center pt-3">CUSTOMIZE THIS VIEW</p>
           <div className="relative flex justify-center flex-col mb-2">
@@ -135,15 +162,23 @@ export default function ShowHideSettings({
 
           {ViewSettings.map((View, index) => (
             <Menu.Item as="a" key={View.id} className="flex items-center py-2 text-sm text-black text-left w-full ">
-              {View.label !== 'Remove Single Line mode' ? (
+              {View.label !== 'Single Line mode' ? (
                 <button
                   className={`${
-                    View.id == 6
-                      ? ' flex justify-between items-center w-full group border-b-2 pb-4'
+                    View.label == 'Upper Case'
+                      ? ' flex justify-between items-center w-full group border-y-2 py-4'
                       : ' flex justify-between items-center w-full group '
                   }`}
                 >
                   <p className="flex items-center space-x-2 pl-2 text-md whitespace-nowrap">{View.label}</p>
+                  {View.label == 'Upper Case' && (
+                    <p
+                      className="absolute text-gray-400 text-center w-2/6 bg-white border border-gray-100 px-1"
+                      style={{ top: '226px', right: '90px', fontSize: '8px' }}
+                    >
+                      TEXT
+                    </p>
+                  )}
                   <p className="flex items-center pr-2 ">
                     <label className="switch" onClick={(event) => event.stopPropagation()}>
                       <input

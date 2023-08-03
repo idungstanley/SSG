@@ -1,14 +1,13 @@
-import React, { TdHTMLAttributes, useState } from 'react';
+import React, { TdHTMLAttributes } from 'react';
 import Description from './Description';
 import AttachFile from './AttachFile';
 import SubtaskWithCount from './SubtaskWithCount';
-import Checklist from './Checklist';
 import { Task } from '../../features/task/interface.tasks';
-import InteractiveTooltip from '../Tooltip/InteractiveTooltip';
 import ToolTip from '../Tooltip/Tooltip';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { setShowNewTaskField, setShowNewTaskId } from '../../features/task/taskSlice';
 import DetailsOnHover from '../Dropdown/DetailsOnHover/DetailsOnHover';
+import Checklist from './Checklist';
 
 export interface BadgeTask extends TdHTMLAttributes<HTMLTableCellElement> {
   task: Task;
@@ -37,11 +36,12 @@ export default function Badges({ task }: BadgeTask) {
                 <Description />
               </button>
             }
+            additionalStyles={{ minHeight: '150px', minWidth: '300px' }}
           />
         )}
 
         {task.has_attachments && (
-          <ToolTip tooltip="Attach File">
+          <ToolTip title="Attach File">
             <button className="p-1 border rounded-md">
               <AttachFile />
             </button>
@@ -49,10 +49,22 @@ export default function Badges({ task }: BadgeTask) {
         )}
 
         {task.descendants_count > 0 && (
-          <ToolTip tooltip="Subtask">
-            <button className="p-1 border rounded-md " onClick={(e) => onShowAddSubtaskField(e, task.id)}>
+          <ToolTip title="Subtask">
+            <button className="relative p-1 border rounded-md" onClick={(e) => onShowAddSubtaskField(e, task.id)}>
               <SubtaskWithCount />
-              <p className="alsoit-text-sm h-2 w-2 absolute left-5 bottom-3.5">{task.descendants_count}</p>
+              <p className="alsoit-text-sm h-2 w-2 absolute left-5 " style={{ fontSize: '9px', bottom: '12.5px' }}>
+                {task.descendants_count}
+              </p>
+            </button>
+          </ToolTip>
+        )}
+        {task.checklist_items_count > 0 && (
+          <ToolTip title="Checklist">
+            <button className="relative p-1 border rounded-md " onClick={(e) => onShowAddSubtaskField(e, task.id)}>
+              <Checklist />
+              <p className="alsoit-text-sm h-2 w-2 absolute left-5" style={{ fontSize: '9px', bottom: '12.2px' }}>
+                {task.checklist_done_items_count}/{task.checklist_items_count}
+              </p>
             </button>
           </ToolTip>
         )}

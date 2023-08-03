@@ -48,59 +48,71 @@ export default function DatePicker({ styles, width, height, range, toggleFn }: D
         ref={sectionRef}
         className={
           styles ??
-          'absolute z-50 mt-1 shadow-2xl bg-white rounded-md ring-1 ring-black ring-opacity-5 focus:outline-none top-56 right-12'
+          'absolute z-50 mt-1 shadow-2xl bg-white rounded-md ring-1 ring-black ring-opacity-5 focus:outline-none top-56 right-12 flex'
         }
         style={{ height: height ?? '425px', width: width ?? '550px' }}
       >
-        <DatePickerManualDates range={range} />
-        <div className="flex border-b" style={{ height: '340px' }}>
-          <div className="w-1/3 h-full">
-            <DatePickerSideBar currentDate={currentDate} />
+        <div className="w-5/12 h-full">
+          <DatePickerSideBar currentDate={currentDate} />
+        </div>
+        <div className="flex flex-col mt-3" style={{ height: '340px' }}>
+          <div className="flex justify-end">
+            <DatePickerManualDates range={range} />
           </div>
           <div>
-            <MiniDatePicker />
+            <MiniDatePicker range={range} />
           </div>
-        </div>
-        <div className="flex items-center justify-end w-full">
-          <div className="flex space-x-2">
-            <div className="flex items-center">
-              <span className="text-xs italic font-semibold">{time}</span>
-            </div>
-            <div className="flex space-x-1">
-              <Button
-                onClick={closeDateModal}
-                variant="contained"
-                className="hover:bg-purple-600"
-                size={'small'}
-                sx={{
-                  background: '#d559aa',
-                  ':hover': { background: '#c128a9' },
-                  height: '32px',
-                  fontSize: '10px',
-                  borderRadius: '0 0 0 0'
-                }}
-              >
-                Close
-              </Button>
-              <Button
-                onClick={closeDateModal}
-                variant="contained"
-                className="hover:bg-purple-600"
-                size={'small'}
-                sx={{
-                  background: '#d559ff',
-                  ':hover': { background: '#c128f5' },
-                  height: '32px',
-                  fontSize: '10px',
-                  borderRadius: '0 0 6px 0'
-                }}
-              >
-                Confirm
-              </Button>
-            </div>
-          </div>
+          <DatePickerFooter closeDateModal={closeDateModal} time={time} />
         </div>
       </section>
     </Modal>
+  );
+}
+
+interface DatePickerFooterProps {
+  time: string;
+  closeDateModal: () => void;
+}
+
+function DatePickerFooter({ closeDateModal, time }: DatePickerFooterProps) {
+  return (
+    <div className="flex items-center justify-end w-full">
+      <div className="flex space-x-2">
+        <div className="flex items-center">
+          <span className="text-xs italic font-semibold">{time}</span>
+        </div>
+        <div className="flex space-x-1">
+          <Button
+            onClick={closeDateModal}
+            variant="outlined"
+            className="bg-alsoit-purple-300"
+            size={'small'}
+            sx={{
+              ':hover': { background: 'black', color: 'white' },
+              height: '32px',
+              fontSize: '10px',
+              borderRadius: '8px'
+            }}
+          >
+            Close
+          </Button>
+          <Button
+            onClick={closeDateModal}
+            variant="contained"
+            size={'small'}
+            disableElevation={true}
+            sx={{
+              background: '#008000',
+              ':hover': { background: '#c128f5' },
+              height: '32px',
+              fontSize: '10px',
+              borderRadius: '8px'
+            }}
+          >
+            Confirm
+          </Button>
+        </div>
+      </div>
+    </div>
   );
 }

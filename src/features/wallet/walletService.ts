@@ -1,12 +1,18 @@
 import { useDispatch } from 'react-redux';
 import requestNew from '../../app/requestNew';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { setArchiveWallet, setDeleteWallet } from './walletSlice';
+import { setArchiveWallet } from './walletSlice';
 import { closeMenu } from '../hubs/hubSlice';
-import { ICreateWallet, IWalletDetailRes, IWalletRes } from './wallet.interfaces';
+import { IWallet, IWalletDetailRes, IWalletRes } from './wallet.interfaces';
 import { useParams } from 'react-router-dom';
 import { useAppSelector } from '../../app/hooks';
 import { generateFilters } from '../../components/TasksHeader/lib/generateFilters';
+
+interface IResponseWallet {
+  data: {
+    wallet: IWallet;
+  };
+}
 
 const moveWallet = (data: { parent_id?: string; walletId?: string; hubId?: string; overType: string }) => {
   const { walletId, parent_id, overType, hubId } = data;
@@ -51,7 +57,7 @@ export const createWalletService = (data: {
   walletId?: string | null;
   color?: string;
 }) => {
-  const response = requestNew<ICreateWallet>({
+  const response = requestNew<IResponseWallet>({
     url: 'wallets',
     method: 'POST',
     data: {
@@ -98,16 +104,16 @@ export const getWalletServices = (data: { hubId?: string | null; Archived?: bool
 //edit wallet
 export const UseEditWalletService = (data: {
   walletName?: string;
-  WalletId?: string | null;
+  walletId?: string | null;
   description?: string | null | undefined;
-  walletColor?: string | null | { innerColour?: string; outterColour?: string };
+  color?: string | null | { innerColour?: string; outterColour?: string };
 }) => {
-  const response = requestNew({
-    url: `wallets/${data.WalletId}`,
+  const response = requestNew<IResponseWallet>({
+    url: `wallets/${data.walletId}`,
     method: 'PUT',
     params: {
       name: data.walletName,
-      color: data.walletColor,
+      color: data.color,
       description: data.description
     }
   });
@@ -115,27 +121,13 @@ export const UseEditWalletService = (data: {
 };
 
 //del wallet
-export const UseDeleteWalletService = (data: { query: string | null | undefined; delWallet: boolean }) => {
-  const dispatch = useDispatch();
-  const walletId = data.query;
-  const queryClient = useQueryClient();
-  return useQuery(
-    ['wallets'],
-    async () => {
-      const data = await requestNew({
-        url: `wallets/${walletId}`,
-        method: 'DELETE'
-      });
-      return data;
-    },
-    {
-      enabled: data.delWallet,
-      onSuccess: () => {
-        queryClient.invalidateQueries();
-        dispatch(setDeleteWallet(false));
-      }
-    }
-  );
+export const UseDeleteWalletService = (data: { id: string | null | undefined }) => {
+  const walletId = data.id;
+  const response = requestNew<IResponseWallet>({
+    url: `wallets/${walletId}`,
+    method: 'DELETE'
+  });
+  return response;
 };
 
 //archive wallet

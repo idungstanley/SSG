@@ -6,6 +6,11 @@ import dayjs, { Dayjs } from 'dayjs';
 
 const initialActivePlaceId: number | null = (JSON.parse(localStorage.getItem('activePlaceIdLocale') as string) ||
   null) as number | null;
+const pilotFromLS = JSON.parse(localStorage.getItem('pilot') || '""') as {
+  tabOrder: number[];
+  showTabLabel: boolean;
+};
+const showTabLabelFromLS = !!pilotFromLS.showTabLabel;
 
 interface workspaceState {
   workspace: string[];
@@ -16,8 +21,11 @@ interface workspaceState {
   pilotWidth: number;
   showHub: boolean;
   fetchAllWorkspace: boolean;
+  isManageStatus: boolean;
   showWallet: boolean;
   extendedSidebarWidth: number;
+  isResize: boolean;
+  showTabLabel: boolean;
   showMenuDropDown: boolean;
   showModal: boolean;
   searchIsActive: boolean;
@@ -73,8 +81,11 @@ const initialState: workspaceState = {
   activePlaceName: null,
   pilotWidth: 400,
   showHub: false,
+  isResize: false,
   showOverlay: false,
+  showTabLabel: showTabLabelFromLS,
   showWallet: false,
+  isManageStatus: false,
   showMenuDropDown: false,
   showIndependentPilot: false,
   showModal: false,
@@ -135,6 +146,15 @@ export const wsSlice = createSlice({
     },
     setShowTreeInput(state, action: PayloadAction<boolean>) {
       state.showTreeInput = action.payload;
+    },
+    setIsManageStatus(state, action: PayloadAction<boolean>) {
+      state.isManageStatus = action.payload;
+    },
+    setShowTabLabel(state, action: PayloadAction<boolean>) {
+      state.showTabLabel = action.payload;
+    },
+    setIsResize(state, action: PayloadAction<boolean>) {
+      state.isResize = action.payload;
     },
     setShowMore(state, action: PayloadAction<boolean>) {
       state.showMore = action.payload;
@@ -341,6 +361,7 @@ export const {
   setSearchIsActive,
   setIsExtSearchActive,
   setActiveItem,
+  setIsResize,
   setShowOverlay,
   setActiveEntityName,
   setCurrentWalletId,
@@ -379,7 +400,9 @@ export const {
   setShowTreeInput,
   setShowIndependentPilot,
   setActiveSubHubManagerTabId,
-  setLastActiveItem
+  setLastActiveItem,
+  setIsManageStatus,
+  setShowTabLabel
 } = wsSlice.actions;
 
 export default wsSlice.reducer;

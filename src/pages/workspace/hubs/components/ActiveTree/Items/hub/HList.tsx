@@ -147,9 +147,7 @@ export default function HList({ hubs }: ListProps) {
               item={hub}
               handleClick={handleClick}
               showChildren={
-                ((hub.children.length || hub.wallets.length || hub.lists.length) &&
-                  showChildren &&
-                  isCanBeOpen(hub.id)) as boolean
+                ((hub.children.length || hub.wallets.length || hub.lists.length) && isCanBeOpen(hub.id)) as boolean
               }
               handleLocation={handleLocation}
               isSticky={stickyButtonIndex !== undefined && stickyButtonIndex !== null && stickyButtonIndex <= index}
@@ -162,7 +160,7 @@ export default function HList({ hubs }: ListProps) {
             {hub.children.length && isCanBeOpen(hub.id) ? <SubHList hubs={hub.children as Hub[]} /> : null}
             {showSidebar && (
               <div>
-                {hub.wallets.length && showChildren && isCanBeOpen(hub.id) ? (
+                {hub.wallets.length && isCanBeOpen(hub.id) ? (
                   <WList
                     wallets={hub.wallets}
                     leftMargin={false}
@@ -171,7 +169,7 @@ export default function HList({ hubs }: ListProps) {
                     paddingLeft="33"
                   />
                 ) : null}
-                {hub.lists.length && showChildren && isCanBeOpen(hub.id) && !showExtendedBar ? (
+                {hub.lists.length && isCanBeOpen(hub.id) && !showExtendedBar ? (
                   <LList list={hub.lists} leftMargin={false} paddingLeft="48" />
                 ) : null}
               </div>

@@ -1,21 +1,22 @@
 import React, { useState } from 'react';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import { UseEditListService } from '../../../../../features/list/listService';
 import { Button, Input, SlideOver } from '../../../../../components';
 import { useAppSelector } from '../../../../../app/hooks';
-import { setSubDropdownMenu, setshowMenuDropdown } from '../../../../../features/hubs/hubSlice';
+import { getHub, setSubDropdownMenu, setshowMenuDropdown } from '../../../../../features/hubs/hubSlice';
 import { useDispatch } from 'react-redux';
 import { setEditListSlideOverVisibility } from '../../../../../features/general/slideOver/slideOverSlice';
+import { changeListManager } from '../../../../../managers/List';
+import { setFilteredResults } from '../../../../../features/search/searchSlice';
 
 function EditListModal() {
-  const queryClient = useQueryClient();
   const dispatch = useDispatch();
-  const { showMenuDropdown } = useAppSelector((state) => state.hub);
+
+  const { showMenuDropdown, prevName, hub } = useAppSelector((state) => state.hub);
   const { showEditListSlideOver } = useAppSelector((state) => state.slideOver);
-  const { prevName } = useAppSelector((state) => state.hub);
-  const createList = useMutation(UseEditListService, {
-    onSuccess: () => {
-      queryClient.invalidateQueries();
+
+  const updateList = useMutation(UseEditListService, {
+    onSuccess: (data) => {
       dispatch(setEditListSlideOverVisibility(false));
       dispatch(setSubDropdownMenu(false));
       dispatch(
@@ -23,6 +24,10 @@ function EditListModal() {
           showMenuDropdown: null
         })
       );
+      const list = data.data.list;
+      const updatedTree = changeListManager(list.id as string, hub, list);
+      dispatch(getHub(updatedTree));
+      dispatch(setFilteredResults(updatedTree));
     }
   });
 
@@ -41,7 +46,7 @@ function EditListModal() {
 
   const { name } = formState;
   const onSubmit = async () => {
-    await createList.mutateAsync({
+    await updateList.mutateAsync({
       listName: name,
       listId: showMenuDropdown
     });

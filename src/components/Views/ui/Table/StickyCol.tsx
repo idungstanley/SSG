@@ -63,6 +63,7 @@ export function StickyCol({
   const { mutate: onAdd } = useAddTask(parentId);
   const { currTeamMemberId, singleLineView, verticalGrid, taskUpperCase, selectedTasksArray, verticalGridlinesTask } =
     useAppSelector((state) => state.task);
+  const { hilightNewTask } = useAppSelector((state) => state.task);
 
   const queryClient = useQueryClient();
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -103,7 +104,7 @@ export function StickyCol({
   useEffect(() => {
     const { current } = inputRef;
     current?.focus();
-    selectText(current);
+    if (eitableContent || hilightNewTask) selectText(current);
   }, [eitableContent]);
 
   const selectText = (element: Node | null) => {
@@ -188,8 +189,10 @@ export function StickyCol({
     }
   });
 
+  const { dragOverItemId, draggableItemId } = useAppSelector((state) => state.list);
+
   return (
-    <div ref={droppabbleRef}>
+    <div>
       {task.id !== '0' && (
         <td
           className="sticky left-0 flex items-center justify-start text-sm font-medium text-gray-900 cursor-pointer text-start"
@@ -213,10 +216,10 @@ export function StickyCol({
             onDoubleClick={() => setEitableContent(true)}
             className={cl(
               ACTIVE_TASK,
-              `relative border-t ${isChecked && 'tdListV'} ${verticalGrid && 'border-r'} ${
+              ` ${isChecked && 'tdListV'} ${verticalGrid && 'border-r'} ${
                 verticalGridlinesTask && 'border-r'
               } w-full py-4 flex items-center `,
-              isOver ? 'border-y-2 border-alsoit-purple-300' : ''
+              isOver && draggableItemId !== dragOverItemId ? 'border-b-2 border-alsoit-purple-300' : 'border-t'
             )}
           >
             <button onClick={onToggleDisplayingSubTasks} className="pl-1">
@@ -235,41 +238,34 @@ export function StickyCol({
             </div>
             <div className="flex flex-col flex-grow items-start justify-start pl-2 space-y-1">
               <div
-                className="relative flex w-full items-center text-left"
-                contentEditable={eitableContent}
-                ref={inputRef}
+                className=" flex w-full mt-1 items-center text-left"
                 onKeyDown={(e) => (e.key === 'Enter' ? handleEditTask(e, task.id) : null)}
-                suppressContentEditableWarning={true}
+                ref={droppabbleRef}
               >
                 <div className="font-semibold alsoit-gray-300 text-alsoit-text-lg">
-                  {task.name.length > 50 && singleLineView ? (
-                    <div>
+                  {singleLineView ? (
+                    <div contentEditable={eitableContent} suppressContentEditableWarning={true} ref={inputRef}>
                       {!eitableContent ? (
-                        <>
-                          <DetailsOnHover
-                            hoverElement={
-                              <div
-                                className=""
-                                style={{
-                                  maxWidth: '300px',
-                                  overflow: 'hidden',
-                                  // fontWeight: 'lighter',
-                                  textOverflow: 'ellipsis',
-                                  whiteSpace: 'nowrap'
-                                }}
-                              >
-                                {taskUpperCase ? task.name.toUpperCase() : Capitalize(task.name)}
-                              </div>
-                            }
-                            content={<div>{taskUpperCase ? task.name.toUpperCase() : Capitalize(task.name)}</div>}
-                            additionalStyles={{ backgroundColor: 'black', color: 'white' }}
-                          />
-                        </>
+                        <DetailsOnHover
+                          hoverElement={
+                            <div
+                              style={{
+                                maxWidth: '200px',
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis',
+                                whiteSpace: 'nowrap'
+                              }}
+                            >
+                              {taskUpperCase ? task.name.toUpperCase() : Capitalize(task.name)}
+                            </div>
+                          }
+                          content={<div>{taskUpperCase ? task.name.toUpperCase() : Capitalize(task.name)}</div>}
+                          additionalStyles={{ backgroundColor: 'black', color: 'white' }}
+                        />
                       ) : (
                         <div
-                          className=""
                           style={{
-                            maxWidth: '300px',
+                            maxWidth: '200px',
                             overflow: 'hidden',
                             whiteSpace: 'nowrap'
                           }}
@@ -279,13 +275,13 @@ export function StickyCol({
                       )}
                     </div>
                   ) : (
-                    <span>{taskUpperCase ? task.name.toUpperCase() : Capitalize(task.name)}</span>
+                    <div>{taskUpperCase ? task.name.toUpperCase() : Capitalize(task.name)}</div>
                   )}
                 </div>
-
                 {/* non default badges here */}
                 <div onClick={(e) => e.stopPropagation()} className="pl-3 flex flex-grow justify-between">
                   <Badges task={task} />
+                  {/*  default badges here */}
                   {children}
                 </div>
               </div>
@@ -321,7 +317,7 @@ export function StickyCol({
             )}
           >
             <div className="absolute flex ml-1 space-x-1 -mt-7">
-              <ToolTip tooltip="Cancel">
+              <ToolTip title="Cancel">
                 <ImCancelCircle onClick={onClose} className="w-3 h-3" />
               </ToolTip>
               <button

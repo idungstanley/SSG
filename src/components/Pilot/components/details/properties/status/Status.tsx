@@ -77,7 +77,7 @@ export default function Status({ Details }: StatusDetailsProps) {
     <section className="flex items-center space-x-1">
       <div className="flex space-x-0.5">
         {Details && 'status' in Details ? (
-          <ToolTip tooltip="Current status">
+          <ToolTip title="Current status">
             <button
               className={`p-2 bg-${statusBg}-300 text-black text-xs border-white rounded-l-md capitalize cursor-pointer object-contain h-8`}
               onClick={() => handleStatusModal()}
@@ -86,14 +86,14 @@ export default function Status({ Details }: StatusDetailsProps) {
             </button>
           </ToolTip>
         ) : null}
-        <ToolTip tooltip="Next status">
+        <ToolTip title="Next status">
           <button className={`p-2 bg-${statusBg}-300 text-black text-xs rounded-r-md border-white h-8`}>
             <MdArrowRight />
           </button>
         </ToolTip>
       </div>
       <div>
-        <ToolTip tooltip="Set to complete">
+        <ToolTip title="Set to complete">
           <button
             className="p-2 text-xs border border-gray-300 rounded-md hover:border-green-300"
             onClick={() => setComplete('completed')}
