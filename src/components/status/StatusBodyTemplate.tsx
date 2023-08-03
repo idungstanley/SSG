@@ -66,6 +66,7 @@ export default function StatusBodyTemplate({ item, index, setStatusTypesState }:
 
   const showStatusEditDropdownOptions = [
     {
+      visibility: true,
       label: 'Edit Status',
       icon: <PencilIcon className="w-4 h-4" aria-hidden="true" />,
       handleClick: () => {
@@ -73,11 +74,25 @@ export default function StatusBodyTemplate({ item, index, setStatusTypesState }:
         setEditableContent(true);
       }
     },
-    { label: 'Change Color', icon: <MdInvertColors />, handleClick: () => ({}) },
     {
+      visibility: item.model_type != 'closed',
+      label: 'Change Color',
+      icon: <MdInvertColors />,
+      handleClick: (event: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
+        setShowStatusColorDropdown(event.currentTarget);
+        setShowStatusEditDropdown(null);
+      }
+    },
+    {
+      visibility: item.model_type === 'custom',
       label: 'Delete status',
       icon: <AiOutlineDelete />,
-      handleClick: () => ({})
+      handleClick: () => {
+        setStatusTypesState((prevState) => {
+          return prevState.filter((status) => status.label !== item.label);
+        });
+        setShowStatusEditDropdown(null);
+      }
     }
   ];
 
@@ -110,16 +125,19 @@ export default function StatusBodyTemplate({ item, index, setStatusTypesState }:
         anchorEl={showStatusEditDropdown as HTMLDivElement | null}
       >
         <div className="flex flex-col w-48 p-2 space-y-2">
-          {showStatusEditDropdownOptions.map((item, index) => (
-            <div
-              className="flex items-center gap-2 p-1 rounded cursor-pointer hover:bg-alsoit-gray-50"
-              key={index}
-              onClick={item.handleClick}
-            >
-              <p>{item.icon}</p>
-              <p>{item.label}</p>
-            </div>
-          ))}
+          {showStatusEditDropdownOptions.map(
+            (item, index) =>
+              item.visibility && (
+                <div
+                  className="flex items-center gap-2 p-1 rounded cursor-pointer hover:bg-alsoit-gray-50"
+                  key={index}
+                  onClick={item.handleClick}
+                >
+                  <p>{item.icon}</p>
+                  <p>{item.label}</p>
+                </div>
+              )
+          )}
         </div>
       </AlsoitMenuDropdown>
       <AlsoitMenuDropdown handleClose={handleCloseStatusColorDropdown} anchorEl={showStatusColorDropdown}>
