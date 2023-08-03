@@ -91,11 +91,11 @@ export function DatePickerSideBar({ currentDate, setOpenSideBar }: DatePickerSid
     if (nextWeekend && secondWeekend) {
       selectedWeekends = [nextWeekend.date, secondWeekend];
       if (durationType === 'weekend') {
-        dispatch(setTaskSelectedDate({ from: selectedWeekends[0], to: selectedWeekends[1] }));
+        dispatch(setTaskSelectedDate({ from: selectedWeekends[0] }));
         dispatch(setSelectedDate({ date: selectedWeekends[0] }));
         return selectedWeekends[0];
       } else {
-        dispatch(setTaskSelectedDate({ from: selectedWeekends[1], to: selectedWeekends[1] }));
+        dispatch(setTaskSelectedDate({ from: selectedWeekends[1] }));
         dispatch(setSelectedDate({ date: selectedWeekends[1] }));
         return selectedWeekends[1];
       }

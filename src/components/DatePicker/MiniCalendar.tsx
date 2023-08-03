@@ -22,6 +22,7 @@ export default function MiniDatePicker({ range }: Props) {
   const [hoveredDate, setHoveredDate] = useState<dayjs.Dayjs | null>(null);
   const { HistoryFilterMemory, selectedDate: taskTime } = useAppSelector((state) => state.task);
   const { selectedDate } = useAppSelector((state) => state.workspace);
+  const { start_week } = useAppSelector((state) => state.userSetting);
 
   const handleClick = (date: dayjs.Dayjs) => {
     if (!selectedDate?.dateType || (taskTime?.from && !range)) {
@@ -93,7 +94,7 @@ export default function MiniDatePicker({ range }: Props) {
     return false;
   };
 
-  const rows = useMemo(() => getCalendarRows(shownDate), [shownDate]);
+  const rows = useMemo(() => getCalendarRows(shownDate, Number(start_week)), [shownDate]);
 
   const handleIconClick = (isNextMonth: boolean) => {
     setShownDate(changeDateMonth(shownDate, isNextMonth));
