@@ -30,7 +30,9 @@ export default function AdditionalHeader() {
   const { timezone: zone, date_format, time_format } = useAppSelector((state) => state.userSetting);
   const [clockModal, setClockModal] = useState<boolean>(false);
   const [HeaderClock, setClock] = useState<string>(
-    moment.tz(zone ?? 'Africa/Lagos').format(time_format === '1' ? 'DD-MM-YYYY HH:mm' : 'DD-MM-YYYY h:mm a')
+    zone
+      ? moment.tz(zone).format(time_format === '1' ? 'DD-MM-YYYY HH:mm' : 'DD-MM-YYYY h:mm a')
+      : moment().format(time_format === '1' ? 'DD-MM-YYYY HH:mm' : 'DD-MM-YYYY h:mm a')
   );
   const [showClock, setShowClock] = useState<{ show: boolean; withDay: boolean; showMinimal: boolean }>({
     show: true,
@@ -49,7 +51,9 @@ export default function AdditionalHeader() {
   const headerClockFn = () =>
     window.setInterval(() => {
       setClock(
-        moment.tz(zone ?? 'Africa/Lagos').format(time_format === '1' ? 'DD-MM-YYYY HH:mm' : 'DD-MM-YYYY h:mm a')
+        zone
+          ? moment.tz(zone).format(time_format === '1' ? 'DD-MM-YYYY HH:mm' : 'DD-MM-YYYY h:mm a')
+          : moment().format(time_format === '1' ? 'DD-MM-YYYY HH:mm' : 'DD-MM-YYYY h:mm a')
       );
     }, 6000);
   const sameEntity = () => activeItemId === (timerLastMemory.hubId || timerLastMemory.listId || timerLastMemory.taskId);
