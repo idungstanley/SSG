@@ -1,24 +1,21 @@
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
-import React, { useState, useEffect, useRef, useCallback, ReactNode, HTMLAttributes } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { setGroupScrollSettings } from '../../features/general/slideOver/slideOverSlice';
 
-interface CustomScrollableContainerProps extends HTMLAttributes<HTMLDivElement> {
-  children: ReactNode;
-}
 const DEFAULT_THUMB_WIDTH = 20;
 const ARROWS_WRAPPER_WIDTH = 35;
 
-export function ScrollableHorizontalListsContainer({ children, ...props }: CustomScrollableContainerProps) {
+export function GroupHorizontalScroll() {
   const dispatch = useAppDispatch();
 
   // update size is pilot is visible / invisible
   const { show: showFullPilot } = useAppSelector((state) => state.slideOver.pilotSideOver);
+  const { groupScroll } = useAppSelector((state) => state.slideOver);
   const { showMore, currentItemId, showTabLabel, isResize, activeItemId, showHub, activePlaceId } = useAppSelector(
     (state) => state.workspace
   );
   const { openedHubId } = useAppSelector((state) => state.hub);
-  const { groupScroll } = useAppSelector((state) => state.slideOver);
 
   const [thumbWidth, setThumbWidth] = useState(DEFAULT_THUMB_WIDTH);
   const [isThumbVisible, setIsThumbVisible] = useState(true);
@@ -44,7 +41,8 @@ export function ScrollableHorizontalListsContainer({ children, ...props }: Custo
         const trackLeft = rect.left;
         const thumbOffset = -(thumbWidth / 2);
         const clickRatio = (clientX - trackLeft + thumbOffset) / trackCurrent.clientWidth;
-        const scrollAmount = Math.floor(clickRatio * contentCurrent.scrollWidth);
+        const scrollAmount = Math.floor(clickRatio * groupScroll.scrollWidth);
+        dispatch(setGroupScrollSettings({ leftPosition: scrollAmount }));
         contentCurrent.scrollTo({
           left: scrollAmount,
           behavior: 'smooth'
@@ -97,6 +95,7 @@ export function ScrollableHorizontalListsContainer({ children, ...props }: Custo
         const newScroll = Math.min(initialScrollTop + deltaX, contentWidth - contentOffsetWidth);
 
         contentRef.current.scrollLeft = newScroll;
+        dispatch(setGroupScrollSettings({ scrollLeft: newScroll }));
       }
     },
     [isDragging, scrollStartPosition, thumbWidth]
@@ -117,15 +116,6 @@ export function ScrollableHorizontalListsContainer({ children, ...props }: Custo
       const THUMB_WIDTH = (clientWidth / scrollWidth) * trackSize;
       setThumbWidth(Math.max(THUMB_WIDTH + 65, DEFAULT_THUMB_WIDTH));
       setIsThumbVisible(scrollWidth > clientWidth); // Check if the content width is greater than the track width
-      dispatch(
-        setGroupScrollSettings({
-          offsetWidth: ref.offsetWidth,
-          scrollLeft: ref.scrollLeft,
-          scrollWidth: ref.scrollWidth,
-          clientWidth: ref.clientWidth,
-          thumbWidth: Math.max(THUMB_WIDTH + 65, DEFAULT_THUMB_WIDTH)
-        })
-      );
     };
 
     const calculateThumbSize = () => {
@@ -160,7 +150,8 @@ export function ScrollableHorizontalListsContainer({ children, ...props }: Custo
     currentItemId,
     activeItemId,
     openedHubId,
-    activePlaceId
+    activePlaceId,
+    groupScroll
   ]);
 
   // Listen for mouse events to handle scrolling by dragging the thumb
@@ -177,24 +168,13 @@ export function ScrollableHorizontalListsContainer({ children, ...props }: Custo
 
   // scroll buttons
   function handleScrollButton(direction: 'left' | 'right') {
-    if (contentRef.current) {
-      const width = contentRef.current.offsetWidth;
+    if (groupScroll && contentRef.current) {
+      const width = groupScroll.offsetWidth;
       const scrollAmount = direction === 'left' ? 0 : width;
+      dispatch(setGroupScrollSettings({ leftPosition: scrollAmount, scrollLeft: 0 }));
       contentRef.current.scrollTo({ left: scrollAmount, behavior: 'smooth' });
     }
   }
-
-  useEffect(() => {
-    if (groupScroll && contentRef.current) {
-      const width = contentRef.current.offsetWidth;
-      const scrollAmount = groupScroll.leftPosition <= 0 ? 0 : width;
-      if (groupScroll.scrollLeft) {
-        contentRef.current.scrollLeft = groupScroll.scrollLeft;
-      } else {
-        contentRef.current.scrollTo({ left: scrollAmount, behavior: 'smooth' });
-      }
-    }
-  }, [groupScroll]);
 
   const renderScrollArrows = () => {
     return (
@@ -217,13 +197,12 @@ export function ScrollableHorizontalListsContainer({ children, ...props }: Custo
 
   return (
     <>
-      <div className="relative w-full overflow-hidden p-2">
-        <div className="scrollbar-hide" ref={contentRef} {...props}>
-          {children}
-        </div>
+      <div className="relative w-full overflow-hidden p-2" />
+      <div style={{ width: `${groupScroll.offsetWidth}px` }} className="h-1 absolute scrollbar-hide" ref={contentRef}>
+        <div style={{ width: `${groupScroll.scrollWidth}px` }} />
       </div>
       {isThumbVisible && (
-        <div className="sticky bottom-0 z-10 pt-4 pr-2 group grid w-full grid-cols-2 bg-purple-50">
+        <div className="sticky -top-1 z-10 pt-2 mr-2 pr-12 pl-6 group grid w-full grid-cols-2">
           <div />
           <div className="flex items-center mb-4 flex-row space-x-2">
             {renderScrollArrows()}
@@ -237,7 +216,7 @@ export function ScrollableHorizontalListsContainer({ children, ...props }: Custo
                 className="absolute bg-alsoit-gray-75 hover:bg-alsoit-gray-300 cursor-pointer rounded-xl w-full h-2 hover:h-3 hover:-top-0.5"
                 onMouseDown={handleThumbMousedown}
                 style={{
-                  width: `${thumbWidth}px`,
+                  width: `${groupScroll.thumbWidth}px`,
                   left: `${leftPosition}px`,
                   cursor: isDragging ? 'grabbing' : 'grab'
                 }}

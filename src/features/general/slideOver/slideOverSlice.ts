@@ -39,6 +39,15 @@ type PilotHub = {
   type?: HubItemType;
 };
 
+type GroupScrollSettings = {
+  offsetWidth?: number;
+  scrollLeft?: number;
+  scrollWidth?: number;
+  clientWidth?: number;
+  thumbWidth?: number;
+  leftPosition?: number;
+};
+
 interface SideOverState {
   showCreateInboxSlideOver: boolean;
   showCreateHubSlideOver: boolean;
@@ -66,6 +75,14 @@ interface SideOverState {
   itemActionForSideOver: itemAction | null;
   showCreateDirectorySlideOver: boolean;
   showFilterByAssigneeSlideOver: boolean;
+  groupScroll: {
+    leftPosition: number;
+    offsetWidth: number;
+    scrollLeft: number;
+    scrollWidth: number;
+    clientWidth: number;
+    thumbWidth: number;
+  };
 }
 
 const initialState: SideOverState = {
@@ -94,7 +111,15 @@ const initialState: SideOverState = {
   pilotSideOver: { show: false },
   pilotSideOverHub: { show: true },
   itemActionForSideOver: null,
-  showFilterByAssigneeSlideOver: false
+  showFilterByAssigneeSlideOver: false,
+  groupScroll: {
+    leftPosition: 0,
+    offsetWidth: 0,
+    scrollLeft: 0,
+    scrollWidth: 0,
+    clientWidth: 0,
+    thumbWidth: 0
+  }
 };
 
 export const slideOverSlice = createSlice({
@@ -178,6 +203,12 @@ export const slideOverSlice = createSlice({
     },
     setShowFilterByAssigneeSlideOver: (state, action: PayloadAction<boolean>) => {
       state.showFilterByAssigneeSlideOver = action.payload;
+    },
+    setGroupScrollSettings: (state, action: PayloadAction<GroupScrollSettings>) => {
+      state.groupScroll = {
+        ...state.groupScroll,
+        ...action.payload
+      };
     }
   }
 });
@@ -208,7 +239,8 @@ export const {
   setShowPilotSideOver,
   setShowPilotSideOverHub,
   setCreateSubHubSlideOverVisibility,
-  setShowFilterByAssigneeSlideOver
+  setShowFilterByAssigneeSlideOver,
+  setGroupScrollSettings
 } = slideOverSlice.actions;
 
 export default slideOverSlice.reducer;
