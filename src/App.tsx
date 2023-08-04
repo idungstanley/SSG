@@ -24,7 +24,7 @@ function App() {
   return (
     <>
       <RouterProvider router={routes(user)} />
-      <Toaster position="bottom-left" />
+      {/* <Toaster position="bottom-left" /> */}
       <Prompt />
     </>
   );
