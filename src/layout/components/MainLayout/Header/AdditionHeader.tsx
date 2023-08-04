@@ -16,6 +16,7 @@ import HeaderTimeModal from './HeaderTimeModal';
 import ArrowCaretUp from '../../../../assets/icons/ArrowCaretUp';
 import AlarmClockIcon from '../../../../assets/icons/AlarmClockicon';
 import ArrowCaretDown from '../../../../assets/icons/ArrowCaretDown';
+import moment from 'moment-timezone';
 
 export default function AdditionalHeader() {
   dayjs.extend(timezone);
@@ -27,12 +28,9 @@ export default function AdditionalHeader() {
   const { activeTabId: tabsId, timerLastMemory, activeItemId } = useAppSelector((state) => state.workspace);
   const { period } = useAppSelector((state) => state.task);
   const { timezone: zone, date_format, time_format } = useAppSelector((state) => state.userSetting);
-  console.log(zone);
   const [clockModal, setClockModal] = useState<boolean>(false);
   const [HeaderClock, setClock] = useState<string>(
-    dayjs()
-      .tz(zone)
-      .format(time_format === '1' ? 'DD-MM-YYYY HH:mm' : 'DD-MM-YYYY h:mm a')
+    moment.tz(zone ?? 'Africa/Lagos').format(time_format === '1' ? 'DD-MM-YYYY HH:mm' : 'DD-MM-YYYY h:mm a')
   );
   const [showClock, setShowClock] = useState<{ show: boolean; withDay: boolean; showMinimal: boolean }>({
     show: true,
@@ -51,9 +49,7 @@ export default function AdditionalHeader() {
   const headerClockFn = () =>
     window.setInterval(() => {
       setClock(
-        dayjs()
-          .tz(zone)
-          .format(time_format === '1' ? 'DD-MM-YYYY HH:mm' : 'DD-MM-YYYY h:mm a')
+        moment.tz(zone ?? 'Africa/Lagos').format(time_format === '1' ? 'DD-MM-YYYY HH:mm' : 'DD-MM-YYYY h:mm a')
       );
     }, 6000);
   const sameEntity = () => activeItemId === (timerLastMemory.hubId || timerLastMemory.listId || timerLastMemory.taskId);
