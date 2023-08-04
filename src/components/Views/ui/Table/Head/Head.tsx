@@ -156,7 +156,7 @@ export function Head({
 
   return columns.length > 0 ? (
     <thead className="contents">
-      <tr className="contents ">
+      <tr className="contents">
         {/* first sticky col */}
         <th style={{ zIndex: 2 }} className="sticky left-0 flex items-center -mb-2 font-extrabold" ref={columns[0].ref}>
           <div className="flex items-center " style={{ width: '38px' }}></div>
@@ -185,7 +185,6 @@ export function Head({
                   </span>
                 </div>
               </div>
-
               <AlsoitMenuDropdown
                 handleClose={handleCloseStatusDropdown}
                 anchorEl={showStatusDropdown as HTMLDivElement | null}

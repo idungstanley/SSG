@@ -22,14 +22,7 @@ interface ItemProps {
 }
 
 const groupStatusByModelType = (statusTypes: ItemProps[]) => {
-  const groupedStatus: { [modelType: string]: ItemProps[] } = {};
-  statusTypes.forEach((item) => {
-    if (!groupedStatus[item.model_type]) {
-      groupedStatus[item.model_type] = [];
-    }
-    groupedStatus[item.model_type].push(item);
-  });
-  return groupedStatus;
+  return [...new Set(statusTypes.map(({ model_type }) => model_type))];
 };
 
 export default function StatusManagement() {
@@ -39,9 +32,11 @@ export default function StatusManagement() {
   const [statusTypesState, setStatusTypesState] = useState<ItemProps[]>(statusTypes);
   const [newStatusValue, setNewStatusValue] = useState<string>();
   const [addStatus, setAddStatus] = useState<boolean>(false);
+
   const handleCloseManageStatus = () => {
     dispatch(setIsManageStatus(!isManageStatus));
   };
+
   const handleSaveNewStatus = () => {
     if (newStatusValue?.trim() !== '') {
       const newStatusItem = {
@@ -95,31 +90,33 @@ export default function StatusManagement() {
             </div>
           ) : (
             <div className="flex flex-col space-y-6">
-              {Object.entries(groupedStatus).map(([modelType, statusItems], index) => (
-                <div className="space-y-2" key={index}>
-                  <p className="flex uppercase justify-items-start">{modelType} STATUSES</p>
-                  {statusItems.map((item, index) => (
-                    <>
-                      <StatusBodyTemplate index={index} item={item} />
-                      {item.model_type === 'open' && !addStatus && (
-                        <span className="flex justify-items-start" onClick={() => setAddStatus(true)}>
-                          <Button height="h-8" icon={<PlusIcon />} label="Add Status" buttonStyle="base" />
-                        </span>
-                      )}
-                      {item.model_type === 'open' && addStatus && (
-                        <span className="flex justify-items-start">
-                          <Input
-                            trailingIcon={<PlusIcon />}
-                            placeholder="Type Status name"
-                            name="Status"
-                            onChange={handleOnChange}
-                            value={newStatusValue}
-                            trailingClick={handleSaveNewStatus}
-                          />
-                        </span>
-                      )}
-                    </>
-                  ))}
+              {groupedStatus.map((uniqueModelType, modelTypeIndex) => (
+                <div className="space-y-2" key={modelTypeIndex}>
+                  <p className="flex uppercase justify-items-start">{uniqueModelType} STATUSES</p>
+                  {statusTypesState
+                    .filter((ticket) => ticket.model_type === uniqueModelType)
+                    .map((item, index) => (
+                      <>
+                        <StatusBodyTemplate index={index} item={item} setStatusTypesState={setStatusTypesState} />
+                        {item.model_type === 'open' && !addStatus && (
+                          <span className="flex justify-items-start" onClick={() => setAddStatus(true)}>
+                            <Button height="h-8" icon={<PlusIcon />} label="Add Status" buttonStyle="base" />
+                          </span>
+                        )}
+                        {item.model_type === 'open' && addStatus && (
+                          <span className="flex justify-items-start">
+                            <Input
+                              trailingIcon={<PlusIcon />}
+                              placeholder="Type Status name"
+                              name="Status"
+                              onChange={handleOnChange}
+                              value={newStatusValue}
+                              trailingClick={handleSaveNewStatus}
+                            />
+                          </span>
+                        )}
+                      </>
+                    ))}
                 </div>
               ))}
             </div>

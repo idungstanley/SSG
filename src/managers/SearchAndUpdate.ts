@@ -40,8 +40,8 @@ function findInWallets(wallets: Wallet[], id: string, type: string, func: <T>(it
         lists: findInLists(newWalletsArr[i].lists, id, func)
       };
     }
-    return newWalletsArr;
   }
+  return newWalletsArr;
 }
 
 function findInWalletChildren(wallets: Wallet[], id: string, type: string, func: <T>(item: T) => T) {
