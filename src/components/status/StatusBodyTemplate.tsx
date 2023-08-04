@@ -1,30 +1,58 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useState } from 'react';
 import ThreeDotIcon from '../../assets/icons/ThreeDotIcon';
 import { IoMdCheckmark } from 'react-icons/io';
 import AlsoitMenuDropdown from '../DropDowns';
 import { PencilIcon } from '@heroicons/react/24/outline';
 import { AiOutlineDelete } from 'react-icons/ai';
+import ColorPalette from '../ColorPalette/component/ColorPalette';
+import { ListColourProps } from '../tasks/ListItem';
 import { MdInvertColors } from 'react-icons/md';
 
 interface ItemProps {
-  item: {
-    label?: string;
-    color: string;
-    model_type: string;
-  };
-  index: number;
+  label?: string;
+  color: string;
+  model_type: string;
 }
 
-export default function StatusBodyTemplate({ item, index }: ItemProps) {
+interface StatusBodyProps {
+  item: ItemProps;
+  index: number;
+  setStatusTypesState: React.Dispatch<React.SetStateAction<ItemProps[]>>;
+}
+
+export default function StatusBodyTemplate({ item, index, setStatusTypesState }: StatusBodyProps) {
   const [editableContent, setEditableContent] = useState<boolean>(false);
-  const [showStatusEditDropdown, setShowStatusEditDropdown] = useState<null | HTMLSpanElement>(null);
+  const [statusColor, setStatusColor] = useState<string | ListColourProps>('');
+  const [showStatusEditDropdown, setShowStatusEditDropdown] = useState<null | HTMLSpanElement | HTMLDivElement>(null);
+  const [showStatusColorDropdown, setShowStatusColorDropdown] = useState<null | HTMLSpanElement>(null);
   const handleOpenStatusEditDropdown = (event: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
     event.stopPropagation();
     setShowStatusEditDropdown(event.currentTarget);
   };
 
+  const handleOpenStatusColorDropdown = (event: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
+    event.stopPropagation();
+    setShowStatusColorDropdown(event.currentTarget);
+  };
+
+  const handleStatusColor = (color: string | ListColourProps) => {
+    setStatusColor(color);
+    setStatusTypesState((prevState) => {
+      return prevState.map((status) => {
+        if (status.label === item.label) {
+          return { ...status, color } as ItemProps;
+        }
+        return status;
+      });
+    });
+  };
+
   const handleCloseStatusEditDropdown = () => {
     setShowStatusEditDropdown(null);
+  };
+
+  const handleCloseStatusColorDropdown = () => {
+    setShowStatusColorDropdown(null);
   };
 
   const handleToggleEditableContent = () => {
@@ -59,7 +87,11 @@ export default function StatusBodyTemplate({ item, index }: ItemProps) {
       className="flex items-center gap-2 p-1 border rounded cursor-pointer justify-items-start border-alsoit-gray-75"
       onClick={() => handleToggleEditableContent()}
     >
-      <span className="w-3 h-3 ml-4 rounded" style={{ backgroundColor: item.color }}></span>
+      <span
+        className="w-3 h-3 ml-4 rounded"
+        style={{ backgroundColor: item.color }}
+        onClick={(e) => handleOpenStatusColorDropdown(e)}
+      ></span>
       <span contentEditable={editableContent} style={{ color: item.color }} className="uppercase">
         {item.label}
       </span>
@@ -89,6 +121,9 @@ export default function StatusBodyTemplate({ item, index }: ItemProps) {
             </div>
           ))}
         </div>
+      </AlsoitMenuDropdown>
+      <AlsoitMenuDropdown handleClose={handleCloseStatusColorDropdown} anchorEl={showStatusColorDropdown}>
+        <ColorPalette handleClick={handleStatusColor} />
       </AlsoitMenuDropdown>
     </span>
   );
