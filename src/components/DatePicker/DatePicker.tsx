@@ -1,19 +1,21 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 import dayjs from 'dayjs';
 import timezone from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
 import { useAppSelector } from '../../app/hooks';
-import { Button, Modal } from '@mui/material';
+import { Modal } from '@mui/material';
 import { DatePickerSideBar } from './DatePickerSideBar';
 import { DatePickerManualDates } from './DatePickerManualDate';
 import MiniDatePicker from './MiniCalendar';
+import LeftPanelOpen from '../../assets/icons/LeftPanelOpen';
+import DatePickerFooter from './DatePickerFooter';
 
 interface DatePickerProps {
   styles?: string;
   range?: boolean;
   height?: string;
   width?: string;
-  toggleFn?: React.Dispatch<React.SetStateAction<boolean>>;
+  toggleFn?: Dispatch<SetStateAction<boolean>>;
 }
 
 export type DateString = {
@@ -24,9 +26,14 @@ export default function DatePicker({ styles, width, height, range, toggleFn }: D
   dayjs.extend(timezone);
   dayjs.extend(utc);
   const currentDate = dayjs();
-  const { timezone: zone } = useAppSelector((state) => state.userSetting);
+  const { timezone: zone, time_format } = useAppSelector((state) => state.userSetting);
   const sectionRef = useRef<HTMLElement>(null);
-  const [time, setTime] = useState<string>(dayjs().tz(zone).format('ddd, DD MMM YYYY h:mm A'));
+  const [time, setTime] = useState<string>(
+    dayjs()
+      .tz(zone)
+      .format(time_format === '1' ? 'ddd, DD MMM YYYY HH:mm' : 'ddd, DD MMM YYYY h:mm A')
+  );
+  const [openSideBar, setOpenSideBar] = useState<boolean>(false);
 
   const closeDateModal = () => {
     if (toggleFn) {
@@ -48,71 +55,30 @@ export default function DatePicker({ styles, width, height, range, toggleFn }: D
         ref={sectionRef}
         className={
           styles ??
-          'absolute z-50 mt-1 shadow-2xl bg-white rounded-md ring-1 ring-black ring-opacity-5 focus:outline-none top-56 right-12 flex'
+          'absolute z-50 mt-1 shadow-2xl bg-white rounded-md ring-1 ring-black ring-opacity-5 focus:outline-none top-56 right-12 flex justify-center'
         }
-        style={{ height: height ?? '425px', width: width ?? '550px' }}
+        style={{ height: height ?? '425px', width: openSideBar ? width ?? '550px' : '360px' }}
       >
-        <div className="w-5/12 h-full">
-          <DatePickerSideBar currentDate={currentDate} />
-        </div>
+        {openSideBar && (
+          <div className="w-5/12 h-full">
+            <DatePickerSideBar setOpenSideBar={setOpenSideBar} currentDate={currentDate} />
+          </div>
+        )}
         <div className="flex flex-col mt-3" style={{ height: '340px' }}>
-          <div className="flex justify-end">
+          <div className={!openSideBar ? 'flex justify-between items-center' : 'flex justify-end items-center'}>
+            {!openSideBar && (
+              <div className="cursor-pointer" onClick={() => setOpenSideBar(true)}>
+                <LeftPanelOpen active dimensions={{ height: 35, width: 35 }} />
+              </div>
+            )}
             <DatePickerManualDates range={range} />
           </div>
           <div>
-            <MiniDatePicker />
+            <MiniDatePicker range={range} />
           </div>
-          <DatePickerFooter closeDateModal={closeDateModal} time={time} />
+          <DatePickerFooter miniMode={openSideBar} closeDateModal={closeDateModal} time={time} />
         </div>
       </section>
     </Modal>
-  );
-}
-
-interface DatePickerFooterProps {
-  time: string;
-  closeDateModal: () => void;
-}
-
-function DatePickerFooter({ closeDateModal, time }: DatePickerFooterProps) {
-  return (
-    <div className="flex items-center justify-end w-full">
-      <div className="flex space-x-2">
-        <div className="flex items-center">
-          <span className="text-xs italic font-semibold">{time}</span>
-        </div>
-        <div className="flex space-x-1">
-          <Button
-            onClick={closeDateModal}
-            variant="outlined"
-            className="bg-alsoit-purple-300"
-            size={'small'}
-            sx={{
-              ':hover': { background: 'black', color: 'white' },
-              height: '32px',
-              fontSize: '10px',
-              borderRadius: '8px'
-            }}
-          >
-            Close
-          </Button>
-          <Button
-            onClick={closeDateModal}
-            variant="contained"
-            size={'small'}
-            disableElevation={true}
-            sx={{
-              background: '#008000',
-              ':hover': { background: '#c128f5' },
-              height: '32px',
-              fontSize: '10px',
-              borderRadius: '8px'
-            }}
-          >
-            Confirm
-          </Button>
-        </div>
-      </div>
-    </div>
   );
 }

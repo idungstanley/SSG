@@ -3,8 +3,8 @@ import Menu from '@mui/material/Menu';
 
 interface dropdownProps {
   handleClose: () => void;
-  anchorEl: HTMLDivElement | null;
-  children: React.ReactNode;
+  anchorEl: HTMLDivElement | null | HTMLSpanElement;
+  children: React.ReactNode | JSX.Element;
 }
 
 export default function AlsoitMenuDropdown({ handleClose, anchorEl, children }: dropdownProps) {

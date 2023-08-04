@@ -22,7 +22,7 @@ export function Header() {
         </div>
       </section>
       {selectedTasksArray.length > 0 && (
-        <div className="w-full p-2  z-50">
+        <div className="w-full z-50">
           <span className="w-12/12 transition duration-300 ease-in-out ">
             <TaskMenu />
           </span>

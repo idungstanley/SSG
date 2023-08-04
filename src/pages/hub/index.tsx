@@ -14,6 +14,7 @@ import { List } from '../../components/Views/ui/List/List';
 import { generateLists } from '../../utils';
 import { Header } from '../../components/TasksHeader';
 import { ScrollableContainer } from '../../components/ScrollableContainer/ScrollableContainer';
+import { GroupHorizontalScroll } from '../../components/ScrollableContainer/GroupHorizontalScroll';
 
 export default function HubPage() {
   const dispatch = useAppDispatch();
@@ -91,6 +92,7 @@ export default function HubPage() {
             ))}
           </section>
         </ScrollableContainer>
+        <GroupHorizontalScroll />
       </Page>
     </>
   );

@@ -40,8 +40,8 @@ function findInWallets(wallets: Wallet[], id: string, type: string, func: <T>(it
         lists: findInLists(newWalletsArr[i].lists, id, func)
       };
     }
-    return newWalletsArr;
   }
+  return newWalletsArr;
 }
 
 function findInWalletChildren(wallets: Wallet[], id: string, type: string, func: <T>(item: T) => T) {
@@ -135,7 +135,7 @@ function updateParentOfHubs(type: string, hubs: Hub[], id: string, func: <T>(ite
       break;
     }
 
-    if (type === 'wallet' && newHubsArray[i].wallets.length) {
+    if ((type === 'wallet' || type === 'list') && newHubsArray[i].wallets.length) {
       newHubsArray[i] = {
         ...newHubsArray[i],
         wallets: updateParentOfWallets(type, newHubsArray[i].wallets, id, func)

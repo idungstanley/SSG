@@ -74,7 +74,7 @@ export function HistoryfilterModal({ logData, toggleFn }: HistoryfiltermodalProp
                     <label htmlFor={`${keys.main}1`} className="w-full">
                       {dateEntries && checkedStates[0] && (
                         <DatePicker
-                          styles="absolute z-50 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none right-12 top-64 flex"
+                          styles="absolute z-50 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none right-12 top-64 flex justify-center"
                           range={true}
                           toggleFn={setEntries}
                         />

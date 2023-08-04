@@ -16,13 +16,13 @@ import statusbox from '../../../../../assets/icons/statusbox.svg';
 import { CiEdit, CiSettings } from 'react-icons/ci';
 import { BsThreeDots } from 'react-icons/bs';
 import { FiPlusCircle } from 'react-icons/fi';
-import { ModalDropdown } from '../../../../Modal/ModalDropdown';
 import { PencilIcon } from '@heroicons/react/24/outline';
 import PlusIcon from '../../../../../assets/icons/PlusIcon';
 import { TbAlignJustified } from 'react-icons/tb';
 import { MdEditNote } from 'react-icons/md';
 import { BiHide } from 'react-icons/bi';
 import { setIsManageStatus } from '../../../../../features/workspace/workspaceSlice';
+import AlsoitMenuDropdown from '../../../../DropDowns';
 
 interface HeadProps {
   columns: Column[];
@@ -57,15 +57,25 @@ export function Head({
   const scrollToRef = useRef(null);
   const sortAbles: string[] = ['Task', 'Updated at', 'Created at', 'Status', 'Priority', 'Assignees'];
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
+
   const [headerId, setheaderId] = useState<string>('');
-  const [showStatusDropdown, setShowStatusDropdown] = useState<boolean>(false);
+  const [showStatusDropdown, setShowStatusDropdown] = useState<null | SVGElement>(null);
   const [showSortModal, setShowSortModal] = useState<boolean>(false);
   const { sortArr, sortAbleArr } = useAppSelector((state) => state.task);
   const { baseColor } = useAppSelector((state) => state.account);
   const { isManageStatus } = useAppSelector((state) => state.workspace);
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleClick = (event: React.MouseEvent<SVGElement, MouseEvent>) => {
+    setShowStatusDropdown(event.currentTarget);
+  };
+
+  const handleCloseStatusDropdown = () => {
+    setShowStatusDropdown(null);
+  };
 
   const headerTxt = (title: string) =>
     title === 'Assignees'
@@ -113,9 +123,9 @@ export function Head({
     setAnchorEl(event.currentTarget);
   };
 
-  const handleCloseManageStatus = () => {
-    dispatch(setIsManageStatus);
-  };
+  // const handleCloseManageStatus = () => {
+  //   dispatch(setIsManageStatus);
+  // };
 
   const dirCheck = (col: string): SortOption | undefined => {
     return sortAbleArr.find((el) => el.field === headerTxt(col));
@@ -139,14 +149,14 @@ export function Head({
       icon: <CiSettings />,
       handleClick: () => {
         dispatch(setIsManageStatus(!isManageStatus));
-        setShowStatusDropdown(false);
+        setShowStatusDropdown(null);
       }
     }
   ];
 
   return columns.length > 0 ? (
     <thead className="contents">
-      <tr className="contents ">
+      <tr className="contents">
         {/* first sticky col */}
         <th style={{ zIndex: 2 }} className="sticky left-0 flex items-center -mb-2 font-extrabold" ref={columns[0].ref}>
           <div className="flex items-center " style={{ width: '38px' }}></div>
@@ -156,10 +166,10 @@ export function Head({
               style={{ backgroundColor: headerStatusColor }}
             >
               <div>
-                <div className=" items-center space-x-1 viewSettings" onClick={(e) => e.stopPropagation()}>
+                <div className=" items-center ml-0.5 space-x-1 viewSettings" onClick={(e) => e.stopPropagation()}>
                   <img src={statusbox} alt="" />
                   <CiEdit />
-                  <BsThreeDots className="cursor-pointer" onClick={() => setShowStatusDropdown((prev) => !prev)} />
+                  <BsThreeDots className="cursor-pointer" onClick={(e) => handleClick(e)} />
                 </div>
                 <div className="flex">
                   <p>
@@ -175,13 +185,11 @@ export function Head({
                   </span>
                 </div>
               </div>
-
-              <ModalDropdown
-                showModal={showStatusDropdown}
-                setShowModal={setShowStatusDropdown}
-                position="left-96 top-56"
+              <AlsoitMenuDropdown
+                handleClose={handleCloseStatusDropdown}
+                anchorEl={showStatusDropdown as HTMLDivElement | null}
               >
-                <div className="flex flex-col p-1 space-y-2">
+                <div className="flex flex-col p-2 px-2 space-y-2">
                   <p className="text-alsoit-gray-75">Group Options</p>
                   <div className="flex flex-col space-y-2">
                     {statusDropdownOptions.map((item, index) => (
@@ -196,7 +204,7 @@ export function Head({
                     ))}
                   </div>
                 </div>
-              </ModalDropdown>
+              </AlsoitMenuDropdown>
             </div>
             <div
               className="flex items-center hover:bg-gray-200 p-0.5 rounded-md space-x-1  border-t-2 border-l-2 border-r-2 border-transparent hover:border-gray-600 text-alsoit-gray-200 font-semibold"
@@ -230,7 +238,7 @@ export function Head({
             </div>
           </div>
           <FiPlusCircle
-            className="w-4 h-4 font-black AddColumnDropdownButton"
+            className="w-4 h-4 font-black AddColumnDropdownButton mr-2"
             onClick={() => dispatch(setListIdForCustom(listId))}
           />
           {headerId === columns[0].id && (

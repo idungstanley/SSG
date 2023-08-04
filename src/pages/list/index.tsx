@@ -87,7 +87,7 @@ export function ListPage() {
           <div
             style={{ minHeight: '0', maxHeight: '83vh' }}
             ref={containerRef}
-            className="w-full h-full p-4 space-y-10 overflow-y-scroll"
+            className="w-full h-full p-4 pb-0 space-y-10 overflow-y-scroll"
             onScroll={onScroll}
           >
             {listView && <TaskQuickAction listDetailsData={listName} />}

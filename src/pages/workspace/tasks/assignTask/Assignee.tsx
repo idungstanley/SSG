@@ -25,10 +25,10 @@ export default function Assignee({
   assigneeChecklistItem?: ICheckListItems;
   task?: ImyTaskData | undefined;
 }) {
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [searchInput, setSearchInput] = React.useState<string>('');
   const [teams, setTeams] = React.useState<boolean>(false);
   const [filteredMembers, setFilteredMembers] = useState<ITeamMembersAndGroup[] | undefined>([]);
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -74,7 +74,7 @@ export default function Assignee({
           ) : (
             <span onClick={handleClick}>
               <UserPlusIcon
-                className="text-xl text-gray-400 items-center justify-center cursor-pointer"
+                className="items-center justify-center text-xl text-gray-400 cursor-pointer"
                 style={{
                   width: '26px'
                 }}
@@ -88,14 +88,14 @@ export default function Assignee({
         <div id="basic-button">
           {userObj ? (
             <div className="">
-              <button className="border-2 border-red-400  rounded-full" onClick={handleClick}>
+              <button className="border-2 border-red-400 rounded-full" onClick={handleClick}>
                 <AvatarWithInitials initials={userObj.user.initials} backgroundColour={userObj.color} badge={true} />
               </button>
             </div>
           ) : (
             <span onClick={handleClick}>
               <UserPlusIcon
-                className="text-xl text-gray-400 items-center justify-center cursor-pointer"
+                className="items-center justify-center text-xl text-gray-400 cursor-pointer"
                 style={{
                   width: '26px'
                 }}
@@ -107,17 +107,17 @@ export default function Assignee({
       )}
       <AlsoitMenuDropdown handleClose={handleClose} anchorEl={anchorEl as HTMLDivElement | null}>
         <div className="overflow-scroll" style={{ maxHeight: '400px' }}>
-          <section className="relative flex items-center sticky top-2 bg-white z-10">
+          <section className="relative sticky z-10 flex items-center bg-white top-2">
             <AiOutlineSearch className="absolute w-5 h-5 right-3" />
             <input
               type="text"
               placeholder="Search..."
-              className="w-11/12 m-auto p-2 border-0 focus:outline-none rounded-md"
+              className="w-11/12 p-2 m-auto border-0 rounded-md focus:outline-none"
               onKeyDown={handleKeyDown}
               onChange={(e) => searchItem(e.target.value)}
             />
           </section>
-          <div className="w-full flex justify-between items-center px-4 my-2 sticky top-12 bg-white z-10">
+          <div className="sticky z-10 flex items-center justify-between w-full px-4 my-2 bg-white top-12">
             <p
               className={cl('flex justify-center w-1/2 cursor-pointer', !teams ? 'border-b-2 border-fuchsia-600' : '')}
               onClick={() => setTeams(!teams)}

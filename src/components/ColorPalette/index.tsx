@@ -1,7 +1,7 @@
-import { useMutation } from '@tanstack/react-query';
 import React, { useEffect, useRef, useState } from 'react';
+import { useMutation } from '@tanstack/react-query';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { useEditHubService } from '../../features/hubs/hubService';
+import { UseEditHubService } from '../../features/hubs/hubService';
 import { UseEditWalletService } from '../../features/wallet/walletService';
 import { UseEditListService } from '../../features/list/listService';
 import { setPaletteDropDown } from '../../features/account/accountSlice';
@@ -11,11 +11,12 @@ import { ChromePicker } from 'react-color';
 import ListIconComponent from '../ItemsListInSidebar/components/ListIconComponent';
 import { ListColourProps } from '../tasks/ListItem';
 import { setListPaletteColor } from '../../features/list/listSlice';
-import { changeListColorManager } from '../../managers/List';
+import { changeListManager } from '../../managers/List';
 import { getHub } from '../../features/hubs/hubSlice';
 import { setFilteredResults } from '../../features/search/searchSlice';
-import { changeWalletColorManager } from '../../managers/Wallet';
-import { changeHubColorManager } from '../../managers/Hub';
+import ColorPalette from './component/ColorPalette';
+import { changeWalletManager } from '../../managers/Wallet';
+import { changeHubManager } from '../../managers/Hub';
 
 interface PaletteProps {
   title?: string;
@@ -30,7 +31,7 @@ interface PaletteProps {
 interface ChromePickerProps {
   hex: string;
 }
-export default function Palette({
+export default function PaletteManager({
   title,
   setPaletteColor,
   bottomContent,
@@ -41,7 +42,6 @@ export default function Palette({
   const { paletteDropdown } = useAppSelector((state) => state.account);
   const { paletteId, paletteType } = paletteDropdown;
   const dispatch = useAppDispatch();
-
   const { hub } = useAppSelector((state) => state.hub);
 
   const [isOutterFrameActive, setIsOutterFrameActive] = useState<boolean>(true);
@@ -67,43 +67,10 @@ export default function Palette({
     setIsOutterFrameActive(false);
   };
 
-  const palette = [
-    'green',
-    'yellow',
-    'blue',
-    'pink',
-    'black',
-    'orange',
-    'gray',
-    '#ED1500',
-    'magenta',
-    '#5CEE4F',
-    'teal',
-    '#1e2533',
-    '#8EFAD3',
-    '#5E5CCB',
-    '#57A1E4',
-    '#87DDF0',
-    '#8F14EF',
-    '#FF7501',
-    '#E71CBB',
-    '#FFB877',
-    '#DF9999',
-    '#7B659F',
-    '#6DF5DD',
-    '#BF00FF',
-    '#C8130C',
-    '#EEDF19',
-    '#306ACC',
-    '#AC4B31',
-    '#33AA2B',
-    '#CC951B'
-  ];
-
-  const editHubColorMutation = useMutation(useEditHubService, {
+  const editHubColorMutation = useMutation(UseEditHubService, {
     onSuccess: (data) => {
       const hubData = data.data.hub;
-      const updatedTree = changeHubColorManager(hubData.id as string, hub, hubData.color as string);
+      const updatedTree = changeHubManager(hubData.id as string, hub, hubData);
       dispatch(getHub(updatedTree));
       dispatch(setFilteredResults(updatedTree));
     }
@@ -112,7 +79,7 @@ export default function Palette({
   const editWalletColorMutation = useMutation(UseEditWalletService, {
     onSuccess: (data) => {
       const wallet = data.data.wallet;
-      const updatedTree = changeWalletColorManager(wallet.id as string, hub, wallet.color);
+      const updatedTree = changeWalletManager(wallet.id as string, hub, wallet);
       dispatch(getHub(updatedTree));
       dispatch(setFilteredResults(updatedTree));
     }
@@ -121,7 +88,7 @@ export default function Palette({
   const editListColorMutation = useMutation(UseEditListService, {
     onSuccess: (data) => {
       const list = data.data.list;
-      const updatedTree = changeListColorManager(list.id as string, hub, JSON.parse(list.color));
+      const updatedTree = changeListManager(list.id as string, hub, list);
       dispatch(getHub(updatedTree));
       dispatch(setFilteredResults(updatedTree));
     }
@@ -142,32 +109,27 @@ export default function Palette({
     };
   }, []);
 
-  const style = {
-    height: '15px',
-    width: '15px'
-  };
-
   const handleClick = (color?: string | ListColourProps) => {
     if (paletteType === 'hub') {
       editHubColorMutation.mutateAsync({
-        currHubId: paletteId,
-        color: color
+        hubId: paletteId,
+        color
       });
     } else if (paletteType === 'wallet') {
       editWalletColorMutation.mutateAsync({
-        WalletId: paletteId,
-        walletColor: color
+        walletId: paletteId,
+        color
       });
     } else if (paletteType === 'list') {
       if (isOutterFrameActive) {
         editListColorMutation.mutateAsync({
           listId: paletteId,
-          colour: { outerColour: color as string, innerColour: listComboColour?.innerColour }
+          color: { outerColour: color as string, innerColour: listComboColour?.innerColour }
         });
       } else if (isInnerFrameActive) {
         editListColorMutation.mutateAsync({
           listId: paletteId,
-          colour: {
+          color: {
             outerColour: listComboColour?.outerColour,
             innerColour: color as string
           }
@@ -177,10 +139,6 @@ export default function Palette({
     setPaletteColor?.(color);
     dispatch(setPaletteDropDown({ ...paletteDropdown, show: false }));
   };
-
-  const colorBoxes = palette.map((c) => (
-    <div style={{ backgroundColor: `${c}`, ...style }} key={c} className="rounded" onClick={() => handleClick(c)}></div>
-  ));
 
   return (
     <div
@@ -206,9 +164,7 @@ export default function Palette({
             />
           </div>
         )}
-        <button type="button" className="grid grid-cols-5 gap-3 p-2 font-semibold">
-          {colorBoxes}
-        </button>
+        <ColorPalette handleClick={handleClick} />
         <div className="flex justify-center">
           <BiPaint
             onClick={() => handleEditColor(true)}
