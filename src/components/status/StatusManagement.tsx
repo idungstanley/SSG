@@ -6,7 +6,6 @@ import Button from '../Button';
 import PlusIcon from '../../assets/icons/PlusIcon';
 import StatusBodyTemplate from './StatusBodyTemplate';
 import Input from '../input/Input';
-import { ListColourProps } from '../tasks/ListItem';
 
 const statusTabOptions = [{ label: 'Use Space Statuses' }, { label: 'Custom' }];
 
@@ -37,13 +36,6 @@ export default function StatusManagement() {
   const handleCloseManageStatus = () => {
     dispatch(setIsManageStatus(!isManageStatus));
   };
-
-  const handleUpdateItemColor = (index: number, updatedItem: ItemProps) => {
-    const newItems = [...statusTypesState];
-    newItems[index] = updatedItem;
-    setStatusTypesState(newItems);
-  };
-  console.log(statusTypesState);
 
   const handleSaveNewStatus = () => {
     if (newStatusValue?.trim() !== '') {
