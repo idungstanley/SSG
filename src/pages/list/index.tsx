@@ -15,6 +15,7 @@ import { setUpdateCords } from '../../features/task/taskSlice';
 import TaskQuickAction from '../workspace/tasks/component/taskQuickActions/TaskQuickAction';
 import { List } from '../../components/Views/ui/List/List';
 import { Header } from '../../components/TasksHeader';
+import { GroupHorizontalScroll } from '../../components/ScrollableContainer/GroupHorizontalScroll';
 
 export function ListPage() {
   const dispatch = useAppDispatch();
@@ -94,6 +95,7 @@ export function ListPage() {
 
             {tasks.length ? <List tasks={tasks} /> : []}
           </div>
+          {tasks.length > 1 && <GroupHorizontalScroll />}
         </>
       </Page>
     </>

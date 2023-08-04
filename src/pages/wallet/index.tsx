@@ -15,6 +15,7 @@ import { useScroll } from '../../hooks/useScroll';
 import { setUpdateCords } from '../../features/task/taskSlice';
 import { List } from '../../components/Views/ui/List/List';
 import { Header } from '../../components/TasksHeader';
+import { GroupHorizontalScroll } from '../../components/ScrollableContainer/GroupHorizontalScroll';
 
 export function WalletPage() {
   const dispatch = useAppDispatch();
@@ -98,6 +99,7 @@ export function WalletPage() {
               <List key={listId} tasks={lists[listId]} />
             ))}
           </section>
+          {Object.keys(lists).length > 1 && <GroupHorizontalScroll />}
         </>
       </Page>
     </>
