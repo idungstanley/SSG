@@ -32,7 +32,7 @@ export default function StatusBodyTemplate({ item, index, setStatusTypesState }:
 
   const handleOpenStatusColorDropdown = (event: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
     event.stopPropagation();
-    setShowStatusColorDropdown(event.currentTarget);
+    if (item.model_type !== 'closed') setShowStatusColorDropdown(event.currentTarget);
   };
 
   const handleStatusColor = (color: string | ListColourProps) => {
