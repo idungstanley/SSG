@@ -10,22 +10,30 @@ import dayjs from 'dayjs';
 import HeaderModal from '../../../../components/Header/HeaderModal';
 import TimerModal from './TimerOptions';
 import { useParams } from 'react-router-dom';
-import moment from 'moment-timezone';
+import timezone from 'dayjs/plugin/timezone';
+import utc from 'dayjs/plugin/utc';
 import HeaderTimeModal from './HeaderTimeModal';
 import ArrowCaretUp from '../../../../assets/icons/ArrowCaretUp';
 import AlarmClockIcon from '../../../../assets/icons/AlarmClockicon';
 import ArrowCaretDown from '../../../../assets/icons/ArrowCaretDown';
 
 export default function AdditionalHeader() {
+  dayjs.extend(timezone);
+  dayjs.extend(utc);
   const { screenRecording, duration, timerStatus } = useAppSelector((state) => state.task);
   const [recordBlinker, setRecordBlinker] = useState<boolean>(false);
   const [timerModal, setTimerModal] = useState<boolean>(false);
   const [isVisible, setIsVisible] = useState<boolean>(true);
   const { activeTabId: tabsId, timerLastMemory, activeItemId } = useAppSelector((state) => state.workspace);
   const { period } = useAppSelector((state) => state.task);
-  const { timezone: zone, date_format } = useAppSelector((state) => state.userSetting);
+  const { timezone: zone, date_format, time_format } = useAppSelector((state) => state.userSetting);
+  console.log(zone);
   const [clockModal, setClockModal] = useState<boolean>(false);
-  const [HeaderClock, setClock] = useState<string>(dayjs().format('DD-MM-YYYY hh:mm'));
+  const [HeaderClock, setClock] = useState<string>(
+    dayjs()
+      .tz(zone)
+      .format(time_format === '1' ? 'DD-MM-YYYY HH:mm' : 'DD-MM-YYYY h:mm a')
+  );
   const [showClock, setShowClock] = useState<{ show: boolean; withDay: boolean; showMinimal: boolean }>({
     show: true,
     withDay: false,
@@ -42,7 +50,11 @@ export default function AdditionalHeader() {
 
   const headerClockFn = () =>
     window.setInterval(() => {
-      setClock(dayjs().format('DD-MM-YYYY hh:mm'));
+      setClock(
+        dayjs()
+          .tz(zone)
+          .format(time_format === '1' ? 'DD-MM-YYYY HH:mm' : 'DD-MM-YYYY h:mm a')
+      );
     }, 6000);
   const sameEntity = () => activeItemId === (timerLastMemory.hubId || timerLastMemory.listId || timerLastMemory.taskId);
 
@@ -179,10 +191,10 @@ export default function AdditionalHeader() {
           onMouseLeave={() => setShowClock((prev) => ({ ...prev, showMinimal: false }))}
         >
           <span className="text-center text-alsoit-text-md">
-            {moment(HeaderClock, 'DD-MM-YYYY hh:mm').format('hh:mm')}
+            {dayjs(HeaderClock).format(time_format === '1' ? 'HH:mm' : 'h:mm a')}
           </span>
           <span className="text-center text-alsoit-text-md">
-            {moment(HeaderClock, 'DD-MM-YYYY hh:mm').format(date_format?.toUpperCase() ?? 'MM-DD-YYYY')}
+            {dayjs(HeaderClock, 'DD-MM-YYYY hh:mm').format(date_format?.toUpperCase() ?? 'MM-DD-YYYY')}
           </span>
           {clockModal && (
             <HeaderModal clickAway={true} toggleFn={setClockModal} styles="top-10 right-32 w-44">
