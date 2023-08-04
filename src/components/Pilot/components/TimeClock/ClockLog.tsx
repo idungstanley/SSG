@@ -10,6 +10,7 @@ import { UserSortDropDown } from './TimeUserSortDropDown';
 import PlusCircle from '../../../../assets/icons/AddCircle';
 import CancelIcon from '../../../../assets/icons/Cancel';
 import ArrowCaretUp from '../../../../assets/icons/ArrowCaretUp';
+import { ScrollableContainer } from '../../../ScrollableContainer/ScrollableContainer';
 
 export type Header = {
   title: string;
@@ -78,14 +79,14 @@ export default function ClockLog() {
       return (
         <div className="p-2">
           <table className="relative w-full">
-            <thead className="relative flex items-center justify-between pb-2 space-x-1 text-xs border-b border-gray-400 font-extralight">
-              <tr className="flex items-center w-9/12 space-x-4">
+            <thead className="relative flex items-center justify-between pb-2 text-xs border-b border-gray-400 font-extralight">
+              <tr className="flex items-center space-x-5">
                 {headers.map((col) => {
                   return (
                     !col.hidden && (
                       <th
                         key={col.id}
-                        className="flex justify-center w-12 gap-1 capitalize cursor-default group relative text-alsoit-text-sm font-semibold"
+                        className="flex gap-1 capitalize cursor-default group relative text-alsoit-text-sm font-semibold"
                       >
                         <span
                           className="cursor-pointer"
@@ -151,8 +152,6 @@ export default function ClockLog() {
                   );
                 })}
               </tr>
-            </thead>
-            <tbody>
               <tr>
                 <th colSpan={headers.filter((header) => !header.hidden).length}>
                   <div
@@ -202,13 +201,17 @@ export default function ClockLog() {
                   )}
                 </th>
               </tr>
-              {getTaskEntries?.data?.time_entries?.map((entries: entriesProps) => {
-                const { id, initials, name } = entries.team_member.user;
-                const { id: teamId } = entries.team_member;
-                teamMember.push({ id, initials, name });
-                teamMemberId.push(teamId);
-                return <EntryList entries={entries} key={entries.id} switchHeader={headers} />;
-              })}
+            </thead>
+            <tbody className="max-h-20">
+              <ScrollableContainer scrollDirection="y">
+                {getTaskEntries?.data?.time_entries?.map((entries: entriesProps) => {
+                  const { id, initials, name } = entries.team_member.user;
+                  const { id: teamId } = entries.team_member;
+                  teamMember.push({ id, initials, name });
+                  teamMemberId.push(teamId);
+                  return <EntryList entries={entries} key={entries.id} switchHeader={headers} />;
+                })}
+              </ScrollableContainer>
             </tbody>
           </table>
         </div>
