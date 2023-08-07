@@ -534,7 +534,7 @@ export const taskSlice = createSlice({
     setCustomSuggetionsField(state, action: PayloadAction<IExtraFields>) {
       state.customSuggestionField = [...state.customSuggestionField, action.payload];
     },
-    setNewTask(state, action: PayloadAction<ImyTaskData>) {
+    setNewTask(state, action: PayloadAction<ImyTaskData | undefined>) {
       state.newTaskData = action.payload;
     }
   }

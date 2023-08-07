@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ExclamationCircleIcon } from '@heroicons/react/24/solid';
 import toast from 'react-hot-toast';
 import { cl } from '../utils';
@@ -6,8 +6,11 @@ import Success from '../assets/icons/Success';
 import ToastClose from '../assets/icons/ToastClose';
 import Checkbox from '../assets/icons/Checkbox';
 import CopyUrl from '../assets/icons/CopyUrl';
-import { useAppSelector } from '../app/hooks';
+import { useAppDispatch, useAppSelector } from '../app/hooks';
 import { useNavigate } from 'react-router-dom';
+import { useToasterStore } from 'react-hot-toast';
+import { ImyTaskData } from '../features/task/taskSlice';
+// import { setNewTask } from '../features/task/taskSlice';
 
 interface ToastProps {
   title: string;
@@ -15,21 +18,20 @@ interface ToastProps {
   type: string;
   showClose?: boolean;
   toastId?: string;
+  taskData?: ImyTaskData;
 }
 
-export default function Toast({ type = 'success', title, body, showClose = true, toastId }: ToastProps) {
+export default function Toast({ type = 'success', title, body, showClose = true, toastId, taskData }: ToastProps) {
   const navigate = useNavigate();
   if (title === 'Query data cannot be undefined' || !title) {
     return null;
   }
 
   const [isCopied, setIsCopied] = useState<number>(0);
-
-  const { newTaskData } = useAppSelector((state) => state.task);
   const { currentWorkspaceId } = useAppSelector((state) => state.auth);
   const currentHost = window.location.host;
-  const task_Id = newTaskData?.id;
-  const list_Id = newTaskData?.list_id;
+  const task_Id = taskData?.id;
+  const list_Id = taskData?.list_id;
   const taskUrl = `${currentHost}/${currentWorkspaceId}/tasks/l/${list_Id}/t/${task_Id}`;
 
   const HandleCopyTaskUrl = async () => {
@@ -78,9 +80,9 @@ export default function Toast({ type = 'success', title, body, showClose = true,
                   <p className="text-alsoit-text-lg font-semibold text-alsoit-gray-300 font-semibold my-1">{body}</p>
                 )}
               </div>
-              {newTaskData && (
+              {taskData && (
                 <div className="my-1">
-                  <h3 className="my-1">{`${newTaskData.name} created`}</h3>
+                  <h3 className="my-1">{`${taskData.name} created`}</h3>
                   <section className="flex justify-between my-1">
                     <div onClick={handleHighlight} className="flex items-center cursor-pointer gap-0.5">
                       <Checkbox />
