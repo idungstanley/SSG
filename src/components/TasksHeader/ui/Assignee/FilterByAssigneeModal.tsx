@@ -1,4 +1,4 @@
-import React, { Fragment, useRef } from 'react';
+import React, { Fragment, useRef, useState } from 'react';
 import { Menu, Transition } from '@headlessui/react';
 import ArrowDownFilled from '../../../../assets/icons/ArrowDownFilled';
 import { useGetTeamMembers } from '../../../../features/settings/teamMembers/teamMemberService';
@@ -14,9 +14,15 @@ import { ScrollableContainer } from '../../../ScrollableContainer/ScrollableCont
 export default function FilterByAssigneeModal() {
   const dispatch = useAppDispatch();
   const inputRef = useRef<HTMLInputElement>(null);
+  const [searchValue, setSearchValue] = useState<string>('');
+  // Rest of the code...
 
   const { data } = useGetTeamMembers({ page: 1, query: '' });
   const members = data?.data.team_members ?? [];
+  // Filter the members based on the search value
+  const filteredMembers = members.filter((member) =>
+    member.user.name.toLowerCase().includes(searchValue.toLowerCase())
+  );
   const {
     filters: { fields: filters }
   } = useAppSelector((state) => state.task);
@@ -67,6 +73,10 @@ export default function FilterByAssigneeModal() {
     }
   };
 
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchValue(e.target.value);
+  };
+
   return (
     <Menu as="div" className="relative inline-block text-left group">
       <div className="relative">
@@ -87,22 +97,25 @@ export default function FilterByAssigneeModal() {
       >
         <Menu.Items
           className="fixed mt-2 overflow-scroll origin-top-right bg-white rounded-md shadow-lg w-72 ring-1 ring-black ring-opacity-5 focus:outline-none"
-          style={{ zIndex: 11, maxHeight: '500px' }}
+          style={{ zIndex: 3, maxHeight: '500px' }}
         >
-          <div className="relative flex items-center w-full px-4 py-2 text-gray-500">
-            <MagnifyingGlassIcon className="w-5 h-5" />
+          <div className="container mx-auto py-2 px-4">
+            <div className="relative flex items-center w-full text-gray-500">
+              <MagnifyingGlassIcon className="w-5 h-5" />
 
-            <input
-              onChange={() => null}
-              ref={inputRef}
-              type="text"
-              className="block w-full h-5 border-0 appearance-none alsoit-radius text-alsoit-gray-300-lg ring-0 focus:ring-0 focus:outline-0 text-alsoit-text-lg"
-              placeholder="Search Assignee"
-            />
-            <EllipsisHorizontalIcon className="w-5 h-5" />
+              <input
+                onChange={handleSearchChange}
+                value={searchValue}
+                ref={inputRef}
+                type="text"
+                className="block w-full h-5 border-0 appearance-none alsoit-radius text-alsoit-gray-300-lg ring-0 focus:ring-0 focus:outline-0 text-alsoit-text-lg pl-8"
+                placeholder="Search Assignee"
+              />
+              <EllipsisHorizontalIcon className="w-5 h-5 absolute right-4" />
+            </div>
           </div>
           <ScrollableContainer scrollDirection="y">
-            {members.map((member) => (
+            {filteredMembers.map((member) => (
               <section
                 className="flex items-center justify-between w-full px-4 py-2 text-left text-black cursor-pointer text-alsoit-text-md hover:bg-gray-200"
                 key={member.id}
