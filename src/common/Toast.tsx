@@ -44,7 +44,7 @@ export default function Toast({ type = 'success', title, body, showClose = true,
         setIsCopied(0);
       }, 2000);
     } catch (error) {
-      alert(`Failed to copy: ${error}`);
+      console.warn(`Failed to copy: ${error}`);
     }
   };
 
