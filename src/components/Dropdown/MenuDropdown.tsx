@@ -40,8 +40,13 @@ import { UseArchiveListService, UseDeleteListService } from '../../features/list
 import { useMutation } from '@tanstack/react-query';
 import { deleteListManager } from '../../managers/List';
 import { setFilteredResults } from '../../features/search/searchSlice';
-import { deleteWalletManager } from '../../managers/Wallet';
-import { deleteHubManager } from '../../managers/Hub';
+import {
+  deleteWalletManager,
+  findAllEntitiesIdsOfWallet,
+  removeEntityChildrenIdsOfWallet
+} from '../../managers/Wallet';
+import { deleteHubManager, findAllEntitiesIdsOfHub, removeEntityChildrenIdsOfHub } from '../../managers/Hub';
+import { setOpenedEntitiesIds, setOpenedParentsIds } from '../../features/workspace/workspaceSlice';
 // import { setTriggerAddToFav } from "../../features/hubs/hubSlice";
 
 interface itemsType {
@@ -65,6 +70,8 @@ export default function MenuDropdown() {
   const { showEditHubSlideOver, showEditWalletSlideOver, showEditListSlideOver } = useAppSelector(
     (state) => state.slideOver
   );
+  const { openedParentsIds, openedEntitiesIds } = useAppSelector((state) => state.workspace);
+
   const { archiveWallet } = useAppSelector((state) => state.wallet);
   const { archiveList } = useAppSelector((state) => state.list);
   const ref = useRef<HTMLInputElement>(null);
@@ -287,6 +294,35 @@ export default function MenuDropdown() {
     },
     {
       id: 16,
+      title: openedParentsIds.includes(showMenuDropdown as string) ? 'Collapse all' : 'Expand all',
+      handleClick: () => {
+        if (showMenuDropdown) {
+          if (!openedParentsIds.includes(showMenuDropdown)) {
+            let allOpenedEntitiesIds: string[] = [];
+            if (showMenuDropdownType?.includes('hub')) {
+              allOpenedEntitiesIds = findAllEntitiesIdsOfHub(showMenuDropdown, hub, openedEntitiesIds);
+            } else if (showMenuDropdownType?.includes('wallet')) {
+              allOpenedEntitiesIds = findAllEntitiesIdsOfWallet(showMenuDropdown, hub, openedEntitiesIds);
+            }
+            dispatch(setOpenedParentsIds([...openedParentsIds, showMenuDropdown]));
+            dispatch(setOpenedEntitiesIds([...new Set(allOpenedEntitiesIds)]));
+          } else {
+            let filteredOpenedIds: string[] = [];
+            if (showMenuDropdownType?.includes('hub')) {
+              filteredOpenedIds = removeEntityChildrenIdsOfHub(showMenuDropdown, hub, openedEntitiesIds);
+            } else if (showMenuDropdownType?.includes('wallet')) {
+              filteredOpenedIds = removeEntityChildrenIdsOfWallet(showMenuDropdown, hub, openedEntitiesIds);
+            }
+            dispatch(setOpenedParentsIds(openedParentsIds.filter((id) => id !== showMenuDropdown)));
+            dispatch(setOpenedEntitiesIds([...new Set(filteredOpenedIds)]));
+          }
+        }
+      },
+      icon: <TrashIcon className="w-4 h-4 text-gray-700" aria-hidden="true" />,
+      isVisible: showMenuDropdownType !== 'list' ? true : false
+    },
+    {
+      id: 17,
       title: 'Delete',
       handleClick: () => {
         if (showMenuDropdownType == 'hubs' || showMenuDropdownType == 'subhub') {

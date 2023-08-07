@@ -41,7 +41,7 @@ interface WalletItemProps {
   topNumber?: number;
   zNumber?: string;
   stickyButtonIndex?: number | undefined;
-  handleShowSubWallet: (id: string, index?: number) => void;
+  handleShowSubWallet: (id: string, parent_id: string | null, index?: number) => void;
   handleLocation: (id: string, name: string, index?: number) => void;
 }
 export default function WalletItem({
@@ -195,7 +195,7 @@ export default function WalletItem({
           isOver ? 'bg-primary-100 border-primary-500 shadow-inner shadow-primary-300' : ''
         }`}
         ref={setNodeRef}
-        onClick={() => handleShowSubWallet(wallet.id, index)}
+        onClick={() => handleShowSubWallet(wallet.id, wallet.parent_id || wallet.hub_id || null, index)}
         style={{
           top: isSticky ? `${topNumber}px` : '',
           zIndex: isSticky ? zNumber : '1',
