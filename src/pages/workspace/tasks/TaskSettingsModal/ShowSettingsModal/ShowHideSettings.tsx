@@ -142,15 +142,17 @@ export default function ShowHideSettings({
         leaveTo="transform opacity-0 scale-95"
       >
         <Menu.Items
-          style={{ zIndex: 61 }}
+          style={{ zIndex: 61, height: '372px', width: '247px', overflow: 'auto' }}
           className="origin-top-right absolute w-64 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none  mt-3"
         >
-          <p className="text-sm flex justify-center pt-3">CUSTOMIZE THIS VIEW</p>
+          <p className="text-alsoit-text-sm font-bold flex justify-center pt-3" style={{ lineHeight: '9.6px' }}>
+            CUSTOMIZE THIS VIEW
+          </p>
           <div className="relative flex justify-center flex-col mb-2">
             <p className="border-b-2 pt-3 "></p>
             <span
-              className="text-xs text-gray-400 text-center absolute top-1.5 left-1/3  bg-white border border-gray-100 px-1"
-              style={{ fontSize: '8px' }}
+              className="text-alsoit-text-sm font-bold text-gray-400 text-center absolute  left-1/3  bg-white border border-gray-100 px-1"
+              style={{ lineHeight: '9.6px', top: '7px' }}
             >
               DEFAULT SETTINGS
             </span>
@@ -161,7 +163,12 @@ export default function ShowHideSettings({
           </div>
 
           {ViewSettings.map((View, index) => (
-            <Menu.Item as="a" key={View.id} className="flex items-center py-2 text-sm text-black text-left w-full ">
+            <Menu.Item
+              as="a"
+              key={View.id}
+              className="flex items-center py-2 text-alsoit-text-lg font-semibold text-left w-full"
+              style={{ lineHeight: '15.6px' }}
+            >
               {View.label !== 'Single Line mode' ? (
                 <button
                   className={`${
@@ -172,11 +179,13 @@ export default function ShowHideSettings({
                 >
                   <p className="flex items-center space-x-2 pl-2 text-md whitespace-nowrap">{View.label}</p>
                   {View.label == 'Upper Case' && (
-                    <p
-                      className="absolute text-gray-400 text-center w-2/6 bg-white border border-gray-100 px-1"
-                      style={{ top: '226px', right: '90px', fontSize: '8px' }}
-                    >
-                      TEXT
+                    <p className="relative">
+                      <p
+                        className="absolute text-gray-400 text-center bg-white border border-gray-100"
+                        style={{ top: '-35px', right: '14px', fontSize: '8px' }}
+                      >
+                        TEXT
+                      </p>
                     </p>
                   )}
                   <p className="flex items-center pr-2 ">

@@ -96,23 +96,25 @@ export function DatePickerManualDates({ range }: DatePickerManualDatesProps) {
           {/* Set Start Date Selection */}
           <label
             htmlFor="from"
-            className="flex space-y-1 space-x-1 text-xs items-center w-32 border border-alsoit-purple-300 rounded-md p-0.5"
+            className="flex space-y-1 space-x-4 text-xs items-center w-36 border border-alsoit-purple-300 rounded-md p-0.5"
           >
-            <div className="bg-alsoit-purple-300 rounded-md p-1">
-              <CalendarIcon active={iconToggle.startIcon} fixed />
-            </div>
-            <div className="relative flex">
-              <div
-                className="h-4 px-1 text-alsoit-text-sm font-semibold"
-                contentEditable
-                suppressContentEditableWarning
-                onBlur={handleFilterDateDispatch}
-                onClick={() => dispatch(setHistoryMemory({ ...HistoryFilterMemory, timePoint: 'start' }))}
-                onInput={(e: ChangeEvent<HTMLDivElement>) => handleChange(e, 'from')}
-              >
-                {(taskTime?.from && dayjs(taskTime?.from).format(date_format?.toUpperCase())) ?? 'Start Date'}
+            <div className="flex space-x-1 items-center">
+              <div className="bg-alsoit-purple-300 rounded-md p-1">
+                <CalendarIcon active={iconToggle.startIcon} fixed />
               </div>
-              {taskTime?.from && <CloseBtn clearFn={() => clearDatesFilter('start')} />}
+              <div className="relative flex">
+                <div
+                  className="h-4 px-1 text-alsoit-text-sm font-semibold"
+                  contentEditable
+                  suppressContentEditableWarning
+                  onBlur={handleFilterDateDispatch}
+                  onClick={() => dispatch(setHistoryMemory({ ...HistoryFilterMemory, timePoint: 'start' }))}
+                  onInput={(e: ChangeEvent<HTMLDivElement>) => handleChange(e, 'from')}
+                >
+                  {(taskTime?.from && dayjs(taskTime?.from).format(date_format?.toUpperCase())) ?? 'Start'}
+                </div>
+                {taskTime?.from && <CloseBtn clearFn={() => clearDatesFilter('start')} />}
+              </div>
             </div>
             {selectedDate?.date && taskTime?.from ? (
               <ReusableSelect
@@ -139,27 +141,29 @@ export function DatePickerManualDates({ range }: DatePickerManualDatesProps) {
           {/* Set Due Date selection */}
           <label
             htmlFor="to"
-            className="flex space-y-1 space-x-1 text-xs items-center border border-alsoit-purple-300 rounded-md p-1 w-32"
+            className="flex space-y-1 space-x-4 text-xs items-center border border-alsoit-purple-300 rounded-md p-1 w-36"
           >
-            <div className="bg-alsoit-purple-300 rounded-md p-1">
-              <CalendarIcon active={iconToggle.dueIcon} fixed />
-            </div>
-            <div className="relative">
-              <div
-                className="h-4 px-1 text-alsoit-text-sm font-semibold"
-                contentEditable
-                suppressContentEditableWarning
-                onBlur={handleFilterDateDispatch}
-                onClick={() => dispatch(setHistoryMemory({ ...HistoryFilterMemory, timePoint: 'start' }))}
-                onInput={(e: ChangeEvent<HTMLDivElement>) => handleChange(e, 'to')}
-              >
-                {(taskTime?.to && taskTime.to.format(date_format?.toUpperCase())) ?? 'Due Date'}
+            <div className="flex space-x-1 items-center">
+              <div className="bg-alsoit-purple-300 rounded-md p-1">
+                <CalendarIcon active={iconToggle.dueIcon} fixed />
               </div>
-              {taskTime?.to && (
-                <div onClick={() => clearDatesFilter('due')}>
-                  <CancelIcon active dimensions={{ height: 2, width: 2 }} />
+              <div className="relative">
+                <div
+                  className="h-4 px-1 text-alsoit-text-sm font-semibold"
+                  contentEditable
+                  suppressContentEditableWarning
+                  onBlur={handleFilterDateDispatch}
+                  onClick={() => dispatch(setHistoryMemory({ ...HistoryFilterMemory, timePoint: 'start' }))}
+                  onInput={(e: ChangeEvent<HTMLDivElement>) => handleChange(e, 'to')}
+                >
+                  {(taskTime?.to && taskTime.to.format(date_format?.toUpperCase())) ?? 'Due'}
                 </div>
-              )}
+                {taskTime?.to && (
+                  <div onClick={() => clearDatesFilter('due')}>
+                    <CloseBtn clearFn={() => clearDatesFilter('due')} />
+                  </div>
+                )}
+              </div>
             </div>
             {selectedDate?.date && taskTime?.to ? (
               <ReusableSelect
@@ -189,7 +193,7 @@ export function DatePickerManualDates({ range }: DatePickerManualDatesProps) {
         // Default Set date
         <label
           htmlFor="from"
-          className="flex space-y-1 space-x-1 text-xs items-center w-36 border border-alsoit-purple-300 p-1 rounded-md"
+          className="flex space-y-1 space-x-1 text-xs items-center w-48 border border-alsoit-purple-300 p-1 rounded-md"
         >
           <div className="bg-alsoit-purple-300 rounded-md p-1">
             <CalendarIcon active={iconToggle.startIcon} fixed />

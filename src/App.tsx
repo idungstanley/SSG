@@ -1,5 +1,4 @@
 import { RouterProvider } from 'react-router-dom';
-import { Toaster } from 'react-hot-toast';
 import routes from './routes';
 import Prompt from './common/Prompt';
 import { selectCurrentUser } from './features/auth/authSlice';
@@ -24,7 +23,7 @@ function App() {
   return (
     <>
       <RouterProvider router={routes(user)} />
-      <Toaster position="bottom-left" />
+      {/* <Toaster position="bottom-left" /> */}
       <Prompt />
     </>
   );

@@ -71,6 +71,7 @@ interface workspaceState {
   workspaceData: undefined | IWorkspaceRes;
   lastActiveItem: string;
   showMore: boolean;
+  isFirstOpened: boolean;
 }
 
 const initialState: workspaceState = {
@@ -131,7 +132,8 @@ const initialState: workspaceState = {
   selectedDate: { date: dayjs() },
   showTreeInput: false,
   lastActiveItem: '',
-  showMore: false
+  showMore: false,
+  isFirstOpened: true
 };
 
 export const wsSlice = createSlice({
@@ -341,6 +343,9 @@ export const wsSlice = createSlice({
     },
     setLastActiveItem(state, action: PayloadAction<string>) {
       state.lastActiveItem = action.payload;
+    },
+    setIsFirstOpened(state, action: PayloadAction<boolean>) {
+      state.isFirstOpened = action.payload;
     }
   }
 });
@@ -402,7 +407,8 @@ export const {
   setActiveSubHubManagerTabId,
   setLastActiveItem,
   setIsManageStatus,
-  setShowTabLabel
+  setShowTabLabel,
+  setIsFirstOpened
 } = wsSlice.actions;
 
 export default wsSlice.reducer;

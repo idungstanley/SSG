@@ -48,14 +48,6 @@ export default function AdditionalHeader() {
   const { activeEntityName } = useAppSelector((state) => state.workspace);
   const { refetch } = useCurrentTime({ workspaceId });
 
-  const headerClockFn = () =>
-    window.setInterval(() => {
-      setClock(
-        zone
-          ? moment.tz(zone).format(time_format === '1' ? 'DD-MM-YYYY HH:mm' : 'DD-MM-YYYY h:mm a')
-          : moment().format(time_format === '1' ? 'DD-MM-YYYY HH:mm' : 'DD-MM-YYYY h:mm a')
-      );
-    }, 6000);
   const sameEntity = () => activeItemId === (timerLastMemory.hubId || timerLastMemory.listId || timerLastMemory.taskId);
 
   const timeBlinkerCheck = () => (timerStatus && sameEntity() && tabsId !== 6) || (!sameEntity() && timerStatus);
@@ -84,10 +76,19 @@ export default function AdditionalHeader() {
   }, [isVisible, refetch]);
 
   useEffect(() => {
-    headerClockFn();
+    const headerClockFn = () =>
+      window.setInterval(() => {
+        setClock(
+          zone
+            ? dayjs()
+                .tz(zone)
+                .format(time_format === '1' ? 'DD-MM-YYYY HH:mm' : 'DD-MM-YYYY h:mm a')
+            : dayjs().format(time_format === '1' ? 'DD-MM-YYYY HH:mm' : 'DD-MM-YYYY h:mm a')
+        );
+      }, 6000);
 
     return () => document.addEventListener('visibilitychange', headerClockFn);
-  }, []);
+  }, [zone]);
 
   return (
     <div className="flex items-center justify-between w-full px-4 border-b" style={{ height: '50px' }}>

@@ -3,10 +3,10 @@ import { useAppDispatch } from '../../app/hooks';
 import { setCustomSuggetionsField } from '../../features/task/taskSlice';
 
 interface CustomSuggestionProps {
-  setRecurring?: Dispatch<SetStateAction<boolean>>;
+  setCustomSuggestion?: Dispatch<SetStateAction<boolean>>;
 }
 
-export default function CustomSuggestion({ setRecurring }: CustomSuggestionProps) {
+export default function CustomSuggestion({ setCustomSuggestion }: CustomSuggestionProps) {
   const dispatch = useAppDispatch();
   const [value, setValue] = useState<{ [key: string]: string | number }>({
     depth: 0,
@@ -27,7 +27,7 @@ export default function CustomSuggestion({ setRecurring }: CustomSuggestionProps
     if ((type === 'month' && depth > 0) || (type === 'week' && depth > 0)) {
       dispatch(setCustomSuggetionsField({ depth, type, label: `${depth} ${type}}` }));
       setError({ monthErr: '', weekErr: '' });
-      setRecurring && setRecurring(false);
+      setCustomSuggestion && setCustomSuggestion(false);
     } else {
       type === 'month'
         ? setError({ ...error, monthErr: 'Months depth can not be less than 1' })
@@ -37,12 +37,12 @@ export default function CustomSuggestion({ setRecurring }: CustomSuggestionProps
 
   return (
     <div className="flex flex-col space-y-4 my-6 items-center justify-center">
-      <label htmlFor="type" className="text-alsoit-text-lg px-2 text-left font-semibold">
-        Type of field
+      <label htmlFor="type" className="text-alsoit-text-lg  text-left font-semibold flex flex-col space-y-2">
+        <span>Type of field</span>
         <select
           name="type"
           id="type"
-          className="w-36 h-8 rounded-md border-none text-alsoit-text-md"
+          className="w-36 h-9 rounded-md border border-alsoit-gray-75 text-alsoit-text-md"
           onChange={handleChange}
         >
           <option value="">Type of field</option>
@@ -50,13 +50,13 @@ export default function CustomSuggestion({ setRecurring }: CustomSuggestionProps
           <option value="week">Weeks</option>
         </select>
       </label>
-      <label htmlFor="depth" className="text-alsoit-text-lg px-2 text-left font-semibold">
-        Depth of Addition
+      <label htmlFor="depth" className="text-alsoit-text-lg text-left font-semibold flex flex-col space-y-2">
+        <span>Depth of Addition</span>
         <input
           type="tel"
           id="depth"
           name="depth"
-          className="w-36 h-7 rounded-md text-alsoit-text-md"
+          className="w-36 h-7 rounded-md border border-alsoit-gray-75 text-alsoit-text-md"
           placeholder={value['type'] === 'week' ? '2 for 2 weeks' : '2 for 2 months'}
           onChange={(e) => handleChange(e)}
         />
@@ -66,13 +66,13 @@ export default function CustomSuggestion({ setRecurring }: CustomSuggestionProps
       {error.numberErr && <span className="text-alsoit-text-sm text-alsoit-danger text-center">{error.numberErr}</span>}
       <div className="flex space-x-2">
         <button
-          className="p-1 text-white bg-alsoit-gray-200 hover:bg-alsoit-gray-75 cursor-pointer rounded-md"
-          onClick={() => setRecurring && setRecurring(false)}
+          className="border p-1 rounded-md text-alsoit-text-md font-semibold border-alsoit-danger text-alsoit-danger w-16 h-8"
+          onClick={() => setCustomSuggestion && setCustomSuggestion(false)}
         >
           Cancel
         </button>
         <button
-          className="p-1 text-white bg-alsoit-purple-300 hover:bg-purple-400 cursor-pointer rounded-md"
+          className="border p-1 rounded-md text-alsoit-text-md font-semibold text-white bg-alsoit-success w-16 h-8 border-none"
           onClick={() => handleClick()}
         >
           Create

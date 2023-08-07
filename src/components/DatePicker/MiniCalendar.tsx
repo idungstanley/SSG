@@ -6,12 +6,15 @@ import { setSelectedDate } from '../../features/workspace/workspaceSlice';
 import { setHistoryMemory, setTaskSelectedDate } from '../../features/task/taskSlice';
 import CircleArrowLeft from '../../assets/icons/CircleArrowLeft';
 import CircleArrowRight from '../../assets/icons/CircleArrowRight';
+import RecurringIcon from '../../assets/icons/Recurring';
 
 type Props = {
   range?: boolean;
+  miniMode?: boolean;
+  fullCalendar?: boolean;
 };
 
-export default function MiniDatePicker({ range }: Props) {
+export default function MiniDatePicker({ range, miniMode, fullCalendar }: Props) {
   const dispatch = useAppDispatch();
   const [today] = useState(dayjs());
   const [shownDate, setShownDate] = useState<dayjs.Dayjs>(today);
@@ -106,10 +109,18 @@ export default function MiniDatePicker({ range }: Props) {
     }
   }, [taskTime]);
 
+  console.log(fullCalendar);
+
   return (
-    <div className="w-full flex flex-col space-y-4 justify-center items-center my-2">
-      <div className="flex flex-col space-y-2 w-full justify-center">
-        <div className="flex justify-end my-1">
+    <div className="w-full flex flex-col space-y-4 my-2">
+      <div className="flex flex-col space-y-2 w-full">
+        <div className={!miniMode && range ? 'flex justify-between my-1 w-full' : 'flex justify-end my-1 w-full'}>
+          {!miniMode && range && (
+            <div className="font-extrabold text-alsoit-text-lg cursor-pointer flex items-center space-x-2">
+              <RecurringIcon active />
+              <span>Set Recurring</span>
+            </div>
+          )}
           <div className="flex space-x-2 items-center">
             <span>{shownDate.format('MMMM')}</span>
             <span
@@ -130,16 +141,25 @@ export default function MiniDatePicker({ range }: Props) {
             </span>
           </div>
         </div>
-        <div className="w-full flex justify-center space-x-4">
+        <div
+          className={
+            fullCalendar && !miniMode ? 'w-full flex justify-center space-x-7' : 'w-full flex justify-center space-x-4'
+          }
+        >
           {rows[0].map(({ value }, i) => (
             <div key={i} className="px-1.5 bg-alsoit-gray-50 rounded-md p-1">
               {value.format('dd')}
             </div>
           ))}
         </div>
-        <div className="flex flex-col justify-center w-full mx-auto">
+        <div className="flex flex-col w-full mx-auto">
           {rows.map((cells, rowIndex) => (
-            <div key={rowIndex} className="flex justify-center space-x-3 my-1">
+            <div
+              key={rowIndex}
+              className={
+                fullCalendar && !miniMode ? 'flex justify-center space-x-6 my-1' : 'flex justify-center space-x-3 my-1'
+              }
+            >
               {cells.map(({ text, value }, i) => (
                 <div
                   key={`${text}-${i}`}

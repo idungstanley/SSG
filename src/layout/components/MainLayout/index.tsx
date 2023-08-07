@@ -11,6 +11,7 @@ import { selectCurrentUser, setCurrentWorkspace, switchWorkspace } from '../../.
 import { setMyWorkspacesSlideOverVisibility } from '../../../features/general/slideOver/slideOverSlice';
 import { useEffect } from 'react';
 import DragContext from './DragContext/DragContext';
+import { Toaster } from 'react-hot-toast';
 
 function MainLayout() {
   const location = useLocation();
@@ -58,6 +59,7 @@ function MainLayout() {
     <div className={cl('h-full flex flex-col')}>
       <ProgressBar />
       {/* <TopMenu /> */}
+      <Toaster position="bottom-left" />
       <DragContext>
         <div className="flex h-full">
           <div className="grid w-full h-full grid-rows-1 overflow-hidden grid-cols-autoFr">

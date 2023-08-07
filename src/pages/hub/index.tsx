@@ -92,7 +92,7 @@ export default function HubPage() {
             ))}
           </section>
         </ScrollableContainer>
-        <GroupHorizontalScroll />
+        {Object.keys(lists).length > 1 && <GroupHorizontalScroll />}
       </Page>
     </>
   );
