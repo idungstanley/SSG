@@ -11,6 +11,7 @@ import {
   setCurrentItem,
   setCurrentWalletId,
   setCurrentWalletName,
+  setIsFirstOpened,
   setShowHub
 } from '../../../../../../../features/workspace/workspaceSlice';
 import { setWalletItem } from '../../../../../../../features/wallet/walletSlice';
@@ -30,19 +31,21 @@ interface IWListProps {
 export default function WList({ wallets, leftMargin, paddingLeft, type, level = 1, topNumber }: IWListProps) {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { showExtendedBar } = useAppSelector((state) => state.workspace);
 
-  const [showSubWallet, setShowSubWallet] = useState<string[]>([]);
+  const { showExtendedBar, isFirstOpened } = useAppSelector((state) => state.workspace);
+
+  const [openedIds, setOpenedIds] = useState<string[]>([]);
   const [stickyButtonIndex, setStickyButtonIndex] = useState<number | undefined>(-1);
 
   useEffect(() => {
-    setShowSubWallet([]);
-    for (const wallet of wallets) {
-      if (wallet.children.length || wallet.lists.length) {
-        setShowSubWallet((prev) => [...prev, wallet.id]);
+    if (isFirstOpened) {
+      for (const wallet of wallets) {
+        if (wallet.children.length || wallet.lists.length) {
+          setOpenedIds((prev) => [...prev, wallet.id]);
+        }
       }
     }
-  }, [wallets]);
+  }, [wallets, isFirstOpened]);
 
   const handleLocation = (id: string, name: string, index?: number) => {
     setStickyButtonIndex(index === stickyButtonIndex ? -1 : index);
@@ -50,10 +53,10 @@ export default function WList({ wallets, leftMargin, paddingLeft, type, level = 
     navigate(`tasks/w/${id}`, {
       replace: true
     });
-    if (showSubWallet.includes(id)) {
-      setShowSubWallet((prev) => prev.filter((item) => item !== id));
+    if (openedIds.includes(id)) {
+      setOpenedIds((prev) => prev.filter((item) => item !== id));
     } else {
-      setShowSubWallet((prev) => [...prev, id]);
+      setOpenedIds((prev) => [...prev, id]);
     }
     dispatch(
       setWalletItem({
@@ -76,10 +79,11 @@ export default function WList({ wallets, leftMargin, paddingLeft, type, level = 
 
   const handleShowSubWallet = (id: string, index?: number) => {
     setStickyButtonIndex(index === stickyButtonIndex ? -1 : index);
-    if (showSubWallet.includes(id)) {
-      setShowSubWallet((prev) => prev.filter((item) => item !== id));
+    dispatch(setIsFirstOpened(false));
+    if (openedIds.includes(id)) {
+      setOpenedIds((prev) => prev.filter((item) => item !== id));
     } else {
-      setShowSubWallet((prev) => [...prev, id]);
+      setOpenedIds((prev) => [...prev, id]);
       dispatch(
         setCurrentItem({
           currentItemId: id,
@@ -112,7 +116,7 @@ export default function WList({ wallets, leftMargin, paddingLeft, type, level = 
             walletType={level === 1 ? EntityType.wallet : level === 2 ? 'subwallet2' : 'subwallet3'}
             handleLocation={handleLocation}
             handleShowSubWallet={handleShowSubWallet}
-            showSubWallet={showSubWallet.includes(wallet.id)}
+            showSubWallet={openedIds.includes(wallet.id)}
             paddingLeft={paddingLeft}
             isSticky={stickyButtonIndex !== undefined && stickyButtonIndex !== null && stickyButtonIndex <= index}
             stickyButtonIndex={stickyButtonIndex}
@@ -120,7 +124,7 @@ export default function WList({ wallets, leftMargin, paddingLeft, type, level = 
             topNumber={topNumber}
             zNumber={level === 1 ? '3' : level === 2 ? '2' : '1'}
           />
-          {wallet.children.length && showSubWallet.includes(wallet.id) ? (
+          {wallet.children.length && openedIds.includes(wallet.id) ? (
             <WList
               wallets={wallet.children}
               leftMargin={false}
@@ -130,7 +134,7 @@ export default function WList({ wallets, leftMargin, paddingLeft, type, level = 
               topNumber={topNumber + 30}
             />
           ) : null}
-          {wallet.lists.length && showSubWallet.includes(wallet.id) && !showExtendedBar ? (
+          {wallet.lists.length && openedIds.includes(wallet.id) && !showExtendedBar ? (
             <LList list={wallet.lists} leftMargin={false} paddingLeft={Number(paddingLeft) + 32} />
           ) : null}
         </div>

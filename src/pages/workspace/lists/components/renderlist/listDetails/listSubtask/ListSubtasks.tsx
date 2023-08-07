@@ -1,6 +1,5 @@
 import React from 'react';
 import Button from '../../../../../../../components/Buttons/Button';
-import Subtask from '../../../../../../../assets/icons/Subtask.svg';
 import SubtaskIcon from '../../../../../../../assets/icons/SubtaskIcon';
 import { useAppDispatch, useAppSelector } from '../../../../../../../app/hooks';
 import { setToggleAllSubtask } from '../../../../../../../features/task/taskSlice';

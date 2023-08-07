@@ -33,7 +33,6 @@ export default function StatusDropdown({ TaskCurrentStatus }: StatusDropdownProp
   function closeModal() {
     setIsOpen(false);
   }
-  console.log(list?.data.list, list);
 
   const sortedStatuses = list?.data.list.task_statuses.sort((a, b) => {
     const positionA = typeof a.position === 'number' ? a.position : 0;

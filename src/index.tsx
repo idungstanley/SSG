@@ -10,6 +10,7 @@ import { store } from './app/store';
 import Toast from './common/Toast';
 import { IErrorRequest, ISuccessRequest } from './types';
 import { GoogleOAuthProvider } from '@react-oauth/google';
+import { newTaskDataRes } from './features/task/interface.tasks';
 
 const onError = (error: unknown): unknown => {
   const typedError = error as IErrorRequest;
@@ -45,6 +46,8 @@ const onSuccess = (data: unknown): unknown => {
   let body: string;
   const typedSuccess = data as ISuccessRequest;
 
+  const typedTaskData = data as newTaskDataRes;
+
   if (!typedSuccess?.message?.title) {
     return;
   }
@@ -56,7 +59,9 @@ const onSuccess = (data: unknown): unknown => {
     title = 'Success';
   }
 
-  toast.custom((t) => <Toast type="success" title={title} body={body} toastId={t.id} />);
+  toast.custom((t) => (
+    <Toast type="success" title={title} body={body} toastId={t.id} taskData={typedTaskData.data.task} />
+  ));
 };
 
 const queryClient = new QueryClient({
