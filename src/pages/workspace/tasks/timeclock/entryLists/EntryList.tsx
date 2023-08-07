@@ -71,61 +71,61 @@ export default function EntryList({ entries, switchHeader }: EntryListProps) {
   };
 
   return (
-    <tr key={entries.id} id="getTimeEntries" className="flex items-center justify-between px-3 border-b">
-      {/* <div id="left" className="flex items-center space-x-2"> */}
-      {headers.map((col) => {
-        if (col.title === 'user' && !col.hidden) {
-          return (
-            <td key={col.id} className="flex w-10 items-center justify-start cursor-pointer py-1">
-              <ToolTip title={name}>
-                <AvatarWithInitials height="h-5" width="w-5" initials={initials} />
-              </ToolTip>
-            </td>
-          );
-        }
+    <tr key={entries.id} id="getTimeEntries" className="flex justify-between border-b w-full">
+      <td id="left" className="flex items-center space-x-4">
+        {headers.map((col) => {
+          if (col.title === 'user' && !col.hidden) {
+            return (
+              <td key={col.id} className="flex w-6 items-center justify-start cursor-pointer py-1">
+                <ToolTip title={name}>
+                  <AvatarWithInitials height="h-5" width="w-5" initials={initials} />
+                </ToolTip>
+              </td>
+            );
+          }
 
-        if (col.title === 'duration' && !col.hidden) {
-          return (
-            <td key={col.id} className="w-14 text-center text-alsoit-text-md font-semibold cursor-default py-1">
-              {moment.utc(entries.duration * 1000).format('HH:mm:ss')}
-            </td>
-          );
-        }
+          if (col.title === 'duration' && !col.hidden) {
+            return (
+              <td key={col.id} className="w-14 text-center text-alsoit-text-md font-semibold cursor-default py-1">
+                {moment.utc(entries.duration * 1000).format('HH:mm:ss')}
+              </td>
+            );
+          }
 
-        if (col.title === 'start date' && !col.hidden) {
-          return (
-            <td key={col.id} className="w-14 text-center font-semibold text-alsoit-gray-300 cursor-default py-1">
-              <DateFormat date={entries.start_date} font="10px" />
-            </td>
-          );
-        }
+          if (col.title === 'start date' && !col.hidden) {
+            return (
+              <td key={col.id} className="w-14 text-center font-semibold text-alsoit-gray-300 cursor-default py-1">
+                <DateFormat date={entries.start_date} font="10px" />
+              </td>
+            );
+          }
 
-        if (col.title === 'end date' && !col.hidden) {
-          return (
-            <td
-              key={col.id}
-              className="w-14 text-center font-semibold text-alsoit-gray-300"
-              style={{ cursor: 'default', padding: '2px 0' }}
-            >
-              <DateFormat date={entries.end_date} font="10px" />
-            </td>
-          );
-        }
+          if (col.title === 'end date' && !col.hidden) {
+            return (
+              <td
+                key={col.id}
+                className="w-14 text-center font-semibold text-alsoit-gray-300"
+                style={{ cursor: 'default', padding: '2px 0' }}
+              >
+                <DateFormat date={entries.end_date} font="10px" />
+              </td>
+            );
+          }
 
-        if (col.title === 'description' && !col.hidden) {
-          return (
-            <td
-              key={col.id}
-              className="w-14 text-alsoit-text-md font-semibold cursor-default py-1"
-              title={entries.description}
-            >
-              {entries.description && entries.description.slice(0, 5) + '...'}
-            </td>
-          );
-        }
-      })}
-      {/* </div> */}
-      <td id="right" className="flex items-center space-x-2 relative">
+          if (col.title === 'description' && !col.hidden) {
+            return (
+              <td
+                key={col.id}
+                className="w-14 text-alsoit-text-md font-semibold cursor-default py-1"
+                title={entries.description}
+              >
+                {entries.description && entries.description.slice(0, 5) + '...'}
+              </td>
+            );
+          }
+        })}
+      </td>
+      <td id="right" className="flex items-center justify-end space-x-2 relative">
         <button type="button" onClick={() => handleUpdateEntry(entries.id)}>
           <div
             onMouseEnter={() =>
