@@ -1,5 +1,4 @@
 import { RouterProvider } from 'react-router-dom';
-import { Toaster } from 'react-hot-toast';
 import routes from './routes';
 import Prompt from './common/Prompt';
 import { selectCurrentUser } from './features/auth/authSlice';
