@@ -5,7 +5,7 @@ import { setArchiveList } from './listSlice';
 import { closeMenu } from '../hubs/hubSlice';
 import { IWalletRes } from '../wallet/wallet.interfaces';
 import { IListDetailRes, listDetails, taskCountFields } from './list.interfaces';
-import { useAppSelector } from '../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { useParams } from 'react-router-dom';
 import { generateFilters } from '../../components/TasksHeader/lib/generateFilters';
 import { UseGetHubDetails } from '../hubs/hubService';
@@ -201,6 +201,7 @@ export const UseGetListDetails = (query: {
   activeItemId: string | null | undefined;
   activeItemType: string | null | undefined;
 }) => {
+  const dispatch = useAppDispatch();
   return useQuery(
     ['hubs', query],
     async () => {
