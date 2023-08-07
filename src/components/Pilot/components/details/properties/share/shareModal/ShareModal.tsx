@@ -120,7 +120,7 @@ export default function ShareModal({ taskId, taskName }: { taskId?: string; task
                     }`}
                     onClick={handleBranchName}
                   >
-                    {!isBranchCopied ? 'Copy Branch Name' : 'Branch Name Copid'}
+                    {!isBranchCopied ? 'Copy Branch Name' : 'Branch Name Copied'}
                   </button>
                 </p>
               </div>

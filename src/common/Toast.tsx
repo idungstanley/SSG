@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ExclamationCircleIcon } from '@heroicons/react/24/solid';
 import toast from 'react-hot-toast';
 import { cl } from '../utils';
@@ -7,6 +7,9 @@ import ToastClose from '../assets/icons/ToastClose';
 import Checkbox from '../assets/icons/Checkbox';
 import CopyUrl from '../assets/icons/CopyUrl';
 import { useAppSelector } from '../app/hooks';
+import { useNavigate } from 'react-router-dom';
+import { ImyTaskData } from '../features/task/taskSlice';
+// import { setNewTask } from '../features/task/taskSlice';
 
 interface ToastProps {
   title: string;
@@ -14,17 +17,47 @@ interface ToastProps {
   type: string;
   showClose?: boolean;
   toastId?: string;
+  taskData?: ImyTaskData;
 }
 
-export default function Toast({ type = 'success', title, body, showClose = true, toastId }: ToastProps) {
+export default function Toast({ type = 'success', title, body, showClose = true, toastId, taskData }: ToastProps) {
+  const navigate = useNavigate();
   if (title === 'Query data cannot be undefined' || !title) {
     return null;
   }
 
-  const { newTaskData } = useAppSelector((state) => state.task);
+  const [isCopied, setIsCopied] = useState<number>(0);
+  const { currentWorkspaceId } = useAppSelector((state) => state.auth);
+  const currentHost = window.location.host;
+  const task_Id = taskData?.id;
+  const list_Id = taskData?.list_id;
+  const taskUrl = `${currentHost}/${currentWorkspaceId}/tasks/l/${list_Id}/t/${task_Id}`;
+
+  const HandleCopyTaskUrl = async () => {
+    try {
+      await navigator.clipboard.writeText(taskUrl);
+      setIsCopied(1);
+      setTimeout(() => {
+        setIsCopied(2);
+      }, 1000);
+      setTimeout(() => {
+        setIsCopied(0);
+      }, 2000);
+    } catch (error) {
+      console.warn(`Failed to copy: ${error}`);
+    }
+  };
+
+  const handleHighlight = () => {
+    navigate(`/${currentWorkspaceId}/tasks/l/${list_Id}/t/${task_Id}`);
+  };
 
   return (
-    <div aria-live="assertive" className="inset-0 flex items-end pointer-events-none z-50 w-80 max-w-xl">
+    <div
+      aria-live="assertive"
+      className="inset-0 flex items-end pointer-events-none z-50 max-w-xl"
+      style={{ width: '350px' }}
+    >
       <div className="w-full flex flex-col items-center space-y-4">
         <div
           className={cl(
@@ -34,36 +67,38 @@ export default function Toast({ type = 'success', title, body, showClose = true,
               : 'bg-alsoit-danger-50 border border-alsoit-danger'
           )}
         >
-          <div className="p-2 flex items-center w-full">
-            <div className="flex-shrink-0 w-1/5">
+          <div className="p-2 flex items-center justify-between w-full">
+            <div className="flex-shrink-0" style={{ width: '10%' }}>
               {type === 'success' && <Success />}
               {type === 'error' && <ExclamationCircleIcon className="h-6 w-6 text-red-400" aria-hidden="true" />}
             </div>
-            <div className="w-3/5">
+            <div className="" style={{ width: '80%' }}>
               <div>
                 <p className="text-alsoit-text-lg font-semibold text-alsoit-gray-300 font-semibold my-1">{title}</p>
                 {body != null && body !== '' && (
                   <p className="text-alsoit-text-lg font-semibold text-alsoit-gray-300 font-semibold my-1">{body}</p>
                 )}
               </div>
-              {newTaskData && (
+              {taskData && (
                 <div className="my-1">
-                  <h3 className="my-1">{`${newTaskData.name} created`}</h3>
+                  <h3 className="my-1">{`${taskData.name} created`}</h3>
                   <section className="flex justify-between my-1">
-                    <div className="flex items-center cursor-pointer">
+                    <div onClick={handleHighlight} className="flex items-center cursor-pointer gap-0.5">
                       <Checkbox />
-                      <h4 className="text-alsoit-text-lg text-alsoit-gray-300">Open(1)</h4>
+                      <h4 className="text-alsoit-text-lg text-alsoit-gray-300">Highlight Task(1)</h4>
                     </div>
-                    <div className="flex items-center cursor-pointer">
+                    <div onClick={HandleCopyTaskUrl} className="flex items-center cursor-pointer gap-0.5">
                       <CopyUrl />
-                      <h4 className="text-alsoit-text-lg text-alsoit-gray-300">Copy URL(1)</h4>
+                      <h4 className="text-alsoit-text-lg text-alsoit-gray-300">
+                        {isCopied === 0 ? 'Copy URL(1)' : isCopied === 1 ? 'Copying...' : 'Copied'}
+                      </h4>
                     </div>
                   </section>
                 </div>
               )}
             </div>
             {showClose && (
-              <div className="flex pt-0.5 w-1/5">
+              <div className="flex pt-0.5 " style={{ width: '10%' }}>
                 <button type="button" onClick={() => toast.remove(toastId)}>
                   <ToastClose />
                 </button>
