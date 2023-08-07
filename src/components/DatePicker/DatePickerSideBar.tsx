@@ -8,6 +8,8 @@ import CustomSuggestion from './CustomSuggestions';
 import ArrowDown from '../../assets/icons/ArrowDown';
 import DoubleArrowLeft from '../../assets/icons/DoubleArrowLeft';
 import { ScrollableContainer } from '../ScrollableContainer/ScrollableContainer';
+import ThreeDotIcon from '../../assets/icons/ThreeDotIcon';
+import Recurring from './Recurring';
 
 interface DatePickerSideBarProp {
   currentDate: dayjs.Dayjs;
@@ -23,9 +25,10 @@ export type extraFields = {
 export function DatePickerSideBar({ currentDate, setOpenSideBar }: DatePickerSideBarProp) {
   const dispatch = useAppDispatch();
   const [iconToggle, setIconToggle] = useState<{ threeDotIcon: boolean }>({
-    threeDotIcon: true
+    threeDotIcon: false
   });
   const [showRecurring, setRecurring] = useState<boolean>(false);
+  const [showAddCustomSuggestions, setCustomSuggetionsField] = useState<boolean>(false);
   const { HistoryFilterMemory, customSuggestionField } = useAppSelector((state) => state.task);
   let selectedStartOfWeek: Dayjs | null = null;
   let selectedEndOfWeek: Dayjs | null = null;
@@ -162,17 +165,26 @@ export function DatePickerSideBar({ currentDate, setOpenSideBar }: DatePickerSid
           <span>Recurring</span>
           <ArrowDown active />
         </div>
-        <div
-          className="cursor-pointer flex"
-          onMouseEnter={() => setIconToggle((prev) => ({ ...prev, threeDotIcon: true }))}
-          onMouseLeave={() => setIconToggle((prev) => ({ ...prev, threeDotIcon: false }))}
-          onClick={() => setOpenSideBar(false)}
-        >
-          <DoubleArrowLeft active={iconToggle.threeDotIcon} />
+        <div className="flex items-center space-x-2">
+          <div
+            onClick={() => setCustomSuggetionsField(!showAddCustomSuggestions)}
+            className="cursor-pointer flex"
+            onMouseEnter={() => setIconToggle((prev) => ({ ...prev, threeDotIcon: true }))}
+            onMouseLeave={() => setIconToggle((prev) => ({ ...prev, threeDotIcon: false }))}
+          >
+            <ThreeDotIcon active={iconToggle.threeDotIcon} />
+          </div>
+          <div className="cursor-pointer" onClick={() => setOpenSideBar(false)}>
+            <DoubleArrowLeft active={true} />
+          </div>
         </div>
       </div>
-      {showRecurring ? (
-        <CustomSuggestion setRecurring={setRecurring} />
+      {showRecurring || showAddCustomSuggestions ? (
+        showAddCustomSuggestions ? (
+          <CustomSuggestion setCustomSuggestion={setCustomSuggetionsField} />
+        ) : (
+          <Recurring />
+        )
       ) : (
         <ScrollableContainer scrollDirection="y">
           <div className="flex flex-col space-y-2 w-full mt-1" style={{ height: '340px' }}>
