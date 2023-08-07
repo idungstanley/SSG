@@ -10,7 +10,6 @@ import { store } from './app/store';
 import Toast from './common/Toast';
 import { IErrorRequest, ISuccessRequest } from './types';
 import { GoogleOAuthProvider } from '@react-oauth/google';
-import { ImyTaskData } from './features/task/taskSlice';
 import { newTaskDataRes } from './features/task/interface.tasks';
 
 const onError = (error: unknown): unknown => {

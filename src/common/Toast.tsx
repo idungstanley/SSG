@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { ExclamationCircleIcon } from '@heroicons/react/24/solid';
 import toast from 'react-hot-toast';
 import { cl } from '../utils';
@@ -6,9 +6,8 @@ import Success from '../assets/icons/Success';
 import ToastClose from '../assets/icons/ToastClose';
 import Checkbox from '../assets/icons/Checkbox';
 import CopyUrl from '../assets/icons/CopyUrl';
-import { useAppDispatch, useAppSelector } from '../app/hooks';
+import { useAppSelector } from '../app/hooks';
 import { useNavigate } from 'react-router-dom';
-import { useToasterStore } from 'react-hot-toast';
 import { ImyTaskData } from '../features/task/taskSlice';
 // import { setNewTask } from '../features/task/taskSlice';
 

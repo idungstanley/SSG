@@ -88,15 +88,13 @@ const addTask = (data: {
 
 export const useAddTask = (parentTaskId?: string) => {
   const queryClient = useQueryClient();
-  const dispatch = useAppDispatch();
   // const id = hubId ?? walletId ?? listId;
   // const type = hubId ? 'hub' : walletId ? 'wallet' : 'list';
 
   return useMutation(addTask, {
-    onSuccess: (data: newTaskDataRes) => {
+    onSuccess: () => {
       queryClient.invalidateQueries(['task']);
       queryClient.invalidateQueries(['sub-tasks']);
-      dispatch(setNewTask(data.data.task));
     }
   });
 };
