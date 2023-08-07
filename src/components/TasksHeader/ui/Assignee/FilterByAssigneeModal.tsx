@@ -87,7 +87,7 @@ export default function FilterByAssigneeModal() {
       >
         <Menu.Items
           className="fixed mt-2 overflow-scroll origin-top-right bg-white rounded-md shadow-lg w-72 ring-1 ring-black ring-opacity-5 focus:outline-none"
-          style={{ zIndex: 3, maxHeight: '500px' }}
+          style={{ zIndex: 11, maxHeight: '500px' }}
         >
           <div className="relative flex items-center w-full px-4 py-2 text-gray-500">
             <MagnifyingGlassIcon className="w-5 h-5" />
