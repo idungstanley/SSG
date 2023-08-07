@@ -9,7 +9,7 @@ interface closeBtnProps {
 export function CloseBtn({ clearFn, size }: closeBtnProps) {
   return (
     <div
-      className={`absolute left-20 top-0 flex items-center bg-red-500 rounded-full p-1 cursor-pointer ${size}`}
+      className={`absolute -right-3 top-0 flex items-center bg-red-500 rounded-full p-1 cursor-pointer ${size}`}
       onClick={clearFn}
     >
       <ToolTip title="clear filters">

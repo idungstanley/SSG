@@ -1,5 +1,5 @@
 import { Button } from '@mui/material';
-import ArrowDown from '../../assets/icons/ArrowDown';
+import RecurringIcon from '../../assets/icons/Recurring';
 
 interface DatePickerFooterProps {
   time: string;
@@ -11,16 +11,9 @@ export default function DatePickerFooter({ closeDateModal, time, miniMode }: Dat
   return (
     <div className="flex items-center justify-end w-full">
       <div className="flex justify-between w-full">
-        {!miniMode ? (
-          <div className="font-extrabold text-alsoit-text-lg cursor-pointer flex items-center space-x-2">
-            <span>Set Recurring</span>
-            <ArrowDown active />
-          </div>
-        ) : (
-          <div className="flex items-center">
-            <span className="text-xs italic font-semibold">{time}</span>
-          </div>
-        )}
+        <div className="flex items-center">
+          <span className="text-xs italic font-semibold">{time}</span>
+        </div>
         <div className="flex space-x-1">
           <Button
             onClick={closeDateModal}

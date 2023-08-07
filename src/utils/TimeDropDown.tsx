@@ -84,7 +84,7 @@ function ReusableSelect({ value, onclick, options, style }: ReusableSelectProps)
   return (
     <div className="rounded-md relative">
       {!editing && (
-        <div className="text-alsoit-text-sm" onClick={handleEdit}>
+        <div className="text-alsoit-text-sm flex items-center" onClick={handleEdit}>
           {value ? value : 'Set Time'}
         </div>
       )}
@@ -157,7 +157,7 @@ function ReusableSelect({ value, onclick, options, style }: ReusableSelectProps)
           value={value}
           onBlur={handleBlur}
           onChange={(e) => onclick(e.target.value)}
-          className="text-alsoit-text-sm italic w-16 h-4 rounded-md border-alsoit-purple-300"
+          className="text-alsoit-text-sm italic w-16 h-4 rounded-md border-alsoit-purple-300 flex items-center"
         />
       )}
     </div>

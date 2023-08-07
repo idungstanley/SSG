@@ -165,16 +165,18 @@ export function DatePickerSideBar({ currentDate, setOpenSideBar }: DatePickerSid
           <span>Recurring</span>
           <ArrowDown active />
         </div>
-        <div
-          onClick={() => setCustomSuggetionsField(!showAddCustomSuggestions)}
-          className="cursor-pointer flex"
-          onMouseEnter={() => setIconToggle((prev) => ({ ...prev, threeDotIcon: true }))}
-          onMouseLeave={() => setIconToggle((prev) => ({ ...prev, threeDotIcon: false }))}
-        >
-          <ThreeDotIcon active={iconToggle.threeDotIcon} />
-        </div>
-        <div className="cursor-pointer" onClick={() => setOpenSideBar(false)}>
-          <DoubleArrowLeft active={true} />
+        <div className="flex items-center space-x-2">
+          <div
+            onClick={() => setCustomSuggetionsField(!showAddCustomSuggestions)}
+            className="cursor-pointer flex"
+            onMouseEnter={() => setIconToggle((prev) => ({ ...prev, threeDotIcon: true }))}
+            onMouseLeave={() => setIconToggle((prev) => ({ ...prev, threeDotIcon: false }))}
+          >
+            <ThreeDotIcon active={iconToggle.threeDotIcon} />
+          </div>
+          <div className="cursor-pointer" onClick={() => setOpenSideBar(false)}>
+            <DoubleArrowLeft active={true} />
+          </div>
         </div>
       </div>
       {showRecurring || showAddCustomSuggestions ? (

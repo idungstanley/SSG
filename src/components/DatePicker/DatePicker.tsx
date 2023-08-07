@@ -57,14 +57,17 @@ export default function DatePicker({ styles, width, height, range, toggleFn }: D
           styles ??
           'absolute z-50 mt-1 shadow-2xl bg-white rounded-md ring-1 ring-black ring-opacity-5 focus:outline-none top-56 right-12 flex justify-center'
         }
-        style={{ height: height ?? '425px', width: openSideBar ? width ?? '550px' : '360px' }}
+        style={{ height: height ?? '425px', width: openSideBar ? width ?? '570px' : '430px' }}
       >
         {openSideBar && (
           <div className="w-5/12 h-full">
             <DatePickerSideBar setOpenSideBar={setOpenSideBar} currentDate={currentDate} />
           </div>
         )}
-        <div className="flex flex-col mt-3" style={{ height: '340px' }}>
+        <div
+          className={openSideBar ? 'flex flex-col mt-3 px-2 w-7/12' : 'flex flex-col mt-3 px-6 w-full'}
+          style={{ height: '340px' }}
+        >
           <div className={!openSideBar ? 'flex justify-between items-center' : 'flex justify-end items-center'}>
             {!openSideBar && (
               <div className="cursor-pointer" onClick={() => setOpenSideBar(true)}>
@@ -74,7 +77,7 @@ export default function DatePicker({ styles, width, height, range, toggleFn }: D
             <DatePickerManualDates range={range} />
           </div>
           <div>
-            <MiniDatePicker range={range} />
+            <MiniDatePicker range={range} miniMode={openSideBar} fullCalendar />
           </div>
           <DatePickerFooter miniMode={openSideBar} closeDateModal={closeDateModal} time={time} />
         </div>
