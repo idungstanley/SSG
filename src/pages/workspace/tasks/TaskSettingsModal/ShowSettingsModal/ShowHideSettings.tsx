@@ -50,53 +50,53 @@ export default function ShowHideSettings({
     },
     {
       id: 3,
-      label: splitSubTask
-    },
-    {
-      id: 4,
-      label: verticalGridLines
-    },
-    {
-      id: 5,
-      label: 'Title Vertical Grid Line'
-    },
-    {
-      id: 6,
-      label: 'Upper Case'
-    },
-    {
-      id: 7,
-      label: entityLocation
-    },
-    {
-      id: 8,
-      label: subTaskParentsNames
-    },
-    {
-      id: 9,
-      label: closedSubtask
-    },
-    {
-      id: 10,
-      label: TaskInMultipleLists
-    },
-    {
-      id: 11,
-      label: subTaskInMultipleLists
-    },
-    {
-      id: 12,
       label: emptyStatuses
     },
     {
-      id: 13,
+      id: 4,
       icon: <FiChevronRight />,
       label: 'Single Line mode'
     },
     {
-      id: 14,
+      id: 5,
       icon: <FiChevronRight />,
       label: 'Compact mode'
+    },
+    {
+      id: 6,
+      label: TaskInMultipleLists
+    },
+    {
+      id: 7,
+      label: 'Upper Case'
+    },
+    {
+      id: 8,
+      label: entityLocation
+    },
+    {
+      id: 9,
+      label: 'Title Vertical Grid Line'
+    },
+    {
+      id: 10,
+      label: verticalGridLines
+    },
+    {
+      id: 11,
+      label: splitSubTask
+    },
+    {
+      id: 12,
+      label: closedSubtask
+    },
+    {
+      id: 13,
+      label: subTaskInMultipleLists
+    },
+    {
+      id: 14,
+      label: subTaskParentsNames
     }
   ];
 
@@ -154,7 +154,7 @@ export default function ShowHideSettings({
               className="text-alsoit-text-sm font-bold text-gray-400 text-center absolute  left-1/3  bg-white border border-gray-100 px-1"
               style={{ lineHeight: '9.6px', top: '7px' }}
             >
-              DEFAULT SETTINGS
+              MAIN SETTINGS
             </span>
           </div>
           <div className="flex justify-between items-center mx-auto mt-4" style={{ width: '93%' }}>
@@ -166,56 +166,59 @@ export default function ShowHideSettings({
             <Menu.Item
               as="a"
               key={View.id}
-              className="flex items-center py-2 text-alsoit-text-lg font-semibold text-left w-full"
+              className="flex items-center py-2 text-alsoit-text-lg font-semibold text-left w-full "
               style={{ lineHeight: '15.6px' }}
             >
-              {View.label !== 'Single Line mode' ? (
-                <button
-                  className={`${
-                    View.label == 'Upper Case'
-                      ? ' flex justify-between items-center w-full group border-y-2 py-4'
-                      : ' flex justify-between items-center w-full group '
-                  }`}
-                >
-                  <p className="flex items-center space-x-2 pl-2 text-md whitespace-nowrap">{View.label}</p>
-                  {View.label == 'Upper Case' && (
-                    <p className="relative">
-                      <p
-                        className="absolute text-gray-400 text-center bg-white border border-gray-100"
-                        style={{ top: '-35px', right: '14px', fontSize: '8px' }}
-                      >
-                        TEXT
-                      </p>
+              <button
+                className={`flex justify-between items-center w-full group ${
+                  View.label == 'Title Vertical Grid Line' && 'border-t-2 pt-4'
+                } ${View.label == 'Task In Multiple Lists' && 'border-t-2 pt-4'} ${
+                  View.label == 'Split Sub Task' && 'border-t-2 pt-4'
+                }`}
+              >
+                <p className="flex items-center space-x-2 pl-2 text-md whitespace-nowrap">{View.label}</p>
+                {View.label == 'Task In Multiple Lists' && (
+                  <p className="relative">
+                    <p
+                      className="absolute whitespace-nowrap text-gray-400 text-center bg-white border border-gray-100"
+                      style={{ top: '-35px', right: '23px', fontSize: '8px' }}
+                    >
+                      TASKS SETTINGS
                     </p>
-                  )}
-                  <p className="flex items-center pr-2 ">
-                    <label className="switch" onClick={(event) => event.stopPropagation()}>
-                      <input
-                        className="inputShow"
-                        type="checkbox"
-                        checked={checkedStates[index]}
-                        onChange={() => handleChange(View.label, index)}
-                      />
-                      <div className={`slider ${checkedStates[index] ? 'checked' : ''}`}></div>
-                    </label>
                   </p>
-                </button>
-              ) : (
-                <button className=" flex justify-between items-center w-full group border-t-2 pt-2">
-                  <p className="flex items-center space-x-2 pl-2 text-md whitespace-nowrap">{View.label}</p>
-                  <p className="flex items-center pr-2 ">
-                    <label className="switch" onClick={(event) => event.stopPropagation()}>
-                      <input
-                        className="inputShow"
-                        type="checkbox"
-                        checked={checkedStates[index]}
-                        onChange={() => handleChange(View.label, index)}
-                      />
-                      <div className={`slider ${checkedStates[index] ? 'checked' : ''}`}></div>
-                    </label>
+                )}
+                {View.label == 'Title Vertical Grid Line' && (
+                  <p className="relative">
+                    <p
+                      className="absolute whitespace-nowrap text-gray-400 text-center bg-white border border-gray-100"
+                      style={{ top: '-35px', right: '28px', fontSize: '8px' }}
+                    >
+                      GRID SETTINGS
+                    </p>
                   </p>
-                </button>
-              )}
+                )}
+                {View.label == 'Split Sub Task' && (
+                  <p className="relative">
+                    <p
+                      className="absolute whitespace-nowrap text-gray-400 text-center bg-white border border-gray-100"
+                      style={{ top: '-35px', right: '-4px', fontSize: '8px' }}
+                    >
+                      SUB TASK SETTINGS
+                    </p>
+                  </p>
+                )}
+                <p className="flex items-center pr-2 ">
+                  <label className="switch" onClick={(event) => event.stopPropagation()}>
+                    <input
+                      className="inputShow"
+                      type="checkbox"
+                      checked={checkedStates[index]}
+                      onChange={() => handleChange(View.label, index)}
+                    />
+                    <div className={`slider ${checkedStates[index] ? 'checked' : ''}`}></div>
+                  </label>
+                </p>
+              </button>
             </Menu.Item>
           ))}
         </Menu.Items>
