@@ -1,7 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
+import { useAppSelector } from '../app/hooks';
 
 function useAdjustedHeight(subtractAmount: number) {
   const [adjustedHeight, setAdjustedHeight] = useState(0);
+  const {
+    activePlaceId,
+    activeTabId,
+    activeSubDetailsTabId,
+    activeSubTimeClockTabId,
+    activeSubHubManagerTabId,
+    activeSubCommunicationTabId,
+    activeSubChecklistTabId
+  } = useAppSelector((state) => state.workspace);
 
   useEffect(() => {
     const calculateAdjustedHeight = () => {
@@ -20,7 +30,16 @@ function useAdjustedHeight(subtractAmount: number) {
     return () => {
       window.removeEventListener('resize', calculateAdjustedHeight);
     };
-  }, [subtractAmount]);
+  }, [
+    subtractAmount,
+    activePlaceId,
+    activeTabId,
+    activeSubDetailsTabId,
+    activeSubTimeClockTabId,
+    activeSubHubManagerTabId,
+    activeSubCommunicationTabId,
+    activeSubChecklistTabId
+  ]);
 
   return adjustedHeight;
 }

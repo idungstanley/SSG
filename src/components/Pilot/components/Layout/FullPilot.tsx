@@ -32,8 +32,8 @@ export default function FullPilot({ featureTabs, activeSection, setShowModal, sh
   });
   const { showOverlay } = useAppSelector((state) => state.workspace);
   const adjustedHeight = useAdjustedHeight(100);
-  const { show: showFullPilot, title, type } = useAppSelector((state) => state.slideOver.pilotSideOver);
-  const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
+  const { show: showFullPilot, title } = useAppSelector((state) => state.slideOver.pilotSideOver);
+  const { activeItemType } = useAppSelector((state) => state.workspace);
 
   return (
     <ScrollableContainer scrollDirection="y">
