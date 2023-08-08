@@ -18,7 +18,6 @@ interface FullPilotProps {
 
 const DEFAULT_PILOT_WIDTH = dimensions.pilot.default;
 const LS_PILOT_KEY = 'pilotWidth';
-
 const pilotWidthFromLS = DEFAULT_PILOT_WIDTH; // JSON.parse(localStorage.getItem(LS_PILOT_KEY) ?? `${DEFAULT_PILOT_WIDTH}`) as number;
 
 export default function FullPilot({ featureTabs, activeSection, setShowModal, showModal }: FullPilotProps) {
@@ -52,7 +51,6 @@ export default function FullPilot({ featureTabs, activeSection, setShowModal, sh
         {showFullPilot ? <Dividers /> : null}
         <div className="relative grid grid-rows-autoAutoAutoFr grid-col-1">
           {showOverlay && <div className="absolute inset-0 top-0 left-0 z-10 bg-black opacity-50" />}
-
           <Header
             isMinified={false}
             menu={<Header.Menu setShowModal={setShowModal} />}
@@ -76,7 +74,6 @@ export default function FullPilot({ featureTabs, activeSection, setShowModal, sh
           </Header>
 
           <FullHotkeysList tabs={featureTabs} setShowModal={setShowModal} showModal={showModal} />
-
           <FullTabs tabs={featureTabs} />
         </div>
         <div className="relative z-50">{activeSection?.element}</div>

@@ -13,9 +13,21 @@ const ARROWS_WRAPPER_HEIGHT = 27;
 export function ScrollableContainer({ children, scrollDirection, ...props }: CustomScrollableContainerProps) {
   // update size is pilot is visible / invisible
   const { show: showFullPilot } = useAppSelector((state) => state.slideOver.pilotSideOver);
-  const { showMore, currentItemId, showTabLabel, isResize, activeItemId, showHub, activePlaceId } = useAppSelector(
-    (state) => state.workspace
-  );
+  const {
+    showMore,
+    currentItemId,
+    activeTabId,
+    activeSubDetailsTabId,
+    activeSubTimeClockTabId,
+    activeSubHubManagerTabId,
+    activeSubCommunicationTabId,
+    activeSubChecklistTabId,
+    showTabLabel,
+    isResize,
+    activeItemId,
+    showHub,
+    activePlaceId
+  } = useAppSelector((state) => state.workspace);
   const { openedHubId } = useAppSelector((state) => state.hub);
 
   const [thumbWidth, setThumbWidth] = useState(DEFAULT_THUMB_WIDTH);
@@ -204,7 +216,13 @@ export function ScrollableContainer({ children, scrollDirection, ...props }: Cus
     currentItemId,
     activeItemId,
     openedHubId,
-    activePlaceId
+    activePlaceId,
+    activeTabId,
+    activeSubDetailsTabId,
+    activeSubTimeClockTabId,
+    activeSubHubManagerTabId,
+    activeSubCommunicationTabId,
+    activeSubChecklistTabId
   ]);
 
   // Listen for mouse events to handle scrolling by dragging the thumb
