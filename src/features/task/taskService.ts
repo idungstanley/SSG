@@ -20,6 +20,37 @@ import { generateFilters } from '../../components/TasksHeader/lib/generateFilter
 import { runTimer } from '../../utils/TimerCounter';
 import Duration from '../../utils/TimerDuration';
 
+export const UseSaveTaskFilters = () => {
+  const { filters } = generateFilters();
+  return requestNew<IFullTaskRes>({
+    url: 'tasks/full-list',
+    method: 'POST',
+    data: {
+      filters
+    }
+  });
+};
+
+const useSaveFilter = () => {
+  // const { filters } = generateFilters();
+  const {
+    filters: { fields: filters, option: op }
+  } = useAppSelector((state) => state.task);
+  const response = requestNew({
+    url: '/settings',
+    method: 'PUT',
+    data: {
+      key: 'tasks_filter',
+      value: filters
+    }
+  });
+  return response;
+};
+
+export const UseSaveFilters = () => {
+  return useMutation(useSaveFilter);
+};
+
 const moveTask = (data: { taskId: TaskId; listId: string; overType: string }) => {
   const { taskId, listId, overType } = data;
   let requestData = {};
