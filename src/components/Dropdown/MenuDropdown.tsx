@@ -47,6 +47,7 @@ import {
 } from '../../managers/Wallet';
 import { deleteHubManager, findAllEntitiesIdsOfHub, removeEntityChildrenIdsOfHub } from '../../managers/Hub';
 import { setOpenedEntitiesIds, setOpenedParentsIds } from '../../features/workspace/workspaceSlice';
+import ExpandCollapseIcon from '../../assets/icons/ExpandCollapseIcon';
 // import { setTriggerAddToFav } from "../../features/hubs/hubSlice";
 
 interface itemsType {
@@ -318,7 +319,7 @@ export default function MenuDropdown() {
           }
         }
       },
-      icon: <TrashIcon className="w-4 h-4 text-gray-700" aria-hidden="true" />,
+      icon: <ExpandCollapseIcon aria-hidden="true" />,
       isVisible: showMenuDropdownType !== 'list' ? true : false
     },
     {
