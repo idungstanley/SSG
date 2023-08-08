@@ -8,6 +8,7 @@ import Header from '../Header';
 import { ShareIcon, EditPageIcon, PrintIcon, CopyIcon, UploadIcon } from '../../../../assets/icons';
 import { dimensions } from '../../../../app/config/dimensions';
 import { ScrollableContainer } from '../../../ScrollableContainer/ScrollableContainer';
+import useAdjustedHeight from '../../../../hooks/useAdjustedHeight';
 
 interface FullPilotProps {
   featureTabs: IPilotTab[];
@@ -30,7 +31,7 @@ export default function FullPilot({ featureTabs, activeSection, setShowModal, sh
     direction: 'XL'
   });
   const { showOverlay } = useAppSelector((state) => state.workspace);
-
+  const adjustedHeight = useAdjustedHeight(100);
   const { show: showFullPilot, title, type } = useAppSelector((state) => state.slideOver.pilotSideOver);
   const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
 
@@ -40,7 +41,7 @@ export default function FullPilot({ featureTabs, activeSection, setShowModal, sh
         ref={blockRef}
         style={{
           width: showFullPilot ? pilotWidthFromLS : undefined,
-          height: 'calc(100vh - 100px)'
+          height: `${adjustedHeight}px`
         }}
         className={cl(
           showFullPilot ? 'relative translate-x-0' : 'w-96 absolute top-0 translate-x-full z-10',
