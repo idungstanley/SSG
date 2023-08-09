@@ -167,7 +167,7 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
   });
 
   return (
-    <>
+    <div className="relative">
       <section
         className={cl(
           'relative flex items-center justify-between h-8 group',
@@ -278,6 +278,6 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
         />
       ) : null}
       {showMenuDropdown === list.id ? <MenuDropdown /> : null}
-    </>
+    </div>
   );
 }

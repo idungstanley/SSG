@@ -168,7 +168,7 @@ export default function HubItem({
   });
 
   return (
-    <>
+    <div className="relative">
       <div
         className={`bg-white truncate items-center group ${item.id !== activeItemId && 'hover:bg-gray-100'} ${
           isSticky && stickyButtonIndex === index ? 'sticky bg-white opacity-100' : ''
@@ -294,6 +294,6 @@ export default function HubItem({
       ) : null}
       {showMenuDropdown === item.id && showSidebar ? <MenuDropdown /> : null}
       {SubMenuId === item.id && showSidebar ? <SubDropdown /> : null}
-    </>
+    </div>
   );
 }

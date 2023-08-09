@@ -187,7 +187,7 @@ export default function WalletItem({
   });
 
   return (
-    <>
+    <div className="relative">
       <section
         className={`bg-white items-center truncate text-sm group ${
           wallet.id === activeItemId ? 'font-medium' : 'hover:bg-gray-100'
@@ -228,7 +228,9 @@ export default function WalletItem({
             <Drag />
           </div>
           {/* showsub1 */}
-          <div className="flex items-center">{renderIcons(showSubWallet)}</div>
+          <div className="flex items-center" style={{ zIndex: '1' }}>
+            {renderIcons(showSubWallet)}
+          </div>
           <div
             onClick={() => handleLocation(wallet.id, wallet.name, index)}
             className="truncate cursor-pointer hover:underline hover:decoration-dashed"
@@ -271,6 +273,6 @@ export default function WalletItem({
       {paletteId === wallet.id && show ? <Palette title="Wallet Colour" setPaletteColor={setPaletteColor} /> : null}
       {showMenuDropdown === wallet.id ? <MenuDropdown /> : null}
       {SubMenuId === wallet.id ? <SubDropdown /> : null}
-    </>
+    </div>
   );
 }
