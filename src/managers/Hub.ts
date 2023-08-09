@@ -63,3 +63,49 @@ export const createHubManager = (parentId: string | null, hubs: Hub[], newHubFro
   }
   return updatedTree;
 };
+
+export const findAllEntitiesIdsOfHub = (id: string, hubs: Hub[], openedEntitiesIds: string[]): string[] => {
+  const currentEntitiesIds: string[] = [...openedEntitiesIds];
+  const findAllEntitiesIds = (currentHub: Hub) => {
+    if (currentHub.children.length) {
+      for (const children of currentHub.children) {
+        currentEntitiesIds.push(children.id);
+      }
+    }
+    if (currentHub.wallets.length) {
+      for (const wallet of currentHub.wallets) {
+        currentEntitiesIds.push(wallet.id);
+      }
+    }
+    return currentHub;
+  };
+
+  findCurrentEntity('hub', id, hubs, findAllEntitiesIds as <IHub>(item: IHub) => IHub);
+  return currentEntitiesIds;
+};
+
+export const removeEntityChildrenIdsOfHub = (id: string, hubs: Hub[], openedEntitiesIds: string[]): string[] => {
+  const currentEntitiesIds: string[] = [...openedEntitiesIds];
+  const idsForRemove: string[] = [];
+  const findAllEntitiesIds = (currentHub: Hub) => {
+    if (currentHub.children.length) {
+      for (const children of currentHub.children) {
+        idsForRemove.push(children.id);
+      }
+    }
+    if (currentHub.wallets.length) {
+      for (const wallet of currentHub.wallets) {
+        idsForRemove.push(wallet.id);
+      }
+    }
+    currentEntitiesIds.splice(
+      0,
+      currentEntitiesIds.length,
+      ...currentEntitiesIds.filter((n) => !idsForRemove.includes(n))
+    );
+    return currentHub;
+  };
+
+  findCurrentEntity('hub', id, hubs, findAllEntitiesIds as <IHub>(item: IHub) => IHub);
+  return currentEntitiesIds;
+};
