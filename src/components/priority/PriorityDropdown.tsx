@@ -59,7 +59,7 @@ export default function PriorityDropdown({ TaskCurrentPriority }: TaskCurrentPri
     }
   ];
   const { status } = UseUpdateTaskStatusServices({
-    task_id: selectedTasksArray,
+    task_id_array: selectedTasksArray,
     priorityDataUpdate: priorityValue
   });
 
