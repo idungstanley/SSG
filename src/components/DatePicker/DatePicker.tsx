@@ -42,13 +42,13 @@ export default function DatePicker({ styles, width, height, range, toggleFn }: D
 
   useEffect(() => {
     if (data) {
-      const { key, value } = data.data.settings;
+      const { value } = data.data.settings;
       if (value.selectedDate && value.HistoryFilterMemory) {
-        const { selectedDate } = value;
+        const { selectedDate, HistoryFilterMemory } = value;
         const from = dayjs(selectedDate.from);
         const to = dayjs(selectedDate.to);
         dispatch(setTaskSelectedDate({ from, to }));
-        dispatch(setHistoryMemory(value.HistoryFilterMemory));
+        dispatch(setHistoryMemory(HistoryFilterMemory));
       }
     }
   }, [data]);

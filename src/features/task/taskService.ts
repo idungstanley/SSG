@@ -9,7 +9,7 @@ import {
   TaskId,
   newTaskDataRes
 } from './interface.tasks';
-import { UseMutationResult, useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import {
   setScreenRecording,
@@ -48,17 +48,23 @@ const moveTask = (data: { taskId: TaskId; listId: string; overType: string }) =>
 };
 
 export const useSaveData = () => {
-  const mutation = useMutation(async ({ key, value }: { key: string; value: IUserCalendarParams }) => {
-    const data = requestNew({
-      url: 'settings',
-      method: 'PUT',
-      data: {
-        key,
-        value
-      }
-    });
-    return data;
-  });
+  const queryClient = useQueryClient();
+  const mutation = useMutation(
+    async ({ key, value }: { key: string; value: IUserCalendarParams }) => {
+      const data = requestNew({
+        url: 'settings',
+        method: 'PUT',
+        data: {
+          key,
+          value
+        }
+      });
+      return data;
+    },
+    {
+      onSuccess: () => queryClient.invalidateQueries(['calendar-data'])
+    }
+  );
 
   return mutation;
 };
