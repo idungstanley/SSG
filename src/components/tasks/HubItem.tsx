@@ -43,7 +43,7 @@ interface TaskItemProps {
   topNumber?: string;
   zNumber?: string;
   stickyButtonIndex?: number | undefined;
-  handleClick: (id: string, index?: number) => void;
+  handleClick: (id: string, parent_id: string | null, index?: number) => void;
   handleLocation: (id: string, name: string, index?: number) => void;
 }
 export default function HubItem({
@@ -168,14 +168,14 @@ export default function HubItem({
   });
 
   return (
-    <>
+    <div className="relative">
       <div
         className={`bg-white truncate items-center group ${item.id !== activeItemId && 'hover:bg-gray-100'} ${
           isSticky && stickyButtonIndex === index ? 'sticky bg-white opacity-100' : ''
         } ${isOver ? 'bg-primary-100 border-primary-500 shadow-inner shadow-primary-300' : ''} `}
         ref={setNodeRef}
         tabIndex={0}
-        onClick={() => handleClick(item.id, index)}
+        onClick={() => handleClick(item.id, item.parent_id ?? null, index)}
         style={{
           top: isSticky && showSidebar ? topNumber : '',
           zIndex: isSticky ? zNumber : '2',
@@ -294,6 +294,6 @@ export default function HubItem({
       ) : null}
       {showMenuDropdown === item.id && showSidebar ? <MenuDropdown /> : null}
       {SubMenuId === item.id && showSidebar ? <SubDropdown /> : null}
-    </>
+    </div>
   );
 }

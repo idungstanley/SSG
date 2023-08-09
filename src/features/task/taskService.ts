@@ -6,6 +6,7 @@ import {
   setNewTask,
   setScreenRecording,
   setScreenRecordingMedia,
+  setSelectedTasksArray,
   setTimerStatus,
   setToggleAssignCurrentTaskId,
   setUpdateTimerDuration
@@ -295,15 +296,19 @@ export const UseUpdateTaskStatusService2 = () => {
   });
 };
 
-export const UseUpdateTaskStatusServices = ({ task_id, priorityDataUpdate }: UpdateTaskProps) => {
+export const UseUpdateTaskStatusServices = ({ task_id_array, priorityDataUpdate }: UpdateTaskProps) => {
+  const { currentTaskPriorityId } = useAppSelector((state) => state.task);
+  const dispatch = useAppDispatch();
+
   const queryClient = useQueryClient();
   return useQuery(
-    ['task', { task_id, priorityDataUpdate }],
+    ['task', { task_id_array, priorityDataUpdate }],
     async () => {
       const data = requestNew({
-        url: `tasks/${task_id}`,
-        method: 'PUT',
-        params: {
+        url: 'tasks/multiple/priority',
+        method: 'POST',
+        data: {
+          ids: task_id_array?.length ? task_id_array : [currentTaskPriorityId],
           priority: priorityDataUpdate
         }
       });
@@ -311,8 +316,9 @@ export const UseUpdateTaskStatusServices = ({ task_id, priorityDataUpdate }: Upd
     },
     {
       // enabled: statusDataUpdate !== '' || priorityDataUpdate !== '',
-      enabled: task_id != null && priorityDataUpdate !== '',
+      enabled: task_id_array != null && priorityDataUpdate !== '',
       onSuccess: () => {
+        dispatch(setSelectedTasksArray([]));
         queryClient.invalidateQueries(['task']);
       }
     }
