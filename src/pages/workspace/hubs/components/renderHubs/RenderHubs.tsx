@@ -109,12 +109,6 @@ function RenderHubs() {
     }
   }
 
-  const extendedObj = {
-    name: 'TASKS',
-    children: <ActiveHub />,
-    source: hubIcon
-  };
-
   return (
     <>
       <PilotSection />
@@ -133,7 +127,11 @@ function RenderHubs() {
             />
           </section>
         }
-        extendedBar={extendedObj}
+        extendedBar={{
+          name: 'TASKS',
+          children: <ActiveHub />,
+          source: hubIcon
+        }}
         additional={<FilterByAssigneesSliderOver />}
       >
         <section>

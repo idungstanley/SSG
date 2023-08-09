@@ -74,12 +74,6 @@ function RenderList() {
     }
   }
 
-  const extendedObj = {
-    name: 'TASKS',
-    children: <ActiveHub />,
-    source: hubIcon
-  };
-
   const handleScrollList = useScroll(() => dispatch(setUpdateCords()));
 
   return (
@@ -101,7 +95,11 @@ function RenderList() {
             />
           </section>
         }
-        extendedBar={extendedObj}
+        extendedBar={{
+          name: 'TASKS',
+          children: <ActiveHub />,
+          source: hubIcon
+        }}
         additional={<FilterByAssigneesSliderOver />}
       >
         <>
