@@ -17,6 +17,7 @@ import { displayPrompt, setVisibility } from '../../../../../features/general/pr
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { setSelectedTasksArray, setShowTaskNavigation } from '../../../../../features/task/taskSlice';
 import RoundedCheckbox from '../../../../../components/Checkbox/RoundedCheckbox';
+import PriorityDropdown from '../../../../../components/priority/PriorityDropdown';
 
 export default function TaskMenu() {
   const { selectedTasksArray } = useAppSelector((state) => state.task);
@@ -97,6 +98,12 @@ export default function TaskMenu() {
     {
       id: 10,
       icons: <FlagIcon />,
+      handleClick: () => ({}),
+      isVisible: true
+    },
+    {
+      id: 15,
+      icons: <PriorityDropdown TaskCurrentPriority="low" />,
       handleClick: () => ({}),
       isVisible: true
     },
