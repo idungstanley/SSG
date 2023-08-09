@@ -25,6 +25,7 @@ import { AvatarWithInitials } from '../../../../../../components';
 import ArrowDownwardIcon from '../../../../../../assets/icons/ArrowDownwardIcon';
 import ArrowUpwardIcon from '../../../../../../assets/icons/ArrowUpwardIcon';
 import { setShowMore } from '../../../../../../features/workspace/workspaceSlice';
+import { getInitials } from '../../../../../../app/helpers';
 
 const showLessOrMore = [
   {
@@ -88,14 +89,7 @@ export default function NavigationItems({
       href: `/${currentWorkspaceId}/community`,
       icon: (
         <AvatarWithInitials
-          initials={
-            workspaceName
-              ?.split(' ')
-              .slice(0, 2)
-              .map((word) => word[0])
-              .join('')
-              .toUpperCase() as string
-          }
+          initials={getInitials(workspaceName ?? '')}
           height="h-5"
           width="w-5"
           backgroundColour={workspaceColor}

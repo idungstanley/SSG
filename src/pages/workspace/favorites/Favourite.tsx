@@ -9,6 +9,7 @@ import { setFavUpdateName, setTriggerFavUpdate } from '../../../features/hubs/hu
 import { AvatarWithInitials } from '../../../components';
 import { MdFolder } from 'react-icons/md';
 import { FiList } from 'react-icons/fi';
+import { getInitials } from '../../../app/helpers';
 
 interface nameType {
   item: {
@@ -42,14 +43,6 @@ function Favourite({ item }: nameType) {
     dispatch(setShowPilot(true));
     dispatch(setActiveTabId(4));
     navigate(`/${item.model_type}/${item.model_id}`);
-    localStorage.setItem(
-      'hubDetailsStorage',
-      JSON.stringify({
-        activeItemId: item.model_id,
-        activeItemType: item.model_type,
-        activeItemName: favName
-      })
-    );
   };
 
   const handleUpdate = (e: { preventDefault: () => void }) => {
@@ -64,12 +57,7 @@ function Favourite({ item }: nameType) {
         <div className="flex">
           {item.model_type === 'hub' && (
             <AvatarWithInitials
-              initials={item.name
-                .split(' ')
-                .slice(0, 2)
-                .map((word) => word[0])
-                .join('')
-                .toUpperCase()}
+              initials={getInitials(item.name)}
               height="h-4"
               width="w-4"
               backgroundColour="blue"
