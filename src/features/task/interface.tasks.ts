@@ -3,7 +3,7 @@ import { teamMember } from '../../pages/workspace/tasks/timeclock/entryLists/Ent
 import { ICustomField, ImyTaskData } from './taskSlice';
 
 export interface UpdateTaskProps {
-  task_id: string | null | undefined;
+  task_id: string | string[] | null | undefined;
   priorityDataUpdate?: string;
   statusDataUpdate?: string;
 }
