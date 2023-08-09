@@ -8,9 +8,9 @@ import { FaSort } from 'react-icons/fa';
 import { setTimeArr, setTimeSortArr } from '../../../../features/task/taskSlice';
 import { UserSortDropDown } from './TimeUserSortDropDown';
 import PlusCircle from '../../../../assets/icons/AddCircle';
-import CancelIcon from '../../../../assets/icons/Cancel';
 import ArrowCaretUp from '../../../../assets/icons/ArrowCaretUp';
 import { ScrollableContainer } from '../../../ScrollableContainer/ScrollableContainer';
+import CancelIcon from '../../../../assets/icons/Cancel';
 
 export type Header = {
   title: string;

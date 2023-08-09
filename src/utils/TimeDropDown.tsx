@@ -84,8 +84,8 @@ function ReusableSelect({ value, onclick, options, style }: ReusableSelectProps)
   return (
     <div className="rounded-md relative">
       {!editing && (
-        <div className="text-alsoit-text-sm flex items-center" onClick={handleEdit}>
-          {value ? value : 'Set Time'}
+        <div className="text-alsoit-text-sm flex items-center -mt-1.5" onClick={handleEdit}>
+          {value ? `| ${value}` : 'Set Time'}
         </div>
       )}
       {dropped.container && !value && (
