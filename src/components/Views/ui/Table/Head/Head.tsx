@@ -83,11 +83,15 @@ export function Head({
 
   const handleCheckedGroupTasks = () => {
     const updatedTaskIds: string[] = [...selectedTasksArray];
-    groupedTask?.map((task) => {
-      if (!selectedTasksArray.includes(task.id)) {
-        updatedTaskIds.push(task.id);
+
+    groupedTask?.forEach((task) => {
+      const taskIndex = updatedTaskIds.indexOf(task.id);
+
+      if (taskIndex === -1) {
+        updatedTaskIds.push(task.id); // Task not in selectedTasksArray, so add it
+      } else {
+        updatedTaskIds.splice(taskIndex, 1); // Task already in selectedTasksArray, so remove it
       }
-      return;
     });
     dispatch(setSelectedTasksArray(updatedTaskIds));
   };
