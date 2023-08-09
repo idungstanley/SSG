@@ -1,9 +1,17 @@
 import requestNew from '../../app/requestNew';
-import { IFullTaskRes, ITaskListRes, ITaskRes, ITimeEntriesRes, TaskId, newTaskDataRes } from './interface.tasks';
-import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import {
+  IFullTaskRes,
+  ITaskListRes,
+  ITaskRes,
+  ITimeEntriesRes,
+  IUserCalendarParams,
+  IUserSettingsRes,
+  TaskId,
+  newTaskDataRes
+} from './interface.tasks';
+import { UseMutationResult, useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import {
-  setNewTask,
   setScreenRecording,
   setScreenRecordingMedia,
   setTimerStatus,
@@ -36,6 +44,36 @@ const moveTask = (data: { taskId: TaskId; listId: string; overType: string }) =>
     data: requestData
   });
   return response;
+};
+
+export const useSaveData = () => {
+  const mutation = useMutation(async ({ key, value }: { key: string; value: IUserCalendarParams }) => {
+    const data = requestNew({
+      url: 'settings',
+      method: 'PUT',
+      data: {
+        key,
+        value
+      }
+    });
+    return data;
+  });
+
+  return mutation;
+};
+
+export const useGetUserSettingsData = ({ keys }: { keys: string }) => {
+  return useQuery(['calendar-data'], async () => {
+    const data = await requestNew<IUserSettingsRes>({
+      url: 'settings',
+      method: 'GET',
+      params: {
+        key: keys
+      }
+    });
+
+    return data;
+  });
 };
 
 export const useMoveTask = () => {
