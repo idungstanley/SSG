@@ -1,5 +1,4 @@
 import { Button } from '@mui/material';
-import RecurringIcon from '../../assets/icons/Recurring';
 
 interface DatePickerFooterProps {
   time: string;
@@ -7,7 +6,7 @@ interface DatePickerFooterProps {
   miniMode: boolean;
 }
 
-export default function DatePickerFooter({ closeDateModal, time, miniMode }: DatePickerFooterProps) {
+export default function DatePickerFooter({ closeDateModal, time }: DatePickerFooterProps) {
   return (
     <div className="flex items-center justify-end w-full">
       <div className="flex justify-between w-full">
