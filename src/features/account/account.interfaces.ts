@@ -20,6 +20,11 @@ export interface IUserParams {
   sidebarWidth?: number;
 }
 
+export interface IUserCalendarParams {
+  selectedDate: ISelectedDate | null;
+  HistoryFilterMemory?: IHistoryFilterMemory | null;
+}
+
 export interface IUserState {
   // add darkTheme or showArchived values
   showPreview: boolean;

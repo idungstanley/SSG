@@ -1,7 +1,5 @@
 import { Button } from '@mui/material';
 import { useAppSelector } from '../../app/hooks';
-import { setUserSettingsData } from '../../features/account/accountService';
-import { useState } from 'react';
 import { useSaveData } from '../../features/task/taskService';
 
 interface DatePickerFooterProps {
@@ -11,16 +9,11 @@ interface DatePickerFooterProps {
 }
 
 export default function DatePickerFooter({ closeDateModal, time }: DatePickerFooterProps) {
-  const [serviceTrigger, setTrigger] = useState<boolean>(false);
   const { selectedDate, HistoryFilterMemory } = useAppSelector((state) => state.task);
-  // setUserSettingsData(serviceTrigger, 'calendar', { selectedDate, HistoryFilterMemory });
 
   const { mutateAsync, isError } = useSaveData();
   const handleSubmit = () => {
-    setTrigger(true);
     mutateAsync({ key: 'calendar', value: { selectedDate, HistoryFilterMemory } });
-    // setUserSettingsData(serviceTrigger, 'calendar', { selectedDate, HistoryFilterMemory });
-    // closeDateModal();
   };
 
   return (

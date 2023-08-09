@@ -29,6 +29,23 @@ import { generateFilters } from '../../components/TasksHeader/lib/generateFilter
 import { runTimer } from '../../utils/TimerCounter';
 import Duration from '../../utils/TimerDuration';
 
+export const UseSaveTaskFilters = () => {
+  const { filters } = generateFilters();
+  const mutation = useMutation(async ({ key }: { key: string }) => {
+    const data = requestNew({
+      url: 'settings',
+      method: 'PUT',
+      data: {
+        key,
+        value: filters
+      }
+    });
+    return data;
+  });
+
+  return mutation;
+};
+
 const moveTask = (data: { taskId: TaskId; listId: string; overType: string }) => {
   const { taskId, listId, overType } = data;
   let requestData = {};
