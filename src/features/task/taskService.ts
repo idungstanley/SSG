@@ -27,37 +27,23 @@ import { setTimerLastMemory, toggleMute } from '../workspace/workspaceSlice';
 import { generateFilters } from '../../components/TasksHeader/lib/generateFilters';
 import { runTimer } from '../../utils/TimerCounter';
 import Duration from '../../utils/TimerDuration';
-import { IUserCalendarParams, IUserSettings, IUserSettingsRes } from '../account/account.interfaces';
+import { IUserCalendarParams } from '../account/account.interfaces';
 
 export const UseSaveTaskFilters = () => {
   const { filters } = generateFilters();
-  return requestNew<IFullTaskRes>({
-    url: 'tasks/full-list',
-    method: 'POST',
-    data: {
-      filters
-    }
+  const mutation = useMutation(async ({ key }: { key: string }) => {
+    const data = requestNew({
+      url: 'settings',
+      method: 'PUT',
+      data: {
+        key,
+        value: filters
+      }
+    });
+    return data;
   });
-};
 
-export const useSaveFilter = () => {
-  // const { filters } = generateFilters();
-  const {
-    filters: { fields: filters, option: op }
-  } = useAppSelector((state) => state.task);
-  const response = requestNew({
-    url: '/settings',
-    method: 'PUT',
-    data: {
-      key: 'tasks_filter',
-      value: filters
-    }
-  });
-  return response;
-};
-
-export const UseSaveFilters = () => {
-  return useMutation(useSaveFilter);
+  return mutation;
 };
 
 const moveTask = (data: { taskId: TaskId; listId: string; overType: string }) => {

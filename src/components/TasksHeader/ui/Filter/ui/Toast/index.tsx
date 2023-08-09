@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { cl } from '../../../../../../utils';
 import ToastClose from '../../../../../../assets/icons/ToastClose';
 import toast from 'react-hot-toast';
-import { UseSaveFilters } from '../../../../../../features/task/taskService';
+import { UseSaveTaskFilters } from '../../../../../../features/task/taskService';
 
 interface ToastProps {
   title: string;
@@ -11,10 +11,18 @@ interface ToastProps {
   toastId?: string;
 }
 function SaveFilterToast({ title, body, showClose = true, toastId }: ToastProps) {
-  const { mutate: onSave } = UseSaveFilters();
+  const { mutateAsync, status } = UseSaveTaskFilters();
   const handleSaveFilters = () => {
-    onSave();
+    mutateAsync({ key: 'tasks_filter' });
   };
+
+  useEffect(() => {
+    if (status === 'success') {
+      setTimeout(() => {
+        toast.remove(toastId);
+      }, 1000);
+    }
+  }, [status]);
   return (
     <div
       aria-live="assertive"
@@ -35,6 +43,8 @@ function SaveFilterToast({ title, body, showClose = true, toastId }: ToastProps)
                   <p className="text-alsoit-text-md font-semibold text-alsoit-gray-300 font-semibold my-1">{body}</p>
                 )}
               </div>
+              {status === 'loading' && <p>Saving</p>}
+              {status === 'success' && <p>Saved</p>}
               <div className="my-1">
                 <section className="flex justify-between my-1">
                   <div className="flex items-center cursor-pointer gap-0.5">
@@ -43,7 +53,12 @@ function SaveFilterToast({ title, body, showClose = true, toastId }: ToastProps)
                     </button>
                   </div>
                   <div className="flex items-center cursor-pointer gap-0.5">
-                    <button className="w-20 h-7 bg-alsoit-gray-50 rounded hover:bg-alsoit-purple-50">Cancel</button>
+                    <button
+                      className="w-20 h-7 bg-alsoit-gray-50 rounded hover:bg-alsoit-purple-50"
+                      onClick={() => toast.remove(toastId)}
+                    >
+                      Cancel
+                    </button>
                   </div>
                 </section>
               </div>
