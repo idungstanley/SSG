@@ -89,8 +89,6 @@ export function DatePickerManualDates({ range }: DatePickerManualDatesProps) {
     }
   }, [taskTime, selectedDate]);
 
-  console.log(taskTime?.from);
-
   return (
     <div className="flex justify-between items-center py-1">
       {range ? (
