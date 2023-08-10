@@ -148,7 +148,6 @@ export default function DragContext({ children }: DragContextProps) {
   const onDragOver = (e: DragOverEvent) => {
     const id = e.over?.id as string;
     dispatch(setDragOverItem(id));
-    console.log(e.over?.id);
   };
 
   return (

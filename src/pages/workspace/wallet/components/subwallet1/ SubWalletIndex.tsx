@@ -25,6 +25,7 @@ interface dataProps {
 function SubWalletIndex({ paddingLeft = '30' }: SubWalletIndexProps) {
   const dispatch = useDispatch();
 
+  const { currentWorkspaceId } = useAppSelector((state) => state.auth);
   const { currentWalletId, toggleArchiveWallet } = useAppSelector((state) => state.wallet);
   const { draggableItemId } = useAppSelector((state) => state.list);
 
@@ -49,7 +50,7 @@ function SubWalletIndex({ paddingLeft = '30' }: SubWalletIndexProps) {
   const navigate = useNavigate();
   const handleLocation = (id: string, type = 'subWallet2') => {
     dispatch(setShowHub(true));
-    navigate(`tasks/w/${id}`);
+    navigate(`/${currentWorkspaceId}/tasks/w/${id}`);
     dispatch(setActiveItem({ activeItemType: type, activeItemId: id }));
     setShowSubWallet((prev) => [...prev, id]);
     setCurrWalId(id);

@@ -15,26 +15,29 @@ import { generateLists } from '../../utils';
 import { Header } from '../../components/TasksHeader';
 import { ScrollableContainer } from '../../components/ScrollableContainer/ScrollableContainer';
 import { GroupHorizontalScroll } from '../../components/ScrollableContainer/GroupHorizontalScroll';
+import { EntityType } from '../../utils/EntityTypes/EntityType';
 
 export default function HubPage() {
   const dispatch = useAppDispatch();
   const { hubId, taskId } = useParams();
+
   const { filterTaskByAssigneeIds } = useAppSelector((state) => state.task);
+
   const containerRef = useRef<HTMLDivElement>(null);
-  const { data: hub } = UseGetHubDetails({ activeItemId: hubId, activeItemType: 'hub' });
+
+  const { data: hub } = UseGetHubDetails({ activeItemId: hubId, activeItemType: EntityType.hub });
 
   // set entity name
   useEffect(() => {
     if (hub && !taskId) {
       const hubName = hub.data.hub.name;
-      dispatch(setActiveItem({ activeItemId: hubId, activeItemType: 'hub', activeItemName: hubName }));
       dispatch(setActiveEntityName(hubName));
     }
   }, [hub]);
 
   const { data, hasNextPage, fetchNextPage } = UseGetFullTaskList({
     itemId: hubId,
-    itemType: 'hub',
+    itemType: EntityType.hub,
     assigneeUserId: filterTaskByAssigneeIds
   });
 

@@ -136,30 +136,6 @@ export const useGetHubs = ({
   );
 };
 
-// get all hubs
-export const useGetHubList = ({ query }: { query: number | null }) => {
-  const queryClient = useQueryClient();
-  return useQuery<IResponseGetHubs>(
-    ['hubs', { isArchived: query ? 1 : 0 }],
-    () =>
-      requestNew({
-        url: 'hubs',
-        method: 'GET',
-        params: {
-          is_archived: query ? 1 : 0
-        }
-      }),
-    {
-      onSuccess: (data) => {
-        data.data.hubs.map((hub) => {
-          queryClient.setQueryData(['hub', hub.id], hub);
-          return { ...hub, isOpen: false };
-        });
-      }
-    }
-  );
-};
-
 export const useGetHubChildren = ({ query, enabled }: { query: string | null | undefined; enabled?: boolean }) => {
   const hubId = query;
 

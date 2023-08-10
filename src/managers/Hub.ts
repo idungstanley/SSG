@@ -110,3 +110,13 @@ export const removeEntityChildrenIdsOfHub = (id: string, hubs: Hub[], openedEnti
   findCurrentEntity(EntityType.hub, id, hubs, findAllEntitiesIds as <IHub>(item: IHub) => IHub);
   return currentEntitiesIds;
 };
+
+export const findCurrentHub = (id: string, hubs: Hub[]) => {
+  let currentEntity = {};
+  const findHub = (currentHub: Hub) => {
+    currentEntity = currentHub;
+    return currentHub;
+  };
+  findCurrentEntity(EntityType.hub, id, hubs, findHub as <IHub>(item: IHub) => IHub);
+  return currentEntity as Hub;
+};

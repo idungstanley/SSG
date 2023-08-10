@@ -66,7 +66,7 @@ const MAX_SIDEBAR_WIDTH = dimensions.extendedBar.max;
 
 function ExtendedBar({ children, name, icon, source }: ExtendedBarProps) {
   const dispatch = useAppDispatch();
-  const [show, setShow] = useState(false);
+
   const { sidebarWidthRD, showExtendedBar } = useAppSelector((state) => state.workspace);
 
   const { blockRef, Dividers, size } = useResize({
@@ -80,12 +80,7 @@ function ExtendedBar({ children, name, icon, source }: ExtendedBarProps) {
   });
 
   const handleToggle = () => {
-    setShow((prev) => !prev);
-    if (showExtendedBar) {
-      dispatch(setShowExtendedBar(false));
-    } else {
-      dispatch(setShowExtendedBar(true));
-    }
+    dispatch(setShowExtendedBar(!showExtendedBar));
   };
 
   useEffect(() => {
@@ -95,21 +90,26 @@ function ExtendedBar({ children, name, icon, source }: ExtendedBarProps) {
 
   return (
     <aside
-      style={{ width: !show ? SIDEBAR_MIN_WIDTH : SIDEBAR_MAX_WIDTH }}
+      style={{ width: !showExtendedBar ? SIDEBAR_MIN_WIDTH : SIDEBAR_MAX_WIDTH }}
       ref={blockRef}
-      className={cl(show && 'border', 'relative w-60 h-full transition-all duration-300')}
+      className={cl(showExtendedBar && 'border', 'relative w-60 h-full transition-all duration-300')}
     >
       <span
-        onClick={() => handleToggle()}
+        onClick={handleToggle}
+        style={{ zIndex: '11' }}
         className={cl(
-          show ? 'bg-green-400 top-2 border-green-400' : 'bg-white top-4 border-inherit',
-          'absolute z-10 border-2 rounded-full cursor-pointer -right-2'
+          showExtendedBar ? 'bg-green-400 top-2 border-green-400' : 'bg-white top-4 border-inherit',
+          'absolute border-2 rounded-full cursor-pointer -right-2'
         )}
       >
-        {show ? <RiArrowLeftSLine className="text-sm text-white" /> : <RiArrowRightSLine className="text-xs" />}
+        {showExtendedBar ? (
+          <RiArrowLeftSLine className="text-sm text-white" />
+        ) : (
+          <RiArrowRightSLine className="text-xs" />
+        )}
       </span>
 
-      {show ? (
+      {showExtendedBar ? (
         <>
           <ExtendedItem name={name} icon={icon} source={source} />
           <div>{children}</div>

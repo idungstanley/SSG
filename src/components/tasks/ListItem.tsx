@@ -43,6 +43,7 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
   const { listId } = useParams();
   const queryClient = useQueryClient();
 
+  const { currentWorkspaceId } = useAppSelector((state) => state.auth);
   const { activeItemId } = useAppSelector((state) => state.workspace);
   const { showMenuDropdown } = useAppSelector((state) => state.hub);
   const { paletteDropdown, lightBaseColor, baseColor } = useAppSelector((state) => state.account);
@@ -62,7 +63,9 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
       queryClient.invalidateQueries(['lists']);
     }
   });
+
   const { data } = GetTaskListCount({ query: list.id, fetchTaskCount: getCount });
+
   // function for the list shape selection
   const handleListLocation = (id: string, name: string) => {
     dispatch(setActiveEntityName(name));
@@ -73,7 +76,7 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
         activeItemName: name
       })
     );
-    navigate(`tasks/l/${id}`);
+    navigate(`/${currentWorkspaceId}/tasks/l/${id}`);
     dispatch(setActiveEntity({ id, type: EntityType.list }));
   };
 

@@ -5,7 +5,7 @@ import { setArchiveList } from './listSlice';
 import { closeMenu } from '../hubs/hubSlice';
 import { IWalletRes } from '../wallet/wallet.interfaces';
 import { IListDetailRes, listDetails, taskCountFields } from './list.interfaces';
-import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { useAppSelector } from '../../app/hooks';
 import { useParams } from 'react-router-dom';
 import { generateFilters } from '../../components/TasksHeader/lib/generateFilters';
 import { UseGetHubDetails } from '../hubs/hubService';
@@ -156,17 +156,14 @@ export const GetTaskListCount = (value: { query: string; fetchTaskCount: boolean
   return useQuery(
     ['task-count', { listId }],
     async () => {
-      const data = await requestNew({
+      const data = await requestNew<TaskCountProps>({
         url: `lists/${listId}/task-status-counts`,
         method: 'GET'
       });
       return data;
     },
     {
-      enabled: value.fetchTaskCount,
-      onSuccess: (data: TaskCountProps) => {
-        console.log(data.data.task_statuses);
-      }
+      enabled: value.fetchTaskCount
     }
   );
 };

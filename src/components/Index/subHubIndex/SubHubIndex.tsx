@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useGetSubHub } from '../../../features/hubs/hubService';
 import { useAppSelector } from '../../../app/hooks';
 import { useDispatch } from 'react-redux';
@@ -10,7 +11,6 @@ import {
   setActiveItem,
   setShowHub
 } from '../../../features/workspace/workspaceSlice';
-// import { useNavigate } from 'react-router-dom';
 import HubItem from '../../tasks/HubItem';
 import { setShowPilotSideOver } from '../../../features/general/slideOver/slideOverSlice';
 import { DragOverlay } from '@dnd-kit/core';
@@ -19,14 +19,18 @@ import { EntityType } from '../../../utils/EntityTypes/EntityType';
 
 export default function SubHubIndex() {
   const dispatch = useDispatch();
-  // const navigate = useNavigate();
-  const [showSubChildren, setShowSubChidren] = useState<string | null | undefined>(null);
+  const navigate = useNavigate();
+
+  const { currentWorkspaceId } = useAppSelector((state) => state.auth);
   const { currentItemId } = useAppSelector((state) => state.workspace);
-  const { data, status } = useGetSubHub({
+
+  const [showSubChildren, setShowSubChidren] = useState<string | null | undefined>(null);
+
+  const { data, isSuccess } = useGetSubHub({
     parentId: currentItemId
   });
 
-  if (status === 'success') {
+  if (isSuccess) {
     data?.data?.hubs.map(({ parent_id }) => dispatch(setHubParentId(parent_id)));
   }
   const { hubParentId, subHubExt } = useAppSelector((state) => state.hub);
@@ -56,6 +60,7 @@ export default function SubHubIndex() {
 
   const handleLocation = (id: string, name: string) => {
     dispatch(setSubHubExt({ id: id, type: EntityType.subHub }));
+    navigate(`/${currentWorkspaceId}/tasks/h/${id}`);
     dispatch(setShowHub(true));
     dispatch(setActiveEntityName(name));
     dispatch(

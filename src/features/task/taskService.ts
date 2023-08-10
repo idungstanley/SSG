@@ -3,7 +3,6 @@ import { IFullTaskRes, ITaskListRes, ITaskRes, ITimeEntriesRes, TaskId, newTaskD
 import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import {
-  setNewTask,
   setScreenRecording,
   setScreenRecordingMedia,
   setSelectedTasksArray,

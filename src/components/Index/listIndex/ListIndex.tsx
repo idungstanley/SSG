@@ -13,8 +13,10 @@ interface ListIndexProps {
 }
 
 function ListIndex({ showHubList, getCurrentHubId, paddingLeft = '26' }: ListIndexProps) {
-  const { data } = getListService({ getCurrentHubId });
   const { showMenuDropdown } = useAppSelector((state) => state.hub);
+
+  const { data } = getListService({ getCurrentHubId });
+
   return (
     <div id="createWallet" className={`${showHubList ? 'block' : 'hidden'}`}>
       {data?.data.lists.map((list: IList) => (

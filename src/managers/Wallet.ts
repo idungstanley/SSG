@@ -108,3 +108,13 @@ export const removeEntityChildrenIdsOfWallet = (id: string, hubs: Hub[], openedE
   findCurrentEntity(EntityType.wallet, id, hubs, findAllEntitiesIds as <IHub>(item: IHub) => IHub);
   return currentEntitiesIds;
 };
+
+export const findCurrentWallet = (id: string, hubs: Hub[]) => {
+  let currentEntity = {};
+  const findWallet = (currentWallet: Wallet) => {
+    currentEntity = currentWallet;
+    return currentWallet;
+  };
+  findCurrentEntity(EntityType.wallet, id, hubs, findWallet as <IHub>(item: IHub) => IHub);
+  return currentEntity as Wallet;
+};
