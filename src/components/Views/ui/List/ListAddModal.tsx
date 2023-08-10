@@ -157,13 +157,15 @@ export default function ListAddModal({ handleCheckedGroupTasks }: { handleChecke
             </MenuItem>
           </>
         ))}
+        <p className="border-t-2"></p>
         <p
-          className="border-y flex items-center p-2 m-3 cursor-pointer text-white rounded-md"
+          className="border-y-2 flex items-center p-2 mx-3 my-2 cursor-pointer text-white rounded-md"
           style={{ backgroundColor: '#5A43EA' }}
         >
           <AiOutlineShareAlt className="mr-2" />
           Sharing & Permissions
         </p>
+        <p className="border-t-2"></p>
         <MenuItem
           className="p-3 flex items-center cursor-pointer"
           onClick={() => {
