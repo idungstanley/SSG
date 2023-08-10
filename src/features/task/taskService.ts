@@ -376,7 +376,6 @@ export const UseUpdateTaskStatusServices = ({ task_id_array, priorityDataUpdate 
       return data;
     },
     {
-      // enabled: statusDataUpdate !== '' || priorityDataUpdate !== '',
       enabled: task_id_array != null && priorityDataUpdate !== '',
       onSuccess: () => {
         dispatch(setSelectedTasksArray([]));

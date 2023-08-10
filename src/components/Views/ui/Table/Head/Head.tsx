@@ -8,6 +8,7 @@ import { Chevron } from '../../Chevron';
 import {
   setActiveTaskColumn,
   setListIdForCustom,
+  setSelectedTasksArray,
   setSortArr,
   setSortArray
 } from '../../../../../features/task/taskSlice';
@@ -23,6 +24,7 @@ import { MdEditNote } from 'react-icons/md';
 import { BiHide } from 'react-icons/bi';
 import { setIsManageStatus } from '../../../../../features/workspace/workspaceSlice';
 import AlsoitMenuDropdown from '../../../../DropDowns';
+import { Task } from '../../../../../features/task/interface.tasks';
 
 interface HeadProps {
   columns: Column[];
@@ -34,6 +36,7 @@ interface HeadProps {
   taskLength: number;
   onToggleCollapseTasks: VoidFunction;
   listId: string | undefined;
+  groupedTask?: Task[];
 }
 
 export type SortOption = {
@@ -50,7 +53,8 @@ export function Head({
   onToggleCollapseTasks,
   mouseDown,
   label,
-  listId
+  listId,
+  groupedTask
 }: HeadProps) {
   const parsedLabel = parseLabel(label);
   const dispatch = useAppDispatch();
@@ -61,7 +65,7 @@ export function Head({
   const [headerId, setheaderId] = useState<string>('');
   const [showStatusDropdown, setShowStatusDropdown] = useState<null | SVGElement>(null);
   const [showSortModal, setShowSortModal] = useState<boolean>(false);
-  const { sortArr, sortAbleArr } = useAppSelector((state) => state.task);
+  const { sortArr, sortAbleArr, selectedTasksArray } = useAppSelector((state) => state.task);
   const { baseColor } = useAppSelector((state) => state.account);
   const { isManageStatus } = useAppSelector((state) => state.workspace);
 
@@ -75,6 +79,21 @@ export function Head({
 
   const handleCloseStatusDropdown = () => {
     setShowStatusDropdown(null);
+  };
+
+  const handleCheckedGroupTasks = () => {
+    const updatedTaskIds: string[] = [...selectedTasksArray];
+
+    groupedTask?.forEach((task) => {
+      const taskIndex = updatedTaskIds.indexOf(task.id);
+
+      if (taskIndex === -1) {
+        updatedTaskIds.push(task.id); // Task not in selectedTasksArray, so add it
+      } else {
+        updatedTaskIds.splice(taskIndex, 1); // Task already in selectedTasksArray, so remove it
+      }
+    });
+    dispatch(setSelectedTasksArray(updatedTaskIds));
   };
 
   const headerTxt = (title: string) =>
@@ -159,7 +178,7 @@ export function Head({
       <tr className="contents">
         {/* first sticky col */}
         <th style={{ zIndex: 2 }} className="sticky left-0 flex items-center -mb-2 font-extrabold" ref={columns[0].ref}>
-          <div className="flex items-center " style={{ width: '38px' }}></div>
+          <div className="flex items-center " style={{ width: '42px' }}></div>
           <div className="flex items-center w-full gap-3 py-2 truncate dBlock group opacity-90">
             <div
               className="py-0.5 relative px-2 rounded-tr-md -mb-1 flex items-center space-x-1 text-white dFlex "
@@ -167,7 +186,7 @@ export function Head({
             >
               <div>
                 <div className=" items-center ml-0.5 space-x-1 viewSettings" onClick={(e) => e.stopPropagation()}>
-                  <img src={statusbox} alt="" />
+                  <img src={statusbox} alt="" onClick={handleCheckedGroupTasks} />
                   <CiEdit />
                   <BsThreeDots className="cursor-pointer" onClick={(e) => handleClick(e)} />
                 </div>
