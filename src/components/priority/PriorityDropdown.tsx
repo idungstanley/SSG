@@ -19,7 +19,7 @@ interface TaskCurrentPriorityProps {
 }
 export default function PriorityDropdown({ TaskCurrentPriority }: TaskCurrentPriorityProps) {
   const [priorityValue, setPriority] = useState('');
-  const { currentTaskPriorityId, selectedTasksArray } = useAppSelector((state) => state.task);
+  const { selectedTasksArray } = useAppSelector((state) => state.task);
   const priorityList: priorityType[] = [
     {
       id: 1,
