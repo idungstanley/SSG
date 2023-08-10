@@ -1,15 +1,15 @@
 import requestNew from '../../app/requestNew';
 import {
   IFullTaskRes,
-  IHistoryFilterMemory,
-  ISelectedDate,
   ITaskListRes,
   ITaskRes,
   ITimeEntriesRes,
+  IUserCalendarParams,
+  IUserSettingsRes,
   TaskId,
   newTaskDataRes
 } from './interface.tasks';
-import { UseMutationResult, useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import {
   setScreenRecording,
@@ -28,7 +28,6 @@ import { setTimerLastMemory, toggleMute } from '../workspace/workspaceSlice';
 import { generateFilters } from '../../components/TasksHeader/lib/generateFilters';
 import { runTimer } from '../../utils/TimerCounter';
 import Duration from '../../utils/TimerDuration';
-import { IUserCalendarParams } from '../account/account.interfaces';
 
 export const UseSaveTaskFilters = () => {
   const { filters } = generateFilters();
@@ -66,7 +65,7 @@ const moveTask = (data: { taskId: TaskId; listId: string; overType: string }) =>
 };
 
 export const useSaveData = () => {
-  const { filters } = generateFilters();
+  const queryClient = useQueryClient();
   const mutation = useMutation(
     async ({ key, value }: { key: string; value: IUserCalendarParams }) => {
       const data = requestNew({
@@ -80,11 +79,25 @@ export const useSaveData = () => {
       return data;
     },
     {
-      onSuccess: (data) => console.log(data, filters)
+      onSuccess: () => queryClient.invalidateQueries(['calendar-data'])
     }
   );
 
   return mutation;
+};
+
+export const useGetUserSettingsData = ({ keys }: { keys: string }) => {
+  return useQuery(['calendar-data'], async () => {
+    const data = await requestNew<IUserSettingsRes>({
+      url: 'settings',
+      method: 'GET',
+      params: {
+        key: keys
+      }
+    });
+
+    return data;
+  });
 };
 
 export const useMoveTask = () => {
