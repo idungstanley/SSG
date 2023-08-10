@@ -36,67 +36,67 @@ export default function ListAddModal({ handleCheckedGroupTasks }: { handleChecke
       handleClick: () => null
     },
     {
-      id: 1,
+      id: 2,
       icon: <GrEdit />,
       label: 'Rename',
       handleClick: () => null
     },
     {
-      id: 1,
+      id: 3,
       icon: <AiOutlineLink />,
       label: 'Copy link',
       handleClick: () => null
     },
     {
-      id: 1,
+      id: 4,
       icon: <AiOutlineStar />,
       label: 'Add to favorite',
       handleClick: () => null
     },
     {
-      id: 1,
+      id: 5,
       icon: <HiOutlineDuplicate />,
       label: 'Duplicate',
       handleClick: () => null
     },
     {
-      id: 1,
+      id: 6,
       icon: <MdOutlineSendToMobile />,
       label: 'Move',
       handleClick: () => null
     },
     {
-      id: 1,
+      id: 7,
       icon: <HiOutlineMail />,
       label: 'Email to List',
       handleClick: () => null
     },
     {
-      id: 1,
+      id: 8,
       icon: <HiOutlineInformationCircle />,
       label: 'List Info',
       handleClick: () => null
     },
     {
-      id: 1,
+      id: 9,
       icon: <CiEdit />,
       label: 'Templates',
       handleClick: () => null
     },
     {
-      id: 1,
+      id: 10,
       icon: <AiOutlineSetting />,
       label: 'List setting',
       handleClick: () => null
     },
     {
-      id: 1,
+      id: 11,
       icon: <BsArchive />,
       label: 'Archive',
       handleClick: () => null
     },
     {
-      id: 1,
+      id: 12,
       icon: <RiDeleteBin6Line />,
       label: 'Delete',
       handleClick: () => null
