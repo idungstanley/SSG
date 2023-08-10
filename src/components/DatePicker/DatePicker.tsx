@@ -10,7 +10,6 @@ import MiniDatePicker from './MiniCalendar';
 import LeftPanelOpen from '../../assets/icons/LeftPanelOpen';
 import DatePickerFooter from './DatePickerFooter';
 import { useGetUserSettingsData } from '../../features/task/taskService';
-import { IHistoryFilterMemory, ISelectedDate } from '../../features/task/interface.tasks';
 import { setHistoryMemory, setTaskSelectedDate } from '../../features/task/taskSlice';
 
 interface DatePickerProps {
