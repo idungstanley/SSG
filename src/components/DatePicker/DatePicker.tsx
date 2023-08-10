@@ -10,7 +10,6 @@ import MiniDatePicker from './MiniCalendar';
 import LeftPanelOpen from '../../assets/icons/LeftPanelOpen';
 import DatePickerFooter from './DatePickerFooter';
 import { useGetUserSettingsData } from '../../features/task/taskService';
-import { IHistoryFilterMemory, ISelectedDate } from '../../features/task/interface.tasks';
 import { setHistoryMemory, setTaskSelectedDate } from '../../features/task/taskSlice';
 
 interface DatePickerProps {
@@ -30,11 +29,12 @@ export default function DatePicker({ styles, width, height, range, toggleFn }: D
   dayjs.extend(utc);
   const dispatch = useAppDispatch();
   const currentDate = dayjs();
+  const userTimeZoneFromLS: string | null = localStorage.getItem('userTimeZone');
   const { timezone: zone, time_format } = useAppSelector((state) => state.userSetting);
   const sectionRef = useRef<HTMLElement>(null);
   const [time, setTime] = useState<string>(
     dayjs()
-      .tz(zone)
+      .tz(userTimeZoneFromLS ?? zone)
       .format(time_format === '1' ? 'ddd, DD MMM YYYY HH:mm' : 'ddd, DD MMM YYYY h:mm A')
   );
   const [openSideBar, setOpenSideBar] = useState<boolean>(false);

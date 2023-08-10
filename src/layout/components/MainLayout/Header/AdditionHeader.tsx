@@ -17,10 +17,13 @@ import ArrowCaretUp from '../../../../assets/icons/ArrowCaretUp';
 import AlarmClockIcon from '../../../../assets/icons/AlarmClockicon';
 import ArrowCaretDown from '../../../../assets/icons/ArrowCaretDown';
 import moment from 'moment-timezone';
+import { toast } from 'react-hot-toast';
+import SaveFilterToast from '../../../../components/TasksHeader/ui/Filter/ui/Toast';
 
 export default function AdditionalHeader() {
   dayjs.extend(timezone);
   dayjs.extend(utc);
+  const userTimeZoneFromLS: string | null = localStorage.getItem('userTimeZone');
   const { screenRecording, duration, timerStatus } = useAppSelector((state) => state.task);
   const [recordBlinker, setRecordBlinker] = useState<boolean>(false);
   const [timerModal, setTimerModal] = useState<boolean>(false);
@@ -31,7 +34,7 @@ export default function AdditionalHeader() {
   const [clockModal, setClockModal] = useState<boolean>(false);
   const [HeaderClock, setClock] = useState<string>(
     zone
-      ? moment.tz(zone).format(time_format === '1' ? 'DD-MM-YYYY HH:mm' : 'DD-MM-YYYY h:mm a')
+      ? moment.tz(userTimeZoneFromLS ?? zone).format(time_format === '1' ? 'DD-MM-YYYY HH:mm' : 'DD-MM-YYYY h:mm a')
       : moment().format(time_format === '1' ? 'DD-MM-YYYY HH:mm' : 'DD-MM-YYYY h:mm a')
   );
   const [showClock, setShowClock] = useState<{ show: boolean; withDay: boolean; showMinimal: boolean }>({
@@ -76,12 +79,29 @@ export default function AdditionalHeader() {
   }, [isVisible, refetch]);
 
   useEffect(() => {
+    if (dayjs.tz.guess() !== zone && (!userTimeZoneFromLS || userTimeZoneFromLS !== dayjs.tz.guess())) {
+      toast.custom(
+        (t) => (
+          <SaveFilterToast
+            title="You are in a different timezone"
+            body="Would you want to use the current timezone for this location?"
+            toastId={t.id}
+            extended="timeZone"
+            extendedState={dayjs.tz.guess()}
+          />
+        ),
+        {
+          position: 'bottom-right',
+          duration: Infinity
+        }
+      );
+    }
     const headerClockFn = () =>
       window.setInterval(() => {
         setClock(
           zone
             ? dayjs()
-                .tz(zone)
+                .tz(userTimeZoneFromLS ?? zone)
                 .format(time_format === '1' ? 'DD-MM-YYYY HH:mm' : 'DD-MM-YYYY h:mm a')
             : dayjs().format(time_format === '1' ? 'DD-MM-YYYY HH:mm' : 'DD-MM-YYYY h:mm a')
         );

@@ -94,6 +94,9 @@ export const userSettingSlice = createSlice({
     },
     setStatus(state, action: PayloadAction<string>) {
       state.status = action.payload;
+    },
+    setTimeZone(state, action: PayloadAction<string | undefined>) {
+      state.timezone = action.payload;
     }
   }
 });
@@ -105,7 +108,8 @@ export const {
   setShowAvatarUpload,
   setShowConfirmationModal,
   setActiveTab,
-  setStatus
+  setStatus,
+  setTimeZone
 } = userSettingSlice.actions;
 
 export default userSettingSlice.reducer;
