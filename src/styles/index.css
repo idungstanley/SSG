@@ -5,6 +5,7 @@
 @import url('./Spinner.css');
 @import url('./Tooltip.css');
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@500&family=Montserrat&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@700&display=swap");
 
 * {
   margin: 0;
@@ -121,3 +122,57 @@ code {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+.clock {
+  width: 85px;
+  height: 85px;
+  border: 2px solid #333;
+  border-radius: 50%;
+  position: relative;
+}
+
+.disc {
+  width: 2px;
+  height: 2px;
+  background: black;
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.hand {
+  background: #333;
+  position: absolute;
+  bottom: 50%;
+  left: 50%;
+  transform-origin: bottom;
+  transition: transform 0.5s cubic-bezier(0.4, 2.4, 0.3, 1);
+}
+
+.second {
+  width: 1px;
+  height: 46%;
+  background-color: red;
+}
+
+.minute {
+  width: 2px;
+  height: 40%;
+}
+
+.hour {
+  width: 3px;
+  height: 30%;
+}
+
+.number {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -130%);
+  font-size: 0.7rem;
+  color: #333;
+}
+

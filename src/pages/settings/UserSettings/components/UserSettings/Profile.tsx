@@ -2,15 +2,28 @@ import React from 'react';
 import CurrentUser from './CurrentUser';
 import Region from './Region';
 import { useAppSelector, useAppDispatch } from '../../../../../app/hooks';
-import { setShowConfirmationModal, setUserInfo } from '../../../../../features/settings/user/userSettingsSlice';
+import {
+  setClockType,
+  setClocktime,
+  setShowConfirmationModal,
+  setUserInfo
+} from '../../../../../features/settings/user/userSettingsSlice';
 import CurrentUserModal from './CurrentUserModal';
 import UploadAvatar from '../UploadAvatar';
 import { InvalidateQueryFilters } from '@tanstack/react-query';
 
 function Profile() {
-  const { name, email, time_format, date_format, start_week, currentUserModal, showAvatarUpload } = useAppSelector(
-    (state) => state.userSetting
-  );
+  const {
+    name,
+    email,
+    time_format,
+    date_format,
+    start_week,
+    currentUserModal,
+    showAvatarUpload,
+    clock_type,
+    is_clock_time
+  } = useAppSelector((state) => state.userSetting);
   const dispatch = useAppDispatch();
 
   return (
@@ -147,10 +160,38 @@ function Profile() {
                   <option value="yyyy/mm/dd">yyyy/mm/dd</option>
                 </select>
               </div>
+              <div style={{ width: '48%' }}>
+                <h5 className="font-semibold" style={{ fontSize: '15px' }}>
+                  Clock Type
+                </h5>
+                <select
+                  name="clock_time"
+                  className="h-10 rounded my w-full"
+                  value={clock_type}
+                  onChange={(e) => dispatch(setClockType(e.target.value))}
+                  style={{ fontSize: '15px' }}
+                >
+                  <option value="d">Digital</option>
+                  <option value="a">Analog</option>
+                </select>
+              </div>
+            </div>
+            <div className="my-3 flex justify-between w-full">
+              <div style={{ width: '10%' }} className="flex items-center">
+                <label className="switch w-full">
+                  <input
+                    type="checkbox"
+                    checked={is_clock_time ? true : false}
+                    onClick={() => dispatch(setClocktime(is_clock_time === 1 ? 0 : 1))}
+                  />
+                  <div className={`slider ${is_clock_time === 1 ? 'checked' : ''}`}></div>
+                </label>
+              </div>
+              <span className="w-full">Show Toolbar Clock?</span>
             </div>
             <div className="w-full flex justify-center">
               <button
-                className="flex items-center justify-center text-white font-bold h-10 px-3 rounded my-8 border-2 text-red-500 border-red-500 w-52"
+                className="flex items-center justify-center font-bold h-10 px-3 rounded my-8 border-2 text-red-500 border-red-500 w-52"
                 style={{ fontSize: '15px' }}
               >
                 Delete Account

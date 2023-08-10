@@ -30,7 +30,7 @@ export default function AdditionalHeader() {
   const [isVisible, setIsVisible] = useState<boolean>(true);
   const { activeTabId: tabsId, timerLastMemory, activeItemId } = useAppSelector((state) => state.workspace);
   const { period } = useAppSelector((state) => state.task);
-  const { timezone: zone, date_format, time_format } = useAppSelector((state) => state.userSetting);
+  const { timezone: zone, date_format, time_format, is_clock_time } = useAppSelector((state) => state.userSetting);
   const [clockModal, setClockModal] = useState<boolean>(false);
   const [HeaderClock, setClock] = useState<string>(
     zone
@@ -205,32 +205,34 @@ export default function AdditionalHeader() {
         <HiOutlineUpload className="w-5 h-5" />
         <BsFillGrid3X3GapFill className="w-5 h-5" />
         <MdHelpOutline className="w-5 h-5" />
-        <div
-          className="relative w-16 font-semibold text-alsoit-text-lg text-alsoit-text border-alsoit-border-base border-alsoit-text rounded-md p-0.5 flex justify-center flex-col space-y-0 cursor-pointer"
-          onClick={() => setClockModal(!clockModal)}
-          onMouseEnter={() => setShowClock((prev) => ({ ...prev, showMinimal: true }))}
-          onMouseLeave={() => setShowClock((prev) => ({ ...prev, showMinimal: false }))}
-        >
-          <span className="text-center text-alsoit-text-md">
-            {dayjs(HeaderClock).format(time_format === '1' ? 'HH:mm' : 'h:mm a')}
-          </span>
-          <span className="text-center text-alsoit-text-md">
-            {dayjs(HeaderClock, 'DD-MM-YYYY hh:mm').format(date_format?.toUpperCase() ?? 'MM-DD-YYYY')}
-          </span>
-          {clockModal && (
-            <HeaderModal clickAway={true} toggleFn={setClockModal} styles="top-10 right-32 w-44">
-              <HeaderTimeModal />
-            </HeaderModal>
-          )}
-          {showClock.showMinimal && !clockModal && (
-            <HeaderModal toggleFn={setClockModal} styles="top-10 -right-5 h-12 w-28">
-              <span className="bg-alsoit-gray-50 font-semibold text-alsoit-text-lg shadow-lg rounded border-alsoit-border-base border-alsoit-gray-75 text-center">
-                <p>{dayjs().format('DD MMMM, YYYY')}</p>
-                <p>{dayjs().format('dddd')}</p>
-              </span>
-            </HeaderModal>
-          )}
-        </div>
+        {is_clock_time === 1 && (
+          <div
+            className="relative w-16 font-semibold text-alsoit-text-lg text-alsoit-text border-alsoit-border-base border-alsoit-text rounded-md p-0.5 flex justify-center flex-col space-y-0 cursor-pointer"
+            onClick={() => setClockModal(!clockModal)}
+            onMouseEnter={() => setShowClock((prev) => ({ ...prev, showMinimal: true }))}
+            onMouseLeave={() => setShowClock((prev) => ({ ...prev, showMinimal: false }))}
+          >
+            <span className="text-center text-alsoit-text-md">
+              {dayjs(HeaderClock).format(time_format === '1' ? 'HH:mm' : 'h:mm a')}
+            </span>
+            <span className="text-center text-alsoit-text-md">
+              {dayjs(HeaderClock, 'DD-MM-YYYY hh:mm').format(date_format?.toUpperCase() ?? 'MM-DD-YYYY')}
+            </span>
+            {clockModal && (
+              <HeaderModal clickAway={true} toggleFn={setClockModal} styles="top-10 right-32 w-44">
+                <HeaderTimeModal />
+              </HeaderModal>
+            )}
+            {showClock.showMinimal && !clockModal && (
+              <HeaderModal toggleFn={setClockModal} styles="top-10 -right-5 h-12 w-28">
+                <span className="bg-alsoit-gray-50 font-semibold text-alsoit-text-lg shadow-lg rounded border-alsoit-border-base border-alsoit-gray-75 text-center">
+                  <p>{dayjs().format('DD MMMM, YYYY')}</p>
+                  <p>{dayjs().format('dddd')}</p>
+                </span>
+              </HeaderModal>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );

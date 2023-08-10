@@ -64,6 +64,8 @@ export interface IUserData {
   theme_color: string | null;
   timezone: string;
   time_format: string;
+  clock_type: string;
+  is_clock_time: number;
 }
 
 export interface IUserRes {
