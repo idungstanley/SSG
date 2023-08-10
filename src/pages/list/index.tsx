@@ -16,22 +16,24 @@ import TaskQuickAction from '../workspace/tasks/component/taskQuickActions/TaskQ
 import { List } from '../../components/Views/ui/List/List';
 import { Header } from '../../components/TasksHeader';
 import { GroupHorizontalScroll } from '../../components/ScrollableContainer/GroupHorizontalScroll';
+import { EntityType } from '../../utils/EntityTypes/EntityType';
 
 export function ListPage() {
   const dispatch = useAppDispatch();
   const { listId, taskId } = useParams();
+
   const { listView, filterTaskByAssigneeIds } = useAppSelector((state) => state.task);
 
   const containerRef = useRef<HTMLDivElement>(null);
 
   // get list details to set active entity
-  const { data: list } = UseGetListDetails({ activeItemId: listId, activeItemType: 'list' });
+  const { data: list } = UseGetListDetails({ activeItemId: listId, activeItemType: EntityType.list });
   const listName = list?.data.list.name ?? '';
 
   useEffect(() => {
     if (list) {
       if (listId && !taskId) {
-        dispatch(setActiveItem({ activeItemId: listId, activeItemType: 'list', activeItemName: listName }));
+        dispatch(setActiveItem({ activeItemId: listId, activeItemType: EntityType.list, activeItemName: listName }));
         dispatch(setActiveEntityName(listName));
       }
     }

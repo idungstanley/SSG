@@ -32,7 +32,7 @@ export const useMoveHubsService = () => {
   const { hubId, walletId, listId } = useParams();
 
   const id = hubId ?? walletId ?? listId;
-  const type = hubId ? 'hub' : walletId ? 'wallet' : 'list';
+  const type = hubId ? EntityType.hub : walletId ? EntityType.wallet : EntityType.list;
 
   const { filterTaskByAssigneeIds: assigneeUserId } = useAppSelector((state) => state.task);
   const { sortAbleArr } = useAppSelector((state) => state.task);
@@ -288,8 +288,8 @@ const addToFavorite = (data: {
 }) => {
   let newType: string | null | undefined = null;
   const { query, type } = data;
-  if (type === 'hubs' || type === 'subhub') {
-    newType = 'hub';
+  if (type === 'hubs' || type === EntityType.subHub) {
+    newType = EntityType.hub;
   } else {
     newType = type;
   }

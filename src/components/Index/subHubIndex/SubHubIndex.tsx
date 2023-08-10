@@ -15,6 +15,7 @@ import HubItem from '../../tasks/HubItem';
 import { setShowPilotSideOver } from '../../../features/general/slideOver/slideOverSlice';
 import { DragOverlay } from '@dnd-kit/core';
 import HubItemOverlay from '../../tasks/HubItemOverLay';
+import { EntityType } from '../../../utils/EntityTypes/EntityType';
 
 export default function SubHubIndex() {
   const dispatch = useDispatch();
@@ -24,7 +25,6 @@ export default function SubHubIndex() {
   const { data, status } = useGetSubHub({
     parentId: currentItemId
   });
-  const type = 'subhub';
 
   if (status === 'success') {
     data?.data?.hubs.map(({ parent_id }) => dispatch(setHubParentId(parent_id)));
@@ -33,20 +33,20 @@ export default function SubHubIndex() {
   const { id: subHubExtId } = subHubExt;
 
   const handleClick = (id: string) => {
-    dispatch(setSubHubExt({ id: id, type: type }));
+    dispatch(setSubHubExt({ id: id, type: EntityType.subHub }));
     setShowSubChidren(id);
     dispatch(setCreateWLID(id));
     dispatch(
       setActiveItem({
-        activeItemType: 'subhub',
+        activeItemType: EntityType.subHub,
         activeItemId: id
       })
     );
-    dispatch(setActiveEntity({ id: id, type: 'hub' }));
+    dispatch(setActiveEntity({ id: id, type: EntityType.hub }));
     dispatch(
       getCurrSubHubId({
         currSubHubId: id,
-        currSubHubIdType: 'subhub'
+        currSubHubIdType: EntityType.subHub
       })
     );
     if (showSubChildren === id) {
@@ -55,26 +55,25 @@ export default function SubHubIndex() {
   };
 
   const handleLocation = (id: string, name: string) => {
-    dispatch(setSubHubExt({ id: id, type: type }));
+    dispatch(setSubHubExt({ id: id, type: EntityType.subHub }));
     dispatch(setShowHub(true));
     dispatch(setActiveEntityName(name));
     dispatch(
       setActiveItem({
         activeItemId: id,
-        activeItemType: 'subhub',
+        activeItemType: EntityType.subHub,
         activeItemName: name
       })
     );
     dispatch(
       setShowPilotSideOver({
         id: id,
-        type: 'subhub',
+        type: EntityType.subHub,
         show: true,
         title: name
       })
     );
-    // navigate(`/h/${id}`);
-    dispatch(setActiveEntity({ id: id, type: 'hub' }));
+    dispatch(setActiveEntity({ id: id, type: EntityType.hub }));
   };
 
   const { draggableItemId } = useAppSelector((state) => state.list);

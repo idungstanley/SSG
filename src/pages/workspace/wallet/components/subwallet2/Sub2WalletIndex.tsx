@@ -12,6 +12,7 @@ import { IList } from '../../../../../features/hubs/hubs.interfaces';
 import { DragOverlay } from '@dnd-kit/core';
 import OverlayList from '../../../../../components/tasks/OverlayList';
 import HubItemOverlay from '../../../../../components/tasks/HubItemOverLay';
+import { EntityType } from '../../../../../utils/EntityTypes/EntityType';
 
 interface SubWalletIndexProps {
   paddingLeft?: string | number;
@@ -23,17 +24,18 @@ interface dataProps {
   name: string;
 }
 
-function SubWalletIndex({ paddingLeft = '32', currWalId }: SubWalletIndexProps) {
+function SubWalletIndex({ paddingLeft = '40', currWalId }: SubWalletIndexProps) {
   const dispatch = useDispatch();
   const { toggleArchiveWallet } = useAppSelector((state) => state.wallet);
+  const { showMenuDropdown } = useAppSelector((state) => state.hub);
 
   const [showSubWallet, setShowSubWallet] = useState<string[]>([]);
   const [finalParentId, setFinalWalletParentId] = useState('');
+
   const { data: subwallet } = getWalletServices({
     Archived: toggleArchiveWallet,
     parentId: currWalId
   });
-  const { showMenuDropdown } = useAppSelector((state) => state.hub);
 
   const handleShowSubWallet = (id: string) => {
     if (showSubWallet.includes(id)) {
@@ -50,7 +52,7 @@ function SubWalletIndex({ paddingLeft = '32', currWalId }: SubWalletIndexProps) 
     dispatch(setShowHub(true));
     navigate(`tasks/w/${id}`);
     dispatch(setActiveItem({ activeItemType: type, activeItemId: id }));
-    dispatch(setActiveEntity({ id: id, type: 'wallet' }));
+    dispatch(setActiveEntity({ id, type: EntityType.wallet }));
   };
 
   const { draggableItemId } = useAppSelector((state) => state.list);

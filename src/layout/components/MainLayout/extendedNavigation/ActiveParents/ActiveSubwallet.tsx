@@ -6,6 +6,7 @@ import { setActiveEntity, setActiveItem } from '../../../../../features/workspac
 import MenuDropdown from '../../../../../components/Dropdown/MenuDropdown';
 import { useAppSelector } from '../../../../../app/hooks';
 import { dataProps } from '../../../../../components/Index/walletIndex/WalletIndex';
+import { EntityType } from '../../../../../utils/EntityTypes/EntityType';
 
 interface SubWalletIndexProps {
   walletParentId: string | null;
@@ -14,11 +15,12 @@ interface SubWalletIndexProps {
 
 function ActiveSubWallet({ padding = 'pl-8' }: SubWalletIndexProps) {
   const dispatch = useDispatch();
-  const { currentWalletParentId, toggleArchiveWallet } = useAppSelector((state) => state.wallet);
+
+  const { currentWalletId, toggleArchiveWallet } = useAppSelector((state) => state.wallet);
 
   const { data: subwallet } = getWalletServices({
     Archived: toggleArchiveWallet,
-    parentId: currentWalletParentId
+    parentId: currentWalletId
   });
   const { activeItemId } = useAppSelector((state) => state.workspace);
   const { showMenuDropdown } = useAppSelector((state) => state.hub);
@@ -27,7 +29,7 @@ function ActiveSubWallet({ padding = 'pl-8' }: SubWalletIndexProps) {
   const handleLocation = (id: string, type = 'subWallet') => {
     navigate(`tasks/w/${id}`);
     dispatch(setActiveItem({ activeItemType: type, activeItemId: id }));
-    dispatch(setActiveEntity({ id: id, type: 'wallet' }));
+    dispatch(setActiveEntity({ id, type: EntityType.wallet }));
   };
 
   return (

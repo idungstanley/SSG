@@ -5,6 +5,7 @@ import MiniDatePicker from '../../../DatePicker/MiniCalendar';
 import { useParams } from 'react-router-dom';
 import { UseGetFullTaskList, getTaskListService } from '../../../../features/task/taskService';
 import { useAppSelector } from '../../../../app/hooks';
+import { EntityType } from '../../../../utils/EntityTypes/EntityType';
 // import Agenda from './Agenda';
 
 export default function Calendar() {
@@ -17,7 +18,7 @@ export default function Calendar() {
   const { data: taskList } = UseGetFullTaskList({ itemId: activeItemId, itemType: activeItemType });
 
   const entityHubData = () => {
-    if (activeItemType === 'hub' || activeItemType === 'wallet')
+    if (activeItemType === EntityType.hub || activeItemType === EntityType.wallet)
       return taskList?.pages.flatMap((data) => data.data.tasks);
   };
 

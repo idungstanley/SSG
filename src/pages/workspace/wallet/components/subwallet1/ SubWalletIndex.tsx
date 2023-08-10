@@ -24,15 +24,16 @@ interface dataProps {
 
 function SubWalletIndex({ paddingLeft = '30' }: SubWalletIndexProps) {
   const dispatch = useDispatch();
-  const { currentWalletParentId, toggleArchiveWallet } = useAppSelector((state) => state.wallet);
 
+  const { currentWalletId, toggleArchiveWallet } = useAppSelector((state) => state.wallet);
   const { draggableItemId } = useAppSelector((state) => state.list);
 
   const [showSubWallet, setShowSubWallet] = useState<string[]>([]);
   const [currWalId, setCurrWalId] = useState('');
+
   const { data: subwallet } = getWalletServices({
     Archived: toggleArchiveWallet,
-    parentId: currentWalletParentId
+    parentId: currentWalletId
   });
   const { showMenuDropdown } = useAppSelector((state) => state.hub);
 

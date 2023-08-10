@@ -5,6 +5,7 @@ import { UseGetWalletDetails } from '../../../../../../features/wallet/walletSer
 import { UseGetListDetails } from '../../../../../../features/list/listService';
 import { getOneTaskServices } from '../../../../../../features/task/taskService';
 import PropertyDetails from './subDetailsIndex/PropertyDetails';
+import { EntityType } from '../../../../../../utils/EntityTypes/EntityType';
 
 export default function DetailsIndex() {
   const { pilotSideOver } = useAppSelector((state) => state.slideOver);
@@ -27,13 +28,13 @@ export default function DetailsIndex() {
   const taskDetails = task?.data.task;
 
   const showDetailsType = () => {
-    if (activeItemType == 'hub' || activeItemType == 'subhub') {
+    if (activeItemType === EntityType.hub || activeItemType === EntityType.subHub) {
       return <PropertyDetails Details={hub?.data.hub} key={hub?.data.hub.id} />;
-    } else if (activeItemType == 'task') {
+    } else if (activeItemType === EntityType.task) {
       return <PropertyDetails Details={taskDetails} key={taskDetails?.id} />;
-    } else if (activeItemType == 'wallet' || activeItemType == 'subWallet') {
+    } else if (activeItemType === EntityType.wallet || activeItemType === 'subWallet') {
       return <PropertyDetails Details={wallet?.data.wallet} key={wallet?.data.wallet.id} />;
-    } else if (activeItemType == 'list') {
+    } else if (activeItemType === EntityType.list) {
       return <PropertyDetails Details={list?.data.list} key={list?.data.list.id} />;
     }
   };

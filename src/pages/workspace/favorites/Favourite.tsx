@@ -10,6 +10,7 @@ import { AvatarWithInitials } from '../../../components';
 import { MdFolder } from 'react-icons/md';
 import { FiList } from 'react-icons/fi';
 import { getInitials } from '../../../app/helpers';
+import { EntityType } from '../../../utils/EntityTypes/EntityType';
 
 interface nameType {
   item: {
@@ -23,8 +24,10 @@ interface nameType {
 function Favourite({ item }: nameType) {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const [favName, setFavName] = useState<string>(item.name);
+
   const { showFavEditInput, triggerFavUpdate, favUpdateName } = useAppSelector((state) => state.hub);
+
+  const [favName, setFavName] = useState<string>(item.name);
 
   UseUpdateFavService({
     favId: showFavEditInput,
@@ -55,7 +58,7 @@ function Favourite({ item }: nameType) {
     <div className="hover:bg-gray-100 py-0.5 h-6 px-2 group">
       <div className="w-full flex justify-between  items-center  relative">
         <div className="flex">
-          {item.model_type === 'hub' && (
+          {item.model_type === EntityType.hub && (
             <AvatarWithInitials
               initials={getInitials(item.name)}
               height="h-4"
@@ -64,8 +67,8 @@ function Favourite({ item }: nameType) {
               roundedStyle="rounded"
             />
           )}
-          {item.model_type === 'wallet' && <MdFolder className="w-4 h-4" />}
-          {item.model_type === 'list' && <FiList className="w-4 h-4" />}
+          {item.model_type === EntityType.wallet && <MdFolder className="w-4 h-4" />}
+          {item.model_type === EntityType.list && <FiList className="w-4 h-4" />}
           {showFavEditInput === item.id ? (
             <form
               onSubmit={(e) => {

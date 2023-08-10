@@ -22,22 +22,30 @@ import { UseGetHubDetails } from '../../../../../features/hubs/hubService';
 import TaskMapTemplate from '../../../tasks/component/views/hubLevel/TaskMapTemplate';
 import ActiveHub from '../../../../../layout/components/MainLayout/extendedNavigation/ActiveParents/ActiveHub';
 import AdditionalHeader from '../../../../../layout/components/MainLayout/Header/AdditionHeader';
+import { EntityType } from '../../../../../utils/EntityTypes/EntityType';
 
 function RenderHubs() {
-  const [TaskDataGroupings, setTaskDataGroupings] = useState<TaskDataGroupingsProps | unknown>({});
+  const dispatch = useAppDispatch();
+  const { hubId } = useParams();
+
   const { activeEntity } = useAppSelector((state) => state.workspace);
   const { groupByStatus, filterTaskByAssigneeIds } = useAppSelector((state) => state.task);
-  const dispatch = useAppDispatch();
-  const containerRef = useRef<HTMLDivElement>(null);
   const { listView, tableView, boardView, calenderView, mapView } = useAppSelector((state) => state.task);
-  const { hubId } = useParams();
-  const hubType = 'hub';
-  const { data } = UseGetHubDetails({ activeItemId: hubId, activeItemType: hubType });
+
+  const [TaskDataGroupings, setTaskDataGroupings] = useState<TaskDataGroupingsProps | unknown>({});
+
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const { data } = UseGetHubDetails({ activeItemId: hubId, activeItemType: EntityType.hub });
   const hubName = data?.data.hub.name;
   useEffect(() => {
     if (hubId) {
       dispatch(
-        setActiveItem({ activeItemId: hubId, activeItemType: activeEntity.type || 'hub', activeItemName: hubName })
+        setActiveItem({
+          activeItemId: hubId,
+          activeItemType: activeEntity.type || EntityType.hub,
+          activeItemName: hubName
+        })
       );
       dispatch(setActiveEntityName(hubName));
     }
@@ -51,7 +59,7 @@ function RenderHubs() {
     fetchNextPage
   } = UseGetFullTaskList({
     itemId: hubId,
-    itemType: hubType,
+    itemType: EntityType.hub,
     assigneeUserId: filterTaskByAssigneeIds
   });
   const unFilteredTaskData = useMemo(() => TaskFullList?.pages.flatMap((page) => page.data.tasks), [TaskFullList]);

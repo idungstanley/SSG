@@ -34,9 +34,6 @@ interface workspaceState {
   activeItemType?: string | null;
   activeItemName: string | null | undefined;
   activeEntityName: string | null | undefined;
-  currentWalletId: string | null;
-  currentSubWalletId: string | null;
-  currentWalletName: string | null | undefined;
   showPilot: boolean;
   createEntityType: null | string;
   showIndependentPilot: boolean;
@@ -101,9 +98,6 @@ const initialState: workspaceState = {
   activeItemName: null,
   createEntityType: null,
   activeEntityName: null,
-  currentSubWalletId: null,
-  currentWalletId: null,
-  currentWalletName: null,
   showPilot: true,
   showPilotIconView: false,
   showPilotListView: false,
@@ -263,9 +257,6 @@ export const wsSlice = createSlice({
     setActiveEntityName(state, action: PayloadAction<string | undefined | null>) {
       state.activeEntityName = action.payload;
     },
-    setCurrentWalletId(state, action: PayloadAction<string | null>) {
-      state.currentWalletId = action.payload;
-    },
     setActiveSubCommunicationTabId(state, action: PayloadAction<number | null>) {
       state.activeSubCommunicationTabId = action.payload;
     },
@@ -286,12 +277,6 @@ export const wsSlice = createSlice({
     },
     setActiveSubChecklistTabId(state, action: PayloadAction<number | null>) {
       state.activeSubChecklistTabId = action.payload;
-    },
-    setCurrentWalletName(state, action: PayloadAction<string | null | undefined>) {
-      state.currentWalletName = action.payload;
-    },
-    setCurrenSubtWalletId(state, action: PayloadAction<string | null>) {
-      state.currentSubWalletId = action.payload;
     },
     setExtendedSidebarWidth(state, action: PayloadAction<number>) {
       state.extendedSidebarWidth = action.payload;
@@ -379,9 +364,6 @@ export const {
   setIsResize,
   setShowOverlay,
   setActiveEntityName,
-  setCurrentWalletId,
-  setCurrenSubtWalletId,
-  setCurrentWalletName,
   setShowPilot,
   setShowPilotIconView,
   setActiveSubCommunicationTabId,

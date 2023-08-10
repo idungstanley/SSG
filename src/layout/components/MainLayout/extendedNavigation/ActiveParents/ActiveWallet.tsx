@@ -4,19 +4,15 @@ import { useGetHubWallet } from '../../../../../features/hubs/hubService';
 
 import { useDispatch } from 'react-redux';
 import { useAppSelector } from '../../../../../app/hooks';
-import {
-  setActiveEntity,
-  setActiveEntityName,
-  setActiveItem,
-  setCurrentWalletId,
-  setCurrentWalletName
-} from '../../../../../features/workspace/workspaceSlice';
+import { setActiveEntity, setActiveEntityName, setActiveItem } from '../../../../../features/workspace/workspaceSlice';
 import MenuDropdown from '../../../../../components/Dropdown/MenuDropdown';
 import SubDropdown from '../../../../../components/Dropdown/SubDropdown';
 import {
   setCreateListSlideOverVisibility,
   setCreateWalletSlideOverVisibility
 } from '../../../../../features/general/slideOver/slideOverSlice';
+import { setCurrentWalletId, setCurrentWalletName } from '../../../../../features/wallet/walletSlice';
+import { EntityType } from '../../../../../utils/EntityTypes/EntityType';
 
 interface WalletIndexProps {
   showHubList: boolean;
@@ -25,16 +21,17 @@ interface WalletIndexProps {
 
 function ActiveWallet({ showHubList, getCurrentHubId }: WalletIndexProps) {
   const dispatch = useDispatch();
-  const { data } = useGetHubWallet(getCurrentHubId);
+  const navigate = useNavigate();
+
   const { activeItemId } = useAppSelector((state) => state.workspace);
-  // const { currentWalletId } = useAppSelector((state) => state.wallet);
   const { SubMenuId, showMenuDropdown } = useAppSelector((state) => state.hub);
 
-  const navigate = useNavigate();
-  const handleLocation = (id: string, name: string, type = 'wallet') => {
+  const { data } = useGetHubWallet(getCurrentHubId);
+
+  const handleLocation = (id: string, name: string, type = EntityType.wallet) => {
     navigate(`tasks/w/${id}`);
     dispatch(setActiveItem({ activeItemType: type, activeItemId: id }));
-    dispatch(setActiveEntity({ id: id, type: type }));
+    dispatch(setActiveEntity({ id, type }));
     dispatch(setCurrentWalletName(name));
     dispatch(setCurrentWalletId(id));
     dispatch(setActiveEntityName(name));

@@ -4,11 +4,12 @@ import SubHubIndex from '../../../../../../components/Index/subHubIndex/SubHubIn
 import ListIndex from '../../../../../../components/Index/listIndex/ListIndex';
 import InboxIndex from '../../../../../../components/Index/InboxIndex';
 import { useAppSelector } from '../../../../../../app/hooks';
+import { EntityType } from '../../../../../../utils/EntityTypes/EntityType';
 
 export default function HubData() {
   const { currentItemId, currentItemType } = useAppSelector((state) => state.workspace);
 
-  return currentItemType === 'hub' ? (
+  return currentItemType === EntityType.hub ? (
     <>
       <SubHubIndex />
       <WalletIndex showHubList={!false} getCurrentHubId={currentItemId} paddingLeft="10" />

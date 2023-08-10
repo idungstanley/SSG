@@ -3,11 +3,12 @@ import WalletIndex from '../../Index/walletIndex/WalletIndex';
 import ListIndex from '../../Index/listIndex/ListIndex';
 import InboxIndex from '../../Index/InboxIndex';
 import { useAppSelector } from '../../../app/hooks';
+import { EntityType } from '../../../utils/EntityTypes/EntityType';
 
 export default function SHubDropdownList() {
   const { currSubHubId, currSubHubIdType } = useAppSelector((state) => state.hub);
 
-  return currSubHubIdType === 'subhub' ? (
+  return currSubHubIdType === EntityType.subHub ? (
     <>
       <div>
         <WalletIndex showHubList={!false} getCurrentHubId={currSubHubId} paddingLeft="25" />

@@ -25,6 +25,7 @@ import TemplatesIcon from '../../../../../assets/icons/Templates';
 import Templates from '../../../../../components/Pilot/components/Templates';
 import CalendarIcon from '../../../../../assets/icons/CalendarIcon';
 import Calendar from '../../../../../components/Pilot/components/Calendar';
+import { EntityType } from '../../../../../utils/EntityTypes/EntityType';
 
 const sections = [
   {
@@ -142,13 +143,12 @@ export default function PilotSection() {
   // set data for pilot
   useEffect(() => {
     const selectedItemId = listId;
-    const selectedItemType = 'list';
 
     if (selectedItemId) {
       dispatch(
         setShowPilotSideOver({
           id: selectedItemId,
-          type: selectedItemType,
+          type: EntityType.list,
           show: true,
           title: activeItemName ?? ''
         })
