@@ -19,7 +19,7 @@ interface TaskCurrentPriorityProps {
 }
 export default function PriorityDropdown({ TaskCurrentPriority }: TaskCurrentPriorityProps) {
   const [priorityValue, setPriority] = useState('');
-  const { currentTaskPriorityId, selectedTasksArray } = useAppSelector((state) => state.task);
+  const { selectedTasksArray } = useAppSelector((state) => state.task);
   const priorityList: priorityType[] = [
     {
       id: 1,
@@ -113,7 +113,10 @@ export default function PriorityDropdown({ TaskCurrentPriority }: TaskCurrentPri
                     TaskCurrentPriority === i.title ? `bg-${i.bg}-200` : '',
                     'flex items-center px-4 py-2 text-sm text-gray-600 text-left space-x-2 w-full'
                   )}
-                  onClick={i.handleClick}
+                  onClick={() => {
+                    i.handleClick();
+                    closeModal();
+                  }}
                 >
                   <p>
                     <AiFillFlag className="h-5 w-7  " aria-hidden="true" style={{ color: `${i.color}` }} />

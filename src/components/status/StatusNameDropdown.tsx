@@ -68,7 +68,10 @@ export default function StatusNameDropdown({ TaskCurrentStatus, statusName }: St
                     statusName?.name.toLowerCase() === statuses.name.toLowerCase() ? `bg-${statuses.color}-200` : '',
                     'flex items-center px-4 py-2 text-sm text-gray-600 text-left space-x-2 w-full'
                   )}
-                  onClick={() => handleUpdateTaskStatus(statuses.id)}
+                  onClick={() => {
+                    handleUpdateTaskStatus(statuses.id);
+                    closeModal();
+                  }}
                 >
                   <p>
                     <RiCheckboxBlankFill
