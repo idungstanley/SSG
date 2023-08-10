@@ -26,11 +26,12 @@ export default function DatePicker({ styles, width, height, range, toggleFn }: D
   dayjs.extend(timezone);
   dayjs.extend(utc);
   const currentDate = dayjs();
+  const userTimeZoneFromLS: string | null = localStorage.getItem('userTimeZone');
   const { timezone: zone, time_format } = useAppSelector((state) => state.userSetting);
   const sectionRef = useRef<HTMLElement>(null);
   const [time, setTime] = useState<string>(
     dayjs()
-      .tz(zone)
+      .tz(userTimeZoneFromLS ?? zone)
       .format(time_format === '1' ? 'ddd, DD MMM YYYY HH:mm' : 'ddd, DD MMM YYYY h:mm A')
   );
   const [openSideBar, setOpenSideBar] = useState<boolean>(false);

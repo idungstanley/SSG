@@ -94,6 +94,7 @@ export function ListBox({
           title="This view has unsaved Changes"
           body="Please Kindly save changes or cancel to discard"
           toastId={t.id}
+          extended="taskFilter"
         />
       ),
       {
