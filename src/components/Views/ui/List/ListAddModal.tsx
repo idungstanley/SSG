@@ -17,6 +17,7 @@ import { MdOutlineSendToMobile } from 'react-icons/md';
 import { CiEdit } from 'react-icons/ci';
 import { BsArchive, BsCheck2All } from 'react-icons/bs';
 import { RiDeleteBin6Line } from 'react-icons/ri';
+import { IoIosArrowForward } from 'react-icons/io';
 
 export default function ListAddModal({ handleCheckedGroupTasks }: { handleCheckedGroupTasks: () => void }) {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -32,72 +33,84 @@ export default function ListAddModal({ handleCheckedGroupTasks }: { handleChecke
     {
       id: 1,
       icon: <AiOutlinePlus />,
+      arrowRight: <IoIosArrowForward />,
       label: 'Create new',
       handleClick: () => null
     },
     {
       id: 2,
       icon: <GrEdit />,
+      arrowRight: null,
       label: 'Rename',
       handleClick: () => null
     },
     {
       id: 3,
       icon: <AiOutlineLink />,
+      arrowRight: null,
       label: 'Copy link',
       handleClick: () => null
     },
     {
       id: 4,
       icon: <AiOutlineStar />,
+      arrowRight: null,
       label: 'Add to favorite',
       handleClick: () => null
     },
     {
       id: 5,
       icon: <HiOutlineDuplicate />,
+      arrowRight: null,
       label: 'Duplicate',
       handleClick: () => null
     },
     {
       id: 6,
       icon: <MdOutlineSendToMobile />,
+      arrowRight: null,
       label: 'Move',
       handleClick: () => null
     },
     {
       id: 7,
       icon: <HiOutlineMail />,
+      arrowRight: null,
       label: 'Email to List',
       handleClick: () => null
     },
     {
       id: 8,
       icon: <HiOutlineInformationCircle />,
+      arrowRight: null,
       label: 'List Info',
       handleClick: () => null
     },
     {
       id: 9,
       icon: <CiEdit />,
+      arrowRight: <IoIosArrowForward />,
       label: 'Templates',
       handleClick: () => null
     },
     {
       id: 10,
       icon: <AiOutlineSetting />,
+      arrowRight: <IoIosArrowForward />,
       label: 'List setting',
       handleClick: () => null
     },
     {
       id: 11,
       icon: <BsArchive />,
+      arrowRight: null,
       label: 'Archive',
       handleClick: () => null
     },
     {
       id: 12,
       icon: <RiDeleteBin6Line />,
+      arrowRight: null,
       label: 'Delete',
       handleClick: () => null
     }
@@ -125,27 +138,35 @@ export default function ListAddModal({ handleCheckedGroupTasks }: { handleChecke
         }}
       >
         {items.map((item) => (
-          <MenuItem
-            key={item.label}
-            onClick={() => {
-              item.handleClick();
-              handleClose();
-            }}
-          >
-            <div className="flex items-center space-x-1">
-              <p className="mr-2">{item.icon}</p>
-              <p>{item.label}</p>
+          <>
+            <div className="w-full m-2">
+              {(item.label == 'List Info' || item.label == 'Archive') && <p className="border-t-2 mr-5"></p>}
             </div>
-          </MenuItem>
+            <MenuItem
+              key={item.label}
+              onClick={() => {
+                item.handleClick();
+                handleClose();
+              }}
+            >
+              <div className="flex items-center space-x-1 w-full ">
+                <p className="mr-2">{item.icon}</p>
+                <p>{item.label}</p>
+              </div>
+              {item.arrowRight}
+            </MenuItem>
+          </>
         ))}
+        <p className="border-t-2"></p>
         <p
-          className="border-y flex items-center p-2 m-3 cursor-pointer text-white rounded-md"
+          className="border-y-2 flex items-center p-2 mx-3 my-2 cursor-pointer text-white rounded-md"
           style={{ backgroundColor: '#5A43EA' }}
         >
           <AiOutlineShareAlt className="mr-2" />
           Sharing & Permissions
         </p>
-        <p
+        <p className="border-t-2"></p>
+        <MenuItem
           className="p-3 flex items-center cursor-pointer"
           onClick={() => {
             handleCheckedGroupTasks();
@@ -153,7 +174,7 @@ export default function ListAddModal({ handleCheckedGroupTasks }: { handleChecke
         >
           <BsCheck2All className="mr-2" />
           Select all
-        </p>
+        </MenuItem>
       </Menu>
     </div>
   );
