@@ -39,6 +39,12 @@ export interface IUserSettings {
   updated_at: string;
 }
 
+export interface IUserSettingRes {
+  data: {
+    settings: IUserSettings;
+  };
+}
+
 export interface IUserSettingsRes {
   data: {
     settings: IUserSettings[];

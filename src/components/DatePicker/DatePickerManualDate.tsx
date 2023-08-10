@@ -6,7 +6,6 @@ import { setHistoryMemory, setTaskSelectedDate } from '../../features/task/taskS
 import dayjs from 'dayjs';
 import ReusableSelect from '../../utils/TimeDropDown';
 import { createDynamicTimeComponent } from '../../utils/calendar';
-import { CloseBtn } from '../Buttons/CloseButton';
 import CalendarIcon from '../../assets/icons/CalendarIcon';
 import CancelIcon from '../../assets/icons/Cancel';
 
@@ -24,6 +23,7 @@ export function DatePickerManualDates({ range }: DatePickerManualDatesProps) {
     dueIcon: false,
     startIcon: false
   });
+  const [timeInterval, setTimeInterval] = useState<15 | 30>(15);
   const dispatch = useAppDispatch();
 
   const handleFilterDateDispatch = () => {
@@ -126,7 +126,9 @@ export function DatePickerManualDates({ range }: DatePickerManualDatesProps) {
               </div>
               {selectedDate?.date && taskTime?.from ? (
                 <ReusableSelect
-                  options={createDynamicTimeComponent(15, timezone)}
+                  intervalFn={setTimeInterval}
+                  timeInterval={timeInterval}
+                  options={createDynamicTimeComponent(timeInterval, timezone)}
                   value={HistoryFilterMemory?.time?.from || ''}
                   onclick={(e: string) => {
                     dispatch(
@@ -180,7 +182,9 @@ export function DatePickerManualDates({ range }: DatePickerManualDatesProps) {
               </div>
               {selectedDate?.date && taskTime?.to ? (
                 <ReusableSelect
-                  options={createDynamicTimeComponent(15, timezone)}
+                  intervalFn={setTimeInterval}
+                  timeInterval={timeInterval}
+                  options={createDynamicTimeComponent(timeInterval, timezone)}
                   value={HistoryFilterMemory?.time?.to || ''}
                   style="-left-44 top-2"
                   onclick={(e: string) => {
