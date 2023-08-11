@@ -185,13 +185,13 @@ export function Head({
               style={{ backgroundColor: headerStatusColor }}
             >
               <div>
-                <div className=" items-center space-x-1 viewSettings" onClick={(e) => e.stopPropagation()}>
+                {/* <div className=" items-center space-x-1 viewSettings" onClick={(e) => e.stopPropagation()}>
                   <img src={statusbox} alt="" className="border-r pr-1" onClick={handleCheckedGroupTasks} />
                   <CiEdit className="cursor-pointer w-4 h-4 border-r pr-1" />
                   <BsThreeDots className="cursor-pointer w-4 h-4" onClick={(e) => handleClick(e)} />
                 </div>
-                <p className="border-t py-.5 viewSettings"></p>
-                <div className="flex">
+                <p className="border-t py-.5 viewSettings"></p> */}
+                <div className="flex items-center">
                   <p>
                     <Chevron
                       color={headerStatusColor}
@@ -203,6 +203,16 @@ export function Head({
                   <span ref={scrollToRef} className="pb-1" style={{ fontSize: '11px', WebkitTextStroke: '0.5px' }}>
                     {parsedLabel}
                   </span>
+                  <div className=" items-center pl-2 space-x-1 viewSettings" onClick={(e) => e.stopPropagation()}>
+                    <img
+                      src={statusbox}
+                      alt=""
+                      className="border-r cursor-pointer pr-1"
+                      onClick={handleCheckedGroupTasks}
+                    />
+                    <CiEdit className="cursor-pointer w-4 h-4 border-r pr-1" />
+                    <BsThreeDots className="cursor-pointer w-4 h-4" onClick={(e) => handleClick(e)} />
+                  </div>
                 </div>
               </div>
               <AlsoitMenuDropdown
