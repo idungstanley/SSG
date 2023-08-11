@@ -518,7 +518,7 @@ export const taskSlice = createSlice({
     setTaskSelectedDate(state, action: PayloadAction<ISelectedDate | null>) {
       state.selectedDate = action.payload;
     },
-    setHistoryMemory(state, action: PayloadAction<IHistoryFilterMemory>) {
+    setHistoryMemory(state, action: PayloadAction<IHistoryFilterMemory | null>) {
       state.HistoryFilterMemory = action.payload;
     },
     setFilterDateString(state, action: PayloadAction<DateString | null>) {

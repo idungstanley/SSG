@@ -173,8 +173,13 @@ export function StickyCol({
 
   useEffect(() => {
     const isSelected = selectedTasksArray.includes(task.id);
-    isSelected ? setIsChecked(true) : setIsChecked(false);
-  }, [selectedTasksArray]);
+
+    if (isSelected) {
+      setIsChecked(true);
+    } else {
+      setIsChecked(false);
+    }
+  }, [selectedTasksArray, task.id]);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const isChecked = e.target.checked;

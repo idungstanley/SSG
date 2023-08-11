@@ -1,4 +1,3 @@
-import React from 'react';
 import ColorTheme from './ColorTheme';
 import TwoFactorAuthentication from './TwoFactorAuthentication';
 import Preferences from './Preferences';
@@ -6,6 +5,7 @@ import { IUserData } from '../../../../../features/workspace/workspace.interface
 import { useAppSelector } from '../../../../../app/hooks';
 import { UseUpdateUserSettings } from '../../../../../features/settings/user/userSettingsServices';
 import Confirmation from '../Modal/Confirmation';
+import { useEffect, useState } from 'react';
 
 interface dataProps {
   data: IUserData | undefined;
@@ -22,8 +22,11 @@ function Personalization({ data }: dataProps) {
     theme_color,
     userData,
     color,
-    showConfirmationModal
+    showConfirmationModal,
+    clock_type,
+    is_clock_time
   } = useAppSelector((state) => state.userSetting);
+
   const { mutate: onUserSettingsUpdate } = UseUpdateUserSettings();
   const handleSubmit = () => {
     onUserSettingsUpdate({
@@ -34,7 +37,9 @@ function Personalization({ data }: dataProps) {
       date_format: date_format !== userData?.date_format ? date_format : undefined,
       timezone: timezone !== userData?.timezone ? timezone : undefined,
       time_format: time_format !== userData?.time_format ? time_format : undefined,
-      color: color !== userData?.color ? color : undefined
+      color: color !== userData?.color ? color : undefined,
+      clock_type: clock_type !== userData?.clock_type ? clock_type : undefined,
+      is_clock_time: is_clock_time !== userData?.is_clock_time ? is_clock_time : undefined
     });
   };
 
@@ -46,8 +51,9 @@ function Personalization({ data }: dataProps) {
     start_week === userData?.start_week &&
     theme_color === userData?.theme_color &&
     timezone === userData?.timezone &&
-    color === userData?.color;
-
+    color === userData?.color &&
+    clock_type === userData?.clock_type &&
+    is_clock_time === userData?.is_clock_time;
   return (
     <div
       className="w-full bg-white m-2 p-4 rounded-lg relative overflow-y-auto overflow-x-hidden flex flex-col min-h-screen"

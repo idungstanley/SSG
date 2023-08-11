@@ -1,13 +1,20 @@
 import dayjs from 'dayjs';
+import timezone from 'dayjs/plugin/timezone';
+import utc from 'dayjs/plugin/utc';
 import { useEffect, useMemo, useState } from 'react';
 import MiniDatePicker from '../../../../components/DatePicker/MiniCalendar';
 import { useParams } from 'react-router-dom';
 import { useAppSelector } from '../../../../app/hooks';
 import { getTaskListService } from '../../../../features/task/taskService';
+import AnalogClock from '../../../../components/DatePicker/AnalogClock';
 // import Agenda from '../../../../components/Pilot/components/Calendar/Agenda';
 
 export default function HeaderTimeModal() {
-  const [time, setTime] = useState<string>(dayjs().format('hh:mm:ss a'));
+  dayjs.extend(timezone);
+  dayjs.extend(utc);
+  const { clock_type, timezone: zone } = useAppSelector((state) => state.userSetting);
+  const [clock, setClock] = useState<dayjs.Dayjs>(dayjs().tz(zone));
+  const [time, setTime] = useState<string>(clock.format('hh:mm:ss a'));
   const { listId } = useParams();
   const { filterTaskByAssigneeIds } = useAppSelector((state) => state.task);
 
@@ -24,9 +31,19 @@ export default function HeaderTimeModal() {
   }, []);
   return (
     <div className="flex flex-col space-y-4 w-80 z-50 bg-alsoit-gray-50 h-4/6 opacity-0 transform transition-transform opacity-100 translate-y-0 delay-700">
-      <div className="flex justify-start flex-col space-y-2 w-full border-b border-alsoit-gray-300 px-4 py-6">
-        <span style={{ fontSize: '35px', padding: '0 0 8px 0' }}>{time}</span>
-        {dayjs().format('dddd MMMM D, YYYY')}
+      <div
+        className={
+          clock_type === 'd'
+            ? 'flex justify-start flex-col space-y-1 w-full border-b border-alsoit-gray-300 px-4 py-6'
+            : 'flex justify-center flex-col space-y-2 w-full mx-auto border-b border-alsoit-gray-300 px-4 py-6'
+        }
+      >
+        {clock_type === 'd' ? (
+          <span style={{ fontSize: '35px', padding: '0 0 8px 0' }}>{time}</span>
+        ) : (
+          <AnalogClock time={clock} setTime={setClock} zone={zone} />
+        )}
+        <span className={clock_type === 'd' ? 'text-left' : 'text-center'}>{dayjs().format('dddd MMMM D, YYYY')}</span>
       </div>
       <div className="border-b border-alsoit-gray-300 px-4 py-6">
         <MiniDatePicker />

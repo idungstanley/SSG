@@ -109,8 +109,6 @@ export default function MiniDatePicker({ range, miniMode, fullCalendar }: Props)
     }
   }, [taskTime]);
 
-  console.log(fullCalendar);
-
   return (
     <div className="w-full flex flex-col space-y-4 my-2">
       <div className="flex flex-col space-y-2 w-full">

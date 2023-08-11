@@ -1,13 +1,38 @@
 import { AiOutlineCaretDown } from 'react-icons/ai';
 import { Chevron } from '../Chevron';
+import { Task } from '../../../../features/task/interface.tasks';
+import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
+import { setSelectedTasksArray } from '../../../../features/task/taskSlice';
+import ListAddModal from './ListAddModal';
 
 interface LabelProps {
   listName?: string;
   onClickChevron: () => void;
   showTable: boolean;
+  tasks?: Task[];
 }
 
-export function Label({ listName, onClickChevron, showTable }: LabelProps) {
+export function Label({ listName, onClickChevron, showTable, tasks }: LabelProps) {
+  const { selectedTasksArray } = useAppSelector((state) => state.task);
+
+  const dispatch = useAppDispatch();
+
+  const handleCheckedGroupTasks = () => {
+    const updatedTaskIds: string[] = [...selectedTasksArray];
+
+    tasks?.forEach((task) => {
+      const taskIndex = updatedTaskIds.indexOf(task.id);
+
+      if (taskIndex === -1) {
+        //Add Task not in selectedTasksArray
+        updatedTaskIds.push(task.id);
+      } else {
+        // Remove Task already in selectedTasksArray
+        updatedTaskIds.splice(taskIndex, 1);
+      }
+    });
+    dispatch(setSelectedTasksArray(updatedTaskIds));
+  };
   return (
     <div className="flex">
       <div className="flex justify-between space-x-10 items-center bg-purple-500 rounded-br-md -mt-1 p-1 rounded-l-md -ml-1">
@@ -17,8 +42,9 @@ export function Label({ listName, onClickChevron, showTable }: LabelProps) {
           <h1 className="">{listName ?? 'Loading...'}</h1>
         </div>
 
-        <button className="p-1 rounded-sm bg-gray-200  flex justify-center items-center space-x-1">
-          <span>Add</span> <AiOutlineCaretDown className="text-gray-500 w-3 h-3 " />
+        <button className="rounded-sm bg-gray-200  flex justify-center items-center h-6">
+          {/* <span>Add </span> */}
+          <ListAddModal handleCheckedGroupTasks={handleCheckedGroupTasks} />
         </button>
       </div>
     </div>

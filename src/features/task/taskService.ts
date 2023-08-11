@@ -1,5 +1,14 @@
 import requestNew from '../../app/requestNew';
-import { IFullTaskRes, ITaskListRes, ITaskRes, ITimeEntriesRes, TaskId, newTaskDataRes } from './interface.tasks';
+import {
+  IFullTaskRes,
+  ITaskListRes,
+  ITaskRes,
+  ITimeEntriesRes,
+  IUserCalendarParams,
+  IUserSettingsRes,
+  TaskId,
+  newTaskDataRes
+} from './interface.tasks';
 import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import {
@@ -21,6 +30,23 @@ import { runTimer } from '../../utils/TimerCounter';
 import Duration from '../../utils/TimerDuration';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
 
+export const UseSaveTaskFilters = () => {
+  const { filters } = generateFilters();
+  const mutation = useMutation(async ({ key }: { key: string }) => {
+    const data = requestNew({
+      url: 'settings',
+      method: 'PUT',
+      data: {
+        key,
+        value: filters
+      }
+    });
+    return data;
+  });
+
+  return mutation;
+};
+
 const moveTask = (data: { taskId: TaskId; listId: string; overType: string }) => {
   const { taskId, listId, overType } = data;
   let requestData = {};
@@ -37,6 +63,42 @@ const moveTask = (data: { taskId: TaskId; listId: string; overType: string }) =>
     data: requestData
   });
   return response;
+};
+
+export const useSaveData = () => {
+  const queryClient = useQueryClient();
+  const mutation = useMutation(
+    async ({ key, value }: { key: string; value: IUserCalendarParams }) => {
+      const data = requestNew({
+        url: 'settings',
+        method: 'PUT',
+        data: {
+          key,
+          value
+        }
+      });
+      return data;
+    },
+    {
+      onSuccess: () => queryClient.invalidateQueries(['calendar-data'])
+    }
+  );
+
+  return mutation;
+};
+
+export const useGetUserSettingsData = ({ keys }: { keys: string }) => {
+  return useQuery(['calendar-data'], async () => {
+    const data = await requestNew<IUserSettingsRes>({
+      url: 'settings',
+      method: 'GET',
+      params: {
+        key: keys
+      }
+    });
+
+    return data;
+  });
 };
 
 export const useMoveTask = () => {
@@ -313,7 +375,6 @@ export const UseUpdateTaskStatusServices = ({ task_id_array, priorityDataUpdate 
       return data;
     },
     {
-      // enabled: statusDataUpdate !== '' || priorityDataUpdate !== '',
       enabled: task_id_array != null && priorityDataUpdate !== '',
       onSuccess: () => {
         dispatch(setSelectedTasksArray([]));

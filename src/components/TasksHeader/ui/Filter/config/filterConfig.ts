@@ -45,7 +45,7 @@ export const operators: OperatorOption = {
   ed: { key: 'eq', value: 'exact date', start: dayjs().format('YYYY-MM-DD') }
 };
 
-const priorityValues = ['low', 'normal', 'hight', 'urgent'];
+const priorityValues = ['low', 'normal', 'high', 'urgent'];
 export const unitValues: Unit[] = [units.d, units.m, units.w, units.y];
 
 export const filterConfig: FilterOption = {

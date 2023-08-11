@@ -44,9 +44,6 @@ export default function TimerModal() {
       >
         Return to Active Timer tab
       </span>
-      {/* <span className="px-2 py-3 cursor-pointer border-b-alsoit-border-base hover:text-white hover:bg-alsoit-gray-75" onClick={() => handleResetTimer()}>
-        Stop and Return to Active Timer tab
-      </span> */}
     </div>
   );
 }

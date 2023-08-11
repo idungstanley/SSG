@@ -232,6 +232,25 @@ export interface IExtraFields {
   depth: number;
 }
 
+export interface IUserCalendarParams {
+  selectedDate: ISelectedDate | null;
+  HistoryFilterMemory: IHistoryFilterMemory | null;
+}
+export interface IUserSettings {
+  key: string;
+  is_json: boolean;
+  resolution?: string | null;
+  value: IUserCalendarParams;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface IUserSettingsRes {
+  data: {
+    settings: IUserSettings;
+  };
+}
+
 type ValueOf<T> = T[keyof T];
 
 export type Task = ImyTaskData | ITaskFullList;

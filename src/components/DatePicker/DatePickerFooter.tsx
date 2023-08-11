@@ -1,5 +1,6 @@
 import { Button } from '@mui/material';
-import RecurringIcon from '../../assets/icons/Recurring';
+import { useAppSelector } from '../../app/hooks';
+import { useSaveData } from '../../features/task/taskService';
 
 interface DatePickerFooterProps {
   time: string;
@@ -7,7 +8,14 @@ interface DatePickerFooterProps {
   miniMode: boolean;
 }
 
-export default function DatePickerFooter({ closeDateModal, time, miniMode }: DatePickerFooterProps) {
+export default function DatePickerFooter({ closeDateModal, time }: DatePickerFooterProps) {
+  const { selectedDate, HistoryFilterMemory } = useAppSelector((state) => state.task);
+
+  const { mutateAsync, isError } = useSaveData();
+  const handleSubmit = () => {
+    mutateAsync({ key: 'calendar', value: { selectedDate, HistoryFilterMemory } });
+  };
+
   return (
     <div className="flex items-center justify-end w-full">
       <div className="flex justify-between w-full">
@@ -30,7 +38,7 @@ export default function DatePickerFooter({ closeDateModal, time, miniMode }: Dat
             Close
           </Button>
           <Button
-            onClick={closeDateModal}
+            onClick={handleSubmit}
             variant="contained"
             size={'small'}
             disableElevation={true}
