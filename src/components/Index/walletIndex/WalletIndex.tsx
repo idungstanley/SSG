@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import SubWalletIndex from '../../../pages/workspace/wallet/components/subwallet1/ SubWalletIndex';
+import SubWalletIndex from '../../../pages/workspace/wallet/components/subwallet1/SubWalletIndex';
 import { useDispatch } from 'react-redux';
 import { useAppSelector } from '../../../app/hooks';
 import {
