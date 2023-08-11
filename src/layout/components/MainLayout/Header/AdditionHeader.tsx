@@ -31,6 +31,7 @@ export default function AdditionalHeader() {
   const { activeTabId: tabsId, timerLastMemory, activeItemId } = useAppSelector((state) => state.workspace);
   const { period } = useAppSelector((state) => state.task);
   const { timezone: zone, date_format, time_format, is_clock_time } = useAppSelector((state) => state.userSetting);
+
   const [clockModal, setClockModal] = useState<boolean>(false);
   const [HeaderClock, setClock] = useState<string>(
     zone
@@ -100,10 +101,10 @@ export default function AdditionalHeader() {
       window.setInterval(() => {
         setClock(
           zone
-            ? dayjs()
+            ? moment()
                 .tz(userTimeZoneFromLS ?? zone)
                 .format(time_format === '1' ? 'DD-MM-YYYY HH:mm' : 'DD-MM-YYYY h:mm a')
-            : dayjs().format(time_format === '1' ? 'DD-MM-YYYY HH:mm' : 'DD-MM-YYYY h:mm a')
+            : moment().format(time_format === '1' ? 'DD-MM-YYYY HH:mm' : 'DD-MM-YYYY h:mm a')
         );
       }, 6000);
 

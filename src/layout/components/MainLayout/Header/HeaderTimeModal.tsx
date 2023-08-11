@@ -1,4 +1,6 @@
 import dayjs from 'dayjs';
+import timezone from 'dayjs/plugin/timezone';
+import utc from 'dayjs/plugin/utc';
 import { useEffect, useMemo, useState } from 'react';
 import MiniDatePicker from '../../../../components/DatePicker/MiniCalendar';
 import { useParams } from 'react-router-dom';
@@ -8,10 +10,13 @@ import AnalogClock from '../../../../components/DatePicker/AnalogClock';
 // import Agenda from '../../../../components/Pilot/components/Calendar/Agenda';
 
 export default function HeaderTimeModal() {
-  const [time, setTime] = useState<string>(dayjs().format('hh:mm:ss a'));
+  dayjs.extend(timezone);
+  dayjs.extend(utc);
+  const { clock_type, timezone: zone } = useAppSelector((state) => state.userSetting);
+  const [clock, setClock] = useState<dayjs.Dayjs>(dayjs().tz(zone));
+  const [time, setTime] = useState<string>(clock.format('hh:mm:ss a'));
   const { listId } = useParams();
   const { filterTaskByAssigneeIds } = useAppSelector((state) => state.task);
-  const { clock_type } = useAppSelector((state) => state.userSetting);
 
   const { data } = getTaskListService({ listId, assigneeUserId: filterTaskByAssigneeIds });
 
@@ -33,7 +38,11 @@ export default function HeaderTimeModal() {
             : 'flex justify-center flex-col space-y-2 w-full mx-auto border-b border-alsoit-gray-300 px-4 py-6'
         }
       >
-        {clock_type === 'd' ? <span style={{ fontSize: '35px', padding: '0 0 8px 0' }}>{time}</span> : <AnalogClock />}
+        {clock_type === 'd' ? (
+          <span style={{ fontSize: '35px', padding: '0 0 8px 0' }}>{time}</span>
+        ) : (
+          <AnalogClock time={clock} setTime={setClock} zone={zone} />
+        )}
         <span className={clock_type === 'd' ? 'text-left' : 'text-center'}>{dayjs().format('dddd MMMM D, YYYY')}</span>
       </div>
       <div className="border-b border-alsoit-gray-300 px-4 py-6">
