@@ -75,7 +75,7 @@ export default function StatusNameDropdown({ TaskCurrentStatus, statusName }: St
                 >
                   <p>
                     <RiCheckboxBlankFill
-                      className="pl-px text-xs "
+                      className="pl-px text-xs"
                       aria-hidden="true"
                       style={{ color: `${statuses.color}` }}
                     />
