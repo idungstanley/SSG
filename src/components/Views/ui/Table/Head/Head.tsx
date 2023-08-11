@@ -190,6 +190,7 @@ export function Head({
                   <CiEdit className="cursor-pointer w-4 h-4 border-r pr-1" />
                   <BsThreeDots className="cursor-pointer w-4 h-4" onClick={(e) => handleClick(e)} />
                 </div>
+                <p className="border-t py-.5 viewSettings"></p>
                 <div className="flex">
                   <p>
                     <Chevron
