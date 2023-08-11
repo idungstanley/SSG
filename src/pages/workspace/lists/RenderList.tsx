@@ -25,14 +25,8 @@ import { EntityType } from '../../../utils/EntityTypes/EntityType';
 function RenderList() {
   const dispatch = useDispatch();
   const { listId } = useParams();
-  const {
-    listView,
-    calenderView,
-    mapView,
-    addNewTaskItem,
-    closeTaskListView,
-    filterTaskByAssigneeIds
-  } = useAppSelector((state) => state.task);
+  const { listView, calenderView, mapView, addNewTaskItem, closeTaskListView, filterTaskByAssigneeIds } =
+    useAppSelector((state) => state.task);
   const { activeEntityName } = useAppSelector((state) => state.workspace);
 
   const containerRef = useRef<HTMLDivElement>(null);
