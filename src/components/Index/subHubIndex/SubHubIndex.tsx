@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useGetSubHub } from '../../../features/hubs/hubService';
 import { useAppSelector } from '../../../app/hooks';
 import { useDispatch } from 'react-redux';
-import { getCurrSubHubId, setCreateWLID, setHubParentId, setSubHubExt } from '../../../features/hubs/hubSlice';
+import { setHubParentId, setSubHubExt } from '../../../features/hubs/hubSlice';
 import SHubDropdownList from '../../ItemsListInSidebar/components/SHubDropdownList';
 import {
   setActiveEntity,
@@ -23,6 +23,8 @@ export default function SubHubIndex() {
 
   const { currentWorkspaceId } = useAppSelector((state) => state.auth);
   const { activeItemId } = useAppSelector((state) => state.workspace);
+  const { hubParentId } = useAppSelector((state) => state.hub);
+  const { draggableItemId } = useAppSelector((state) => state.list);
 
   const [showSubChildren, setShowSubChidren] = useState<string | null | undefined>(null);
 
@@ -31,30 +33,6 @@ export default function SubHubIndex() {
   if (isSuccess) {
     data?.data?.hubs.map(({ parent_id }) => dispatch(setHubParentId(parent_id)));
   }
-  const { hubParentId, subHubExt } = useAppSelector((state) => state.hub);
-  const { id: subHubExtId } = subHubExt;
-
-  const handleClick = (id: string) => {
-    dispatch(setSubHubExt({ id: id, type: EntityType.subHub }));
-    setShowSubChidren(id);
-    dispatch(setCreateWLID(id));
-    dispatch(
-      setActiveItem({
-        activeItemType: EntityType.subHub,
-        activeItemId: id
-      })
-    );
-    dispatch(setActiveEntity({ id: id, type: EntityType.hub }));
-    dispatch(
-      getCurrSubHubId({
-        currSubHubId: id,
-        currSubHubIdType: EntityType.subHub
-      })
-    );
-    if (showSubChildren === id) {
-      return setShowSubChidren(null);
-    }
-  };
 
   const handleLocation = (id: string, name: string) => {
     dispatch(setSubHubExt({ id: id, type: EntityType.subHub }));
@@ -79,7 +57,14 @@ export default function SubHubIndex() {
     dispatch(setActiveEntity({ id: id, type: EntityType.hub }));
   };
 
-  const { draggableItemId } = useAppSelector((state) => state.list);
+  const handleClick = (id: string) => {
+    if (showSubChildren === id) {
+      setShowSubChidren(null);
+    } else {
+      setShowSubChidren(id);
+    }
+  };
+
   const draggableItem = draggableItemId ? data?.data?.hubs.find((i) => i.id === draggableItemId) : null;
 
   return activeItemId === hubParentId ? (
@@ -95,11 +80,11 @@ export default function SubHubIndex() {
             <HubItem
               item={subhub}
               handleClick={handleClick}
-              showChildren={!!showSubChildren}
+              showChildren={showSubChildren === subhub.id}
               handleLocation={handleLocation}
               type="subhub"
             />
-            {subHubExtId === subhub.id ? <SHubDropdownList /> : null}
+            {showSubChildren === subhub.id ? <SHubDropdownList currenId={showSubChildren} /> : null}
           </div>
         ))}
     </div>

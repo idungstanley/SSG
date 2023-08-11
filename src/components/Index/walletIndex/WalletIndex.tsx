@@ -20,6 +20,7 @@ import { EntityType } from '../../../utils/EntityTypes/EntityType';
 interface WalletIndexProps {
   showHubList: boolean;
   paddingLeft: string | number;
+  parentId?: string;
 }
 
 export interface dataProps {
@@ -28,7 +29,7 @@ export interface dataProps {
   color?: string;
 }
 
-function WalletIndex({ showHubList, paddingLeft }: WalletIndexProps) {
+function WalletIndex({ showHubList, paddingLeft, parentId }: WalletIndexProps) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -36,19 +37,19 @@ function WalletIndex({ showHubList, paddingLeft }: WalletIndexProps) {
   const { toggleArchiveWallet } = useAppSelector((state) => state.wallet);
   const { activeItemId } = useAppSelector((state) => state.workspace);
 
-  const [showSubWallet, setShowSubWallet] = useState<string[]>([]);
+  const [showSubWallet, setShowSubWallet] = useState<string>('');
 
   const { data: walletAndListData } = useGetHubWallet(activeItemId);
 
   const { data: walletData } = getWalletServices({
-    hubId: activeItemId,
+    hubId: parentId || activeItemId,
     Archived: toggleArchiveWallet
   });
 
   const handleLocation = (id: string, name: string) => {
     dispatch(setShowHub(true));
     navigate(`/${currentWorkspaceId}/tasks/w/${id}`);
-    setShowSubWallet((prev) => [...prev, id]);
+    setShowSubWallet('');
     dispatch(setCurrentWalletId(id));
     dispatch(setCurrentWalletType(EntityType.wallet));
     dispatch(setCurrentWalletName(name));
@@ -64,13 +65,13 @@ function WalletIndex({ showHubList, paddingLeft }: WalletIndexProps) {
   };
 
   const handleShowSubWallet = (id: string) => {
-    if (showSubWallet.includes(id)) {
-      setShowSubWallet((prev) => prev.filter((item) => item !== id));
+    if (showSubWallet === id) {
+      setShowSubWallet('');
     } else {
-      dispatch(setCurrentWalletId(id));
-      dispatch(setCurrentWalletType(EntityType.wallet));
-      setShowSubWallet((prev) => [...prev, id]);
+      setShowSubWallet(id);
     }
+    dispatch(setCurrentWalletId(id));
+    dispatch(setCurrentWalletType(EntityType.wallet));
   };
 
   const { draggableItemId } = useAppSelector((state) => state.list);

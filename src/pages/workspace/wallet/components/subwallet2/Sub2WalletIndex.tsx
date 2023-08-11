@@ -16,6 +16,7 @@ import { EntityType } from '../../../../../utils/EntityTypes/EntityType';
 
 interface SubWalletIndexProps {
   paddingLeft?: string | number;
+  currWalId?: string;
 }
 
 interface dataProps {
@@ -23,38 +24,38 @@ interface dataProps {
   name: string;
 }
 
-function SubWalletIndex({ paddingLeft = '40' }: SubWalletIndexProps) {
+function SubWalletIndex({ paddingLeft = '40', currWalId }: SubWalletIndexProps) {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const { currentWorkspaceId } = useAppSelector((state) => state.auth);
   const { toggleArchiveWallet } = useAppSelector((state) => state.wallet);
   const { showMenuDropdown } = useAppSelector((state) => state.hub);
   const { activeItemId } = useAppSelector((state) => state.workspace);
 
-  const [showSubWallet, setShowSubWallet] = useState<string[]>([]);
+  const [showSubWallet, setShowSubWallet] = useState<string>('');
   const [finalParentId, setFinalWalletParentId] = useState('');
 
   const { data: subwallet } = getWalletServices({
     Archived: toggleArchiveWallet,
-    parentId: activeItemId
+    parentId: currWalId || activeItemId
   });
-
-  const handleShowSubWallet = (id: string) => {
-    if (showSubWallet.includes(id)) {
-      setShowSubWallet((prev) => prev.filter((item) => item !== id));
-    } else {
-      setFinalWalletParentId(id);
-      setShowSubWallet((prev) => [...prev, id]);
-    }
-  };
-
-  const navigate = useNavigate();
 
   const handleLocation = (id: string, type = 'subwallet3') => {
     dispatch(setShowHub(true));
     navigate(`/${currentWorkspaceId}/tasks/w/${id}`);
     dispatch(setActiveItem({ activeItemType: type, activeItemId: id }));
     dispatch(setActiveEntity({ id, type: EntityType.wallet }));
+    setShowSubWallet('');
+  };
+
+  const handleShowSubWallet = (id: string) => {
+    if (showSubWallet === id) {
+      setShowSubWallet('');
+    } else {
+      setShowSubWallet(id);
+    }
+    setFinalWalletParentId(id);
   };
 
   const { draggableItemId } = useAppSelector((state) => state.list);

@@ -150,11 +150,13 @@ export function findFirstActiveEntity(props: { id: string; type: string }, hubs:
   }
   if (props.type === EntityType.wallet) {
     currentEntity = findCurrentWallet(props.id, hubs) as Wallet;
-    if (currentEntity.parent_id || currentEntity.hub_id) {
-      currentType = EntityType.subWallet;
-      parrentWalletId = currentEntity.parent_id || currentEntity.hub_id;
-    } else {
+    if (currentEntity.hub_id) {
       currentType = EntityType.wallet;
+      parrentWalletId = currentEntity.hub_id;
+    }
+    if (currentEntity.parent_id) {
+      currentType = EntityType.subWallet;
+      parrentWalletId = currentEntity.parent_id;
     }
   }
   if (props.type === EntityType.list) {

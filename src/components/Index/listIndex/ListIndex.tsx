@@ -8,13 +8,14 @@ import { IList } from '../../../features/hubs/hubs.interfaces';
 interface ListIndexProps {
   showHubList: boolean;
   paddingLeft?: string;
+  parentId?: string;
 }
 
-function ListIndex({ showHubList, paddingLeft = '26' }: ListIndexProps) {
+function ListIndex({ showHubList, paddingLeft = '26', parentId }: ListIndexProps) {
   const { showMenuDropdown } = useAppSelector((state) => state.hub);
   const { activeItemId } = useAppSelector((state) => state.workspace);
 
-  const { data } = getListService(activeItemId);
+  const { data } = getListService(parentId || activeItemId);
 
   return (
     <div id="createWallet" className={`${showHubList ? 'block' : 'hidden'}`}>

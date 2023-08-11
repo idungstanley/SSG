@@ -13,7 +13,7 @@ export default function DropdownList() {
     <>
       <SubHubIndex />
       <WalletIndex showHubList={true} paddingLeft="20" />
-      <ListIndex showHubList={true} />
+      <ListIndex showHubList={true} paddingLeft="35" />
     </>
   ) : (
     <InboxIndex />

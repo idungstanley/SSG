@@ -5,13 +5,17 @@ import InboxIndex from '../../Index/InboxIndex';
 import { EntityType } from '../../../utils/EntityTypes/EntityType';
 import { useAppSelector } from '../../../app/hooks';
 
-export default function SHubDropdownList() {
+interface SHubDropdownListProps {
+  currenId?: string;
+}
+
+export default function SHubDropdownList({ currenId }: SHubDropdownListProps) {
   const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
 
-  return activeItemType === EntityType.subHub && activeItemId ? (
+  return (activeItemType === EntityType.subHub || activeItemType === EntityType.hub) && activeItemId ? (
     <div>
-      <WalletIndex showHubList={true} paddingLeft="25" />
-      <ListIndex showHubList={true} paddingLeft="40" />
+      <WalletIndex showHubList={true} parentId={currenId ?? ''} paddingLeft="35" />
+      <ListIndex showHubList={true} parentId={currenId ?? ''} paddingLeft="40" />
     </div>
   ) : (
     <InboxIndex />

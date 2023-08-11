@@ -18,9 +18,8 @@ export default function ActiveHub() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const { hub } = useAppSelector((state) => state.hub);
+  const { hub, parentHubExt } = useAppSelector((state) => state.hub);
   const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
-  const { parentHubExt } = useAppSelector((state) => state.hub);
 
   const { id: parentHubId } = parentHubExt;
 
