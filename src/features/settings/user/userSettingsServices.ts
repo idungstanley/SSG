@@ -13,6 +13,8 @@ interface IUserSettings {
   timezone?: string;
   time_format?: string;
   color?: string;
+  is_clock_time?: number | null;
+  clock_type?: string | null;
 }
 
 interface IPasswordprops {
@@ -48,7 +50,9 @@ const updateUserSettings = ({
   date_format,
   timezone,
   time_format,
-  color
+  color,
+  clock_type,
+  is_clock_time
 }: IUserSettings) => {
   const request = requestNew({
     url: '/auth/account',
@@ -61,7 +65,9 @@ const updateUserSettings = ({
       theme_color,
       timezone,
       time_format,
-      color
+      color,
+      clock_type,
+      is_clock_time
     }
   });
   return request;
