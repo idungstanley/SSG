@@ -19,7 +19,6 @@ import { EntityType } from '../../../utils/EntityTypes/EntityType';
 
 interface WalletIndexProps {
   showHubList: boolean;
-  getCurrentHubId: string | null;
   paddingLeft: string | number;
 }
 
@@ -29,19 +28,20 @@ export interface dataProps {
   color?: string;
 }
 
-function WalletIndex({ showHubList, getCurrentHubId, paddingLeft }: WalletIndexProps) {
+function WalletIndex({ showHubList, paddingLeft }: WalletIndexProps) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const { currentWorkspaceId } = useAppSelector((state) => state.auth);
+  const { toggleArchiveWallet } = useAppSelector((state) => state.wallet);
+  const { activeItemId } = useAppSelector((state) => state.workspace);
 
   const [showSubWallet, setShowSubWallet] = useState<string[]>([]);
-  const { toggleArchiveWallet } = useAppSelector((state) => state.wallet);
 
-  const { data: walletAndListData } = useGetHubWallet(getCurrentHubId);
+  const { data: walletAndListData } = useGetHubWallet(activeItemId);
 
   const { data: walletData } = getWalletServices({
-    hubId: getCurrentHubId,
+    hubId: activeItemId,
     Archived: toggleArchiveWallet
   });
 

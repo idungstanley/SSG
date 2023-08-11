@@ -9,21 +9,20 @@ import { dataProps } from '../../../../../components/Index/walletIndex/WalletInd
 import { EntityType } from '../../../../../utils/EntityTypes/EntityType';
 
 interface SubWalletIndexProps {
-  walletParentId: string | null;
   padding?: string;
 }
 
 function ActiveSubWallet({ padding = 'pl-8' }: SubWalletIndexProps) {
   const dispatch = useDispatch();
 
-  const { currentWalletId, toggleArchiveWallet } = useAppSelector((state) => state.wallet);
+  const { toggleArchiveWallet } = useAppSelector((state) => state.wallet);
+  const { activeItemId } = useAppSelector((state) => state.workspace);
+  const { showMenuDropdown } = useAppSelector((state) => state.hub);
 
   const { data: subwallet } = getWalletServices({
     Archived: toggleArchiveWallet,
-    parentId: currentWalletId
+    parentId: activeItemId
   });
-  const { activeItemId } = useAppSelector((state) => state.workspace);
-  const { showMenuDropdown } = useAppSelector((state) => state.hub);
 
   const navigate = useNavigate();
   const handleLocation = (id: string, type = 'subWallet') => {

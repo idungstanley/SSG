@@ -30,8 +30,8 @@ interface workspaceState {
   showModal: boolean;
   searchIsActive: boolean;
   isExtSearchActive: boolean;
-  activeItemId?: string | null;
-  activeItemType?: string | null;
+  activeItemId: string | null;
+  activeItemType: string | null;
   activeItemName: string | null | undefined;
   activeEntityName: string | null | undefined;
   showPilot: boolean;
@@ -245,9 +245,9 @@ export const wsSlice = createSlice({
     setActiveItem(
       state,
       action: PayloadAction<{
-        activeItemId?: string | null;
-        activeItemType?: string | null;
-        activeItemName?: string | undefined | null;
+        activeItemId: string;
+        activeItemType: string;
+        activeItemName?: string;
       }>
     ) {
       state.activeItemId = action.payload.activeItemId;

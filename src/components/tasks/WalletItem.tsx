@@ -163,7 +163,7 @@ export default function WalletItem({
         );
       }
     } else {
-      return <div className="pl-4">{renderCloseFolder()}</div>;
+      return <div style={{ paddingLeft: '14px' }}>{renderCloseFolder()}</div>;
     }
   };
 

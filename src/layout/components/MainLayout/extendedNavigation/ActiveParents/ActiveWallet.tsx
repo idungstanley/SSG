@@ -16,17 +16,17 @@ import { EntityType } from '../../../../../utils/EntityTypes/EntityType';
 
 interface WalletIndexProps {
   showHubList: boolean;
-  getCurrentHubId: string | null;
 }
 
-function ActiveWallet({ showHubList, getCurrentHubId }: WalletIndexProps) {
+function ActiveWallet({ showHubList }: WalletIndexProps) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const { activeItemId } = useAppSelector((state) => state.workspace);
+  const { parentWalletId } = useAppSelector((state) => state.wallet);
   const { SubMenuId, showMenuDropdown } = useAppSelector((state) => state.hub);
 
-  const { data } = useGetHubWallet(getCurrentHubId);
+  const { data } = useGetHubWallet(parentWalletId);
 
   const handleLocation = (id: string, name: string, type = EntityType.wallet) => {
     navigate(`tasks/w/${id}`);

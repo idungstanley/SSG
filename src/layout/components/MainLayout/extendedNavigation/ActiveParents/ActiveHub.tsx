@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import { AvatarWithInitials } from '../../../../../components';
 import SubWalletIndex from '../../../../../pages/workspace/wallet/components/subwallet1/ SubWalletIndex';
@@ -13,69 +13,36 @@ import { setActiveItem, setCurrentItem } from '../../../../../features/workspace
 import { setParentHubExt, setSubHubExt } from '../../../../../features/hubs/hubSlice';
 import { getInitials } from '../../../../../app/helpers';
 import { EntityType } from '../../../../../utils/EntityTypes/EntityType';
-import { Hub, Wallet } from '../../../../../pages/workspace/hubs/components/ActiveTree/activetree.interfaces';
-import { findCurrentWallet } from '../../../../../managers/Wallet';
-import { findCurrentHub } from '../../../../../managers/Hub';
 
 export default function ActiveHub() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const { hub } = useAppSelector((state) => state.hub);
-  const { currentItemId, activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
-  const { currentWalletId, parentWalletId } = useAppSelector((state) => state.wallet);
+  const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
   const { parentHubExt } = useAppSelector((state) => state.hub);
-
-  const [hubData, setHubData] = useState<Hub>();
-  const [subHubData, setSubHubData] = useState<Hub>();
-  const [walletData, setWalletData] = useState<Wallet>();
-  const [subWalletData, setSubWalletData] = useState<Wallet>();
 
   const { id: parentHubId } = parentHubExt;
 
-  useEffect(() => {
-    if (hub.length) {
-      if (activeItemId && activeItemType === EntityType.hub) {
-        setHubData(findCurrentHub(activeItemId, hub));
-      }
-      if (parentHubId && activeItemType === EntityType.subHub) {
-        setSubHubData(findCurrentHub(parentHubId, hub));
-      }
-      if (currentWalletId) {
-        setWalletData(findCurrentWallet(currentWalletId, hub));
-      }
-      if (parentWalletId) {
-        setSubWalletData(findCurrentWallet(parentWalletId, hub));
-      }
-    }
-  }, [hub]);
-
   const displayActiveItem = () => {
     if (activeItemType === EntityType.hub) {
-      return <DropdownList key={hubData?.id} />;
+      return <DropdownList />;
     } else if (activeItemType === EntityType.subHub) {
-      return <SHubDropdownList key={subHubData?.id} />;
+      return <SHubDropdownList />;
     } else if (activeItemType === EntityType.wallet) {
-      return <SubWalletIndex key={walletData?.id} paddingLeft="20" />;
+      return <SubWalletIndex paddingLeft="20" />;
     } else if (activeItemType?.includes(EntityType.subWallet)) {
-      if (subWalletData?.id && walletData?.id) {
-        return <Sub2WalletIndex key={subWalletData.id} currWalId={walletData.id} paddingLeft="15" />;
-      }
-      return null;
+      return <Sub2WalletIndex paddingLeft="15" />;
     }
-    return null;
   };
 
   const displayClickedParent = () => {
     if (activeItemType === EntityType.subHub) {
-      return <ActiveSubHub key={subHubData?.id} />;
+      return <ActiveSubHub />;
     } else if (activeItemType === EntityType.wallet) {
-      return <ActiveWallet key={walletData?.id} showHubList={!false} getCurrentHubId={currentItemId} />;
+      return <ActiveWallet showHubList={!false} />;
     } else if (activeItemType === EntityType.subWallet) {
-      if (walletData?.id && subWalletData?.id) {
-        return <ActiveSubWallet key={subWalletData.id} walletParentId={walletData.id} padding="pl-0" />;
-      }
-      return null;
+      return <ActiveSubWallet padding="pl-0" />;
     }
   };
 

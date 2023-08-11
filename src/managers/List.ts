@@ -1,5 +1,5 @@
 import { IList } from '../features/hubs/hubs.interfaces';
-import { Hub, Wallet } from '../pages/workspace/hubs/components/ActiveTree/activetree.interfaces';
+import { Hub, List, Wallet } from '../pages/workspace/hubs/components/ActiveTree/activetree.interfaces';
 import { EntityType } from '../utils/EntityTypes/EntityType';
 import { findCurrentEntity, findParentOfEntity } from './SearchAndUpdate';
 
@@ -43,4 +43,14 @@ export const createListManager = (walletId: string | null, parentId: string | nu
   const type = walletId ? EntityType.wallet : EntityType.hub;
   const updatedTree = findCurrentEntity(type, id, hubs, createList as <IList>(item: IList) => IList);
   return updatedTree;
+};
+
+export const findCurrentList = (id: string, hubs: Hub[]) => {
+  let currentEntity = {};
+  const findList = (currentList: List) => {
+    currentEntity = currentList;
+    return currentList;
+  };
+  findCurrentEntity(EntityType.list, id, hubs, findList as <IList>(item: IList) => IList);
+  return currentEntity as List;
 };

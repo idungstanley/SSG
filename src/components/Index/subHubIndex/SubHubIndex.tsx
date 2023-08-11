@@ -22,13 +22,11 @@ export default function SubHubIndex() {
   const navigate = useNavigate();
 
   const { currentWorkspaceId } = useAppSelector((state) => state.auth);
-  const { currentItemId } = useAppSelector((state) => state.workspace);
+  const { activeItemId } = useAppSelector((state) => state.workspace);
 
   const [showSubChildren, setShowSubChidren] = useState<string | null | undefined>(null);
 
-  const { data, isSuccess } = useGetSubHub({
-    parentId: currentItemId
-  });
+  const { data, isSuccess } = useGetSubHub({ parentId: activeItemId });
 
   if (isSuccess) {
     data?.data?.hubs.map(({ parent_id }) => dispatch(setHubParentId(parent_id)));
@@ -83,7 +81,8 @@ export default function SubHubIndex() {
 
   const { draggableItemId } = useAppSelector((state) => state.list);
   const draggableItem = draggableItemId ? data?.data?.hubs.find((i) => i.id === draggableItemId) : null;
-  return currentItemId === hubParentId ? (
+
+  return activeItemId === hubParentId ? (
     <div id="subhub">
       {draggableItem ? (
         <DragOverlay>

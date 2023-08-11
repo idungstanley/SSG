@@ -33,10 +33,10 @@ export default function DetailsIndex() {
   const taskDetails = task?.data.task;
 
   useEffect(() => {
-    if (taskId && (hubId || walletId || listId)) {
+    if (taskId && (hubId || walletId || listId) && taskDetails) {
       dispatch(
         setActiveItem({
-          activeItemId: taskDetails?.id,
+          activeItemId: taskDetails.id,
           activeItemType: EntityType.task,
           activeItemName: taskDetails?.name
         })

@@ -84,6 +84,12 @@ export default function WList({ wallets, leftMargin, paddingLeft, type, level = 
     dispatch(setIsFirstOpened(false));
     dispatch(setCurrentWalletId(id));
     if (parent_id) dispatch(setParentWalletId(parent_id));
+    dispatch(
+      setActiveItem({
+        activeItemType: type,
+        activeItemId: id
+      })
+    );
 
     if (openedIds.includes(id)) {
       if (openedIds.length === 1) {

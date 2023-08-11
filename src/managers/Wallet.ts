@@ -115,6 +115,6 @@ export const findCurrentWallet = (id: string, hubs: Hub[]) => {
     currentEntity = currentWallet;
     return currentWallet;
   };
-  findCurrentEntity(EntityType.wallet, id, hubs, findWallet as <IHub>(item: IHub) => IHub);
+  findCurrentEntity(EntityType.wallet, id, hubs, findWallet as <IWallet>(item: IWallet) => IWallet);
   return currentEntity as Wallet;
 };

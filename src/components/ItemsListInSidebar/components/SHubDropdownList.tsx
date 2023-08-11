@@ -2,19 +2,17 @@ import React from 'react';
 import WalletIndex from '../../Index/walletIndex/WalletIndex';
 import ListIndex from '../../Index/listIndex/ListIndex';
 import InboxIndex from '../../Index/InboxIndex';
-import { useAppSelector } from '../../../app/hooks';
 import { EntityType } from '../../../utils/EntityTypes/EntityType';
+import { useAppSelector } from '../../../app/hooks';
 
 export default function SHubDropdownList() {
-  const { currSubHubId, currSubHubIdType } = useAppSelector((state) => state.hub);
+  const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
 
-  return currSubHubIdType === EntityType.subHub ? (
-    <>
-      <div>
-        <WalletIndex showHubList={!false} getCurrentHubId={currSubHubId} paddingLeft="25" />
-        <ListIndex showHubList={!false} getCurrentHubId={currSubHubId} paddingLeft="40" />
-      </div>
-    </>
+  return activeItemType === EntityType.subHub && activeItemId ? (
+    <div>
+      <WalletIndex showHubList={true} paddingLeft="25" />
+      <ListIndex showHubList={true} paddingLeft="40" />
+    </div>
   ) : (
     <InboxIndex />
   );

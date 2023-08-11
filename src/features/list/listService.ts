@@ -91,8 +91,8 @@ export const createListService = (data: {
 };
 
 // get lists
-export const getListService = (data: { getCurrentHubId: string | undefined | null }) => {
-  const hubID = data.getCurrentHubId;
+export const getListService = (id: string | null) => {
+  const hubID = id;
   return useQuery(['list', hubID], async () => {
     const response = await requestNew<listDetails | undefined>({
       url: 'lists',

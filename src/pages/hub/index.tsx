@@ -4,7 +4,7 @@ import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import Page from '../../components/Page';
 import { UseGetHubDetails } from '../../features/hubs/hubService';
 import { UseGetFullTaskList } from '../../features/task/taskService';
-import { setActiveEntityName, setActiveItem } from '../../features/workspace/workspaceSlice';
+import { setActiveEntityName } from '../../features/workspace/workspaceSlice';
 import ActiveHub from '../../layout/components/MainLayout/extendedNavigation/ActiveParents/ActiveHub';
 import AdditionalHeader from '../../layout/components/MainLayout/Header/AdditionHeader';
 import PilotSection, { pilotConfig } from '../workspace/hubs/components/PilotSection';

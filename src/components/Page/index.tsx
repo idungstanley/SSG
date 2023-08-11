@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useState } from 'react';
+import { ReactNode, useEffect } from 'react';
 import { RiArrowLeftSLine, RiArrowRightSLine } from 'react-icons/ri';
 import { dimensions } from '../../app/config/dimensions';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';

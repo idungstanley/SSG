@@ -16,7 +16,6 @@ import { EntityType } from '../../../../../utils/EntityTypes/EntityType';
 
 interface SubWalletIndexProps {
   paddingLeft?: string | number;
-  currWalId: string;
 }
 
 interface dataProps {
@@ -24,19 +23,20 @@ interface dataProps {
   name: string;
 }
 
-function SubWalletIndex({ paddingLeft = '40', currWalId }: SubWalletIndexProps) {
+function SubWalletIndex({ paddingLeft = '40' }: SubWalletIndexProps) {
   const dispatch = useDispatch();
 
   const { currentWorkspaceId } = useAppSelector((state) => state.auth);
   const { toggleArchiveWallet } = useAppSelector((state) => state.wallet);
   const { showMenuDropdown } = useAppSelector((state) => state.hub);
+  const { activeItemId } = useAppSelector((state) => state.workspace);
 
   const [showSubWallet, setShowSubWallet] = useState<string[]>([]);
   const [finalParentId, setFinalWalletParentId] = useState('');
 
   const { data: subwallet } = getWalletServices({
     Archived: toggleArchiveWallet,
-    parentId: currWalId
+    parentId: activeItemId
   });
 
   const handleShowSubWallet = (id: string) => {
