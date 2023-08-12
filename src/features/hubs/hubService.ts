@@ -223,6 +223,18 @@ export const UseDeleteHubService = (data: { id: string | null | undefined }) => 
   return response;
 };
 
+//status service
+export const statusService = () => {
+  return useQuery(['status'], async () => {
+    const data = await requestNew({
+      url: 'task-statuses',
+      method: 'POST',
+      data: {}
+    });
+    return data;
+  });
+};
+
 //archive hub
 export const ArchiveHubService = (hub: { query: string | null | undefined; archiveHub: boolean }) => {
   const hubid = hub.query;
