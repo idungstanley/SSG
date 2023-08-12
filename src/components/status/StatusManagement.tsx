@@ -10,9 +10,9 @@ import Input from '../input/Input';
 const statusTabOptions = [{ label: 'Use Space Statuses' }, { label: 'Custom' }];
 
 const statusTypes = [
-  { label: 'To do', color: 'grey', model_type: 'open' },
-  { label: 'In Progress', color: 'purple', model_type: 'custom' },
-  { label: 'Completed', color: 'green', model_type: 'closed' }
+  { label: 'To do', color: 'grey', model_type: 'open', position: '1' },
+  { label: 'In Progress', color: 'purple', model_type: 'custom', position: '2' },
+  { label: 'Completed', color: 'green', model_type: 'closed', position: '3' }
 ];
 
 interface ItemProps {
@@ -32,7 +32,6 @@ export default function StatusManagement() {
   const [statusTypesState, setStatusTypesState] = useState<ItemProps[]>(statusTypes);
   const [newStatusValue, setNewStatusValue] = useState<string>();
   const [addStatus, setAddStatus] = useState<boolean>(false);
-
   const handleCloseManageStatus = () => {
     dispatch(setIsManageStatus(!isManageStatus));
   };
