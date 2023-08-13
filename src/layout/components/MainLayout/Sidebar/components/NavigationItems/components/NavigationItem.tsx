@@ -17,7 +17,7 @@ interface NavigationItemProps {
     icon?: JSX.Element;
     id: string;
   };
-  handleHotkeyClick: (value: string, event: React.MouseEvent<SVGElement, MouseEvent>) => void;
+  handleHotkeyClick: (value: string, event: React.MouseEvent<HTMLSpanElement, MouseEvent>) => void;
   activeTabId: string | null;
   setActiveTabId: React.Dispatch<React.SetStateAction<string | null>>;
 }

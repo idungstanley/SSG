@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useAppSelector } from '../../../../../../app/hooks';
 import WorkSpaceSelection from '../WorkSpaceSelection';
-import MainLogo from '../../../../../../assets/icons/mainIcon.svg';
 import { cl } from '../../../../../../utils';
 import UserSettingsModal from '../../../../../../pages/settings/UserSettings/components/UserSettings/UserSettingsModal';
 import { Link } from 'react-router-dom';
@@ -16,7 +15,7 @@ import AlsoitIcon from '../../../../../../assets/icons/AlsoitIcon';
 interface HeaderProps {
   handleHotkeyClick: (
     value: string,
-    e: React.MouseEvent<SVGElement, MouseEvent> | React.MouseEvent<HTMLButtonElement, MouseEvent>
+    e: React.MouseEvent<HTMLSpanElement, MouseEvent> | React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => void;
   hotkeys: (
     | {
@@ -83,7 +82,7 @@ export default function Header({
           <div className="z-50 flex flex-col items-start mt-4">
             {NavigationList.map((tab) => (
               <button
-                onClick={(e) => handleHotkeyClick(tab.id, e)}
+                onClick={(e) => handleHotkeyClick(tab.id, e as React.MouseEvent<HTMLButtonElement, MouseEvent>)}
                 key={tab.id}
                 className={cl(
                   activeHotkeyIds.includes(tab.id) && 'font-semibold',
@@ -91,9 +90,7 @@ export default function Header({
                 )}
               >
                 <div className="flex items-center gap-2">
-                  <span className={cl(activeHotkeyIds.includes(tab.id) && 'text-black')}>
-                    {tab.icon || <img className="w-5 h-5" src={tab.source} alt={tab.name} />}
-                  </span>
+                  <span className={cl(activeHotkeyIds.includes(tab.id) && 'text-black')}>{tab.icon}</span>
                   <span className="block truncate">{tab.name}</span>
                 </div>
                 {activeHotkeyIds.includes(tab.id) && <BsFillPinFill className="w-4 h-4" aria-hidden="true" />}

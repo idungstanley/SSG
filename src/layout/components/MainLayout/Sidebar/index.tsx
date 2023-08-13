@@ -51,7 +51,10 @@ export default function Sidebar() {
   );
 
   const handleHotkeyClick = useCallback(
-    (tabId: string, e: React.MouseEvent<SVGElement, MouseEvent> | React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    (
+      tabId: string,
+      e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.MouseEvent<HTMLSpanElement, MouseEvent>
+    ) => {
       e.stopPropagation();
       const isIncludes = activeHotkeyIds.includes(tabId);
 

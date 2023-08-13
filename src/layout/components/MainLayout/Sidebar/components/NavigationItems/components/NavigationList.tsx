@@ -1,16 +1,15 @@
 import React from 'react';
-import { IoNotificationsOutline } from 'react-icons/io5';
-import { VscCalendar } from 'react-icons/vsc';
 import { cl } from '../../../../../../../utils';
-import { HiOutlineLibrary, HiOutlineUserGroup } from 'react-icons/hi';
-import { CgTemplate } from 'react-icons/cg';
-import { Squares2X2Icon } from '@heroicons/react/24/outline';
-import groupIcon from '../../../../../../../assets/branding/Group.png';
-import homeIcon from '../../../../../../../assets/icons/Home.svg';
+import { HiOutlineUserGroup } from 'react-icons/hi';
 import { useAppDispatch } from '../../../../../../../app/hooks';
 import { setActivePlaceName } from '../../../../../../../features/workspace/workspaceSlice';
 import FavoriteIcon from '../../../../../../../assets/branding/FavoriteIcon';
 import HomeIcon from '../../../../../../../assets/icons/HomeIcon';
+import NotificationIcon from '../../../../../../../assets/icons/NotificationIcon';
+import CalendarIcon from '../../../../../../../assets/icons/CalendarIcon';
+import TemplateIcon from '../../../../../../../assets/icons/TemplateIcon';
+import GoalIcon from '../../../../../../../assets/icons/GoalIcon';
+import DashboardIcon from '../../../../../../../assets/icons/DashboardIcon';
 
 export const NavigationList = [
   {
@@ -22,13 +21,13 @@ export const NavigationList = [
   {
     id: '2',
     name: 'Notifications',
-    icon: <IoNotificationsOutline className="w-5 h-5" aria-hidden="true" />,
+    icon: <NotificationIcon />,
     alwaysShow: true
   },
   {
     id: '3',
     name: 'Calendar',
-    icon: <VscCalendar className="w-5 h-5" aria-hidden="true" />,
+    icon: <CalendarIcon active={false} />,
     alwaysShow: false
   },
   {
@@ -39,30 +38,24 @@ export const NavigationList = [
   },
   {
     id: '5',
-    name: 'Library',
-    icon: <HiOutlineLibrary className="w-5 h-5" aria-hidden="true" />,
+    name: 'Template Center',
+    icon: <TemplateIcon />,
     alwaysShow: false
   },
   {
     id: '6',
-    name: 'Template',
-    icon: <CgTemplate className="w-5 h-5" aria-hidden="true" />,
+    name: 'Goals',
+    icon: <GoalIcon />,
     alwaysShow: false
   },
   {
     id: '7',
-    name: 'Goals',
-    source: groupIcon,
+    name: 'Dashboards',
+    icon: <DashboardIcon />,
     alwaysShow: false
   },
   {
     id: '8',
-    name: 'Dashboards',
-    icon: <Squares2X2Icon className="w-5 h-5" aria-hidden="true" />,
-    alwaysShow: false
-  },
-  {
-    id: '9',
     name: 'Favorites',
     icon: <FavoriteIcon />,
     alwaysShow: false

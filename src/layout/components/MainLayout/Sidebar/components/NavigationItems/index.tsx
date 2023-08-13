@@ -1,5 +1,4 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import homeIcon from '../../../../../../assets/icons/Home.svg';
 import { cl } from '../../../../../../utils';
 import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
 import NavigationItem from './components/NavigationItem';
@@ -38,7 +37,7 @@ const showLessOrMore = [
 ];
 
 interface NavigationProps {
-  handleHotkeyClick: (value: string, e: React.MouseEvent<SVGElement, MouseEvent>) => void;
+  handleHotkeyClick: (value: string, e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => void;
   activeHotkeyIds: string[];
   activeTabId: string | null;
   setActiveTabId: React.Dispatch<React.SetStateAction<string | null>>;
