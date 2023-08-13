@@ -5,8 +5,8 @@ import { cl } from '../../../../../../../utils';
 import { useNavigate } from 'react-router-dom';
 import { useSortable } from '@dnd-kit/sortable';
 import { useGetNotificationCountService } from '../../../../../../../features/general/notification/notificationService';
-import { VscPinned } from 'react-icons/vsc';
 import Drag from '../../../../../../../assets/icons/Drag';
+import UnpinnedIcon from '../../../../../../../assets/icons/UnpinnedIcon';
 
 interface NavigationItemProps {
   item: {
@@ -113,10 +113,12 @@ export default function NavigationItem({ item, handleHotkeyClick }: NavigationIt
         ) : null}
       </div>
       {showSidebar && (
-        <VscPinned
+        <span
           onClick={(e) => handleHotkeyClick(item.id, e)}
           className="opacity-0 cursor-pointer group-hover:opacity-100 hover:text-black"
-        />
+        >
+          <UnpinnedIcon />
+        </span>
       )}
     </div>
   );
