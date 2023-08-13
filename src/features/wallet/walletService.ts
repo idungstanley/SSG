@@ -2,10 +2,10 @@ import { useDispatch } from 'react-redux';
 import requestNew from '../../app/requestNew';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { setArchiveWallet } from './walletSlice';
-import { closeMenu } from '../hubs/hubSlice';
+import { closeMenu, setSpaceStatuses } from '../hubs/hubSlice';
 import { IWallet, IWalletDetailRes, IWalletRes } from './wallet.interfaces';
 import { useParams } from 'react-router-dom';
-import { useAppSelector } from '../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { generateFilters } from '../../components/TasksHeader/lib/generateFilters';
 
 interface IResponseWallet {
@@ -158,6 +158,7 @@ export const UseArchiveWalletService = (wallet: { query: string | null | undefin
 
 //get wallet details
 export const UseGetWalletDetails = (query: { activeItemId?: string | null; activeItemType?: string | null }) => {
+  const dispatch = useAppDispatch();
   return useQuery(
     ['wallet-details', query],
     async () => {
@@ -169,9 +170,7 @@ export const UseGetWalletDetails = (query: { activeItemId?: string | null; activ
     },
     {
       enabled: query.activeItemType === 'wallet' && !!query.activeItemId
-      // onSuccess(data) {
-      //   console.log(data.data.wallet);
-      // }
+      // onSuccess: (data) => dispatch(setSpaceStatuses(data.data.wallet.task_statuses))
     }
   );
 };

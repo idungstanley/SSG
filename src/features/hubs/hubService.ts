@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import requestNew from '../../app/requestNew';
 import { IResponseGetHubs, IHubReq, IFavoritesRes, IHubDetailRes, IHubsRes, IHub } from './hubs.interfaces';
-import { closeMenu, setShowFavEditInput, setTriggerFavUpdate } from './hubSlice';
+import { closeMenu, setShowFavEditInput, setSpaceStatuses, setTriggerFavUpdate } from './hubSlice';
 import { setArchiveHub } from './hubSlice';
 import { generateFilters } from '../../components/TasksHeader/lib/generateFilters';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
@@ -266,6 +266,7 @@ export const UseGetHubDetails = (query: {
   activeItemId: string | null | undefined;
   activeItemType?: string | null;
 }) => {
+  const dispatch = useAppDispatch();
   const { workSpaceId } = useParams();
   const { currentWorkspaceId } = useAppSelector((state) => state.auth);
 
@@ -280,7 +281,11 @@ export const UseGetHubDetails = (query: {
       return data;
     },
     {
-      enabled: (query.activeItemType === 'hub' || query.activeItemType === 'subhub') && !!query.activeItemId && fetch
+      enabled: (query.activeItemType === 'hub' || query.activeItemType === 'subhub') && !!query.activeItemId && fetch,
+      onSuccess: (data) => {
+        console.log(data.data.hub.task_statuses, 'hub statusTypes');
+        dispatch(setSpaceStatuses(data.data.hub.task_statuses));
+      }
     }
   );
 };

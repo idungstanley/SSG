@@ -2,10 +2,10 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import requestNew from '../../app/requestNew';
 import { useDispatch } from 'react-redux';
 import { setArchiveList } from './listSlice';
-import { closeMenu } from '../hubs/hubSlice';
+import { closeMenu, setSpaceStatuses } from '../hubs/hubSlice';
 import { IWalletRes } from '../wallet/wallet.interfaces';
 import { IListDetailRes, listDetails, taskCountFields } from './list.interfaces';
-import { useAppSelector } from '../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { useParams } from 'react-router-dom';
 import { generateFilters } from '../../components/TasksHeader/lib/generateFilters';
 import { UseGetHubDetails } from '../hubs/hubService';
@@ -201,6 +201,7 @@ export const UseGetListDetails = (query: {
   activeItemId: string | null | undefined;
   activeItemType: string | null | undefined;
 }) => {
+  const dispatch = useAppDispatch();
   return useQuery(
     ['hubs', query],
     async () => {
@@ -211,7 +212,11 @@ export const UseGetListDetails = (query: {
       return data;
     },
     {
-      enabled: query.activeItemType === 'list' && !!query.activeItemId
+      enabled: query.activeItemType === 'list' && !!query.activeItemId,
+      onSuccess: (data) => {
+        console.log(data.data.list.task_statuses, 'list statusTypes');
+        // dispatch(setSpaceStatuses(data.data.list.task_statuses));
+      }
     }
   );
 };
