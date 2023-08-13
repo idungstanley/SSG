@@ -5,17 +5,18 @@ import { cl } from '../../../../../../../utils';
 import { HiOutlineLibrary, HiOutlineUserGroup } from 'react-icons/hi';
 import { CgTemplate } from 'react-icons/cg';
 import { Squares2X2Icon } from '@heroicons/react/24/outline';
-import favoriteIcon from '../../../../../../../assets/branding/Favourite-icon.svg';
 import groupIcon from '../../../../../../../assets/branding/Group.png';
 import homeIcon from '../../../../../../../assets/icons/Home.svg';
 import { useAppDispatch } from '../../../../../../../app/hooks';
 import { setActivePlaceName } from '../../../../../../../features/workspace/workspaceSlice';
+import FavoriteIcon from '../../../../../../../assets/branding/FavoriteIcon';
+import HomeIcon from '../../../../../../../assets/icons/HomeIcon';
 
 export const NavigationList = [
   {
     id: '1',
     name: 'Home',
-    source: homeIcon,
+    icon: <HomeIcon />,
     alwaysShow: true
   },
   {
@@ -63,7 +64,7 @@ export const NavigationList = [
   {
     id: '9',
     name: 'Favorites',
-    source: favoriteIcon,
+    icon: <FavoriteIcon />,
     alwaysShow: false
   }
 ];
