@@ -10,7 +10,7 @@ import { UserSortDropDown } from './TimeUserSortDropDown';
 import PlusCircle from '../../../../assets/icons/AddCircle';
 import CancelIcon from '../../../../assets/icons/Cancel';
 import ArrowCaretUp from '../../../../assets/icons/ArrowCaretUp';
-import { ScrollableContainer } from '../../../ScrollableContainer/ScrollableContainer';
+import { VerticalScroll } from '../../../ScrollableContainer/VerticalScroll';
 
 export type Header = {
   title: string;
@@ -86,7 +86,7 @@ export default function ClockLog() {
                     !col.hidden && (
                       <th
                         key={col.id}
-                        className="flex gap-1 capitalize cursor-default group relative text-alsoit-text-sm font-semibold"
+                        className="relative flex gap-1 font-semibold capitalize cursor-default group text-alsoit-text-sm"
                       >
                         <span
                           className="cursor-pointer"
@@ -98,13 +98,13 @@ export default function ClockLog() {
                           <>
                             {headerId === '' && (
                               <FaSort
-                                className="w-3 h-3 text-alsoit-text-lg text-alsoit-gray-50 transition duration-200 bg-alsoit-gray-200 rounded-full opacity-0 cursor-pointer group-hover:opacity-100"
+                                className="w-3 h-3 transition duration-200 rounded-full opacity-0 cursor-pointer text-alsoit-text-lg text-alsoit-gray-50 bg-alsoit-gray-200 group-hover:opacity-100"
                                 onClick={() => handleSort(col.title, col.id)}
                               />
                             )}
                             {timeArr.includes(col.title) && (
                               <div className="rounded-full sortClose-group">
-                                <div className="relative flex items-center justify-center w-4 h-4 space-x-1 text-alsoit-text-lg font-medium text-white uppercase bg-alsoit-danger rounded-full cursor-pointer group">
+                                <div className="relative flex items-center justify-center w-4 h-4 space-x-1 font-medium text-white uppercase rounded-full cursor-pointer text-alsoit-text-lg bg-alsoit-danger group">
                                   <div className="font-bold cursor-pointer hover:text-clip" style={{ fontSize: '8px' }}>
                                     <>
                                       {timeArr.length === 1 ? (
@@ -203,7 +203,7 @@ export default function ClockLog() {
               </tr>
             </thead>
             <tbody className="max-h-20">
-              <ScrollableContainer scrollDirection="y">
+              <VerticalScroll>
                 {getTaskEntries?.data?.time_entries?.map((entries: entriesProps) => {
                   const { id, initials, name } = entries.team_member.user;
                   const { id: teamId } = entries.team_member;
@@ -211,7 +211,7 @@ export default function ClockLog() {
                   teamMemberId.push(teamId);
                   return <EntryList entries={entries} key={entries.id} switchHeader={headers} />;
                 })}
-              </ScrollableContainer>
+              </VerticalScroll>
             </tbody>
           </table>
         </div>

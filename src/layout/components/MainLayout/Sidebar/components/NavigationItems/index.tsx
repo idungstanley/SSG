@@ -1,4 +1,3 @@
-import { ArrowDownIcon, ArrowUpIcon } from '@heroicons/react/24/outline';
 import React, { useEffect, useMemo, useState } from 'react';
 import favoriteIcon from '../../../../../../assets/branding/Favourite-icon.svg';
 import homeIcon from '../../../../../../assets/icons/Home.svg';
