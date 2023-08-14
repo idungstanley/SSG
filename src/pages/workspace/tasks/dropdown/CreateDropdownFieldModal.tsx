@@ -32,13 +32,16 @@ export default function CreateDropdownFieldModal({ show, setShow, listId }: Crea
 
     if (fieldNameRef.current) {
       const name = fieldNameRef.current.value;
-      const properties = formInputs.map((i) => i.value.trim());
+      const options = formInputs.map((i) => {
+        return { name: i.value.trim() };
+      });
 
       onCreate({
         name,
-        properties,
+        options,
         id: entity.id,
-        type: entity.type
+        type: entity.type,
+        customType: 'anything'
       });
 
       setFormInputs([{ id: 1, value: '' }]);

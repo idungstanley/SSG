@@ -12,7 +12,13 @@ export function Default({ value }: DefaultProps) {
   }
 
   if (isArray(value)) {
-    const title = value.map((i) => (isString(i) ? stringifyValue(i) : stringifyValue(i.value))).join(', ');
+    const title = value
+      .map((i) =>
+        isString(i)
+          ? stringifyValue(i)
+          : stringifyValue((i as { id: string; value: string; color?: string; initials?: string }).value)
+      )
+      .join(', ');
 
     return (
       <div title={title} className="flex items-center h-5 gap-1">
@@ -21,7 +27,9 @@ export function Default({ value }: DefaultProps) {
         ) : (
           value.map((i) => (
             <span key={isString(i) ? i : i.id} className="block truncate">
-              {isString(i) ? stringifyValue(i) : stringifyValue(i.value)}
+              {isString(i)
+                ? stringifyValue(i)
+                : stringifyValue((i as { id: string; value: string; color?: string; initials?: string }).value)}
             </span>
           ))
         )}
