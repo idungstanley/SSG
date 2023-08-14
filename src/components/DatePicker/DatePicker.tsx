@@ -43,6 +43,7 @@ export default function DatePicker({ styles, width, height, range, toggleFn }: D
   useEffect(() => {
     if (data) {
       const { value } = data.data.settings;
+      if (!value) return;
       if (value.selectedDate && value.HistoryFilterMemory) {
         const { selectedDate, HistoryFilterMemory } = value;
         const from = dayjs(selectedDate.from);

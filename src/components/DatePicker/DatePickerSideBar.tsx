@@ -4,7 +4,6 @@ import { setHistoryMemory, setTaskSelectedDate } from '../../features/task/taskS
 import { setSelectedDate } from '../../features/workspace/workspaceSlice';
 import { generateDate, weekends, weeks } from '../../utils/calendar';
 import { Dispatch, SetStateAction, useState } from 'react';
-import CustomSuggestion from './CustomSuggestions';
 import ArrowDown from '../../assets/icons/ArrowDown';
 import DoubleArrowLeft from '../../assets/icons/DoubleArrowLeft';
 import { VerticalScroll } from '../ScrollableContainer/VerticalScroll';
@@ -28,7 +27,6 @@ export function DatePickerSideBar({ currentDate, setOpenSideBar }: DatePickerSid
     threeDotIcon: false
   });
   const [showRecurring, setRecurring] = useState<boolean>(false);
-  const [showAddCustomSuggestions, setCustomSuggetionsField] = useState<boolean>(false);
   const { HistoryFilterMemory, customSuggestionField } = useAppSelector((state) => state.task);
   let selectedStartOfWeek: Dayjs | null = null;
   let selectedEndOfWeek: Dayjs | null = null;
@@ -167,8 +165,7 @@ export function DatePickerSideBar({ currentDate, setOpenSideBar }: DatePickerSid
         </div>
         <div className="flex items-center space-x-2">
           <div
-            onClick={() => setCustomSuggetionsField(!showAddCustomSuggestions)}
-            className="flex cursor-pointer"
+            className="cursor-pointer flex"
             onMouseEnter={() => setIconToggle((prev) => ({ ...prev, threeDotIcon: true }))}
             onMouseLeave={() => setIconToggle((prev) => ({ ...prev, threeDotIcon: false }))}
           >
@@ -179,12 +176,8 @@ export function DatePickerSideBar({ currentDate, setOpenSideBar }: DatePickerSid
           </div>
         </div>
       </div>
-      {showRecurring || showAddCustomSuggestions ? (
-        showAddCustomSuggestions ? (
-          <CustomSuggestion setCustomSuggestion={setCustomSuggetionsField} />
-        ) : (
-          <Recurring />
-        )
+      {showRecurring ? (
+        <Recurring />
       ) : (
         <VerticalScroll>
           <div className="flex flex-col w-full mt-1 space-y-2" style={{ height: '340px' }}>

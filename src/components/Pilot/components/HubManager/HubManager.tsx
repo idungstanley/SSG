@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import CreateHub from '../../../../pages/workspace/pilot/components/createEntity/createHub/CreateHub';
 import CreateWallet from '../../../../pages/workspace/pilot/components/createEntity/createWallet/CreateWallet';
 import CreateList from '../../../../pages/workspace/pilot/components/createEntity/createList/CreateList';
@@ -6,11 +6,13 @@ import { useAppSelector } from '../../../../app/hooks';
 import SectionArea from '../SectionArea';
 import hubIcon from '../../../../assets/branding/hub.svg';
 import HubManagerSubTab from './HubManagerSubTab';
+import CustomSuggestion from '../../../DatePicker/CustomSuggestions';
 
 const HubsOptions = [
   { id: 1, element: <CreateHub /> },
   { id: 2, element: <CreateWallet /> },
-  { id: 3, element: <CreateList /> }
+  { id: 3, element: <CreateList /> },
+  { id: 4, element: <CustomSuggestion /> }
 ];
 export default function HubManager() {
   const { activeSubHubManagerTabId } = useAppSelector((state) => state.workspace);
