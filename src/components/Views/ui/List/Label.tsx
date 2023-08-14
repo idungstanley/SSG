@@ -7,12 +7,13 @@ import ListAddModal from './ListAddModal';
 
 interface LabelProps {
   listName?: string;
+  hubName?: string;
   onClickChevron: () => void;
   showTable: boolean;
   tasks?: Task[];
 }
 
-export function Label({ listName, onClickChevron, showTable, tasks }: LabelProps) {
+export function Label({ listName, onClickChevron, hubName, showTable, tasks }: LabelProps) {
   const { selectedTasksArray } = useAppSelector((state) => state.task);
 
   const dispatch = useAppDispatch();
@@ -34,19 +35,21 @@ export function Label({ listName, onClickChevron, showTable, tasks }: LabelProps
     dispatch(setSelectedTasksArray(updatedTaskIds));
   };
   return (
-    <div className="flex">
-      <div className="flex justify-between space-x-10 items-center bg-purple-500 rounded-br-md -mt-1 p-1 rounded-l-md -ml-1">
+    <div className="flex items-center">
+      <div className="flex justify-between space-x-10 items-center bg-purple-500 rounded-br-md -mt-1 p-1 pr-7 rounded-l-md -ml-1">
         <div className="flex space-x-2 items-center pl-2 text-sm text-white  w-fit">
           <Chevron onToggle={onClickChevron} active={showTable} />
 
           <h1 className="">{listName ?? 'Loading...'}</h1>
         </div>
 
-        <button className="rounded-sm bg-gray-200  flex justify-center items-center h-6">
+        <button className="rounded-sm bg-gray-200 flex justify-center items-center h-6">
           {/* <span>Add </span> */}
           <ListAddModal handleCheckedGroupTasks={handleCheckedGroupTasks} />
         </button>
       </div>
+
+      <p className="ml-3">{hubName}</p>
     </div>
   );
 }
