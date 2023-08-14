@@ -6,7 +6,6 @@ import {
   setCurrTaskListId,
   setCurrTeamMemId,
   setHilightNewTask,
-  setSelectedTasksArray,
   setStatusId,
   setUpdateCords
 } from '../../../../features/task/taskSlice';
@@ -43,7 +42,7 @@ export function Table({ heads, data, label }: TableProps) {
 
   const { draggableItemId } = useAppSelector((state) => state.list);
   const [listId, setListId] = useState<string>('');
-  const { statusId, selectedTasksArray } = useAppSelector((state) => state.task);
+  const { statusId } = useAppSelector((state) => state.task);
 
   const { data: list } = UseGetListDetails({ activeItemId: listId, activeItemType: 'list' });
 
