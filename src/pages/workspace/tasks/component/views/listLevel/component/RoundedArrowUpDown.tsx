@@ -9,7 +9,7 @@ interface ArrowUpDownProps {
 export default function RoundedArrowUpDown({ value, id, handleSort }: ArrowUpDownProps) {
   return (
     <div
-      className="flex py-0.5 items-center justify-center w-5 h-5 -space-y-2.5 transition-opacity duration-500 bg-gray-300 rounded-full dNone "
+      className="flex py-0.5 items-center justify-center w-4 h-4 -space-y-2.5 transition-opacity duration-500 bg-gray-300 rounded-full dNone "
       style={{ paddingLeft: '3px' }}
     >
       <FaSortUp
