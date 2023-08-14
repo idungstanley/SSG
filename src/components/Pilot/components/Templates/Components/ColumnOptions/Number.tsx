@@ -1,8 +1,8 @@
 import { Menu, Transition } from '@headlessui/react';
 import { Fragment } from 'react';
-import { BiCaretDownSquare } from 'react-icons/bi';
 import ArrowRight from '../../../../../../assets/icons/ArrowRight';
 import RoundedCheckbox from '../../../../../Checkbox/RoundedCheckbox';
+import Number from '../../../../../../assets/branding/Number';
 
 const items = [
   {
@@ -20,7 +20,7 @@ export default function NumberOptions() {
           <div className="w-full flex items-center justify-between h-full">
             <div className="flex items-center">
               <span className="mx-1">
-                <BiCaretDownSquare />
+                <Number />
               </span>
               <p className="text-alsoit-gray-300-lg text-alsoit-text-lg font-semibold">Number</p>
             </div>

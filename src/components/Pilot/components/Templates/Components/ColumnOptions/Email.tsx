@@ -1,8 +1,8 @@
 import { Menu, Transition } from '@headlessui/react';
 import { Fragment } from 'react';
-import { BiCaretDownSquare } from 'react-icons/bi';
 import ArrowRight from '../../../../../../assets/icons/ArrowRight';
 import RoundedCheckbox from '../../../../../Checkbox/RoundedCheckbox';
+import Email from '../../../../../../assets/branding/Email';
 
 const items = [
   {
@@ -20,7 +20,7 @@ export default function EmailOptions() {
           <div className="w-full flex items-center justify-between h-full">
             <div className="flex items-center">
               <span className="mx-1">
-                <BiCaretDownSquare />
+                <Email />
               </span>
               <p className="text-alsoit-gray-300-lg text-alsoit-text-lg font-semibold">Email</p>
             </div>

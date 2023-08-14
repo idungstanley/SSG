@@ -1,11 +1,11 @@
 import { Menu, Transition } from '@headlessui/react';
 import { Fragment } from 'react';
-import { EllipsisVerticalIcon } from '@heroicons/react/24/outline';
 import { BiCaretDownSquare } from 'react-icons/bi';
 import ArrowRight from '../../../../../../assets/icons/ArrowRight';
 import RoundedCheckbox from '../../../../../Checkbox/RoundedCheckbox';
 import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
 import { setNewCustomPropertyDetails } from '../../../../../../features/task/taskSlice';
+import DropdownIcon from '../../../../../../assets/branding/DropdownIcon';
 
 const items = [
   {
@@ -44,7 +44,7 @@ export default function DropdownOptions() {
           <div className="w-full flex items-center justify-between h-full">
             <div className="flex items-center">
               <span className="mx-1">
-                <BiCaretDownSquare />
+                <DropdownIcon />
               </span>
               <p className="text-alsoit-gray-300-lg text-alsoit-text-lg font-semibold">Dropdown</p>
             </div>

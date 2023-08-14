@@ -3,6 +3,7 @@ import { Fragment } from 'react';
 import { BiCaretDownSquare } from 'react-icons/bi';
 import ArrowRight from '../../../../../../assets/icons/ArrowRight';
 import RoundedCheckbox from '../../../../../Checkbox/RoundedCheckbox';
+import Text from '../../../../../../assets/branding/Text';
 
 const items = [
   {
@@ -40,7 +41,7 @@ export default function TextOptions() {
           <div className="w-full flex items-center justify-between h-full">
             <div className="flex items-center">
               <span className="mx-1">
-                <BiCaretDownSquare />
+                <Text />
               </span>
               <p className="text-alsoit-gray-300-lg text-alsoit-text-lg font-semibold">Texts</p>
             </div>
