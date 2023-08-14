@@ -21,11 +21,11 @@ import { useParams } from 'react-router-dom';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
 import PlusIcon from '../../assets/icons/PlusIcon';
 import ThreeDotIcon from '../../assets/icons/ThreeDotIcon';
-import { Tooltip } from '@mui/material';
 import MenuDropdown from '../Dropdown/MenuDropdown';
 import SubDropdown from '../Dropdown/SubDropdown';
 import { useDraggable, useDroppable } from '@dnd-kit/core';
 import Drag from '../../assets/icons/Drag';
+import ToolTip from '../Tooltip/Tooltip';
 
 interface TaskItemProps {
   item: {
@@ -250,7 +250,7 @@ export default function HubItem({
                 )}
               </div>
               <span className="ml-5 overflow-hidden">
-                <Tooltip title={item.name} arrow placement="top">
+                <ToolTip title={item.name}>
                   <p
                     className="capitalize truncate cursor-pointer"
                     style={{
@@ -263,7 +263,7 @@ export default function HubItem({
                   >
                     {item.name}
                   </p>
-                </Tooltip>
+                </ToolTip>
               </span>
             </div>
           </div>

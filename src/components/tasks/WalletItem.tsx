@@ -20,9 +20,9 @@ import { useParams } from 'react-router-dom';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
 import PlusIcon from '../../assets/icons/PlusIcon';
 import ThreeDotIcon from '../../assets/icons/ThreeDotIcon';
-import { Tooltip } from '@mui/material';
 import { useDraggable, useDroppable } from '@dnd-kit/core';
 import Drag from '../../assets/icons/Drag';
+import ToolTip from '../Tooltip/Tooltip';
 
 interface WalletItemProps {
   wallet: {
@@ -236,7 +236,7 @@ export default function WalletItem({
             className="truncate cursor-pointer hover:underline hover:decoration-dashed"
             style={{ marginLeft: '17px' }}
           >
-            <Tooltip title={wallet.name} arrow placement="top">
+            <ToolTip title={wallet.name}>
               <p
                 className="capitalize truncate cursor-pointer"
                 style={{
@@ -248,7 +248,7 @@ export default function WalletItem({
               >
                 {wallet.name}
               </p>
-            </Tooltip>
+            </ToolTip>
           </div>
           {showSidebar && (
             <div
