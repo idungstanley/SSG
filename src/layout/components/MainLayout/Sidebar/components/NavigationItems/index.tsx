@@ -1,7 +1,4 @@
-import { ArrowDownIcon, ArrowUpIcon } from '@heroicons/react/24/outline';
 import React, { useEffect, useMemo, useState } from 'react';
-import favoriteIcon from '../../../../../../assets/branding/Favourite-icon.svg';
-import homeIcon from '../../../../../../assets/icons/Home.svg';
 import { cl } from '../../../../../../utils';
 import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
 import NavigationItem from './components/NavigationItem';
@@ -25,6 +22,8 @@ import { AvatarWithInitials } from '../../../../../../components';
 import ArrowDownwardIcon from '../../../../../../assets/icons/ArrowDownwardIcon';
 import ArrowUpwardIcon from '../../../../../../assets/icons/ArrowUpwardIcon';
 import { setShowMore } from '../../../../../../features/workspace/workspaceSlice';
+import FavoriteIcon from '../../../../../../assets/branding/FavoriteIcon';
+import HomeIcon from '../../../../../../assets/icons/HomeIcon';
 
 const showLessOrMore = [
   {
@@ -38,7 +37,7 @@ const showLessOrMore = [
 ];
 
 interface NavigationProps {
-  handleHotkeyClick: (value: string, e: React.MouseEvent<SVGElement, MouseEvent>) => void;
+  handleHotkeyClick: (value: string, e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => void;
   activeHotkeyIds: string[];
   activeTabId: string | null;
   setActiveTabId: React.Dispatch<React.SetStateAction<string | null>>;
@@ -65,7 +64,7 @@ export default function NavigationItems({
       id: '1',
       name: 'Home',
       href: '/',
-      source: homeIcon,
+      icon: <HomeIcon />,
       alwaysShow: true
     },
     {
@@ -79,7 +78,7 @@ export default function NavigationItems({
       id: '3',
       name: 'Calendar',
       href: `/${currentWorkspaceId}/calendar`,
-      icon: <CalendarIcon active />,
+      icon: <CalendarIcon active={false} />,
       alwaysShow: false
     },
     {
@@ -130,7 +129,7 @@ export default function NavigationItems({
       id: '8',
       name: 'Favorites',
       href: `${currentWorkspaceId}/favorites`,
-      source: favoriteIcon,
+      icon: <FavoriteIcon />,
       alwaysShow: false
     }
   ];
@@ -204,7 +203,7 @@ export default function NavigationItems({
               onClick={handleToggleMore}
               className={cl(
                 !showSidebar ? 'justify-center pl-5' : 'gap-2 items-center pl-7',
-                'flex cursor-pointer gap-2 items-center p-2 w-full hover:text-gray-500 hover:bg-gray-100'
+                'flex cursor-pointer gap-2 items-center p-2 w-full hover:text-gray-500 hover:bg-gray-100 mb-4'
               )}
               style={{ height: '30px', fontWeight: '600' }}
             >

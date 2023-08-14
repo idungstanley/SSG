@@ -1,33 +1,33 @@
 import React from 'react';
-import { IoNotificationsOutline } from 'react-icons/io5';
-import { VscCalendar } from 'react-icons/vsc';
 import { cl } from '../../../../../../../utils';
-import { HiOutlineLibrary, HiOutlineUserGroup } from 'react-icons/hi';
-import { CgTemplate } from 'react-icons/cg';
-import { Squares2X2Icon } from '@heroicons/react/24/outline';
-import favoriteIcon from '../../../../../../../assets/branding/Favourite-icon.svg';
-import groupIcon from '../../../../../../../assets/branding/Group.png';
-import homeIcon from '../../../../../../../assets/icons/Home.svg';
-import { useAppDispatch } from '../../../../../../../app/hooks';
+import { HiOutlineUserGroup } from 'react-icons/hi';
+import { useAppDispatch, useAppSelector } from '../../../../../../../app/hooks';
 import { setActivePlaceName } from '../../../../../../../features/workspace/workspaceSlice';
+import FavoriteIcon from '../../../../../../../assets/branding/FavoriteIcon';
+import HomeIcon from '../../../../../../../assets/icons/HomeIcon';
+import NotificationIcon from '../../../../../../../assets/icons/NotificationIcon';
+import CalendarIcon from '../../../../../../../assets/icons/CalendarIcon';
+import TemplateIcon from '../../../../../../../assets/icons/TemplateIcon';
+import GoalIcon from '../../../../../../../assets/icons/GoalIcon';
+import DashboardIcon from '../../../../../../../assets/icons/DashboardIcon';
 
 export const NavigationList = [
   {
     id: '1',
     name: 'Home',
-    source: homeIcon,
+    icon: <HomeIcon />,
     alwaysShow: true
   },
   {
     id: '2',
     name: 'Notifications',
-    icon: <IoNotificationsOutline className="w-5 h-5" aria-hidden="true" />,
+    icon: <NotificationIcon />,
     alwaysShow: true
   },
   {
     id: '3',
     name: 'Calendar',
-    icon: <VscCalendar className="w-5 h-5" aria-hidden="true" />,
+    icon: <CalendarIcon active={false} />,
     alwaysShow: false
   },
   {
@@ -38,32 +38,26 @@ export const NavigationList = [
   },
   {
     id: '5',
-    name: 'Library',
-    icon: <HiOutlineLibrary className="w-5 h-5" aria-hidden="true" />,
+    name: 'Template Center',
+    icon: <TemplateIcon />,
     alwaysShow: false
   },
   {
     id: '6',
-    name: 'Template',
-    icon: <CgTemplate className="w-5 h-5" aria-hidden="true" />,
+    name: 'Goals',
+    icon: <GoalIcon />,
     alwaysShow: false
   },
   {
     id: '7',
-    name: 'Goals',
-    source: groupIcon,
+    name: 'Dashboards',
+    icon: <DashboardIcon />,
     alwaysShow: false
   },
   {
     id: '8',
-    name: 'Dashboards',
-    icon: <Squares2X2Icon className="w-5 h-5" aria-hidden="true" />,
-    alwaysShow: false
-  },
-  {
-    id: '9',
     name: 'Favorites',
-    source: favoriteIcon,
+    icon: <FavoriteIcon />,
     alwaysShow: false
   }
 ];
@@ -91,6 +85,7 @@ interface PinnedNavProps {
 
 export default function PinnedNavigationItem({ hotkeys, activeTabId, setActiveTabId }: PinnedNavProps) {
   const dispatch = useAppDispatch();
+  const { notificationCount } = useAppSelector((state) => state.notification);
   const handleClick = (name: string, id: string) => {
     dispatch(setActivePlaceName(name));
     setActiveTabId(activeTabId === id ? null : id);
@@ -102,11 +97,24 @@ export default function PinnedNavigationItem({ hotkeys, activeTabId, setActiveTa
           onClick={() => handleClick(item.name, item.id)}
           title={item.name}
           className={cl(
-            activeTabId === item.id ? 'text-primary-500 bg-primary-200' : 'text-gray-600',
-            'flex items-center justify-center divide-x mr-1'
+            activeTabId === item.id ? 'text-primary-500' : 'text-gray-600',
+            'flex items-center px-0.5 justify-center divide-x m-1 relative'
           )}
           key={item.id}
         >
+          {item.name === 'Notifications' && notificationCount > 0 && (
+            <p
+              className="absolute top-0 flex items-center justify-center w-auto h-3 px-1 text-white"
+              style={{
+                fontSize: '8px',
+                borderRadius: '50px',
+                left: notificationCount > 9 ? '5px' : '10px',
+                backgroundColor: '#B30A0B'
+              }}
+            >
+              {notificationCount}
+            </p>
+          )}
           {item.icon || <img className="w-5 h-5" src={item.source} alt={item.name} />}
         </div>
       ))}
