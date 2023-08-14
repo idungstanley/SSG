@@ -26,7 +26,7 @@ export default function SubHubIndex() {
   const { hubParentId } = useAppSelector((state) => state.hub);
   const { draggableItemId } = useAppSelector((state) => state.list);
 
-  const [showSubChildren, setShowSubChidren] = useState<string | null | undefined>(null);
+  const [openedIds, setOpenedIds] = useState<string[]>([]);
 
   const { data, isSuccess } = useGetSubHub({ parentId: activeItemId });
 
@@ -55,13 +55,14 @@ export default function SubHubIndex() {
       })
     );
     dispatch(setActiveEntity({ id: id, type: EntityType.hub }));
+    setOpenedIds([]);
   };
 
   const handleClick = (id: string) => {
-    if (showSubChildren === id) {
-      setShowSubChidren(null);
+    if (openedIds.includes(id)) {
+      setOpenedIds((prev) => prev.filter((item) => item !== id));
     } else {
-      setShowSubChidren(id);
+      setOpenedIds((prev) => [...prev, id]);
     }
   };
 
@@ -80,11 +81,11 @@ export default function SubHubIndex() {
             <HubItem
               item={subhub}
               handleClick={handleClick}
-              showChildren={showSubChildren === subhub.id}
+              showChildren={openedIds.includes(subhub.id)}
               handleLocation={handleLocation}
               type="subhub"
             />
-            {showSubChildren === subhub.id ? <SHubDropdownList currenId={showSubChildren} /> : null}
+            {openedIds.includes(subhub.id) ? <SHubDropdownList currenId={subhub.id} /> : null}
           </div>
         ))}
     </div>

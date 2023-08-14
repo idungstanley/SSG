@@ -16,7 +16,7 @@ import { EntityType } from '../../../../../utils/EntityTypes/EntityType';
 
 interface SubWalletIndexProps {
   paddingLeft?: string | number;
-  currWalId?: string;
+  parentId?: string;
 }
 
 interface dataProps {
@@ -24,7 +24,7 @@ interface dataProps {
   name: string;
 }
 
-function SubWalletIndex({ paddingLeft = '40', currWalId }: SubWalletIndexProps) {
+function SubWalletIndex({ paddingLeft = '40', parentId }: SubWalletIndexProps) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -32,13 +32,13 @@ function SubWalletIndex({ paddingLeft = '40', currWalId }: SubWalletIndexProps) 
   const { toggleArchiveWallet } = useAppSelector((state) => state.wallet);
   const { showMenuDropdown } = useAppSelector((state) => state.hub);
   const { activeItemId } = useAppSelector((state) => state.workspace);
+  const { draggableItemId } = useAppSelector((state) => state.list);
 
-  const [showSubWallet, setShowSubWallet] = useState<string>('');
-  const [finalParentId, setFinalWalletParentId] = useState('');
+  const [openedIds, setOpenedIds] = useState<string[]>([]);
 
   const { data: subwallet } = getWalletServices({
     Archived: toggleArchiveWallet,
-    parentId: currWalId || activeItemId
+    parentId: parentId || activeItemId
   });
 
   const handleLocation = (id: string, type = 'subwallet3') => {
@@ -46,22 +46,18 @@ function SubWalletIndex({ paddingLeft = '40', currWalId }: SubWalletIndexProps) 
     navigate(`/${currentWorkspaceId}/tasks/w/${id}`);
     dispatch(setActiveItem({ activeItemType: type, activeItemId: id }));
     dispatch(setActiveEntity({ id, type: EntityType.wallet }));
-    setShowSubWallet('');
+    setOpenedIds([]);
   };
 
   const handleShowSubWallet = (id: string) => {
-    if (showSubWallet === id) {
-      setShowSubWallet('');
+    if (openedIds.includes(id)) {
+      setOpenedIds((prev) => prev.filter((item) => item !== id));
     } else {
-      setShowSubWallet(id);
+      setOpenedIds((prev) => [...prev, id]);
     }
-    setFinalWalletParentId(id);
   };
 
-  const { draggableItemId } = useAppSelector((state) => state.list);
-
   const draggableItem = draggableItemId ? subwallet?.data?.lists.find((i: IList) => i.id === draggableItemId) : null;
-
   const draggableWallet = draggableItemId ? subwallet?.data?.wallets.find((i) => i.id === draggableItemId) : null;
 
   return (
@@ -84,10 +80,10 @@ function SubWalletIndex({ paddingLeft = '40', currWalId }: SubWalletIndexProps) 
             handleLocation={handleLocation}
             handleShowSubWallet={handleShowSubWallet}
             paddingLeft={paddingLeft}
-            showSubWallet={showSubWallet.includes(wallet.id)}
+            showSubWallet={openedIds.includes(wallet.id)}
           />
-          {showSubWallet.includes(wallet.id) ? (
-            <LastListIndex finalParentId={finalParentId} paddingLeft={Number(paddingLeft) + 13} />
+          {openedIds.includes(wallet.id) ? (
+            <LastListIndex parentId={wallet.id} paddingLeft={Number(paddingLeft) + 13} />
           ) : null}
         </div>
       ))}

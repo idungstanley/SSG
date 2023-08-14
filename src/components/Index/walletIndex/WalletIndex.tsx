@@ -37,7 +37,7 @@ function WalletIndex({ showHubList, paddingLeft, parentId }: WalletIndexProps) {
   const { toggleArchiveWallet } = useAppSelector((state) => state.wallet);
   const { activeItemId } = useAppSelector((state) => state.workspace);
 
-  const [showSubWallet, setShowSubWallet] = useState<string>('');
+  const [openedIds, setOpenedIds] = useState<string[]>([]);
 
   const { data: walletAndListData } = useGetHubWallet(activeItemId);
 
@@ -49,7 +49,7 @@ function WalletIndex({ showHubList, paddingLeft, parentId }: WalletIndexProps) {
   const handleLocation = (id: string, name: string) => {
     dispatch(setShowHub(true));
     navigate(`/${currentWorkspaceId}/tasks/w/${id}`);
-    setShowSubWallet('');
+    setOpenedIds([]);
     dispatch(setCurrentWalletId(id));
     dispatch(setCurrentWalletType(EntityType.wallet));
     dispatch(setCurrentWalletName(name));
@@ -65,10 +65,10 @@ function WalletIndex({ showHubList, paddingLeft, parentId }: WalletIndexProps) {
   };
 
   const handleShowSubWallet = (id: string) => {
-    if (showSubWallet === id) {
-      setShowSubWallet('');
+    if (openedIds.includes(id)) {
+      setOpenedIds((prev) => prev.filter((item) => item !== id));
     } else {
-      setShowSubWallet(id);
+      setOpenedIds((prev) => [...prev, id]);
     }
     dispatch(setCurrentWalletId(id));
     dispatch(setCurrentWalletType(EntityType.wallet));
@@ -92,11 +92,13 @@ function WalletIndex({ showHubList, paddingLeft, parentId }: WalletIndexProps) {
               walletType="wallet"
               handleLocation={handleLocation}
               handleShowSubWallet={handleShowSubWallet}
-              showSubWallet={showSubWallet.includes(wallet.id)}
+              showSubWallet={openedIds.includes(wallet.id)}
               paddingLeft={paddingLeft}
             />
             <div>
-              {showSubWallet.includes(wallet.id) ? <SubWalletIndex paddingLeft={Number(paddingLeft) + 15} /> : null}
+              {openedIds.includes(wallet.id) ? (
+                <SubWalletIndex paddingLeft={Number(paddingLeft) + 15} parentId={wallet.id} />
+              ) : null}
             </div>
           </div>
         ))}
