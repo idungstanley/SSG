@@ -23,7 +23,7 @@ export function DatePickerManualDates({ range }: DatePickerManualDatesProps) {
     dueIcon: false,
     startIcon: false
   });
-  const [timeInterval, setTimeInterval] = useState<15 | 30>(15);
+  const { timeInterval } = useAppSelector((state) => state.calendar);
   const dispatch = useAppDispatch();
 
   const handleFilterDateDispatch = () => {
@@ -126,8 +126,6 @@ export function DatePickerManualDates({ range }: DatePickerManualDatesProps) {
               </div>
               {selectedDate?.date && taskTime?.from ? (
                 <ReusableSelect
-                  intervalFn={setTimeInterval}
-                  timeInterval={timeInterval}
                   options={createDynamicTimeComponent(timeInterval, timezone)}
                   value={HistoryFilterMemory?.time?.from || ''}
                   onclick={(e: string) => {
@@ -182,8 +180,6 @@ export function DatePickerManualDates({ range }: DatePickerManualDatesProps) {
               </div>
               {selectedDate?.date && taskTime?.to ? (
                 <ReusableSelect
-                  intervalFn={setTimeInterval}
-                  timeInterval={timeInterval}
                   options={createDynamicTimeComponent(timeInterval, timezone)}
                   value={HistoryFilterMemory?.time?.to || ''}
                   style="-left-44 top-2"

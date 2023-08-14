@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect, Dispatch, SetStateAction } from 'react';
 import dayjs from 'dayjs';
 import ArrowCaretDown from '../assets/icons/ArrowCaretDown';
+import { useAppSelector } from '../app/hooks';
 
 type Option = string; // Change this type to match the type of your options
 
@@ -9,11 +10,9 @@ interface ReusableSelectProps {
   onclick: (option: string) => void;
   options: Option[];
   style?: string;
-  intervalFn?: Dispatch<SetStateAction<15 | 30>>;
-  timeInterval?: 15 | 30;
 }
 
-function ReusableSelect({ value, onclick, options, style, intervalFn, timeInterval }: ReusableSelectProps) {
+function ReusableSelect({ value, onclick, options, style }: ReusableSelectProps) {
   const [dropped, setDrop] = useState<{ container: boolean; timeInterval: boolean }>({
     container: false,
     timeInterval: false
@@ -21,6 +20,7 @@ function ReusableSelect({ value, onclick, options, style, intervalFn, timeInterv
   const [editing, setEditing] = useState<boolean>(false);
   const currentOrFutureTime = value || findNearestTime(dayjs(), options);
   const [activeItem, setActiveItem] = useState<string | null>(currentOrFutureTime);
+  const { timeInterval } = useAppSelector((state) => state.calendar);
   const listRef = useRef<HTMLUListElement>(null);
 
   useEffect(() => {
@@ -55,7 +55,7 @@ function ReusableSelect({ value, onclick, options, style, intervalFn, timeInterv
 
   const handleCloseModal = (value?: 15 | 30) => {
     if (value) {
-      intervalFn && intervalFn(value);
+      // intervalFn && intervalFn(value);
       setDrop((prev) => ({ ...prev, timeInterval: !prev.timeInterval }));
     }
   };
@@ -103,9 +103,9 @@ function ReusableSelect({ value, onclick, options, style, intervalFn, timeInterv
                 onClick={() => setDrop((prev) => ({ ...prev, timeInterval: !prev.timeInterval }))}
               >
                 <span>{timeInterval} mins</span>
-                <ArrowCaretDown active />
+                {/* <ArrowCaretDown active /> */}
               </div>
-              {dropped.timeInterval && (
+              {/* {dropped.timeInterval && (
                 <div className="bg-alsoit-gray-50 flex flex-col space-y-2 shadow-lg w-20 p-1 absolute top-8 right-0">
                   <span
                     onClick={() => handleCloseModal(15)}
@@ -120,7 +120,7 @@ function ReusableSelect({ value, onclick, options, style, intervalFn, timeInterv
                     30 Mins
                   </span>
                 </div>
-              )}
+              )} */}
             </li>
             {options.map((option, index) => (
               <li

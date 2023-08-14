@@ -28,7 +28,6 @@ export function DatePickerSideBar({ currentDate, setOpenSideBar }: DatePickerSid
     threeDotIcon: false
   });
   const [showRecurring, setRecurring] = useState<boolean>(false);
-  const [showAddCustomSuggestions, setCustomSuggetionsField] = useState<boolean>(false);
   const { HistoryFilterMemory, customSuggestionField } = useAppSelector((state) => state.task);
   let selectedStartOfWeek: Dayjs | null = null;
   let selectedEndOfWeek: Dayjs | null = null;
@@ -167,7 +166,6 @@ export function DatePickerSideBar({ currentDate, setOpenSideBar }: DatePickerSid
         </div>
         <div className="flex items-center space-x-2">
           <div
-            onClick={() => setCustomSuggetionsField(!showAddCustomSuggestions)}
             className="cursor-pointer flex"
             onMouseEnter={() => setIconToggle((prev) => ({ ...prev, threeDotIcon: true }))}
             onMouseLeave={() => setIconToggle((prev) => ({ ...prev, threeDotIcon: false }))}
@@ -179,12 +177,8 @@ export function DatePickerSideBar({ currentDate, setOpenSideBar }: DatePickerSid
           </div>
         </div>
       </div>
-      {showRecurring || showAddCustomSuggestions ? (
-        showAddCustomSuggestions ? (
-          <CustomSuggestion setCustomSuggestion={setCustomSuggetionsField} />
-        ) : (
-          <Recurring />
-        )
+      {showRecurring ? (
+        <Recurring />
       ) : (
         <ScrollableContainer scrollDirection="y">
           <div className="flex flex-col space-y-2 w-full mt-1" style={{ height: '340px' }}>
