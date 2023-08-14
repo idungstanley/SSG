@@ -1,12 +1,5 @@
 import * as React from 'react';
-import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import { AiOutlineNumber } from 'react-icons/ai';
-import { BiCaretDownSquare, BiText } from 'react-icons/bi';
-import { HiOutlineMail } from 'react-icons/hi';
-import { TfiMoney } from 'react-icons/tfi';
-import { MdDateRange } from 'react-icons/md';
-import ArrowRight from '../../../../../assets/icons/ArrowRight';
 import ArrowDown from '../../../../../assets/icons/ArrowDown';
 import { useAppSelector } from '../../../../../app/hooks';
 import { Capitalize } from '../../../../../utils/NoCapWords/Capitalize';

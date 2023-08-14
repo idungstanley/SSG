@@ -1,6 +1,5 @@
 import { Menu, Transition } from '@headlessui/react';
 import { Fragment } from 'react';
-import { BiCaretDownSquare } from 'react-icons/bi';
 import ArrowRight from '../../../../../../assets/icons/ArrowRight';
 import RoundedCheckbox from '../../../../../Checkbox/RoundedCheckbox';
 import Text from '../../../../../../assets/branding/Text';
