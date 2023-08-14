@@ -1,7 +1,7 @@
 import React from 'react';
 import { cl } from '../../../../../../../utils';
 import { HiOutlineUserGroup } from 'react-icons/hi';
-import { useAppDispatch } from '../../../../../../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../../../../../../app/hooks';
 import { setActivePlaceName } from '../../../../../../../features/workspace/workspaceSlice';
 import FavoriteIcon from '../../../../../../../assets/branding/FavoriteIcon';
 import HomeIcon from '../../../../../../../assets/icons/HomeIcon';
@@ -85,6 +85,7 @@ interface PinnedNavProps {
 
 export default function PinnedNavigationItem({ hotkeys, activeTabId, setActiveTabId }: PinnedNavProps) {
   const dispatch = useAppDispatch();
+  const { notificationCount } = useAppSelector((state) => state.notification);
   const handleClick = (name: string, id: string) => {
     dispatch(setActivePlaceName(name));
     setActiveTabId(activeTabId === id ? null : id);
@@ -96,11 +97,24 @@ export default function PinnedNavigationItem({ hotkeys, activeTabId, setActiveTa
           onClick={() => handleClick(item.name, item.id)}
           title={item.name}
           className={cl(
-            activeTabId === item.id ? 'text-primary-500 bg-primary-200' : 'text-gray-600',
-            'flex items-center justify-center divide-x mr-1'
+            activeTabId === item.id ? 'text-primary-500' : 'text-gray-600',
+            'flex items-center px-0.5 justify-center divide-x m-1 relative'
           )}
           key={item.id}
         >
+          {item.name === 'Notifications' && notificationCount > 0 && (
+            <p
+              className="absolute top-0 flex items-center justify-center w-auto h-3 px-1 text-white"
+              style={{
+                fontSize: '8px',
+                borderRadius: '50px',
+                left: notificationCount > 9 ? '5px' : '10px',
+                backgroundColor: '#B30A0B'
+              }}
+            >
+              {notificationCount}
+            </p>
+          )}
           {item.icon || <img className="w-5 h-5" src={item.source} alt={item.name} />}
         </div>
       ))}
