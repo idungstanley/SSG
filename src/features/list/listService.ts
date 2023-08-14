@@ -202,7 +202,7 @@ export const UseGetListDetails = (query: {
   activeItemId: string | null | undefined;
   activeItemType: string | null | undefined;
 }) => {
-  const dispatch = useAppDispatch();
+  // const dispatch = useAppDispatch();
   return useQuery(
     ['hubs', query],
     async () => {
