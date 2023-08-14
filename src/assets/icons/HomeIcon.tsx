@@ -3,7 +3,7 @@ import React from 'react';
 
 export default function HomeIcon() {
   return (
-    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg width="20" height="20" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
         d="M0.599609 2.125C0.599609 1.22754 1.32715 0.5 2.22461 0.5H11.9746C12.8721 0.5 13.5996 1.22754 13.5996 2.125V11.875C13.5996 12.7725 12.8721 13.5 11.9746 13.5H2.22461C1.32715 13.5 0.599609 12.7725 0.599609 11.875V2.125Z"
         fill="#00CC25"

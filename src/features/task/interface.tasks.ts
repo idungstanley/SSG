@@ -3,7 +3,8 @@ import { teamMember } from '../../pages/workspace/tasks/timeclock/entryLists/Ent
 import { ICustomField, ImyTaskData } from './taskSlice';
 
 export interface UpdateTaskProps {
-  task_id: string | null | undefined;
+  task_id_array?: string[];
+  task_id?: string | string[] | null | undefined;
   priorityDataUpdate?: string;
   statusDataUpdate?: string;
 }
@@ -229,6 +230,25 @@ export interface IExtraFields {
   label: string;
   type: string;
   depth: number;
+}
+
+export interface IUserCalendarParams {
+  selectedDate: ISelectedDate | null;
+  HistoryFilterMemory: IHistoryFilterMemory | null;
+}
+export interface IUserSettings {
+  key: string;
+  is_json: boolean;
+  resolution?: string | null;
+  value: IUserCalendarParams;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface IUserSettingsRes {
+  data: {
+    settings: IUserSettings;
+  };
 }
 
 type ValueOf<T> = T[keyof T];

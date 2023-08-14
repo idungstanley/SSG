@@ -11,6 +11,8 @@ import {
   setActiveItem,
   setActiveTabId,
   setCurrentItem,
+  setOpenedEntitiesIds,
+  setOpenedParentsIds,
   setShowHub,
   setShowPilot
 } from '../../../../../../../features/workspace/workspaceSlice';
@@ -31,7 +33,9 @@ export default function HList({ hubs }: ListProps) {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { hubId, walletId, listId } = useParams();
-  const { currentItemId, showExtendedBar, createEntityType } = useAppSelector((state) => state.workspace);
+  const { currentItemId, showExtendedBar, createEntityType, openedParentsIds, openedEntitiesIds } = useAppSelector(
+    (state) => state.workspace
+  );
   const { entityToCreate } = useAppSelector((state) => state.hub);
   const { showSidebar } = useAppSelector((state) => state.account);
   const [showChildren, setShowChidren] = useState<string | null | undefined>(null);
@@ -93,7 +97,7 @@ export default function HList({ hubs }: ListProps) {
     );
   };
 
-  const handleClick = (id: string, index?: number) => {
+  const handleClick = (id: string, parent_id: string | null, index?: number) => {
     dispatch(setSubHubExt({ id: null, type: null }));
     dispatch(setParentHubExt({ id, type: EntityType.hub }));
 
@@ -110,9 +114,15 @@ export default function HList({ hubs }: ListProps) {
     if (id === openedNewHubId) {
       setShowChidren(null);
       setOpenedNewHubId('');
+      dispatch(setOpenedParentsIds(openedParentsIds.filter((item) => item !== id)));
+      dispatch(setOpenedEntitiesIds(openedEntitiesIds.filter((item) => item !== id)));
     } else {
+      if (parent_id) {
+        dispatch(setOpenedParentsIds([...openedParentsIds, parent_id]));
+      }
       setShowChidren(id);
       setOpenedNewHubId(id);
+      dispatch(setOpenedEntitiesIds([...openedEntitiesIds, id]));
     }
 
     dispatch(

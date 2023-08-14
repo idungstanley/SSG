@@ -72,6 +72,8 @@ interface workspaceState {
   lastActiveItem: string;
   showMore: boolean;
   isFirstOpened: boolean;
+  openedEntitiesIds: string[];
+  openedParentsIds: string[];
 }
 
 const initialState: workspaceState = {
@@ -133,7 +135,9 @@ const initialState: workspaceState = {
   showTreeInput: false,
   lastActiveItem: '',
   showMore: false,
-  isFirstOpened: true
+  isFirstOpened: true,
+  openedEntitiesIds: [],
+  openedParentsIds: []
 };
 
 export const wsSlice = createSlice({
@@ -346,6 +350,12 @@ export const wsSlice = createSlice({
     },
     setIsFirstOpened(state, action: PayloadAction<boolean>) {
       state.isFirstOpened = action.payload;
+    },
+    setOpenedEntitiesIds(state, action: PayloadAction<string[]>) {
+      state.openedEntitiesIds = action.payload;
+    },
+    setOpenedParentsIds(state, action: PayloadAction<string[]>) {
+      state.openedParentsIds = action.payload;
     }
   }
 });
@@ -408,7 +418,9 @@ export const {
   setLastActiveItem,
   setIsManageStatus,
   setShowTabLabel,
-  setIsFirstOpened
+  setIsFirstOpened,
+  setOpenedEntitiesIds,
+  setOpenedParentsIds
 } = wsSlice.actions;
 
 export default wsSlice.reducer;

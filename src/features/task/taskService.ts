@@ -1,11 +1,20 @@
 import requestNew from '../../app/requestNew';
-import { IFullTaskRes, ITaskListRes, ITaskRes, ITimeEntriesRes, TaskId, newTaskDataRes } from './interface.tasks';
+import {
+  IFullTaskRes,
+  ITaskListRes,
+  ITaskRes,
+  ITimeEntriesRes,
+  IUserCalendarParams,
+  IUserSettingsRes,
+  TaskId,
+  newTaskDataRes
+} from './interface.tasks';
 import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import {
-  setNewTask,
   setScreenRecording,
   setScreenRecordingMedia,
+  setSelectedTasksArray,
   setTimerStatus,
   setToggleAssignCurrentTaskId,
   setUpdateTimerDuration
@@ -19,6 +28,23 @@ import { setTimerLastMemory, toggleMute } from '../workspace/workspaceSlice';
 import { generateFilters } from '../../components/TasksHeader/lib/generateFilters';
 import { runTimer } from '../../utils/TimerCounter';
 import Duration from '../../utils/TimerDuration';
+
+export const UseSaveTaskFilters = () => {
+  const { filters } = generateFilters();
+  const mutation = useMutation(async ({ key }: { key: string }) => {
+    const data = requestNew({
+      url: 'settings',
+      method: 'PUT',
+      data: {
+        key,
+        value: filters
+      }
+    });
+    return data;
+  });
+
+  return mutation;
+};
 
 const moveTask = (data: { taskId: TaskId; listId: string; overType: string }) => {
   const { taskId, listId, overType } = data;
@@ -36,6 +62,42 @@ const moveTask = (data: { taskId: TaskId; listId: string; overType: string }) =>
     data: requestData
   });
   return response;
+};
+
+export const useSaveData = () => {
+  const queryClient = useQueryClient();
+  const mutation = useMutation(
+    async ({ key, value }: { key: string; value: IUserCalendarParams }) => {
+      const data = requestNew({
+        url: 'settings',
+        method: 'PUT',
+        data: {
+          key,
+          value
+        }
+      });
+      return data;
+    },
+    {
+      onSuccess: () => queryClient.invalidateQueries(['calendar-data'])
+    }
+  );
+
+  return mutation;
+};
+
+export const useGetUserSettingsData = ({ keys }: { keys: string }) => {
+  return useQuery(['calendar-data'], async () => {
+    const data = await requestNew<IUserSettingsRes>({
+      url: 'settings',
+      method: 'GET',
+      params: {
+        key: keys
+      }
+    });
+
+    return data;
+  });
 };
 
 export const useMoveTask = () => {
@@ -295,24 +357,28 @@ export const UseUpdateTaskStatusService2 = () => {
   });
 };
 
-export const UseUpdateTaskStatusServices = ({ task_id, priorityDataUpdate }: UpdateTaskProps) => {
+export const UseUpdateTaskStatusServices = ({ task_id_array, priorityDataUpdate }: UpdateTaskProps) => {
+  const { currentTaskPriorityId } = useAppSelector((state) => state.task);
+  const dispatch = useAppDispatch();
+
   const queryClient = useQueryClient();
   return useQuery(
-    ['task', { task_id, priorityDataUpdate }],
+    ['task', { task_id_array, priorityDataUpdate }],
     async () => {
       const data = requestNew({
-        url: `tasks/${task_id}`,
-        method: 'PUT',
-        params: {
+        url: 'tasks/multiple/priority',
+        method: 'POST',
+        data: {
+          ids: task_id_array?.length ? task_id_array : [currentTaskPriorityId],
           priority: priorityDataUpdate
         }
       });
       return data;
     },
     {
-      // enabled: statusDataUpdate !== '' || priorityDataUpdate !== '',
-      enabled: task_id != null && priorityDataUpdate !== '',
+      enabled: task_id_array != null && priorityDataUpdate !== '',
       onSuccess: () => {
+        dispatch(setSelectedTasksArray([]));
         queryClient.invalidateQueries(['task']);
       }
     }

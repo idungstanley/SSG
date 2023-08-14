@@ -29,8 +29,8 @@ export function FilterDropdown() {
         leaveTo="transform opacity-0 scale-95"
       >
         <Menu.Items
-          style={{ minWidth: '600px' }}
-          className="fixed z-10 p-2 origin-top-left rounded-md bg-white shadow-lg focus:outline-none"
+          style={{ minWidth: '600px', zIndex: '31' }}
+          className="fixed p-2 origin-top-left rounded-md bg-white shadow-lg focus:outline-none"
         >
           {/* close */}
           <Menu.Item>

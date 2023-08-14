@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, Dispatch, SetStateAction } from 'react';
 import dayjs from 'dayjs';
 import ArrowCaretDown from '../assets/icons/ArrowCaretDown';
 
@@ -9,15 +9,16 @@ interface ReusableSelectProps {
   onclick: (option: string) => void;
   options: Option[];
   style?: string;
+  intervalFn?: Dispatch<SetStateAction<15 | 30>>;
+  timeInterval?: 15 | 30;
 }
 
-function ReusableSelect({ value, onclick, options, style }: ReusableSelectProps) {
+function ReusableSelect({ value, onclick, options, style, intervalFn, timeInterval }: ReusableSelectProps) {
   const [dropped, setDrop] = useState<{ container: boolean; timeInterval: boolean }>({
     container: false,
     timeInterval: false
   });
   const [editing, setEditing] = useState<boolean>(false);
-  const [timeInterval, setTimeInterval] = useState<15 | 30>(15);
   const currentOrFutureTime = value || findNearestTime(dayjs(), options);
   const [activeItem, setActiveItem] = useState<string | null>(currentOrFutureTime);
   const listRef = useRef<HTMLUListElement>(null);
@@ -54,7 +55,7 @@ function ReusableSelect({ value, onclick, options, style }: ReusableSelectProps)
 
   const handleCloseModal = (value?: 15 | 30) => {
     if (value) {
-      setTimeInterval(value);
+      intervalFn && intervalFn(value);
       setDrop((prev) => ({ ...prev, timeInterval: !prev.timeInterval }));
     }
   };
@@ -84,8 +85,8 @@ function ReusableSelect({ value, onclick, options, style }: ReusableSelectProps)
   return (
     <div className="rounded-md relative">
       {!editing && (
-        <div className="text-alsoit-text-sm flex items-center" onClick={handleEdit}>
-          {value ? value : 'Set Time'}
+        <div className="text-alsoit-text-sm flex items-center -mt-1.5" onClick={handleEdit}>
+          {value ? `| ${value}` : 'Set Time'}
         </div>
       )}
       {dropped.container && !value && (

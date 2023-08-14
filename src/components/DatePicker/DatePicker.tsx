@@ -2,13 +2,15 @@ import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 import dayjs from 'dayjs';
 import timezone from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
-import { useAppSelector } from '../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { Modal } from '@mui/material';
 import { DatePickerSideBar } from './DatePickerSideBar';
 import { DatePickerManualDates } from './DatePickerManualDate';
 import MiniDatePicker from './MiniCalendar';
 import LeftPanelOpen from '../../assets/icons/LeftPanelOpen';
 import DatePickerFooter from './DatePickerFooter';
+import { useGetUserSettingsData } from '../../features/task/taskService';
+import { setHistoryMemory, setTaskSelectedDate } from '../../features/task/taskSlice';
 
 interface DatePickerProps {
   styles?: string;
@@ -25,15 +27,31 @@ export type DateString = {
 export default function DatePicker({ styles, width, height, range, toggleFn }: DatePickerProps) {
   dayjs.extend(timezone);
   dayjs.extend(utc);
+  const dispatch = useAppDispatch();
   const currentDate = dayjs();
+  const userTimeZoneFromLS: string | null = localStorage.getItem('userTimeZone');
   const { timezone: zone, time_format } = useAppSelector((state) => state.userSetting);
   const sectionRef = useRef<HTMLElement>(null);
   const [time, setTime] = useState<string>(
     dayjs()
-      .tz(zone)
+      .tz(userTimeZoneFromLS ?? zone)
       .format(time_format === '1' ? 'ddd, DD MMM YYYY HH:mm' : 'ddd, DD MMM YYYY h:mm A')
   );
   const [openSideBar, setOpenSideBar] = useState<boolean>(false);
+  const { data } = useGetUserSettingsData({ keys: 'calendar' });
+
+  useEffect(() => {
+    if (data) {
+      const { value } = data.data.settings;
+      if (value.selectedDate && value.HistoryFilterMemory) {
+        const { selectedDate, HistoryFilterMemory } = value;
+        const from = dayjs(selectedDate.from);
+        const to = dayjs(selectedDate.to);
+        dispatch(setTaskSelectedDate({ from, to }));
+        dispatch(setHistoryMemory(HistoryFilterMemory));
+      }
+    }
+  }, [data]);
 
   const closeDateModal = () => {
     if (toggleFn) {

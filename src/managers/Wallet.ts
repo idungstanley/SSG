@@ -61,3 +61,39 @@ export const createWalletManager = (
   const updatedTree = findCurrentEntity(type, id, hubs, createWallet as <IWallet>(item: IWallet) => IWallet);
   return updatedTree;
 };
+
+export const findAllEntitiesIdsOfWallet = (id: string, hubs: Hub[], openedEntitiesIds: string[]): string[] => {
+  const currentEntitiesIds: string[] = [id, ...openedEntitiesIds];
+  const findAllEntitiesIds = (currentWallet: Wallet) => {
+    if (currentWallet.children.length) {
+      for (const children of currentWallet.children) {
+        currentEntitiesIds.push(children.id);
+      }
+    }
+    return currentWallet;
+  };
+
+  findCurrentEntity('wallet', id, hubs, findAllEntitiesIds as <IHub>(item: IHub) => IHub);
+  return currentEntitiesIds;
+};
+
+export const removeEntityChildrenIdsOfWallet = (id: string, hubs: Hub[], openedEntitiesIds: string[]): string[] => {
+  const currentEntitiesIds: string[] = [...openedEntitiesIds];
+  const idsForRemove: string[] = [];
+  const findAllEntitiesIds = (currentWallet: Wallet) => {
+    if (currentWallet.children.length) {
+      for (const children of currentWallet.children) {
+        idsForRemove.push(children.id);
+      }
+      currentEntitiesIds.splice(
+        0,
+        currentEntitiesIds.length,
+        ...currentEntitiesIds.filter((n) => !idsForRemove.includes(n))
+      );
+    }
+    return currentWallet;
+  };
+
+  findCurrentEntity('wallet', id, hubs, findAllEntitiesIds as <IHub>(item: IHub) => IHub);
+  return currentEntitiesIds;
+};
