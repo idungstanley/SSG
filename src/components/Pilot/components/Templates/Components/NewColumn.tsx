@@ -28,8 +28,9 @@ function NewColumn() {
           />
         </div>
       </div>
-      {newCustomPropertyDetails.type.toLowerCase() === 'single label' ||
-        (newCustomPropertyDetails.type.toLowerCase() === 'multi label' && <CreateDropdownField />)}
+      {newCustomPropertyDetails.type.toLowerCase() === 'single label' && <CreateDropdownField />}
+      {newCustomPropertyDetails.type.toLowerCase() === 'multi label' && <CreateDropdownField />}
+
       {newCustomPropertyDetails.type.toLowerCase() === 'date' && <CreateDateField />}
     </div>
   );

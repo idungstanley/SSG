@@ -251,7 +251,7 @@ export const useCreateDropdownField = (type: string | undefined, id?: string | u
 
   return useMutation(createDropdownField, {
     onSuccess: () => {
-      dispatch(setNewCustomPropertyDetails({ name: '', type: 'dropdown' }));
+      dispatch(setNewCustomPropertyDetails({ name: '', type: 'single label' }));
       if (type === 'hub') {
         queryClient.invalidateQueries(['task', activeItemId, activeItemType, filterTaskByAssigneeIds]);
       }

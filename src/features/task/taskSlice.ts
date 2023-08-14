@@ -274,7 +274,7 @@ const initialState: TaskState = {
   listViewHeads: [],
   customSuggestionField: [],
   newTaskData: undefined,
-  newCustomPropertyDetails: { name: '', type: 'single label' }
+  newCustomPropertyDetails: { name: '', type: 'Single Label' }
 };
 
 export const taskSlice = createSlice({
