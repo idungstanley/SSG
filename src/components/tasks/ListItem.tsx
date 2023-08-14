@@ -22,11 +22,11 @@ import { useDraggable, useDroppable } from '@dnd-kit/core';
 import { cl } from '../../utils';
 import InteractiveTooltip from '../Tooltip/InteractiveTooltip';
 import ThreeDotIcon from '../../assets/icons/ThreeDotIcon';
-import { Tooltip } from '@mui/material';
 import MenuDropdown from '../Dropdown/MenuDropdown';
 import Drag from '../../assets/icons/Drag';
 import { IList } from '../../features/hubs/hubs.interfaces';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
+import ToolTip from '../Tooltip/Tooltip';
 
 interface ListItemProps {
   list: IList;
@@ -207,7 +207,7 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
               outterColour={outerColour}
             />
           </div>
-          <Tooltip title={list.name} arrow placement="top">
+          <ToolTip title={list.name}>
             <div
               style={{
                 fontSize: '13px',
@@ -220,7 +220,7 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
             >
               {list.name}
             </div>
-          </Tooltip>
+          </ToolTip>
         </div>
         {/* ends here */}
         <div className="flex items-center gap-1">
