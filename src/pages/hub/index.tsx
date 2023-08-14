@@ -13,7 +13,7 @@ import FilterByAssigneesSliderOver from '../workspace/lists/components/renderlis
 import { List } from '../../components/Views/ui/List/List';
 import { generateLists } from '../../utils';
 import { Header } from '../../components/TasksHeader';
-import { ScrollableContainer } from '../../components/ScrollableContainer/ScrollableContainer';
+import { VerticalScroll } from '../../components/ScrollableContainer/VerticalScroll';
 import { GroupHorizontalScroll } from '../../components/ScrollableContainer/GroupHorizontalScroll';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
 
@@ -81,7 +81,7 @@ export default function HubPage() {
         additional={<FilterByAssigneesSliderOver />}
       >
         <Header />
-        <ScrollableContainer scrollDirection="y">
+        <VerticalScroll>
           <section
             ref={containerRef}
             style={{ minHeight: '0', maxHeight: '83vh' }}
@@ -94,7 +94,7 @@ export default function HubPage() {
               </div>
             ))}
           </section>
-        </ScrollableContainer>
+        </VerticalScroll>
         {Object.keys(lists).length > 1 && <GroupHorizontalScroll />}
       </Page>
     </>

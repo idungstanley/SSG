@@ -22,7 +22,6 @@ interface StatusBodyProps {
 
 export default function StatusBodyTemplate({ item, index, setStatusTypesState }: StatusBodyProps) {
   const [editableContent, setEditableContent] = useState<boolean>(false);
-  const [statusColor, setStatusColor] = useState<string | ListColourProps>('');
   const [showStatusEditDropdown, setShowStatusEditDropdown] = useState<null | HTMLSpanElement | HTMLDivElement>(null);
   const [showStatusColorDropdown, setShowStatusColorDropdown] = useState<null | HTMLSpanElement>(null);
   const handleOpenStatusEditDropdown = (event: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
@@ -36,7 +35,6 @@ export default function StatusBodyTemplate({ item, index, setStatusTypesState }:
   };
 
   const handleStatusColor = (color: string | ListColourProps) => {
-    setStatusColor(color);
     setStatusTypesState((prevState) => {
       return prevState.map((status) => {
         if (status.label === item.label) {

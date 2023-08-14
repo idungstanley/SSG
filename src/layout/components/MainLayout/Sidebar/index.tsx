@@ -16,7 +16,7 @@ import CommandSearchModal from './components/CommandSearchModal';
 import SearchIcon from '../../../../assets/icons/SearchIcon';
 import { setUpdateCords } from '../../../../features/hubs/hubSlice';
 import { useScroll } from '../../../../hooks/useScroll';
-import { ScrollableContainer } from '../../../../components/ScrollableContainer/ScrollableContainer';
+import { VerticalScroll } from '../../../../components/ScrollableContainer/VerticalScroll';
 import StatusManagement from '../../../../components/status/StatusManagement';
 
 const MAX_SIDEBAR_WIDTH = dimensions.navigationBar.max;
@@ -91,7 +91,7 @@ export default function Sidebar() {
           activeTabId={activeTabId}
           setActiveTabId={setActiveTabId}
         />
-        <ScrollableContainer scrollDirection="y" onScroll={onScroll}>
+        <VerticalScroll onScroll={onScroll}>
           <section className="overflow-x-hidden">
             {showSidebar ? (
               <NonInteractiveSearch
@@ -123,7 +123,7 @@ export default function Sidebar() {
             />
             <Places />
           </section>
-        </ScrollableContainer>
+        </VerticalScroll>
         <StatusManagement />
       </section>
     </aside>
