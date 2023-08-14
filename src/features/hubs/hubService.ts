@@ -283,7 +283,6 @@ export const UseGetHubDetails = (query: {
     {
       enabled: (query.activeItemType === 'hub' || query.activeItemType === 'subhub') && !!query.activeItemId && fetch,
       onSuccess: (data) => {
-        console.log(data.data.hub.task_statuses, 'hub statusTypes');
         dispatch(setSpaceStatuses(data.data.hub.task_statuses));
       }
     }

@@ -16,7 +16,7 @@ export interface StatusProps {
   model_type: string | null;
   type: string | null;
   position: number | null;
-  name: string | null;
+  name?: string | null;
 }
 
 export interface Hub extends IHub {

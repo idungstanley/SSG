@@ -9,7 +9,7 @@ import { ListColourProps } from '../tasks/ListItem';
 import { MdInvertColors } from 'react-icons/md';
 
 interface ItemProps {
-  label?: string;
+  name?: string;
   color: string;
   model_type: string;
 }
@@ -22,7 +22,6 @@ interface StatusBodyProps {
 
 export default function StatusBodyTemplate({ item, index, setStatusTypesState }: StatusBodyProps) {
   const [editableContent, setEditableContent] = useState<boolean>(false);
-  const [statusColor, setStatusColor] = useState<string | ListColourProps>('');
   const [showStatusEditDropdown, setShowStatusEditDropdown] = useState<null | HTMLSpanElement | HTMLDivElement>(null);
   const [showStatusColorDropdown, setShowStatusColorDropdown] = useState<null | HTMLSpanElement>(null);
   const handleOpenStatusEditDropdown = (event: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
@@ -36,10 +35,9 @@ export default function StatusBodyTemplate({ item, index, setStatusTypesState }:
   };
 
   const handleStatusColor = (color: string | ListColourProps) => {
-    setStatusColor(color);
     setStatusTypesState((prevState) => {
       return prevState.map((status) => {
-        if (status.label === item.label) {
+        if (status.name === item.name) {
           return { ...status, color } as ItemProps;
         }
         return status;
@@ -108,7 +106,7 @@ export default function StatusBodyTemplate({ item, index, setStatusTypesState }:
         onClick={(e) => handleOpenStatusColorDropdown(e)}
       ></span>
       <span contentEditable={editableContent} style={{ color: item.color }} className="uppercase">
-        {item.label}
+        {item.name}
       </span>
       {!editableContent && (
         <span className="ml-auto" onClick={(e) => handleOpenStatusEditDropdown(e)}>

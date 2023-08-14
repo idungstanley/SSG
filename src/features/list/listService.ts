@@ -214,7 +214,9 @@ export const UseGetListDetails = (query: {
     {
       enabled: query.activeItemType === 'list' && !!query.activeItemId,
       onSuccess: (data) => {
-        console.log(data.data.list.task_statuses, 'list statusTypes');
+        if (query.activeItemType === 'list') {
+          console.log(data.data.list.task_statuses, 'list statusTypes');
+        }
         // dispatch(setSpaceStatuses(data.data.list.task_statuses));
       }
     }

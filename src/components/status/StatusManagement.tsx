@@ -6,14 +6,15 @@ import Button from '../Button';
 import PlusIcon from '../../assets/icons/PlusIcon';
 import StatusBodyTemplate from './StatusBodyTemplate';
 import Input from '../input/Input';
+import { StatusProps } from '../../pages/workspace/hubs/components/ActiveTree/activetree.interfaces';
 
 const statusTabOptions = [{ label: 'Use Space Statuses' }, { label: 'Custom' }];
 
-const statusTypes = [
-  { label: 'To do', color: 'grey', model_type: 'open', position: '1' },
-  { label: 'In Progress', color: 'purple', model_type: 'custom', position: '2' },
-  { label: 'Completed', color: 'green', model_type: 'closed', position: '3' }
-];
+// const statusTypes = [
+//   { label: 'To do', color: 'grey', model_type: 'open', position: '1' },
+//   { label: 'In Progress', color: 'purple', model_type: 'custom', position: '2' },
+//   { label: 'Completed', color: 'green', model_type: 'closed', position: '3' }
+// ];
 
 interface ItemProps {
   label?: string;
@@ -28,8 +29,10 @@ const groupStatusByModelType = (statusTypes: ItemProps[]) => {
 export default function StatusManagement() {
   const dispatch = useAppDispatch();
   const { isManageStatus } = useAppSelector((state) => state.workspace);
+  const { spaceStatuses } = useAppSelector((state) => state.hub);
+
   const [activeStatusTab, setActiveStatusTab] = useState<string>(statusTabOptions[0].label);
-  const [statusTypesState, setStatusTypesState] = useState<ItemProps[]>(statusTypes);
+  const [statusTypesState, setStatusTypesState] = useState<StatusProps[]>(spaceStatuses);
   const [newStatusValue, setNewStatusValue] = useState<string>();
   const [addStatus, setAddStatus] = useState<boolean>(false);
   const handleCloseManageStatus = () => {
@@ -38,8 +41,8 @@ export default function StatusManagement() {
 
   const handleSaveNewStatus = () => {
     if (newStatusValue?.trim() !== '') {
-      const newStatusItem = {
-        label: newStatusValue,
+      const newStatusItem: StatusProps = {
+        name: newStatusValue,
         color: 'green',
         model_type: 'custom'
       };
@@ -51,7 +54,7 @@ export default function StatusManagement() {
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNewStatusValue(e.target.value);
   };
-  const groupedStatus = groupStatusByModelType(statusTypesState);
+  const groupedStatus = groupStatusByModelType(spaceStatuses);
 
   return (
     <ModalOverlay isModalVisible={isManageStatus} onCloseModal={handleCloseManageStatus}>
@@ -75,14 +78,14 @@ export default function StatusManagement() {
           </div>
           {activeStatusTab === statusTabOptions[0].label ? (
             <div className="flex flex-col space-y-2">
-              {statusTypesState.map((item, index) => (
+              {spaceStatuses.map((item, index) => (
                 <span
                   key={index}
                   className="flex items-center gap-2 p-1 text-white border rounded cursor-pointer border-alsoit-gray-75 justify-items-start"
                 >
-                  <span className="w-3 h-3 ml-4 rounded" style={{ backgroundColor: item.color }}></span>
-                  <span style={{ color: item.color }} className="uppercase">
-                    {item.label}
+                  <span className="w-3 h-3 ml-4 rounded" style={{ backgroundColor: item.color as string }}></span>
+                  <span style={{ color: item.color as string }} className="uppercase">
+                    {item.name}
                   </span>
                 </span>
               ))}
