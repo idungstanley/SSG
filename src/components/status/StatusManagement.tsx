@@ -100,13 +100,13 @@ export default function StatusManagement() {
                         <StatusBodyTemplate index={index} item={item} setStatusTypesState={setStatusTypesState} />
                         {item.model_type === 'open' && !addStatus && (
                           <span className="flex justify-items-start" onClick={() => setAddStatus(true)}>
-                            <Button height="h-8" icon={<PlusIcon />} label="Add Status" buttonStyle="base" />
+                            <Button height="h-8" icon={<PlusIcon active />} label="Add Status" buttonStyle="base" />
                           </span>
                         )}
                         {item.model_type === 'open' && addStatus && (
                           <span className="flex justify-items-start">
                             <Input
-                              trailingIcon={<PlusIcon />}
+                              trailingIcon={<PlusIcon active />}
                               placeholder="Type Status name"
                               name="Status"
                               onChange={handleOnChange}

@@ -10,7 +10,6 @@ import { setActiveItem } from '../../../../../features/workspace/workspaceSlice'
 import { useAppDispatch } from '../../../../../app/hooks';
 
 export default function DetailsIndex() {
-  // const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
   const dispatch = useAppDispatch();
 
   const { hubId, walletId, listId, taskId } = useParams();

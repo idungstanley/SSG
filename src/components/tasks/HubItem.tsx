@@ -273,7 +273,7 @@ export default function HubItem({
               onClick={(e) => e.stopPropagation()}
             >
               <span onClick={() => handleItemAction(item.id, item.name)} className="cursor-pointer">
-                <PlusIcon />
+                <PlusIcon active />
               </span>
               <span
                 onClick={(e) => {
