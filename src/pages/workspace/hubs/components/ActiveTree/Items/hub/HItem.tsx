@@ -5,6 +5,7 @@ import { cl } from '../../../../../../../utils';
 import { VscTriangleDown, VscTriangleRight } from 'react-icons/vsc';
 import { useAppSelector } from '../../../../../../../app/hooks';
 import { AvatarWithInitials } from '../../../../../../../components';
+import { getInitials } from '../../../../../../../app/helpers';
 
 export default function HItem({ id, name, parentId }: ItemProps) {
   const { hubId } = useParams();
@@ -45,12 +46,7 @@ export default function HItem({ id, name, parentId }: ItemProps) {
         <div className={`flex items-center flex-1 min-w-0 ${!showSidebar && 'ml-3'}`}>
           <div>
             <AvatarWithInitials
-              initials={name
-                .split(' ')
-                .slice(0, 2)
-                .map((word) => word[0])
-                .join('')
-                .toUpperCase()}
+              initials={getInitials(name)}
               height={showSidebar ? 'h-4' : 'h-6'}
               width={showSidebar ? 'w-4' : 'w-6'}
               // backgroundColour={item.color !== null ? item.color : paletteColor}

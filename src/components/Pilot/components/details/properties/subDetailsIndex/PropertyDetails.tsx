@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { AiOutlinePlus } from 'react-icons/ai';
 import moment from 'moment';
 import CustomReference from '../customReference/CustomReference';
 import EntitySettings from '../entitySettings/EntitySettings';
@@ -21,6 +20,7 @@ import MoreDetails from './components/MoreDetails';
 import { IListDetails } from '../../../../../../features/list/list.interfaces';
 import { useParams } from 'react-router-dom';
 import { IWalletDetails } from '../../../../../../features/wallet/wallet.interfaces';
+import PlusIcon from '../../../../../../assets/icons/PlusIcon';
 
 export interface tagItem {
   id: string;
@@ -219,10 +219,10 @@ export default function PropertyDetails({ Details, type }: PropertyDetailsProps)
         {/* create subtask */}
         <div id="create subtask" className="mt-2">
           <div
-            className="flex p-0.5 items-center space-x-0.5 border border-gray-400 cursor-pointer w-20 rounded-md hover:bg-gray-400 hover:text-white"
+            className="flex p-1 items-center space-x-0.5 border border-gray-400 cursor-pointer w-20 rounded-md hover:bg-gray-400 hover:text-white"
             onClick={() => setToggleSubTask(!toggleSubTask)}
           >
-            <AiOutlinePlus className="text-xs h-2.5" />
+            <PlusIcon active dimensions={{ width: 9, height: 9 }} />
             <button className="text-xs text-gray-500  ">Subtask</button>
           </div>
         </div>

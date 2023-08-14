@@ -9,14 +9,17 @@ import {
   setActiveEntityName,
   setActiveItem,
   setCurrentItem,
-  setCurrentWalletId,
-  setCurrentWalletName,
   setIsFirstOpened,
   setOpenedEntitiesIds,
   setOpenedParentsIds,
   setShowHub
 } from '../../../../../../../features/workspace/workspaceSlice';
-import { setWalletItem } from '../../../../../../../features/wallet/walletSlice';
+import {
+  setCurrentWalletId,
+  setCurrentWalletName,
+  setCurrentWalletType,
+  setParentWalletId
+} from '../../../../../../../features/wallet/walletSlice';
 import { EntityType } from '../../../../../../../utils/EntityTypes/EntityType';
 import { DragOverlay } from '@dnd-kit/core';
 import HubItemOverlay from '../../../../../../../components/tasks/HubItemOverLay';
@@ -52,23 +55,16 @@ export default function WList({ wallets, leftMargin, paddingLeft, type, level = 
     }
   }, [wallets, isFirstOpened]);
 
-  const handleLocation = (id: string, name: string, index?: number) => {
+  const handleLocation = (id: string, name: string, parent_id: string | null, index?: number) => {
     setStickyButtonIndex(index === stickyButtonIndex ? -1 : index);
     dispatch(setShowHub(true));
-    navigate(`tasks/w/${id}`, {
-      replace: true
-    });
+    navigate(`tasks/w/${id}`, { replace: true });
     if (openedIds.includes(id)) {
       setOpenedIds((prev) => prev.filter((item) => item !== id));
     } else {
       setOpenedIds((prev) => [...prev, id]);
     }
-    dispatch(
-      setWalletItem({
-        currentWalletParentId: id,
-        currentWalletParentType: EntityType.wallet
-      })
-    );
+    dispatch(setCurrentWalletType(EntityType.wallet));
     dispatch(setActiveEntityName(name));
     dispatch(
       setActiveItem({
@@ -80,11 +76,20 @@ export default function WList({ wallets, leftMargin, paddingLeft, type, level = 
     dispatch(setActiveEntity({ id, type: EntityType.wallet }));
     dispatch(setCurrentWalletName(name));
     dispatch(setCurrentWalletId(id));
+    if (parent_id) dispatch(setParentWalletId(parent_id));
   };
 
   const handleShowSubWallet = (id: string, parent_id: string | null, index?: number) => {
     setStickyButtonIndex(index === stickyButtonIndex ? -1 : index);
     dispatch(setIsFirstOpened(false));
+    dispatch(setCurrentWalletId(id));
+    if (parent_id) dispatch(setParentWalletId(parent_id));
+    dispatch(
+      setActiveItem({
+        activeItemType: type,
+        activeItemId: id
+      })
+    );
 
     if (openedIds.includes(id)) {
       if (openedIds.length === 1) {
@@ -102,12 +107,6 @@ export default function WList({ wallets, leftMargin, paddingLeft, type, level = 
         setCurrentItem({
           currentItemId: id,
           currentItemType: EntityType.wallet
-        })
-      );
-      dispatch(
-        setWalletItem({
-          currentWalletParentId: id,
-          currentWalletParentType: EntityType.wallet
         })
       );
     }

@@ -17,6 +17,7 @@ import { setFilteredResults } from '../../features/search/searchSlice';
 import ColorPalette from './component/ColorPalette';
 import { changeWalletManager } from '../../managers/Wallet';
 import { changeHubManager } from '../../managers/Hub';
+import { EntityType } from '../../utils/EntityTypes/EntityType';
 
 interface PaletteProps {
   title?: string;
@@ -110,17 +111,17 @@ export default function PaletteManager({
   }, []);
 
   const handleClick = (color?: string | ListColourProps) => {
-    if (paletteType === 'hub') {
+    if (paletteType === EntityType.hub) {
       editHubColorMutation.mutateAsync({
         hubId: paletteId,
         color
       });
-    } else if (paletteType === 'wallet') {
+    } else if (paletteType === EntityType.wallet) {
       editWalletColorMutation.mutateAsync({
         walletId: paletteId,
         color
       });
-    } else if (paletteType === 'list') {
+    } else if (paletteType === EntityType.list) {
       if (isOutterFrameActive) {
         editListColorMutation.mutateAsync({
           listId: paletteId,
@@ -147,9 +148,9 @@ export default function PaletteManager({
       ref={ref}
     >
       <div className="z-50 flex flex-col">
-        {paletteType !== 'list' && <p className="justify-center">{title}</p>}
+        {paletteType !== EntityType.list && <p className="justify-center">{title}</p>}
         {topContent}
-        {paletteType === 'list' && (
+        {paletteType === EntityType.list && (
           <div className="flex justify-between mt-1">
             <span>{title}</span>
             <ListIconComponent

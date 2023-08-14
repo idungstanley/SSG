@@ -1,23 +1,19 @@
 import React, { useState } from 'react';
 import { useAppSelector } from '../../../../../../app/hooks';
 import WorkSpaceSelection from '../WorkSpaceSelection';
-import MainLogo from '../../../../../../assets/icons/mainIcon.svg';
 import { cl } from '../../../../../../utils';
 import UserSettingsModal from '../../../../../../pages/settings/UserSettings/components/UserSettings/UserSettingsModal';
 import { Link } from 'react-router-dom';
 import Toggle from '../Toggle';
 import { Modal } from '../../../../../../components/Pilot/components/HotKeys/components/Modal';
 import PinnedNavigationItem, { NavigationList } from '../NavigationItems/components/NavigationList';
-import { VscPinned } from 'react-icons/vsc';
-import { BsFillPinFill } from 'react-icons/bs';
 import ToolTip from '../../../../../../components/Tooltip/Tooltip';
 import AlsoitIcon from '../../../../../../assets/icons/AlsoitIcon';
+import PinnedIcon from '../../../../../../assets/icons/PinnedIcon';
+import UnpinnedIcon from '../../../../../../assets/icons/UnpinnedIcon';
 
 interface HeaderProps {
-  handleHotkeyClick: (
-    value: string,
-    e: React.MouseEvent<SVGElement, MouseEvent> | React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) => void;
+  handleHotkeyClick: (value: string, e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => void;
   hotkeys: (
     | {
         id: string;
@@ -82,30 +78,32 @@ export default function Header({
           {/* hotkeys list */}
           <div className="z-50 flex flex-col items-start mt-4">
             {NavigationList.map((tab) => (
-              <button
+              <span
                 onClick={(e) => handleHotkeyClick(tab.id, e)}
                 key={tab.id}
                 className={cl(
                   activeHotkeyIds.includes(tab.id) && 'font-semibold',
-                  'relative flex gap-10 text-gray-500 items-center rounded-md justify-between py-1 px-2 hover:bg-gray-100 cursor-pointer w-full'
+                  'relative flex text-gray-500 items-center rounded-md justify-between py-1 px-2 hover:bg-gray-100 cursor-pointer w-full'
                 )}
               >
                 <div className="flex items-center gap-2">
-                  <span className={cl(activeHotkeyIds.includes(tab.id) && 'text-black')}>
-                    {tab.icon || <img className="w-5 h-5" src={tab.source} alt={tab.name} />}
+                  <span className={cl('w-5 h-5 flex items-center', activeHotkeyIds.includes(tab.id) && 'text-black')}>
+                    {tab.icon}
                   </span>
                   <span className="block truncate">{tab.name}</span>
                 </div>
-                {activeHotkeyIds.includes(tab.id) && <BsFillPinFill className="w-4 h-4" aria-hidden="true" />}
-                {!activeHotkeyIds.includes(tab.id) &&
-                  (hotkeys.length >= 4 ? (
-                    <ToolTip title="Exceeded pin limit">
-                      <VscPinned className="w-4 h-4" aria-hidden="true" />
-                    </ToolTip>
-                  ) : (
-                    <VscPinned className="w-4 h-4" aria-hidden="true" />
-                  ))}
-              </button>
+                <span className="flex">
+                  {activeHotkeyIds.includes(tab.id) && <PinnedIcon />}
+                  {!activeHotkeyIds.includes(tab.id) &&
+                    (hotkeys.length >= 4 ? (
+                      <ToolTip title="Exceeded pin limit">
+                        <UnpinnedIcon />
+                      </ToolTip>
+                    ) : (
+                      <UnpinnedIcon />
+                    ))}
+                </span>
+              </span>
             ))}
           </div>
         </Modal>

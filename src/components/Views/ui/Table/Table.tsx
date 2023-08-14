@@ -6,7 +6,6 @@ import {
   setCurrTaskListId,
   setCurrTeamMemId,
   setHilightNewTask,
-  setSelectedTasksArray,
   setStatusId,
   setUpdateCords
 } from '../../../../features/task/taskSlice';
@@ -21,6 +20,7 @@ import { OverlayRow } from './OverlayRow';
 import { Row } from './Row';
 import { UseGetListDetails } from '../../../../features/list/listService';
 import { ITask_statuses } from '../../../../features/list/list.interfaces';
+import { EntityType } from '../../../../utils/EntityTypes/EntityType';
 
 interface TableProps {
   heads: listColumnProps[];
@@ -30,11 +30,13 @@ interface TableProps {
 
 export function Table({ heads, data, label }: TableProps) {
   const dispatch = useAppDispatch();
+
   const [tableHeight, setTableHeight] = useState<string | number>('auto');
   const [activeIndex, setActiveIndex] = useState<null | number>(null);
-  const tableElement = useRef<HTMLTableElement>(null);
   const [showNewTaskField, setShowNewTaskField] = useState(false);
   const [collapseTasks, setCollapseTasks] = useState(false);
+
+  const tableElement = useRef<HTMLTableElement>(null);
   const taskLength = data.length;
 
   const columns = createHeaders(heads).filter((i) => !i.hidden);
@@ -43,9 +45,9 @@ export function Table({ heads, data, label }: TableProps) {
 
   const { draggableItemId } = useAppSelector((state) => state.list);
   const [listId, setListId] = useState<string>('');
-  const { statusId, selectedTasksArray } = useAppSelector((state) => state.task);
+  const { statusId } = useAppSelector((state) => state.task);
 
-  const { data: list } = UseGetListDetails({ activeItemId: listId, activeItemType: 'list' });
+  const { data: list } = UseGetListDetails({ activeItemId: listId, activeItemType: EntityType.list });
 
   const mouseMove = useCallback(
     (e: MouseEvent) => {

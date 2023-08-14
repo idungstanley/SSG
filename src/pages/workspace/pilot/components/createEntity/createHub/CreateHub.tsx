@@ -91,7 +91,7 @@ export default function CreateHub() {
     localStorage.getItem('currentWorkspaceId') || '"'
   ) as string;
   const { data } = useGetHubChildren({
-    query: type === 'hub' ? id : currHubId
+    query: type === EntityType.hub ? id : currHubId
   });
 
   const isCreateAllowed = !!data && (data?.data.wallets?.length > 0 || data?.data?.lists?.length > 0);

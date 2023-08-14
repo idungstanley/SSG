@@ -3,6 +3,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import requestNew from '../../../app/requestNew';
 import { AddTagRes, ITagRes, TagsRes } from './tag.interfaces';
 import { Tag, TagId, TaskId } from '../../task/interface.tasks';
+import { EntityType } from '../../../utils/EntityTypes/EntityType';
 
 export const useTags = () => {
   return useQuery(
@@ -64,11 +65,6 @@ const assignTag = (data: { tagId: TagId; entityId: string; entityType: string })
 
 export const useAssignTag = (taskId: string) => {
   const queryClient = useQueryClient();
-  // const { hubId, walletId, listId } = useParams();
-
-  // const id = hubId ?? walletId ?? listId;
-  // const type = hubId ? 'hub' : walletId ? 'wallet' : 'list';
-  // const { filters } = generateFilters();
 
   return useMutation(assignTag, {
     onSuccess: () => {
@@ -91,17 +87,12 @@ const deleteTag = (data: { tagId: TagId }) => {
 
 export const useDeleteTag = (entityId: string, entityType: string) => {
   const queryClient = useQueryClient();
-  // const { hubId, walletId, listId } = useParams();
-
-  // const id = hubId ?? walletId ?? listId;
-  // const type = hubId ? 'hub' : walletId ? 'wallet' : 'list';
-  // const { filters } = generateFilters();
 
   return useMutation(deleteTag, {
     onSuccess: () => {
       queryClient.invalidateQueries(['tags']);
       queryClient.invalidateQueries(['task']);
-      entityType === 'task'
+      entityType === EntityType.task
         ? queryClient.invalidateQueries(['sub-tasks', entityId])
         : queryClient.invalidateQueries(['checklists', entityId]);
     }
@@ -125,17 +116,12 @@ const updateTag = (data: Pick<Tag, 'id'> & Partial<Omit<Tag, 'id'>>) => {
 
 export const useUpdateTag = (entityId: string, entityType: string) => {
   const queryClient = useQueryClient();
-  // const { hubId, walletId, listId } = useParams();
-
-  // const id = hubId ?? walletId ?? listId;
-  // const type = hubId ? 'hub' : walletId ? 'wallet' : 'list';
-  // const { filters } = generateFilters();
 
   return useMutation(updateTag, {
     onSuccess: () => {
       queryClient.invalidateQueries(['tags']);
       queryClient.invalidateQueries(['task']);
-      entityType === 'task'
+      entityType === EntityType.task
         ? queryClient.invalidateQueries(['sub-tasks', entityId])
         : queryClient.invalidateQueries(['checklists', entityId]);
     }
@@ -244,7 +230,7 @@ export const UseUnAssignTagFromTask = ({
         url: `tags/${tagId}/unassign`,
         method: 'POST',
         params: {
-          type: 'task',
+          type: EntityType.task,
           id: currentTaskIdForTag
         }
       });
@@ -272,11 +258,6 @@ const unassignTag = (data: { tagId: TagId; entityId: TaskId; entityType: string 
 
 export const useUnassignTag = (entityId: string) => {
   const queryClient = useQueryClient();
-  // const { hubId, walletId, listId } = useParams();
-
-  // const id = hubId ?? walletId ?? listId;
-  // const type = hubId ? 'hub' : walletId ? 'wallet' : 'list';
-  // const { filters } = generateFilters();
 
   return useMutation(unassignTag, {
     onSuccess: () => {

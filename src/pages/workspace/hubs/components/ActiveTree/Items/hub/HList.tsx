@@ -87,14 +87,6 @@ export default function HList({ hubs }: ListProps) {
     navigate(`tasks/h/${id}`, {
       replace: true
     });
-    localStorage.setItem(
-      'hubDetailsStorage',
-      JSON.stringify({
-        activeItemId: id,
-        activeItemType: EntityType.hub,
-        activeItemName: name
-      })
-    );
   };
 
   const handleClick = (id: string, parent_id: string | null, index?: number) => {

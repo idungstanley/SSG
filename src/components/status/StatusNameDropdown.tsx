@@ -8,6 +8,7 @@ import ToolTip from '../Tooltip/Tooltip';
 import { useAbsolute } from '../../hooks/useAbsolute';
 import { Status } from '../../features/task/interface.tasks';
 import { UseGetListDetails } from '../../features/list/listService';
+import { EntityType } from '../../utils/EntityTypes/EntityType';
 
 interface StatusDropdownProps {
   TaskCurrentStatus: Status;
@@ -16,7 +17,8 @@ interface StatusDropdownProps {
 
 export default function StatusNameDropdown({ TaskCurrentStatus, statusName }: StatusDropdownProps) {
   const { currentTaskStatusId, currTaskListId } = useAppSelector((state) => state.task);
-  const { data: list } = UseGetListDetails({ activeItemId: currTaskListId, activeItemType: 'list' });
+
+  const { data: list } = UseGetListDetails({ activeItemId: currTaskListId, activeItemType: EntityType.list });
 
   const { mutate } = UseUpdateTaskStatusService2();
 

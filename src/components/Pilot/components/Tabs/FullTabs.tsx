@@ -17,8 +17,9 @@ import { IPilotTab } from '../../../../types';
 import { cl } from '../../../../utils';
 import ShowTabsLabelToggle from './components/ShowTabsLabelToggle';
 import Tab from './components/Tab';
-import { ScrollableContainer } from '../../../ScrollableContainer/ScrollableContainer';
+import { VerticalScroll } from '../../../ScrollableContainer/VerticalScroll';
 import { useAppSelector } from '../../../../app/hooks';
+import { HorizontalScroll } from '../../../ScrollableContainer/HorizontalScroll';
 
 interface TabsProps {
   tabs: IPilotTab[];
@@ -53,30 +54,59 @@ export default function FullTabs({ tabs }: TabsProps) {
   });
 
   return (
-    <ScrollableContainer scrollDirection={showTabLabel ? 'y' : 'x'}>
-      <div
-        style={{ height: !showTabLabel ? 'auto' : '' }}
-        ref={showTabLabel ? blockRef : null}
-        className={cl('relative col-span-1 flex items-center')}
-      >
-        {showTabLabel ? <Dividers /> : null}
-        <nav
-          ref={navRef}
-          className={cl(
-            'relative h-fit',
-            showTabLabel ? 'grid grid-cols-1 h-full divide-y grow' : 'divide-x border flex mr-10'
-          )}
-          aria-label="Tabs"
-        >
-          <SortableProvider disableOverflow={disableOverflow} items={tabItems} setItems={setTabItems}>
-            {tabItems.map((tab) => (
-              <Tab key={tab.id} id={tab.id} icon={tab.icon} label={tab.label} showTabLabel={showTabLabel} />
-            ))}
-          </SortableProvider>
-        </nav>
-      </div>
-      <ShowTabsLabelToggle />
-    </ScrollableContainer>
+    <>
+      {showTabLabel ? (
+        <VerticalScroll>
+          <div
+            style={{ height: !showTabLabel ? 'auto' : '' }}
+            ref={showTabLabel ? blockRef : null}
+            className={cl('relative col-span-1 flex items-center')}
+          >
+            {showTabLabel ? <Dividers /> : null}
+            <nav
+              ref={navRef}
+              className={cl(
+                'relative h-fit',
+                showTabLabel ? 'grid grid-cols-1 h-full divide-y grow' : 'divide-x border flex mr-10'
+              )}
+              aria-label="Tabs"
+            >
+              <SortableProvider disableOverflow={disableOverflow} items={tabItems} setItems={setTabItems}>
+                {tabItems.map((tab) => (
+                  <Tab key={tab.id} id={tab.id} icon={tab.icon} label={tab.label} showTabLabel={showTabLabel} />
+                ))}
+              </SortableProvider>
+            </nav>
+          </div>
+          <ShowTabsLabelToggle />
+        </VerticalScroll>
+      ) : (
+        <HorizontalScroll>
+          <div
+            style={{ height: !showTabLabel ? 'auto' : '' }}
+            ref={showTabLabel ? blockRef : null}
+            className={cl('relative col-span-1 flex items-center')}
+          >
+            {showTabLabel ? <Dividers /> : null}
+            <nav
+              ref={navRef}
+              className={cl(
+                'relative h-fit',
+                showTabLabel ? 'grid grid-cols-1 h-full divide-y grow' : 'divide-x border flex mr-10'
+              )}
+              aria-label="Tabs"
+            >
+              <SortableProvider disableOverflow={disableOverflow} items={tabItems} setItems={setTabItems}>
+                {tabItems.map((tab) => (
+                  <Tab key={tab.id} id={tab.id} icon={tab.icon} label={tab.label} showTabLabel={showTabLabel} />
+                ))}
+              </SortableProvider>
+            </nav>
+          </div>
+          <ShowTabsLabelToggle />
+        </HorizontalScroll>
+      )}
+    </>
   );
 }
 

@@ -11,6 +11,7 @@ import { DEFAULT_COL_BG } from '../../config';
 import DateFormat from '../../../DateFormat';
 import StatusNameDropdown from '../../../status/StatusNameDropdown';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
+import { EntityType } from '../../../../utils/EntityTypes/EntityType';
 
 interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   value: TaskValue;
@@ -54,7 +55,11 @@ export function Col({ value, field, fieldId, task, ...props }: ColProps) {
       />
     ),
     assignees: (
-      <Assignee task={task as ImyTaskData} itemId={task.id} option={`${task.id !== '0' ? 'task' : 'getTeamId'}`} />
+      <Assignee
+        task={task as ImyTaskData}
+        itemId={task.id}
+        option={`${task.id !== '0' ? EntityType.task : 'getTeamId'}`}
+      />
     )
   };
 

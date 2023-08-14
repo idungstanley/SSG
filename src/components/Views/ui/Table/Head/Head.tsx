@@ -152,7 +152,7 @@ export function Head({
 
   const statusDropdownOptions = [
     { label: 'Rename', icon: <PencilIcon className="w-4 h-4" aria-hidden="true" />, handleClick: () => ({}) },
-    { label: 'New status', icon: <PlusIcon />, handleClick: () => ({}) },
+    { label: 'New status', icon: <PlusIcon active />, handleClick: () => ({}) },
     { label: 'Select all', icon: <TbAlignJustified />, handleClick: () => ({}) },
     { label: 'Collapse group', icon: <MdEditNote />, handleClick: () => ({}) },
     { label: 'Collapse all groups', icon: <MdEditNote />, handleClick: () => ({}) },

@@ -1,28 +1,26 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import SubWalletIndex from '../../../pages/workspace/wallet/components/subwallet1/ SubWalletIndex';
+import SubWalletIndex from '../../../pages/workspace/wallet/components/subwallet1/SubWalletIndex';
 import { useDispatch } from 'react-redux';
 import { useAppSelector } from '../../../app/hooks';
 import {
   setActiveEntity,
   setActiveEntityName,
   setActiveItem,
-  setCurrentWalletId,
-  setCurrentWalletName,
   setShowHub
 } from '../../../features/workspace/workspaceSlice';
-import { setWalletItem } from '../../../features/wallet/walletSlice';
 import { getWalletServices } from '../../../features/wallet/walletService';
 import { useGetHubWallet } from '../../../features/hubs/hubService';
 import WalletItem from '../../tasks/WalletItem';
 import { DragOverlay } from '@dnd-kit/core';
 import HubItemOverlay from '../../tasks/HubItemOverLay';
-// import CreateWL from '../../tasks/CreateWL';
+import { setCurrentWalletId, setCurrentWalletName, setCurrentWalletType } from '../../../features/wallet/walletSlice';
+import { EntityType } from '../../../utils/EntityTypes/EntityType';
 
 interface WalletIndexProps {
   showHubList: boolean;
-  getCurrentHubId: string | null;
   paddingLeft: string | number;
+  parentId?: string;
 }
 
 export interface dataProps {
@@ -31,61 +29,49 @@ export interface dataProps {
   color?: string;
 }
 
-function WalletIndex({ showHubList, getCurrentHubId, paddingLeft }: WalletIndexProps) {
+function WalletIndex({ showHubList, paddingLeft, parentId }: WalletIndexProps) {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  const [showSubWallet, setShowSubWallet] = useState<string[]>([]);
+  const { currentWorkspaceId } = useAppSelector((state) => state.auth);
   const { toggleArchiveWallet } = useAppSelector((state) => state.wallet);
+  const { activeItemId } = useAppSelector((state) => state.workspace);
 
-  const { data: walletAndListData } = useGetHubWallet(getCurrentHubId);
+  const [openedIds, setOpenedIds] = useState<string[]>([]);
+
+  const { data: walletAndListData } = useGetHubWallet(activeItemId);
 
   const { data: walletData } = getWalletServices({
-    hubId: getCurrentHubId,
+    hubId: parentId || activeItemId,
     Archived: toggleArchiveWallet
   });
-  // const { currentItemId } = useAppSelector((state) => state.workspace);
-  // const { data } = useGetSubHub({
-  //   parentId: currentItemId
-  // });
-  const navigate = useNavigate();
+
   const handleLocation = (id: string, name: string) => {
-    const type = 'wallet';
     dispatch(setShowHub(true));
-    navigate(`tasks/w/${id}`);
-    setShowSubWallet((prev) => [...prev, id]);
+    navigate(`/${currentWorkspaceId}/tasks/w/${id}`);
+    setOpenedIds([]);
     dispatch(setCurrentWalletId(id));
-    dispatch(
-      setWalletItem({
-        currentWalletParentId: id,
-        currentWalletParentType: 'wallet'
-      })
-    );
+    dispatch(setCurrentWalletType(EntityType.wallet));
+    dispatch(setCurrentWalletName(name));
     dispatch(setActiveEntityName(name));
     dispatch(
       setActiveItem({
-        activeItemType: type,
+        activeItemType: EntityType.wallet,
         activeItemId: id,
         activeItemName: name
       })
     );
-    dispatch(setActiveEntity({ id: id, type: 'wallet' }));
-    dispatch(setCurrentWalletName(name));
-    dispatch(setCurrentWalletId(id));
+    dispatch(setActiveEntity({ id: id, type: EntityType.wallet }));
   };
 
   const handleShowSubWallet = (id: string) => {
-    if (showSubWallet.includes(id)) {
-      setShowSubWallet((prev) => prev.filter((item) => item !== id));
+    if (openedIds.includes(id)) {
+      setOpenedIds((prev) => prev.filter((item) => item !== id));
     } else {
-      dispatch(setCurrentWalletId(id));
-      setShowSubWallet((prev) => [...prev, id]);
-      dispatch(
-        setWalletItem({
-          currentWalletParentId: id,
-          currentWalletParentType: 'wallet'
-        })
-      );
+      setOpenedIds((prev) => [...prev, id]);
     }
+    dispatch(setCurrentWalletId(id));
+    dispatch(setCurrentWalletType(EntityType.wallet));
   };
 
   const { draggableItemId } = useAppSelector((state) => state.list);
@@ -93,9 +79,6 @@ function WalletIndex({ showHubList, getCurrentHubId, paddingLeft }: WalletIndexP
 
   return walletAndListData?.data?.wallets != null ? (
     <div id="createWallet" className={`${showHubList ? 'block' : 'hidden'}`}>
-      {/* {walletAndListData?.data.lists.length === 0 &&
-        walletAndListData?.data.wallets.length === 0 &&
-        data?.data?.hubs.length === 0 && <CreateWL paddingLeft={Number(paddingLeft) + 25} />} */}
       {draggableItem ? (
         <DragOverlay>
           <HubItemOverlay item={draggableItem} type="wallet" />
@@ -109,11 +92,13 @@ function WalletIndex({ showHubList, getCurrentHubId, paddingLeft }: WalletIndexP
               walletType="wallet"
               handleLocation={handleLocation}
               handleShowSubWallet={handleShowSubWallet}
-              showSubWallet={showSubWallet.includes(wallet.id)}
+              showSubWallet={openedIds.includes(wallet.id)}
               paddingLeft={paddingLeft}
             />
             <div>
-              {showSubWallet.includes(wallet.id) ? <SubWalletIndex paddingLeft={Number(paddingLeft) + 15} /> : null}
+              {openedIds.includes(wallet.id) ? (
+                <SubWalletIndex paddingLeft={Number(paddingLeft) + 15} parentId={wallet.id} />
+              ) : null}
             </div>
           </div>
         ))}
