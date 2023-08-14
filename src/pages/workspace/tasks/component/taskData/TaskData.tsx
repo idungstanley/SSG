@@ -9,6 +9,7 @@ import { useList } from '../../../../../features/list/listService';
 import { useNavigate, useParams } from 'react-router-dom';
 import { cl } from '../../../../../utils';
 import { Task, TaskKey } from '../../../../../features/task/interface.tasks';
+import { EntityType } from '../../../../../utils/EntityTypes/EntityType';
 
 export interface TaskDataProps {
   listId?: string;
@@ -17,17 +18,15 @@ export interface TaskDataProps {
 }
 
 export default function TaskData({ task, listId }: TaskDataProps) {
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const { hubId, walletId, taskId } = useParams();
+
   const { hideTask, getSubTaskId } = useAppSelector((state) => state.task);
   const { currentWorkspaceId } = useAppSelector((state) => state.auth);
 
-  const { hubId, walletId, taskId } = useParams();
-
   const isActive = taskId === task?.id;
   const taskBg = isActive ? 'bg-primary-200' : 'bg-white';
-
-  const dispatch = useAppDispatch();
-
-  const navigate = useNavigate();
 
   const handleGetSubTask = (id: string | undefined) => {
     if (id == getSubTaskId) {
@@ -46,7 +45,7 @@ export default function TaskData({ task, listId }: TaskDataProps) {
     dispatch(
       setShowPilotSideOver({
         id: id,
-        type: 'task',
+        type: EntityType.task,
         show: true,
         title: name
       })
@@ -55,7 +54,7 @@ export default function TaskData({ task, listId }: TaskDataProps) {
     dispatch(
       setActiveItem({
         activeItemId: id,
-        activeItemType: 'task',
+        activeItemType: EntityType.task,
         activeItemName: name
       })
     );
@@ -91,7 +90,7 @@ export default function TaskData({ task, listId }: TaskDataProps) {
         {/* task name (hidden, because we show sticky name) */}
         <div className="relative text-sm" onClick={() => handleTaskPilot(task?.id as string, task?.name as string)}>
           {hideTask.length
-            ? hideTask.map((col) => col.value == 'Task' && !col.hidden && <></>)
+            ? hideTask.map((col) => col.value === EntityType.task && !col.hidden && <></>)
             : task &&
               [...columnsHead, ...customFields]
                 .filter((i) => i.value === 'Task')

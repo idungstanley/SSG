@@ -13,24 +13,31 @@ import { ITaskFullList, TaskDataGroupingsProps } from '../../../../features/task
 import FilterByAssigneesSliderOver from '../../lists/components/renderlist/filters/FilterByAssigneesSliderOver';
 import { useParams } from 'react-router-dom';
 import { UseGetWalletDetails } from '../../../../features/wallet/walletService';
-import { setActiveItem, setCurrentWalletName } from '../../../../features/workspace/workspaceSlice';
+import { setActiveItem } from '../../../../features/workspace/workspaceSlice';
 import ActiveHub from '../../../../layout/components/MainLayout/extendedNavigation/ActiveParents/ActiveHub';
 import AdditionalHeader from '../../../../layout/components/MainLayout/Header/AdditionHeader';
+import { setCurrentWalletName } from '../../../../features/wallet/walletSlice';
+import { EntityType } from '../../../../utils/EntityTypes/EntityType';
 
 function RenderWallets() {
-  const [TaskDataGroupings, setTaskDataGroupings] = useState<TaskDataGroupingsProps | unknown>({});
-  const { filterTaskByAssigneeIds } = useAppSelector((state) => state.task);
   const dispatch = useAppDispatch();
-
-  const { currentWalletName } = useAppSelector((state) => state.workspace);
-  const containerRef = useRef<HTMLDivElement>(null);
   const { walletId } = useParams();
-  const walletType = 'wallet';
-  const { data } = UseGetWalletDetails({ activeItemId: walletId, activeItemType: walletType });
+
+  const { filterTaskByAssigneeIds } = useAppSelector((state) => state.task);
+  const { currentWalletName } = useAppSelector((state) => state.wallet);
+
+  const [TaskDataGroupings, setTaskDataGroupings] = useState<TaskDataGroupingsProps | unknown>({});
+
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const { data } = UseGetWalletDetails({ activeItemId: walletId, activeItemType: EntityType.wallet });
   const walletName = data?.data.wallet.name;
+
   useEffect(() => {
     if (walletId) {
-      dispatch(setActiveItem({ activeItemId: walletId, activeItemType: walletType, activeItemName: walletName }));
+      dispatch(
+        setActiveItem({ activeItemId: walletId, activeItemType: EntityType.wallet, activeItemName: walletName })
+      );
       dispatch(setCurrentWalletName(walletName));
     }
   }, [walletId, data]);
@@ -42,9 +49,10 @@ function RenderWallets() {
     fetchNextPage
   } = UseGetFullTaskList({
     itemId: walletId,
-    itemType: walletType,
+    itemType: EntityType.wallet,
     assigneeUserId: filterTaskByAssigneeIds
   });
+
   const unFilteredTaskData = useMemo(() => TaskFullList?.pages.flatMap((page) => page.data.tasks), [TaskFullList]);
 
   useEffect(() => {
@@ -93,12 +101,6 @@ function RenderWallets() {
     }
   }
 
-  const extendedObj = {
-    name: 'TASKS',
-    children: <ActiveHub />,
-    source: hubIcon
-  };
-
   return (
     <>
       <PilotSection />
@@ -106,7 +108,11 @@ function RenderWallets() {
         pilotConfig={pilotConfig}
         additionalHeader={<AdditionalHeader />}
         header={<ListNav navName={currentWalletName} viewsList="List" viewsList2="Board" changeViews="View" />}
-        extendedBar={extendedObj}
+        extendedBar={{
+          name: 'TASKS',
+          children: <ActiveHub />,
+          source: hubIcon
+        }}
         additional={<FilterByAssigneesSliderOver />}
       >
         <div className="pr-1 pt-0.5 w-full h-full">

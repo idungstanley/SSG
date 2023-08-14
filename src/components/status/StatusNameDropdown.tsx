@@ -8,6 +8,7 @@ import ToolTip from '../Tooltip/Tooltip';
 import { useAbsolute } from '../../hooks/useAbsolute';
 import { Status } from '../../features/task/interface.tasks';
 import { UseGetListDetails } from '../../features/list/listService';
+import { EntityType } from '../../utils/EntityTypes/EntityType';
 
 interface StatusDropdownProps {
   TaskCurrentStatus: Status;
@@ -16,7 +17,8 @@ interface StatusDropdownProps {
 
 export default function StatusNameDropdown({ TaskCurrentStatus, statusName }: StatusDropdownProps) {
   const { currentTaskStatusId, currTaskListId } = useAppSelector((state) => state.task);
-  const { data: list } = UseGetListDetails({ activeItemId: currTaskListId, activeItemType: 'list' });
+
+  const { data: list } = UseGetListDetails({ activeItemId: currTaskListId, activeItemType: EntityType.list });
 
   const { mutate } = UseUpdateTaskStatusService2();
 
@@ -68,11 +70,14 @@ export default function StatusNameDropdown({ TaskCurrentStatus, statusName }: St
                     statusName?.name.toLowerCase() === statuses.name.toLowerCase() ? `bg-${statuses.color}-200` : '',
                     'flex items-center px-4 py-2 text-sm text-gray-600 text-left space-x-2 w-full'
                   )}
-                  onClick={() => handleUpdateTaskStatus(statuses.id)}
+                  onClick={() => {
+                    handleUpdateTaskStatus(statuses.id);
+                    closeModal();
+                  }}
                 >
                   <p>
                     <RiCheckboxBlankFill
-                      className="pl-px text-xs "
+                      className="pl-px text-xs"
                       aria-hidden="true"
                       style={{ color: `${statuses.color}` }}
                     />

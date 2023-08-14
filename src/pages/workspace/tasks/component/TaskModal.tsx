@@ -11,16 +11,17 @@ import { useAppSelector } from '../../../../app/hooks';
 import { UseGetListDetails } from '../../../../features/list/listService';
 import { ITask_statuses } from '../../../../features/list/list.interfaces';
 import { setLastActiveItem, setShowTreeInput } from '../../../../features/workspace/workspaceSlice';
+import { EntityType } from '../../../../utils/EntityTypes/EntityType';
 
 function TaskModal() {
   const queryClient = useQueryClient();
   const dispatch = useDispatch();
-  const { showMenuDropdown, listIdCreateTask } = useAppSelector((state) => state.hub);
+  const { listIdCreateTask } = useAppSelector((state) => state.hub);
   const { showCreateTaskSlideOver } = useAppSelector((state) => state.slideOver);
 
   const { data: list } = UseGetListDetails({
     activeItemId: listIdCreateTask,
-    activeItemType: 'list'
+    activeItemType: EntityType.list
   });
 
   const [statusId, setStatusId] = useState<string>('');

@@ -19,8 +19,8 @@ export default function MiniDatePicker({ range, miniMode, fullCalendar }: Props)
   const [today] = useState(dayjs());
   const [shownDate, setShownDate] = useState<dayjs.Dayjs>(today);
   const [iconToggle, setIconToggle] = useState<{ rightIcon: boolean; leftIcon: boolean }>({
-    rightIcon: false,
-    leftIcon: false
+    rightIcon: true,
+    leftIcon: true
   });
   const [hoveredDate, setHoveredDate] = useState<dayjs.Dayjs | null>(null);
   const { HistoryFilterMemory, selectedDate: taskTime } = useAppSelector((state) => state.task);
@@ -109,8 +109,6 @@ export default function MiniDatePicker({ range, miniMode, fullCalendar }: Props)
     }
   }, [taskTime]);
 
-  console.log(fullCalendar);
-
   return (
     <div className="w-full flex flex-col space-y-4 my-2">
       <div className="flex flex-col space-y-2 w-full">
@@ -124,7 +122,7 @@ export default function MiniDatePicker({ range, miniMode, fullCalendar }: Props)
           <div className="flex space-x-2 items-center">
             <span>{shownDate.format('MMMM')}</span>
             <span
-              className="font-bold text-xs cursor-pointer"
+              className="font-bold text-xs cursor-pointer hover:bg-alsoit-purple-50 rounded-md p-1"
               onClick={() => handleIconClick(false)}
               onMouseEnter={() => setIconToggle((prev) => ({ ...prev, leftIcon: true }))}
               onMouseLeave={() => setIconToggle((prev) => ({ ...prev, leftIcon: false }))}
@@ -132,7 +130,7 @@ export default function MiniDatePicker({ range, miniMode, fullCalendar }: Props)
               <CircleArrowLeft active={iconToggle.leftIcon} />
             </span>
             <span
-              className="font-bold text-xs cursor-pointer"
+              className="font-bold text-xs cursor-pointer hover:bg-alsoit-purple-50 rounded-md p-1"
               onClick={() => handleIconClick(true)}
               onMouseEnter={() => setIconToggle((prev) => ({ ...prev, rightIcon: true }))}
               onMouseLeave={() => setIconToggle((prev) => ({ ...prev, rightIcon: false }))}

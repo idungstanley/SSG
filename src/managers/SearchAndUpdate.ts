@@ -1,12 +1,13 @@
 import { Hub, List, Wallet } from '../pages/workspace/hubs/components/ActiveTree/activetree.interfaces';
+import { EntityType } from '../utils/EntityTypes/EntityType';
 
 function findInChildren(hubs: Hub[], id: string, type: string, func: <T>(item: T) => T) {
   const newHubsArray = [...hubs];
   for (let i = 0; i < newHubsArray.length; i++) {
-    if (type === 'hub' && newHubsArray[i].id === id) {
+    if (type === EntityType.hub && newHubsArray[i].id === id) {
       newHubsArray[i] = func(newHubsArray[i]);
     }
-    if (type === 'list' && newHubsArray[i].lists.length) {
+    if (type === EntityType.list && newHubsArray[i].lists.length) {
       newHubsArray[i] = {
         ...newHubsArray[i],
         lists: findInLists(newHubsArray[i].lists, id, func)
@@ -25,16 +26,16 @@ function findInChildren(hubs: Hub[], id: string, type: string, func: <T>(item: T
 function findInWallets(wallets: Wallet[], id: string, type: string, func: <T>(item: T) => T) {
   const newWalletsArr = [...wallets];
   for (let i = 0; i < newWalletsArr.length; i++) {
-    if (type === 'wallet' && newWalletsArr[i].id === id) {
+    if (type === EntityType.wallet && newWalletsArr[i].id === id) {
       newWalletsArr[i] = func(newWalletsArr[i]);
     }
-    if ((type === 'wallet' || type === 'list') && newWalletsArr[i].children.length) {
+    if ((type === EntityType.wallet || type === EntityType.list) && newWalletsArr[i].children.length) {
       newWalletsArr[i] = {
         ...newWalletsArr[i],
         children: findInWalletChildren(newWalletsArr[i].children, id, type, func)
       };
     }
-    if (type === 'list' && newWalletsArr[i].lists.length) {
+    if (type === EntityType.list && newWalletsArr[i].lists.length) {
       newWalletsArr[i] = {
         ...newWalletsArr[i],
         lists: findInLists(newWalletsArr[i].lists, id, func)
@@ -47,10 +48,10 @@ function findInWallets(wallets: Wallet[], id: string, type: string, func: <T>(it
 function findInWalletChildren(wallets: Wallet[], id: string, type: string, func: <T>(item: T) => T) {
   const newWalletArray = [...wallets];
   for (let i = 0; i < newWalletArray.length; i++) {
-    if (type === 'wallet' && newWalletArray[i].id === id) {
+    if (type === EntityType.wallet && newWalletArray[i].id === id) {
       newWalletArray[i] = func(newWalletArray[i]);
     }
-    if (type === 'list' && newWalletArray[i].lists.length) {
+    if (type === EntityType.list && newWalletArray[i].lists.length) {
       newWalletArray[i] = {
         ...newWalletArray[i],
         lists: findInLists(newWalletArray[i].lists, id, func)
@@ -79,7 +80,7 @@ function findInLists(lists: List[], id: string, func: <T>(item: T) => T) {
 export function findCurrentEntity(type: string, id: string, hubs: Hub[], func: <T>(item: T) => T): Hub[] {
   const newHubsArray = [...hubs];
   for (let i = 0; i < newHubsArray.length; i++) {
-    if (type === 'hub' && newHubsArray[i].id === id) {
+    if (type === EntityType.hub && newHubsArray[i].id === id) {
       newHubsArray[i] = func(newHubsArray[i]);
     }
     if (newHubsArray[i].children.length) {
@@ -88,13 +89,13 @@ export function findCurrentEntity(type: string, id: string, hubs: Hub[], func: <
         children: findInChildren(newHubsArray[i].children, id, type, func)!
       };
     }
-    if ((type === 'wallet' || type === 'list') && newHubsArray[i].wallets.length) {
+    if ((type === EntityType.wallet || type === EntityType.list) && newHubsArray[i].wallets.length) {
       newHubsArray[i] = {
         ...newHubsArray[i],
         wallets: findInWallets(newHubsArray[i].wallets, id, type, func)!
       };
     }
-    if (type === 'list' && newHubsArray[i].lists.length) {
+    if (type === EntityType.list && newHubsArray[i].lists.length) {
       newHubsArray[i] = {
         ...newHubsArray[i],
         lists: findInLists(newHubsArray[i].lists, id, func)
@@ -107,7 +108,7 @@ export function findCurrentEntity(type: string, id: string, hubs: Hub[], func: <
 function updateParentOfWallets(type: string, wallets: Wallet[], id: string, func: <T>(item: T) => T) {
   let newWalletsArray = [...wallets];
   for (let i = 0; i < newWalletsArray.length; i++) {
-    if (type === 'wallet' && newWalletsArray[i].id === id) {
+    if (type === EntityType.wallet && newWalletsArray[i].id === id) {
       newWalletsArray = func(newWalletsArray);
       break;
     }
@@ -117,7 +118,7 @@ function updateParentOfWallets(type: string, wallets: Wallet[], id: string, func
         children: updateParentOfWallets(type, newWalletsArray[i].children, id, func)
       };
     }
-    if (type === 'list' && newWalletsArray[i].lists.length) {
+    if (type === EntityType.list && newWalletsArray[i].lists.length) {
       newWalletsArray[i] = {
         ...newWalletsArray[i],
         lists: updateParentOfLists(newWalletsArray[i].lists, id, func)
@@ -130,19 +131,19 @@ function updateParentOfWallets(type: string, wallets: Wallet[], id: string, func
 function updateParentOfHubs(type: string, hubs: Hub[], id: string, func: <T>(item: T) => T) {
   let newHubsArray = [...hubs];
   for (let i = 0; i < newHubsArray.length; i++) {
-    if (type === 'hub' && newHubsArray[i].id === id) {
+    if (type === EntityType.hub && newHubsArray[i].id === id) {
       newHubsArray = func(newHubsArray);
       break;
     }
 
-    if ((type === 'wallet' || type === 'list') && newHubsArray[i].wallets.length) {
+    if ((type === EntityType.wallet || type === EntityType.list) && newHubsArray[i].wallets.length) {
       newHubsArray[i] = {
         ...newHubsArray[i],
         wallets: updateParentOfWallets(type, newHubsArray[i].wallets, id, func)
       };
     }
 
-    if (type === 'list' && newHubsArray[i].lists.length) {
+    if (type === EntityType.list && newHubsArray[i].lists.length) {
       newHubsArray[i] = {
         ...newHubsArray[i],
         lists: updateParentOfLists(newHubsArray[i].lists, id, func)
@@ -174,14 +175,14 @@ export function findParentOfEntity(type: string, id: string, hubs: Hub[], func: 
       };
     }
     // check first level of wallets
-    if ((type === 'wallet' || type === 'list') && newHubsArray[i].wallets.length) {
+    if ((type === EntityType.wallet || type === EntityType.list) && newHubsArray[i].wallets.length) {
       newHubsArray[i] = {
         ...newHubsArray[i],
         wallets: updateParentOfWallets(type, newHubsArray[i].wallets, id, func)
       };
     }
     // check first level of lists
-    if (type === 'list' && newHubsArray[i].lists.length) {
+    if (type === EntityType.list && newHubsArray[i].lists.length) {
       newHubsArray[i] = {
         ...newHubsArray[i],
         lists: updateParentOfLists(newHubsArray[i].lists, id, func)

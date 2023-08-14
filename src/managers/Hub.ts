@@ -1,5 +1,6 @@
 import { IHub } from '../features/hubs/hubs.interfaces';
 import { Hub } from '../pages/workspace/hubs/components/ActiveTree/activetree.interfaces';
+import { EntityType } from '../utils/EntityTypes/EntityType';
 import { findCurrentEntity, findParentOfEntity } from './SearchAndUpdate';
 
 export const changeHubManager = (id: string, hubs: Hub[], hubFromResponse: IHub) => {
@@ -16,7 +17,7 @@ export const changeHubManager = (id: string, hubs: Hub[], hubFromResponse: IHub)
     return newHub;
   };
 
-  const updatedTree = findCurrentEntity('hub', id, hubs, updateHub as <IHub>(item: IHub) => IHub);
+  const updatedTree = findCurrentEntity(EntityType.hub, id, hubs, updateHub as <IHub>(item: IHub) => IHub);
   return updatedTree;
 };
 
@@ -34,7 +35,7 @@ export const deleteHubManager = (id: string, hubs: Hub[]) => {
     }
   }
 
-  updatedTree = findParentOfEntity('hub', id, hubs, deleteHub as <IHub>(item: IHub) => IHub);
+  updatedTree = findParentOfEntity(EntityType.hub, id, hubs, deleteHub as <IHub>(item: IHub) => IHub);
   return updatedTree;
 };
 
@@ -57,9 +58,65 @@ export const createHubManager = (parentId: string | null, hubs: Hub[], newHubFro
   let updatedTree = [...hubs];
 
   if (parentId) {
-    updatedTree = findCurrentEntity('hub', parentId, hubs, createHub as <IHub>(item: IHub) => IHub);
+    updatedTree = findCurrentEntity(EntityType.hub, parentId, hubs, createHub as <IHub>(item: IHub) => IHub);
   } else {
     updatedTree = [...updatedTree, newHub];
   }
   return updatedTree;
+};
+
+export const findAllEntitiesIdsOfHub = (id: string, hubs: Hub[], openedEntitiesIds: string[]): string[] => {
+  const currentEntitiesIds: string[] = [...openedEntitiesIds];
+  const findAllEntitiesIds = (currentHub: Hub) => {
+    if (currentHub.children.length) {
+      for (const children of currentHub.children) {
+        currentEntitiesIds.push(children.id);
+      }
+    }
+    if (currentHub.wallets.length) {
+      for (const wallet of currentHub.wallets) {
+        currentEntitiesIds.push(wallet.id);
+      }
+    }
+    return currentHub;
+  };
+
+  findCurrentEntity(EntityType.hub, id, hubs, findAllEntitiesIds as <IHub>(item: IHub) => IHub);
+  return currentEntitiesIds;
+};
+
+export const removeEntityChildrenIdsOfHub = (id: string, hubs: Hub[], openedEntitiesIds: string[]): string[] => {
+  const currentEntitiesIds: string[] = [...openedEntitiesIds];
+  const idsForRemove: string[] = [];
+  const findAllEntitiesIds = (currentHub: Hub) => {
+    if (currentHub.children.length) {
+      for (const children of currentHub.children) {
+        idsForRemove.push(children.id);
+      }
+    }
+    if (currentHub.wallets.length) {
+      for (const wallet of currentHub.wallets) {
+        idsForRemove.push(wallet.id);
+      }
+    }
+    currentEntitiesIds.splice(
+      0,
+      currentEntitiesIds.length,
+      ...currentEntitiesIds.filter((n) => !idsForRemove.includes(n))
+    );
+    return currentHub;
+  };
+
+  findCurrentEntity(EntityType.hub, id, hubs, findAllEntitiesIds as <IHub>(item: IHub) => IHub);
+  return currentEntitiesIds;
+};
+
+export const findCurrentHub = (id: string, hubs: Hub[]) => {
+  let currentEntity = {};
+  const findHub = (currentHub: Hub) => {
+    currentEntity = currentHub;
+    return currentHub;
+  };
+  findCurrentEntity(EntityType.hub, id, hubs, findHub as <IHub>(item: IHub) => IHub);
+  return currentEntity as Hub;
 };

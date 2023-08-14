@@ -9,13 +9,15 @@ import { VscChecklist } from 'react-icons/vsc';
 import { UseGetHubDetails } from '../../../../features/hubs/hubService';
 import { UseGetWalletDetails } from '../../../../features/wallet/walletService';
 import { UseGetListDetails } from '../../../../features/list/listService';
+import { EntityType } from '../../../../utils/EntityTypes/EntityType';
 
 export default function ChecklistIndex() {
-  const [checklistName, setChecklistName] = useState<string>('Checklist');
-
-  const queryClient = useQueryClient();
   const dispatch = useAppDispatch();
+  const queryClient = useQueryClient();
+
   const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
+
+  const [checklistName, setChecklistName] = useState<string>('Checklist');
 
   //Create Checklist
   const createChecklist = useMutation(UseCreateChecklistService, {
@@ -84,22 +86,22 @@ export default function ChecklistIndex() {
           <MdCancel className="w-4 h-4 cursor-pointer" onClick={() => dispatch(setShowChecklistInput(false))} />
         </form>
       )}
-      {activeItemType === 'task' && (
+      {activeItemType === EntityType.task && (
         <div>
           <Disclosures item={checkListData?.data.task.checklists} />
         </div>
       )}
-      {activeItemType === 'hub' && (
+      {activeItemType === EntityType.hub && (
         <div>
           <Disclosures item={hub?.data.hub.checklists} />
         </div>
       )}
-      {activeItemType === 'wallet' && (
+      {activeItemType === EntityType.wallet && (
         <div>
           <Disclosures item={wallet?.data.wallet.checklists} />
         </div>
       )}
-      {activeItemType === 'list' && (
+      {activeItemType === EntityType.list && (
         <div>
           <Disclosures item={list?.data.list.checklists} />
         </div>

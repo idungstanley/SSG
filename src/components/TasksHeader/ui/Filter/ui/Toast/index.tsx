@@ -1,20 +1,35 @@
-import React, { useEffect } from 'react';
+import { Dispatch, SetStateAction, useEffect } from 'react';
 import { cl } from '../../../../../../utils';
 import ToastClose from '../../../../../../assets/icons/ToastClose';
 import toast from 'react-hot-toast';
 import { UseSaveTaskFilters } from '../../../../../../features/task/taskService';
+import { useAppDispatch } from '../../../../../../app/hooks';
+import { setTimeZone } from '../../../../../../features/settings/user/userSettingsSlice';
 
 interface ToastProps {
   title: string;
   body: string | null;
   showClose?: boolean;
   toastId?: string;
+  extended?: 'taskFilter' | 'timeZone' | 'calendar';
+  extendedFn?: Dispatch<SetStateAction<string | undefined>>;
+  extendedState?: string;
 }
-function SaveFilterToast({ title, body, showClose = true, toastId }: ToastProps) {
-  const { mutateAsync, status } = UseSaveTaskFilters();
+function SaveFilterToast({ title, body, showClose = true, toastId, extended, extendedState }: ToastProps) {
+  const dispatch = useAppDispatch();
+  const { mutateAsync, status: taskFilterStatus } = UseSaveTaskFilters();
   const handleSaveFilters = () => {
-    mutateAsync({ key: 'tasks_filter' });
+    extended === 'taskFilter' && mutateAsync({ key: 'tasks_filter' });
+    if (extended === 'timeZone') {
+      dispatch(setTimeZone(extendedState));
+      extendedState && localStorage.setItem('userTimeZone', extendedState);
+      setTimeout(() => {
+        toast.remove(toastId);
+      }, 1000);
+    }
   };
+
+  const status = extended === 'taskFilter' ? taskFilterStatus : '';
 
   useEffect(() => {
     if (status === 'success') {
@@ -38,13 +53,11 @@ function SaveFilterToast({ title, body, showClose = true, toastId }: ToastProps)
           <div className="p-2 flex items-center justify-between w-full">
             <div className="" style={{ width: '80%' }}>
               <div>
-                <p className="text-base font-semibold text-alsoit-gray-300 font-semibold my-1">{title}</p>
+                <p className="text-base font-semibold text-alsoit-gray-300 my-1">{title}</p>
                 {body != null && body !== '' && (
-                  <p className="text-alsoit-text-md font-semibold text-alsoit-gray-300 font-semibold my-1">{body}</p>
+                  <p className="text-alsoit-text-md font-semibold text-alsoit-gray-300 my-1">{body}</p>
                 )}
               </div>
-              {status === 'loading' && <p>Saving</p>}
-              {status === 'success' && <p>Saved</p>}
               <div className="my-1">
                 <section className="flex justify-between my-1">
                   <div className="flex items-center cursor-pointer gap-0.5">

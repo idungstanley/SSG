@@ -10,6 +10,7 @@ import { useParams } from 'react-router-dom';
 import { generateFilters } from '../../components/TasksHeader/lib/generateFilters';
 import { UseGetHubDetails } from '../hubs/hubService';
 import { IList } from '../hubs/hubs.interfaces';
+import { EntityType } from '../../utils/EntityTypes/EntityType';
 import { setNewCustomPropertyDetails } from '../task/taskSlice';
 
 interface TaskCountProps {
@@ -28,7 +29,7 @@ const moveList = (data: { listId: string; hubId: string; type: string }) => {
   const { hubId, listId, type } = data;
   let requestData = {};
 
-  if (type == 'hub') {
+  if (type === EntityType.hub) {
     requestData = {
       hub_id: hubId
     };
@@ -50,7 +51,7 @@ export const useMoveListService = () => {
   const { hubId, walletId, listId } = useParams();
 
   const id = hubId ?? walletId ?? listId;
-  const type = hubId ? 'hub' : walletId ? 'wallet' : 'list';
+  const type = hubId ? EntityType.hub : walletId ? EntityType.wallet : EntityType.list;
 
   const { filterTaskByAssigneeIds: assigneeUserId } = useAppSelector((state) => state.task);
   const { sortAbleArr } = useAppSelector((state) => state.task);
@@ -91,8 +92,8 @@ export const createListService = (data: {
 };
 
 // get lists
-export const getListService = (data: { getCurrentHubId: string | undefined | null }) => {
-  const hubID = data.getCurrentHubId;
+export const getListService = (id: string | null) => {
+  const hubID = id;
   return useQuery(['list', hubID], async () => {
     const response = await requestNew<listDetails | undefined>({
       url: 'lists',
@@ -156,17 +157,14 @@ export const GetTaskListCount = (value: { query: string; fetchTaskCount: boolean
   return useQuery(
     ['task-count', { listId }],
     async () => {
-      const data = await requestNew({
+      const data = await requestNew<TaskCountProps>({
         url: `lists/${listId}/task-status-counts`,
         method: 'GET'
       });
       return data;
     },
     {
-      enabled: value.fetchTaskCount,
-      onSuccess: (data: TaskCountProps) => {
-        console.log(data.data.task_statuses);
-      }
+      enabled: value.fetchTaskCount
     }
   );
 };
@@ -202,7 +200,6 @@ export const UseGetListDetails = (query: {
   activeItemId: string | null | undefined;
   activeItemType: string | null | undefined;
 }) => {
-  // const dispatch = useAppDispatch();
   return useQuery(
     ['hubs', query],
     async () => {
@@ -213,7 +210,7 @@ export const UseGetListDetails = (query: {
       return data;
     },
     {
-      enabled: query.activeItemType === 'list' && !!query.activeItemId
+      enabled: query.activeItemType === EntityType.list && !!query.activeItemId
     }
   );
 };
@@ -252,7 +249,8 @@ export const useCreateDropdownField = (type: string | undefined, id?: string | u
   return useMutation(createDropdownField, {
     onSuccess: () => {
       dispatch(setNewCustomPropertyDetails({ name: '', type: 'single label' }));
-      if (type === 'hub') {
+
+      if (type === EntityType.hub) {
         queryClient.invalidateQueries(['task', activeItemId, activeItemType, filterTaskByAssigneeIds]);
       }
       queryClient.invalidateQueries([type, id]);
@@ -283,9 +281,7 @@ export const useUpdateEntityCustomFieldValue = (listId?: string) => {
 
   return useMutation(updateEntityCustomFieldValue, {
     onSuccess: () => {
-      // if (activeItemType === 'hub') {
       queryClient.invalidateQueries(['task', activeItemId, activeItemType, filterTaskByAssigneeIds]);
-      // }
       queryClient.invalidateQueries(['task', { listId }]);
       queryClient.invalidateQueries(['task', listId, 'hub', filters]);
     }
@@ -316,7 +312,7 @@ export const useTaskStatuses = () => {
 
     return data?.task_statuses;
   } else if (hubId) {
-    const { data } = UseGetHubDetails({ activeItemId: hubId, activeItemType: 'hub' });
+    const { data } = UseGetHubDetails({ activeItemId: hubId, activeItemType: EntityType.hub });
 
     return data?.data.hub.task_statuses;
   }

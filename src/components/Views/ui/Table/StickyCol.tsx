@@ -24,6 +24,7 @@ import RoundedCheckbox from '../../../Checkbox/RoundedCheckbox';
 import ToolTip from '../../../Tooltip/Tooltip';
 import Badges from '../../../badges';
 import DetailsOnHover from '../../../Dropdown/DetailsOnHover/DetailsOnHover';
+import { EntityType } from '../../../../utils/EntityTypes/EntityType';
 
 interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   task: Task;
@@ -54,12 +55,15 @@ export function StickyCol({
   dragElement,
   ...props
 }: ColProps) {
-  const { currentWorkspaceId } = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { taskId, hubId, walletId, listId } = useParams();
-  const ACTIVE_TASK = taskId === task.id ? 'tdListV' : DEFAULT_COL_BG;
+
+  const { currentWorkspaceId } = useAppSelector((state) => state.auth);
+
   const [isChecked, setIsChecked] = useState(false);
+
+  const ACTIVE_TASK = taskId === task.id ? 'tdListV' : DEFAULT_COL_BG;
   const { mutate: onAdd } = useAddTask(parentId);
   const {
     currTeamMemberId,
@@ -92,7 +96,7 @@ export function StickyCol({
       dispatch(
         setShowPilotSideOver({
           id: task.id,
-          type: 'task',
+          type: EntityType.task,
           show: true,
           title: task.name
         })
@@ -101,7 +105,7 @@ export function StickyCol({
       dispatch(
         setActiveItem({
           activeItemId: task.id,
-          activeItemType: 'task',
+          activeItemType: EntityType.task,
           activeItemName: task.name
         })
       );
@@ -169,8 +173,13 @@ export function StickyCol({
 
   useEffect(() => {
     const isSelected = selectedTasksArray.includes(task.id);
-    isSelected ? setIsChecked(true) : setIsChecked(false);
-  }, [selectedTasksArray]);
+
+    if (isSelected) {
+      setIsChecked(true);
+    } else {
+      setIsChecked(false);
+    }
+  }, [selectedTasksArray, task.id]);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const isChecked = e.target.checked;
