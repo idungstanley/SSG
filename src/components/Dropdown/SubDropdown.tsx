@@ -141,11 +141,11 @@ export default function SubDropdown() {
     {
       id: 2,
       title:
-        SubMenuType === 'wallet' ||
+        SubMenuType === EntityType.wallet ||
         SubMenuType === 'subwallet2' ||
-        showMenuDropdownType === 'wallet' ||
+        showMenuDropdownType === EntityType.wallet ||
         showMenuDropdownType === 'subwallet2' ||
-        showMenuDropdownType === 'subwallet'
+        showMenuDropdownType === EntityType.subWallet
           ? 'Sub Wallet'
           : 'Wallet',
       handleClick: () => {
@@ -154,7 +154,9 @@ export default function SubDropdown() {
       },
       icon: <FaFolder className="w-4 h-4" aria-hidden="true" />,
       isVisible:
-        showMenuDropdownType == 'list' || showMenuDropdownType == 'subwallet3' || SubMenuType === 'subwallet3'
+        showMenuDropdownType === EntityType.list ||
+        showMenuDropdownType === 'subwallet3' ||
+        SubMenuType === 'subwallet3'
           ? false
           : true
     },
@@ -167,7 +169,7 @@ export default function SubDropdown() {
         dispatch(setLastActiveItem('Task'));
       },
       icon: <PlusIcon className="w-5 pt-2 text-gray-700 h-7" aria-hidden="true" />,
-      isVisible: showMenuDropdownType == 'list' ? true : false
+      isVisible: showMenuDropdownType === EntityType.list ? true : false
     },
     {
       id: 4,
@@ -177,7 +179,7 @@ export default function SubDropdown() {
         dispatch(setEntityToCreate(EntityType.list));
       },
       icon: <AiOutlineUnorderedList className="w-4 h-4" aria-hidden="true" />,
-      isVisible: showMenuDropdownType === 'list' ? false : true
+      isVisible: showMenuDropdownType === EntityType.list ? false : true
     },
     {
       id: 5,

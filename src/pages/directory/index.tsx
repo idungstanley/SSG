@@ -33,12 +33,6 @@ function Directory() {
 
   const { data: template, status: templateStatus } = useGetDirectoryTemplate(selectedTemplateId);
 
-  const extendedObj = {
-    name: 'Directory',
-    source: libraryIcon,
-    children: <LibraryData />
-  };
-
   return (
     <>
       <PilotSection templateId={selectedTemplateId} />
@@ -70,7 +64,11 @@ function Directory() {
             <CreateDirectorySideOver />
           </>
         }
-        extendedBar={extendedObj}
+        extendedBar={{
+          name: 'Directory',
+          source: libraryIcon,
+          children: <LibraryData />
+        }}
       >
         <div className="flex flex-col items-start w-full h-full py-2">
           {/* status checking */}

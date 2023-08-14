@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useGetSubHub } from '../../../features/hubs/hubService';
 import { useAppSelector } from '../../../app/hooks';
 import { useDispatch } from 'react-redux';
-import { getCurrSubHubId, setCreateWLID, setHubParentId, setSubHubExt } from '../../../features/hubs/hubSlice';
+import { setHubParentId, setSubHubExt } from '../../../features/hubs/hubSlice';
 import SHubDropdownList from '../../ItemsListInSidebar/components/SHubDropdownList';
 import {
   setActiveEntity,
@@ -10,76 +11,64 @@ import {
   setActiveItem,
   setShowHub
 } from '../../../features/workspace/workspaceSlice';
-// import { useNavigate } from 'react-router-dom';
 import HubItem from '../../tasks/HubItem';
 import { setShowPilotSideOver } from '../../../features/general/slideOver/slideOverSlice';
 import { DragOverlay } from '@dnd-kit/core';
 import HubItemOverlay from '../../tasks/HubItemOverLay';
+import { EntityType } from '../../../utils/EntityTypes/EntityType';
 
 export default function SubHubIndex() {
   const dispatch = useDispatch();
-  // const navigate = useNavigate();
-  const [showSubChildren, setShowSubChidren] = useState<string | null | undefined>(null);
-  const { currentItemId } = useAppSelector((state) => state.workspace);
-  const { data, status } = useGetSubHub({
-    parentId: currentItemId
-  });
-  const type = 'subhub';
+  const navigate = useNavigate();
 
-  if (status === 'success') {
+  const { currentWorkspaceId } = useAppSelector((state) => state.auth);
+  const { activeItemId } = useAppSelector((state) => state.workspace);
+  const { hubParentId } = useAppSelector((state) => state.hub);
+  const { draggableItemId } = useAppSelector((state) => state.list);
+
+  const [openedIds, setOpenedIds] = useState<string[]>([]);
+
+  const { data, isSuccess } = useGetSubHub({ parentId: activeItemId });
+
+  if (isSuccess) {
     data?.data?.hubs.map(({ parent_id }) => dispatch(setHubParentId(parent_id)));
   }
-  const { hubParentId, subHubExt } = useAppSelector((state) => state.hub);
-  const { id: subHubExtId } = subHubExt;
-
-  const handleClick = (id: string) => {
-    dispatch(setSubHubExt({ id: id, type: type }));
-    setShowSubChidren(id);
-    dispatch(setCreateWLID(id));
-    dispatch(
-      setActiveItem({
-        activeItemType: 'subhub',
-        activeItemId: id
-      })
-    );
-    dispatch(setActiveEntity({ id: id, type: 'hub' }));
-    dispatch(
-      getCurrSubHubId({
-        currSubHubId: id,
-        currSubHubIdType: 'subhub'
-      })
-    );
-    if (showSubChildren === id) {
-      return setShowSubChidren(null);
-    }
-  };
 
   const handleLocation = (id: string, name: string) => {
-    dispatch(setSubHubExt({ id: id, type: type }));
+    dispatch(setSubHubExt({ id: id, type: EntityType.subHub }));
+    navigate(`/${currentWorkspaceId}/tasks/h/${id}`);
     dispatch(setShowHub(true));
     dispatch(setActiveEntityName(name));
     dispatch(
       setActiveItem({
         activeItemId: id,
-        activeItemType: 'subhub',
+        activeItemType: EntityType.subHub,
         activeItemName: name
       })
     );
     dispatch(
       setShowPilotSideOver({
         id: id,
-        type: 'subhub',
+        type: EntityType.subHub,
         show: true,
         title: name
       })
     );
-    // navigate(`/h/${id}`);
-    dispatch(setActiveEntity({ id: id, type: 'hub' }));
+    dispatch(setActiveEntity({ id: id, type: EntityType.hub }));
+    setOpenedIds([]);
   };
 
-  const { draggableItemId } = useAppSelector((state) => state.list);
+  const handleClick = (id: string) => {
+    if (openedIds.includes(id)) {
+      setOpenedIds((prev) => prev.filter((item) => item !== id));
+    } else {
+      setOpenedIds((prev) => [...prev, id]);
+    }
+  };
+
   const draggableItem = draggableItemId ? data?.data?.hubs.find((i) => i.id === draggableItemId) : null;
-  return currentItemId === hubParentId ? (
+
+  return activeItemId === hubParentId ? (
     <div id="subhub">
       {draggableItem ? (
         <DragOverlay>
@@ -92,11 +81,11 @@ export default function SubHubIndex() {
             <HubItem
               item={subhub}
               handleClick={handleClick}
-              showChildren={!!showSubChildren}
+              showChildren={openedIds.includes(subhub.id)}
               handleLocation={handleLocation}
               type="subhub"
             />
-            {subHubExtId === subhub.id ? <SHubDropdownList /> : null}
+            {openedIds.includes(subhub.id) ? <SHubDropdownList currenId={subhub.id} /> : null}
           </div>
         ))}
     </div>

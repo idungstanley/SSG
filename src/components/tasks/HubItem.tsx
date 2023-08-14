@@ -25,6 +25,7 @@ import MenuDropdown from '../Dropdown/MenuDropdown';
 import SubDropdown from '../Dropdown/SubDropdown';
 import { useDraggable, useDroppable } from '@dnd-kit/core';
 import Drag from '../../assets/icons/Drag';
+import { getInitials } from '../../app/helpers';
 import ToolTip from '../Tooltip/Tooltip';
 
 interface TaskItemProps {
@@ -236,12 +237,7 @@ export default function HubItem({
                   <img src={item.path} alt="hubs image" className="w-full h-full rounded" />
                 ) : (
                   <AvatarWithInitials
-                    initials={item.name
-                      .split(' ')
-                      .slice(0, 2)
-                      .map((word) => word[0])
-                      .join('')
-                      .toUpperCase()}
+                    initials={getInitials(item.name)}
                     height="h-5"
                     width="w-5"
                     backgroundColour={item.color !== null ? item.color : (paletteColor as string)}

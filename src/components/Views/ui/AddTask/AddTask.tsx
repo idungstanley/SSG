@@ -8,6 +8,7 @@ import { UseGetListDetails } from '../../../../features/list/listService';
 import { ITask_statuses } from '../../../../features/list/list.interfaces';
 import { ImCancelCircle } from 'react-icons/im';
 import { useAppSelector } from '../../../../app/hooks';
+import { EntityType } from '../../../../utils/EntityTypes/EntityType';
 
 interface AddTaskFieldProps {
   onClose: VoidFunction;
@@ -22,7 +23,7 @@ export function AddTask({ onClose, paddingLeft, parentId, isListParent, columns 
   const nameRef = useRef<HTMLInputElement>(null);
   const { mutate: onAdd } = useAddTask(parentId);
 
-  const { data: list } = UseGetListDetails({ activeItemId: parentId, activeItemType: 'list' });
+  const { data: list } = UseGetListDetails({ activeItemId: parentId, activeItemType: EntityType.list });
   const { currTeamMemberId } = useAppSelector((state) => state.task);
 
   const [statusId, setStatusId] = useState<string>('');

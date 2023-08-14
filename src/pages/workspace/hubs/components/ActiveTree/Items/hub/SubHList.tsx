@@ -67,14 +67,6 @@ export default function SubHubList({ hubs }: ListProps) {
     navigate(`tasks/h/${id}`, {
       replace: true
     });
-    localStorage.setItem(
-      'hubDetailsStorage',
-      JSON.stringify({
-        activeItemId: id,
-        activeItemType: EntityType.subHub,
-        activeItemName: name
-      })
-    );
   };
 
   const handleClick = (id: string, parent_id: string | null, index?: number) => {

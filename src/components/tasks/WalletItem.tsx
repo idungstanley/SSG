@@ -42,7 +42,7 @@ interface WalletItemProps {
   zNumber?: string;
   stickyButtonIndex?: number | undefined;
   handleShowSubWallet: (id: string, parent_id: string | null, index?: number) => void;
-  handleLocation: (id: string, name: string, index?: number) => void;
+  handleLocation: (id: string, name: string, parent_id: string | null, index?: number) => void;
 }
 export default function WalletItem({
   wallet,
@@ -101,7 +101,7 @@ export default function WalletItem({
 
   const handleWalletColour = (id: string, e: React.MouseEvent<SVGElement>) => {
     e.stopPropagation();
-    dispatch(setPaletteDropDown({ show: true, paletteId: id, paletteType: 'wallet' }));
+    dispatch(setPaletteDropDown({ show: true, paletteId: id, paletteType: EntityType.wallet }));
   };
 
   const handleWalletSettings = (id: string, name: string, e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
@@ -163,7 +163,7 @@ export default function WalletItem({
         );
       }
     } else {
-      return <div className="pl-4">{renderCloseFolder()}</div>;
+      return <div style={{ paddingLeft: '14px' }}>{renderCloseFolder()}</div>;
     }
   };
 
@@ -232,7 +232,7 @@ export default function WalletItem({
             {renderIcons(showSubWallet)}
           </div>
           <div
-            onClick={() => handleLocation(wallet.id, wallet.name, index)}
+            onClick={() => handleLocation(wallet.id, wallet.name, wallet.parent_id || wallet.hub_id || null, index)}
             className="truncate cursor-pointer hover:underline hover:decoration-dashed"
             style={{ marginLeft: '17px' }}
           >

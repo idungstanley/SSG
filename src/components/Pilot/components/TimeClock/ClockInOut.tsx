@@ -22,33 +22,36 @@ import { setTimerLastMemory } from '../../../../features/workspace/workspaceSlic
 import { runTimer } from '../../../../utils/TimerCounter';
 import Duration from '../../../../utils/TimerDuration';
 import ClockLog from './ClockLog';
+import { EntityType } from '../../../../utils/EntityTypes/EntityType';
 
 export interface User {
   initials: string;
 }
 
 export default function ClockInOut() {
+  const dispatch = useAppDispatch();
+  const { workSpaceId, hubId, listId, taskId } = useParams();
+
   const { activeItemId, activeItemType, activeTabId, timerLastMemory } = useAppSelector((state) => state.workspace);
   const { timerStatus, duration, period, timerDetails } = useAppSelector((state) => state.task);
   const { initials } = useAppSelector((state) => state.userSetting);
   const { currentUserId } = useAppSelector((state) => state.auth);
-  const dispatch = useAppDispatch();
+
   const [isRunning, setRunning] = useState(false);
   const [time, setTime] = useState({ s: 0, m: 0, h: 0 });
   const [, setBtnClicked] = useState(false);
   const [prompt, setPrompt] = useState(false);
   const [newTimer, setNewtimer] = useState(false);
-  const { workSpaceId, hubId, listId, taskId } = useParams();
 
   const { data: getEntries } = GetTimeEntriesService({
     itemId: activeItemId,
-    trigger: activeItemType === 'subhub' ? 'hub' : activeItemType
+    trigger: activeItemType === EntityType.subHub ? EntityType.hub : activeItemType
   });
 
   // Get currently active timers
   const { data: getCurrent } = GetTimeEntriesService({
     itemId: activeItemId,
-    trigger: activeItemType === 'subhub' ? 'hub' : activeItemType,
+    trigger: activeItemType === EntityType.subHub ? EntityType.hub : activeItemType,
     is_active: 1
   });
   const mutation = EndTimeEntriesService();
@@ -57,7 +60,7 @@ export default function ClockInOut() {
   const start = () => {
     mutate({
       taskId: activeItemId,
-      type: activeItemType === 'subhub' ? 'hub' : activeItemType
+      type: activeItemType === EntityType.subHub ? EntityType.hub : activeItemType
     });
     if (timerStatus) {
       return dispatch(setTimerStatus(false));
@@ -84,7 +87,7 @@ export default function ClockInOut() {
 
   function timerCheck() {
     if (
-      (activeItemType === 'hub' || activeItemType === 'list' || activeItemType === 'task') &&
+      (activeItemType === EntityType.hub || activeItemType === EntityType.list || activeItemType === EntityType.task) &&
       (activeItemId === timerLastMemory.hubId ||
         activeItemId === timerLastMemory.listId ||
         activeItemId === timerLastMemory.taskId)

@@ -3,7 +3,6 @@ import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { useList } from '../../../../features/list/listService';
 import { Task } from '../../../../features/task/interface.tasks';
 import { filterByAssignee, filterBySearchValue, sortTasks } from '../../../TasksHeader/lib';
-// import { generateColumns } from '../../lib/tableHeadUtils';
 import { Table } from '../Table/Table';
 import { Label } from './Label';
 import { AddTask } from '../AddTask/AddTask';
@@ -14,6 +13,7 @@ import { UseGetWalletDetails } from '../../../../features/wallet/walletService';
 import { UseGetHubDetails } from '../../../../features/hubs/hubService';
 import { cl } from '../../../../utils';
 import { useDroppable } from '@dnd-kit/core';
+import { EntityType } from '../../../../utils/EntityTypes/EntityType';
 
 interface ListProps {
   tasks: Task[];
@@ -36,11 +36,11 @@ export function List({ tasks }: ListProps) {
 
   const { data: hub } = UseGetHubDetails({
     activeItemId: hubId,
-    activeItemType: 'hub'
+    activeItemType: EntityType.hub
   });
   const { data: wallet } = UseGetWalletDetails({
     activeItemId: walletId,
-    activeItemType: 'wallet'
+    activeItemType: EntityType.wallet
   });
   const { data: list } = useList(tasks[0].list_id);
 

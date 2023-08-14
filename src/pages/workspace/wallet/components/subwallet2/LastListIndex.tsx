@@ -6,16 +6,16 @@ import ListItem from '../../../../../components/tasks/ListItem';
 import { IList } from '../../../../../features/hubs/hubs.interfaces';
 
 interface LastListIndexProps {
-  finalParentId: string;
+  parentId: string;
   paddingLeft?: string | number;
 }
 
-export default function LastListIndex({ finalParentId, paddingLeft }: LastListIndexProps) {
+export default function LastListIndex({ parentId, paddingLeft }: LastListIndexProps) {
   const { showMenuDropdown } = useAppSelector((state) => state.hub);
   const { toggleArchiveList } = useAppSelector((state) => state.list);
 
   const { data: dataList } = getListServices({
-    walletId: finalParentId,
+    walletId: parentId,
     Archived: toggleArchiveList
   });
   return dataList?.data.lists != null ? (
