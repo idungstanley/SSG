@@ -9,6 +9,9 @@ import { ITaskFullList } from '../../../../../../features/task/interface.tasks';
 import { IHubDetails } from '../../../../../../features/hubs/hubs.interfaces';
 import { IListDetails } from '../../../../../../features/list/list.interfaces';
 import { IWalletDetails } from '../../../../../../features/wallet/wallet.interfaces';
+import ArrowRight from '../../../../../../assets/icons/ArrowRight';
+import ArrowDownFilled from '../../../../../../assets/icons/ArrowDownFilled';
+import ArrowRightFilled from '../../../../../../assets/icons/ArrowRightFilled';
 
 interface StatusDetailsProps {
   Details: IHubDetails | undefined | ITaskFullList | IListDetails | IWalletDetails;
@@ -17,6 +20,10 @@ interface StatusDetailsProps {
 export default function Status({ Details }: StatusDetailsProps) {
   const [statusBg, setStatusBg] = useState('');
   const [complete, setComplete] = useState('');
+  const [iconToggle, setIconToggle] = useState<{ arrow: boolean; check: boolean }>({
+    arrow: false,
+    check: false
+  });
   const dispatch = useAppDispatch();
   const StatusData = Details ? ('status' in Details ? Details?.status : null) : null;
 
@@ -88,7 +95,14 @@ export default function Status({ Details }: StatusDetailsProps) {
         ) : null}
         <ToolTip title="Next status">
           <button className={`p-2 bg-${statusBg}-300 text-black text-xs rounded-r-md border-white h-8`}>
-            <MdArrowRight />
+            <div
+              onMouseEnter={() => setIconToggle((prev) => ({ ...prev, arrow: true }))}
+              onMouseLeave={() => setIconToggle((prev) => ({ ...prev, arrow: false }))}
+            >
+              <MdArrowRight
+                className={iconToggle.arrow ? 'text-alsoit-purple-300 w-4 h-4' : 'text-alsoit-gray-200 w-4 h-4'}
+              />
+            </div>
           </button>
         </ToolTip>
       </div>

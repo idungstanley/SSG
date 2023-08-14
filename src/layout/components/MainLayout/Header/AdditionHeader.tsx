@@ -10,8 +10,6 @@ import dayjs from 'dayjs';
 import HeaderModal from '../../../../components/Header/HeaderModal';
 import TimerModal from './TimerOptions';
 import { useParams } from 'react-router-dom';
-import timezone from 'dayjs/plugin/timezone';
-import utc from 'dayjs/plugin/utc';
 import HeaderTimeModal from './HeaderTimeModal';
 import ArrowCaretUp from '../../../../assets/icons/ArrowCaretUp';
 import AlarmClockIcon from '../../../../assets/icons/AlarmClockicon';
@@ -21,8 +19,6 @@ import { toast } from 'react-hot-toast';
 import SaveFilterToast from '../../../../components/TasksHeader/ui/Filter/ui/Toast';
 
 export default function AdditionalHeader() {
-  dayjs.extend(timezone);
-  dayjs.extend(utc);
   const userTimeZoneFromLS: string | null = localStorage.getItem('userTimeZone');
   const { screenRecording, duration, timerStatus } = useAppSelector((state) => state.task);
   const [recordBlinker, setRecordBlinker] = useState<boolean>(false);
@@ -214,10 +210,14 @@ export default function AdditionalHeader() {
             onMouseLeave={() => setShowClock((prev) => ({ ...prev, showMinimal: false }))}
           >
             <span className="text-center text-alsoit-text-md">
-              {dayjs(HeaderClock).format(time_format === '1' ? 'HH:mm' : 'h:mm a')}
+              {time_format === '0'
+                ? moment(HeaderClock, `${date_format?.toLocaleUpperCase()} HH:mm a`).format('h:mm a')
+                : moment(HeaderClock, `${date_format?.toLocaleUpperCase()} HH:mm a`).format('HH:mm')}
             </span>
             <span className="text-center text-alsoit-text-md">
-              {dayjs(HeaderClock, 'DD-MM-YYYY hh:mm').format(date_format?.toUpperCase() ?? 'MM-DD-YYYY')}
+              {moment(HeaderClock, `${date_format?.toLocaleUpperCase()} HH:mm`).format(
+                date_format?.toUpperCase() ?? 'MM-DD-YYYY'
+              )}
             </span>
             {clockModal && (
               <HeaderModal clickAway={true} toggleFn={setClockModal} styles="top-10 right-32 w-44">

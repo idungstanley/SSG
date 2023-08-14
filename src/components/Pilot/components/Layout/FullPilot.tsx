@@ -63,7 +63,7 @@ export default function FullPilot({ featureTabs, activeSection, setShowModal, sh
 
                 <CopyIcon className="w-6 h-6" />
 
-                <ShareIcon className="w-4 h-4" />
+                <ShareIcon active />
 
                 <PrintIcon className="w-4 h-4" />
               </>

@@ -257,7 +257,7 @@ export default function WalletItem({
               onClick={(e) => e.stopPropagation()}
             >
               <span onClick={() => handleItemAction(wallet.id, wallet.name)} className="cursor-pointer">
-                <PlusIcon />
+                <PlusIcon active />
               </span>
               <span
                 className="cursor-pointer"
