@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import ModalOverlay from '../Modal/ModalOverlay';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { setIsManageStatus } from '../../features/workspace/workspaceSlice';
@@ -10,27 +10,15 @@ import { StatusProps } from '../../pages/workspace/hubs/components/ActiveTree/ac
 
 const statusTabOptions = [{ label: 'Use Space Statuses' }, { label: 'Custom' }];
 
-// const statusTypes = [
-//   { label: 'To do', color: 'grey', model_type: 'open', position: '1' },
-//   { label: 'In Progress', color: 'purple', model_type: 'custom', position: '2' },
-//   { label: 'Completed', color: 'green', model_type: 'closed', position: '3' }
-// ];
-
-interface ItemProps {
-  label?: string;
-  color: string;
-  model_type: string;
-}
-
-const groupStatusByModelType = (statusTypes: ItemProps[]) => {
-  return [...new Set(statusTypes.map(({ model_type }) => model_type))];
+const groupStatusByModelType = (statusTypes: StatusProps[]) => {
+  return [...new Set(statusTypes.map(({ type }) => type))];
 };
 
 export default function StatusManagement() {
   const dispatch = useAppDispatch();
   const { isManageStatus } = useAppSelector((state) => state.workspace);
   const { spaceStatuses } = useAppSelector((state) => state.hub);
-
+  const { statusTaskListDetails } = useAppSelector((state) => state.list);
   const [activeStatusTab, setActiveStatusTab] = useState<string>(statusTabOptions[0].label);
   const [statusTypesState, setStatusTypesState] = useState<StatusProps[]>(spaceStatuses);
   const [newStatusValue, setNewStatusValue] = useState<string>();
@@ -39,12 +27,28 @@ export default function StatusManagement() {
     dispatch(setIsManageStatus(!isManageStatus));
   };
 
+  useEffect(() => {
+    setStatusTypesState(
+      spaceStatuses.map((status) => {
+        return {
+          name: status.name,
+          color: status.color,
+          id: status.id,
+          type: status.type,
+          position: status.position
+        };
+      })
+    );
+  }, [spaceStatuses]);
+
   const handleSaveNewStatus = () => {
     if (newStatusValue?.trim() !== '') {
       const newStatusItem: StatusProps = {
         name: newStatusValue,
         color: 'green',
-        model_type: 'custom'
+        type: 'custom',
+        position: statusTypesState.length,
+        id: null
       };
       setStatusTypesState((prevStatusTypes) => [...prevStatusTypes, newStatusItem]);
       setNewStatusValue('');
@@ -60,7 +64,7 @@ export default function StatusManagement() {
     <ModalOverlay isModalVisible={isManageStatus} onCloseModal={handleCloseManageStatus}>
       <section className="flex flex-col p-4" style={{ minHeight: '450px' }}>
         <div>
-          <h1>Edit statuses for List</h1>
+          <h1>Edit statuses for {statusTaskListDetails.listName}</h1>
         </div>
         <div className="grid grid-cols-2 gap-4 mt-8">
           <div className="flex flex-col space-y-3">
@@ -96,16 +100,16 @@ export default function StatusManagement() {
                 <div className="space-y-2" key={modelTypeIndex}>
                   <p className="flex uppercase justify-items-start">{uniqueModelType} STATUSES</p>
                   {statusTypesState
-                    .filter((ticket) => ticket.model_type === uniqueModelType)
+                    .filter((ticket) => ticket.type === uniqueModelType)
                     .map((item, index) => (
                       <>
                         <StatusBodyTemplate index={index} item={item} setStatusTypesState={setStatusTypesState} />
-                        {item.model_type === 'open' && !addStatus && (
+                        {item.type === 'open' && !addStatus && (
                           <span className="flex justify-items-start" onClick={() => setAddStatus(true)}>
                             <Button height="h-8" icon={<PlusIcon />} label="Add Status" buttonStyle="base" />
                           </span>
                         )}
-                        {item.model_type === 'open' && addStatus && (
+                        {item.type === 'open' && addStatus && (
                           <span className="flex justify-items-start">
                             <Input
                               trailingIcon={<PlusIcon />}

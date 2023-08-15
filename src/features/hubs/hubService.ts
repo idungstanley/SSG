@@ -8,6 +8,7 @@ import { closeMenu, setShowFavEditInput, setSpaceStatuses, setTriggerFavUpdate }
 import { setArchiveHub } from './hubSlice';
 import { generateFilters } from '../../components/TasksHeader/lib/generateFilters';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
+import { StatusProps } from '../../pages/workspace/hubs/components/ActiveTree/activetree.interfaces';
 
 interface IResponseHub {
   data: {
@@ -224,12 +225,21 @@ export const UseDeleteHubService = (data: { id: string | null | undefined }) => 
 };
 
 //status service
-export const statusService = () => {
+export const statusService = (statusTypes: StatusProps[]) => {
+  const { statusTaskListDetails } = useAppSelector((state) => state.list);
+  const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
+
   return useQuery(['status'], async () => {
     const data = await requestNew({
       url: 'task-statuses',
       method: 'POST',
-      data: {}
+      data: {
+        model_id: statusTaskListDetails.listId,
+        model_type: 'list',
+        from_model: activeItemType,
+        from_model_id: activeItemId,
+        statuses: statusTypes
+      }
     });
     return data;
   });

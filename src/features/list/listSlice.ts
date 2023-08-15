@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { ListColourProps } from '../../components/tasks/ListItem';
 import { TaskId } from '../task/interface.tasks';
+import { StatusTaskListProps } from './list.interfaces';
 
 interface ListState {
   list: string[];
@@ -12,6 +13,7 @@ interface ListState {
   editList: boolean;
   draggableItemId: null | TaskId;
   dragOverItemId: null | string;
+  statusTaskListDetails: StatusTaskListProps;
 }
 
 const initialState: ListState = {
@@ -23,7 +25,8 @@ const initialState: ListState = {
   listColour: { innerColour: 'white', outerColour: 'black' },
   editList: false,
   draggableItemId: null,
-  dragOverItemId: null
+  dragOverItemId: null,
+  statusTaskListDetails: { listId: undefined, listName: undefined }
 };
 
 export const listSlice = createSlice({
@@ -47,6 +50,9 @@ export const listSlice = createSlice({
     },
     setEditList(state, action: PayloadAction<boolean>) {
       state.editList = action.payload;
+    },
+    setStatusTaskListDetails(state, action: PayloadAction<StatusTaskListProps>) {
+      state.statusTaskListDetails = action.payload;
     },
     setListPaletteColor(state, action: PayloadAction<ListColourProps | undefined | string>) {
       (state.listColour as ListColourProps).innerColour = (action.payload as ListColourProps).innerColour;
@@ -76,6 +82,7 @@ export const {
   setToggleArchiveList,
   setListPaletteColor,
   setEditList,
-  setDragOverItem
+  setDragOverItem,
+  setStatusTaskListDetails
 } = listSlice.actions;
 export default listSlice.reducer;

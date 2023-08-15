@@ -23,6 +23,7 @@ import { MdEditNote } from 'react-icons/md';
 import { BiHide } from 'react-icons/bi';
 import { setIsManageStatus } from '../../../../../features/workspace/workspaceSlice';
 import AlsoitMenuDropdown from '../../../../DropDowns';
+import { setStatusTaskListDetails } from '../../../../../features/list/listSlice';
 
 interface HeadProps {
   columns: Column[];
@@ -34,6 +35,7 @@ interface HeadProps {
   taskLength: number;
   onToggleCollapseTasks: VoidFunction;
   listId: string | undefined;
+  listName?: string;
 }
 
 export type SortOption = {
@@ -50,7 +52,8 @@ export function Head({
   onToggleCollapseTasks,
   mouseDown,
   label,
-  listId
+  listId,
+  listName
 }: HeadProps) {
   const parsedLabel = parseLabel(label);
   const dispatch = useAppDispatch();
@@ -150,6 +153,7 @@ export function Head({
       handleClick: () => {
         dispatch(setIsManageStatus(!isManageStatus));
         setShowStatusDropdown(null);
+        dispatch(setStatusTaskListDetails({ listId, listName }));
       }
     }
   ];
@@ -238,7 +242,7 @@ export function Head({
             </div>
           </div>
           <FiPlusCircle
-            className="w-4 h-4 font-black AddColumnDropdownButton mr-2"
+            className="w-4 h-4 mr-2 font-black AddColumnDropdownButton"
             onClick={() => dispatch(setListIdForCustom(listId))}
           />
           {headerId === columns[0].id && (

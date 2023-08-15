@@ -7,20 +7,15 @@ import { AiOutlineDelete } from 'react-icons/ai';
 import ColorPalette from '../ColorPalette/component/ColorPalette';
 import { ListColourProps } from '../tasks/ListItem';
 import { MdInvertColors } from 'react-icons/md';
-
-interface ItemProps {
-  name?: string;
-  color: string;
-  model_type: string;
-}
+import { StatusProps } from '../../pages/workspace/hubs/components/ActiveTree/activetree.interfaces';
 
 interface StatusBodyProps {
-  item: ItemProps;
+  item: StatusProps;
   index: number;
-  setStatusTypesState: React.Dispatch<React.SetStateAction<ItemProps[]>>;
+  setStatusTypesState: React.Dispatch<React.SetStateAction<StatusProps[]>>;
 }
 
-export default function StatusBodyTemplate({ item, index, setStatusTypesState }: StatusBodyProps) {
+export default function StatusBodyTemplate({ item, setStatusTypesState }: StatusBodyProps) {
   const [editableContent, setEditableContent] = useState<boolean>(false);
   const [showStatusEditDropdown, setShowStatusEditDropdown] = useState<null | HTMLSpanElement | HTMLDivElement>(null);
   const [showStatusColorDropdown, setShowStatusColorDropdown] = useState<null | HTMLSpanElement>(null);
@@ -31,14 +26,14 @@ export default function StatusBodyTemplate({ item, index, setStatusTypesState }:
 
   const handleOpenStatusColorDropdown = (event: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
     event.stopPropagation();
-    if (item.model_type !== 'closed') setShowStatusColorDropdown(event.currentTarget);
+    if (item.type !== 'closed') setShowStatusColorDropdown(event.currentTarget);
   };
 
   const handleStatusColor = (color: string | ListColourProps) => {
     setStatusTypesState((prevState) => {
       return prevState.map((status) => {
         if (status.name === item.name) {
-          return { ...status, color } as ItemProps;
+          return { ...status, color } as StatusProps;
         }
         return status;
       });
@@ -73,7 +68,7 @@ export default function StatusBodyTemplate({ item, index, setStatusTypesState }:
       }
     },
     {
-      visibility: item.model_type != 'closed',
+      visibility: item.type != 'closed',
       label: 'Change Color',
       icon: <MdInvertColors />,
       handleClick: (event: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
@@ -82,12 +77,12 @@ export default function StatusBodyTemplate({ item, index, setStatusTypesState }:
       }
     },
     {
-      visibility: item.model_type === 'custom',
+      visibility: item.type === 'custom',
       label: 'Delete status',
       icon: <AiOutlineDelete />,
       handleClick: () => {
         setStatusTypesState((prevState) => {
-          return prevState.filter((status) => status.label !== item.label);
+          return prevState.filter((status) => status.name !== item.name);
         });
         setShowStatusEditDropdown(null);
       }
@@ -96,16 +91,16 @@ export default function StatusBodyTemplate({ item, index, setStatusTypesState }:
 
   return (
     <span
-      key={index}
+      key={item.name}
       className="flex items-center gap-2 p-1 border rounded cursor-pointer justify-items-start border-alsoit-gray-75"
       onClick={() => handleToggleEditableContent()}
     >
       <span
         className="w-3 h-3 ml-4 rounded"
-        style={{ backgroundColor: item.color }}
+        style={{ backgroundColor: item.color as string }}
         onClick={(e) => handleOpenStatusColorDropdown(e)}
       ></span>
-      <span contentEditable={editableContent} style={{ color: item.color }} className="uppercase">
+      <span contentEditable={editableContent} style={{ color: item.color as string }} className="uppercase">
         {item.name}
       </span>
       {!editableContent && (
