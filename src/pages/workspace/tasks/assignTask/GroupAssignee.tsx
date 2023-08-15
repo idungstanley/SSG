@@ -131,6 +131,8 @@ function GroupAssignee({
                                 : (newData.color as string)
                             }
                             badge={true}
+                            height={CompactView ? 'h-5' : 'h-7'}
+                            width={CompactView ? 'w-5' : 'w-7'}
                           />
                         </div>
                       )}
