@@ -3,6 +3,13 @@ import axios from 'axios';
 import { Buffer } from 'buffer';
 import fileDownload from 'js-file-download';
 import { explorerItemType } from '../types';
+import { IHub, IWallet, IList } from '../features/hubs/hubs.interfaces';
+import { Location } from 'react-router-dom';
+import { EntityType } from '../utils/EntityTypes/EntityType';
+import { findCurrentHub } from '../managers/Hub';
+import { Hub, List, Wallet } from '../pages/workspace/hubs/components/ActiveTree/activetree.interfaces';
+import { findCurrentWallet } from '../managers/Wallet';
+import { findCurrentList } from '../managers/List';
 
 export async function GetFileWithHeaders(type: string, id: string) {
   const baseUrl = `${process.env.REACT_APP_API_BASE_URL}/api/af`;
@@ -91,4 +98,70 @@ export function getInitials(str: string) {
     .map((word) => word[0])
     .join('')
     .toUpperCase();
+}
+
+export function findParentHubId(data: { hubs: IHub[]; wallets: IWallet[]; lists: IList[] }) {
+  let newParentHubId = '';
+  if (data.hubs.length) {
+    for (const hub of data.hubs) {
+      if (hub.parent_id) {
+        newParentHubId = hub.parent_id;
+        break;
+      }
+    }
+  }
+  if (!newParentHubId && data.wallets.length) {
+    for (const wallet of data.wallets) {
+      if (wallet.hub_id) {
+        newParentHubId = wallet.hub_id;
+        break;
+      }
+    }
+  }
+  if (!newParentHubId && data.lists.length) {
+    for (const list of data.lists) {
+      if (list.hub_id) {
+        newParentHubId = list.hub_id;
+        break;
+      }
+    }
+  }
+  return newParentHubId;
+}
+
+export function findFirstActiveEntityExt(location: Location) {
+  const shortType = location.pathname.split('/')[3];
+  const id = location.pathname.split('/')[4];
+  const longType = shortType === 'h' ? EntityType.hub : shortType === 'w' ? EntityType.wallet : EntityType.list;
+  return { id, type: longType };
+}
+
+export function findFirstActiveEntity(props: { id: string; type: string }, hubs: Hub[]) {
+  let currentEntity;
+  let currentType;
+  let parrentWalletId;
+  if (props.type === EntityType.hub) {
+    currentEntity = findCurrentHub(props.id, hubs) as Hub;
+    if (currentEntity.parent_id) {
+      currentType = EntityType.subHub;
+    } else {
+      currentType = EntityType.hub;
+    }
+  }
+  if (props.type === EntityType.wallet) {
+    currentEntity = findCurrentWallet(props.id, hubs) as Wallet;
+    if (currentEntity.hub_id) {
+      currentType = EntityType.wallet;
+      parrentWalletId = currentEntity.hub_id;
+    }
+    if (currentEntity.parent_id) {
+      currentType = EntityType.subWallet;
+      parrentWalletId = currentEntity.parent_id;
+    }
+  }
+  if (props.type === EntityType.list) {
+    currentEntity = findCurrentList(props.id, hubs) as List;
+    currentType = EntityType.list;
+  }
+  return { currentEntity, currentType, parrentWalletId };
 }

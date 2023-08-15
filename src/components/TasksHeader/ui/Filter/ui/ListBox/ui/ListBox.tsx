@@ -10,6 +10,8 @@ import { Input } from './Input';
 import { Date } from './Date';
 import { isDefined } from '../../../../../../../utils/typeGuards';
 import { AdditionalListBox } from './AdditionalListBox';
+import toast from 'react-hot-toast';
+import SaveFilterToast from '../../Toast';
 
 interface ListBoxProps {
   values: FilterValue[] | Operator[] | string[] | Unit[];
@@ -73,7 +75,6 @@ export function ListBox({
   const onToggleSelect = () => {
     if (onSelectOrDeselectAll) {
       onSelectOrDeselectAll({ type: selectAll });
-
       setSelectAll(selectAll === 'select' ? 'deselect' : 'select');
     }
   };
@@ -87,6 +88,20 @@ export function ListBox({
   const onClickConfirm = () => {
     setShowOptions(false);
     resetPrevState();
+    toast.custom(
+      (t) => (
+        <SaveFilterToast
+          title="This view has unsaved Changes"
+          body="Please Kindly save changes or cancel to discard"
+          toastId={t.id}
+          extended="taskFilter"
+        />
+      ),
+      {
+        position: 'bottom-right',
+        duration: Infinity
+      }
+    );
   };
 
   const onClickField = () => {

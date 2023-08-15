@@ -40,8 +40,15 @@ import { UseArchiveListService, UseDeleteListService } from '../../features/list
 import { useMutation } from '@tanstack/react-query';
 import { deleteListManager } from '../../managers/List';
 import { setFilteredResults } from '../../features/search/searchSlice';
-import { deleteWalletManager } from '../../managers/Wallet';
-import { deleteHubManager } from '../../managers/Hub';
+import {
+  deleteWalletManager,
+  findAllEntitiesIdsOfWallet,
+  removeEntityChildrenIdsOfWallet
+} from '../../managers/Wallet';
+import { deleteHubManager, findAllEntitiesIdsOfHub, removeEntityChildrenIdsOfHub } from '../../managers/Hub';
+import { setOpenedEntitiesIds, setOpenedParentsIds } from '../../features/workspace/workspaceSlice';
+import ExpandCollapseIcon from '../../assets/icons/ExpandCollapseIcon';
+import { EntityType } from '../../utils/EntityTypes/EntityType';
 // import { setTriggerAddToFav } from "../../features/hubs/hubSlice";
 
 interface itemsType {
@@ -65,6 +72,8 @@ export default function MenuDropdown() {
   const { showEditHubSlideOver, showEditWalletSlideOver, showEditListSlideOver } = useAppSelector(
     (state) => state.slideOver
   );
+  const { openedParentsIds, openedEntitiesIds } = useAppSelector((state) => state.workspace);
+
   const { archiveWallet } = useAppSelector((state) => state.wallet);
   const { archiveList } = useAppSelector((state) => state.list);
   const ref = useRef<HTMLInputElement>(null);
@@ -154,9 +163,9 @@ export default function MenuDropdown() {
       id: 2,
       title: 'Rename',
       handleClick: () => {
-        if (showMenuDropdownType == 'hubs' || showMenuDropdownType == 'subhub') {
+        if (showMenuDropdownType === 'hubs' || showMenuDropdownType === EntityType.subHub) {
           dispatch(setEditHubSlideOverVisibility(true));
-        } else if (showMenuDropdownType?.includes('wallet')) {
+        } else if (showMenuDropdownType?.includes(EntityType.wallet)) {
           dispatch(setEditWalletSlideOverVisibility(true));
         } else {
           dispatch(setEditListSlideOverVisibility(true));
@@ -247,7 +256,7 @@ export default function MenuDropdown() {
       handleClick: () => {
         if (showMenuDropdownType == 'hubs' || showMenuDropdownType == 'subhubs') {
           dispatch(setArchiveHub(true));
-        } else if (showMenuDropdownType?.includes('wallet')) {
+        } else if (showMenuDropdownType?.includes(EntityType.wallet)) {
           dispatch(setArchiveWallet(true));
         } else {
           dispatch(setArchiveList(true));
@@ -287,13 +296,42 @@ export default function MenuDropdown() {
     },
     {
       id: 16,
+      title: openedParentsIds.includes(showMenuDropdown as string) ? 'Collapse all' : 'Expand all',
+      handleClick: () => {
+        if (showMenuDropdown) {
+          if (!openedParentsIds.includes(showMenuDropdown)) {
+            let allOpenedEntitiesIds: string[] = [];
+            if (showMenuDropdownType?.includes(EntityType.hub)) {
+              allOpenedEntitiesIds = findAllEntitiesIdsOfHub(showMenuDropdown, hub, openedEntitiesIds);
+            } else if (showMenuDropdownType?.includes(EntityType.wallet)) {
+              allOpenedEntitiesIds = findAllEntitiesIdsOfWallet(showMenuDropdown, hub, openedEntitiesIds);
+            }
+            dispatch(setOpenedParentsIds([...openedParentsIds, showMenuDropdown]));
+            dispatch(setOpenedEntitiesIds([...new Set(allOpenedEntitiesIds)]));
+          } else {
+            let filteredOpenedIds: string[] = [];
+            if (showMenuDropdownType?.includes(EntityType.hub)) {
+              filteredOpenedIds = removeEntityChildrenIdsOfHub(showMenuDropdown, hub, openedEntitiesIds);
+            } else if (showMenuDropdownType?.includes(EntityType.wallet)) {
+              filteredOpenedIds = removeEntityChildrenIdsOfWallet(showMenuDropdown, hub, openedEntitiesIds);
+            }
+            dispatch(setOpenedParentsIds(openedParentsIds.filter((id) => id !== showMenuDropdown)));
+            dispatch(setOpenedEntitiesIds([...new Set(filteredOpenedIds)]));
+          }
+        }
+      },
+      icon: <ExpandCollapseIcon aria-hidden="true" />,
+      isVisible: showMenuDropdownType !== EntityType.list ? true : false
+    },
+    {
+      id: 17,
       title: 'Delete',
       handleClick: () => {
-        if (showMenuDropdownType == 'hubs' || showMenuDropdownType == 'subhub') {
+        if (showMenuDropdownType === 'hubs' || showMenuDropdownType === EntityType.subHub) {
           deleteHubMutation.mutateAsync({
             id: showMenuDropdown
           });
-        } else if (showMenuDropdownType?.includes('wallet')) {
+        } else if (showMenuDropdownType?.includes(EntityType.wallet)) {
           deleteWalletMutation.mutateAsync({
             id: showMenuDropdown
           });

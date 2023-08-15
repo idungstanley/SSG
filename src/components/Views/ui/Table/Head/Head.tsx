@@ -8,6 +8,7 @@ import { Chevron } from '../../Chevron';
 import {
   setActiveTaskColumn,
   setListIdForCustom,
+  setSelectedTasksArray,
   setSortArr,
   setSortArray
 } from '../../../../../features/task/taskSlice';
@@ -19,11 +20,12 @@ import { FiPlusCircle } from 'react-icons/fi';
 import { PencilIcon } from '@heroicons/react/24/outline';
 import PlusIcon from '../../../../../assets/icons/PlusIcon';
 import { TbAlignJustified } from 'react-icons/tb';
-import { MdEditNote } from 'react-icons/md';
+import { MdEditNote, MdOutlineDragIndicator } from 'react-icons/md';
 import { BiHide } from 'react-icons/bi';
 import { setIsManageStatus } from '../../../../../features/workspace/workspaceSlice';
 import AlsoitMenuDropdown from '../../../../DropDowns';
 import { setStatusTaskListDetails } from '../../../../../features/list/listSlice';
+import { Task } from '../../../../../features/task/interface.tasks';
 
 interface HeadProps {
   columns: Column[];
@@ -36,6 +38,7 @@ interface HeadProps {
   onToggleCollapseTasks: VoidFunction;
   listId: string | undefined;
   listName?: string;
+  groupedTask?: Task[];
 }
 
 export type SortOption = {
@@ -53,7 +56,8 @@ export function Head({
   mouseDown,
   label,
   listId,
-  listName
+  listName,
+  groupedTask
 }: HeadProps) {
   const parsedLabel = parseLabel(label);
   const dispatch = useAppDispatch();
@@ -64,7 +68,7 @@ export function Head({
   const [headerId, setheaderId] = useState<string>('');
   const [showStatusDropdown, setShowStatusDropdown] = useState<null | SVGElement>(null);
   const [showSortModal, setShowSortModal] = useState<boolean>(false);
-  const { sortArr, sortAbleArr } = useAppSelector((state) => state.task);
+  const { sortArr, sortAbleArr, selectedTasksArray } = useAppSelector((state) => state.task);
   const { baseColor } = useAppSelector((state) => state.account);
   const { isManageStatus } = useAppSelector((state) => state.workspace);
 
@@ -78,6 +82,21 @@ export function Head({
 
   const handleCloseStatusDropdown = () => {
     setShowStatusDropdown(null);
+  };
+
+  const handleCheckedGroupTasks = () => {
+    const updatedTaskIds: string[] = [...selectedTasksArray];
+
+    groupedTask?.forEach((task) => {
+      const taskIndex = updatedTaskIds.indexOf(task.id);
+
+      if (taskIndex === -1) {
+        updatedTaskIds.push(task.id); // Task not in selectedTasksArray, so add it
+      } else {
+        updatedTaskIds.splice(taskIndex, 1); // Task already in selectedTasksArray, so remove it
+      }
+    });
+    dispatch(setSelectedTasksArray(updatedTaskIds));
   };
 
   const headerTxt = (title: string) =>
@@ -136,7 +155,7 @@ export function Head({
 
   const statusDropdownOptions = [
     { label: 'Rename', icon: <PencilIcon className="w-4 h-4" aria-hidden="true" />, handleClick: () => ({}) },
-    { label: 'New status', icon: <PlusIcon />, handleClick: () => ({}) },
+    { label: 'New status', icon: <PlusIcon active />, handleClick: () => ({}) },
     { label: 'Select all', icon: <TbAlignJustified />, handleClick: () => ({}) },
     { label: 'Collapse group', icon: <MdEditNote />, handleClick: () => ({}) },
     { label: 'Collapse all groups', icon: <MdEditNote />, handleClick: () => ({}) },
@@ -163,19 +182,20 @@ export function Head({
       <tr className="contents">
         {/* first sticky col */}
         <th style={{ zIndex: 2 }} className="sticky left-0 flex items-center -mb-2 font-extrabold" ref={columns[0].ref}>
-          <div className="flex items-center " style={{ width: '38px' }}></div>
+          <div className="flex items-center " style={{ width: '42px' }}></div>
           <div className="flex items-center w-full gap-3 py-2 truncate dBlock group opacity-90">
             <div
               className="py-0.5 relative px-2 rounded-tr-md -mb-1 flex items-center space-x-1 text-white dFlex "
               style={{ backgroundColor: headerStatusColor }}
             >
               <div>
-                <div className=" items-center ml-0.5 space-x-1 viewSettings" onClick={(e) => e.stopPropagation()}>
-                  <img src={statusbox} alt="" />
-                  <CiEdit />
-                  <BsThreeDots className="cursor-pointer" onClick={(e) => handleClick(e)} />
+                {/* <div className="items-center space-x-1 viewSettings" onClick={(e) => e.stopPropagation()}>
+                  <img src={statusbox} alt="" className="pr-1 border-r" onClick={handleCheckedGroupTasks} />
+                  <CiEdit className="w-4 h-4 pr-1 border-r cursor-pointer" />
+                  <BsThreeDots className="w-4 h-4 cursor-pointer" onClick={(e) => handleClick(e)} />
                 </div>
-                <div className="flex">
+                <p className="border-t py-.5 viewSettings"></p> */}
+                <div className="flex items-center">
                   <p>
                     <Chevron
                       color={headerStatusColor}
@@ -187,6 +207,16 @@ export function Head({
                   <span ref={scrollToRef} className="pb-1" style={{ fontSize: '11px', WebkitTextStroke: '0.5px' }}>
                     {parsedLabel}
                   </span>
+                  <div className="items-center pl-2 space-x-1 viewSettings" onClick={(e) => e.stopPropagation()}>
+                    <img
+                      src={statusbox}
+                      alt=""
+                      className="pr-1 border-r cursor-pointer"
+                      onClick={handleCheckedGroupTasks}
+                    />
+                    <CiEdit className="w-4 h-4 pr-1 border-r cursor-pointer" />
+                    <BsThreeDots className="w-4 h-4 cursor-pointer" onClick={(e) => handleClick(e)} />
+                  </div>
                 </div>
               </div>
               <AlsoitMenuDropdown
@@ -211,7 +241,7 @@ export function Head({
               </AlsoitMenuDropdown>
             </div>
             <div
-              className="flex items-center hover:bg-gray-200 p-0.5 rounded-md space-x-1  border-t-2 border-l-2 border-r-2 border-transparent hover:border-gray-600 text-alsoit-gray-200 font-semibold"
+              className="flex items-center hover:bg-gray-200 p-0.5 rounded-xs space-x-1  border-t-2 border-l-2 border-r-2 border-transparent hover:border-r-gray-600 text-alsoit-gray-200 font-semibold"
               style={{ fontSize: '11px', WebkitTextStroke: '0.5px' }}
             >
               <span onClick={(e) => setOptions(e, columns[0].id, columns[0].value)} className="cursor-pointer">
@@ -257,15 +287,18 @@ export function Head({
         </th>
         {!collapseTasks
           ? columns.slice(1).map(({ ref, value, id }, index) => (
-              <th key={id} className="relative w-full py-2 -mb-1 font-extrabold opacity-90 " ref={ref}>
+              <th key={id} className="relative w-full py-2 -mb-1.5 font-extrabold opacity-90" ref={ref}>
                 <div
                   className={`text-alsoit-gray-200 font-semibold flex dBlock items-center justify-center w-full h-full my-auto cursor-pointer group  ${
                     sortAbles.includes(value)
-                      ? 'hover:bg-gray-200 p-0.5 rounded-md space-x-1 border-l-2 border-r-2 border-t-2 border-transparent hover:border-gray-500'
+                      ? 'hover:bg-gray-200 p-0.5 rounded-xs space-x-1 border-l-2 border-r-2 border-t-2 border-transparent hover:border-r-gray-500'
                       : ''
                   }`}
                   style={{ fontSize: '11px', WebkitTextStroke: '0.5px' }}
                 >
+                  <span className="dNone">
+                    <MdOutlineDragIndicator className="h4 w4" />
+                  </span>
                   <span onClick={(e) => setOptions(e, id, value)}>{value.toUpperCase()}</span>
                   {sortAbles.includes(value) && (
                     <span className="ml-0.5">

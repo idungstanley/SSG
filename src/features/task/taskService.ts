@@ -1,11 +1,20 @@
 import requestNew from '../../app/requestNew';
-import { IFullTaskRes, ITaskListRes, ITaskRes, ITimeEntriesRes, TaskId, newTaskDataRes } from './interface.tasks';
+import {
+  IFullTaskRes,
+  ITaskListRes,
+  ITaskRes,
+  ITimeEntriesRes,
+  IUserCalendarParams,
+  IUserSettingsRes,
+  TaskId,
+  newTaskDataRes
+} from './interface.tasks';
 import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import {
-  setNewTask,
   setScreenRecording,
   setScreenRecordingMedia,
+  setSelectedTasksArray,
   setTimerStatus,
   setToggleAssignCurrentTaskId,
   setUpdateTimerDuration
@@ -19,11 +28,29 @@ import { setTimerLastMemory, toggleMute } from '../workspace/workspaceSlice';
 import { generateFilters } from '../../components/TasksHeader/lib/generateFilters';
 import { runTimer } from '../../utils/TimerCounter';
 import Duration from '../../utils/TimerDuration';
+import { EntityType } from '../../utils/EntityTypes/EntityType';
+
+export const UseSaveTaskFilters = () => {
+  const { filters } = generateFilters();
+  const mutation = useMutation(async ({ key }: { key: string }) => {
+    const data = requestNew({
+      url: 'settings',
+      method: 'PUT',
+      data: {
+        key,
+        value: filters
+      }
+    });
+    return data;
+  });
+
+  return mutation;
+};
 
 const moveTask = (data: { taskId: TaskId; listId: string; overType: string }) => {
   const { taskId, listId, overType } = data;
   let requestData = {};
-  if (overType == 'list') {
+  if (overType === EntityType.list) {
     requestData = {
       list_id: listId
     };
@@ -38,12 +65,48 @@ const moveTask = (data: { taskId: TaskId; listId: string; overType: string }) =>
   return response;
 };
 
+export const useSaveData = () => {
+  const queryClient = useQueryClient();
+  const mutation = useMutation(
+    async ({ key, value }: { key: string; value: IUserCalendarParams }) => {
+      const data = requestNew({
+        url: 'settings',
+        method: 'PUT',
+        data: {
+          key,
+          value
+        }
+      });
+      return data;
+    },
+    {
+      onSuccess: () => queryClient.invalidateQueries(['calendar-data'])
+    }
+  );
+
+  return mutation;
+};
+
+export const useGetUserSettingsData = ({ keys }: { keys: string }) => {
+  return useQuery(['calendar-data'], async () => {
+    const data = await requestNew<IUserSettingsRes>({
+      url: 'settings',
+      method: 'GET',
+      params: {
+        key: keys
+      }
+    });
+
+    return data;
+  });
+};
+
 export const useMoveTask = () => {
   const queryClient = useQueryClient();
   const { hubId, walletId, listId } = useParams();
 
   const id = hubId ?? walletId ?? listId;
-  const type = hubId ? 'hub' : walletId ? 'wallet' : 'list';
+  const type = hubId ? EntityType.hub : walletId ? EntityType.wallet : EntityType.list;
 
   const { filterTaskByAssigneeIds: assigneeUserId } = useAppSelector((state) => state.task);
   const { sortAbleArr } = useAppSelector((state) => state.task);
@@ -88,8 +151,6 @@ const addTask = (data: {
 
 export const useAddTask = (parentTaskId?: string) => {
   const queryClient = useQueryClient();
-  // const id = hubId ?? walletId ?? listId;
-  // const type = hubId ? 'hub' : walletId ? 'wallet' : 'list';
 
   return useMutation(addTask, {
     onSuccess: () => {
@@ -142,9 +203,9 @@ export const UseGetFullTaskList = ({
   assigneeUserId?: string | null | undefined;
 }) => {
   const queryClient = useQueryClient();
-  // const enabled = itemType == 'hub' || itemType == 'subhub' || itemType == 'wallet' || itemType == 'subwallet';
-  const hub_id = itemType === 'hub' || itemType === 'subhub' ? itemId : null;
-  const wallet_id = itemType == 'wallet' || itemType == 'subwallet' ? itemId : null;
+
+  const hub_id = itemType === EntityType.hub || itemType === EntityType.subHub ? itemId : null;
+  const wallet_id = itemType == EntityType.wallet || itemType === EntityType.subWallet ? itemId : null;
   const assignees = assigneeUserId ? (assigneeUserId == 'unassigned' ? null : [assigneeUserId]) : null;
   const { sortAbleArr } = useAppSelector((state) => state.task);
   const sortArrUpdate = sortAbleArr.length <= 0 ? null : sortAbleArr;
@@ -225,7 +286,7 @@ export const getOneTaskService = ({
     },
     {
       // enabled: false
-      enabled: activeItemType === 'task' && task_id != null
+      enabled: activeItemType === EntityType.task && task_id != null
     }
   );
 };
@@ -295,24 +356,28 @@ export const UseUpdateTaskStatusService2 = () => {
   });
 };
 
-export const UseUpdateTaskStatusServices = ({ task_id, priorityDataUpdate }: UpdateTaskProps) => {
+export const UseUpdateTaskStatusServices = ({ task_id_array, priorityDataUpdate }: UpdateTaskProps) => {
+  const { currentTaskPriorityId } = useAppSelector((state) => state.task);
+  const dispatch = useAppDispatch();
+
   const queryClient = useQueryClient();
   return useQuery(
-    ['task', { task_id, priorityDataUpdate }],
+    ['task', { task_id_array, priorityDataUpdate }],
     async () => {
       const data = requestNew({
-        url: `tasks/${task_id}`,
-        method: 'PUT',
-        params: {
+        url: 'tasks/multiple/priority',
+        method: 'POST',
+        data: {
+          ids: task_id_array?.length ? task_id_array : [currentTaskPriorityId],
           priority: priorityDataUpdate
         }
       });
       return data;
     },
     {
-      // enabled: statusDataUpdate !== '' || priorityDataUpdate !== '',
-      enabled: task_id != null && priorityDataUpdate !== '',
+      enabled: task_id_array != null && priorityDataUpdate !== '',
       onSuccess: () => {
+        dispatch(setSelectedTasksArray([]));
         queryClient.invalidateQueries(['task']);
       }
     }
@@ -421,7 +486,7 @@ export const createTimeEntriesService = (data: { queryKey: (string | undefined)[
     url: 'time-entries/start',
     method: 'POST',
     params: {
-      type: 'task',
+      type: EntityType.task,
       id: taskID
     }
   });
@@ -485,10 +550,10 @@ export const useCurrentTime = ({ workspaceId }: { workspaceId?: string }) => {
           dispatch(setUpdateTimerDuration({ s: seconds, m: minutes, h: hours }));
           dispatch(
             setTimerLastMemory({
-              hubId: dateString.model_type === 'hub' ? dateString.model_id : null,
+              hubId: dateString.model_type === EntityType.hub ? dateString.model_id : null,
               activeTabId: 6,
-              listId: dateString.model_type === 'list' ? dateString.model_id : null,
-              taskId: dateString.model_type === 'task' ? dateString.model_id : null,
+              listId: dateString.model_type === EntityType.list ? dateString.model_id : null,
+              taskId: dateString.model_type === EntityType.task ? dateString.model_id : null,
               workSpaceId: workspaceId
             })
           );
@@ -616,7 +681,7 @@ export const AddTaskWatcherService = (data: { queryKey: string[] }) => {
     url: 'watch',
     method: 'POST',
     params: {
-      type: 'task',
+      type: EntityType.task,
       id: taskID
     }
   });
@@ -633,7 +698,7 @@ export const UseGetWatcherService = (taskId: { query: string | null | undefined 
         url: 'watch',
         method: 'GET',
         params: {
-          type: 'task',
+          type: EntityType.task,
           id: taskId.query
         }
       });
@@ -656,7 +721,7 @@ export const AddWatcherService = ({ query }: { query: (string | undefined | null
         url: 'watch',
         method: 'POST',
         params: {
-          type: 'task',
+          type: EntityType.task,
           id: query[1],
           team_member_ids: [query[0]]
         }
@@ -683,7 +748,7 @@ export const RemoveWatcherService = ({ query }: { query: (string | null | undefi
         url: 'watch/remove',
         method: 'POST',
         params: {
-          type: 'task',
+          type: EntityType.task,
           id: query[1],
           team_member_ids: [query[0]]
         }
@@ -716,7 +781,7 @@ const AssignTask = ({
     data: {
       id: taskId,
       ...(teams ? { team_member_group_id: team_member_id } : { team_member_id: team_member_id }),
-      type: 'task'
+      type: EntityType.task
     }
   });
   return request;
@@ -750,7 +815,7 @@ const UnassignTask = ({
     data: {
       ...(teams ? { team_member_group_id: team_member_id } : { team_member_id: team_member_id }),
       id: taskId,
-      type: 'task'
+      type: EntityType.task
     }
   });
   return request;

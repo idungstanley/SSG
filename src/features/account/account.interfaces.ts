@@ -1,3 +1,5 @@
+import { IHistoryFilterMemory, ISelectedDate } from '../task/interface.tasks';
+
 export interface IWorkspace {
   id: string;
   name: string;
@@ -18,6 +20,11 @@ export interface IUserParams {
   sidebarWidth?: number;
 }
 
+export interface IUserCalendarParams {
+  selectedDate: ISelectedDate | null;
+  HistoryFilterMemory?: IHistoryFilterMemory | null;
+}
+
 export interface IUserState {
   // add darkTheme or showArchived values
   showPreview: boolean;
@@ -30,6 +37,12 @@ export interface IUserSettings {
   value: IUserParams;
   created_at: string;
   updated_at: string;
+}
+
+export interface IUserSettingRes {
+  data: {
+    settings: IUserSettings;
+  };
 }
 
 export interface IUserSettingsRes {

@@ -5,6 +5,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useAppDispatch } from '../../../app/hooks';
 import { ITaskRes } from '../interface.tasks';
 import { setToggleAssignCurrentTaskId } from '../taskSlice';
+import { EntityType } from '../../../utils/EntityTypes/EntityType';
 
 export const UseCreateChecklistService = ({
   item_id,
@@ -45,7 +46,7 @@ export const UseGetAllClistService = ({
       return data;
     },
     {
-      enabled: task_id != null && activeItemType == 'task'
+      enabled: task_id !== null && activeItemType === EntityType.task
     }
   );
 };

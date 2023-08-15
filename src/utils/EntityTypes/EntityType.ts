@@ -3,6 +3,7 @@ const EntityType = {
   subHub: 'subhub',
   wallet: 'wallet',
   subWallet: 'subwallet',
-  list: 'list'
+  list: 'list',
+  task: 'task'
 };
 export { EntityType };

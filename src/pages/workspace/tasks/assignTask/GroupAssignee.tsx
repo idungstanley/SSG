@@ -103,7 +103,7 @@ function GroupAssignee({
           {data?.slice(0, 3).map((newData, index: number) => (
             <div
               key={newData.id}
-              className={`scaleBigger ${index === 0 ? ' z-30   ' : ''} ${index === 1 ? 'z-20 ' : ''} ${
+              className={`scaleBigger cursor-pointer ${index === 0 ? ' z-30   ' : ''} ${index === 1 ? 'z-20 ' : ''} ${
                 index === 2 ? 'z-10' : 'z-0'
               }  `}
               onMouseEnter={(e) => {
@@ -120,8 +120,16 @@ function GroupAssignee({
                       ) : (
                         <div className="border-2 border-red-400 rounded-full">
                           <AvatarWithInitials
-                            initials={newData.initials}
-                            backgroundColour={newData.color}
+                            initials={
+                              (newData as InewData).user
+                                ? ((newData as InewData)?.user?.initials as string)
+                                : (newData.initials as string)
+                            }
+                            backgroundColour={
+                              (newData as InewData).user
+                                ? ((newData as InewData)?.user?.color as string)
+                                : (newData.color as string)
+                            }
                             badge={true}
                           />
                         </div>
@@ -194,7 +202,7 @@ function GroupAssignee({
                     handleHoverIntervalMouseIn(index, e);
                   }}
                   onMouseLeave={() => handleHoverIntervalMouseOut()}
-                  className="relative "
+                  className="relative cursor-pointer"
                 >
                   {newData.avatar_path == null ? (
                     <span onClick={handleClick}>

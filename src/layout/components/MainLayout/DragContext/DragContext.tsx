@@ -10,6 +10,7 @@ import { arrayMove } from '@dnd-kit/sortable';
 import { useMoveListService } from '../../../../features/list/listService';
 import { useMoveHubsService } from '../../../../features/hubs/hubService';
 import { useMoveWalletsService } from '../../../../features/wallet/walletService';
+import { EntityType } from '../../../../utils/EntityTypes/EntityType';
 
 interface DragContextProps {
   children: ReactNode;
@@ -64,7 +65,7 @@ export default function DragContext({ children }: DragContextProps) {
         onMove({
           taskId: activeId,
           listId: overId,
-          overType: 'list'
+          overType: EntityType.list
         });
       }
       // reset dragging item
@@ -75,7 +76,7 @@ export default function DragContext({ children }: DragContextProps) {
       onMoveList({
         listId: activeId,
         hubId: overId,
-        type: 'hub'
+        type: EntityType.hub
       });
       dispatch(setDraggableItem(null));
     }
@@ -83,7 +84,7 @@ export default function DragContext({ children }: DragContextProps) {
       onMoveList({
         listId: activeId,
         hubId: overId,
-        type: 'wallet'
+        type: EntityType.wallet
       });
       dispatch(setDraggableItem(null));
     }
@@ -92,7 +93,7 @@ export default function DragContext({ children }: DragContextProps) {
         onMove({
           taskId: activeId,
           listId: overId,
-          overType: 'task'
+          overType: EntityType.task
         });
         dispatch(setDraggableItem(null));
       }
@@ -111,7 +112,7 @@ export default function DragContext({ children }: DragContextProps) {
         onMoveWallet({
           walletId: activeId,
           parent_id: overId,
-          overType: 'wallet'
+          overType: EntityType.wallet
         });
       }
     }
@@ -120,7 +121,7 @@ export default function DragContext({ children }: DragContextProps) {
         onMoveWallet({
           walletId: activeId,
           hubId: overId,
-          overType: 'hub'
+          overType: EntityType.hub
         });
       }
     }
@@ -147,7 +148,6 @@ export default function DragContext({ children }: DragContextProps) {
   const onDragOver = (e: DragOverEvent) => {
     const id = e.over?.id as string;
     dispatch(setDragOverItem(id));
-    console.log(e.over?.id);
   };
 
   return (

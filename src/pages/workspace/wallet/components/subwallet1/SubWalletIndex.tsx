@@ -15,6 +15,7 @@ import HubItemOverlay from '../../../../../components/tasks/HubItemOverLay';
 
 interface SubWalletIndexProps {
   paddingLeft?: string | number;
+  parentId?: string;
 }
 
 interface dataProps {
@@ -22,40 +23,39 @@ interface dataProps {
   name: string;
 }
 
-function SubWalletIndex({ paddingLeft = '30' }: SubWalletIndexProps) {
+function SubWalletIndex({ paddingLeft = '30', parentId }: SubWalletIndexProps) {
   const dispatch = useDispatch();
-  const { currentWalletParentId, toggleArchiveWallet } = useAppSelector((state) => state.wallet);
+  const navigate = useNavigate();
 
+  const { currentWorkspaceId } = useAppSelector((state) => state.auth);
+  const { toggleArchiveWallet } = useAppSelector((state) => state.wallet);
+  const { activeItemId } = useAppSelector((state) => state.workspace);
   const { draggableItemId } = useAppSelector((state) => state.list);
-
-  const [showSubWallet, setShowSubWallet] = useState<string[]>([]);
-  const [currWalId, setCurrWalId] = useState('');
-  const { data: subwallet } = getWalletServices({
-    Archived: toggleArchiveWallet,
-    parentId: currentWalletParentId
-  });
   const { showMenuDropdown } = useAppSelector((state) => state.hub);
 
+  const [openedIds, setOpenedIds] = useState<string[]>([]);
+
+  const { data: subwallet } = getWalletServices({
+    Archived: toggleArchiveWallet,
+    parentId: parentId || activeItemId
+  });
+
+  const handleLocation = (id: string, type = 'subwallet2') => {
+    dispatch(setShowHub(true));
+    navigate(`/${currentWorkspaceId}/tasks/w/${id}`);
+    dispatch(setActiveItem({ activeItemType: type, activeItemId: id }));
+    setOpenedIds([]);
+  };
+
   const handleShowSubWallet = (id: string) => {
-    if (showSubWallet.includes(id)) {
-      setShowSubWallet((prev) => prev.filter((item) => item !== id));
+    if (openedIds.includes(id)) {
+      setOpenedIds((prev) => prev.filter((item) => item !== id));
     } else {
-      setShowSubWallet((prev) => [...prev, id]);
-      setCurrWalId(id);
+      setOpenedIds((prev) => [...prev, id]);
     }
   };
 
-  const navigate = useNavigate();
-  const handleLocation = (id: string, type = 'subWallet2') => {
-    dispatch(setShowHub(true));
-    navigate(`tasks/w/${id}`);
-    dispatch(setActiveItem({ activeItemType: type, activeItemId: id }));
-    setShowSubWallet((prev) => [...prev, id]);
-    setCurrWalId(id);
-  };
-
   const draggableItem = draggableItemId ? subwallet?.data?.lists.find((i: IList) => i.id === draggableItemId) : null;
-
   const draggableWallet = draggableItemId ? subwallet?.data?.wallets.find((i) => i.id === draggableItemId) : null;
 
   return (
@@ -78,11 +78,11 @@ function SubWalletIndex({ paddingLeft = '30' }: SubWalletIndexProps) {
             handleLocation={handleLocation}
             handleShowSubWallet={handleShowSubWallet}
             paddingLeft={paddingLeft}
-            showSubWallet={showSubWallet.includes(wallet.id)}
+            showSubWallet={openedIds.includes(wallet.id)}
           />
           <div>
-            {showSubWallet.includes(wallet.id) ? (
-              <Sub2WalletIndex currWalId={currWalId} paddingLeft={Number(paddingLeft) + 15} />
+            {openedIds.includes(wallet.id) ? (
+              <Sub2WalletIndex parentId={wallet.id} paddingLeft={Number(paddingLeft) + 15} />
             ) : null}
           </div>
         </div>

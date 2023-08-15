@@ -19,7 +19,7 @@ interface TaskCurrentPriorityProps {
 }
 export default function PriorityDropdown({ TaskCurrentPriority }: TaskCurrentPriorityProps) {
   const [priorityValue, setPriority] = useState('');
-  const { currentTaskPriorityId } = useAppSelector((state) => state.task);
+  const { selectedTasksArray } = useAppSelector((state) => state.task);
   const priorityList: priorityType[] = [
     {
       id: 1,
@@ -59,7 +59,7 @@ export default function PriorityDropdown({ TaskCurrentPriority }: TaskCurrentPri
     }
   ];
   const { status } = UseUpdateTaskStatusServices({
-    task_id: currentTaskPriorityId,
+    task_id_array: selectedTasksArray,
     priorityDataUpdate: priorityValue
   });
 
@@ -70,7 +70,7 @@ export default function PriorityDropdown({ TaskCurrentPriority }: TaskCurrentPri
     priority: string | null | undefined | [{ id: string; initials: string; color: string }]
   ) => {
     if (priority == null || priority == 'low') {
-      return <AiFillFlag className="h-5 w-7  text-gray-400 " aria-hidden="true" />;
+      return <AiFillFlag className="h-5 w-7  text-gray-400" aria-hidden="true" />;
     } else if (priority == 'normal') {
       return <AiFillFlag className="h-5 w-7" style={{ color: '#6fddff' }} aria-hidden="true" />;
     } else if (priority == 'high') {
@@ -113,7 +113,10 @@ export default function PriorityDropdown({ TaskCurrentPriority }: TaskCurrentPri
                     TaskCurrentPriority === i.title ? `bg-${i.bg}-200` : '',
                     'flex items-center px-4 py-2 text-sm text-gray-600 text-left space-x-2 w-full'
                   )}
-                  onClick={i.handleClick}
+                  onClick={() => {
+                    i.handleClick();
+                    closeModal();
+                  }}
                 >
                   <p>
                     <AiFillFlag className="h-5 w-7  " aria-hidden="true" style={{ color: `${i.color}` }} />

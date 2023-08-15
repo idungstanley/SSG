@@ -14,6 +14,7 @@ import {
 } from '@dnd-kit/core';
 import SubtabDrag from '../../../../pages/workspace/pilot/components/SubtabDnd';
 import { useAppSelector } from '../../../../app/hooks';
+import CalendarIcon from '../../../../assets/icons/CalendarIcon';
 
 export const HubManagerOptions = [
   {
@@ -32,6 +33,12 @@ export const HubManagerOptions = [
     id: 3,
     name: 'Create List',
     icon: <AddListIcon />,
+    isVisible: false
+  },
+  {
+    id: 4,
+    name: 'Calendar Settings',
+    icon: <CalendarIcon active={false} />,
     isVisible: false
   }
 ];

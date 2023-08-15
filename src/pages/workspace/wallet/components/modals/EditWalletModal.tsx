@@ -8,12 +8,12 @@ import { getHub, setSubDropdownMenu, setshowMenuDropdown } from '../../../../../
 import { useDispatch } from 'react-redux';
 import { changeWalletManager } from '../../../../../managers/Wallet';
 import { setFilteredResults } from '../../../../../features/search/searchSlice';
+import { EntityType } from '../../../../../utils/EntityTypes/EntityType';
 
 function EditWalletModal() {
   const dispatch = useDispatch();
 
   const { showMenuDropdownType, showMenuDropdown, prevName, hub } = useAppSelector((state) => state.hub);
-
   const { showEditWalletSlideOver } = useAppSelector((state) => state.slideOver);
 
   const editWallet = useMutation(UseEditWalletService, {
@@ -64,13 +64,13 @@ function EditWalletModal() {
     <SlideOver
       show={showEditWalletSlideOver}
       onClose={() => handleCloseSlider()}
-      headerTitle={showMenuDropdownType === 'wallet' ? ' Edit wallet' : 'Edit subwallet'}
+      headerTitle={showMenuDropdownType === EntityType.wallet ? ' Edit wallet' : 'Edit subwallet'}
       body={
         <div className="py-6 space-y-6 sm:py-0 sm:space-y-0 sm:divide-y sm:divide-gray-200">
           <div className="space-y-1 px-4 sm:space-y-0 sm:px-6 sm:py-5">
             <Input
-              label={showMenuDropdownType === 'wallet' ? 'Wallet Name:' : 'Subwallet Name:'}
-              placeholder={showMenuDropdownType === 'wallet' ? 'Enter wallet Name' : 'Enter Subwallet Name'}
+              label={showMenuDropdownType === EntityType.wallet ? 'Wallet Name:' : 'Subwallet Name:'}
+              placeholder={showMenuDropdownType === EntityType.wallet ? 'Enter wallet Name' : 'Enter Subwallet Name'}
               name="name"
               value={name}
               type="text"
@@ -83,7 +83,7 @@ function EditWalletModal() {
         <Button
           buttonStyle="primary"
           onClick={onSubmit}
-          label={showMenuDropdownType === 'wallet' ? 'Edit Wallet' : 'Edit Subwallet'}
+          label={showMenuDropdownType === EntityType.wallet ? 'Edit Wallet' : 'Edit Subwallet'}
           padding="py-2 px-4"
           height="h-10"
           width="w-40"

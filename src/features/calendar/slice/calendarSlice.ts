@@ -5,7 +5,11 @@ import { BlacklistId, CalendarState, NewDayOff } from '../types/calendarSchema';
 const initialState: CalendarState = {
   updateCords: Date.now(),
   blacklistIds: [],
-  newDayOff: null
+  newDayOff: null,
+  intervalType: 'minutes',
+  timeInterval: 15,
+  reminderType: 'days',
+  reminderInterval: 2
 };
 
 export const calendarSlice = createSlice({
@@ -20,12 +24,19 @@ export const calendarSlice = createSlice({
     },
     setNewDayOff: (state, action: PayloadAction<NewDayOff | null>) => {
       state.newDayOff = action.payload;
+    },
+    setIntervalType(state, action: PayloadAction<string>) {
+      state.intervalType = action.payload;
+    },
+    setTimeInterval(state, action: PayloadAction<15 | 30>) {
+      state.timeInterval = action.payload;
     }
   }
 });
 
 export const selectCalendar = (state: RootState) => state.calendar;
 
-export const { setUpdateCords, setBlacklistIds, setNewDayOff } = calendarSlice.actions;
+export const { setUpdateCords, setBlacklistIds, setNewDayOff, setIntervalType, setTimeInterval } =
+  calendarSlice.actions;
 
 export default calendarSlice.reducer;

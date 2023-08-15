@@ -9,6 +9,7 @@ import { Status } from '../../features/task/interface.tasks';
 import StatusIconComp from '../../assets/icons/StatusIconComp';
 import { UseGetListDetails } from '../../features/list/listService';
 import ToolTip from '../Tooltip/Tooltip';
+import { EntityType } from '../../utils/EntityTypes/EntityType';
 
 interface StatusDropdownProps {
   TaskCurrentStatus: Status;
@@ -16,7 +17,8 @@ interface StatusDropdownProps {
 
 export default function StatusDropdown({ TaskCurrentStatus }: StatusDropdownProps) {
   const { currentTaskStatusId, currTaskListId } = useAppSelector((state) => state.task);
-  const { data: list } = UseGetListDetails({ activeItemId: currTaskListId, activeItemType: 'list' });
+
+  const { data: list } = UseGetListDetails({ activeItemId: currTaskListId, activeItemType: EntityType.list });
 
   const { mutate } = UseUpdateTaskStatusService2();
 
