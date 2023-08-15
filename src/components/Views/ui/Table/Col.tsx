@@ -11,6 +11,7 @@ import { DEFAULT_COL_BG } from '../../config';
 import DateFormat from '../../../DateFormat';
 import StatusNameDropdown from '../../../status/StatusNameDropdown';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
+import { EntityType } from '../../../../utils/EntityTypes/EntityType';
 
 interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   value: TaskValue;
@@ -23,7 +24,7 @@ export function Col({ value, field, fieldId, task, ...props }: ColProps) {
   const { taskId } = useParams();
   const { dragOverItemId, draggableItemId } = useAppSelector((state) => state.list);
   const ACTIVE_TASK = taskId === task.id ? 'tdListVNoSticky' : DEFAULT_COL_BG;
-  const { singleLineView, verticalGrid, selectedTasksArray } = useAppSelector((state) => state.task);
+  const { singleLineView, verticalGrid, selectedTasksArray, CompactView } = useAppSelector((state) => state.task);
   const isSelected = selectedTasksArray.includes(task.id);
 
   const dispatch = useAppDispatch();
@@ -54,7 +55,11 @@ export function Col({ value, field, fieldId, task, ...props }: ColProps) {
       />
     ),
     assignees: (
-      <Assignee task={task as ImyTaskData} itemId={task.id} option={`${task.id !== '0' ? 'task' : 'getTeamId'}`} />
+      <Assignee
+        task={task as ImyTaskData}
+        itemId={task.id}
+        option={`${task.id !== '0' ? EntityType.task : 'getTeamId'}`}
+      />
     )
   };
 
@@ -71,7 +76,16 @@ export function Col({ value, field, fieldId, task, ...props }: ColProps) {
           } justify-center items-center text-sm font-medium text-gray-900 `
         )}
         {...props}
-        style={{ minHeight: '42px', height: singleLineView ? '42px' : '' }}
+        style={{
+          height:
+            singleLineView && !CompactView
+              ? '42px'
+              : CompactView && singleLineView
+              ? '32px'
+              : !singleLineView && CompactView && task.name.length < 30
+              ? '32px'
+              : ''
+        }}
       >
         {field in fields ? fields[field] : String(value)}
       </td>

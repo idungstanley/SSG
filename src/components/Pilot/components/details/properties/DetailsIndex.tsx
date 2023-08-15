@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-// import { useAppSelector } from '../../../../../app/hooks';
 import { UseGetHubDetails } from '../../../../../features/hubs/hubService';
 import { UseGetWalletDetails } from '../../../../../features/wallet/walletService';
 import { UseGetListDetails } from '../../../../../features/list/listService';
@@ -8,26 +7,25 @@ import PropertyDetails from './subDetailsIndex/PropertyDetails';
 import { useParams } from 'react-router-dom';
 import { setActiveItem } from '../../../../../features/workspace/workspaceSlice';
 import { useAppDispatch } from '../../../../../app/hooks';
+import { EntityType } from '../../../../../utils/EntityTypes/EntityType';
 
 export default function DetailsIndex() {
-  // const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
   const dispatch = useAppDispatch();
 
   const { hubId, walletId, listId, taskId } = useParams();
 
   const { data: hub } = UseGetHubDetails({
     activeItemId: hubId,
-    activeItemType: 'hub'
+    activeItemType: EntityType.hub
   });
 
   const { data: wallet } = UseGetWalletDetails({
     activeItemId: walletId,
-    activeItemType: 'wallet'
+    activeItemType: EntityType.wallet
   });
-  // console.log(wallet?.data.wallet);
   const { data: list } = UseGetListDetails({
     activeItemId: listId != undefined ? listId : null,
-    activeItemType: 'list'
+    activeItemType: EntityType.list
   });
 
   const { data: task } = getOneTaskServices({ task_id: taskId != undefined ? taskId : null });
@@ -35,11 +33,11 @@ export default function DetailsIndex() {
   const taskDetails = task?.data.task;
 
   useEffect(() => {
-    if (taskId && (hubId || walletId || listId)) {
+    if (taskId && (hubId || walletId || listId) && taskDetails) {
       dispatch(
         setActiveItem({
-          activeItemId: taskDetails?.id,
-          activeItemType: 'task',
+          activeItemId: taskDetails.id,
+          activeItemType: EntityType.task,
           activeItemName: taskDetails?.name
         })
       );

@@ -12,7 +12,7 @@ export default function ListShow({ changeViews }: { changeViews: string }) {
           entityLocation="Entity Location"
           subTaskParentsNames="Subtask Parent Names"
           closedSubtask="Closed Subtask"
-          TaskInMultipleLists="Task In Multiple Lista"
+          TaskInMultipleLists="Task In Multiple Lists"
           subTaskInMultipleLists="Subtask In Multiple Lists"
           emptyStatuses="Empty Statuses"
         />

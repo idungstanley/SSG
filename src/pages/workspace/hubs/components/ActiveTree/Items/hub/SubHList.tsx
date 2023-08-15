@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { ListProps } from '../../activetree.interfaces';
 import WList from '../wallet/WList';
 import LList from '../list/LList';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import HubItem from '../../../../../../../components/tasks/HubItem';
 import { useAppDispatch, useAppSelector } from '../../../../../../../app/hooks';
 import {
@@ -11,6 +11,9 @@ import {
   setActiveItem,
   setActiveTabId,
   setCurrentItem,
+  setIsFirstOpened,
+  setOpenedEntitiesIds,
+  setOpenedParentsIds,
   setShowHub,
   setShowPilot
 } from '../../../../../../../features/workspace/workspaceSlice';
@@ -23,20 +26,23 @@ import { DragOverlay } from '@dnd-kit/core';
 export default function SubHubList({ hubs }: ListProps) {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { hubId, walletId, listId } = useParams();
-  const { currentItemId, showExtendedBar } = useAppSelector((state) => state.workspace);
+  const { showExtendedBar, openedParentsIds, openedEntitiesIds, isFirstOpened } = useAppSelector(
+    (state) => state.workspace
+  );
   const { showSidebar } = useAppSelector((state) => state.account);
-  const [showChildren, setShowChidren] = useState<string | null | undefined>(null);
   const [stickyButtonIndex, setStickyButtonIndex] = useState<number | undefined>(-1);
   const [openedSubhubsIds, setOpenedSubhubIds] = useState<string[]>([]);
-  const id = hubId || walletId || listId || currentItemId;
 
   useEffect(() => {
-    setShowChidren(id);
-    if (hubId && !currentItemId) {
-      setOpenedSubhubIds((prev) => [...prev, hubId]);
+    if (isFirstOpened) {
+      for (const hub of hubs) {
+        if (hub.children.length || hub.wallets.length || hub.lists.length) {
+          setOpenedSubhubIds((prev) => [...prev, hub.id]);
+          dispatch(setOpenedEntitiesIds([...openedEntitiesIds, hub.id]));
+        }
+      }
     }
-  }, []);
+  }, [hubs, isFirstOpened]);
 
   const handleLocation = (id: string, name: string, index?: number) => {
     dispatch(
@@ -55,25 +61,17 @@ export default function SubHubList({ hubs }: ListProps) {
     );
     setStickyButtonIndex(index === stickyButtonIndex ? -1 : index);
     dispatch(setActiveEntityName(name));
-    setShowChidren(id);
     dispatch(setActiveEntity({ id: id, type: EntityType.subHub }));
     dispatch(setShowPilot(true));
     dispatch(setActiveTabId(4));
     navigate(`tasks/h/${id}`, {
       replace: true
     });
-    localStorage.setItem(
-      'hubDetailsStorage',
-      JSON.stringify({
-        activeItemId: id,
-        activeItemType: EntityType.subHub,
-        activeItemName: name
-      })
-    );
   };
 
-  const handleClick = (id: string, index?: number) => {
+  const handleClick = (id: string, parent_id: string | null, index?: number) => {
     dispatch(setSubHubExt({ id, type: EntityType.subHub }));
+    dispatch(setIsFirstOpened(false));
 
     setStickyButtonIndex(index === stickyButtonIndex ? -1 : index);
     if (!showSidebar) {
@@ -85,18 +83,18 @@ export default function SubHubList({ hubs }: ListProps) {
     dispatch(setOpenedHubId(id));
     dispatch(setShowHub(true));
 
-    if (id === showChildren) {
-      setShowChidren(null);
-    } else {
-      setShowChidren(id);
-    }
-
     if (openedSubhubsIds.includes(id)) {
-      setOpenedSubhubIds([...openedSubhubsIds.filter((subhubId) => subhubId !== id)]);
-      setShowChidren(null);
+      if (openedSubhubsIds.length === 1) {
+        dispatch(setOpenedParentsIds(openedParentsIds.filter((item) => item !== parent_id)));
+      }
+      setOpenedSubhubIds((prev) => prev.filter((subhubId) => subhubId !== id));
+      dispatch(setOpenedEntitiesIds(openedEntitiesIds.filter((subhubId) => subhubId !== id)));
     } else {
-      setOpenedSubhubIds([...openedSubhubsIds, id]);
-      setShowChidren(id);
+      if (parent_id) {
+        dispatch(setOpenedParentsIds([...openedParentsIds, parent_id]));
+      }
+      dispatch(setOpenedEntitiesIds([...openedEntitiesIds, id]));
+      setOpenedSubhubIds((prev) => [...prev, id]);
     }
 
     dispatch(
@@ -105,13 +103,6 @@ export default function SubHubList({ hubs }: ListProps) {
         currentItemType: EntityType.hub
       })
     );
-  };
-
-  const isCanBeOpen = (id: string) => {
-    if (openedSubhubsIds.length) {
-      return openedSubhubsIds.includes(id);
-    }
-    return !!showChildren;
   };
 
   const { draggableItemId } = useAppSelector((state) => state.list);
@@ -130,7 +121,7 @@ export default function SubHubList({ hubs }: ListProps) {
             <HubItem
               item={hub}
               handleClick={handleClick}
-              showChildren={((hub.wallets.length || hub.lists.length) && isCanBeOpen(hub.id)) as boolean}
+              showChildren={openedEntitiesIds.includes(hub.id)}
               handleLocation={handleLocation}
               isSticky={stickyButtonIndex !== undefined && stickyButtonIndex !== null && stickyButtonIndex <= index}
               stickyButtonIndex={stickyButtonIndex}
@@ -141,7 +132,7 @@ export default function SubHubList({ hubs }: ListProps) {
             />
             {showSidebar && (
               <div>
-                {hub.wallets.length && isCanBeOpen(hub.id) ? (
+                {hub.wallets.length && openedEntitiesIds.includes(hub.id) ? (
                   <WList
                     wallets={hub.wallets}
                     leftMargin={false}
@@ -150,7 +141,7 @@ export default function SubHubList({ hubs }: ListProps) {
                     paddingLeft="35"
                   />
                 ) : null}
-                {hub.lists.length && isCanBeOpen(hub.id) && !showExtendedBar ? (
+                {hub.lists.length && openedEntitiesIds.includes(hub.id) && !showExtendedBar ? (
                   <LList list={hub.lists} leftMargin={false} paddingLeft="50" />
                 ) : null}
               </div>

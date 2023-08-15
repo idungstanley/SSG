@@ -21,11 +21,12 @@ import { useParams } from 'react-router-dom';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
 import PlusIcon from '../../assets/icons/PlusIcon';
 import ThreeDotIcon from '../../assets/icons/ThreeDotIcon';
-import { Tooltip } from '@mui/material';
 import MenuDropdown from '../Dropdown/MenuDropdown';
 import SubDropdown from '../Dropdown/SubDropdown';
 import { useDraggable, useDroppable } from '@dnd-kit/core';
 import Drag from '../../assets/icons/Drag';
+import { getInitials } from '../../app/helpers';
+import ToolTip from '../Tooltip/Tooltip';
 
 interface TaskItemProps {
   item: {
@@ -43,7 +44,7 @@ interface TaskItemProps {
   topNumber?: string;
   zNumber?: string;
   stickyButtonIndex?: number | undefined;
-  handleClick: (id: string, index?: number) => void;
+  handleClick: (id: string, parent_id: string | null, index?: number) => void;
   handleLocation: (id: string, name: string, index?: number) => void;
 }
 export default function HubItem({
@@ -76,7 +77,11 @@ export default function HubItem({
   const handleHubColour = (id: string, e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     if (showSidebar) {
       e.stopPropagation();
-      dispatch(setPaletteDropDown({ show: true, paletteId: id, paletteType: EntityType.hub }));
+      if (paletteId === id && show) {
+        dispatch(setPaletteDropDown({ ...paletteDropdown, show: false }));
+      } else {
+        dispatch(setPaletteDropDown({ show: true, paletteId: id, paletteType: EntityType.hub }));
+      }
     }
   };
 
@@ -168,14 +173,14 @@ export default function HubItem({
   });
 
   return (
-    <>
+    <div className="relative">
       <div
         className={`bg-white truncate items-center group ${item.id !== activeItemId && 'hover:bg-gray-100'} ${
           isSticky && stickyButtonIndex === index ? 'sticky bg-white opacity-100' : ''
         } ${isOver ? 'bg-primary-100 border-primary-500 shadow-inner shadow-primary-300' : ''} `}
         ref={setNodeRef}
         tabIndex={0}
-        onClick={() => handleClick(item.id, index)}
+        onClick={() => handleClick(item.id, item.parent_id ?? null, index)}
         style={{
           top: isSticky && showSidebar ? topNumber : '',
           zIndex: isSticky ? zNumber : '2',
@@ -236,12 +241,7 @@ export default function HubItem({
                   <img src={item.path} alt="hubs image" className="w-full h-full rounded" />
                 ) : (
                   <AvatarWithInitials
-                    initials={item.name
-                      .split(' ')
-                      .slice(0, 2)
-                      .map((word) => word[0])
-                      .join('')
-                      .toUpperCase()}
+                    initials={getInitials(item.name)}
                     height="h-5"
                     width="w-5"
                     backgroundColour={item.color !== null ? item.color : (paletteColor as string)}
@@ -250,7 +250,7 @@ export default function HubItem({
                 )}
               </div>
               <span className="ml-5 overflow-hidden">
-                <Tooltip title={item.name} arrow placement="top">
+                <ToolTip title={item.name}>
                   <p
                     className="capitalize truncate cursor-pointer"
                     style={{
@@ -263,7 +263,7 @@ export default function HubItem({
                   >
                     {item.name}
                   </p>
-                </Tooltip>
+                </ToolTip>
               </span>
             </div>
           </div>
@@ -273,7 +273,7 @@ export default function HubItem({
               onClick={(e) => e.stopPropagation()}
             >
               <span onClick={() => handleItemAction(item.id, item.name)} className="cursor-pointer">
-                <PlusIcon />
+                <PlusIcon active />
               </span>
               <span
                 onClick={(e) => {
@@ -294,6 +294,6 @@ export default function HubItem({
       ) : null}
       {showMenuDropdown === item.id && showSidebar ? <MenuDropdown /> : null}
       {SubMenuId === item.id && showSidebar ? <SubDropdown /> : null}
-    </>
+    </div>
   );
 }

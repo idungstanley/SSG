@@ -4,7 +4,6 @@ import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import Page from '../../components/Page';
 import { UseGetFullTaskList } from '../../features/task/taskService';
 import { UseGetWalletDetails } from '../../features/wallet/walletService';
-import { setActiveItem, setCurrentWalletName } from '../../features/workspace/workspaceSlice';
 import AdditionalHeader from '../../layout/components/MainLayout/Header/AdditionHeader';
 import { generateLists } from '../../utils';
 import PilotSection, { pilotConfig } from '../workspace/wallet/components/PilotSection';
@@ -16,20 +15,23 @@ import { setUpdateCords } from '../../features/task/taskSlice';
 import { List } from '../../components/Views/ui/List/List';
 import { Header } from '../../components/TasksHeader';
 import { GroupHorizontalScroll } from '../../components/ScrollableContainer/GroupHorizontalScroll';
+import { setCurrentWalletName } from '../../features/wallet/walletSlice';
+import { EntityType } from '../../utils/EntityTypes/EntityType';
 
 export function WalletPage() {
   const dispatch = useAppDispatch();
-  const { filterTaskByAssigneeIds } = useAppSelector((state) => state.task);
   const { walletId, taskId } = useParams();
+
+  const { filterTaskByAssigneeIds } = useAppSelector((state) => state.task);
+
   const containerRef = useRef<HTMLDivElement>(null);
 
   // get wallet details to set active entity
-  const { data: wallet } = UseGetWalletDetails({ activeItemId: walletId, activeItemType: 'wallet' });
+  const { data: wallet } = UseGetWalletDetails({ activeItemId: walletId, activeItemType: EntityType.wallet });
   const walletName = wallet?.data.wallet.name ?? '';
 
   useEffect(() => {
     if (wallet && !taskId) {
-      dispatch(setActiveItem({ activeItemId: walletId, activeItemType: 'wallet', activeItemName: walletName }));
       dispatch(setCurrentWalletName(walletName));
     }
   }, [wallet]);
@@ -37,7 +39,7 @@ export function WalletPage() {
   // get tasks
   const { data, hasNextPage, fetchNextPage } = UseGetFullTaskList({
     itemId: walletId,
-    itemType: 'wallet',
+    itemType: EntityType.wallet,
     assigneeUserId: filterTaskByAssigneeIds
   });
 

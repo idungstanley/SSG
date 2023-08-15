@@ -6,7 +6,6 @@ import { setHistoryMemory, setTaskSelectedDate } from '../../features/task/taskS
 import dayjs from 'dayjs';
 import ReusableSelect from '../../utils/TimeDropDown';
 import { createDynamicTimeComponent } from '../../utils/calendar';
-import { CloseBtn } from '../Buttons/CloseButton';
 import CalendarIcon from '../../assets/icons/CalendarIcon';
 import CancelIcon from '../../assets/icons/Cancel';
 
@@ -24,6 +23,7 @@ export function DatePickerManualDates({ range }: DatePickerManualDatesProps) {
     dueIcon: false,
     startIcon: false
   });
+  const { timeInterval } = useAppSelector((state) => state.calendar);
   const dispatch = useAppDispatch();
 
   const handleFilterDateDispatch = () => {
@@ -92,102 +92,116 @@ export function DatePickerManualDates({ range }: DatePickerManualDatesProps) {
   return (
     <div className="flex items-center justify-between py-1">
       {range ? (
-        <div className="grid w-full grid-cols-2 space-x-2 place-self-center">
+        <div className="w-full grid grid-cols-2 place-self-center space-x-1">
           {/* Set Start Date Selection */}
-          <label
-            htmlFor="from"
-            className="flex space-y-1 space-x-4 text-xs items-center w-36 border border-alsoit-purple-300 rounded-md p-0.5"
-          >
-            <div className="flex items-center space-x-1">
-              <div className="p-1 rounded-md bg-alsoit-purple-300">
-                <CalendarIcon active={iconToggle.startIcon} fixed />
-              </div>
-              <div className="relative flex">
-                <div
-                  className="h-4 px-1 font-semibold text-alsoit-text-sm"
-                  contentEditable
-                  suppressContentEditableWarning
-                  onBlur={handleFilterDateDispatch}
-                  onClick={() => dispatch(setHistoryMemory({ ...HistoryFilterMemory, timePoint: 'start' }))}
-                  onInput={(e: ChangeEvent<HTMLDivElement>) => handleChange(e, 'from')}
-                >
-                  {(taskTime?.from && dayjs(taskTime?.from).format(date_format?.toUpperCase())) ?? 'Start'}
-                </div>
-                {taskTime?.from && <CloseBtn clearFn={() => clearDatesFilter('start')} />}
-              </div>
-            </div>
-            {selectedDate?.date && taskTime?.from ? (
-              <ReusableSelect
-                options={createDynamicTimeComponent(15, timezone)}
-                value={HistoryFilterMemory?.time?.from || ''}
-                onclick={(e: string) => {
-                  dispatch(
-                    setHistoryMemory({
-                      ...HistoryFilterMemory,
-                      time: {
-                        ...HistoryFilterMemory?.time,
-                        from: e
-                      }
-                    })
-                  );
-                }}
-              />
-            ) : (
-              <span className="w-1/3 text-alsoit-text-sm">
-                {(HistoryFilterMemory?.time?.from && `${HistoryFilterMemory?.time?.from}`) ?? undefined}
-              </span>
+          <div className="relative">
+            {taskTime?.from && (
+              <div className="absolute bg-white w-max px-1 -top-1.5 left-3 text-alsoit-text-sm z-20">start Date</div>
             )}
-          </label>
-          {/* Set Due Date selection */}
-          <label
-            htmlFor="to"
-            className="flex items-center p-1 space-x-4 space-y-1 text-xs border rounded-md border-alsoit-purple-300 w-36"
-          >
-            <div className="flex items-center space-x-1">
-              <div className="p-1 rounded-md bg-alsoit-purple-300">
-                <CalendarIcon active={iconToggle.dueIcon} fixed />
-              </div>
-              <div className="relative">
-                <div
-                  className="h-4 px-1 font-semibold text-alsoit-text-sm"
-                  contentEditable
-                  suppressContentEditableWarning
-                  onBlur={handleFilterDateDispatch}
-                  onClick={() => dispatch(setHistoryMemory({ ...HistoryFilterMemory, timePoint: 'start' }))}
-                  onInput={(e: ChangeEvent<HTMLDivElement>) => handleChange(e, 'to')}
-                >
-                  {(taskTime?.to && taskTime.to.format(date_format?.toUpperCase())) ?? 'Due'}
+            <label
+              htmlFor="from"
+              className="flex space-y-1 text-xs items-center w-40 border border-alsoit-purple-300 rounded-md py-1.5 px-0.5 relative"
+            >
+              <div className="flex space-x-1 items-center">
+                <div className="bg-alsoit-purple-300 rounded-md p-1">
+                  <CalendarIcon active={iconToggle.startIcon} fixed />
                 </div>
-                {taskTime?.to && (
-                  <div onClick={() => clearDatesFilter('due')}>
-                    <CloseBtn clearFn={() => clearDatesFilter('due')} />
+                <div className="relative flex items-center">
+                  <div
+                    className="h-4 px-0.5 text-alsoit-text-sm font-semibold"
+                    contentEditable
+                    suppressContentEditableWarning
+                    onBlur={handleFilterDateDispatch}
+                    onClick={() => dispatch(setHistoryMemory({ ...HistoryFilterMemory, timePoint: 'start' }))}
+                    onInput={(e: ChangeEvent<HTMLDivElement>) => handleChange(e, 'from')}
+                  >
+                    {(taskTime?.from && dayjs(taskTime?.from).format(date_format?.toUpperCase())) ?? 'Start'}
                   </div>
-                )}
+                  {taskTime?.from && (
+                    <div className="pt-1.5" onClick={() => clearDatesFilter('start')}>
+                      <CancelIcon active dimensions={{ height: 20, width: 20 }} />
+                    </div>
+                  )}
+                </div>
               </div>
-            </div>
-            {selectedDate?.date && taskTime?.to ? (
-              <ReusableSelect
-                options={createDynamicTimeComponent(15, timezone)}
-                value={HistoryFilterMemory?.time?.to || ''}
-                style="-left-44 top-2"
-                onclick={(e: string) => {
-                  dispatch(
-                    setHistoryMemory({
-                      ...HistoryFilterMemory,
-                      time: {
-                        ...HistoryFilterMemory?.time,
-                        to: e
-                      }
-                    })
-                  );
-                }}
-              />
-            ) : (
-              <span className="w-1/3 text-alsoit-text-sm">
-                {(HistoryFilterMemory?.time?.to && `${HistoryFilterMemory?.time?.to}`) ?? undefined}
-              </span>
+              {selectedDate?.date && taskTime?.from ? (
+                <ReusableSelect
+                  options={createDynamicTimeComponent(timeInterval, timezone)}
+                  value={HistoryFilterMemory?.time?.from || ''}
+                  onclick={(e: string) => {
+                    dispatch(
+                      setHistoryMemory({
+                        ...HistoryFilterMemory,
+                        time: {
+                          ...HistoryFilterMemory?.time,
+                          from: e
+                        }
+                      })
+                    );
+                  }}
+                />
+              ) : (
+                <span className="w-1/3 text-alsoit-text-sm">
+                  {(HistoryFilterMemory?.time?.from && `${HistoryFilterMemory?.time?.from}`) ?? undefined}
+                </span>
+              )}
+            </label>
+          </div>
+          {/* Set Due Date selection */}
+          <div className="relative">
+            {taskTime?.to && (
+              <div className="absolute bg-white w-max px-1 -top-1.5 left-3 text-alsoit-text-sm z-20">Due Date</div>
             )}
-          </label>{' '}
+            <label
+              htmlFor="to"
+              className="flex space-y-1 text-xs items-center w-40 border border-alsoit-purple-300 rounded-md py-1.5 px-0.5 relative"
+            >
+              <div className="flex space-x-1 items-center">
+                <div className="bg-alsoit-purple-300 rounded-md p-1">
+                  <CalendarIcon active={iconToggle.dueIcon} fixed />
+                </div>
+                <div className="flex items-center relative">
+                  <div
+                    className="h-4 px-0.5 text-alsoit-text-sm font-semibold"
+                    contentEditable
+                    suppressContentEditableWarning
+                    onBlur={handleFilterDateDispatch}
+                    onClick={() => dispatch(setHistoryMemory({ ...HistoryFilterMemory, timePoint: 'start' }))}
+                    onInput={(e: ChangeEvent<HTMLDivElement>) => handleChange(e, 'to')}
+                  >
+                    {(taskTime?.to && taskTime.to.format(date_format?.toUpperCase())) ?? 'Due'}
+                  </div>
+                  {taskTime?.to && (
+                    <div className="pt-1.5" onClick={() => clearDatesFilter('due')}>
+                      <CancelIcon active dimensions={{ height: 20, width: 20 }} />
+                    </div>
+                  )}
+                </div>
+              </div>
+              {selectedDate?.date && taskTime?.to ? (
+                <ReusableSelect
+                  options={createDynamicTimeComponent(timeInterval, timezone)}
+                  value={HistoryFilterMemory?.time?.to || ''}
+                  style="-left-44 top-2"
+                  onclick={(e: string) => {
+                    dispatch(
+                      setHistoryMemory({
+                        ...HistoryFilterMemory,
+                        time: {
+                          ...HistoryFilterMemory?.time,
+                          to: e
+                        }
+                      })
+                    );
+                  }}
+                />
+              ) : (
+                <span className="w-1/3 text-alsoit-text-sm">
+                  {(HistoryFilterMemory?.time?.to && `${HistoryFilterMemory?.time?.to}`) ?? undefined}
+                </span>
+              )}
+            </label>{' '}
+          </div>
         </div>
       ) : (
         // Default Set date

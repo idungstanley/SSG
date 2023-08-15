@@ -23,7 +23,16 @@ export const generateFilter = (key: FilterKey, props?: AdditionalProps): FilterW
 });
 
 export const filterValueBySearchQuery = (value: FilterValue | Operator | Unit, query: string) =>
-  isString(value) ? value.includes(query.toLowerCase().trim()) : value.value.includes(query.toLowerCase().trim());
+  isString(value)
+    ? value.includes(query.toLowerCase().trim())
+    : (
+        value as {
+          id: string;
+          value: string;
+          color?: string | undefined;
+          initials?: string | undefined;
+        }
+      ).value.includes(query.toLowerCase().trim());
 
 export const modifyFilters = ({ newValue, id, type }: onChangeProps, filters: FilterWithId[]) =>
   filters.map((i) => {

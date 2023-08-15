@@ -22,10 +22,11 @@ import { useDraggable, useDroppable } from '@dnd-kit/core';
 import { cl } from '../../utils';
 import InteractiveTooltip from '../Tooltip/InteractiveTooltip';
 import ThreeDotIcon from '../../assets/icons/ThreeDotIcon';
-import { Tooltip } from '@mui/material';
 import MenuDropdown from '../Dropdown/MenuDropdown';
 import Drag from '../../assets/icons/Drag';
 import { IList } from '../../features/hubs/hubs.interfaces';
+import { EntityType } from '../../utils/EntityTypes/EntityType';
+import ToolTip from '../Tooltip/Tooltip';
 
 interface ListItemProps {
   list: IList;
@@ -41,14 +42,16 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
   const navigate = useNavigate();
   const { listId } = useParams();
   const queryClient = useQueryClient();
-  const [getCount, setGetCount] = useState<boolean>(false);
+
+  const { currentWorkspaceId } = useAppSelector((state) => state.auth);
   const { activeItemId } = useAppSelector((state) => state.workspace);
   const { showMenuDropdown } = useAppSelector((state) => state.hub);
   const { paletteDropdown, lightBaseColor, baseColor } = useAppSelector((state) => state.account);
   const { listColour } = useAppSelector((state) => state.list);
 
+  const [getCount, setGetCount] = useState<boolean>(false);
   const [activeShape, setActiveShape] = useState(list.shape);
-  // const [listPaletteColor, setListPaletteColor] = useState<ListColourProps>();
+
   const { paletteId, show, paletteType } = paletteDropdown;
   const color: ListColourProps = JSON.parse(list.color as string) as ListColourProps;
   const innerColour = list?.color ? (color.innerColour as string) : (listColour as ListColourProps)?.innerColour;
@@ -60,24 +63,26 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
       queryClient.invalidateQueries(['lists']);
     }
   });
+
   const { data } = GetTaskListCount({ query: list.id, fetchTaskCount: getCount });
+
   // function for the list shape selection
   const handleListLocation = (id: string, name: string) => {
     dispatch(setActiveEntityName(name));
     dispatch(
       setActiveItem({
-        activeItemType: 'list',
+        activeItemType: EntityType.list,
         activeItemId: id,
         activeItemName: name
       })
     );
-    navigate(`tasks/l/${id}`);
-    dispatch(setActiveEntity({ id: id, type: 'list' }));
+    navigate(`/${currentWorkspaceId}/tasks/l/${id}`);
+    dispatch(setActiveEntity({ id, type: EntityType.list }));
   };
 
   const handleSelection = (shape: string) => {
     setActiveShape(shape);
-    if (paletteType === 'list') {
+    if (paletteType === EntityType.list) {
       editListColorMutation.mutateAsync({
         listId: paletteId,
         shape: shape
@@ -88,7 +93,7 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
     navigate(`tasks/l/${list.id}`);
     dispatch(
       setActiveItem({
-        activeItemType: 'list',
+        activeItemType: EntityType.list,
         activeItemId: list.id
       })
     );
@@ -129,7 +134,7 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
       dispatch(
         setshowMenuDropdown({
           showMenuDropdown: id,
-          showMenuDropdownType: 'list'
+          showMenuDropdownType: EntityType.list
         })
       );
     }
@@ -143,7 +148,11 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
 
   const handleListColour = (id: string, e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     e.stopPropagation();
-    dispatch(setPaletteDropDown({ show: true, paletteId: id, paletteType: 'list' }));
+    if (paletteId === id && show) {
+      dispatch(setPaletteDropDown({ ...paletteDropdown, show: false }));
+    } else {
+      dispatch(setPaletteDropDown({ show: true, paletteId: id, paletteType: EntityType.list }));
+    }
     dispatch(setListPaletteColor(list?.color === null ? { innerColour: 'white', outerColour: 'black' } : color));
   };
 
@@ -167,7 +176,7 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
   });
 
   return (
-    <>
+    <div className="relative">
       <section
         className={cl(
           'relative flex items-center justify-between h-8 group',
@@ -202,7 +211,7 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
               outterColour={outerColour}
             />
           </div>
-          <Tooltip title={list.name} arrow placement="top">
+          <ToolTip title={list.name}>
             <div
               style={{
                 fontSize: '13px',
@@ -215,7 +224,7 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
             >
               {list.name}
             </div>
-          </Tooltip>
+          </ToolTip>
         </div>
         {/* ends here */}
         <div className="flex items-center gap-1">
@@ -278,6 +287,6 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
         />
       ) : null}
       {showMenuDropdown === list.id ? <MenuDropdown /> : null}
-    </>
+    </div>
   );
 }

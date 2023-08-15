@@ -1,4 +1,3 @@
-import React from 'react';
 import { BsShare } from 'react-icons/bs';
 import ShareModal from './shareModal/ShareModal';
 

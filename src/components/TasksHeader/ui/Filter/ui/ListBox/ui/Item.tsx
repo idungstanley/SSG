@@ -63,7 +63,16 @@ export function ListBoxItem({ value, selected }: ListBoxItemProps) {
   return (
     <>
       <span className={cl('block whitespace-nowrap capitalize', isSelected ? 'font-medium' : 'font-normal')}>
-        {stringifyValue(value.value)}
+        {stringifyValue(
+          (
+            value as {
+              id: string;
+              value: string;
+              color?: string | undefined;
+              initials?: string | undefined;
+            }
+          ).value
+        )}
       </span>
       {isSelected ? (
         <span className="absolute inset-y-0 right-0 flex items-center pr-3 text-primary-600">

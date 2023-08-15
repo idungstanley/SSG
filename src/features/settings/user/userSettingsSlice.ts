@@ -21,6 +21,8 @@ interface userSettingState {
   triggerDeleteAvatar: boolean;
   activeTab: string | null;
   status: string;
+  clock_type: string | undefined;
+  is_clock_time: number | undefined;
 }
 
 const initialState: userSettingState = {
@@ -42,7 +44,9 @@ const initialState: userSettingState = {
   showConfirmationModal: false,
   triggerDeleteAvatar: false,
   activeTab: null,
-  status: 'loading'
+  status: 'loading',
+  clock_type: undefined,
+  is_clock_time: undefined
 };
 
 export const userSettingSlice = createSlice({
@@ -63,6 +67,8 @@ export const userSettingSlice = createSlice({
         theme_color?: string | null;
         timezone?: string;
         time_format?: string;
+        clock_type?: string;
+        is_clock_time?: number;
       }>
     ) {
       state.name = action.payload?.name ?? state.name;
@@ -76,6 +82,8 @@ export const userSettingSlice = createSlice({
       state.theme_color = action.payload?.theme_color ?? state.theme_color;
       state.timezone = action.payload?.timezone ?? state.timezone;
       state.time_format = action.payload?.time_format ?? state.time_format;
+      state.clock_type = action.payload.clock_type ?? state.clock_type;
+      state.is_clock_time = action.payload.is_clock_time ?? state.is_clock_time;
     },
     setUserData(state, action: PayloadAction<IUserData | null | undefined>) {
       state.userData = action.payload;
@@ -94,6 +102,15 @@ export const userSettingSlice = createSlice({
     },
     setStatus(state, action: PayloadAction<string>) {
       state.status = action.payload;
+    },
+    setTimeZone(state, action: PayloadAction<string | undefined>) {
+      state.timezone = action.payload;
+    },
+    setClockType(state, action: PayloadAction<string | undefined>) {
+      state.clock_type = action.payload;
+    },
+    setClocktime(state, action: PayloadAction<number | undefined>) {
+      state.is_clock_time = action.payload;
     }
   }
 });
@@ -105,7 +122,10 @@ export const {
   setShowAvatarUpload,
   setShowConfirmationModal,
   setActiveTab,
-  setStatus
+  setStatus,
+  setTimeZone,
+  setClockType,
+  setClocktime
 } = userSettingSlice.actions;
 
 export default userSettingSlice.reducer;

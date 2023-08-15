@@ -4,10 +4,9 @@ import { setHistoryMemory, setTaskSelectedDate } from '../../features/task/taskS
 import { setSelectedDate } from '../../features/workspace/workspaceSlice';
 import { generateDate, weekends, weeks } from '../../utils/calendar';
 import { Dispatch, SetStateAction, useState } from 'react';
-import CustomSuggestion from './CustomSuggestions';
 import ArrowDown from '../../assets/icons/ArrowDown';
 import DoubleArrowLeft from '../../assets/icons/DoubleArrowLeft';
-import { ScrollableContainer } from '../ScrollableContainer/ScrollableContainer';
+import { VerticalScroll } from '../ScrollableContainer/VerticalScroll';
 import ThreeDotIcon from '../../assets/icons/ThreeDotIcon';
 import Recurring from './Recurring';
 
@@ -28,7 +27,6 @@ export function DatePickerSideBar({ currentDate, setOpenSideBar }: DatePickerSid
     threeDotIcon: false
   });
   const [showRecurring, setRecurring] = useState<boolean>(false);
-  const [showAddCustomSuggestions, setCustomSuggetionsField] = useState<boolean>(false);
   const { HistoryFilterMemory, customSuggestionField } = useAppSelector((state) => state.task);
   let selectedStartOfWeek: Dayjs | null = null;
   let selectedEndOfWeek: Dayjs | null = null;
@@ -40,8 +38,8 @@ export function DatePickerSideBar({ currentDate, setOpenSideBar }: DatePickerSid
           className="font-extrabold rounded-md border hover:bg-alsoit-gray-75 hover:text-white text-xl flex justify-between px-2 py-0.5 w-full group"
           onClick={() => handleWeekButtonClick(field.depth)}
         >
-          <span className="text-alsoit-text-md font-extrabold">Next {field.depth} weeks</span>
-          <span className="text-alsoit-gray-200 group-hover:text-white text-right text-alsoit-text-md">
+          <span className="font-extrabold text-alsoit-text-md">Next {field.depth} weeks</span>
+          <span className="text-right text-alsoit-gray-200 group-hover:text-white text-alsoit-text-md">
             {dayjs(weeks(field.depth)).format('ddd D MMM')}
           </span>
         </p>
@@ -54,8 +52,8 @@ export function DatePickerSideBar({ currentDate, setOpenSideBar }: DatePickerSid
           className="font-extrabold rounded-md hover:bg-alsoit-gray-75 hover:text-white text-xl flex justify-between px-2 py-0.5 w-full group"
           onClick={() => handleWeekButtonClick(field.depth * 4)}
         >
-          <span className="text-alsoit-text-md font-extrabold">Next {field.depth} months</span>
-          <span className="text-alsoit-gray-200 group-hover:text-white text-right text-alsoit-text-md">
+          <span className="font-extrabold text-alsoit-text-md">Next {field.depth} months</span>
+          <span className="text-right text-alsoit-gray-200 group-hover:text-white text-alsoit-text-md">
             {dayjs().add(field.depth, 'months').format('ddd D, MMM')}
           </span>
         </p>
@@ -156,18 +154,17 @@ export function DatePickerSideBar({ currentDate, setOpenSideBar }: DatePickerSid
   };
 
   return (
-    <div className="my-4 mx-2 p-2 rounded-md border-2" style={{ height: '94%' }}>
-      <div className="flex justify-between items-center w-full p-2">
+    <div className="p-2 mx-2 my-4 border-2 rounded-md" style={{ height: '94%' }}>
+      <div className="flex items-center justify-between w-full p-2">
         <div
           onClick={() => setRecurring(!showRecurring)}
-          className="font-extrabold text-alsoit-text-lg cursor-pointer flex items-center space-x-2"
+          className="flex items-center space-x-2 font-extrabold cursor-pointer text-alsoit-text-lg"
         >
           <span>Recurring</span>
           <ArrowDown active />
         </div>
         <div className="flex items-center space-x-2">
           <div
-            onClick={() => setCustomSuggetionsField(!showAddCustomSuggestions)}
             className="cursor-pointer flex"
             onMouseEnter={() => setIconToggle((prev) => ({ ...prev, threeDotIcon: true }))}
             onMouseLeave={() => setIconToggle((prev) => ({ ...prev, threeDotIcon: false }))}
@@ -179,21 +176,17 @@ export function DatePickerSideBar({ currentDate, setOpenSideBar }: DatePickerSid
           </div>
         </div>
       </div>
-      {showRecurring || showAddCustomSuggestions ? (
-        showAddCustomSuggestions ? (
-          <CustomSuggestion setCustomSuggestion={setCustomSuggetionsField} />
-        ) : (
-          <Recurring />
-        )
+      {showRecurring ? (
+        <Recurring />
       ) : (
-        <ScrollableContainer scrollDirection="y">
-          <div className="flex flex-col space-y-2 w-full mt-1" style={{ height: '340px' }}>
+        <VerticalScroll>
+          <div className="flex flex-col w-full mt-1 space-y-2" style={{ height: '340px' }}>
             <p
               className="font-extrabold rounded-md border hover:bg-alsoit-gray-75 hover:text-white text-xl flex justify-between px-2 py-0.5 w-full group"
               onClick={() => handleDayClick('today')}
             >
-              <span className="text-alsoit-text-md font-extrabold">Today</span>
-              <span className="text-alsoit-gray-200 group-hover:text-white text-right text-alsoit-text-md">
+              <span className="font-extrabold text-alsoit-text-md">Today</span>
+              <span className="text-right text-alsoit-gray-200 group-hover:text-white text-alsoit-text-md">
                 {dayjs().format('ddd')}
               </span>
             </p>
@@ -211,8 +204,8 @@ export function DatePickerSideBar({ currentDate, setOpenSideBar }: DatePickerSid
                 )
               }
             >
-              <span className="text-alsoit-text-md font-extrabold">Later</span>
-              <span className="text-alsoit-gray-200 group-hover:text-white text-right text-alsoit-text-md">
+              <span className="font-extrabold text-alsoit-text-md">Later</span>
+              <span className="text-right text-alsoit-gray-200 group-hover:text-white text-alsoit-text-md">
                 {dayjs().add(4, 'hour').format('h:mm A')}
               </span>
             </p>
@@ -220,8 +213,8 @@ export function DatePickerSideBar({ currentDate, setOpenSideBar }: DatePickerSid
               className="font-extrabold rounded-md border hover:bg-alsoit-gray-75 hover:text-white text-xl flex justify-between px-2 py-0.5 w-full group"
               onClick={() => handleDayClick('tomorrow')}
             >
-              <span className="text-alsoit-text-md font-extrabold">Tomorrow</span>
-              <span className="text-alsoit-gray-200 group-hover:text-white text-right text-alsoit-text-md">
+              <span className="font-extrabold text-alsoit-text-md">Tomorrow</span>
+              <span className="text-right text-alsoit-gray-200 group-hover:text-white text-alsoit-text-md">
                 {dayjs().add(1, 'day').format('ddd')}
               </span>
             </p>
@@ -229,8 +222,8 @@ export function DatePickerSideBar({ currentDate, setOpenSideBar }: DatePickerSid
               className="font-extrabold rounded-md border hover:bg-alsoit-gray-75 hover:text-white text-xl flex justify-between px-2 py-0.5 w-full group"
               onClick={() => handleWeekendButtonClick('weekend')}
             >
-              <span className="text-alsoit-text-md font-extrabold">This Weekend</span>
-              <span className="text-alsoit-gray-200 group-hover:text-white text-right text-alsoit-text-md">
+              <span className="font-extrabold text-alsoit-text-md">This Weekend</span>
+              <span className="text-right text-alsoit-gray-200 group-hover:text-white text-alsoit-text-md">
                 {dayjs(weekends('weekend')[1]).format('ddd')}
               </span>
             </p>
@@ -238,8 +231,8 @@ export function DatePickerSideBar({ currentDate, setOpenSideBar }: DatePickerSid
               className="font-extrabold rounded-md border hover:bg-alsoit-gray-75 hover:text-white text-xl flex justify-between px-2 py-0.5 w-full group"
               onClick={() => handleWeekendButtonClick('next weekend')}
             >
-              <span className="text-alsoit-text-md font-extrabold">Next Weekend</span>
-              <span className="text-alsoit-gray-200 group-hover:text-white text-right text-alsoit-text-md">
+              <span className="font-extrabold text-alsoit-text-md">Next Weekend</span>
+              <span className="text-right text-alsoit-gray-200 group-hover:text-white text-alsoit-text-md">
                 {dayjs(weekends('nweekend')[1]).format('ddd D')}
               </span>
             </p>
@@ -247,8 +240,8 @@ export function DatePickerSideBar({ currentDate, setOpenSideBar }: DatePickerSid
               className="font-extrabold rounded-md border hover:bg-alsoit-gray-75 hover:text-white text-xl flex justify-between px-2 py-0.5 w-full group"
               onClick={() => handleWeekClick()}
             >
-              <span className="text-alsoit-text-md font-extrabold">Next Week</span>
-              <span className="text-alsoit-gray-200 group-hover:text-white text-right text-alsoit-text-md">
+              <span className="font-extrabold text-alsoit-text-md">Next Week</span>
+              <span className="text-right text-alsoit-gray-200 group-hover:text-white text-alsoit-text-md">
                 {dayjs().add(8, 'days').format('ddd D')}
               </span>
             </p>
@@ -256,8 +249,8 @@ export function DatePickerSideBar({ currentDate, setOpenSideBar }: DatePickerSid
               className="font-extrabold rounded-md border hover:bg-alsoit-gray-75 hover:text-white text-xl flex justify-between px-2 py-0.5 w-full group"
               onClick={() => handleWeekButtonClick(1)}
             >
-              <span className="text-alsoit-text-md font-extrabold">Next Work Week</span>
-              <span className="text-alsoit-gray-200 group-hover:text-white text-right text-alsoit-text-md">
+              <span className="font-extrabold text-alsoit-text-md">Next Work Week</span>
+              <span className="text-right text-alsoit-gray-200 group-hover:text-white text-alsoit-text-md">
                 {dayjs(weeks(1)).format('ddd D')}
               </span>
             </p>
@@ -265,8 +258,8 @@ export function DatePickerSideBar({ currentDate, setOpenSideBar }: DatePickerSid
               className="font-extrabold rounded-md border hover:bg-alsoit-gray-75 hover:text-white text-xl flex justify-between px-2 py-0.5 w-full group"
               onClick={() => handleWeekButtonClick(2)}
             >
-              <span className="text-alsoit-text-md font-extrabold">Next 2 Work Weeks</span>
-              <span className="text-alsoit-gray-200 group-hover:text-white text-right text-alsoit-text-md">
+              <span className="font-extrabold text-alsoit-text-md">Next 2 Work Weeks</span>
+              <span className="text-right text-alsoit-gray-200 group-hover:text-white text-alsoit-text-md">
                 {dayjs(weeks(2)).format('ddd D')}
               </span>
             </p>
@@ -274,7 +267,7 @@ export function DatePickerSideBar({ currentDate, setOpenSideBar }: DatePickerSid
               return customSuggestion(field);
             })}
           </div>
-        </ScrollableContainer>
+        </VerticalScroll>
       )}
     </div>
   );

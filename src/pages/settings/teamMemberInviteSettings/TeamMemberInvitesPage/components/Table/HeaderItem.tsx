@@ -9,6 +9,7 @@ import {
 import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
 import SortDirectionCheck from '../../../../../workspace/tasks/component/views/listLevel/component/SortDirectionCheck';
 import { SortOption } from '../../../../../workspace/tasks/component/views/listLevel/TaskListViews';
+import { EntityType } from '../../../../../../utils/EntityTypes/EntityType';
 
 interface valueType {
   value: string;
@@ -16,8 +17,10 @@ interface valueType {
 }
 function HeaderItem({ value, index }: valueType) {
   const dispatch = useAppDispatch();
+
   const { sortTeamInviteArr, sortInvite } = useAppSelector((state) => state.teamMemberInvite);
   const { baseColor } = useAppSelector((state) => state.account);
+
   const handleSort = (val: string | undefined, id: string | undefined, con: string) => {
     let field: string | undefined = '';
     if (val === 'invited at') {
@@ -39,7 +42,7 @@ function HeaderItem({ value, index }: valueType) {
   const sortAbles: string[] = ['name', 'email', 'role', 'status', 'invited at', 'expires at'];
 
   const dirCheck = (col: string): SortOption | undefined => {
-    const headerTxt = col === 'Assignees' ? 'assignee' : col === 'Task' ? 'name' : col.toLowerCase();
+    const headerTxt = col === 'Assignees' ? 'assignee' : col === EntityType.task ? 'name' : col.toLowerCase();
     return sortTeamInviteArr.find((el) => el.field === headerTxt);
   };
   return (

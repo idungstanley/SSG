@@ -10,28 +10,28 @@ import dayjs from 'dayjs';
 import HeaderModal from '../../../../components/Header/HeaderModal';
 import TimerModal from './TimerOptions';
 import { useParams } from 'react-router-dom';
-import timezone from 'dayjs/plugin/timezone';
-import utc from 'dayjs/plugin/utc';
 import HeaderTimeModal from './HeaderTimeModal';
 import ArrowCaretUp from '../../../../assets/icons/ArrowCaretUp';
 import AlarmClockIcon from '../../../../assets/icons/AlarmClockicon';
 import ArrowCaretDown from '../../../../assets/icons/ArrowCaretDown';
 import moment from 'moment-timezone';
+import { toast } from 'react-hot-toast';
+import SaveFilterToast from '../../../../components/TasksHeader/ui/Filter/ui/Toast';
 
 export default function AdditionalHeader() {
-  dayjs.extend(timezone);
-  dayjs.extend(utc);
+  const userTimeZoneFromLS: string | null = localStorage.getItem('userTimeZone');
   const { screenRecording, duration, timerStatus } = useAppSelector((state) => state.task);
   const [recordBlinker, setRecordBlinker] = useState<boolean>(false);
   const [timerModal, setTimerModal] = useState<boolean>(false);
   const [isVisible, setIsVisible] = useState<boolean>(true);
   const { activeTabId: tabsId, timerLastMemory, activeItemId } = useAppSelector((state) => state.workspace);
   const { period } = useAppSelector((state) => state.task);
-  const { timezone: zone, date_format, time_format } = useAppSelector((state) => state.userSetting);
+  const { timezone: zone, date_format, time_format, is_clock_time } = useAppSelector((state) => state.userSetting);
+
   const [clockModal, setClockModal] = useState<boolean>(false);
   const [HeaderClock, setClock] = useState<string>(
     zone
-      ? moment.tz(zone).format(time_format === '1' ? 'DD-MM-YYYY HH:mm' : 'DD-MM-YYYY h:mm a')
+      ? moment.tz(userTimeZoneFromLS ?? zone).format(time_format === '1' ? 'DD-MM-YYYY HH:mm' : 'DD-MM-YYYY h:mm a')
       : moment().format(time_format === '1' ? 'DD-MM-YYYY HH:mm' : 'DD-MM-YYYY h:mm a')
   );
   const [showClock, setShowClock] = useState<{ show: boolean; withDay: boolean; showMinimal: boolean }>({
@@ -76,14 +76,31 @@ export default function AdditionalHeader() {
   }, [isVisible, refetch]);
 
   useEffect(() => {
+    if (dayjs.tz.guess() !== zone && (!userTimeZoneFromLS || userTimeZoneFromLS !== dayjs.tz.guess())) {
+      toast.custom(
+        (t) => (
+          <SaveFilterToast
+            title="You are in a different timezone"
+            body="Would you want to use the current timezone for this location?"
+            toastId={t.id}
+            extended="timeZone"
+            extendedState={dayjs.tz.guess()}
+          />
+        ),
+        {
+          position: 'bottom-right',
+          duration: Infinity
+        }
+      );
+    }
     const headerClockFn = () =>
       window.setInterval(() => {
         setClock(
           zone
-            ? dayjs()
-                .tz(zone)
+            ? moment()
+                .tz(userTimeZoneFromLS ?? zone)
                 .format(time_format === '1' ? 'DD-MM-YYYY HH:mm' : 'DD-MM-YYYY h:mm a')
-            : dayjs().format(time_format === '1' ? 'DD-MM-YYYY HH:mm' : 'DD-MM-YYYY h:mm a')
+            : moment().format(time_format === '1' ? 'DD-MM-YYYY HH:mm' : 'DD-MM-YYYY h:mm a')
         );
       }, 6000);
 
@@ -185,32 +202,38 @@ export default function AdditionalHeader() {
         <HiOutlineUpload className="w-5 h-5" />
         <BsFillGrid3X3GapFill className="w-5 h-5" />
         <MdHelpOutline className="w-5 h-5" />
-        <div
-          className="relative w-16 font-semibold text-alsoit-text-lg text-alsoit-text border-alsoit-border-base border-alsoit-text rounded-md p-0.5 flex justify-center flex-col space-y-0 cursor-pointer"
-          onClick={() => setClockModal(!clockModal)}
-          onMouseEnter={() => setShowClock((prev) => ({ ...prev, showMinimal: true }))}
-          onMouseLeave={() => setShowClock((prev) => ({ ...prev, showMinimal: false }))}
-        >
-          <span className="text-center text-alsoit-text-md">
-            {dayjs(HeaderClock).format(time_format === '1' ? 'HH:mm' : 'h:mm a')}
-          </span>
-          <span className="text-center text-alsoit-text-md">
-            {dayjs(HeaderClock, 'DD-MM-YYYY hh:mm').format(date_format?.toUpperCase() ?? 'MM-DD-YYYY')}
-          </span>
-          {clockModal && (
-            <HeaderModal clickAway={true} toggleFn={setClockModal} styles="top-10 right-32 w-44">
-              <HeaderTimeModal />
-            </HeaderModal>
-          )}
-          {showClock.showMinimal && !clockModal && (
-            <HeaderModal toggleFn={setClockModal} styles="top-10 -right-5 h-12 w-28">
-              <span className="bg-alsoit-gray-50 font-semibold text-alsoit-text-lg shadow-lg rounded border-alsoit-border-base border-alsoit-gray-75 text-center">
-                <p>{dayjs().format('DD MMMM, YYYY')}</p>
-                <p>{dayjs().format('dddd')}</p>
-              </span>
-            </HeaderModal>
-          )}
-        </div>
+        {is_clock_time === 1 && (
+          <div
+            className="relative w-16 font-semibold text-alsoit-text-lg text-alsoit-text border-alsoit-border-base border-alsoit-text rounded-md p-0.5 flex justify-center flex-col space-y-0 cursor-pointer"
+            onClick={() => setClockModal(!clockModal)}
+            onMouseEnter={() => setShowClock((prev) => ({ ...prev, showMinimal: true }))}
+            onMouseLeave={() => setShowClock((prev) => ({ ...prev, showMinimal: false }))}
+          >
+            <span className="text-center text-alsoit-text-md">
+              {time_format === '0'
+                ? moment(HeaderClock, `${date_format?.toLocaleUpperCase()} HH:mm a`).format('h:mm a')
+                : moment(HeaderClock, `${date_format?.toLocaleUpperCase()} HH:mm a`).format('HH:mm')}
+            </span>
+            <span className="text-center text-alsoit-text-md">
+              {moment(HeaderClock, `${date_format?.toLocaleUpperCase()} HH:mm`).format(
+                date_format?.toUpperCase() ?? 'MM-DD-YYYY'
+              )}
+            </span>
+            {clockModal && (
+              <HeaderModal clickAway={true} toggleFn={setClockModal} styles="top-10 right-32 w-44">
+                <HeaderTimeModal />
+              </HeaderModal>
+            )}
+            {showClock.showMinimal && !clockModal && (
+              <HeaderModal toggleFn={setClockModal} styles="top-10 -right-5 h-12 w-28">
+                <span className="bg-alsoit-gray-50 font-semibold text-alsoit-text-lg shadow-lg rounded border-alsoit-border-base border-alsoit-gray-75 text-center">
+                  <p>{dayjs().format('DD MMMM, YYYY')}</p>
+                  <p>{dayjs().format('dddd')}</p>
+                </span>
+              </HeaderModal>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );

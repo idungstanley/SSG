@@ -6,8 +6,10 @@ interface walletProps {
 }
 interface WalletState {
   wallet: walletProps[];
-  currentWalletParentId: string | null;
-  currentWalletParentType: string | null;
+  currentWalletId: string | null;
+  currentWalletType: string | null;
+  parentWalletId: string | null;
+  currentWalletName: string | null | undefined;
   archiveWallet: boolean;
   toggleArchiveWallet: boolean;
   paletteDropDown?: null | string;
@@ -16,8 +18,10 @@ interface WalletState {
 
 const initialState: WalletState = {
   wallet: [],
-  currentWalletParentId: null,
-  currentWalletParentType: null,
+  currentWalletId: null,
+  currentWalletType: null,
+  parentWalletId: null,
+  currentWalletName: null,
   archiveWallet: false,
   toggleArchiveWallet: false,
   paletteDropDown: null,
@@ -57,12 +61,17 @@ export const walletSlice = createSlice({
         return wallet;
       });
     },
-    setWalletItem(
-      state,
-      action: PayloadAction<{ currentWalletParentId: string | null; currentWalletParentType: string | null }>
-    ) {
-      state.currentWalletParentId = action.payload.currentWalletParentId;
-      state.currentWalletParentType = action.payload.currentWalletParentType;
+    setCurrentWalletId(state, action: PayloadAction<string | null>) {
+      state.currentWalletId = action.payload;
+    },
+    setCurrentWalletName(state, action: PayloadAction<string | null | undefined>) {
+      state.currentWalletName = action.payload;
+    },
+    setParentWalletId(state, action: PayloadAction<string | null>) {
+      state.parentWalletId = action.payload;
+    },
+    setCurrentWalletType(state, action: PayloadAction<string | null>) {
+      state.currentWalletType = action.payload;
     },
     checkIfWallet: (state) => state
   }
@@ -73,10 +82,13 @@ export const {
   checkIfWallet,
   getWallet,
   showWallet,
-  setWalletItem,
   setArchiveWallet,
   setToggleArchiveWallet,
   setPaletteDropDown,
-  setEditWallet
+  setEditWallet,
+  setCurrentWalletId,
+  setCurrentWalletType,
+  setCurrentWalletName,
+  setParentWalletId
 } = walletSlice.actions;
 export default walletSlice.reducer;

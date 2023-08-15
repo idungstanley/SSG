@@ -9,7 +9,7 @@ import { setFilterFields } from '../../../../features/task/taskSlice';
 import { generateFilter } from '../Filter/lib/filterUtils';
 import { EllipsisHorizontalIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import AssigneeIcon from '../../../../assets/icons/Assignee';
-import { ScrollableContainer } from '../../../ScrollableContainer/ScrollableContainer';
+import { VerticalScroll } from '../../../ScrollableContainer/VerticalScroll';
 
 export default function FilterByAssigneeModal() {
   const dispatch = useAppDispatch();
@@ -99,7 +99,7 @@ export default function FilterByAssigneeModal() {
           className="fixed mt-2 overflow-scroll origin-top-right bg-white rounded-md shadow-lg w-72 ring-1 ring-black ring-opacity-5 focus:outline-none"
           style={{ zIndex: 3, maxHeight: '500px' }}
         >
-          <div className="container mx-auto py-2 px-4">
+          <div className="container px-4 py-2 mx-auto">
             <div className="relative flex items-center w-full text-gray-500">
               <MagnifyingGlassIcon className="w-5 h-5" />
 
@@ -108,13 +108,13 @@ export default function FilterByAssigneeModal() {
                 value={searchValue}
                 ref={inputRef}
                 type="text"
-                className="block w-full h-5 border-0 appearance-none alsoit-radius text-alsoit-gray-300-lg ring-0 focus:ring-0 focus:outline-0 text-alsoit-text-lg pl-8"
+                className="block w-full h-5 pl-8 border-0 appearance-none alsoit-radius text-alsoit-gray-300-lg ring-0 focus:ring-0 focus:outline-0 text-alsoit-text-lg"
                 placeholder="Search Assignee"
               />
-              <EllipsisHorizontalIcon className="w-5 h-5 absolute right-4" />
+              <EllipsisHorizontalIcon className="absolute w-5 h-5 right-4" />
             </div>
           </div>
-          <ScrollableContainer scrollDirection="y">
+          <VerticalScroll>
             {filteredMembers.map((member) => (
               <section
                 className="flex items-center justify-between w-full px-4 py-2 text-left text-black cursor-pointer text-alsoit-text-md hover:bg-gray-200"
@@ -145,7 +145,7 @@ export default function FilterByAssigneeModal() {
                 </button>
               </section>
             ))}
-          </ScrollableContainer>
+          </VerticalScroll>
         </Menu.Items>
       </Transition>
     </Menu>

@@ -7,14 +7,18 @@ import { setCreateWalletSlideOverVisibility } from '../../../../../features/gene
 import { setSubDropdownMenu, setshowMenuDropdown } from '../../../../../features/hubs/hubSlice';
 import { useDispatch } from 'react-redux';
 import { setCreateWlLink } from '../../../../../features/workspace/workspaceSlice';
+import { EntityType } from '../../../../../utils/EntityTypes/EntityType';
 
 function WalletModal() {
-  const queryClient = useQueryClient();
   const dispatch = useDispatch();
+  const queryClient = useQueryClient();
+
+  const { showCreateWalletSlideOver } = useAppSelector((state) => state.slideOver);
+
   const { showMenuDropdownType, showMenuDropdown, SubMenuId, SubMenuType, createWLID } = useAppSelector(
     (state) => state.hub
   );
-  const { showCreateWalletSlideOver } = useAppSelector((state) => state.slideOver);
+
   const createWallet = useMutation(createWalletService, {
     onSuccess: () => {
       queryClient.invalidateQueries();
@@ -41,15 +45,15 @@ function WalletModal() {
       name,
       hubID:
         (createWLID ? createWLID : null) ||
-        (SubMenuType == 'hubs' ? SubMenuId : null) ||
-        (SubMenuType == 'subhub' ? SubMenuId : null) ||
-        (showMenuDropdownType == 'hubs' ? showMenuDropdown : null) ||
-        (showMenuDropdownType == 'subhub' ? showMenuDropdown : null),
+        (SubMenuType === 'hubs' ? SubMenuId : null) ||
+        (SubMenuType === EntityType.subHub ? SubMenuId : null) ||
+        (showMenuDropdownType === 'hubs' ? showMenuDropdown : null) ||
+        (showMenuDropdownType === EntityType.subHub ? showMenuDropdown : null),
       walletId:
-        (showMenuDropdownType == 'wallet' && !createWLID ? showMenuDropdown : null) ||
-        (showMenuDropdownType == 'subwallet2' ? showMenuDropdown : null) ||
-        (SubMenuType == 'wallet' ? SubMenuId : null) ||
-        (SubMenuType == 'subwallet2' ? SubMenuId : null)
+        (showMenuDropdownType === EntityType.wallet && !createWLID ? showMenuDropdown : null) ||
+        (showMenuDropdownType === 'subwallet2' ? showMenuDropdown : null) ||
+        (SubMenuType === EntityType.wallet ? SubMenuId : null) ||
+        (SubMenuType === 'subwallet2' ? SubMenuId : null)
     });
   };
 

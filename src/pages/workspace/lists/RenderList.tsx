@@ -21,19 +21,12 @@ import TaskMapTemplate from '../tasks/component/views/hubLevel/TaskMapTemplate';
 import ActiveHub from '../../../layout/components/MainLayout/extendedNavigation/ActiveParents/ActiveHub';
 import AdditionalHeader from '../../../layout/components/MainLayout/Header/AdditionHeader';
 import { useScroll } from '../../../hooks/useScroll';
+import { EntityType } from '../../../utils/EntityTypes/EntityType';
 function RenderList() {
   const dispatch = useDispatch();
   const { listId } = useParams();
-  const {
-    listView,
-    calenderView,
-    mapView,
-    addNewTaskItem,
-    closeTaskListView,
-    currentParentTaskId,
-    getSubTaskId,
-    filterTaskByAssigneeIds
-  } = useAppSelector((state) => state.task);
+  const { listView, calenderView, mapView, addNewTaskItem, closeTaskListView, filterTaskByAssigneeIds } =
+    useAppSelector((state) => state.task);
   const { activeEntityName } = useAppSelector((state) => state.workspace);
 
   const containerRef = useRef<HTMLDivElement>(null);
@@ -43,12 +36,12 @@ function RenderList() {
     hasNextPage,
     fetchNextPage
   } = getTaskListService({ listId, assigneeUserId: filterTaskByAssigneeIds });
-  const listType = 'list';
-  const { data: listData } = UseGetListDetails({ activeItemId: listId, activeItemType: listType });
+
+  const { data: listData } = UseGetListDetails({ activeItemId: listId, activeItemType: EntityType.list });
   const listName = listData?.data.list.name;
   useEffect(() => {
     if (listId) {
-      dispatch(setActiveItem({ activeItemId: listId, activeItemType: listType, activeItemName: listName }));
+      dispatch(setActiveItem({ activeItemId: listId, activeItemType: EntityType.list, activeItemName: listName }));
       dispatch(setActiveEntityName(listName));
     }
   }, [listId, listData]);
@@ -74,12 +67,6 @@ function RenderList() {
     }
   }
 
-  const extendedObj = {
-    name: 'TASKS',
-    children: <ActiveHub />,
-    source: hubIcon
-  };
-
   const handleScrollList = useScroll(() => dispatch(setUpdateCords()));
 
   return (
@@ -101,7 +88,11 @@ function RenderList() {
             />
           </section>
         }
-        extendedBar={extendedObj}
+        extendedBar={{
+          name: 'TASKS',
+          children: <ActiveHub />,
+          source: hubIcon
+        }}
         additional={<FilterByAssigneesSliderOver />}
       >
         <>

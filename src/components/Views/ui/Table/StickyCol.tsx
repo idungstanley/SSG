@@ -24,6 +24,7 @@ import RoundedCheckbox from '../../../Checkbox/RoundedCheckbox';
 import ToolTip from '../../../Tooltip/Tooltip';
 import Badges from '../../../badges';
 import DetailsOnHover from '../../../Dropdown/DetailsOnHover/DetailsOnHover';
+import { EntityType } from '../../../../utils/EntityTypes/EntityType';
 
 interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   task: Task;
@@ -54,12 +55,15 @@ export function StickyCol({
   dragElement,
   ...props
 }: ColProps) {
-  const { currentWorkspaceId } = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { taskId, hubId, walletId, listId } = useParams();
-  const ACTIVE_TASK = taskId === task.id ? 'tdListV' : DEFAULT_COL_BG;
+
+  const { currentWorkspaceId } = useAppSelector((state) => state.auth);
+
   const [isChecked, setIsChecked] = useState(false);
+
+  const ACTIVE_TASK = taskId === task.id ? 'tdListV' : DEFAULT_COL_BG;
   const { mutate: onAdd } = useAddTask(parentId);
   const {
     currTeamMemberId,
@@ -69,6 +73,7 @@ export function StickyCol({
     selectedTasksArray,
     verticalGridlinesTask,
     hilightNewTask,
+    CompactView,
     toggleAllSubtask
   } = useAppSelector((state) => state.task);
 
@@ -92,7 +97,7 @@ export function StickyCol({
       dispatch(
         setShowPilotSideOver({
           id: task.id,
-          type: 'task',
+          type: EntityType.task,
           show: true,
           title: task.name
         })
@@ -101,7 +106,7 @@ export function StickyCol({
       dispatch(
         setActiveItem({
           activeItemId: task.id,
-          activeItemType: 'task',
+          activeItemType: EntityType.task,
           activeItemName: task.name
         })
       );
@@ -169,8 +174,13 @@ export function StickyCol({
 
   useEffect(() => {
     const isSelected = selectedTasksArray.includes(task.id);
-    isSelected ? setIsChecked(true) : setIsChecked(false);
-  }, [selectedTasksArray]);
+
+    if (isSelected) {
+      setIsChecked(true);
+    } else {
+      setIsChecked(false);
+    }
+  }, [selectedTasksArray, task.id]);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const isChecked = e.target.checked;
@@ -218,7 +228,17 @@ export function StickyCol({
             </div>
           </div>
           <div
-            style={{ paddingLeft, minHeight: '42px', height: singleLineView ? '42px' : '' }}
+            style={{
+              paddingLeft,
+              height:
+                singleLineView && !CompactView
+                  ? '42px'
+                  : CompactView && singleLineView
+                  ? '25px'
+                  : !singleLineView && CompactView && task.name.length < 30
+                  ? '25px'
+                  : ''
+            }}
             onClick={onClickTask}
             onDoubleClick={() => setEitableContent(true)}
             className={cl(
@@ -249,13 +269,20 @@ export function StickyCol({
                 onKeyDown={(e) => (e.key === 'Enter' ? handleEditTask(e, task.id) : null)}
                 ref={droppabbleRef}
               >
-                <div className="font-semibold alsoit-gray-300 text-alsoit-text-lg">
+                <div
+                  className={`font-semibold alsoit-gray-300 ${
+                    CompactView ? 'text-alsoit-text-md' : 'text-alsoit-text-lg'
+                  }`}
+                >
                   {singleLineView ? (
                     <div contentEditable={eitableContent} suppressContentEditableWarning={true} ref={inputRef}>
                       {!eitableContent ? (
                         <DetailsOnHover
                           hoverElement={
                             <div
+                              className={`font-semibold alsoit-gray-300 ${
+                                CompactView ? 'text-alsoit-text-md' : 'text-alsoit-text-lg'
+                              }`}
                               style={{
                                 maxWidth: '200px',
                                 overflow: 'hidden',
