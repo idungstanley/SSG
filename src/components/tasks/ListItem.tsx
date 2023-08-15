@@ -148,7 +148,11 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
 
   const handleListColour = (id: string, e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     e.stopPropagation();
-    dispatch(setPaletteDropDown({ show: true, paletteId: id, paletteType: EntityType.list }));
+    if (paletteId === id && show) {
+      dispatch(setPaletteDropDown({ ...paletteDropdown, show: false }));
+    } else {
+      dispatch(setPaletteDropDown({ show: true, paletteId: id, paletteType: EntityType.list }));
+    }
     dispatch(setListPaletteColor(list?.color === null ? { innerColour: 'white', outerColour: 'black' } : color));
   };
 

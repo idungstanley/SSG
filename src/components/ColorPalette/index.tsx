@@ -151,7 +151,7 @@ export default function PaletteManager({
 
   return (
     <div
-      className="absolute ease-in-out duration-300 inset-0 w-auto top-auto p-2 mt-3 overflow-y-auto bg-white border border-gray-200 rounded shadow-2xl w-fit left-5 h-fit drop-shadow-2xl"
+      className="absolute ease-in-out duration-300 inset-0 w-auto p-2 mt-3 overflow-y-auto bg-white border border-gray-200 rounded shadow-2xl w-fit left-5 h-fit drop-shadow-2xl"
       style={{ zIndex: '999', ...containerStyles }}
       ref={ref}
     >
