@@ -245,6 +245,27 @@ export const statusService = (statusTypes: StatusProps[]) => {
   });
 };
 
+export const statusTypesService = (data: {
+  model_id?: string;
+  model?: string;
+  from_model?: string | null;
+  from_model_id?: string | null;
+  statuses: StatusProps[];
+}) => {
+  const response = requestNew<unknown>({
+    url: 'task-statuses',
+    method: 'POST',
+    data: {
+      model_id: data.model_id,
+      model: data.model,
+      from_model: data.from_model,
+      from_model_id: data.from_model_id,
+      statuses: data.statuses
+    }
+  });
+  return response;
+};
+
 //archive hub
 export const ArchiveHubService = (hub: { query: string | null | undefined; archiveHub: boolean }) => {
   const hubid = hub.query;

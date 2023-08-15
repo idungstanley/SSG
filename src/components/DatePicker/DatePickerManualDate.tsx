@@ -90,21 +90,21 @@ export function DatePickerManualDates({ range }: DatePickerManualDatesProps) {
   }, [taskTime, selectedDate]);
 
   return (
-    <div className="flex justify-between items-center py-1">
+    <div className="flex items-center justify-between py-1">
       {range ? (
-        <div className="w-full grid grid-cols-2 place-self-center space-x-2">
+        <div className="grid w-full grid-cols-2 space-x-2 place-self-center">
           {/* Set Start Date Selection */}
           <label
             htmlFor="from"
             className="flex space-y-1 space-x-4 text-xs items-center w-36 border border-alsoit-purple-300 rounded-md p-0.5"
           >
-            <div className="flex space-x-1 items-center">
-              <div className="bg-alsoit-purple-300 rounded-md p-1">
+            <div className="flex items-center space-x-1">
+              <div className="p-1 rounded-md bg-alsoit-purple-300">
                 <CalendarIcon active={iconToggle.startIcon} fixed />
               </div>
               <div className="relative flex">
                 <div
-                  className="h-4 px-1 text-alsoit-text-sm font-semibold"
+                  className="h-4 px-1 font-semibold text-alsoit-text-sm"
                   contentEditable
                   suppressContentEditableWarning
                   onBlur={handleFilterDateDispatch}
@@ -141,15 +141,15 @@ export function DatePickerManualDates({ range }: DatePickerManualDatesProps) {
           {/* Set Due Date selection */}
           <label
             htmlFor="to"
-            className="flex space-y-1 space-x-4 text-xs items-center border border-alsoit-purple-300 rounded-md p-1 w-36"
+            className="flex items-center p-1 space-x-4 space-y-1 text-xs border rounded-md border-alsoit-purple-300 w-36"
           >
-            <div className="flex space-x-1 items-center">
-              <div className="bg-alsoit-purple-300 rounded-md p-1">
+            <div className="flex items-center space-x-1">
+              <div className="p-1 rounded-md bg-alsoit-purple-300">
                 <CalendarIcon active={iconToggle.dueIcon} fixed />
               </div>
               <div className="relative">
                 <div
-                  className="h-4 px-1 text-alsoit-text-sm font-semibold"
+                  className="h-4 px-1 font-semibold text-alsoit-text-sm"
                   contentEditable
                   suppressContentEditableWarning
                   onBlur={handleFilterDateDispatch}
@@ -193,14 +193,14 @@ export function DatePickerManualDates({ range }: DatePickerManualDatesProps) {
         // Default Set date
         <label
           htmlFor="from"
-          className="flex space-y-1 space-x-1 text-xs items-center w-48 border border-alsoit-purple-300 p-1 rounded-md"
+          className="flex items-center w-48 p-1 space-x-1 space-y-1 text-xs border rounded-md border-alsoit-purple-300"
         >
-          <div className="bg-alsoit-purple-300 rounded-md p-1">
+          <div className="p-1 rounded-md bg-alsoit-purple-300">
             <CalendarIcon active={iconToggle.startIcon} fixed />
           </div>
           <div className="relative">
             <div
-              className="w-28 h-4 px-1 text-alsoit-text-lg font-semibold"
+              className="h-4 px-1 font-semibold w-28 text-alsoit-text-lg"
               contentEditable
               suppressContentEditableWarning
               onBlur={handleFilterDateDispatch}
