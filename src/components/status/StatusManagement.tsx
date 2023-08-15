@@ -35,7 +35,7 @@ export default function StatusManagement() {
         return {
           name: status.name,
           color: status.color,
-          id: status.id,
+          id: null,
           type: status.type,
           position: status.position,
           is_default: status.type === 'open' ? 1 : 0
