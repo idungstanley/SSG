@@ -26,9 +26,10 @@ interface TableProps {
   heads: listColumnProps[];
   data: Task[];
   label: string;
+  listName?: string;
 }
 
-export function Table({ heads, data, label }: TableProps) {
+export function Table({ heads, data, label, listName }: TableProps) {
   const dispatch = useAppDispatch();
 
   const [tableHeight, setTableHeight] = useState<string | number>('auto');
@@ -205,6 +206,7 @@ export function Table({ heads, data, label }: TableProps) {
             label={label}
             headerStatusColor={data[0].status.color as string}
             columns={columns}
+            listName={listName}
             mouseDown={onMouseDown}
             tableHeight={tableHeight}
             listId={data[0].list_id}
@@ -238,7 +240,7 @@ export function Table({ heads, data, label }: TableProps) {
           {!showNewTaskField ? (
             <tbody className="h-5">
               <tr onClick={() => handleToggleNewTask()} className="absolute left-0 p-1.5 pl-16 text-left w-fit text-xs">
-                <td className="font-semibold alsoit-gray-300 cursor-pointer">+ New Task</td>
+                <td className="font-semibold cursor-pointer alsoit-gray-300">+ New Task</td>
               </tr>
             </tbody>
           ) : null}
