@@ -41,6 +41,11 @@ export interface ActiveTaskColumnProps {
   header: string;
 }
 
+interface customPropertyInfo {
+  name: string;
+  type: string;
+}
+
 export interface ImyTaskData {
   id: string;
   name: string;
@@ -101,6 +106,10 @@ export interface ImyTaskData2 {
     | [{ id: string; initials: string; color: string; name: string }];
 }
 
+interface entityForCustom {
+  id: string | undefined;
+  type: string | undefined;
+}
 interface TaskState {
   task: string[];
   currentTaskIdForPilot: string | null;
@@ -176,10 +185,11 @@ interface TaskState {
   statusId: string;
   currTaskListId: string;
   newColInstance: [{ id: number; value: string }];
-  listIdForCustom: string | undefined;
+  entityForCustom: entityForCustom;
   listViewHeads: listColumnProps[];
   customSuggestionField: IExtraFields[];
   newTaskData: ImyTaskData | undefined;
+  newCustomPropertyDetails: customPropertyInfo;
 }
 
 const initialState: TaskState = {
@@ -260,10 +270,11 @@ const initialState: TaskState = {
   statusId: '',
   currTaskListId: '',
   newColInstance: [{ id: 1, value: '' }],
-  listIdForCustom: '',
+  entityForCustom: { id: undefined, type: undefined },
   listViewHeads: [],
   customSuggestionField: [],
-  newTaskData: undefined
+  newTaskData: undefined,
+  newCustomPropertyDetails: { name: '', type: 'Single Label' }
 };
 
 export const taskSlice = createSlice({
@@ -530,8 +541,8 @@ export const taskSlice = createSlice({
     setNewColInstance(state, action: PayloadAction<{ id: number; value: string }>) {
       state.newColInstance.push(action.payload);
     },
-    setListIdForCustom(state, action: PayloadAction<string | undefined>) {
-      state.listIdForCustom = action.payload;
+    setEntityForCustom(state, action: PayloadAction<entityForCustom>) {
+      state.entityForCustom = action.payload;
     },
     setHeads(state, action: PayloadAction<listColumnProps[]>) {
       state.listViewHeads = action.payload;
@@ -541,6 +552,9 @@ export const taskSlice = createSlice({
     },
     setNewTask(state, action: PayloadAction<ImyTaskData | undefined>) {
       state.newTaskData = action.payload;
+    },
+    setNewCustomPropertyDetails(state, action: PayloadAction<customPropertyInfo>) {
+      state.newCustomPropertyDetails = action.payload;
     }
   }
 });
@@ -618,9 +632,10 @@ export const {
   setHistoryMemory,
   setFilterDateString,
   setNewColInstance,
-  setListIdForCustom,
+  setEntityForCustom,
   setHeads,
   setCustomSuggetionsField,
-  setNewTask
+  setNewTask,
+  setNewCustomPropertyDetails
 } = taskSlice.actions;
 export default taskSlice.reducer;

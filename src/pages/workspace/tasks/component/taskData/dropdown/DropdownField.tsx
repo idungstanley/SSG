@@ -1,13 +1,13 @@
 import { Dialog, Transition } from '@headlessui/react';
 import { Fragment, useState } from 'react';
 import { useAppSelector } from '../../../../../../app/hooks';
-import { Property } from '../../../../../../features/list/list.interfaces';
+import { Options } from '../../../../../../features/list/list.interfaces';
 import { useUpdateEntityCustomFieldValue } from '../../../../../../features/list/listService';
 import { useAbsolute } from '../../../../../../hooks/useAbsolute';
 import { cl } from '../../../../../../utils';
 
 interface DropdownModalProps {
-  field: { properties: Property; id: string; activeProperty: string };
+  field: { options: Options; id: string; activeProperty: string };
   taskId: string;
 }
 
@@ -23,7 +23,7 @@ export default function DropdownField({ field, taskId }: DropdownModalProps) {
 
   const { cords, relativeRef } = useAbsolute(updateCords, 160);
 
-  const { properties } = field;
+  const { options } = field;
 
   const handleClick = (option: string) => {
     setActiveOption(option);
@@ -58,17 +58,17 @@ export default function DropdownField({ field, taskId }: DropdownModalProps) {
                 select an option
               </p>
               <div className="w-full pt-3 space-y-2">
-                {Array.isArray(properties)
-                  ? properties.map((option) => (
+                {Array.isArray(options)
+                  ? options.map((option) => (
                       <button
-                        key={option}
-                        onClick={() => handleClick(option)}
+                        key={option.id}
+                        onClick={() => handleClick(option.name)}
                         className={cl(
-                          option === activeOption && 'bg-gray-100',
+                          option.name === activeOption && 'bg-gray-100',
                           'text-gray-700 py-2 bg-white border w-full text-center block px-4 text-sm hover:bg-gray-100 hover:text-gray-900'
                         )}
                       >
-                        {option}
+                        {option.name}
                       </button>
                     ))
                   : null}

@@ -4,12 +4,11 @@ import CreateNewColumn from './Components/CreateNewColumn';
 import { useAppSelector } from '../../../../app/hooks';
 
 function Templates() {
-  const { newColInstance } = useAppSelector((state) => state.task);
-
+  const { entityForCustom } = useAppSelector((state) => state.task);
   return (
     <div className="h-full w-full overflow-scroll">
       <Header />
-      <CreateNewColumn />
+      {entityForCustom.id && entityForCustom.type && <CreateNewColumn />}
     </div>
   );
 }

@@ -1,153 +1,104 @@
 import * as React from 'react';
-import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import DropdownIcon from '../../../../../assets/icons/dropdownIcon';
-import { AiOutlineNumber, AiOutlineSearch } from 'react-icons/ai';
-import { BiCaretDownSquare, BiText } from 'react-icons/bi';
-import { BsTag, BsTextareaT } from 'react-icons/bs';
-import { MdDateRange, MdOutlineAttachFile, MdPersonOutline } from 'react-icons/md';
-import { TbBatteryEco } from 'react-icons/tb';
-import { IoMdCheckboxOutline } from 'react-icons/io';
-import { HiOutlineMail } from 'react-icons/hi';
-import { ImClearFormatting } from 'react-icons/im';
-import { TfiLocationPin, TfiMoney } from 'react-icons/tfi';
+import ArrowDown from '../../../../../assets/icons/ArrowDown';
+import { useAppSelector } from '../../../../../app/hooks';
+import { Capitalize } from '../../../../../utils/NoCapWords/Capitalize';
+import { Dialog, Transition } from '@headlessui/react';
+import { useAbsolute } from '../../../../../hooks/useAbsolute';
+import DropdownOptions from './ColumnOptions/Dropdown';
+import TextOptions from './ColumnOptions/Text';
+import DateOptions from './ColumnOptions/Date';
+import CurrencyOptions from './ColumnOptions/Currency';
+import NumberOptions from './ColumnOptions/Number';
+import EmailOptions from './ColumnOptions/Email';
 
 const columnTypes = [
   {
     id: 'Dropdown',
     title: 'Dropdown',
-    description: '',
-    icon: <BiCaretDownSquare />
+    options: <DropdownOptions />
   },
   {
     id: 'Text',
     title: 'Text',
-    description: '',
-    icon: <BiText />
-  },
-  {
-    id: 'Text Area',
-    title: 'Text Area',
-    description: '',
-    icon: <BsTextareaT />
+    options: <TextOptions />
   },
   {
     id: 'Date',
     title: 'Date',
-    description: '',
-    icon: <MdDateRange />
+    options: <DateOptions />
   },
   {
-    id: 'Progress',
-    title: 'Progress',
-    description: '',
-    icon: <TbBatteryEco />
+    id: 'Currenct',
+    title: 'Currency',
+    options: <CurrencyOptions />
   },
   {
     id: 'Number',
     title: 'Number',
-    description: '',
-    icon: <AiOutlineNumber />
-  },
-  {
-    id: 'Checkbox',
-    title: 'Checkbox',
-    description: '',
-    icon: <IoMdCheckboxOutline />
+    options: <NumberOptions />
   },
   {
     id: 'Email',
     title: 'Email',
-    description: '',
-    icon: <HiOutlineMail />
-  },
-  {
-    id: 'Files',
-    title: 'Files',
-    description: '',
-    icon: <MdOutlineAttachFile />
-  },
-  {
-    id: 'Formula',
-    title: 'Formula',
-    description: '',
-    icon: <ImClearFormatting />
-  },
-  {
-    id: 'Labels',
-    title: 'Labels',
-    description: '',
-    icon: <BsTag />
-  },
-  {
-    id: 'Location',
-    title: 'Location',
-    description: '',
-    icon: <TfiLocationPin />
-  },
-  {
-    id: 'Money',
-    title: 'Money',
-    description: '',
-    icon: <TfiMoney />
-  },
-  {
-    id: 'People',
-    title: 'People',
-    description: '',
-    icon: <MdPersonOutline />
+    options: <EmailOptions />
   }
 ];
 
 export default function ColumnTypeDropdown() {
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
-  const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
-    setAnchorEl(event.currentTarget);
+  const [isOpen, setIsOpen] = React.useState(false);
+  const closeModal = () => setIsOpen(false);
+  const { newCustomPropertyDetails } = useAppSelector((state) => state.task);
+
+  const onClickOpenDropdown = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.stopPropagation();
+    setIsOpen(true);
   };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
+
+  const { updateCords } = useAppSelector((state) => state.task);
+  const { cords, relativeRef } = useAbsolute(updateCords, 200);
 
   return (
     <div>
-      <div onClick={handleClick} className="bg-white h-6 flex items-center justify-center cursor-pointer w-full">
-        <DropdownIcon />
-        <p className="text-black text-alsoit-gray-300-md font-semibold">Dropdown</p>
-      </div>
-      <Menu
-        id="basic-menu"
-        anchorEl={anchorEl}
-        open={open}
-        onClose={handleClose}
-        MenuListProps={{
-          'aria-labelledby': 'basic-button'
-        }}
-        PaperProps={{
-          style: {
-            overflowY: 'auto',
-            width: '222px'
-          }
-        }}
+      <div
+        // onClick={handleClick}
+        ref={relativeRef}
       >
-        <section className="relative flex items-center sticky top-2 bg-white z-10">
-          <AiOutlineSearch className="absolute w-4 h-4 right-3" />
-          <input
-            type="text"
-            placeholder="Search..."
-            className="w-11/12 m-auto p-1 border-0 focus:outline-0 rounded-md active:outline-0 outline-0"
-          />
-        </section>
-        <hr />
-        {columnTypes.map((item) => {
-          return (
-            <MenuItem key={item.id} onClick={handleClose}>
-              <span className="mx-1"> {item.icon}</span>
-              <p className="text-alsoit-gray-300-lg">{item.title}</p>
-            </MenuItem>
-          );
-        })}
-      </Menu>
+        <button
+          onClick={onClickOpenDropdown}
+          className="bg-white flex gap-4 items-center justify-between cursor-pointer w-full px-2"
+          style={{ height: '30px', borderRadius: '6px' }}
+        >
+          <p className="text-black text-alsoit-gray-300-md font-semibold">
+            {Capitalize(newCustomPropertyDetails.type)}
+          </p>
+          <ArrowDown />
+        </button>
+      </div>
+      <Transition appear show={isOpen} as="div">
+        <Dialog as="div" className="relative z-20" onClose={closeModal}>
+          <div style={{ ...cords, width: '174px' }} className="fixed">
+            <div className="flex-col  border bg-white h-fit py-1 outline-none flex items-start text-left mt-2 rounded-md shadow-lg divide-y divide-gray-100 focus:outline-none">
+              <p className="text-alsoit-text-sm font-bold flex justify-center pt-3 w-full">CUSTOM PROPERTY</p>
+              <div className="relative flex justify-center mb-2 w-full">
+                <span
+                  className="text-alsoit-text-sm font-bold text-gray-400 text-center absolute px-1 flex justify-center bg-white"
+                  style={{ lineHeight: '9.6px', top: '7px' }}
+                >
+                  SELECT PROPERTY
+                </span>
+              </div>
+              {columnTypes.map((item) => {
+                return (
+                  <div key={item.id} className="hover:bg-alsoit-gray-50 cursor-pointer h-10 w-full">
+                    <MenuItem>{item.options}</MenuItem>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </Dialog>
+      </Transition>
     </div>
   );
 }
