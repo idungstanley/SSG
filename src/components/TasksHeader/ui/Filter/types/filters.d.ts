@@ -101,7 +101,10 @@ interface Operator {
 
 export type OperatorOption = Record<OperatorKey, Operator>;
 
-type FilterValue = string | { id: string; value: string; color?: string; initials?: string };
+type FilterValue =
+  | string
+  | { id: string; value: string; color?: string; initials?: string }
+  | { id: string; name: string; color?: string };
 type FilterId = number;
 type FilterKey = TaskKey | string; // string for custom fields
 

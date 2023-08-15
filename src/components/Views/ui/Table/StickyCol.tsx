@@ -73,6 +73,7 @@ export function StickyCol({
     selectedTasksArray,
     verticalGridlinesTask,
     hilightNewTask,
+    CompactView,
     toggleAllSubtask
   } = useAppSelector((state) => state.task);
 
@@ -227,7 +228,17 @@ export function StickyCol({
             </div>
           </div>
           <div
-            style={{ paddingLeft, minHeight: '42px', height: singleLineView ? '42px' : '' }}
+            style={{
+              paddingLeft,
+              height:
+                singleLineView && !CompactView
+                  ? '42px'
+                  : CompactView && singleLineView
+                  ? '25px'
+                  : !singleLineView && CompactView && task.name.length < 30
+                  ? '25px'
+                  : ''
+            }}
             onClick={onClickTask}
             onDoubleClick={() => setEitableContent(true)}
             className={cl(
@@ -258,13 +269,20 @@ export function StickyCol({
                 onKeyDown={(e) => (e.key === 'Enter' ? handleEditTask(e, task.id) : null)}
                 ref={droppabbleRef}
               >
-                <div className="font-semibold alsoit-gray-300 text-alsoit-text-lg">
+                <div
+                  className={`font-semibold alsoit-gray-300 ${
+                    CompactView ? 'text-alsoit-text-md' : 'text-alsoit-text-lg'
+                  }`}
+                >
                   {singleLineView ? (
                     <div contentEditable={eitableContent} suppressContentEditableWarning={true} ref={inputRef}>
                       {!eitableContent ? (
                         <DetailsOnHover
                           hoverElement={
                             <div
+                              className={`font-semibold alsoit-gray-300 ${
+                                CompactView ? 'text-alsoit-text-md' : 'text-alsoit-text-lg'
+                              }`}
                               style={{
                                 maxWidth: '200px',
                                 overflow: 'hidden',

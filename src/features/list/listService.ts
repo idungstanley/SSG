@@ -5,12 +5,13 @@ import { setArchiveList } from './listSlice';
 import { closeMenu } from '../hubs/hubSlice';
 import { IWalletRes } from '../wallet/wallet.interfaces';
 import { IListDetailRes, listDetails, taskCountFields } from './list.interfaces';
-import { useAppSelector } from '../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { useParams } from 'react-router-dom';
 import { generateFilters } from '../../components/TasksHeader/lib/generateFilters';
 import { UseGetHubDetails } from '../hubs/hubService';
 import { IList } from '../hubs/hubs.interfaces';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
+import { setNewCustomPropertyDetails } from '../task/taskSlice';
 
 interface TaskCountProps {
   data: {
@@ -214,30 +215,41 @@ export const UseGetListDetails = (query: {
   );
 };
 
-const createDropdownField = (data: { id?: string; name: string; properties: string[]; type: string }) => {
-  const { id, properties, name, type } = data;
+const createDropdownField = (data: {
+  id?: string;
+  name?: string;
+  options: { name: string }[] | undefined;
+  type?: string;
+  customType: string;
+}) => {
+  const { id, options, name, type, customType } = data;
+
+  const fieldType = customType === 'Single Label' ? 'dropdown' : customType === 'Multi Label' ? 'labels' : customType;
 
   const response = requestNew({
     url: 'custom-fields',
     method: 'POST',
     data: {
-      type: 'dropdown',
+      type: fieldType,
       name,
       entity_id: id,
       entity_type: type,
-      properties
+      options
     }
   });
   return response;
 };
 
-export const useCreateDropdownField = (type: string, id?: string) => {
+export const useCreateDropdownField = (type: string | undefined, id?: string | undefined) => {
   const queryClient = useQueryClient();
+  const dispatch = useAppDispatch();
   const { filterTaskByAssigneeIds } = useAppSelector((state) => state.task);
   const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
 
   return useMutation(createDropdownField, {
     onSuccess: () => {
+      dispatch(setNewCustomPropertyDetails({ name: '', type: 'single label' }));
+
       if (type === EntityType.hub) {
         queryClient.invalidateQueries(['task', activeItemId, activeItemType, filterTaskByAssigneeIds]);
       }

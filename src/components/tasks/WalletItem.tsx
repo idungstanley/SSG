@@ -101,7 +101,11 @@ export default function WalletItem({
 
   const handleWalletColour = (id: string, e: React.MouseEvent<SVGElement>) => {
     e.stopPropagation();
-    dispatch(setPaletteDropDown({ show: true, paletteId: id, paletteType: EntityType.wallet }));
+    if (paletteId === id && show) {
+      dispatch(setPaletteDropDown({ ...paletteDropdown, show: false }));
+    } else {
+      dispatch(setPaletteDropDown({ show: true, paletteId: id, paletteType: EntityType.wallet }));
+    }
   };
 
   const handleWalletSettings = (id: string, name: string, e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
