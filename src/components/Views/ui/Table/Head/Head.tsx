@@ -7,7 +7,7 @@ import { Column } from '../../../types/table';
 import { Chevron } from '../../Chevron';
 import {
   setActiveTaskColumn,
-  setListIdForCustom,
+  setEntityForCustom,
   setSelectedTasksArray,
   setSortArr,
   setSortArray
@@ -24,6 +24,7 @@ import { MdEditNote, MdOutlineDragIndicator } from 'react-icons/md';
 import { BiHide } from 'react-icons/bi';
 import { setIsManageStatus } from '../../../../../features/workspace/workspaceSlice';
 import AlsoitMenuDropdown from '../../../../DropDowns';
+import { useParams } from 'react-router-dom';
 import { Task } from '../../../../../features/task/interface.tasks';
 
 interface HeadProps {
@@ -59,6 +60,7 @@ export function Head({
   const parsedLabel = parseLabel(label);
   const dispatch = useAppDispatch();
   const scrollToRef = useRef(null);
+  const { listId: list_id, hubId, walletId } = useParams();
   const sortAbles: string[] = ['Task', 'Updated at', 'Created at', 'Status', 'Priority', 'Assignees'];
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
@@ -173,6 +175,11 @@ export function Head({
     }
   ];
 
+  const handleAddCustomProperty = () => {
+    const type = hubId ? 'hub' : walletId ? 'wallet' : 'list';
+    dispatch(setEntityForCustom({ id: hubId ?? walletId ?? list_id, type }));
+  };
+
   return columns.length > 0 ? (
     <thead className="contents">
       <tr className="contents">
@@ -267,10 +274,7 @@ export function Head({
               )}
             </div>
           </div>
-          <FiPlusCircle
-            className="w-4 h-4 font-black AddColumnDropdownButton mr-2"
-            onClick={() => dispatch(setListIdForCustom(listId))}
-          />
+          <FiPlusCircle className="w-4 h-4 font-black AddColumnDropdownButton mr-2" onClick={handleAddCustomProperty} />
           {headerId === columns[0].id && (
             <SortModal
               handleClose={handleClose}

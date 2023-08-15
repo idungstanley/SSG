@@ -70,7 +70,7 @@ export function List({ tasks }: ListProps) {
 
     dispatch(getTaskColumns(newColumns));
     setColumns(newColumns);
-  }, [data]);
+  }, []);
 
   const [collapseTable, setCollapseTable] = useState(false);
   const [showNewTaskField, setShowNewTaskField] = useState(false);

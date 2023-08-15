@@ -52,12 +52,12 @@ export function List() {
     if (list?.custom_fields.length) {
       const customFields: FilterOption = {};
       list.custom_fields.forEach((field) => {
-        if (field.properties) {
+        if (field.options) {
           const name = field.name + SPECIAL_CHAR + 'cus_' + field.id;
 
           customFields[name] = {
             operators: [operators.eq, operators.ne],
-            values: [...field.properties]
+            values: [...field.options]
           };
         }
       });
