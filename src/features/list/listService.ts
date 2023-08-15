@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import requestNew from '../../app/requestNew';
 import { useDispatch } from 'react-redux';
 import { setArchiveList } from './listSlice';
-import { closeMenu } from '../hubs/hubSlice';
+import { closeMenu, setSpaceStatuses } from '../hubs/hubSlice';
 import { IWalletRes } from '../wallet/wallet.interfaces';
 import { IListDetailRes, listDetails, taskCountFields } from './list.interfaces';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
@@ -200,6 +200,7 @@ export const UseGetListDetails = (query: {
   activeItemId: string | null | undefined;
   activeItemType: string | null | undefined;
 }) => {
+  const dispatch = useAppDispatch();
   return useQuery(
     ['hubs', query],
     async () => {

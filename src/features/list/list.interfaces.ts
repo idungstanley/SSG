@@ -37,6 +37,11 @@ export interface ITask_statuses {
   updated_at: string;
 }
 
+export interface StatusTaskListProps {
+  listName?: string;
+  listId?: string;
+}
+
 export interface IListDetails {
   id: string;
   name: string;
