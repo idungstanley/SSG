@@ -49,8 +49,10 @@ export default function PaletteManager({
   const [isInnerFrameActive, setIsInnerFrameActive] = useState<boolean>(false);
   const [displayColorPicker, setDisplayColorPicker] = useState<boolean>(false);
   const [customColor, setCustomColor] = useState<string>('');
+  const [containerStyles, setContainerStyles] = useState({ top: '20px' });
 
   const ref = useRef<HTMLInputElement>(null);
+
   const handleEditColor = (state: boolean) => {
     setDisplayColorPicker(state);
   };
@@ -92,6 +94,12 @@ export default function PaletteManager({
       const updatedTree = changeListManager(list.id as string, hub, list);
       dispatch(getHub(updatedTree));
       dispatch(setFilteredResults(updatedTree));
+    }
+  });
+
+  useEffect(() => {
+    if (ref.current && ref.current.getBoundingClientRect().bottom > window.innerHeight) {
+      setContainerStyles({ top: `-${ref.current.getBoundingClientRect().height + 20}px` });
     }
   });
 
@@ -143,8 +151,8 @@ export default function PaletteManager({
 
   return (
     <div
-      className="absolute inset-0 top-auto w-auto p-2 mt-3 overflow-y-auto bg-white border border-gray-200 rounded shadow-2xl w-fit left-5 h-fit drop-shadow-2xl"
-      style={{ zIndex: '999' }}
+      className="absolute ease-in-out duration-300 inset-0 w-auto top-auto p-2 mt-3 overflow-y-auto bg-white border border-gray-200 rounded shadow-2xl w-fit left-5 h-fit drop-shadow-2xl"
+      style={{ zIndex: '999', ...containerStyles }}
       ref={ref}
     >
       <div className="z-50 flex flex-col">
