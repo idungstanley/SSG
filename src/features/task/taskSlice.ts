@@ -125,6 +125,7 @@ interface TaskState {
   verticalGridlinesTask: boolean;
   CompactViewWrap: boolean;
   tableView: boolean;
+  meMode: boolean;
   boardView: boolean;
   calenderView: boolean;
   mapView: boolean;
@@ -196,6 +197,7 @@ const initialState: TaskState = {
   comfortableView: true,
   comfortableViewWrap: false,
   showNewTaskField: false,
+  meMode: false,
   showNewTaskId: '',
   singleLineView: true,
   hilightNewTask: false,
@@ -349,6 +351,9 @@ export const taskSlice = createSlice({
     },
     setHilightNewTask(state, action: PayloadAction<boolean>) {
       state.hilightNewTask = action.payload;
+    },
+    setMeMode(state, action: PayloadAction<boolean>) {
+      state.meMode = action.payload;
     },
     setToggleAllSubtask(state, action: PayloadAction<boolean>) {
       state.toggleAllSubtask = action.payload;
@@ -574,6 +579,7 @@ export const {
   setHilightNewTask,
   getMapView,
   setTaskStatus,
+  setMeMode,
   setShowTaskNavigation,
   setShowNewTaskField,
   setShowNewTaskId,
