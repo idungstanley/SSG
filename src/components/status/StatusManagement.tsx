@@ -21,6 +21,7 @@ export default function StatusManagement() {
   const { statusTaskListDetails } = useAppSelector((state) => state.list);
   const [activeStatusTab, setActiveStatusTab] = useState<string>(statusTabOptions[0].label);
   const [statusTypesState, setStatusTypesState] = useState<StatusProps[]>(spaceStatuses);
+  const [validationMessage, setValidationMessage] = useState<string>('');
   const [newStatusValue, setNewStatusValue] = useState<string>();
   const [addStatus, setAddStatus] = useState<boolean>(false);
   const handleCloseManageStatus = () => {
@@ -42,7 +43,11 @@ export default function StatusManagement() {
   }, [spaceStatuses]);
 
   const handleSaveNewStatus = () => {
-    if (newStatusValue?.trim() !== '') {
+    const nameWithoutWhiteSpace = newStatusValue?.trim();
+    const isNameExist = statusTypesState.some(
+      (status) => status.name?.toLowerCase() === nameWithoutWhiteSpace?.toLowerCase()
+    );
+    if (nameWithoutWhiteSpace !== '' && !isNameExist) {
       const newStatusItem: StatusProps = {
         name: newStatusValue,
         color: 'green',
@@ -52,6 +57,10 @@ export default function StatusManagement() {
       };
       setStatusTypesState((prevStatusTypes) => [...prevStatusTypes, newStatusItem]);
       setNewStatusValue('');
+      setValidationMessage('');
+    } else {
+      setNewStatusValue('');
+      setValidationMessage(`Whoops, status with name '${newStatusValue}' already exist`);
     }
     setAddStatus(false);
   };
@@ -128,6 +137,7 @@ export default function StatusManagement() {
             </div>
           )}
         </div>
+        <p className="text-red-600 mt-auto text-start">{validationMessage}</p>
         <div className="mt-auto">
           <Button label="Save" buttonStyle="base" width="w-full" />
         </div>
