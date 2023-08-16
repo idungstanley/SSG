@@ -9,6 +9,12 @@ import { ITask_statuses } from '../../../../features/list/list.interfaces';
 import { ImCancelCircle } from 'react-icons/im';
 import { useAppSelector } from '../../../../app/hooks';
 import { EntityType } from '../../../../utils/EntityTypes/EntityType';
+import ToolTip from '../../../Tooltip/Tooltip';
+import CreateTaskCalender from '../../../../assets/icons/CreateTaskCalender';
+import CreateTaskPriority from '../../../../assets/icons/CreateTaskPriority';
+import CreateTaskTaskTag from '../../../../assets/icons/CreateTaskTaskTag';
+import CreateTaskTaskEdit from '../../../../assets/icons/CreateTaskTaskEdit';
+import CreateTaskTaskCancel from '../../../../assets/icons/CreateTaskTaskCancel';
 
 interface AddTaskFieldProps {
   onClose: VoidFunction;
@@ -56,10 +62,10 @@ export function AddTask({ onClose, paddingLeft, parentId, isListParent, columns 
   };
 
   return (
-    <tr className="contents group">
-      <td className="z-20 w-full flex items-center pl-7">
+    <tr className="contents group ">
+      <td className="relative z-20 w-full flex items-center pl-7">
         <div className="h-full bg-primary-50"></div>
-        <div style={{ paddingLeft }} className="border-t flex items-center w-full h-12 bg-white opacity-90">
+        <div style={{ paddingLeft, width: '99%' }} className="border-t flex items-center h-12 bg-white opacity-90">
           <input
             ref={nameRef}
             required
@@ -68,19 +74,34 @@ export function AddTask({ onClose, paddingLeft, parentId, isListParent, columns 
             autoFocus
             onKeyDown={(e) => (e.key === 'Enter' ? onClickSave() : null)}
             placeholder="Enter task name"
-            className="border-transparent text-sm appearance-none focus:border-transparent focus:ring-0 flex-grow"
+            className="border-transparent ml-2 text-sm appearance-none focus:border-transparent focus:ring-0 flex-grow"
           />
         </div>
 
         <div className="absolute right-4 flex items-center space-x-2">
-          <p>
-            {/* <img src={unassignedIcon} alt="" /> */}
+          <div className="flex ml-2 items-center space-x-1">
+            <CreateTaskTaskEdit />
+            <CreateTaskTaskTag />
             <Assignee option="getTeamId" />
-          </p>
-          <p>
+            <CreateTaskPriority />
+            <CreateTaskCalender />
+            <button
+              onClick={onClickSave}
+              className="px-6 py-1 text-white text-sm rounded-md bg-alsoit-success flex items-center"
+            >
+              Save
+            </button>
+            <ToolTip title="Cancel">
+              <div onClick={onClose}>
+                <CreateTaskTaskCancel />
+              </div>
+            </ToolTip>
+          </div>
+
+          {/* <p>
             <CiFloppyDisk onClick={onClickSave} className="h-8 w-8" />
           </p>
-          <ImCancelCircle onClick={onClose} className="h-6 w-6" />
+          <ImCancelCircle onClick={onClose} className="h-6 w-6" /> */}
         </div>
       </td>
 
