@@ -26,6 +26,7 @@ import Templates from '../../../../../components/Pilot/components/Templates';
 import Calendar from '../../../../../components/Pilot/components/Calendar';
 import CalendarIcon from '../../../../../assets/icons/CalendarIcon';
 import { EntityType } from '../../../../../utils/EntityTypes/EntityType';
+import EntityManagerIcon from '../../../../../assets/icons/EntityManagerIcon';
 
 const sections = [
   {
@@ -118,7 +119,7 @@ const tabs = [
   {
     id: 9,
     label: 'Entity Manager',
-    icon: <img src={hubIcon} alt="Hub Icon" className="w-4 h-4" />
+    icon: <EntityManagerIcon />
   },
   {
     id: 10,
