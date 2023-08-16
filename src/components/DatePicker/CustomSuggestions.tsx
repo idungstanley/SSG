@@ -1,12 +1,17 @@
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { setCustomSuggetionsField } from '../../features/task/taskSlice';
-import ArrowDown from '../../assets/icons/ArrowDown';
-import { setTimeInterval } from '../../features/calendar/slice/calendarSlice';
+import { setReminderInterval, setRemindertype, setTimeInterval } from '../../features/calendar/slice/calendarSlice';
+import Interval from './CalendarSettingsInterval';
 
 interface CustomSuggestionProps {
   setCustomSuggestion?: Dispatch<SetStateAction<boolean>>;
 }
+
+const reminderTypeArr = ['minutes', 'hours', 'days', 'weeks', 'months'];
+const reminderValueArr = [1, 2, 5, 10, 15, 20, 30];
+const timeIntervalArr = [15, 20, 30];
+const intervalTypeArr = ['minutes'];
 
 export default function CustomSuggestion({ setCustomSuggestion }: CustomSuggestionProps) {
   const dispatch = useAppDispatch();
@@ -18,6 +23,15 @@ export default function CustomSuggestion({ setCustomSuggestion }: CustomSuggesti
     monthErr: '',
     weekErr: ''
   });
+  const [timeIntervalValue, setIntervalValue] = useState<string | number>(15);
+  const [timeIntervalType, setTimeIntervaltype] = useState<string | number>('minutes');
+  const [reminderIntervalValue, setReminderIntervalValue] = useState<string | number>(10);
+  const [reminderTypeValue, setReminderType] = useState<string | number>('minutes');
+  const [timeToggle, setTimeToggle] = useState(false);
+  const [timeTypeToggle, setTimeTypeToggle] = useState(false);
+  const [reminderToggle, setReminderToggle] = useState(false);
+  const [reminderTypeToggle, setReminderTypeToggle] = useState(false);
+  const { reminderInterval, reminderType, timeInterval, intervalType } = useAppSelector((state) => state.calendar);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setValue({ ...value, [e.target.name]: e.target.value });
@@ -36,6 +50,17 @@ export default function CustomSuggestion({ setCustomSuggestion }: CustomSuggesti
         : setError({ ...error, weekErr: 'Week depth can not be less than 1' });
     }
   };
+
+  const handleReminder = ({ value, type }: { value?: number; type?: string }) => {
+    value && dispatch(setReminderInterval(value));
+    type && dispatch(setRemindertype(type));
+  };
+
+  useEffect(() => {
+    dispatch(setTimeInterval(timeIntervalValue));
+    dispatch(setReminderInterval(reminderIntervalValue));
+    dispatch(setRemindertype(reminderTypeValue));
+  }, [timeIntervalValue, reminderIntervalValue, reminderTypeValue]);
 
   return (
     <div className="w-full px-2 flex flex-col space-y-4 my-6">
@@ -93,57 +118,40 @@ export default function CustomSuggestion({ setCustomSuggestion }: CustomSuggesti
         {/* Time Selection Interval */}
         <div className="w-11/12 mx-auto flex space-x-2 items-center">
           <span className="font-semibold text-alsoit-text-lg text-left">Set Time Interval</span>
-          <Interval />
+          <Interval
+            data={intervalType}
+            toggle={timeTypeToggle}
+            toggleFn={setTimeTypeToggle}
+            valueArr={intervalTypeArr}
+            valueFn={setTimeIntervaltype}
+          />
+          <Interval
+            data={timeInterval}
+            toggle={timeToggle}
+            toggleFn={setTimeToggle}
+            valueArr={timeIntervalArr}
+            valueFn={setIntervalValue}
+          />
         </div>
-      </div>
-    </div>
-  );
-}
-
-function Interval() {
-  const dispatch = useAppDispatch();
-  const [timeIntervalValue, setIntervalValue] = useState<15 | 30>(15);
-  const [intervalTypeArr, setTypeArr] = useState<string>('minutes');
-  const [dropDownToggle, setDropDownToggle] = useState<{ time: boolean; type: boolean }>({
-    time: false,
-    type: false
-  });
-  const { intervalType, timeInterval } = useAppSelector((state) => state.calendar);
-
-  useEffect(() => {
-    dispatch(setTimeInterval(timeIntervalValue));
-  }, [timeIntervalValue]);
-
-  return (
-    <div className="flex space-x-2 items-center">
-      <div
-        onClick={() => setDropDownToggle((prev) => ({ ...prev, type: !prev.type }))}
-        className="flex items-center space-x-2 w-min bg-alsoit-gray-75 text-center p-1 rounded-md text-white capitalize cursor-pointer relative"
-      >
-        <span className="">{intervalType}</span>
-        <ArrowDown active={false} />
-        {dropDownToggle.type && (
-          <ul className="w-20 p-1 rounded-md flex flex-col space-y-2 absolute bg-alsoit-gray-75 shadow-2xl top-8 -left-2">
-            <li className="hover:bg-alsoit-gray-50 hover:text-alsoit-gray-300">Minutes</li>
-          </ul>
-        )}
-      </div>
-      <div
-        onClick={() => setDropDownToggle((prev) => ({ ...prev, time: !prev.time }))}
-        className="flex items-center space-x-2 w-min bg-alsoit-gray-75 text-center p-1 rounded-md text-white capitalize cursor-pointer relative"
-      >
-        <span className="">{timeInterval}</span>
-        <ArrowDown active={false} />
-        {dropDownToggle.time && (
-          <ul className="w-20 p-1 rounded-md flex flex-col space-y-2 absolute bg-alsoit-gray-75 shadow-2xl top-8 -left-2">
-            <li onClick={() => setIntervalValue(15)} className="hover:bg-alsoit-gray-50 hover:text-alsoit-gray-300">
-              15
-            </li>
-            <li onClick={() => setIntervalValue(30)} className="hover:bg-alsoit-gray-50 hover:text-alsoit-gray-300">
-              30
-            </li>
-          </ul>
-        )}
+        {/* Reminder settings */}
+        <div className="w-11/12 mx-auto flex space-x-2 items-center">
+          <span className="font-semibold text-alsoit-text-lg text-left">Remind me</span>
+          <Interval
+            data={reminderInterval}
+            toggle={reminderToggle}
+            toggleFn={setReminderToggle}
+            valueArr={reminderValueArr}
+            valueFn={setReminderIntervalValue}
+          />
+          <Interval
+            data={reminderType}
+            toggle={reminderTypeToggle}
+            toggleFn={setReminderTypeToggle}
+            valueArr={reminderTypeArr}
+            valueFn={setReminderType}
+          />
+          <span>Before</span>
+        </div>
       </div>
     </div>
   );

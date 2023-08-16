@@ -109,7 +109,7 @@ const initialState: workspaceState = {
   activeSubDetailsTabId: 1,
   activeSubTimeClockTabId: 0,
   activeStatusManagementTabId: 1,
-  activeSubHubManagerTabId: 0,
+  activeSubHubManagerTabId: 1,
   activeSubCommunicationTabId: 1,
   activeSubChecklistTabId: 2,
   fetchAllWorkspace: false,

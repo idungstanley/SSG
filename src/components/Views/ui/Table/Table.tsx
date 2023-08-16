@@ -97,7 +97,7 @@ export function Table({ heads, data, label, listName }: TableProps) {
       id: '0',
       list_id: null,
       main_list_id: '',
-      name: 'Add Task',
+      name: 'Enter New Task',
       parent_id: null,
       position: 125,
       priority: 'low',
