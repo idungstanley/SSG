@@ -100,7 +100,7 @@ export function DatePickerManualDates({ range }: DatePickerManualDatesProps) {
             )}
             <label
               htmlFor="from"
-              className="flex space-y-1 text-xs items-center w-40 border border-alsoit-purple-300 rounded-md py-1.5 px-0.5 relative"
+              className="flex space-y-1 text-xs items-center w-40 h-10 border border-alsoit-purple-300 rounded-md py-1.5 px-0.5 relative"
             >
               <div className="flex space-x-1 items-center">
                 <div className="bg-alsoit-purple-300 rounded-md p-1">
@@ -128,6 +128,7 @@ export function DatePickerManualDates({ range }: DatePickerManualDatesProps) {
                 <ReusableSelect
                   options={createDynamicTimeComponent(timeInterval, timezone)}
                   value={HistoryFilterMemory?.time?.from || ''}
+                  style="top-3"
                   onclick={(e: string) => {
                     dispatch(
                       setHistoryMemory({
@@ -154,7 +155,7 @@ export function DatePickerManualDates({ range }: DatePickerManualDatesProps) {
             )}
             <label
               htmlFor="to"
-              className="flex space-y-1 text-xs items-center w-40 border border-alsoit-purple-300 rounded-md py-1.5 px-0.5 relative"
+              className="flex space-y-1 text-xs items-center w-40 h-10 border border-alsoit-purple-300 rounded-md py-1.5 px-0.5 relative"
             >
               <div className="flex space-x-1 items-center">
                 <div className="bg-alsoit-purple-300 rounded-md p-1">
