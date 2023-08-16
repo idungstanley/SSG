@@ -60,7 +60,7 @@ module.exports = {
       ...defaultTheme.fontSize, // add default tailwind classes
       'alsoit-text-sm': '0.5rem', // 8px
       'alsoit-text-md': '0.625rem', // 10px
-      'alsoit-text-11': '11px',
+      'alsoit-text-xi': '11px',  //11px
       'alsoit-text-lg': '0.813rem' // 13px
     },
     borderWidth: {

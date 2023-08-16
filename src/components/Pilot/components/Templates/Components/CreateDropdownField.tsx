@@ -3,9 +3,16 @@ import React, { useState } from 'react';
 import { useAppSelector } from '../../../../../app/hooks';
 import { useCreateDropdownField } from '../../../../../features/list/listService';
 import SaveCols from './SaveCols';
+import AlsoitMenuDropdown from '../../../../DropDowns';
+import ColorPalette from '../../../../ColorPalette/component/ColorPalette';
+import { ListColourProps } from '../../../../tasks/ListItem';
 
 function CreateDropdownField() {
-  const [formInputs, setFormInputs] = useState<{ id: number; value: string }[]>([{ id: 1, value: '' }]);
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [itemId, setItemId] = useState<number>();
+  const [formInputs, setFormInputs] = useState<{ id: number; value: string; color: null | string }[]>([
+    { id: 1, value: '', color: null }
+  ]);
 
   const { newCustomPropertyDetails, entityForCustom } = useAppSelector((state) => state.task);
 
@@ -29,24 +36,55 @@ function CreateDropdownField() {
   };
 
   const handleAddOption = () =>
-    setFormInputs((prevInputs) => [...prevInputs, { id: (prevInputs.at(-1)?.id || 1) + 1, value: '' }]);
+    setFormInputs((prevInputs) => [...prevInputs, { id: (prevInputs.at(-1)?.id || 1) + 1, value: '', color: null }]);
 
   const handleSubmit = () => {
     if (newCustomPropertyDetails.name && entityForCustom) {
       const name = newCustomPropertyDetails.name;
+      const color = newCustomPropertyDetails.color;
+
+      const customType =
+        newCustomPropertyDetails.type === 'Single Label'
+          ? 'dropdown'
+          : newCustomPropertyDetails.type === 'Multi Label'
+          ? 'labels'
+          : newCustomPropertyDetails.type;
       const options = formInputs.map((i) => {
-        return { name: i.value.trim() };
+        return { name: i.value.trim(), color: i.color };
       });
       onCreate({
         name,
+        color,
         options,
         id: entityForCustom.id,
         type: entityForCustom.type,
-        customType: newCustomPropertyDetails.type
+        customType
       });
 
-      setFormInputs([{ id: 1, value: '' }]);
+      setFormInputs([{ id: 1, value: '', color: null }]);
     }
+  };
+
+  const handleColor = (color: string | ListColourProps) => {
+    setFormInputs((prevInputs) => {
+      const newInputs = [...prevInputs];
+
+      return newInputs.map((i) => {
+        if (i.id === itemId) {
+          i.color = color as string;
+        }
+        return i;
+      });
+    });
+  };
+
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>, id: number) => {
+    setItemId(id);
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
   };
 
   return (
@@ -56,21 +94,40 @@ function CreateDropdownField() {
           <div className="relative" key={i.id}>
             <label
               htmlFor={`input_${i.id}`}
-              className="block text-alsoit-gray-100 font-medium text-alsoit-text-11 uppercase mb-1"
+              className="block text-alsoit-gray-100 font-medium text-alsoit-text-xi uppercase mb-1"
             >{`OPTION ${index + 1}`}</label>
-            <input
-              min={1}
-              required
-              type="text"
-              placeholder="Please input property option"
-              name={`input_${index + 1}`}
-              value={i.value}
-              onChange={(event) => handleInputChange(event, i.id)}
-              className="block w-full rounded-md border-0 py-1 shadow-sm ring-1 ring-inset placeholder-gray-300 ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 text-alsoit-gray-300 text-alsoit-text-11 sm:text-sm sm:leading-6"
-            />
-            <button onClick={() => handleRemoveOption(i.id)} className="absolute top-6 right-1">
-              <TrashIcon className="w-4 h-4 text-gray-300 cursor-pointer hover:text-primary-300 transition" />
-            </button>
+            <div className="flex items-center j rounded-md bg-white">
+              {i.color && (
+                <span
+                  className="w-2"
+                  style={{ backgroundColor: i.color, height: '30px', borderRadius: '6px 0 0 6px' }}
+                ></span>
+              )}
+              <input
+                min={1}
+                required
+                type="text"
+                placeholder="Please input property option"
+                name={`input_${index + 1}`}
+                value={i.value}
+                onChange={(event) => handleInputChange(event, i.id)}
+                className="block border-0 py-1 shadow-sm ring-0 ring-inset placeholder-gray-300 focus:ring-0 focus:ring-inset focus:ring-indigo-600 text-alsoit-gray-300 text-alsoit-text-xi sm:text-sm sm:leading-6 w-2/3"
+              />
+              <div className="flex items-center gap-1">
+                <button
+                  className="text-alsoit-text-xi text-alsoit-gray-300 font-semibold hover:text-alsoit-purple-300 cursor-pointer"
+                  onClick={(e) => handleClick(e, i.id)}
+                >
+                  Change Option Color
+                </button>
+                <button onClick={() => handleRemoveOption(i.id)}>
+                  <TrashIcon className="w-4 h-4 text-gray-300 cursor-pointer hover:text-primary-300 transition" />
+                </button>
+              </div>
+            </div>
+            <AlsoitMenuDropdown handleClose={handleClose} anchorEl={anchorEl}>
+              <ColorPalette handleClick={handleColor} />
+            </AlsoitMenuDropdown>
           </div>
         ))}
       </div>

@@ -10,13 +10,14 @@ function CreateTextField() {
   const handleSubmit = () => {
     if (newCustomPropertyDetails.name && entityForCustom) {
       const name = newCustomPropertyDetails.name;
+      const customType = newCustomPropertyDetails.type === 'short text' ? 'text' : newCustomPropertyDetails.type;
 
       onCreate({
         name,
         id: entityForCustom.id,
         type: entityForCustom.type,
         options: undefined,
-        customType: 'text'
+        customType
       });
     }
   };
@@ -25,7 +26,7 @@ function CreateTextField() {
       <SaveCols
         handleSubmit={handleSubmit}
         header="Text"
-        body="This custom property allows setting dates and time against tasks."
+        body="This custom property which allows for texts like names, locations."
       />
     </div>
   );
