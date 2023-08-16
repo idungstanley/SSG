@@ -16,6 +16,7 @@ import { DragOverlay } from '@dnd-kit/core';
 import HubItemOverlay from '../../tasks/HubItemOverLay';
 import { setCurrentWalletId, setCurrentWalletName, setCurrentWalletType } from '../../../features/wallet/walletSlice';
 import { EntityType } from '../../../utils/EntityTypes/EntityType';
+import { Wallet } from '../../../pages/workspace/hubs/components/ActiveTree/activetree.interfaces';
 
 interface WalletIndexProps {
   showHubList: boolean;
@@ -88,7 +89,7 @@ function WalletIndex({ showHubList, paddingLeft, parentId }: WalletIndexProps) {
         walletData?.data.wallets.map((wallet: dataProps) => (
           <div key={wallet.id}>
             <WalletItem
-              wallet={wallet}
+              wallet={wallet as Wallet}
               walletType="wallet"
               handleLocation={handleLocation}
               handleShowSubWallet={handleShowSubWallet}

@@ -3,7 +3,6 @@ import axios from 'axios';
 import { Buffer } from 'buffer';
 import fileDownload from 'js-file-download';
 import { explorerItemType } from '../types';
-import { IHub, IWallet, IList } from '../features/hubs/hubs.interfaces';
 import { Location } from 'react-router-dom';
 import { EntityType } from '../utils/EntityTypes/EntityType';
 import { findCurrentHub } from '../managers/Hub';
@@ -100,35 +99,6 @@ export function getInitials(str: string) {
     .toUpperCase();
 }
 
-export function findParentHubId(data: { hubs: IHub[]; wallets: IWallet[]; lists: IList[] }) {
-  let newParentHubId = '';
-  if (data.hubs.length) {
-    for (const hub of data.hubs) {
-      if (hub.parent_id) {
-        newParentHubId = hub.parent_id;
-        break;
-      }
-    }
-  }
-  if (!newParentHubId && data.wallets.length) {
-    for (const wallet of data.wallets) {
-      if (wallet.hub_id) {
-        newParentHubId = wallet.hub_id;
-        break;
-      }
-    }
-  }
-  if (!newParentHubId && data.lists.length) {
-    for (const list of data.lists) {
-      if (list.hub_id) {
-        newParentHubId = list.hub_id;
-        break;
-      }
-    }
-  }
-  return newParentHubId;
-}
-
 export function findFirstActiveEntityExt(location: Location) {
   const shortType = location.pathname.split('/')[3];
   const id = location.pathname.split('/')[4];
@@ -164,4 +134,18 @@ export function findFirstActiveEntity(props: { id: string; type: string }, hubs:
     currentType = EntityType.list;
   }
   return { currentEntity, currentType, parrentWalletId };
+}
+
+export function findAllIdsBeforeActiveEntity(activeId: string, entities: [Hub | Wallet | List]): string[] {
+  const arrayWithIds: string[] = [];
+  const reversedEntities = [...entities].reverse();
+  for (let i = 0; i < reversedEntities.length; i++) {
+    if (reversedEntities[i].id === activeId) {
+      arrayWithIds.push(reversedEntities[i].id, reversedEntities[i].parent_id ?? '');
+    }
+    if (arrayWithIds.includes(reversedEntities[i].id)) {
+      arrayWithIds.push(reversedEntities[i].parent_id ?? '');
+    }
+  }
+  return [...new Set(arrayWithIds)];
 }

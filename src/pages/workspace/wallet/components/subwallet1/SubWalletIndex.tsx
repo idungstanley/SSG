@@ -12,6 +12,7 @@ import { IList } from '../../../../../features/hubs/hubs.interfaces';
 import { DragOverlay } from '@dnd-kit/core';
 import OverlayList from '../../../../../components/tasks/OverlayList';
 import HubItemOverlay from '../../../../../components/tasks/HubItemOverLay';
+import { Wallet } from '../../../hubs/components/ActiveTree/activetree.interfaces';
 
 interface SubWalletIndexProps {
   paddingLeft?: string | number;
@@ -73,7 +74,7 @@ function SubWalletIndex({ paddingLeft = '30', parentId }: SubWalletIndexProps) {
       {subwallet?.data?.wallets.map((wallet: dataProps) => (
         <div key={wallet.id}>
           <WalletItem
-            wallet={wallet}
+            wallet={wallet as Wallet}
             walletType="subwallet2"
             handleLocation={handleLocation}
             handleShowSubWallet={handleShowSubWallet}

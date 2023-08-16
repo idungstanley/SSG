@@ -8,6 +8,7 @@ import { closeMenu, setShowFavEditInput, setTriggerFavUpdate } from './hubSlice'
 import { setArchiveHub } from './hubSlice';
 import { generateFilters } from '../../components/TasksHeader/lib/generateFilters';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
+import { Hub, List, Wallet } from '../../pages/workspace/hubs/components/ActiveTree/activetree.interfaces';
 
 interface IResponseHub {
   data: {
@@ -74,63 +75,39 @@ export const createHubService = (data: {
   return response;
 };
 
-export const useGetHubs = ({
-  includeTree,
-  hub_id,
-  wallet_id,
-  list_id
-}: {
-  includeTree?: boolean;
-  hub_id?: string | null;
-  wallet_id?: string | null;
-  list_id?: string;
-}) => {
-  const { currentWorkspaceId } = useAppSelector((state) => state.auth);
-  const { currentItemType } = useAppSelector((state) => state.workspace);
-  const { hubId, walletId, listId, workSpaceId } = useParams();
-  const id = hub_id || wallet_id || list_id;
-
-  const fetch = currentWorkspaceId == workSpaceId;
-
-  let activeHub: string | null = null;
-  let activeWallet: string | null = null;
-  let activeList: string | null = null;
-
-  (() => {
-    if (fetch) {
-      if (hub_id && currentItemType === EntityType.hub) {
-        activeHub = `hubs/${hub_id}`;
-      } else if (wallet_id && currentItemType === EntityType.wallet) {
-        activeWallet = `wallets?parent_id=${wallet_id}`;
-      } else if (listId) {
-        activeList = `lists?parent_id=${list_id}`;
-      }
-    }
-  })();
-
-  const createURL = () => {
-    if (includeTree) {
-      return 'active-tree';
-    }
-    return activeHub || activeWallet || activeList || 'hubs';
-  };
-
+export const useGetAllHubs = () => {
   return useQuery(
-    ['retrieve', id ? id : 'root', includeTree ? 'tree' : undefined],
+    ['retrieve'],
     () =>
       requestNew<IHubsRes>({
-        url: createURL(),
-        method: 'GET',
-        params: includeTree
-          ? {
-              hub_id: hubId,
-              wallet_id: walletId,
-              list_id: listId
-            }
-          : undefined
+        url: 'hubs',
+        method: 'GET'
       }),
     {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      select: (res) => res.data
+    }
+  );
+};
+
+interface IActiveHubRes {
+  data: {
+    tree: [Hub | Wallet | List];
+  };
+}
+
+export const useGetActiveHubChildren = ({ hub_id }: { hub_id?: string | null }) => {
+  const id = hub_id;
+  return useQuery(
+    ['retrieve', id ? id : 'root'],
+    () =>
+      requestNew<IActiveHubRes>({
+        url: 'tree',
+        method: 'GET',
+        params: {
+          hub_id
+        }
+      }),
+    {
       select: (res) => res.data
     }
   );

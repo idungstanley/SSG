@@ -48,9 +48,6 @@ export default function HList({ hubs }: ListProps) {
   const dummyHub = {
     name: hubCreationStatus,
     id: hubCreationStatus,
-    wallets: [],
-    lists: [],
-    children: [],
     color: 'blue',
     path: null
   };
@@ -81,7 +78,7 @@ export default function HList({ hubs }: ListProps) {
     setStickyButtonIndex(index === stickyButtonIndex ? -1 : index);
     dispatch(setActiveEntityName(name));
     setShowChidren(id);
-    dispatch(setActiveEntity({ id: id, type: EntityType.hub }));
+    dispatch(setActiveEntity({ id, type: EntityType.hub }));
     dispatch(setShowPilot(true));
     dispatch(setActiveTabId(4));
     navigate(`tasks/h/${id}`, {
@@ -149,7 +146,8 @@ export default function HList({ hubs }: ListProps) {
               item={hub}
               handleClick={handleClick}
               showChildren={
-                ((hub.children.length || hub.wallets.length || hub.lists.length) && isCanBeOpen(hub.id)) as boolean
+                ((hub?.children?.length || hub?.wallets?.length || hub?.lists?.length) &&
+                  isCanBeOpen(hub.id)) as boolean
               }
               handleLocation={handleLocation}
               isSticky={stickyButtonIndex !== undefined && stickyButtonIndex !== null && stickyButtonIndex <= index}
@@ -159,10 +157,10 @@ export default function HList({ hubs }: ListProps) {
               topNumber="50px"
               zNumber="5"
             />
-            {hub.children.length && isCanBeOpen(hub.id) ? <SubHList hubs={hub.children as Hub[]} /> : null}
+            {hub?.children?.length && isCanBeOpen(hub.id) ? <SubHList hubs={hub.children as Hub[]} /> : null}
             {showSidebar && (
               <div>
-                {hub.wallets.length && isCanBeOpen(hub.id) ? (
+                {hub?.wallets?.length && isCanBeOpen(hub.id) ? (
                   <WList
                     wallets={hub.wallets}
                     leftMargin={false}
@@ -171,7 +169,7 @@ export default function HList({ hubs }: ListProps) {
                     paddingLeft="33"
                   />
                 ) : null}
-                {hub.lists.length && isCanBeOpen(hub.id) && !showExtendedBar ? (
+                {hub?.lists?.length && isCanBeOpen(hub.id) && !showExtendedBar ? (
                   <LList list={hub.lists} leftMargin={false} paddingLeft="48" />
                 ) : null}
               </div>

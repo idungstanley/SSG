@@ -27,6 +27,7 @@ import { useDraggable, useDroppable } from '@dnd-kit/core';
 import Drag from '../../assets/icons/Drag';
 import { getInitials } from '../../app/helpers';
 import ToolTip from '../Tooltip/Tooltip';
+import { Hub, List, Wallet } from '../../pages/workspace/hubs/components/ActiveTree/activetree.interfaces';
 
 interface TaskItemProps {
   item: {
@@ -35,7 +36,9 @@ interface TaskItemProps {
     path?: string | null;
     color?: string | null;
     parent_id?: string | null;
-    has_descendants?: number;
+    children?: Hub[];
+    wallets?: Wallet[];
+    lists?: List[];
   };
   showChildren: boolean;
   index?: number;
@@ -217,7 +220,7 @@ export default function HubItem({
                 type === EntityType.subHub && !showSidebar ? '5px' : type === EntityType.subHub ? '15px' : '5px'
             }}
           >
-            {!collapseNavAndSubhub && item?.has_descendants ? (
+            {!collapseNavAndSubhub && (item?.wallets?.length || item?.lists?.length) ? (
               <div>
                 {showChildren ? (
                   <span className="flex flex-col">
