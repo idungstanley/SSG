@@ -25,9 +25,10 @@ export default function ActiveTreeSearch({ closeDropdown }: ActiveTreeSearchProp
 
   const [hubs, setHubs] = useState<Hub[]>(hub.length ? hub : []);
   const [toggleTree, setToggleTree] = useState<boolean>(false);
+  const [newHubId, setNewHubId] = useState<string>('');
 
   const { data: allHubs } = useGetAllHubs();
-  const { data: allHubTree } = useGetActiveHubChildren({ hub_id: hubId ?? null });
+  const { data: allHubTree } = useGetActiveHubChildren({ hub_id: newHubId || hubId });
 
   useEffect(() => {
     if (allHubTree && allHubs && hubs.length) {
@@ -55,6 +56,10 @@ export default function ActiveTreeSearch({ closeDropdown }: ActiveTreeSearchProp
       dispatch(getHub(hubs));
     }
   }, [hubs, allHubs]);
+
+  const handleOpenNewHub = (id: string) => {
+    setNewHubId(id);
+  };
 
   const fetchAndToggle = () => {
     setToggleTree((prev) => !prev);
@@ -101,7 +106,7 @@ export default function ActiveTreeSearch({ closeDropdown }: ActiveTreeSearchProp
           type="text"
         />
       </button>
-      {toggleTree && <ActiveTreeDataFormater data={hubs} setToggleTree={setToggleTree} />}
+      {toggleTree && <ActiveTreeDataFormater data={hubs} openNewHub={handleOpenNewHub} setToggleTree={setToggleTree} />}
     </div>
   );
 }

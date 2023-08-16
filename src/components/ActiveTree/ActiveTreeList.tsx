@@ -11,9 +11,10 @@ import SearchLList from '../../pages/workspace/hubs/components/ActiveTree/Items/
 
 interface hubsProps {
   hubs: Hub[];
+  openNewHub: (id: string) => void;
   setToggleTree?: React.Dispatch<React.SetStateAction<boolean>>;
 }
-export default function ActiveTreeList({ hubs, setToggleTree }: hubsProps) {
+export default function ActiveTreeList({ hubs, openNewHub, setToggleTree }: hubsProps) {
   const dispatch = useAppDispatch();
 
   const { lastActiveItem } = useAppSelector((state) => state.workspace);
@@ -53,6 +54,7 @@ export default function ActiveTreeList({ hubs, setToggleTree }: hubsProps) {
         currentItemType: EntityType.hub
       })
     );
+    openNewHub(id);
   };
 
   const isCanBeOpen = (id: string) => {
@@ -72,13 +74,13 @@ export default function ActiveTreeList({ hubs, setToggleTree }: hubsProps) {
               handleClick={handleClick}
               handleTabClick={handleTabClick}
               showChildren={
-                ((hub.children.length || hub.wallets.length || hub.lists.length) &&
+                ((hub?.children?.length || hub?.wallets?.length || hub?.lists?.length) &&
                   showChildren &&
                   isCanBeOpen(hub.id)) as boolean
               }
               type={EntityType.hub}
             />
-            {hub.children.length && isCanBeOpen(hub.id) ? (
+            {hub?.children?.length && isCanBeOpen(hub.id) ? (
               <SearchSubHList hubs={hub.children as Hub[]} handleTabClick={handleTabClick} />
             ) : null}
             <div
@@ -88,7 +90,7 @@ export default function ActiveTreeList({ hubs, setToggleTree }: hubsProps) {
                   : {}
               }
             >
-              {hub.wallets.length && showChildren && isCanBeOpen(hub.id) ? (
+              {hub?.wallets?.length && showChildren && isCanBeOpen(hub.id) ? (
                 <SearchWList
                   wallets={hub.wallets}
                   leftMargin={false}
@@ -99,7 +101,7 @@ export default function ActiveTreeList({ hubs, setToggleTree }: hubsProps) {
               ) : null}
             </div>
             <div style={{ opacity: '0.5', pointerEvents: 'none' }}>
-              {hub.lists.length && showChildren && isCanBeOpen(hub.id) ? (
+              {hub?.lists?.length && showChildren && isCanBeOpen(hub.id) ? (
                 <SearchLList list={hub.lists} leftMargin={false} paddingLeft="48" />
               ) : null}
             </div>

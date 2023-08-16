@@ -33,6 +33,7 @@ export default function HList({ hubs }: ListProps) {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { hubId, subhubId, walletId, listId } = useParams();
+
   const { currentItemId, showExtendedBar, createEntityType, openedParentsIds, openedEntitiesIds } = useAppSelector(
     (state) => state.workspace
   );
@@ -126,7 +127,7 @@ export default function HList({ hubs }: ListProps) {
     if (openedNewHubId) {
       return openedNewHubId === id;
     }
-    return !!showChildren;
+    if (openedEntitiesIds.includes(id)) return true;
   };
 
   const { draggableItemId } = useAppSelector((state) => state.list);
