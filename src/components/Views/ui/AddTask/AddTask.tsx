@@ -65,7 +65,7 @@ export function AddTask({ onClose, paddingLeft, parentId, isListParent, columns 
     <tr className="contents group ">
       <td className="relative z-20 w-full flex items-center pl-7">
         <div className="h-full bg-primary-50"></div>
-        <div style={{ paddingLeft, width: '99%' }} className="border-t flex items-center h-12 bg-white opacity-90">
+        <div style={{ paddingLeft, width: '99%' }} className="border-t flex items-center h-12 mx-2 bg-white opacity-90">
           <input
             ref={nameRef}
             required
@@ -74,7 +74,7 @@ export function AddTask({ onClose, paddingLeft, parentId, isListParent, columns 
             autoFocus
             onKeyDown={(e) => (e.key === 'Enter' ? onClickSave() : null)}
             placeholder="Enter task name"
-            className="border-transparent ml-2 text-sm appearance-none focus:border-transparent focus:ring-0 flex-grow"
+            className="border-transparent l-2 text-sm appearance-none focus:border-transparent focus:ring-0 flex-grow"
           />
         </div>
 
