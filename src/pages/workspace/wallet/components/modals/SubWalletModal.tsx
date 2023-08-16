@@ -6,10 +6,12 @@ import { useAppSelector } from '../../../../../app/hooks';
 import { setCreateSubWalletSlideOverVisibility } from '../../../../../features/general/slideOver/slideOverSlice';
 import { setSubDropdownMenu, setshowMenuDropdown } from '../../../../../features/hubs/hubSlice';
 import { useDispatch } from 'react-redux';
+import { EntityType } from '../../../../../utils/EntityTypes/EntityType';
 
 function SubWalletModal() {
-  const queryClient = useQueryClient();
   const dispatch = useDispatch();
+  const queryClient = useQueryClient();
+
   const { showMenuDropdownType, showMenuDropdown, SubMenuId, SubMenuType } = useAppSelector((state) => state.hub);
   const { showCreateSubWalletSlideOver } = useAppSelector((state) => state.slideOver);
 
@@ -42,14 +44,14 @@ function SubWalletModal() {
       name,
       hubID:
         (SubMenuType == 'hubs' ? SubMenuId : null) ||
-        (SubMenuType == 'subhub' ? SubMenuId : null) ||
-        (showMenuDropdownType == 'hubs' ? showMenuDropdown : null) ||
-        (showMenuDropdownType == 'subhub' ? showMenuDropdown : null),
+        (SubMenuType == EntityType.subHub ? SubMenuId : null) ||
+        (showMenuDropdownType === 'hubs' ? showMenuDropdown : null) ||
+        (showMenuDropdownType === EntityType.subHub ? showMenuDropdown : null),
       walletId:
-        (showMenuDropdownType == 'wallet' ? showMenuDropdown : null) ||
-        (showMenuDropdownType == 'subwallet2' ? showMenuDropdown : null) ||
-        (SubMenuType == 'wallet' ? SubMenuId : null) ||
-        (SubMenuType == 'subwallet2' ? SubMenuId : null)
+        (showMenuDropdownType === EntityType.wallet ? showMenuDropdown : null) ||
+        (showMenuDropdownType === 'subwallet2' ? showMenuDropdown : null) ||
+        (SubMenuType === EntityType.wallet ? SubMenuId : null) ||
+        (SubMenuType === 'subwallet2' ? SubMenuId : null)
     });
   };
 

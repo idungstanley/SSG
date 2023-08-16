@@ -4,10 +4,11 @@ import { useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import requestNew from '../../app/requestNew';
 import { IResponseGetHubs, IHubReq, IFavoritesRes, IHubDetailRes, IHubsRes, IHub } from './hubs.interfaces';
-import { closeMenu, setShowFavEditInput, setTriggerFavUpdate } from './hubSlice';
+import { closeMenu, setShowFavEditInput, setSpaceStatuses, setTriggerFavUpdate } from './hubSlice';
 import { setArchiveHub } from './hubSlice';
 import { generateFilters } from '../../components/TasksHeader/lib/generateFilters';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
+import { StatusProps } from '../../pages/workspace/hubs/components/ActiveTree/activetree.interfaces';
 
 interface IResponseHub {
   data: {
@@ -32,7 +33,7 @@ export const useMoveHubsService = () => {
   const { hubId, walletId, listId } = useParams();
 
   const id = hubId ?? walletId ?? listId;
-  const type = hubId ? 'hub' : walletId ? 'wallet' : 'list';
+  const type = hubId ? EntityType.hub : walletId ? EntityType.wallet : EntityType.list;
 
   const { filterTaskByAssigneeIds: assigneeUserId } = useAppSelector((state) => state.task);
   const { sortAbleArr } = useAppSelector((state) => state.task);
@@ -136,30 +137,6 @@ export const useGetHubs = ({
   );
 };
 
-// get all hubs
-export const useGetHubList = ({ query }: { query: number | null }) => {
-  const queryClient = useQueryClient();
-  return useQuery<IResponseGetHubs>(
-    ['hubs', { isArchived: query ? 1 : 0 }],
-    () =>
-      requestNew({
-        url: 'hubs',
-        method: 'GET',
-        params: {
-          is_archived: query ? 1 : 0
-        }
-      }),
-    {
-      onSuccess: (data) => {
-        data.data.hubs.map((hub) => {
-          queryClient.setQueryData(['hub', hub.id], hub);
-          return { ...hub, isOpen: false };
-        });
-      }
-    }
-  );
-};
-
 export const useGetHubChildren = ({ query, enabled }: { query: string | null | undefined; enabled?: boolean }) => {
   const hubId = query;
 
@@ -223,6 +200,48 @@ export const UseDeleteHubService = (data: { id: string | null | undefined }) => 
   return response;
 };
 
+//status service
+export const statusService = (statusTypes: StatusProps[]) => {
+  const { statusTaskListDetails } = useAppSelector((state) => state.list);
+  const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
+
+  return useQuery(['status'], async () => {
+    const data = await requestNew({
+      url: 'task-statuses',
+      method: 'POST',
+      data: {
+        model_id: statusTaskListDetails.listId,
+        model_type: 'list',
+        from_model: activeItemType,
+        from_model_id: activeItemId,
+        statuses: statusTypes
+      }
+    });
+    return data;
+  });
+};
+
+export const statusTypesService = (data: {
+  model_id?: string;
+  model?: string;
+  from_model?: string | null;
+  from_model_id?: string | null;
+  statuses: StatusProps[];
+}) => {
+  const response = requestNew<unknown>({
+    url: 'task-statuses',
+    method: 'POST',
+    data: {
+      model_id: data.model_id,
+      model: data.model,
+      from_model: data.from_model,
+      from_model_id: data.from_model_id,
+      statuses: data.statuses
+    }
+  });
+  return response;
+};
+
 //archive hub
 export const ArchiveHubService = (hub: { query: string | null | undefined; archiveHub: boolean }) => {
   const hubid = hub.query;
@@ -254,6 +273,7 @@ export const UseGetHubDetails = (query: {
   activeItemId: string | null | undefined;
   activeItemType?: string | null;
 }) => {
+  const dispatch = useAppDispatch();
   const { workSpaceId } = useParams();
   const { currentWorkspaceId } = useAppSelector((state) => state.auth);
 
@@ -268,7 +288,10 @@ export const UseGetHubDetails = (query: {
       return data;
     },
     {
-      enabled: (query.activeItemType === 'hub' || query.activeItemType === 'subhub') && !!query.activeItemId && fetch
+      enabled: (query.activeItemType === 'hub' || query.activeItemType === 'subhub') && !!query.activeItemId && fetch,
+      onSuccess: (data) => {
+        dispatch(setSpaceStatuses(data.data.hub.task_statuses));
+      }
     }
   );
 };
@@ -288,8 +311,8 @@ const addToFavorite = (data: {
 }) => {
   let newType: string | null | undefined = null;
   const { query, type } = data;
-  if (type === 'hubs' || type === 'subhub') {
-    newType = 'hub';
+  if (type === 'hubs' || type === EntityType.subHub) {
+    newType = EntityType.hub;
   } else {
     newType = type;
   }

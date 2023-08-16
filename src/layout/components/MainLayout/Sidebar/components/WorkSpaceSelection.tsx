@@ -19,6 +19,7 @@ import { BsPinAngle, BsPinFill } from 'react-icons/bs';
 import { Menu } from '@headlessui/react';
 import { cl } from '../../../../../utils';
 import ArrowDownFilled from '../../../../../assets/icons/ArrowDownFilled';
+import { getInitials } from '../../../../../app/helpers';
 
 const MIN_SIDEBAR_WIDTH = dimensions.navigationBar.min;
 interface workspaceSettingsListType {
@@ -162,14 +163,7 @@ function WorkSpaceSelection() {
       <div className="flex items-center justify-between w-full" onClick={() => dispatch(setFetchAllWorkspace(true))}>
         <div className="flex items-center justify-between space-x-1">
           <AvatarWithInitials
-            initials={
-              workspaceName
-                ?.split(' ')
-                .slice(0, 2)
-                .map((word) => word[0])
-                .join('')
-                .toUpperCase() as string
-            }
+            initials={getInitials(workspaceName ?? '')}
             height="h-6"
             width="w-6"
             backgroundColour={workspaceColor}
@@ -231,7 +225,7 @@ function WorkSpaceSelection() {
                   />
                 </div>
               )}
-              <div className="h-40 overflow-y-auto">
+              <div className="overflow-y-auto max-h-10">
                 {filteredResults?.map((i: WorkspaceProps) => (
                   <Menu.Item key={i.id}>
                     {({ active }) => (

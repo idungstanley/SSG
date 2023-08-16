@@ -21,11 +21,14 @@ import { useParams } from 'react-router-dom';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
 import PlusIcon from '../../assets/icons/PlusIcon';
 import ThreeDotIcon from '../../assets/icons/ThreeDotIcon';
-import { Tooltip } from '@mui/material';
 import MenuDropdown from '../Dropdown/MenuDropdown';
 import SubDropdown from '../Dropdown/SubDropdown';
 import { useDraggable, useDroppable } from '@dnd-kit/core';
 import Drag from '../../assets/icons/Drag';
+import { getInitials } from '../../app/helpers';
+import ToolTip from '../Tooltip/Tooltip';
+import ActiveBarIdentification from './Component/ActiveBarIdentification';
+import ActiveBackground from './Component/ActiveBackground';
 
 interface TaskItemProps {
   item: {
@@ -61,7 +64,7 @@ export default function HubItem({
   const dispatch = useAppDispatch();
   const { activeItemId } = useAppSelector((state) => state.workspace);
   const { paletteDropdown } = useAppSelector((state) => state.account);
-  const { showSidebar, lightBaseColor, baseColor } = useAppSelector((state) => state.account);
+  const { showSidebar } = useAppSelector((state) => state.account);
   const { showMenuDropdown, SubMenuId } = useAppSelector((state) => state.hub);
   const [uploadId, setUploadId] = useState<string | null | undefined>('');
   const [paletteColor, setPaletteColor] = useState<string | undefined | ListColourProps>(
@@ -76,7 +79,11 @@ export default function HubItem({
   const handleHubColour = (id: string, e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     if (showSidebar) {
       e.stopPropagation();
-      dispatch(setPaletteDropDown({ show: true, paletteId: id, paletteType: EntityType.hub }));
+      if (paletteId === id && show) {
+        dispatch(setPaletteDropDown({ ...paletteDropdown, show: false }));
+      } else {
+        dispatch(setPaletteDropDown({ show: true, paletteId: id, paletteType: EntityType.hub }));
+      }
     }
   };
 
@@ -186,19 +193,8 @@ export default function HubItem({
           className={`relative flex items-center justify-between ${showSidebar ? 'pl-1' : 'pl-2.5'}`}
           style={{ height: '30px' }}
         >
-          {item.id === hubId && (
-            <span
-              className="absolute inset-0 z-0 before:content before:absolute before:inset-0"
-              style={{ backgroundColor: lightBaseColor }}
-            />
-          )}
-          {item.id === hubId && (
-            <span
-              className="absolute top-0 bottom-0 left-0 w-0.5 rounded-r-lg"
-              style={{ backgroundColor: baseColor }}
-            />
-          )}
-
+          <ActiveBackground showBgColor={item.id === hubId} />
+          <ActiveBarIdentification showBar={item.id === hubId} />
           <div
             className="absolute rounded-r-lg opacity-0 cursor-move left-0.5 group-hover:opacity-100"
             ref={draggableRef}
@@ -236,12 +232,7 @@ export default function HubItem({
                   <img src={item.path} alt="hubs image" className="w-full h-full rounded" />
                 ) : (
                   <AvatarWithInitials
-                    initials={item.name
-                      .split(' ')
-                      .slice(0, 2)
-                      .map((word) => word[0])
-                      .join('')
-                      .toUpperCase()}
+                    initials={getInitials(item.name)}
                     height="h-5"
                     width="w-5"
                     backgroundColour={item.color !== null ? item.color : (paletteColor as string)}
@@ -250,7 +241,7 @@ export default function HubItem({
                 )}
               </div>
               <span className="ml-5 overflow-hidden">
-                <Tooltip title={item.name} arrow placement="top">
+                <ToolTip title={item.name}>
                   <p
                     className="capitalize truncate cursor-pointer"
                     style={{
@@ -263,7 +254,7 @@ export default function HubItem({
                   >
                     {item.name}
                   </p>
-                </Tooltip>
+                </ToolTip>
               </span>
             </div>
           </div>

@@ -20,20 +20,24 @@ import { OverlayRow } from './OverlayRow';
 import { Row } from './Row';
 import { UseGetListDetails } from '../../../../features/list/listService';
 import { ITask_statuses } from '../../../../features/list/list.interfaces';
+import { EntityType } from '../../../../utils/EntityTypes/EntityType';
 
 interface TableProps {
   heads: listColumnProps[];
   data: Task[];
   label: string;
+  listName?: string;
 }
 
-export function Table({ heads, data, label }: TableProps) {
+export function Table({ heads, data, label, listName }: TableProps) {
   const dispatch = useAppDispatch();
+
   const [tableHeight, setTableHeight] = useState<string | number>('auto');
   const [activeIndex, setActiveIndex] = useState<null | number>(null);
-  const tableElement = useRef<HTMLTableElement>(null);
   const [showNewTaskField, setShowNewTaskField] = useState(false);
   const [collapseTasks, setCollapseTasks] = useState(false);
+
+  const tableElement = useRef<HTMLTableElement>(null);
   const taskLength = data.length;
 
   const columns = createHeaders(heads).filter((i) => !i.hidden);
@@ -44,7 +48,7 @@ export function Table({ heads, data, label }: TableProps) {
   const [listId, setListId] = useState<string>('');
   const { statusId } = useAppSelector((state) => state.task);
 
-  const { data: list } = UseGetListDetails({ activeItemId: listId, activeItemType: 'list' });
+  const { data: list } = UseGetListDetails({ activeItemId: listId, activeItemType: EntityType.list });
 
   const mouseMove = useCallback(
     (e: MouseEvent) => {
@@ -93,7 +97,7 @@ export function Table({ heads, data, label }: TableProps) {
       id: '0',
       list_id: null,
       main_list_id: '',
-      name: 'Add Task',
+      name: 'Enter New Task',
       parent_id: null,
       position: 125,
       priority: 'low',
@@ -202,9 +206,11 @@ export function Table({ heads, data, label }: TableProps) {
             label={label}
             headerStatusColor={data[0].status.color as string}
             columns={columns}
+            listName={listName}
             mouseDown={onMouseDown}
             tableHeight={tableHeight}
             listId={data[0].list_id}
+            groupedTask={data}
           />
 
           {/* rows */}
@@ -234,7 +240,7 @@ export function Table({ heads, data, label }: TableProps) {
           {!showNewTaskField ? (
             <tbody className="h-5">
               <tr onClick={() => handleToggleNewTask()} className="absolute left-0 p-1.5 pl-16 text-left w-fit text-xs">
-                <td className="font-semibold alsoit-gray-300 cursor-pointer">+ New Task</td>
+                <td className="font-semibold cursor-pointer alsoit-gray-300">+ New Task</td>
               </tr>
             </tbody>
           ) : null}

@@ -4,7 +4,7 @@ import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import Page from '../../components/Page';
 import { UseGetHubDetails } from '../../features/hubs/hubService';
 import { UseGetFullTaskList } from '../../features/task/taskService';
-import { setActiveEntityName, setActiveItem } from '../../features/workspace/workspaceSlice';
+import { setActiveEntityName } from '../../features/workspace/workspaceSlice';
 import ActiveHub from '../../layout/components/MainLayout/extendedNavigation/ActiveParents/ActiveHub';
 import AdditionalHeader from '../../layout/components/MainLayout/Header/AdditionHeader';
 import PilotSection, { pilotConfig } from '../workspace/hubs/components/PilotSection';
@@ -13,28 +13,31 @@ import FilterByAssigneesSliderOver from '../workspace/lists/components/renderlis
 import { List } from '../../components/Views/ui/List/List';
 import { generateLists } from '../../utils';
 import { Header } from '../../components/TasksHeader';
-import { ScrollableContainer } from '../../components/ScrollableContainer/ScrollableContainer';
+import { VerticalScroll } from '../../components/ScrollableContainer/VerticalScroll';
 import { GroupHorizontalScroll } from '../../components/ScrollableContainer/GroupHorizontalScroll';
+import { EntityType } from '../../utils/EntityTypes/EntityType';
 
 export default function HubPage() {
   const dispatch = useAppDispatch();
   const { hubId, taskId } = useParams();
+
   const { filterTaskByAssigneeIds } = useAppSelector((state) => state.task);
+
   const containerRef = useRef<HTMLDivElement>(null);
-  const { data: hub } = UseGetHubDetails({ activeItemId: hubId, activeItemType: 'hub' });
+
+  const { data: hub } = UseGetHubDetails({ activeItemId: hubId, activeItemType: EntityType.hub });
 
   // set entity name
   useEffect(() => {
     if (hub && !taskId) {
       const hubName = hub.data.hub.name;
-      dispatch(setActiveItem({ activeItemId: hubId, activeItemType: 'hub', activeItemName: hubName }));
       dispatch(setActiveEntityName(hubName));
     }
   }, [hub]);
 
   const { data, hasNextPage, fetchNextPage } = UseGetFullTaskList({
     itemId: hubId,
-    itemType: 'hub',
+    itemType: EntityType.hub,
     assigneeUserId: filterTaskByAssigneeIds
   });
 
@@ -78,7 +81,7 @@ export default function HubPage() {
         additional={<FilterByAssigneesSliderOver />}
       >
         <Header />
-        <ScrollableContainer scrollDirection="y">
+        <VerticalScroll>
           <section
             ref={containerRef}
             style={{ minHeight: '0', maxHeight: '83vh' }}
@@ -91,7 +94,7 @@ export default function HubPage() {
               </div>
             ))}
           </section>
-        </ScrollableContainer>
+        </VerticalScroll>
         {Object.keys(lists).length > 1 && <GroupHorizontalScroll />}
       </Page>
     </>

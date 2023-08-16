@@ -4,6 +4,7 @@ import { useAppSelector } from '../../../../../app/hooks';
 import { useDispatch } from 'react-redux';
 import { setHubParentId } from '../../../../../features/hubs/hubSlice';
 import { AvatarWithInitials } from '../../../../../components';
+import { getInitials } from '../../../../../app/helpers';
 
 export default function ActiveSubHub() {
   const dispatch = useDispatch();
@@ -34,12 +35,7 @@ export default function ActiveSubHub() {
                   <div className="flex items-center flex-1 min-w-0">
                     <div className="flex items-center justify-center">
                       <AvatarWithInitials
-                        initials={subhub.name
-                          .split(' ')
-                          .slice(0, 2)
-                          .map((word) => word[0])
-                          .join('')
-                          .toUpperCase()}
+                        initials={getInitials(subhub.name)}
                         height="h-4"
                         width="w-4"
                         backgroundColour={subhub.color !== null ? subhub.color : 'blue'}

@@ -2,11 +2,12 @@ import { useDispatch } from 'react-redux';
 import requestNew from '../../app/requestNew';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { setArchiveWallet } from './walletSlice';
-import { closeMenu } from '../hubs/hubSlice';
+import { closeMenu, setSpaceStatuses } from '../hubs/hubSlice';
 import { IWallet, IWalletDetailRes, IWalletRes } from './wallet.interfaces';
 import { useParams } from 'react-router-dom';
-import { useAppSelector } from '../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { generateFilters } from '../../components/TasksHeader/lib/generateFilters';
+import { EntityType } from '../../utils/EntityTypes/EntityType';
 
 interface IResponseWallet {
   data: {
@@ -17,7 +18,7 @@ interface IResponseWallet {
 const moveWallet = (data: { parent_id?: string; walletId?: string; hubId?: string; overType: string }) => {
   const { walletId, parent_id, overType, hubId } = data;
 
-  const requestData = overType === 'wallet' ? { parent_id } : { hub_id: hubId };
+  const requestData = overType === EntityType.wallet ? { parent_id } : { hub_id: hubId };
 
   const response = requestNew({
     url: 'wallets/' + walletId + '/move',
@@ -33,7 +34,7 @@ export const useMoveWalletsService = () => {
   const { hubId, walletId, listId } = useParams();
 
   const id = hubId ?? walletId ?? listId;
-  const type = hubId ? 'hub' : walletId ? 'wallet' : 'list';
+  const type = hubId ? EntityType.hub : walletId ? EntityType.wallet : EntityType.list;
 
   const { filterTaskByAssigneeIds: assigneeUserId } = useAppSelector((state) => state.task);
   const { sortAbleArr } = useAppSelector((state) => state.task);
@@ -158,6 +159,7 @@ export const UseArchiveWalletService = (wallet: { query: string | null | undefin
 
 //get wallet details
 export const UseGetWalletDetails = (query: { activeItemId?: string | null; activeItemType?: string | null }) => {
+  const dispatch = useAppDispatch();
   return useQuery(
     ['wallet-details', query],
     async () => {
@@ -169,9 +171,7 @@ export const UseGetWalletDetails = (query: { activeItemId?: string | null; activ
     },
     {
       enabled: query.activeItemType === 'wallet' && !!query.activeItemId
-      // onSuccess(data) {
-      //   console.log(data.data.wallet);
-      // }
+      // onSuccess: (data) => dispatch(setSpaceStatuses(data.data.wallet.task_statuses))
     }
   );
 };

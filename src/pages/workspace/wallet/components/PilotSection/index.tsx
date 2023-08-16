@@ -25,6 +25,7 @@ import Templates from '../../../../../components/Pilot/components/Templates';
 import TemplatesIcon from '../../../../../assets/icons/Templates';
 import Calendar from '../../../../../components/Pilot/components/Calendar';
 import CalendarIcon from '../../../../../assets/icons/CalendarIcon';
+import { EntityType } from '../../../../../utils/EntityTypes/EntityType';
 
 const sections = [
   {
@@ -135,14 +136,14 @@ export const pilotConfig = { sections, tabs };
 
 export default function PilotSection() {
   const dispatch = useAppDispatch();
-
   const { walletId } = useParams();
-  const { currentWalletName } = useAppSelector((state) => state.workspace);
+
+  const { currentWalletName } = useAppSelector((state) => state.wallet);
 
   // set data for pilot
   useEffect(() => {
     const selectedItemId = walletId;
-    const selectedItemType = 'wallet';
+    const selectedItemType = EntityType.wallet;
 
     if (selectedItemId) {
       dispatch(

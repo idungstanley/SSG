@@ -104,7 +104,7 @@ function Hubs() {
   const taskCreate = [
     {
       label: 'Create New',
-      icon: <PlusIcon />,
+      icon: <PlusIcon active />,
       onClick: () => handleOpenDropdown()
     }
   ];

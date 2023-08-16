@@ -5,6 +5,7 @@ import { Fragment, useRef, useState } from 'react';
 
 // import { useParams } from 'react-router-dom';
 import { useCreateDropdownField } from '../../../../features/list/listService';
+import { EntityType } from '../../../../utils/EntityTypes/EntityType';
 
 interface CreateDropdownFieldModalProps {
   show: boolean;
@@ -13,12 +14,13 @@ interface CreateDropdownFieldModalProps {
 }
 
 export default function CreateDropdownFieldModal({ show, setShow, listId }: CreateDropdownFieldModalProps) {
-  const fieldNameRef = useRef<HTMLInputElement>(null);
   const [formInputs, setFormInputs] = useState<{ id: number; value: string }[]>([{ id: 1, value: '' }]);
+
+  const fieldNameRef = useRef<HTMLInputElement>(null);
   // const { listId, hubId, walletId } = useParams();
 
   const entity = {
-    type: 'list', // listId ? 'list' : hubId ? 'hub' : 'wallet',
+    type: EntityType.list, // listId ? 'list' : hubId ? 'hub' : 'wallet',
     id: listId //listId ?? walletId ?? hubId
   };
 
@@ -32,13 +34,16 @@ export default function CreateDropdownFieldModal({ show, setShow, listId }: Crea
 
     if (fieldNameRef.current) {
       const name = fieldNameRef.current.value;
-      const properties = formInputs.map((i) => i.value.trim());
+      const options = formInputs.map((i) => {
+        return { name: i.value.trim(), color: null };
+      });
 
       onCreate({
         name,
-        properties,
+        options,
         id: entity.id,
-        type: entity.type
+        type: entity.type,
+        customType: 'anything'
       });
 
       setFormInputs([{ id: 1, value: '' }]);

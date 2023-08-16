@@ -17,6 +17,7 @@ import { setFilteredResults } from '../../features/search/searchSlice';
 import ColorPalette from './component/ColorPalette';
 import { changeWalletManager } from '../../managers/Wallet';
 import { changeHubManager } from '../../managers/Hub';
+import { EntityType } from '../../utils/EntityTypes/EntityType';
 
 interface PaletteProps {
   title?: string;
@@ -48,8 +49,10 @@ export default function PaletteManager({
   const [isInnerFrameActive, setIsInnerFrameActive] = useState<boolean>(false);
   const [displayColorPicker, setDisplayColorPicker] = useState<boolean>(false);
   const [customColor, setCustomColor] = useState<string>('');
+  const [containerStyles, setContainerStyles] = useState({ top: '20px' });
 
   const ref = useRef<HTMLInputElement>(null);
+
   const handleEditColor = (state: boolean) => {
     setDisplayColorPicker(state);
   };
@@ -95,6 +98,12 @@ export default function PaletteManager({
   });
 
   useEffect(() => {
+    if (ref.current && ref.current.getBoundingClientRect().bottom > window.innerHeight) {
+      setContainerStyles({ top: `-${ref.current.getBoundingClientRect().height + 20}px` });
+    }
+  });
+
+  useEffect(() => {
     const checkClickedOutSide = (e: MouseEvent) => {
       if (ref.current && e.target && !ref.current.contains(e.target as Node)) {
         if (paletteDropdown !== null) {
@@ -110,17 +119,17 @@ export default function PaletteManager({
   }, []);
 
   const handleClick = (color?: string | ListColourProps) => {
-    if (paletteType === 'hub') {
+    if (paletteType === EntityType.hub) {
       editHubColorMutation.mutateAsync({
         hubId: paletteId,
         color
       });
-    } else if (paletteType === 'wallet') {
+    } else if (paletteType === EntityType.wallet) {
       editWalletColorMutation.mutateAsync({
         walletId: paletteId,
         color
       });
-    } else if (paletteType === 'list') {
+    } else if (paletteType === EntityType.list) {
       if (isOutterFrameActive) {
         editListColorMutation.mutateAsync({
           listId: paletteId,
@@ -142,14 +151,14 @@ export default function PaletteManager({
 
   return (
     <div
-      className="absolute inset-0 top-auto w-auto p-2 mt-3 overflow-y-auto bg-white border border-gray-200 rounded shadow-2xl w-fit left-5 h-fit drop-shadow-2xl"
-      style={{ zIndex: '999' }}
+      className="absolute ease-in-out duration-300 inset-0 w-auto p-2 mt-3 overflow-y-auto bg-white border border-gray-200 rounded shadow-2xl w-fit left-5 h-fit drop-shadow-2xl"
+      style={{ zIndex: '999', ...containerStyles }}
       ref={ref}
     >
       <div className="z-50 flex flex-col">
-        {paletteType !== 'list' && <p className="justify-center">{title}</p>}
+        {paletteType !== EntityType.list && <p className="justify-center">{title}</p>}
         {topContent}
-        {paletteType === 'list' && (
+        {paletteType === EntityType.list && (
           <div className="flex justify-between mt-1">
             <span>{title}</span>
             <ListIconComponent

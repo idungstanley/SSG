@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import requestNew from '../../app/requestNew';
-import { IAccountReq, IUserParams, IUserSettings, IUserSettingsRes } from './account.interfaces';
+import { IAccountReq, IUserCalendarParams, IUserParams, IUserSettings, IUserSettingsRes } from './account.interfaces';
 import { SetUserSettingsData } from './accountSlice';
 import { useAppDispatch } from '../../app/hooks';
 
@@ -69,7 +69,12 @@ export const setUserSettingsKeys = (value: IUserParams, resolution?: string | nu
   return request;
 };
 
-export const setUserSettingsData = (enabled: boolean, key: string, value: IUserParams, resolution?: string | null) => {
+export const setUserSettingsData = (
+  enabled: boolean,
+  key: string,
+  value: IUserParams | IUserCalendarParams,
+  resolution?: string | null
+) => {
   return useQuery<IUserSettingsRes, unknown, IUserSettings>(
     ['user-settings', { value }],
     () =>

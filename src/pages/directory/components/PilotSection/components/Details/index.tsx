@@ -27,7 +27,7 @@ export default function Details() {
 
   return config ? (
     <>
-      <SectionArea label="Details" icon={<DetailsIcon className="w-4 h-4" />} />
+      <SectionArea label="Details" icon={<DetailsIcon active={false} dimensions={{ width: 20, height: 20 }} />} />
       <DetailsSection config={config} />
     </>
   ) : null;

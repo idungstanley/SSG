@@ -10,11 +10,6 @@ import ExtendedBar from './components/Sidebar';
 import { BiCabinet } from 'react-icons/bi';
 
 export default function ExplorerPage() {
-  const extendedObj = {
-    name: 'Cabinet',
-    children: <ExtendedBar />,
-    icon: <BiCabinet className="h-4 mr-4" />
-  };
   return (
     <>
       <PilotSection />
@@ -27,7 +22,11 @@ export default function ExplorerPage() {
             <ShareItemModal />
           </>
         }
-        extendedBar={extendedObj}
+        extendedBar={{
+          name: 'Cabinet',
+          children: <ExtendedBar />,
+          icon: <BiCabinet className="h-4 mr-4" />
+        }}
       >
         {/* files list, breadcrumb, file preview */}
         <div className="flex flex-col w-full h-full">

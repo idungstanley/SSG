@@ -11,6 +11,7 @@ import { setCurrTeamMemId } from '../../../../features/task/taskSlice';
 import AvatarWithImage from '../../../../components/avatar/AvatarWithImage';
 import { TrashIcon } from '@heroicons/react/24/outline';
 import { Capitalize } from '../../../../utils/NoCapWords/Capitalize';
+import { EntityType } from '../../../../utils/EntityTypes/EntityType';
 
 interface AssigneeItem {
   item: ITeamMembersAndGroup;
@@ -23,7 +24,9 @@ interface AssigneeItem {
 
 function AssigneeItem({ item, option, entity_id, teams, handleClose, isAssigned }: AssigneeItem) {
   const dispatch = useAppDispatch();
+
   const { mutate: onCheklistItemAssign } = UseChecklistItemAssignee();
+
   const handleAssignChecklist = (id: string) => {
     onCheklistItemAssign({
       itemId: entity_id,
@@ -67,7 +70,7 @@ function AssigneeItem({ item, option, entity_id, teams, handleClose, isAssigned 
           handleClose();
           option === 'checklist'
             ? handleAssignChecklist(item.id)
-            : option === 'task'
+            : option === EntityType.task
             ? handleAssignTask(item.id)
             : option == 'getTeamId'
             ? dispatch(setCurrTeamMemId(item.id))
@@ -101,7 +104,9 @@ function AssigneeItem({ item, option, entity_id, teams, handleClose, isAssigned 
           <button
             type="button"
             className="mx-2"
-            onClick={() => (option == 'task' ? handleUnAssignTask(item.id) : handleUnAssignChecklistItem(item.id))}
+            onClick={() =>
+              option === EntityType.task ? handleUnAssignTask(item.id) : handleUnAssignChecklistItem(item.id)
+            }
           >
             <TrashIcon className="w-4 h-4 text-gray-500 cursor-pointer" />
           </button>

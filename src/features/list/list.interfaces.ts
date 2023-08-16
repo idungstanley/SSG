@@ -2,7 +2,7 @@ import { ListColourProps } from '../../components/tasks/ListItem';
 import { IList } from '../hubs/hubs.interfaces';
 import { ICheckListRes } from './../task/interface.tasks';
 
-export type Property = string[] | null;
+export type Options = { id: string; color: string; name: string }[] | null;
 
 export interface IField {
   id: string;
@@ -10,7 +10,7 @@ export interface IField {
   model_id: string;
   name: string;
   type: string;
-  properties: Property;
+  options: Options;
   created_at: string;
 }
 
@@ -35,6 +35,11 @@ export interface ITask_statuses {
   position: number;
   type: string;
   updated_at: string;
+}
+
+export interface StatusTaskListProps {
+  listName?: string;
+  listId?: string;
 }
 
 export interface IListDetails {

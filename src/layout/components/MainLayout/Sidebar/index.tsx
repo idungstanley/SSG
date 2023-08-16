@@ -16,8 +16,7 @@ import CommandSearchModal from './components/CommandSearchModal';
 import SearchIcon from '../../../../assets/icons/SearchIcon';
 import { setUpdateCords } from '../../../../features/hubs/hubSlice';
 import { useScroll } from '../../../../hooks/useScroll';
-import { ScrollableContainer } from '../../../../components/ScrollableContainer/ScrollableContainer';
-import StatusManagement from '../../../../components/status/StatusManagement';
+import { VerticalScroll } from '../../../../components/ScrollableContainer/VerticalScroll';
 
 const MAX_SIDEBAR_WIDTH = dimensions.navigationBar.max;
 const MIN_SIDEBAR_WIDTH = dimensions.navigationBar.min;
@@ -51,7 +50,7 @@ export default function Sidebar() {
   );
 
   const handleHotkeyClick = useCallback(
-    (tabId: string, e: React.MouseEvent<SVGElement, MouseEvent> | React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    (tabId: string, e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
       e.stopPropagation();
       const isIncludes = activeHotkeyIds.includes(tabId);
 
@@ -91,7 +90,7 @@ export default function Sidebar() {
           activeTabId={activeTabId}
           setActiveTabId={setActiveTabId}
         />
-        <ScrollableContainer scrollDirection="y" onScroll={onScroll}>
+        <VerticalScroll onScroll={onScroll}>
           <section className="overflow-x-hidden">
             {showSidebar ? (
               <NonInteractiveSearch
@@ -123,8 +122,7 @@ export default function Sidebar() {
             />
             <Places />
           </section>
-        </ScrollableContainer>
-        <StatusManagement />
+        </VerticalScroll>
       </section>
     </aside>
   );

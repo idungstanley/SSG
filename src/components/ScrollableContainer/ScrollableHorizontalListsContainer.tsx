@@ -198,7 +198,7 @@ export function ScrollableHorizontalListsContainer({ children, ...props }: Custo
 
   const renderScrollArrows = () => {
     return (
-      <div className="flex z-10 gap-1.5 bg-alsoit-gray-50 bg-opacity-75 opacity-0 group-hover:opacity-100 rounded-md flex-row ml-2">
+      <div className="flex z-3 gap-1.5 bg-alsoit-gray-50 bg-opacity-75 opacity-0 group-hover:opacity-100 rounded-md flex-row ml-2">
         <button
           className="flex items-center justify-center w-3 h-3 bg-gray-200 rounded-full"
           onClick={() => handleScrollButton('left')}
@@ -223,7 +223,7 @@ export function ScrollableHorizontalListsContainer({ children, ...props }: Custo
         </div>
       </div>
       {isThumbVisible && (
-        <div className="sticky bottom-0 z-10 pt-4 pr-2 group grid w-full grid-cols-2 bg-purple-50">
+        <div className="sticky bottom-0 z-3 pt-4 pr-2 group grid w-full grid-cols-2 bg-purple-50">
           <div />
           <div className="flex items-center mb-4 flex-row space-x-2">
             {renderScrollArrows()}

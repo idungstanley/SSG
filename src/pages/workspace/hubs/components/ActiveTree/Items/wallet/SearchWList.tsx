@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Wallet } from '../../activetree.interfaces';
 import { useAppDispatch, useAppSelector } from '../../../../../../../app/hooks';
-import { setCurrentItem, setCurrentWalletId } from '../../../../../../../features/workspace/workspaceSlice';
-import { setWalletItem } from '../../../../../../../features/wallet/walletSlice';
+import { setCurrentItem } from '../../../../../../../features/workspace/workspaceSlice';
+import { setCurrentWalletId, setCurrentWalletType } from '../../../../../../../features/wallet/walletSlice';
 import { EntityType } from '../../../../../../../utils/EntityTypes/EntityType';
 import SearchWalletItem from '../../../../../../../components/tasks/SearchWalletItem';
 import SearchLList from '../list/SearchLList';
@@ -32,17 +32,12 @@ export default function SearchWList({ wallets, leftMargin, paddingLeft, level = 
       setShowSubWallet((prev) => prev.filter((item) => item !== id));
     } else {
       dispatch(setCurrentWalletId(id));
+      dispatch(setCurrentWalletType(EntityType.wallet));
       setShowSubWallet((prev) => [...prev, id]);
       dispatch(
         setCurrentItem({
           currentItemId: id,
           currentItemType: EntityType.wallet
-        })
-      );
-      dispatch(
-        setWalletItem({
-          currentWalletParentId: id,
-          currentWalletParentType: EntityType.wallet
         })
       );
     }

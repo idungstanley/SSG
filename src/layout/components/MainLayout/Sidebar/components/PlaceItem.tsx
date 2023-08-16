@@ -1,5 +1,4 @@
 import React, { ReactNode } from 'react';
-import { FiChevronDown, FiChevronRight } from 'react-icons/fi';
 import { MdDragIndicator } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
@@ -10,6 +9,7 @@ import SearchTaskView from './Search/SearchTaskView';
 import { setIsSearchActive } from '../../../../../features/search/searchSlice';
 import ArrowRight from '../../../../../assets/icons/ArrowRight';
 import ArrowOpenDown from '../../../../../assets/icons/ArrowOpenDown';
+import Drag from '../../../../../assets/icons/Drag';
 
 interface PlaceItemProps {
   label: string;
@@ -107,7 +107,7 @@ export default function PlaceItem({
             {...attributes}
             {...listeners}
           >
-            <MdDragIndicator className="text-gray-400 hover:text-fuchsia-500" />
+            <Drag />
           </span>
           <div className="flex items-center justify-between w-full">
             <div

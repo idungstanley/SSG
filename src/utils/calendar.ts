@@ -125,15 +125,15 @@ export const groupDatesByDayOfWeek = (
   return groupedDates;
 };
 
-export const createDynamicTimeComponent = (intervalInMinutes: number, format?: string) => {
+export const createDynamicTimeComponent = (intervalInMinutes: number | string, zone?: string) => {
   // Calculate the number of time elements to create
-  const totalElements = (24 * 60) / intervalInMinutes;
+  const totalElements = (24 * 60) / Number(intervalInMinutes);
 
   // Create an array to hold the time elements
   const timeElements = [];
 
   // Start with 12 midnight
-  let currentTime = dayjs().tz(format).set('hour', 0).set('minute', 0);
+  let currentTime = dayjs().tz(zone).set('hour', 0).set('minute', 0);
 
   // Generate the time elements
   for (let i = 0; i < totalElements; i++) {
@@ -141,7 +141,7 @@ export const createDynamicTimeComponent = (intervalInMinutes: number, format?: s
     timeElements.push(formattedTime);
 
     // Increment the time by the given interval
-    currentTime = currentTime.add(intervalInMinutes, 'minute');
+    currentTime = currentTime.add(Number(intervalInMinutes), 'minute');
   }
 
   // Return the array of time elements

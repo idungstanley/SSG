@@ -7,7 +7,7 @@ import { useResize } from '../../../../hooks/useResize';
 import Header from '../Header';
 import { ShareIcon, EditPageIcon, PrintIcon, CopyIcon, UploadIcon } from '../../../../assets/icons';
 import { dimensions } from '../../../../app/config/dimensions';
-import { ScrollableContainer } from '../../../ScrollableContainer/ScrollableContainer';
+import { VerticalScroll } from '../../../ScrollableContainer/VerticalScroll';
 import useAdjustedHeight from '../../../../hooks/useAdjustedHeight';
 
 interface FullPilotProps {
@@ -36,7 +36,7 @@ export default function FullPilot({ featureTabs, activeSection, setShowModal, sh
   const { activeItemType } = useAppSelector((state) => state.workspace);
 
   return (
-    <ScrollableContainer scrollDirection="y">
+    <VerticalScroll>
       <div
         ref={blockRef}
         style={{
@@ -63,7 +63,7 @@ export default function FullPilot({ featureTabs, activeSection, setShowModal, sh
 
                 <CopyIcon className="w-6 h-6" />
 
-                <ShareIcon className="w-4 h-4" />
+                <ShareIcon active />
 
                 <PrintIcon className="w-4 h-4" />
               </>
@@ -79,6 +79,6 @@ export default function FullPilot({ featureTabs, activeSection, setShowModal, sh
         </div>
         <div className="relative z-50">{activeSection?.element}</div>
       </div>
-    </ScrollableContainer>
+    </VerticalScroll>
   );
 }
