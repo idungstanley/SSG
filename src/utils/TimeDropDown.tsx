@@ -2,6 +2,7 @@ import { useState, useRef, useEffect, Dispatch, SetStateAction } from 'react';
 import dayjs from 'dayjs';
 import ArrowCaretDown from '../assets/icons/ArrowCaretDown';
 import { useAppSelector } from '../app/hooks';
+import { boolean } from 'yup/lib/locale';
 
 type Option = string; // Change this type to match the type of your options
 
@@ -13,17 +14,20 @@ interface ReusableSelectProps {
 }
 
 function ReusableSelect({ value, onclick, options, style }: ReusableSelectProps) {
-  const [dropped, setDrop] = useState<{ container: boolean; timeInterval: boolean }>({
-    container: false,
-    timeInterval: false
-  });
+  const [dropped, setDrop] = useState<boolean>(false);
   const [editing, setEditing] = useState<boolean>(false);
   const currentOrFutureTime = value || findNearestTime(dayjs(), options);
   const [activeItem, setActiveItem] = useState<string | null>(currentOrFutureTime);
   const { timeInterval } = useAppSelector((state) => state.calendar);
   const listRef = useRef<HTMLUListElement>(null);
+  const modalRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    const handleClickAway = (event: MouseEvent) => {
+      if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
+        setDrop(false);
+      }
+    };
     // Scroll to show the active item
     if (listRef.current && activeItem) {
       const activeElement = listRef.current.querySelector(`li[data-value="${activeItem}"]`);
@@ -31,33 +35,29 @@ function ReusableSelect({ value, onclick, options, style }: ReusableSelectProps)
         activeElement.scrollIntoView({ block: 'center', inline: 'nearest' });
       }
     }
+
+    document.addEventListener('mousedown', handleClickAway);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickAway);
+    };
   }, [dropped, activeItem]);
 
   const handleClick = (option: string) => {
     onclick(option);
     setActiveItem(option);
     setEditing(false);
+    setDrop(false);
   };
 
   const handleEdit = () => {
-    if (value) {
-      setEditing(true);
-      setDrop((prev) => ({ ...prev, container: true }));
-    } else {
-      setDrop((prev) => ({ ...prev, container: true }));
-    }
+    setEditing(true);
+    setDrop(!dropped);
   };
 
   const handleBlur = () => {
     setEditing(false);
-    setDrop((prev) => ({ ...prev, container: false }));
-  };
-
-  const handleCloseModal = (value?: 15 | 30) => {
-    if (value) {
-      // intervalFn && intervalFn(value);
-      setDrop((prev) => ({ ...prev, timeInterval: !prev.timeInterval }));
-    }
+    setDrop(false);
   };
 
   function findNearestTime(currentTime: dayjs.Dayjs, timeOptions: Option[]): string {
@@ -89,38 +89,17 @@ function ReusableSelect({ value, onclick, options, style }: ReusableSelectProps)
           {value ? `| ${value}` : 'Set Time'}
         </div>
       )}
-      {dropped.container && !value && (
-        <div className={`relative flex flex-col space-y-2 w-60 ${style}`} tabIndex={0} onBlur={handleBlur}>
-          <span className="text-alsoit-text-sm italic">Set Time</span>
+      {dropped && (
+        <div className={`relative flex flex-col space-y-2 w-60 ${style}`} tabIndex={0} ref={modalRef}>
           <ul
             className="absolute top-2 max-h-72 w-11/12 overflow-y-scroll flex flex-col space-y-2 p-4 bg-white shadow-2xl rounded-md"
             ref={listRef}
           >
             <li className="flex justify-between items-center relative">
               <span className="font-semibold">Time Interval</span>
-              <div
-                className="w-max flex items-center bg-alsoit-gray-50 p-2 rounded-lg"
-                onClick={() => setDrop((prev) => ({ ...prev, timeInterval: !prev.timeInterval }))}
-              >
+              <div className="w-max flex items-center bg-alsoit-gray-50 p-2 rounded-lg">
                 <span>{timeInterval} mins</span>
-                {/* <ArrowCaretDown active /> */}
               </div>
-              {/* {dropped.timeInterval && (
-                <div className="bg-alsoit-gray-50 flex flex-col space-y-2 shadow-lg w-20 p-1 absolute top-8 right-0">
-                  <span
-                    onClick={() => handleCloseModal(15)}
-                    className="w-full cursor-pointer rounded bg-alsoit-gray-50 shadow font-semibold p-1 hover:bg-alsoit-gray-75 hover:text-white text-alsoit-gray-200"
-                  >
-                    15 Mins
-                  </span>
-                  <span
-                    onClick={() => handleCloseModal(30)}
-                    className="w-full cursor-pointer rounded bg-alsoit-gray-50 shadow font-semibold p-1 hover:bg-alsoit-gray-75 hover:text-white text-alsoit-gray-200"
-                  >
-                    30 Mins
-                  </span>
-                </div>
-              )} */}
             </li>
             {options.map((option, index) => (
               <li
@@ -158,7 +137,7 @@ function ReusableSelect({ value, onclick, options, style }: ReusableSelectProps)
           value={value}
           onBlur={handleBlur}
           onChange={(e) => onclick(e.target.value)}
-          className="text-alsoit-text-sm italic w-16 h-4 rounded-md border-alsoit-purple-300 flex items-center"
+          className="text-alsoit-text-sm italic w-16 h-4 rounded-md border-alsoit-purple-300 flex items-center absolute -top-2.5"
         />
       )}
     </div>

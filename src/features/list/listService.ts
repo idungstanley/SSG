@@ -219,19 +219,18 @@ export const UseGetListDetails = (query: {
 const createDropdownField = (data: {
   id?: string;
   name?: string;
-  options: { name: string }[] | undefined;
+  color?: string | null;
+  options: { name: string; color: null | string }[] | undefined;
   type?: string;
   customType: string;
 }) => {
   const { id, options, name, type, customType } = data;
 
-  const fieldType = customType === 'Single Label' ? 'dropdown' : customType === 'Multi Label' ? 'labels' : customType;
-
   const response = requestNew({
     url: 'custom-fields',
     method: 'POST',
     data: {
-      type: fieldType,
+      type: customType.replace(/\s+/g, '').toLowerCase(),
       name,
       entity_id: id,
       entity_type: type,
@@ -249,7 +248,7 @@ export const useCreateDropdownField = (type: string | undefined, id?: string | u
 
   return useMutation(createDropdownField, {
     onSuccess: () => {
-      dispatch(setNewCustomPropertyDetails({ name: '', type: 'single label' }));
+      dispatch(setNewCustomPropertyDetails({ name: '', type: 'Select Property Type', color: null }));
 
       if (type === EntityType.hub) {
         queryClient.invalidateQueries(['task', activeItemId, activeItemType, filterTaskByAssigneeIds]);

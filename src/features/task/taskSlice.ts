@@ -44,6 +44,7 @@ export interface ActiveTaskColumnProps {
 interface customPropertyInfo {
   name: string;
   type: string;
+  color: string | null;
 }
 
 export interface ImyTaskData {
@@ -134,6 +135,7 @@ interface TaskState {
   verticalGridlinesTask: boolean;
   CompactViewWrap: boolean;
   tableView: boolean;
+  meMode: boolean;
   boardView: boolean;
   calenderView: boolean;
   mapView: boolean;
@@ -206,6 +208,7 @@ const initialState: TaskState = {
   comfortableView: true,
   comfortableViewWrap: false,
   showNewTaskField: false,
+  meMode: false,
   showNewTaskId: '',
   singleLineView: true,
   hilightNewTask: false,
@@ -274,7 +277,7 @@ const initialState: TaskState = {
   listViewHeads: [],
   customSuggestionField: [],
   newTaskData: undefined,
-  newCustomPropertyDetails: { name: '', type: 'Single Label' }
+  newCustomPropertyDetails: { name: '', type: 'Select Property Type', color: null }
 };
 
 export const taskSlice = createSlice({
@@ -360,6 +363,9 @@ export const taskSlice = createSlice({
     },
     setHilightNewTask(state, action: PayloadAction<boolean>) {
       state.hilightNewTask = action.payload;
+    },
+    setMeMode(state, action: PayloadAction<boolean>) {
+      state.meMode = action.payload;
     },
     setToggleAllSubtask(state, action: PayloadAction<boolean>) {
       state.toggleAllSubtask = action.payload;
@@ -588,6 +594,7 @@ export const {
   setHilightNewTask,
   getMapView,
   setTaskStatus,
+  setMeMode,
   setShowTaskNavigation,
   setShowNewTaskField,
   setShowNewTaskId,
