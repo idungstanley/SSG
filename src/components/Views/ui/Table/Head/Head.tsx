@@ -22,7 +22,7 @@ import PlusIcon from '../../../../../assets/icons/PlusIcon';
 import { TbAlignJustified } from 'react-icons/tb';
 import { MdEditNote, MdOutlineDragIndicator } from 'react-icons/md';
 import { BiHide } from 'react-icons/bi';
-import { setIsManageStatus } from '../../../../../features/workspace/workspaceSlice';
+import { setActiveTabId, setIsManageStatus } from '../../../../../features/workspace/workspaceSlice';
 import AlsoitMenuDropdown from '../../../../DropDowns';
 import { useParams } from 'react-router-dom';
 import { Task } from '../../../../../features/task/interface.tasks';
@@ -178,6 +178,7 @@ export function Head({
   const handleAddCustomProperty = () => {
     const type = hubId ? 'hub' : walletId ? 'wallet' : 'list';
     dispatch(setEntityForCustom({ id: hubId ?? walletId ?? list_id, type }));
+    dispatch(setActiveTabId(10));
   };
 
   return columns.length > 0 ? (
