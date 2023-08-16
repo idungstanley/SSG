@@ -78,7 +78,9 @@ export function Col({ value, field, fieldId, task, ...props }: ColProps) {
         {...props}
         style={{
           height:
-            singleLineView && !CompactView
+            task.id == '0'
+              ? '64px'
+              : singleLineView && !CompactView
               ? '42px'
               : CompactView && singleLineView
               ? '32px'
