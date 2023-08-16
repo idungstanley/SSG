@@ -5,7 +5,6 @@ import Button from '../../../Buttons/Button';
 import { setAssigneeIds, setFilterFields, setMeMode } from '../../../../features/task/taskSlice';
 import Me from '../../../../assets/icons/Me';
 import FilterByAssigneeModal from './FilterByAssigneeModal';
-import { useState } from 'react';
 
 export function Assignee() {
   const dispatch = useAppDispatch();
