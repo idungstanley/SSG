@@ -63,6 +63,8 @@ export default function HubItem({
   handleLocation
 }: TaskItemProps) {
   const dispatch = useAppDispatch();
+  const { hubId, subhubId } = useParams();
+
   const { activeItemId } = useAppSelector((state) => state.workspace);
   const { paletteDropdown } = useAppSelector((state) => state.account);
   const { showSidebar, lightBaseColor, baseColor } = useAppSelector((state) => state.account);
@@ -74,7 +76,6 @@ export default function HubItem({
 
   const collapseNavAndSubhub = !showSidebar && type === EntityType.subHub;
 
-  const { hubId } = useParams();
   const { paletteId, show } = paletteDropdown;
 
   const handleHubColour = (id: string, e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
@@ -190,13 +191,13 @@ export default function HubItem({
           className={`relative flex items-center justify-between ${showSidebar ? 'pl-1' : 'pl-2.5'}`}
           style={{ height: '30px' }}
         >
-          {item.id === hubId && (
+          {(item.id === hubId || item.id === subhubId) && (
             <span
               className="absolute inset-0 z-0 before:content before:absolute before:inset-0"
               style={{ backgroundColor: lightBaseColor }}
             />
           )}
-          {item.id === hubId && (
+          {(item.id === hubId || item.id === subhubId) && (
             <span
               className="absolute top-0 bottom-0 left-0 w-0.5 rounded-r-lg"
               style={{ backgroundColor: baseColor }}

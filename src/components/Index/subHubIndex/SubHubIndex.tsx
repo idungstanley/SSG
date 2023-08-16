@@ -36,7 +36,7 @@ export default function SubHubIndex() {
 
   const handleLocation = (id: string, name: string) => {
     dispatch(setSubHubExt({ id: id, type: EntityType.subHub }));
-    navigate(`/${currentWorkspaceId}/tasks/h/${id}`);
+    navigate(`/${currentWorkspaceId}/tasks/sh/${id}`);
     dispatch(setShowHub(true));
     dispatch(setActiveEntityName(name));
     dispatch(

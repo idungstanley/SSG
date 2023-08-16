@@ -32,7 +32,7 @@ import HubItemOverlay from '../../../../../../../components/tasks/HubItemOverLay
 export default function HList({ hubs }: ListProps) {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { hubId, walletId, listId } = useParams();
+  const { hubId, subhubId, walletId, listId } = useParams();
   const { currentItemId, showExtendedBar, createEntityType, openedParentsIds, openedEntitiesIds } = useAppSelector(
     (state) => state.workspace
   );
@@ -43,7 +43,7 @@ export default function HList({ hubs }: ListProps) {
   const [openedNewHubId, setOpenedNewHubId] = useState<string>('');
   const CapitalizeType = Capitalize(entityToCreate);
   const hubCreationStatus = 'New ' + CapitalizeType + ' Under Construction';
-  const id = hubId || walletId || listId || currentItemId;
+  const id = hubId || subhubId || walletId || listId || currentItemId;
 
   const dummyHub = {
     name: hubCreationStatus,

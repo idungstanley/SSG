@@ -68,7 +68,6 @@ interface workspaceState {
   workspaceData: undefined | IWorkspaceRes;
   lastActiveItem: string;
   showMore: boolean;
-  isFirstOpened: boolean;
   openedEntitiesIds: string[];
   openedParentsIds: string[];
 }
@@ -120,8 +119,8 @@ const initialState: workspaceState = {
   createWlLink: false,
   workspaceData: undefined,
   activeSubRecordsTabId: 0,
-  recorderLastMemory: { activeTabId: 0, workSpaceId: '', listId: '', hubId: '', taskId: '' },
-  timerLastMemory: { activeTabId: 0, workSpaceId: '', listId: '', hubId: '', taskId: '' },
+  recorderLastMemory: { activeTabId: 0, workSpaceId: '', listId: '', hubId: '', subhubId: '', taskId: '' },
+  timerLastMemory: { activeTabId: 0, workSpaceId: '', listId: '', hubId: '', subhubId: '', taskId: '' },
   activityArray: [],
   logType: 'activity',
   activeLogTab: 'activity',
@@ -129,7 +128,6 @@ const initialState: workspaceState = {
   showTreeInput: false,
   lastActiveItem: '',
   showMore: false,
-  isFirstOpened: true,
   openedEntitiesIds: [],
   openedParentsIds: []
 };
@@ -333,9 +331,6 @@ export const wsSlice = createSlice({
     setLastActiveItem(state, action: PayloadAction<string>) {
       state.lastActiveItem = action.payload;
     },
-    setIsFirstOpened(state, action: PayloadAction<boolean>) {
-      state.isFirstOpened = action.payload;
-    },
     setOpenedEntitiesIds(state, action: PayloadAction<string[]>) {
       state.openedEntitiesIds = action.payload;
     },
@@ -400,7 +395,6 @@ export const {
   setLastActiveItem,
   setIsManageStatus,
   setShowTabLabel,
-  setIsFirstOpened,
   setOpenedEntitiesIds,
   setOpenedParentsIds
 } = wsSlice.actions;
