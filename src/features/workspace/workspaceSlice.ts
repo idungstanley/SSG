@@ -50,6 +50,7 @@ interface workspaceState {
   activeHotKeyTabId: number | null;
   activeSubCommunicationTabId: number | null;
   activeSubHubManagerTabId: number | null;
+  activeStatusManagementTabId: number | null;
   activeSubDetailsTabId: number | null;
   activeSubTimeClockTabId: number | null;
   activeSubChecklistTabId: number | null;
@@ -107,6 +108,7 @@ const initialState: workspaceState = {
   activeHotKeyTabId: 0,
   activeSubDetailsTabId: 1,
   activeSubTimeClockTabId: 0,
+  activeStatusManagementTabId: 1,
   activeSubHubManagerTabId: 0,
   activeSubCommunicationTabId: 1,
   activeSubChecklistTabId: 2,
@@ -260,6 +262,9 @@ export const wsSlice = createSlice({
     setActiveSubCommunicationTabId(state, action: PayloadAction<number | null>) {
       state.activeSubCommunicationTabId = action.payload;
     },
+    setActiveStatusManagementTabId(state, action: PayloadAction<number | null>) {
+      state.activeStatusManagementTabId = action.payload;
+    },
     setActiveSubDetailsTabId(state, action: PayloadAction<number | null>) {
       state.activeSubDetailsTabId = action.payload;
     },
@@ -402,7 +407,8 @@ export const {
   setShowTabLabel,
   setIsFirstOpened,
   setOpenedEntitiesIds,
-  setOpenedParentsIds
+  setOpenedParentsIds,
+  setActiveStatusManagementTabId
 } = wsSlice.actions;
 
 export default wsSlice.reducer;

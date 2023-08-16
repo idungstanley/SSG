@@ -7,13 +7,14 @@ import SectionArea from '../SectionArea';
 import HubManagerSubTab from './HubManagerSubTab';
 import CustomSuggestion from '../../../DatePicker/CustomSuggestions';
 import EntityManagerIcon from '../../../../assets/icons/EntityManagerIcon';
+import StatusManagement from '../../../status/StatusManagement';
 
 const HubsOptions = [
   { id: 1, element: <CreateHub /> },
   { id: 2, element: <CreateWallet /> },
   { id: 3, element: <CreateList /> },
   { id: 4, element: <CustomSuggestion /> },
-  { id: 5, element: <CustomSuggestion /> }
+  { id: 5, element: <StatusManagement /> }
 ];
 export default function HubManager() {
   const { activeSubHubManagerTabId } = useAppSelector((state) => state.workspace);
