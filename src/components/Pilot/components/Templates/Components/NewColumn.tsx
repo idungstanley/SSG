@@ -44,8 +44,9 @@ function NewColumn() {
                 dispatch(setNewCustomPropertyDetails({ ...newCustomPropertyDetails, name: e.target.value }))
               }
               type="text"
-              className="block border-0 py-1 ring-0  placeholder-gray-300 focus:ring-0 focus:ring-inset text-alsoit-gray-300 text-alsoit-text-xi sm:text-sm sm:leading-6"
+              className="block border-0 py-1 ring-0  placeholder-gray-300 focus:ring-0 focus:ring-inset text-alsoit-text-xi sm:text-sm sm:leading-6"
               value={newCustomPropertyDetails.name}
+              style={{ color: newCustomPropertyDetails.color ? newCustomPropertyDetails.color : '#242424' }}
             />
             <button onClick={handleClick}>
               <Picker />

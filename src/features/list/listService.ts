@@ -218,7 +218,8 @@ export const UseGetListDetails = (query: {
 const createDropdownField = (data: {
   id?: string;
   name?: string;
-  options: { name: string }[] | undefined;
+  color?: string | null;
+  options: { name: string; color: null | string }[] | undefined;
   type?: string;
   customType: string;
 }) => {
@@ -246,7 +247,7 @@ export const useCreateDropdownField = (type: string | undefined, id?: string | u
 
   return useMutation(createDropdownField, {
     onSuccess: () => {
-      dispatch(setNewCustomPropertyDetails({ name: '', type: 'single label', color: null }));
+      dispatch(setNewCustomPropertyDetails({ name: '', type: 'Select Property Type', color: null }));
 
       if (type === EntityType.hub) {
         queryClient.invalidateQueries(['task', activeItemId, activeItemType, filterTaskByAssigneeIds]);

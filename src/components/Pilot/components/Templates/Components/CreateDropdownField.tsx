@@ -41,6 +41,8 @@ function CreateDropdownField() {
   const handleSubmit = () => {
     if (newCustomPropertyDetails.name && entityForCustom) {
       const name = newCustomPropertyDetails.name;
+      const color = newCustomPropertyDetails.color;
+
       const customType =
         newCustomPropertyDetails.type === 'Single Label'
           ? 'dropdown'
@@ -48,10 +50,11 @@ function CreateDropdownField() {
           ? 'labels'
           : newCustomPropertyDetails.type;
       const options = formInputs.map((i) => {
-        return { name: i.value.trim() };
+        return { name: i.value.trim(), color: i.color };
       });
       onCreate({
         name,
+        color,
         options,
         id: entityForCustom.id,
         type: entityForCustom.type,
