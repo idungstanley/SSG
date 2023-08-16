@@ -7,6 +7,8 @@ import PlusIcon from '../../assets/icons/PlusIcon';
 import StatusBodyTemplate from './StatusBodyTemplate';
 import Input from '../input/Input';
 import { StatusProps } from '../../pages/workspace/hubs/components/ActiveTree/activetree.interfaces';
+import { useMutation } from '@tanstack/react-query';
+import { statusTypesService } from '../../features/hubs/hubService';
 
 const statusTabOptions = [{ label: 'Use Space Statuses' }, { label: 'Custom' }];
 
@@ -16,7 +18,7 @@ const groupStatusByModelType = (statusTypes: StatusProps[]) => {
 
 export default function StatusManagement() {
   const dispatch = useAppDispatch();
-  const { isManageStatus } = useAppSelector((state) => state.workspace);
+  const { isManageStatus, activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
   const { spaceStatuses } = useAppSelector((state) => state.hub);
   const { statusTaskListDetails } = useAppSelector((state) => state.list);
   const [activeStatusTab, setActiveStatusTab] = useState<string>(statusTabOptions[0].label);
@@ -33,9 +35,10 @@ export default function StatusManagement() {
         return {
           name: status.name,
           color: status.color,
-          id: status.id,
+          id: null,
           type: status.type,
-          position: status.position
+          position: status.position,
+          is_default: status.type === 'open' ? 1 : 0
         };
       })
     );
@@ -48,7 +51,8 @@ export default function StatusManagement() {
         color: 'green',
         type: 'custom',
         position: statusTypesState.length,
-        id: null
+        id: null,
+        is_default: 0
       };
       setStatusTypesState((prevStatusTypes) => [...prevStatusTypes, newStatusItem]);
       setNewStatusValue('');
@@ -58,7 +62,21 @@ export default function StatusManagement() {
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNewStatusValue(e.target.value);
   };
+  const createStatusTypes = useMutation(statusTypesService, {
+    onSuccess: (data) => {
+      console.log(data);
+    }
+  });
   const groupedStatus = groupStatusByModelType(spaceStatuses);
+  const onSubmit = async () => {
+    await createStatusTypes.mutateAsync({
+      model_id: statusTaskListDetails.listId,
+      model: 'list',
+      from_model: activeItemType,
+      from_model_id: activeItemId,
+      statuses: statusTypesState
+    });
+  };
 
   return (
     <ModalOverlay isModalVisible={isManageStatus} onCloseModal={handleCloseManageStatus}>
@@ -129,7 +147,7 @@ export default function StatusManagement() {
           )}
         </div>
         <div className="mt-auto">
-          <Button label="Save" buttonStyle="base" width="w-full" />
+          <Button label="Save" buttonStyle="base" width="w-full" onClick={onSubmit} />
         </div>
       </section>
     </ModalOverlay>

@@ -68,7 +68,9 @@ const initialState: HubState = {
   selectedTreeDetails: { name: null, id: null, type: null },
   toggleTree: false,
   entityToCreate: null,
-  spaceStatuses: [{ color: null, id: null, model_id: null, model_type: null, type: null, position: null, name: null }]
+  spaceStatuses: [
+    { color: null, is_default: null, id: null, model_id: null, model: null, type: null, position: null, name: null }
+  ]
 };
 
 export const hubSlice = createSlice({
