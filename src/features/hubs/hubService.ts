@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import requestNew from '../../app/requestNew';
-import { IResponseGetHubs, IHubReq, IFavoritesRes, IHubDetailRes, IHubsRes, IHub } from './hubs.interfaces';
+import { IHubReq, IFavoritesRes, IHubDetailRes, IHubsRes, IHub } from './hubs.interfaces';
 import { closeMenu, setShowFavEditInput, setTriggerFavUpdate } from './hubSlice';
 import { setArchiveHub } from './hubSlice';
 import { generateFilters } from '../../components/TasksHeader/lib/generateFilters';
@@ -129,21 +129,6 @@ export const useGetHubChildren = ({ query, enabled }: { query: string | null | u
   );
 };
 
-//get subhub
-export const useGetSubHub = ({ parentId }: { parentId: string | null }) => {
-  return useQuery<IResponseGetHubs>(
-    ['hubs', { parentId: parentId }],
-    () =>
-      requestNew({
-        url: `hubs/${parentId}`,
-        method: 'GET'
-      }),
-    {
-      enabled: parentId != null
-    }
-  );
-};
-
 //edit a hub
 export const UseEditHubService = (data: {
   hubId?: string | null;
@@ -225,14 +210,6 @@ export const UseGetHubDetails = (query: {
     }
   );
 };
-
-export const useGetHubWallet = (hubId: string | null) =>
-  useQuery(['wallets-and-list'], () =>
-    requestNew<IHubReq | undefined>({
-      url: `hubs/${hubId}`,
-      method: 'GET'
-    })
-  );
 
 const addToFavorite = (data: {
   query: string | null | undefined;

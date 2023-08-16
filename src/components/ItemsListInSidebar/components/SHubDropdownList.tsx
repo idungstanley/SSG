@@ -4,18 +4,24 @@ import ListIndex from '../../Index/listIndex/ListIndex';
 import InboxIndex from '../../Index/InboxIndex';
 import { EntityType } from '../../../utils/EntityTypes/EntityType';
 import { useAppSelector } from '../../../app/hooks';
+import { findCurrentHub } from '../../../managers/Hub';
 
-interface SHubDropdownListProps {
-  currenId?: string;
+interface ISHubDropdownListProps {
+  parentId?: string;
 }
 
-export default function SHubDropdownList({ currenId }: SHubDropdownListProps) {
+export default function SHubDropdownList({ parentId }: ISHubDropdownListProps) {
   const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
+  const { hub } = useAppSelector((state) => state.hub);
+
+  const currentEntity = findCurrentHub(parentId || (activeItemId as string), hub);
+  const walletsData = currentEntity.wallets;
+  const listsData = currentEntity.lists;
 
   return (activeItemType === EntityType.subHub || activeItemType === EntityType.hub) && activeItemId ? (
     <div>
-      <WalletIndex showHubList={true} parentId={currenId ?? ''} paddingLeft="35" />
-      <ListIndex showHubList={true} parentId={currenId ?? ''} paddingLeft="40" />
+      <WalletIndex data={walletsData} showHubList={true} paddingLeft="25" />
+      <ListIndex data={listsData} showHubList={true} paddingLeft="30" />
     </div>
   ) : (
     <InboxIndex />

@@ -9,8 +9,6 @@ import {
   setActiveItem,
   setShowHub
 } from '../../../features/workspace/workspaceSlice';
-import { getWalletServices } from '../../../features/wallet/walletService';
-import { useGetHubWallet } from '../../../features/hubs/hubService';
 import WalletItem from '../../tasks/WalletItem';
 import { DragOverlay } from '@dnd-kit/core';
 import HubItemOverlay from '../../tasks/HubItemOverLay';
@@ -19,9 +17,9 @@ import { EntityType } from '../../../utils/EntityTypes/EntityType';
 import { Wallet } from '../../../pages/workspace/hubs/components/ActiveTree/activetree.interfaces';
 
 interface WalletIndexProps {
+  data: Wallet[];
   showHubList: boolean;
   paddingLeft: string | number;
-  parentId?: string;
 }
 
 export interface dataProps {
@@ -30,22 +28,13 @@ export interface dataProps {
   color?: string;
 }
 
-function WalletIndex({ showHubList, paddingLeft, parentId }: WalletIndexProps) {
+function WalletIndex({ data, showHubList, paddingLeft }: WalletIndexProps) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const { currentWorkspaceId } = useAppSelector((state) => state.auth);
-  const { toggleArchiveWallet } = useAppSelector((state) => state.wallet);
-  const { activeItemId } = useAppSelector((state) => state.workspace);
 
   const [openedIds, setOpenedIds] = useState<string[]>([]);
-
-  const { data: walletAndListData } = useGetHubWallet(activeItemId);
-
-  const { data: walletData } = getWalletServices({
-    hubId: parentId || activeItemId,
-    Archived: toggleArchiveWallet
-  });
 
   const handleLocation = (id: string, name: string) => {
     dispatch(setShowHub(true));
@@ -76,17 +65,17 @@ function WalletIndex({ showHubList, paddingLeft, parentId }: WalletIndexProps) {
   };
 
   const { draggableItemId } = useAppSelector((state) => state.list);
-  const draggableItem = draggableItemId ? walletData?.data.wallets.find((i) => i.id === draggableItemId) : null;
+  const draggableItem = draggableItemId ? data.find((i) => i.id === draggableItemId) : null;
 
-  return walletAndListData?.data?.wallets != null ? (
+  return data?.length ? (
     <div id="createWallet" className={`${showHubList ? 'block' : 'hidden'}`}>
       {draggableItem ? (
         <DragOverlay>
           <HubItemOverlay item={draggableItem} type="wallet" />
         </DragOverlay>
       ) : null}
-      {walletData?.data.wallets.length !== 0 &&
-        walletData?.data.wallets.map((wallet: dataProps) => (
+      {data.length &&
+        data.map((wallet) => (
           <div key={wallet.id}>
             <WalletItem
               wallet={wallet as Wallet}
@@ -98,7 +87,7 @@ function WalletIndex({ showHubList, paddingLeft, parentId }: WalletIndexProps) {
             />
             <div>
               {openedIds.includes(wallet.id) ? (
-                <SubWalletIndex paddingLeft={Number(paddingLeft) + 15} parentId={wallet.id} />
+                <SubWalletIndex parentId={wallet.id} paddingLeft={Number(paddingLeft) + 15} />
               ) : null}
             </div>
           </div>
