@@ -40,6 +40,12 @@ export const HubManagerOptions = [
     name: 'Calendar Settings',
     icon: <CalendarIcon active={false} />,
     isVisible: false
+  },
+  {
+    id: 5,
+    name: 'Status Management',
+    icon: <CalendarIcon active={false} />,
+    isVisible: false
   }
 ];
 

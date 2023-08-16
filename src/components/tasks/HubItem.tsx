@@ -27,6 +27,8 @@ import { useDraggable, useDroppable } from '@dnd-kit/core';
 import Drag from '../../assets/icons/Drag';
 import { getInitials } from '../../app/helpers';
 import ToolTip from '../Tooltip/Tooltip';
+import ActiveBarIdentification from './Component/ActiveBarIdentification';
+import ActiveBackground from './Component/ActiveBackground';
 
 interface TaskItemProps {
   item: {
@@ -62,7 +64,7 @@ export default function HubItem({
   const dispatch = useAppDispatch();
   const { activeItemId } = useAppSelector((state) => state.workspace);
   const { paletteDropdown } = useAppSelector((state) => state.account);
-  const { showSidebar, lightBaseColor, baseColor } = useAppSelector((state) => state.account);
+  const { showSidebar } = useAppSelector((state) => state.account);
   const { showMenuDropdown, SubMenuId } = useAppSelector((state) => state.hub);
   const [uploadId, setUploadId] = useState<string | null | undefined>('');
   const [paletteColor, setPaletteColor] = useState<string | undefined | ListColourProps>(
@@ -191,19 +193,8 @@ export default function HubItem({
           className={`relative flex items-center justify-between ${showSidebar ? 'pl-1' : 'pl-2.5'}`}
           style={{ height: '30px' }}
         >
-          {item.id === hubId && (
-            <span
-              className="absolute inset-0 z-0 before:content before:absolute before:inset-0"
-              style={{ backgroundColor: lightBaseColor }}
-            />
-          )}
-          {item.id === hubId && (
-            <span
-              className="absolute top-0 bottom-0 left-0 w-0.5 rounded-r-lg"
-              style={{ backgroundColor: baseColor }}
-            />
-          )}
-
+          <ActiveBackground showBgColor={item.id === hubId} />
+          <ActiveBarIdentification showBar={item.id === hubId} />
           <div
             className="absolute rounded-r-lg opacity-0 cursor-move left-0.5 group-hover:opacity-100"
             ref={draggableRef}
