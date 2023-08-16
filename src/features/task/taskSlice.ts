@@ -44,6 +44,7 @@ export interface ActiveTaskColumnProps {
 interface customPropertyInfo {
   name: string;
   type: string;
+  color: string | null;
 }
 
 export interface ImyTaskData {
@@ -276,7 +277,7 @@ const initialState: TaskState = {
   listViewHeads: [],
   customSuggestionField: [],
   newTaskData: undefined,
-  newCustomPropertyDetails: { name: '', type: 'Single Label' }
+  newCustomPropertyDetails: { name: '', type: 'Select Property Type', color: null }
 };
 
 export const taskSlice = createSlice({

@@ -35,7 +35,7 @@ export default function CreateDropdownFieldModal({ show, setShow, listId }: Crea
     if (fieldNameRef.current) {
       const name = fieldNameRef.current.value;
       const options = formInputs.map((i) => {
-        return { name: i.value.trim() };
+        return { name: i.value.trim(), color: null };
       });
 
       onCreate({
