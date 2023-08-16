@@ -5,8 +5,8 @@ import Button from '../../Button';
 import PlusIcon from '../../../assets/icons/PlusIcon';
 import Input from '../../input/Input';
 import { StatusProps } from '../../../pages/workspace/hubs/components/ActiveTree/activetree.interfaces';
-
-const statusTabOptions = [{ label: 'Use Space Statuses' }, { label: 'Custom' }];
+import PlusCircle from '../../../assets/icons/AddCircle';
+import { Chevron } from '../../Views/ui/Chevron';
 
 const groupStatusByModelType = (statusTypes: StatusProps[]) => {
   return [...new Set(statusTypes.map(({ type }) => type))];
@@ -14,11 +14,10 @@ const groupStatusByModelType = (statusTypes: StatusProps[]) => {
 
 export default function CustomStatus() {
   const { spaceStatuses } = useAppSelector((state) => state.hub);
-  const { statusTaskListDetails } = useAppSelector((state) => state.list);
-  const [activeStatusTab, setActiveStatusTab] = useState<string>(statusTabOptions[0].label);
   const [statusTypesState, setStatusTypesState] = useState<StatusProps[]>(spaceStatuses);
   const [validationMessage, setValidationMessage] = useState<string>('');
   const [newStatusValue, setNewStatusValue] = useState<string>();
+  const [toggleStatusTypes, setToggleStatusTypes] = useState<boolean>(true);
   const [addStatus, setAddStatus] = useState<boolean>(false);
 
   useEffect(() => {
@@ -67,7 +66,10 @@ export default function CustomStatus() {
       <div className="flex flex-col space-y-6">
         {groupedStatus.map((uniqueModelType, modelTypeIndex) => (
           <div className="space-y-2" key={modelTypeIndex}>
-            <p className="flex uppercase justify-items-start">{uniqueModelType} STATUSES</p>
+            <span className="flex">
+              <Chevron onToggle={() => setToggleStatusTypes((prev) => !prev)} active={true} />
+              <p className="flex uppercase justify-items-start">{uniqueModelType} STATUSES</p>
+            </span>
             {statusTypesState
               .filter((ticket) => ticket.type === uniqueModelType)
               .map((item, index) => (
@@ -75,7 +77,12 @@ export default function CustomStatus() {
                   <StatusBodyTemplate index={index} item={item} setStatusTypesState={setStatusTypesState} />
                   {item.type === 'open' && !addStatus && (
                     <span className="flex justify-items-start" onClick={() => setAddStatus(true)}>
-                      <Button height="h-8" icon={<PlusIcon active />} label="Add Status" buttonStyle="base" />
+                      <Button
+                        height="h-7"
+                        icon={<PlusCircle active={false} color="white" />}
+                        label="Add Status"
+                        buttonStyle="base"
+                      />
                     </span>
                   )}
                   {item.type === 'open' && addStatus && (
