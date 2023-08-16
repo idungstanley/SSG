@@ -15,15 +15,18 @@ module.exports = {
         primary: colors.fuchsia,
         'alsoit-gray-50': '#F4F4F4',
         'alsoit-gray-75': '#B2B2B2',
+        'alsoit-gray-100': '#919191',
         'alsoit-gray-200': '#626262',
         'alsoit-gray-300': '#424242',
         'alsoit-purple-50': '#F9E6FF',
         'alsoit-purple-300': '#BF01FE',
+        'alsoit-purple-400': '#8601B2',
         'alsoit-success': '#19D03A',
         'alsoit-success-50': '#E6FAE9',
         'alsoit-warning': '#ffde66',
         'alsoit-danger': '#FF0000',
-        'alsoit-danger-50': '#FFDEDE'
+        'alsoit-danger-50': '#FFDEDE',
+        'alsoit-blue-100': '#6E9FE7'
       },
       gridTemplateColumns: {
         sidebarItem: 'auto 1fr auto',
@@ -57,6 +60,7 @@ module.exports = {
       ...defaultTheme.fontSize, // add default tailwind classes
       'alsoit-text-sm': '0.5rem', // 8px
       'alsoit-text-md': '0.625rem', // 10px
+      'alsoit-text-xi': '11px',  //11px
       'alsoit-text-lg': '0.813rem' // 13px
     },
     borderWidth: {

@@ -131,6 +131,8 @@ function GroupAssignee({
                                 : (newData.color as string)
                             }
                             badge={true}
+                            height={CompactView ? 'h-6' : 'h-7'}
+                            width={CompactView ? 'w-6' : 'w-7'}
                           />
                         </div>
                       )}
@@ -222,6 +224,8 @@ function GroupAssignee({
                                 : (newData.color as string)
                             }
                             badge={true}
+                            height={CompactView ? 'h-6' : 'h-7'}
+                            width={CompactView ? 'w-6' : 'w-7'}
                           />
                         </div>
                       )}

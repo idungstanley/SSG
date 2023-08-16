@@ -4,12 +4,13 @@ import { useDispatch } from 'react-redux';
 import { setArchiveList } from './listSlice';
 import { closeMenu } from '../hubs/hubSlice';
 import { IListDetailRes, taskCountFields } from './list.interfaces';
-import { useAppSelector } from '../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { useParams } from 'react-router-dom';
 import { generateFilters } from '../../components/TasksHeader/lib/generateFilters';
 import { UseGetHubDetails } from '../hubs/hubService';
 import { IList } from '../hubs/hubs.interfaces';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
+import { setNewCustomPropertyDetails } from '../task/taskSlice';
 
 interface TaskCountProps {
   data: {
@@ -168,6 +169,7 @@ export const UseGetListDetails = (query: {
   activeItemId: string | null | undefined;
   activeItemType: string | null | undefined;
 }) => {
+  const dispatch = useAppDispatch();
   return useQuery(
     ['hubs', query],
     async () => {
@@ -183,30 +185,40 @@ export const UseGetListDetails = (query: {
   );
 };
 
-const createDropdownField = (data: { id?: string; name: string; properties: string[]; type: string }) => {
-  const { id, properties, name, type } = data;
+const createDropdownField = (data: {
+  id?: string;
+  name?: string;
+  color?: string | null;
+  options: { name: string; color: null | string }[] | undefined;
+  type?: string;
+  customType: string;
+}) => {
+  const { id, options, name, type, customType } = data;
 
   const response = requestNew({
     url: 'custom-fields',
     method: 'POST',
     data: {
-      type: 'dropdown',
+      type: customType.replace(/\s+/g, '').toLowerCase(),
       name,
       entity_id: id,
       entity_type: type,
-      properties
+      options
     }
   });
   return response;
 };
 
-export const useCreateDropdownField = (type: string, id?: string) => {
+export const useCreateDropdownField = (type: string | undefined, id?: string | undefined) => {
   const queryClient = useQueryClient();
+  const dispatch = useAppDispatch();
   const { filterTaskByAssigneeIds } = useAppSelector((state) => state.task);
   const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
 
   return useMutation(createDropdownField, {
     onSuccess: () => {
+      dispatch(setNewCustomPropertyDetails({ name: '', type: 'Select Property Type', color: null }));
+
       if (type === EntityType.hub) {
         queryClient.invalidateQueries(['task', activeItemId, activeItemType, filterTaskByAssigneeIds]);
       }

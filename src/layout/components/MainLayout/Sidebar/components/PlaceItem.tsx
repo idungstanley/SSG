@@ -1,5 +1,4 @@
 import React, { ReactNode } from 'react';
-import { FiChevronDown, FiChevronRight } from 'react-icons/fi';
 import { MdDragIndicator } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';

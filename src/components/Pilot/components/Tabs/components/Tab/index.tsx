@@ -4,6 +4,7 @@ import { MdDragIndicator } from 'react-icons/md';
 import { cl } from '../../../../../../utils';
 import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
 import { setActiveTabId } from '../../../../../../features/workspace/workspaceSlice';
+import ActiveBarIdentification from '../../../../../tasks/Component/ActiveBarIdentification';
 
 interface TabProps {
   id: number;
@@ -42,6 +43,7 @@ export default function Tab({ id, label, icon, showTabLabel }: TabProps) {
       )}
       aria-current={isActiveTab ? 'page' : undefined}
     >
+      <ActiveBarIdentification showBar={isActiveTab} />
       {/* drag area */}
       <span ref={setNodeRef} {...attributes} {...listeners} className="opacity-0 group-hover:opacity-100">
         <MdDragIndicator aria-hidden="true" className="w-4 h-4 cursor-move text-gray-400" />

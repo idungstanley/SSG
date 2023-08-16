@@ -24,6 +24,8 @@ import { useDraggable, useDroppable } from '@dnd-kit/core';
 import Drag from '../../assets/icons/Drag';
 import ToolTip from '../Tooltip/Tooltip';
 import { List, Wallet } from '../../pages/workspace/hubs/components/ActiveTree/activetree.interfaces';
+import ActiveBackground from './Component/ActiveBackground';
+import ActiveBarIdentification from './Component/ActiveBarIdentification';
 
 interface WalletItemProps {
   wallet: {
@@ -103,7 +105,11 @@ export default function WalletItem({
 
   const handleWalletColour = (id: string, e: React.MouseEvent<SVGElement>) => {
     e.stopPropagation();
-    dispatch(setPaletteDropDown({ show: true, paletteId: id, paletteType: EntityType.wallet }));
+    if (paletteId === id && show) {
+      dispatch(setPaletteDropDown({ ...paletteDropdown, show: false }));
+    } else {
+      dispatch(setPaletteDropDown({ show: true, paletteId: id, paletteType: EntityType.wallet }));
+    }
   };
 
   const handleWalletSettings = (id: string, name: string, e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
@@ -209,18 +215,8 @@ export default function WalletItem({
           className="relative flex items-center flex-1 truncate"
           style={{ paddingLeft: `${paddingLeft}px`, height: '30px' }}
         >
-          {wallet.id === walletId && (
-            <span
-              className="absolute inset-0 z-0 before:content before:absolute before:inset-0"
-              style={{ backgroundColor: lightBaseColor }}
-            />
-          )}
-          {wallet.id === walletId && (
-            <span
-              className="absolute top-0 bottom-0 left-0 w-0.5 rounded-r-lg"
-              style={{ backgroundColor: baseColor }}
-            />
-          )}
+          <ActiveBackground showBgColor={wallet.id === walletId} />
+          <ActiveBarIdentification showBar={wallet.id === walletId} />
           <div
             className="absolute left-2 rounded-r-lg w-0.5 opacity-0 group-hover:opacity-100 cursor-move"
             ref={draggableRef}

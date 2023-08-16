@@ -90,7 +90,7 @@ export function DatePickerManualDates({ range }: DatePickerManualDatesProps) {
   }, [taskTime, selectedDate]);
 
   return (
-    <div className="flex justify-between items-center py-1">
+    <div className="flex items-center justify-between py-1">
       {range ? (
         <div className="w-full grid grid-cols-2 place-self-center space-x-1">
           {/* Set Start Date Selection */}
@@ -100,7 +100,7 @@ export function DatePickerManualDates({ range }: DatePickerManualDatesProps) {
             )}
             <label
               htmlFor="from"
-              className="flex space-y-1 text-xs items-center w-40 border border-alsoit-purple-300 rounded-md py-1.5 px-0.5 relative"
+              className="flex space-y-1 text-xs items-center w-40 h-10 border border-alsoit-purple-300 rounded-md py-1.5 px-0.5 relative"
             >
               <div className="flex space-x-1 items-center">
                 <div className="bg-alsoit-purple-300 rounded-md p-1">
@@ -128,6 +128,7 @@ export function DatePickerManualDates({ range }: DatePickerManualDatesProps) {
                 <ReusableSelect
                   options={createDynamicTimeComponent(timeInterval, timezone)}
                   value={HistoryFilterMemory?.time?.from || ''}
+                  style="top-3"
                   onclick={(e: string) => {
                     dispatch(
                       setHistoryMemory({
@@ -154,7 +155,7 @@ export function DatePickerManualDates({ range }: DatePickerManualDatesProps) {
             )}
             <label
               htmlFor="to"
-              className="flex space-y-1 text-xs items-center w-40 border border-alsoit-purple-300 rounded-md py-1.5 px-0.5 relative"
+              className="flex space-y-1 text-xs items-center w-40 h-10 border border-alsoit-purple-300 rounded-md py-1.5 px-0.5 relative"
             >
               <div className="flex space-x-1 items-center">
                 <div className="bg-alsoit-purple-300 rounded-md p-1">
@@ -207,14 +208,14 @@ export function DatePickerManualDates({ range }: DatePickerManualDatesProps) {
         // Default Set date
         <label
           htmlFor="from"
-          className="flex space-y-1 space-x-1 text-xs items-center w-48 border border-alsoit-purple-300 p-1 rounded-md"
+          className="flex items-center w-48 p-1 space-x-1 space-y-1 text-xs border rounded-md border-alsoit-purple-300"
         >
-          <div className="bg-alsoit-purple-300 rounded-md p-1">
+          <div className="p-1 rounded-md bg-alsoit-purple-300">
             <CalendarIcon active={iconToggle.startIcon} fixed />
           </div>
           <div className="relative">
             <div
-              className="w-28 h-4 px-1 text-alsoit-text-lg font-semibold"
+              className="h-4 px-1 font-semibold w-28 text-alsoit-text-lg"
               contentEditable
               suppressContentEditableWarning
               onBlur={handleFilterDateDispatch}

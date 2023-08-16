@@ -70,7 +70,7 @@ export function List({ tasks }: ListProps) {
 
     dispatch(getTaskColumns(newColumns));
     setColumns(newColumns);
-  }, [data]);
+  }, []);
 
   const [collapseTable, setCollapseTable] = useState(false);
   const [showNewTaskField, setShowNewTaskField] = useState(false);
@@ -120,7 +120,13 @@ export function List({ tasks }: ListProps) {
             </div>
           ) : null}
           {Object.keys(sortedTasks).map((key) => (
-            <Table label={key} key={key} heads={hideTask.length ? hideTask : taskColumns} data={sortedTasks[key]} />
+            <Table
+              listName={listName}
+              label={key}
+              key={key}
+              heads={hideTask.length ? hideTask : taskColumns}
+              data={sortedTasks[key]}
+            />
           ))}
         </div>
       ) : null}

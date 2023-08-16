@@ -1,51 +1,67 @@
 import React from 'react';
-import Picker from '../../../../../assets/icons/Picker';
-import Pin from '../../../../../assets/icons/Pin';
 import ColumnTypeDropdown from './ColumnTypeDropdown';
 import CreateDropdownField from './CreateDropdownField';
+import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
+import { setNewCustomPropertyDetails } from '../../../../../features/task/taskSlice';
+import CreateDateField from './CreateDateField';
+import CreateTextField from './CreateTextField';
+import Picker from '../../../../../assets/icons/Picker';
+import AlsoitMenuDropdown from '../../../../DropDowns';
+import ColorPalette from '../../../../ColorPalette/component/ColorPalette';
+import { ListColourProps } from '../../../../tasks/ListItem';
 
 function NewColumn() {
+  const dispatch = useAppDispatch();
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const { newCustomPropertyDetails } = useAppSelector((state) => state.task);
+
+  const handleColor = (color: string | ListColourProps) => {
+    dispatch(setNewCustomPropertyDetails({ ...newCustomPropertyDetails, color: color as string }));
+  };
+
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
   return (
-    <div>
-      <div className="flex justify-between items-center my-4">
-        <div style={{ width: '12%' }}>
-          <p className="text-alsoit-text-sm">FIELD REF</p>
-          <div className="h-6 border-0 text-alsoit-text-md flex justify-center bg-white items-center">1</div>
-        </div>
-        <div className="w-2/5">
-          <p className="text-alsoit-text-sm">FIELD NAME</p>
-          <div className="w-full h-6 border-0 text-alsoit-text-md flex bg-white items-center">
-            <input
-              style={{ width: '90%' }}
-              type="text"
-              className="text-alsoit-text-sm border-0 focus:border-0 active:border-0 h-6"
-            />
-            <div className="flex gap-0.5 justify-center">
-              <Picker />
-              <hr />
-              <Pin />
-            </div>
-          </div>
-        </div>
-        <div className="w-2/5">
-          <p className="text-alsoit-text-sm">FIELD TYPE</p>
+    <div className="w-full">
+      <div className="flex gap-2 items-center justify-between my-4 w-full">
+        <div className="w-2/4">
+          <p className="text-alsoit-text-xi text-alsoit-gray-100">PROPERTY TYPE</p>
           <ColumnTypeDropdown />
         </div>
-      </div>
-      <CreateDropdownField />
-      <div className="flex justify-between w-full my-4">
-        <button className="bg-white text-red-600 p-0.5 border-2 border-red-600 rounded hover:text-white hover:bg-red-500">
-          Cancel
-        </button>
-        <div className="flex gap-1">
-          <button className="bg-white text-fuchsia-600 p-0.5 border-2 border-fuchsia-600 rounded hover:bg-fuchsia-600 hover:text-white">
-            Add Field
-          </button>
-          <button className="bg-white text-fuchsia-600 p-0.5 border-2 border-fuchsia-600 rounded hover:bg-fuchsia-600 hover:text-white">
-            Save to
-          </button>
+        <div className="w-2/4">
+          <p className="text-alsoit-text-xi text-alsoit-gray-100">PROPERTY NAME</p>
+          <div
+            className="flex items-center w-full rounded-md bg-white gap-1"
+            style={{ height: '30px', borderRadius: '6px' }}
+          >
+            <input
+              onChange={(e) =>
+                dispatch(setNewCustomPropertyDetails({ ...newCustomPropertyDetails, name: e.target.value }))
+              }
+              type="text"
+              className="block border-0 py-1 ring-0  placeholder-gray-300 focus:ring-0 focus:ring-inset text-alsoit-text-xi sm:text-sm sm:leading-6"
+              value={newCustomPropertyDetails.name}
+              style={{ color: newCustomPropertyDetails.color ? newCustomPropertyDetails.color : '#242424' }}
+            />
+            <button onClick={handleClick}>
+              <Picker />
+            </button>
+            <AlsoitMenuDropdown handleClose={handleClose} anchorEl={anchorEl}>
+              <ColorPalette handleClick={handleColor} />
+            </AlsoitMenuDropdown>
+          </div>
         </div>
       </div>
+      {newCustomPropertyDetails.type.toLowerCase() === 'single label' && <CreateDropdownField />}
+      {newCustomPropertyDetails.type.toLowerCase() === 'multi label' && <CreateDropdownField />}
+      {newCustomPropertyDetails.type.toLowerCase() === 'date' && <CreateDateField />}
+      {newCustomPropertyDetails.type.toLowerCase() === 'short text' && <CreateTextField />}
+      {newCustomPropertyDetails.type.toLowerCase() === 'long text' && <CreateTextField />}
     </div>
   );
 }

@@ -138,7 +138,7 @@ export default function ListAddModal({ handleCheckedGroupTasks }: { handleChecke
         }}
       >
         {items.map((item) => (
-          <>
+          <div key={item.id}>
             <div className="w-full m-2">
               {(item.label == 'List Info' || item.label == 'Archive') && <p className="border-t-2 mr-5"></p>}
             </div>
@@ -155,7 +155,7 @@ export default function ListAddModal({ handleCheckedGroupTasks }: { handleChecke
               </div>
               {item.arrowRight}
             </MenuItem>
-          </>
+          </div>
         ))}
         <p className="border-t-2"></p>
         <p

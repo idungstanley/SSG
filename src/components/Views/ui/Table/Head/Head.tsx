@@ -7,7 +7,7 @@ import { Column } from '../../../types/table';
 import { Chevron } from '../../Chevron';
 import {
   setActiveTaskColumn,
-  setListIdForCustom,
+  setEntityForCustom,
   setSelectedTasksArray,
   setSortArr,
   setSortArray
@@ -22,8 +22,10 @@ import PlusIcon from '../../../../../assets/icons/PlusIcon';
 import { TbAlignJustified } from 'react-icons/tb';
 import { MdEditNote, MdOutlineDragIndicator } from 'react-icons/md';
 import { BiHide } from 'react-icons/bi';
-import { setIsManageStatus } from '../../../../../features/workspace/workspaceSlice';
+import { setActiveTabId, setIsManageStatus } from '../../../../../features/workspace/workspaceSlice';
 import AlsoitMenuDropdown from '../../../../DropDowns';
+import { setStatusTaskListDetails } from '../../../../../features/list/listSlice';
+import { useParams } from 'react-router-dom';
 import { Task } from '../../../../../features/task/interface.tasks';
 
 interface HeadProps {
@@ -36,6 +38,7 @@ interface HeadProps {
   taskLength: number;
   onToggleCollapseTasks: VoidFunction;
   listId: string | undefined;
+  listName?: string;
   groupedTask?: Task[];
 }
 
@@ -54,11 +57,13 @@ export function Head({
   mouseDown,
   label,
   listId,
+  listName,
   groupedTask
 }: HeadProps) {
   const parsedLabel = parseLabel(label);
   const dispatch = useAppDispatch();
   const scrollToRef = useRef(null);
+  const { listId: list_id, hubId, walletId } = useParams();
   const sortAbles: string[] = ['Task', 'Updated at', 'Created at', 'Status', 'Priority', 'Assignees'];
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
@@ -169,9 +174,16 @@ export function Head({
       handleClick: () => {
         dispatch(setIsManageStatus(!isManageStatus));
         setShowStatusDropdown(null);
+        dispatch(setStatusTaskListDetails({ listId, listName }));
       }
     }
   ];
+
+  const handleAddCustomProperty = () => {
+    const type = hubId ? 'hub' : walletId ? 'wallet' : 'list';
+    dispatch(setEntityForCustom({ id: hubId ?? walletId ?? list_id, type }));
+    dispatch(setActiveTabId(10));
+  };
 
   return columns.length > 0 ? (
     <thead className="contents">
@@ -185,10 +197,10 @@ export function Head({
               style={{ backgroundColor: headerStatusColor }}
             >
               <div>
-                {/* <div className=" items-center space-x-1 viewSettings" onClick={(e) => e.stopPropagation()}>
-                  <img src={statusbox} alt="" className="border-r pr-1" onClick={handleCheckedGroupTasks} />
-                  <CiEdit className="cursor-pointer w-4 h-4 border-r pr-1" />
-                  <BsThreeDots className="cursor-pointer w-4 h-4" onClick={(e) => handleClick(e)} />
+                {/* <div className="items-center space-x-1 viewSettings" onClick={(e) => e.stopPropagation()}>
+                  <img src={statusbox} alt="" className="pr-1 border-r" onClick={handleCheckedGroupTasks} />
+                  <CiEdit className="w-4 h-4 pr-1 border-r cursor-pointer" />
+                  <BsThreeDots className="w-4 h-4 cursor-pointer" onClick={(e) => handleClick(e)} />
                 </div>
                 <p className="border-t py-.5 viewSettings"></p> */}
                 <div className="flex items-center">
@@ -203,15 +215,15 @@ export function Head({
                   <span ref={scrollToRef} className="pb-1" style={{ fontSize: '11px', WebkitTextStroke: '0.5px' }}>
                     {parsedLabel}
                   </span>
-                  <div className=" items-center pl-2 space-x-1 viewSettings" onClick={(e) => e.stopPropagation()}>
+                  <div className="items-center pl-2 space-x-1 viewSettings" onClick={(e) => e.stopPropagation()}>
                     <img
                       src={statusbox}
                       alt=""
-                      className="border-r cursor-pointer pr-1"
+                      className="pr-1 border-r cursor-pointer"
                       onClick={handleCheckedGroupTasks}
                     />
-                    <CiEdit className="cursor-pointer w-4 h-4 border-r pr-1" />
-                    <BsThreeDots className="cursor-pointer w-4 h-4" onClick={(e) => handleClick(e)} />
+                    <CiEdit className="w-4 h-4 pr-1 border-r cursor-pointer" />
+                    <BsThreeDots className="w-4 h-4 cursor-pointer" onClick={(e) => handleClick(e)} />
                   </div>
                 </div>
               </div>
@@ -267,10 +279,7 @@ export function Head({
               )}
             </div>
           </div>
-          <FiPlusCircle
-            className="w-4 h-4 font-black AddColumnDropdownButton mr-2"
-            onClick={() => dispatch(setListIdForCustom(listId))}
-          />
+          <FiPlusCircle className="w-4 h-4 font-black AddColumnDropdownButton mr-2" onClick={handleAddCustomProperty} />
           {headerId === columns[0].id && (
             <SortModal
               handleClose={handleClose}

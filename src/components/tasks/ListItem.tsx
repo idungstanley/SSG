@@ -27,6 +27,7 @@ import Drag from '../../assets/icons/Drag';
 import { IList } from '../../features/hubs/hubs.interfaces';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
 import ToolTip from '../Tooltip/Tooltip';
+import ActiveBarIdentification from './Component/ActiveBarIdentification';
 
 interface ListItemProps {
   list: IList;
@@ -148,7 +149,11 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
 
   const handleListColour = (id: string, e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     e.stopPropagation();
-    dispatch(setPaletteDropDown({ show: true, paletteId: id, paletteType: EntityType.list }));
+    if (paletteId === id && show) {
+      dispatch(setPaletteDropDown({ ...paletteDropdown, show: false }));
+    } else {
+      dispatch(setPaletteDropDown({ show: true, paletteId: id, paletteType: EntityType.list }));
+    }
     dispatch(setListPaletteColor(list?.color === null ? { innerColour: 'white', outerColour: 'black' } : color));
   };
 
@@ -188,9 +193,7 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
         }}
         onClick={() => handleListLocation(list.id, list.name)}
       >
-        {list.id === listId && (
-          <span className="absolute top-0 bottom-0 left-0 rounded-r-lg w-0.5" style={{ backgroundColor: baseColor }} />
-        )}
+        <ActiveBarIdentification showBar={list.id === listId} />
         <div
           className="absolute left-2 rounded-r-lg w-0.5 opacity-0 group-hover:opacity-100 cursor-move"
           ref={draggableRef}

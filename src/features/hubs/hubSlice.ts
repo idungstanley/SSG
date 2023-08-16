@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Hub } from '../../pages/workspace/hubs/components/ActiveTree/activetree.interfaces';
+import { Hub, StatusProps } from '../../pages/workspace/hubs/components/ActiveTree/activetree.interfaces';
 
 interface HubState {
   hub: Hub[];
@@ -31,6 +31,7 @@ interface HubState {
   favUpdateName: null | string;
   createWLID: string | null;
   editHub: boolean;
+  spaceStatuses: StatusProps[];
   openedHubId: string[];
 }
 
@@ -64,7 +65,10 @@ const initialState: HubState = {
   subHubExt: { id: null, type: null },
   selectedTreeDetails: { name: null, id: null, type: null },
   toggleTree: false,
-  entityToCreate: null
+  entityToCreate: null,
+  spaceStatuses: [
+    { color: null, is_default: null, id: null, model_id: null, model: null, type: null, position: null, name: null }
+  ]
 };
 
 export const hubSlice = createSlice({
@@ -79,6 +83,9 @@ export const hubSlice = createSlice({
       action: PayloadAction<{ name: string | null | undefined; id: string | null; type: string | null }>
     ) {
       state.selectedTreeDetails = action.payload;
+    },
+    setSpaceStatuses(state, action: PayloadAction<StatusProps[]>) {
+      state.spaceStatuses = action.payload;
     },
     getHub(state, action: PayloadAction<Hub[]>) {
       state.hub = action.payload;
@@ -209,6 +216,7 @@ export const {
   setShowFavEditInput,
   setTriggerFavUpdate,
   setFavUpdateName,
+  setSpaceStatuses,
   setCreateWLID,
   setEditHub,
   setParentHubExt,
