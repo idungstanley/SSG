@@ -6,10 +6,11 @@ import { CiSearch } from 'react-icons/ci';
 
 interface IActiveTreeDataFormaterProps {
   data: Hub[];
+  openNewHub: (id: string) => void;
   setToggleTree?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export default function ActiveTreeDataFormater({ data, setToggleTree }: IActiveTreeDataFormaterProps) {
+export default function ActiveTreeDataFormater({ data, openNewHub, setToggleTree }: IActiveTreeDataFormaterProps) {
   return data.length ? (
     <div
       className="absolute max-h-48 left-0 right-0 h-auto px-1 space-x-2 overflow-y-scroll bg-white border border-gray-100 rounded-md top-0 ring-1 ring-black ring-opacity-5 focus:outline-none"
@@ -18,7 +19,7 @@ export default function ActiveTreeDataFormater({ data, setToggleTree }: IActiveT
       <div className="sticky top-0 z-50 pt-3 bg-white">
         <Input leadingIcon={<CiSearch />} placeholder="Choose Location" name="search" onChange={() => ({})} />
       </div>
-      <ActiveTreeList hubs={data} setToggleTree={setToggleTree} />
+      <ActiveTreeList hubs={data} openNewHub={openNewHub} setToggleTree={setToggleTree} />
     </div>
   ) : null;
 }

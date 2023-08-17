@@ -1,12 +1,12 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getWalletServices } from '../../../../../features/wallet/walletService';
 import { useDispatch } from 'react-redux';
 import { setActiveEntity, setActiveItem } from '../../../../../features/workspace/workspaceSlice';
 import MenuDropdown from '../../../../../components/Dropdown/MenuDropdown';
 import { useAppSelector } from '../../../../../app/hooks';
-import { dataProps } from '../../../../../components/Index/walletIndex/WalletIndex';
 import { EntityType } from '../../../../../utils/EntityTypes/EntityType';
+import { findCurrentWallet } from '../../../../../managers/Wallet';
+import { Wallet } from '../../../../../pages/workspace/hubs/components/ActiveTree/activetree.interfaces';
 
 interface SubWalletIndexProps {
   padding?: string;
@@ -14,48 +14,43 @@ interface SubWalletIndexProps {
 
 function ActiveSubWallet({ padding = 'pl-8' }: SubWalletIndexProps) {
   const dispatch = useDispatch();
-
-  const { toggleArchiveWallet } = useAppSelector((state) => state.wallet);
-  const { activeItemId } = useAppSelector((state) => state.workspace);
-  const { showMenuDropdown } = useAppSelector((state) => state.hub);
-
-  const { data: subwallet } = getWalletServices({
-    Archived: toggleArchiveWallet,
-    parentId: activeItemId
-  });
-
   const navigate = useNavigate();
+
+  const { activeItemId } = useAppSelector((state) => state.workspace);
+  const { showMenuDropdown, hub } = useAppSelector((state) => state.hub);
+
+  const [wallet, setWallet] = useState<Wallet>();
+
+  useEffect(() => {
+    if (activeItemId) {
+      setWallet(findCurrentWallet(activeItemId as string, hub));
+    }
+  }, [activeItemId]);
+
   const handleLocation = (id: string, type = 'subWallet') => {
     navigate(`tasks/w/${id}`);
     dispatch(setActiveItem({ activeItemType: type, activeItemId: id }));
     dispatch(setActiveEntity({ id, type: EntityType.wallet }));
   };
 
-  return (
+  return wallet ? (
     <div>
-      {subwallet?.data?.wallets.map(
-        (wallet: dataProps) =>
-          wallet.id === activeItemId && (
-            <div key={wallet.id}>
-              <section
-                className={`flex relative items-center mt-0.5 justify-between ${padding} text-sm h-8 py-1.5 space-x-1 hover:bg-gray-100 ${
-                  wallet.id === activeItemId && 'bg-green-100 text-black'
-                }`}
-              >
-                <div className="flex items-center cursor-pointer hover:underline hover:decoration-dashed">
-                  <div onClick={() => handleLocation(wallet.id)}>
-                    <p className="ml-2 tracking-wider capitalize truncate" style={{ fontSize: '10px' }}>
-                      {wallet.name.length > 10 ? wallet.name.substr(0, 10) + '...' : wallet.name}
-                    </p>
-                  </div>
-                </div>
-              </section>
-              <div>{showMenuDropdown === wallet.id ? <MenuDropdown /> : null}</div>
-            </div>
-          )
-      )}
+      <section
+        className={`flex relative items-center mt-0.5 justify-between ${padding} text-sm h-8 py-1.5 space-x-1 hover:bg-gray-100 ${
+          wallet.id === activeItemId && 'bg-green-100 text-black'
+        }`}
+      >
+        <div className="flex items-center cursor-pointer hover:underline hover:decoration-dashed">
+          <div onClick={() => handleLocation(wallet.id)}>
+            <p className="ml-2 tracking-wider capitalize truncate" style={{ fontSize: '10px' }}>
+              {wallet.name.length > 10 ? wallet.name.substr(0, 10) + '...' : wallet.name}
+            </p>
+          </div>
+        </div>
+      </section>
+      <div>{showMenuDropdown === wallet.id ? <MenuDropdown /> : null}</div>
     </div>
-  );
+  ) : null;
 }
 
 export default ActiveSubWallet;

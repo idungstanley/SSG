@@ -11,12 +11,12 @@ export default function TimerModal() {
   const { timerLastMemory, activeItemId } = useAppSelector((state) => state.workspace);
   const { timerDetails, period } = useAppSelector((state) => state.task);
 
-  const { activeTabId, workSpaceId, hubId, listId, taskId } = timerLastMemory;
+  const { activeTabId, workSpaceId, hubId, subhubId, listId, taskId } = timerLastMemory;
   const { mutate } = EndTimeEntriesService();
 
   const handleResetTimer = () => {
-    dispatch(resetWorkSpace({ activeTabId, workSpaceId, hubId, listId, taskId }));
-    navigate(handleEntity({ workSpaceId, hubId, listId, taskId }), { replace: true });
+    dispatch(resetWorkSpace({ activeTabId, workSpaceId, hubId, subhubId, listId, taskId }));
+    navigate(handleEntity({ workSpaceId, hubId, subhubId, listId, taskId }), { replace: true });
   };
 
   const stop = () => {

@@ -2,9 +2,8 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import requestNew from '../../app/requestNew';
 import { useDispatch } from 'react-redux';
 import { setArchiveList } from './listSlice';
-import { closeMenu, setSpaceStatuses } from '../hubs/hubSlice';
-import { IWalletRes } from '../wallet/wallet.interfaces';
-import { IListDetailRes, listDetails, taskCountFields } from './list.interfaces';
+import { closeMenu } from '../hubs/hubSlice';
+import { IListDetailRes, taskCountFields } from './list.interfaces';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { useParams } from 'react-router-dom';
 import { generateFilters } from '../../components/TasksHeader/lib/generateFilters';
@@ -89,36 +88,6 @@ export const createListService = (data: {
     }
   });
   return response;
-};
-
-// get lists
-export const getListService = (id: string | null) => {
-  const hubID = id;
-  return useQuery(['list', hubID], async () => {
-    const response = await requestNew<listDetails | undefined>({
-      url: 'lists',
-      method: 'GET',
-      params: {
-        hub_id: hubID
-      }
-    });
-    return response;
-  });
-};
-
-export const getListServices = (data: { Archived: boolean; walletId?: string | null }) => {
-  // const queryClient = useQueryClient();
-  return useQuery(['lists', { data: data.walletId, isArchived: data.Archived ? 1 : 0 }], () =>
-    requestNew<IWalletRes | undefined>({
-      url: 'lists',
-      method: 'GET',
-      params: {
-        wallet_id: data.walletId,
-        is_archived: data.Archived ? 1 : 0 // send is_archived query
-        // parent_id: data.parentId, //not sure if sub list is needed
-      }
-    })
-  );
 };
 
 //edit list

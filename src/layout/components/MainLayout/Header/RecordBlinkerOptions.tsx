@@ -10,7 +10,7 @@ export default function BlinkerModal() {
   const { recorderLastMemory } = useAppSelector((state) => state.workspace);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { activeTabId, workSpaceId, hubId, listId, taskId } = recorderLastMemory as IRecorderLastMemory;
+  const { activeTabId, workSpaceId, hubId, subhubId, listId, taskId } = recorderLastMemory as IRecorderLastMemory;
 
   const { handleStopStream } = useMediaStream();
 
@@ -19,8 +19,8 @@ export default function BlinkerModal() {
       recorder,
       stream
     });
-    dispatch(resetWorkSpace({ activeTabId, workSpaceId, hubId, listId, taskId }));
-    navigate(handleEntity({ workSpaceId, hubId, listId, taskId }), { replace: true });
+    dispatch(resetWorkSpace({ activeTabId, workSpaceId, hubId, subhubId, listId, taskId }));
+    navigate(handleEntity({ workSpaceId, hubId, subhubId, listId, taskId }), { replace: true });
   };
   return (
     <div className="flex flex-col w-full">
@@ -37,7 +37,7 @@ export default function BlinkerModal() {
       </span>
       <span
         className="capitalize px-2 py-3 hover:bg-gray-300 cursor-pointer"
-        onClick={() => dispatch(resetWorkSpace({ activeTabId, workSpaceId, hubId, listId, taskId }))}
+        onClick={() => dispatch(resetWorkSpace({ activeTabId, workSpaceId, hubId, subhubId, listId, taskId }))}
       >
         Return to Recording tab
       </span>

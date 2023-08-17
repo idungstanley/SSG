@@ -23,7 +23,6 @@ export default function SearchSubHList({ hubs, handleTabClick }: ISearchSubHList
   const dispatch = useAppDispatch();
   const { hubId, walletId, listId } = useParams();
   const { currentItemId, showExtendedBar } = useAppSelector((state) => state.workspace);
-  const { showSidebar } = useAppSelector((state) => state.account);
   const { lastActiveItem } = useAppSelector((state) => state.workspace);
 
   const [showChildren, setShowChidren] = useState<string | null | undefined>(null);
@@ -84,7 +83,11 @@ export default function SearchSubHList({ hubs, handleTabClick }: ISearchSubHList
               item={hub}
               handleClick={handleClick}
               handleTabClick={handleTabClick}
-              showChildren={((hub.wallets.length || hub.lists.length) && isCanBeOpen(hub.id)) as boolean}
+              showChildren={
+                ((hub?.children?.length || hub?.wallets?.length || hub?.lists?.length) &&
+                  showChildren &&
+                  isCanBeOpen(hub.id)) as boolean
+              }
               type={EntityType.subHub}
             />
             <div style={lastActiveItem === 'Wallet' ? { opacity: '0.5', pointerEvents: 'none' } : {}}>

@@ -19,7 +19,7 @@ import { EntityType } from '../../utils/EntityTypes/EntityType';
 
 export default function HubPage() {
   const dispatch = useAppDispatch();
-  const { hubId, taskId } = useParams();
+  const { hubId, subhubId, taskId } = useParams();
 
   const { filterTaskByAssigneeIds } = useAppSelector((state) => state.task);
 
@@ -36,7 +36,7 @@ export default function HubPage() {
   }, [hub]);
 
   const { data, hasNextPage, fetchNextPage } = UseGetFullTaskList({
-    itemId: hubId,
+    itemId: hubId || subhubId,
     itemType: EntityType.hub,
     assigneeUserId: filterTaskByAssigneeIds
   });

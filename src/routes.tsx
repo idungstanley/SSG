@@ -173,6 +173,8 @@ export const routes = (user: IUser | null) => {
         // old view here now default  =============================
         { path: 'tasks/h/:hubId', element: <HubPage /> },
         { path: 'tasks/h/:hubId/t/:taskId', element: <HubPage /> },
+        { path: 'tasks/sh/:subhubId', element: <HubPage /> },
+        { path: 'tasks/sh/:subhubId/t/:taskId', element: <HubPage /> },
         { path: 'tasks/w/:walletId', element: <WalletPage /> },
         { path: 'tasks/w/:walletId/t/:taskId', element: <WalletPage /> },
         { path: 'tasks/l/:listId', element: <ListPage /> },

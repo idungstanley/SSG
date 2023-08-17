@@ -23,6 +23,7 @@ import ThreeDotIcon from '../../assets/icons/ThreeDotIcon';
 import { useDraggable, useDroppable } from '@dnd-kit/core';
 import Drag from '../../assets/icons/Drag';
 import ToolTip from '../Tooltip/Tooltip';
+import { List, Wallet } from '../../pages/workspace/hubs/components/ActiveTree/activetree.interfaces';
 import ActiveBackground from './Component/ActiveBackground';
 import ActiveBarIdentification from './Component/ActiveBarIdentification';
 
@@ -33,7 +34,8 @@ interface WalletItemProps {
     color?: string;
     parent_id?: string | null;
     hub_id?: string;
-    has_descendants?: number;
+    children: Wallet[];
+    lists: List[];
   };
   showSubWallet: boolean;
   paddingLeft: string | number;
@@ -152,7 +154,7 @@ export default function WalletItem({
   };
 
   const renderIcons = (showSubWallet: boolean) => {
-    if (wallet?.has_descendants) {
+    if (wallet?.children.length || wallet?.lists.length) {
       if (showSubWallet) {
         return (
           <>

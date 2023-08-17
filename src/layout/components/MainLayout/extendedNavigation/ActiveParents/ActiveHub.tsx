@@ -39,8 +39,8 @@ export default function ActiveHub() {
     if (activeItemType === EntityType.subHub) {
       return <ActiveSubHub />;
     } else if (activeItemType === EntityType.wallet) {
-      return <ActiveWallet showHubList={!false} />;
-    } else if (activeItemType === EntityType.subWallet) {
+      return <ActiveWallet showHubList={true} />;
+    } else if (activeItemType?.includes(EntityType.subWallet)) {
       return <ActiveSubWallet padding="pl-0" />;
     }
   };

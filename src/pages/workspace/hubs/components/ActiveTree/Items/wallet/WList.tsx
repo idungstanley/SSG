@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Wallet } from '../../activetree.interfaces';
 import LList from '../list/LList';
 import WalletItem from '../../../../../../../components/tasks/WalletItem';
@@ -9,7 +9,6 @@ import {
   setActiveEntityName,
   setActiveItem,
   setCurrentItem,
-  setIsFirstOpened,
   setOpenedEntitiesIds,
   setOpenedParentsIds,
   setShowHub
@@ -37,23 +36,10 @@ export default function WList({ wallets, leftMargin, paddingLeft, type, level = 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const { showExtendedBar, isFirstOpened, openedEntitiesIds, openedParentsIds } = useAppSelector(
-    (state) => state.workspace
-  );
+  const { showExtendedBar, openedEntitiesIds, openedParentsIds } = useAppSelector((state) => state.workspace);
 
   const [openedIds, setOpenedIds] = useState<string[]>([]);
   const [stickyButtonIndex, setStickyButtonIndex] = useState<number | undefined>(-1);
-
-  useEffect(() => {
-    if (isFirstOpened) {
-      for (const wallet of wallets) {
-        if (wallet.children.length || wallet.lists.length) {
-          setOpenedIds((prev) => [...prev, wallet.id]);
-          dispatch(setOpenedEntitiesIds([...openedEntitiesIds, wallet.id]));
-        }
-      }
-    }
-  }, [wallets, isFirstOpened]);
 
   const handleLocation = (id: string, name: string, parent_id: string | null, index?: number) => {
     setStickyButtonIndex(index === stickyButtonIndex ? -1 : index);
@@ -81,7 +67,6 @@ export default function WList({ wallets, leftMargin, paddingLeft, type, level = 
 
   const handleShowSubWallet = (id: string, parent_id: string | null, index?: number) => {
     setStickyButtonIndex(index === stickyButtonIndex ? -1 : index);
-    dispatch(setIsFirstOpened(false));
     dispatch(setCurrentWalletId(id));
     if (parent_id) dispatch(setParentWalletId(parent_id));
     dispatch(

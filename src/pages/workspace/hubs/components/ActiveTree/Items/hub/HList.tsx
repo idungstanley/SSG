@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Hub, ListProps } from '../../activetree.interfaces';
 import WList from '../wallet/WList';
 import LList from '../list/LList';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import HubItem from '../../../../../../../components/tasks/HubItem';
 import { useAppDispatch, useAppSelector } from '../../../../../../../app/hooks';
 import {
@@ -32,35 +32,26 @@ import HubItemOverlay from '../../../../../../../components/tasks/HubItemOverLay
 export default function HList({ hubs }: ListProps) {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { hubId, walletId, listId } = useParams();
-  const { currentItemId, showExtendedBar, createEntityType, openedParentsIds, openedEntitiesIds } = useAppSelector(
+
+  const { showExtendedBar, createEntityType, openedParentsIds, openedEntitiesIds } = useAppSelector(
     (state) => state.workspace
   );
   const { entityToCreate } = useAppSelector((state) => state.hub);
   const { showSidebar } = useAppSelector((state) => state.account);
-  const [showChildren, setShowChidren] = useState<string | null | undefined>(null);
   const [stickyButtonIndex, setStickyButtonIndex] = useState<number | undefined>(-1);
   const [openedNewHubId, setOpenedNewHubId] = useState<string>('');
   const CapitalizeType = Capitalize(entityToCreate);
   const hubCreationStatus = 'New ' + CapitalizeType + ' Under Construction';
-  const id = hubId || walletId || listId || currentItemId;
 
   const dummyHub = {
     name: hubCreationStatus,
     id: hubCreationStatus,
-    wallets: [],
-    lists: [],
-    children: [],
     color: 'blue',
     path: null
   };
 
   const hubsSpread = [...hubs, dummyHub];
   const hubsWithEntity = createEntityType === EntityType.hub ? (hubsSpread as Hub[]) : hubs;
-
-  useEffect(() => {
-    setShowChidren(id);
-  }, []);
 
   const handleLocation = (id: string, name: string, index?: number) => {
     dispatch(setSubHubExt({ id: null, type: null }));
@@ -80,8 +71,7 @@ export default function HList({ hubs }: ListProps) {
     );
     setStickyButtonIndex(index === stickyButtonIndex ? -1 : index);
     dispatch(setActiveEntityName(name));
-    setShowChidren(id);
-    dispatch(setActiveEntity({ id: id, type: EntityType.hub }));
+    dispatch(setActiveEntity({ id, type: EntityType.hub }));
     dispatch(setShowPilot(true));
     dispatch(setActiveTabId(4));
     navigate(`tasks/h/${id}`, {
@@ -104,7 +94,6 @@ export default function HList({ hubs }: ListProps) {
     dispatch(setShowHub(true));
 
     if (id === openedNewHubId) {
-      setShowChidren(null);
       setOpenedNewHubId('');
       dispatch(setOpenedParentsIds(openedParentsIds.filter((item) => item !== id)));
       dispatch(setOpenedEntitiesIds(openedEntitiesIds.filter((item) => item !== id)));
@@ -112,7 +101,6 @@ export default function HList({ hubs }: ListProps) {
       if (parent_id) {
         dispatch(setOpenedParentsIds([...openedParentsIds, parent_id]));
       }
-      setShowChidren(id);
       setOpenedNewHubId(id);
       dispatch(setOpenedEntitiesIds([...openedEntitiesIds, id]));
     }
@@ -129,7 +117,7 @@ export default function HList({ hubs }: ListProps) {
     if (openedNewHubId) {
       return openedNewHubId === id;
     }
-    return !!showChildren;
+    if (openedEntitiesIds.includes(id)) return true;
   };
 
   const { draggableItemId } = useAppSelector((state) => state.list);
@@ -149,7 +137,8 @@ export default function HList({ hubs }: ListProps) {
               item={hub}
               handleClick={handleClick}
               showChildren={
-                ((hub.children.length || hub.wallets.length || hub.lists.length) && isCanBeOpen(hub.id)) as boolean
+                ((hub?.children?.length || hub?.wallets?.length || hub?.lists?.length) &&
+                  isCanBeOpen(hub.id)) as boolean
               }
               handleLocation={handleLocation}
               isSticky={stickyButtonIndex !== undefined && stickyButtonIndex !== null && stickyButtonIndex <= index}
@@ -159,10 +148,10 @@ export default function HList({ hubs }: ListProps) {
               topNumber="50px"
               zNumber="5"
             />
-            {hub.children.length && isCanBeOpen(hub.id) ? <SubHList hubs={hub.children as Hub[]} /> : null}
+            {hub?.children?.length && isCanBeOpen(hub.id) ? <SubHList hubs={hub.children as Hub[]} /> : null}
             {showSidebar && (
               <div>
-                {hub.wallets.length && isCanBeOpen(hub.id) ? (
+                {hub?.wallets?.length && isCanBeOpen(hub.id) ? (
                   <WList
                     wallets={hub.wallets}
                     leftMargin={false}
@@ -171,7 +160,7 @@ export default function HList({ hubs }: ListProps) {
                     paddingLeft="33"
                   />
                 ) : null}
-                {hub.lists.length && isCanBeOpen(hub.id) && !showExtendedBar ? (
+                {hub?.lists?.length && isCanBeOpen(hub.id) && !showExtendedBar ? (
                   <LList list={hub.lists} leftMargin={false} paddingLeft="48" />
                 ) : null}
               </div>

@@ -2,31 +2,28 @@ import React from 'react';
 import MenuDropdown from '../../Dropdown/MenuDropdown';
 import { useAppSelector } from '../../../app/hooks';
 import ListItem from '../../tasks/ListItem';
-import { getListService } from '../../../features/list/listService';
 import { IList } from '../../../features/hubs/hubs.interfaces';
+import { List } from '../../../pages/workspace/hubs/components/ActiveTree/activetree.interfaces';
 
 interface ListIndexProps {
+  data: List[];
   showHubList: boolean;
   paddingLeft?: string;
-  parentId?: string;
 }
 
-function ListIndex({ showHubList, paddingLeft = '26', parentId }: ListIndexProps) {
+function ListIndex({ data, showHubList, paddingLeft = '26' }: ListIndexProps) {
   const { showMenuDropdown } = useAppSelector((state) => state.hub);
-  const { activeItemId } = useAppSelector((state) => state.workspace);
 
-  const { data } = getListService(parentId || activeItemId);
-
-  return (
+  return data?.length ? (
     <div id="createWallet" className={`${showHubList ? 'block' : 'hidden'}`}>
-      {data?.data.lists.map((list: IList) => (
+      {data.map((list: IList) => (
         <div key={list.id}>
           <ListItem paddingLeft={paddingLeft} list={list} />
           {showMenuDropdown === list.id ? <MenuDropdown /> : null}
         </div>
       ))}
     </div>
-  );
+  ) : null;
 }
 
 export default ListIndex;

@@ -24,7 +24,6 @@ interface HubState {
   entityToCreate: string | null;
   SubMenuId: string | null | undefined;
   SubMenuType: string | null | undefined;
-  hubParentId: string | null;
   refType: null;
   prevName: string;
   showFavEditInput: null | string;
@@ -54,7 +53,6 @@ const initialState: HubState = {
   SubMenuId: null,
   SubMenuType: null,
   updateCords: Date.now(),
-  hubParentId: null,
   refType: null,
   prevName: '',
   showFavEditInput: null,
@@ -162,9 +160,6 @@ export const hubSlice = createSlice({
     setSubDropdownMenu(state, action: PayloadAction<boolean>) {
       state.SubDropdownMenu = action.payload;
     },
-    setHubParentId(state, action: PayloadAction<string | null>) {
-      state.hubParentId = action.payload;
-    },
     getMenuRef(state, action: PayloadAction<null>) {
       state.refType = action.payload;
     },
@@ -214,7 +209,6 @@ export const {
   setshowMenuDropdown,
   setListIdCreateTask,
   setSubDropdownMenu,
-  setHubParentId,
   setOpenedHubId,
   closeMenu,
   getMenuRef,
