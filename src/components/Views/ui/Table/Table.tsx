@@ -215,12 +215,13 @@ export function Table({ heads, data, label }: TableProps) {
           {!collapseTasks ? (
             <tbody className="contents">
               {dataSpread.length ? (
-                dataSpread.map((i) =>
-                  'tags' in i ? (
+                dataSpread.map((task, index) =>
+                  'tags' in task ? (
                     <Row
                       columns={columns}
-                      task={i as ITaskFullList}
-                      key={i.id}
+                      task={task as ITaskFullList}
+                      key={task.id}
+                      taskIndex={index}
                       isListParent={true}
                       parentId={listId}
                       task_status={statusId}

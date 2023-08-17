@@ -10,6 +10,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { setShowPilotSideOver } from '../../../../features/general/slideOver/slideOverSlice';
 import {
   setCurrentTaskStatusId,
+  setSelectedIndex,
   setSelectedTasksArray,
   setShowTaskNavigation,
   setTaskIdForPilot
@@ -25,10 +26,12 @@ import ToolTip from '../../../Tooltip/Tooltip';
 import Badges from '../../../badges';
 import DetailsOnHover from '../../../Dropdown/DetailsOnHover/DetailsOnHover';
 import { EntityType } from '../../../../utils/EntityTypes/EntityType';
+import { indexOf } from 'cypress/types/lodash';
 
 interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   task: Task;
   children?: ReactNode;
+  taskIndex?: number;
   showSubTasks?: boolean;
   setShowSubTasks: (i: boolean) => void;
   paddingLeft?: number;
@@ -46,6 +49,7 @@ export function StickyCol({
   setShowSubTasks,
   children,
   tags,
+  taskIndex,
   parentId,
   isListParent,
   task_status,
@@ -73,6 +77,7 @@ export function StickyCol({
     selectedTasksArray,
     verticalGridlinesTask,
     hilightNewTask,
+    selectedIndex,
     CompactView,
     toggleAllSubtask
   } = useAppSelector((state) => state.task);
@@ -173,6 +178,21 @@ export function StickyCol({
   };
 
   useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.shiftKey && event.key === 'ArrowDown') {
+        if (selectedIndex == null) return;
+        const newIndex = (selectedIndex as number) + 1;
+        dispatch(setSelectedIndex(newIndex));
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [selectedIndex]);
+
+  useEffect(() => {
     const isSelected = selectedTasksArray.includes(task.id);
 
     if (isSelected) {
@@ -183,6 +203,7 @@ export function StickyCol({
   }, [selectedTasksArray, task.id]);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    dispatch(setSelectedIndex(taskIndex as number));
     const isChecked = e.target.checked;
     dispatch(setShowTaskNavigation(isChecked));
     if (isChecked) {
