@@ -1,4 +1,3 @@
-import { AiOutlineCaretDown } from 'react-icons/ai';
 import { Chevron } from '../Chevron';
 import { Task } from '../../../../features/task/interface.tasks';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';

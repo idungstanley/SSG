@@ -17,8 +17,15 @@ export default function CustomStatus() {
   const [statusTypesState, setStatusTypesState] = useState<StatusProps[]>(spaceStatuses);
   const [validationMessage, setValidationMessage] = useState<string>('');
   const [newStatusValue, setNewStatusValue] = useState<string>();
-  const [toggleStatusTypes, setToggleStatusTypes] = useState<boolean>(true);
   const [addStatus, setAddStatus] = useState<boolean>(false);
+  const [collapsedStatusGroups, setCollapsedStatusGroups] = useState<{ [key: string]: boolean }>({});
+
+  const handleToggleGroup = (group: string) => {
+    setCollapsedStatusGroups((prevCollapsedStatusGroups) => ({
+      ...prevCollapsedStatusGroups,
+      [group]: !prevCollapsedStatusGroups[group]
+    }));
+  };
 
   useEffect(() => {
     setStatusTypesState(
@@ -60,51 +67,78 @@ export default function CustomStatus() {
     setNewStatusValue(e.target.value);
   };
   const groupedStatus = groupStatusByModelType(spaceStatuses);
+  const groupStylesMapping: Record<string, { backgroundColor: string; boxShadow: string }> = {
+    open: { backgroundColor: '#FBFBFB', boxShadow: '0px 0px 5px rgba(0, 0, 0, 0.2)' },
+    custom: { backgroundColor: '#FCF1FF', boxShadow: '0px 0px 5px rgba(128, 0, 128, 0.2)' },
+    closed: { backgroundColor: '#E6FAE9', boxShadow: '0px 0px 5px rgba(0, 128, 0, 0.2)' }
+    // Add more model_type values and their styles as needed
+  };
 
   return (
-    <section className="flex flex-col p-4">
+    <section className="flex flex-col p-4 gap-2">
       <div className="flex flex-col space-y-6">
-        {groupedStatus.map((uniqueModelType, modelTypeIndex) => (
-          <div className="space-y-2" key={modelTypeIndex}>
-            <span className="flex">
-              <Chevron onToggle={() => setToggleStatusTypes((prev) => !prev)} active={true} />
-              <p className="flex uppercase justify-items-start">{uniqueModelType} STATUSES</p>
-            </span>
-            {statusTypesState
-              .filter((ticket) => ticket.type === uniqueModelType)
-              .map((item, index) => (
-                <>
-                  <StatusBodyTemplate index={index} item={item} setStatusTypesState={setStatusTypesState} />
-                  {item.type === 'open' && !addStatus && (
-                    <span className="flex justify-items-start" onClick={() => setAddStatus(true)}>
-                      <Button
-                        height="h-7"
-                        icon={<PlusCircle active={false} color="white" />}
-                        label="Add Status"
-                        buttonStyle="base"
-                      />
-                    </span>
-                  )}
-                  {item.type === 'open' && addStatus && (
-                    <span className="flex justify-items-start">
-                      <Input
-                        trailingIcon={<PlusIcon active />}
-                        placeholder="Type Status name"
-                        name="Status"
-                        onChange={handleOnChange}
-                        value={newStatusValue}
-                        trailingClick={handleSaveNewStatus}
-                      />
-                    </span>
-                  )}
-                </>
-              ))}
-          </div>
-        ))}
+        {groupedStatus.map((uniqueModelType, modelTypeIndex) => {
+          if (uniqueModelType) {
+            return (
+              <div
+                className="space-y-2 p-2 rounded"
+                key={modelTypeIndex}
+                style={{
+                  backgroundColor: groupStylesMapping[uniqueModelType]?.backgroundColor,
+                  boxShadow: groupStylesMapping[uniqueModelType]?.boxShadow
+                }}
+              >
+                {uniqueModelType && (
+                  <span className="flex gap-2">
+                    <Chevron
+                      onToggle={() => handleToggleGroup(uniqueModelType)}
+                      active={collapsedStatusGroups[uniqueModelType]}
+                      iconColor="text-gray-400"
+                    />
+                    <p className="flex uppercase justify-items-start">{uniqueModelType} STATUSES</p>
+                  </span>
+                )}
+                {uniqueModelType &&
+                  !collapsedStatusGroups[uniqueModelType] &&
+                  statusTypesState
+                    .filter((ticket) => ticket.type === uniqueModelType)
+                    .map((item, index) => (
+                      <>
+                        <StatusBodyTemplate index={index} item={item} setStatusTypesState={setStatusTypesState} />
+                      </>
+                    ))}
+                {uniqueModelType && uniqueModelType === 'open' && !addStatus && (
+                  <span className="flex justify-items-start" onClick={() => setAddStatus(true)}>
+                    <Button
+                      height="h-7"
+                      icon={<PlusCircle active={false} color="white" />}
+                      label="Add Status"
+                      buttonStyle="base"
+                    />
+                  </span>
+                )}
+                {uniqueModelType && uniqueModelType === 'open' && addStatus && (
+                  <span className="flex justify-items-start">
+                    <Input
+                      trailingIcon={<PlusIcon active />}
+                      placeholder="Type Status name"
+                      name="Status"
+                      onChange={handleOnChange}
+                      value={newStatusValue}
+                      trailingClick={handleSaveNewStatus}
+                    />
+                  </span>
+                )}
+              </div>
+            );
+          } else {
+            return null;
+          }
+        })}
       </div>
       <p className="text-red-600 mt-auto text-start">{validationMessage}</p>
-      <div className="mt-auto">
-        <Button label="Save" buttonStyle="base" width="w-full" />
+      <div className="flex justify-center">
+        <Button label="Save" buttonStyle="base" width="w-40" height="h-8" />
       </div>
     </section>
   );

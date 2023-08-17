@@ -1,4 +1,4 @@
-import { MouseEvent, useState } from 'react';
+import { useState } from 'react';
 import { IoChevronDownCircleOutline, IoChevronForwardCircleOutline } from 'react-icons/io5';
 
 interface ChevronProps {
@@ -6,9 +6,10 @@ interface ChevronProps {
   active: boolean;
   color?: string;
   hoverBg?: string;
+  iconColor?: string;
 }
 
-export function Chevron({ onToggle, active, color, hoverBg }: ChevronProps) {
+export function Chevron({ onToggle, active, color, hoverBg, iconColor }: ChevronProps) {
   const [isHovered, setIsHovered] = useState(false);
 
   const defaultStyle = {
@@ -28,9 +29,9 @@ export function Chevron({ onToggle, active, color, hoverBg }: ChevronProps) {
       onMouseLeave={() => setIsHovered(false)}
     >
       {active ? (
-        <IoChevronForwardCircleOutline className="w-4 h-4 rounded-full" />
+        <IoChevronForwardCircleOutline className={`w-4 h-4 rounded-full ${iconColor}`} />
       ) : (
-        <IoChevronDownCircleOutline className="w-4 h-4 rounded-full " />
+        <IoChevronDownCircleOutline className={`w-4 h-4 rounded-full ${iconColor}`} />
       )}
     </button>
   );
