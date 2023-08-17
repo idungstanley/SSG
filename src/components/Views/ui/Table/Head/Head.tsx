@@ -65,7 +65,9 @@ export function Head({
   const [headerId, setheaderId] = useState<string>('');
   const [showStatusDropdown, setShowStatusDropdown] = useState<null | SVGElement>(null);
   const [showSortModal, setShowSortModal] = useState<boolean>(false);
-  const { sortArr, sortAbleArr, selectedTasksArray, selectedIndex } = useAppSelector((state) => state.task);
+  const { sortArr, sortAbleArr, selectedTasksArray, selectedIndex, selectedIndexStatus } = useAppSelector(
+    (state) => state.task
+  );
   const { baseColor } = useAppSelector((state) => state.account);
   const { isManageStatus } = useAppSelector((state) => state.workspace);
 
@@ -83,10 +85,14 @@ export function Head({
 
   useEffect(() => {
     if (selectedIndex !== null) {
+      const updatedTaskIds: string[] = [...selectedTasksArray];
       groupedTask?.map((task, index) => {
-        if (selectedIndex + 1 == index) {
-          const updatedTaskIds = [...selectedTasksArray, task.id];
-          dispatch(setSelectedTasksArray(updatedTaskIds));
+        if (selectedIndex == index && selectedIndexStatus == task.status.name) {
+          const taskIndex = updatedTaskIds.indexOf(task.id);
+          if (taskIndex == -1) {
+            updatedTaskIds.push(task.id);
+            dispatch(setSelectedTasksArray(updatedTaskIds));
+          }
         }
       });
     }

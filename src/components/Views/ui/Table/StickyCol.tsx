@@ -11,6 +11,7 @@ import { setShowPilotSideOver } from '../../../../features/general/slideOver/sli
 import {
   setCurrentTaskStatusId,
   setSelectedIndex,
+  setSelectedIndexStatus,
   setSelectedTasksArray,
   setShowTaskNavigation,
   setTaskIdForPilot
@@ -184,6 +185,11 @@ export function StickyCol({
         const newIndex = (selectedIndex as number) + 1;
         dispatch(setSelectedIndex(newIndex));
       }
+      // else if (event.shiftKey && event.key === 'ArrowUp') {
+      //   if (selectedIndex == null) return;
+      //   const newIndex = (selectedIndex as number) - 1;
+      //   dispatch(setSelectedIndex(newIndex));
+      // }
     };
 
     document.addEventListener('keydown', handleKeyDown);
@@ -204,6 +210,7 @@ export function StickyCol({
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     dispatch(setSelectedIndex(taskIndex as number));
+    dispatch(setSelectedIndexStatus(task.status.name));
     const isChecked = e.target.checked;
     dispatch(setShowTaskNavigation(isChecked));
     if (isChecked) {
