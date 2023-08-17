@@ -178,25 +178,28 @@ export function StickyCol({
     });
   };
 
+  const [selectedIndexArray, setSelectedIndexArray] = useState<number[]>([]);
+
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.shiftKey && event.key === 'ArrowDown') {
         if (selectedIndex == null) return;
-        const newIndex = (selectedIndex as number) + 1;
-        dispatch(setSelectedIndex(newIndex));
+        if (!selectedIndexArray.includes(taskIndex as number)) {
+          setSelectedIndexArray((prev) => {
+            const updatedArray = [...prev, taskIndex as number];
+            const newIndex = (selectedIndex as number) + 1;
+            dispatch(setSelectedIndex(newIndex));
+            return updatedArray;
+          });
+        }
       }
-      // else if (event.shiftKey && event.key === 'ArrowUp') {
-      //   if (selectedIndex == null) return;
-      //   const newIndex = (selectedIndex as number) - 1;
-      //   dispatch(setSelectedIndex(newIndex));
-      // }
     };
 
     document.addEventListener('keydown', handleKeyDown);
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
     };
-  }, [selectedIndex]);
+  }, [selectedIndex, selectedIndexArray]);
 
   useEffect(() => {
     const isSelected = selectedTasksArray.includes(task.id);
@@ -209,7 +212,19 @@ export function StickyCol({
   }, [selectedTasksArray, task.id]);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    dispatch(setSelectedIndex(taskIndex as number));
+    const indexInArray = selectedIndexArray.indexOf(taskIndex as number);
+    if (!selectedIndexArray.includes(taskIndex as number)) {
+      setSelectedIndexArray((prev) => {
+        const updatedArray = [...prev, taskIndex as number];
+        dispatch(setSelectedIndex(taskIndex as number));
+        return updatedArray;
+      });
+    } else {
+      // If taskIndex is already in selectedIndexArray, remove it
+      const updatedArray = [...selectedIndexArray];
+      updatedArray.splice(indexInArray, 1);
+      setSelectedIndexArray(updatedArray);
+    }
     dispatch(setSelectedIndexStatus(task.status.name));
     const isChecked = e.target.checked;
     dispatch(setShowTaskNavigation(isChecked));
