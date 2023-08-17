@@ -5,8 +5,8 @@ import Button from '../../Button';
 import PlusIcon from '../../../assets/icons/PlusIcon';
 import Input from '../../input/Input';
 import { StatusProps } from '../../../pages/workspace/hubs/components/ActiveTree/activetree.interfaces';
-
-const statusTabOptions = [{ label: 'Use Space Statuses' }, { label: 'Custom' }];
+import PlusCircle from '../../../assets/icons/AddCircle';
+import { Chevron } from '../../Views/ui/Chevron';
 
 const groupStatusByModelType = (statusTypes: StatusProps[]) => {
   return [...new Set(statusTypes.map(({ type }) => type))];
@@ -14,11 +14,10 @@ const groupStatusByModelType = (statusTypes: StatusProps[]) => {
 
 export default function CustomStatus() {
   const { spaceStatuses } = useAppSelector((state) => state.hub);
-  const { statusTaskListDetails } = useAppSelector((state) => state.list);
-  const [activeStatusTab, setActiveStatusTab] = useState<string>(statusTabOptions[0].label);
   const [statusTypesState, setStatusTypesState] = useState<StatusProps[]>(spaceStatuses);
   const [validationMessage, setValidationMessage] = useState<string>('');
   const [newStatusValue, setNewStatusValue] = useState<string>();
+  const [toggleStatusTypes, setToggleStatusTypes] = useState<boolean>(true);
   const [addStatus, setAddStatus] = useState<boolean>(false);
 
   useEffect(() => {
@@ -64,70 +63,44 @@ export default function CustomStatus() {
 
   return (
     <section className="flex flex-col p-4">
-      <div>
-        <h1>Edit statuses for {statusTaskListDetails.listName}</h1>
-      </div>
-      <div className="grid grid-cols-2 gap-4 mt-8">
-        <div className="flex flex-col space-y-3">
-          {statusTabOptions.map((item, index) => (
-            <span
-              key={index}
-              onClick={() => setActiveStatusTab(item.label)}
-              className={`flex p-1 cursor-pointer justify-items-start  ${
-                activeStatusTab === item.label ? 'bg-alsoit-purple-300 text-white rounded' : ''
-              }`}
-            >
-              {item.label}
+      <div className="flex flex-col space-y-6">
+        {groupedStatus.map((uniqueModelType, modelTypeIndex) => (
+          <div className="space-y-2" key={modelTypeIndex}>
+            <span className="flex">
+              <Chevron onToggle={() => setToggleStatusTypes((prev) => !prev)} active={true} />
+              <p className="flex uppercase justify-items-start">{uniqueModelType} STATUSES</p>
             </span>
-          ))}
-        </div>
-        {activeStatusTab === statusTabOptions[0].label ? (
-          <div className="flex flex-col space-y-2">
-            {spaceStatuses.map((item, index) => (
-              <span
-                key={index}
-                className="flex items-center gap-2 p-1 text-white border rounded cursor-pointer border-alsoit-gray-75 justify-items-start"
-              >
-                <span className="w-3 h-3 ml-4 rounded" style={{ backgroundColor: item.color as string }}></span>
-                <span style={{ color: item.color as string }} className="uppercase">
-                  {item.name}
-                </span>
-              </span>
-            ))}
+            {statusTypesState
+              .filter((ticket) => ticket.type === uniqueModelType)
+              .map((item, index) => (
+                <>
+                  <StatusBodyTemplate index={index} item={item} setStatusTypesState={setStatusTypesState} />
+                  {item.type === 'open' && !addStatus && (
+                    <span className="flex justify-items-start" onClick={() => setAddStatus(true)}>
+                      <Button
+                        height="h-7"
+                        icon={<PlusCircle active={false} color="white" />}
+                        label="Add Status"
+                        buttonStyle="base"
+                      />
+                    </span>
+                  )}
+                  {item.type === 'open' && addStatus && (
+                    <span className="flex justify-items-start">
+                      <Input
+                        trailingIcon={<PlusIcon active />}
+                        placeholder="Type Status name"
+                        name="Status"
+                        onChange={handleOnChange}
+                        value={newStatusValue}
+                        trailingClick={handleSaveNewStatus}
+                      />
+                    </span>
+                  )}
+                </>
+              ))}
           </div>
-        ) : (
-          <div className="flex flex-col space-y-6">
-            {groupedStatus.map((uniqueModelType, modelTypeIndex) => (
-              <div className="space-y-2" key={modelTypeIndex}>
-                <p className="flex uppercase justify-items-start">{uniqueModelType} STATUSES</p>
-                {statusTypesState
-                  .filter((ticket) => ticket.type === uniqueModelType)
-                  .map((item, index) => (
-                    <>
-                      <StatusBodyTemplate index={index} item={item} setStatusTypesState={setStatusTypesState} />
-                      {item.type === 'open' && !addStatus && (
-                        <span className="flex justify-items-start" onClick={() => setAddStatus(true)}>
-                          <Button height="h-8" icon={<PlusIcon active />} label="Add Status" buttonStyle="base" />
-                        </span>
-                      )}
-                      {item.type === 'open' && addStatus && (
-                        <span className="flex justify-items-start">
-                          <Input
-                            trailingIcon={<PlusIcon active />}
-                            placeholder="Type Status name"
-                            name="Status"
-                            onChange={handleOnChange}
-                            value={newStatusValue}
-                            trailingClick={handleSaveNewStatus}
-                          />
-                        </span>
-                      )}
-                    </>
-                  ))}
-              </div>
-            ))}
-          </div>
-        )}
+        ))}
       </div>
       <p className="text-red-600 mt-auto text-start">{validationMessage}</p>
       <div className="mt-auto">
