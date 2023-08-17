@@ -178,7 +178,7 @@ export function GroupHorizontalScroll() {
 
   const renderScrollArrows = () => {
     return (
-      <div className="flex z-10 gap-1.5 bg-alsoit-gray-50 bg-opacity-75 opacity-0 group-hover:opacity-100 rounded-md flex-row ml-2">
+      <div className="flex z-3 gap-1.5 bg-alsoit-gray-50 bg-opacity-75 opacity-0 group-hover:opacity-100 rounded-md flex-row ml-2">
         <button
           className="flex items-center justify-center w-3 h-3 bg-gray-200 rounded-full"
           onClick={() => handleScrollButton('left')}
@@ -202,7 +202,7 @@ export function GroupHorizontalScroll() {
         <div style={{ width: `${groupScroll.scrollWidth}px` }} />
       </div>
       {isThumbVisible && (
-        <div className="sticky -top-1 z-10 pt-2 mr-2 pr-12 pl-6 group grid w-full grid-cols-2">
+        <div className="sticky -top-1 z-3 pt-2 mr-2 pr-12 pl-6 group grid w-full grid-cols-2">
           <div />
           <div className="flex items-center mb-4 flex-row space-x-2">
             {renderScrollArrows()}
