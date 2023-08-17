@@ -189,7 +189,7 @@ export default function TaskMenu() {
           {TaskIcons.map((menu) => (
             <>
               <p
-                className="flex items-center px-2 cursor-pointer mt-0 text-white text-lg"
+                className="flex items-center px-2 cursor-pointer mt-0 text-white text-lg "
                 onClick={() => menu.handleClick()}
                 key={menu.id}
               >
