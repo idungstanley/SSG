@@ -26,7 +26,7 @@ import { EntityType } from '../../../../../utils/EntityTypes/EntityType';
 
 function RenderHubs() {
   const dispatch = useAppDispatch();
-  const { hubId } = useParams();
+  const { hubId, subhubId } = useParams();
 
   const { activeEntity } = useAppSelector((state) => state.workspace);
   const { groupByStatus, filterTaskByAssigneeIds } = useAppSelector((state) => state.task);
@@ -39,17 +39,17 @@ function RenderHubs() {
   const { data } = UseGetHubDetails({ activeItemId: hubId, activeItemType: EntityType.hub });
   const hubName = data?.data.hub.name;
   useEffect(() => {
-    if (hubId) {
+    if (hubId || subhubId) {
       dispatch(
         setActiveItem({
-          activeItemId: hubId,
+          activeItemId: hubId ? (hubId as string) : (subhubId as string),
           activeItemType: activeEntity.type || EntityType.hub,
           activeItemName: hubName
         })
       );
       dispatch(setActiveEntityName(hubName));
     }
-  }, [hubId, data]);
+  }, [hubId, subhubId, data]);
 
   const {
     data: TaskFullList,
@@ -58,7 +58,7 @@ function RenderHubs() {
     hasNextPage,
     fetchNextPage
   } = UseGetFullTaskList({
-    itemId: hubId,
+    itemId: hubId || subhubId,
     itemType: EntityType.hub,
     assigneeUserId: filterTaskByAssigneeIds
   });

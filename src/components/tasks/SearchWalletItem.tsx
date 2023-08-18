@@ -3,6 +3,7 @@ import { FaFolder, FaFolderOpen } from 'react-icons/fa';
 import { VscTriangleDown, VscTriangleRight } from 'react-icons/vsc';
 import { useAppSelector } from '../../app/hooks';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
+import { List, Wallet } from '../../pages/workspace/hubs/components/ActiveTree/activetree.interfaces';
 
 interface WalletItemProps {
   wallet: {
@@ -11,7 +12,8 @@ interface WalletItemProps {
     color?: string;
     parent_id?: string | null;
     hub_id?: string;
-    has_descendants?: number;
+    children: Wallet[];
+    lists: List[];
   };
   showSubWallet: boolean;
   paddingLeft: string | number;
@@ -42,7 +44,7 @@ export default function SearchWalletItem({
   };
 
   const renderIcons = (showSubWallet: boolean) => {
-    if (wallet?.has_descendants) {
+    if (wallet?.children.length || wallet?.lists.length) {
       if (showSubWallet) {
         return (
           <>

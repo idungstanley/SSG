@@ -3,6 +3,7 @@ import { Status } from '../task/interface.tasks';
 
 export interface IHub {
   id: string;
+  type: string;
   name: string;
   path: string | null;
   parent_id: string | null;
@@ -52,6 +53,7 @@ export interface IHubDetailResErr {
 
 export interface IWallet {
   id: string;
+  type: string;
   name: string;
   hub_id: string;
   parent_id: null | string;
@@ -70,6 +72,7 @@ export interface IList {
   archived_at: null | string;
   deleted_at: null | string;
   id: string;
+  type: string;
   name: string;
   color: string;
   tasks_count: number;

@@ -87,21 +87,6 @@ export const getWalletService = (currentWalletId: string | null) => {
   });
 };
 
-export const getWalletServices = (data: { hubId?: string | null; Archived?: boolean; parentId?: string | null }) => {
-  // const queryClient = useQueryClient();
-  return useQuery(['wallets', { data: [data.hubId, data.parentId], isArchived: data.Archived ? 1 : 0 }], () =>
-    requestNew<IWalletRes | undefined>({
-      url: 'wallets',
-      method: 'GET',
-      params: {
-        hub_id: data.hubId,
-        is_archived: data.Archived ? 1 : 0, // send is_archived query
-        parent_id: data.parentId //send wallet id for subwallet
-      }
-    })
-  );
-};
-
 //edit wallet
 export const UseEditWalletService = (data: {
   walletName?: string;

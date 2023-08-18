@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getWalletServices } from '../../../../../features/wallet/walletService';
 import { useDispatch } from 'react-redux';
 import { setActiveEntity, setActiveItem, setShowHub } from '../../../../../features/workspace/workspaceSlice';
 import MenuDropdown from '../../../../../components/Dropdown/MenuDropdown';
@@ -13,6 +12,8 @@ import { DragOverlay } from '@dnd-kit/core';
 import OverlayList from '../../../../../components/tasks/OverlayList';
 import HubItemOverlay from '../../../../../components/tasks/HubItemOverLay';
 import { EntityType } from '../../../../../utils/EntityTypes/EntityType';
+import { List, Wallet } from '../../../hubs/components/ActiveTree/activetree.interfaces';
+import { findCurrentWallet } from '../../../../../managers/Wallet';
 
 interface SubWalletIndexProps {
   paddingLeft?: string | number;
@@ -29,17 +30,21 @@ function SubWalletIndex({ paddingLeft = '40', parentId }: SubWalletIndexProps) {
   const navigate = useNavigate();
 
   const { currentWorkspaceId } = useAppSelector((state) => state.auth);
-  const { toggleArchiveWallet } = useAppSelector((state) => state.wallet);
-  const { showMenuDropdown } = useAppSelector((state) => state.hub);
+  const { showMenuDropdown, hub } = useAppSelector((state) => state.hub);
   const { activeItemId } = useAppSelector((state) => state.workspace);
   const { draggableItemId } = useAppSelector((state) => state.list);
 
   const [openedIds, setOpenedIds] = useState<string[]>([]);
+  const [data, setData] = useState<{ wallets: Wallet[]; lists: List[] }>();
 
-  const { data: subwallet } = getWalletServices({
-    Archived: toggleArchiveWallet,
-    parentId: parentId || activeItemId
-  });
+  useEffect(() => {
+    if (activeItemId || parentId) {
+      const currentEntity = findCurrentWallet(parentId || (activeItemId as string), hub);
+      const walletsData = currentEntity.children;
+      const listsData = currentEntity.lists;
+      setData({ wallets: walletsData, lists: listsData });
+    }
+  }, [activeItemId, parentId]);
 
   const handleLocation = (id: string, type = 'subwallet3') => {
     dispatch(setShowHub(true));
@@ -57,8 +62,8 @@ function SubWalletIndex({ paddingLeft = '40', parentId }: SubWalletIndexProps) {
     }
   };
 
-  const draggableItem = draggableItemId ? subwallet?.data?.lists.find((i: IList) => i.id === draggableItemId) : null;
-  const draggableWallet = draggableItemId ? subwallet?.data?.wallets.find((i) => i.id === draggableItemId) : null;
+  const draggableItem = draggableItemId ? data?.lists.find((i: IList) => i.id === draggableItemId) : null;
+  const draggableWallet = draggableItemId ? data?.wallets.find((i) => i.id === draggableItemId) : null;
 
   return (
     <div>
@@ -72,10 +77,10 @@ function SubWalletIndex({ paddingLeft = '40', parentId }: SubWalletIndexProps) {
           <HubItemOverlay item={draggableWallet} type="wallet" />
         </DragOverlay>
       ) : null}
-      {subwallet?.data?.wallets.map((wallet: dataProps) => (
+      {data?.wallets.map((wallet: dataProps) => (
         <div key={wallet.id}>
           <WalletItem
-            wallet={wallet}
+            wallet={wallet as Wallet}
             walletType="subwallet3"
             handleLocation={handleLocation}
             handleShowSubWallet={handleShowSubWallet}
@@ -87,7 +92,7 @@ function SubWalletIndex({ paddingLeft = '40', parentId }: SubWalletIndexProps) {
           ) : null}
         </div>
       ))}
-      {subwallet?.data?.lists.map((list: IList) => (
+      {data?.lists.map((list: IList) => (
         <div key={list.id}>
           <ListItem list={list} paddingLeft={Number(paddingLeft) + 15} />
           {showMenuDropdown === list.id ? <MenuDropdown /> : null}

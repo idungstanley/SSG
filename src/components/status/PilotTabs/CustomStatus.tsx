@@ -5,8 +5,8 @@ import Button from '../../Button';
 import PlusIcon from '../../../assets/icons/PlusIcon';
 import Input from '../../input/Input';
 import { StatusProps } from '../../../pages/workspace/hubs/components/ActiveTree/activetree.interfaces';
-
-const statusTabOptions = [{ label: 'Use Space Statuses' }, { label: 'Custom' }];
+import PlusCircle from '../../../assets/icons/AddCircle';
+import { Chevron } from '../../Views/ui/Chevron';
 
 const groupStatusByModelType = (statusTypes: StatusProps[]) => {
   return [...new Set(statusTypes.map(({ type }) => type))];
@@ -14,12 +14,18 @@ const groupStatusByModelType = (statusTypes: StatusProps[]) => {
 
 export default function CustomStatus() {
   const { spaceStatuses } = useAppSelector((state) => state.hub);
-  const { statusTaskListDetails } = useAppSelector((state) => state.list);
-  const [activeStatusTab, setActiveStatusTab] = useState<string>(statusTabOptions[0].label);
   const [statusTypesState, setStatusTypesState] = useState<StatusProps[]>(spaceStatuses);
   const [validationMessage, setValidationMessage] = useState<string>('');
   const [newStatusValue, setNewStatusValue] = useState<string>();
   const [addStatus, setAddStatus] = useState<boolean>(false);
+  const [collapsedStatusGroups, setCollapsedStatusGroups] = useState<{ [key: string]: boolean }>({});
+
+  const handleToggleGroup = (group: string) => {
+    setCollapsedStatusGroups((prevCollapsedStatusGroups) => ({
+      ...prevCollapsedStatusGroups,
+      [group]: !prevCollapsedStatusGroups[group]
+    }));
+  };
 
   useEffect(() => {
     setStatusTypesState(
@@ -61,77 +67,78 @@ export default function CustomStatus() {
     setNewStatusValue(e.target.value);
   };
   const groupedStatus = groupStatusByModelType(spaceStatuses);
+  const groupStylesMapping: Record<string, { backgroundColor: string; boxShadow: string }> = {
+    open: { backgroundColor: '#FBFBFB', boxShadow: '0px 0px 5px rgba(0, 0, 0, 0.2)' },
+    custom: { backgroundColor: '#FCF1FF', boxShadow: '0px 0px 5px rgba(128, 0, 128, 0.2)' },
+    closed: { backgroundColor: '#E6FAE9', boxShadow: '0px 0px 5px rgba(0, 128, 0, 0.2)' }
+    // Add more model_type values and their styles as needed
+  };
 
   return (
-    <section className="flex flex-col p-4">
-      <div>
-        <h1>Edit statuses for {statusTaskListDetails.listName}</h1>
-      </div>
-      <div className="grid grid-cols-2 gap-4 mt-8">
-        <div className="flex flex-col space-y-3">
-          {statusTabOptions.map((item, index) => (
-            <span
-              key={index}
-              onClick={() => setActiveStatusTab(item.label)}
-              className={`flex p-1 cursor-pointer justify-items-start  ${
-                activeStatusTab === item.label ? 'bg-alsoit-purple-300 text-white rounded' : ''
-              }`}
-            >
-              {item.label}
-            </span>
-          ))}
-        </div>
-        {activeStatusTab === statusTabOptions[0].label ? (
-          <div className="flex flex-col space-y-2">
-            {spaceStatuses.map((item, index) => (
-              <span
-                key={index}
-                className="flex items-center gap-2 p-1 text-white border rounded cursor-pointer border-alsoit-gray-75 justify-items-start"
+    <section className="flex flex-col p-4 gap-2">
+      <div className="flex flex-col space-y-6">
+        {groupedStatus.map((uniqueModelType, modelTypeIndex) => {
+          if (uniqueModelType) {
+            return (
+              <div
+                className="space-y-2 p-2 rounded"
+                key={modelTypeIndex}
+                style={{
+                  backgroundColor: groupStylesMapping[uniqueModelType]?.backgroundColor,
+                  boxShadow: groupStylesMapping[uniqueModelType]?.boxShadow
+                }}
               >
-                <span className="w-3 h-3 ml-4 rounded" style={{ backgroundColor: item.color as string }}></span>
-                <span style={{ color: item.color as string }} className="uppercase">
-                  {item.name}
-                </span>
-              </span>
-            ))}
-          </div>
-        ) : (
-          <div className="flex flex-col space-y-6">
-            {groupedStatus.map((uniqueModelType, modelTypeIndex) => (
-              <div className="space-y-2" key={modelTypeIndex}>
-                <p className="flex uppercase justify-items-start">{uniqueModelType} STATUSES</p>
-                {statusTypesState
-                  .filter((ticket) => ticket.type === uniqueModelType)
-                  .map((item, index) => (
-                    <>
-                      <StatusBodyTemplate index={index} item={item} setStatusTypesState={setStatusTypesState} />
-                      {item.type === 'open' && !addStatus && (
-                        <span className="flex justify-items-start" onClick={() => setAddStatus(true)}>
-                          <Button height="h-8" icon={<PlusIcon active />} label="Add Status" buttonStyle="base" />
-                        </span>
-                      )}
-                      {item.type === 'open' && addStatus && (
-                        <span className="flex justify-items-start">
-                          <Input
-                            trailingIcon={<PlusIcon active />}
-                            placeholder="Type Status name"
-                            name="Status"
-                            onChange={handleOnChange}
-                            value={newStatusValue}
-                            trailingClick={handleSaveNewStatus}
-                          />
-                        </span>
-                      )}
-                    </>
-                  ))}
+                {uniqueModelType && (
+                  <span className="flex gap-2">
+                    <Chevron
+                      onToggle={() => handleToggleGroup(uniqueModelType)}
+                      active={collapsedStatusGroups[uniqueModelType]}
+                      iconColor="text-gray-400"
+                    />
+                    <p className="flex uppercase justify-items-start">{uniqueModelType} STATUSES</p>
+                  </span>
+                )}
+                {uniqueModelType &&
+                  !collapsedStatusGroups[uniqueModelType] &&
+                  statusTypesState
+                    .filter((ticket) => ticket.type === uniqueModelType)
+                    .map((item, index) => (
+                      <>
+                        <StatusBodyTemplate index={index} item={item} setStatusTypesState={setStatusTypesState} />
+                      </>
+                    ))}
+                {uniqueModelType && uniqueModelType === 'open' && !addStatus && (
+                  <span className="flex justify-items-start" onClick={() => setAddStatus(true)}>
+                    <Button
+                      height="h-7"
+                      icon={<PlusCircle active={false} color="white" />}
+                      label="Add Status"
+                      buttonStyle="base"
+                    />
+                  </span>
+                )}
+                {uniqueModelType && uniqueModelType === 'open' && addStatus && (
+                  <span className="flex justify-items-start">
+                    <Input
+                      trailingIcon={<PlusIcon active />}
+                      placeholder="Type Status name"
+                      name="Status"
+                      onChange={handleOnChange}
+                      value={newStatusValue}
+                      trailingClick={handleSaveNewStatus}
+                    />
+                  </span>
+                )}
               </div>
-            ))}
-          </div>
-        )}
+            );
+          } else {
+            return null;
+          }
+        })}
       </div>
       <p className="text-red-600 mt-auto text-start">{validationMessage}</p>
-      <div className="mt-auto">
-        <Button label="Save" buttonStyle="base" width="w-full" />
+      <div className="flex justify-center">
+        <Button label="Save" buttonStyle="base" width="w-40" height="h-8" />
       </div>
     </section>
   );

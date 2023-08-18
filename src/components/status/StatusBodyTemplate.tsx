@@ -8,6 +8,9 @@ import ColorPalette from '../ColorPalette/component/ColorPalette';
 import { ListColourProps } from '../tasks/ListItem';
 import { MdInvertColors } from 'react-icons/md';
 import { StatusProps } from '../../pages/workspace/hubs/components/ActiveTree/activetree.interfaces';
+import Picker from '../../assets/icons/Picker';
+import StatusIconComp from '../../assets/icons/StatusIconComp';
+import Drag from '../../assets/icons/Drag';
 
 interface StatusBodyProps {
   item: StatusProps;
@@ -95,17 +98,25 @@ export default function StatusBodyTemplate({ item, setStatusTypesState }: Status
       className="flex items-center gap-2 p-1 border rounded cursor-pointer justify-items-start border-alsoit-gray-75"
       onClick={() => handleToggleEditableContent()}
     >
-      <span
-        className="w-3 h-3 ml-4 rounded"
-        style={{ backgroundColor: item.color as string }}
-        onClick={(e) => handleOpenStatusColorDropdown(e)}
-      ></span>
-      <span contentEditable={editableContent} style={{ color: item.color as string }} className="uppercase">
-        {item.name}
+      <span className="flex items-center">
+        <Drag />
+        <div className="flex items-center gap-1">
+          <span className="w-3 h-3 ml-4 rounded" onClick={(e) => handleOpenStatusColorDropdown(e)}>
+            <StatusIconComp color={item.color as string} />
+          </span>
+          <span contentEditable={editableContent} style={{ color: item.color as string }} className="uppercase">
+            {item.name}
+          </span>
+        </div>
       </span>
       {!editableContent && (
-        <span className="ml-auto" onClick={(e) => handleOpenStatusEditDropdown(e)}>
-          <ThreeDotIcon />
+        <span className="ml-auto flex items-center gap-2">
+          <span>
+            <Picker />
+          </span>
+          <span onClick={(e) => handleOpenStatusEditDropdown(e)}>
+            <ThreeDotIcon />
+          </span>
         </span>
       )}
       {editableContent && (

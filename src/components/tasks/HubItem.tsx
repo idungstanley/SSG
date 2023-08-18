@@ -27,6 +27,7 @@ import { useDraggable, useDroppable } from '@dnd-kit/core';
 import Drag from '../../assets/icons/Drag';
 import { getInitials } from '../../app/helpers';
 import ToolTip from '../Tooltip/Tooltip';
+import { Hub, List, Wallet } from '../../pages/workspace/hubs/components/ActiveTree/activetree.interfaces';
 import ActiveBarIdentification from './Component/ActiveBarIdentification';
 import ActiveBackground from './Component/ActiveBackground';
 
@@ -37,7 +38,9 @@ interface TaskItemProps {
     path?: string | null;
     color?: string | null;
     parent_id?: string | null;
-    has_descendants?: number;
+    children?: Hub[];
+    wallets?: Wallet[];
+    lists?: List[];
   };
   showChildren: boolean;
   index?: number;
@@ -62,6 +65,8 @@ export default function HubItem({
   handleLocation
 }: TaskItemProps) {
   const dispatch = useAppDispatch();
+  const { hubId, subhubId } = useParams();
+
   const { activeItemId } = useAppSelector((state) => state.workspace);
   const { paletteDropdown } = useAppSelector((state) => state.account);
   const { showSidebar } = useAppSelector((state) => state.account);
@@ -73,7 +78,6 @@ export default function HubItem({
 
   const collapseNavAndSubhub = !showSidebar && type === EntityType.subHub;
 
-  const { hubId } = useParams();
   const { paletteId, show } = paletteDropdown;
 
   const handleHubColour = (id: string, e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
@@ -193,8 +197,8 @@ export default function HubItem({
           className={`relative flex items-center justify-between ${showSidebar ? 'pl-1' : 'pl-2.5'}`}
           style={{ height: '30px' }}
         >
-          <ActiveBackground showBgColor={item.id === hubId} />
-          <ActiveBarIdentification showBar={item.id === hubId} />
+          <ActiveBackground showBgColor={item.id === hubId || item.id === subhubId} />
+          <ActiveBarIdentification showBar={item.id === hubId || item.id === subhubId} />
           <div
             className="absolute rounded-r-lg opacity-0 cursor-move left-0.5 group-hover:opacity-100"
             ref={draggableRef}
@@ -212,7 +216,7 @@ export default function HubItem({
                 type === EntityType.subHub && !showSidebar ? '5px' : type === EntityType.subHub ? '15px' : '5px'
             }}
           >
-            {!collapseNavAndSubhub && item?.has_descendants ? (
+            {!collapseNavAndSubhub && (item?.wallets?.length || item?.lists?.length) ? (
               <div>
                 {showChildren ? (
                   <span className="flex flex-col">

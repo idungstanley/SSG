@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { ListProps } from '../../activetree.interfaces';
 import WList from '../wallet/WList';
 import LList from '../list/LList';
@@ -11,7 +11,6 @@ import {
   setActiveItem,
   setActiveTabId,
   setCurrentItem,
-  setIsFirstOpened,
   setOpenedEntitiesIds,
   setOpenedParentsIds,
   setShowHub,
@@ -26,23 +25,11 @@ import { DragOverlay } from '@dnd-kit/core';
 export default function SubHubList({ hubs }: ListProps) {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { showExtendedBar, openedParentsIds, openedEntitiesIds, isFirstOpened } = useAppSelector(
-    (state) => state.workspace
-  );
+
+  const { showExtendedBar, openedParentsIds, openedEntitiesIds } = useAppSelector((state) => state.workspace);
   const { showSidebar } = useAppSelector((state) => state.account);
   const [stickyButtonIndex, setStickyButtonIndex] = useState<number | undefined>(-1);
   const [openedSubhubsIds, setOpenedSubhubIds] = useState<string[]>([]);
-
-  useEffect(() => {
-    if (isFirstOpened) {
-      for (const hub of hubs) {
-        if (hub.children.length || hub.wallets.length || hub.lists.length) {
-          setOpenedSubhubIds((prev) => [...prev, hub.id]);
-          dispatch(setOpenedEntitiesIds([...openedEntitiesIds, hub.id]));
-        }
-      }
-    }
-  }, [hubs, isFirstOpened]);
 
   const handleLocation = (id: string, name: string, index?: number) => {
     dispatch(
@@ -64,18 +51,16 @@ export default function SubHubList({ hubs }: ListProps) {
     dispatch(setActiveEntity({ id: id, type: EntityType.subHub }));
     dispatch(setShowPilot(true));
     dispatch(setActiveTabId(4));
-    navigate(`tasks/h/${id}`, {
+    navigate(`tasks/sh/${id}`, {
       replace: true
     });
   };
 
   const handleClick = (id: string, parent_id: string | null, index?: number) => {
     dispatch(setSubHubExt({ id, type: EntityType.subHub }));
-    dispatch(setIsFirstOpened(false));
-
     setStickyButtonIndex(index === stickyButtonIndex ? -1 : index);
     if (!showSidebar) {
-      navigate(`tasks/h/${id}`, {
+      navigate(`tasks/sh/${id}`, {
         replace: true
       });
     }
