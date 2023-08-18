@@ -294,7 +294,7 @@ export const taskSlice = createSlice({
     setSearchValue(state, action: PayloadAction<string>) {
       state.searchValue = action.payload;
     },
-    setSelectedIndex(state, action: PayloadAction<number>) {
+    setSelectedIndex(state, action: PayloadAction<number | null>) {
       state.selectedIndex = action.payload;
     },
     setSelectedIndexStatus(state, action: PayloadAction<string>) {
