@@ -1,8 +1,6 @@
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
-import { GetTimeEntriesService } from '../../../../features/task/taskService';
 import EntryList, { entriesProps } from '../../../../pages/workspace/tasks/timeclock/entryLists/EntryList';
 import NoEntriesFound from './NoEntries';
-import { useState } from 'react';
 import { GiCheckMark } from 'react-icons/gi';
 import { FaSort } from 'react-icons/fa';
 import { setTimeArr, setTimeSortArr } from '../../../../features/task/taskSlice';
@@ -11,6 +9,8 @@ import PlusCircle from '../../../../assets/icons/AddCircle';
 import ArrowCaretUp from '../../../../assets/icons/ArrowCaretUp';
 import { VerticalScroll } from '../../../ScrollableContainer/VerticalScroll';
 import CancelIcon from '../../../../assets/icons/Cancel';
+import { ITimeEntriesRes } from '../../../../features/task/interface.tasks';
+import { useEffect, useState } from 'react';
 
 export type Header = {
   title: string;
@@ -24,14 +24,13 @@ export interface User {
   name: string;
 }
 
-export default function ClockLog() {
-  const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
+interface LogProps {
+  getTaskEntries: ITimeEntriesRes | undefined;
+}
+
+export default function ClockLog({ getTaskEntries }: LogProps) {
   const { timeArr } = useAppSelector((state) => state.task);
   const dispatch = useAppDispatch();
-  const { data: getTaskEntries } = GetTimeEntriesService({
-    itemId: activeItemId,
-    trigger: activeItemType
-  });
   const [headers, setHeaders] = useState<Header[]>([
     { title: 'user', id: '1', hidden: false },
     { title: 'duration', id: '2', hidden: false },
@@ -46,8 +45,20 @@ export default function ClockLog() {
   const [showModal, setShowModal] = useState<boolean>(false);
   const [headerId, setHeaderId] = useState<string>('');
   const [showSortModal, setShowSortModal] = useState<boolean>(false);
-  const teamMember: User[] = [];
-  const teamMemberId: string[] = [];
+  const [teamMember, setTeamMember] = useState<User[]>([]);
+  const [teamMemberId, setTeamMemberId] = useState<string[]>([]);
+
+  useEffect(() => {
+    const handleTeamMember = () => {
+      const newTeamMembers = getTaskEntries?.data.filters.team_members.map((member) => member.user);
+      const newTeamMemberIds = newTeamMembers?.map((member) => member.id);
+
+      newTeamMembers && setTeamMember((prevTeamMembers) => [...prevTeamMembers, ...newTeamMembers]);
+      newTeamMemberIds && setTeamMemberId((prevIds) => [...prevIds, ...newTeamMemberIds]);
+    };
+
+    handleTeamMember();
+  }, [getTaskEntries?.data.filters.team_members]);
 
   const handleColumnHide = (col: string) => {
     setHeaders((prev) => prev.map((header) => (header.id === col ? { ...header, hidden: !header.hidden } : header)));
@@ -205,10 +216,6 @@ export default function ClockLog() {
             <tbody className="max-h-20">
               <VerticalScroll>
                 {getTaskEntries?.data?.time_entries?.map((entries: entriesProps) => {
-                  const { id, initials, name } = entries.team_member.user;
-                  const { id: teamId } = entries.team_member;
-                  teamMember.push({ id, initials, name });
-                  teamMemberId.push(teamId);
                   return <EntryList entries={entries} key={entries.id} switchHeader={headers} />;
                 })}
               </VerticalScroll>

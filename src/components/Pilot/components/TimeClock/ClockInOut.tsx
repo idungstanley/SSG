@@ -43,9 +43,12 @@ export default function ClockInOut() {
   const [prompt, setPrompt] = useState(false);
   const [newTimer, setNewtimer] = useState(false);
 
-  const { data: getEntries } = GetTimeEntriesService({
+  const [page, setPage] = useState<number>(1);
+  const { data: getTaskEntries, isPreviousData } = GetTimeEntriesService({
     itemId: activeItemId,
-    trigger: activeItemType === EntityType.subHub ? EntityType.hub : activeItemType
+    trigger: activeItemType,
+    page,
+    include_filters: true
   });
 
   // Get currently active timers
@@ -159,7 +162,7 @@ export default function ClockInOut() {
           >
             <span>Tags: </span>
             {/* total time here */}
-            <p>{moment.utc((getEntries as ITimeEntriesRes)?.data?.total_duration * 1000).format('HH:mm:ss')}</p>
+            <p>{moment.utc((getTaskEntries as ITimeEntriesRes)?.data?.total_duration * 1000).format('HH:mm:ss')}</p>
           </div>
           <div id="descNote" className="w-full my-3 text-white">
             <input
@@ -243,7 +246,7 @@ export default function ClockInOut() {
           </div>
         </section>
         <div className="w-full p-2 my-4">
-          <ClockLog />
+          <ClockLog getTaskEntries={getTaskEntries} />
         </div>
       </div>
     </div>
