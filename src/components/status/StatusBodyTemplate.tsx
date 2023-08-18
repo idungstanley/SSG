@@ -11,6 +11,7 @@ import { StatusProps } from '../../pages/workspace/hubs/components/ActiveTree/ac
 import Picker from '../../assets/icons/Picker';
 import StatusIconComp from '../../assets/icons/StatusIconComp';
 import Drag from '../../assets/icons/Drag';
+import { useSortable } from '@dnd-kit/sortable';
 
 interface StatusBodyProps {
   item: StatusProps;
@@ -25,6 +26,17 @@ export default function StatusBodyTemplate({ item, setStatusTypesState }: Status
   const handleOpenStatusEditDropdown = (event: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
     event.stopPropagation();
     setShowStatusEditDropdown(event.currentTarget);
+  };
+
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
+    id: item.name as string
+  });
+
+  const style = {
+    transform: transform ? `translate(${transform.x}px, ${transform.y}px)` : undefined,
+    transition,
+    backgroundColor: isDragging ? '#f3f4f6' : undefined, // ? bg for draggable, can be replaced by any style
+    zIndex: isDragging ? 1 : undefined // important for overlay
   };
 
   const handleOpenStatusColorDropdown = (event: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
@@ -97,8 +109,9 @@ export default function StatusBodyTemplate({ item, setStatusTypesState }: Status
       key={item.name}
       className="flex items-center gap-2 p-1 border rounded cursor-pointer justify-items-start border-alsoit-gray-75"
       onClick={() => handleToggleEditableContent()}
+      style={style}
     >
-      <span className="flex items-center">
+      <span className="flex items-center" ref={setNodeRef} {...attributes} {...listeners}>
         <Drag />
         <div className="flex items-center gap-1">
           <span className="w-3 h-3 ml-4 rounded" onClick={(e) => handleOpenStatusColorDropdown(e)}>

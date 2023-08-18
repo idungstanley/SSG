@@ -7,6 +7,8 @@ import Input from '../../input/Input';
 import { StatusProps } from '../../../pages/workspace/hubs/components/ActiveTree/activetree.interfaces';
 import PlusCircle from '../../../assets/icons/AddCircle';
 import { Chevron } from '../../Views/ui/Chevron';
+import { DragEndEvent, KeyboardSensor, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
+import { sortableKeyboardCoordinates } from '@dnd-kit/sortable';
 
 const groupStatusByModelType = (statusTypes: StatusProps[]) => {
   return [...new Set(statusTypes.map(({ type }) => type))];
@@ -19,6 +21,34 @@ export default function CustomStatus() {
   const [newStatusValue, setNewStatusValue] = useState<string>();
   const [addStatus, setAddStatus] = useState<boolean>(false);
   const [collapsedStatusGroups, setCollapsedStatusGroups] = useState<{ [key: string]: boolean }>({});
+
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates
+    })
+  );
+
+  // const [items, setItems] = useState(
+  //   communicationOptions.sort((a, b) => idsFromLS.indexOf(a.id) - idsFromLS.indexOf(b.id))
+  // );
+
+  // const handleDragEnd = (e: DragEndEvent) => {
+  //   const { active, over } = e;
+  //   if (active.id !== over?.id) {
+  //     const findActive = items.find((i) => i.id === active.id);
+  //     const findOver = items.find((i) => i.id === over?.id);
+  //     if (findActive && findOver) {
+  //       setItems((items) => {
+  //         const oldIndex = items.indexOf(findActive);
+  //         const newIndex = items.indexOf(findOver);
+  //         const sortArray = arrayMove(items, oldIndex, newIndex);
+  //         localStorage.setItem('subTab', JSON.stringify([...sortArray.map((i) => i.id)]));
+  //         return sortArray;
+  //       });
+  //     }
+  //   }
+  // };
 
   const handleToggleGroup = (group: string) => {
     setCollapsedStatusGroups((prevCollapsedStatusGroups) => ({
@@ -50,7 +80,7 @@ export default function CustomStatus() {
       const newStatusItem: StatusProps = {
         name: newStatusValue,
         color: 'green',
-        type: 'custom',
+        type: 'open',
         position: statusTypesState.length,
         id: null
       };
@@ -66,6 +96,7 @@ export default function CustomStatus() {
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNewStatusValue(e.target.value);
   };
+
   const groupedStatus = groupStatusByModelType(spaceStatuses);
   const groupStylesMapping: Record<string, { backgroundColor: string; boxShadow: string }> = {
     open: { backgroundColor: '#FBFBFB', boxShadow: '0px 0px 5px rgba(0, 0, 0, 0.2)' },
