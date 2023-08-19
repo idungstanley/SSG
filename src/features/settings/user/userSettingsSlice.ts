@@ -23,6 +23,8 @@ interface userSettingState {
   status: string;
   clock_type: string | undefined;
   is_clock_time: number | undefined;
+  clock_limit: number | undefined;
+  clock_stop_reminder: number | undefined;
 }
 
 const initialState: userSettingState = {
@@ -46,7 +48,9 @@ const initialState: userSettingState = {
   activeTab: null,
   status: 'loading',
   clock_type: undefined,
-  is_clock_time: undefined
+  is_clock_time: undefined,
+  clock_limit: 3600000,
+  clock_stop_reminder: 300000
 };
 
 export const userSettingSlice = createSlice({
@@ -111,6 +115,12 @@ export const userSettingSlice = createSlice({
     },
     setClocktime(state, action: PayloadAction<number | undefined>) {
       state.is_clock_time = action.payload;
+    },
+    setClockLimit(state, action: PayloadAction<number | undefined>) {
+      state.clock_limit = action.payload;
+    },
+    setClockStopReminder(state, action: PayloadAction<number | undefined>) {
+      state.clock_stop_reminder = action.payload;
     }
   }
 });
@@ -125,7 +135,9 @@ export const {
   setStatus,
   setTimeZone,
   setClockType,
-  setClocktime
+  setClocktime,
+  setClockLimit,
+  setClockStopReminder
 } = userSettingSlice.actions;
 
 export default userSettingSlice.reducer;
