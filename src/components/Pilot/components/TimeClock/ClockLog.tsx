@@ -7,7 +7,6 @@ import { setTimeArr, setTimeSortArr } from '../../../../features/task/taskSlice'
 import { UserSortDropDown } from './TimeUserSortDropDown';
 import PlusCircle from '../../../../assets/icons/AddCircle';
 import ArrowCaretUp from '../../../../assets/icons/ArrowCaretUp';
-import { VerticalScroll } from '../../../ScrollableContainer/VerticalScroll';
 import CancelIcon from '../../../../assets/icons/Cancel';
 import { ITimeEntriesRes } from '../../../../features/task/interface.tasks';
 import { useEffect, useState } from 'react';
@@ -90,7 +89,7 @@ export default function ClockLog({ getTaskEntries }: LogProps) {
       return (
         <div className="p-2">
           <table className="relative w-full">
-            <thead className="relative flex items-center justify-between pb-2 text-xs border-b border-gray-400 font-extralight">
+            <thead className="flex items-center justify-between pb-2 text-xs border-b border-gray-400 font-extralight relative">
               <tr className="flex items-center space-x-5">
                 {headers.map((col) => {
                   return (
@@ -213,12 +212,10 @@ export default function ClockLog({ getTaskEntries }: LogProps) {
                 </th>
               </tr>
             </thead>
-            <tbody className="max-h-20">
-              <VerticalScroll>
-                {getTaskEntries?.data?.time_entries?.map((entries: entriesProps) => {
-                  return <EntryList entries={entries} key={entries.id} switchHeader={headers} />;
-                })}
-              </VerticalScroll>
+            <tbody>
+              {getTaskEntries?.data?.time_entries?.map((entries: entriesProps) => {
+                return <EntryList entries={entries} key={entries.id} switchHeader={headers} />;
+              })}
             </tbody>
           </table>
         </div>
