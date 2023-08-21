@@ -15,8 +15,8 @@ import { setUpdateCords } from '../../features/task/taskSlice';
 import { List } from '../../components/Views/ui/List/List';
 import { Header } from '../../components/TasksHeader';
 import { GroupHorizontalScroll } from '../../components/ScrollableContainer/GroupHorizontalScroll';
-import { setCurrentWalletName } from '../../features/wallet/walletSlice';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
+import { setActiveItem } from '../../features/workspace/workspaceSlice';
 
 export function WalletPage() {
   const dispatch = useAppDispatch();
@@ -28,11 +28,16 @@ export function WalletPage() {
 
   // get wallet details to set active entity
   const { data: wallet } = UseGetWalletDetails({ activeItemId: walletId, activeItemType: EntityType.wallet });
-  const walletName = wallet?.data.wallet.name ?? '';
 
   useEffect(() => {
     if (wallet && !taskId) {
-      dispatch(setCurrentWalletName(walletName));
+      dispatch(
+        setActiveItem({
+          activeItemId: wallet.data.wallet.id,
+          activeItemType: EntityType.wallet,
+          activeItemName: wallet.data.wallet.name
+        })
+      );
     }
   }, [wallet]);
 

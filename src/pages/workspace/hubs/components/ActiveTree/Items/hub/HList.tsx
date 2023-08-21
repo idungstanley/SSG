@@ -6,22 +6,13 @@ import { useNavigate } from 'react-router-dom';
 import HubItem from '../../../../../../../components/tasks/HubItem';
 import { useAppDispatch, useAppSelector } from '../../../../../../../app/hooks';
 import {
-  setActiveEntity,
-  setActiveEntityName,
   setActiveItem,
   setActiveTabId,
   setCurrentItem,
   setOpenedEntitiesIds,
-  setOpenedParentsIds,
-  setShowHub,
   setShowPilot
 } from '../../../../../../../features/workspace/workspaceSlice';
-import {
-  getCurrSubHubId,
-  setOpenedHubId,
-  setParentHubExt,
-  setSubHubExt
-} from '../../../../../../../features/hubs/hubSlice';
+import { setParentHubExt } from '../../../../../../../features/hubs/hubSlice';
 import { cl } from '../../../../../../../utils';
 import { EntityType } from '../../../../../../../utils/EntityTypes/EntityType';
 import { Capitalize } from '../../../../../../../utils/NoCapWords/Capitalize';
@@ -33,13 +24,13 @@ export default function HList({ hubs }: ListProps) {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const { showExtendedBar, createEntityType, openedParentsIds, openedEntitiesIds } = useAppSelector(
-    (state) => state.workspace
-  );
+  const { showExtendedBar, createEntityType, openedEntitiesIds } = useAppSelector((state) => state.workspace);
   const { entityToCreate } = useAppSelector((state) => state.hub);
   const { showSidebar } = useAppSelector((state) => state.account);
+
   const [stickyButtonIndex, setStickyButtonIndex] = useState<number | undefined>(-1);
   const [openedNewHubId, setOpenedNewHubId] = useState<string>('');
+
   const CapitalizeType = Capitalize(entityToCreate);
   const hubCreationStatus = 'New ' + CapitalizeType + ' Under Construction';
 
@@ -54,14 +45,7 @@ export default function HList({ hubs }: ListProps) {
   const hubsWithEntity = createEntityType === EntityType.hub ? (hubsSpread as Hub[]) : hubs;
 
   const handleLocation = (id: string, name: string, index?: number) => {
-    dispatch(setSubHubExt({ id: null, type: null }));
     dispatch(setParentHubExt({ id: id, type: EntityType.hub }));
-    dispatch(
-      getCurrSubHubId({
-        currSubHubId: null,
-        currSubHubIdType: null
-      })
-    );
     dispatch(
       setActiveItem({
         activeItemId: id,
@@ -70,8 +54,6 @@ export default function HList({ hubs }: ListProps) {
       })
     );
     setStickyButtonIndex(index === stickyButtonIndex ? -1 : index);
-    dispatch(setActiveEntityName(name));
-    dispatch(setActiveEntity({ id, type: EntityType.hub }));
     dispatch(setShowPilot(true));
     dispatch(setActiveTabId(4));
     navigate(`tasks/h/${id}`, {
@@ -79,8 +61,7 @@ export default function HList({ hubs }: ListProps) {
     });
   };
 
-  const handleClick = (id: string, parent_id: string | null, index?: number) => {
-    dispatch(setSubHubExt({ id: null, type: null }));
+  const handleClick = (id: string, index?: number) => {
     dispatch(setParentHubExt({ id, type: EntityType.hub }));
 
     setStickyButtonIndex(index === stickyButtonIndex ? -1 : index);
@@ -90,17 +71,10 @@ export default function HList({ hubs }: ListProps) {
       });
     }
 
-    dispatch(setOpenedHubId(id));
-    dispatch(setShowHub(true));
-
     if (id === openedNewHubId) {
       setOpenedNewHubId('');
-      dispatch(setOpenedParentsIds(openedParentsIds.filter((item) => item !== id)));
       dispatch(setOpenedEntitiesIds(openedEntitiesIds.filter((item) => item !== id)));
     } else {
-      if (parent_id) {
-        dispatch(setOpenedParentsIds([...openedParentsIds, parent_id]));
-      }
       setOpenedNewHubId(id);
       dispatch(setOpenedEntitiesIds([...openedEntitiesIds, id]));
     }

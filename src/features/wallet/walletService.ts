@@ -2,10 +2,10 @@ import { useDispatch } from 'react-redux';
 import requestNew from '../../app/requestNew';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { setArchiveWallet } from './walletSlice';
-import { closeMenu, setSpaceStatuses } from '../hubs/hubSlice';
-import { IWallet, IWalletDetailRes, IWalletRes } from './wallet.interfaces';
+import { closeMenu } from '../hubs/hubSlice';
+import { IWallet, IWalletDetailRes } from './wallet.interfaces';
 import { useParams } from 'react-router-dom';
-import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { useAppSelector } from '../../app/hooks';
 import { generateFilters } from '../../components/TasksHeader/lib/generateFilters';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
 
@@ -71,22 +71,6 @@ export const createWalletService = (data: {
   return response;
 };
 
-// // get wallets
-export const getWalletService = (currentWalletId: string | null) => {
-  return useQuery(['wallet', currentWalletId], async () => {
-    const response = await requestNew<IWalletRes | undefined>({
-      url: 'wallets',
-      method: 'GET',
-      params: {
-        parent_id: currentWalletId //this returns for subwallet
-        // hub_id: //this is the hub id
-        // is_archived: //toggle archive
-      }
-    });
-    return response;
-  });
-};
-
 //edit wallet
 export const UseEditWalletService = (data: {
   walletName?: string;
@@ -144,7 +128,6 @@ export const UseArchiveWalletService = (wallet: { query: string | null | undefin
 
 //get wallet details
 export const UseGetWalletDetails = (query: { activeItemId?: string | null; activeItemType?: string | null }) => {
-  const dispatch = useAppDispatch();
   return useQuery(
     ['wallet-details', query],
     async () => {
@@ -156,7 +139,6 @@ export const UseGetWalletDetails = (query: { activeItemId?: string | null; activ
     },
     {
       enabled: query.activeItemType === 'wallet' && !!query.activeItemId
-      // onSuccess: (data) => dispatch(setSpaceStatuses(data.data.wallet.task_statuses))
     }
   );
 };

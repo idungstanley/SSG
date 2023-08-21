@@ -45,7 +45,7 @@ export default function AdditionalHeader() {
     arrowDown: false
   });
   const { workSpaceId: workspaceId } = useParams();
-  const { activeEntityName } = useAppSelector((state) => state.workspace);
+  const { activeItemName } = useAppSelector((state) => state.workspace);
   const { refetch } = useCurrentTime({ workspaceId });
 
   const sameEntity = () => activeItemId === (timerLastMemory.hubId || timerLastMemory.listId || timerLastMemory.taskId);
@@ -113,7 +113,7 @@ export default function AdditionalHeader() {
         <p className="p-1 bg-gray-300 rounded-md ">
           <img src={headerIcon} alt="" className="w-6 h-6" />
         </p>
-        <span className="text-alsoit-text-lg font-bold">{activeEntityName}</span>
+        <span className="text-alsoit-text-lg font-bold">{activeItemName}</span>
       </h1>
       <div className="relative flex items-center justify-center space-x-2">
         {timeBlinkerCheck() && (

@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { setActiveEntity, setActiveItem } from '../../../../../features/workspace/workspaceSlice';
+import { setActiveItem } from '../../../../../features/workspace/workspaceSlice';
 import MenuDropdown from '../../../../../components/Dropdown/MenuDropdown';
 import { useAppSelector } from '../../../../../app/hooks';
-import { EntityType } from '../../../../../utils/EntityTypes/EntityType';
 import { findCurrentWallet } from '../../../../../managers/Wallet';
 import { Wallet } from '../../../../../pages/workspace/hubs/components/ActiveTree/activetree.interfaces';
 
@@ -30,7 +29,6 @@ function ActiveSubWallet({ padding = 'pl-8' }: SubWalletIndexProps) {
   const handleLocation = (id: string, type = 'subWallet') => {
     navigate(`tasks/w/${id}`);
     dispatch(setActiveItem({ activeItemType: type, activeItemId: id }));
-    dispatch(setActiveEntity({ id, type: EntityType.wallet }));
   };
 
   return wallet ? (
