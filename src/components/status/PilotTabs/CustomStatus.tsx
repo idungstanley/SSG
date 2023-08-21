@@ -10,6 +10,7 @@ import { Chevron } from '../../Views/ui/Chevron';
 import {
   DndContext,
   DragEndEvent,
+  DragOverEvent,
   KeyboardSensor,
   PointerSensor,
   closestCorners,
@@ -22,6 +23,9 @@ import {
   sortableKeyboardCoordinates,
   verticalListSortingStrategy
 } from '@dnd-kit/sortable';
+import { findBoardSectionContainer, initializeBoard } from '../../../utils/StatusManagement/board';
+import { BoardSectionsType } from '../../../utils/StatusManagement/Types';
+import { getTaskById } from '../../../utils/StatusManagement/statusUtils';
 
 const groupStatusByModelType = (statusTypes: StatusProps[]) => {
   return [...new Set(statusTypes.map(({ type }) => type))];
@@ -34,7 +38,9 @@ export default function CustomStatus() {
   const [newStatusValue, setNewStatusValue] = useState<string>();
   const [addStatus, setAddStatus] = useState<boolean>(false);
   const [collapsedStatusGroups, setCollapsedStatusGroups] = useState<{ [key: string]: boolean }>({});
-  const [activeId, setActiveId] = useState<number>(0);
+  const [activeId, setActiveId] = useState<number | null>(null);
+  const initialBoardSections = initializeBoard(statusTypesState);
+  const [boardSections, setBoardSections] = useState<BoardSectionsType>(initialBoardSections);
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -47,76 +53,61 @@ export default function CustomStatus() {
     id: status.position
   }));
 
-  console.log(statusTypesState);
-
-  function findContainer(id: number) {
-    for (const status of statusTypesState) {
-      if (status.position === id) {
-        return status.type; // Assuming that `type` is the property that identifies the container
-      }
-    }
-    return null; // If the status was not found in any container
-  }
-
   function handleDragStart(event: DragEndEvent) {
     const { active } = event;
     const { id } = active;
     setActiveId(id as number);
   }
 
-  function handleDragOver(event: DragEndEvent) {
-    const { active, over, draggingRect } = event;
-    const { id } = active;
-    const { id: overId } = over;
-    const activeContainer = findContainer(id as number);
-    const overContainer = findContainer(overId as number);
+  const handleDragOver = ({ active, over }: DragOverEvent) => {
+    // Find the containers
+    const activeContainer = findBoardSectionContainer(boardSections, active.id as string);
+    const overContainer = findBoardSectionContainer(boardSections, over?.id as string);
+
     if (!activeContainer || !overContainer || activeContainer === overContainer) {
       return;
     }
-    setStatusTypesState((prev) => {
-      const activeItems = prev.find((item) => item.position === id);
-      const overItems = prev.find((item) => item.position === overId);
 
-      if (!activeItems || !overItems) {
-        return prev;
-      }
+    setBoardSections((boardSection) => {
+      const activeItems = boardSection[activeContainer];
+      const overItems = boardSection[overContainer];
 
-      const activeIndex = prev.indexOf(activeItems);
-      const overIndex = prev.indexOf(overItems);
-      const isBelowLastItem =
-        over && overIndex === prev.length - 1 && draggingRect.offsetTop > over.rect.offsetTop + over.rect.height;
-      const modifier = isBelowLastItem ? 1 : 0;
-      const newIndex = overIndex >= 0 ? overIndex + modifier : prev.length;
-      const newStatusTypesState = [...prev];
-      newStatusTypesState.splice(activeIndex, 1);
-      newStatusTypesState.splice(newIndex, 0, activeItems);
-      return newStatusTypesState;
+      // Find the indexes for the items
+      const activeIndex = activeItems.findIndex((item) => item.position === active.id);
+      const overIndex = overItems.findIndex((item) => item.position !== over?.id);
+
+      return {
+        ...boardSection,
+        [activeContainer]: [...boardSection[activeContainer].filter((item) => item.position !== active.id)],
+        [overContainer]: [
+          ...boardSection[overContainer].slice(0, overIndex),
+          boardSections[activeContainer][activeIndex],
+          ...boardSection[overContainer].slice(overIndex, boardSection[overContainer].length)
+        ]
+      };
     });
-  }
+  };
 
-  function handleDragEnd(event: DragEndEvent) {
-    const { active, over } = event;
-    const { id } = active;
-    const activeContainer = findContainer(id as number);
-    const overContainer = over ? findContainer(over.id as number) : null;
+  const handleDragEnd = ({ active, over }: DragEndEvent) => {
+    const activeContainer = findBoardSectionContainer(boardSections, active.id as string);
+    const overContainer = findBoardSectionContainer(boardSections, over?.id as string);
+
     if (!activeContainer || !overContainer || activeContainer !== overContainer) {
       return;
     }
-    const activeItems = statusTypesState.find((item) => item.position === id);
-    const overItems = over ? statusTypesState.find((item) => item.position === over.id) : null;
 
-    if (!activeItems || (over && !overItems)) {
-      return;
-    }
-    const activeIndex = statusTypesState.indexOf(activeItems);
-    const overIndex = overItems ? statusTypesState.indexOf(overItems) : -1;
+    const activeIndex = boardSections[activeContainer].findIndex((task) => task.position === active.id);
+    const overIndex = boardSections[overContainer].findIndex((task) => task.position === over?.id);
 
     if (activeIndex !== overIndex) {
-      const newStatusTypesState = arrayMove(statusTypesState, activeIndex, overIndex);
-      setStatusTypesState(newStatusTypesState);
+      setBoardSections((boardSection) => ({
+        ...boardSection,
+        [overContainer]: arrayMove(boardSection[overContainer], activeIndex, overIndex)
+      }));
     }
-    setActiveId(0);
-  }
+
+    setActiveId(null);
+  };
   // ... (remaining code)
 
   const handleToggleGroup = (group: string) => {
@@ -166,7 +157,6 @@ export default function CustomStatus() {
     setNewStatusValue(e.target.value);
   };
 
-  const groupedStatus = groupStatusByModelType(spaceStatuses);
   const groupStylesMapping: Record<string, { backgroundColor: string; boxShadow: string }> = {
     open: { backgroundColor: '#FBFBFB', boxShadow: '0px 0px 5px rgba(0, 0, 0, 0.2)' },
     custom: { backgroundColor: '#FCF1FF', boxShadow: '0px 0px 5px rgba(128, 0, 128, 0.2)' },
@@ -184,66 +174,58 @@ export default function CustomStatus() {
           onDragOver={handleDragOver}
           onDragEnd={handleDragEnd}
         >
-          {groupedStatus.map((uniqueModelType, modelTypeIndex) => {
-            if (uniqueModelType) {
-              return (
-                <div
-                  className="p-2 space-y-2 rounded"
-                  key={modelTypeIndex}
-                  style={{
-                    backgroundColor: groupStylesMapping[uniqueModelType]?.backgroundColor,
-                    boxShadow: groupStylesMapping[uniqueModelType]?.boxShadow
-                  }}
-                >
-                  {uniqueModelType && (
-                    <span className="flex gap-2">
-                      <Chevron
-                        onToggle={() => handleToggleGroup(uniqueModelType)}
-                        active={collapsedStatusGroups[uniqueModelType]}
-                        iconColor="text-gray-400"
-                      />
-                      <p className="flex uppercase justify-items-start">{uniqueModelType} STATUSES</p>
-                    </span>
-                  )}
-                  <SortableContext items={statusTypesState} strategy={verticalListSortingStrategy} id={uniqueModelType}>
-                    {uniqueModelType &&
-                      !collapsedStatusGroups[uniqueModelType] &&
-                      statusTypesState
-                        .filter((ticket) => ticket.type === uniqueModelType)
-                        .map((item, index) => (
-                          <>
-                            <StatusBodyTemplate index={index} item={item} setStatusTypesState={setStatusTypesState} />
-                          </>
-                        ))}
-                  </SortableContext>
-                  {uniqueModelType && uniqueModelType === 'open' && !addStatus && (
-                    <span className="flex justify-items-start" onClick={() => setAddStatus(true)}>
-                      <Button
-                        height="h-7"
-                        icon={<PlusCircle active={false} color="white" />}
-                        label="Add Status"
-                        buttonStyle="base"
-                      />
-                    </span>
-                  )}
-                  {uniqueModelType && uniqueModelType === 'open' && addStatus && (
-                    <span className="flex justify-items-start">
-                      <Input
-                        trailingIcon={<PlusIcon active />}
-                        placeholder="Type Status name"
-                        name="Status"
-                        onChange={handleOnChange}
-                        value={newStatusValue}
-                        trailingClick={handleSaveNewStatus}
-                      />
-                    </span>
-                  )}
-                </div>
-              );
-            } else {
-              return null;
-            }
-          })}
+          {Object.keys(boardSections).map((uniqueModelType) => (
+            <div
+              className="p-2 space-y-2 rounded"
+              key={uniqueModelType}
+              style={{
+                backgroundColor: groupStylesMapping[uniqueModelType]?.backgroundColor,
+                boxShadow: groupStylesMapping[uniqueModelType]?.boxShadow
+              }}
+            >
+              {uniqueModelType && (
+                <span className="flex gap-2">
+                  <Chevron
+                    onToggle={() => handleToggleGroup(uniqueModelType)}
+                    active={collapsedStatusGroups[uniqueModelType]}
+                    iconColor="text-gray-400"
+                  />
+                  <p className="flex uppercase justify-items-start">{uniqueModelType} STATUSES</p>
+                </span>
+              )}
+              <SortableContext items={sortableItems} strategy={verticalListSortingStrategy} id={uniqueModelType}>
+                {uniqueModelType &&
+                  !collapsedStatusGroups[uniqueModelType] &&
+                  boardSections[uniqueModelType].map((item, index) => (
+                    <>
+                      <StatusBodyTemplate index={index} item={item} setStatusTypesState={setStatusTypesState} />
+                    </>
+                  ))}
+              </SortableContext>
+              {uniqueModelType && uniqueModelType === 'open' && !addStatus && (
+                <span className="flex justify-items-start" onClick={() => setAddStatus(true)}>
+                  <Button
+                    height="h-7"
+                    icon={<PlusCircle active={false} color="white" />}
+                    label="Add Status"
+                    buttonStyle="base"
+                  />
+                </span>
+              )}
+              {uniqueModelType && uniqueModelType === 'open' && addStatus && (
+                <span className="flex justify-items-start">
+                  <Input
+                    trailingIcon={<PlusIcon active />}
+                    placeholder="Type Status name"
+                    name="Status"
+                    onChange={handleOnChange}
+                    value={newStatusValue}
+                    trailingClick={handleSaveNewStatus}
+                  />
+                </span>
+              )}
+            </div>
+          ))}
         </DndContext>
       </div>
       <p className="mt-auto text-red-600 text-start">{validationMessage}</p>

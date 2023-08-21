@@ -15,8 +15,8 @@ import { useSortable } from '@dnd-kit/sortable';
 
 interface StatusBodyProps {
   item: StatusProps;
-  index: number;
-  setStatusTypesState: React.Dispatch<React.SetStateAction<StatusProps[]>>;
+  index?: number;
+  setStatusTypesState?: React.Dispatch<React.SetStateAction<StatusProps[]>>;
 }
 
 export default function StatusBodyTemplate({ item, setStatusTypesState }: StatusBodyProps) {
@@ -45,14 +45,16 @@ export default function StatusBodyTemplate({ item, setStatusTypesState }: Status
   };
 
   const handleStatusColor = (color: string | ListColourProps) => {
-    setStatusTypesState((prevState) => {
-      return prevState.map((status) => {
-        if (status.name === item.name) {
-          return { ...status, color } as StatusProps;
-        }
-        return status;
+    if (setStatusTypesState) {
+      setStatusTypesState((prevState) => {
+        return prevState.map((status) => {
+          if (status.name === item.name) {
+            return { ...status, color } as StatusProps;
+          }
+          return status;
+        });
       });
-    });
+    }
   };
 
   const handleCloseStatusEditDropdown = () => {
@@ -96,9 +98,11 @@ export default function StatusBodyTemplate({ item, setStatusTypesState }: Status
       label: 'Delete status',
       icon: <AiOutlineDelete />,
       handleClick: () => {
-        setStatusTypesState((prevState) => {
-          return prevState.filter((status) => status.name !== item.name);
-        });
+        if (setStatusTypesState) {
+          setStatusTypesState((prevState) => {
+            return prevState.filter((status) => status.name !== item.name);
+          });
+        }
         setShowStatusEditDropdown(null);
       }
     }
@@ -125,7 +129,7 @@ export default function StatusBodyTemplate({ item, setStatusTypesState }: Status
         </div>
       </span>
       {!editableContent && (
-        <span className="ml-auto flex items-center gap-2">
+        <span className="flex items-center gap-2 ml-auto">
           <span>
             <Picker />
           </span>

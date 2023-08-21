@@ -1,9 +1,9 @@
 import { BOARD_SECTIONS } from './Constant';
-import { BoardSections, Status, StatusType } from './Types';
+import { BoardSectionsType, Status, StatusType } from './Types';
 import { getTasksByStatus } from './statusUtils';
 
 export const initializeBoard = (tasks: StatusType[]) => {
-  const boardSections: BoardSections = {};
+  const boardSections: BoardSectionsType = {};
 
   Object.keys(BOARD_SECTIONS).forEach((boardSectionKey) => {
     boardSections[boardSectionKey] = getTasksByStatus(tasks, boardSectionKey as Status);
@@ -12,7 +12,7 @@ export const initializeBoard = (tasks: StatusType[]) => {
   return boardSections;
 };
 
-export const findBoardSectionContainer = (boardSections: BoardSections, id: string) => {
+export const findBoardSectionContainer = (boardSections: BoardSectionsType, id: string) => {
   if (id in boardSections) {
     return id;
   }

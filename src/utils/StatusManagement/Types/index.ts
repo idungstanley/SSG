@@ -11,6 +11,6 @@ export type StatusType = {
   is_default?: number | null;
 };
 
-export type BoardSections = {
+export type BoardSectionsType = {
   [name: string]: StatusType[];
 };
