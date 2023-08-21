@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-// import { tagItem } from '../../pages/workspace/pilot/components/details/properties/subDetailsIndex/PropertyDetails';
 import { listColumnProps } from '../../pages/workspace/tasks/component/views/ListColumns';
 import { IField } from '../list/list.interfaces';
 import {
@@ -661,6 +660,7 @@ export const {
   setHeads,
   setCustomSuggetionsField,
   setNewTask,
-  setNewCustomPropertyDetails
+  setNewCustomPropertyDetails,
+  setEditCustomProperty
 } = taskSlice.actions;
 export default taskSlice.reducer;

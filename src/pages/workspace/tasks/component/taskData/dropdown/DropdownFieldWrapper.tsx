@@ -1,5 +1,4 @@
 import { IField } from '../../../../../../features/list/list.interfaces';
-import { useList } from '../../../../../../features/list/listService';
 import { ICustomField } from '../../../../../../features/task/taskSlice';
 import DropdownField from './DropdownField';
 

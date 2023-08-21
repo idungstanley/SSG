@@ -9,7 +9,6 @@ import { AddTask } from '../AddTask/AddTask';
 import { getTaskColumns, setCurrTeamMemId } from '../../../../features/task/taskSlice';
 import { columnsHead, listColumnProps } from '../../../../pages/workspace/tasks/component/views/ListColumns';
 import { useParams } from 'react-router-dom';
-import { UseGetWalletDetails } from '../../../../features/wallet/walletService';
 import { UseGetHubDetails } from '../../../../features/hubs/hubService';
 import { cl } from '../../../../utils';
 import { useDroppable } from '@dnd-kit/core';
@@ -28,7 +27,7 @@ export type SortOption = {
 };
 
 export function List({ tasks, customProperty }: ListProps) {
-  const { hubId, walletId, listId } = useParams();
+  const { hubId } = useParams();
   // hubId;
   const [columns, setColumns] = useState<listColumnProps[] | undefined>(undefined);
   const { sortType } = useAppSelector((state) => state.task);
