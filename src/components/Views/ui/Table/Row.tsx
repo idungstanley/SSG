@@ -19,6 +19,7 @@ import Dradnddrop from '../../../../assets/icons/Dradnddrop';
 
 interface RowProps {
   task: Task;
+  taskIndex?: number;
   columns: Column[];
   paddingLeft?: number;
   parentId?: string;
@@ -27,7 +28,16 @@ interface RowProps {
   handleClose?: VoidFunction;
 }
 
-export function Row({ task, columns, paddingLeft = 0, parentId, task_status, isListParent, handleClose }: RowProps) {
+export function Row({
+  task,
+  columns,
+  taskIndex,
+  paddingLeft = 0,
+  parentId,
+  task_status,
+  isListParent,
+  handleClose
+}: RowProps) {
   const otherColumns = columns.slice(1);
   const [showSubTasks, setShowSubTasks] = useState(false);
   const { showNewTaskField, showNewTaskId } = useAppSelector((state) => state.task);
@@ -116,6 +126,7 @@ export function Row({ task, columns, paddingLeft = 0, parentId, task_status, isL
           style={{ zIndex: 1 }}
           isListParent={isListParent}
           task={task}
+          taskIndex={taskIndex}
           parentId={parentId as string}
           task_status={task_status as string}
           onClose={handleClose as VoidFunction}

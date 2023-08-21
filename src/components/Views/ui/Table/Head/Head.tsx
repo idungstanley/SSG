@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import RoundedArrowUpDown from '../../../../../pages/workspace/tasks/component/views/listLevel/component/RoundedArrowUpDown';
 import SortDirectionCheck from '../../../../../pages/workspace/tasks/component/views/listLevel/component/SortDirectionCheck';
@@ -70,7 +70,9 @@ export function Head({
   const [headerId, setheaderId] = useState<string>('');
   const [showStatusDropdown, setShowStatusDropdown] = useState<null | SVGElement>(null);
   const [showSortModal, setShowSortModal] = useState<boolean>(false);
-  const { sortArr, sortAbleArr, selectedTasksArray } = useAppSelector((state) => state.task);
+  const { sortArr, sortAbleArr, selectedTasksArray, selectedIndex, selectedIndexStatus } = useAppSelector(
+    (state) => state.task
+  );
   const { baseColor } = useAppSelector((state) => state.account);
   const { isManageStatus } = useAppSelector((state) => state.workspace);
 
@@ -86,6 +88,21 @@ export function Head({
     setShowStatusDropdown(null);
   };
 
+  useEffect(() => {
+    if (selectedIndex !== null) {
+      const updatedTaskIds: string[] = [...selectedTasksArray];
+      groupedTask?.map((task, index) => {
+        if (selectedIndex == index && selectedIndexStatus == task.status.name) {
+          const taskIndex = updatedTaskIds.indexOf(task.id);
+          if (taskIndex == -1) {
+            updatedTaskIds.push(task.id);
+            dispatch(setSelectedTasksArray(updatedTaskIds));
+          }
+        }
+      });
+    }
+  }, [selectedIndex]);
+
   const handleCheckedGroupTasks = () => {
     const updatedTaskIds: string[] = [...selectedTasksArray];
 
@@ -93,9 +110,9 @@ export function Head({
       const taskIndex = updatedTaskIds.indexOf(task.id);
 
       if (taskIndex === -1) {
-        updatedTaskIds.push(task.id); // Task not in selectedTasksArray, so add it
+        updatedTaskIds.push(task.id);
       } else {
-        updatedTaskIds.splice(taskIndex, 1); // Task already in selectedTasksArray, so remove it
+        updatedTaskIds.splice(taskIndex, 1);
       }
     });
     dispatch(setSelectedTasksArray(updatedTaskIds));

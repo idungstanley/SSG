@@ -10,6 +10,8 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { setShowPilotSideOver } from '../../../../features/general/slideOver/slideOverSlice';
 import {
   setCurrentTaskStatusId,
+  setSelectedIndex,
+  setSelectedIndexStatus,
   setSelectedTasksArray,
   setShowTaskNavigation,
   setTaskIdForPilot
@@ -25,10 +27,12 @@ import ToolTip from '../../../Tooltip/Tooltip';
 import Badges from '../../../badges';
 import DetailsOnHover from '../../../Dropdown/DetailsOnHover/DetailsOnHover';
 import { EntityType } from '../../../../utils/EntityTypes/EntityType';
+import { indexOf } from 'cypress/types/lodash';
 
 interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   task: Task;
   children?: ReactNode;
+  taskIndex?: number;
   showSubTasks?: boolean;
   setShowSubTasks: (i: boolean) => void;
   paddingLeft?: number;
@@ -46,6 +50,7 @@ export function StickyCol({
   setShowSubTasks,
   children,
   tags,
+  taskIndex,
   parentId,
   isListParent,
   task_status,
@@ -73,6 +78,7 @@ export function StickyCol({
     selectedTasksArray,
     verticalGridlinesTask,
     hilightNewTask,
+    selectedIndex,
     CompactView,
     toggleAllSubtask
   } = useAppSelector((state) => state.task);
@@ -174,6 +180,29 @@ export function StickyCol({
     });
   };
 
+  const [selectedIndexArray, setSelectedIndexArray] = useState<number[]>([]);
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.shiftKey && event.key === 'ArrowDown') {
+        if (selectedIndex == null) return;
+        if (!selectedIndexArray.includes(taskIndex as number)) {
+          setSelectedIndexArray((prev) => {
+            const updatedArray = [...prev, taskIndex as number];
+            const newIndex = (selectedIndex as number) + 1;
+            dispatch(setSelectedIndex(newIndex));
+            return updatedArray;
+          });
+        }
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [selectedIndex, selectedIndexArray]);
+
   useEffect(() => {
     const isSelected = selectedTasksArray.includes(task.id);
 
@@ -185,6 +214,20 @@ export function StickyCol({
   }, [selectedTasksArray, task.id]);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const indexInArray = selectedIndexArray.indexOf(taskIndex as number);
+    if (!selectedIndexArray.includes(taskIndex as number)) {
+      setSelectedIndexArray((prev) => {
+        const updatedArray = [...prev, taskIndex as number];
+        dispatch(setSelectedIndex(taskIndex as number));
+        return updatedArray;
+      });
+    } else {
+      // If taskIndex is already in selectedIndexArray, remove it
+      const updatedArray = [...selectedIndexArray];
+      updatedArray.splice(indexInArray, 1);
+      setSelectedIndexArray(updatedArray);
+    }
+    dispatch(setSelectedIndexStatus(task.status.name));
     const isChecked = e.target.checked;
     dispatch(setShowTaskNavigation(isChecked));
     if (isChecked) {
