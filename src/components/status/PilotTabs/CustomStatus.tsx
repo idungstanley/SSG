@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useAppSelector } from '../../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import StatusBodyTemplate from '../StatusBodyTemplate';
 import Button from '../../Button';
 import PlusIcon from '../../../assets/icons/PlusIcon';
@@ -26,6 +26,8 @@ import {
 import { findBoardSectionContainer, initializeBoard } from '../../../utils/StatusManagement/board';
 import { BoardSectionsType } from '../../../utils/StatusManagement/Types';
 import { getTaskById } from '../../../utils/StatusManagement/statusUtils';
+import { useMutation } from '@tanstack/react-query';
+import { statusTypesService } from '../../../features/hubs/hubService';
 
 const groupStatusByModelType = (statusTypes: StatusProps[]) => {
   return [...new Set(statusTypes.map(({ type }) => type))];
@@ -34,6 +36,7 @@ const groupStatusByModelType = (statusTypes: StatusProps[]) => {
 export default function CustomStatus() {
   const { spaceStatuses } = useAppSelector((state) => state.hub);
   const [statusTypesState, setStatusTypesState] = useState<StatusProps[]>(spaceStatuses);
+  const {activeItemId, activeItemType} = useAppSelector(state=> state.workspace)
   const [validationMessage, setValidationMessage] = useState<string>('');
   const [newStatusValue, setNewStatusValue] = useState<string>();
   const [addStatus, setAddStatus] = useState<boolean>(false);
@@ -163,6 +166,12 @@ export default function CustomStatus() {
     closed: { backgroundColor: '#E6FAE9', boxShadow: '0px 0px 5px rgba(0, 128, 0, 0.2)' }
     // Add more model_type values and their styles as needed
   };
+
+  const createStatusTypes = useMutation(statusTypesService, {
+    onSuccess: (data) => {
+      console.log(data);
+    }
+  });
 
   const onSubmit = async () => {
     await createStatusTypes.mutateAsync({
