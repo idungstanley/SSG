@@ -14,7 +14,7 @@ import {
 } from '../../features/hubs/hubSlice';
 import { GetTaskListCount, UseEditListService } from '../../features/list/listService';
 import { setListPaletteColor } from '../../features/list/listSlice';
-import { setActiveEntity, setActiveEntityName, setActiveItem } from '../../features/workspace/workspaceSlice';
+import { setActiveItem } from '../../features/workspace/workspaceSlice';
 import Palette from '../ColorPalette';
 import ListIconSelection from '../ColorPalette/component/ListIconSelection';
 import ListIconComponent from '../ItemsListInSidebar/components/ListIconComponent';
@@ -27,6 +27,7 @@ import Drag from '../../assets/icons/Drag';
 import { IList } from '../../features/hubs/hubs.interfaces';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
 import ToolTip from '../Tooltip/Tooltip';
+import ActiveBarIdentification from './Component/ActiveBarIdentification';
 
 interface ListItemProps {
   list: IList;
@@ -68,7 +69,6 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
 
   // function for the list shape selection
   const handleListLocation = (id: string, name: string) => {
-    dispatch(setActiveEntityName(name));
     dispatch(
       setActiveItem({
         activeItemType: EntityType.list,
@@ -77,7 +77,6 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
       })
     );
     navigate(`/${currentWorkspaceId}/tasks/l/${id}`);
-    dispatch(setActiveEntity({ id, type: EntityType.list }));
   };
 
   const handleSelection = (shape: string) => {
@@ -192,9 +191,7 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
         }}
         onClick={() => handleListLocation(list.id, list.name)}
       >
-        {list.id === listId && (
-          <span className="absolute top-0 bottom-0 left-0 rounded-r-lg w-0.5" style={{ backgroundColor: baseColor }} />
-        )}
+        <ActiveBarIdentification showBar={list.id === listId} />
         <div
           className="absolute left-2 rounded-r-lg w-0.5 opacity-0 group-hover:opacity-100 cursor-move"
           ref={draggableRef}

@@ -199,6 +199,9 @@ export interface ITimeEntriesRes {
       per_page: number;
       has_more_pages: boolean;
     };
+    filters: {
+      team_members: teamMember[];
+    };
   };
 }
 

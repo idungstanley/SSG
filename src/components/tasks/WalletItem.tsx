@@ -23,6 +23,9 @@ import ThreeDotIcon from '../../assets/icons/ThreeDotIcon';
 import { useDraggable, useDroppable } from '@dnd-kit/core';
 import Drag from '../../assets/icons/Drag';
 import ToolTip from '../Tooltip/Tooltip';
+import { List, Wallet } from '../../pages/workspace/hubs/components/ActiveTree/activetree.interfaces';
+import ActiveBackground from './Component/ActiveBackground';
+import ActiveBarIdentification from './Component/ActiveBarIdentification';
 
 interface WalletItemProps {
   wallet: {
@@ -31,7 +34,8 @@ interface WalletItemProps {
     color?: string;
     parent_id?: string | null;
     hub_id?: string;
-    has_descendants?: number;
+    children: Wallet[];
+    lists: List[];
   };
   showSubWallet: boolean;
   paddingLeft: string | number;
@@ -41,8 +45,9 @@ interface WalletItemProps {
   topNumber?: number;
   zNumber?: string;
   stickyButtonIndex?: number | undefined;
-  handleShowSubWallet: (id: string, parent_id: string | null, index?: number) => void;
-  handleLocation: (id: string, name: string, parent_id: string | null, index?: number) => void;
+  isExtendedBar?: boolean;
+  handleShowSubWallet: (id: string, index?: number) => void;
+  handleLocation: (id: string, name: string, index?: number) => void;
 }
 export default function WalletItem({
   wallet,
@@ -54,13 +59,14 @@ export default function WalletItem({
   stickyButtonIndex,
   topNumber = 0,
   zNumber,
+  isExtendedBar,
   handleShowSubWallet,
   handleLocation
 }: WalletItemProps) {
   const dispatch = useAppDispatch();
   const { activeItemId } = useAppSelector((state) => state.workspace);
   const { showMenuDropdown, SubMenuId } = useAppSelector((state) => state.hub);
-  const { paletteDropdown, lightBaseColor, baseColor, showSidebar } = useAppSelector((state) => state.account);
+  const { paletteDropdown, showSidebar } = useAppSelector((state) => state.account);
   const { paletteId, show } = paletteDropdown;
   const { walletId } = useParams();
   const [paletteColor, setPaletteColor] = useState<string | undefined | ListColourProps>('');
@@ -150,7 +156,7 @@ export default function WalletItem({
   };
 
   const renderIcons = (showSubWallet: boolean) => {
-    if (wallet?.has_descendants) {
+    if (wallet?.children.length || wallet?.lists.length) {
       if (showSubWallet) {
         return (
           <>
@@ -199,7 +205,7 @@ export default function WalletItem({
           isOver ? 'bg-primary-100 border-primary-500 shadow-inner shadow-primary-300' : ''
         }`}
         ref={setNodeRef}
-        onClick={() => handleShowSubWallet(wallet.id, wallet.parent_id || wallet.hub_id || null, index)}
+        onClick={() => handleShowSubWallet(wallet.id, index)}
         style={{
           top: isSticky ? `${topNumber}px` : '',
           zIndex: isSticky ? zNumber : '1',
@@ -211,18 +217,8 @@ export default function WalletItem({
           className="relative flex items-center flex-1 truncate"
           style={{ paddingLeft: `${paddingLeft}px`, height: '30px' }}
         >
-          {wallet.id === walletId && (
-            <span
-              className="absolute inset-0 z-0 before:content before:absolute before:inset-0"
-              style={{ backgroundColor: lightBaseColor }}
-            />
-          )}
-          {wallet.id === walletId && (
-            <span
-              className="absolute top-0 bottom-0 left-0 w-0.5 rounded-r-lg"
-              style={{ backgroundColor: baseColor }}
-            />
-          )}
+          <ActiveBackground showBgColor={wallet.id === walletId} />
+          <ActiveBarIdentification showBar={wallet.id === walletId} />
           <div
             className="absolute left-2 rounded-r-lg w-0.5 opacity-0 group-hover:opacity-100 cursor-move"
             ref={draggableRef}
@@ -236,7 +232,7 @@ export default function WalletItem({
             {renderIcons(showSubWallet)}
           </div>
           <div
-            onClick={() => handleLocation(wallet.id, wallet.name, wallet.parent_id || wallet.hub_id || null, index)}
+            onClick={() => handleLocation(wallet.id, wallet.name, index)}
             className="truncate cursor-pointer hover:underline hover:decoration-dashed"
             style={{ marginLeft: '17px' }}
           >
@@ -275,7 +271,7 @@ export default function WalletItem({
         </div>
       </section>
       {paletteId === wallet.id && show ? <Palette title="Wallet Colour" setPaletteColor={setPaletteColor} /> : null}
-      {showMenuDropdown === wallet.id ? <MenuDropdown /> : null}
+      {showMenuDropdown === wallet.id ? <MenuDropdown isExtendedBar={isExtendedBar} /> : null}
       {SubMenuId === wallet.id ? <SubDropdown /> : null}
     </div>
   );

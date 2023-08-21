@@ -15,6 +15,7 @@ import {
 import SubtabDrag from '../../../../pages/workspace/pilot/components/SubtabDnd';
 import { useAppSelector } from '../../../../app/hooks';
 import CalendarIcon from '../../../../assets/icons/CalendarIcon';
+import StatusMgIcon from '../../../../assets/icons/StatusMgIcon';
 
 export const HubManagerOptions = [
   {
@@ -39,6 +40,12 @@ export const HubManagerOptions = [
     id: 4,
     name: 'Calendar Settings',
     icon: <CalendarIcon active={false} />,
+    isVisible: false
+  },
+  {
+    id: 5,
+    name: 'Status Management',
+    icon: <StatusMgIcon />,
     isVisible: false
   }
 ];

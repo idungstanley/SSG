@@ -5,15 +5,22 @@ import ListIndex from '../../../../../../components/Index/listIndex/ListIndex';
 import InboxIndex from '../../../../../../components/Index/InboxIndex';
 import { useAppSelector } from '../../../../../../app/hooks';
 import { EntityType } from '../../../../../../utils/EntityTypes/EntityType';
+import { findCurrentHub } from '../../../../../../managers/Hub';
 
 export default function HubData() {
   const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
+  const { hub } = useAppSelector((state) => state.hub);
+
+  const currentEntity = findCurrentHub(activeItemId as string, hub);
+  const subHubsData = currentEntity.children;
+  const walletsData = currentEntity.wallets;
+  const listsData = currentEntity.lists;
 
   return activeItemType === EntityType.hub && activeItemId ? (
     <>
-      <SubHubIndex />
-      <WalletIndex showHubList={true} paddingLeft="10" />
-      <ListIndex showHubList={true} />
+      <SubHubIndex data={subHubsData} />
+      <WalletIndex data={walletsData} showHubList={true} paddingLeft="10" />
+      <ListIndex data={listsData} showHubList={true} />
     </>
   ) : (
     <InboxIndex />

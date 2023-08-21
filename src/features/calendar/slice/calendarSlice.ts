@@ -28,15 +28,28 @@ export const calendarSlice = createSlice({
     setIntervalType(state, action: PayloadAction<string>) {
       state.intervalType = action.payload;
     },
-    setTimeInterval(state, action: PayloadAction<15 | 30>) {
+    setTimeInterval(state, action: PayloadAction<number | string>) {
       state.timeInterval = action.payload;
+    },
+    setReminderInterval(state, action: PayloadAction<number | string>) {
+      state.reminderInterval = action.payload;
+    },
+    setRemindertype(state, action: PayloadAction<string | number>) {
+      state.reminderType = action.payload;
     }
   }
 });
 
 export const selectCalendar = (state: RootState) => state.calendar;
 
-export const { setUpdateCords, setBlacklistIds, setNewDayOff, setIntervalType, setTimeInterval } =
-  calendarSlice.actions;
+export const {
+  setUpdateCords,
+  setBlacklistIds,
+  setNewDayOff,
+  setIntervalType,
+  setTimeInterval,
+  setReminderInterval,
+  setRemindertype
+} = calendarSlice.actions;
 
 export default calendarSlice.reducer;

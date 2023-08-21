@@ -568,6 +568,7 @@ export const useCurrentTime = ({ workspaceId }: { workspaceId?: string }) => {
             setTimerLastMemory({
               hubId: dateString.model_type === EntityType.hub ? dateString.model_id : null,
               activeTabId: 6,
+              subhubId: dateString.model_type === EntityType.subHub ? dateString.model_id : null,
               listId: dateString.model_type === EntityType.list ? dateString.model_id : null,
               taskId: dateString.model_type === EntityType.task ? dateString.model_id : null,
               workSpaceId: workspaceId
@@ -634,11 +635,15 @@ export const EndTimeEntriesService = () => {
 export const GetTimeEntriesService = ({
   itemId,
   trigger,
-  is_active
+  is_active,
+  page,
+  include_filters
 }: {
   itemId: string | null | undefined;
   trigger: string | null | undefined;
   is_active?: number;
+  page?: number;
+  include_filters?: boolean;
 }) => {
   const { timeSortArr } = useAppSelector((state) => state.task);
   const updatesortArr = timeSortArr.length === 0 ? null : timeSortArr;
@@ -652,13 +657,16 @@ export const GetTimeEntriesService = ({
           type: trigger,
           id: itemId,
           team_member_ids: updatesortArr,
-          is_active: is_active
+          is_active: is_active,
+          page,
+          include_filters
         }
       });
       return data;
     },
     {
-      enabled: trigger != null
+      enabled: trigger != null,
+      keepPreviousData: true
     }
   );
 };

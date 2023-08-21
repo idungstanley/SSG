@@ -19,7 +19,6 @@ interface workspaceState {
   activePlaceId: number | null | boolean | undefined | string;
   activePlaceName: string | null;
   pilotWidth: number;
-  showHub: boolean;
   fetchAllWorkspace: boolean;
   isManageStatus: boolean;
   showWallet: boolean;
@@ -33,7 +32,6 @@ interface workspaceState {
   activeItemId: string | null;
   activeItemType: string | null;
   activeItemName: string | null | undefined;
-  activeEntityName: string | null | undefined;
   showPilot: boolean;
   createEntityType: null | string;
   showIndependentPilot: boolean;
@@ -43,13 +41,13 @@ interface workspaceState {
   showRemoveHotKeyDropdown: boolean;
   getRecording: { id: string | null; type: string | null };
   isMuted: boolean;
-  activeEntity: { id: string | null; type: string | null };
   showPilotListView: boolean;
   activeTabId: number | undefined;
   showOverlay: boolean;
   activeHotKeyTabId: number | null;
   activeSubCommunicationTabId: number | null;
   activeSubHubManagerTabId: number | null;
+  activeStatusManagementTabId: number | null;
   activeSubDetailsTabId: number | null;
   activeSubTimeClockTabId: number | null;
   activeSubChecklistTabId: number | null;
@@ -68,9 +66,8 @@ interface workspaceState {
   workspaceData: undefined | IWorkspaceRes;
   lastActiveItem: string;
   showMore: boolean;
-  isFirstOpened: boolean;
   openedEntitiesIds: string[];
-  openedParentsIds: string[];
+  extendedBarOpenedEntitiesIds: string[];
 }
 
 const initialState: workspaceState = {
@@ -80,7 +77,6 @@ const initialState: workspaceState = {
   activePlaceId: initialActivePlaceId,
   activePlaceName: null,
   pilotWidth: 400,
-  showHub: false,
   isResize: false,
   showOverlay: false,
   showTabLabel: showTabLabelFromLS,
@@ -97,7 +93,6 @@ const initialState: workspaceState = {
   activeItemType: null,
   activeItemName: null,
   createEntityType: null,
-  activeEntityName: null,
   showPilot: true,
   showPilotIconView: false,
   showPilotListView: false,
@@ -107,21 +102,21 @@ const initialState: workspaceState = {
   activeHotKeyTabId: 0,
   activeSubDetailsTabId: 1,
   activeSubTimeClockTabId: 0,
-  activeSubHubManagerTabId: 0,
+  activeStatusManagementTabId: 1,
+  activeSubHubManagerTabId: 1,
   activeSubCommunicationTabId: 1,
   activeSubChecklistTabId: 2,
   fetchAllWorkspace: false,
   showAddHotKeyDropdown: false,
   showExtendedBar: false,
   showRemoveHotKeyDropdown: false,
-  activeEntity: { id: null, type: null },
   activePlaceNameForNavigation: null,
   activePlaceIdForNavigation: null,
   createWlLink: false,
   workspaceData: undefined,
   activeSubRecordsTabId: 0,
-  recorderLastMemory: { activeTabId: 0, workSpaceId: '', listId: '', hubId: '', taskId: '' },
-  timerLastMemory: { activeTabId: 0, workSpaceId: '', listId: '', hubId: '', taskId: '' },
+  recorderLastMemory: { activeTabId: 0, workSpaceId: '', listId: '', hubId: '', subhubId: '', taskId: '' },
+  timerLastMemory: { activeTabId: 0, workSpaceId: '', listId: '', hubId: '', subhubId: '', taskId: '' },
   activityArray: [],
   logType: 'activity',
   activeLogTab: 'activity',
@@ -129,9 +124,8 @@ const initialState: workspaceState = {
   showTreeInput: false,
   lastActiveItem: '',
   showMore: false,
-  isFirstOpened: true,
   openedEntitiesIds: [],
-  openedParentsIds: []
+  extendedBarOpenedEntitiesIds: []
 };
 
 export const wsSlice = createSlice({
@@ -208,17 +202,11 @@ export const wsSlice = createSlice({
     setShowMenuDropDown(state, action: PayloadAction<boolean>) {
       state.showMenuDropDown = action.payload;
     },
-    setActiveEntity(state, action: PayloadAction<{ id: string | null; type: string | null }>) {
-      state.activeEntity = action.payload;
-    },
     setCreateEntityType(state, action: PayloadAction<null | string>) {
       state.createEntityType = action.payload;
     },
     setWorkspaceData(state, action: PayloadAction<undefined | IWorkspaceRes>) {
       state.workspaceData = action.payload;
-    },
-    setShowHub(state, action: PayloadAction<boolean>) {
-      state.showHub = action.payload;
     },
     setShowIndependentPilot(state, action: PayloadAction<boolean>) {
       state.showIndependentPilot = action.payload;
@@ -252,13 +240,13 @@ export const wsSlice = createSlice({
     ) {
       state.activeItemId = action.payload.activeItemId;
       state.activeItemType = action.payload.activeItemType;
-      state.activeItemName = action.payload.activeItemName;
-    },
-    setActiveEntityName(state, action: PayloadAction<string | undefined | null>) {
-      state.activeEntityName = action.payload;
+      state.activeItemName = action.payload.activeItemName || state.activeItemName;
     },
     setActiveSubCommunicationTabId(state, action: PayloadAction<number | null>) {
       state.activeSubCommunicationTabId = action.payload;
+    },
+    setActiveStatusManagementTabId(state, action: PayloadAction<number | null>) {
+      state.activeStatusManagementTabId = action.payload;
     },
     setActiveSubDetailsTabId(state, action: PayloadAction<number | null>) {
       state.activeSubDetailsTabId = action.payload;
@@ -333,14 +321,11 @@ export const wsSlice = createSlice({
     setLastActiveItem(state, action: PayloadAction<string>) {
       state.lastActiveItem = action.payload;
     },
-    setIsFirstOpened(state, action: PayloadAction<boolean>) {
-      state.isFirstOpened = action.payload;
-    },
     setOpenedEntitiesIds(state, action: PayloadAction<string[]>) {
       state.openedEntitiesIds = action.payload;
     },
-    setOpenedParentsIds(state, action: PayloadAction<string[]>) {
-      state.openedParentsIds = action.payload;
+    setExtendedBarOpenedEntitiesIds(state, action: PayloadAction<string[]>) {
+      state.extendedBarOpenedEntitiesIds = action.payload;
     }
   }
 });
@@ -352,7 +337,6 @@ export const {
   resetCurrentItem,
   setRecording,
   setActivePlaceId,
-  setShowHub,
   setShowWallet,
   setCreateEntityType,
   setShowMenuDropDown,
@@ -363,7 +347,6 @@ export const {
   setActiveItem,
   setIsResize,
   setShowOverlay,
-  setActiveEntityName,
   setShowPilot,
   setShowPilotIconView,
   setActiveSubCommunicationTabId,
@@ -376,7 +359,6 @@ export const {
   setShowAddHotKeyDropdown,
   setShowRemoveHotKeyDropdown,
   setActiveHotKeyId,
-  setActiveEntity,
   setSidebarWidthRD,
   setShowExtendedBar,
   setExtendedSidebarWidth,
@@ -400,9 +382,9 @@ export const {
   setLastActiveItem,
   setIsManageStatus,
   setShowTabLabel,
-  setIsFirstOpened,
   setOpenedEntitiesIds,
-  setOpenedParentsIds
+  setExtendedBarOpenedEntitiesIds,
+  setActiveStatusManagementTabId
 } = wsSlice.actions;
 
 export default wsSlice.reducer;

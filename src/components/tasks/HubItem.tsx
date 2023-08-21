@@ -27,6 +27,9 @@ import { useDraggable, useDroppable } from '@dnd-kit/core';
 import Drag from '../../assets/icons/Drag';
 import { getInitials } from '../../app/helpers';
 import ToolTip from '../Tooltip/Tooltip';
+import { Hub, List, Wallet } from '../../pages/workspace/hubs/components/ActiveTree/activetree.interfaces';
+import ActiveBarIdentification from './Component/ActiveBarIdentification';
+import ActiveBackground from './Component/ActiveBackground';
 
 interface TaskItemProps {
   item: {
@@ -35,7 +38,9 @@ interface TaskItemProps {
     path?: string | null;
     color?: string | null;
     parent_id?: string | null;
-    has_descendants?: number;
+    children?: Hub[];
+    wallets?: Wallet[];
+    lists?: List[];
   };
   showChildren: boolean;
   index?: number;
@@ -44,7 +49,8 @@ interface TaskItemProps {
   topNumber?: string;
   zNumber?: string;
   stickyButtonIndex?: number | undefined;
-  handleClick: (id: string, parent_id: string | null, index?: number) => void;
+  isExtendedBar?: boolean;
+  handleClick: (id: string, index?: number) => void;
   handleLocation: (id: string, name: string, index?: number) => void;
 }
 export default function HubItem({
@@ -56,13 +62,16 @@ export default function HubItem({
   stickyButtonIndex,
   topNumber = '0',
   zNumber,
+  isExtendedBar,
   handleClick,
   handleLocation
 }: TaskItemProps) {
   const dispatch = useAppDispatch();
+  const { hubId, subhubId } = useParams();
+
   const { activeItemId } = useAppSelector((state) => state.workspace);
   const { paletteDropdown } = useAppSelector((state) => state.account);
-  const { showSidebar, lightBaseColor, baseColor } = useAppSelector((state) => state.account);
+  const { showSidebar } = useAppSelector((state) => state.account);
   const { showMenuDropdown, SubMenuId } = useAppSelector((state) => state.hub);
   const [uploadId, setUploadId] = useState<string | null | undefined>('');
   const [paletteColor, setPaletteColor] = useState<string | undefined | ListColourProps>(
@@ -71,7 +80,6 @@ export default function HubItem({
 
   const collapseNavAndSubhub = !showSidebar && type === EntityType.subHub;
 
-  const { hubId } = useParams();
   const { paletteId, show } = paletteDropdown;
 
   const handleHubColour = (id: string, e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
@@ -180,7 +188,7 @@ export default function HubItem({
         } ${isOver ? 'bg-primary-100 border-primary-500 shadow-inner shadow-primary-300' : ''} `}
         ref={setNodeRef}
         tabIndex={0}
-        onClick={() => handleClick(item.id, item.parent_id ?? null, index)}
+        onClick={() => handleClick(item.id, index)}
         style={{
           top: isSticky && showSidebar ? topNumber : '',
           zIndex: isSticky ? zNumber : '2',
@@ -191,19 +199,8 @@ export default function HubItem({
           className={`relative flex items-center justify-between ${showSidebar ? 'pl-1' : 'pl-2.5'}`}
           style={{ height: '30px' }}
         >
-          {item.id === hubId && (
-            <span
-              className="absolute inset-0 z-0 before:content before:absolute before:inset-0"
-              style={{ backgroundColor: lightBaseColor }}
-            />
-          )}
-          {item.id === hubId && (
-            <span
-              className="absolute top-0 bottom-0 left-0 w-0.5 rounded-r-lg"
-              style={{ backgroundColor: baseColor }}
-            />
-          )}
-
+          <ActiveBackground showBgColor={item.id === hubId || item.id === subhubId} />
+          <ActiveBarIdentification showBar={item.id === hubId || item.id === subhubId} />
           <div
             className="absolute rounded-r-lg opacity-0 cursor-move left-0.5 group-hover:opacity-100"
             ref={draggableRef}
@@ -221,7 +218,7 @@ export default function HubItem({
                 type === EntityType.subHub && !showSidebar ? '5px' : type === EntityType.subHub ? '15px' : '5px'
             }}
           >
-            {!collapseNavAndSubhub && item?.has_descendants ? (
+            {!collapseNavAndSubhub && (item?.wallets?.length || item?.lists?.length) ? (
               <div>
                 {showChildren ? (
                   <span className="flex flex-col">
@@ -273,7 +270,7 @@ export default function HubItem({
               onClick={(e) => e.stopPropagation()}
             >
               <span onClick={() => handleItemAction(item.id, item.name)} className="cursor-pointer">
-                <PlusIcon active />
+                <PlusIcon />
               </span>
               <span
                 onClick={(e) => {
@@ -292,7 +289,7 @@ export default function HubItem({
       {paletteId == item.id && show ? (
         <Palette title="Hub Colour" setPaletteColor={setPaletteColor} bottomContent={<SearchIconUpload />} />
       ) : null}
-      {showMenuDropdown === item.id && showSidebar ? <MenuDropdown /> : null}
+      {showMenuDropdown === item.id && showSidebar ? <MenuDropdown isExtendedBar={isExtendedBar} /> : null}
       {SubMenuId === item.id && showSidebar ? <SubDropdown /> : null}
     </div>
   );

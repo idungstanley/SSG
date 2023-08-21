@@ -136,12 +136,15 @@ interface TaskState {
   verticalGridlinesTask: boolean;
   CompactViewWrap: boolean;
   tableView: boolean;
+  meMode: boolean;
   boardView: boolean;
   calenderView: boolean;
   mapView: boolean;
   taskStatus: string | null;
   showTaskNavigation: boolean;
   addNewTaskItem: boolean;
+  selectedIndex: number | null;
+  selectedIndexStatus: string | null;
   hilightNewTask: boolean;
   closeTaskListView: boolean;
   toggleAssignCurrentTaskId: string | null | undefined;
@@ -209,6 +212,7 @@ const initialState: TaskState = {
   comfortableView: true,
   comfortableViewWrap: false,
   showNewTaskField: false,
+  meMode: false,
   showNewTaskId: '',
   singleLineView: true,
   hilightNewTask: false,
@@ -227,6 +231,8 @@ const initialState: TaskState = {
   showTaskNavigation: false,
   addNewTaskItem: false,
   closeTaskListView: true,
+  selectedIndex: null,
+  selectedIndexStatus: null,
   toggleAssignCurrentTaskId: null,
   currentParentTaskId: null,
   getSubTaskId: null,
@@ -303,6 +309,12 @@ export const taskSlice = createSlice({
     setSearchValue(state, action: PayloadAction<string>) {
       state.searchValue = action.payload;
     },
+    setSelectedIndex(state, action: PayloadAction<number | null>) {
+      state.selectedIndex = action.payload;
+    },
+    setSelectedIndexStatus(state, action: PayloadAction<string>) {
+      state.selectedIndexStatus = action.payload;
+    },
     setSortType(state, action: PayloadAction<TaskKey>) {
       state.sortType = action.payload;
     },
@@ -364,6 +376,9 @@ export const taskSlice = createSlice({
     },
     setHilightNewTask(state, action: PayloadAction<boolean>) {
       state.hilightNewTask = action.payload;
+    },
+    setMeMode(state, action: PayloadAction<boolean>) {
+      state.meMode = action.payload;
     },
     setToggleAllSubtask(state, action: PayloadAction<boolean>) {
       state.toggleAllSubtask = action.payload;
@@ -589,12 +604,15 @@ export const {
   getVerticalGridlinesTask,
   getCompactView,
   getCompactViewWrap,
+  setSelectedIndex,
+  setSelectedIndexStatus,
   getTableView,
   getBoardView,
   getCalendeView,
   setHilightNewTask,
   getMapView,
   setTaskStatus,
+  setMeMode,
   setShowTaskNavigation,
   setShowNewTaskField,
   setShowNewTaskId,

@@ -1,11 +1,9 @@
 import dayjs from 'dayjs';
 import timezone from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import MiniDatePicker from '../../../../components/DatePicker/MiniCalendar';
-import { useParams } from 'react-router-dom';
 import { useAppSelector } from '../../../../app/hooks';
-import { getTaskListService } from '../../../../features/task/taskService';
 import AnalogClock from '../../../../components/DatePicker/AnalogClock';
 // import Agenda from '../../../../components/Pilot/components/Calendar/Agenda';
 
@@ -15,12 +13,12 @@ export default function HeaderTimeModal() {
   const { clock_type, timezone: zone } = useAppSelector((state) => state.userSetting);
   const [clock, setClock] = useState<dayjs.Dayjs>(dayjs().tz(zone));
   const [time, setTime] = useState<string>(clock.format('hh:mm:ss a'));
-  const { listId } = useParams();
-  const { filterTaskByAssigneeIds } = useAppSelector((state) => state.task);
+  // const { listId } = useParams();
+  // const { filterTaskByAssigneeIds } = useAppSelector((state) => state.task);
 
-  const { data } = getTaskListService({ listId, assigneeUserId: filterTaskByAssigneeIds });
+  // const { data } = getTaskListService({ listId, assigneeUserId: filterTaskByAssigneeIds });
 
-  const entityTaskData = useMemo(() => data?.pages.flatMap((page) => page.data.tasks), [data]);
+  // const entityTaskData = useMemo(() => data?.pages.flatMap((page) => page.data.tasks), [data]);
 
   const timeUpdateFn = () => window.setInterval(() => setTime(dayjs().format('hh:mm:ss a')), 1000);
 

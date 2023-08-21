@@ -2,7 +2,7 @@ import ICONS_INTERACTIONS from '../../utils/Constants/IconInteractions';
 
 /* eslint-disable max-len */
 interface Props {
-  active: boolean;
+  active?: boolean;
   dimensions?: {
     height: number;
     width: number;
@@ -12,8 +12,8 @@ interface Props {
 export default function PlusIcon({ active = false, dimensions }: Props) {
   return (
     <svg
-      width={dimensions?.width ?? '20'}
-      height={dimensions?.height ?? '20'}
+      width={dimensions?.width ?? '12'}
+      height={dimensions?.height ?? '12'}
       viewBox="0 0 12 12"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"

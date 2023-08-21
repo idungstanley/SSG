@@ -23,20 +23,21 @@ export function VerticalScroll({ children, ...props }: CustomScrollableContainer
     showTabLabel,
     isResize,
     activeItemId,
-    showHub,
     activePlaceId
   } = useAppSelector((state) => state.workspace);
-  const { openedHubId } = useAppSelector((state) => state.hub);
+
   const [thumbWidth, setThumbWidth] = useState(DEFAULT_THUMB_WIDTH);
   const [isThumbVisible, setIsThumbVisible] = useState(true);
   const [topPosition, setTopPosition] = useState<number>(-ARROWS_WRAPPER_HEIGHT);
   const [scrollStartPosition, setScrollStartPosition] = useState<number | null>(null);
   const [initialScrollTop, setInitialScrollTop] = useState<number>(0);
   const [isDragging, setIsDragging] = useState(false);
+
   const contentRef = useRef<HTMLDivElement>(null);
   const scrollTrackRef = useRef<HTMLDivElement>(null);
   const scrollThumbRef = useRef<HTMLDivElement>(null);
   const observer = useRef<ResizeObserver | null>(null);
+
   const handleTrackClick = useCallback(
     (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
       e.preventDefault();
@@ -152,11 +153,9 @@ export function VerticalScroll({ children, ...props }: CustomScrollableContainer
     initialActivePlaceId,
     showTabLabel,
     showTabLabelFromLS,
-    showHub,
     showMore,
     currentItemId,
     activeItemId,
-    openedHubId,
     activePlaceId,
     activeTabId,
     activeSubDetailsTabId,

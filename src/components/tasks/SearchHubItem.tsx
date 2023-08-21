@@ -1,6 +1,6 @@
 import React from 'react';
 import { VscTriangleDown, VscTriangleRight } from 'react-icons/vsc';
-import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { useAppSelector } from '../../app/hooks';
 import AvatarWithInitials from '../avatar/AvatarWithInitials';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
 import { getInitials } from '../../app/helpers';
@@ -12,7 +12,6 @@ interface TaskItemProps {
     path?: string | null;
     color?: string | null;
     parent_id?: string | null;
-    has_descendants?: number;
   };
   showChildren: boolean;
   type: string;
@@ -25,10 +24,8 @@ interface TaskItemProps {
   handleClick: (id: string) => void;
 }
 export default function SearchHubItem({ item, showChildren, type, handleTabClick, handleClick }: TaskItemProps) {
-  const dispatch = useAppDispatch();
   const { activeItemId } = useAppSelector((state) => state.workspace);
   const { showSidebar } = useAppSelector((state) => state.account);
-  const { SubMenuId } = useAppSelector((state) => state.hub);
   const paletteColor = type === EntityType.hub ? 'blue' : 'orange';
 
   const collapseNavAndSubhub = !showSidebar && type === EntityType.subHub;
@@ -62,7 +59,7 @@ export default function SearchHubItem({ item, showChildren, type, handleTabClick
                 type === EntityType.subHub && !showSidebar ? '5px' : type === EntityType.subHub ? '15px' : '5px'
             }}
           >
-            {!collapseNavAndSubhub && item?.has_descendants ? (
+            {!collapseNavAndSubhub ? (
               <div onClick={() => handleClick(item.id)}>
                 {showChildren ? (
                   <span className="flex flex-col">

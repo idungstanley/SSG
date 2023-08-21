@@ -138,7 +138,7 @@ export default function PilotSection() {
   const dispatch = useAppDispatch();
   const { walletId } = useParams();
 
-  const { currentWalletName } = useAppSelector((state) => state.wallet);
+  const { activeItemName } = useAppSelector((state) => state.workspace);
 
   // set data for pilot
   useEffect(() => {
@@ -151,11 +151,11 @@ export default function PilotSection() {
           id: selectedItemId,
           type: selectedItemType,
           show: true,
-          title: currentWalletName ?? ''
+          title: activeItemName ?? ''
         })
       );
     }
-  }, [walletId, currentWalletName]);
+  }, [walletId, activeItemName]);
 
   return null;
 }

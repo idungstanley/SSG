@@ -6,12 +6,11 @@ import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { setActiveSubHubManagerTabId, setActiveTabId, setShowOverlay } from '../../features/workspace/workspaceSlice';
 import { getHub, getSubMenu } from '../../features/hubs/hubSlice';
 import { EntityManagerTabsId, PilotTabsId } from '../../utils/PilotUtils';
-import { Hub, InputData } from '../../pages/workspace/hubs/components/ActiveTree/activetree.interfaces';
+import { Hub } from '../../pages/workspace/hubs/components/ActiveTree/activetree.interfaces';
 import ActiveTreeDataFormater from './ActiveTreeDataFormater';
-import { useGetHubs } from '../../features/hubs/hubService';
+import { useGetAllHubs, useGetActiveHubChildren } from '../../features/hubs/hubService';
 import { useParams } from 'react-router';
 import CreateTree from '../../pages/workspace/hubs/components/ActiveTree/CreateTree';
-import UpdateTree from '../../pages/workspace/hubs/components/ActiveTree/updateTree/UpdateTree';
 import { setFilteredResults } from '../../features/search/searchSlice';
 
 interface ActiveTreeSearchProps {
@@ -20,75 +19,47 @@ interface ActiveTreeSearchProps {
 
 export default function ActiveTreeSearch({ closeDropdown }: ActiveTreeSearchProps) {
   const dispatch = useAppDispatch();
-  const { listId, workSpaceId } = useParams();
+  const { hubId } = useParams();
 
-  const { currentWorkspaceId } = useAppSelector((state) => state.auth);
-  const { currentItemId } = useAppSelector((state) => state.workspace);
   const { selectedTreeDetails, entityToCreate, hub } = useAppSelector((state) => state.hub);
 
   const [hubs, setHubs] = useState<Hub[]>(hub.length ? hub : []);
   const [toggleTree, setToggleTree] = useState<boolean>(false);
+  const [newHubId, setNewHubId] = useState<string>('');
 
-  const fetch = currentWorkspaceId == workSpaceId;
-  const fetchTree = !hubs.length && fetch;
-  const id = currentItemId;
-
-  const { data } = useGetHubs({ includeTree: fetchTree, hub_id: id, wallet_id: id, list_id: listId });
+  const { data: allHubs } = useGetAllHubs();
+  const { data: allHubTree } = useGetActiveHubChildren({ hub_id: newHubId || hubId });
 
   useEffect(() => {
-    if (data) {
-      const incoming: InputData = {
-        hubs: data.hubs ? [...data.hubs.map((i) => ({ ...i, children: [], wallets: [], lists: [] }))] : [],
-        wallets: data.wallets ? [...data.wallets.map((i) => ({ ...i, children: [], lists: [] }))] : [],
-        lists: data.lists ? [...data.lists.map((i) => ({ ...i, children: [] }))] : []
-      };
-
-      if (fetchTree) {
-        setHubs(() => [...CreateTree(incoming)]);
-      } else {
-        setHubs((prev) =>
-          !prev.length
-            ? [...incoming.hubs]
-            : [
-                ...UpdateTree(
-                  hubs,
-                  (item) => {
-                    if ('wallets' in item && 'lists' in item) {
-                      return {
-                        ...item,
-                        children: [...incoming.hubs],
-                        wallets: [...incoming.wallets],
-                        lists: [...incoming.lists]
-                      };
-                    } else if ('lists' in item) {
-                      return {
-                        ...item,
-                        children: [...incoming.wallets],
-                        lists: [...incoming.lists]
-                      };
-                    } else if ('children' in item) {
-                      return {
-                        ...item,
-                        children: [...incoming.lists]
-                      };
-                    } else {
-                      return item;
-                    }
-                  },
-                  id || listId
-                )
-              ]
-        );
+    if (allHubTree && allHubs && hubs.length) {
+      const currentHubId = hubId || allHubTree.tree[0].parent_id;
+      const currentItem = hubs.find((item) => item.id === currentHubId);
+      if (!currentItem?.children) {
+        setHubs(() => [...CreateTree(allHubTree.tree, currentHubId as string, hubs as Hub[])]);
       }
     }
-  }, [data]);
+  }, [allHubTree, allHubs, hubs]);
 
   useEffect(() => {
-    if (hubs) {
+    if (allHubs && !hubs.length) {
+      const incoming = {
+        hubs: allHubs.hubs ? [...allHubs.hubs] : []
+      };
+
+      setHubs([...incoming.hubs] as Hub[]);
+    }
+  }, [allHubs]);
+
+  useEffect(() => {
+    if (hubs && hubs.length) {
       dispatch(setFilteredResults(hubs));
       dispatch(getHub(hubs));
     }
-  }, [hubs, data]);
+  }, [hubs, allHubs]);
+
+  const handleOpenNewHub = (id: string) => {
+    setNewHubId(id);
+  };
 
   const fetchAndToggle = () => {
     setToggleTree((prev) => !prev);
@@ -135,7 +106,7 @@ export default function ActiveTreeSearch({ closeDropdown }: ActiveTreeSearchProp
           type="text"
         />
       </button>
-      {toggleTree && <ActiveTreeDataFormater data={hubs} setToggleTree={setToggleTree} />}
+      {toggleTree && <ActiveTreeDataFormater data={hubs} openNewHub={handleOpenNewHub} setToggleTree={setToggleTree} />}
     </div>
   );
 }

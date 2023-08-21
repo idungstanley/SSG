@@ -2,6 +2,7 @@ import { Hub, List, Wallet } from '../activetree.interfaces';
 import UpdateWallet from './UpdateWallet';
 import UpdateList from './UpdateList';
 
+// TODO need to remove
 export default function UpdateTree(
   existingTree: Hub[],
   updateFn: <T extends Hub | Wallet | List>(i: T) => T,

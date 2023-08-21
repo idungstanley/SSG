@@ -20,6 +20,7 @@ import { IField } from '../../../../features/list/list.interfaces';
 
 interface RowProps {
   task: Task;
+  taskIndex?: number;
   columns: Column[];
   paddingLeft?: number;
   parentId?: string;
@@ -32,6 +33,7 @@ interface RowProps {
 export function Row({
   task,
   columns,
+  taskIndex,
   paddingLeft = 0,
   parentId,
   task_status,
@@ -127,6 +129,7 @@ export function Row({
           style={{ zIndex: 1 }}
           isListParent={isListParent}
           task={task}
+          taskIndex={taskIndex}
           parentId={parentId as string}
           task_status={task_status as string}
           onClose={handleClose as VoidFunction}

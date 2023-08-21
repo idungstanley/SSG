@@ -4,7 +4,7 @@ import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import Page from '../../components/Page';
 import { UseGetHubDetails } from '../../features/hubs/hubService';
 import { UseGetFullTaskList } from '../../features/task/taskService';
-import { setActiveEntityName } from '../../features/workspace/workspaceSlice';
+import { setActiveItem } from '../../features/workspace/workspaceSlice';
 import ActiveHub from '../../layout/components/MainLayout/extendedNavigation/ActiveParents/ActiveHub';
 import AdditionalHeader from '../../layout/components/MainLayout/Header/AdditionHeader';
 import PilotSection, { pilotConfig } from '../workspace/hubs/components/PilotSection';
@@ -19,9 +19,10 @@ import { EntityType } from '../../utils/EntityTypes/EntityType';
 
 export default function HubPage() {
   const dispatch = useAppDispatch();
-  const { hubId, taskId } = useParams();
+  const { hubId, subhubId, taskId } = useParams();
 
   const { filterTaskByAssigneeIds } = useAppSelector((state) => state.task);
+  const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
 
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -31,12 +32,18 @@ export default function HubPage() {
   useEffect(() => {
     if (hub && !taskId) {
       const hubName = hub.data.hub.name;
-      dispatch(setActiveEntityName(hubName));
+      dispatch(
+        setActiveItem({
+          activeItemId: activeItemId as string,
+          activeItemType: activeItemType as string,
+          activeItemName: hubName
+        })
+      );
     }
   }, [hub]);
 
   const { data, hasNextPage, fetchNextPage } = UseGetFullTaskList({
-    itemId: hubId,
+    itemId: hubId || subhubId,
     itemType: EntityType.hub,
     assigneeUserId: filterTaskByAssigneeIds
   });

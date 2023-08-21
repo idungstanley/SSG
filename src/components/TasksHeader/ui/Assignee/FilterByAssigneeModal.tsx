@@ -5,7 +5,7 @@ import { useGetTeamMembers } from '../../../../features/settings/teamMembers/tea
 import { useAppSelector, useAppDispatch } from '../../../../app/hooks';
 import AvatarWithInitials from '../../../avatar/AvatarWithInitials';
 import { AiFillCheckCircle, AiOutlineCheckCircle } from 'react-icons/ai';
-import { setFilterFields } from '../../../../features/task/taskSlice';
+import { setAssigneeIds, setFilterFields, setMeMode } from '../../../../features/task/taskSlice';
 import { generateFilter } from '../Filter/lib/filterUtils';
 import { EllipsisHorizontalIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import AssigneeIcon from '../../../../assets/icons/Assignee';
@@ -15,6 +15,11 @@ export default function FilterByAssigneeModal() {
   const dispatch = useAppDispatch();
   const inputRef = useRef<HTMLInputElement>(null);
   const [searchValue, setSearchValue] = useState<string>('');
+  const {
+    filters: { fields: filters },
+    meMode
+  } = useAppSelector((state) => state.task);
+
   // Rest of the code...
 
   const { data } = useGetTeamMembers({ page: 1, query: '' });
@@ -23,16 +28,16 @@ export default function FilterByAssigneeModal() {
   const filteredMembers = members.filter((member) =>
     member.user.name.toLowerCase().includes(searchValue.toLowerCase())
   );
-  const {
-    filters: { fields: filters }
-  } = useAppSelector((state) => state.task);
 
-  const currentAssignees =
-    (filters.find((i) => i.key === 'assignees')?.values as { id: string; value: string }[]) ?? [];
+  const currentAssignees = !meMode
+    ? (filters.find((i) => i.key === 'assignees')?.values as { id: string; value: string }[]) ?? []
+    : [];
 
   const isAssignee = currentAssignees.length ? true : false;
 
   const onClickMember = (memberId: string, memberName: string) => {
+    dispatch(setMeMode(false));
+    dispatch(setAssigneeIds([]));
     const isAssigneesInFilters = filters.find((i) => i.key === 'assignees');
 
     const newMemberObj = {
@@ -81,9 +86,9 @@ export default function FilterByAssigneeModal() {
     <Menu as="div" className="relative inline-block text-left group">
       <div className="relative">
         <Menu.Button className="flex items-center">
-          <AssigneeIcon active={isAssignee} />
+          <AssigneeIcon active={isAssignee && !meMode} />
           <span>Assignee</span>
-          <ArrowDownFilled active={isAssignee} />
+          <ArrowDownFilled active={isAssignee && !meMode} />
         </Menu.Button>
       </div>
       <Transition
@@ -102,7 +107,6 @@ export default function FilterByAssigneeModal() {
           <div className="container px-4 py-2 mx-auto">
             <div className="relative flex items-center w-full text-gray-500">
               <MagnifyingGlassIcon className="w-5 h-5" />
-
               <input
                 onChange={handleSearchChange}
                 value={searchValue}
