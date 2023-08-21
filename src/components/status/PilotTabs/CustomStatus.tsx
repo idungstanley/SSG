@@ -128,7 +128,8 @@ export default function CustomStatus() {
           color: status.color,
           id: status.id,
           type: status.type,
-          position: index
+          position: index,
+          is_default: index === 0 ? 1 : 0
         };
       })
     );
@@ -145,7 +146,8 @@ export default function CustomStatus() {
         color: 'green',
         type: 'open',
         position: statusTypesState.length,
-        id: null
+        id: null,
+        is_default: 0
       };
       setStatusTypesState((prevStatusTypes) => [...prevStatusTypes, newStatusItem]);
       setBoardSections((prevBoardSections) => ({
