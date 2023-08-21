@@ -14,7 +14,6 @@ import {
   findFirstActiveEntityExt
 } from '../../../../../app/helpers';
 import { setActiveItem, setOpenedEntitiesIds } from '../../../../../features/workspace/workspaceSlice';
-import { setParentWalletId } from '../../../../../features/wallet/walletSlice';
 
 export default function ActiveTress() {
   const dispatch = useAppDispatch();
@@ -70,7 +69,7 @@ export default function ActiveTress() {
       dispatch(getHub(hubs));
 
       if (activeEntityExt?.id && !activeItemId) {
-        const { currentEntity, currentType, parrentWalletId } = findFirstActiveEntity(activeEntityExt, hubs);
+        const { currentEntity, currentType } = findFirstActiveEntity(activeEntityExt, hubs);
         if (currentEntity && currentType) {
           dispatch(
             setActiveItem({
@@ -79,9 +78,6 @@ export default function ActiveTress() {
               activeItemName: currentEntity.name
             })
           );
-        }
-        if (parrentWalletId) {
-          dispatch(setParentWalletId(parrentWalletId));
         }
       }
     }

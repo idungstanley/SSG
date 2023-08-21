@@ -14,7 +14,7 @@ import {
 } from '../../features/hubs/hubSlice';
 import { GetTaskListCount, UseEditListService } from '../../features/list/listService';
 import { setListPaletteColor } from '../../features/list/listSlice';
-import { setActiveEntity, setActiveEntityName, setActiveItem } from '../../features/workspace/workspaceSlice';
+import { setActiveItem } from '../../features/workspace/workspaceSlice';
 import Palette from '../ColorPalette';
 import ListIconSelection from '../ColorPalette/component/ListIconSelection';
 import ListIconComponent from '../ItemsListInSidebar/components/ListIconComponent';
@@ -69,7 +69,6 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
 
   // function for the list shape selection
   const handleListLocation = (id: string, name: string) => {
-    dispatch(setActiveEntityName(name));
     dispatch(
       setActiveItem({
         activeItemType: EntityType.list,
@@ -78,7 +77,6 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
       })
     );
     navigate(`/${currentWorkspaceId}/tasks/l/${id}`);
-    dispatch(setActiveEntity({ id, type: EntityType.list }));
   };
 
   const handleSelection = (shape: string) => {

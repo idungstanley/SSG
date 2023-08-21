@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { getTaskListService } from '../../features/task/taskService';
-import { setActiveEntityName, setActiveItem } from '../../features/workspace/workspaceSlice';
+import { setActiveItem } from '../../features/workspace/workspaceSlice';
 import { UseGetListDetails } from '../../features/list/listService';
 import PilotSection, { pilotConfig } from '../workspace/lists/components/PilotSection';
 import Page from '../../components/Page';
@@ -34,7 +34,6 @@ export function ListPage() {
     if (list) {
       if (listId && !taskId) {
         dispatch(setActiveItem({ activeItemId: listId, activeItemType: EntityType.list, activeItemName: listName }));
-        dispatch(setActiveEntityName(listName));
       }
     }
   }, [list]);

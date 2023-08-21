@@ -107,9 +107,8 @@ export function findFirstActiveEntityExt(location: Location) {
 }
 
 export function findFirstActiveEntity(props: { id: string; type: string }, hubs: Hub[]) {
-  let currentEntity;
+  let currentEntity = {} as Hub | Wallet | List;
   let currentType;
-  let parrentWalletId;
   if (props.type === EntityType.hub) {
     currentEntity = findCurrentHub(props.id, hubs) as Hub;
     if (currentEntity.parent_id) {
@@ -120,20 +119,18 @@ export function findFirstActiveEntity(props: { id: string; type: string }, hubs:
   }
   if (props.type === EntityType.wallet) {
     currentEntity = findCurrentWallet(props.id, hubs) as Wallet;
-    if (currentEntity.hub_id) {
+    const hubId = hubs.find((hub) => hub.id === currentEntity.parent_id);
+    if (hubId) {
       currentType = EntityType.wallet;
-      parrentWalletId = currentEntity.hub_id;
-    }
-    if (currentEntity.parent_id) {
+    } else {
       currentType = EntityType.subWallet;
-      parrentWalletId = currentEntity.parent_id;
     }
   }
   if (props.type === EntityType.list) {
     currentEntity = findCurrentList(props.id, hubs) as List;
     currentType = EntityType.list;
   }
-  return { currentEntity, currentType, parrentWalletId };
+  return { currentEntity, currentType };
 }
 
 export function findAllIdsBeforeActiveEntity(activeId: string, entities: [Hub | Wallet | List]): string[] {

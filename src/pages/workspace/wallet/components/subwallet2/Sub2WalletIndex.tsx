@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { setActiveEntity, setActiveItem, setShowHub } from '../../../../../features/workspace/workspaceSlice';
+import { setActiveItem, setExtendedBarOpenedEntitiesIds } from '../../../../../features/workspace/workspaceSlice';
 import MenuDropdown from '../../../../../components/Dropdown/MenuDropdown';
 import { useAppSelector } from '../../../../../app/hooks';
 import WalletItem from '../../../../../components/tasks/WalletItem';
@@ -11,7 +11,6 @@ import { IList } from '../../../../../features/hubs/hubs.interfaces';
 import { DragOverlay } from '@dnd-kit/core';
 import OverlayList from '../../../../../components/tasks/OverlayList';
 import HubItemOverlay from '../../../../../components/tasks/HubItemOverLay';
-import { EntityType } from '../../../../../utils/EntityTypes/EntityType';
 import { List, Wallet } from '../../../hubs/components/ActiveTree/activetree.interfaces';
 import { findCurrentWallet } from '../../../../../managers/Wallet';
 
@@ -31,10 +30,9 @@ function SubWalletIndex({ paddingLeft = '40', parentId }: SubWalletIndexProps) {
 
   const { currentWorkspaceId } = useAppSelector((state) => state.auth);
   const { showMenuDropdown, hub } = useAppSelector((state) => state.hub);
-  const { activeItemId } = useAppSelector((state) => state.workspace);
+  const { activeItemId, extendedBarOpenedEntitiesIds } = useAppSelector((state) => state.workspace);
   const { draggableItemId } = useAppSelector((state) => state.list);
 
-  const [openedIds, setOpenedIds] = useState<string[]>([]);
   const [data, setData] = useState<{ wallets: Wallet[]; lists: List[] }>();
 
   useEffect(() => {
@@ -47,18 +45,15 @@ function SubWalletIndex({ paddingLeft = '40', parentId }: SubWalletIndexProps) {
   }, [activeItemId, parentId]);
 
   const handleLocation = (id: string, type = 'subwallet3') => {
-    dispatch(setShowHub(true));
     navigate(`/${currentWorkspaceId}/tasks/w/${id}`);
     dispatch(setActiveItem({ activeItemType: type, activeItemId: id }));
-    dispatch(setActiveEntity({ id, type: EntityType.wallet }));
-    setOpenedIds([]);
   };
 
   const handleShowSubWallet = (id: string) => {
-    if (openedIds.includes(id)) {
-      setOpenedIds((prev) => prev.filter((item) => item !== id));
+    if (extendedBarOpenedEntitiesIds.includes(id)) {
+      dispatch(setExtendedBarOpenedEntitiesIds(extendedBarOpenedEntitiesIds.filter((item) => item !== id)));
     } else {
-      setOpenedIds((prev) => [...prev, id]);
+      dispatch(setExtendedBarOpenedEntitiesIds([...extendedBarOpenedEntitiesIds, id]));
     }
   };
 
@@ -85,9 +80,10 @@ function SubWalletIndex({ paddingLeft = '40', parentId }: SubWalletIndexProps) {
             handleLocation={handleLocation}
             handleShowSubWallet={handleShowSubWallet}
             paddingLeft={paddingLeft}
-            showSubWallet={openedIds.includes(wallet.id)}
+            showSubWallet={extendedBarOpenedEntitiesIds.includes(wallet.id)}
+            isExtendedBar={true}
           />
-          {openedIds.includes(wallet.id) ? (
+          {extendedBarOpenedEntitiesIds.includes(wallet.id) ? (
             <LastListIndex parentId={wallet.id} paddingLeft={Number(paddingLeft) + 13} />
           ) : null}
         </div>
