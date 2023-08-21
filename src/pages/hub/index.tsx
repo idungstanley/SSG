@@ -97,7 +97,7 @@ export default function HubPage() {
             {/* lists */}
             {Object.keys(lists).map((listId) => (
               <div key={listId}>
-                <List tasks={lists[listId]} />
+                <List tasks={lists[listId]} customProperty={hub?.data.hub.custom_fields} />
               </div>
             ))}
           </section>

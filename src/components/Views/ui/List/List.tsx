@@ -14,9 +14,11 @@ import { UseGetHubDetails } from '../../../../features/hubs/hubService';
 import { cl } from '../../../../utils';
 import { useDroppable } from '@dnd-kit/core';
 import { EntityType } from '../../../../utils/EntityTypes/EntityType';
+import { IField } from '../../../../features/list/list.interfaces';
 
 interface ListProps {
   tasks: Task[];
+  customProperty?: IField[];
 }
 
 const unique = (arr: listColumnProps[]) => [...new Set(arr)];
@@ -25,7 +27,7 @@ export type SortOption = {
   field: string;
 };
 
-export function List({ tasks }: ListProps) {
+export function List({ tasks, customProperty }: ListProps) {
   const { hubId, walletId, listId } = useParams();
   // hubId;
   const [columns, setColumns] = useState<listColumnProps[] | undefined>(undefined);
@@ -38,19 +40,8 @@ export function List({ tasks }: ListProps) {
     activeItemId: hubId,
     activeItemType: EntityType.hub
   });
-  const { data: wallet } = UseGetWalletDetails({
-    activeItemId: walletId,
-    activeItemType: EntityType.wallet
-  });
-  const { data: list } = useList(tasks[0].list_id);
 
-  const custom_fields = listId
-    ? list?.custom_fields
-    : walletId
-    ? wallet?.data.wallet.custom_fields
-    : hubId
-    ? hub?.data.hub.custom_fields
-    : null;
+  const custom_fields = customProperty;
 
   const { taskColumns, hideTask } = useAppSelector((state) => state.task);
 
@@ -58,7 +49,6 @@ export function List({ tasks }: ListProps) {
     if (!custom_fields) {
       return;
     }
-
     const customFieldNames = custom_fields?.map((i) => ({
       value: i.name,
       id: i.id,
@@ -70,14 +60,12 @@ export function List({ tasks }: ListProps) {
 
     dispatch(getTaskColumns(newColumns));
     setColumns(newColumns);
-  }, []);
+  }, [custom_fields]);
 
   const [collapseTable, setCollapseTable] = useState(false);
   const [showNewTaskField, setShowNewTaskField] = useState(false);
 
   const listName = data?.name;
-
-  // const heads = useMemo(() => (data ? generateColumns(data.custom_fields) : null), [data]);
 
   const { filteredBySearch } = filterBySearchValue(tasks);
 
@@ -126,6 +114,7 @@ export function List({ tasks }: ListProps) {
               key={key}
               heads={hideTask.length ? hideTask : taskColumns}
               data={sortedTasks[key]}
+              customFields={custom_fields as IField[]}
             />
           ))}
         </div>
