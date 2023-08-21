@@ -164,6 +164,16 @@ export default function CustomStatus() {
     // Add more model_type values and their styles as needed
   };
 
+  const onSubmit = async () => {
+    await createStatusTypes.mutateAsync({
+      model_id: statusTaskListDetails.listId,
+      model: 'list',
+      from_model: activeItemType,
+      from_model_id: activeItemId,
+      statuses: statusTypesState
+    });
+  };
+
   return (
     <section className="flex flex-col gap-2 p-4">
       <div className="flex flex-col space-y-6">
