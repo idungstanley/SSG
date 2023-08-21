@@ -1,10 +1,16 @@
 import { Dialog, Transition } from '@headlessui/react';
 import { Fragment, useState } from 'react';
-import { useAppSelector } from '../../../../../../app/hooks';
+import { useAppSelector, useAppDispatch } from '../../../../../../app/hooks';
 import { IField, Options } from '../../../../../../features/list/list.interfaces';
 import { useUpdateEntityCustomFieldValue } from '../../../../../../features/list/listService';
 import { useAbsolute } from '../../../../../../hooks/useAbsolute';
 import { cl } from '../../../../../../utils';
+import {
+  setEditCustomProperty,
+  setEntityForCustom,
+  setNewCustomPropertyDetails
+} from '../../../../../../features/task/taskSlice';
+import { setActiveTabId } from '../../../../../../features/workspace/workspaceSlice';
 
 interface DropdownModalProps {
   field: {
@@ -23,6 +29,7 @@ interface DropdownModalProps {
 }
 
 export default function DropdownField({ field, taskId, currentProperty }: DropdownModalProps) {
+  const dispatch = useAppDispatch();
   const [isOpen, setIsOpen] = useState(false);
   const { options } = field;
   const { updateCords } = useAppSelector((state) => state.task);
@@ -52,6 +59,13 @@ export default function DropdownField({ field, taskId, currentProperty }: Dropdo
         fieldId: field.id
       });
     closeModal();
+  };
+
+  const handleEditCustom = () => {
+    dispatch(setEditCustomProperty(currentProperty));
+    dispatch(setActiveTabId(10));
+    dispatch(setEntityForCustom({ id: undefined, type: undefined }));
+    dispatch(setNewCustomPropertyDetails({ type: 'Single Label', name: currentProperty.name, color: '' }));
   };
 
   return (
@@ -96,6 +110,7 @@ export default function DropdownField({ field, taskId, currentProperty }: Dropdo
                   className={cl(
                     'text-gray-700 py-2 bg-alsoit-purple-50 border w-full text-center block px-4 text-sm font-semibold hover:text-alsoit-purple-300'
                   )}
+                  onClick={handleEditCustom}
                 >
                   Add/Edit Options
                 </button>
