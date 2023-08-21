@@ -15,7 +15,7 @@ import { deleteTask } from '../../../../../features/task/taskService';
 import { useDispatch } from 'react-redux';
 import { displayPrompt, setVisibility } from '../../../../../features/general/prompt/promptSlice';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { setSelectedTasksArray, setShowTaskNavigation } from '../../../../../features/task/taskSlice';
+import { setSelectedIndex, setSelectedTasksArray, setShowTaskNavigation } from '../../../../../features/task/taskSlice';
 import RoundedCheckbox from '../../../../../components/Checkbox/RoundedCheckbox';
 import PriorityDropdown from '../../../../../components/priority/PriorityDropdown';
 
@@ -189,7 +189,7 @@ export default function TaskMenu() {
           {TaskIcons.map((menu) => (
             <>
               <p
-                className="flex items-center px-2 cursor-pointer mt-0 text-white text-lg"
+                className="flex items-center px-2 cursor-pointer mt-0 text-white text-lg "
                 onClick={() => menu.handleClick()}
                 key={menu.id}
               >
@@ -206,7 +206,10 @@ export default function TaskMenu() {
       <div className="flex justify-center">
         <p
           className=" bg-gray-800 text-white p-2 rounded-3xl border border-white -mt-1 cursor-pointer"
-          onClick={() => dispatch(setSelectedTasksArray([]))}
+          onClick={() => {
+            dispatch(setSelectedTasksArray([]));
+            // dispatch(setSelectedIndex(null));
+          }}
         >
           <span className="text-gray-300 ">X</span> Dismiss
         </p>
