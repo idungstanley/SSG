@@ -70,6 +70,7 @@ import { WalletPage } from './pages/wallet';
 // import PeopleProfile from './pages/settings/People';
 import Construction from './pages/settings/UserSettings/Pages/Construction';
 import TaskInvite from './pages/workspace/tasks/taskInvite/TaskInvite';
+import WorkSpaceTable from './pages/settings/WorkspaceSettings/GeneralWorkSpaceSettings/Table';
 
 const inbox = [
   {
@@ -212,6 +213,7 @@ export const routes = (user: IUser | null) => {
         { path: 'construction', element: <Construction /> },
         // { path: 'team-members', element: <TeamMembersPage /> },
         { path: 'workspaces', element: <WorkspaceSettings /> },
+        { path: 'workspaces/settings', element: <WorkSpaceTable /> },
         {
           path: 'notifications',
           element: <NotificationSettingsPage />

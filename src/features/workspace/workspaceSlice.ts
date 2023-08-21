@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { dimensions } from '../../app/config/dimensions';
-import { IRecorderLastMemory, ITimerLastMemory, IWorkspaceRes } from './workspace.interfaces';
+import { IRecorderLastMemory, ITimerLastMemory, IWorkspaceRes, WorkSpaceSettingsRes } from './workspace.interfaces';
 import { IActivityLog } from '../general/history/history.interfaces';
 import dayjs, { Dayjs } from 'dayjs';
 
@@ -68,6 +68,7 @@ interface workspaceState {
   showMore: boolean;
   openedEntitiesIds: string[];
   extendedBarOpenedEntitiesIds: string[];
+  workSpaceSettings: WorkSpaceSettingsRes[] | undefined;
 }
 
 const initialState: workspaceState = {
@@ -125,7 +126,8 @@ const initialState: workspaceState = {
   lastActiveItem: '',
   showMore: false,
   openedEntitiesIds: [],
-  extendedBarOpenedEntitiesIds: []
+  extendedBarOpenedEntitiesIds: [],
+  workSpaceSettings: []
 };
 
 export const wsSlice = createSlice({
@@ -326,6 +328,9 @@ export const wsSlice = createSlice({
     },
     setExtendedBarOpenedEntitiesIds(state, action: PayloadAction<string[]>) {
       state.extendedBarOpenedEntitiesIds = action.payload;
+    },
+    setWorkSpaceSetting(state, action: PayloadAction<WorkSpaceSettingsRes[] | undefined>) {
+      state.workSpaceSettings = action.payload;
     }
   }
 });
@@ -384,7 +389,8 @@ export const {
   setShowTabLabel,
   setOpenedEntitiesIds,
   setExtendedBarOpenedEntitiesIds,
-  setActiveStatusManagementTabId
+  setActiveStatusManagementTabId,
+  setWorkSpaceSetting
 } = wsSlice.actions;
 
 export default wsSlice.reducer;
