@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { Hub } from '../../pages/workspace/hubs/components/ActiveTree/activetree.interfaces';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { setOpenedHubId, setParentHubExt, setSelectedTreeDetails, setSubHubExt } from '../../features/hubs/hubSlice';
+import { setParentHubExt, setSelectedTreeDetails } from '../../features/hubs/hubSlice';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
-import { setCurrentItem, setShowHub } from '../../features/workspace/workspaceSlice';
+import { setCurrentItem } from '../../features/workspace/workspaceSlice';
 import SearchHubItem from '../tasks/SearchHubItem';
 import SearchSubHList from '../../pages/workspace/hubs/components/ActiveTree/Items/hub/SearchSubHList';
 import SearchWList from '../../pages/workspace/hubs/components/ActiveTree/Items/wallet/SearchWList';
@@ -34,11 +34,7 @@ export default function ActiveTreeList({ hubs, openNewHub, setToggleTree }: hubs
   };
 
   const handleClick = (id: string) => {
-    dispatch(setSubHubExt({ id: null, type: null }));
     dispatch(setParentHubExt({ id, type: EntityType.hub }));
-
-    dispatch(setOpenedHubId(id));
-    dispatch(setShowHub(true));
 
     if (id === openedNewHubId) {
       setShowChidren(null);

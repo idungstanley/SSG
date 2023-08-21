@@ -45,8 +45,9 @@ interface WalletItemProps {
   topNumber?: number;
   zNumber?: string;
   stickyButtonIndex?: number | undefined;
-  handleShowSubWallet: (id: string, parent_id: string | null, index?: number) => void;
-  handleLocation: (id: string, name: string, parent_id: string | null, index?: number) => void;
+  isExtendedBar?: boolean;
+  handleShowSubWallet: (id: string, index?: number) => void;
+  handleLocation: (id: string, name: string, index?: number) => void;
 }
 export default function WalletItem({
   wallet,
@@ -58,13 +59,14 @@ export default function WalletItem({
   stickyButtonIndex,
   topNumber = 0,
   zNumber,
+  isExtendedBar,
   handleShowSubWallet,
   handleLocation
 }: WalletItemProps) {
   const dispatch = useAppDispatch();
   const { activeItemId } = useAppSelector((state) => state.workspace);
   const { showMenuDropdown, SubMenuId } = useAppSelector((state) => state.hub);
-  const { paletteDropdown, lightBaseColor, baseColor, showSidebar } = useAppSelector((state) => state.account);
+  const { paletteDropdown, showSidebar } = useAppSelector((state) => state.account);
   const { paletteId, show } = paletteDropdown;
   const { walletId } = useParams();
   const [paletteColor, setPaletteColor] = useState<string | undefined | ListColourProps>('');
@@ -203,7 +205,7 @@ export default function WalletItem({
           isOver ? 'bg-primary-100 border-primary-500 shadow-inner shadow-primary-300' : ''
         }`}
         ref={setNodeRef}
-        onClick={() => handleShowSubWallet(wallet.id, wallet.parent_id || wallet.hub_id || null, index)}
+        onClick={() => handleShowSubWallet(wallet.id, index)}
         style={{
           top: isSticky ? `${topNumber}px` : '',
           zIndex: isSticky ? zNumber : '1',
@@ -230,7 +232,7 @@ export default function WalletItem({
             {renderIcons(showSubWallet)}
           </div>
           <div
-            onClick={() => handleLocation(wallet.id, wallet.name, wallet.parent_id || wallet.hub_id || null, index)}
+            onClick={() => handleLocation(wallet.id, wallet.name, index)}
             className="truncate cursor-pointer hover:underline hover:decoration-dashed"
             style={{ marginLeft: '17px' }}
           >
@@ -269,7 +271,7 @@ export default function WalletItem({
         </div>
       </section>
       {paletteId === wallet.id && show ? <Palette title="Wallet Colour" setPaletteColor={setPaletteColor} /> : null}
-      {showMenuDropdown === wallet.id ? <MenuDropdown /> : null}
+      {showMenuDropdown === wallet.id ? <MenuDropdown isExtendedBar={isExtendedBar} /> : null}
       {SubMenuId === wallet.id ? <SubDropdown /> : null}
     </div>
   );

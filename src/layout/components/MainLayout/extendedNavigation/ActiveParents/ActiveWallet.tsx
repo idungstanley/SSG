@@ -2,14 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { useAppSelector } from '../../../../../app/hooks';
-import { setActiveEntity, setActiveEntityName, setActiveItem } from '../../../../../features/workspace/workspaceSlice';
+import { setActiveItem } from '../../../../../features/workspace/workspaceSlice';
 import MenuDropdown from '../../../../../components/Dropdown/MenuDropdown';
 import SubDropdown from '../../../../../components/Dropdown/SubDropdown';
 import {
   setCreateListSlideOverVisibility,
   setCreateWalletSlideOverVisibility
 } from '../../../../../features/general/slideOver/slideOverSlice';
-import { setCurrentWalletId, setCurrentWalletName } from '../../../../../features/wallet/walletSlice';
 import { EntityType } from '../../../../../utils/EntityTypes/EntityType';
 import { Wallet } from '../../../../../pages/workspace/hubs/components/ActiveTree/activetree.interfaces';
 import { findCurrentWallet } from '../../../../../managers/Wallet';
@@ -35,11 +34,7 @@ function ActiveWallet({ showHubList }: WalletIndexProps) {
 
   const handleLocation = (id: string, name: string, type = EntityType.wallet) => {
     navigate(`tasks/w/${id}`);
-    dispatch(setActiveItem({ activeItemType: type, activeItemId: id }));
-    dispatch(setActiveEntity({ id, type }));
-    dispatch(setCurrentWalletName(name));
-    dispatch(setCurrentWalletId(id));
-    dispatch(setActiveEntityName(name));
+    dispatch(setActiveItem({ activeItemType: type, activeItemId: id, activeItemName: name }));
   };
 
   return wallet ? (

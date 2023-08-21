@@ -7,9 +7,9 @@ import { AiOutlineUnorderedList } from 'react-icons/ai';
 import hubIcon from '../../assets/branding/hub.svg';
 import { setCreateTaskSlideOverVisibility } from '../../features/general/slideOver/slideOverSlice';
 import { getSubMenu, setEntityToCreate, setSubDropdownMenu } from '../../features/hubs/hubSlice';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import {
-  setActiveEntityName,
+  setActiveItem,
   setActiveSubHubManagerTabId,
   setActiveTabId,
   setLastActiveItem,
@@ -40,13 +40,11 @@ interface optionsProps {
 
 export default function SubDropdown() {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const { listId, hubId, walletId } = useParams();
 
-  const { currentWorkspaceId } = useAppSelector((state) => state.auth);
   const { showMenuDropdownType, selectedTreeDetails, entityToCreate, showMenuDropdown, SubMenuType, SubMenuId } =
     useAppSelector((state) => state.hub);
-  const { showTreeInput, lastActiveItem } = useAppSelector((state) => state.workspace);
+  const { showTreeInput, lastActiveItem, activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
   const { lightBaseColor } = useAppSelector((state) => state.account);
 
   const isEntityActive = !!listId || !!hubId || !!walletId;
@@ -101,7 +99,13 @@ export default function SubDropdown() {
       bgColor: lightBaseColor,
       callback: () => {
         if (!isEntityActive) {
-          dispatch(setActiveEntityName(`New ${Capitalize(lastActiveItem as string)} Under Construction`));
+          dispatch(
+            setActiveItem({
+              activeItemId: activeItemId as string,
+              activeItemType: activeItemType as string,
+              activeItemName: `New ${Capitalize(lastActiveItem as string)} Under Construction`
+            })
+          );
         }
         dispatch(setShowOverlay(true));
         dispatch(setShowIndependentPilot(true));

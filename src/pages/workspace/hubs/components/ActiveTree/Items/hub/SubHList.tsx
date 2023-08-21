@@ -6,17 +6,12 @@ import { useNavigate } from 'react-router-dom';
 import HubItem from '../../../../../../../components/tasks/HubItem';
 import { useAppDispatch, useAppSelector } from '../../../../../../../app/hooks';
 import {
-  setActiveEntity,
-  setActiveEntityName,
   setActiveItem,
   setActiveTabId,
   setCurrentItem,
   setOpenedEntitiesIds,
-  setOpenedParentsIds,
-  setShowHub,
   setShowPilot
 } from '../../../../../../../features/workspace/workspaceSlice';
-import { getCurrSubHubId, setOpenedHubId, setSubHubExt } from '../../../../../../../features/hubs/hubSlice';
 import { cl } from '../../../../../../../utils';
 import { EntityType } from '../../../../../../../utils/EntityTypes/EntityType';
 import HubItemOverlay from '../../../../../../../components/tasks/HubItemOverLay';
@@ -26,12 +21,17 @@ export default function SubHubList({ hubs }: ListProps) {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const { showExtendedBar, openedParentsIds, openedEntitiesIds } = useAppSelector((state) => state.workspace);
+  const { showExtendedBar, openedEntitiesIds } = useAppSelector((state) => state.workspace);
   const { showSidebar } = useAppSelector((state) => state.account);
+
   const [stickyButtonIndex, setStickyButtonIndex] = useState<number | undefined>(-1);
-  const [openedSubhubsIds, setOpenedSubhubIds] = useState<string[]>([]);
 
   const handleLocation = (id: string, name: string, index?: number) => {
+    if (openedEntitiesIds.includes(id)) {
+      dispatch(setOpenedEntitiesIds(openedEntitiesIds.filter((item) => item !== id)));
+    } else {
+      dispatch(setOpenedEntitiesIds([...openedEntitiesIds, id]));
+    }
     dispatch(
       setActiveItem({
         activeItemId: id,
@@ -39,16 +39,7 @@ export default function SubHubList({ hubs }: ListProps) {
         activeItemName: name
       })
     );
-    dispatch(setSubHubExt({ id: id, type: EntityType.subHub }));
-    dispatch(
-      getCurrSubHubId({
-        currSubHubId: id,
-        currSubHubIdType: EntityType.subHub
-      })
-    );
     setStickyButtonIndex(index === stickyButtonIndex ? -1 : index);
-    dispatch(setActiveEntityName(name));
-    dispatch(setActiveEntity({ id: id, type: EntityType.subHub }));
     dispatch(setShowPilot(true));
     dispatch(setActiveTabId(4));
     navigate(`tasks/sh/${id}`, {
@@ -56,8 +47,7 @@ export default function SubHubList({ hubs }: ListProps) {
     });
   };
 
-  const handleClick = (id: string, parent_id: string | null, index?: number) => {
-    dispatch(setSubHubExt({ id, type: EntityType.subHub }));
+  const handleClick = (id: string, index?: number) => {
     setStickyButtonIndex(index === stickyButtonIndex ? -1 : index);
     if (!showSidebar) {
       navigate(`tasks/sh/${id}`, {
@@ -65,21 +55,10 @@ export default function SubHubList({ hubs }: ListProps) {
       });
     }
 
-    dispatch(setOpenedHubId(id));
-    dispatch(setShowHub(true));
-
-    if (openedSubhubsIds.includes(id)) {
-      if (openedSubhubsIds.length === 1) {
-        dispatch(setOpenedParentsIds(openedParentsIds.filter((item) => item !== parent_id)));
-      }
-      setOpenedSubhubIds((prev) => prev.filter((subhubId) => subhubId !== id));
+    if (openedEntitiesIds.includes(id)) {
       dispatch(setOpenedEntitiesIds(openedEntitiesIds.filter((subhubId) => subhubId !== id)));
     } else {
-      if (parent_id) {
-        dispatch(setOpenedParentsIds([...openedParentsIds, parent_id]));
-      }
       dispatch(setOpenedEntitiesIds([...openedEntitiesIds, id]));
-      setOpenedSubhubIds((prev) => [...prev, id]);
     }
 
     dispatch(

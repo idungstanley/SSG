@@ -6,10 +6,6 @@ interface walletProps {
 }
 interface WalletState {
   wallet: walletProps[];
-  currentWalletId: string | null;
-  currentWalletType: string | null;
-  parentWalletId: string | null;
-  currentWalletName: string | null | undefined;
   archiveWallet: boolean;
   toggleArchiveWallet: boolean;
   paletteDropDown?: null | string;
@@ -18,10 +14,6 @@ interface WalletState {
 
 const initialState: WalletState = {
   wallet: [],
-  currentWalletId: null,
-  currentWalletType: null,
-  parentWalletId: null,
-  currentWalletName: null,
   archiveWallet: false,
   toggleArchiveWallet: false,
   paletteDropDown: null,
@@ -61,18 +53,6 @@ export const walletSlice = createSlice({
         return wallet;
       });
     },
-    setCurrentWalletId(state, action: PayloadAction<string | null>) {
-      state.currentWalletId = action.payload;
-    },
-    setCurrentWalletName(state, action: PayloadAction<string | null | undefined>) {
-      state.currentWalletName = action.payload;
-    },
-    setParentWalletId(state, action: PayloadAction<string | null>) {
-      state.parentWalletId = action.payload;
-    },
-    setCurrentWalletType(state, action: PayloadAction<string | null>) {
-      state.currentWalletType = action.payload;
-    },
     checkIfWallet: (state) => state
   }
 });
@@ -85,10 +65,6 @@ export const {
   setArchiveWallet,
   setToggleArchiveWallet,
   setPaletteDropDown,
-  setEditWallet,
-  setCurrentWalletId,
-  setCurrentWalletType,
-  setCurrentWalletName,
-  setParentWalletId
+  setEditWallet
 } = walletSlice.actions;
 export default walletSlice.reducer;

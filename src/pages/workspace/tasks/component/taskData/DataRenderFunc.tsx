@@ -67,13 +67,6 @@ export default function DataRenderFunc({
   } else if (col?.field === 'priority') {
     return <TaskPriority task={task} />;
   } else if (col && col.field === 'dropdown' && task) {
-    return (
-      <DropdownFieldWrapper
-        taskId={task.id}
-        fieldId={col.id}
-        listId={task.list_id}
-        taskCustomFields={task.custom_fields}
-      />
-    );
+    return <DropdownFieldWrapper taskId={task.id} fieldId={col.id} taskCustomFields={task.custom_fields} />;
   } else return <>{taskColField}</>;
 }

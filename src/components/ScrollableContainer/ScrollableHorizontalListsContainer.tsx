@@ -14,10 +14,9 @@ export function ScrollableHorizontalListsContainer({ children, ...props }: Custo
 
   // update size is pilot is visible / invisible
   const { show: showFullPilot } = useAppSelector((state) => state.slideOver.pilotSideOver);
-  const { showMore, currentItemId, showTabLabel, isResize, activeItemId, showHub, activePlaceId } = useAppSelector(
+  const { showMore, currentItemId, showTabLabel, isResize, activeItemId, activePlaceId } = useAppSelector(
     (state) => state.workspace
   );
-  const { openedHubId } = useAppSelector((state) => state.hub);
   const { groupScroll } = useAppSelector((state) => state.slideOver);
 
   const [thumbWidth, setThumbWidth] = useState(DEFAULT_THUMB_WIDTH);
@@ -155,11 +154,9 @@ export function ScrollableHorizontalListsContainer({ children, ...props }: Custo
     initialActivePlaceId,
     showTabLabel,
     showTabLabelFromLS,
-    showHub,
     showMore,
     currentItemId,
     activeItemId,
-    openedHubId,
     activePlaceId
   ]);
 

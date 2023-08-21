@@ -1,15 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppSelector } from '../../../app/hooks';
 import { useDispatch } from 'react-redux';
-import { setSubHubExt } from '../../../features/hubs/hubSlice';
 import SHubDropdownList from '../../ItemsListInSidebar/components/SHubDropdownList';
-import {
-  setActiveEntity,
-  setActiveEntityName,
-  setActiveItem,
-  setShowHub
-} from '../../../features/workspace/workspaceSlice';
+import { setActiveItem, setExtendedBarOpenedEntitiesIds } from '../../../features/workspace/workspaceSlice';
 import HubItem from '../../tasks/HubItem';
 import { setShowPilotSideOver } from '../../../features/general/slideOver/slideOverSlice';
 import { DragOverlay } from '@dnd-kit/core';
@@ -27,14 +21,10 @@ export default function SubHubIndex({ data }: ISubHubIndexProps) {
 
   const { currentWorkspaceId } = useAppSelector((state) => state.auth);
   const { draggableItemId } = useAppSelector((state) => state.list);
-
-  const [openedIds, setOpenedIds] = useState<string[]>([]);
+  const { extendedBarOpenedEntitiesIds } = useAppSelector((state) => state.workspace);
 
   const handleLocation = (id: string, name: string) => {
-    dispatch(setSubHubExt({ id: id, type: EntityType.subHub }));
     navigate(`/${currentWorkspaceId}/tasks/sh/${id}`);
-    dispatch(setShowHub(true));
-    dispatch(setActiveEntityName(name));
     dispatch(
       setActiveItem({
         activeItemId: id,
@@ -50,15 +40,13 @@ export default function SubHubIndex({ data }: ISubHubIndexProps) {
         title: name
       })
     );
-    dispatch(setActiveEntity({ id: id, type: EntityType.hub }));
-    setOpenedIds([]);
   };
 
   const handleClick = (id: string) => {
-    if (openedIds.includes(id)) {
-      setOpenedIds((prev) => prev.filter((item) => item !== id));
+    if (extendedBarOpenedEntitiesIds.includes(id)) {
+      dispatch(setExtendedBarOpenedEntitiesIds(extendedBarOpenedEntitiesIds.filter((item) => item !== id)));
     } else {
-      setOpenedIds((prev) => [...prev, id]);
+      dispatch(setExtendedBarOpenedEntitiesIds([...extendedBarOpenedEntitiesIds, id]));
     }
   };
 
@@ -77,11 +65,12 @@ export default function SubHubIndex({ data }: ISubHubIndexProps) {
             <HubItem
               item={subhub}
               handleClick={handleClick}
-              showChildren={openedIds.includes(subhub.id)}
+              showChildren={extendedBarOpenedEntitiesIds.includes(subhub.id)}
               handleLocation={handleLocation}
               type="subhub"
+              isExtendedBar={true}
             />
-            {openedIds.includes(subhub.id) ? <SHubDropdownList parentId={subhub.id} /> : null}
+            {extendedBarOpenedEntitiesIds.includes(subhub.id) ? <SHubDropdownList parentId={subhub.id} /> : null}
           </div>
         ))}
     </div>

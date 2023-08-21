@@ -1,21 +1,40 @@
 import { Dialog, Transition } from '@headlessui/react';
 import { Fragment, useState } from 'react';
 import { useAppSelector } from '../../../../../../app/hooks';
-import { Options } from '../../../../../../features/list/list.interfaces';
+import { IField, Options } from '../../../../../../features/list/list.interfaces';
 import { useUpdateEntityCustomFieldValue } from '../../../../../../features/list/listService';
 import { useAbsolute } from '../../../../../../hooks/useAbsolute';
 import { cl } from '../../../../../../utils';
 
 interface DropdownModalProps {
-  field: { options: Options; id: string; activeProperty: string };
+  field: {
+    options: Options;
+    id: string;
+    activeProperty:
+      | {
+          id: string;
+          color: string;
+          name: string;
+        }
+      | undefined;
+  };
   taskId: string;
+  currentProperty: IField;
 }
 
-export default function DropdownField({ field, taskId }: DropdownModalProps) {
-  const { updateCords } = useAppSelector((state) => state.task);
-  const [activeOption, setActiveOption] = useState<string>(field.activeProperty);
-  const { mutate: onUpdate } = useUpdateEntityCustomFieldValue(taskId);
+export default function DropdownField({ field, taskId, currentProperty }: DropdownModalProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const { options } = field;
+  const { updateCords } = useAppSelector((state) => state.task);
+  const [activeOption, setActiveOption] = useState<
+    | {
+        id: string;
+        color: string;
+        name: string;
+      }
+    | undefined
+  >(field.activeProperty);
+  const { mutate: onUpdate } = useUpdateEntityCustomFieldValue(taskId);
 
   function closeModal() {
     setIsOpen(false);
@@ -23,30 +42,30 @@ export default function DropdownField({ field, taskId }: DropdownModalProps) {
 
   const { cords, relativeRef } = useAbsolute(updateCords, 160);
 
-  const { options } = field;
-
-  const handleClick = (option: string) => {
+  const handleClick = (option: { id: string; color: string; name: string }) => {
     setActiveOption(option);
 
     if (field)
       onUpdate({
         taskId,
-        value: option,
+        value: option.id,
         fieldId: field.id
       });
-
     closeModal();
   };
 
   return (
     <>
-      <div className="flex items-center justify-center w-full h-full">
+      <div
+        className={cl('flex items-center justify-center w-full h-full', activeOption?.color && 'text-white')}
+        style={{ backgroundColor: activeOption?.color }}
+      >
         <button
           type="button"
           onClick={() => setIsOpen(true)}
-          className="flex items-center justify-center w-full focus:outline-none hover:text-gray-700"
+          className="flex items-center justify-center w-full focus:outline-none"
         >
-          <div ref={relativeRef}>{activeOption}</div>
+          <div ref={relativeRef}>{activeOption?.name ? activeOption?.name : '-'}</div>
         </button>
       </div>
 
@@ -62,16 +81,24 @@ export default function DropdownField({ field, taskId }: DropdownModalProps) {
                   ? options.map((option) => (
                       <button
                         key={option.id}
-                        onClick={() => handleClick(option.name)}
+                        onClick={() => handleClick(option)}
                         className={cl(
-                          option.name === activeOption && 'bg-gray-100',
-                          'text-gray-700 py-2 bg-white border w-full text-center block px-4 text-sm hover:bg-gray-100 hover:text-gray-900'
+                          'text-gray-700 py-2 bg-white border w-full text-center block px-4 text-sm',
+                          option.color ? 'text-white' : ''
                         )}
+                        style={{ backgroundColor: option.color }}
                       >
                         {option.name}
                       </button>
                     ))
                   : null}
+                <button
+                  className={cl(
+                    'text-gray-700 py-2 bg-alsoit-purple-50 border w-full text-center block px-4 text-sm font-semibold hover:text-alsoit-purple-300'
+                  )}
+                >
+                  Add/Edit Options
+                </button>
               </div>
             </div>
           </div>

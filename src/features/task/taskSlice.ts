@@ -33,6 +33,7 @@ export interface ICustomField {
     {
       id: string;
       value: string;
+      name: string;
     }
   ];
 }
@@ -194,6 +195,7 @@ interface TaskState {
   customSuggestionField: IExtraFields[];
   newTaskData: ImyTaskData | undefined;
   newCustomPropertyDetails: customPropertyInfo;
+  editCustomProperty: IField | undefined;
 }
 
 const initialState: TaskState = {
@@ -281,7 +283,8 @@ const initialState: TaskState = {
   listViewHeads: [],
   customSuggestionField: [],
   newTaskData: undefined,
-  newCustomPropertyDetails: { name: '', type: 'Select Property Type', color: null }
+  newCustomPropertyDetails: { name: '', type: 'Select Property Type', color: null },
+  editCustomProperty: undefined
 };
 
 export const taskSlice = createSlice({
@@ -571,6 +574,9 @@ export const taskSlice = createSlice({
     },
     setNewCustomPropertyDetails(state, action: PayloadAction<customPropertyInfo>) {
       state.newCustomPropertyDetails = action.payload;
+    },
+    setEditCustomProperty(state, action: PayloadAction<IField | undefined>) {
+      state.editCustomProperty = action.payload;
     }
   }
 });

@@ -46,20 +46,25 @@ import {
   removeEntityChildrenIdsOfWallet
 } from '../../managers/Wallet';
 import { deleteHubManager, findAllEntitiesIdsOfHub, removeEntityChildrenIdsOfHub } from '../../managers/Hub';
-import { setOpenedEntitiesIds, setOpenedParentsIds } from '../../features/workspace/workspaceSlice';
-import ExpandCollapseIcon from '../../assets/icons/ExpandCollapseIcon';
+import { setExtendedBarOpenedEntitiesIds, setOpenedEntitiesIds } from '../../features/workspace/workspaceSlice';
+import ExpandAllIcon from '../../assets/icons/ExpandAllIcon';
+import CollapseAllIcon from '../../assets/icons/CollapseAllIcon';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
 // import { setTriggerAddToFav } from "../../features/hubs/hubSlice";
+
+interface IMenuDropdownProps {
+  isExtendedBar?: boolean;
+}
 
 interface itemsType {
   id: number;
   title: string;
   icon: JSX.Element;
-  handleClick: () => void;
   isVisible: boolean;
+  handleClick: () => void;
 }
 
-export default function MenuDropdown() {
+export default function MenuDropdown({ isExtendedBar }: IMenuDropdownProps) {
   const dispatch = useDispatch();
   const {
     SubDropdownMenu,
@@ -72,7 +77,7 @@ export default function MenuDropdown() {
   const { showEditHubSlideOver, showEditWalletSlideOver, showEditListSlideOver } = useAppSelector(
     (state) => state.slideOver
   );
-  const { openedParentsIds, openedEntitiesIds } = useAppSelector((state) => state.workspace);
+  const { openedEntitiesIds } = useAppSelector((state) => state.workspace);
 
   const { archiveWallet } = useAppSelector((state) => state.wallet);
   const { archiveList } = useAppSelector((state) => state.list);
@@ -296,35 +301,48 @@ export default function MenuDropdown() {
     },
     {
       id: 16,
-      title: openedParentsIds.includes(showMenuDropdown as string) ? 'Collapse all' : 'Expand all',
+      title: 'Expand all',
       handleClick: () => {
         if (showMenuDropdown) {
-          if (!openedParentsIds.includes(showMenuDropdown)) {
-            let allOpenedEntitiesIds: string[] = [];
-            if (showMenuDropdownType?.includes(EntityType.hub)) {
-              allOpenedEntitiesIds = findAllEntitiesIdsOfHub(showMenuDropdown, hub, openedEntitiesIds);
-            } else if (showMenuDropdownType?.includes(EntityType.wallet)) {
-              allOpenedEntitiesIds = findAllEntitiesIdsOfWallet(showMenuDropdown, hub, openedEntitiesIds);
-            }
-            dispatch(setOpenedParentsIds([...openedParentsIds, showMenuDropdown]));
-            dispatch(setOpenedEntitiesIds([...new Set(allOpenedEntitiesIds)]));
+          let allOpenedEntitiesIds: string[] = [];
+          if (showMenuDropdownType?.includes(EntityType.hub)) {
+            allOpenedEntitiesIds = findAllEntitiesIdsOfHub(showMenuDropdown, hub, openedEntitiesIds);
+          } else if (showMenuDropdownType?.includes(EntityType.wallet)) {
+            allOpenedEntitiesIds = findAllEntitiesIdsOfWallet(showMenuDropdown, hub, openedEntitiesIds);
+          }
+          if (isExtendedBar) {
+            dispatch(setExtendedBarOpenedEntitiesIds([...new Set(allOpenedEntitiesIds)]));
           } else {
-            let filteredOpenedIds: string[] = [];
-            if (showMenuDropdownType?.includes(EntityType.hub)) {
-              filteredOpenedIds = removeEntityChildrenIdsOfHub(showMenuDropdown, hub, openedEntitiesIds);
-            } else if (showMenuDropdownType?.includes(EntityType.wallet)) {
-              filteredOpenedIds = removeEntityChildrenIdsOfWallet(showMenuDropdown, hub, openedEntitiesIds);
-            }
-            dispatch(setOpenedParentsIds(openedParentsIds.filter((id) => id !== showMenuDropdown)));
+            dispatch(setOpenedEntitiesIds([...new Set(allOpenedEntitiesIds)]));
+          }
+        }
+      },
+      icon: <ExpandAllIcon aria-hidden="true" />,
+      isVisible: true
+    },
+    {
+      id: 17,
+      title: 'Collapse all',
+      handleClick: () => {
+        if (showMenuDropdown) {
+          let filteredOpenedIds: string[] = [];
+          if (showMenuDropdownType?.includes(EntityType.hub)) {
+            filteredOpenedIds = removeEntityChildrenIdsOfHub(showMenuDropdown, hub, openedEntitiesIds);
+          } else if (showMenuDropdownType?.includes(EntityType.wallet)) {
+            filteredOpenedIds = removeEntityChildrenIdsOfWallet(showMenuDropdown, hub, openedEntitiesIds);
+          }
+          if (isExtendedBar) {
+            dispatch(setExtendedBarOpenedEntitiesIds([...new Set(filteredOpenedIds)]));
+          } else {
             dispatch(setOpenedEntitiesIds([...new Set(filteredOpenedIds)]));
           }
         }
       },
-      icon: <ExpandCollapseIcon aria-hidden="true" />,
-      isVisible: showMenuDropdownType !== EntityType.list ? true : false
+      icon: <CollapseAllIcon aria-hidden="true" />,
+      isVisible: true
     },
     {
-      id: 17,
+      id: 18,
       title: 'Delete',
       handleClick: () => {
         if (showMenuDropdownType === 'hubs' || showMenuDropdownType === EntityType.subHub) {

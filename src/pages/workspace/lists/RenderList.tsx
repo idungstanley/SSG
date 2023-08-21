@@ -16,7 +16,7 @@ import PilotSection, { pilotConfig } from './components/PilotSection';
 import TaskCalenderTemplate from '../tasks/component/views/hubLevel/TaskCalenderTemplate';
 import FilterByAssigneesSliderOver from './components/renderlist/filters/FilterByAssigneesSliderOver';
 import { UseGetListDetails } from '../../../features/list/listService';
-import { setActiveEntityName, setActiveItem } from '../../../features/workspace/workspaceSlice';
+import { setActiveItem } from '../../../features/workspace/workspaceSlice';
 import TaskMapTemplate from '../tasks/component/views/hubLevel/TaskMapTemplate';
 import ActiveHub from '../../../layout/components/MainLayout/extendedNavigation/ActiveParents/ActiveHub';
 import AdditionalHeader from '../../../layout/components/MainLayout/Header/AdditionHeader';
@@ -27,7 +27,7 @@ function RenderList() {
   const { listId } = useParams();
   const { listView, calenderView, mapView, addNewTaskItem, closeTaskListView, filterTaskByAssigneeIds } =
     useAppSelector((state) => state.task);
-  const { activeEntityName } = useAppSelector((state) => state.workspace);
+  const { activeItemName } = useAppSelector((state) => state.workspace);
 
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -42,7 +42,6 @@ function RenderList() {
   useEffect(() => {
     if (listId) {
       dispatch(setActiveItem({ activeItemId: listId, activeItemType: EntityType.list, activeItemName: listName }));
-      dispatch(setActiveEntityName(listName));
     }
   }, [listId, listData]);
 
@@ -78,7 +77,7 @@ function RenderList() {
         header={
           <section id="nav" className="capitalize" style={{ height: '50px' }}>
             <ListNav
-              navName={activeEntityName}
+              navName={activeItemName}
               viewsList="List"
               viewsList1="Table"
               viewsList2="Board"
@@ -108,7 +107,7 @@ function RenderList() {
             // style={{ backgroundColor: `${listView ? '#e1e4e5' : ''}` }}
             onScroll={handleScrollList}
           >
-            {listView && <TaskQuickAction listDetailsData={activeEntityName} />}
+            {listView && <TaskQuickAction listDetailsData={activeItemName} />}
 
             {/* task list logic */}
             {/* {tableView && closeTaskListView && <TaskTableView tasks={paginatedTaskData} />} */}
