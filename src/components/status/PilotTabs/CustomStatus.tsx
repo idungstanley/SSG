@@ -25,18 +25,18 @@ import {
 } from '@dnd-kit/sortable';
 import { findBoardSectionContainer, initializeBoard } from '../../../utils/StatusManagement/board';
 import { BoardSectionsType } from '../../../utils/StatusManagement/Types';
-import { getTaskById } from '../../../utils/StatusManagement/statusUtils';
 import { useMutation } from '@tanstack/react-query';
 import { statusTypesService } from '../../../features/hubs/hubService';
 
-const groupStatusByModelType = (statusTypes: StatusProps[]) => {
-  return [...new Set(statusTypes.map(({ type }) => type))];
-};
+// const groupStatusByModelType = (statusTypes: StatusProps[]) => {
+//   return [...new Set(statusTypes.map(({ type }) => type))];
+// };
 
 export default function CustomStatus() {
   const { spaceStatuses } = useAppSelector((state) => state.hub);
   const [statusTypesState, setStatusTypesState] = useState<StatusProps[]>(spaceStatuses);
-  const {activeItemId, activeItemType} = useAppSelector(state=> state.workspace)
+  const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
+  const { statusTaskListDetails } = useAppSelector((state) => state.list);
   const [validationMessage, setValidationMessage] = useState<string>('');
   const [newStatusValue, setNewStatusValue] = useState<string>();
   const [addStatus, setAddStatus] = useState<boolean>(false);
@@ -148,6 +148,10 @@ export default function CustomStatus() {
         id: null
       };
       setStatusTypesState((prevStatusTypes) => [...prevStatusTypes, newStatusItem]);
+      setBoardSections((prevBoardSections) => ({
+        ...prevBoardSections,
+        open: [...prevBoardSections.open, newStatusItem] // Assuming 'open' is the section name
+      }));
       setNewStatusValue('');
       setValidationMessage('');
     } else {
@@ -249,7 +253,7 @@ export default function CustomStatus() {
       </div>
       <p className="mt-auto text-red-600 text-start">{validationMessage}</p>
       <div className="flex justify-center">
-        <Button label="Save" buttonStyle="base" width="w-40" height="h-8" />
+        <Button label="Save" buttonStyle="base" width="w-40" height="h-8" onClick={onSubmit} />
       </div>
     </section>
   );
