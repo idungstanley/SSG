@@ -1,7 +1,7 @@
 import { Dialog, Transition } from '@headlessui/react';
-import { Fragment, useState } from 'react';
+import { useState } from 'react';
 import { useAppSelector } from '../../../../../../app/hooks';
-import { IField, Options } from '../../../../../../features/list/list.interfaces';
+import { Options } from '../../../../../../features/list/list.interfaces';
 import { useUpdateEntityCustomFieldValue } from '../../../../../../features/list/listService';
 import { useAbsolute } from '../../../../../../hooks/useAbsolute';
 import { cl } from '../../../../../../utils';
@@ -19,10 +19,9 @@ interface DropdownModalProps {
       | undefined;
   };
   taskId: string;
-  currentProperty: IField;
 }
 
-export default function DropdownField({ field, taskId, currentProperty }: DropdownModalProps) {
+export default function DropdownField({ field, taskId }: DropdownModalProps) {
   const [isOpen, setIsOpen] = useState(false);
   const { options } = field;
   const { updateCords } = useAppSelector((state) => state.task);
