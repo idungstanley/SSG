@@ -20,13 +20,19 @@ import SaveFilterToast from '../../../../components/TasksHeader/ui/Filter/ui/Toa
 
 export default function AdditionalHeader() {
   const userTimeZoneFromLS: string | null = localStorage.getItem('userTimeZone');
-  const { screenRecording, duration, timerStatus } = useAppSelector((state) => state.task);
+  const { screenRecording, duration, timerStatus, period } = useAppSelector((state) => state.task);
   const [recordBlinker, setRecordBlinker] = useState<boolean>(false);
   const [timerModal, setTimerModal] = useState<boolean>(false);
   const [isVisible, setIsVisible] = useState<boolean>(true);
   const { activeTabId: tabsId, timerLastMemory, activeItemId } = useAppSelector((state) => state.workspace);
-  const { period } = useAppSelector((state) => state.task);
-  const { timezone: zone, date_format, time_format, is_clock_time } = useAppSelector((state) => state.userSetting);
+  const {
+    timezone: zone,
+    date_format,
+    time_format,
+    is_clock_time,
+    clock_limit,
+    clock_stop_reminder
+  } = useAppSelector((state) => state.userSetting);
 
   const [clockModal, setClockModal] = useState<boolean>(false);
   const [HeaderClock, setClock] = useState<string>(
@@ -47,6 +53,31 @@ export default function AdditionalHeader() {
   const { workSpaceId: workspaceId } = useParams();
   const { activeEntityName } = useAppSelector((state) => state.workspace);
   const { refetch } = useCurrentTime({ workspaceId });
+  const currentTime = Date.now();
+  const notificationTime = clock_limit - clock_stop_reminder;
+  const timeDiff = clock_limit - currentTime;
+
+  const notificationhandler = () => {
+    if (timeDiff > 0) {
+      setTimeout(
+        toast.custom(
+          (t) => (
+            <SaveFilterToast
+              title="Timer about to Expire!"
+              body="Your active timer is about to expire, Would you want to stop it now?"
+              toastId={t.id}
+              extended="clockReminder"
+            />
+          ),
+          {
+            position: 'bottom-right',
+            duration: Infinity
+          }
+        ),
+        notificationTime - currentTime
+      );
+    }
+  };
 
   const sameEntity = () => activeItemId === (timerLastMemory.hubId || timerLastMemory.listId || timerLastMemory.taskId);
 
@@ -73,7 +104,8 @@ export default function AdditionalHeader() {
       if (period) clearInterval(period);
       refetch();
     }
-  }, [isVisible, refetch]);
+    notificationhandler();
+  }, [isVisible, refetch, timerStatus]);
 
   useEffect(() => {
     if (dayjs.tz.guess() !== zone && (!userTimeZoneFromLS || userTimeZoneFromLS !== dayjs.tz.guess())) {
