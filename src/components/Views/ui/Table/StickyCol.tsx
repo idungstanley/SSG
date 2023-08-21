@@ -204,6 +204,10 @@ export function StickyCol({
   }, [selectedIndex, selectedIndexArray]);
 
   useEffect(() => {
+    if (selectedTasksArray.length == 0) {
+      setSelectedIndexArray([]);
+      dispatch(setSelectedIndex(null));
+    }
     const isSelected = selectedTasksArray.includes(task.id);
 
     if (isSelected) {
