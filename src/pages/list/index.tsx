@@ -95,7 +95,7 @@ export function ListPage() {
           >
             {listView && <TaskQuickAction listDetailsData={listName} />}
 
-            {tasks.length ? <List tasks={tasks} /> : []}
+            {tasks.length ? <List tasks={tasks} customProperty={list?.data.list.custom_fields} /> : []}
           </div>
           {tasks.length > 1 && <GroupHorizontalScroll />}
         </>

@@ -19,7 +19,7 @@ import { Head } from './Head/Head';
 import { OverlayRow } from './OverlayRow';
 import { Row } from './Row';
 import { UseGetListDetails } from '../../../../features/list/listService';
-import { ITask_statuses } from '../../../../features/list/list.interfaces';
+import { IField, ITask_statuses } from '../../../../features/list/list.interfaces';
 import { EntityType } from '../../../../utils/EntityTypes/EntityType';
 
 interface TableProps {
@@ -27,9 +27,10 @@ interface TableProps {
   data: Task[];
   label: string;
   listName?: string;
+  customFields?: IField[];
 }
 
-export function Table({ heads, data, label, listName }: TableProps) {
+export function Table({ heads, data, label, listName, customFields }: TableProps) {
   const dispatch = useAppDispatch();
 
   const [tableHeight, setTableHeight] = useState<string | number>('auto');
@@ -227,6 +228,7 @@ export function Table({ heads, data, label, listName }: TableProps) {
                       parentId={listId}
                       task_status={statusId}
                       handleClose={handleClose}
+                      customFields={customFields}
                     />
                   ) : null
                 )

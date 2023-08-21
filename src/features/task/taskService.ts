@@ -30,6 +30,22 @@ import { runTimer } from '../../utils/TimerCounter';
 import Duration from '../../utils/TimerDuration';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
 
+export const useGetCustomField = (id: string | undefined, getCustom: boolean) => {
+  return useQuery(
+    ['xustom-field'],
+    async () => {
+      const data = await requestNew<IUserSettingsRes>({
+        url: `custom-fields/${id}`,
+        method: 'GET'
+      });
+      return data;
+    },
+    {
+      enabled: getCustom
+    }
+  );
+};
+
 export const UseSaveTaskFilters = () => {
   const { filters } = generateFilters();
   const mutation = useMutation(async ({ key }: { key: string }) => {

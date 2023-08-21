@@ -16,6 +16,7 @@ import { setShowNewTaskField, setShowNewTaskId } from '../../../../features/task
 import ToolTip from '../../../Tooltip/Tooltip';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import Dradnddrop from '../../../../assets/icons/Dradnddrop';
+import { IField } from '../../../../features/list/list.interfaces';
 
 interface RowProps {
   task: Task;
@@ -25,9 +26,19 @@ interface RowProps {
   isListParent: boolean;
   task_status?: string;
   handleClose?: VoidFunction;
+  customFields?: IField[];
 }
 
-export function Row({ task, columns, paddingLeft = 0, parentId, task_status, isListParent, handleClose }: RowProps) {
+export function Row({
+  task,
+  columns,
+  paddingLeft = 0,
+  parentId,
+  task_status,
+  isListParent,
+  handleClose,
+  customFields
+}: RowProps) {
   const otherColumns = columns.slice(1);
   const [showSubTasks, setShowSubTasks] = useState(false);
   const { showNewTaskField, showNewTaskId } = useAppSelector((state) => state.task);
@@ -169,6 +180,7 @@ export function Row({ task, columns, paddingLeft = 0, parentId, task_status, isL
             value={task[col.field as keyof Task]}
             key={col.id}
             style={{ zIndex: 0 }}
+            customFields={customFields}
           />
         ))}
       </tr>

@@ -12,15 +12,18 @@ import DateFormat from '../../../DateFormat';
 import StatusNameDropdown from '../../../status/StatusNameDropdown';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { EntityType } from '../../../../utils/EntityTypes/EntityType';
+import { IField } from '../../../../features/list/list.interfaces';
+import TextField from '../TextField/TextField';
 
 interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   value: TaskValue;
   field: Pick<listColumnProps, 'field'>['field'];
   task: Task;
   fieldId: string;
+  customFields?: IField[];
 }
 
-export function Col({ value, field, fieldId, task, ...props }: ColProps) {
+export function Col({ value, field, fieldId, task, customFields, ...props }: ColProps) {
   const { taskId } = useParams();
   const { dragOverItemId, draggableItemId } = useAppSelector((state) => state.list);
   const ACTIVE_TASK = taskId === task.id ? 'tdListVNoSticky' : DEFAULT_COL_BG;
@@ -50,10 +53,19 @@ export function Col({ value, field, fieldId, task, ...props }: ColProps) {
       <DropdownFieldWrapper
         taskId={task.id}
         fieldId={fieldId}
-        listId={task.list_id}
         taskCustomFields={task.custom_fields}
+        entityCustomProperty={customFields}
       />
     ),
+    labels: (
+      <DropdownFieldWrapper
+        taskId={task.id}
+        fieldId={fieldId}
+        taskCustomFields={task.custom_fields}
+        entityCustomProperty={customFields}
+      />
+    ),
+    text: <TextField />,
     assignees: (
       <Assignee
         task={task as ImyTaskData}

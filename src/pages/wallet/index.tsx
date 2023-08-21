@@ -98,7 +98,7 @@ export function WalletPage() {
           >
             {/* lists */}
             {Object.keys(lists).map((listId) => (
-              <List key={listId} tasks={lists[listId]} />
+              <List key={listId} tasks={lists[listId]} customProperty={wallet?.data.wallet.custom_fields} />
             ))}
           </section>
           {Object.keys(lists).length > 1 && <GroupHorizontalScroll />}
