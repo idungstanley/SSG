@@ -29,7 +29,7 @@ export default function StatusBodyTemplate({ item, setStatusTypesState }: Status
   };
 
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
-    id: item.name as string
+    id: item.position
   });
 
   const style = {
@@ -111,8 +111,10 @@ export default function StatusBodyTemplate({ item, setStatusTypesState }: Status
       onClick={() => handleToggleEditableContent()}
       style={style}
     >
-      <span className="flex items-center" ref={setNodeRef} {...attributes} {...listeners}>
-        <Drag />
+      <span className="flex items-center">
+        <span className="cursor-move" ref={setNodeRef} {...attributes} {...listeners}>
+          <Drag />
+        </span>
         <div className="flex items-center gap-1">
           <span className="w-3 h-3 ml-4 rounded" onClick={(e) => handleOpenStatusColorDropdown(e)}>
             <StatusIconComp color={item.color as string} />
