@@ -14,6 +14,7 @@ import {
   KeyboardSensor,
   PointerSensor,
   closestCorners,
+  useDroppable,
   useSensor,
   useSensors
 } from '@dnd-kit/core';
@@ -24,6 +25,8 @@ import {
   verticalListSortingStrategy
 } from '@dnd-kit/sortable';
 import { findBoardSectionContainer, initializeBoard } from '../../../utils/StatusManagement/board';
+import { GroupStyles } from '../../../utils/StatusManagement/Types';
+import BoardSection from '../Components/BoardSection';
 import { BoardSectionsType } from '../../../utils/StatusManagement/Types';
 import { useMutation } from '@tanstack/react-query';
 import { statusTypesService } from '../../../features/hubs/hubService';
@@ -53,7 +56,7 @@ export default function CustomStatus() {
 
   const [statusTypesState, setStatusTypesState] = useState<StatusProps[]>(spaceStatuses);
   const [validationMessage, setValidationMessage] = useState<string>('');
-  const [newStatusValue, setNewStatusValue] = useState<string>();
+  const [newStatusValue, setNewStatusValue] = useState<string>('');
   const [addStatus, setAddStatus] = useState<boolean>(false);
   const [collapsedStatusGroups, setCollapsedStatusGroups] = useState<{ [key: string]: boolean }>({});
   const [activeId, setActiveId] = useState<number | null>(null);
@@ -69,7 +72,7 @@ export default function CustomStatus() {
   );
 
   const sortableItems = statusTypesState.map((status) => ({
-    id: status.position
+    id: status.name
   }));
 
   function handleDragStart(event: DragEndEvent) {
@@ -80,6 +83,8 @@ export default function CustomStatus() {
 
   const handleDragOver = ({ active, over }: DragOverEvent) => {
     // Find the containers
+    console.log(active.id, 'active');
+    console.log(over?.id, 'over');
     const activeContainer = findBoardSectionContainer(boardSections, active.id as string);
     const overContainer = findBoardSectionContainer(boardSections, over?.id as string);
 
@@ -92,12 +97,12 @@ export default function CustomStatus() {
       const overItems = boardSection[overContainer];
 
       // Find the indexes for the items
-      const activeIndex = activeItems.findIndex((item) => item.position === active.id);
-      const overIndex = overItems.findIndex((item) => item.position !== over?.id);
+      const activeIndex = activeItems.findIndex((item) => item.name === active.id);
+      const overIndex = overItems.findIndex((item) => item.name !== over?.id);
 
       return {
         ...boardSection,
-        [activeContainer]: [...boardSection[activeContainer].filter((item) => item.position !== active.id)],
+        [activeContainer]: [...boardSection[activeContainer].filter((item) => item.name !== active.id)],
         [overContainer]: [
           ...boardSection[overContainer].slice(0, overIndex),
           boardSections[activeContainer][activeIndex],
@@ -115,8 +120,8 @@ export default function CustomStatus() {
       return;
     }
 
-    const activeIndex = boardSections[activeContainer].findIndex((task) => task.position === active.id);
-    const overIndex = boardSections[overContainer].findIndex((task) => task.position === over?.id);
+    const activeIndex = boardSections[activeContainer].findIndex((task) => task.name === active.id);
+    const overIndex = boardSections[overContainer].findIndex((task) => task.name === over?.id);
 
     if (activeIndex !== overIndex) {
       setBoardSections((boardSection) => ({
@@ -182,7 +187,7 @@ export default function CustomStatus() {
     setNewStatusValue(e.target.value);
   };
 
-  const groupStylesMapping: Record<string, { backgroundColor: string; boxShadow: string }> = {
+  const groupStylesMapping: Record<string, GroupStyles> = {
     open: { backgroundColor: '#FBFBFB', boxShadow: '0px 0px 5px rgba(0, 0, 0, 0.2)' },
     custom: { backgroundColor: '#FCF1FF', boxShadow: '0px 0px 5px rgba(128, 0, 128, 0.2)' },
     closed: { backgroundColor: '#E6FAE9', boxShadow: '0px 0px 5px rgba(0, 128, 0, 0.2)' }
@@ -251,51 +256,18 @@ export default function CustomStatus() {
               className="p-2 space-y-2 rounded"
               key={uniqueModelType}
               style={{
-                backgroundColor: groupStylesMapping[uniqueModelType]?.backgroundColor,
-                boxShadow: groupStylesMapping[uniqueModelType]?.boxShadow
+                backgroundColor:
+                  groupStylesMapping[uniqueModelType as keyof typeof groupStylesMapping]?.backgroundColor,
+                boxShadow: groupStylesMapping[uniqueModelType as keyof typeof groupStylesMapping]?.boxShadow
               }}
             >
-              {uniqueModelType && (
-                <span className="flex gap-2">
-                  <Chevron
-                    onToggle={() => handleToggleGroup(uniqueModelType)}
-                    active={collapsedStatusGroups[uniqueModelType]}
-                    iconColor="text-gray-400"
-                  />
-                  <p className="flex uppercase justify-items-start">{uniqueModelType} STATUSES</p>
-                </span>
-              )}
-              <SortableContext items={sortableItems} strategy={verticalListSortingStrategy} id={uniqueModelType}>
-                {uniqueModelType &&
-                  !collapsedStatusGroups[uniqueModelType] &&
-                  boardSections[uniqueModelType].map((item, index) => (
-                    <>
-                      <StatusBodyTemplate index={index} item={item} setStatusTypesState={setBoardSections} />
-                    </>
-                  ))}
-              </SortableContext>
-              {uniqueModelType && uniqueModelType === 'open' && !addStatus && (
-                <span className="flex justify-items-start" onClick={() => setAddStatus(true)}>
-                  <Button
-                    height="h-7"
-                    icon={<PlusCircle active={false} color="white" />}
-                    label="Add Status"
-                    buttonStyle="base"
-                  />
-                </span>
-              )}
-              {uniqueModelType && uniqueModelType === 'open' && addStatus && (
-                <span className="flex justify-items-start">
-                  <Input
-                    trailingIcon={<PlusIcon active />}
-                    placeholder="Type Status name"
-                    name="Status"
-                    onChange={handleOnChange}
-                    value={newStatusValue}
-                    trailingClick={handleSaveNewStatus}
-                  />
-                </span>
-              )}
+              <BoardSection
+                id={uniqueModelType}
+                title={uniqueModelType}
+                status={boardSections[uniqueModelType]}
+                handleSaveNewStatus={handleSaveNewStatus}
+                setStatusTypesState={setBoardSections}
+              />
             </div>
           ))}
         </DndContext>

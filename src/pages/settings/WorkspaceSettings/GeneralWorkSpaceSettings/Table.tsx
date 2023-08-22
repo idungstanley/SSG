@@ -38,9 +38,9 @@ export default function WorkSpaceTable() {
     }
   }, [workSpaceSettings]);
   return (
-    <div className="bg-white border border-gray-300 w-full">
+    <div className="w-full bg-white border border-gray-300">
       <div
-        className="mt-5 flex items-center rounded-t-md pl-5"
+        className="flex items-center pl-5 mt-5 rounded-t-md"
         style={{ backgroundImage: `url(${notificationFrame})`, height: '122px' }}
       >
         <SimpleSectionHeading title="Notifications" description="Manage workspace settings" />
@@ -51,7 +51,7 @@ export default function WorkSpaceTable() {
             <Disclosure.Button className="w-full">
               <div className="bg-gray-200">
                 <div className="flex">
-                  <div className="py-6 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6 w-2/4">
+                  <div className="w-2/4 py-6 pl-4 pr-3 text-sm font-semibold text-left text-gray-900 sm:pl-6">
                     <div className="flex items-center space-x-2">
                       <ChevronRightIcon className={cl(open ? 'rotate-90 transform' : '', 'w-6 h-6')} />
                       <p className="uppercase" style={{ fontSize: '15px' }}>
@@ -70,31 +70,31 @@ export default function WorkSpaceTable() {
             ) : (
               <Disclosure.Panel>
                 {' '}
-                <div className="bg-white p-4 w-full">
+                <div className="w-full p-4 bg-white">
                   {getSettings &&
                     getSettings.length &&
                     getSettings.map((setting: WorkSpaceSettingsRes) => {
                       return setting.value === 1 || setting.value === 0 ? (
-                        <div key={setting.key} className="flex justify-between items-center w-full">
+                        <div key={setting.key} className="flex items-center justify-between w-full">
                           <div className="pl-10 py-3.5 text-left text-sm font-semibold text-gray-900 w-2/4">
                             {setting.name}
                           </div>
-                          <div className="flex w-2/4 justify-around">
-                            <div className="px-3 flex justify-center">
+                          <div className="flex justify-around w-2/4">
+                            <div className="flex justify-center px-3">
                               <input
                                 checked={setting.value === 1}
-                                className="h-5 w-5 cursor-pointer bg-gray-300 border-gray-500"
+                                className="w-5 h-5 bg-gray-300 border-gray-500 cursor-pointer"
                                 type="checkbox"
                               />
                             </div>
                           </div>
                         </div>
                       ) : (
-                        <div key={setting.key} className="flex justify-between items-center w-full">
+                        <div key={setting.key} className="flex items-center justify-between w-full">
                           <div className="pl-10 py-3.5 text-left text-sm font-semibold text-gray-900 w-2/4">
                             {setting.name}
                           </div>
-                          <div className="flex w-2/4 justify-around items-center">
+                          <div className="flex items-center justify-around w-2/4">
                             <div>{setting.value}</div>
                           </div>
                         </div>
@@ -112,7 +112,7 @@ export default function WorkSpaceTable() {
             <Disclosure.Button className="w-full">
               <div className="bg-gray-200">
                 <div className="flex">
-                  <div className="py-6 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6 w-2/4">
+                  <div className="w-2/4 py-6 pl-4 pr-3 text-sm font-semibold text-left text-gray-900 sm:pl-6">
                     <div className="flex items-center space-x-2">
                       <ChevronRightIcon className={cl(open ? 'rotate-90 transform' : '', 'w-6 h-6')} />
                       <p className="uppercase" style={{ fontSize: '15px' }}>
@@ -125,15 +125,15 @@ export default function WorkSpaceTable() {
             </Disclosure.Button>
             <Disclosure.Panel>
               {' '}
-              <div className="bg-white p-4 w-full">
-                <div className="my-3 flex justify-between ">
+              <div className="w-full p-4 bg-white">
+                <div className="flex justify-between my-3 ">
                   <div style={{ width: '48%' }}>
                     <h5 className="font-semibold" style={{ fontSize: '15px' }}>
                       Clocking Limit
                     </h5>
                     <select
                       name="Day"
-                      className="h-10 rounded my w-full"
+                      className="w-full h-10 rounded my"
                       value={clock_limit}
                       onChange={(e) => dispatch(setClockLimit(Number(e.target.value)))}
                       style={{ fontSize: '15px' }}
@@ -150,7 +150,7 @@ export default function WorkSpaceTable() {
                     </h5>
                     <select
                       name="Time-format"
-                      className="h-10 rounded my w-full"
+                      className="w-full h-10 rounded my"
                       value={clock_stop_reminder}
                       onChange={(e) => dispatch(setClockStopReminder(Number(e.target.value)))}
                       style={{ fontSize: '15px' }}
@@ -162,14 +162,14 @@ export default function WorkSpaceTable() {
                     </select>
                   </div>
                 </div>
-                <div className="my-3 flex justify-between w-full">
+                <div className="flex justify-between w-full my-3">
                   <div style={{ width: '48%' }}>
                     <h5 className="font-semibold" style={{ fontSize: '15px' }}>
                       Clock Type
                     </h5>
                     <select
                       name="clock_time"
-                      className="h-10 rounded my w-full"
+                      className="w-full h-10 rounded my"
                       value={clock_type}
                       onChange={(e) => dispatch(setClockType(e.target.value))}
                       style={{ fontSize: '15px' }}
@@ -179,9 +179,9 @@ export default function WorkSpaceTable() {
                     </select>
                   </div>
                 </div>
-                <div className="my-3 flex space-x-1 items-center w-80">
+                <div className="flex items-center my-3 space-x-1 w-80">
                   <div style={{ width: '20%' }} className="flex items-center">
-                    <label className="switch w-full">
+                    <label className="w-full switch">
                       <input
                         type="checkbox"
                         checked={is_clock_time ? true : false}
