@@ -13,8 +13,8 @@ export function Chevron({ onToggle, active, color, hoverBg, iconColor }: Chevron
   const [isHovered, setIsHovered] = useState(false);
 
   const defaultStyle = {
-    color: isHovered ? color : 'white',
-    backgroundColor: isHovered ? hoverBg : color
+    color: isHovered ? 'white' : color,
+    backgroundColor: isHovered ? color : hoverBg
   };
 
   return (

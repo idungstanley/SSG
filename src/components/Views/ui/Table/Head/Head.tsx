@@ -227,7 +227,7 @@ export function Head({
                 </div>
                 <p className="border-t py-.5 viewSettings"></p> */}
                 <div className="flex items-center">
-                  <p>
+                  <p className="pr-1.5">
                     <Chevron
                       color={headerStatusColor}
                       active={collapseTasks}
