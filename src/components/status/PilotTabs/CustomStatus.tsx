@@ -27,21 +27,37 @@ import { findBoardSectionContainer, initializeBoard } from '../../../utils/Statu
 import { BoardSectionsType } from '../../../utils/StatusManagement/Types';
 import { useMutation } from '@tanstack/react-query';
 import { statusTypesService } from '../../../features/hubs/hubService';
+import { displayPrompt } from '../../../features/general/prompt/promptSlice';
+import { addIsDefaultToValues, extractValuesFromArray } from '../../../utils/StatusManagement/statusUtils';
 
 // const groupStatusByModelType = (statusTypes: StatusProps[]) => {
 //   return [...new Set(statusTypes.map(({ type }) => type))];
 // };
 
+interface ErrorResponse {
+  data: {
+    data: {
+      match?: StatusProps[];
+    };
+    // Other properties if needed
+  };
+  // Other error properties if needed
+}
+
 export default function CustomStatus() {
+  const dispatch = useAppDispatch();
+
   const { spaceStatuses } = useAppSelector((state) => state.hub);
-  const [statusTypesState, setStatusTypesState] = useState<StatusProps[]>(spaceStatuses);
   const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
   const { statusTaskListDetails } = useAppSelector((state) => state.list);
+
+  const [statusTypesState, setStatusTypesState] = useState<StatusProps[]>(spaceStatuses);
   const [validationMessage, setValidationMessage] = useState<string>('');
   const [newStatusValue, setNewStatusValue] = useState<string>();
   const [addStatus, setAddStatus] = useState<boolean>(false);
   const [collapsedStatusGroups, setCollapsedStatusGroups] = useState<{ [key: string]: boolean }>({});
   const [activeId, setActiveId] = useState<number | null>(null);
+
   const initialBoardSections = initializeBoard(statusTypesState);
   const [boardSections, setBoardSections] = useState<BoardSectionsType>(initialBoardSections);
 
@@ -179,14 +195,45 @@ export default function CustomStatus() {
     }
   });
 
+  //Add default status
+  const defaultItem = statusTypesState.find((item) => item.position === 0);
+  const AddDefault = addIsDefaultToValues(boardSections, defaultItem?.name);
+  const statusData = extractValuesFromArray(AddDefault);
+  console.log(statusData);
+
   const onSubmit = async () => {
-    await createStatusTypes.mutateAsync({
-      model_id: statusTaskListDetails.listId,
-      model: 'list',
-      from_model: activeItemType,
-      from_model_id: activeItemId,
-      statuses: statusTypesState
-    });
+    try {
+      await createStatusTypes.mutateAsync({
+        model_id: statusTaskListDetails.listId || (activeItemId as string),
+        model: 'list' || (activeItemType as string),
+        from_model: activeItemType,
+        from_model_id: activeItemId,
+        statuses: statusData
+      });
+    } catch (err) {
+      const errorResponse = err as ErrorResponse; // Cast err to the ErrorResponse type
+      if (errorResponse.data.data.match) {
+        console.log(true);
+        dispatch(
+          displayPrompt(
+            'Are you sure you want to delete this Status ?(“PENDING”)',
+            'You changed Statuses in your List . 3 Tasks would be affected. Please select an option below.',
+            [
+              {
+                label: 'Create Subhub',
+                style: 'danger',
+                callback: async () => ({})
+              },
+              {
+                label: 'Cancel',
+                style: 'plain',
+                callback: () => ({})
+              }
+            ]
+          )
+        );
+      }
+    }
   };
 
   return (
@@ -223,7 +270,7 @@ export default function CustomStatus() {
                   !collapsedStatusGroups[uniqueModelType] &&
                   boardSections[uniqueModelType].map((item, index) => (
                     <>
-                      <StatusBodyTemplate index={index} item={item} setStatusTypesState={setStatusTypesState} />
+                      <StatusBodyTemplate index={index} item={item} setStatusTypesState={setBoardSections} />
                     </>
                   ))}
               </SortableContext>

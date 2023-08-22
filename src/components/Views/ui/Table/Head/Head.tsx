@@ -22,7 +22,11 @@ import PlusIcon from '../../../../../assets/icons/PlusIcon';
 import { TbAlignJustified } from 'react-icons/tb';
 import { MdEditNote, MdOutlineDragIndicator } from 'react-icons/md';
 import { BiHide } from 'react-icons/bi';
-import { setActiveTabId, setIsManageStatus } from '../../../../../features/workspace/workspaceSlice';
+import {
+  setActiveSubHubManagerTabId,
+  setActiveTabId,
+  setIsManageStatus
+} from '../../../../../features/workspace/workspaceSlice';
 import AlsoitMenuDropdown from '../../../../DropDowns';
 import { setStatusTaskListDetails } from '../../../../../features/list/listSlice';
 import { useParams } from 'react-router-dom';
@@ -173,7 +177,9 @@ export function Head({
       icon: <CiSettings />,
       handleClick: () => {
         dispatch(setIsManageStatus(!isManageStatus));
+        dispatch(setActiveTabId(9));
         setShowStatusDropdown(null);
+        dispatch(setActiveSubHubManagerTabId(5));
         dispatch(setStatusTaskListDetails({ listId, listName }));
       }
     }
@@ -279,7 +285,7 @@ export function Head({
               )}
             </div>
           </div>
-          <FiPlusCircle className="w-4 h-4 font-black AddColumnDropdownButton mr-2" onClick={handleAddCustomProperty} />
+          <FiPlusCircle className="w-4 h-4 mr-2 font-black AddColumnDropdownButton" onClick={handleAddCustomProperty} />
           {headerId === columns[0].id && (
             <SortModal
               handleClose={handleClose}
