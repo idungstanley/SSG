@@ -50,16 +50,16 @@ export default function Prompt() {
           >
             <div className="inline-block overflow-hidden text-left align-bottom transition-all transform bg-white rounded-lg shadow-xl sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
               <div className="px-4 pt-5 pb-4 bg-white sm:p-6 sm:pb-4">
-                <div className="sm:flex sm:items-start">
+                <div className="flex-col sm:flex sm:items-center">
                   <div className="flex items-center justify-center flex-shrink-0 w-12 h-12 mx-auto bg-red-100 rounded-full sm:mx-0 sm:h-10 sm:w-10">
                     <ExclamationTriangleIcon className="w-6 h-6 text-red-600" aria-hidden="true" />
                   </div>
                   <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-                    <Dialog.Title as="h3" className="text-lg font-medium leading-6 text-gray-900">
+                    <Dialog.Title as="h3" className="text-lg font-medium leading-6 text-center text-gray-900">
                       {title}
                     </Dialog.Title>
                     <div className="mt-2">
-                      <p className="text-sm text-gray-500">{body}</p>
+                      <p className="text-sm text-center text-gray-500">{body}</p>
                     </div>
                   </div>
                 </div>

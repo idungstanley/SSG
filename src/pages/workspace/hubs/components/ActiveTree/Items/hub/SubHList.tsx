@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { ListProps } from '../../activetree.interfaces';
 import WList from '../wallet/WList';
 import LList from '../list/LList';
@@ -24,9 +24,7 @@ export default function SubHubList({ hubs }: ListProps) {
   const { showExtendedBar, openedEntitiesIds } = useAppSelector((state) => state.workspace);
   const { showSidebar } = useAppSelector((state) => state.account);
 
-  const [stickyButtonIndex, setStickyButtonIndex] = useState<number | undefined>(-1);
-
-  const handleLocation = (id: string, name: string, index?: number) => {
+  const handleLocation = (id: string, name: string) => {
     if (openedEntitiesIds.includes(id)) {
       dispatch(setOpenedEntitiesIds(openedEntitiesIds.filter((item) => item !== id)));
     } else {
@@ -39,7 +37,6 @@ export default function SubHubList({ hubs }: ListProps) {
         activeItemName: name
       })
     );
-    setStickyButtonIndex(index === stickyButtonIndex ? -1 : index);
     dispatch(setShowPilot(true));
     dispatch(setActiveTabId(4));
     navigate(`tasks/sh/${id}`, {
@@ -47,8 +44,7 @@ export default function SubHubList({ hubs }: ListProps) {
     });
   };
 
-  const handleClick = (id: string, index?: number) => {
-    setStickyButtonIndex(index === stickyButtonIndex ? -1 : index);
+  const handleClick = (id: string) => {
     if (!showSidebar) {
       navigate(`tasks/sh/${id}`, {
         replace: true
@@ -79,7 +75,7 @@ export default function SubHubList({ hubs }: ListProps) {
           <HubItemOverlay item={draggableItem} type="subhub" />
         </DragOverlay>
       ) : null}
-      {hubs.map((hub, index) => (
+      {hubs.map((hub) => (
         <div key={hub.id} className={cl(!showSidebar && 'overflow-hidden w-12')}>
           <div className="relative flex flex-col">
             <HubItem
@@ -87,9 +83,6 @@ export default function SubHubList({ hubs }: ListProps) {
               handleClick={handleClick}
               showChildren={openedEntitiesIds.includes(hub.id)}
               handleLocation={handleLocation}
-              isSticky={stickyButtonIndex !== undefined && stickyButtonIndex !== null && stickyButtonIndex <= index}
-              stickyButtonIndex={stickyButtonIndex}
-              index={index}
               type={EntityType.subHub}
               topNumber="80px"
               zNumber="4"

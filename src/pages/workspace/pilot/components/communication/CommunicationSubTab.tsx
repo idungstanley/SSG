@@ -65,6 +65,7 @@ export default function CommunicationSubTab() {
       }
     }
   };
+
   return (
     <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={(e) => handleDragEnd(e)}>
       <SortableContext strategy={rectSortingStrategy} items={items}>

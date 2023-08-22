@@ -18,7 +18,6 @@ import { VscChecklist, VscScreenFull } from 'react-icons/vsc';
 import Checklists from '../../../../../components/Pilot/components/Checklist/Checklist';
 import Details from '../../../../../components/Pilot/components/details/Details';
 import TimeClock from './components/TimeClock';
-import hubIcon from '../../../../../assets/branding/hub.svg';
 import RecordScreen from '../../../../../components/Pilot/components/RecordScreen';
 import HubManager from '../../../../../components/Pilot/components/HubManager/HubManager';
 import TemplatesIcon from '../../../../../assets/icons/Templates';
