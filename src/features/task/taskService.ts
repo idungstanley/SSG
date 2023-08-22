@@ -30,6 +30,41 @@ import { runTimer } from '../../utils/TimerCounter';
 import Duration from '../../utils/TimerDuration';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
 
+//edit a custom field
+export const UseEditCustomFieldService = (data: {
+  id?: string | null;
+  name?: string;
+  options?: { name: string; color: string }[];
+  color?: string | null;
+}) => {
+  const response = requestNew({
+    url: `custom-fields/${data.id}`,
+    method: 'PUT',
+    data: {
+      name: data.name,
+      color: data.color,
+      options: data.options
+    }
+  });
+  return response;
+};
+
+export const useGetCustomField = (id: string | undefined, getCustom: boolean) => {
+  return useQuery(
+    ['xustom-field'],
+    async () => {
+      const data = await requestNew<IUserSettingsRes>({
+        url: `custom-fields/${id}`,
+        method: 'GET'
+      });
+      return data;
+    },
+    {
+      enabled: getCustom
+    }
+  );
+};
+
 export const UseSaveTaskFilters = () => {
   const { filters } = generateFilters();
   const mutation = useMutation(async ({ key }: { key: string }) => {
@@ -149,7 +184,7 @@ const addTask = (data: {
   return response;
 };
 
-export const useAddTask = (parentTaskId?: string) => {
+export const useAddTask = () => {
   const queryClient = useQueryClient();
 
   return useMutation(addTask, {
@@ -619,11 +654,15 @@ export const EndTimeEntriesService = () => {
 export const GetTimeEntriesService = ({
   itemId,
   trigger,
-  is_active
+  is_active,
+  page,
+  include_filters
 }: {
   itemId: string | null | undefined;
   trigger: string | null | undefined;
   is_active?: number;
+  page?: number;
+  include_filters?: boolean;
 }) => {
   const { timeSortArr } = useAppSelector((state) => state.task);
   const updatesortArr = timeSortArr.length === 0 ? null : timeSortArr;
@@ -637,13 +676,16 @@ export const GetTimeEntriesService = ({
           type: trigger,
           id: itemId,
           team_member_ids: updatesortArr,
-          is_active: is_active
+          is_active: is_active,
+          page,
+          include_filters
         }
       });
       return data;
     },
     {
-      enabled: trigger != null
+      enabled: trigger != null,
+      keepPreviousData: true
     }
   );
 };

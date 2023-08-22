@@ -6,8 +6,6 @@ interface HubState {
   selectedTreeDetails: { name: null | string | undefined; id: string | null; type: null | string };
   toggleTree: boolean;
   currHubId: string | null;
-  currSubHubId: string | null;
-  currSubHubIdType: string | null;
   updateCords: number;
   showSubItems: boolean;
   showEditHubModal: boolean;
@@ -15,7 +13,6 @@ interface HubState {
   sidebarSettings: boolean;
   toggleArchive: number;
   parentHubExt: { id: string | null; type: string | null };
-  subHubExt: { id: string | null; type: string | null };
   showMenuDropdown: string | null | undefined;
   showMenuDropdownType: string | null | undefined;
   listIdCreateTask: string;
@@ -32,14 +29,11 @@ interface HubState {
   createWLID: string | null;
   editHub: boolean;
   spaceStatuses: StatusProps[];
-  openedHubId: string[];
 }
 
 const initialState: HubState = {
   hub: [],
   currHubId: null,
-  currSubHubId: null,
-  currSubHubIdType: null,
   showEditHubModal: false,
   showSubItems: false,
   archiveHub: false,
@@ -60,9 +54,7 @@ const initialState: HubState = {
   favUpdateName: null,
   createWLID: null,
   editHub: false,
-  openedHubId: [],
   parentHubExt: { id: null, type: null },
-  subHubExt: { id: null, type: null },
   selectedTreeDetails: { name: null, id: null, type: null },
   toggleTree: false,
   entityToCreate: null,
@@ -105,9 +97,6 @@ export const hubSlice = createSlice({
     setParentHubExt(state, action: PayloadAction<{ id: string | null; type: string | null }>) {
       state.parentHubExt = action.payload;
     },
-    setSubHubExt(state, action: PayloadAction<{ id: string | null; type: string | null }>) {
-      state.subHubExt = action.payload;
-    },
     getCurrHubId(state, action: PayloadAction<string | null>) {
       state.currHubId = action.payload;
     },
@@ -116,10 +105,6 @@ export const hubSlice = createSlice({
     },
     setCreateWLID(state, action: PayloadAction<string | null>) {
       state.createWLID = action.payload;
-    },
-    getCurrSubHubId(state, action: PayloadAction<{ currSubHubId: string | null; currSubHubIdType: string | null }>) {
-      state.currSubHubId = action.payload.currSubHubId;
-      state.currSubHubIdType = action.payload.currSubHubIdType;
     },
     getSubMenu(
       state,
@@ -178,15 +163,6 @@ export const hubSlice = createSlice({
     setFavUpdateName(state, action: PayloadAction<string | null>) {
       state.favUpdateName = action.payload;
     },
-    setOpenedHubId(state, action: PayloadAction<string>) {
-      let newArr = [];
-      if (state.openedHubId.includes(action.payload)) {
-        newArr = state.openedHubId.filter((i) => i !== action.payload);
-      } else {
-        newArr = [...state.openedHubId, action.payload];
-      }
-      state.openedHubId = newArr;
-    },
     chechIfHub: (state) => state
   }
 });
@@ -196,7 +172,6 @@ export const {
   getHub,
   chechIfHub,
   getCurrHubId,
-  getCurrSubHubId,
   getSubMenu,
   setToggleTree,
   setShowSubItems,
@@ -209,7 +184,6 @@ export const {
   setshowMenuDropdown,
   setListIdCreateTask,
   setSubDropdownMenu,
-  setOpenedHubId,
   closeMenu,
   getMenuRef,
   getPrevName,
@@ -220,7 +194,6 @@ export const {
   setCreateWLID,
   setEditHub,
   setParentHubExt,
-  setSubHubExt,
   setSelectedTreeDetails,
   setEntityToCreate
 } = hubSlice.actions;

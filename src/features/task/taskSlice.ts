@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-// import { tagItem } from '../../pages/workspace/pilot/components/details/properties/subDetailsIndex/PropertyDetails';
 import { listColumnProps } from '../../pages/workspace/tasks/component/views/ListColumns';
 import { IField } from '../list/list.interfaces';
 import {
@@ -33,6 +32,7 @@ export interface ICustomField {
     {
       id: string;
       value: string;
+      name: string;
     }
   ];
 }
@@ -142,6 +142,8 @@ interface TaskState {
   taskStatus: string | null;
   showTaskNavigation: boolean;
   addNewTaskItem: boolean;
+  selectedIndex: number | null;
+  selectedIndexStatus: string | null;
   hilightNewTask: boolean;
   closeTaskListView: boolean;
   toggleAssignCurrentTaskId: string | null | undefined;
@@ -192,6 +194,7 @@ interface TaskState {
   customSuggestionField: IExtraFields[];
   newTaskData: ImyTaskData | undefined;
   newCustomPropertyDetails: customPropertyInfo;
+  editCustomProperty: IField | undefined;
 }
 
 const initialState: TaskState = {
@@ -227,6 +230,8 @@ const initialState: TaskState = {
   showTaskNavigation: false,
   addNewTaskItem: false,
   closeTaskListView: true,
+  selectedIndex: null,
+  selectedIndexStatus: null,
   toggleAssignCurrentTaskId: null,
   currentParentTaskId: null,
   getSubTaskId: null,
@@ -277,7 +282,8 @@ const initialState: TaskState = {
   listViewHeads: [],
   customSuggestionField: [],
   newTaskData: undefined,
-  newCustomPropertyDetails: { name: '', type: 'Select Property Type', color: null }
+  newCustomPropertyDetails: { name: '', type: 'Select Property Type', color: null },
+  editCustomProperty: undefined
 };
 
 export const taskSlice = createSlice({
@@ -301,6 +307,12 @@ export const taskSlice = createSlice({
     },
     setSearchValue(state, action: PayloadAction<string>) {
       state.searchValue = action.payload;
+    },
+    setSelectedIndex(state, action: PayloadAction<number | null>) {
+      state.selectedIndex = action.payload;
+    },
+    setSelectedIndexStatus(state, action: PayloadAction<string>) {
+      state.selectedIndexStatus = action.payload;
     },
     setSortType(state, action: PayloadAction<TaskKey>) {
       state.sortType = action.payload;
@@ -561,6 +573,9 @@ export const taskSlice = createSlice({
     },
     setNewCustomPropertyDetails(state, action: PayloadAction<customPropertyInfo>) {
       state.newCustomPropertyDetails = action.payload;
+    },
+    setEditCustomProperty(state, action: PayloadAction<IField | undefined>) {
+      state.editCustomProperty = action.payload;
     }
   }
 });
@@ -588,6 +603,8 @@ export const {
   getVerticalGridlinesTask,
   getCompactView,
   getCompactViewWrap,
+  setSelectedIndex,
+  setSelectedIndexStatus,
   getTableView,
   getBoardView,
   getCalendeView,
@@ -643,6 +660,7 @@ export const {
   setHeads,
   setCustomSuggetionsField,
   setNewTask,
-  setNewCustomPropertyDetails
+  setNewCustomPropertyDetails,
+  setEditCustomProperty
 } = taskSlice.actions;
 export default taskSlice.reducer;

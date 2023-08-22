@@ -14,7 +14,7 @@ import { BiSearch } from 'react-icons/bi';
 import { setIsSearchActive } from '../../../features/search/searchSlice';
 import { useNavigate, useParams } from 'react-router-dom';
 import {
-  setActiveEntityName,
+  setActiveItem,
   setActiveSubHubManagerTabId,
   setActiveTabId,
   setCreateEntityType,
@@ -41,7 +41,7 @@ function Hubs() {
   const { showSidebar } = useAppSelector((state) => state.account);
   const { currentWorkspaceId } = useAppSelector((state) => state.auth);
   const { isSearchActive } = useAppSelector((state) => state.search);
-  const { createEntityType } = useAppSelector((state) => state.workspace);
+  const { createEntityType, activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
 
   const [showModal, setShowModal] = useState<boolean>(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -63,7 +63,13 @@ function Hubs() {
     const CapitalizeType = Capitalize(type);
     dispatch(setCreateEntityType(type));
     dispatch(setEntityToCreate(type));
-    dispatch(setActiveEntityName('New ' + CapitalizeType + ' Under Construction'));
+    dispatch(
+      setActiveItem({
+        activeItemId: activeItemId as string,
+        activeItemType: activeItemType as string,
+        activeItemName: `New ${CapitalizeType} Under Construction`
+      })
+    );
     if (type === EntityType.hub) {
       setShowModal(false);
       navigate(`/${currentWorkspaceId}` + '/tasks');

@@ -2,8 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import { Hub } from '../../activetree.interfaces';
 import { useAppDispatch, useAppSelector } from '../../../../../../../app/hooks';
-import { setCurrentItem, setShowHub } from '../../../../../../../features/workspace/workspaceSlice';
-import { setOpenedHubId, setSubHubExt } from '../../../../../../../features/hubs/hubSlice';
+import { setCurrentItem } from '../../../../../../../features/workspace/workspaceSlice';
 import { EntityType } from '../../../../../../../utils/EntityTypes/EntityType';
 import SearchHubItem from '../../../../../../../components/tasks/SearchHubItem';
 import SearchWList from '../wallet/SearchWList';
@@ -38,10 +37,6 @@ export default function SearchSubHList({ hubs, handleTabClick }: ISearchSubHList
   }, []);
 
   const handleClick = (id: string) => {
-    dispatch(setSubHubExt({ id, type: EntityType.subHub }));
-    dispatch(setOpenedHubId(id));
-    dispatch(setShowHub(true));
-
     if (id === showChildren) {
       setShowChidren(null);
     } else {

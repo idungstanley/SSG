@@ -12,7 +12,6 @@ export default function HubData() {
   const { hub } = useAppSelector((state) => state.hub);
 
   const currentEntity = findCurrentHub(activeItemId as string, hub);
-  console.log(currentEntity);
   const subHubsData = currentEntity.children;
   const walletsData = currentEntity.wallets;
   const listsData = currentEntity.lists;

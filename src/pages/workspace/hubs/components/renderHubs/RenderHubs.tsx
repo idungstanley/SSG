@@ -17,7 +17,7 @@ import { Spinner } from '../../../../../common';
 import TaskCalenderTemplate from '../../../tasks/component/views/hubLevel/TaskCalenderTemplate';
 import FilterByAssigneesSliderOver from '../../../lists/components/renderlist/filters/FilterByAssigneesSliderOver';
 import { useParams } from 'react-router-dom';
-import { setActiveEntityName, setActiveItem } from '../../../../../features/workspace/workspaceSlice';
+import { setActiveItem } from '../../../../../features/workspace/workspaceSlice';
 import { UseGetHubDetails } from '../../../../../features/hubs/hubService';
 import TaskMapTemplate from '../../../tasks/component/views/hubLevel/TaskMapTemplate';
 import ActiveHub from '../../../../../layout/components/MainLayout/extendedNavigation/ActiveParents/ActiveHub';
@@ -28,7 +28,7 @@ function RenderHubs() {
   const dispatch = useAppDispatch();
   const { hubId, subhubId } = useParams();
 
-  const { activeEntity } = useAppSelector((state) => state.workspace);
+  const { activeItemType } = useAppSelector((state) => state.workspace);
   const { groupByStatus, filterTaskByAssigneeIds } = useAppSelector((state) => state.task);
   const { listView, tableView, boardView, calenderView, mapView } = useAppSelector((state) => state.task);
 
@@ -43,11 +43,10 @@ function RenderHubs() {
       dispatch(
         setActiveItem({
           activeItemId: hubId ? (hubId as string) : (subhubId as string),
-          activeItemType: activeEntity.type || EntityType.hub,
+          activeItemType: activeItemType || EntityType.hub,
           activeItemName: hubName
         })
       );
-      dispatch(setActiveEntityName(hubName));
     }
   }, [hubId, subhubId, data]);
 

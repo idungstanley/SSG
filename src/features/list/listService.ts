@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import requestNew from '../../app/requestNew';
 import { useDispatch } from 'react-redux';
 import { setArchiveList } from './listSlice';
-import { closeMenu } from '../hubs/hubSlice';
+import { closeMenu, setSpaceStatuses } from '../hubs/hubSlice';
 import { IListDetailRes, taskCountFields } from './list.interfaces';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { useParams } from 'react-router-dom';
@@ -169,7 +169,6 @@ export const UseGetListDetails = (query: {
   activeItemId: string | null | undefined;
   activeItemType: string | null | undefined;
 }) => {
-  const dispatch = useAppDispatch();
   return useQuery(
     ['hubs', query],
     async () => {
@@ -231,12 +230,12 @@ const updateEntityCustomFieldValue = (data: { taskId?: string; fieldId: string; 
   const { taskId, fieldId, value } = data;
 
   const response = requestNew({
-    url: `custom-fields/${fieldId}`,
+    url: `custom-fields/${fieldId}/value`,
     method: 'PUT',
     data: {
       type: 'task',
       id: taskId,
-      values: [value]
+      values: [{ value }]
     }
   });
   return response;

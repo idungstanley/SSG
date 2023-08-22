@@ -12,11 +12,12 @@ import Picker from '../../assets/icons/Picker';
 import StatusIconComp from '../../assets/icons/StatusIconComp';
 import Drag from '../../assets/icons/Drag';
 import { useSortable } from '@dnd-kit/sortable';
+import { BoardSectionsType } from '../../utils/StatusManagement/Types';
 
 interface StatusBodyProps {
   item: StatusProps;
   index: string;
-  setStatusTypesState?: React.Dispatch<React.SetStateAction<StatusProps[]>>;
+  setStatusTypesState: React.Dispatch<React.SetStateAction<BoardSectionsType>>;
 }
 
 export default function StatusBodyTemplate({ item, setStatusTypesState, index }: StatusBodyProps) {
@@ -45,16 +46,17 @@ export default function StatusBodyTemplate({ item, setStatusTypesState, index }:
   };
 
   const handleStatusColor = (color: string | ListColourProps) => {
-    if (setStatusTypesState) {
-      setStatusTypesState((prevState) => {
-        return prevState.map((status) => {
+    setStatusTypesState((prevState) => {
+      return Object.entries(prevState).reduce((acc, [name, statuses]) => {
+        acc[name] = statuses.map((status) => {
           if (status.name === item.name) {
             return { ...status, color } as StatusProps;
           }
           return status;
         });
-      });
-    }
+        return acc;
+      }, {} as BoardSectionsType);
+    });
   };
 
   const handleCloseStatusEditDropdown = () => {
@@ -94,15 +96,16 @@ export default function StatusBodyTemplate({ item, setStatusTypesState, index }:
       }
     },
     {
-      visibility: item.type === 'custom',
+      visibility: item.type != 'closed' && item.position !== 0,
       label: 'Delete status',
       icon: <AiOutlineDelete />,
       handleClick: () => {
-        if (setStatusTypesState) {
-          setStatusTypesState((prevState) => {
-            return prevState.filter((status) => status.name !== item.name);
-          });
-        }
+        setStatusTypesState((prevState) => {
+          return Object.entries(prevState).reduce((acc, [name, statuses]) => {
+            acc[name] = statuses.filter((status) => status.name !== item.name);
+            return acc;
+          }, {} as BoardSectionsType);
+        });
         setShowStatusEditDropdown(null);
       }
     }

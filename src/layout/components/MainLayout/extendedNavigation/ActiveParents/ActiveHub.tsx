@@ -10,7 +10,7 @@ import ActiveSubHub from './ActiveSubHub';
 import DropdownList from '../../../../../components/ItemsListInSidebar/components/DropdownList';
 import { useNavigate } from 'react-router-dom';
 import { setActiveItem, setCurrentItem } from '../../../../../features/workspace/workspaceSlice';
-import { setParentHubExt, setSubHubExt } from '../../../../../features/hubs/hubSlice';
+import { setParentHubExt } from '../../../../../features/hubs/hubSlice';
 import { getInitials } from '../../../../../app/helpers';
 import { EntityType } from '../../../../../utils/EntityTypes/EntityType';
 
@@ -52,7 +52,6 @@ export default function ActiveHub() {
         activeItemType: EntityType.hub
       })
     );
-    dispatch(setSubHubExt({ id: null, type: null }));
     dispatch(setParentHubExt({ id: id, type: EntityType.hub }));
     dispatch(
       setCurrentItem({

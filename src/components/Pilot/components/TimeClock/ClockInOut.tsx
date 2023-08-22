@@ -23,6 +23,9 @@ import { runTimer } from '../../../../utils/TimerCounter';
 import Duration from '../../../../utils/TimerDuration';
 import ClockLog from './ClockLog';
 import { EntityType } from '../../../../utils/EntityTypes/EntityType';
+import PaginationLinks from '../NavLinks/PaginationLinks';
+import ArrowLeft from '../../../../assets/icons/ArrowLeft';
+import { VerticalScroll } from '../../../ScrollableContainer/VerticalScroll';
 
 export interface User {
   initials: string;
@@ -43,9 +46,12 @@ export default function ClockInOut() {
   const [prompt, setPrompt] = useState(false);
   const [newTimer, setNewtimer] = useState(false);
 
-  const { data: getEntries } = GetTimeEntriesService({
+  const [page, setPage] = useState<number>(1);
+  const { data: getTaskEntries, isPreviousData } = GetTimeEntriesService({
     itemId: activeItemId,
-    trigger: activeItemType === EntityType.subHub ? EntityType.hub : activeItemType
+    trigger: activeItemType,
+    page,
+    include_filters: true
   });
 
   // Get currently active timers
@@ -141,6 +147,12 @@ export default function ClockInOut() {
 
   const RunTimer = runTimer({ isRunning: isRunning, setTime: setTime });
 
+  const firstPage = () => setPage(1);
+  const lastPage = () => setPage((page * 100) / 100);
+  const pageLinks = Array(getTaskEntries?.data.pagination.page)
+    .fill(0)
+    .map((_, index) => index + 1);
+
   useEffect(() => {
     RunTimer;
   }, [isRunning]);
@@ -159,7 +171,7 @@ export default function ClockInOut() {
           >
             <span>Tags: </span>
             {/* total time here */}
-            <p>{moment.utc((getEntries as ITimeEntriesRes)?.data?.total_duration * 1000).format('HH:mm:ss')}</p>
+            <p>{moment.utc((getTaskEntries as ITimeEntriesRes)?.data?.total_duration * 1000).format('HH:mm:ss')}</p>
           </div>
           <div id="descNote" className="w-full my-3 text-white">
             <input
@@ -242,8 +254,18 @@ export default function ClockInOut() {
             </div>
           </div>
         </section>
-        <div className="w-full p-2 my-4">
-          <ClockLog />
+        <div className="w-full p-2 my-4 flex flex-col space-y-2">
+          <VerticalScroll>
+            <div className="h-96">
+              <ClockLog getTaskEntries={getTaskEntries} />
+            </div>
+          </VerticalScroll>
+          <div className="flex space-x-1">
+            <div className="cursor-pointer">
+              <ArrowLeft />
+            </div>
+            <PaginationLinks arr={pageLinks} />
+          </div>
         </div>
       </div>
     </div>

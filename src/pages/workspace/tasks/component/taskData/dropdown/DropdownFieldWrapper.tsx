@@ -1,24 +1,31 @@
-import { useList } from '../../../../../../features/list/listService';
+import { IField } from '../../../../../../features/list/list.interfaces';
 import { ICustomField } from '../../../../../../features/task/taskSlice';
 import DropdownField from './DropdownField';
 
 interface DropdownFieldWrapperProps {
-  listId: string;
   taskCustomFields?: ICustomField[];
   fieldId: string;
   taskId: string;
+  entityCustomProperty?: IField[];
 }
 
-export default function DropdownFieldWrapper({ taskId, fieldId, listId, taskCustomFields }: DropdownFieldWrapperProps) {
-  const { data } = useList(listId);
-  const customFields = data?.custom_fields ?? [];
-
+export default function DropdownFieldWrapper({
+  taskId,
+  fieldId,
+  taskCustomFields,
+  entityCustomProperty
+}: DropdownFieldWrapperProps) {
+  const customFields = entityCustomProperty ?? [];
   const field = customFields.find((i) => i.id === fieldId);
-  const property = taskCustomFields?.find((i) => i.custom_field.id === fieldId);
-
-  const activeProperty = property ? property.values[0].value : '-';
+  const property = taskCustomFields?.find((i) => i.id === fieldId);
+  const taskActiveProperty = field?.options?.find((i) => i.id === property?.values[0].value);
+  const activeProperty = property ? taskActiveProperty : undefined;
 
   return field ? (
-    <DropdownField field={{ id: field.id, options: field.options, activeProperty }} taskId={taskId} />
+    <DropdownField
+      field={{ id: field.id, options: field.options, activeProperty }}
+      taskId={taskId}
+      currentProperty={field}
+    />
   ) : null;
 }
