@@ -7,17 +7,20 @@ import ColorPalette from '../../../../ColorPalette/component/ColorPalette';
 import { ListColourProps } from '../../../../tasks/ListItem';
 import { UseEditCustomFieldService } from '../../../../../features/task/taskService';
 import { useMutation } from '@tanstack/react-query';
+import { cl } from '../../../../../utils';
 
 function EditDropdown() {
   const { editCustomProperty } = useAppSelector((state) => state.task);
   const [formInputs, setFormInputs] = useState(editCustomProperty?.options ? [...editCustomProperty.options] : []);
   const [propertyTitle, setPropertyTitle] = useState(editCustomProperty?.name || '');
+  const [propertyColor, setPropertyColor] = useState(editCustomProperty?.color || null);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [open, setOpen] = React.useState<null | HTMLElement>(null);
   const [itemId, setItemId] = useState<string>();
 
   const editCustomField = useMutation(UseEditCustomFieldService);
 
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>, id: string) => {
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>, id?: string) => {
     setItemId(id);
     setAnchorEl(event.currentTarget);
   };
@@ -28,7 +31,6 @@ function EditDropdown() {
     setFormInputs((prevInputs) => {
       return prevInputs?.map((i) => {
         if (i.id === id) {
-          // Create a new object with the updated name property
           return { ...i, name: value };
         }
 
@@ -41,7 +43,7 @@ function EditDropdown() {
     setFormInputs((prevInputs) => [
       ...prevInputs,
       {
-        id: formInputs.length.toString(), // Replace with your unique ID generation logic
+        id: formInputs.length.toString(),
         name: '',
         color: ''
       }
@@ -76,8 +78,13 @@ function EditDropdown() {
     editCustomField.mutateAsync({
       id: editCustomProperty?.id,
       name: propertyTitle,
-      options
+      options,
+      color: propertyColor
     });
+  };
+
+  const handleNameColor = (color: string | ListColourProps) => {
+    setPropertyColor(color as string);
   };
 
   return (
@@ -90,15 +97,18 @@ function EditDropdown() {
         >
           <input
             type="text"
-            className="block border-0 py-1 ring-0 placeholder-gray-300 focus:ring-0 focus:ring-inset text-alsoit-text-xi sm:text-sm sm:leading-6 w-full"
+            className={cl(
+              'block border-0 py-1 ring-0 placeholder-gray-300 focus:ring-0 focus:ring-inset text-alsoit-text-xi sm:text-sm sm:leading-6 w-full'
+            )}
+            style={{ color: propertyColor as string }}
             value={propertyTitle}
             onChange={handleTitleChange}
           />
-          <button className="mx-2">
+          <button className="mx-2" onClick={(e) => setOpen(e.currentTarget)}>
             <Picker />
           </button>
-          <AlsoitMenuDropdown handleClose={handleClose} anchorEl={anchorEl}>
-            <ColorPalette handleClick={handleColor} />
+          <AlsoitMenuDropdown handleClose={() => setOpen(null)} anchorEl={open}>
+            <ColorPalette handleClick={handleNameColor} />
           </AlsoitMenuDropdown>
         </div>
       </div>
@@ -136,9 +146,9 @@ function EditDropdown() {
               </button>
             </div>
           </div>
-          {/* <AlsoitMenuDropdown handleClose={handleClose} anchorEl={anchorEl}>
+          <AlsoitMenuDropdown handleClose={handleClose} anchorEl={anchorEl}>
             <ColorPalette handleClick={handleColor} />
-          </AlsoitMenuDropdown> */}
+          </AlsoitMenuDropdown>
         </div>
       ))}
       <button
