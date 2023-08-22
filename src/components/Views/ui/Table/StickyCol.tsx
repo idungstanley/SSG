@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { Task } from '../../../../features/task/interface.tasks';
 import { cl } from '../../../../utils';
-import { DEFAULT_COL_BG } from '../../config';
+import { ACTIVE_COL_BG, DEFAULT_COL_BG } from '../../config';
 import { UseUpdateTaskService, useAddTask } from '../../../../features/task/taskService';
 import StatusDropdown from '../../../status/StatusDropdown';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -68,7 +68,9 @@ export function StickyCol({
 
   const [isChecked, setIsChecked] = useState(false);
 
-  const ACTIVE_TASK = taskId === task.id ? 'tdListV' : DEFAULT_COL_BG;
+  // const ACTIVE_TASK = taskId === task.id ? 'tdListV' : DEFAULT_COL_BG;
+  const COL_BG = taskId === task.id ? ACTIVE_COL_BG : DEFAULT_COL_BG;
+
   const { mutate: onAdd } = useAddTask(parentId);
   const {
     currTeamMemberId,
@@ -291,7 +293,7 @@ export function StickyCol({
             onClick={onClickTask}
             onDoubleClick={() => setEitableContent(true)}
             className={cl(
-              ACTIVE_TASK,
+              COL_BG,
               ` ${isChecked && 'tdListV'} ${verticalGrid && 'border-r'} ${
                 verticalGridlinesTask && 'border-r'
               } w-full py-4 flex items-center `,
@@ -395,7 +397,7 @@ export function StickyCol({
           <div
             style={{ paddingLeft }}
             className={cl(
-              ACTIVE_TASK,
+              COL_BG,
               `relative border-t ${verticalGrid && 'border-r'} w-full h-16  py-4 p-4 flex items-center`
             )}
           >
