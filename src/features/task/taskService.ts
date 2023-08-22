@@ -42,7 +42,7 @@ export const UseEditCustomFieldService = (data: {
     method: 'PUT',
     data: {
       name: data.name,
-      color: data.color,
+      color: data.color === null ? undefined : data.color,
       options: data.options
     }
   });

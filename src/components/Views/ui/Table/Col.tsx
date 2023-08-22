@@ -66,8 +66,9 @@ export function Col({ value, field, fieldId, task, customFields, ...props }: Col
       //   entityCustomProperty={customFields}
       // />
       <LabelsWrapper
-        entityCustomProperty={customFields}
+        entityCustomProperty={customFields?.find((i) => i.id === fieldId)}
         taskCustomFields={task.custom_fields?.find((i) => i.id === fieldId)}
+        taskId={task.id}
       />
     ),
     text: <TextField />,

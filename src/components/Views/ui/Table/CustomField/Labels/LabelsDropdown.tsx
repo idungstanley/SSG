@@ -1,74 +1,44 @@
-import { Dialog, Transition } from '@headlessui/react';
-import { Fragment, useState, useRef } from 'react';
-import { useAppSelector, useAppDispatch } from '../../../../../../app/hooks';
-import { IField, Options } from '../../../../../../features/list/list.interfaces';
-import { useUpdateEntityCustomFieldValue } from '../../../../../../features/list/listService';
-import { useAbsolute } from '../../../../../../hooks/useAbsolute';
+import React, { useState } from 'react';
 import { cl } from '../../../../../../utils';
+import { Dialog, Transition } from '@headlessui/react';
+import { useAbsolute } from '../../../../../../hooks/useAbsolute';
+import SearchIcon from '../../../../../../assets/icons/SearchIcon';
+import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
+import { IField, Options } from '../../../../../../features/list/list.interfaces';
 import {
   setEditCustomProperty,
   setEntityForCustom,
   setNewCustomPropertyDetails
 } from '../../../../../../features/task/taskSlice';
 import { setActiveTabId } from '../../../../../../features/workspace/workspaceSlice';
-import SearchIcon from '../../../../../../assets/icons/SearchIcon';
+import { useUpdateEntityCustomFieldValue } from '../../../../../../features/list/listService';
 
-interface DropdownModalProps {
-  field: {
-    options: Options;
-    id: string;
-    activeProperty:
-      | {
-          id: string;
-          color: string;
-          name: string;
-        }
-      | undefined;
-  };
-  taskId: string;
-  currentProperty: IField;
-}
-
-export default function DropdownField({ field, taskId, currentProperty }: DropdownModalProps) {
-  const dispatch = useAppDispatch();
-  const [isOpen, setIsOpen] = useState(false);
-  const { options } = field;
-  const { updateCords } = useAppSelector((state) => state.task);
-  const [searchValue, setSearchValue] = useState<string>('');
-  const [activeOption, setActiveOption] = useState<
+interface dropdownProps {
+  optionsFromField:
     | {
         id: string;
         color: string;
         name: string;
-      }
-    | undefined
-  >(field.activeProperty);
-  const filteredOptions = options?.filter((option) => option.name.toLowerCase().includes(searchValue.toLowerCase()));
+      }[]
+    | undefined;
+  allOptions: Options | undefined;
+  currentProperty: IField;
+  taskId: string;
+}
+
+function LabelsDropdown({ optionsFromField, allOptions, currentProperty, taskId }: dropdownProps) {
+  const dispatch = useAppDispatch();
   const { mutate: onUpdate } = useUpdateEntityCustomFieldValue(taskId);
 
-  const inputRef = useRef<HTMLInputElement>(null);
+  const [isOpen, setIsOpen] = useState(false);
+  const { updateCords } = useAppSelector((state) => state.task);
+  const { cords, relativeRef } = useAbsolute(updateCords, 160);
 
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchValue(e.target.value);
-  };
+  const valueIds = optionsFromField?.map((obj) => ({ value: obj.id }));
 
   function closeModal() {
     setIsOpen(false);
   }
-
-  const { cords, relativeRef } = useAbsolute(updateCords, 160);
-
-  const handleClick = (option: { id: string; color: string; name: string }) => {
-    setActiveOption(option);
-
-    if (field)
-      onUpdate({
-        taskId,
-        value: [{ value: option.id }],
-        fieldId: field.id
-      });
-    closeModal();
-  };
 
   const handleEditCustom = () => {
     dispatch(setEditCustomProperty(currentProperty));
@@ -78,18 +48,43 @@ export default function DropdownField({ field, taskId, currentProperty }: Dropdo
     setIsOpen(false);
   };
 
+  const handleClick = (option: { id: string; color: string; name: string }) => {
+    const updatedValueIds = valueIds ? [...valueIds, { value: option.id }] : [{ value: option.id }];
+    if (currentProperty)
+      onUpdate({
+        taskId,
+        value: updatedValueIds,
+        fieldId: currentProperty.id
+      });
+    closeModal();
+  };
   return (
-    <>
-      <div
-        className={cl('flex items-center justify-center w-full h-full', activeOption?.color && 'text-white')}
-        style={{ backgroundColor: activeOption?.color }}
-      >
+    <div className="w-full">
+      <div className="w-full">
         <button
           type="button"
           onClick={() => setIsOpen(true)}
           className="flex items-center justify-center w-full focus:outline-none"
         >
-          <div ref={relativeRef}>{activeOption?.name ? activeOption?.name : '-'}</div>
+          <div ref={relativeRef} className="w-full">
+            {optionsFromField?.length ? (
+              <div className="w-full flex flex-wrap justify-center gap-1 items-center">
+                {optionsFromField?.map((value) => {
+                  return (
+                    <div
+                      key={value.id}
+                      className={cl(value.color ? 'text-white' : 'border-2 border-gray-500', 'rounded p-0.5 ')}
+                      style={{ backgroundColor: value.color }}
+                    >
+                      <h3 className="text-alsoit-text-md">{value.name}</h3>
+                    </div>
+                  );
+                })}
+              </div>
+            ) : (
+              '-'
+            )}
+          </div>
         </button>
       </div>
 
@@ -100,17 +95,17 @@ export default function DropdownField({ field, taskId, currentProperty }: Dropdo
               <div className="flex items-center">
                 <SearchIcon />
                 <input
-                  onChange={handleSearchChange}
-                  value={searchValue}
-                  ref={inputRef}
+                  // onChange={handleSearchChange}
+                  // value={searchValue}
+                  // ref={inputRef}
                   type="text"
                   placeholder="Search"
                   className="h-4 border-0 ring-0 outline-0 focus:ring-0 focust:outline-0 focus:border-0"
                 />
               </div>
               <div className="w-full pt-3 space-y-2">
-                {Array.isArray(filteredOptions)
-                  ? filteredOptions.map((option) => (
+                {Array.isArray(allOptions)
+                  ? allOptions.map((option) => (
                       <button
                         key={option.id}
                         onClick={() => handleClick(option)}
@@ -137,6 +132,8 @@ export default function DropdownField({ field, taskId, currentProperty }: Dropdo
           </div>
         </Dialog>
       </Transition>
-    </>
+    </div>
   );
 }
+
+export default LabelsDropdown;
