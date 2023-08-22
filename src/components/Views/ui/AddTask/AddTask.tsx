@@ -5,7 +5,6 @@ import Assignee from '../../../../pages/workspace/tasks/assignTask/Assignee';
 import { UseGetListDetails } from '../../../../features/list/listService';
 import { ITask_statuses } from '../../../../features/list/list.interfaces';
 import { useAppSelector } from '../../../../app/hooks';
-import { EntityType } from '../../../../utils/EntityTypes/EntityType';
 import ToolTip from '../../../Tooltip/Tooltip';
 import CreateTaskCalender from '../../../../assets/icons/CreateTaskCalender';
 import CreateTaskPriority from '../../../../assets/icons/CreateTaskPriority';
@@ -31,7 +30,7 @@ export function AddTask({ onClose, paddingLeft, parentId, isListParent, columns 
 
   const { mutate: onAdd } = useAddTask();
 
-  const { data: list } = UseGetListDetails({ activeItemId: parentId, activeItemType: EntityType.list });
+  const { data: list } = UseGetListDetails(parentId);
 
   useEffect(() => {
     const minPosition = Math.min(...(list?.data.list.task_statuses.map((status) => status.position) || []));

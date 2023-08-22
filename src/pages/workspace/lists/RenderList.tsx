@@ -37,7 +37,7 @@ function RenderList() {
     fetchNextPage
   } = getTaskListService({ listId, assigneeUserId: filterTaskByAssigneeIds });
 
-  const { data: listData } = UseGetListDetails({ activeItemId: listId, activeItemType: EntityType.list });
+  const { data: listData } = UseGetListDetails(listId);
   const listName = listData?.data.list.name;
   useEffect(() => {
     if (listId) {
