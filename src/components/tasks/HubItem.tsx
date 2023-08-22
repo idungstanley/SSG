@@ -43,23 +43,17 @@ interface TaskItemProps {
     lists?: List[];
   };
   showChildren: boolean;
-  index?: number;
-  isSticky?: boolean;
   type: string;
   topNumber?: string;
   zNumber?: string;
-  stickyButtonIndex?: number | undefined;
   isExtendedBar?: boolean;
-  handleClick: (id: string, index?: number) => void;
-  handleLocation: (id: string, name: string, index?: number) => void;
+  handleClick: (id: string) => void;
+  handleLocation: (id: string, name: string) => void;
 }
 export default function HubItem({
   item,
   showChildren,
   type,
-  index,
-  isSticky,
-  stickyButtonIndex,
   topNumber = '0',
   zNumber,
   isExtendedBar,
@@ -69,7 +63,7 @@ export default function HubItem({
   const dispatch = useAppDispatch();
   const { hubId, subhubId } = useParams();
 
-  const { activeItemId } = useAppSelector((state) => state.workspace);
+  const { activeItemId, openedEntitiesIds } = useAppSelector((state) => state.workspace);
   const { paletteDropdown } = useAppSelector((state) => state.account);
   const { showSidebar } = useAppSelector((state) => state.account);
   const { showMenuDropdown, SubMenuId } = useAppSelector((state) => state.hub);
@@ -181,19 +175,21 @@ export default function HubItem({
   });
 
   return (
-    <div className="relative">
+    <div
+      className={`${openedEntitiesIds.includes(item.id) ? 'sticky bg-white opacity-100' : ''}`}
+      style={{
+        top: openedEntitiesIds.includes(item.id) && showSidebar ? topNumber : '',
+        zIndex: openedEntitiesIds.includes(item.id) ? zNumber : '2',
+        opacity: transform ? 0 : 100
+      }}
+    >
       <div
         className={`bg-white truncate items-center group ${item.id !== activeItemId && 'hover:bg-gray-100'} ${
-          isSticky && stickyButtonIndex === index ? 'sticky bg-white opacity-100' : ''
-        } ${isOver ? 'bg-primary-100 border-primary-500 shadow-inner shadow-primary-300' : ''} `}
+          isOver ? 'bg-primary-100 border-primary-500 shadow-inner shadow-primary-300' : ''
+        }`}
         ref={setNodeRef}
         tabIndex={0}
-        onClick={() => handleClick(item.id, index)}
-        style={{
-          top: isSticky && showSidebar ? topNumber : '',
-          zIndex: isSticky ? zNumber : '2',
-          opacity: transform ? 0 : 100
-        }}
+        onClick={() => handleClick(item.id)}
       >
         <div
           className={`relative flex items-center justify-between ${showSidebar ? 'pl-1' : 'pl-2.5'}`}
@@ -256,7 +252,7 @@ export default function HubItem({
                       verticalAlign: 'baseline',
                       letterSpacing: '0.28px'
                     }}
-                    onClick={() => handleLocation(item.id, item.name, index)}
+                    onClick={() => handleLocation(item.id, item.name)}
                   >
                     {item.name}
                   </p>

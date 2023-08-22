@@ -28,7 +28,6 @@ export default function HList({ hubs }: ListProps) {
   const { entityToCreate } = useAppSelector((state) => state.hub);
   const { showSidebar } = useAppSelector((state) => state.account);
 
-  const [stickyButtonIndex, setStickyButtonIndex] = useState<number | undefined>(-1);
   const [openedNewHubId, setOpenedNewHubId] = useState<string>('');
 
   const CapitalizeType = Capitalize(entityToCreate);
@@ -44,7 +43,7 @@ export default function HList({ hubs }: ListProps) {
   const hubsSpread = [...hubs, dummyHub];
   const hubsWithEntity = createEntityType === EntityType.hub ? (hubsSpread as Hub[]) : hubs;
 
-  const handleLocation = (id: string, name: string, index?: number) => {
+  const handleLocation = (id: string, name: string) => {
     dispatch(setParentHubExt({ id: id, type: EntityType.hub }));
     dispatch(
       setActiveItem({
@@ -53,7 +52,6 @@ export default function HList({ hubs }: ListProps) {
         activeItemName: name
       })
     );
-    setStickyButtonIndex(index === stickyButtonIndex ? -1 : index);
     dispatch(setShowPilot(true));
     dispatch(setActiveTabId(4));
     navigate(`tasks/h/${id}`, {
@@ -61,10 +59,8 @@ export default function HList({ hubs }: ListProps) {
     });
   };
 
-  const handleClick = (id: string, index?: number) => {
+  const handleClick = (id: string) => {
     dispatch(setParentHubExt({ id, type: EntityType.hub }));
-
-    setStickyButtonIndex(index === stickyButtonIndex ? -1 : index);
     if (!showSidebar) {
       navigate(`tasks/h/${id}`, {
         replace: true
@@ -104,7 +100,7 @@ export default function HList({ hubs }: ListProps) {
           <HubItemOverlay item={draggableItem} type="hub" />
         </DragOverlay>
       ) : null}
-      {hubsWithEntity.map((hub, index) => (
+      {hubsWithEntity.map((hub) => (
         <div key={hub.id} className={cl(!showSidebar && 'overflow-hidden w-12')}>
           <div className="relative flex flex-col">
             <HubItem
@@ -115,9 +111,6 @@ export default function HList({ hubs }: ListProps) {
                   isCanBeOpen(hub.id)) as boolean
               }
               handleLocation={handleLocation}
-              isSticky={stickyButtonIndex !== undefined && stickyButtonIndex !== null && stickyButtonIndex <= index}
-              stickyButtonIndex={stickyButtonIndex}
-              index={index}
               type={EntityType.hub}
               topNumber="50px"
               zNumber="5"

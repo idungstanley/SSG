@@ -19,7 +19,7 @@ export default function ActiveHub() {
   const navigate = useNavigate();
 
   const { hub, parentHubExt } = useAppSelector((state) => state.hub);
-  const { activeItemId, activeItemType, openedEntitiesIds } = useAppSelector((state) => state.workspace);
+  const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
 
   const { id: parentHubId } = parentHubExt;
 
