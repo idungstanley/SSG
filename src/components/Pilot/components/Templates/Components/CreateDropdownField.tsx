@@ -10,7 +10,7 @@ import { ListColourProps } from '../../../../tasks/ListItem';
 function CreateDropdownField() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [itemId, setItemId] = useState<number>();
-  const [formInputs, setFormInputs] = useState<{ id: number; value: string; color: null | string }[]>([
+  const [formInputs, setFormInputs] = useState<{ id: number; value?: string; color: null | string }[]>([
     { id: 1, value: '', color: null }
   ]);
 
@@ -50,7 +50,7 @@ function CreateDropdownField() {
           ? 'labels'
           : newCustomPropertyDetails.type;
       const options = formInputs.map((i) => {
-        return { name: i.value.trim(), color: i.color };
+        return { name: (i.value as string).trim(), color: i.color };
       });
       onCreate({
         name,

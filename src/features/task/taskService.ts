@@ -30,6 +30,25 @@ import { runTimer } from '../../utils/TimerCounter';
 import Duration from '../../utils/TimerDuration';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
 
+//edit a custom field
+export const UseEditCustomFieldService = (data: {
+  id?: string | null;
+  name?: string;
+  options?: { name: string; color: string }[];
+  color?: string | null;
+}) => {
+  const response = requestNew({
+    url: `custom-fields/${data.id}`,
+    method: 'PUT',
+    data: {
+      name: data.name,
+      color: data.color,
+      options: data.options
+    }
+  });
+  return response;
+};
+
 export const useGetCustomField = (id: string | undefined, getCustom: boolean) => {
   return useQuery(
     ['xustom-field'],

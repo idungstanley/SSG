@@ -27,15 +27,14 @@ export type SortOption = {
 };
 
 export function List({ tasks, customProperty }: ListProps) {
-  const dispatch = useAppDispatch();
   const { hubId } = useParams();
-
-  const { sortType } = useAppSelector((state) => state.task);
-  const { taskColumns, hideTask } = useAppSelector((state) => state.task);
-
+  // hubId;
   const [columns, setColumns] = useState<listColumnProps[] | undefined>(undefined);
-
+  const { sortType } = useAppSelector((state) => state.task);
   const { data } = useList(tasks[0].list_id);
+
+  const dispatch = useAppDispatch();
+  const { taskColumns, hideTask } = useAppSelector((state) => state.task);
 
   const { data: hub } = UseGetHubDetails({
     activeItemId: hubId,

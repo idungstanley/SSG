@@ -7,6 +7,7 @@ import { Column } from '../../../types/table';
 import { Chevron } from '../../Chevron';
 import {
   setActiveTaskColumn,
+  setEditCustomProperty,
   setEntityForCustom,
   setSelectedTasksArray,
   setSortArr,
@@ -205,6 +206,7 @@ export function Head({
   const handleAddCustomProperty = () => {
     const type = hubId ? 'hub' : walletId ? 'wallet' : 'list';
     dispatch(setEntityForCustom({ id: hubId ?? walletId ?? list_id, type }));
+    dispatch(setEditCustomProperty(undefined));
     dispatch(setActiveTabId(10));
   };
 
