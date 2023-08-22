@@ -251,7 +251,9 @@ export const UseGetHubDetails = (query: {
     {
       enabled: (query.activeItemType === 'hub' || query.activeItemType === 'subhub') && !!query.activeItemId && fetch,
       onSuccess: (data) => {
-        dispatch(setSpaceStatuses(data.data.hub.task_statuses));
+        if (query.activeItemType === 'hub' || query.activeItemType === 'subhub') {
+          dispatch(setSpaceStatuses(data.data.hub.task_statuses));
+        }
       }
     }
   );
