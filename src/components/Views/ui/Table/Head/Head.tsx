@@ -31,6 +31,7 @@ import AlsoitMenuDropdown from '../../../../DropDowns';
 import { setStatusTaskListDetails } from '../../../../../features/list/listSlice';
 import { useParams } from 'react-router-dom';
 import { Task } from '../../../../../features/task/interface.tasks';
+import CollapseIcon from '../../collapseIcon/CollapseIcon';
 
 interface HeadProps {
   columns: Column[];
@@ -228,12 +229,18 @@ export function Head({
                 <p className="border-t py-.5 viewSettings"></p> */}
                 <div className="flex items-center">
                   <p className="pr-1.5">
-                    <Chevron
+                    <CollapseIcon
                       color={headerStatusColor}
                       active={collapseTasks}
                       onToggle={onToggleCollapseTasks}
                       hoverBg="white"
                     />
+                    {/* <Chevron
+                      color={headerStatusColor}
+                      active={collapseTasks}
+                      onToggle={onToggleCollapseTasks}
+                      hoverBg="white"
+                    /> */}
                   </p>
                   <span ref={scrollToRef} className="pb-1" style={{ fontSize: '11px', WebkitTextStroke: '0.5px' }}>
                     {parsedLabel}
