@@ -5,13 +5,14 @@ import { ICheckListRes } from './../task/interface.tasks';
 export type Options = { id: string; color: string; name: string }[] | null;
 
 export interface IField {
+  color: null | string;
   id: string;
-  model: string;
-  model_id: string;
+  is_bold: null | string;
+  is_italic: null | string;
+  is_underlined: null | string;
+  options: Options;
   name: string;
   type: string;
-  options: Options;
-  created_at: string;
 }
 
 export interface taskCountFields {

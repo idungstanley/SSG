@@ -1,36 +1,16 @@
-import React from 'react';
 import CurrentUser from './CurrentUser';
 import Region from './Region';
 import { useAppSelector, useAppDispatch } from '../../../../../app/hooks';
-import {
-  setClockLimit,
-  setClockStopReminder,
-  setClockType,
-  setClocktime,
-  setShowConfirmationModal,
-  setUserInfo
-} from '../../../../../features/settings/user/userSettingsSlice';
+import { setShowConfirmationModal, setUserInfo } from '../../../../../features/settings/user/userSettingsSlice';
 import CurrentUserModal from './CurrentUserModal';
 import UploadAvatar from '../UploadAvatar';
 import { InvalidateQueryFilters } from '@tanstack/react-query';
 
-const minutesToMilliseconds = 60 * 1000;
-const hoursToMilliseconds = 60 * 60 * 1000;
-
 function Profile() {
-  const {
-    name,
-    email,
-    time_format,
-    date_format,
-    start_week,
-    currentUserModal,
-    showAvatarUpload,
-    clock_type,
-    is_clock_time,
-    clock_limit,
-    clock_stop_reminder
-  } = useAppSelector((state) => state.userSetting);
+  const { name, email, time_format, date_format, start_week, currentUserModal, showAvatarUpload } = useAppSelector(
+    (state) => state.userSetting
+  );
+
   const dispatch = useAppDispatch();
 
   return (
@@ -167,70 +147,6 @@ function Profile() {
                   <option value="yyyy/mm/dd">yyyy/mm/dd</option>
                 </select>
               </div>
-              <div style={{ width: '48%' }}>
-                <h5 className="font-semibold" style={{ fontSize: '15px' }}>
-                  Clock Type
-                </h5>
-                <select
-                  name="clock_time"
-                  className="h-10 rounded my w-full"
-                  value={clock_type}
-                  onChange={(e) => dispatch(setClockType(e.target.value))}
-                  style={{ fontSize: '15px' }}
-                >
-                  <option value="d">Digital</option>
-                  <option value="a">Analog</option>
-                </select>
-              </div>
-            </div>
-            <div className="my-3 flex justify-between ">
-              <div style={{ width: '48%' }}>
-                <h5 className="font-semibold" style={{ fontSize: '15px' }}>
-                  Clocking Limit
-                </h5>
-                <select
-                  name="Day"
-                  className="h-10 rounded my w-full"
-                  value={clock_limit}
-                  onChange={(e) => dispatch(setClockLimit(Number(e.target.value)))}
-                  style={{ fontSize: '15px' }}
-                >
-                  <option value={1 * hoursToMilliseconds}>1 hour</option>
-                  <option value={2 * hoursToMilliseconds}>2 hours</option>
-                  <option value={3 * hoursToMilliseconds}>3 hour</option>
-                  <option value={24 * hoursToMilliseconds}>1 day</option>
-                </select>
-              </div>
-              <div style={{ width: '48%' }}>
-                <h5 className="font-semibold" style={{ fontSize: '15px' }}>
-                  Reminder Time
-                </h5>
-                <select
-                  name="Time-format"
-                  className="h-10 rounded my w-full"
-                  value={clock_stop_reminder}
-                  onChange={(e) => dispatch(setClockStopReminder(Number(e.target.value)))}
-                  style={{ fontSize: '15px' }}
-                >
-                  <option value={5 * minutesToMilliseconds}>5 minutes</option>
-                  <option value={15 * minutesToMilliseconds}>15 minutes</option>
-                  <option value={25 * minutesToMilliseconds}>25 minutes</option>
-                  <option value={35 * minutesToMilliseconds}>35 minutes</option>
-                </select>
-              </div>
-            </div>
-            <div className="my-3 flex justify-between w-full">
-              <div style={{ width: '10%' }} className="flex items-center">
-                <label className="switch w-full">
-                  <input
-                    type="checkbox"
-                    checked={is_clock_time ? true : false}
-                    onClick={() => dispatch(setClocktime(is_clock_time === 1 ? 0 : 1))}
-                  />
-                  <div className={`slider ${is_clock_time === 1 ? 'checked' : ''}`}></div>
-                </label>
-              </div>
-              <span className="w-full">Show Toolbar Clock?</span>
             </div>
             <div className="w-full flex justify-center">
               <button

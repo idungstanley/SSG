@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { AvatarWithInitials } from '../../../components';
 import notificationFrame from '../../../assets/branding/notificationFrame.png';
 import { getAllWorkSpaceService } from '../../../features/workspace/workspaceService';
@@ -15,17 +15,16 @@ import { getWorkspaceService } from '../../../features/workspace/workspaceServic
 
 function WorkspaceSettings() {
   const queryClient = useQueryClient();
-  // const navigate = useNavigate();
   const dispatch = useAppDispatch();
+
   const [selectedWorkSpace, setSelectedWorkspace] = useState<string | undefined>('');
+
   const { data: workSpaceData } = getWorkspaceService();
   const { data: AllMyWorkSpace, status } = getAllWorkSpaceService();
 
   useEffect(() => {
     dispatch(setFetchAllWorkspace(true));
   }, []);
-
-  // const { currentWorkspaceId } = useAppSelector((state) => state.auth);
 
   const switchWorkspaceMutation = useMutation(switchWorkspaceService, {
     onSuccess: (data) => {

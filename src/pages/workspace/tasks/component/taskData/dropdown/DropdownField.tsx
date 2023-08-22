@@ -1,5 +1,5 @@
 import { Dialog, Transition } from '@headlessui/react';
-import { Fragment, useState } from 'react';
+import { Fragment, useState, useRef } from 'react';
 import { useAppSelector, useAppDispatch } from '../../../../../../app/hooks';
 import { IField, Options } from '../../../../../../features/list/list.interfaces';
 import { useUpdateEntityCustomFieldValue } from '../../../../../../features/list/listService';
@@ -11,6 +11,7 @@ import {
   setNewCustomPropertyDetails
 } from '../../../../../../features/task/taskSlice';
 import { setActiveTabId } from '../../../../../../features/workspace/workspaceSlice';
+import SearchIcon from '../../../../../../assets/icons/SearchIcon';
 
 interface DropdownModalProps {
   field: {
@@ -33,6 +34,7 @@ export default function DropdownField({ field, taskId, currentProperty }: Dropdo
   const [isOpen, setIsOpen] = useState(false);
   const { options } = field;
   const { updateCords } = useAppSelector((state) => state.task);
+  const [searchValue, setSearchValue] = useState<string>('');
   const [activeOption, setActiveOption] = useState<
     | {
         id: string;
@@ -41,7 +43,14 @@ export default function DropdownField({ field, taskId, currentProperty }: Dropdo
       }
     | undefined
   >(field.activeProperty);
+  const filteredOptions = options?.filter((option) => option.name.toLowerCase().includes(searchValue.toLowerCase()));
   const { mutate: onUpdate } = useUpdateEntityCustomFieldValue(taskId);
+
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchValue(e.target.value);
+  };
 
   function closeModal() {
     setIsOpen(false);
@@ -66,6 +75,7 @@ export default function DropdownField({ field, taskId, currentProperty }: Dropdo
     dispatch(setActiveTabId(10));
     dispatch(setEntityForCustom({ id: undefined, type: undefined }));
     dispatch(setNewCustomPropertyDetails({ type: 'Single Label', name: currentProperty.name, color: '' }));
+    setIsOpen(false);
   };
 
   return (
@@ -86,13 +96,21 @@ export default function DropdownField({ field, taskId, currentProperty }: Dropdo
       <Transition appear show={isOpen} as="div">
         <Dialog as="div" className="relative z-10" onClose={closeModal}>
           <div style={{ ...cords }} className="fixed overflow-y-auto">
-            <div className="flex flex-col items-center justify-center px-2 py-1 text-center bg-white border rounded-md shadow-lg outline-none w-fit h-fit">
-              <p className="pb-3 pr-10 text-xs font-thin text-gray-400 uppercase bg-white border-b whitespace-nowrap">
-                select an option
-              </p>
+            <div className="flex flex-col items-center justify-center p-4 text-center bg-white border rounded-md shadow-lg outline-none w-fit h-fit">
+              <div className="flex items-center">
+                <SearchIcon />
+                <input
+                  onChange={handleSearchChange}
+                  value={searchValue}
+                  ref={inputRef}
+                  type="text"
+                  placeholder="Search"
+                  className="h-4 border-0 ring-0 outline-0 focus:ring-0 focust:outline-0 focus:border-0"
+                />
+              </div>
               <div className="w-full pt-3 space-y-2">
-                {Array.isArray(options)
-                  ? options.map((option) => (
+                {Array.isArray(filteredOptions)
+                  ? filteredOptions.map((option) => (
                       <button
                         key={option.id}
                         onClick={() => handleClick(option)}
