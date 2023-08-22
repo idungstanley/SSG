@@ -1,11 +1,11 @@
-import { useAppSelector } from '../../../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { HiOutlineUpload } from 'react-icons/hi';
 import { BsFillGrid3X3GapFill } from 'react-icons/bs';
 import { MdHelpOutline, MdTab } from 'react-icons/md';
 import { useEffect, useState } from 'react';
 import BlinkerModal from './RecordBlinkerOptions';
 import headerIcon from '../../../../assets/icons/headerIcon.png';
-import { useCurrentTime } from '../../../../features/task/taskService';
+import { EndTimeEntriesService, useCurrentTime } from '../../../../features/task/taskService';
 import dayjs from 'dayjs';
 import HeaderModal from '../../../../components/Header/HeaderModal';
 import TimerModal from './TimerOptions';
@@ -17,17 +17,28 @@ import ArrowCaretDown from '../../../../assets/icons/ArrowCaretDown';
 import moment from 'moment-timezone';
 import { toast } from 'react-hot-toast';
 import SaveFilterToast from '../../../../components/TasksHeader/ui/Filter/ui/Toast';
+import { setTimerInterval, setTimerStatus, setUpdateTimerDuration } from '../../../../features/task/taskSlice';
 
 export default function AdditionalHeader() {
+  const { workSpaceId: workspaceId } = useParams();
+  const dispatch = useAppDispatch();
   const userTimeZoneFromLS: string | null = localStorage.getItem('userTimeZone');
-  const { screenRecording, duration, timerStatus } = useAppSelector((state) => state.task);
+
+  const { activeTabId: tabsId, timerLastMemory, activeItemId } = useAppSelector((state) => state.workspace);
+  const { screenRecording, duration, timerStatus, period, timerDetails } = useAppSelector((state) => state.task);
+  const {
+    timezone: zone,
+    date_format,
+    time_format,
+    is_clock_time,
+    clock_limit,
+    clock_stop_reminder
+  } = useAppSelector((state) => state.userSetting);
+  const { activeItemName } = useAppSelector((state) => state.workspace);
+
   const [recordBlinker, setRecordBlinker] = useState<boolean>(false);
   const [timerModal, setTimerModal] = useState<boolean>(false);
   const [isVisible, setIsVisible] = useState<boolean>(true);
-  const { activeTabId: tabsId, timerLastMemory, activeItemId } = useAppSelector((state) => state.workspace);
-  const { period } = useAppSelector((state) => state.task);
-  const { timezone: zone, date_format, time_format, is_clock_time } = useAppSelector((state) => state.userSetting);
-
   const [clockModal, setClockModal] = useState<boolean>(false);
   const [HeaderClock, setClock] = useState<string>(
     zone
@@ -44,9 +55,48 @@ export default function AdditionalHeader() {
     arrowUp: false,
     arrowDown: false
   });
-  const { workSpaceId: workspaceId } = useParams();
-  const { activeItemName } = useAppSelector((state) => state.workspace);
+
   const { refetch } = useCurrentTime({ workspaceId });
+  const { mutate } = EndTimeEntriesService();
+
+  const currentTime = Date.now();
+  const notificationTime = clock_limit - clock_stop_reminder;
+  const timeDiff = clock_limit - currentTime;
+
+  const notificationhandler = () => {
+    if (timeDiff > 0) {
+      setTimeout(
+        toast.custom(
+          (t) => (
+            <SaveFilterToast
+              title="Timer about to Expire!"
+              body="Your active timer is about to expire, Would you want to stop it now?"
+              toastId={t.id}
+              extended="clockReminder"
+            />
+          ),
+          {
+            position: 'bottom-right',
+            duration: Infinity
+          }
+        ),
+        notificationTime - currentTime
+      );
+      setTimeout(() => {
+        {
+          mutate({
+            id: activeItemId,
+            is_Billable: timerDetails.isBillable,
+            description: timerDetails.description
+          });
+          dispatch(setTimerStatus(false));
+          clearInterval(period);
+          dispatch(setUpdateTimerDuration({ h: 0, s: 0, m: 0 }));
+          dispatch(setTimerInterval());
+        }
+      }, clock_limit);
+    }
+  };
 
   const sameEntity = () => activeItemId === (timerLastMemory.hubId || timerLastMemory.listId || timerLastMemory.taskId);
 
@@ -73,7 +123,8 @@ export default function AdditionalHeader() {
       if (period) clearInterval(period);
       refetch();
     }
-  }, [isVisible, refetch]);
+    notificationhandler();
+  }, [isVisible, refetch, timerStatus]);
 
   useEffect(() => {
     if (dayjs.tz.guess() !== zone && (!userTimeZoneFromLS || userTimeZoneFromLS !== dayjs.tz.guess())) {
