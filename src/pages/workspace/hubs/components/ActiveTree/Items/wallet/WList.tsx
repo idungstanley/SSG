@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Wallet } from '../../activetree.interfaces';
 import LList from '../list/LList';
 import WalletItem from '../../../../../../../components/tasks/WalletItem';
@@ -28,10 +28,7 @@ export default function WList({ wallets, leftMargin, paddingLeft, type, level = 
 
   const { showExtendedBar, openedEntitiesIds } = useAppSelector((state) => state.workspace);
 
-  const [stickyButtonIndex, setStickyButtonIndex] = useState<number | undefined>(-1);
-
-  const handleLocation = (id: string, name: string, index?: number) => {
-    setStickyButtonIndex(index === stickyButtonIndex ? -1 : index);
+  const handleLocation = (id: string, name: string) => {
     navigate(`tasks/w/${id}`, { replace: true });
     if (openedEntitiesIds.includes(id)) {
       dispatch(setOpenedEntitiesIds(openedEntitiesIds.filter((item) => item !== id)));
@@ -47,8 +44,7 @@ export default function WList({ wallets, leftMargin, paddingLeft, type, level = 
     );
   };
 
-  const handleShowSubWallet = (id: string, index?: number) => {
-    setStickyButtonIndex(index === stickyButtonIndex ? -1 : index);
+  const handleShowSubWallet = (id: string) => {
     dispatch(
       setActiveItem({
         activeItemType: type,
@@ -79,7 +75,7 @@ export default function WList({ wallets, leftMargin, paddingLeft, type, level = 
           <HubItemOverlay item={draggableItem} type="subhub" />
         </DragOverlay>
       ) : null}
-      {wallets.map((wallet, index) => (
+      {wallets.map((wallet) => (
         <div key={wallet.id} style={{ marginLeft: leftMargin ? 20 : 0 }}>
           <WalletItem
             wallet={wallet}
@@ -88,9 +84,6 @@ export default function WList({ wallets, leftMargin, paddingLeft, type, level = 
             handleShowSubWallet={handleShowSubWallet}
             showSubWallet={openedEntitiesIds.includes(wallet.id)}
             paddingLeft={paddingLeft}
-            isSticky={stickyButtonIndex !== undefined && stickyButtonIndex !== null && stickyButtonIndex <= index}
-            stickyButtonIndex={stickyButtonIndex}
-            index={index}
             topNumber={topNumber}
             zNumber={level === 1 ? '3' : level === 2 ? '2' : '1'}
           />

@@ -165,7 +165,7 @@ const addTask = (data: {
   return response;
 };
 
-export const useAddTask = (parentTaskId?: string) => {
+export const useAddTask = () => {
   const queryClient = useQueryClient();
 
   return useMutation(addTask, {

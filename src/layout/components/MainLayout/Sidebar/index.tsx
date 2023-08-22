@@ -90,8 +90,8 @@ export default function Sidebar() {
           activeTabId={activeTabId}
           setActiveTabId={setActiveTabId}
         />
-        <VerticalScroll onScroll={onScroll}>
-          <section className="overflow-x-hidden">
+        <VerticalScroll onScroll={onScroll} style={{ overflowX: 'hidden' }}>
+          <section>
             {showSidebar ? (
               <NonInteractiveSearch
                 setAction={setCommandSearchModal}
