@@ -221,12 +221,6 @@ export function Head({
               style={{ backgroundColor: headerStatusColor }}
             >
               <div>
-                {/* <div className="items-center space-x-1 viewSettings" onClick={(e) => e.stopPropagation()}>
-                  <img src={statusbox} alt="" className="pr-1 border-r" onClick={handleCheckedGroupTasks} />
-                  <CiEdit className="w-4 h-4 pr-1 border-r cursor-pointer" />
-                  <BsThreeDots className="w-4 h-4 cursor-pointer" onClick={(e) => handleClick(e)} />
-                </div>
-                <p className="border-t py-.5 viewSettings"></p> */}
                 <div className="flex items-center">
                   <p className="pr-1.5">
                     <CollapseIcon
@@ -235,12 +229,6 @@ export function Head({
                       onToggle={onToggleCollapseTasks}
                       hoverBg="white"
                     />
-                    {/* <Chevron
-                      color={headerStatusColor}
-                      active={collapseTasks}
-                      onToggle={onToggleCollapseTasks}
-                      hoverBg="white"
-                    /> */}
                   </p>
                   <span ref={scrollToRef} className="pb-1" style={{ fontSize: '11px', WebkitTextStroke: '0.5px' }}>
                     {parsedLabel}
