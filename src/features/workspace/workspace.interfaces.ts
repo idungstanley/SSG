@@ -125,3 +125,15 @@ export interface ITimerLastMemory {
   taskId: string | undefined | null;
   workSpaceId: string | undefined;
 }
+
+export interface WorkSpaceSettingsRes {
+  name: string;
+  value: string | number;
+  key: string;
+}
+
+export interface IWorkspaceSettingsRes {
+  data: {
+    workspace_settings: WorkSpaceSettingsRes[];
+  };
+}
