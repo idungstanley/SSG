@@ -8,12 +8,13 @@ import { Chevron } from '../../Views/ui/Chevron';
 import Button from '../../Button';
 import Input from '../../input/Input';
 import { useDroppable } from '@dnd-kit/core';
+import { BoardSectionsType } from '../../../utils/StatusManagement/Types';
 
 interface BoardProps {
   id: string;
   title: string;
   status: StatusProps[];
-  setStatusTypesState?: React.Dispatch<React.SetStateAction<StatusProps[]>>;
+  setStatusTypesState: React.Dispatch<React.SetStateAction<BoardSectionsType>>;
   handleSaveNewStatus: () => void;
 }
 
@@ -36,7 +37,6 @@ export default function BoardSection({ id, title, status, setStatusTypesState, h
     }));
   };
   const TaskIndex = status.map((item) => item.position);
-  console.log(TaskIndex);
 
   return (
     <>

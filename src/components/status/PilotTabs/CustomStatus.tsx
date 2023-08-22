@@ -266,7 +266,7 @@ export default function CustomStatus() {
                 title={uniqueModelType}
                 status={boardSections[uniqueModelType]}
                 handleSaveNewStatus={handleSaveNewStatus}
-                setStatusTypesState={setStatusTypesState}
+                setStatusTypesState={setBoardSections}
               />
             </div>
           ))}
