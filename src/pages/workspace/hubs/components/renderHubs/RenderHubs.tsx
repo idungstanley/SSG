@@ -17,7 +17,7 @@ import { Spinner } from '../../../../../common';
 import TaskCalenderTemplate from '../../../tasks/component/views/hubLevel/TaskCalenderTemplate';
 import FilterByAssigneesSliderOver from '../../../lists/components/renderlist/filters/FilterByAssigneesSliderOver';
 import { useParams } from 'react-router-dom';
-import { setActiveEntityName, setActiveItem } from '../../../../../features/workspace/workspaceSlice';
+import { setActiveItem } from '../../../../../features/workspace/workspaceSlice';
 import { UseGetHubDetails } from '../../../../../features/hubs/hubService';
 import TaskMapTemplate from '../../../tasks/component/views/hubLevel/TaskMapTemplate';
 import ActiveHub from '../../../../../layout/components/MainLayout/extendedNavigation/ActiveParents/ActiveHub';
@@ -26,9 +26,9 @@ import { EntityType } from '../../../../../utils/EntityTypes/EntityType';
 
 function RenderHubs() {
   const dispatch = useAppDispatch();
-  const { hubId } = useParams();
+  const { hubId, subhubId } = useParams();
 
-  const { activeEntity } = useAppSelector((state) => state.workspace);
+  const { activeItemType } = useAppSelector((state) => state.workspace);
   const { groupByStatus, filterTaskByAssigneeIds } = useAppSelector((state) => state.task);
   const { listView, tableView, boardView, calenderView, mapView } = useAppSelector((state) => state.task);
 
@@ -39,17 +39,16 @@ function RenderHubs() {
   const { data } = UseGetHubDetails({ activeItemId: hubId, activeItemType: EntityType.hub });
   const hubName = data?.data.hub.name;
   useEffect(() => {
-    if (hubId) {
+    if (hubId || subhubId) {
       dispatch(
         setActiveItem({
-          activeItemId: hubId,
-          activeItemType: activeEntity.type || EntityType.hub,
+          activeItemId: hubId ? (hubId as string) : (subhubId as string),
+          activeItemType: activeItemType || EntityType.hub,
           activeItemName: hubName
         })
       );
-      dispatch(setActiveEntityName(hubName));
     }
-  }, [hubId, data]);
+  }, [hubId, subhubId, data]);
 
   const {
     data: TaskFullList,
@@ -58,7 +57,7 @@ function RenderHubs() {
     hasNextPage,
     fetchNextPage
   } = UseGetFullTaskList({
-    itemId: hubId,
+    itemId: hubId || subhubId,
     itemType: EntityType.hub,
     assigneeUserId: filterTaskByAssigneeIds
   });

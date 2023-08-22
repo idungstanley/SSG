@@ -9,14 +9,15 @@ import { AddTask } from '../AddTask/AddTask';
 import { getTaskColumns, setCurrTeamMemId } from '../../../../features/task/taskSlice';
 import { columnsHead, listColumnProps } from '../../../../pages/workspace/tasks/component/views/ListColumns';
 import { useParams } from 'react-router-dom';
-import { UseGetWalletDetails } from '../../../../features/wallet/walletService';
 import { UseGetHubDetails } from '../../../../features/hubs/hubService';
 import { cl } from '../../../../utils';
 import { useDroppable } from '@dnd-kit/core';
 import { EntityType } from '../../../../utils/EntityTypes/EntityType';
+import { IField } from '../../../../features/list/list.interfaces';
 
 interface ListProps {
   tasks: Task[];
+  customProperty?: IField[];
 }
 
 const unique = (arr: listColumnProps[]) => [...new Set(arr)];
@@ -25,40 +26,27 @@ export type SortOption = {
   field: string;
 };
 
-export function List({ tasks }: ListProps) {
-  const { hubId, walletId, listId } = useParams();
+export function List({ tasks, customProperty }: ListProps) {
+  const { hubId } = useParams();
   // hubId;
   const [columns, setColumns] = useState<listColumnProps[] | undefined>(undefined);
   const { sortType } = useAppSelector((state) => state.task);
   const { data } = useList(tasks[0].list_id);
 
   const dispatch = useAppDispatch();
+  const { taskColumns, hideTask } = useAppSelector((state) => state.task);
 
   const { data: hub } = UseGetHubDetails({
     activeItemId: hubId,
     activeItemType: EntityType.hub
   });
-  const { data: wallet } = UseGetWalletDetails({
-    activeItemId: walletId,
-    activeItemType: EntityType.wallet
-  });
-  const { data: list } = useList(tasks[0].list_id);
 
-  const custom_fields = listId
-    ? list?.custom_fields
-    : walletId
-    ? wallet?.data.wallet.custom_fields
-    : hubId
-    ? hub?.data.hub.custom_fields
-    : null;
-
-  const { taskColumns, hideTask } = useAppSelector((state) => state.task);
+  const custom_fields = customProperty;
 
   useEffect(() => {
     if (!custom_fields) {
       return;
     }
-
     const customFieldNames = custom_fields?.map((i) => ({
       value: i.name,
       id: i.id,
@@ -70,14 +58,12 @@ export function List({ tasks }: ListProps) {
 
     dispatch(getTaskColumns(newColumns));
     setColumns(newColumns);
-  }, []);
+  }, [custom_fields]);
 
   const [collapseTable, setCollapseTable] = useState(false);
   const [showNewTaskField, setShowNewTaskField] = useState(false);
 
   const listName = data?.name;
-
-  // const heads = useMemo(() => (data ? generateColumns(data.custom_fields) : null), [data]);
 
   const { filteredBySearch } = filterBySearchValue(tasks);
 
@@ -126,6 +112,7 @@ export function List({ tasks }: ListProps) {
               key={key}
               heads={hideTask.length ? hideTask : taskColumns}
               data={sortedTasks[key]}
+              customFields={custom_fields as IField[]}
             />
           ))}
         </div>

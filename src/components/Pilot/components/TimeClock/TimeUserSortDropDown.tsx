@@ -16,6 +16,7 @@ export function UserSortDropDown({ arr, toggleModalFn, memberIds }: UserSortPara
   const sortIds: string[] = [...new Set(memberIds)];
   const [idArr, setArr] = useState<string[]>([]);
   const [listIndex, setIndex] = useState<number[]>([]);
+  // console.log(arr);
 
   const teamMember = arr.filter((obj, index, arr) => {
     return arr.findIndex((item) => item.id === obj.id) === index;

@@ -111,6 +111,7 @@ export interface ITeamMembersRes {
 export interface IRecorderLastMemory {
   activeTabId: number | undefined;
   hubId: string | undefined;
+  subhubId: string | undefined;
   listId: string | undefined;
   taskId: string | undefined;
   workSpaceId: string | undefined;
@@ -119,7 +120,20 @@ export interface IRecorderLastMemory {
 export interface ITimerLastMemory {
   activeTabId: number | undefined;
   hubId: string | undefined | null;
+  subhubId: string | undefined | null;
   listId: string | undefined | null;
   taskId: string | undefined | null;
   workSpaceId: string | undefined;
+}
+
+export interface WorkSpaceSettingsRes {
+  name: string;
+  value: string | number;
+  key: string;
+}
+
+export interface IWorkspaceSettingsRes {
+  data: {
+    workspace_settings: WorkSpaceSettingsRes[];
+  };
 }

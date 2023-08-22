@@ -12,10 +12,9 @@ export function GroupHorizontalScroll() {
   // update size is pilot is visible / invisible
   const { show: showFullPilot } = useAppSelector((state) => state.slideOver.pilotSideOver);
   const { groupScroll } = useAppSelector((state) => state.slideOver);
-  const { showMore, currentItemId, showTabLabel, isResize, activeItemId, showHub, activePlaceId } = useAppSelector(
+  const { showMore, currentItemId, showTabLabel, isResize, activeItemId, activePlaceId } = useAppSelector(
     (state) => state.workspace
   );
-  const { openedHubId } = useAppSelector((state) => state.hub);
 
   const [thumbWidth, setThumbWidth] = useState(DEFAULT_THUMB_WIDTH);
   const [isThumbVisible, setIsThumbVisible] = useState(true);
@@ -145,11 +144,9 @@ export function GroupHorizontalScroll() {
     initialActivePlaceId,
     showTabLabel,
     showTabLabelFromLS,
-    showHub,
     showMore,
     currentItemId,
     activeItemId,
-    openedHubId,
     activePlaceId,
     groupScroll
   ]);

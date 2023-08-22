@@ -15,7 +15,7 @@ export interface StatusProps {
   model_id?: string | null;
   model?: string | null;
   type: string | null;
-  position: number | null;
+  position: number;
   name?: string | null;
   is_default?: number | null;
 }

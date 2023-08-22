@@ -19,7 +19,7 @@ import { Head } from './Head/Head';
 import { OverlayRow } from './OverlayRow';
 import { Row } from './Row';
 import { UseGetListDetails } from '../../../../features/list/listService';
-import { ITask_statuses } from '../../../../features/list/list.interfaces';
+import { IField, ITask_statuses } from '../../../../features/list/list.interfaces';
 import { EntityType } from '../../../../utils/EntityTypes/EntityType';
 
 interface TableProps {
@@ -27,9 +27,10 @@ interface TableProps {
   data: Task[];
   label: string;
   listName?: string;
+  customFields?: IField[];
 }
 
-export function Table({ heads, data, label, listName }: TableProps) {
+export function Table({ heads, data, label, listName, customFields }: TableProps) {
   const dispatch = useAppDispatch();
 
   const [tableHeight, setTableHeight] = useState<string | number>('auto');
@@ -217,16 +218,18 @@ export function Table({ heads, data, label, listName }: TableProps) {
           {!collapseTasks ? (
             <tbody className="contents">
               {dataSpread.length ? (
-                dataSpread.map((i) =>
-                  'tags' in i ? (
+                dataSpread.map((task, index) =>
+                  'tags' in task ? (
                     <Row
                       columns={columns}
-                      task={i as ITaskFullList}
-                      key={i.id}
+                      task={task as ITaskFullList}
+                      key={task.id}
+                      taskIndex={index}
                       isListParent={true}
                       parentId={listId}
                       task_status={statusId}
                       handleClose={handleClose}
+                      customFields={customFields}
                     />
                   ) : null
                 )

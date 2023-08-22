@@ -10,8 +10,7 @@ function CreateTextField() {
   const handleSubmit = () => {
     if (newCustomPropertyDetails.name && entityForCustom) {
       const name = newCustomPropertyDetails.name;
-      const customType = newCustomPropertyDetails.type === 'short text' ? 'text' : newCustomPropertyDetails.type;
-
+      const customType = newCustomPropertyDetails.type === 'Short Text' ? 'text' : newCustomPropertyDetails.type;
       onCreate({
         name,
         id: entityForCustom.id,

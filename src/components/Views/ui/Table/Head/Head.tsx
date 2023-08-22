@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import RoundedArrowUpDown from '../../../../../pages/workspace/tasks/component/views/listLevel/component/RoundedArrowUpDown';
 import SortDirectionCheck from '../../../../../pages/workspace/tasks/component/views/listLevel/component/SortDirectionCheck';
@@ -7,6 +7,7 @@ import { Column } from '../../../types/table';
 import { Chevron } from '../../Chevron';
 import {
   setActiveTaskColumn,
+  setEditCustomProperty,
   setEntityForCustom,
   setSelectedTasksArray,
   setSortArr,
@@ -22,7 +23,11 @@ import PlusIcon from '../../../../../assets/icons/PlusIcon';
 import { TbAlignJustified } from 'react-icons/tb';
 import { MdEditNote, MdOutlineDragIndicator } from 'react-icons/md';
 import { BiHide } from 'react-icons/bi';
-import { setActiveTabId, setIsManageStatus } from '../../../../../features/workspace/workspaceSlice';
+import {
+  setActiveSubHubManagerTabId,
+  setActiveTabId,
+  setIsManageStatus
+} from '../../../../../features/workspace/workspaceSlice';
 import AlsoitMenuDropdown from '../../../../DropDowns';
 import { setStatusTaskListDetails } from '../../../../../features/list/listSlice';
 import { useParams } from 'react-router-dom';
@@ -70,7 +75,9 @@ export function Head({
   const [headerId, setheaderId] = useState<string>('');
   const [showStatusDropdown, setShowStatusDropdown] = useState<null | SVGElement>(null);
   const [showSortModal, setShowSortModal] = useState<boolean>(false);
-  const { sortArr, sortAbleArr, selectedTasksArray } = useAppSelector((state) => state.task);
+  const { sortArr, sortAbleArr, selectedTasksArray, selectedIndex, selectedIndexStatus } = useAppSelector(
+    (state) => state.task
+  );
   const { baseColor } = useAppSelector((state) => state.account);
   const { isManageStatus } = useAppSelector((state) => state.workspace);
 
@@ -86,6 +93,21 @@ export function Head({
     setShowStatusDropdown(null);
   };
 
+  useEffect(() => {
+    if (selectedIndex !== null) {
+      const updatedTaskIds: string[] = [...selectedTasksArray];
+      groupedTask?.map((task, index) => {
+        if (selectedIndex == index && selectedIndexStatus == task.status.name) {
+          const taskIndex = updatedTaskIds.indexOf(task.id);
+          if (taskIndex == -1) {
+            updatedTaskIds.push(task.id);
+            dispatch(setSelectedTasksArray(updatedTaskIds));
+          }
+        }
+      });
+    }
+  }, [selectedIndex]);
+
   const handleCheckedGroupTasks = () => {
     const updatedTaskIds: string[] = [...selectedTasksArray];
 
@@ -93,9 +115,9 @@ export function Head({
       const taskIndex = updatedTaskIds.indexOf(task.id);
 
       if (taskIndex === -1) {
-        updatedTaskIds.push(task.id); // Task not in selectedTasksArray, so add it
+        updatedTaskIds.push(task.id);
       } else {
-        updatedTaskIds.splice(taskIndex, 1); // Task already in selectedTasksArray, so remove it
+        updatedTaskIds.splice(taskIndex, 1);
       }
     });
     dispatch(setSelectedTasksArray(updatedTaskIds));
@@ -173,7 +195,9 @@ export function Head({
       icon: <CiSettings />,
       handleClick: () => {
         dispatch(setIsManageStatus(!isManageStatus));
+        dispatch(setActiveTabId(9));
         setShowStatusDropdown(null);
+        dispatch(setActiveSubHubManagerTabId(5));
         dispatch(setStatusTaskListDetails({ listId, listName }));
       }
     }
@@ -182,6 +206,7 @@ export function Head({
   const handleAddCustomProperty = () => {
     const type = hubId ? 'hub' : walletId ? 'wallet' : 'list';
     dispatch(setEntityForCustom({ id: hubId ?? walletId ?? list_id, type }));
+    dispatch(setEditCustomProperty(undefined));
     dispatch(setActiveTabId(10));
   };
 
@@ -279,7 +304,7 @@ export function Head({
               )}
             </div>
           </div>
-          <FiPlusCircle className="w-4 h-4 font-black AddColumnDropdownButton mr-2" onClick={handleAddCustomProperty} />
+          <FiPlusCircle className="w-4 h-4 mr-2 font-black AddColumnDropdownButton" onClick={handleAddCustomProperty} />
           {headerId === columns[0].id && (
             <SortModal
               handleClose={handleClose}

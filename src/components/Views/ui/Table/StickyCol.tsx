@@ -10,6 +10,8 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { setShowPilotSideOver } from '../../../../features/general/slideOver/slideOverSlice';
 import {
   setCurrentTaskStatusId,
+  setSelectedIndex,
+  setSelectedIndexStatus,
   setSelectedTasksArray,
   setShowTaskNavigation,
   setTaskIdForPilot
@@ -29,6 +31,7 @@ import { EntityType } from '../../../../utils/EntityTypes/EntityType';
 interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   task: Task;
   children?: ReactNode;
+  taskIndex?: number;
   showSubTasks?: boolean;
   setShowSubTasks: (i: boolean) => void;
   paddingLeft?: number;
@@ -46,6 +49,7 @@ export function StickyCol({
   setShowSubTasks,
   children,
   tags,
+  taskIndex,
   parentId,
   isListParent,
   task_status,
@@ -57,14 +61,11 @@ export function StickyCol({
 }: ColProps) {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { taskId, hubId, walletId, listId } = useParams();
+  const queryClient = useQueryClient();
+  const { taskId, hubId, subhubId, walletId, listId } = useParams();
 
   const { currentWorkspaceId } = useAppSelector((state) => state.auth);
-
-  const [isChecked, setIsChecked] = useState(false);
-
-  const ACTIVE_TASK = taskId === task.id ? 'tdListV' : DEFAULT_COL_BG;
-  const { mutate: onAdd } = useAddTask(parentId);
+  const { dragOverItemId, draggableItemId } = useAppSelector((state) => state.list);
   const {
     currTeamMemberId,
     singleLineView,
@@ -73,24 +74,34 @@ export function StickyCol({
     selectedTasksArray,
     verticalGridlinesTask,
     hilightNewTask,
+    selectedIndex,
     CompactView,
     toggleAllSubtask
   } = useAppSelector((state) => state.task);
 
-  const queryClient = useQueryClient();
+  const [isChecked, setIsChecked] = useState(false);
+  const [eitableContent, setEitableContent] = useState(false);
+  const [selectedIndexArray, setSelectedIndexArray] = useState<number[]>([]);
+
+  const ACTIVE_TASK = taskId === task.id ? 'tdListV' : DEFAULT_COL_BG;
+
+  const { mutate: onAdd } = useAddTask();
+
   const inputRef = useRef<HTMLInputElement | null>(null);
+
   const { attributes, listeners, setNodeRef } = useDraggable({
     id: task?.id as UniqueIdentifier,
     data: {
       isTask: true
     }
   });
-  const [eitableContent, setEitableContent] = useState(false);
 
   const onClickTask = () => {
     if (task.id !== '0') {
       hubId
         ? navigate(`/${currentWorkspaceId}/tasks/h/${hubId}/t/${task.id}`, { replace: true })
+        : subhubId
+        ? navigate(`/${currentWorkspaceId}/tasks/sh/${subhubId}/t/${task.id}`, { replace: true })
         : walletId
         ? navigate(`/${currentWorkspaceId}/tasks/w/${walletId}/t/${task.id}`, { replace: true })
         : navigate(`/${currentWorkspaceId}/tasks/l/${listId}/t/${task.id}`, { replace: true });
@@ -173,6 +184,31 @@ export function StickyCol({
   };
 
   useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.shiftKey && event.key === 'ArrowDown') {
+        if (selectedIndex == null) return;
+        if (!selectedIndexArray.includes(taskIndex as number)) {
+          setSelectedIndexArray((prev) => {
+            const updatedArray = [...prev, taskIndex as number];
+            const newIndex = (selectedIndex as number) + 1;
+            dispatch(setSelectedIndex(newIndex));
+            return updatedArray;
+          });
+        }
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [selectedIndex, selectedIndexArray]);
+
+  useEffect(() => {
+    if (selectedTasksArray.length == 0) {
+      setSelectedIndexArray([]);
+      dispatch(setSelectedIndex(null));
+    }
     const isSelected = selectedTasksArray.includes(task.id);
 
     if (isSelected) {
@@ -183,6 +219,20 @@ export function StickyCol({
   }, [selectedTasksArray, task.id]);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const indexInArray = selectedIndexArray.indexOf(taskIndex as number);
+    if (!selectedIndexArray.includes(taskIndex as number)) {
+      setSelectedIndexArray((prev) => {
+        const updatedArray = [...prev, taskIndex as number];
+        dispatch(setSelectedIndex(taskIndex as number));
+        return updatedArray;
+      });
+    } else {
+      // If taskIndex is already in selectedIndexArray, remove it
+      const updatedArray = [...selectedIndexArray];
+      updatedArray.splice(indexInArray, 1);
+      setSelectedIndexArray(updatedArray);
+    }
+    dispatch(setSelectedIndexStatus(task.status.name));
     const isChecked = e.target.checked;
     dispatch(setShowTaskNavigation(isChecked));
     if (isChecked) {
@@ -205,8 +255,6 @@ export function StickyCol({
       isOverTask: true
     }
   });
-
-  const { dragOverItemId, draggableItemId } = useAppSelector((state) => state.list);
 
   return (
     <div className="sticky left-0 z-10">

@@ -1,12 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 import { useAddTask } from '../../../../features/task/taskService';
-import { cl } from '../../../../utils';
 import { Column } from '../../types/table';
 import Assignee from '../../../../pages/workspace/tasks/assignTask/Assignee';
-import { CiFloppyDisk } from 'react-icons/ci';
 import { UseGetListDetails } from '../../../../features/list/listService';
 import { ITask_statuses } from '../../../../features/list/list.interfaces';
-import { ImCancelCircle } from 'react-icons/im';
 import { useAppSelector } from '../../../../app/hooks';
 import { EntityType } from '../../../../utils/EntityTypes/EntityType';
 import ToolTip from '../../../Tooltip/Tooltip';
@@ -26,13 +23,15 @@ interface AddTaskFieldProps {
 }
 
 export function AddTask({ onClose, paddingLeft, parentId, isListParent, columns }: AddTaskFieldProps) {
-  const nameRef = useRef<HTMLInputElement>(null);
-  const { mutate: onAdd } = useAddTask(parentId);
-
-  const { data: list } = UseGetListDetails({ activeItemId: parentId, activeItemType: EntityType.list });
   const { currTeamMemberId } = useAppSelector((state) => state.task);
 
   const [statusId, setStatusId] = useState<string>('');
+
+  const nameRef = useRef<HTMLInputElement>(null);
+
+  const { mutate: onAdd } = useAddTask();
+
+  const { data: list } = UseGetListDetails({ activeItemId: parentId, activeItemType: EntityType.list });
 
   useEffect(() => {
     const minPosition = Math.min(...(list?.data.list.task_statuses.map((status) => status.position) || []));
@@ -115,23 +114,23 @@ export function AddTask({ onClose, paddingLeft, parentId, isListParent, columns 
   );
 }
 
-interface ButtonProps {
-  label: string;
-  onClick?: VoidFunction;
-  primary?: boolean;
-}
+// interface ButtonProps {
+//   label: string;
+//   onClick?: VoidFunction;
+//   primary?: boolean;
+// }
 
-function Button({ label, onClick, primary }: ButtonProps) {
-  return (
-    <button
-      type={primary ? 'submit' : 'button'}
-      className={cl(
-        'p-1 font-semibold border uppercase',
-        primary ? 'bg-primary-400 border-primary-400 text-white' : 'bg-white border-gray-400'
-      )}
-      onClick={onClick}
-    >
-      {label}
-    </button>
-  );
-}
+// function Button({ label, onClick, primary }: ButtonProps) {
+//   return (
+//     <button
+//       type={primary ? 'submit' : 'button'}
+//       className={cl(
+//         'p-1 font-semibold border uppercase',
+//         primary ? 'bg-primary-400 border-primary-400 text-white' : 'bg-white border-gray-400'
+//       )}
+//       onClick={onClick}
+//     >
+//       {label}
+//     </button>
+//   );
+// }

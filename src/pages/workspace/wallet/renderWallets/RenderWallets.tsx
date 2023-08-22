@@ -16,7 +16,6 @@ import { UseGetWalletDetails } from '../../../../features/wallet/walletService';
 import { setActiveItem } from '../../../../features/workspace/workspaceSlice';
 import ActiveHub from '../../../../layout/components/MainLayout/extendedNavigation/ActiveParents/ActiveHub';
 import AdditionalHeader from '../../../../layout/components/MainLayout/Header/AdditionHeader';
-import { setCurrentWalletName } from '../../../../features/wallet/walletSlice';
 import { EntityType } from '../../../../utils/EntityTypes/EntityType';
 
 function RenderWallets() {
@@ -24,7 +23,7 @@ function RenderWallets() {
   const { walletId } = useParams();
 
   const { filterTaskByAssigneeIds } = useAppSelector((state) => state.task);
-  const { currentWalletName } = useAppSelector((state) => state.wallet);
+  const { activeItemName } = useAppSelector((state) => state.workspace);
 
   const [TaskDataGroupings, setTaskDataGroupings] = useState<TaskDataGroupingsProps | unknown>({});
 
@@ -38,7 +37,6 @@ function RenderWallets() {
       dispatch(
         setActiveItem({ activeItemId: walletId, activeItemType: EntityType.wallet, activeItemName: walletName })
       );
-      dispatch(setCurrentWalletName(walletName));
     }
   }, [walletId, data]);
 
@@ -107,7 +105,7 @@ function RenderWallets() {
       <Page
         pilotConfig={pilotConfig}
         additionalHeader={<AdditionalHeader />}
-        header={<ListNav navName={currentWalletName} viewsList="List" viewsList2="Board" changeViews="View" />}
+        header={<ListNav navName={activeItemName} viewsList="List" viewsList2="Board" changeViews="View" />}
         extendedBar={{
           name: 'TASKS',
           children: <ActiveHub />,

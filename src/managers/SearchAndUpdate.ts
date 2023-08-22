@@ -83,19 +83,19 @@ export function findCurrentEntity(type: string, id: string, hubs: Hub[], func: <
     if (type === EntityType.hub && newHubsArray[i].id === id) {
       newHubsArray[i] = func(newHubsArray[i]);
     }
-    if (newHubsArray[i].children.length) {
+    if (newHubsArray[i]?.children?.length) {
       newHubsArray[i] = {
         ...newHubsArray[i],
         children: findInChildren(newHubsArray[i].children, id, type, func)!
       };
     }
-    if ((type === EntityType.wallet || type === EntityType.list) && newHubsArray[i].wallets.length) {
+    if ((type === EntityType.wallet || type === EntityType.list) && newHubsArray[i]?.wallets?.length) {
       newHubsArray[i] = {
         ...newHubsArray[i],
         wallets: findInWallets(newHubsArray[i].wallets, id, type, func)!
       };
     }
-    if (type === EntityType.list && newHubsArray[i].lists.length) {
+    if (type === EntityType.list && newHubsArray[i]?.lists?.length) {
       newHubsArray[i] = {
         ...newHubsArray[i],
         lists: findInLists(newHubsArray[i].lists, id, func)

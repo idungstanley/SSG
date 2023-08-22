@@ -70,6 +70,7 @@ import { WalletPage } from './pages/wallet';
 // import PeopleProfile from './pages/settings/People';
 import Construction from './pages/settings/UserSettings/Pages/Construction';
 import TaskInvite from './pages/workspace/tasks/taskInvite/TaskInvite';
+import WorkSpaceTable from './pages/settings/WorkspaceSettings/GeneralWorkSpaceSettings/Table';
 
 const inbox = [
   {
@@ -173,6 +174,8 @@ export const routes = (user: IUser | null) => {
         // old view here now default  =============================
         { path: 'tasks/h/:hubId', element: <HubPage /> },
         { path: 'tasks/h/:hubId/t/:taskId', element: <HubPage /> },
+        { path: 'tasks/sh/:subhubId', element: <HubPage /> },
+        { path: 'tasks/sh/:subhubId/t/:taskId', element: <HubPage /> },
         { path: 'tasks/w/:walletId', element: <WalletPage /> },
         { path: 'tasks/w/:walletId/t/:taskId', element: <WalletPage /> },
         { path: 'tasks/l/:listId', element: <ListPage /> },
@@ -210,6 +213,7 @@ export const routes = (user: IUser | null) => {
         { path: 'construction', element: <Construction /> },
         // { path: 'team-members', element: <TeamMembersPage /> },
         { path: 'workspaces', element: <WorkspaceSettings /> },
+        { path: 'workspaces/settings', element: <WorkSpaceTable /> },
         {
           path: 'notifications',
           element: <NotificationSettingsPage />

@@ -23,6 +23,7 @@ import ThreeDotIcon from '../../assets/icons/ThreeDotIcon';
 import { useDraggable, useDroppable } from '@dnd-kit/core';
 import Drag from '../../assets/icons/Drag';
 import ToolTip from '../Tooltip/Tooltip';
+import { List, Wallet } from '../../pages/workspace/hubs/components/ActiveTree/activetree.interfaces';
 import ActiveBackground from './Component/ActiveBackground';
 import ActiveBarIdentification from './Component/ActiveBarIdentification';
 
@@ -33,38 +34,38 @@ interface WalletItemProps {
     color?: string;
     parent_id?: string | null;
     hub_id?: string;
-    has_descendants?: number;
+    children: Wallet[];
+    lists: List[];
   };
   showSubWallet: boolean;
   paddingLeft: string | number;
   walletType: string;
-  index?: number;
-  isSticky?: boolean;
   topNumber?: number;
   zNumber?: string;
-  stickyButtonIndex?: number | undefined;
-  handleShowSubWallet: (id: string, parent_id: string | null, index?: number) => void;
-  handleLocation: (id: string, name: string, parent_id: string | null, index?: number) => void;
+  isExtendedBar?: boolean;
+  handleShowSubWallet: (id: string) => void;
+  handleLocation: (id: string, name: string) => void;
 }
 export default function WalletItem({
   wallet,
   showSubWallet,
   paddingLeft,
   walletType,
-  index,
-  isSticky,
-  stickyButtonIndex,
   topNumber = 0,
   zNumber,
+  isExtendedBar,
   handleShowSubWallet,
   handleLocation
 }: WalletItemProps) {
   const dispatch = useAppDispatch();
-  const { activeItemId } = useAppSelector((state) => state.workspace);
-  const { showMenuDropdown, SubMenuId } = useAppSelector((state) => state.hub);
-  const { paletteDropdown, lightBaseColor, baseColor, showSidebar } = useAppSelector((state) => state.account);
-  const { paletteId, show } = paletteDropdown;
   const { walletId } = useParams();
+
+  const { activeItemId, openedEntitiesIds } = useAppSelector((state) => state.workspace);
+  const { showMenuDropdown, SubMenuId } = useAppSelector((state) => state.hub);
+  const { paletteDropdown, showSidebar } = useAppSelector((state) => state.account);
+
+  const { paletteId, show } = paletteDropdown;
+
   const [paletteColor, setPaletteColor] = useState<string | undefined | ListColourProps>('');
 
   const closeSubMenu = () => {
@@ -152,7 +153,7 @@ export default function WalletItem({
   };
 
   const renderIcons = (showSubWallet: boolean) => {
-    if (wallet?.has_descendants) {
+    if (wallet?.children.length || wallet?.lists.length) {
       if (showSubWallet) {
         return (
           <>
@@ -193,20 +194,20 @@ export default function WalletItem({
   });
 
   return (
-    <div className="relative">
+    <div
+      className={`${openedEntitiesIds.includes(wallet.id) ? 'sticky bg-white' : ''}`}
+      style={{
+        top: openedEntitiesIds.includes(wallet.id) && showSidebar ? topNumber : '',
+        zIndex: openedEntitiesIds.includes(wallet.id) ? zNumber : '2',
+        opacity: transform ? 0 : 100
+      }}
+    >
       <section
         className={`bg-white items-center truncate text-sm group ${
           wallet.id === activeItemId ? 'font-medium' : 'hover:bg-gray-100'
-        } ${isSticky && stickyButtonIndex === index ? 'sticky bg-white' : ''} ${
-          isOver ? 'bg-primary-100 border-primary-500 shadow-inner shadow-primary-300' : ''
-        }`}
+        } ${isOver ? 'bg-primary-100 border-primary-500 shadow-inner shadow-primary-300' : ''}`}
         ref={setNodeRef}
-        onClick={() => handleShowSubWallet(wallet.id, wallet.parent_id || wallet.hub_id || null, index)}
-        style={{
-          top: isSticky ? `${topNumber}px` : '',
-          zIndex: isSticky ? zNumber : '1',
-          opacity: transform ? 0 : 100
-        }}
+        onClick={() => handleShowSubWallet(wallet.id)}
       >
         <div
           id="walletLeft"
@@ -228,7 +229,7 @@ export default function WalletItem({
             {renderIcons(showSubWallet)}
           </div>
           <div
-            onClick={() => handleLocation(wallet.id, wallet.name, wallet.parent_id || wallet.hub_id || null, index)}
+            onClick={() => handleLocation(wallet.id, wallet.name)}
             className="truncate cursor-pointer hover:underline hover:decoration-dashed"
             style={{ marginLeft: '17px' }}
           >
@@ -267,7 +268,7 @@ export default function WalletItem({
         </div>
       </section>
       {paletteId === wallet.id && show ? <Palette title="Wallet Colour" setPaletteColor={setPaletteColor} /> : null}
-      {showMenuDropdown === wallet.id ? <MenuDropdown /> : null}
+      {showMenuDropdown === wallet.id ? <MenuDropdown isExtendedBar={isExtendedBar} /> : null}
       {SubMenuId === wallet.id ? <SubDropdown /> : null}
     </div>
   );

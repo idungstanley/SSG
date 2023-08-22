@@ -49,7 +49,7 @@ export default function StatusManagementSubTab() {
 
   return (
     <section>
-      <div className={`grid gap-4 p-2 ${pilotWidth < 390 ? 'sm:grid-cols-3' : 'md:grid-cols-4'}`}>
+      <div className={`grid gap-4 p-2 ${pilotWidth < 400 ? 'sm:grid-cols-3' : 'md:grid-cols-4'}`}>
         {HubManagerOptions.map((item, index) => (
           <div
             key={index}

@@ -2,40 +2,60 @@ import { Dispatch, SetStateAction, useEffect } from 'react';
 import { cl } from '../../../../../../utils';
 import ToastClose from '../../../../../../assets/icons/ToastClose';
 import toast from 'react-hot-toast';
-import { UseSaveTaskFilters } from '../../../../../../features/task/taskService';
-import { useAppDispatch } from '../../../../../../app/hooks';
+import { EndTimeEntriesService, UseSaveTaskFilters } from '../../../../../../features/task/taskService';
+import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
 import { setTimeZone } from '../../../../../../features/settings/user/userSettingsSlice';
+import { setTimerInterval, setTimerStatus, setUpdateTimerDuration } from '../../../../../../features/task/taskSlice';
 
 interface ToastProps {
   title: string;
   body: string | null;
   showClose?: boolean;
   toastId?: string;
-  extended?: 'taskFilter' | 'timeZone' | 'calendar';
+  extended?: 'taskFilter' | 'timeZone' | 'calendar' | 'clockReminder';
   extendedFn?: Dispatch<SetStateAction<string | undefined>>;
   extendedState?: string;
 }
 function SaveFilterToast({ title, body, showClose = true, toastId, extended, extendedState }: ToastProps) {
   const dispatch = useAppDispatch();
+  const { activeItemId } = useAppSelector((state) => state.workspace);
+  const { timerDetails, period } = useAppSelector((state) => state.task);
+
+  const timeOutFn = () =>
+    setTimeout(() => {
+      toast.remove(toastId);
+    }, 1000);
+
+  const { mutate } = EndTimeEntriesService();
   const { mutateAsync, status: taskFilterStatus } = UseSaveTaskFilters();
   const handleSaveFilters = () => {
     extended === 'taskFilter' && mutateAsync({ key: 'tasks_filter' });
     if (extended === 'timeZone') {
       dispatch(setTimeZone(extendedState));
       extendedState && localStorage.setItem('userTimeZone', extendedState);
-      setTimeout(() => {
-        toast.remove(toastId);
-      }, 1000);
+      timeOutFn();
     }
+    if (extended === 'clockReminder') stop();
+  };
+
+  const stop = () => {
+    mutate({
+      id: activeItemId,
+      is_Billable: timerDetails.isBillable,
+      description: timerDetails.description
+    });
+    dispatch(setTimerStatus(false));
+    clearInterval(period);
+    dispatch(setUpdateTimerDuration({ h: 0, s: 0, m: 0 }));
+    dispatch(setTimerInterval());
+    timeOutFn();
   };
 
   const status = extended === 'taskFilter' ? taskFilterStatus : '';
 
   useEffect(() => {
     if (status === 'success') {
-      setTimeout(() => {
-        toast.remove(toastId);
-      }, 1000);
+      timeOutFn();
     }
   }, [status]);
   return (
@@ -62,7 +82,7 @@ function SaveFilterToast({ title, body, showClose = true, toastId, extended, ext
                 <section className="flex justify-between my-1">
                   <div className="flex items-center cursor-pointer gap-0.5">
                     <button className="w-20 h-7 bg-alsoit-purple-300 rounded text-white" onClick={handleSaveFilters}>
-                      Save
+                      {extended === 'clockReminder' ? 'Stop Timer Now' : 'Save'}
                     </button>
                   </div>
                   <div className="flex items-center cursor-pointer gap-0.5">
@@ -70,7 +90,7 @@ function SaveFilterToast({ title, body, showClose = true, toastId, extended, ext
                       className="w-20 h-7 bg-alsoit-gray-50 rounded hover:bg-alsoit-purple-50"
                       onClick={() => toast.remove(toastId)}
                     >
-                      Cancel
+                      {extended === 'clockReminder' ? 'Continue' : 'Cancel'}
                     </button>
                   </div>
                 </section>
