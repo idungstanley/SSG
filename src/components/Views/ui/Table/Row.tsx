@@ -49,8 +49,6 @@ export function Row({
 
   const otherColumns = columns.slice(1);
 
-  console.log(task);
-
   const newSubTask: ITaskFullList = {
     archived_at: null,
     assignees: undefined,

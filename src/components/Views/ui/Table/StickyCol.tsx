@@ -127,7 +127,7 @@ export function StickyCol({
   useEffect(() => {
     const { current } = inputRef;
     current?.focus();
-    if (eitableContent || hilightNewTask) selectText(current);
+    // if (eitableContent || hilightNewTask) selectText(current);
   }, [eitableContent]);
 
   const selectText = (element: Node | null) => {
