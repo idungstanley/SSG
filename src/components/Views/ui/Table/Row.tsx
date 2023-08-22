@@ -41,12 +41,13 @@ export function Row({
   handleClose,
   customFields
 }: RowProps) {
-  const otherColumns = columns.slice(1);
-  const [showSubTasks, setShowSubTasks] = useState(false);
-  const { showNewTaskField, showNewTaskId } = useAppSelector((state) => state.task);
-  const { toggleAllSubtask } = useAppSelector((state) => state.task);
-
   const dispatch = useAppDispatch();
+
+  const { showNewTaskField, showNewTaskId } = useAppSelector((state) => state.task);
+
+  const [showSubTasks, setShowSubTasks] = useState(false);
+
+  const otherColumns = columns.slice(1);
 
   const newSubTask: ITaskFullList = {
     archived_at: null,

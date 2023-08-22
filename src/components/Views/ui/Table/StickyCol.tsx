@@ -27,7 +27,6 @@ import ToolTip from '../../../Tooltip/Tooltip';
 import Badges from '../../../badges';
 import DetailsOnHover from '../../../Dropdown/DetailsOnHover/DetailsOnHover';
 import { EntityType } from '../../../../utils/EntityTypes/EntityType';
-import { indexOf } from 'cypress/types/lodash';
 
 interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   task: Task;
@@ -62,14 +61,11 @@ export function StickyCol({
 }: ColProps) {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const { taskId, hubId, subhubId, walletId, listId } = useParams();
 
   const { currentWorkspaceId } = useAppSelector((state) => state.auth);
-
-  const [isChecked, setIsChecked] = useState(false);
-
-  const ACTIVE_TASK = taskId === task.id ? 'tdListV' : DEFAULT_COL_BG;
-  const { mutate: onAdd } = useAddTask(parentId);
+  const { dragOverItemId, draggableItemId } = useAppSelector((state) => state.list);
   const {
     currTeamMemberId,
     singleLineView,
@@ -83,15 +79,22 @@ export function StickyCol({
     toggleAllSubtask
   } = useAppSelector((state) => state.task);
 
-  const queryClient = useQueryClient();
+  const [isChecked, setIsChecked] = useState(false);
+  const [eitableContent, setEitableContent] = useState(false);
+  const [selectedIndexArray, setSelectedIndexArray] = useState<number[]>([]);
+
+  const ACTIVE_TASK = taskId === task.id ? 'tdListV' : DEFAULT_COL_BG;
+
+  const { mutate: onAdd } = useAddTask();
+
   const inputRef = useRef<HTMLInputElement | null>(null);
+
   const { attributes, listeners, setNodeRef } = useDraggable({
     id: task?.id as UniqueIdentifier,
     data: {
       isTask: true
     }
   });
-  const [eitableContent, setEitableContent] = useState(false);
 
   const onClickTask = () => {
     if (task.id !== '0') {
@@ -180,8 +183,6 @@ export function StickyCol({
     });
   };
 
-  const [selectedIndexArray, setSelectedIndexArray] = useState<number[]>([]);
-
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.shiftKey && event.key === 'ArrowDown') {
@@ -254,8 +255,6 @@ export function StickyCol({
       isOverTask: true
     }
   });
-
-  const { dragOverItemId, draggableItemId } = useAppSelector((state) => state.list);
 
   return (
     <div className="sticky left-0 z-10">

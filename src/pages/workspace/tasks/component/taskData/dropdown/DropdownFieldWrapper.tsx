@@ -1,5 +1,4 @@
 import { IField } from '../../../../../../features/list/list.interfaces';
-import { useList } from '../../../../../../features/list/listService';
 import { ICustomField } from '../../../../../../features/task/taskSlice';
 import DropdownField from './DropdownField';
 
@@ -23,10 +22,6 @@ export default function DropdownFieldWrapper({
   const activeProperty = property ? taskActiveProperty : undefined;
 
   return field ? (
-    <DropdownField
-      field={{ id: field.id, options: field.options, activeProperty }}
-      currentProperty={field}
-      taskId={taskId}
-    />
+    <DropdownField field={{ id: field.id, options: field.options, activeProperty }} taskId={taskId} />
   ) : null;
 }
