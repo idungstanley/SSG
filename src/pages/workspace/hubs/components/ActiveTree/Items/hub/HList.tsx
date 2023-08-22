@@ -10,6 +10,7 @@ import {
   setActiveTabId,
   setCurrentItem,
   setOpenedEntitiesIds,
+  setShowExtendedBar,
   setShowPilot
 } from '../../../../../../../features/workspace/workspaceSlice';
 import { setParentHubExt } from '../../../../../../../features/hubs/hubSlice';
@@ -57,15 +58,13 @@ export default function HList({ hubs }: ListProps) {
     navigate(`tasks/h/${id}`, {
       replace: true
     });
+    if (!showSidebar) {
+      dispatch(setShowExtendedBar(true));
+    }
   };
 
   const handleClick = (id: string) => {
     dispatch(setParentHubExt({ id, type: EntityType.hub }));
-    if (!showSidebar) {
-      navigate(`tasks/h/${id}`, {
-        replace: true
-      });
-    }
 
     if (id === openedNewHubId) {
       setOpenedNewHubId('');
