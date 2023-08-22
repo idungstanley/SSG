@@ -217,15 +217,15 @@ export default function CustomStatus() {
       });
     } catch (err) {
       const errorResponse = err as ErrorResponse; // Cast err to the ErrorResponse type
-      if (errorResponse.data.data.match) {
-        console.log(true);
+      const matchData = errorResponse.data.data.match;
+      if (matchData) {
         dispatch(
           displayPrompt(
             'Are you sure you want to delete this Status ?(“PENDING”)',
             'You changed Statuses in your List . 3 Tasks would be affected. Please select an option below.',
             [
               {
-                label: 'Create Subhub',
+                label: 'Save Changes',
                 style: 'danger',
                 callback: async () => ({})
               },
@@ -234,7 +234,8 @@ export default function CustomStatus() {
                 style: 'plain',
                 callback: () => ({})
               }
-            ]
+            ],
+            matchData
           )
         );
       }

@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { AppDispatch } from '../../../app/store';
+import { StatusProps } from '../../../pages/workspace/hubs/components/ActiveTree/activetree.interfaces';
 
 interface IOption {
   label: string;
@@ -12,13 +13,15 @@ interface PromptState {
   title: string;
   body: string;
   options: IOption[];
+  matchData: StatusProps[];
 }
 
 const initialState: PromptState = {
   show: false,
   title: '',
   body: '',
-  options: []
+  options: [],
+  matchData: []
 };
 
 export const promptSlice = createSlice({
@@ -35,6 +38,9 @@ export const promptSlice = createSlice({
     setOptions: (state, action: PayloadAction<IOption[]>) => {
       state.options = action.payload;
     },
+    setMatchData: (state, action: PayloadAction<StatusProps[]>) => {
+      state.matchData = action.payload;
+    },
     reset: (state) => {
       state.show = false;
       state.title = '';
@@ -44,17 +50,21 @@ export const promptSlice = createSlice({
   }
 });
 
-export const { setVisibility, setData, setOptions, reset } = promptSlice.actions;
+export const { setVisibility, setData, setOptions, reset, setMatchData } = promptSlice.actions;
 
-export const displayPrompt = (title: string, body: string, options: IOption[]) => (dispatch: AppDispatch) => {
-  dispatch(
-    setData({
-      title,
-      body
-    })
-  );
-  dispatch(setOptions(options));
-  dispatch(setVisibility(true));
-};
+export const displayPrompt =
+  (title: string, body: string, options: IOption[], matchData?: StatusProps[]) => (dispatch: AppDispatch) => {
+    dispatch(
+      setData({
+        title,
+        body
+      })
+    );
+    dispatch(setOptions(options));
+    dispatch(setVisibility(true));
+    if (matchData) {
+      dispatch(setMatchData(matchData));
+    }
+  };
 
 export default promptSlice.reducer;
