@@ -14,6 +14,7 @@ import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { EntityType } from '../../../../utils/EntityTypes/EntityType';
 import { IField } from '../../../../features/list/list.interfaces';
 import TextField from '../TextField/TextField';
+import LabelsWrapper from './CustomField/Labels/LabelsWrapper';
 
 interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   value: TaskValue;
@@ -58,11 +59,15 @@ export function Col({ value, field, fieldId, task, customFields, ...props }: Col
       />
     ),
     labels: (
-      <DropdownFieldWrapper
-        taskId={task.id}
-        fieldId={fieldId}
-        taskCustomFields={task.custom_fields}
+      // <DropdownFieldWrapper
+      //   taskId={task.id}
+      //   fieldId={fieldId}
+      //   taskCustomFields={task.custom_fields}
+      //   entityCustomProperty={customFields}
+      // />
+      <LabelsWrapper
         entityCustomProperty={customFields}
+        taskCustomFields={task.custom_fields?.find((i) => i.id === fieldId)}
       />
     ),
     text: <TextField />,
