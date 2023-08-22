@@ -34,6 +34,7 @@ export function List({ tasks, customProperty }: ListProps) {
   const { data } = useList(tasks[0].list_id);
 
   const dispatch = useAppDispatch();
+  const { taskColumns, hideTask } = useAppSelector((state) => state.task);
 
   const { data: hub } = UseGetHubDetails({
     activeItemId: hubId,
@@ -41,8 +42,6 @@ export function List({ tasks, customProperty }: ListProps) {
   });
 
   const custom_fields = customProperty;
-
-  const { taskColumns, hideTask } = useAppSelector((state) => state.task);
 
   useEffect(() => {
     if (!custom_fields) {

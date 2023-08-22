@@ -40,23 +40,17 @@ interface WalletItemProps {
   showSubWallet: boolean;
   paddingLeft: string | number;
   walletType: string;
-  index?: number;
-  isSticky?: boolean;
   topNumber?: number;
   zNumber?: string;
-  stickyButtonIndex?: number | undefined;
   isExtendedBar?: boolean;
-  handleShowSubWallet: (id: string, index?: number) => void;
-  handleLocation: (id: string, name: string, index?: number) => void;
+  handleShowSubWallet: (id: string) => void;
+  handleLocation: (id: string, name: string) => void;
 }
 export default function WalletItem({
   wallet,
   showSubWallet,
   paddingLeft,
   walletType,
-  index,
-  isSticky,
-  stickyButtonIndex,
   topNumber = 0,
   zNumber,
   isExtendedBar,
@@ -64,11 +58,14 @@ export default function WalletItem({
   handleLocation
 }: WalletItemProps) {
   const dispatch = useAppDispatch();
-  const { activeItemId } = useAppSelector((state) => state.workspace);
+  const { walletId } = useParams();
+
+  const { activeItemId, openedEntitiesIds } = useAppSelector((state) => state.workspace);
   const { showMenuDropdown, SubMenuId } = useAppSelector((state) => state.hub);
   const { paletteDropdown, showSidebar } = useAppSelector((state) => state.account);
+
   const { paletteId, show } = paletteDropdown;
-  const { walletId } = useParams();
+
   const [paletteColor, setPaletteColor] = useState<string | undefined | ListColourProps>('');
 
   const closeSubMenu = () => {
@@ -197,20 +194,20 @@ export default function WalletItem({
   });
 
   return (
-    <div className="relative">
+    <div
+      className={`${openedEntitiesIds.includes(wallet.id) ? 'sticky bg-white' : ''}`}
+      style={{
+        top: openedEntitiesIds.includes(wallet.id) && showSidebar ? topNumber : '',
+        zIndex: openedEntitiesIds.includes(wallet.id) ? zNumber : '2',
+        opacity: transform ? 0 : 100
+      }}
+    >
       <section
         className={`bg-white items-center truncate text-sm group ${
           wallet.id === activeItemId ? 'font-medium' : 'hover:bg-gray-100'
-        } ${isSticky && stickyButtonIndex === index ? 'sticky bg-white' : ''} ${
-          isOver ? 'bg-primary-100 border-primary-500 shadow-inner shadow-primary-300' : ''
-        }`}
+        } ${isOver ? 'bg-primary-100 border-primary-500 shadow-inner shadow-primary-300' : ''}`}
         ref={setNodeRef}
-        onClick={() => handleShowSubWallet(wallet.id, index)}
-        style={{
-          top: isSticky ? `${topNumber}px` : '',
-          zIndex: isSticky ? zNumber : '1',
-          opacity: transform ? 0 : 100
-        }}
+        onClick={() => handleShowSubWallet(wallet.id)}
       >
         <div
           id="walletLeft"
@@ -232,7 +229,7 @@ export default function WalletItem({
             {renderIcons(showSubWallet)}
           </div>
           <div
-            onClick={() => handleLocation(wallet.id, wallet.name, index)}
+            onClick={() => handleLocation(wallet.id, wallet.name)}
             className="truncate cursor-pointer hover:underline hover:decoration-dashed"
             style={{ marginLeft: '17px' }}
           >

@@ -23,8 +23,8 @@ interface userSettingState {
   status: string;
   clock_type: string | undefined;
   is_clock_time: number | undefined;
-  clock_limit: number | undefined;
-  clock_stop_reminder: number | undefined;
+  clock_limit: number;
+  clock_stop_reminder: number;
 }
 
 const initialState: userSettingState = {
@@ -116,10 +116,10 @@ export const userSettingSlice = createSlice({
     setClocktime(state, action: PayloadAction<number | undefined>) {
       state.is_clock_time = action.payload;
     },
-    setClockLimit(state, action: PayloadAction<number | undefined>) {
+    setClockLimit(state, action: PayloadAction<number>) {
       state.clock_limit = action.payload;
     },
-    setClockStopReminder(state, action: PayloadAction<number | undefined>) {
+    setClockStopReminder(state, action: PayloadAction<number>) {
       state.clock_stop_reminder = action.payload;
     }
   }
