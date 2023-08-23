@@ -60,12 +60,6 @@ export function Col({ value, field, fieldId, task, customFields, ...props }: Col
       />
     ),
     labels: (
-      // <DropdownFieldWrapper
-      //   taskId={task.id}
-      //   fieldId={fieldId}
-      //   taskCustomFields={task.custom_fields}
-      //   entityCustomProperty={customFields}
-      // />
       <LabelsWrapper
         entityCustomProperty={customFields?.find((i) => i.id === fieldId)}
         taskCustomFields={task.custom_fields?.find((i) => i.id === fieldId)}
@@ -76,7 +70,14 @@ export function Col({ value, field, fieldId, task, customFields, ...props }: Col
       <TextField
         taskId={task.id}
         taskCustomFields={task.custom_fields?.find((i) => i.id === fieldId)}
-        entityCustomProperty={customFields?.find((i) => i.id === fieldId)}
+        fieldId={fieldId}
+      />
+    ),
+    longtext: (
+      <TextField
+        taskId={task.id}
+        taskCustomFields={task.custom_fields?.find((i) => i.id === fieldId)}
+        fieldId={fieldId}
       />
     ),
     assignees: (
