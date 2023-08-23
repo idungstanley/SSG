@@ -50,7 +50,7 @@ export default function ClockLog({ getTaskEntries }: LogProps) {
   useEffect(() => {
     const handleTeamMember = () => {
       const newTeamMembers = getTaskEntries?.data.filters.team_members.map((member) => member.user);
-      const newTeamMemberIds = newTeamMembers?.map((member) => member.id);
+      const newTeamMemberIds = getTaskEntries?.data.filters.team_members.map((member) => member.id);
 
       newTeamMembers && setTeamMember((prevTeamMembers) => [...prevTeamMembers, ...newTeamMembers]);
       newTeamMemberIds && setTeamMemberId((prevIds) => [...prevIds, ...newTeamMemberIds]);

@@ -13,14 +13,15 @@ type UserSortParams = {
 
 export function UserSortDropDown({ arr, toggleModalFn, memberIds }: UserSortParams) {
   const dispatch = useAppDispatch();
+
   const sortIds: string[] = [...new Set(memberIds)];
   const [idArr, setArr] = useState<string[]>([]);
   const [listIndex, setIndex] = useState<number[]>([]);
-  // console.log(arr);
 
   const teamMember = arr.filter((obj, index, arr) => {
     return arr.findIndex((item) => item.id === obj.id) === index;
   });
+
   const handleSort = (id: number) => {
     !idArr.includes(sortIds[id])
       ? setArr((prev) => [...prev, sortIds[id]])
