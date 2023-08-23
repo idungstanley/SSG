@@ -66,7 +66,13 @@ export function Col({ value, field, fieldId, task, customFields, ...props }: Col
         entityCustomProperty={customFields}
       />
     ),
-    text: <TextField />,
+    text: (
+      <TextField
+        taskId={task.id}
+        taskCustomFields={task.custom_fields?.find((i) => i.id === fieldId)}
+        entityCustomProperty={customFields?.find((i) => i.id === fieldId)}
+      />
+    ),
     assignees: (
       <Assignee
         task={task as ImyTaskData}
