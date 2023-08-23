@@ -2,13 +2,8 @@ import React, { useState } from 'react';
 import RoundedArrowUpDown from './RoundedArrowUpDown';
 import SortDirectionCheck from './SortDirectionCheck';
 import SortModal from '../../../../../../../components/SortModal/SortModal';
-import { setActiveTaskColumn, setSortArr, setSortArray } from '../../../../../../../features/task/taskSlice';
+import { SortOption, setActiveTaskColumn, setSortArr, setSortArray } from '../../../../../../../features/task/taskSlice';
 import { useAppDispatch, useAppSelector } from '../../../../../../../app/hooks';
-
-export type SortOption = {
-  dir: 'asc' | 'desc';
-  field: string;
-};
 
 interface PropertyHeaderProps {
   id: string;

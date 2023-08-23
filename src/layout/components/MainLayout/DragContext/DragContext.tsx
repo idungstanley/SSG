@@ -21,7 +21,6 @@ export default function DragContext({ children }: DragContextProps) {
   const queryClient = useQueryClient();
 
   // needed for invalidation
-  const { filterTaskByAssigneeIds: assigneeUserId } = useAppSelector((state) => state.task);
   const { sortAbleArr } = useAppSelector((state) => state.task);
   const sortArrUpdate = sortAbleArr.length <= 0 ? null : sortAbleArr;
   const { filters } = generateFilters();
@@ -70,7 +69,7 @@ export default function DragContext({ children }: DragContextProps) {
       }
       // reset dragging item
       dispatch(setDraggableItem(null));
-      queryClient.invalidateQueries(['task', { listId: overId, assigneeUserId, sortArrUpdate, filters }]);
+      queryClient.invalidateQueries(['task', { listId: overId, sortArrUpdate, filters }]);
     }
     if (isListToHub) {
       onMoveList({

@@ -9,7 +9,6 @@ import CopyUrl from '../assets/icons/CopyUrl';
 import { useAppSelector } from '../app/hooks';
 import { useNavigate } from 'react-router-dom';
 import { ImyTaskData } from '../features/task/taskSlice';
-// import { setNewTask } from '../features/task/taskSlice';
 
 interface ToastProps {
   title: string;

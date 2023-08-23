@@ -1,11 +1,12 @@
 import React, { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { setRecorderLastMemory, setRecording } from '../../../../features/workspace/workspaceSlice';
-import '../../../../pages/workspace/tasks/component/views/view.css';
 import { useMediaStream } from '../../../../features/task/taskService';
 import { BsFillRecord2Fill } from 'react-icons/bs';
 import { IoStopCircleSharp, IoVolumeHigh, IoVolumeMute } from 'react-icons/io5';
 import { useParams } from 'react-router-dom';
+
+import '../../../../pages/workspace/tasks/component/views/view.css';
 
 export interface IFormData {
   append(name: string, value: Blob, fileName?: string): void;

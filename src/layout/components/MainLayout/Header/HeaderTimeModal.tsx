@@ -13,12 +13,6 @@ export default function HeaderTimeModal() {
   const { clock_type, timezone: zone } = useAppSelector((state) => state.userSetting);
   const [clock, setClock] = useState<dayjs.Dayjs>(dayjs().tz(zone));
   const [time, setTime] = useState<string>(clock.format('hh:mm:ss a'));
-  // const { listId } = useParams();
-  // const { filterTaskByAssigneeIds } = useAppSelector((state) => state.task);
-
-  // const { data } = getTaskListService({ listId, assigneeUserId: filterTaskByAssigneeIds });
-
-  // const entityTaskData = useMemo(() => data?.pages.flatMap((page) => page.data.tasks), [data]);
 
   const timeUpdateFn = () => window.setInterval(() => setTime(dayjs().format('hh:mm:ss a')), 1000);
 

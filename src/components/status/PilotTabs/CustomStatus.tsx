@@ -1,12 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
-import StatusBodyTemplate from '../StatusBodyTemplate';
 import Button from '../../Button';
-import PlusIcon from '../../../assets/icons/PlusIcon';
-import Input from '../../input/Input';
 import { StatusProps } from '../../../pages/workspace/hubs/components/ActiveTree/activetree.interfaces';
-import PlusCircle from '../../../assets/icons/AddCircle';
-import { Chevron } from '../../Views/ui/Chevron';
 import {
   DndContext,
   DragEndEvent,
@@ -14,16 +9,10 @@ import {
   KeyboardSensor,
   PointerSensor,
   closestCorners,
-  useDroppable,
   useSensor,
   useSensors
 } from '@dnd-kit/core';
-import {
-  SortableContext,
-  arrayMove,
-  sortableKeyboardCoordinates,
-  verticalListSortingStrategy
-} from '@dnd-kit/sortable';
+import { arrayMove, sortableKeyboardCoordinates } from '@dnd-kit/sortable';
 import { findBoardSectionContainer, initializeBoard } from '../../../utils/StatusManagement/board';
 import { GroupStyles } from '../../../utils/StatusManagement/Types';
 import BoardSection from '../Components/BoardSection';
@@ -83,8 +72,6 @@ export default function CustomStatus() {
 
   const handleDragOver = ({ active, over }: DragOverEvent) => {
     // Find the containers
-    console.log(active.id, 'active');
-    console.log(over?.id, 'over');
     const activeContainer = findBoardSectionContainer(boardSections, active.id as string);
     const overContainer = findBoardSectionContainer(boardSections, over?.id as string);
 
@@ -196,7 +183,7 @@ export default function CustomStatus() {
 
   const createStatusTypes = useMutation(statusTypesService, {
     onSuccess: (data) => {
-      console.log(data);
+      // console.log(data);
     }
   });
 
@@ -204,7 +191,6 @@ export default function CustomStatus() {
   const defaultItem = statusTypesState.find((item) => item.position === 0);
   const AddDefault = addIsDefaultToValues(boardSections, defaultItem?.name);
   const statusData = extractValuesFromArray(AddDefault);
-  console.log(statusData);
 
   const onSubmit = async () => {
     try {
@@ -218,7 +204,6 @@ export default function CustomStatus() {
     } catch (err) {
       const errorResponse = err as ErrorResponse; // Cast err to the ErrorResponse type
       if (errorResponse.data.data.match) {
-        console.log(true);
         dispatch(
           displayPrompt(
             'Are you sure you want to delete this Status ?(“PENDING”)',

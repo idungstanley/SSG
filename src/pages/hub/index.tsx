@@ -21,7 +21,6 @@ export default function HubPage() {
   const dispatch = useAppDispatch();
   const { hubId, subhubId, taskId } = useParams();
 
-  const { filterTaskByAssigneeIds } = useAppSelector((state) => state.task);
   const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
 
   const containerRef = useRef<HTMLDivElement>(null);
@@ -44,8 +43,7 @@ export default function HubPage() {
 
   const { data, hasNextPage, fetchNextPage } = UseGetFullTaskList({
     itemId: hubId || subhubId,
-    itemType: EntityType.hub,
-    assigneeUserId: filterTaskByAssigneeIds
+    itemType: EntityType.hub
   });
 
   const tasks = useMemo(() => (data ? data.pages.flatMap((page) => page.data.tasks) : []), [data]);
