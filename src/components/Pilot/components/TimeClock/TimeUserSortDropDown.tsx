@@ -2,8 +2,9 @@ import { FiSearch } from 'react-icons/fi';
 import { setTimeSortArr } from '../../../../features/task/taskSlice';
 import { useAppDispatch } from '../../../../app/hooks';
 import { User } from './ClockLog';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { GiCheckMark } from 'react-icons/gi';
+import { useGetUserSettingsData, useSaveData } from '../../../../features/task/taskService';
 
 type UserSortParams = {
   arr: User[];
@@ -18,6 +19,8 @@ export function UserSortDropDown({ arr, toggleModalFn, memberIds }: UserSortPara
   const [idArr, setArr] = useState<string[]>([]);
   const [listIndex, setIndex] = useState<number[]>([]);
 
+  const { mutateAsync } = useSaveData();
+
   const teamMember = arr.filter((obj, index, arr) => {
     return arr.findIndex((item) => item.id === obj.id) === index;
   });
@@ -31,6 +34,10 @@ export function UserSortDropDown({ arr, toggleModalFn, memberIds }: UserSortPara
 
   const handleDispatch = () => {
     dispatch(setTimeSortArr(idArr));
+    mutateAsync({
+      key: 'time_entry',
+      value: idArr
+    });
     toggleModalFn(false);
   };
 

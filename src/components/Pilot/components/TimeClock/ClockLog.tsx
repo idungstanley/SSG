@@ -10,6 +10,7 @@ import ArrowCaretUp from '../../../../assets/icons/ArrowCaretUp';
 import CancelIcon from '../../../../assets/icons/Cancel';
 import { ITimeEntriesRes } from '../../../../features/task/interface.tasks';
 import { useEffect, useState } from 'react';
+import { useGetUserSettingsData } from '../../../../features/task/taskService';
 
 export type Header = {
   title: string;
@@ -29,7 +30,10 @@ interface LogProps {
 
 export default function ClockLog({ getTaskEntries }: LogProps) {
   const { timeArr } = useAppSelector((state) => state.task);
+
   const dispatch = useAppDispatch();
+  const fetchSortData = useGetUserSettingsData({ keys: 'time_entry' });
+
   const [headers, setHeaders] = useState<Header[]>([
     { title: 'user', id: '1', hidden: false },
     { title: 'duration', id: '2', hidden: false },
@@ -58,6 +62,10 @@ export default function ClockLog({ getTaskEntries }: LogProps) {
 
     handleTeamMember();
   }, [getTaskEntries?.data.filters.team_members]);
+
+  useEffect(() => {
+    fetchSortData;
+  }, []);
 
   const handleColumnHide = (col: string) => {
     setHeaders((prev) => prev.map((header) => (header.id === col ? { ...header, hidden: !header.hidden } : header)));
