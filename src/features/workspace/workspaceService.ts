@@ -1,8 +1,16 @@
 import requestNew from '../../app/requestNew';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { IAllWorkspacesRes, IAttachments, IWorkspaceRes, IWorkspaceSettingsRes } from './workspace.interfaces';
+import {
+  IAllWorkspacesRes,
+  IAttachments,
+  IWorkSpaceSettings,
+  IWorkspaceRes,
+  IWorkspaceSettingsRes,
+  IWorkspaceSettingsUpdateRes,
+  WorkSpaceSettingsRes
+} from './workspace.interfaces';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { setFetchAllWorkspace, setWorkSpaceSetting, setWorkspaceData } from './workspaceSlice';
+import { setFetchAllWorkspace, setWorkSpaceSetting, setWorkSpaceSettingsObj, setWorkspaceData } from './workspaceSlice';
 import { IFormData } from '../../components/Pilot/components/RecordScreen/Recording';
 
 interface IData {
@@ -160,6 +168,29 @@ export const getWorkSpaceSettings = () => {
     {
       onSuccess(data) {
         dispatch(setWorkSpaceSetting(data?.data.workspace_settings));
+      }
+    }
+  );
+};
+
+export const upDateWorkSpaceSettings = () => {
+  const dispatch = useAppDispatch();
+  return useMutation(
+    async ({ key, value }: { key: string; value: string | number }) => {
+      const data = await requestNew<IWorkspaceSettingsUpdateRes>({
+        url: 'settings/workspace/update-setting',
+        method: 'POST',
+        data: {
+          key,
+          value
+        }
+      });
+
+      return data.data;
+    },
+    {
+      onSuccess: (data) => {
+        dispatch(setWorkSpaceSettingsObj(data.workspace_setting));
       }
     }
   );
