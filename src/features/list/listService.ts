@@ -222,7 +222,7 @@ export const useCreateDropdownField = (type: string | undefined, id?: string | u
   });
 };
 
-const updateEntityCustomFieldValue = (data: { taskId?: string; fieldId: string; value: string }) => {
+const updateEntityCustomFieldValue = (data: { taskId?: string; fieldId: string; value: { value: string }[] }) => {
   const { taskId, fieldId, value } = data;
 
   const response = requestNew({
@@ -231,7 +231,7 @@ const updateEntityCustomFieldValue = (data: { taskId?: string; fieldId: string; 
     data: {
       type: 'task',
       id: taskId,
-      values: [{ value }]
+      values: value
     }
   });
   return response;
