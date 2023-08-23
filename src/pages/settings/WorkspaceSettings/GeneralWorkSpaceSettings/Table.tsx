@@ -3,30 +3,50 @@ import { ChevronRightIcon } from '@heroicons/react/24/outline';
 import { cl } from '../../../../utils';
 import { useEffect, useState } from 'react';
 import { WorkSpaceSettingsRes } from '../../../../features/workspace/workspace.interfaces';
-import { getWorkSpaceSettings } from '../../../../features/workspace/workspaceService';
+import { getWorkSpaceSettings, upDateWorkSpaceSettings } from '../../../../features/workspace/workspaceService';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { SimpleSectionHeading } from '../../../../components';
 import notificationFrame from '../../../../assets/branding/notificationFrame.png';
 import { Spinner } from '../../../../common';
-import {
-  setClockLimit,
-  setClockStopReminder,
-  setClockType,
-  setClocktime
-} from '../../../../features/settings/user/userSettingsSlice';
+import { setClockType, setClocktime } from '../../../../features/settings/user/userSettingsSlice';
+import { UseUpdateUserSettings } from '../../../../features/settings/user/userSettingsServices';
 
 const minutesToMilliseconds = 60 * 1000;
-const hoursToMilliseconds = 60 * 60 * 1000;
+// const hoursToMilliseconds = 60 * 60 * 1000;
 
 export default function WorkSpaceTable() {
   const { workSpaceSettings } = useAppSelector((state) => state.workspace);
-  const { is_clock_time, clock_limit, clock_stop_reminder, clock_type } = useAppSelector((state) => state.userSetting);
+  const { is_clock_time, clock_limit, clock_stop_reminder, clock_type, userData } = useAppSelector(
+    (state) => state.userSetting
+  );
 
   const { data: fetchedData, status } = getWorkSpaceSettings();
+  const { mutateAsync, isError, error } = upDateWorkSpaceSettings();
+  const { mutate } = UseUpdateUserSettings();
 
   const dispatch = useAppDispatch();
 
   const [getSettings, setGetSettings] = useState<WorkSpaceSettingsRes[] | undefined>([]);
+  const [clockData, setClockData] = useState<{
+    [key: string]: number | string;
+  }>({
+    stop_tracking_hours: clock_limit,
+    clock_reminder: clock_stop_reminder
+  });
+
+  const handleChange = (key: string, value: string | number) => {
+    mutateAsync({ key, value });
+    setClockData((prev) => ({ ...prev, [key]: value }));
+  };
+
+  const handleSubmit = () => {
+    mutate({
+      is_clock_time,
+      clock_type
+    });
+  };
+
+  const validate = is_clock_time === userData?.is_clock_time && clock_type === userData?.clock_type;
 
   useEffect(() => {
     if (workSpaceSettings) {
@@ -43,7 +63,7 @@ export default function WorkSpaceTable() {
         className="flex items-center pl-5 mt-5 rounded-t-md"
         style={{ backgroundImage: `url(${notificationFrame})`, height: '122px' }}
       >
-        <SimpleSectionHeading title="Notifications" description="Manage workspace settings" />
+        <SimpleSectionHeading title="Workspace" description="Manage workspace settings" />
       </div>
       <Disclosure defaultOpen={true}>
         {({ open }) => (
@@ -70,133 +90,132 @@ export default function WorkSpaceTable() {
             ) : (
               <Disclosure.Panel>
                 {' '}
-                <div className="w-full p-4 bg-white">
-                  {getSettings &&
-                    getSettings.length &&
-                    getSettings.map((setting: WorkSpaceSettingsRes) => {
-                      return setting.value === 1 || setting.value === 0 ? (
-                        <div key={setting.key} className="flex items-center justify-between w-full">
-                          <div className="pl-10 py-3.5 text-left text-sm font-semibold text-gray-900 w-2/4">
-                            {setting.name}
-                          </div>
-                          <div className="flex justify-around w-2/4">
-                            <div className="flex justify-center px-3">
-                              <input
-                                checked={setting.value === 1}
-                                className="w-5 h-5 bg-gray-300 border-gray-500 cursor-pointer"
-                                type="checkbox"
-                              />
+                <div className="bg-white p-4 w-10/12 mx-auto">
+                  {workSpaceSettings &&
+                    workSpaceSettings.length &&
+                    workSpaceSettings.map((setting: WorkSpaceSettingsRes) => {
+                      return (
+                        <div key={setting.key} className="w-full">
+                          {(setting.key === 'duplicate_name' || setting.key === 'folder_uppercase') && (
+                            <div className="my-3 flex space-x-1 items-center w-80">
+                              <div style={{ width: '20%' }} className="flex items-center">
+                                <label className="switch w-full">
+                                  <input
+                                    type="checkbox"
+                                    checked={Number(setting.value) === 1 ? true : false}
+                                    onChange={() => handleChange(setting.key, Number(setting.value) === 0 ? 1 : 0)}
+                                  />
+                                  <div className={`slider ${Number(setting.value) === 1 ? 'checked' : ''}`}></div>
+                                </label>
+                              </div>
+                              <span className="w-full">{setting.name}</span>
                             </div>
-                          </div>
-                        </div>
-                      ) : (
-                        <div key={setting.key} className="flex items-center justify-between w-full">
-                          <div className="pl-10 py-3.5 text-left text-sm font-semibold text-gray-900 w-2/4">
-                            {setting.name}
-                          </div>
-                          <div className="flex items-center justify-around w-2/4">
-                            <div>{setting.value}</div>
-                          </div>
+                          )}
+                          {setting.key === 'stop_tracking_hours' && (
+                            <div className="my-3 flex flex-col space-y-2">
+                              <div style={{ width: '48%' }}>
+                                <h5 className="font-semibold" style={{ fontSize: '15px' }}>
+                                  {setting.name}
+                                </h5>
+                                <select
+                                  name="stop_tracking_hours"
+                                  className="h-10 rounded my w-full"
+                                  value={clockData[setting.key]}
+                                  onChange={(e) => handleChange(setting.key, Number(e.target.value))}
+                                >
+                                  <option value={1}>{setting.value} hour</option>
+                                  <option value={1}>1 hour</option>
+                                  <option value={2}>2 hours</option>
+                                  <option value={3}>3 hours</option>
+                                  <option value={24}>1 day</option>
+                                </select>
+                              </div>
+                              <div style={{ width: '48%' }}>
+                                <h5 className="font-semibold" style={{ fontSize: '15px' }}>
+                                  Reminder Time
+                                </h5>
+                                <select
+                                  name="Time-format"
+                                  className="h-10 rounded my w-full"
+                                  value={clockData.clock_reminder}
+                                >
+                                  <option value={5 * minutesToMilliseconds}>5 minutes</option>
+                                  <option value={15 * minutesToMilliseconds}>15 minutes</option>
+                                  <option value={25 * minutesToMilliseconds}>25 minutes</option>
+                                  <option value={35 * minutesToMilliseconds}>35 minutes</option>
+                                </select>
+                              </div>
+                            </div>
+                          )}
+                          {setting.key === 'folder_separator' && (
+                            <div className="my-3 flex justify-between ">
+                              <div style={{ width: '48%' }}>
+                                <h5 className="font-semibold" style={{ fontSize: '15px' }}>
+                                  {setting.name}
+                                </h5>
+                                <select
+                                  name="folder_separator"
+                                  className="h-10 rounded my w-full"
+                                  value={setting.value}
+                                  onChange={(e) => handleChange(setting.key, e.target.value)}
+                                >
+                                  <option value={setting.value}>{setting.value}</option>
+                                </select>
+                              </div>
+                            </div>
+                          )}
                         </div>
                       );
                     })}
+                  <div className="my-3 flex justify-between w-full">
+                    <div style={{ width: '48%' }}>
+                      <h5 className="font-semibold" style={{ fontSize: '15px' }}>
+                        Clock Type
+                      </h5>
+                      <select
+                        name="clock_type"
+                        className="h-10 rounded my w-full"
+                        value={clock_type}
+                        onChange={(e) => dispatch(setClockType(e.target.value))}
+                        style={{ fontSize: '15px' }}
+                      >
+                        <option value="d">Digital</option>
+                        <option value="a">Analog</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div className="my-3 flex space-x-1 items-center w-80">
+                    <div style={{ width: '20%' }} className="flex items-center">
+                      <label className="switch w-full">
+                        <input
+                          type="checkbox"
+                          checked={is_clock_time === 1 ? true : false}
+                          onChange={() => dispatch(setClocktime(is_clock_time === 1 ? 0 : 1))}
+                        />
+                        <div className={`slider ${is_clock_time === 1 ? 'checked' : ''}`}></div>
+                      </label>
+                    </div>
+                    <span className="w-full">Show Toolbar Clock?</span>
+                  </div>
                 </div>
               </Disclosure.Panel>
             )}
           </div>
         )}
       </Disclosure>
-      <Disclosure defaultOpen={false}>
-        {({ open }) => (
-          <div className="w-full">
-            <Disclosure.Button className="w-full">
-              <div className="bg-gray-200">
-                <div className="flex">
-                  <div className="w-2/4 py-6 pl-4 pr-3 text-sm font-semibold text-left text-gray-900 sm:pl-6">
-                    <div className="flex items-center space-x-2">
-                      <ChevronRightIcon className={cl(open ? 'rotate-90 transform' : '', 'w-6 h-6')} />
-                      <p className="uppercase" style={{ fontSize: '15px' }}>
-                        Workspace Extra Settings
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </Disclosure.Button>
-            <Disclosure.Panel>
-              {' '}
-              <div className="w-full p-4 bg-white">
-                <div className="flex justify-between my-3 ">
-                  <div style={{ width: '48%' }}>
-                    <h5 className="font-semibold" style={{ fontSize: '15px' }}>
-                      Clocking Limit
-                    </h5>
-                    <select
-                      name="Day"
-                      className="w-full h-10 rounded my"
-                      value={clock_limit}
-                      onChange={(e) => dispatch(setClockLimit(Number(e.target.value)))}
-                      style={{ fontSize: '15px' }}
-                    >
-                      <option value={1 * hoursToMilliseconds}>1 hour</option>
-                      <option value={2 * hoursToMilliseconds}>2 hours</option>
-                      <option value={3 * hoursToMilliseconds}>3 hour</option>
-                      <option value={24 * hoursToMilliseconds}>1 day</option>
-                    </select>
-                  </div>
-                  <div style={{ width: '48%' }}>
-                    <h5 className="font-semibold" style={{ fontSize: '15px' }}>
-                      Reminder Time
-                    </h5>
-                    <select
-                      name="Time-format"
-                      className="w-full h-10 rounded my"
-                      value={clock_stop_reminder}
-                      onChange={(e) => dispatch(setClockStopReminder(Number(e.target.value)))}
-                      style={{ fontSize: '15px' }}
-                    >
-                      <option value={5 * minutesToMilliseconds}>5 minutes</option>
-                      <option value={15 * minutesToMilliseconds}>15 minutes</option>
-                      <option value={25 * minutesToMilliseconds}>25 minutes</option>
-                      <option value={35 * minutesToMilliseconds}>35 minutes</option>
-                    </select>
-                  </div>
-                </div>
-                <div className="flex justify-between w-full my-3">
-                  <div style={{ width: '48%' }}>
-                    <h5 className="font-semibold" style={{ fontSize: '15px' }}>
-                      Clock Type
-                    </h5>
-                    <select
-                      name="clock_time"
-                      className="w-full h-10 rounded my"
-                      value={clock_type}
-                      onChange={(e) => dispatch(setClockType(e.target.value))}
-                      style={{ fontSize: '15px' }}
-                    >
-                      <option value="d">Digital</option>
-                      <option value="a">Analog</option>
-                    </select>
-                  </div>
-                </div>
-                <div className="flex items-center my-3 space-x-1 w-80">
-                  <div style={{ width: '20%' }} className="flex items-center">
-                    <label className="w-full switch">
-                      <input
-                        type="checkbox"
-                        checked={is_clock_time ? true : false}
-                        onClick={() => dispatch(setClocktime(is_clock_time === 1 ? 0 : 1))}
-                      />
-                      <div className={`slider ${is_clock_time === 1 ? 'checked' : ''}`}></div>
-                    </label>
-                  </div>
-                  <span className="w-full">Show Toolbar Clock?</span>
-                </div>
-              </div>
-            </Disclosure.Panel>
-          </div>
-        )}
-      </Disclosure>
+      <div className="flex w-7/12 justify-center my-2">
+        <button
+          className={
+            validate
+              ? 'border-2 border-alsoit-gray-75 text-alsoit-gray-75 font-bold text-alsoit-text-lg p-2 w-44'
+              : 'border-2 border-alsoit-success text-alsoit-success font-bold text-alsoit-text-lg p-2 w-44'
+          }
+          disabled={validate}
+          onClick={handleSubmit}
+        >
+          Save
+        </button>
+      </div>
     </div>
   );
 }
