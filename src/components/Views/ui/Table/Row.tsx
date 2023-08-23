@@ -77,12 +77,12 @@ export function Row({
     priority: 'low',
     start_date: null,
     status: {
-      color: task.status.color,
+      color: '#AEADAE',
       created_at: '',
       id: '',
       model_id: '',
       model_type: '',
-      name: task.status.name,
+      name: 'Todo',
       position: '',
       type: '',
       updated_at: ''
