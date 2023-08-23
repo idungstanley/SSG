@@ -103,9 +103,12 @@ function LabelsDropdown({ optionsFromField, allOptions, currentProperty, taskId 
 
       <Transition appear show={isOpen} as="div">
         <Dialog as="div" className="relative z-10" onClose={closeModal}>
-          <div style={{ ...cords }} className="fixed overflow-y-auto max-w-full">
-            <div className="flex flex-col items-center justify-center p-4 text-center bg-white border rounded-xl shadow-lg outline-none w-fit h-fit">
-              <div className="flex items-center">
+          <div style={{ ...cords, maxWidth: '195px' }} className="fixed overflow-y-auto max-w-full">
+            <div
+              className="flex flex-col items-center justify-center p-4 text-center bg-white border rounded-xl shadow-lg outline-none h-fit"
+              style={{ maxWidth: '195px' }}
+            >
+              <div className="flex items-center" style={{ width: '195px' }}>
                 <SearchIcon />
                 <input
                   onChange={handleSearchChange}
@@ -126,7 +129,7 @@ function LabelsDropdown({ optionsFromField, allOptions, currentProperty, taskId 
                           'text-gray-700 py-2 bg-white border w-full text-center block px-4 text-sm truncate',
                           option.color ? 'text-white' : ''
                         )}
-                        style={{ backgroundColor: option.color }}
+                        style={{ backgroundColor: option.color, maxWidth: '195px' }}
                       >
                         {option.name}
                       </button>
@@ -137,6 +140,7 @@ function LabelsDropdown({ optionsFromField, allOptions, currentProperty, taskId 
                     'text-gray-700 py-2 bg-alsoit-purple-50 border w-full text-center block px-4 text-sm font-semibold hover:text-alsoit-purple-300'
                   )}
                   onClick={handleEditCustom}
+                  style={{ maxWidth: '195px' }}
                 >
                   Add/Edit Options
                 </button>
