@@ -27,8 +27,15 @@ export function ListPage() {
   const containerRef = useRef<HTMLDivElement>(null);
 
   // get list details to set active entity
-  const { data: list } = UseGetListDetails({ activeItemId: listId, activeItemType: EntityType.list });
+  const { data: list } = UseGetListDetails(listId);
   const listName = list?.data.list.name ?? '';
+
+  // get list tasks
+  const { data, hasNextPage, fetchNextPage } = getTaskListService({
+    listId,
+    assigneeUserId: filterTaskByAssigneeIds
+  });
+  const tasks = data ? data.pages.flatMap((page) => page.data.tasks) : [];
 
   useEffect(() => {
     if (list) {
@@ -37,10 +44,6 @@ export function ListPage() {
       }
     }
   }, [list]);
-
-  // get list tasks
-  const { data, hasNextPage, fetchNextPage } = getTaskListService({ listId, assigneeUserId: filterTaskByAssigneeIds });
-  const tasks = data ? data.pages.flatMap((page) => page.data.tasks) : [];
 
   // infinite scroll
   useEffect(() => {
@@ -94,9 +97,9 @@ export function ListPage() {
           >
             {listView && <TaskQuickAction listDetailsData={listName} />}
 
-            {tasks.length ? <List tasks={tasks} customProperty={list?.data.list.custom_fields} /> : []}
+            {tasks?.length ? <List tasks={tasks} customProperty={list?.data.list.custom_fields} /> : null}
           </div>
-          {tasks.length > 1 && <GroupHorizontalScroll />}
+          {tasks?.length > 1 && <GroupHorizontalScroll />}
         </>
       </Page>
     </>

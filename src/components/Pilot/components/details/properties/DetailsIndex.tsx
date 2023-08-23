@@ -23,10 +23,7 @@ export default function DetailsIndex() {
     activeItemId: walletId,
     activeItemType: EntityType.wallet
   });
-  const { data: list } = UseGetListDetails({
-    activeItemId: listId != undefined ? listId : null,
-    activeItemType: EntityType.list
-  });
+  const { data: list } = UseGetListDetails(listId);
 
   const { data: task } = getOneTaskServices({ task_id: taskId != undefined ? taskId : null });
 
