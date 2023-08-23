@@ -158,7 +158,6 @@ interface TaskState {
   groupByStatus: string | null;
   showTaskUploadModal: boolean;
   timerStatus: boolean;
-  // filterTaskByAssigneeIds: string | null | undefined;
   sortAbleArr: SortOption[];
   sortArr: string[];
   timeArr: string[];
@@ -230,7 +229,6 @@ const initialState: TaskState = {
   groupByStatus: 'status',
   showTaskUploadModal: false,
   timerStatus: false,
-  // filterTaskByAssigneeIds: null,
   sortAbleArr: [],
   sortArr: [],
   timeArr: [],
@@ -432,9 +430,6 @@ export const taskSlice = createSlice({
     setTimerStatus(state, action: PayloadAction<boolean>) {
       state.timerStatus = action.payload;
     },
-    // setFilterTaskByAssigneeIds(state, action: PayloadAction<string | null | undefined>) {
-    //   state.filterTaskByAssigneeIds = action.payload;
-    // },
     setSortArray(state, action: PayloadAction<SortOption[]>) {
       state.sortAbleArr = action.payload;
     },
