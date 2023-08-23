@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { ICustomField } from '../../../../features/task/taskSlice';
-import { IField } from '../../../../features/list/list.interfaces';
 import { useUpdateEntityCustomFieldValue } from '../../../../features/list/listService';
 
 interface DropdownFieldWrapperProps {
@@ -46,7 +45,7 @@ function TextField({ taskCustomFields, taskId, fieldId }: DropdownFieldWrapperPr
             onClick={() => {
               setEditMode(true);
             }}
-            className="w-full h-full flex justify-center items-center text-alsoit-text-md"
+            className="w-full h-full flex justify-center items-center text-alsoit-text-md font-semibold"
           >
             {currentValue}
           </h1>
@@ -59,7 +58,7 @@ function TextField({ taskCustomFields, taskId, fieldId }: DropdownFieldWrapperPr
           onChange={(e) => setCurrentValue(e.target.value)}
           onKeyDown={handleKeyDown}
           onBlur={handleInputBlur}
-          className="w-full h-fit border-alsoit-gray-300 text-alsoit-text-md"
+          className="w-full h-fit border-alsoit-gray-300 text-alsoit-text-md font-semibold"
         />
       )}
     </div>
