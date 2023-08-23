@@ -11,6 +11,7 @@ import { setShowPilotSideOver } from '../../../../features/general/slideOver/sli
 import {
   setCurrentTaskStatusId,
   setSelectedIndex,
+  setSelectedIndexListId,
   setSelectedIndexStatus,
   setSelectedTasksArray,
   setShowTaskNavigation,
@@ -183,6 +184,7 @@ export function StickyCol({
     });
   };
 
+  // listen on shift + arrow down key
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.shiftKey && event.key === 'ArrowDown') {
@@ -233,6 +235,7 @@ export function StickyCol({
       setSelectedIndexArray(updatedArray);
     }
     dispatch(setSelectedIndexStatus(task.status.name));
+    dispatch(setSelectedIndexListId(task.list_id));
     const isChecked = e.target.checked;
     dispatch(setShowTaskNavigation(isChecked));
     if (isChecked) {

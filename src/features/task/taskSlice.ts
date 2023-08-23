@@ -145,6 +145,7 @@ interface TaskState {
   addNewTaskItem: boolean;
   selectedIndex: number | null;
   selectedIndexStatus: string | null;
+  selectedIndexListId: string | null;
   hilightNewTask: boolean;
   closeTaskListView: boolean;
   toggleAssignCurrentTaskId: string | null | undefined;
@@ -233,6 +234,7 @@ const initialState: TaskState = {
   closeTaskListView: true,
   selectedIndex: null,
   selectedIndexStatus: null,
+  selectedIndexListId: null,
   toggleAssignCurrentTaskId: null,
   currentParentTaskId: null,
   getSubTaskId: null,
@@ -314,6 +316,9 @@ export const taskSlice = createSlice({
     },
     setSelectedIndexStatus(state, action: PayloadAction<string>) {
       state.selectedIndexStatus = action.payload;
+    },
+    setSelectedIndexListId(state, action: PayloadAction<string>) {
+      state.selectedIndexListId = action.payload;
     },
     setSortType(state, action: PayloadAction<TaskKey>) {
       state.sortType = action.payload;
@@ -606,6 +611,7 @@ export const {
   getCompactViewWrap,
   setSelectedIndex,
   setSelectedIndexStatus,
+  setSelectedIndexListId,
   getTableView,
   getBoardView,
   getCalendeView,
