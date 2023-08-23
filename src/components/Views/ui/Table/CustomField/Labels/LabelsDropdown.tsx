@@ -103,8 +103,8 @@ function LabelsDropdown({ optionsFromField, allOptions, currentProperty, taskId 
 
       <Transition appear show={isOpen} as="div">
         <Dialog as="div" className="relative z-10" onClose={closeModal}>
-          <div style={{ ...cords, width: '195px' }} className="fixed overflow-y-auto max-w-full">
-            <div className="flex flex-col items-center justify-center p-4 text-center bg-white border rounded-xl shadow-lg outline-none h-fit">
+          <div style={{ ...cords }} className="fixed overflow-y-auto max-w-full">
+            <div className="flex flex-col items-center justify-center p-4 text-center bg-white border rounded-xl shadow-lg outline-none w-fit h-fit">
               <div className="flex items-center">
                 <SearchIcon />
                 <input
