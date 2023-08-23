@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { cl } from '../../../../../../utils';
 import { Dialog, Transition } from '@headlessui/react';
 import { useAbsolute } from '../../../../../../hooks/useAbsolute';
@@ -31,10 +31,19 @@ function LabelsDropdown({ optionsFromField, allOptions, currentProperty, taskId 
   const { mutate: onUpdate } = useUpdateEntityCustomFieldValue(taskId);
 
   const [isOpen, setIsOpen] = useState(false);
+  const [searchValue, setSearchValue] = useState<string>('');
   const { updateCords } = useAppSelector((state) => state.task);
   const { cords, relativeRef } = useAbsolute(updateCords, 160);
 
   const valueIds = optionsFromField?.map((obj) => ({ value: obj.id }));
+
+  const filteredOptions = allOptions?.filter((option) => option.name.toLowerCase().includes(searchValue.toLowerCase()));
+
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchValue(e.target.value);
+  };
 
   function closeModal() {
     setIsOpen(false);
@@ -58,6 +67,7 @@ function LabelsDropdown({ optionsFromField, allOptions, currentProperty, taskId 
       });
     closeModal();
   };
+
   return (
     <div className="w-full">
       <div className="w-full">
@@ -68,15 +78,18 @@ function LabelsDropdown({ optionsFromField, allOptions, currentProperty, taskId 
         >
           <div ref={relativeRef} className="w-full">
             {optionsFromField?.length ? (
-              <div className="w-full flex flex-wrap justify-center gap-1 items-center">
+              <div className="w-full flex flex-wrap justify-center gap-1 items-center p-1">
                 {optionsFromField?.map((value) => {
                   return (
                     <div
                       key={value.id}
-                      className={cl(value.color ? 'text-white' : 'border-2 border-gray-500', 'rounded p-0.5 ')}
+                      className={cl(
+                        value.color ? 'text-white' : 'border-2 border-gray-500',
+                        'rounded p-0.5 max-w-full'
+                      )}
                       style={{ backgroundColor: value.color }}
                     >
-                      <h3 className="text-alsoit-text-md">{value.name}</h3>
+                      <h3 className="text-alsoit-text-md max-w-full truncate">{value.name}</h3>
                     </div>
                   );
                 })}
@@ -90,27 +103,27 @@ function LabelsDropdown({ optionsFromField, allOptions, currentProperty, taskId 
 
       <Transition appear show={isOpen} as="div">
         <Dialog as="div" className="relative z-10" onClose={closeModal}>
-          <div style={{ ...cords }} className="fixed overflow-y-auto">
-            <div className="flex flex-col items-center justify-center p-4 text-center bg-white border rounded-md shadow-lg outline-none w-fit h-fit">
+          <div style={{ ...cords, width: '195px' }} className="fixed overflow-y-auto max-w-full">
+            <div className="flex flex-col items-center justify-center p-4 text-center bg-white border rounded-xl shadow-lg outline-none h-fit">
               <div className="flex items-center">
                 <SearchIcon />
                 <input
-                  // onChange={handleSearchChange}
-                  // value={searchValue}
-                  // ref={inputRef}
+                  onChange={handleSearchChange}
+                  value={searchValue}
+                  ref={inputRef}
                   type="text"
                   placeholder="Search"
                   className="h-4 border-0 ring-0 outline-0 focus:ring-0 focust:outline-0 focus:border-0"
                 />
               </div>
               <div className="w-full pt-3 space-y-2">
-                {Array.isArray(allOptions)
-                  ? allOptions.map((option) => (
+                {Array.isArray(filteredOptions)
+                  ? filteredOptions.map((option) => (
                       <button
                         key={option.id}
                         onClick={() => handleClick(option)}
                         className={cl(
-                          'text-gray-700 py-2 bg-white border w-full text-center block px-4 text-sm',
+                          'text-gray-700 py-2 bg-white border w-full text-center block px-4 text-sm truncate',
                           option.color ? 'text-white' : ''
                         )}
                         style={{ backgroundColor: option.color }}
