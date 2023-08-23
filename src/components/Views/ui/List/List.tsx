@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
-import { useList } from '../../../../features/list/listService';
 import { Task } from '../../../../features/task/interface.tasks';
 import { filterByAssignee, filterBySearchValue, sortTasks } from '../../../TasksHeader/lib';
 import { Table } from '../Table/Table';
@@ -9,11 +8,12 @@ import { AddTask } from '../AddTask/AddTask';
 import { getTaskColumns, setCurrTeamMemId } from '../../../../features/task/taskSlice';
 import { columnsHead, listColumnProps } from '../../../../pages/workspace/tasks/component/views/ListColumns';
 import { useParams } from 'react-router-dom';
-import { UseGetHubDetails } from '../../../../features/hubs/hubService';
 import { cl } from '../../../../utils';
 import { useDroppable } from '@dnd-kit/core';
-import { EntityType } from '../../../../utils/EntityTypes/EntityType';
 import { IField } from '../../../../features/list/list.interfaces';
+import { Hub, List as ListType } from '../../../../pages/workspace/hubs/components/ActiveTree/activetree.interfaces';
+import { findCurrentHub } from '../../../../managers/Hub';
+import { findCurrentList } from '../../../../managers/List';
 
 interface ListProps {
   tasks: Task[];
@@ -27,27 +27,37 @@ export type SortOption = {
 };
 
 export function List({ tasks, customProperty }: ListProps) {
-  const { hubId } = useParams();
-  // hubId;
-  const [columns, setColumns] = useState<listColumnProps[] | undefined>(undefined);
-  const { sortType } = useAppSelector((state) => state.task);
-  const { data } = useList(tasks[0].list_id);
-
   const dispatch = useAppDispatch();
-  const { taskColumns, hideTask } = useAppSelector((state) => state.task);
+  const { listId } = useParams();
 
-  const { data: hub } = UseGetHubDetails({
-    activeItemId: hubId,
-    activeItemType: EntityType.hub
-  });
+  const { sortType, hideTask } = useAppSelector((state) => state.task);
+  const { parentHubExt, hub } = useAppSelector((state) => state.hub);
+
+  const [columns, setColumns] = useState<listColumnProps[] | undefined>(undefined);
+  const [collapseTable, setCollapseTable] = useState(false);
+  const [showNewTaskField, setShowNewTaskField] = useState(false);
+  const [parentHub, setParentHub] = useState<Hub>();
+  const [currentList, setCurrentList] = useState<ListType>();
+
+  useEffect(() => {
+    if (parentHubExt.id) {
+      setParentHub(findCurrentHub(parentHubExt.id, hub));
+    }
+  }, [parentHubExt]);
+
+  useEffect(() => {
+    if (listId) {
+      setCurrentList(findCurrentList(listId, hub));
+    }
+  }, [listId]);
 
   const custom_fields = customProperty;
 
   useEffect(() => {
-    if (!custom_fields) {
+    if (!customProperty) {
       return;
     }
-    const customFieldNames = custom_fields?.map((i) => ({
+    const customFieldNames = customProperty?.map((i) => ({
       value: i.name,
       id: i.id,
       field: i.type,
@@ -58,18 +68,12 @@ export function List({ tasks, customProperty }: ListProps) {
 
     dispatch(getTaskColumns(newColumns));
     setColumns(newColumns);
-  }, [custom_fields]);
-
-  const [collapseTable, setCollapseTable] = useState(false);
-  const [showNewTaskField, setShowNewTaskField] = useState(false);
-
-  const listName = data?.name;
+  }, [customProperty]);
 
   const { filteredBySearch } = filterBySearchValue(tasks);
-
   const { filteredByAssignee } = filterByAssignee(filteredBySearch);
-
   const { sortedTasks } = sortTasks(sortType, filteredByAssignee);
+
   const handleClose = () => {
     setShowNewTaskField(false);
     dispatch(setCurrTeamMemId(null));
@@ -85,8 +89,8 @@ export function List({ tasks, customProperty }: ListProps) {
   return (
     <div className="pt-1 border-t-4 border-l-4 border-purple-500 rounded-xl bg-purple-50" ref={setNodeRef}>
       <Label
-        listName={listName}
-        hubName={hub?.data.hub?.name}
+        listName={currentList?.name}
+        hubName={parentHub?.name}
         tasks={tasks}
         showTable={collapseTable}
         onClickChevron={() => setCollapseTable((prev) => !prev)}
@@ -95,7 +99,7 @@ export function List({ tasks, customProperty }: ListProps) {
         <div className="relative">
           {showNewTaskField ? (
             <div className="pl-2">
-              <AddTask parentId={data?.id as string} isListParent onClose={() => handleClose()} />
+              <AddTask parentId={currentList?.id as string} isListParent onClose={() => handleClose()} />
             </div>
           ) : null}
           {!showNewTaskField ? (
@@ -107,10 +111,10 @@ export function List({ tasks, customProperty }: ListProps) {
           ) : null}
           {Object.keys(sortedTasks).map((key) => (
             <Table
-              listName={listName}
+              listName={currentList?.name}
               label={key}
               key={key}
-              heads={hideTask.length ? hideTask : taskColumns}
+              heads={hideTask.length ? hideTask : columns}
               data={sortedTasks[key]}
               customFields={custom_fields as IField[]}
             />
