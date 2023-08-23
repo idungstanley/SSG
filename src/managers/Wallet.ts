@@ -39,26 +39,21 @@ export const deleteWalletManager = (id: string, hubs: Hub[]) => {
   return updatedTree;
 };
 
-export const createWalletManager = (
-  hubId: string | null,
-  parentId: string | null,
-  hubs: Hub[],
-  newWalletFromData: IWallet
-) => {
+export const createWalletManager = (type: string, parentId: string | null, hubs: Hub[], newWalletFromData: IWallet) => {
   const createWallet = (parent: Wallet | Hub) => {
     const newWallet = {
       ...newWalletFromData,
       children: [],
       lists: []
     };
-    if (hubId) {
+    if (type.includes('hub')) {
       const newParent = { ...parent } as Hub;
       return {
         ...newParent,
         wallets: [...newParent.wallets, newWallet]
       };
     }
-    if (parentId) {
+    if (type.includes('wallet')) {
       const newParent = { ...parent } as Wallet;
       return {
         ...newParent,
@@ -67,8 +62,7 @@ export const createWalletManager = (
     }
   };
 
-  const id = hubId ? hubId : parentId ? parentId : '';
-  const type = parentId ? EntityType.wallet : EntityType.hub;
+  const id = parentId ?? '';
   const updatedTree = findCurrentEntity(type, id, hubs, createWallet as <IWallet>(item: IWallet) => IWallet);
   return updatedTree;
 };

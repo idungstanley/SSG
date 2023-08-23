@@ -30,6 +30,25 @@ import { runTimer } from '../../utils/TimerCounter';
 import Duration from '../../utils/TimerDuration';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
 
+//edit a custom field
+export const UseEditCustomFieldService = (data: {
+  id?: string | null;
+  name?: string;
+  options?: { name: string; color: string }[];
+  color?: string | null;
+}) => {
+  const response = requestNew({
+    url: `custom-fields/${data.id}`,
+    method: 'PUT',
+    data: {
+      name: data.name,
+      color: data.color,
+      options: data.options
+    }
+  });
+  return response;
+};
+
 export const useGetCustomField = (id: string | undefined, getCustom: boolean) => {
   return useQuery(
     ['xustom-field'],
@@ -407,19 +426,21 @@ export const getTaskListService = ({
   listId: string | null | undefined;
   assigneeUserId: string | undefined | null;
 }) => {
+  const { workSpaceId } = useParams();
   const queryClient = useQueryClient();
-  const assignees = assigneeUserId ? (assigneeUserId == 'unassigned' ? null : [assigneeUserId]) : null;
+
   const { sortAbleArr } = useAppSelector((state) => state.task);
+  const { currentWorkspaceId } = useAppSelector((state) => state.auth);
+
+  const assignees = assigneeUserId && assigneeUserId !== 'unassigned' ? [assigneeUserId] : null;
   const sortArrUpdate = sortAbleArr.length <= 0 ? null : sortAbleArr;
 
-  const { workSpaceId } = useParams();
-  const { currentWorkspaceId } = useAppSelector((state) => state.auth);
-  const fetch = currentWorkspaceId == workSpaceId;
+  const fetch = currentWorkspaceId === workSpaceId;
 
   const { filters } = generateFilters();
 
   return useInfiniteQuery(
-    ['task', { listId, assigneeUserId, sortArrUpdate, filters }],
+    ['task', listId, { assigneeUserId, sortArrUpdate, filters }],
 
     async ({ pageParam = 0 }: { pageParam?: number }) => {
       return requestNew<ITaskListRes>({
@@ -445,9 +466,9 @@ export const getTaskListService = ({
         if (lastPage?.data?.paginator.has_more_pages) {
           return Number(lastPage.data.paginator.page) + 1;
         }
-
         return false;
-      }
+      },
+      cacheTime: 0
     }
   );
 };

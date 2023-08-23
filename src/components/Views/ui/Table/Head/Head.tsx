@@ -7,6 +7,7 @@ import { Column } from '../../../types/table';
 import { Chevron } from '../../Chevron';
 import {
   setActiveTaskColumn,
+  setEditCustomProperty,
   setEntityForCustom,
   setSelectedTasksArray,
   setSortArr,
@@ -31,6 +32,7 @@ import AlsoitMenuDropdown from '../../../../DropDowns';
 import { setStatusTaskListDetails } from '../../../../../features/list/listSlice';
 import { useParams } from 'react-router-dom';
 import { Task } from '../../../../../features/task/interface.tasks';
+import CollapseIcon from '../../collapseIcon/CollapseIcon';
 
 interface HeadProps {
   columns: Column[];
@@ -205,6 +207,7 @@ export function Head({
   const handleAddCustomProperty = () => {
     const type = hubId ? 'hub' : walletId ? 'wallet' : 'list';
     dispatch(setEntityForCustom({ id: hubId ?? walletId ?? list_id, type }));
+    dispatch(setEditCustomProperty(undefined));
     dispatch(setActiveTabId(10));
   };
 
@@ -220,15 +223,9 @@ export function Head({
               style={{ backgroundColor: headerStatusColor }}
             >
               <div>
-                {/* <div className="items-center space-x-1 viewSettings" onClick={(e) => e.stopPropagation()}>
-                  <img src={statusbox} alt="" className="pr-1 border-r" onClick={handleCheckedGroupTasks} />
-                  <CiEdit className="w-4 h-4 pr-1 border-r cursor-pointer" />
-                  <BsThreeDots className="w-4 h-4 cursor-pointer" onClick={(e) => handleClick(e)} />
-                </div>
-                <p className="border-t py-.5 viewSettings"></p> */}
                 <div className="flex items-center">
-                  <p>
-                    <Chevron
+                  <p className="pr-1.5">
+                    <CollapseIcon
                       color={headerStatusColor}
                       active={collapseTasks}
                       onToggle={onToggleCollapseTasks}

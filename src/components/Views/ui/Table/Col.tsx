@@ -7,7 +7,7 @@ import DropdownFieldWrapper from '../../../../pages/workspace/tasks/component/ta
 import TaskPriority from '../../../../pages/workspace/tasks/component/taskData/priority';
 import { listColumnProps } from '../../../../pages/workspace/tasks/component/views/ListColumns';
 import { Task, TaskValue } from '../../../../features/task/interface.tasks';
-import { DEFAULT_COL_BG } from '../../config';
+import { ACTIVE_COL_BG, DEFAULT_COL_BG } from '../../config';
 import DateFormat from '../../../DateFormat';
 import StatusNameDropdown from '../../../status/StatusNameDropdown';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
@@ -26,7 +26,8 @@ interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
 export function Col({ value, field, fieldId, task, customFields, ...props }: ColProps) {
   const { taskId } = useParams();
   const { dragOverItemId, draggableItemId } = useAppSelector((state) => state.list);
-  const ACTIVE_TASK = taskId === task.id ? 'tdListVNoSticky' : DEFAULT_COL_BG;
+
+  const COL_BG = taskId === task.id ? ACTIVE_COL_BG : DEFAULT_COL_BG;
   const { singleLineView, verticalGrid, selectedTasksArray, CompactView } = useAppSelector((state) => state.task);
   const isSelected = selectedTasksArray.includes(task.id);
 
@@ -82,7 +83,7 @@ export function Col({ value, field, fieldId, task, customFields, ...props }: Col
           dragOverItemId === task.id && draggableItemId !== dragOverItemId
             ? 'border-b-2 border-alsoit-purple-300'
             : 'border-t',
-          ACTIVE_TASK,
+          COL_BG,
           `relative flex ${isSelected && 'tdListVNoSticky'} ${
             verticalGrid && 'border-r'
           } justify-center items-center text-sm font-medium text-gray-900 `

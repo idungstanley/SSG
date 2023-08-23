@@ -22,6 +22,10 @@ export default function DropdownFieldWrapper({
   const activeProperty = property ? taskActiveProperty : undefined;
 
   return field ? (
-    <DropdownField field={{ id: field.id, options: field.options, activeProperty }} taskId={taskId} />
+    <DropdownField
+      field={{ id: field.id, options: field.options, activeProperty }}
+      taskId={taskId}
+      currentProperty={field}
+    />
   ) : null;
 }

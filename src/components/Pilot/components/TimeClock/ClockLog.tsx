@@ -89,7 +89,7 @@ export default function ClockLog({ getTaskEntries }: LogProps) {
       return (
         <div className="p-2">
           <table className="relative w-full">
-            <thead className="flex items-center justify-between pb-2 text-xs border-b border-gray-400 font-extralight relative">
+            <thead className="relative flex items-center justify-between pb-2 text-xs border-b border-gray-400 font-extralight">
               <tr className="flex items-center space-x-5">
                 {headers.map((col) => {
                   return (

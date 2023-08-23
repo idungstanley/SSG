@@ -3,6 +3,7 @@ import { Task } from '../../../../features/task/interface.tasks';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { setSelectedTasksArray } from '../../../../features/task/taskSlice';
 import ListAddModal from './ListAddModal';
+import CollapseIcon from '../collapseIcon/CollapseIcon';
 
 interface LabelProps {
   listName?: string;
@@ -37,7 +38,7 @@ export function Label({ listName, onClickChevron, hubName, showTable, tasks }: L
     <div className="flex items-center">
       <div className="flex justify-between space-x-10 items-center bg-purple-500 rounded-br-md -mt-1 p-1 pr-7 rounded-l-md -ml-1">
         <div className="flex space-x-2 items-center pl-2 text-sm text-white  w-fit">
-          <Chevron onToggle={onClickChevron} active={showTable} />
+          <CollapseIcon color="#A854F7" active={showTable} onToggle={onClickChevron} hoverBg="white" />
           <h1 className="">{listName ?? 'Loading...'}</h1>
         </div>
         <button className="rounded-sm bg-gray-200 flex justify-center items-center h-6">

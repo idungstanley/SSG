@@ -20,7 +20,6 @@ import { OverlayRow } from './OverlayRow';
 import { Row } from './Row';
 import { UseGetListDetails } from '../../../../features/list/listService';
 import { IField, ITask_statuses } from '../../../../features/list/list.interfaces';
-import { EntityType } from '../../../../utils/EntityTypes/EntityType';
 
 interface TableProps {
   heads: listColumnProps[];
@@ -33,6 +32,10 @@ interface TableProps {
 export function Table({ heads, data, label, listName, customFields }: TableProps) {
   const dispatch = useAppDispatch();
 
+  const { draggableItemId } = useAppSelector((state) => state.list);
+  const { statusId } = useAppSelector((state) => state.task);
+
+  const [listId, setListId] = useState<string>('');
   const [tableHeight, setTableHeight] = useState<string | number>('auto');
   const [activeIndex, setActiveIndex] = useState<null | number>(null);
   const [showNewTaskField, setShowNewTaskField] = useState(false);
@@ -43,13 +46,7 @@ export function Table({ heads, data, label, listName, customFields }: TableProps
 
   const columns = createHeaders(heads).filter((i) => !i.hidden);
 
-  // const columns = createHeaders(heads).filter((i) => !i.hidden);
-
-  const { draggableItemId } = useAppSelector((state) => state.list);
-  const [listId, setListId] = useState<string>('');
-  const { statusId } = useAppSelector((state) => state.task);
-
-  const { data: list } = UseGetListDetails({ activeItemId: listId, activeItemType: EntityType.list });
+  const { data: list } = UseGetListDetails(listId);
 
   const mouseMove = useCallback(
     (e: MouseEvent) => {
