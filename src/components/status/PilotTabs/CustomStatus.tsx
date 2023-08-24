@@ -19,12 +19,10 @@ import BoardSection from '../Components/BoardSection';
 import { BoardSectionsType } from '../../../utils/StatusManagement/Types';
 import { useMutation } from '@tanstack/react-query';
 import { statusTypesService } from '../../../features/hubs/hubService';
-import { displayPrompt } from '../../../features/general/prompt/promptSlice';
 import { addIsDefaultToValues, extractValuesFromArray } from '../../../utils/StatusManagement/statusUtils';
-
-// const groupStatusByModelType = (statusTypes: StatusProps[]) => {
-//   return [...new Set(statusTypes.map(({ type }) => type))];
-// };
+import { setMatchedStatus, setStatusesToMatch } from '../../../features/hubs/hubSlice';
+import MatchStatusPopUp from '../Components/MatchStatusPopUp';
+import { setMatchData } from '../../../features/general/prompt/promptSlice';
 
 interface ErrorResponse {
   data: {
@@ -39,7 +37,9 @@ interface ErrorResponse {
 export default function CustomStatus() {
   const dispatch = useAppDispatch();
 
-  const { spaceStatuses } = useAppSelector((state) => state.hub);
+  const { spaceStatuses, matchedStatus } = useAppSelector((state) => state.hub);
+  const { matchData } = useAppSelector((state) => state.prompt);
+
   const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
   const { statusTaskListDetails } = useAppSelector((state) => state.list);
 
@@ -47,8 +47,8 @@ export default function CustomStatus() {
   const [validationMessage, setValidationMessage] = useState<string>('');
   const [newStatusValue, setNewStatusValue] = useState<string>('');
   const [addStatus, setAddStatus] = useState<boolean>(false);
-  const [collapsedStatusGroups, setCollapsedStatusGroups] = useState<{ [key: string]: boolean }>({});
   const [activeId, setActiveId] = useState<number | null>(null);
+  const [showMatchStatusPop, setShowMatchStatusPopup] = useState<boolean>(false);
 
   const initialBoardSections = initializeBoard(statusTypesState);
   const [boardSections, setBoardSections] = useState<BoardSectionsType>(initialBoardSections);
@@ -59,10 +59,6 @@ export default function CustomStatus() {
       coordinateGetter: sortableKeyboardCoordinates
     })
   );
-
-  const sortableItems = statusTypesState.map((status) => ({
-    id: status.name
-  }));
 
   function handleDragStart(event: DragEndEvent) {
     const { active } = event;
@@ -116,16 +112,7 @@ export default function CustomStatus() {
         [overContainer]: arrayMove(boardSection[overContainer], activeIndex, overIndex)
       }));
     }
-
     setActiveId(null);
-  };
-  // ... (remaining code)
-
-  const handleToggleGroup = (group: string) => {
-    setCollapsedStatusGroups((prevCollapsedStatusGroups) => ({
-      ...prevCollapsedStatusGroups,
-      [group]: !prevCollapsedStatusGroups[group]
-    }));
   };
 
   useEffect(() => {
@@ -170,9 +157,6 @@ export default function CustomStatus() {
     }
     setAddStatus(false);
   };
-  const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setNewStatusValue(e.target.value);
-  };
 
   const groupStylesMapping: Record<string, GroupStyles> = {
     open: { backgroundColor: '#FBFBFB', boxShadow: '0px 0px 5px rgba(0, 0, 0, 0.2)' },
@@ -191,37 +175,55 @@ export default function CustomStatus() {
   const defaultItem = statusTypesState.find((item) => item.position === 0);
   const AddDefault = addIsDefaultToValues(boardSections, defaultItem?.name);
   const statusData = extractValuesFromArray(AddDefault);
+  const model = statusTaskListDetails.listId ? 'list' : (activeItemType as string);
+  const model_id = statusTaskListDetails.listId || (activeItemId as string);
+
+  const handleStatusData = async () => {
+    await createStatusTypes.mutateAsync({
+      model_id: model_id,
+      model: model,
+      from_model: activeItemType,
+      from_model_id: activeItemId,
+      statuses: statusData,
+      status_matches: matchedStatus
+    });
+  };
+
+  const matchStatusArray = [
+    {
+      label: 'Save Changes',
+      style: 'danger',
+      callback: async () => {
+        handleStatusData();
+        setShowMatchStatusPopup(false);
+      }
+    },
+    {
+      label: 'Cancel',
+      style: 'plain',
+      callback: () => {
+        setShowMatchStatusPopup(false);
+        dispatch(setMatchedStatus([]));
+      }
+    }
+  ];
 
   const onSubmit = async () => {
     try {
       await createStatusTypes.mutateAsync({
-        model_id: statusTaskListDetails.listId || (activeItemId as string),
-        model: 'list' || (activeItemType as string),
+        model_id: model_id,
+        model: model,
         from_model: activeItemType,
         from_model_id: activeItemId,
         statuses: statusData
       });
     } catch (err) {
       const errorResponse = err as ErrorResponse; // Cast err to the ErrorResponse type
-      if (errorResponse.data.data.match) {
-        dispatch(
-          displayPrompt(
-            'Are you sure you want to delete this Status ?(“PENDING”)',
-            'You changed Statuses in your List . 3 Tasks would be affected. Please select an option below.',
-            [
-              {
-                label: 'Create Subhub',
-                style: 'danger',
-                callback: async () => ({})
-              },
-              {
-                label: 'Cancel',
-                style: 'plain',
-                callback: () => ({})
-              }
-            ]
-          )
-        );
+      const matchData = errorResponse.data.data.match;
+      if (matchData) {
+        dispatch(setMatchData(matchData));
+        dispatch(setStatusesToMatch(statusData));
+        setShowMatchStatusPopup(true);
       }
     }
   };
@@ -248,6 +250,10 @@ export default function CustomStatus() {
             >
               <BoardSection
                 id={uniqueModelType}
+                addStatus={addStatus}
+                setNewStatusValue={setNewStatusValue}
+                newStatusValue={newStatusValue}
+                setAddStatus={setAddStatus}
                 title={uniqueModelType}
                 status={boardSections[uniqueModelType]}
                 handleSaveNewStatus={handleSaveNewStatus}
@@ -261,6 +267,13 @@ export default function CustomStatus() {
       <div className="flex justify-center">
         <Button label="Save" buttonStyle="base" width="w-40" height="h-8" onClick={onSubmit} />
       </div>
+      <MatchStatusPopUp
+        options={matchStatusArray}
+        title="Match Statuses"
+        body={`You changed statuses in your List. ${matchData?.length} status will be affected. How should we handle these statuses?`}
+        setShow={setShowMatchStatusPopup}
+        show={showMatchStatusPop}
+      />
     </section>
   );
 }

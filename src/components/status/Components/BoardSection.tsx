@@ -15,16 +15,28 @@ interface BoardProps {
   title: string;
   status: StatusProps[];
   setStatusTypesState: React.Dispatch<React.SetStateAction<BoardSectionsType>>;
+  setAddStatus: React.Dispatch<React.SetStateAction<boolean>>;
+  setNewStatusValue: React.Dispatch<React.SetStateAction<string>>;
+  addStatus: boolean;
+  newStatusValue: string;
   handleSaveNewStatus: () => void;
 }
 
-export default function BoardSection({ id, title, status, setStatusTypesState, handleSaveNewStatus }: BoardProps) {
+export default function BoardSection({
+  id,
+  title,
+  status,
+  setAddStatus,
+  addStatus,
+  setStatusTypesState,
+  handleSaveNewStatus,
+  newStatusValue,
+  setNewStatusValue
+}: BoardProps) {
   const { setNodeRef } = useDroppable({
     id
   });
 
-  const [addStatus, setAddStatus] = useState<boolean>(false);
-  const [newStatusValue, setNewStatusValue] = useState<string>();
   const [collapsedStatusGroups, setCollapsedStatusGroups] = useState<{ [key: string]: boolean }>({});
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
