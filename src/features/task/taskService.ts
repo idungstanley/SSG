@@ -171,7 +171,6 @@ export const useMoveTask = () => {
   const id = hubId ?? walletId ?? listId;
   const type = hubId ? EntityType.hub : walletId ? EntityType.wallet : EntityType.list;
 
-  const { filterTaskByAssigneeIds: assigneeUserId } = useAppSelector((state) => state.task);
   const { sortAbleArr } = useAppSelector((state) => state.task);
   const sortArrUpdate = sortAbleArr.length <= 0 ? null : sortAbleArr;
 
@@ -180,7 +179,7 @@ export const useMoveTask = () => {
   return useMutation(moveTask, {
     onSuccess: () => {
       queryClient.invalidateQueries(['lists']);
-      queryClient.invalidateQueries(['task', { listId, assigneeUserId, sortArrUpdate, filters }]);
+      queryClient.invalidateQueries(['task', { listId, sortArrUpdate, filters }]);
       queryClient.invalidateQueries(['task', id, type]);
       queryClient.invalidateQueries(['retrieve', id ?? 'root', 'tree']);
       queryClient.invalidateQueries(['retrieve', id ?? 'root', undefined]);
@@ -258,18 +257,15 @@ export const createTaskService = (data: {
 
 export const UseGetFullTaskList = ({
   itemId,
-  itemType,
-  assigneeUserId
+  itemType
 }: {
   itemId: string | undefined | null;
   itemType: string | null | undefined;
-  assigneeUserId?: string | null | undefined;
 }) => {
   const queryClient = useQueryClient();
 
   const hub_id = itemType === EntityType.hub || itemType === EntityType.subHub ? itemId : null;
   const wallet_id = itemType == EntityType.wallet || itemType === EntityType.subWallet ? itemId : null;
-  const assignees = assigneeUserId ? (assigneeUserId == 'unassigned' ? null : [assigneeUserId]) : null;
   const { sortAbleArr } = useAppSelector((state) => state.task);
   const sortArrUpdate = sortAbleArr.length <= 0 ? null : sortAbleArr;
 
@@ -288,8 +284,7 @@ export const UseGetFullTaskList = ({
         params: {
           page: pageParam,
           hub_id,
-          wallet_id,
-          assignees
+          wallet_id
         },
         data: {
           filters,
@@ -299,7 +294,7 @@ export const UseGetFullTaskList = ({
     },
     {
       keepPreviousData: true,
-      enabled: fetch,
+      enabled: fetch && (!!hub_id || !!wallet_id),
       onSuccess: (data) => {
         data.pages.map((page) => page.data.tasks.map((task) => queryClient.setQueryData(['task', task.id], task)));
       },
@@ -447,20 +442,13 @@ export const UseUpdateTaskStatusServices = ({ task_id_array, priorityDataUpdate 
   );
 };
 
-export const getTaskListService = ({
-  listId,
-  assigneeUserId
-}: {
-  listId: string | null | undefined;
-  assigneeUserId: string | undefined | null;
-}) => {
+export const getTaskListService = (listId: string | null | undefined) => {
   const { workSpaceId } = useParams();
   const queryClient = useQueryClient();
 
   const { sortAbleArr } = useAppSelector((state) => state.task);
   const { currentWorkspaceId } = useAppSelector((state) => state.auth);
 
-  const assignees = assigneeUserId && assigneeUserId !== 'unassigned' ? [assigneeUserId] : null;
   const sortArrUpdate = sortAbleArr.length <= 0 ? null : sortAbleArr;
 
   const fetch = currentWorkspaceId === workSpaceId;
@@ -468,7 +456,7 @@ export const getTaskListService = ({
   const { filters } = generateFilters();
 
   return useInfiniteQuery(
-    ['task', listId, { assigneeUserId, sortArrUpdate, filters }],
+    ['task', listId, { sortArrUpdate, filters }],
 
     async ({ pageParam = 0 }: { pageParam?: number }) => {
       return requestNew<ITaskListRes>({
@@ -476,8 +464,7 @@ export const getTaskListService = ({
         method: 'POST',
         params: {
           list_id: listId,
-          page: pageParam,
-          assignees
+          page: pageParam
         },
         data: {
           sorting: sortArrUpdate,
@@ -539,7 +526,6 @@ export const getTaskListService2 = (query: { parentId: string | null | undefined
         //   queryClient.setQueryData(['task', task.id], task);
         //   return { ...task };
         // });
-        // dispatch(getTaskData(taskData));
       }
     }
   );

@@ -220,7 +220,7 @@ export function ScrollableHorizontalListsContainer({ children, ...props }: Custo
         </div>
       </div>
       {isThumbVisible && (
-        <div className="sticky bottom-0 z-3 pt-4 pr-2 group grid w-full grid-cols-2 bg-purple-50">
+        <div className="sticky bottom-0 pt-4 pr-2 group grid w-full grid-cols-2 bg-purple-50" style={{ zIndex: 11 }}>
           <div />
           <div className="flex items-center mb-4 flex-row space-x-2">
             {renderScrollArrows()}

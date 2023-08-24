@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef } from 'react';
 import { useParams } from 'react-router-dom';
-import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { useAppDispatch } from '../../app/hooks';
 import Page from '../../components/Page';
 import { UseGetFullTaskList } from '../../features/task/taskService';
 import { UseGetWalletDetails } from '../../features/wallet/walletService';
@@ -22,8 +22,6 @@ export function WalletPage() {
   const dispatch = useAppDispatch();
   const { walletId, taskId } = useParams();
 
-  const { filterTaskByAssigneeIds } = useAppSelector((state) => state.task);
-
   const containerRef = useRef<HTMLDivElement>(null);
 
   // get wallet details to set active entity
@@ -44,8 +42,7 @@ export function WalletPage() {
   // get tasks
   const { data, hasNextPage, fetchNextPage } = UseGetFullTaskList({
     itemId: walletId,
-    itemType: EntityType.wallet,
-    assigneeUserId: filterTaskByAssigneeIds
+    itemType: EntityType.wallet
   });
 
   // infinite scroll

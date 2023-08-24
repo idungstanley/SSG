@@ -21,10 +21,6 @@ interface ListProps {
 }
 
 const unique = (arr: listColumnProps[]) => [...new Set(arr)];
-export type SortOption = {
-  dir: 'asc' | 'desc';
-  field: string;
-};
 
 export function List({ tasks, customProperty }: ListProps) {
   const dispatch = useAppDispatch();
@@ -89,7 +85,7 @@ export function List({ tasks, customProperty }: ListProps) {
   return (
     <div className="pt-1 border-t-4 border-l-4 border-purple-500 rounded-xl bg-purple-50" ref={setNodeRef}>
       <Label
-        listName={currentList?.name}
+        listName={tasks[0].list?.name || currentList?.name}
         hubName={parentHub?.name}
         tasks={tasks}
         showTable={collapseTable}
@@ -99,7 +95,7 @@ export function List({ tasks, customProperty }: ListProps) {
         <div className="relative">
           {showNewTaskField ? (
             <div className="pl-2">
-              <AddTask parentId={currentList?.id as string} isListParent onClose={() => handleClose()} />
+              <AddTask parentId={tasks[0].list?.id as string} isListParent onClose={() => handleClose()} />
             </div>
           ) : null}
           {!showNewTaskField ? (
@@ -111,7 +107,7 @@ export function List({ tasks, customProperty }: ListProps) {
           ) : null}
           {Object.keys(sortedTasks).map((key) => (
             <Table
-              listName={currentList?.name}
+              listName={tasks[0].list?.name}
               label={key}
               key={key}
               heads={hideTask.length ? hideTask : columns}

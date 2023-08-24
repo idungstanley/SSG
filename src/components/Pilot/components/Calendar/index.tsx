@@ -11,10 +11,10 @@ import { EntityType } from '../../../../utils/EntityTypes/EntityType';
 export default function Calendar() {
   const [iconToggle, setIconToggle] = useState(false);
   const { listId, walletId, hubId } = useParams();
-  const { filterTaskByAssigneeIds } = useAppSelector((state) => state.task);
+
   const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
 
-  const { data: list } = getTaskListService({ listId, assigneeUserId: filterTaskByAssigneeIds });
+  const { data: list } = getTaskListService(listId);
   const { data: taskList } = UseGetFullTaskList({ itemId: activeItemId, itemType: activeItemType });
 
   const entityHubData = () => {
