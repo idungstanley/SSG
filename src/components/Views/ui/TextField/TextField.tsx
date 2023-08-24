@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { ICustomField } from '../../../../features/task/taskSlice';
 import { useUpdateEntityCustomFieldValue } from '../../../../features/list/listService';
+import Copy from '../../../../assets/icons/Copy';
+import { cl } from '../../../../utils';
 
 interface DropdownFieldWrapperProps {
   taskCustomFields?: ICustomField;
@@ -12,16 +14,19 @@ function TextField({ taskCustomFields, taskId, fieldId }: DropdownFieldWrapperPr
   const activeValue = taskCustomFields?.values[0].value ? taskCustomFields?.values[0].value : '-';
   const [currentValue, setCurrentValue] = useState<string>(activeValue);
   const [editMode, setEditMode] = useState(false);
+  const [isCopied, setIsCopied] = useState<number>(0);
 
   const { mutate: onUpdate } = useUpdateEntityCustomFieldValue(taskId);
 
   const handleInputBlur = () => {
     setEditMode(false);
-    onUpdate({
-      taskId,
-      value: [{ value: currentValue }],
-      fieldId
-    });
+    if (currentValue !== activeValue) {
+      onUpdate({
+        taskId,
+        value: [{ value: currentValue }],
+        fieldId
+      });
+    }
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -37,18 +42,42 @@ function TextField({ taskCustomFields, taskId, fieldId }: DropdownFieldWrapperPr
     }
   };
 
+  const handleCopyTexts = async () => {
+    try {
+      await navigator.clipboard.writeText(currentValue);
+      setIsCopied(1);
+      setTimeout(() => {
+        setIsCopied(0);
+      }, 500);
+    } catch (error) {
+      console.warn(`Failed to copy: ${error}`);
+    }
+  };
+
   return (
     <div className="w-full h-full flex justify-center items-center">
       {!editMode ? (
-        <div className="w-full h-full hover:border-2 hover:borer-alsoit-gray-300">
-          <h1
-            onClick={() => {
-              setEditMode(true);
-            }}
-            className="w-full h-full flex justify-center items-center text-alsoit-text-md font-semibold"
-          >
-            {currentValue}
-          </h1>
+        <div className="w-full h-full hover:border-2 hover:borer-alsoit-gray-300 group p-1">
+          <span className="h-full flex justify-center items-center  cursor-pointer">
+            <h1
+              className="truncate text-alsoit-text-lg font-semibold"
+              onClick={() => {
+                setEditMode(true);
+              }}
+            >
+              {currentValue}
+            </h1>
+            <figure
+              className={cl(
+                'opacity-0',
+                isCopied === 1 ? '-mt-2' : '-mt-4',
+                activeValue === '-' ? 'group-hover:opacity-0' : 'group-hover:opacity-100'
+              )}
+              onClick={handleCopyTexts}
+            >
+              <Copy />
+            </figure>
+          </span>
         </div>
       ) : (
         <input
@@ -58,7 +87,7 @@ function TextField({ taskCustomFields, taskId, fieldId }: DropdownFieldWrapperPr
           onChange={(e) => setCurrentValue(e.target.value)}
           onKeyDown={handleKeyDown}
           onBlur={handleInputBlur}
-          className="w-full h-fit border-alsoit-gray-300 text-alsoit-text-md font-semibold"
+          className="w-full h-fit border-alsoit-gray-300 text-alsoit-text-lg font-semibold"
         />
       )}
     </div>
