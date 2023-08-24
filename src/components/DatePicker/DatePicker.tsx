@@ -11,6 +11,7 @@ import LeftPanelOpen from '../../assets/icons/LeftPanelOpen';
 import DatePickerFooter from './DatePickerFooter';
 import { useGetUserSettingsData } from '../../features/task/taskService';
 import { setHistoryMemory, setTaskSelectedDate } from '../../features/task/taskSlice';
+import { IUserCalendarParams } from '../../features/task/interface.tasks';
 
 interface DatePickerProps {
   styles?: string;
@@ -40,14 +41,21 @@ export default function DatePicker({ styles, width, height, range, toggleFn }: D
   const [openSideBar, setOpenSideBar] = useState<boolean>(false);
   const { data } = useGetUserSettingsData({ keys: 'calendar' });
 
+  function isIUserCalendarParams(value: unknown): value is IUserCalendarParams {
+    if (typeof value === 'object' && value !== null) {
+      const userCalendarParams = value as IUserCalendarParams;
+      return 'selectedDate' in userCalendarParams && 'HistoryFilterMemory' in userCalendarParams;
+    }
+    return false;
+  }
+
   useEffect(() => {
     if (data) {
       const { value } = data.data.settings;
-      if (!value) return;
-      if (value.selectedDate && value.HistoryFilterMemory) {
+      if (isIUserCalendarParams(value)) {
         const { selectedDate, HistoryFilterMemory } = value;
-        const from = dayjs(selectedDate.from);
-        const to = dayjs(selectedDate.to);
+        const from = dayjs(selectedDate?.from);
+        const to = dayjs(selectedDate?.to);
         dispatch(setTaskSelectedDate({ from, to }));
         dispatch(setHistoryMemory(HistoryFilterMemory));
       }

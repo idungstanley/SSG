@@ -239,6 +239,11 @@ export interface IUserCalendarParams {
   selectedDate: ISelectedDate | null;
   HistoryFilterMemory: IHistoryFilterMemory | null;
 }
+
+export interface ITimeEntryParams {
+  key: string;
+  value: string[];
+}
 export interface IUserSettings {
   key: string;
   is_json: boolean;
@@ -248,9 +253,20 @@ export interface IUserSettings {
   updated_at: string;
 }
 
+export interface IUserSettingsTimeEntryRes {
+  key: string;
+  value: string[];
+}
+
 export interface IUserSettingsRes {
   data: {
     settings: IUserSettings;
+  };
+}
+
+export interface IUserSettingsUpdateRes {
+  data: {
+    settings: IUserSettingsTimeEntryRes;
   };
 }
 
