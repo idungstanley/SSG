@@ -36,7 +36,6 @@ export const useMoveWalletsService = () => {
   const id = hubId ?? walletId ?? listId;
   const type = hubId ? EntityType.hub : walletId ? EntityType.wallet : EntityType.list;
 
-  const { filterTaskByAssigneeIds: assigneeUserId } = useAppSelector((state) => state.task);
   const { sortAbleArr } = useAppSelector((state) => state.task);
   const sortArrUpdate = sortAbleArr.length <= 0 ? null : sortAbleArr;
 
@@ -44,7 +43,7 @@ export const useMoveWalletsService = () => {
 
   return useMutation(moveWallet, {
     onSuccess: () => {
-      queryClient.invalidateQueries(['task', { listId, assigneeUserId, sortArrUpdate, filters }]);
+      queryClient.invalidateQueries(['task', { listId, sortArrUpdate, filters }]);
       queryClient.invalidateQueries(['task', id, type]);
       queryClient.invalidateQueries(['retrieve', id ?? 'root', 'tree']);
       queryClient.invalidateQueries(['retrieve', id ?? 'root', undefined]);

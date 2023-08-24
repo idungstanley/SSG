@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { logout, switchWorkspace } from '../../auth/authSlice';
-import { SortOption } from '../../../pages/workspace/tasks/component/views/listLevel/component/TaskListPropertyHead';
+import { SortOption } from '../../task/taskSlice';
 
 const defaultSortOptions: SortOption[] = [];
 const sortInviteArr: string[] = [];

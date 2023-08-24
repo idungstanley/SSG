@@ -57,7 +57,7 @@ export default function PlaceItem({
       ? 'white'
       : isActivePlace
       ? 'white'
-      : isActivePlace && activeItemId !== null && !searchStatus
+      : isActivePlace && activeItemId && !searchStatus
       ? '#BF00FF08'
       : undefined,
     zIndex: isDragging ? 1 : isActivePlace ? 10 : undefined,

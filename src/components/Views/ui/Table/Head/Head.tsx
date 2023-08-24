@@ -4,8 +4,8 @@ import RoundedArrowUpDown from '../../../../../pages/workspace/tasks/component/v
 import SortDirectionCheck from '../../../../../pages/workspace/tasks/component/views/listLevel/component/SortDirectionCheck';
 import { parseLabel } from '../../../../TasksHeader/lib';
 import { Column } from '../../../types/table';
-import { Chevron } from '../../Chevron';
 import {
+  SortOption,
   setActiveTaskColumn,
   setEditCustomProperty,
   setEntityForCustom,
@@ -34,6 +34,8 @@ import { useParams } from 'react-router-dom';
 import { Task } from '../../../../../features/task/interface.tasks';
 import CollapseIcon from '../../collapseIcon/CollapseIcon';
 
+import '../../../../../styles/task.css';
+
 interface HeadProps {
   columns: Column[];
   tableHeight: string | number;
@@ -47,11 +49,6 @@ interface HeadProps {
   listName?: string;
   groupedTask?: Task[];
 }
-
-export type SortOption = {
-  dir: 'asc' | 'desc';
-  field: string;
-};
 
 export function Head({
   columns,

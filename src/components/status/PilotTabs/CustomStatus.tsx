@@ -167,7 +167,7 @@ export default function CustomStatus() {
 
   const createStatusTypes = useMutation(statusTypesService, {
     onSuccess: (data) => {
-      console.log(data);
+      // console.log(data);
     }
   });
 

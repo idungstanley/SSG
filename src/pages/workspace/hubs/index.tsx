@@ -3,7 +3,6 @@ import { useDispatch } from 'react-redux';
 import { useAppSelector } from '../../../app/hooks';
 import PlaceItem from '../../../layout/components/MainLayout/Sidebar/components/PlaceItem';
 import SubHubModal from './components/SubHubModal';
-import { cl } from '../../../utils';
 import SubWalletModal from '../wallet/components/modals/SubWalletModal';
 import ListModal from '../lists/components/modals/ListModal';
 import TaskModal from '../tasks/component/TaskModal';
@@ -31,14 +30,13 @@ import PlusIcon from '../../../assets/icons/PlusIcon';
 import ActiveTreeSearch from '../../../components/ActiveTree/ActiveTreeSearch';
 import { Modal } from '../../../components/Pilot/components/HotKeys/components/Modal';
 import { Capitalize } from '../../../utils/NoCapWords/Capitalize';
-import EverythingIcon from '../../../assets/icons/EverythingIcon';
+import EverythingTasks from './components/EverythingTasks';
 
 function Hubs() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { listId, hubId, walletId } = useParams();
 
-  const { showSidebar } = useAppSelector((state) => state.account);
   const { currentWorkspaceId } = useAppSelector((state) => state.auth);
   const { isSearchActive } = useAppSelector((state) => state.search);
   const { createEntityType, activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
@@ -130,17 +128,7 @@ function Hubs() {
           </div>
         }
       />
-      <div
-        className={cl(
-          !showSidebar ? 'overflow-x-hidden w-12 pl-5' : 'pl-6',
-          'flex items-center justify-between hover:bg-gray-100'
-        )}
-      >
-        <div className="flex items-center content-center self-center gap-6 py-2">
-          <EverythingIcon />
-          <p className="block text-xs tracking-wider capitalize truncate">Everything</p>
-        </div>
-      </div>
+      <EverythingTasks />
       <Modal setShowModal={setShowModal} position="left-44 top-72" showModal={showModal} width="w-64">
         {configForDropdown.map((item, index) => (
           <React.Fragment key={index}>
