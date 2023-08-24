@@ -72,8 +72,6 @@ export default function HubItem({
     type === EntityType.hub ? 'blue' : 'orange'
   );
 
-  const collapseNavAndSubhub = !showSidebar && type === EntityType.subHub;
-
   const { paletteId, show } = paletteDropdown;
 
   const handleHubColour = (id: string, e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
@@ -174,6 +172,22 @@ export default function HubItem({
     }
   });
 
+  const paddingLeft = () => {
+    if (!showSidebar) {
+      return '7px';
+    }
+
+    if (type === EntityType.subHub) {
+      if (isExtendedBar) {
+        return '17px';
+      } else {
+        return '25px';
+      }
+    } else {
+      return '17px';
+    }
+  };
+
   return (
     <div
       className={`${openedEntitiesIds.includes(item.id) ? 'sticky bg-white opacity-100' : ''}`}
@@ -189,32 +203,29 @@ export default function HubItem({
         }`}
         ref={setNodeRef}
         tabIndex={0}
-        onClick={() => handleClick(item.id)}
+        onClick={showSidebar || isExtendedBar ? () => handleClick(item.id) : () => handleLocation(item.id, item.name)}
       >
         <div
-          className={`relative flex items-center justify-between ${showSidebar ? 'pl-1' : 'pl-2.5'}`}
-          style={{ height: '30px' }}
+          className="relative flex items-center justify-between"
+          style={{ height: '30px', paddingLeft: paddingLeft() }}
         >
           <ActiveBackground showBgColor={item.id === hubId || item.id === subhubId} />
           <ActiveBarIdentification showBar={item.id === hubId || item.id === subhubId} />
-          <div
-            className="absolute rounded-r-lg opacity-0 cursor-move left-0.5 group-hover:opacity-100"
-            ref={draggableRef}
-            {...listeners}
-            {...attributes}
-          >
-            <Drag />
-          </div>
+          {showSidebar && !isExtendedBar ? (
+            <div
+              className="absolute left-2 rounded-r-lg opacity-0 cursor-move left-0.5 group-hover:opacity-100"
+              ref={draggableRef}
+              {...listeners}
+              {...attributes}
+            >
+              <Drag />
+            </div>
+          ) : null}
           <div
             role="button"
             className="flex truncate items-center py-1.5 mt-0.5 justify-start overflow-y-hidden text-sm"
-            style={{
-              marginLeft: type === EntityType.subHub && !showSidebar ? '-14px' : type === EntityType.subHub ? '0' : '',
-              paddingLeft:
-                type === EntityType.subHub && !showSidebar ? '5px' : type === EntityType.subHub ? '15px' : '5px'
-            }}
           >
-            {!collapseNavAndSubhub && (item?.wallets?.length || item?.lists?.length) ? (
+            {item?.wallets?.length || item?.lists?.length ? (
               <div>
                 {showChildren ? (
                   <span className="flex flex-col">
@@ -228,7 +239,7 @@ export default function HubItem({
               renderEmptyArrowBlock()
             )}
 
-            <div className={`flex items-center flex-1 min-w-0 gap-1 ${collapseNavAndSubhub && 'ml-3'}`}>
+            <div className="flex items-center flex-1 min-w-0 gap-1">
               <div onClick={(e) => handleHubColour(item.id, e)} className="flex items-center justify-center w-5 h-5">
                 {item.path !== null ? (
                   <img src={item.path} alt="hubs image" className="w-full h-full rounded" />

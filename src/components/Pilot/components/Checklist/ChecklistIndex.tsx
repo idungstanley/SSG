@@ -49,10 +49,7 @@ export default function ChecklistIndex() {
     activeItemId,
     activeItemType
   });
-  const { data: list } = UseGetListDetails({
-    activeItemId,
-    activeItemType
-  });
+  const { data: list } = UseGetListDetails(activeItemId);
 
   const { showChecklistInput } = useAppSelector((state) => state.checklist);
 

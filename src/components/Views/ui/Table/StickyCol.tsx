@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { Task } from '../../../../features/task/interface.tasks';
 import { cl } from '../../../../utils';
-import { DEFAULT_COL_BG } from '../../config';
+import { ACTIVE_COL_BG, DEFAULT_COL_BG } from '../../config';
 import { UseUpdateTaskService, useAddTask } from '../../../../features/task/taskService';
 import StatusDropdown from '../../../status/StatusDropdown';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -11,6 +11,7 @@ import { setShowPilotSideOver } from '../../../../features/general/slideOver/sli
 import {
   setCurrentTaskStatusId,
   setSelectedIndex,
+  setSelectedIndexListId,
   setSelectedIndexStatus,
   setSelectedTasksArray,
   setShowTaskNavigation,
@@ -83,7 +84,7 @@ export function StickyCol({
   const [eitableContent, setEitableContent] = useState(false);
   const [selectedIndexArray, setSelectedIndexArray] = useState<number[]>([]);
 
-  const ACTIVE_TASK = taskId === task.id ? 'tdListV' : DEFAULT_COL_BG;
+  const COL_BG = taskId === task.id ? ACTIVE_COL_BG : DEFAULT_COL_BG;
 
   const { mutate: onAdd } = useAddTask();
 
@@ -127,7 +128,7 @@ export function StickyCol({
   useEffect(() => {
     const { current } = inputRef;
     current?.focus();
-    if (eitableContent || hilightNewTask) selectText(current);
+    // if (eitableContent || hilightNewTask) selectText(current);
   }, [eitableContent]);
 
   const selectText = (element: Node | null) => {
@@ -183,6 +184,7 @@ export function StickyCol({
     });
   };
 
+  // listen on shift + arrow down key
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.shiftKey && event.key === 'ArrowDown') {
@@ -233,6 +235,7 @@ export function StickyCol({
       setSelectedIndexArray(updatedArray);
     }
     dispatch(setSelectedIndexStatus(task.status.name));
+    dispatch(setSelectedIndexListId(task.list_id));
     const isChecked = e.target.checked;
     dispatch(setShowTaskNavigation(isChecked));
     if (isChecked) {
@@ -290,7 +293,7 @@ export function StickyCol({
             onClick={onClickTask}
             onDoubleClick={() => setEitableContent(true)}
             className={cl(
-              ACTIVE_TASK,
+              COL_BG,
               ` ${isChecked && 'tdListV'} ${verticalGrid && 'border-r'} ${
                 verticalGridlinesTask && 'border-r'
               } w-full py-4 flex items-center `,
@@ -394,7 +397,7 @@ export function StickyCol({
           <div
             style={{ paddingLeft }}
             className={cl(
-              ACTIVE_TASK,
+              COL_BG,
               `relative border-t ${verticalGrid && 'border-r'} w-full h-16  py-4 p-4 flex items-center`
             )}
           >

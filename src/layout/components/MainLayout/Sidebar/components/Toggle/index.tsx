@@ -16,6 +16,12 @@ export default function Toggle() {
   const { showSidebar } = useAppSelector((state) => state.account);
   const { activePlaceId } = useAppSelector((state) => state.workspace);
 
+  useEffect(() => {
+    if (!showSidebar && activePlaceId) {
+      dispatch(setShowExtendedBar(true));
+    }
+  }, [showSidebar, activePlaceId]);
+
   const closeOrShowSidebar = () => {
     dispatch(setShowSidebar(!showSidebar));
     dispatch(setSidebarWidthRD(showSidebar ? dimensions.navigationBar.collapse : dimensions.navigationBar.max));
@@ -29,11 +35,6 @@ export default function Toggle() {
       })
     );
   };
-  useEffect(() => {
-    if (!showSidebar && activePlaceId !== null) {
-      dispatch(setShowExtendedBar(true));
-    }
-  }, [showSidebar, activePlaceId]);
 
   return (
     <div

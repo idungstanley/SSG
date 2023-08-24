@@ -32,6 +32,7 @@ import AlsoitMenuDropdown from '../../../../DropDowns';
 import { setStatusTaskListDetails } from '../../../../../features/list/listSlice';
 import { useParams } from 'react-router-dom';
 import { Task } from '../../../../../features/task/interface.tasks';
+import CollapseIcon from '../../collapseIcon/CollapseIcon';
 
 interface HeadProps {
   columns: Column[];
@@ -75,9 +76,8 @@ export function Head({
   const [headerId, setheaderId] = useState<string>('');
   const [showStatusDropdown, setShowStatusDropdown] = useState<null | SVGElement>(null);
   const [showSortModal, setShowSortModal] = useState<boolean>(false);
-  const { sortArr, sortAbleArr, selectedTasksArray, selectedIndex, selectedIndexStatus } = useAppSelector(
-    (state) => state.task
-  );
+  const { sortArr, sortAbleArr, selectedTasksArray, selectedIndex, selectedIndexStatus, selectedIndexListId } =
+    useAppSelector((state) => state.task);
   const { baseColor } = useAppSelector((state) => state.account);
   const { isManageStatus } = useAppSelector((state) => state.workspace);
 
@@ -97,7 +97,7 @@ export function Head({
     if (selectedIndex !== null) {
       const updatedTaskIds: string[] = [...selectedTasksArray];
       groupedTask?.map((task, index) => {
-        if (selectedIndex == index && selectedIndexStatus == task.status.name) {
+        if (selectedIndex == index && selectedIndexStatus == task.status.name && listId == selectedIndexListId) {
           const taskIndex = updatedTaskIds.indexOf(task.id);
           if (taskIndex == -1) {
             updatedTaskIds.push(task.id);
@@ -222,15 +222,9 @@ export function Head({
               style={{ backgroundColor: headerStatusColor }}
             >
               <div>
-                {/* <div className="items-center space-x-1 viewSettings" onClick={(e) => e.stopPropagation()}>
-                  <img src={statusbox} alt="" className="pr-1 border-r" onClick={handleCheckedGroupTasks} />
-                  <CiEdit className="w-4 h-4 pr-1 border-r cursor-pointer" />
-                  <BsThreeDots className="w-4 h-4 cursor-pointer" onClick={(e) => handleClick(e)} />
-                </div>
-                <p className="border-t py-.5 viewSettings"></p> */}
                 <div className="flex items-center">
-                  <p>
-                    <Chevron
+                  <p className="pr-1.5">
+                    <CollapseIcon
                       color={headerStatusColor}
                       active={collapseTasks}
                       onToggle={onToggleCollapseTasks}

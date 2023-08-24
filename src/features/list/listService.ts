@@ -165,25 +165,22 @@ export const UseArchiveListService = (list: { query: string | undefined | null; 
 };
 
 //get list details
-export const UseGetListDetails = (query: {
-  activeItemId: string | null | undefined;
-  activeItemType: string | null | undefined;
-}) => {
+export const UseGetListDetails = (listId: string | null | undefined) => {
   const dispatch = useAppDispatch();
 
   const { activeItemType } = useAppSelector((state) => state.workspace);
 
   return useQuery(
-    ['hubs', { query }],
+    ['hubs', listId],
     async () => {
       const data = await requestNew<IListDetailRes>({
-        url: `lists/${query.activeItemId}`,
+        url: `lists/${listId}`,
         method: 'GET'
       });
       return data;
     },
     {
-      enabled: query.activeItemType === EntityType.list && !!query.activeItemId,
+      enabled: !!listId,
       onSuccess: (data) => {
         const listStatusTypes = data.data.list.task_statuses;
         if (activeItemType === 'list') {
@@ -236,7 +233,7 @@ export const useCreateDropdownField = (type: string | undefined, id?: string | u
   });
 };
 
-const updateEntityCustomFieldValue = (data: { taskId?: string; fieldId: string; value: string }) => {
+const updateEntityCustomFieldValue = (data: { taskId?: string; fieldId: string; value: { value: string }[] }) => {
   const { taskId, fieldId, value } = data;
 
   const response = requestNew({
@@ -245,7 +242,7 @@ const updateEntityCustomFieldValue = (data: { taskId?: string; fieldId: string; 
     data: {
       type: 'task',
       id: taskId,
-      values: [{ value }]
+      values: value
     }
   });
   return response;

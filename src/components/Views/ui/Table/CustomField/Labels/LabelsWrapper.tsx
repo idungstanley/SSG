@@ -1,16 +1,39 @@
 import React from 'react';
-import { IField } from '../../../../../../features/list/list.interfaces';
+import { IField, Options } from '../../../../../../features/list/list.interfaces';
 import { ICustomField } from '../../../../../../features/task/taskSlice';
+import LabelsDropdown from './LabelsDropdown';
 
 interface LabelFieldWrapperProps {
   taskCustomFields?: ICustomField;
   // fieldId: string;
-  // taskId: string;
-  entityCustomProperty?: IField[];
+  taskId: string;
+  entityCustomProperty?: IField;
 }
 
-function LabelsWrapper({ entityCustomProperty, taskCustomFields }: LabelFieldWrapperProps) {
-  return <div>LabelsWrapper</div>;
+interface array2 {
+  id: string;
+  value: string;
+}
+
+const getActiveOptions = (arr1: Options | undefined, arr2: array2[] | undefined) => {
+  return arr1?.filter((obj1) => arr2?.find((obj2) => obj2.value === obj1.id));
+};
+
+function LabelsWrapper({ entityCustomProperty, taskCustomFields, taskId }: LabelFieldWrapperProps) {
+  const activeOptions = taskCustomFields?.values;
+  const allOptions = entityCustomProperty?.options;
+  const optionsFromField = getActiveOptions(allOptions, activeOptions);
+
+  return (
+    <div className="w-full">
+      <LabelsDropdown
+        optionsFromField={optionsFromField}
+        allOptions={allOptions}
+        currentProperty={entityCustomProperty as IField}
+        taskId={taskId}
+      />
+    </div>
+  );
 }
 
 export default LabelsWrapper;

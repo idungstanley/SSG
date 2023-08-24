@@ -30,7 +30,7 @@ export const deleteListManager = (id: string, hubs: Hub[]) => {
   return updatedTree;
 };
 
-export const createListManager = (walletId: string | null, parentId: string | null, hubs: Hub[], newList: IList) => {
+export const createListManager = (type: string, parentId: string | null, hubs: Hub[], newList: IList) => {
   const createList = (parent: Wallet | Hub) => {
     const newParent = { ...parent };
     return {
@@ -39,8 +39,7 @@ export const createListManager = (walletId: string | null, parentId: string | nu
     };
   };
 
-  const id = walletId ? walletId : parentId ? parentId : '';
-  const type = walletId ? EntityType.wallet : EntityType.hub;
+  const id = parentId ?? '';
   const updatedTree = findCurrentEntity(type, id, hubs, createList as <IList>(item: IList) => IList);
   return updatedTree;
 };

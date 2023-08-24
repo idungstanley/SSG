@@ -64,7 +64,7 @@ export default function DropdownField({ field, taskId, currentProperty }: Dropdo
     if (field)
       onUpdate({
         taskId,
-        value: option.id,
+        value: [{ value: option.id }],
         fieldId: field.id
       });
     closeModal();

@@ -22,15 +22,7 @@ interface RowProps {
   handleClose?: () => void | void;
 }
 
-export function AddSubTask({
-  task,
-  columns,
-  paddingLeft = 0,
-  parentId,
-  task_status,
-  isListParent,
-  handleClose
-}: RowProps) {
+export function AddSubTask({ task, columns, paddingLeft, parentId, task_status, isListParent, handleClose }: RowProps) {
   const [showNewTaskField] = useState(false);
   const otherColumns = columns.slice(1);
   const [showSubTasks, setShowSubTasks] = useState(false);
@@ -110,15 +102,13 @@ export function AddSubTask({
       {showNewTaskField ? (
         <AddTask
           columns={otherColumns}
-          paddingLeft={DEFAULT_LEFT_PADDING + paddingLeft}
+          paddingLeft={DEFAULT_LEFT_PADDING}
           parentId={task.id}
           onClose={onCloseAddTaskFIeld}
         />
       ) : null}
 
-      {showSubTasks ? (
-        <SubTasks paddingLeft={DEFAULT_LEFT_PADDING + paddingLeft} parentId={task.id} columns={columns} />
-      ) : null}
+      {showSubTasks ? <SubTasks paddingLeft={DEFAULT_LEFT_PADDING} parentId={task.id} columns={columns} /> : null}
     </>
   );
 }

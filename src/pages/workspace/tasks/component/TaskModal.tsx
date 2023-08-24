@@ -11,7 +11,6 @@ import { useAppSelector } from '../../../../app/hooks';
 import { UseGetListDetails } from '../../../../features/list/listService';
 import { ITask_statuses } from '../../../../features/list/list.interfaces';
 import { setLastActiveItem, setShowTreeInput } from '../../../../features/workspace/workspaceSlice';
-import { EntityType } from '../../../../utils/EntityTypes/EntityType';
 
 function TaskModal() {
   const queryClient = useQueryClient();
@@ -19,10 +18,7 @@ function TaskModal() {
   const { listIdCreateTask } = useAppSelector((state) => state.hub);
   const { showCreateTaskSlideOver } = useAppSelector((state) => state.slideOver);
 
-  const { data: list } = UseGetListDetails({
-    activeItemId: listIdCreateTask,
-    activeItemType: EntityType.list
-  });
+  const { data: list } = UseGetListDetails(listIdCreateTask);
 
   const [statusId, setStatusId] = useState<string>('');
 
