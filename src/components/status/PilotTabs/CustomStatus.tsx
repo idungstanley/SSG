@@ -40,7 +40,7 @@ interface ErrorResponse {
 export default function CustomStatus() {
   const dispatch = useAppDispatch();
 
-  const { spaceStatuses, matchedStatus } = useAppSelector((state) => state.hub);
+  const { spaceStatuses } = useAppSelector((state) => state.hub);
   const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
   const { statusTaskListDetails } = useAppSelector((state) => state.list);
 
@@ -59,7 +59,6 @@ export default function CustomStatus() {
       coordinateGetter: sortableKeyboardCoordinates
     })
   );
-  console.log(matchedStatus);
 
   function handleDragStart(event: DragEndEvent) {
     const { active } = event;

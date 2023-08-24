@@ -15,8 +15,6 @@ export interface matchedStatusProps {
 export default function MatchStatusPopUp() {
   const dispatch = useAppDispatch();
   const { show, title, body, options, matchData } = useAppSelector((state) => state.prompt);
-  const { matchedStatus } = useAppSelector((state) => state.hub);
-
   const setShow = (state: boolean) => {
     dispatch(setVisibility(state));
   };

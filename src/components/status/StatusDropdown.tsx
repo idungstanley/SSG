@@ -36,7 +36,7 @@ export default function StatusDropdown({ TaskCurrentStatus }: StatusDropdownProp
     setIsOpen(false);
   }
 
-  const sortedStatuses = list?.data.list.task_statuses.sort((a, b) => {
+  const sortedStatuses = list?.data.list.task_statuses.slice().sort((a, b) => {
     const positionA = typeof a.position === 'number' ? a.position : 0;
     const positionB = typeof b.position === 'number' ? b.position : 0;
     return positionA - positionB;

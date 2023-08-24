@@ -169,8 +169,12 @@ export const UseGetListDetails = (query: {
   activeItemId: string | null | undefined;
   activeItemType: string | null | undefined;
 }) => {
+  const dispatch = useAppDispatch();
+
+  const { activeItemType } = useAppSelector((state) => state.workspace);
+
   return useQuery(
-    ['hubs', query],
+    ['hubs', { query }],
     async () => {
       const data = await requestNew<IListDetailRes>({
         url: `lists/${query.activeItemId}`,
@@ -179,7 +183,13 @@ export const UseGetListDetails = (query: {
       return data;
     },
     {
-      enabled: query.activeItemType === EntityType.list && !!query.activeItemId
+      enabled: query.activeItemType === EntityType.list && !!query.activeItemId,
+      onSuccess: (data) => {
+        const listStatusTypes = data.data.list.task_statuses;
+        if (activeItemType === 'list') {
+          dispatch(setSpaceStatuses(listStatusTypes));
+        }
+      }
     }
   );
 };
