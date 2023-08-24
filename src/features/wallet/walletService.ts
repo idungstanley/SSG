@@ -2,10 +2,10 @@ import { useDispatch } from 'react-redux';
 import requestNew from '../../app/requestNew';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { setArchiveWallet } from './walletSlice';
-import { closeMenu } from '../hubs/hubSlice';
+import { closeMenu, setSpaceStatuses } from '../hubs/hubSlice';
 import { IWallet, IWalletDetailRes } from './wallet.interfaces';
 import { useParams } from 'react-router-dom';
-import { useAppSelector } from '../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { generateFilters } from '../../components/TasksHeader/lib/generateFilters';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
 
@@ -36,7 +36,6 @@ export const useMoveWalletsService = () => {
   const id = hubId ?? walletId ?? listId;
   const type = hubId ? EntityType.hub : walletId ? EntityType.wallet : EntityType.list;
 
-  const { filterTaskByAssigneeIds: assigneeUserId } = useAppSelector((state) => state.task);
   const { sortAbleArr } = useAppSelector((state) => state.task);
   const sortArrUpdate = sortAbleArr.length <= 0 ? null : sortAbleArr;
 
@@ -44,7 +43,7 @@ export const useMoveWalletsService = () => {
 
   return useMutation(moveWallet, {
     onSuccess: () => {
-      queryClient.invalidateQueries(['task', { listId, assigneeUserId, sortArrUpdate, filters }]);
+      queryClient.invalidateQueries(['task', { listId, sortArrUpdate, filters }]);
       queryClient.invalidateQueries(['task', id, type]);
       queryClient.invalidateQueries(['retrieve', id ?? 'root', 'tree']);
       queryClient.invalidateQueries(['retrieve', id ?? 'root', undefined]);
@@ -128,6 +127,8 @@ export const UseArchiveWalletService = (wallet: { query: string | null | undefin
 
 //get wallet details
 export const UseGetWalletDetails = (query: { activeItemId?: string | null; activeItemType?: string | null }) => {
+  const dispatch = useAppDispatch();
+
   return useQuery(
     ['wallet-details', query],
     async () => {
@@ -138,7 +139,13 @@ export const UseGetWalletDetails = (query: { activeItemId?: string | null; activ
       return data;
     },
     {
-      enabled: query.activeItemType === 'wallet' && !!query.activeItemId
+      enabled: query.activeItemType === 'wallet' && !!query.activeItemId,
+      onSuccess: (data) => {
+        const walletTaskStatus = data.data.wallet.task_statuses;
+        if (query.activeItemType === EntityType.wallet) {
+          dispatch(setSpaceStatuses(walletTaskStatus));
+        }
+      }
     }
   );
 };

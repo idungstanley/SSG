@@ -9,6 +9,7 @@ import { setArchiveHub } from './hubSlice';
 import { generateFilters } from '../../components/TasksHeader/lib/generateFilters';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
 import { Hub, List, StatusProps, Wallet } from '../../pages/workspace/hubs/components/ActiveTree/activetree.interfaces';
+import { matchedStatusProps } from '../../common/Prompt';
 
 interface IResponseHub {
   data: {
@@ -35,7 +36,6 @@ export const useMoveHubsService = () => {
   const id = hubId ?? walletId ?? listId;
   const type = hubId ? EntityType.hub : walletId ? EntityType.wallet : EntityType.list;
 
-  const { filterTaskByAssigneeIds: assigneeUserId } = useAppSelector((state) => state.task);
   const { sortAbleArr } = useAppSelector((state) => state.task);
   const sortArrUpdate = sortAbleArr.length <= 0 ? null : sortAbleArr;
 
@@ -46,7 +46,7 @@ export const useMoveHubsService = () => {
       queryClient.invalidateQueries(['hub']);
       queryClient.invalidateQueries(['sub-hub']);
       queryClient.invalidateQueries(['task']);
-      queryClient.invalidateQueries(['task', { listId, assigneeUserId, sortArrUpdate, filters }]);
+      queryClient.invalidateQueries(['task', { listId, sortArrUpdate, filters }]);
       queryClient.invalidateQueries(['task', id, type]);
       queryClient.invalidateQueries(['retrieve', id ?? 'root', 'tree']);
       queryClient.invalidateQueries(['retrieve', id ?? 'root', undefined]);
@@ -188,6 +188,7 @@ export const statusTypesService = (data: {
   from_model?: string | null;
   from_model_id?: string | null;
   statuses: StatusProps[];
+  status_matches?: matchedStatusProps[];
 }) => {
   const response = requestNew<unknown>({
     url: 'task-statuses',
@@ -197,7 +198,8 @@ export const statusTypesService = (data: {
       model: data.model,
       from_model: data.from_model,
       from_model_id: data.from_model_id,
-      statuses: data.statuses
+      statuses: data.statuses,
+      status_matches: data.status_matches
     }
   });
   return response;
@@ -240,7 +242,7 @@ export const UseGetHubDetails = (query: {
 
   const fetch = currentWorkspaceId == workSpaceId;
   return useQuery(
-    ['hub-details', query],
+    ['hub-details', { query }],
     async () => {
       const data = await requestNew<IHubDetailRes>({
         url: `hubs/${query.activeItemId}/details`,
