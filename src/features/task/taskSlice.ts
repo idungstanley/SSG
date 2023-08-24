@@ -142,8 +142,8 @@ interface TaskState {
   addNewTaskItem: boolean;
   selectedIndex: number | null;
   selectedIndexStatus: string | null;
-  selectedIndexListId: string | null;
-  hilightNewTask: boolean;
+  selectedListIds: string[];
+  selectedListId: string;
   closeTaskListView: boolean;
   toggleAssignCurrentTaskId: string | null | undefined;
   currentParentTaskId: string | null;
@@ -203,7 +203,6 @@ const initialState: TaskState = {
   meMode: false,
   showNewTaskId: '',
   singleLineView: true,
-  hilightNewTask: false,
   selectedTasksArray: [],
   verticalGrid: false,
   taskUpperCase: false,
@@ -216,7 +215,8 @@ const initialState: TaskState = {
   closeTaskListView: true,
   selectedIndex: null,
   selectedIndexStatus: null,
-  selectedIndexListId: null,
+  selectedListIds: [],
+  selectedListId: '',
   toggleAssignCurrentTaskId: null,
   currentParentTaskId: null,
   getSubTaskId: null,
@@ -293,8 +293,11 @@ export const taskSlice = createSlice({
     setSelectedIndexStatus(state, action: PayloadAction<string>) {
       state.selectedIndexStatus = action.payload;
     },
-    setSelectedIndexListId(state, action: PayloadAction<string>) {
-      state.selectedIndexListId = action.payload;
+    setSelectedListIds(state, action: PayloadAction<string[]>) {
+      state.selectedListIds = action.payload;
+    },
+    setSelectedListId(state, action: PayloadAction<string>) {
+      state.selectedListId = action.payload;
     },
     setSortType(state, action: PayloadAction<TaskKey>) {
       state.sortType = action.payload;
@@ -340,9 +343,6 @@ export const taskSlice = createSlice({
     },
     getCompactView(state, action: PayloadAction<boolean>) {
       state.CompactView = action.payload;
-    },
-    setHilightNewTask(state, action: PayloadAction<boolean>) {
-      state.hilightNewTask = action.payload;
     },
     setMeMode(state, action: PayloadAction<boolean>) {
       state.meMode = action.payload;
@@ -516,8 +516,8 @@ export const {
   getCompactViewWrap,
   setSelectedIndex,
   setSelectedIndexStatus,
-  setSelectedIndexListId,
-  setHilightNewTask,
+  setSelectedListIds,
+  setSelectedListId,
   setMeMode,
   setShowTaskNavigation,
   setShowNewTaskField,

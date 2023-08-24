@@ -9,15 +9,12 @@ import { ITaskFullList } from '../../../../../../features/task/interface.tasks';
 import { IHubDetails } from '../../../../../../features/hubs/hubs.interfaces';
 import { IListDetails } from '../../../../../../features/list/list.interfaces';
 import { IWalletDetails } from '../../../../../../features/wallet/wallet.interfaces';
-import ArrowRight from '../../../../../../assets/icons/ArrowRight';
-import ArrowDownFilled from '../../../../../../assets/icons/ArrowDownFilled';
-import ArrowRightFilled from '../../../../../../assets/icons/ArrowRightFilled';
 
 interface StatusDetailsProps {
-  Details: IHubDetails | undefined | ITaskFullList | IListDetails | IWalletDetails;
+  details: IHubDetails | undefined | ITaskFullList | IListDetails | IWalletDetails;
 }
 
-export default function Status({ Details }: StatusDetailsProps) {
+export default function Status({ details }: StatusDetailsProps) {
   const [statusBg, setStatusBg] = useState('');
   const [complete, setComplete] = useState('');
   const [iconToggle, setIconToggle] = useState<{ arrow: boolean; check: boolean }>({
@@ -25,7 +22,7 @@ export default function Status({ Details }: StatusDetailsProps) {
     check: false
   });
   const dispatch = useAppDispatch();
-  const StatusData = Details ? ('status' in Details ? Details?.status : null) : null;
+  const StatusData = details ? ('status' in details ? details?.status : null) : null;
 
   // const { status } = UseUpdateTaskStatusService({
   //   task_id: Details?.id,
@@ -40,14 +37,14 @@ export default function Status({ Details }: StatusDetailsProps) {
 
   const handleUpdateTaskStatus = () => {
     const updateStatusMutation = {
-      task_id: Details?.id,
+      task_id: details?.id,
       statusDataUpdate: complete
     };
     mutate(updateStatusMutation);
   };
 
   const handleStatusModal = () => {
-    dispatch(setUpdateStatusModalId(Details?.id || ''));
+    dispatch(setUpdateStatusModalId(details?.id || ''));
     handleUpdateTaskStatus();
   };
 
@@ -83,13 +80,13 @@ export default function Status({ Details }: StatusDetailsProps) {
   return (
     <section className="flex items-center space-x-1">
       <div className="flex space-x-0.5">
-        {Details && 'status' in Details ? (
+        {details && 'status' in details ? (
           <ToolTip title="Current status">
             <button
               className={`p-2 bg-${statusBg}-300 text-black text-xs border-white rounded-l-md capitalize cursor-pointer object-contain h-8`}
               onClick={() => handleStatusModal()}
             >
-              {handleStatusMessage(Details.status.name)}
+              {handleStatusMessage(details.status.name)}
             </button>
           </ToolTip>
         ) : null}

@@ -25,14 +25,14 @@ interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
 }
 
 export function Col({ value, field, fieldId, task, customFields, ...props }: ColProps) {
+  const dispatch = useAppDispatch();
   const { taskId } = useParams();
+
   const { dragOverItemId, draggableItemId } = useAppSelector((state) => state.list);
+  const { singleLineView, verticalGrid, selectedTasksArray, CompactView } = useAppSelector((state) => state.task);
 
   const COL_BG = taskId === task.id ? ACTIVE_COL_BG : DEFAULT_COL_BG;
-  const { singleLineView, verticalGrid, selectedTasksArray, CompactView } = useAppSelector((state) => state.task);
   const isSelected = selectedTasksArray.includes(task.id);
-
-  const dispatch = useAppDispatch();
 
   // fields config
   const fields: Record<string, JSX.Element> = {

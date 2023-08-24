@@ -112,9 +112,9 @@ export default function PropertyDetails({ Details, type }: PropertyDetailsProps)
     <>
       <div className="flex items-center justify-between p-2">
         <section className="flex items-center space-x-3">
-          <Status Details={Details} />
+          <Status details={Details} />
           <ToolTip title="Priority">
-            <Priority Details={Details} />
+            <Priority details={Details} />
           </ToolTip>
         </section>
         <section className="z-0 flex items-center justify-center space-x-3">

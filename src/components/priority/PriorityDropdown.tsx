@@ -1,8 +1,8 @@
-import React, { Fragment, useState } from 'react';
+import React, { useState } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { cl } from '../../utils';
 import { AiFillFlag } from 'react-icons/ai';
-import { UseUpdateTaskStatusServices } from '../../features/task/taskService';
+import { UseUpdateTaskPrioritiesServices } from '../../features/task/taskService';
 import { useAppSelector } from '../../app/hooks';
 import { useAbsolute } from '../../hooks/useAbsolute';
 
@@ -15,78 +15,82 @@ interface priorityType {
 }
 
 interface TaskCurrentPriorityProps {
-  TaskCurrentPriority: string | [{ id: string; initials: string; color: string }] | null | undefined;
+  taskCurrentPriority: string | [{ id: string; initials: string; color: string }] | null | undefined;
 }
-export default function PriorityDropdown({ TaskCurrentPriority }: TaskCurrentPriorityProps) {
-  const [priorityValue, setPriority] = useState('');
+
+const LOW = 'low';
+const NORMAL = 'normal';
+const HIGH = 'high';
+const URGENT = 'urgent';
+
+export default function PriorityDropdown({ taskCurrentPriority }: TaskCurrentPriorityProps) {
   const { selectedTasksArray } = useAppSelector((state) => state.task);
+  const { updateCords, selectedListIds, selectedListId } = useAppSelector((state) => state.task);
+
+  const [priority, setPriority] = useState('');
+  const [isOpen, setIsOpen] = useState(false);
+
+  const { isSuccess } = UseUpdateTaskPrioritiesServices({
+    task_id_array: selectedTasksArray,
+    priorityDataUpdate: priority,
+    listIds: selectedListIds.length ? selectedListIds : [selectedListId]
+  });
+
+  if (isSuccess) setPriority('');
+
   const priorityList: priorityType[] = [
     {
       id: 1,
       title: 'Low',
-      handleClick: () => {
-        setPriority('low');
-      },
       color: '#d3d3d3',
-      bg: 'gray'
+      bg: 'gray',
+      handleClick: () => {
+        setPriority(LOW);
+      }
     },
     {
       id: 2,
       title: 'Normal',
-      handleClick: () => {
-        setPriority('normal');
-      },
       color: '#6fddff',
-      bg: 'blue'
+      bg: 'blue',
+      handleClick: () => {
+        setPriority(NORMAL);
+      }
     },
     {
       id: 3,
       title: 'High',
-      handleClick: () => {
-        setPriority('high');
-      },
       color: '#f7cb04',
-      bg: 'yellow'
+      bg: 'yellow',
+      handleClick: () => {
+        setPriority(HIGH);
+      }
     },
     {
       id: 4,
       title: 'Urgent',
-      handleClick: () => {
-        setPriority('urgent');
-      },
       color: '#f32100',
-      bg: 'red'
+      bg: 'red',
+      handleClick: () => {
+        setPriority(URGENT);
+      }
     }
   ];
-  const { status } = UseUpdateTaskStatusServices({
-    task_id_array: selectedTasksArray,
-    priorityDataUpdate: priorityValue
-  });
 
-  if (status == 'success') {
-    setPriority('');
-  }
   const setPriorityColor = (
     priority: string | null | undefined | [{ id: string; initials: string; color: string }]
   ) => {
-    if (priority == null || priority == 'low') {
+    if (priority === LOW) {
       return <AiFillFlag className="h-5 w-7  text-gray-400" aria-hidden="true" />;
-    } else if (priority == 'normal') {
+    } else if (priority === NORMAL) {
       return <AiFillFlag className="h-5 w-7" style={{ color: '#6fddff' }} aria-hidden="true" />;
-    } else if (priority == 'high') {
+    } else if (priority === HIGH) {
       return <AiFillFlag className="h-5 w-7  text-yellow-400 " aria-hidden="true" />;
-    } else if (priority == 'urgent') {
+    } else if (priority === URGENT) {
       return <AiFillFlag className="h-5 w-7  text-red-400 " aria-hidden="true" />;
     }
   };
 
-  const [isOpen, setIsOpen] = useState(false);
-
-  function closeModal() {
-    setIsOpen(false);
-  }
-
-  const { updateCords } = useAppSelector((state) => state.task);
   const { cords, relativeRef } = useAbsolute(updateCords, 200);
 
   return (
@@ -97,31 +101,31 @@ export default function PriorityDropdown({ TaskCurrentPriority }: TaskCurrentPri
           onClick={() => setIsOpen(true)}
           className="flex text-sm justify-center items-center focus:outline-none text-gray-400 hover:text-gray-700 w-full"
         >
-          <div ref={relativeRef}>{setPriorityColor(TaskCurrentPriority)}</div>
+          <div ref={relativeRef}>{setPriorityColor(taskCurrentPriority)}</div>
         </button>
       </div>
 
       <Transition appear show={isOpen} as="div">
-        <Dialog as="div" className="relative z-10" onClose={closeModal}>
+        <Dialog as="div" className="relative z-10" onClose={() => setIsOpen(false)}>
           <div style={{ ...cords }} className="fixed overflow-y-auto">
             <div className="flex-col border px-2 w-fit h-fit py-1 outline-none flex items-center justify-center text-center mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none">
-              {priorityList.map((i) => (
+              {priorityList.map((priority) => (
                 <button
-                  key={i.id}
+                  key={priority.id}
                   type="button"
                   className={cl(
-                    TaskCurrentPriority === i.title ? `bg-${i.bg}-200` : '',
+                    taskCurrentPriority === priority.title ? `bg-${priority.bg}-200` : '',
                     'flex items-center px-4 py-2 text-sm text-gray-600 text-left space-x-2 w-full'
                   )}
                   onClick={() => {
-                    i.handleClick();
-                    closeModal();
+                    priority.handleClick();
+                    setIsOpen(false);
                   }}
                 >
                   <p>
-                    <AiFillFlag className="h-5 w-7  " aria-hidden="true" style={{ color: `${i.color}` }} />
+                    <AiFillFlag className="h-5 w-7  " aria-hidden="true" style={{ color: `${priority.color}` }} />
                   </p>
-                  <p>{i.title}</p>
+                  <p>{priority.title}</p>
                 </button>
               ))}
             </div>

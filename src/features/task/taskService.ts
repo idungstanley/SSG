@@ -7,7 +7,6 @@ import {
   ITimeEntryParams,
   IUserCalendarParams,
   IUserSettingsRes,
-  IUserSettingsTimeEntryRes,
   IUserSettingsUpdateRes,
   TaskId,
   newTaskDataRes
@@ -17,7 +16,9 @@ import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import {
   setScreenRecording,
   setScreenRecordingMedia,
+  setSelectedListIds,
   setSelectedTasksArray,
+  setTasks,
   setTimeArr,
   setTimeSortArr,
   setTimeSortStatus,
@@ -35,7 +36,7 @@ import { generateFilters } from '../../components/TasksHeader/lib/generateFilter
 import { runTimer } from '../../utils/TimerCounter';
 import Duration from '../../utils/TimerDuration';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
-import { data } from 'cypress/types/jquery';
+import { taskPriorityUpdateManager } from '../../managers/Task';
 
 //edit a custom field
 export const UseEditCustomFieldService = (data: {
@@ -391,8 +392,8 @@ export const UseUpdateTaskService = ({
   return response;
 };
 
-const updateTaskStatusService = ({ task_id, statusDataUpdate }: UpdateTaskProps) => {
-  const url = `tasks/${task_id}`;
+const updateTaskStatusService = ({ task_id_array, statusDataUpdate }: UpdateTaskProps) => {
+  const url = `tasks/${task_id_array}`;
   const response = requestNew({
     url,
     method: 'PUT',
@@ -414,29 +415,41 @@ export const UseUpdateTaskStatusService2 = () => {
   });
 };
 
-export const UseUpdateTaskStatusServices = ({ task_id_array, priorityDataUpdate }: UpdateTaskProps) => {
-  const { currentTaskPriorityId } = useAppSelector((state) => state.task);
+export const UseUpdateTaskPrioritiesServices = ({ task_id_array, priorityDataUpdate, listIds }: UpdateTaskProps) => {
   const dispatch = useAppDispatch();
 
-  const queryClient = useQueryClient();
+  const { currentTaskPriorityId, tasks } = useAppSelector((state) => state.task);
+
+  const currentTaskIds = task_id_array?.length ? task_id_array : [currentTaskPriorityId];
+
   return useQuery(
-    ['task', { task_id_array, priorityDataUpdate }],
+    ['task', { priorityDataUpdate, listIds, task_id_array }],
     async () => {
       const data = requestNew({
         url: 'tasks/multiple/priority',
         method: 'POST',
         data: {
-          ids: task_id_array?.length ? task_id_array : [currentTaskPriorityId],
+          ids: currentTaskIds,
           priority: priorityDataUpdate
         }
       });
       return data;
     },
     {
-      enabled: task_id_array != null && priorityDataUpdate !== '',
+      enabled: !!currentTaskIds.length && !!priorityDataUpdate,
+      cacheTime: 0,
       onSuccess: () => {
+        if (listIds) {
+          const updatedTasks = taskPriorityUpdateManager(
+            currentTaskIds as string[],
+            listIds as string[],
+            tasks,
+            priorityDataUpdate as string
+          );
+          dispatch(setTasks(updatedTasks));
+        }
         dispatch(setSelectedTasksArray([]));
-        queryClient.invalidateQueries(['task']);
+        dispatch(setSelectedListIds([]));
       }
     }
   );

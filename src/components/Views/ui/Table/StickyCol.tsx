@@ -11,7 +11,7 @@ import { setShowPilotSideOver } from '../../../../features/general/slideOver/sli
 import {
   setCurrentTaskStatusId,
   setSelectedIndex,
-  setSelectedIndexListId,
+  setSelectedListIds,
   setSelectedIndexStatus,
   setSelectedTasksArray,
   setShowTaskNavigation,
@@ -74,10 +74,10 @@ export function StickyCol({
     taskUpperCase,
     selectedTasksArray,
     verticalGridlinesTask,
-    hilightNewTask,
     selectedIndex,
     CompactView,
-    toggleAllSubtask
+    toggleAllSubtask,
+    selectedListIds
   } = useAppSelector((state) => state.task);
 
   const [isChecked, setIsChecked] = useState(false);
@@ -128,16 +128,15 @@ export function StickyCol({
   useEffect(() => {
     const { current } = inputRef;
     current?.focus();
-    // if (eitableContent || hilightNewTask) selectText(current);
   }, [eitableContent]);
 
-  const selectText = (element: Node | null) => {
-    const selection = window.getSelection();
-    const range = document.createRange();
-    range.selectNodeContents(element as Node);
-    selection?.removeAllRanges();
-    selection?.addRange(range);
-  };
+  // const selectText = (element: Node | null) => {
+  //   const selection = window.getSelection();
+  //   const range = document.createRange();
+  //   range.selectNodeContents(element as Node);
+  //   selection?.removeAllRanges();
+  //   selection?.addRange(range);
+  // };
 
   const onToggleDisplayingSubTasks = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.stopPropagation();
@@ -207,7 +206,7 @@ export function StickyCol({
   }, [selectedIndex, selectedIndexArray]);
 
   useEffect(() => {
-    if (selectedTasksArray.length == 0) {
+    if (!selectedTasksArray.length) {
       setSelectedIndexArray([]);
       dispatch(setSelectedIndex(null));
     }
@@ -235,7 +234,6 @@ export function StickyCol({
       setSelectedIndexArray(updatedArray);
     }
     dispatch(setSelectedIndexStatus(task.status.name));
-    dispatch(setSelectedIndexListId(task.list_id));
     const isChecked = e.target.checked;
     dispatch(setShowTaskNavigation(isChecked));
     if (isChecked) {
@@ -244,10 +242,12 @@ export function StickyCol({
         const updatedTaskIds = [...selectedTasksArray, task.id];
         dispatch(setSelectedTasksArray(updatedTaskIds));
       }
+      dispatch(setSelectedListIds([...selectedListIds, task.list_id]));
     } else {
       // Remove the task ID from the selectedTasksArray array
       const updatedTaskIds = selectedTasksArray.filter((id: string) => id !== task.id);
       dispatch(setSelectedTasksArray(updatedTaskIds));
+      dispatch(setSelectedListIds(selectedListIds.filter((item) => item !== task.list_id)));
     }
     setIsChecked(isChecked);
   };
