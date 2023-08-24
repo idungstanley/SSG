@@ -7,6 +7,7 @@ import {
   IHistoryFilterMemory,
   IParent,
   ISelectedDate,
+  ITaskFullList,
   ITimerDetails,
   Status,
   TaskKey
@@ -115,7 +116,7 @@ interface entityForCustom {
   type: string | undefined;
 }
 interface TaskState {
-  task: string[];
+  tasks: Record<string, ITaskFullList[]>;
   currentTaskIdForPilot: string | null;
   watchersData: string[];
   removeWatcherId: null | string;
@@ -186,7 +187,7 @@ interface TaskState {
 }
 
 const initialState: TaskState = {
-  task: [],
+  tasks: {},
   currentTaskIdForPilot: null,
   watchersData: [],
   currTeamMemberId: null,
@@ -263,6 +264,9 @@ export const taskSlice = createSlice({
   name: 'task',
   initialState,
   reducers: {
+    setTasks(state, action: PayloadAction<Record<string, ITaskFullList[]>>) {
+      state.tasks = action.payload;
+    },
     setFilterFields(state, action: PayloadAction<FilterWithId[]>) {
       state.filters = { ...state.filters, fields: action.payload };
     },
@@ -487,6 +491,7 @@ export const taskSlice = createSlice({
 });
 
 export const {
+  setTasks,
   setFilterFields,
   setFilterOption,
   setAssigneeIds,
