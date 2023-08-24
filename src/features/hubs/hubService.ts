@@ -9,6 +9,7 @@ import { setArchiveHub } from './hubSlice';
 import { generateFilters } from '../../components/TasksHeader/lib/generateFilters';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
 import { Hub, List, StatusProps, Wallet } from '../../pages/workspace/hubs/components/ActiveTree/activetree.interfaces';
+import { matchedStatusProps } from '../../common/Prompt';
 
 interface IResponseHub {
   data: {
@@ -188,6 +189,7 @@ export const statusTypesService = (data: {
   from_model?: string | null;
   from_model_id?: string | null;
   statuses: StatusProps[];
+  status_matches?: matchedStatusProps[];
 }) => {
   const response = requestNew<unknown>({
     url: 'task-statuses',
@@ -197,7 +199,8 @@ export const statusTypesService = (data: {
       model: data.model,
       from_model: data.from_model,
       from_model_id: data.from_model_id,
-      statuses: data.statuses
+      statuses: data.statuses,
+      status_matches: data.status_matches
     }
   });
   return response;

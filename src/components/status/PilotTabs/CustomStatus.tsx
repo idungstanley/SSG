@@ -1,12 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
-import StatusBodyTemplate from '../StatusBodyTemplate';
 import Button from '../../Button';
-import PlusIcon from '../../../assets/icons/PlusIcon';
-import Input from '../../input/Input';
 import { StatusProps } from '../../../pages/workspace/hubs/components/ActiveTree/activetree.interfaces';
-import PlusCircle from '../../../assets/icons/AddCircle';
-import { Chevron } from '../../Views/ui/Chevron';
 import {
   DndContext,
   DragEndEvent,
@@ -14,16 +9,10 @@ import {
   KeyboardSensor,
   PointerSensor,
   closestCorners,
-  useDroppable,
   useSensor,
   useSensors
 } from '@dnd-kit/core';
-import {
-  SortableContext,
-  arrayMove,
-  sortableKeyboardCoordinates,
-  verticalListSortingStrategy
-} from '@dnd-kit/sortable';
+import { arrayMove, sortableKeyboardCoordinates } from '@dnd-kit/sortable';
 import { findBoardSectionContainer, initializeBoard } from '../../../utils/StatusManagement/board';
 import { GroupStyles } from '../../../utils/StatusManagement/Types';
 import BoardSection from '../Components/BoardSection';
@@ -32,7 +21,7 @@ import { useMutation } from '@tanstack/react-query';
 import { statusTypesService } from '../../../features/hubs/hubService';
 import { displayPrompt, setVisibility } from '../../../features/general/prompt/promptSlice';
 import { addIsDefaultToValues, extractValuesFromArray } from '../../../utils/StatusManagement/statusUtils';
-import { setStatusesToMatch } from '../../../features/hubs/hubSlice';
+import { setMatchedStatus, setStatusesToMatch } from '../../../features/hubs/hubSlice';
 
 // const groupStatusByModelType = (statusTypes: StatusProps[]) => {
 //   return [...new Set(statusTypes.map(({ type }) => type))];
@@ -51,7 +40,7 @@ interface ErrorResponse {
 export default function CustomStatus() {
   const dispatch = useAppDispatch();
 
-  const { spaceStatuses } = useAppSelector((state) => state.hub);
+  const { spaceStatuses, matchedStatus } = useAppSelector((state) => state.hub);
   const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
   const { statusTaskListDetails } = useAppSelector((state) => state.list);
 
@@ -70,6 +59,7 @@ export default function CustomStatus() {
       coordinateGetter: sortableKeyboardCoordinates
     })
   );
+  console.log(matchedStatus);
 
   function handleDragStart(event: DragEndEvent) {
     const { active } = event;
@@ -187,7 +177,15 @@ export default function CustomStatus() {
   const defaultItem = statusTypesState.find((item) => item.position === 0);
   const AddDefault = addIsDefaultToValues(boardSections, defaultItem?.name);
   const statusData = extractValuesFromArray(AddDefault);
-  console.log(statusData);
+  const handleStatusData = async () => {
+    await createStatusTypes.mutateAsync({
+      model_id: statusTaskListDetails.listId || (activeItemId as string),
+      model: 'list' || (activeItemType as string),
+      from_model: activeItemType,
+      from_model_id: activeItemId,
+      statuses: statusData
+    });
+  };
 
   const onSubmit = async () => {
     try {
@@ -211,13 +209,17 @@ export default function CustomStatus() {
               {
                 label: 'Save Changes',
                 style: 'danger',
-                callback: async () => ({})
+                callback: async () => {
+                  handleStatusData();
+                  dispatch(setVisibility(false));
+                }
               },
               {
                 label: 'Cancel',
                 style: 'plain',
                 callback: () => {
                   dispatch(setVisibility(false));
+                  dispatch(setMatchedStatus([]));
                 }
               }
             ],
@@ -250,6 +252,10 @@ export default function CustomStatus() {
             >
               <BoardSection
                 id={uniqueModelType}
+                addStatus={addStatus}
+                setNewStatusValue={setNewStatusValue}
+                newStatusValue={newStatusValue}
+                setAddStatus={setAddStatus}
                 title={uniqueModelType}
                 status={boardSections[uniqueModelType]}
                 handleSaveNewStatus={handleSaveNewStatus}

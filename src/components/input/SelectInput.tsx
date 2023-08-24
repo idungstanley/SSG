@@ -4,16 +4,19 @@ import ArrowCaretUp from '../../assets/icons/ArrowCaretUp';
 import { StatusProps } from '../../pages/workspace/hubs/components/ActiveTree/activetree.interfaces';
 import StatusIconComp from '../../assets/icons/StatusIconComp';
 import { matchedStatusProps } from '../../common/Prompt';
-import { useAppSelector } from '../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { setMatchedStatus } from '../../features/hubs/hubSlice';
 
 interface SelectDropdownProps {
   options: StatusProps[];
   index?: number;
-  setMatchedStatus: React.Dispatch<React.SetStateAction<matchedStatusProps[]>>;
+  // setMatchedStatus: React.Dispatch<React.SetStateAction<matchedStatusProps[]>>;
 }
 
-export default function SelectDropdown({ options, setMatchedStatus, index }: SelectDropdownProps) {
-  const { statusesToMatch } = useAppSelector((state) => state.hub);
+export default function SelectDropdown({ options, index }: SelectDropdownProps) {
+  const dispatch = useAppDispatch();
+
+  const { statusesToMatch, matchedStatus } = useAppSelector((state) => state.hub);
 
   const [selectItem, setSelectItem] = useState<string>('');
   const [showSelectDropdown, setShowSelectDropdown] = useState<null | HTMLSpanElement | HTMLDivElement>(null);
@@ -27,23 +30,10 @@ export default function SelectDropdown({ options, setMatchedStatus, index }: Sel
 
   const handleSelectOption = (value: string) => {
     setSelectItem(value);
-    setMatchedStatus((prev) => {
-      const matchItem = options.map((option, optionIndex) => {
-        if (optionIndex === index) {
-          return { id: options[index].id, name: value };
-        }
-        return option;
-      });
-      console.log(matchItem, 'matchItem');
-      console.log(prev);
-      if (prev.length === 0) {
-        return prev.push(matchItem);
-      } else {
-        return prev.map((prevItem) => {
-          return { ...prevItem, matchItem };
-        });
-      }
-    });
+    const updatedMatchedStatus = [...matchedStatus];
+    // Update the matched status at the specified index
+    updatedMatchedStatus[index as number] = { id: options[index as number].id, name: value };
+    dispatch(setMatchedStatus(updatedMatchedStatus as matchedStatusProps[]));
   };
 
   return (

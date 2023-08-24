@@ -1,23 +1,21 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment } from 'react';
+import { useAppDispatch, useAppSelector } from '../../../app/hooks';
+import { setVisibility } from '../../../features/general/prompt/promptSlice';
 import { Dialog, Transition } from '@headlessui/react';
-import { ExclamationTriangleIcon } from '@heroicons/react/24/outline';
-import { useDispatch } from 'react-redux';
-import { setVisibility } from '../features/general/prompt/promptSlice';
-import { useAppSelector } from '../app/hooks';
-import StatusIconComp from '../assets/icons/StatusIconComp';
-import SelectDropdown from '../components/input/SelectInput';
+import StatusIconComp from '../../../assets/icons/StatusIconComp';
 import { HiOutlineArrowNarrowRight } from 'react-icons/hi';
+import SelectDropdown from '../../input/SelectInput';
+import { ExclamationTriangleIcon } from '@heroicons/react/24/outline';
 
 export interface matchedStatusProps {
   id: string | null;
   name: string;
 }
 
-export default function Prompt() {
-  const dispatch = useDispatch();
+export default function MatchStatusPopUp() {
+  const dispatch = useAppDispatch();
   const { show, title, body, options, matchData } = useAppSelector((state) => state.prompt);
   const { matchedStatus } = useAppSelector((state) => state.hub);
-  console.log(matchedStatus, 'match prompt');
 
   const setShow = (state: boolean) => {
     dispatch(setVisibility(state));
@@ -28,7 +26,6 @@ export default function Prompt() {
     style: string | null;
     callback: () => void;
   }
-
   return (
     <Transition.Root show={show} as={Fragment}>
       <Dialog as="div" className="fixed inset-0 z-50 overflow-y-auto" onClose={setShow}>

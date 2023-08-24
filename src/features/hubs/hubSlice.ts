@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Hub, StatusProps } from '../../pages/workspace/hubs/components/ActiveTree/activetree.interfaces';
+import { matchedStatusProps } from '../../common/Prompt';
 
 interface HubState {
   hub: Hub[];
@@ -30,6 +31,7 @@ interface HubState {
   editHub: boolean;
   spaceStatuses: StatusProps[];
   statusesToMatch: StatusProps[];
+  matchedStatus: matchedStatusProps[];
 }
 
 const initialState: HubState = {
@@ -62,7 +64,8 @@ const initialState: HubState = {
   spaceStatuses: [
     { color: null, is_default: null, id: null, model_id: null, model: null, type: null, position: 0, name: '' }
   ],
-  statusesToMatch: []
+  statusesToMatch: [],
+  matchedStatus: []
 };
 
 export const hubSlice = createSlice({
@@ -83,6 +86,9 @@ export const hubSlice = createSlice({
     },
     setStatusesToMatch(state, action: PayloadAction<StatusProps[]>) {
       state.statusesToMatch = action.payload;
+    },
+    setMatchedStatus(state, action: PayloadAction<matchedStatusProps[]>) {
+      state.matchedStatus = action.payload;
     },
     getHub(state, action: PayloadAction<Hub[]>) {
       state.hub = action.payload;
@@ -201,6 +207,7 @@ export const {
   setParentHubExt,
   setSelectedTreeDetails,
   setEntityToCreate,
-  setStatusesToMatch
+  setStatusesToMatch,
+  setMatchedStatus
 } = hubSlice.actions;
 export default hubSlice.reducer;
