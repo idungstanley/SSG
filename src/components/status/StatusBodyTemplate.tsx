@@ -16,11 +16,11 @@ import { BoardSectionsType } from '../../utils/StatusManagement/Types';
 
 interface StatusBodyProps {
   item: StatusProps;
-  index?: number;
+  index: string;
   setStatusTypesState: React.Dispatch<React.SetStateAction<BoardSectionsType>>;
 }
 
-export default function StatusBodyTemplate({ item, setStatusTypesState }: StatusBodyProps) {
+export default function StatusBodyTemplate({ item, setStatusTypesState, index }: StatusBodyProps) {
   const [editableContent, setEditableContent] = useState<boolean>(false);
   const [showStatusEditDropdown, setShowStatusEditDropdown] = useState<null | HTMLSpanElement | HTMLDivElement>(null);
   const [showStatusColorDropdown, setShowStatusColorDropdown] = useState<null | HTMLSpanElement>(null);
@@ -30,7 +30,7 @@ export default function StatusBodyTemplate({ item, setStatusTypesState }: Status
   };
 
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
-    id: item.position
+    id: index
   });
 
   const style = {

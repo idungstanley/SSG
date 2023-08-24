@@ -57,10 +57,24 @@ function User() {
     {
       id: 2,
       title: 'Workspaces',
-      onClick: () => {
-        dispatch(setActiveTab('Workspaces'));
-        navigate('workspaces');
-      }
+      child: [
+        {
+          id: 1,
+          title: 'General Workspaces',
+          onClick: () => {
+            dispatch(setActiveTab('General Workspaces'));
+            navigate('workspaces');
+          }
+        },
+        {
+          id: 2,
+          title: 'Workspace settings',
+          onClick: () => {
+            dispatch(setActiveTab('Workspace settings'));
+            navigate('workspaces/settings');
+          }
+        }
+      ]
     },
     {
       id: 3,

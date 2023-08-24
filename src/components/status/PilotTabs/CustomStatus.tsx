@@ -1,12 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
-import StatusBodyTemplate from '../StatusBodyTemplate';
 import Button from '../../Button';
-import PlusIcon from '../../../assets/icons/PlusIcon';
-import Input from '../../input/Input';
 import { StatusProps } from '../../../pages/workspace/hubs/components/ActiveTree/activetree.interfaces';
-import PlusCircle from '../../../assets/icons/AddCircle';
-import { Chevron } from '../../Views/ui/Chevron';
 import {
   DndContext,
   DragEndEvent,
@@ -17,22 +12,17 @@ import {
   useSensor,
   useSensors
 } from '@dnd-kit/core';
-import {
-  SortableContext,
-  arrayMove,
-  sortableKeyboardCoordinates,
-  verticalListSortingStrategy
-} from '@dnd-kit/sortable';
+import { arrayMove, sortableKeyboardCoordinates } from '@dnd-kit/sortable';
 import { findBoardSectionContainer, initializeBoard } from '../../../utils/StatusManagement/board';
+import { GroupStyles } from '../../../utils/StatusManagement/Types';
+import BoardSection from '../Components/BoardSection';
 import { BoardSectionsType } from '../../../utils/StatusManagement/Types';
 import { useMutation } from '@tanstack/react-query';
 import { statusTypesService } from '../../../features/hubs/hubService';
-import { displayPrompt } from '../../../features/general/prompt/promptSlice';
 import { addIsDefaultToValues, extractValuesFromArray } from '../../../utils/StatusManagement/statusUtils';
-
-// const groupStatusByModelType = (statusTypes: StatusProps[]) => {
-//   return [...new Set(statusTypes.map(({ type }) => type))];
-// };
+import { setMatchedStatus, setStatusesToMatch } from '../../../features/hubs/hubSlice';
+import MatchStatusPopUp from '../Components/MatchStatusPopUp';
+import { setMatchData } from '../../../features/general/prompt/promptSlice';
 
 interface ErrorResponse {
   data: {
@@ -47,16 +37,18 @@ interface ErrorResponse {
 export default function CustomStatus() {
   const dispatch = useAppDispatch();
 
-  const { spaceStatuses } = useAppSelector((state) => state.hub);
+  const { spaceStatuses, matchedStatus } = useAppSelector((state) => state.hub);
+  const { matchData } = useAppSelector((state) => state.prompt);
+
   const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
   const { statusTaskListDetails } = useAppSelector((state) => state.list);
 
   const [statusTypesState, setStatusTypesState] = useState<StatusProps[]>(spaceStatuses);
   const [validationMessage, setValidationMessage] = useState<string>('');
-  const [newStatusValue, setNewStatusValue] = useState<string>();
+  const [newStatusValue, setNewStatusValue] = useState<string>('');
   const [addStatus, setAddStatus] = useState<boolean>(false);
-  const [collapsedStatusGroups, setCollapsedStatusGroups] = useState<{ [key: string]: boolean }>({});
   const [activeId, setActiveId] = useState<number | null>(null);
+  const [showMatchStatusPop, setShowMatchStatusPopup] = useState<boolean>(false);
 
   const initialBoardSections = initializeBoard(statusTypesState);
   const [boardSections, setBoardSections] = useState<BoardSectionsType>(initialBoardSections);
@@ -67,10 +59,6 @@ export default function CustomStatus() {
       coordinateGetter: sortableKeyboardCoordinates
     })
   );
-
-  const sortableItems = statusTypesState.map((status) => ({
-    id: status.position
-  }));
 
   function handleDragStart(event: DragEndEvent) {
     const { active } = event;
@@ -92,12 +80,12 @@ export default function CustomStatus() {
       const overItems = boardSection[overContainer];
 
       // Find the indexes for the items
-      const activeIndex = activeItems.findIndex((item) => item.position === active.id);
-      const overIndex = overItems.findIndex((item) => item.position !== over?.id);
+      const activeIndex = activeItems.findIndex((item) => item.name === active.id);
+      const overIndex = overItems.findIndex((item) => item.name !== over?.id);
 
       return {
         ...boardSection,
-        [activeContainer]: [...boardSection[activeContainer].filter((item) => item.position !== active.id)],
+        [activeContainer]: [...boardSection[activeContainer].filter((item) => item.name !== active.id)],
         [overContainer]: [
           ...boardSection[overContainer].slice(0, overIndex),
           boardSections[activeContainer][activeIndex],
@@ -115,8 +103,8 @@ export default function CustomStatus() {
       return;
     }
 
-    const activeIndex = boardSections[activeContainer].findIndex((task) => task.position === active.id);
-    const overIndex = boardSections[overContainer].findIndex((task) => task.position === over?.id);
+    const activeIndex = boardSections[activeContainer].findIndex((task) => task.name === active.id);
+    const overIndex = boardSections[overContainer].findIndex((task) => task.name === over?.id);
 
     if (activeIndex !== overIndex) {
       setBoardSections((boardSection) => ({
@@ -124,16 +112,7 @@ export default function CustomStatus() {
         [overContainer]: arrayMove(boardSection[overContainer], activeIndex, overIndex)
       }));
     }
-
     setActiveId(null);
-  };
-  // ... (remaining code)
-
-  const handleToggleGroup = (group: string) => {
-    setCollapsedStatusGroups((prevCollapsedStatusGroups) => ({
-      ...prevCollapsedStatusGroups,
-      [group]: !prevCollapsedStatusGroups[group]
-    }));
   };
 
   useEffect(() => {
@@ -178,11 +157,8 @@ export default function CustomStatus() {
     }
     setAddStatus(false);
   };
-  const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setNewStatusValue(e.target.value);
-  };
 
-  const groupStylesMapping: Record<string, { backgroundColor: string; boxShadow: string }> = {
+  const groupStylesMapping: Record<string, GroupStyles> = {
     open: { backgroundColor: '#FBFBFB', boxShadow: '0px 0px 5px rgba(0, 0, 0, 0.2)' },
     custom: { backgroundColor: '#FCF1FF', boxShadow: '0px 0px 5px rgba(128, 0, 128, 0.2)' },
     closed: { backgroundColor: '#E6FAE9', boxShadow: '0px 0px 5px rgba(0, 128, 0, 0.2)' }
@@ -191,7 +167,7 @@ export default function CustomStatus() {
 
   const createStatusTypes = useMutation(statusTypesService, {
     onSuccess: (data) => {
-      console.log(data);
+      // console.log(data);
     }
   });
 
@@ -199,39 +175,55 @@ export default function CustomStatus() {
   const defaultItem = statusTypesState.find((item) => item.position === 0);
   const AddDefault = addIsDefaultToValues(boardSections, defaultItem?.name);
   const statusData = extractValuesFromArray(AddDefault);
-  console.log(statusData);
+  const model = statusTaskListDetails.listId ? 'list' : (activeItemType as string);
+  const model_id = statusTaskListDetails.listId || (activeItemId as string);
+
+  const handleStatusData = async () => {
+    await createStatusTypes.mutateAsync({
+      model_id: model_id,
+      model: model,
+      from_model: activeItemType,
+      from_model_id: activeItemId,
+      statuses: statusData,
+      status_matches: matchedStatus
+    });
+  };
+
+  const matchStatusArray = [
+    {
+      label: 'Save Changes',
+      style: 'danger',
+      callback: async () => {
+        handleStatusData();
+        setShowMatchStatusPopup(false);
+      }
+    },
+    {
+      label: 'Cancel',
+      style: 'plain',
+      callback: () => {
+        setShowMatchStatusPopup(false);
+        dispatch(setMatchedStatus([]));
+      }
+    }
+  ];
 
   const onSubmit = async () => {
     try {
       await createStatusTypes.mutateAsync({
-        model_id: statusTaskListDetails.listId || (activeItemId as string),
-        model: 'list' || (activeItemType as string),
+        model_id: model_id,
+        model: model,
         from_model: activeItemType,
         from_model_id: activeItemId,
         statuses: statusData
       });
     } catch (err) {
       const errorResponse = err as ErrorResponse; // Cast err to the ErrorResponse type
-      if (errorResponse.data.data.match) {
-        console.log(true);
-        dispatch(
-          displayPrompt(
-            'Are you sure you want to delete this Status ?(“PENDING”)',
-            'You changed Statuses in your List . 3 Tasks would be affected. Please select an option below.',
-            [
-              {
-                label: 'Create Subhub',
-                style: 'danger',
-                callback: async () => ({})
-              },
-              {
-                label: 'Cancel',
-                style: 'plain',
-                callback: () => ({})
-              }
-            ]
-          )
-        );
+      const matchData = errorResponse.data.data.match;
+      if (matchData) {
+        dispatch(setMatchData(matchData));
+        dispatch(setStatusesToMatch(statusData));
+        setShowMatchStatusPopup(true);
       }
     }
   };
@@ -251,51 +243,22 @@ export default function CustomStatus() {
               className="p-2 space-y-2 rounded"
               key={uniqueModelType}
               style={{
-                backgroundColor: groupStylesMapping[uniqueModelType]?.backgroundColor,
-                boxShadow: groupStylesMapping[uniqueModelType]?.boxShadow
+                backgroundColor:
+                  groupStylesMapping[uniqueModelType as keyof typeof groupStylesMapping]?.backgroundColor,
+                boxShadow: groupStylesMapping[uniqueModelType as keyof typeof groupStylesMapping]?.boxShadow
               }}
             >
-              {uniqueModelType && (
-                <span className="flex gap-2">
-                  <Chevron
-                    onToggle={() => handleToggleGroup(uniqueModelType)}
-                    active={collapsedStatusGroups[uniqueModelType]}
-                    iconColor="text-gray-400"
-                  />
-                  <p className="flex uppercase justify-items-start">{uniqueModelType} STATUSES</p>
-                </span>
-              )}
-              <SortableContext items={sortableItems} strategy={verticalListSortingStrategy} id={uniqueModelType}>
-                {uniqueModelType &&
-                  !collapsedStatusGroups[uniqueModelType] &&
-                  boardSections[uniqueModelType].map((item, index) => (
-                    <>
-                      <StatusBodyTemplate index={index} item={item} setStatusTypesState={setBoardSections} />
-                    </>
-                  ))}
-              </SortableContext>
-              {uniqueModelType && uniqueModelType === 'open' && !addStatus && (
-                <span className="flex justify-items-start" onClick={() => setAddStatus(true)}>
-                  <Button
-                    height="h-7"
-                    icon={<PlusCircle active={false} color="white" />}
-                    label="Add Status"
-                    buttonStyle="base"
-                  />
-                </span>
-              )}
-              {uniqueModelType && uniqueModelType === 'open' && addStatus && (
-                <span className="flex justify-items-start">
-                  <Input
-                    trailingIcon={<PlusIcon active />}
-                    placeholder="Type Status name"
-                    name="Status"
-                    onChange={handleOnChange}
-                    value={newStatusValue}
-                    trailingClick={handleSaveNewStatus}
-                  />
-                </span>
-              )}
+              <BoardSection
+                id={uniqueModelType}
+                addStatus={addStatus}
+                setNewStatusValue={setNewStatusValue}
+                newStatusValue={newStatusValue}
+                setAddStatus={setAddStatus}
+                title={uniqueModelType}
+                status={boardSections[uniqueModelType]}
+                handleSaveNewStatus={handleSaveNewStatus}
+                setStatusTypesState={setBoardSections}
+              />
             </div>
           ))}
         </DndContext>
@@ -304,6 +267,13 @@ export default function CustomStatus() {
       <div className="flex justify-center">
         <Button label="Save" buttonStyle="base" width="w-40" height="h-8" onClick={onSubmit} />
       </div>
+      <MatchStatusPopUp
+        options={matchStatusArray}
+        title="Match Statuses"
+        body={`You changed statuses in your List. ${matchData?.length} status will be affected. How should we handle these statuses?`}
+        setShow={setShowMatchStatusPopup}
+        show={showMatchStatusPop}
+      />
     </section>
   );
 }

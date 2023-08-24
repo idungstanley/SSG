@@ -9,7 +9,6 @@ import { Status } from '../../features/task/interface.tasks';
 import StatusIconComp from '../../assets/icons/StatusIconComp';
 import { UseGetListDetails } from '../../features/list/listService';
 import ToolTip from '../Tooltip/Tooltip';
-import { EntityType } from '../../utils/EntityTypes/EntityType';
 
 interface StatusDropdownProps {
   TaskCurrentStatus: Status;
@@ -18,7 +17,7 @@ interface StatusDropdownProps {
 export default function StatusDropdown({ TaskCurrentStatus }: StatusDropdownProps) {
   const { currentTaskStatusId, currTaskListId } = useAppSelector((state) => state.task);
 
-  const { data: list } = UseGetListDetails({ activeItemId: currTaskListId, activeItemType: EntityType.list });
+  const { data: list } = UseGetListDetails(currTaskListId);
 
   const { mutate } = UseUpdateTaskStatusService2();
 
@@ -36,7 +35,7 @@ export default function StatusDropdown({ TaskCurrentStatus }: StatusDropdownProp
     setIsOpen(false);
   }
 
-  const sortedStatuses = list?.data.list.task_statuses.sort((a, b) => {
+  const sortedStatuses = list?.data.list.task_statuses.slice().sort((a, b) => {
     const positionA = typeof a.position === 'number' ? a.position : 0;
     const positionB = typeof b.position === 'number' ? b.position : 0;
     return positionA - positionB;

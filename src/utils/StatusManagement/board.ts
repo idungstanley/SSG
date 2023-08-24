@@ -17,6 +17,6 @@ export const findBoardSectionContainer = (boardSections: BoardSectionsType, id: 
     return id;
   }
 
-  const container = Object.keys(boardSections).find((key) => boardSections[key].find((item) => item.id === id));
+  const container = Object.keys(boardSections).find((key) => boardSections[key].find((item) => item.name === id));
   return container;
 };

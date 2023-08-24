@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-// import { tagItem } from '../../pages/workspace/pilot/components/details/properties/subDetailsIndex/PropertyDetails';
 import { listColumnProps } from '../../pages/workspace/tasks/component/views/ListColumns';
 import { IField } from '../list/list.interfaces';
 import {
@@ -12,14 +11,12 @@ import {
   Status,
   TaskKey
 } from './interface.tasks';
-import { SortOption } from '../../pages/workspace/tasks/component/views/listLevel/TaskListViews';
 import RecordRTC from 'recordrtc';
 import {
   FilterFieldsWithOption,
   FiltersOption,
   FilterWithId
 } from '../../components/TasksHeader/ui/Filter/types/filters';
-import { DateString } from '../../components/DatePicker/DatePicker';
 import { DEFAULT_FILTERS_OPTION } from '../../components/TasksHeader/ui/Filter/config/filterConfig';
 
 export interface ICustomField {
@@ -41,6 +38,11 @@ export interface ActiveTaskColumnProps {
   id: string;
   header: string;
 }
+
+export type SortOption = {
+  dir: 'asc' | 'desc';
+  field: string;
+};
 
 interface customPropertyInfo {
   name: string;
@@ -123,7 +125,6 @@ interface TaskState {
   hideTask: listColumnProps[];
   currentTaskId: string | null;
   selectedTasksArray: string[];
-  listView: boolean;
   comfortableView: boolean;
   comfortableViewWrap: boolean;
   verticalGrid: boolean;
@@ -135,12 +136,7 @@ interface TaskState {
   taskUpperCase: boolean;
   verticalGridlinesTask: boolean;
   CompactViewWrap: boolean;
-  tableView: boolean;
   meMode: boolean;
-  boardView: boolean;
-  calenderView: boolean;
-  mapView: boolean;
-  taskStatus: string | null;
   showTaskNavigation: boolean;
   addNewTaskItem: boolean;
   selectedIndex: number | null;
@@ -151,10 +147,6 @@ interface TaskState {
   toggleAssignCurrentTaskId: string | null | undefined;
   currentParentTaskId: string | null;
   getSubTaskId: null | string | undefined;
-  currentParentSubTaskId: null | string;
-  currentParentSubTaskId2: null | string;
-  currentParentSubTaskId3: null | string;
-  currentParentSubTaskId4: string | null | undefined;
   initial_description: string | undefined;
   initial_start_date: null | undefined | string;
   initial_end_date: null | undefined | string;
@@ -163,13 +155,12 @@ interface TaskState {
   updateStatusModalIdForPilot: null;
   currentTaskStatusId: string | null;
   currentTaskPriorityId: string | null | undefined;
-  triggerAsssignTask: boolean;
   groupByStatus: string | null;
   showTaskUploadModal: boolean;
   timerStatus: boolean;
-  filterTaskByAssigneeIds: string | null | undefined;
   sortAbleArr: SortOption[];
   sortArr: string[];
+  timeSortStatus: boolean;
   timeArr: string[];
   timeSortArr: string[];
   screenRecording: 'idle' | 'recording';
@@ -179,7 +170,6 @@ interface TaskState {
   activeTaskColumn: ActiveTaskColumnProps;
   timerDetails: ITimerDetails;
   duration: IDuration;
-  fetchedTime: { h: number; m: number; s: number } | null;
   period: number | undefined;
   sortType: TaskKey;
   searchValue: string;
@@ -187,12 +177,9 @@ interface TaskState {
   selectedDate: ISelectedDate | null;
   HistoryFilterMemory: IHistoryFilterMemory | null;
   filters: FilterFieldsWithOption;
-  FilterDateString: DateString | null;
   statusId: string;
   currTaskListId: string;
-  newColInstance: [{ id: number; value: string }];
   entityForCustom: entityForCustom;
-  listViewHeads: listColumnProps[];
   customSuggestionField: IExtraFields[];
   newTaskData: ImyTaskData | undefined;
   newCustomPropertyDetails: customPropertyInfo;
@@ -209,7 +196,6 @@ const initialState: TaskState = {
   taskColumns: [],
   hideTask: [],
   currentTaskId: null,
-  listView: true,
   comfortableView: true,
   comfortableViewWrap: false,
   showNewTaskField: false,
@@ -224,11 +210,6 @@ const initialState: TaskState = {
   verticalGridlinesTask: true,
   CompactView: false,
   CompactViewWrap: false,
-  tableView: false,
-  boardView: false,
-  calenderView: false,
-  mapView: false,
-  taskStatus: null,
   showTaskNavigation: false,
   addNewTaskItem: false,
   closeTaskListView: true,
@@ -238,10 +219,6 @@ const initialState: TaskState = {
   toggleAssignCurrentTaskId: null,
   currentParentTaskId: null,
   getSubTaskId: null,
-  currentParentSubTaskId: null,
-  currentParentSubTaskId2: null,
-  currentParentSubTaskId3: null,
-  currentParentSubTaskId4: null,
   initial_description: '',
   initial_start_date: null,
   initial_end_date: null,
@@ -250,13 +227,12 @@ const initialState: TaskState = {
   updateStatusModalIdForPilot: null,
   currentTaskStatusId: null,
   currentTaskPriorityId: null,
-  triggerAsssignTask: false,
   groupByStatus: 'status',
   showTaskUploadModal: false,
   timerStatus: false,
-  filterTaskByAssigneeIds: null,
   sortAbleArr: [],
   sortArr: [],
+  timeSortStatus: false,
   timeArr: [],
   timeSortArr: [],
   screenRecording: 'idle',
@@ -266,7 +242,6 @@ const initialState: TaskState = {
   activeTaskColumn: { id: '', header: '' },
   timerDetails: { description: '', isBillable: false },
   duration: { s: 0, m: 0, h: 0 },
-  fetchedTime: null,
   period: undefined,
   sortType: 'status',
   searchValue: '',
@@ -277,12 +252,9 @@ const initialState: TaskState = {
   },
   selectedDate: null,
   HistoryFilterMemory: null,
-  FilterDateString: null,
   statusId: '',
   currTaskListId: '',
-  newColInstance: [{ id: 1, value: '' }],
   entityForCustom: { id: undefined, type: undefined },
-  listViewHeads: [],
   customSuggestionField: [],
   newTaskData: undefined,
   newCustomPropertyDetails: { name: '', type: 'Select Property Type', color: null },
@@ -323,18 +295,8 @@ export const taskSlice = createSlice({
     setSortType(state, action: PayloadAction<TaskKey>) {
       state.sortType = action.payload;
     },
-    createTaskSlice(state, action: PayloadAction<string>) {
-      state.task.push(action.payload);
-    },
     setTaskIdForPilot(state, action: PayloadAction<string | null>) {
       state.currentTaskIdForPilot = action.payload;
-    },
-    getTaskData(state, action: PayloadAction<{ id: string }[] | undefined>) {
-      const taskDataArray = action.payload;
-      // taskDataArray.unshift(myObj);
-      if (taskDataArray) {
-        state.myTaskData = taskDataArray as ImyTaskData[];
-      }
     },
     getTaskColumns(state, action: PayloadAction<listColumnProps[]>) {
       state.taskColumns = action.payload;
@@ -365,10 +327,6 @@ export const taskSlice = createSlice({
                 }
               })
       };
-    },
-
-    getListView(state, action: PayloadAction<boolean>) {
-      state.listView = action.payload;
     },
     getComfortableView(state, action: PayloadAction<boolean>) {
       state.comfortableView = action.payload;
@@ -415,40 +373,18 @@ export const taskSlice = createSlice({
     setAddNewTaskItem(state, action: PayloadAction<boolean>) {
       state.addNewTaskItem = action.payload;
     },
-    getTableView(state, action: PayloadAction<boolean>) {
-      state.tableView = action.payload;
-    },
-    getBoardView(state, action: PayloadAction<boolean>) {
-      state.boardView = action.payload;
-    },
     setActiveTaskColumn(state, action: PayloadAction<ActiveTaskColumnProps>) {
       state.activeTaskColumn = action.payload;
     },
-    getCalendeView(state, action: PayloadAction<boolean>) {
-      state.calenderView = action.payload;
-    },
-    getMapView(state, action: PayloadAction<boolean>) {
-      state.mapView = action.payload;
-    },
-    setTaskStatus(state, action: PayloadAction<string | null>) {
-      state.taskStatus = action.payload;
-    },
-
     setShowTaskNavigation(state, action: PayloadAction<boolean>) {
       state.showTaskNavigation = action.payload;
-    },
-
-    setWatchersData(state, action: PayloadAction<string>) {
-      state.watchersData.push(action.payload);
     },
     setRmWatcher(state, action: PayloadAction<null | string>) {
       state.removeWatcherId = action.payload;
     },
-
     setCurrTeamMemId(state, action: PayloadAction<null | string>) {
       state.currTeamMemberId = action.payload;
     },
-
     setCurrentTaskId(state, action: PayloadAction<string | null>) {
       state.currentTaskId = action.payload;
     },
@@ -463,18 +399,6 @@ export const taskSlice = createSlice({
     },
     setGetSubTaskId(state, action: PayloadAction<null | string | undefined>) {
       state.getSubTaskId = action.payload;
-    },
-    setCurrentParentSubTaskId(state, action: PayloadAction<null | string>) {
-      state.currentParentSubTaskId = action.payload;
-    },
-    setCurrentParentSubTaskId2(state, action: PayloadAction<null | string>) {
-      state.currentParentSubTaskId2 = action.payload;
-    },
-    setCurrentParentSubTaskId3(state, action: PayloadAction<null | string>) {
-      state.currentParentSubTaskId3 = action.payload;
-    },
-    setCurrentParentSubTaskId4(state, action: PayloadAction<null | string | undefined>) {
-      state.currentParentSubTaskId4 = action.payload;
     },
     setCurrentTaskStatusId(state, action: PayloadAction<string | null>) {
       state.currentTaskStatusId = action.payload;
@@ -499,10 +423,6 @@ export const taskSlice = createSlice({
     setUpdateStatusModalId(state, action: PayloadAction<string | null>) {
       state.updateStatusModalId = action.payload;
     },
-    checkIfTask: (state) => state,
-    setTriggerAsssignTask(state, action: PayloadAction<boolean>) {
-      state.triggerAsssignTask = action.payload;
-    },
     setGroupByStatus(state, action: PayloadAction<string | null>) {
       state.groupByStatus = action.payload;
     },
@@ -512,14 +432,14 @@ export const taskSlice = createSlice({
     setTimerStatus(state, action: PayloadAction<boolean>) {
       state.timerStatus = action.payload;
     },
-    setFilterTaskByAssigneeIds(state, action: PayloadAction<string | null | undefined>) {
-      state.filterTaskByAssigneeIds = action.payload;
-    },
     setSortArray(state, action: PayloadAction<SortOption[]>) {
       state.sortAbleArr = action.payload;
     },
     setSortArr(state, action: PayloadAction<string[]>) {
       state.sortArr = action.payload;
+    },
+    setTimeSortStatus(state, action: PayloadAction<boolean>) {
+      state.timeSortStatus = action.payload;
     },
     setTimeArr(state, action: PayloadAction<string[]>) {
       state.timeArr = action.payload;
@@ -556,26 +476,11 @@ export const taskSlice = createSlice({
     setHistoryMemory(state, action: PayloadAction<IHistoryFilterMemory | null>) {
       state.HistoryFilterMemory = action.payload;
     },
-    setFilterDateString(state, action: PayloadAction<DateString | null>) {
-      state.FilterDateString = action.payload;
-    },
-    setFetchedTime(state, action: PayloadAction<{ h: number; m: number; s: number } | null>) {
-      state.fetchedTime = action.payload;
-    },
-    setNewColInstance(state, action: PayloadAction<{ id: number; value: string }>) {
-      state.newColInstance.push(action.payload);
-    },
     setEntityForCustom(state, action: PayloadAction<entityForCustom>) {
       state.entityForCustom = action.payload;
     },
-    setHeads(state, action: PayloadAction<listColumnProps[]>) {
-      state.listViewHeads = action.payload;
-    },
     setCustomSuggetionsField(state, action: PayloadAction<IExtraFields>) {
       state.customSuggestionField = [...state.customSuggestionField, action.payload];
-    },
-    setNewTask(state, action: PayloadAction<ImyTaskData | undefined>) {
-      state.newTaskData = action.payload;
     },
     setNewCustomPropertyDetails(state, action: PayloadAction<customPropertyInfo>) {
       state.newCustomPropertyDetails = action.payload;
@@ -593,14 +498,9 @@ export const {
   setStatusId,
   setCurrTaskListId,
   setSearchValue,
-  createTaskSlice,
   setTaskIdForPilot,
-  checkIfTask,
-  setWatchersData,
   setCurrTeamMemId,
-  getTaskData,
   getTaskColumns,
-  getListView,
   getComfortableView,
   getComfortableViewWrap,
   getVerticalGrid,
@@ -612,12 +512,7 @@ export const {
   setSelectedIndex,
   setSelectedIndexStatus,
   setSelectedIndexListId,
-  getTableView,
-  getBoardView,
-  getCalendeView,
   setHilightNewTask,
-  getMapView,
-  setTaskStatus,
   setMeMode,
   setShowTaskNavigation,
   setShowNewTaskField,
@@ -632,22 +527,17 @@ export const {
   setCurrentParentTaskId,
   setGetSubTaskId,
   hideTaskColumns,
-  setCurrentParentSubTaskId,
-  setCurrentParentSubTaskId2,
-  setCurrentParentSubTaskId3,
-  setCurrentParentSubTaskId4,
   setUpdateEntries,
   setUpdateStatusModalId,
   setCurrentTaskStatusId,
   setCurrentTaskPriorityId,
-  setTriggerAsssignTask,
   setGroupByStatus,
   setShowTaskUploadModal,
   setTimerStatus,
   setTimerDetails,
-  setFilterTaskByAssigneeIds,
   setSortArray,
   setSortArr,
+  setTimeSortStatus,
   setTimeArr,
   setTimeSortArr,
   setScreenRecording,
@@ -655,18 +545,14 @@ export const {
   setUpdateCords,
   setActiveTaskColumn,
   setUpdateTimerDuration,
-  setFetchedTime,
   setStopTimer,
   setTimerInterval,
   setSortType,
   setTaskSelectedDate,
   setHistoryMemory,
-  setFilterDateString,
-  setNewColInstance,
   setEntityForCustom,
-  setHeads,
   setCustomSuggetionsField,
-  setNewTask,
-  setNewCustomPropertyDetails
+  setNewCustomPropertyDetails,
+  setEditCustomProperty
 } = taskSlice.actions;
 export default taskSlice.reducer;

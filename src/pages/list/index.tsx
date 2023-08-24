@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
-import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { useAppDispatch } from '../../app/hooks';
 import { getTaskListService } from '../../features/task/taskService';
 import { setActiveItem } from '../../features/workspace/workspaceSlice';
 import { UseGetListDetails } from '../../features/list/listService';
@@ -22,13 +22,15 @@ export function ListPage() {
   const dispatch = useAppDispatch();
   const { listId, taskId } = useParams();
 
-  const { listView, filterTaskByAssigneeIds } = useAppSelector((state) => state.task);
-
   const containerRef = useRef<HTMLDivElement>(null);
 
   // get list details to set active entity
-  const { data: list } = UseGetListDetails({ activeItemId: listId, activeItemType: EntityType.list });
+  const { data: list } = UseGetListDetails(listId);
   const listName = list?.data.list.name ?? '';
+
+  // get list tasks
+  const { data, hasNextPage, fetchNextPage } = getTaskListService(listId);
+  const tasks = data ? data.pages.flatMap((page) => page.data.tasks) : [];
 
   useEffect(() => {
     if (list) {
@@ -37,10 +39,6 @@ export function ListPage() {
       }
     }
   }, [list]);
-
-  // get list tasks
-  const { data, hasNextPage, fetchNextPage } = getTaskListService({ listId, assigneeUserId: filterTaskByAssigneeIds });
-  const tasks = data ? data.pages.flatMap((page) => page.data.tasks) : [];
 
   // infinite scroll
   useEffect(() => {
@@ -92,11 +90,11 @@ export function ListPage() {
             className="w-full h-full p-4 pb-0 space-y-10 overflow-y-scroll"
             onScroll={onScroll}
           >
-            {listView && <TaskQuickAction listDetailsData={listName} />}
+            <TaskQuickAction listDetailsData={listName} />
 
-            {tasks.length ? <List tasks={tasks} customProperty={list?.data.list.custom_fields} /> : []}
+            {tasks?.length ? <List tasks={tasks} customProperty={list?.data.list.custom_fields} /> : null}
           </div>
-          {tasks.length > 1 && <GroupHorizontalScroll />}
+          {tasks?.length > 1 && <GroupHorizontalScroll />}
         </>
       </Page>
     </>

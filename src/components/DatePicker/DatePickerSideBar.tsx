@@ -1,7 +1,7 @@
 import dayjs, { Dayjs } from 'dayjs';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { setHistoryMemory, setTaskSelectedDate } from '../../features/task/taskSlice';
-import { setSelectedDate } from '../../features/workspace/workspaceSlice';
+import { setActiveSubHubManagerTabId, setActiveTabId, setSelectedDate } from '../../features/workspace/workspaceSlice';
 import { generateDate, weekends, weeks } from '../../utils/calendar';
 import { Dispatch, SetStateAction, useState } from 'react';
 import ArrowDown from '../../assets/icons/ArrowDown';
@@ -107,6 +107,11 @@ export function DatePickerSideBar({ currentDate, setOpenSideBar }: DatePickerSid
     }
   };
 
+  const handleTabSwitch = () => {
+    dispatch(setActiveSubHubManagerTabId(4));
+    dispatch(setActiveTabId(9));
+  };
+
   const handleDayClick = (type: string) => {
     if (type === 'today') {
       dispatch(
@@ -168,6 +173,7 @@ export function DatePickerSideBar({ currentDate, setOpenSideBar }: DatePickerSid
             className="cursor-pointer flex"
             onMouseEnter={() => setIconToggle((prev) => ({ ...prev, threeDotIcon: true }))}
             onMouseLeave={() => setIconToggle((prev) => ({ ...prev, threeDotIcon: false }))}
+            onClick={() => handleTabSwitch()}
           >
             <ThreeDotIcon active={iconToggle.threeDotIcon} />
           </div>

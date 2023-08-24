@@ -1,13 +1,23 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useState } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { ExclamationTriangleIcon } from '@heroicons/react/24/outline';
 import { useDispatch } from 'react-redux';
 import { setVisibility } from '../features/general/prompt/promptSlice';
 import { useAppSelector } from '../app/hooks';
+import StatusIconComp from '../assets/icons/StatusIconComp';
+import SelectDropdown from '../components/input/SelectInput';
+import { HiOutlineArrowNarrowRight } from 'react-icons/hi';
+
+export interface matchedStatusProps {
+  id: string | null;
+  name: string;
+}
 
 export default function Prompt() {
   const dispatch = useDispatch();
-  const { show, title, body, options } = useAppSelector((state) => state.prompt);
+  const { show, title, body, options, matchData } = useAppSelector((state) => state.prompt);
+  const { matchedStatus } = useAppSelector((state) => state.hub);
+  console.log(matchedStatus, 'match prompt');
 
   const setShow = (state: boolean) => {
     dispatch(setVisibility(state));
@@ -64,6 +74,25 @@ export default function Prompt() {
                   </div>
                 </div>
               </div>
+              {matchData && (
+                <div className="flex flex-col gap-2 px-4">
+                  {matchData.map((matchItem, index) => (
+                    <div key={index} className="px-6">
+                      <div className="grid grid-cols-3 gap-8">
+                        <span className="flex items-center gap-2">
+                          <StatusIconComp color={matchItem.color as string} />
+                          <span>{matchItem.name}</span>
+                        </span>
+                        <span className="flex gap-4 items-center">
+                          <p>MOVE TO</p>
+                          <HiOutlineArrowNarrowRight />
+                        </span>
+                        <SelectDropdown options={matchData} index={index} />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
               <div className="px-4 py-3 bg-gray-50 sm:px-6 sm:flex sm:flex-row-reverse">
                 {options.map((option: optionsProps) => (
                   <div key={option.label}>

@@ -10,6 +10,7 @@ import {
   setActiveTabId,
   setCurrentItem,
   setOpenedEntitiesIds,
+  setShowExtendedBar,
   setShowPilot
 } from '../../../../../../../features/workspace/workspaceSlice';
 import { cl } from '../../../../../../../utils';
@@ -42,15 +43,12 @@ export default function SubHubList({ hubs }: ListProps) {
     navigate(`tasks/sh/${id}`, {
       replace: true
     });
+    if (!showSidebar) {
+      dispatch(setShowExtendedBar(true));
+    }
   };
 
   const handleClick = (id: string) => {
-    if (!showSidebar) {
-      navigate(`tasks/sh/${id}`, {
-        replace: true
-      });
-    }
-
     if (openedEntitiesIds.includes(id)) {
       dispatch(setOpenedEntitiesIds(openedEntitiesIds.filter((subhubId) => subhubId !== id)));
     } else {

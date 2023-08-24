@@ -8,8 +8,8 @@ import {
 } from '../../../../../../features/settings/teamMemberInvites/teamMemberInviteSlice';
 import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
 import SortDirectionCheck from '../../../../../workspace/tasks/component/views/listLevel/component/SortDirectionCheck';
-import { SortOption } from '../../../../../workspace/tasks/component/views/listLevel/TaskListViews';
 import { EntityType } from '../../../../../../utils/EntityTypes/EntityType';
+import { SortOption } from '../../../../../../features/task/taskSlice';
 
 interface valueType {
   value: string;

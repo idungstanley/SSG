@@ -1,6 +1,12 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { dimensions } from '../../app/config/dimensions';
-import { IRecorderLastMemory, ITimerLastMemory, IWorkspaceRes } from './workspace.interfaces';
+import {
+  IRecorderLastMemory,
+  ITimerLastMemory,
+  IWorkspaceRes,
+  WorkSpaceSettingsRes,
+  WorkSpaceSettingsUpdateRes
+} from './workspace.interfaces';
 import { IActivityLog } from '../general/history/history.interfaces';
 import dayjs, { Dayjs } from 'dayjs';
 
@@ -68,6 +74,8 @@ interface workspaceState {
   showMore: boolean;
   openedEntitiesIds: string[];
   extendedBarOpenedEntitiesIds: string[];
+  workSpaceSettings: WorkSpaceSettingsRes[] | undefined;
+  workSpaceSettingsObj: WorkSpaceSettingsUpdateRes | undefined;
 }
 
 const initialState: workspaceState = {
@@ -125,7 +133,9 @@ const initialState: workspaceState = {
   lastActiveItem: '',
   showMore: false,
   openedEntitiesIds: [],
-  extendedBarOpenedEntitiesIds: []
+  extendedBarOpenedEntitiesIds: [],
+  workSpaceSettings: [],
+  workSpaceSettingsObj: undefined
 };
 
 export const wsSlice = createSlice({
@@ -326,6 +336,12 @@ export const wsSlice = createSlice({
     },
     setExtendedBarOpenedEntitiesIds(state, action: PayloadAction<string[]>) {
       state.extendedBarOpenedEntitiesIds = action.payload;
+    },
+    setWorkSpaceSetting(state, action: PayloadAction<WorkSpaceSettingsRes[] | undefined>) {
+      state.workSpaceSettings = action.payload;
+    },
+    setWorkSpaceSettingsObj(state, action: PayloadAction<WorkSpaceSettingsUpdateRes>) {
+      state.workSpaceSettingsObj = action.payload;
     }
   }
 });
@@ -384,7 +400,9 @@ export const {
   setShowTabLabel,
   setOpenedEntitiesIds,
   setExtendedBarOpenedEntitiesIds,
-  setActiveStatusManagementTabId
+  setActiveStatusManagementTabId,
+  setWorkSpaceSetting,
+  setWorkSpaceSettingsObj
 } = wsSlice.actions;
 
 export default wsSlice.reducer;
