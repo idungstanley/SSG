@@ -171,6 +171,10 @@ interface TaskState {
   timerDetails: ITimerDetails;
   duration: IDuration;
   period: number | undefined;
+  activeTimeOut: {
+    clockLimit: number;
+    timeoutReminder: number;
+  };
   sortType: TaskKey;
   searchValue: string;
   assigneeIds: string[];
@@ -243,6 +247,7 @@ const initialState: TaskState = {
   timerDetails: { description: '', isBillable: false },
   duration: { s: 0, m: 0, h: 0 },
   period: undefined,
+  activeTimeOut: { clockLimit: 0, timeoutReminder: 0 },
   sortType: 'status',
   searchValue: '',
   assigneeIds: [],
@@ -470,6 +475,9 @@ export const taskSlice = createSlice({
     setTimerInterval(state, action: PayloadAction<number | undefined>) {
       state.period = action.payload;
     },
+    setActiveTimeout(state, action: PayloadAction<{ clockLimit: number; timeoutReminder: number }>) {
+      state.activeTimeOut = action.payload;
+    },
     setTaskSelectedDate(state, action: PayloadAction<ISelectedDate | null>) {
       state.selectedDate = action.payload;
     },
@@ -547,6 +555,7 @@ export const {
   setUpdateTimerDuration,
   setStopTimer,
   setTimerInterval,
+  setActiveTimeout,
   setSortType,
   setTaskSelectedDate,
   setHistoryMemory,
