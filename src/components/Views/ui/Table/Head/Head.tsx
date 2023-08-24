@@ -236,7 +236,7 @@ export function Head({
                     <img
                       src={statusbox}
                       alt=""
-                      className="pr-1 border-r cursor-pointer "
+                      className="pr-1 border-r cursor-pointer"
                       onClick={handleCheckedGroupTasks}
                     />
                     <CiEdit className="w-4 h-4 pr-1 border-r cursor-pointer" />
