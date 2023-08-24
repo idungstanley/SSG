@@ -40,7 +40,7 @@ interface ErrorResponse {
 export default function CustomStatus() {
   const dispatch = useAppDispatch();
 
-  const { spaceStatuses } = useAppSelector((state) => state.hub);
+  const { spaceStatuses, matchedStatus } = useAppSelector((state) => state.hub);
   const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
   const { statusTaskListDetails } = useAppSelector((state) => state.list);
 
@@ -182,7 +182,8 @@ export default function CustomStatus() {
       model: 'list' || (activeItemType as string),
       from_model: activeItemType,
       from_model_id: activeItemId,
-      statuses: statusData
+      statuses: statusData,
+      status_matches: matchedStatus
     });
   };
 
