@@ -50,6 +50,7 @@ export default function CustomStatus() {
   const [addStatus, setAddStatus] = useState<boolean>(false);
   const [activeId, setActiveId] = useState<number | null>(null);
   const [showMatchStatusPop, setShowMatchStatusPopup] = useState<boolean>(false);
+  const [matchingStatusValidation, setMatchingStatusValidation] = useState<string | null>(null);
 
   const initialBoardSections = initializeBoard(statusTypesState);
   const [boardSections, setBoardSections] = useState<BoardSectionsType>(initialBoardSections);
@@ -189,8 +190,16 @@ export default function CustomStatus() {
       label: 'Save Changes',
       style: 'danger',
       callback: async () => {
-        handleStatusData();
-        setShowMatchStatusPopup(false);
+        if (matchedStatus.length !== matchData.length) {
+          setMatchingStatusValidation('Whoops! Select a status for every conflicting status');
+          setTimeout(() => {
+            setMatchingStatusValidation(null);
+          }, 3000);
+        } else {
+          setMatchingStatusValidation(null);
+          handleStatusData();
+          setShowMatchStatusPopup(false);
+        }
       }
     },
     {
@@ -199,6 +208,7 @@ export default function CustomStatus() {
       callback: () => {
         setShowMatchStatusPopup(false);
         dispatch(setMatchedStatus([]));
+        setMatchingStatusValidation(null);
       }
     }
   ];
@@ -263,6 +273,7 @@ export default function CustomStatus() {
         <Button label="Save" buttonStyle="base" width="w-40" height="h-8" onClick={onSubmit} />
       </div>
       <MatchStatusPopUp
+        validationMessage={matchingStatusValidation}
         options={matchStatusArray}
         title="Match Statuses"
         body={`You changed statuses in your List. ${matchData?.length} status will be affected. How should we handle these statuses?`}
