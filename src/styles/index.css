@@ -25,7 +25,6 @@ body {
 }
 
 html {
-  zoom: 0.85;
   scroll-behavior: smooth;
 }
 
@@ -175,4 +174,10 @@ code {
   transform: translate(-50%, -130%);
   font-size: 0.7rem;
   color: #333;
+}
+
+@media (max-width: 2560px) {
+  html {
+    zoom: 0.85;
+  }
 }
