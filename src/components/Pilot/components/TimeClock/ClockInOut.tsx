@@ -12,6 +12,7 @@ import {
 } from '../../../../features/task/taskService';
 import AvatarWithInitials from '../../../avatar/AvatarWithInitials';
 import {
+  setActiveTimeout,
   setTimerDetails,
   setTimerInterval,
   setTimerStatus,
@@ -37,7 +38,7 @@ export default function ClockInOut() {
 
   const { activeItemId, activeItemType, activeTabId, timerLastMemory } = useAppSelector((state) => state.workspace);
   const { timerStatus, duration, period, timerDetails } = useAppSelector((state) => state.task);
-  const { initials } = useAppSelector((state) => state.userSetting);
+  const { initials, clock_limit, clock_stop_reminder } = useAppSelector((state) => state.userSetting);
   const { currentUserId } = useAppSelector((state) => state.auth);
 
   const [isRunning, setRunning] = useState(false);
@@ -47,7 +48,7 @@ export default function ClockInOut() {
   const [newTimer, setNewtimer] = useState(false);
 
   const [page, setPage] = useState<number>(1);
-  const { data: getTaskEntries, isPreviousData } = GetTimeEntriesService({
+  const { data: getTaskEntries } = GetTimeEntriesService({
     itemId: activeItemId,
     trigger: activeItemType,
     page,
@@ -72,6 +73,7 @@ export default function ClockInOut() {
       return dispatch(setTimerStatus(false));
     }
     dispatch(setTimerStatus(!timerStatus));
+    dispatch(setActiveTimeout({ clockLimit: clock_limit, timeoutReminder: clock_stop_reminder }));
     setRunning(true);
     dispatch(setTimerLastMemory({ workSpaceId, hubId, subhubId, listId, taskId, activeTabId }));
   };
@@ -86,6 +88,7 @@ export default function ClockInOut() {
     setTime({ s: 0, m: 0, h: 0 });
     setRunning(false);
     dispatch(setTimerStatus(false));
+    dispatch(setActiveTimeout({ clockLimit: 0, timeoutReminder: 0 }));
     clearInterval(period);
     dispatch(setUpdateTimerDuration({ s: 0, m: 0, h: 0 }));
     dispatch(setTimerInterval());

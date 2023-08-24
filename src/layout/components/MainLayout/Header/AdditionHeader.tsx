@@ -18,6 +18,11 @@ import moment from 'moment-timezone';
 import { toast } from 'react-hot-toast';
 import SaveFilterToast from '../../../../components/TasksHeader/ui/Filter/ui/Toast';
 import { setTimerInterval, setTimerStatus, setUpdateTimerDuration } from '../../../../features/task/taskSlice';
+import { title } from 'process';
+import { string } from 'yup/lib/locale';
+
+const hoursToMilliseconds = 60 * 60 * 1000;
+const minutesToMilliseconds = 60 * 1000;
 
 export default function AdditionalHeader() {
   const { workSpaceId: workspaceId } = useParams();
@@ -25,15 +30,10 @@ export default function AdditionalHeader() {
   const userTimeZoneFromLS: string | null = localStorage.getItem('userTimeZone');
 
   const { activeTabId: tabsId, timerLastMemory, activeItemId } = useAppSelector((state) => state.workspace);
-  const { screenRecording, duration, timerStatus, period, timerDetails } = useAppSelector((state) => state.task);
-  const {
-    timezone: zone,
-    date_format,
-    time_format,
-    is_clock_time,
-    clock_limit,
-    clock_stop_reminder
-  } = useAppSelector((state) => state.userSetting);
+  const { screenRecording, duration, timerStatus, period, timerDetails, activeTimeOut } = useAppSelector(
+    (state) => state.task
+  );
+  const { timezone: zone, date_format, time_format, is_clock_time } = useAppSelector((state) => state.userSetting);
   const { activeItemName } = useAppSelector((state) => state.workspace);
 
   const [recordBlinker, setRecordBlinker] = useState<boolean>(false);
@@ -58,44 +58,40 @@ export default function AdditionalHeader() {
 
   const { refetch } = useCurrentTime({ workspaceId });
   const { mutate } = EndTimeEntriesService();
+  const stop = () => {
+    mutate({
+      id: activeItemId,
+      is_Billable: timerDetails.isBillable,
+      description: timerDetails.description
+    });
+    dispatch(setTimerStatus(false));
+    clearInterval(period);
+    dispatch(setUpdateTimerDuration({ h: 0, s: 0, m: 0 }));
+    dispatch(setTimerInterval());
+  };
 
-  const currentTime = Date.now();
-  const notificationTime = clock_limit - clock_stop_reminder;
-  const timeDiff = clock_limit - currentTime;
+  const notificationhandler = ({
+    period,
+    type,
+    message,
+    title
+  }: {
+    period: number;
+    type: string;
+    message: string;
+    title: string;
+  }) => {
+    setTimeout(() => {
+      toast.custom((t) => <SaveFilterToast title={title} body={message} toastId={t.id} extended="clockReminder" />, {
+        position: 'bottom-right',
+        duration: Infinity
+      });
+    }, period * (type === 'hours' ? hoursToMilliseconds : minutesToMilliseconds));
 
-  const notificationhandler = () => {
-    if (timeDiff > 0) {
-      setTimeout(
-        toast.custom(
-          (t) => (
-            <SaveFilterToast
-              title="Timer about to Expire!"
-              body="Your active timer is about to expire, Would you want to stop it now?"
-              toastId={t.id}
-              extended="clockReminder"
-            />
-          ),
-          {
-            position: 'bottom-right',
-            duration: Infinity
-          }
-        ),
-        notificationTime - currentTime
-      );
-      setTimeout(() => {
-        {
-          mutate({
-            id: activeItemId,
-            is_Billable: timerDetails.isBillable,
-            description: timerDetails.description
-          });
-          dispatch(setTimerStatus(false));
-          clearInterval(period);
-          dispatch(setUpdateTimerDuration({ h: 0, s: 0, m: 0 }));
-          dispatch(setTimerInterval());
-        }
-      }, clock_limit);
-    }
+    setTimeout(
+      () => stop(),
+      activeTimeOut.clockLimit * (type === 'hours' ? hoursToMilliseconds : minutesToMilliseconds)
+    );
   };
 
   const sameEntity = () => activeItemId === (timerLastMemory.hubId || timerLastMemory.listId || timerLastMemory.taskId);
@@ -123,7 +119,15 @@ export default function AdditionalHeader() {
       if (period) clearInterval(period);
       refetch();
     }
-    notificationhandler();
+    activeTimeOut.clockLimit !== 0 &&
+      notificationhandler({
+        period: activeTimeOut.timeoutReminder,
+        type: 'hours',
+        title: 'Timer about to Expire!',
+        message: `Your active timer is about to expire in ${
+          activeTimeOut.clockLimit - activeTimeOut.timeoutReminder
+        } hours. Would you want to stop it now?`
+      });
   }, [isVisible, refetch, timerStatus]);
 
   useEffect(() => {

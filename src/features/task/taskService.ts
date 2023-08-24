@@ -7,7 +7,6 @@ import {
   ITimeEntryParams,
   IUserCalendarParams,
   IUserSettingsRes,
-  IUserSettingsTimeEntryRes,
   IUserSettingsUpdateRes,
   TaskId,
   newTaskDataRes
@@ -35,7 +34,6 @@ import { generateFilters } from '../../components/TasksHeader/lib/generateFilter
 import { runTimer } from '../../utils/TimerCounter';
 import Duration from '../../utils/TimerDuration';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
-import { data } from 'cypress/types/jquery';
 
 //edit a custom field
 export const UseEditCustomFieldService = (data: {
@@ -608,8 +606,11 @@ export const useCurrentTime = ({ workspaceId }: { workspaceId?: string }) => {
       onSuccess: (data) => {
         const dateData = data?.data;
         const dateString = dateData?.time_entry;
-
-        if (dateString) {
+        if (dateData?.time_entry === null) {
+          dispatch(setTimerStatus(false));
+          dispatch(setUpdateTimerDuration({ s: 0, m: 0, h: 0 }));
+          return;
+        } else if (dateString) {
           const { hours, minutes, seconds } = Duration({ dateString });
           dispatch(setTimerStatus(true));
           dispatch(setUpdateTimerDuration({ s: seconds, m: minutes, h: hours }));
