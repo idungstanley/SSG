@@ -219,8 +219,6 @@ export const useCreateDropdownField = (type: string | undefined, id?: string | u
         queryClient.invalidateQueries(['task', activeItemId, activeItemType, filterTaskByAssigneeIds]);
       }
       queryClient.invalidateQueries([type, id]);
-      queryClient.invalidateQueries(['task']);
-      queryClient.invalidateQueries(['sub-tasks']);
     }
   });
 };
@@ -251,8 +249,6 @@ export const useUpdateEntityCustomFieldValue = (listId?: string) => {
       queryClient.invalidateQueries(['task', activeItemId, activeItemType, filterTaskByAssigneeIds]);
       queryClient.invalidateQueries(['task', { listId }]);
       queryClient.invalidateQueries(['task', listId, 'hub', filters]);
-      queryClient.invalidateQueries(['task']);
-      queryClient.invalidateQueries(['sub-tasks']);
     }
   });
 };
