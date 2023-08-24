@@ -36,6 +36,7 @@ interface ErrorResponse {
 
 export default function CustomStatus() {
   const dispatch = useAppDispatch();
+  const createStatusTypes = useMutation(statusTypesService);
 
   const { spaceStatuses, matchedStatus } = useAppSelector((state) => state.hub);
   const { matchData } = useAppSelector((state) => state.prompt);
@@ -164,12 +165,6 @@ export default function CustomStatus() {
     closed: { backgroundColor: '#E6FAE9', boxShadow: '0px 0px 5px rgba(0, 128, 0, 0.2)' }
     // Add more model_type values and their styles as needed
   };
-
-  const createStatusTypes = useMutation(statusTypesService, {
-    onSuccess: (data) => {
-      // console.log(data);
-    }
-  });
 
   //Add default status
   const defaultItem = statusTypesState.find((item) => item.position === 0);

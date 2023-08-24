@@ -7,7 +7,6 @@ import {
   ITimeEntryParams,
   IUserCalendarParams,
   IUserSettingsRes,
-  IUserSettingsTimeEntryRes,
   IUserSettingsUpdateRes,
   TaskId,
   newTaskDataRes
