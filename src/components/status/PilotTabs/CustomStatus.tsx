@@ -19,13 +19,10 @@ import BoardSection from '../Components/BoardSection';
 import { BoardSectionsType } from '../../../utils/StatusManagement/Types';
 import { useMutation } from '@tanstack/react-query';
 import { statusTypesService } from '../../../features/hubs/hubService';
-import { displayPrompt, setVisibility } from '../../../features/general/prompt/promptSlice';
 import { addIsDefaultToValues, extractValuesFromArray } from '../../../utils/StatusManagement/statusUtils';
 import { setMatchedStatus, setStatusesToMatch } from '../../../features/hubs/hubSlice';
-
-// const groupStatusByModelType = (statusTypes: StatusProps[]) => {
-//   return [...new Set(statusTypes.map(({ type }) => type))];
-// };
+import MatchStatusPopUp from '../Components/MatchStatusPopUp';
+import { setMatchData } from '../../../features/general/prompt/promptSlice';
 
 interface ErrorResponse {
   data: {
@@ -41,6 +38,8 @@ export default function CustomStatus() {
   const dispatch = useAppDispatch();
 
   const { spaceStatuses, matchedStatus } = useAppSelector((state) => state.hub);
+  const { matchData } = useAppSelector((state) => state.prompt);
+
   const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
   const { statusTaskListDetails } = useAppSelector((state) => state.list);
 
@@ -49,6 +48,7 @@ export default function CustomStatus() {
   const [newStatusValue, setNewStatusValue] = useState<string>('');
   const [addStatus, setAddStatus] = useState<boolean>(false);
   const [activeId, setActiveId] = useState<number | null>(null);
+  const [showMatchStatusPop, setShowMatchStatusPopup] = useState<boolean>(false);
 
   const initialBoardSections = initializeBoard(statusTypesState);
   const [boardSections, setBoardSections] = useState<BoardSectionsType>(initialBoardSections);
@@ -112,7 +112,6 @@ export default function CustomStatus() {
         [overContainer]: arrayMove(boardSection[overContainer], activeIndex, overIndex)
       }));
     }
-
     setActiveId(null);
   };
 
@@ -176,10 +175,13 @@ export default function CustomStatus() {
   const defaultItem = statusTypesState.find((item) => item.position === 0);
   const AddDefault = addIsDefaultToValues(boardSections, defaultItem?.name);
   const statusData = extractValuesFromArray(AddDefault);
+  const model = statusTaskListDetails.listId ? 'list' : (activeItemType as string);
+  const model_id = statusTaskListDetails.listId || (activeItemId as string);
+
   const handleStatusData = async () => {
     await createStatusTypes.mutateAsync({
-      model_id: statusTaskListDetails.listId || (activeItemId as string),
-      model: 'list' || (activeItemType as string),
+      model_id: model_id,
+      model: model,
       from_model: activeItemType,
       from_model_id: activeItemId,
       statuses: statusData,
@@ -187,11 +189,30 @@ export default function CustomStatus() {
     });
   };
 
+  const matchStatusArray = [
+    {
+      label: 'Save Changes',
+      style: 'danger',
+      callback: async () => {
+        handleStatusData();
+        setShowMatchStatusPopup(false);
+      }
+    },
+    {
+      label: 'Cancel',
+      style: 'plain',
+      callback: () => {
+        setShowMatchStatusPopup(false);
+        dispatch(setMatchedStatus([]));
+      }
+    }
+  ];
+
   const onSubmit = async () => {
     try {
       await createStatusTypes.mutateAsync({
-        model_id: statusTaskListDetails.listId || (activeItemId as string),
-        model: 'list' || (activeItemType as string),
+        model_id: model_id,
+        model: model,
         from_model: activeItemType,
         from_model_id: activeItemId,
         statuses: statusData
@@ -200,32 +221,9 @@ export default function CustomStatus() {
       const errorResponse = err as ErrorResponse; // Cast err to the ErrorResponse type
       const matchData = errorResponse.data.data.match;
       if (matchData) {
+        dispatch(setMatchData(matchData));
         dispatch(setStatusesToMatch(statusData));
-        dispatch(
-          displayPrompt(
-            'Different Statuses',
-            'You changed statuses in your List. 4 tasks will be affected. How should we handle these statuses?',
-            [
-              {
-                label: 'Save Changes',
-                style: 'danger',
-                callback: async () => {
-                  handleStatusData();
-                  dispatch(setVisibility(false));
-                }
-              },
-              {
-                label: 'Cancel',
-                style: 'plain',
-                callback: () => {
-                  dispatch(setVisibility(false));
-                  dispatch(setMatchedStatus([]));
-                }
-              }
-            ],
-            matchData
-          )
-        );
+        setShowMatchStatusPopup(true);
       }
     }
   };
@@ -269,6 +267,13 @@ export default function CustomStatus() {
       <div className="flex justify-center">
         <Button label="Save" buttonStyle="base" width="w-40" height="h-8" onClick={onSubmit} />
       </div>
+      <MatchStatusPopUp
+        options={matchStatusArray}
+        title="Match Statuses"
+        body={`You changed statuses in your List. ${matchData?.length} status will be affected. How should we handle these statuses?`}
+        setShow={setShowMatchStatusPopup}
+        show={showMatchStatusPop}
+      />
     </section>
   );
 }

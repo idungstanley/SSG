@@ -1,23 +1,27 @@
 import React, { Fragment } from 'react';
-import { useAppDispatch, useAppSelector } from '../../../app/hooks';
-import { setVisibility } from '../../../features/general/prompt/promptSlice';
+import { useAppSelector } from '../../../app/hooks';
 import { Dialog, Transition } from '@headlessui/react';
 import StatusIconComp from '../../../assets/icons/StatusIconComp';
 import { HiOutlineArrowNarrowRight } from 'react-icons/hi';
 import SelectDropdown from '../../input/SelectInput';
 import { ExclamationTriangleIcon } from '@heroicons/react/24/outline';
+import { IOption } from '../../../features/general/prompt/promptSlice';
 
 export interface matchedStatusProps {
   id: string | null;
   name: string;
 }
 
-export default function MatchStatusPopUp() {
-  const dispatch = useAppDispatch();
-  const { show, title, body, options, matchData } = useAppSelector((state) => state.prompt);
-  const setShow = (state: boolean) => {
-    dispatch(setVisibility(state));
-  };
+interface MatchPopUpProps {
+  show: boolean;
+  setShow: React.Dispatch<React.SetStateAction<boolean>>;
+  title: string;
+  body: string;
+  options: IOption[];
+}
+
+export default function MatchStatusPopUp({ show, setShow, options, title, body }: MatchPopUpProps) {
+  const { matchData } = useAppSelector((state) => state.prompt);
 
   interface optionsProps {
     label: string | null;

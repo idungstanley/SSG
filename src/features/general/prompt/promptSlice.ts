@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { AppDispatch } from '../../../app/store';
 import { StatusProps } from '../../../pages/workspace/hubs/components/ActiveTree/activetree.interfaces';
 
-interface IOption {
+export interface IOption {
   label: string;
   style: string;
   callback: () => void;
