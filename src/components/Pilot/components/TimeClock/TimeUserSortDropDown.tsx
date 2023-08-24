@@ -2,9 +2,9 @@ import { FiSearch } from 'react-icons/fi';
 import { setTimeSortArr } from '../../../../features/task/taskSlice';
 import { useAppDispatch } from '../../../../app/hooks';
 import { User } from './ClockLog';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { GiCheckMark } from 'react-icons/gi';
-import { useGetUserSettingsData, useSaveData } from '../../../../features/task/taskService';
+import { useSaveData } from '../../../../features/task/taskService';
 
 type UserSortParams = {
   arr: User[];

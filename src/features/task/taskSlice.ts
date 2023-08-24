@@ -169,6 +169,7 @@ interface TaskState {
   filterTaskByAssigneeIds: string | null | undefined;
   sortAbleArr: SortOption[];
   sortArr: string[];
+  timeSortStatus: boolean;
   timeArr: string[];
   timeSortArr: string[];
   screenRecording: 'idle' | 'recording';
@@ -256,6 +257,7 @@ const initialState: TaskState = {
   filterTaskByAssigneeIds: null,
   sortAbleArr: [],
   sortArr: [],
+  timeSortStatus: false,
   timeArr: [],
   timeSortArr: [],
   screenRecording: 'idle',
@@ -520,6 +522,9 @@ export const taskSlice = createSlice({
     setSortArr(state, action: PayloadAction<string[]>) {
       state.sortArr = action.payload;
     },
+    setTimeSortStatus(state, action: PayloadAction<boolean>) {
+      state.timeSortStatus = action.payload;
+    },
     setTimeArr(state, action: PayloadAction<string[]>) {
       state.timeArr = action.payload;
     },
@@ -647,6 +652,7 @@ export const {
   setFilterTaskByAssigneeIds,
   setSortArray,
   setSortArr,
+  setTimeSortStatus,
   setTimeArr,
   setTimeSortArr,
   setScreenRecording,

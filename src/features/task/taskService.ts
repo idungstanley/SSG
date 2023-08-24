@@ -20,6 +20,7 @@ import {
   setSelectedTasksArray,
   setTimeArr,
   setTimeSortArr,
+  setTimeSortStatus,
   setTimerStatus,
   setToggleAssignCurrentTaskId,
   setUpdateTimerDuration
@@ -126,6 +127,7 @@ export const useSaveData = () => {
         queryClient.invalidateQueries(['calendar-data']);
         if (data.settings.key === 'time_entry') {
           dispatch(setTimeSortArr(data.settings.value));
+          dispatch(setTimeSortStatus(true));
         }
       }
     }

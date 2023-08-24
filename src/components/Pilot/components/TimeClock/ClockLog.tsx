@@ -11,6 +11,8 @@ import CancelIcon from '../../../../assets/icons/Cancel';
 import { ITimeEntriesRes } from '../../../../features/task/interface.tasks';
 import { useEffect, useState } from 'react';
 import { useGetUserSettingsData } from '../../../../features/task/taskService';
+import { toast } from 'react-hot-toast';
+import SaveFilterToast from '../../../TasksHeader/ui/Filter/ui/Toast';
 
 export type Header = {
   title: string;
@@ -29,7 +31,7 @@ interface LogProps {
 }
 
 export default function ClockLog({ getTaskEntries }: LogProps) {
-  const { timeArr } = useAppSelector((state) => state.task);
+  const { timeArr, timeSortStatus } = useAppSelector((state) => state.task);
 
   const dispatch = useAppDispatch();
   const fetchSortData = useGetUserSettingsData({ keys: 'time_entry' });
@@ -62,6 +64,25 @@ export default function ClockLog({ getTaskEntries }: LogProps) {
 
     handleTeamMember();
   }, [getTaskEntries?.data.filters.team_members]);
+
+  useEffect(() => {
+    if (timeSortStatus) {
+      toast.custom(
+        (t) => (
+          <SaveFilterToast
+            body="Sort Data Saved successfully"
+            title="Sorting Saved"
+            toastId={t.id}
+            extended="timeSort"
+          />
+        ),
+        {
+          position: 'bottom-right',
+          duration: Infinity
+        }
+      );
+    }
+  }, [timeSortStatus]);
 
   useEffect(() => {
     fetchSortData;
