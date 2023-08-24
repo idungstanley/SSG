@@ -193,7 +193,7 @@ export function Row({
         <AddSubTask
           task={newSubTask}
           columns={columns}
-          paddingLeft={0}
+          paddingLeft={DEFAULT_LEFT_PADDING + paddingLeft}
           isListParent={false}
           parentId={task.id}
           task_status={task.status.id}
