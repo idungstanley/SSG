@@ -183,6 +183,7 @@ export const UseGetListDetails = (listId: string | null | undefined) => {
       onSuccess: (data) => {
         const listStatusTypes = data.data.list.task_statuses;
         if (activeItemType === 'list') {
+          console.log(listStatusTypes);
           dispatch(setSpaceStatuses(listStatusTypes));
         }
       }
