@@ -18,9 +18,10 @@ interface MatchPopUpProps {
   title: string;
   body: string;
   options: IOption[];
+  validationMessage: string | null;
 }
 
-export default function MatchStatusPopUp({ show, setShow, options, title, body }: MatchPopUpProps) {
+export default function MatchStatusPopUp({ show, setShow, options, validationMessage, title, body }: MatchPopUpProps) {
   const { matchData } = useAppSelector((state) => state.prompt);
 
   interface optionsProps {
@@ -92,6 +93,7 @@ export default function MatchStatusPopUp({ show, setShow, options, title, body }
                   ))}
                 </div>
               )}
+              {validationMessage && <p className="text-red-500 pl-10 pt-6 ">{validationMessage}</p>}
               <div className="px-4 py-3 bg-gray-50 sm:px-6 sm:flex sm:flex-row-reverse">
                 {options.map((option: optionsProps) => (
                   <div key={option.label}>

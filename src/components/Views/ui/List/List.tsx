@@ -57,7 +57,8 @@ export function List({ tasks, customProperty }: ListProps) {
       value: i.name,
       id: i.id,
       field: i.type,
-      hidden: false
+      hidden: false,
+      color: i.color
     }));
 
     const newColumns = unique([...columnsHead, ...customFieldNames]);
