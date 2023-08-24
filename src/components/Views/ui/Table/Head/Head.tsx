@@ -213,15 +213,15 @@ export function Head({
       <tr className="contents">
         {/* first sticky col */}
         <th style={{ zIndex: 2 }} className="sticky left-0 flex items-center -mb-2 font-extrabold" ref={columns[0].ref}>
-          <div className="flex items-center " style={{ width: '42px' }}></div>
+          <div className="flex items-center "></div>
           <div className="flex items-center w-full gap-3 py-2 truncate dBlock group opacity-90">
             <div
               className="py-0.5 relative px-2 rounded-tr-md -mb-1 flex items-center space-x-1 text-white dFlex "
-              style={{ backgroundColor: headerStatusColor }}
+              style={{ backgroundColor: headerStatusColor, marginLeft: '38px', height: '25px', gap: '5px' }}
             >
               <div>
                 <div className="flex items-center">
-                  <p className="pr-1.5">
+                  <p className="pr-1.5 -ml-1.5">
                     <CollapseIcon
                       color={headerStatusColor}
                       active={collapseTasks}
@@ -229,7 +229,7 @@ export function Head({
                       hoverBg="white"
                     />
                   </p>
-                  <span ref={scrollToRef} className="pb-1" style={{ fontSize: '11px', WebkitTextStroke: '0.5px' }}>
+                  <span ref={scrollToRef} className="" style={{ fontSize: '11px', WebkitTextStroke: '0.5px' }}>
                     {parsedLabel}
                   </span>
                   <div className="items-center pl-2 space-x-1 viewSettings" onClick={(e) => e.stopPropagation()}>
