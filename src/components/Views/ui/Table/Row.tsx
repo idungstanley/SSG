@@ -123,7 +123,7 @@ export function Row({
     <>
       {/* current task */}
 
-      <tr style={style} className="contents group dNFlex">
+      <tr style={style} className="contents relative group dNFlex">
         <StickyCol
           showSubTasks={showSubTasks}
           setShowSubTasks={setShowSubTasks}
@@ -145,7 +145,7 @@ export function Row({
           }
         >
           {/* actions */}
-          <div className="opacity-0 group-hover:opacity-100 flex items-center justify-center mr-1 space-x-1">
+          <div className="opacity-0 absolute group-hover:opacity-100 flex items-center justify-center mr-1 space-x-1">
             {/* effects */}
             <ToolTip title="Apply Effects">
               <button className="p-1 border rounded-md " onClick={(e) => e.stopPropagation()}>
