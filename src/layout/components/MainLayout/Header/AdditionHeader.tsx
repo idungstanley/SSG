@@ -18,8 +18,6 @@ import moment from 'moment-timezone';
 import { toast } from 'react-hot-toast';
 import SaveFilterToast from '../../../../components/TasksHeader/ui/Filter/ui/Toast';
 import { setTimerInterval, setTimerStatus, setUpdateTimerDuration } from '../../../../features/task/taskSlice';
-import { title } from 'process';
-import { string } from 'yup/lib/locale';
 
 const hoursToMilliseconds = 60 * 60 * 1000;
 const minutesToMilliseconds = 60 * 1000;
