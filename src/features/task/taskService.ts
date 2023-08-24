@@ -34,6 +34,7 @@ import { generateFilters } from '../../components/TasksHeader/lib/generateFilter
 import { runTimer } from '../../utils/TimerCounter';
 import Duration from '../../utils/TimerDuration';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
+import { isArrayOfStrings } from '../../utils/typeGuards';
 
 //edit a custom field
 export const UseEditCustomFieldService = (data: {
@@ -125,7 +126,9 @@ export const useSaveData = () => {
         queryClient.invalidateQueries(['calendar-data']);
         if (data.settings.key === 'time_entry') {
           dispatch(setTimeSortArr(data.settings.value));
-          dispatch(setTimeSortStatus(true));
+
+          // Only dispatch when request is for sort Array
+          isArrayOfStrings(data.settings.value) && dispatch(setTimeSortStatus(true));
         }
       }
     }
