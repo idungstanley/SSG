@@ -185,7 +185,6 @@ export const upDateWorkSpaceSettings = () => {
           value
         }
       });
-
       return data.data;
     },
     {

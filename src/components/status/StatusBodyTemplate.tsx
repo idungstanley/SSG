@@ -112,40 +112,40 @@ export default function StatusBodyTemplate({ item, setStatusTypesState, index }:
   ];
 
   return (
-    <span
-      key={item.name}
-      className="flex items-center gap-2 p-1 border rounded cursor-pointer justify-items-start border-alsoit-gray-75"
-      onClick={() => handleToggleEditableContent()}
-      style={style}
-    >
-      <span className="flex items-center">
-        <span className="cursor-move" ref={setNodeRef} {...attributes} {...listeners}>
-          <Drag />
+    <span key={item.name} className="mb-1" style={style}>
+      <span className="flex justify-items-start px-1 rounded cursor-pointer h-7 items-center border-alsoit-gray-75 border">
+        {item.type !== 'closed' && (
+          <span className="cursor-move" ref={setNodeRef} {...attributes} {...listeners}>
+            <Drag />
+          </span>
+        )}
+        <span className="w-3 h-3 ml-4 rounded" onClick={(e) => handleOpenStatusColorDropdown(e)}>
+          <StatusIconComp color={item.color as string} />
         </span>
-        <div className="flex items-center gap-1">
-          <span className="w-3 h-3 ml-4 rounded" onClick={(e) => handleOpenStatusColorDropdown(e)}>
-            <StatusIconComp color={item.color as string} />
+        <span
+          contentEditable={editableContent}
+          style={{ color: item.color as string }}
+          className="uppercase truncate flex-grow"
+          onClick={() => handleToggleEditableContent()}
+        >
+          {item.name}
+        </span>
+        {!editableContent && (
+          <span className="flex items-center gap-2 ml-2">
+            <span>
+              <Picker />
+            </span>
+            <span onClick={(e) => handleOpenStatusEditDropdown(e)}>
+              <ThreeDotIcon />
+            </span>
           </span>
-          <span contentEditable={editableContent} style={{ color: item.color as string }} className="uppercase">
-            {item.name}
+        )}
+        {editableContent && (
+          <span className="ml-auto text-green-400" onClick={(e) => handleSaveEditableContent(e)}>
+            <IoMdCheckmark />
           </span>
-        </div>
+        )}
       </span>
-      {!editableContent && (
-        <span className="flex items-center gap-2 ml-auto">
-          <span>
-            <Picker />
-          </span>
-          <span onClick={(e) => handleOpenStatusEditDropdown(e)}>
-            <ThreeDotIcon />
-          </span>
-        </span>
-      )}
-      {editableContent && (
-        <span className="ml-auto text-green-400" onClick={(e) => handleSaveEditableContent(e)}>
-          <IoMdCheckmark />
-        </span>
-      )}
       <AlsoitMenuDropdown
         handleClose={handleCloseStatusEditDropdown}
         anchorEl={showStatusEditDropdown as HTMLDivElement | null}

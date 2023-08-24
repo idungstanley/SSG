@@ -6,9 +6,12 @@ import {
   DndContext,
   DragEndEvent,
   DragOverEvent,
+  DragOverlay,
+  DropAnimation,
   KeyboardSensor,
   PointerSensor,
   closestCorners,
+  defaultDropAnimation,
   useSensor,
   useSensors
 } from '@dnd-kit/core';
@@ -19,10 +22,15 @@ import BoardSection from '../Components/BoardSection';
 import { BoardSectionsType } from '../../../utils/StatusManagement/Types';
 import { useMutation } from '@tanstack/react-query';
 import { statusTypesService } from '../../../features/hubs/hubService';
-import { addIsDefaultToValues, extractValuesFromArray } from '../../../utils/StatusManagement/statusUtils';
+import {
+  addIsDefaultToValues,
+  extractValuesFromArray,
+  getStatusById
+} from '../../../utils/StatusManagement/statusUtils';
 import { setMatchedStatus, setStatusesToMatch } from '../../../features/hubs/hubSlice';
 import MatchStatusPopUp from '../Components/MatchStatusPopUp';
 import { setMatchData } from '../../../features/general/prompt/promptSlice';
+import StatusItem from '../Components/StatusItem';
 
 interface ErrorResponse {
   data: {
@@ -48,12 +56,13 @@ export default function CustomStatus() {
   const [validationMessage, setValidationMessage] = useState<string>('');
   const [newStatusValue, setNewStatusValue] = useState<string>('');
   const [addStatus, setAddStatus] = useState<boolean>(false);
-  const [activeId, setActiveId] = useState<number | null>(null);
+  const [activeId, setActiveId] = useState<string | null>(null);
   const [showMatchStatusPop, setShowMatchStatusPopup] = useState<boolean>(false);
   const [matchingStatusValidation, setMatchingStatusValidation] = useState<string | null>(null);
 
   const initialBoardSections = initializeBoard(statusTypesState);
   const [boardSections, setBoardSections] = useState<BoardSectionsType>(initialBoardSections);
+  console.log(boardSections);
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -65,7 +74,14 @@ export default function CustomStatus() {
   function handleDragStart(event: DragEndEvent) {
     const { active } = event;
     const { id } = active;
-    setActiveId(id as number);
+
+    // Check if the dragged item belongs to the 'closed' group type
+    const draggedStatus = statusTypesState.find((status) => status.name === id);
+    if (draggedStatus && draggedStatus.type === 'closed') {
+      // Prevent dragging items out of the 'closed' group type
+      return;
+    }
+    setActiveId(id as string);
   }
 
   const handleDragOver = ({ active, over }: DragOverEvent) => {
@@ -74,6 +90,9 @@ export default function CustomStatus() {
     const overContainer = findBoardSectionContainer(boardSections, over?.id as string);
 
     if (!activeContainer || !overContainer || activeContainer === overContainer) {
+      return;
+    }
+    if (overContainer === 'closed' && activeContainer !== 'closed') {
       return;
     }
 
@@ -109,9 +128,24 @@ export default function CustomStatus() {
     const overIndex = boardSections[overContainer].findIndex((task) => task.name === over?.id);
 
     if (activeIndex !== overIndex) {
+      const draggedStatus = boardSections[activeContainer][activeIndex];
+
+      // Update the type property to match the new container (group)
+      const updatedDraggedStatus = { ...draggedStatus, type: overContainer };
+
       setBoardSections((boardSection) => ({
         ...boardSection,
-        [overContainer]: arrayMove(boardSection[overContainer], activeIndex, overIndex)
+        [overContainer]: arrayMove(boardSection[overContainer], activeIndex, overIndex),
+        [activeContainer]: boardSection[activeContainer].filter((item) => item.name !== active.id)
+      }));
+
+      setBoardSections((boardSection) => ({
+        ...boardSection,
+        [overContainer]: [
+          ...boardSection[overContainer].slice(0, overIndex),
+          updatedDraggedStatus,
+          ...boardSection[overContainer].slice(overIndex, boardSection[overContainer].length)
+        ]
       }));
     }
     setActiveId(null);
@@ -233,6 +267,11 @@ export default function CustomStatus() {
     }
   };
 
+  // const status = activeId ? getStatusById(statusTypesState, activeId) : null;
+  // const dropAnimation: DropAnimation = {
+  //   ...defaultDropAnimation
+  // };
+
   return (
     <section className="flex flex-col gap-2 p-4">
       <div className="flex flex-col space-y-6">
@@ -266,6 +305,7 @@ export default function CustomStatus() {
               />
             </div>
           ))}
+          {/* <DragOverlay dropAnimation={dropAnimation}>{status ? <StatusItem item={status} /> : null}</DragOverlay> */}
         </DndContext>
       </div>
       <p className="mt-auto text-red-600 text-start">{validationMessage}</p>

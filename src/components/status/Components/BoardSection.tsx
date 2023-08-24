@@ -63,7 +63,7 @@ export default function BoardSection({
         </span>
       )}
       <SortableContext items={TaskIndex} strategy={verticalListSortingStrategy} id={id}>
-        <div ref={setNodeRef}>
+        <div ref={setNodeRef} className="flex flex-col space-y-1">
           {id &&
             !collapsedStatusGroups[id] &&
             status.map((item) => (

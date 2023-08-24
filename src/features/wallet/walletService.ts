@@ -143,7 +143,6 @@ export const UseGetWalletDetails = (query: { activeItemId?: string | null; activ
       onSuccess: (data) => {
         const walletTaskStatus = data.data.wallet.task_statuses;
         if (query.activeItemType === EntityType.wallet) {
-          console.log(walletTaskStatus);
           dispatch(setSpaceStatuses(walletTaskStatus));
         }
       }
