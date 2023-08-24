@@ -4,6 +4,7 @@ import { useAppDispatch } from '../../../../app/hooks';
 import { User } from './ClockLog';
 import { useState } from 'react';
 import { GiCheckMark } from 'react-icons/gi';
+import { useSaveData } from '../../../../features/task/taskService';
 
 type UserSortParams = {
   arr: User[];
@@ -13,14 +14,17 @@ type UserSortParams = {
 
 export function UserSortDropDown({ arr, toggleModalFn, memberIds }: UserSortParams) {
   const dispatch = useAppDispatch();
+
   const sortIds: string[] = [...new Set(memberIds)];
   const [idArr, setArr] = useState<string[]>([]);
   const [listIndex, setIndex] = useState<number[]>([]);
-  // console.log(arr);
+
+  const { mutateAsync } = useSaveData();
 
   const teamMember = arr.filter((obj, index, arr) => {
     return arr.findIndex((item) => item.id === obj.id) === index;
   });
+
   const handleSort = (id: number) => {
     !idArr.includes(sortIds[id])
       ? setArr((prev) => [...prev, sortIds[id]])
@@ -30,6 +34,10 @@ export function UserSortDropDown({ arr, toggleModalFn, memberIds }: UserSortPara
 
   const handleDispatch = () => {
     dispatch(setTimeSortArr(idArr));
+    mutateAsync({
+      key: 'time_entry',
+      value: idArr
+    });
     toggleModalFn(false);
   };
 

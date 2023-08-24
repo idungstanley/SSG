@@ -4,8 +4,11 @@ import {
   ITaskListRes,
   ITaskRes,
   ITimeEntriesRes,
+  ITimeEntryParams,
   IUserCalendarParams,
   IUserSettingsRes,
+  IUserSettingsTimeEntryRes,
+  IUserSettingsUpdateRes,
   TaskId,
   newTaskDataRes
 } from './interface.tasks';
@@ -15,6 +18,9 @@ import {
   setScreenRecording,
   setScreenRecordingMedia,
   setSelectedTasksArray,
+  setTimeArr,
+  setTimeSortArr,
+  setTimeSortStatus,
   setTimerStatus,
   setToggleAssignCurrentTaskId,
   setUpdateTimerDuration
@@ -29,6 +35,7 @@ import { generateFilters } from '../../components/TasksHeader/lib/generateFilter
 import { runTimer } from '../../utils/TimerCounter';
 import Duration from '../../utils/TimerDuration';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
+import { data } from 'cypress/types/jquery';
 
 //edit a custom field
 export const UseEditCustomFieldService = (data: {
@@ -102,9 +109,10 @@ const moveTask = (data: { taskId: TaskId; listId: string; overType: string }) =>
 
 export const useSaveData = () => {
   const queryClient = useQueryClient();
+  const dispatch = useAppDispatch();
   const mutation = useMutation(
-    async ({ key, value }: { key: string; value: IUserCalendarParams }) => {
-      const data = requestNew({
+    async ({ key, value }: { key: string; value: IUserCalendarParams } | ITimeEntryParams) => {
+      const data = requestNew<IUserSettingsUpdateRes>({
         url: 'settings',
         method: 'PUT',
         data: {
@@ -112,10 +120,16 @@ export const useSaveData = () => {
           value
         }
       });
-      return data;
+      return (await data).data;
     },
     {
-      onSuccess: () => queryClient.invalidateQueries(['calendar-data'])
+      onSuccess: (data) => {
+        queryClient.invalidateQueries(['calendar-data']);
+        if (data.settings.key === 'time_entry') {
+          dispatch(setTimeSortArr(data.settings.value));
+          dispatch(setTimeSortStatus(true));
+        }
+      }
     }
   );
 
@@ -123,17 +137,31 @@ export const useSaveData = () => {
 };
 
 export const useGetUserSettingsData = ({ keys }: { keys: string }) => {
-  return useQuery(['calendar-data'], async () => {
-    const data = await requestNew<IUserSettingsRes>({
-      url: 'settings',
-      method: 'GET',
-      params: {
-        key: keys
-      }
-    });
+  const dispatch = useAppDispatch();
+  const { timeArr } = useAppSelector((state) => state.task);
+  return useQuery(
+    ['calendar-data'],
+    async () => {
+      const data = await requestNew<IUserSettingsRes | IUserSettingsUpdateRes>({
+        url: 'settings',
+        method: 'GET',
+        params: {
+          key: keys
+        }
+      });
 
-    return data;
-  });
+      return data;
+    },
+    {
+      onSuccess(data) {
+        if (keys === 'time_entry') {
+          const value = data.data.settings.value as string[];
+          dispatch(setTimeSortArr(value));
+          dispatch(setTimeArr([...timeArr, 'user']));
+        }
+      }
+    }
+  );
 };
 
 export const useMoveTask = () => {
