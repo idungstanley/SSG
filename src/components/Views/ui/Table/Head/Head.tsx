@@ -310,7 +310,7 @@ export function Head({
           )}
         </th>
         {!collapseTasks
-          ? columns.slice(1).map(({ ref, value, id }, index) => (
+          ? columns.slice(1).map(({ ref, value, id, color }, index) => (
               <th key={id} className="relative w-full py-2 -mb-1.5 font-extrabold opacity-90" ref={ref}>
                 <div
                   className={`text-alsoit-gray-200 font-semibold flex dBlock items-center justify-center w-full h-full my-auto cursor-pointer group  ${
@@ -323,7 +323,9 @@ export function Head({
                   <span className="dNone">
                     <MdOutlineDragIndicator className="h4 w4" />
                   </span>
-                  <span onClick={(e) => setOptions(e, id, value)}>{value.toUpperCase()}</span>
+                  <span onClick={(e) => setOptions(e, id, value)} style={{ color: color ? color : '' }}>
+                    {value.toUpperCase()}
+                  </span>
                   {sortAbles.includes(value) && (
                     <span className="ml-0.5">
                       {sortArr.length >= 1 && sortArr.includes(value) ? (
