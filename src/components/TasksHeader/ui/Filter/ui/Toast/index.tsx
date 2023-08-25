@@ -2,19 +2,20 @@ import { Dispatch, SetStateAction, useEffect } from 'react';
 import { cl } from '../../../../../../utils';
 import ToastClose from '../../../../../../assets/icons/ToastClose';
 import toast from 'react-hot-toast';
-import { EndTimeEntriesService, UseSaveTaskFilters } from '../../../../../../features/task/taskService';
+import { EndTimeEntriesService, UseSaveTaskFilters, useSaveData } from '../../../../../../features/task/taskService';
 import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
 import { setTimeZone } from '../../../../../../features/settings/user/userSettingsSlice';
 import { setTimerInterval, setTimerStatus, setUpdateTimerDuration } from '../../../../../../features/task/taskSlice';
+import { Header } from '../../../../../Pilot/components/TimeClock/ClockLog';
 
 interface ToastProps {
   title: string;
   body: string | null;
   showClose?: boolean;
   toastId?: string;
-  extended?: 'taskFilter' | 'timeZone' | 'calendar' | 'clockReminder' | 'timeSort';
+  extended?: 'taskFilter' | 'timeZone' | 'calendar' | 'clockReminder' | 'timeSort' | 'timeLogColumns';
   extendedFn?: Dispatch<SetStateAction<string | undefined>>;
-  extendedState?: string;
+  extendedState?: string | Header[];
 }
 function SaveFilterToast({ title, body, showClose = true, toastId, extended, extendedState }: ToastProps) {
   const dispatch = useAppDispatch();
@@ -28,14 +29,23 @@ function SaveFilterToast({ title, body, showClose = true, toastId, extended, ext
 
   const { mutate } = EndTimeEntriesService();
   const { mutateAsync, status: taskFilterStatus } = UseSaveTaskFilters();
+  const { mutateAsync: saveUsersetting } = useSaveData();
+
   const handleSaveFilters = () => {
     extended === 'taskFilter' && mutateAsync({ key: 'tasks_filter' });
     if (extended === 'timeZone') {
-      dispatch(setTimeZone(extendedState));
-      extendedState && localStorage.setItem('userTimeZone', extendedState);
+      dispatch(setTimeZone(extendedState as string));
+      extendedState && localStorage.setItem('userTimeZone', extendedState as string);
       timeOutFn();
     }
     if (extended === 'clockReminder') stop();
+    if (extended === 'timeLogColumns') {
+      saveUsersetting({
+        key: 'time_entry',
+        value: extendedState as Header[]
+      });
+      timeOutFn();
+    }
   };
 
   const stop = () => {
@@ -79,34 +89,24 @@ function SaveFilterToast({ title, body, showClose = true, toastId, extended, ext
                 )}
               </div>
               <div className="my-1">
-                {extended === 'timeSort' ? (
-                  <section className="flex justify-end my-1">
-                    <div className="flex items-center cursor-pointer gap-0.5">
-                      <button
-                        className="w-20 h-7 bg-alsoit-gray-50 rounded hover:bg-alsoit-purple-50"
-                        onClick={() => toast.remove(toastId)}
-                      >
-                        Close
-                      </button>
-                    </div>
-                  </section>
-                ) : (
-                  <section className="flex justify-between my-1">
-                    <div className="flex items-center cursor-pointer gap-0.5">
-                      <button className="w-20 h-7 bg-alsoit-purple-300 rounded text-white" onClick={handleSaveFilters}>
-                        {extended === 'clockReminder' ? 'Stop Timer Now' : 'Save'}
-                      </button>
-                    </div>
-                    <div className="flex items-center cursor-pointer gap-0.5">
-                      <button
-                        className="w-20 h-7 bg-alsoit-gray-50 rounded hover:bg-alsoit-purple-50"
-                        onClick={() => toast.remove(toastId)}
-                      >
-                        {extended === 'clockReminder' ? 'Continue' : 'Cancel'}
-                      </button>
-                    </div>
-                  </section>
-                )}
+                <section className="flex justify-between my-1">
+                  <div className="flex items-center cursor-pointer gap-0.5">
+                    <button
+                      className="w-28 h-7 bg-alsoit-purple-300 rounded text-white text-alsoit-text-sm font-semibold"
+                      onClick={handleSaveFilters}
+                    >
+                      {extended === 'clockReminder' ? 'Stop Timer Now' : 'Save'}
+                    </button>
+                  </div>
+                  <div className="flex items-center cursor-pointer gap-0.5">
+                    <button
+                      className="w-28 h-7 bg-alsoit-gray-50 rounded hover:bg-alsoit-purple-50 text-alsoit-text-sm font-semibold"
+                      onClick={() => toast.remove(toastId)}
+                    >
+                      {extended === 'clockReminder' ? 'Continue' : 'Cancel'}
+                    </button>
+                  </div>
+                </section>
               </div>
             </div>
             {showClose && (

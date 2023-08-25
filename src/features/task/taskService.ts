@@ -38,6 +38,7 @@ import Duration from '../../utils/TimerDuration';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
 import { taskAssignessUpdateManager, taskPriorityUpdateManager, taskStatusUpdateManager } from '../../managers/Task';
 import { ITeamMembersAndGroup } from '../settings/teamMembersAndGroups.interfaces';
+import { isArrayOfStrings } from '../../utils/typeGuards';
 
 //edit a custom field
 export const UseEditCustomFieldService = (data: {
@@ -129,7 +130,9 @@ export const useSaveData = () => {
         queryClient.invalidateQueries(['calendar-data']);
         if (data.settings.key === 'time_entry') {
           dispatch(setTimeSortArr(data.settings.value));
-          dispatch(setTimeSortStatus(true));
+
+          // Only dispatch when request is for sort Array
+          isArrayOfStrings(data.settings.value) && dispatch(setTimeSortStatus(true));
         }
       }
     }
@@ -622,8 +625,11 @@ export const useCurrentTime = ({ workspaceId }: { workspaceId?: string }) => {
       onSuccess: (data) => {
         const dateData = data?.data;
         const dateString = dateData?.time_entry;
-
-        if (dateString) {
+        if (dateData?.time_entry === null) {
+          dispatch(setTimerStatus(false));
+          dispatch(setUpdateTimerDuration({ s: 0, m: 0, h: 0 }));
+          return;
+        } else if (dateString) {
           const { hours, minutes, seconds } = Duration({ dateString });
           dispatch(setTimerStatus(true));
           dispatch(setUpdateTimerDuration({ s: seconds, m: minutes, h: hours }));

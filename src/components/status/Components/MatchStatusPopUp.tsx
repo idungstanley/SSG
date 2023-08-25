@@ -1,34 +1,34 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment } from 'react';
+import { useAppSelector } from '../../../app/hooks';
 import { Dialog, Transition } from '@headlessui/react';
-import { ExclamationTriangleIcon } from '@heroicons/react/24/outline';
-import { useDispatch } from 'react-redux';
-import { setVisibility } from '../features/general/prompt/promptSlice';
-import { useAppSelector } from '../app/hooks';
-import StatusIconComp from '../assets/icons/StatusIconComp';
-import SelectDropdown from '../components/input/SelectInput';
+import StatusIconComp from '../../../assets/icons/StatusIconComp';
 import { HiOutlineArrowNarrowRight } from 'react-icons/hi';
+import SelectDropdown from '../../input/SelectInput';
+import { ExclamationTriangleIcon } from '@heroicons/react/24/outline';
+import { IOption } from '../../../features/general/prompt/promptSlice';
 
 export interface matchedStatusProps {
   id: string | null;
   name: string;
 }
 
-export default function Prompt() {
-  const dispatch = useDispatch();
-  const { show, title, body, options, matchData } = useAppSelector((state) => state.prompt);
-  const { matchedStatus } = useAppSelector((state) => state.hub);
-  console.log(matchedStatus, 'match prompt');
+interface MatchPopUpProps {
+  show: boolean;
+  setShow: React.Dispatch<React.SetStateAction<boolean>>;
+  title: string;
+  body: string;
+  options: IOption[];
+  validationMessage: string | null;
+}
 
-  const setShow = (state: boolean) => {
-    dispatch(setVisibility(state));
-  };
+export default function MatchStatusPopUp({ show, setShow, options, validationMessage, title, body }: MatchPopUpProps) {
+  const { matchData } = useAppSelector((state) => state.prompt);
 
   interface optionsProps {
     label: string | null;
     style: string | null;
     callback: () => void;
   }
-
   return (
     <Transition.Root show={show} as={Fragment}>
       <Dialog as="div" className="fixed inset-0 z-50 overflow-y-auto" onClose={setShow}>
@@ -93,6 +93,7 @@ export default function Prompt() {
                   ))}
                 </div>
               )}
+              {validationMessage && <p className="text-red-500 pl-10 pt-6 ">{validationMessage}</p>}
               <div className="px-4 py-3 bg-gray-50 sm:px-6 sm:flex sm:flex-row-reverse">
                 {options.map((option: optionsProps) => (
                   <div key={option.label}>

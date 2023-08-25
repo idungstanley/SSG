@@ -9,7 +9,7 @@ import PlusCircle from '../../../../assets/icons/AddCircle';
 import ArrowCaretUp from '../../../../assets/icons/ArrowCaretUp';
 import CancelIcon from '../../../../assets/icons/Cancel';
 import { ITimeEntriesRes } from '../../../../features/task/interface.tasks';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useGetUserSettingsData } from '../../../../features/task/taskService';
 import { toast } from 'react-hot-toast';
 import SaveFilterToast from '../../../TasksHeader/ui/Filter/ui/Toast';
@@ -31,9 +31,10 @@ interface LogProps {
 }
 
 export default function ClockLog({ getTaskEntries }: LogProps) {
-  const { timeArr, timeSortStatus } = useAppSelector((state) => state.task);
+  const { timeArr, timeSortStatus, timeLogColumnData } = useAppSelector((state) => state.task);
 
   const dispatch = useAppDispatch();
+
   const fetchSortData = useGetUserSettingsData({ keys: 'time_entry' });
 
   const [headers, setHeaders] = useState<Header[]>([
@@ -52,6 +53,11 @@ export default function ClockLog({ getTaskEntries }: LogProps) {
   const [showSortModal, setShowSortModal] = useState<boolean>(false);
   const [teamMember, setTeamMember] = useState<User[]>([]);
   const [teamMemberId, setTeamMemberId] = useState<string[]>([]);
+  const [viewChanges, setViewChanges] = useState<{ logColumns: boolean }>({
+    logColumns: false
+  });
+
+  const prevLogColumnsRef = useRef<boolean>(viewChanges.logColumns);
 
   useEffect(() => {
     const handleTeamMember = () => {
@@ -66,6 +72,7 @@ export default function ClockLog({ getTaskEntries }: LogProps) {
   }, [getTaskEntries?.data.filters.team_members]);
 
   useEffect(() => {
+    fetchSortData;
     if (timeSortStatus) {
       toast.custom(
         (t) => (
@@ -85,15 +92,41 @@ export default function ClockLog({ getTaskEntries }: LogProps) {
   }, [timeSortStatus]);
 
   useEffect(() => {
-    fetchSortData;
-  }, []);
+    if (timeLogColumnData.length) {
+      setHeaders(timeLogColumnData);
+    }
+  }, [timeLogColumnData]);
+
+  useEffect(() => {
+    if (prevLogColumnsRef.current !== viewChanges.logColumns && viewChanges.logColumns) {
+      toast.custom(
+        (t) => (
+          <SaveFilterToast
+            body="Time Log Columns changed, would you want to save the new setting?"
+            title="Columns changed"
+            toastId={t.id}
+            extended="timeLogColumns"
+            extendedState={headers}
+          />
+        ),
+        {
+          position: 'bottom-right',
+          duration: Infinity
+        }
+      );
+    }
+
+    prevLogColumnsRef.current = viewChanges.logColumns;
+  }, [viewChanges.logColumns]);
 
   const handleColumnHide = (col: string) => {
     setHeaders((prev) => prev.map((header) => (header.id === col ? { ...header, hidden: !header.hidden } : header)));
+    setViewChanges((prev) => ({ ...prev, logColumns: !prev.logColumns }));
   };
 
   const handleShowAllColumns = () => {
     setHeaders((prev) => prev.map((header) => ({ ...header, hidden: header.hidden ? !header.hidden : header.hidden })));
+    setViewChanges((prev) => ({ ...prev, logColumns: !prev.logColumns }));
   };
 
   const handleSort = (header: string, id: string) => {

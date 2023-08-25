@@ -26,7 +26,7 @@ export default function Badges({ task }: BadgeTask) {
     }
   };
   return (
-    <div className="">
+    <div className="absolute">
       <div className="flex items-center space-x-1">
         {task.description && (
           <DetailsOnHover

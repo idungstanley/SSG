@@ -2,7 +2,7 @@ import ICONS_INTERACTIONS from '../../utils/Constants/IconInteractions';
 
 /* eslint-disable max-len */
 interface Props {
-  active: boolean;
+  active?: boolean;
   dimensions?: {
     height: number;
     width: number;

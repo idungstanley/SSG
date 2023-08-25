@@ -364,7 +364,7 @@ export function StickyCol({
                   )}
                 </div>
                 {/* non default badges here */}
-                <div onClick={(e) => e.stopPropagation()} className="pl-3 flex flex-grow justify-between">
+                <div onClick={(e) => e.stopPropagation()} className="pl-3 flex flex-grow items-center justify-between">
                   <Badges task={task} />
                   {/*  default badges here */}
                   {children}

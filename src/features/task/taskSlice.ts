@@ -20,6 +20,8 @@ import {
 } from '../../components/TasksHeader/ui/Filter/types/filters';
 import { DEFAULT_FILTERS_OPTION } from '../../components/TasksHeader/ui/Filter/config/filterConfig';
 import { ITeamMembersAndGroup } from '../settings/teamMembersAndGroups.interfaces';
+import { Header } from '../../components/Pilot/components/TimeClock/ClockLog';
+import { isArrayOfStrings } from '../../utils/typeGuards';
 
 export interface ICustomField {
   id: string;
@@ -165,6 +167,7 @@ interface TaskState {
   timeSortStatus: boolean;
   timeArr: string[];
   timeSortArr: string[];
+  timeLogColumnData: Header[];
   screenRecording: 'idle' | 'recording';
   recorder: RecordRTC | null;
   stream: MediaStream | null;
@@ -173,6 +176,10 @@ interface TaskState {
   timerDetails: ITimerDetails;
   duration: IDuration;
   period: number | undefined;
+  activeTimeOut: {
+    clockLimit: number;
+    timeoutReminder: number;
+  };
   sortType: TaskKey;
   searchValue: string;
   assigneeIds: string[];
@@ -237,6 +244,7 @@ const initialState: TaskState = {
   timeSortStatus: false,
   timeArr: [],
   timeSortArr: [],
+  timeLogColumnData: [],
   screenRecording: 'idle',
   stream: null,
   recorder: null,
@@ -245,6 +253,7 @@ const initialState: TaskState = {
   timerDetails: { description: '', isBillable: false },
   duration: { s: 0, m: 0, h: 0 },
   period: undefined,
+  activeTimeOut: { clockLimit: 0, timeoutReminder: 0 },
   sortType: 'status',
   searchValue: '',
   assigneeIds: [],
@@ -449,8 +458,10 @@ export const taskSlice = createSlice({
     setTimeArr(state, action: PayloadAction<string[]>) {
       state.timeArr = action.payload;
     },
-    setTimeSortArr(state, action: PayloadAction<string[]>) {
-      state.timeSortArr = action.payload;
+    setTimeSortArr(state, action: PayloadAction<string[] | Header[]>) {
+      isArrayOfStrings(action.payload)
+        ? (state.timeSortArr = action.payload)
+        : (state.timeLogColumnData = action.payload);
     },
     setScreenRecording(state, action: PayloadAction<'idle' | 'recording'>) {
       state.screenRecording = action.payload;
@@ -474,6 +485,9 @@ export const taskSlice = createSlice({
     },
     setTimerInterval(state, action: PayloadAction<number | undefined>) {
       state.period = action.payload;
+    },
+    setActiveTimeout(state, action: PayloadAction<{ clockLimit: number; timeoutReminder: number }>) {
+      state.activeTimeOut = action.payload;
     },
     setTaskSelectedDate(state, action: PayloadAction<ISelectedDate | null>) {
       state.selectedDate = action.payload;
@@ -553,6 +567,7 @@ export const {
   setUpdateTimerDuration,
   setStopTimer,
   setTimerInterval,
+  setActiveTimeout,
   setSortType,
   setTaskSelectedDate,
   setHistoryMemory,
