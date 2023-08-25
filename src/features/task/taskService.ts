@@ -36,7 +36,7 @@ import { generateFilters } from '../../components/TasksHeader/lib/generateFilter
 import { runTimer } from '../../utils/TimerCounter';
 import Duration from '../../utils/TimerDuration';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
-import { taskPriorityUpdateManager } from '../../managers/Task';
+import { taskPriorityUpdateManager, taskStatusUpdateManager } from '../../managers/Task';
 
 //edit a custom field
 export const UseEditCustomFieldService = (data: {
@@ -392,27 +392,41 @@ export const UseUpdateTaskService = ({
   return response;
 };
 
-const updateTaskStatusService = ({ task_id_array, statusDataUpdate }: UpdateTaskProps) => {
-  const url = `tasks/${task_id_array}`;
-  const response = requestNew({
-    url,
-    method: 'PUT',
-    params: {
-      task_status_id: statusDataUpdate
-      // priority: priorityDataUpdate,
-    }
-  });
-  return response;
-};
+export const UseUpdateTaskStatusService = ({ task_id, statusDataUpdate }: UpdateTaskProps) => {
+  const dispatch = useAppDispatch();
 
-export const UseUpdateTaskStatusService2 = () => {
-  const queryClient = useQueryClient();
-  return useMutation(updateTaskStatusService, {
-    onSuccess: () => {
-      queryClient.invalidateQueries(['task']);
-      queryClient.invalidateQueries(['sub-tasks']);
+  const { selectedListId, tasks } = useAppSelector((state) => state.task);
+
+  return useQuery(
+    ['task', { task_id, statusDataUpdate }],
+    async () => {
+      const data = requestNew<ITaskRes>({
+        url: `tasks/${task_id}`,
+        method: 'PUT',
+        params: {
+          task_status_id: statusDataUpdate
+        }
+      });
+      return data;
+    },
+    {
+      enabled: !!task_id && !!statusDataUpdate,
+      cacheTime: 0,
+      onSuccess: (data) => {
+        if (selectedListId) {
+          const updatedTasks = taskStatusUpdateManager(
+            task_id as string,
+            selectedListId as string,
+            tasks,
+            data.data.task.status
+          );
+          dispatch(setTasks(updatedTasks));
+        }
+        dispatch(setSelectedTasksArray([]));
+        dispatch(setSelectedListIds([]));
+      }
     }
-  });
+  );
 };
 
 export const UseUpdateTaskPrioritiesServices = ({ task_id_array, priorityDataUpdate, listIds }: UpdateTaskProps) => {

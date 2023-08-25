@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { MdArrowRight } from 'react-icons/md';
 import { AiOutlineCheck } from 'react-icons/ai';
 import ToolTip from '../../../../../Tooltip/Tooltip';
 import { useAppDispatch } from '../../../../../../app/hooks';
 import { setUpdateStatusModalId } from '../../../../../../features/task/taskSlice';
-import { UseUpdateTaskStatusService2 } from '../../../../../../features/task/taskService';
+import { UseUpdateTaskStatusService } from '../../../../../../features/task/taskService';
 import { ITaskFullList } from '../../../../../../features/task/interface.tasks';
 import { IHubDetails } from '../../../../../../features/hubs/hubs.interfaces';
 import { IListDetails } from '../../../../../../features/list/list.interfaces';
@@ -15,52 +15,40 @@ interface StatusDetailsProps {
 }
 
 export default function Status({ details }: StatusDetailsProps) {
-  const [statusBg, setStatusBg] = useState('');
+  const dispatch = useAppDispatch();
+
   const [complete, setComplete] = useState('');
   const [iconToggle, setIconToggle] = useState<{ arrow: boolean; check: boolean }>({
     arrow: false,
     check: false
   });
-  const dispatch = useAppDispatch();
+
   const StatusData = details ? ('status' in details ? details?.status : null) : null;
 
-  // const { status } = UseUpdateTaskStatusService({
-  //   task_id: Details?.id,
-  //   statusDataUpdate: complete
-  // });
+  const { isSuccess } = UseUpdateTaskStatusService({
+    task_id: details?.id as string,
+    statusDataUpdate: complete
+  });
 
-  // if (status == 'success') {
-  //   setComplete('');
-  // }
-
-  const { mutate } = UseUpdateTaskStatusService2();
-
-  const handleUpdateTaskStatus = () => {
-    const updateStatusMutation = {
-      task_id: details?.id,
-      statusDataUpdate: complete
-    };
-    mutate(updateStatusMutation);
-  };
+  if (isSuccess) setComplete('');
 
   const handleStatusModal = () => {
     dispatch(setUpdateStatusModalId(details?.id || ''));
-    handleUpdateTaskStatus();
   };
 
-  const handleStatusBg = () => {
+  const renderStatusBg = () => {
     const statusName = StatusData?.name;
-
-    if (statusName == 'to do') {
-      setStatusBg('gray');
-    } else if (statusName == 'in progress') {
-      setStatusBg('purple');
-    } else if (statusName == 'archived') {
-      setStatusBg('yellow');
-    } else if (statusName == 'completed') {
-      setStatusBg('green');
-    } else {
-      setStatusBg('gray');
+    switch (statusName) {
+      case 'to do':
+        return 'gray';
+      case 'in progress':
+        return 'purple';
+      case 'archived':
+        return 'yellow';
+      case 'completed':
+        return 'green';
+      default:
+        return 'gray';
     }
   };
 
@@ -73,9 +61,6 @@ export default function Status({ details }: StatusDetailsProps) {
       return status;
     }
   };
-  useEffect(() => {
-    handleStatusBg();
-  });
 
   return (
     <section className="flex items-center space-x-1">
@@ -83,7 +68,7 @@ export default function Status({ details }: StatusDetailsProps) {
         {details && 'status' in details ? (
           <ToolTip title="Current status">
             <button
-              className={`p-2 bg-${statusBg}-300 text-black text-xs border-white rounded-l-md capitalize cursor-pointer object-contain h-8`}
+              className={`p-2 bg-${renderStatusBg}-300 text-black text-xs border-white rounded-l-md capitalize cursor-pointer object-contain h-8`}
               onClick={() => handleStatusModal()}
             >
               {handleStatusMessage(details.status.name)}
@@ -91,7 +76,7 @@ export default function Status({ details }: StatusDetailsProps) {
           </ToolTip>
         ) : null}
         <ToolTip title="Next status">
-          <button className={`p-2 bg-${statusBg}-300 text-black text-xs rounded-r-md border-white h-8`}>
+          <button className={`p-2 bg-${renderStatusBg}-300 text-black text-xs rounded-r-md border-white h-8`}>
             <div
               onMouseEnter={() => setIconToggle((prev) => ({ ...prev, arrow: true }))}
               onMouseLeave={() => setIconToggle((prev) => ({ ...prev, arrow: false }))}

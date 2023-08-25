@@ -4,6 +4,7 @@ import { ICustomField, ImyTaskData } from './taskSlice';
 
 export interface UpdateTaskProps {
   task_id_array?: string[];
+  task_id?: string;
   priorityDataUpdate?: string;
   statusDataUpdate?: string;
   listIds?: string[];

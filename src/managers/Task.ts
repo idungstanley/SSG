@@ -1,4 +1,4 @@
-import { ITaskFullList } from '../features/task/interface.tasks';
+import { IStatus, ITaskFullList } from '../features/task/interface.tasks';
 
 export const taskPriorityUpdateManager = (
   taskIds: string[],
@@ -20,6 +20,30 @@ export const taskPriorityUpdateManager = (
         return task;
       });
     }
+    return updatedTasks;
+  }
+
+  return tasks;
+};
+
+export const taskStatusUpdateManager = (
+  taskId: string,
+  listId: string,
+  tasks: Record<string, ITaskFullList[]>,
+  newStatus: IStatus
+) => {
+  if (listId) {
+    const updatedTasks = { ...tasks };
+
+    updatedTasks[listId] = updatedTasks[listId].map((task) => {
+      if (taskId === task.id) {
+        return {
+          ...task,
+          status: newStatus
+        };
+      }
+      return task;
+    });
     return updatedTasks;
   }
 

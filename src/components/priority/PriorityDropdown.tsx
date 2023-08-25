@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { Dialog, Transition } from '@headlessui/react';
 import { cl } from '../../utils';
 import { AiFillFlag } from 'react-icons/ai';
 import { UseUpdateTaskPrioritiesServices } from '../../features/task/taskService';
 import { useAppSelector } from '../../app/hooks';
 import { useAbsolute } from '../../hooks/useAbsolute';
+import { Fade, Menu } from '@mui/material';
 
 interface priorityType {
   id: number;
@@ -105,33 +105,39 @@ export default function PriorityDropdown({ taskCurrentPriority }: TaskCurrentPri
         </button>
       </div>
 
-      <Transition appear show={isOpen} as="div">
-        <Dialog as="div" className="relative z-10" onClose={() => setIsOpen(false)}>
-          <div style={{ ...cords }} className="fixed overflow-y-auto">
-            <div className="flex-col border px-2 w-fit h-fit py-1 outline-none flex items-center justify-center text-center mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none">
-              {priorityList.map((priority) => (
-                <button
-                  key={priority.id}
-                  type="button"
-                  className={cl(
-                    taskCurrentPriority === priority.title ? `bg-${priority.bg}-200` : '',
-                    'flex items-center px-4 py-2 text-sm text-gray-600 text-left space-x-2 w-full'
-                  )}
-                  onClick={() => {
-                    priority.handleClick();
-                    setIsOpen(false);
-                  }}
-                >
-                  <p>
-                    <AiFillFlag className="h-5 w-7  " aria-hidden="true" style={{ color: `${priority.color}` }} />
-                  </p>
-                  <p>{priority.title}</p>
-                </button>
-              ))}
-            </div>
+      <Menu
+        id="priority-menu"
+        open={isOpen}
+        onClose={() => setIsOpen(false)}
+        MenuListProps={{
+          'aria-labelledby': 'basic-button'
+        }}
+        TransitionComponent={Fade}
+      >
+        <div style={{ ...cords }} className="fixed overflow-y-auto">
+          <div className="flex-col border px-2 w-fit h-fit py-1 outline-none flex items-center justify-center text-center mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none">
+            {priorityList.map((priority) => (
+              <button
+                key={priority.id}
+                type="button"
+                className={cl(
+                  taskCurrentPriority === priority.title ? `bg-${priority.bg}-200` : '',
+                  'flex items-center px-4 py-2 text-sm text-gray-600 text-left space-x-2 w-full'
+                )}
+                onClick={() => {
+                  priority.handleClick();
+                  setIsOpen(false);
+                }}
+              >
+                <p>
+                  <AiFillFlag className="h-5 w-7  " aria-hidden="true" style={{ color: `${priority.color}` }} />
+                </p>
+                <p>{priority.title}</p>
+              </button>
+            ))}
           </div>
-        </Dialog>
-      </Transition>
+        </div>
+      </Menu>
     </>
   );
 }
