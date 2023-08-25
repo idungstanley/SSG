@@ -1,6 +1,7 @@
 import dayjs, { Dayjs } from 'dayjs';
 import { teamMember } from '../../pages/workspace/tasks/timeclock/entryLists/EntryList';
 import { ICustomField, ImyTaskData } from './taskSlice';
+import { Header } from '../../components/Pilot/components/TimeClock/ClockLog';
 
 export interface UpdateTaskProps {
   task_id_array?: string[];
@@ -242,8 +243,9 @@ export interface IUserCalendarParams {
 
 export interface ITimeEntryParams {
   key: string;
-  value: string[];
+  value: string[] | Header[];
 }
+
 export interface IUserSettings {
   key: string;
   is_json: boolean;
@@ -255,7 +257,7 @@ export interface IUserSettings {
 
 export interface IUserSettingsTimeEntryRes {
   key: string;
-  value: string[];
+  value: string[] | Header[];
 }
 
 export interface IUserSettingsRes {

@@ -18,6 +18,8 @@ import {
   FilterWithId
 } from '../../components/TasksHeader/ui/Filter/types/filters';
 import { DEFAULT_FILTERS_OPTION } from '../../components/TasksHeader/ui/Filter/config/filterConfig';
+import { Header } from '../../components/Pilot/components/TimeClock/ClockLog';
+import { isArrayOfStrings } from '../../utils/typeGuards';
 
 export interface ICustomField {
   id: string;
@@ -163,6 +165,7 @@ interface TaskState {
   timeSortStatus: boolean;
   timeArr: string[];
   timeSortArr: string[];
+  timeLogColumnData: Header[];
   screenRecording: 'idle' | 'recording';
   recorder: RecordRTC | null;
   stream: MediaStream | null;
@@ -239,6 +242,7 @@ const initialState: TaskState = {
   timeSortStatus: false,
   timeArr: [],
   timeSortArr: [],
+  timeLogColumnData: [],
   screenRecording: 'idle',
   stream: null,
   recorder: null,
@@ -449,8 +453,10 @@ export const taskSlice = createSlice({
     setTimeArr(state, action: PayloadAction<string[]>) {
       state.timeArr = action.payload;
     },
-    setTimeSortArr(state, action: PayloadAction<string[]>) {
-      state.timeSortArr = action.payload;
+    setTimeSortArr(state, action: PayloadAction<string[] | Header[]>) {
+      isArrayOfStrings(action.payload)
+        ? (state.timeSortArr = action.payload)
+        : (state.timeLogColumnData = action.payload);
     },
     setScreenRecording(state, action: PayloadAction<'idle' | 'recording'>) {
       state.screenRecording = action.payload;

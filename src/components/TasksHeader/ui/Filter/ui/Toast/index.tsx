@@ -2,19 +2,20 @@ import { Dispatch, SetStateAction, useEffect } from 'react';
 import { cl } from '../../../../../../utils';
 import ToastClose from '../../../../../../assets/icons/ToastClose';
 import toast from 'react-hot-toast';
-import { EndTimeEntriesService, UseSaveTaskFilters } from '../../../../../../features/task/taskService';
+import { EndTimeEntriesService, UseSaveTaskFilters, useSaveData } from '../../../../../../features/task/taskService';
 import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
 import { setTimeZone } from '../../../../../../features/settings/user/userSettingsSlice';
 import { setTimerInterval, setTimerStatus, setUpdateTimerDuration } from '../../../../../../features/task/taskSlice';
+import { Header } from '../../../../../Pilot/components/TimeClock/ClockLog';
 
 interface ToastProps {
   title: string;
   body: string | null;
   showClose?: boolean;
   toastId?: string;
-  extended?: 'taskFilter' | 'timeZone' | 'calendar' | 'clockReminder' | 'timeSort';
+  extended?: 'taskFilter' | 'timeZone' | 'calendar' | 'clockReminder' | 'timeSort' | 'timeLogColumns';
   extendedFn?: Dispatch<SetStateAction<string | undefined>>;
-  extendedState?: string;
+  extendedState?: string | Header[];
 }
 function SaveFilterToast({ title, body, showClose = true, toastId, extended, extendedState }: ToastProps) {
   const dispatch = useAppDispatch();
@@ -28,14 +29,23 @@ function SaveFilterToast({ title, body, showClose = true, toastId, extended, ext
 
   const { mutate } = EndTimeEntriesService();
   const { mutateAsync, status: taskFilterStatus } = UseSaveTaskFilters();
+  const { mutateAsync: saveUsersetting } = useSaveData();
+
   const handleSaveFilters = () => {
     extended === 'taskFilter' && mutateAsync({ key: 'tasks_filter' });
     if (extended === 'timeZone') {
-      dispatch(setTimeZone(extendedState));
-      extendedState && localStorage.setItem('userTimeZone', extendedState);
+      dispatch(setTimeZone(extendedState as string));
+      extendedState && localStorage.setItem('userTimeZone', extendedState as string);
       timeOutFn();
     }
     if (extended === 'clockReminder') stop();
+    if (extended === 'timeLogColumns') {
+      saveUsersetting({
+        key: 'time_entry',
+        value: extendedState as Header[]
+      });
+      timeOutFn();
+    }
   };
 
   const stop = () => {
