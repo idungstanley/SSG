@@ -36,7 +36,7 @@ export function Label({ listName, onClickChevron, hubName, showTable, tasks }: L
   };
   return (
     <div className="flex items-center">
-      <div className="flex justify-between space-x-10 items-center bg-purple-500 rounded-br-md -mt-1 p-1 pr-7 rounded-l-md -ml-1">
+      <div className="flex items-center justify-between space-x-10 bg-purple-500 -mt-1 p-1 pr-7 rounded-tl-2xl -ml-0.5 gap-4 h-8">
         <div className="flex space-x-2 items-center pl-2 text-sm text-white  w-fit">
           <CollapseIcon color="#A854F7" active={showTable} onToggle={onClickChevron} hoverBg="white" />
           <h1 className="">{listName ?? 'Loading...'}</h1>

@@ -10,7 +10,6 @@ import { setUserData, setUserInfo } from './features/settings/user/userSettingsS
 function App() {
   const user = useAppSelector(selectCurrentUser);
   const dispatch = useAppDispatch();
-
   const { data, status } = useGetSelf();
 
   useEffect(() => {
@@ -19,6 +18,18 @@ function App() {
       dispatch(setUserInfo({ ...data?.data.user }));
     }
   }, [data]);
+
+  // useEffect(() => {
+  //   $(document).ready(function () {
+  //     const maxScreen = 2560;
+  //     const screenWidth = window.innerWidth;
+  //     if (screenWidth <= maxScreen) {
+  //       $('html').css('zoom', '0.85');
+  //     }
+  //   });
+  // }, []);
+
+  console.log(window.innerWidth);
 
   return (
     <>
