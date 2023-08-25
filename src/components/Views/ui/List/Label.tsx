@@ -1,4 +1,3 @@
-import { Chevron } from '../Chevron';
 import { Task } from '../../../../features/task/interface.tasks';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { setSelectedTasksArray } from '../../../../features/task/taskSlice';

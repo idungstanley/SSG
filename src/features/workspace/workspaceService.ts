@@ -3,11 +3,9 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
   IAllWorkspacesRes,
   IAttachments,
-  IWorkSpaceSettings,
   IWorkspaceRes,
   IWorkspaceSettingsRes,
-  IWorkspaceSettingsUpdateRes,
-  WorkSpaceSettingsRes
+  IWorkspaceSettingsUpdateRes
 } from './workspace.interfaces';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { setFetchAllWorkspace, setWorkSpaceSetting, setWorkSpaceSettingsObj, setWorkspaceData } from './workspaceSlice';

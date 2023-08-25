@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { MdArrowRight } from 'react-icons/md';
 import { AiOutlineCheck } from 'react-icons/ai';
 import ToolTip from '../../../../../../../components/Tooltip/Tooltip';
@@ -24,7 +24,7 @@ export default function Status({ Details }: StatusDetailsProps) {
   const StatusData = Details?.status;
 
   const { isSuccess } = UseUpdateTaskStatusService({
-    task_id:  Details?.id as string,
+    task_id: Details?.id as string,
     statusDataUpdate: status
   });
 

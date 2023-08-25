@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { ExclamationTriangleIcon } from '@heroicons/react/24/outline';
 import { useDispatch } from 'react-redux';
@@ -15,9 +15,8 @@ export interface matchedStatusProps {
 
 export default function Prompt() {
   const dispatch = useDispatch();
+
   const { show, title, body, options, matchData } = useAppSelector((state) => state.prompt);
-  const { matchedStatus } = useAppSelector((state) => state.hub);
-  console.log(matchedStatus, 'match prompt');
 
   const setShow = (state: boolean) => {
     dispatch(setVisibility(state));
