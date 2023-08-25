@@ -89,7 +89,7 @@ export default function HubPage() {
         <VerticalScroll>
           <section
             ref={containerRef}
-            style={{ minHeight: '0', maxHeight: '99vh' }}
+            style={{ minHeight: '0', maxHeight: '83vh' }}
             className="w-full h-full p-4 space-y-10"
           >
             {/* lists */}

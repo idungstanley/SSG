@@ -77,7 +77,7 @@ export interface ImyTaskData {
   archived_at?: string | null;
   deleted_at?: string | null;
   custom_fields: ICustomField[];
-  list?: { id: string; name: string; parent: IParent };
+  list?: { id: string; name: string; parent: IParent; color?: string };
 }
 
 export interface ImyTaskData2 {

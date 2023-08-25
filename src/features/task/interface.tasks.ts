@@ -126,6 +126,7 @@ export interface ITaskFullList {
     id: string;
     name: string;
     parents: IParent;
+    color?: string;
   };
 }
 

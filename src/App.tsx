@@ -19,18 +19,6 @@ function App() {
     }
   }, [data]);
 
-  // useEffect(() => {
-  //   $(document).ready(function () {
-  //     const maxScreen = 2560;
-  //     const screenWidth = window.innerWidth;
-  //     if (screenWidth <= maxScreen) {
-  //       $('html').css('zoom', '0.85');
-  //     }
-  //   });
-  // }, []);
-
-  console.log(window.innerWidth);
-
   return (
     <>
       <RouterProvider router={routes(user)} />

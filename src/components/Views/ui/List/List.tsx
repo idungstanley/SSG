@@ -14,10 +14,15 @@ import { IField } from '../../../../features/list/list.interfaces';
 import { Hub, List as ListType } from '../../../../pages/workspace/hubs/components/ActiveTree/activetree.interfaces';
 import { findCurrentHub } from '../../../../managers/Hub';
 import { findCurrentList } from '../../../../managers/List';
+import { colors } from '../../../Tag/ui/ManageTagsDropdown/config/colors';
 
 interface ListProps {
   tasks: Task[];
   customProperty?: IField[];
+}
+
+export interface IListColor {
+  outerColour: string;
 }
 
 const unique = (arr: listColumnProps[]) => [...new Set(arr)];
@@ -81,13 +86,19 @@ export function List({ tasks, customProperty }: ListProps) {
       isOverList: true
     }
   });
+  const ListColor: IListColor = JSON.parse(tasks[0].list?.color as string);
 
   return (
-    <div className="pt-1 border-t-4 border-l-4 border-purple-500 rounded-3xl bg-purple-50" ref={setNodeRef}>
+    <div
+      className="pt-1 border-t-4 border-l-4 border-purple-500 rounded-3xl bg-purple-50"
+      ref={setNodeRef}
+      style={{ borderColor: ListColor?.outerColour }}
+    >
       <Label
         listName={tasks[0].list?.name || currentList?.name}
         hubName={parentHub?.name}
         tasks={tasks}
+        ListColor={ListColor}
         showTable={collapseTable}
         onClickChevron={() => setCollapseTable((prev) => !prev)}
       />
@@ -109,6 +120,7 @@ export function List({ tasks, customProperty }: ListProps) {
             <Table
               listName={tasks[0].list?.name}
               label={key}
+              ListColor={ListColor}
               key={key}
               heads={hideTask.length ? hideTask : columns}
               data={sortedTasks[key]}

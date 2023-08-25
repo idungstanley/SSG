@@ -18,8 +18,15 @@ import { CiEdit } from 'react-icons/ci';
 import { BsArchive, BsCheck2All } from 'react-icons/bs';
 import { RiDeleteBin6Line } from 'react-icons/ri';
 import { IoIosArrowForward } from 'react-icons/io';
+import { IListColor } from './List';
 
-export default function ListAddModal({ handleCheckedGroupTasks }: { handleCheckedGroupTasks: () => void }) {
+export default function ListAddModal({
+  handleCheckedGroupTasks,
+  ListColor
+}: {
+  ListColor?: IListColor;
+  handleCheckedGroupTasks: () => void;
+}) {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -125,7 +132,8 @@ export default function ListAddModal({ handleCheckedGroupTasks }: { handleChecke
         aria-expanded={open ? 'true' : undefined}
         onClick={handleClick}
       >
-        Add <AiOutlineCaretDown className="text-gray-500 pl-1 w-3 h-3 " />
+        <span style={{ color: ListColor?.outerColour }}>Add</span>
+        <AiOutlineCaretDown className="text-gray-500 pl-1 w-3 h-3 " />
       </Button>
       <Menu
         id="basic-menu"
