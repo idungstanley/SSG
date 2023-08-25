@@ -161,7 +161,6 @@ export function Table({ heads, data, label, listName, customFields }: TableProps
     setActiveIndex(index);
   };
 
-  console.log('activeIndex', activeIndex);
   const handleClose = () => {
     setShowNewTaskField(false);
     dispatch(setCurrTeamMemId(null));
