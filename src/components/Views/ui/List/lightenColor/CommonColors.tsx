@@ -1,0 +1,25 @@
+export const CommonColors: { [key: string]: string } = {
+  black: '#000000',
+  white: '#FFFFFF',
+  red: '#FF0000',
+  green: '#00FF00',
+  blue: '#0000FF',
+  yellow: '#FFFF00',
+  orange: '#FFA500',
+  purple: '#800080',
+  pink: '#FFC0CB',
+  gray: '#808080',
+  brown: '#A52A2A',
+  cyan: '#00FFFF',
+  teal: '#008080',
+  lime: '#00FF00',
+  magenta: '#FF00FF',
+  maroon: '#800000',
+  navy: '#000080',
+  olive: '#808000',
+  silver: '#C0C0C0',
+  indigo: '#4B0082',
+  gold: '#FFD700',
+  violet: '#EE82EE'
+  // Add more color mappings here as needed
+};
