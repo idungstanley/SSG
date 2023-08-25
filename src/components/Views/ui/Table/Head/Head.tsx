@@ -346,8 +346,8 @@ export function Head({
                   )}
                 </div>
                 <div
-                  className="absolute top-0 block w-2 cursor-move -right-3 idle"
-                  style={{ height: tableHeight }}
+                  className="absolute top-0 block cursor-move right-0 idle"
+                  style={{ height: tableHeight, paddingLeft: '5px' }}
                   onMouseDown={() => mouseDown(index + 1)}
                 >
                   <div className="w-0.5 mx-auto h-full bg-gray-100" />

@@ -160,6 +160,8 @@ export function Table({ heads, data, label, listName, customFields }: TableProps
     document.body.style.userSelect = 'none';
     setActiveIndex(index);
   };
+
+  console.log('activeIndex', activeIndex);
   const handleClose = () => {
     setShowNewTaskField(false);
     dispatch(setCurrTeamMemId(null));
