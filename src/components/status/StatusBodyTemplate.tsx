@@ -13,14 +13,15 @@ import StatusIconComp from '../../assets/icons/StatusIconComp';
 import Drag from '../../assets/icons/Drag';
 import { useSortable } from '@dnd-kit/sortable';
 import { BoardSectionsType } from '../../utils/StatusManagement/Types';
+import { CSS } from '@dnd-kit/utilities';
 
 interface StatusBodyProps {
   item: StatusProps;
-  index: string;
+  id: string;
   setStatusTypesState: React.Dispatch<React.SetStateAction<BoardSectionsType>>;
 }
 
-export default function StatusBodyTemplate({ item, setStatusTypesState, index }: StatusBodyProps) {
+export default function StatusBodyTemplate({ item, setStatusTypesState, id }: StatusBodyProps) {
   const [editableContent, setEditableContent] = useState<boolean>(false);
   const [showStatusEditDropdown, setShowStatusEditDropdown] = useState<null | HTMLSpanElement | HTMLDivElement>(null);
   const [showStatusColorDropdown, setShowStatusColorDropdown] = useState<null | HTMLSpanElement>(null);
@@ -29,15 +30,12 @@ export default function StatusBodyTemplate({ item, setStatusTypesState, index }:
     setShowStatusEditDropdown(event.currentTarget);
   };
 
-  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
-    id: index
-  });
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id });
 
   const style = {
-    transform: transform ? `translate(${transform.x}px, ${transform.y}px)` : undefined,
+    transform: CSS.Transform.toString(transform),
     transition,
-    backgroundColor: isDragging ? '#f3f4f6' : undefined, // ? bg for draggable, can be replaced by any style
-    zIndex: isDragging ? 1 : undefined // important for overlay
+    opacity: isDragging ? 0 : 1
   };
 
   const handleOpenStatusColorDropdown = (event: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
@@ -79,7 +77,7 @@ export default function StatusBodyTemplate({ item, setStatusTypesState, index }:
   const showStatusEditDropdownOptions = [
     {
       visibility: true,
-      label: 'Edit Status',
+      label: 'Rename',
       icon: <PencilIcon className="w-4 h-4" aria-hidden="true" />,
       handleClick: () => {
         setShowStatusEditDropdown(null);
@@ -113,9 +111,9 @@ export default function StatusBodyTemplate({ item, setStatusTypesState, index }:
 
   return (
     <span key={item.name} className="mb-1" style={style}>
-      <span className="flex justify-items-start px-1 rounded cursor-pointer h-7 items-center border-alsoit-gray-75 border">
-        {item.type !== 'closed' && (
-          <span className="cursor-move" ref={setNodeRef} {...attributes} {...listeners}>
+      <span className="flex justify-items-start px-1 rounded cursor-pointer h-7 items-center border-alsoit-gray-75 border bg-white">
+        {item.type !== 'closed' && item.position !== 0 && (
+          <span className="cursor-move" ref={setNodeRef} style={style} {...attributes} {...listeners}>
             <Drag />
           </span>
         )}

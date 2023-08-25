@@ -68,7 +68,7 @@ export default function BoardSection({
             !collapsedStatusGroups[id] &&
             status.map((item) => (
               <>
-                <StatusBodyTemplate index={item.name} item={item} setStatusTypesState={setStatusTypesState} />
+                <StatusBodyTemplate id={item.name} item={item} setStatusTypesState={setStatusTypesState} />
               </>
             ))}
         </div>

@@ -74,13 +74,6 @@ export default function CustomStatus() {
   function handleDragStart(event: DragEndEvent) {
     const { active } = event;
     const { id } = active;
-
-    // Check if the dragged item belongs to the 'closed' group type
-    const draggedStatus = statusTypesState.find((status) => status.name === id);
-    if (draggedStatus && draggedStatus.type === 'closed') {
-      // Prevent dragging items out of the 'closed' group type
-      return;
-    }
     setActiveId(id as string);
   }
 
@@ -95,6 +88,11 @@ export default function CustomStatus() {
     if (overContainer === 'closed' && activeContainer !== 'closed') {
       return;
     }
+
+    // const overIndex = boardSections[overContainer]?.findIndex((task) => task.name === over?.id);
+    // if (overIndex === 0) {
+    //   return;
+    // }
 
     setBoardSections((boardSection) => {
       const activeItems = boardSection[activeContainer];
@@ -267,10 +265,7 @@ export default function CustomStatus() {
     }
   };
 
-  // const status = activeId ? getStatusById(statusTypesState, activeId) : null;
-  // const dropAnimation: DropAnimation = {
-  //   ...defaultDropAnimation
-  // };
+  // const draggableItem = activeId ? getStatusById(statusTypesState, activeId) : null;
 
   return (
     <section className="flex flex-col gap-2 p-4">
@@ -305,7 +300,11 @@ export default function CustomStatus() {
               />
             </div>
           ))}
-          {/* <DragOverlay dropAnimation={dropAnimation}>{status ? <StatusItem item={status} /> : null}</DragOverlay> */}
+          {/* {draggableItem ? (
+            <DragOverlay>
+              <StatusItem item={draggableItem} />
+            </DragOverlay>
+          ) : null} */}
         </DndContext>
       </div>
       <p className="mt-auto text-red-600 text-start">{validationMessage}</p>
