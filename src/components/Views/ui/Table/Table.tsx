@@ -180,7 +180,7 @@ export function Table({ heads, data, label, listName, customFields, ListColor }:
   const draggableItem = draggableItemId ? data.find((i) => i.id === draggableItemId) : null;
 
   return (
-    <ScrollableHorizontalListsContainer onScroll={onScroll}>
+    <ScrollableHorizontalListsContainer onScroll={onScroll} ListColor={ListColor}>
       {/* draggable item */}{' '}
       {draggableItem ? (
         <DragOverlay>

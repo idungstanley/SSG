@@ -30,6 +30,7 @@
     "@uppy/xhr-upload": "^3.2.0",
     "axios": "^0.24.0",
     "buffer": "^6.0.3",
+    "color-name-list": "^10.11.0",
     "dayjs": "^1.11.7",
     "dotenv": "^10.0.0",
     "eslint-config-airbnb": "^19.0.4",

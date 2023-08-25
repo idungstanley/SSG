@@ -2,14 +2,17 @@ import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
 import React, { useState, useEffect, useRef, useCallback, ReactNode, HTMLAttributes } from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { setGroupScrollSettings } from '../../features/general/slideOver/slideOverSlice';
+import { IListColor } from '../Views/ui/List/List';
+import LightenColor from '../Views/ui/List/lightenColor/LightenColor';
 
 interface CustomScrollableContainerProps extends HTMLAttributes<HTMLDivElement> {
   children: ReactNode;
+  ListColor?: IListColor;
 }
 const DEFAULT_THUMB_WIDTH = 20;
 const ARROWS_WRAPPER_WIDTH = 35;
 
-export function ScrollableHorizontalListsContainer({ children, ...props }: CustomScrollableContainerProps) {
+export function ScrollableHorizontalListsContainer({ children, ListColor, ...props }: CustomScrollableContainerProps) {
   const dispatch = useAppDispatch();
 
   // update size is pilot is visible / invisible
@@ -220,7 +223,10 @@ export function ScrollableHorizontalListsContainer({ children, ...props }: Custo
         </div>
       </div>
       {isThumbVisible && (
-        <div className="sticky bottom-0 z-3 pt-4 pr-2 group grid w-full grid-cols-2 bg-purple-50 rounded-3xl">
+        <div
+          className="sticky bottom-0 z-3 pt-4 pr-2 group grid w-full grid-cols-2 bg-purple-50 rounded-3xl"
+          style={{ backgroundColor: LightenColor(ListColor?.outerColour as string, 0.95) }}
+        >
           <div />
           <div className="flex items-center mb-4 flex-row space-x-2">
             {renderScrollArrows()}

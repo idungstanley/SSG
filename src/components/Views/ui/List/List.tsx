@@ -15,6 +15,7 @@ import { Hub, List as ListType } from '../../../../pages/workspace/hubs/componen
 import { findCurrentHub } from '../../../../managers/Hub';
 import { findCurrentList } from '../../../../managers/List';
 import { colors } from '../../../Tag/ui/ManageTagsDropdown/config/colors';
+import LightenColor from './lightenColor/LightenColor';
 
 interface ListProps {
   tasks: Task[];
@@ -53,6 +54,11 @@ export function List({ tasks, customProperty }: ListProps) {
   }, [listId]);
 
   const custom_fields = customProperty;
+  const ListColor: IListColor = tasks[0].list?.color
+    ? JSON.parse(tasks[0].list?.color as string)
+    : {
+        outerColour: '#A854F7'
+      };
 
   useEffect(() => {
     if (!customProperty) {
@@ -86,13 +92,12 @@ export function List({ tasks, customProperty }: ListProps) {
       isOverList: true
     }
   });
-  const ListColor: IListColor = JSON.parse(tasks[0].list?.color as string);
 
   return (
     <div
       className="pt-1 border-t-4 border-l-4 border-purple-500 rounded-3xl bg-purple-50"
       ref={setNodeRef}
-      style={{ borderColor: ListColor?.outerColour }}
+      style={{ borderColor: ListColor?.outerColour, backgroundColor: LightenColor(ListColor?.outerColour, 0.95) }}
     >
       <Label
         listName={tasks[0].list?.name || currentList?.name}
