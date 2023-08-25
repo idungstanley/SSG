@@ -1,16 +1,15 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import { UserPlusIcon } from '@heroicons/react/24/solid';
 import { useGetTeamMembers } from '../../../../features/settings/teamMembers/teamMemberService';
 import { AvatarWithInitials } from '../../../../components';
 import GroupAssignee from './GroupAssignee';
 import { ICheckListItems } from '../../../../features/task/interface.tasks';
-import { ImyTaskData } from '../../../../features/task/taskSlice';
+import { ImyTaskData, setSelectedListId } from '../../../../features/task/taskSlice';
 import { AiOutlineSearch } from 'react-icons/ai';
-import { useState } from 'react';
 import { ITeamMembersAndGroup } from '../../../../features/settings/teamMembersAndGroups.interfaces';
 import { useGetTeamMemberGroups } from '../../../../features/settings/teamMemberGroups/teamMemberGroupService';
 import { cl } from '../../../../utils';
-import { useAppSelector } from '../../../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import AssigneeItem from './AssigneeItem';
 import AlsoitMenuDropdown from '../../../../components/DropDowns';
 
@@ -25,12 +24,18 @@ export default function Assignee({
   assigneeChecklistItem?: ICheckListItems;
   task?: ImyTaskData | undefined;
 }) {
-  const [searchInput, setSearchInput] = React.useState<string>('');
-  const [teams, setTeams] = React.useState<boolean>(false);
+  const dispatch = useAppDispatch();
+
+  const { currTeamMemberId } = useAppSelector((state) => state.task);
+
+  const [searchInput, setSearchInput] = useState<string>('');
+  const [teams, setTeams] = useState<boolean>(false);
   const [filteredMembers, setFilteredMembers] = useState<ITeamMembersAndGroup[] | undefined>([]);
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
+    dispatch(setSelectedListId(task?.list_id as string));
   };
 
   const handleClose = () => {
@@ -38,13 +43,12 @@ export default function Assignee({
   };
   // Get Team Members
   const { data } = teams ? useGetTeamMemberGroups(0) : useGetTeamMembers({ page: 0, query: '' });
-  const { currTeamMemberId } = useAppSelector((state) => state.task);
 
   const userObj = data?.data.team_members?.find((userObj) => userObj?.id === currTeamMemberId);
 
   const teamMembers = teams ? data?.data.team_member_groups : data?.data.team_members;
   // const assignees = task?.assignees;
-  const assignees = [...(task?.assignees ?? []), ...(task?.group_assignees ?? [])];
+  const assignees = task?.assignees;
 
   const assignedUser = assignees?.map(({ id }: { id: string }) => id);
 
@@ -52,7 +56,7 @@ export default function Assignee({
 
   const searchItem = (value: string) => {
     setSearchInput(value);
-    if (searchInput !== '') {
+    if (searchInput) {
       const filtered = teamMembers?.filter((el) => el.user.name.toLowerCase().includes(value.toLowerCase()));
       setFilteredMembers(filtered);
     } else {
@@ -63,31 +67,13 @@ export default function Assignee({
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     event.stopPropagation();
   };
+
   return (
     <>
-      {option !== 'getTeamId' && (
-        <>
-          {assignees?.length ? (
-            <div className="flex">
-              <GroupAssignee data={assignees} itemId={itemId as string} handleClick={handleClick} teams={teams} />
-            </div>
-          ) : (
-            <span onClick={handleClick}>
-              <UserPlusIcon
-                className="items-center justify-center text-xl text-gray-400 cursor-pointer"
-                style={{
-                  width: '26px'
-                }}
-                aria-hidden="true"
-              />
-            </span>
-          )}
-        </>
-      )}
-      {option === 'getTeamId' && (
+      {option === 'getTeamId' ? (
         <div id="basic-button">
           {userObj ? (
-            <div className="">
+            <div>
               <button className="border-2 border-red-400 rounded-full" onClick={handleClick}>
                 <AvatarWithInitials initials={userObj.user.initials} backgroundColour={userObj.color} badge={true} />
               </button>
@@ -104,6 +90,29 @@ export default function Assignee({
             </span>
           )}
         </div>
+      ) : (
+        <>
+          {assignees?.length ? (
+            <div className="flex">
+              <GroupAssignee
+                data={assignees as ITeamMembersAndGroup[]}
+                itemId={itemId as string}
+                teams={teams}
+                handleClick={handleClick}
+              />
+            </div>
+          ) : (
+            <span onClick={handleClick}>
+              <UserPlusIcon
+                className="items-center justify-center text-xl text-gray-400 cursor-pointer"
+                style={{
+                  width: '26px'
+                }}
+                aria-hidden="true"
+              />
+            </span>
+          )}
+        </>
       )}
       <AlsoitMenuDropdown handleClose={handleClose} anchorEl={anchorEl as HTMLDivElement | null}>
         <div className="overflow-scroll" style={{ maxHeight: '400px' }}>

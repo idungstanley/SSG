@@ -1,6 +1,7 @@
 import dayjs, { Dayjs } from 'dayjs';
 import { teamMember } from '../../pages/workspace/tasks/timeclock/entryLists/EntryList';
 import { ICustomField, ImyTaskData } from './taskSlice';
+import { ITeamMembersAndGroup } from '../settings/teamMembersAndGroups.interfaces';
 
 export interface UpdateTaskProps {
   task_id_array?: string[];
@@ -113,7 +114,7 @@ export interface ITaskFullList {
   has_attachments: boolean;
   start_date: string | null;
   end_date: string | null;
-  assignees?: [{ id: string; initials: string; color: string; name: string; avatar_path: string | null }] | undefined;
+  assignees: ITeamMembersAndGroup[];
   group_assignees?: [];
   custom_fields?: ICustomField[];
   tags: Tag[];

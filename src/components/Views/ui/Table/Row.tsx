@@ -51,7 +51,7 @@ export function Row({
 
   const newSubTask: ITaskFullList = {
     archived_at: null,
-    assignees: undefined,
+    assignees: [],
     avatar_path: '',
     created_at: '',
     custom_fields: [],

@@ -14,9 +14,8 @@ export const filterByAssignee = (tasks: Task[]) => {
 
   if (!assigneeIds.length) {
     return { filteredByAssignee: tasks };
+  } else {
+    const filteredByAssignee = tasks.filter((i) => i.assignees.filter((j) => assigneeIds.includes(j.id)).length);
+    return { filteredByAssignee };
   }
-
-  const filteredByAssignee = tasks.filter((i) => i.assignees?.filter((j) => assigneeIds.includes(j.id)).length);
-
-  return { filteredByAssignee };
 };

@@ -1,3 +1,4 @@
+import { ITeamMembersAndGroup } from '../features/settings/teamMembersAndGroups.interfaces';
 import { IStatus, ITaskFullList } from '../features/task/interface.tasks';
 
 export const taskPriorityUpdateManager = (
@@ -40,6 +41,36 @@ export const taskStatusUpdateManager = (
         return {
           ...task,
           status: newStatus
+        };
+      }
+      return task;
+    });
+    return updatedTasks;
+  }
+
+  return tasks;
+};
+
+export const taskAssignessUpdateManager = (
+  taskId: string,
+  listId: string,
+  tasks: Record<string, ITaskFullList[]>,
+  userData: ITeamMembersAndGroup,
+  assign: boolean
+) => {
+  if (listId) {
+    const updatedTasks = { ...tasks };
+
+    updatedTasks[listId] = updatedTasks[listId].map((task) => {
+      if (taskId === task.id) {
+        const updatedAssignees = assign
+          ? [...task.assignees, userData]
+          : task.assignees.filter((item) => item.id !== userData.id);
+        return {
+          ...task,
+          assignees: task.assignees.length
+            ? (updatedAssignees as ITeamMembersAndGroup[])
+            : ([userData] as ITeamMembersAndGroup[])
         };
       }
       return task;

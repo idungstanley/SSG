@@ -36,7 +36,8 @@ import { generateFilters } from '../../components/TasksHeader/lib/generateFilter
 import { runTimer } from '../../utils/TimerCounter';
 import Duration from '../../utils/TimerDuration';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
-import { taskPriorityUpdateManager, taskStatusUpdateManager } from '../../managers/Task';
+import { taskAssignessUpdateManager, taskPriorityUpdateManager, taskStatusUpdateManager } from '../../managers/Task';
+import { ITeamMembersAndGroup } from '../settings/teamMembersAndGroups.interfaces';
 
 //edit a custom field
 export const UseEditCustomFieldService = (data: {
@@ -866,21 +867,22 @@ const AssignTask = ({
     method: 'POST',
     data: {
       id: taskId,
-      ...(teams ? { team_member_group_id: team_member_id } : { team_member_id: team_member_id }),
+      ...(teams ? { team_member_group_id: team_member_id } : { team_member_id }),
       type: EntityType.task
     }
   });
   return request;
 };
 
-export const UseTaskAssignService = () => {
-  const queryClient = useQueryClient();
+export const UseTaskAssignService = (taskId: string, user: ITeamMembersAndGroup) => {
   const dispatch = useAppDispatch();
+
+  const { selectedListId, tasks } = useAppSelector((state) => state.task);
   return useMutation(AssignTask, {
     onSuccess: () => {
+      const updatedTasks = taskAssignessUpdateManager(taskId, selectedListId, tasks, user, true);
+      dispatch(setTasks(updatedTasks));
       dispatch(setToggleAssignCurrentTaskId(null));
-      queryClient.invalidateQueries(['task']);
-      queryClient.invalidateQueries(['sub-tasks']);
     }
   });
 };
@@ -907,14 +909,16 @@ const UnassignTask = ({
   return request;
 };
 
-export const UseUnassignTask = () => {
-  const queryClient = useQueryClient();
-
+export const UseTaskUnassignService = (taskId: string, user: ITeamMembersAndGroup) => {
   const dispatch = useAppDispatch();
+
+  const { selectedListId, tasks } = useAppSelector((state) => state.task);
+
   return useMutation(UnassignTask, {
     onSuccess: () => {
+      const updatedTasks = taskAssignessUpdateManager(taskId, selectedListId, tasks, user, false);
+      dispatch(setTasks(updatedTasks));
       dispatch(setToggleAssignCurrentTaskId(null));
-      queryClient.invalidateQueries(['task']);
     }
   });
 };

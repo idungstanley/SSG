@@ -19,6 +19,7 @@ import {
   FilterWithId
 } from '../../components/TasksHeader/ui/Filter/types/filters';
 import { DEFAULT_FILTERS_OPTION } from '../../components/TasksHeader/ui/Filter/config/filterConfig';
+import { ITeamMembersAndGroup } from '../settings/teamMembersAndGroups.interfaces';
 
 export interface ICustomField {
   id: string;
@@ -66,7 +67,7 @@ export interface ImyTaskData {
   has_attachments: boolean;
   end_date: string | null;
   status: Status;
-  assignees?: [{ id: string; initials: string; color: string; name: string; avatar_path: string | null }];
+  assignees: ITeamMembersAndGroup[];
   group_assignees?: {
     color: string;
     id: string;
