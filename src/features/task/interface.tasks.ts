@@ -243,7 +243,7 @@ export interface IUserCalendarParams {
 
 export interface ITimeEntryParams {
   key: string;
-  value: string[] | Header[];
+  value: string[] | Header[] | [][];
 }
 
 export interface IUserSettings {

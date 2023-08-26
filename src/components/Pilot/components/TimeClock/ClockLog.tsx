@@ -13,6 +13,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useGetUserSettingsData } from '../../../../features/task/taskService';
 import { toast } from 'react-hot-toast';
 import SaveFilterToast from '../../../TasksHeader/ui/Filter/ui/Toast';
+import { isArray } from '../../../../utils/typeGuards';
 
 export type Header = {
   title: string;
@@ -31,7 +32,7 @@ interface LogProps {
 }
 
 export default function ClockLog({ getTaskEntries }: LogProps) {
-  const { timeArr, timeSortStatus, timeLogColumnData } = useAppSelector((state) => state.task);
+  const { timeArr, timeSortStatus, timeLogColumnData, timeSortArr } = useAppSelector((state) => state.task);
 
   const dispatch = useAppDispatch();
 
@@ -92,8 +93,11 @@ export default function ClockLog({ getTaskEntries }: LogProps) {
   }, [timeSortStatus]);
 
   useEffect(() => {
-    if (timeLogColumnData.length) {
+    if (timeLogColumnData.length && !isArray(timeLogColumnData[0])) {
       setHeaders(timeLogColumnData);
+    } else if (isArray(timeLogColumnData[0])) {
+      dispatch(setTimeSortArr([]));
+      dispatch(setTimeArr([]));
     }
   }, [timeLogColumnData]);
 
@@ -168,18 +172,18 @@ export default function ClockLog({ getTaskEntries }: LogProps) {
                         </span>
                         {col.title === 'user' && (
                           <>
-                            {headerId === '' && (
+                            {headerId === '' && timeSortArr.length === 0 && (
                               <FaSort
                                 className="w-3 h-3 transition duration-200 rounded-full opacity-0 cursor-pointer text-alsoit-text-lg text-alsoit-gray-50 bg-alsoit-gray-200 group-hover:opacity-100"
                                 onClick={() => handleSort(col.title, col.id)}
                               />
                             )}
-                            {timeArr.includes(col.title) && (
+                            {timeArr.includes(col.title) && timeSortArr.length && (
                               <div className="rounded-full sortClose-group">
                                 <div className="relative flex items-center justify-center w-4 h-4 space-x-1 font-medium text-white uppercase rounded-full cursor-pointer text-alsoit-text-lg bg-alsoit-danger group">
                                   <div className="font-bold cursor-pointer hover:text-clip" style={{ fontSize: '8px' }}>
                                     <>
-                                      {timeArr.length === 1 ? (
+                                      {timeArr.length === 1 && timeSortArr.length ? (
                                         <ArrowCaretUp active={false} />
                                       ) : (
                                         <span className="flex gap-1">
