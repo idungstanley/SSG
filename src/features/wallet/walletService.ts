@@ -130,7 +130,7 @@ export const UseGetWalletDetails = (query: { activeItemId?: string | null; activ
   const dispatch = useAppDispatch();
 
   return useQuery(
-    ['wallet-details', query],
+    ['wallet-details', { query }],
     async () => {
       const data = await requestNew<IWalletDetailRes>({
         url: `wallets/${query.activeItemId}`,

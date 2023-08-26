@@ -13,14 +13,15 @@ import StatusIconComp from '../../assets/icons/StatusIconComp';
 import Drag from '../../assets/icons/Drag';
 import { useSortable } from '@dnd-kit/sortable';
 import { BoardSectionsType } from '../../utils/StatusManagement/Types';
+import { CSS } from '@dnd-kit/utilities';
 
 interface StatusBodyProps {
   item: StatusProps;
-  index: string;
+  id: string;
   setStatusTypesState: React.Dispatch<React.SetStateAction<BoardSectionsType>>;
 }
 
-export default function StatusBodyTemplate({ item, setStatusTypesState, index }: StatusBodyProps) {
+export default function StatusBodyTemplate({ item, setStatusTypesState, id }: StatusBodyProps) {
   const [editableContent, setEditableContent] = useState<boolean>(false);
   const [showStatusEditDropdown, setShowStatusEditDropdown] = useState<null | HTMLSpanElement | HTMLDivElement>(null);
   const [showStatusColorDropdown, setShowStatusColorDropdown] = useState<null | HTMLSpanElement>(null);
@@ -29,15 +30,12 @@ export default function StatusBodyTemplate({ item, setStatusTypesState, index }:
     setShowStatusEditDropdown(event.currentTarget);
   };
 
-  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
-    id: index
-  });
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id });
 
   const style = {
-    transform: transform ? `translate(${transform.x}px, ${transform.y}px)` : undefined,
+    transform: CSS.Transform.toString(transform),
     transition,
-    backgroundColor: isDragging ? '#f3f4f6' : undefined, // ? bg for draggable, can be replaced by any style
-    zIndex: isDragging ? 1 : undefined // important for overlay
+    opacity: isDragging ? 0 : 1
   };
 
   const handleOpenStatusColorDropdown = (event: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
@@ -79,7 +77,7 @@ export default function StatusBodyTemplate({ item, setStatusTypesState, index }:
   const showStatusEditDropdownOptions = [
     {
       visibility: true,
-      label: 'Edit Status',
+      label: 'Rename',
       icon: <PencilIcon className="w-4 h-4" aria-hidden="true" />,
       handleClick: () => {
         setShowStatusEditDropdown(null);
@@ -112,40 +110,40 @@ export default function StatusBodyTemplate({ item, setStatusTypesState, index }:
   ];
 
   return (
-    <span
-      key={item.name}
-      className="flex items-center gap-2 p-1 border rounded cursor-pointer justify-items-start border-alsoit-gray-75"
-      onClick={() => handleToggleEditableContent()}
-      style={style}
-    >
-      <span className="flex items-center">
-        <span className="cursor-move" ref={setNodeRef} {...attributes} {...listeners}>
-          <Drag />
+    <span key={item.name} className="mb-1" style={style}>
+      <span className="flex justify-items-start px-1 rounded cursor-pointer h-7 items-center border-alsoit-gray-75 border bg-white">
+        {item.type !== 'closed' && item.position !== 0 && (
+          <span className="cursor-move" ref={setNodeRef} style={style} {...attributes} {...listeners}>
+            <Drag />
+          </span>
+        )}
+        <span className="w-3 h-3 ml-4 rounded" onClick={(e) => handleOpenStatusColorDropdown(e)}>
+          <StatusIconComp color={item.color as string} />
         </span>
-        <div className="flex items-center gap-1">
-          <span className="w-3 h-3 ml-4 rounded" onClick={(e) => handleOpenStatusColorDropdown(e)}>
-            <StatusIconComp color={item.color as string} />
+        <span
+          contentEditable={editableContent}
+          style={{ color: item.color as string }}
+          className="uppercase truncate flex-grow"
+          onClick={() => handleToggleEditableContent()}
+        >
+          {item.name}
+        </span>
+        {!editableContent && (
+          <span className="flex items-center gap-2 ml-2">
+            <span>
+              <Picker />
+            </span>
+            <span onClick={(e) => handleOpenStatusEditDropdown(e)}>
+              <ThreeDotIcon />
+            </span>
           </span>
-          <span contentEditable={editableContent} style={{ color: item.color as string }} className="uppercase">
-            {item.name}
+        )}
+        {editableContent && (
+          <span className="ml-auto text-green-400" onClick={(e) => handleSaveEditableContent(e)}>
+            <IoMdCheckmark />
           </span>
-        </div>
+        )}
       </span>
-      {!editableContent && (
-        <span className="flex items-center gap-2 ml-auto">
-          <span>
-            <Picker />
-          </span>
-          <span onClick={(e) => handleOpenStatusEditDropdown(e)}>
-            <ThreeDotIcon />
-          </span>
-        </span>
-      )}
-      {editableContent && (
-        <span className="ml-auto text-green-400" onClick={(e) => handleSaveEditableContent(e)}>
-          <IoMdCheckmark />
-        </span>
-      )}
       <AlsoitMenuDropdown
         handleClose={handleCloseStatusEditDropdown}
         anchorEl={showStatusEditDropdown as HTMLDivElement | null}
