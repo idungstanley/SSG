@@ -31,6 +31,7 @@ import { setMatchedStatus, setStatusesToMatch } from '../../../features/hubs/hub
 import MatchStatusPopUp from '../Components/MatchStatusPopUp';
 import { setMatchData } from '../../../features/general/prompt/promptSlice';
 import StatusItem from '../Components/StatusItem';
+import StatusBodyTemplate from '../StatusBodyTemplate';
 
 interface ErrorResponse {
   data: {
@@ -71,10 +72,8 @@ export default function CustomStatus() {
     })
   );
 
-  function handleDragStart(event: DragEndEvent) {
-    const { active } = event;
-    const { id } = active;
-    setActiveId(id as string);
+  function handleDragStart({ active }: DragEndEvent) {
+    setActiveId(active.id as string);
   }
 
   const handleDragOver = ({ active, over }: DragOverEvent) => {
@@ -88,11 +87,6 @@ export default function CustomStatus() {
     if (overContainer === 'closed' && activeContainer !== 'closed') {
       return;
     }
-
-    // const overIndex = boardSections[overContainer]?.findIndex((task) => task.name === over?.id);
-    // if (overIndex === 0) {
-    //   return;
-    // }
 
     setBoardSections((boardSection) => {
       const activeItems = boardSection[activeContainer];
@@ -162,7 +156,7 @@ export default function CustomStatus() {
         };
       })
     );
-  }, [spaceStatuses]);
+  }, [spaceStatuses, boardSections]);
 
   const handleSaveNewStatus = () => {
     const nameWithoutWhiteSpace = newStatusValue?.trim();
@@ -265,7 +259,7 @@ export default function CustomStatus() {
     }
   };
 
-  // const draggableItem = activeId ? getStatusById(statusTypesState, activeId) : null;
+  const draggableItem = activeId ? getStatusById(statusTypesState, activeId) : null;
 
   return (
     <section className="flex flex-col gap-2 p-4">
@@ -300,11 +294,11 @@ export default function CustomStatus() {
               />
             </div>
           ))}
-          {/* {draggableItem ? (
+          {draggableItem ? (
             <DragOverlay>
-              <StatusItem item={draggableItem} />
+              <StatusBodyTemplate item={draggableItem} id={activeId as string} />
             </DragOverlay>
-          ) : null} */}
+          ) : null}
         </DndContext>
       </div>
       <p className="mt-auto text-red-600 text-start">{validationMessage}</p>
