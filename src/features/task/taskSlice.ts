@@ -50,6 +50,11 @@ interface customPropertyInfo {
   name: string;
   type: string;
   color: string | null;
+  style?: {
+    is_bold?: string;
+    is_italic?: string;
+    is_underlined?: string;
+  };
 }
 
 export interface ImyTaskData {
@@ -266,7 +271,16 @@ const initialState: TaskState = {
   entityForCustom: { id: undefined, type: undefined },
   customSuggestionField: [],
   newTaskData: undefined,
-  newCustomPropertyDetails: { name: '', type: 'Select Property Type', color: null },
+  newCustomPropertyDetails: {
+    name: '',
+    type: 'Select Property Type',
+    color: null,
+    style: {
+      is_bold: '0',
+      is_italic: '0',
+      is_underlined: '0'
+    }
+  },
   editCustomProperty: undefined
 };
 
