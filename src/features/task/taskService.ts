@@ -475,6 +475,7 @@ export const getTaskListService = (listId: string | null | undefined) => {
       enabled: fetch,
       onSuccess: (data) => {
         data.pages.map((page) => page?.data.tasks.map((task) => queryClient.setQueryData(['task', task.id], task)));
+        queryClient.invalidateQueries(['hubs']);
       },
       getNextPageParam: (lastPage) => {
         if (lastPage?.data?.paginator.has_more_pages) {

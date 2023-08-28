@@ -7,11 +7,9 @@ import {
   DragEndEvent,
   DragOverEvent,
   DragOverlay,
-  DropAnimation,
   KeyboardSensor,
   PointerSensor,
   closestCorners,
-  defaultDropAnimation,
   useSensor,
   useSensors
 } from '@dnd-kit/core';
@@ -30,8 +28,8 @@ import {
 import { setMatchedStatus, setStatusesToMatch } from '../../../features/hubs/hubSlice';
 import MatchStatusPopUp from '../Components/MatchStatusPopUp';
 import { setMatchData } from '../../../features/general/prompt/promptSlice';
-import StatusItem from '../Components/StatusItem';
 import StatusBodyTemplate from '../StatusBodyTemplate';
+import { UseGetListDetails } from '../../../features/list/listService';
 
 interface ErrorResponse {
   data: {
@@ -47,11 +45,11 @@ export default function CustomStatus() {
   const dispatch = useAppDispatch();
   const createStatusTypes = useMutation(statusTypesService);
 
-  const { spaceStatuses, matchedStatus } = useAppSelector((state) => state.hub);
   const { matchData } = useAppSelector((state) => state.prompt);
 
   const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
   const { statusTaskListDetails } = useAppSelector((state) => state.list);
+  const { spaceStatuses, matchedStatus } = useAppSelector((state) => state.hub);
 
   const [statusTypesState, setStatusTypesState] = useState<StatusProps[]>(spaceStatuses);
   const [validationMessage, setValidationMessage] = useState<string>('');
@@ -61,16 +59,18 @@ export default function CustomStatus() {
   const [showMatchStatusPop, setShowMatchStatusPopup] = useState<boolean>(false);
   const [matchingStatusValidation, setMatchingStatusValidation] = useState<string | null>(null);
 
-  const initialBoardSections = initializeBoard(statusTypesState);
+  const initialBoardSections = initializeBoard(spaceStatuses);
   const [boardSections, setBoardSections] = useState<BoardSectionsType>(initialBoardSections);
-  console.log(boardSections);
-
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates
     })
   );
+
+  useEffect(() => {
+    setBoardSections(initialBoardSections);
+  }, [spaceStatuses, activeItemId]);
 
   function handleDragStart({ active }: DragEndEvent) {
     setActiveId(active.id as string);
@@ -143,21 +143,6 @@ export default function CustomStatus() {
     setActiveId(null);
   };
 
-  useEffect(() => {
-    setStatusTypesState(
-      spaceStatuses.map((status, index) => {
-        return {
-          name: status.name,
-          color: status.color,
-          id: status.id,
-          type: status.type,
-          position: index,
-          is_default: index === 0 ? 1 : 0
-        };
-      })
-    );
-  }, [spaceStatuses, boardSections]);
-
   const handleSaveNewStatus = () => {
     const nameWithoutWhiteSpace = newStatusValue?.trim();
     const isNameExist = statusTypesState.some(
@@ -200,13 +185,24 @@ export default function CustomStatus() {
   const model = statusTaskListDetails.listId ? 'list' : (activeItemType as string);
   const model_id = statusTaskListDetails.listId || (activeItemId as string);
 
+  const handleStatusId = () => {
+    const modelTypeIsSameEntity = statusData.some((item) => item.model_type === model);
+    if (activeItemId === model_id && modelTypeIsSameEntity) {
+      return statusData;
+    } else {
+      return statusData.map((item, index) => {
+        return { ...item, id: null, is_default: index === 0 ? 1 : 0 }; // Set the id to null
+      });
+    }
+  };
+
   const handleStatusData = async () => {
     await createStatusTypes.mutateAsync({
       model_id: model_id,
       model: model,
       from_model: activeItemType,
       from_model_id: activeItemId,
-      statuses: statusData,
+      statuses: handleStatusId(),
       status_matches: matchedStatus
     });
   };
@@ -246,7 +242,7 @@ export default function CustomStatus() {
         model: model,
         from_model: activeItemType,
         from_model_id: activeItemId,
-        statuses: statusData
+        statuses: handleStatusId()
       });
     } catch (err) {
       const errorResponse = err as ErrorResponse; // Cast err to the ErrorResponse type

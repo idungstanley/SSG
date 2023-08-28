@@ -4,7 +4,7 @@ export type StatusType = {
   color: string | null;
   id: string | null;
   model_id?: string | null;
-  model?: string | null;
+  model_type?: string | null;
   type: string | null;
   position: number;
   name: string;
