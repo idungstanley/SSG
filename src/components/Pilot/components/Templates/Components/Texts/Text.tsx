@@ -2,17 +2,36 @@ import { Menu, Transition } from '@headlessui/react';
 import { Fragment } from 'react';
 import ArrowRight from '../../../../../../assets/icons/ArrowRight';
 import RoundedCheckbox from '../../../../../Checkbox/RoundedCheckbox';
-import Number from '../../../../../../assets/branding/Number';
+import Text from '../../../../../../assets/branding/Text';
+import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
+import { setNewCustomPropertyDetails } from '../../../../../../features/task/taskSlice';
 
 const items = [
   {
     id: 1,
-    name: 'Number',
+    name: 'Short Text',
+    onclick: () => null
+  },
+  {
+    id: 2,
+    name: 'Long Text',
+    onclick: () => null
+  },
+  {
+    id: 3,
+    name: 'Email',
+    onclick: () => null
+  },
+  {
+    id: 4,
+    name: 'Website',
     onclick: () => null
   }
 ];
 
-export default function NumberOptions() {
+export default function TextOptions() {
+  const dispatch = useAppDispatch();
+  const { newCustomPropertyDetails } = useAppSelector((state) => state.task);
   return (
     <Menu as="div" className="relative inline-block text-left w-full">
       <div className="w-full">
@@ -20,9 +39,9 @@ export default function NumberOptions() {
           <div className="w-full flex items-center justify-between h-full">
             <div className="flex items-center">
               <span className="mx-1">
-                <Number />
+                <Text />
               </span>
-              <p className="text-alsoit-gray-300-lg text-alsoit-text-lg font-semibold">Number</p>
+              <p className="text-alsoit-gray-300-lg text-alsoit-text-lg font-semibold">Texts</p>
             </div>
             <ArrowRight />
           </div>
@@ -40,14 +59,16 @@ export default function NumberOptions() {
       >
         <Menu.Items className="z-50 absolute left-0 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none  ml-24">
           <div className="w-full mt-2 flex justify-center">
-            <h1 className="text-alsoit-text-lg font-semibold">NUMBER</h1>
+            <h1 className="text-alsoit-text-lg font-semibold">TEXT</h1>
           </div>
           <div className="px-1 py-1">
             {items.map((item) => (
               <Menu.Item key={item.name}>
                 {({ active }) => (
                   <button
-                    // onClick={item.onClick}
+                    onClick={() =>
+                      dispatch(setNewCustomPropertyDetails({ ...newCustomPropertyDetails, type: item.name }))
+                    }
                     className={`${
                       active ? 'bg-alsoit-gray-50 text-gray-700' : 'text-gray-700'
                     } group flex gap-4 w-full items-center rounded-md px-2 py-2 text-alsoit-text-lg font-semibold`}

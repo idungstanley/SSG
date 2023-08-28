@@ -2,39 +2,19 @@ import { Menu, Transition } from '@headlessui/react';
 import { Fragment } from 'react';
 import ArrowRight from '../../../../../../assets/icons/ArrowRight';
 import RoundedCheckbox from '../../../../../Checkbox/RoundedCheckbox';
-import Text from '../../../../../../assets/branding/Text';
+import Number from '../../../../../../assets/branding/Number';
 import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
 import { setNewCustomPropertyDetails } from '../../../../../../features/task/taskSlice';
 
 const items = [
   {
     id: 1,
-    name: 'Short Text',
-    onclick: () => null
-  },
-  {
-    id: 2,
-    name: 'Long Text',
-    onclick: () => null
-  },
-  {
-    id: 3,
-    name: 'Email',
-    onclick: () => null
-  },
-  {
-    id: 4,
     name: 'Number',
-    onclick: () => null
-  },
-  {
-    id: 4,
-    name: 'Website',
     onclick: () => null
   }
 ];
 
-export default function TextOptions() {
+export default function NumberOptions() {
   const dispatch = useAppDispatch();
   const { newCustomPropertyDetails } = useAppSelector((state) => state.task);
   return (
@@ -44,9 +24,9 @@ export default function TextOptions() {
           <div className="w-full flex items-center justify-between h-full">
             <div className="flex items-center">
               <span className="mx-1">
-                <Text />
+                <Number />
               </span>
-              <p className="text-alsoit-gray-300-lg text-alsoit-text-lg font-semibold">Texts</p>
+              <p className="text-alsoit-gray-300-lg text-alsoit-text-lg font-semibold">Number</p>
             </div>
             <ArrowRight />
           </div>
@@ -64,7 +44,7 @@ export default function TextOptions() {
       >
         <Menu.Items className="z-50 absolute left-0 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none  ml-24">
           <div className="w-full mt-2 flex justify-center">
-            <h1 className="text-alsoit-text-lg font-semibold">TEXT</h1>
+            <h1 className="text-alsoit-text-lg font-semibold">NUMBER</h1>
           </div>
           <div className="px-1 py-1">
             {items.map((item) => (
