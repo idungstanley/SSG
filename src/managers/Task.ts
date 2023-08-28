@@ -82,7 +82,7 @@ export const taskAssignessUpdateManager = (
   return tasks;
 };
 
-export const updateListCustomeFieldsManager = (
+export const updateListCustomFieldsManager = (
   listId: string,
   tasks: Record<string, ITaskFullList[]>,
   customFieldData: IField

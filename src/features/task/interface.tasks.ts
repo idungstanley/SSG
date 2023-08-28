@@ -119,7 +119,7 @@ export interface ITaskFullList {
   assignees: ITeamMembersAndGroup[];
   group_assignees?: [];
   custom_fields?: ICustomField[];
-  custom_field_columns: IField[]; 
+  custom_field_columns: IField[];
   tags: Tag[];
   updated_at: string;
   created_at: string;

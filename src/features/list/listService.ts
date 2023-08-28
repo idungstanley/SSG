@@ -11,7 +11,7 @@ import { UseGetHubDetails } from '../hubs/hubService';
 import { IList } from '../hubs/hubs.interfaces';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
 import { setIsTasksUpdated, setNewCustomPropertyDetails, setTasks } from '../task/taskSlice';
-import { updateListCustomeFieldsManager } from '../../managers/Task';
+import { updateListCustomFieldsManager } from '../../managers/Task';
 
 interface TaskCountProps {
   data: {
@@ -233,7 +233,7 @@ export const useCreateDropdownField = (type: string | undefined, id?: string | u
   return useMutation(createDropdownField, {
     onSuccess: (data) => {
       dispatch(setNewCustomPropertyDetails({ name: '', type: 'Select Property Type', color: null }));
-      const updatedList = updateListCustomeFieldsManager(id as string, tasks, data.data.custom_field);
+      const updatedList = updateListCustomFieldsManager(id as string, tasks, data.data.custom_field);
       dispatch(setTasks(updatedList));
       dispatch(setIsTasksUpdated(true));
     }
