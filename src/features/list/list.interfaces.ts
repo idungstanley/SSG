@@ -46,7 +46,7 @@ export interface StatusTaskListProps {
 export interface IListDetails {
   id: string;
   name: string;
-  color: null;
+  color: null | { outerColour: string };
   shape: null;
   hub_id: null | string;
   wallet_id: string | null;
