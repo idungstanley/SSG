@@ -158,6 +158,7 @@ export function Table({ heads, data, label, listName, customFields, ListColor }:
     document.body.style.userSelect = 'none';
     setActiveIndex(index);
   };
+
   const handleClose = () => {
     setShowNewTaskField(false);
     dispatch(setCurrTeamMemId(null));
