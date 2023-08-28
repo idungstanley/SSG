@@ -93,11 +93,13 @@ export default function ClockLog({ getTaskEntries }: LogProps) {
   }, [timeSortStatus]);
 
   useEffect(() => {
-    if (timeLogColumnData.length && !isArray(timeLogColumnData[0])) {
-      setHeaders(timeLogColumnData);
-    } else if (isArray(timeLogColumnData[0])) {
-      dispatch(setTimeSortArr([]));
-      dispatch(setTimeArr([]));
+    if (timeLogColumnData) {
+      if (timeLogColumnData.length && !isArray(timeLogColumnData[0])) {
+        setHeaders(timeLogColumnData);
+      } else if (isArray(timeLogColumnData[0])) {
+        dispatch(setTimeSortArr([]));
+        dispatch(setTimeArr([]));
+      }
     }
   }, [timeLogColumnData]);
 
