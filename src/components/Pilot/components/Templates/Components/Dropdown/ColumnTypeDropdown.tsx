@@ -1,16 +1,16 @@
 import * as React from 'react';
 import MenuItem from '@mui/material/MenuItem';
-import ArrowDown from '../../../../../assets/icons/ArrowDown';
-import { useAppSelector } from '../../../../../app/hooks';
-import { Capitalize } from '../../../../../utils/NoCapWords/Capitalize';
+import ArrowDown from '../../../../../../assets/icons/ArrowDown';
+import { useAppSelector } from '../../../../../../app/hooks';
+import { Capitalize } from '../../../../../../utils/NoCapWords/Capitalize';
 import { Dialog, Transition } from '@headlessui/react';
-import { useAbsolute } from '../../../../../hooks/useAbsolute';
-import DropdownOptions from './ColumnOptions/Dropdown';
-import TextOptions from './ColumnOptions/Text';
-import DateOptions from './ColumnOptions/Date';
-import CurrencyOptions from './ColumnOptions/Currency';
-import NumberOptions from './ColumnOptions/Number';
-import EmailOptions from './ColumnOptions/Email';
+import { useAbsolute } from '../../../../../../hooks/useAbsolute';
+import DropdownOptions from './Dropdown';
+import TextOptions from '../Texts/Text';
+import DateOptions from '../Date/Date';
+import CurrencyOptions from '../Currency/Currency';
+import NumberOptions from '../Number/Number';
+import EmailOptions from '../Texts/Email';
 
 const columnTypes = [
   {
@@ -60,10 +60,7 @@ export default function ColumnTypeDropdown() {
 
   return (
     <div>
-      <div
-        // onClick={handleClick}
-        ref={relativeRef}
-      >
+      <div ref={relativeRef}>
         <button
           onClick={onClickOpenDropdown}
           className="bg-white flex gap-4 items-center justify-between cursor-pointer w-full px-2"
