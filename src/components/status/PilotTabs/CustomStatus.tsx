@@ -29,7 +29,6 @@ import { setMatchedStatus, setStatusesToMatch } from '../../../features/hubs/hub
 import MatchStatusPopUp from '../Components/MatchStatusPopUp';
 import { setMatchData } from '../../../features/general/prompt/promptSlice';
 import StatusBodyTemplate from '../StatusBodyTemplate';
-import { UseGetListDetails } from '../../../features/list/listService';
 
 interface ErrorResponse {
   data: {
@@ -40,6 +39,13 @@ interface ErrorResponse {
   };
   // Other error properties if needed
 }
+
+const groupStylesMapping: Record<string, GroupStyles> = {
+  open: { backgroundColor: '#FBFBFB', boxShadow: '0px 0px 5px rgba(0, 0, 0, 0.2)' },
+  custom: { backgroundColor: '#FCF1FF', boxShadow: '0px 0px 5px rgba(128, 0, 128, 0.2)' },
+  closed: { backgroundColor: '#E6FAE9', boxShadow: '0px 0px 5px rgba(0, 128, 0, 0.2)' }
+  // Add more model_type values and their styles as needed
+};
 
 export default function CustomStatus() {
   const dispatch = useAppDispatch();
@@ -169,13 +175,6 @@ export default function CustomStatus() {
       setValidationMessage(`Whoops, status with name '${newStatusValue}' already exist`);
     }
     setAddStatus(false);
-  };
-
-  const groupStylesMapping: Record<string, GroupStyles> = {
-    open: { backgroundColor: '#FBFBFB', boxShadow: '0px 0px 5px rgba(0, 0, 0, 0.2)' },
-    custom: { backgroundColor: '#FCF1FF', boxShadow: '0px 0px 5px rgba(128, 0, 128, 0.2)' },
-    closed: { backgroundColor: '#E6FAE9', boxShadow: '0px 0px 5px rgba(0, 128, 0, 0.2)' }
-    // Add more model_type values and their styles as needed
   };
 
   //Add default status
