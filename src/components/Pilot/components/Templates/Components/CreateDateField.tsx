@@ -10,9 +10,20 @@ function CreateDateField() {
   const handleSubmit = () => {
     if (newCustomPropertyDetails.name && entityForCustom) {
       const name = newCustomPropertyDetails.name;
+      const color = newCustomPropertyDetails.color;
+      const is_bold = newCustomPropertyDetails.style?.is_bold;
+      const is_italic = newCustomPropertyDetails.style?.is_italic;
+      const is_underlined = newCustomPropertyDetails.style?.is_underlined;
+      const style = {
+        is_bold: is_bold as string,
+        is_italic: is_italic as string,
+        is_underlined: is_underlined as string
+      };
 
       onCreate({
         name,
+        style,
+        color,
         id: entityForCustom.id,
         type: entityForCustom.type,
         options: undefined,

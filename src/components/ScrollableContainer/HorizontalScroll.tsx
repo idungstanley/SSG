@@ -181,18 +181,6 @@ export function HorizontalScroll({ children, ...props }: CustomScrollableContain
     }
   }
 
-  useEffect(() => {
-    if (groupScroll && contentRef.current) {
-      const width = contentRef.current.offsetWidth;
-      const scrollAmount = groupScroll.leftPosition <= 0 ? 0 : width;
-      if (groupScroll.scrollLeft) {
-        contentRef.current.scrollLeft = groupScroll.scrollLeft;
-      } else {
-        contentRef.current.scrollTo({ left: scrollAmount, behavior: 'smooth' });
-      }
-    }
-  }, [groupScroll]);
-
   const renderScrollArrows = () => {
     return (
       <div className="flex z-10 gap-1.5 bg-alsoit-gray-50 bg-opacity-75 opacity-0 group-hover:opacity-100 rounded-md flex-row ml-2">

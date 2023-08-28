@@ -15,18 +15,21 @@ import { deleteTask } from '../../../../../features/task/taskService';
 import { useDispatch } from 'react-redux';
 import { displayPrompt, setVisibility } from '../../../../../features/general/prompt/promptSlice';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { setSelectedIndex, setSelectedTasksArray, setShowTaskNavigation } from '../../../../../features/task/taskSlice';
+import { setSelectedTasksArray, setShowTaskNavigation } from '../../../../../features/task/taskSlice';
 import RoundedCheckbox from '../../../../../components/Checkbox/RoundedCheckbox';
 import PriorityDropdown from '../../../../../components/priority/PriorityDropdown';
 
 export default function TaskMenu() {
-  const { selectedTasksArray } = useAppSelector((state) => state.task);
-  const queryClient = useQueryClient();
   const dispatch = useDispatch();
 
+  const { selectedTasksArray } = useAppSelector((state) => state.task);
+
+  const queryClient = useQueryClient();
+
   const [isVisible, setIsVisible] = useState(false);
+
   useEffect(() => {
-    if (selectedTasksArray.length > 0) {
+    if (selectedTasksArray.length) {
       setIsVisible(true);
     } else {
       setIsVisible(false);
@@ -103,7 +106,7 @@ export default function TaskMenu() {
     },
     {
       id: 15,
-      icons: <PriorityDropdown TaskCurrentPriority="low" />,
+      icons: <PriorityDropdown taskCurrentPriority="low" />,
       handleClick: () => ({}),
       isVisible: true
     },

@@ -73,7 +73,7 @@ export function Head({
   const [headerId, setheaderId] = useState<string>('');
   const [showStatusDropdown, setShowStatusDropdown] = useState<null | SVGElement>(null);
   const [showSortModal, setShowSortModal] = useState<boolean>(false);
-  const { sortArr, sortAbleArr, selectedTasksArray, selectedIndex, selectedIndexStatus, selectedIndexListId } =
+  const { sortArr, sortAbleArr, selectedTasksArray, selectedIndex, selectedIndexStatus, selectedListIds } =
     useAppSelector((state) => state.task);
   const { baseColor } = useAppSelector((state) => state.account);
   const { isManageStatus } = useAppSelector((state) => state.workspace);
@@ -94,7 +94,11 @@ export function Head({
     if (selectedIndex !== null) {
       const updatedTaskIds: string[] = [...selectedTasksArray];
       groupedTask?.map((task, index) => {
-        if (selectedIndex == index && selectedIndexStatus == task.status.name && listId == selectedIndexListId) {
+        if (
+          selectedIndex == index &&
+          selectedIndexStatus == task.status.name &&
+          selectedListIds.includes(listId as string)
+        ) {
           const taskIndex = updatedTaskIds.indexOf(task.id);
           if (taskIndex == -1) {
             updatedTaskIds.push(task.id);
@@ -346,7 +350,7 @@ export function Head({
                   )}
                 </div>
                 <div
-                  className="absolute top-0 block w-2 cursor-move -right-3 idle"
+                  className="absolute top-0 block pl-1 cursor-move right-0 idle"
                   style={{ height: tableHeight }}
                   onMouseDown={() => mouseDown(index + 1)}
                 >

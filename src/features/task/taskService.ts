@@ -16,7 +16,9 @@ import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import {
   setScreenRecording,
   setScreenRecordingMedia,
+  setSelectedListIds,
   setSelectedTasksArray,
+  setTasks,
   setTimeArr,
   setTimeSortArr,
   setTimeSortStatus,
@@ -34,6 +36,8 @@ import { generateFilters } from '../../components/TasksHeader/lib/generateFilter
 import { runTimer } from '../../utils/TimerCounter';
 import Duration from '../../utils/TimerDuration';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
+import { taskAssignessUpdateManager, taskPriorityUpdateManager, taskStatusUpdateManager } from '../../managers/Task';
+import { ITeamMembersAndGroup } from '../settings/teamMembersAndGroups.interfaces';
 import { isArrayOfStrings } from '../../utils/typeGuards';
 
 //edit a custom field
@@ -392,52 +396,78 @@ export const UseUpdateTaskService = ({
   return response;
 };
 
-const updateTaskStatusService = ({ task_id, statusDataUpdate }: UpdateTaskProps) => {
-  const url = `tasks/${task_id}`;
-  const response = requestNew({
-    url,
-    method: 'PUT',
-    params: {
-      task_status_id: statusDataUpdate
-      // priority: priorityDataUpdate,
-    }
-  });
-  return response;
-};
-
-export const UseUpdateTaskStatusService2 = () => {
-  const queryClient = useQueryClient();
-  return useMutation(updateTaskStatusService, {
-    onSuccess: () => {
-      queryClient.invalidateQueries(['task']);
-      queryClient.invalidateQueries(['sub-tasks']);
-    }
-  });
-};
-
-export const UseUpdateTaskStatusServices = ({ task_id_array, priorityDataUpdate }: UpdateTaskProps) => {
-  const { currentTaskPriorityId } = useAppSelector((state) => state.task);
+export const UseUpdateTaskStatusService = ({ task_id, statusDataUpdate }: UpdateTaskProps) => {
   const dispatch = useAppDispatch();
 
-  const queryClient = useQueryClient();
+  const { selectedListId, tasks } = useAppSelector((state) => state.task);
+
   return useQuery(
-    ['task', { task_id_array, priorityDataUpdate }],
+    ['task', { task_id, statusDataUpdate }],
+    async () => {
+      const data = requestNew<ITaskRes>({
+        url: `tasks/${task_id}`,
+        method: 'PUT',
+        params: {
+          task_status_id: statusDataUpdate
+        }
+      });
+      return data;
+    },
+    {
+      enabled: !!task_id && !!statusDataUpdate,
+      cacheTime: 0,
+      onSuccess: (data) => {
+        if (selectedListId) {
+          const updatedTasks = taskStatusUpdateManager(
+            task_id as string,
+            selectedListId as string,
+            tasks,
+            data.data.task.status
+          );
+          dispatch(setTasks(updatedTasks));
+        }
+        dispatch(setSelectedTasksArray([]));
+        dispatch(setSelectedListIds([]));
+      }
+    }
+  );
+};
+
+export const UseUpdateTaskPrioritiesServices = ({ task_id_array, priorityDataUpdate, listIds }: UpdateTaskProps) => {
+  const dispatch = useAppDispatch();
+
+  const { currentTaskPriorityId, tasks } = useAppSelector((state) => state.task);
+
+  const currentTaskIds = task_id_array?.length ? task_id_array : [currentTaskPriorityId];
+
+  return useQuery(
+    ['task', { priorityDataUpdate, listIds, task_id_array }],
     async () => {
       const data = requestNew({
         url: 'tasks/multiple/priority',
         method: 'POST',
         data: {
-          ids: task_id_array?.length ? task_id_array : [currentTaskPriorityId],
+          ids: currentTaskIds,
           priority: priorityDataUpdate
         }
       });
       return data;
     },
     {
-      enabled: task_id_array != null && priorityDataUpdate !== '',
+      enabled: !!currentTaskIds.length && !!priorityDataUpdate,
+      cacheTime: 0,
       onSuccess: () => {
+        if (listIds) {
+          const updatedTasks = taskPriorityUpdateManager(
+            currentTaskIds as string[],
+            listIds as string[],
+            tasks,
+            priorityDataUpdate as string
+          );
+          dispatch(setTasks(updatedTasks));
+        }
         dispatch(setSelectedTasksArray([]));
-        queryClient.invalidateQueries(['task']);
+        dispatch(setSelectedListIds([]));
       }
     }
   );
@@ -843,21 +873,22 @@ const AssignTask = ({
     method: 'POST',
     data: {
       id: taskId,
-      ...(teams ? { team_member_group_id: team_member_id } : { team_member_id: team_member_id }),
+      ...(teams ? { team_member_group_id: team_member_id } : { team_member_id }),
       type: EntityType.task
     }
   });
   return request;
 };
 
-export const UseTaskAssignService = () => {
-  const queryClient = useQueryClient();
+export const UseTaskAssignService = (taskId: string, user: ITeamMembersAndGroup) => {
   const dispatch = useAppDispatch();
+
+  const { selectedListId, tasks } = useAppSelector((state) => state.task);
   return useMutation(AssignTask, {
     onSuccess: () => {
+      const updatedTasks = taskAssignessUpdateManager(taskId, selectedListId, tasks, user, true);
+      dispatch(setTasks(updatedTasks));
       dispatch(setToggleAssignCurrentTaskId(null));
-      queryClient.invalidateQueries(['task']);
-      queryClient.invalidateQueries(['sub-tasks']);
     }
   });
 };
@@ -884,14 +915,16 @@ const UnassignTask = ({
   return request;
 };
 
-export const UseUnassignTask = () => {
-  const queryClient = useQueryClient();
-
+export const UseTaskUnassignService = (taskId: string, user: ITeamMembersAndGroup) => {
   const dispatch = useAppDispatch();
+
+  const { selectedListId, tasks } = useAppSelector((state) => state.task);
+
   return useMutation(UnassignTask, {
     onSuccess: () => {
+      const updatedTasks = taskAssignessUpdateManager(taskId, selectedListId, tasks, user, false);
+      dispatch(setTasks(updatedTasks));
       dispatch(setToggleAssignCurrentTaskId(null));
-      queryClient.invalidateQueries(['task']);
     }
   });
 };

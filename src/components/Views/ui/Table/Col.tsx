@@ -1,6 +1,6 @@
 import { TdHTMLAttributes } from 'react';
 import { useParams } from 'react-router-dom';
-import { ImyTaskData, setCurrentTaskStatusId } from '../../../../features/task/taskSlice';
+import { ImyTaskData, setCurrentTaskStatusId, setSelectedListId } from '../../../../features/task/taskSlice';
 import { cl } from '../../../../utils';
 import Assignee from '../../../../pages/workspace/tasks/assignTask/Assignee';
 import DropdownFieldWrapper from '../../../../pages/workspace/tasks/component/taskData/dropdown/DropdownFieldWrapper';
@@ -25,14 +25,14 @@ interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
 }
 
 export function Col({ value, field, fieldId, task, customFields, ...props }: ColProps) {
+  const dispatch = useAppDispatch();
   const { taskId } = useParams();
+
   const { dragOverItemId, draggableItemId } = useAppSelector((state) => state.list);
+  const { singleLineView, verticalGrid, selectedTasksArray, CompactView } = useAppSelector((state) => state.task);
 
   const COL_BG = taskId === task.id ? ACTIVE_COL_BG : DEFAULT_COL_BG;
-  const { singleLineView, verticalGrid, selectedTasksArray, CompactView } = useAppSelector((state) => state.task);
   const isSelected = selectedTasksArray.includes(task.id);
-
-  const dispatch = useAppDispatch();
 
   // fields config
   const fields: Record<string, JSX.Element> = {
@@ -41,7 +41,10 @@ export function Col({ value, field, fieldId, task, customFields, ...props }: Col
       <div
         className="capitalize text-xs font-medium bg-green-500 text-white px-1 w-full items-center text-center h-full top-0 flex flex-col justify-center"
         style={{ backgroundColor: task.status.color }}
-        onClick={() => dispatch(setCurrentTaskStatusId(task.id as string))}
+        onClick={() => {
+          dispatch(setCurrentTaskStatusId(task.id as string));
+          dispatch(setSelectedListId(task.list_id));
+        }}
       >
         <StatusNameDropdown TaskCurrentStatus={task.status} />
       </div>

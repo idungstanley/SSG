@@ -6,13 +6,13 @@ import { IListDetails } from '../../../../../../features/list/list.interfaces';
 import { IWalletDetails } from '../../../../../../features/wallet/wallet.interfaces';
 
 interface PriorityProps {
-  Details: IHubDetails | undefined | ITaskFullList | IListDetails | IWalletDetails;
+  details: IHubDetails | undefined | ITaskFullList | IListDetails | IWalletDetails;
 }
 
-export default function Priority({ Details }: PriorityProps) {
-  return Details ? (
+export default function Priority({ details }: PriorityProps) {
+  return details ? (
     <div className=" p-1 ml-1">
-      {'priority' in Details ? <PriorityDropdown TaskCurrentPriority={Details.priority} /> : null}
+      {'priority' in details ? <PriorityDropdown taskCurrentPriority={details.priority} /> : null}
     </div>
   ) : null;
 }

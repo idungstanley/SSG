@@ -2,7 +2,7 @@ import React, { Fragment, useState } from 'react';
 import { Menu, Transition } from '@headlessui/react';
 import { cl } from '../../../../../../../../../utils';
 import { AiFillFlag } from 'react-icons/ai';
-import { UseUpdateTaskStatusServices } from '../../../../../../../../../features/task/taskService';
+import { UseUpdateTaskPrioritiesServices } from '../../../../../../../../../features/task/taskService';
 import { useAppSelector } from '../../../../../../../../../app/hooks';
 
 interface priorityType {
@@ -57,8 +57,8 @@ export default function PriorityFllterModal({ TaskCurrentPriority }: TaskCurrent
       bg: 'red'
     }
   ];
-  const { status } = UseUpdateTaskStatusServices({
-    task_id: currentTaskPriorityId,
+  const { status } = UseUpdateTaskPrioritiesServices({
+    task_id_array: [currentTaskPriorityId as string],
     priorityDataUpdate: priorityValue
   });
 
