@@ -15,8 +15,11 @@ import { EntityType } from '../../../../utils/EntityTypes/EntityType';
 interface DragContextProps {
   children: ReactNode;
 }
-
 export default function DragContext({ children }: DragContextProps) {
+  //Variables
+  const minDistanceToMakeSubtask = 20;
+
+  //App hooks
   const dispatch = useAppDispatch();
   const queryClient = useQueryClient();
 
@@ -42,6 +45,7 @@ export default function DragContext({ children }: DragContextProps) {
     const { over, active } = e;
     const overId = over?.id as string;
     const activeId = active?.id as string;
+    const offsetX = e.delta.x || 0;
     const isPlace = over?.data.current?.isPlace && active?.data.current?.isPlace;
     const isTaskToList = over?.data.current?.isOverList && active?.data.current?.isTask && !over?.data.current?.isTask;
     const isListToHub = over?.data.current?.isOverHub && active?.data.current?.isList;
@@ -54,6 +58,10 @@ export default function DragContext({ children }: DragContextProps) {
     const isWalletToWallet = over?.data.current?.isOverWallet && active?.data.current?.isWallet;
 
     const isWalletToHub = over?.data.current?.isOverHub && active?.data.current?.isWallet;
+
+    // Determine if the task should become a subtask
+    const shouldBecomeSubtask = isTaskToTask && offsetX >= minDistanceToMakeSubtask;
+
     // drag and drop places
     if (isPlace) {
       handleMovePlace(active.id, over?.id);
@@ -87,7 +95,7 @@ export default function DragContext({ children }: DragContextProps) {
       });
       dispatch(setDraggableItem(null));
     }
-    if (isTaskToTask) {
+    if (isTaskToTask && shouldBecomeSubtask) {
       if (activeId !== overId) {
         onMove({
           taskId: activeId,
