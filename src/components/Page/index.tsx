@@ -38,7 +38,7 @@ export default function Page({ header, additionalHeader, children, additional, p
         {header}
 
         <div className="relative grid w-full h-full grid-cols-frAuto">
-          <div>{children}</div>
+          <div className="relative">{children}</div>
 
           <span className={`${showOverlay && 'relative z-50'}`}>
             {pilotConfig ? <Pilot pilotConfig={pilotConfig} /> : null}
