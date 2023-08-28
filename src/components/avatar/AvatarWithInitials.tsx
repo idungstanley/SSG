@@ -1,6 +1,5 @@
 import React from 'react';
 import nonWatcherBadge from '../../assets/icons/nonWatcherBadge.svg';
-import { useAppSelector } from '../../app/hooks';
 
 interface AvatarWithInitialsProps {
   initials: string;

@@ -15,6 +15,7 @@ export interface matchedStatusProps {
 
 export default function Prompt() {
   const dispatch = useDispatch();
+
   const { show, title, body, options, matchData } = useAppSelector((state) => state.prompt);
 
   const setShow = (state: boolean) => {

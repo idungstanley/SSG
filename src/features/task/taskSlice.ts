@@ -7,6 +7,7 @@ import {
   IHistoryFilterMemory,
   IParent,
   ISelectedDate,
+  ITaskFullList,
   ITimerDetails,
   Status,
   TaskKey
@@ -18,6 +19,7 @@ import {
   FilterWithId
 } from '../../components/TasksHeader/ui/Filter/types/filters';
 import { DEFAULT_FILTERS_OPTION } from '../../components/TasksHeader/ui/Filter/config/filterConfig';
+import { ITeamMembersAndGroup } from '../settings/teamMembersAndGroups.interfaces';
 import { Header } from '../../components/Pilot/components/TimeClock/ClockLog';
 import { isArrayOfStrings } from '../../utils/typeGuards';
 
@@ -67,7 +69,7 @@ export interface ImyTaskData {
   has_attachments: boolean;
   end_date: string | null;
   status: Status;
-  assignees?: [{ id: string; initials: string; color: string; name: string; avatar_path: string | null }];
+  assignees: ITeamMembersAndGroup[];
   group_assignees?: {
     color: string;
     id: string;
@@ -117,7 +119,7 @@ interface entityForCustom {
   type: string | undefined;
 }
 interface TaskState {
-  task: string[];
+  tasks: Record<string, ITaskFullList[]>;
   currentTaskIdForPilot: string | null;
   watchersData: string[];
   removeWatcherId: null | string;
@@ -143,8 +145,8 @@ interface TaskState {
   addNewTaskItem: boolean;
   selectedIndex: number | null;
   selectedIndexStatus: string | null;
-  selectedIndexListId: string | null;
-  hilightNewTask: boolean;
+  selectedListIds: string[];
+  selectedListId: string;
   closeTaskListView: boolean;
   toggleAssignCurrentTaskId: string | null | undefined;
   currentParentTaskId: string | null;
@@ -194,7 +196,7 @@ interface TaskState {
 }
 
 const initialState: TaskState = {
-  task: [],
+  tasks: {},
   currentTaskIdForPilot: null,
   watchersData: [],
   currTeamMemberId: null,
@@ -209,7 +211,6 @@ const initialState: TaskState = {
   meMode: false,
   showNewTaskId: '',
   singleLineView: true,
-  hilightNewTask: false,
   selectedTasksArray: [],
   verticalGrid: false,
   taskUpperCase: false,
@@ -222,7 +223,8 @@ const initialState: TaskState = {
   closeTaskListView: true,
   selectedIndex: null,
   selectedIndexStatus: null,
-  selectedIndexListId: null,
+  selectedListIds: [],
+  selectedListId: '',
   toggleAssignCurrentTaskId: null,
   currentParentTaskId: null,
   getSubTaskId: null,
@@ -274,6 +276,9 @@ export const taskSlice = createSlice({
   name: 'task',
   initialState,
   reducers: {
+    setTasks(state, action: PayloadAction<Record<string, ITaskFullList[]>>) {
+      state.tasks = action.payload;
+    },
     setFilterFields(state, action: PayloadAction<FilterWithId[]>) {
       state.filters = { ...state.filters, fields: action.payload };
     },
@@ -298,8 +303,11 @@ export const taskSlice = createSlice({
     setSelectedIndexStatus(state, action: PayloadAction<string>) {
       state.selectedIndexStatus = action.payload;
     },
-    setSelectedIndexListId(state, action: PayloadAction<string>) {
-      state.selectedIndexListId = action.payload;
+    setSelectedListIds(state, action: PayloadAction<string[]>) {
+      state.selectedListIds = action.payload;
+    },
+    setSelectedListId(state, action: PayloadAction<string>) {
+      state.selectedListId = action.payload;
     },
     setSortType(state, action: PayloadAction<TaskKey>) {
       state.sortType = action.payload;
@@ -345,9 +353,6 @@ export const taskSlice = createSlice({
     },
     getCompactView(state, action: PayloadAction<boolean>) {
       state.CompactView = action.payload;
-    },
-    setHilightNewTask(state, action: PayloadAction<boolean>) {
-      state.hilightNewTask = action.payload;
     },
     setMeMode(state, action: PayloadAction<boolean>) {
       state.meMode = action.payload;
@@ -506,6 +511,7 @@ export const taskSlice = createSlice({
 });
 
 export const {
+  setTasks,
   setFilterFields,
   setFilterOption,
   setAssigneeIds,
@@ -525,8 +531,8 @@ export const {
   getCompactViewWrap,
   setSelectedIndex,
   setSelectedIndexStatus,
-  setSelectedIndexListId,
-  setHilightNewTask,
+  setSelectedListIds,
+  setSelectedListId,
   setMeMode,
   setShowTaskNavigation,
   setShowNewTaskField,

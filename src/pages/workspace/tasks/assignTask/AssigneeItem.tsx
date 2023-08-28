@@ -5,7 +5,7 @@ import {
   UseChecklistItemAssignee,
   UseChecklistItemUnassignee
 } from '../../../../features/task/checklist/checklistService';
-import { UseTaskAssignService, UseUnassignTask } from '../../../../features/task/taskService';
+import { UseTaskAssignService, UseTaskUnassignService } from '../../../../features/task/taskService';
 import { useAppDispatch } from '../../../../app/hooks';
 import { setCurrTeamMemId } from '../../../../features/task/taskSlice';
 import AvatarWithImage from '../../../../components/avatar/AvatarWithImage';
@@ -34,7 +34,7 @@ function AssigneeItem({ item, option, entity_id, teams, handleClose, isAssigned 
     });
   };
 
-  const { mutate: onTaskAssign } = UseTaskAssignService();
+  const { mutate: onTaskAssign } = UseTaskAssignService(entity_id as string, item);
   const handleAssignTask = (id: string) => {
     onTaskAssign({
       taskId: entity_id,
@@ -43,7 +43,7 @@ function AssigneeItem({ item, option, entity_id, teams, handleClose, isAssigned 
     });
   };
 
-  const { mutate: onTaskUnassign } = UseUnassignTask();
+  const { mutate: onTaskUnassign } = UseTaskUnassignService(entity_id as string, item);
   const handleUnAssignTask = (id: string) => {
     handleClose();
     onTaskUnassign({
@@ -72,7 +72,7 @@ function AssigneeItem({ item, option, entity_id, teams, handleClose, isAssigned 
             ? handleAssignChecklist(item.id)
             : option === EntityType.task
             ? handleAssignTask(item.id)
-            : option == 'getTeamId'
+            : option === 'getTeamId'
             ? dispatch(setCurrTeamMemId(item.id))
             : null;
         }}
@@ -80,7 +80,7 @@ function AssigneeItem({ item, option, entity_id, teams, handleClose, isAssigned 
         <span className={`${isAssigned ? 'ring ring-green-500 ring-offset-2 rounded-full ' : null}`}>
           {!teams ? (
             <div>
-              {item.user.avatar_path == null && (
+              {!item.user.avatar_path && (
                 <AvatarWithInitials
                   initials={item.user.initials}
                   backgroundColour={item.user.color}
@@ -91,7 +91,7 @@ function AssigneeItem({ item, option, entity_id, teams, handleClose, isAssigned 
               {item.user.avatar_path && <AvatarWithImage image_path={item.user.avatar_path} height="h-8" width="w-8" />}
             </div>
           ) : (
-            <AvatarWithInitials initials={item.initials} backgroundColour={item.color} height="h-8" width="w-8" />
+            <AvatarWithInitials initials={item.user.initials} backgroundColour={item.color} height="h-8" width="w-8" />
           )}
         </span>
         <p className="text-sm text-black truncate hover:text-clip">

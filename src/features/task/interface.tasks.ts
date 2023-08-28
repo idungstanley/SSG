@@ -1,13 +1,15 @@
 import dayjs, { Dayjs } from 'dayjs';
 import { teamMember } from '../../pages/workspace/tasks/timeclock/entryLists/EntryList';
 import { ICustomField, ImyTaskData } from './taskSlice';
+import { ITeamMembersAndGroup } from '../settings/teamMembersAndGroups.interfaces';
 import { Header } from '../../components/Pilot/components/TimeClock/ClockLog';
 
 export interface UpdateTaskProps {
   task_id_array?: string[];
-  task_id?: string | string[] | null | undefined;
+  task_id?: string;
   priorityDataUpdate?: string;
   statusDataUpdate?: string;
+  listIds?: string[];
 }
 
 export interface IParent {
@@ -113,7 +115,7 @@ export interface ITaskFullList {
   has_attachments: boolean;
   start_date: string | null;
   end_date: string | null;
-  assignees?: [{ id: string; initials: string; color: string; name: string; avatar_path: string | null }] | undefined;
+  assignees: ITeamMembersAndGroup[];
   group_assignees?: [];
   custom_fields?: ICustomField[];
   tags: Tag[];

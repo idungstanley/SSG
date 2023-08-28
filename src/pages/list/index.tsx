@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
-import { useAppDispatch } from '../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { getTaskListService } from '../../features/task/taskService';
 import { setActiveItem } from '../../features/workspace/workspaceSlice';
 import { UseGetListDetails } from '../../features/list/listService';
@@ -11,16 +11,19 @@ import ActiveHub from '../../layout/components/MainLayout/extendedNavigation/Act
 import hubIcon from '../../assets/branding/hub.png';
 import FilterByAssigneesSliderOver from '../workspace/lists/components/renderlist/filters/FilterByAssigneesSliderOver';
 import { useScroll } from '../../hooks/useScroll';
-import { setUpdateCords } from '../../features/task/taskSlice';
+import { setTasks, setUpdateCords } from '../../features/task/taskSlice';
 import TaskQuickAction from '../workspace/tasks/component/taskQuickActions/TaskQuickAction';
 import { List } from '../../components/Views/ui/List/List';
 import { Header } from '../../components/TasksHeader';
 import { GroupHorizontalScroll } from '../../components/ScrollableContainer/GroupHorizontalScroll';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
+import { ITaskFullList } from '../../features/task/interface.tasks';
 
 export function ListPage() {
   const dispatch = useAppDispatch();
   const { listId, taskId } = useParams();
+
+  const { tasks: tasksStore } = useAppSelector((state) => state.task);
 
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -67,6 +70,12 @@ export function ListPage() {
   // update cords for modal on scroll
   const onScroll = useScroll(() => dispatch(setUpdateCords()));
 
+  useEffect(() => {
+    if (tasks.length && listId && !tasksStore[listId]) {
+      dispatch(setTasks({ ...tasksStore, [listId]: tasks as ITaskFullList[] }));
+    }
+  }, [tasks]);
+
   return (
     <>
       <PilotSection />
@@ -92,7 +101,9 @@ export function ListPage() {
           >
             <TaskQuickAction listDetailsData={listName} />
 
-            {tasks?.length ? <List tasks={tasks} customProperty={list?.data.list.custom_fields} /> : null}
+            {tasksStore[listId as string] && tasks.length ? (
+              <List tasks={tasksStore[listId as string]} customProperty={list?.data.list.custom_fields} />
+            ) : null}
           </div>
           {tasks?.length > 1 && <GroupHorizontalScroll />}
         </>

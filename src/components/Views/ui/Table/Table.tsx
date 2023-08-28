@@ -2,13 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { DragOverlay } from '@dnd-kit/core';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { ITaskFullList, Task } from '../../../../features/task/interface.tasks';
-import {
-  setCurrTaskListId,
-  setCurrTeamMemId,
-  setHilightNewTask,
-  setStatusId,
-  setUpdateCords
-} from '../../../../features/task/taskSlice';
+import { setCurrTaskListId, setCurrTeamMemId, setStatusId, setUpdateCords } from '../../../../features/task/taskSlice';
 import { useScroll } from '../../../../hooks/useScroll';
 import { listColumnProps } from '../../../../pages/workspace/tasks/component/views/ListColumns';
 import { MAX_COL_WIDTH, MIN_COL_WIDTH } from '../../config';
@@ -48,7 +42,7 @@ export function Table({ heads, data, label, listName, customFields, ListColor }:
 
   const columns = createHeaders(heads).filter((i) => !i.hidden);
 
-  const { data: list } = UseGetListDetails(listId);
+  const { data: listDetails } = UseGetListDetails(listId);
 
   // console.log(list?.data.list.color);
 
@@ -119,7 +113,7 @@ export function Table({ heads, data, label, listName, customFields, ListColor }:
   useEffect(() => {
     setListId(data[0].list_id);
     dispatch(setCurrTaskListId(data[0].list_id));
-    const statusObj: ITask_statuses | undefined = list?.data.list.task_statuses.find(
+    const statusObj: ITask_statuses | undefined = listDetails?.data.list.task_statuses.find(
       (statusObj: ITask_statuses) => statusObj?.name === dataSpread[0].status.name
     );
 
@@ -167,12 +161,10 @@ export function Table({ heads, data, label, listName, customFields, ListColor }:
   const handleClose = () => {
     setShowNewTaskField(false);
     dispatch(setCurrTeamMemId(null));
-    dispatch(setHilightNewTask(true));
   };
 
   const handleToggleNewTask = () => {
     setShowNewTaskField(true);
-    dispatch(setHilightNewTask(true));
   };
 
   const onScroll = useScroll(() => dispatch(setUpdateCords()));
