@@ -3,6 +3,7 @@ import { teamMember } from '../../pages/workspace/tasks/timeclock/entryLists/Ent
 import { ICustomField, ImyTaskData } from './taskSlice';
 import { ITeamMembersAndGroup } from '../settings/teamMembersAndGroups.interfaces';
 import { Header } from '../../components/Pilot/components/TimeClock/ClockLog';
+import { IField } from '../list/list.interfaces';
 
 export interface UpdateTaskProps {
   task_id_array?: string[];
@@ -118,6 +119,7 @@ export interface ITaskFullList {
   assignees: ITeamMembersAndGroup[];
   group_assignees?: [];
   custom_fields?: ICustomField[];
+  custom_field_columns: IField[]; 
   tags: Tag[];
   updated_at: string;
   created_at: string;

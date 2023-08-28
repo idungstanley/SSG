@@ -3,14 +3,15 @@ import requestNew from '../../app/requestNew';
 import { useDispatch } from 'react-redux';
 import { setArchiveList } from './listSlice';
 import { closeMenu, setSpaceStatuses } from '../hubs/hubSlice';
-import { IListDetailRes, taskCountFields } from './list.interfaces';
+import { IField, IListDetailRes, taskCountFields } from './list.interfaces';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { useParams } from 'react-router-dom';
 import { generateFilters } from '../../components/TasksHeader/lib/generateFilters';
 import { UseGetHubDetails } from '../hubs/hubService';
 import { IList } from '../hubs/hubs.interfaces';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
-import { setNewCustomPropertyDetails } from '../task/taskSlice';
+import { setIsTasksUpdated, setNewCustomPropertyDetails, setTasks } from '../task/taskSlice';
+import { updateListCustomeFieldsManager } from '../../managers/Task';
 
 interface TaskCountProps {
   data: {
@@ -21,6 +22,12 @@ interface TaskCountProps {
 interface IResponseList {
   data: {
     list: IList;
+  };
+}
+
+interface IResCustomfield {
+  data: {
+    custom_field: IField;
   };
 }
 
@@ -183,7 +190,6 @@ export const UseGetListDetails = (listId: string | null | undefined) => {
       onSuccess: (data) => {
         const listStatusTypes = data.data.list.task_statuses;
         if (activeItemType === 'list') {
-          console.log(listStatusTypes);
           dispatch(setSpaceStatuses(listStatusTypes));
         }
       }
@@ -201,7 +207,7 @@ const createDropdownField = (data: {
   style?: { is_bold: string; is_underlined: string; is_italic: string };
 }) => {
   const { id, options, name, type, customType, style, color } = data;
-  const response = requestNew({
+  const response = requestNew<IResCustomfield>({
     url: 'custom-fields',
     method: 'POST',
     data: {
@@ -220,19 +226,16 @@ const createDropdownField = (data: {
 };
 
 export const useCreateDropdownField = (type: string | undefined, id?: string | undefined) => {
-  const queryClient = useQueryClient();
   const dispatch = useAppDispatch();
 
-  const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
+  const { tasks } = useAppSelector((state) => state.task);
 
   return useMutation(createDropdownField, {
-    onSuccess: () => {
+    onSuccess: (data) => {
       dispatch(setNewCustomPropertyDetails({ name: '', type: 'Select Property Type', color: null }));
-
-      if (type === EntityType.hub) {
-        queryClient.invalidateQueries(['task', activeItemId, activeItemType]);
-      }
-      queryClient.invalidateQueries([type, id]);
+      const updatedList = updateListCustomeFieldsManager(id as string, tasks, data.data.custom_field);
+      dispatch(setTasks(updatedList));
+      dispatch(setIsTasksUpdated(true));
     }
   });
 };

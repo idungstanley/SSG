@@ -71,16 +71,16 @@ export function WalletPage() {
   }, [hasNextPage]);
 
   const tasks = useMemo(() => (data ? data.pages.flatMap((page) => page.data.tasks) : []), [data]);
-  const lists = useMemo(() => generateLists(tasks), [tasks]);
+  const lists = useMemo(() => generateLists(tasks, wallet?.data.wallet.custom_fields), [tasks, wallet]);
 
   // update cords for modal on scroll
   const onScroll = useScroll(() => dispatch(setUpdateCords()));
 
   useEffect(() => {
-    if (lists) {
+    if (lists && tasks.length) {
       dispatch(setTasks({ ...tasksStore, ...lists }));
     }
-  }, [lists]);
+  }, [lists, tasks]);
 
   return (
     <>
@@ -106,13 +106,13 @@ export function WalletPage() {
             className="w-full h-full p-4 space-y-10 overflow-y-scroll"
           >
             {/* lists */}
-            {Object.keys(lists).map((listId) => (
+            {tasks.length ? (
               <>
-                {tasksStore[listId] ? (
-                  <List key={listId} tasks={tasksStore[listId]} customProperty={wallet?.data.wallet.custom_fields} />
-                ) : null}
+                {Object.keys(lists).map((listId) => (
+                  <>{tasksStore[listId] ? <List key={listId} tasks={tasksStore[listId]} /> : null}</>
+                ))}
               </>
-            ))}
+            ) : null}
           </section>
           {Object.keys(lists).length > 1 && <GroupHorizontalScroll />}
         </>

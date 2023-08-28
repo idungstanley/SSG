@@ -168,21 +168,21 @@ export function findParentOfEntity(type: string, id: string, hubs: Hub[], func: 
   const newHubsArray = [...hubs];
   for (let i = 0; i < newHubsArray.length; i++) {
     // check sub hubs
-    if (newHubsArray[i].children.length) {
+    if (newHubsArray[i]?.children?.length) {
       newHubsArray[i] = {
         ...newHubsArray[i],
         children: updateParentOfHubs(type, newHubsArray[i].children, id, func)
       };
     }
     // check first level of wallets
-    if ((type === EntityType.wallet || type === EntityType.list) && newHubsArray[i].wallets.length) {
+    if ((type === EntityType.wallet || type === EntityType.list) && newHubsArray[i]?.wallets?.length) {
       newHubsArray[i] = {
         ...newHubsArray[i],
         wallets: updateParentOfWallets(type, newHubsArray[i].wallets, id, func)
       };
     }
     // check first level of lists
-    if (type === EntityType.list && newHubsArray[i].lists.length) {
+    if (type === EntityType.list && newHubsArray[i]?.lists?.length) {
       newHubsArray[i] = {
         ...newHubsArray[i],
         lists: updateParentOfLists(newHubsArray[i].lists, id, func)

@@ -1,3 +1,4 @@
+import { IField } from '../features/list/list.interfaces';
 import { ITeamMembersAndGroup } from '../features/settings/teamMembersAndGroups.interfaces';
 import { IStatus, ITaskFullList } from '../features/task/interface.tasks';
 
@@ -74,6 +75,26 @@ export const taskAssignessUpdateManager = (
         };
       }
       return task;
+    });
+    return updatedTasks;
+  }
+
+  return tasks;
+};
+
+export const updateListCustomeFieldsManager = (
+  listId: string,
+  tasks: Record<string, ITaskFullList[]>,
+  customFieldData: IField
+) => {
+  if (listId) {
+    const updatedTasks = { ...tasks };
+
+    updatedTasks[listId] = updatedTasks[listId].map((task) => {
+      return {
+        ...task,
+        custom_field_columns: [customFieldData, ...task.custom_field_columns]
+      };
     });
     return updatedTasks;
   }

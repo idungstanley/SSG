@@ -11,7 +11,7 @@ import ActiveHub from '../../layout/components/MainLayout/extendedNavigation/Act
 import hubIcon from '../../assets/branding/hub.png';
 import FilterByAssigneesSliderOver from '../workspace/lists/components/renderlist/filters/FilterByAssigneesSliderOver';
 import { useScroll } from '../../hooks/useScroll';
-import { setTasks, setUpdateCords } from '../../features/task/taskSlice';
+import { setIsTasksUpdated, setTasks, setUpdateCords } from '../../features/task/taskSlice';
 import TaskQuickAction from '../workspace/tasks/component/taskQuickActions/TaskQuickAction';
 import { List } from '../../components/Views/ui/List/List';
 import { Header } from '../../components/TasksHeader';
@@ -23,7 +23,7 @@ export function ListPage() {
   const dispatch = useAppDispatch();
   const { listId, taskId } = useParams();
 
-  const { tasks: tasksStore } = useAppSelector((state) => state.task);
+  const { tasks: tasksStore, isTasksUpdated } = useAppSelector((state) => state.task);
 
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -71,10 +71,17 @@ export function ListPage() {
   const onScroll = useScroll(() => dispatch(setUpdateCords()));
 
   useEffect(() => {
-    if (tasks.length && listId && !tasksStore[listId]) {
-      dispatch(setTasks({ ...tasksStore, [listId]: tasks as ITaskFullList[] }));
+    if (tasks.length && listId && !tasksStore[listId] && list?.data.list.custom_fields) {
+      const tasksWithCustomFields = tasks.map((task) => {
+        return {
+          ...task,
+          custom_field_columns: list.data.list.custom_fields
+        };
+      });
+      dispatch(setTasks({ ...tasksStore, [listId]: tasksWithCustomFields as ITaskFullList[] }));
+      dispatch(setIsTasksUpdated(true));
     }
-  }, [tasks]);
+  }, [tasks, list]);
 
   return (
     <>
@@ -101,8 +108,8 @@ export function ListPage() {
           >
             <TaskQuickAction listDetailsData={listName} />
 
-            {tasksStore[listId as string] && tasks.length ? (
-              <List tasks={tasksStore[listId as string]} customProperty={list?.data.list.custom_fields} />
+            {tasksStore[listId as string] && tasks.length && isTasksUpdated ? (
+              <List tasks={tasksStore[listId as string]} />
             ) : null}
           </div>
           {tasks?.length > 1 && <GroupHorizontalScroll />}

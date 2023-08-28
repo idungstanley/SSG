@@ -196,7 +196,7 @@ export function GroupHorizontalScroll() {
     <>
       <div
         className="fixed bottom-0 w-full overflow-hidden p-2"
-        style={{ width: `${groupScroll.offsetWidth + 50}px`, background: 'white' }}
+        style={{ width: `${groupScroll.offsetWidth + 50}px`, background: 'white', zIndex: 11 }}
       >
         <div style={{ width: `${groupScroll.offsetWidth}px` }} className="h-1 absolute scrollbar-hide" ref={contentRef}>
           <div style={{ width: `${groupScroll.scrollWidth}px` }} />

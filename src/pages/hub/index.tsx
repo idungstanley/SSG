@@ -23,7 +23,7 @@ export default function HubPage() {
   const { hubId, subhubId, taskId } = useParams();
 
   const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
-  const { tasks: tasksStore } = useAppSelector((state) => state.task);
+  const { tasks: tasksStore, isTasksUpdated } = useAppSelector((state) => state.task);
 
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -49,7 +49,7 @@ export default function HubPage() {
   });
 
   const tasks = useMemo(() => (data ? data.pages.flatMap((page) => page.data.tasks) : []), [data]);
-  const lists = useMemo(() => generateLists(tasks), [tasks]);
+  const lists = useMemo(() => generateLists(tasks, hub?.data.hub.custom_fields), [tasks, hub]);
 
   // infinite scroll
   useEffect(() => {
@@ -75,10 +75,10 @@ export default function HubPage() {
   }, [hasNextPage]);
 
   useEffect(() => {
-    if (lists) {
+    if (lists && tasks.length) {
       dispatch(setTasks({ ...tasksStore, ...lists }));
     }
-  }, [lists]);
+  }, [lists, tasks]);
 
   return (
     <>
@@ -103,9 +103,9 @@ export default function HubPage() {
             {/* lists */}
             {Object.keys(lists).map((listId) => (
               <>
-                {tasksStore[listId] ? (
+                {tasksStore[listId] && tasks.length ? (
                   <div key={listId}>
-                    <List tasks={tasksStore[listId]} customProperty={hub?.data.hub.custom_fields} />
+                    <List tasks={tasksStore[listId]} />
                   </div>
                 ) : null}
               </>
