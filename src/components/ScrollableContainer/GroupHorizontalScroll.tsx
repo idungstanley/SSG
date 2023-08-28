@@ -194,35 +194,39 @@ export function GroupHorizontalScroll() {
 
   return (
     <>
-      <div className="relative w-full overflow-hidden p-2" />
-      <div style={{ width: `${groupScroll.offsetWidth}px` }} className="h-1 absolute scrollbar-hide" ref={contentRef}>
-        <div style={{ width: `${groupScroll.scrollWidth}px` }} />
-      </div>
-      {isThumbVisible && (
-        <div className="sticky -top-1 z-3 pt-2 mr-2 pr-12 pl-6 group grid w-full grid-cols-2">
-          <div />
-          <div className="flex items-center mb-4 flex-row space-x-2">
-            {renderScrollArrows()}
-            <div className="relative flex flex-grow block w-full h-2">
-              <div
-                className="absolute top-0 -bottom-7 bg-transparent cursor-pointer rounded-xl w-full h-2 -right-12"
-                ref={scrollTrackRef}
-                onClick={handleTrackClick}
-              ></div>
-              <div
-                className="absolute bg-alsoit-gray-75 hover:bg-alsoit-gray-300 cursor-pointer rounded-xl w-full h-2 hover:h-3 hover:-top-0.5"
-                onMouseDown={handleThumbMousedown}
-                style={{
-                  width: `${groupScroll.thumbWidth}px`,
-                  left: `${leftPosition}px`,
-                  cursor: isDragging ? 'grabbing' : 'grab'
-                }}
-              ></div>
-            </div>
-            {renderScrollArrows()}
-          </div>
+      <div
+        className="fixed bottom-0 w-full overflow-hidden p-2"
+        style={{ width: `${groupScroll.offsetWidth + 50}px`, background: 'white' }}
+      >
+        <div style={{ width: `${groupScroll.offsetWidth}px` }} className="h-1 absolute scrollbar-hide" ref={contentRef}>
+          <div style={{ width: `${groupScroll.scrollWidth}px` }} />
         </div>
-      )}
+        {isThumbVisible && (
+          <div className="sticky -top-1 z-3 pt-2 mr-2 pr-12 pl-6 group grid w-full grid-cols-2">
+            <div />
+            <div className="flex items-center flex-row space-x-2">
+              {renderScrollArrows()}
+              <div className="relative flex flex-grow block w-full h-2">
+                <div
+                  className="absolute top-0 -bottom-7 bg-transparent cursor-pointer rounded-xl w-full h-2 -right-12"
+                  ref={scrollTrackRef}
+                  onClick={handleTrackClick}
+                ></div>
+                <div
+                  className="absolute bg-alsoit-gray-75 hover:bg-alsoit-gray-300 cursor-pointer rounded-xl w-full h-2 hover:h-3 hover:-top-0.5"
+                  onMouseDown={handleThumbMousedown}
+                  style={{
+                    width: `${groupScroll.thumbWidth}px`,
+                    left: `${leftPosition}px`,
+                    cursor: isDragging ? 'grabbing' : 'grab'
+                  }}
+                ></div>
+              </div>
+              {renderScrollArrows()}
+            </div>
+          </div>
+        )}
+      </div>
     </>
   );
 }

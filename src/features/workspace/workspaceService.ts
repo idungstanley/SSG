@@ -1,13 +1,11 @@
 import requestNew from '../../app/requestNew';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
   IAllWorkspacesRes,
   IAttachments,
-  IWorkSpaceSettings,
   IWorkspaceRes,
   IWorkspaceSettingsRes,
-  IWorkspaceSettingsUpdateRes,
-  WorkSpaceSettingsRes
+  IWorkspaceSettingsUpdateRes
 } from './workspace.interfaces';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { setFetchAllWorkspace, setWorkSpaceSetting, setWorkSpaceSettingsObj, setWorkspaceData } from './workspaceSlice';
@@ -175,6 +173,7 @@ export const getWorkSpaceSettings = () => {
 
 export const upDateWorkSpaceSettings = () => {
   const dispatch = useAppDispatch();
+  const queryClient = useQueryClient();
   return useMutation(
     async ({ key, value }: { key: string; value: string | number }) => {
       const data = await requestNew<IWorkspaceSettingsUpdateRes>({
@@ -190,6 +189,7 @@ export const upDateWorkSpaceSettings = () => {
     {
       onSuccess: (data) => {
         dispatch(setWorkSpaceSettingsObj(data.workspace_setting));
+        queryClient.invalidateQueries(['workspace-settings']);
       }
     }
   );

@@ -1,7 +1,6 @@
 import * as React from 'react';
 import Popover from '@mui/material/Popover';
 import Typography from '@mui/material/Typography';
-import Description from '../../badges/Description';
 
 interface DetailsOnHoverProps {
   hoverElement?: React.ReactNode;

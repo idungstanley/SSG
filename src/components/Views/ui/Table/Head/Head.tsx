@@ -73,7 +73,7 @@ export function Head({
   const [headerId, setheaderId] = useState<string>('');
   const [showStatusDropdown, setShowStatusDropdown] = useState<null | SVGElement>(null);
   const [showSortModal, setShowSortModal] = useState<boolean>(false);
-  const { sortArr, sortAbleArr, selectedTasksArray, selectedIndex, selectedIndexStatus, selectedIndexListId } =
+  const { sortArr, sortAbleArr, selectedTasksArray, selectedIndex, selectedIndexStatus, selectedListIds } =
     useAppSelector((state) => state.task);
   const { baseColor } = useAppSelector((state) => state.account);
   const { isManageStatus } = useAppSelector((state) => state.workspace);
@@ -94,7 +94,11 @@ export function Head({
     if (selectedIndex !== null) {
       const updatedTaskIds: string[] = [...selectedTasksArray];
       groupedTask?.map((task, index) => {
-        if (selectedIndex == index && selectedIndexStatus == task.status.name && listId == selectedIndexListId) {
+        if (
+          selectedIndex == index &&
+          selectedIndexStatus == task.status.name &&
+          selectedListIds.includes(listId as string)
+        ) {
           const taskIndex = updatedTaskIds.indexOf(task.id);
           if (taskIndex == -1) {
             updatedTaskIds.push(task.id);
@@ -212,15 +216,15 @@ export function Head({
       <tr className="contents">
         {/* first sticky col */}
         <th style={{ zIndex: 2 }} className="sticky left-0 flex items-center -mb-2 font-extrabold" ref={columns[0].ref}>
-          <div className="flex items-center " style={{ width: '42px' }}></div>
+          <div className="flex items-center "></div>
           <div className="flex items-center w-full gap-3 py-2 truncate dBlock group opacity-90">
             <div
               className="py-0.5 relative px-2 rounded-tr-md -mb-1 flex items-center space-x-1 text-white dFlex "
-              style={{ backgroundColor: headerStatusColor }}
+              style={{ backgroundColor: headerStatusColor, marginLeft: '38px', height: '25px', gap: '5px' }}
             >
               <div>
                 <div className="flex items-center">
-                  <p className="pr-1.5">
+                  <p className="pr-1.5 -ml-1.5">
                     <CollapseIcon
                       color={headerStatusColor}
                       active={collapseTasks}
@@ -228,7 +232,7 @@ export function Head({
                       hoverBg="white"
                     />
                   </p>
-                  <span ref={scrollToRef} className="pb-1" style={{ fontSize: '11px', WebkitTextStroke: '0.5px' }}>
+                  <span ref={scrollToRef} className="" style={{ fontSize: '11px', WebkitTextStroke: '0.5px' }}>
                     {parsedLabel}
                   </span>
                   <div className="items-center pl-2 space-x-1 viewSettings" onClick={(e) => e.stopPropagation()}>
@@ -307,7 +311,7 @@ export function Head({
           )}
         </th>
         {!collapseTasks
-          ? columns.slice(1).map(({ ref, value, id }, index) => (
+          ? columns.slice(1).map(({ ref, value, id, color }, index) => (
               <th key={id} className="relative w-full py-2 -mb-1.5 font-extrabold opacity-90" ref={ref}>
                 <div
                   className={`text-alsoit-gray-200 font-semibold flex dBlock items-center justify-center w-full h-full my-auto cursor-pointer group  ${
@@ -320,7 +324,9 @@ export function Head({
                   <span className="dNone">
                     <MdOutlineDragIndicator className="h4 w4" />
                   </span>
-                  <span onClick={(e) => setOptions(e, id, value)}>{value.toUpperCase()}</span>
+                  <span onClick={(e) => setOptions(e, id, value)} style={{ color: color ? color : '' }}>
+                    {value.toUpperCase()}
+                  </span>
                   {sortAbles.includes(value) && (
                     <span className="ml-0.5">
                       {sortArr.length >= 1 && sortArr.includes(value) ? (
@@ -344,7 +350,7 @@ export function Head({
                   )}
                 </div>
                 <div
-                  className="absolute top-0 block w-2 cursor-move -right-3 idle"
+                  className="absolute top-0 block pl-1 cursor-move right-0 idle"
                   style={{ height: tableHeight }}
                   onMouseDown={() => mouseDown(index + 1)}
                 >

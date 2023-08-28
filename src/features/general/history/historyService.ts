@@ -12,18 +12,15 @@ type GetItemHistoryData = {
 
 export const useGetItemHistory = () => {
   const dispatch = useAppDispatch();
-  const { pilotSideOver } = useAppSelector((state) => state.slideOver);
-
-  const id = pilotSideOver.id;
-  const type = pilotSideOver.type;
+  const { activeItemType, activeItemId } = useAppSelector((state) => state.workspace);
 
   const getItemHistory = async (data: GetItemHistoryData) => {
     const response = await requestNew<IHistoryRes>({
       url: 'activity-logs/list',
       method: 'POST',
       data: {
-        model: type,
-        model_id: id,
+        model: activeItemType,
+        model_id: activeItemId,
         type: data.logType !== undefined ? data.logType : null
       }
     });

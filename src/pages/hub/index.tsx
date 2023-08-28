@@ -16,12 +16,14 @@ import { Header } from '../../components/TasksHeader';
 import { VerticalScroll } from '../../components/ScrollableContainer/VerticalScroll';
 import { GroupHorizontalScroll } from '../../components/ScrollableContainer/GroupHorizontalScroll';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
+import { setTasks } from '../../features/task/taskSlice';
 
 export default function HubPage() {
   const dispatch = useAppDispatch();
   const { hubId, subhubId, taskId } = useParams();
 
   const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
+  const { tasks: tasksStore } = useAppSelector((state) => state.task);
 
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -72,6 +74,12 @@ export default function HubPage() {
     };
   }, [hasNextPage]);
 
+  useEffect(() => {
+    if (lists) {
+      dispatch(setTasks({ ...tasksStore, ...lists }));
+    }
+  }, [lists]);
+
   return (
     <>
       <PilotSection />
@@ -94,9 +102,13 @@ export default function HubPage() {
           >
             {/* lists */}
             {Object.keys(lists).map((listId) => (
-              <div key={listId}>
-                <List tasks={lists[listId]} customProperty={hub?.data.hub.custom_fields} />
-              </div>
+              <>
+                {tasksStore[listId] ? (
+                  <div key={listId}>
+                    <List tasks={tasksStore[listId]} customProperty={hub?.data.hub.custom_fields} />
+                  </div>
+                ) : null}
+              </>
             ))}
           </section>
         </VerticalScroll>

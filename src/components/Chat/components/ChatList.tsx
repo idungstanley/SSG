@@ -1,12 +1,11 @@
 import React from 'react';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
-import { useDeleteChat, useGetChats } from '../../../features/chat/chatService';
+import { useGetChats } from '../../../features/chat/chatService';
 import FullScreenMessage from '../../CenterMessage/FullScreenMessage';
 import { PlusIcon, UsersIcon } from '@heroicons/react/24/outline';
 import { Spinner } from '../../../common';
 import { CiSearch } from 'react-icons/ci';
 import { CgSortAz } from 'react-icons/cg';
-import { AiOutlinePlus } from 'react-icons/ai';
 import ToolTip from '../../Tooltip/Tooltip';
 import { setShowCreateChatSideOver } from '../../../features/chat/chatSlice';
 
@@ -19,12 +18,12 @@ export default function ChatsList({ selectChat }: ChatsListProps) {
   const { type, id } = pilotSideOver;
   const dispatch = useAppDispatch();
 
-  const { mutate: onDelete } = useDeleteChat();
+  // const { mutate: onDelete } = useDeleteChat();
   const { data, status } = useGetChats({ id, type });
 
-  const handleDelete = (id: string) => {
-    onDelete(id);
-  };
+  // const handleDelete = (id: string) => {
+  //   onDelete(id);
+  // };
 
   return status === 'loading' ? (
     <div className="justify-center w-6 mx-auto mt-5">

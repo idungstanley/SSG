@@ -14,10 +14,16 @@ import { IField } from '../../../../features/list/list.interfaces';
 import { Hub, List as ListType } from '../../../../pages/workspace/hubs/components/ActiveTree/activetree.interfaces';
 import { findCurrentHub } from '../../../../managers/Hub';
 import { findCurrentList } from '../../../../managers/List';
+import { colors } from '../../../Tag/ui/ManageTagsDropdown/config/colors';
+import LightenColor from './lightenColor/LightenColor';
 
 interface ListProps {
   tasks: Task[];
   customProperty?: IField[];
+}
+
+export interface IListColor {
+  outerColour: string;
 }
 
 const unique = (arr: listColumnProps[]) => [...new Set(arr)];
@@ -48,6 +54,11 @@ export function List({ tasks, customProperty }: ListProps) {
   }, [listId]);
 
   const custom_fields = customProperty;
+  const ListColor: IListColor = tasks[0].list?.color
+    ? JSON.parse(tasks[0].list?.color as string)
+    : {
+        outerColour: '#A854F7'
+      };
 
   useEffect(() => {
     if (!customProperty) {
@@ -57,7 +68,8 @@ export function List({ tasks, customProperty }: ListProps) {
       value: i.name,
       id: i.id,
       field: i.type,
-      hidden: false
+      hidden: false,
+      color: i.color
     }));
 
     const newColumns = unique([...columnsHead, ...customFieldNames]);
@@ -83,11 +95,16 @@ export function List({ tasks, customProperty }: ListProps) {
   });
 
   return (
-    <div className="pt-1 border-t-4 border-l-4 border-purple-500 rounded-xl bg-purple-50" ref={setNodeRef}>
+    <div
+      className="pt-1 border-t-4 border-l-4 border-purple-500 rounded-3xl bg-purple-50"
+      ref={setNodeRef}
+      style={{ borderColor: ListColor?.outerColour, backgroundColor: LightenColor(ListColor?.outerColour, 0.95) }}
+    >
       <Label
         listName={tasks[0].list?.name || currentList?.name}
         hubName={parentHub?.name}
         tasks={tasks}
+        ListColor={ListColor}
         showTable={collapseTable}
         onClickChevron={() => setCollapseTable((prev) => !prev)}
       />
@@ -109,6 +126,7 @@ export function List({ tasks, customProperty }: ListProps) {
             <Table
               listName={tasks[0].list?.name}
               label={key}
+              ListColor={ListColor}
               key={key}
               heads={hideTask.length ? hideTask : columns}
               data={sortedTasks[key]}

@@ -1,7 +1,7 @@
 import { Disclosure } from '@headlessui/react';
 import { ChevronRightIcon } from '@heroicons/react/24/outline';
 import { cl } from '../../../../utils';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { WorkSpaceSettingsRes } from '../../../../features/workspace/workspace.interfaces';
 import { getWorkSpaceSettings, upDateWorkSpaceSettings } from '../../../../features/workspace/workspaceService';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
@@ -20,13 +20,12 @@ export default function WorkSpaceTable() {
     (state) => state.userSetting
   );
 
-  const { data: fetchedData, status } = getWorkSpaceSettings();
-  const { mutateAsync, isError, error } = upDateWorkSpaceSettings();
+  const { status } = getWorkSpaceSettings();
+  const { mutateAsync } = upDateWorkSpaceSettings();
   const { mutate } = UseUpdateUserSettings();
 
   const dispatch = useAppDispatch();
 
-  const [getSettings, setGetSettings] = useState<WorkSpaceSettingsRes[] | undefined>([]);
   const [clockData, setClockData] = useState<{
     [key: string]: number | string;
   }>({
@@ -48,15 +47,6 @@ export default function WorkSpaceTable() {
 
   const validate = is_clock_time === userData?.is_clock_time && clock_type === userData?.clock_type;
 
-  useEffect(() => {
-    if (workSpaceSettings) {
-      if (!workSpaceSettings?.length && status === 'success') {
-        setGetSettings(fetchedData?.data.workspace_settings);
-      } else {
-        setGetSettings(workSpaceSettings);
-      }
-    }
-  }, [workSpaceSettings]);
   return (
     <div className="w-full bg-white border border-gray-300">
       <div
@@ -123,7 +113,6 @@ export default function WorkSpaceTable() {
                                   value={clockData[setting.key]}
                                   onChange={(e) => handleChange(setting.key, Number(e.target.value))}
                                 >
-                                  <option value={1}>{setting.value} hour</option>
                                   <option value={1}>1 hour</option>
                                   <option value={2}>2 hours</option>
                                   <option value={3}>3 hours</option>

@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef } from 'react';
 import { useParams } from 'react-router-dom';
-import { useAppDispatch } from '../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import Page from '../../components/Page';
 import { UseGetFullTaskList } from '../../features/task/taskService';
 import { UseGetWalletDetails } from '../../features/wallet/walletService';
@@ -11,7 +11,7 @@ import hubIcon from '../../assets/branding/hub.png';
 import ActiveHub from '../../layout/components/MainLayout/extendedNavigation/ActiveParents/ActiveHub';
 import FilterByAssigneesSliderOver from '../workspace/lists/components/renderlist/filters/FilterByAssigneesSliderOver';
 import { useScroll } from '../../hooks/useScroll';
-import { setUpdateCords } from '../../features/task/taskSlice';
+import { setTasks, setUpdateCords } from '../../features/task/taskSlice';
 import { List } from '../../components/Views/ui/List/List';
 import { Header } from '../../components/TasksHeader';
 import { GroupHorizontalScroll } from '../../components/ScrollableContainer/GroupHorizontalScroll';
@@ -21,6 +21,8 @@ import { setActiveItem } from '../../features/workspace/workspaceSlice';
 export function WalletPage() {
   const dispatch = useAppDispatch();
   const { walletId, taskId } = useParams();
+
+  const { tasks: tasksStore } = useAppSelector((state) => state.task);
 
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -69,11 +71,16 @@ export function WalletPage() {
   }, [hasNextPage]);
 
   const tasks = useMemo(() => (data ? data.pages.flatMap((page) => page.data.tasks) : []), [data]);
-
   const lists = useMemo(() => generateLists(tasks), [tasks]);
 
   // update cords for modal on scroll
   const onScroll = useScroll(() => dispatch(setUpdateCords()));
+
+  useEffect(() => {
+    if (lists) {
+      dispatch(setTasks({ ...tasksStore, ...lists }));
+    }
+  }, [lists]);
 
   return (
     <>
@@ -100,7 +107,11 @@ export function WalletPage() {
           >
             {/* lists */}
             {Object.keys(lists).map((listId) => (
-              <List key={listId} tasks={lists[listId]} customProperty={wallet?.data.wallet.custom_fields} />
+              <>
+                {tasksStore[listId] ? (
+                  <List key={listId} tasks={tasksStore[listId]} customProperty={wallet?.data.wallet.custom_fields} />
+                ) : null}
+              </>
             ))}
           </section>
           {Object.keys(lists).length > 1 && <GroupHorizontalScroll />}
