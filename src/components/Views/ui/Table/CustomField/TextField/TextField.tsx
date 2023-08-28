@@ -57,7 +57,7 @@ function TextField({ taskCustomFields, taskId, fieldId }: DropdownFieldWrapperPr
   return (
     <div className="w-full h-full flex justify-center items-center">
       {!editMode ? (
-        <div className="w-full h-full hover:border-2 hover:borer-alsoit-gray-300 group/parent p-1">
+        <div className="w-full h-full border-2 border-transparent hover:border-alsoit-gray-50 group/parent p-1">
           <span className="h-full flex justify-center items-center  cursor-pointer">
             <h1
               className="truncate text-alsoit-text-lg font-semibold"

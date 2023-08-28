@@ -10,7 +10,7 @@ import TextOptions from '../Texts/Text';
 import DateOptions from '../Date/Date';
 import CurrencyOptions from '../Currency/Currency';
 import NumberOptions from '../Number/Number';
-import EmailOptions from '../Texts/Email';
+import EmailOptions from '../Email/Email';
 
 const columnTypes = [
   {

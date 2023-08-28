@@ -16,6 +16,7 @@ import { IField } from '../../../../features/list/list.interfaces';
 import TextField from './CustomField/TextField/TextField';
 import LabelsWrapper from './CustomField/Labels/LabelsWrapper';
 import NumberField from './CustomField/Number/NumberField';
+import EmailField from './CustomField/EmailField/EmailField';
 
 interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   value: TaskValue;
@@ -72,6 +73,13 @@ export function Col({ value, field, fieldId, task, customFields, ...props }: Col
     ),
     text: (
       <TextField
+        taskId={task.id}
+        taskCustomFields={task.custom_fields?.find((i) => i.id === fieldId)}
+        fieldId={fieldId}
+      />
+    ),
+    email: (
+      <EmailField
         taskId={task.id}
         taskCustomFields={task.custom_fields?.find((i) => i.id === fieldId)}
         fieldId={fieldId}

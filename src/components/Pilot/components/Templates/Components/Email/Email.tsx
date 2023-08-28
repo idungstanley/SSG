@@ -3,6 +3,8 @@ import { Fragment } from 'react';
 import ArrowRight from '../../../../../../assets/icons/ArrowRight';
 import RoundedCheckbox from '../../../../../Checkbox/RoundedCheckbox';
 import Email from '../../../../../../assets/branding/Email';
+import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
+import { setNewCustomPropertyDetails } from '../../../../../../features/task/taskSlice';
 
 const items = [
   {
@@ -13,6 +15,8 @@ const items = [
 ];
 
 export default function EmailOptions() {
+  const dispatch = useAppDispatch();
+  const { newCustomPropertyDetails } = useAppSelector((state) => state.task);
   return (
     <Menu as="div" className="relative inline-block text-left w-full">
       <div className="w-full">
@@ -47,7 +51,9 @@ export default function EmailOptions() {
               <Menu.Item key={item.name}>
                 {({ active }) => (
                   <button
-                    // onClick={item.onClick}
+                    onClick={() =>
+                      dispatch(setNewCustomPropertyDetails({ ...newCustomPropertyDetails, type: item.name }))
+                    }
                     className={`${
                       active ? 'bg-alsoit-gray-50 text-gray-700' : 'text-gray-700'
                     } group flex gap-4 w-full items-center rounded-md px-2 py-2 text-alsoit-text-lg font-semibold`}
