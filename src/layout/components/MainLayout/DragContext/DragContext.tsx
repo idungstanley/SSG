@@ -11,6 +11,7 @@ import { useMoveListService } from '../../../../features/list/listService';
 import { useMoveHubsService } from '../../../../features/hubs/hubService';
 import { useMoveWalletsService } from '../../../../features/wallet/walletService';
 import { EntityType } from '../../../../utils/EntityTypes/EntityType';
+import { setDragToBecomeSubTask } from '../../../../features/task/taskSlice';
 
 interface DragContextProps {
   children: ReactNode;
@@ -24,7 +25,7 @@ export default function DragContext({ children }: DragContextProps) {
   const queryClient = useQueryClient();
 
   // needed for invalidation
-  const { sortAbleArr } = useAppSelector((state) => state.task);
+  const { sortAbleArr, dragToBecomeSubTask } = useAppSelector((state) => state.task);
   const sortArrUpdate = sortAbleArr.length <= 0 ? null : sortAbleArr;
   const { filters } = generateFilters();
   const { places } = useAppSelector((state) => state.account);
@@ -38,6 +39,7 @@ export default function DragContext({ children }: DragContextProps) {
   const onDragStart = (e: DragStartEvent) => {
     const id = e.active.id as string;
     dispatch(setDraggableItem(id));
+    dispatch(setDragToBecomeSubTask(true));
   };
 
   const onDragEnd = (e: DragEndEvent) => {
@@ -61,6 +63,7 @@ export default function DragContext({ children }: DragContextProps) {
 
     // Determine if the task should become a subtask
     const shouldBecomeSubtask = isTaskToTask && offsetX >= minDistanceToMakeSubtask;
+    console.log(dragToBecomeSubTask);
 
     // drag and drop places
     if (isPlace) {
@@ -95,7 +98,7 @@ export default function DragContext({ children }: DragContextProps) {
       });
       dispatch(setDraggableItem(null));
     }
-    if (isTaskToTask && shouldBecomeSubtask) {
+    if (isTaskToTask && dragToBecomeSubTask) {
       if (activeId !== overId) {
         onMove({
           taskId: activeId,
@@ -155,6 +158,11 @@ export default function DragContext({ children }: DragContextProps) {
   const onDragOver = (e: DragOverEvent) => {
     const id = e.over?.id as string;
     dispatch(setDragOverItem(id));
+    if (e.delta?.x >= minDistanceToMakeSubtask) {
+      dispatch(setDragToBecomeSubTask(true));
+    } else {
+      dispatch(setDragToBecomeSubTask(false));
+    }
   };
 
   return (

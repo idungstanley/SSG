@@ -198,6 +198,7 @@ interface TaskState {
   newTaskData: ImyTaskData | undefined;
   newCustomPropertyDetails: customPropertyInfo;
   editCustomProperty: IField | undefined;
+  dragToBecomeSubTask: boolean;
 }
 
 const initialState: TaskState = {
@@ -283,7 +284,8 @@ const initialState: TaskState = {
       is_underlined: '0'
     }
   },
-  editCustomProperty: undefined
+  editCustomProperty: undefined,
+  dragToBecomeSubTask: false
 };
 
 export const taskSlice = createSlice({
@@ -361,6 +363,9 @@ export const taskSlice = createSlice({
     },
     getComfortableView(state, action: PayloadAction<boolean>) {
       state.comfortableView = action.payload;
+    },
+    setDragToBecomeSubTask(state, action: PayloadAction<boolean>) {
+      state.dragToBecomeSubTask = action.payload;
     },
     getComfortableViewWrap(state, action: PayloadAction<boolean>) {
       state.comfortableViewWrap = action.payload;
@@ -588,6 +593,7 @@ export const {
   setEntityForCustom,
   setCustomSuggetionsField,
   setNewCustomPropertyDetails,
-  setEditCustomProperty
+  setEditCustomProperty,
+  setDragToBecomeSubTask
 } = taskSlice.actions;
 export default taskSlice.reducer;
