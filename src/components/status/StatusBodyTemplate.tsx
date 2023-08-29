@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import ThreeDotIcon from '../../assets/icons/ThreeDotIcon';
 import { IoMdCheckmark } from 'react-icons/io';
 import AlsoitMenuDropdown from '../DropDowns';
@@ -21,6 +21,8 @@ interface StatusBodyProps {
 }
 
 export default function StatusBodyTemplate({ item, setStatusTypesState }: StatusBodyProps) {
+  const inputRef = useRef<HTMLInputElement | null>(null);
+
   const [editableContent, setEditableContent] = useState<boolean>(false);
   const [showStatusEditDropdown, setShowStatusEditDropdown] = useState<null | HTMLSpanElement | HTMLDivElement>(null);
   const [showStatusColorDropdown, setShowStatusColorDropdown] = useState<null | HTMLSpanElement>(null);
@@ -57,6 +59,11 @@ export default function StatusBodyTemplate({ item, setStatusTypesState }: Status
     }
   };
 
+  useEffect(() => {
+    const { current } = inputRef;
+    current?.focus();
+  }, [editableContent]);
+
   const handleCloseStatusEditDropdown = () => {
     setShowStatusEditDropdown(null);
   };
@@ -69,9 +76,27 @@ export default function StatusBodyTemplate({ item, setStatusTypesState }: Status
     setEditableContent(true);
   };
 
-  const handleSaveEditableContent = (e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
+  const handleSaveEditableContent = (
+    e: React.MouseEvent<HTMLSpanElement, MouseEvent> | React.KeyboardEvent<HTMLSpanElement>
+  ) => {
     e.stopPropagation();
     setEditableContent(false);
+    if (setStatusTypesState) {
+      setStatusTypesState((prevState) => {
+        return Object.entries(prevState).reduce((acc, [name, statuses]) => {
+          acc[name] = statuses.map((status) => {
+            if (status.name === item.name) {
+              return {
+                ...status,
+                name: inputRef.current?.innerText.trim() || status.name
+              } as StatusProps;
+            }
+            return status;
+          });
+          return acc;
+        }, {} as BoardSectionsType);
+      });
+    }
   };
 
   const showStatusEditDropdownOptions = [
@@ -127,6 +152,8 @@ export default function StatusBodyTemplate({ item, setStatusTypesState }: Status
           style={{ color: item.color as string }}
           className="uppercase truncate flex-grow"
           onClick={() => handleToggleEditableContent()}
+          onKeyDown={(e) => (e.key === 'Enter' ? handleSaveEditableContent(e) : null)}
+          ref={inputRef}
         >
           {item.name}
         </span>

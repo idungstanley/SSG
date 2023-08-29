@@ -22,11 +22,7 @@ import BoardSection from '../Components/BoardSection';
 import { BoardSectionsType } from '../../../utils/StatusManagement/Types';
 import { useMutation } from '@tanstack/react-query';
 import { statusTypesService } from '../../../features/hubs/hubService';
-import {
-  addIsDefaultToValues,
-  extractValuesFromArray,
-  getStatusById
-} from '../../../utils/StatusManagement/statusUtils';
+import { addIsDefaultToValues, extractValuesFromArray } from '../../../utils/StatusManagement/statusUtils';
 import { setMatchedStatus, setStatusesToMatch } from '../../../features/hubs/hubSlice';
 import MatchStatusPopUp from '../Components/MatchStatusPopUp';
 import { setMatchData } from '../../../features/general/prompt/promptSlice';
@@ -69,6 +65,8 @@ export default function CustomStatus() {
 
   const initialBoardSections = initializeBoard(spaceStatuses);
   const [boardSections, setBoardSections] = useState<BoardSectionsType>(initialBoardSections);
+  const [is_default_name, setIsDefaultName] = useState<string | null>(boardSections['open'][0]?.name || null); // Initialize with the name of the item at position 0 or null if no item
+
   const [activeId, setActiveId] = useState<string | null>(null);
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -82,9 +80,12 @@ export default function CustomStatus() {
     setStatusTypesState(spaceStatuses);
   }, [spaceStatuses, activeItemId]);
 
+  useEffect(() => {
+    setIsDefaultName(boardSections['open'][0]?.name || null);
+  }, [boardSections]);
+
   function handleDragStart({ active }: DragEndEvent) {
     setActiveId(active.id as string);
-    console.log(active.id);
   }
 
   const handleDragOver = ({ active, over }: DragOverEvent) => {
@@ -183,8 +184,7 @@ export default function CustomStatus() {
   };
 
   //Add default status
-  const defaultItem = statusTypesState.find((item) => item.position === 0);
-  const AddDefault = addIsDefaultToValues(boardSections, defaultItem?.name);
+  const AddDefault = addIsDefaultToValues(boardSections, is_default_name);
   const statusData = extractValuesFromArray(AddDefault);
   const model = statusTaskListDetails.listId ? 'list' : (activeItemType as string);
   const model_id = statusTaskListDetails.listId || (activeItemId as string);
