@@ -14,7 +14,6 @@ import { IField } from '../../../../features/list/list.interfaces';
 import { Hub, List as ListType } from '../../../../pages/workspace/hubs/components/ActiveTree/activetree.interfaces';
 import { findCurrentHub } from '../../../../managers/Hub';
 import { findCurrentList } from '../../../../managers/List';
-import { colors } from '../../../Tag/ui/ManageTagsDropdown/config/colors';
 import LightenColor from './lightenColor/LightenColor';
 
 interface ListProps {
