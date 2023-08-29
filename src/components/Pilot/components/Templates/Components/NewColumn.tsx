@@ -32,6 +32,7 @@ function NewColumn() {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
   return (
     <>
       {editCustomProperty ? (
@@ -109,6 +110,7 @@ function NewColumn() {
           </div>
           {newCustomPropertyDetails.type.toLowerCase() === 'single label' && <CreateDropdownField />}
           {newCustomPropertyDetails.type.toLowerCase() === 'multi label' && <CreateDropdownField />}
+          {newCustomPropertyDetails.type.toLowerCase() === 'tags' && <CreateDropdownField />}
           {newCustomPropertyDetails.type.toLowerCase() === 'date' && <CreateDateField />}
           {newCustomPropertyDetails.type.toLowerCase() === 'short text' && <CreateTextField />}
           {newCustomPropertyDetails.type.toLowerCase() === 'long text' && <CreateTextField />}
