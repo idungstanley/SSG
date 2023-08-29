@@ -31,7 +31,7 @@ import { IWatchersRes } from '../general/watchers/watchers.interface';
 import RecordRTC from 'recordrtc';
 import { useUploadRecording } from '../workspace/workspaceService';
 import { useParams } from 'react-router-dom';
-import { setTimerLastMemory, toggleMute } from '../workspace/workspaceSlice';
+import { setPickedDateState, setTimerLastMemory, toggleMute } from '../workspace/workspaceSlice';
 import { generateFilters } from '../../components/TasksHeader/lib/generateFilters';
 import { runTimer } from '../../utils/TimerCounter';
 import Duration from '../../utils/TimerDuration';
@@ -428,6 +428,49 @@ export const UseUpdateTaskStatusService = ({ task_id, statusDataUpdate }: Update
         }
         dispatch(setSelectedTasksArray([]));
         dispatch(setSelectedListIds([]));
+      }
+    }
+  );
+};
+export const UseUpdateTaskDateService = ({
+  task_id,
+  taskDate
+}: {
+  task_id: string;
+  taskDate: string;
+  pickedDateState: boolean;
+}) => {
+  const { pickedDateState } = useAppSelector((state) => state.workspace);
+  const dispatch = useAppDispatch();
+
+  return useQuery(
+    ['task', { task_id, taskDate }],
+    async () => {
+      const data = requestNew<ITaskRes>({
+        url: `tasks/${task_id}`,
+        method: 'PUT',
+        data: {
+          start_date: taskDate
+        }
+      });
+      return data;
+    },
+    {
+      enabled: !!task_id && !!pickedDateState,
+      cacheTime: 0,
+      onSuccess: (data) => {
+        dispatch(setPickedDateState(false));
+        // if (selectedListId) {
+        //   const updatedTasks = taskStatusUpdateManager(
+        //     task_id as string,
+        //     selectedListId as string,
+        //     tasks,
+        //     data.data.task.status
+        //   );
+        //   dispatch(setTasks(updatedTasks));
+        // }
+        // dispatch(setSelectedTasksArray([]));
+        // dispatch(setSelectedListIds([]));
       }
     }
   );

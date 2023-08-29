@@ -12,11 +12,14 @@ import DatePickerFooter from './DatePickerFooter';
 import { useGetUserSettingsData } from '../../features/task/taskService';
 import { setHistoryMemory, setTaskSelectedDate } from '../../features/task/taskSlice';
 import { IUserCalendarParams } from '../../features/task/interface.tasks';
+import { setPickedDateState } from '../../features/workspace/workspaceSlice';
 
 interface DatePickerProps {
   styles?: string;
   range?: boolean;
+  setShowDatePickerOption?: boolean;
   height?: string;
+  handleClose?: () => void;
   width?: string;
   toggleFn?: Dispatch<SetStateAction<boolean>>;
 }
@@ -25,13 +28,22 @@ export type DateString = {
   start?: string;
   due?: string;
 };
-export default function DatePicker({ styles, width, height, range, toggleFn }: DatePickerProps) {
+export default function DatePicker({
+  styles,
+  width,
+  height,
+  range,
+  handleClose,
+  setShowDatePickerOption,
+  toggleFn
+}: DatePickerProps) {
   dayjs.extend(timezone);
   dayjs.extend(utc);
   const dispatch = useAppDispatch();
   const currentDate = dayjs();
   const userTimeZoneFromLS: string | null = localStorage.getItem('userTimeZone');
   const { timezone: zone, time_format } = useAppSelector((state) => state.userSetting);
+
   const sectionRef = useRef<HTMLElement>(null);
   const [time, setTime] = useState<string>(
     dayjs()
@@ -103,7 +115,12 @@ export default function DatePicker({ styles, width, height, range, toggleFn }: D
             )}
             <DatePickerManualDates range={range} />
           </div>
-          <div>
+          <div
+            onClick={() => {
+              setShowDatePickerOption ? dispatch(setPickedDateState(true)) : null;
+              handleClose && handleClose();
+            }}
+          >
             <MiniDatePicker range={range} miniMode={openSideBar} fullCalendar />
           </div>
           <DatePickerFooter miniMode={openSideBar} closeDateModal={closeDateModal} time={time} />
