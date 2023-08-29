@@ -200,6 +200,7 @@ interface TaskState {
   newCustomPropertyDetails: customPropertyInfo;
   editCustomProperty: IField | undefined;
   isTasksUpdated: boolean;
+  dragToBecomeSubTask: boolean;
 }
 
 const initialState: TaskState = {
@@ -286,7 +287,8 @@ const initialState: TaskState = {
     }
   },
   editCustomProperty: undefined,
-  isTasksUpdated: false
+  isTasksUpdated: false,
+  dragToBecomeSubTask: false
 };
 
 export const taskSlice = createSlice({
@@ -364,6 +366,9 @@ export const taskSlice = createSlice({
     },
     getComfortableView(state, action: PayloadAction<boolean>) {
       state.comfortableView = action.payload;
+    },
+    setDragToBecomeSubTask(state, action: PayloadAction<boolean>) {
+      state.dragToBecomeSubTask = action.payload;
     },
     getComfortableViewWrap(state, action: PayloadAction<boolean>) {
       state.comfortableViewWrap = action.payload;
@@ -595,6 +600,6 @@ export const {
   setCustomSuggetionsField,
   setNewCustomPropertyDetails,
   setEditCustomProperty,
-  setIsTasksUpdated
+  setDragToBecomeSubTask
 } = taskSlice.actions;
 export default taskSlice.reducer;
