@@ -77,7 +77,8 @@ export function StickyCol({
     selectedIndex,
     CompactView,
     toggleAllSubtask,
-    selectedListIds
+    selectedListIds,
+    dragToBecomeSubTask
   } = useAppSelector((state) => state.task);
 
   const [isChecked, setIsChecked] = useState(false);
@@ -296,10 +297,26 @@ export function StickyCol({
               COL_BG,
               ` ${isChecked && 'tdListV'} ${verticalGrid && 'border-r'} ${
                 verticalGridlinesTask && 'border-r'
-              } w-full py-4 flex items-center `,
-              isOver && draggableItemId !== dragOverItemId ? 'border-b-2 border-alsoit-purple-300' : 'border-t'
+              } w-full py-4 flex items-center`,
+              isOver && draggableItemId !== dragOverItemId && !dragToBecomeSubTask
+                ? 'border-b-2 border-alsoit-purple-300'
+                : dragToBecomeSubTask && isOver && draggableItemId !== dragOverItemId
+                ? 'mb-2'
+                : 'border-t relative'
             )}
           >
+            {dragToBecomeSubTask && isOver && draggableItemId !== dragOverItemId && (
+              <span
+                className={cl(
+                  dragToBecomeSubTask && isOver && draggableItemId !== dragOverItemId
+                    ? 'absolute content-start z-50 flex items-center left-20 w-full right-0 bottom-1 gap-0'
+                    : ''
+                )}
+              >
+                <span className="border-solid z-50 border-alsoit-purple-300 border-l-[8px] border-y-transparent border-y-[4px] border-r-0 m-0" />
+                <span className={cl('h-0.5 bg-alsoit-purple-300 w-full m-0')}></span>
+              </span>
+            )}
             <button onClick={onToggleDisplayingSubTasks} className="pl-1">
               {showSubTasks || toggleAllSubtask ? (
                 <div className={`${task.descendants_count > 0 ? 'w-3 h-3' : ' opacity-0 w-3 h-3 '}`}>

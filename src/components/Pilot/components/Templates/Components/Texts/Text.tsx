@@ -24,11 +24,6 @@ const items = [
   },
   {
     id: 4,
-    name: 'Number',
-    onclick: () => null
-  },
-  {
-    id: 4,
     name: 'Website',
     onclick: () => null
   }

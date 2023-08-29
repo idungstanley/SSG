@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef } from 'react';
+import { useEffect, useMemo, useRef, Fragment } from 'react';
 import { useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import Page from '../../components/Page';
@@ -11,7 +11,7 @@ import hubIcon from '../../assets/branding/hub.png';
 import ActiveHub from '../../layout/components/MainLayout/extendedNavigation/ActiveParents/ActiveHub';
 import FilterByAssigneesSliderOver from '../workspace/lists/components/renderlist/filters/FilterByAssigneesSliderOver';
 import { useScroll } from '../../hooks/useScroll';
-import { setTasks, setUpdateCords } from '../../features/task/taskSlice';
+import { setIsTasksUpdated, setTasks, setUpdateCords } from '../../features/task/taskSlice';
 import { List } from '../../components/Views/ui/List/List';
 import { Header } from '../../components/TasksHeader';
 import { GroupHorizontalScroll } from '../../components/ScrollableContainer/GroupHorizontalScroll';
@@ -22,7 +22,7 @@ export function WalletPage() {
   const dispatch = useAppDispatch();
   const { walletId, taskId } = useParams();
 
-  const { tasks: tasksStore } = useAppSelector((state) => state.task);
+  const { tasks: tasksStore, isTasksUpdated } = useAppSelector((state) => state.task);
 
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -71,16 +71,17 @@ export function WalletPage() {
   }, [hasNextPage]);
 
   const tasks = useMemo(() => (data ? data.pages.flatMap((page) => page.data.tasks) : []), [data]);
-  const lists = useMemo(() => generateLists(tasks), [tasks]);
+  const lists = useMemo(() => generateLists(tasks, wallet?.data.wallet.custom_fields), [tasks, wallet]);
 
   // update cords for modal on scroll
   const onScroll = useScroll(() => dispatch(setUpdateCords()));
 
   useEffect(() => {
-    if (lists) {
+    if (lists && !Object.keys(tasksStore).length) {
       dispatch(setTasks({ ...tasksStore, ...lists }));
+      dispatch(setIsTasksUpdated(true));
     }
-  }, [lists]);
+  }, [lists, tasksStore]);
 
   return (
     <>
@@ -106,13 +107,15 @@ export function WalletPage() {
             className="w-full h-full p-4 space-y-10 overflow-y-scroll"
           >
             {/* lists */}
-            {Object.keys(lists).map((listId) => (
+            {tasks.length && isTasksUpdated ? (
               <>
-                {tasksStore[listId] ? (
-                  <List key={listId} tasks={tasksStore[listId]} customProperty={wallet?.data.wallet.custom_fields} />
-                ) : null}
+                {Object.keys(lists).map((listId) => (
+                  <Fragment key={listId}>
+                    {tasksStore[listId] ? <List key={listId} tasks={tasksStore[listId]} /> : null}
+                  </Fragment>
+                ))}
               </>
-            ))}
+            ) : null}
           </section>
           {Object.keys(lists).length > 1 && <GroupHorizontalScroll />}
         </>

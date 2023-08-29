@@ -6,6 +6,8 @@ import { Fragment, useRef, useState } from 'react';
 // import { useParams } from 'react-router-dom';
 import { useCreateDropdownField } from '../../../../features/list/listService';
 import { EntityType } from '../../../../utils/EntityTypes/EntityType';
+import { setIsTasksUpdated } from '../../../../features/task/taskSlice';
+import { useAppDispatch } from '../../../../app/hooks';
 
 interface CreateDropdownFieldModalProps {
   show: boolean;
@@ -14,6 +16,8 @@ interface CreateDropdownFieldModalProps {
 }
 
 export default function CreateDropdownFieldModal({ show, setShow, listId }: CreateDropdownFieldModalProps) {
+  const dispatch = useAppDispatch();
+
   const [formInputs, setFormInputs] = useState<{ id: number; value: string }[]>([{ id: 1, value: '' }]);
 
   const fieldNameRef = useRef<HTMLInputElement>(null);
@@ -24,7 +28,7 @@ export default function CreateDropdownFieldModal({ show, setShow, listId }: Crea
     id: listId //listId ?? walletId ?? hubId
   };
 
-  const { mutate: onCreate } = useCreateDropdownField(entity.type, entity.id);
+  const { mutate: onCreate } = useCreateDropdownField();
 
   const handleAddOption = () =>
     setFormInputs((prevInputs) => [...prevInputs, { id: (prevInputs.at(-1)?.id || 1) + 1, value: '' }]);
@@ -37,7 +41,7 @@ export default function CreateDropdownFieldModal({ show, setShow, listId }: Crea
       const options = formInputs.map((i) => {
         return { name: i.value.trim(), color: null };
       });
-
+      dispatch(setIsTasksUpdated(false));
       onCreate({
         name,
         options,

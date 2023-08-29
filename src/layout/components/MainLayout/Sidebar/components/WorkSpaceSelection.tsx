@@ -225,7 +225,7 @@ function WorkSpaceSelection() {
                   />
                 </div>
               )}
-              <div className="overflow-y-auto max-h-10">
+              <div className="overflow-y-auto max-h-32">
                 {filteredResults?.map((i: WorkspaceProps) => (
                   <Menu.Item key={i.id}>
                     {({ active }) => (

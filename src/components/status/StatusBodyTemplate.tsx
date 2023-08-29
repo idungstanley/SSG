@@ -18,7 +18,7 @@ import { CSS } from '@dnd-kit/utilities';
 interface StatusBodyProps {
   item: StatusProps;
   id: string;
-  setStatusTypesState: React.Dispatch<React.SetStateAction<BoardSectionsType>>;
+  setStatusTypesState?: React.Dispatch<React.SetStateAction<BoardSectionsType>>;
 }
 
 export default function StatusBodyTemplate({ item, setStatusTypesState, id }: StatusBodyProps) {
@@ -44,17 +44,19 @@ export default function StatusBodyTemplate({ item, setStatusTypesState, id }: St
   };
 
   const handleStatusColor = (color: string | ListColourProps) => {
-    setStatusTypesState((prevState) => {
-      return Object.entries(prevState).reduce((acc, [name, statuses]) => {
-        acc[name] = statuses.map((status) => {
-          if (status.name === item.name) {
-            return { ...status, color } as StatusProps;
-          }
-          return status;
-        });
-        return acc;
-      }, {} as BoardSectionsType);
-    });
+    if (setStatusTypesState) {
+      setStatusTypesState((prevState) => {
+        return Object.entries(prevState).reduce((acc, [name, statuses]) => {
+          acc[name] = statuses.map((status) => {
+            if (status.name === item.name) {
+              return { ...status, color } as StatusProps;
+            }
+            return status;
+          });
+          return acc;
+        }, {} as BoardSectionsType);
+      });
+    }
   };
 
   const handleCloseStatusEditDropdown = () => {
@@ -98,13 +100,15 @@ export default function StatusBodyTemplate({ item, setStatusTypesState, id }: St
       label: 'Delete status',
       icon: <AiOutlineDelete />,
       handleClick: () => {
-        setStatusTypesState((prevState) => {
-          return Object.entries(prevState).reduce((acc, [name, statuses]) => {
-            acc[name] = statuses.filter((status) => status.name !== item.name);
-            return acc;
-          }, {} as BoardSectionsType);
-        });
-        setShowStatusEditDropdown(null);
+        if (setStatusTypesState) {
+          setStatusTypesState((prevState) => {
+            return Object.entries(prevState).reduce((acc, [name, statuses]) => {
+              acc[name] = statuses.filter((status) => status.name !== item.name);
+              return acc;
+            }, {} as BoardSectionsType);
+          });
+          setShowStatusEditDropdown(null);
+        }
       }
     }
   ];
@@ -113,7 +117,7 @@ export default function StatusBodyTemplate({ item, setStatusTypesState, id }: St
     <span key={item.name} className="mb-1" style={style}>
       <span className="flex justify-items-start px-1 rounded cursor-pointer h-7 items-center border-alsoit-gray-75 border bg-white">
         {item.type !== 'closed' && item.position !== 0 && (
-          <span className="cursor-move" ref={setNodeRef} style={style} {...attributes} {...listeners}>
+          <span className="cursor-move" ref={setNodeRef} {...attributes} {...listeners}>
             <Drag />
           </span>
         )}

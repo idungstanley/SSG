@@ -50,6 +50,7 @@ interface workspaceState {
   showPilotListView: boolean;
   activeTabId: number | undefined;
   showOverlay: boolean;
+  pickedDateState: boolean;
   activeHotKeyTabId: number | null;
   activeSubCommunicationTabId: number | null;
   activeSubHubManagerTabId: number | null;
@@ -88,6 +89,7 @@ const initialState: workspaceState = {
   isResize: false,
   showOverlay: false,
   showTabLabel: showTabLabelFromLS,
+  pickedDateState: false,
   showWallet: false,
   isManageStatus: false,
   showMenuDropDown: false,
@@ -156,6 +158,9 @@ export const wsSlice = createSlice({
     },
     setShowTabLabel(state, action: PayloadAction<boolean>) {
       state.showTabLabel = action.payload;
+    },
+    setPickedDateState(state, action: PayloadAction<boolean>) {
+      state.pickedDateState = action.payload;
     },
     setIsResize(state, action: PayloadAction<boolean>) {
       state.isResize = action.payload;
@@ -386,6 +391,7 @@ export const {
   toggleMute,
   setRecorderLastMemory,
   setWorkspaceData,
+  setPickedDateState,
   setTimerLastMemory,
   resetWorkSpace,
   setActivityArray,

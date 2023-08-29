@@ -250,6 +250,10 @@ input:checked + .slider:before {
   background-color: #d559ff !important;
 }
 
+.searchHover:hover input::placeholder {
+  color: #d559ff;
+}
+
 .slider:before {
   position: absolute;
   content: '';
