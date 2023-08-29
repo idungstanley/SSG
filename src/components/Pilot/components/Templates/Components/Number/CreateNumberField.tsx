@@ -1,12 +1,15 @@
 import React from 'react';
 import SaveCols from '../SaveCols';
-import { useAppSelector } from '../../../../../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
 import { useCreateDropdownField } from '../../../../../../features/list/listService';
+import { setIsTasksUpdated } from '../../../../../../features/task/taskSlice';
 
 function CreateNumberField() {
+  const dispatch = useAppDispatch();
+
   const { newCustomPropertyDetails, entityForCustom } = useAppSelector((state) => state.task);
 
-  const { mutate: onCreate } = useCreateDropdownField(entityForCustom.type, entityForCustom.id);
+  const { mutate: onCreate } = useCreateDropdownField();
 
   const handleSubmit = () => {
     if (newCustomPropertyDetails.name && entityForCustom) {
@@ -21,6 +24,7 @@ function CreateNumberField() {
         is_underlined: is_underlined as string
       };
       const customType = newCustomPropertyDetails.type.toLowerCase();
+      dispatch(setIsTasksUpdated(false));
       onCreate({
         name,
         style,

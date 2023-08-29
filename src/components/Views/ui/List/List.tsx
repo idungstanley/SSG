@@ -1,11 +1,11 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { Task } from '../../../../features/task/interface.tasks';
 import { filterByAssignee, filterBySearchValue, sortTasks } from '../../../TasksHeader/lib';
 import { Table } from '../Table/Table';
 import { Label } from './Label';
 import { AddTask } from '../AddTask/AddTask';
-import { getTaskColumns, setCurrTeamMemId } from '../../../../features/task/taskSlice';
+import { setCurrTeamMemId } from '../../../../features/task/taskSlice';
 import { columnsHead, listColumnProps } from '../../../../pages/workspace/tasks/component/views/ListColumns';
 import { useParams } from 'react-router-dom';
 import { cl } from '../../../../utils';
@@ -27,14 +27,13 @@ export interface IListColor {
 
 const unique = (arr: listColumnProps[]) => [...new Set(arr)];
 
-export function List({ tasks, customProperty }: ListProps) {
+export function List({ tasks }: ListProps) {
   const dispatch = useAppDispatch();
   const { listId } = useParams();
 
   const { sortType, hideTask } = useAppSelector((state) => state.task);
   const { parentHubExt, hub } = useAppSelector((state) => state.hub);
 
-  const [columns, setColumns] = useState<listColumnProps[] | undefined>(undefined);
   const [collapseTable, setCollapseTable] = useState(false);
   const [showNewTaskField, setShowNewTaskField] = useState(false);
   const [parentHub, setParentHub] = useState<Hub>();
@@ -52,30 +51,22 @@ export function List({ tasks, customProperty }: ListProps) {
     }
   }, [listId]);
 
-  const custom_fields = customProperty;
   const ListColor: IListColor = tasks[0].list?.color
     ? JSON.parse(tasks[0].list?.color as string)
     : {
         outerColour: '#A854F7'
       };
 
-  useEffect(() => {
-    if (!customProperty) {
-      return;
-    }
-    const customFieldNames = customProperty?.map((i) => ({
+  const generateColumns = useMemo(() => {
+    const customFieldNames = tasks[0].custom_field_columns.map((i) => ({
       value: i.name,
       id: i.id,
       field: i.type,
       hidden: false,
       color: i.color
     }));
-
-    const newColumns = unique([...columnsHead, ...customFieldNames]);
-
-    dispatch(getTaskColumns(newColumns));
-    setColumns(newColumns);
-  }, [customProperty]);
+    return unique([...columnsHead, ...customFieldNames]);
+  }, [tasks]);
 
   const { filteredBySearch } = filterBySearchValue(tasks);
   const { filteredByAssignee } = filterByAssignee(filteredBySearch);
@@ -107,7 +98,7 @@ export function List({ tasks, customProperty }: ListProps) {
         showTable={collapseTable}
         onClickChevron={() => setCollapseTable((prev) => !prev)}
       />
-      {!collapseTable && columns ? (
+      {!collapseTable ? (
         <div className="relative">
           {showNewTaskField ? (
             <div className="pl-2">
@@ -127,9 +118,9 @@ export function List({ tasks, customProperty }: ListProps) {
               label={key}
               ListColor={ListColor}
               key={key}
-              heads={hideTask.length ? hideTask : columns}
+              heads={hideTask.length ? hideTask : generateColumns}
               data={sortedTasks[key]}
-              customFields={custom_fields as IField[]}
+              customFields={tasks[0].custom_field_columns as IField[]}
             />
           ))}
         </div>

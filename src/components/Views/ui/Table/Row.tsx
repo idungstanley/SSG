@@ -55,6 +55,7 @@ export function Row({
     avatar_path: '',
     created_at: '',
     custom_fields: [],
+    custom_field_columns: [],
     deleted_at: null,
     descendants_count: 0,
     checklist_items_count: 0,
