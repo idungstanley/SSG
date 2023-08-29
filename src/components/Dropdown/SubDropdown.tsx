@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { DocumentDuplicateIcon, StarIcon, PlusIcon, LinkIcon, SwatchIcon } from '@heroicons/react/24/outline';
 import { useAppSelector } from '../../app/hooks';
 import { useDispatch } from 'react-redux';
@@ -23,6 +23,7 @@ import Button from '../Button';
 import { EntityManagerTabsId, PilotTabsId } from '../../utils/PilotUtils';
 import { setVisibility } from '../../features/general/prompt/promptSlice';
 import { Capitalize } from '../../utils/NoCapWords/Capitalize';
+import { Fade, Menu } from '@mui/material';
 
 interface itemsType {
   id: number;
@@ -46,6 +47,8 @@ export default function SubDropdown() {
     useAppSelector((state) => state.hub);
   const { showTreeInput, lastActiveItem, activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
   const { lightBaseColor } = useAppSelector((state) => state.account);
+
+  const [open, setOpen] = useState<boolean>(true);
 
   const isEntityActive = !!listId || !!hubId || !!walletId;
 
@@ -216,13 +219,16 @@ export default function SubDropdown() {
   ];
 
   return (
-    <div className="" ref={ref}>
-      <div
-        className={`fixed w-96 p-2 origin-top-right bg-white rounded-md top-2/4 ring-1 ring-black ring-opacity-5 focus:outline-none ${
-          showMenuDropdown == null ? 'left-56' : 'left-96'
-        }`}
-        style={{ boxShadow: '0 1px 10px #00000040', minWidth: '200px', zIndex: '999' }}
-      >
+    <Menu
+      open={open}
+      onClose={() => setOpen(false)}
+      TransitionComponent={Fade}
+      anchorOrigin={{
+        vertical: 'center',
+        horizontal: 250
+      }}
+    >
+      <div className="w-96 px-2 origin-top-right bg-white" style={{ minWidth: '200px' }}>
         {itemsList.map((item) =>
           (lastActiveItem === '' || lastActiveItem === item.title) && item.isVisible ? (
             <div key={item.id}>
@@ -260,6 +266,6 @@ export default function SubDropdown() {
           </div>
         )}
       </div>
-    </div>
+    </Menu>
   );
 }
