@@ -7,11 +7,9 @@ import {
   DragEndEvent,
   DragOverEvent,
   DragOverlay,
-  DropAnimation,
   KeyboardSensor,
   PointerSensor,
   closestCorners,
-  defaultDropAnimation,
   useSensor,
   useSensors
 } from '@dnd-kit/core';
@@ -30,7 +28,7 @@ import {
 import { setMatchedStatus, setStatusesToMatch } from '../../../features/hubs/hubSlice';
 import MatchStatusPopUp from '../Components/MatchStatusPopUp';
 import { setMatchData } from '../../../features/general/prompt/promptSlice';
-import StatusItem from '../Components/StatusItem';
+import StatusBodyTemplate from '../StatusBodyTemplate';
 
 interface ErrorResponse {
   data: {
@@ -42,15 +40,22 @@ interface ErrorResponse {
   // Other error properties if needed
 }
 
+const groupStylesMapping: Record<string, GroupStyles> = {
+  open: { backgroundColor: '#FBFBFB', boxShadow: '0px 0px 5px rgba(0, 0, 0, 0.2)' },
+  custom: { backgroundColor: '#FCF1FF', boxShadow: '0px 0px 5px rgba(128, 0, 128, 0.2)' },
+  closed: { backgroundColor: '#E6FAE9', boxShadow: '0px 0px 5px rgba(0, 128, 0, 0.2)' }
+  // Add more model_type values and their styles as needed
+};
+
 export default function CustomStatus() {
   const dispatch = useAppDispatch();
   const createStatusTypes = useMutation(statusTypesService);
 
-  const { spaceStatuses, matchedStatus } = useAppSelector((state) => state.hub);
   const { matchData } = useAppSelector((state) => state.prompt);
 
   const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
   const { statusTaskListDetails } = useAppSelector((state) => state.list);
+  const { spaceStatuses, matchedStatus } = useAppSelector((state) => state.hub);
 
   const [statusTypesState, setStatusTypesState] = useState<StatusProps[]>(spaceStatuses);
   const [validationMessage, setValidationMessage] = useState<string>('');
@@ -60,10 +65,8 @@ export default function CustomStatus() {
   const [showMatchStatusPop, setShowMatchStatusPopup] = useState<boolean>(false);
   const [matchingStatusValidation, setMatchingStatusValidation] = useState<string | null>(null);
 
-  const initialBoardSections = initializeBoard(statusTypesState);
+  const initialBoardSections = initializeBoard(spaceStatuses);
   const [boardSections, setBoardSections] = useState<BoardSectionsType>(initialBoardSections);
-  console.log(boardSections);
-
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
@@ -71,10 +74,12 @@ export default function CustomStatus() {
     })
   );
 
-  function handleDragStart(event: DragEndEvent) {
-    const { active } = event;
-    const { id } = active;
-    setActiveId(id as string);
+  useEffect(() => {
+    setBoardSections(initialBoardSections);
+  }, [spaceStatuses, activeItemId]);
+
+  function handleDragStart({ active }: DragEndEvent) {
+    setActiveId(active.id as string);
   }
 
   const handleDragOver = ({ active, over }: DragOverEvent) => {
@@ -88,11 +93,6 @@ export default function CustomStatus() {
     if (overContainer === 'closed' && activeContainer !== 'closed') {
       return;
     }
-
-    // const overIndex = boardSections[overContainer]?.findIndex((task) => task.name === over?.id);
-    // if (overIndex === 0) {
-    //   return;
-    // }
 
     setBoardSections((boardSection) => {
       const activeItems = boardSection[activeContainer];
@@ -149,21 +149,6 @@ export default function CustomStatus() {
     setActiveId(null);
   };
 
-  useEffect(() => {
-    setStatusTypesState(
-      spaceStatuses.map((status, index) => {
-        return {
-          name: status.name,
-          color: status.color,
-          id: status.id,
-          type: status.type,
-          position: index,
-          is_default: index === 0 ? 1 : 0
-        };
-      })
-    );
-  }, [spaceStatuses]);
-
   const handleSaveNewStatus = () => {
     const nameWithoutWhiteSpace = newStatusValue?.trim();
     const isNameExist = statusTypesState.some(
@@ -192,13 +177,6 @@ export default function CustomStatus() {
     setAddStatus(false);
   };
 
-  const groupStylesMapping: Record<string, GroupStyles> = {
-    open: { backgroundColor: '#FBFBFB', boxShadow: '0px 0px 5px rgba(0, 0, 0, 0.2)' },
-    custom: { backgroundColor: '#FCF1FF', boxShadow: '0px 0px 5px rgba(128, 0, 128, 0.2)' },
-    closed: { backgroundColor: '#E6FAE9', boxShadow: '0px 0px 5px rgba(0, 128, 0, 0.2)' }
-    // Add more model_type values and their styles as needed
-  };
-
   //Add default status
   const defaultItem = statusTypesState.find((item) => item.position === 0);
   const AddDefault = addIsDefaultToValues(boardSections, defaultItem?.name);
@@ -206,13 +184,24 @@ export default function CustomStatus() {
   const model = statusTaskListDetails.listId ? 'list' : (activeItemType as string);
   const model_id = statusTaskListDetails.listId || (activeItemId as string);
 
+  const handleStatusId = () => {
+    const modelTypeIsSameEntity = statusData.some((item) => item.model_type === model);
+    if (activeItemId === model_id && modelTypeIsSameEntity) {
+      return statusData;
+    } else {
+      return statusData.map((item, index) => {
+        return { ...item, id: null, is_default: index === 0 ? 1 : 0 }; // Set the id to null
+      });
+    }
+  };
+
   const handleStatusData = async () => {
     await createStatusTypes.mutateAsync({
       model_id: model_id,
       model: model,
       from_model: activeItemType,
       from_model_id: activeItemId,
-      statuses: statusData,
+      statuses: handleStatusId(),
       status_matches: matchedStatus
     });
   };
@@ -252,7 +241,7 @@ export default function CustomStatus() {
         model: model,
         from_model: activeItemType,
         from_model_id: activeItemId,
-        statuses: statusData
+        statuses: handleStatusId()
       });
     } catch (err) {
       const errorResponse = err as ErrorResponse; // Cast err to the ErrorResponse type
@@ -265,7 +254,7 @@ export default function CustomStatus() {
     }
   };
 
-  // const draggableItem = activeId ? getStatusById(statusTypesState, activeId) : null;
+  const draggableItem = activeId ? getStatusById(statusTypesState, activeId) : null;
 
   return (
     <section className="flex flex-col gap-2 p-4">
@@ -300,11 +289,11 @@ export default function CustomStatus() {
               />
             </div>
           ))}
-          {/* {draggableItem ? (
+          {draggableItem ? (
             <DragOverlay>
-              <StatusItem item={draggableItem} />
+              <StatusBodyTemplate item={draggableItem} id={activeId as string} />
             </DragOverlay>
-          ) : null} */}
+          ) : null}
         </DndContext>
       </div>
       <p className="mt-auto text-red-600 text-start">{validationMessage}</p>

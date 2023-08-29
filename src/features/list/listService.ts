@@ -174,10 +174,10 @@ export const UseArchiveListService = (list: { query: string | undefined | null; 
 export const UseGetListDetails = (listId: string | null | undefined) => {
   const dispatch = useAppDispatch();
 
-  const { activeItemType } = useAppSelector((state) => state.workspace);
-
+  const { activeItemType, activeItemId } = useAppSelector((state) => state.workspace);
+  const id = activeItemId === 'list' ? activeItemId : listId;
   return useQuery(
-    ['hubs', listId],
+    ['hubs', { listId, id }],
     async () => {
       const data = await requestNew<IListDetailRes>({
         url: `lists/${listId}`,
@@ -186,7 +186,7 @@ export const UseGetListDetails = (listId: string | null | undefined) => {
       return data;
     },
     {
-      enabled: !!listId,
+      enabled: !!listId || !!id,
       onSuccess: (data) => {
         const listStatusTypes = data.data.list.task_statuses;
         if (activeItemType === 'list') {

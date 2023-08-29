@@ -62,7 +62,7 @@ const initialState: HubState = {
   toggleTree: false,
   entityToCreate: null,
   spaceStatuses: [
-    { color: null, is_default: null, id: null, model_id: null, model: null, type: null, position: 0, name: '' }
+    { color: null, is_default: null, id: null, model_id: null, model_type: null, type: null, position: 0, name: '' }
   ],
   statusesToMatch: [],
   matchedStatus: []

@@ -1,15 +1,16 @@
 import React from 'react';
-import SaveCols from './SaveCols';
-import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
-import { useCreateDropdownField } from '../../../../../features/list/listService';
-import { setIsTasksUpdated } from '../../../../../features/task/taskSlice';
+import SaveCols from '../SaveCols';
+import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
+import { useCreateDropdownField } from '../../../../../../features/list/listService';
+import { setIsTasksUpdated } from '../../../../../../features/task/taskSlice';
 
-function CreateDateField() {
+function CreateTextField() {
   const dispatch = useAppDispatch();
 
   const { newCustomPropertyDetails, entityForCustom } = useAppSelector((state) => state.task);
 
   const { mutate: onCreate } = useCreateDropdownField();
+
   const handleSubmit = () => {
     if (newCustomPropertyDetails.name && entityForCustom) {
       const name = newCustomPropertyDetails.name;
@@ -22,6 +23,7 @@ function CreateDateField() {
         is_italic: is_italic as string,
         is_underlined: is_underlined as string
       };
+      const customType = newCustomPropertyDetails.type === 'Short Text' ? 'text' : newCustomPropertyDetails.type;
       dispatch(setIsTasksUpdated(false));
       onCreate({
         name,
@@ -30,7 +32,7 @@ function CreateDateField() {
         id: entityForCustom.id,
         type: entityForCustom.type,
         options: undefined,
-        customType: 'date'
+        customType
       });
     }
   };
@@ -39,11 +41,11 @@ function CreateDateField() {
     <div>
       <SaveCols
         handleSubmit={handleSubmit}
-        header="Date"
-        body="This custom property allows setting dates and time against tasks."
+        header="Text"
+        body="This custom property which allows for texts like names, locations."
       />
     </div>
   );
 }
 
-export default CreateDateField;
+export default CreateTextField;

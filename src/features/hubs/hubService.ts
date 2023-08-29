@@ -187,7 +187,7 @@ export const statusTypesService = (data: {
   model?: string;
   from_model?: string | null;
   from_model_id?: string | null;
-  statuses: StatusProps[];
+  statuses: StatusProps[] | (() => StatusProps[]);
   status_matches?: matchedStatusProps[];
 }) => {
   const response = requestNew<unknown>({

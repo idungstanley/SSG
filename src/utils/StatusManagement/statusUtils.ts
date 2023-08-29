@@ -1,11 +1,11 @@
 import { BoardSectionsType, Status, StatusType } from './Types';
 
-export const getTasksByStatus = (tasks: StatusType[], status: Status) => {
-  return tasks.filter((task) => task.type === status);
+export const getTasksByStatus = (statuses: StatusType[], status: Status) => {
+  return statuses.filter((item) => item.type === status);
 };
 
-export const getStatusById = (tasks: StatusType[], id: string) => {
-  return tasks.find((task) => task.name === id);
+export const getStatusById = (statuses: StatusType[], id: string) => {
+  return statuses.find((status) => status.name === id);
 };
 
 export function extractValuesFromArray(groupedObject: BoardSectionsType) {

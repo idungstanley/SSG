@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import ColumnTypeDropdown from './ColumnTypeDropdown';
-import CreateDropdownField from './CreateDropdownField';
+import ColumnTypeDropdown from './Dropdown/ColumnTypeDropdown';
+import CreateDropdownField from './Dropdown/CreateDropdownField';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import { setNewCustomPropertyDetails } from '../../../../../features/task/taskSlice';
-import CreateDateField from './CreateDateField';
-import CreateTextField from './CreateTextField';
+import CreateDateField from './Date/CreateDateField';
+import CreateTextField from './Texts/CreateTextField';
 import Picker from '../../../../../assets/icons/Picker';
 import AlsoitMenuDropdown from '../../../../DropDowns';
 import ColorPalette from '../../../../ColorPalette/component/ColorPalette';
@@ -12,6 +12,8 @@ import { ListColourProps } from '../../../../tasks/ListItem';
 import EditDropdown from '../Edit/EditDropdown';
 import { cl } from '../../../../../utils';
 import FontStyle from './FontStyles/FontStyle';
+import CreateNumberField from './Number/CreateNumberField';
+import CreateEmailField from './Email/CreateEmailField';
 
 function NewColumn() {
   const dispatch = useAppDispatch();
@@ -110,6 +112,8 @@ function NewColumn() {
           {newCustomPropertyDetails.type.toLowerCase() === 'date' && <CreateDateField />}
           {newCustomPropertyDetails.type.toLowerCase() === 'short text' && <CreateTextField />}
           {newCustomPropertyDetails.type.toLowerCase() === 'long text' && <CreateTextField />}
+          {newCustomPropertyDetails.type.toLowerCase() === 'number' && <CreateNumberField />}
+          {newCustomPropertyDetails.type.toLowerCase() === 'email' && <CreateEmailField />}
         </div>
       )}
     </>
