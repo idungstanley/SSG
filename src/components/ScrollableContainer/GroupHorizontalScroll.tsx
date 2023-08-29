@@ -15,6 +15,8 @@ export function GroupHorizontalScroll() {
   const { showMore, currentItemId, showTabLabel, isResize, activeItemId, activePlaceId } = useAppSelector(
     (state) => state.workspace
   );
+  const { showExtendedBar } = useAppSelector((state) => state.workspace);
+  const { showSidebar } = useAppSelector((state) => state.account);
 
   const [thumbWidth, setThumbWidth] = useState(DEFAULT_THUMB_WIDTH);
   const [isThumbVisible, setIsThumbVisible] = useState(true);
@@ -148,7 +150,9 @@ export function GroupHorizontalScroll() {
     currentItemId,
     activeItemId,
     activePlaceId,
-    groupScroll
+    groupScroll,
+    showExtendedBar,
+    showSidebar
   ]);
 
   // Listen for mouse events to handle scrolling by dragging the thumb
