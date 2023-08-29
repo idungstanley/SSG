@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import {
   EndTimeEntriesService,
@@ -30,7 +30,9 @@ export default function ClockInOut() {
   const dispatch = useAppDispatch();
   const { workSpaceId, hubId, subhubId, listId, taskId } = useParams();
 
-  const { activeItemId, activeItemType, activeTabId, timerLastMemory } = useAppSelector((state) => state.workspace);
+  const { activeItemId, activeItemType, activeTabId, timerLastMemory, activeSubTimeClockTabId } = useAppSelector(
+    (state) => state.workspace
+  );
   const { timerStatus, duration, period, timerDetails } = useAppSelector((state) => state.task);
   const { clock_limit, clock_stop_reminder } = useAppSelector((state) => state.userSetting);
   const { currentUserId } = useAppSelector((state) => state.auth);
@@ -143,6 +145,31 @@ export default function ClockInOut() {
 
   const RunTimer = runTimer({ isRunning: isRunning, setTime: setTime });
 
+  const timeTabs = [
+    {
+      id: 0,
+      element: (
+        <AutomaticTimeElement
+          activeTimerCheck={activeTimerCheck}
+          activeTrackers={activeTrackers}
+          getTaskEntries={getTaskEntries}
+          handleEndTimeChange={handleEndTimeChange}
+          handleTimeSwitch={handleTimeSwitch}
+          prompt={prompt}
+          sameEntity={sameEntity}
+          setPrompt={setPrompt}
+          stop={stop}
+          timerCheck={timerCheck}
+        />
+      ),
+      title: 'Automatic'
+    }
+  ];
+
+  const activeTimeTab = useMemo(() => {
+    return timeTabs.find((option) => option.id === activeSubTimeClockTabId);
+  }, [activeSubTimeClockTabId]);
+
   const firstPage = () => setPage(1);
   const lastPage = () => setPage((page * 100) / 100);
   const pageLinks = Array(getTaskEntries?.data.pagination.page)
@@ -159,21 +186,23 @@ export default function ClockInOut() {
 
   return (
     <div className="p-2 mt-6 rounded-t-md">
-      <div className="bg-alsoit-gray-50">
-        <section id="body" className="px-3 py-1 text-white bg-indigo-500 rounded-b-md">
+      <div className="bg-white">
+        <section id="body" className="px-3 py-1 text-white bg-alsoit-gray-50 rounded-b-md shadow-lg">
           {/* Interface Tabs */}
-          <AutomaticTimeElement
-            activeTimerCheck={activeTimerCheck}
-            activeTrackers={activeTrackers}
-            getTaskEntries={getTaskEntries}
-            handleEndTimeChange={handleEndTimeChange}
-            handleTimeSwitch={handleTimeSwitch}
-            prompt={prompt}
-            sameEntity={sameEntity}
-            setPrompt={setPrompt}
-            stop={stop}
-            timerCheck={timerCheck}
-          />
+          {activeSubTimeClockTabId === 0 && (
+            <AutomaticTimeElement
+              activeTimerCheck={activeTimerCheck}
+              activeTrackers={activeTrackers}
+              getTaskEntries={getTaskEntries}
+              handleEndTimeChange={handleEndTimeChange}
+              handleTimeSwitch={handleTimeSwitch}
+              prompt={prompt}
+              sameEntity={sameEntity}
+              setPrompt={setPrompt}
+              stop={stop}
+              timerCheck={timerCheck}
+            />
+          )}
         </section>
         <div className="w-full p-2 my-4 flex flex-col space-y-2">
           <VerticalScroll>
