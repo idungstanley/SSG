@@ -47,7 +47,6 @@ export default function DragContext({ children }: DragContextProps) {
     const { over, active } = e;
     const overId = over?.id as string;
     const activeId = active?.id as string;
-    const offsetX = e.delta.x || 0;
     const isPlace = over?.data.current?.isPlace && active?.data.current?.isPlace;
     const isTaskToList = over?.data.current?.isOverList && active?.data.current?.isTask && !over?.data.current?.isTask;
     const isListToHub = over?.data.current?.isOverHub && active?.data.current?.isList;
@@ -60,10 +59,6 @@ export default function DragContext({ children }: DragContextProps) {
     const isWalletToWallet = over?.data.current?.isOverWallet && active?.data.current?.isWallet;
 
     const isWalletToHub = over?.data.current?.isOverHub && active?.data.current?.isWallet;
-
-    // Determine if the task should become a subtask
-    const shouldBecomeSubtask = isTaskToTask && offsetX >= minDistanceToMakeSubtask;
-    console.log(dragToBecomeSubTask);
 
     // drag and drop places
     if (isPlace) {
@@ -98,13 +93,21 @@ export default function DragContext({ children }: DragContextProps) {
       });
       dispatch(setDraggableItem(null));
     }
-    if (isTaskToTask && dragToBecomeSubTask) {
+    if (isTaskToTask) {
       if (activeId !== overId) {
-        onMove({
-          taskId: activeId,
-          listId: overId,
-          overType: EntityType.task
-        });
+        if (dragToBecomeSubTask) {
+          onMove({
+            taskId: activeId,
+            listId: overId,
+            overType: EntityType.task
+          });
+        } else {
+          onMove({
+            taskId: activeId,
+            moveAfterId: overId,
+            overType: EntityType.task
+          });
+        }
         dispatch(setDraggableItem(null));
       }
     }
@@ -158,6 +161,8 @@ export default function DragContext({ children }: DragContextProps) {
   const onDragOver = (e: DragOverEvent) => {
     const id = e.over?.id as string;
     dispatch(setDragOverItem(id));
+
+    // Determine if the task should become a subtask
     if (e.delta?.x >= minDistanceToMakeSubtask) {
       dispatch(setDragToBecomeSubTask(true));
     } else {

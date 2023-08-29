@@ -92,12 +92,16 @@ export const UseSaveTaskFilters = () => {
   return mutation;
 };
 
-const moveTask = (data: { taskId: TaskId; listId: string; overType: string }) => {
-  const { taskId, listId, overType } = data;
+export const moveTask = (data: { taskId: TaskId; moveAfterId?: string; listId?: string; overType: string }) => {
+  const { taskId, listId, overType, moveAfterId } = data;
   let requestData = {};
   if (overType === EntityType.list) {
     requestData = {
       list_id: listId
+    };
+  } else if (overType === EntityType.task && moveAfterId) {
+    requestData = {
+      move_after_id: moveAfterId
     };
   } else {
     requestData = { parent_id: listId };

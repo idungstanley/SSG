@@ -300,6 +300,8 @@ export function StickyCol({
               } w-full py-4 flex items-center`,
               isOver && draggableItemId !== dragOverItemId && !dragToBecomeSubTask
                 ? 'border-b-2 border-alsoit-purple-300'
+                : dragToBecomeSubTask && isOver && draggableItemId !== dragOverItemId
+                ? 'mb-2'
                 : 'border-t relative'
             )}
           >
@@ -307,17 +309,12 @@ export function StickyCol({
               <span
                 className={cl(
                   dragToBecomeSubTask && isOver && draggableItemId !== dragOverItemId
-                    ? 'absolute content-start z-10 flex items-center left-20 w-full right-0 -bottom-1'
+                    ? 'absolute content-start z-50 flex items-center left-20 w-full right-0 bottom-1'
                     : ''
                 )}
               >
-                <span className="border-solid z-10 border-alsoit-purple-300 border-l-[8px] border-y-transparent border-y-[4px] border-r-0" />
-                <span
-                  className={cl(
-                    'h-0.5 bg-alsoit-purple-300 w-full',
-                    dragToBecomeSubTask && isOver && draggableItemId !== dragOverItemId ? 'ml-1' : ''
-                  )}
-                ></span>
+                <span className="border-solid z-50 border-alsoit-purple-300 border-l-[8px] border-y-transparent border-y-[4px] border-r-0" />
+                <span className={cl('h-0.5 bg-alsoit-purple-300 w-full')}></span>
               </span>
             )}
             <button onClick={onToggleDisplayingSubTasks} className="pl-1">
