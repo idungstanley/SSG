@@ -9,7 +9,7 @@ function CreateTextField() {
 
   const { newCustomPropertyDetails, entityForCustom } = useAppSelector((state) => state.task);
 
-  const { mutate: onCreate } = useCreateDropdownField(entityForCustom.type, entityForCustom.id);
+  const { mutate: onCreate } = useCreateDropdownField();
 
   const handleSubmit = () => {
     if (newCustomPropertyDetails.name && entityForCustom) {

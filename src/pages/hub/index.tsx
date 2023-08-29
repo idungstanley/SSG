@@ -16,7 +16,7 @@ import { Header } from '../../components/TasksHeader';
 import { VerticalScroll } from '../../components/ScrollableContainer/VerticalScroll';
 import { GroupHorizontalScroll } from '../../components/ScrollableContainer/GroupHorizontalScroll';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
-import { setTasks } from '../../features/task/taskSlice';
+import { setIsTasksUpdated, setTasks } from '../../features/task/taskSlice';
 
 export default function HubPage() {
   const dispatch = useAppDispatch();
@@ -77,6 +77,7 @@ export default function HubPage() {
   useEffect(() => {
     if (lists && tasks.length) {
       dispatch(setTasks({ ...tasksStore, ...lists }));
+      dispatch(setIsTasksUpdated(true));
     }
   }, [lists, tasks]);
 
@@ -103,7 +104,7 @@ export default function HubPage() {
             {/* lists */}
             {Object.keys(lists).map((listId) => (
               <>
-                {tasksStore[listId] && tasks.length ? (
+                {tasksStore[listId] && tasks.length && isTasksUpdated ? (
                   <div key={listId}>
                     <List tasks={tasksStore[listId]} />
                   </div>

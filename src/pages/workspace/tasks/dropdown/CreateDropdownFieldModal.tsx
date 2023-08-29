@@ -28,7 +28,7 @@ export default function CreateDropdownFieldModal({ show, setShow, listId }: Crea
     id: listId //listId ?? walletId ?? hubId
   };
 
-  const { mutate: onCreate } = useCreateDropdownField(entity.type, entity.id);
+  const { mutate: onCreate } = useCreateDropdownField();
 
   const handleAddOption = () =>
     setFormInputs((prevInputs) => [...prevInputs, { id: (prevInputs.at(-1)?.id || 1) + 1, value: '' }]);

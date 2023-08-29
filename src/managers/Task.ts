@@ -82,22 +82,17 @@ export const taskAssignessUpdateManager = (
   return tasks;
 };
 
-export const updateListCustomFieldsManager = (
-  listId: string,
-  tasks: Record<string, ITaskFullList[]>,
-  customFieldData: IField
-) => {
-  if (listId) {
-    const updatedTasks = { ...tasks };
+export const updateCustomFieldsManager = (tasks: Record<string, ITaskFullList[]>, customFieldData: IField) => {
+  const updatedTasks = { ...tasks };
 
+  Object.keys(updatedTasks).map((listId) => {
     updatedTasks[listId] = updatedTasks[listId].map((task) => {
       return {
         ...task,
         custom_field_columns: [customFieldData, ...task.custom_field_columns]
       };
     });
-    return updatedTasks;
-  }
+  });
 
-  return tasks;
+  return updatedTasks;
 };
