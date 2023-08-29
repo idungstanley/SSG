@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef } from 'react';
+import { useEffect, useMemo, useRef, Fragment } from 'react';
 import { useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import Page from '../../components/Page';
@@ -103,13 +103,13 @@ export default function HubPage() {
           >
             {/* lists */}
             {Object.keys(lists).map((listId) => (
-              <>
+              <Fragment key={listId}>
                 {tasksStore[listId] && tasks.length && isTasksUpdated ? (
                   <div key={listId}>
                     <List tasks={tasksStore[listId]} />
                   </div>
                 ) : null}
-              </>
+              </Fragment>
             ))}
           </section>
         </VerticalScroll>

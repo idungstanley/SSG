@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef } from 'react';
+import { useEffect, useMemo, useRef, Fragment } from 'react';
 import { useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import Page from '../../components/Page';
@@ -110,7 +110,9 @@ export function WalletPage() {
             {tasks.length && isTasksUpdated ? (
               <>
                 {Object.keys(lists).map((listId) => (
-                  <>{tasksStore[listId] ? <List key={listId} tasks={tasksStore[listId]} /> : null}</>
+                  <Fragment key={listId}>
+                    {tasksStore[listId] ? <List key={listId} tasks={tasksStore[listId]} /> : null}
+                  </Fragment>
                 ))}
               </>
             ) : null}
