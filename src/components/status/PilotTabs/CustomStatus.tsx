@@ -7,9 +7,11 @@ import {
   DragEndEvent,
   DragOverEvent,
   DragOverlay,
+  DropAnimation,
   KeyboardSensor,
   PointerSensor,
   closestCorners,
+  defaultDropAnimation,
   useSensor,
   useSensors
 } from '@dnd-kit/core';
@@ -29,6 +31,7 @@ import { setMatchedStatus, setStatusesToMatch } from '../../../features/hubs/hub
 import MatchStatusPopUp from '../Components/MatchStatusPopUp';
 import { setMatchData } from '../../../features/general/prompt/promptSlice';
 import StatusBodyTemplate from '../StatusBodyTemplate';
+import StatusItem from '../Components/StatusItem';
 
 interface ErrorResponse {
   data: {
@@ -61,12 +64,12 @@ export default function CustomStatus() {
   const [validationMessage, setValidationMessage] = useState<string>('');
   const [newStatusValue, setNewStatusValue] = useState<string>('');
   const [addStatus, setAddStatus] = useState<boolean>(false);
-  const [activeId, setActiveId] = useState<string | null>(null);
   const [showMatchStatusPop, setShowMatchStatusPopup] = useState<boolean>(false);
   const [matchingStatusValidation, setMatchingStatusValidation] = useState<string | null>(null);
 
   const initialBoardSections = initializeBoard(spaceStatuses);
   const [boardSections, setBoardSections] = useState<BoardSectionsType>(initialBoardSections);
+  const [activeId, setActiveId] = useState<string | null>(null);
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
@@ -76,10 +79,12 @@ export default function CustomStatus() {
 
   useEffect(() => {
     setBoardSections(initialBoardSections);
+    setStatusTypesState(spaceStatuses);
   }, [spaceStatuses, activeItemId]);
 
   function handleDragStart({ active }: DragEndEvent) {
     setActiveId(active.id as string);
+    console.log(active.id);
   }
 
   const handleDragOver = ({ active, over }: DragOverEvent) => {
@@ -254,7 +259,11 @@ export default function CustomStatus() {
     }
   };
 
-  const draggableItem = activeId ? getStatusById(statusTypesState, activeId) : null;
+  // const dropAnimation: DropAnimation = {
+  //   ...defaultDropAnimation
+  // };
+
+  // const draggableItem = activeId ? getStatusById(statusData, activeId) : null;
 
   return (
     <section className="flex flex-col gap-2 p-4">
@@ -263,8 +272,8 @@ export default function CustomStatus() {
           sensors={sensors}
           collisionDetection={closestCorners}
           onDragStart={handleDragStart}
-          onDragOver={handleDragOver}
           onDragEnd={handleDragEnd}
+          onDragOver={handleDragOver}
         >
           {Object.keys(boardSections).map((uniqueModelType) => (
             <div
@@ -289,11 +298,9 @@ export default function CustomStatus() {
               />
             </div>
           ))}
-          {draggableItem ? (
-            <DragOverlay>
-              <StatusBodyTemplate item={draggableItem} id={activeId as string} />
-            </DragOverlay>
-          ) : null}
+          {/* <DragOverlay dropAnimation={dropAnimation}>
+            {draggableItem ? <StatusItem item={draggableItem} /> : null}
+          </DragOverlay> */}
         </DndContext>
       </div>
       <p className="mt-auto text-red-600 text-start">{validationMessage}</p>

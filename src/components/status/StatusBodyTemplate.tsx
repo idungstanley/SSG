@@ -17,11 +17,10 @@ import { CSS } from '@dnd-kit/utilities';
 
 interface StatusBodyProps {
   item: StatusProps;
-  id: string;
   setStatusTypesState?: React.Dispatch<React.SetStateAction<BoardSectionsType>>;
 }
 
-export default function StatusBodyTemplate({ item, setStatusTypesState, id }: StatusBodyProps) {
+export default function StatusBodyTemplate({ item, setStatusTypesState }: StatusBodyProps) {
   const [editableContent, setEditableContent] = useState<boolean>(false);
   const [showStatusEditDropdown, setShowStatusEditDropdown] = useState<null | HTMLSpanElement | HTMLDivElement>(null);
   const [showStatusColorDropdown, setShowStatusColorDropdown] = useState<null | HTMLSpanElement>(null);
@@ -30,12 +29,11 @@ export default function StatusBodyTemplate({ item, setStatusTypesState, id }: St
     setShowStatusEditDropdown(event.currentTarget);
   };
 
-  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id });
+  const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: item.name });
 
   const style = {
     transform: CSS.Transform.toString(transform),
-    transition,
-    opacity: isDragging ? 0 : 1
+    transition
   };
 
   const handleOpenStatusColorDropdown = (event: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
@@ -114,7 +112,7 @@ export default function StatusBodyTemplate({ item, setStatusTypesState, id }: St
   ];
 
   return (
-    <span key={item.name} className="mb-1" style={style}>
+    <span className="mb-1" style={style}>
       <span className="flex justify-items-start px-1 rounded cursor-pointer h-7 items-center border-alsoit-gray-75 border bg-white">
         {item.type !== 'closed' && item.position !== 0 && (
           <span className="cursor-move" ref={setNodeRef} {...attributes} {...listeners}>
