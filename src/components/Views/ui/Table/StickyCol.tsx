@@ -314,7 +314,7 @@ export function StickyCol({
                 )}
               >
                 <span className="border-solid z-50 border-alsoit-purple-300 border-l-[8px] border-y-transparent border-y-[4px] border-r-0" />
-                <span className={cl('h-0.5 bg-alsoit-purple-300 w-full')}></span>
+                <span className={cl('h-0.5 bg-alsoit-purple-300 w-full m-0')}></span>
               </span>
             )}
             <button onClick={onToggleDisplayingSubTasks} className="pl-1">

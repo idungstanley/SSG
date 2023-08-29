@@ -29,7 +29,9 @@ export function Col({ value, field, fieldId, task, customFields, ...props }: Col
   const { taskId } = useParams();
 
   const { dragOverItemId, draggableItemId } = useAppSelector((state) => state.list);
-  const { singleLineView, verticalGrid, selectedTasksArray, CompactView } = useAppSelector((state) => state.task);
+  const { singleLineView, dragToBecomeSubTask, verticalGrid, selectedTasksArray, CompactView } = useAppSelector(
+    (state) => state.task
+  );
 
   const COL_BG = taskId === task.id ? ACTIVE_COL_BG : DEFAULT_COL_BG;
   const isSelected = selectedTasksArray.includes(task.id);
@@ -96,13 +98,13 @@ export function Col({ value, field, fieldId, task, customFields, ...props }: Col
     <>
       <td
         className={cl(
-          dragOverItemId === task.id && draggableItemId !== dragOverItemId
+          dragOverItemId === task.id && draggableItemId !== dragOverItemId && !dragToBecomeSubTask
             ? 'border-b-2 border-alsoit-purple-300'
             : 'border-t',
           COL_BG,
           `relative flex ${isSelected && 'tdListVNoSticky'} ${
             verticalGrid && 'border-r'
-          } justify-center items-center text-sm font-medium text-gray-900 `
+          } justify-center items-center text-sm font-medium text-gray-900 relative`
         )}
         {...props}
         style={{
@@ -118,6 +120,9 @@ export function Col({ value, field, fieldId, task, customFields, ...props }: Col
               : ''
         }}
       >
+        {dragOverItemId === task.id && draggableItemId !== dragOverItemId && dragToBecomeSubTask && (
+          <span className={cl('absolute h-0.5 bg-alsoit-purple-300 w-full -bottom-px right-0')}></span>
+        )}
         {field in fields ? fields[field] : String(value)}
       </td>
     </>
