@@ -75,11 +75,11 @@ export default function HubPage() {
   }, [hasNextPage]);
 
   useEffect(() => {
-    if (lists && tasks.length) {
+    if (lists && !Object.keys(tasksStore).length) {
       dispatch(setTasks({ ...tasksStore, ...lists }));
       dispatch(setIsTasksUpdated(true));
     }
-  }, [lists, tasks]);
+  }, [lists, tasksStore]);
 
   return (
     <>
