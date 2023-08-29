@@ -600,6 +600,7 @@ export const {
   setCustomSuggetionsField,
   setNewCustomPropertyDetails,
   setEditCustomProperty,
-  setDragToBecomeSubTask
+  setDragToBecomeSubTask,
+  setIsTasksUpdated
 } = taskSlice.actions;
 export default taskSlice.reducer;
