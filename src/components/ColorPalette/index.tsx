@@ -18,6 +18,8 @@ import { changeWalletManager } from '../../managers/Wallet';
 import { changeHubManager } from '../../managers/Hub';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
 import { Fade, Menu } from '@mui/material';
+import { setListPaletteColor } from '../../features/list/listSlice';
+import { Cords } from '../../hooks/useAbsolute';
 
 interface PaletteProps {
   title?: string;
@@ -27,6 +29,7 @@ interface PaletteProps {
   setListPaletteColor?: (value: { innerColour: string; outterColour: string }) => void;
   shape?: string;
   listComboColour?: ListColourProps;
+  cords?: Cords;
 }
 
 interface ChromePickerProps {
@@ -38,11 +41,12 @@ export default function PaletteManager({
   bottomContent,
   topContent,
   shape,
-  listComboColour
+  listComboColour,
+  cords
 }: PaletteProps) {
-  const { paletteDropdown } = useAppSelector((state) => state.account);
-  const { paletteId, paletteType } = paletteDropdown;
   const dispatch = useAppDispatch();
+
+  const { paletteDropdown } = useAppSelector((state) => state.account);
   const { hub } = useAppSelector((state) => state.hub);
 
   const [open, setOpen] = useState<boolean>(true);
@@ -50,6 +54,14 @@ export default function PaletteManager({
   const [isInnerFrameActive, setIsInnerFrameActive] = useState<boolean>(false);
   const [displayColorPicker, setDisplayColorPicker] = useState<boolean>(false);
   const [customColor, setCustomColor] = useState<string>('');
+
+  const { paletteId, paletteType } = paletteDropdown;
+
+  const closeMenu = () => {
+    setOpen(false);
+    dispatch(setPaletteDropDown({ ...paletteDropdown, show: false }));
+    dispatch(setListPaletteColor({ innerColour: 'white', outerColour: 'black' }));
+  };
 
   const handleEditColor = (state: boolean) => {
     setDisplayColorPicker(state);
@@ -129,11 +141,11 @@ export default function PaletteManager({
   return (
     <Menu
       open={open}
-      onClose={() => setOpen(false)}
+      onClose={closeMenu}
       TransitionComponent={Fade}
       anchorOrigin={{
-        vertical: 'bottom',
-        horizontal: 'left'
+        vertical: cords?.top || 'center',
+        horizontal: 15
       }}
     >
       <div className="w-auto p-2 overflow-y-auto drop-shadow-2xl">

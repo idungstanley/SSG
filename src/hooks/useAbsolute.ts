@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 
-interface Cords {
+export interface Cords {
   top: number;
   left: number;
 }

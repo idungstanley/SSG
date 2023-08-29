@@ -17,7 +17,7 @@ import {
   ArrowDownIcon,
   PencilSquareIcon
 } from '@heroicons/react/24/outline';
-import { getHub, setArchiveHub, setSubDropdownMenu } from '../../features/hubs/hubSlice';
+import { getHub, setArchiveHub, setSubDropdownMenu, setshowMenuDropdown } from '../../features/hubs/hubSlice';
 import EditHubModal from '../../pages/workspace/hubs/components/EditHubModal';
 import SubDropdown from './SubDropdown';
 import { ArchiveHubService, useCreateFavorite, UseDeleteHubService } from '../../features/hubs/hubService';
@@ -46,9 +46,11 @@ import ExpandAllIcon from '../../assets/icons/ExpandAllIcon';
 import CollapseAllIcon from '../../assets/icons/CollapseAllIcon';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
 import { Fade, Menu } from '@mui/material';
+import { Cords } from '../../hooks/useAbsolute';
 
 interface IMenuDropdownProps {
   isExtendedBar?: boolean;
+  cords?: Cords;
 }
 
 interface itemsType {
@@ -59,7 +61,7 @@ interface itemsType {
   handleClick: () => void;
 }
 
-export default function MenuDropdown({ isExtendedBar }: IMenuDropdownProps) {
+export default function MenuDropdown({ isExtendedBar, cords }: IMenuDropdownProps) {
   const dispatch = useDispatch();
 
   const { SubDropdownMenu, archiveHub, showMenuDropdown, showMenuDropdownType, hub } = useAppSelector(
@@ -70,6 +72,12 @@ export default function MenuDropdown({ isExtendedBar }: IMenuDropdownProps) {
   const { archiveList } = useAppSelector((state) => state.list);
 
   const [open, setOpen] = useState<boolean>(true);
+
+  const closeMenu = () => {
+    setOpen(false);
+    dispatch(setSubDropdownMenu(false));
+    dispatch(setshowMenuDropdown({ showMenuDropdown: null, showMenuDropdownType: null }));
+  };
 
   //delete-entity
   //hubs and subhubs
@@ -339,10 +347,10 @@ export default function MenuDropdown({ isExtendedBar }: IMenuDropdownProps) {
   return (
     <Menu
       open={open}
-      onClose={() => setOpen(false)}
+      onClose={closeMenu}
       TransitionComponent={Fade}
       anchorOrigin={{
-        vertical: 'center',
+        vertical: Number(cords?.top) - 150 || 'center',
         horizontal: 300
       }}
     >

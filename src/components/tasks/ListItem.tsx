@@ -3,11 +3,9 @@ import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { setPaletteDropDown } from '../../features/account/accountSlice';
-// import ListIcon from '../../assets/icons/ListIcon';
 import {
   closeMenu,
   getPrevName,
-  getSubMenu,
   setListIdCreateTask,
   setSideBarCreateTaskListId,
   setshowMenuDropdown
@@ -28,6 +26,7 @@ import { IList } from '../../features/hubs/hubs.interfaces';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
 import ToolTip from '../Tooltip/Tooltip';
 import ActiveBarIdentification from './Component/ActiveBarIdentification';
+import { useAbsolute } from '../../hooks/useAbsolute';
 
 interface ListItemProps {
   list: IList;
@@ -49,6 +48,7 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
   const { showMenuDropdown } = useAppSelector((state) => state.hub);
   const { paletteDropdown, lightBaseColor, baseColor } = useAppSelector((state) => state.account);
   const { listColour } = useAppSelector((state) => state.list);
+  const { updateCords } = useAppSelector((state) => state.task);
 
   const [getCount, setGetCount] = useState<boolean>(false);
   const [activeShape, setActiveShape] = useState(list.shape);
@@ -105,38 +105,15 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
 
   const tooltipItems = data?.data.task_statuses;
 
-  const closeMenuDropdown = () => {
-    dispatch(
-      setshowMenuDropdown({
-        showMenuDropdown: null,
-        showMenuDropdownType: null
-      })
-    );
-  };
-
-  const closeSubMenu = () => {
-    dispatch(
-      getSubMenu({
-        SubMenuId: null,
-        SubMenuType: null
-      })
-    );
-  };
-
   const handleListSettings = (id: string, name: string, e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
     dispatch(setListIdCreateTask(id));
     dispatch(setSideBarCreateTaskListId(id));
-    if (id === showMenuDropdown) {
-      closeMenuDropdown();
-    } else {
-      closeSubMenu();
-      dispatch(
-        setshowMenuDropdown({
-          showMenuDropdown: id,
-          showMenuDropdownType: EntityType.list
-        })
-      );
-    }
+    dispatch(
+      setshowMenuDropdown({
+        showMenuDropdown: id,
+        showMenuDropdownType: EntityType.list
+      })
+    );
     dispatch(getPrevName(name));
     if (showMenuDropdown != null) {
       if ((e.target as HTMLButtonElement).id == 'menusettings') {
@@ -147,11 +124,7 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
 
   const handleListColour = (id: string, e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     e.stopPropagation();
-    if (paletteId === id && show) {
-      dispatch(setPaletteDropDown({ ...paletteDropdown, show: false }));
-    } else {
-      dispatch(setPaletteDropDown({ show: true, paletteId: id, paletteType: EntityType.list }));
-    }
+    dispatch(setPaletteDropDown({ show: true, paletteId: id, paletteType: EntityType.list }));
     dispatch(setListPaletteColor(list?.color === null ? { innerColour: 'white', outerColour: 'black' } : color));
   };
 
@@ -173,6 +146,9 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
       isList: true
     }
   });
+
+  const { cords, relativeRef } = useAbsolute(updateCords, 275);
+  const { cords: menuCords, relativeRef: menuRef } = useAbsolute(updateCords, 352);
 
   return (
     <div className="relative">
@@ -201,7 +177,7 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
           <Drag />
         </div>
         <div className="flex items-center space-x-1 overflow-hidden capitalize cursor-pointer">
-          <div onClick={(e) => handleListColour(list.id, e)}>
+          <div onClick={(e) => handleListColour(list.id, e)} ref={relativeRef}>
             <ListIconComponent
               shape={activeShape ? activeShape : 'solid-circle'}
               innerColour={innerColour}
@@ -258,11 +234,11 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
               </span>
             </InteractiveTooltip>
           )}
-          <button
-            type="button"
+          <div
             id="listright"
             className="flex items-center justify-end pr-1 space-x-1 opacity-0 group-hover:opacity-100"
             onClick={(e) => e.stopPropagation()}
+            ref={menuRef}
           >
             {/* <TaskDropdown /> */}
             <span
@@ -272,7 +248,7 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
             >
               <ThreeDotIcon />
             </span>
-          </button>
+          </div>
         </div>
       </section>
       {paletteId == list.id && show ? (
@@ -281,9 +257,10 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
           title="List Colour"
           listComboColour={listComboColour}
           shape={activeShape}
+          cords={cords}
         />
       ) : null}
-      {showMenuDropdown === list.id ? <MenuDropdown /> : null}
+      {showMenuDropdown === list.id ? <MenuDropdown cords={menuCords} /> : null}
     </div>
   );
 }

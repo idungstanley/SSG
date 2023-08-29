@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState } from 'react';
 import { DocumentDuplicateIcon, StarIcon, PlusIcon, LinkIcon, SwatchIcon } from '@heroicons/react/24/outline';
 import { useAppSelector } from '../../app/hooks';
 import { useDispatch } from 'react-redux';
@@ -24,6 +24,7 @@ import { EntityManagerTabsId, PilotTabsId } from '../../utils/PilotUtils';
 import { setVisibility } from '../../features/general/prompt/promptSlice';
 import { Capitalize } from '../../utils/NoCapWords/Capitalize';
 import { Fade, Menu } from '@mui/material';
+import { Cords } from '../../hooks/useAbsolute';
 
 interface itemsType {
   id: number;
@@ -39,12 +40,17 @@ interface optionsProps {
   bgColor?: string;
 }
 
-export default function SubDropdown() {
+interface SubDropdownProps {
+  cords?: Cords;
+}
+
+export default function SubDropdown({ cords }: SubDropdownProps) {
   const dispatch = useDispatch();
   const { listId, hubId, walletId } = useParams();
 
-  const { showMenuDropdownType, selectedTreeDetails, entityToCreate, showMenuDropdown, SubMenuType, SubMenuId } =
-    useAppSelector((state) => state.hub);
+  const { showMenuDropdownType, selectedTreeDetails, entityToCreate, SubMenuType } = useAppSelector(
+    (state) => state.hub
+  );
   const { showTreeInput, lastActiveItem, activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
   const { lightBaseColor } = useAppSelector((state) => state.account);
 
@@ -52,26 +58,15 @@ export default function SubDropdown() {
 
   const isEntityActive = !!listId || !!hubId || !!walletId;
 
-  const ref = useRef<HTMLInputElement>(null);
-
-  useEffect(() => {
-    const checkClickedOutSide = (e: MouseEvent): void => {
-      if (SubMenuId && ref.current && !ref.current.contains(e.target as HTMLButtonElement)) {
-        if (lastActiveItem !== '') {
-          dispatch(
-            getSubMenu({
-              SubMenuId: null,
-              SubMenuType: null
-            })
-          );
-        }
-      }
-    };
-    document.addEventListener('click', checkClickedOutSide);
-    return () => {
-      document.removeEventListener('click', checkClickedOutSide);
-    };
-  }, [SubMenuId]);
+  const closeMenu = () => {
+    setOpen(false);
+    dispatch(
+      getSubMenu({
+        SubMenuId: null,
+        SubMenuType: null
+      })
+    );
+  };
 
   const options = [
     {
@@ -221,11 +216,11 @@ export default function SubDropdown() {
   return (
     <Menu
       open={open}
-      onClose={() => setOpen(false)}
+      onClose={closeMenu}
       TransitionComponent={Fade}
       anchorOrigin={{
-        vertical: 'center',
-        horizontal: 250
+        vertical: Number(cords?.top) - 100 || 'center',
+        horizontal: 270
       }}
     >
       <div className="w-96 px-2 origin-top-right bg-white" style={{ minWidth: '200px' }}>
