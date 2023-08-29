@@ -21,6 +21,8 @@ export function ScrollableHorizontalListsContainer({ children, ListColor, ...pro
     (state) => state.workspace
   );
   const { groupScroll } = useAppSelector((state) => state.slideOver);
+  const { showExtendedBar } = useAppSelector((state) => state.workspace);
+  const { showSidebar } = useAppSelector((state) => state.account);
 
   const [thumbWidth, setThumbWidth] = useState(DEFAULT_THUMB_WIDTH);
   const [isThumbVisible, setIsThumbVisible] = useState(true);
@@ -160,7 +162,9 @@ export function ScrollableHorizontalListsContainer({ children, ListColor, ...pro
     showMore,
     currentItemId,
     activeItemId,
-    activePlaceId
+    activePlaceId,
+    showExtendedBar,
+    showSidebar
   ]);
 
   // Listen for mouse events to handle scrolling by dragging the thumb
