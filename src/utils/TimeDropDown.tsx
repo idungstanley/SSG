@@ -1,8 +1,6 @@
-import { useState, useRef, useEffect, Dispatch, SetStateAction } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import dayjs from 'dayjs';
-import ArrowCaretDown from '../assets/icons/ArrowCaretDown';
 import { useAppSelector } from '../app/hooks';
-import { boolean } from 'yup/lib/locale';
 
 type Option = string; // Change this type to match the type of your options
 

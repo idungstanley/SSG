@@ -1,12 +1,13 @@
 import React from 'react';
-import SaveCols from './SaveCols';
-import { useAppSelector } from '../../../../../app/hooks';
-import { useCreateDropdownField } from '../../../../../features/list/listService';
+import SaveCols from '../SaveCols';
+import { useAppSelector } from '../../../../../../app/hooks';
+import { useCreateDropdownField } from '../../../../../../features/list/listService';
 
-function CreateTextField() {
+function CreateEmailField() {
   const { newCustomPropertyDetails, entityForCustom } = useAppSelector((state) => state.task);
 
   const { mutate: onCreate } = useCreateDropdownField(entityForCustom.type, entityForCustom.id);
+
   const handleSubmit = () => {
     if (newCustomPropertyDetails.name && entityForCustom) {
       const name = newCustomPropertyDetails.name;
@@ -19,7 +20,7 @@ function CreateTextField() {
         is_italic: is_italic as string,
         is_underlined: is_underlined as string
       };
-      const customType = newCustomPropertyDetails.type === 'Short Text' ? 'text' : newCustomPropertyDetails.type;
+      const customType = newCustomPropertyDetails.type.toLowerCase();
       onCreate({
         name,
         style,
@@ -31,15 +32,16 @@ function CreateTextField() {
       });
     }
   };
+
   return (
     <div>
       <SaveCols
         handleSubmit={handleSubmit}
-        header="Text"
-        body="This custom property which allows for texts like names, locations."
+        header="Email"
+        body="This custom property which allows to track clients, vendors, leads and more by entering emails"
       />
     </div>
   );
 }
 
-export default CreateTextField;
+export default CreateEmailField;

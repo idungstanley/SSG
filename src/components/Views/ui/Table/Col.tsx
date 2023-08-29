@@ -13,8 +13,10 @@ import StatusNameDropdown from '../../../status/StatusNameDropdown';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { EntityType } from '../../../../utils/EntityTypes/EntityType';
 import { IField } from '../../../../features/list/list.interfaces';
-import TextField from '../TextField/TextField';
+import TextField from './CustomField/TextField/TextField';
 import LabelsWrapper from './CustomField/Labels/LabelsWrapper';
+import NumberField from './CustomField/Number/NumberField';
+import EmailField from './CustomField/EmailField/EmailField';
 
 interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   value: TaskValue;
@@ -76,8 +78,22 @@ export function Col({ value, field, fieldId, task, customFields, ...props }: Col
         fieldId={fieldId}
       />
     ),
+    email: (
+      <EmailField
+        taskId={task.id}
+        taskCustomFields={task.custom_fields?.find((i) => i.id === fieldId)}
+        fieldId={fieldId}
+      />
+    ),
     longtext: (
       <TextField
+        taskId={task.id}
+        taskCustomFields={task.custom_fields?.find((i) => i.id === fieldId)}
+        fieldId={fieldId}
+      />
+    ),
+    number: (
+      <NumberField
         taskId={task.id}
         taskCustomFields={task.custom_fields?.find((i) => i.id === fieldId)}
         fieldId={fieldId}
