@@ -314,11 +314,7 @@ export function Head({
           ? columns.slice(1).map(({ ref, value, id, color }, index) => (
               <th key={id} className="relative w-full py-2 -mb-1.5 font-extrabold opacity-90" ref={ref}>
                 <div
-                  className={`text-alsoit-gray-200 font-semibold flex dBlock items-center justify-center w-full h-full my-auto cursor-pointer group  ${
-                    sortAbles.includes(value)
-                      ? 'hover:bg-gray-200 p-0.5 rounded-xs space-x-1 border-l-2 border-r-2 border-t-2 border-transparent hover:border-r-gray-500'
-                      : ''
-                  }`}
+                  className="text-alsoit-gray-200 font-semibold flex dBlock items-center justify-center w-full h-full my-auto cursor-pointer group hover:bg-gray-200 p-0.5 rounded-xs space-x-1 border-l-2 border-r-2 border-t-2 border-transparent hover:border-r-gray-500 "
                   style={{ fontSize: '11px', WebkitTextStroke: '0.5px' }}
                 >
                   <span className="dNone">

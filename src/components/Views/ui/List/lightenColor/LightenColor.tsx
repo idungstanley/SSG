@@ -32,7 +32,6 @@ export default function LightenColor(color: string, lightenAmount: number): stri
 
   if (match) {
     const [, r, g, b] = match;
-
     const newR = Math.min(255, Math.round(parseInt(r, 16) + (255 - parseInt(r, 16)) * lightenAmount));
     const newG = Math.min(255, Math.round(parseInt(g, 16) + (255 - parseInt(g, 16)) * lightenAmount));
     const newB = Math.min(255, Math.round(parseInt(b, 16) + (255 - parseInt(b, 16)) * lightenAmount));
