@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { UseEditHubService } from '../../features/hubs/hubService';
@@ -10,7 +10,6 @@ import { RiArrowUpSFill } from 'react-icons/ri';
 import { ChromePicker } from 'react-color';
 import ListIconComponent from '../ItemsListInSidebar/components/ListIconComponent';
 import { ListColourProps } from '../tasks/ListItem';
-import { setListPaletteColor } from '../../features/list/listSlice';
 import { changeListManager } from '../../managers/List';
 import { getHub } from '../../features/hubs/hubSlice';
 import { setFilteredResults } from '../../features/search/searchSlice';
@@ -18,6 +17,9 @@ import ColorPalette from './component/ColorPalette';
 import { changeWalletManager } from '../../managers/Wallet';
 import { changeHubManager } from '../../managers/Hub';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
+import { Fade, Menu } from '@mui/material';
+import { setListPaletteColor } from '../../features/list/listSlice';
+import { Cords } from '../../hooks/useAbsolute';
 
 interface PaletteProps {
   title?: string;
@@ -27,6 +29,7 @@ interface PaletteProps {
   setListPaletteColor?: (value: { innerColour: string; outterColour: string }) => void;
   shape?: string;
   listComboColour?: ListColourProps;
+  cords?: Cords;
 }
 
 interface ChromePickerProps {
@@ -38,20 +41,27 @@ export default function PaletteManager({
   bottomContent,
   topContent,
   shape,
-  listComboColour
+  listComboColour,
+  cords
 }: PaletteProps) {
-  const { paletteDropdown } = useAppSelector((state) => state.account);
-  const { paletteId, paletteType } = paletteDropdown;
   const dispatch = useAppDispatch();
+
+  const { paletteDropdown } = useAppSelector((state) => state.account);
   const { hub } = useAppSelector((state) => state.hub);
 
+  const [open, setOpen] = useState<boolean>(true);
   const [isOutterFrameActive, setIsOutterFrameActive] = useState<boolean>(true);
   const [isInnerFrameActive, setIsInnerFrameActive] = useState<boolean>(false);
   const [displayColorPicker, setDisplayColorPicker] = useState<boolean>(false);
   const [customColor, setCustomColor] = useState<string>('');
-  const [containerStyles, setContainerStyles] = useState({ top: '20px' });
 
-  const ref = useRef<HTMLInputElement>(null);
+  const { paletteId, paletteType } = paletteDropdown;
+
+  const closeMenu = () => {
+    setOpen(false);
+    dispatch(setPaletteDropDown({ ...paletteDropdown, show: false }));
+    dispatch(setListPaletteColor({ innerColour: 'white', outerColour: 'black' }));
+  };
 
   const handleEditColor = (state: boolean) => {
     setDisplayColorPicker(state);
@@ -97,27 +107,6 @@ export default function PaletteManager({
     }
   });
 
-  useEffect(() => {
-    if (ref.current && ref.current.getBoundingClientRect().bottom > window.innerHeight) {
-      setContainerStyles({ top: `-${ref.current.getBoundingClientRect().height + 20}px` });
-    }
-  });
-
-  useEffect(() => {
-    const checkClickedOutSide = (e: MouseEvent) => {
-      if (ref.current && e.target && !ref.current.contains(e.target as Node)) {
-        if (paletteDropdown !== null) {
-          dispatch(setPaletteDropDown({ ...paletteDropdown, show: false }));
-          dispatch(setListPaletteColor({ innerColour: 'white', outerColour: 'black' }));
-        }
-      }
-    };
-    document.addEventListener('click', checkClickedOutSide);
-    return () => {
-      document.removeEventListener('click', checkClickedOutSide);
-    };
-  }, []);
-
   const handleClick = (color?: string | ListColourProps) => {
     if (paletteType === EntityType.hub) {
       editHubColorMutation.mutateAsync({
@@ -150,54 +139,60 @@ export default function PaletteManager({
   };
 
   return (
-    <div
-      className="absolute ease-in-out duration-300 inset-0 w-auto p-2 mt-3 overflow-y-auto bg-white border border-gray-200 rounded shadow-2xl w-fit left-5 h-fit drop-shadow-2xl"
-      style={{ zIndex: '999', ...containerStyles }}
-      ref={ref}
+    <Menu
+      open={open}
+      onClose={closeMenu}
+      TransitionComponent={Fade}
+      anchorOrigin={{
+        vertical: cords?.top || 'center',
+        horizontal: 15
+      }}
     >
-      <div className="z-50 flex flex-col">
-        {paletteType !== EntityType.list && <p className="justify-center">{title}</p>}
-        {topContent}
-        {paletteType === EntityType.list && (
-          <div className="flex justify-between mt-1">
-            <span>{title}</span>
-            <ListIconComponent
-              shape={shape}
-              type="colourToggle"
-              outterFrameClick={handleOutterFrameClick}
-              innerFrameClick={handleInnerFrameClick}
-              isInnerFrameActive={isInnerFrameActive}
-              isOutterFrameActive={isOutterFrameActive}
-              innerColour={listComboColour?.innerColour}
-              outterColour={listComboColour?.outerColour}
+      <div className="w-auto p-2 overflow-y-auto drop-shadow-2xl">
+        <div className="z-50 flex flex-col">
+          {paletteType !== EntityType.list && <p className="justify-center">{title}</p>}
+          {topContent}
+          {paletteType === EntityType.list && (
+            <div className="flex justify-between mt-1">
+              <span>{title}</span>
+              <ListIconComponent
+                shape={shape}
+                type="colourToggle"
+                outterFrameClick={handleOutterFrameClick}
+                innerFrameClick={handleInnerFrameClick}
+                isInnerFrameActive={isInnerFrameActive}
+                isOutterFrameActive={isOutterFrameActive}
+                innerColour={listComboColour?.innerColour}
+                outterColour={listComboColour?.outerColour}
+              />
+            </div>
+          )}
+          <ColorPalette handleClick={handleClick} />
+          <div className="flex justify-center">
+            <BiPaint
+              onClick={() => handleEditColor(true)}
+              className={`${displayColorPicker ? 'hidden' : 'block cursor-pointer'}`}
+            />
+            <RiArrowUpSFill
+              onClick={() => handleEditColor(false)}
+              className={`${!displayColorPicker ? 'hidden' : 'block cursor-pointer'}`}
             />
           </div>
-        )}
-        <ColorPalette handleClick={handleClick} />
-        <div className="flex justify-center">
-          <BiPaint
-            onClick={() => handleEditColor(true)}
-            className={`${displayColorPicker ? 'hidden' : 'block cursor-pointer'}`}
-          />
-          <RiArrowUpSFill
-            onClick={() => handleEditColor(false)}
-            className={`${!displayColorPicker ? 'hidden' : 'block cursor-pointer'}`}
-          />
+          <div className="flex flex-col justify-center">
+            {displayColorPicker && <ChromePicker color={customColor} onChangeComplete={handleCustomColor} />}
+            {displayColorPicker && (
+              <button
+                onClick={() => handleClick(customColor)}
+                className={`p-1 mt-2 border rounded ${customColor !== '' ? 'text-white' : 'text-black'}`}
+                style={{ backgroundColor: `${customColor}` }}
+              >
+                Save Color
+              </button>
+            )}
+          </div>
+          {bottomContent}
         </div>
-        <div className="flex flex-col justify-center">
-          {displayColorPicker && <ChromePicker color={customColor} onChangeComplete={handleCustomColor} />}
-          {displayColorPicker && (
-            <button
-              onClick={() => handleClick(customColor)}
-              className={`p-1 mt-2 border rounded ${customColor !== '' ? 'text-white' : 'text-black'}`}
-              style={{ backgroundColor: `${customColor}` }}
-            >
-              Save Color
-            </button>
-          )}
-        </div>
-        {bottomContent}
       </div>
-    </div>
+    </Menu>
   );
 }
