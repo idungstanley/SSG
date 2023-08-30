@@ -34,7 +34,8 @@ export default function DateFormat({ date, task, font = 'text-sm' }: dateFormatP
 
   const { isSuccess } = UseUpdateTaskDateService({
     task_id: taskId as string,
-    taskDate: selectedDate?.date.format('YYYY-MM-DD HH:mm:ss') as string
+    taskDate: selectedDate?.date.format('YYYY-MM-DD HH:mm:ss') as string,
+    setTaskId
   });
 
   const { date_format } = useAppSelector((state) => state.userSetting);
