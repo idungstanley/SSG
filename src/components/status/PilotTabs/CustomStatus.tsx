@@ -200,8 +200,15 @@ export default function CustomStatus() {
 
   const handleStatusId = () => {
     const modelTypeIsSameEntity = statusData.some((item) => item.model_type === model);
+    const modelIdIsSameEntity = statusData.some((item) => item.model_id === model_id);
     if (activeItemId === model_id && modelTypeIsSameEntity) {
-      return statusData;
+      if (modelIdIsSameEntity) {
+        return statusData;
+      } else {
+        return statusData.map((item, index) => {
+          return { ...item, id: null, is_default: index === 0 ? 1 : 0 }; // Set the id to null
+        });
+      }
     } else {
       return statusData.map((item, index) => {
         return { ...item, id: null, is_default: index === 0 ? 1 : 0 }; // Set the id to null
