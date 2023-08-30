@@ -437,14 +437,7 @@ export const UseUpdateTaskStatusService = ({ task_id, statusDataUpdate }: Update
     }
   );
 };
-export const UseUpdateTaskDateService = ({
-  task_id,
-  taskDate
-}: {
-  task_id: string;
-  taskDate: string;
-  pickedDateState: boolean;
-}) => {
+export const UseUpdateTaskDateService = ({ task_id, taskDate }: { task_id: string; taskDate: string }) => {
   const { pickedDateState } = useAppSelector((state) => state.workspace);
   const { tasks } = useAppSelector((state) => state.task);
 
@@ -467,7 +460,7 @@ export const UseUpdateTaskDateService = ({
       cacheTime: 0,
       onSuccess: (data) => {
         dispatch(setPickedDateState(false));
-        if (data.data.task.list_id) {
+        if (data.data.task.id == task_id) {
           const updatedTasks = taskDateUpdateManager(
             task_id as string,
             data.data.task.list_id as string,

@@ -54,7 +54,7 @@ export const taskDateUpdateManager = (
   taskId: string,
   listId: string,
   tasks: Record<string, ITaskFullList[]>,
-  type: string,
+  dateType: string,
   newDate: string
 ) => {
   if (listId) {
@@ -62,10 +62,12 @@ export const taskDateUpdateManager = (
 
     updatedTasks[listId] = updatedTasks[listId].map((task) => {
       if (taskId === task.id) {
-        return {
-          ...task,
-          start_date: newDate
-        };
+        if (dateType == 'start_date') {
+          return {
+            ...task,
+            start_date: newDate
+          };
+        }
       }
       return task;
     });
