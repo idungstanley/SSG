@@ -17,12 +17,16 @@ import {
 } from '@dnd-kit/core';
 import { arrayMove, sortableKeyboardCoordinates } from '@dnd-kit/sortable';
 import { findBoardSectionContainer, initializeBoard } from '../../../utils/StatusManagement/board';
-import { GroupStyles } from '../../../utils/StatusManagement/Types';
+import { GroupStyles, ModelType } from '../../../utils/StatusManagement/Types';
 import BoardSection from '../Components/BoardSection';
 import { BoardSectionsType } from '../../../utils/StatusManagement/Types';
 import { useMutation } from '@tanstack/react-query';
 import { statusTypesService } from '../../../features/hubs/hubService';
-import { addIsDefaultToValues, extractValuesFromArray } from '../../../utils/StatusManagement/statusUtils';
+import {
+  addIsDefaultToValues,
+  createModelIdAndTypeHandler,
+  extractValuesFromArray
+} from '../../../utils/StatusManagement/statusUtils';
 import { setMatchedStatus, setStatusesToMatch } from '../../../features/hubs/hubSlice';
 import MatchStatusPopUp from '../Components/MatchStatusPopUp';
 import { setMatchData } from '../../../features/general/prompt/promptSlice';
@@ -51,7 +55,6 @@ export default function CustomStatus() {
   const createStatusTypes = useMutation(statusTypesService);
 
   const { matchData } = useAppSelector((state) => state.prompt);
-
   const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
   const { statusTaskListDetails } = useAppSelector((state) => state.list);
   const { spaceStatuses, matchedStatus } = useAppSelector((state) => state.hub);
@@ -61,13 +64,18 @@ export default function CustomStatus() {
   const [newStatusValue, setNewStatusValue] = useState<string>('');
   const [addStatus, setAddStatus] = useState<boolean>(false);
   const [showMatchStatusPop, setShowMatchStatusPopup] = useState<boolean>(false);
+  const [modelData, setModelData] = useState<ModelType>({
+    modelId: null,
+    modelType: null
+  });
   const [matchingStatusValidation, setMatchingStatusValidation] = useState<string | null>(null);
 
   const initialBoardSections = initializeBoard(spaceStatuses);
   const [boardSections, setBoardSections] = useState<BoardSectionsType>(initialBoardSections);
+  const [activeId, setActiveId] = useState<string | null>(null);
+
   const [is_default_name, setIsDefaultName] = useState<string | null>(boardSections['open'][0]?.name || null); // Initialize with the name of the item at position 0 or null if no item
 
-  const [activeId, setActiveId] = useState<string | null>(null);
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
@@ -76,17 +84,18 @@ export default function CustomStatus() {
   );
 
   useEffect(() => {
+    createModelIdAndTypeHandler(activeItemId, activeItemType, setModelData, modelData);
     setBoardSections(initialBoardSections);
     setStatusTypesState(spaceStatuses);
-  }, [spaceStatuses, activeItemId]);
+  }, [spaceStatuses, activeItemId, activeItemType]);
 
   useEffect(() => {
     setIsDefaultName(boardSections['open'][0]?.name || null);
   }, [boardSections]);
 
-  function handleDragStart({ active }: DragEndEvent) {
+  const handleDragStart = ({ active }: DragEndEvent) => {
     setActiveId(active.id as string);
-  }
+  };
 
   const handleDragOver = ({ active, over }: DragOverEvent) => {
     // Find the containers
@@ -186,8 +195,8 @@ export default function CustomStatus() {
   //Add default status
   const AddDefault = addIsDefaultToValues(boardSections, is_default_name);
   const statusData = extractValuesFromArray(AddDefault);
-  const model = statusTaskListDetails.listId ? 'list' : (activeItemType as string);
-  const model_id = statusTaskListDetails.listId || (activeItemId as string);
+  const model = statusTaskListDetails.listId ? 'list' : (modelData?.modelType as string);
+  const model_id = statusTaskListDetails.listId || (modelData?.modelId as string);
 
   const handleStatusId = () => {
     const modelTypeIsSameEntity = statusData.some((item) => item.model_type === model);
@@ -244,8 +253,8 @@ export default function CustomStatus() {
       await createStatusTypes.mutateAsync({
         model_id: model_id,
         model: model,
-        from_model: activeItemType,
-        from_model_id: activeItemId,
+        from_model: modelData.modelType as string,
+        from_model_id: modelData.modelId as string,
         statuses: handleStatusId()
       });
     } catch (err) {
