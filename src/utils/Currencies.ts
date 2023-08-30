@@ -1,4 +1,4 @@
-interface currencyType {
+export interface currencyType {
   code: string;
   country: string;
   currency: string;
@@ -7,7 +7,7 @@ interface currencyType {
   name: string;
 }
 
-const currenciesArr: currencyType[] = [
+export const currenciesArr: currencyType[] = [
   {
     code: 'us',
     country: 'United States',
@@ -32,7 +32,6 @@ const currenciesArr: currencyType[] = [
     locale: 'eu-eu',
     symbol: '€'
   },
-
   {
     code: 'al',
     country: 'Albania',

@@ -14,6 +14,7 @@ import { cl } from '../../../../../utils';
 import FontStyle from './FontStyles/FontStyle';
 import CreateNumberField from './Number/CreateNumberField';
 import CreateEmailField from './Email/CreateEmailField';
+import CreateCurrencyField from './Currency/CreateCurrencyField';
 
 function NewColumn() {
   const dispatch = useAppDispatch();
@@ -116,6 +117,7 @@ function NewColumn() {
           {newCustomPropertyDetails.type.toLowerCase() === 'long text' && <CreateTextField />}
           {newCustomPropertyDetails.type.toLowerCase() === 'number' && <CreateNumberField />}
           {newCustomPropertyDetails.type.toLowerCase() === 'email' && <CreateEmailField />}
+          {newCustomPropertyDetails.type.toLowerCase() === 'currency' && <CreateCurrencyField />}
         </div>
       )}
     </>
