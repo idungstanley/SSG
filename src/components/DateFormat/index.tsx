@@ -16,15 +16,18 @@ export default function DateFormat({ date, task, font = 'text-sm' }: dateFormatP
   const [showDataPicker, setShowDatePicker] = useState<boolean>(false);
   const [taskId, setTaskId] = useState<string | null>(null);
   const [pickedDateState, setPickedDateState] = useState<boolean>(false);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   const { selectedDate } = useAppSelector((state) => state.workspace);
 
-  const handleClick = () => {
+  const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
+    setAnchorEl(event.currentTarget);
     setShowDatePicker(!showDataPicker);
     setTaskId(task?.id as string);
   };
 
   const handleClose = () => {
+    setAnchorEl(null);
     setShowDatePicker(!showDataPicker);
     setTaskId(task?.id as string);
   };
@@ -37,14 +40,15 @@ export default function DateFormat({ date, task, font = 'text-sm' }: dateFormatP
 
   const { date_format } = useAppSelector((state) => state.userSetting);
   return (
-    <div className="relative" onClick={() => handleClick()}>
+    <div className="" onClick={(e) => handleClick(e)}>
       <span className={`text-sm font-medium text-gray-400 ${font}`} style={{ fontSize: font }}>
         {showDataPicker && (
           <DatePicker
-            styles="absolute z-50 mt-1 shadow-2xl bg-white rounded-md ring-1 ring-black ring-opacity-5 focus:outline-none  right-32 flex justify-center"
+            styles="flex justify-center"
             toggleFn={setShowDatePicker}
             setShowDatePickerOption={true}
             handleClose={handleClose}
+            anchorEl={anchorEl}
           />
         )}
         {date ? (
