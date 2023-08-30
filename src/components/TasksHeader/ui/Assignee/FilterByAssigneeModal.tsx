@@ -125,7 +125,7 @@ export default function FilterByAssigneeModal() {
       >
         <Menu.Items
           className="fixed mt-2 overflow-scroll origin-top-right bg-white rounded-md shadow-lg w-72 ring-1 ring-black ring-opacity-5 focus:outline-none"
-          style={{ zIndex: 3, maxHeight: '500px' }}
+          style={{ zIndex: 3 }}
         >
           <div className="container px-4 py-2 mx-auto">
             <div className="relative flex items-center w-full text-gray-500">
@@ -142,59 +142,38 @@ export default function FilterByAssigneeModal() {
             </div>
           </div>
           <VerticalScroll>
-            {/* <section
-              className="flex items-center justify-between w-full px-4 py-2 text-left text-black cursor-pointer text-alsoit-text-md hover:bg-gray-200"
-              onClick={() => onClickMember('ns', 'unassigned')}
-            >
-              <div className="flex items-center space-x-3">
-                <AvatarWithInitials
-                  initials={'NA'}
-                  textColor={'white'}
-                  height="h-8"
-                  width="w-8"
-                  backgroundColour={'grey'}
-                  textSize={'8px'}
-                />
-                <div className="flex flex-col text-left">
-                  <p className="capitalize text-alsoit-text-lg text-alsoit-gray-300">Unassigned</p>
-                  <p className="text-alsoit-text-md">{''}</p>
-                </div>
-              </div>
-
-              <button>
-                {currentAssignees?.map((i) => i.id).includes('ns') ? <AiFillCheckCircle /> : <AiOutlineCheckCircle />}
-              </button>
-            </section> */}
-            {filteredMembers.map((member) => (
-              <section
-                className="flex items-center justify-between w-full px-4 py-2 text-left text-black cursor-pointer text-alsoit-text-md hover:bg-gray-200"
-                key={member.id}
-                onClick={() => onClickMember(member.id, member.user.name)}
-              >
-                <div className="flex items-center space-x-3">
-                  <AvatarWithInitials
-                    initials={member.user.initials}
-                    textColor={'white'}
-                    height="h-8"
-                    width="w-8"
-                    backgroundColour={member.color}
-                    textSize={'8px'}
-                  />
-                  <div className="flex flex-col text-left">
-                    <p className="capitalize text-alsoit-text-lg text-alsoit-gray-300">{member.user.name}</p>
-                    <p className="text-alsoit-text-md">{member.user.email}</p>
+            <div style={{ maxHeight: '340px' }}>
+              {filteredMembers.map((member) => (
+                <section
+                  className="flex items-center justify-between w-full px-4 py-2 text-left text-black cursor-pointer text-alsoit-text-md hover:bg-gray-200"
+                  key={member.id}
+                  onClick={() => onClickMember(member.id, member.user.name)}
+                >
+                  <div className="flex items-center space-x-3">
+                    <AvatarWithInitials
+                      initials={member.user.initials}
+                      textColor={'white'}
+                      height="h-8"
+                      width="w-8"
+                      backgroundColour={member.color}
+                      textSize={'8px'}
+                    />
+                    <div className="flex flex-col text-left">
+                      <p className="capitalize text-alsoit-text-lg text-alsoit-gray-300">{member.user.name}</p>
+                      <p className="text-alsoit-text-md">{member.user.email}</p>
+                    </div>
                   </div>
-                </div>
 
-                <button>
-                  {currentAssignees?.map((i) => i.id).includes(member.id) ? (
-                    <AiFillCheckCircle />
-                  ) : (
-                    <AiOutlineCheckCircle />
-                  )}
-                </button>
-              </section>
-            ))}
+                  <button>
+                    {currentAssignees?.map((i) => i.id).includes(member.id) ? (
+                      <AiFillCheckCircle />
+                    ) : (
+                      <AiOutlineCheckCircle />
+                    )}
+                  </button>
+                </section>
+              ))}
+            </div>
           </VerticalScroll>
         </Menu.Items>
       </Transition>
