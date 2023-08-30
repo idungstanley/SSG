@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import SubtasksIcon from '../../../../assets/icons/SubtasksIcon';
 import { ITaskFullList, Tag, Task } from '../../../../features/task/interface.tasks';
 import { DEFAULT_LEFT_PADDING } from '../../config';
@@ -43,9 +43,13 @@ export function Row({
 }: RowProps) {
   const dispatch = useAppDispatch();
 
-  const { showNewTaskField, showNewTaskId } = useAppSelector((state) => state.task);
+  const { showNewTaskField, showNewTaskId, toggleAllSubtask } = useAppSelector((state) => state.task);
 
-  const [showSubTasks, setShowSubTasks] = useState(false);
+  const [showSubTasks, setShowSubTasks] = useState(toggleAllSubtask);
+
+  useEffect(() => {
+    setShowSubTasks(toggleAllSubtask);
+  }, [toggleAllSubtask]);
 
   const otherColumns = columns.slice(1);
 
@@ -149,7 +153,7 @@ export function Row({
           <div className="opacity-0 absolute right-0 group-hover:opacity-100 flex items-center justify-center mr-1 space-x-1">
             {/* effects */}
             <ToolTip title="Apply Effects">
-              <button className="p-1 border rounded-md " onClick={(e) => e.stopPropagation()}>
+              <button className="p-1 border rounded-md bg-white" onClick={(e) => e.stopPropagation()}>
                 <Effect className="w-3 h-3" />
               </button>
             </ToolTip>
@@ -164,13 +168,13 @@ export function Row({
             {/* show create subtask field */}
             {task.descendants_count < 1 && (
               <ToolTip title="Subtask">
-                <button className="p-1 border rounded-md " onClick={(e) => onShowAddSubtaskField(e, task.id)}>
+                <button className="p-1 border rounded-md bg-white" onClick={(e) => onShowAddSubtaskField(e, task.id)}>
                   <SubtasksIcon className="w-3 h-3" />
                 </button>
               </ToolTip>
             )}
             <ToolTip title="Enhance View">
-              <button className="p-1 pl-4 " onClick={(e) => e.stopPropagation()}>
+              <button className="p-1 pl-4 rounded-md bg-white" onClick={(e) => e.stopPropagation()}>
                 <Enhance className="w-3 h-3" />
               </button>
             </ToolTip>

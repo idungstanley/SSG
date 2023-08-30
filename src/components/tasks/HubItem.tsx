@@ -30,6 +30,7 @@ import ToolTip from '../Tooltip/Tooltip';
 import { Hub, List, Wallet } from '../../pages/workspace/hubs/components/ActiveTree/activetree.interfaces';
 import ActiveBarIdentification from './Component/ActiveBarIdentification';
 import ActiveBackground from './Component/ActiveBackground';
+import { useAbsolute } from '../../hooks/useAbsolute';
 
 interface TaskItemProps {
   item: {
@@ -67,6 +68,8 @@ export default function HubItem({
   const { paletteDropdown } = useAppSelector((state) => state.account);
   const { showSidebar } = useAppSelector((state) => state.account);
   const { showMenuDropdown, SubMenuId } = useAppSelector((state) => state.hub);
+  const { updateCords } = useAppSelector((state) => state.task);
+
   const [uploadId, setUploadId] = useState<string | null | undefined>('');
   const [paletteColor, setPaletteColor] = useState<string | undefined | ListColourProps>(
     type === EntityType.hub ? 'blue' : 'orange'
@@ -77,11 +80,7 @@ export default function HubItem({
   const handleHubColour = (id: string, e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     if (showSidebar) {
       e.stopPropagation();
-      if (paletteId === id && show) {
-        dispatch(setPaletteDropDown({ ...paletteDropdown, show: false }));
-      } else {
-        dispatch(setPaletteDropDown({ show: true, paletteId: id, paletteType: EntityType.hub }));
-      }
+      dispatch(setPaletteDropDown({ show: true, paletteId: id, paletteType: EntityType.hub }));
     }
   };
 
@@ -89,58 +88,28 @@ export default function HubItem({
     setUploadId(paletteId);
   }, [paletteId]);
 
-  const closeSubMenu = () => {
-    dispatch(
-      getSubMenu({
-        SubMenuId: null,
-        SubMenuType: null
-      })
-    );
-  };
-
-  const closeMenuDropdown = () => {
-    dispatch(
-      setshowMenuDropdown({
-        showMenuDropdown: null,
-        showMenuDropdownType: null
-      })
-    );
-  };
-
   const handleItemAction = (id: string, name?: string | null) => {
     dispatch(getPrevName(name as string));
     dispatch(setSelectedTreeDetails({ name, id, type: EntityType.hub }));
     dispatch(setCreateWlLink(false));
-    if (id === SubMenuId) {
-      closeSubMenu();
-    } else {
-      closeMenuDropdown();
-      dispatch(
-        getSubMenu({
-          SubMenuId: id,
-          SubMenuType: type == EntityType.hub ? 'hubs' : EntityType.subHub
-        })
-      );
-    }
+    dispatch(
+      getSubMenu({
+        SubMenuId: id,
+        SubMenuType: type == EntityType.hub ? 'hubs' : EntityType.subHub
+      })
+    );
   };
 
   const handleHubSettings = (id: string, name: string, e: React.MouseEvent<HTMLSpanElement, MouseEvent>): void => {
     dispatch(setSelectedTreeDetails({ name, id, type: EntityType.hub }));
     dispatch(setCreateWLID(id));
-    // dispatch(getCurrHubId(id));
     dispatch(setCreateWlLink(false));
-    if (id === showMenuDropdown) {
-      closeMenuDropdown();
-    } else {
-      closeSubMenu();
-      dispatch(
-        setshowMenuDropdown({
-          showMenuDropdown: id,
-          showMenuDropdownType: EntityType.subHub
-        })
-      );
-    }
-
+    dispatch(
+      setshowMenuDropdown({
+        showMenuDropdown: id,
+        showMenuDropdownType: EntityType.subHub
+      })
+    );
     dispatch(getPrevName(name));
     if (showMenuDropdown != null) {
       if ((e.target as HTMLButtonElement).id == 'menusettings') {
@@ -187,6 +156,9 @@ export default function HubItem({
       return '17px';
     }
   };
+
+  const { cords, relativeRef } = useAbsolute(updateCords, 266);
+  const { cords: menuCords, relativeRef: menuRef } = useAbsolute(updateCords, 352);
 
   return (
     <div
@@ -240,7 +212,11 @@ export default function HubItem({
             )}
 
             <div className="flex items-center flex-1 min-w-0 gap-1">
-              <div onClick={(e) => handleHubColour(item.id, e)} className="flex items-center justify-center w-5 h-5">
+              <div
+                onClick={(e) => handleHubColour(item.id, e)}
+                className="flex items-center justify-center w-5 h-5"
+                ref={relativeRef}
+              >
                 {item.path !== null ? (
                   <img src={item.path} alt="hubs image" className="w-full h-full rounded" />
                 ) : (
@@ -275,6 +251,7 @@ export default function HubItem({
             <div
               className="relative right-0 flex items-center pr-1 space-x-2 text-black opacity-0 z-1 group-hover:opacity-100 hover:text-fuchsia-500"
               onClick={(e) => e.stopPropagation()}
+              ref={menuRef}
             >
               <span onClick={() => handleItemAction(item.id, item.name)} className="cursor-pointer">
                 <PlusIcon />
@@ -294,10 +271,17 @@ export default function HubItem({
       </div>
       <UploadImage endpoint={`hubs/${uploadId}`} invalidateQuery={['hubs'] as InvalidateQueryFilters<unknown>} />
       {paletteId == item.id && show ? (
-        <Palette title="Hub Colour" setPaletteColor={setPaletteColor} bottomContent={<SearchIconUpload />} />
+        <Palette
+          title="Hub Colour"
+          setPaletteColor={setPaletteColor}
+          bottomContent={<SearchIconUpload />}
+          cords={cords}
+        />
       ) : null}
-      {showMenuDropdown === item.id && showSidebar ? <MenuDropdown isExtendedBar={isExtendedBar} /> : null}
-      {SubMenuId === item.id && showSidebar ? <SubDropdown /> : null}
+      {showMenuDropdown === item.id && showSidebar ? (
+        <MenuDropdown isExtendedBar={isExtendedBar} cords={menuCords} />
+      ) : null}
+      {SubMenuId === item.id && showSidebar ? <SubDropdown cords={menuCords} /> : null}
     </div>
   );
 }

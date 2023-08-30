@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useState } from 'react';
 import { DocumentDuplicateIcon, StarIcon, PlusIcon, LinkIcon, SwatchIcon } from '@heroicons/react/24/outline';
 import { useAppSelector } from '../../app/hooks';
 import { useDispatch } from 'react-redux';
@@ -23,6 +23,8 @@ import Button from '../Button';
 import { EntityManagerTabsId, PilotTabsId } from '../../utils/PilotUtils';
 import { setVisibility } from '../../features/general/prompt/promptSlice';
 import { Capitalize } from '../../utils/NoCapWords/Capitalize';
+import { Fade, Menu } from '@mui/material';
+import { Cords } from '../../hooks/useAbsolute';
 
 interface itemsType {
   id: number;
@@ -38,37 +40,33 @@ interface optionsProps {
   bgColor?: string;
 }
 
-export default function SubDropdown() {
+interface SubDropdownProps {
+  cords?: Cords;
+}
+
+export default function SubDropdown({ cords }: SubDropdownProps) {
   const dispatch = useDispatch();
   const { listId, hubId, walletId } = useParams();
 
-  const { showMenuDropdownType, selectedTreeDetails, entityToCreate, showMenuDropdown, SubMenuType, SubMenuId } =
-    useAppSelector((state) => state.hub);
+  const { showMenuDropdownType, selectedTreeDetails, entityToCreate, SubMenuType } = useAppSelector(
+    (state) => state.hub
+  );
   const { showTreeInput, lastActiveItem, activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
   const { lightBaseColor } = useAppSelector((state) => state.account);
 
+  const [open, setOpen] = useState<boolean>(true);
+
   const isEntityActive = !!listId || !!hubId || !!walletId;
 
-  const ref = useRef<HTMLInputElement>(null);
-
-  useEffect(() => {
-    const checkClickedOutSide = (e: MouseEvent): void => {
-      if (SubMenuId && ref.current && !ref.current.contains(e.target as HTMLButtonElement)) {
-        if (lastActiveItem !== '') {
-          dispatch(
-            getSubMenu({
-              SubMenuId: null,
-              SubMenuType: null
-            })
-          );
-        }
-      }
-    };
-    document.addEventListener('click', checkClickedOutSide);
-    return () => {
-      document.removeEventListener('click', checkClickedOutSide);
-    };
-  }, [SubMenuId]);
+  const closeMenu = () => {
+    setOpen(false);
+    dispatch(
+      getSubMenu({
+        SubMenuId: null,
+        SubMenuType: null
+      })
+    );
+  };
 
   const options = [
     {
@@ -216,13 +214,16 @@ export default function SubDropdown() {
   ];
 
   return (
-    <div className="" ref={ref}>
-      <div
-        className={`fixed w-96 p-2 origin-top-right bg-white rounded-md top-2/4 ring-1 ring-black ring-opacity-5 focus:outline-none ${
-          showMenuDropdown == null ? 'left-56' : 'left-96'
-        }`}
-        style={{ boxShadow: '0 1px 10px #00000040', minWidth: '200px', zIndex: '999' }}
-      >
+    <Menu
+      open={open}
+      onClose={closeMenu}
+      TransitionComponent={Fade}
+      anchorOrigin={{
+        vertical: Number(cords?.top) - 100 || 'center',
+        horizontal: 270
+      }}
+    >
+      <div className="w-96 px-2 origin-top-right bg-white" style={{ minWidth: '200px' }}>
         {itemsList.map((item) =>
           (lastActiveItem === '' || lastActiveItem === item.title) && item.isVisible ? (
             <div key={item.id}>
@@ -260,6 +261,6 @@ export default function SubDropdown() {
           </div>
         )}
       </div>
-    </div>
+    </Menu>
   );
 }

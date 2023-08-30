@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useState } from 'react';
 import { useAppSelector } from '../../app/hooks';
 import { useDispatch } from 'react-redux';
 import {
@@ -17,15 +17,10 @@ import {
   ArrowDownIcon,
   PencilSquareIcon
 } from '@heroicons/react/24/outline';
-import { getHub, setArchiveHub, setshowMenuDropdown, setSubDropdownMenu } from '../../features/hubs/hubSlice';
+import { getHub, setArchiveHub, setSubDropdownMenu, setshowMenuDropdown } from '../../features/hubs/hubSlice';
 import EditHubModal from '../../pages/workspace/hubs/components/EditHubModal';
 import SubDropdown from './SubDropdown';
-import {
-  ArchiveHubService,
-  // useAddToFavourites,
-  useCreateFavorite,
-  UseDeleteHubService
-} from '../../features/hubs/hubService';
+import { ArchiveHubService, useCreateFavorite, UseDeleteHubService } from '../../features/hubs/hubService';
 import {
   setEditHubSlideOverVisibility,
   setEditListSlideOverVisibility,
@@ -50,10 +45,12 @@ import { setExtendedBarOpenedEntitiesIds, setOpenedEntitiesIds } from '../../fea
 import ExpandAllIcon from '../../assets/icons/ExpandAllIcon';
 import CollapseAllIcon from '../../assets/icons/CollapseAllIcon';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
-// import { setTriggerAddToFav } from "../../features/hubs/hubSlice";
+import { Fade, Menu } from '@mui/material';
+import { Cords } from '../../hooks/useAbsolute';
 
 interface IMenuDropdownProps {
   isExtendedBar?: boolean;
+  cords?: Cords;
 }
 
 interface itemsType {
@@ -64,40 +61,23 @@ interface itemsType {
   handleClick: () => void;
 }
 
-export default function MenuDropdown({ isExtendedBar }: IMenuDropdownProps) {
+export default function MenuDropdown({ isExtendedBar, cords }: IMenuDropdownProps) {
   const dispatch = useDispatch();
-  const {
-    SubDropdownMenu,
-    archiveHub,
-    showMenuDropdown,
-    showMenuDropdownType,
-    hub
-    // triggerAddToFav,
-  } = useAppSelector((state) => state.hub);
-  const { showEditHubSlideOver, showEditWalletSlideOver, showEditListSlideOver } = useAppSelector(
-    (state) => state.slideOver
+
+  const { SubDropdownMenu, archiveHub, showMenuDropdown, showMenuDropdownType, hub } = useAppSelector(
+    (state) => state.hub
   );
   const { openedEntitiesIds } = useAppSelector((state) => state.workspace);
-
   const { archiveWallet } = useAppSelector((state) => state.wallet);
   const { archiveList } = useAppSelector((state) => state.list);
-  const ref = useRef<HTMLInputElement>(null);
 
-  useEffect(() => {
-    const isOpenModal = showEditHubSlideOver || showEditWalletSlideOver || showEditListSlideOver;
-    const checkClickedOutSide = (e: MouseEvent) => {
-      if (showMenuDropdown && !isOpenModal && ref.current && e.target && !ref.current.contains(e.target as Node)) {
-        if (!SubDropdownMenu) {
-          dispatch(setSubDropdownMenu(false));
-          dispatch(setshowMenuDropdown({ showMenuDropdown: null, showMenuDropdownType: null }));
-        }
-      }
-    };
-    document.addEventListener('click', checkClickedOutSide);
-    return () => {
-      document.removeEventListener('click', checkClickedOutSide);
-    };
-  }, [SubDropdownMenu, showMenuDropdown, showEditHubSlideOver, showEditWalletSlideOver, showEditListSlideOver]);
+  const [open, setOpen] = useState<boolean>(true);
+
+  const closeMenu = () => {
+    setOpen(false);
+    dispatch(setSubDropdownMenu(false));
+    dispatch(setshowMenuDropdown({ showMenuDropdown: null, showMenuDropdownType: null }));
+  };
 
   //delete-entity
   //hubs and subhubs
@@ -224,7 +204,7 @@ export default function MenuDropdown({ isExtendedBar }: IMenuDropdownProps) {
       id: 8,
       title: 'Templates',
       handleClick: () => ({}),
-      icon: <SparklesIcon className="w-5 h-6 pt-2 text-gray-700" aria-hidden="true" />,
+      icon: <SparklesIcon className="w-4 h-6 text-gray-700" aria-hidden="true" />,
       isVisible: true
     },
     {
@@ -365,15 +345,16 @@ export default function MenuDropdown({ isExtendedBar }: IMenuDropdownProps) {
   ];
 
   return (
-    <div ref={ref}>
-      <div
-        className="fixed w-auto p-2 origin-top-right bg-white rounded-md top-2/4 left-56 ring-1 ring-black ring-opacity-5 focus:outline-none"
-        style={{
-          boxShadow: '0 1px 10px #00000040',
-          minWidth: '200px',
-          zIndex: '999'
-        }}
-      >
+    <Menu
+      open={open}
+      onClose={closeMenu}
+      TransitionComponent={Fade}
+      anchorOrigin={{
+        vertical: Number(cords?.top) - 150 || 'center',
+        horizontal: 300
+      }}
+    >
+      <div className="w-auto px-2" style={{ minWidth: '200px' }}>
         {itemsList.map((item) =>
           item.isVisible ? (
             <div key={item.id}>
@@ -392,6 +373,6 @@ export default function MenuDropdown({ isExtendedBar }: IMenuDropdownProps) {
       <EditHubModal />
       <EditListModal />
       <EditWalletModal />
-    </div>
+    </Menu>
   );
 }

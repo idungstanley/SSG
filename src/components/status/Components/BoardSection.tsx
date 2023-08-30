@@ -48,7 +48,7 @@ export default function BoardSection({
       [group]: !prevCollapsedStatusGroups[group]
     }));
   };
-  const TaskIndex = status.map((item) => item.position);
+  const StatusIndex = status.map((item) => item.name);
 
   return (
     <>
@@ -62,14 +62,14 @@ export default function BoardSection({
           <p className="flex uppercase justify-items-start">{title} STATUSES</p>
         </span>
       )}
-      <SortableContext items={TaskIndex} strategy={verticalListSortingStrategy} id={id}>
+      <SortableContext items={StatusIndex} strategy={verticalListSortingStrategy} id={id}>
         <div ref={setNodeRef} className="flex flex-col space-y-1">
           {id &&
             !collapsedStatusGroups[id] &&
             status.map((item) => (
-              <>
-                <StatusBodyTemplate id={item.name} item={item} setStatusTypesState={setStatusTypesState} />
-              </>
+              <div key={item.name}>
+                <StatusBodyTemplate item={item} setStatusTypesState={setStatusTypesState} />
+              </div>
             ))}
         </div>
       </SortableContext>

@@ -26,7 +26,7 @@ export default function StatusItem({ item }: StatusBodyProps) {
       <span style={{ color: item.color as string }} className="uppercase truncate flex-grow">
         {item.name}
       </span>
-      <span className="flex items-center gap-2 ml-2">
+      <span className="flex items-center gap-2 ml-10">
         <span>
           <Picker />
         </span>
