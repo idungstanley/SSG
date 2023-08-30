@@ -7,9 +7,11 @@ import {
   DragEndEvent,
   DragOverEvent,
   DragOverlay,
+  DropAnimation,
   KeyboardSensor,
   PointerSensor,
   closestCorners,
+  defaultDropAnimation,
   useSensor,
   useSensors
 } from '@dnd-kit/core';
@@ -20,15 +22,12 @@ import BoardSection from '../Components/BoardSection';
 import { BoardSectionsType } from '../../../utils/StatusManagement/Types';
 import { useMutation } from '@tanstack/react-query';
 import { statusTypesService } from '../../../features/hubs/hubService';
-import {
-  addIsDefaultToValues,
-  extractValuesFromArray,
-  getStatusById
-} from '../../../utils/StatusManagement/statusUtils';
+import { addIsDefaultToValues, extractValuesFromArray } from '../../../utils/StatusManagement/statusUtils';
 import { setMatchedStatus, setStatusesToMatch } from '../../../features/hubs/hubSlice';
 import MatchStatusPopUp from '../Components/MatchStatusPopUp';
 import { setMatchData } from '../../../features/general/prompt/promptSlice';
 import StatusBodyTemplate from '../StatusBodyTemplate';
+import StatusItem from '../Components/StatusItem';
 
 interface ErrorResponse {
   data: {
@@ -61,12 +60,14 @@ export default function CustomStatus() {
   const [validationMessage, setValidationMessage] = useState<string>('');
   const [newStatusValue, setNewStatusValue] = useState<string>('');
   const [addStatus, setAddStatus] = useState<boolean>(false);
-  const [activeId, setActiveId] = useState<string | null>(null);
   const [showMatchStatusPop, setShowMatchStatusPopup] = useState<boolean>(false);
   const [matchingStatusValidation, setMatchingStatusValidation] = useState<string | null>(null);
 
   const initialBoardSections = initializeBoard(spaceStatuses);
   const [boardSections, setBoardSections] = useState<BoardSectionsType>(initialBoardSections);
+  const [is_default_name, setIsDefaultName] = useState<string | null>(boardSections['open'][0]?.name || null); // Initialize with the name of the item at position 0 or null if no item
+
+  const [activeId, setActiveId] = useState<string | null>(null);
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
@@ -76,7 +77,12 @@ export default function CustomStatus() {
 
   useEffect(() => {
     setBoardSections(initialBoardSections);
+    setStatusTypesState(spaceStatuses);
   }, [spaceStatuses, activeItemId]);
+
+  useEffect(() => {
+    setIsDefaultName(boardSections['open'][0]?.name || null);
+  }, [boardSections]);
 
   function handleDragStart({ active }: DragEndEvent) {
     setActiveId(active.id as string);
@@ -178,8 +184,7 @@ export default function CustomStatus() {
   };
 
   //Add default status
-  const defaultItem = statusTypesState.find((item) => item.position === 0);
-  const AddDefault = addIsDefaultToValues(boardSections, defaultItem?.name);
+  const AddDefault = addIsDefaultToValues(boardSections, is_default_name);
   const statusData = extractValuesFromArray(AddDefault);
   const model = statusTaskListDetails.listId ? 'list' : (activeItemType as string);
   const model_id = statusTaskListDetails.listId || (activeItemId as string);
@@ -254,7 +259,11 @@ export default function CustomStatus() {
     }
   };
 
-  const draggableItem = activeId ? getStatusById(statusTypesState, activeId) : null;
+  // const dropAnimation: DropAnimation = {
+  //   ...defaultDropAnimation
+  // };
+
+  // const draggableItem = activeId ? getStatusById(statusData, activeId) : null;
 
   return (
     <section className="flex flex-col gap-2 p-4">
@@ -263,8 +272,8 @@ export default function CustomStatus() {
           sensors={sensors}
           collisionDetection={closestCorners}
           onDragStart={handleDragStart}
-          onDragOver={handleDragOver}
           onDragEnd={handleDragEnd}
+          onDragOver={handleDragOver}
         >
           {Object.keys(boardSections).map((uniqueModelType) => (
             <div
@@ -289,11 +298,9 @@ export default function CustomStatus() {
               />
             </div>
           ))}
-          {draggableItem ? (
-            <DragOverlay>
-              <StatusBodyTemplate item={draggableItem} id={activeId as string} />
-            </DragOverlay>
-          ) : null}
+          {/* <DragOverlay dropAnimation={dropAnimation}>
+            {draggableItem ? <StatusItem item={draggableItem} /> : null}
+          </DragOverlay> */}
         </DndContext>
       </div>
       <p className="mt-auto text-red-600 text-start">{validationMessage}</p>
