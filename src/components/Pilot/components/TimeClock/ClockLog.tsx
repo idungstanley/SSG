@@ -14,6 +14,13 @@ import { useGetUserSettingsData } from '../../../../features/task/taskService';
 import { toast } from 'react-hot-toast';
 import SaveFilterToast from '../../../TasksHeader/ui/Filter/ui/Toast';
 import { isArray } from '../../../../utils/typeGuards';
+import { useSelector } from 'react-redux';
+import CollapseIcon from '../../../Views/ui/collapseIcon/CollapseIcon';
+import ShowIcon from '../../../../assets/icons/ShowIcon';
+import { FilterListIcon } from '../../../../assets/icons/FilterListIcon';
+import Me from '../../../../assets/icons/Me';
+import AssigneeIcon from '../../../../assets/icons/Assignee';
+import SearchIcon from '../../../../assets/icons/SearchIcon';
 
 export type Header = {
   title: string;
@@ -33,6 +40,7 @@ interface LogProps {
 
 export default function ClockLog({ getTaskEntries }: LogProps) {
   const { timeArr, timeSortStatus, timeLogColumnData, timeSortArr } = useAppSelector((state) => state.task);
+  const { activeItemName } = useAppSelector((state) => state.workspace);
 
   const dispatch = useAppDispatch();
 
@@ -57,8 +65,13 @@ export default function ClockLog({ getTaskEntries }: LogProps) {
   const [viewChanges, setViewChanges] = useState<{ logColumns: boolean }>({
     logColumns: false
   });
+  const [showLogs, setShowLogs] = useState<boolean>(true);
 
   const prevLogColumnsRef = useRef<boolean>(viewChanges.logColumns);
+
+  const handleShowLogs = () => {
+    setShowLogs(!showLogs);
+  };
 
   useEffect(() => {
     const handleTeamMember = () => {
@@ -93,11 +106,13 @@ export default function ClockLog({ getTaskEntries }: LogProps) {
   }, [timeSortStatus]);
 
   useEffect(() => {
-    if (timeLogColumnData.length && !isArray(timeLogColumnData[0])) {
-      setHeaders(timeLogColumnData);
-    } else if (isArray(timeLogColumnData[0])) {
-      dispatch(setTimeSortArr([]));
-      dispatch(setTimeArr([]));
+    if (timeLogColumnData) {
+      if (timeLogColumnData.length && !isArray(timeLogColumnData[0])) {
+        setHeaders(timeLogColumnData);
+      } else if (isArray(timeLogColumnData[0])) {
+        dispatch(setTimeSortArr([]));
+        dispatch(setTimeArr([]));
+      }
     }
   }, [timeLogColumnData]);
 
@@ -153,137 +168,163 @@ export default function ClockLog({ getTaskEntries }: LogProps) {
       return <NoEntriesFound />;
     } else {
       return (
-        <div className="p-2">
-          <table className="relative w-full">
-            <thead className="relative flex items-center justify-between pb-2 text-xs border-b border-gray-400 font-extralight">
-              <tr className="flex items-center space-x-5">
-                {headers.map((col) => {
-                  return (
-                    !col.hidden && (
-                      <th
-                        key={col.id}
-                        className="relative flex gap-1 font-semibold capitalize cursor-default group text-alsoit-text-sm"
-                      >
-                        <span
-                          className="cursor-pointer"
-                          onClick={() => col.id === headerId && setShowSortModal(!showSortModal)}
+        <div className="px-2 py-8 border-t-4 border-l-2 border-alsoit-gray-100 rounded-md relative w-full">
+          <div className="flex justify-between items-center absolute -top-0 left-0 w-full">
+            <div className="flex space-x-1 items-center">
+              <label
+                htmlFor="time_logs"
+                className="bg-alsoit-gray-100 text-alsoit-gray-50 p-1.5 rounded-l-sm flex gap-2 items-center uppercase text-alsoit-text-md font-semibold"
+              >
+                <div className="cursor-pointer">
+                  <CollapseIcon color="#A854F7" active={showLogs} onToggle={() => handleShowLogs()} hoverBg="white" />
+                </div>
+                Time Inventory
+              </label>
+              <span className="text-alsoit-text-md">{activeItemName}</span>
+            </div>
+            <div className="flex justify-end space-x-1 px-1.5">
+              <ShowIcon color="gray" />
+              <FilterListIcon active={false} />
+              <Me active={false} />
+              <AssigneeIcon active={false} />
+              <SearchIcon />
+            </div>
+          </div>
+          {showLogs && (
+            <table className="relative w-full">
+              <thead className="relative flex items-center justify-between pb-2 text-xs border-b border-gray-400 font-extralight w-full">
+                <tr className="flex items-center justify-between w-10/12">
+                  {headers.map((col) => {
+                    return (
+                      !col.hidden && (
+                        <th
+                          key={col.id}
+                          className="relative flex font-semibold capitalize cursor-default group text-alsoit-text-sm text-start"
                         >
-                          {col.title}
-                        </span>
-                        {col.title === 'user' && (
-                          <>
-                            {headerId === '' && timeSortArr.length === 0 && (
-                              <FaSort
-                                className="w-3 h-3 transition duration-200 rounded-full opacity-0 cursor-pointer text-alsoit-text-lg text-alsoit-gray-50 bg-alsoit-gray-200 group-hover:opacity-100"
-                                onClick={() => handleSort(col.title, col.id)}
-                              />
-                            )}
-                            {timeArr.includes(col.title) && timeSortArr.length && (
-                              <div className="rounded-full sortClose-group">
-                                <div className="relative flex items-center justify-center w-4 h-4 space-x-1 font-medium text-white uppercase rounded-full cursor-pointer text-alsoit-text-lg bg-alsoit-danger group">
-                                  <div className="font-bold cursor-pointer hover:text-clip" style={{ fontSize: '8px' }}>
-                                    <>
-                                      {timeArr.length === 1 && timeSortArr.length ? (
-                                        <ArrowCaretUp active={false} />
-                                      ) : (
-                                        <span className="flex gap-1">
-                                          {timeArr.indexOf(col.title) + 1}
+                          <span
+                            className="cursor-pointer"
+                            onClick={() => col.id === headerId && setShowSortModal(!showSortModal)}
+                          >
+                            {col.title}
+                          </span>
+                          {col.title === 'user' && (
+                            <>
+                              {headerId === '' && timeSortArr.length === 0 && (
+                                <FaSort
+                                  className="w-3 h-3 transition duration-200 rounded-full opacity-0 cursor-pointer text-alsoit-text-lg text-alsoit-gray-50 bg-alsoit-gray-200 group-hover:opacity-100"
+                                  onClick={() => handleSort(col.title, col.id)}
+                                />
+                              )}
+                              {timeArr.includes(col.title) && timeSortArr.length && (
+                                <div className="rounded-full sortClose-group">
+                                  <div className="relative flex items-center justify-center w-4 h-4 space-x-1 font-medium text-white uppercase rounded-full cursor-pointer text-alsoit-text-lg bg-alsoit-danger group">
+                                    <div
+                                      className="font-bold cursor-pointer hover:text-clip"
+                                      style={{ fontSize: '8px' }}
+                                    >
+                                      <>
+                                        {timeArr.length === 1 && timeSortArr.length ? (
                                           <ArrowCaretUp active={false} />
-                                        </span>
-                                      )}
-                                    </>
+                                        ) : (
+                                          <span className="flex gap-1">
+                                            {timeArr.indexOf(col.title) + 1}
+                                            <ArrowCaretUp active={false} />
+                                          </span>
+                                        )}
+                                      </>
+                                    </div>
+                                  </div>
+                                  <div
+                                    className="w-4 h-4"
+                                    onClick={() => handleRemoveFilter(col.title)}
+                                    onMouseEnter={() =>
+                                      setIconToggle((prev) => ({
+                                        ...prev,
+                                        cancelIcon: true
+                                      }))
+                                    }
+                                    onMouseLeave={() =>
+                                      setIconToggle((prev) => ({
+                                        ...prev,
+                                        cancelIcon: false
+                                      }))
+                                    }
+                                  >
+                                    <CancelIcon active={icontoggle.cancelIcon} dimensions={{ width: 12, height: 12 }} />
                                   </div>
                                 </div>
-                                <div
-                                  className="w-4 h-4"
-                                  onClick={() => handleRemoveFilter(col.title)}
-                                  onMouseEnter={() =>
-                                    setIconToggle((prev) => ({
-                                      ...prev,
-                                      cancelIcon: true
-                                    }))
-                                  }
-                                  onMouseLeave={() =>
-                                    setIconToggle((prev) => ({
-                                      ...prev,
-                                      cancelIcon: false
-                                    }))
-                                  }
-                                >
-                                  <CancelIcon active={icontoggle.cancelIcon} dimensions={{ width: 12, height: 12 }} />
-                                </div>
-                              </div>
-                            )}
-                          </>
-                        )}
-                        {showSortModal && col.id === headerId && (
-                          <UserSortDropDown
-                            arr={teamMember}
-                            toggleModalFn={setShowSortModal}
-                            memberIds={teamMemberId}
-                          />
-                        )}
-                      </th>
-                    )
-                  );
-                })}
-              </tr>
-              <tr>
-                <th colSpan={headers.filter((header) => !header.hidden).length}>
-                  <div
-                    className="flex items-center justify-end mb-2"
-                    onClick={() => setShowModal(!showModal)}
-                    onMouseEnter={() =>
-                      setIconToggle((prev) => ({
-                        ...prev,
-                        plusIcon: true
-                      }))
-                    }
-                    onMouseLeave={() =>
-                      setIconToggle((prev) => ({
-                        ...prev,
-                        plusIcon: false
-                      }))
-                    }
-                  >
-                    <PlusCircle active={icontoggle.plusIcon} dimensions={{ width: 20, height: 20 }} />
-                  </div>
-                  {showModal && (
+                              )}
+                            </>
+                          )}
+                          {showSortModal && col.id === headerId && (
+                            <UserSortDropDown
+                              arr={teamMember}
+                              toggleModalFn={setShowSortModal}
+                              memberIds={teamMemberId}
+                            />
+                          )}
+                        </th>
+                      )
+                    );
+                  })}
+                </tr>
+                <tr>
+                  <th colSpan={headers.filter((header) => !header.hidden).length}>
                     <div
-                      className="absolute bg-white shadow-md w-44 top-10 right-10"
-                      tabIndex={0}
-                      onBlur={() => setShowModal(!showModal)}
+                      className="flex items-center justify-end mb-2"
+                      onClick={() => setShowModal(!showModal)}
+                      onMouseEnter={() =>
+                        setIconToggle((prev) => ({
+                          ...prev,
+                          plusIcon: true
+                        }))
+                      }
+                      onMouseLeave={() =>
+                        setIconToggle((prev) => ({
+                          ...prev,
+                          plusIcon: false
+                        }))
+                      }
                     >
-                      <ul className="flex flex-col px-4 py-6 space-y-2">
-                        <li
-                          className="flex gap-1 py-1 capitalize border-b cursor-pointer"
-                          onClick={() => handleShowAllColumns()}
-                        >
-                          <input type="checkbox" checked={!checkedField} />
-                          show all
-                        </li>
-                        {headers.map((header) => (
-                          <li
-                            className="flex justify-between py-1 capitalize border-b cursor-pointer"
-                            key={header.id}
-                            onClick={() => handleColumnHide(header.id)}
-                          >
-                            {header.title}
-                            {!header.hidden && <GiCheckMark />}
-                          </li>
-                        ))}
-                      </ul>
+                      <PlusCircle active={icontoggle.plusIcon} dimensions={{ width: 20, height: 20 }} />
                     </div>
-                  )}
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {getTaskEntries?.data?.time_entries?.map((entries: entriesProps) => {
-                return <EntryList entries={entries} key={entries.id} switchHeader={headers} />;
-              })}
-            </tbody>
-          </table>
+                    {showModal && (
+                      <div
+                        className="absolute bg-white shadow-md w-44 top-10 right-10"
+                        tabIndex={0}
+                        onBlur={() => setShowModal(!showModal)}
+                      >
+                        <ul className="flex flex-col px-4 py-6 space-y-2">
+                          <li
+                            className="flex gap-1 py-1 capitalize border-b cursor-pointer"
+                            onClick={() => handleShowAllColumns()}
+                          >
+                            <input type="checkbox" checked={!checkedField} />
+                            show all
+                          </li>
+                          {headers.map((header) => (
+                            <li
+                              className="flex justify-between py-1 capitalize border-b cursor-pointer"
+                              key={header.id}
+                              onClick={() => handleColumnHide(header.id)}
+                            >
+                              {header.title}
+                              {!header.hidden && <GiCheckMark />}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {getTaskEntries?.data?.time_entries?.map((entries: entriesProps) => {
+                  return <EntryList entries={entries} key={entries.id} switchHeader={headers} />;
+                })}
+              </tbody>
+            </table>
+          )}
         </div>
       );
     }

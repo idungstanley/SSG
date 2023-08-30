@@ -1,12 +1,11 @@
 import {
   ChatBubbleLeftEllipsisIcon,
-  ClockIcon,
   DocumentTextIcon,
   EyeIcon,
   InformationCircleIcon,
   SignalIcon
 } from '@heroicons/react/24/outline';
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import ChatForPilot from '../../../../../components/Chat/ChatForPilot';
@@ -26,6 +25,7 @@ import Calendar from '../../../../../components/Pilot/components/Calendar';
 import CalendarIcon from '../../../../../assets/icons/CalendarIcon';
 import { EntityType } from '../../../../../utils/EntityTypes/EntityType';
 import EntityManagerIcon from '../../../../../assets/icons/EntityManagerIcon';
+import { ClockIcon } from '../../../../../assets/icons/ClockIcon';
 
 const sections = [
   {
@@ -103,7 +103,7 @@ const tabs = [
   {
     id: 6,
     label: 'Time clock',
-    icon: <ClockIcon className="w-4 h-4" />
+    icon: <ClockIcon />
   },
   {
     id: 7,
