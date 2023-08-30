@@ -11,6 +11,28 @@ import { EllipsisHorizontalIcon, MagnifyingGlassIcon } from '@heroicons/react/24
 import AssigneeIcon from '../../../../assets/icons/Assignee';
 import { VerticalScroll } from '../../../ScrollableContainer/VerticalScroll';
 
+const unassigned = {
+  color: '#626262',
+  id: 'ns',
+  name: 'Unassigned',
+  is_active: false,
+  invited_at: '',
+  user: {
+    color: '#626262',
+    name: 'Unassigned',
+    id: 'ns',
+    email: '',
+    initials: 'NA',
+    avatar_path: null
+  },
+  role: {
+    key: 'ns',
+    name: 'ns'
+  },
+  initials: 'NA',
+  colour: '#626262'
+};
+
 export default function FilterByAssigneeModal() {
   const dispatch = useAppDispatch();
   const inputRef = useRef<HTMLInputElement>(null);
@@ -24,8 +46,9 @@ export default function FilterByAssigneeModal() {
 
   const { data } = useGetTeamMembers({ page: 1, query: '' });
   const members = data?.data.team_members ?? [];
+  const allMembers = [unassigned, ...members];
   // Filter the members based on the search value
-  const filteredMembers = members.filter((member) =>
+  const filteredMembers = allMembers.filter((member) =>
     member.user.name.toLowerCase().includes(searchValue.toLowerCase())
   );
 
@@ -119,6 +142,29 @@ export default function FilterByAssigneeModal() {
             </div>
           </div>
           <VerticalScroll>
+            {/* <section
+              className="flex items-center justify-between w-full px-4 py-2 text-left text-black cursor-pointer text-alsoit-text-md hover:bg-gray-200"
+              onClick={() => onClickMember('ns', 'unassigned')}
+            >
+              <div className="flex items-center space-x-3">
+                <AvatarWithInitials
+                  initials={'NA'}
+                  textColor={'white'}
+                  height="h-8"
+                  width="w-8"
+                  backgroundColour={'grey'}
+                  textSize={'8px'}
+                />
+                <div className="flex flex-col text-left">
+                  <p className="capitalize text-alsoit-text-lg text-alsoit-gray-300">Unassigned</p>
+                  <p className="text-alsoit-text-md">{''}</p>
+                </div>
+              </div>
+
+              <button>
+                {currentAssignees?.map((i) => i.id).includes('ns') ? <AiFillCheckCircle /> : <AiOutlineCheckCircle />}
+              </button>
+            </section> */}
             {filteredMembers.map((member) => (
               <section
                 className="flex items-center justify-between w-full px-4 py-2 text-left text-black cursor-pointer text-alsoit-text-md hover:bg-gray-200"
