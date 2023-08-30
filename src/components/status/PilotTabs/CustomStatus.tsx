@@ -55,7 +55,6 @@ export default function CustomStatus() {
   const createStatusTypes = useMutation(statusTypesService);
 
   const { matchData } = useAppSelector((state) => state.prompt);
-
   const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
   const { statusTaskListDetails } = useAppSelector((state) => state.list);
   const { spaceStatuses, matchedStatus } = useAppSelector((state) => state.hub);
@@ -73,10 +72,10 @@ export default function CustomStatus() {
 
   const initialBoardSections = initializeBoard(spaceStatuses);
   const [boardSections, setBoardSections] = useState<BoardSectionsType>(initialBoardSections);
-  const [is_default_name, setIsDefaultName] = useState<string | null>(boardSections['open'][0]?.name || null); // Initialize with the name of the item at position 0 or null if no item
   const [activeId, setActiveId] = useState<string | null>(null);
 
-  console.log(modelData);
+  const [is_default_name, setIsDefaultName] = useState<string | null>(boardSections['open'][0]?.name || null); // Initialize with the name of the item at position 0 or null if no item
+
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
@@ -94,9 +93,9 @@ export default function CustomStatus() {
     setIsDefaultName(boardSections['open'][0]?.name || null);
   }, [boardSections]);
 
-  function handleDragStart({ active }: DragEndEvent) {
+  const handleDragStart = ({ active }: DragEndEvent) => {
     setActiveId(active.id as string);
-  }
+  };
 
   const handleDragOver = ({ active, over }: DragOverEvent) => {
     // Find the containers
@@ -192,8 +191,6 @@ export default function CustomStatus() {
     }
     setAddStatus(false);
   };
-
-  //Model Id
 
   //Add default status
   const AddDefault = addIsDefaultToValues(boardSections, is_default_name);
