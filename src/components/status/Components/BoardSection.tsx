@@ -20,6 +20,7 @@ interface BoardProps {
   addStatus: boolean;
   newStatusValue: string;
   handleSaveNewStatus: () => void;
+  completeData: StatusProps[];
 }
 
 export default function BoardSection({
@@ -31,7 +32,8 @@ export default function BoardSection({
   setStatusTypesState,
   handleSaveNewStatus,
   newStatusValue,
-  setNewStatusValue
+  setNewStatusValue,
+  completeData
 }: BoardProps) {
   const { setNodeRef } = useDroppable({
     id
@@ -48,7 +50,7 @@ export default function BoardSection({
       [group]: !prevCollapsedStatusGroups[group]
     }));
   };
-  const StatusIndex = status.map((item) => item.name);
+  const StatusIndex = completeData.map((item) => item.name);
 
   return (
     <>
@@ -62,7 +64,7 @@ export default function BoardSection({
           <p className="flex uppercase justify-items-start">{title} STATUSES</p>
         </span>
       )}
-      <SortableContext items={StatusIndex} strategy={verticalListSortingStrategy} id={id}>
+      <SortableContext items={StatusIndex} strategy={verticalListSortingStrategy}>
         <div ref={setNodeRef} className="flex flex-col space-y-1">
           {id &&
             !collapsedStatusGroups[id] &&

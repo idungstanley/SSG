@@ -14,6 +14,8 @@ import Drag from '../../assets/icons/Drag';
 import { useSortable } from '@dnd-kit/sortable';
 import { BoardSectionsType } from '../../utils/StatusManagement/Types';
 import { CSS } from '@dnd-kit/utilities';
+import { useAppSelector } from '../../app/hooks';
+import { groupStylesMapping } from './PilotTabs/CustomStatus';
 
 interface StatusBodyProps {
   item: StatusProps;
@@ -23,19 +25,33 @@ interface StatusBodyProps {
 export default function StatusBodyTemplate({ item, setStatusTypesState }: StatusBodyProps) {
   const inputRef = useRef<HTMLInputElement | null>(null);
 
+  const { draggableActiveStatusId } = useAppSelector((state) => state.workspace);
+
   const [editableContent, setEditableContent] = useState<boolean>(false);
   const [showStatusEditDropdown, setShowStatusEditDropdown] = useState<null | HTMLSpanElement | HTMLDivElement>(null);
   const [showStatusColorDropdown, setShowStatusColorDropdown] = useState<null | HTMLSpanElement>(null);
+
   const handleOpenStatusEditDropdown = (event: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
     event.stopPropagation();
     setShowStatusEditDropdown(event.currentTarget);
   };
 
-  const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: item.name });
+  const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: item.name, data: { item } });
+
+  // const style = {
+  //   transform: CSS.Transform.toString(transform),
+  //   transition
+  // };
 
   const style = {
     transform: CSS.Transform.toString(transform),
-    transition
+    transition,
+    touchAction: 'none',
+    opacity: item.name === draggableActiveStatusId ? 0.3 : 1,
+    backgroundColor:
+      item.name === draggableActiveStatusId
+        ? (groupStylesMapping[item.type as keyof typeof groupStylesMapping]?.backgroundColor as string)
+        : undefined
   };
 
   const handleOpenStatusColorDropdown = (event: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
