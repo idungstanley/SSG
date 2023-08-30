@@ -46,7 +46,7 @@ export function ManageTagsDropdown({ tagsArr, entityId, entityType }: ManageTags
         <button
           type="button"
           onClick={onClickOpenDropdown}
-          className="p-1 border rounded-md bg-transparent text-gray-400 hover:text-gray-700"
+          className="p-1 border rounded-md bg-transparent text-gray-400 hover:text-gray-700 bg-white"
         >
           <div ref={relativeRef}>
             <TagIcon />
