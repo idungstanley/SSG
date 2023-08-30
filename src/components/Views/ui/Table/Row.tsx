@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import SubtasksIcon from '../../../../assets/icons/SubtasksIcon';
 import { ITaskFullList, Tag, Task } from '../../../../features/task/interface.tasks';
 import { DEFAULT_LEFT_PADDING } from '../../config';
@@ -43,9 +43,13 @@ export function Row({
 }: RowProps) {
   const dispatch = useAppDispatch();
 
-  const { showNewTaskField, showNewTaskId } = useAppSelector((state) => state.task);
+  const { showNewTaskField, showNewTaskId, toggleAllSubtask } = useAppSelector((state) => state.task);
 
-  const [showSubTasks, setShowSubTasks] = useState(false);
+  const [showSubTasks, setShowSubTasks] = useState(toggleAllSubtask);
+
+  useEffect(() => {
+    setShowSubTasks(toggleAllSubtask);
+  }, [toggleAllSubtask]);
 
   const otherColumns = columns.slice(1);
 
