@@ -77,6 +77,7 @@ interface workspaceState {
   extendedBarOpenedEntitiesIds: string[];
   workSpaceSettings: WorkSpaceSettingsRes[] | undefined;
   workSpaceSettingsObj: WorkSpaceSettingsUpdateRes | undefined;
+  draggableActiveStatusId: string | null;
 }
 
 const initialState: workspaceState = {
@@ -137,7 +138,8 @@ const initialState: workspaceState = {
   openedEntitiesIds: [],
   extendedBarOpenedEntitiesIds: [],
   workSpaceSettings: [],
-  workSpaceSettingsObj: undefined
+  workSpaceSettingsObj: undefined,
+  draggableActiveStatusId: null
 };
 
 export const wsSlice = createSlice({
@@ -182,6 +184,9 @@ export const wsSlice = createSlice({
     },
     setShowExtendedBar(state, action: PayloadAction<boolean>) {
       state.showExtendedBar = action.payload;
+    },
+    setDraggableActiveStatusId(state, action: PayloadAction<string | null>) {
+      state.draggableActiveStatusId = action.payload;
     },
     setShowPilotIconView(state, action: PayloadAction<boolean>) {
       state.showPilotIconView = action.payload;
@@ -408,7 +413,8 @@ export const {
   setExtendedBarOpenedEntitiesIds,
   setActiveStatusManagementTabId,
   setWorkSpaceSetting,
-  setWorkSpaceSettingsObj
+  setWorkSpaceSettingsObj,
+  setDraggableActiveStatusId
 } = wsSlice.actions;
 
 export default wsSlice.reducer;
