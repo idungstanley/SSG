@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from 'react';
-import { useAppSelector } from '../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import Page from '../../components/Page';
 import { UseGetHubDetails } from '../../features/hubs/hubService';
 import { UseGetFullTaskList } from '../../features/task/taskService';
@@ -13,9 +13,13 @@ import { VerticalScroll } from '../../components/ScrollableContainer/VerticalScr
 import { GroupHorizontalScroll } from '../../components/ScrollableContainer/GroupHorizontalScroll';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
 import { ITaskFullList } from '../../features/task/interface.tasks';
+import { setIsTasksUpdated, setTasks } from '../../features/task/taskSlice';
 
 export default function AllListsPage() {
+  const dispatch = useAppDispatch();
+
   const { hub } = useAppSelector((state) => state.hub);
+  const { tasks: tasksStore, isTasksUpdated } = useAppSelector((state) => state.task);
 
   const [allHubsId, setAllHubsId] = useState<string[]>([]);
   const [currentHubIdInOrder, setCurrentHubIdInOrder] = useState<string>('');
@@ -25,7 +29,8 @@ export default function AllListsPage() {
 
   const { data, hasNextPage, fetchNextPage, isLoading } = UseGetFullTaskList({
     itemId: currentHubIdInOrder,
-    itemType: EntityType.hub
+    itemType: EntityType.hub,
+    isEverythingPage: true
   });
 
   useEffect(() => {
@@ -52,7 +57,22 @@ export default function AllListsPage() {
     }
   }, [allHubsId]);
 
-  const lists = useMemo(() => generateLists([...new Set(allTasks)]), [allTasks]);
+  const lists = useMemo(
+    () => generateLists([...new Set(allTasks)], hubsData?.data.hub.custom_fields),
+    [allTasks, hubsData]
+  );
+
+  useEffect(() => {
+    if (lists) {
+      dispatch(setTasks({ ...tasksStore, ...lists }));
+    }
+  }, [lists]);
+
+  useEffect(() => {
+    if (!allHubsId.length && Object.keys(tasksStore).length) {
+      dispatch(setIsTasksUpdated(true));
+    }
+  }, [allHubsId]);
 
   return (
     <>
@@ -67,9 +87,13 @@ export default function AllListsPage() {
           <section style={{ minHeight: '0', maxHeight: '83vh' }} className="w-full h-full p-4 space-y-10">
             {/* lists */}
             {Object.keys(lists).map((listId) => (
-              <div key={listId}>
-                <List tasks={lists[listId]} customProperty={hubsData?.data.hub.custom_fields} />
-              </div>
+              <>
+                {tasksStore[listId] && isTasksUpdated ? (
+                  <div key={listId}>
+                    <List tasks={lists[listId]} />
+                  </div>
+                ) : null}
+              </>
             ))}
           </section>
         </VerticalScroll>

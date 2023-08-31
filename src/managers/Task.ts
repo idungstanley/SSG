@@ -1,3 +1,4 @@
+import { IField } from '../features/list/list.interfaces';
 import { ITeamMembersAndGroup } from '../features/settings/teamMembersAndGroups.interfaces';
 import { IStatus, ITaskFullList } from '../features/task/interface.tasks';
 
@@ -50,6 +51,32 @@ export const taskStatusUpdateManager = (
 
   return tasks;
 };
+export const taskDateUpdateManager = (
+  taskId: string,
+  listId: string,
+  tasks: Record<string, ITaskFullList[]>,
+  dateType: string,
+  newDate: string
+) => {
+  if (listId) {
+    const updatedTasks = { ...tasks };
+
+    updatedTasks[listId] = updatedTasks[listId].map((task) => {
+      if (taskId === task.id) {
+        if (dateType == 'start_date') {
+          return {
+            ...task,
+            start_date: newDate
+          };
+        }
+      }
+      return task;
+    });
+    return updatedTasks;
+  }
+
+  return tasks;
+};
 
 export const taskAssignessUpdateManager = (
   taskId: string,
@@ -79,4 +106,19 @@ export const taskAssignessUpdateManager = (
   }
 
   return tasks;
+};
+
+export const updateCustomFieldsManager = (tasks: Record<string, ITaskFullList[]>, customFieldData: IField) => {
+  const updatedTasks = { ...tasks };
+
+  Object.keys(updatedTasks).map((listId) => {
+    updatedTasks[listId] = updatedTasks[listId].map((task) => {
+      return {
+        ...task,
+        custom_field_columns: [customFieldData, ...task.custom_field_columns]
+      };
+    });
+  });
+
+  return updatedTasks;
 };

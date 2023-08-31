@@ -31,12 +31,17 @@ import { IWatchersRes } from '../general/watchers/watchers.interface';
 import RecordRTC from 'recordrtc';
 import { useUploadRecording } from '../workspace/workspaceService';
 import { useParams } from 'react-router-dom';
-import { setTimerLastMemory, toggleMute } from '../workspace/workspaceSlice';
+import { setPickedDateState, setTimerLastMemory, toggleMute } from '../workspace/workspaceSlice';
 import { generateFilters } from '../../components/TasksHeader/lib/generateFilters';
 import { runTimer } from '../../utils/TimerCounter';
 import Duration from '../../utils/TimerDuration';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
-import { taskAssignessUpdateManager, taskPriorityUpdateManager, taskStatusUpdateManager } from '../../managers/Task';
+import {
+  taskAssignessUpdateManager,
+  taskDateUpdateManager,
+  taskPriorityUpdateManager,
+  taskStatusUpdateManager
+} from '../../managers/Task';
 import { ITeamMembersAndGroup } from '../settings/teamMembersAndGroups.interfaces';
 import { isArrayOfStrings } from '../../utils/typeGuards';
 
@@ -266,21 +271,20 @@ export const createTaskService = (data: {
 
 export const UseGetFullTaskList = ({
   itemId,
-  itemType
+  itemType,
+  isEverythingPage
 }: {
   itemId: string | undefined | null;
   itemType: string | null | undefined;
+  isEverythingPage?: boolean;
 }) => {
+  const dispatch = useAppDispatch();
   const queryClient = useQueryClient();
 
   const hub_id = itemType === EntityType.hub || itemType === EntityType.subHub ? itemId : null;
   const wallet_id = itemType == EntityType.wallet || itemType === EntityType.subWallet ? itemId : null;
   const { sortAbleArr } = useAppSelector((state) => state.task);
   const sortArrUpdate = sortAbleArr.length <= 0 ? null : sortAbleArr;
-
-  const { workSpaceId } = useParams();
-  const { currentWorkspaceId } = useAppSelector((state) => state.auth);
-  const fetch = currentWorkspaceId == workSpaceId;
 
   const { filters } = generateFilters();
 
@@ -303,8 +307,11 @@ export const UseGetFullTaskList = ({
     },
     {
       keepPreviousData: true,
-      enabled: fetch && (!!hub_id || !!wallet_id),
+      enabled: !!hub_id || !!wallet_id,
       onSuccess: (data) => {
+        if (!isEverythingPage) {
+          dispatch(setTasks({}));
+        }
         data.pages.map((page) => page.data.tasks.map((task) => queryClient.setQueryData(['task', task.id], task)));
       },
       getNextPageParam: (lastPage) => {
@@ -313,7 +320,8 @@ export const UseGetFullTaskList = ({
         }
 
         return false;
-      }
+      },
+      cacheTime: 0
     }
   );
 };
@@ -436,6 +444,52 @@ export const UseUpdateTaskStatusService = ({ task_id, statusDataUpdate }: Update
     }
   );
 };
+export const UseUpdateTaskDateService = ({
+  task_id,
+  taskDate,
+  setTaskId
+}: {
+  task_id: string;
+  taskDate: string;
+  setTaskId: React.Dispatch<React.SetStateAction<string | null>>;
+}) => {
+  const { pickedDateState } = useAppSelector((state) => state.workspace);
+  const { tasks } = useAppSelector((state) => state.task);
+
+  const dispatch = useAppDispatch();
+
+  return useQuery(
+    ['task', { task_id, taskDate }],
+    async () => {
+      const data = requestNew<ITaskRes>({
+        url: `tasks/${task_id}`,
+        method: 'PUT',
+        data: {
+          start_date: taskDate
+        }
+      });
+      return data;
+    },
+    {
+      enabled: !!task_id && !!pickedDateState,
+      cacheTime: 0,
+      onSuccess: (data) => {
+        dispatch(setPickedDateState(false));
+        setTaskId(null);
+        if (data.data.task.id == task_id) {
+          const updatedTasks = taskDateUpdateManager(
+            task_id as string,
+            data.data.task.list_id as string,
+            tasks,
+            'start_date',
+            data.data.task.start_date as string
+          );
+          dispatch(setTasks(updatedTasks));
+        }
+      }
+    }
+  );
+};
 
 export const UseUpdateTaskPrioritiesServices = ({ task_id_array, priorityDataUpdate, listIds }: UpdateTaskProps) => {
   const dispatch = useAppDispatch();
@@ -478,6 +532,7 @@ export const UseUpdateTaskPrioritiesServices = ({ task_id_array, priorityDataUpd
 };
 
 export const getTaskListService = (listId: string | null | undefined) => {
+  const dispatch = useAppDispatch();
   const { workSpaceId } = useParams();
   const queryClient = useQueryClient();
 
@@ -510,6 +565,7 @@ export const getTaskListService = (listId: string | null | undefined) => {
     {
       enabled: fetch,
       onSuccess: (data) => {
+        dispatch(setTasks({}));
         data.pages.map((page) => page?.data.tasks.map((task) => queryClient.setQueryData(['task', task.id], task)));
         queryClient.invalidateQueries(['hubs']);
       },

@@ -7,28 +7,31 @@ import {
   DragEndEvent,
   DragOverEvent,
   DragOverlay,
+  DropAnimation,
   KeyboardSensor,
   PointerSensor,
   closestCorners,
+  defaultDropAnimation,
   useSensor,
   useSensors
 } from '@dnd-kit/core';
 import { arrayMove, sortableKeyboardCoordinates } from '@dnd-kit/sortable';
 import { findBoardSectionContainer, initializeBoard } from '../../../utils/StatusManagement/board';
-import { GroupStyles } from '../../../utils/StatusManagement/Types';
+import { GroupStyles, ModelType } from '../../../utils/StatusManagement/Types';
 import BoardSection from '../Components/BoardSection';
 import { BoardSectionsType } from '../../../utils/StatusManagement/Types';
 import { useMutation } from '@tanstack/react-query';
 import { statusTypesService } from '../../../features/hubs/hubService';
 import {
   addIsDefaultToValues,
-  extractValuesFromArray,
-  getStatusById
+  createModelIdAndTypeHandler,
+  extractValuesFromArray
 } from '../../../utils/StatusManagement/statusUtils';
 import { setMatchedStatus, setStatusesToMatch } from '../../../features/hubs/hubSlice';
 import MatchStatusPopUp from '../Components/MatchStatusPopUp';
 import { setMatchData } from '../../../features/general/prompt/promptSlice';
 import StatusBodyTemplate from '../StatusBodyTemplate';
+import StatusItem from '../Components/StatusItem';
 
 interface ErrorResponse {
   data: {
@@ -52,7 +55,6 @@ export default function CustomStatus() {
   const createStatusTypes = useMutation(statusTypesService);
 
   const { matchData } = useAppSelector((state) => state.prompt);
-
   const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
   const { statusTaskListDetails } = useAppSelector((state) => state.list);
   const { spaceStatuses, matchedStatus } = useAppSelector((state) => state.hub);
@@ -61,12 +63,19 @@ export default function CustomStatus() {
   const [validationMessage, setValidationMessage] = useState<string>('');
   const [newStatusValue, setNewStatusValue] = useState<string>('');
   const [addStatus, setAddStatus] = useState<boolean>(false);
-  const [activeId, setActiveId] = useState<string | null>(null);
   const [showMatchStatusPop, setShowMatchStatusPopup] = useState<boolean>(false);
+  const [modelData, setModelData] = useState<ModelType>({
+    modelId: null,
+    modelType: null
+  });
   const [matchingStatusValidation, setMatchingStatusValidation] = useState<string | null>(null);
 
   const initialBoardSections = initializeBoard(spaceStatuses);
   const [boardSections, setBoardSections] = useState<BoardSectionsType>(initialBoardSections);
+  const [activeId, setActiveId] = useState<string | null>(null);
+
+  const [is_default_name, setIsDefaultName] = useState<string | null>(boardSections['open'][0]?.name || null); // Initialize with the name of the item at position 0 or null if no item
+
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
@@ -75,12 +84,18 @@ export default function CustomStatus() {
   );
 
   useEffect(() => {
+    createModelIdAndTypeHandler(activeItemId, activeItemType, setModelData, modelData);
     setBoardSections(initialBoardSections);
-  }, [spaceStatuses, activeItemId]);
+    setStatusTypesState(spaceStatuses);
+  }, [spaceStatuses, activeItemId, activeItemType]);
 
-  function handleDragStart({ active }: DragEndEvent) {
+  useEffect(() => {
+    setIsDefaultName(boardSections['open'][0]?.name || null);
+  }, [boardSections]);
+
+  const handleDragStart = ({ active }: DragEndEvent) => {
     setActiveId(active.id as string);
-  }
+  };
 
   const handleDragOver = ({ active, over }: DragOverEvent) => {
     // Find the containers
@@ -178,16 +193,22 @@ export default function CustomStatus() {
   };
 
   //Add default status
-  const defaultItem = statusTypesState.find((item) => item.position === 0);
-  const AddDefault = addIsDefaultToValues(boardSections, defaultItem?.name);
+  const AddDefault = addIsDefaultToValues(boardSections, is_default_name);
   const statusData = extractValuesFromArray(AddDefault);
-  const model = statusTaskListDetails.listId ? 'list' : (activeItemType as string);
-  const model_id = statusTaskListDetails.listId || (activeItemId as string);
+  const model = statusTaskListDetails.listId ? 'list' : (modelData?.modelType as string);
+  const model_id = statusTaskListDetails.listId || (modelData?.modelId as string);
 
   const handleStatusId = () => {
     const modelTypeIsSameEntity = statusData.some((item) => item.model_type === model);
+    const modelIdIsSameEntity = statusData.some((item) => item.model_id === model_id);
     if (activeItemId === model_id && modelTypeIsSameEntity) {
-      return statusData;
+      if (modelIdIsSameEntity) {
+        return statusData;
+      } else {
+        return statusData.map((item, index) => {
+          return { ...item, id: null, is_default: index === 0 ? 1 : 0 }; // Set the id to null
+        });
+      }
     } else {
       return statusData.map((item, index) => {
         return { ...item, id: null, is_default: index === 0 ? 1 : 0 }; // Set the id to null
@@ -239,8 +260,8 @@ export default function CustomStatus() {
       await createStatusTypes.mutateAsync({
         model_id: model_id,
         model: model,
-        from_model: activeItemType,
-        from_model_id: activeItemId,
+        from_model: modelData.modelType as string,
+        from_model_id: modelData.modelId as string,
         statuses: handleStatusId()
       });
     } catch (err) {
@@ -254,7 +275,11 @@ export default function CustomStatus() {
     }
   };
 
-  const draggableItem = activeId ? getStatusById(statusTypesState, activeId) : null;
+  // const dropAnimation: DropAnimation = {
+  //   ...defaultDropAnimation
+  // };
+
+  // const draggableItem = activeId ? getStatusById(statusData, activeId) : null;
 
   return (
     <section className="flex flex-col gap-2 p-4">
@@ -263,8 +288,8 @@ export default function CustomStatus() {
           sensors={sensors}
           collisionDetection={closestCorners}
           onDragStart={handleDragStart}
-          onDragOver={handleDragOver}
           onDragEnd={handleDragEnd}
+          onDragOver={handleDragOver}
         >
           {Object.keys(boardSections).map((uniqueModelType) => (
             <div
@@ -289,11 +314,9 @@ export default function CustomStatus() {
               />
             </div>
           ))}
-          {draggableItem ? (
-            <DragOverlay>
-              <StatusBodyTemplate item={draggableItem} id={activeId as string} />
-            </DragOverlay>
-          ) : null}
+          {/* <DragOverlay dropAnimation={dropAnimation}>
+            {draggableItem ? <StatusItem item={draggableItem} /> : null}
+          </DragOverlay> */}
         </DndContext>
       </div>
       <p className="mt-auto text-red-600 text-start">{validationMessage}</p>
