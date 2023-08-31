@@ -30,7 +30,7 @@ export function Table({ heads, data, label, listName, customFields, ListColor }:
   const dispatch = useAppDispatch();
 
   const { draggableItemId } = useAppSelector((state) => state.list);
-  const { statusId, splitSubTask } = useAppSelector((state) => state.task);
+  const { statusId, splitSubTask: splitSubTaskMode } = useAppSelector((state) => state.task);
 
   const [listId, setListId] = useState<string>('');
   const [tableHeight, setTableHeight] = useState<string | number>('auto');
@@ -44,8 +44,6 @@ export function Table({ heads, data, label, listName, customFields, ListColor }:
   const columns = createHeaders(heads).filter((i) => !i.hidden);
 
   const { data: listDetails } = UseGetListDetails(listId);
-
-  // console.log(list?.data.list.color);
 
   const mouseMove = useCallback(
     (e: MouseEvent) => {
@@ -174,83 +172,88 @@ export function Table({ heads, data, label, listName, customFields, ListColor }:
   const draggableItem = draggableItemId ? data.find((i) => i.id === draggableItemId) : null;
 
   return (
-    <ScrollableHorizontalListsContainer onScroll={onScroll} ListColor={ListColor}>
-      {/* draggable item */}{' '}
-      {draggableItem ? (
-        <DragOverlay>
-          <OverlayRow columns={columns} task={draggableItem} />
-        </DragOverlay>
-      ) : null}
-      <div className="table-container" id={label}>
-        <table
-          onScroll={onScroll}
-          style={
-            !collapseTasks
-              ? {
-                  display: 'grid',
-                  gridTemplateColumns: generateGrid(columns.length)
-                }
-              : undefined
-          }
-          className="w-full"
-          ref={tableElement}
-        >
-          <Head
-            collapseTasks={collapseTasks}
-            taskLength={taskLength}
-            onToggleCollapseTasks={() => setCollapseTasks((prev) => !prev)}
-            label={label}
-            headerStatusColor={data[0].status.color as string}
-            columns={columns}
-            listName={listName}
-            mouseDown={onMouseDown}
-            tableHeight={tableHeight}
-            listId={data[0].list_id}
-            groupedTask={data}
-          />
-
-          {/* rows */}
-          {!collapseTasks ? (
-            <tbody className="contents">
-              {dataSpread.length ? (
-                dataSpread.map((task, index) =>
-                  'tags' in task ? (
-                    <Row
-                      columns={columns}
-                      task={task as ITaskFullList}
-                      key={task.id}
-                      taskIndex={index}
-                      isListParent={true}
-                      parentId={listId}
-                      task_status={statusId}
-                      handleClose={handleClose}
-                      customFields={customFields}
-                    />
-                  ) : null
-                )
-              ) : (
-                <h1 className="p-5 text-center">No tasks</h1>
-              )}
-            </tbody>
-          ) : null}
-
-          {/* add subtask button */}
-          {!showNewTaskField && !splitSubTask ? (
-            <tbody className="h-5">
-              <tr onClick={() => handleToggleNewTask()} className="absolute left-0 p-1.5 pl-16 text-left w-fit text-xs">
-                <td className="font-semibold cursor-pointer alsoit-gray-300">+ New Task</td>
-              </tr>
-            </tbody>
-          ) : null}
-        </table>
-        {splitSubTask && data.length ? (
-          <>
-            {data.map((item) => (
-              <SubtasksTable key={item.id} data={item} columns={columns} customFields={customFields} />
-            ))}
-          </>
+    <>
+      <ScrollableHorizontalListsContainer onScroll={onScroll} ListColor={ListColor}>
+        {/* draggable item */}{' '}
+        {draggableItem ? (
+          <DragOverlay>
+            <OverlayRow columns={columns} task={draggableItem} />
+          </DragOverlay>
         ) : null}
-      </div>
-    </ScrollableHorizontalListsContainer>
+        <div className="table-container py-2" id={label}>
+          <table
+            onScroll={splitSubTaskMode ? () => null : onScroll}
+            style={
+              !collapseTasks
+                ? {
+                    display: 'grid',
+                    gridTemplateColumns: generateGrid(columns.length)
+                  }
+                : undefined
+            }
+            className="w-full"
+            ref={tableElement}
+          >
+            <Head
+              collapseTasks={collapseTasks}
+              taskLength={taskLength}
+              onToggleCollapseTasks={() => setCollapseTasks((prev) => !prev)}
+              label={label}
+              headerStatusColor={data[0].status.color as string}
+              columns={columns}
+              listName={listName}
+              mouseDown={onMouseDown}
+              tableHeight={tableHeight}
+              listId={data[0].list_id}
+              groupedTask={data}
+            />
+
+            {/* rows */}
+            {!collapseTasks ? (
+              <tbody className="contents">
+                {dataSpread.length ? (
+                  dataSpread.map((task, index) =>
+                    'tags' in task ? (
+                      <Row
+                        columns={columns}
+                        task={task as ITaskFullList}
+                        key={task.id}
+                        taskIndex={index}
+                        isListParent={true}
+                        parentId={listId}
+                        task_status={statusId}
+                        handleClose={handleClose}
+                        customFields={customFields}
+                      />
+                    ) : null
+                  )
+                ) : (
+                  <h1 className="p-5 text-center">No tasks</h1>
+                )}
+              </tbody>
+            ) : null}
+
+            {/* add subtask button */}
+            {!showNewTaskField && !splitSubTaskMode ? (
+              <tbody className="h-5">
+                <tr
+                  onClick={() => handleToggleNewTask()}
+                  className="absolute left-0 p-1.5 pl-16 text-left w-fit text-xs"
+                >
+                  <td className="font-semibold cursor-pointer alsoit-gray-300">+ New Task</td>
+                </tr>
+              </tbody>
+            ) : null}
+          </table>
+        </div>
+      </ScrollableHorizontalListsContainer>
+      {splitSubTaskMode && data.length ? (
+        <>
+          {data.map((item) => (
+            <SubtasksTable key={item.id} data={item} columns={columns} customFields={customFields} />
+          ))}
+        </>
+      ) : null}
+    </>
   );
 }

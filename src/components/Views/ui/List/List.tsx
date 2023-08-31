@@ -103,7 +103,7 @@ export function List({ tasks }: ListProps) {
         onClickChevron={() => setCollapseTable((prev) => !prev)}
       />
       {!collapseTable ? (
-        <div className="relative">
+        <div className="relative" style={{ paddingRight: '30px' }}>
           {showNewTaskField ? (
             <div className="pl-2">
               <AddTask parentId={tasks[0].list?.id as string} isListParent onClose={() => handleClose()} />

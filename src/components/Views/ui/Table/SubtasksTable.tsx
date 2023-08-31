@@ -5,7 +5,7 @@ import { Head } from './Head/Head';
 import { Row } from './Row';
 import { useSubTasks } from '../../../../features/task/taskService';
 import { Column } from '../../types/table';
-import { useAppSelector } from '../../../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { IField } from '../../../../features/list/list.interfaces';
 import { DEFAULT_LEFT_PADDING } from '../../config';
 import { Label } from '../List/Label';
@@ -13,6 +13,9 @@ import { IListColor } from '../List/List';
 import LightenColor from '../List/lightenColor/LightenColor';
 import { Hub } from '../../../../pages/workspace/hubs/components/ActiveTree/activetree.interfaces';
 import { findCurrentHub } from '../../../../managers/Hub';
+import { ScrollableHorizontalListsContainer } from '../../../ScrollableContainer/ScrollableHorizontalListsContainer';
+import { useScroll } from '../../../../hooks/useScroll';
+import { setUpdateCords } from '../../../../features/task/taskSlice';
 
 interface ISubtasksTableProps {
   data: Task;
@@ -27,6 +30,8 @@ export function SubtasksTable({
   customFields,
   paddingLeft = DEFAULT_LEFT_PADDING
 }: ISubtasksTableProps) {
+  const dispatch = useAppDispatch();
+
   const { statusId } = useAppSelector((state) => state.task);
   const { parentHubExt, hub } = useAppSelector((state) => state.hub);
 
@@ -55,6 +60,8 @@ export function SubtasksTable({
     setShowNewTaskField(true);
   };
 
+  const onScroll = useScroll(() => dispatch(setUpdateCords()));
+
   return tasks && tasks.length ? (
     <>
       <div
@@ -75,74 +82,76 @@ export function SubtasksTable({
           onClickChevron={() => setCollapseTable((prev) => !prev)}
           isSplitSubtasks={true}
         />
-        {!collapseTable ? (
-          <div className="table-container">
-            <table
-              // onScroll={onScroll}
-              style={
-                !collapseTasks
-                  ? {
-                      display: 'grid',
-                      gridTemplateColumns: generateGrid(columns.length, true)
-                    }
-                  : undefined
-              }
-              className="w-full"
-              // ref={tableElement}
-            >
-              <Head
-                collapseTasks={collapseTasks}
-                taskLength={taskLength || 0}
-                onToggleCollapseTasks={() => setCollapseTasks((prev) => !prev)}
-                label={tasks[0].status.name}
-                headerStatusColor={tasks[0].status.color as string}
-                columns={columns}
-                listName={data.list?.name}
-                // mouseDown={onMouseDown}
-                mouseDown={() => null}
-                tableHeight={tableHeight}
-                listId={tasks[0].list_id}
-                groupedTask={tasks}
-                isSplitSubtask={true}
-              />
+        <ScrollableHorizontalListsContainer onScroll={onScroll} ListColor={ListColor}>
+          {!collapseTable ? (
+            <div className="table-container">
+              <table
+                onScroll={onScroll}
+                style={
+                  !collapseTasks
+                    ? {
+                        display: 'grid',
+                        gridTemplateColumns: generateGrid(columns.length, true)
+                      }
+                    : undefined
+                }
+                className="w-full"
+                // ref={tableElement}
+              >
+                <Head
+                  collapseTasks={collapseTasks}
+                  taskLength={taskLength || 0}
+                  onToggleCollapseTasks={() => setCollapseTasks((prev) => !prev)}
+                  label={tasks[0].status.name}
+                  headerStatusColor={tasks[0].status.color as string}
+                  columns={columns}
+                  listName={data.list?.name}
+                  // mouseDown={onMouseDown}
+                  mouseDown={() => null}
+                  tableHeight={tableHeight}
+                  listId={tasks[0].list_id}
+                  groupedTask={tasks}
+                  isSplitSubtask={true}
+                />
 
-              {/* rows */}
-              {!collapseTasks ? (
-                <tbody className="contents">
-                  {tasks.map((task, index) =>
-                    'tags' in task ? (
-                      <Row
-                        columns={columns}
-                        task={task as ITaskFullList}
-                        key={task.id}
-                        taskIndex={index}
-                        isListParent={true}
-                        paddingLeft={paddingLeft}
-                        parentId={task.id}
-                        task_status={statusId}
-                        // handleClose={handleClose}
-                        customFields={customFields}
-                        isSplitSubtask={true}
-                      />
-                    ) : null
-                  )}
-                </tbody>
-              ) : null}
+                {/* rows */}
+                {!collapseTasks ? (
+                  <tbody className="contents">
+                    {tasks.map((task, index) =>
+                      'tags' in task ? (
+                        <Row
+                          columns={columns}
+                          task={task as ITaskFullList}
+                          key={task.id}
+                          taskIndex={index}
+                          isListParent={true}
+                          paddingLeft={paddingLeft}
+                          parentId={task.id}
+                          task_status={statusId}
+                          // handleClose={handleClose}
+                          customFields={customFields}
+                          isSplitSubtask={true}
+                        />
+                      ) : null
+                    )}
+                  </tbody>
+                ) : null}
 
-              {/* add subtask button */}
-              {!showNewTaskField ? (
-                <tbody className="h-5">
-                  <tr
-                    onClick={() => handleToggleNewTask()}
-                    className="absolute left-0 p-1.5 pl-20 text-left w-fit text-xs"
-                  >
-                    <td className="font-semibold cursor-pointer alsoit-gray-300">+ New Task</td>
-                  </tr>
-                </tbody>
-              ) : null}
-            </table>
-          </div>
-        ) : null}
+                {/* add subtask button */}
+                {!showNewTaskField ? (
+                  <tbody className="h-5">
+                    <tr
+                      onClick={() => handleToggleNewTask()}
+                      className="absolute left-0 p-1.5 pl-20 text-left w-fit text-xs"
+                    >
+                      <td className="font-semibold cursor-pointer alsoit-gray-300">+ New Task</td>
+                    </tr>
+                  </tbody>
+                ) : null}
+              </table>
+            </div>
+          ) : null}
+        </ScrollableHorizontalListsContainer>
       </div>
 
       {tasks.map((item) => (
