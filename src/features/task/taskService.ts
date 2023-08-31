@@ -64,22 +64,6 @@ export const UseEditCustomFieldService = (data: {
   return response;
 };
 
-export const useGetCustomField = (id: string | undefined, getCustom: boolean) => {
-  return useQuery(
-    ['xustom-field'],
-    async () => {
-      const data = await requestNew<IUserSettingsRes>({
-        url: `custom-fields/${id}`,
-        method: 'GET'
-      });
-      return data;
-    },
-    {
-      enabled: getCustom
-    }
-  );
-};
-
 export const UseSaveTaskFilters = () => {
   const { filters } = generateFilters();
   const mutation = useMutation(async ({ key }: { key: string }) => {
@@ -594,35 +578,6 @@ export const useSubTasks = (parentId: string) =>
     { enabled: !!parentId, select: (res) => res.data.tasks }
   );
 
-export const getTaskListService2 = (query: { parentId: string | null | undefined }) => {
-  const { workSpaceId } = useParams();
-  const { currentWorkspaceId } = useAppSelector((state) => state.auth);
-  const fetch = currentWorkspaceId == workSpaceId;
-
-  return useQuery(
-    ['task', { query: query.parentId }],
-    async () => {
-      const data = await requestNew<ITaskListRes | undefined>({
-        url: 'tasks/list',
-        method: 'POST',
-        params: {
-          parent_id: query.parentId
-        }
-      });
-      return data;
-    },
-    {
-      enabled: query.parentId != null && fetch,
-      onSuccess: () => {
-        // const taskData = data.data.tasks.map((task) => {
-        //   queryClient.setQueryData(['task', task.id], task);
-        //   return { ...task };
-        // });
-      }
-    }
-  );
-};
-
 export const createTimeEntriesService = (data: { queryKey: (string | undefined)[] }) => {
   const taskID = data.queryKey[1];
   const response = requestNew({
@@ -825,19 +780,6 @@ export const DeleteTimeEntriesService = (data: { timeEntryDeleteTriggerId: strin
   const response = requestNew({
     url: `time-entries/${data.timeEntryDeleteTriggerId}`,
     method: 'DELETE'
-  });
-  return response;
-};
-
-export const AddTaskWatcherService = (data: { queryKey: string[] }) => {
-  const taskID = data.queryKey[1];
-  const response = requestNew({
-    url: 'watch',
-    method: 'POST',
-    params: {
-      type: EntityType.task,
-      id: taskID
-    }
   });
   return response;
 };

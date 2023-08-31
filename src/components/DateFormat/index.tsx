@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import moment, { MomentInput } from 'moment';
 import { useAppSelector } from '../../app/hooks';
 import CalenderIcon from '../../assets/icons/CalenderIcon';

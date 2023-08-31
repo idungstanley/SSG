@@ -3,7 +3,6 @@ import dayjs from 'dayjs';
 import timezone from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { Modal } from '@mui/material';
 import { DatePickerSideBar } from './DatePickerSideBar';
 import { DatePickerManualDates } from './DatePickerManualDate';
 import MiniDatePicker from './MiniCalendar';
