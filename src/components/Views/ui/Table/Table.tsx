@@ -15,6 +15,7 @@ import { Row } from './Row';
 import { UseGetListDetails } from '../../../../features/list/listService';
 import { IField, ITask_statuses } from '../../../../features/list/list.interfaces';
 import { IListColor } from '../List/List';
+import { SubtasksTable } from './SubtasksTable';
 
 interface TableProps {
   heads: listColumnProps[];
@@ -29,7 +30,7 @@ export function Table({ heads, data, label, listName, customFields, ListColor }:
   const dispatch = useAppDispatch();
 
   const { draggableItemId } = useAppSelector((state) => state.list);
-  const { statusId } = useAppSelector((state) => state.task);
+  const { statusId, splitSubTask } = useAppSelector((state) => state.task);
 
   const [listId, setListId] = useState<string>('');
   const [tableHeight, setTableHeight] = useState<string | number>('auto');
@@ -234,7 +235,7 @@ export function Table({ heads, data, label, listName, customFields, ListColor }:
           ) : null}
 
           {/* add subtask button */}
-          {!showNewTaskField ? (
+          {!showNewTaskField && !splitSubTask ? (
             <tbody className="h-5">
               <tr onClick={() => handleToggleNewTask()} className="absolute left-0 p-1.5 pl-16 text-left w-fit text-xs">
                 <td className="font-semibold cursor-pointer alsoit-gray-300">+ New Task</td>
@@ -242,6 +243,13 @@ export function Table({ heads, data, label, listName, customFields, ListColor }:
             </tbody>
           ) : null}
         </table>
+        {splitSubTask && data.length ? (
+          <>
+            {data.map((item) => (
+              <SubtasksTable key={item.id} data={item} columns={columns} customFields={customFields} />
+            ))}
+          </>
+        ) : null}
       </div>
     </ScrollableHorizontalListsContainer>
   );
