@@ -6,6 +6,7 @@ import ArrowDown from '../../../../../../assets/icons/ArrowDown';
 import SaveCols from '../SaveCols';
 import { useCreateDropdownField } from '../../../../../../features/list/listService';
 import { useAppSelector } from '../../../../../../app/hooks';
+import ArrowUpIcon from '../../../../../../assets/icons/ArrowUpIcon';
 
 function CreateCurrencyField() {
   const { newCustomPropertyDetails, entityForCustom } = useAppSelector((state) => state.task);
@@ -47,16 +48,22 @@ function CreateCurrencyField() {
         is_italic: is_italic as string,
         is_underlined: is_underlined as string
       };
-      const customType = newCustomPropertyDetails.type.toLowerCase();
-      onCreate({
-        name,
-        style,
-        color,
-        id: entityForCustom.id,
-        type: entityForCustom.type,
-        options: undefined,
-        customType
-      });
+      const properties = {
+        currency: selected?.currency as string,
+        symbol: selected?.symbol as string
+      };
+      if (selected) {
+        onCreate({
+          name,
+          style,
+          color,
+          id: entityForCustom.id,
+          type: entityForCustom.type,
+          options: undefined,
+          customType: 'money',
+          properties
+        });
+      }
     }
   };
 
@@ -72,7 +79,7 @@ function CreateCurrencyField() {
           <h1 className="text-alsoit-text-lg font-semibold">Please Select Currency</h1>
         )}
 
-        <ArrowDown />
+        {anchorEl ? <ArrowUpIcon /> : <ArrowDown />}
       </button>
       {anchorEl && (
         <div className="absolute right-0 mt-2">
@@ -93,7 +100,10 @@ function CreateCurrencyField() {
                     <div
                       key={currency.name}
                       className="flex items-center justify-between h-8 px-4 cursor-pointer hover:bg-alsoit-purple-50 text-alsoit-text-lg"
-                      onClick={() => setSelected(currency)}
+                      onClick={() => {
+                        setSelected(currency);
+                        setAnchorEl(null);
+                      }}
                     >
                       <h1>{`${currency.currency} - ${currency.name}`}</h1>
                       <span>{currency.symbol}</span>
@@ -109,8 +119,8 @@ function CreateCurrencyField() {
       )}
       <SaveCols
         handleSubmit={handleSubmit}
-        header="Email"
-        body="This custom property which allows to track clients, vendors, leads and more by entering emails"
+        header="Currency"
+        body="This custom property which allows to track currecy(money)"
       />
     </div>
   );

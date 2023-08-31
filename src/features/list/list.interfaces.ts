@@ -13,6 +13,10 @@ export interface IField {
   options: Options;
   name: string;
   type: string;
+  properties?: {
+    symbol: string;
+    currency: string;
+  };
 }
 
 export interface taskCountFields {

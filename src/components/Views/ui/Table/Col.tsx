@@ -18,6 +18,7 @@ import LabelsWrapper from './CustomField/Labels/LabelsWrapper';
 import NumberField from './CustomField/Number/NumberField';
 import EmailField from './CustomField/EmailField/EmailField';
 import TagsWrapper from './CustomField/Tags/TagsWrapper';
+import MoneyField from './CustomField/Money/MoneyField';
 
 interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   value: TaskValue;
@@ -102,6 +103,14 @@ export function Col({ value, field, fieldId, task, customFields, ...props }: Col
     ),
     number: (
       <NumberField
+        taskId={task.id}
+        taskCustomFields={task.custom_fields?.find((i) => i.id === fieldId)}
+        fieldId={fieldId}
+      />
+    ),
+    money: (
+      <MoneyField
+        entityCustomProperty={customFields?.find((i) => i.id === fieldId)}
         taskId={task.id}
         taskCustomFields={task.custom_fields?.find((i) => i.id === fieldId)}
         fieldId={fieldId}

@@ -198,8 +198,9 @@ const createDropdownField = (data: {
   type?: string;
   customType: string;
   style?: { is_bold: string; is_underlined: string; is_italic: string };
+  properties?: { currency: string; symbol: string };
 }) => {
-  const { id, options, name, type, customType, style, color } = data;
+  const { id, options, name, type, customType, style, color, properties } = data;
   const response = requestNew({
     url: 'custom-fields',
     method: 'POST',
@@ -212,7 +213,8 @@ const createDropdownField = (data: {
       is_underlined: style?.is_underlined,
       entity_id: id,
       entity_type: type,
-      options
+      options,
+      properties
     }
   });
   return response;

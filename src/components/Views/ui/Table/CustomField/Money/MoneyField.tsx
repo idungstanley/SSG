@@ -1,23 +1,31 @@
 import React, { useState } from 'react';
 import { ICustomField } from '../../../../../../features/task/taskSlice';
+import { IField } from '../../../../../../features/list/list.interfaces';
 import { useUpdateEntityCustomFieldValue } from '../../../../../../features/list/listService';
-import Copy from '../../../../../../assets/icons/Copy';
-import { cl } from '../../../../../../utils';
 
-interface DropdownFieldWrapperProps {
+interface MoneyField {
   taskCustomFields?: ICustomField;
   taskId: string;
   fieldId: string;
+  entityCustomProperty?: IField;
 }
 
-function TextField({ taskCustomFields, taskId, fieldId }: DropdownFieldWrapperProps) {
-  // console.log(taskCustomFields);
+function MoneyField({ taskCustomFields, taskId, fieldId, entityCustomProperty }: MoneyField) {
+  console.log(fieldId);
+  const avtiveCurrency = entityCustomProperty?.properties?.symbol;
   const activeValue = taskCustomFields?.values[0].value ? taskCustomFields?.values[0].value : '-';
   const [currentValue, setCurrentValue] = useState<string>(activeValue);
   const [editMode, setEditMode] = useState(false);
-  const [isCopied, setIsCopied] = useState<number>(0);
 
   const { mutate: onUpdate } = useUpdateEntityCustomFieldValue(taskId);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = e.target.value.replace(avtiveCurrency as string, '').trim();
+
+    if (newValue === '' || !isNaN(Number(newValue))) {
+      setCurrentValue(newValue);
+    }
+  };
 
   const handleInputBlur = () => {
     setEditMode(false);
@@ -27,31 +35,6 @@ function TextField({ taskCustomFields, taskId, fieldId }: DropdownFieldWrapperPr
         value: [{ value: currentValue }],
         fieldId
       });
-    }
-  };
-
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
-      setEditMode(false);
-      if (currentValue !== activeValue) {
-        onUpdate({
-          taskId,
-          value: [{ value: currentValue }],
-          fieldId
-        });
-      }
-    }
-  };
-
-  const handleCopyTexts = async () => {
-    try {
-      await navigator.clipboard.writeText(currentValue);
-      setIsCopied(1);
-      setTimeout(() => {
-        setIsCopied(0);
-      }, 500);
-    } catch (error) {
-      console.warn(`Failed to copy: ${error}`);
     }
   };
 
@@ -66,27 +49,17 @@ function TextField({ taskCustomFields, taskId, fieldId }: DropdownFieldWrapperPr
                 setEditMode(true);
               }}
             >
-              {currentValue}
+              {currentValue === '-' ? currentValue : `${avtiveCurrency + currentValue}`}
             </h1>
-            <figure
-              className={cl(
-                'opacity-0',
-                isCopied === 1 ? '-mt-2' : '-mt-4',
-                activeValue === '-' ? 'group-hover/parent:opacity-0' : 'group-hover/parent:opacity-100'
-              )}
-              onClick={handleCopyTexts}
-            >
-              <Copy />
-            </figure>
           </span>
         </div>
       ) : (
         <input
           type="text"
           autoFocus={true}
-          value={currentValue === '-' ? '' : currentValue}
-          onChange={(e) => setCurrentValue(e.target.value)}
-          onKeyDown={handleKeyDown}
+          value={currentValue === '-' ? '' : `${avtiveCurrency + currentValue}`}
+          onChange={handleChange}
+          // onKeyDown={handleKeyDown}
           onBlur={handleInputBlur}
           className="w-full h-fit border-alsoit-gray-300 text-alsoit-text-lg font-semibold"
         />
@@ -95,4 +68,4 @@ function TextField({ taskCustomFields, taskId, fieldId }: DropdownFieldWrapperPr
   );
 }
 
-export default TextField;
+export default MoneyField;

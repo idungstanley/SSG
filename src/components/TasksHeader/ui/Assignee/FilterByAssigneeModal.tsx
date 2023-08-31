@@ -66,7 +66,6 @@ export default function FilterByAssigneeModal() {
                 // return { ...filter, values: [] };
                 return { ...filter, values: [...newAssignees] };
               }
-
               return filter;
             })
           ])
