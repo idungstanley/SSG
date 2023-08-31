@@ -14,7 +14,7 @@ function CreateCurrencyField() {
   const [searchValue, setSearchValue] = useState<string>('');
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
-  const { mutate: onCreate } = useCreateDropdownField(entityForCustom.type, entityForCustom.id);
+  const { mutate: onCreate } = useCreateDropdownField();
 
   const filteredCurrency = currenciesArr.filter(
     (option) =>

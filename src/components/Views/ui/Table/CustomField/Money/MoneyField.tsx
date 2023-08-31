@@ -21,9 +21,9 @@ function MoneyField({ taskCustomFields, taskId, fieldId, entityCustomProperty }:
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value.replace(avtiveCurrency as string, '').trim();
 
-    if (newValue === '' || !isNaN(Number(newValue))) {
-      setCurrentValue(newValue);
-    }
+    // if (newValue === '' || !isNaN(Number(newValue))) {
+    setCurrentValue(newValue);
+    // }
   };
 
   const handleInputBlur = () => {
@@ -34,6 +34,19 @@ function MoneyField({ taskCustomFields, taskId, fieldId, entityCustomProperty }:
         value: [{ value: currentValue }],
         fieldId
       });
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      setEditMode(false);
+      if (currentValue !== activeValue) {
+        onUpdate({
+          taskId,
+          value: [{ value: currentValue }],
+          fieldId
+        });
+      }
     }
   };
 
@@ -58,7 +71,7 @@ function MoneyField({ taskCustomFields, taskId, fieldId, entityCustomProperty }:
           autoFocus={true}
           value={currentValue === '-' ? '' : `${avtiveCurrency + currentValue}`}
           onChange={handleChange}
-          // onKeyDown={handleKeyDown}
+          onKeyDown={handleKeyDown}
           onBlur={handleInputBlur}
           className="w-full h-fit border-alsoit-gray-300 text-alsoit-text-lg font-semibold"
         />
