@@ -19,3 +19,8 @@ export interface GroupStyles {
   backgroundColor: string;
   boxShadow: string;
 }
+
+export interface ModelType {
+  modelId: string | null;
+  modelType: string | null;
+}

@@ -51,6 +51,32 @@ export const taskStatusUpdateManager = (
 
   return tasks;
 };
+export const taskDateUpdateManager = (
+  taskId: string,
+  listId: string,
+  tasks: Record<string, ITaskFullList[]>,
+  dateType: string,
+  newDate: string
+) => {
+  if (listId) {
+    const updatedTasks = { ...tasks };
+
+    updatedTasks[listId] = updatedTasks[listId].map((task) => {
+      if (taskId === task.id) {
+        if (dateType == 'start_date') {
+          return {
+            ...task,
+            start_date: newDate
+          };
+        }
+      }
+      return task;
+    });
+    return updatedTasks;
+  }
+
+  return tasks;
+};
 
 export const taskAssignessUpdateManager = (
   taskId: string,
