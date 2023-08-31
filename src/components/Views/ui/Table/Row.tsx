@@ -200,9 +200,9 @@ export function Row({
         <AddSubTask
           task={newSubTask}
           columns={columns}
-          paddingLeft={DEFAULT_LEFT_PADDING + paddingLeft}
+          paddingLeft={splitSubTask ? 0 : DEFAULT_LEFT_PADDING + paddingLeft}
           isListParent={false}
-          parentId={task.id}
+          parentId={splitSubTask ? (task.parent_id as string) : task.id}
           task_status={task.status.id}
           handleClose={onCloseAddTaskFIeld}
         />

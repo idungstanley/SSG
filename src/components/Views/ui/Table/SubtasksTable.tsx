@@ -15,7 +15,7 @@ import { Hub } from '../../../../pages/workspace/hubs/components/ActiveTree/acti
 import { findCurrentHub } from '../../../../managers/Hub';
 import { ScrollableHorizontalListsContainer } from '../../../ScrollableContainer/ScrollableHorizontalListsContainer';
 import { useScroll } from '../../../../hooks/useScroll';
-import { setUpdateCords } from '../../../../features/task/taskSlice';
+import { setShowNewTaskField, setShowNewTaskId, setUpdateCords } from '../../../../features/task/taskSlice';
 
 interface ISubtasksTableProps {
   data: Task;
@@ -35,7 +35,6 @@ export function SubtasksTable({
   const { statusId } = useAppSelector((state) => state.task);
   const { parentHubExt, hub } = useAppSelector((state) => state.hub);
 
-  const [showNewTaskField, setShowNewTaskField] = useState(false);
   const [collapseTasks, setCollapseTasks] = useState(false);
   const [collapseTable, setCollapseTable] = useState(false);
   const [tableHeight, setTableHeight] = useState<string | number>('auto');
@@ -56,8 +55,10 @@ export function SubtasksTable({
         outerColour: '#A854F7'
       };
 
-  const handleToggleNewTask = () => {
-    setShowNewTaskField(true);
+  const onShowAddSubtaskField = (e: React.MouseEvent<HTMLTableRowElement, MouseEvent>, taskId: string) => {
+    e.stopPropagation();
+    dispatch(setShowNewTaskId(taskId));
+    dispatch(setShowNewTaskField(true));
   };
 
   const onScroll = useScroll(() => dispatch(setUpdateCords()));
@@ -138,16 +139,14 @@ export function SubtasksTable({
                 ) : null}
 
                 {/* add subtask button */}
-                {!showNewTaskField ? (
-                  <tbody className="h-5">
-                    <tr
-                      onClick={() => handleToggleNewTask()}
-                      className="absolute left-0 p-1.5 pl-20 text-left w-fit text-xs"
-                    >
-                      <td className="font-semibold cursor-pointer alsoit-gray-300">+ New Task</td>
-                    </tr>
-                  </tbody>
-                ) : null}
+                <tbody className="h-5">
+                  <tr
+                    onClick={(e) => onShowAddSubtaskField(e, tasks[tasks.length - 1].id)}
+                    className="absolute left-0 p-1.5 pl-5 text-left w-fit text-xs"
+                  >
+                    <td className="font-semibold cursor-pointer alsoit-gray-300">+ New Task</td>
+                  </tr>
+                </tbody>
               </table>
             </div>
           ) : null}
