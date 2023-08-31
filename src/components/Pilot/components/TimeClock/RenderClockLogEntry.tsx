@@ -51,6 +51,7 @@ export function RenderItemEntries({
   const [showLogs, setShowLogs] = useState<boolean>(true);
   const [meMode, setMeMode] = useState<boolean>(false);
   const [assigneeId, setAssigneeId] = useState<string | undefined>();
+
   const handleShowLogs = () => {
     setShowLogs(!showLogs);
   };
@@ -104,6 +105,8 @@ export function RenderItemEntries({
           handleShowLogs={handleShowLogs}
           meMode={meMode}
           showLogs={showLogs}
+          assigneeId={assigneeId}
+          teamMembers={teamMember}
         />
         {showLogs && (
           <table className="relative w-full">

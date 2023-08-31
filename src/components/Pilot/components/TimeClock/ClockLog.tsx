@@ -18,6 +18,8 @@ export interface User {
   id: string;
   initials: string;
   name: string;
+  avatar_path: string;
+  color: string;
 }
 
 interface LogProps {
