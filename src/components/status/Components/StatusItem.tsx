@@ -12,7 +12,7 @@ interface StatusBodyProps {
 export default function StatusItem({ item }: StatusBodyProps) {
   return (
     <span
-      style={{ minWidth: 300 }}
+      style={{ minWidth: 250 }}
       className="flex justify-items-start px-1 rounded cursor-pointer h-7 items-center border-alsoit-gray-75 border bg-white"
     >
       {item.type !== 'closed' && (

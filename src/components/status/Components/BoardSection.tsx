@@ -9,6 +9,7 @@ import Button from '../../Button';
 import Input from '../../input/Input';
 import { useDroppable } from '@dnd-kit/core';
 import { BoardSectionsType } from '../../../utils/StatusManagement/Types';
+import { useAppSelector } from '../../../app/hooks';
 
 interface BoardProps {
   id: string;
@@ -62,8 +63,8 @@ export default function BoardSection({
           <p className="flex uppercase justify-items-start">{title} STATUSES</p>
         </span>
       )}
-      <SortableContext items={StatusIndex} strategy={verticalListSortingStrategy} id={id}>
-        <div ref={setNodeRef} className="flex flex-col space-y-1">
+      <SortableContext items={StatusIndex} strategy={verticalListSortingStrategy}>
+        <div ref={setNodeRef} className="flex flex-col space-y-1 p-1 flex-1">
           {id &&
             !collapsedStatusGroups[id] &&
             status.map((item) => (

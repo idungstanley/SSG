@@ -6,7 +6,11 @@ import { setAssigneeIds, setFilterFields, setMeMode } from '../../../../features
 import Me from '../../../../assets/icons/Me';
 import FilterByAssigneeModal from './FilterByAssigneeModal';
 
-export function Assignee() {
+interface IAssigneeProps {
+  isSplitSubtasks?: boolean;
+}
+
+export function Assignee({ isSplitSubtasks }: IAssigneeProps) {
   const dispatch = useAppDispatch();
   const { currentUserId } = useAppSelector((state) => state.auth);
   const { assigneeIds, meMode } = useAppSelector((state) => state.task);
@@ -67,12 +71,12 @@ export function Assignee() {
 
   return (
     <div className="flex items-center rounded-2xl h-8 cursor-pointer">
-      <Button active={forMe && meMode} onClick={onToggleMe}>
+      <Button active={forMe && meMode} withoutBg={isSplitSubtasks} onClick={onToggleMe}>
         <Me active={forMe && meMode} />
         <span>Me</span>
       </Button>
 
-      <Button active={isAssignee && !meMode}>
+      <Button active={isAssignee && !isSplitSubtasks && !meMode} withoutBg={isSplitSubtasks}>
         <FilterByAssigneeModal />
       </Button>
     </div>

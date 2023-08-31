@@ -145,6 +145,7 @@ interface TaskState {
   CompactView: boolean;
   taskUpperCase: boolean;
   verticalGridlinesTask: boolean;
+  splitSubTask: boolean;
   CompactViewWrap: boolean;
   meMode: boolean;
   showTaskNavigation: boolean;
@@ -226,6 +227,7 @@ const initialState: TaskState = {
   taskUpperCase: false,
   toggleAllSubtask: false,
   verticalGridlinesTask: true,
+  splitSubTask: false,
   CompactView: false,
   CompactViewWrap: false,
   showTaskNavigation: false,
@@ -404,6 +406,9 @@ export const taskSlice = createSlice({
     getVerticalGridlinesTask(state, action: PayloadAction<boolean>) {
       state.verticalGridlinesTask = action.payload;
     },
+    getSplitSubTask(state, action: PayloadAction<boolean>) {
+      state.splitSubTask = action.payload;
+    },
     setSelectedTasksArray(state, action: PayloadAction<string[]>) {
       state.selectedTasksArray = action.payload;
     },
@@ -562,6 +567,7 @@ export const {
   getSingleLineView,
   getTaskUpperCase,
   getVerticalGridlinesTask,
+  getSplitSubTask,
   getCompactView,
   getCompactViewWrap,
   setSelectedIndex,
