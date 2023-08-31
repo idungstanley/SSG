@@ -28,6 +28,7 @@ interface RowProps {
   task_status?: string;
   handleClose?: VoidFunction;
   customFields?: IField[];
+  isSplitSubtask?: boolean;
 }
 
 export function Row({
@@ -39,11 +40,12 @@ export function Row({
   task_status,
   isListParent,
   handleClose,
-  customFields
+  customFields,
+  isSplitSubtask
 }: RowProps) {
   const dispatch = useAppDispatch();
 
-  const { showNewTaskField, showNewTaskId, toggleAllSubtask } = useAppSelector((state) => state.task);
+  const { showNewTaskField, showNewTaskId, toggleAllSubtask, splitSubTask } = useAppSelector((state) => state.task);
 
   const [showSubTasks, setShowSubTasks] = useState(toggleAllSubtask);
 
@@ -132,7 +134,7 @@ export function Row({
         <StickyCol
           showSubTasks={showSubTasks}
           setShowSubTasks={setShowSubTasks}
-          style={{ zIndex: 1 }}
+          style={{ zIndex: 1, marginLeft: isSplitSubtask ? '-36px' : 0 }}
           isListParent={isListParent}
           task={task}
           taskIndex={taskIndex}
@@ -194,19 +196,19 @@ export function Row({
         ))}
       </tr>
 
-      {showNewTaskField && showNewTaskId == task.id ? (
+      {showNewTaskField && showNewTaskId === task.id ? (
         <AddSubTask
           task={newSubTask}
           columns={columns}
-          paddingLeft={DEFAULT_LEFT_PADDING + paddingLeft}
+          paddingLeft={splitSubTask ? 0 : DEFAULT_LEFT_PADDING + paddingLeft}
           isListParent={false}
-          parentId={task.id}
+          parentId={splitSubTask ? (task.parent_id as string) : task.id}
           task_status={task.status.id}
           handleClose={onCloseAddTaskFIeld}
         />
       ) : null}
 
-      {showSubTasks ? (
+      {showSubTasks && !splitSubTask ? (
         <SubTasks paddingLeft={DEFAULT_LEFT_PADDING + paddingLeft} parentId={task.id} columns={columns} />
       ) : null}
     </>

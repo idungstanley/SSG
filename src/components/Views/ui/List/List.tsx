@@ -88,7 +88,11 @@ export function List({ tasks }: ListProps) {
     <div
       className="pt-1 border-t-4 border-l-4 border-purple-500 rounded-3xl bg-purple-50"
       ref={setNodeRef}
-      style={{ borderColor: ListColor?.outerColour, backgroundColor: LightenColor(ListColor?.outerColour, 0.95) }}
+      style={{
+        borderColor: ListColor?.outerColour,
+        backgroundColor: LightenColor(ListColor?.outerColour, 0.95),
+        overflow: collapseTable ? 'hidden' : 'unset'
+      }}
     >
       <Label
         listName={tasks[0].list?.name || currentList?.name}
@@ -99,7 +103,7 @@ export function List({ tasks }: ListProps) {
         onClickChevron={() => setCollapseTable((prev) => !prev)}
       />
       {!collapseTable ? (
-        <div className="relative">
+        <div className="relative" style={{ paddingRight: '30px' }}>
           {showNewTaskField ? (
             <div className="pl-2">
               <AddTask parentId={tasks[0].list?.id as string} isListParent onClose={() => handleClose()} />

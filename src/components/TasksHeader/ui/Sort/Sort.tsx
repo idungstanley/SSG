@@ -25,7 +25,11 @@ const options: Option = {
   }
 };
 
-export function Sort() {
+interface ISortProps {
+  isSplitSubtasks?: boolean;
+}
+
+export function Sort({ isSplitSubtasks }: ISortProps) {
   const dispatch = useAppDispatch();
   const { sortType } = useAppSelector((state) => state.task);
 
@@ -35,7 +39,7 @@ export function Sort() {
     <Listbox value={sortType} onChange={setOption}>
       <div className="relative">
         <Listbox.Button className="relative w-full rounded-md outline-none cursor-pointer">
-          <Button active={true}>
+          <Button active={isSplitSubtasks ? false : true} withoutBg={isSplitSubtasks}>
             <Icons src={GroupBy} />
             <p className="block truncate">
               Group by: <span className="capitalize">{sortType}</span>

@@ -9,7 +9,6 @@ import { TagItem } from './TagItem';
 import { SearchAndAddNewTag } from './SearchAndAddNewTag';
 import TaskTag from '../../TaskTag';
 import TagIcon from '../../../../../assets/icons/TagIcon';
-import ToolTip from '../../../../Tooltip/Tooltip';
 
 interface ManageTagsDropdownProps {
   tagsArr: Tag[];
