@@ -24,12 +24,7 @@ interface ISubtasksTableProps {
   paddingLeft?: number;
 }
 
-export function SubtasksTable({
-  data,
-  columns,
-  customFields,
-  paddingLeft = DEFAULT_LEFT_PADDING
-}: ISubtasksTableProps) {
+export function SubtasksTable({ data, columns, customFields, paddingLeft = 0 }: ISubtasksTableProps) {
   const dispatch = useAppDispatch();
 
   const { statusId } = useAppSelector((state) => state.task);
