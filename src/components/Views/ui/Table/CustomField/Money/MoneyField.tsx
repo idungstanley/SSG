@@ -11,7 +11,6 @@ interface MoneyField {
 }
 
 function MoneyField({ taskCustomFields, taskId, fieldId, entityCustomProperty }: MoneyField) {
-  console.log(fieldId);
   const avtiveCurrency = entityCustomProperty?.properties?.symbol;
   const activeValue = taskCustomFields?.values[0].value ? taskCustomFields?.values[0].value : '-';
   const [currentValue, setCurrentValue] = useState<string>(activeValue);
