@@ -14,7 +14,6 @@ import { useGetUserSettingsData } from '../../../../features/task/taskService';
 import { toast } from 'react-hot-toast';
 import SaveFilterToast from '../../../TasksHeader/ui/Filter/ui/Toast';
 import { isArray } from '../../../../utils/typeGuards';
-import { useSelector } from 'react-redux';
 import CollapseIcon from '../../../Views/ui/collapseIcon/CollapseIcon';
 import ShowIcon from '../../../../assets/icons/ShowIcon';
 import { FilterListIcon } from '../../../../assets/icons/FilterListIcon';

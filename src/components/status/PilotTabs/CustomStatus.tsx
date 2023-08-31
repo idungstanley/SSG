@@ -6,12 +6,9 @@ import {
   DndContext,
   DragEndEvent,
   DragOverEvent,
-  DragOverlay,
-  DropAnimation,
   KeyboardSensor,
   PointerSensor,
   closestCorners,
-  defaultDropAnimation,
   useSensor,
   useSensors
 } from '@dnd-kit/core';
@@ -26,8 +23,6 @@ import { addIsDefaultToValues, extractValuesFromArray } from '../../../utils/Sta
 import { setMatchedStatus, setStatusesToMatch } from '../../../features/hubs/hubSlice';
 import MatchStatusPopUp from '../Components/MatchStatusPopUp';
 import { setMatchData } from '../../../features/general/prompt/promptSlice';
-import StatusBodyTemplate from '../StatusBodyTemplate';
-import StatusItem from '../Components/StatusItem';
 
 interface ErrorResponse {
   data: {
