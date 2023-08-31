@@ -12,7 +12,7 @@ import { AddSubTask } from '../AddTask/AddSubTask';
 import TaskTag from '../../../Tag/ui/TaskTag';
 import Effect from '../../../../assets/icons/Effect';
 import Enhance from '../../../badges/Enhance';
-import { setShowNewTaskField, setShowNewTaskId } from '../../../../features/task/taskSlice';
+import { setDefaultSubtaskId, setShowNewTaskField, setShowNewTaskId } from '../../../../features/task/taskSlice';
 import ToolTip from '../../../Tooltip/Tooltip';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import Dradnddrop from '../../../../assets/icons/Dradnddrop';
@@ -97,6 +97,7 @@ export function Row({
   };
 
   const onShowAddSubtaskField = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, taskId: string) => {
+    dispatch(setDefaultSubtaskId(task.list_id));
     e.stopPropagation();
     if (showNewTaskField) {
       dispatch(setShowNewTaskId(''));

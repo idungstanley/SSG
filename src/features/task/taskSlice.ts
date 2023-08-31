@@ -150,6 +150,7 @@ interface TaskState {
   showTaskNavigation: boolean;
   addNewTaskItem: boolean;
   selectedIndex: number | null;
+  defaultSubtaskListId: null | string;
   selectedIndexStatus: string | null;
   selectedListIds: string[];
   selectedListId: string;
@@ -167,6 +168,7 @@ interface TaskState {
   currentTaskPriorityId: string | null | undefined;
   groupByStatus: string | null;
   showTaskUploadModal: boolean;
+  subtaskDefaultStatusId: string | null;
   timerStatus: boolean;
   sortAbleArr: SortOption[];
   sortArr: string[];
@@ -230,6 +232,8 @@ const initialState: TaskState = {
   addNewTaskItem: false,
   closeTaskListView: true,
   selectedIndex: null,
+  subtaskDefaultStatusId: null,
+  defaultSubtaskListId: null,
   selectedIndexStatus: null,
   selectedListIds: [],
   selectedListId: '',
@@ -321,6 +325,12 @@ export const taskSlice = createSlice({
     },
     setSelectedIndexStatus(state, action: PayloadAction<string>) {
       state.selectedIndexStatus = action.payload;
+    },
+    setDefaultSubtaskId(state, action: PayloadAction<string | null>) {
+      state.defaultSubtaskListId = action.payload;
+    },
+    setSubtaskDefaultStatusId(state, action: PayloadAction<string | null>) {
+      state.subtaskDefaultStatusId = action.payload;
     },
     setSelectedListIds(state, action: PayloadAction<string[]>) {
       state.selectedListIds = action.payload;
@@ -564,6 +574,7 @@ export const {
   setShowNewTaskId,
   setRmWatcher,
   setCurrentTaskId,
+  setDefaultSubtaskId,
   setToggleAllSubtask,
   setSelectedTasksArray,
   setAddNewTaskItem,
@@ -572,6 +583,7 @@ export const {
   setCurrentParentTaskId,
   setGetSubTaskId,
   hideTaskColumns,
+  setSubtaskDefaultStatusId,
   setUpdateEntries,
   setUpdateStatusModalId,
   setCurrentTaskStatusId,

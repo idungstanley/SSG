@@ -2,7 +2,13 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { DragOverlay } from '@dnd-kit/core';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { ITaskFullList, Task } from '../../../../features/task/interface.tasks';
-import { setCurrTaskListId, setCurrTeamMemId, setStatusId, setUpdateCords } from '../../../../features/task/taskSlice';
+import {
+  setCurrTaskListId,
+  setCurrTeamMemId,
+  setStatusId,
+  setSubtaskDefaultStatusId,
+  setUpdateCords
+} from '../../../../features/task/taskSlice';
 import { useScroll } from '../../../../hooks/useScroll';
 import { listColumnProps } from '../../../../pages/workspace/tasks/component/views/ListColumns';
 import { MAX_COL_WIDTH, MIN_COL_WIDTH } from '../../config';
@@ -29,7 +35,7 @@ export function Table({ heads, data, label, listName, customFields, ListColor }:
   const dispatch = useAppDispatch();
 
   const { draggableItemId } = useAppSelector((state) => state.list);
-  const { statusId } = useAppSelector((state) => state.task);
+  const { statusId, showNewTaskId, defaultSubtaskListId } = useAppSelector((state) => state.task);
 
   const [listId, setListId] = useState<string>('');
   const [tableHeight, setTableHeight] = useState<string | number>('auto');
@@ -121,7 +127,17 @@ export function Table({ heads, data, label, listName, customFields, ListColor }:
       const newStatusId: string = statusObj.id;
       dispatch(setStatusId(newStatusId));
     }
-  }, [listId, showNewTaskField]);
+
+    // get default list_status_id
+    const minPosition = Math.min(...(listDetails?.data.list.task_statuses.map((status) => status.position) || []));
+
+    const defaultStatusObj: ITask_statuses | undefined = listDetails?.data.list.task_statuses.find(
+      (statusObj: ITask_statuses) =>
+        statusObj?.is_default == 1 ? statusObj?.is_default : statusObj.position == minPosition
+    );
+
+    if (listId == defaultSubtaskListId) dispatch(setSubtaskDefaultStatusId(defaultStatusObj?.id as string));
+  }, [listId, showNewTaskField, defaultSubtaskListId]);
 
   const removeListeners = () => {
     window.removeEventListener('mousemove', mouseMove);
