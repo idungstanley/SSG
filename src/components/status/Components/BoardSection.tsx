@@ -9,6 +9,7 @@ import Button from '../../Button';
 import Input from '../../input/Input';
 import { useDroppable } from '@dnd-kit/core';
 import { BoardSectionsType } from '../../../utils/StatusManagement/Types';
+import { useAppSelector } from '../../../app/hooks';
 
 interface BoardProps {
   id: string;
@@ -20,7 +21,6 @@ interface BoardProps {
   addStatus: boolean;
   newStatusValue: string;
   handleSaveNewStatus: () => void;
-  completeData: StatusProps[];
 }
 
 export default function BoardSection({
@@ -32,12 +32,13 @@ export default function BoardSection({
   setStatusTypesState,
   handleSaveNewStatus,
   newStatusValue,
-  setNewStatusValue,
-  completeData
+  setNewStatusValue
 }: BoardProps) {
   const { setNodeRef } = useDroppable({
     id
   });
+
+  const { draggableActiveStatusId } = useAppSelector((state) => state.workspace);
 
   const [collapsedStatusGroups, setCollapsedStatusGroups] = useState<{ [key: string]: boolean }>({});
 
@@ -50,7 +51,8 @@ export default function BoardSection({
       [group]: !prevCollapsedStatusGroups[group]
     }));
   };
-  const StatusIndex = completeData.map((item) => item.name);
+  const StatusIndex = status.map((item) => item.name);
+  console.log(draggableActiveStatusId);
 
   return (
     <>
@@ -65,7 +67,7 @@ export default function BoardSection({
         </span>
       )}
       <SortableContext items={StatusIndex} strategy={verticalListSortingStrategy}>
-        <div ref={setNodeRef} className="flex flex-col space-y-1">
+        <div ref={setNodeRef} className="flex flex-col space-y-1 p-1 flex-1">
           {id &&
             !collapsedStatusGroups[id] &&
             status.map((item) => (

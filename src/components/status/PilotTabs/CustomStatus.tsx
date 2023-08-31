@@ -6,12 +6,9 @@ import {
   DndContext,
   DragEndEvent,
   DragOverEvent,
-  DragOverlay,
-  DropAnimation,
   KeyboardSensor,
   PointerSensor,
   closestCorners,
-  defaultDropAnimation,
   useSensor,
   useSensors
 } from '@dnd-kit/core';
@@ -26,12 +23,11 @@ import {
   addIsDefaultToValues,
   createModelIdAndTypeHandler,
   extractValuesFromArray,
-  getStatusById
+  getDragDirection
 } from '../../../utils/StatusManagement/statusUtils';
 import { setMatchedStatus, setStatusesToMatch } from '../../../features/hubs/hubSlice';
 import MatchStatusPopUp from '../Components/MatchStatusPopUp';
 import { setMatchData } from '../../../features/general/prompt/promptSlice';
-import StatusItem from '../Components/StatusItem';
 import { setDraggableActiveStatusId } from '../../../features/workspace/workspaceSlice';
 
 interface ErrorResponse {
@@ -56,7 +52,7 @@ export default function CustomStatus() {
   const createStatusTypes = useMutation(statusTypesService);
 
   const { matchData } = useAppSelector((state) => state.prompt);
-  const { activeItemId, activeItemType, draggableActiveStatusId } = useAppSelector((state) => state.workspace);
+  const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
   const { statusTaskListDetails } = useAppSelector((state) => state.list);
   const { spaceStatuses, matchedStatus } = useAppSelector((state) => state.hub);
 
@@ -99,9 +95,13 @@ export default function CustomStatus() {
 
   const handleDragOver = ({ active, over }: DragOverEvent) => {
     // Find the containers
+    const dragDirection = getDragDirection({ active, over } as DragOverEvent);
+    if (!dragDirection) return;
+
     const activeContainer = findBoardSectionContainer(boardSections, active.id as string);
     const overContainer = findBoardSectionContainer(boardSections, over?.id as string);
 
+    if (!active || !over) return;
     if (!activeContainer || !overContainer || activeContainer === overContainer) {
       return;
     }
@@ -275,8 +275,6 @@ export default function CustomStatus() {
     }
   };
 
-  const draggableItem = draggableActiveStatusId ? getStatusById(statusData, draggableActiveStatusId) : null;
-
   return (
     <section className="flex flex-col gap-2 p-4">
       <div className="flex flex-col space-y-6">
@@ -307,11 +305,9 @@ export default function CustomStatus() {
                 status={boardSections[uniqueModelType]}
                 handleSaveNewStatus={handleSaveNewStatus}
                 setStatusTypesState={setBoardSections}
-                completeData={statusData}
               />
             </div>
           ))}
-          <DragOverlay>{draggableItem ? <StatusItem item={draggableItem} /> : null}</DragOverlay>
         </DndContext>
       </div>
       <p className="mt-auto text-red-600 text-start">{validationMessage}</p>

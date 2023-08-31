@@ -36,7 +36,10 @@ export default function StatusBodyTemplate({ item, setStatusTypesState }: Status
     setShowStatusEditDropdown(event.currentTarget);
   };
 
-  const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: item.name, data: { item } });
+  const { attributes, listeners, setNodeRef, setActivatorNodeRef, transform, transition } = useSortable({
+    id: item.name,
+    data: { item }
+  });
 
   // const style = {
   //   transform: CSS.Transform.toString(transform),
@@ -48,6 +51,7 @@ export default function StatusBodyTemplate({ item, setStatusTypesState }: Status
     transition,
     touchAction: 'none',
     opacity: item.name === draggableActiveStatusId ? 0.3 : 1,
+    marginBottom: item.name === draggableActiveStatusId ? '16px' : '',
     backgroundColor:
       item.name === draggableActiveStatusId
         ? (groupStylesMapping[item.type as keyof typeof groupStylesMapping]?.backgroundColor as string)
@@ -153,10 +157,13 @@ export default function StatusBodyTemplate({ item, setStatusTypesState }: Status
   ];
 
   return (
-    <span className="mb-1" style={style}>
-      <span className="flex justify-items-start px-1 rounded cursor-pointer h-7 items-center border-alsoit-gray-75 border bg-white">
+    <span ref={setNodeRef}>
+      <span
+        className="flex justify-items-start px-1 rounded cursor-pointer h-7 items-center border-alsoit-gray-75 border bg-white"
+        style={style}
+      >
         {item.type !== 'closed' && item.position !== 0 && (
-          <span className="cursor-move" ref={setNodeRef} {...attributes} {...listeners}>
+          <span className="cursor-move" ref={setActivatorNodeRef} {...attributes} {...listeners}>
             <Drag />
           </span>
         )}

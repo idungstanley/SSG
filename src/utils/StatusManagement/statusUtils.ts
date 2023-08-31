@@ -1,3 +1,4 @@
+import { DragOverEvent } from '@dnd-kit/core';
 import { EntityType } from '../EntityTypes/EntityType';
 import { BoardSectionsType, ModelType, Status, StatusType } from './Types';
 
@@ -64,3 +65,11 @@ export const createModelIdAndTypeHandler = (
 
   return model;
 };
+
+export function getDragDirection({ active, over }: DragOverEvent) {
+  const activeBottom = active?.rect?.current?.initial?.bottom;
+  const overTop = over?.rect?.top;
+  if (!activeBottom || !overTop) return;
+  if (activeBottom < overTop) return 'fromAbove';
+  if (activeBottom > overTop) return 'fromBelow';
+}
