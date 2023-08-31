@@ -14,6 +14,7 @@ import { cl } from '../../../../../utils';
 import FontStyle from './FontStyles/FontStyle';
 import CreateNumberField from './Number/CreateNumberField';
 import CreateEmailField from './Email/CreateEmailField';
+import CraeteWebsite from './Websites/CraeteWebsite';
 
 function NewColumn() {
   const dispatch = useAppDispatch();
@@ -32,6 +33,18 @@ function NewColumn() {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const properties: Record<string, JSX.Element> = {
+    'single label': <CreateDropdownField />,
+    'multi label': <CreateDropdownField />,
+    date: <CreateDateField />,
+    'short text': <CreateTextField />,
+    'long text': <CreateTextField />,
+    number: <CreateNumberField />,
+    email: <CreateEmailField />,
+    website: <CraeteWebsite />
+  };
+
   return (
     <>
       {editCustomProperty ? (
@@ -107,13 +120,9 @@ function NewColumn() {
               </div>
             </div>
           </div>
-          {newCustomPropertyDetails.type.toLowerCase() === 'single label' && <CreateDropdownField />}
-          {newCustomPropertyDetails.type.toLowerCase() === 'multi label' && <CreateDropdownField />}
-          {newCustomPropertyDetails.type.toLowerCase() === 'date' && <CreateDateField />}
-          {newCustomPropertyDetails.type.toLowerCase() === 'short text' && <CreateTextField />}
-          {newCustomPropertyDetails.type.toLowerCase() === 'long text' && <CreateTextField />}
-          {newCustomPropertyDetails.type.toLowerCase() === 'number' && <CreateNumberField />}
-          {newCustomPropertyDetails.type.toLowerCase() === 'email' && <CreateEmailField />}
+          {newCustomPropertyDetails.type.toLowerCase() in properties
+            ? properties[newCustomPropertyDetails.type.toLowerCase()]
+            : null}
         </div>
       )}
     </>
