@@ -36,7 +36,12 @@ import { generateFilters } from '../../components/TasksHeader/lib/generateFilter
 import { runTimer } from '../../utils/TimerCounter';
 import Duration from '../../utils/TimerDuration';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
-import { taskAssignessUpdateManager, taskPriorityUpdateManager, taskStatusUpdateManager } from '../../managers/Task';
+import {
+  taskAssignessUpdateManager,
+  taskDateUpdateManager,
+  taskPriorityUpdateManager,
+  taskStatusUpdateManager
+} from '../../managers/Task';
 import { ITeamMembersAndGroup } from '../settings/teamMembersAndGroups.interfaces';
 import { isArrayOfStrings } from '../../utils/typeGuards';
 
@@ -425,13 +430,16 @@ export const UseUpdateTaskStatusService = ({ task_id, statusDataUpdate }: Update
 };
 export const UseUpdateTaskDateService = ({
   task_id,
-  taskDate
+  taskDate,
+  setTaskId
 }: {
   task_id: string;
   taskDate: string;
-  pickedDateState: boolean;
+  setTaskId: React.Dispatch<React.SetStateAction<string | null>>;
 }) => {
   const { pickedDateState } = useAppSelector((state) => state.workspace);
+  const { tasks } = useAppSelector((state) => state.task);
+
   const dispatch = useAppDispatch();
 
   return useQuery(
@@ -449,8 +457,19 @@ export const UseUpdateTaskDateService = ({
     {
       enabled: !!task_id && !!pickedDateState,
       cacheTime: 0,
-      onSuccess: () => {
+      onSuccess: (data) => {
         dispatch(setPickedDateState(false));
+        setTaskId(null);
+        if (data.data.task.id == task_id) {
+          const updatedTasks = taskDateUpdateManager(
+            task_id as string,
+            data.data.task.list_id as string,
+            tasks,
+            'start_date',
+            data.data.task.start_date as string
+          );
+          dispatch(setTasks(updatedTasks));
+        }
       }
     }
   );

@@ -1,0 +1,55 @@
+import { useAppSelector } from '../../../../app/hooks';
+import AssigneeIcon from '../../../../assets/icons/Assignee';
+import { FilterListIcon } from '../../../../assets/icons/FilterListIcon';
+import Me from '../../../../assets/icons/Me';
+import SearchIcon from '../../../../assets/icons/SearchIcon';
+import ShowIcon from '../../../../assets/icons/ShowIcon';
+import CollapseIcon from '../../../Views/ui/collapseIcon/CollapseIcon';
+
+interface Props {
+  handleShowLogs: () => void;
+  showLogs: boolean;
+  handleFilters: (filterBy: string, searchStr: string) => void;
+  meMode: boolean;
+}
+
+export function ClockLogHeader({ handleShowLogs, showLogs, handleFilters, meMode }: Props) {
+  const { activeItemName } = useAppSelector((state) => state.workspace);
+  const { currentUserId } = useAppSelector((state) => state.auth);
+  return (
+    <div className="flex justify-between items-center absolute -top-0 left-0 w-full">
+      <div className="flex space-x-1 items-center">
+        <label
+          htmlFor="time_logs"
+          className="bg-alsoit-gray-100 text-alsoit-gray-50 p-1.5 rounded-l-sm flex gap-2 items-center uppercase text-alsoit-text-md font-semibold h-8 w-32"
+        >
+          <div className="cursor-pointer">
+            <CollapseIcon color="#A854F7" active={showLogs} onToggle={() => handleShowLogs()} hoverBg="white" />
+          </div>
+          Time Inventory
+        </label>
+        <span className="text-alsoit-text-md">{activeItemName}</span>
+      </div>
+      <div className="flex justify-end space-x-1 px-1.5">
+        <div className="p-1 rounded-sm bg-alsoit-gray-50">
+          <ShowIcon color="gray" />
+        </div>
+        <div className="p-1 rounded-sm bg-alsoit-gray-50">
+          <FilterListIcon active={false} />
+        </div>
+        <div
+          className={`p-1 rounded-sm bg-alsoit-gray-50 cursor-pointer ${meMode && 'bg-alsoit-purple-50'}`}
+          onClick={() => handleFilters('me', currentUserId as string)}
+        >
+          <Me active={false} />
+        </div>
+        <div className={`p-1 rounded-sm bg-alsoit-gray-50 cursor-pointer ${meMode && 'bg-alsoit-purple-50'}`}>
+          <AssigneeIcon active={false} />
+        </div>
+        <div className="p-1 rounded-sm bg-alsoit-gray-50">
+          <SearchIcon />
+        </div>
+      </div>
+    </div>
+  );
+}
