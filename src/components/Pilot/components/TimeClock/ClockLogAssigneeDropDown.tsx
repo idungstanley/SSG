@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { User } from './ClockLog';
 import SearchIcon from '../../../../assets/icons/SearchIcon';
 import AvatarWithInitials from '../../../avatar/AvatarWithInitials';
+import AvatarWithImage from '../../../avatar/AvatarWithImage';
 
 interface AssigneeProps {
   teamMembers: User[];
@@ -14,6 +15,18 @@ export function TimeLogAssigneeDropDown({ teamMembers }: AssigneeProps) {
   ];
 
   const [activeFiltertab, setActiveFilter] = useState<string>('Teams');
+  const [team, setTeam] = useState<User[]>([...new Set(teamMembers)]);
+
+  const handleSearch = (searchStr: string) => {
+    const filteredUsers = [...new Set(teamMembers)].filter((teamMember) =>
+      teamMember.name.toLowerCase().includes(searchStr.toLowerCase())
+    );
+    if (searchStr.length > 0) {
+      setTeam(filteredUsers);
+    } else {
+      setTeam([...new Set(teamMembers)]);
+    }
+  };
 
   return (
     <div
@@ -26,6 +39,7 @@ export function TimeLogAssigneeDropDown({ teamMembers }: AssigneeProps) {
           <input
             type="text"
             className="relative border-none rounded-md px-6 py-0.5 text-alsoit-text-md"
+            onChange={(e) => handleSearch(e.target.value)}
             placeholder="search..."
           />
           <div className="absolute top-3 left-5">
@@ -41,8 +55,8 @@ export function TimeLogAssigneeDropDown({ teamMembers }: AssigneeProps) {
                   key={data.id}
                   className={
                     data.title === activeFiltertab
-                      ? 'bg-alsoit-purple-400 text-alsoit-gray-50 w-12 px-1 rounded-md border-none'
-                      : 'bg-alsoit-gray-50 text-alsoit-gray-200 w-12 px-1 rounded-md border-none'
+                      ? 'bg-alsoit-purple-400 text-alsoit-gray-50 px-2.5 rounded-xl border-none'
+                      : 'bg-alsoit-gray-50 text-alsoit-gray-200 px-2.5 rounded-xl border-none'
                   }
                   onClick={() => setActiveFilter(data.title)}
                 >
@@ -53,19 +67,30 @@ export function TimeLogAssigneeDropDown({ teamMembers }: AssigneeProps) {
           </div>
           {activeFiltertab === 'Teams' ? (
             <div className="flex flex-col space-y-2 w-full">
-              {teamMembers.length > 0 &&
-                teamMembers.map((user) => (
-                  <div key={user?.id} className="flex items-center space-x-2 py-1 border-b-2 w-full">
-                    <AvatarWithInitials initials={user?.initials ?? 'UN'} />
-                    <span>{user?.name}</span>
-                  </div>
-                ))}
+              {teamMembers.length > 0 && team.map((user) => <LogAssigneeDropDown key={user.id} user={user} />)}
             </div>
           ) : (
-            <></>
+            <div className="text-center">Under construction</div>
           )}
         </div>
       </div>
+    </div>
+  );
+}
+
+interface LogAssigneeDropDownProps {
+  user: User;
+}
+
+function LogAssigneeDropDown({ user }: LogAssigneeDropDownProps) {
+  return (
+    <div key={user?.id} className="flex items-center space-x-2 py-1 border-b-2 w-full">
+      {user.avatar_path ? (
+        <AvatarWithImage image_path={user.avatar_path} roundedStyle="circular" />
+      ) : (
+        <AvatarWithInitials height="h-10" width="w-10" initials={user?.initials ?? 'UN'} />
+      )}
+      <span>{user?.name}</span>
     </div>
   );
 }
