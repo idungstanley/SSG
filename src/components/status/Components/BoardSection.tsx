@@ -38,8 +38,6 @@ export default function BoardSection({
     id
   });
 
-  const { draggableActiveStatusId } = useAppSelector((state) => state.workspace);
-
   const [collapsedStatusGroups, setCollapsedStatusGroups] = useState<{ [key: string]: boolean }>({});
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -52,7 +50,6 @@ export default function BoardSection({
     }));
   };
   const StatusIndex = status.map((item) => item.name);
-  console.log(draggableActiveStatusId);
 
   return (
     <>
