@@ -134,7 +134,7 @@ export function Row({
         <StickyCol
           showSubTasks={showSubTasks}
           setShowSubTasks={setShowSubTasks}
-          style={{ zIndex: 1, marginLeft: isSplitSubtask ? '-36px' : 0 }}
+          style={{ zIndex: 1 }}
           isListParent={isListParent}
           task={task}
           taskIndex={taskIndex}
@@ -143,6 +143,7 @@ export function Row({
           onClose={handleClose as VoidFunction}
           paddingLeft={paddingLeft}
           tags={'tags' in task ? <TaskTag tags={task.tags} entity_id={task.id} entity_type="task" /> : null}
+          isSplitSubtask={isSplitSubtask}
           dragElement={
             <div ref={setNodeRef} {...listeners} {...attributes}>
               <div className="text-lg text-gray-400 transition duration-200 opacity-0 cursor-move group-hover:opacity-100">
