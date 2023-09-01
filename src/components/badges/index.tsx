@@ -5,7 +5,7 @@ import SubtaskWithCount from './SubtaskWithCount';
 import { Task } from '../../features/task/interface.tasks';
 import ToolTip from '../Tooltip/Tooltip';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { setShowNewTaskField, setShowNewTaskId } from '../../features/task/taskSlice';
+import { setDefaultSubtaskId, setShowNewTaskField, setShowNewTaskId } from '../../features/task/taskSlice';
 import DetailsOnHover from '../Dropdown/DetailsOnHover/DetailsOnHover';
 import Checklist from './Checklist';
 
@@ -17,6 +17,7 @@ export default function Badges({ task }: BadgeTask) {
   const dispatch = useAppDispatch();
 
   const onShowAddSubtaskField = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, taskId: string) => {
+    dispatch(setDefaultSubtaskId(task.list_id));
     if (showNewTaskField) {
       dispatch(setShowNewTaskId(''));
       dispatch(setShowNewTaskField(false));
