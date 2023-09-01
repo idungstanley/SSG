@@ -7,7 +7,7 @@ import EditDropdown from './Edit/EditDropdown';
 function Templates() {
   const { entityForCustom, editCustomProperty } = useAppSelector((state) => state.task);
   return (
-    <div className="h-full w-full overflow-scroll">
+    <div className="h-full w-full overflow-scroll p-2">
       <Header />
       {entityForCustom.id && entityForCustom.type && <CreateNewColumn />}
       {editCustomProperty && <EditDropdown />}

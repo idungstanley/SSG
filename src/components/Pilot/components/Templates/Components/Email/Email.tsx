@@ -23,7 +23,7 @@ export default function EmailOptions() {
         <Menu.Button className="inline-flex justify-center rounded-md p-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 w-full">
           <div className="w-full flex items-center justify-between h-full">
             <div className="flex items-center">
-              <span className="mx-1">
+              <span className="mx-1 w-5 h-5">
                 <Email />
               </span>
               <p className="text-alsoit-gray-300-lg text-alsoit-text-lg font-semibold">Email</p>

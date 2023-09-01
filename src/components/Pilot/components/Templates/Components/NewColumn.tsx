@@ -40,11 +40,11 @@ function NewColumn() {
         <div className="w-full">
           <div className="flex gap-2 items-center justify-between my-4 w-full">
             <div className="w-2/4">
-              <p className="text-alsoit-text-xi text-alsoit-gray-100">PROPERTY TYPE</p>
+              <p className="text-alsoit-text-xi text-alsoit-gray-100">TYPE</p>
               <ColumnTypeDropdown />
             </div>
             <div className="w-2/4">
-              <p className="text-alsoit-text-xi text-alsoit-gray-100">PROPERTY NAME</p>
+              <p className="text-alsoit-text-xi text-alsoit-gray-100">TITTLE</p>
               <div
                 className="flex items-center w-full rounded-md bg-white gap-1"
                 style={{ height: '30px', borderRadius: '6px' }}
