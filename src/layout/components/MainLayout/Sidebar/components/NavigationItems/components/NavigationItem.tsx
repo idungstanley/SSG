@@ -37,9 +37,9 @@ export default function NavigationItem({ item, handleHotkeyClick }: NavigationIt
   const handleClick = (name: string | null, link: string) => {
     dispatch(setActivePlaceName(name));
     dispatch(setShowExtendedBar(true));
-    if (name !== 'Favorites') {
-      navigate(link);
-    }
+    navigate(link);
+    // if (name !== 'Favorites') {
+    // }
   };
 
   const style = {

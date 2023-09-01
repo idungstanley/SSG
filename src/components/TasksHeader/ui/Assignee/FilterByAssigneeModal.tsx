@@ -11,6 +11,28 @@ import { EllipsisHorizontalIcon, MagnifyingGlassIcon } from '@heroicons/react/24
 import AssigneeIcon from '../../../../assets/icons/Assignee';
 import { VerticalScroll } from '../../../ScrollableContainer/VerticalScroll';
 
+const unassigned = {
+  color: '#626262',
+  id: 'ns',
+  name: 'Unassigned',
+  is_active: false,
+  invited_at: '',
+  user: {
+    color: '#626262',
+    name: 'Unassigned',
+    id: 'ns',
+    email: '',
+    initials: 'NA',
+    avatar_path: null
+  },
+  role: {
+    key: 'ns',
+    name: 'ns'
+  },
+  initials: 'NA',
+  colour: '#626262'
+};
+
 export default function FilterByAssigneeModal() {
   const dispatch = useAppDispatch();
   const inputRef = useRef<HTMLInputElement>(null);
@@ -24,8 +46,9 @@ export default function FilterByAssigneeModal() {
 
   const { data } = useGetTeamMembers({ page: 1, query: '' });
   const members = data?.data.team_members ?? [];
+  const allMembers = [unassigned, ...members];
   // Filter the members based on the search value
-  const filteredMembers = members.filter((member) =>
+  const filteredMembers = allMembers.filter((member) =>
     member.user.name.toLowerCase().includes(searchValue.toLowerCase())
   );
 
@@ -102,7 +125,7 @@ export default function FilterByAssigneeModal() {
       >
         <Menu.Items
           className="fixed mt-2 overflow-scroll origin-top-right bg-white rounded-md shadow-lg w-72 ring-1 ring-black ring-opacity-5 focus:outline-none"
-          style={{ zIndex: 3, maxHeight: '500px' }}
+          style={{ zIndex: 3 }}
         >
           <div className="container px-4 py-2 mx-auto">
             <div className="relative flex items-center w-full text-gray-500">
@@ -119,36 +142,38 @@ export default function FilterByAssigneeModal() {
             </div>
           </div>
           <VerticalScroll>
-            {filteredMembers.map((member) => (
-              <section
-                className="flex items-center justify-between w-full px-4 py-2 text-left text-black cursor-pointer text-alsoit-text-md hover:bg-gray-200"
-                key={member.id}
-                onClick={() => onClickMember(member.id, member.user.name)}
-              >
-                <div className="flex items-center space-x-3">
-                  <AvatarWithInitials
-                    initials={member.user.initials}
-                    textColor={'white'}
-                    height="h-8"
-                    width="w-8"
-                    backgroundColour={member.color}
-                    textSize={'8px'}
-                  />
-                  <div className="flex flex-col text-left">
-                    <p className="capitalize text-alsoit-text-lg text-alsoit-gray-300">{member.user.name}</p>
-                    <p className="text-alsoit-text-md">{member.user.email}</p>
+            <div style={{ maxHeight: '340px' }}>
+              {filteredMembers.map((member) => (
+                <section
+                  className="flex items-center justify-between w-full px-4 py-2 text-left text-black cursor-pointer text-alsoit-text-md hover:bg-gray-200"
+                  key={member.id}
+                  onClick={() => onClickMember(member.id, member.user.name)}
+                >
+                  <div className="flex items-center space-x-3">
+                    <AvatarWithInitials
+                      initials={member.user.initials}
+                      textColor={'white'}
+                      height="h-8"
+                      width="w-8"
+                      backgroundColour={member.color}
+                      textSize={'8px'}
+                    />
+                    <div className="flex flex-col text-left">
+                      <p className="capitalize text-alsoit-text-lg text-alsoit-gray-300">{member.user.name}</p>
+                      <p className="text-alsoit-text-md">{member.user.email}</p>
+                    </div>
                   </div>
-                </div>
 
-                <button>
-                  {currentAssignees?.map((i) => i.id).includes(member.id) ? (
-                    <AiFillCheckCircle />
-                  ) : (
-                    <AiOutlineCheckCircle />
-                  )}
-                </button>
-              </section>
-            ))}
+                  <button>
+                    {currentAssignees?.map((i) => i.id).includes(member.id) ? (
+                      <AiFillCheckCircle />
+                    ) : (
+                      <AiOutlineCheckCircle />
+                    )}
+                  </button>
+                </section>
+              ))}
+            </div>
           </VerticalScroll>
         </Menu.Items>
       </Transition>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FaFolder, FaFolderOpen } from 'react-icons/fa';
 import { VscTriangleDown, VscTriangleRight } from 'react-icons/vsc';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
@@ -150,6 +150,12 @@ export default function WalletItem({
       isOverWallet: true
     }
   });
+
+  useEffect(() => {
+    if (isOver) {
+      handleShowSubWallet(wallet.id);
+    }
+  }, [isOver]);
 
   const {
     attributes,
