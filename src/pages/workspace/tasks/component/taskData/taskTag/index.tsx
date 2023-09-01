@@ -40,9 +40,9 @@ export default function TaskTag({ taskColField, entity_id, entity_type }: render
       <div key={arr.length} className="flex items-center -mr-5 drop-shadow-xl">
         {arr.map((item: tagItem) => {
           return (
-            <div key={item.id} className="">
+            <div key={item.id}>
               {Array.isArray(item) ? (
-                <div className="">{groupTags(item)}</div>
+                <div>{groupTags(item)}</div>
               ) : (
                 <>
                   {renameTagId == item.id && currentTaskIdForTag == entity_id ? (

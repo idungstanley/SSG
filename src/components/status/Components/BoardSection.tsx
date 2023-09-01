@@ -9,7 +9,6 @@ import Button from '../../Button';
 import Input from '../../input/Input';
 import { useDroppable } from '@dnd-kit/core';
 import { BoardSectionsType } from '../../../utils/StatusManagement/Types';
-import { useAppSelector } from '../../../app/hooks';
 
 interface BoardProps {
   id: string;

@@ -42,7 +42,7 @@ export default function DataRenderFunc({
     );
   } else if (col?.field === 'tags') {
     return (
-      <div className="">
+      <div>
         <TaskTag entity_id={task?.id} taskColField={taskColField} entity_type="task" />
       </div>
     );

@@ -24,7 +24,6 @@ export const taskPriorityUpdateManager = (
     }
     return updatedTasks;
   }
-
   return tasks;
 };
 
@@ -53,28 +52,28 @@ export const taskStatusUpdateManager = (
 };
 export const taskDateUpdateManager = (
   taskId: string,
-  listId: string,
+  listIds: string[],
   tasks: Record<string, ITaskFullList[]>,
   dateType: string,
   newDate: string
 ) => {
-  if (listId) {
+  if (listIds.length) {
     const updatedTasks = { ...tasks };
-
-    updatedTasks[listId] = updatedTasks[listId].map((task) => {
-      if (taskId === task.id) {
-        if (dateType == 'start_date') {
-          return {
-            ...task,
-            start_date: newDate
-          };
+    for (let i = 0; i < listIds.length; i++) {
+      updatedTasks[listIds[i]] = updatedTasks[listIds[i]].map((task) => {
+        if (taskId === task.id) {
+          if (dateType === 'start_date') {
+            return {
+              ...task,
+              start_date: newDate
+            };
+          }
         }
-      }
-      return task;
-    });
+        return task;
+      });
+    }
     return updatedTasks;
   }
-
   return tasks;
 };
 

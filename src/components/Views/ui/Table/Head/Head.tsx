@@ -239,7 +239,7 @@ export function Head({
                       hoverBg="white"
                     />
                   </p>
-                  <span ref={scrollToRef} className="" style={{ fontSize: '11px', WebkitTextStroke: '0.5px' }}>
+                  <span ref={scrollToRef} style={{ fontSize: '11px', WebkitTextStroke: '0.5px' }}>
                     {parsedLabel}
                   </span>
                   <div className="items-center pl-2 space-x-1 viewSettings" onClick={(e) => e.stopPropagation()}>
