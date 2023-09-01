@@ -220,14 +220,12 @@ export default function NavigationItems({
                 handleHotkeyClick={handleHotkeyClick}
                 key={item.name}
                 item={item}
-                // isVisible={pinnedNav.length > 1 && showSidebar ? true : item.alwaysShow || showMore}
                 activeTabId={activeTabId}
                 setActiveTabId={setActiveTabId}
               />
             ))}
 
             {/* show less or more button */}
-            {/* {(pinnedNav.length < 2 || !showSidebar) && ( */}
             <div
               onClick={handleToggleMore}
               className={cl(
