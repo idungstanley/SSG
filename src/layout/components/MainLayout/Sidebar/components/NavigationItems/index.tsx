@@ -165,7 +165,6 @@ export default function NavigationItems({
   let showMoreCount = (JSON.parse(localStorage.getItem('showmoreCount') || '""') as number) || 3;
   const displayNavItems = showMore ? navigation : navigation.slice(0, showMoreCount);
   const displayPinnedItems = showMore ? hotkeys : hotkeys.slice(0, showMoreCount);
-  const navigationLength = navigation.length;
 
   const handleOpenDropdown = (event: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
     event.stopPropagation();
@@ -246,7 +245,7 @@ export default function NavigationItems({
           </nav>
           <AlsoitMenuDropdown handleClose={handleCloseDropdown} anchorEl={showDropdown}>
             <div className="flex flex-col p-2 w-40 gap-2">
-              <p>How many items do you want to show out of {navigationLength}</p>
+              <p>How many items would you like to show when showing less?</p>
               <Input type="number" onChange={handleOnChange} name="show more count" />
               <Button label="Save" buttonStyle="base" height="h-6" onClick={handleSaveToLS} />
             </div>
