@@ -129,7 +129,7 @@ function ReusableSelect({ value, onclick, options, style }: ReusableSelectProps)
           </ul>
         </div>
       )}
-      {editing && (
+      {editing && value && (
         <input
           type="text"
           value={value}
