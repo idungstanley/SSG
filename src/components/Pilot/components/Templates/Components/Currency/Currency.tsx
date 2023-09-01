@@ -52,11 +52,6 @@ export default function CurrencyOptions() {
                       active ? 'bg-alsoit-gray-50 text-gray-700' : 'text-gray-700'
                     } group flex gap-4 w-full items-center rounded-md px-2 py-2 text-alsoit-text-lg font-semibold`}
                   >
-                    <RoundedCheckbox
-                      onChange={() => null}
-                      isChecked={false}
-                      styles="w-3 h-3 rounded-full  cursor-pointer focus:outline-1 focus:ring-transparent  focus:border-2 focus:opacity-100 group-hover:opacity-100 text-alsoit-purple-300"
-                    />
                     {item.name}
                   </button>
                 )}
