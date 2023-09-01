@@ -129,6 +129,12 @@ export default function HubItem({
     }
   });
 
+  useEffect(() => {
+    if (isOver) {
+      handleClick(item.id);
+    }
+  }, [isOver]);
+
   const {
     attributes,
     listeners,

@@ -10,6 +10,7 @@ import CalendarIcon from '../../../../../../../assets/icons/CalendarIcon';
 import TemplateIcon from '../../../../../../../assets/icons/TemplateIcon';
 import GoalIcon from '../../../../../../../assets/icons/GoalIcon';
 import DashboardIcon from '../../../../../../../assets/icons/DashboardIcon';
+import { GrFormClose } from 'react-icons/gr';
 
 export const NavigationList = [
   {
@@ -81,9 +82,15 @@ interface PinnedNavProps {
   )[];
   activeTabId: string | null;
   setActiveTabId: React.Dispatch<React.SetStateAction<string | null>>;
+  handleHotkeyClick: (value: string, e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => void;
 }
 
-export default function PinnedNavigationItem({ hotkeys, activeTabId, setActiveTabId }: PinnedNavProps) {
+export default function PinnedNavigationItem({
+  hotkeys,
+  activeTabId,
+  setActiveTabId,
+  handleHotkeyClick
+}: PinnedNavProps) {
   const dispatch = useAppDispatch();
   const { notificationCount } = useAppSelector((state) => state.notification);
   const handleClick = (name: string, id: string) => {
@@ -98,7 +105,7 @@ export default function PinnedNavigationItem({ hotkeys, activeTabId, setActiveTa
           title={item.name}
           className={cl(
             activeTabId === item.id ? 'text-primary-500' : 'text-gray-600',
-            'flex items-center px-0.5 justify-center divide-x m-1 relative'
+            'flex items-center px-1 justify-center m-1 relative group'
           )}
           key={item.id}
         >
@@ -116,6 +123,12 @@ export default function PinnedNavigationItem({ hotkeys, activeTabId, setActiveTa
             </p>
           )}
           {item.icon || <img className="w-5 h-5" src={item.source} alt={item.name} />}
+          <span
+            className="cursor-pointer group-hover:opacity-100 opacity-0 absolute -right-1.5 -top-1.5"
+            onClick={(e) => handleHotkeyClick(item.id, e)}
+          >
+            <GrFormClose />
+          </span>
         </div>
       ))}
     </div>
