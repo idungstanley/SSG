@@ -43,6 +43,7 @@ interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   parentId?: string;
   onClose?: VoidFunction;
   isOver?: boolean;
+  isSplitSubtask?: boolean;
 }
 
 export function StickyCol({
@@ -58,6 +59,7 @@ export function StickyCol({
   task,
   paddingLeft = 0,
   dragElement,
+  isSplitSubtask,
   ...props
 }: ColProps) {
   const dispatch = useAppDispatch();
@@ -267,7 +269,19 @@ export function StickyCol({
           className="flex items-center justify-start text-sm font-medium text-gray-900 cursor-pointer text-start"
           {...props}
         >
-          <div className="flex items-center h-full space-x-1 ">
+          <div
+            className={`flex items-center h-full space-x-1 ${isSplitSubtask && 'bg-white/90'}`}
+            style={{
+              height:
+                singleLineView && !CompactView
+                  ? '42px'
+                  : CompactView && singleLineView
+                  ? '25px'
+                  : !singleLineView && CompactView && task.name.length < 30
+                  ? '25px'
+                  : ''
+            }}
+          >
             <RoundedCheckbox
               onChange={onChange}
               isChecked={isChecked}
@@ -398,19 +412,6 @@ export function StickyCol({
           className="sticky left-0 flex items-start justify-start text-sm font-medium text-gray-900 cursor-pointer text-start"
           {...props}
         >
-          <div className="flex items-center h-full space-x-1 opacity-0">
-            <RoundedCheckbox
-              onChange={onChange}
-              isChecked={isChecked}
-              styles={`w-4 h-4 rounded-full ${
-                selectedTasksArray.length > 0 ? 'opacity-100' : 'opacity-0'
-              } cursor-pointer focus:outline-1 focus:ring-transparent  focus:border-2 focus:opacity-100 group-hover:opacity-100`}
-            />
-            <div ref={setNodeRef} {...attributes} {...listeners} className="pr-2">
-              {dragElement}
-            </div>
-          </div>
-
           <div
             style={{ paddingLeft }}
             className={cl(
