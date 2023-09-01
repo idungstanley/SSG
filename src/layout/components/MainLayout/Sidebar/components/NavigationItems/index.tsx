@@ -233,11 +233,11 @@ export default function NavigationItems({
               )}
               style={{ height: '30px', fontWeight: '600' }}
             >
-              <span className="flex items-center">
+              <span className="flex items-center gap-2">
                 {showLessOrMore[showMore ? 0 : 1].icon}
                 {showSidebar ? <p className="ml-4 text-xs truncate">{showLessOrMore[showMore ? 0 : 1].name}</p> : null}
               </span>
-              <span className="" onClick={(e) => handleOpenDropdown(e)}>
+              <span onClick={(e) => handleOpenDropdown(e)}>
                 <ThreeDotIcon />
               </span>
             </div>
