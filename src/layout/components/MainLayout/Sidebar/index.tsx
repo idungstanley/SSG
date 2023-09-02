@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { cl } from '../../../../utils';
-import { setSidebarWidthRD } from '../../../../features/workspace/workspaceSlice';
+import { setIsFavoritePinned, setSidebarWidthRD } from '../../../../features/workspace/workspaceSlice';
 import Header from './components/Header';
 import NavigationItems from './components/NavigationItems';
 import Places from './components/Places';
@@ -53,13 +53,18 @@ export default function Sidebar() {
     (tabId: string, e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
       e.stopPropagation();
       const isIncludes = activeHotkeyIds.includes(tabId);
+      const isFavoriteItem = NavigationList.find((item) => item.id === tabId);
 
       const newHotkeyIds =
         !isIncludes && activeHotkeyIds.length <= 3
           ? [...activeHotkeyIds, tabId]
           : [...activeHotkeyIds.filter((i) => i !== tabId)];
-
       setActiveHotkeyIds(newHotkeyIds);
+      if (newHotkeyIds.includes(isFavoriteItem?.id as string)) {
+        dispatch(setIsFavoritePinned(true));
+      } else {
+        dispatch(setIsFavoritePinned(false));
+      }
       localStorage.setItem('navhotkeys', JSON.stringify(newHotkeyIds));
     },
     [activeHotkeyIds]

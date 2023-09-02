@@ -133,7 +133,7 @@ export default function NavigationItems({
     {
       id: '8',
       name: 'Favorites',
-      href: `${currentWorkspaceId}/favorites`,
+      href: `/${currentWorkspaceId}/favorites`,
       icon: <FavoriteIcon />,
       alwaysShow: false
     }

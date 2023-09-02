@@ -26,6 +26,7 @@ function Favourite({ item }: nameType) {
   const navigate = useNavigate();
 
   const { showFavEditInput, triggerFavUpdate, favUpdateName } = useAppSelector((state) => state.hub);
+  const { currentWorkspaceId } = useAppSelector((state) => state.auth);
 
   const [favName, setFavName] = useState<string>(item.name);
 
@@ -45,7 +46,13 @@ function Favourite({ item }: nameType) {
     );
     dispatch(setShowPilot(true));
     dispatch(setActiveTabId(4));
-    navigate(`/${item.model_type}/${item.model_id}`);
+    if (item.model_type === 'hub') {
+      navigate(`/${currentWorkspaceId}/tasks/h/${item.model_id}`);
+    } else if (item.model_type === 'wallet') {
+      navigate(`/${currentWorkspaceId}/tasks/w/${item.model_id}`);
+    } else if (item.model_type === 'list') {
+      navigate(`/${currentWorkspaceId}/tasks/s/${item.model_id}`);
+    }
   };
 
   const handleUpdate = (e: { preventDefault: () => void }) => {
@@ -55,9 +62,9 @@ function Favourite({ item }: nameType) {
   };
 
   return (
-    <div className="hover:bg-gray-100 py-0.5 h-6 px-2 group">
-      <div className="w-full flex justify-between  items-center  relative">
-        <div className="flex">
+    <div className="py-0.5 h-6 px-1 group">
+      <div className="w-full flex justify-between items-center relative">
+        <div className="flex items-center">
           {item.model_type === EntityType.hub && (
             <AvatarWithInitials
               initials={getInitials(item.name)}
@@ -86,7 +93,7 @@ function Favourite({ item }: nameType) {
             </form>
           ) : (
             <h4
-              className="tracking-wider capitalize truncate cursor-pointer mx-1"
+              className="tracking-wider capitalize hover:text-alsoit-purple-300 truncate cursor-pointer mx-1"
               style={{ fontSize: '10px' }}
               onClick={() => handleLocation()}
             >
@@ -94,7 +101,7 @@ function Favourite({ item }: nameType) {
             </h4>
           )}
         </div>
-        <div className="">
+        <div className="flex items-center">
           <FavModal id={item.id} />
         </div>
       </div>
