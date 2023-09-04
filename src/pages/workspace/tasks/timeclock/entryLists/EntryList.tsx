@@ -3,9 +3,10 @@ import { Header } from '../../../../../components/Pilot/components/TimeClock/Clo
 import DateFormat from '../../../../../components/DateFormat';
 import ToolTip from '../../../../../components/Tooltip/Tooltip';
 import moment from 'moment-timezone';
-import { useState } from 'react';
+import { MouseEvent, useState } from 'react';
 import ThreeDotIcon from '../../../../../assets/icons/ThreeDotIcon';
 import { EntryListActionBtns } from './EntryListActionBtns';
+import PopAssignModal from '../../assignTask/popAssignModal';
 export interface teamMember {
   id: string;
   user: {
@@ -32,12 +33,27 @@ export interface EntryListProps {
 
 export default function EntryList({ entries, switchHeader }: EntryListProps) {
   const headers = switchHeader;
+
   const { initials, name } = entries.team_member.user;
+  console.log(entries.team_member.id);
+
   const [iconToggle, setIconToggle] = useState<{ editIcon: boolean; trashIcon: boolean; threeDots: boolean }>({
     editIcon: false,
     trashIcon: false,
     threeDots: false
   });
+  const [anchorEl, setAnchorEl] = useState<HTMLTableCellElement | null>(null);
+  const [showUserModal, setShowUserModal] = useState<boolean>(false);
+
+  const handleHover = (e: MouseEvent<HTMLTableCellElement>) => {
+    if (anchorEl) {
+      setAnchorEl(null);
+      setShowUserModal(false);
+    } else {
+      setAnchorEl(e.currentTarget);
+      setShowUserModal(true);
+    }
+  };
 
   return (
     <tr key={entries.id} id="getTimeEntries" className="flex justify-between border-b w-full py-0.5">
@@ -45,10 +61,24 @@ export default function EntryList({ entries, switchHeader }: EntryListProps) {
         {headers.map((col) => {
           if (col.title === 'user' && !col.hidden) {
             return (
-              <td key={col.id} className="w-1/5 flex items-center justify-start cursor-pointer py-1">
+              <td
+                key={col.id}
+                onMouseEnter={handleHover}
+                onMouseLeave={handleHover}
+                className="w-1/5 flex items-center justify-start cursor-pointer py-1"
+              >
                 <ToolTip title={name}>
                   <AvatarWithInitials height="h-5" width="w-5" initials={initials} />
                 </ToolTip>
+                {showUserModal && (
+                  <PopAssignModal
+                    anchorEl={anchorEl}
+                    currHoveredOnUser={entries.team_member.id}
+                    handleClose={() => setShowUserModal(false)}
+                    modalLoader={false}
+                    spinnerSize={6}
+                  />
+                )}
               </td>
             );
           }

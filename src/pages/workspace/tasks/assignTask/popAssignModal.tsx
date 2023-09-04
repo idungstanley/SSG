@@ -22,6 +22,8 @@ export function PopAssignModal({
   const { data } = useCommunity();
   const filteredUser = useMemo(() => data?.team_members.filter((users) => users.id == currHoveredOnUser), [data]);
 
+  console.log(data?.team_members.filter((users) => users.id == currHoveredOnUser));
+
   const open = Boolean(anchorEl);
   return (
     <Menu
