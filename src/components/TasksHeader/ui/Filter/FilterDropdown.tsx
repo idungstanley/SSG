@@ -7,12 +7,16 @@ import Icons from '../../../Icons/Icons';
 import Filter from '../../../../assets/icons/filter_alt.svg';
 import ArrowDownFilled from '../../../../assets/icons/ArrowDownFilled';
 
-export function FilterDropdown() {
+interface IFilterDropdownProps {
+  isSplitSubtasks?: boolean;
+}
+
+export function FilterDropdown({ isSplitSubtasks }: IFilterDropdownProps) {
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
         <Menu.Button className="inline-flex text-gay-500">
-          <Button active={false}>
+          <Button active={false} withoutBg={isSplitSubtasks}>
             <Icons src={Filter} />
             Filter
             <ArrowDownFilled />

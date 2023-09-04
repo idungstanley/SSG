@@ -51,8 +51,10 @@ export default function SubDropdown({ cords }: SubDropdownProps) {
   const { showMenuDropdownType, selectedTreeDetails, entityToCreate, SubMenuType } = useAppSelector(
     (state) => state.hub
   );
-  const { showTreeInput, lastActiveItem, activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
-  const { lightBaseColor } = useAppSelector((state) => state.account);
+  const { showTreeInput, lastActiveItem, activeItemId, activeItemType, sidebarWidthRD } = useAppSelector(
+    (state) => state.workspace
+  );
+  const { lightBaseColor, showSidebar, userSettingsData } = useAppSelector((state) => state.account);
 
   const [open, setOpen] = useState<boolean>(true);
 
@@ -220,7 +222,7 @@ export default function SubDropdown({ cords }: SubDropdownProps) {
       TransitionComponent={Fade}
       anchorOrigin={{
         vertical: Number(cords?.top) - 100 || 'center',
-        horizontal: 270
+        horizontal: showSidebar ? Number(userSettingsData?.sidebarWidth) - 30 : sidebarWidthRD
       }}
     >
       <div className="w-96 px-2 origin-top-right bg-white" style={{ minWidth: '200px' }}>

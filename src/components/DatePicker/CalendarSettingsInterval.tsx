@@ -16,7 +16,7 @@ export default function Interval({ toggle, toggleFn, valueArr, valueFn, data }: 
         onClick={() => toggleFn(!toggle)}
         className="flex items-center space-x-2 w-min bg-alsoit-gray-75 text-center p-1 rounded-md text-white capitalize cursor-pointer relative"
       >
-        <span className="">{data}</span>
+        <span>{data}</span>
         <ArrowDown active={false} />
         {toggle && (
           <ul className="w-20 p-1 rounded-md flex flex-col space-y-2 absolute bg-alsoit-gray-75 shadow-2xl top-8 -left-2">

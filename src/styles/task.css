@@ -100,3 +100,9 @@
   transition: transform 1s ease;
   transform: translateY(-100%);
 }
+
+.custom-property-tags {
+  width: auto;
+  height: 15px;
+  clip-path: polygon(75% 0%, 100% 50%, 75% 100%, 0% 100%, 25% 50%, 0% 0%);
+}

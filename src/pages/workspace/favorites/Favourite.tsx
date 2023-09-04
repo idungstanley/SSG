@@ -62,7 +62,7 @@ function Favourite({ item }: nameType) {
 
   return (
     <div className="py-0.5 h-6 px-1 group">
-      <div className="w-full flex justify-between items-center relative">
+      <div className="relative flex items-center justify-between w-full">
         <div className="flex items-center">
           {item.model_type === EntityType.hub && (
             <AvatarWithInitials
@@ -84,7 +84,7 @@ function Favourite({ item }: nameType) {
               <input
                 autoFocus
                 style={{ fontSize: '10px' }}
-                className="h-6 outline-none border-none focus:border-none focus:outline-none rounded"
+                className="h-6 border-none rounded outline-none focus:border-none focus:outline-none"
                 type="text"
                 onChange={(e) => setFavName(e.target.value)}
                 value={favName}
@@ -92,7 +92,7 @@ function Favourite({ item }: nameType) {
             </form>
           ) : (
             <h4
-              className="tracking-wider capitalize hover:text-alsoit-purple-300 truncate cursor-pointer mx-1"
+              className="mx-1 tracking-wider capitalize truncate cursor-pointer hover:text-alsoit-purple-300"
               style={{ fontSize: '10px' }}
               onClick={() => handleLocation()}
             >

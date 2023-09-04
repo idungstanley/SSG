@@ -13,6 +13,10 @@ export interface IField {
   options: Options;
   name: string;
   type: string;
+  properties?: {
+    symbol: string;
+    currency: string;
+  };
 }
 
 export interface taskCountFields {
@@ -32,6 +36,7 @@ export interface ITask_statuses {
   id: string;
   model_id: string;
   model_type: string;
+  is_default: number;
   name: string;
   position: number;
   type: string;

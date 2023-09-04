@@ -5,7 +5,7 @@ import SubtaskWithCount from './SubtaskWithCount';
 import { Task } from '../../features/task/interface.tasks';
 import ToolTip from '../Tooltip/Tooltip';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { setShowNewTaskField, setShowNewTaskId } from '../../features/task/taskSlice';
+import { setDefaultSubtaskId, setShowNewTaskField, setShowNewTaskId } from '../../features/task/taskSlice';
 import DetailsOnHover from '../Dropdown/DetailsOnHover/DetailsOnHover';
 import Checklist from './Checklist';
 
@@ -17,6 +17,7 @@ export default function Badges({ task }: BadgeTask) {
   const dispatch = useAppDispatch();
 
   const onShowAddSubtaskField = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, taskId: string) => {
+    dispatch(setDefaultSubtaskId(task.list_id));
     if (showNewTaskField) {
       dispatch(setShowNewTaskId(''));
       dispatch(setShowNewTaskField(false));
@@ -32,7 +33,7 @@ export default function Badges({ task }: BadgeTask) {
           <DetailsOnHover
             content={<p>{task.description}</p>}
             hoverElement={
-              <button className="p-1 border rounded-md ">
+              <button className="p-1 border rounded-md bg-white ">
                 <Description />
               </button>
             }
@@ -42,7 +43,7 @@ export default function Badges({ task }: BadgeTask) {
 
         {task.has_attachments && (
           <ToolTip title="Attach File">
-            <button className="p-1 border rounded-md">
+            <button className="p-1 border rounded-md bg-white">
               <AttachFile />
             </button>
           </ToolTip>
@@ -50,7 +51,10 @@ export default function Badges({ task }: BadgeTask) {
 
         {task.descendants_count > 0 && (
           <ToolTip title="Subtask">
-            <button className="relative p-1 border rounded-md" onClick={(e) => onShowAddSubtaskField(e, task.id)}>
+            <button
+              className="relative p-1 border rounded-md bg-white"
+              onClick={(e) => onShowAddSubtaskField(e, task.id)}
+            >
               <SubtaskWithCount />
               <p className="alsoit-text-sm h-2 w-2 absolute left-5 " style={{ fontSize: '9px', bottom: '12.5px' }}>
                 {task.descendants_count}

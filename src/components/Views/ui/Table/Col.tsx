@@ -1,6 +1,11 @@
 import { TdHTMLAttributes } from 'react';
 import { useParams } from 'react-router-dom';
-import { ImyTaskData, setCurrentTaskStatusId, setSelectedListId } from '../../../../features/task/taskSlice';
+import {
+  ImyTaskData,
+  setCurrentTaskStatusId,
+  setSelectedTaskParentId,
+  setSelectedTaskType
+} from '../../../../features/task/taskSlice';
 import { cl } from '../../../../utils';
 import Assignee from '../../../../pages/workspace/tasks/assignTask/Assignee';
 import DropdownFieldWrapper from '../../../../pages/workspace/tasks/component/taskData/dropdown/DropdownFieldWrapper';
@@ -17,6 +22,8 @@ import TextField from './CustomField/TextField/TextField';
 import LabelsWrapper from './CustomField/Labels/LabelsWrapper';
 import NumberField from './CustomField/Number/NumberField';
 import EmailField from './CustomField/EmailField/EmailField';
+import TagsWrapper from './CustomField/Tags/TagsWrapper';
+import MoneyField from './CustomField/Money/MoneyField';
 import DateField from './CustomField/Date/DateField';
 
 interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
@@ -48,7 +55,8 @@ export function Col({ value, field, fieldId, task, customFields, ...props }: Col
         style={{ backgroundColor: task.status.color }}
         onClick={() => {
           dispatch(setCurrentTaskStatusId(task.id as string));
-          dispatch(setSelectedListId(task.list_id));
+          dispatch(setSelectedTaskParentId((task.list_id || task.parent_id) as string));
+          dispatch(setSelectedTaskType(task?.list_id ? EntityType.task : EntityType.subtask));
         }}
       >
         <StatusNameDropdown TaskCurrentStatus={task.status} />
@@ -69,6 +77,13 @@ export function Col({ value, field, fieldId, task, customFields, ...props }: Col
     ),
     labels: (
       <LabelsWrapper
+        entityCustomProperty={customFields?.find((i) => i.id === fieldId)}
+        taskCustomFields={task.custom_fields?.find((i) => i.id === fieldId)}
+        taskId={task.id}
+      />
+    ),
+    tags: (
+      <TagsWrapper
         entityCustomProperty={customFields?.find((i) => i.id === fieldId)}
         taskCustomFields={task.custom_fields?.find((i) => i.id === fieldId)}
         taskId={task.id}
@@ -97,6 +112,14 @@ export function Col({ value, field, fieldId, task, customFields, ...props }: Col
     ),
     number: (
       <NumberField
+        taskId={task.id}
+        taskCustomFields={task.custom_fields?.find((i) => i.id === fieldId)}
+        fieldId={fieldId}
+      />
+    ),
+    money: (
+      <MoneyField
+        entityCustomProperty={customFields?.find((i) => i.id === fieldId)}
         taskId={task.id}
         taskCustomFields={task.custom_fields?.find((i) => i.id === fieldId)}
         fieldId={fieldId}

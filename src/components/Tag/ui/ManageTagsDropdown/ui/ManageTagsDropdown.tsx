@@ -9,7 +9,6 @@ import { TagItem } from './TagItem';
 import { SearchAndAddNewTag } from './SearchAndAddNewTag';
 import TaskTag from '../../TaskTag';
 import TagIcon from '../../../../../assets/icons/TagIcon';
-import ToolTip from '../../../../Tooltip/Tooltip';
 
 interface ManageTagsDropdownProps {
   tagsArr: Tag[];
@@ -46,10 +45,10 @@ export function ManageTagsDropdown({ tagsArr, entityId, entityType }: ManageTags
         <button
           type="button"
           onClick={onClickOpenDropdown}
-          className="p-1 border rounded-md bg-transparent text-gray-400 hover:text-gray-700"
+          className="p-1 border rounded-md bg-transparent text-gray-400 hover:text-gray-700 bg-white"
         >
           <div ref={relativeRef}>
-            <TagIcon />
+            <TagIcon className="w-3 h-3" />
           </div>
         </button>
       </div>

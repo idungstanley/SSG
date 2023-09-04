@@ -53,7 +53,9 @@ function LabelsDropdown({ optionsFromField, allOptions, currentProperty, taskId 
     dispatch(setEditCustomProperty(currentProperty));
     dispatch(setActiveTabId(10));
     dispatch(setEntityForCustom({ id: undefined, type: undefined }));
-    dispatch(setNewCustomPropertyDetails({ type: 'Single Label', name: currentProperty.name, color: '' }));
+    dispatch(
+      setNewCustomPropertyDetails({ type: 'Multi Label', name: currentProperty.name, color: currentProperty.color })
+    );
     setIsOpen(false);
   };
 
@@ -108,7 +110,7 @@ function LabelsDropdown({ optionsFromField, allOptions, currentProperty, taskId 
               className="flex flex-col items-center justify-center p-4 text-center bg-white border rounded-xl shadow-lg outline-none h-fit"
               style={{ maxWidth: '195px' }}
             >
-              <div className="flex items-center" style={{ width: '195px' }}>
+              <div className="flex items-center max-w-full">
                 <SearchIcon />
                 <input
                   onChange={handleSearchChange}
@@ -116,7 +118,7 @@ function LabelsDropdown({ optionsFromField, allOptions, currentProperty, taskId 
                   ref={inputRef}
                   type="text"
                   placeholder="Search"
-                  className="h-4 border-0 ring-0 outline-0 focus:ring-0 focust:outline-0 focus:border-0"
+                  className="h-4 border-0 ring-0 outline-0 focus:ring-0 focust:outline-0 focus:border-0 w-11/12"
                 />
               </div>
               <div className="w-full pt-3 space-y-2">

@@ -99,7 +99,7 @@ export default function HubPage() {
           <section
             ref={containerRef}
             style={{ minHeight: '0', maxHeight: '83vh' }}
-            className="w-full h-full p-4 space-y-10"
+            className="w-full h-full p-4 space-y-10 pb-0"
           >
             {/* lists */}
             {Object.keys(lists).map((listId) => (

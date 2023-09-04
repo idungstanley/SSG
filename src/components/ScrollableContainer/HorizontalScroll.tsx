@@ -17,7 +17,6 @@ export function HorizontalScroll({ children, ...props }: CustomScrollableContain
   const { showMore, currentItemId, showTabLabel, isResize, activeItemId, activePlaceId } = useAppSelector(
     (state) => state.workspace
   );
-  const { groupScroll } = useAppSelector((state) => state.slideOver);
 
   const [thumbWidth, setThumbWidth] = useState(DEFAULT_THUMB_WIDTH);
   const [isThumbVisible, setIsThumbVisible] = useState(true);
