@@ -412,6 +412,16 @@ export function StickyCol({
           className="sticky left-0 flex items-start justify-start text-sm font-medium text-gray-900 cursor-pointer text-start"
           {...props}
         >
+          <div className="flex items-center h-full space-x-1 opacity-0">
+            <RoundedCheckbox
+              onChange={onChange}
+              isChecked={isChecked}
+              styles={`w-4 h-4 rounded-full ${
+                selectedTasksArray.length > 0 ? 'opacity-100' : 'opacity-0'
+              } cursor-pointer focus:outline-1 focus:ring-transparent  focus:border-2 focus:opacity-100 group-hover:opacity-100`}
+            />
+            <div className="pr-2">{dragElement}</div>
+          </div>
           <div
             style={{ paddingLeft }}
             className={cl(

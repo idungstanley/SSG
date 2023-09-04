@@ -111,6 +111,7 @@ export function Row({
   };
 
   const onCloseAddTaskFIeld = () => {
+    handleClose && handleClose();
     dispatch(setShowNewTaskId(''));
     dispatch(setShowNewTaskField(false));
   };
