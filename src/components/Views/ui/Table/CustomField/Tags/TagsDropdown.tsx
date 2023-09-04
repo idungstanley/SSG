@@ -12,6 +12,7 @@ import {
 } from '../../../../../../features/task/taskSlice';
 import { setActiveTabId } from '../../../../../../features/workspace/workspaceSlice';
 import { useUpdateEntityCustomFieldValue } from '../../../../../../features/list/listService';
+import '../../../../../../styles/task.css';
 
 interface dropdownProps {
   optionsFromField:
@@ -26,7 +27,7 @@ interface dropdownProps {
   taskId: string;
 }
 
-function LabelsDropdown({ optionsFromField, allOptions, currentProperty, taskId }: dropdownProps) {
+function TagsDropdown({ optionsFromField, allOptions, currentProperty, taskId }: dropdownProps) {
   const dispatch = useAppDispatch();
   const { mutate: onUpdate } = useUpdateEntityCustomFieldValue(taskId);
 
@@ -53,9 +54,7 @@ function LabelsDropdown({ optionsFromField, allOptions, currentProperty, taskId 
     dispatch(setEditCustomProperty(currentProperty));
     dispatch(setActiveTabId(10));
     dispatch(setEntityForCustom({ id: undefined, type: undefined }));
-    dispatch(
-      setNewCustomPropertyDetails({ type: 'Multi Label', name: currentProperty.name, color: currentProperty.color })
-    );
+    dispatch(setNewCustomPropertyDetails({ type: 'Tags', name: currentProperty.name, color: currentProperty.color }));
     setIsOpen(false);
   };
 
@@ -87,7 +86,7 @@ function LabelsDropdown({ optionsFromField, allOptions, currentProperty, taskId 
                       key={value.id}
                       className={cl(
                         value.color ? 'text-white' : 'border-2 border-gray-500',
-                        'rounded p-0.5 max-w-full'
+                        'rounded p-4 max-w-full custom-property-tags'
                       )}
                       style={{ backgroundColor: value.color }}
                     >
@@ -128,7 +127,7 @@ function LabelsDropdown({ optionsFromField, allOptions, currentProperty, taskId 
                         key={option.id}
                         onClick={() => handleClick(option)}
                         className={cl(
-                          'text-gray-700 py-2 bg-white border w-full text-center block px-4 text-sm truncate',
+                          'text-gray-700 py-2 bg-white border w-full text-center block px-4 text-sm truncate rounded',
                           option.color ? 'text-white' : ''
                         )}
                         style={{ backgroundColor: option.color, maxWidth: '195px' }}
@@ -155,4 +154,4 @@ function LabelsDropdown({ optionsFromField, allOptions, currentProperty, taskId 
   );
 }
 
-export default LabelsDropdown;
+export default TagsDropdown;
