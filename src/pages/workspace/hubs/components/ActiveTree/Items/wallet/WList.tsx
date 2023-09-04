@@ -12,6 +12,8 @@ import {
 import { EntityType } from '../../../../../../../utils/EntityTypes/EntityType';
 import { DragOverlay } from '@dnd-kit/core';
 import HubItemOverlay from '../../../../../../../components/tasks/HubItemOverLay';
+import { generateViewsUrl } from '../../../../../../../utils/generateViewsUrl';
+import { IWallet } from '../../../../../../../features/hubs/hubs.interfaces';
 
 interface IWListProps {
   wallets: Wallet[];
@@ -28,8 +30,10 @@ export default function WList({ wallets, leftMargin, paddingLeft, type, level = 
 
   const { showExtendedBar, openedEntitiesIds } = useAppSelector((state) => state.workspace);
 
-  const handleLocation = (id: string, name: string) => {
-    navigate(`tasks/w/${id}`, { replace: true });
+  const handleLocation = (id: string, name: string, item: IWallet) => {
+    const viewsUrl = generateViewsUrl(id, item) as string;
+
+    navigate(viewsUrl, { replace: true });
     if (openedEntitiesIds.includes(id)) {
       dispatch(setOpenedEntitiesIds(openedEntitiesIds.filter((item) => item !== id)));
     } else {
