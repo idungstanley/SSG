@@ -5,11 +5,12 @@ import { useGetTeamMembers } from '../../../../features/settings/teamMembers/tea
 import { useAppSelector, useAppDispatch } from '../../../../app/hooks';
 import AvatarWithInitials from '../../../avatar/AvatarWithInitials';
 import { AiFillCheckCircle, AiOutlineCheckCircle } from 'react-icons/ai';
-import { setAssigneeIds, setFilterFields, setMeMode } from '../../../../features/task/taskSlice';
+import { setSubtasksFilters } from '../../../../features/task/taskSlice';
 import { generateFilter } from '../Filter/lib/filterUtils';
 import { EllipsisHorizontalIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import AssigneeIcon from '../../../../assets/icons/Assignee';
 import { VerticalScroll } from '../../../ScrollableContainer/VerticalScroll';
+import { ASSIGNEES, IAssigneesItem } from './AssigneeSplitSubtasks';
 
 const unassigned = {
   color: '#626262',
@@ -33,13 +34,18 @@ const unassigned = {
   colour: '#626262'
 };
 
-export default function FilterByAssigneeModal() {
+interface IFilterByAssigneeModalSplitSubtaskProps {
+  isMeMode: boolean;
+  parentId: string;
+}
+
+export default function FilterByAssigneeModalSplitSubtask({
+  isMeMode,
+  parentId
+}: IFilterByAssigneeModalSplitSubtaskProps) {
   const dispatch = useAppDispatch();
 
-  const {
-    filters: { fields: filters },
-    meMode
-  } = useAppSelector((state) => state.task);
+  const { subtasksfilters } = useAppSelector((state) => state.task);
 
   const [searchValue, setSearchValue] = useState<string>('');
 
@@ -54,16 +60,55 @@ export default function FilterByAssigneeModal() {
     member.user.name.toLowerCase().includes(searchValue.toLowerCase())
   );
 
-  const currentAssignees = !meMode
-    ? (filters.find((i) => i.key === 'assignees')?.values as { id: string; value: string }[]) ?? []
+  const currentAssignees = !isMeMode
+    ? (subtasksfilters[parentId]?.fields.find((i) => i.key === ASSIGNEES)?.values as IAssigneesItem[]) ?? []
     : [];
 
   const isAssignee = currentAssignees.length ? true : false;
 
+  const clearAssignees = () => {
+    return {
+      ...subtasksfilters,
+      [parentId]: {
+        ...subtasksfilters[parentId],
+        fields: subtasksfilters[parentId].fields.filter((field) => field.key !== ASSIGNEES)
+      }
+    };
+  };
+
+  const updateAssignees = (assigneesItems: IAssigneesItem[]) => {
+    const updatedFields = subtasksfilters[parentId].fields.map((field) => {
+      if (field.key === ASSIGNEES) {
+        return {
+          ...field,
+          values: assigneesItems
+        };
+      }
+      return field;
+    });
+    return {
+      ...subtasksfilters,
+      [parentId]: {
+        ...subtasksfilters[parentId],
+        fields: updatedFields
+      }
+    };
+  };
+
+  const createAssigneesFilter = (me: IAssigneesItem) => {
+    const hasFields = subtasksfilters[parentId]?.fields;
+    const newAssigneesField = generateFilter(ASSIGNEES, { initialValue: me });
+    return {
+      ...subtasksfilters,
+      [parentId]: {
+        ...subtasksfilters[parentId],
+        fields: hasFields ? [...subtasksfilters[parentId].fields, newAssigneesField] : [newAssigneesField]
+      }
+    };
+  };
+
   const onClickMember = (memberId: string, memberName: string) => {
-    dispatch(setMeMode(false));
-    dispatch(setAssigneeIds([]));
-    const isAssigneesInFilters = filters.find((i) => i.key === 'assignees');
+    const isAssigneesInFilters = subtasksfilters[parentId]?.fields.find((i) => i.key === ASSIGNEES);
 
     const newMemberObj = {
       value: memberName,
@@ -71,9 +116,7 @@ export default function FilterByAssigneeModal() {
     };
 
     if (isAssigneesInFilters) {
-      const isMemberInAssignees = (isAssigneesInFilters.values as { id: string; value: string }[])
-        .map((i) => i.id)
-        .includes(memberId);
+      const isMemberInAssignees = (isAssigneesInFilters.values as IAssigneesItem[]).map((i) => i.id).includes(memberId);
 
       // add member or remove if exists
       const newAssignees = isMemberInAssignees
@@ -82,24 +125,13 @@ export default function FilterByAssigneeModal() {
 
       if (newAssignees.length === 0) {
         // delete assignees filter if no one member
-        dispatch(setFilterFields([...filters.filter((i) => i.key !== 'assignees')]));
+        dispatch(setSubtasksFilters(clearAssignees()));
       } else {
-        dispatch(
-          setFilterFields([
-            ...filters.map((filter) => {
-              if (filter.key === 'assignees') {
-                // return { ...filter, values: [] };
-                return { ...filter, values: [...newAssignees] };
-              }
-
-              return filter;
-            })
-          ])
-        );
+        dispatch(setSubtasksFilters(updateAssignees(newAssignees)));
       }
     } else {
       // create assignees filter
-      dispatch(setFilterFields([...filters, generateFilter('assignees', { initialValue: newMemberObj })]));
+      dispatch(setSubtasksFilters(createAssigneesFilter(newMemberObj)));
     }
   };
 
@@ -111,9 +143,9 @@ export default function FilterByAssigneeModal() {
     <Menu as="div" className="relative inline-block text-left group">
       <div className="relative">
         <Menu.Button className="flex items-center">
-          <AssigneeIcon active={isAssignee && !meMode} />
+          <AssigneeIcon active={isAssignee && !isMeMode} />
           <span>Assignee</span>
-          <ArrowDownFilled active={isAssignee && !meMode} />
+          <ArrowDownFilled active={isAssignee && !isMeMode} />
         </Menu.Button>
       </div>
       <Transition

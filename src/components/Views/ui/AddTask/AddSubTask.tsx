@@ -62,7 +62,7 @@ export function AddSubTask({ task, columns, paddingLeft, parentId, task_status, 
           task={task}
           isListParent={isListParent}
           parentId={parentId as string}
-          task_status={subtaskDefaultStatusId as string}
+          task_status={(subtaskDefaultStatusId as string) || task_status}
           onClose={handleClose}
           paddingLeft={paddingLeft}
           tags={'tags' in task ? <Tags tags={task.tags} taskId={task.id} /> : null}
