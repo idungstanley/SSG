@@ -11,6 +11,7 @@ import DateOptions from '../Date/Date';
 import CurrencyOptions from '../Currency/Currency';
 import NumberOptions from '../Number/Number';
 import EmailOptions from '../Email/Email';
+import WebsiteOptions from '../Websites/WebsiteOptions';
 
 const columnTypes = [
   {
@@ -29,7 +30,7 @@ const columnTypes = [
     options: <DateOptions />
   },
   {
-    id: 'Currenct',
+    id: 'Currency',
     title: 'Currency',
     options: <CurrencyOptions />
   },
@@ -42,6 +43,11 @@ const columnTypes = [
     id: 'Email',
     title: 'Email',
     options: <EmailOptions />
+  },
+  {
+    id: 'Website',
+    title: 'Website',
+    options: <WebsiteOptions />
   }
 ];
 
