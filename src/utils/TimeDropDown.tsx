@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import dayjs from 'dayjs';
 import { useAppSelector } from '../app/hooks';
+import { findNearestTime } from './FindNearesttime';
 
 type Option = string; // Change this type to match the type of your options
 
@@ -57,28 +58,6 @@ function ReusableSelect({ value, onclick, options, style }: ReusableSelectProps)
     setEditing(false);
     setDrop(false);
   };
-
-  function findNearestTime(currentTime: dayjs.Dayjs, timeOptions: Option[]): string {
-    const currentTimeMoment = dayjs(currentTime);
-    const currentDateString = currentTimeMoment.format('YYYY-MM-DD');
-    const currentTimeMinutes = currentTimeMoment.diff(dayjs().startOf('day'), 'minutes');
-
-    let nearestTime = timeOptions[0];
-    let nearestDiff = Math.abs(
-      currentTimeMinutes - dayjs(currentDateString + ' ' + nearestTime).diff(dayjs().startOf('day'), 'minutes')
-    );
-
-    for (const option of timeOptions) {
-      const optionMinutes = dayjs(currentDateString + ' ' + option).diff(dayjs().startOf('day'), 'minutes');
-      const diff = Math.abs(currentTimeMinutes - optionMinutes);
-      if (diff < nearestDiff) {
-        nearestTime = option;
-        nearestDiff = diff;
-      }
-    }
-
-    return nearestTime;
-  }
 
   return (
     <div className="rounded-md relative">
