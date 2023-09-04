@@ -94,7 +94,7 @@ function Favourite({ item }: nameType) {
             </h4>
           )}
         </div>
-        <div className="">
+        <div>
           <FavModal id={item.id} />
         </div>
       </div>

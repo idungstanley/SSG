@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { IEntries, ITimeEntriesRes } from '../../../../features/task/interface.tasks';
 import { Header, User } from './ClockLog';
@@ -11,6 +11,7 @@ import { UserSortDropDown } from './TimeUserSortDropDown';
 import PlusCircle from '../../../../assets/icons/AddCircle';
 import { ColumnFilterList } from './ClockColumnFilterList';
 import EntryList, { entriesProps } from '../../../../pages/workspace/tasks/timeclock/entryLists/EntryList';
+import { useSaveData } from '../../../../features/task/taskService';
 
 interface Props {
   getTaskEntries: ITimeEntriesRes | undefined;
@@ -39,6 +40,8 @@ export function RenderItemEntries({
 }: Props) {
   const dispatch = useAppDispatch();
 
+  const { mutateAsync } = useSaveData();
+
   const { timeArr, timeSortArr } = useAppSelector((state) => state.task);
 
   const [icontoggle, setIconToggle] = useState<{ cancelIcon: boolean; plusIcon: boolean }>({
@@ -51,6 +54,7 @@ export function RenderItemEntries({
   const [showLogs, setShowLogs] = useState<boolean>(true);
   const [meMode, setMeMode] = useState<boolean>(false);
   const [assigneeId, setAssigneeId] = useState<string | undefined>();
+
   const handleShowLogs = () => {
     setShowLogs(!showLogs);
   };
@@ -90,6 +94,10 @@ export function RenderItemEntries({
     dispatch(setTimeArr(timeArr.filter((el) => el !== title)));
     dispatch(setTimeSortArr([]));
     setHeaderId('');
+    mutateAsync({
+      key: 'time_entry',
+      value: [[]]
+    });
   };
 
   const checkedField = headers.some((el) => el.hidden);
@@ -98,12 +106,14 @@ export function RenderItemEntries({
     return <NoEntriesFound />;
   } else {
     return (
-      <div className="px-2 py-8 border-t-4 border-l-2 border-alsoit-gray-100 rounded-md relative w-full">
+      <div className="px-2 py-8 border-t-2 border-l-2 border-b-2 border-alsoit-gray-100 rounded-md relative w-full">
         <ClockLogHeader
           handleFilters={handleFilters}
           handleShowLogs={handleShowLogs}
           meMode={meMode}
           showLogs={showLogs}
+          assigneeId={assigneeId}
+          teamMembers={teamMember}
         />
         {showLogs && (
           <table className="relative w-full">
@@ -122,31 +132,6 @@ export function RenderItemEntries({
                         >
                           {col.title}
                         </span>
-                        {col.title === 'user' && (
-                          <>
-                            {headerId === '' && timeSortArr.length === 0 && (
-                              <FaSort
-                                className="w-3 h-3 transition duration-200 rounded-full opacity-0 cursor-pointer text-alsoit-text-lg text-alsoit-gray-50 bg-alsoit-gray-200 group-hover:opacity-100"
-                                onClick={() => handleSort(col.title, col.id)}
-                              />
-                            )}
-                            {timeArr.includes(col.title) && timeSortArr.length && (
-                              <HeaderSort
-                                col={col}
-                                handleRemoveFilter={handleRemoveFilter}
-                                icontoggle={icontoggle}
-                                setIconToggle={setIconToggle}
-                              />
-                            )}
-                          </>
-                        )}
-                        {showSortModal && col.id === headerId && (
-                          <UserSortDropDown
-                            arr={teamMember}
-                            toggleModalFn={setShowSortModal}
-                            memberIds={teamMemberId}
-                          />
-                        )}
                       </th>
                     )
                   );
@@ -205,4 +190,32 @@ export function RenderItemEntries({
       </div>
     );
   }
+}
+
+{
+  /* {col.title === 'user' && (
+                          <>
+                            {headerId === '' && timeSortArr.length === 0 && (
+                              <FaSort
+                                className="w-3 h-3 transition duration-200 rounded-full opacity-0 cursor-pointer text-alsoit-text-lg text-alsoit-gray-50 bg-alsoit-gray-200 group-hover:opacity-100"
+                                onClick={() => handleSort(col.title, col.id)}
+                              />
+                            )}
+                            {timeArr.includes(col.title) && timeSortArr.length && (
+                              <HeaderSort
+                                col={col}
+                                handleRemoveFilter={handleRemoveFilter}
+                                icontoggle={icontoggle}
+                                setIconToggle={setIconToggle}
+                              />
+                            )}
+                          </>
+                        )}
+                        {showSortModal && col.id === headerId && (
+                          <UserSortDropDown
+                            arr={teamMember}
+                            toggleModalFn={setShowSortModal}
+                            memberIds={teamMemberId}
+                          />
+                        )} */
 }

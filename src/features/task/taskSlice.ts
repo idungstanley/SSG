@@ -126,6 +126,7 @@ interface entityForCustom {
 }
 interface TaskState {
   tasks: Record<string, ITaskFullList[]>;
+  subtasks: Record<string, ITaskFullList[]>;
   currentTaskIdForPilot: string | null;
   watchersData: string[];
   removeWatcherId: null | string;
@@ -145,14 +146,17 @@ interface TaskState {
   CompactView: boolean;
   taskUpperCase: boolean;
   verticalGridlinesTask: boolean;
+  splitSubTask: boolean;
   CompactViewWrap: boolean;
   meMode: boolean;
   showTaskNavigation: boolean;
   addNewTaskItem: boolean;
   selectedIndex: number | null;
+  defaultSubtaskListId: null | string;
   selectedIndexStatus: string | null;
   selectedListIds: string[];
-  selectedListId: string;
+  selectedTaskParentId: string;
+  selectedTaskType: string;
   closeTaskListView: boolean;
   toggleAssignCurrentTaskId: string | null | undefined;
   currentParentTaskId: string | null;
@@ -167,6 +171,7 @@ interface TaskState {
   currentTaskPriorityId: string | null | undefined;
   groupByStatus: string | null;
   showTaskUploadModal: boolean;
+  subtaskDefaultStatusId: string | null;
   timerStatus: boolean;
   sortAbleArr: SortOption[];
   sortArr: string[];
@@ -205,6 +210,7 @@ interface TaskState {
 
 const initialState: TaskState = {
   tasks: {},
+  subtasks: {},
   currentTaskIdForPilot: null,
   watchersData: [],
   currTeamMemberId: null,
@@ -224,15 +230,19 @@ const initialState: TaskState = {
   taskUpperCase: false,
   toggleAllSubtask: false,
   verticalGridlinesTask: true,
+  splitSubTask: false,
   CompactView: false,
   CompactViewWrap: false,
   showTaskNavigation: false,
   addNewTaskItem: false,
   closeTaskListView: true,
   selectedIndex: null,
+  subtaskDefaultStatusId: null,
+  defaultSubtaskListId: null,
   selectedIndexStatus: null,
   selectedListIds: [],
-  selectedListId: '',
+  selectedTaskParentId: '',
+  selectedTaskType: '',
   toggleAssignCurrentTaskId: null,
   currentParentTaskId: null,
   getSubTaskId: null,
@@ -298,6 +308,9 @@ export const taskSlice = createSlice({
     setTasks(state, action: PayloadAction<Record<string, ITaskFullList[]>>) {
       state.tasks = action.payload;
     },
+    setSubtasks(state, action: PayloadAction<Record<string, ITaskFullList[]>>) {
+      state.subtasks = action.payload;
+    },
     setFilterFields(state, action: PayloadAction<FilterWithId[]>) {
       state.filters = { ...state.filters, fields: action.payload };
     },
@@ -322,11 +335,20 @@ export const taskSlice = createSlice({
     setSelectedIndexStatus(state, action: PayloadAction<string>) {
       state.selectedIndexStatus = action.payload;
     },
+    setDefaultSubtaskId(state, action: PayloadAction<string | null>) {
+      state.defaultSubtaskListId = action.payload;
+    },
+    setSubtaskDefaultStatusId(state, action: PayloadAction<string | null>) {
+      state.subtaskDefaultStatusId = action.payload;
+    },
     setSelectedListIds(state, action: PayloadAction<string[]>) {
       state.selectedListIds = action.payload;
     },
-    setSelectedListId(state, action: PayloadAction<string>) {
-      state.selectedListId = action.payload;
+    setSelectedTaskParentId(state, action: PayloadAction<string>) {
+      state.selectedTaskParentId = action.payload;
+    },
+    setSelectedTaskType(state, action: PayloadAction<string>) {
+      state.selectedTaskType = action.payload;
     },
     setSortType(state, action: PayloadAction<TaskKey>) {
       state.sortType = action.payload;
@@ -393,6 +415,9 @@ export const taskSlice = createSlice({
     },
     getVerticalGridlinesTask(state, action: PayloadAction<boolean>) {
       state.verticalGridlinesTask = action.payload;
+    },
+    getSplitSubTask(state, action: PayloadAction<boolean>) {
+      state.splitSubTask = action.payload;
     },
     setSelectedTasksArray(state, action: PayloadAction<string[]>) {
       state.selectedTasksArray = action.payload;
@@ -537,6 +562,7 @@ export const taskSlice = createSlice({
 
 export const {
   setTasks,
+  setSubtasks,
   setFilterFields,
   setFilterOption,
   setAssigneeIds,
@@ -552,18 +578,21 @@ export const {
   getSingleLineView,
   getTaskUpperCase,
   getVerticalGridlinesTask,
+  getSplitSubTask,
   getCompactView,
   getCompactViewWrap,
   setSelectedIndex,
   setSelectedIndexStatus,
   setSelectedListIds,
-  setSelectedListId,
+  setSelectedTaskParentId,
+  setSelectedTaskType,
   setMeMode,
   setShowTaskNavigation,
   setShowNewTaskField,
   setShowNewTaskId,
   setRmWatcher,
   setCurrentTaskId,
+  setDefaultSubtaskId,
   setToggleAllSubtask,
   setSelectedTasksArray,
   setAddNewTaskItem,
@@ -572,6 +601,7 @@ export const {
   setCurrentParentTaskId,
   setGetSubTaskId,
   hideTaskColumns,
+  setSubtaskDefaultStatusId,
   setUpdateEntries,
   setUpdateStatusModalId,
   setCurrentTaskStatusId,

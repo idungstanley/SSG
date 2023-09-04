@@ -12,7 +12,7 @@ import { AddSubTask } from '../AddTask/AddSubTask';
 import TaskTag from '../../../Tag/ui/TaskTag';
 import Effect from '../../../../assets/icons/Effect';
 import Enhance from '../../../badges/Enhance';
-import { setShowNewTaskField, setShowNewTaskId } from '../../../../features/task/taskSlice';
+import { setDefaultSubtaskId, setShowNewTaskField, setShowNewTaskId } from '../../../../features/task/taskSlice';
 import ToolTip from '../../../Tooltip/Tooltip';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import Dradnddrop from '../../../../assets/icons/Dradnddrop';
@@ -28,6 +28,7 @@ interface RowProps {
   task_status?: string;
   handleClose?: VoidFunction;
   customFields?: IField[];
+  isSplitSubtask?: boolean;
 }
 
 export function Row({
@@ -39,11 +40,12 @@ export function Row({
   task_status,
   isListParent,
   handleClose,
-  customFields
+  customFields,
+  isSplitSubtask
 }: RowProps) {
   const dispatch = useAppDispatch();
 
-  const { showNewTaskField, showNewTaskId, toggleAllSubtask } = useAppSelector((state) => state.task);
+  const { showNewTaskField, showNewTaskId, toggleAllSubtask, splitSubTask } = useAppSelector((state) => state.task);
 
   const [showSubTasks, setShowSubTasks] = useState(toggleAllSubtask);
 
@@ -97,6 +99,7 @@ export function Row({
   };
 
   const onShowAddSubtaskField = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, taskId: string) => {
+    dispatch(setDefaultSubtaskId(task.list_id));
     e.stopPropagation();
     if (showNewTaskField) {
       dispatch(setShowNewTaskId(''));
@@ -141,6 +144,7 @@ export function Row({
           onClose={handleClose as VoidFunction}
           paddingLeft={paddingLeft}
           tags={'tags' in task ? <TaskTag tags={task.tags} entity_id={task.id} entity_type="task" /> : null}
+          isSplitSubtask={isSplitSubtask}
           dragElement={
             <div ref={setNodeRef} {...listeners} {...attributes}>
               <div className="text-lg text-gray-400 transition duration-200 opacity-0 cursor-move group-hover:opacity-100">
@@ -161,7 +165,9 @@ export function Row({
             {/* tags */}
             {'tags' in task ? (
               <ToolTip title="Tags">
-                <ManageTagsDropdown entityId={task.id} tagsArr={task.tags as Tag[]} entityType="task" />
+                <button className=" border rounded-md bg-white">
+                  <ManageTagsDropdown entityId={task.id} tagsArr={task.tags as Tag[]} entityType="task" />
+                </button>
               </ToolTip>
             ) : null}
 
@@ -194,19 +200,19 @@ export function Row({
         ))}
       </tr>
 
-      {showNewTaskField && showNewTaskId == task.id ? (
+      {showNewTaskField && showNewTaskId === task.id ? (
         <AddSubTask
           task={newSubTask}
           columns={columns}
-          paddingLeft={DEFAULT_LEFT_PADDING + paddingLeft}
+          paddingLeft={splitSubTask ? 0 : DEFAULT_LEFT_PADDING + paddingLeft}
           isListParent={false}
-          parentId={task.id}
+          parentId={splitSubTask ? (task.parent_id as string) : task.id}
           task_status={task.status.id}
           handleClose={onCloseAddTaskFIeld}
         />
       ) : null}
 
-      {showSubTasks ? (
+      {showSubTasks && !splitSubTask ? (
         <SubTasks paddingLeft={DEFAULT_LEFT_PADDING + paddingLeft} parentId={task.id} columns={columns} />
       ) : null}
     </>

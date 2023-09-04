@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import moment, { MomentInput } from 'moment';
-import { useAppSelector } from '../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import CalenderIcon from '../../assets/icons/CalenderIcon';
 import DatePicker from '../DatePicker/DatePicker';
 import { UseUpdateTaskDateService } from '../../features/task/taskService';
 import { Task } from '../../features/task/interface.tasks';
+import { setSelectedTaskParentId, setSelectedTaskType } from '../../features/task/taskSlice';
+import { EntityType } from '../../utils/EntityTypes/EntityType';
 
 interface dateFormatProps {
   date: string | undefined;
@@ -13,17 +15,29 @@ interface dateFormatProps {
 }
 
 export default function DateFormat({ date, task, font = 'text-sm' }: dateFormatProps) {
+  const dispatch = useAppDispatch();
+
+  const { date_format } = useAppSelector((state) => state.userSetting);
+  const { selectedDate } = useAppSelector((state) => state.workspace);
+  const { selectedListIds, selectedTaskParentId } = useAppSelector((state) => state.task);
+
   const [showDataPicker, setShowDatePicker] = useState<boolean>(false);
   const [taskId, setTaskId] = useState<string | null>(null);
-  const [pickedDateState, setPickedDateState] = useState<boolean>(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
-  const { selectedDate } = useAppSelector((state) => state.workspace);
+  const { isSuccess } = UseUpdateTaskDateService({
+    task_id: taskId as string,
+    taskDate: selectedDate?.date.format('YYYY-MM-DD HH:mm:ss') as string,
+    listIds: selectedListIds.length ? selectedListIds : [selectedTaskParentId],
+    setTaskId
+  });
 
   const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
     setAnchorEl(event.currentTarget);
     setShowDatePicker(!showDataPicker);
     setTaskId(task?.id as string);
+    dispatch(setSelectedTaskParentId((task?.list_id || task?.parent_id) as string));
+    dispatch(setSelectedTaskType(task?.list_id ? EntityType.task : EntityType.subtask));
   };
 
   const handleClose = () => {
@@ -32,15 +46,8 @@ export default function DateFormat({ date, task, font = 'text-sm' }: dateFormatP
     setTaskId(task?.id as string);
   };
 
-  const { isSuccess } = UseUpdateTaskDateService({
-    task_id: taskId as string,
-    taskDate: selectedDate?.date.format('YYYY-MM-DD HH:mm:ss') as string,
-    setTaskId
-  });
-
-  const { date_format } = useAppSelector((state) => state.userSetting);
   return (
-    <div className="" onClick={(e) => handleClick(e)}>
+    <div onClick={(e) => handleClick(e)}>
       <span className={`text-sm font-medium text-gray-400 ${font}`} style={{ fontSize: font }}>
         {showDataPicker && (
           <DatePicker

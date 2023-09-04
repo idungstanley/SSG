@@ -62,8 +62,8 @@ export default function BoardSection({
           <p className="flex uppercase justify-items-start">{title} STATUSES</p>
         </span>
       )}
-      <SortableContext items={StatusIndex} strategy={verticalListSortingStrategy} id={id}>
-        <div ref={setNodeRef} className="flex flex-col space-y-1">
+      <SortableContext items={StatusIndex} strategy={verticalListSortingStrategy}>
+        <div ref={setNodeRef} className="flex flex-col space-y-1 p-1 flex-1">
           {id &&
             !collapsedStatusGroups[id] &&
             status.map((item) => (

@@ -15,13 +15,13 @@ interface StatusDropdownProps {
 }
 
 export default function StatusDropdown({ TaskCurrentStatus }: StatusDropdownProps) {
-  const { currentTaskStatusId, selectedListId } = useAppSelector((state) => state.task);
+  const { currentTaskStatusId, selectedTaskParentId } = useAppSelector((state) => state.task);
   const { updateCords } = useAppSelector((state) => state.task);
 
   const [status, setStatus] = useState('');
   const [isOpen, setIsOpen] = useState(false);
 
-  const { data: list } = UseGetListDetails(selectedListId);
+  const { data: list } = UseGetListDetails(selectedTaskParentId);
 
   const { isSuccess } = UseUpdateTaskStatusService({
     task_id: currentTaskStatusId as string,

@@ -6,12 +6,9 @@ import {
   DndContext,
   DragEndEvent,
   DragOverEvent,
-  DragOverlay,
-  DropAnimation,
   KeyboardSensor,
   PointerSensor,
   closestCorners,
-  defaultDropAnimation,
   useSensor,
   useSensors
 } from '@dnd-kit/core';
@@ -25,13 +22,13 @@ import { statusTypesService } from '../../../features/hubs/hubService';
 import {
   addIsDefaultToValues,
   createModelIdAndTypeHandler,
-  extractValuesFromArray
+  extractValuesFromArray,
+  getDragDirection
 } from '../../../utils/StatusManagement/statusUtils';
 import { setMatchedStatus, setStatusesToMatch } from '../../../features/hubs/hubSlice';
 import MatchStatusPopUp from '../Components/MatchStatusPopUp';
 import { setMatchData } from '../../../features/general/prompt/promptSlice';
-import StatusBodyTemplate from '../StatusBodyTemplate';
-import StatusItem from '../Components/StatusItem';
+import { setDraggableActiveStatusId } from '../../../features/workspace/workspaceSlice';
 
 interface ErrorResponse {
   data: {
@@ -43,7 +40,7 @@ interface ErrorResponse {
   // Other error properties if needed
 }
 
-const groupStylesMapping: Record<string, GroupStyles> = {
+export const groupStylesMapping: Record<string, GroupStyles> = {
   open: { backgroundColor: '#FBFBFB', boxShadow: '0px 0px 5px rgba(0, 0, 0, 0.2)' },
   custom: { backgroundColor: '#FCF1FF', boxShadow: '0px 0px 5px rgba(128, 0, 128, 0.2)' },
   closed: { backgroundColor: '#E6FAE9', boxShadow: '0px 0px 5px rgba(0, 128, 0, 0.2)' }
@@ -72,7 +69,6 @@ export default function CustomStatus() {
 
   const initialBoardSections = initializeBoard(spaceStatuses);
   const [boardSections, setBoardSections] = useState<BoardSectionsType>(initialBoardSections);
-  const [activeId, setActiveId] = useState<string | null>(null);
 
   const [is_default_name, setIsDefaultName] = useState<string | null>(boardSections['open'][0]?.name || null); // Initialize with the name of the item at position 0 or null if no item
 
@@ -94,14 +90,18 @@ export default function CustomStatus() {
   }, [boardSections]);
 
   const handleDragStart = ({ active }: DragEndEvent) => {
-    setActiveId(active.id as string);
+    dispatch(setDraggableActiveStatusId(active.id as string));
   };
 
   const handleDragOver = ({ active, over }: DragOverEvent) => {
     // Find the containers
+    const dragDirection = getDragDirection({ active, over } as DragOverEvent);
+    if (!dragDirection) return;
+
     const activeContainer = findBoardSectionContainer(boardSections, active.id as string);
     const overContainer = findBoardSectionContainer(boardSections, over?.id as string);
 
+    if (!active || !over) return;
     if (!activeContainer || !overContainer || activeContainer === overContainer) {
       return;
     }
@@ -161,7 +161,7 @@ export default function CustomStatus() {
         ]
       }));
     }
-    setActiveId(null);
+    dispatch(setDraggableActiveStatusId(null));
   };
 
   const handleSaveNewStatus = () => {
@@ -275,12 +275,6 @@ export default function CustomStatus() {
     }
   };
 
-  // const dropAnimation: DropAnimation = {
-  //   ...defaultDropAnimation
-  // };
-
-  // const draggableItem = activeId ? getStatusById(statusData, activeId) : null;
-
   return (
     <section className="flex flex-col gap-2 p-4">
       <div className="flex flex-col space-y-6">
@@ -288,8 +282,8 @@ export default function CustomStatus() {
           sensors={sensors}
           collisionDetection={closestCorners}
           onDragStart={handleDragStart}
-          onDragEnd={handleDragEnd}
           onDragOver={handleDragOver}
+          onDragEnd={handleDragEnd}
         >
           {Object.keys(boardSections).map((uniqueModelType) => (
             <div
@@ -314,9 +308,6 @@ export default function CustomStatus() {
               />
             </div>
           ))}
-          {/* <DragOverlay dropAnimation={dropAnimation}>
-            {draggableItem ? <StatusItem item={draggableItem} /> : null}
-          </DragOverlay> */}
         </DndContext>
       </div>
       <p className="mt-auto text-red-600 text-start">{validationMessage}</p>

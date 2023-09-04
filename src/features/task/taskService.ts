@@ -18,6 +18,7 @@ import {
   setScreenRecordingMedia,
   setSelectedListIds,
   setSelectedTasksArray,
+  setSubtasks,
   setTasks,
   setTimeArr,
   setTimeSortArr,
@@ -62,22 +63,6 @@ export const UseEditCustomFieldService = (data: {
     }
   });
   return response;
-};
-
-export const useGetCustomField = (id: string | undefined, getCustom: boolean) => {
-  return useQuery(
-    ['xustom-field'],
-    async () => {
-      const data = await requestNew<IUserSettingsRes>({
-        url: `custom-fields/${id}`,
-        method: 'GET'
-      });
-      return data;
-    },
-    {
-      enabled: getCustom
-    }
-  );
 };
 
 export const UseSaveTaskFilters = () => {
@@ -411,7 +396,7 @@ export const UseUpdateTaskService = ({
 export const UseUpdateTaskStatusService = ({ task_id, statusDataUpdate }: UpdateTaskProps) => {
   const dispatch = useAppDispatch();
 
-  const { selectedListId, tasks } = useAppSelector((state) => state.task);
+  const { selectedTaskParentId, tasks, subtasks, selectedTaskType } = useAppSelector((state) => state.task);
 
   return useQuery(
     ['task', { task_id, statusDataUpdate }],
@@ -429,14 +414,18 @@ export const UseUpdateTaskStatusService = ({ task_id, statusDataUpdate }: Update
       enabled: !!task_id && !!statusDataUpdate,
       cacheTime: 0,
       onSuccess: (data) => {
-        if (selectedListId) {
+        if (selectedTaskParentId) {
           const updatedTasks = taskStatusUpdateManager(
             task_id as string,
-            selectedListId as string,
-            tasks,
+            selectedTaskParentId as string,
+            selectedTaskType === EntityType.task ? tasks : subtasks,
             data.data.task.status
           );
-          dispatch(setTasks(updatedTasks));
+          if (selectedTaskType === EntityType.task) {
+            dispatch(setTasks(updatedTasks));
+          } else {
+            dispatch(setSubtasks(updatedTasks));
+          }
         }
         dispatch(setSelectedTasksArray([]));
         dispatch(setSelectedListIds([]));
@@ -447,16 +436,18 @@ export const UseUpdateTaskStatusService = ({ task_id, statusDataUpdate }: Update
 export const UseUpdateTaskDateService = ({
   task_id,
   taskDate,
+  listIds,
   setTaskId
 }: {
   task_id: string;
   taskDate: string;
+  listIds: string[];
   setTaskId: React.Dispatch<React.SetStateAction<string | null>>;
 }) => {
-  const { pickedDateState } = useAppSelector((state) => state.workspace);
-  const { tasks } = useAppSelector((state) => state.task);
-
   const dispatch = useAppDispatch();
+
+  const { pickedDateState } = useAppSelector((state) => state.workspace);
+  const { tasks, subtasks, selectedTaskType } = useAppSelector((state) => state.task);
 
   return useQuery(
     ['task', { task_id, taskDate }],
@@ -476,15 +467,17 @@ export const UseUpdateTaskDateService = ({
       onSuccess: (data) => {
         dispatch(setPickedDateState(false));
         setTaskId(null);
-        if (data.data.task.id == task_id) {
-          const updatedTasks = taskDateUpdateManager(
-            task_id as string,
-            data.data.task.list_id as string,
-            tasks,
-            'start_date',
-            data.data.task.start_date as string
-          );
+        const updatedTasks = taskDateUpdateManager(
+          task_id as string,
+          listIds as string[],
+          selectedTaskType === EntityType.task ? tasks : subtasks,
+          'start_date',
+          data.data.task.start_date as string
+        );
+        if (selectedTaskType === EntityType.task) {
           dispatch(setTasks(updatedTasks));
+        } else {
+          dispatch(setSubtasks(updatedTasks));
         }
       }
     }
@@ -494,7 +487,7 @@ export const UseUpdateTaskDateService = ({
 export const UseUpdateTaskPrioritiesServices = ({ task_id_array, priorityDataUpdate, listIds }: UpdateTaskProps) => {
   const dispatch = useAppDispatch();
 
-  const { currentTaskPriorityId, tasks } = useAppSelector((state) => state.task);
+  const { currentTaskPriorityId, tasks, subtasks, selectedTaskType } = useAppSelector((state) => state.task);
 
   const currentTaskIds = task_id_array?.length ? task_id_array : [currentTaskPriorityId];
 
@@ -519,10 +512,14 @@ export const UseUpdateTaskPrioritiesServices = ({ task_id_array, priorityDataUpd
           const updatedTasks = taskPriorityUpdateManager(
             currentTaskIds as string[],
             listIds as string[],
-            tasks,
+            selectedTaskType === EntityType.task ? tasks : subtasks,
             priorityDataUpdate as string
           );
-          dispatch(setTasks(updatedTasks));
+          if (selectedTaskType === EntityType.task) {
+            dispatch(setTasks(updatedTasks));
+          } else {
+            dispatch(setSubtasks(updatedTasks));
+          }
         }
         dispatch(setSelectedTasksArray([]));
         dispatch(setSelectedListIds([]));
@@ -593,35 +590,6 @@ export const useSubTasks = (parentId: string) =>
       }),
     { enabled: !!parentId, select: (res) => res.data.tasks }
   );
-
-export const getTaskListService2 = (query: { parentId: string | null | undefined }) => {
-  const { workSpaceId } = useParams();
-  const { currentWorkspaceId } = useAppSelector((state) => state.auth);
-  const fetch = currentWorkspaceId == workSpaceId;
-
-  return useQuery(
-    ['task', { query: query.parentId }],
-    async () => {
-      const data = await requestNew<ITaskListRes | undefined>({
-        url: 'tasks/list',
-        method: 'POST',
-        params: {
-          parent_id: query.parentId
-        }
-      });
-      return data;
-    },
-    {
-      enabled: query.parentId != null && fetch,
-      onSuccess: () => {
-        // const taskData = data.data.tasks.map((task) => {
-        //   queryClient.setQueryData(['task', task.id], task);
-        //   return { ...task };
-        // });
-      }
-    }
-  );
-};
 
 export const createTimeEntriesService = (data: { queryKey: (string | undefined)[] }) => {
   const taskID = data.queryKey[1];
@@ -829,19 +797,6 @@ export const DeleteTimeEntriesService = (data: { timeEntryDeleteTriggerId: strin
   return response;
 };
 
-export const AddTaskWatcherService = (data: { queryKey: string[] }) => {
-  const taskID = data.queryKey[1];
-  const response = requestNew({
-    url: 'watch',
-    method: 'POST',
-    params: {
-      type: EntityType.task,
-      id: taskID
-    }
-  });
-  return response;
-};
-
 //Get watcher
 export const UseGetWatcherService = (taskId: { query: string | null | undefined }) => {
   const queryClient = useQueryClient();
@@ -944,11 +899,21 @@ const AssignTask = ({
 export const UseTaskAssignService = (taskId: string, user: ITeamMembersAndGroup) => {
   const dispatch = useAppDispatch();
 
-  const { selectedListId, tasks } = useAppSelector((state) => state.task);
+  const { selectedTaskParentId, tasks, subtasks, selectedTaskType } = useAppSelector((state) => state.task);
   return useMutation(AssignTask, {
     onSuccess: () => {
-      const updatedTasks = taskAssignessUpdateManager(taskId, selectedListId, tasks, user, true);
-      dispatch(setTasks(updatedTasks));
+      const updatedTasks = taskAssignessUpdateManager(
+        taskId,
+        selectedTaskParentId,
+        selectedTaskType === EntityType.task ? tasks : subtasks,
+        user,
+        true
+      );
+      if (selectedTaskType === EntityType.task) {
+        dispatch(setTasks(updatedTasks));
+      } else {
+        dispatch(setSubtasks(updatedTasks));
+      }
       dispatch(setToggleAssignCurrentTaskId(null));
     }
   });
@@ -979,12 +944,22 @@ const UnassignTask = ({
 export const UseTaskUnassignService = (taskId: string, user: ITeamMembersAndGroup) => {
   const dispatch = useAppDispatch();
 
-  const { selectedListId, tasks } = useAppSelector((state) => state.task);
+  const { selectedTaskParentId, tasks, subtasks, selectedTaskType } = useAppSelector((state) => state.task);
 
   return useMutation(UnassignTask, {
     onSuccess: () => {
-      const updatedTasks = taskAssignessUpdateManager(taskId, selectedListId, tasks, user, false);
-      dispatch(setTasks(updatedTasks));
+      const updatedTasks = taskAssignessUpdateManager(
+        taskId,
+        selectedTaskParentId,
+        selectedTaskType === EntityType.task ? tasks : subtasks,
+        user,
+        false
+      );
+      if (selectedTaskType === EntityType.task) {
+        dispatch(setTasks(updatedTasks));
+      } else {
+        dispatch(setSubtasks(updatedTasks));
+      }
       dispatch(setToggleAssignCurrentTaskId(null));
     }
   });

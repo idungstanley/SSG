@@ -66,7 +66,12 @@ export default function Header({
             }`}
           >
             {hotkeys.length > 0 && showSidebar && (
-              <PinnedNavigationItem activeTabId={activeTabId} setActiveTabId={setActiveTabId} hotkeys={hotkeys} />
+              <PinnedNavigationItem
+                activeTabId={activeTabId}
+                setActiveTabId={setActiveTabId}
+                hotkeys={hotkeys}
+                handleHotkeyClick={handleHotkeyClick}
+              />
             )}
             <div className="flex items-center">
               <UserSettingsModal setShowModal={setShowModal} />
