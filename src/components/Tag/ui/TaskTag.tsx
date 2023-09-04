@@ -47,9 +47,9 @@ export default function TaskTag({ tags, entity_id, entity_type }: taskTageProps)
       <div key={arr.length} className="flex flex-wrap items-center justify-start gap-2 -mr-5 drop-shadow-xl">
         {arr.map((item: tagItem) => {
           return (
-            <div key={item.id} className="">
+            <div key={item.id}>
               {Array.isArray(item) ? (
-                <div className="">{groupTags(item)}</div>
+                <div>{groupTags(item)}</div>
               ) : (
                 <>
                   {renameTagId == item.id && currentTaskIdForTag == entity_id ? (

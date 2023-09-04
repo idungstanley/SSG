@@ -19,7 +19,7 @@ function Results({ data }: dataProps) {
     <div className="h-full bg-white overflow-x-none">
       <div className="overflow-x-none">
         <div className="inline-block min-w-full align-middle">
-          <div className="">
+          <div>
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="select-none bg-gray-50">
                 <tr>
