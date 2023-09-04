@@ -105,7 +105,9 @@ function AssigneeItem({ item, option, entity_id, teams, handleClose, isAssigned 
             type="button"
             className="mx-2"
             onClick={() =>
-              option === EntityType.task ? handleUnAssignTask(item.id) : handleUnAssignChecklistItem(item.id)
+              option === EntityType.task || option === EntityType.subtask
+                ? handleUnAssignTask(item.id)
+                : handleUnAssignChecklistItem(item.id)
             }
           >
             <TrashIcon className="w-4 h-4 text-gray-500 cursor-pointer" />

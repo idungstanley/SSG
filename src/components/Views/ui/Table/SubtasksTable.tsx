@@ -15,7 +15,12 @@ import { Hub } from '../../../../pages/workspace/hubs/components/ActiveTree/acti
 import { findCurrentHub } from '../../../../managers/Hub';
 import { ScrollableHorizontalListsContainer } from '../../../ScrollableContainer/ScrollableHorizontalListsContainer';
 import { useScroll } from '../../../../hooks/useScroll';
-import { setShowNewTaskField, setShowNewTaskId, setUpdateCords } from '../../../../features/task/taskSlice';
+import {
+  setShowNewTaskField,
+  setShowNewTaskId,
+  setSubtasks,
+  setUpdateCords
+} from '../../../../features/task/taskSlice';
 
 interface ISubtasksTableProps {
   data: Task;
@@ -27,7 +32,7 @@ interface ISubtasksTableProps {
 export function SubtasksTable({ data, columns, customFields, paddingLeft = 0 }: ISubtasksTableProps) {
   const dispatch = useAppDispatch();
 
-  const { statusId } = useAppSelector((state) => state.task);
+  const { statusId, subtasks } = useAppSelector((state) => state.task);
   const { parentHubExt, hub } = useAppSelector((state) => state.hub);
 
   const [collapseTasks, setCollapseTasks] = useState(false);
@@ -37,6 +42,12 @@ export function SubtasksTable({ data, columns, customFields, paddingLeft = 0 }: 
 
   const { data: tasks } = useSubTasks(data.id);
   const taskLength = tasks?.length;
+
+  useEffect(() => {
+    if (tasks?.length) {
+      dispatch(setSubtasks({ ...subtasks, [data.id]: tasks as ITaskFullList[] }));
+    }
+  }, [tasks]);
 
   useEffect(() => {
     if (parentHubExt.id) {
@@ -113,23 +124,24 @@ export function SubtasksTable({ data, columns, customFields, paddingLeft = 0 }: 
                 {/* rows */}
                 {!collapseTasks ? (
                   <tbody className="contents">
-                    {tasks.map((task, index) =>
-                      'tags' in task ? (
-                        <Row
-                          columns={columns}
-                          task={task as ITaskFullList}
-                          key={task.id}
-                          taskIndex={index}
-                          isListParent={true}
-                          paddingLeft={paddingLeft}
-                          parentId={task.id}
-                          task_status={statusId}
-                          // handleClose={handleClose}
-                          customFields={customFields}
-                          isSplitSubtask={true}
-                        />
-                      ) : null
-                    )}
+                    {Object.keys(subtasks).length &&
+                      subtasks[data.id]?.map((task, index) =>
+                        'tags' in task ? (
+                          <Row
+                            columns={columns}
+                            task={task as ITaskFullList}
+                            key={task.id}
+                            taskIndex={index}
+                            isListParent={true}
+                            paddingLeft={paddingLeft}
+                            parentId={task.id}
+                            task_status={statusId}
+                            // handleClose={handleClose}
+                            customFields={customFields}
+                            isSplitSubtask={true}
+                          />
+                        ) : null
+                      )}
                   </tbody>
                 ) : null}
 

@@ -37,7 +37,7 @@ export default function Dropdown({ taskId }: DropdownProps) {
     dispatch(setRmWatcher(null));
   }
   return (
-    <div className="">
+    <div>
       <section className="absolute -left-56 top-10 z-10 -mt-3 w-60 rounded-md shadow-lg bg-gray-100">
         <div className="text-xs">
           <section className="flex relative w-full ">

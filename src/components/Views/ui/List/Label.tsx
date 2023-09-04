@@ -50,7 +50,7 @@ export function Label({ listName, onClickChevron, hubName, showTable, tasks, Lis
         >
           <div className="flex space-x-2 items-center pl-2 text-sm text-white  w-fit">
             <CollapseIcon color="#A854F7" active={showTable} onToggle={onClickChevron} hoverBg="white" />
-            <h1 className="">{listName ?? 'Loading...'}</h1>
+            <h1>{listName ?? 'Loading...'}</h1>
           </div>
           <button className="rounded-sm bg-gray-200 flex justify-center items-center h-6">
             <ListAddModal handleCheckedGroupTasks={handleCheckedGroupTasks} ListColor={ListColor} />

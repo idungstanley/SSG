@@ -71,7 +71,7 @@ export default function Toast({ type = 'success', title, body, showClose = true,
               {type === 'success' && <Success />}
               {type === 'error' && <ExclamationCircleIcon className="h-6 w-6 text-red-400" aria-hidden="true" />}
             </div>
-            <div className="" style={{ width: '80%' }}>
+            <div style={{ width: '80%' }}>
               <div>
                 <p className="text-alsoit-text-lg font-semibold text-alsoit-gray-300 font-semibold my-1">{title}</p>
                 {body != null && body !== '' && (

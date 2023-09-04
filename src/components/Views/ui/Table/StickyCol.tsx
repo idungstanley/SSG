@@ -422,7 +422,7 @@ export function StickyCol({
             <div className="absolute flex ml-2 space-x-1 -mt-10">
               <ToolTip title="Cancel">
                 <div className="border rounded-md p-1" style={{ borderColor: '#FFE7E7' }}>
-                  <ImCancelCircle onClick={onClose} className="" />
+                  <ImCancelCircle onClick={onClose} />
                 </div>
               </ToolTip>
               <button

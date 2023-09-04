@@ -64,12 +64,7 @@ export default function ShareModal({ taskId, taskName }: { taskId?: string; task
             </p>
 
             <div id="inviteInput" className="flex items-center w-12/12">
-              <input
-                type="text"
-                placeholder="Invite by name or email"
-                className=""
-                style={{ width: '80%', height: '30px' }}
-              />
+              <input type="text" placeholder="Invite by name or email" style={{ width: '80%', height: '30px' }} />
               <p
                 className="flex justify-center items-center text-white bg-purple-500"
                 style={{ width: '20%', height: '30px' }}
