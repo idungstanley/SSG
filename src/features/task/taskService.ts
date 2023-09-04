@@ -598,12 +598,16 @@ export const createManualTimeEntry = () => {
       start_date,
       end_date,
       type,
-      id
+      id,
+      description,
+      isBillable
     }: {
       start_date: string | undefined;
       end_date: string | undefined;
       type: string | null | undefined;
       id: string | null | undefined;
+      description: string | null | undefined;
+      isBillable: boolean | null | undefined;
     }) => {
       const response = await requestNew({
         url: 'time-entries',
@@ -612,7 +616,9 @@ export const createManualTimeEntry = () => {
           start_date,
           end_date,
           type,
-          id
+          id,
+          description,
+          isBillable
         }
       });
       return response;
