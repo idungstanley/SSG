@@ -7,6 +7,7 @@ import AlsoitMenuDropdown from '../../../../../DropDowns';
 import { CopyIcon } from '../../../../../../assets/icons';
 import EditIcon from '../../../../../../assets/icons/Edit';
 import { RiDeleteBinLine } from 'react-icons/ri';
+import { Capitalize } from '../../../../../../utils/NoCapWords/Capitalize';
 
 interface EmailFieldProps {
   taskCustomFields?: ICustomField;
@@ -161,20 +162,20 @@ function EmailWebsiteField({ taskCustomFields, taskId, fieldId, fieldType }: Ema
             onClick={handleCopyTexts}
           >
             <CopyIcon className="w-5 h-5" />
-            <h1> {isCopied === 0 ? ' Copy Email' : 'Copied'}</h1>
+            <h1> {isCopied === 0 ? `Copy ${Capitalize(fieldType)}` : 'Copied'}</h1>
           </button>
           <button
             className="flex w-full  gap-2 items-center  p-1 hover:bg-alsoit-purple-50 rounded"
             onClick={handleEditEmail}
           >
             <EditIcon active={false} />
-            Edit Email
+            {`Edit ${Capitalize(fieldType)}`}
           </button>
           <button
             className="flex w-full gap-2 items-center text-alsoit-danger p-1 hover:bg-alsoit-purple-50 rounded"
             onClick={handleDeleteEmail}
           >
-            <RiDeleteBinLine className="w-4 h-4" /> Remove Email
+            <RiDeleteBinLine className="w-4 h-4" /> {`Remove ${Capitalize(fieldType)}`}
           </button>
         </div>
       </AlsoitMenuDropdown>
