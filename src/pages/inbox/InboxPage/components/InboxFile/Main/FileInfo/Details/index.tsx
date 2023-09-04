@@ -15,7 +15,7 @@ function Details() {
           <FileHeader />
 
           <div className="w-full overflow-y-scroll flex-1 h-full p-6 space-y-6">
-            <div className="">
+            <div>
               <h3 className="font-medium text-gray-900">Information</h3>
               <dl className="mt-2 border-t border-b border-gray-200 divide-y divide-gray-200">
                 <div key={1} className="py-3 flex justify-between text-sm font-medium">

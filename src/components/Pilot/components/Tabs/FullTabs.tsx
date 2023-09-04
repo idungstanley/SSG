@@ -27,7 +27,6 @@ interface TabsProps {
 
 const pilotFromLS = JSON.parse(localStorage.getItem('pilot') || '""') as { tabOrder: number[]; showTabLabel: boolean };
 const tabIdsFromLS = pilotFromLS.tabOrder || [];
-const showTabLabelFromLS = !!pilotFromLS.showTabLabel;
 
 const MIN = 100;
 const MAX = 200;

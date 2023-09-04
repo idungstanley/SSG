@@ -2,6 +2,7 @@ import React from 'react';
 import { IField, Options } from '../../../../../../features/list/list.interfaces';
 import { ICustomField } from '../../../../../../features/task/taskSlice';
 import LabelsDropdown from './LabelsDropdown';
+import '../../../../../../styles/task.css';
 
 interface LabelFieldWrapperProps {
   taskCustomFields?: ICustomField;

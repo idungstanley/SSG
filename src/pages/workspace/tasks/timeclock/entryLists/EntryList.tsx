@@ -12,6 +12,8 @@ export interface teamMember {
     id: string;
     initials: string;
     name: string;
+    color: string;
+    avatar_path: string;
   };
 }
 export interface entriesProps {

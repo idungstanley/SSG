@@ -1,17 +1,22 @@
+import { DetailedHTMLProps, SVGAttributes } from 'react';
 import ICONS_INTERACTIONS from '../../utils/Constants/IconInteractions';
 
 /* eslint-disable max-len */
-interface Props {
-  active?: boolean;
-  dimensions?: {
-    height: number;
-    width: number;
-  };
+
+interface Dimensions {
+  height: number;
+  width: number;
 }
 
-export default function TagIcon({ active, dimensions }: Props) {
+interface Props extends DetailedHTMLProps<SVGAttributes<SVGSVGElement>, SVGSVGElement> {
+  active?: boolean;
+  dimensions?: Dimensions;
+}
+
+export default function TagIcon({ active, dimensions, ...props }: Props) {
   return (
     <svg
+      {...props}
       width={dimensions?.width ?? '21'}
       height={dimensions?.height ?? '20'}
       viewBox="0 0 21 20"

@@ -8,6 +8,7 @@ import { useAbsolute } from '../../hooks/useAbsolute';
 import { Status } from '../../features/task/interface.tasks';
 import { UseGetListDetails } from '../../features/list/listService';
 import { Fade, Menu } from '@mui/material';
+import { useParams } from 'react-router-dom';
 
 interface StatusDropdownProps {
   TaskCurrentStatus: Status;
@@ -15,13 +16,15 @@ interface StatusDropdownProps {
 }
 
 export default function StatusNameDropdown({ TaskCurrentStatus, statusName }: StatusDropdownProps) {
-  const { currentTaskStatusId, selectedListId } = useAppSelector((state) => state.task);
+  const { listId } = useParams();
+
+  const { currentTaskStatusId, selectedTaskParentId } = useAppSelector((state) => state.task);
   const { updateCords } = useAppSelector((state) => state.task);
 
   const [status, setStatus] = useState('');
   const [isOpen, setIsOpen] = useState(false);
 
-  const { data: list } = UseGetListDetails(selectedListId);
+  const { data: list } = UseGetListDetails(listId || selectedTaskParentId);
 
   const { isSuccess } = UseUpdateTaskStatusService({
     task_id: currentTaskStatusId as string,

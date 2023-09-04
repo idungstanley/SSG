@@ -48,6 +48,7 @@ interface HeadProps {
   listId: string | undefined;
   listName?: string;
   groupedTask?: Task[];
+  isSplitSubtask?: boolean;
 }
 
 export function Head({
@@ -61,7 +62,8 @@ export function Head({
   label,
   listId,
   listName,
-  groupedTask
+  groupedTask,
+  isSplitSubtask
 }: HeadProps) {
   const parsedLabel = parseLabel(label);
   const dispatch = useAppDispatch();
@@ -220,7 +222,12 @@ export function Head({
           <div className="flex items-center w-full gap-3 py-2 truncate dBlock group opacity-90">
             <div
               className="py-0.5 relative px-2 rounded-tr-md -mb-1 flex items-center space-x-1 text-white dFlex "
-              style={{ backgroundColor: headerStatusColor, marginLeft: '38px', height: '25px', gap: '5px' }}
+              style={{
+                backgroundColor: headerStatusColor,
+                marginLeft: isSplitSubtask ? 0 : '38px',
+                height: '25px',
+                gap: '5px'
+              }}
             >
               <div>
                 <div className="flex items-center">
@@ -232,7 +239,7 @@ export function Head({
                       hoverBg="white"
                     />
                   </p>
-                  <span ref={scrollToRef} className="" style={{ fontSize: '11px', WebkitTextStroke: '0.5px' }}>
+                  <span ref={scrollToRef} style={{ fontSize: '11px', WebkitTextStroke: '0.5px' }}>
                     {parsedLabel}
                   </span>
                   <div className="items-center pl-2 space-x-1 viewSettings" onClick={(e) => e.stopPropagation()}>
@@ -350,7 +357,7 @@ export function Head({
                   style={{ height: tableHeight }}
                   onMouseDown={() => mouseDown(index + 1)}
                 >
-                  <div className="w-0.5 mx-auto h-full bg-gray-100" />
+                  <div className="w-0.5 mx-auto bg-gray-100" style={{ height: '75px' }} />
                 </div>
                 {headerId === id && sortAbles.includes(value) && (
                   <SortModal

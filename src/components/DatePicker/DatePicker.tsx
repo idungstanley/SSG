@@ -3,7 +3,6 @@ import dayjs from 'dayjs';
 import timezone from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { Modal } from '@mui/material';
 import { DatePickerSideBar } from './DatePickerSideBar';
 import { DatePickerManualDates } from './DatePickerManualDate';
 import MiniDatePicker from './MiniCalendar';
@@ -13,12 +12,14 @@ import { useGetUserSettingsData } from '../../features/task/taskService';
 import { setHistoryMemory, setTaskSelectedDate } from '../../features/task/taskSlice';
 import { IUserCalendarParams } from '../../features/task/interface.tasks';
 import { setPickedDateState } from '../../features/workspace/workspaceSlice';
+import AlsoitMenuDropdown from '../DropDowns';
 
 interface DatePickerProps {
   styles?: string;
   range?: boolean;
   setShowDatePickerOption?: boolean;
   height?: string;
+  anchorEl?: null | HTMLElement;
   handleClose?: () => void;
   width?: string;
   toggleFn?: Dispatch<SetStateAction<boolean>>;
@@ -34,6 +35,7 @@ export default function DatePicker({
   height,
   range,
   handleClose,
+  anchorEl,
   setShowDatePickerOption,
   toggleFn
 }: DatePickerProps) {
@@ -88,7 +90,8 @@ export default function DatePicker({
   }, []);
 
   return (
-    <Modal open={true} hideBackdrop>
+    <AlsoitMenuDropdown handleClose={closeDateModal} anchorEl={anchorEl}>
+      {/* <Modal open={true} hideBackdrop> */}
       <section
         onClick={(e) => e.stopPropagation()}
         ref={sectionRef}
@@ -126,6 +129,7 @@ export default function DatePicker({
           <DatePickerFooter miniMode={openSideBar} closeDateModal={closeDateModal} time={time} />
         </div>
       </section>
-    </Modal>
+      {/* </Modal> */}
+    </AlsoitMenuDropdown>
   );
 }

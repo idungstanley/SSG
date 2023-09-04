@@ -83,7 +83,7 @@ function Profile() {
               </h1>
             </div>
             <div className="flex justify-between my-3">
-              <div className="" style={{ width: '48%' }}>
+              <div style={{ width: '48%' }}>
                 <h5 className="font-semibold" style={{ fontSize: '15px' }}>
                   Language
                 </h5>
@@ -91,7 +91,7 @@ function Profile() {
                   <option value="en">English</option>
                 </select>
               </div>
-              <div className="" style={{ width: '48%' }}>
+              <div style={{ width: '48%' }}>
                 <h5 className="font-bold" style={{ fontSize: '15px' }}>
                   Region
                 </h5>

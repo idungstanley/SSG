@@ -21,6 +21,8 @@ import PaginationLinks from '../NavLinks/PaginationLinks';
 import ArrowLeft from '../../../../assets/icons/ArrowLeft';
 import { VerticalScroll } from '../../../ScrollableContainer/VerticalScroll';
 import AutomaticTimeElement from './AutomaticTimeElement';
+import { ClockIcon } from '../../../../assets/icons/ClockIcon';
+import { ManualTimeElement } from './ManualTimeElement';
 
 export interface User {
   initials: string;
@@ -42,6 +44,7 @@ export default function ClockInOut() {
   const [, setBtnClicked] = useState(false);
   const [prompt, setPrompt] = useState(false);
   const [newTimer, setNewtimer] = useState(false);
+  const [activeClockTab, setActiveClockTab] = useState<string>('Real Time');
 
   const [page, setPage] = useState<number>(1);
   const { data: getTaskEntries } = GetTimeEntriesService({
@@ -153,7 +156,6 @@ export default function ClockInOut() {
           activeTimerCheck={activeTimerCheck}
           activeTrackers={activeTrackers}
           getTaskEntries={getTaskEntries}
-          handleEndTimeChange={handleEndTimeChange}
           handleTimeSwitch={handleTimeSwitch}
           prompt={prompt}
           sameEntity={sameEntity}
@@ -162,13 +164,14 @@ export default function ClockInOut() {
           timerCheck={timerCheck}
         />
       ),
-      title: 'Automatic'
+      title: 'Real Time'
+    },
+    {
+      id: 1,
+      element: <ManualTimeElement activeTrackers={activeTrackers} />,
+      title: 'Manual'
     }
   ];
-
-  const activeTimeTab = useMemo(() => {
-    return timeTabs.find((option) => option.id === activeSubTimeClockTabId);
-  }, [activeSubTimeClockTabId]);
 
   const firstPage = () => setPage(1);
   const lastPage = () => setPage((page * 100) / 100);
@@ -185,37 +188,79 @@ export default function ClockInOut() {
   }, [newTimer]);
 
   return (
-    <div className="p-2 mt-6 rounded-t-md">
-      <div className="bg-white">
-        <section id="body" className="px-3 py-1 text-white bg-alsoit-gray-50 rounded-b-md shadow-lg">
-          {/* Interface Tabs */}
-          {activeSubTimeClockTabId === 0 && (
-            <AutomaticTimeElement
-              activeTimerCheck={activeTimerCheck}
-              activeTrackers={activeTrackers}
-              getTaskEntries={getTaskEntries}
-              handleEndTimeChange={handleEndTimeChange}
-              handleTimeSwitch={handleTimeSwitch}
-              prompt={prompt}
-              sameEntity={sameEntity}
-              setPrompt={setPrompt}
-              stop={stop}
-              timerCheck={timerCheck}
-            />
-          )}
-        </section>
-        <div className="w-full p-2 my-4 flex flex-col space-y-2">
-          <VerticalScroll>
-            <div className="h-96">
-              <ClockLog getTaskEntries={getTaskEntries} />
+    <div className="p-2 mt-6 bg-white">
+      {/* Clock Counter */}
+      <div className="bg-alsoit-gray-50 rounded-lg py-2 px-0.5 flex flex-col space-y-2">
+        {/* Timer section */}
+        <div className="flex w-1/2 justify-between items-center">
+          {timeTabs.map((entry) => (
+            <div
+              key={entry.id}
+              className={`text-alsoit-text-xi ${
+                entry.title.toUpperCase() === activeClockTab.toUpperCase() &&
+                'text-alsoit-purple-300 border-b-2 border-alsoit-purple-300'
+              } py-0.5 w-1/2 text-center cursor-pointer`}
+              onClick={() => setActiveClockTab(entry.title)}
+            >
+              {entry.title}
             </div>
-          </VerticalScroll>
-          <div className="flex space-x-1">
-            <div className="cursor-pointer">
-              <ArrowLeft />
+          ))}
+        </div>
+        {/* Automatic Timers */}
+        {activeClockTab === 'Real Time' && (
+          <>
+            <section
+              id="body"
+              className="px-2 text-white bg-alsoit-gray-50 rounded-md border-t-2 border-l-2 border-alsoit-gray-100 relative"
+            >
+              <label
+                htmlFor=""
+                className="absolute -top-0 -left-0 bg-alsoit-gray-100 text-alsoit-gray-50 rounded-t-sm p-0.5 flex space-x-1 items-center font-semibold pr-1"
+              >
+                <ClockIcon fixed />
+                <span className="text-alsoit-text-md">REAL TIME</span>
+              </label>
+              {/* Interface Tabs */}
+              {activeSubTimeClockTabId === 0 && (
+                <AutomaticTimeElement
+                  activeTimerCheck={activeTimerCheck}
+                  activeTrackers={activeTrackers}
+                  getTaskEntries={getTaskEntries}
+                  handleTimeSwitch={handleTimeSwitch}
+                  prompt={prompt}
+                  sameEntity={sameEntity}
+                  setPrompt={setPrompt}
+                  stop={stop}
+                  timerCheck={timerCheck}
+                />
+              )}
+            </section>
+            {/* Memo and tags */}
+            <div id="descNote" className="w-full mt-1 text-white">
+              <input
+                type="text"
+                name="description"
+                onChange={(e) => handleEndTimeChange(e.target.value)}
+                placeholder="Enter memo"
+                className="w-full border rounded-md shadow-sm py-0.5 text-alsoit-gray-200 text-alsoit-text-xi"
+              />
             </div>
-            <PaginationLinks arr={pageLinks} />
+          </>
+        )}
+        {activeClockTab === 'Manual' && <ManualTimeElement activeTrackers={activeTrackers} />}
+      </div>
+      {/* Clock Log */}
+      <div className="w-full p-2 my-4 flex flex-col space-y-2 bg-alsoit-gray-50 rounded-lg">
+        <VerticalScroll>
+          <div className="h-96">
+            <ClockLog getTaskEntries={getTaskEntries} />
           </div>
+        </VerticalScroll>
+        <div className="flex space-x-1">
+          <div className="cursor-pointer">
+            <ArrowLeft />
+          </div>
+          <PaginationLinks arr={pageLinks} />
         </div>
       </div>
     </div>

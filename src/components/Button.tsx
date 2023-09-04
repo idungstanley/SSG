@@ -103,7 +103,7 @@ function Button({
         </div>
       ) : (
         <>
-          {icon && iconPosition === 'center' && <span className="">{icon}</span>}
+          {icon && iconPosition === 'center' && <span>{icon}</span>}
           {icon && (iconPosition === 'left' || iconPosition === null) && <span className="mr-1">{icon}</span>}
           {label && <span>{label}</span>}
           {icon && iconPosition === 'right' && <span className="ml-1">{icon}</span>}

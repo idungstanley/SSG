@@ -4,7 +4,7 @@ import { useGetTeamMembers } from '../../../../features/settings/teamMembers/tea
 import { AvatarWithInitials } from '../../../../components';
 import GroupAssignee from './GroupAssignee';
 import { ICheckListItems } from '../../../../features/task/interface.tasks';
-import { ImyTaskData, setSelectedListId } from '../../../../features/task/taskSlice';
+import { ImyTaskData, setSelectedTaskParentId, setSelectedTaskType } from '../../../../features/task/taskSlice';
 import { AiOutlineSearch } from 'react-icons/ai';
 import { ITeamMembersAndGroup } from '../../../../features/settings/teamMembersAndGroups.interfaces';
 import { useGetTeamMemberGroups } from '../../../../features/settings/teamMemberGroups/teamMemberGroupService';
@@ -12,6 +12,7 @@ import { cl } from '../../../../utils';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import AssigneeItem from './AssigneeItem';
 import AlsoitMenuDropdown from '../../../../components/DropDowns';
+import { EntityType } from '../../../../utils/EntityTypes/EntityType';
 
 export default function Assignee({
   itemId,
@@ -35,7 +36,8 @@ export default function Assignee({
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
-    dispatch(setSelectedListId(task?.list_id as string));
+    dispatch(setSelectedTaskParentId((task?.list_id || task?.parent_id) as string));
+    dispatch(setSelectedTaskType(task?.list_id ? EntityType.task : EntityType.subtask));
   };
 
   const handleClose = () => {

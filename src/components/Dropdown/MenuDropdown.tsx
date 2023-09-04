@@ -67,9 +67,10 @@ export default function MenuDropdown({ isExtendedBar, cords }: IMenuDropdownProp
   const { SubDropdownMenu, archiveHub, showMenuDropdown, showMenuDropdownType, hub } = useAppSelector(
     (state) => state.hub
   );
-  const { openedEntitiesIds } = useAppSelector((state) => state.workspace);
+  const { openedEntitiesIds, sidebarWidthRD } = useAppSelector((state) => state.workspace);
   const { archiveWallet } = useAppSelector((state) => state.wallet);
   const { archiveList } = useAppSelector((state) => state.list);
+  const { showSidebar, userSettingsData } = useAppSelector((state) => state.account);
 
   const [open, setOpen] = useState<boolean>(true);
 
@@ -351,7 +352,7 @@ export default function MenuDropdown({ isExtendedBar, cords }: IMenuDropdownProp
       TransitionComponent={Fade}
       anchorOrigin={{
         vertical: Number(cords?.top) - 150 || 'center',
-        horizontal: 300
+        horizontal: showSidebar ? Number(userSettingsData?.sidebarWidth) : sidebarWidthRD
       }}
     >
       <div className="w-auto px-2" style={{ minWidth: '200px' }}>
