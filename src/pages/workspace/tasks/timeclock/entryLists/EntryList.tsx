@@ -35,7 +35,6 @@ export default function EntryList({ entries, switchHeader }: EntryListProps) {
   const headers = switchHeader;
 
   const { initials, name } = entries.team_member.user;
-  console.log(entries.team_member.id);
 
   const [iconToggle, setIconToggle] = useState<{ editIcon: boolean; trashIcon: boolean; threeDots: boolean }>({
     editIcon: false,
