@@ -27,6 +27,7 @@ import { List, Wallet } from '../../pages/workspace/hubs/components/ActiveTree/a
 import ActiveBackground from './Component/ActiveBackground';
 import ActiveBarIdentification from './Component/ActiveBarIdentification';
 import { useAbsolute } from '../../hooks/useAbsolute';
+import { IWallet } from '../../features/hubs/hubs.interfaces';
 
 interface WalletItemProps {
   wallet: {
@@ -45,7 +46,7 @@ interface WalletItemProps {
   zNumber?: string;
   isExtendedBar?: boolean;
   handleShowSubWallet: (id: string) => void;
-  handleLocation: (id: string, name: string) => void;
+  handleLocation: (id: string, name: string, item: IWallet) => void;
 }
 export default function WalletItem({
   wallet,
@@ -208,7 +209,7 @@ export default function WalletItem({
             {renderIcons(showSubWallet)}
           </div>
           <div
-            onClick={() => handleLocation(wallet.id, wallet.name)}
+            onClick={() => handleLocation(wallet.id, wallet.name, wallet as Wallet)}
             className="truncate cursor-pointer hover:underline hover:decoration-dashed"
             style={{ marginLeft: '17px' }}
           >

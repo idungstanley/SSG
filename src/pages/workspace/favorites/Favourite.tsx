@@ -11,6 +11,7 @@ import { MdFolder } from 'react-icons/md';
 import { FiList } from 'react-icons/fi';
 import { getInitials } from '../../../app/helpers';
 import { EntityType } from '../../../utils/EntityTypes/EntityType';
+import { generateViewsUrl } from '../../../utils/generateViewsUrl';
 
 interface nameType {
   item: {
@@ -37,6 +38,7 @@ function Favourite({ item }: nameType) {
   });
 
   const handleLocation = () => {
+    const viewsUrl = generateViewsUrl(item.model_id, item) as string;
     dispatch(
       setActiveItem({
         activeItemId: item.model_id,
@@ -46,13 +48,10 @@ function Favourite({ item }: nameType) {
     );
     dispatch(setShowPilot(true));
     dispatch(setActiveTabId(4));
-    if (item.model_type === 'hub') {
-      navigate(`/${currentWorkspaceId}/tasks/h/${item.model_id}`);
-    } else if (item.model_type === 'wallet') {
-      navigate(`/${currentWorkspaceId}/tasks/w/${item.model_id}`);
-    } else if (item.model_type === 'list') {
-      navigate(`/${currentWorkspaceId}/tasks/s/${item.model_id}`);
-    }
+
+    navigate(viewsUrl, {
+      replace: true
+    });
   };
 
   const handleUpdate = (e: { preventDefault: () => void }) => {
