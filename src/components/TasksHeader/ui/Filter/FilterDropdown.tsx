@@ -1,7 +1,7 @@
 import { Menu, Transition } from '@headlessui/react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import { Fragment } from 'react';
-import { List } from './ui/FilterList/List';
+import { FilterList } from './ui/FilterList/FilterList';
 import Button from '../../../Buttons/Button';
 import Icons from '../../../Icons/Icons';
 import Filter from '../../../../assets/icons/filter_alt.svg';
@@ -43,7 +43,7 @@ export function FilterDropdown({ isSplitSubtasks }: IFilterDropdownProps) {
 
           {/* title */}
           <h1 className="text-black text-lg font-bold">Filters</h1>
-          <List />
+          <FilterList />
         </Menu.Items>
       </Transition>
     </Menu>

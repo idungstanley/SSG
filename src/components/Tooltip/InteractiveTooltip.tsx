@@ -1,5 +1,5 @@
-import { ReactElement, ReactNode, useEffect, useRef, useState } from 'react';
-import AlsoitMenuDropdown from '../DropDowns';
+import { ReactElement, ReactNode, useRef, useState } from 'react';
+
 interface TooltipProps {
   children: ReactNode;
   content: ReactElement;
@@ -8,6 +8,7 @@ interface TooltipProps {
   zIndex?: string;
   bottom?: string;
 }
+
 export default function InteractiveTooltip({
   children,
   content,

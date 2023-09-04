@@ -21,6 +21,7 @@ import {
   setSubtasks,
   setUpdateCords
 } from '../../../../features/task/taskSlice';
+import { filterSubtasks } from '../../../../utils/filterSubtasks';
 
 interface ISubtasksTableProps {
   data: Task;
@@ -32,12 +33,12 @@ interface ISubtasksTableProps {
 export function SubtasksTable({ data, columns, customFields, paddingLeft = 0 }: ISubtasksTableProps) {
   const dispatch = useAppDispatch();
 
-  const { statusId, subtasks } = useAppSelector((state) => state.task);
+  const { statusId, subtasks, subtasksfilters } = useAppSelector((state) => state.task);
   const { parentHubExt, hub } = useAppSelector((state) => state.hub);
 
+  const [filteredSubtasks, setFilteredSubTasks] = useState<ITaskFullList[]>([]);
   const [collapseTasks, setCollapseTasks] = useState(false);
   const [collapseTable, setCollapseTable] = useState(false);
-  const [tableHeight, setTableHeight] = useState<string | number>('auto');
   const [parentHub, setParentHub] = useState<Hub>();
 
   const { data: tasks } = useSubTasks(data.id);
@@ -48,6 +49,12 @@ export function SubtasksTable({ data, columns, customFields, paddingLeft = 0 }: 
       dispatch(setSubtasks({ ...subtasks, [data.id]: tasks as ITaskFullList[] }));
     }
   }, [tasks]);
+
+  useEffect(() => {
+    if (tasks?.length) {
+      setFilteredSubTasks(filterSubtasks(tasks as ITaskFullList[], subtasksfilters));
+    }
+  }, [tasks, subtasksfilters]);
 
   useEffect(() => {
     if (parentHubExt.id) {
@@ -88,6 +95,7 @@ export function SubtasksTable({ data, columns, customFields, paddingLeft = 0 }: 
           showTable={collapseTable}
           onClickChevron={() => setCollapseTable((prev) => !prev)}
           isSplitSubtasks={true}
+          parentId={data.id}
         />
         <ScrollableHorizontalListsContainer onScroll={onScroll} ListColor={ListColor}>
           {!collapseTable ? (
@@ -115,7 +123,7 @@ export function SubtasksTable({ data, columns, customFields, paddingLeft = 0 }: 
                   listName={data.list?.name}
                   // mouseDown={onMouseDown}
                   mouseDown={() => null}
-                  tableHeight={tableHeight}
+                  tableHeight="auto"
                   listId={tasks[0].list_id}
                   groupedTask={tasks}
                   isSplitSubtask={true}
@@ -124,24 +132,29 @@ export function SubtasksTable({ data, columns, customFields, paddingLeft = 0 }: 
                 {/* rows */}
                 {!collapseTasks ? (
                   <tbody className="contents">
-                    {Object.keys(subtasks).length &&
-                      subtasks[data.id]?.map((task, index) =>
-                        'tags' in task ? (
-                          <Row
-                            columns={columns}
-                            task={task as ITaskFullList}
-                            key={task.id}
-                            taskIndex={index}
-                            isListParent={true}
-                            paddingLeft={paddingLeft}
-                            parentId={task.id}
-                            task_status={statusId}
-                            // handleClose={handleClose}
-                            customFields={customFields}
-                            isSplitSubtask={true}
-                          />
-                        ) : null
-                      )}
+                    {filteredSubtasks.length ? (
+                      <>
+                        {filteredSubtasks.map((task, index) =>
+                          'tags' in task ? (
+                            <Row
+                              columns={columns}
+                              task={task as ITaskFullList}
+                              key={task.id}
+                              taskIndex={index}
+                              isListParent={true}
+                              paddingLeft={paddingLeft}
+                              parentId={task.id}
+                              task_status={statusId}
+                              // handleClose={handleClose}
+                              customFields={customFields}
+                              isSplitSubtask={true}
+                            />
+                          ) : null
+                        )}
+                      </>
+                    ) : (
+                      <div className="flex justify-center">No results</div>
+                    )}
                   </tbody>
                 ) : null}
 
@@ -151,7 +164,7 @@ export function SubtasksTable({ data, columns, customFields, paddingLeft = 0 }: 
                     onClick={(e) => onShowAddSubtaskField(e, tasks[tasks.length - 1].id)}
                     className="absolute left-0 p-1.5 pl-5 text-left w-fit text-xs"
                   >
-                    <td className="font-semibold cursor-pointer alsoit-gray-300">+ New Task</td>
+                    <td className="font-semibold cursor-pointer alsoit-gray-300">+ New Subtask</td>
                   </tr>
                 </tbody>
               </table>
