@@ -135,7 +135,7 @@ export function Table({ heads, data, label, listName, customFields, ListColor }:
         statusObj?.is_default == 1 ? statusObj?.is_default : statusObj.position == minPosition
     );
 
-    if (listId == defaultSubtaskListId) dispatch(setSubtaskDefaultStatusId(defaultStatusObj?.id as string));
+    if (listId === defaultSubtaskListId) dispatch(setSubtaskDefaultStatusId(defaultStatusObj?.id as string));
   }, [listId, showNewTaskField, defaultSubtaskListId]);
 
   const removeListeners = () => {
