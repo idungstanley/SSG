@@ -3,15 +3,14 @@ import { IEntries, ITimeEntriesRes } from '../../../../features/task/interface.t
 import { BsStopCircle } from 'react-icons/bs';
 import { AiOutlinePlayCircle } from 'react-icons/ai';
 import AvatarWithInitials from '../../../avatar/AvatarWithInitials';
-import Duration from '../../../../utils/TimerDuration';
 import { setTimerDetails } from '../../../../features/task/taskSlice';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { PoundsIcon } from '../../../../assets/icons/PoundsIcon';
 import TagIcon from '../../../../assets/icons/TagIcon';
+import { ActiveUsersTimer } from './ActiveUsersTimer';
 
 interface Props {
   getTaskEntries: ITimeEntriesRes | undefined;
-  handleEndTimeChange: (value: string) => void;
   sameEntity: () => boolean;
   stop: () => void;
   timerCheck: () => JSX.Element;
@@ -26,7 +25,6 @@ export default function AutomaticTimeElement({
   activeTimerCheck,
   activeTrackers,
   getTaskEntries,
-  handleEndTimeChange,
   handleTimeSwitch,
   prompt,
   sameEntity,
@@ -37,39 +35,17 @@ export default function AutomaticTimeElement({
   const dispatch = useAppDispatch();
 
   const { timerStatus, timerDetails } = useAppSelector((state) => state.task);
-  const { initials } = useAppSelector((state) => state.userSetting);
+  const { initials, color } = useAppSelector((state) => state.userSetting);
 
   return (
     <>
-      <div
-        id="taskUser"
-        className="flex items-center justify-between h-10 py-3 font-semibold cursor-pointer text-alsoit-text-lg"
-      >
-        <span className="text-alsoit-gray-200">Tabs Name Here: </span>
-        {/* total time here */}
-        <div className="flex flex-col justify-center text-center px-1 py-0.5">
-          <span className="text-alsoit-gray-200">Total time</span>
-          <p className="text-alsoit-gray-200 bg-white rounded-md">
-            {moment.utc((getTaskEntries as ITimeEntriesRes)?.data?.total_duration * 1000).format('HH:mm:ss')}
-          </p>
-        </div>
-      </div>
-      <div id="descNote" className="w-full my-3 text-white">
-        <input
-          type="text"
-          name="description"
-          onChange={(e) => handleEndTimeChange(e.target.value)}
-          placeholder="Enter a note"
-          className="w-full border rounded shadow-sm text-alsoit-gray-300"
-        />
-      </div>
-      <div id="entries" className="flex items-center justify-between py-1">
+      <div id="entries" className="flex items-center justify-between mt-8 pb-1.5">
         {/* timer goes here */}
         <div className="flex flex-col">
           <div className="flex space-x-1">
             {/* Avatar */}
-            <div className="flex items-center p-1 rounded-md bg-alsoit-purple-400">
-              <AvatarWithInitials height="h-4" width="w-4" initials={initials ?? 'UN'} />
+            <div className="flex items-center">
+              <AvatarWithInitials height="h-4" width="w-4" initials={initials ?? 'UN'} backgroundColour={color} />
             </div>
             {/* Timer */}
             <div
@@ -113,42 +89,31 @@ export default function AutomaticTimeElement({
               </div>
               <div className="flex items-center space-x-2">{timerCheck()}</div>
             </div>
+            {/* Total Time */}
+            <div className="flex items-center">
+              <div
+                onClick={() => dispatch(setTimerDetails({ ...timerDetails, isBillable: !timerDetails.isBillable }))}
+                className="flex space-x-0.5 p-0.5 bg-white rounded-full"
+              >
+                <PoundsIcon active={timerDetails.isBillable} dimensions={{ height: 19, width: 16 }} />
+              </div>
+              <span className="flex items-center justify-center">
+                <TagIcon />
+              </span>
+            </div>
           </div>
           {/* active users timer goes here */}
-          <div>
-            <div className="flex flex-col space-y-1 max-h-40">
-              {activeTrackers?.map((trackers) => {
-                const { hours, minutes, seconds } = Duration({ dateString: trackers });
-                const { initials } = trackers.team_member.user;
-                return (
-                  <div key={trackers.id} className="flex items-center space-y-1 overflow-y-auto w-44 h-min">
-                    <div className="flex items-center p-1 rounded-md bg-alsoit-purple-400">
-                      <AvatarWithInitials height="h-4" width="w-4" textSize="text-alsoit-text-sm" initials={initials} />
-                    </div>
-                    <div className="text-alsoit-text-md">
-                      {`${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(
-                        seconds
-                      ).padStart(2, '0')}`}
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
+          <ActiveUsersTimer activeTrackers={activeTrackers} />
         </div>
+        {/* total time here */}
         <div id="right" className="flex flex-col items-center text-alsoit-gray-200 font-semibold">
-          <span className="flex justify-end w-full">Bill task</span>
-          <div className="flex items-start">
-            <span className="flex items-center justify-center">
-              <TagIcon />
+          <div className="flex flex-col justify-center text-center px-1 py-0.5 relative border border-alsoit-success rounded-sm bg-white">
+            <span className="text-alsoit-gray-200 absolute text-alsoit-text-sm -top-1.5 bg-alsoit-gray-50">
+              Total time
             </span>
-            <div
-              onClick={() => dispatch(setTimerDetails({ ...timerDetails, isBillable: !timerDetails.isBillable }))}
-              className="flex space-x-0.5"
-            >
-              <PoundsIcon active={timerDetails.isBillable} />
-              <span>0.00</span>
-            </div>
+            <p className="text-alsoit-gray-200 bg-white rounded-md">
+              {moment.utc((getTaskEntries as ITimeEntriesRes)?.data?.total_duration * 1000).format('HH:mm:ss')}
+            </p>
           </div>
         </div>
       </div>

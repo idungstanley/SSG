@@ -22,22 +22,21 @@ export function HeaderSort({ handleRemoveFilter, col, setIconToggle, icontoggle 
   const { timeArr, timeSortArr } = useAppSelector((state) => state.task);
   return (
     <div className="rounded-full sortClose-group">
-      <div className="relative flex items-center justify-center w-4 h-4 space-x-1 font-medium text-white uppercase rounded-full cursor-pointer text-alsoit-text-lg bg-alsoit-danger group">
+      <div className="relative flex items-center justify-center w-5 h-5 space-x-1 font-medium text-white uppercase rounded-full cursor-pointer text-alsoit-text-lg bg-alsoit-danger group">
         <div className="font-bold cursor-pointer hover:text-clip" style={{ fontSize: '8px' }}>
           <>
             {timeArr.length === 1 && timeSortArr.length ? (
-              <ArrowCaretUp active={false} />
+              <ArrowCaretUp active={false} dimensions={{ height: 6, width: 6 }} />
             ) : (
               <span className="flex gap-1">
                 {timeArr.indexOf(col.title) + 1}
-                <ArrowCaretUp active={false} />
+                <ArrowCaretUp active={false} dimensions={{ height: 6, width: 6 }} />
               </span>
             )}
           </>
         </div>
       </div>
       <div
-        className="w-4 h-4"
         onClick={() => handleRemoveFilter(col.title)}
         onMouseEnter={() =>
           setIconToggle((prev) => ({

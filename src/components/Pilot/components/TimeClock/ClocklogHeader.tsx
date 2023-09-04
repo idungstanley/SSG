@@ -54,7 +54,7 @@ export function ClockLogHeader({ handleShowLogs, showLogs, handleFilters, meMode
           className={`p-1 rounded-sm bg-alsoit-gray-50 cursor-pointer ${meMode && 'bg-alsoit-purple-50'}`}
           onClick={() => handleFilters('me', currentUserId as string)}
         >
-          <Me active={false} />
+          <Me active={meMode} />
         </div>
         <div
           className={`relative p-1 rounded-sm bg-alsoit-gray-50 cursor-pointer ${assigneeId && 'bg-alsoit-purple-50'}`}
