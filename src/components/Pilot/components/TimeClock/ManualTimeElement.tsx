@@ -9,15 +9,19 @@ import { VerticalScroll } from '../../../ScrollableContainer/VerticalScroll';
 import ArrowDownFilled from '../../../../assets/icons/ArrowDownFilled';
 import { parseAndUpdateTime } from '../../../../utils/TimerDuration';
 import { createManualTimeEntry } from '../../../../features/task/taskService';
+import { PoundsIcon } from '../../../../assets/icons/PoundsIcon';
+import TagIcon from '../../../../assets/icons/TagIcon';
 
 interface Props {
   activeTrackers: IEntries[] | undefined;
 }
 
 export function ManualTimeElement({ activeTrackers }: Props) {
-  const [value, setValue] = useState<{ start?: string; end?: string }>({
+  const [value, setValue] = useState<{ start?: string; end?: string; description?: string; isBillable?: 0 | 1 }>({
     start: '00:00',
-    end: '00:00'
+    end: '00:00',
+    description: '',
+    isBillable: 0
   });
   const [dropped, setDropped] = useState<{ container: boolean; start: boolean; end: boolean }>({
     container: false,
@@ -40,12 +44,14 @@ export function ManualTimeElement({ activeTrackers }: Props) {
       end_date: parseAndUpdateTime(value.end),
       start_date: parseAndUpdateTime(value.start),
       id: activeItemId,
-      type: activeItemType
+      type: activeItemType,
+      description: value.description,
+      isBillable: value.isBillable === 1 ? true : false
     });
   };
 
   useEffect(() => {
-    if (isSuccess) setValue({ end: '00:00', start: '00:00' });
+    if (isSuccess) setValue({ end: '00:00', start: '00:00', description: '' });
   }, [isSuccess]);
 
   return (
@@ -58,7 +64,9 @@ export function ManualTimeElement({ activeTrackers }: Props) {
         />
         <input
           type="text"
+          name="description"
           placeholder="Description"
+          onChange={handleChange}
           className="w-11/12 px-2 py-0.5 mx-auto rounded-lg text-alsoit-text-md"
         />
       </div>
@@ -77,43 +85,49 @@ export function ManualTimeElement({ activeTrackers }: Props) {
               <span className="text-alsoit-text-md uppercase">Start time</span>
               <input
                 onChange={handleChange}
-                onClick={() => (
-                  <TimeDropDown
-                    setValue={setValue}
-                    timeArr={createDynamicTimeComponent(timeInterval, timezone)}
-                    value={value.start}
-                    type="start"
-                  />
-                )}
+                onClick={() => setDropped((prev) => ({ ...prev, start: !prev.start }))}
                 name="start"
                 value={value.start}
                 type="text"
                 className="border-none px-1 py-0.5 text-center text-alsoit-text-md bg-white rounded-md w-full"
               />
+
+              {dropped.start && (
+                <TimeDropDown
+                  setValue={setValue}
+                  timeArr={createDynamicTimeComponent(timeInterval, timezone)}
+                  value={value.start}
+                  type="start"
+                  closeModal={() => setDropped((prev) => ({ ...prev, start: false }))}
+                />
+              )}
             </div>
             {/* End time Entry */}
             <div className="flex flex-col space-y-1 items-center w-20">
               <span className="text-alsoit-text-md uppercase">end time</span>
               <input
                 onChange={handleChange}
-                onClickCapture={() => (
-                  <TimeDropDown
-                    setValue={setValue}
-                    timeArr={createDynamicTimeComponent(timeInterval, timezone)}
-                    value={value.end}
-                    type="end"
-                  />
-                )}
+                onClick={() => setDropped((prev) => ({ ...prev, end: !prev.end }))}
                 name="end"
                 value={value.end}
                 type="text"
                 className="border-none px-1 py-0.5 text-center text-alsoit-text-md bg-white rounded-md w-full"
               />
+
+              {dropped.end && (
+                <TimeDropDown
+                  setValue={setValue}
+                  timeArr={createDynamicTimeComponent(timeInterval, timezone)}
+                  value={value.end}
+                  closeModal={() => setDropped((prev) => ({ ...prev, end: false }))}
+                  type="end"
+                />
+              )}
             </div>
             {/* Action Buttons */}
             <div className="flex space-x-2 items-baseline mt-5 pl-5">
               <button
-                onClick={() => setValue({ end: '00:00', start: '00:00' })}
+                onClick={() => setValue({ end: '00:00', start: '00:00', description: '' })}
                 className="bg-alsoit-gray-75 py-0.5 px-2.5 rounded-md text-alsoit-gray-50"
               >
                 Reset
@@ -127,6 +141,21 @@ export function ManualTimeElement({ activeTrackers }: Props) {
       </div>
       <div className="flex justify-between">
         <ActiveUsersTimer activeTrackers={activeTrackers} />
+        <div className="flex items-center">
+          <div
+            onClick={() =>
+              value.isBillable === 0
+                ? setValue((prev) => ({ ...prev, isBillable: 1 }))
+                : setValue((prev) => ({ ...prev, isBillable: 0 }))
+            }
+            className="flex space-x-0.5 p-0.5 bg-white rounded-full"
+          >
+            <PoundsIcon active={value.isBillable === 1 && true} />
+          </div>
+          <span className="flex items-center justify-center">
+            <TagIcon />
+          </span>
+        </div>
       </div>
     </div>
   );
@@ -142,12 +171,16 @@ interface TimeDropDownProps {
     }>
   >;
   type: string;
+  closeModal: () => void;
 }
 
-function TimeDropDown({ value, timeArr, setValue, type }: TimeDropDownProps) {
+function TimeDropDown({ value, timeArr, setValue, type, closeModal }: TimeDropDownProps) {
   const listRef = useRef<HTMLUListElement>(null);
+  const modalRef = useRef<HTMLDivElement>(null);
 
-  const nearestTime = value || findNearestTime(dayjs(), timeArr);
+  const timeValue = value !== '00:00' && value;
+
+  const nearestTime = timeValue || findNearestTime(dayjs(), timeArr);
 
   const [activeTime, setActiveTime] = useState<string>(nearestTime);
 
@@ -157,6 +190,13 @@ function TimeDropDown({ value, timeArr, setValue, type }: TimeDropDownProps) {
   };
 
   useEffect(() => {
+    //  close the modal on click away
+    const handleCliskAway = (e: MouseEvent) => {
+      if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
+        closeModal();
+      }
+    };
+
     // Scroll to show the active item
     if (listRef.current && activeTime) {
       const activeElement = listRef.current.querySelector(`li[data-value="${activeTime}"]`);
@@ -164,10 +204,14 @@ function TimeDropDown({ value, timeArr, setValue, type }: TimeDropDownProps) {
         activeElement.scrollIntoView({ block: 'center', inline: 'nearest' });
       }
     }
+
+    document.addEventListener('mousedown', handleCliskAway);
+
+    return () => document.removeEventListener('mousedown', handleCliskAway);
   }, [activeTime]);
 
   return (
-    <div className="flex flex-col space-y-2 absolute top-10 z-30 bg-alsoit-gray-50 h-56 w-44">
+    <div className="flex flex-col space-y-2 absolute top-0 shadow z-30 bg-alsoit-gray-50 h-56 w-44" ref={modalRef}>
       <VerticalScroll>
         <ul className="flex flex-col space-x-1.5" ref={listRef}>
           {timeArr.map((item, index) => (
