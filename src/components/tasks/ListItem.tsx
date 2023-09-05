@@ -206,6 +206,7 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
         <div className="flex items-center gap-1">
           {list.tasks_count > 0 && (
             <InteractiveTooltip
+              dependency={tooltipItems?.length}
               content={
                 <ul className="space-y-2 w-28">
                   <span className="flex items-center justify-between cursor-pointer hover:text-blue-500">

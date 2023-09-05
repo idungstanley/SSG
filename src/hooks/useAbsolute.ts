@@ -16,7 +16,8 @@ export interface Cords {
  */
 export function useAbsolute<T>(
   update: T,
-  blockHeight: number
+  blockHeight: number,
+  position?: string
 ): { cords: Cords; relativeRef: React.RefObject<HTMLDivElement> } {
   const RELATIVE_HEIGHT = 20;
 
@@ -33,11 +34,12 @@ export function useAbsolute<T>(
       const { x, y } = relativeRef.current.getBoundingClientRect();
 
       const xCord = x + RELATIVE_HEIGHT;
-      const yCord = isOverflowBottom(y)
-        ? window.innerHeight - blockHeight - RELATIVE_HEIGHT
-        : isOverflowTop(y)
-        ? RELATIVE_HEIGHT
-        : y + RELATIVE_HEIGHT;
+      const yCord =
+        isOverflowBottom(y) || position === 'bottom'
+          ? window.innerHeight - blockHeight - RELATIVE_HEIGHT
+          : isOverflowTop(y)
+          ? RELATIVE_HEIGHT
+          : y + RELATIVE_HEIGHT;
 
       setCords({ top: yCord, left: xCord });
     }
