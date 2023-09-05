@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import Page from '../../components/Page';
 import { UseGetHubDetails } from '../../features/hubs/hubService';
-import { UseGetFullTaskList } from '../../features/task/taskService';
+import { UseGetFullTaskList, UseUpdateTaskViewSettings } from '../../features/task/taskService';
 import { setActiveItem } from '../../features/workspace/workspaceSlice';
 import ActiveHub from '../../layout/components/MainLayout/extendedNavigation/ActiveParents/ActiveHub';
 import AdditionalHeader from '../../layout/components/MainLayout/Header/AdditionHeader';
@@ -17,17 +17,25 @@ import { VerticalScroll } from '../../components/ScrollableContainer/VerticalScr
 import { GroupHorizontalScroll } from '../../components/ScrollableContainer/GroupHorizontalScroll';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
 import { setIsTasksUpdated, setTasks } from '../../features/task/taskSlice';
+import { IHubDetailRes, ItaskViews } from '../../features/hubs/hubs.interfaces';
 
 export default function HubPage() {
   const dispatch = useAppDispatch();
   const { hubId, subhubId, taskId } = useParams();
 
   const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
-  const { tasks: tasksStore, isTasksUpdated } = useAppSelector((state) => state.task);
+  const { tasks: tasksStore, isTasksUpdated, saveSetting } = useAppSelector((state) => state.task);
 
   const containerRef = useRef<HTMLDivElement>(null);
 
   const { data: hub } = UseGetHubDetails({ activeItemId: hubId, activeItemType: EntityType.hub });
+
+  const task_views_id = hub?.data.hub.task_views.length ? hub?.data.hub.task_views?.[0].id : '';
+
+  const { isSuccess } = UseUpdateTaskViewSettings({
+    task_views_id,
+    taskDate: saveSetting as { [key: string]: boolean }
+  });
 
   // set entity name
   useEffect(() => {

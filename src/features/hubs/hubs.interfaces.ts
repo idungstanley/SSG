@@ -17,6 +17,16 @@ export interface IHub {
   description: string;
 }
 
+export interface ItaskViews {
+  created_at: string;
+  id: string;
+  is_required: number;
+  name: string;
+  team_member_id: null;
+  type: string;
+  updated_at: string;
+  view_settings: null | [{ [key: string]: boolean }];
+}
 export interface IHubDetails {
   id: string;
   name: string;
@@ -34,6 +44,7 @@ export interface IHubDetails {
   tags?: [];
   status: Status;
   priority?: string | null | undefined;
+  task_views: ItaskViews[];
   task_statuses: ITask_statuses[];
   custom_fields: IField[];
 }

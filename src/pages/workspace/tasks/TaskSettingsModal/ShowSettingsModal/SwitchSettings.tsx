@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import {
   getCompactView,
@@ -5,7 +6,8 @@ import {
   getSplitSubTask,
   getTaskUpperCase,
   getVerticalGrid,
-  getVerticalGridlinesTask
+  getVerticalGridlinesTask,
+  setSaveSetting
 } from '../../../../../features/task/taskSlice';
 
 export function useSwitchSettings() {

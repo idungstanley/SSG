@@ -135,6 +135,7 @@ interface TaskState {
   hideTask: listColumnProps[];
   currentTaskId: string | null;
   selectedTasksArray: string[];
+  saveSetting: { [key: string]: boolean } | null;
   comfortableView: boolean;
   comfortableViewWrap: boolean;
   verticalGrid: boolean;
@@ -147,6 +148,8 @@ interface TaskState {
   verticalGridlinesTask: boolean;
   splitSubTask: boolean;
   CompactViewWrap: boolean;
+  triggerSaveSettings: boolean;
+  triggerSaveSettingsModal: boolean;
   meMode: boolean;
   showTaskNavigation: boolean;
   addNewTaskItem: boolean;
@@ -222,9 +225,12 @@ const initialState: TaskState = {
   meMode: false,
   showNewTaskId: '',
   singleLineView: true,
+  saveSetting: null,
   selectedTasksArray: [],
   verticalGrid: false,
   taskUpperCase: false,
+  triggerSaveSettings: false,
+  triggerSaveSettingsModal: false,
   toggleAllSubtask: false,
   verticalGridlinesTask: true,
   splitSubTask: false,
@@ -322,6 +328,9 @@ export const taskSlice = createSlice({
     setSearchValue(state, action: PayloadAction<string>) {
       state.searchValue = action.payload;
     },
+    setSaveSetting(state, action: PayloadAction<{ [key: string]: boolean } | null>) {
+      state.saveSetting = action.payload;
+    },
     setSelectedIndex(state, action: PayloadAction<number | null>) {
       state.selectedIndex = action.payload;
     },
@@ -378,6 +387,12 @@ export const taskSlice = createSlice({
     },
     getComfortableView(state, action: PayloadAction<boolean>) {
       state.comfortableView = action.payload;
+    },
+    setTriggerSaveSettings(state, action: PayloadAction<boolean>) {
+      state.triggerSaveSettings = action.payload;
+    },
+    setTriggerSaveSettingsModal(state, action: PayloadAction<boolean>) {
+      state.triggerSaveSettingsModal = action.payload;
     },
     setDragToBecomeSubTask(state, action: PayloadAction<boolean>) {
       state.dragToBecomeSubTask = action.payload;
@@ -573,6 +588,7 @@ export const {
   setSelectedIndex,
   setSelectedIndexStatus,
   setSelectedListIds,
+  setSaveSetting,
   setSelectedListId,
   setMeMode,
   setShowTaskNavigation,
@@ -585,12 +601,14 @@ export const {
   setSelectedTasksArray,
   setAddNewTaskItem,
   setCloseTaskListView,
+  setTriggerSaveSettings,
   setToggleAssignCurrentTaskId,
   setCurrentParentTaskId,
   setGetSubTaskId,
   hideTaskColumns,
   setSubtaskDefaultStatusId,
   setUpdateEntries,
+  setTriggerSaveSettingsModal,
   setUpdateStatusModalId,
   setCurrentTaskStatusId,
   setCurrentTaskPriorityId,
