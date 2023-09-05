@@ -67,8 +67,6 @@ export default function InteractiveTooltip({
     };
   }, [elementRef, dependency]);
 
-  console.log(elementHeight);
-
   const { updateCords } = useAppSelector((state) => state.task);
   const { cords, relativeRef } = useAbsolute(updateCords, elementHeight);
 
