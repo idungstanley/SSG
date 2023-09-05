@@ -1,18 +1,9 @@
-import { Dispatch, SetStateAction, useEffect } from 'react';
+import { useEffect } from 'react';
 import { cl } from '../../../../../utils';
 import ToastClose from '../../../../../assets/icons/ToastClose';
 import toast from 'react-hot-toast';
-import { EndTimeEntriesService, UseSaveTaskFilters, useSaveData } from '../../../../../features/task/taskService';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
-import { setTimeZone } from '../../../../../features/settings/user/userSettingsSlice';
-import {
-  setTimerInterval,
-  setTimerStatus,
-  setTriggerSaveSettings,
-  setTriggerSaveSettingsModal,
-  setUpdateTimerDuration
-} from '../../../../../features/task/taskSlice';
-import { Header } from '../../../../../components/Pilot/components/TimeClock/ClockLog';
+import { setTriggerSaveSettings, setTriggerSaveSettingsModal } from '../../../../../features/task/taskSlice';
 import { BiCommand } from 'react-icons/bi';
 import { IoReturnDownBack } from 'react-icons/io5';
 
@@ -20,9 +11,6 @@ interface ToastProps {
   title: string;
   showClose?: boolean;
   toastId?: string;
-  extended?: 'taskFilter' | 'timeZone' | 'calendar' | 'clockReminder' | 'timeSort' | 'timeLogColumns';
-  extendedFn?: Dispatch<SetStateAction<string | undefined>>;
-  extendedState?: string | Header[];
 }
 function SaveSettingsModal({ title, showClose = true, toastId }: ToastProps) {
   const dispatch = useAppDispatch();
