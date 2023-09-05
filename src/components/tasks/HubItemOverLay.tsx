@@ -13,7 +13,7 @@ interface TaskItemProps {
     path?: string | null;
     color?: string | null;
     parent_id?: string | null;
-    has_descendants?: number;
+    has_descendants: boolean;
   };
   type: string;
 }

@@ -29,7 +29,7 @@ export function AssigneeSplitSubtasks({ parentId }: IAssigneeSplitSubtasksProps)
   const { data } = useGetTeamMembers({ page: 1, query: '' });
 
   const currentAssignees =
-    (subtasksfilters[parentId]?.fields.find((i) => i.key === ASSIGNEES)?.values as IAssigneesItem[]) ?? [];
+    (subtasksfilters[parentId]?.fields?.find((i) => i.key === ASSIGNEES)?.values as IAssigneesItem[]) ?? [];
 
   const members = data?.data.team_members ?? [];
 
@@ -86,7 +86,7 @@ export function AssigneeSplitSubtasks({ parentId }: IAssigneeSplitSubtasksProps)
   const onToggleMe = () => {
     const me = { id: currentMemberId, value: currentMemberName };
 
-    const isAssigneesInFilters = subtasksfilters[parentId]?.fields.find((i) => i.key === ASSIGNEES);
+    const isAssigneesInFilters = subtasksfilters[parentId]?.fields?.find((i) => i.key === ASSIGNEES);
 
     if (isAssigneesInFilters) {
       const isMeInAssignees = (isAssigneesInFilters.values as IAssigneesItem[])
