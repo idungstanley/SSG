@@ -4,13 +4,13 @@ import { useUpdateEntityCustomFieldValue } from '../../../../../../features/list
 import Copy from '../../../../../../assets/icons/Copy';
 import { cl } from '../../../../../../utils';
 
-interface DropdownFieldWrapperProps {
+interface TextFielProps {
   taskCustomFields?: ICustomField;
   taskId: string;
   fieldId: string;
 }
 
-function TextField({ taskCustomFields, taskId, fieldId }: DropdownFieldWrapperProps) {
+function TextField({ taskCustomFields, taskId, fieldId }: TextFielProps) {
   // console.log(taskCustomFields);
   const activeValue = taskCustomFields?.values[0].value ? taskCustomFields?.values[0].value : '-';
   const [currentValue, setCurrentValue] = useState<string>(activeValue);
