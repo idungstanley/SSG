@@ -41,6 +41,7 @@ interface TaskItemProps {
     color?: string | null;
     parent_id?: string | null;
     children?: Hub[];
+    has_descendants: boolean;
     wallets?: Wallet[];
     lists?: List[];
   };
@@ -208,7 +209,7 @@ export default function HubItem({
             role="button"
             className="flex truncate items-center py-1.5 mt-0.5 justify-start overflow-y-hidden text-sm"
           >
-            {item?.wallets?.length || item?.lists?.length ? (
+            {item?.wallets?.length || item?.lists?.length || item.has_descendants ? (
               <div>
                 {showChildren ? (
                   <span className="flex flex-col">

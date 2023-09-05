@@ -1,15 +1,18 @@
 import { useState } from 'react';
 import { EllipsisHorizontalIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import { useRef } from 'react';
-import { useAppDispatch } from '../../../../app/hooks';
-import { setSearchValue } from '../../../../features/task/taskSlice';
+import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
+import { setSearchValue, setSubtasksFilters } from '../../../../features/task/taskSlice';
 import { useThrottle } from '../../../../hooks/useThrottle';
 
 interface ISearchProps {
   isSplitSubtasks?: boolean;
+  parentId?: string;
 }
-export function Search({ isSplitSubtasks }: ISearchProps) {
+export function Search({ isSplitSubtasks, parentId }: ISearchProps) {
   const dispatch = useAppDispatch();
+
+  const { subtasksfilters } = useAppSelector((state) => state.task);
 
   const [showInput, setShowInput] = useState(false);
 
@@ -18,7 +21,18 @@ export function Search({ isSplitSubtasks }: ISearchProps) {
   const onChange = useThrottle(() => {
     if (inputRef.current) {
       const { value } = inputRef.current;
-      dispatch(setSearchValue(value));
+      if (isSplitSubtasks) {
+        const searchSubtasksValue = {
+          ...subtasksfilters,
+          [parentId as string]: {
+            ...subtasksfilters[parentId as string],
+            search: value
+          }
+        };
+        dispatch(setSubtasksFilters(searchSubtasksValue));
+      } else {
+        dispatch(setSearchValue(value));
+      }
     }
   }, 500);
 

@@ -61,7 +61,7 @@ export default function FilterByAssigneeModalSplitSubtask({
   );
 
   const currentAssignees = !isMeMode
-    ? (subtasksfilters[parentId]?.fields.find((i) => i.key === ASSIGNEES)?.values as IAssigneesItem[]) ?? []
+    ? (subtasksfilters[parentId]?.fields?.find((i) => i.key === ASSIGNEES)?.values as IAssigneesItem[]) ?? []
     : [];
 
   const isAssignee = currentAssignees.length ? true : false;
@@ -108,7 +108,7 @@ export default function FilterByAssigneeModalSplitSubtask({
   };
 
   const onClickMember = (memberId: string, memberName: string) => {
-    const isAssigneesInFilters = subtasksfilters[parentId]?.fields.find((i) => i.key === ASSIGNEES);
+    const isAssigneesInFilters = subtasksfilters[parentId]?.fields?.find((i) => i.key === ASSIGNEES);
 
     const newMemberObj = {
       value: memberName,
