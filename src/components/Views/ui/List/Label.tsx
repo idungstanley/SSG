@@ -5,21 +5,31 @@ import ListAddModal from './ListAddModal';
 import CollapseIcon from '../collapseIcon/CollapseIcon';
 import { IListColor } from './List';
 import { FilterDropdown } from '../../../TasksHeader/ui/Filter/FilterDropdown';
-import { Assignee } from '../../../TasksHeader/ui/Assignee/Assignee';
 import { Search } from '../../../TasksHeader/ui/Search/Search';
 import { Sort } from '../../../TasksHeader/ui/Sort/Sort';
+import { AssigneeSplitSubtasks } from '../../../TasksHeader/ui/Assignee/AssigneeSplitSubtasks';
 
 interface LabelProps {
+  showTable: boolean;
   listName?: string;
   hubName?: string;
-  onClickChevron: () => void;
-  showTable: boolean;
   ListColor?: IListColor;
   tasks?: Task[];
   isSplitSubtasks?: boolean;
+  parentId?: string;
+  onClickChevron: () => void;
 }
 
-export function Label({ listName, onClickChevron, hubName, showTable, tasks, ListColor, isSplitSubtasks }: LabelProps) {
+export function Label({
+  showTable,
+  listName,
+  hubName,
+  tasks,
+  ListColor,
+  isSplitSubtasks,
+  parentId,
+  onClickChevron
+}: LabelProps) {
   const dispatch = useAppDispatch();
 
   const { selectedTasksArray } = useAppSelector((state) => state.task);
@@ -50,7 +60,7 @@ export function Label({ listName, onClickChevron, hubName, showTable, tasks, Lis
         >
           <div className="flex space-x-2 items-center pl-2 text-sm text-white  w-fit">
             <CollapseIcon color="#A854F7" active={showTable} onToggle={onClickChevron} hoverBg="white" />
-            <h1 className="">{listName ?? 'Loading...'}</h1>
+            <h1>{listName ?? 'Loading...'}</h1>
           </div>
           <button className="rounded-sm bg-gray-200 flex justify-center items-center h-6">
             <ListAddModal handleCheckedGroupTasks={handleCheckedGroupTasks} ListColor={ListColor} />
@@ -63,8 +73,8 @@ export function Label({ listName, onClickChevron, hubName, showTable, tasks, Lis
         <div className="flex items-center justify-end">
           <Sort isSplitSubtasks={true} />
           <FilterDropdown isSplitSubtasks={true} />
-          <Assignee isSplitSubtasks={true} />
-          <Search isSplitSubtasks={true} />
+          <AssigneeSplitSubtasks parentId={parentId as string} />
+          <Search isSplitSubtasks={true} parentId={parentId as string} />
         </div>
       ) : null}
     </div>

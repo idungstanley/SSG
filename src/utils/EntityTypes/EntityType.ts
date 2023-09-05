@@ -4,6 +4,7 @@ const EntityType = {
   wallet: 'wallet',
   subWallet: 'subwallet',
   list: 'list',
-  task: 'task'
+  task: 'task',
+  subtask: 'subtask'
 };
 export { EntityType };

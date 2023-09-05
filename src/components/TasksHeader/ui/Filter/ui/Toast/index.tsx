@@ -81,7 +81,7 @@ function SaveFilterToast({ title, body, showClose = true, toastId, extended, ext
           )}
         >
           <div className="p-2 flex items-center justify-between w-full">
-            <div className="" style={{ width: '80%' }}>
+            <div style={{ width: '80%' }}>
               <div>
                 <p className="text-base font-semibold text-alsoit-gray-300 my-1">{title}</p>
                 {body != null && body !== '' && (

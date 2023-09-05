@@ -16,7 +16,9 @@ export default function MapsView() {
   const onUnMount = (): void => {
     mapRef.current = null;
   };
-  if (!isLoaded) return <div className="">Map Loading...</div>;
+
+  if (!isLoaded) return <div>Map Loading...</div>;
+
   return (
     <div className="App">
       <GoogleMap

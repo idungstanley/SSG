@@ -120,6 +120,7 @@ export type FiltersOption = 'and' | 'or';
 export interface FilterFieldsWithOption {
   fields: FilterWithId[];
   option: FiltersOption;
+  search?: string;
 }
 
 export interface FilterWithId {

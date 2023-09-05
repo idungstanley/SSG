@@ -35,15 +35,17 @@ const unassigned = {
 
 export default function FilterByAssigneeModal() {
   const dispatch = useAppDispatch();
-  const inputRef = useRef<HTMLInputElement>(null);
-  const [searchValue, setSearchValue] = useState<string>('');
+
   const {
     filters: { fields: filters },
     meMode
   } = useAppSelector((state) => state.task);
 
-  // Rest of the code...
+  const [searchValue, setSearchValue] = useState<string>('');
 
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  // Rest of the code...
   const { data } = useGetTeamMembers({ page: 1, query: '' });
   const members = data?.data.team_members ?? [];
   const allMembers = [unassigned, ...members];
@@ -89,7 +91,6 @@ export default function FilterByAssigneeModal() {
                 // return { ...filter, values: [] };
                 return { ...filter, values: [...newAssignees] };
               }
-
               return filter;
             })
           ])

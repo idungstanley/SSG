@@ -16,13 +16,13 @@ import SaveFilterToast from '../../Toast';
 interface ListBoxProps {
   values: FilterValue[] | Operator[] | string[] | Unit[];
   selected: FilterValue[] | Operator | string | Unit;
-  setSelected: (i: FilterValue[] | Operator | string) => void;
   showSearch?: boolean;
-  onSelectOrDeselectAll?: (data: Pick<onSelectOrDeselectAllProps, 'type'>) => void;
   controlledOptionsDisplay?: true;
-  onUndoChanges?: (i: FilterValue[]) => void;
   filterKey?: FilterKey;
   children?: ReactNode;
+  setSelected: (i: FilterValue[] | Operator | string) => void;
+  onSelectOrDeselectAll?: (data: Pick<onSelectOrDeselectAllProps, 'type'>) => void;
+  onUndoChanges?: (i: FilterValue[]) => void;
 }
 
 const DEFAULT_PREV_STATE = {
@@ -33,19 +33,20 @@ const DEFAULT_PREV_STATE = {
 export function ListBox({
   values,
   selected,
-  setSelected,
   showSearch,
-  onSelectOrDeselectAll,
   controlledOptionsDisplay,
   filterKey,
-  onUndoChanges,
-  children
+  children,
+  setSelected,
+  onSelectOrDeselectAll,
+  onUndoChanges
 }: ListBoxProps) {
   const [query, setQuery] = useState('');
   const [showOptions, setShowOptions] = useState(false);
-  const showSelectAll = !!onSelectOrDeselectAll;
   const [selectAll, setSelectAll] = useState<'select' | 'deselect'>('select');
   const [prevState, setPrevState] = useState<{ state: FilterValue[]; isSet: boolean }>(DEFAULT_PREV_STATE);
+
+  const showSelectAll = !!onSelectOrDeselectAll;
 
   // manage select and deselect values
   useEffect(() => {

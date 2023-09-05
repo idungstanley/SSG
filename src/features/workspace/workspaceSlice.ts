@@ -78,6 +78,7 @@ interface workspaceState {
   workSpaceSettings: WorkSpaceSettingsRes[] | undefined;
   workSpaceSettingsObj: WorkSpaceSettingsUpdateRes | undefined;
   draggableActiveStatusId: string | null;
+  isFavoritePinned: boolean;
 }
 
 const initialState: workspaceState = {
@@ -139,7 +140,8 @@ const initialState: workspaceState = {
   extendedBarOpenedEntitiesIds: [],
   workSpaceSettings: [],
   workSpaceSettingsObj: undefined,
-  draggableActiveStatusId: null
+  draggableActiveStatusId: null,
+  isFavoritePinned: false
 };
 
 export const wsSlice = createSlice({
@@ -154,6 +156,9 @@ export const wsSlice = createSlice({
     },
     setShowTreeInput(state, action: PayloadAction<boolean>) {
       state.showTreeInput = action.payload;
+    },
+    setIsFavoritePinned(state, action: PayloadAction<boolean>) {
+      state.isFavoritePinned = action.payload;
     },
     setIsManageStatus(state, action: PayloadAction<boolean>) {
       state.isManageStatus = action.payload;
@@ -413,6 +418,7 @@ export const {
   setExtendedBarOpenedEntitiesIds,
   setActiveStatusManagementTabId,
   setWorkSpaceSetting,
+  setIsFavoritePinned,
   setWorkSpaceSettingsObj,
   setDraggableActiveStatusId
 } = wsSlice.actions;

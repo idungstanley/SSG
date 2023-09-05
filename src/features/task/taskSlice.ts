@@ -126,6 +126,7 @@ interface entityForCustom {
 }
 interface TaskState {
   tasks: Record<string, ITaskFullList[]>;
+  subtasks: Record<string, ITaskFullList[]>;
   currentTaskIdForPilot: string | null;
   watchersData: string[];
   removeWatcherId: null | string;
@@ -157,7 +158,8 @@ interface TaskState {
   defaultSubtaskListId: null | string;
   selectedIndexStatus: string | null;
   selectedListIds: string[];
-  selectedListId: string;
+  selectedTaskParentId: string;
+  selectedTaskType: string;
   closeTaskListView: boolean;
   toggleAssignCurrentTaskId: string | null | undefined;
   currentParentTaskId: string | null;
@@ -198,6 +200,7 @@ interface TaskState {
   selectedDate: ISelectedDate | null;
   HistoryFilterMemory: IHistoryFilterMemory | null;
   filters: FilterFieldsWithOption;
+  subtasksfilters: Record<string, FilterFieldsWithOption>;
   statusId: string;
   currTaskListId: string;
   entityForCustom: entityForCustom;
@@ -211,6 +214,7 @@ interface TaskState {
 
 const initialState: TaskState = {
   tasks: {},
+  subtasks: {},
   currentTaskIdForPilot: null,
   watchersData: [],
   currTeamMemberId: null,
@@ -244,7 +248,8 @@ const initialState: TaskState = {
   defaultSubtaskListId: null,
   selectedIndexStatus: null,
   selectedListIds: [],
-  selectedListId: '',
+  selectedTaskParentId: '',
+  selectedTaskType: '',
   toggleAssignCurrentTaskId: null,
   currentParentTaskId: null,
   getSubTaskId: null,
@@ -281,6 +286,7 @@ const initialState: TaskState = {
     fields: [],
     option: DEFAULT_FILTERS_OPTION
   },
+  subtasksfilters: {},
   selectedDate: null,
   HistoryFilterMemory: null,
   statusId: '',
@@ -310,11 +316,17 @@ export const taskSlice = createSlice({
     setTasks(state, action: PayloadAction<Record<string, ITaskFullList[]>>) {
       state.tasks = action.payload;
     },
+    setSubtasks(state, action: PayloadAction<Record<string, ITaskFullList[]>>) {
+      state.subtasks = action.payload;
+    },
     setFilterFields(state, action: PayloadAction<FilterWithId[]>) {
       state.filters = { ...state.filters, fields: action.payload };
     },
     setFilterOption(state, action: PayloadAction<FiltersOption>) {
       state.filters = { ...state.filters, option: action.payload };
+    },
+    setSubtasksFilters(state, action: PayloadAction<Record<string, FilterFieldsWithOption>>) {
+      state.subtasksfilters = action.payload;
     },
     setAssigneeIds(state, action: PayloadAction<string[]>) {
       state.assigneeIds = action.payload;
@@ -346,8 +358,11 @@ export const taskSlice = createSlice({
     setSelectedListIds(state, action: PayloadAction<string[]>) {
       state.selectedListIds = action.payload;
     },
-    setSelectedListId(state, action: PayloadAction<string>) {
-      state.selectedListId = action.payload;
+    setSelectedTaskParentId(state, action: PayloadAction<string>) {
+      state.selectedTaskParentId = action.payload;
+    },
+    setSelectedTaskType(state, action: PayloadAction<string>) {
+      state.selectedTaskType = action.payload;
     },
     setSortType(state, action: PayloadAction<TaskKey>) {
       state.sortType = action.payload;
@@ -567,8 +582,10 @@ export const taskSlice = createSlice({
 
 export const {
   setTasks,
+  setSubtasks,
   setFilterFields,
   setFilterOption,
+  setSubtasksFilters,
   setAssigneeIds,
   setStatusId,
   setCurrTaskListId,
@@ -589,7 +606,8 @@ export const {
   setSelectedIndexStatus,
   setSelectedListIds,
   setSaveSetting,
-  setSelectedListId,
+  setSelectedTaskParentId,
+  setSelectedTaskType,
   setMeMode,
   setShowTaskNavigation,
   setShowNewTaskField,

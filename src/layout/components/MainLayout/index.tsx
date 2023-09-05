@@ -12,11 +12,12 @@ import { setMyWorkspacesSlideOverVisibility } from '../../../features/general/sl
 import { useEffect } from 'react';
 import DragContext from './DragContext/DragContext';
 import { Toaster } from 'react-hot-toast';
+import Favorites from '../../../pages/workspace/favorites';
 
 function MainLayout() {
   const location = useLocation();
   const navigate = useNavigate();
-  const { activeItemType, activeItemId } = useAppSelector((state) => state.workspace);
+  const { activeItemType, activeItemId, isFavoritePinned } = useAppSelector((state) => state.workspace);
   const { workSpaceId } = useParams();
   const { currentWorkspaceId } = useAppSelector((state) => state.auth);
   const user = useAppSelector(selectCurrentUser);
@@ -59,6 +60,7 @@ function MainLayout() {
     <div className={cl('h-full flex flex-col')}>
       <ProgressBar />
       {/* <TopMenu /> */}
+      {isFavoritePinned && <Favorites />}
       <Toaster position="bottom-left" />
       <DragContext>
         <div className="flex h-full">

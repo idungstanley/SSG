@@ -44,6 +44,7 @@ interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   onClose?: VoidFunction;
   isOver?: boolean;
   isSplitSubtask?: boolean;
+  isLastSubtaskLevel: boolean;
 }
 
 export function StickyCol({
@@ -60,6 +61,7 @@ export function StickyCol({
   paddingLeft = 0,
   dragElement,
   isSplitSubtask,
+  isLastSubtaskLevel,
   ...props
 }: ColProps) {
   const dispatch = useAppDispatch();
@@ -347,7 +349,7 @@ export function StickyCol({
             </div>
             <div className="flex flex-col flex-grow items-start justify-start pl-2 space-y-1">
               <div
-                className=" flex w-full mt-1 items-center text-left"
+                className="flex w-full mt-1 items-center text-left"
                 onKeyDown={(e) => (e.key === 'Enter' ? handleEditTask(e, task.id) : null)}
                 ref={droppabbleRef}
               >
@@ -396,7 +398,7 @@ export function StickyCol({
                 </div>
                 {/* non default badges here */}
                 <div onClick={(e) => e.stopPropagation()} className="pl-3 flex flex-grow items-center justify-between">
-                  <Badges task={task} />
+                  {!isLastSubtaskLevel ? <Badges task={task} /> : null}
                   {/*  default badges here */}
                   {children}
                 </div>
@@ -432,7 +434,7 @@ export function StickyCol({
             <div className="absolute flex ml-2 space-x-1 -mt-10">
               <ToolTip title="Cancel">
                 <div className="border rounded-md p-1" style={{ borderColor: '#FFE7E7' }}>
-                  <ImCancelCircle onClick={onClose} className="" />
+                  <ImCancelCircle onClick={onClose} />
                 </div>
               </ToolTip>
               <button

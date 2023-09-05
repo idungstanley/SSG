@@ -135,7 +135,7 @@ export function Table({ heads, data, label, listName, customFields, ListColor }:
         statusObj?.is_default == 1 ? statusObj?.is_default : statusObj.position == minPosition
     );
 
-    if (listId == defaultSubtaskListId) dispatch(setSubtaskDefaultStatusId(defaultStatusObj?.id as string));
+    if (listId === defaultSubtaskListId) dispatch(setSubtaskDefaultStatusId(defaultStatusObj?.id as string));
   }, [listId, showNewTaskField, defaultSubtaskListId]);
 
   const removeListeners = () => {
@@ -240,6 +240,7 @@ export function Table({ heads, data, label, listName, customFields, ListColor }:
                         task_status={statusId}
                         handleClose={handleClose}
                         customFields={customFields}
+                        level={0}
                       />
                     ) : null
                   )
@@ -266,7 +267,7 @@ export function Table({ heads, data, label, listName, customFields, ListColor }:
       {splitSubTaskMode && data.length ? (
         <>
           {data.map((item) => (
-            <SubtasksTable key={item.id} data={item} columns={columns} customFields={customFields} />
+            <SubtasksTable key={item.id} data={item} columns={columns} customFields={customFields} level={1} />
           ))}
         </>
       ) : null}

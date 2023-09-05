@@ -150,7 +150,7 @@ export default function History() {
                       <td className="text-xs">
                         <span>{duration.humanize()} ago</span>
                       </td>
-                      <td className="">
+                      <td>
                         <span className="text-xs">{time}</span>
                       </td>
                       {user && (

@@ -31,6 +31,7 @@ import { Hub, List, Wallet } from '../../pages/workspace/hubs/components/ActiveT
 import ActiveBarIdentification from './Component/ActiveBarIdentification';
 import ActiveBackground from './Component/ActiveBackground';
 import { useAbsolute } from '../../hooks/useAbsolute';
+import { IHub } from '../../features/hubs/hubs.interfaces';
 
 interface TaskItemProps {
   item: {
@@ -40,6 +41,7 @@ interface TaskItemProps {
     color?: string | null;
     parent_id?: string | null;
     children?: Hub[];
+    has_descendants: boolean;
     wallets?: Wallet[];
     lists?: List[];
   };
@@ -49,7 +51,7 @@ interface TaskItemProps {
   zNumber?: string;
   isExtendedBar?: boolean;
   handleClick: (id: string) => void;
-  handleLocation: (id: string, name: string) => void;
+  handleLocation: (id: string, name: string, item: IHub) => void;
 }
 export default function HubItem({
   item,
@@ -181,7 +183,11 @@ export default function HubItem({
         }`}
         ref={setNodeRef}
         tabIndex={0}
-        onClick={showSidebar || isExtendedBar ? () => handleClick(item.id) : () => handleLocation(item.id, item.name)}
+        onClick={
+          showSidebar || isExtendedBar
+            ? () => handleClick(item.id)
+            : () => handleLocation(item.id, item.name, item as Hub)
+        }
       >
         <div
           className="relative flex items-center justify-between"
@@ -203,7 +209,7 @@ export default function HubItem({
             role="button"
             className="flex truncate items-center py-1.5 mt-0.5 justify-start overflow-y-hidden text-sm"
           >
-            {item?.wallets?.length || item?.lists?.length ? (
+            {item?.wallets?.length || item?.lists?.length || item.has_descendants ? (
               <div>
                 {showChildren ? (
                   <span className="flex flex-col">
@@ -245,7 +251,7 @@ export default function HubItem({
                       verticalAlign: 'baseline',
                       letterSpacing: '0.28px'
                     }}
-                    onClick={() => handleLocation(item.id, item.name)}
+                    onClick={() => handleLocation(item.id, item.name, item as Hub)}
                   >
                     {item.name}
                   </p>

@@ -11,6 +11,7 @@ import { MdFolder } from 'react-icons/md';
 import { FiList } from 'react-icons/fi';
 import { getInitials } from '../../../app/helpers';
 import { EntityType } from '../../../utils/EntityTypes/EntityType';
+import { generateViewsUrl } from '../../../utils/generateViewsUrl';
 
 interface nameType {
   item: {
@@ -26,6 +27,7 @@ function Favourite({ item }: nameType) {
   const navigate = useNavigate();
 
   const { showFavEditInput, triggerFavUpdate, favUpdateName } = useAppSelector((state) => state.hub);
+  const { currentWorkspaceId } = useAppSelector((state) => state.auth);
 
   const [favName, setFavName] = useState<string>(item.name);
 
@@ -36,6 +38,7 @@ function Favourite({ item }: nameType) {
   });
 
   const handleLocation = () => {
+    const viewsUrl = generateViewsUrl(item.model_id, item) as string;
     dispatch(
       setActiveItem({
         activeItemId: item.model_id,
@@ -45,7 +48,10 @@ function Favourite({ item }: nameType) {
     );
     dispatch(setShowPilot(true));
     dispatch(setActiveTabId(4));
-    navigate(`/${item.model_type}/${item.model_id}`);
+
+    navigate(viewsUrl, {
+      replace: true
+    });
   };
 
   const handleUpdate = (e: { preventDefault: () => void }) => {
@@ -55,9 +61,9 @@ function Favourite({ item }: nameType) {
   };
 
   return (
-    <div className="hover:bg-gray-100 py-0.5 h-6 px-2 group">
-      <div className="w-full flex justify-between  items-center  relative">
-        <div className="flex">
+    <div className="py-0.5 h-6 px-1 group">
+      <div className="relative flex items-center justify-between w-full">
+        <div className="flex items-center">
           {item.model_type === EntityType.hub && (
             <AvatarWithInitials
               initials={getInitials(item.name)}
@@ -78,7 +84,7 @@ function Favourite({ item }: nameType) {
               <input
                 autoFocus
                 style={{ fontSize: '10px' }}
-                className="h-6 outline-none border-none focus:border-none focus:outline-none rounded"
+                className="h-6 border-none rounded outline-none focus:border-none focus:outline-none"
                 type="text"
                 onChange={(e) => setFavName(e.target.value)}
                 value={favName}
@@ -86,7 +92,7 @@ function Favourite({ item }: nameType) {
             </form>
           ) : (
             <h4
-              className="tracking-wider capitalize truncate cursor-pointer mx-1"
+              className="mx-1 tracking-wider capitalize truncate cursor-pointer hover:text-alsoit-purple-300"
               style={{ fontSize: '10px' }}
               onClick={() => handleLocation()}
             >
@@ -94,7 +100,7 @@ function Favourite({ item }: nameType) {
             </h4>
           )}
         </div>
-        <div className="">
+        <div className="flex items-center">
           <FavModal id={item.id} />
         </div>
       </div>

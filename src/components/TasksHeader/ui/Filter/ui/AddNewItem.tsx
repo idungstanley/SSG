@@ -4,7 +4,7 @@ import { FilterKey, FilterOption } from '../types/filters';
 import { ListBox } from './ListBox';
 import { DeleteItem } from './FilterItem/DeleteItem';
 import { Label } from './FilterItem/Label';
-import { setFilterFields } from '../../../../../features/task/taskSlice';
+import { setFilterFields, setSubtasksFilters } from '../../../../../features/task/taskSlice';
 
 interface AddNewItemProps {
   onHideNewItem: VoidFunction;
@@ -12,13 +12,31 @@ interface AddNewItemProps {
 }
 
 export function AddNewItem({ onHideNewItem, initialFilters }: AddNewItemProps) {
+  const dispatch = useAppDispatch();
+
+  const { selectedTaskParentId, splitSubTask: splitMode, subtasksfilters } = useAppSelector((state) => state.task);
+
   const {
     filters: { fields: filters }
   } = useAppSelector((state) => state.task);
-  const dispatch = useAppDispatch();
+
+  const createUpdatedFilter = (key: FilterKey) => {
+    const oldField = subtasksfilters[selectedTaskParentId]?.fields;
+    return {
+      ...subtasksfilters,
+      [selectedTaskParentId]: {
+        ...subtasksfilters[selectedTaskParentId],
+        fields: oldField?.length ? [...oldField, generateFilter(key)] : [generateFilter(key)]
+      }
+    };
+  };
 
   const onAdd = (key: FilterKey) => {
-    dispatch(setFilterFields([...filters, generateFilter(key)]));
+    if (splitMode) {
+      dispatch(setSubtasksFilters(createUpdatedFilter(key)));
+    } else {
+      dispatch(setFilterFields([...filters, generateFilter(key)]));
+    }
     onHideNewItem();
   };
 

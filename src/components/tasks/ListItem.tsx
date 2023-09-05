@@ -27,6 +27,7 @@ import { EntityType } from '../../utils/EntityTypes/EntityType';
 import ToolTip from '../Tooltip/Tooltip';
 import ActiveBarIdentification from './Component/ActiveBarIdentification';
 import { useAbsolute } from '../../hooks/useAbsolute';
+import { generateViewsUrl } from '../../utils/generateViewsUrl';
 
 interface ListItemProps {
   list: IList;
@@ -43,7 +44,6 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
   const { listId } = useParams();
   const queryClient = useQueryClient();
 
-  const { currentWorkspaceId } = useAppSelector((state) => state.auth);
   const { activeItemId } = useAppSelector((state) => state.workspace);
   const { showMenuDropdown } = useAppSelector((state) => state.hub);
   const { paletteDropdown, lightBaseColor, baseColor } = useAppSelector((state) => state.account);
@@ -69,6 +69,7 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
 
   // function for the list shape selection
   const handleListLocation = (id: string, name: string) => {
+    const viewsUrl = generateViewsUrl(id, list, EntityType.list) as string;
     dispatch(
       setActiveItem({
         activeItemType: EntityType.list,
@@ -76,7 +77,9 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
         activeItemName: name
       })
     );
-    navigate(`/${currentWorkspaceId}/tasks/l/${id}`);
+    navigate(viewsUrl, {
+      replace: true
+    });
   };
 
   const handleSelection = (shape: string) => {

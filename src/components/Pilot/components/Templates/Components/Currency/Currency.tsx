@@ -1,25 +1,28 @@
 import { Menu, Transition } from '@headlessui/react';
 import { Fragment } from 'react';
 import ArrowRight from '../../../../../../assets/icons/ArrowRight';
-import RoundedCheckbox from '../../../../../Checkbox/RoundedCheckbox';
 import Currency from '../../../../../../assets/branding/Currency';
+import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
+import { setNewCustomPropertyDetails } from '../../../../../../features/task/taskSlice';
 
 const items = [
   {
     id: 1,
-    name: 'Money',
+    name: 'Currency',
     onclick: () => null
   }
 ];
 
 export default function CurrencyOptions() {
+  const dispatch = useAppDispatch();
+  const { newCustomPropertyDetails } = useAppSelector((state) => state.task);
   return (
     <Menu as="div" className="relative inline-block text-left w-full">
       <div className="w-full">
         <Menu.Button className="inline-flex justify-center rounded-md p-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 w-full">
           <div className="w-full flex items-center justify-between h-full">
             <div className="flex items-center">
-              <span className="mx-1">
+              <span className="mx-1 w-5 h-5">
                 <Currency />
               </span>
               <p className="text-alsoit-gray-300-lg text-alsoit-text-lg font-semibold">Currency</p>
@@ -47,16 +50,13 @@ export default function CurrencyOptions() {
               <Menu.Item key={item.name}>
                 {({ active }) => (
                   <button
-                    // onClick={item.onClick}
+                    onClick={() =>
+                      dispatch(setNewCustomPropertyDetails({ ...newCustomPropertyDetails, type: item.name }))
+                    }
                     className={`${
                       active ? 'bg-alsoit-gray-50 text-gray-700' : 'text-gray-700'
                     } group flex gap-4 w-full items-center rounded-md px-2 py-2 text-alsoit-text-lg font-semibold`}
                   >
-                    <RoundedCheckbox
-                      onChange={() => null}
-                      isChecked={false}
-                      styles="w-3 h-3 rounded-full  cursor-pointer focus:outline-1 focus:ring-transparent  focus:border-2 focus:opacity-100 group-hover:opacity-100 text-alsoit-purple-300"
-                    />
                     {item.name}
                   </button>
                 )}
