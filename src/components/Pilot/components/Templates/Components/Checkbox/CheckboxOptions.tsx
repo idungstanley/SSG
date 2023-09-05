@@ -4,17 +4,17 @@ import ArrowRight from '../../../../../../assets/icons/ArrowRight';
 import RoundedCheckbox from '../../../../../Checkbox/RoundedCheckbox';
 import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
 import { setNewCustomPropertyDetails } from '../../../../../../features/task/taskSlice';
-import { BiGlobe } from 'react-icons/bi';
+import { ImCheckboxChecked } from 'react-icons/im';
 
 const items = [
   {
     id: 1,
-    name: 'Website',
+    name: 'Checkbox',
     onclick: () => null
   }
 ];
 
-export default function WebsiteOptions() {
+export default function CheckBoxOptions() {
   const dispatch = useAppDispatch();
   const { newCustomPropertyDetails } = useAppSelector((state) => state.task);
   return (
@@ -24,9 +24,9 @@ export default function WebsiteOptions() {
           <div className="w-full flex items-center justify-between h-full">
             <div className="flex items-center">
               <span className="mx-1 h-5 w-5">
-                <BiGlobe />
+                <ImCheckboxChecked />
               </span>
-              <p className="text-alsoit-gray-300-lg text-alsoit-text-lg font-semibold">Websites</p>
+              <p className="text-alsoit-gray-300-lg text-alsoit-text-lg font-semibold">Checkbox</p>
             </div>
             <ArrowRight />
           </div>
@@ -44,7 +44,7 @@ export default function WebsiteOptions() {
       >
         <Menu.Items className="z-50 absolute left-0 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none  ml-24">
           <div className="w-full mt-2 flex justify-center">
-            <h1 className="text-alsoit-text-lg font-semibold">EMAIL</h1>
+            <h1 className="text-alsoit-text-lg font-semibold">CHECKBOX</h1>
           </div>
           <div className="px-1 py-1">
             {items.map((item) => (
