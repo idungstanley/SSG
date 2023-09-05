@@ -741,13 +741,15 @@ export const GetTimeEntriesService = ({
   trigger,
   is_active,
   page,
-  include_filters
+  include_filters,
+  team_member_group_ids
 }: {
   itemId: string | null | undefined;
   trigger: string | null | undefined;
   is_active?: number;
   page?: number;
   include_filters?: boolean;
+  team_member_group_ids?: string[];
 }) => {
   const { timeSortArr } = useAppSelector((state) => state.task);
   const updatesortArr = timeSortArr.length === 0 ? null : timeSortArr;
@@ -763,7 +765,8 @@ export const GetTimeEntriesService = ({
           team_member_ids: updatesortArr,
           is_active: is_active,
           page,
-          include_filters
+          include_filters,
+          team_member_group_ids
         }
       });
       return data;
