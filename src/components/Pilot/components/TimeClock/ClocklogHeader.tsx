@@ -61,7 +61,13 @@ export function ClockLogHeader({ handleShowLogs, showLogs, handleFilters, meMode
           onClick={() => setAssigneeDropDown(!assigneedropdown)}
         >
           <AssigneeIcon active={false} />
-          {assigneedropdown && <TimeLogAssigneeDropDown teamMembers={teamMembersArr} />}
+          {assigneedropdown && (
+            <TimeLogAssigneeDropDown
+              handleFilters={handleFilters}
+              teamMembers={teamMembersArr}
+              closeModal={setAssigneeDropDown}
+            />
+          )}
         </div>
         <div className="p-1 rounded-sm bg-alsoit-gray-50">
           <SearchIcon />
