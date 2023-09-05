@@ -84,7 +84,6 @@ const queryClient = new QueryClient({
 });
 
 const GOOGLE_CLIENT_ID = process.env.REACT_APP_GOOGLE_CLIENT_ID || '""';
-console.log(this is to check if deploy works")
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <Provider store={store}>
