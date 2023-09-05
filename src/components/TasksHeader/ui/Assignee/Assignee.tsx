@@ -8,8 +8,10 @@ import FilterByAssigneeModal from './FilterByAssigneeModal';
 
 export function Assignee() {
   const dispatch = useAppDispatch();
+
   const { currentUserId } = useAppSelector((state) => state.auth);
   const { assigneeIds, meMode } = useAppSelector((state) => state.task);
+
   const { data } = useGetTeamMembers({ page: 1, query: '' });
   const {
     filters: { fields: filters }

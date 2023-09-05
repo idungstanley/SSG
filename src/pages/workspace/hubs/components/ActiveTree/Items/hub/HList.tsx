@@ -10,6 +10,7 @@ import {
   setActiveTabId,
   setCurrentItem,
   setOpenedEntitiesIds,
+  setShowExtendedBar,
   setShowPilot
 } from '../../../../../../../features/workspace/workspaceSlice';
 import { setParentHubExt } from '../../../../../../../features/hubs/hubSlice';
@@ -19,6 +20,8 @@ import { Capitalize } from '../../../../../../../utils/NoCapWords/Capitalize';
 import SubHList from './SubHList';
 import { DragOverlay } from '@dnd-kit/core';
 import HubItemOverlay from '../../../../../../../components/tasks/HubItemOverLay';
+import { generateViewsUrl } from '../../../../../../../utils/generateViewsUrl';
+import { IHub } from '../../../../../../../features/hubs/hubs.interfaces';
 
 export default function HList({ hubs }: ListProps) {
   const dispatch = useAppDispatch();
@@ -43,7 +46,8 @@ export default function HList({ hubs }: ListProps) {
   const hubsSpread = [...hubs, dummyHub];
   const hubsWithEntity = createEntityType === EntityType.hub ? (hubsSpread as Hub[]) : hubs;
 
-  const handleLocation = (id: string, name: string) => {
+  const handleLocation = (id: string, name: string, item: IHub) => {
+    const viewsUrl = generateViewsUrl(id, item, EntityType.hub) as string;
     dispatch(setParentHubExt({ id: id, type: EntityType.hub }));
     dispatch(
       setActiveItem({
@@ -54,18 +58,16 @@ export default function HList({ hubs }: ListProps) {
     );
     dispatch(setShowPilot(true));
     dispatch(setActiveTabId(4));
-    navigate(`tasks/h/${id}`, {
+    navigate(viewsUrl, {
       replace: true
     });
+    if (!showSidebar) {
+      dispatch(setShowExtendedBar(true));
+    }
   };
 
   const handleClick = (id: string) => {
     dispatch(setParentHubExt({ id, type: EntityType.hub }));
-    if (!showSidebar) {
-      navigate(`tasks/h/${id}`, {
-        replace: true
-      });
-    }
 
     if (id === openedNewHubId) {
       setOpenedNewHubId('');

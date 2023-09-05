@@ -17,7 +17,6 @@ export function HorizontalScroll({ children, ...props }: CustomScrollableContain
   const { showMore, currentItemId, showTabLabel, isResize, activeItemId, activePlaceId } = useAppSelector(
     (state) => state.workspace
   );
-  const { groupScroll } = useAppSelector((state) => state.slideOver);
 
   const [thumbWidth, setThumbWidth] = useState(DEFAULT_THUMB_WIDTH);
   const [isThumbVisible, setIsThumbVisible] = useState(true);
@@ -180,18 +179,6 @@ export function HorizontalScroll({ children, ...props }: CustomScrollableContain
       contentRef.current.scrollTo({ left: scrollAmount, behavior: 'smooth' });
     }
   }
-
-  useEffect(() => {
-    if (groupScroll && contentRef.current) {
-      const width = contentRef.current.offsetWidth;
-      const scrollAmount = groupScroll.leftPosition <= 0 ? 0 : width;
-      if (groupScroll.scrollLeft) {
-        contentRef.current.scrollLeft = groupScroll.scrollLeft;
-      } else {
-        contentRef.current.scrollTo({ left: scrollAmount, behavior: 'smooth' });
-      }
-    }
-  }, [groupScroll]);
 
   const renderScrollArrows = () => {
     return (

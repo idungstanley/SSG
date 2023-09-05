@@ -49,8 +49,8 @@ const initialState: userSettingState = {
   status: 'loading',
   clock_type: undefined,
   is_clock_time: undefined,
-  clock_limit: 3600000,
-  clock_stop_reminder: 300000
+  clock_limit: 8,
+  clock_stop_reminder: 5
 };
 
 export const userSettingSlice = createSlice({

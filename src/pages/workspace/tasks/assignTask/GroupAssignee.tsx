@@ -1,59 +1,39 @@
 import React, { useState } from 'react';
 import { useAppSelector } from '../../../../app/hooks';
 import { AvatarWithInitials } from '../../../../components';
-import { UseUnassignTask } from '../../../../features/task/taskService';
+import { UseTaskUnassignService } from '../../../../features/task/taskService';
 import PopAssignModal from './popAssignModal';
 import ToolTip from '../../../../components/Tooltip/Tooltip';
 import AvatarForOwner from '../../../../components/avatar/AvatarForOwner';
 import AvatarWithImage from '../../../../components/avatar/AvatarWithImage';
-
-interface InewData {
-  id: string | null | undefined;
-  initials: string;
-  color: string | undefined;
-  name: string;
-  role: string;
-  avatar_path: string | null;
-  user?: {
-    avatar_path: string | null;
-    color: string;
-    email: string;
-    id: string;
-    initials: string;
-    name: string;
-    timezone: string;
-  };
-}
-
-interface groupAssignee {
-  color: string;
-  id: string;
-  initials: string;
-  name: string;
-  avatar_path?: string | null;
-}
+import { ITeamMembersAndGroup } from '../../../../features/settings/teamMembersAndGroups.interfaces';
 
 function GroupAssignee({
   data,
   itemId,
-  handleClick,
-  teams
+  teams,
+  handleClick
 }: {
-  data: InewData[] | groupAssignee[] | undefined;
+  data: ITeamMembersAndGroup[];
   itemId?: string;
-  handleClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
   teams: boolean;
+  handleClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
 }) {
   const { CompactView, CompactViewWrap } = useAppSelector((state) => state.task);
+
+  const [hoverInterval, setHoverInterval] = useState(false);
+  const [modalLoader, setModalLoader] = useState(true);
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLDivElement>(null);
+  const [hoverTimeout, setHoverTimeout] = useState<NodeJS.Timeout | null>(null);
   const [displayed, setDisplayed] = useState<{
     show: boolean;
-    index: null | number;
+    index: number;
   }>({
     show: false,
-    index: null
+    index: 0
   });
 
-  const { mutate: onTaskUnassign } = UseUnassignTask();
+  const { mutate: onTaskUnassign } = UseTaskUnassignService(itemId as string, data[displayed.index]);
 
   const handleUnAssignTask = (id: string) => {
     onTaskUnassign({
@@ -62,11 +42,6 @@ function GroupAssignee({
       teams
     });
   };
-
-  const [hoverInterval, setHoverInterval] = useState(false);
-  const [modalLoader, setModalLoader] = useState(true);
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLDivElement>(null);
-  const [hoverTimeout, setHoverTimeout] = useState<NodeJS.Timeout | null>(null);
 
   const handleHoverIntervalMouseIn = (index: number, event: React.MouseEvent<HTMLDivElement>) => {
     setAnchorEl(event.currentTarget);
@@ -81,7 +56,7 @@ function GroupAssignee({
   };
 
   const handleHoverIntervalMouseOut = () => {
-    setDisplayed((prev) => ({ ...prev, show: false, index: null }));
+    setDisplayed((prev) => ({ ...prev, show: false, index: 0 }));
     setAnchorEl(null);
     handleClose();
     setHoverInterval(false);
@@ -89,18 +64,33 @@ function GroupAssignee({
   };
 
   const handleClose = () => {
-    setDisplayed((prev) => ({ ...prev, show: false, index: null }));
+    setDisplayed((prev) => ({ ...prev, show: false, index: 0 }));
     setAnchorEl(null);
     if (hoverTimeout) {
       clearTimeout(hoverTimeout);
     }
   };
 
+  const renderUnassignButton = (userId: string) => {
+    return (
+      <button
+        className="flex items-center justify-center absolute top-0 right-0 w-3 h-3 text-white bg-gray-500 border rounded-full hover:bg-purple-700 "
+        style={{
+          fontSize: '6px',
+          zIndex: 11
+        }}
+        onClick={() => handleUnAssignTask(userId)}
+      >
+        X
+      </button>
+    );
+  };
+
   return (
     <>
       {data && data?.length >= 5 ? (
         <div className="relative flex items-center justify-center">
-          {data?.slice(0, 3).map((newData, index: number) => (
+          {data?.slice(0, 3).map((newData, index) => (
             <div
               key={newData.id}
               className={`scaleBigger cursor-pointer ${index === 0 ? ' z-30   ' : ''} ${index === 1 ? 'z-20 ' : ''} ${
@@ -115,21 +105,13 @@ function GroupAssignee({
                 <ToolTip title={newData.name}>
                   <div>
                     <span onClick={handleClick}>
-                      {(newData as InewData).role == 'owner' ? (
+                      {newData.role.key === 'owner' ? (
                         <AvatarForOwner initials="me" />
                       ) : (
                         <div className="border-2 border-red-400 rounded-full">
                           <AvatarWithInitials
-                            initials={
-                              (newData as InewData).user
-                                ? ((newData as InewData)?.user?.initials as string)
-                                : (newData.initials as string)
-                            }
-                            backgroundColour={
-                              (newData as InewData).user
-                                ? ((newData as InewData)?.user?.color as string)
-                                : (newData.color as string)
-                            }
+                            initials={newData.user && (newData.user.initials as string)}
+                            backgroundColour={newData.user && (newData.user.color as string)}
                             badge={true}
                             height={CompactView ? 'h-6' : 'h-7'}
                             width={CompactView ? 'w-6' : 'w-7'}
@@ -137,36 +119,17 @@ function GroupAssignee({
                         </div>
                       )}
                     </span>
-                    {displayed.show && index == displayed?.index && (
-                      <button
-                        className="absolute top-0 right-0 w-3 h-3 text-white bg-gray-500 border rounded-full hover:bg-purple-700 "
-                        style={{
-                          fontSize: '6px'
-                        }}
-                        onClick={() => handleUnAssignTask(newData.id as string)}
-                      >
-                        X
-                      </button>
-                    )}
+                    {displayed.show && index === displayed?.index && renderUnassignButton(newData.id)}
                   </div>
                 </ToolTip>
               </div>
-              {displayed.show && index == displayed?.index ? (
-                <button
-                  className="absolute top-0 right-0 w-3 h-3 text-white bg-gray-500 border rounded-full hover:bg-purple-700"
-                  style={{
-                    fontSize: '6px'
-                  }}
-                  onClick={() => handleUnAssignTask(newData.id as string)}
-                >
-                  X
-                </button>
+              {displayed.show && index === displayed?.index ? (
+                renderUnassignButton(newData.id)
               ) : (
-                <span className="absolute top-0 right-0 w-2 h-2 bg-green-500 border rounded-full"></span>
+                <span className="absolute top-0 right-0 w-2 h-2 bg-green-500 border rounded-full" />
               )}
 
-              {/* <div className="absolute z-50"> */}
-              {hoverInterval && displayed.show && index == displayed?.index && (
+              {hoverInterval && displayed.show && index === displayed?.index && (
                 <PopAssignModal
                   modalLoader={modalLoader}
                   spinnerSize={20}
@@ -175,7 +138,6 @@ function GroupAssignee({
                   handleClose={handleClose}
                 />
               )}
-              {/* </div> */}
             </div>
           ))}
           <span>
@@ -206,23 +168,15 @@ function GroupAssignee({
                   onMouseLeave={() => handleHoverIntervalMouseOut()}
                   className="relative cursor-pointer"
                 >
-                  {newData.avatar_path == null ? (
+                  {!newData.user.avatar_path ? (
                     <span onClick={handleClick}>
-                      {(newData as InewData).role == 'owner' ? (
-                        <AvatarForOwner initials={newData.initials} />
+                      {newData.role.key === 'owner' ? (
+                        <AvatarForOwner initials={newData.user.initials} />
                       ) : (
                         <div className="border-2 border-red-400 rounded-full">
                           <AvatarWithInitials
-                            initials={
-                              (newData as InewData).user
-                                ? ((newData as InewData)?.user?.initials as string)
-                                : (newData.initials as string)
-                            }
-                            backgroundColour={
-                              (newData as InewData).user
-                                ? ((newData as InewData)?.user?.color as string)
-                                : (newData.color as string)
-                            }
+                            initials={newData.user && (newData.user.initials as string)}
+                            backgroundColour={newData.user && (newData.user?.color as string)}
                             badge={true}
                             height={CompactView ? 'h-6' : 'h-7'}
                             width={CompactView ? 'w-6' : 'w-7'}
@@ -232,31 +186,22 @@ function GroupAssignee({
                     </span>
                   ) : (
                     <span onClick={handleClick}>
-                      {(newData as InewData).role == 'owner' ? (
+                      {newData.role.key === 'owner' ? (
                         <AvatarForOwner initials={newData.initials} />
                       ) : (
                         <div className="border-2 border-red-400 rounded-full">
-                          <AvatarWithImage image_path={newData.avatar_path} height="h-8" width="w-8" />
+                          <AvatarWithImage image_path={newData.user.avatar_path} height="h-8" width="w-8" />
                         </div>
                       )}
                     </span>
                   )}
 
                   {displayed.show && index == displayed?.index ? (
-                    <button
-                      className="absolute top-0 right-0 w-3 h-3 text-white bg-gray-500 border rounded-full hover:bg-purple-700"
-                      style={{
-                        fontSize: '6px'
-                      }}
-                      onClick={() => handleUnAssignTask(newData.id as string)}
-                    >
-                      X
-                    </button>
+                    renderUnassignButton(newData.id)
                   ) : (
-                    <span className="absolute top-0 right-0 w-2 h-2 bg-green-500 border rounded-full"></span>
+                    <span className="absolute top-0 right-0 w-2 h-2 bg-green-500 border rounded-full" />
                   )}
 
-                  {/* <div className="absolute z-50"> */}
                   {hoverInterval && displayed.show && index == displayed?.index && (
                     <PopAssignModal
                       modalLoader={modalLoader}
@@ -266,7 +211,6 @@ function GroupAssignee({
                       handleClose={handleClose}
                     />
                   )}
-                  {/* </div> */}
                 </div>
               </ToolTip>
             </div>

@@ -4,8 +4,8 @@ import RoundedArrowUpDown from '../../../../../pages/workspace/tasks/component/v
 import SortDirectionCheck from '../../../../../pages/workspace/tasks/component/views/listLevel/component/SortDirectionCheck';
 import { parseLabel } from '../../../../TasksHeader/lib';
 import { Column } from '../../../types/table';
-import { Chevron } from '../../Chevron';
 import {
+  SortOption,
   setActiveTaskColumn,
   setEditCustomProperty,
   setEntityForCustom,
@@ -32,6 +32,9 @@ import AlsoitMenuDropdown from '../../../../DropDowns';
 import { setStatusTaskListDetails } from '../../../../../features/list/listSlice';
 import { useParams } from 'react-router-dom';
 import { Task } from '../../../../../features/task/interface.tasks';
+import CollapseIcon from '../../collapseIcon/CollapseIcon';
+
+import '../../../../../styles/task.css';
 
 interface HeadProps {
   columns: Column[];
@@ -45,12 +48,8 @@ interface HeadProps {
   listId: string | undefined;
   listName?: string;
   groupedTask?: Task[];
+  isSplitSubtask?: boolean;
 }
-
-export type SortOption = {
-  dir: 'asc' | 'desc';
-  field: string;
-};
 
 export function Head({
   columns,
@@ -63,7 +62,8 @@ export function Head({
   label,
   listId,
   listName,
-  groupedTask
+  groupedTask,
+  isSplitSubtask
 }: HeadProps) {
   const parsedLabel = parseLabel(label);
   const dispatch = useAppDispatch();
@@ -75,9 +75,8 @@ export function Head({
   const [headerId, setheaderId] = useState<string>('');
   const [showStatusDropdown, setShowStatusDropdown] = useState<null | SVGElement>(null);
   const [showSortModal, setShowSortModal] = useState<boolean>(false);
-  const { sortArr, sortAbleArr, selectedTasksArray, selectedIndex, selectedIndexStatus } = useAppSelector(
-    (state) => state.task
-  );
+  const { sortArr, sortAbleArr, selectedTasksArray, selectedIndex, selectedIndexStatus, selectedListIds } =
+    useAppSelector((state) => state.task);
   const { baseColor } = useAppSelector((state) => state.account);
   const { isManageStatus } = useAppSelector((state) => state.workspace);
 
@@ -97,7 +96,11 @@ export function Head({
     if (selectedIndex !== null) {
       const updatedTaskIds: string[] = [...selectedTasksArray];
       groupedTask?.map((task, index) => {
-        if (selectedIndex == index && selectedIndexStatus == task.status.name) {
+        if (
+          selectedIndex == index &&
+          selectedIndexStatus == task.status.name &&
+          selectedListIds.includes(listId as string)
+        ) {
           const taskIndex = updatedTaskIds.indexOf(task.id);
           if (taskIndex == -1) {
             updatedTaskIds.push(task.id);
@@ -215,29 +218,28 @@ export function Head({
       <tr className="contents">
         {/* first sticky col */}
         <th style={{ zIndex: 2 }} className="sticky left-0 flex items-center -mb-2 font-extrabold" ref={columns[0].ref}>
-          <div className="flex items-center " style={{ width: '42px' }}></div>
+          <div className="flex items-center "></div>
           <div className="flex items-center w-full gap-3 py-2 truncate dBlock group opacity-90">
             <div
               className="py-0.5 relative px-2 rounded-tr-md -mb-1 flex items-center space-x-1 text-white dFlex "
-              style={{ backgroundColor: headerStatusColor }}
+              style={{
+                backgroundColor: headerStatusColor,
+                marginLeft: isSplitSubtask ? 0 : '38px',
+                height: '25px',
+                gap: '5px'
+              }}
             >
               <div>
-                {/* <div className="items-center space-x-1 viewSettings" onClick={(e) => e.stopPropagation()}>
-                  <img src={statusbox} alt="" className="pr-1 border-r" onClick={handleCheckedGroupTasks} />
-                  <CiEdit className="w-4 h-4 pr-1 border-r cursor-pointer" />
-                  <BsThreeDots className="w-4 h-4 cursor-pointer" onClick={(e) => handleClick(e)} />
-                </div>
-                <p className="border-t py-.5 viewSettings"></p> */}
                 <div className="flex items-center">
-                  <p>
-                    <Chevron
+                  <p className="pr-1.5 -ml-1.5">
+                    <CollapseIcon
                       color={headerStatusColor}
                       active={collapseTasks}
                       onToggle={onToggleCollapseTasks}
                       hoverBg="white"
                     />
                   </p>
-                  <span ref={scrollToRef} className="pb-1" style={{ fontSize: '11px', WebkitTextStroke: '0.5px' }}>
+                  <span ref={scrollToRef} style={{ fontSize: '11px', WebkitTextStroke: '0.5px' }}>
                     {parsedLabel}
                   </span>
                   <div className="items-center pl-2 space-x-1 viewSettings" onClick={(e) => e.stopPropagation()}>
@@ -316,20 +318,18 @@ export function Head({
           )}
         </th>
         {!collapseTasks
-          ? columns.slice(1).map(({ ref, value, id }, index) => (
+          ? columns.slice(1).map(({ ref, value, id, color }, index) => (
               <th key={id} className="relative w-full py-2 -mb-1.5 font-extrabold opacity-90" ref={ref}>
                 <div
-                  className={`text-alsoit-gray-200 font-semibold flex dBlock items-center justify-center w-full h-full my-auto cursor-pointer group  ${
-                    sortAbles.includes(value)
-                      ? 'hover:bg-gray-200 p-0.5 rounded-xs space-x-1 border-l-2 border-r-2 border-t-2 border-transparent hover:border-r-gray-500'
-                      : ''
-                  }`}
+                  className="text-alsoit-gray-200 font-semibold flex dBlock items-center justify-center w-full h-full my-auto cursor-pointer group hover:bg-gray-200 p-0.5 rounded-xs space-x-1 border-l-2 border-r-2 border-t-2 border-transparent hover:border-r-gray-500 "
                   style={{ fontSize: '11px', WebkitTextStroke: '0.5px' }}
                 >
                   <span className="dNone">
                     <MdOutlineDragIndicator className="h4 w4" />
                   </span>
-                  <span onClick={(e) => setOptions(e, id, value)}>{value.toUpperCase()}</span>
+                  <span onClick={(e) => setOptions(e, id, value)} style={{ color: color ? color : '' }}>
+                    {value.toUpperCase()}
+                  </span>
                   {sortAbles.includes(value) && (
                     <span className="ml-0.5">
                       {sortArr.length >= 1 && sortArr.includes(value) ? (
@@ -353,11 +353,11 @@ export function Head({
                   )}
                 </div>
                 <div
-                  className="absolute top-0 block w-2 cursor-move -right-3 idle"
+                  className="absolute top-0 block pl-1 cursor-move right-0 idle"
                   style={{ height: tableHeight }}
                   onMouseDown={() => mouseDown(index + 1)}
                 >
-                  <div className="w-0.5 mx-auto h-full bg-gray-100" />
+                  <div className="w-0.5 mx-auto bg-gray-100" style={{ height: '75px' }} />
                 </div>
                 {headerId === id && sortAbles.includes(value) && (
                   <SortModal

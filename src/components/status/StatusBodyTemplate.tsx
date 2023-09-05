@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import ThreeDotIcon from '../../assets/icons/ThreeDotIcon';
 import { IoMdCheckmark } from 'react-icons/io';
 import AlsoitMenuDropdown from '../DropDowns';
@@ -13,31 +13,49 @@ import StatusIconComp from '../../assets/icons/StatusIconComp';
 import Drag from '../../assets/icons/Drag';
 import { useSortable } from '@dnd-kit/sortable';
 import { BoardSectionsType } from '../../utils/StatusManagement/Types';
+import { CSS } from '@dnd-kit/utilities';
+import { useAppSelector } from '../../app/hooks';
+import { groupStylesMapping } from './PilotTabs/CustomStatus';
 
 interface StatusBodyProps {
   item: StatusProps;
-  index?: number;
-  setStatusTypesState: React.Dispatch<React.SetStateAction<BoardSectionsType>>;
+  setStatusTypesState?: React.Dispatch<React.SetStateAction<BoardSectionsType>>;
 }
 
 export default function StatusBodyTemplate({ item, setStatusTypesState }: StatusBodyProps) {
+  const inputRef = useRef<HTMLInputElement | null>(null);
+
+  const { draggableActiveStatusId } = useAppSelector((state) => state.workspace);
+
   const [editableContent, setEditableContent] = useState<boolean>(false);
   const [showStatusEditDropdown, setShowStatusEditDropdown] = useState<null | HTMLSpanElement | HTMLDivElement>(null);
   const [showStatusColorDropdown, setShowStatusColorDropdown] = useState<null | HTMLSpanElement>(null);
+
   const handleOpenStatusEditDropdown = (event: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
     event.stopPropagation();
     setShowStatusEditDropdown(event.currentTarget);
   };
 
-  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
-    id: item.position
+  const { attributes, listeners, setNodeRef, setActivatorNodeRef, transform, transition } = useSortable({
+    id: item.name,
+    data: { item }
   });
 
+  // const style = {
+  //   transform: CSS.Transform.toString(transform),
+  //   transition
+  // };
+
   const style = {
-    transform: transform ? `translate(${transform.x}px, ${transform.y}px)` : undefined,
+    transform: CSS.Transform.toString(transform),
     transition,
-    backgroundColor: isDragging ? '#f3f4f6' : undefined, // ? bg for draggable, can be replaced by any style
-    zIndex: isDragging ? 1 : undefined // important for overlay
+    touchAction: 'none',
+    opacity: item.name === draggableActiveStatusId ? 0.3 : 1,
+    marginBottom: item.name === draggableActiveStatusId ? '16px' : '',
+    backgroundColor:
+      item.name === draggableActiveStatusId
+        ? (groupStylesMapping[item.type as keyof typeof groupStylesMapping]?.backgroundColor as string)
+        : undefined
   };
 
   const handleOpenStatusColorDropdown = (event: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
@@ -46,18 +64,25 @@ export default function StatusBodyTemplate({ item, setStatusTypesState }: Status
   };
 
   const handleStatusColor = (color: string | ListColourProps) => {
-    setStatusTypesState((prevState) => {
-      return Object.entries(prevState).reduce((acc, [name, statuses]) => {
-        acc[name] = statuses.map((status) => {
-          if (status.name === item.name) {
-            return { ...status, color } as StatusProps;
-          }
-          return status;
-        });
-        return acc;
-      }, {} as BoardSectionsType);
-    });
+    if (setStatusTypesState) {
+      setStatusTypesState((prevState) => {
+        return Object.entries(prevState).reduce((acc, [name, statuses]) => {
+          acc[name] = statuses.map((status) => {
+            if (status.name === item.name) {
+              return { ...status, color } as StatusProps;
+            }
+            return status;
+          });
+          return acc;
+        }, {} as BoardSectionsType);
+      });
+    }
   };
+
+  useEffect(() => {
+    const { current } = inputRef;
+    current?.focus();
+  }, [editableContent]);
 
   const handleCloseStatusEditDropdown = () => {
     setShowStatusEditDropdown(null);
@@ -71,15 +96,33 @@ export default function StatusBodyTemplate({ item, setStatusTypesState }: Status
     setEditableContent(true);
   };
 
-  const handleSaveEditableContent = (e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
+  const handleSaveEditableContent = (
+    e: React.MouseEvent<HTMLSpanElement, MouseEvent> | React.KeyboardEvent<HTMLSpanElement>
+  ) => {
     e.stopPropagation();
     setEditableContent(false);
+    if (setStatusTypesState) {
+      setStatusTypesState((prevState) => {
+        return Object.entries(prevState).reduce((acc, [name, statuses]) => {
+          acc[name] = statuses.map((status) => {
+            if (status.name === item.name) {
+              return {
+                ...status,
+                name: inputRef.current?.innerText.trim() || status.name
+              } as StatusProps;
+            }
+            return status;
+          });
+          return acc;
+        }, {} as BoardSectionsType);
+      });
+    }
   };
 
   const showStatusEditDropdownOptions = [
     {
       visibility: true,
-      label: 'Edit Status',
+      label: 'Rename',
       icon: <PencilIcon className="w-4 h-4" aria-hidden="true" />,
       handleClick: () => {
         setShowStatusEditDropdown(null);
@@ -100,52 +143,59 @@ export default function StatusBodyTemplate({ item, setStatusTypesState }: Status
       label: 'Delete status',
       icon: <AiOutlineDelete />,
       handleClick: () => {
-        setStatusTypesState((prevState) => {
-          return Object.entries(prevState).reduce((acc, [name, statuses]) => {
-            acc[name] = statuses.filter((status) => status.name !== item.name);
-            return acc;
-          }, {} as BoardSectionsType);
-        });
-        setShowStatusEditDropdown(null);
+        if (setStatusTypesState) {
+          setStatusTypesState((prevState) => {
+            return Object.entries(prevState).reduce((acc, [name, statuses]) => {
+              acc[name] = statuses.filter((status) => status.name !== item.name);
+              return acc;
+            }, {} as BoardSectionsType);
+          });
+          setShowStatusEditDropdown(null);
+        }
       }
     }
   ];
 
   return (
-    <span
-      key={item.name}
-      className="flex items-center gap-2 p-1 border rounded cursor-pointer justify-items-start border-alsoit-gray-75"
-      onClick={() => handleToggleEditableContent()}
-      style={style}
-    >
-      <span className="flex items-center">
-        <span className="cursor-move" ref={setNodeRef} {...attributes} {...listeners}>
-          <Drag />
+    <span ref={setNodeRef}>
+      <span
+        className="flex justify-items-start px-1 rounded cursor-pointer h-7 items-center border-alsoit-gray-75 border bg-white"
+        style={style}
+      >
+        {item.type !== 'closed' && item.position !== 0 && (
+          <span className="cursor-move" ref={setActivatorNodeRef} {...attributes} {...listeners}>
+            <Drag />
+          </span>
+        )}
+        <span className="w-3 h-3 ml-4 rounded" onClick={(e) => handleOpenStatusColorDropdown(e)}>
+          <StatusIconComp color={item.color as string} />
         </span>
-        <div className="flex items-center gap-1">
-          <span className="w-3 h-3 ml-4 rounded" onClick={(e) => handleOpenStatusColorDropdown(e)}>
-            <StatusIconComp color={item.color as string} />
+        <span
+          contentEditable={editableContent}
+          style={{ color: item.color as string }}
+          className="uppercase truncate flex-grow"
+          onClick={() => handleToggleEditableContent()}
+          onKeyDown={(e) => (e.key === 'Enter' ? handleSaveEditableContent(e) : null)}
+          ref={inputRef}
+        >
+          {item.name}
+        </span>
+        {!editableContent && (
+          <span className="flex items-center gap-2 ml-2">
+            <span>
+              <Picker />
+            </span>
+            <span onClick={(e) => handleOpenStatusEditDropdown(e)}>
+              <ThreeDotIcon />
+            </span>
           </span>
-          <span contentEditable={editableContent} style={{ color: item.color as string }} className="uppercase">
-            {item.name}
+        )}
+        {editableContent && (
+          <span className="ml-auto text-green-400" onClick={(e) => handleSaveEditableContent(e)}>
+            <IoMdCheckmark />
           </span>
-        </div>
+        )}
       </span>
-      {!editableContent && (
-        <span className="flex items-center gap-2 ml-auto">
-          <span>
-            <Picker />
-          </span>
-          <span onClick={(e) => handleOpenStatusEditDropdown(e)}>
-            <ThreeDotIcon />
-          </span>
-        </span>
-      )}
-      {editableContent && (
-        <span className="ml-auto text-green-400" onClick={(e) => handleSaveEditableContent(e)}>
-          <IoMdCheckmark />
-        </span>
-      )}
       <AlsoitMenuDropdown
         handleClose={handleCloseStatusEditDropdown}
         anchorEl={showStatusEditDropdown as HTMLDivElement | null}

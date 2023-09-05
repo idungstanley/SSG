@@ -50,7 +50,7 @@ export default function CreateList() {
       dispatch(setCreateEntityType(null));
       dispatch(setEntityToCreate(null));
       const list = data.data.list;
-      const updatedTree = createListManager(list.wallet_id as string, list.hub_id as string, hub, list);
+      const updatedTree = createListManager(type as string, list.parent_id, hub, list);
       dispatch(getHub(updatedTree));
       dispatch(setFilteredResults(updatedTree));
     }

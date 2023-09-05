@@ -133,15 +133,15 @@ export default function History() {
                     >
                       <td>
                         {user ? (
-                          user.avatar_path !== '' ? (
+                          user.avatar_path ? (
                             <AvatarWithImage
-                              image_path={user && user.avatar_path}
+                              image_path={user.avatar_path}
                               height="h-5"
                               width="w-5"
                               roundedStyle="circular"
                             />
                           ) : (
-                            <InitialsAvatar size={5} colour={user && user.color} initials={user && user.initials} />
+                            <InitialsAvatar size={6} colour={user.color} initials={user.initials} />
                           )
                         ) : (
                           <AvatarWithInitials initials="UN" height="h-5" width="w-5" roundedStyle="circular" />
@@ -150,7 +150,7 @@ export default function History() {
                       <td className="text-xs">
                         <span>{duration.humanize()} ago</span>
                       </td>
-                      <td className="">
+                      <td>
                         <span className="text-xs">{time}</span>
                       </td>
                       {user && (

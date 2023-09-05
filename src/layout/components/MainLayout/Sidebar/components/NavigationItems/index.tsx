@@ -18,13 +18,15 @@ import CalendarIcon from '../../../../../../assets/icons/CalendarIcon';
 import TemplateIcon from '../../../../../../assets/icons/TemplateIcon';
 import GoalIcon from '../../../../../../assets/icons/GoalIcon';
 import DashboardIcon from '../../../../../../assets/icons/DashboardIcon';
-import { AvatarWithInitials } from '../../../../../../components';
+import { AvatarWithInitials, Button, Input } from '../../../../../../components';
 import ArrowDownwardIcon from '../../../../../../assets/icons/ArrowDownwardIcon';
 import ArrowUpwardIcon from '../../../../../../assets/icons/ArrowUpwardIcon';
 import { setShowMore } from '../../../../../../features/workspace/workspaceSlice';
 import { getInitials } from '../../../../../../app/helpers';
 import FavoriteIcon from '../../../../../../assets/branding/FavoriteIcon';
 import HomeIcon from '../../../../../../assets/icons/HomeIcon';
+import ThreeDotIcon from '../../../../../../assets/icons/ThreeDotIcon';
+import AlsoitMenuDropdown from '../../../../../../components/DropDowns';
 
 const showLessOrMore = [
   {
@@ -50,12 +52,21 @@ export default function NavigationItems({
   activeTabId,
   setActiveTabId
 }: NavigationProps) {
-  const { currentWorkspaceId } = useAppSelector((state) => state.auth);
-  const { workspaceData, showMore } = useAppSelector((state) => state.workspace);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+
+  const { currentWorkspaceId } = useAppSelector((state) => state.auth);
+  const { showSidebar } = useAppSelector((state) => state.account);
+  const { workspaceData, showMore } = useAppSelector((state) => state.workspace);
+
+  const [countOfItemToShow, setCountOfItemToShow] = useState<number>(3);
+  const [showDropdown, setShowDropdown] = useState<null | HTMLSpanElement | HTMLDivElement>(null);
+
   const workspaceName = workspaceData?.data?.workspace.name;
   const workspaceColor = workspaceData?.data?.workspace.color as string;
+
+  const idsFromLS = JSON.parse(localStorage.getItem('navItem') || '[]') as string[];
+
   const handleToggleMore = () => {
     dispatch(setShowMore(!showMore));
   };
@@ -122,7 +133,7 @@ export default function NavigationItems({
     {
       id: '8',
       name: 'Favorites',
-      href: `${currentWorkspaceId}/favorites`,
+      href: `/${currentWorkspaceId}/favorites`,
       icon: <FavoriteIcon />,
       alwaysShow: false
     }
@@ -132,6 +143,11 @@ export default function NavigationItems({
     () => navigation.filter((i) => !activeHotkeyIds.includes(i.id)),
     [activeHotkeyIds, navigation]
   );
+
+  const [items, setItems] = useState(
+    (showSidebar ? hotkeys : navigation).sort((a, b) => idsFromLS.indexOf(a.id) - idsFromLS.indexOf(b.id))
+  );
+
   useEffect(() => {
     const activePinnedNav = navigation.find((i) => i.id === activeTabId);
     if (activePinnedNav !== undefined) {
@@ -139,19 +155,37 @@ export default function NavigationItems({
     }
   }, [activeTabId]);
 
-  const { showSidebar } = useAppSelector((state) => state.account);
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates
     })
   );
-  const idsFromLS = JSON.parse(localStorage.getItem('navItem') || '[]') as string[];
-  const [items, setItems] = useState(
-    (showSidebar ? hotkeys : navigation).sort((a, b) => idsFromLS.indexOf(a.id) - idsFromLS.indexOf(b.id))
-  );
-  const displayNavItems = showMore ? navigation : navigation.slice(0, 3);
-  const displayPinnedItems = showMore ? hotkeys : hotkeys.slice(0, 3);
+
+  let showMoreCount = (JSON.parse(localStorage.getItem('showmoreCount') || '""') as number) || 3;
+  const displayNavItems = showMore ? navigation : navigation.slice(0, showMoreCount);
+  const displayPinnedItems = showMore ? hotkeys : hotkeys.slice(0, showMoreCount);
+
+  const handleOpenDropdown = (event: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
+    event.stopPropagation();
+    setShowDropdown(event.currentTarget);
+  };
+
+  const handleSaveToLS = () => {
+    localStorage.setItem('showmoreCount', JSON.stringify(countOfItemToShow));
+    showMoreCount = countOfItemToShow;
+    setShowDropdown(null);
+  };
+
+  const handleCloseDropdown = () => {
+    setShowDropdown(null);
+  };
+
+  const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.value != '' && e.target.value != '0') {
+      setCountOfItemToShow(Number(e.target.value));
+    }
+  };
 
   const handleDragEnd = (e: DragEndEvent) => {
     const { active, over } = e;
@@ -185,27 +219,37 @@ export default function NavigationItems({
                 handleHotkeyClick={handleHotkeyClick}
                 key={item.name}
                 item={item}
-                // isVisible={pinnedNav.length > 1 && showSidebar ? true : item.alwaysShow || showMore}
                 activeTabId={activeTabId}
                 setActiveTabId={setActiveTabId}
               />
             ))}
 
             {/* show less or more button */}
-            {/* {(pinnedNav.length < 2 || !showSidebar) && ( */}
             <div
               onClick={handleToggleMore}
               className={cl(
                 !showSidebar ? 'justify-center pl-5' : 'gap-2 items-center pl-7',
-                'flex cursor-pointer gap-2 items-center p-2 w-full hover:text-gray-500 hover:bg-gray-100 mb-4'
+                'flex cursor-pointer gap-2 items-center justify-between p-2 w-full hover:text-gray-500 hover:bg-gray-100 mb-4'
               )}
               style={{ height: '30px', fontWeight: '600' }}
             >
-              {showLessOrMore[showMore ? 0 : 1].icon}
-              {showSidebar ? <p className="ml-4 text-xs truncate">{showLessOrMore[showMore ? 0 : 1].name}</p> : null}
+              <span className="flex items-center gap-2">
+                {showLessOrMore[showMore ? 0 : 1].icon}
+                {showSidebar ? <p className="ml-4 text-xs truncate">{showLessOrMore[showMore ? 0 : 1].name}</p> : null}
+              </span>
+              <span onClick={(e) => handleOpenDropdown(e)}>
+                <ThreeDotIcon />
+              </span>
             </div>
             {/* )} */}
           </nav>
+          <AlsoitMenuDropdown handleClose={handleCloseDropdown} anchorEl={showDropdown}>
+            <div className="flex flex-col p-2 w-40 gap-2">
+              <p>How many items would you like to show when showing less?</p>
+              <Input type="number" onChange={handleOnChange} name="show more count" />
+              <Button label="Save" buttonStyle="base" height="h-6" onClick={handleSaveToLS} />
+            </div>
+          </AlsoitMenuDropdown>
         </section>
       </SortableContext>
     </DndContext>

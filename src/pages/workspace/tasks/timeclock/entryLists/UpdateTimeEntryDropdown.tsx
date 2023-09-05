@@ -53,8 +53,8 @@ function UpdateTimeEntryDropdown({ time_entry_id, billable }: UpdateTimeEntryDro
   };
 
   return (
-    <div className="absolute -left-64 top-8 z-50 -mt-3 w-60 rounded-md shadow-lg bg-alsoit-gay-50">
-      <section className="">
+    <div className="absolute right-12 top-2 z-50 -mt-3 w-60 rounded-md shadow-lg bg-alsoit-gray-50">
+      <section>
         <div className="flex justify-between items-center px-3 py-3 text-alsoit-text-lg">
           <p>Edit Session</p>
           <button type="button" onClick={() => dispatch(setUpdateEntries({ openUpdateEntryId: null }))}>

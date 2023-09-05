@@ -3,10 +3,6 @@ import { useAppSelector, useAppDispatch } from '../../../../../app/hooks';
 import { BsCheck2 } from 'react-icons/bs';
 import { hideTaskColumns } from '../../../../../features/task/taskSlice';
 
-export type SortOption = {
-  dir: 'asc' | 'desc';
-  field: string;
-};
 function ShowHide() {
   const dispatch = useAppDispatch();
   const { taskColumns, hideTask } = useAppSelector((state) => state.task);

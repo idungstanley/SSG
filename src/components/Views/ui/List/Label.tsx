@@ -1,21 +1,38 @@
-import { Chevron } from '../Chevron';
 import { Task } from '../../../../features/task/interface.tasks';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { setSelectedTasksArray } from '../../../../features/task/taskSlice';
 import ListAddModal from './ListAddModal';
+import CollapseIcon from '../collapseIcon/CollapseIcon';
+import { IListColor } from './List';
+import { FilterDropdown } from '../../../TasksHeader/ui/Filter/FilterDropdown';
+import { Search } from '../../../TasksHeader/ui/Search/Search';
+import { Sort } from '../../../TasksHeader/ui/Sort/Sort';
+import { AssigneeSplitSubtasks } from '../../../TasksHeader/ui/Assignee/AssigneeSplitSubtasks';
 
 interface LabelProps {
+  showTable: boolean;
   listName?: string;
   hubName?: string;
-  onClickChevron: () => void;
-  showTable: boolean;
+  ListColor?: IListColor;
   tasks?: Task[];
+  isSplitSubtasks?: boolean;
+  parentId?: string;
+  onClickChevron: () => void;
 }
 
-export function Label({ listName, onClickChevron, hubName, showTable, tasks }: LabelProps) {
-  const { selectedTasksArray } = useAppSelector((state) => state.task);
-
+export function Label({
+  showTable,
+  listName,
+  hubName,
+  tasks,
+  ListColor,
+  isSplitSubtasks,
+  parentId,
+  onClickChevron
+}: LabelProps) {
   const dispatch = useAppDispatch();
+
+  const { selectedTasksArray } = useAppSelector((state) => state.task);
 
   const handleCheckedGroupTasks = () => {
     const updatedTaskIds: string[] = [...selectedTasksArray];
@@ -33,20 +50,33 @@ export function Label({ listName, onClickChevron, hubName, showTable, tasks }: L
     });
     dispatch(setSelectedTasksArray(updatedTaskIds));
   };
-  return (
-    <div className="flex items-center">
-      <div className="flex justify-between space-x-10 items-center bg-purple-500 rounded-br-md -mt-1 p-1 pr-7 rounded-l-md -ml-1">
-        <div className="flex space-x-2 items-center pl-2 text-sm text-white  w-fit">
-          <Chevron onToggle={onClickChevron} active={showTable} />
-          <h1 className="">{listName ?? 'Loading...'}</h1>
-        </div>
-        <button className="rounded-sm bg-gray-200 flex justify-center items-center h-6">
-          {/* <span>Add </span> */}
-          <ListAddModal handleCheckedGroupTasks={handleCheckedGroupTasks} />
-        </button>
-      </div>
 
-      <p className="ml-3">{hubName}</p>
+  return (
+    <div className="flex items-center justify-between">
+      <div className="flex items-center">
+        <div
+          className="flex items-center justify-between space-x-10 bg-purple-500 -mt-1 p-1 pr-7 rounded-tl-2xl -ml-0.5 gap-4 h-8"
+          style={{ backgroundColor: ListColor?.outerColour }}
+        >
+          <div className="flex space-x-2 items-center pl-2 text-sm text-white  w-fit">
+            <CollapseIcon color="#A854F7" active={showTable} onToggle={onClickChevron} hoverBg="white" />
+            <h1>{listName ?? 'Loading...'}</h1>
+          </div>
+          <button className="rounded-sm bg-gray-200 flex justify-center items-center h-6">
+            <ListAddModal handleCheckedGroupTasks={handleCheckedGroupTasks} ListColor={ListColor} />
+          </button>
+        </div>
+
+        <p className="ml-3">{hubName}</p>
+      </div>
+      {isSplitSubtasks ? (
+        <div className="flex items-center justify-end">
+          <Sort isSplitSubtasks={true} />
+          <FilterDropdown isSplitSubtasks={true} />
+          <AssigneeSplitSubtasks parentId={parentId as string} />
+          <Search isSplitSubtasks={true} />
+        </div>
+      ) : null}
     </div>
   );
 }

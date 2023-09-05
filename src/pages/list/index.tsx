@@ -11,24 +11,29 @@ import ActiveHub from '../../layout/components/MainLayout/extendedNavigation/Act
 import hubIcon from '../../assets/branding/hub.png';
 import FilterByAssigneesSliderOver from '../workspace/lists/components/renderlist/filters/FilterByAssigneesSliderOver';
 import { useScroll } from '../../hooks/useScroll';
-import { setUpdateCords } from '../../features/task/taskSlice';
+import { setIsTasksUpdated, setTasks, setUpdateCords } from '../../features/task/taskSlice';
 import TaskQuickAction from '../workspace/tasks/component/taskQuickActions/TaskQuickAction';
 import { List } from '../../components/Views/ui/List/List';
 import { Header } from '../../components/TasksHeader';
 import { GroupHorizontalScroll } from '../../components/ScrollableContainer/GroupHorizontalScroll';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
+import { ITaskFullList } from '../../features/task/interface.tasks';
 
 export function ListPage() {
   const dispatch = useAppDispatch();
   const { listId, taskId } = useParams();
 
-  const { listView, filterTaskByAssigneeIds } = useAppSelector((state) => state.task);
+  const { tasks: tasksStore, isTasksUpdated } = useAppSelector((state) => state.task);
 
   const containerRef = useRef<HTMLDivElement>(null);
 
   // get list details to set active entity
-  const { data: list } = UseGetListDetails({ activeItemId: listId, activeItemType: EntityType.list });
+  const { data: list } = UseGetListDetails(listId);
   const listName = list?.data.list.name ?? '';
+
+  // get list tasks
+  const { data, hasNextPage, fetchNextPage } = getTaskListService(listId);
+  const tasks = data ? data.pages.flatMap((page) => page.data.tasks) : [];
 
   useEffect(() => {
     if (list) {
@@ -37,10 +42,6 @@ export function ListPage() {
       }
     }
   }, [list]);
-
-  // get list tasks
-  const { data, hasNextPage, fetchNextPage } = getTaskListService({ listId, assigneeUserId: filterTaskByAssigneeIds });
-  const tasks = data ? data.pages.flatMap((page) => page.data.tasks) : [];
 
   // infinite scroll
   useEffect(() => {
@@ -69,6 +70,19 @@ export function ListPage() {
   // update cords for modal on scroll
   const onScroll = useScroll(() => dispatch(setUpdateCords()));
 
+  useEffect(() => {
+    if (tasks.length && listId && !tasksStore[listId] && list?.data.list.custom_fields) {
+      const tasksWithCustomFields = tasks.map((task) => {
+        return {
+          ...task,
+          custom_field_columns: list.data.list.custom_fields
+        };
+      });
+      dispatch(setTasks({ ...tasksStore, [listId]: tasksWithCustomFields as ITaskFullList[] }));
+      dispatch(setIsTasksUpdated(true));
+    }
+  }, [tasks, list]);
+
   return (
     <>
       <PilotSection />
@@ -92,11 +106,13 @@ export function ListPage() {
             className="w-full h-full p-4 pb-0 space-y-10 overflow-y-scroll"
             onScroll={onScroll}
           >
-            {listView && <TaskQuickAction listDetailsData={listName} />}
+            <TaskQuickAction listDetailsData={listName} />
 
-            {tasks.length ? <List tasks={tasks} customProperty={list?.data.list.custom_fields} /> : []}
+            {tasksStore[listId as string] && tasks.length && isTasksUpdated ? (
+              <List tasks={tasksStore[listId as string]} />
+            ) : null}
           </div>
-          {tasks.length > 1 && <GroupHorizontalScroll />}
+          {tasks?.length > 1 && <GroupHorizontalScroll />}
         </>
       </Page>
     </>

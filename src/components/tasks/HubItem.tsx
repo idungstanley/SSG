@@ -30,6 +30,8 @@ import ToolTip from '../Tooltip/Tooltip';
 import { Hub, List, Wallet } from '../../pages/workspace/hubs/components/ActiveTree/activetree.interfaces';
 import ActiveBarIdentification from './Component/ActiveBarIdentification';
 import ActiveBackground from './Component/ActiveBackground';
+import { useAbsolute } from '../../hooks/useAbsolute';
+import { IHub } from '../../features/hubs/hubs.interfaces';
 
 interface TaskItemProps {
   item: {
@@ -48,7 +50,7 @@ interface TaskItemProps {
   zNumber?: string;
   isExtendedBar?: boolean;
   handleClick: (id: string) => void;
-  handleLocation: (id: string, name: string) => void;
+  handleLocation: (id: string, name: string, item: IHub) => void;
 }
 export default function HubItem({
   item,
@@ -67,23 +69,19 @@ export default function HubItem({
   const { paletteDropdown } = useAppSelector((state) => state.account);
   const { showSidebar } = useAppSelector((state) => state.account);
   const { showMenuDropdown, SubMenuId } = useAppSelector((state) => state.hub);
+  const { updateCords } = useAppSelector((state) => state.task);
+
   const [uploadId, setUploadId] = useState<string | null | undefined>('');
   const [paletteColor, setPaletteColor] = useState<string | undefined | ListColourProps>(
     type === EntityType.hub ? 'blue' : 'orange'
   );
-
-  const collapseNavAndSubhub = !showSidebar && type === EntityType.subHub;
 
   const { paletteId, show } = paletteDropdown;
 
   const handleHubColour = (id: string, e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     if (showSidebar) {
       e.stopPropagation();
-      if (paletteId === id && show) {
-        dispatch(setPaletteDropDown({ ...paletteDropdown, show: false }));
-      } else {
-        dispatch(setPaletteDropDown({ show: true, paletteId: id, paletteType: EntityType.hub }));
-      }
+      dispatch(setPaletteDropDown({ show: true, paletteId: id, paletteType: EntityType.hub }));
     }
   };
 
@@ -91,58 +89,28 @@ export default function HubItem({
     setUploadId(paletteId);
   }, [paletteId]);
 
-  const closeSubMenu = () => {
-    dispatch(
-      getSubMenu({
-        SubMenuId: null,
-        SubMenuType: null
-      })
-    );
-  };
-
-  const closeMenuDropdown = () => {
-    dispatch(
-      setshowMenuDropdown({
-        showMenuDropdown: null,
-        showMenuDropdownType: null
-      })
-    );
-  };
-
   const handleItemAction = (id: string, name?: string | null) => {
     dispatch(getPrevName(name as string));
     dispatch(setSelectedTreeDetails({ name, id, type: EntityType.hub }));
     dispatch(setCreateWlLink(false));
-    if (id === SubMenuId) {
-      closeSubMenu();
-    } else {
-      closeMenuDropdown();
-      dispatch(
-        getSubMenu({
-          SubMenuId: id,
-          SubMenuType: type == EntityType.hub ? 'hubs' : EntityType.subHub
-        })
-      );
-    }
+    dispatch(
+      getSubMenu({
+        SubMenuId: id,
+        SubMenuType: type == EntityType.hub ? 'hubs' : EntityType.subHub
+      })
+    );
   };
 
   const handleHubSettings = (id: string, name: string, e: React.MouseEvent<HTMLSpanElement, MouseEvent>): void => {
     dispatch(setSelectedTreeDetails({ name, id, type: EntityType.hub }));
     dispatch(setCreateWLID(id));
-    // dispatch(getCurrHubId(id));
     dispatch(setCreateWlLink(false));
-    if (id === showMenuDropdown) {
-      closeMenuDropdown();
-    } else {
-      closeSubMenu();
-      dispatch(
-        setshowMenuDropdown({
-          showMenuDropdown: id,
-          showMenuDropdownType: EntityType.subHub
-        })
-      );
-    }
-
+    dispatch(
+      setshowMenuDropdown({
+        showMenuDropdown: id,
+        showMenuDropdownType: EntityType.subHub
+      })
+    );
     dispatch(getPrevName(name));
     if (showMenuDropdown != null) {
       if ((e.target as HTMLButtonElement).id == 'menusettings') {
@@ -162,6 +130,12 @@ export default function HubItem({
     }
   });
 
+  useEffect(() => {
+    if (isOver) {
+      handleClick(item.id);
+    }
+  }, [isOver]);
+
   const {
     attributes,
     listeners,
@@ -173,6 +147,25 @@ export default function HubItem({
       isHub: true
     }
   });
+
+  const paddingLeft = () => {
+    if (!showSidebar) {
+      return '7px';
+    }
+
+    if (type === EntityType.subHub) {
+      if (isExtendedBar) {
+        return '17px';
+      } else {
+        return '25px';
+      }
+    } else {
+      return '17px';
+    }
+  };
+
+  const { cords, relativeRef } = useAbsolute(updateCords, 266);
+  const { cords: menuCords, relativeRef: menuRef } = useAbsolute(updateCords, 352);
 
   return (
     <div
@@ -189,32 +182,33 @@ export default function HubItem({
         }`}
         ref={setNodeRef}
         tabIndex={0}
-        onClick={() => handleClick(item.id)}
+        onClick={
+          showSidebar || isExtendedBar
+            ? () => handleClick(item.id)
+            : () => handleLocation(item.id, item.name, item as Hub)
+        }
       >
         <div
-          className={`relative flex items-center justify-between ${showSidebar ? 'pl-1' : 'pl-2.5'}`}
-          style={{ height: '30px' }}
+          className="relative flex items-center justify-between"
+          style={{ height: '30px', paddingLeft: paddingLeft() }}
         >
           <ActiveBackground showBgColor={item.id === hubId || item.id === subhubId} />
           <ActiveBarIdentification showBar={item.id === hubId || item.id === subhubId} />
-          <div
-            className="absolute rounded-r-lg opacity-0 cursor-move left-0.5 group-hover:opacity-100"
-            ref={draggableRef}
-            {...listeners}
-            {...attributes}
-          >
-            <Drag />
-          </div>
+          {showSidebar && !isExtendedBar ? (
+            <div
+              className="absolute left-2 rounded-r-lg opacity-0 cursor-move left-0.5 group-hover:opacity-100"
+              ref={draggableRef}
+              {...listeners}
+              {...attributes}
+            >
+              <Drag />
+            </div>
+          ) : null}
           <div
             role="button"
             className="flex truncate items-center py-1.5 mt-0.5 justify-start overflow-y-hidden text-sm"
-            style={{
-              marginLeft: type === EntityType.subHub && !showSidebar ? '-14px' : type === EntityType.subHub ? '0' : '',
-              paddingLeft:
-                type === EntityType.subHub && !showSidebar ? '5px' : type === EntityType.subHub ? '15px' : '5px'
-            }}
           >
-            {!collapseNavAndSubhub && (item?.wallets?.length || item?.lists?.length) ? (
+            {item?.wallets?.length || item?.lists?.length ? (
               <div>
                 {showChildren ? (
                   <span className="flex flex-col">
@@ -228,8 +222,12 @@ export default function HubItem({
               renderEmptyArrowBlock()
             )}
 
-            <div className={`flex items-center flex-1 min-w-0 gap-1 ${collapseNavAndSubhub && 'ml-3'}`}>
-              <div onClick={(e) => handleHubColour(item.id, e)} className="flex items-center justify-center w-5 h-5">
+            <div className="flex items-center flex-1 min-w-0 gap-1">
+              <div
+                onClick={(e) => handleHubColour(item.id, e)}
+                className="flex items-center justify-center w-5 h-5"
+                ref={relativeRef}
+              >
                 {item.path !== null ? (
                   <img src={item.path} alt="hubs image" className="w-full h-full rounded" />
                 ) : (
@@ -252,7 +250,7 @@ export default function HubItem({
                       verticalAlign: 'baseline',
                       letterSpacing: '0.28px'
                     }}
-                    onClick={() => handleLocation(item.id, item.name)}
+                    onClick={() => handleLocation(item.id, item.name, item as Hub)}
                   >
                     {item.name}
                   </p>
@@ -264,6 +262,7 @@ export default function HubItem({
             <div
               className="relative right-0 flex items-center pr-1 space-x-2 text-black opacity-0 z-1 group-hover:opacity-100 hover:text-fuchsia-500"
               onClick={(e) => e.stopPropagation()}
+              ref={menuRef}
             >
               <span onClick={() => handleItemAction(item.id, item.name)} className="cursor-pointer">
                 <PlusIcon />
@@ -283,10 +282,17 @@ export default function HubItem({
       </div>
       <UploadImage endpoint={`hubs/${uploadId}`} invalidateQuery={['hubs'] as InvalidateQueryFilters<unknown>} />
       {paletteId == item.id && show ? (
-        <Palette title="Hub Colour" setPaletteColor={setPaletteColor} bottomContent={<SearchIconUpload />} />
+        <Palette
+          title="Hub Colour"
+          setPaletteColor={setPaletteColor}
+          bottomContent={<SearchIconUpload />}
+          cords={cords}
+        />
       ) : null}
-      {showMenuDropdown === item.id && showSidebar ? <MenuDropdown isExtendedBar={isExtendedBar} /> : null}
-      {SubMenuId === item.id && showSidebar ? <SubDropdown /> : null}
+      {showMenuDropdown === item.id && showSidebar ? (
+        <MenuDropdown isExtendedBar={isExtendedBar} cords={menuCords} />
+      ) : null}
+      {SubMenuId === item.id && showSidebar ? <SubDropdown cords={menuCords} /> : null}
     </div>
   );
 }

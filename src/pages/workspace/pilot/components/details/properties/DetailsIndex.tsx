@@ -20,10 +20,7 @@ export default function DetailsIndex() {
     activeItemId,
     activeItemType
   });
-  const { data: list } = UseGetListDetails({
-    activeItemId,
-    activeItemType
-  });
+  const { data: list } = UseGetListDetails(activeItemId);
   const { data: task } = getOneTaskServices({ task_id: activeItemId });
   const taskDetails = task?.data.task;
 

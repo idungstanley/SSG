@@ -10,6 +10,11 @@ import { cl } from '../../utils';
 import { isAllowIncreaseWidth } from '../../utils/widthUtils';
 import Pilot from '../Pilot';
 
+const SIDEBAR_MIN_WIDTH = 0;
+const SIDEBAR_MAX_WIDTH = 288;
+const PILOT_SCROLLBAR_WIDTH = 24;
+const PILOT_COLLAPSE_WIDTH = 54;
+
 interface PageProps {
   header?: JSX.Element;
   additionalHeader?: JSX.Element;
@@ -21,6 +26,16 @@ interface PageProps {
 
 export default function Page({ header, additionalHeader, children, additional, pilotConfig, extendedBar }: PageProps) {
   const { showOverlay } = useAppSelector((state) => state.workspace);
+  const { sidebarWidthRD, showExtendedBar } = useAppSelector((state) => state.workspace);
+  const { showSidebar, userSettingsData } = useAppSelector((state) => state.account);
+  const { show: showFullPilot } = useAppSelector((state) => state.slideOver.pilotSideOver);
+
+  const culculateWidthForContent = () => {
+    const sidebarWidth = showSidebar ? userSettingsData?.sidebarWidth : sidebarWidthRD;
+    const extendedBarWidth = showExtendedBar ? SIDEBAR_MAX_WIDTH : SIDEBAR_MIN_WIDTH;
+    const pilotWidth = showFullPilot ? dimensions.pilot.default + PILOT_SCROLLBAR_WIDTH : PILOT_COLLAPSE_WIDTH;
+    return `calc(100vw - ${sidebarWidth}px - ${extendedBarWidth}px - ${pilotWidth}px)`;
+  };
 
   return (
     <main className="grid w-full h-full grid-cols-autoFr">
@@ -38,7 +53,9 @@ export default function Page({ header, additionalHeader, children, additional, p
         {header}
 
         <div className="relative grid w-full h-full grid-cols-frAuto">
-          <div className="overflow-scroll">{children}</div>
+          <div className="relative" style={{ width: culculateWidthForContent() }}>
+            {children}
+          </div>
 
           <span className={`${showOverlay && 'relative z-50'}`}>
             {pilotConfig ? <Pilot pilotConfig={pilotConfig} /> : null}
@@ -57,9 +74,6 @@ interface ExtendedBarProps {
   icon?: JSX.Element;
   source?: string;
 }
-
-const SIDEBAR_MIN_WIDTH = 0;
-const SIDEBAR_MAX_WIDTH = 288;
 
 const MIN_SIDEBAR_WIDTH = dimensions.extendedBar.min;
 const MAX_SIDEBAR_WIDTH = dimensions.extendedBar.max;

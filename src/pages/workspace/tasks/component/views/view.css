@@ -195,7 +195,7 @@ textarea {
 }
 
 .slider.checked {
-  background-color: #2196F3;
+  background-color: #2196f3;
 }
 
 .slider:before {
@@ -250,13 +250,17 @@ input:checked + .slider:before {
   background-color: #d559ff !important;
 }
 
+.searchHover:hover input::placeholder {
+  color: #d559ff;
+}
+
 .slider:before {
   position: absolute;
   content: '';
   height: 16px;
   width: 16px;
   left: 2px;
-  bottom: 2px;
+  /* bottom: 2px; */
   background-color: white;
   border-radius: 50%;
   transition: transform 0.2s ease;

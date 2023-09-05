@@ -1,6 +1,12 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { dimensions } from '../../app/config/dimensions';
-import { IRecorderLastMemory, ITimerLastMemory, IWorkspaceRes, WorkSpaceSettingsRes } from './workspace.interfaces';
+import {
+  IRecorderLastMemory,
+  ITimerLastMemory,
+  IWorkspaceRes,
+  WorkSpaceSettingsRes,
+  WorkSpaceSettingsUpdateRes
+} from './workspace.interfaces';
 import { IActivityLog } from '../general/history/history.interfaces';
 import dayjs, { Dayjs } from 'dayjs';
 
@@ -44,6 +50,7 @@ interface workspaceState {
   showPilotListView: boolean;
   activeTabId: number | undefined;
   showOverlay: boolean;
+  pickedDateState: boolean;
   activeHotKeyTabId: number | null;
   activeSubCommunicationTabId: number | null;
   activeSubHubManagerTabId: number | null;
@@ -69,6 +76,9 @@ interface workspaceState {
   openedEntitiesIds: string[];
   extendedBarOpenedEntitiesIds: string[];
   workSpaceSettings: WorkSpaceSettingsRes[] | undefined;
+  workSpaceSettingsObj: WorkSpaceSettingsUpdateRes | undefined;
+  draggableActiveStatusId: string | null;
+  isFavoritePinned: boolean;
 }
 
 const initialState: workspaceState = {
@@ -81,6 +91,7 @@ const initialState: workspaceState = {
   isResize: false,
   showOverlay: false,
   showTabLabel: showTabLabelFromLS,
+  pickedDateState: false,
   showWallet: false,
   isManageStatus: false,
   showMenuDropDown: false,
@@ -127,7 +138,10 @@ const initialState: workspaceState = {
   showMore: false,
   openedEntitiesIds: [],
   extendedBarOpenedEntitiesIds: [],
-  workSpaceSettings: []
+  workSpaceSettings: [],
+  workSpaceSettingsObj: undefined,
+  draggableActiveStatusId: null,
+  isFavoritePinned: false
 };
 
 export const wsSlice = createSlice({
@@ -143,11 +157,17 @@ export const wsSlice = createSlice({
     setShowTreeInput(state, action: PayloadAction<boolean>) {
       state.showTreeInput = action.payload;
     },
+    setIsFavoritePinned(state, action: PayloadAction<boolean>) {
+      state.isFavoritePinned = action.payload;
+    },
     setIsManageStatus(state, action: PayloadAction<boolean>) {
       state.isManageStatus = action.payload;
     },
     setShowTabLabel(state, action: PayloadAction<boolean>) {
       state.showTabLabel = action.payload;
+    },
+    setPickedDateState(state, action: PayloadAction<boolean>) {
+      state.pickedDateState = action.payload;
     },
     setIsResize(state, action: PayloadAction<boolean>) {
       state.isResize = action.payload;
@@ -169,6 +189,9 @@ export const wsSlice = createSlice({
     },
     setShowExtendedBar(state, action: PayloadAction<boolean>) {
       state.showExtendedBar = action.payload;
+    },
+    setDraggableActiveStatusId(state, action: PayloadAction<string | null>) {
+      state.draggableActiveStatusId = action.payload;
     },
     setShowPilotIconView(state, action: PayloadAction<boolean>) {
       state.showPilotIconView = action.payload;
@@ -331,6 +354,9 @@ export const wsSlice = createSlice({
     },
     setWorkSpaceSetting(state, action: PayloadAction<WorkSpaceSettingsRes[] | undefined>) {
       state.workSpaceSettings = action.payload;
+    },
+    setWorkSpaceSettingsObj(state, action: PayloadAction<WorkSpaceSettingsUpdateRes>) {
+      state.workSpaceSettingsObj = action.payload;
     }
   }
 });
@@ -375,6 +401,7 @@ export const {
   toggleMute,
   setRecorderLastMemory,
   setWorkspaceData,
+  setPickedDateState,
   setTimerLastMemory,
   resetWorkSpace,
   setActivityArray,
@@ -390,7 +417,10 @@ export const {
   setOpenedEntitiesIds,
   setExtendedBarOpenedEntitiesIds,
   setActiveStatusManagementTabId,
-  setWorkSpaceSetting
+  setWorkSpaceSetting,
+  setIsFavoritePinned,
+  setWorkSpaceSettingsObj,
+  setDraggableActiveStatusId
 } = wsSlice.actions;
 
 export default wsSlice.reducer;

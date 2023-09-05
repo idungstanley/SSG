@@ -1,24 +1,28 @@
-import UpdateTimeEntryDropdown from './UpdateTimeEntryDropdown';
-import { setUpdateEntries } from '../../../../../features/task/taskSlice';
-import { useDispatch } from 'react-redux';
-import { useAppSelector } from '../../../../../app/hooks';
-import { DeleteTimeEntriesService } from '../../../../../features/task/taskService';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { AvatarWithInitials } from '../../../../../components';
 import { Header } from '../../../../../components/Pilot/components/TimeClock/ClockLog';
 import DateFormat from '../../../../../components/DateFormat';
 import ToolTip from '../../../../../components/Tooltip/Tooltip';
-import EditIcon from '../../../../../assets/icons/Edit';
 import moment from 'moment-timezone';
-import TrashIcon from '../../../../../assets/icons/delete';
-import { useState } from 'react';
+import { MouseEvent, useState } from 'react';
+import ThreeDotIcon from '../../../../../assets/icons/ThreeDotIcon';
+import { EntryListActionBtns } from './EntryListActionBtns';
+import PopAssignModal from '../../assignTask/popAssignModal';
 export interface teamMember {
   id: string;
   user: {
     id: string;
     initials: string;
     name: string;
+    color: string;
+    avatar_path: string;
   };
+}
+
+export interface teamGroups {
+  id: string;
+  name: string;
+  color: string;
+  initials: string;
 }
 export interface entriesProps {
   id: string;
@@ -35,58 +39,57 @@ export interface EntryListProps {
 }
 
 export default function EntryList({ entries, switchHeader }: EntryListProps) {
-  const dispatch = useDispatch();
-  const { openUpdateEntryId } = useAppSelector((state) => state.task);
-  const queryClient = useQueryClient();
   const headers = switchHeader;
-  const { initials, name } = entries.team_member.user;
-  const [iconToggle, setIconToggle] = useState<{ editIcon: boolean; trashIcon: boolean }>({
+  const { initials, name, color } = entries.team_member.user;
+  const [iconToggle, setIconToggle] = useState<{ editIcon: boolean; trashIcon: boolean; threeDots: boolean }>({
     editIcon: false,
-    trashIcon: false
+    trashIcon: false,
+    threeDots: false
   });
+  const [anchorEl, setAnchorEl] = useState<HTMLTableCellElement | null>(null);
+  const [showUserModal, setShowUserModal] = useState<boolean>(false);
 
-  const handledelete = useMutation(DeleteTimeEntriesService, {
-    onSuccess: () => {
-      queryClient.invalidateQueries(['timeclock']);
-    }
-  });
-
-  const handleUpdateEntry = (id: string) => {
-    if (openUpdateEntryId == id) {
-      dispatch(
-        setUpdateEntries({
-          openUpdateEntryId: id
-        })
-      );
+  const handleHover = (e: MouseEvent<HTMLTableCellElement>) => {
+    if (anchorEl) {
+      setAnchorEl(null);
+      setShowUserModal(false);
     } else {
-      dispatch(
-        setUpdateEntries({
-          openUpdateEntryId: id,
-          initial_description: entries.description,
-          initial_start_date: entries.start_date,
-          initial_end_date: entries.end_date
-        })
-      );
+      setAnchorEl(e.currentTarget);
+      setShowUserModal(true);
     }
   };
 
   return (
-    <tr key={entries.id} id="getTimeEntries" className="flex justify-between border-b w-full">
-      <td id="left" className="flex items-center space-x-4">
+    <tr key={entries.id} id="getTimeEntries" className="flex justify-between border-b w-full py-0.5">
+      <td id="left" className="w-10/12 flex items-center justify-between">
         {headers.map((col) => {
           if (col.title === 'user' && !col.hidden) {
             return (
-              <td key={col.id} className="flex w-6 items-center justify-start cursor-pointer py-1">
+              <td
+                key={col.id}
+                onMouseEnter={handleHover}
+                onMouseLeave={handleHover}
+                className="w-1/5 flex items-center justify-start cursor-pointer py-1"
+              >
                 <ToolTip title={name}>
-                  <AvatarWithInitials height="h-5" width="w-5" initials={initials} />
+                  <AvatarWithInitials height="h-5" width="w-5" initials={initials} backgroundColour={color} />
                 </ToolTip>
+                {showUserModal && (
+                  <PopAssignModal
+                    anchorEl={anchorEl}
+                    currHoveredOnUser={entries.team_member.id}
+                    handleClose={() => setShowUserModal(false)}
+                    modalLoader={false}
+                    spinnerSize={6}
+                  />
+                )}
               </td>
             );
           }
 
           if (col.title === 'duration' && !col.hidden) {
             return (
-              <td key={col.id} className="w-14 text-center text-alsoit-text-md font-semibold cursor-default py-1">
+              <td key={col.id} className="w-1/5 text-center text-alsoit-text-md font-semibold cursor-default py-1">
                 {moment.utc(entries.duration * 1000).format('HH:mm:ss')}
               </td>
             );
@@ -94,7 +97,7 @@ export default function EntryList({ entries, switchHeader }: EntryListProps) {
 
           if (col.title === 'start date' && !col.hidden) {
             return (
-              <td key={col.id} className="w-14 text-center font-semibold text-alsoit-gray-300 cursor-default py-1">
+              <td key={col.id} className="w-1/5 text-center font-semibold text-alsoit-gray-300 cursor-default py-1">
                 <DateFormat date={entries.start_date} font="10px" />
               </td>
             );
@@ -104,7 +107,7 @@ export default function EntryList({ entries, switchHeader }: EntryListProps) {
             return (
               <td
                 key={col.id}
-                className="w-14 text-center font-semibold text-alsoit-gray-300"
+                className="w-1/5 text-center font-semibold text-alsoit-gray-300"
                 style={{ cursor: 'default', padding: '2px 0' }}
               >
                 <DateFormat date={entries.end_date} font="10px" />
@@ -116,7 +119,7 @@ export default function EntryList({ entries, switchHeader }: EntryListProps) {
             return (
               <td
                 key={col.id}
-                className="w-14 text-alsoit-text-md font-semibold cursor-default py-1"
+                className="w-1/5 text-alsoit-text-sm text-center font-semibold cursor-default py-1"
                 title={entries.description}
               >
                 {entries.description && entries.description.slice(0, 5) + '...'}
@@ -125,46 +128,16 @@ export default function EntryList({ entries, switchHeader }: EntryListProps) {
           }
         })}
       </td>
-      <td id="right" className="flex items-center justify-end space-x-2 relative">
-        <button type="button" onClick={() => handleUpdateEntry(entries.id)}>
-          <div
-            onMouseEnter={() =>
-              setIconToggle((prev) => ({
-                ...prev,
-                editIcon: true
-              }))
-            }
-            onMouseLeave={() =>
-              setIconToggle((prev) => ({
-                ...prev,
-                editIcon: false
-              }))
-            }
-          >
-            <EditIcon active={iconToggle.editIcon} dimensions={{ width: 20, height: 20 }} aria-hidden="true" />
-          </div>
-        </button>
-        {openUpdateEntryId == entries.id ? (
-          <UpdateTimeEntryDropdown time_entry_id={entries.id} billable={entries.is_billable} />
-        ) : null}
-        <button type="button" onClick={() => handledelete.mutateAsync({ timeEntryDeleteTriggerId: entries.id })}>
-          <div
-            onMouseEnter={() =>
-              setIconToggle((prev) => ({
-                ...prev,
-                trashIcon: true
-              }))
-            }
-            onMouseLeave={() =>
-              setIconToggle((prev) => ({
-                ...prev,
-                trashIcon: false
-              }))
-            }
-          >
-            <TrashIcon active={iconToggle.trashIcon} dimensions={{ width: 20, height: 20 }} aria-hidden="true" />
-          </div>
-        </button>
+      {/* action buttons */}
+      <td
+        className="relative flex items-center"
+        onMouseEnter={() => setIconToggle((prev) => ({ ...prev, threeDots: true }))}
+        onMouseLeave={() => setIconToggle((prev) => ({ ...prev, threeDots: false }))}
+      >
+        <ThreeDotIcon active={iconToggle.threeDots} />
+        {iconToggle.threeDots && (
+          <EntryListActionBtns entries={entries} iconToggle={iconToggle} setIconToggle={setIconToggle} />
+        )}
       </td>
     </tr>
   );

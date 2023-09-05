@@ -1,18 +1,22 @@
 import { Menu, Transition } from '@headlessui/react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import { Fragment } from 'react';
-import { List } from './ui/FilterList/List';
+import { FilterList } from './ui/FilterList/FilterList';
 import Button from '../../../Buttons/Button';
 import Icons from '../../../Icons/Icons';
 import Filter from '../../../../assets/icons/filter_alt.svg';
 import ArrowDownFilled from '../../../../assets/icons/ArrowDownFilled';
 
-export function FilterDropdown() {
+interface IFilterDropdownProps {
+  isSplitSubtasks?: boolean;
+}
+
+export function FilterDropdown({ isSplitSubtasks }: IFilterDropdownProps) {
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
         <Menu.Button className="inline-flex text-gay-500">
-          <Button active={false}>
+          <Button active={false} withoutBg={isSplitSubtasks}>
             <Icons src={Filter} />
             Filter
             <ArrowDownFilled />
@@ -39,7 +43,7 @@ export function FilterDropdown() {
 
           {/* title */}
           <h1 className="text-black text-lg font-bold">Filters</h1>
-          <List />
+          <FilterList />
         </Menu.Items>
       </Transition>
     </Menu>

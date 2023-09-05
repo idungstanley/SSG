@@ -1,0 +1,108 @@
+.stack {
+  position: relative;
+  border-radius: 50%;
+  outline: 1px solid #fff;
+}
+
+.hii {
+  font-size: 14px;
+  gap: 10px;
+  text-transform: capitalize;
+  padding-left: 20px;
+  color: red;
+}
+
+.scrollbarDynCol {
+  min-height: 500px;
+  max-height: 500px;
+  background: #fff;
+  overflow-y: hidden;
+}
+/* .scrollbarDynCol:hover {
+  overflow-y: auto;
+} */
+
+.comfortableView {
+  /* width: 400px; */
+  white-space: nowrap;
+  overflow: auto;
+  text-overflow: ellipsis;
+}
+
+.comfortableViewWrap {
+  min-height: 60px;
+}
+
+.compactView {
+  min-height: 20px;
+  /* overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis; */
+}
+
+.compactViewWrap {
+  min-height: 20px;
+  white-space: normal;
+}
+
+.dNone {
+  display: none;
+}
+
+.dNFlex:hover .dNone {
+  display: flex;
+}
+
+.dBlock:hover .dNone {
+  display: block;
+}
+
+.dFlex:hover .viewSettings {
+  display: flex;
+}
+
+.viewSettings {
+  display: none;
+}
+
+.viewSettingsParent:hover .viewSettings {
+  display: block;
+}
+
+.viewSettingsHoverBorder:hover {
+  border-bottom: solid grey 4px;
+  border-radius: 4px;
+}
+
+.table-container table .tdListV,
+.tdListVNoSticky {
+  background-color: white;
+  border-top: 1px solid #bf01fe;
+  border-bottom: 1px solid #bf01fe;
+}
+
+/* Style left border of the first column */
+.table-container table .tdListV {
+  border-left: 4px solid #bf01fe;
+}
+
+/* Style right border of the last column */
+.table-container table .tdListVNoSticky:last-child {
+  border-right: 1px solid #bf01fe;
+}
+
+.slide-in {
+  transition: transform 1s ease;
+  transform: translateY(0%);
+}
+
+.slide-out {
+  transition: transform 1s ease;
+  transform: translateY(-100%);
+}
+
+.custom-property-tags {
+  width: auto;
+  height: 15px;
+  clip-path: polygon(75% 0%, 100% 50%, 75% 100%, 0% 100%, 25% 50%, 0% 0%);
+}

@@ -1,4 +1,3 @@
-import React from 'react';
 import hubIcon from '../../../../../../assets/branding/hub.svg';
 import { VscChecklist, VscScreenFull } from 'react-icons/vsc';
 import TimeClock from '../../timeClock/subtabs/TimeClock';
@@ -9,13 +8,8 @@ import WatchersForPilot from '../../../../../../components/Watchers/WatchersForP
 import ChatForPilot from '../../../../../../components/Chat/ChatForPilot';
 import Checklists from '../../../../../../components/Pilot/components/Checklist/Checklist';
 import RecordScreen from '../../../../../../components/Pilot/components/RecordScreen';
-import {
-  ChatBubbleLeftEllipsisIcon,
-  ClockIcon,
-  DocumentTextIcon,
-  EyeIcon,
-  SignalIcon
-} from '@heroicons/react/24/outline';
+import { ChatBubbleLeftEllipsisIcon, DocumentTextIcon, EyeIcon, SignalIcon } from '@heroicons/react/24/outline';
+import { ClockIcon } from '../../../../../../assets/icons/ClockIcon';
 
 const sections = [
   {
@@ -81,7 +75,7 @@ const tabs = [
   {
     id: 6,
     label: 'Time clock',
-    icon: <ClockIcon className="w-4 h-4" />
+    icon: <ClockIcon />
   },
   {
     id: 7,

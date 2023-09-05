@@ -64,7 +64,7 @@ export default function DropdownField({ field, taskId, currentProperty }: Dropdo
     if (field)
       onUpdate({
         taskId,
-        value: option.id,
+        value: [{ value: option.id }],
         fieldId: field.id
       });
     closeModal();
@@ -95,9 +95,12 @@ export default function DropdownField({ field, taskId, currentProperty }: Dropdo
 
       <Transition appear show={isOpen} as="div">
         <Dialog as="div" className="relative z-10" onClose={closeModal}>
-          <div style={{ ...cords }} className="fixed overflow-y-auto">
-            <div className="flex flex-col items-center justify-center p-4 text-center bg-white border rounded-md shadow-lg outline-none w-fit h-fit">
-              <div className="flex items-center">
+          <div style={{ ...cords, maxWidth: '195px' }} className="fixed overflow-y-auto max-w-full">
+            <div
+              className="flex flex-col items-center justify-center p-4 text-center bg-white border rounded-xl shadow-lg outline-none h-fit"
+              style={{ maxWidth: '195px' }}
+            >
+              <div className="flex items-center max-w-full">
                 <SearchIcon />
                 <input
                   onChange={handleSearchChange}
@@ -105,7 +108,7 @@ export default function DropdownField({ field, taskId, currentProperty }: Dropdo
                   ref={inputRef}
                   type="text"
                   placeholder="Search"
-                  className="h-4 border-0 ring-0 outline-0 focus:ring-0 focust:outline-0 focus:border-0"
+                  className="h-4 border-0 ring-0 outline-0 focus:ring-0 focust:outline-0 focus:border-0 w-11/12"
                 />
               </div>
               <div className="w-full pt-3 space-y-2">
@@ -115,10 +118,10 @@ export default function DropdownField({ field, taskId, currentProperty }: Dropdo
                         key={option.id}
                         onClick={() => handleClick(option)}
                         className={cl(
-                          'text-gray-700 py-2 bg-white border w-full text-center block px-4 text-sm',
+                          'text-gray-700 py-2 bg-white border w-full text-center block px-4 text-sm truncate rounded',
                           option.color ? 'text-white' : ''
                         )}
-                        style={{ backgroundColor: option.color }}
+                        style={{ backgroundColor: option.color, maxWidth: '195px' }}
                       >
                         {option.name}
                       </button>

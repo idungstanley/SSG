@@ -3,6 +3,7 @@ export interface listColumnProps {
   field: string;
   value: string;
   hidden: boolean;
+  color?: string | null;
 }
 
 export const columnsHead: listColumnProps[] = [

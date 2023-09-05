@@ -10,7 +10,6 @@ import { setUserData, setUserInfo } from './features/settings/user/userSettingsS
 function App() {
   const user = useAppSelector(selectCurrentUser);
   const dispatch = useAppDispatch();
-
   const { data, status } = useGetSelf();
 
   useEffect(() => {

@@ -11,6 +11,7 @@ import { useDraggable } from '@dnd-kit/core';
 import { MdDragIndicator } from 'react-icons/md';
 import { ManageTagsDropdown } from '../../../Tag/ui/ManageTagsDropdown/ui/ManageTagsDropdown';
 import { Tags } from '../../../Tag';
+import { useAppSelector } from '../../../../app/hooks';
 
 interface RowProps {
   task: Task;
@@ -22,18 +23,11 @@ interface RowProps {
   handleClose?: () => void | void;
 }
 
-export function AddSubTask({
-  task,
-  columns,
-  paddingLeft = 0,
-  parentId,
-  task_status,
-  isListParent,
-  handleClose
-}: RowProps) {
+export function AddSubTask({ task, columns, paddingLeft, parentId, task_status, isListParent, handleClose }: RowProps) {
   const [showNewTaskField] = useState(false);
   const otherColumns = columns.slice(1);
   const [showSubTasks, setShowSubTasks] = useState(false);
+  const { subtaskDefaultStatusId } = useAppSelector((state) => state.task);
 
   const onShowAddSubtaskField = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.stopPropagation();
@@ -68,7 +62,7 @@ export function AddSubTask({
           task={task}
           isListParent={isListParent}
           parentId={parentId as string}
-          task_status={task_status as string}
+          task_status={(subtaskDefaultStatusId as string) || task_status}
           onClose={handleClose}
           paddingLeft={paddingLeft}
           tags={'tags' in task ? <Tags tags={task.tags} taskId={task.id} /> : null}
@@ -110,15 +104,13 @@ export function AddSubTask({
       {showNewTaskField ? (
         <AddTask
           columns={otherColumns}
-          paddingLeft={DEFAULT_LEFT_PADDING + paddingLeft}
+          paddingLeft={DEFAULT_LEFT_PADDING}
           parentId={task.id}
           onClose={onCloseAddTaskFIeld}
         />
       ) : null}
 
-      {showSubTasks ? (
-        <SubTasks paddingLeft={DEFAULT_LEFT_PADDING + paddingLeft} parentId={task.id} columns={columns} />
-      ) : null}
+      {showSubTasks ? <SubTasks paddingLeft={DEFAULT_LEFT_PADDING} parentId={task.id} columns={columns} /> : null}
     </>
   );
 }

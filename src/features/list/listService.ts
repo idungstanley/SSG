@@ -3,14 +3,15 @@ import requestNew from '../../app/requestNew';
 import { useDispatch } from 'react-redux';
 import { setArchiveList } from './listSlice';
 import { closeMenu, setSpaceStatuses } from '../hubs/hubSlice';
-import { IListDetailRes, taskCountFields } from './list.interfaces';
+import { IField, IListDetailRes, taskCountFields } from './list.interfaces';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { useParams } from 'react-router-dom';
 import { generateFilters } from '../../components/TasksHeader/lib/generateFilters';
 import { UseGetHubDetails } from '../hubs/hubService';
 import { IList } from '../hubs/hubs.interfaces';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
-import { setNewCustomPropertyDetails } from '../task/taskSlice';
+import { setIsTasksUpdated, setNewCustomPropertyDetails, setTasks } from '../task/taskSlice';
+import { updateCustomFieldsManager } from '../../managers/Task';
 
 interface TaskCountProps {
   data: {
@@ -21,6 +22,12 @@ interface TaskCountProps {
 interface IResponseList {
   data: {
     list: IList;
+  };
+}
+
+interface IResCustomfield {
+  data: {
+    custom_field: IField;
   };
 }
 
@@ -52,7 +59,6 @@ export const useMoveListService = () => {
   const id = hubId ?? walletId ?? listId;
   const type = hubId ? EntityType.hub : walletId ? EntityType.wallet : EntityType.list;
 
-  const { filterTaskByAssigneeIds: assigneeUserId } = useAppSelector((state) => state.task);
   const { sortAbleArr } = useAppSelector((state) => state.task);
   const sortArrUpdate = sortAbleArr.length <= 0 ? null : sortAbleArr;
 
@@ -63,7 +69,7 @@ export const useMoveListService = () => {
       queryClient.invalidateQueries(['hub']);
       queryClient.invalidateQueries(['sub-hub']);
       queryClient.invalidateQueries(['lists']);
-      queryClient.invalidateQueries(['task', { listId, assigneeUserId, sortArrUpdate, filters }]);
+      queryClient.invalidateQueries(['task', { listId, sortArrUpdate, filters }]);
       queryClient.invalidateQueries(['task', id, type]);
       queryClient.invalidateQueries(['retrieve', id ?? 'root', 'tree']);
       queryClient.invalidateQueries(['retrieve', id ?? 'root', undefined]);
@@ -165,21 +171,28 @@ export const UseArchiveListService = (list: { query: string | undefined | null; 
 };
 
 //get list details
-export const UseGetListDetails = (query: {
-  activeItemId: string | null | undefined;
-  activeItemType: string | null | undefined;
-}) => {
+export const UseGetListDetails = (listId: string | null | undefined) => {
+  const dispatch = useAppDispatch();
+
+  const { activeItemType, activeItemId } = useAppSelector((state) => state.workspace);
+  const id = activeItemId === 'list' ? activeItemId : listId;
   return useQuery(
-    ['hubs', query],
+    ['hubs', { listId, id }],
     async () => {
       const data = await requestNew<IListDetailRes>({
-        url: `lists/${query.activeItemId}`,
+        url: `lists/${listId}`,
         method: 'GET'
       });
       return data;
     },
     {
-      enabled: query.activeItemType === EntityType.list && !!query.activeItemId
+      enabled: !!listId || !!id,
+      onSuccess: (data) => {
+        const listStatusTypes = data.data.list.task_statuses;
+        if (activeItemType === 'list') {
+          dispatch(setSpaceStatuses(listStatusTypes));
+        }
+      }
     }
   );
 };
@@ -191,42 +204,45 @@ const createDropdownField = (data: {
   options: { name: string; color: null | string }[] | undefined;
   type?: string;
   customType: string;
+  style?: { is_bold: string; is_underlined: string; is_italic: string };
+  properties?: { currency: string; symbol: string };
 }) => {
-  const { id, options, name, type, customType } = data;
-
-  const response = requestNew({
+  const { id, options, name, type, customType, style, color, properties } = data;
+  const response = requestNew<IResCustomfield>({
     url: 'custom-fields',
     method: 'POST',
     data: {
       type: customType.replace(/\s+/g, '').toLowerCase(),
       name,
+      color,
+      is_bold: style?.is_bold,
+      is_italic: style?.is_italic,
+      is_underlined: style?.is_underlined,
       entity_id: id,
       entity_type: type,
-      options
+      options,
+      properties
     }
   });
   return response;
 };
 
-export const useCreateDropdownField = (type: string | undefined, id?: string | undefined) => {
-  const queryClient = useQueryClient();
+export const useCreateDropdownField = () => {
   const dispatch = useAppDispatch();
-  const { filterTaskByAssigneeIds } = useAppSelector((state) => state.task);
-  const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
+
+  const { tasks } = useAppSelector((state) => state.task);
 
   return useMutation(createDropdownField, {
-    onSuccess: () => {
+    onSuccess: (data) => {
       dispatch(setNewCustomPropertyDetails({ name: '', type: 'Select Property Type', color: null }));
-
-      if (type === EntityType.hub) {
-        queryClient.invalidateQueries(['task', activeItemId, activeItemType, filterTaskByAssigneeIds]);
-      }
-      queryClient.invalidateQueries([type, id]);
+      const updatedList = updateCustomFieldsManager(tasks, data.data.custom_field);
+      dispatch(setTasks(updatedList));
+      dispatch(setIsTasksUpdated(true));
     }
   });
 };
 
-const updateEntityCustomFieldValue = (data: { taskId?: string; fieldId: string; value: string }) => {
+const updateEntityCustomFieldValue = (data: { taskId?: string; fieldId: string; value: { value: string }[] }) => {
   const { taskId, fieldId, value } = data;
 
   const response = requestNew({
@@ -235,7 +251,7 @@ const updateEntityCustomFieldValue = (data: { taskId?: string; fieldId: string; 
     data: {
       type: 'task',
       id: taskId,
-      values: [{ value }]
+      values: value
     }
   });
   return response;
@@ -243,13 +259,13 @@ const updateEntityCustomFieldValue = (data: { taskId?: string; fieldId: string; 
 
 export const useUpdateEntityCustomFieldValue = (listId?: string) => {
   const queryClient = useQueryClient();
-  const { filterTaskByAssigneeIds } = useAppSelector((state) => state.task);
+
   const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
   const { filters } = generateFilters();
 
   return useMutation(updateEntityCustomFieldValue, {
     onSuccess: () => {
-      queryClient.invalidateQueries(['task', activeItemId, activeItemType, filterTaskByAssigneeIds]);
+      queryClient.invalidateQueries(['task', activeItemId, activeItemType]);
       queryClient.invalidateQueries(['task', { listId }]);
       queryClient.invalidateQueries(['task', listId, 'hub', filters]);
     }

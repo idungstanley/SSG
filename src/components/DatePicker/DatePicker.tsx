@@ -3,7 +3,6 @@ import dayjs from 'dayjs';
 import timezone from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { Modal } from '@mui/material';
 import { DatePickerSideBar } from './DatePickerSideBar';
 import { DatePickerManualDates } from './DatePickerManualDate';
 import MiniDatePicker from './MiniCalendar';
@@ -11,11 +10,17 @@ import LeftPanelOpen from '../../assets/icons/LeftPanelOpen';
 import DatePickerFooter from './DatePickerFooter';
 import { useGetUserSettingsData } from '../../features/task/taskService';
 import { setHistoryMemory, setTaskSelectedDate } from '../../features/task/taskSlice';
+import { IUserCalendarParams } from '../../features/task/interface.tasks';
+import { setPickedDateState } from '../../features/workspace/workspaceSlice';
+import AlsoitMenuDropdown from '../DropDowns';
 
 interface DatePickerProps {
   styles?: string;
   range?: boolean;
+  setShowDatePickerOption?: boolean;
   height?: string;
+  anchorEl?: null | HTMLElement;
+  handleClose?: () => void;
   width?: string;
   toggleFn?: Dispatch<SetStateAction<boolean>>;
 }
@@ -24,13 +29,23 @@ export type DateString = {
   start?: string;
   due?: string;
 };
-export default function DatePicker({ styles, width, height, range, toggleFn }: DatePickerProps) {
+export default function DatePicker({
+  styles,
+  width,
+  height,
+  range,
+  handleClose,
+  anchorEl,
+  setShowDatePickerOption,
+  toggleFn
+}: DatePickerProps) {
   dayjs.extend(timezone);
   dayjs.extend(utc);
   const dispatch = useAppDispatch();
   const currentDate = dayjs();
   const userTimeZoneFromLS: string | null = localStorage.getItem('userTimeZone');
   const { timezone: zone, time_format } = useAppSelector((state) => state.userSetting);
+
   const sectionRef = useRef<HTMLElement>(null);
   const [time, setTime] = useState<string>(
     dayjs()
@@ -40,14 +55,21 @@ export default function DatePicker({ styles, width, height, range, toggleFn }: D
   const [openSideBar, setOpenSideBar] = useState<boolean>(false);
   const { data } = useGetUserSettingsData({ keys: 'calendar' });
 
+  function isIUserCalendarParams(value: unknown): value is IUserCalendarParams {
+    if (typeof value === 'object' && value !== null) {
+      const userCalendarParams = value as IUserCalendarParams;
+      return 'selectedDate' in userCalendarParams && 'HistoryFilterMemory' in userCalendarParams;
+    }
+    return false;
+  }
+
   useEffect(() => {
     if (data) {
       const { value } = data.data.settings;
-      if (!value) return;
-      if (value.selectedDate && value.HistoryFilterMemory) {
+      if (isIUserCalendarParams(value)) {
         const { selectedDate, HistoryFilterMemory } = value;
-        const from = dayjs(selectedDate.from);
-        const to = dayjs(selectedDate.to);
+        const from = dayjs(selectedDate?.from);
+        const to = dayjs(selectedDate?.to);
         dispatch(setTaskSelectedDate({ from, to }));
         dispatch(setHistoryMemory(HistoryFilterMemory));
       }
@@ -68,7 +90,8 @@ export default function DatePicker({ styles, width, height, range, toggleFn }: D
   }, []);
 
   return (
-    <Modal open={true} hideBackdrop>
+    <AlsoitMenuDropdown handleClose={closeDateModal} anchorEl={anchorEl}>
+      {/* <Modal open={true} hideBackdrop> */}
       <section
         onClick={(e) => e.stopPropagation()}
         ref={sectionRef}
@@ -95,12 +118,18 @@ export default function DatePicker({ styles, width, height, range, toggleFn }: D
             )}
             <DatePickerManualDates range={range} />
           </div>
-          <div>
+          <div
+            onClick={() => {
+              setShowDatePickerOption ? dispatch(setPickedDateState(true)) : null;
+              handleClose && handleClose();
+            }}
+          >
             <MiniDatePicker range={range} miniMode={openSideBar} fullCalendar />
           </div>
           <DatePickerFooter miniMode={openSideBar} closeDateModal={closeDateModal} time={time} />
         </div>
       </section>
-    </Modal>
+      {/* </Modal> */}
+    </AlsoitMenuDropdown>
   );
 }

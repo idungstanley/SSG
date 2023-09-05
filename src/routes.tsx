@@ -39,9 +39,6 @@ import Hidden from './pages/inbox/InboxesPage/components/Hidden';
 import Archived from './pages/inbox/InboxesPage/components/Archive';
 import Restore from './pages/inbox/InboxesPage/components/Restore';
 import Docs from './pages/workspace/docs';
-import RenderWallets from './pages/workspace/wallet/renderWallets/RenderWallets';
-// import RenderList from './pages/workspace/lists/RenderList';
-// import { IUser } from './types';
 import RenderTaskModal from './pages/workspace/tasks/component/RenderTaskModal';
 import NotFoundPage from './pages/NotFoundPage/NotFoundPage';
 import Calendar from './pages/calendar';
@@ -49,7 +46,6 @@ import Goals from './pages/workspace/goals';
 import Favorites from './pages/workspace/favorites';
 import Home from './pages/workspace/home/Home';
 import ExplorerPage from './pages/explorer';
-import RenderHubs from './pages/workspace/hubs/components/renderHubs/RenderHubs';
 import Directory from './pages/directory';
 import NotificationSettingsPage from './pages/settings/NotificationSettings/GeneralNotification/index';
 import UserSettings from './pages/settings/UserSettings/Pages/Settings';
@@ -67,10 +63,10 @@ import { useAppSelector } from './app/hooks';
 import HubPage from './pages/hub';
 import { ListPage } from './pages/list';
 import { WalletPage } from './pages/wallet';
-// import PeopleProfile from './pages/settings/People';
 import Construction from './pages/settings/UserSettings/Pages/Construction';
 import TaskInvite from './pages/workspace/tasks/taskInvite/TaskInvite';
 import WorkSpaceTable from './pages/settings/WorkspaceSettings/GeneralWorkSpaceSettings/Table';
+import AllListsPage from './pages/all-lists';
 
 const inbox = [
   {
@@ -164,13 +160,6 @@ export const routes = (user: IUser | null) => {
         { path: 'favorites', element: <Favorites /> },
         { path: 'goals', element: <Goals /> },
         { path: 'docs', element: <Docs /> },
-        // new view here now old  ====================
-        { path: 'tasks/newh/:hubId', element: <RenderHubs /> },
-        { path: 'tasks/newh/:hubId/t/:taskId', element: <RenderHubs /> },
-        { path: 'tasks/newl/:listId', element: <RenderWallets /> },
-        { path: 'tasks/newl/:listId/t/:taskId', element: <RenderWallets /> },
-        { path: 'tasks/neww/:walletId', element: <RenderWallets /> },
-        { path: 'tasks/neww/:walletId/t/:taskId', element: <RenderWallets /> },
         // old view here now default  =============================
         { path: 'tasks/h/:hubId', element: <HubPage /> },
         { path: 'tasks/h/:hubId/t/:taskId', element: <HubPage /> },
@@ -181,6 +170,7 @@ export const routes = (user: IUser | null) => {
         { path: 'tasks/l/:listId', element: <ListPage /> },
         { path: 'tasks/l/:listId/t/:taskId', element: <ListPage /> },
         { path: 't/:taskId', element: <RenderTaskModal /> },
+        { path: 'all-lists', element: <AllListsPage /> },
         ...inbox,
         { path: 'shared', element: <SharedPage /> },
         { path: 'search', element: <SearchPage /> },

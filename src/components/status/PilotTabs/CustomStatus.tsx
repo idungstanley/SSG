@@ -1,12 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
-import StatusBodyTemplate from '../StatusBodyTemplate';
 import Button from '../../Button';
-import PlusIcon from '../../../assets/icons/PlusIcon';
-import Input from '../../input/Input';
 import { StatusProps } from '../../../pages/workspace/hubs/components/ActiveTree/activetree.interfaces';
-import PlusCircle from '../../../assets/icons/AddCircle';
-import { Chevron } from '../../Views/ui/Chevron';
 import {
   DndContext,
   DragEndEvent,
@@ -17,22 +12,23 @@ import {
   useSensor,
   useSensors
 } from '@dnd-kit/core';
-import {
-  SortableContext,
-  arrayMove,
-  sortableKeyboardCoordinates,
-  verticalListSortingStrategy
-} from '@dnd-kit/sortable';
+import { arrayMove, sortableKeyboardCoordinates } from '@dnd-kit/sortable';
 import { findBoardSectionContainer, initializeBoard } from '../../../utils/StatusManagement/board';
+import { GroupStyles, ModelType } from '../../../utils/StatusManagement/Types';
+import BoardSection from '../Components/BoardSection';
 import { BoardSectionsType } from '../../../utils/StatusManagement/Types';
 import { useMutation } from '@tanstack/react-query';
 import { statusTypesService } from '../../../features/hubs/hubService';
-import { displayPrompt } from '../../../features/general/prompt/promptSlice';
-import { addIsDefaultToValues, extractValuesFromArray } from '../../../utils/StatusManagement/statusUtils';
-
-// const groupStatusByModelType = (statusTypes: StatusProps[]) => {
-//   return [...new Set(statusTypes.map(({ type }) => type))];
-// };
+import {
+  addIsDefaultToValues,
+  createModelIdAndTypeHandler,
+  extractValuesFromArray,
+  getDragDirection
+} from '../../../utils/StatusManagement/statusUtils';
+import { setMatchedStatus, setStatusesToMatch } from '../../../features/hubs/hubSlice';
+import MatchStatusPopUp from '../Components/MatchStatusPopUp';
+import { setMatchData } from '../../../features/general/prompt/promptSlice';
+import { setDraggableActiveStatusId } from '../../../features/workspace/workspaceSlice';
 
 interface ErrorResponse {
   data: {
@@ -44,22 +40,37 @@ interface ErrorResponse {
   // Other error properties if needed
 }
 
+export const groupStylesMapping: Record<string, GroupStyles> = {
+  open: { backgroundColor: '#FBFBFB', boxShadow: '0px 0px 5px rgba(0, 0, 0, 0.2)' },
+  custom: { backgroundColor: '#FCF1FF', boxShadow: '0px 0px 5px rgba(128, 0, 128, 0.2)' },
+  closed: { backgroundColor: '#E6FAE9', boxShadow: '0px 0px 5px rgba(0, 128, 0, 0.2)' }
+  // Add more model_type values and their styles as needed
+};
+
 export default function CustomStatus() {
   const dispatch = useAppDispatch();
+  const createStatusTypes = useMutation(statusTypesService);
 
-  const { spaceStatuses } = useAppSelector((state) => state.hub);
+  const { matchData } = useAppSelector((state) => state.prompt);
   const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
   const { statusTaskListDetails } = useAppSelector((state) => state.list);
+  const { spaceStatuses, matchedStatus } = useAppSelector((state) => state.hub);
 
   const [statusTypesState, setStatusTypesState] = useState<StatusProps[]>(spaceStatuses);
   const [validationMessage, setValidationMessage] = useState<string>('');
-  const [newStatusValue, setNewStatusValue] = useState<string>();
+  const [newStatusValue, setNewStatusValue] = useState<string>('');
   const [addStatus, setAddStatus] = useState<boolean>(false);
-  const [collapsedStatusGroups, setCollapsedStatusGroups] = useState<{ [key: string]: boolean }>({});
-  const [activeId, setActiveId] = useState<number | null>(null);
+  const [showMatchStatusPop, setShowMatchStatusPopup] = useState<boolean>(false);
+  const [modelData, setModelData] = useState<ModelType>({
+    modelId: null,
+    modelType: null
+  });
+  const [matchingStatusValidation, setMatchingStatusValidation] = useState<string | null>(null);
 
-  const initialBoardSections = initializeBoard(statusTypesState);
+  const initialBoardSections = initializeBoard(spaceStatuses);
   const [boardSections, setBoardSections] = useState<BoardSectionsType>(initialBoardSections);
+
+  const [is_default_name, setIsDefaultName] = useState<string | null>(boardSections['open'][0]?.name || null); // Initialize with the name of the item at position 0 or null if no item
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -68,22 +79,33 @@ export default function CustomStatus() {
     })
   );
 
-  const sortableItems = statusTypesState.map((status) => ({
-    id: status.position
-  }));
+  useEffect(() => {
+    createModelIdAndTypeHandler(activeItemId, activeItemType, setModelData, modelData);
+    setBoardSections(initialBoardSections);
+    setStatusTypesState(spaceStatuses);
+  }, [spaceStatuses, activeItemId, activeItemType]);
 
-  function handleDragStart(event: DragEndEvent) {
-    const { active } = event;
-    const { id } = active;
-    setActiveId(id as number);
-  }
+  useEffect(() => {
+    setIsDefaultName(boardSections['open'][0]?.name || null);
+  }, [boardSections]);
+
+  const handleDragStart = ({ active }: DragEndEvent) => {
+    dispatch(setDraggableActiveStatusId(active.id as string));
+  };
 
   const handleDragOver = ({ active, over }: DragOverEvent) => {
     // Find the containers
+    const dragDirection = getDragDirection({ active, over } as DragOverEvent);
+    if (!dragDirection) return;
+
     const activeContainer = findBoardSectionContainer(boardSections, active.id as string);
     const overContainer = findBoardSectionContainer(boardSections, over?.id as string);
 
+    if (!active || !over) return;
     if (!activeContainer || !overContainer || activeContainer === overContainer) {
+      return;
+    }
+    if (overContainer === 'closed' && activeContainer !== 'closed') {
       return;
     }
 
@@ -92,12 +114,12 @@ export default function CustomStatus() {
       const overItems = boardSection[overContainer];
 
       // Find the indexes for the items
-      const activeIndex = activeItems.findIndex((item) => item.position === active.id);
-      const overIndex = overItems.findIndex((item) => item.position !== over?.id);
+      const activeIndex = activeItems.findIndex((item) => item.name === active.id);
+      const overIndex = overItems.findIndex((item) => item.name !== over?.id);
 
       return {
         ...boardSection,
-        [activeContainer]: [...boardSection[activeContainer].filter((item) => item.position !== active.id)],
+        [activeContainer]: [...boardSection[activeContainer].filter((item) => item.name !== active.id)],
         [overContainer]: [
           ...boardSection[overContainer].slice(0, overIndex),
           boardSections[activeContainer][activeIndex],
@@ -115,41 +137,32 @@ export default function CustomStatus() {
       return;
     }
 
-    const activeIndex = boardSections[activeContainer].findIndex((task) => task.position === active.id);
-    const overIndex = boardSections[overContainer].findIndex((task) => task.position === over?.id);
+    const activeIndex = boardSections[activeContainer].findIndex((task) => task.name === active.id);
+    const overIndex = boardSections[overContainer].findIndex((task) => task.name === over?.id);
 
     if (activeIndex !== overIndex) {
+      const draggedStatus = boardSections[activeContainer][activeIndex];
+
+      // Update the type property to match the new container (group)
+      const updatedDraggedStatus = { ...draggedStatus, type: overContainer };
+
       setBoardSections((boardSection) => ({
         ...boardSection,
-        [overContainer]: arrayMove(boardSection[overContainer], activeIndex, overIndex)
+        [overContainer]: arrayMove(boardSection[overContainer], activeIndex, overIndex),
+        [activeContainer]: boardSection[activeContainer].filter((item) => item.name !== active.id)
+      }));
+
+      setBoardSections((boardSection) => ({
+        ...boardSection,
+        [overContainer]: [
+          ...boardSection[overContainer].slice(0, overIndex),
+          updatedDraggedStatus,
+          ...boardSection[overContainer].slice(overIndex, boardSection[overContainer].length)
+        ]
       }));
     }
-
-    setActiveId(null);
+    dispatch(setDraggableActiveStatusId(null));
   };
-  // ... (remaining code)
-
-  const handleToggleGroup = (group: string) => {
-    setCollapsedStatusGroups((prevCollapsedStatusGroups) => ({
-      ...prevCollapsedStatusGroups,
-      [group]: !prevCollapsedStatusGroups[group]
-    }));
-  };
-
-  useEffect(() => {
-    setStatusTypesState(
-      spaceStatuses.map((status, index) => {
-        return {
-          name: status.name,
-          color: status.color,
-          id: status.id,
-          type: status.type,
-          position: index,
-          is_default: index === 0 ? 1 : 0
-        };
-      })
-    );
-  }, [spaceStatuses]);
 
   const handleSaveNewStatus = () => {
     const nameWithoutWhiteSpace = newStatusValue?.trim();
@@ -178,60 +191,86 @@ export default function CustomStatus() {
     }
     setAddStatus(false);
   };
-  const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setNewStatusValue(e.target.value);
-  };
-
-  const groupStylesMapping: Record<string, { backgroundColor: string; boxShadow: string }> = {
-    open: { backgroundColor: '#FBFBFB', boxShadow: '0px 0px 5px rgba(0, 0, 0, 0.2)' },
-    custom: { backgroundColor: '#FCF1FF', boxShadow: '0px 0px 5px rgba(128, 0, 128, 0.2)' },
-    closed: { backgroundColor: '#E6FAE9', boxShadow: '0px 0px 5px rgba(0, 128, 0, 0.2)' }
-    // Add more model_type values and their styles as needed
-  };
-
-  const createStatusTypes = useMutation(statusTypesService, {
-    onSuccess: (data) => {
-      console.log(data);
-    }
-  });
 
   //Add default status
-  const defaultItem = statusTypesState.find((item) => item.position === 0);
-  const AddDefault = addIsDefaultToValues(boardSections, defaultItem?.name);
+  const AddDefault = addIsDefaultToValues(boardSections, is_default_name);
   const statusData = extractValuesFromArray(AddDefault);
-  console.log(statusData);
+  const model = statusTaskListDetails.listId ? 'list' : (modelData?.modelType as string);
+  const model_id = statusTaskListDetails.listId || (modelData?.modelId as string);
+
+  const handleStatusId = () => {
+    const modelTypeIsSameEntity = statusData.some((item) => item.model_type === model);
+    const modelIdIsSameEntity = statusData.some((item) => item.model_id === model_id);
+    if (activeItemId === model_id && modelTypeIsSameEntity) {
+      if (modelIdIsSameEntity) {
+        return statusData;
+      } else {
+        return statusData.map((item, index) => {
+          return { ...item, id: null, is_default: index === 0 ? 1 : 0 }; // Set the id to null
+        });
+      }
+    } else {
+      return statusData.map((item, index) => {
+        return { ...item, id: null, is_default: index === 0 ? 1 : 0 }; // Set the id to null
+      });
+    }
+  };
+
+  const handleStatusData = async () => {
+    await createStatusTypes.mutateAsync({
+      model_id: model_id,
+      model: model,
+      from_model: activeItemType,
+      from_model_id: activeItemId,
+      statuses: handleStatusId(),
+      status_matches: matchedStatus
+    });
+  };
+
+  const matchStatusArray = [
+    {
+      label: 'Save Changes',
+      style: 'danger',
+      callback: async () => {
+        if (matchedStatus.length !== matchData.length) {
+          setMatchingStatusValidation('Whoops! Select a status for every conflicting status');
+          setTimeout(() => {
+            setMatchingStatusValidation(null);
+          }, 3000);
+        } else {
+          setMatchingStatusValidation(null);
+          handleStatusData();
+          setShowMatchStatusPopup(false);
+        }
+      }
+    },
+    {
+      label: 'Cancel',
+      style: 'plain',
+      callback: () => {
+        setShowMatchStatusPopup(false);
+        dispatch(setMatchedStatus([]));
+        setMatchingStatusValidation(null);
+      }
+    }
+  ];
 
   const onSubmit = async () => {
     try {
       await createStatusTypes.mutateAsync({
-        model_id: statusTaskListDetails.listId || (activeItemId as string),
-        model: 'list' || (activeItemType as string),
-        from_model: activeItemType,
-        from_model_id: activeItemId,
-        statuses: statusData
+        model_id: model_id,
+        model: model,
+        from_model: modelData.modelType as string,
+        from_model_id: modelData.modelId as string,
+        statuses: handleStatusId()
       });
     } catch (err) {
       const errorResponse = err as ErrorResponse; // Cast err to the ErrorResponse type
-      if (errorResponse.data.data.match) {
-        console.log(true);
-        dispatch(
-          displayPrompt(
-            'Are you sure you want to delete this Status ?(“PENDING”)',
-            'You changed Statuses in your List . 3 Tasks would be affected. Please select an option below.',
-            [
-              {
-                label: 'Create Subhub',
-                style: 'danger',
-                callback: async () => ({})
-              },
-              {
-                label: 'Cancel',
-                style: 'plain',
-                callback: () => ({})
-              }
-            ]
-          )
-        );
+      const matchData = errorResponse.data.data.match;
+      if (matchData) {
+        dispatch(setMatchData(matchData));
+        dispatch(setStatusesToMatch(statusData));
+        setShowMatchStatusPopup(true);
       }
     }
   };
@@ -251,51 +290,22 @@ export default function CustomStatus() {
               className="p-2 space-y-2 rounded"
               key={uniqueModelType}
               style={{
-                backgroundColor: groupStylesMapping[uniqueModelType]?.backgroundColor,
-                boxShadow: groupStylesMapping[uniqueModelType]?.boxShadow
+                backgroundColor:
+                  groupStylesMapping[uniqueModelType as keyof typeof groupStylesMapping]?.backgroundColor,
+                boxShadow: groupStylesMapping[uniqueModelType as keyof typeof groupStylesMapping]?.boxShadow
               }}
             >
-              {uniqueModelType && (
-                <span className="flex gap-2">
-                  <Chevron
-                    onToggle={() => handleToggleGroup(uniqueModelType)}
-                    active={collapsedStatusGroups[uniqueModelType]}
-                    iconColor="text-gray-400"
-                  />
-                  <p className="flex uppercase justify-items-start">{uniqueModelType} STATUSES</p>
-                </span>
-              )}
-              <SortableContext items={sortableItems} strategy={verticalListSortingStrategy} id={uniqueModelType}>
-                {uniqueModelType &&
-                  !collapsedStatusGroups[uniqueModelType] &&
-                  boardSections[uniqueModelType].map((item, index) => (
-                    <>
-                      <StatusBodyTemplate index={index} item={item} setStatusTypesState={setBoardSections} />
-                    </>
-                  ))}
-              </SortableContext>
-              {uniqueModelType && uniqueModelType === 'open' && !addStatus && (
-                <span className="flex justify-items-start" onClick={() => setAddStatus(true)}>
-                  <Button
-                    height="h-7"
-                    icon={<PlusCircle active={false} color="white" />}
-                    label="Add Status"
-                    buttonStyle="base"
-                  />
-                </span>
-              )}
-              {uniqueModelType && uniqueModelType === 'open' && addStatus && (
-                <span className="flex justify-items-start">
-                  <Input
-                    trailingIcon={<PlusIcon active />}
-                    placeholder="Type Status name"
-                    name="Status"
-                    onChange={handleOnChange}
-                    value={newStatusValue}
-                    trailingClick={handleSaveNewStatus}
-                  />
-                </span>
-              )}
+              <BoardSection
+                id={uniqueModelType}
+                addStatus={addStatus}
+                setNewStatusValue={setNewStatusValue}
+                newStatusValue={newStatusValue}
+                setAddStatus={setAddStatus}
+                title={uniqueModelType}
+                status={boardSections[uniqueModelType]}
+                handleSaveNewStatus={handleSaveNewStatus}
+                setStatusTypesState={setBoardSections}
+              />
             </div>
           ))}
         </DndContext>
@@ -304,6 +314,14 @@ export default function CustomStatus() {
       <div className="flex justify-center">
         <Button label="Save" buttonStyle="base" width="w-40" height="h-8" onClick={onSubmit} />
       </div>
+      <MatchStatusPopUp
+        validationMessage={matchingStatusValidation}
+        options={matchStatusArray}
+        title="Match Statuses"
+        body={`You changed statuses in your List. ${matchData?.length} status will be affected. How should we handle these statuses?`}
+        setShow={setShowMatchStatusPopup}
+        show={showMatchStatusPop}
+      />
     </section>
   );
 }

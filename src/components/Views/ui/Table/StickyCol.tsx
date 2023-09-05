@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { Task } from '../../../../features/task/interface.tasks';
 import { cl } from '../../../../utils';
-import { DEFAULT_COL_BG } from '../../config';
+import { ACTIVE_COL_BG, DEFAULT_COL_BG } from '../../config';
 import { UseUpdateTaskService, useAddTask } from '../../../../features/task/taskService';
 import StatusDropdown from '../../../status/StatusDropdown';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -11,6 +11,7 @@ import { setShowPilotSideOver } from '../../../../features/general/slideOver/sli
 import {
   setCurrentTaskStatusId,
   setSelectedIndex,
+  setSelectedListIds,
   setSelectedIndexStatus,
   setSelectedTasksArray,
   setShowTaskNavigation,
@@ -42,6 +43,7 @@ interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   parentId?: string;
   onClose?: VoidFunction;
   isOver?: boolean;
+  isSplitSubtask?: boolean;
 }
 
 export function StickyCol({
@@ -57,6 +59,7 @@ export function StickyCol({
   task,
   paddingLeft = 0,
   dragElement,
+  isSplitSubtask,
   ...props
 }: ColProps) {
   const dispatch = useAppDispatch();
@@ -73,17 +76,18 @@ export function StickyCol({
     taskUpperCase,
     selectedTasksArray,
     verticalGridlinesTask,
-    hilightNewTask,
     selectedIndex,
     CompactView,
-    toggleAllSubtask
+    toggleAllSubtask,
+    selectedListIds,
+    dragToBecomeSubTask
   } = useAppSelector((state) => state.task);
 
   const [isChecked, setIsChecked] = useState(false);
   const [eitableContent, setEitableContent] = useState(false);
   const [selectedIndexArray, setSelectedIndexArray] = useState<number[]>([]);
 
-  const ACTIVE_TASK = taskId === task.id ? 'tdListV' : DEFAULT_COL_BG;
+  const COL_BG = taskId === task.id ? ACTIVE_COL_BG : DEFAULT_COL_BG;
 
   const { mutate: onAdd } = useAddTask();
 
@@ -127,16 +131,15 @@ export function StickyCol({
   useEffect(() => {
     const { current } = inputRef;
     current?.focus();
-    if (eitableContent || hilightNewTask) selectText(current);
   }, [eitableContent]);
 
-  const selectText = (element: Node | null) => {
-    const selection = window.getSelection();
-    const range = document.createRange();
-    range.selectNodeContents(element as Node);
-    selection?.removeAllRanges();
-    selection?.addRange(range);
-  };
+  // const selectText = (element: Node | null) => {
+  //   const selection = window.getSelection();
+  //   const range = document.createRange();
+  //   range.selectNodeContents(element as Node);
+  //   selection?.removeAllRanges();
+  //   selection?.addRange(range);
+  // };
 
   const onToggleDisplayingSubTasks = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.stopPropagation();
@@ -183,6 +186,7 @@ export function StickyCol({
     });
   };
 
+  // listen on shift + arrow down key
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.shiftKey && event.key === 'ArrowDown') {
@@ -205,7 +209,7 @@ export function StickyCol({
   }, [selectedIndex, selectedIndexArray]);
 
   useEffect(() => {
-    if (selectedTasksArray.length == 0) {
+    if (!selectedTasksArray.length) {
       setSelectedIndexArray([]);
       dispatch(setSelectedIndex(null));
     }
@@ -241,10 +245,12 @@ export function StickyCol({
         const updatedTaskIds = [...selectedTasksArray, task.id];
         dispatch(setSelectedTasksArray(updatedTaskIds));
       }
+      dispatch(setSelectedListIds([...selectedListIds, task.list_id]));
     } else {
       // Remove the task ID from the selectedTasksArray array
       const updatedTaskIds = selectedTasksArray.filter((id: string) => id !== task.id);
       dispatch(setSelectedTasksArray(updatedTaskIds));
+      dispatch(setSelectedListIds(selectedListIds.filter((item) => item !== task.list_id)));
     }
     setIsChecked(isChecked);
   };
@@ -263,7 +269,19 @@ export function StickyCol({
           className="flex items-center justify-start text-sm font-medium text-gray-900 cursor-pointer text-start"
           {...props}
         >
-          <div className="flex items-center h-full space-x-1 ">
+          <div
+            className={`flex items-center h-full space-x-1 ${isSplitSubtask && 'bg-white/90'}`}
+            style={{
+              height:
+                singleLineView && !CompactView
+                  ? '42px'
+                  : CompactView && singleLineView
+                  ? '25px'
+                  : !singleLineView && CompactView && task.name.length < 30
+                  ? '25px'
+                  : ''
+            }}
+          >
             <RoundedCheckbox
               onChange={onChange}
               isChecked={isChecked}
@@ -290,13 +308,29 @@ export function StickyCol({
             onClick={onClickTask}
             onDoubleClick={() => setEitableContent(true)}
             className={cl(
-              ACTIVE_TASK,
+              COL_BG,
               ` ${isChecked && 'tdListV'} ${verticalGrid && 'border-r'} ${
                 verticalGridlinesTask && 'border-r'
-              } w-full py-4 flex items-center `,
-              isOver && draggableItemId !== dragOverItemId ? 'border-b-2 border-alsoit-purple-300' : 'border-t'
+              } w-full py-4 flex items-center`,
+              isOver && draggableItemId !== dragOverItemId && !dragToBecomeSubTask
+                ? 'border-b-2 border-alsoit-purple-300'
+                : dragToBecomeSubTask && isOver && draggableItemId !== dragOverItemId
+                ? 'mb-2'
+                : 'border-t relative'
             )}
           >
+            {dragToBecomeSubTask && isOver && draggableItemId !== dragOverItemId && (
+              <span
+                className={cl(
+                  dragToBecomeSubTask && isOver && draggableItemId !== dragOverItemId
+                    ? 'absolute content-start z-50 flex items-center left-20 w-full right-0 bottom-1 gap-0'
+                    : ''
+                )}
+              >
+                <span className="border-solid z-50 border-alsoit-purple-300 border-l-[8px] border-y-transparent border-y-[4px] border-r-0 m-0" />
+                <span className={cl('h-0.5 bg-alsoit-purple-300 w-full m-0')}></span>
+              </span>
+            )}
             <button onClick={onToggleDisplayingSubTasks} className="pl-1">
               {showSubTasks || toggleAllSubtask ? (
                 <div className={`${task.descendants_count > 0 ? 'w-3 h-3' : ' opacity-0 w-3 h-3 '}`}>
@@ -361,7 +395,7 @@ export function StickyCol({
                   )}
                 </div>
                 {/* non default badges here */}
-                <div onClick={(e) => e.stopPropagation()} className="pl-3 flex flex-grow justify-between">
+                <div onClick={(e) => e.stopPropagation()} className="pl-3 flex flex-grow items-center justify-between">
                   <Badges task={task} />
                   {/*  default badges here */}
                   {children}
@@ -386,22 +420,19 @@ export function StickyCol({
                 selectedTasksArray.length > 0 ? 'opacity-100' : 'opacity-0'
               } cursor-pointer focus:outline-1 focus:ring-transparent  focus:border-2 focus:opacity-100 group-hover:opacity-100`}
             />
-            <div ref={setNodeRef} {...attributes} {...listeners} className="pr-2">
-              {dragElement}
-            </div>
+            <div className="pr-2">{dragElement}</div>
           </div>
-
           <div
             style={{ paddingLeft }}
             className={cl(
-              ACTIVE_TASK,
+              COL_BG,
               `relative border-t ${verticalGrid && 'border-r'} w-full h-16  py-4 p-4 flex items-center`
             )}
           >
             <div className="absolute flex ml-2 space-x-1 -mt-10">
               <ToolTip title="Cancel">
                 <div className="border rounded-md p-1" style={{ borderColor: '#FFE7E7' }}>
-                  <ImCancelCircle onClick={onClose} className="" />
+                  <ImCancelCircle onClick={onClose} />
                 </div>
               </ToolTip>
               <button

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef } from 'react';
+import { useEffect, useMemo, useRef, Fragment } from 'react';
 import { useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import Page from '../../components/Page';
@@ -16,13 +16,14 @@ import { Header } from '../../components/TasksHeader';
 import { VerticalScroll } from '../../components/ScrollableContainer/VerticalScroll';
 import { GroupHorizontalScroll } from '../../components/ScrollableContainer/GroupHorizontalScroll';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
+import { setIsTasksUpdated, setTasks } from '../../features/task/taskSlice';
 
 export default function HubPage() {
   const dispatch = useAppDispatch();
   const { hubId, subhubId, taskId } = useParams();
 
-  const { filterTaskByAssigneeIds } = useAppSelector((state) => state.task);
   const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
+  const { tasks: tasksStore, isTasksUpdated } = useAppSelector((state) => state.task);
 
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -44,13 +45,12 @@ export default function HubPage() {
 
   const { data, hasNextPage, fetchNextPage } = UseGetFullTaskList({
     itemId: hubId || subhubId,
-    itemType: EntityType.hub,
-    assigneeUserId: filterTaskByAssigneeIds
+    itemType: EntityType.hub
   });
 
   const tasks = useMemo(() => (data ? data.pages.flatMap((page) => page.data.tasks) : []), [data]);
+  const lists = useMemo(() => generateLists(tasks, hub?.data.hub.custom_fields), [tasks, hub]);
 
-  const lists = useMemo(() => generateLists(tasks), [tasks]);
   // infinite scroll
   useEffect(() => {
     function handleScroll(event: Event) {
@@ -74,6 +74,13 @@ export default function HubPage() {
     };
   }, [hasNextPage]);
 
+  useEffect(() => {
+    if (lists && !Object.keys(tasksStore).length) {
+      dispatch(setTasks({ ...tasksStore, ...lists }));
+      dispatch(setIsTasksUpdated(true));
+    }
+  }, [lists, tasksStore]);
+
   return (
     <>
       <PilotSection />
@@ -92,13 +99,17 @@ export default function HubPage() {
           <section
             ref={containerRef}
             style={{ minHeight: '0', maxHeight: '83vh' }}
-            className="w-full h-full p-4 space-y-10"
+            className="w-full h-full p-4 space-y-10 pb-0"
           >
             {/* lists */}
             {Object.keys(lists).map((listId) => (
-              <div key={listId}>
-                <List tasks={lists[listId]} customProperty={hub?.data.hub.custom_fields} />
-              </div>
+              <Fragment key={listId}>
+                {tasksStore[listId] && tasks.length && isTasksUpdated ? (
+                  <div key={listId}>
+                    <List tasks={tasksStore[listId]} />
+                  </div>
+                ) : null}
+              </Fragment>
             ))}
           </section>
         </VerticalScroll>
