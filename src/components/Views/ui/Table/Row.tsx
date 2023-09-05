@@ -18,6 +18,8 @@ import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import Dradnddrop from '../../../../assets/icons/Dradnddrop';
 import { IField } from '../../../../features/list/list.interfaces';
 
+export const MAX_SUBTASKS_LEVEL = 10;
+
 interface RowProps {
   task: Task;
   taskIndex?: number;
@@ -29,6 +31,7 @@ interface RowProps {
   handleClose?: VoidFunction;
   customFields?: IField[];
   isSplitSubtask?: boolean;
+  level: number;
 }
 
 export function Row({
@@ -41,7 +44,8 @@ export function Row({
   isListParent,
   handleClose,
   customFields,
-  isSplitSubtask
+  isSplitSubtask,
+  level
 }: RowProps) {
   const dispatch = useAppDispatch();
 
@@ -146,6 +150,7 @@ export function Row({
           paddingLeft={paddingLeft}
           tags={'tags' in task ? <TaskTag tags={task.tags} entity_id={task.id} entity_type="task" /> : null}
           isSplitSubtask={isSplitSubtask}
+          isLastSubtaskLevel={level >= MAX_SUBTASKS_LEVEL}
           dragElement={
             <div ref={setNodeRef} {...listeners} {...attributes}>
               <div className="text-lg text-gray-400 transition duration-200 opacity-0 cursor-move group-hover:opacity-100">
@@ -214,7 +219,12 @@ export function Row({
       ) : null}
 
       {showSubTasks && !splitSubTask ? (
-        <SubTasks paddingLeft={DEFAULT_LEFT_PADDING + paddingLeft} parentId={task.id} columns={columns} />
+        <SubTasks
+          paddingLeft={DEFAULT_LEFT_PADDING + paddingLeft}
+          parentId={task.id}
+          columns={columns}
+          level={level + 1}
+        />
       ) : null}
     </>
   );
