@@ -142,7 +142,7 @@ export default function MenuDropdown({ isExtendedBar, cords }: IMenuDropdownProp
       handleClick: () => {
         dispatch(setSubDropdownMenu(!SubDropdownMenu));
       },
-      icon: <PlusIcon className="w-5 text-gray-700 h-7" aria-hidden="true" />,
+      icon: <PlusIcon className="w-5 text-gray-700 h-5" aria-hidden="true" />,
       isVisible: true
     },
     {
@@ -164,7 +164,7 @@ export default function MenuDropdown({ isExtendedBar, cords }: IMenuDropdownProp
       id: 3,
       title: 'Color & Avatar',
       handleClick: () => ({}),
-      icon: <SwatchIcon className="w-5 pt-2 text-gray-700 h-7" aria-hidden="true" />,
+      icon: <SwatchIcon className="w-5 pt-2 text-gray-700 h-5" aria-hidden="true" />,
       isVisible: false
     },
     {
@@ -355,12 +355,16 @@ export default function MenuDropdown({ isExtendedBar, cords }: IMenuDropdownProp
         horizontal: showSidebar ? Number(userSettingsData?.sidebarWidth) : sidebarWidthRD
       }}
     >
-      <div className="w-auto px-2" style={{ minWidth: '200px' }}>
+      <div className="relative border-b py-2 mb-3">
+        <div className="flex items-center justify-center gap-2 mb-2">ENTITY PROPERTIES</div>
+        <span className="absolute bg-white left-9 text-gray-400 -bottom-2.5">DEFAULT SETTINGS</span>
+      </div>
+      <div className="w-auto px-2 gap-2" style={{ minWidth: '200px' }}>
         {itemsList.map((item) =>
           item.isVisible ? (
             <div key={item.id}>
               <div
-                className="flex items-center p-2 space-x-2 text-sm text-left text-gray-600 rounded-md cursor-pointer hover:bg-gray-200"
+                className="flex items-center p-1 space-x-2 text-sm text-left text-gray-600 rounded-md cursor-pointer hover:bg-alsoit-gray-75"
                 onClick={item.handleClick}
               >
                 {item.icon}
