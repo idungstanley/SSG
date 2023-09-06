@@ -63,7 +63,7 @@ export default function BoardSection({
         </span>
       )}
       <SortableContext items={StatusIndex} strategy={verticalListSortingStrategy}>
-        <div ref={setNodeRef} className="flex flex-col space-y-1 p-1 flex-1">
+        <div ref={setNodeRef} className="flex flex-col flex-1 p-1 space-y-1">
           {id &&
             !collapsedStatusGroups[id] &&
             status.map((item) => (
@@ -73,17 +73,8 @@ export default function BoardSection({
             ))}
         </div>
       </SortableContext>
-      {id && id === 'open' && !addStatus && (
-        <span className="flex justify-items-start" onClick={() => setAddStatus(true)}>
-          <Button
-            height="h-7"
-            icon={<PlusCircle active={false} color="white" />}
-            label="Add Status"
-            buttonStyle="base"
-          />
-        </span>
-      )}
-      {id && id === 'open' && addStatus && (
+
+      {addStatus && (
         <span className="flex justify-items-start">
           <Input
             trailingIcon={<PlusIcon active />}
@@ -95,6 +86,9 @@ export default function BoardSection({
           />
         </span>
       )}
+      <span className="flex justify-items-start" onClick={() => setAddStatus(true)}>
+        <Button height="h-7" icon={<PlusCircle active={false} color="white" />} label="Add Status" buttonStyle="base" />
+      </span>
     </>
   );
 }
