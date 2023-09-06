@@ -28,8 +28,9 @@ export default function HubPage() {
   const containerRef = useRef<HTMLDivElement>(null);
 
   const { data: hub } = UseGetHubDetails({ activeItemId: hubId, activeItemType: EntityType.hub });
+  const listObjectWithViewSettings = hub?.data.hub.task_views?.find((element) => element.type === 'list');
 
-  const task_views_id = hub?.data.hub.task_views.length ? hub?.data.hub.task_views?.[0].id : '';
+  const task_views_id = listObjectWithViewSettings ? listObjectWithViewSettings.id : '';
 
   const { isSuccess } = UseUpdateTaskViewSettings({
     task_views_id,
@@ -49,8 +50,8 @@ export default function HubPage() {
       );
     }
 
-    hub?.data.hub.task_views?.[0].view_settings
-      ? dispatch(setSaveSettingOnline(hub?.data.hub.task_views?.[0].view_settings as { [key: string]: boolean }))
+    listObjectWithViewSettings?.view_settings
+      ? dispatch(setSaveSettingOnline(listObjectWithViewSettings.view_settings as { [key: string]: boolean }))
       : dispatch(setSaveSettingOnline(saveSettingLocal));
   }, [hub]);
 

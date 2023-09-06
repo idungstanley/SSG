@@ -73,8 +73,6 @@ export default function ShowHideSettings({
   useEffect(() => {
     dispatch(setSaveSettingLocal(saveSettingsOnj));
 
-    console.log(triggerSaveSettingsModal);
-
     if (triggerSaveSettingsModal) {
       dispatch(setSaveSettingOnline(saveSettingsOnj));
     }
