@@ -25,6 +25,8 @@ import {
   setTimeSortStatus,
   setTimerStatus,
   setToggleAssignCurrentTaskId,
+  setTriggerSaveSettings,
+  setTriggerSaveSettingsModal,
   setUpdateTimerDuration
 } from './taskSlice';
 import { UpdateTaskProps } from './interface.tasks';
@@ -483,6 +485,48 @@ export const UseUpdateTaskDateService = ({
     }
   );
 };
+export const UseUpdateTaskViewSettings = ({
+  task_views_id,
+  taskDate
+}: {
+  task_views_id: string;
+  taskDate: { [key: string]: boolean };
+}) => {
+  const { triggerSaveSettings } = useAppSelector((state) => state.task);
+  const dispatch = useAppDispatch();
+  return useQuery(
+    ['task', { task_views_id, taskDate }],
+    async () => {
+      const data = requestNew<ITaskRes>({
+        url: `task-views/${task_views_id}`,
+        method: 'PUT',
+        data: {
+          view_settings: taskDate
+        }
+      });
+      return data;
+    },
+    {
+      enabled: !!task_views_id && triggerSaveSettings,
+      cacheTime: 0,
+      onSuccess: (data) => {
+        dispatch(setTriggerSaveSettings(false));
+        dispatch(setTriggerSaveSettingsModal(false));
+
+        // if (data.data.task.id == task_id) {
+        //   const updatedTasks = taskDateUpdateManager(
+        //     task_id as string,
+        //     data.data.task.list_id as string,
+        //     tasks,
+        //     'start_date',
+        //     data.data.task.start_date as string
+        //   );
+        //   dispatch(setTasks(updatedTasks));
+        // }
+      }
+    }
+  );
+};
 
 export const UseUpdateTaskPrioritiesServices = ({ task_id_array, priorityDataUpdate, listIds }: UpdateTaskProps) => {
   const dispatch = useAppDispatch();
@@ -611,12 +655,16 @@ export const createManualTimeEntry = () => {
       start_date,
       end_date,
       type,
-      id
+      id,
+      description,
+      isBillable
     }: {
       start_date: string | undefined;
       end_date: string | undefined;
       type: string | null | undefined;
       id: string | null | undefined;
+      description: string | null | undefined;
+      isBillable: boolean | null | undefined;
     }) => {
       const response = await requestNew({
         url: 'time-entries',
@@ -625,7 +673,9 @@ export const createManualTimeEntry = () => {
           start_date,
           end_date,
           type,
-          id
+          id,
+          description,
+          isBillable
         }
       });
       return response;
@@ -735,13 +785,15 @@ export const GetTimeEntriesService = ({
   trigger,
   is_active,
   page,
-  include_filters
+  include_filters,
+  team_member_group_ids
 }: {
   itemId: string | null | undefined;
   trigger: string | null | undefined;
   is_active?: number;
   page?: number;
   include_filters?: boolean;
+  team_member_group_ids?: string[];
 }) => {
   const { timeSortArr } = useAppSelector((state) => state.task);
   const updatesortArr = timeSortArr.length === 0 ? null : timeSortArr;
@@ -757,7 +809,8 @@ export const GetTimeEntriesService = ({
           team_member_ids: updatesortArr,
           is_active: is_active,
           page,
-          include_filters
+          include_filters,
+          team_member_group_ids
         }
       });
       return data;

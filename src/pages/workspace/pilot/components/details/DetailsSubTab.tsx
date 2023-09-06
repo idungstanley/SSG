@@ -68,7 +68,7 @@ export default function DetailsSubTab() {
     <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={(e) => handleDragEnd(e)}>
       <SortableContext strategy={rectSortingStrategy} items={items}>
         <section>
-          <div className={`flex bg-gray-400 pt-0.5 ${showPilot ? 'flex-row' : 'flex-col'}`}>
+          <div className={`flex  bg-primary-200 pb-0.5 ${showPilot ? 'flex-row' : 'flex-col'}`}>
             {DetailOptions.map((item) => (
               <SubtabDrag
                 key={item.id}
@@ -77,6 +77,8 @@ export default function DetailsSubTab() {
                 activeSub={activeSubDetailsTabId}
                 showPilot={showPilot}
                 name={'details'}
+                item={item}
+                items={DetailOptions}
               />
             ))}
           </div>

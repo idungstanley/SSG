@@ -215,7 +215,7 @@ export default function ClockInOut() {
             >
               <label
                 htmlFor=""
-                className="absolute -top-0 -left-0 bg-alsoit-gray-100 text-alsoit-gray-50 rounded-t-sm p-0.5 flex space-x-1 items-center font-semibold pr-1"
+                className="absolute -top-0 -left-0 bg-alsoit-gray-75 text-alsoit-gray-50 rounded-t-sm p-0.5 flex space-x-1 items-center font-semibold pr-1"
               >
                 <ClockIcon fixed />
                 <span className="text-alsoit-text-md">REAL TIME</span>

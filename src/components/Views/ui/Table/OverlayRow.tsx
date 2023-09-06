@@ -38,6 +38,7 @@ export function OverlayRow({ task, columns }: OverlayRowProps) {
             />
           </span>
         }
+        isLastSubtaskLevel={false}
       >
         {/* actions */}
         <div className="absolute opacity-0 group-hover:opacity-100 top-0 bottom-0 right-0 flex space-x-1 items-center justify-center">

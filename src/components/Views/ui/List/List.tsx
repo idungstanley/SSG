@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, Fragment } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { Task } from '../../../../features/task/interface.tasks';
 import { filterByAssignee, filterBySearchValue, sortTasks } from '../../../TasksHeader/lib';
@@ -15,6 +15,7 @@ import { Hub, List as ListType } from '../../../../pages/workspace/hubs/componen
 import { findCurrentHub } from '../../../../managers/Hub';
 import { findCurrentList } from '../../../../managers/List';
 import LightenColor from './lightenColor/LightenColor';
+import { SubtasksTable } from '../Table/SubtasksTable';
 
 interface ListProps {
   tasks: Task[];
@@ -31,7 +32,7 @@ export function List({ tasks }: ListProps) {
   const dispatch = useAppDispatch();
   const { listId } = useParams();
 
-  const { sortType, hideTask } = useAppSelector((state) => state.task);
+  const { sortType, hideTask, splitSubTask: splitSubTaskMode } = useAppSelector((state) => state.task);
   const { parentHubExt, hub } = useAppSelector((state) => state.hub);
 
   const [collapseTable, setCollapseTable] = useState(false);
@@ -117,15 +118,42 @@ export function List({ tasks }: ListProps) {
             </div>
           ) : null}
           {Object.keys(sortedTasks).map((key) => (
-            <Table
-              listName={tasks[0].list?.name}
-              label={key}
-              ListColor={ListColor}
-              key={key}
-              heads={hideTask.length ? hideTask : generateColumns}
-              data={sortedTasks[key]}
-              customFields={tasks[0].custom_field_columns as IField[]}
-            />
+            <Fragment key={key}>
+              {!splitSubTaskMode ? (
+                <Table
+                  listName={tasks[0].list?.name}
+                  label={key}
+                  ListColor={ListColor}
+                  key={key}
+                  heads={hideTask.length ? hideTask : generateColumns}
+                  data={sortedTasks[key]}
+                  customFields={tasks[0].custom_field_columns as IField[]}
+                />
+              ) : (
+                <>
+                  {sortedTasks[key].map((task) => (
+                    <Fragment key={task.id}>
+                      <Table
+                        listName={tasks[0].list?.name}
+                        label={key}
+                        ListColor={ListColor}
+                        key={key}
+                        heads={hideTask.length ? hideTask : generateColumns}
+                        data={[task]}
+                        customFields={tasks[0].custom_field_columns as IField[]}
+                      />
+                      <SubtasksTable
+                        key={task.id}
+                        data={task}
+                        heads={hideTask.length ? hideTask : generateColumns}
+                        customFields={tasks[0].custom_field_columns as IField[]}
+                        level={1}
+                      />
+                    </Fragment>
+                  ))}
+                </>
+              )}
+            </Fragment>
           ))}
         </div>
       ) : null}
