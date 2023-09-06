@@ -74,7 +74,7 @@ export default function Sidebar() {
     [activeHotkeyIds]
   );
 
-  setUserSettingsData(isMouseUp, key, { ...userSettingsData, sidebarWidth: size, isFavoritePinned }, resolution);
+  setUserSettingsData(isDrag, key, { ...userSettingsData, sidebarWidth: size, isFavoritePinned }, resolution);
 
   useEffect(() => {
     const { isAllow, allowedSize } = isAllowIncreaseWidth(size, extendedSidebarWidth);

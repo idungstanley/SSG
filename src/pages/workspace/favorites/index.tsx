@@ -12,7 +12,6 @@ function Favorites() {
   const dispatch = useAppDispatch();
 
   const { showSidebar } = useAppSelector((state) => state.account);
-
   const { data: FavData, status } = useGetFavourites();
 
   if (status === 'loading') {
@@ -25,13 +24,13 @@ function Favorites() {
 
   return (
     <>
-      <div className="flex w-full py-2 items-center relative justify-between h-8 border-b">
+      <div className="relative flex items-center justify-between w-full h-8 py-2 border-b">
         <div className="flex items-center gap-2 ml-2">
           <div className="flex items-center">
-            <span className="flex justify-between items-center w-full h-6 mx-1">
+            <span className="flex items-center justify-between w-full h-6 mx-1">
               <AiFillStar />
             </span>
-            <span className="block font-semibold text-xs w-full cursor-pointer uppercase leading-2 tracking-wider mx-1">
+            <span className="block w-full mx-1 text-xs font-semibold tracking-wider uppercase cursor-pointer leading-2">
               FAVORITES
             </span>
           </div>
