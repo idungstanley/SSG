@@ -35,7 +35,7 @@ export function Table({ heads, data, label, listName, customFields, ListColor }:
   const dispatch = useAppDispatch();
 
   const { draggableItemId } = useAppSelector((state) => state.list);
-  const { statusId, defaultSubtaskListId, splitSubTask: splitSubTaskMode } = useAppSelector((state) => state.task);
+  const { statusId, defaultSubtaskListId, splitSubTaskState: splitSubTaskMode } = useAppSelector((state) => state.task);
 
   const [listId, setListId] = useState<string>('');
   const [tableHeight, setTableHeight] = useState<string | number>('auto');

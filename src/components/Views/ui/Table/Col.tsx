@@ -40,9 +40,8 @@ export function Col({ value, field, fieldId, task, customFields, ...props }: Col
   const { taskId } = useParams();
 
   const { dragOverItemId, draggableItemId } = useAppSelector((state) => state.list);
-  const { singleLineView, dragToBecomeSubTask, verticalGrid, selectedTasksArray, CompactView } = useAppSelector(
-    (state) => state.task
-  );
+  const { singleLineView, dragToBecomeSubTask, verticalGrid, selectedTasksArray, CompactView, saveSettingOnline } =
+    useAppSelector((state) => state.task);
 
   const COL_BG = taskId === task.id ? ACTIVE_COL_BG : DEFAULT_COL_BG;
   const isSelected = selectedTasksArray.includes(task.id);
@@ -169,11 +168,11 @@ export function Col({ value, field, fieldId, task, customFields, ...props }: Col
           height:
             task.id == '0'
               ? '64px'
-              : singleLineView && !CompactView
+              : saveSettingOnline?.singleLineView && !saveSettingOnline?.CompactView
               ? '42px'
-              : CompactView && singleLineView
+              : saveSettingOnline?.CompactView && saveSettingOnline?.singleLineView
               ? '32px'
-              : !singleLineView && CompactView && task.name.length < 30
+              : !saveSettingOnline?.singleLineView && saveSettingOnline?.CompactView && task.name.length < 30
               ? '32px'
               : ''
         }}

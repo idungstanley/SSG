@@ -25,7 +25,7 @@ export interface ItaskViews {
   team_member_id: null;
   type: string;
   updated_at: string;
-  view_settings: null | [{ [key: string]: boolean }];
+  view_settings: null | { [key: string]: boolean };
 }
 export interface IHubDetails {
   id: string;

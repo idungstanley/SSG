@@ -49,7 +49,9 @@ export function Row({
 }: RowProps) {
   const dispatch = useAppDispatch();
 
-  const { showNewTaskField, showNewTaskId, toggleAllSubtask, splitSubTask } = useAppSelector((state) => state.task);
+  const { showNewTaskField, showNewTaskId, toggleAllSubtask, splitSubTaskState } = useAppSelector(
+    (state) => state.task
+  );
 
   const [showSubTasks, setShowSubTasks] = useState(toggleAllSubtask);
 
@@ -210,15 +212,15 @@ export function Row({
         <AddSubTask
           task={newSubTask}
           columns={columns}
-          paddingLeft={splitSubTask ? 0 : DEFAULT_LEFT_PADDING + paddingLeft}
+          paddingLeft={splitSubTaskState ? 0 : DEFAULT_LEFT_PADDING + paddingLeft}
           isListParent={false}
-          parentId={splitSubTask ? (task.parent_id as string) : task.id}
+          parentId={splitSubTaskState ? (task.parent_id as string) : task.id}
           task_status={task.status.id}
           handleClose={onCloseAddTaskFIeld}
         />
       ) : null}
 
-      {showSubTasks && !splitSubTask ? (
+      {showSubTasks && !splitSubTaskState ? (
         <SubTasks
           paddingLeft={DEFAULT_LEFT_PADDING + paddingLeft}
           parentId={task.id}

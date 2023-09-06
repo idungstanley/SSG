@@ -32,7 +32,7 @@ export function List({ tasks }: ListProps) {
   const dispatch = useAppDispatch();
   const { listId } = useParams();
 
-  const { sortType, hideTask, splitSubTask: splitSubTaskMode } = useAppSelector((state) => state.task);
+  const { sortType, hideTask, splitSubTaskState: splitSubTaskMode } = useAppSelector((state) => state.task);
   const { parentHubExt, hub } = useAppSelector((state) => state.hub);
 
   const [collapseTable, setCollapseTable] = useState(false);
