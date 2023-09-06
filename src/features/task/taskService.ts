@@ -25,6 +25,8 @@ import {
   setTimeSortStatus,
   setTimerStatus,
   setToggleAssignCurrentTaskId,
+  setTriggerSaveSettings,
+  setTriggerSaveSettingsModal,
   setUpdateTimerDuration
 } from './taskSlice';
 import { UpdateTaskProps } from './interface.tasks';
@@ -479,6 +481,48 @@ export const UseUpdateTaskDateService = ({
         } else {
           dispatch(setSubtasks(updatedTasks));
         }
+      }
+    }
+  );
+};
+export const UseUpdateTaskViewSettings = ({
+  task_views_id,
+  taskDate
+}: {
+  task_views_id: string;
+  taskDate: { [key: string]: boolean };
+}) => {
+  const { triggerSaveSettings } = useAppSelector((state) => state.task);
+  const dispatch = useAppDispatch();
+  return useQuery(
+    ['task', { task_views_id, taskDate }],
+    async () => {
+      const data = requestNew<ITaskRes>({
+        url: `task-views/${task_views_id}`,
+        method: 'PUT',
+        data: {
+          view_settings: taskDate
+        }
+      });
+      return data;
+    },
+    {
+      enabled: !!task_views_id && triggerSaveSettings,
+      cacheTime: 0,
+      onSuccess: (data) => {
+        dispatch(setTriggerSaveSettings(false));
+        dispatch(setTriggerSaveSettingsModal(false));
+
+        // if (data.data.task.id == task_id) {
+        //   const updatedTasks = taskDateUpdateManager(
+        //     task_id as string,
+        //     data.data.task.list_id as string,
+        //     tasks,
+        //     'start_date',
+        //     data.data.task.start_date as string
+        //   );
+        //   dispatch(setTasks(updatedTasks));
+        // }
       }
     }
   );

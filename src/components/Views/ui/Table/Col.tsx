@@ -25,6 +25,7 @@ import TagsWrapper from './CustomField/Tags/TagsWrapper';
 import MoneyField from './CustomField/Money/MoneyField';
 import DateField from './CustomField/Date/DateField';
 import EmailWebsiteField from './CustomField/EmailWebsiteField/EmailWebsiteField';
+import CheckboxField from './CustomField/Checkbox/CheckboxField';
 
 interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   value: TaskValue;
@@ -140,6 +141,13 @@ export function Col({ value, field, fieldId, task, customFields, ...props }: Col
         task={task as ImyTaskData}
         itemId={task.id}
         option={`${task.id !== '0' ? EntityType.task : 'getTeamId'}`}
+      />
+    ),
+    checkbox: (
+      <CheckboxField
+        taskId={task.id}
+        taskCustomFields={task.custom_fields?.find((i) => i.id === fieldId)}
+        fieldId={fieldId}
       />
     )
   };
