@@ -25,6 +25,7 @@ import TagsWrapper from './CustomField/Tags/TagsWrapper';
 import MoneyField from './CustomField/Money/MoneyField';
 import DateField from './CustomField/Date/DateField';
 import EmailWebsiteField from './CustomField/EmailWebsiteField/EmailWebsiteField';
+import PhoneField from './CustomField/Phone/PhoneField';
 
 interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   value: TaskValue;
@@ -135,6 +136,7 @@ export function Col({ value, field, fieldId, task, customFields, ...props }: Col
         fieldType="website"
       />
     ),
+    phone: <PhoneField />,
     assignees: (
       <Assignee
         task={task as ImyTaskData}
