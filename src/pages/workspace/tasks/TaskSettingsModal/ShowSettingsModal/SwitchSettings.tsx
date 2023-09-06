@@ -6,8 +6,7 @@ import {
   getSplitSubTask,
   getTaskUpperCase,
   getVerticalGrid,
-  getVerticalGridlinesTask,
-  setSaveSetting
+  getVerticalGridlinesTask
 } from '../../../../../features/task/taskSlice';
 
 export function useSwitchSettings() {

@@ -136,7 +136,8 @@ interface TaskState {
   hideTask: listColumnProps[];
   currentTaskId: string | null;
   selectedTasksArray: string[];
-  saveSetting: { [key: string]: boolean } | null;
+  saveSettingLocal: { [key: string]: boolean } | null;
+  saveSettingOnline: { [key: string]: boolean } | null;
   comfortableView: boolean;
   comfortableViewWrap: boolean;
   verticalGrid: boolean;
@@ -229,7 +230,8 @@ const initialState: TaskState = {
   meMode: false,
   showNewTaskId: '',
   singleLineView: true,
-  saveSetting: null,
+  saveSettingLocal: null,
+  saveSettingOnline: null,
   selectedTasksArray: [],
   verticalGrid: false,
   taskUpperCase: false,
@@ -340,8 +342,11 @@ export const taskSlice = createSlice({
     setSearchValue(state, action: PayloadAction<string>) {
       state.searchValue = action.payload;
     },
-    setSaveSetting(state, action: PayloadAction<{ [key: string]: boolean } | null>) {
-      state.saveSetting = action.payload;
+    setSaveSettingLocal(state, action: PayloadAction<{ [key: string]: boolean } | null>) {
+      state.saveSettingLocal = action.payload;
+    },
+    setSaveSettingOnline(state, action: PayloadAction<{ [key: string]: boolean } | null>) {
+      state.saveSettingOnline = action.payload;
     },
     setSelectedIndex(state, action: PayloadAction<number | null>) {
       state.selectedIndex = action.payload;
@@ -605,7 +610,7 @@ export const {
   setSelectedIndex,
   setSelectedIndexStatus,
   setSelectedListIds,
-  setSaveSetting,
+  setSaveSettingLocal,
   setSelectedTaskParentId,
   setSelectedTaskType,
   setMeMode,
@@ -627,6 +632,7 @@ export const {
   setSubtaskDefaultStatusId,
   setUpdateEntries,
   setTriggerSaveSettingsModal,
+  setSaveSettingOnline,
   setUpdateStatusModalId,
   setCurrentTaskStatusId,
   setCurrentTaskPriorityId,

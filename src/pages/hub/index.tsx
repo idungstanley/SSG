@@ -16,15 +16,14 @@ import { Header } from '../../components/TasksHeader';
 import { VerticalScroll } from '../../components/ScrollableContainer/VerticalScroll';
 import { GroupHorizontalScroll } from '../../components/ScrollableContainer/GroupHorizontalScroll';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
-import { setIsTasksUpdated, setTasks } from '../../features/task/taskSlice';
-import { IHubDetailRes, ItaskViews } from '../../features/hubs/hubs.interfaces';
+import { setIsTasksUpdated, setSaveSettingOnline, setTasks } from '../../features/task/taskSlice';
 
 export default function HubPage() {
   const dispatch = useAppDispatch();
   const { hubId, subhubId, taskId } = useParams();
 
   const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
-  const { tasks: tasksStore, isTasksUpdated, saveSetting } = useAppSelector((state) => state.task);
+  const { tasks: tasksStore, isTasksUpdated, saveSettingLocal } = useAppSelector((state) => state.task);
 
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -34,7 +33,7 @@ export default function HubPage() {
 
   const { isSuccess } = UseUpdateTaskViewSettings({
     task_views_id,
-    taskDate: saveSetting as { [key: string]: boolean }
+    taskDate: saveSettingLocal as { [key: string]: boolean }
   });
 
   // set entity name
@@ -49,6 +48,10 @@ export default function HubPage() {
         })
       );
     }
+
+    hub?.data.hub.task_views?.[0].view_settings
+      ? dispatch(setSaveSettingOnline(hub?.data.hub.task_views?.[0].view_settings as { [key: string]: boolean }))
+      : dispatch(setSaveSettingOnline(saveSettingLocal));
   }, [hub]);
 
   const { data, hasNextPage, fetchNextPage } = UseGetFullTaskList({

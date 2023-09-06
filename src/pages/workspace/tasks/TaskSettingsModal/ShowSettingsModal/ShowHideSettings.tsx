@@ -9,8 +9,11 @@ import Button from '../../../../../components/Buttons/Button';
 import toast from 'react-hot-toast';
 import SaveSettingsModal from '../SaveSettingsModal/SaveSettingsModal';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
-import { setSaveSetting, setTriggerSaveSettingsModal } from '../../../../../features/task/taskSlice';
-import { UseUpdateTaskViewSettings } from '../../../../../features/task/taskService';
+import {
+  setSaveSettingLocal,
+  setSaveSettingOnline,
+  setTriggerSaveSettingsModal
+} from '../../../../../features/task/taskSlice';
 
 interface IShowHideSettings {
   scrollByEachGroup: string;
@@ -45,7 +48,7 @@ export default function ShowHideSettings({
     verticalGrid,
     taskUpperCase,
     verticalGridlinesTask,
-    saveSetting
+    saveSettingLocal
   } = useAppSelector((state) => state.task);
 
   const dispatch = useAppDispatch();
@@ -68,8 +71,14 @@ export default function ShowHideSettings({
   };
 
   useEffect(() => {
-    dispatch(setSaveSetting(saveSettingsOnj));
-  }, [checkedStates]);
+    dispatch(setSaveSettingLocal(saveSettingsOnj));
+
+    console.log(triggerSaveSettingsModal);
+
+    if (triggerSaveSettingsModal) {
+      dispatch(setSaveSettingOnline(saveSettingsOnj));
+    }
+  }, [checkedStates, triggerSaveSettingsModal]);
 
   const ViewSettings = [
     {
