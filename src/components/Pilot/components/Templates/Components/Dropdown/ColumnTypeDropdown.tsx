@@ -13,6 +13,7 @@ import NumberOptions from '../Number/Number';
 import EmailOptions from '../Email/Email';
 import WebsiteOptions from '../Websites/WebsiteOptions';
 import PhoneOptions from '../Phone/PhoneOptions';
+import CheckBoxOptions from '../Checkbox/CheckboxOptions';
 
 const columnTypes = [
   {
@@ -54,6 +55,11 @@ const columnTypes = [
     id: 'Phone',
     title: 'Phone',
     options: <PhoneOptions />
+  },
+  {
+    id: 'Checkbox',
+    title: 'Checkbox',
+    options: <CheckBoxOptions />
   }
 ];
 

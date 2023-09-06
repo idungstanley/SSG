@@ -17,6 +17,7 @@ import CreateEmailField from './Email/CreateEmailField';
 import CraeteWebsite from './Websites/CraeteWebsite';
 import CreateCurrencyField from './Currency/CreateCurrencyField';
 import CreatePhone from './Phone/CreatePhone';
+import CreateCheckbox from './Checkbox/CreateCheckbox';
 
 function NewColumn() {
   const dispatch = useAppDispatch();
@@ -46,7 +47,8 @@ function NewColumn() {
     email: <CreateEmailField />,
     website: <CraeteWebsite />,
     currency: <CreateCurrencyField />,
-    phone: <CreatePhone />
+    phone: <CreatePhone />,
+    checkbox: <CreateCheckbox />
   };
 
   return (

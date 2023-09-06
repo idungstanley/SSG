@@ -1,10 +1,9 @@
 import { useState, useEffect } from 'react';
 import { ITaskFullList, Task } from '../../../../features/task/interface.tasks';
-import { generateGrid } from '../../lib';
+import { createHeaders, generateGrid } from '../../lib';
 import { Head } from './Head/Head';
 import { MAX_SUBTASKS_LEVEL, Row } from './Row';
 import { useSubTasks } from '../../../../features/task/taskService';
-import { Column } from '../../types/table';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { IField } from '../../../../features/list/list.interfaces';
 import { DEFAULT_LEFT_PADDING } from '../../config';
@@ -22,16 +21,17 @@ import {
   setUpdateCords
 } from '../../../../features/task/taskSlice';
 import { filterSubtasks } from '../../../../utils/filterSubtasks';
+import { listColumnProps } from '../../../../pages/workspace/tasks/component/views/ListColumns';
 
 interface ISubtasksTableProps {
   data: Task;
-  columns: Column[];
+  heads: listColumnProps[];
   customFields?: IField[];
   paddingLeft?: number;
   level: number;
 }
 
-export function SubtasksTable({ data, columns, customFields, paddingLeft = 0, level }: ISubtasksTableProps) {
+export function SubtasksTable({ data, heads, customFields, paddingLeft = 0, level }: ISubtasksTableProps) {
   const dispatch = useAppDispatch();
 
   const { statusId, subtasks, subtasksfilters } = useAppSelector((state) => state.task);
@@ -41,6 +41,8 @@ export function SubtasksTable({ data, columns, customFields, paddingLeft = 0, le
   const [collapseTasks, setCollapseTasks] = useState(false);
   const [collapseTable, setCollapseTable] = useState(false);
   const [parentHub, setParentHub] = useState<Hub>();
+
+  const columns = createHeaders(heads).filter((i) => !i.hidden);
 
   const { data: tasks } = useSubTasks(data.id);
   const taskLength = tasks?.length;
@@ -181,7 +183,7 @@ export function SubtasksTable({ data, columns, customFields, paddingLeft = 0, le
         <SubtasksTable
           key={item.id}
           data={item}
-          columns={columns}
+          heads={heads}
           paddingLeft={paddingLeft + DEFAULT_LEFT_PADDING}
           customFields={customFields}
           level={level + 1}

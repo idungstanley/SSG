@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
 import { User } from './ClockLog';
 import SearchIcon from '../../../../assets/icons/SearchIcon';
 import AvatarWithInitials from '../../../avatar/AvatarWithInitials';
