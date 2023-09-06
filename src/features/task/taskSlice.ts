@@ -180,7 +180,7 @@ interface TaskState {
   sortArr: string[];
   timeSortStatus: boolean;
   timeArr: string[];
-  timeSortArr: string[];
+  timeSortArr: SortOption[];
   timeLogColumnData: Header[];
   screenRecording: 'idle' | 'recording';
   recorder: RecordRTC | null;
@@ -525,10 +525,8 @@ export const taskSlice = createSlice({
     setTimeArr(state, action: PayloadAction<string[]>) {
       state.timeArr = action.payload;
     },
-    setTimeSortArr(state, action: PayloadAction<string[] | Header[]>) {
-      isArrayOfStrings(action.payload)
-        ? (state.timeSortArr = action.payload)
-        : (state.timeLogColumnData = action.payload);
+    setTimeSortArr(state, action: PayloadAction<SortOption[]>) {
+      state.timeSortArr = action.payload;
     },
     setScreenRecording(state, action: PayloadAction<'idle' | 'recording'>) {
       state.screenRecording = action.payload;
