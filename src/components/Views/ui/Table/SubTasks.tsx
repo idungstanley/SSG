@@ -12,9 +12,10 @@ interface SubTasksProps {
   parentId: string;
   columns: Column[];
   paddingLeft: number;
+  level: number;
 }
 
-export function SubTasks({ parentId, columns, paddingLeft }: SubTasksProps) {
+export function SubTasks({ parentId, columns, paddingLeft, level }: SubTasksProps) {
   const dispatch = useAppDispatch();
 
   const { draggableItemId } = useAppSelector((state) => state.list);
@@ -39,7 +40,7 @@ export function SubTasks({ parentId, columns, paddingLeft }: SubTasksProps) {
       ) : null}
       {Object.keys(subtasks).length &&
         subtasks[parentId]?.map((i) => (
-          <Row paddingLeft={paddingLeft} columns={columns} task={i} key={i.id} isListParent={false} />
+          <Row paddingLeft={paddingLeft} columns={columns} task={i} key={i.id} isListParent={false} level={level} />
         ))}
     </>
   );

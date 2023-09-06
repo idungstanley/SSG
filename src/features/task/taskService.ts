@@ -717,6 +717,7 @@ export const GetTimeEntriesService = ({
   is_active?: number;
   page?: number;
   include_filters?: boolean;
+  team_member_group_ids?: string[];
 }) => {
   const { timeSortArr } = useAppSelector((state) => state.task);
   const updatesortArr = timeSortArr.length === 0 ? null : timeSortArr;

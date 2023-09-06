@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { ITaskFullList, Task } from '../../../../features/task/interface.tasks';
 import { generateGrid } from '../../lib';
 import { Head } from './Head/Head';
-import { Row } from './Row';
+import { MAX_SUBTASKS_LEVEL, Row } from './Row';
 import { useSubTasks } from '../../../../features/task/taskService';
 import { Column } from '../../types/table';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
@@ -28,9 +28,10 @@ interface ISubtasksTableProps {
   columns: Column[];
   customFields?: IField[];
   paddingLeft?: number;
+  level: number;
 }
 
-export function SubtasksTable({ data, columns, customFields, paddingLeft = 0 }: ISubtasksTableProps) {
+export function SubtasksTable({ data, columns, customFields, paddingLeft = 0, level }: ISubtasksTableProps) {
   const dispatch = useAppDispatch();
 
   const { statusId, subtasks, subtasksfilters } = useAppSelector((state) => state.task);
@@ -148,6 +149,7 @@ export function SubtasksTable({ data, columns, customFields, paddingLeft = 0 }: 
                               // handleClose={handleClose}
                               customFields={customFields}
                               isSplitSubtask={true}
+                              level={level}
                             />
                           ) : null
                         )}
@@ -159,14 +161,16 @@ export function SubtasksTable({ data, columns, customFields, paddingLeft = 0 }: 
                 ) : null}
 
                 {/* add subtask button */}
-                <tbody className="h-5">
-                  <tr
-                    onClick={(e) => onShowAddSubtaskField(e, tasks[tasks.length - 1].id)}
-                    className="absolute left-0 p-1.5 pl-5 text-left w-fit text-xs"
-                  >
-                    <td className="font-semibold cursor-pointer alsoit-gray-300">+ New Subtask</td>
-                  </tr>
-                </tbody>
+                {level <= MAX_SUBTASKS_LEVEL ? (
+                  <tbody className="h-5">
+                    <tr
+                      onClick={(e) => onShowAddSubtaskField(e, tasks[tasks.length - 1].id)}
+                      className="absolute left-0 p-1.5 pl-5 text-left w-fit text-xs"
+                    >
+                      <td className="font-semibold cursor-pointer alsoit-gray-300">+ New Subtask</td>
+                    </tr>
+                  </tbody>
+                ) : null}
               </table>
             </div>
           ) : null}
@@ -180,6 +184,7 @@ export function SubtasksTable({ data, columns, customFields, paddingLeft = 0 }: 
           columns={columns}
           paddingLeft={paddingLeft + DEFAULT_LEFT_PADDING}
           customFields={customFields}
+          level={level + 1}
         />
       ))}
     </>

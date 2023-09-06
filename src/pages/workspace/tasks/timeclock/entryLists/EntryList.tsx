@@ -17,6 +17,13 @@ export interface teamMember {
     avatar_path: string;
   };
 }
+
+export interface teamGroups {
+  id: string;
+  name: string;
+  color: string;
+  initials: string;
+}
 export interface entriesProps {
   id: string;
   duration: number;
@@ -33,9 +40,7 @@ export interface EntryListProps {
 
 export default function EntryList({ entries, switchHeader }: EntryListProps) {
   const headers = switchHeader;
-
-  const { initials, name } = entries.team_member.user;
-
+  const { initials, name, color } = entries.team_member.user;
   const [iconToggle, setIconToggle] = useState<{ editIcon: boolean; trashIcon: boolean; threeDots: boolean }>({
     editIcon: false,
     trashIcon: false,
@@ -67,7 +72,7 @@ export default function EntryList({ entries, switchHeader }: EntryListProps) {
                 className="w-1/5 flex items-center justify-start cursor-pointer py-1"
               >
                 <ToolTip title={name}>
-                  <AvatarWithInitials height="h-5" width="w-5" initials={initials} />
+                  <AvatarWithInitials height="h-5" width="w-5" initials={initials} backgroundColour={color} />
                 </ToolTip>
                 {showUserModal && (
                   <PopAssignModal
