@@ -147,6 +147,7 @@ interface TaskState {
   showNewTaskId: string;
   singleLineView: boolean;
   toggleAllSubtask: boolean;
+  separateSubtasksMode: boolean;
   CompactView: boolean;
   taskUpperCase: boolean;
   verticalGridlinesTask: boolean;
@@ -183,7 +184,7 @@ interface TaskState {
   sortArr: string[];
   timeSortStatus: boolean;
   timeArr: string[];
-  timeSortArr: string[];
+  timeSortArr: SortOption[];
   timeLogColumnData: Header[];
   screenRecording: 'idle' | 'recording';
   recorder: RecordRTC | null;
@@ -243,6 +244,7 @@ const initialState: TaskState = {
   toggleAllSubtask: false,
   verticalGridlinesTask: false,
   splitSubTaskState: false,
+  separateSubtasksMode: false,
   CompactView: false,
   CompactViewWrap: false,
   showTaskNavigation: false,
@@ -434,6 +436,11 @@ export const taskSlice = createSlice({
     },
     setToggleAllSubtask(state, action: PayloadAction<boolean>) {
       state.toggleAllSubtask = action.payload;
+      state.separateSubtasksMode = false;
+    },
+    setSeparateSubtasksMode(state, action: PayloadAction<boolean>) {
+      state.separateSubtasksMode = action.payload;
+      state.toggleAllSubtask = false;
     },
     setShowNewTaskField(state, action: PayloadAction<boolean>) {
       state.showNewTaskField = action.payload;
@@ -536,10 +543,8 @@ export const taskSlice = createSlice({
     setTimeArr(state, action: PayloadAction<string[]>) {
       state.timeArr = action.payload;
     },
-    setTimeSortArr(state, action: PayloadAction<string[] | Header[]>) {
-      isArrayOfStrings(action.payload)
-        ? (state.timeSortArr = action.payload)
-        : (state.timeLogColumnData = action.payload);
+    setTimeSortArr(state, action: PayloadAction<SortOption[]>) {
+      state.timeSortArr = action.payload;
     },
     setScreenRecording(state, action: PayloadAction<'idle' | 'recording'>) {
       state.screenRecording = action.payload;
@@ -628,6 +633,7 @@ export const {
   setCurrentTaskId,
   setDefaultSubtaskId,
   setToggleAllSubtask,
+  setSeparateSubtasksMode,
   setSelectedTasksArray,
   setAddNewTaskItem,
   setCloseTaskListView,

@@ -38,10 +38,13 @@ export function SubTasks({ parentId, columns, paddingLeft, level }: SubTasksProp
           <OverlayRow columns={columns} task={draggableItem} />
         </DragOverlay>
       ) : null}
-      {Object.keys(subtasks).length &&
-        subtasks[parentId]?.map((i) => (
-          <Row paddingLeft={paddingLeft} columns={columns} task={i} key={i.id} isListParent={false} level={level} />
-        ))}
+      {Object.keys(subtasks).length ? (
+        <>
+          {subtasks[parentId]?.map((i) => (
+            <Row paddingLeft={paddingLeft} columns={columns} task={i} key={i.id} isListParent={false} level={level} />
+          ))}
+        </>
+      ) : null}
     </>
   );
 }

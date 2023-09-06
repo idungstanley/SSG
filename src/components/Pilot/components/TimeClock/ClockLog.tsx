@@ -12,6 +12,7 @@ export type Header = {
   title: string;
   id: string;
   hidden: boolean;
+  value: string;
 };
 
 export interface User {
@@ -34,11 +35,11 @@ export default function ClockLog({ getTaskEntries }: LogProps) {
   const fetchSortData = useGetUserSettingsData({ keys: 'time_entry' });
 
   const [headers, setHeaders] = useState<Header[]>([
-    { title: 'user', id: '1', hidden: false },
-    { title: 'duration', id: '2', hidden: false },
-    { title: 'start date', id: '3', hidden: false },
-    { title: 'end date', id: '4', hidden: false },
-    { title: 'description', id: '5', hidden: true }
+    { title: 'user', id: '1', hidden: false, value: 'team_member_id' },
+    { title: 'duration', id: '2', hidden: false, value: 'duration' },
+    { title: 'start date', id: '3', hidden: false, value: 'start_date' },
+    { title: 'end date', id: '4', hidden: false, value: 'end_date' },
+    { title: 'description', id: '5', hidden: true, value: '' }
   ]);
   const [teamMember, setTeamMember] = useState<User[]>([]);
   const [teamMemberId, setTeamMemberId] = useState<string[]>([]);
