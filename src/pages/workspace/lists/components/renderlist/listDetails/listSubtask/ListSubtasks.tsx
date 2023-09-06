@@ -11,13 +11,13 @@ export default function ListSubtasks({ subtasksTitle }: { subtasksTitle: string 
 
   const { toggleAllSubtask } = useAppSelector((state) => state.task);
 
-  const [activeViewId, setActiveViewId] = useState<number | null>(1);
-  const [listView] = useState<boolean | null>(true);
+  const [activeViewId, setActiveViewId] = useState<string>('collapse_all');
+  const [listView] = useState<boolean>(true);
   const [activeLabel, setActiveLabel] = useState<string>('');
 
   const viewSettings = [
     {
-      id: 1,
+      id: 'collapse_all',
       label: 'Collapse all',
       subLabel: '(Default)',
       handleClick: () => {
@@ -25,14 +25,14 @@ export default function ListSubtasks({ subtasksTitle }: { subtasksTitle: string 
       }
     },
     {
-      id: 2,
+      id: 'expand_all',
       label: 'Expand all',
       handleClick: () => {
         dispatch(setToggleAllSubtask(true));
       }
     },
     {
-      id: 3,
+      id: 'separate_tasks',
       label: 'As separate tasks',
       handleClick: () => {
         dispatch(setSeparateSubtasksMode(true));
@@ -82,7 +82,7 @@ export default function ListSubtasks({ subtasksTitle }: { subtasksTitle: string 
                       : 'flex items-center text-sm text-gray-600 text-left w-full'
                   }`}
                   onClick={() => {
-                    setActiveLabel(view.id === 1 ? '' : view.label);
+                    setActiveLabel(view.id === 'collapse_all' ? '' : view.label);
                     setActiveViewId(view.id);
                   }}
                 >

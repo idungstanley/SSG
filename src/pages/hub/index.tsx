@@ -17,7 +17,6 @@ import { VerticalScroll } from '../../components/ScrollableContainer/VerticalScr
 import { GroupHorizontalScroll } from '../../components/ScrollableContainer/GroupHorizontalScroll';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
 import { setIsTasksUpdated, setTasks } from '../../features/task/taskSlice';
-import { IHubDetailRes, ItaskViews } from '../../features/hubs/hubs.interfaces';
 
 export default function HubPage() {
   const dispatch = useAppDispatch();
