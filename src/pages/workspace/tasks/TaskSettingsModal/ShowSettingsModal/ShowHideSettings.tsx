@@ -48,19 +48,22 @@ export default function ShowHideSettings({
     verticalGrid,
     taskUpperCase,
     verticalGridlinesTask,
-    saveSettingLocal
+    saveSettingList,
+    splitSubTaskState,
+    saveSettingOnline
   } = useAppSelector((state) => state.task);
 
   const dispatch = useAppDispatch();
 
   const switchSettings = useSwitchSettings();
 
-  const saveSettingsOnj: { [key: string]: boolean } = {
+  const saveSettingsObj: { [key: string]: boolean } = {
     singleLineView,
     CompactView,
     verticalGrid,
     taskUpperCase,
-    verticalGridlinesTask
+    verticalGridlinesTask,
+    splitSubTaskState
   };
   const handleChange = (viewMode: string, index: number) => {
     dispatch(setTriggerSaveSettingsModal(true));
@@ -71,10 +74,10 @@ export default function ShowHideSettings({
   };
 
   useEffect(() => {
-    dispatch(setSaveSettingLocal(saveSettingsOnj));
+    dispatch(setSaveSettingLocal(saveSettingsObj));
 
     if (triggerSaveSettingsModal) {
-      dispatch(setSaveSettingOnline(saveSettingsOnj));
+      dispatch(setSaveSettingOnline(saveSettingsObj));
     }
   }, [checkedStates, triggerSaveSettingsModal]);
 
@@ -155,16 +158,28 @@ export default function ShowHideSettings({
         const newState = [...prev];
         const singleLineIndex = ViewSettings.findIndex((item) => item.label === 'Single Line mode');
         const TitleVerticalGridLineIndex = ViewSettings.findIndex((item) => item.label === 'Title Vertical Grid Line');
+        const CompactView = ViewSettings.findIndex((item) => item.label === 'Compact mode');
+        const taskUpperCase = ViewSettings.findIndex((item) => item.label === 'Upper Case');
+        const verticalGrid = ViewSettings.findIndex((item) => item.label === 'Property Vertical Grid Line');
+        const splitSubTaskState = ViewSettings.findIndex((item) => item.label === 'Split Sub Task');
 
-        newState[singleLineIndex] = true;
-        newState[TitleVerticalGridLineIndex] = true;
-
+        if (saveSettingList != undefined && saveSettingList?.view_settings != null) {
+          newState[singleLineIndex] = saveSettingOnline?.singleLineView as boolean;
+          newState[TitleVerticalGridLineIndex] = saveSettingOnline?.verticalGridlinesTask as boolean;
+          newState[CompactView] = saveSettingOnline?.CompactView as boolean;
+          newState[taskUpperCase] = saveSettingOnline?.taskUpperCase as boolean;
+          newState[verticalGrid] = saveSettingOnline?.verticalGrid as boolean;
+          newState[splitSubTaskState] = saveSettingOnline?.splitSubTaskState as boolean;
+        } else {
+          newState[singleLineIndex] = true;
+          newState[TitleVerticalGridLineIndex] = true;
+        }
         return newState;
       });
     };
 
     handleCheckboxChange();
-  }, []);
+  }, [saveSettingList]);
 
   return (
     <Menu>

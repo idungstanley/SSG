@@ -73,13 +73,11 @@ export function StickyCol({
   const { dragOverItemId, draggableItemId } = useAppSelector((state) => state.list);
   const {
     currTeamMemberId,
-    singleLineView,
     verticalGrid,
     taskUpperCase,
     selectedTasksArray,
     verticalGridlinesTask,
     selectedIndex,
-    CompactView,
     toggleAllSubtask,
     selectedListIds,
     dragToBecomeSubTask,

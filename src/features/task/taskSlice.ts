@@ -22,6 +22,7 @@ import { DEFAULT_FILTERS_OPTION } from '../../components/TasksHeader/ui/Filter/c
 import { ITeamMembersAndGroup } from '../settings/teamMembersAndGroups.interfaces';
 import { Header } from '../../components/Pilot/components/TimeClock/ClockLog';
 import { isArrayOfStrings } from '../../utils/typeGuards';
+import { ItaskViews } from '../hubs/hubs.interfaces';
 
 export interface ICustomField {
   id: string;
@@ -137,6 +138,7 @@ interface TaskState {
   currentTaskId: string | null;
   selectedTasksArray: string[];
   saveSettingLocal: { [key: string]: boolean } | null;
+  saveSettingList: ItaskViews | undefined;
   saveSettingOnline: { [key: string]: boolean } | null;
   comfortableView: boolean;
   comfortableViewWrap: boolean;
@@ -148,7 +150,7 @@ interface TaskState {
   CompactView: boolean;
   taskUpperCase: boolean;
   verticalGridlinesTask: boolean;
-  splitSubTask: boolean;
+  splitSubTaskState: boolean;
   CompactViewWrap: boolean;
   triggerSaveSettings: boolean;
   triggerSaveSettingsModal: boolean;
@@ -229,8 +231,9 @@ const initialState: TaskState = {
   showNewTaskField: false,
   meMode: false,
   showNewTaskId: '',
-  singleLineView: true,
+  singleLineView: false,
   saveSettingLocal: null,
+  saveSettingList: undefined,
   saveSettingOnline: null,
   selectedTasksArray: [],
   verticalGrid: false,
@@ -238,8 +241,8 @@ const initialState: TaskState = {
   triggerSaveSettings: false,
   triggerSaveSettingsModal: false,
   toggleAllSubtask: false,
-  verticalGridlinesTask: true,
-  splitSubTask: false,
+  verticalGridlinesTask: false,
+  splitSubTaskState: false,
   CompactView: false,
   CompactViewWrap: false,
   showTaskNavigation: false,
@@ -345,6 +348,9 @@ export const taskSlice = createSlice({
     setSaveSettingLocal(state, action: PayloadAction<{ [key: string]: boolean } | null>) {
       state.saveSettingLocal = action.payload;
     },
+    setSaveSettingList(state, action: PayloadAction<ItaskViews | undefined>) {
+      state.saveSettingList = action.payload;
+    },
     setSaveSettingOnline(state, action: PayloadAction<{ [key: string]: boolean } | null>) {
       state.saveSettingOnline = action.payload;
     },
@@ -442,7 +448,7 @@ export const taskSlice = createSlice({
       state.verticalGridlinesTask = action.payload;
     },
     getSplitSubTask(state, action: PayloadAction<boolean>) {
-      state.splitSubTask = action.payload;
+      state.splitSubTaskState = action.payload;
     },
     setSelectedTasksArray(state, action: PayloadAction<string[]>) {
       state.selectedTasksArray = action.payload;
@@ -611,6 +617,7 @@ export const {
   setSelectedIndexStatus,
   setSelectedListIds,
   setSaveSettingLocal,
+  setSaveSettingList,
   setSelectedTaskParentId,
   setSelectedTaskType,
   setMeMode,

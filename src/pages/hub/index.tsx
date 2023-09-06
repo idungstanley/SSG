@@ -16,7 +16,14 @@ import { Header } from '../../components/TasksHeader';
 import { VerticalScroll } from '../../components/ScrollableContainer/VerticalScroll';
 import { GroupHorizontalScroll } from '../../components/ScrollableContainer/GroupHorizontalScroll';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
-import { setIsTasksUpdated, setSaveSettingOnline, setTasks } from '../../features/task/taskSlice';
+import {
+  setIsTasksUpdated,
+  setSaveSettingList,
+  setSaveSettingLocal,
+  setSaveSettingOnline,
+  setTasks
+} from '../../features/task/taskSlice';
+import { useformatSettings } from '../workspace/tasks/TaskSettingsModal/ShowSettingsModal/FormatSettings';
 
 export default function HubPage() {
   const dispatch = useAppDispatch();
@@ -24,13 +31,14 @@ export default function HubPage() {
 
   const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
   const { tasks: tasksStore, isTasksUpdated, saveSettingLocal } = useAppSelector((state) => state.task);
+  const formatSettings = useformatSettings();
 
   const containerRef = useRef<HTMLDivElement>(null);
 
   const { data: hub } = UseGetHubDetails({ activeItemId: hubId, activeItemType: EntityType.hub });
-  const listObjectWithViewSettings = hub?.data.hub.task_views?.find((element) => element.type === 'list');
+  const saveSettingList = hub?.data.hub.task_views?.find((element) => element.type === 'list');
 
-  const task_views_id = listObjectWithViewSettings ? listObjectWithViewSettings.id : '';
+  const task_views_id = saveSettingList ? saveSettingList.id : '';
 
   const { isSuccess } = UseUpdateTaskViewSettings({
     task_views_id,
@@ -50,10 +58,15 @@ export default function HubPage() {
       );
     }
 
-    listObjectWithViewSettings?.view_settings
-      ? dispatch(setSaveSettingOnline(listObjectWithViewSettings.view_settings as { [key: string]: boolean }))
-      : dispatch(setSaveSettingOnline(saveSettingLocal));
-  }, [hub]);
+    dispatch(setSaveSettingList(saveSettingList));
+
+    if (saveSettingList?.view_settings) {
+      dispatch(setSaveSettingOnline(saveSettingList.view_settings as { [key: string]: boolean }));
+      formatSettings(saveSettingList.view_settings);
+    } else {
+      dispatch(setSaveSettingOnline(saveSettingLocal));
+    }
+  }, [hub, saveSettingList]);
 
   const { data, hasNextPage, fetchNextPage } = UseGetFullTaskList({
     itemId: hubId || subhubId,
