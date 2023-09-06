@@ -1,28 +1,20 @@
-import React from 'react';
 import { useAppSelector } from '../../../../../../../../app/hooks';
-import { MdDragIndicator, MdOutlineMoreTime } from 'react-icons/md';
 import { useDispatch } from 'react-redux';
 import { setActiveSubTimeClockTabId } from '../../../../../../../../features/workspace/workspaceSlice';
-import { RiTimerFlashLine } from 'react-icons/ri';
-import { FaBusinessTime } from 'react-icons/fa';
+import { ClockIcon } from '../../../../../../../../assets/icons/ClockIcon';
+import { ScreenRecordIcon } from '../../../../../../../../assets/icons/ScreenRecordIcon';
 
 export const TimeClockOptions = [
   {
     id: 0,
-    name: 'In & Out',
-    icon: <RiTimerFlashLine />,
+    name: 'Timeclock',
+    icon: <ClockIcon />,
     isVisible: false
   },
   {
     id: 1,
-    name: 'Manual Time Add',
-    icon: <FaBusinessTime />,
-    isVisible: false
-  },
-  {
-    id: 2,
-    name: 'Clock Preference',
-    icon: <MdOutlineMoreTime />,
+    name: 'Screen Record',
+    icon: <ScreenRecordIcon />,
     isVisible: false
   }
 ];
@@ -31,7 +23,7 @@ export default function TimeSubTab() {
   const dispatch = useDispatch();
   return (
     <section>
-      <div className={`flex bg-gray-400 pt-0.5 ${showPilot ? 'flex-row' : 'flex-col'}`}>
+      <div className={`flex bg-white pt-0.5 ${showPilot ? 'flex-row' : 'flex-col'}`}>
         {TimeClockOptions.map((item) => (
           <section
             className={`flex flex-col w-full bg-white ${
@@ -42,24 +34,25 @@ export default function TimeSubTab() {
             <div
               key={item.id}
               onClick={() => dispatch(setActiveSubTimeClockTabId(item.id))}
-              className={`relative flex justify-center flex-grow py-2 font-medium text-gray-500 transition cursor-pointer group hover:text-gray-700 border-y-2 ${
-                item.id === activeSubTimeClockTabId && showPilot && 'rounded-t-lg bg-white'
-              } ${item.id != activeSubTimeClockTabId && showPilot && 'rounded-b-lg bg-gray-400'}`}
+              className={`relative flex px-2 flex-grow py-2 font-medium text-alsoit-gray-200 transition cursor-pointer group hover:text-alsoit-gray-300 ${
+                item.id === activeSubTimeClockTabId && showPilot && 'rounded-t-lg bg-alsoit-purple-50'
+              } ${item.id != activeSubTimeClockTabId && showPilot && ' bg-white'}`}
             >
-              <span
-                className={`absolute left-2 text-gray-500 justify-center text-xl cursor-move opacity-0 group-hover:opacity-100 ${
+              {/* <span
+                className={`absolute left-2 text-alsoit-gray-300 text-xl cursor-move opacity-0 group-hover:opacity-100 ${
                   showPilot ? 'block' : 'hidden'
                 }`}
               >
                 <MdDragIndicator />
-              </span>
-              <span
-                className={`${!showPilot && 'text-xs'} ${
-                  item.id === activeSubTimeClockTabId && !showPilot && 'bg-green-500 p-2 rounded w-3 h-3'
-                }`}
+              </span> */}
+              <div
+                className={`${!showPilot && 'text-alsoit-text-md'} ${
+                  item.id === activeSubTimeClockTabId && !showPilot && 'bg-alsoit-success p-2 rounded'
+                } flex items-center space-x-1.5 justify-start`}
               >
-                {item.icon}
-              </span>
+                <span>{item.icon}</span>
+                <span className="font-semibold">{item.name}</span>
+              </div>
             </div>
           </section>
         ))}
