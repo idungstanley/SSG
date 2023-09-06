@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { MouseEvent, useRef, useState } from 'react';
 import AvatarWithInitials from '../../../avatar/AvatarWithInitials';
 import { RiPlayFill, RiStopFill } from 'react-icons/ri';
 import moment from 'moment';
@@ -6,13 +6,20 @@ import { getUploadAttatchment } from '../../../../features/workspace/workspaceSe
 import { useAppSelector } from '../../../../app/hooks';
 import { VideoControlModal } from './VideoControlModal';
 import AdaptiveModal from '../../../Dropdown/AdaptiveModal/AdaptiveModal';
+import AvatarWithImage from '../../../avatar/AvatarWithImage';
+import PopAssignModal from '../../../../pages/workspace/tasks/assignTask/popAssignModal';
 
 export default function VideoEntries() {
   const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
+
   const { data } = getUploadAttatchment({ id: activeItemId as string, type: activeItemType });
+
   const [playToggle, setPlayToggle] = useState<boolean>(false);
   const [hoverIndex, setHoverIndex] = useState<number | undefined>();
   const [controlModal, setModal] = useState<boolean>(false);
+  const [anchorEl, setAnchorEl] = useState<HTMLTableCellElement | null>(null);
+  const [showUserModal, setShowUserModal] = useState<boolean>(false);
+
   const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
   const targetElementRef = useRef<HTMLTableCellElement>(null);
 
@@ -29,6 +36,16 @@ export default function VideoEntries() {
     }
   };
 
+  const handleHover = (e: MouseEvent<HTMLTableCellElement>) => {
+    if (anchorEl) {
+      setAnchorEl(null);
+      setShowUserModal(false);
+    } else {
+      setAnchorEl(e.currentTarget);
+      setShowUserModal(!showUserModal);
+    }
+  };
+
   const toggleControls = ({
     index,
     showControls,
@@ -38,7 +55,6 @@ export default function VideoEntries() {
     showControls: boolean;
     videoElement: HTMLVideoElement | null;
   }) => {
-    // const videoRef = videoRefs.current[index];
     if (videoElement) {
       if (showControls) {
         setModal(!controlModal);
@@ -64,18 +80,32 @@ export default function VideoEntries() {
         <div className="relative overflow-y-auto max-h-204">
           {data?.data.attachments.map((videoFile, index) => {
             const { created_at, updated_at, file_format } = videoFile.physical_file;
+            const { color, initials, avatar_path } = videoFile.team_member.user;
             const duration = new Date(updated_at).getTime() - new Date(created_at).getTime();
             return (
               <tr key={videoFile.id} className="flex space-x-8 border-b items-center p-2 relative">
-                <td>
-                  <AvatarWithInitials initials="MD" width="w-5" height="h-5" />
+                <td onMouseEnter={handleHover} onMouseLeave={handleHover} className="relative">
+                  {avatar_path ? (
+                    <AvatarWithImage image_path={avatar_path} height="h-10" width="w-10" roundedStyle="circular" />
+                  ) : (
+                    <AvatarWithInitials initials={initials} width="w-10" height="h-10" backgroundColour={color} />
+                  )}
+                  {/* {showUserModal && (
+                    <PopAssignModal
+                      anchorEl={anchorEl}
+                      currHoveredOnUser={videoFile.team_member.id}
+                      handleClose={() => handleHover}
+                      modalLoader={false}
+                      spinnerSize={6}
+                    />
+                  )} */}
                 </td>
                 <td className="relative" ref={targetElementRef}>
                   <video
                     ref={(el) => (videoRefs.current[index] = el)}
                     src={videoFile.path}
                     height={60}
-                    width={100}
+                    width={60}
                     tabIndex={0}
                     className="recording-tag"
                     onMouseEnter={() =>
@@ -96,12 +126,12 @@ export default function VideoEntries() {
                   )}
                   {playToggle && hoverIndex === index ? (
                     <RiStopFill
-                      className="absolute top-10 left-1 h-4 w-4 text-gray-200 cursor-pointer hover:text-gray-200"
+                      className="absolute top-5 left-1 h-4 w-4 text-gray-200 cursor-pointer hover:text-gray-200"
                       onClick={() => handlePlayBack(index)}
                     />
                   ) : (
                     <RiPlayFill
-                      className="absolute top-10 left-1 h-4 w-4 text-gray-200 cursor-pointer hover:text-gray-200"
+                      className="absolute top-5 left-1 h-4 w-4 text-gray-200 cursor-pointer hover:text-gray-200"
                       onClick={() => handlePlayBack(index)}
                     />
                   )}

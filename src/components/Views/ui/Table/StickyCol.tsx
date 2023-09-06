@@ -73,16 +73,15 @@ export function StickyCol({
   const { dragOverItemId, draggableItemId } = useAppSelector((state) => state.list);
   const {
     currTeamMemberId,
-    singleLineView,
     verticalGrid,
     taskUpperCase,
     selectedTasksArray,
     verticalGridlinesTask,
     selectedIndex,
-    CompactView,
     toggleAllSubtask,
     selectedListIds,
-    dragToBecomeSubTask
+    dragToBecomeSubTask,
+    saveSettingOnline
   } = useAppSelector((state) => state.task);
 
   const [isChecked, setIsChecked] = useState(false);
@@ -275,11 +274,11 @@ export function StickyCol({
             className={`flex items-center h-full space-x-1 ${isSplitSubtask && 'bg-white/90'}`}
             style={{
               height:
-                singleLineView && !CompactView
+                saveSettingOnline?.singleLineView && !saveSettingOnline?.CompactView
                   ? '42px'
-                  : CompactView && singleLineView
+                  : saveSettingOnline?.CompactView && saveSettingOnline?.singleLineView
                   ? '25px'
-                  : !singleLineView && CompactView && task.name.length < 30
+                  : !saveSettingOnline?.singleLineView && saveSettingOnline?.CompactView && task.name.length < 30
                   ? '25px'
                   : ''
             }}
@@ -299,11 +298,11 @@ export function StickyCol({
             style={{
               paddingLeft,
               height:
-                singleLineView && !CompactView
+                saveSettingOnline?.singleLineView && !saveSettingOnline?.CompactView
                   ? '42px'
-                  : CompactView && singleLineView
+                  : saveSettingOnline?.CompactView && saveSettingOnline?.singleLineView
                   ? '25px'
-                  : !singleLineView && CompactView && task.name.length < 30
+                  : !saveSettingOnline?.singleLineView && saveSettingOnline?.CompactView && task.name.length < 30
                   ? '25px'
                   : ''
             }}
@@ -355,17 +354,17 @@ export function StickyCol({
               >
                 <div
                   className={`font-semibold alsoit-gray-300 ${
-                    CompactView ? 'text-alsoit-text-md' : 'text-alsoit-text-lg'
+                    saveSettingOnline?.CompactView ? 'text-alsoit-text-md' : 'text-alsoit-text-lg'
                   }`}
                 >
-                  {singleLineView ? (
+                  {saveSettingOnline?.singleLineView ? (
                     <div contentEditable={eitableContent} suppressContentEditableWarning={true} ref={inputRef}>
                       {!eitableContent ? (
                         <DetailsOnHover
                           hoverElement={
                             <div
                               className={`font-semibold alsoit-gray-300 ${
-                                CompactView ? 'text-alsoit-text-md' : 'text-alsoit-text-lg'
+                                saveSettingOnline?.CompactView ? 'text-alsoit-text-md' : 'text-alsoit-text-lg'
                               }`}
                               style={{
                                 maxWidth: '200px',

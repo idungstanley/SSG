@@ -6,13 +6,12 @@ import {
   getSplitSubTask,
   getTaskUpperCase,
   getVerticalGrid,
-  getVerticalGridlinesTask,
-  setSaveSetting
+  getVerticalGridlinesTask
 } from '../../../../../features/task/taskSlice';
 
 export function useSwitchSettings() {
   const dispatch = useAppDispatch();
-  const { singleLineView, CompactView, verticalGrid, taskUpperCase, verticalGridlinesTask, splitSubTask } =
+  const { singleLineView, CompactView, verticalGrid, taskUpperCase, verticalGridlinesTask, splitSubTaskState } =
     useAppSelector((state) => state.task);
 
   const switchSettings = (viewMode: string) => {
@@ -33,7 +32,7 @@ export function useSwitchSettings() {
         dispatch(getVerticalGridlinesTask(!verticalGridlinesTask));
         break;
       case 'Split Sub Task':
-        dispatch(getSplitSubTask(!splitSubTask));
+        dispatch(getSplitSubTask(!splitSubTaskState));
         break;
       default:
         // If none of the cases match, do something else or nothing.

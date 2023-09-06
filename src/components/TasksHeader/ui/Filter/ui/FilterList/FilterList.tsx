@@ -16,7 +16,7 @@ export function FilterList() {
     filters: { fields: filters },
     subtasksfilters,
     selectedTaskParentId,
-    splitSubTask: splitMode
+    splitSubTaskState: splitMode
   } = useAppSelector((state) => state.task);
 
   const [showAddNewItem, setShowAddNewItem] = useState(false);
