@@ -29,6 +29,7 @@ import { setMatchedStatus, setStatusesToMatch } from '../../../features/hubs/hub
 import MatchStatusPopUp from '../Components/MatchStatusPopUp';
 import { setMatchData } from '../../../features/general/prompt/promptSlice';
 import { setDraggableActiveStatusId } from '../../../features/workspace/workspaceSlice';
+import StatusCollectionBoard from '../Components/StatusCollectionBoard';
 
 interface ErrorResponse {
   data: {
@@ -277,6 +278,7 @@ export default function CustomStatus() {
 
   return (
     <section className="flex flex-col gap-2 p-4">
+      <StatusCollectionBoard />
       <div className="flex flex-col space-y-6">
         <DndContext
           sensors={sensors}

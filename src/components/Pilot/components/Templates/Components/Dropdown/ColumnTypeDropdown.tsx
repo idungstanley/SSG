@@ -12,6 +12,7 @@ import CurrencyOptions from '../Currency/Currency';
 import NumberOptions from '../Number/Number';
 import EmailOptions from '../Email/Email';
 import WebsiteOptions from '../Websites/WebsiteOptions';
+import CheckBoxOptions from '../Checkbox/CheckboxOptions';
 
 const columnTypes = [
   {
@@ -48,6 +49,11 @@ const columnTypes = [
     id: 'Website',
     title: 'Website',
     options: <WebsiteOptions />
+  },
+  {
+    id: 'Checkbox',
+    title: 'Checkbox',
+    options: <CheckBoxOptions />
   }
 ];
 

@@ -6,6 +6,11 @@ import { useSwitchSettings } from './SwitchSettings';
 import ShowIcon from '../../../../../assets/icons/ShowIcon';
 import ArrowDrop from '../../../../../assets/icons/ArrowDrop';
 import Button from '../../../../../components/Buttons/Button';
+import toast from 'react-hot-toast';
+import SaveSettingsModal from '../SaveSettingsModal/SaveSettingsModal';
+import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
+import { setSaveSetting, setTriggerSaveSettingsModal } from '../../../../../features/task/taskSlice';
+import { UseUpdateTaskViewSettings } from '../../../../../features/task/taskService';
 
 interface IShowHideSettings {
   scrollByEachGroup: string;
@@ -33,15 +38,38 @@ export default function ShowHideSettings({
   const [checkedStates, setCheckedStates] = useState<boolean[]>([]);
   const [isAnyactive, setIsAnyactive] = useState<boolean>();
   const isActiveColor = isAnyactive ? '#BF01FE' : 'black';
+  const {
+    singleLineView,
+    triggerSaveSettingsModal,
+    CompactView,
+    verticalGrid,
+    taskUpperCase,
+    verticalGridlinesTask,
+    saveSetting
+  } = useAppSelector((state) => state.task);
+
+  const dispatch = useAppDispatch();
 
   const switchSettings = useSwitchSettings();
 
+  const saveSettingsOnj: { [key: string]: boolean } = {
+    singleLineView,
+    CompactView,
+    verticalGrid,
+    taskUpperCase,
+    verticalGridlinesTask
+  };
   const handleChange = (viewMode: string, index: number) => {
+    dispatch(setTriggerSaveSettingsModal(true));
     const newCheckedStates = [...checkedStates];
     newCheckedStates[index] = !newCheckedStates[index];
     setCheckedStates(newCheckedStates);
     switchSettings(viewMode);
   };
+
+  useEffect(() => {
+    dispatch(setSaveSetting(saveSettingsOnj));
+  }, [checkedStates]);
 
   const ViewSettings = [
     {
@@ -104,6 +132,15 @@ export default function ShowHideSettings({
     const isAnyTrue = checkedStates.some((value) => value === true);
     setIsAnyactive(isAnyTrue);
   }, [checkedStates]);
+
+  useEffect(() => {
+    if (triggerSaveSettingsModal) {
+      toast.custom((t) => <SaveSettingsModal title="This view has unsaved changes" toastId={t.id} />, {
+        position: 'bottom-right',
+        duration: Infinity
+      });
+    }
+  }, [triggerSaveSettingsModal]);
 
   useEffect(() => {
     const handleCheckboxChange = () => {
