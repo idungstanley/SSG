@@ -299,14 +299,11 @@ export default function CustomStatus() {
             >
               <BoardSection
                 id={uniqueModelType}
-                addStatus={addStatus}
-                setNewStatusValue={setNewStatusValue}
-                newStatusValue={newStatusValue}
-                setAddStatus={setAddStatus}
                 title={uniqueModelType}
                 status={boardSections[uniqueModelType]}
-                handleSaveNewStatus={handleSaveNewStatus}
                 setStatusTypesState={setBoardSections}
+                statusData={statusData}
+                setValidationMessage={setValidationMessage}
               />
             </div>
           ))}

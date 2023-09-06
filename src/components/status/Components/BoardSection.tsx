@@ -15,29 +15,54 @@ interface BoardProps {
   title: string;
   status: StatusProps[];
   setStatusTypesState: React.Dispatch<React.SetStateAction<BoardSectionsType>>;
-  setAddStatus: React.Dispatch<React.SetStateAction<boolean>>;
-  setNewStatusValue: React.Dispatch<React.SetStateAction<string>>;
-  addStatus: boolean;
-  newStatusValue: string;
-  handleSaveNewStatus: () => void;
+  statusData: StatusProps[];
+  setValidationMessage: React.Dispatch<React.SetStateAction<string>>;
 }
 
 export default function BoardSection({
   id,
   title,
   status,
-  setAddStatus,
-  addStatus,
   setStatusTypesState,
-  handleSaveNewStatus,
-  newStatusValue,
-  setNewStatusValue
+  statusData,
+  setValidationMessage
 }: BoardProps) {
   const { setNodeRef } = useDroppable({
     id
   });
 
   const [collapsedStatusGroups, setCollapsedStatusGroups] = useState<{ [key: string]: boolean }>({});
+  const [activeStatusType, setActiveStatusType] = useState<string>('');
+  const [newStatusValue, setNewStatusValue] = useState<string>('');
+  const [addStatus, setAddStatus] = useState<boolean>(false);
+
+  const handleSaveNewStatus = (title: string) => {
+    const nameWithoutWhiteSpace = newStatusValue?.trim();
+    const isNameExist = statusData.some(
+      (status) => status.name?.toLowerCase() === nameWithoutWhiteSpace?.toLowerCase()
+    );
+    if (nameWithoutWhiteSpace !== '' && !isNameExist) {
+      const newStatusItem: StatusProps = {
+        name: newStatusValue,
+        color: 'green',
+        type: title,
+        position: statusData.length,
+        id: null,
+        is_default: 0
+      };
+      // setStatusTypesState((prevStatusTypes) => [...prevStatusTypes, newStatusItem]);
+      setStatusTypesState((prevBoardSections) => ({
+        ...prevBoardSections,
+        [title]: [...prevBoardSections[title], newStatusItem] // Assuming 'open' is the section name
+      }));
+      setNewStatusValue('');
+      setValidationMessage('');
+    } else {
+      setNewStatusValue('');
+      setValidationMessage(`Whoops, status with name '${newStatusValue}' already exist`);
+    }
+    setAddStatus(false);
+  };
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNewStatusValue(e.target.value);
@@ -49,6 +74,12 @@ export default function BoardSection({
     }));
   };
   const StatusIndex = status.map((item) => item.name);
+  const handleAddStatus = (title: string) => {
+    setActiveStatusType(title);
+    setAddStatus(true);
+  };
+
+  console.log(activeStatusType);
 
   return (
     <>
@@ -74,20 +105,27 @@ export default function BoardSection({
         </div>
       </SortableContext>
 
-      {addStatus && (
+      {addStatus && title === activeStatusType && (
         <span className="flex justify-items-start">
           <Input
             trailingIcon={<PlusIcon active />}
             placeholder="Type Status name"
-            name="Status"
+            name={title}
             onChange={handleOnChange}
             value={newStatusValue}
-            trailingClick={handleSaveNewStatus}
+            trailingClick={() => handleSaveNewStatus(title)}
           />
         </span>
       )}
-      <span className="flex justify-items-start" onClick={() => setAddStatus(true)}>
-        <Button height="h-7" icon={<PlusCircle active={false} color="white" />} label="Add Status" buttonStyle="base" />
+      <span className="flex justify-items-start" onClick={() => handleAddStatus(title)}>
+        <Button
+          height="h-5"
+          icon={<PlusCircle active={true} color="base" dimensions={{ height: 18, width: 18 }} />}
+          label="Add Status"
+          labelSize="text-xs"
+          padding="p-1"
+          buttonStyle="white"
+        />
       </span>
     </>
   );
