@@ -7,12 +7,19 @@ import { cl } from '../../../utils';
 import { AiFillStar } from 'react-icons/ai';
 import PinnedIcon from '../../../assets/icons/PinnedIcon';
 import { setIsFavoritePinned } from '../../../features/workspace/workspaceSlice';
+import { useQueryClient } from '@tanstack/react-query';
 
 function Favorites() {
   const dispatch = useAppDispatch();
+  const queryClient = useQueryClient();
 
   const { showSidebar } = useAppSelector((state) => state.account);
   const { data: FavData, status } = useGetFavourites();
+
+  const handleUnpinned = () => {
+    dispatch(setIsFavoritePinned(false));
+    queryClient.invalidateQueries(['user-settings']);
+  };
 
   if (status === 'loading') {
     return (
@@ -40,7 +47,7 @@ function Favorites() {
             })}
           </div>
         </div>
-        <span className="flex items-center mr-4 cursor-pointer" onClick={() => dispatch(setIsFavoritePinned(false))}>
+        <span className="flex items-center mr-4 cursor-pointer" onClick={() => handleUnpinned()}>
           <PinnedIcon />
         </span>
       </div>

@@ -17,6 +17,7 @@ import SearchIcon from '../../../../assets/icons/SearchIcon';
 import { setUpdateCords } from '../../../../features/hubs/hubSlice';
 import { useScroll } from '../../../../hooks/useScroll';
 import { VerticalScroll } from '../../../../components/ScrollableContainer/VerticalScroll';
+import { useQueryClient } from '@tanstack/react-query';
 
 const MAX_SIDEBAR_WIDTH = dimensions.navigationBar.max;
 const MIN_SIDEBAR_WIDTH = dimensions.navigationBar.min;
@@ -27,6 +28,8 @@ export default function Sidebar() {
     (state) => state.workspace
   );
   const key = 'sidebar';
+  const queryClient = useQueryClient();
+
   const { showSidebar, userSettingsData } = useAppSelector((state) => state.account);
   const [commandSearchModal, setCommandSearchModal] = useState<boolean>(false);
 
@@ -66,6 +69,7 @@ export default function Sidebar() {
       setActiveHotkeyIds(newHotkeyIds);
       if (newHotkeyIds.includes(isFavoriteItem?.id as string)) {
         dispatch(setIsFavoritePinned(true));
+        queryClient.invalidateQueries(['user-settings']);
       } else {
         dispatch(setIsFavoritePinned(false));
       }
@@ -74,7 +78,7 @@ export default function Sidebar() {
     [activeHotkeyIds]
   );
 
-  setUserSettingsData(isDrag, key, { ...userSettingsData, sidebarWidth: size, isFavoritePinned }, resolution);
+  setUserSettingsData(isMouseUp, key, { ...userSettingsData, sidebarWidth: size, isFavoritePinned }, resolution);
 
   useEffect(() => {
     const { isAllow, allowedSize } = isAllowIncreaseWidth(size, extendedSidebarWidth);

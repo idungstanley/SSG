@@ -93,7 +93,7 @@ export const setUserSettingsData = (
         }
       }),
     {
-      enabled: enabled || isFavoritePinned
+      enabled: enabled || !isFavoritePinned || isFavoritePinned
     }
   );
 };
