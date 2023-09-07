@@ -309,7 +309,7 @@ export default function MenuDropdown({ isExtendedBar, cords }: IMenuDropdownProp
     {
       title: 'Delete',
       handleClick: () => {
-        if (showMenuDropdownType === 'hubs' || showMenuDropdownType === EntityType.subHub) {
+        if (showMenuDropdownType?.includes(EntityType.hub)) {
           deleteHubMutation.mutateAsync({
             id: showMenuDropdown
           });
