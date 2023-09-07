@@ -27,11 +27,12 @@ interface ISubtasksTableProps {
   data: Task;
   heads: listColumnProps[];
   customFields?: IField[];
+  listId: string;
   paddingLeft?: number;
   level: number;
 }
 
-export function SubtasksTable({ data, heads, customFields, paddingLeft = 0, level }: ISubtasksTableProps) {
+export function SubtasksTable({ data, heads, customFields, listId, paddingLeft = 0, level }: ISubtasksTableProps) {
   const dispatch = useAppDispatch();
 
   const { statusId, subtasks, subtasksfilters } = useAppSelector((state) => state.task);
@@ -49,7 +50,13 @@ export function SubtasksTable({ data, heads, customFields, paddingLeft = 0, leve
 
   useEffect(() => {
     if (tasks?.length) {
-      dispatch(setSubtasks({ ...subtasks, [data.id]: tasks as ITaskFullList[] }));
+      const tasksWithListId = tasks.map((item) => {
+        return {
+          ...item,
+          list_id: listId
+        };
+      });
+      dispatch(setSubtasks({ ...subtasks, [data.id]: tasksWithListId as ITaskFullList[] }));
     }
   }, [tasks]);
 
@@ -144,6 +151,7 @@ export function SubtasksTable({ data, heads, customFields, paddingLeft = 0, leve
                               task={task as ITaskFullList}
                               key={task.id}
                               taskIndex={index}
+                              listId={listId}
                               isListParent={true}
                               paddingLeft={paddingLeft}
                               parentId={task.id}
@@ -184,6 +192,7 @@ export function SubtasksTable({ data, heads, customFields, paddingLeft = 0, leve
           key={item.id}
           data={item}
           heads={heads}
+          listId={listId}
           paddingLeft={paddingLeft + DEFAULT_LEFT_PADDING}
           customFields={customFields}
           level={level + 1}

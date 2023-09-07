@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo, Fragment } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
-import { Task } from '../../../../features/task/interface.tasks';
+import { ITaskFullList, Task } from '../../../../features/task/interface.tasks';
 import { filterByAssignee, filterBySearchValue, sortTasks } from '../../../TasksHeader/lib';
 import { Table } from '../Table/Table';
 import { Label } from './Label';
@@ -32,13 +32,21 @@ export function List({ tasks }: ListProps) {
   const dispatch = useAppDispatch();
   const { listId } = useParams();
 
-  const { sortType, hideTask, splitSubTask: splitSubTaskMode } = useAppSelector((state) => state.task);
+  const {
+    sortType,
+    hideTask,
+    splitSubTask: splitSubTaskMode,
+    subtasks,
+    tasks: storeTasks,
+    separateSubtasksMode
+  } = useAppSelector((state) => state.task);
   const { parentHubExt, hub } = useAppSelector((state) => state.hub);
 
   const [collapseTable, setCollapseTable] = useState(false);
   const [showNewTaskField, setShowNewTaskField] = useState(false);
   const [parentHub, setParentHub] = useState<Hub>();
   const [currentList, setCurrentList] = useState<ListType>();
+  const [fullTasksLists, setFullTasksLists] = useState<ITaskFullList[]>([]);
 
   useEffect(() => {
     if (parentHubExt.id) {
@@ -69,7 +77,38 @@ export function List({ tasks }: ListProps) {
     return unique([...columnsHead, ...customFieldNames]);
   }, [tasks]);
 
-  const { filteredBySearch } = filterBySearchValue(tasks);
+  const createFullTasksList = () => {
+    const newFullTasksList: ITaskFullList[] = [];
+    const allTasks = [
+      ...Object.keys(storeTasks).map((key) => {
+        return storeTasks[key];
+      })
+    ];
+    allTasks.forEach((items) => {
+      items.forEach((item) => {
+        if (item.list_id === tasks[0].list_id) {
+          newFullTasksList.push(item);
+        }
+      });
+    });
+    const allSubtasks = [
+      ...Object.keys(subtasks).map((key) => {
+        return subtasks[key];
+      })
+    ];
+    allSubtasks.forEach((items) => {
+      if (items[0].list_id === tasks[0].list_id) {
+        newFullTasksList.push(...items);
+      }
+    });
+    return newFullTasksList;
+  };
+
+  useEffect(() => {
+    setFullTasksLists(separateSubtasksMode ? createFullTasksList() : (tasks as ITaskFullList[]));
+  }, [storeTasks, subtasks, separateSubtasksMode]);
+
+  const { filteredBySearch } = filterBySearchValue(fullTasksLists);
   const { filteredByAssignee } = filterByAssignee(filteredBySearch);
   const { sortedTasks } = sortTasks(sortType, filteredByAssignee);
 
@@ -145,6 +184,7 @@ export function List({ tasks }: ListProps) {
                       <SubtasksTable
                         key={task.id}
                         data={task}
+                        listId={task.list_id}
                         heads={hideTask.length ? hideTask : generateColumns}
                         customFields={tasks[0].custom_field_columns as IField[]}
                         level={1}

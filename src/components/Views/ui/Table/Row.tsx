@@ -23,6 +23,7 @@ export const MAX_SUBTASKS_LEVEL = 10;
 interface RowProps {
   task: Task;
   taskIndex?: number;
+  listId: string;
   columns: Column[];
   paddingLeft?: number;
   parentId?: string;
@@ -37,6 +38,7 @@ interface RowProps {
 export function Row({
   task,
   columns,
+  listId,
   taskIndex,
   paddingLeft = 0,
   parentId,
@@ -212,6 +214,7 @@ export function Row({
           columns={columns}
           paddingLeft={splitSubTask ? 0 : DEFAULT_LEFT_PADDING + paddingLeft}
           isListParent={false}
+          listId={listId}
           parentId={splitSubTask ? (task.parent_id as string) : task.id}
           task_status={task.status.id}
           handleClose={onCloseAddTaskFIeld}
@@ -221,6 +224,7 @@ export function Row({
       {showSubTasks && !splitSubTask ? (
         <SubTasks
           paddingLeft={DEFAULT_LEFT_PADDING + paddingLeft}
+          listId={listId}
           parentId={task.id}
           columns={columns}
           level={level + 1}
