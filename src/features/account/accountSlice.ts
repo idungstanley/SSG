@@ -8,6 +8,8 @@ const showPreviewFromLS = localStorage.getItem('showPreview') as string;
 //   JSON.parse(localStorage.getItem('sidebar') || '""');
 
 const sidebarFromLS = localStorage.getItem('sidebar');
+//get sidebar width from local storage
+const sidebarWidthFromLS = JSON.parse(localStorage.getItem('sidebarWidth') || '""') as number;
 
 const idsFromLS = JSON.parse(localStorage.getItem('placeItem') || '[]') as string[];
 
@@ -50,7 +52,7 @@ const initialState: AccountState = {
   scrollTop: '',
   baseColor: '#BF00FFB2',
   lightBaseColor: '#BF00FF21',
-  userSettingsData: undefined,
+  userSettingsData: { showPreview: '', sidebarWidth: sidebarWidthFromLS, isFavoritePinned: false },
   places: [...initialPlaces.sort((a, b) => idsFromLS.indexOf(a.id) - idsFromLS.indexOf(b.id))]
 };
 

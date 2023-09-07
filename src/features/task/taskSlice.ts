@@ -21,7 +21,6 @@ import {
 import { DEFAULT_FILTERS_OPTION } from '../../components/TasksHeader/ui/Filter/config/filterConfig';
 import { ITeamMembersAndGroup } from '../settings/teamMembersAndGroups.interfaces';
 import { Header } from '../../components/Pilot/components/TimeClock/ClockLog';
-import { isArrayOfStrings } from '../../utils/typeGuards';
 import { ItaskViews } from '../hubs/hubs.interfaces';
 
 export interface ICustomField {
@@ -125,6 +124,10 @@ interface entityForCustom {
   id: string | undefined;
   type: string | undefined;
 }
+
+export const TWO_SUBTASKS_LEVELS = 'two_levels';
+export const THREE_SUBTASKS_LEVELS = 'three_levels';
+
 interface TaskState {
   tasks: Record<string, ITaskFullList[]>;
   subtasks: Record<string, ITaskFullList[]>;
@@ -152,6 +155,7 @@ interface TaskState {
   taskUpperCase: boolean;
   verticalGridlinesTask: boolean;
   splitSubTaskState: boolean;
+  splitSubTaskLevels: string;
   CompactViewWrap: boolean;
   triggerSaveSettings: boolean;
   triggerSaveSettingsModal: boolean;
@@ -246,6 +250,7 @@ const initialState: TaskState = {
   toggleAllSubtask: false,
   verticalGridlinesTask: false,
   splitSubTaskState: false,
+  splitSubTaskLevels: TWO_SUBTASKS_LEVELS,
   separateSubtasksMode: false,
   CompactView: false,
   CompactViewWrap: false,
@@ -461,6 +466,9 @@ export const taskSlice = createSlice({
     getSplitSubTask(state, action: PayloadAction<boolean>) {
       state.splitSubTaskState = action.payload;
     },
+    getSplitSubTaskLevels(state, action: PayloadAction<string>) {
+      state.splitSubTaskLevels = action.payload;
+    },
     setSelectedTasksArray(state, action: PayloadAction<string[]>) {
       state.selectedTasksArray = action.payload;
     },
@@ -626,6 +634,7 @@ export const {
   getTaskUpperCase,
   getVerticalGridlinesTask,
   getSplitSubTask,
+  getSplitSubTaskLevels,
   getCompactView,
   getCompactViewWrap,
   setSelectedIndex,

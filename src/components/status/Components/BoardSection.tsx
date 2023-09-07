@@ -79,8 +79,6 @@ export default function BoardSection({
     setAddStatus(true);
   };
 
-  console.log(activeStatusType);
-
   return (
     <>
       {title && (

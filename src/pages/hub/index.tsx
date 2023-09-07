@@ -16,13 +16,7 @@ import { Header } from '../../components/TasksHeader';
 import { VerticalScroll } from '../../components/ScrollableContainer/VerticalScroll';
 import { GroupHorizontalScroll } from '../../components/ScrollableContainer/GroupHorizontalScroll';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
-import {
-  setIsTasksUpdated,
-  setSaveSettingList,
-  setSaveSettingLocal,
-  setSaveSettingOnline,
-  setTasks
-} from '../../features/task/taskSlice';
+import { setIsTasksUpdated, setSaveSettingList, setSaveSettingOnline, setTasks } from '../../features/task/taskSlice';
 import { useformatSettings } from '../workspace/tasks/TaskSettingsModal/ShowSettingsModal/FormatSettings';
 
 export default function HubPage() {
@@ -36,8 +30,9 @@ export default function HubPage() {
   const containerRef = useRef<HTMLDivElement>(null);
 
   const { data: hub } = UseGetHubDetails({ activeItemId: hubId, activeItemType: EntityType.hub });
-  const saveSettingList = hub?.data.hub.task_views?.find((element) => element.type === 'list');
 
+  // get task_view id for list view
+  const saveSettingList = hub?.data.hub.task_views?.find((element) => element.type === 'list');
   const task_views_id = saveSettingList ? saveSettingList.id : '';
 
   const { isSuccess } = UseUpdateTaskViewSettings({
@@ -59,14 +54,14 @@ export default function HubPage() {
     }
 
     dispatch(setSaveSettingList(saveSettingList));
-
+    // check if views settings exist and use else use local list view settings
     if (saveSettingList?.view_settings) {
       dispatch(setSaveSettingOnline(saveSettingList.view_settings as { [key: string]: boolean }));
       formatSettings(saveSettingList.view_settings);
     } else {
       dispatch(setSaveSettingOnline(saveSettingLocal));
     }
-  }, [hub, saveSettingList]);
+  }, [hub]);
 
   const { data, hasNextPage, fetchNextPage } = UseGetFullTaskList({
     itemId: hubId || subhubId,
@@ -123,8 +118,8 @@ export default function HubPage() {
         <VerticalScroll>
           <section
             ref={containerRef}
-            style={{ minHeight: '0', maxHeight: '83vh' }}
-            className="w-full h-full p-4 space-y-10 pb-0"
+            style={{ minHeight: '0', maxHeight: '83vh', maxWidth: '' }}
+            className="w-full h-full p-4 pb-0 space-y-10"
           >
             {/* lists */}
             {Object.keys(lists).map((listId) => (

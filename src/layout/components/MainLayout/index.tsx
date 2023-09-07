@@ -17,9 +17,10 @@ import Favorites from '../../../pages/workspace/favorites';
 function MainLayout() {
   const location = useLocation();
   const navigate = useNavigate();
-  const { activeItemType, activeItemId, isFavoritePinned } = useAppSelector((state) => state.workspace);
+  const { activeItemType, activeItemId } = useAppSelector((state) => state.workspace);
   const { workSpaceId } = useParams();
   const { currentWorkspaceId } = useAppSelector((state) => state.auth);
+  const { userSettingsData } = useAppSelector((state) => state.account);
   const user = useAppSelector(selectCurrentUser);
 
   const queryClient = useQueryClient();
@@ -60,7 +61,7 @@ function MainLayout() {
     <div className={cl('h-full flex flex-col')}>
       <ProgressBar />
       {/* <TopMenu /> */}
-      {isFavoritePinned && <Favorites />}
+      {userSettingsData?.isFavoritePinned && <Favorites />}
       <Toaster position="bottom-left" />
       <DragContext>
         <div className="flex h-full">

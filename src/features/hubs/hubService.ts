@@ -95,7 +95,7 @@ interface IActiveHubRes {
   };
 }
 
-export const useGetActiveHubChildren = ({ hub_id }: { hub_id?: string | null }) => {
+export const useGetActiveHubChildren = ({ hub_id, hubs }: { hub_id?: string | null; hubs: IHub[] }) => {
   const id = hub_id;
   return useQuery(
     ['retrieve', id ? id : 'root'],
@@ -108,6 +108,7 @@ export const useGetActiveHubChildren = ({ hub_id }: { hub_id?: string | null }) 
         }
       }),
     {
+      enabled: hubs?.length > 0,
       select: (res) => res.data
     }
   );
