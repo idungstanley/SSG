@@ -44,6 +44,7 @@ interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   onClose?: VoidFunction;
   isOver?: boolean;
   isSplitSubtask?: boolean;
+  isLastSubtaskLevel: boolean;
 }
 
 export function StickyCol({
@@ -60,6 +61,7 @@ export function StickyCol({
   paddingLeft = 0,
   dragElement,
   isSplitSubtask,
+  isLastSubtaskLevel,
   ...props
 }: ColProps) {
   const dispatch = useAppDispatch();
@@ -71,16 +73,15 @@ export function StickyCol({
   const { dragOverItemId, draggableItemId } = useAppSelector((state) => state.list);
   const {
     currTeamMemberId,
-    singleLineView,
     verticalGrid,
     taskUpperCase,
     selectedTasksArray,
     verticalGridlinesTask,
     selectedIndex,
-    CompactView,
     toggleAllSubtask,
     selectedListIds,
-    dragToBecomeSubTask
+    dragToBecomeSubTask,
+    saveSettingOnline
   } = useAppSelector((state) => state.task);
 
   const [isChecked, setIsChecked] = useState(false);
@@ -273,11 +274,11 @@ export function StickyCol({
             className={`flex items-center h-full space-x-1 ${isSplitSubtask && 'bg-white/90'}`}
             style={{
               height:
-                singleLineView && !CompactView
+                saveSettingOnline?.singleLineView && !saveSettingOnline?.CompactView
                   ? '42px'
-                  : CompactView && singleLineView
+                  : saveSettingOnline?.CompactView && saveSettingOnline?.singleLineView
                   ? '25px'
-                  : !singleLineView && CompactView && task.name.length < 30
+                  : !saveSettingOnline?.singleLineView && saveSettingOnline?.CompactView && task.name.length < 30
                   ? '25px'
                   : ''
             }}
@@ -297,11 +298,11 @@ export function StickyCol({
             style={{
               paddingLeft,
               height:
-                singleLineView && !CompactView
+                saveSettingOnline?.singleLineView && !saveSettingOnline?.CompactView
                   ? '42px'
-                  : CompactView && singleLineView
+                  : saveSettingOnline?.CompactView && saveSettingOnline?.singleLineView
                   ? '25px'
-                  : !singleLineView && CompactView && task.name.length < 30
+                  : !saveSettingOnline?.singleLineView && saveSettingOnline?.CompactView && task.name.length < 30
                   ? '25px'
                   : ''
             }}
@@ -347,23 +348,23 @@ export function StickyCol({
             </div>
             <div className="flex flex-col flex-grow items-start justify-start pl-2 space-y-1">
               <div
-                className=" flex w-full mt-1 items-center text-left"
+                className="flex w-full mt-1 items-center text-left"
                 onKeyDown={(e) => (e.key === 'Enter' ? handleEditTask(e, task.id) : null)}
                 ref={droppabbleRef}
               >
                 <div
                   className={`font-semibold alsoit-gray-300 ${
-                    CompactView ? 'text-alsoit-text-md' : 'text-alsoit-text-lg'
+                    saveSettingOnline?.CompactView ? 'text-alsoit-text-md' : 'text-alsoit-text-lg'
                   }`}
                 >
-                  {singleLineView ? (
+                  {saveSettingOnline?.singleLineView ? (
                     <div contentEditable={eitableContent} suppressContentEditableWarning={true} ref={inputRef}>
                       {!eitableContent ? (
                         <DetailsOnHover
                           hoverElement={
                             <div
                               className={`font-semibold alsoit-gray-300 ${
-                                CompactView ? 'text-alsoit-text-md' : 'text-alsoit-text-lg'
+                                saveSettingOnline?.CompactView ? 'text-alsoit-text-md' : 'text-alsoit-text-lg'
                               }`}
                               style={{
                                 maxWidth: '200px',
@@ -396,7 +397,7 @@ export function StickyCol({
                 </div>
                 {/* non default badges here */}
                 <div onClick={(e) => e.stopPropagation()} className="pl-3 flex flex-grow items-center justify-between">
-                  <Badges task={task} />
+                  {!isLastSubtaskLevel ? <Badges task={task} /> : null}
                   {/*  default badges here */}
                   {children}
                 </div>
@@ -412,6 +413,16 @@ export function StickyCol({
           className="sticky left-0 flex items-start justify-start text-sm font-medium text-gray-900 cursor-pointer text-start"
           {...props}
         >
+          <div className="flex items-center h-full space-x-1 opacity-0">
+            <RoundedCheckbox
+              onChange={onChange}
+              isChecked={isChecked}
+              styles={`w-4 h-4 rounded-full ${
+                selectedTasksArray.length > 0 ? 'opacity-100' : 'opacity-0'
+              } cursor-pointer focus:outline-1 focus:ring-transparent  focus:border-2 focus:opacity-100 group-hover:opacity-100`}
+            />
+            <div className="pr-2">{dragElement}</div>
+          </div>
           <div
             style={{ paddingLeft }}
             className={cl(

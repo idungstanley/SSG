@@ -6,7 +6,7 @@ import ListSubtasks from './listDetails/listSubtask/ListSubtasks';
 interface ListNavProps {
   navName?: string | null;
   viewsList?: string;
-  viewsList1?: string;
+  viewsSubtasks: string;
   viewsList2?: string;
   viewsList3?: string;
   viewsList4?: string;
@@ -15,7 +15,7 @@ interface ListNavProps {
   buttonLabel?: string;
 }
 
-function ListNav({ viewsList, changeViews, viewsList1 }: ListNavProps) {
+function ListNav({ viewsList, changeViews, viewsSubtasks }: ListNavProps) {
   return (
     <>
       <nav
@@ -26,7 +26,7 @@ function ListNav({ viewsList, changeViews, viewsList1 }: ListNavProps) {
           <div className="flex items-center">
             <ListViews viewsList={viewsList as string} />
             <ListShow changeViews={changeViews as string} />
-            <ListSubtasks viewsList1={viewsList1 as string} />
+            <ListSubtasks subtasksTitle={viewsSubtasks as string} />
           </div>
         </section>
       </nav>

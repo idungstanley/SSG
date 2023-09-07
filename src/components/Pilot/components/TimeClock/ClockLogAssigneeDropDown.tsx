@@ -1,17 +1,21 @@
-import { useState } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
 import { User } from './ClockLog';
 import SearchIcon from '../../../../assets/icons/SearchIcon';
 import AvatarWithInitials from '../../../avatar/AvatarWithInitials';
 import AvatarWithImage from '../../../avatar/AvatarWithImage';
+import { GetTimeEntriesService } from '../../../../features/task/taskService';
+import { useAppSelector } from '../../../../app/hooks';
 
 interface AssigneeProps {
   teamMembers: User[];
+  handleFilters: (filterBy: string, searchStr: string) => void;
+  closeModal: Dispatch<SetStateAction<boolean>>;
 }
 
-export function TimeLogAssigneeDropDown({ teamMembers }: AssigneeProps) {
+export function TimeLogAssigneeDropDown({ teamMembers, handleFilters, closeModal }: AssigneeProps) {
   const assigneeData = [
-    { id: 1, title: 'Teams', data: teamMembers },
-    { id: 2, title: 'Users', data: [] }
+    { id: 1, title: 'Teams', data: [] },
+    { id: 2, title: 'Users', data: teamMembers }
   ];
 
   const [activeFiltertab, setActiveFilter] = useState<string>('Teams');
@@ -65,12 +69,20 @@ export function TimeLogAssigneeDropDown({ teamMembers }: AssigneeProps) {
               );
             })}
           </div>
-          {activeFiltertab === 'Teams' ? (
+          {activeFiltertab === 'Users' ? (
             <div className="flex flex-col space-y-2 w-full">
-              {teamMembers.length > 0 && team.map((user) => <LogAssigneeDropDown key={user.id} user={user} />)}
+              {teamMembers.length > 0 &&
+                team.map((user) => (
+                  <LogAssigneeDropDown
+                    key={user.id}
+                    handleFilters={handleFilters}
+                    user={user}
+                    closeModal={closeModal}
+                  />
+                ))}
             </div>
           ) : (
-            <div className="text-center">Under construction</div>
+            <LogTeamsDropDown />
           )}
         </div>
       </div>
@@ -80,17 +92,57 @@ export function TimeLogAssigneeDropDown({ teamMembers }: AssigneeProps) {
 
 interface LogAssigneeDropDownProps {
   user: User;
+  handleFilters: (filterBy: string, searchStr: string) => void;
+  closeModal: Dispatch<SetStateAction<boolean>>;
 }
 
-function LogAssigneeDropDown({ user }: LogAssigneeDropDownProps) {
+function LogAssigneeDropDown({ user, handleFilters, closeModal }: LogAssigneeDropDownProps) {
+  const handleClick = () => {
+    handleFilters('user', user.id);
+    closeModal(false);
+  };
+
   return (
-    <div key={user?.id} className="flex items-center space-x-2 py-1 border-b-2 w-full">
+    <div key={user?.id} className="flex items-center space-x-2 py-1 border-b-2 w-full" onClick={handleClick}>
       {user.avatar_path ? (
         <AvatarWithImage image_path={user.avatar_path} roundedStyle="circular" />
       ) : (
         <AvatarWithInitials height="h-10" width="w-10" initials={user?.initials ?? 'UN'} />
       )}
       <span>{user?.name}</span>
+    </div>
+  );
+}
+
+function LogTeamsDropDown() {
+  const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
+
+  const [groupIds, setGroupIds] = useState<string[]>([]);
+
+  const { data: getTaskEntries } = GetTimeEntriesService({
+    itemId: activeItemId,
+    trigger: activeItemType,
+    include_filters: true,
+    team_member_group_ids: groupIds
+  });
+
+  return (
+    <div className="flex flex-col space-y-2 w-full">
+      {getTaskEntries?.data.filters.team_member_groups.map((group) => (
+        <div
+          key={group.id}
+          className="flex items-center space-x-2 py-1 border-b-2 w-full"
+          onClick={() => setGroupIds((prev) => [...prev, group.id])}
+        >
+          <AvatarWithInitials
+            height="h-10"
+            width="w-10"
+            initials={group?.initials ?? 'UN'}
+            backgroundColour={group.color}
+          />
+          <span>{group.name}</span>
+        </div>
+      ))}
     </div>
   );
 }

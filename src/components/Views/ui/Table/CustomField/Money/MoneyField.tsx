@@ -51,12 +51,12 @@ function MoneyField({ taskCustomFields, taskId, fieldId, entityCustomProperty }:
   };
 
   return (
-    <div className="w-full h-full flex justify-center items-center">
+    <div className="flex items-center justify-center w-full h-full">
       {!editMode ? (
-        <div className="w-full h-full border-2 border-transparent hover:border-alsoit-gray-50 group/parent p-1">
-          <span className="h-full flex justify-center items-center  cursor-pointer">
+        <div className="w-full h-full p-1 border-2 border-transparent hover:border-alsoit-gray-50 group/parent">
+          <span className="flex items-center justify-center h-full cursor-pointer">
             <h1
-              className="truncate text-alsoit-text-lg font-semibold"
+              className="font-semibold truncate text-alsoit-text-lg"
               onClick={() => {
                 setEditMode(true);
               }}
@@ -73,7 +73,7 @@ function MoneyField({ taskCustomFields, taskId, fieldId, entityCustomProperty }:
           onChange={handleChange}
           onKeyDown={handleKeyDown}
           onBlur={handleInputBlur}
-          className="w-full h-fit border-alsoit-gray-300 text-alsoit-text-lg font-semibold"
+          className="w-full font-semibold h-fit border-alsoit-gray-300 text-alsoit-text-lg"
         />
       )}
     </div>

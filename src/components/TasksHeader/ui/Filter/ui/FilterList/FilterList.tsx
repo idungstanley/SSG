@@ -9,15 +9,19 @@ import { Item } from '../FilterItem/Item';
 import { useGetTeamMembers } from '../../../../../../features/settings/teamMembers/teamMemberService';
 import { FilterOption } from '../../types/filters';
 
-export function List() {
-  const [showAddNewItem, setShowAddNewItem] = useState(false);
+export function FilterList() {
+  const { listId } = useParams();
+
   const {
-    filters: { fields: filters }
+    filters: { fields: filters },
+    subtasksfilters,
+    selectedTaskParentId,
+    splitSubTaskState: splitMode
   } = useAppSelector((state) => state.task);
 
+  const [showAddNewItem, setShowAddNewItem] = useState(false);
   const [initialFilters, setInitialFilters] = useState(filterConfig);
 
-  const { listId } = useParams();
   const { data: tags } = useTags();
   const { data: members } = useGetTeamMembers({ query: '', page: 1 });
   const { data: list } = useList(listId);
@@ -69,9 +73,12 @@ export function List() {
     }
   }, [members, tags, list]);
 
+  const showingFilters =
+    splitMode && subtasksfilters[selectedTaskParentId] ? subtasksfilters[selectedTaskParentId]?.fields : filters;
+
   return (
     <div className="w-full p-2 space-y-4">
-      {filters.map((filter) => (
+      {showingFilters.map((filter) => (
         <Item initialFilters={initialFilters} filter={filter} key={filter.key} />
       ))}
 

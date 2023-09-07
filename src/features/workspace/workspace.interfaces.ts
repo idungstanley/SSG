@@ -32,6 +32,7 @@ export interface IAttachments {
             name: string;
           };
         };
+        team_member: ITeamMember;
       }
     ];
   };

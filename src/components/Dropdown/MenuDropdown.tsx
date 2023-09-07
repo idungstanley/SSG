@@ -7,7 +7,6 @@ import {
   DocumentDuplicateIcon,
   EyeSlashIcon,
   PencilIcon,
-  ShareIcon,
   SparklesIcon,
   TrashIcon,
   StarIcon,
@@ -47,6 +46,11 @@ import CollapseAllIcon from '../../assets/icons/CollapseAllIcon';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
 import { Fade, Menu } from '@mui/material';
 import { Cords } from '../../hooks/useAbsolute';
+import Button from '../Button';
+import { ShareIcon } from '../../assets/icons';
+import ArrowRight from '../../assets/icons/ArrowRight';
+import { VerticalScroll } from '../ScrollableContainer/VerticalScroll';
+import { Capitalize } from '../../utils/NoCapWords/Capitalize';
 
 interface IMenuDropdownProps {
   isExtendedBar?: boolean;
@@ -54,11 +58,19 @@ interface IMenuDropdownProps {
 }
 
 interface itemsType {
-  id: number;
   title: string;
   icon: JSX.Element;
   isVisible: boolean;
+  rightIcon?: JSX.Element;
   handleClick: () => void;
+}
+
+interface ItemsProps {
+  items: itemsType[];
+}
+interface InlineBorderProps {
+  label: string;
+  topElement?: JSX.Element;
 }
 
 export default function MenuDropdown({ isExtendedBar, cords }: IMenuDropdownProps) {
@@ -137,16 +149,15 @@ export default function MenuDropdown({ isExtendedBar, cords }: IMenuDropdownProp
 
   const itemsList: itemsType[] = [
     {
-      id: 1,
       title: 'Create new',
       handleClick: () => {
         dispatch(setSubDropdownMenu(!SubDropdownMenu));
       },
-      icon: <PlusIcon className="w-5 text-gray-700 h-7" aria-hidden="true" />,
+      icon: <PlusIcon className="w-5 h-5 text-gray-700" aria-hidden="true" />,
+      rightIcon: <ArrowRight />,
       isVisible: true
     },
     {
-      id: 2,
       title: 'Rename',
       handleClick: () => {
         if (showMenuDropdownType === 'hubs' || showMenuDropdownType === EntityType.subHub) {
@@ -161,28 +172,24 @@ export default function MenuDropdown({ isExtendedBar, cords }: IMenuDropdownProp
       isVisible: true
     },
     {
-      id: 3,
       title: 'Color & Avatar',
       handleClick: () => ({}),
-      icon: <SwatchIcon className="w-5 pt-2 text-gray-700 h-7" aria-hidden="true" />,
+      icon: <SwatchIcon className="w-5 h-5 text-gray-700" aria-hidden="true" />,
       isVisible: false
     },
     {
-      id: 4,
       title: 'Copy link',
       handleClick: () => ({}),
       icon: <LinkIcon className="w-4 h-4" aria-hidden="true" />,
       isVisible: false
     },
     {
-      id: 5,
       title: 'Duplicate',
       handleClick: () => ({}),
       icon: <DocumentDuplicateIcon className="w-4 h-4" aria-hidden="true" />,
       isVisible: false
     },
     {
-      id: 6,
       title: 'Add to favorites',
       handleClick: () => {
         onCreate({
@@ -195,71 +202,30 @@ export default function MenuDropdown({ isExtendedBar, cords }: IMenuDropdownProp
       isVisible: true
     },
     {
-      id: 7,
       title: 'Hide in sidebar',
       handleClick: () => ({}),
       icon: <EyeSlashIcon className="w-4 h-4" aria-hidden="true" />,
       isVisible: true
     },
     {
-      id: 8,
-      title: 'Templates',
-      handleClick: () => ({}),
-      icon: <SparklesIcon className="w-4 h-6 text-gray-700" aria-hidden="true" />,
-      isVisible: true
-    },
-    {
-      id: 9,
-      title: 'More settings',
-      handleClick: () => ({}),
-      icon: <CogIcon className="w-5 h-6 pt-2 text-gray-700" aria-hidden="true" />,
-      isVisible: false
-    },
-    {
-      id: 10,
-      title: 'Sharing & Permission',
-      handleClick: () => ({}),
-      icon: <ShareIcon className="w-4 h-4" aria-hidden="true" />,
-      isVisible: false
-    },
-    {
-      id: 11,
       title: 'Archive',
       handleClick: () => ({}),
       icon: <ArchiveBoxIcon className="w-4 h-4" aria-hidden="true" />,
       isVisible: false
     },
     {
-      id: 12,
       title: 'Import',
       handleClick: () => ({}),
       icon: <ArrowDownIcon className="w-4 h-4" aria-hidden="true" />,
       isVisible: false
     },
     {
-      id: 13,
-      title: 'Archive',
-      handleClick: () => {
-        if (showMenuDropdownType == 'hubs' || showMenuDropdownType == 'subhubs') {
-          dispatch(setArchiveHub(true));
-        } else if (showMenuDropdownType?.includes(EntityType.wallet)) {
-          dispatch(setArchiveWallet(true));
-        } else {
-          dispatch(setArchiveList(true));
-        }
-      },
-      icon: <ArchiveBoxIcon className="w-4 h-4" aria-hidden="true" />,
-      isVisible: true
-    },
-    {
-      id: 14,
       title: 'Whiteboard',
       handleClick: () => ({}),
       icon: <PencilSquareIcon className="w-4 h-4" aria-hidden="true" />,
       isVisible: false
     },
     {
-      id: 15,
       title: 'Wallet',
       handleClick: () => ({}),
       icon: (
@@ -281,7 +247,6 @@ export default function MenuDropdown({ isExtendedBar, cords }: IMenuDropdownProp
       isVisible: false
     },
     {
-      id: 16,
       title: 'Expand all',
       handleClick: () => {
         if (showMenuDropdown) {
@@ -302,7 +267,6 @@ export default function MenuDropdown({ isExtendedBar, cords }: IMenuDropdownProp
       isVisible: true
     },
     {
-      id: 17,
       title: 'Collapse all',
       handleClick: () => {
         if (showMenuDropdown) {
@@ -321,9 +285,28 @@ export default function MenuDropdown({ isExtendedBar, cords }: IMenuDropdownProp
       },
       icon: <CollapseAllIcon aria-hidden="true" />,
       isVisible: true
+    }
+  ];
+
+  const advanceOption = [
+    {
+      title: 'Templates',
+      handleClick: () => ({}),
+      icon: <SparklesIcon className="w-4 h-6 text-gray-700" aria-hidden="true" />,
+      isVisible: true,
+      rightIcon: <ArrowRight />
     },
     {
-      id: 18,
+      title: `${Capitalize(showMenuDropdownType as string)} settings`,
+      handleClick: () => ({}),
+      icon: <CogIcon className="w-5 h-6 text-gray-700" aria-hidden="true" />,
+      isVisible: true,
+      rightIcon: <ArrowRight />
+    }
+  ];
+
+  const moreOptions = [
+    {
       title: 'Delete',
       handleClick: () => {
         if (showMenuDropdownType === 'hubs' || showMenuDropdownType === EntityType.subHub) {
@@ -342,6 +325,20 @@ export default function MenuDropdown({ isExtendedBar, cords }: IMenuDropdownProp
       },
       icon: <TrashIcon className="w-4 h-4 text-red-500" aria-hidden="true" />,
       isVisible: true
+    },
+    {
+      title: 'Archive',
+      handleClick: () => {
+        if (showMenuDropdownType == 'hubs' || showMenuDropdownType == 'subhubs') {
+          dispatch(setArchiveHub(true));
+        } else if (showMenuDropdownType?.includes(EntityType.wallet)) {
+          dispatch(setArchiveWallet(true));
+        } else {
+          dispatch(setArchiveList(true));
+        }
+      },
+      icon: <ArchiveBoxIcon className="w-4 h-4" aria-hidden="true" />,
+      isVisible: true
     }
   ];
 
@@ -352,28 +349,72 @@ export default function MenuDropdown({ isExtendedBar, cords }: IMenuDropdownProp
       TransitionComponent={Fade}
       anchorOrigin={{
         vertical: Number(cords?.top) - 150 || 'center',
-        horizontal: showSidebar ? Number(userSettingsData?.sidebarWidth) : sidebarWidthRD
+        horizontal: showSidebar ? Number(userSettingsData?.sidebarWidth) - 100 : sidebarWidthRD
       }}
     >
-      <div className="w-auto px-2" style={{ minWidth: '200px' }}>
-        {itemsList.map((item) =>
-          item.isVisible ? (
-            <div key={item.id}>
-              <div
-                className="flex items-center p-2 space-x-2 text-sm text-left text-gray-600 rounded-md cursor-pointer hover:bg-gray-200"
-                onClick={item.handleClick}
-              >
-                {item.icon}
+      <VerticalScroll>
+        <div className="relative h-96">
+          <InlineBorderLabel
+            label="DEFAULT SETTINGS"
+            topElement={
+              <div className="flex items-center justify-center gap-2 mb-2">
+                {showMenuDropdownType?.toUpperCase()} PROPERTIES
+              </div>
+            }
+          />
+          <GroupMenuOptions items={itemsList} />
+          <InlineBorderLabel label="ADVANCE SETTINGS" />
+          <GroupMenuOptions items={advanceOption} />
+          <InlineBorderLabel label="MORE SETTINGS" />
+          <GroupMenuOptions items={moreOptions} />
+          <div className="sticky bottom-0 p-2 bg-white border-t">
+            <Button
+              label="Sharing & Permissions"
+              icon={<ShareIcon active={false} color="white" />}
+              buttonStyle="base"
+              height="h-9"
+            />
+          </div>
+        </div>
+        {SubDropdownMenu && <SubDropdown />}
+        <EditHubModal />
+        <EditListModal />
+        <EditWalletModal />
+      </VerticalScroll>
+    </Menu>
+  );
+}
+
+function GroupMenuOptions({ items }: ItemsProps) {
+  return (
+    <div className="w-auto gap-2 px-2 mb-1" style={{ minWidth: '200px' }}>
+      {items.map((item, index) =>
+        item.isVisible ? (
+          <div key={index}>
+            <div
+              className="flex items-center justify-between p-1 py-2 space-x-2 text-sm text-left text-gray-600 rounded-md cursor-pointer hover:bg-alsoit-gray-75"
+              onClick={item.handleClick}
+            >
+              <div className="flex items-center gap-2">
+                <span className="flex items-center w-5 h-5">{item.icon}</span>
                 <p>{item.title}</p>
               </div>
+              {item.rightIcon && <span>{item.rightIcon}</span>}
             </div>
-          ) : null
-        )}
-      </div>
-      {SubDropdownMenu && <SubDropdown />}
-      <EditHubModal />
-      <EditListModal />
-      <EditWalletModal />
-    </Menu>
+          </div>
+        ) : null
+      )}
+    </div>
+  );
+}
+
+function InlineBorderLabel({ label, topElement }: InlineBorderProps) {
+  return (
+    <div className="relative py-1 mb-3 border-b">
+      {topElement}
+      <span className="absolute text-xs text-gray-400 transform -translate-x-1/2 bg-white left-1/2 -bottom-2">
+        {label}
+      </span>
+    </div>
   );
 }

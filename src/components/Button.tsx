@@ -20,6 +20,7 @@ interface ButtonProps {
   borderRight?: boolean;
   value?: string | number | readonly string[] | undefined;
   bgColor?: string;
+  labelSize?: string;
 }
 
 function Button({
@@ -34,6 +35,7 @@ function Button({
   disabled = false,
   iconPosition = 'left',
   ringOnFocus = false,
+  labelSize = 'text-base',
   roundedLeft = true,
   roundedRight = true,
   borderLeft = true,
@@ -58,7 +60,8 @@ function Button({
       'border border-transparent shadow-sm text-sm font-medium text-white bg-red-600 focus:ring-red-500';
   } else if (buttonStyle === 'white') {
     hoverBackgroundColor = 'hover:bg-gray-50';
-    buttonClassName = 'border border-gray-300 shadow-sm text-sm font-medium text-gray-700 bg-white focus:outline-none';
+    buttonClassName =
+      'border border-gray-300 shadow-sm text-sm font-medium text-primary-700 bg-white focus:outline-none';
   } else if (buttonStyle === 'base') {
     hoverBackgroundColor = 'hover:bg-alsoit-purple-300';
     buttonClassName = 'border border-gray-300 shadow-sm font-medium text-white bg-alsoit-purple-300 focus:outline-none';
@@ -105,7 +108,7 @@ function Button({
         <>
           {icon && iconPosition === 'center' && <span>{icon}</span>}
           {icon && (iconPosition === 'left' || iconPosition === null) && <span className="mr-1">{icon}</span>}
-          {label && <span>{label}</span>}
+          {label && <span className={`${labelSize}`}>{label}</span>}
           {icon && iconPosition === 'right' && <span className="ml-1">{icon}</span>}
         </>
       )}

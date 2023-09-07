@@ -1,10 +1,6 @@
-import moment from 'moment-timezone';
-import { useAppSelector } from '../../../../app/hooks';
-import DateStringFix from '../../../../utils/ManualTimeFix';
 import CurrencyIcon from '../../../../assets/icons/CurrencyIcon';
 import TagIcon from '../../../../assets/icons/DotCircleTagIcon';
 import { ChangeEvent, useState } from 'react';
-import { createManualTimeEntry } from '../../../../features/task/taskService';
 
 // interface ManualTimeAddProps {
 //   start_date: dayjs.Dayjs;
@@ -14,35 +10,35 @@ import { createManualTimeEntry } from '../../../../features/task/taskService';
 // }
 
 export default function ManualTimeAddDialog() {
-  const { activeItemId: id, activeItemType: type } = useAppSelector((state) => state.workspace);
-  const { timezone, date_format } = useAppSelector((state) => state.userSetting);
-  const { mutate } = createManualTimeEntry();
+  // const { timezone, date_format } = useAppSelector((state) => state.userSetting);
   const [data, setData] = useState<{ [key: string]: string }>({
     start_time: '9:00 AM',
     end_time: '9:00 PM'
   });
 
-  const timeStamp = (time: string) =>
-    moment(
-      DateStringFix({
-        timeStamp: moment().format(date_format?.toUpperCase()),
-        timeString: time,
-        timeZone: timezone
-      })
-    ).format('YYYY-MM-DD HH:mm:ss');
+  // const timeStamp = (time: string) =>
+  //   moment(
+  //     DateStringFix({
+  //       timeStamp: moment().format(date_format?.toUpperCase()),
+  //       timeString: time,
+  //       timeZone: timezone
+  //     })
+  //   ).format('YYYY-MM-DD HH:mm:ss');
 
   const [interactions, setInteractions] = useState<{ tag: boolean; currency: boolean }>({
     tag: false,
     currency: false
   });
-  const handleSubmit = () => {
-    mutate({
-      end_date: timeStamp(data.end_time),
-      start_date: timeStamp(data.start_time),
-      id,
-      type
-    });
-  };
+  // const handleSubmit = () => {
+  //   mutate({
+  //     end_date: parseAndUpdateTime(value.end),
+  //     start_date: parseAndUpdateTime(value.start),
+  //     id: activeItemId,
+  //     type: activeItemType,
+  //     description: value.description,
+  //     isBillable: value.isBillable === 1 ? true : false
+  //   });
+  // };
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     return setData({ ...data, [e.target.name]: e.target.value });
@@ -116,10 +112,7 @@ export default function ManualTimeAddDialog() {
               <button className="bg-alsoit-gray-200 hover:bg-alsoit-text-active text-white p-1 rounded-lg font-bold">
                 Cancel
               </button>
-              <button
-                className="bg-alsoit-purple-300 hover:bg-purple-600 text-white p-1 rounded-lg font-bold"
-                onClick={() => handleSubmit()}
-              >
+              <button className="bg-alsoit-purple-300 hover:bg-purple-600 text-white p-1 rounded-lg font-bold">
                 Confirm
               </button>
             </div>

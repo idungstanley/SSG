@@ -6,6 +6,14 @@ import { useSwitchSettings } from './SwitchSettings';
 import ShowIcon from '../../../../../assets/icons/ShowIcon';
 import ArrowDrop from '../../../../../assets/icons/ArrowDrop';
 import Button from '../../../../../components/Buttons/Button';
+import toast from 'react-hot-toast';
+import SaveSettingsModal from '../SaveSettingsModal/SaveSettingsModal';
+import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
+import {
+  setSaveSettingLocal,
+  setSaveSettingOnline,
+  setTriggerSaveSettingsModal
+} from '../../../../../features/task/taskSlice';
 
 interface IShowHideSettings {
   scrollByEachGroup: string;
@@ -33,15 +41,45 @@ export default function ShowHideSettings({
   const [checkedStates, setCheckedStates] = useState<boolean[]>([]);
   const [isAnyactive, setIsAnyactive] = useState<boolean>();
   const isActiveColor = isAnyactive ? '#BF01FE' : 'black';
+  const {
+    singleLineView,
+    triggerSaveSettingsModal,
+    CompactView,
+    verticalGrid,
+    taskUpperCase,
+    verticalGridlinesTask,
+    saveSettingList,
+    splitSubTaskState,
+    saveSettingOnline
+  } = useAppSelector((state) => state.task);
+
+  const dispatch = useAppDispatch();
 
   const switchSettings = useSwitchSettings();
 
+  const saveSettingsObj: { [key: string]: boolean } = {
+    singleLineView,
+    CompactView,
+    verticalGrid,
+    taskUpperCase,
+    verticalGridlinesTask,
+    splitSubTaskState
+  };
   const handleChange = (viewMode: string, index: number) => {
+    dispatch(setTriggerSaveSettingsModal(true));
     const newCheckedStates = [...checkedStates];
     newCheckedStates[index] = !newCheckedStates[index];
     setCheckedStates(newCheckedStates);
     switchSettings(viewMode);
   };
+
+  useEffect(() => {
+    dispatch(setSaveSettingLocal(saveSettingsObj));
+
+    if (triggerSaveSettingsModal) {
+      dispatch(setSaveSettingOnline(saveSettingsObj));
+    }
+  }, [checkedStates, triggerSaveSettingsModal]);
 
   const ViewSettings = [
     {
@@ -106,21 +144,42 @@ export default function ShowHideSettings({
   }, [checkedStates]);
 
   useEffect(() => {
+    if (triggerSaveSettingsModal) {
+      toast.custom((t) => <SaveSettingsModal title="This view has unsaved changes" toastId={t.id} />, {
+        position: 'bottom-right',
+        duration: Infinity
+      });
+    }
+  }, [triggerSaveSettingsModal]);
+
+  useEffect(() => {
     const handleCheckboxChange = () => {
       setCheckedStates((prev: boolean[]) => {
         const newState = [...prev];
         const singleLineIndex = ViewSettings.findIndex((item) => item.label === 'Single Line mode');
         const TitleVerticalGridLineIndex = ViewSettings.findIndex((item) => item.label === 'Title Vertical Grid Line');
+        const CompactView = ViewSettings.findIndex((item) => item.label === 'Compact mode');
+        const taskUpperCase = ViewSettings.findIndex((item) => item.label === 'Upper Case');
+        const verticalGrid = ViewSettings.findIndex((item) => item.label === 'Property Vertical Grid Line');
+        const splitSubTaskState = ViewSettings.findIndex((item) => item.label === 'Split Sub Task');
 
-        newState[singleLineIndex] = true;
-        newState[TitleVerticalGridLineIndex] = true;
-
+        if (saveSettingList != undefined && saveSettingList?.view_settings != null) {
+          newState[singleLineIndex] = saveSettingOnline?.singleLineView as boolean;
+          newState[TitleVerticalGridLineIndex] = saveSettingOnline?.verticalGridlinesTask as boolean;
+          newState[CompactView] = saveSettingOnline?.CompactView as boolean;
+          newState[taskUpperCase] = saveSettingOnline?.taskUpperCase as boolean;
+          newState[verticalGrid] = saveSettingOnline?.verticalGrid as boolean;
+          newState[splitSubTaskState] = saveSettingOnline?.splitSubTaskState as boolean;
+        } else {
+          newState[singleLineIndex] = true;
+          newState[TitleVerticalGridLineIndex] = true;
+        }
         return newState;
       });
     };
 
     handleCheckboxChange();
-  }, []);
+  }, [saveSettingList]);
 
   return (
     <Menu>

@@ -20,11 +20,10 @@ import {
   setSelectedTasksArray,
   setSubtasks,
   setTasks,
-  setTimeArr,
-  setTimeSortArr,
-  setTimeSortStatus,
   setTimerStatus,
   setToggleAssignCurrentTaskId,
+  setTriggerSaveSettings,
+  setTriggerSaveSettingsModal,
   setUpdateTimerDuration
 } from './taskSlice';
 import { UpdateTaskProps } from './interface.tasks';
@@ -44,7 +43,6 @@ import {
   taskStatusUpdateManager
 } from '../../managers/Task';
 import { ITeamMembersAndGroup } from '../settings/teamMembersAndGroups.interfaces';
-import { isArrayOfStrings } from '../../utils/typeGuards';
 
 //edit a custom field
 export const UseEditCustomFieldService = (data: {
@@ -105,8 +103,6 @@ export const moveTask = (data: { taskId: TaskId; moveAfterId?: string; listId?: 
 };
 
 export const useSaveData = () => {
-  const queryClient = useQueryClient();
-  const dispatch = useAppDispatch();
   const mutation = useMutation(
     async ({ key, value }: { key: string; value: IUserCalendarParams } | ITimeEntryParams) => {
       const data = requestNew<IUserSettingsUpdateRes>({
@@ -118,17 +114,6 @@ export const useSaveData = () => {
         }
       });
       return (await data).data;
-    },
-    {
-      onSuccess: (data) => {
-        queryClient.invalidateQueries(['calendar-data']);
-        if (data.settings.key === 'time_entry') {
-          dispatch(setTimeSortArr(data.settings.value));
-
-          // Only dispatch when request is for sort Array
-          isArrayOfStrings(data.settings.value) && dispatch(setTimeSortStatus(true));
-        }
-      }
     }
   );
 
@@ -136,31 +121,17 @@ export const useSaveData = () => {
 };
 
 export const useGetUserSettingsData = ({ keys }: { keys: string }) => {
-  const dispatch = useAppDispatch();
-  const { timeArr } = useAppSelector((state) => state.task);
-  return useQuery(
-    ['calendar-data'],
-    async () => {
-      const data = await requestNew<IUserSettingsRes | IUserSettingsUpdateRes>({
-        url: 'settings',
-        method: 'GET',
-        params: {
-          key: keys
-        }
-      });
-
-      return data;
-    },
-    {
-      onSuccess(data) {
-        if (keys === 'time_entry') {
-          const value = data.data.settings.value as string[];
-          dispatch(setTimeSortArr(value));
-          dispatch(setTimeArr([...timeArr, 'user']));
-        }
+  return useQuery(['calendar-data'], async () => {
+    const data = await requestNew<IUserSettingsRes>({
+      url: 'settings',
+      method: 'GET',
+      params: {
+        key: keys
       }
-    }
-  );
+    });
+
+    return data;
+  });
 };
 
 export const useMoveTask = () => {
@@ -483,6 +454,48 @@ export const UseUpdateTaskDateService = ({
     }
   );
 };
+export const UseUpdateTaskViewSettings = ({
+  task_views_id,
+  taskDate
+}: {
+  task_views_id: string;
+  taskDate: { [key: string]: boolean };
+}) => {
+  const { triggerSaveSettings } = useAppSelector((state) => state.task);
+  const dispatch = useAppDispatch();
+  return useQuery(
+    ['task', { task_views_id, taskDate }],
+    async () => {
+      const data = requestNew<ITaskRes>({
+        url: `task-views/${task_views_id}`,
+        method: 'PUT',
+        data: {
+          view_settings: taskDate
+        }
+      });
+      return data;
+    },
+    {
+      enabled: !!task_views_id && triggerSaveSettings,
+      cacheTime: 0,
+      onSuccess: (data) => {
+        dispatch(setTriggerSaveSettings(false));
+        dispatch(setTriggerSaveSettingsModal(false));
+
+        // if (data.data.task.id == task_id) {
+        //   const updatedTasks = taskDateUpdateManager(
+        //     task_id as string,
+        //     data.data.task.list_id as string,
+        //     tasks,
+        //     'start_date',
+        //     data.data.task.start_date as string
+        //   );
+        //   dispatch(setTasks(updatedTasks));
+        // }
+      }
+    }
+  );
+};
 
 export const UseUpdateTaskPrioritiesServices = ({ task_id_array, priorityDataUpdate, listIds }: UpdateTaskProps) => {
   const dispatch = useAppDispatch();
@@ -611,12 +624,16 @@ export const createManualTimeEntry = () => {
       start_date,
       end_date,
       type,
-      id
+      id,
+      description,
+      isBillable
     }: {
       start_date: string | undefined;
       end_date: string | undefined;
       type: string | null | undefined;
       id: string | null | undefined;
+      description: string | null | undefined;
+      isBillable: boolean | null | undefined;
     }) => {
       const response = await requestNew({
         url: 'time-entries',
@@ -625,7 +642,9 @@ export const createManualTimeEntry = () => {
           start_date,
           end_date,
           type,
-          id
+          id,
+          description,
+          isBillable
         }
       });
       return response;
@@ -742,6 +761,7 @@ export const GetTimeEntriesService = ({
   is_active?: number;
   page?: number;
   include_filters?: boolean;
+  team_member_group_ids?: string[];
 }) => {
   const { timeSortArr } = useAppSelector((state) => state.task);
   const updatesortArr = timeSortArr.length === 0 ? null : timeSortArr;
@@ -754,10 +774,11 @@ export const GetTimeEntriesService = ({
         params: {
           type: trigger,
           id: itemId,
-          team_member_ids: updatesortArr,
+          team_member_group_ids: null,
           is_active: is_active,
           page,
-          include_filters
+          include_filters,
+          sorting: updatesortArr
         }
       });
       return data;

@@ -14,7 +14,9 @@ import { cl } from '../../../../../utils';
 import FontStyle from './FontStyles/FontStyle';
 import CreateNumberField from './Number/CreateNumberField';
 import CreateEmailField from './Email/CreateEmailField';
+import CraeteWebsite from './Websites/CraeteWebsite';
 import CreateCurrencyField from './Currency/CreateCurrencyField';
+import CreateCheckbox from './Checkbox/CreateCheckbox';
 
 function NewColumn() {
   const dispatch = useAppDispatch();
@@ -34,6 +36,19 @@ function NewColumn() {
     setAnchorEl(null);
   };
 
+  const properties: Record<string, JSX.Element> = {
+    'single label': <CreateDropdownField />,
+    'multi label': <CreateDropdownField />,
+    date: <CreateDateField />,
+    'short text': <CreateTextField />,
+    'long text': <CreateTextField />,
+    number: <CreateNumberField />,
+    email: <CreateEmailField />,
+    website: <CraeteWebsite />,
+    currency: <CreateCurrencyField />,
+    checkbox: <CreateCheckbox />
+  };
+
   return (
     <>
       {editCustomProperty ? (
@@ -42,11 +57,11 @@ function NewColumn() {
         <div className="w-full">
           <div className="flex gap-2 items-center justify-between my-4 w-full">
             <div className="w-2/4">
-              <p className="text-alsoit-text-xi text-alsoit-gray-100">PROPERTY TYPE</p>
+              <p className="text-alsoit-text-xi text-alsoit-gray-100">TYPE</p>
               <ColumnTypeDropdown />
             </div>
             <div className="w-2/4">
-              <p className="text-alsoit-text-xi text-alsoit-gray-100">PROPERTY NAME</p>
+              <p className="text-alsoit-text-xi text-alsoit-gray-100">TITTLE</p>
               <div
                 className="flex items-center w-full rounded-md bg-white gap-1"
                 style={{ height: '30px', borderRadius: '6px' }}
@@ -109,15 +124,9 @@ function NewColumn() {
               </div>
             </div>
           </div>
-          {newCustomPropertyDetails.type.toLowerCase() === 'single label' && <CreateDropdownField />}
-          {newCustomPropertyDetails.type.toLowerCase() === 'multi label' && <CreateDropdownField />}
-          {newCustomPropertyDetails.type.toLowerCase() === 'tags' && <CreateDropdownField />}
-          {newCustomPropertyDetails.type.toLowerCase() === 'date' && <CreateDateField />}
-          {newCustomPropertyDetails.type.toLowerCase() === 'short text' && <CreateTextField />}
-          {newCustomPropertyDetails.type.toLowerCase() === 'long text' && <CreateTextField />}
-          {newCustomPropertyDetails.type.toLowerCase() === 'number' && <CreateNumberField />}
-          {newCustomPropertyDetails.type.toLowerCase() === 'email' && <CreateEmailField />}
-          {newCustomPropertyDetails.type.toLowerCase() === 'currency' && <CreateCurrencyField />}
+          {newCustomPropertyDetails.type.toLowerCase() in properties
+            ? properties[newCustomPropertyDetails.type.toLowerCase()]
+            : null}
         </div>
       )}
     </>
