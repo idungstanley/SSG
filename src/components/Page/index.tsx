@@ -30,10 +30,13 @@ export default function Page({ header, additionalHeader, children, additional, p
   const { showSidebar, userSettingsData } = useAppSelector((state) => state.account);
   const { show: showFullPilot } = useAppSelector((state) => state.slideOver.pilotSideOver);
 
+  const DEFAULT_PILOT_WIDTH = dimensions.pilot.default;
+  const LS_PILOT_KEY = 'pilotWidth';
+  const pilotWidthFromLS = JSON.parse(localStorage.getItem(LS_PILOT_KEY) ?? `${DEFAULT_PILOT_WIDTH}`) as number;
   const culculateWidthForContent = () => {
     const sidebarWidth = showSidebar ? userSettingsData?.sidebarWidth : sidebarWidthRD;
     const extendedBarWidth = showExtendedBar ? SIDEBAR_MAX_WIDTH : SIDEBAR_MIN_WIDTH;
-    const pilotWidth = showFullPilot ? dimensions.pilot.default + PILOT_SCROLLBAR_WIDTH : PILOT_COLLAPSE_WIDTH;
+    const pilotWidth = showFullPilot ? pilotWidthFromLS + PILOT_SCROLLBAR_WIDTH : PILOT_COLLAPSE_WIDTH;
     return `calc(100vw - ${sidebarWidth}px - ${extendedBarWidth}px - ${pilotWidth}px)`;
   };
 
