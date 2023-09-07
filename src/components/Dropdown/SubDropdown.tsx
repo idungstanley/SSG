@@ -26,6 +26,9 @@ import { Capitalize } from '../../utils/NoCapWords/Capitalize';
 import { Fade, Menu } from '@mui/material';
 import { Cords } from '../../hooks/useAbsolute';
 import { BsFiletypeDoc } from 'react-icons/bs';
+import AddHubIcon from '../../assets/icons/AddHub';
+import AddWalletIcon from '../../assets/icons/AddWallet';
+import AddListIcon from '../../assets/icons/AddList';
 
 interface itemsType {
   title: string;
@@ -138,7 +141,7 @@ export default function SubDropdown({ cords }: SubDropdownProps) {
         dispatch(setEntityToCreate(EntityType.subHub));
         dispatch(setLastActiveItem('Sub Hub'));
       },
-      icon: <img src={hubIcon} alt="" className="w-4 h-4" />,
+      icon: <AddHubIcon />,
       isVisible: showMenuDropdownType == 'hubs' ? true : false || SubMenuType == 'hubs' ? true : false
     },
     {
@@ -154,7 +157,7 @@ export default function SubDropdown({ cords }: SubDropdownProps) {
         dispatch(setEntityToCreate(EntityType.wallet));
         dispatch(setLastActiveItem(selectedTreeDetails.type === EntityType.wallet ? 'Sub Wallet' : 'Wallet'));
       },
-      icon: <FaFolder className="w-4 h-4" aria-hidden="true" />,
+      icon: <AddWalletIcon />,
       isVisible:
         showMenuDropdownType === EntityType.list ||
         showMenuDropdownType === 'subwallet3' ||
@@ -178,7 +181,7 @@ export default function SubDropdown({ cords }: SubDropdownProps) {
         dispatch(setLastActiveItem('List'));
         dispatch(setEntityToCreate(EntityType.list));
       },
-      icon: <AiOutlineUnorderedList className="w-4 h-4" aria-hidden="true" />,
+      icon: <AddListIcon />,
       isVisible: showMenuDropdownType === EntityType.list ? false : true
     },
     {
