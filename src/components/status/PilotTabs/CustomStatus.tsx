@@ -198,7 +198,6 @@ export default function CustomStatus() {
   const statusData = extractValuesFromArray(AddDefault);
   const model = statusTaskListDetails.listId ? 'list' : (modelData?.modelType as string);
   const model_id = statusTaskListDetails.listId || (modelData?.modelId as string);
-  console.log(statusData);
 
   const handleStatusId = () => {
     const modelTypeIsSameEntity = statusData.some((item) => item.model_type === model);
@@ -219,8 +218,6 @@ export default function CustomStatus() {
       });
     }
   };
-
-  console.log(handleStatusId(), 'position');
 
   const handleStatusData = async () => {
     await createStatusTypes.mutateAsync({
