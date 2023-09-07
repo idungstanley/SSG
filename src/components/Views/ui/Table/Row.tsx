@@ -223,7 +223,7 @@ export function Row({
         />
       ) : null}
 
-      {showSubTasks && !splitSubTaskState ? (
+      {showSubTasks && !isSplitSubtask ? (
         <SubTasks
           paddingLeft={DEFAULT_LEFT_PADDING + paddingLeft}
           listId={listId}

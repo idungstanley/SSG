@@ -10,6 +10,9 @@ import toast from 'react-hot-toast';
 import SaveSettingsModal from '../SaveSettingsModal/SaveSettingsModal';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import {
+  THREE_SUBTASKS_LEVELS,
+  TWO_SUBTASKS_LEVELS,
+  getSplitSubTaskLevels,
   setSaveSettingLocal,
   setSaveSettingOnline,
   setTriggerSaveSettingsModal
@@ -38,9 +41,8 @@ export default function ShowHideSettings({
   subTaskInMultipleLists,
   emptyStatuses
 }: IShowHideSettings) {
-  const [checkedStates, setCheckedStates] = useState<boolean[]>([]);
-  const [isAnyactive, setIsAnyactive] = useState<boolean>();
-  const isActiveColor = isAnyactive ? '#BF01FE' : 'black';
+  const dispatch = useAppDispatch();
+
   const {
     singleLineView,
     triggerSaveSettingsModal,
@@ -50,10 +52,15 @@ export default function ShowHideSettings({
     verticalGridlinesTask,
     saveSettingList,
     splitSubTaskState,
+    splitSubTaskLevels,
     saveSettingOnline
   } = useAppSelector((state) => state.task);
 
-  const dispatch = useAppDispatch();
+  const [checkedStates, setCheckedStates] = useState<boolean[]>([]);
+  const [isAnyactive, setIsAnyactive] = useState<boolean>();
+  const [activeItem, setActiveItem] = useState<string>(splitSubTaskLevels);
+
+  const isActiveColor = isAnyactive ? '#BF01FE' : 'black';
 
   const switchSettings = useSwitchSettings();
 
@@ -65,13 +72,6 @@ export default function ShowHideSettings({
     verticalGridlinesTask,
     splitSubTaskState
   };
-  const handleChange = (viewMode: string, index: number) => {
-    dispatch(setTriggerSaveSettingsModal(true));
-    const newCheckedStates = [...checkedStates];
-    newCheckedStates[index] = !newCheckedStates[index];
-    setCheckedStates(newCheckedStates);
-    switchSettings(viewMode);
-  };
 
   useEffect(() => {
     dispatch(setSaveSettingLocal(saveSettingsObj));
@@ -81,7 +81,7 @@ export default function ShowHideSettings({
     }
   }, [checkedStates, triggerSaveSettingsModal]);
 
-  const ViewSettings = [
+  const viewSettings = [
     {
       id: 2,
       label: scrollByEachGroup
@@ -156,12 +156,12 @@ export default function ShowHideSettings({
     const handleCheckboxChange = () => {
       setCheckedStates((prev: boolean[]) => {
         const newState = [...prev];
-        const singleLineIndex = ViewSettings.findIndex((item) => item.label === 'Single Line mode');
-        const TitleVerticalGridLineIndex = ViewSettings.findIndex((item) => item.label === 'Title Vertical Grid Line');
-        const CompactView = ViewSettings.findIndex((item) => item.label === 'Compact mode');
-        const taskUpperCase = ViewSettings.findIndex((item) => item.label === 'Upper Case');
-        const verticalGrid = ViewSettings.findIndex((item) => item.label === 'Property Vertical Grid Line');
-        const splitSubTaskState = ViewSettings.findIndex((item) => item.label === 'Split Sub Task');
+        const singleLineIndex = viewSettings.findIndex((item) => item.label === 'Single Line mode');
+        const TitleVerticalGridLineIndex = viewSettings.findIndex((item) => item.label === 'Title Vertical Grid Line');
+        const CompactView = viewSettings.findIndex((item) => item.label === 'Compact mode');
+        const taskUpperCase = viewSettings.findIndex((item) => item.label === 'Upper Case');
+        const verticalGrid = viewSettings.findIndex((item) => item.label === 'Property Vertical Grid Line');
+        const splitSubTaskState = viewSettings.findIndex((item) => item.label === 'Split Sub Task');
 
         if (saveSettingList != undefined && saveSettingList?.view_settings != null) {
           newState[singleLineIndex] = saveSettingOnline?.singleLineView as boolean;
@@ -180,6 +180,30 @@ export default function ShowHideSettings({
 
     handleCheckboxChange();
   }, [saveSettingList]);
+
+  const splitSubtasksOptions = [
+    {
+      id: TWO_SUBTASKS_LEVELS,
+      label: '2 levels of subtasks'
+    },
+    {
+      id: THREE_SUBTASKS_LEVELS,
+      label: '3 levels of subtasks'
+    }
+  ];
+
+  const handleChange = (viewMode: string, index: number) => {
+    dispatch(setTriggerSaveSettingsModal(true));
+    const newCheckedStates = [...checkedStates];
+    newCheckedStates[index] = !newCheckedStates[index];
+    setCheckedStates(newCheckedStates);
+    switchSettings(viewMode);
+  };
+
+  const handleClick = (option: string) => {
+    setActiveItem(option);
+    dispatch(getSplitSubTaskLevels(option));
+  };
 
   return (
     <Menu>
@@ -221,64 +245,95 @@ export default function ShowHideSettings({
             <BsChevronRight />
           </div>
 
-          {ViewSettings.map((View, index) => (
-            <Menu.Item
-              as="a"
-              key={View.id}
-              className="flex items-center py-2 text-alsoit-text-lg font-semibold text-left w-full "
-              style={{ lineHeight: '15.6px' }}
-            >
-              <button
-                className={`flex justify-between items-center w-full group ${
-                  View.label == 'Title Vertical Grid Line' && 'border-t-2 pt-4'
-                } ${View.label == 'Task In Multiple Lists' && 'border-t-2 pt-4'} ${
-                  View.label == 'Split Sub Task' && 'border-t-2 pt-4'
-                }`}
+          {viewSettings.map((view, index) => (
+            <Fragment key={view.id}>
+              <Menu.Item
+                as="a"
+                className="flex items-center py-2 text-alsoit-text-lg font-semibold text-left w-full "
+                style={{ lineHeight: '15.6px' }}
               >
-                <p className="flex items-center space-x-2 pl-2 text-md whitespace-nowrap">{View.label}</p>
-                {View.label == 'Task In Multiple Lists' && (
-                  <p className="relative">
-                    <p
-                      className="absolute whitespace-nowrap text-gray-400 text-center bg-white border border-gray-100"
-                      style={{ top: '-35px', right: '23px', fontSize: '8px' }}
-                    >
-                      TASKS SETTINGS
+                <button
+                  className={`flex justify-between items-center w-full group ${
+                    view.label === 'Title Vertical Grid Line' && 'border-t-2 pt-4'
+                  } ${view.label === 'Task In Multiple Lists' && 'border-t-2 pt-4'} ${
+                    view.label === 'Split Sub Task' && 'border-t-2 pt-4'
+                  }`}
+                >
+                  <p className="flex items-center space-x-2 pl-2 text-md whitespace-nowrap">{view.label}</p>
+                  {view.label === 'Task In Multiple Lists' && (
+                    <p className="relative">
+                      <p
+                        className="absolute whitespace-nowrap text-gray-400 text-center bg-white border border-gray-100"
+                        style={{ top: '-35px', right: '23px', fontSize: '8px' }}
+                      >
+                        TASKS SETTINGS
+                      </p>
                     </p>
-                  </p>
-                )}
-                {View.label == 'Title Vertical Grid Line' && (
-                  <p className="relative">
-                    <p
-                      className="absolute whitespace-nowrap text-gray-400 text-center bg-white border border-gray-100"
-                      style={{ top: '-35px', right: '28px', fontSize: '8px' }}
-                    >
-                      GRID SETTINGS
+                  )}
+                  {view.label === 'Title Vertical Grid Line' && (
+                    <p className="relative">
+                      <p
+                        className="absolute whitespace-nowrap text-gray-400 text-center bg-white border border-gray-100"
+                        style={{ top: '-35px', right: '28px', fontSize: '8px' }}
+                      >
+                        GRID SETTINGS
+                      </p>
                     </p>
-                  </p>
-                )}
-                {View.label == 'Split Sub Task' && (
-                  <p className="relative">
-                    <p
-                      className="absolute whitespace-nowrap text-gray-400 text-center bg-white border border-gray-100"
-                      style={{ top: '-35px', right: '-4px', fontSize: '8px' }}
-                    >
-                      SUB TASK SETTINGS
+                  )}
+                  {view.label === 'Split Sub Task' && (
+                    <p className="relative">
+                      <p
+                        className="absolute whitespace-nowrap text-gray-400 text-center bg-white border border-gray-100"
+                        style={{ top: '-35px', right: '-4px', fontSize: '8px' }}
+                      >
+                        SUB TASK SETTINGS
+                      </p>
                     </p>
+                  )}
+                  <p className="flex items-center pr-2 ">
+                    <label className="switch" onClick={(event) => event.stopPropagation()}>
+                      <input
+                        className="inputShow"
+                        type="checkbox"
+                        checked={checkedStates[index]}
+                        onChange={() => handleChange(view.label, index)}
+                      />
+                      <div className={`slider ${checkedStates[index] ? 'checked' : ''}`}></div>
+                    </label>
                   </p>
-                )}
-                <p className="flex items-center pr-2 ">
-                  <label className="switch" onClick={(event) => event.stopPropagation()}>
-                    <input
-                      className="inputShow"
-                      type="checkbox"
-                      checked={checkedStates[index]}
-                      onChange={() => handleChange(View.label, index)}
-                    />
-                    <div className={`slider ${checkedStates[index] ? 'checked' : ''}`}></div>
-                  </label>
-                </p>
-              </button>
-            </Menu.Item>
+                </button>
+              </Menu.Item>
+              {view.label === 'Split Sub Task' && splitSubTaskState ? (
+                <ul>
+                  {splitSubtasksOptions.map((option) => (
+                    <li
+                      onClick={() => handleClick(option.id)}
+                      key={option.id}
+                      className={`text-alsoit-text-lg font-semibold py-1.5 flex space-x-2 items-center px-2 ${
+                        activeItem === option.id ? 'bg-alsoit-purple-50' : 'hover:bg-alsoit-purple-50'
+                      }`}
+                    >
+                      <input
+                        checked={activeItem === option.id}
+                        type="radio"
+                        id="myRadio"
+                        name="myRadioGroup"
+                        className="hidden"
+                      />
+                      <label
+                        htmlFor="myRadio"
+                        className={
+                          activeItem === option.id
+                            ? 'bg-alsoit-purple-300 inline-block p-2 border border-alsoit-purple-300 rounded-full cursor-pointer text-purple-600'
+                            : 'inline-block p-2 border border-alsoit-purple-300 rounded-full cursor-pointer text-purple-600'
+                        }
+                      ></label>
+                      <span className="font-semibold">{option.label}</span>
+                    </li>
+                  ))}
+                </ul>
+              ) : null}
+            </Fragment>
           ))}
         </Menu.Items>
       </Transition>
