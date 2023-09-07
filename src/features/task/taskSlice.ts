@@ -193,7 +193,9 @@ interface TaskState {
   activeTaskColumn: ActiveTaskColumnProps;
   timerDetails: ITimerDetails;
   duration: IDuration;
+  recorderDuration: IDuration;
   period: number | undefined;
+  recorderPeriod: number | undefined;
   activeTimeOut: {
     clockLimit: number;
     timeoutReminder: number;
@@ -284,7 +286,9 @@ const initialState: TaskState = {
   activeTaskColumn: { id: '', header: '' },
   timerDetails: { description: '', isBillable: false },
   duration: { s: 0, m: 0, h: 0 },
+  recorderDuration: { s: 0, m: 0, h: 0 },
   period: undefined,
+  recorderPeriod: undefined,
   activeTimeOut: { clockLimit: 0, timeoutReminder: 0 },
   sortType: 'status',
   searchValue: '',
@@ -560,6 +564,9 @@ export const taskSlice = createSlice({
     setUpdateTimerDuration(state, action: PayloadAction<IDuration>) {
       state.duration = action.payload;
     },
+    setUpdateRecoderDuration(state, action: PayloadAction<IDuration>) {
+      state.recorderDuration = action.payload;
+    },
     setStopTimer(state) {
       state.timerStatus = !state.timerStatus;
     },
@@ -568,6 +575,9 @@ export const taskSlice = createSlice({
     },
     setTimerInterval(state, action: PayloadAction<number | undefined>) {
       state.period = action.payload;
+    },
+    setRecorderInterval(state, action: PayloadAction<number | undefined>) {
+      state.recorderPeriod = action.payload;
     },
     setActiveTimeout(state, action: PayloadAction<{ clockLimit: number; timeoutReminder: number }>) {
       state.activeTimeOut = action.payload;
@@ -663,6 +673,8 @@ export const {
   setUpdateCords,
   setActiveTaskColumn,
   setUpdateTimerDuration,
+  setUpdateRecoderDuration,
+  setRecorderInterval,
   setStopTimer,
   setTimerInterval,
   setActiveTimeout,

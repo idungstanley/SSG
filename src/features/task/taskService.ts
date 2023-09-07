@@ -33,7 +33,6 @@ import { useUploadRecording } from '../workspace/workspaceService';
 import { useParams } from 'react-router-dom';
 import { setPickedDateState, setTimerLastMemory, toggleMute } from '../workspace/workspaceSlice';
 import { generateFilters } from '../../components/TasksHeader/lib/generateFilters';
-import { runTimer } from '../../utils/TimerCounter';
 import Duration from '../../utils/TimerDuration';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
 import {
@@ -43,6 +42,7 @@ import {
   taskStatusUpdateManager
 } from '../../managers/Task';
 import { ITeamMembersAndGroup } from '../settings/teamMembersAndGroups.interfaces';
+import { runTimer } from '../../utils/timeCounter';
 
 //edit a custom field
 export const UseEditCustomFieldService = (data: {
@@ -667,7 +667,7 @@ export const useCurrentTime = ({ workspaceId }: { workspaceId?: string }) => {
         method: 'GET',
         url: 'time-entries/current'
       });
-      return response; // Access the 'data' property of the response
+      return response;
     },
     {
       onSuccess: (data) => {
@@ -695,7 +695,7 @@ export const useCurrentTime = ({ workspaceId }: { workspaceId?: string }) => {
       }
     }
   );
-  runTimer({ isRunning: !!data?.data.time_entry });
+  runTimer({ isRunning: !!data?.data.time_entry, timerType: 'time-clock' });
 
   return { data, isLoading, isError, refetch };
 };

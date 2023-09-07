@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import {
   EndTimeEntriesService,
@@ -14,7 +14,6 @@ import {
 } from '../../../../features/task/taskSlice';
 import { useParams } from 'react-router-dom';
 import { setTimerLastMemory } from '../../../../features/workspace/workspaceSlice';
-import { runTimer } from '../../../../utils/TimerCounter';
 import ClockLog from './ClockLog';
 import { EntityType } from '../../../../utils/EntityTypes/EntityType';
 import PaginationLinks from '../NavLinks/PaginationLinks';
@@ -23,6 +22,7 @@ import { VerticalScroll } from '../../../ScrollableContainer/VerticalScroll';
 import AutomaticTimeElement from './AutomaticTimeElement';
 import { ClockIcon } from '../../../../assets/icons/ClockIcon';
 import { ManualTimeElement } from './ManualTimeElement';
+import { runTimer } from '../../../../utils/timeCounter';
 
 export interface User {
   initials: string;
@@ -146,7 +146,7 @@ export default function ClockInOut() {
     (tracker) => tracker.team_member.user.id !== currentUserId
   );
 
-  const RunTimer = runTimer({ isRunning: isRunning, setTime: setTime });
+  const RunTimer = runTimer({ isRunning: isRunning, setTime: setTime, timerType: 'time-clock' });
 
   const timeTabs = [
     {
