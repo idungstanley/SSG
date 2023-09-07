@@ -39,7 +39,7 @@ export function Table({ heads, data, label, listName, customFields, ListColor }:
   const {
     statusId,
     defaultSubtaskListId,
-    splitSubTask: splitSubTaskMode,
+    splitSubTaskState: splitSubTaskMode,
     separateSubtasksMode
   } = useAppSelector((state) => state.task);
 

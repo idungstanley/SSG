@@ -35,7 +35,7 @@ export function List({ tasks }: ListProps) {
   const {
     sortType,
     hideTask,
-    splitSubTask: splitSubTaskMode,
+    splitSubTaskState: splitSubTaskMode,
     subtasks,
     tasks: storeTasks,
     separateSubtasksMode

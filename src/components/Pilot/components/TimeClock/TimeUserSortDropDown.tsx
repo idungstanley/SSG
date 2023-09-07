@@ -32,14 +32,14 @@ export function UserSortDropDown({ arr, toggleModalFn, memberIds }: UserSortPara
     !listIndex.includes(id) ? setIndex((prev) => [...prev, id]) : setIndex((prev) => prev.filter((item) => item != id));
   };
 
-  const handleDispatch = () => {
-    dispatch(setTimeSortArr(idArr));
-    mutateAsync({
-      key: 'time_entry',
-      value: idArr
-    });
-    toggleModalFn(false);
-  };
+  // const handleDispatch = () => {
+  //   dispatch(setTimeSortArr(idArr));
+  //   mutateAsync({
+  //     key: 'time_entry',
+  //     value: idArr
+  //   });
+  //   toggleModalFn(false);
+  // };
 
   return (
     <div tabIndex={0} onBlur={() => toggleModalFn(false)}>
@@ -65,7 +65,6 @@ export function UserSortDropDown({ arr, toggleModalFn, memberIds }: UserSortPara
             type="button"
             className="float-right p-1 bg-purple-600 text-white font-bold capitalize rounded-md z-50 my-2 mr-2"
             tabIndex={0}
-            onMouseDown={() => handleDispatch()}
           >
             done
           </button>

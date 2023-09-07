@@ -22,6 +22,7 @@ import { DEFAULT_FILTERS_OPTION } from '../../components/TasksHeader/ui/Filter/c
 import { ITeamMembersAndGroup } from '../settings/teamMembersAndGroups.interfaces';
 import { Header } from '../../components/Pilot/components/TimeClock/ClockLog';
 import { isArrayOfStrings } from '../../utils/typeGuards';
+import { ItaskViews } from '../hubs/hubs.interfaces';
 
 export interface ICustomField {
   id: string;
@@ -136,7 +137,9 @@ interface TaskState {
   hideTask: listColumnProps[];
   currentTaskId: string | null;
   selectedTasksArray: string[];
-  saveSetting: { [key: string]: boolean } | null;
+  saveSettingLocal: { [key: string]: boolean } | null;
+  saveSettingList: ItaskViews | undefined;
+  saveSettingOnline: { [key: string]: boolean } | null;
   comfortableView: boolean;
   comfortableViewWrap: boolean;
   verticalGrid: boolean;
@@ -148,7 +151,7 @@ interface TaskState {
   CompactView: boolean;
   taskUpperCase: boolean;
   verticalGridlinesTask: boolean;
-  splitSubTask: boolean;
+  splitSubTaskState: boolean;
   CompactViewWrap: boolean;
   triggerSaveSettings: boolean;
   triggerSaveSettingsModal: boolean;
@@ -181,7 +184,7 @@ interface TaskState {
   sortArr: string[];
   timeSortStatus: boolean;
   timeArr: string[];
-  timeSortArr: string[];
+  timeSortArr: SortOption[];
   timeLogColumnData: Header[];
   screenRecording: 'idle' | 'recording';
   recorder: RecordRTC | null;
@@ -229,17 +232,19 @@ const initialState: TaskState = {
   showNewTaskField: false,
   meMode: false,
   showNewTaskId: '',
-  singleLineView: true,
-  saveSetting: null,
+  singleLineView: false,
+  saveSettingLocal: null,
+  saveSettingList: undefined,
+  saveSettingOnline: null,
   selectedTasksArray: [],
   verticalGrid: false,
   taskUpperCase: false,
   triggerSaveSettings: false,
   triggerSaveSettingsModal: false,
   toggleAllSubtask: false,
+  verticalGridlinesTask: false,
+  splitSubTaskState: false,
   separateSubtasksMode: false,
-  verticalGridlinesTask: true,
-  splitSubTask: false,
   CompactView: false,
   CompactViewWrap: false,
   showTaskNavigation: false,
@@ -342,8 +347,14 @@ export const taskSlice = createSlice({
     setSearchValue(state, action: PayloadAction<string>) {
       state.searchValue = action.payload;
     },
-    setSaveSetting(state, action: PayloadAction<{ [key: string]: boolean } | null>) {
-      state.saveSetting = action.payload;
+    setSaveSettingLocal(state, action: PayloadAction<{ [key: string]: boolean } | null>) {
+      state.saveSettingLocal = action.payload;
+    },
+    setSaveSettingList(state, action: PayloadAction<ItaskViews | undefined>) {
+      state.saveSettingList = action.payload;
+    },
+    setSaveSettingOnline(state, action: PayloadAction<{ [key: string]: boolean } | null>) {
+      state.saveSettingOnline = action.payload;
     },
     setSelectedIndex(state, action: PayloadAction<number | null>) {
       state.selectedIndex = action.payload;
@@ -444,7 +455,7 @@ export const taskSlice = createSlice({
       state.verticalGridlinesTask = action.payload;
     },
     getSplitSubTask(state, action: PayloadAction<boolean>) {
-      state.splitSubTask = action.payload;
+      state.splitSubTaskState = action.payload;
     },
     setSelectedTasksArray(state, action: PayloadAction<string[]>) {
       state.selectedTasksArray = action.payload;
@@ -532,10 +543,8 @@ export const taskSlice = createSlice({
     setTimeArr(state, action: PayloadAction<string[]>) {
       state.timeArr = action.payload;
     },
-    setTimeSortArr(state, action: PayloadAction<string[] | Header[]>) {
-      isArrayOfStrings(action.payload)
-        ? (state.timeSortArr = action.payload)
-        : (state.timeLogColumnData = action.payload);
+    setTimeSortArr(state, action: PayloadAction<SortOption[]>) {
+      state.timeSortArr = action.payload;
     },
     setScreenRecording(state, action: PayloadAction<'idle' | 'recording'>) {
       state.screenRecording = action.payload;
@@ -612,7 +621,8 @@ export const {
   setSelectedIndex,
   setSelectedIndexStatus,
   setSelectedListIds,
-  setSaveSetting,
+  setSaveSettingLocal,
+  setSaveSettingList,
   setSelectedTaskParentId,
   setSelectedTaskType,
   setMeMode,
@@ -635,6 +645,7 @@ export const {
   setSubtaskDefaultStatusId,
   setUpdateEntries,
   setTriggerSaveSettingsModal,
+  setSaveSettingOnline,
   setUpdateStatusModalId,
   setCurrentTaskStatusId,
   setCurrentTaskPriorityId,
