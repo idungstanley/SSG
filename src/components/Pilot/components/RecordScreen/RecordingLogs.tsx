@@ -17,8 +17,10 @@ export default function VideoEntries() {
   const [playToggle, setPlayToggle] = useState<boolean>(false);
   const [hoverIndex, setHoverIndex] = useState<number | undefined>();
   const [controlModal, setModal] = useState<boolean>(false);
-  const [anchorEl, setAnchorEl] = useState<HTMLTableCellElement | null>(null);
-  const [showUserModal, setShowUserModal] = useState<boolean>(false);
+  const [showUserModals, setShowUserModals] = useState<boolean[]>(new Array(data?.data.attachments.length).fill(false));
+  const [anchorEls, setAnchorEls] = useState<(HTMLTableCellElement | null)[]>(
+    new Array(data?.data.attachments.length).fill(null)
+  );
 
   const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
   const targetElementRef = useRef<HTMLTableCellElement>(null);
@@ -36,14 +38,20 @@ export default function VideoEntries() {
     }
   };
 
-  const handleHover = (e: MouseEvent<HTMLTableCellElement>) => {
-    if (anchorEl) {
-      setAnchorEl(null);
-      setShowUserModal(false);
-    } else {
-      setAnchorEl(e.currentTarget);
-      setShowUserModal(!showUserModal);
-    }
+  const handleClose = (index: number) => {
+    const updatedAnchorEls = [...anchorEls];
+    updatedAnchorEls[index] = null;
+    setAnchorEls(updatedAnchorEls);
+  };
+
+  const handleHover = (e: MouseEvent<HTMLTableCellElement>, index: number) => {
+    const updatedShowUserModals = [...showUserModals];
+    updatedShowUserModals[index] = !updatedShowUserModals[index];
+    setShowUserModals(updatedShowUserModals);
+
+    const updatedAnchorEls = [...anchorEls];
+    updatedAnchorEls[index] = e.currentTarget;
+    setAnchorEls(updatedAnchorEls);
   };
 
   const toggleControls = ({
@@ -84,21 +92,25 @@ export default function VideoEntries() {
             const duration = new Date(updated_at).getTime() - new Date(created_at).getTime();
             return (
               <tr key={videoFile.id} className="flex space-x-8 border-b items-center p-2 relative">
-                <td onMouseEnter={handleHover} onMouseLeave={handleHover} className="relative">
+                <td
+                  onMouseEnter={(e) => handleHover(e, index)}
+                  onMouseLeave={(e) => handleHover(e, index)}
+                  className="relative"
+                >
                   {avatar_path ? (
                     <AvatarWithImage image_path={avatar_path} height="h-10" width="w-10" roundedStyle="circular" />
                   ) : (
                     <AvatarWithInitials initials={initials} width="w-10" height="h-10" backgroundColour={color} />
                   )}
-                  {/* {showUserModal && (
+                  {showUserModals[index] && (
                     <PopAssignModal
-                      anchorEl={anchorEl}
+                      anchorEl={anchorEls[index]}
                       currHoveredOnUser={videoFile.team_member.id}
-                      handleClose={() => handleHover}
+                      handleClose={() => handleClose(index)}
                       modalLoader={false}
                       spinnerSize={6}
                     />
-                  )} */}
+                  )}
                 </td>
                 <td className="relative" ref={targetElementRef}>
                   <video

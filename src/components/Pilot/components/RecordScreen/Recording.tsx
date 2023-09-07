@@ -35,6 +35,7 @@ export default function Recording() {
   const stopRecording = () => {
     handleStopStream({ stream, recorder });
   };
+
   useEffect(() => {
     if (screenRecording !== 'recording') {
       dispatch(
