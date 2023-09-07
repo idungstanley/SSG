@@ -204,15 +204,17 @@ export default function CustomStatus() {
     const modelIdIsSameEntity = statusData.some((item) => item.model_id === model_id);
     if (activeItemId === model_id && modelTypeIsSameEntity) {
       if (modelIdIsSameEntity) {
-        return statusData;
+        return statusData.map((item, index) => {
+          return { ...item, position: index };
+        });
       } else {
         return statusData.map((item, index) => {
-          return { ...item, id: null, is_default: index === 0 ? 1 : 0 }; // Set the id to null
+          return { ...item, id: null, is_default: index === 0 ? 1 : 0, position: index }; // Set the id to null
         });
       }
     } else {
       return statusData.map((item, index) => {
-        return { ...item, id: null, is_default: index === 0 ? 1 : 0 }; // Set the id to null
+        return { ...item, id: null, is_default: index === 0 ? 1 : 0, position: index }; // Set the id to null
       });
     }
   };
