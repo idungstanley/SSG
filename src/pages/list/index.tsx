@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { getTaskListService } from '../../features/task/taskService';
+import { UseUpdateTaskViewSettings, getTaskListService } from '../../features/task/taskService';
 import { setActiveItem } from '../../features/workspace/workspaceSlice';
 import { UseGetListDetails } from '../../features/list/listService';
 import PilotSection, { pilotConfig } from '../workspace/lists/components/PilotSection';
@@ -11,25 +11,42 @@ import ActiveHub from '../../layout/components/MainLayout/extendedNavigation/Act
 import hubIcon from '../../assets/branding/hub.png';
 import FilterByAssigneesSliderOver from '../workspace/lists/components/renderlist/filters/FilterByAssigneesSliderOver';
 import { useScroll } from '../../hooks/useScroll';
-import { setIsTasksUpdated, setTasks, setUpdateCords } from '../../features/task/taskSlice';
+import {
+  setIsTasksUpdated,
+  setSaveSettingList,
+  setSaveSettingOnline,
+  setTasks,
+  setUpdateCords
+} from '../../features/task/taskSlice';
 import TaskQuickAction from '../workspace/tasks/component/taskQuickActions/TaskQuickAction';
 import { List } from '../../components/Views/ui/List/List';
 import { Header } from '../../components/TasksHeader';
 import { GroupHorizontalScroll } from '../../components/ScrollableContainer/GroupHorizontalScroll';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
 import { ITaskFullList } from '../../features/task/interface.tasks';
+import { useformatSettings } from '../workspace/tasks/TaskSettingsModal/ShowSettingsModal/FormatSettings';
 
 export function ListPage() {
   const dispatch = useAppDispatch();
   const { listId, taskId } = useParams();
 
-  const { tasks: tasksStore, isTasksUpdated } = useAppSelector((state) => state.task);
+  const { tasks: tasksStore, isTasksUpdated, saveSettingLocal } = useAppSelector((state) => state.task);
 
   const containerRef = useRef<HTMLDivElement>(null);
+  const formatSettings = useformatSettings();
 
   // get list details to set active entity
   const { data: list } = UseGetListDetails(listId);
   const listName = list?.data.list.name ?? '';
+
+  // get task_view id for list view
+  const saveSettingList = list?.data?.list.task_views?.find((element) => element.type === 'list');
+  const task_views_id = saveSettingList ? saveSettingList.id : '';
+
+  const { isSuccess } = UseUpdateTaskViewSettings({
+    task_views_id,
+    taskDate: saveSettingLocal as { [key: string]: boolean }
+  });
 
   // get list tasks
   const { data, hasNextPage, fetchNextPage } = getTaskListService(listId);
@@ -40,6 +57,15 @@ export function ListPage() {
       if (listId && !taskId) {
         dispatch(setActiveItem({ activeItemId: listId, activeItemType: EntityType.list, activeItemName: listName }));
       }
+    }
+
+    dispatch(setSaveSettingList(saveSettingList));
+    // check if views settings exist and use else use local list view settings
+    if (saveSettingList?.view_settings) {
+      dispatch(setSaveSettingOnline(saveSettingList.view_settings as { [key: string]: boolean }));
+      formatSettings(saveSettingList.view_settings);
+    } else {
+      dispatch(setSaveSettingOnline(saveSettingLocal));
     }
   }, [list]);
 
