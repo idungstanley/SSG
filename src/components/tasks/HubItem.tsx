@@ -109,7 +109,7 @@ export default function HubItem({
     dispatch(
       setshowMenuDropdown({
         showMenuDropdown: id,
-        showMenuDropdownType: EntityType.subHub
+        showMenuDropdownType: EntityType.hub
       })
     );
     dispatch(getPrevName(name));
