@@ -142,7 +142,7 @@ export default function SubDropdown({ cords }: SubDropdownProps) {
         dispatch(setLastActiveItem('Sub Hub'));
       },
       icon: <AddHubIcon />,
-      isVisible: showMenuDropdownType == 'hubs' ? true : false || SubMenuType == 'hubs' ? true : false
+      isVisible: showMenuDropdownType === EntityType.hub ? true : false || SubMenuType === EntityType.hub ? true : false
     },
     {
       title:

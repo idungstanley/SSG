@@ -175,9 +175,9 @@ export default function ListViewSettingsModal({
               as="a"
               key={View.id}
               className={`${
-                View.id == viewId && View.id !== activeView
+                View.id === viewId && View.id !== activeView
                   ? 'flex items-center py-2 text-sm text-gray-600 text-left w-full hover:bg-gray-300'
-                  : listView && View.id == activeView
+                  : listView && View.id === activeView
                   ? 'flex items-center py-2 text-sm text-gray-600 text-left w-full bg-primary-200'
                   : 'flex items-center py-2 text-sm text-gray-600 text-left w-full '
               }`}
@@ -191,7 +191,7 @@ export default function ListViewSettingsModal({
                   </p>
                   <p
                     className={`${
-                      View.id == viewId
+                      View.id === viewId
                         ? 'flex items-center pr-2 opacity-0 group-hover:opacity-100'
                         : 'flex items-center pr-2 opacity-0'
                     }`}

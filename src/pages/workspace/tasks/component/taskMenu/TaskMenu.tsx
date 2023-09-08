@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { MdFileCopy } from 'react-icons/md';
-// import TaskIcons from './taskIcons';
 import { useAppSelector } from '../../../../../app/hooks';
 import { IoEyeOutline } from 'react-icons/io5';
 import { BsTags } from 'react-icons/bs';
@@ -211,7 +210,6 @@ export default function TaskMenu() {
           className=" bg-gray-800 text-white p-2 rounded-3xl border border-white -mt-1 cursor-pointer"
           onClick={() => {
             dispatch(setSelectedTasksArray([]));
-            // dispatch(setSelectedIndex(null));
           }}
         >
           <span className="text-gray-300 ">X</span> Dismiss

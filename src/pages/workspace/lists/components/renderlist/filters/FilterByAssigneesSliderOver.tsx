@@ -49,7 +49,6 @@ export default function FilterByAssigneesSliderOver() {
           setFilterFields([
             ...filters.map((filter) => {
               if (filter.key === 'assignees') {
-                // return { ...filter, values: [] };
                 return { ...filter, values: [...newAssignees] };
               }
 

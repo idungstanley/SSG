@@ -39,7 +39,7 @@ export const deleteHubManager = (id: string, hubs: Hub[]) => {
   return updatedTree;
 };
 
-export const createHubManager = (parentId: string | null, hubs: Hub[], newHubFromData: IHub) => {
+export const createHubManager = (hubs: Hub[], newHubFromData: IHub) => {
   const newHub = {
     ...newHubFromData,
     children: [],
@@ -51,14 +51,19 @@ export const createHubManager = (parentId: string | null, hubs: Hub[], newHubFro
     const newParent = { ...parent } as Hub;
     return {
       ...newParent,
-      children: [...newParent.children, newHub]
+      children: newParent.children ? [...newParent.children, newHub] : [newHub]
     };
   };
 
   let updatedTree = [...hubs];
 
-  if (parentId) {
-    updatedTree = findCurrentEntity(EntityType.hub, parentId, hubs, createHub as <IHub>(item: IHub) => IHub);
+  if (newHubFromData.parent_id) {
+    updatedTree = findCurrentEntity(
+      EntityType.hub,
+      newHubFromData.parent_id,
+      hubs,
+      createHub as <IHub>(item: IHub) => IHub
+    );
   } else {
     updatedTree = [...updatedTree, newHub];
   }

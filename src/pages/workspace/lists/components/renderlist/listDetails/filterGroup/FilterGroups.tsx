@@ -39,23 +39,23 @@ export default function FilterGroups() {
           </div>
 
           <div>
-            {selectOptions == 'status' ? (
+            {selectOptions === 'status' ? (
               <div id="filterDrop">
                 <IsIsNot />
               </div>
-            ) : selectOptions == 'priority' ? (
+            ) : selectOptions === 'priority' ? (
               <div id="filterDrop">
                 <IsSetIsNotSet />
               </div>
-            ) : selectOptions == 'tags' ? (
+            ) : selectOptions === 'tags' ? (
               <div id="filterDrop">
                 <IsSetIsNotSet />
               </div>
-            ) : selectOptions == 'assignee' ? (
+            ) : selectOptions === 'assignee' ? (
               <div id="filterDrop">
                 <IsSetIsNotSet />
               </div>
-            ) : selectOptions == 'due_date' ? (
+            ) : selectOptions === 'due_date' ? (
               <div id="filterDrop">
                 <IsSetIsNotSet />
               </div>
@@ -63,27 +63,27 @@ export default function FilterGroups() {
           </div>
 
           <div>
-            {selectOptions == 'status' ? (
+            {selectOptions === 'status' ? (
               <div id="filterDrop">
                 <StatusFilter />
               </div>
-            ) : selectOptions == 'priority' ? (
+            ) : selectOptions === 'priority' ? (
               <div id="filterDrop">
                 <PriorityFllter />
               </div>
-            ) : selectOptions == 'tags' ? (
+            ) : selectOptions === 'tags' ? (
               <div id="filterDrop">
                 <TagFilter />
               </div>
-            ) : selectOptions == 'assignee' ? (
+            ) : selectOptions === 'assignee' ? (
               <div id="filterDrop">
                 <AssigneeFilter />
               </div>
-            ) : selectOptions == 'due_date' ? (
+            ) : selectOptions === 'due_date' ? (
               <div id="filterDrop">
                 <DueDateFilter />
               </div>
-            ) : selectOptions == 'archived' ? (
+            ) : selectOptions === 'archived' ? (
               <div id="filterDrop">
                 <ArchivedFilter />
               </div>

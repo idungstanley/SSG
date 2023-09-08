@@ -166,7 +166,7 @@ export function Col({ value, field, fieldId, task, customFields, ...props }: Col
         {...props}
         style={{
           height:
-            task.id == '0'
+            task.id === '0'
               ? '64px'
               : saveSettingOnline?.singleLineView && !saveSettingOnline?.CompactView
               ? '42px'

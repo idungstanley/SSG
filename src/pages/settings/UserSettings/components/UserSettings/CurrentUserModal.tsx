@@ -50,7 +50,6 @@ function CurrentUserModal() {
   const style = {
     height: '15px',
     width: '15px'
-    // border: '1px solid black'
   };
   const colorBoxes = palette.map((c) => (
     <div key={c}>

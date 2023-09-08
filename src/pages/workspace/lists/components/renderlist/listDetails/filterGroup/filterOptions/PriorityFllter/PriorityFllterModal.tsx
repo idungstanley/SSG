@@ -62,19 +62,19 @@ export default function PriorityFllterModal({ TaskCurrentPriority }: TaskCurrent
     priorityDataUpdate: priorityValue
   });
 
-  if (status == 'success') {
+  if (status === 'success') {
     setPriority('');
   }
   const setPriorityColor = (
     priority: string | null | undefined | [{ id: string; initials: string; colour: string }]
   ) => {
-    if (priority == null || priority == 'low') {
+    if (priority === null || priority === 'low') {
       return <AiFillFlag className="h-5 w-7  text-gray-400 " aria-hidden="true" />;
-    } else if (priority == 'normal') {
+    } else if (priority === 'normal') {
       return <AiFillFlag className="h-5 w-7" style={{ color: '#6fddff' }} aria-hidden="true" />;
-    } else if (priority == 'high') {
+    } else if (priority === 'high') {
       return <AiFillFlag className="h-5 w-7  text-yellow-400 " aria-hidden="true" />;
-    } else if (priority == 'urgent') {
+    } else if (priority === 'urgent') {
       return <AiFillFlag className="h-5 w-7  text-red-400 " aria-hidden="true" />;
     }
   };
@@ -84,10 +84,6 @@ export default function PriorityFllterModal({ TaskCurrentPriority }: TaskCurrent
       <div>
         <Menu.Button className="flex text-sm text-gray-400">
           {setPriorityColor(TaskCurrentPriority)}
-          {/* <AiFillFlag
-            className="h-5 w-7  text-gray-400 "
-            aria-hidden="true"
-          /> */}
         </Menu.Button>
       </div>
       <Transition
@@ -98,7 +94,6 @@ export default function PriorityFllterModal({ TaskCurrentPriority }: TaskCurrent
         leave="transition ease-in duration-75"
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
-        // show={sidebarSettings}
       >
         <Menu.Items className="origin-top-right absolute z-50 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none ">
           {priorityList.map((i) => (

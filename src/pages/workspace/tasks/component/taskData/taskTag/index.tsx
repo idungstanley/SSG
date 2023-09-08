@@ -45,7 +45,7 @@ export default function TaskTag({ taskColField, entity_id, entity_type }: render
                 <div>{groupTags(item)}</div>
               ) : (
                 <>
-                  {renameTagId == item.id && currentTaskIdForTag == entity_id ? (
+                  {renameTagId === item.id && currentTaskIdForTag === entity_id ? (
                     <form onSubmit={(e) => handleEditTagSubmit(e, item.id)}>
                       <input
                         type="text"

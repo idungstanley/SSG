@@ -57,7 +57,7 @@ export default function CreateHub() {
       dispatch(setEntityToCreate(null));
       setFormState(defaultHubFormState);
       const hubFromResponse = data.data.hub;
-      const updatedTree = createHubManager(hubFromResponse.parent_id, hub, hubFromResponse);
+      const updatedTree = createHubManager(hub, hubFromResponse);
       dispatch(getHub(updatedTree));
       dispatch(setFilteredResults(updatedTree));
     }

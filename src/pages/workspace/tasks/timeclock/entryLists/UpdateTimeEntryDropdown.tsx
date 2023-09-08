@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { CalendarIcon, CurrencyDollarIcon } from '@heroicons/react/24/outline';
-// import moment from 'moment';
 import { useQueryClient, useMutation } from '@tanstack/react-query';
 import { Button } from '../../../../../components';
 import { UpdateTimeEntriesService } from '../../../../../features/task/taskService';

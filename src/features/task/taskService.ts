@@ -238,7 +238,7 @@ export const UseGetFullTaskList = ({
   const queryClient = useQueryClient();
 
   const hub_id = itemType === EntityType.hub || itemType === EntityType.subHub ? itemId : null;
-  const wallet_id = itemType == EntityType.wallet || itemType === EntityType.subWallet ? itemId : null;
+  const wallet_id = itemType === EntityType.wallet || itemType === EntityType.subWallet ? itemId : null;
   const { sortAbleArr } = useAppSelector((state) => state.task);
   const sortArrUpdate = sortAbleArr.length <= 0 ? null : sortAbleArr;
 
@@ -481,17 +481,6 @@ export const UseUpdateTaskViewSettings = ({
       onSuccess: (data) => {
         dispatch(setTriggerSaveSettings(false));
         dispatch(setTriggerSaveSettingsModal(false));
-
-        // if (data.data.task.id == task_id) {
-        //   const updatedTasks = taskDateUpdateManager(
-        //     task_id as string,
-        //     data.data.task.list_id as string,
-        //     tasks,
-        //     'start_date',
-        //     data.data.task.start_date as string
-        //   );
-        //   dispatch(setTasks(updatedTasks));
-        // }
       }
     }
   );
@@ -816,29 +805,6 @@ export const DeleteTimeEntriesService = (data: { timeEntryDeleteTriggerId: strin
     method: 'DELETE'
   });
   return response;
-};
-
-//Get watcher
-export const UseGetWatcherService = (taskId: { query: string | null | undefined }) => {
-  const queryClient = useQueryClient();
-  return useQuery(
-    ['watcher', taskId],
-    async () => {
-      const data = await requestNew<IWatchersRes | undefined>({
-        url: 'watch',
-        method: 'GET',
-        params: {
-          type: EntityType.task,
-          id: taskId.query
-        }
-      });
-      return data;
-    },
-    {
-      initialData: queryClient.getQueryData(['watcher', taskId]),
-      enabled: taskId != null
-    }
-  );
 };
 
 //Add watcher to task

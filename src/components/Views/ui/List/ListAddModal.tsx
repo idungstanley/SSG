@@ -148,7 +148,7 @@ export default function ListAddModal({
         {items.map((item) => (
           <div key={item.id}>
             <div className="w-full m-2">
-              {(item.label == 'List Info' || item.label == 'Archive') && <p className="border-t-2 mr-5"></p>}
+              {(item.label === 'List Info' || item.label === 'Archive') && <p className="border-t-2 mr-5"></p>}
             </div>
             <MenuItem
               key={item.label}

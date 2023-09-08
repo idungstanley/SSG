@@ -8,6 +8,7 @@ import { getHub, setshowMenuDropdown } from '../../../../features/hubs/hubSlice'
 import { setEditHubSlideOverVisibility } from '../../../../features/general/slideOver/slideOverSlice';
 import { setFilteredResults } from '../../../../features/search/searchSlice';
 import { changeHubManager } from '../../../../managers/Hub';
+import { EntityType } from '../../../../utils/EntityTypes/EntityType';
 
 export default function EditHubModal() {
   const dispatch = useDispatch();
@@ -71,13 +72,13 @@ export default function EditHubModal() {
     <SlideOver
       show={showEditHubSlideOver}
       onClose={() => handleCloseSlider()}
-      headerTitle={showMenuDropdownType === 'hubs' ? ' Edit hub' : 'Edit subhub'}
+      headerTitle={showMenuDropdownType === EntityType.hub ? ' Edit hub' : 'Edit subhub'}
       body={
         <div className="py-6 space-y-6 sm:py-0 sm:space-y-0 sm:divide-y sm:divide-gray-200">
           <div className="px-4 space-y-1 sm:space-y-0 sm:px-6 sm:py-5">
             <Input
-              label={showMenuDropdownType === 'hubs' ? 'Hub Name:' : 'Subhub Name:'}
-              placeholder={showMenuDropdownType === 'hubs' ? 'Enter hub Name' : 'Enter SubHub Name'}
+              label={showMenuDropdownType === EntityType.hub ? 'Hub Name:' : 'Subhub Name:'}
+              placeholder={showMenuDropdownType === EntityType.hub ? 'Enter hub Name' : 'Enter SubHub Name'}
               name="name"
               value={name}
               type="text"
@@ -90,7 +91,7 @@ export default function EditHubModal() {
         <Button
           buttonStyle="primary"
           onClick={onSubmit}
-          label={showMenuDropdownType === 'hubs' ? 'Edit hub' : 'Edit  Subhub'}
+          label={showMenuDropdownType === EntityType.hub ? 'Edit hub' : 'Edit  Subhub'}
           padding="py-2 px-4"
           height="h-10"
           width="w-40"

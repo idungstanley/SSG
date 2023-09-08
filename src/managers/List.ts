@@ -30,16 +30,16 @@ export const deleteListManager = (id: string, hubs: Hub[]) => {
   return updatedTree;
 };
 
-export const createListManager = (type: string, parentId: string | null, hubs: Hub[], newList: IList) => {
+export const createListManager = (type: string, hubs: Hub[], newList: IList) => {
   const createList = (parent: Wallet | Hub) => {
     const newParent = { ...parent };
     return {
       ...newParent,
-      lists: [...newParent.lists, newList]
+      lists: newParent?.lists?.length ? [...newParent.lists, newList] : [newList]
     };
   };
 
-  const id = parentId ?? '';
+  const id = newList.parent_id ?? '';
   const updatedTree = findCurrentEntity(type, id, hubs, createList as <IList>(item: IList) => IList);
   return updatedTree;
 };

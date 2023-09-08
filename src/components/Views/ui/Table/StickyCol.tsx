@@ -134,14 +134,6 @@ export function StickyCol({
     current?.focus();
   }, [eitableContent]);
 
-  // const selectText = (element: Node | null) => {
-  //   const selection = window.getSelection();
-  //   const range = document.createRange();
-  //   range.selectNodeContents(element as Node);
-  //   selection?.removeAllRanges();
-  //   selection?.addRange(range);
-  // };
-
   const onToggleDisplayingSubTasks = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.stopPropagation();
     setShowSubTasks(!showSubTasks);
@@ -191,7 +183,7 @@ export function StickyCol({
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.shiftKey && event.key === 'ArrowDown') {
-        if (selectedIndex == null) return;
+        if (selectedIndex === null) return;
         if (!selectedIndexArray.includes(taskIndex as number)) {
           setSelectedIndexArray((prev) => {
             const updatedArray = [...prev, taskIndex as number];

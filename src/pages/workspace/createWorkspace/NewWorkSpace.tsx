@@ -5,7 +5,6 @@ import Apps from '../../../assets/icons/any_app.svg';
 import PmTools from '../../../assets/icons/pm-tool.png';
 import { InputAvatar } from '../../../components';
 import { avatarBg, companySizeBtn } from './colors';
-// import { GoPrimitiveDot } from 'react-icons/go';
 import { cl } from '../../../utils';
 import { useSelector } from 'react-redux';
 import { useMutation } from '@tanstack/react-query';
@@ -44,7 +43,7 @@ function CreateNewWorkspace() {
       );
       localStorage.setItem('currentWorkspaceId', JSON.stringify(successData.data.workspace.id));
       dispatch(setCurrentWorkspace(successData.data.workspace.id));
-      // window.location.href = '/';
+
       if (user) {
         dispatch(
           setCurrentUser({
