@@ -82,9 +82,7 @@ export default function PriorityFllterModal({ TaskCurrentPriority }: TaskCurrent
   return (
     <Menu as="div" className="relative inline-block text-left ">
       <div>
-        <Menu.Button className="flex text-sm text-gray-400">
-          {setPriorityColor(TaskCurrentPriority)}
-        </Menu.Button>
+        <Menu.Button className="flex text-sm text-gray-400">{setPriorityColor(TaskCurrentPriority)}</Menu.Button>
       </div>
       <Transition
         as={Fragment}

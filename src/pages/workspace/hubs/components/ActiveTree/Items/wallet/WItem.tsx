@@ -40,10 +40,7 @@ export default function WItem({ id, name, parentId }: { id: string; name: string
           )}
         </div>
 
-        <div
-          className="cursor-pointer hover:underline hover:decoration-dashed"
-          style={{ marginLeft: '17px' }}
-        >
+        <div className="cursor-pointer hover:underline hover:decoration-dashed" style={{ marginLeft: '17px' }}>
           <p
             className="capitalize truncate cursor-pointer"
             style={{
