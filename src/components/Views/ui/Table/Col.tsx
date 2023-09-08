@@ -21,10 +21,11 @@ import { IField } from '../../../../features/list/list.interfaces';
 import TextField from './CustomField/TextField/TextField';
 import LabelsWrapper from './CustomField/Labels/LabelsWrapper';
 import NumberField from './CustomField/Number/NumberField';
-import EmailField from './CustomField/EmailField/EmailField';
 import TagsWrapper from './CustomField/Tags/TagsWrapper';
 import MoneyField from './CustomField/Money/MoneyField';
 import DateField from './CustomField/Date/DateField';
+import EmailWebsiteField from './CustomField/EmailWebsiteField/EmailWebsiteField';
+import CheckboxField from './CustomField/Checkbox/CheckboxField';
 
 interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   value: TaskValue;
@@ -39,9 +40,8 @@ export function Col({ value, field, fieldId, task, customFields, ...props }: Col
   const { taskId } = useParams();
 
   const { dragOverItemId, draggableItemId } = useAppSelector((state) => state.list);
-  const { singleLineView, dragToBecomeSubTask, verticalGrid, selectedTasksArray, CompactView } = useAppSelector(
-    (state) => state.task
-  );
+  const { singleLineView, dragToBecomeSubTask, verticalGrid, selectedTasksArray, CompactView, saveSettingOnline } =
+    useAppSelector((state) => state.task);
 
   const COL_BG = taskId === task.id ? ACTIVE_COL_BG : DEFAULT_COL_BG;
   const isSelected = selectedTasksArray.includes(task.id);
@@ -97,10 +97,11 @@ export function Col({ value, field, fieldId, task, customFields, ...props }: Col
       />
     ),
     email: (
-      <EmailField
+      <EmailWebsiteField
         taskId={task.id}
         taskCustomFields={task.custom_fields?.find((i) => i.id === fieldId)}
         fieldId={fieldId}
+        fieldType="email"
       />
     ),
     longtext: (
@@ -126,11 +127,26 @@ export function Col({ value, field, fieldId, task, customFields, ...props }: Col
       />
     ),
     date: <DateField />,
+    website: (
+      <EmailWebsiteField
+        taskId={task.id}
+        taskCustomFields={task.custom_fields?.find((i) => i.id === fieldId)}
+        fieldId={fieldId}
+        fieldType="website"
+      />
+    ),
     assignees: (
       <Assignee
         task={task as ImyTaskData}
         itemId={task.id}
         option={`${task.id !== '0' ? EntityType.task : 'getTeamId'}`}
+      />
+    ),
+    checkbox: (
+      <CheckboxField
+        taskId={task.id}
+        taskCustomFields={task.custom_fields?.find((i) => i.id === fieldId)}
+        fieldId={fieldId}
       />
     )
   };
@@ -152,11 +168,11 @@ export function Col({ value, field, fieldId, task, customFields, ...props }: Col
           height:
             task.id == '0'
               ? '64px'
-              : singleLineView && !CompactView
+              : saveSettingOnline?.singleLineView && !saveSettingOnline?.CompactView
               ? '42px'
-              : CompactView && singleLineView
+              : saveSettingOnline?.CompactView && saveSettingOnline?.singleLineView
               ? '32px'
-              : !singleLineView && CompactView && task.name.length < 30
+              : !saveSettingOnline?.singleLineView && saveSettingOnline?.CompactView && task.name.length < 30
               ? '32px'
               : ''
         }}

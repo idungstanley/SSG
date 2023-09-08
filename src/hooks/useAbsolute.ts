@@ -16,9 +16,11 @@ export interface Cords {
  */
 export function useAbsolute<T>(
   update: T,
-  blockHeight: number
+  blockHeight: number,
+  toolTip?: boolean
 ): { cords: Cords; relativeRef: React.RefObject<HTMLDivElement> } {
   const RELATIVE_HEIGHT = 20;
+  const RELATIVE_SIZE = 50;
 
   const relativeRef = useRef<HTMLDivElement>(null);
 
@@ -32,16 +34,17 @@ export function useAbsolute<T>(
     if (relativeRef.current) {
       const { x, y } = relativeRef.current.getBoundingClientRect();
 
-      const xCord = x + RELATIVE_HEIGHT;
-      const yCord = isOverflowBottom(y)
+      const xCord = toolTip ? x - RELATIVE_SIZE : x + RELATIVE_HEIGHT;
+      const yCord = toolTip
+        ? y - blockHeight - RELATIVE_SIZE
+        : isOverflowBottom(y)
         ? window.innerHeight - blockHeight - RELATIVE_HEIGHT
         : isOverflowTop(y)
         ? RELATIVE_HEIGHT
         : y + RELATIVE_HEIGHT;
-
       setCords({ top: yCord, left: xCord });
     }
-  }, [update]);
+  }, [update, relativeRef, cords]);
 
   return { relativeRef, cords };
 }

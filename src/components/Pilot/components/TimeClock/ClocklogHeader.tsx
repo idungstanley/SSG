@@ -34,7 +34,7 @@ export function ClockLogHeader({ handleShowLogs, showLogs, handleFilters, meMode
       <div className="flex space-x-1 items-center">
         <label
           htmlFor="time_logs"
-          className="bg-alsoit-gray-100 text-alsoit-gray-50 p-1.5 rounded-l-sm flex gap-2 items-center uppercase text-alsoit-text-md font-semibold h-8 w-32"
+          className="bg-alsoit-gray-75 text-alsoit-gray-50 p-1.5 rounded-l-sm flex gap-2 items-center uppercase text-alsoit-text-md font-semibold h-8 w-32"
         >
           <div className="cursor-pointer">
             <CollapseIcon color="#A854F7" active={showLogs} onToggle={() => handleShowLogs()} hoverBg="white" />
@@ -61,7 +61,13 @@ export function ClockLogHeader({ handleShowLogs, showLogs, handleFilters, meMode
           onClick={() => setAssigneeDropDown(!assigneedropdown)}
         >
           <AssigneeIcon active={false} />
-          {assigneedropdown && <TimeLogAssigneeDropDown teamMembers={teamMembersArr} />}
+          {assigneedropdown && (
+            <TimeLogAssigneeDropDown
+              handleFilters={handleFilters}
+              teamMembers={teamMembersArr}
+              closeModal={setAssigneeDropDown}
+            />
+          )}
         </div>
         <div className="p-1 rounded-sm bg-alsoit-gray-50">
           <SearchIcon />

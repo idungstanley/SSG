@@ -21,7 +21,7 @@ import {
 import { DEFAULT_FILTERS_OPTION } from '../../components/TasksHeader/ui/Filter/config/filterConfig';
 import { ITeamMembersAndGroup } from '../settings/teamMembersAndGroups.interfaces';
 import { Header } from '../../components/Pilot/components/TimeClock/ClockLog';
-import { isArrayOfStrings } from '../../utils/typeGuards';
+import { ItaskViews } from '../hubs/hubs.interfaces';
 
 export interface ICustomField {
   id: string;
@@ -124,6 +124,10 @@ interface entityForCustom {
   id: string | undefined;
   type: string | undefined;
 }
+
+export const TWO_SUBTASKS_LEVELS = 'two_levels';
+export const THREE_SUBTASKS_LEVELS = 'three_levels';
+
 interface TaskState {
   tasks: Record<string, ITaskFullList[]>;
   subtasks: Record<string, ITaskFullList[]>;
@@ -136,6 +140,9 @@ interface TaskState {
   hideTask: listColumnProps[];
   currentTaskId: string | null;
   selectedTasksArray: string[];
+  saveSettingLocal: { [key: string]: boolean } | null;
+  saveSettingList: ItaskViews | undefined;
+  saveSettingOnline: { [key: string]: boolean } | null;
   comfortableView: boolean;
   comfortableViewWrap: boolean;
   verticalGrid: boolean;
@@ -143,11 +150,15 @@ interface TaskState {
   showNewTaskId: string;
   singleLineView: boolean;
   toggleAllSubtask: boolean;
+  separateSubtasksMode: boolean;
   CompactView: boolean;
   taskUpperCase: boolean;
   verticalGridlinesTask: boolean;
-  splitSubTask: boolean;
+  splitSubTaskState: boolean;
+  splitSubTaskLevels: string;
   CompactViewWrap: boolean;
+  triggerSaveSettings: boolean;
+  triggerSaveSettingsModal: boolean;
   meMode: boolean;
   showTaskNavigation: boolean;
   addNewTaskItem: boolean;
@@ -177,7 +188,7 @@ interface TaskState {
   sortArr: string[];
   timeSortStatus: boolean;
   timeArr: string[];
-  timeSortArr: string[];
+  timeSortArr: SortOption[];
   timeLogColumnData: Header[];
   screenRecording: 'idle' | 'recording';
   recorder: RecordRTC | null;
@@ -225,13 +236,20 @@ const initialState: TaskState = {
   showNewTaskField: false,
   meMode: false,
   showNewTaskId: '',
-  singleLineView: true,
+  singleLineView: false,
+  saveSettingLocal: null,
+  saveSettingList: undefined,
+  saveSettingOnline: null,
   selectedTasksArray: [],
   verticalGrid: false,
   taskUpperCase: false,
+  triggerSaveSettings: false,
+  triggerSaveSettingsModal: false,
   toggleAllSubtask: false,
-  verticalGridlinesTask: true,
-  splitSubTask: false,
+  verticalGridlinesTask: false,
+  splitSubTaskState: false,
+  splitSubTaskLevels: TWO_SUBTASKS_LEVELS,
+  separateSubtasksMode: false,
   CompactView: false,
   CompactViewWrap: false,
   showTaskNavigation: false,
@@ -334,6 +352,15 @@ export const taskSlice = createSlice({
     setSearchValue(state, action: PayloadAction<string>) {
       state.searchValue = action.payload;
     },
+    setSaveSettingLocal(state, action: PayloadAction<{ [key: string]: boolean } | null>) {
+      state.saveSettingLocal = action.payload;
+    },
+    setSaveSettingList(state, action: PayloadAction<ItaskViews | undefined>) {
+      state.saveSettingList = action.payload;
+    },
+    setSaveSettingOnline(state, action: PayloadAction<{ [key: string]: boolean } | null>) {
+      state.saveSettingOnline = action.payload;
+    },
     setSelectedIndex(state, action: PayloadAction<number | null>) {
       state.selectedIndex = action.payload;
     },
@@ -394,6 +421,12 @@ export const taskSlice = createSlice({
     getComfortableView(state, action: PayloadAction<boolean>) {
       state.comfortableView = action.payload;
     },
+    setTriggerSaveSettings(state, action: PayloadAction<boolean>) {
+      state.triggerSaveSettings = action.payload;
+    },
+    setTriggerSaveSettingsModal(state, action: PayloadAction<boolean>) {
+      state.triggerSaveSettingsModal = action.payload;
+    },
     setDragToBecomeSubTask(state, action: PayloadAction<boolean>) {
       state.dragToBecomeSubTask = action.payload;
     },
@@ -408,6 +441,11 @@ export const taskSlice = createSlice({
     },
     setToggleAllSubtask(state, action: PayloadAction<boolean>) {
       state.toggleAllSubtask = action.payload;
+      state.separateSubtasksMode = false;
+    },
+    setSeparateSubtasksMode(state, action: PayloadAction<boolean>) {
+      state.separateSubtasksMode = action.payload;
+      state.toggleAllSubtask = false;
     },
     setShowNewTaskField(state, action: PayloadAction<boolean>) {
       state.showNewTaskField = action.payload;
@@ -422,7 +460,10 @@ export const taskSlice = createSlice({
       state.verticalGridlinesTask = action.payload;
     },
     getSplitSubTask(state, action: PayloadAction<boolean>) {
-      state.splitSubTask = action.payload;
+      state.splitSubTaskState = action.payload;
+    },
+    getSplitSubTaskLevels(state, action: PayloadAction<string>) {
+      state.splitSubTaskLevels = action.payload;
     },
     setSelectedTasksArray(state, action: PayloadAction<string[]>) {
       state.selectedTasksArray = action.payload;
@@ -510,10 +551,8 @@ export const taskSlice = createSlice({
     setTimeArr(state, action: PayloadAction<string[]>) {
       state.timeArr = action.payload;
     },
-    setTimeSortArr(state, action: PayloadAction<string[] | Header[]>) {
-      isArrayOfStrings(action.payload)
-        ? (state.timeSortArr = action.payload)
-        : (state.timeLogColumnData = action.payload);
+    setTimeSortArr(state, action: PayloadAction<SortOption[]>) {
+      state.timeSortArr = action.payload;
     },
     setScreenRecording(state, action: PayloadAction<'idle' | 'recording'>) {
       state.screenRecording = action.payload;
@@ -585,11 +624,14 @@ export const {
   getTaskUpperCase,
   getVerticalGridlinesTask,
   getSplitSubTask,
+  getSplitSubTaskLevels,
   getCompactView,
   getCompactViewWrap,
   setSelectedIndex,
   setSelectedIndexStatus,
   setSelectedListIds,
+  setSaveSettingLocal,
+  setSaveSettingList,
   setSelectedTaskParentId,
   setSelectedTaskType,
   setMeMode,
@@ -600,15 +642,19 @@ export const {
   setCurrentTaskId,
   setDefaultSubtaskId,
   setToggleAllSubtask,
+  setSeparateSubtasksMode,
   setSelectedTasksArray,
   setAddNewTaskItem,
   setCloseTaskListView,
+  setTriggerSaveSettings,
   setToggleAssignCurrentTaskId,
   setCurrentParentTaskId,
   setGetSubTaskId,
   hideTaskColumns,
   setSubtaskDefaultStatusId,
   setUpdateEntries,
+  setTriggerSaveSettingsModal,
+  setSaveSettingOnline,
   setUpdateStatusModalId,
   setCurrentTaskStatusId,
   setCurrentTaskPriorityId,

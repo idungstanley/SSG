@@ -16,6 +16,7 @@ import { useAppSelector } from '../../../../app/hooks';
 interface RowProps {
   task: Task;
   columns: Column[];
+  listId: string;
   paddingLeft?: number;
   parentId?: string;
   isListParent: boolean;
@@ -23,7 +24,16 @@ interface RowProps {
   handleClose?: () => void | void;
 }
 
-export function AddSubTask({ task, columns, paddingLeft, parentId, task_status, isListParent, handleClose }: RowProps) {
+export function AddSubTask({
+  task,
+  columns,
+  listId,
+  paddingLeft,
+  parentId,
+  task_status,
+  isListParent,
+  handleClose
+}: RowProps) {
   const [showNewTaskField] = useState(false);
   const otherColumns = columns.slice(1);
   const [showSubTasks, setShowSubTasks] = useState(false);
@@ -74,6 +84,7 @@ export function AddSubTask({ task, columns, paddingLeft, parentId, task_status, 
               />
             </span>
           }
+          isLastSubtaskLevel={false}
         >
           {/* actions */}
           <div className="absolute opacity-0 group-hover:opacity-100 top-0 bottom-0 right-0 flex space-x-1 items-center justify-center">
@@ -110,7 +121,9 @@ export function AddSubTask({ task, columns, paddingLeft, parentId, task_status, 
         />
       ) : null}
 
-      {showSubTasks ? <SubTasks paddingLeft={DEFAULT_LEFT_PADDING} parentId={task.id} columns={columns} /> : null}
+      {showSubTasks ? (
+        <SubTasks listId={listId} paddingLeft={DEFAULT_LEFT_PADDING} parentId={task.id} columns={columns} level={0} />
+      ) : null}
     </>
   );
 }

@@ -1,6 +1,7 @@
-import { ReactElement, ReactNode, useEffect, useRef, useState } from 'react';
+import { ReactElement, ReactNode, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useAppSelector } from '../../app/hooks';
 import { useAbsolute } from '../../hooks/useAbsolute';
+import { taskCountFields } from '../../features/list/list.interfaces';
 
 interface TooltipProps {
   children: ReactNode;
@@ -9,7 +10,7 @@ interface TooltipProps {
   right?: string;
   zIndex?: string;
   bottom?: string;
-  dependency?: number;
+  dependency?: taskCountFields[];
 }
 
 export default function InteractiveTooltip({
@@ -21,24 +22,14 @@ export default function InteractiveTooltip({
   zIndex = 'z-50',
   dependency
 }: TooltipProps) {
-  const tooltipTimeout = useRef<number | undefined>(undefined);
-
   const [isTooltipOpen, setIsTooltipOpen] = useState<boolean>(false);
 
   const handleOpenTooltip = () => {
-    // Clear any existing timeout to avoid premature closure
-    if (tooltipTimeout.current) clearTimeout(tooltipTimeout.current);
     setIsTooltipOpen(true);
   };
 
   const handleCloseTooltip = () => {
-    // Delay the closure to give time for interaction
-    tooltipTimeout.current = window.setTimeout(() => {
-      setIsTooltipOpen(false);
-    }, 200); // Adjust this delay time as needed (e.g., 200ms)
     setIsTooltipOpen(false);
-    // Clear the timeout if the tooltip is reopened before the delay completes
-    clearTimeout(tooltipTimeout.current);
   };
 
   const handleTooltipClick = (e: React.MouseEvent) => {
@@ -48,11 +39,17 @@ export default function InteractiveTooltip({
   const [elementHeight, setElementHeight] = useState(0);
   const elementRef = useRef<HTMLDivElement | null>(null);
 
+  useLayoutEffect(() => {
+    if (elementRef.current) {
+      const height = elementRef.current.clientHeight;
+      setElementHeight(height);
+    }
+  }, [dependency]);
+
   useEffect(() => {
     const calculateHeight = () => {
       if (elementRef.current) {
-        const rect = elementRef.current.getBoundingClientRect();
-        const height = rect.height;
+        const height = elementRef.current.clientHeight;
         setElementHeight(height);
       }
     };
@@ -65,29 +62,27 @@ export default function InteractiveTooltip({
     return () => {
       window.removeEventListener('resize', calculateHeight);
     };
-  }, [elementRef, dependency]);
+  }, [dependency]);
 
   const { updateCords } = useAppSelector((state) => state.task);
-  const { cords, relativeRef } = useAbsolute(updateCords, elementHeight);
+  const { cords, relativeRef } = useAbsolute(updateCords, elementHeight, true);
 
   return (
-    <div className="relative inline-block" ref={relativeRef}>
-      <div className="rounded cursor-pointer" onMouseEnter={handleOpenTooltip}>
-        {children}
-      </div>
+    <div
+      className="relative inline-block cursor-pointer"
+      ref={relativeRef}
+      onMouseEnter={handleOpenTooltip}
+      onMouseLeave={handleCloseTooltip}
+    >
+      <div className="rounded cursor-pointer">{children}</div>
       {isTooltipOpen && (
         <div
           style={{ ...cords }}
           className={`fixed w-32 transition-all ease-out delay-300 duration-100 ${zIndex} ${top} ${right} ${bottom}`}
           onClick={(e) => handleTooltipClick(e)}
-          onMouseLeave={handleCloseTooltip}
-          onMouseEnter={() => clearTimeout(tooltipTimeout?.current)}
+          ref={elementRef}
         >
-          <div
-            ref={elementRef}
-            className="w-auto p-2 text-white rounded shadow-lg"
-            style={{ backgroundColor: '#424242' }}
-          >
+          <div className="w-auto p-2 text-white rounded shadow-lg" style={{ backgroundColor: '#424242' }}>
             {content}
           </div>
           <div

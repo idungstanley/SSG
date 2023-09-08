@@ -1,5 +1,5 @@
 import dayjs, { Dayjs } from 'dayjs';
-import { teamMember } from '../../pages/workspace/tasks/timeclock/entryLists/EntryList';
+import { teamGroups, teamMember } from '../../pages/workspace/tasks/timeclock/entryLists/EntryList';
 import { ICustomField, ImyTaskData } from './taskSlice';
 import { ITeamMembersAndGroup } from '../settings/teamMembersAndGroups.interfaces';
 import { Header } from '../../components/Pilot/components/TimeClock/ClockLog';
@@ -207,6 +207,7 @@ export interface ITimeEntriesRes {
     };
     filters: {
       team_members: teamMember[];
+      team_member_groups: teamGroups[];
     };
   };
 }
