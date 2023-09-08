@@ -1,6 +1,7 @@
 import requestNew from '../../app/requestNew';
 import {
   IFullTaskRes,
+  ITaskFullList,
   ITaskListRes,
   ITaskRes,
   ITimeEntriesRes,
@@ -38,10 +39,12 @@ import { EntityType } from '../../utils/EntityTypes/EntityType';
 import {
   taskAssignessUpdateManager,
   taskDateUpdateManager,
+  taskMoveManager,
   taskPriorityUpdateManager,
   taskStatusUpdateManager
 } from '../../managers/Task';
 import { ITeamMembersAndGroup } from '../settings/teamMembersAndGroups.interfaces';
+import { useDispatch } from 'react-redux';
 
 //edit a custom field
 export const UseEditCustomFieldService = (data: {
@@ -134,24 +137,31 @@ export const useGetUserSettingsData = ({ keys }: { keys: string }) => {
 };
 
 export const useMoveTask = () => {
+  const dispath = useDispatch();
   const queryClient = useQueryClient();
   const { hubId, walletId, listId } = useParams();
 
   const id = hubId ?? walletId ?? listId;
-  const type = hubId ? EntityType.hub : walletId ? EntityType.wallet : EntityType.list;
 
-  const { sortAbleArr } = useAppSelector((state) => state.task);
-  const sortArrUpdate = sortAbleArr.length <= 0 ? null : sortAbleArr;
-
-  const { filters } = generateFilters();
+  const { draggableTask, dragOverTask } = useAppSelector((state) => state.list);
+  const { tasks, subtasks } = useAppSelector((state) => state.task);
 
   return useMutation(moveTask, {
     onSuccess: () => {
+      const { updatedTasks, updatedSubtasks } = taskMoveManager(
+        draggableTask as ITaskFullList,
+        dragOverTask as ITaskFullList,
+        tasks,
+        subtasks
+      );
+      if (!draggableTask?.parent_id) {
+        dispath(setTasks(updatedTasks));
+      } else {
+        dispath(setSubtasks(updatedSubtasks));
+      }
       queryClient.invalidateQueries(['lists']);
-      queryClient.invalidateQueries(['task', { listId, sortArrUpdate, filters }]);
-      queryClient.invalidateQueries(['task', id, type]);
+      queryClient.invalidateQueries(['task']);
       queryClient.invalidateQueries(['retrieve', id ?? 'root', 'tree']);
-      queryClient.invalidateQueries(['retrieve', id ?? 'root', undefined]);
     }
   });
 };
@@ -589,7 +599,11 @@ export const useSubTasks = (parentId: string) =>
           parent_id: parentId
         }
       }),
-    { enabled: !!parentId, select: (res) => res.data.tasks }
+    {
+      enabled: !!parentId,
+      select: (res) => res.data.tasks,
+      cacheTime: 0
+    }
   );
 
 export const createTimeEntriesService = (data: { queryKey: (string | undefined)[] }) => {

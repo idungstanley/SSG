@@ -94,13 +94,6 @@ export function StickyCol({
 
   const inputRef = useRef<HTMLInputElement | null>(null);
 
-  const { attributes, listeners, setNodeRef } = useDraggable({
-    id: task?.id as UniqueIdentifier,
-    data: {
-      isTask: true
-    }
-  });
-
   const onClickTask = () => {
     if (task.id !== '0') {
       hubId
@@ -248,10 +241,19 @@ export function StickyCol({
     setIsChecked(isChecked);
   };
 
+  const { attributes, listeners, setNodeRef } = useDraggable({
+    id: task?.id as UniqueIdentifier,
+    data: {
+      isTask: true,
+      movingTask: task
+    }
+  });
+
   const { isOver, setNodeRef: droppabbleRef } = useDroppable({
     id: task.id,
     data: {
-      isOverTask: true
+      isOverTask: true,
+      overTask: task
     }
   });
 

@@ -50,6 +50,7 @@ export const taskStatusUpdateManager = (
 
   return tasks;
 };
+
 export const taskDateUpdateManager = (
   taskId: string,
   listIds: string[],
@@ -120,4 +121,76 @@ export const updateCustomFieldsManager = (tasks: Record<string, ITaskFullList[]>
   });
 
   return updatedTasks;
+};
+
+export const taskMoveManager = (
+  draggableTask: ITaskFullList,
+  dragOverTask: ITaskFullList,
+  tasks: Record<string, ITaskFullList[]>,
+  subtasks: Record<string, ITaskFullList[]>
+) => {
+  const updatedTasks = { ...tasks };
+  const updatedSubtasks = { ...subtasks };
+
+  console.log('dragOverTask', dragOverTask);
+
+  // remove task from old place logic
+  if (draggableTask.parent_id) {
+    // search in subtasks
+    const filteredArray = updatedSubtasks[draggableTask.parent_id].filter((task) => {
+      task.id !== draggableTask.id;
+    });
+    if (filteredArray.length) {
+      // if array is not empty update key
+      updatedSubtasks[draggableTask.parent_id] = filteredArray;
+    } else {
+      // if array is empty remove key
+      delete updatedSubtasks[draggableTask.parent_id];
+    }
+  } else {
+    // search in tasks
+    const filteredArray: ITaskFullList[] = [];
+    updatedTasks[draggableTask.list_id].forEach((task) => {
+      if (task.id !== draggableTask.id) {
+        filteredArray.push(task);
+      }
+    });
+    if (filteredArray.length) {
+      // if array is not empty update key
+      updatedTasks[draggableTask.list_id] = filteredArray;
+    } else {
+      // if array is empty remove key
+      delete updatedTasks[draggableTask.list_id];
+    }
+  }
+
+  // add task on new place logic
+  if (updatedSubtasks[dragOverTask.id]) {
+    // if key was in store add new
+    updatedSubtasks[dragOverTask.id] = [
+      ...updatedSubtasks[dragOverTask.id],
+      {
+        ...draggableTask,
+        parent_id: dragOverTask.id,
+        list_id: dragOverTask.list_id
+      }
+    ];
+  } else {
+    // else create a new one
+    updatedSubtasks[dragOverTask.id] = [
+      {
+        ...draggableTask,
+        parent_id: dragOverTask.id,
+        list_id: dragOverTask.list_id
+      }
+    ];
+  }
+
+  console.log('updatedTasks', updatedTasks);
+  console.log('updatedSubtasks', updatedSubtasks);
+
+  return {
+    updatedTasks,
+    updatedSubtasks
+  };
 };

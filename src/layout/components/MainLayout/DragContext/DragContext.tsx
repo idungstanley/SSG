@@ -1,7 +1,12 @@
 import { ReactNode } from 'react';
 import { DndContext, DragEndEvent, DragOverEvent, DragStartEvent, UniqueIdentifier } from '@dnd-kit/core';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
-import { setDragOverItem, setDraggableItem } from '../../../../features/list/listSlice';
+import {
+  setDragOverItem,
+  setDragOverTask,
+  setDraggableItem,
+  setDraggableTask
+} from '../../../../features/list/listSlice';
 import { useMoveTask } from '../../../../features/task/taskService';
 import { useQueryClient } from '@tanstack/react-query';
 import { generateFilters } from '../../../../components/TasksHeader/lib/generateFilters';
@@ -12,6 +17,7 @@ import { useMoveHubsService } from '../../../../features/hubs/hubService';
 import { useMoveWalletsService } from '../../../../features/wallet/walletService';
 import { EntityType } from '../../../../utils/EntityTypes/EntityType';
 import { setDragToBecomeSubTask } from '../../../../features/task/taskSlice';
+import { ITaskFullList } from '../../../../features/task/interface.tasks';
 
 interface DragContextProps {
   children: ReactNode;
@@ -40,6 +46,11 @@ export default function DragContext({ children }: DragContextProps) {
   // set active task id to store
   const onDragStart = (e: DragStartEvent) => {
     const id = e.active.id as string;
+    if (e.active?.data.current?.isTask) {
+      const movingTask = e.active?.data.current?.movingTask as ITaskFullList;
+      dispatch(setDraggableTask(movingTask));
+    }
+
     dispatch(setDraggableItem(id));
     dispatch(setDragToBecomeSubTask(true));
   };
@@ -163,6 +174,10 @@ export default function DragContext({ children }: DragContextProps) {
   const onDragOver = (e: DragOverEvent) => {
     const id = e.over?.id as string;
     dispatch(setDragOverItem(id));
+
+    if (e.over?.data.current?.isOverTask) {
+      dispatch(setDragOverTask(e.over?.data.current?.overTask as ITaskFullList));
+    }
 
     // Determine if the task should become a subtask
     if (e.delta?.x >= minDistanceToMakeSubtask) {
