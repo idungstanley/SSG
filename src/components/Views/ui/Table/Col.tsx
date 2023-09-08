@@ -137,7 +137,13 @@ export function Col({ value, field, fieldId, task, customFields, ...props }: Col
         fieldType="website"
       />
     ),
-    phone: <PhoneField />,
+    phone: (
+      <PhoneField
+        taskId={task.id}
+        taskCustomFields={task.custom_fields?.find((i) => i.id === fieldId)}
+        fieldId={fieldId}
+      />
+    ),
     assignees: (
       <Assignee
         task={task as ImyTaskData}
