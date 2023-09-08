@@ -15,7 +15,7 @@ import { useSortable } from '@dnd-kit/sortable';
 import { BoardSectionsType } from '../../utils/StatusManagement/Types';
 import { CSS } from '@dnd-kit/utilities';
 import { useAppSelector } from '../../app/hooks';
-import { groupStylesMapping } from './PilotTabs/CustomStatus';
+import { groupStylesMapping } from './StatusManagement';
 
 interface StatusBodyProps {
   item: StatusProps;
@@ -40,11 +40,6 @@ export default function StatusBodyTemplate({ item, setStatusTypesState }: Status
     id: item.name,
     data: { item }
   });
-
-  // const style = {
-  //   transform: CSS.Transform.toString(transform),
-  //   transition
-  // };
 
   const style = {
     transform: CSS.Transform.toString(transform),
@@ -159,7 +154,7 @@ export default function StatusBodyTemplate({ item, setStatusTypesState }: Status
   return (
     <span ref={setNodeRef}>
       <span
-        className="flex justify-items-start px-1 rounded cursor-pointer h-7 items-center border-alsoit-gray-75 border bg-white"
+        className="flex items-center px-1 bg-white border rounded cursor-pointer justify-items-start h-7 border-alsoit-gray-75"
         style={style}
       >
         {item.type !== 'closed' && item.position !== 0 && (
@@ -173,7 +168,7 @@ export default function StatusBodyTemplate({ item, setStatusTypesState }: Status
         <span
           contentEditable={editableContent}
           style={{ color: item.color as string }}
-          className="uppercase truncate flex-grow"
+          className="flex-grow uppercase truncate"
           onClick={() => handleToggleEditableContent()}
           onKeyDown={(e) => (e.key === 'Enter' ? handleSaveEditableContent(e) : null)}
           ref={inputRef}
