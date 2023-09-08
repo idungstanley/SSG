@@ -132,8 +132,6 @@ export const taskMoveManager = (
   const updatedTasks = { ...tasks };
   const updatedSubtasks = { ...subtasks };
 
-  console.log('dragOverTask', dragOverTask);
-
   // remove task from old place logic
   if (draggableTask.parent_id) {
     // search in subtasks
@@ -185,9 +183,6 @@ export const taskMoveManager = (
       }
     ];
   }
-
-  console.log('updatedTasks', updatedTasks);
-  console.log('updatedSubtasks', updatedSubtasks);
 
   return {
     updatedTasks,
