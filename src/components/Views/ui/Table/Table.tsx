@@ -21,6 +21,7 @@ import { Row } from './Row';
 import { UseGetListDetails } from '../../../../features/list/listService';
 import { IField, ITask_statuses } from '../../../../features/list/list.interfaces';
 import { IListColor } from '../List/List';
+import { SeparateSubtasks } from './SeparateSubtasks';
 
 interface TableProps {
   heads: listColumnProps[];
@@ -35,7 +36,12 @@ export function Table({ heads, data, label, listName, customFields, ListColor }:
   const dispatch = useAppDispatch();
 
   const { draggableItemId } = useAppSelector((state) => state.list);
-  const { statusId, defaultSubtaskListId, splitSubTask: splitSubTaskMode } = useAppSelector((state) => state.task);
+  const {
+    statusId,
+    defaultSubtaskListId,
+    splitSubTaskState: splitSubTaskMode,
+    separateSubtasksMode
+  } = useAppSelector((state) => state.task);
 
   const [listId, setListId] = useState<string>('');
   const [tableHeight, setTableHeight] = useState<string | number>('auto');
@@ -228,18 +234,24 @@ export function Table({ heads, data, label, listName, customFields, ListColor }:
               {dataSpread.length ? (
                 dataSpread.map((task, index) =>
                   'tags' in task ? (
-                    <Row
-                      columns={columns}
-                      task={task as ITaskFullList}
-                      key={task.id}
-                      taskIndex={index}
-                      isListParent={true}
-                      parentId={listId}
-                      task_status={statusId}
-                      handleClose={handleClose}
-                      customFields={customFields}
-                      level={0}
-                    />
+                    <>
+                      <Row
+                        columns={columns}
+                        task={task as ITaskFullList}
+                        key={task.id}
+                        listId={task.list_id as string}
+                        taskIndex={index}
+                        isListParent={true}
+                        parentId={listId}
+                        task_status={statusId}
+                        handleClose={handleClose}
+                        customFields={customFields}
+                        level={0}
+                      />
+                      {separateSubtasksMode ? (
+                        <SeparateSubtasks listId={task.list_id as string} parentId={task.id} />
+                      ) : null}
+                    </>
                   ) : null
                 )
               ) : (

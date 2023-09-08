@@ -15,6 +15,8 @@ import { findCurrentHub } from '../../../../managers/Hub';
 import { ScrollableHorizontalListsContainer } from '../../../ScrollableContainer/ScrollableHorizontalListsContainer';
 import { useScroll } from '../../../../hooks/useScroll';
 import {
+  THREE_SUBTASKS_LEVELS,
+  TWO_SUBTASKS_LEVELS,
   setShowNewTaskField,
   setShowNewTaskId,
   setSubtasks,
@@ -27,14 +29,15 @@ interface ISubtasksTableProps {
   data: Task;
   heads: listColumnProps[];
   customFields?: IField[];
+  listId: string;
   paddingLeft?: number;
   level: number;
 }
 
-export function SubtasksTable({ data, heads, customFields, paddingLeft = 0, level }: ISubtasksTableProps) {
+export function SubtasksTable({ data, heads, customFields, listId, paddingLeft = 0, level }: ISubtasksTableProps) {
   const dispatch = useAppDispatch();
 
-  const { statusId, subtasks, subtasksfilters } = useAppSelector((state) => state.task);
+  const { statusId, subtasks, subtasksfilters, splitSubTaskLevels } = useAppSelector((state) => state.task);
   const { parentHubExt, hub } = useAppSelector((state) => state.hub);
 
   const [filteredSubtasks, setFilteredSubTasks] = useState<ITaskFullList[]>([]);
@@ -49,7 +52,13 @@ export function SubtasksTable({ data, heads, customFields, paddingLeft = 0, leve
 
   useEffect(() => {
     if (tasks?.length) {
-      dispatch(setSubtasks({ ...subtasks, [data.id]: tasks as ITaskFullList[] }));
+      const tasksWithListId = tasks.map((item) => {
+        return {
+          ...item,
+          list_id: listId
+        };
+      });
+      dispatch(setSubtasks({ ...subtasks, [data.id]: tasksWithListId as ITaskFullList[] }));
     }
   }, [tasks]);
 
@@ -78,6 +87,15 @@ export function SubtasksTable({ data, heads, customFields, paddingLeft = 0, leve
   };
 
   const onScroll = useScroll(() => dispatch(setUpdateCords()));
+
+  const isShowNewLevel = () => {
+    if (splitSubTaskLevels === TWO_SUBTASKS_LEVELS && level === 1) {
+      return false;
+    } else if (splitSubTaskLevels === THREE_SUBTASKS_LEVELS && level === 2) {
+      return false;
+    }
+    return true;
+  };
 
   return tasks && tasks.length ? (
     <>
@@ -144,13 +162,14 @@ export function SubtasksTable({ data, heads, customFields, paddingLeft = 0, leve
                               task={task as ITaskFullList}
                               key={task.id}
                               taskIndex={index}
+                              listId={listId}
                               isListParent={true}
                               paddingLeft={paddingLeft}
                               parentId={task.id}
                               task_status={statusId}
                               // handleClose={handleClose}
                               customFields={customFields}
-                              isSplitSubtask={true}
+                              isSplitSubtask={isShowNewLevel()}
                               level={level}
                             />
                           ) : null
@@ -179,16 +198,19 @@ export function SubtasksTable({ data, heads, customFields, paddingLeft = 0, leve
         </ScrollableHorizontalListsContainer>
       </div>
 
-      {tasks.map((item) => (
-        <SubtasksTable
-          key={item.id}
-          data={item}
-          heads={heads}
-          paddingLeft={paddingLeft + DEFAULT_LEFT_PADDING}
-          customFields={customFields}
-          level={level + 1}
-        />
-      ))}
+      {isShowNewLevel()
+        ? tasks.map((item) => (
+            <SubtasksTable
+              key={item.id}
+              data={item}
+              heads={heads}
+              listId={listId}
+              paddingLeft={paddingLeft + DEFAULT_LEFT_PADDING}
+              customFields={customFields}
+              level={level + 1}
+            />
+          ))
+        : null}
     </>
   ) : null;
 }

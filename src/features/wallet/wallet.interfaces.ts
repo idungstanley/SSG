@@ -1,5 +1,5 @@
 import { StatusProps } from '../../pages/workspace/hubs/components/ActiveTree/activetree.interfaces';
-import { IList } from '../hubs/hubs.interfaces';
+import { IList, ItaskViews } from '../hubs/hubs.interfaces';
 import { IField } from '../list/list.interfaces';
 
 export interface IWallet {
@@ -36,6 +36,7 @@ export interface IWalletDetails {
   archived_at: null;
   deleted_at: null;
   description: null;
+  task_views?: ItaskViews[];
   directory_items: [];
   checklists: [];
   custom_fields: IField[];

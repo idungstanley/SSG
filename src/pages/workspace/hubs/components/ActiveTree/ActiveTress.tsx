@@ -14,6 +14,7 @@ import {
   findFirstActiveEntityExt
 } from '../../../../../app/helpers';
 import { setActiveItem, setOpenedEntitiesIds } from '../../../../../features/workspace/workspaceSlice';
+import { IHub } from '../../../../../features/hubs/hubs.interfaces';
 
 export default function ActiveTress() {
   const dispatch = useAppDispatch();
@@ -28,10 +29,10 @@ export default function ActiveTress() {
   const [activeEntityExt, setActiveEntityExt] = useState<{ id: string; type: string }>();
 
   const { data: allHubs } = useGetAllHubs();
-  const { data: allHubTree } = useGetActiveHubChildren({ hub_id: hubId ?? null });
+  const { data: allHubTree } = useGetActiveHubChildren({ hub_id: hubId ?? null, hubs: allHubs?.hubs as IHub[] });
 
   useEffect(() => {
-    if (allHubTree && allHubs && hubs.length) {
+    if (allHubTree?.tree.length && allHubs && hubs.length) {
       const currentHubId = hubId || allHubTree.tree[0].parent_id;
       const currentItem = hubs.find((item) => item.id === currentHubId);
       if (!currentItem?.children) {
@@ -47,7 +48,7 @@ export default function ActiveTress() {
   }, [activeEntityExt?.id, allHubTree]);
 
   useEffect(() => {
-    if (allHubTree && !parentHubExt.id) {
+    if (allHubTree?.tree.length && !parentHubExt.id) {
       const newParentHubId = allHubTree.tree[0].parent_id;
       setActiveEntityExt(findFirstActiveEntityExt(location));
       dispatch(setParentHubExt({ id: newParentHubId, type: EntityType.hub }));

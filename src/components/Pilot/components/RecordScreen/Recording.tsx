@@ -35,6 +35,7 @@ export default function Recording() {
   const stopRecording = () => {
     handleStopStream({ stream, recorder });
   };
+
   useEffect(() => {
     if (screenRecording !== 'recording') {
       dispatch(
@@ -50,8 +51,12 @@ export default function Recording() {
       {screenRecording === 'recording' ? (
         <>
           <div className="screenRecording flex space-x-2">
-            <button onClick={() => handleToggleMute()} className="flex space-x-2 items-center justify-center">
-              {!isMuted ? <IoVolumeMute className="w-7 h-7" /> : <IoVolumeHigh className="w-7 h-7" />}
+            <button onClick={() => handleToggleMute()} className="flex items-center justify-center">
+              {!isMuted ? (
+                <IoVolumeMute className="w-7 h-7 text-alsoit-purple-300" />
+              ) : (
+                <IoVolumeHigh className="w-7 h-7 text-alsoit-purple-300" />
+              )}
             </button>
             <button onClick={stopRecording} className="flex space-x-2 items-center justify-center">
               <IoStopCircleSharp className="w-7 h-7" />
@@ -60,14 +65,21 @@ export default function Recording() {
           </div>
         </>
       ) : (
-        <>
+        <div className="flex items-center justify-center">
+          <button onClick={() => handleToggleMute()} className="flex items-center justify-center">
+            {!isMuted ? (
+              <IoVolumeMute className="w-7 h-7 mt-2 text-alsoit-purple-300" />
+            ) : (
+              <IoVolumeHigh className="w-7 h-7 mt-2 text-alsoit-purple-300" />
+            )}
+          </button>
           <div className="screenRecording flex flex-col">
-            <button onClick={startRecording} className="flex space-x-2 items-center justify-center">
+            <button onClick={startRecording} className="flex">
               <BsFillRecord2Fill className="w-7 h-7" />
               Start Recording
             </button>
           </div>
-        </>
+        </div>
       )}
     </div>
   );

@@ -23,6 +23,7 @@ export const MAX_SUBTASKS_LEVEL = 10;
 interface RowProps {
   task: Task;
   taskIndex?: number;
+  listId: string;
   columns: Column[];
   paddingLeft?: number;
   parentId?: string;
@@ -37,6 +38,7 @@ interface RowProps {
 export function Row({
   task,
   columns,
+  listId,
   taskIndex,
   paddingLeft = 0,
   parentId,
@@ -49,7 +51,9 @@ export function Row({
 }: RowProps) {
   const dispatch = useAppDispatch();
 
-  const { showNewTaskField, showNewTaskId, toggleAllSubtask, splitSubTask } = useAppSelector((state) => state.task);
+  const { showNewTaskField, showNewTaskId, toggleAllSubtask, splitSubTaskState } = useAppSelector(
+    (state) => state.task
+  );
 
   const [showSubTasks, setShowSubTasks] = useState(toggleAllSubtask);
 
@@ -210,17 +214,19 @@ export function Row({
         <AddSubTask
           task={newSubTask}
           columns={columns}
-          paddingLeft={splitSubTask ? 0 : DEFAULT_LEFT_PADDING + paddingLeft}
+          paddingLeft={splitSubTaskState ? 0 : DEFAULT_LEFT_PADDING + paddingLeft}
           isListParent={false}
-          parentId={splitSubTask ? (task.parent_id as string) : task.id}
+          listId={listId}
+          parentId={splitSubTaskState ? (task.parent_id as string) : task.id}
           task_status={task.status.id}
           handleClose={onCloseAddTaskFIeld}
         />
       ) : null}
 
-      {showSubTasks && !splitSubTask ? (
+      {showSubTasks && !isSplitSubtask ? (
         <SubTasks
           paddingLeft={DEFAULT_LEFT_PADDING + paddingLeft}
+          listId={listId}
           parentId={task.id}
           columns={columns}
           level={level + 1}
