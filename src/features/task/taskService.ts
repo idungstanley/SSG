@@ -27,7 +27,6 @@ import {
   setUpdateTimerDuration
 } from './taskSlice';
 import { UpdateTaskProps } from './interface.tasks';
-import { IWatchersRes } from '../general/watchers/watchers.interface';
 import RecordRTC from 'recordrtc';
 import { useUploadRecording } from '../workspace/workspaceService';
 import { useParams } from 'react-router-dom';
@@ -478,7 +477,7 @@ export const UseUpdateTaskViewSettings = ({
     {
       enabled: !!task_views_id && triggerSaveSettings,
       cacheTime: 0,
-      onSuccess: (data) => {
+      onSuccess: () => {
         dispatch(setTriggerSaveSettings(false));
         dispatch(setTriggerSaveSettingsModal(false));
       }

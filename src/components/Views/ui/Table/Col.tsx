@@ -40,8 +40,9 @@ export function Col({ value, field, fieldId, task, customFields, ...props }: Col
   const { taskId } = useParams();
 
   const { dragOverItemId, draggableItemId } = useAppSelector((state) => state.list);
-  const { singleLineView, dragToBecomeSubTask, verticalGrid, selectedTasksArray, CompactView, saveSettingOnline } =
-    useAppSelector((state) => state.task);
+  const { dragToBecomeSubTask, verticalGrid, selectedTasksArray, saveSettingOnline } = useAppSelector(
+    (state) => state.task
+  );
 
   const COL_BG = taskId === task.id ? ACTIVE_COL_BG : DEFAULT_COL_BG;
   const isSelected = selectedTasksArray.includes(task.id);

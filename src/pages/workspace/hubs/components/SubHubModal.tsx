@@ -8,7 +8,6 @@ import { useDispatch } from 'react-redux';
 import { setCreateSubHubSlideOverVisibility } from '../../../../features/general/slideOver/slideOverSlice';
 import { displayPrompt, setVisibility } from '../../../../features/general/prompt/promptSlice';
 import { EntityType } from '../../../../utils/EntityTypes/EntityType';
-// import { IHubDetailResErr } from '../../../../features/hubs/hubs.interfaces';
 
 function SubHubModal() {
   const queryClient = useQueryClient();

@@ -10,7 +10,6 @@ import {
   AiOutlineShareAlt,
   AiOutlineStar
 } from 'react-icons/ai';
-import Permissions from '../../../Pilot/components/Permissions/index';
 import { GrEdit } from 'react-icons/gr';
 import { HiOutlineDuplicate, HiOutlineInformationCircle, HiOutlineMail } from 'react-icons/hi';
 import { MdOutlineSendToMobile } from 'react-icons/md';

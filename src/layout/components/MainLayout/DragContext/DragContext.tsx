@@ -26,9 +26,11 @@ export default function DragContext({ children }: DragContextProps) {
 
   // needed for invalidation
   const { sortAbleArr, dragToBecomeSubTask } = useAppSelector((state) => state.task);
-  const sortArrUpdate = sortAbleArr.length <= 0 ? null : sortAbleArr;
-  const { filters } = generateFilters();
   const { places } = useAppSelector((state) => state.account);
+
+  const sortArrUpdate = sortAbleArr.length <= 0 ? null : sortAbleArr;
+
+  const { filters } = generateFilters();
 
   const { mutate: onMove } = useMoveTask();
   const { mutate: onMoveList } = useMoveListService();
