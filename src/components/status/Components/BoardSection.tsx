@@ -88,7 +88,7 @@ export default function BoardSection({
             active={collapsedStatusGroups[id]}
             iconColor="text-gray-400"
           />
-          <p className="flex uppercase justify-items-start">{title} STATUSES</p>
+          <p className="flex uppercase justify-items-start">{title} STATUS</p>
         </span>
       )}
       <SortableContext items={StatusIndex} strategy={verticalListSortingStrategy}>

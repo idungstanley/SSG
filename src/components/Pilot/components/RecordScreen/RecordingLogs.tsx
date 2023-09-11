@@ -75,13 +75,13 @@ export default function VideoEntries() {
   };
 
   return (
-    <table className="w-full mx-auto p-1">
+    <table className="w-full p-1 mx-auto">
       <thead>
-        <tr className="flex mx-2 border-b-2 py-2 space-x-9">
-          <th className="capitalize font-bold">user</th>
-          <th className="capitalize font-bold">recording</th>
-          <th className="capitalize font-bold">format</th>
-          <th className="capitalize font-bold">duration</th>
+        <tr className="flex py-2 mx-2 border-b-2 space-x-9">
+          <th className="font-bold capitalize">user</th>
+          <th className="font-bold capitalize">recording</th>
+          <th className="font-bold capitalize">format</th>
+          <th className="font-bold capitalize">duration</th>
         </tr>
       </thead>
       <tbody>
@@ -91,7 +91,7 @@ export default function VideoEntries() {
             const { color, initials, avatar_path } = videoFile.team_member.user;
             const duration = new Date(updated_at).getTime() - new Date(created_at).getTime();
             return (
-              <tr key={videoFile.id} className="flex space-x-8 border-b items-center p-2 relative">
+              <tr key={videoFile.id} className="relative flex items-center p-2 space-x-8 border-b">
                 <td
                   onMouseEnter={(e) => handleHover(e, index)}
                   onMouseLeave={(e) => handleHover(e, index)}
@@ -138,12 +138,12 @@ export default function VideoEntries() {
                   )}
                   {playToggle && hoverIndex === index ? (
                     <RiStopFill
-                      className="absolute top-5 left-1 h-4 w-4 text-gray-200 cursor-pointer hover:text-gray-200"
+                      className="absolute w-4 h-4 text-gray-200 cursor-pointer top-5 left-1 hover:text-gray-200"
                       onClick={() => handlePlayBack(index)}
                     />
                   ) : (
                     <RiPlayFill
-                      className="absolute top-5 left-1 h-4 w-4 text-gray-200 cursor-pointer hover:text-gray-200"
+                      className="absolute w-4 h-4 text-gray-200 cursor-pointer top-5 left-1 hover:text-gray-200"
                       onClick={() => handlePlayBack(index)}
                     />
                   )}
