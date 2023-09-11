@@ -15,6 +15,7 @@ import CreateNumberField from './Number/CreateNumberField';
 import CreateEmailField from './Email/CreateEmailField';
 import CraeteWebsite from './Websites/CraeteWebsite';
 import CreateCurrencyField from './Currency/CreateCurrencyField';
+import CreatePhone from './Phone/CreatePhone';
 import CreateCheckbox from './Checkbox/CreateCheckbox';
 import Palletes from '../../../../ColorPalette/Palettes';
 
@@ -46,6 +47,7 @@ function NewColumn() {
     email: <CreateEmailField />,
     website: <CraeteWebsite />,
     currency: <CreateCurrencyField />,
+    phone: <CreatePhone />,
     checkbox: <CreateCheckbox />
   };
 

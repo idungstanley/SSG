@@ -25,6 +25,7 @@ import TagsWrapper from './CustomField/Tags/TagsWrapper';
 import MoneyField from './CustomField/Money/MoneyField';
 import DateField from './CustomField/Date/DateField';
 import EmailWebsiteField from './CustomField/EmailWebsiteField/EmailWebsiteField';
+import PhoneField from './CustomField/Phone/PhoneField';
 import CheckboxField from './CustomField/Checkbox/CheckboxField';
 
 interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
@@ -133,6 +134,13 @@ export function Col({ value, field, fieldId, task, customFields, ...props }: Col
         taskCustomFields={task.custom_fields?.find((i) => i.id === fieldId)}
         fieldId={fieldId}
         fieldType="website"
+      />
+    ),
+    phone: (
+      <PhoneField
+        taskId={task.id}
+        taskCustomFields={task.custom_fields?.find((i) => i.id === fieldId)}
+        fieldId={fieldId}
       />
     ),
     assignees: (

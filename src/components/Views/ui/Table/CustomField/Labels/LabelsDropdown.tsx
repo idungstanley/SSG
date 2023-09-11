@@ -11,7 +11,10 @@ import {
   setNewCustomPropertyDetails
 } from '../../../../../../features/task/taskSlice';
 import { setActiveTabId } from '../../../../../../features/workspace/workspaceSlice';
-import { useUpdateEntityCustomFieldValue } from '../../../../../../features/list/listService';
+import {
+  useClearEntityCustomFieldValue,
+  useUpdateEntityCustomFieldValue
+} from '../../../../../../features/list/listService';
 
 interface dropdownProps {
   optionsFromField:
@@ -29,6 +32,7 @@ interface dropdownProps {
 function LabelsDropdown({ optionsFromField, allOptions, currentProperty, taskId }: dropdownProps) {
   const dispatch = useAppDispatch();
   const { mutate: onUpdate } = useUpdateEntityCustomFieldValue(taskId);
+  const { mutate: onClear } = useClearEntityCustomFieldValue();
 
   const [isOpen, setIsOpen] = useState(false);
   const [searchValue, setSearchValue] = useState<string>('');
@@ -38,6 +42,8 @@ function LabelsDropdown({ optionsFromField, allOptions, currentProperty, taskId 
   const valueIds = optionsFromField?.map((obj) => ({ value: obj.id }));
 
   const filteredOptions = allOptions?.filter((option) => option.name.toLowerCase().includes(searchValue.toLowerCase()));
+
+  // console.log(allOptions);
 
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -65,6 +71,15 @@ function LabelsDropdown({ optionsFromField, allOptions, currentProperty, taskId 
       onUpdate({
         taskId,
         value: updatedValueIds,
+        fieldId: currentProperty.id
+      });
+    closeModal();
+  };
+
+  const handleClearField = () => {
+    if (currentProperty)
+      onClear({
+        taskId,
         fieldId: currentProperty.id
       });
     closeModal();
@@ -121,7 +136,18 @@ function LabelsDropdown({ optionsFromField, allOptions, currentProperty, taskId 
                   className="h-4 border-0 ring-0 outline-0 focus:ring-0 focust:outline-0 focus:border-0 w-11/12"
                 />
               </div>
+
               <div className="w-full pt-3 space-y-2">
+                {optionsFromField?.length ? (
+                  <button
+                    onClick={handleClearField}
+                    className={cl('text-gray-700 py-2 bg-white border w-full text-center block px-4 text-sm truncate')}
+                    style={{ backgroundColor: 'white', maxWidth: '195px' }}
+                  >
+                    -
+                  </button>
+                ) : null}
+
                 {Array.isArray(filteredOptions)
                   ? filteredOptions.map((option) => (
                       <button
