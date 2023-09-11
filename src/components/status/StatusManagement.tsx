@@ -196,8 +196,6 @@ export default function CustomStatus() {
     }
   };
 
-  console.log(statusData);
-
   const handleStatusData = async () => {
     await createStatusTypes.mutateAsync({
       model_id: model_id,
