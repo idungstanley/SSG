@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
-import { setTimerInterval, setUpdateTimerDuration } from '../features/task/taskSlice';
+import { setRecorderInterval, setUpdateRecoderDuration } from '../features/task/taskSlice';
 
 interface TimerProps {
   isRunning: boolean;
@@ -10,7 +10,7 @@ interface TimerProps {
 
 export function runTimer({ isRunning, setTime }: TimerProps) {
   const dispatch = useAppDispatch();
-  const { duration } = useAppSelector((state) => state.task);
+  const { recorderDuration: duration, period } = useAppSelector((state) => state.task);
 
   useEffect(() => {
     let updateH = duration.h;
@@ -18,7 +18,6 @@ export function runTimer({ isRunning, setTime }: TimerProps) {
     let updateS = duration.s;
 
     let interval: number | undefined;
-    console.log(isRunning);
 
     if (isRunning) {
       interval = window.setInterval(() => {
@@ -27,9 +26,9 @@ export function runTimer({ isRunning, setTime }: TimerProps) {
         updateH = (updateH + (updateM === 0 && updateS === 0 ? 1 : 0)) % 24;
 
         setTime && setTime({ h: updateH, m: updateM, s: updateS });
-        dispatch(setUpdateTimerDuration({ s: updateS, m: updateM, h: updateH }));
+        dispatch(setUpdateRecoderDuration({ s: updateS, m: updateM, h: updateH }));
       }, 1000);
     }
-    isRunning && dispatch(setTimerInterval(interval));
+    isRunning && !period && dispatch(setRecorderInterval(interval));
   }, [isRunning, duration]);
 }
