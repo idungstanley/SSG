@@ -18,6 +18,7 @@ import CreateCurrencyField from './Currency/CreateCurrencyField';
 import CreatePhone from './Phone/CreatePhone';
 import CreateCheckbox from './Checkbox/CreateCheckbox';
 import Palletes from '../../../../ColorPalette/Palettes';
+import CreateRatings from './Rating/CreateRatings';
 
 function NewColumn() {
   const dispatch = useAppDispatch();
@@ -48,7 +49,8 @@ function NewColumn() {
     website: <CraeteWebsite />,
     currency: <CreateCurrencyField />,
     phone: <CreatePhone />,
-    checkbox: <CreateCheckbox />
+    checkbox: <CreateCheckbox />,
+    rating: <CreateRatings />
   };
 
   return (
