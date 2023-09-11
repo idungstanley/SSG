@@ -84,7 +84,7 @@ function NewColumn() {
                   <Picker />
                 </button>
                 <AlsoitMenuDropdown handleClose={handleClose} anchorEl={anchorEl}>
-                  <div style={{ width: '276px' }} className="p-4 rounded-2xl">
+                  <div style={{ width: '276px' }} className="p-4 rounded-2xl w-full">
                     <div className="bg-gray-200  flex justify-between rounded-2xl">
                       <button
                         className={cl(

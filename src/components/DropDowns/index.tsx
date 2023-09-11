@@ -18,6 +18,11 @@ export default function AlsoitMenuDropdown({ handleClose, anchorEl, children }: 
       MenuListProps={{
         'aria-labelledby': 'basic-button'
       }}
+      PaperProps={{
+        style: {
+          borderRadius: '10px'
+        }
+      }}
     >
       {children}
     </Menu>
