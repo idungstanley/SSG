@@ -160,7 +160,7 @@ export default function MenuDropdown({ isExtendedBar, cords }: IMenuDropdownProp
     {
       title: 'Rename',
       handleClick: () => {
-        if (showMenuDropdownType === 'hubs' || showMenuDropdownType === EntityType.subHub) {
+        if (showMenuDropdownType?.includes(EntityType.hub)) {
           dispatch(setEditHubSlideOverVisibility(true));
         } else if (showMenuDropdownType?.includes(EntityType.wallet)) {
           dispatch(setEditWalletSlideOverVisibility(true));
@@ -329,7 +329,7 @@ export default function MenuDropdown({ isExtendedBar, cords }: IMenuDropdownProp
     {
       title: 'Archive',
       handleClick: () => {
-        if (showMenuDropdownType == 'hubs' || showMenuDropdownType == 'subhubs') {
+        if (showMenuDropdownType?.includes(EntityType.hub)) {
           dispatch(setArchiveHub(true));
         } else if (showMenuDropdownType?.includes(EntityType.wallet)) {
           dispatch(setArchiveWallet(true));

@@ -7,7 +7,7 @@ import { getCurrHubId, getSubMenu, setshowMenuDropdown, setSubDropdownMenu } fro
 import { useDispatch } from 'react-redux';
 import { setCreateSubHubSlideOverVisibility } from '../../../../features/general/slideOver/slideOverSlice';
 import { displayPrompt, setVisibility } from '../../../../features/general/prompt/promptSlice';
-// import { IHubDetailResErr } from '../../../../features/hubs/hubs.interfaces';
+import { EntityType } from '../../../../utils/EntityTypes/EntityType';
 
 function SubHubModal() {
   const queryClient = useQueryClient();
@@ -15,7 +15,7 @@ function SubHubModal() {
   const { currHubId, SubMenuId, SubMenuType } = useAppSelector((state) => state.hub);
 
   const { data } = useGetHubChildren({
-    query: SubMenuType === 'hubs' ? SubMenuId : currHubId
+    query: SubMenuType === EntityType.hub ? SubMenuId : currHubId
   });
 
   const isCreateAllowed = data?.data.wallets.length === 0 && data?.data.lists.length === 0;
@@ -38,34 +38,6 @@ function SubHubModal() {
         })
       );
     }
-
-    // onError: (data: IHubDetailResErr) => {
-    //   if (data.data.data.need_confirmation === true) {
-    //     dispatch(
-    //       displayPrompt('Create Subhub', 'Would move all entities in Hub to Subhub. Do you want to proceed?', [
-    //         {
-    //           label: 'Create Subhub',
-    //           style: 'danger',
-    //           callback: async () => {
-    //             await createHub.mutateAsync({
-    //               name,
-    //               currentWorkspaceId,
-    //               currHubId: SubMenuType === 'hubs' ? SubMenuId : currHubId,
-    //               confirmAction: 1
-    //             });
-    //           }
-    //         },
-    //         {
-    //           label: 'Cancel',
-    //           style: 'plain',
-    //           callback: () => {
-    //             dispatch(setVisibility(false));
-    //           }
-    //         }
-    //       ])
-    //     );
-    //   }
-    // }
   });
 
   const handleCloseSlider = () => {
@@ -100,7 +72,7 @@ function SubHubModal() {
       await createHub.mutateAsync({
         name,
         currentWorkspaceId,
-        currHubId: SubMenuType === 'hubs' ? SubMenuId : currHubId,
+        currHubId: SubMenuType === EntityType.hub ? SubMenuId : currHubId,
         confirmAction: 1
       });
     } else {
@@ -113,7 +85,7 @@ function SubHubModal() {
               await createHub.mutateAsync({
                 name,
                 currentWorkspaceId,
-                currHubId: SubMenuType === 'hubs' ? SubMenuId : currHubId,
+                currHubId: SubMenuType === EntityType.hub ? SubMenuId : currHubId,
                 confirmAction: 1
               });
             }

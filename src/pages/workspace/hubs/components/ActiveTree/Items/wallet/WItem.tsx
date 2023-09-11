@@ -30,27 +30,17 @@ export default function WItem({ id, name, parentId }: { id: string; name: string
           {walletId === id ? (
             <>
               <VscTriangleDown className="flex-shrink-0 h-2" aria-hidden="true" color="rgba(72, 67, 67, 0.64)" />
-              <FaFolderOpen
-              // color={paletteColor === '' ? wallet.color : paletteColor}
-              // onClick={(e) => handleWalletColour(wallet.id, e)}
-              />
+              <FaFolderOpen />
             </>
           ) : (
             <>
               <VscTriangleRight className="flex-shrink-0 h-2" aria-hidden="true" color="#BBBDC0" />
-              <FaFolder
-              // color={paletteColor === '' ? wallet.color : paletteColor}
-              // onClick={(e) => handleWalletColour(wallet.id, e)}
-              />
+              <FaFolder />
             </>
           )}
         </div>
 
-        <div
-          // onClick={() => handleLocation(wallet.id, wallet.name)}
-          className="cursor-pointer hover:underline hover:decoration-dashed"
-          style={{ marginLeft: '17px' }}
-        >
+        <div className="cursor-pointer hover:underline hover:decoration-dashed" style={{ marginLeft: '17px' }}>
           <p
             className="capitalize truncate cursor-pointer"
             style={{

@@ -45,9 +45,9 @@ function WalletModal() {
       name,
       hubID:
         (createWLID ? createWLID : null) ||
-        (SubMenuType === 'hubs' ? SubMenuId : null) ||
+        (SubMenuType === EntityType.hub ? SubMenuId : null) ||
         (SubMenuType === EntityType.subHub ? SubMenuId : null) ||
-        (showMenuDropdownType === 'hubs' ? showMenuDropdown : null) ||
+        (showMenuDropdownType === EntityType.hub ? showMenuDropdown : null) ||
         (showMenuDropdownType === EntityType.subHub ? showMenuDropdown : null),
       walletId:
         (showMenuDropdownType === EntityType.wallet && !createWLID ? showMenuDropdown : null) ||

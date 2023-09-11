@@ -65,17 +65,6 @@ export function DatePickerManualDates({ range }: DatePickerManualDatesProps) {
       setString((prev) => ({ ...prev, due: undefined }));
     }
   };
-  // const clearFiltertimes = (point: 'from' | 'to') => {
-  //   point == 'to'
-  //     ? setHistoryMemory({
-  //         ...HistoryFilterMemory,
-  //         time: { ...HistoryFilterMemory?.time, from: HistoryFilterMemory?.time?.from }
-  //       })
-  //     : setHistoryMemory({
-  //         ...HistoryFilterMemory,
-  //         time: { ...HistoryFilterMemory?.time, to: HistoryFilterMemory?.time?.to }
-  //       });
-  // };
 
   useEffect(() => {
     if (taskTime) {

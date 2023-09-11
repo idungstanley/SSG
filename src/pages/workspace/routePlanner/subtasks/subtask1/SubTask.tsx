@@ -80,7 +80,6 @@ function SubTask({ parentTaskId }: SubTaskProps) {
           <Button
             buttonStyle="primary"
             onClick={onSubmit}
-            // loading={loginMutation.status === 'loading'}
             label="SAVE"
             padding="py-3 px-4"
             height="h-5"

@@ -43,9 +43,9 @@ function SubWalletModal() {
     await createWallet.mutateAsync({
       name,
       hubID:
-        (SubMenuType == 'hubs' ? SubMenuId : null) ||
-        (SubMenuType == EntityType.subHub ? SubMenuId : null) ||
-        (showMenuDropdownType === 'hubs' ? showMenuDropdown : null) ||
+        (SubMenuType === EntityType.hub ? SubMenuId : null) ||
+        (SubMenuType === EntityType.subHub ? SubMenuId : null) ||
+        (showMenuDropdownType === EntityType.hub ? showMenuDropdown : null) ||
         (showMenuDropdownType === EntityType.subHub ? showMenuDropdown : null),
       walletId:
         (showMenuDropdownType === EntityType.wallet ? showMenuDropdown : null) ||

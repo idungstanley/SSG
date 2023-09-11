@@ -13,10 +13,8 @@ import {
 } from '@heroicons/react/24/outline';
 import { useQuery } from '@tanstack/react-query';
 import { useNavigate, useParams } from 'react-router-dom';
-// import Timer from 'react-compound-timer/build';
 import moment from 'moment';
 import { createTimeEntriesService, getOneTaskServices } from '../../../../features/task/taskService';
-// import { AiOutlinePlayCircle } from 'react-icons/ai';
 import ClockInOut from '../../../../components/Pilot/components/TimeClock/ClockInOut';
 
 function RenderTaskModal() {
@@ -134,7 +132,6 @@ function RenderTaskModal() {
                     <VideoCameraIcon className="h-5 w-7 text-gray-400" aria-hidden="true" />
                   </span>
                 </div>
-                {/* <Watcher taskId={taskId} /> */}
               </div>
             </section>
           </section>

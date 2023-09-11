@@ -83,7 +83,7 @@ export default function FilesList({ data }: FilesListProps) {
       ) : null}
 
       {/* table */}
-      {status == 'success' ? (
+      {status === 'success' ? (
         !data.length ? (
           <FullScreenMessage
             title="No files in your folder"

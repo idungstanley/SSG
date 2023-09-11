@@ -94,13 +94,6 @@ export function StickyCol({
 
   const inputRef = useRef<HTMLInputElement | null>(null);
 
-  const { attributes, listeners, setNodeRef } = useDraggable({
-    id: task?.id as UniqueIdentifier,
-    data: {
-      isTask: true
-    }
-  });
-
   const onClickTask = () => {
     if (task.id !== '0') {
       hubId
@@ -133,14 +126,6 @@ export function StickyCol({
     const { current } = inputRef;
     current?.focus();
   }, [eitableContent]);
-
-  // const selectText = (element: Node | null) => {
-  //   const selection = window.getSelection();
-  //   const range = document.createRange();
-  //   range.selectNodeContents(element as Node);
-  //   selection?.removeAllRanges();
-  //   selection?.addRange(range);
-  // };
 
   const onToggleDisplayingSubTasks = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.stopPropagation();
@@ -191,7 +176,7 @@ export function StickyCol({
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.shiftKey && event.key === 'ArrowDown') {
-        if (selectedIndex == null) return;
+        if (selectedIndex === null) return;
         if (!selectedIndexArray.includes(taskIndex as number)) {
           setSelectedIndexArray((prev) => {
             const updatedArray = [...prev, taskIndex as number];
@@ -256,10 +241,19 @@ export function StickyCol({
     setIsChecked(isChecked);
   };
 
+  const { attributes, listeners, setNodeRef } = useDraggable({
+    id: task?.id as UniqueIdentifier,
+    data: {
+      isTask: true,
+      movingTask: task
+    }
+  });
+
   const { isOver, setNodeRef: droppabbleRef } = useDroppable({
     id: task.id,
     data: {
-      isOverTask: true
+      isOverTask: true,
+      overTask: task
     }
   });
 

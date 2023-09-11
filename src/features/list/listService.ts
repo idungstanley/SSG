@@ -302,7 +302,7 @@ export const useUpdateEntityCustomFieldValue = (listId?: string) => {
 export const useList = (listId?: string) => {
   const { workSpaceId } = useParams();
   const { currentWorkspaceId } = useAppSelector((state) => state.auth);
-  const fetch = currentWorkspaceId == workSpaceId;
+  const fetch = currentWorkspaceId === workSpaceId;
 
   return useQuery(
     ['list', listId],

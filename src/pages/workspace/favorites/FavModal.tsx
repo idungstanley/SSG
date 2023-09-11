@@ -2,12 +2,8 @@ import React, { Fragment } from 'react';
 import { Menu, Transition } from '@headlessui/react';
 import { BsThreeDots } from 'react-icons/bs';
 import { useAppDispatch } from '../../../app/hooks';
-import {
-  // setDelFavId,
-  setShowFavEditInput
-} from '../../../features/hubs/hubSlice';
+import { setShowFavEditInput } from '../../../features/hubs/hubSlice';
 import { useUnfavoriteEntity } from '../../../features/hubs/hubService';
-// import { UseDeleteFav } from "../../../features/hubs/hubService";
 
 export default function FavModal({ id }: { id: string }) {
   const dispatch = useAppDispatch();
@@ -26,7 +22,6 @@ export default function FavModal({ id }: { id: string }) {
 
   const handleClick = (name: string) => {
     if (name === 'Unfavorite') {
-      // dispatch(setDelFavId(id));
       onUnfavorite({
         delFav: id
       });
