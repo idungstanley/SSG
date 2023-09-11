@@ -260,7 +260,7 @@ export default function CustomStatus() {
         >
           {Object.keys(boardSections).map((uniqueModelType) => (
             <div
-              className="p-2 space-y-2 rounded"
+              className={`p-2 space-y-2 rounded ${uniqueModelType === 'done' && 'bg-alsoit-gray-50'}`}
               key={uniqueModelType}
               style={{
                 backgroundColor:
