@@ -16,6 +16,7 @@ import SubtabDrag from '../../../../pages/workspace/pilot/components/SubtabDnd';
 import { useAppSelector } from '../../../../app/hooks';
 import CalendarIcon from '../../../../assets/icons/CalendarIcon';
 import StatusMgIcon from '../../../../assets/icons/StatusMgIcon';
+import { dimensions } from '../../../../app/config/dimensions';
 
 export const HubManagerOptions = [
   {
@@ -50,8 +51,12 @@ export const HubManagerOptions = [
   }
 ];
 
+const DEFAULT_PILOT_WIDTH = dimensions.pilot.default;
+const pilotWidthFromLS = DEFAULT_PILOT_WIDTH;
+
 export default function HubManagerSubTab() {
   const { showPilot, activeSubHubManagerTabId } = useAppSelector((state) => state.workspace);
+  const { show: showFullPilot } = useAppSelector((state) => state.slideOver.pilotSideOver);
 
   const idsFromLS = JSON.parse(localStorage.getItem('subTab') || '[]') as number[];
 
@@ -87,11 +92,12 @@ export default function HubManagerSubTab() {
       }
     }
   };
+
   return (
     <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={(e) => handleDragEnd(e)}>
       <SortableContext strategy={rectSortingStrategy} items={items}>
         <section>
-          <div className="flex bg-gray-400 pt-0.5 flex-row">
+          <div className="flex w-full bg-primary-200 pb-0.5 flex-row">
             {HubManagerOptions.map((item) => (
               <SubtabDrag
                 key={item.id}
@@ -100,6 +106,8 @@ export default function HubManagerSubTab() {
                 activeSub={activeSubHubManagerTabId}
                 showPilot={showPilot}
                 name={'hubmanager'}
+                item={item}
+                items={items}
               />
             ))}
           </div>

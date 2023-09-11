@@ -20,7 +20,7 @@ export default function TagModal({ entity_type }: tagModalProps) {
   //get all tags
   const { data: tagsData, status } = UseGetAllTagsService();
 
-  if (status == 'loading') {
+  if (status === 'loading') {
     <Spinner size={10} color={'blue'} />;
   }
 
@@ -38,7 +38,7 @@ export default function TagModal({ entity_type }: tagModalProps) {
     });
   };
 
-  return status == 'success' ? (
+  return status === 'success' ? (
     <Menu as="div" className="group relative inline-block text-left">
       <div>
         <Menu.Button className="flex text-sm text-gray-400">

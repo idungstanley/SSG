@@ -28,6 +28,7 @@ import ToolTip from '../Tooltip/Tooltip';
 import ActiveBarIdentification from './Component/ActiveBarIdentification';
 import { useAbsolute } from '../../hooks/useAbsolute';
 import { generateViewsUrl } from '../../utils/generateViewsUrl';
+import { taskCountFields } from '../../features/list/list.interfaces';
 
 interface ListItemProps {
   list: IList;
@@ -119,7 +120,7 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
     );
     dispatch(getPrevName(name));
     if (showMenuDropdown != null) {
-      if ((e.target as HTMLButtonElement).id == 'menusettings') {
+      if ((e.target as HTMLButtonElement).id === 'menusettings') {
         dispatch(closeMenu());
       }
     }
@@ -206,6 +207,7 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
         <div className="flex items-center gap-1">
           {list.tasks_count > 0 && (
             <InteractiveTooltip
+              dependency={tooltipItems as taskCountFields[]}
               content={
                 <ul className="space-y-2 w-28">
                   <span className="flex items-center justify-between cursor-pointer hover:text-blue-500">
@@ -254,7 +256,7 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
           </div>
         </div>
       </section>
-      {paletteId == list.id && show ? (
+      {paletteId === list.id && show ? (
         <Palette
           topContent={<ListIconSelection handleSelection={handleSelection} activeShape={activeShape} />}
           title="List Colour"

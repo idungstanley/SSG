@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import requestNew from '../../app/requestNew';
 import { IAccountReq, IUserCalendarParams, IUserParams, IUserSettings, IUserSettingsRes } from './account.interfaces';
 import { SetUserSettingsData } from './accountSlice';
-import { useAppDispatch } from '../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
 
 // Get all user's workspaces
 export const useGetMyWorkspaces = () => {
@@ -34,8 +34,9 @@ export const switchWorkspaceService = async (data: { workspaceId: string }) => {
 
 export const useGetUserSettingsKeys = (enabled: boolean, key: string, resolution?: string | null) => {
   const dispatch = useAppDispatch();
+  const { isFavoritePinned } = useAppSelector((state) => state.workspace);
   return useQuery<IUserSettingsRes, unknown, IUserSettings>(
-    ['user-settings'],
+    ['user-settings', { isFavoritePinned }],
     () =>
       requestNew({
         url: 'user/settings',
@@ -75,8 +76,14 @@ export const setUserSettingsData = (
   value: IUserParams | IUserCalendarParams,
   resolution?: string | null
 ) => {
+  const queryClient = useQueryClient();
+
+  const { isFavoritePinned } = useAppSelector((state) => state.workspace);
+
+  const { sidebarWidth, showPreview, isFavoritePinned: isFavoritePinnedValue } = value as IUserParams;
+
   return useQuery<IUserSettingsRes, unknown, IUserSettings>(
-    ['user-settings', { value }],
+    ['user-settings', { sidebarWidth, showPreview, isFavoritePinned, isFavoritePinnedValue }],
     () =>
       requestNew({
         url: 'user/settings',
@@ -86,7 +93,7 @@ export const setUserSettingsData = (
         }
       }),
     {
-      enabled
+      enabled: enabled || !isFavoritePinned || isFavoritePinned
     }
   );
 };

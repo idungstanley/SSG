@@ -74,7 +74,7 @@ export function Label({
           <Sort isSplitSubtasks={true} />
           <FilterDropdown isSplitSubtasks={true} />
           <AssigneeSplitSubtasks parentId={parentId as string} />
-          <Search isSplitSubtasks={true} />
+          <Search isSplitSubtasks={true} parentId={parentId as string} />
         </div>
       ) : null}
     </div>

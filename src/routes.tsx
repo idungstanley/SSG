@@ -179,7 +179,7 @@ export const routes = (user: IUser | null) => {
     },
     {
       path: '/auth',
-      element: user == null ? <UnauthenticatedLayout /> : <Navigate to="/" />,
+      element: !user ? <UnauthenticatedLayout /> : <Navigate to="/" />,
       children: [
         { path: 'login', element: <LoginPage /> },
         { path: 'register', element: <RegisterPage /> },
@@ -201,7 +201,6 @@ export const routes = (user: IUser | null) => {
         { path: 'profile', element: <UserSettings /> },
         { path: 'people', element: <TeamMembersPage /> },
         { path: 'construction', element: <Construction /> },
-        // { path: 'team-members', element: <TeamMembersPage /> },
         { path: 'workspaces', element: <WorkspaceSettings /> },
         { path: 'workspaces/settings', element: <WorkSpaceTable /> },
         {
@@ -209,7 +208,6 @@ export const routes = (user: IUser | null) => {
           element: <NotificationSettingsPage />
         },
         { path: 'team-members/invites', element: <TeamMemberInvitesPage /> },
-        // { path: 'team-members', element: <TeamMembersPage /> },
         { path: 'team-members/groups', element: <TeamMemberGroupsPage /> },
         { path: 'settings/permisions', element: <PermissionsPage /> },
         { path: 'subscribers', element: <SubscribersSettings /> },

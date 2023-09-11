@@ -9,12 +9,14 @@ import { setSubtasks } from '../../../../features/task/taskSlice';
 import { ITaskFullList } from '../../../../features/task/interface.tasks';
 
 interface SubTasksProps {
+  listId: string;
   parentId: string;
   columns: Column[];
   paddingLeft: number;
+  level: number;
 }
 
-export function SubTasks({ parentId, columns, paddingLeft }: SubTasksProps) {
+export function SubTasks({ listId, parentId, columns, paddingLeft, level }: SubTasksProps) {
   const dispatch = useAppDispatch();
 
   const { draggableItemId } = useAppSelector((state) => state.list);
@@ -26,7 +28,13 @@ export function SubTasks({ parentId, columns, paddingLeft }: SubTasksProps) {
 
   useEffect(() => {
     if (tasks?.length) {
-      dispatch(setSubtasks({ ...subtasks, [parentId]: tasks as ITaskFullList[] }));
+      const tasksWithListId = tasks.map((item) => {
+        return {
+          ...item,
+          list_id: listId
+        };
+      });
+      dispatch(setSubtasks({ ...subtasks, [parentId]: tasksWithListId as ITaskFullList[] }));
     }
   }, [tasks]);
 
@@ -37,10 +45,21 @@ export function SubTasks({ parentId, columns, paddingLeft }: SubTasksProps) {
           <OverlayRow columns={columns} task={draggableItem} />
         </DragOverlay>
       ) : null}
-      {Object.keys(subtasks).length &&
-        subtasks[parentId]?.map((i) => (
-          <Row paddingLeft={paddingLeft} columns={columns} task={i} key={i.id} isListParent={false} />
-        ))}
+      {Object.keys(subtasks).length ? (
+        <>
+          {subtasks[parentId]?.map((i) => (
+            <Row
+              paddingLeft={paddingLeft}
+              listId={listId}
+              columns={columns}
+              task={i}
+              key={i.id}
+              isListParent={false}
+              level={level}
+            />
+          ))}
+        </>
+      ) : null}
     </>
   );
 }

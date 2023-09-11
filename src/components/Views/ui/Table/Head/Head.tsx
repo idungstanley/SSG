@@ -97,12 +97,12 @@ export function Head({
       const updatedTaskIds: string[] = [...selectedTasksArray];
       groupedTask?.map((task, index) => {
         if (
-          selectedIndex == index &&
-          selectedIndexStatus == task.status.name &&
+          selectedIndex === index &&
+          selectedIndexStatus === task.status.name &&
           selectedListIds.includes(listId as string)
         ) {
           const taskIndex = updatedTaskIds.indexOf(task.id);
-          if (taskIndex == -1) {
+          if (taskIndex === -1) {
             updatedTaskIds.push(task.id);
             dispatch(setSelectedTasksArray(updatedTaskIds));
           }

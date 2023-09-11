@@ -197,6 +197,33 @@ export const UseGetListDetails = (listId: string | null | undefined) => {
   );
 };
 
+const clearEntityCustomFieldValue = (data: { taskId?: string; fieldId: string }) => {
+  const { taskId, fieldId } = data;
+
+  const response = requestNew({
+    url: `custom-fields/${fieldId}/clear`,
+    method: 'PUT',
+    data: {
+      type: 'task',
+      id: taskId
+    }
+  });
+  return response;
+};
+
+export const useClearEntityCustomFieldValue = () => {
+  const queryClient = useQueryClient();
+
+  const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
+  const { filters } = generateFilters();
+
+  return useMutation(clearEntityCustomFieldValue, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['task', activeItemId, activeItemType, filters]);
+    }
+  });
+};
+
 const createDropdownField = (data: {
   id?: string;
   name?: string;
@@ -275,7 +302,7 @@ export const useUpdateEntityCustomFieldValue = (listId?: string) => {
 export const useList = (listId?: string) => {
   const { workSpaceId } = useParams();
   const { currentWorkspaceId } = useAppSelector((state) => state.auth);
-  const fetch = currentWorkspaceId == workSpaceId;
+  const fetch = currentWorkspaceId === workSpaceId;
 
   return useQuery(
     ['list', listId],

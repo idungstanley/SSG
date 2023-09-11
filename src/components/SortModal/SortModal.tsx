@@ -196,7 +196,7 @@ export default function SortModal({ toggleModal, setAnchorEl, anchorEl, handleCl
                 sortItemLength={sortItems.length}
                 sortIndex={sortItems.findIndex((item) => item.field === getOrder?.field)}
                 sortValue={getOrder?.field}
-                sortDesc={getOrder?.dir == 'desc'}
+                sortDesc={getOrder?.dir === 'desc'}
                 handleRemoveSortFn={handleRemoveFilter}
                 sortCriteria="dir"
               />
@@ -204,12 +204,12 @@ export default function SortModal({ toggleModal, setAnchorEl, anchorEl, handleCl
                 <div className="flex flex-col items-center justify-center -space-y-1">
                   <IoIosArrowUp
                     className="text-gray-600"
-                    style={{ color: getOrder?.dir == 'asc' ? baseColor : '' }}
+                    style={{ color: getOrder?.dir === 'asc' ? baseColor : '' }}
                     onClick={() => handleSortFn(activeTaskColumn.header, activeTaskColumn.id, 'asc')}
                   />
                   <IoIosArrowDown
                     className="text-gray-600"
-                    style={{ color: getOrder?.dir == 'desc' ? baseColor : '' }}
+                    style={{ color: getOrder?.dir === 'desc' ? baseColor : '' }}
                     onClick={() => handleSortFn(activeTaskColumn.header, activeTaskColumn.id, 'desc')}
                   />
                 </div>

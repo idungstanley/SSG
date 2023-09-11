@@ -28,7 +28,6 @@ export default function LItem({ id, name, parentId }: { id: string; name: string
         <div className="flex items-center space-x-1 capitalize truncate cursor-pointer">
           <ListIcon />
           <div
-            // onClick={() => handleListLocation(list.id, list.name)}
             style={{
               fontSize: '13px',
               lineHeight: '15.56px',

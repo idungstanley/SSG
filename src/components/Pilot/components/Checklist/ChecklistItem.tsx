@@ -87,7 +87,7 @@ function ChecklistItem({ Item, checklistId }: checkListItemProps) {
             placeholder="Add New Checklist Item"
             onChange={(e) => setNewItem(e.target.value)}
             value={newItem}
-            onKeyDown={(e) => (e.key == 'Enter' ? handleSubmit() : null)}
+            onKeyDown={(e) => (e.key === 'Enter' ? handleSubmit() : null)}
           />
         </span>
       )}
@@ -98,7 +98,7 @@ function ChecklistItem({ Item, checklistId }: checkListItemProps) {
             <div className="group flex items-center text-gray-500 hover:text-gray-700 hover:bg-gray-50 py-0.5 h-auto">
               <input
                 type="checkbox"
-                checked={item.is_done == 0 ? false : true}
+                checked={item.is_done ? true : false}
                 className="rounded-lg mx-3 text-green-500 border-green-800"
                 onChange={() => {
                   setItemId(item.id);

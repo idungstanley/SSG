@@ -14,7 +14,7 @@ interface AddNewItemProps {
 export function AddNewItem({ onHideNewItem, initialFilters }: AddNewItemProps) {
   const dispatch = useAppDispatch();
 
-  const { selectedTaskParentId, splitSubTask: splitMode, subtasksfilters } = useAppSelector((state) => state.task);
+  const { selectedTaskParentId, splitSubTaskState: splitMode, subtasksfilters } = useAppSelector((state) => state.task);
 
   const {
     filters: { fields: filters }

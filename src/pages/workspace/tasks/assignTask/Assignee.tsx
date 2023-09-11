@@ -49,7 +49,7 @@ export default function Assignee({
   const userObj = data?.data.team_members?.find((userObj) => userObj?.id === currTeamMemberId);
 
   const teamMembers = teams ? data?.data.team_member_groups : data?.data.team_members;
-  // const assignees = task?.assignees;
+
   const assignees = task?.assignees;
 
   const assignedUser = assignees?.map(({ id }: { id: string }) => id);

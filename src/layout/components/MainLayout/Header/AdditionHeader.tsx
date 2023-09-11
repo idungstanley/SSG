@@ -28,9 +28,8 @@ export default function AdditionalHeader() {
   const userTimeZoneFromLS: string | null = localStorage.getItem('userTimeZone');
 
   const { activeTabId: tabsId, timerLastMemory, activeItemId } = useAppSelector((state) => state.workspace);
-  const { screenRecording, duration, timerStatus, period, timerDetails, activeTimeOut } = useAppSelector(
-    (state) => state.task
-  );
+  const { screenRecording, duration, recorderDuration, timerStatus, period, timerDetails, activeTimeOut } =
+    useAppSelector((state) => state.task);
   const { timezone: zone, date_format, time_format, is_clock_time } = useAppSelector((state) => state.userSetting);
   const { activeItemName } = useAppSelector((state) => state.workspace);
 
@@ -240,10 +239,15 @@ export default function AdditionalHeader() {
           </div>
         )}
         <MdTab className="w-5 h-5" />
-        {screenRecording === 'recording' && (
-          <div className="relative w-2" onMouseEnter={() => setRecordBlinker(!recordBlinker)}>
+        {screenRecording === 'recording' && tabsId !== 6 && (
+          <div className="relative w-16 flex space-x-0.5 mr-1.5" onMouseEnter={() => setRecordBlinker(!recordBlinker)}>
             <div className="flex items-center justify-start w-5 h-5 border-alsoit-danger rounded-full">
               <div className="w-3 h-3 bg-alsoit-danger rounded-full pulsate"></div>
+            </div>
+            <div className="w-2/3">
+              {`${String(recorderDuration.h).padStart(2, '0')}:${String(recorderDuration.m).padStart(2, '0')}:${String(
+                recorderDuration.s
+              ).padStart(2, '0')}`}
             </div>
             {recordBlinker && (
               <HeaderModal toggleFn={setRecordBlinker}>

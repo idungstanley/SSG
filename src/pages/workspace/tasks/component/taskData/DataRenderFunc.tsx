@@ -1,9 +1,7 @@
 import { ImyTaskData } from '../../../../../features/task/taskSlice';
 import Assignee from '../../assignTask/Assignee';
-// import TaskStatus from './status/index';
 import TaskName from './taskName';
 import TaskPriority from './priority/index';
-// import DateFormat from './taskDate/index';
 import TaskTag from './taskTag/index';
 import DropdownFieldWrapper from './dropdown/DropdownFieldWrapper';
 import { TaskValue } from '../../../../../features/task/interface.tasks';
@@ -46,13 +44,13 @@ export default function DataRenderFunc({
         <TaskTag entity_id={task?.id} taskColField={taskColField} entity_type="task" />
       </div>
     );
-  } else if (col?.field == 'created_at' || col?.field == 'updated_at') {
+  } else if (col?.field === 'created_at' || col?.field === 'updated_at') {
     return (
       <div className="mt-2">
         <DateFormat date={taskColField as string} font="text-sm" />
       </div>
     );
-  } else if (col?.field == 'status') {
+  } else if (col?.field === 'status') {
     return <div>{/* <TaskStatus taskColField={taskColField} task={task} /> */}</div>;
   } else if (col?.field === 'name') {
     return (

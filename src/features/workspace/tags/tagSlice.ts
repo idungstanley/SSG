@@ -30,7 +30,7 @@ export const tagSlice = createSlice({
       state.showTagColorDialogueBox = action.payload;
     },
     triggerUnassignTag(state, action: PayloadAction<{ unAssignTadId: null; currentTaskIdForTag: null } | null>) {
-      if (action.payload == null) {
+      if (action.payload === null) {
         state.unAssignTadId = null;
         state.currentTaskIdForTag = null;
       } else {

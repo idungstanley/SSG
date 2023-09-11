@@ -35,7 +35,7 @@ export function EntryListActionBtns({ setIconToggle, entries, iconToggle }: Prop
   });
 
   const handleUpdateEntry = (id: string) => {
-    if (openUpdateEntryId == id) {
+    if (openUpdateEntryId === id) {
       dispatch(
         setUpdateEntries({
           openUpdateEntryId: id
@@ -75,7 +75,7 @@ export function EntryListActionBtns({ setIconToggle, entries, iconToggle }: Prop
           <EditIcon active={iconToggle.editIcon} dimensions={{ width: 20, height: 20 }} aria-hidden="true" />
         </div>
       </button>
-      {openUpdateEntryId == entries.id ? (
+      {openUpdateEntryId === entries.id ? (
         <UpdateTimeEntryDropdown time_entry_id={entries.id} billable={entries.is_billable} />
       ) : null}
       <button type="button" onClick={() => handledelete.mutateAsync({ timeEntryDeleteTriggerId: entries.id })}>

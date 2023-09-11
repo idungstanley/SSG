@@ -1,4 +1,7 @@
-import { ReactElement, ReactNode, useRef, useState } from 'react';
+import { ReactElement, ReactNode, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useAppSelector } from '../../app/hooks';
+import { useAbsolute } from '../../hooks/useAbsolute';
+import { taskCountFields } from '../../features/list/list.interfaces';
 
 interface TooltipProps {
   children: ReactNode;
@@ -7,6 +10,7 @@ interface TooltipProps {
   right?: string;
   zIndex?: string;
   bottom?: string;
+  dependency?: taskCountFields[];
 }
 
 export default function InteractiveTooltip({
@@ -15,43 +19,68 @@ export default function InteractiveTooltip({
   top,
   bottom = 'bottom-8',
   right = '-right-10',
-  zIndex = 'z-50'
+  zIndex = 'z-50',
+  dependency
 }: TooltipProps) {
-  const tooltipTimeout = useRef<number | undefined>(undefined);
-
   const [isTooltipOpen, setIsTooltipOpen] = useState<boolean>(false);
 
   const handleOpenTooltip = () => {
-    // Clear any existing timeout to avoid premature closure
-    if (tooltipTimeout.current) clearTimeout(tooltipTimeout.current);
     setIsTooltipOpen(true);
   };
 
   const handleCloseTooltip = () => {
-    // Delay the closure to give time for interaction
-    tooltipTimeout.current = window.setTimeout(() => {
-      setIsTooltipOpen(false);
-    }, 200); // Adjust this delay time as needed (e.g., 200ms)
     setIsTooltipOpen(false);
-    // Clear the timeout if the tooltip is reopened before the delay completes
-    clearTimeout(tooltipTimeout.current);
   };
 
   const handleTooltipClick = (e: React.MouseEvent) => {
     e.stopPropagation(); // Prevent click event from closing the tooltip
   };
 
+  const [elementHeight, setElementHeight] = useState(0);
+  const elementRef = useRef<HTMLDivElement | null>(null);
+
+  useLayoutEffect(() => {
+    if (elementRef.current) {
+      const height = elementRef.current.clientHeight;
+      setElementHeight(height);
+    }
+  }, [dependency]);
+
+  useEffect(() => {
+    const calculateHeight = () => {
+      if (elementRef.current) {
+        const height = elementRef.current.clientHeight;
+        setElementHeight(height);
+      }
+    };
+    // Initial calculation
+    calculateHeight();
+    // Add event listeners for resizing (optional, if element can change size)
+    window.addEventListener('resize', calculateHeight);
+
+    // Cleanup on unmount
+    return () => {
+      window.removeEventListener('resize', calculateHeight);
+    };
+  }, [dependency]);
+
+  const { updateCords } = useAppSelector((state) => state.task);
+  const { cords, relativeRef } = useAbsolute(updateCords, elementHeight, true);
+
   return (
-    <div className="realtive inline-block">
-      <div className="rounded cursor-pointer" onMouseEnter={handleOpenTooltip}>
-        {children}
-      </div>
+    <div
+      className="relative inline-block cursor-pointer"
+      ref={relativeRef}
+      onMouseEnter={handleOpenTooltip}
+      onMouseLeave={handleCloseTooltip}
+    >
+      <div className="rounded cursor-pointer">{children}</div>
       {isTooltipOpen && (
         <div
-          className={`absolute transition-all ease-out delay-300 duration-100 ${zIndex} ${top} ${right} ${bottom}`}
+          style={{ ...cords }}
+          className={`fixed w-32 transition-all ease-out delay-300 duration-100 ${zIndex} ${top} ${right} ${bottom}`}
           onClick={(e) => handleTooltipClick(e)}
-          onMouseLeave={handleCloseTooltip}
-          onMouseEnter={() => clearTimeout(tooltipTimeout?.current)}
+          ref={elementRef}
         >
           <div className="w-auto p-2 text-white rounded shadow-lg" style={{ backgroundColor: '#424242' }}>
             {content}

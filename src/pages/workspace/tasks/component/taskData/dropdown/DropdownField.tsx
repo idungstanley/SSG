@@ -2,7 +2,10 @@ import { Dialog, Transition } from '@headlessui/react';
 import { Fragment, useState, useRef } from 'react';
 import { useAppSelector, useAppDispatch } from '../../../../../../app/hooks';
 import { IField, Options } from '../../../../../../features/list/list.interfaces';
-import { useUpdateEntityCustomFieldValue } from '../../../../../../features/list/listService';
+import {
+  useClearEntityCustomFieldValue,
+  useUpdateEntityCustomFieldValue
+} from '../../../../../../features/list/listService';
 import { useAbsolute } from '../../../../../../hooks/useAbsolute';
 import { cl } from '../../../../../../utils';
 import {
@@ -45,6 +48,7 @@ export default function DropdownField({ field, taskId, currentProperty }: Dropdo
   >(field.activeProperty);
   const filteredOptions = options?.filter((option) => option.name.toLowerCase().includes(searchValue.toLowerCase()));
   const { mutate: onUpdate } = useUpdateEntityCustomFieldValue(taskId);
+  const { mutate: onClear } = useClearEntityCustomFieldValue();
 
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -76,6 +80,15 @@ export default function DropdownField({ field, taskId, currentProperty }: Dropdo
     dispatch(setEntityForCustom({ id: undefined, type: undefined }));
     dispatch(setNewCustomPropertyDetails({ type: 'Single Label', name: currentProperty.name, color: '' }));
     setIsOpen(false);
+  };
+
+  const handleClearField = () => {
+    if (currentProperty)
+      onClear({
+        taskId,
+        fieldId: currentProperty.id
+      });
+    closeModal();
   };
 
   return (
@@ -112,6 +125,18 @@ export default function DropdownField({ field, taskId, currentProperty }: Dropdo
                 />
               </div>
               <div className="w-full pt-3 space-y-2">
+                {activeOption?.name ? (
+                  <button
+                    onClick={handleClearField}
+                    className={cl(
+                      'text-gray-700 py-2 bg-white border w-full text-center block px-4 text-sm truncate rounded'
+                    )}
+                    style={{ backgroundColor: 'white', maxWidth: '195px' }}
+                  >
+                    -
+                  </button>
+                ) : null}
+
                 {Array.isArray(filteredOptions)
                   ? filteredOptions.map((option) => (
                       <button

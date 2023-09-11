@@ -59,11 +59,10 @@ function EditDropdown() {
   };
 
   const handleColor = (color: string | ListColourProps) => {
-    const colorValue = typeof color === 'string' ? color : ''; // Assuming color is an object with a "color" property
+    const colorValue = typeof color === 'string' ? color : '';
     setFormInputs((prevInputs) => {
       return prevInputs?.map((i) => {
         if (i.id === itemId) {
-          // Create a new object with the updated color property
           return { ...i, color: colorValue };
         }
         return i;
