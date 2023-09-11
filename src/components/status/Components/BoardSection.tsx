@@ -45,7 +45,7 @@ export default function BoardSection({
       const newStatusItem: StatusProps = {
         name: newStatusValue,
         color: 'green',
-        type: title,
+        type: id,
         position: statusData.length,
         id: null,
         is_default: 0
@@ -53,7 +53,7 @@ export default function BoardSection({
       // setStatusTypesState((prevStatusTypes) => [...prevStatusTypes, newStatusItem]);
       setStatusTypesState((prevBoardSections) => ({
         ...prevBoardSections,
-        [title]: [...prevBoardSections[title], newStatusItem] // Assuming 'open' is the section name
+        [id]: Array.isArray(prevBoardSections[id]) ? [...prevBoardSections[id], newStatusItem] : [newStatusItem] // Assuming 'open' is the section name
       }));
       setNewStatusValue('');
       setValidationMessage('');
