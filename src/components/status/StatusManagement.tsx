@@ -48,15 +48,6 @@ export const groupStylesMapping: Record<string, GroupStyles> = {
   // Add more model_type values and their styles as needed
 };
 
-// const statusTypes = {
-//   open: 'NOT STARTED STATUSES',
-//   custom: 'ACTIVE STATUSES',
-//   done: 'DONE STATUSES',
-//   closed: 'COMPLETED STATUSES'
-// };
-
-const statusTypes = ['open', 'custom', 'done', 'closed'];
-
 export default function CustomStatus() {
   const dispatch = useAppDispatch();
   const createStatusTypes = useMutation(statusTypesService);
