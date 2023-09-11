@@ -35,6 +35,7 @@ import { Task } from '../../../../../features/task/interface.tasks';
 import CollapseIcon from '../../collapseIcon/CollapseIcon';
 
 import '../../../../../styles/task.css';
+import { EntityType } from '../../../../../utils/EntityTypes/EntityType';
 
 interface HeadProps {
   columns: Column[];
@@ -49,6 +50,7 @@ interface HeadProps {
   listName?: string;
   groupedTask?: Task[];
   isSplitSubtask?: boolean;
+  parentId?: string;
 }
 
 export function Head({
@@ -63,7 +65,8 @@ export function Head({
   listId,
   listName,
   groupedTask,
-  isSplitSubtask
+  isSplitSubtask,
+  parentId
 }: HeadProps) {
   const parsedLabel = parseLabel(label);
   const dispatch = useAppDispatch();
@@ -207,8 +210,16 @@ export function Head({
   ];
 
   const handleAddCustomProperty = () => {
-    const type = hubId ? 'hub' : walletId ? 'wallet' : 'list';
-    dispatch(setEntityForCustom({ id: hubId ?? walletId ?? list_id, type }));
+    let id = '';
+    let type = '';
+    if (isSplitSubtask && parentId) {
+      id = parentId;
+      type = EntityType.task;
+    } else {
+      id = hubId || walletId || list_id || '';
+      type = hubId ? EntityType.hub : walletId ? EntityType.wallet : EntityType.list;
+    }
+    dispatch(setEntityForCustom({ id, type }));
     dispatch(setEditCustomProperty(undefined));
     dispatch(setActiveTabId(10));
   };

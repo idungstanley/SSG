@@ -13,7 +13,7 @@ import { cl } from '../../../../../utils';
 import FontStyle from './FontStyles/FontStyle';
 import CreateNumberField from './Number/CreateNumberField';
 import CreateEmailField from './Email/CreateEmailField';
-import CraeteWebsite from './Websites/CraeteWebsite';
+import CreateWebsite from './Websites/CreateWebsite';
 import CreateCurrencyField from './Currency/CreateCurrencyField';
 import CreatePhone from './Phone/CreatePhone';
 import CreateCheckbox from './Checkbox/CreateCheckbox';
@@ -45,7 +45,7 @@ function NewColumn() {
     'long text': <CreateTextField />,
     number: <CreateNumberField />,
     email: <CreateEmailField />,
-    website: <CraeteWebsite />,
+    website: <CreateWebsite />,
     currency: <CreateCurrencyField />,
     phone: <CreatePhone />,
     checkbox: <CreateCheckbox />
