@@ -36,7 +36,7 @@ export default function BoardSection({
   const [newStatusValue, setNewStatusValue] = useState<string>('');
   const [addStatus, setAddStatus] = useState<boolean>(false);
 
-  const handleSaveNewStatus = (title: string) => {
+  const handleSaveNewStatus = () => {
     const nameWithoutWhiteSpace = newStatusValue?.trim();
     const isNameExist = statusData.some(
       (status) => status.name?.toLowerCase() === nameWithoutWhiteSpace?.toLowerCase()
@@ -74,8 +74,9 @@ export default function BoardSection({
     }));
   };
   const StatusIndex = status.map((item) => item.name);
-  const handleAddStatus = (title: string) => {
-    setActiveStatusType(title);
+
+  const handleAddStatus = () => {
+    setActiveStatusType(id);
     setAddStatus(true);
   };
 
@@ -111,11 +112,11 @@ export default function BoardSection({
             name={title}
             onChange={handleOnChange}
             value={newStatusValue}
-            trailingClick={() => handleSaveNewStatus(title)}
+            trailingClick={() => handleSaveNewStatus()}
           />
         </span>
       )}
-      <span className="flex justify-items-start" onClick={() => handleAddStatus(title)}>
+      <span className="flex justify-items-start" onClick={() => handleAddStatus()}>
         <Button
           height="h-5"
           icon={<PlusCircle active={true} color="base" dimensions={{ height: 18, width: 18 }} />}
