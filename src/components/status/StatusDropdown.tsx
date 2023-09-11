@@ -13,9 +13,10 @@ import { VerticalScroll } from '../ScrollableContainer/VerticalScroll';
 
 interface StatusDropdownProps {
   TaskCurrentStatus: Status;
+  statusDropdownType?: string;
 }
 
-export default function StatusDropdown({ TaskCurrentStatus }: StatusDropdownProps) {
+export default function StatusDropdown({ TaskCurrentStatus, statusDropdownType }: StatusDropdownProps) {
   const { currentTaskStatusId, selectedTaskParentId } = useAppSelector((state) => state.task);
   const { updateCords } = useAppSelector((state) => state.task);
 
@@ -57,7 +58,11 @@ export default function StatusDropdown({ TaskCurrentStatus }: StatusDropdownProp
             className="flex items-center justify-center w-full text-sm focus:outline-none hover:text-gray-700"
           >
             <div ref={relativeRef}>
-              <StatusIconComp color={TaskCurrentStatus.color} />
+              {statusDropdownType === 'name' ? (
+                TaskCurrentStatus.name
+              ) : (
+                <StatusIconComp color={TaskCurrentStatus.color} />
+              )}
             </div>
           </button>
         </ToolTip>
