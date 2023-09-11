@@ -29,6 +29,7 @@ import BoardSection from './Components/BoardSection';
 import Button from '../Button';
 import MatchStatusPopUp from './Components/MatchStatusPopUp';
 import { setMatchData } from '../../features/general/prompt/promptSlice';
+import { BOARD_SECTIONS } from '../../utils/StatusManagement/Constant';
 
 interface ErrorResponse {
   data: {
@@ -46,6 +47,15 @@ export const groupStylesMapping: Record<string, GroupStyles> = {
   closed: { backgroundColor: '#E6FAE9', boxShadow: '0px 0px 5px rgba(0, 128, 0, 0.2)' }
   // Add more model_type values and their styles as needed
 };
+
+// const statusTypes = {
+//   open: 'NOT STARTED STATUSES',
+//   custom: 'ACTIVE STATUSES',
+//   done: 'DONE STATUSES',
+//   closed: 'COMPLETED STATUSES'
+// };
+
+const statusTypes = ['open', 'custom', 'done', 'closed'];
 
 export default function CustomStatus() {
   const dispatch = useAppDispatch();
@@ -186,6 +196,8 @@ export default function CustomStatus() {
     }
   };
 
+  console.log(statusData);
+
   const handleStatusData = async () => {
     await createStatusTypes.mutateAsync({
       model_id: model_id,
@@ -268,7 +280,7 @@ export default function CustomStatus() {
             >
               <BoardSection
                 id={uniqueModelType}
-                title={uniqueModelType}
+                title={BOARD_SECTIONS[uniqueModelType] as string}
                 status={boardSections[uniqueModelType]}
                 setStatusTypesState={setBoardSections}
                 statusData={statusData}

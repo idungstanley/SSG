@@ -44,7 +44,6 @@ export function useAbsolute<T>(
         : y + RELATIVE_HEIGHT;
       setCords({ top: yCord, left: xCord });
     }
-  }, [update, relativeRef, cords]);
-
+  }, [update, relativeRef, toolTip, relativeRef?.current?.scroll, blockHeight]);
   return { relativeRef, cords };
 }
