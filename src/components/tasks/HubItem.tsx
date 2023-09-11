@@ -50,7 +50,7 @@ interface TaskItemProps {
   topNumber?: string;
   zNumber?: string;
   isExtendedBar?: boolean;
-  handleClick: (id: string) => void;
+  handleClick: (id: string, type?: string) => void;
   handleLocation: (id: string, name: string, item: IHub) => void;
 }
 export default function HubItem({
@@ -133,7 +133,7 @@ export default function HubItem({
 
   useEffect(() => {
     if (isOver) {
-      handleClick(item.id);
+      handleClick(item.id, 'isOver');
     }
   }, [isOver]);
 
