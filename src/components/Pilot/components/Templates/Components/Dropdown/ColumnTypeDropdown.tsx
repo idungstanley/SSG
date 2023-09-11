@@ -68,7 +68,7 @@ export default function ColumnTypeDropdown() {
   };
 
   const { updateCords } = useAppSelector((state) => state.task);
-  const { cords, relativeRef } = useAbsolute(updateCords, 200);
+  const { cords, relativeRef } = useAbsolute(updateCords, 400);
 
   return (
     <div>
