@@ -7,7 +7,6 @@ import CreateDateField from './Date/CreateDateField';
 import CreateTextField from './Texts/CreateTextField';
 import Picker from '../../../../../assets/icons/Picker';
 import AlsoitMenuDropdown from '../../../../DropDowns';
-import ColorPalette from '../../../../ColorPalette/component/ColorPalette';
 import { ListColourProps } from '../../../../tasks/ListItem';
 import EditDropdown from '../Edit/EditDropdown';
 import { cl } from '../../../../../utils';
@@ -17,6 +16,7 @@ import CreateEmailField from './Email/CreateEmailField';
 import CraeteWebsite from './Websites/CraeteWebsite';
 import CreateCurrencyField from './Currency/CreateCurrencyField';
 import CreateCheckbox from './Checkbox/CreateCheckbox';
+import Palletes from '../../../../ColorPalette/Palettes';
 
 function NewColumn() {
   const dispatch = useAppDispatch();
@@ -24,7 +24,7 @@ function NewColumn() {
   const [activeBtn, setActiveBtn] = useState('1');
   const { newCustomPropertyDetails, editCustomProperty } = useAppSelector((state) => state.task);
 
-  const handleColor = (color: string | ListColourProps) => {
+  const handleColor = (color: string | ListColourProps | null) => {
     dispatch(setNewCustomPropertyDetails({ ...newCustomPropertyDetails, color: color as string }));
   };
 
@@ -72,7 +72,7 @@ function NewColumn() {
                   }
                   type="text"
                   className={cl(
-                    'block border-0 py-1 ring-0  placeholder-gray-300 focus:ring-0 focus:ring-inset text-alsoit-text-xi sm:text-sm sm:leading-6',
+                    'block border-0 py-1 ring-0  placeholder-gray-300 focus:ring-0 focus:ring-inset text-alsoit-text-xi sm:text-sm sm:leading-6 w-11/12',
                     newCustomPropertyDetails.style?.is_bold === '1' ? 'font-extrabold' : 'font-semibold',
                     newCustomPropertyDetails.style?.is_italic === '1' && 'italic',
                     newCustomPropertyDetails.style?.is_underlined === '1' && 'underline underline-offset-2'
@@ -80,11 +80,11 @@ function NewColumn() {
                   value={newCustomPropertyDetails.name}
                   style={{ color: newCustomPropertyDetails.color ? newCustomPropertyDetails.color : '#242424' }}
                 />
-                <button onClick={handleClick}>
+                <button onClick={handleClick} className="1/12 flex justify-center items-center">
                   <Picker />
                 </button>
                 <AlsoitMenuDropdown handleClose={handleClose} anchorEl={anchorEl}>
-                  <div style={{ width: '276px' }} className="p-4 rounded-2xl">
+                  <div style={{ width: '276px' }} className="p-4 rounded-2xl w-full">
                     <div className="bg-gray-200  flex justify-between rounded-2xl">
                       <button
                         className={cl(
@@ -117,7 +117,7 @@ function NewColumn() {
                         Font Size
                       </button>
                     </div>
-                    {activeBtn === '1' && <ColorPalette handleClick={handleColor} />}
+                    {activeBtn === '1' && <Palletes handleClick={handleColor} />}
                     {activeBtn === '2' && <FontStyle />}
                   </div>
                 </AlsoitMenuDropdown>
