@@ -42,7 +42,7 @@ import {
   taskStatusUpdateManager
 } from '../../managers/Task';
 import { ITeamMembersAndGroup } from '../settings/teamMembersAndGroups.interfaces';
-import { runTimer } from '../../utils/timeCounter';
+import { runTimer } from '../../utils/TimerCounter';
 
 //edit a custom field
 export const UseEditCustomFieldService = (data: {
@@ -695,7 +695,7 @@ export const useCurrentTime = ({ workspaceId }: { workspaceId?: string }) => {
       }
     }
   );
-  runTimer({ isRunning: !!data?.data.time_entry, timerType: 'time-clock' });
+  runTimer({ isRunning: !!data?.data.time_entry });
 
   return { data, isLoading, isError, refetch };
 };

@@ -13,11 +13,10 @@ import CommentsForPilot from '../../../../../components/Comments/CommentsForPilo
 import History from '../../../../../components/Pilot/components/History';
 import WatchersForPilot from '../../../../../components/Watchers/WatchersForPilot';
 import { setShowPilotSideOver } from '../../../../../features/general/slideOver/slideOverSlice';
-import { VscChecklist, VscScreenFull } from 'react-icons/vsc';
+import { VscChecklist } from 'react-icons/vsc';
 import Checklists from '../../../../../components/Pilot/components/Checklist/Checklist';
 import Details from '../../../../../components/Pilot/components/details/Details';
 import TimeClock from './components/TimeClock';
-import RecordScreen from '../../../../../components/Pilot/components/RecordScreen';
 import HubManager from '../../../../../components/Pilot/components/HubManager/HubManager';
 import TemplatesIcon from '../../../../../assets/icons/Templates';
 import Templates from '../../../../../components/Pilot/components/Templates';
@@ -25,7 +24,7 @@ import Calendar from '../../../../../components/Pilot/components/Calendar';
 import CalendarIcon from '../../../../../assets/icons/CalendarIcon';
 import { EntityType } from '../../../../../utils/EntityTypes/EntityType';
 import EntityManagerIcon from '../../../../../assets/icons/EntityManagerIcon';
-import { ClockIcon } from '../../../../../assets/icons/ClockIcon';
+import { UtilityIcon } from '../../../../../assets/icons/Utility';
 
 const sections = [
   {
@@ -55,10 +54,6 @@ const sections = [
   {
     id: 7,
     element: <Checklists />
-  },
-  {
-    id: 8,
-    element: <RecordScreen />
   },
   {
     id: 9,
@@ -102,18 +97,13 @@ const tabs = [
   },
   {
     id: 6,
-    label: 'Time clock',
-    icon: <ClockIcon />
+    label: 'Utilities',
+    icon: <UtilityIcon />
   },
   {
     id: 7,
     label: 'Checklists',
     icon: <VscChecklist className="w-4 h-4" />
-  },
-  {
-    id: 8,
-    label: 'Screen Record',
-    icon: <VscScreenFull className="w-4 h-4" />
   },
   {
     id: 9,

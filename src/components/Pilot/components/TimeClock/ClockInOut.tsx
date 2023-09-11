@@ -22,7 +22,7 @@ import { VerticalScroll } from '../../../ScrollableContainer/VerticalScroll';
 import AutomaticTimeElement from './AutomaticTimeElement';
 import { ClockIcon } from '../../../../assets/icons/ClockIcon';
 import { ManualTimeElement } from './ManualTimeElement';
-import { runTimer } from '../../../../utils/timeCounter';
+import { runTimer } from '../../../../utils/TimerCounter';
 
 export interface User {
   initials: string;
@@ -146,7 +146,7 @@ export default function ClockInOut() {
     (tracker) => tracker.team_member.user.id !== currentUserId
   );
 
-  const RunTimer = runTimer({ isRunning: isRunning, setTime: setTime, timerType: 'time-clock' });
+  const RunTimer = runTimer({ isRunning: isRunning, setTime: setTime });
 
   const timeTabs = [
     {

@@ -16,7 +16,7 @@ interface TimerProps {
 
 export function runTimer({ isRunning, setTime, timerType }: TimerProps) {
   const dispatch = useAppDispatch();
-  const { duration } = useAppSelector((state) => state.task);
+  const { duration, period } = useAppSelector((state) => state.task);
 
   const { intervalId, duration: timeData } = useGlobalCounter({
     duration: duration,
@@ -25,15 +25,15 @@ export function runTimer({ isRunning, setTime, timerType }: TimerProps) {
   });
 
   useEffect(() => {
-    if (isRunning) {
-      timerType === 'time-clock'
-        ? dispatch(setUpdateTimerDuration(timeData))
-        : dispatch(setUpdateRecoderDuration(timeData));
+    if (timerType === 'time-clock') {
+      dispatch(setUpdateTimerDuration(timeData));
+    } else {
+      dispatch(setUpdateRecoderDuration(timeData));
     }
     isRunning && timerType === 'time-clock'
-      ? dispatch(setTimerInterval(intervalId))
+      ? period !== intervalId && dispatch(setTimerInterval(intervalId))
       : dispatch(setRecorderInterval(intervalId));
-  }, [isRunning, dispatch]);
+  }, [isRunning, dispatch, timeData]);
 }
 
 interface GlobalCounterProps {
@@ -53,20 +53,25 @@ export function useGlobalCounter({ duration: initialDuration, localTrigger, loca
 
   useEffect(() => {
     if (localTrigger) {
+      // Reset the timer to the initial duration
+      setTimerData((prevTimerData) => ({ ...prevTimerData, duration: initialDuration }));
+
       const newIntervalId = window.setInterval(() => {
         setTimerData((prevTimerData) => {
-          const { h, m, s } = prevTimerData.duration;
-          const updatedS = (s + 1) % 60;
-          const updatedM = (m + (s === 0 ? 1 : 0)) % 60;
-          const updatedH = (h + (m === 0 && s === 0 ? 1 : 0)) % 24;
+          let { h, m, s } = prevTimerData.duration;
 
-          const updatedDuration = { h: updatedH, m: updatedM, s: updatedS };
+          // Update seconds, minutes, and hours
+          s = (s + 1) % 60;
+          m = (m + (s === 0 ? 1 : 0)) % 60;
+          h = (h + (m === 0 && s === 0 ? 1 : 0)) % 24;
+
+          const updatedDuration = { h, m, s };
 
           if (localStateFn) {
             localStateFn(updatedDuration);
           }
 
-          return { intervalId: prevTimerData.intervalId, duration: updatedDuration };
+          return { ...prevTimerData, duration: updatedDuration };
         });
       }, 1000);
 
@@ -79,13 +84,12 @@ export function useGlobalCounter({ duration: initialDuration, localTrigger, loca
       }
     }
 
-    // Clean up the interval when the component unmounts
     return () => {
       if (timerData.intervalId) {
         clearInterval(timerData.intervalId);
       }
     };
-  }, [localTrigger, localStateFn]);
+  }, [localTrigger, localStateFn, initialDuration]);
 
   return timerData;
 }

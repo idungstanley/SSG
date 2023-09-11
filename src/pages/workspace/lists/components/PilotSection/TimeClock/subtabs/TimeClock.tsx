@@ -1,7 +1,14 @@
-import { useAppSelector } from '../../../../../../../app/hooks';
-import ClockInOut from '../../../../../../../components/Pilot/components/TimeClock/ClockInOut';
+import SectionArea from '../../../../../../../components/Pilot/components/SectionArea';
+import TimeClockIcon from '../../../../../../../assets/icons/TimeClockIcon';
+import TimeClockTabs from '../../../../../hubs/components/PilotSection/components/TimeClock/subtabs/TimeClock';
 
-export default function TimeClockTabs() {
-  const { showPilot } = useAppSelector((state) => state.workspace);
-  return <section className="flex flex-col h-full">{showPilot && <ClockInOut />}</section>;
+export default function TimeClock() {
+  return (
+    <>
+      <SectionArea label="Time Clock" icon={<TimeClockIcon />} />
+      <>
+        <TimeClockTabs />
+      </>
+    </>
+  );
 }

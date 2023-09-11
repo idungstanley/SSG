@@ -18,6 +18,7 @@ export function runTimer({ isRunning, setTime }: TimerProps) {
     let updateS = duration.s;
 
     let interval: number | undefined;
+    console.log(isRunning);
 
     if (isRunning) {
       interval = window.setInterval(() => {
@@ -30,5 +31,5 @@ export function runTimer({ isRunning, setTime }: TimerProps) {
       }, 1000);
     }
     isRunning && dispatch(setTimerInterval(interval));
-  }, [isRunning, dispatch]);
+  }, [isRunning, duration]);
 }

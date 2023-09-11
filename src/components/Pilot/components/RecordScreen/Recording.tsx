@@ -9,6 +9,8 @@ import { useParams } from 'react-router-dom';
 import '../../../../pages/workspace/tasks/component/views/view.css';
 import { EntityType } from '../../../../utils/EntityTypes/EntityType';
 import { IDuration } from '../../../../features/task/interface.tasks';
+import { runTimer } from '../../../../utils/RecordTimer';
+import { setRecorderInterval, setUpdateRecoderDuration } from '../../../../features/task/taskSlice';
 
 export interface IFormData {
   append(name: string, value: Blob, fileName?: string): void;
@@ -17,16 +19,15 @@ export interface IFormData {
 
 export default function Recording() {
   const { activeTabId, activeItemId, activeItemType, isMuted } = useAppSelector((state) => state.workspace);
-  const { recorder, stream, recorderDuration: duration } = useAppSelector((state) => state.task);
+  const { recorder, stream, recorderDuration } = useAppSelector((state) => state.task);
   const { hubId, subhubId, listId, workSpaceId, taskId } = useParams();
 
-  const [time, setTime] = useState<IDuration>({
-    s: 0,
-    m: 0,
-    h: 0
-  });
+  const [time, setTime] = useState<IDuration>(recorderDuration);
+
+  const [recordState, setRecordState] = useState<boolean>(false);
 
   const dispatch = useAppDispatch();
+
   const {
     handleStartStream,
     handleStopStream,
@@ -39,20 +40,23 @@ export default function Recording() {
   const startRecording = async () => {
     await handleStartStream();
     dispatch(setRecorderLastMemory({ activeTabId, workSpaceId, listId, hubId, subhubId, taskId }));
+    setRecordState(true);
   };
 
   const stopRecording = () => {
     handleStopStream({ stream, recorder });
+    setRecordState(false);
+    dispatch(setRecorderInterval());
+    dispatch(setUpdateRecoderDuration({ h: 0, m: 0, s: 0 }));
   };
 
   function timerCheck() {
     if (activeItemType === EntityType.hub || activeItemType === EntityType.list || activeItemType === EntityType.task) {
       return (
         <div className="items-center text-alsoit-text-md">
-          {`${String(duration.h).padStart(2, '0')}:${String(duration.m).padStart(2, '0')}:${String(duration.s).padStart(
-            2,
-            '0'
-          )}`}
+          {`${String(recorderDuration.h).padStart(2, '0')}:${String(recorderDuration.m).padStart(2, '0')}:${String(
+            recorderDuration.s
+          ).padStart(2, '0')}`}
         </div>
       );
     }
@@ -63,6 +67,11 @@ export default function Recording() {
     );
   }
 
+  const run = runTimer({
+    isRunning: recordState,
+    setTime: setTime
+  });
+
   useEffect(() => {
     if (screenRecording !== 'recording') {
       dispatch(
@@ -72,7 +81,13 @@ export default function Recording() {
         })
       );
     }
+    run;
   }, [screenRecording]);
+
+  useEffect(() => {
+    setTime(recorderDuration);
+  }, [recorderDuration]);
+
   return (
     <div>
       {screenRecording === 'recording' ? (
@@ -89,6 +104,9 @@ export default function Recording() {
               <IoStopCircleSharp className="w-7 h-7" />
               Stop Recording
             </button>
+          </div>
+          <div className="flex justify-center items-center my-4 bg-alsoit-gray-50 text-alsoit-gray-200 font-semibold p-1.5">
+            {timerCheck()}
           </div>
         </>
       ) : (
