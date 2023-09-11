@@ -76,7 +76,7 @@ export default function BoardSection({
   const StatusIndex = status.map((item) => item.name);
 
   const handleAddStatus = () => {
-    setActiveStatusType(id);
+    setActiveStatusType(title);
     setAddStatus(true);
   };
 
