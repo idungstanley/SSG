@@ -61,7 +61,6 @@ function MainLayout() {
     <div className={cl('h-full flex flex-col')}>
       <ProgressBar />
       {/* <TopMenu /> */}
-      {userSettingsData?.isFavoritePinned && <Favorites />}
       <Toaster position="bottom-left" />
       <DragContext>
         <div className="flex h-full">
@@ -71,6 +70,7 @@ function MainLayout() {
             </div>
             <div className="w-full h-full">
               {/* <AdditionalHeader /> */}
+              {userSettingsData?.isFavoritePinned && <Favorites />}
               <Header />
               <div className="w-full h-full">
                 <Outlet />
