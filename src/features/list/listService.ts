@@ -264,8 +264,7 @@ export const useCreateDropdownField = () => {
       dispatch(setNewCustomPropertyDetails({ name: '', type: 'Select Property Type', color: null }));
       const updatedList = updateCustomFieldsManager(
         entityForCustom.type === EntityType.task ? subtasks : tasks,
-        data.data.custom_field,
-        entityForCustom.id
+        data.data.custom_field
       );
       if (entityForCustom.type === EntityType.task) {
         dispatch(setSubtasks(updatedList));
