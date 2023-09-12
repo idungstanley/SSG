@@ -158,8 +158,10 @@ interface TaskState {
   splitSubTaskLevels: string;
   CompactViewWrap: boolean;
   triggerSaveSettings: boolean;
+  triggerAutoSave: boolean;
   triggerSaveSettingsModal: boolean;
   meMode: boolean;
+  autoSave: boolean;
   showTaskNavigation: boolean;
   addNewTaskItem: boolean;
   selectedIndex: number | null;
@@ -237,6 +239,7 @@ const initialState: TaskState = {
   comfortableViewWrap: false,
   showNewTaskField: false,
   meMode: false,
+  autoSave: false,
   showNewTaskId: '',
   singleLineView: false,
   saveSettingLocal: null,
@@ -246,6 +249,7 @@ const initialState: TaskState = {
   verticalGrid: false,
   taskUpperCase: false,
   triggerSaveSettings: false,
+  triggerAutoSave: false,
   triggerSaveSettingsModal: false,
   toggleAllSubtask: false,
   verticalGridlinesTask: false,
@@ -428,6 +432,9 @@ export const taskSlice = createSlice({
     setTriggerSaveSettings(state, action: PayloadAction<boolean>) {
       state.triggerSaveSettings = action.payload;
     },
+    setTriggerAutoSave(state, action: PayloadAction<boolean>) {
+      state.triggerAutoSave = action.payload;
+    },
     setTriggerSaveSettingsModal(state, action: PayloadAction<boolean>) {
       state.triggerSaveSettingsModal = action.payload;
     },
@@ -442,6 +449,9 @@ export const taskSlice = createSlice({
     },
     setMeMode(state, action: PayloadAction<boolean>) {
       state.meMode = action.payload;
+    },
+    setAutoSave(state, action: PayloadAction<boolean>) {
+      state.autoSave = action.payload;
     },
     setToggleAllSubtask(state, action: PayloadAction<boolean>) {
       state.toggleAllSubtask = action.payload;
@@ -645,6 +655,7 @@ export const {
   setSelectedTaskParentId,
   setSelectedTaskType,
   setMeMode,
+  setAutoSave,
   setShowTaskNavigation,
   setShowNewTaskField,
   setShowNewTaskId,
@@ -657,6 +668,7 @@ export const {
   setAddNewTaskItem,
   setCloseTaskListView,
   setTriggerSaveSettings,
+  setTriggerAutoSave,
   setToggleAssignCurrentTaskId,
   setCurrentParentTaskId,
   setGetSubTaskId,
