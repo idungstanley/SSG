@@ -19,6 +19,7 @@ import { SubtasksTable } from '../Table/SubtasksTable';
 
 interface ListProps {
   tasks: Task[];
+  subtasksCustomeFields?: IField[];
   customProperty?: IField[];
 }
 
@@ -28,7 +29,7 @@ export interface IListColor {
 
 const unique = (arr: listColumnProps[]) => [...new Set(arr)];
 
-export function List({ tasks }: ListProps) {
+export function List({ tasks, subtasksCustomeFields }: ListProps) {
   const dispatch = useAppDispatch();
   const { listId } = useParams();
 
@@ -55,10 +56,10 @@ export function List({ tasks }: ListProps) {
   }, [parentHubExt]);
 
   useEffect(() => {
-    if (listId) {
+    if (listId && hub.length) {
       setCurrentList(findCurrentList(listId, hub));
     }
-  }, [listId]);
+  }, [listId, hub]);
 
   const ListColor: IListColor = tasks[0].list?.color
     ? JSON.parse(tasks[0].list?.color as string)
@@ -77,6 +78,20 @@ export function List({ tasks }: ListProps) {
     console.log(customFieldNames);
     return unique([...columnsHead, ...customFieldNames]);
   }, [tasks]);
+
+  const generateSubtasksColumns = useMemo(() => {
+    let customFieldNames: listColumnProps[] = [];
+    if (subtasksCustomeFields?.length) {
+      customFieldNames = subtasksCustomeFields.map((i) => ({
+        value: i.name,
+        id: i.id,
+        field: i.type,
+        hidden: false,
+        color: i.color
+      }));
+    }
+    return unique([...columnsHead, ...customFieldNames]);
+  }, [subtasksCustomeFields]);
 
   const createFullTasksList = () => {
     const newFullTasksList: ITaskFullList[] = [];
@@ -186,8 +201,8 @@ export function List({ tasks }: ListProps) {
                         key={task.id}
                         data={task}
                         listId={task.list_id}
-                        heads={hideTask.length ? hideTask : generateColumns}
-                        customFields={tasks[0].custom_field_columns as IField[]}
+                        heads={hideTask.length ? hideTask : generateSubtasksColumns}
+                        customFields={subtasksCustomeFields as IField[]}
                         level={1}
                       />
                     </Fragment>

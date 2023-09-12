@@ -44,18 +44,10 @@ interface ErrorResponse {
 export const groupStylesMapping: Record<string, GroupStyles> = {
   open: { backgroundColor: '#FBFBFB', boxShadow: '0px 0px 5px rgba(0, 0, 0, 0.2)' },
   custom: { backgroundColor: '#FCF1FF', boxShadow: '0px 0px 5px rgba(128, 0, 128, 0.2)' },
-  closed: { backgroundColor: '#E6FAE9', boxShadow: '0px 0px 5px rgba(0, 128, 0, 0.2)' }
+  closed: { backgroundColor: '#E6FAE9', boxShadow: '0px 0px 5px rgba(0, 128, 0, 0.2)' },
+  done: { boxShadow: '0px 0px 5px rgba(0, 0, 0, 0.2)' }
   // Add more model_type values and their styles as needed
 };
-
-// const statusTypes = {
-//   open: 'NOT STARTED STATUSES',
-//   custom: 'ACTIVE STATUSES',
-//   done: 'DONE STATUSES',
-//   closed: 'COMPLETED STATUSES'
-// };
-
-const statusTypes = ['open', 'custom', 'done', 'closed'];
 
 export default function CustomStatus() {
   const dispatch = useAppDispatch();
@@ -268,7 +260,7 @@ export default function CustomStatus() {
         >
           {Object.keys(boardSections).map((uniqueModelType) => (
             <div
-              className="p-2 space-y-2 rounded"
+              className={`p-2 space-y-2 rounded ${uniqueModelType === 'done' && 'bg-alsoit-gray-50'}`}
               key={uniqueModelType}
               style={{
                 backgroundColor:

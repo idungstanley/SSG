@@ -55,18 +55,21 @@ export function SubtasksTable({ data, heads, customFields, listId, paddingLeft =
       const tasksWithListId = tasks.map((item) => {
         return {
           ...item,
+          custom_field_columns: customFields,
           list_id: listId
         };
       });
-      dispatch(setSubtasks({ ...subtasks, [data.id]: tasksWithListId as ITaskFullList[] }));
+      if (!subtasks[data.id]) {
+        dispatch(setSubtasks({ ...subtasks, [data.id]: tasksWithListId as ITaskFullList[] }));
+      }
     }
   }, [tasks]);
 
   useEffect(() => {
-    if (tasks?.length) {
-      setFilteredSubTasks(filterSubtasks(tasks as ITaskFullList[], subtasksfilters));
+    if (Object.keys(subtasks).length && data.id) {
+      setFilteredSubTasks(filterSubtasks(subtasks[data.id] as ITaskFullList[], subtasksfilters));
     }
-  }, [tasks, subtasksfilters]);
+  }, [subtasks, subtasksfilters]);
 
   useEffect(() => {
     if (parentHubExt.id) {
@@ -148,12 +151,13 @@ export function SubtasksTable({ data, heads, customFields, listId, paddingLeft =
                   listId={tasks[0].list_id}
                   groupedTask={tasks}
                   isSplitSubtask={true}
+                  parentId={data.id}
                 />
 
                 {/* rows */}
                 {!collapseTasks ? (
                   <tbody className="contents">
-                    {filteredSubtasks.length ? (
+                    {filteredSubtasks?.length ? (
                       <>
                         {filteredSubtasks.map((task, index) =>
                           'tags' in task ? (

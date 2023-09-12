@@ -97,11 +97,11 @@ export function ListPage() {
   const onScroll = useScroll(() => dispatch(setUpdateCords()));
 
   useEffect(() => {
-    if (tasks.length && listId && !tasksStore[listId] && list?.data.list.custom_fields) {
+    if (tasks.length && listId && !tasksStore[listId] && list?.data.list.custom_field_columns) {
       const tasksWithCustomFields = tasks.map((task) => {
         return {
           ...task,
-          custom_field_columns: list.data.list.custom_fields
+          custom_field_columns: list.data.list.custom_field_columns
         };
       });
       dispatch(setTasks({ ...tasksStore, [listId]: tasksWithCustomFields as ITaskFullList[] }));
@@ -135,7 +135,7 @@ export function ListPage() {
             <TaskQuickAction listDetailsData={listName} />
 
             {tasksStore[listId as string] && tasks.length && isTasksUpdated ? (
-              <List tasks={tasksStore[listId as string]} />
+              <List tasks={tasksStore[listId as string]} subtasksCustomeFields={tasks[0].custom_field_columns} />
             ) : null}
           </div>
           {tasks?.length > 1 && <GroupHorizontalScroll />}

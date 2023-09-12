@@ -66,10 +66,10 @@ export default function HList({ hubs }: ListProps) {
     }
   };
 
-  const handleClick = (id: string) => {
+  const handleClick = (id: string, type?: string) => {
     dispatch(setParentHubExt({ id, type: EntityType.hub }));
 
-    if (id === openedNewHubId) {
+    if (id === openedNewHubId && type !== 'isOver') {
       setOpenedNewHubId('');
       dispatch(setOpenedEntitiesIds(openedEntitiesIds.filter((item) => item !== id)));
     } else {
