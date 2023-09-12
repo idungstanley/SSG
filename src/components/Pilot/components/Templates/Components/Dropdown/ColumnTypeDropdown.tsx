@@ -14,6 +14,7 @@ import EmailOptions from '../Email/Email';
 import WebsiteOptions from '../Websites/WebsiteOptions';
 import PhoneOptions from '../Phone/PhoneOptions';
 import CheckBoxOptions from '../Checkbox/CheckboxOptions';
+import RatingOption from '../Rating/RatingOptions';
 
 const columnTypes = [
   {
@@ -60,6 +61,11 @@ const columnTypes = [
     id: 'Checkbox',
     title: 'Checkbox',
     options: <CheckBoxOptions />
+  },
+  {
+    id: 'Rating',
+    title: 'Rating',
+    options: <RatingOption />
   }
 ];
 

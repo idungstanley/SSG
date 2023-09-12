@@ -232,7 +232,7 @@ const createDropdownField = (data: {
   type?: string;
   customType: string;
   style?: { is_bold: string; is_underlined: string; is_italic: string };
-  properties?: { currency: string; symbol: string };
+  properties?: { currency?: string; symbol?: string; emoji?: string; number?: number };
 }) => {
   const { id, options, name, type, customType, style, color, properties } = data;
   const response = requestNew<IResCustomfield>({
