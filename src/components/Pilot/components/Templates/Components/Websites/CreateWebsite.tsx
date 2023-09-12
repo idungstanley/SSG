@@ -4,7 +4,7 @@ import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
 import { useCreateDropdownField } from '../../../../../../features/list/listService';
 import { setIsTasksUpdated } from '../../../../../../features/task/taskSlice';
 
-function CraeteWebsite() {
+function CreateWebsite() {
   const dispatch = useAppDispatch();
 
   const { newCustomPropertyDetails, entityForCustom } = useAppSelector((state) => state.task);
@@ -47,4 +47,4 @@ function CraeteWebsite() {
   );
 }
 
-export default CraeteWebsite;
+export default CreateWebsite;
