@@ -159,7 +159,14 @@ export function Col({ value, field, fieldId, task, customFields, ...props }: Col
         fieldId={fieldId}
       />
     ),
-    rating: <RatingField />
+    rating: (
+      <RatingField
+        entityCustomProperty={customFields?.find((i) => i.id === fieldId)}
+        taskId={task.id}
+        taskCustomFields={task.custom_fields?.find((i) => i.id === fieldId)}
+        fieldId={fieldId}
+      />
+    )
   };
   return (
     <>
