@@ -75,7 +75,6 @@ export function List({ tasks, subtasksCustomeFields }: ListProps) {
       hidden: false,
       color: i.color
     }));
-    console.log(customFieldNames);
     return unique([...columnsHead, ...customFieldNames]);
   }, [tasks]);
 
