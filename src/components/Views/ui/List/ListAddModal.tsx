@@ -10,7 +10,6 @@ import {
   AiOutlineShareAlt,
   AiOutlineStar
 } from 'react-icons/ai';
-import Permissions from '../../../Pilot/components/Permissions/index';
 import { GrEdit } from 'react-icons/gr';
 import { HiOutlineDuplicate, HiOutlineInformationCircle, HiOutlineMail } from 'react-icons/hi';
 import { MdOutlineSendToMobile } from 'react-icons/md';
@@ -148,7 +147,7 @@ export default function ListAddModal({
         {items.map((item) => (
           <div key={item.id}>
             <div className="w-full m-2">
-              {(item.label == 'List Info' || item.label == 'Archive') && <p className="border-t-2 mr-5"></p>}
+              {(item.label === 'List Info' || item.label === 'Archive') && <p className="border-t-2 mr-5"></p>}
             </div>
             <MenuItem
               key={item.label}

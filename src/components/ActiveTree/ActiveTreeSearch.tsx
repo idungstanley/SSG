@@ -12,6 +12,7 @@ import { useGetAllHubs, useGetActiveHubChildren } from '../../features/hubs/hubS
 import { useParams } from 'react-router';
 import CreateTree from '../../pages/workspace/hubs/components/ActiveTree/CreateTree';
 import { setFilteredResults } from '../../features/search/searchSlice';
+import { IHub } from '../../features/hubs/hubs.interfaces';
 
 interface ActiveTreeSearchProps {
   closeDropdown?: React.Dispatch<React.SetStateAction<boolean>>;
@@ -28,7 +29,7 @@ export default function ActiveTreeSearch({ closeDropdown }: ActiveTreeSearchProp
   const [newHubId, setNewHubId] = useState<string>('');
 
   const { data: allHubs } = useGetAllHubs();
-  const { data: allHubTree } = useGetActiveHubChildren({ hub_id: newHubId || hubId });
+  const { data: allHubTree } = useGetActiveHubChildren({ hub_id: newHubId || hubId, hubs: allHubs?.hubs as IHub[] });
 
   useEffect(() => {
     if (allHubTree && allHubs && hubs.length) {

@@ -95,7 +95,7 @@ interface IActiveHubRes {
   };
 }
 
-export const useGetActiveHubChildren = ({ hub_id }: { hub_id?: string | null }) => {
+export const useGetActiveHubChildren = ({ hub_id, hubs }: { hub_id?: string | null; hubs: IHub[] }) => {
   const id = hub_id;
   return useQuery(
     ['retrieve', id ? id : 'root'],
@@ -108,6 +108,7 @@ export const useGetActiveHubChildren = ({ hub_id }: { hub_id?: string | null }) 
         }
       }),
     {
+      enabled: hubs?.length > 0,
       select: (res) => res.data
     }
   );
@@ -240,7 +241,7 @@ export const UseGetHubDetails = (query: {
   const { workSpaceId } = useParams();
   const { currentWorkspaceId } = useAppSelector((state) => state.auth);
 
-  const fetch = currentWorkspaceId == workSpaceId;
+  const fetch = currentWorkspaceId === workSpaceId;
   return useQuery(
     ['hub-details', { query }],
     async () => {
@@ -268,7 +269,7 @@ const addToFavorite = (data: {
 }) => {
   let newType: string | null | undefined = null;
   const { query, type } = data;
-  if (type === 'hubs' || type === EntityType.subHub) {
+  if (type?.includes(EntityType.hub)) {
     newType = EntityType.hub;
   } else {
     newType = type;

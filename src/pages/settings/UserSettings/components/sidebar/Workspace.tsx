@@ -32,14 +32,6 @@ function Workspace() {
       id: 3,
       title: 'Teams',
       child: [
-        // {
-        //   id: 1,
-        //   title: 'Team Members',
-        //   onClick: () => {
-        //     dispatch(setActiveTab('Team Members'));
-        //     navigate('team-members');
-        //   }
-        // },
         {
           id: 1,
           title: 'Team Member Invites',

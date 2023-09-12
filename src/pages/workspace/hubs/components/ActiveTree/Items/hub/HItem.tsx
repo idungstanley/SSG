@@ -49,7 +49,6 @@ export default function HItem({ id, name, parentId }: ItemProps) {
               initials={getInitials(name)}
               height={showSidebar ? 'h-4' : 'h-6'}
               width={showSidebar ? 'w-4' : 'w-6'}
-              // backgroundColour={item.color !== null ? item.color : paletteColor}
               backgroundColour={'blue'}
               roundedStyle="rounded"
             />
@@ -63,7 +62,6 @@ export default function HItem({ id, name, parentId }: ItemProps) {
                 verticalAlign: 'baseline',
                 letterSpacing: '0.28px'
               }}
-              // onClick={() => handleLocation(item.id, item.name)}
             >
               {name}
             </a>

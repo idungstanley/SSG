@@ -20,7 +20,7 @@ export function PopAssignModal({
   handleClose: () => void;
 }) {
   const { data } = useCommunity();
-  const filteredUser = useMemo(() => data?.team_members.filter((users) => users.id == currHoveredOnUser), [data]);
+  const filteredUser = useMemo(() => data?.team_members.filter((users) => users.id === currHoveredOnUser), [data]);
 
   const open = Boolean(anchorEl);
   return (

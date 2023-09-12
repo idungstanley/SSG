@@ -42,7 +42,7 @@ export default function CreateWallet() {
       dispatch(setCreateEntityType(null));
       dispatch(setEntityToCreate(null));
       const wallet = data.data.wallet;
-      const updatedTree = createWalletManager(type as string, wallet.parent_id, hub, wallet);
+      const updatedTree = createWalletManager(type as string, hub, wallet);
       dispatch(getHub(updatedTree));
       dispatch(setFilteredResults(updatedTree));
     }

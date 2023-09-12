@@ -1,17 +1,18 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { IEntries, ITimeEntriesRes } from '../../../../features/task/interface.tasks';
 import { Header, User } from './ClockLog';
-import { setTimeArr, setTimeSortArr } from '../../../../features/task/taskSlice';
+import { setTimeArr, setTimeSortArr, setTimeSortStatus } from '../../../../features/task/taskSlice';
 import NoEntriesFound from './NoEntries';
 import { ClockLogHeader } from './ClocklogHeader';
-import { FaSort } from 'react-icons/fa';
-import { HeaderSort } from './HeaderSort';
-import { UserSortDropDown } from './TimeUserSortDropDown';
 import PlusCircle from '../../../../assets/icons/AddCircle';
 import { ColumnFilterList } from './ClockColumnFilterList';
 import EntryList, { entriesProps } from '../../../../pages/workspace/tasks/timeclock/entryLists/EntryList';
 import { useSaveData } from '../../../../features/task/taskService';
+import { CloseBtn } from '../../../Buttons/CloseButton';
+import { IoCloseCircleOutline } from 'react-icons/io5';
+import ArrowUpIcon from '../../../../assets/icons/ArrowUpIcon';
+import { SortIcon } from '../../../../assets/icons/SortIcon';
 
 interface Props {
   getTaskEntries: ITimeEntriesRes | undefined;
@@ -42,15 +43,13 @@ export function RenderItemEntries({
 
   const { mutateAsync } = useSaveData();
 
-  const { timeArr, timeSortArr } = useAppSelector((state) => state.task);
+  const { timeArr, timeSortArr, timeSortStatus } = useAppSelector((state) => state.task);
 
   const [icontoggle, setIconToggle] = useState<{ cancelIcon: boolean; plusIcon: boolean }>({
     cancelIcon: false,
     plusIcon: false
   });
   const [showModal, setShowModal] = useState<boolean>(false);
-  const [headerId, setHeaderId] = useState<string>('');
-  const [showSortModal, setShowSortModal] = useState<boolean>(false);
   const [showLogs, setShowLogs] = useState<boolean>(true);
   const [meMode, setMeMode] = useState<boolean>(false);
   const [assigneeId, setAssigneeId] = useState<string | undefined>();
@@ -83,17 +82,17 @@ export function RenderItemEntries({
     setViewChanges((prev) => ({ ...prev, logColumns: !prev.logColumns }));
   };
 
-  const handleSort = (header: string, id: string) => {
-    setHeaderId(id);
-    if (timeArr.includes(header)) return setShowSortModal(!showSortModal);
-    dispatch(setTimeArr([...timeArr, header]));
-    setShowSortModal(!showSortModal);
+  const handleSort = (header?: { field: string; dir: 'asc' | 'desc' }) => {
+    if (header) {
+      if (timeSortArr.some((entry) => entry.field === header.field && entry.dir === header.dir)) return;
+      dispatch(setTimeSortArr([...timeSortArr, header]));
+      dispatch(setTimeSortStatus(!timeSortStatus));
+    }
   };
 
   const handleRemoveFilter = (title: string): void => {
     dispatch(setTimeArr(timeArr.filter((el) => el !== title)));
     dispatch(setTimeSortArr([]));
-    setHeaderId('');
     mutateAsync({
       key: 'time_entry',
       value: [[]]
@@ -124,14 +123,15 @@ export function RenderItemEntries({
                     !col.hidden && (
                       <th
                         key={col.id}
-                        className="relative flex font-semibold capitalize cursor-default group text-alsoit-text-sm text-start"
+                        className="relative flex space-x-0.5 items-center font-semibold capitalize cursor-default group text-alsoit-text-sm text-start"
                       >
-                        <span
-                          className="cursor-pointer"
-                          onClick={() => col.id === headerId && setShowSortModal(!showSortModal)}
+                        <span className="cursor-pointer">{col.title}</span>
+                        <div
+                          className="flex items-center invisible group-hover:visible"
+                          onClick={() => handleSort({ field: col.value, dir: 'desc' })}
                         >
-                          {col.title}
-                        </span>
+                          {!timeSortStatus ? <SortIcon active={!!timeArr.length} /> : <ArrowUpIcon />}
+                        </div>
                       </th>
                     )
                   );

@@ -45,7 +45,7 @@ interface WalletItemProps {
   topNumber?: number;
   zNumber?: string;
   isExtendedBar?: boolean;
-  handleShowSubWallet: (id: string) => void;
+  handleShowSubWallet: (id: string, type?: string) => void;
   handleLocation: (id: string, name: string, item: IWallet) => void;
 }
 export default function WalletItem({
@@ -99,7 +99,7 @@ export default function WalletItem({
     );
     dispatch(getPrevName(name));
     if (showMenuDropdown != null) {
-      if ((e.target as HTMLButtonElement).id == 'menusettings') {
+      if ((e.target as HTMLButtonElement).id === 'menusettings') {
         dispatch(closeMenu());
       }
     }
@@ -154,7 +154,7 @@ export default function WalletItem({
 
   useEffect(() => {
     if (isOver) {
-      handleShowSubWallet(wallet.id);
+      handleShowSubWallet(wallet.id, 'isOver');
     }
   }, [isOver]);
 

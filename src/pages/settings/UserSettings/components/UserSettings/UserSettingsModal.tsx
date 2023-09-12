@@ -10,7 +10,6 @@ import { logout, setAuthData } from '../../../../../features/auth/authSlice';
 import { useNavigate } from 'react-router-dom';
 import { useAppSelector } from '../../../../../app/hooks';
 import ToolTip from '../../../../../components/Tooltip/Tooltip';
-import { VscTriangleDown } from 'react-icons/vsc';
 import ArrowDownFilled from '../../../../../assets/icons/ArrowDownFilled';
 
 interface UserSettingsType {
@@ -19,10 +18,6 @@ interface UserSettingsType {
   handleClick: () => void;
 }
 
-// interface User {
-//   initials: string;
-//   colour: string;
-// }s
 interface UserProps {
   setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -30,8 +25,8 @@ interface UserProps {
 export default function UserSettingsModal({ setShowModal }: UserProps) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
   const { showSidebar } = useAppSelector((state) => state.account);
-  // const { userData } = useAppSelector((state) => state.userSetting);
   const { currentWorkspaceId } = useAppSelector((state) => state.auth);
   const { userData } = useAppSelector((state) => state.userSetting);
 
@@ -126,9 +121,6 @@ export default function UserSettingsModal({ setShowModal }: UserProps) {
     }
   ];
 
-  // const getLocalWS: User = JSON.parse(localStorage.getItem('user') as string) as User;
-
-  // const workspaceInitials: string = getLocalWS ? getLocalWS.initials : 'A';
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
@@ -174,7 +166,7 @@ export default function UserSettingsModal({ setShowModal }: UserProps) {
                   <div className="flex items-center justify-between">
                     <p>{i.title}</p>
                     <span>
-                      {i.id == 7 ? (
+                      {i.id === 7 ? (
                         <button className="flex ml-14 items-center text-gray-400 cursor-pointer p-0.5 rounded-md space-x-1 ">
                           <BsToggleOff className="w-4 h-4 test-sm" />
                         </button>

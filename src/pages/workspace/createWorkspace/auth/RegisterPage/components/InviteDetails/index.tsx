@@ -8,11 +8,9 @@ export default function InviteDetails() {
   const { inviteCode } = useParams();
   const { status, data: inviteData } = useGetInviteByCode(inviteCode);
 
-  if (inviteCode == null) {
+  if (inviteCode === null) {
     return null;
   }
-
-  // console.log(inviteData);
 
   return status === 'loading' ? (
     <Spinner size={8} color="#0F70B7" />

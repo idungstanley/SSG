@@ -69,7 +69,7 @@ export default function CommunicationSubTab() {
   return (
     <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={(e) => handleDragEnd(e)}>
       <SortableContext strategy={rectSortingStrategy} items={items}>
-        <div className={`flex bg-gray-400 pt-0.5 ${showPilot ? 'flex-row' : 'flex-col border'}`}>
+        <div className={`flex  bg-primary-200 pb-0.5 ${showPilot ? 'flex-row' : 'flex-col border'}`}>
           {items.map((item) => (
             <SubtabDrag
               key={item.id}
@@ -78,6 +78,8 @@ export default function CommunicationSubTab() {
               activeSub={activeSubCommunicationTabId}
               showPilot={showPilot}
               name={'connect'}
+              items={items}
+              item={item}
             />
           ))}
         </div>

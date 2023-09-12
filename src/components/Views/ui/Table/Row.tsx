@@ -18,9 +18,12 @@ import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import Dradnddrop from '../../../../assets/icons/Dradnddrop';
 import { IField } from '../../../../features/list/list.interfaces';
 
+export const MAX_SUBTASKS_LEVEL = 10;
+
 interface RowProps {
   task: Task;
   taskIndex?: number;
+  listId: string;
   columns: Column[];
   paddingLeft?: number;
   parentId?: string;
@@ -29,11 +32,13 @@ interface RowProps {
   handleClose?: VoidFunction;
   customFields?: IField[];
   isSplitSubtask?: boolean;
+  level: number;
 }
 
 export function Row({
   task,
   columns,
+  listId,
   taskIndex,
   paddingLeft = 0,
   parentId,
@@ -41,11 +46,14 @@ export function Row({
   isListParent,
   handleClose,
   customFields,
-  isSplitSubtask
+  isSplitSubtask,
+  level
 }: RowProps) {
   const dispatch = useAppDispatch();
 
-  const { showNewTaskField, showNewTaskId, toggleAllSubtask, splitSubTask } = useAppSelector((state) => state.task);
+  const { showNewTaskField, showNewTaskId, toggleAllSubtask, splitSubTaskState } = useAppSelector(
+    (state) => state.task
+  );
 
   const [showSubTasks, setShowSubTasks] = useState(toggleAllSubtask);
 
@@ -119,7 +127,8 @@ export function Row({
   const { attributes, listeners, setNodeRef, transform } = useDraggable({
     id: task.id,
     data: {
-      isTask: true
+      isTask: true,
+      movingTask: task
     }
   });
 
@@ -146,6 +155,7 @@ export function Row({
           paddingLeft={paddingLeft}
           tags={'tags' in task ? <TaskTag tags={task.tags} entity_id={task.id} entity_type="task" /> : null}
           isSplitSubtask={isSplitSubtask}
+          isLastSubtaskLevel={level >= MAX_SUBTASKS_LEVEL}
           dragElement={
             <div ref={setNodeRef} {...listeners} {...attributes}>
               <div className="text-lg text-gray-400 transition duration-200 opacity-0 cursor-move group-hover:opacity-100">
@@ -205,16 +215,23 @@ export function Row({
         <AddSubTask
           task={newSubTask}
           columns={columns}
-          paddingLeft={splitSubTask ? 0 : DEFAULT_LEFT_PADDING + paddingLeft}
+          paddingLeft={splitSubTaskState ? 0 : DEFAULT_LEFT_PADDING + paddingLeft}
           isListParent={false}
-          parentId={splitSubTask ? (task.parent_id as string) : task.id}
+          listId={listId}
+          parentId={splitSubTaskState ? (task.parent_id as string) : task.id}
           task_status={task.status.id}
           handleClose={onCloseAddTaskFIeld}
         />
       ) : null}
 
-      {showSubTasks && !splitSubTask ? (
-        <SubTasks paddingLeft={DEFAULT_LEFT_PADDING + paddingLeft} parentId={task.id} columns={columns} />
+      {showSubTasks && !isSplitSubtask ? (
+        <SubTasks
+          paddingLeft={DEFAULT_LEFT_PADDING + paddingLeft}
+          listId={listId}
+          parentId={task.id}
+          columns={columns}
+          level={level + 1}
+        />
       ) : null}
     </>
   );

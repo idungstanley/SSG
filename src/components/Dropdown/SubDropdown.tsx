@@ -2,9 +2,6 @@ import React, { useState } from 'react';
 import { DocumentDuplicateIcon, StarIcon, PlusIcon, LinkIcon, SwatchIcon } from '@heroicons/react/24/outline';
 import { useAppSelector } from '../../app/hooks';
 import { useDispatch } from 'react-redux';
-import { FaFolder } from 'react-icons/fa';
-import { AiOutlineUnorderedList } from 'react-icons/ai';
-import hubIcon from '../../assets/branding/hub.svg';
 import { setCreateTaskSlideOverVisibility } from '../../features/general/slideOver/slideOverSlice';
 import { getSubMenu, setEntityToCreate, setSubDropdownMenu } from '../../features/hubs/hubSlice';
 import { useParams } from 'react-router-dom';
@@ -25,9 +22,12 @@ import { setVisibility } from '../../features/general/prompt/promptSlice';
 import { Capitalize } from '../../utils/NoCapWords/Capitalize';
 import { Fade, Menu } from '@mui/material';
 import { Cords } from '../../hooks/useAbsolute';
+import { BsFiletypeDoc } from 'react-icons/bs';
+import AddHubIcon from '../../assets/icons/AddHub';
+import AddWalletIcon from '../../assets/icons/AddWallet';
+import AddListIcon from '../../assets/icons/AddList';
 
 interface itemsType {
-  id: number;
   title: string;
   icon: JSX.Element;
   handleClick: () => void;
@@ -48,7 +48,7 @@ export default function SubDropdown({ cords }: SubDropdownProps) {
   const dispatch = useDispatch();
   const { listId, hubId, walletId } = useParams();
 
-  const { showMenuDropdownType, selectedTreeDetails, entityToCreate, SubMenuType } = useAppSelector(
+  const { showMenuDropdownType, showMenuDropdown, selectedTreeDetails, entityToCreate, SubMenuType } = useAppSelector(
     (state) => state.hub
   );
   const { showTreeInput, lastActiveItem, activeItemId, activeItemType, sidebarWidthRD } = useAppSelector(
@@ -133,17 +133,15 @@ export default function SubDropdown({ cords }: SubDropdownProps) {
 
   const itemsList: itemsType[] = [
     {
-      id: 1,
       title: 'Sub Hub',
       handleClick: () => {
         dispatch(setEntityToCreate(EntityType.subHub));
         dispatch(setLastActiveItem('Sub Hub'));
       },
-      icon: <img src={hubIcon} alt="" className="w-4 h-4" />,
-      isVisible: showMenuDropdownType == 'hubs' ? true : false || SubMenuType == 'hubs' ? true : false
+      icon: <AddHubIcon />,
+      isVisible: showMenuDropdownType === EntityType.hub ? true : false || SubMenuType === EntityType.hub ? true : false
     },
     {
-      id: 2,
       title:
         SubMenuType === EntityType.wallet ||
         SubMenuType === 'subwallet2' ||
@@ -156,7 +154,7 @@ export default function SubDropdown({ cords }: SubDropdownProps) {
         dispatch(setEntityToCreate(EntityType.wallet));
         dispatch(setLastActiveItem(selectedTreeDetails.type === EntityType.wallet ? 'Sub Wallet' : 'Wallet'));
       },
-      icon: <FaFolder className="w-4 h-4" aria-hidden="true" />,
+      icon: <AddWalletIcon />,
       isVisible:
         showMenuDropdownType === EntityType.list ||
         showMenuDropdownType === 'subwallet3' ||
@@ -165,49 +163,49 @@ export default function SubDropdown({ cords }: SubDropdownProps) {
           : true
     },
     {
-      id: 3,
       title: 'Task',
       handleClick: () => {
         dispatch(setCreateTaskSlideOverVisibility(true));
         // navigate(`/${currentWorkspaceId}/tasks`);
         dispatch(setLastActiveItem('Task'));
       },
-      icon: <PlusIcon className="w-5 pt-2 text-gray-700 h-7" aria-hidden="true" />,
+      icon: <PlusIcon className="w-5 text-gray-700 h-7" aria-hidden="true" />,
       isVisible: showMenuDropdownType === EntityType.list ? true : false
     },
     {
-      id: 4,
       title: 'List',
       handleClick: () => {
         dispatch(setLastActiveItem('List'));
         dispatch(setEntityToCreate(EntityType.list));
       },
-      icon: <AiOutlineUnorderedList className="w-4 h-4" aria-hidden="true" />,
+      icon: <AddListIcon />,
       isVisible: showMenuDropdownType === EntityType.list ? false : true
     },
     {
-      id: 5,
       title: 'Sprint',
       handleClick: () => ({}),
-      icon: <SwatchIcon className="w-5 pt-2 text-gray-700 h-7" aria-hidden="true" />,
+      icon: <SwatchIcon className="w-5 text-gray-700 h-7" aria-hidden="true" />,
       isVisible: true
     },
     {
-      id: 6,
+      title: 'Docs',
+      handleClick: () => ({}),
+      icon: <BsFiletypeDoc className="w-5 text-gray-700 h-7" aria-hidden="true" />,
+      isVisible: true
+    },
+    {
       title: 'Folder',
       handleClick: () => ({}),
       icon: <LinkIcon className="w-4 h-4" aria-hidden="true" />,
-      isVisible: false
+      isVisible: true
     },
     {
-      id: 7,
       title: 'From Template',
       handleClick: () => ({}),
       icon: <DocumentDuplicateIcon className="w-4 h-4" aria-hidden="true" />,
       isVisible: true
     },
     {
-      id: 8,
       title: 'Import',
       handleClick: () => ({}),
       icon: <StarIcon className="w-4 h-4" aria-hidden="true" />,
@@ -221,26 +219,38 @@ export default function SubDropdown({ cords }: SubDropdownProps) {
       onClose={closeMenu}
       TransitionComponent={Fade}
       anchorOrigin={{
-        vertical: Number(cords?.top) - 100 || 'center',
-        horizontal: showSidebar ? Number(userSettingsData?.sidebarWidth) - 30 : sidebarWidthRD
+        vertical: showMenuDropdown ? 'center' : Number(cords?.top) - 100,
+        horizontal:
+          showSidebar && showMenuDropdown
+            ? Number(userSettingsData?.sidebarWidth) + 120
+            : showSidebar && !showMenuDropdown
+            ? Number(userSettingsData?.sidebarWidth) - 100
+            : sidebarWidthRD
       }}
     >
-      <div className="w-96 px-2 origin-top-right bg-white" style={{ minWidth: '200px' }}>
-        {itemsList.map((item) =>
-          (lastActiveItem === '' || lastActiveItem === item.title) && item.isVisible ? (
-            <div key={item.id}>
+      <div className="px-2 origin-top-right bg-white" style={{ minWidth: '200px' }}>
+        <div className="w-auto gap-2 mb-1 px-0.5">
+          {itemsList.map((item, index) =>
+            (lastActiveItem === '' || lastActiveItem === item.title) && item.isVisible ? (
               <div
-                className={`flex items-center p-2 space-x-2 text-sm text-left text-gray-600  ${
-                  lastActiveItem ? '' : 'hover:bg-gray-200 rounded-md cursor-pointer'
+                key={index}
+                className={`py-1 ${item.title === 'List' ? 'border-b' : ''} ${
+                  item.title === 'Folder' ? 'border-y' : ''
                 }`}
-                onClick={item.handleClick}
               >
-                {item.icon}
-                <p>{lastActiveItem ? 'Create Entity' : item.title}</p>
+                <div
+                  className={`flex items-center gap-1 p-1.5 py-1.5 space-x-2 text-sm text-left text-gray-600  ${
+                    lastActiveItem ? '' : 'hover:bg-alsoit-gray-75 rounded-md cursor-pointer'
+                  }`}
+                  onClick={item.handleClick}
+                >
+                  <span className="flex items-center w-5 h-5">{item.icon}</span>
+                  <p>{lastActiveItem ? 'Create Entity' : item.title}</p>
+                </div>
               </div>
-            </div>
-          ) : null
-        )}
+            ) : null
+          )}
+        </div>
         {lastActiveItem && (
           <div className="mb-2">
             <span className="flex p-2 mb-2 truncate whitespace-normal text-start">

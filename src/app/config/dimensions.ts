@@ -12,8 +12,8 @@ const INNER_WIDTH = window.innerWidth;
 const COMMON_WIDTH = 1550;
 
 const PILOT_WIDTH = {
-  DEFAULT: 25,
-  MAX: 30,
+  DEFAULT: 22,
+  MAX: 28,
   MIN: 20
 } as const;
 
@@ -24,8 +24,8 @@ const NAVIGATION_BAR_WIDTH = {
 } as const;
 
 const EXTENDED_BAR_WIDTH = {
-  DEFAULT: 12,
-  MAX: 20,
+  DEFAULT: 10,
+  MAX: 12,
   MIN: 8
 } as const;
 

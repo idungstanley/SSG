@@ -41,6 +41,7 @@ interface TaskItemProps {
     color?: string | null;
     parent_id?: string | null;
     children?: Hub[];
+    has_descendants: boolean;
     wallets?: Wallet[];
     lists?: List[];
   };
@@ -49,7 +50,7 @@ interface TaskItemProps {
   topNumber?: string;
   zNumber?: string;
   isExtendedBar?: boolean;
-  handleClick: (id: string) => void;
+  handleClick: (id: string, type?: string) => void;
   handleLocation: (id: string, name: string, item: IHub) => void;
 }
 export default function HubItem({
@@ -96,7 +97,7 @@ export default function HubItem({
     dispatch(
       getSubMenu({
         SubMenuId: id,
-        SubMenuType: type == EntityType.hub ? 'hubs' : EntityType.subHub
+        SubMenuType: type === EntityType.hub ? EntityType.hub : EntityType.subHub
       })
     );
   };
@@ -108,12 +109,12 @@ export default function HubItem({
     dispatch(
       setshowMenuDropdown({
         showMenuDropdown: id,
-        showMenuDropdownType: EntityType.subHub
+        showMenuDropdownType: EntityType.hub
       })
     );
     dispatch(getPrevName(name));
     if (showMenuDropdown != null) {
-      if ((e.target as HTMLButtonElement).id == 'menusettings') {
+      if ((e.target as HTMLButtonElement).id === 'menusettings') {
         dispatch(closeMenu());
       }
     }
@@ -132,7 +133,7 @@ export default function HubItem({
 
   useEffect(() => {
     if (isOver) {
-      handleClick(item.id);
+      handleClick(item.id, 'isOver');
     }
   }, [isOver]);
 
@@ -208,7 +209,7 @@ export default function HubItem({
             role="button"
             className="flex truncate items-center py-1.5 mt-0.5 justify-start overflow-y-hidden text-sm"
           >
-            {item?.wallets?.length || item?.lists?.length ? (
+            {item?.wallets?.length || item?.lists?.length || item.has_descendants ? (
               <div>
                 {showChildren ? (
                   <span className="flex flex-col">
@@ -281,7 +282,7 @@ export default function HubItem({
         </div>
       </div>
       <UploadImage endpoint={`hubs/${uploadId}`} invalidateQuery={['hubs'] as InvalidateQueryFilters<unknown>} />
-      {paletteId == item.id && show ? (
+      {paletteId === item.id && show ? (
         <Palette
           title="Hub Colour"
           setPaletteColor={setPaletteColor}

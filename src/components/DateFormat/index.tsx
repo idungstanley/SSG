@@ -59,7 +59,15 @@ export default function DateFormat({ date, task, font = 'text-sm' }: dateFormatP
           />
         )}
         {date ? (
-          moment(date as MomentInput).format(date_format?.toUpperCase())
+          <div className="flex group items-center">
+            <p
+              className="rounded-full flex items-center justify-center bg-alsoit-purple-300 mr-1 h-3 w-3 text-white text-xs pb-0.5 opacity-0 group-hover:opacity-100 cursor-pointer"
+              onClick={(e) => e.stopPropagation()}
+            >
+              x
+            </p>
+            <p>{moment(date as MomentInput).format(date_format?.toUpperCase())}</p>
+          </div>
         ) : (
           <div className="absolute">
             <CalenderIcon />

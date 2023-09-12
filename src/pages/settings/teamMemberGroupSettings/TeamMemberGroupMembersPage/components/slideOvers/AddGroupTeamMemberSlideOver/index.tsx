@@ -45,7 +45,7 @@ function AddGroupTeamMemberSlideOver() {
   };
 
   const onSubmit = () => {
-    if (teamMemberId == null) {
+    if (teamMemberId === null) {
       return false;
     }
 

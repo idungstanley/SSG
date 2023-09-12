@@ -19,7 +19,7 @@ interface FullPilotProps {
 
 const DEFAULT_PILOT_WIDTH = dimensions.pilot.default;
 const LS_PILOT_KEY = 'pilotWidth';
-const pilotWidthFromLS = DEFAULT_PILOT_WIDTH; // JSON.parse(localStorage.getItem(LS_PILOT_KEY) ?? `${DEFAULT_PILOT_WIDTH}`) as number;
+const pilotWidthFromLS = JSON.parse(localStorage.getItem(LS_PILOT_KEY) ?? `${DEFAULT_PILOT_WIDTH}`) as number;
 
 export default function FullPilot({ featureTabs, activeSection, setShowModal, showModal }: FullPilotProps) {
   const { blockRef, Dividers } = useResize({

@@ -1,5 +1,6 @@
-export const BOARD_SECTIONS = {
-  open: 'open',
-  custom: 'custom',
-  closed: 'closed'
+export const BOARD_SECTIONS: Record<string, string> = {
+  open: 'NOT STARTED',
+  custom: 'ACTIVE',
+  done: 'DONE',
+  closed: 'COMPLETED'
 };

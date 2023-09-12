@@ -1,5 +1,5 @@
 import { ListColourProps } from '../../components/tasks/ListItem';
-import { IList } from '../hubs/hubs.interfaces';
+import { IList, ItaskViews } from '../hubs/hubs.interfaces';
 import { ICheckListRes } from './../task/interface.tasks';
 
 export type Options = { id: string; color: string; name: string }[] | null;
@@ -57,13 +57,14 @@ export interface IListDetails {
   wallet_id: string | null;
   parent_id: null | string;
   updated_at: string;
+  task_views?: ItaskViews[];
   task_statuses: ITask_statuses[];
   created_at: string;
   archived_at: null | string;
   deleted_at: null | string;
   description: null | string;
   directory_items: string[];
-  custom_fields: IField[];
+  custom_field_columns: IField[];
   checklists: ICheckListRes[];
 }
 

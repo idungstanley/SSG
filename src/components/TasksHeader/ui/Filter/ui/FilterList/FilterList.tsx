@@ -16,7 +16,7 @@ export function FilterList() {
     filters: { fields: filters },
     subtasksfilters,
     selectedTaskParentId,
-    splitSubTask: splitMode
+    splitSubTaskState: splitMode
   } = useAppSelector((state) => state.task);
 
   const [showAddNewItem, setShowAddNewItem] = useState(false);
@@ -53,9 +53,9 @@ export function FilterList() {
 
     // set custom fields to config
     // check if not exist to prevent duplication
-    if (list?.custom_fields.length) {
+    if (list?.custom_field_columns.length) {
       const customFields: FilterOption = {};
-      list.custom_fields.forEach((field) => {
+      list.custom_field_columns.forEach((field) => {
         if (field.options) {
           const name = field.name + SPECIAL_CHAR + 'cus_' + field.id;
 

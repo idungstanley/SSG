@@ -14,17 +14,19 @@ import { listColumnProps } from '../../../../pages/workspace/tasks/component/vie
 import { Task, TaskValue } from '../../../../features/task/interface.tasks';
 import { ACTIVE_COL_BG, DEFAULT_COL_BG } from '../../config';
 import DateFormat from '../../../DateFormat';
-import StatusNameDropdown from '../../../status/StatusNameDropdown';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { EntityType } from '../../../../utils/EntityTypes/EntityType';
 import { IField } from '../../../../features/list/list.interfaces';
 import TextField from './CustomField/TextField/TextField';
 import LabelsWrapper from './CustomField/Labels/LabelsWrapper';
 import NumberField from './CustomField/Number/NumberField';
-import EmailField from './CustomField/EmailField/EmailField';
 import TagsWrapper from './CustomField/Tags/TagsWrapper';
 import MoneyField from './CustomField/Money/MoneyField';
 import DateField from './CustomField/Date/DateField';
+import EmailWebsiteField from './CustomField/EmailWebsiteField/EmailWebsiteField';
+import PhoneField from './CustomField/Phone/PhoneField';
+import CheckboxField from './CustomField/Checkbox/CheckboxField';
+import StatusDropdown from '../../../status/StatusDropdown';
 
 interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   value: TaskValue;
@@ -39,7 +41,7 @@ export function Col({ value, field, fieldId, task, customFields, ...props }: Col
   const { taskId } = useParams();
 
   const { dragOverItemId, draggableItemId } = useAppSelector((state) => state.list);
-  const { singleLineView, dragToBecomeSubTask, verticalGrid, selectedTasksArray, CompactView } = useAppSelector(
+  const { dragToBecomeSubTask, verticalGrid, selectedTasksArray, saveSettingOnline } = useAppSelector(
     (state) => state.task
   );
 
@@ -51,7 +53,7 @@ export function Col({ value, field, fieldId, task, customFields, ...props }: Col
     priority: <TaskPriority task={task as ImyTaskData} />,
     status: value ? (
       <div
-        className="capitalize text-xs font-medium bg-green-500 text-white px-1 w-full items-center text-center h-full top-0 flex flex-col justify-center"
+        className="top-0 flex flex-col items-center justify-center w-full h-full px-1 text-xs font-medium text-center text-white capitalize bg-green-500"
         style={{ backgroundColor: task.status.color }}
         onClick={() => {
           dispatch(setCurrentTaskStatusId(task.id as string));
@@ -59,7 +61,7 @@ export function Col({ value, field, fieldId, task, customFields, ...props }: Col
           dispatch(setSelectedTaskType(task?.list_id ? EntityType.task : EntityType.subtask));
         }}
       >
-        <StatusNameDropdown TaskCurrentStatus={task.status} />
+        <StatusDropdown TaskCurrentStatus={task.status} statusDropdownType="name" />
       </div>
     ) : (
       <></>
@@ -97,10 +99,11 @@ export function Col({ value, field, fieldId, task, customFields, ...props }: Col
       />
     ),
     email: (
-      <EmailField
+      <EmailWebsiteField
         taskId={task.id}
         taskCustomFields={task.custom_fields?.find((i) => i.id === fieldId)}
         fieldId={fieldId}
+        fieldType="email"
       />
     ),
     longtext: (
@@ -126,11 +129,33 @@ export function Col({ value, field, fieldId, task, customFields, ...props }: Col
       />
     ),
     date: <DateField />,
+    website: (
+      <EmailWebsiteField
+        taskId={task.id}
+        taskCustomFields={task.custom_fields?.find((i) => i.id === fieldId)}
+        fieldId={fieldId}
+        fieldType="website"
+      />
+    ),
+    phone: (
+      <PhoneField
+        taskId={task.id}
+        taskCustomFields={task.custom_fields?.find((i) => i.id === fieldId)}
+        fieldId={fieldId}
+      />
+    ),
     assignees: (
       <Assignee
         task={task as ImyTaskData}
         itemId={task.id}
         option={`${task.id !== '0' ? EntityType.task : 'getTeamId'}`}
+      />
+    ),
+    checkbox: (
+      <CheckboxField
+        taskId={task.id}
+        taskCustomFields={task.custom_fields?.find((i) => i.id === fieldId)}
+        fieldId={fieldId}
       />
     )
   };
@@ -150,13 +175,13 @@ export function Col({ value, field, fieldId, task, customFields, ...props }: Col
         {...props}
         style={{
           height:
-            task.id == '0'
+            task.id === '0'
               ? '64px'
-              : singleLineView && !CompactView
+              : saveSettingOnline?.singleLineView && !saveSettingOnline?.CompactView
               ? '42px'
-              : CompactView && singleLineView
+              : saveSettingOnline?.CompactView && saveSettingOnline?.singleLineView
               ? '32px'
-              : !singleLineView && CompactView && task.name.length < 30
+              : !saveSettingOnline?.singleLineView && saveSettingOnline?.CompactView && task.name.length < 30
               ? '32px'
               : ''
         }}

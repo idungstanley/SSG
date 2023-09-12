@@ -1,7 +1,6 @@
 import { Menu, Transition } from '@headlessui/react';
 import { Fragment } from 'react';
 import ArrowRight from '../../../../../../assets/icons/ArrowRight';
-import RoundedCheckbox from '../../../../../Checkbox/RoundedCheckbox';
 import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
 import { setNewCustomPropertyDetails } from '../../../../../../features/task/taskSlice';
 import DropdownIcon from '../../../../../../assets/branding/DropdownIcon';

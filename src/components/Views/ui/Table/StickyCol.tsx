@@ -44,6 +44,7 @@ interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   onClose?: VoidFunction;
   isOver?: boolean;
   isSplitSubtask?: boolean;
+  isLastSubtaskLevel: boolean;
 }
 
 export function StickyCol({
@@ -60,6 +61,7 @@ export function StickyCol({
   paddingLeft = 0,
   dragElement,
   isSplitSubtask,
+  isLastSubtaskLevel,
   ...props
 }: ColProps) {
   const dispatch = useAppDispatch();
@@ -71,16 +73,15 @@ export function StickyCol({
   const { dragOverItemId, draggableItemId } = useAppSelector((state) => state.list);
   const {
     currTeamMemberId,
-    singleLineView,
     verticalGrid,
     taskUpperCase,
     selectedTasksArray,
     verticalGridlinesTask,
     selectedIndex,
-    CompactView,
     toggleAllSubtask,
     selectedListIds,
-    dragToBecomeSubTask
+    dragToBecomeSubTask,
+    saveSettingOnline
   } = useAppSelector((state) => state.task);
 
   const [isChecked, setIsChecked] = useState(false);
@@ -92,13 +93,6 @@ export function StickyCol({
   const { mutate: onAdd } = useAddTask();
 
   const inputRef = useRef<HTMLInputElement | null>(null);
-
-  const { attributes, listeners, setNodeRef } = useDraggable({
-    id: task?.id as UniqueIdentifier,
-    data: {
-      isTask: true
-    }
-  });
 
   const onClickTask = () => {
     if (task.id !== '0') {
@@ -132,14 +126,6 @@ export function StickyCol({
     const { current } = inputRef;
     current?.focus();
   }, [eitableContent]);
-
-  // const selectText = (element: Node | null) => {
-  //   const selection = window.getSelection();
-  //   const range = document.createRange();
-  //   range.selectNodeContents(element as Node);
-  //   selection?.removeAllRanges();
-  //   selection?.addRange(range);
-  // };
 
   const onToggleDisplayingSubTasks = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.stopPropagation();
@@ -190,7 +176,7 @@ export function StickyCol({
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.shiftKey && event.key === 'ArrowDown') {
-        if (selectedIndex == null) return;
+        if (selectedIndex === null) return;
         if (!selectedIndexArray.includes(taskIndex as number)) {
           setSelectedIndexArray((prev) => {
             const updatedArray = [...prev, taskIndex as number];
@@ -255,10 +241,19 @@ export function StickyCol({
     setIsChecked(isChecked);
   };
 
+  const { attributes, listeners, setNodeRef } = useDraggable({
+    id: task?.id as UniqueIdentifier,
+    data: {
+      isTask: true,
+      movingTask: task
+    }
+  });
+
   const { isOver, setNodeRef: droppabbleRef } = useDroppable({
     id: task.id,
     data: {
-      isOverTask: true
+      isOverTask: true,
+      overTask: task
     }
   });
 
@@ -273,11 +268,11 @@ export function StickyCol({
             className={`flex items-center h-full space-x-1 ${isSplitSubtask && 'bg-white/90'}`}
             style={{
               height:
-                singleLineView && !CompactView
+                saveSettingOnline?.singleLineView && !saveSettingOnline?.CompactView
                   ? '42px'
-                  : CompactView && singleLineView
+                  : saveSettingOnline?.CompactView && saveSettingOnline?.singleLineView
                   ? '25px'
-                  : !singleLineView && CompactView && task.name.length < 30
+                  : !saveSettingOnline?.singleLineView && saveSettingOnline?.CompactView && task.name.length < 30
                   ? '25px'
                   : ''
             }}
@@ -297,11 +292,11 @@ export function StickyCol({
             style={{
               paddingLeft,
               height:
-                singleLineView && !CompactView
+                saveSettingOnline?.singleLineView && !saveSettingOnline?.CompactView
                   ? '42px'
-                  : CompactView && singleLineView
+                  : saveSettingOnline?.CompactView && saveSettingOnline?.singleLineView
                   ? '25px'
-                  : !singleLineView && CompactView && task.name.length < 30
+                  : !saveSettingOnline?.singleLineView && saveSettingOnline?.CompactView && task.name.length < 30
                   ? '25px'
                   : ''
             }}
@@ -347,23 +342,23 @@ export function StickyCol({
             </div>
             <div className="flex flex-col flex-grow items-start justify-start pl-2 space-y-1">
               <div
-                className=" flex w-full mt-1 items-center text-left"
+                className="flex w-full mt-1 items-center text-left"
                 onKeyDown={(e) => (e.key === 'Enter' ? handleEditTask(e, task.id) : null)}
                 ref={droppabbleRef}
               >
                 <div
                   className={`font-semibold alsoit-gray-300 ${
-                    CompactView ? 'text-alsoit-text-md' : 'text-alsoit-text-lg'
+                    saveSettingOnline?.CompactView ? 'text-alsoit-text-md' : 'text-alsoit-text-lg'
                   }`}
                 >
-                  {singleLineView ? (
+                  {saveSettingOnline?.singleLineView ? (
                     <div contentEditable={eitableContent} suppressContentEditableWarning={true} ref={inputRef}>
                       {!eitableContent ? (
                         <DetailsOnHover
                           hoverElement={
                             <div
                               className={`font-semibold alsoit-gray-300 ${
-                                CompactView ? 'text-alsoit-text-md' : 'text-alsoit-text-lg'
+                                saveSettingOnline?.CompactView ? 'text-alsoit-text-md' : 'text-alsoit-text-lg'
                               }`}
                               style={{
                                 maxWidth: '200px',
@@ -396,7 +391,7 @@ export function StickyCol({
                 </div>
                 {/* non default badges here */}
                 <div onClick={(e) => e.stopPropagation()} className="pl-3 flex flex-grow items-center justify-between">
-                  <Badges task={task} />
+                  {!isLastSubtaskLevel ? <Badges task={task} /> : null}
                   {/*  default badges here */}
                   {children}
                 </div>

@@ -83,7 +83,7 @@ export function OutputFileSize(bytes: number) {
   } while (Math.round(Math.abs(tmpBytes) * r) / r >= thresh && u < units.length - 1);
 
   let decimal_points = 0;
-  if (units[u] == 'GB' || units[u] == 'MB') {
+  if (units[u] === 'GB' || units[u] === 'MB') {
     decimal_points = 1;
   }
 

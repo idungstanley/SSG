@@ -30,5 +30,5 @@ export function runTimer({ isRunning, setTime }: TimerProps) {
       }, 1000);
     }
     isRunning && dispatch(setTimerInterval(interval));
-  }, [isRunning, dispatch]);
+  }, [isRunning, duration]);
 }

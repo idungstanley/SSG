@@ -149,11 +149,11 @@ function WorkSpaceSelection() {
     navigate('settings/team-members/invites');
   };
 
-  if (status == 'loading') {
+  if (status === 'loading') {
     return <Spinner size={10} color={'#6B7280'} />;
   }
 
-  return status == 'success' ? (
+  return status === 'success' ? (
     <div
       className={`${
         showSidebar ? 'rounded-md border border-alsoit-gray-75 p-0.5 h-8 cursor-pointer flex flex-grow' : ''
@@ -194,7 +194,7 @@ function WorkSpaceSelection() {
                 >
                   <div className="flex ">
                     {i.title}
-                    {i.title == 'People' ? (
+                    {i.title === 'People' ? (
                       <button
                         className="ml-5 flex items-center bg-alsoit-purple-50 cursor-pointer p-0.5 rounded-md space-x-1"
                         onClick={() => handleInvite()}

@@ -196,13 +196,13 @@ function GroupAssignee({
                     </span>
                   )}
 
-                  {displayed.show && index == displayed?.index ? (
+                  {displayed.show && index === displayed?.index ? (
                     renderUnassignButton(newData.id)
                   ) : (
                     <span className="absolute top-0 right-0 w-2 h-2 bg-green-500 border rounded-full" />
                   )}
 
-                  {hoverInterval && displayed.show && index == displayed?.index && (
+                  {hoverInterval && displayed.show && index === displayed?.index && (
                     <PopAssignModal
                       modalLoader={modalLoader}
                       spinnerSize={20}
