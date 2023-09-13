@@ -7,13 +7,11 @@ import { Label } from './Label';
 import { AddTask } from '../AddTask/AddTask';
 import { setCurrTeamMemId } from '../../../../features/task/taskSlice';
 import { columnsHead, listColumnProps } from '../../../../pages/workspace/tasks/component/views/ListColumns';
-import { useParams } from 'react-router-dom';
 import { cl } from '../../../../utils';
 import { useDroppable } from '@dnd-kit/core';
-import { IField } from '../../../../features/list/list.interfaces';
-import { Hub, List as ListType } from '../../../../pages/workspace/hubs/components/ActiveTree/activetree.interfaces';
+import { IField, IListDetailRes } from '../../../../features/list/list.interfaces';
+import { Hub } from '../../../../pages/workspace/hubs/components/ActiveTree/activetree.interfaces';
 import { findCurrentHub } from '../../../../managers/Hub';
-import { findCurrentList } from '../../../../managers/List';
 import LightenColor from './lightenColor/LightenColor';
 import { SubtasksTable } from '../Table/SubtasksTable';
 
@@ -21,6 +19,7 @@ interface ListProps {
   tasks: Task[];
   subtasksCustomeFields?: IField[];
   customProperty?: IField[];
+  listDetails?: IListDetailRes;
 }
 
 export interface IListColor {
@@ -29,9 +28,8 @@ export interface IListColor {
 
 const unique = (arr: listColumnProps[]) => [...new Set(arr)];
 
-export function List({ tasks, subtasksCustomeFields }: ListProps) {
+export function List({ tasks, subtasksCustomeFields, listDetails }: ListProps) {
   const dispatch = useAppDispatch();
-  const { listId } = useParams();
 
   const {
     sortType,
@@ -46,7 +44,6 @@ export function List({ tasks, subtasksCustomeFields }: ListProps) {
   const [collapseTable, setCollapseTable] = useState(false);
   const [showNewTaskField, setShowNewTaskField] = useState(false);
   const [parentHub, setParentHub] = useState<Hub>();
-  const [currentList, setCurrentList] = useState<ListType>();
   const [fullTasksLists, setFullTasksLists] = useState<ITaskFullList[]>([]);
 
   useEffect(() => {
@@ -54,12 +51,6 @@ export function List({ tasks, subtasksCustomeFields }: ListProps) {
       setParentHub(findCurrentHub(parentHubExt.id, hub));
     }
   }, [parentHubExt]);
-
-  useEffect(() => {
-    if (listId && hub.length) {
-      setCurrentList(findCurrentList(listId, hub));
-    }
-  }, [listId, hub]);
 
   const ListColor: IListColor = tasks[0].list?.color
     ? JSON.parse(tasks[0].list?.color as string)
@@ -150,7 +141,7 @@ export function List({ tasks, subtasksCustomeFields }: ListProps) {
       }}
     >
       <Label
-        listName={tasks[0].list?.name || currentList?.name}
+        listName={tasks[0].list?.name || listDetails?.data.list.name}
         hubName={parentHub?.name}
         tasks={tasks}
         ListColor={ListColor}
@@ -177,8 +168,7 @@ export function List({ tasks, subtasksCustomeFields }: ListProps) {
                 <Table
                   listName={tasks[0].list?.name}
                   label={key}
-                  ListColor={ListColor}
-                  key={key}
+                  listColor={ListColor}
                   heads={hideTask.length ? hideTask : generateColumns}
                   data={sortedTasks[key]}
                   customFields={tasks[0].custom_field_columns as IField[]}
@@ -190,14 +180,13 @@ export function List({ tasks, subtasksCustomeFields }: ListProps) {
                       <Table
                         listName={tasks[0].list?.name}
                         label={key}
-                        ListColor={ListColor}
-                        key={key}
+                        listColor={ListColor}
                         heads={hideTask.length ? hideTask : generateColumns}
                         data={[task]}
                         customFields={tasks[0].custom_field_columns as IField[]}
+                        listDetails={listDetails}
                       />
                       <SubtasksTable
-                        key={task.id}
                         data={task}
                         listId={task.list_id}
                         heads={hideTask.length ? hideTask : generateSubtasksColumns}

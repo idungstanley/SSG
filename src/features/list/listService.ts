@@ -10,7 +10,7 @@ import { generateFilters } from '../../components/TasksHeader/lib/generateFilter
 import { UseGetHubDetails } from '../hubs/hubService';
 import { IList } from '../hubs/hubs.interfaces';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
-import { setIsTasksUpdated, setNewCustomPropertyDetails, setSubtasks, setTasks } from '../task/taskSlice';
+import { setNewCustomPropertyDetails, setSubtasks, setTasks } from '../task/taskSlice';
 import { updateCustomFieldsManager } from '../../managers/Task';
 
 interface TaskCountProps {
@@ -192,7 +192,8 @@ export const UseGetListDetails = (listId: string | null | undefined) => {
         if (activeItemType === 'list') {
           dispatch(setSpaceStatuses(listStatusTypes));
         }
-      }
+      },
+      cacheTime: 0
     }
   );
 };
@@ -265,14 +266,13 @@ export const useCreateDropdownField = () => {
       const updatedList = updateCustomFieldsManager(
         entityForCustom.type === EntityType.task ? subtasks : tasks,
         data.data.custom_field,
-        entityForCustom.id
+        entityForCustom.type === EntityType.task ? entityForCustom.id : ''
       );
       if (entityForCustom.type === EntityType.task) {
         dispatch(setSubtasks(updatedList));
       } else {
         dispatch(setTasks(updatedList));
       }
-      dispatch(setIsTasksUpdated(true));
     }
   });
 };

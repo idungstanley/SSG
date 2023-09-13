@@ -46,7 +46,7 @@ export interface IHubDetails {
   priority?: string | null | undefined;
   task_views: ItaskViews[];
   task_statuses: ITask_statuses[];
-  custom_fields: IField[];
+  custom_field_columns: IField[];
 }
 
 export interface IHubDetailRes {

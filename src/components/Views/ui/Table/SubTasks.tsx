@@ -2,16 +2,16 @@ import { useEffect } from 'react';
 import { DragOverlay } from '@dnd-kit/core';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { useSubTasks } from '../../../../features/task/taskService';
-import { Column } from '../../types/table';
 import { Row } from './Row';
 import { OverlayRow } from './OverlayRow';
 import { setSubtasks } from '../../../../features/task/taskSlice';
 import { ITaskFullList } from '../../../../features/task/interface.tasks';
+import { listColumnProps } from '../../../../pages/workspace/tasks/component/views/ListColumns';
 
 interface SubTasksProps {
   listId: string;
   parentId: string;
-  columns: Column[];
+  columns: listColumnProps[];
   paddingLeft: number;
   level: number;
 }

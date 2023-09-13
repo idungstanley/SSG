@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import SubtasksIcon from '../../../../assets/icons/SubtasksIcon';
 import { ITaskFullList, Tag, Task } from '../../../../features/task/interface.tasks';
 import { DEFAULT_LEFT_PADDING } from '../../config';
-import { Column } from '../../types/table';
 import { Col } from './Col';
 import { StickyCol } from './StickyCol';
 import { SubTasks } from './SubTasks';
@@ -17,6 +16,7 @@ import ToolTip from '../../../Tooltip/Tooltip';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import Dradnddrop from '../../../../assets/icons/Dradnddrop';
 import { IField } from '../../../../features/list/list.interfaces';
+import { listColumnProps } from '../../../../pages/workspace/tasks/component/views/ListColumns';
 
 export const MAX_SUBTASKS_LEVEL = 10;
 
@@ -24,7 +24,7 @@ interface RowProps {
   task: Task;
   taskIndex?: number;
   listId: string;
-  columns: Column[];
+  columns: listColumnProps[];
   paddingLeft?: number;
   parentId?: string;
   isListParent: boolean;
