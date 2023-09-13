@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import SaveCols from '../SaveCols';
 import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
-import { setIsTasksUpdated } from '../../../../../../features/task/taskSlice';
 import { useCreateDropdownField } from '../../../../../../features/list/listService';
+import { setIsTasksUpdated } from '../../../../../../features/task/taskSlice';
 
 function CreateManualProgress() {
   const dispatch = useAppDispatch();
