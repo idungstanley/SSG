@@ -29,6 +29,7 @@ import BoardSection from './Components/BoardSection';
 import Button from '../Button';
 import MatchStatusPopUp from './Components/MatchStatusPopUp';
 import { setMatchData } from '../../features/general/prompt/promptSlice';
+import { BOARD_SECTIONS } from '../../utils/StatusManagement/Constant';
 
 interface ErrorResponse {
   data: {
@@ -43,7 +44,8 @@ interface ErrorResponse {
 export const groupStylesMapping: Record<string, GroupStyles> = {
   open: { backgroundColor: '#FBFBFB', boxShadow: '0px 0px 5px rgba(0, 0, 0, 0.2)' },
   custom: { backgroundColor: '#FCF1FF', boxShadow: '0px 0px 5px rgba(128, 0, 128, 0.2)' },
-  closed: { backgroundColor: '#E6FAE9', boxShadow: '0px 0px 5px rgba(0, 128, 0, 0.2)' }
+  closed: { backgroundColor: '#E6FAE9', boxShadow: '0px 0px 5px rgba(0, 128, 0, 0.2)' },
+  done: { boxShadow: '0px 0px 5px rgba(0, 0, 0, 0.2)' }
   // Add more model_type values and their styles as needed
 };
 
@@ -258,7 +260,7 @@ export default function CustomStatus() {
         >
           {Object.keys(boardSections).map((uniqueModelType) => (
             <div
-              className="p-2 space-y-2 rounded"
+              className={`p-2 space-y-2 rounded ${uniqueModelType === 'done' && 'bg-alsoit-gray-50'}`}
               key={uniqueModelType}
               style={{
                 backgroundColor:
@@ -268,7 +270,7 @@ export default function CustomStatus() {
             >
               <BoardSection
                 id={uniqueModelType}
-                title={uniqueModelType}
+                title={BOARD_SECTIONS[uniqueModelType] as string}
                 status={boardSections[uniqueModelType]}
                 setStatusTypesState={setBoardSections}
                 statusData={statusData}

@@ -97,7 +97,7 @@ export function WalletPage() {
   }, [hasNextPage]);
 
   const tasks = useMemo(() => (data ? data.pages.flatMap((page) => page.data.tasks) : []), [data]);
-  const lists = useMemo(() => generateLists(tasks, wallet?.data.wallet.custom_fields), [tasks, wallet]);
+  const lists = useMemo(() => generateLists(tasks, wallet?.data.wallet.custom_field_columns), [tasks, wallet]);
 
   // update cords for modal on scroll
   const onScroll = useScroll(() => dispatch(setUpdateCords()));

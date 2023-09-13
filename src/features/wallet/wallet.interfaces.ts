@@ -39,7 +39,7 @@ export interface IWalletDetails {
   task_views?: ItaskViews[];
   directory_items: [];
   checklists: [];
-  custom_fields: IField[];
+  custom_field_columns: IField[];
   task_statuses: StatusProps[];
 }
 

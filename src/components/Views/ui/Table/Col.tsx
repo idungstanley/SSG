@@ -14,7 +14,6 @@ import { listColumnProps } from '../../../../pages/workspace/tasks/component/vie
 import { Task, TaskValue } from '../../../../features/task/interface.tasks';
 import { ACTIVE_COL_BG, DEFAULT_COL_BG } from '../../config';
 import DateFormat from '../../../DateFormat';
-import StatusNameDropdown from '../../../status/StatusNameDropdown';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { EntityType } from '../../../../utils/EntityTypes/EntityType';
 import { IField } from '../../../../features/list/list.interfaces';
@@ -27,6 +26,8 @@ import DateField from './CustomField/Date/DateField';
 import EmailWebsiteField from './CustomField/EmailWebsiteField/EmailWebsiteField';
 import PhoneField from './CustomField/Phone/PhoneField';
 import CheckboxField from './CustomField/Checkbox/CheckboxField';
+import StatusDropdown from '../../../status/StatusDropdown';
+import RatingField from './CustomField/Ratings/RatingField';
 
 interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   value: TaskValue;
@@ -53,7 +54,7 @@ export function Col({ value, field, fieldId, task, customFields, ...props }: Col
     priority: <TaskPriority task={task as ImyTaskData} />,
     status: value ? (
       <div
-        className="capitalize text-xs font-medium bg-green-500 text-white px-1 w-full items-center text-center h-full top-0 flex flex-col justify-center"
+        className="top-0 flex flex-col items-center justify-center w-full h-full px-1 text-xs font-medium text-center text-white capitalize bg-green-500"
         style={{ backgroundColor: task.status.color }}
         onClick={() => {
           dispatch(setCurrentTaskStatusId(task.id as string));
@@ -61,7 +62,7 @@ export function Col({ value, field, fieldId, task, customFields, ...props }: Col
           dispatch(setSelectedTaskType(task?.list_id ? EntityType.task : EntityType.subtask));
         }}
       >
-        <StatusNameDropdown TaskCurrentStatus={task.status} />
+        <StatusDropdown TaskCurrentStatus={task.status} statusDropdownType="name" />
       </div>
     ) : (
       <></>
@@ -157,9 +158,16 @@ export function Col({ value, field, fieldId, task, customFields, ...props }: Col
         taskCustomFields={task.custom_fields?.find((i) => i.id === fieldId)}
         fieldId={fieldId}
       />
+    ),
+    rating: (
+      <RatingField
+        entityCustomProperty={customFields?.find((i) => i.id === fieldId)}
+        taskId={task.id}
+        taskCustomFields={task.custom_fields?.find((i) => i.id === fieldId)}
+        fieldId={fieldId}
+      />
     )
   };
-
   return (
     <>
       <td

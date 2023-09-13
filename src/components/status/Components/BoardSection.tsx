@@ -36,7 +36,7 @@ export default function BoardSection({
   const [newStatusValue, setNewStatusValue] = useState<string>('');
   const [addStatus, setAddStatus] = useState<boolean>(false);
 
-  const handleSaveNewStatus = (title: string) => {
+  const handleSaveNewStatus = () => {
     const nameWithoutWhiteSpace = newStatusValue?.trim();
     const isNameExist = statusData.some(
       (status) => status.name?.toLowerCase() === nameWithoutWhiteSpace?.toLowerCase()
@@ -45,7 +45,7 @@ export default function BoardSection({
       const newStatusItem: StatusProps = {
         name: newStatusValue,
         color: 'green',
-        type: title,
+        type: id,
         position: statusData.length,
         id: null,
         is_default: 0
@@ -53,7 +53,7 @@ export default function BoardSection({
       // setStatusTypesState((prevStatusTypes) => [...prevStatusTypes, newStatusItem]);
       setStatusTypesState((prevBoardSections) => ({
         ...prevBoardSections,
-        [title]: [...prevBoardSections[title], newStatusItem] // Assuming 'open' is the section name
+        [id]: Array.isArray(prevBoardSections[id]) ? [...prevBoardSections[id], newStatusItem] : [newStatusItem] // Assuming 'open' is the section name
       }));
       setNewStatusValue('');
       setValidationMessage('');
@@ -74,7 +74,8 @@ export default function BoardSection({
     }));
   };
   const StatusIndex = status.map((item) => item.name);
-  const handleAddStatus = (title: string) => {
+
+  const handleAddStatus = () => {
     setActiveStatusType(title);
     setAddStatus(true);
   };
@@ -88,7 +89,7 @@ export default function BoardSection({
             active={collapsedStatusGroups[id]}
             iconColor="text-gray-400"
           />
-          <p className="flex uppercase justify-items-start">{title} STATUSES</p>
+          <p className="flex uppercase justify-items-start">{title} STATUS</p>
         </span>
       )}
       <SortableContext items={StatusIndex} strategy={verticalListSortingStrategy}>
@@ -102,6 +103,11 @@ export default function BoardSection({
             ))}
         </div>
       </SortableContext>
+      {!collapsedStatusGroups[id] && id === 'done' && status.length === 0 && (
+        <div className="w-full border h-10 border-dashed p-2 flex items-center justify-center">
+          <span>Move statuses here to consider tasks Done.</span>
+        </div>
+      )}
 
       {addStatus && title === activeStatusType && (
         <span className="flex justify-items-start">
@@ -111,11 +117,11 @@ export default function BoardSection({
             name={title}
             onChange={handleOnChange}
             value={newStatusValue}
-            trailingClick={() => handleSaveNewStatus(title)}
+            trailingClick={() => handleSaveNewStatus()}
           />
         </span>
       )}
-      <span className="flex justify-items-start" onClick={() => handleAddStatus(title)}>
+      <span className="flex justify-items-start" onClick={() => handleAddStatus()}>
         <Button
           height="h-5"
           icon={<PlusCircle active={true} color="base" dimensions={{ height: 18, width: 18 }} />}

@@ -69,7 +69,7 @@ export default function HubPage() {
   });
 
   const tasks = useMemo(() => (data ? data.pages.flatMap((page) => page.data.tasks) : []), [data]);
-  const lists = useMemo(() => generateLists(tasks, hub?.data.hub.custom_fields), [tasks, hub]);
+  const lists = useMemo(() => generateLists(tasks, hub?.data.hub.custom_field_columns), [tasks, hub]);
 
   // infinite scroll
   useEffect(() => {

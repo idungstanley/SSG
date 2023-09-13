@@ -14,8 +14,10 @@ export interface IField {
   name: string;
   type: string;
   properties?: {
-    symbol: string;
-    currency: string;
+    symbol?: string;
+    currency?: string;
+    emoji?: string;
+    number?: number;
   };
 }
 
@@ -64,7 +66,7 @@ export interface IListDetails {
   deleted_at: null | string;
   description: null | string;
   directory_items: string[];
-  custom_fields: IField[];
+  custom_field_columns: IField[];
   checklists: ICheckListRes[];
 }
 

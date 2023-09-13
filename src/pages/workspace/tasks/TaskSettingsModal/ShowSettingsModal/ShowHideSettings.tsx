@@ -234,21 +234,21 @@ export default function ShowHideSettings({
       >
         <Menu.Items
           style={{ zIndex: 61, height: '372px', width: '247px', overflow: 'auto' }}
-          className="origin-top-right absolute w-64 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none  mt-3"
+          className="absolute w-64 mt-3 origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
         >
-          <p className="text-alsoit-text-sm font-bold flex justify-center pt-3" style={{ lineHeight: '9.6px' }}>
+          <p className="flex justify-center pt-3 font-bold text-alsoit-text-sm" style={{ lineHeight: '9.6px' }}>
             CUSTOMIZE THIS VIEW
           </p>
-          <div className="relative flex justify-center flex-col mb-2">
-            <p className="border-b-2 pt-3 "></p>
+          <div className="relative flex flex-col justify-center mb-2">
+            <p className="pt-3 border-b-2 "></p>
             <span
-              className="text-alsoit-text-sm font-bold text-gray-400 text-center absolute  left-1/3  bg-white border border-gray-100 px-1"
+              className="absolute px-1 font-bold text-center text-gray-400 bg-white border border-gray-100 text-alsoit-text-sm left-1/3"
               style={{ lineHeight: '9.6px', top: '7px' }}
             >
               MAIN SETTINGS
             </span>
           </div>
-          <div className="flex justify-between items-center mx-auto mt-4" style={{ width: '93%' }}>
+          <div className="flex items-center justify-between mx-auto mt-4" style={{ width: '93%' }}>
             <p className="text-sm">Property Column </p>
             <BsChevronRight />
           </div>
@@ -257,7 +257,7 @@ export default function ShowHideSettings({
             <Fragment key={view.id}>
               <Menu.Item
                 as="a"
-                className="flex items-center py-2 text-alsoit-text-lg font-semibold text-left w-full "
+                className="flex items-center w-full py-2 font-semibold text-left text-alsoit-text-lg "
                 style={{ lineHeight: '15.6px' }}
               >
                 <button
@@ -267,11 +267,11 @@ export default function ShowHideSettings({
                     view.label === 'Split Sub Task' && 'border-t-2 pt-4'
                   }`}
                 >
-                  <p className="flex items-center space-x-2 pl-2 text-md whitespace-nowrap">{view.label}</p>
+                  <p className="flex items-center pl-2 space-x-2 text-md whitespace-nowrap">{view.label}</p>
                   {view.label === 'Task In Multiple Lists' && (
                     <p className="relative">
                       <p
-                        className="absolute whitespace-nowrap text-gray-400 text-center bg-white border border-gray-100"
+                        className="absolute text-center text-gray-400 bg-white border border-gray-100 whitespace-nowrap"
                         style={{ top: '-35px', right: '23px', fontSize: '8px' }}
                       >
                         TASKS SETTINGS
@@ -281,7 +281,7 @@ export default function ShowHideSettings({
                   {view.label === 'Title Vertical Grid Line' && (
                     <p className="relative">
                       <p
-                        className="absolute whitespace-nowrap text-gray-400 text-center bg-white border border-gray-100"
+                        className="absolute text-center text-gray-400 bg-white border border-gray-100 whitespace-nowrap"
                         style={{ top: '-35px', right: '28px', fontSize: '8px' }}
                       >
                         GRID SETTINGS
@@ -291,7 +291,7 @@ export default function ShowHideSettings({
                   {view.label === 'Split Sub Task' && (
                     <p className="relative">
                       <p
-                        className="absolute whitespace-nowrap text-gray-400 text-center bg-white border border-gray-100"
+                        className="absolute text-center text-gray-400 bg-white border border-gray-100 whitespace-nowrap"
                         style={{ top: '-35px', right: '-4px', fontSize: '8px' }}
                       >
                         SUB TASK SETTINGS

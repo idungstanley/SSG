@@ -35,7 +35,7 @@ export function TimeLogAssigneeDropDown({ teamMembers, handleFilters, closeModal
   return (
     <div
       onClick={(e) => e.stopPropagation()}
-      className="bg-white z-30 px-2 rounded-md h-96 w-56 shadow-xl absolute top-8 -right-8"
+      className="absolute z-30 w-56 px-2 bg-white rounded-md shadow-xl h-96 top-8 -right-8"
     >
       <div className="flex flex-col space-y-2.5 w-full">
         {/* search input header */}
@@ -70,7 +70,7 @@ export function TimeLogAssigneeDropDown({ teamMembers, handleFilters, closeModal
             })}
           </div>
           {activeFiltertab === 'Users' ? (
-            <div className="flex flex-col space-y-2 w-full">
+            <div className="flex flex-col w-full space-y-2">
               {teamMembers.length > 0 &&
                 team.map((user) => (
                   <LogAssigneeDropDown
@@ -103,7 +103,7 @@ function LogAssigneeDropDown({ user, handleFilters, closeModal }: LogAssigneeDro
   };
 
   return (
-    <div key={user?.id} className="flex items-center space-x-2 py-1 border-b-2 w-full" onClick={handleClick}>
+    <div key={user?.id} className="flex items-center w-full py-1 space-x-2 border-b-2" onClick={handleClick}>
       {user.avatar_path ? (
         <AvatarWithImage image_path={user.avatar_path} roundedStyle="circular" />
       ) : (
@@ -127,11 +127,11 @@ function LogTeamsDropDown() {
   });
 
   return (
-    <div className="flex flex-col space-y-2 w-full">
+    <div className="flex flex-col w-full space-y-2">
       {getTaskEntries?.data.filters.team_member_groups.map((group) => (
         <div
           key={group.id}
-          className="flex items-center space-x-2 py-1 border-b-2 w-full"
+          className="flex items-center w-full py-1 space-x-2 border-b-2"
           onClick={() => setGroupIds((prev) => [...prev, group.id])}
         >
           <AvatarWithInitials
