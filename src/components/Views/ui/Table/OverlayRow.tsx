@@ -5,13 +5,13 @@ import { tagItem } from '../../../../pages/workspace/tasks/component/taskData/Da
 import { ManageTagsDropdown } from '../../../Tag/ui/ManageTagsDropdown/ui/ManageTagsDropdown';
 import TaskTag from '../../../Tag/ui/TaskTag';
 import { generateGrid } from '../../lib';
-import { Column } from '../../types/table';
 import { Col } from './Col';
 import { StickyCol } from './StickyCol';
+import { listColumnProps } from '../../../../pages/workspace/tasks/component/views/ListColumns';
 
 interface OverlayRowProps {
   task: Task;
-  columns: Column[];
+  columns: listColumnProps[];
 }
 
 export function OverlayRow({ task, columns }: OverlayRowProps) {

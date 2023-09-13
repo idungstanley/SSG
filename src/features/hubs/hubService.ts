@@ -257,7 +257,8 @@ export const UseGetHubDetails = (query: {
         if (query.activeItemType === 'hub' || query.activeItemType === 'subhub') {
           dispatch(setSpaceStatuses(data.data.hub.task_statuses));
         }
-      }
+      },
+      cacheTime: 0
     }
   );
 };

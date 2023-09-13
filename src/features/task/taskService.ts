@@ -237,14 +237,11 @@ export const createTaskService = (data: {
 
 export const UseGetFullTaskList = ({
   itemId,
-  itemType,
-  isEverythingPage
+  itemType
 }: {
   itemId: string | undefined | null;
   itemType: string | null | undefined;
-  isEverythingPage?: boolean;
 }) => {
-  const dispatch = useAppDispatch();
   const queryClient = useQueryClient();
 
   const hub_id = itemType === EntityType.hub || itemType === EntityType.subHub ? itemId : null;
@@ -275,9 +272,6 @@ export const UseGetFullTaskList = ({
       keepPreviousData: true,
       enabled: !!hub_id || !!wallet_id,
       onSuccess: (data) => {
-        if (!isEverythingPage) {
-          dispatch(setTasks({}));
-        }
         data.pages.map((page) => page.data.tasks.map((task) => queryClient.setQueryData(['task', task.id], task)));
       },
       getNextPageParam: (lastPage) => {
