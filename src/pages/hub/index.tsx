@@ -16,15 +16,16 @@ import { Header } from '../../components/TasksHeader';
 import { VerticalScroll } from '../../components/ScrollableContainer/VerticalScroll';
 import { GroupHorizontalScroll } from '../../components/ScrollableContainer/GroupHorizontalScroll';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
-import { setIsTasksUpdated, setSaveSettingList, setSaveSettingOnline, setTasks } from '../../features/task/taskSlice';
+import { setSaveSettingList, setSaveSettingOnline, setTasks } from '../../features/task/taskSlice';
 import { useformatSettings } from '../workspace/tasks/TaskSettingsModal/ShowSettingsModal/FormatSettings';
+import { IField } from '../../features/list/list.interfaces';
 
 export default function HubPage() {
   const dispatch = useAppDispatch();
   const { hubId, subhubId, taskId } = useParams();
 
   const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
-  const { tasks: tasksStore, isTasksUpdated, saveSettingLocal } = useAppSelector((state) => state.task);
+  const { tasks: tasksStore, saveSettingLocal } = useAppSelector((state) => state.task);
   const formatSettings = useformatSettings();
 
   const containerRef = useRef<HTMLDivElement>(null);
@@ -35,7 +36,7 @@ export default function HubPage() {
   const saveSettingList = hub?.data.hub.task_views?.find((element) => element.type === 'list');
   const task_views_id = saveSettingList ? saveSettingList.id : '';
 
-  const { isSuccess } = UseUpdateTaskViewSettings({
+  UseUpdateTaskViewSettings({
     task_views_id,
     taskDate: saveSettingLocal as { [key: string]: boolean }
   });
@@ -69,7 +70,7 @@ export default function HubPage() {
   });
 
   const tasks = useMemo(() => (data ? data.pages.flatMap((page) => page.data.tasks) : []), [data]);
-  const lists = useMemo(() => generateLists(tasks, hub?.data.hub.custom_field_columns), [tasks, hub]);
+  const lists = useMemo(() => generateLists(tasks, hub?.data.hub?.custom_field_columns as IField[]), [tasks, hub]);
 
   // infinite scroll
   useEffect(() => {
@@ -95,11 +96,10 @@ export default function HubPage() {
   }, [hasNextPage]);
 
   useEffect(() => {
-    if (lists && !Object.keys(tasksStore).length) {
+    if (Object.keys(lists).length) {
       dispatch(setTasks({ ...tasksStore, ...lists }));
-      dispatch(setIsTasksUpdated(true));
     }
-  }, [lists, tasksStore]);
+  }, [lists]);
 
   return (
     <>
@@ -123,13 +123,7 @@ export default function HubPage() {
           >
             {/* lists */}
             {Object.keys(lists).map((listId) => (
-              <Fragment key={listId}>
-                {tasksStore[listId] && tasks.length && isTasksUpdated ? (
-                  <div key={listId}>
-                    <List tasks={tasksStore[listId]} />
-                  </div>
-                ) : null}
-              </Fragment>
+              <Fragment key={listId}>{tasksStore[listId] ? <List tasks={tasksStore[listId]} /> : null}</Fragment>
             ))}
           </section>
         </VerticalScroll>

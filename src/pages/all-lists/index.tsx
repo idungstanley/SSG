@@ -13,13 +13,13 @@ import { VerticalScroll } from '../../components/ScrollableContainer/VerticalScr
 import { GroupHorizontalScroll } from '../../components/ScrollableContainer/GroupHorizontalScroll';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
 import { ITaskFullList } from '../../features/task/interface.tasks';
-import { setIsTasksUpdated, setTasks } from '../../features/task/taskSlice';
+import { setTasks } from '../../features/task/taskSlice';
 
 export default function AllListsPage() {
   const dispatch = useAppDispatch();
 
   const { hub } = useAppSelector((state) => state.hub);
-  const { tasks: tasksStore, isTasksUpdated } = useAppSelector((state) => state.task);
+  const { tasks: tasksStore } = useAppSelector((state) => state.task);
 
   const [allHubsId, setAllHubsId] = useState<string[]>([]);
   const [currentHubIdInOrder, setCurrentHubIdInOrder] = useState<string>('');
@@ -29,8 +29,7 @@ export default function AllListsPage() {
 
   const { data, hasNextPage, fetchNextPage, isLoading } = UseGetFullTaskList({
     itemId: currentHubIdInOrder,
-    itemType: EntityType.hub,
-    isEverythingPage: true
+    itemType: EntityType.hub
   });
 
   useEffect(() => {
@@ -58,7 +57,7 @@ export default function AllListsPage() {
   }, [allHubsId]);
 
   const lists = useMemo(
-    () => generateLists([...new Set(allTasks)], hubsData?.data.hub.custom_field_columns),
+    () => generateLists([...new Set(allTasks)], hubsData?.data.hub?.custom_field_columns),
     [allTasks, hubsData]
   );
 
@@ -67,12 +66,6 @@ export default function AllListsPage() {
       dispatch(setTasks({ ...tasksStore, ...lists }));
     }
   }, [lists]);
-
-  useEffect(() => {
-    if (!allHubsId.length && Object.keys(tasksStore).length) {
-      dispatch(setIsTasksUpdated(true));
-    }
-  }, [allHubsId]);
 
   return (
     <>
@@ -88,7 +81,7 @@ export default function AllListsPage() {
             {/* lists */}
             {Object.keys(lists).map((listId) => (
               <>
-                {tasksStore[listId] && isTasksUpdated ? (
+                {tasksStore[listId] ? (
                   <div key={listId}>
                     <List tasks={lists[listId]} />
                   </div>

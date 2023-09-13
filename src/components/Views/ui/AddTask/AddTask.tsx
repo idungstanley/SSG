@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
 import { useAddTask } from '../../../../features/task/taskService';
-import { Column } from '../../types/table';
 import Assignee from '../../../../pages/workspace/tasks/assignTask/Assignee';
 import { UseGetListDetails } from '../../../../features/list/listService';
 import { ITask_statuses } from '../../../../features/list/list.interfaces';
@@ -11,14 +10,15 @@ import CreateTaskPriority from '../../../../assets/icons/CreateTaskPriority';
 import CreateTaskTaskTag from '../../../../assets/icons/CreateTaskTaskTag';
 import CreateTaskTaskEdit from '../../../../assets/icons/CreateTaskTaskEdit';
 import CreateTaskTaskCancel from '../../../../assets/icons/CreateTaskTaskCancel';
+import { listColumnProps } from '../../../../pages/workspace/tasks/component/views/ListColumns';
 
 interface AddTaskFieldProps {
-  onClose: VoidFunction;
   parentId: string;
   status?: string;
   paddingLeft?: number;
   isListParent?: boolean;
-  columns?: Column[];
+  columns?: listColumnProps[];
+  onClose: VoidFunction;
 }
 
 export function AddTask({ onClose, paddingLeft, parentId, isListParent, columns }: AddTaskFieldProps) {
@@ -99,32 +99,8 @@ export function AddTask({ onClose, paddingLeft, parentId, isListParent, columns 
       </td>
 
       {columns?.map((_, index) => (
-        <td
-          key={index}
-          className="z-10 border-t bg-white w-full h-full opacity-90 flex items-center justify-center"
-        ></td>
+        <td key={index} className="z-10 border-t bg-white w-full h-full opacity-90 flex items-center justify-center" />
       ))}
     </tr>
   );
 }
-
-// interface ButtonProps {
-//   label: string;
-//   onClick?: VoidFunction;
-//   primary?: boolean;
-// }
-
-// function Button({ label, onClick, primary }: ButtonProps) {
-//   return (
-//     <button
-//       type={primary ? 'submit' : 'button'}
-//       className={cl(
-//         'p-1 font-semibold border uppercase',
-//         primary ? 'bg-primary-400 border-primary-400 text-white' : 'bg-white border-gray-400'
-//       )}
-//       onClick={onClick}
-//     >
-//       {label}
-//     </button>
-//   );
-// }
