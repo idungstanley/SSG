@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import SaveCols from '../SaveCols';
-import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
+import { useAppSelector } from '../../../../../../app/hooks';
 import { useCreateDropdownField } from '../../../../../../features/list/listService';
-import { setIsTasksUpdated } from '../../../../../../features/task/taskSlice';
+// import { setIsTasksUpdated } from '../../../../../../features/task/taskSlice';
 
 function CreateManualProgress() {
-  const dispatch = useAppDispatch();
+  // const dispatch = useAppDispatch();
 
   const [startValue, setStartValue] = useState<string>('');
   const [endValue, setEndValue] = useState<string>('');
@@ -26,7 +26,7 @@ function CreateManualProgress() {
         is_underlined: is_underlined as string
       };
       const customType = 'progress_manual';
-      dispatch(setIsTasksUpdated(false));
+      // dispatch(setIsTasksUpdated(false));
       if (name) {
         onCreate({
           name,
