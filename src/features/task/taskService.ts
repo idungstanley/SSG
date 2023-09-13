@@ -23,6 +23,7 @@ import {
   setTasks,
   setTimerStatus,
   setToggleAssignCurrentTaskId,
+  setTriggerAutoSave,
   setTriggerSaveSettings,
   setTriggerSaveSettingsModal,
   setUpdateTimerDuration
@@ -464,10 +465,10 @@ export const UseUpdateTaskViewSettings = ({
   task_views_id: string;
   taskDate: { [key: string]: boolean };
 }) => {
-  const { triggerSaveSettings } = useAppSelector((state) => state.task);
+  const { triggerSaveSettings, triggerAutoSave } = useAppSelector((state) => state.task);
   const dispatch = useAppDispatch();
   return useQuery(
-    ['task', { task_views_id, taskDate }],
+    ['task', { task_views_id, taskDate, triggerAutoSave }],
     async () => {
       const data = requestNew<ITaskRes>({
         url: `task-views/${task_views_id}`,
@@ -483,6 +484,7 @@ export const UseUpdateTaskViewSettings = ({
       cacheTime: 0,
       onSuccess: () => {
         dispatch(setTriggerSaveSettings(false));
+        dispatch(setTriggerAutoSave(false));
         dispatch(setTriggerSaveSettingsModal(false));
       }
     }
