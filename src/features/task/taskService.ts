@@ -985,10 +985,47 @@ export const startMediaStream = async () => {
   const [audioTrack] = audioStream.getAudioTracks();
   const stream = new MediaStream([videoTrack, audioTrack]);
 
-  const recorder = new RecordRTC(stream, { type: 'video' });
-  await recorder.startRecording();
+  const recorder = new MediaRecorder(stream);
+  await recorder.start();
   return { recorder, stream };
 };
+
+export async function startRecord() {
+  try {
+    const userStream = await navigator.mediaDevices.getUserMedia({
+      audio: true
+    });
+    const screenStream = await navigator.mediaDevices.getDisplayMedia({
+      video: true
+    });
+    const combinedStream = new MediaStream();
+
+    userStream.getTracks().forEach((track) => combinedStream.addTrack(track));
+    screenStream.getTracks().forEach((track) => combinedStream.addTrack(track));
+
+    // setStream(combinedStream);
+
+    const recorder = new MediaRecorder(combinedStream);
+    // setMediaRecorder(recorder);
+
+    const chunks: Blob[] = [];
+
+    recorder.ondataavailable = (event) => {
+      if (event.data.size > 0) {
+        chunks.push(event.data);
+      }
+    };
+
+    recorder.onstop = () => {
+      const blob = new Blob(chunks, { type: 'video/webm' });
+      // setMediaBlob(blob);
+    };
+    console.log(chunks);
+    recorder.start();
+  } catch (error) {
+    console.error('Error starting screen recording:', error);
+  }
+}
 
 export function useMediaStream() {
   const dispatch = useAppDispatch();
@@ -996,6 +1033,7 @@ export function useMediaStream() {
   const queryClient = useQueryClient();
   const { activeItemId, activeItemType, isMuted } = useAppSelector((state) => state.workspace);
   const { currentWorkspaceId, accessToken } = useAppSelector((state) => state.auth);
+
   const { mutate } = useUploadRecording();
   const { stream } = useAppSelector((state) => state.task);
 
@@ -1009,28 +1047,25 @@ export function useMediaStream() {
     return { stream, recorder };
   };
 
-  const handleStopStream = async ({ stream, recorder }: { stream: MediaStream | null; recorder: RecordRTC | null }) => {
-    recorder?.stopRecording(async () => {
-      const blob: Blob | undefined = recorder?.getBlob();
-      if (blob && currentWorkspaceId && accessToken && activeItemId && activeItemType) {
-        mutate({
-          blob,
-          currentWorkspaceId,
-          accessToken,
-          activeItemId,
-          activeItemType
-        });
-        const tracks = stream?.getTracks();
-        if (tracks) {
-          tracks.forEach((track) => track.stop());
-        }
-        // Invalidate React Query
-        queryClient.invalidateQueries(['attachments']);
-      }
-    });
+  const handleStopStream = async ({ blob }: { blob: Blob | undefined }) => {
+    if (blob && currentWorkspaceId && accessToken && activeItemId && activeItemType) {
+      mutate({
+        blob,
+        currentWorkspaceId,
+        accessToken,
+        activeItemId,
+        activeItemType
+      });
+      // const tracks = stream?.getTracks();
+      // if (tracks) {
+      //   tracks.forEach((track) => track.stop());
+      // }
+      // Invalidate React Query
+      queryClient.invalidateQueries(['attachments']);
+    }
 
     dispatch(setScreenRecording('idle'));
-    const newAction: { recorder: RecordRTC | null; stream: MediaStream | null } = {
+    const newAction: { recorder: MediaRecorder | null; stream: MediaStream | null } = {
       stream: null,
       recorder: null
     };
