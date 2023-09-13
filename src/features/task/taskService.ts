@@ -9,6 +9,7 @@ import {
   IUserCalendarParams,
   IUserSettingsRes,
   IUserSettingsUpdateRes,
+  Task,
   TaskId,
   newTaskDataRes
 } from './interface.tasks';
@@ -36,6 +37,7 @@ import { generateFilters } from '../../components/TasksHeader/lib/generateFilter
 import Duration from '../../utils/TimerDuration';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
 import {
+  addNewTaskManager,
   taskAssignessUpdateManager,
   taskDateUpdateManager,
   taskMoveManager,
@@ -45,6 +47,9 @@ import {
 import { ITeamMembersAndGroup } from '../settings/teamMembersAndGroups.interfaces';
 import { useDispatch } from 'react-redux';
 import { runTimer } from '../../utils/TimerCounter';
+import { updateListTasksCountManager } from '../../managers/List';
+import { getHub } from '../hubs/hubSlice';
+import { setFilteredResults } from '../search/searchSlice';
 
 //edit a custom field
 export const UseEditCustomFieldService = (data: {
@@ -190,13 +195,20 @@ const addTask = (data: {
   return response;
 };
 
-export const useAddTask = () => {
-  const queryClient = useQueryClient();
+export const useAddTask = (task?: Task) => {
+  const dispatch = useAppDispatch();
+
+  const { tasks } = useAppSelector((state) => state.task);
+  const { hub } = useAppSelector((state) => state.hub);
 
   return useMutation(addTask, {
-    onSuccess: () => {
-      queryClient.invalidateQueries(['task']);
-      queryClient.invalidateQueries(['sub-tasks']);
+    onSuccess: (data) => {
+      const updatedTasks = addNewTaskManager(tasks, data.data.task as ITaskFullList, task?.custom_field_columns || []);
+      dispatch(setTasks(updatedTasks));
+      const listId = data.data.task.list_id;
+      const updatedTree = updateListTasksCountManager(listId as string, hub, updatedTasks[listId].length);
+      dispatch(getHub(updatedTree));
+      dispatch(setFilteredResults(updatedTree));
     }
   });
 };

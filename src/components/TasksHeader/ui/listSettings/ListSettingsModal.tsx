@@ -1,8 +1,6 @@
-import React, { Fragment, ReactNode, useEffect, useState } from 'react';
+import { Fragment, ReactNode, useEffect, useState } from 'react';
 import { Menu, Transition } from '@headlessui/react';
 import { BsChevronRight, BsThreeDotsVertical } from 'react-icons/bs';
-import ShowIcon from '../../../../assets/icons/ShowIcon';
-import ArrowDrop from '../../../../assets/icons/ArrowDrop';
 import Button from '../../../Buttons/Button';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { useSwitchSettings } from '../../../../pages/workspace/tasks/TaskSettingsModal/ShowSettingsModal/SwitchSettings';
@@ -11,8 +9,7 @@ import {
   setSaveSettingLocal,
   setSaveSettingOnline,
   setTriggerAutoSave,
-  setTriggerSaveSettings,
-  setTriggerSaveSettingsModal
+  setTriggerSaveSettings
 } from '../../../../features/task/taskSlice';
 interface IShowHideSettings {
   itemsArray: [
