@@ -55,6 +55,7 @@ export default function AdditionalHeader() {
 
   const { refetch } = useCurrentTime({ workspaceId });
   const { mutate } = EndTimeEntriesService();
+
   const stop = () => {
     mutate({
       id: activeItemId,

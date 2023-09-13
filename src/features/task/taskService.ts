@@ -29,7 +29,6 @@ import {
   setUpdateTimerDuration
 } from './taskSlice';
 import { UpdateTaskProps } from './interface.tasks';
-import RecordRTC from 'recordrtc';
 import { useUploadRecording } from '../workspace/workspaceService';
 import { useParams } from 'react-router-dom';
 import { setPickedDateState, setTimerLastMemory, toggleMute } from '../workspace/workspaceSlice';
@@ -985,8 +984,8 @@ export const startMediaStream = async () => {
   const [audioTrack] = audioStream.getAudioTracks();
   const stream = new MediaStream([videoTrack, audioTrack]);
 
-  const recorder = new RecordRTC(stream, { type: 'video' });
-  await recorder.startRecording();
+  const recorder = new MediaRecorder(stream);
+  await recorder.start();
   return { recorder, stream };
 };
 
@@ -996,6 +995,7 @@ export function useMediaStream() {
   const queryClient = useQueryClient();
   const { activeItemId, activeItemType, isMuted } = useAppSelector((state) => state.workspace);
   const { currentWorkspaceId, accessToken } = useAppSelector((state) => state.auth);
+
   const { mutate } = useUploadRecording();
   const { stream } = useAppSelector((state) => state.task);
 
@@ -1009,28 +1009,28 @@ export function useMediaStream() {
     return { stream, recorder };
   };
 
-  const handleStopStream = async ({ stream, recorder }: { stream: MediaStream | null; recorder: RecordRTC | null }) => {
-    recorder?.stopRecording(async () => {
-      const blob: Blob | undefined = recorder?.getBlob();
-      if (blob && currentWorkspaceId && accessToken && activeItemId && activeItemType) {
-        mutate({
-          blob,
-          currentWorkspaceId,
-          accessToken,
-          activeItemId,
-          activeItemType
-        });
-        const tracks = stream?.getTracks();
-        if (tracks) {
-          tracks.forEach((track) => track.stop());
-        }
-        // Invalidate React Query
-        queryClient.invalidateQueries(['attachments']);
-      }
-    });
+  const handleStopStream = async ({ blob }: { blob: Blob | undefined }) => {
+    const combinedStream = new MediaStream();
+    const recorder = new MediaRecorder(combinedStream);
+    dispatch(setScreenRecordingMedia({ recorder, stream: combinedStream }));
+    if (blob && currentWorkspaceId && accessToken && activeItemId && activeItemType) {
+      mutate({
+        blob,
+        currentWorkspaceId,
+        accessToken,
+        activeItemId,
+        activeItemType
+      });
+      // const tracks = stream?.getTracks();
+      // if (tracks) {
+      //   tracks.forEach((track) => track.stop());
+      // }
+      // Invalidate React Query
+      queryClient.invalidateQueries(['attachments']);
+    }
 
     dispatch(setScreenRecording('idle'));
-    const newAction: { recorder: RecordRTC | null; stream: MediaStream | null } = {
+    const newAction: { recorder: MediaRecorder | null; stream: MediaStream | null } = {
       stream: null,
       recorder: null
     };
