@@ -7,6 +7,7 @@ import Button from '../../../Buttons/Button';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { useSwitchSettings } from '../../../../pages/workspace/tasks/TaskSettingsModal/ShowSettingsModal/SwitchSettings';
 import {
+  setAutoSave,
   setSaveSettingLocal,
   setSaveSettingOnline,
   setTriggerAutoSave,
@@ -32,9 +33,11 @@ export default function ListSettingsModal({ itemsArray }: IShowHideSettings) {
     verticalGrid,
     saveSettingList,
     taskUpperCase,
+    saveSettingOnline,
     verticalGridlinesTask,
     splitSubTaskState
   } = useAppSelector((state) => state.task);
+  const { activeItemId } = useAppSelector((state) => state.workspace);
 
   const [checkedStates, setCheckedStates] = useState<boolean[]>([]);
   const [isAnyactive, setIsAnyactive] = useState<boolean>();
@@ -68,14 +71,17 @@ export default function ListSettingsModal({ itemsArray }: IShowHideSettings) {
         const AutoSaveIndex = itemsArray.findIndex((item) => item.label == 'AutoSave View');
 
         if (saveSettingList != undefined && saveSettingList?.view_settings != null) {
-          newState[AutoSaveIndex] = autoSave;
+          newState[AutoSaveIndex] = saveSettingOnline?.autoSave as boolean;
+        } else {
+          dispatch(setAutoSave(false));
+          newState[AutoSaveIndex] = false;
         }
         return newState;
       });
     };
 
     handleCheckboxChange();
-  }, [saveSettingList]);
+  }, [saveSettingList, activeItemId, autoSave]);
 
   const handleChange = (viewMode: string, index: number) => {
     dispatch(setTriggerSaveSettings(true));
