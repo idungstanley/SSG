@@ -59,6 +59,7 @@ export function Table({ heads, data, label, listName, customFields, listColor, l
       assignees: [],
       checklists: [],
       created_at: Date.now(),
+      custom_field_columns: listDetails?.data.list.custom_field_columns || [],
       custom_fields: [],
       deleted_at: null,
       description: null,

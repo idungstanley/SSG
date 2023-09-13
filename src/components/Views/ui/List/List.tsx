@@ -172,6 +172,7 @@ export function List({ tasks, subtasksCustomeFields, listDetails }: ListProps) {
                   heads={hideTask.length ? hideTask : generateColumns}
                   data={sortedTasks[key]}
                   customFields={tasks[0].custom_field_columns as IField[]}
+                  listDetails={listDetails}
                 />
               ) : (
                 <>

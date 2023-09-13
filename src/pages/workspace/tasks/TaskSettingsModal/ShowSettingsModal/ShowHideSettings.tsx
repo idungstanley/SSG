@@ -15,7 +15,6 @@ import {
   getSplitSubTaskLevels,
   setSaveSettingLocal,
   setSaveSettingOnline,
-  setTriggerAutoSave,
   setTriggerSaveSettings,
   setTriggerSaveSettingsModal
 } from '../../../../../features/task/taskSlice';
