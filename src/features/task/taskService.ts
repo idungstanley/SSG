@@ -29,7 +29,6 @@ import {
   setUpdateTimerDuration
 } from './taskSlice';
 import { UpdateTaskProps } from './interface.tasks';
-import RecordRTC from 'recordrtc';
 import { useUploadRecording } from '../workspace/workspaceService';
 import { useParams } from 'react-router-dom';
 import { setPickedDateState, setTimerLastMemory, toggleMute } from '../workspace/workspaceSlice';
@@ -990,43 +989,6 @@ export const startMediaStream = async () => {
   return { recorder, stream };
 };
 
-export async function startRecord() {
-  try {
-    const userStream = await navigator.mediaDevices.getUserMedia({
-      audio: true
-    });
-    const screenStream = await navigator.mediaDevices.getDisplayMedia({
-      video: true
-    });
-    const combinedStream = new MediaStream();
-
-    userStream.getTracks().forEach((track) => combinedStream.addTrack(track));
-    screenStream.getTracks().forEach((track) => combinedStream.addTrack(track));
-
-    // setStream(combinedStream);
-
-    const recorder = new MediaRecorder(combinedStream);
-    // setMediaRecorder(recorder);
-
-    const chunks: Blob[] = [];
-
-    recorder.ondataavailable = (event) => {
-      if (event.data.size > 0) {
-        chunks.push(event.data);
-      }
-    };
-
-    recorder.onstop = () => {
-      const blob = new Blob(chunks, { type: 'video/webm' });
-      // setMediaBlob(blob);
-    };
-    console.log(chunks);
-    recorder.start();
-  } catch (error) {
-    console.error('Error starting screen recording:', error);
-  }
-}
-
 export function useMediaStream() {
   const dispatch = useAppDispatch();
   const { mutateAsync: startStream, isLoading: isStarting } = useMutation(startMediaStream);
@@ -1048,6 +1010,9 @@ export function useMediaStream() {
   };
 
   const handleStopStream = async ({ blob }: { blob: Blob | undefined }) => {
+    const combinedStream = new MediaStream();
+    const recorder = new MediaRecorder(combinedStream);
+    dispatch(setScreenRecordingMedia({ recorder, stream: combinedStream }));
     if (blob && currentWorkspaceId && accessToken && activeItemId && activeItemType) {
       mutate({
         blob,

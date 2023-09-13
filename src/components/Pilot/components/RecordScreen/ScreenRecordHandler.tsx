@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
-import { setRecordBlob, setScreenRecording, setScreenRecordingMedia } from '../../../../features/task/taskSlice';
+import { setScreenRecording, setScreenRecordingMedia } from '../../../../features/task/taskSlice';
 import { useMediaStream } from '../../../../features/task/taskService';
 
 export function useScreenRecorder() {
@@ -46,7 +46,6 @@ export function useScreenRecorder() {
 
       recorder.onstop = () => {
         const blob = new Blob(chunks, { type: 'video/webm' });
-        console.log(blob);
         handleStopStream({ blob });
         setRecordedBlob(blob);
         setIsRecording(false);
@@ -55,6 +54,7 @@ export function useScreenRecorder() {
       dispatch(setScreenRecording('recording'));
 
       recorder.start();
+      return { recorder, combinedStream: stream };
     } catch (error) {
       console.error('Error starting screen recording:', error);
     }

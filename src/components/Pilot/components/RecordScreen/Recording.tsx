@@ -34,11 +34,7 @@ export default function Recording() {
 
   const dispatch = useAppDispatch();
 
-  const {
-    handleToggleMute
-    // isStarting,
-    // isStopping,
-  } = useMediaStream();
+  const { handleToggleMute } = useMediaStream();
   const {
     startRecording: Record,
     stopRecording: StopRecord,
@@ -50,6 +46,7 @@ export default function Recording() {
 
   const startRecording = async () => {
     Record();
+    dispatch(setScreenRecordingMedia(recordedData));
     dispatch(setRecorderLastMemory({ activeTabId, workSpaceId, listId, hubId, subhubId, taskId }));
     setRecordState(true);
   };
@@ -57,8 +54,6 @@ export default function Recording() {
   const stopRecording = () => {
     StopRecord();
     recordedData.recorder?.stop();
-    dispatch(setScreenRecordingMedia(recordedData));
-    dispatch(setRecordBlob(recordedBlob));
     setRecordState(false);
     dispatch(setRecorderInterval());
     dispatch(setUpdateRecoderDuration({ h: 0, m: 0, s: 0 }));
