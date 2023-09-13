@@ -14,8 +14,10 @@ export interface IField {
   name: string;
   type: string;
   properties?: {
-    symbol: string;
-    currency: string;
+    symbol?: string;
+    currency?: string;
+    emoji?: string;
+    number?: number;
   };
 }
 

@@ -59,9 +59,9 @@ export default function DateFormat({ date, task, font = 'text-sm' }: dateFormatP
           />
         )}
         {date ? (
-          <div className="flex group items-center">
+          <div className="flex group/parent items-center">
             <p
-              className="rounded-full flex items-center justify-center bg-alsoit-purple-300 mr-1 h-3 w-3 text-white text-xs pb-0.5 opacity-0 group-hover:opacity-100 cursor-pointer"
+              className="rounded-full flex items-center justify-center bg-alsoit-purple-300 mr-1 h-3 w-3 text-white text-xs pb-0.5 opacity-0 group-hover/parent:opacity-100 cursor-pointer"
               onClick={(e) => e.stopPropagation()}
             >
               x
