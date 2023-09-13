@@ -185,7 +185,7 @@ export default function TaskName({
         </div>
         <p id="iconWrapper" className="flex items-center ml-1 space-x-1 opacity-0 group-hover:opacity-100 ">
           {!ShowPlusIcon && (
-            <ToolTip title="Add subtask">
+            <ToolTip title="Add subTask">
               <span className="cursor-pointer bg-white  border rounded flex justify-center align-center p-0.5">
                 <PlusIcon
                   className="w-3 text-gray-500 "

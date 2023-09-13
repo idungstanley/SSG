@@ -440,15 +440,14 @@ export function StickyCol({
             <div className="ml-4 pt-2">
               <StatusDropdown TaskCurrentStatus={task.status} />
             </div>
-            <div className="flex flex-col pt-2 items-start justify-start pl-2 space-y-1">
+            <div className="flex flex-col pt-2 items-start justify-start pl-2 space-y-1 " >
               <p
-                className="flex text-left"
+                className="flex text-left empty:before:content-[attr(placeholder)]"
                 contentEditable={true}
+                placeholder="Add New Task"
                 ref={inputRef}
                 onKeyDown={(e) => (e.key === 'Enter' ? handleOnSave(e, task.id) : null)}
-              >
-                {task.name}
-              </p>
+              ></p>
             </div>
           </div>
         </td>
