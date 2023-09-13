@@ -24,6 +24,30 @@ export const addNewTaskManager = (
   return tasks;
 };
 
+export const updateTaskSubtasksCountManager = (
+  parentId: string,
+  tasks: Record<string, ITaskFullList[]>,
+  count: number
+) => {
+  if (parentId) {
+    const updatedTasks = { ...tasks };
+
+    Object.keys(updatedTasks).forEach((key) => {
+      updatedTasks[key] = updatedTasks[key].map((task) => {
+        if (task.id === parentId) {
+          return {
+            ...task,
+            descendants_count: count
+          };
+        }
+        return task;
+      });
+    });
+    return updatedTasks;
+  }
+  return tasks;
+};
+
 export const taskPriorityUpdateManager = (
   taskIds: string[],
   listIds: string[],
