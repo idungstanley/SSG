@@ -58,7 +58,7 @@ export default function AllListsPage() {
   }, [allHubsId]);
 
   const lists = useMemo(
-    () => generateLists([...new Set(allTasks)], hubsData?.data.hub.custom_fields),
+    () => generateLists([...new Set(allTasks)], hubsData?.data.hub.custom_field_columns),
     [allTasks, hubsData]
   );
 
