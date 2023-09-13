@@ -3,17 +3,22 @@ import Menu from '@mui/material/Menu';
 import ArrowRight from '../../../../../../assets/icons/ArrowRight';
 import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
 import { setNewCustomPropertyDetails } from '../../../../../../features/task/taskSlice';
-import Currency from '../../../../../../assets/branding/Currency';
+import { GiProgression } from 'react-icons/gi';
 
 const items = [
   {
     id: 1,
-    name: 'Currency',
-    onclick: () => null
+    name: 'Progress(Auto)',
+    type: 'progress_auto'
+  },
+  {
+    id: 2,
+    name: 'Progress(Manual)',
+    type: 'progress_manual'
   }
 ];
 
-export default function CurrencyOptions() {
+export default function ProgressOptions() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -31,9 +36,9 @@ export default function CurrencyOptions() {
       <button className="w-full flex items-center justify-between h-full" onClick={handleClick}>
         <div className="flex items-center">
           <span className="mx-1 w-5 h-5">
-            <Currency />
+            <GiProgression />
           </span>
-          <p className="text-alsoit-gray-300-lg text-alsoit-text-lg font-semibold">Currency</p>
+          <p className="text-alsoit-gray-300-lg text-alsoit-text-lg font-semibold">Progress</p>
         </div>
         <ArrowRight />
       </button>
@@ -54,7 +59,7 @@ export default function CurrencyOptions() {
         }}
       >
         <div className="w-full mt-2 flex justify-center">
-          <h1 className="text-alsoit-text-lg font-semibold">CURRENCY</h1>
+          <h1 className="text-alsoit-text-lg font-semibold">PROGRESS</h1>
         </div>
         <hr />
         <div className="px-1 py-1">

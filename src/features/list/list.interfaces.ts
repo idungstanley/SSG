@@ -1,6 +1,11 @@
 import { ListColourProps } from '../../components/tasks/ListItem';
 import { IList, ItaskViews } from '../hubs/hubs.interfaces';
-import { ICheckListRes } from './../task/interface.tasks';
+import {
+  ICheckListRes,
+  currencyProperties,
+  manualProgressProperties,
+  ratingProperties
+} from './../task/interface.tasks';
 
 export type Options = { id: string; color: string; name: string }[] | null;
 
@@ -13,12 +18,7 @@ export interface IField {
   options: Options;
   name: string;
   type: string;
-  properties?: {
-    symbol?: string;
-    currency?: string;
-    emoji?: string;
-    number?: number;
-  };
+  properties?: currencyProperties | ratingProperties | manualProgressProperties;
 }
 
 export interface taskCountFields {
