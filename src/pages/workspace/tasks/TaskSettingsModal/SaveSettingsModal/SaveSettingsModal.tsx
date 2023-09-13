@@ -5,6 +5,8 @@ import toast from 'react-hot-toast';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import {
   setAutoSave,
+  setSaveSettingLocal,
+  setSaveSettingOnline,
   setTriggerSaveSettings,
   setTriggerSaveSettingsModal
 } from '../../../../../features/task/taskSlice';
@@ -18,15 +20,22 @@ interface ToastProps {
 }
 function SaveSettingsModal({ title, showClose = true, toastId }: ToastProps) {
   const dispatch = useAppDispatch();
-  const { triggerSaveSettingsModal } = useAppSelector((state) => state.task);
+  const { triggerSaveSettingsModal, autoSave, saveSettingLocal, saveSettingOnline } = useAppSelector(
+    (state) => state.task
+  );
 
   const handleSaveViewSettings = () => {
     dispatch(setTriggerSaveSettings(true));
   };
   const handleAutoSaveViewSettings = () => {
+    dispatch(setSaveSettingLocal({ ...saveSettingLocal, autoSave: true }));
+    dispatch(setSaveSettingOnline({ ...saveSettingOnline, autoSave: true }));
     dispatch(setAutoSave(true));
-    dispatch(setTriggerSaveSettings(true));
   };
+
+  useEffect(() => {
+    if (saveSettingLocal?.autoSave == true) dispatch(setTriggerSaveSettings(true));
+  }, [saveSettingLocal]);
 
   useEffect(() => {
     if (!triggerSaveSettingsModal) toast.remove(toastId);
