@@ -275,10 +275,8 @@ export const useCreateDropdownField = () => {
         entityForCustom.type === EntityType.task ? entityForCustom.id : ''
       );
       if (entityForCustom.type === EntityType.task) {
-        console.log('first');
         dispatch(setSubtasks(updatedList));
       } else {
-        console.log(updatedList);
         dispatch(setTasks(updatedList));
       }
     }
