@@ -152,7 +152,12 @@ export function List({ tasks, subtasksCustomeFields, listDetails }: ListProps) {
         <div className="relative" style={{ paddingRight: '30px' }}>
           {showNewTaskField ? (
             <div className="pl-2">
-              <AddTask parentId={tasks[0].list?.id as string} isListParent onClose={() => handleClose()} />
+              <AddTask
+                parentId={tasks[0].list_id as string}
+                isListParent={true}
+                task={tasks[0]}
+                onClose={() => handleClose()}
+              />
             </div>
           ) : null}
           {!showNewTaskField ? (

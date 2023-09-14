@@ -11,24 +11,26 @@ import CreateTaskTaskTag from '../../../../assets/icons/CreateTaskTaskTag';
 import CreateTaskTaskEdit from '../../../../assets/icons/CreateTaskTaskEdit';
 import CreateTaskTaskCancel from '../../../../assets/icons/CreateTaskTaskCancel';
 import { listColumnProps } from '../../../../pages/workspace/tasks/component/views/ListColumns';
+import { Task } from '../../../../features/task/interface.tasks';
 
 interface AddTaskFieldProps {
   parentId: string;
   status?: string;
   paddingLeft?: number;
-  isListParent?: boolean;
+  isListParent: boolean;
   columns?: listColumnProps[];
+  task: Task;
   onClose: VoidFunction;
 }
 
-export function AddTask({ onClose, paddingLeft, parentId, isListParent, columns }: AddTaskFieldProps) {
+export function AddTask({ onClose, paddingLeft, parentId, isListParent, columns, task }: AddTaskFieldProps) {
   const { currTeamMemberId } = useAppSelector((state) => state.task);
 
   const [statusId, setStatusId] = useState<string>('');
 
   const nameRef = useRef<HTMLInputElement>(null);
 
-  const { mutate: onAdd } = useAddTask();
+  const { mutate: onAdd } = useAddTask(task);
 
   const { data: list } = UseGetListDetails(parentId);
 
@@ -49,7 +51,7 @@ export function AddTask({ onClose, paddingLeft, parentId, isListParent, columns 
 
       onAdd({
         name,
-        isListParent: !!isListParent,
+        isListParent,
         id: parentId,
         assignees: [currTeamMemberId] as string[],
         task_status_id: statusId as string

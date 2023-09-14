@@ -42,7 +42,8 @@ import {
   taskDateUpdateManager,
   taskMoveManager,
   taskPriorityUpdateManager,
-  taskStatusUpdateManager
+  taskStatusUpdateManager,
+  updateTaskSubtasksCountManager
 } from '../../managers/Task';
 import { ITeamMembersAndGroup } from '../settings/teamMembersAndGroups.interfaces';
 import { useDispatch } from 'react-redux';
@@ -50,6 +51,7 @@ import { runTimer } from '../../utils/TimerCounter';
 import { updateListTasksCountManager } from '../../managers/List';
 import { getHub } from '../hubs/hubSlice';
 import { setFilteredResults } from '../search/searchSlice';
+import { addNewSubtaskManager } from '../../managers/Subtask';
 
 //edit a custom field
 export const UseEditCustomFieldService = (data: {
@@ -198,17 +200,40 @@ const addTask = (data: {
 export const useAddTask = (task?: Task) => {
   const dispatch = useAppDispatch();
 
-  const { tasks } = useAppSelector((state) => state.task);
+  const { tasks, subtasks } = useAppSelector((state) => state.task);
   const { hub } = useAppSelector((state) => state.hub);
 
   return useMutation(addTask, {
     onSuccess: (data) => {
-      const updatedTasks = addNewTaskManager(tasks, data.data.task as ITaskFullList, task?.custom_field_columns || []);
-      dispatch(setTasks(updatedTasks));
-      const listId = data.data.task.list_id;
-      const updatedTree = updateListTasksCountManager(listId as string, hub, updatedTasks[listId].length);
-      dispatch(getHub(updatedTree));
-      dispatch(setFilteredResults(updatedTree));
+      if (data.data.task.parent_id) {
+        // add subtask
+        const updatedSubtasks = addNewSubtaskManager(
+          subtasks,
+          data.data.task as ITaskFullList,
+          task?.custom_field_columns || []
+        );
+        dispatch(setSubtasks(updatedSubtasks));
+
+        const parentId = data.data.task.parent_id;
+        const updatedTasks = updateTaskSubtasksCountManager(
+          parentId as string,
+          tasks,
+          updatedSubtasks[parentId].length
+        );
+        dispatch(setTasks(updatedTasks));
+      } else {
+        // add task
+        const updatedTasks = addNewTaskManager(
+          tasks,
+          data.data.task as ITaskFullList,
+          task?.custom_field_columns || []
+        );
+        dispatch(setTasks(updatedTasks));
+        const listId = data.data.task.list_id;
+        const updatedTree = updateListTasksCountManager(listId as string, hub, updatedTasks[listId].length);
+        dispatch(getHub(updatedTree));
+        dispatch(setFilteredResults(updatedTree));
+      }
     }
   });
 };
