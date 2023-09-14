@@ -12,8 +12,6 @@ import { setShowTaskUploadModal } from '../../../../../../features/task/taskSlic
 interface UploadFileModalProps {
   invalidateQuery?: InvalidateQueryFilters<unknown>;
   endpoint?: string;
-  // activeItemId: string | null | undefined;
-  // activeType: string | null | undefined;
 }
 
 export default function AddFileModal({ invalidateQuery, endpoint }: UploadFileModalProps) {
@@ -21,47 +19,45 @@ export default function AddFileModal({ invalidateQuery, endpoint }: UploadFileMo
   const dispatch = useDispatch();
   const { currentWorkspaceId, accessToken } = useAppSelector((state) => state.auth);
   const { showTaskUploadModal } = useAppSelector((state) => state.task);
+  const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
 
   // init
   const uppy = useUppy(() =>
     new Uppy({
       debug: true,
-      autoProceed: true,
-      meta: {},
-      restrictions: {
-        maxFileSize: null,
-        minFileSize: null,
-        maxTotalFileSize: null,
-        maxNumberOfFiles: 5,
-        minNumberOfFiles: null,
-        allowedFileTypes: ['image/*']
-      }
+      autoProceed: false,
+      meta: {}
     }).use(XHRUpload, {
-      allowedMetaFields: ['image', 'path'],
-      endpoint: '',
-      bundle: false,
+      fieldName: 'files[0]',
+      allowedMetaFields: ['id', 'type'],
+      endpoint: `${process.env.REACT_APP_API_BASE_URL}/api/${endpoint}`,
       headers: currentWorkspaceId
         ? {
             Authorization: `Bearer ${accessToken}`,
             current_workspace_id: currentWorkspaceId
           }
         : undefined,
-      method: 'POST',
-      formData: true
+      method: 'POST'
     })
   );
 
-  const { xhrUpload } = uppy.getState();
-
-  // setup data
-  useEffect(() => {
-    uppy.setState({
-      xhrUpload: {
-        ...xhrUpload,
-        endpoint: `${process.env.REACT_APP_API_BASE_URL}/api/${endpoint}`
-      }
+  uppy.on('file-added', (file) => {
+    // Set metadata for the file using uppy.setFileMeta
+    uppy.setFileMeta(file.id, {
+      id: activeItemId,
+      type: activeItemType
     });
-  }, [endpoint]);
+  });
+
+  useEffect(() => {
+    uppy.on('upload-progress', () => {
+      uppy.close();
+    });
+
+    return () => {
+      uppy.off('upload-success', () => uppy.close());
+    };
+  }, [uppy]);
 
   // invalidate query
   uppy.on('upload-success', (_file, response) => {
