@@ -81,7 +81,7 @@ export default function DateFormat({ date, task, font = 'text-sm' }: dateFormatP
             <p>{moment(date as MomentInput).format(date_format?.toUpperCase())}</p>
           </div>
         ) : (
-          <div className="absolute">
+          <div className="flex group/parent items-center">
             <CalenderIcon />
           </div>
         )}
