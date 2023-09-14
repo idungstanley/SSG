@@ -24,8 +24,9 @@ const HIGH = 'high';
 const URGENT = 'urgent';
 
 export default function PriorityDropdown({ taskCurrentPriority }: TaskCurrentPriorityProps) {
-  const { selectedTasksArray } = useAppSelector((state) => state.task);
-  const { updateCords, selectedListIds, selectedTaskParentId } = useAppSelector((state) => state.task);
+  const { selectedTasksArray, updateCords, selectedListIds, selectedTaskParentId } = useAppSelector(
+    (state) => state.task
+  );
 
   const [priority, setPriority] = useState('');
   const [isOpen, setIsOpen] = useState(false);

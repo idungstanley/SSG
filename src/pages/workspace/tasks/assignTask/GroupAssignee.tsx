@@ -20,6 +20,7 @@ function GroupAssignee({
   handleClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
 }) {
   const { CompactView, CompactViewWrap } = useAppSelector((state) => state.task);
+  const { selectedTasksArray, selectedListIds, selectedTaskParentId } = useAppSelector((state) => state.task);
 
   const [hoverInterval, setHoverInterval] = useState(false);
   const [modalLoader, setModalLoader] = useState(true);
@@ -33,11 +34,15 @@ function GroupAssignee({
     index: 0
   });
 
-  const { mutate: onTaskUnassign } = UseTaskUnassignService(itemId as string, data[displayed.index]);
+  const { mutate: onTaskUnassign } = UseTaskUnassignService(
+    selectedTasksArray.length ? selectedTasksArray : [itemId as string],
+    data[displayed.index],
+    selectedListIds.length ? selectedListIds : [selectedTaskParentId]
+  );
 
   const handleUnAssignTask = (id: string) => {
     onTaskUnassign({
-      taskId: itemId,
+      taskId: itemId as string,
       team_member_id: id,
       teams
     });

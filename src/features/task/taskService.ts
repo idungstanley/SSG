@@ -530,7 +530,7 @@ export const UseUpdateTaskViewSettings = ({
 export const UseUpdateTaskPrioritiesServices = ({ task_id_array, priorityDataUpdate, listIds }: UpdateTaskProps) => {
   const dispatch = useAppDispatch();
 
-  const { currentTaskPriorityId, tasks, subtasks, selectedTaskType } = useAppSelector((state) => state.task);
+  const { currentTaskPriorityId, tasks, subtasks } = useAppSelector((state) => state.task);
 
   const currentTaskIds = task_id_array?.length ? task_id_array : [currentTaskPriorityId];
 
@@ -552,17 +552,15 @@ export const UseUpdateTaskPrioritiesServices = ({ task_id_array, priorityDataUpd
       cacheTime: 0,
       onSuccess: () => {
         if (listIds) {
-          const updatedTasks = taskPriorityUpdateManager(
+          const { updatedTasks, updatedSubtasks } = taskPriorityUpdateManager(
             currentTaskIds as string[],
             listIds as string[],
-            selectedTaskType === EntityType.task ? tasks : subtasks,
+            tasks,
+            subtasks,
             priorityDataUpdate as string
           );
-          if (selectedTaskType === EntityType.task) {
-            dispatch(setTasks(updatedTasks));
-          } else {
-            dispatch(setSubtasks(updatedTasks));
-          }
+          dispatch(setTasks(updatedTasks as Record<string, ITaskFullList[]>));
+          dispatch(setSubtasks(updatedSubtasks as Record<string, ITaskFullList[]>));
         }
         dispatch(setSelectedTasksArray([]));
         dispatch(setSelectedListIds([]));
@@ -908,45 +906,46 @@ export const RemoveWatcherService = ({ query }: { query: (string | null | undefi
 
 // Assign Checklist Item
 const AssignTask = ({
-  taskId,
+  taskIds,
   team_member_id,
   teams
 }: {
-  taskId: string | null | undefined;
+  taskIds: string[];
   team_member_id: string | null;
   teams: boolean;
 }) => {
   const request = requestNew({
-    url: teams ? '/group-assignee/assign' : '/assignee/assign',
+    url: teams ? '/group-assignee/assign' : '/tasks/multiple/assignees',
     method: 'POST',
     data: {
-      id: taskId,
-      ...(teams ? { team_member_group_id: team_member_id } : { team_member_id }),
+      ids: taskIds,
+      ...(teams ? { team_member_group_id: team_member_id } : { team_member_ids: [team_member_id] }),
       type: EntityType.task
     }
   });
   return request;
 };
 
-export const UseTaskAssignService = (taskId: string, user: ITeamMembersAndGroup) => {
+export const UseTaskAssignService = (taskIds: string[], user: ITeamMembersAndGroup, listIds: string[]) => {
   const dispatch = useAppDispatch();
 
-  const { selectedTaskParentId, tasks, subtasks, selectedTaskType } = useAppSelector((state) => state.task);
+  const { tasks, subtasks } = useAppSelector((state) => state.task);
+
   return useMutation(AssignTask, {
     onSuccess: () => {
-      const updatedTasks = taskAssignessUpdateManager(
-        taskId,
-        selectedTaskParentId,
-        selectedTaskType === EntityType.task ? tasks : subtasks,
+      const { updatedTasks, updatedSubtasks } = taskAssignessUpdateManager(
+        taskIds,
+        listIds,
+        tasks,
+        subtasks,
         user,
         true
       );
-      if (selectedTaskType === EntityType.task) {
-        dispatch(setTasks(updatedTasks));
-      } else {
-        dispatch(setSubtasks(updatedTasks));
-      }
+      dispatch(setTasks(updatedTasks as Record<string, ITaskFullList[]>));
+      dispatch(setSubtasks(updatedSubtasks as Record<string, ITaskFullList[]>));
       dispatch(setToggleAssignCurrentTaskId(null));
+      dispatch(setSelectedTasksArray([]));
+      dispatch(setSelectedListIds([]));
     }
   });
 };
@@ -957,7 +956,7 @@ const UnassignTask = ({
   team_member_id,
   teams
 }: {
-  taskId: string | null | undefined;
+  taskId: string;
   team_member_id: string | null;
   teams: boolean;
 }) => {
@@ -965,7 +964,7 @@ const UnassignTask = ({
     url: teams ? '/group-assignee/unassign' : '/assignee/unassign',
     method: 'POST',
     data: {
-      ...(teams ? { team_member_group_id: team_member_id } : { team_member_id: team_member_id }),
+      ...(teams ? { team_member_group_id: team_member_id } : { team_member_id }),
       id: taskId,
       type: EntityType.task
     }
@@ -973,26 +972,26 @@ const UnassignTask = ({
   return request;
 };
 
-export const UseTaskUnassignService = (taskId: string, user: ITeamMembersAndGroup) => {
+export const UseTaskUnassignService = (taskIds: string[], user: ITeamMembersAndGroup, listIds: string[]) => {
   const dispatch = useAppDispatch();
 
-  const { selectedTaskParentId, tasks, subtasks, selectedTaskType } = useAppSelector((state) => state.task);
+  const { tasks, subtasks } = useAppSelector((state) => state.task);
 
   return useMutation(UnassignTask, {
     onSuccess: () => {
-      const updatedTasks = taskAssignessUpdateManager(
-        taskId,
-        selectedTaskParentId,
-        selectedTaskType === EntityType.task ? tasks : subtasks,
+      const { updatedTasks, updatedSubtasks } = taskAssignessUpdateManager(
+        taskIds,
+        listIds,
+        tasks,
+        subtasks,
         user,
         false
       );
-      if (selectedTaskType === EntityType.task) {
-        dispatch(setTasks(updatedTasks));
-      } else {
-        dispatch(setSubtasks(updatedTasks));
-      }
+      dispatch(setTasks(updatedTasks as Record<string, ITaskFullList[]>));
+      dispatch(setSubtasks(updatedSubtasks as Record<string, ITaskFullList[]>));
       dispatch(setToggleAssignCurrentTaskId(null));
+      dispatch(setSelectedTasksArray([]));
+      dispatch(setSelectedListIds([]));
     }
   });
 };

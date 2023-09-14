@@ -25,7 +25,7 @@ export default function DateFormat({ date, task, font = 'text-sm' }: dateFormatP
   const [taskId, setTaskId] = useState<string | null>(null);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
-  const { isSuccess } = UseUpdateTaskDateService({
+  UseUpdateTaskDateService({
     task_id: taskId as string,
     taskDate: selectedDate?.date.format('YYYY-MM-DD HH:mm:ss') as string,
     listIds: selectedListIds.length ? selectedListIds : [selectedTaskParentId],
@@ -36,8 +36,8 @@ export default function DateFormat({ date, task, font = 'text-sm' }: dateFormatP
     setAnchorEl(event.currentTarget);
     setShowDatePicker(!showDataPicker);
     setTaskId(task?.id as string);
-    dispatch(setSelectedTaskParentId((task?.list_id || task?.parent_id) as string));
-    dispatch(setSelectedTaskType(task?.list_id ? EntityType.task : EntityType.subtask));
+    dispatch(setSelectedTaskParentId((task?.parent_id || task?.list_id) as string));
+    dispatch(setSelectedTaskType(task?.parent_id ? EntityType.subtask : EntityType.task));
   };
 
   const handleClose = () => {
