@@ -2,13 +2,11 @@ import React, { useState } from 'react';
 import SaveCols from '../SaveCols';
 import { useAppSelector } from '../../../../../../app/hooks';
 import { useCreateDropdownField } from '../../../../../../features/list/listService';
-// import { setIsTasksUpdated } from '../../../../../../features/task/taskSlice';
 
 function CreateManualProgress() {
-  // const dispatch = useAppDispatch();
-
   const [startValue, setStartValue] = useState<string>('');
   const [endValue, setEndValue] = useState<string>('');
+  const [value, setValue] = useState('20');
 
   const { newCustomPropertyDetails, entityForCustom } = useAppSelector((state) => state.task);
 
@@ -26,7 +24,6 @@ function CreateManualProgress() {
         is_underlined: is_underlined as string
       };
       const customType = 'progress_manual';
-      // dispatch(setIsTasksUpdated(false));
       if (name) {
         onCreate({
           name,
@@ -51,7 +48,7 @@ function CreateManualProgress() {
           <label>Start value</label>
           <input
             type="number"
-            className="h-10 rounded text-alsoit-text-lg w-full e border-0 ring-0 outline-0 focus:border-0 focus:ring-0 focus:outline-0"
+            className="h-10 rounded text-alsoit-text-lg w-full border-0 ring-0 outline-0 focus:border-0 focus:ring-0 focus:outline-0"
             placeholder="Enter start value"
             value={startValue}
             min={1}
@@ -73,10 +70,22 @@ function CreateManualProgress() {
         </div>
       </div>
       <div>
+        <label htmlFor="default-range" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+          Default range
+        </label>
+        <input
+          id="default-range"
+          type="range"
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
+          className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"
+        />
+      </div>
+      <div>
         <SaveCols
           handleSubmit={handleSubmit}
-          header="Ratings"
-          body="This custom property which allows to rate tasks in a given range"
+          header="Progress"
+          body="This custom property which allows to track progress of tasks"
         />
       </div>
     </div>

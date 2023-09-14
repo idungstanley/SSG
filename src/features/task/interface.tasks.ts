@@ -312,3 +312,11 @@ export interface manualProgressProperties {
   start_value: number;
   end_value: number;
 }
+
+export interface autoProgressProperties {
+  tracking: {
+    Subtasks: boolean;
+    Checklists: boolean;
+  };
+  complete_on?: number;
+}
