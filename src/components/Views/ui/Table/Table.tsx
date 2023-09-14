@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, Fragment } from 'react';
 import { DragOverlay } from '@dnd-kit/core';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { ITaskFullList, Task } from '../../../../features/task/interface.tasks';
@@ -11,15 +11,12 @@ import {
 } from '../../../../features/task/taskSlice';
 import { useScroll } from '../../../../hooks/useScroll';
 import { listColumnProps } from '../../../../pages/workspace/tasks/component/views/ListColumns';
-import { MAX_COL_WIDTH, MIN_COL_WIDTH } from '../../config';
 import { generateGrid } from '../../lib';
-import { createHeaders } from '../../lib/tableHeadUtils';
 import { ScrollableHorizontalListsContainer } from '../../../ScrollableContainer/ScrollableHorizontalListsContainer';
 import { Head } from './Head/Head';
 import { OverlayRow } from './OverlayRow';
 import { Row } from './Row';
-import { UseGetListDetails } from '../../../../features/list/listService';
-import { IField, ITask_statuses } from '../../../../features/list/list.interfaces';
+import { IField, IListDetailRes, ITask_statuses } from '../../../../features/list/list.interfaces';
 import { IListColor } from '../List/List';
 import { SeparateSubtasks } from './SeparateSubtasks';
 
@@ -28,11 +25,12 @@ interface TableProps {
   data: Task[];
   label: string;
   listName?: string;
-  ListColor?: IListColor;
+  listColor?: IListColor;
   customFields?: IField[];
+  listDetails?: IListDetailRes;
 }
 
-export function Table({ heads, data, label, listName, customFields, ListColor }: TableProps) {
+export function Table({ heads, data, label, listName, customFields, listColor, listDetails }: TableProps) {
   const dispatch = useAppDispatch();
 
   const { draggableItemId } = useAppSelector((state) => state.list);
@@ -45,46 +43,13 @@ export function Table({ heads, data, label, listName, customFields, ListColor }:
 
   const [listId, setListId] = useState<string>('');
   const [tableHeight, setTableHeight] = useState<string | number>('auto');
-  const [activeIndex, setActiveIndex] = useState<null | number>(null);
   const [showNewTaskField, setShowNewTaskField] = useState(false);
   const [collapseTasks, setCollapseTasks] = useState(false);
 
   const tableElement = useRef<HTMLTableElement>(null);
   const taskLength = data.length;
 
-  const columns = createHeaders(heads).filter((i) => !i.hidden);
-
-  const { data: listDetails } = UseGetListDetails(listId);
-
-  const mouseMove = useCallback(
-    (e: MouseEvent) => {
-      const gridColumns = columns.map((col, i) => {
-        if (i === activeIndex && col.ref.current) {
-          const mouseX = e.clientX;
-          const widthFromLeftToCurrentBlock = Math.round(col.ref.current.getBoundingClientRect().right);
-          const currentBlockWidth = col.ref.current.offsetWidth;
-
-          const width =
-            widthFromLeftToCurrentBlock -
-            (widthFromLeftToCurrentBlock - currentBlockWidth) -
-            (widthFromLeftToCurrentBlock - mouseX);
-
-          if (width >= MIN_COL_WIDTH && width <= MAX_COL_WIDTH) {
-            return `${width}px`;
-          }
-        }
-
-        // Otherwise return the previous width (no changes)
-        return col.ref.current ? `${col.ref.current.offsetWidth}px` : null;
-      });
-
-      // Assign the px values to the table
-      if (tableElement.current) {
-        tableElement.current.style.gridTemplateColumns = `${gridColumns.join(' ')}`;
-      }
-    },
-    [activeIndex, columns]
-  );
+  const columns = heads.filter((i) => !i.hidden);
 
   // New task template
   const newTaskObj = [
@@ -94,6 +59,7 @@ export function Table({ heads, data, label, listName, customFields, ListColor }:
       assignees: [],
       checklists: [],
       created_at: Date.now(),
+      custom_field_columns: listDetails?.data.list.custom_field_columns || [],
       custom_fields: [],
       deleted_at: null,
       description: null,
@@ -143,41 +109,12 @@ export function Table({ heads, data, label, listName, customFields, ListColor }:
     if (listId === defaultSubtaskListId) dispatch(setSubtaskDefaultStatusId(defaultStatusObj?.id as string));
   }, [listId, showNewTaskField, defaultSubtaskListId]);
 
-  const removeListeners = () => {
-    window.removeEventListener('mousemove', mouseMove);
-    window.removeEventListener('mouseup', removeListeners);
-  };
-
-  // reset
-  const onMouseUp = () => {
-    document.body.style.userSelect = '';
-    setActiveIndex(null);
-    removeListeners();
-    dispatch(setUpdateCords());
-  };
-
-  useEffect(() => {
-    if (activeIndex !== null) {
-      window.addEventListener('mousemove', mouseMove);
-      window.addEventListener('mouseup', onMouseUp);
-    }
-
-    return () => {
-      removeListeners();
-    };
-  }, [activeIndex]);
-
   // init height
   useEffect(() => {
     if (tableElement.current) {
       setTableHeight(tableElement.current.offsetHeight);
     }
   }, []);
-
-  const onMouseDown = (index: number) => {
-    document.body.style.userSelect = 'none';
-    setActiveIndex(index);
-  };
 
   const handleClose = () => {
     setShowNewTaskField(false);
@@ -193,7 +130,7 @@ export function Table({ heads, data, label, listName, customFields, ListColor }:
   const draggableItem = draggableItemId ? data.find((i) => i.id === draggableItemId) : null;
 
   return (
-    <ScrollableHorizontalListsContainer onScroll={onScroll} ListColor={ListColor}>
+    <ScrollableHorizontalListsContainer onScroll={onScroll} ListColor={listColor}>
       {/* draggable item */}{' '}
       {draggableItem ? (
         <DragOverlay>
@@ -222,7 +159,6 @@ export function Table({ heads, data, label, listName, customFields, ListColor }:
             headerStatusColor={data[0].status.color as string}
             columns={columns}
             listName={listName}
-            mouseDown={onMouseDown}
             tableHeight={tableHeight}
             listId={data[0].list_id}
             groupedTask={data}
@@ -234,11 +170,10 @@ export function Table({ heads, data, label, listName, customFields, ListColor }:
               {dataSpread.length ? (
                 dataSpread.map((task, index) =>
                   'tags' in task ? (
-                    <>
+                    <Fragment key={task.id}>
                       <Row
                         columns={columns}
                         task={task as ITaskFullList}
-                        key={task.id}
                         listId={task.list_id as string}
                         taskIndex={index}
                         isListParent={true}
@@ -251,7 +186,7 @@ export function Table({ heads, data, label, listName, customFields, ListColor }:
                       {separateSubtasksMode ? (
                         <SeparateSubtasks listId={task.list_id as string} parentId={task.id} />
                       ) : null}
-                    </>
+                    </Fragment>
                   ) : null
                 )
               ) : (

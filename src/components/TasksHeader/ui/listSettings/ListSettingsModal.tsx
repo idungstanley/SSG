@@ -1,17 +1,15 @@
-import React, { Fragment, ReactNode, useEffect, useState } from 'react';
+import { Fragment, ReactNode, useEffect, useState } from 'react';
 import { Menu, Transition } from '@headlessui/react';
 import { BsChevronRight, BsThreeDotsVertical } from 'react-icons/bs';
-import ShowIcon from '../../../../assets/icons/ShowIcon';
-import ArrowDrop from '../../../../assets/icons/ArrowDrop';
 import Button from '../../../Buttons/Button';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { useSwitchSettings } from '../../../../pages/workspace/tasks/TaskSettingsModal/ShowSettingsModal/SwitchSettings';
 import {
+  setAutoSave,
   setSaveSettingLocal,
   setSaveSettingOnline,
   setTriggerAutoSave,
-  setTriggerSaveSettings,
-  setTriggerSaveSettingsModal
+  setTriggerSaveSettings
 } from '../../../../features/task/taskSlice';
 interface IShowHideSettings {
   itemsArray: [
@@ -32,9 +30,11 @@ export default function ListSettingsModal({ itemsArray }: IShowHideSettings) {
     verticalGrid,
     saveSettingList,
     taskUpperCase,
+    saveSettingOnline,
     verticalGridlinesTask,
     splitSubTaskState
   } = useAppSelector((state) => state.task);
+  const { activeItemId } = useAppSelector((state) => state.workspace);
 
   const [checkedStates, setCheckedStates] = useState<boolean[]>([]);
   const [isAnyactive, setIsAnyactive] = useState<boolean>();
@@ -68,14 +68,17 @@ export default function ListSettingsModal({ itemsArray }: IShowHideSettings) {
         const AutoSaveIndex = itemsArray.findIndex((item) => item.label == 'AutoSave View');
 
         if (saveSettingList != undefined && saveSettingList?.view_settings != null) {
-          newState[AutoSaveIndex] = autoSave;
+          newState[AutoSaveIndex] = saveSettingOnline?.autoSave as boolean;
+        } else {
+          dispatch(setAutoSave(false));
+          newState[AutoSaveIndex] = false;
         }
         return newState;
       });
     };
 
     handleCheckboxChange();
-  }, [saveSettingList]);
+  }, [saveSettingList, activeItemId, autoSave]);
 
   const handleChange = (viewMode: string, index: number) => {
     dispatch(setTriggerSaveSettings(true));

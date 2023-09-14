@@ -9,6 +9,7 @@ import {
   IUserCalendarParams,
   IUserSettingsRes,
   IUserSettingsUpdateRes,
+  Task,
   TaskId,
   newTaskDataRes
 } from './interface.tasks';
@@ -36,15 +37,21 @@ import { generateFilters } from '../../components/TasksHeader/lib/generateFilter
 import Duration from '../../utils/TimerDuration';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
 import {
+  addNewTaskManager,
   taskAssignessUpdateManager,
   taskDateUpdateManager,
   taskMoveManager,
   taskPriorityUpdateManager,
-  taskStatusUpdateManager
+  taskStatusUpdateManager,
+  updateTaskSubtasksCountManager
 } from '../../managers/Task';
 import { ITeamMembersAndGroup } from '../settings/teamMembersAndGroups.interfaces';
 import { useDispatch } from 'react-redux';
 import { runTimer } from '../../utils/TimerCounter';
+import { updateListTasksCountManager } from '../../managers/List';
+import { getHub } from '../hubs/hubSlice';
+import { setFilteredResults } from '../search/searchSlice';
+import { addNewSubtaskManager } from '../../managers/Subtask';
 
 //edit a custom field
 export const UseEditCustomFieldService = (data: {
@@ -190,13 +197,43 @@ const addTask = (data: {
   return response;
 };
 
-export const useAddTask = () => {
-  const queryClient = useQueryClient();
+export const useAddTask = (task?: Task) => {
+  const dispatch = useAppDispatch();
+
+  const { tasks, subtasks } = useAppSelector((state) => state.task);
+  const { hub } = useAppSelector((state) => state.hub);
 
   return useMutation(addTask, {
-    onSuccess: () => {
-      queryClient.invalidateQueries(['task']);
-      queryClient.invalidateQueries(['sub-tasks']);
+    onSuccess: (data) => {
+      if (data.data.task.parent_id) {
+        // add subtask
+        const updatedSubtasks = addNewSubtaskManager(
+          subtasks,
+          data.data.task as ITaskFullList,
+          task?.custom_field_columns || []
+        );
+        dispatch(setSubtasks(updatedSubtasks));
+
+        const parentId = data.data.task.parent_id;
+        const updatedTasks = updateTaskSubtasksCountManager(
+          parentId as string,
+          tasks,
+          updatedSubtasks[parentId].length
+        );
+        dispatch(setTasks(updatedTasks));
+      } else {
+        // add task
+        const updatedTasks = addNewTaskManager(
+          tasks,
+          data.data.task as ITaskFullList,
+          task?.custom_field_columns || []
+        );
+        dispatch(setTasks(updatedTasks));
+        const listId = data.data.task.list_id;
+        const updatedTree = updateListTasksCountManager(listId as string, hub, updatedTasks[listId].length);
+        dispatch(getHub(updatedTree));
+        dispatch(setFilteredResults(updatedTree));
+      }
     }
   });
 };
@@ -236,14 +273,11 @@ export const createTaskService = (data: {
 
 export const UseGetFullTaskList = ({
   itemId,
-  itemType,
-  isEverythingPage
+  itemType
 }: {
   itemId: string | undefined | null;
   itemType: string | null | undefined;
-  isEverythingPage?: boolean;
 }) => {
-  const dispatch = useAppDispatch();
   const queryClient = useQueryClient();
 
   const hub_id = itemType === EntityType.hub || itemType === EntityType.subHub ? itemId : null;
@@ -274,9 +308,6 @@ export const UseGetFullTaskList = ({
       keepPreviousData: true,
       enabled: !!hub_id || !!wallet_id,
       onSuccess: (data) => {
-        if (!isEverythingPage) {
-          dispatch(setTasks({}));
-        }
         data.pages.map((page) => page.data.tasks.map((task) => queryClient.setQueryData(['task', task.id], task)));
       },
       getNextPageParam: (lastPage) => {

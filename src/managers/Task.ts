@@ -2,6 +2,52 @@ import { IField } from '../features/list/list.interfaces';
 import { ITeamMembersAndGroup } from '../features/settings/teamMembersAndGroups.interfaces';
 import { IStatus, ITaskFullList } from '../features/task/interface.tasks';
 
+export const addNewTaskManager = (
+  tasks: Record<string, ITaskFullList[]>,
+  taskFromData: ITaskFullList,
+  custom_field_columns: IField[]
+): Record<string, ITaskFullList[]> => {
+  const listId = taskFromData.list_id;
+  if (listId) {
+    const updatedTasks = { ...tasks };
+    const newTask = {
+      ...taskFromData,
+      custom_field_columns,
+      descendants_count: 0
+    };
+
+    updatedTasks[listId] = [...updatedTasks[listId], newTask];
+
+    return updatedTasks;
+  }
+
+  return tasks;
+};
+
+export const updateTaskSubtasksCountManager = (
+  parentId: string,
+  tasks: Record<string, ITaskFullList[]>,
+  count: number
+) => {
+  if (parentId) {
+    const updatedTasks = { ...tasks };
+
+    Object.keys(updatedTasks).forEach((key) => {
+      updatedTasks[key] = updatedTasks[key].map((task) => {
+        if (task.id === parentId) {
+          return {
+            ...task,
+            descendants_count: count
+          };
+        }
+        return task;
+      });
+    });
+    return updatedTasks;
+  }
+  return tasks;
+};
+
 export const taskPriorityUpdateManager = (
   taskIds: string[],
   listIds: string[],

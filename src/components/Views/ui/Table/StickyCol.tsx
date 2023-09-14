@@ -90,7 +90,7 @@ export function StickyCol({
 
   const COL_BG = taskId === task.id ? ACTIVE_COL_BG : DEFAULT_COL_BG;
 
-  const { mutate: onAdd } = useAddTask();
+  const { mutate: onAdd } = useAddTask(task);
 
   const inputRef = useRef<HTMLInputElement | null>(null);
 
@@ -156,7 +156,7 @@ export function StickyCol({
 
       onAdd({
         name,
-        isListParent: isListParent,
+        isListParent,
         id: parentId as string,
         assignees: [currTeamMemberId] as string[],
         task_status_id: task_status as string

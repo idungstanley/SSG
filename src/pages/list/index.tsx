@@ -11,13 +11,7 @@ import ActiveHub from '../../layout/components/MainLayout/extendedNavigation/Act
 import hubIcon from '../../assets/branding/hub.png';
 import FilterByAssigneesSliderOver from '../workspace/lists/components/renderlist/filters/FilterByAssigneesSliderOver';
 import { useScroll } from '../../hooks/useScroll';
-import {
-  setIsTasksUpdated,
-  setSaveSettingList,
-  setSaveSettingOnline,
-  setTasks,
-  setUpdateCords
-} from '../../features/task/taskSlice';
+import { setSaveSettingList, setSaveSettingOnline, setTasks, setUpdateCords } from '../../features/task/taskSlice';
 import TaskQuickAction from '../workspace/tasks/component/taskQuickActions/TaskQuickAction';
 import { List } from '../../components/Views/ui/List/List';
 import { Header } from '../../components/TasksHeader';
@@ -30,20 +24,21 @@ export function ListPage() {
   const dispatch = useAppDispatch();
   const { listId, taskId } = useParams();
 
-  const { tasks: tasksStore, isTasksUpdated, saveSettingLocal } = useAppSelector((state) => state.task);
+  const { tasks: tasksStore, saveSettingLocal } = useAppSelector((state) => state.task);
 
   const containerRef = useRef<HTMLDivElement>(null);
+
   const formatSettings = useformatSettings();
 
   // get list details to set active entity
-  const { data: list } = UseGetListDetails(listId);
-  const listName = list?.data.list.name ?? '';
+  const { data: listDetails } = UseGetListDetails(listId);
+  const listName = listDetails?.data.list.name ?? '';
 
   // get task_view id for list view
-  const saveSettingList = list?.data?.list.task_views?.find((element) => element.type === 'list');
+  const saveSettingList = listDetails?.data?.list.task_views?.find((element) => element.type === 'list');
   const task_views_id = saveSettingList ? saveSettingList.id : '';
 
-  const { isSuccess } = UseUpdateTaskViewSettings({
+  UseUpdateTaskViewSettings({
     task_views_id,
     taskDate: saveSettingLocal as { [key: string]: boolean }
   });
@@ -53,7 +48,7 @@ export function ListPage() {
   const tasks = data ? data.pages.flatMap((page) => page.data.tasks) : [];
 
   useEffect(() => {
-    if (list) {
+    if (listDetails) {
       if (listId && !taskId) {
         dispatch(setActiveItem({ activeItemId: listId, activeItemType: EntityType.list, activeItemName: listName }));
       }
@@ -67,7 +62,7 @@ export function ListPage() {
     } else {
       dispatch(setSaveSettingOnline(saveSettingLocal));
     }
-  }, [list]);
+  }, [listDetails]);
 
   // infinite scroll
   useEffect(() => {
@@ -97,17 +92,16 @@ export function ListPage() {
   const onScroll = useScroll(() => dispatch(setUpdateCords()));
 
   useEffect(() => {
-    if (tasks.length && listId && !tasksStore[listId] && list?.data.list.custom_field_columns) {
+    if (tasks.length && listId && !tasksStore[listId] && listDetails?.data.list.custom_field_columns) {
       const tasksWithCustomFields = tasks.map((task) => {
         return {
           ...task,
-          custom_field_columns: list.data.list.custom_field_columns
+          custom_field_columns: listDetails.data.list.custom_field_columns
         };
       });
       dispatch(setTasks({ ...tasksStore, [listId]: tasksWithCustomFields as ITaskFullList[] }));
-      dispatch(setIsTasksUpdated(true));
     }
-  }, [tasks, list]);
+  }, [tasks, listDetails]);
 
   return (
     <>
@@ -134,8 +128,12 @@ export function ListPage() {
           >
             <TaskQuickAction listDetailsData={listName} />
 
-            {tasksStore[listId as string] && tasks.length && isTasksUpdated ? (
-              <List tasks={tasksStore[listId as string]} subtasksCustomeFields={tasks[0].custom_field_columns} />
+            {tasksStore[listId as string] && tasks.length ? (
+              <List
+                tasks={tasksStore[listId as string]}
+                subtasksCustomeFields={tasks[0].custom_field_columns}
+                listDetails={listDetails}
+              />
             ) : null}
           </div>
           {tasks?.length > 1 && <GroupHorizontalScroll />}

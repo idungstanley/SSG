@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { ICustomField } from '../../../../../../features/task/taskSlice';
 import { IField } from '../../../../../../features/list/list.interfaces';
 import { useUpdateEntityCustomFieldValue } from '../../../../../../features/list/listService';
+import { currencyProperties } from '../../../../../../features/task/interface.tasks';
 
 interface MoneyField {
   taskCustomFields?: ICustomField;
@@ -11,7 +12,7 @@ interface MoneyField {
 }
 
 function MoneyField({ taskCustomFields, taskId, fieldId, entityCustomProperty }: MoneyField) {
-  const avtiveCurrency = entityCustomProperty?.properties?.symbol;
+  const avtiveCurrency = (entityCustomProperty?.properties as currencyProperties).symbol;
   const activeValue = taskCustomFields?.values[0].value ? taskCustomFields?.values[0].value : '-';
   const [currentValue, setCurrentValue] = useState<string>(activeValue);
   const [editMode, setEditMode] = useState(false);

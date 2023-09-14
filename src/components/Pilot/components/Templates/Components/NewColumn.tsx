@@ -19,6 +19,7 @@ import CreatePhone from './Phone/CreatePhone';
 import CreateCheckbox from './Checkbox/CreateCheckbox';
 import Palletes from '../../../../ColorPalette/Palettes';
 import CreateRatings from './Rating/CreateRatings';
+import CreateManualProgress from './Progress/CreateManualProgress';
 
 function NewColumn() {
   const dispatch = useAppDispatch();
@@ -50,7 +51,9 @@ function NewColumn() {
     currency: <CreateCurrencyField />,
     phone: <CreatePhone />,
     checkbox: <CreateCheckbox />,
-    rating: <CreateRatings />
+    rating: <CreateRatings />,
+    'progress(auto)': <CreateManualProgress />,
+    'progress(manual)': <CreateManualProgress />
   };
 
   return (

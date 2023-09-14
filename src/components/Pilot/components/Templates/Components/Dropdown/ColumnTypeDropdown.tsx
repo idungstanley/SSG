@@ -15,6 +15,8 @@ import WebsiteOptions from '../Websites/WebsiteOptions';
 import PhoneOptions from '../Phone/PhoneOptions';
 import CheckBoxOptions from '../Checkbox/CheckboxOptions';
 import RatingOption from '../Rating/RatingOptions';
+import { VerticalScroll } from '../../../../../ScrollableContainer/VerticalScroll';
+import ProgressOptions from '../Progress/Progress';
 
 const columnTypes = [
   {
@@ -66,6 +68,11 @@ const columnTypes = [
     id: 'Rating',
     title: 'Rating',
     options: <RatingOption />
+  },
+  {
+    id: 'Progress',
+    title: 'Progress',
+    options: <ProgressOptions />
   }
 ];
 
@@ -80,7 +87,7 @@ export default function ColumnTypeDropdown() {
   };
 
   const { updateCords } = useAppSelector((state) => state.task);
-  const { cords, relativeRef } = useAbsolute(updateCords, 400);
+  const { cords, relativeRef } = useAbsolute(updateCords, 372);
 
   return (
     <div>
@@ -98,8 +105,11 @@ export default function ColumnTypeDropdown() {
       </div>
       <Transition appear show={isOpen} as="div">
         <Dialog as="div" className="relative z-20" onClose={closeModal}>
-          <div style={{ ...cords, width: '174px' }} className="fixed">
-            <div className="flex-col bg-white h-fit py-1 outline-none flex items-start text-left mt-2 rounded-md shadow-lg focus:outline-none">
+          <div style={{ ...cords }} className="fixed">
+            <div
+              className="flex-col bg-white h-fit py-1 outline-none flex items-start text-left mt-2 rounded-md shadow-lg focus:outline-none"
+              style={{ ...cords, width: '174px' }}
+            >
               <p className="text-alsoit-text-sm font-bold flex justify-center pt-3 w-full">CUSTOM PROPERTY</p>
               <div className="relative flex justify-center mt-2 w-full">
                 <hr className="bg-gray-300 h-0.5 w-full relative" />
@@ -107,15 +117,20 @@ export default function ColumnTypeDropdown() {
                   SELECT PROPERTY
                 </span>
               </div>
-              <div className="w-full mt-2">
-                {columnTypes.map((item) => {
-                  return (
-                    <div key={item.id} className="hover:bg-alsoit-gray-50 cursor-pointer h-10 w-full">
-                      <MenuItem>{item.options}</MenuItem>
-                    </div>
-                  );
-                })}
-              </div>
+              <VerticalScroll>
+                <div className="w-full mt-2 overflow-visible" style={{ maxHeight: '300px', maxWidth: '174px' }}>
+                  {columnTypes.map((item) => {
+                    return (
+                      <div
+                        key={item.id}
+                        className="hover:bg-alsoit-gray-50 cursor-pointer h-10 w-full flex justify-between items-center"
+                      >
+                        <MenuItem className="w-full">{item.options}</MenuItem>
+                      </div>
+                    );
+                  })}
+                </div>
+              </VerticalScroll>
             </div>
           </div>
         </Dialog>
