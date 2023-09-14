@@ -418,12 +418,14 @@ export const UseUpdateTaskDateService = ({
   task_id,
   taskDate,
   listIds,
-  setTaskId
+  setTaskId,
+  setResetDate
 }: {
   task_id: string;
   taskDate: string;
   listIds: string[];
   setTaskId: React.Dispatch<React.SetStateAction<string | null>>;
+  setResetDate: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   const dispatch = useAppDispatch();
 
@@ -448,6 +450,7 @@ export const UseUpdateTaskDateService = ({
       onSuccess: (data) => {
         dispatch(setPickedDateState(false));
         setTaskId(null);
+        setResetDate(false);
         const updatedTasks = taskDateUpdateManager(
           task_id as string,
           listIds as string[],
