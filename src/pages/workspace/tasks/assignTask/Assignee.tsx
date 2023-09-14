@@ -36,8 +36,8 @@ export default function Assignee({
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
-    dispatch(setSelectedTaskParentId((task?.list_id || task?.parent_id) as string));
-    dispatch(setSelectedTaskType(task?.list_id ? EntityType.task : EntityType.subtask));
+    dispatch(setSelectedTaskParentId((task?.parent_id || task?.list_id) as string));
+    dispatch(setSelectedTaskType(task?.parent_id ? EntityType.subtask : EntityType.task));
   };
 
   const handleClose = () => {
@@ -131,13 +131,13 @@ export default function Assignee({
           <div className="sticky z-10 flex items-center justify-between w-full px-4 my-2 bg-white top-12">
             <p
               className={cl('flex justify-center w-1/2 cursor-pointer', !teams ? 'border-b-2 border-fuchsia-600' : '')}
-              onClick={() => setTeams(!teams)}
+              onClick={() => setTeams(false)}
             >
               Users
             </p>
             <p
               className={cl('flex justify-center w-1/2 cursor-pointer', teams ? 'border-b-2 border-fuchsia-600' : '')}
-              onClick={() => setTeams(!teams)}
+              onClick={() => setTeams(true)}
             >
               Teams
             </p>
