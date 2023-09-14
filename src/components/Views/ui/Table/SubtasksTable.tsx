@@ -145,8 +145,6 @@ export function SubtasksTable({ data, heads, customFields, listId, paddingLeft =
                   headerStatusColor={tasks[0].status.color as string}
                   columns={columns}
                   listName={data.list?.name}
-                  // mouseDown={onMouseDown}
-                  mouseDown={() => null}
                   tableHeight="auto"
                   listId={tasks[0].list_id}
                   groupedTask={tasks}

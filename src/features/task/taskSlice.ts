@@ -12,7 +12,6 @@ import {
   Status,
   TaskKey
 } from './interface.tasks';
-import RecordRTC from 'recordrtc';
 import {
   FilterFieldsWithOption,
   FiltersOption,
@@ -158,8 +157,10 @@ interface TaskState {
   splitSubTaskLevels: string;
   CompactViewWrap: boolean;
   triggerSaveSettings: boolean;
+  triggerAutoSave: boolean;
   triggerSaveSettingsModal: boolean;
   meMode: boolean;
+  autoSave: boolean;
   showTaskNavigation: boolean;
   addNewTaskItem: boolean;
   selectedIndex: number | null;
@@ -191,8 +192,9 @@ interface TaskState {
   timeSortArr: SortOption[];
   timeLogColumnData: Header[];
   screenRecording: 'idle' | 'recording';
-  recorder: RecordRTC | null;
+  recorder: MediaRecorder | null;
   stream: MediaStream | null;
+  recordBlob: Blob | undefined;
   updateCords: number;
   activeTaskColumn: ActiveTaskColumnProps;
   timerDetails: ITimerDetails;
@@ -218,7 +220,6 @@ interface TaskState {
   newTaskData: ImyTaskData | undefined;
   newCustomPropertyDetails: customPropertyInfo;
   editCustomProperty: IField | undefined;
-  isTasksUpdated: boolean;
   dragToBecomeSubTask: boolean;
 }
 
@@ -237,6 +238,7 @@ const initialState: TaskState = {
   comfortableViewWrap: false,
   showNewTaskField: false,
   meMode: false,
+  autoSave: false,
   showNewTaskId: '',
   singleLineView: false,
   saveSettingLocal: null,
@@ -246,6 +248,7 @@ const initialState: TaskState = {
   verticalGrid: false,
   taskUpperCase: false,
   triggerSaveSettings: false,
+  triggerAutoSave: false,
   triggerSaveSettingsModal: false,
   toggleAllSubtask: false,
   verticalGridlinesTask: false,
@@ -287,6 +290,7 @@ const initialState: TaskState = {
   screenRecording: 'idle',
   stream: null,
   recorder: null,
+  recordBlob: undefined,
   updateCords: Date.now(),
   activeTaskColumn: { id: '', header: '' },
   timerDetails: { description: '', isBillable: false },
@@ -321,7 +325,6 @@ const initialState: TaskState = {
     }
   },
   editCustomProperty: undefined,
-  isTasksUpdated: false,
   dragToBecomeSubTask: false
 };
 
@@ -428,6 +431,9 @@ export const taskSlice = createSlice({
     setTriggerSaveSettings(state, action: PayloadAction<boolean>) {
       state.triggerSaveSettings = action.payload;
     },
+    setTriggerAutoSave(state, action: PayloadAction<boolean>) {
+      state.triggerAutoSave = action.payload;
+    },
     setTriggerSaveSettingsModal(state, action: PayloadAction<boolean>) {
       state.triggerSaveSettingsModal = action.payload;
     },
@@ -442,6 +448,9 @@ export const taskSlice = createSlice({
     },
     setMeMode(state, action: PayloadAction<boolean>) {
       state.meMode = action.payload;
+    },
+    setAutoSave(state, action: PayloadAction<boolean>) {
+      state.autoSave = action.payload;
     },
     setToggleAllSubtask(state, action: PayloadAction<boolean>) {
       state.toggleAllSubtask = action.payload;
@@ -561,10 +570,16 @@ export const taskSlice = createSlice({
     setScreenRecording(state, action: PayloadAction<'idle' | 'recording'>) {
       state.screenRecording = action.payload;
     },
-    setScreenRecordingMedia(state, action: PayloadAction<{ recorder: RecordRTC | null; stream: MediaStream | null }>) {
+    setScreenRecordingMedia(
+      state,
+      action: PayloadAction<{ recorder: MediaRecorder | null; stream: MediaStream | null }>
+    ) {
       const { recorder, stream } = action.payload;
       state.stream = stream;
       state.recorder = recorder;
+    },
+    setRecordBlob(state, action: PayloadAction<Blob | undefined>) {
+      state.recordBlob = action.payload;
     },
     setUpdateCords(state) {
       state.updateCords = Date.now();
@@ -607,9 +622,6 @@ export const taskSlice = createSlice({
     },
     setEditCustomProperty(state, action: PayloadAction<IField | undefined>) {
       state.editCustomProperty = action.payload;
-    },
-    setIsTasksUpdated(state, action: PayloadAction<boolean>) {
-      state.isTasksUpdated = action.payload;
     }
   }
 });
@@ -645,6 +657,7 @@ export const {
   setSelectedTaskParentId,
   setSelectedTaskType,
   setMeMode,
+  setAutoSave,
   setShowTaskNavigation,
   setShowNewTaskField,
   setShowNewTaskId,
@@ -657,6 +670,7 @@ export const {
   setAddNewTaskItem,
   setCloseTaskListView,
   setTriggerSaveSettings,
+  setTriggerAutoSave,
   setToggleAssignCurrentTaskId,
   setCurrentParentTaskId,
   setGetSubTaskId,
@@ -679,6 +693,7 @@ export const {
   setTimeSortArr,
   setScreenRecording,
   setScreenRecordingMedia,
+  setRecordBlob,
   setUpdateCords,
   setActiveTaskColumn,
   setUpdateTimerDuration,
@@ -694,7 +709,6 @@ export const {
   setCustomSuggetionsField,
   setNewCustomPropertyDetails,
   setEditCustomProperty,
-  setDragToBecomeSubTask,
-  setIsTasksUpdated
+  setDragToBecomeSubTask
 } = taskSlice.actions;
 export default taskSlice.reducer;

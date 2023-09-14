@@ -10,7 +10,7 @@ import { generateFilters } from '../../components/TasksHeader/lib/generateFilter
 import { UseGetHubDetails } from '../hubs/hubService';
 import { IList } from '../hubs/hubs.interfaces';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
-import { setIsTasksUpdated, setNewCustomPropertyDetails, setSubtasks, setTasks } from '../task/taskSlice';
+import { setNewCustomPropertyDetails, setSubtasks, setTasks } from '../task/taskSlice';
 import { updateCustomFieldsManager } from '../../managers/Task';
 import {
   autoProgressProperties,
@@ -198,7 +198,8 @@ export const UseGetListDetails = (listId: string | null | undefined) => {
         if (activeItemType === 'list') {
           dispatch(setSpaceStatuses(listStatusTypes));
         }
-      }
+      },
+      cacheTime: 0
     }
   );
 };
@@ -270,7 +271,8 @@ export const useCreateDropdownField = () => {
       dispatch(setNewCustomPropertyDetails({ name: '', type: 'Select Property Type', color: null }));
       const updatedList = updateCustomFieldsManager(
         entityForCustom.type === EntityType.task ? subtasks : tasks,
-        data.data.custom_field
+        data.data.custom_field,
+        entityForCustom.type === EntityType.task ? entityForCustom.id : ''
       );
       if (entityForCustom.type === EntityType.task) {
         console.log('first');
@@ -279,7 +281,6 @@ export const useCreateDropdownField = () => {
         console.log(updatedList);
         dispatch(setTasks(updatedList));
       }
-      dispatch(setIsTasksUpdated(true));
     }
   });
 };

@@ -1,8 +1,8 @@
 import { useMemo } from 'react';
 import { useAppSelector } from '../../../../../../../../app/hooks';
-import Recording from '../../../../../../../../components/Pilot/components/RecordScreen/Recording';
 import ClockInOut from '../../../../../../../../components/Pilot/components/TimeClock/ClockInOut';
 import TimeSubTab from './TimeSubTab';
+import RecordScreen from '../../../../../../../../components/Pilot/components/RecordScreen';
 
 export const TimeClockOptions = [
   {
@@ -11,7 +11,7 @@ export const TimeClockOptions = [
   },
   {
     id: 1,
-    element: <Recording />
+    element: <RecordScreen />
   }
 ];
 

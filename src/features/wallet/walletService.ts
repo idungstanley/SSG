@@ -145,7 +145,8 @@ export const UseGetWalletDetails = (query: { activeItemId?: string | null; activ
         if (query.activeItemType === EntityType.wallet) {
           dispatch(setSpaceStatuses(walletTaskStatus));
         }
-      }
+      },
+      cacheTime: 0
     }
   );
 };

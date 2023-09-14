@@ -10,7 +10,13 @@ import '../../../../pages/workspace/tasks/component/views/view.css';
 import { EntityType } from '../../../../utils/EntityTypes/EntityType';
 import { IDuration } from '../../../../features/task/interface.tasks';
 import { runTimer } from '../../../../utils/RecordTimer';
-import { setRecorderInterval, setUpdateRecoderDuration } from '../../../../features/task/taskSlice';
+import {
+  setRecordBlob,
+  setRecorderInterval,
+  setScreenRecordingMedia,
+  setUpdateRecoderDuration
+} from '../../../../features/task/taskSlice';
+import { useScreenRecorder } from './ScreenRecordHandler';
 
 export interface IFormData {
   append(name: string, value: Blob, fileName?: string): void;
@@ -19,7 +25,7 @@ export interface IFormData {
 
 export default function Recording() {
   const { activeTabId, activeItemId, activeItemType, isMuted } = useAppSelector((state) => state.workspace);
-  const { recorder, stream, recorderDuration } = useAppSelector((state) => state.task);
+  const { recorderDuration } = useAppSelector((state) => state.task);
   const { hubId, subhubId, listId, workSpaceId, taskId } = useParams();
 
   const [time, setTime] = useState<IDuration>(recorderDuration);
@@ -28,23 +34,26 @@ export default function Recording() {
 
   const dispatch = useAppDispatch();
 
+  const { handleToggleMute } = useMediaStream();
   const {
-    handleStartStream,
-    handleStopStream,
-    handleToggleMute
-    // isStarting,
-    // isStopping,
-  } = useMediaStream();
+    startRecording: Record,
+    stopRecording: StopRecord,
+    isRecording,
+    recordedBlob,
+    recordedData
+  } = useScreenRecorder();
   const { screenRecording } = useAppSelector((state) => state.task);
 
   const startRecording = async () => {
-    await handleStartStream();
+    Record();
+    dispatch(setScreenRecordingMedia(recordedData));
     dispatch(setRecorderLastMemory({ activeTabId, workSpaceId, listId, hubId, subhubId, taskId }));
     setRecordState(true);
   };
 
   const stopRecording = () => {
-    handleStopStream({ stream, recorder });
+    StopRecord();
+    recordedData.recorder?.stop();
     setRecordState(false);
     dispatch(setRecorderInterval());
     dispatch(setUpdateRecoderDuration({ h: 0, m: 0, s: 0 }));
@@ -68,7 +77,7 @@ export default function Recording() {
   }
 
   const run = runTimer({
-    isRunning: recordState,
+    isRunning: false,
     setTime: setTime
   });
 
@@ -85,12 +94,19 @@ export default function Recording() {
   }, [screenRecording]);
 
   useEffect(() => {
+    if (recordedBlob) {
+      dispatch(setScreenRecordingMedia(recordedData));
+      dispatch(setRecordBlob(recordedBlob));
+    }
+  }, [recordedBlob]);
+
+  useEffect(() => {
     setTime(recorderDuration);
   }, [recorderDuration]);
 
   return (
     <div>
-      {screenRecording === 'recording' ? (
+      {isRecording ? (
         <>
           <div className="screenRecording flex space-x-2">
             <button onClick={() => handleToggleMute()} className="flex items-center justify-center">

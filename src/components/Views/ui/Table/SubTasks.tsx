@@ -2,21 +2,23 @@ import { useEffect } from 'react';
 import { DragOverlay } from '@dnd-kit/core';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { useSubTasks } from '../../../../features/task/taskService';
-import { Column } from '../../types/table';
 import { Row } from './Row';
 import { OverlayRow } from './OverlayRow';
 import { setSubtasks } from '../../../../features/task/taskSlice';
 import { ITaskFullList } from '../../../../features/task/interface.tasks';
+import { listColumnProps } from '../../../../pages/workspace/tasks/component/views/ListColumns';
+import { ITask_statuses } from '../../../../features/list/list.interfaces';
 
 interface SubTasksProps {
   listId: string;
   parentId: string;
-  columns: Column[];
+  columns: listColumnProps[];
   paddingLeft: number;
+  taskStatuses?: ITask_statuses[];
   level: number;
 }
 
-export function SubTasks({ listId, parentId, columns, paddingLeft, level }: SubTasksProps) {
+export function SubTasks({ listId, parentId, columns, paddingLeft, taskStatuses, level }: SubTasksProps) {
   const dispatch = useAppDispatch();
 
   const { draggableItemId } = useAppSelector((state) => state.list);
@@ -55,6 +57,7 @@ export function SubTasks({ listId, parentId, columns, paddingLeft, level }: SubT
               task={i}
               key={i.id}
               isListParent={false}
+              taskStatuses={taskStatuses}
               level={level}
             />
           ))}

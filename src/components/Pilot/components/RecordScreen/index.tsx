@@ -1,90 +1,47 @@
-import React, { useMemo } from 'react';
-import { MdDragIndicator, MdOutlineMoreTime } from 'react-icons/md';
-import { useDispatch } from 'react-redux';
-import { RiTimerFlashLine } from 'react-icons/ri';
-import { FaBusinessTime } from 'react-icons/fa';
-import { useAppSelector } from '../../../../app/hooks';
-import { setActiveSubRecordTabId } from '../../../../features/workspace/workspaceSlice';
 import Recording from './Recording';
 import VideoEntries from './RecordingLogs';
-
-export const ScreenRecordTabs = [
-  {
-    id: 0,
-    name: 'Recorder',
-    icon: <RiTimerFlashLine />,
-    isVisible: false
-  },
-  {
-    id: 1,
-    name: 'Video Logs',
-    icon: <FaBusinessTime />,
-    isVisible: false
-  },
-  {
-    id: 2,
-    name: 'Video Preference',
-    icon: <MdOutlineMoreTime />,
-    isVisible: false
-  }
-];
-
-const videoOptions = [
-  { id: 0, element: <Recording /> },
-  {
-    id: 1,
-    element: <VideoEntries />
-  },
-  {
-    id: 2,
-    element: ''
-  }
-];
+import { VerticalScroll } from '../../../ScrollableContainer/VerticalScroll';
+import CollapseIcon from '../../../Views/ui/collapseIcon/CollapseIcon';
+import { useState } from 'react';
+import { ClockIcon } from '../../../../assets/icons/ClockIcon';
 
 export default function RecordScreen() {
-  const { showPilot, activeSubRecordsTabId } = useAppSelector((state) => state.workspace);
-  const dispatch = useDispatch();
+  const [showLogs, setShowLogs] = useState<boolean>(false);
 
-  const VideotabsView = useMemo(
-    () => videoOptions.find((el) => el.id === activeSubRecordsTabId),
-    [activeSubRecordsTabId]
-  );
+  const handleShowLogs = () => {
+    setShowLogs(!showLogs);
+  };
+
   return (
-    <section className="mb-12 h-full">
-      <div className={'flex bg-gray-400 pt-0.5'}>
-        {ScreenRecordTabs.map((item) => (
-          <section
-            className={`flex flex-col w-full bg-white ${
-              item.id === activeSubRecordsTabId && showPilot ? 'rounded-t-lg bg-white' : ''
-            }`}
-            key={item.id}
-          >
-            <div
-              key={item.id}
-              onClick={() => dispatch(setActiveSubRecordTabId(item.id))}
-              className={`relative flex justify-center flex-grow py-2 font-medium text-gray-500 transition cursor-pointer group hover:text-gray-700 border-y-2 ${
-                item.id === activeSubRecordsTabId && 'rounded-t-lg bg-white'
-              } ${item.id != activeSubRecordsTabId && 'rounded-b-lg bg-gray-400'}`}
-            >
-              <span
-                className={`absolute left-2 text-gray-500 justify-center text-xl cursor-move opacity-0 group-hover:opacity-100 ${
-                  showPilot ? 'block' : 'hidden'
-                }`}
-              >
-                <MdDragIndicator />
-              </span>
-              <span
-                className={`${!showPilot && 'text-xs'} ${
-                  item.id === activeSubRecordsTabId && !showPilot && 'bg-green-500 p-2 rounded w-3 h-3'
-                }`}
-              >
-                {item.icon}
-              </span>
-            </div>
-          </section>
-        ))}
+    <section className="p-2 mt-6 bg-white relative">
+      <div className="relative w-full pb-8 px-2 pt-2 rounded-lg border-t-2 border-l-2 border-b-2 border-alsoit-gray-100">
+        <label
+          htmlFor=""
+          className="absolute -top-0 -left-0 bg-alsoit-gray-100 text-alsoit-gray-50 rounded-t-sm p-0.5 flex space-x-1 items-center font-semibold pr-1"
+        >
+          <ClockIcon fixed />
+          <span className="text-alsoit-text-md">RECORDER</span>
+        </label>
+        <Recording />
       </div>
-      {VideotabsView?.element}
+      {/* Video Logs */}
+      <div className="w-full pb-8 px-2 pt-2 my-4 flex flex-col space-y-2 rounded-lg border-t-2 border-l-2 border-b-2 border-alsoit-gray-100">
+        <label htmlFor="video-entries" className="relative w-full">
+          <div className="absolute -top-2 -left-2 w-28 bg-alsoit-gray-100 p-1.5 rounded-t-sm flex gap-2">
+            <div className="cursor-pointer">
+              <CollapseIcon color="#A854F7" active={showLogs} onToggle={() => handleShowLogs()} hoverBg="white" />
+            </div>
+            <span className="font-semibold text-alsoit-gray-50 text-alsoit-text-md uppercase">Record Logs</span>
+          </div>
+        </label>
+        {showLogs && (
+          <VerticalScroll>
+            <div className="h-96 mt-6">
+              <VideoEntries />
+            </div>
+          </VerticalScroll>
+        )}
+      </div>
     </section>
   );
 }
