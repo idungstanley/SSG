@@ -297,3 +297,18 @@ export interface newTaskDataRes {
     task: ImyTaskData;
   };
 }
+
+export interface currencyProperties {
+  currency: string;
+  symbol: string;
+}
+
+export interface ratingProperties {
+  emoji: string;
+  number: number;
+}
+
+export interface manualProgressProperties {
+  start_value: number;
+  end_value: number;
+}
