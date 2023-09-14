@@ -20,9 +20,7 @@ interface ToastProps {
 }
 function SaveSettingsModal({ title, showClose = true, toastId }: ToastProps) {
   const dispatch = useAppDispatch();
-  const { triggerSaveSettingsModal, autoSave, saveSettingLocal, saveSettingOnline } = useAppSelector(
-    (state) => state.task
-  );
+  const { triggerSaveSettingsModal, saveSettingLocal, saveSettingOnline } = useAppSelector((state) => state.task);
 
   const handleSaveViewSettings = () => {
     dispatch(setTriggerSaveSettings(true));

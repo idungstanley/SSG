@@ -7,6 +7,7 @@ import { UseUpdateTaskDateService } from '../../features/task/taskService';
 import { Task } from '../../features/task/interface.tasks';
 import { setSelectedTaskParentId, setSelectedTaskType } from '../../features/task/taskSlice';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
+import { setPickedDateState } from '../../features/workspace/workspaceSlice';
 
 interface dateFormatProps {
   date: string | undefined;
@@ -24,13 +25,24 @@ export default function DateFormat({ date, task, font = 'text-sm' }: dateFormatP
   const [showDataPicker, setShowDatePicker] = useState<boolean>(false);
   const [taskId, setTaskId] = useState<string | null>(null);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [resetDate, setResetDate] = useState<boolean>(false);
 
   const { isSuccess } = UseUpdateTaskDateService({
     task_id: taskId as string,
-    taskDate: selectedDate?.date.format('YYYY-MM-DD HH:mm:ss') as string,
+    taskDate: resetDate ? '' : (selectedDate?.date.format('YYYY-MM-DD HH:mm:ss') as string),
     listIds: selectedListIds.length ? selectedListIds : [selectedTaskParentId],
-    setTaskId
+    setTaskId,
+    setResetDate
   });
+
+  const handleResetDate = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation();
+    setTaskId(task?.id as string);
+    dispatch(setSelectedTaskParentId((task?.list_id || task?.parent_id) as string));
+    dispatch(setPickedDateState(true));
+    setResetDate(true);
+    dispatch(setSelectedTaskType(task?.list_id ? EntityType.task : EntityType.subtask));
+  };
 
   const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
     setAnchorEl(event.currentTarget);
@@ -62,7 +74,7 @@ export default function DateFormat({ date, task, font = 'text-sm' }: dateFormatP
           <div className="flex group/parent items-center">
             <p
               className="rounded-full flex items-center justify-center bg-alsoit-purple-300 mr-1 h-3 w-3 text-white text-xs pb-0.5 opacity-0 group-hover/parent:opacity-100 cursor-pointer"
-              onClick={(e) => e.stopPropagation()}
+              onClick={(e) => handleResetDate(e)}
             >
               x
             </p>
