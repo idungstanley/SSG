@@ -14,8 +14,8 @@ export default function TaskPriority({ task }: renderDataProps) {
 
   const handleTaskPriority = (task: ImyTaskData) => {
     dispatch(setCurrentTaskPriorityId(task.id));
-    dispatch(setSelectedTaskParentId((task.list_id || task.parent_id) as string));
-    dispatch(setSelectedTaskType(task?.list_id ? EntityType.task : EntityType.subtask));
+    dispatch(setSelectedTaskParentId((task.parent_id || task.list_id) as string));
+    dispatch(setSelectedTaskType(task?.parent_id ? EntityType.subtask : EntityType.task));
   };
 
   return (

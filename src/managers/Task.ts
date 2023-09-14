@@ -52,25 +52,42 @@ export const taskPriorityUpdateManager = (
   taskIds: string[],
   listIds: string[],
   tasks: Record<string, ITaskFullList[]>,
+  subtasks: Record<string, ITaskFullList[]>,
   newPriority: string
 ) => {
   if (listIds.length) {
     const updatedTasks = { ...tasks };
+    const updatedSubtasks = { ...subtasks };
+    const uniqListIds = [...new Set(listIds)];
 
-    for (let i = 0; i < listIds.length; i++) {
-      updatedTasks[listIds[i]] = updatedTasks[listIds[i]].map((task) => {
-        if (taskIds.includes(task.id)) {
-          return {
-            ...task,
-            priority: newPriority
-          };
-        }
-        return task;
-      });
-    }
-    return updatedTasks;
+    uniqListIds.forEach((id) => {
+      if (updatedTasks[id]) {
+        updatedTasks[id] = updatedTasks[id].map((task) => {
+          if (taskIds.includes(task.id)) {
+            return {
+              ...task,
+              priority: newPriority
+            };
+          }
+          return task;
+        });
+      }
+
+      if (updatedSubtasks[id]) {
+        updatedSubtasks[id] = updatedSubtasks[id].map((task) => {
+          if (taskIds.includes(task.id)) {
+            return {
+              ...task,
+              priority: newPriority
+            };
+          }
+          return task;
+        });
+      }
+    });
+    return { updatedTasks, updatedSubtasks };
   }
-  return tasks;
+  return { tasks, subtasks };
 };
 
 export const taskStatusUpdateManager = (
@@ -93,7 +110,6 @@ export const taskStatusUpdateManager = (
     });
     return updatedTasks;
   }
-
   return tasks;
 };
 
@@ -125,30 +141,54 @@ export const taskDateUpdateManager = (
 };
 
 export const taskAssignessUpdateManager = (
-  taskId: string,
-  listId: string,
+  taskIds: string[],
+  listIds: string[],
   tasks: Record<string, ITaskFullList[]>,
+  subtasks: Record<string, ITaskFullList[]>,
   userData: ITeamMembersAndGroup,
   assign: boolean
 ) => {
-  if (listId) {
+  if (listIds.length) {
     const updatedTasks = { ...tasks };
+    const updatedSubtasks = { ...subtasks };
+    const uniqListIds = [...new Set(listIds)];
 
-    updatedTasks[listId] = updatedTasks[listId].map((task) => {
-      if (taskId === task.id) {
-        const updatedAssignees = assign
-          ? [...task.assignees, userData]
-          : task.assignees.filter((item) => item.id !== userData.id);
-        return {
-          ...task,
-          assignees: task.assignees.length
-            ? (updatedAssignees as ITeamMembersAndGroup[])
-            : ([userData] as ITeamMembersAndGroup[])
-        };
+    uniqListIds.forEach((id) => {
+      if (updatedTasks[id]) {
+        updatedTasks[id] = updatedTasks[id].map((task) => {
+          if (taskIds.includes(task.id)) {
+            const updatedAssignees = assign
+              ? [...task.assignees, userData]
+              : task.assignees.filter((item) => item.id !== userData.id);
+            return {
+              ...task,
+              assignees: task.assignees.length
+                ? (updatedAssignees as ITeamMembersAndGroup[])
+                : ([userData] as ITeamMembersAndGroup[])
+            };
+          }
+          return task;
+        });
       }
-      return task;
+
+      if (updatedSubtasks[id]) {
+        updatedSubtasks[id] = updatedSubtasks[id].map((task) => {
+          if (taskIds.includes(task.id)) {
+            const updatedAssignees = assign
+              ? [...task.assignees, userData]
+              : task.assignees.filter((item) => item.id !== userData.id);
+            return {
+              ...task,
+              assignees: task.assignees.length
+                ? (updatedAssignees as ITeamMembersAndGroup[])
+                : ([userData] as ITeamMembersAndGroup[])
+            };
+          }
+          return task;
+        });
+      }
     });
-    return updatedTasks;
+    return { updatedTasks, updatedSubtasks };
   }
 
   return tasks;

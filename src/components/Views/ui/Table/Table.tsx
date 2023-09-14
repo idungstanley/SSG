@@ -181,6 +181,7 @@ export function Table({ heads, data, label, listName, customFields, listColor, l
                         task_status={statusId}
                         handleClose={handleClose}
                         customFields={customFields}
+                        taskStatuses={listDetails?.data.list.task_statuses}
                         level={0}
                       />
                       {separateSubtasksMode ? (
