@@ -69,7 +69,7 @@ function NewColumn() {
               <ColumnTypeDropdown />
             </div>
             <div className="w-2/4">
-              <p className="text-alsoit-text-xi text-alsoit-gray-100">TITTLE</p>
+              <p className="text-alsoit-text-xi text-alsoit-gray-100">TITLE</p>
               <div
                 className="flex items-center w-full rounded-md bg-white gap-1"
                 style={{ height: '30px', borderRadius: '6px' }}
