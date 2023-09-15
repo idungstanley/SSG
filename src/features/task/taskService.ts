@@ -40,7 +40,8 @@ import {
   addNewTaskManager,
   taskAssignessUpdateManager,
   taskDateUpdateManager,
-  taskMoveManager,
+  taskMoveToListManager,
+  taskMoveToSubtaskManager,
   taskPriorityUpdateManager,
   taskStatusUpdateManager,
   updateTaskSubtasksCountManager
@@ -52,6 +53,8 @@ import { updateListTasksCountManager } from '../../managers/List';
 import { getHub } from '../hubs/hubSlice';
 import { setFilteredResults } from '../search/searchSlice';
 import { addNewSubtaskManager } from '../../managers/Subtask';
+import { IList } from '../hubs/hubs.interfaces';
+import { setDraggableItem } from '../list/listSlice';
 
 //edit a custom field
 export const UseEditCustomFieldService = (data: {
@@ -144,31 +147,35 @@ export const useGetUserSettingsData = ({ keys }: { keys: string }) => {
 };
 
 export const useMoveTask = () => {
-  const dispath = useDispatch();
-  const queryClient = useQueryClient();
-  const { hubId, walletId, listId } = useParams();
+  const dispatch = useDispatch();
 
-  const id = hubId ?? walletId ?? listId;
-
-  const { draggableTask, dragOverTask } = useAppSelector((state) => state.list);
+  const { draggableTask, dragOverTask, dragOverList } = useAppSelector((state) => state.list);
   const { tasks, subtasks } = useAppSelector((state) => state.task);
 
   return useMutation(moveTask, {
     onSuccess: () => {
-      const { updatedTasks, updatedSubtasks } = taskMoveManager(
-        draggableTask as ITaskFullList,
-        dragOverTask as ITaskFullList,
-        tasks,
-        subtasks
-      );
-      if (!draggableTask?.parent_id) {
-        dispath(setTasks(updatedTasks));
+      if (dragOverList) {
+        // move to list
+        const { updatedTasks, updatedSubtasks } = taskMoveToListManager(
+          draggableTask as ITaskFullList,
+          dragOverList as IList,
+          tasks,
+          subtasks
+        );
+        dispatch(setTasks(updatedTasks));
+        dispatch(setSubtasks(updatedSubtasks));
       } else {
-        dispath(setSubtasks(updatedSubtasks));
+        // move like sub
+        const { updatedTasks, updatedSubtasks } = taskMoveToSubtaskManager(
+          draggableTask as ITaskFullList,
+          dragOverTask as ITaskFullList,
+          tasks,
+          subtasks
+        );
+        dispatch(setTasks(updatedTasks));
+        dispatch(setSubtasks(updatedSubtasks));
       }
-      queryClient.invalidateQueries(['lists']);
-      queryClient.invalidateQueries(['task']);
-      queryClient.invalidateQueries(['retrieve', id ?? 'root', 'tree']);
+      dispatch(setDraggableItem(null));
     }
   });
 };
@@ -280,6 +287,8 @@ export const UseGetFullTaskList = ({
 }) => {
   const queryClient = useQueryClient();
 
+  const { draggableItemId } = useAppSelector((state) => state.list);
+
   const hub_id = itemType === EntityType.hub || itemType === EntityType.subHub ? itemId : null;
   const wallet_id = itemType === EntityType.wallet || itemType === EntityType.subWallet ? itemId : null;
   const { sortAbleArr } = useAppSelector((state) => state.task);
@@ -288,7 +297,7 @@ export const UseGetFullTaskList = ({
   const { filters } = generateFilters();
 
   return useInfiniteQuery(
-    ['task', itemId, itemType, filters, sortArrUpdate],
+    ['task', itemId, itemType, filters, sortArrUpdate, draggableItemId],
     async ({ pageParam = 0 }: { pageParam?: number }) => {
       return requestNew<IFullTaskRes>({
         url: 'tasks/full-list',
@@ -306,7 +315,7 @@ export const UseGetFullTaskList = ({
     },
     {
       keepPreviousData: true,
-      enabled: !!hub_id || !!wallet_id,
+      enabled: !!hub_id || !!wallet_id || !draggableItemId,
       onSuccess: (data) => {
         data.pages.map((page) => page.data.tasks.map((task) => queryClient.setQueryData(['task', task.id], task)));
       },

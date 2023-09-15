@@ -1,3 +1,4 @@
+import { IList } from '../features/hubs/hubs.interfaces';
 import { IField } from '../features/list/list.interfaces';
 import { ITeamMembersAndGroup } from '../features/settings/teamMembersAndGroups.interfaces';
 import { IStatus, ITaskFullList } from '../features/task/interface.tasks';
@@ -222,46 +223,57 @@ export const updateCustomFieldsManager = (
   return updatedTasks;
 };
 
-export const taskMoveManager = (
+const removeTaskFromOldPlace = (
   draggableTask: ITaskFullList,
-  dragOverTask: ITaskFullList,
-  tasks: Record<string, ITaskFullList[]>,
-  subtasks: Record<string, ITaskFullList[]>
+  newTasks: Record<string, ITaskFullList[]>,
+  newSubtasks: Record<string, ITaskFullList[]>
 ) => {
-  const updatedTasks = { ...tasks };
-  const updatedSubtasks = { ...subtasks };
-
-  // remove task from old place logic
   if (draggableTask.parent_id) {
     // search in subtasks
-    const filteredArray = updatedSubtasks[draggableTask.parent_id].filter((task) => {
+    const filteredArray = newSubtasks[draggableTask.parent_id].filter((task) => {
       task.id !== draggableTask.id;
     });
     if (filteredArray.length) {
       // if array is not empty update key
-      updatedSubtasks[draggableTask.parent_id] = filteredArray;
+      newSubtasks[draggableTask.parent_id] = filteredArray;
     } else {
       // if array is empty remove key
-      delete updatedSubtasks[draggableTask.parent_id];
+      delete newSubtasks[draggableTask.parent_id];
     }
   } else {
     // search in tasks
     const filteredArray: ITaskFullList[] = [];
-    updatedTasks[draggableTask.list_id].forEach((task) => {
+    newTasks[draggableTask.list_id].forEach((task) => {
       if (task.id !== draggableTask.id) {
         filteredArray.push(task);
       }
     });
     if (filteredArray.length) {
       // if array is not empty update key
-      updatedTasks[draggableTask.list_id] = filteredArray;
+      newTasks[draggableTask.list_id] = filteredArray;
     } else {
       // if array is empty remove key
-      delete updatedTasks[draggableTask.list_id];
+      delete newTasks[draggableTask.list_id];
     }
   }
+  return { newTasks, newSubtasks };
+};
 
-  // add task on new place logic
+export const taskMoveToSubtaskManager = (
+  draggableTask: ITaskFullList,
+  dragOverTask: ITaskFullList,
+  tasks: Record<string, ITaskFullList[]>,
+  subtasks: Record<string, ITaskFullList[]>
+) => {
+  let updatedTasks = { ...tasks };
+  let updatedSubtasks = { ...subtasks };
+
+  // remove task from old place
+  const { newTasks, newSubtasks } = removeTaskFromOldPlace(draggableTask, updatedTasks, updatedSubtasks);
+  updatedTasks = newTasks;
+  updatedSubtasks = newSubtasks;
+
+  // add subtask to new task
   if (updatedSubtasks[dragOverTask.id]) {
     // if key was in store add new
     updatedSubtasks[dragOverTask.id] = [
@@ -279,6 +291,48 @@ export const taskMoveManager = (
         ...draggableTask,
         parent_id: dragOverTask.id,
         list_id: dragOverTask.list_id
+      }
+    ];
+  }
+
+  return {
+    updatedTasks,
+    updatedSubtasks
+  };
+};
+
+export const taskMoveToListManager = (
+  draggableTask: ITaskFullList,
+  dragOverList: IList,
+  tasks: Record<string, ITaskFullList[]>,
+  subtasks: Record<string, ITaskFullList[]>
+) => {
+  let updatedTasks = { ...tasks };
+  let updatedSubtasks = { ...subtasks };
+
+  // remove task from old place
+  const { newTasks, newSubtasks } = removeTaskFromOldPlace(draggableTask, updatedTasks, updatedSubtasks);
+  updatedTasks = newTasks;
+  updatedSubtasks = newSubtasks;
+
+  // add task to new list
+  if (updatedTasks[dragOverList.id]) {
+    // if key was in store add new
+    updatedTasks[dragOverList.id] = [
+      ...updatedTasks[dragOverList.id],
+      {
+        ...draggableTask,
+        parent_id: null,
+        list_id: dragOverList.id
+      }
+    ];
+  } else {
+    // else create a new one
+    updatedTasks[dragOverList.id] = [
+      {
+        ...draggableTask,
+        parent_id: null,
+        list_id: dragOverList.id
       }
     ];
   }
