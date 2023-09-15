@@ -50,6 +50,7 @@ export function DatePickerManualDates({ range }: DatePickerManualDatesProps) {
     } else {
       setString((prev) => ({ ...prev, due: event.target.textContent as string }));
     }
+    handleFilterDateDispatch();
   };
 
   const clearDatesFilter = (point: 'start' | 'due') => {
