@@ -12,7 +12,12 @@ import { IList } from '../hubs/hubs.interfaces';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
 import { setNewCustomPropertyDetails, setSubtasks, setTasks } from '../task/taskSlice';
 import { updateCustomFieldsManager } from '../../managers/Task';
-import { currencyProperties, manualProgressProperties, ratingProperties } from '../task/interface.tasks';
+import {
+  autoProgressProperties,
+  currencyProperties,
+  manualProgressProperties,
+  ratingProperties
+} from '../task/interface.tasks';
 
 interface TaskCountProps {
   data: {
@@ -234,7 +239,7 @@ const createDropdownField = (data: {
   type?: string;
   customType: string;
   style?: { is_bold: string; is_underlined: string; is_italic: string };
-  properties?: currencyProperties | ratingProperties | manualProgressProperties;
+  properties?: currencyProperties | ratingProperties | manualProgressProperties | autoProgressProperties;
 }) => {
   const { id, options, name, type, customType, style, color, properties } = data;
   const response = requestNew<IResCustomfield>({

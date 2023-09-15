@@ -20,6 +20,7 @@ import CreateCheckbox from './Checkbox/CreateCheckbox';
 import Palletes from '../../../../ColorPalette/Palettes';
 import CreateRatings from './Rating/CreateRatings';
 import CreateManualProgress from './Progress/CreateManualProgress';
+import CreateAutoProgress from './Progress/CreateAutoProgress';
 
 function NewColumn() {
   const dispatch = useAppDispatch();
@@ -52,7 +53,7 @@ function NewColumn() {
     phone: <CreatePhone />,
     checkbox: <CreateCheckbox />,
     rating: <CreateRatings />,
-    'progress(auto)': <CreateManualProgress />,
+    'progress(auto)': <CreateAutoProgress />,
     'progress(manual)': <CreateManualProgress />
   };
 
@@ -68,7 +69,7 @@ function NewColumn() {
               <ColumnTypeDropdown />
             </div>
             <div className="w-2/4">
-              <p className="text-alsoit-text-xi text-alsoit-gray-100">TITTLE</p>
+              <p className="text-alsoit-text-xi text-alsoit-gray-100">TITLE</p>
               <div
                 className="flex items-center w-full rounded-md bg-white gap-1"
                 style={{ height: '30px', borderRadius: '6px' }}
