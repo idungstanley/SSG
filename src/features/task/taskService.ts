@@ -151,29 +151,36 @@ export const useMoveTask = () => {
 
   const { draggableTask, dragOverTask, dragOverList } = useAppSelector((state) => state.list);
   const { tasks, subtasks } = useAppSelector((state) => state.task);
+  const { hub } = useAppSelector((state) => state.hub);
 
   return useMutation(moveTask, {
     onSuccess: () => {
       if (dragOverList) {
         // move to list
-        const { updatedTasks, updatedSubtasks } = taskMoveToListManager(
+        const { updatedTasks, updatedSubtasks, updatedTree } = taskMoveToListManager(
           draggableTask as ITaskFullList,
           dragOverList as IList,
           tasks,
-          subtasks
+          subtasks,
+          hub
         );
         dispatch(setTasks(updatedTasks));
         dispatch(setSubtasks(updatedSubtasks));
+        dispatch(getHub(updatedTree));
+        dispatch(setFilteredResults(updatedTree));
       } else {
         // move like sub
-        const { updatedTasks, updatedSubtasks } = taskMoveToSubtaskManager(
+        const { updatedTasks, updatedSubtasks, updatedTree } = taskMoveToSubtaskManager(
           draggableTask as ITaskFullList,
           dragOverTask as ITaskFullList,
           tasks,
-          subtasks
+          subtasks,
+          hub
         );
         dispatch(setTasks(updatedTasks));
         dispatch(setSubtasks(updatedSubtasks));
+        dispatch(getHub(updatedTree));
+        dispatch(setFilteredResults(updatedTree));
       }
       dispatch(setDraggableItem(null));
     }
@@ -582,11 +589,9 @@ export const UseUpdateTaskPrioritiesServices = ({ task_id_array, priorityDataUpd
 };
 
 export const getTaskListService = (listId: string | null | undefined) => {
-  const dispatch = useAppDispatch();
   const { workSpaceId } = useParams();
-  const queryClient = useQueryClient();
 
-  const { sortAbleArr } = useAppSelector((state) => state.task);
+  const { sortAbleArr, tasks } = useAppSelector((state) => state.task);
   const { currentWorkspaceId } = useAppSelector((state) => state.auth);
 
   const sortArrUpdate = sortAbleArr.length <= 0 ? null : sortAbleArr;
@@ -613,12 +618,7 @@ export const getTaskListService = (listId: string | null | undefined) => {
       });
     },
     {
-      enabled: fetch,
-      onSuccess: (data) => {
-        dispatch(setTasks({}));
-        data.pages.map((page) => page?.data.tasks.map((task) => queryClient.setQueryData(['task', task.id], task)));
-        queryClient.invalidateQueries(['hubs']);
-      },
+      enabled: fetch && !tasks[listId as string],
       getNextPageParam: (lastPage) => {
         if (lastPage?.data?.paginator.has_more_pages) {
           return Number(lastPage.data.paginator.page) + 1;
