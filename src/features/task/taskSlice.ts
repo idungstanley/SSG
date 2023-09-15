@@ -194,7 +194,6 @@ interface TaskState {
   screenRecording: 'idle' | 'recording';
   recorder: MediaRecorder | null;
   stream: MediaStream | null;
-  recordBlob: Blob | undefined;
   updateCords: number;
   activeTaskColumn: ActiveTaskColumnProps;
   timerDetails: ITimerDetails;
@@ -290,7 +289,6 @@ const initialState: TaskState = {
   screenRecording: 'idle',
   stream: null,
   recorder: null,
-  recordBlob: undefined,
   updateCords: Date.now(),
   activeTaskColumn: { id: '', header: '' },
   timerDetails: { description: '', isBillable: false },
@@ -578,9 +576,6 @@ export const taskSlice = createSlice({
       state.stream = stream;
       state.recorder = recorder;
     },
-    setRecordBlob(state, action: PayloadAction<Blob | undefined>) {
-      state.recordBlob = action.payload;
-    },
     setUpdateCords(state) {
       state.updateCords = Date.now();
     },
@@ -693,7 +688,6 @@ export const {
   setTimeSortArr,
   setScreenRecording,
   setScreenRecordingMedia,
-  setRecordBlob,
   setUpdateCords,
   setActiveTaskColumn,
   setUpdateTimerDuration,

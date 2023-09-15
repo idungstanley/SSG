@@ -16,7 +16,7 @@ export function useScreenRecorder() {
   const [recordedBlob, setRecordedBlob] = useState<Blob | undefined>(undefined);
 
   const { isMuted } = useAppSelector((state) => state.workspace);
-  const { recorder, stream, screenRecording, recordBlob } = useAppSelector((state) => state.task);
+  const { recorder, stream, screenRecording } = useAppSelector((state) => state.task);
 
   const { handleStopStream } = useMediaStream();
 
