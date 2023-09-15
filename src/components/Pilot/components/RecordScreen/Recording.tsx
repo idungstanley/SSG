@@ -11,7 +11,6 @@ import { EntityType } from '../../../../utils/EntityTypes/EntityType';
 import { IDuration } from '../../../../features/task/interface.tasks';
 import { runTimer } from '../../../../utils/RecordTimer';
 import {
-  setRecordBlob,
   setRecorderInterval,
   setScreenRecordingMedia,
   setUpdateRecoderDuration
@@ -96,7 +95,6 @@ export default function Recording() {
   useEffect(() => {
     if (recordedBlob) {
       dispatch(setScreenRecordingMedia(recordedData));
-      dispatch(setRecordBlob(recordedBlob));
     }
   }, [recordedBlob]);
 
