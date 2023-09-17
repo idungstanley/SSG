@@ -97,7 +97,7 @@ export default function HubItem({
     dispatch(
       getSubMenu({
         SubMenuId: id,
-        SubMenuType: type == EntityType.hub ? 'hubs' : EntityType.subHub
+        SubMenuType: type === EntityType.hub ? EntityType.hub : EntityType.subHub
       })
     );
   };
@@ -114,7 +114,7 @@ export default function HubItem({
     );
     dispatch(getPrevName(name));
     if (showMenuDropdown != null) {
-      if ((e.target as HTMLButtonElement).id == 'menusettings') {
+      if ((e.target as HTMLButtonElement).id === 'menusettings') {
         dispatch(closeMenu());
       }
     }
@@ -282,13 +282,8 @@ export default function HubItem({
         </div>
       </div>
       <UploadImage endpoint={`hubs/${uploadId}`} invalidateQuery={['hubs'] as InvalidateQueryFilters<unknown>} />
-      {paletteId == item.id && show ? (
-        <Palette
-          title="Hub Colour"
-          setPaletteColor={setPaletteColor}
-          bottomContent={<SearchIconUpload />}
-          cords={cords}
-        />
+      {paletteId === item.id && show ? (
+        <Palette title="Hub Colour" setPaletteColor={setPaletteColor} cords={cords} />
       ) : null}
       {showMenuDropdown === item.id && showSidebar ? (
         <MenuDropdown isExtendedBar={isExtendedBar} cords={menuCords} />

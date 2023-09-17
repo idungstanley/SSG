@@ -10,7 +10,6 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { switchWorkspaceService } from '../../../features/account/accountService';
 import { setCurrentWorkspace, switchWorkspace } from '../../../features/auth/authSlice';
 import { setMyWorkspacesSlideOverVisibility } from '../../../features/general/slideOver/slideOverSlice';
-// import { useNavigate } from 'react-router-dom';
 import { getWorkspaceService } from '../../../features/workspace/workspaceService';
 
 function WorkspaceSettings() {
@@ -34,7 +33,6 @@ function WorkspaceSettings() {
       dispatch(setCurrentWorkspace(data.data.workspace.id));
 
       dispatch(setMyWorkspacesSlideOverVisibility(false));
-      // navigate('/');
 
       queryClient.invalidateQueries();
       dispatch(switchWorkspace());

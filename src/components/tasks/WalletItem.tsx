@@ -99,7 +99,7 @@ export default function WalletItem({
     );
     dispatch(getPrevName(name));
     if (showMenuDropdown != null) {
-      if ((e.target as HTMLButtonElement).id == 'menusettings') {
+      if ((e.target as HTMLButtonElement).id === 'menusettings') {
         dispatch(closeMenu());
       }
     }

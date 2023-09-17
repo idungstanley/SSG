@@ -55,7 +55,7 @@ export default function ChecklistModal({ options, checklistId, checklistItemId, 
       dispatch(setClickChecklistItemId(checklistItemId));
     } else if (option.name === 'Rename') {
       focus();
-    } else if (option.name == 'New Item') {
+    } else if (option.name === 'New Item') {
       dispatch(setClickChecklistId(checklistId));
       dispatch(setShowChecklistItemInput(true));
       if (!openedDisclosureId.includes(checklistId)) {

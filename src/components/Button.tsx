@@ -21,6 +21,7 @@ interface ButtonProps {
   value?: string | number | readonly string[] | undefined;
   bgColor?: string;
   labelSize?: string;
+  customHoverColor?: string;
 }
 
 function Button({
@@ -41,7 +42,8 @@ function Button({
   borderLeft = true,
   borderRight = true,
   value,
-  bgColor
+  bgColor,
+  customHoverColor
 }: ButtonProps) {
   let buttonClassName;
   let hoverBackgroundColor;
@@ -64,7 +66,12 @@ function Button({
       'border border-gray-300 shadow-sm text-sm font-medium text-primary-700 bg-white focus:outline-none';
   } else if (buttonStyle === 'base') {
     hoverBackgroundColor = 'hover:bg-alsoit-purple-300';
-    buttonClassName = 'border border-gray-300 shadow-sm font-medium text-white bg-alsoit-purple-300 focus:outline-none';
+    buttonClassName =
+      'border border-gray-300 border-transparent shadow-sm font-medium text-white bg-alsoit-purple-300 focus:outline-none';
+  } else if (buttonStyle === 'custom') {
+    hoverBackgroundColor = `${customHoverColor} hover:text-white`;
+    buttonClassName =
+      'border border-gray-300 rounded shadow-sm font-medium  focus:outline-none text-gray-500 bg-gray-200';
   }
 
   if (ringOnFocus === true) {

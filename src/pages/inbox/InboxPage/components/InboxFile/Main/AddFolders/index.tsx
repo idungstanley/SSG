@@ -117,7 +117,7 @@ function AddFolders() {
             </div>
           )}
 
-          {searchFoldersQuery == null && (
+          {searchFoldersQuery === null && (
             <div className="overflow-hidden flex-1 h-full pb-6">
               <StackListWithHeader
                 title={

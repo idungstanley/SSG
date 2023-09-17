@@ -127,7 +127,8 @@ export function Row({
   const { attributes, listeners, setNodeRef, transform } = useDraggable({
     id: task.id,
     data: {
-      isTask: true
+      isTask: true,
+      movingTask: task
     }
   });
 

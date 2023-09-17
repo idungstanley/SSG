@@ -10,7 +10,7 @@ import { generateFilters } from '../../components/TasksHeader/lib/generateFilter
 import { UseGetHubDetails } from '../hubs/hubService';
 import { IList } from '../hubs/hubs.interfaces';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
-import { setIsTasksUpdated, setNewCustomPropertyDetails, setTasks } from '../task/taskSlice';
+import { setIsTasksUpdated, setNewCustomPropertyDetails, setSubtasks, setTasks } from '../task/taskSlice';
 import { updateCustomFieldsManager } from '../../managers/Task';
 
 interface TaskCountProps {
@@ -197,6 +197,33 @@ export const UseGetListDetails = (listId: string | null | undefined) => {
   );
 };
 
+const clearEntityCustomFieldValue = (data: { taskId?: string; fieldId: string }) => {
+  const { taskId, fieldId } = data;
+
+  const response = requestNew({
+    url: `custom-fields/${fieldId}/clear`,
+    method: 'PUT',
+    data: {
+      type: 'task',
+      id: taskId
+    }
+  });
+  return response;
+};
+
+export const useClearEntityCustomFieldValue = () => {
+  const queryClient = useQueryClient();
+
+  const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
+  const { filters } = generateFilters();
+
+  return useMutation(clearEntityCustomFieldValue, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['task', activeItemId, activeItemType, filters]);
+    }
+  });
+};
+
 const createDropdownField = (data: {
   id?: string;
   name?: string;
@@ -205,7 +232,7 @@ const createDropdownField = (data: {
   type?: string;
   customType: string;
   style?: { is_bold: string; is_underlined: string; is_italic: string };
-  properties?: { currency: string; symbol: string };
+  properties?: { currency?: string; symbol?: string; emoji?: string; number?: number };
 }) => {
   const { id, options, name, type, customType, style, color, properties } = data;
   const response = requestNew<IResCustomfield>({
@@ -230,13 +257,21 @@ const createDropdownField = (data: {
 export const useCreateDropdownField = () => {
   const dispatch = useAppDispatch();
 
-  const { tasks } = useAppSelector((state) => state.task);
+  const { tasks, subtasks, entityForCustom } = useAppSelector((state) => state.task);
 
   return useMutation(createDropdownField, {
     onSuccess: (data) => {
       dispatch(setNewCustomPropertyDetails({ name: '', type: 'Select Property Type', color: null }));
-      const updatedList = updateCustomFieldsManager(tasks, data.data.custom_field);
-      dispatch(setTasks(updatedList));
+      const updatedList = updateCustomFieldsManager(
+        entityForCustom.type === EntityType.task ? subtasks : tasks,
+        data.data.custom_field,
+        entityForCustom.id
+      );
+      if (entityForCustom.type === EntityType.task) {
+        dispatch(setSubtasks(updatedList));
+      } else {
+        dispatch(setTasks(updatedList));
+      }
       dispatch(setIsTasksUpdated(true));
     }
   });
@@ -275,7 +310,7 @@ export const useUpdateEntityCustomFieldValue = (listId?: string) => {
 export const useList = (listId?: string) => {
   const { workSpaceId } = useParams();
   const { currentWorkspaceId } = useAppSelector((state) => state.auth);
-  const fetch = currentWorkspaceId == workSpaceId;
+  const fetch = currentWorkspaceId === workSpaceId;
 
   return useQuery(
     ['list', listId],

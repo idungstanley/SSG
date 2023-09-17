@@ -13,7 +13,7 @@ function Preview() {
 
   useEffect(() => {
     const getFIle = async () => {
-      if (selectedInboxFileId == null) {
+      if (selectedInboxFileId === null) {
         return setFileData(null);
       }
 

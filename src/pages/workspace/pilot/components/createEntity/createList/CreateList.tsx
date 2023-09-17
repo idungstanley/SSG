@@ -26,7 +26,7 @@ import { setFilteredResults } from '../../../../../../features/search/searchSlic
 
 export default function CreateList() {
   const dispatch = useAppDispatch();
-  // const { currentItemId } = useAppSelector((state) => state.workspace);
+
   const { selectedTreeDetails, createWLID, hub } = useAppSelector((state) => state.hub);
   const { createWlLink } = useAppSelector((state) => state.workspace);
 
@@ -50,7 +50,7 @@ export default function CreateList() {
       dispatch(setCreateEntityType(null));
       dispatch(setEntityToCreate(null));
       const list = data.data.list;
-      const updatedTree = createListManager(type as string, list.parent_id, hub, list);
+      const updatedTree = createListManager(type as string, hub, list);
       dispatch(getHub(updatedTree));
       dispatch(setFilteredResults(updatedTree));
     }

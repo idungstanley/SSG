@@ -76,7 +76,7 @@ export default function TaskName({
   };
 
   const handleCreateSubTask = (id: string) => {
-    if (id == currentParentTaskId) {
+    if (id === currentParentTaskId) {
       dispatch(setCurrentParentTaskId(null));
     } else {
       dispatch(setCurrentParentTaskId(id));
@@ -122,7 +122,7 @@ export default function TaskName({
         {/* <MdDragIndicator className="left-0 text-lg text-gray-400 transition duration-200 opacity-0 cursor-move group-hover:opacity-100" /> */}
       </div>
       <div onClick={() => (handleGetSubTask ? handleGetSubTask(task?.id) : null)} className="items-center">
-        {task?.id == getSubTaskId ? (
+        {task?.id === getSubTaskId ? (
           <span>
             <img
               src={ArrowDown}

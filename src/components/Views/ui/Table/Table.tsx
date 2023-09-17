@@ -137,7 +137,7 @@ export function Table({ heads, data, label, listName, customFields, ListColor }:
 
     const defaultStatusObj: ITask_statuses | undefined = listDetails?.data.list.task_statuses.find(
       (statusObj: ITask_statuses) =>
-        statusObj?.is_default == 1 ? statusObj?.is_default : statusObj.position == minPosition
+        statusObj?.is_default === 1 ? statusObj?.is_default : statusObj.position === minPosition
     );
 
     if (listId === defaultSubtaskListId) dispatch(setSubtaskDefaultStatusId(defaultStatusObj?.id as string));

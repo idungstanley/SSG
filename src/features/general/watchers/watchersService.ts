@@ -16,7 +16,7 @@ export const useGetItemWatchers = (data: { type: itemType | null; id: string | n
         }
       }),
     {
-      enabled: !!data.id && !!data.type
+      enabled: !!data.id && !!data.type && data.id !== 'unknown'
       // select: (watchers) => watchers.data.watchers,
     }
   );

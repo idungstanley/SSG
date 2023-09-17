@@ -241,7 +241,7 @@ export const UseGetHubDetails = (query: {
   const { workSpaceId } = useParams();
   const { currentWorkspaceId } = useAppSelector((state) => state.auth);
 
-  const fetch = currentWorkspaceId == workSpaceId;
+  const fetch = currentWorkspaceId === workSpaceId;
   return useQuery(
     ['hub-details', { query }],
     async () => {
@@ -269,7 +269,7 @@ const addToFavorite = (data: {
 }) => {
   let newType: string | null | undefined = null;
   const { query, type } = data;
-  if (type === 'hubs' || type === EntityType.subHub) {
+  if (type?.includes(EntityType.hub)) {
     newType = EntityType.hub;
   } else {
     newType = type;

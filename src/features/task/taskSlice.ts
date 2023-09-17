@@ -158,8 +158,10 @@ interface TaskState {
   splitSubTaskLevels: string;
   CompactViewWrap: boolean;
   triggerSaveSettings: boolean;
+  triggerAutoSave: boolean;
   triggerSaveSettingsModal: boolean;
   meMode: boolean;
+  autoSave: boolean;
   showTaskNavigation: boolean;
   addNewTaskItem: boolean;
   selectedIndex: number | null;
@@ -197,7 +199,9 @@ interface TaskState {
   activeTaskColumn: ActiveTaskColumnProps;
   timerDetails: ITimerDetails;
   duration: IDuration;
+  recorderDuration: IDuration;
   period: number | undefined;
+  recorderPeriod: number | undefined;
   activeTimeOut: {
     clockLimit: number;
     timeoutReminder: number;
@@ -235,6 +239,7 @@ const initialState: TaskState = {
   comfortableViewWrap: false,
   showNewTaskField: false,
   meMode: false,
+  autoSave: false,
   showNewTaskId: '',
   singleLineView: false,
   saveSettingLocal: null,
@@ -244,6 +249,7 @@ const initialState: TaskState = {
   verticalGrid: false,
   taskUpperCase: false,
   triggerSaveSettings: false,
+  triggerAutoSave: false,
   triggerSaveSettingsModal: false,
   toggleAllSubtask: false,
   verticalGridlinesTask: false,
@@ -289,7 +295,9 @@ const initialState: TaskState = {
   activeTaskColumn: { id: '', header: '' },
   timerDetails: { description: '', isBillable: false },
   duration: { s: 0, m: 0, h: 0 },
+  recorderDuration: { s: 0, m: 0, h: 0 },
   period: undefined,
+  recorderPeriod: undefined,
   activeTimeOut: { clockLimit: 0, timeoutReminder: 0 },
   sortType: 'status',
   searchValue: '',
@@ -424,6 +432,9 @@ export const taskSlice = createSlice({
     setTriggerSaveSettings(state, action: PayloadAction<boolean>) {
       state.triggerSaveSettings = action.payload;
     },
+    setTriggerAutoSave(state, action: PayloadAction<boolean>) {
+      state.triggerAutoSave = action.payload;
+    },
     setTriggerSaveSettingsModal(state, action: PayloadAction<boolean>) {
       state.triggerSaveSettingsModal = action.payload;
     },
@@ -438,6 +449,9 @@ export const taskSlice = createSlice({
     },
     setMeMode(state, action: PayloadAction<boolean>) {
       state.meMode = action.payload;
+    },
+    setAutoSave(state, action: PayloadAction<boolean>) {
+      state.autoSave = action.payload;
     },
     setToggleAllSubtask(state, action: PayloadAction<boolean>) {
       state.toggleAllSubtask = action.payload;
@@ -568,6 +582,9 @@ export const taskSlice = createSlice({
     setUpdateTimerDuration(state, action: PayloadAction<IDuration>) {
       state.duration = action.payload;
     },
+    setUpdateRecoderDuration(state, action: PayloadAction<IDuration>) {
+      state.recorderDuration = action.payload;
+    },
     setStopTimer(state) {
       state.timerStatus = !state.timerStatus;
     },
@@ -576,6 +593,9 @@ export const taskSlice = createSlice({
     },
     setTimerInterval(state, action: PayloadAction<number | undefined>) {
       state.period = action.payload;
+    },
+    setRecorderInterval(state, action: PayloadAction<number | undefined>) {
+      state.recorderPeriod = action.payload;
     },
     setActiveTimeout(state, action: PayloadAction<{ clockLimit: number; timeoutReminder: number }>) {
       state.activeTimeOut = action.payload;
@@ -635,6 +655,7 @@ export const {
   setSelectedTaskParentId,
   setSelectedTaskType,
   setMeMode,
+  setAutoSave,
   setShowTaskNavigation,
   setShowNewTaskField,
   setShowNewTaskId,
@@ -647,6 +668,7 @@ export const {
   setAddNewTaskItem,
   setCloseTaskListView,
   setTriggerSaveSettings,
+  setTriggerAutoSave,
   setToggleAssignCurrentTaskId,
   setCurrentParentTaskId,
   setGetSubTaskId,
@@ -672,6 +694,8 @@ export const {
   setUpdateCords,
   setActiveTaskColumn,
   setUpdateTimerDuration,
+  setUpdateRecoderDuration,
+  setRecorderInterval,
   setStopTimer,
   setTimerInterval,
   setActiveTimeout,

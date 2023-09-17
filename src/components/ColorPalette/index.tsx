@@ -20,6 +20,13 @@ import { EntityType } from '../../utils/EntityTypes/EntityType';
 import { Fade, Menu } from '@mui/material';
 import { setListPaletteColor } from '../../features/list/listSlice';
 import { Cords } from '../../hooks/useAbsolute';
+import GridViews from '../../assets/icons/GridViews';
+import SearchIcon from '../../assets/icons/SearchIcon';
+import FormatListBullet from '../../assets/icons/FormatListBullet';
+import SearchIconUpload from './component/SearchIconUpload';
+import Input from '../input/Input';
+import { CiSearch } from 'react-icons/ci';
+import Button from '../Button';
 
 interface PaletteProps {
   title?: string;
@@ -54,6 +61,8 @@ export default function PaletteManager({
   const [isInnerFrameActive, setIsInnerFrameActive] = useState<boolean>(false);
   const [displayColorPicker, setDisplayColorPicker] = useState<boolean>(false);
   const [customColor, setCustomColor] = useState<string>('');
+  const [views, setViews] = useState<string>('board');
+  const [isSearch, setIsSearch] = useState<boolean>(false);
 
   const { paletteId, paletteType } = paletteDropdown;
 
@@ -61,6 +70,15 @@ export default function PaletteManager({
     setOpen(false);
     dispatch(setPaletteDropDown({ ...paletteDropdown, show: false }));
     dispatch(setListPaletteColor({ innerColour: 'white', outerColour: 'black' }));
+  };
+
+  const handleCancel = () => {
+    if (isSearch) {
+      setIsSearch(false);
+    } else {
+      setOpen(false);
+      dispatch(setPaletteDropDown({ ...paletteDropdown, show: false }));
+    }
   };
 
   const handleEditColor = (state: boolean) => {
@@ -138,6 +156,10 @@ export default function PaletteManager({
     dispatch(setPaletteDropDown({ ...paletteDropdown, show: false }));
   };
 
+  // const views = [
+  //   {label: 'Board', element: }
+  // ]
+
   return (
     <Menu
       open={open}
@@ -147,10 +169,39 @@ export default function PaletteManager({
         vertical: cords?.top || 'center',
         horizontal: 15
       }}
+      sx={{ borderRadius: '16px' }}
     >
-      <div className="w-auto p-2 overflow-y-auto drop-shadow-2xl">
+      <div className="w-auto p-2 rounded-md overflow-y-auto drop-shadow-2xl" style={{ borderRadius: '5px' }}>
         <div className="z-50 flex flex-col">
-          {paletteType !== EntityType.list && <p className="justify-center">{title}</p>}
+          {!isSearch && (
+            <div className="flex items-center justify-between">
+              {paletteType !== EntityType.list && <p className="justify-center text-gray-500 ml-2">{title}</p>}
+              <div className="flex items-center gap-1">
+                <span className={` p-1 rounded ${views === 'board' ? 'bg-primary-500' : 'border border-primary-200'}`}>
+                  <GridViews color={views === 'board' ? 'white' : undefined} />
+                </span>
+                <span className="border p-1 border-primary-200 rounded">
+                  <FormatListBullet />
+                </span>
+                <span className="border p-1 border-primary-200 rounded" onClick={() => setIsSearch(true)}>
+                  <SearchIcon />
+                </span>
+              </div>
+            </div>
+          )}
+          {isSearch && (
+            <div className="mx-2">
+              <Input
+                placeholder="Search"
+                bgColor="bg-gray-200"
+                borderRadius="rounded-md py-0.5"
+                type="text"
+                name="search"
+                leadingIcon={<CiSearch />}
+                onChange={() => null}
+              />
+            </div>
+          )}
           {topContent}
           {paletteType === EntityType.list && (
             <div className="flex justify-between mt-1">
@@ -168,15 +219,37 @@ export default function PaletteManager({
             </div>
           )}
           <ColorPalette handleClick={handleClick} />
-          <div className="flex justify-center">
-            <BiPaint
-              onClick={() => handleEditColor(true)}
-              className={`${displayColorPicker ? 'hidden' : 'block cursor-pointer'}`}
-            />
+          <div className="flex justify-between items-center mt-2">
+            <span className="flex items-center p-1 ml-2 rounded-md border border-primary-200">
+              <BiPaint
+                onClick={() => handleEditColor(true)}
+                className={`${displayColorPicker ? 'hidden' : 'block cursor-pointer'}`}
+              />
+            </span>
             <RiArrowUpSFill
               onClick={() => handleEditColor(false)}
               className={`${!displayColorPicker ? 'hidden' : 'block cursor-pointer'}`}
             />
+            {!displayColorPicker && (
+              <div className="flex justify-between items-center gap-2">
+                <Button
+                  height="h-5"
+                  label="Cancel"
+                  labelSize="text-xs"
+                  padding="p-1"
+                  buttonStyle="danger"
+                  onClick={handleCancel}
+                />
+                <Button
+                  height="h-5"
+                  customHoverColor="hover:bg-alsoit-purple-300"
+                  label="Update Hub"
+                  labelSize="text-xs"
+                  padding="p-1"
+                  buttonStyle="custom"
+                />
+              </div>
+            )}
           </div>
           <div className="flex flex-col justify-center">
             {displayColorPicker && <ChromePicker color={customColor} onChangeComplete={handleCustomColor} />}

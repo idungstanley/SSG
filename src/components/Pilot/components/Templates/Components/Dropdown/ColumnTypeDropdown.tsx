@@ -12,7 +12,9 @@ import CurrencyOptions from '../Currency/Currency';
 import NumberOptions from '../Number/Number';
 import EmailOptions from '../Email/Email';
 import WebsiteOptions from '../Websites/WebsiteOptions';
+import PhoneOptions from '../Phone/PhoneOptions';
 import CheckBoxOptions from '../Checkbox/CheckboxOptions';
+import RatingOption from '../Rating/RatingOptions';
 
 const columnTypes = [
   {
@@ -51,9 +53,19 @@ const columnTypes = [
     options: <WebsiteOptions />
   },
   {
+    id: 'Phone',
+    title: 'Phone',
+    options: <PhoneOptions />
+  },
+  {
     id: 'Checkbox',
     title: 'Checkbox',
     options: <CheckBoxOptions />
+  },
+  {
+    id: 'Rating',
+    title: 'Rating',
+    options: <RatingOption />
   }
 ];
 
@@ -68,7 +80,7 @@ export default function ColumnTypeDropdown() {
   };
 
   const { updateCords } = useAppSelector((state) => state.task);
-  const { cords, relativeRef } = useAbsolute(updateCords, 200);
+  const { cords, relativeRef } = useAbsolute(updateCords, 400);
 
   return (
     <div>

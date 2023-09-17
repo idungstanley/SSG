@@ -1,6 +1,7 @@
 import requestNew from '../../app/requestNew';
 import {
   IFullTaskRes,
+  ITaskFullList,
   ITaskListRes,
   ITaskRes,
   ITimeEntriesRes,
@@ -22,27 +23,29 @@ import {
   setTasks,
   setTimerStatus,
   setToggleAssignCurrentTaskId,
+  setTriggerAutoSave,
   setTriggerSaveSettings,
   setTriggerSaveSettingsModal,
   setUpdateTimerDuration
 } from './taskSlice';
 import { UpdateTaskProps } from './interface.tasks';
-import { IWatchersRes } from '../general/watchers/watchers.interface';
 import RecordRTC from 'recordrtc';
 import { useUploadRecording } from '../workspace/workspaceService';
 import { useParams } from 'react-router-dom';
 import { setPickedDateState, setTimerLastMemory, toggleMute } from '../workspace/workspaceSlice';
 import { generateFilters } from '../../components/TasksHeader/lib/generateFilters';
-import { runTimer } from '../../utils/TimerCounter';
 import Duration from '../../utils/TimerDuration';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
 import {
   taskAssignessUpdateManager,
   taskDateUpdateManager,
+  taskMoveManager,
   taskPriorityUpdateManager,
   taskStatusUpdateManager
 } from '../../managers/Task';
 import { ITeamMembersAndGroup } from '../settings/teamMembersAndGroups.interfaces';
+import { useDispatch } from 'react-redux';
+import { runTimer } from '../../utils/TimerCounter';
 
 //edit a custom field
 export const UseEditCustomFieldService = (data: {
@@ -135,24 +138,31 @@ export const useGetUserSettingsData = ({ keys }: { keys: string }) => {
 };
 
 export const useMoveTask = () => {
+  const dispath = useDispatch();
   const queryClient = useQueryClient();
   const { hubId, walletId, listId } = useParams();
 
   const id = hubId ?? walletId ?? listId;
-  const type = hubId ? EntityType.hub : walletId ? EntityType.wallet : EntityType.list;
 
-  const { sortAbleArr } = useAppSelector((state) => state.task);
-  const sortArrUpdate = sortAbleArr.length <= 0 ? null : sortAbleArr;
-
-  const { filters } = generateFilters();
+  const { draggableTask, dragOverTask } = useAppSelector((state) => state.list);
+  const { tasks, subtasks } = useAppSelector((state) => state.task);
 
   return useMutation(moveTask, {
     onSuccess: () => {
+      const { updatedTasks, updatedSubtasks } = taskMoveManager(
+        draggableTask as ITaskFullList,
+        dragOverTask as ITaskFullList,
+        tasks,
+        subtasks
+      );
+      if (!draggableTask?.parent_id) {
+        dispath(setTasks(updatedTasks));
+      } else {
+        dispath(setSubtasks(updatedSubtasks));
+      }
       queryClient.invalidateQueries(['lists']);
-      queryClient.invalidateQueries(['task', { listId, sortArrUpdate, filters }]);
-      queryClient.invalidateQueries(['task', id, type]);
+      queryClient.invalidateQueries(['task']);
       queryClient.invalidateQueries(['retrieve', id ?? 'root', 'tree']);
-      queryClient.invalidateQueries(['retrieve', id ?? 'root', undefined]);
     }
   });
 };
@@ -238,7 +248,7 @@ export const UseGetFullTaskList = ({
   const queryClient = useQueryClient();
 
   const hub_id = itemType === EntityType.hub || itemType === EntityType.subHub ? itemId : null;
-  const wallet_id = itemType == EntityType.wallet || itemType === EntityType.subWallet ? itemId : null;
+  const wallet_id = itemType === EntityType.wallet || itemType === EntityType.subWallet ? itemId : null;
   const { sortAbleArr } = useAppSelector((state) => state.task);
   const sortArrUpdate = sortAbleArr.length <= 0 ? null : sortAbleArr;
 
@@ -461,10 +471,10 @@ export const UseUpdateTaskViewSettings = ({
   task_views_id: string;
   taskDate: { [key: string]: boolean };
 }) => {
-  const { triggerSaveSettings } = useAppSelector((state) => state.task);
+  const { triggerSaveSettings, triggerAutoSave } = useAppSelector((state) => state.task);
   const dispatch = useAppDispatch();
   return useQuery(
-    ['task', { task_views_id, taskDate }],
+    ['task', { task_views_id, taskDate, triggerAutoSave }],
     async () => {
       const data = requestNew<ITaskRes>({
         url: `task-views/${task_views_id}`,
@@ -478,20 +488,10 @@ export const UseUpdateTaskViewSettings = ({
     {
       enabled: !!task_views_id && triggerSaveSettings,
       cacheTime: 0,
-      onSuccess: (data) => {
+      onSuccess: () => {
         dispatch(setTriggerSaveSettings(false));
+        dispatch(setTriggerAutoSave(false));
         dispatch(setTriggerSaveSettingsModal(false));
-
-        // if (data.data.task.id == task_id) {
-        //   const updatedTasks = taskDateUpdateManager(
-        //     task_id as string,
-        //     data.data.task.list_id as string,
-        //     tasks,
-        //     'start_date',
-        //     data.data.task.start_date as string
-        //   );
-        //   dispatch(setTasks(updatedTasks));
-        // }
       }
     }
   );
@@ -601,7 +601,11 @@ export const useSubTasks = (parentId: string) =>
           parent_id: parentId
         }
       }),
-    { enabled: !!parentId, select: (res) => res.data.tasks }
+    {
+      enabled: !!parentId,
+      select: (res) => res.data.tasks,
+      cacheTime: 0
+    }
   );
 
 export const createTimeEntriesService = (data: { queryKey: (string | undefined)[] }) => {
@@ -667,7 +671,7 @@ export const useCurrentTime = ({ workspaceId }: { workspaceId?: string }) => {
         method: 'GET',
         url: 'time-entries/current'
       });
-      return response; // Access the 'data' property of the response
+      return response;
     },
     {
       onSuccess: (data) => {
@@ -816,29 +820,6 @@ export const DeleteTimeEntriesService = (data: { timeEntryDeleteTriggerId: strin
     method: 'DELETE'
   });
   return response;
-};
-
-//Get watcher
-export const UseGetWatcherService = (taskId: { query: string | null | undefined }) => {
-  const queryClient = useQueryClient();
-  return useQuery(
-    ['watcher', taskId],
-    async () => {
-      const data = await requestNew<IWatchersRes | undefined>({
-        url: 'watch',
-        method: 'GET',
-        params: {
-          type: EntityType.task,
-          id: taskId.query
-        }
-      });
-      return data;
-    },
-    {
-      initialData: queryClient.getQueryData(['watcher', taskId]),
-      enabled: taskId != null
-    }
-  );
 };
 
 //Add watcher to task

@@ -112,14 +112,14 @@ export function AddSubTask({
         ))}
       </tr>
 
-      {showNewTaskField ? (
+      {/* {showNewTaskField ? (
         <AddTask
           columns={otherColumns}
           paddingLeft={DEFAULT_LEFT_PADDING}
           parentId={task.id}
           onClose={onCloseAddTaskFIeld}
         />
-      ) : null}
+      ) : null} */}
 
       {showSubTasks ? (
         <SubTasks listId={listId} paddingLeft={DEFAULT_LEFT_PADDING} parentId={task.id} columns={columns} level={0} />

@@ -38,7 +38,6 @@ export default function UploadAvatar({ invalidateQuery, endpoint }: UploadFileMo
     })
       .use(XHRUpload, {
         allowedMetaFields: ['image', 'path'],
-        // metaFields: ['image', 'path'],
         endpoint: '',
         bundle: false,
         headers: currentWorkspaceId

@@ -3,7 +3,11 @@ import { cl } from '../../../../../utils';
 import ToastClose from '../../../../../assets/icons/ToastClose';
 import toast from 'react-hot-toast';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
-import { setTriggerSaveSettings, setTriggerSaveSettingsModal } from '../../../../../features/task/taskSlice';
+import {
+  setAutoSave,
+  setTriggerSaveSettings,
+  setTriggerSaveSettingsModal
+} from '../../../../../features/task/taskSlice';
 import { BiCommand } from 'react-icons/bi';
 import { IoReturnDownBack } from 'react-icons/io5';
 
@@ -17,6 +21,10 @@ function SaveSettingsModal({ title, showClose = true, toastId }: ToastProps) {
   const { triggerSaveSettingsModal } = useAppSelector((state) => state.task);
 
   const handleSaveViewSettings = () => {
+    dispatch(setTriggerSaveSettings(true));
+  };
+  const handleAutoSaveViewSettings = () => {
+    dispatch(setAutoSave(true));
     dispatch(setTriggerSaveSettings(true));
   };
 
@@ -66,7 +74,7 @@ function SaveSettingsModal({ title, showClose = true, toastId }: ToastProps) {
                   </div>
                   <div
                     className="flex text-alsoit-purple-300 items-center cursor-pointer gap-0.5"
-                    onClick={handleSaveViewSettings}
+                    onClick={handleAutoSaveViewSettings}
                   >
                     Autosave View
                   </div>

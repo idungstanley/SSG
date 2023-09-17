@@ -53,17 +53,15 @@ function ListModal() {
       listName: name,
       hubId:
         (createWlLink ? createWLID : null) ||
-        (SubMenuType == 'hubs' ? SubMenuId : null) ||
-        (SubMenuType == EntityType.subHub ? SubMenuId : null) ||
-        (showMenuDropdownType == 'hubs' ? showMenuDropdown : null) ||
-        (showMenuDropdownType == EntityType.subHub ? showMenuDropdown : null),
+        (SubMenuType === EntityType.hub ? SubMenuId : null) ||
+        (SubMenuType === EntityType.subHub ? SubMenuId : null) ||
+        (showMenuDropdownType === EntityType.hub ? showMenuDropdown : null) ||
+        (showMenuDropdownType === EntityType.subHub ? showMenuDropdown : null),
       walletId:
-        (showMenuDropdownType == EntityType.wallet && !createWLID ? showMenuDropdown : null) ||
-        (showMenuDropdownType == EntityType.subWallet ? showMenuDropdown : null) ||
-        (showMenuDropdownType == 'subwallet3' ? showMenuDropdown : null) ||
-        (SubMenuType == EntityType.wallet ? SubMenuId : null) ||
-        (SubMenuType == 'subwallet2' ? SubMenuId : null) ||
-        (SubMenuType == 'subwallet3' ? SubMenuId : null)
+        (showMenuDropdownType === EntityType.wallet && !createWLID ? showMenuDropdown : null) ||
+        (showMenuDropdownType === EntityType.subWallet ? showMenuDropdown : null) ||
+        (showMenuDropdownType?.includes(EntityType.subWallet) ? showMenuDropdown : null) ||
+        (SubMenuType?.includes(EntityType.wallet) ? SubMenuId : null)
     });
   };
   const handleCloseSlider = () => {

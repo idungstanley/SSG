@@ -4,7 +4,7 @@ import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
 import { useCreateDropdownField } from '../../../../../../features/list/listService';
 import { setIsTasksUpdated } from '../../../../../../features/task/taskSlice';
 
-function CraeteWebsite() {
+function CreatePhone() {
   const dispatch = useAppDispatch();
 
   const { newCustomPropertyDetails, entityForCustom } = useAppSelector((state) => state.task);
@@ -36,15 +36,16 @@ function CraeteWebsite() {
       });
     }
   };
+
   return (
     <div>
       <SaveCols
         handleSubmit={handleSubmit}
-        header="Websites"
-        body="This custom property which allows to track clients, vendors, leads and more by entering websites"
+        header="Phone"
+        body="This custom property which allows to track clients, vendors, leads and more by entering phone details"
       />
     </div>
   );
 }
 
-export default CraeteWebsite;
+export default CreatePhone;
