@@ -233,7 +233,7 @@ export default function PaletteManager({
             {!displayColorPicker && (
               <div className="flex justify-between items-center gap-2">
                 <Button
-                  height="h-5"
+                  height="h-6"
                   label="Cancel"
                   labelSize="text-xs"
                   padding="p-1"
@@ -241,7 +241,7 @@ export default function PaletteManager({
                   onClick={handleCancel}
                 />
                 <Button
-                  height="h-5"
+                  height="h-6"
                   customHoverColor="hover:bg-alsoit-purple-300"
                   label={'Update ' + title}
                   labelSize="text-xs"
