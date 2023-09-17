@@ -23,7 +23,6 @@ import { Cords } from '../../hooks/useAbsolute';
 import GridViews from '../../assets/icons/GridViews';
 import SearchIcon from '../../assets/icons/SearchIcon';
 import FormatListBullet from '../../assets/icons/FormatListBullet';
-import SearchIconUpload from './component/SearchIconUpload';
 import Input from '../input/Input';
 import { CiSearch } from 'react-icons/ci';
 import Button from '../Button';
@@ -180,7 +179,7 @@ export default function PaletteManager({
                 <span className={` p-1 rounded ${views === 'board' ? 'bg-primary-500' : 'border border-primary-200'}`}>
                   <GridViews color={views === 'board' ? 'white' : undefined} />
                 </span>
-                <span className="border p-1 border-primary-200 rounded">
+                <span className="border p-1 border-primary-200 rounded" onClick={() => setViews('list')}>
                   <FormatListBullet />
                 </span>
                 <span className="border p-1 border-primary-200 rounded" onClick={() => setIsSearch(true)}>
