@@ -15,7 +15,6 @@ import Palette from '../ColorPalette';
 import UploadImage from '../ColorPalette/component/UploadImage';
 import { InvalidateQueryFilters } from '@tanstack/react-query';
 import { setCreateWlLink } from '../../features/workspace/workspaceSlice';
-import SearchIconUpload from '../ColorPalette/component/SearchIconUpload';
 import { ListColourProps } from './ListItem';
 import { useParams } from 'react-router-dom';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
@@ -282,9 +281,7 @@ export default function HubItem({
         </div>
       </div>
       <UploadImage endpoint={`hubs/${uploadId}`} invalidateQuery={['hubs'] as InvalidateQueryFilters<unknown>} />
-      {paletteId === item.id && show ? (
-        <Palette title="Hub Colour" setPaletteColor={setPaletteColor} cords={cords} />
-      ) : null}
+      {paletteId === item.id && show ? <Palette title="Hub" setPaletteColor={setPaletteColor} cords={cords} /> : null}
       {showMenuDropdown === item.id && showSidebar ? (
         <MenuDropdown isExtendedBar={isExtendedBar} cords={menuCords} />
       ) : null}

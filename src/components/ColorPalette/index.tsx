@@ -171,11 +171,11 @@ export default function PaletteManager({
       }}
       sx={{ borderRadius: '16px' }}
     >
-      <div className="w-auto p-2 rounded-md overflow-y-auto drop-shadow-2xl" style={{ borderRadius: '5px' }}>
+      <div className="w-auto p-2 rounded-full overflow-y-auto drop-shadow-2xl" style={{ borderRadius: '5px' }}>
         <div className="z-50 flex flex-col">
           {!isSearch && (
             <div className="flex items-center justify-between">
-              {paletteType !== EntityType.list && <p className="justify-center text-gray-500 ml-2">{title}</p>}
+              <p className="justify-center text-gray-500 ml-2">COLOUR LIBRARY</p>
               <div className="flex items-center gap-1">
                 <span className={` p-1 rounded ${views === 'board' ? 'bg-primary-500' : 'border border-primary-200'}`}>
                   <GridViews color={views === 'board' ? 'white' : undefined} />
@@ -243,7 +243,7 @@ export default function PaletteManager({
                 <Button
                   height="h-5"
                   customHoverColor="hover:bg-alsoit-purple-300"
-                  label="Update Hub"
+                  label={'Update ' + title}
                   labelSize="text-xs"
                   padding="p-1"
                   buttonStyle="custom"
