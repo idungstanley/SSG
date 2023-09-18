@@ -9,8 +9,6 @@ import PlusCircle from '../../../../assets/icons/AddCircle';
 import { ColumnFilterList } from './ClockColumnFilterList';
 import EntryList, { entriesProps } from '../../../../pages/workspace/tasks/timeclock/entryLists/EntryList';
 import { useSaveData } from '../../../../features/task/taskService';
-import { CloseBtn } from '../../../Buttons/CloseButton';
-import { IoCloseCircleOutline } from 'react-icons/io5';
 import ArrowUpIcon from '../../../../assets/icons/ArrowUpIcon';
 import { SortIcon } from '../../../../assets/icons/SortIcon';
 
