@@ -130,7 +130,17 @@ export function RenderItemEntries({
                           className="flex items-center invisible group-hover:visible"
                           onClick={() => handleSort({ field: col.value, dir: 'desc' })}
                         >
-                          {!timeSortStatus ? <SortIcon active={!!timeArr.length} /> : <ArrowUpIcon />}
+                          {timeSortArr.length > 0 ? (
+                            timeSortArr.map((header) =>
+                              header.field === col.value ? (
+                                <ArrowUpIcon key={header.dir} />
+                              ) : (
+                                <SortIcon key={header.dir} active={!!timeArr.length} />
+                              )
+                            )
+                          ) : !timeSortStatus ? (
+                            <SortIcon active={!!timeArr.length} />
+                          ) : null}
                         </div>
                       </th>
                     )
