@@ -11,9 +11,7 @@ export default function ListSubtasks({ subtasksTitle }: { subtasksTitle: string 
 
   const { toggleAllSubtask } = useAppSelector((state) => state.task);
 
-  const [activeViewId, setActiveViewId] = useState<string>('collapse_all');
   const [listView] = useState<boolean>(true);
-  const [activeLabel, setActiveLabel] = useState<string>('');
 
   const viewSettings = [
     {
@@ -39,6 +37,9 @@ export default function ListSubtasks({ subtasksTitle }: { subtasksTitle: string 
       }
     }
   ];
+
+  const [activeViewId, setActiveViewId] = useState<string>(viewSettings[0].id);
+  const [activeLabel, setActiveLabel] = useState<string>(viewSettings[0].label);
 
   return (
     <div className="flex items-center justify-start space-x-1 ">
@@ -81,7 +82,7 @@ export default function ListSubtasks({ subtasksTitle }: { subtasksTitle: string 
                       : 'flex items-center text-sm text-gray-600 text-left w-full'
                   }`}
                   onClick={() => {
-                    setActiveLabel(view.id === 'collapse_all' ? '' : view.label);
+                    setActiveLabel(view.label);
                     setActiveViewId(view.id);
                   }}
                 >
