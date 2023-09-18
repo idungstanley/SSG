@@ -21,6 +21,20 @@ export const changeListManager = (id: string, hubs: Hub[], listFromResponse: ILi
   return updatedTree;
 };
 
+export const updateListTasksCountManager = (id: string, hubs: Hub[], count?: number) => {
+  const updateList = (item: IList) => {
+    let newList = { ...item };
+    newList = {
+      ...newList,
+      tasks_count: count ? count : 0
+    };
+    return newList;
+  };
+
+  const updatedTree = findCurrentEntity(EntityType.list, id, hubs, updateList as <IList>(item: IList) => IList);
+  return updatedTree;
+};
+
 export const deleteListManager = (id: string, hubs: Hub[]) => {
   const deleteList = (lists: IList[]) => {
     return [...lists].filter((lists) => lists.id !== id);

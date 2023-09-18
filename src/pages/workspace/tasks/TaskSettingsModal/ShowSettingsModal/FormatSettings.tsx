@@ -5,7 +5,8 @@ import {
   getSplitSubTask,
   getTaskUpperCase,
   getVerticalGrid,
-  getVerticalGridlinesTask
+  getVerticalGridlinesTask,
+  setAutoSave
 } from '../../../../../features/task/taskSlice';
 
 export function useformatSettings() {
@@ -18,6 +19,7 @@ export function useformatSettings() {
     dispatch(getTaskUpperCase(settingsOng.taskUpperCase));
     dispatch(getVerticalGridlinesTask(settingsOng.verticalGridlinesTask));
     dispatch(getSplitSubTask(settingsOng.splitSubTaskState));
+    dispatch(setAutoSave(settingsOng.autoSave));
   };
 
   return formatSettings;

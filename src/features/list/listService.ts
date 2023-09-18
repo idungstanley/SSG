@@ -10,8 +10,14 @@ import { generateFilters } from '../../components/TasksHeader/lib/generateFilter
 import { UseGetHubDetails } from '../hubs/hubService';
 import { IList } from '../hubs/hubs.interfaces';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
-import { setIsTasksUpdated, setNewCustomPropertyDetails, setSubtasks, setTasks } from '../task/taskSlice';
+import { setNewCustomPropertyDetails, setSubtasks, setTasks } from '../task/taskSlice';
 import { updateCustomFieldsManager } from '../../managers/Task';
+import {
+  autoProgressProperties,
+  currencyProperties,
+  manualProgressProperties,
+  ratingProperties
+} from '../task/interface.tasks';
 
 interface TaskCountProps {
   data: {
@@ -192,7 +198,8 @@ export const UseGetListDetails = (listId: string | null | undefined) => {
         if (activeItemType === 'list') {
           dispatch(setSpaceStatuses(listStatusTypes));
         }
-      }
+      },
+      cacheTime: 0
     }
   );
 };
@@ -232,7 +239,7 @@ const createDropdownField = (data: {
   type?: string;
   customType: string;
   style?: { is_bold: string; is_underlined: string; is_italic: string };
-  properties?: { currency?: string; symbol?: string; emoji?: string; number?: number };
+  properties?: currencyProperties | ratingProperties | manualProgressProperties | autoProgressProperties;
 }) => {
   const { id, options, name, type, customType, style, color, properties } = data;
   const response = requestNew<IResCustomfield>({
@@ -265,14 +272,13 @@ export const useCreateDropdownField = () => {
       const updatedList = updateCustomFieldsManager(
         entityForCustom.type === EntityType.task ? subtasks : tasks,
         data.data.custom_field,
-        entityForCustom.id
+        entityForCustom.type === EntityType.task ? entityForCustom.id : ''
       );
       if (entityForCustom.type === EntityType.task) {
         dispatch(setSubtasks(updatedList));
       } else {
         dispatch(setTasks(updatedList));
       }
-      dispatch(setIsTasksUpdated(true));
     }
   });
 };

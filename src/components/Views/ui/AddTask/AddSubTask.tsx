@@ -2,7 +2,6 @@ import { useState } from 'react';
 import SubtasksIcon from '../../../../assets/icons/SubtasksIcon';
 import { Tag, Task } from '../../../../features/task/interface.tasks';
 import { DEFAULT_LEFT_PADDING } from '../../config';
-import { Column } from '../../types/table';
 import { AddTask } from '../AddTask/AddTask';
 import { Col } from '../Table/Col';
 import { StickyCol } from '../Table/StickyCol';
@@ -12,10 +11,11 @@ import { MdDragIndicator } from 'react-icons/md';
 import { ManageTagsDropdown } from '../../../Tag/ui/ManageTagsDropdown/ui/ManageTagsDropdown';
 import { Tags } from '../../../Tag';
 import { useAppSelector } from '../../../../app/hooks';
+import { listColumnProps } from '../../../../pages/workspace/tasks/component/views/ListColumns';
 
 interface RowProps {
   task: Task;
-  columns: Column[];
+  columns: listColumnProps[];
   listId: string;
   paddingLeft?: number;
   parentId?: string;
@@ -34,10 +34,12 @@ export function AddSubTask({
   isListParent,
   handleClose
 }: RowProps) {
-  const [showNewTaskField] = useState(false);
-  const otherColumns = columns.slice(1);
-  const [showSubTasks, setShowSubTasks] = useState(false);
   const { subtaskDefaultStatusId } = useAppSelector((state) => state.task);
+
+  const [showNewTaskField] = useState(false);
+  const [showSubTasks, setShowSubTasks] = useState(false);
+
+  const otherColumns = columns.slice(1);
 
   const onShowAddSubtaskField = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.stopPropagation();
@@ -112,14 +114,14 @@ export function AddSubTask({
         ))}
       </tr>
 
-      {showNewTaskField ? (
+      {/* {showNewTaskField ? (
         <AddTask
           columns={otherColumns}
           paddingLeft={DEFAULT_LEFT_PADDING}
           parentId={task.id}
           onClose={onCloseAddTaskFIeld}
         />
-      ) : null}
+      ) : null} */}
 
       {showSubTasks ? (
         <SubTasks listId={listId} paddingLeft={DEFAULT_LEFT_PADDING} parentId={task.id} columns={columns} level={0} />

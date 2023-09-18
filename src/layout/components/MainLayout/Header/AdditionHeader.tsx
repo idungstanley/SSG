@@ -55,6 +55,7 @@ export default function AdditionalHeader() {
 
   const { refetch } = useCurrentTime({ workspaceId });
   const { mutate } = EndTimeEntriesService();
+
   const stop = () => {
     mutate({
       id: activeItemId,
@@ -167,7 +168,7 @@ export default function AdditionalHeader() {
         </p>
         <span className="text-alsoit-text-lg font-bold">{activeItemName}</span>
       </h1>
-      <div className="relative flex items-center justify-center space-x-2">
+      <div className="relative flex items-center justify-center space-x-2.5">
         {timeBlinkerCheck() && (
           <div
             className="flex items-center px-2 py-1 space-x-1 border border-alsoit-purple-300 rounded-lg cursor-pointer"
@@ -240,7 +241,7 @@ export default function AdditionalHeader() {
         )}
         <MdTab className="w-5 h-5" />
         {screenRecording === 'recording' && tabsId !== 6 && (
-          <div className="relative w-16 flex space-x-0.5 mr-1.5" onMouseEnter={() => setRecordBlinker(!recordBlinker)}>
+          <div className="relative w-16 flex space-x-0.5" onMouseEnter={() => setRecordBlinker(!recordBlinker)}>
             <div className="flex items-center justify-start w-5 h-5 border-alsoit-danger rounded-full">
               <div className="w-3 h-3 bg-alsoit-danger rounded-full pulsate"></div>
             </div>

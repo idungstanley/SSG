@@ -1,12 +1,9 @@
 import React from 'react';
 import SaveCols from '../SaveCols';
-import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
+import { useAppSelector } from '../../../../../../app/hooks';
 import { useCreateDropdownField } from '../../../../../../features/list/listService';
-import { setIsTasksUpdated } from '../../../../../../features/task/taskSlice';
 
 function CreateDateField() {
-  const dispatch = useAppDispatch();
-
   const { newCustomPropertyDetails, entityForCustom } = useAppSelector((state) => state.task);
 
   const { mutate: onCreate } = useCreateDropdownField();
@@ -22,7 +19,6 @@ function CreateDateField() {
         is_italic: is_italic as string,
         is_underlined: is_underlined as string
       };
-      dispatch(setIsTasksUpdated(false));
       onCreate({
         name,
         style,

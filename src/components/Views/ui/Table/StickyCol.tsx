@@ -90,7 +90,7 @@ export function StickyCol({
 
   const COL_BG = taskId === task.id ? ACTIVE_COL_BG : DEFAULT_COL_BG;
 
-  const { mutate: onAdd } = useAddTask();
+  const { mutate: onAdd } = useAddTask(task);
 
   const inputRef = useRef<HTMLInputElement | null>(null);
 
@@ -156,7 +156,7 @@ export function StickyCol({
 
       onAdd({
         name,
-        isListParent: isListParent,
+        isListParent,
         id: parentId as string,
         assignees: [currTeamMemberId] as string[],
         task_status_id: task_status as string
@@ -231,7 +231,7 @@ export function StickyCol({
         const updatedTaskIds = [...selectedTasksArray, task.id];
         dispatch(setSelectedTasksArray(updatedTaskIds));
       }
-      dispatch(setSelectedListIds([...selectedListIds, task.list_id]));
+      dispatch(setSelectedListIds([...selectedListIds, task.parent_id || task.list_id]));
     } else {
       // Remove the task ID from the selectedTasksArray array
       const updatedTaskIds = selectedTasksArray.filter((id: string) => id !== task.id);
@@ -442,13 +442,12 @@ export function StickyCol({
             </div>
             <div className="flex flex-col pt-2 items-start justify-start pl-2 space-y-1">
               <p
-                className="flex text-left"
+                className="flex text-left empty:before:content-[attr(placeholder)]"
                 contentEditable={true}
+                placeholder="Add New Task"
                 ref={inputRef}
                 onKeyDown={(e) => (e.key === 'Enter' ? handleOnSave(e, task.id) : null)}
-              >
-                {task.name}
-              </p>
+              ></p>
             </div>
           </div>
         </td>

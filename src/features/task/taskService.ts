@@ -9,6 +9,7 @@ import {
   IUserCalendarParams,
   IUserSettingsRes,
   IUserSettingsUpdateRes,
+  Task,
   TaskId,
   newTaskDataRes
 } from './interface.tasks';
@@ -23,12 +24,12 @@ import {
   setTasks,
   setTimerStatus,
   setToggleAssignCurrentTaskId,
+  setTriggerAutoSave,
   setTriggerSaveSettings,
   setTriggerSaveSettingsModal,
   setUpdateTimerDuration
 } from './taskSlice';
 import { UpdateTaskProps } from './interface.tasks';
-import RecordRTC from 'recordrtc';
 import { useUploadRecording } from '../workspace/workspaceService';
 import { useParams } from 'react-router-dom';
 import { setPickedDateState, setTimerLastMemory, toggleMute } from '../workspace/workspaceSlice';
@@ -36,15 +37,24 @@ import { generateFilters } from '../../components/TasksHeader/lib/generateFilter
 import Duration from '../../utils/TimerDuration';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
 import {
+  addNewTaskManager,
   taskAssignessUpdateManager,
   taskDateUpdateManager,
-  taskMoveManager,
+  taskMoveToListManager,
+  taskMoveToSubtaskManager,
   taskPriorityUpdateManager,
-  taskStatusUpdateManager
+  taskStatusUpdateManager,
+  updateTaskSubtasksCountManager
 } from '../../managers/Task';
 import { ITeamMembersAndGroup } from '../settings/teamMembersAndGroups.interfaces';
 import { useDispatch } from 'react-redux';
 import { runTimer } from '../../utils/TimerCounter';
+import { updateListTasksCountManager } from '../../managers/List';
+import { getHub } from '../hubs/hubSlice';
+import { setFilteredResults } from '../search/searchSlice';
+import { addNewSubtaskManager } from '../../managers/Subtask';
+import { IList } from '../hubs/hubs.interfaces';
+import { setDraggableItem } from '../list/listSlice';
 
 //edit a custom field
 export const UseEditCustomFieldService = (data: {
@@ -137,31 +147,42 @@ export const useGetUserSettingsData = ({ keys }: { keys: string }) => {
 };
 
 export const useMoveTask = () => {
-  const dispath = useDispatch();
-  const queryClient = useQueryClient();
-  const { hubId, walletId, listId } = useParams();
+  const dispatch = useDispatch();
 
-  const id = hubId ?? walletId ?? listId;
-
-  const { draggableTask, dragOverTask } = useAppSelector((state) => state.list);
+  const { draggableTask, dragOverTask, dragOverList } = useAppSelector((state) => state.list);
   const { tasks, subtasks } = useAppSelector((state) => state.task);
+  const { hub } = useAppSelector((state) => state.hub);
 
   return useMutation(moveTask, {
     onSuccess: () => {
-      const { updatedTasks, updatedSubtasks } = taskMoveManager(
-        draggableTask as ITaskFullList,
-        dragOverTask as ITaskFullList,
-        tasks,
-        subtasks
-      );
-      if (!draggableTask?.parent_id) {
-        dispath(setTasks(updatedTasks));
+      if (dragOverList) {
+        // move to list
+        const { updatedTasks, updatedSubtasks, updatedTree } = taskMoveToListManager(
+          draggableTask as ITaskFullList,
+          dragOverList as IList,
+          tasks,
+          subtasks,
+          hub
+        );
+        dispatch(setTasks(updatedTasks));
+        dispatch(setSubtasks(updatedSubtasks));
+        dispatch(getHub(updatedTree));
+        dispatch(setFilteredResults(updatedTree));
       } else {
-        dispath(setSubtasks(updatedSubtasks));
+        // move like sub
+        const { updatedTasks, updatedSubtasks, updatedTree } = taskMoveToSubtaskManager(
+          draggableTask as ITaskFullList,
+          dragOverTask as ITaskFullList,
+          tasks,
+          subtasks,
+          hub
+        );
+        dispatch(setTasks(updatedTasks));
+        dispatch(setSubtasks(updatedSubtasks));
+        dispatch(getHub(updatedTree));
+        dispatch(setFilteredResults(updatedTree));
       }
-      queryClient.invalidateQueries(['lists']);
-      queryClient.invalidateQueries(['task']);
-      queryClient.invalidateQueries(['retrieve', id ?? 'root', 'tree']);
+      dispatch(setDraggableItem(null));
     }
   });
 };
@@ -190,13 +211,43 @@ const addTask = (data: {
   return response;
 };
 
-export const useAddTask = () => {
-  const queryClient = useQueryClient();
+export const useAddTask = (task?: Task) => {
+  const dispatch = useAppDispatch();
+
+  const { tasks, subtasks } = useAppSelector((state) => state.task);
+  const { hub } = useAppSelector((state) => state.hub);
 
   return useMutation(addTask, {
-    onSuccess: () => {
-      queryClient.invalidateQueries(['task']);
-      queryClient.invalidateQueries(['sub-tasks']);
+    onSuccess: (data) => {
+      if (data.data.task.parent_id) {
+        // add subtask
+        const updatedSubtasks = addNewSubtaskManager(
+          subtasks,
+          data.data.task as ITaskFullList,
+          task?.custom_field_columns || []
+        );
+        dispatch(setSubtasks(updatedSubtasks));
+
+        const parentId = data.data.task.parent_id;
+        const updatedTasks = updateTaskSubtasksCountManager(
+          parentId as string,
+          tasks,
+          updatedSubtasks[parentId].length
+        );
+        dispatch(setTasks(updatedTasks));
+      } else {
+        // add task
+        const updatedTasks = addNewTaskManager(
+          tasks,
+          data.data.task as ITaskFullList,
+          task?.custom_field_columns || []
+        );
+        dispatch(setTasks(updatedTasks));
+        const listId = data.data.task.list_id;
+        const updatedTree = updateListTasksCountManager(listId as string, hub, updatedTasks[listId].length);
+        dispatch(getHub(updatedTree));
+        dispatch(setFilteredResults(updatedTree));
+      }
     }
   });
 };
@@ -236,15 +287,14 @@ export const createTaskService = (data: {
 
 export const UseGetFullTaskList = ({
   itemId,
-  itemType,
-  isEverythingPage
+  itemType
 }: {
   itemId: string | undefined | null;
   itemType: string | null | undefined;
-  isEverythingPage?: boolean;
 }) => {
-  const dispatch = useAppDispatch();
   const queryClient = useQueryClient();
+
+  const { draggableItemId } = useAppSelector((state) => state.list);
 
   const hub_id = itemType === EntityType.hub || itemType === EntityType.subHub ? itemId : null;
   const wallet_id = itemType === EntityType.wallet || itemType === EntityType.subWallet ? itemId : null;
@@ -254,7 +304,7 @@ export const UseGetFullTaskList = ({
   const { filters } = generateFilters();
 
   return useInfiniteQuery(
-    ['task', itemId, itemType, filters, sortArrUpdate],
+    ['task', itemId, itemType, filters, sortArrUpdate, draggableItemId],
     async ({ pageParam = 0 }: { pageParam?: number }) => {
       return requestNew<IFullTaskRes>({
         url: 'tasks/full-list',
@@ -272,11 +322,8 @@ export const UseGetFullTaskList = ({
     },
     {
       keepPreviousData: true,
-      enabled: !!hub_id || !!wallet_id,
+      enabled: !!hub_id || !!wallet_id || !draggableItemId,
       onSuccess: (data) => {
-        if (!isEverythingPage) {
-          dispatch(setTasks({}));
-        }
         data.pages.map((page) => page.data.tasks.map((task) => queryClient.setQueryData(['task', task.id], task)));
       },
       getNextPageParam: (lastPage) => {
@@ -417,12 +464,14 @@ export const UseUpdateTaskDateService = ({
   task_id,
   taskDate,
   listIds,
-  setTaskId
+  setTaskId,
+  setResetDate
 }: {
   task_id: string;
   taskDate: string;
   listIds: string[];
   setTaskId: React.Dispatch<React.SetStateAction<string | null>>;
+  setResetDate: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   const dispatch = useAppDispatch();
 
@@ -447,6 +496,7 @@ export const UseUpdateTaskDateService = ({
       onSuccess: (data) => {
         dispatch(setPickedDateState(false));
         setTaskId(null);
+        setResetDate(false);
         const updatedTasks = taskDateUpdateManager(
           task_id as string,
           listIds as string[],
@@ -470,10 +520,10 @@ export const UseUpdateTaskViewSettings = ({
   task_views_id: string;
   taskDate: { [key: string]: boolean };
 }) => {
-  const { triggerSaveSettings } = useAppSelector((state) => state.task);
+  const { triggerSaveSettings, triggerAutoSave } = useAppSelector((state) => state.task);
   const dispatch = useAppDispatch();
   return useQuery(
-    ['task', { task_views_id, taskDate }],
+    ['task', { task_views_id, taskDate, triggerAutoSave }],
     async () => {
       const data = requestNew<ITaskRes>({
         url: `task-views/${task_views_id}`,
@@ -489,6 +539,7 @@ export const UseUpdateTaskViewSettings = ({
       cacheTime: 0,
       onSuccess: () => {
         dispatch(setTriggerSaveSettings(false));
+        dispatch(setTriggerAutoSave(false));
         dispatch(setTriggerSaveSettingsModal(false));
       }
     }
@@ -498,7 +549,7 @@ export const UseUpdateTaskViewSettings = ({
 export const UseUpdateTaskPrioritiesServices = ({ task_id_array, priorityDataUpdate, listIds }: UpdateTaskProps) => {
   const dispatch = useAppDispatch();
 
-  const { currentTaskPriorityId, tasks, subtasks, selectedTaskType } = useAppSelector((state) => state.task);
+  const { currentTaskPriorityId, tasks, subtasks } = useAppSelector((state) => state.task);
 
   const currentTaskIds = task_id_array?.length ? task_id_array : [currentTaskPriorityId];
 
@@ -520,17 +571,15 @@ export const UseUpdateTaskPrioritiesServices = ({ task_id_array, priorityDataUpd
       cacheTime: 0,
       onSuccess: () => {
         if (listIds) {
-          const updatedTasks = taskPriorityUpdateManager(
+          const { updatedTasks, updatedSubtasks } = taskPriorityUpdateManager(
             currentTaskIds as string[],
             listIds as string[],
-            selectedTaskType === EntityType.task ? tasks : subtasks,
+            tasks,
+            subtasks,
             priorityDataUpdate as string
           );
-          if (selectedTaskType === EntityType.task) {
-            dispatch(setTasks(updatedTasks));
-          } else {
-            dispatch(setSubtasks(updatedTasks));
-          }
+          dispatch(setTasks(updatedTasks as Record<string, ITaskFullList[]>));
+          dispatch(setSubtasks(updatedSubtasks as Record<string, ITaskFullList[]>));
         }
         dispatch(setSelectedTasksArray([]));
         dispatch(setSelectedListIds([]));
@@ -540,11 +589,9 @@ export const UseUpdateTaskPrioritiesServices = ({ task_id_array, priorityDataUpd
 };
 
 export const getTaskListService = (listId: string | null | undefined) => {
-  const dispatch = useAppDispatch();
   const { workSpaceId } = useParams();
-  const queryClient = useQueryClient();
 
-  const { sortAbleArr } = useAppSelector((state) => state.task);
+  const { sortAbleArr, tasks } = useAppSelector((state) => state.task);
   const { currentWorkspaceId } = useAppSelector((state) => state.auth);
 
   const sortArrUpdate = sortAbleArr.length <= 0 ? null : sortAbleArr;
@@ -571,12 +618,7 @@ export const getTaskListService = (listId: string | null | undefined) => {
       });
     },
     {
-      enabled: fetch,
-      onSuccess: (data) => {
-        dispatch(setTasks({}));
-        data.pages.map((page) => page?.data.tasks.map((task) => queryClient.setQueryData(['task', task.id], task)));
-        queryClient.invalidateQueries(['hubs']);
-      },
+      enabled: fetch && !tasks[listId as string],
       getNextPageParam: (lastPage) => {
         if (lastPage?.data?.paginator.has_more_pages) {
           return Number(lastPage.data.paginator.page) + 1;
@@ -876,45 +918,46 @@ export const RemoveWatcherService = ({ query }: { query: (string | null | undefi
 
 // Assign Checklist Item
 const AssignTask = ({
-  taskId,
+  taskIds,
   team_member_id,
   teams
 }: {
-  taskId: string | null | undefined;
+  taskIds: string[];
   team_member_id: string | null;
   teams: boolean;
 }) => {
   const request = requestNew({
-    url: teams ? '/group-assignee/assign' : '/assignee/assign',
+    url: teams ? '/group-assignee/assign' : '/tasks/multiple/assignees',
     method: 'POST',
     data: {
-      id: taskId,
-      ...(teams ? { team_member_group_id: team_member_id } : { team_member_id }),
+      ids: taskIds,
+      ...(teams ? { team_member_group_id: team_member_id } : { team_member_ids: [team_member_id] }),
       type: EntityType.task
     }
   });
   return request;
 };
 
-export const UseTaskAssignService = (taskId: string, user: ITeamMembersAndGroup) => {
+export const UseTaskAssignService = (taskIds: string[], user: ITeamMembersAndGroup, listIds: string[]) => {
   const dispatch = useAppDispatch();
 
-  const { selectedTaskParentId, tasks, subtasks, selectedTaskType } = useAppSelector((state) => state.task);
+  const { tasks, subtasks } = useAppSelector((state) => state.task);
+
   return useMutation(AssignTask, {
     onSuccess: () => {
-      const updatedTasks = taskAssignessUpdateManager(
-        taskId,
-        selectedTaskParentId,
-        selectedTaskType === EntityType.task ? tasks : subtasks,
+      const { updatedTasks, updatedSubtasks } = taskAssignessUpdateManager(
+        taskIds,
+        listIds,
+        tasks,
+        subtasks,
         user,
         true
       );
-      if (selectedTaskType === EntityType.task) {
-        dispatch(setTasks(updatedTasks));
-      } else {
-        dispatch(setSubtasks(updatedTasks));
-      }
+      dispatch(setTasks(updatedTasks as Record<string, ITaskFullList[]>));
+      dispatch(setSubtasks(updatedSubtasks as Record<string, ITaskFullList[]>));
       dispatch(setToggleAssignCurrentTaskId(null));
+      dispatch(setSelectedTasksArray([]));
+      dispatch(setSelectedListIds([]));
     }
   });
 };
@@ -925,7 +968,7 @@ const UnassignTask = ({
   team_member_id,
   teams
 }: {
-  taskId: string | null | undefined;
+  taskId: string;
   team_member_id: string | null;
   teams: boolean;
 }) => {
@@ -933,7 +976,7 @@ const UnassignTask = ({
     url: teams ? '/group-assignee/unassign' : '/assignee/unassign',
     method: 'POST',
     data: {
-      ...(teams ? { team_member_group_id: team_member_id } : { team_member_id: team_member_id }),
+      ...(teams ? { team_member_group_id: team_member_id } : { team_member_id }),
       id: taskId,
       type: EntityType.task
     }
@@ -941,26 +984,26 @@ const UnassignTask = ({
   return request;
 };
 
-export const UseTaskUnassignService = (taskId: string, user: ITeamMembersAndGroup) => {
+export const UseTaskUnassignService = (taskIds: string[], user: ITeamMembersAndGroup, listIds: string[]) => {
   const dispatch = useAppDispatch();
 
-  const { selectedTaskParentId, tasks, subtasks, selectedTaskType } = useAppSelector((state) => state.task);
+  const { tasks, subtasks } = useAppSelector((state) => state.task);
 
   return useMutation(UnassignTask, {
     onSuccess: () => {
-      const updatedTasks = taskAssignessUpdateManager(
-        taskId,
-        selectedTaskParentId,
-        selectedTaskType === EntityType.task ? tasks : subtasks,
+      const { updatedTasks, updatedSubtasks } = taskAssignessUpdateManager(
+        taskIds,
+        listIds,
+        tasks,
+        subtasks,
         user,
         false
       );
-      if (selectedTaskType === EntityType.task) {
-        dispatch(setTasks(updatedTasks));
-      } else {
-        dispatch(setSubtasks(updatedTasks));
-      }
+      dispatch(setTasks(updatedTasks as Record<string, ITaskFullList[]>));
+      dispatch(setSubtasks(updatedSubtasks as Record<string, ITaskFullList[]>));
       dispatch(setToggleAssignCurrentTaskId(null));
+      dispatch(setSelectedTasksArray([]));
+      dispatch(setSelectedListIds([]));
     }
   });
 };
@@ -983,8 +1026,8 @@ export const startMediaStream = async () => {
   const [audioTrack] = audioStream.getAudioTracks();
   const stream = new MediaStream([videoTrack, audioTrack]);
 
-  const recorder = new RecordRTC(stream, { type: 'video' });
-  await recorder.startRecording();
+  const recorder = new MediaRecorder(stream);
+  await recorder.start();
   return { recorder, stream };
 };
 
@@ -994,6 +1037,7 @@ export function useMediaStream() {
   const queryClient = useQueryClient();
   const { activeItemId, activeItemType, isMuted } = useAppSelector((state) => state.workspace);
   const { currentWorkspaceId, accessToken } = useAppSelector((state) => state.auth);
+
   const { mutate } = useUploadRecording();
   const { stream } = useAppSelector((state) => state.task);
 
@@ -1007,28 +1051,28 @@ export function useMediaStream() {
     return { stream, recorder };
   };
 
-  const handleStopStream = async ({ stream, recorder }: { stream: MediaStream | null; recorder: RecordRTC | null }) => {
-    recorder?.stopRecording(async () => {
-      const blob: Blob | undefined = recorder?.getBlob();
-      if (blob && currentWorkspaceId && accessToken && activeItemId && activeItemType) {
-        mutate({
-          blob,
-          currentWorkspaceId,
-          accessToken,
-          activeItemId,
-          activeItemType
-        });
-        const tracks = stream?.getTracks();
-        if (tracks) {
-          tracks.forEach((track) => track.stop());
-        }
-        // Invalidate React Query
-        queryClient.invalidateQueries(['attachments']);
-      }
-    });
+  const handleStopStream = async ({ blob }: { blob: Blob | undefined }) => {
+    const combinedStream = new MediaStream();
+    const recorder = new MediaRecorder(combinedStream);
+    dispatch(setScreenRecordingMedia({ recorder, stream: combinedStream }));
+    if (blob && currentWorkspaceId && accessToken && activeItemId && activeItemType) {
+      mutate({
+        blob,
+        currentWorkspaceId,
+        accessToken,
+        activeItemId,
+        activeItemType
+      });
+      // const tracks = stream?.getTracks();
+      // if (tracks) {
+      //   tracks.forEach((track) => track.stop());
+      // }
+      // Invalidate React Query
+      queryClient.invalidateQueries(['attachments']);
+    }
 
     dispatch(setScreenRecording('idle'));
-    const newAction: { recorder: RecordRTC | null; stream: MediaStream | null } = {
+    const newAction: { recorder: MediaRecorder | null; stream: MediaStream | null } = {
       stream: null,
       recorder: null
     };

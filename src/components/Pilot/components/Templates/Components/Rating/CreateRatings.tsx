@@ -2,15 +2,13 @@ import React, { useState, ChangeEvent } from 'react';
 import Picker from '@emoji-mart/react';
 import data from '@emoji-mart/data';
 import SaveCols from '../SaveCols';
-import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
+import { useAppSelector } from '../../../../../../app/hooks';
 import { useCreateDropdownField } from '../../../../../../features/list/listService';
-import { setIsTasksUpdated } from '../../../../../../features/task/taskSlice';
 
 function CreateRatings() {
   const [value, setValue] = useState<number>(1);
   const [isPickerVisible, setIsPickerVisible] = useState<boolean>(false);
   const [selectedEmoji, setSelectedEmoji] = useState<string | undefined>(undefined);
-  const dispatch = useAppDispatch();
 
   const { newCustomPropertyDetails, entityForCustom } = useAppSelector((state) => state.task);
 
@@ -34,7 +32,6 @@ function CreateRatings() {
         is_underlined: is_underlined as string
       };
       const customType = newCustomPropertyDetails.type.toLowerCase();
-      dispatch(setIsTasksUpdated(false));
       if (value && selectedEmoji && name) {
         onCreate({
           name,

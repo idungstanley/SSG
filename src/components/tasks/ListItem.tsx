@@ -135,7 +135,8 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
   const { isOver, setNodeRef } = useDroppable({
     id: list.id,
     data: {
-      isOverList: true
+      isOverList: true,
+      overList: list
     }
   });
 

@@ -16,7 +16,7 @@ import { ACTIVE_COL_BG, DEFAULT_COL_BG } from '../../config';
 import DateFormat from '../../../DateFormat';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { EntityType } from '../../../../utils/EntityTypes/EntityType';
-import { IField } from '../../../../features/list/list.interfaces';
+import { IField, ITask_statuses } from '../../../../features/list/list.interfaces';
 import TextField from './CustomField/TextField/TextField';
 import LabelsWrapper from './CustomField/Labels/LabelsWrapper';
 import NumberField from './CustomField/Number/NumberField';
@@ -27,6 +27,7 @@ import EmailWebsiteField from './CustomField/EmailWebsiteField/EmailWebsiteField
 import PhoneField from './CustomField/Phone/PhoneField';
 import CheckboxField from './CustomField/Checkbox/CheckboxField';
 import StatusDropdown from '../../../status/StatusDropdown';
+import RatingField from './CustomField/Ratings/RatingField';
 
 interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   value: TaskValue;
@@ -34,9 +35,10 @@ interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   task: Task;
   fieldId: string;
   customFields?: IField[];
+  taskStatuses?: ITask_statuses[];
 }
 
-export function Col({ value, field, fieldId, task, customFields, ...props }: ColProps) {
+export function Col({ value, field, fieldId, task, customFields, taskStatuses, ...props }: ColProps) {
   const dispatch = useAppDispatch();
   const { taskId } = useParams();
 
@@ -57,11 +59,11 @@ export function Col({ value, field, fieldId, task, customFields, ...props }: Col
         style={{ backgroundColor: task.status.color }}
         onClick={() => {
           dispatch(setCurrentTaskStatusId(task.id as string));
-          dispatch(setSelectedTaskParentId((task.list_id || task.parent_id) as string));
-          dispatch(setSelectedTaskType(task?.list_id ? EntityType.task : EntityType.subtask));
+          dispatch(setSelectedTaskParentId((task.parent_id || task.list_id) as string));
+          dispatch(setSelectedTaskType(task?.parent_id ? EntityType.subtask : EntityType.task));
         }}
       >
-        <StatusDropdown TaskCurrentStatus={task.status} statusDropdownType="name" />
+        <StatusDropdown TaskCurrentStatus={task.status} taskStatuses={taskStatuses} statusDropdownType="name" />
       </div>
     ) : (
       <></>
@@ -157,9 +159,16 @@ export function Col({ value, field, fieldId, task, customFields, ...props }: Col
         taskCustomFields={task.custom_fields?.find((i) => i.id === fieldId)}
         fieldId={fieldId}
       />
+    ),
+    rating: (
+      <RatingField
+        entityCustomProperty={customFields?.find((i) => i.id === fieldId)}
+        taskId={task.id}
+        taskCustomFields={task.custom_fields?.find((i) => i.id === fieldId)}
+        fieldId={fieldId}
+      />
     )
   };
-
   return (
     <>
       <td

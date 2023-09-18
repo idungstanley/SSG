@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { UseUpdateTaskViewSettings, getTaskListService } from '../../features/task/taskService';
@@ -11,49 +11,65 @@ import ActiveHub from '../../layout/components/MainLayout/extendedNavigation/Act
 import hubIcon from '../../assets/branding/hub.png';
 import FilterByAssigneesSliderOver from '../workspace/lists/components/renderlist/filters/FilterByAssigneesSliderOver';
 import { useScroll } from '../../hooks/useScroll';
-import {
-  setIsTasksUpdated,
-  setSaveSettingList,
-  setSaveSettingOnline,
-  setTasks,
-  setUpdateCords
-} from '../../features/task/taskSlice';
+import { setSaveSettingList, setSaveSettingOnline, setTasks, setUpdateCords } from '../../features/task/taskSlice';
 import TaskQuickAction from '../workspace/tasks/component/taskQuickActions/TaskQuickAction';
 import { List } from '../../components/Views/ui/List/List';
 import { Header } from '../../components/TasksHeader';
-import { GroupHorizontalScroll } from '../../components/ScrollableContainer/GroupHorizontalScroll';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
 import { ITaskFullList } from '../../features/task/interface.tasks';
 import { useformatSettings } from '../workspace/tasks/TaskSettingsModal/ShowSettingsModal/FormatSettings';
+import { IListDetailRes } from '../../features/list/list.interfaces';
 
 export function ListPage() {
   const dispatch = useAppDispatch();
   const { listId, taskId } = useParams();
 
-  const { tasks: tasksStore, isTasksUpdated, saveSettingLocal } = useAppSelector((state) => state.task);
+  const { tasks: tasksStore, saveSettingLocal } = useAppSelector((state) => state.task);
+
+  const [tasksFromRes, setTasksFromRes] = useState<ITaskFullList[]>([]);
+  const [listDetailsFromRes, setListDetailsFromRes] = useState<IListDetailRes>();
 
   const containerRef = useRef<HTMLDivElement>(null);
+
   const formatSettings = useformatSettings();
 
   // get list details to set active entity
-  const { data: list } = UseGetListDetails(listId);
-  const listName = list?.data.list.name ?? '';
+  const { data: listDetails } = UseGetListDetails(listId);
+  const listName = listDetails?.data.list.name ?? '';
 
   // get task_view id for list view
-  const saveSettingList = list?.data?.list.task_views?.find((element) => element.type === 'list');
+  const saveSettingList = listDetails?.data?.list.task_views?.find((element) => element.type === 'list');
   const task_views_id = saveSettingList ? saveSettingList.id : '';
 
-  const { isSuccess } = UseUpdateTaskViewSettings({
+  UseUpdateTaskViewSettings({
     task_views_id,
     taskDate: saveSettingLocal as { [key: string]: boolean }
   });
 
   // get list tasks
   const { data, hasNextPage, fetchNextPage } = getTaskListService(listId);
-  const tasks = data ? data.pages.flatMap((page) => page.data.tasks) : [];
 
   useEffect(() => {
-    if (list) {
+    if (listId) {
+      dispatch(setTasks({}));
+      setTasksFromRes([]);
+    }
+  }, [listId]);
+
+  useEffect(() => {
+    if (data && !tasksFromRes.length) {
+      setTasksFromRes(data.pages.flatMap((page) => page.data.tasks as ITaskFullList[]));
+    }
+  }, [data]);
+
+  useEffect(() => {
+    if (listDetails) {
+      setListDetailsFromRes(listDetails);
+    }
+  }, [listDetails]);
+
+  useEffect(() => {
+    if (listDetails) {
       if (listId && !taskId) {
         dispatch(setActiveItem({ activeItemId: listId, activeItemType: EntityType.list, activeItemName: listName }));
       }
@@ -67,7 +83,7 @@ export function ListPage() {
     } else {
       dispatch(setSaveSettingOnline(saveSettingLocal));
     }
-  }, [list]);
+  }, [listDetails]);
 
   // infinite scroll
   useEffect(() => {
@@ -97,17 +113,16 @@ export function ListPage() {
   const onScroll = useScroll(() => dispatch(setUpdateCords()));
 
   useEffect(() => {
-    if (tasks.length && listId && !tasksStore[listId] && list?.data.list.custom_field_columns) {
-      const tasksWithCustomFields = tasks.map((task) => {
+    if (tasksFromRes.length && listId && !tasksStore[listId] && listDetailsFromRes?.data.list.custom_field_columns) {
+      const tasksWithCustomFields = tasksFromRes.map((task) => {
         return {
           ...task,
-          custom_field_columns: list.data.list.custom_field_columns
+          custom_field_columns: listDetailsFromRes.data.list.custom_field_columns
         };
       });
       dispatch(setTasks({ ...tasksStore, [listId]: tasksWithCustomFields as ITaskFullList[] }));
-      dispatch(setIsTasksUpdated(true));
     }
-  }, [tasks, list]);
+  }, [tasksFromRes, listDetailsFromRes]);
 
   return (
     <>
@@ -134,11 +149,14 @@ export function ListPage() {
           >
             <TaskQuickAction listDetailsData={listName} />
 
-            {tasksStore[listId as string] && tasks.length && isTasksUpdated ? (
-              <List tasks={tasksStore[listId as string]} subtasksCustomeFields={tasks[0].custom_field_columns} />
+            {tasksStore[listId as string] && tasksFromRes.length ? (
+              <List
+                tasks={tasksStore[listId as string]}
+                subtasksCustomeFields={tasksFromRes[0].custom_field_columns}
+                listDetails={listDetailsFromRes}
+              />
             ) : null}
           </div>
-          {tasks?.length > 1 && <GroupHorizontalScroll />}
         </>
       </Page>
     </>
