@@ -143,7 +143,7 @@ export default function CreateList() {
           label="Create List"
           padding="py-2 px-2"
           height="h-7"
-          width="w-24"
+          width="w-28"
         />
       </div>
     </div>
