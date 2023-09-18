@@ -2,8 +2,8 @@ import { Tooltip, TooltipProps, styled, tooltipClasses } from '@mui/material';
 import React from 'react';
 // import { cl } from '../utils';
 
-const ToolTip = styled(({ className, ...props }: TooltipProps) => (
-  <Tooltip {...props} arrow classes={{ popper: className }} placement="top" />
+const ToolTip = styled(({ className, placement, ...props }: TooltipProps) => (
+  <Tooltip {...props} arrow classes={{ popper: className }} placement={placement ?? 'top'} />
 ))(({ theme }) => ({
   [`& .${tooltipClasses.arrow}`]: {
     color: theme.palette.common.black
