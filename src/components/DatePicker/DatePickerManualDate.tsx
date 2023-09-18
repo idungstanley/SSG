@@ -181,7 +181,7 @@ export function DatePickerManualDates({ range }: DatePickerManualDatesProps) {
               onBlur={() => handleFilterDateDispatch('due')}
               value={dateString?.due}
               data-allowed-chars="0123456789/-"
-              onInput={(e: ChangeEvent<HTMLInputElement>) => setString({ ...dateString, due: e.target.value })}
+              onChange={(e) => handleChange(e, 'due')}
             />
             <div className="bg-alsoit-purple-300 rounded-md p-1 flex items-center w-6 h-6 absolute top-2 left-1">
               <CalendarIcon active={iconToggle.startIcon} fixed />
