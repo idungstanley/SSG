@@ -68,9 +68,10 @@ export function Col({ value, field, fieldId, task, customFields, taskStatuses, .
     ) : (
       <></>
     ),
-    created_at: <DateFormat date={value as string} font="text-sm" />,
-    updated_at: <DateFormat date={value as string} font="text-sm" />,
-    start_date: <DateFormat date={value as string} font="text-sm" task={task} />,
+    created_at: <DateFormat date={value as string} font="text-sm" type="created_at" />,
+    updated_at: <DateFormat date={value as string} font="text-sm" type="updated_at" />,
+    start_date: <DateFormat date={value as string} font="text-sm" task={task} type="start_date" />,
+    end_date: <DateFormat date={value as string} font="text-sm" task={task} type="end_date" />,
     dropdown: (
       <DropdownFieldWrapper
         taskId={task.id}
