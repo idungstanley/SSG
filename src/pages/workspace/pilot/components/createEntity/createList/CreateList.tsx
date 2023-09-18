@@ -23,6 +23,9 @@ import Wand from '../../../../../../assets/icons/Wand';
 import { ListColourProps } from '../../../../../../components/tasks/ListItem';
 import { createListManager } from '../../../../../../managers/List';
 import { setFilteredResults } from '../../../../../../features/search/searchSlice';
+import { ErrorHasDescendant } from '../../../../../../types';
+import Toast from '../../../../../../common/Toast';
+import { toast } from 'react-hot-toast';
 
 export default function CreateList() {
   const dispatch = useAppDispatch();
@@ -81,12 +84,22 @@ export default function CreateList() {
   const jsonColorString = JSON.stringify({ outerColour: paletteColor as string, innerColour: undefined });
   const { name } = formState;
   const onSubmit = async () => {
-    await createList.mutateAsync({
-      listName: name,
-      color: jsonColorString,
-      hubId: (createWlLink ? createWLID : null) || type === EntityType.hub ? id : null,
-      walletId: type === EntityType.wallet ? id : null
-    });
+    try {
+      await createList.mutateAsync({
+        listName: name,
+        color: jsonColorString,
+        hubId: (createWlLink ? createWLID : null) || type === EntityType.hub ? id : null,
+        walletId: type === EntityType.wallet ? id : null
+      });
+    } catch (error) {
+      const errorResponse = error as ErrorHasDescendant;
+      const isHasDescendant = errorResponse.data.data.has_descendants;
+      if (isHasDescendant) {
+        toast.custom((t) => (
+          <Toast type="error" title="Error Creating List" body="Parent Entity has a descendant" toastId={t.id} />
+        ));
+      }
+    }
   };
 
   return (

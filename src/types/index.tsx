@@ -14,6 +14,19 @@ export interface IErrorRequest {
   message: string;
 }
 
+export interface ErrorHasDescendant {
+  data: {
+    data: {
+      has_descendants: boolean;
+      message: {
+        title: string;
+        body: string;
+      };
+    };
+    statusText: string;
+    message: string;
+  };
+}
 export interface ISuccessRequest {
   message: {
     title: string;
