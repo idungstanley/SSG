@@ -1,11 +1,11 @@
 const palette = [
   'green',
-  'yellow',
+  '#FFD700',
   'blue',
   'pink',
   'black',
   'orange',
-  'gray',
+  '#F7B3DA',
   '#ED1500',
   'magenta',
   '#5CEE4F',
@@ -28,6 +28,8 @@ const palette = [
   '#306ACC',
   '#AC4B31',
   '#33AA2B',
-  '#CC951B'
+  '#CC951B',
+  '#CDCD00',
+  '#9BCD9B'
 ];
 export { palette };
