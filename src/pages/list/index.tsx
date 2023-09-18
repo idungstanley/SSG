@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { UseUpdateTaskViewSettings, getTaskListService } from '../../features/task/taskService';
@@ -15,16 +15,19 @@ import { setSaveSettingList, setSaveSettingOnline, setTasks, setUpdateCords } fr
 import TaskQuickAction from '../workspace/tasks/component/taskQuickActions/TaskQuickAction';
 import { List } from '../../components/Views/ui/List/List';
 import { Header } from '../../components/TasksHeader';
-import { GroupHorizontalScroll } from '../../components/ScrollableContainer/GroupHorizontalScroll';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
 import { ITaskFullList } from '../../features/task/interface.tasks';
 import { useformatSettings } from '../workspace/tasks/TaskSettingsModal/ShowSettingsModal/FormatSettings';
+import { IListDetailRes } from '../../features/list/list.interfaces';
 
 export function ListPage() {
   const dispatch = useAppDispatch();
   const { listId, taskId } = useParams();
 
   const { tasks: tasksStore, saveSettingLocal } = useAppSelector((state) => state.task);
+
+  const [tasksFromRes, setTasksFromRes] = useState<ITaskFullList[]>([]);
+  const [listDetailsFromRes, setListDetailsFromRes] = useState<IListDetailRes>();
 
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -45,7 +48,25 @@ export function ListPage() {
 
   // get list tasks
   const { data, hasNextPage, fetchNextPage } = getTaskListService(listId);
-  const tasks = data ? data.pages.flatMap((page) => page.data.tasks) : [];
+
+  useEffect(() => {
+    if (listId) {
+      dispatch(setTasks({}));
+      setTasksFromRes([]);
+    }
+  }, [listId]);
+
+  useEffect(() => {
+    if (data && !tasksFromRes.length) {
+      setTasksFromRes(data.pages.flatMap((page) => page.data.tasks as ITaskFullList[]));
+    }
+  }, [data]);
+
+  useEffect(() => {
+    if (listDetails) {
+      setListDetailsFromRes(listDetails);
+    }
+  }, [listDetails]);
 
   useEffect(() => {
     if (listDetails) {
@@ -92,16 +113,16 @@ export function ListPage() {
   const onScroll = useScroll(() => dispatch(setUpdateCords()));
 
   useEffect(() => {
-    if (tasks.length && listId && !tasksStore[listId] && listDetails?.data.list.custom_field_columns) {
-      const tasksWithCustomFields = tasks.map((task) => {
+    if (tasksFromRes.length && listId && !tasksStore[listId] && listDetailsFromRes?.data.list.custom_field_columns) {
+      const tasksWithCustomFields = tasksFromRes.map((task) => {
         return {
           ...task,
-          custom_field_columns: listDetails.data.list.custom_field_columns
+          custom_field_columns: listDetailsFromRes.data.list.custom_field_columns
         };
       });
       dispatch(setTasks({ ...tasksStore, [listId]: tasksWithCustomFields as ITaskFullList[] }));
     }
-  }, [tasks, listDetails]);
+  }, [tasksFromRes, listDetailsFromRes]);
 
   return (
     <>
@@ -128,15 +149,14 @@ export function ListPage() {
           >
             <TaskQuickAction listDetailsData={listName} />
 
-            {tasksStore[listId as string] && tasks.length ? (
+            {tasksStore[listId as string] && tasksFromRes.length ? (
               <List
                 tasks={tasksStore[listId as string]}
-                subtasksCustomeFields={tasks[0].custom_field_columns}
-                listDetails={listDetails}
+                subtasksCustomeFields={tasksFromRes[0].custom_field_columns}
+                listDetails={listDetailsFromRes}
               />
             ) : null}
           </div>
-          {tasks?.length > 1 && <GroupHorizontalScroll />}
         </>
       </Page>
     </>
