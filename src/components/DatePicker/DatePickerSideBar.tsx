@@ -187,18 +187,16 @@ export function DatePickerSideBar({ currentDate, setOpenSideBar }: DatePickerSid
       ) : (
         <VerticalScroll>
           <div className="flex flex-col w-full mt-1 space-y-2" style={{ height: '340px' }}>
-            <p
-              className="font-extrabold rounded-md border hover:bg-alsoit-gray-75 cursor-pointer hover:text-white text-xl flex justify-between px-2 py-0.5 w-full group"
-              onClick={() => handleDayClick('today')}
-            >
-              <span className="font-extrabold text-alsoit-text-md">Today</span>
-              <span className="text-right text-alsoit-gray-200 group-hover:text-white text-alsoit-text-md">
-                {dayjs().format('ddd')}
-              </span>
-            </p>
-            <p
-              className="font-extrabold rounded-md border hover:bg-alsoit-gray-75 cursor-pointer hover:text-white text-xl flex justify-between px-2 py-0.5 w-full group"
-              onClick={() =>
+            <QuickItemsWrapper handleClick={handleDayClick} settingValue="today">
+              <>
+                <span className="font-extrabold text-alsoit-text-md">Today</span>
+                <span className="text-right text-alsoit-gray-200 group-hover:text-white text-alsoit-text-md">
+                  {dayjs().format('ddd')}
+                </span>
+              </>
+            </QuickItemsWrapper>
+            <QuickItemsWrapper
+              handleClick={() =>
                 dispatch(
                   setHistoryMemory({
                     ...HistoryFilterMemory,
@@ -209,21 +207,23 @@ export function DatePickerSideBar({ currentDate, setOpenSideBar }: DatePickerSid
                   })
                 )
               }
+              settingValue=""
             >
-              <span className="font-extrabold text-alsoit-text-md">Later</span>
-              <span className="text-right text-alsoit-gray-200 group-hover:text-white text-alsoit-text-md">
-                {dayjs().add(4, 'hour').format('h:mm A')}
-              </span>
-            </p>
-            <p
-              className="font-extrabold rounded-md border hover:bg-alsoit-gray-75 cursor-pointer hover:text-white text-xl flex justify-between px-2 py-0.5 w-full group"
-              onClick={() => handleDayClick('tomorrow')}
-            >
-              <span className="font-extrabold text-alsoit-text-md">Tomorrow</span>
-              <span className="text-right text-alsoit-gray-200 group-hover:text-white text-alsoit-text-md">
-                {dayjs().add(1, 'day').format('ddd')}
-              </span>
-            </p>
+              <>
+                <span className="font-extrabold text-alsoit-text-md">Later</span>
+                <span className="text-right text-alsoit-gray-200 group-hover:text-white text-alsoit-text-md">
+                  {dayjs().add(4, 'hour').format('h:mm A')}
+                </span>
+              </>
+            </QuickItemsWrapper>
+            <QuickItemsWrapper handleClick={handleDayClick} settingValue="tomorrow">
+              <>
+                <span className="font-extrabold text-alsoit-text-md">Tomorrow</span>
+                <span className="text-right text-alsoit-gray-200 group-hover:text-white text-alsoit-text-md">
+                  {dayjs().add(1, 'day').format('ddd')}
+                </span>
+              </>
+            </QuickItemsWrapper>
             <p
               className="font-extrabold rounded-md border hover:bg-alsoit-gray-75 cursor-pointer hover:text-white text-xl flex justify-between px-2 py-0.5 w-full group"
               onClick={() => handleWeekendButtonClick('weekend')}
@@ -276,5 +276,22 @@ export function DatePickerSideBar({ currentDate, setOpenSideBar }: DatePickerSid
         </VerticalScroll>
       )}
     </div>
+  );
+}
+
+interface Props {
+  handleClick: (value: string) => void;
+  settingValue: string;
+  children: JSX.Element;
+}
+
+function QuickItemsWrapper({ handleClick, settingValue, children }: Props) {
+  return (
+    <p
+      className="font-extrabold rounded-md border hover:bg-alsoit-gray-75 cursor-pointer hover:text-white text-xl flex justify-between px-2 py-0.5 w-full group"
+      onClick={() => handleClick(settingValue)}
+    >
+      {children}
+    </p>
   );
 }
