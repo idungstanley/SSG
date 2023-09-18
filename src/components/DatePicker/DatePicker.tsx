@@ -120,8 +120,8 @@ export default function DatePicker({
           </div>
           <div
             onClick={() => {
-              setShowDatePickerOption ? dispatch(setPickedDateState(true)) : null;
-              handleClose && handleClose();
+              !range && setShowDatePickerOption ? dispatch(setPickedDateState(true)) : null;
+              !range && handleClose && handleClose();
             }}
           >
             <MiniDatePicker range={range} miniMode={openSideBar} fullCalendar />

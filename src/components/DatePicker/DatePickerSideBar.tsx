@@ -35,7 +35,7 @@ export function DatePickerSideBar({ currentDate, setOpenSideBar }: DatePickerSid
     if (field.type === 'week') {
       return (
         <p
-          className="font-extrabold rounded-md border hover:bg-alsoit-gray-75 hover:text-white text-xl flex justify-between px-2 py-0.5 w-full group"
+          className="font-extrabold rounded-md border hover:bg-alsoit-gray-75 cursor-pointer hover:text-white text-xl flex justify-between px-2 py-0.5 w-full group"
           onClick={() => handleWeekButtonClick(field.depth)}
         >
           <span className="font-extrabold text-alsoit-text-md">Next {field.depth} weeks</span>
@@ -49,7 +49,7 @@ export function DatePickerSideBar({ currentDate, setOpenSideBar }: DatePickerSid
     if (field.type === 'month') {
       return (
         <p
-          className="font-extrabold rounded-md hover:bg-alsoit-gray-75 hover:text-white text-xl flex justify-between px-2 py-0.5 w-full group"
+          className="font-extrabold rounded-md hover:bg-alsoit-gray-75 cursor-pointer hover:text-white text-xl flex justify-between px-2 py-0.5 w-full group"
           onClick={() => handleWeekButtonClick(field.depth * 4)}
         >
           <span className="font-extrabold text-alsoit-text-md">Next {field.depth} months</span>
@@ -187,18 +187,16 @@ export function DatePickerSideBar({ currentDate, setOpenSideBar }: DatePickerSid
       ) : (
         <VerticalScroll>
           <div className="flex flex-col w-full mt-1 space-y-2" style={{ height: '340px' }}>
-            <p
-              className="font-extrabold rounded-md border hover:bg-alsoit-gray-75 hover:text-white text-xl flex justify-between px-2 py-0.5 w-full group"
-              onClick={() => handleDayClick('today')}
-            >
-              <span className="font-extrabold text-alsoit-text-md">Today</span>
-              <span className="text-right text-alsoit-gray-200 group-hover:text-white text-alsoit-text-md">
-                {dayjs().format('ddd')}
-              </span>
-            </p>
-            <p
-              className="font-extrabold rounded-md border hover:bg-alsoit-gray-75 hover:text-white text-xl flex justify-between px-2 py-0.5 w-full group"
-              onClick={() =>
+            <QuickItemsWrapper handleClick={handleDayClick} settingValue="today">
+              <>
+                <span className="font-extrabold text-alsoit-text-md">Today</span>
+                <span className="text-right text-alsoit-gray-200 group-hover:text-white text-alsoit-text-md">
+                  {dayjs().format('ddd')}
+                </span>
+              </>
+            </QuickItemsWrapper>
+            <QuickItemsWrapper
+              handleClick={() =>
                 dispatch(
                   setHistoryMemory({
                     ...HistoryFilterMemory,
@@ -209,23 +207,25 @@ export function DatePickerSideBar({ currentDate, setOpenSideBar }: DatePickerSid
                   })
                 )
               }
+              settingValue=""
             >
-              <span className="font-extrabold text-alsoit-text-md">Later</span>
-              <span className="text-right text-alsoit-gray-200 group-hover:text-white text-alsoit-text-md">
-                {dayjs().add(4, 'hour').format('h:mm A')}
-              </span>
-            </p>
+              <>
+                <span className="font-extrabold text-alsoit-text-md">Later</span>
+                <span className="text-right text-alsoit-gray-200 group-hover:text-white text-alsoit-text-md">
+                  {dayjs().add(4, 'hour').format('h:mm A')}
+                </span>
+              </>
+            </QuickItemsWrapper>
+            <QuickItemsWrapper handleClick={handleDayClick} settingValue="tomorrow">
+              <>
+                <span className="font-extrabold text-alsoit-text-md">Tomorrow</span>
+                <span className="text-right text-alsoit-gray-200 group-hover:text-white text-alsoit-text-md">
+                  {dayjs().add(1, 'day').format('ddd')}
+                </span>
+              </>
+            </QuickItemsWrapper>
             <p
-              className="font-extrabold rounded-md border hover:bg-alsoit-gray-75 hover:text-white text-xl flex justify-between px-2 py-0.5 w-full group"
-              onClick={() => handleDayClick('tomorrow')}
-            >
-              <span className="font-extrabold text-alsoit-text-md">Tomorrow</span>
-              <span className="text-right text-alsoit-gray-200 group-hover:text-white text-alsoit-text-md">
-                {dayjs().add(1, 'day').format('ddd')}
-              </span>
-            </p>
-            <p
-              className="font-extrabold rounded-md border hover:bg-alsoit-gray-75 hover:text-white text-xl flex justify-between px-2 py-0.5 w-full group"
+              className="font-extrabold rounded-md border hover:bg-alsoit-gray-75 cursor-pointer hover:text-white text-xl flex justify-between px-2 py-0.5 w-full group"
               onClick={() => handleWeekendButtonClick('weekend')}
             >
               <span className="font-extrabold text-alsoit-text-md">This Weekend</span>
@@ -234,7 +234,7 @@ export function DatePickerSideBar({ currentDate, setOpenSideBar }: DatePickerSid
               </span>
             </p>
             <p
-              className="font-extrabold rounded-md border hover:bg-alsoit-gray-75 hover:text-white text-xl flex justify-between px-2 py-0.5 w-full group"
+              className="font-extrabold rounded-md border hover:bg-alsoit-gray-75 cursor-pointer hover:text-white text-xl flex justify-between px-2 py-0.5 w-full group"
               onClick={() => handleWeekendButtonClick('next weekend')}
             >
               <span className="font-extrabold text-alsoit-text-md">Next Weekend</span>
@@ -243,7 +243,7 @@ export function DatePickerSideBar({ currentDate, setOpenSideBar }: DatePickerSid
               </span>
             </p>
             <p
-              className="font-extrabold rounded-md border hover:bg-alsoit-gray-75 hover:text-white text-xl flex justify-between px-2 py-0.5 w-full group"
+              className="font-extrabold rounded-md border hover:bg-alsoit-gray-75 cursor-pointer hover:text-white text-xl flex justify-between px-2 py-0.5 w-full group"
               onClick={() => handleWeekClick()}
             >
               <span className="font-extrabold text-alsoit-text-md">Next Week</span>
@@ -252,7 +252,7 @@ export function DatePickerSideBar({ currentDate, setOpenSideBar }: DatePickerSid
               </span>
             </p>
             <p
-              className="font-extrabold rounded-md border hover:bg-alsoit-gray-75 hover:text-white text-xl flex justify-between px-2 py-0.5 w-full group"
+              className="font-extrabold rounded-md border hover:bg-alsoit-gray-75 cursor-pointer hover:text-white text-xl flex justify-between px-2 py-0.5 w-full group"
               onClick={() => handleWeekButtonClick(1)}
             >
               <span className="font-extrabold text-alsoit-text-md">Next Work Week</span>
@@ -261,7 +261,7 @@ export function DatePickerSideBar({ currentDate, setOpenSideBar }: DatePickerSid
               </span>
             </p>
             <p
-              className="font-extrabold rounded-md border hover:bg-alsoit-gray-75 hover:text-white text-xl flex justify-between px-2 py-0.5 w-full group"
+              className="font-extrabold rounded-md border hover:bg-alsoit-gray-75 cursor-pointer hover:text-white text-xl flex justify-between px-2 py-0.5 w-full group"
               onClick={() => handleWeekButtonClick(2)}
             >
               <span className="font-extrabold text-alsoit-text-md">Next 2 Work Weeks</span>
@@ -276,5 +276,22 @@ export function DatePickerSideBar({ currentDate, setOpenSideBar }: DatePickerSid
         </VerticalScroll>
       )}
     </div>
+  );
+}
+
+interface Props {
+  handleClick: (value: string) => void;
+  settingValue: string;
+  children: JSX.Element;
+}
+
+function QuickItemsWrapper({ handleClick, settingValue, children }: Props) {
+  return (
+    <p
+      className="font-extrabold rounded-md border hover:bg-alsoit-gray-75 cursor-pointer hover:text-white text-xl flex justify-between px-2 py-0.5 w-full group"
+      onClick={() => handleClick(settingValue)}
+    >
+      {children}
+    </p>
   );
 }

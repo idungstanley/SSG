@@ -123,7 +123,7 @@ export default function CreateWallet() {
           label="Create Wallet"
           padding="py-2 px-2"
           height="h-7"
-          width="w-32"
+          width="w-fit"
         />
       </div>
     </div>

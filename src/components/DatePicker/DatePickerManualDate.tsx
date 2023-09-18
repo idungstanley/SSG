@@ -17,8 +17,11 @@ export function DatePickerManualDates({ range }: DatePickerManualDatesProps) {
   const { HistoryFilterMemory, selectedDate: taskTime } = useAppSelector((state) => state.task);
   const { selectedDate } = useAppSelector((state) => state.workspace);
   const { date_format, timezone } = useAppSelector((state) => state.userSetting);
-  const [dateType, setDateType] = useState<string | undefined>();
-  const [dateString, setString] = useState<DateString | null>(null);
+  const [dateType, setDateType] = useState<string | undefined>('start');
+  const [dateString, setString] = useState<DateString | null>({
+    start: 'Start',
+    due: 'Due'
+  });
   const [iconToggle] = useState<{ startIcon: boolean; dueIcon: boolean }>({
     dueIcon: false,
     startIcon: false
@@ -26,29 +29,49 @@ export function DatePickerManualDates({ range }: DatePickerManualDatesProps) {
   const { timeInterval } = useAppSelector((state) => state.calendar);
   const dispatch = useAppDispatch();
 
-  const handleFilterDateDispatch = () => {
-    const type = (selectedDate?.dateType && selectedDate.dateType) ?? 'start';
+  const handleFilterDateDispatch = (point: 'start' | 'due') => {
     const dateFormat = date_format?.toUpperCase();
 
-    const startDate = dateString?.start ? dayjs(dateString.start, dateFormat) : null;
-    const dueDate = dateString?.due ? dayjs(dateString.due, dateFormat) : null;
+    const startDate = dateString?.start ? dayjs(dateString.start, dateFormat) : undefined;
+    const dueDate = dateString?.due ? dayjs(dateString.due, dateFormat) : undefined;
 
-    const dateObject = type === 'start' ? startDate : dueDate;
+    const dateObject = point === 'start' ? startDate : dueDate;
 
     if (dateObject && dateObject.isValid()) {
-      type === 'start'
-        ? dispatch(setHistoryMemory({ ...HistoryFilterMemory, timePoint: 'due' }))
-        : dispatch(setHistoryMemory({ ...HistoryFilterMemory, timePoint: 'start' }));
+      if (point === 'start') {
+        dispatch(setHistoryMemory({ ...HistoryFilterMemory, timePoint: 'due' }));
+        setDateType('due');
+        dispatch(setTaskSelectedDate({ ...taskTime, from: dateObject }));
+      }
 
-      dispatch(setSelectedDate({ date: dateObject, dateType }));
+      if (point === 'due') {
+        dispatch(setHistoryMemory({ ...HistoryFilterMemory, timePoint: 'start' }));
+        dispatch(setTaskSelectedDate({ ...taskTime, to: dateObject }));
+      }
+      dispatch(setSelectedDate({ date: dateObject && dateObject, dateType }));
     }
   };
 
-  const handleChange = (event: ChangeEvent<HTMLDivElement>, point: string) => {
+  const handleChange = (event: ChangeEvent<HTMLInputElement>, point: string) => {
+    const inputData = event.target;
+    const allowedChars = inputData.getAttribute('data-allowed-chars');
+    const currentValue = inputData.value; // Use .value instead of .textContent
+
+    // Define a regular expression pattern based on the allowed characters
+    const pattern = new RegExp(`^[${allowedChars}]*$`);
+
+    // Check if the input matches the pattern
+    if (currentValue) {
+      if (!pattern.test(currentValue)) {
+        // If it doesn't match, remove invalid characters
+        inputData.value = currentValue.replace(new RegExp(`[^${allowedChars}]`, 'g'), '');
+      }
+    }
+
     if (point === 'from') {
-      setString((prev) => ({ ...prev, start: event.target.textContent as string }));
+      setString((prev) => ({ ...prev, start: inputData.value as string }));
     } else {
-      setString((prev) => ({ ...prev, due: event.target.textContent as string }));
+      setString((prev) => ({ ...prev, due: inputData.value as string }));
     }
   };
 
@@ -56,25 +79,39 @@ export function DatePickerManualDates({ range }: DatePickerManualDatesProps) {
     if (point === 'start') {
       dispatch(setTaskSelectedDate({ to: taskTime?.to }));
       dispatch(setHistoryMemory({ ...HistoryFilterMemory, timePoint: 'due' }));
-      setString((prev) => ({ ...prev, start: undefined }));
+      setString((prev) => ({ ...prev, start: 'Start' }));
       dispatch(setSelectedDate({ ...selectedDate, date: taskTime?.to ?? dayjs() }));
     }
     if (point === 'due') {
       dispatch(setTaskSelectedDate({ from: taskTime?.from }));
       dispatch(setHistoryMemory({ ...HistoryFilterMemory, timePoint: 'start' }));
-      setString((prev) => ({ ...prev, due: undefined }));
+      setString((prev) => ({ ...prev, due: 'Due' }));
+    }
+  };
+
+  const handleClearTime = (point: string) => {
+    if (point === 'start') {
+      dispatch(setHistoryMemory({ ...HistoryFilterMemory, time: { ...HistoryFilterMemory?.time, from: undefined } }));
+    }
+
+    if (point === 'due') {
+      dispatch(setHistoryMemory({ ...HistoryFilterMemory, time: { ...HistoryFilterMemory?.time, to: undefined } }));
     }
   };
 
   useEffect(() => {
-    if (taskTime) {
+    if (taskTime?.from) {
       setString({
-        start: taskTime?.from?.format(date_format?.toUpperCase()),
-        due: taskTime?.to?.format(date_format?.toUpperCase())
+        ...dateString,
+        start: taskTime?.from?.format(date_format?.toUpperCase())
       });
     }
-    if (selectedDate?.dateType) {
-      setDateType(selectedDate.dateType);
+
+    if (taskTime?.to) {
+      setString({
+        ...dateString,
+        due: taskTime?.to?.format(date_format?.toUpperCase())
+      });
     }
   }, [taskTime, selectedDate]);
 
@@ -85,34 +122,25 @@ export function DatePickerManualDates({ range }: DatePickerManualDatesProps) {
           {/* Set Start Date Selection */}
           <div className="relative">
             {taskTime?.from && (
-              <div className="absolute bg-white w-max px-1 -top-1.5 left-3 text-alsoit-text-sm z-20">start Date</div>
+              <div className="absolute bg-white w-max px-1 -top-1.5 left-3 text-alsoit-text-sm z-20">Start Date</div>
             )}
-            <label
-              htmlFor="from"
-              className="flex space-y-1 text-xs items-center w-40 h-10 border border-alsoit-purple-300 rounded-md py-1.5 px-0.5 relative"
-            >
-              <div className="flex space-x-1 items-center">
-                <div className="bg-alsoit-purple-300 rounded-md p-1">
-                  <CalendarIcon active={iconToggle.startIcon} fixed />
-                </div>
-                <div className="relative flex items-center">
-                  <div
-                    className="h-4 px-0.5 text-alsoit-text-sm font-semibold"
-                    contentEditable
-                    suppressContentEditableWarning
-                    onBlur={handleFilterDateDispatch}
-                    onClick={() => dispatch(setHistoryMemory({ ...HistoryFilterMemory, timePoint: 'start' }))}
-                    onInput={(e: ChangeEvent<HTMLDivElement>) => handleChange(e, 'from')}
-                  >
-                    {(taskTime?.from && dayjs(taskTime?.from).format(date_format?.toUpperCase())) ?? 'Start'}
-                  </div>
-                  {taskTime?.from && (
-                    <div className="pt-1.5" onClick={() => clearDatesFilter('start')}>
-                      <CancelIcon active dimensions={{ height: 20, width: 20 }} />
-                    </div>
-                  )}
-                </div>
+            <input
+              type="text"
+              className="w-40 h-10 border border-alsoit-purple-300 rounded-md py-1.5 px-8 relative text-alsoit-text-sm font-semibold"
+              onBlur={() => handleFilterDateDispatch('start')}
+              value={dateString?.start}
+              data-allowed-chars="0123456789/-"
+              onChange={(e) => handleChange(e, 'from')}
+            />
+            <div className="bg-alsoit-purple-300 rounded-md p-1 flex items-center w-6 h-6 absolute top-2 left-1">
+              <CalendarIcon active={iconToggle.startIcon} fixed />
+            </div>
+            {taskTime?.from && (
+              <div className="pt-1.5 absolute top-1.5 left-20" onClick={() => clearDatesFilter('start')}>
+                <CancelIcon active dimensions={{ height: 20, width: 20 }} />
               </div>
+            )}
+            <div className="absolute top-5 left-24">
               {selectedDate?.date && taskTime?.from ? (
                 <ReusableSelect
                   options={createDynamicTimeComponent(timeInterval, timezone)}
@@ -135,44 +163,40 @@ export function DatePickerManualDates({ range }: DatePickerManualDatesProps) {
                   {(HistoryFilterMemory?.time?.from && `${HistoryFilterMemory?.time?.from}`) ?? undefined}
                 </span>
               )}
-            </label>
+              {HistoryFilterMemory?.time?.from && (
+                <div className="pt-1.5 absolute -top-3.5 left-10" onClick={() => handleClearTime('start')}>
+                  <CancelIcon active dimensions={{ height: 20, width: 20 }} />
+                </div>
+              )}
+            </div>
           </div>
-          {/* Set Due Date selection */}
+          {/* set Due date Selection */}
           <div className="relative">
             {taskTime?.to && (
               <div className="absolute bg-white w-max px-1 -top-1.5 left-3 text-alsoit-text-sm z-20">Due Date</div>
             )}
-            <label
-              htmlFor="to"
-              className="flex space-y-1 text-xs items-center w-40 h-10 border border-alsoit-purple-300 rounded-md py-1.5 px-0.5 relative"
-            >
-              <div className="flex space-x-1 items-center">
-                <div className="bg-alsoit-purple-300 rounded-md p-1">
-                  <CalendarIcon active={iconToggle.dueIcon} fixed />
-                </div>
-                <div className="flex items-center relative">
-                  <div
-                    className="h-4 px-0.5 text-alsoit-text-sm font-semibold"
-                    contentEditable
-                    suppressContentEditableWarning
-                    onBlur={handleFilterDateDispatch}
-                    onClick={() => dispatch(setHistoryMemory({ ...HistoryFilterMemory, timePoint: 'start' }))}
-                    onInput={(e: ChangeEvent<HTMLDivElement>) => handleChange(e, 'to')}
-                  >
-                    {(taskTime?.to && taskTime.to.format(date_format?.toUpperCase())) ?? 'Due'}
-                  </div>
-                  {taskTime?.to && (
-                    <div className="pt-1.5" onClick={() => clearDatesFilter('due')}>
-                      <CancelIcon active dimensions={{ height: 20, width: 20 }} />
-                    </div>
-                  )}
-                </div>
+            <input
+              type="text"
+              className="w-40 h-10 border border-alsoit-purple-300 rounded-md py-1.5 px-8 relative text-alsoit-text-sm font-semibold"
+              onBlur={() => handleFilterDateDispatch('due')}
+              value={dateString?.due}
+              data-allowed-chars="0123456789/-"
+              onChange={(e) => handleChange(e, 'due')}
+            />
+            <div className="bg-alsoit-purple-300 rounded-md p-1 flex items-center w-6 h-6 absolute top-2 left-1">
+              <CalendarIcon active={iconToggle.startIcon} fixed />
+            </div>
+            {taskTime?.to && (
+              <div className="pt-1.5 absolute top-1.5 left-20" onClick={() => clearDatesFilter('due')}>
+                <CancelIcon active dimensions={{ height: 20, width: 20 }} />
               </div>
+            )}
+            <div className="absolute top-5 left-24">
               {selectedDate?.date && taskTime?.to ? (
                 <ReusableSelect
                   options={createDynamicTimeComponent(timeInterval, timezone)}
                   value={HistoryFilterMemory?.time?.to || ''}
-                  style="-left-44 top-2"
+                  style="top-3"
                   onclick={(e: string) => {
                     dispatch(
                       setHistoryMemory({
@@ -190,7 +214,12 @@ export function DatePickerManualDates({ range }: DatePickerManualDatesProps) {
                   {(HistoryFilterMemory?.time?.to && `${HistoryFilterMemory?.time?.to}`) ?? undefined}
                 </span>
               )}
-            </label>{' '}
+              {HistoryFilterMemory?.time?.to && (
+                <div className="pt-1.5 absolute -top-3.5 left-10" onClick={() => handleClearTime('due')}>
+                  <CancelIcon active dimensions={{ height: 20, width: 20 }} />
+                </div>
+              )}
+            </div>
           </div>
         </div>
       ) : (
@@ -207,9 +236,9 @@ export function DatePickerManualDates({ range }: DatePickerManualDatesProps) {
               className="h-4 px-1 font-semibold w-28 text-alsoit-text-lg"
               contentEditable
               suppressContentEditableWarning
-              onBlur={handleFilterDateDispatch}
+              onBlur={() => handleFilterDateDispatch('start')}
               onClick={() => dispatch(setHistoryMemory({ ...HistoryFilterMemory, timePoint: 'start' }))}
-              onInput={(e: ChangeEvent<HTMLDivElement>) => handleChange(e, 'from')}
+              onInput={(e: ChangeEvent<HTMLInputElement>) => handleChange(e, 'due')}
             >
               {(taskTime?.from && dayjs(taskTime?.from).format(date_format?.toUpperCase())) ?? 'Start Date'}
             </div>

@@ -11,7 +11,6 @@ import { EntityType } from '../../../../utils/EntityTypes/EntityType';
 import { IDuration } from '../../../../features/task/interface.tasks';
 import { runTimer } from '../../../../utils/RecordTimer';
 import {
-  setRecordBlob,
   setRecorderInterval,
   setScreenRecordingMedia,
   setUpdateRecoderDuration
@@ -24,12 +23,10 @@ export interface IFormData {
 }
 
 export default function Recording() {
-  const { activeTabId, activeItemId, activeItemType, isMuted } = useAppSelector((state) => state.workspace);
   const { recorderDuration } = useAppSelector((state) => state.task);
   const { hubId, subhubId, listId, workSpaceId, taskId } = useParams();
 
   const [time, setTime] = useState<IDuration>(recorderDuration);
-
   const [recordState, setRecordState] = useState<boolean>(false);
 
   const dispatch = useAppDispatch();
@@ -43,6 +40,7 @@ export default function Recording() {
     recordedData
   } = useScreenRecorder();
   const { screenRecording } = useAppSelector((state) => state.task);
+  const { activeTabId, activeItemId, activeItemType, isMuted } = useAppSelector((state) => state.workspace);
 
   const startRecording = async () => {
     Record();
@@ -77,7 +75,7 @@ export default function Recording() {
   }
 
   const run = runTimer({
-    isRunning: false,
+    isRunning: recordState,
     setTime: setTime
   });
 
@@ -96,7 +94,6 @@ export default function Recording() {
   useEffect(() => {
     if (recordedBlob) {
       dispatch(setScreenRecordingMedia(recordedData));
-      dispatch(setRecordBlob(recordedBlob));
     }
   }, [recordedBlob]);
 

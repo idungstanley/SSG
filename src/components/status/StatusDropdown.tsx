@@ -62,7 +62,7 @@ export default function StatusDropdown({ TaskCurrentStatus, statusDropdownType, 
             onClick={(e) => handleOpenStatusDropdown(e)}
             className="flex items-center justify-center w-full text-sm focus:outline-none hover:text-gray-700"
           >
-            <div ref={relativeRef}>
+            <div ref={relativeRef} className="mb-1">
               {statusDropdownType === 'name' ? (
                 TaskCurrentStatus.name
               ) : (

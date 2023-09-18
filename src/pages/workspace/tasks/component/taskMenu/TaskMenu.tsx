@@ -17,6 +17,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { setSelectedTasksArray, setShowTaskNavigation } from '../../../../../features/task/taskSlice';
 import RoundedCheckbox from '../../../../../components/Checkbox/RoundedCheckbox';
 import PriorityDropdown from '../../../../../components/priority/PriorityDropdown';
+import ToolTip from '../../../../../components/Tooltip/Tooltip';
 
 export default function TaskMenu() {
   const dispatch = useDispatch();
@@ -45,96 +46,112 @@ export default function TaskMenu() {
   const TaskIcons = [
     {
       id: 1,
+      label: 'Set watchers',
       icons: <IoEyeOutline />,
       handleClick: () => ({}),
       isVisible: true
     },
     {
       id: 2,
+      label: 'Set assignees',
       icons: <UserPlusIcon />,
       handleClick: () => ({}),
       isVisible: true
     },
     {
       id: 3,
+      label: 'Set Status',
       icons: <MdOutlineDeveloperBoard />,
       handleClick: () => ({}),
       isVisible: true
     },
     {
       id: 4,
+      label: 'Set Status',
       icons: <BsTags />,
       handleClick: () => ({}),
       isVisible: true
     },
     {
       id: 5,
+      label: 'Set Tags',
       icons: <TbSubtask />,
       handleClick: () => ({}),
       isVisible: true
     },
     {
       id: 6,
+      label: 'Convert to Subtask',
       icons: <MdOutlineDriveFileMove />,
       handleClick: () => ({}),
       isVisible: true
     },
     {
       id: 7,
+      label: 'Move tasks or add tasks in multiple Lists',
       icons: <HiOutlineDocumentDuplicate />,
       handleClick: () => ({}),
       isVisible: true
     },
     {
       id: 8,
+      label: 'Duplicate tasks',
       icons: <TbFolderX />,
       handleClick: () => ({}),
       isVisible: true
     },
     {
       id: 9,
+      label: 'Set Dates',
       icons: <MdDateRange />,
       handleClick: () => ({}),
       isVisible: true
     },
+    // {
+    //   id: 10,
+    //   label: 'Priority',
+    //   icons: <FlagIcon />,
+    //   handleClick: () => ({}),
+    //   isVisible: true
+    // },
     {
       id: 10,
-      icons: <FlagIcon />,
-      handleClick: () => ({}),
-      isVisible: true
-    },
-    {
-      id: 15,
+      label: 'Priority',
       icons: <PriorityDropdown taskCurrentPriority="low" />,
       handleClick: () => ({}),
       isVisible: true
     },
     {
       id: 11,
+      label: 'Dependencies',
       icons: <GiStoneStack />,
       handleClick: () => ({}),
       isVisible: true
     },
     {
       id: 12,
+      label: 'Merge tasks',
       icons: <BiMerge />,
       handleClick: () => ({}),
       isVisible: true
     },
     {
       id: 13,
+      label: 'Task Linking',
       icons: <GiJusticeStar />,
       handleClick: () => ({}),
       isVisible: true
     },
     {
       id: 14,
+      label: 'Set Custom Fields',
       icons: <BiEdit />,
       handleClick: () => ({}),
       isVisible: true
     },
     {
       id: 15,
+      label: 'Archive tasks',
       icons: <HiInbox />,
       handleClick: () => ({}),
       isVisible: true
@@ -142,6 +159,7 @@ export default function TaskMenu() {
     {
       id: 16,
       icons: <MdDeleteForever />,
+      label: 'Delete',
       handleClick: () => {
         dispatch(
           displayPrompt('Delete task', 'Would you like delete this task from the workspace?', [
@@ -171,7 +189,7 @@ export default function TaskMenu() {
   ];
 
   return (
-    <div className={`overflow-hidden ${isVisible ? 'slide-in' : 'slide-out'} z-100`}>
+    <div className={`overflow-hidden ${isVisible ? 'slide-in' : 'slide-out'} z-100 `}>
       <div
         className="abolute flex justify-between items-center w-12/12 h-11 bg-gray-800"
         style={{ transition: 'linear', transitionDelay: '100s' }}
@@ -190,13 +208,15 @@ export default function TaskMenu() {
         <div className="flex">
           {TaskIcons.map((menu) => (
             <>
-              <p
-                className="flex items-center px-2 cursor-pointer mt-0 text-white text-lg "
-                onClick={() => menu.handleClick()}
-                key={menu.id}
-              >
-                {menu.icons}
-              </p>
+              <ToolTip className="pt-2" title={menu.label} placement="bottom">
+                <p
+                  className="flex items-center px-2 cursor-pointer mt-0 text-white text-lg "
+                  onClick={() => menu.handleClick()}
+                  key={menu.id}
+                >
+                  {menu.icons}
+                </p>
+              </ToolTip>
             </>
           ))}
         </div>

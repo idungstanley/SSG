@@ -176,3 +176,9 @@ code {
   font-size: 0.7rem;
   color: #333;
 }
+
+input:focus {
+  outline: none !important;
+  border-radius: 6px;
+  border: none;
+}
