@@ -14,8 +14,19 @@ export const filterByAssignee = (tasks: Task[]) => {
 
   if (!assigneeIds.length) {
     return { filteredByAssignee: tasks };
-  } else {
-    const filteredByAssignee = tasks.filter((i) => i.assignees.filter((j) => assigneeIds.includes(j.id)).length);
-    return { filteredByAssignee };
   }
+  const filteredByAssignee: Task[] = [];
+  for (const task of tasks) {
+    if (!task.assignees.length && assigneeIds.includes('ns')) {
+      filteredByAssignee.push(task);
+    }
+    if (task.assignees.length) {
+      for (const assign of task.assignees) {
+        if (assigneeIds.includes(assign.id)) {
+          filteredByAssignee.push(task);
+        }
+      }
+    }
+  }
+  return { filteredByAssignee };
 };
