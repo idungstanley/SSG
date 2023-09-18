@@ -1,10 +1,11 @@
 import { ReactNode } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
-import { ChevronDoubleRightIcon } from '../../../../assets/icons';
 import { setShowPilotSideOver } from '../../../../features/general/slideOver/slideOverSlice';
 import { cl } from '../../../../utils';
 import Menu from '../HotKeys/components/Dropdown';
 import { setActiveTabId } from '../../../../features/workspace/workspaceSlice';
+import CompactIcon from '../../../../assets/icons/CompactIcon';
+import ExpandIcon from '../../../../assets/icons/ExpandIcon';
 
 interface HeaderProps {
   isMinified: boolean;
@@ -45,7 +46,7 @@ export default function Header({ menu, children, isMinified, additionalNavItems 
 
           {/* show / hide pilot toggle */}
           <button type="button" onClick={togglePilot} className="text-gray-400">
-            <ChevronDoubleRightIcon className="w-4 h-4" />
+            {isMinified ? <CompactIcon /> : <ExpandIcon />}
           </button>
         </div>
       </div>
