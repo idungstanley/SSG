@@ -171,7 +171,7 @@ export function SubtasksTable({ data, heads, customFields, listId, paddingLeft =
                               task_status={statusId}
                               // handleClose={handleClose}
                               customFields={customFields}
-                              isSplitSubtask={isShowNewLevel()}
+                              isSplitSubtask={true}
                               level={level}
                             />
                           ) : null
