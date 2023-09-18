@@ -48,9 +48,8 @@ export default function ListSubtasks({ subtasksTitle }: { subtasksTitle: string 
             <Menu.Button>
               <Button active={toggleAllSubtask}>
                 <SubtaskIcon color={toggleAllSubtask ? '#BF01FE' : '#424242'} />
-                <span>
-                  {subtasksTitle}
-                  {activeLabel ? `: ${activeLabel}` : ''}
+                <span className="whitespace-nowrap">
+                  {subtasksTitle}: {activeLabel ? `: ${activeLabel}` : ''}
                 </span>
                 <ArrowDownFilled active={toggleAllSubtask} />
               </Button>
