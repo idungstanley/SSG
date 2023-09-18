@@ -38,7 +38,8 @@ export default function FilterByAssigneeModal() {
 
   const {
     filters: { fields: filters },
-    meMode
+    meMode,
+    assigneeIds
   } = useAppSelector((state) => state.task);
 
   const [searchValue, setSearchValue] = useState<string>('');
@@ -64,7 +65,6 @@ export default function FilterByAssigneeModal() {
     dispatch(setMeMode(false));
     dispatch(setAssigneeIds([]));
     const isAssigneesInFilters = filters.find((i) => i.key === 'assignees');
-
     const newMemberObj = {
       value: memberName,
       id: memberId
@@ -99,6 +99,11 @@ export default function FilterByAssigneeModal() {
     } else {
       // create assignees filter
       dispatch(setFilterFields([...filters, generateFilter('assignees', { initialValue: newMemberObj })]));
+    }
+    if (assigneeIds.includes(memberId)) {
+      dispatch(setAssigneeIds(assigneeIds.filter((id) => id !== memberId)));
+    } else {
+      dispatch(setAssigneeIds([...assigneeIds, memberId]));
     }
   };
 

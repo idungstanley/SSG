@@ -191,13 +191,13 @@ export default function SubDropdown({ cords }: SubDropdownProps) {
       title: 'Docs',
       handleClick: () => ({}),
       icon: <BsFiletypeDoc className="w-5 text-gray-700 h-7" aria-hidden="true" />,
-      isVisible: true
+      isVisible: false
     },
     {
       title: 'Folder',
       handleClick: () => ({}),
       icon: <LinkIcon className="w-4 h-4" aria-hidden="true" />,
-      isVisible: true
+      isVisible: false
     },
     {
       title: 'From Template',
