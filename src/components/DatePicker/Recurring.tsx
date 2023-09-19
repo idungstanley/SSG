@@ -4,8 +4,8 @@ import ArrowUp from '../../assets/icons/ArrowUp';
 import RadioWrapper from './RadioWrapper';
 import FileIcon from '../../assets/icons/FileIcon';
 
-const IntervalArr = ['daily', 'weekly', 'fortnightly', 'monthly', 'days after', 'custom'];
-const statusArr = ['When Complete'];
+const IntervalArr = ['daily', 'weekly', 'fortnightly', 'monthly', 'yearly', 'days after', 'custom'];
+const statusArr = ['When Complete', 'When Done', 'Any'];
 
 export default function Recurring() {
   const [recuringInterval, setRecurringInterval] = useState<string>('daily');
@@ -14,6 +14,12 @@ export default function Recurring() {
     recurringInterval: false,
     statusInterval: false
   });
+  const [btnCheckStatus, setbtnCheck] = useState<{ [key: string]: boolean }>({
+    frequency: true,
+    status: false,
+    task: false
+  });
+
   return (
     <div className="flex flex-col space-y-2 p-2">
       <label htmlFor="recur" className="flex flex-col space-y-1">
@@ -24,7 +30,9 @@ export default function Recurring() {
         >
           <span className="capitalize">{recuringInterval}</span>
           {dropRecurring.recurringInterval ? <ArrowUp /> : <ArrowDown dimensions={{ height: 7, width: 7 }} />}
-          {dropRecurring.recurringInterval && <RecurringIntervals setFn={setRecurringInterval} arr={IntervalArr} />}
+          {dropRecurring.recurringInterval && (
+            <RecurringIntervals setFn={setRecurringInterval} arr={IntervalArr} activeItem={recuringInterval} />
+          )}
         </div>
         <div
           onClick={() => setDropRecurring((prev) => ({ ...prev, statusInterval: !prev.statusInterval }))}
@@ -32,18 +40,20 @@ export default function Recurring() {
         >
           <span className="capitalize">{statusInterval}</span>
           {dropRecurring.statusInterval ? <ArrowUp /> : <ArrowDown dimensions={{ height: 7, width: 7 }} />}
-          {dropRecurring.statusInterval && <RecurringIntervals setFn={setStatusInterval} arr={statusArr} />}
+          {dropRecurring.statusInterval && (
+            <RecurringIntervals setFn={setStatusInterval} arr={statusArr} activeItem={statusInterval} />
+          )}
         </div>
       </label>
       <div className="px-3 flex flex-col space-y-4">
-        <RadioWrapper>
+        <RadioWrapper btnCheckState={btnCheckStatus.task} checkStateFn={setbtnCheck} stateValue="task">
           <span className="text-alsoit-text-md font-semibold">Create Task</span>
         </RadioWrapper>
-        <RadioWrapper>
+        <RadioWrapper btnCheckState={btnCheckStatus['frequency']} checkStateFn={setbtnCheck} stateValue="frequency">
           <span className="text-alsoit-text-md font-semibold">Recur Forever</span>
         </RadioWrapper>
         <div className="flex flex-col space-y-1">
-          <RadioWrapper>
+          <RadioWrapper btnCheckState={btnCheckStatus['status']} checkStateFn={setbtnCheck} stateValue="status">
             <span className="text-alsoit-text-md font-semibold">Update Status to:</span>
           </RadioWrapper>
           <div className="bg-alsoit-gray-75 w-16 rounded-md cursor-pointer py-1 mx-6 flex space-x-1 items-center">
@@ -66,16 +76,20 @@ export default function Recurring() {
 
 interface RecurringIntervalsProps {
   arr: string[];
+  activeItem: string;
   setFn: Dispatch<SetStateAction<string>>;
 }
 
-function RecurringIntervals({ arr, setFn }: RecurringIntervalsProps) {
+function RecurringIntervals({ arr, setFn, activeItem }: RecurringIntervalsProps) {
   return (
     <div className="flex flex-col space-y-1 w-36 h-min rounded-md shadow-2xl absolute top-8 right-0 bg-alsoit-gray-50 p-2 z-20">
       {arr.map((interval, index) => {
         return (
           <div key={index} onClick={() => setFn(interval)}>
-            <RadioWrapper styles="text-alsoit-text-md p-2 hover:bg-alsoit-purple-50 capitalize cursor-pointer font-semibold flex space-x-1 p-1">
+            <RadioWrapper
+              styles="text-alsoit-text-md p-2 hover:bg-alsoit-purple-50 capitalize cursor-pointer font-semibold flex space-x-1 p-1"
+              btnCheckState={activeItem === interval}
+            >
               <span>{interval}</span>
             </RadioWrapper>
           </div>
