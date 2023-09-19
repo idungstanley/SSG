@@ -87,7 +87,7 @@ export default function SubDropdown({ cords }: SubDropdownProps) {
       }
     },
     {
-      label: 'Choose Location',
+      label: 'Choose ',
       style: 'white',
       callback: () => {
         dispatch(setVisibility(false));
