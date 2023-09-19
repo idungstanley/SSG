@@ -45,6 +45,7 @@ interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   isOver?: boolean;
   isSplitSubtask?: boolean;
   isLastSubtaskLevel: boolean;
+  isBlockToOpenSubtasks?: boolean;
 }
 
 export function StickyCol({
@@ -62,6 +63,7 @@ export function StickyCol({
   dragElement,
   isSplitSubtask,
   isLastSubtaskLevel,
+  isBlockToOpenSubtasks,
   ...props
 }: ColProps) {
   const dispatch = useAppDispatch();
@@ -328,13 +330,21 @@ export function StickyCol({
                 <span className={cl('h-0.5 bg-alsoit-purple-300 w-full m-0')}></span>
               </span>
             )}
-            <button onClick={onToggleDisplayingSubTasks} className="pl-1">
+            <button onClick={isBlockToOpenSubtasks ? () => null : onToggleDisplayingSubTasks} className="pl-1">
               {showSubTasks || toggleAllSubtask ? (
-                <div className={`${task.descendants_count > 0 ? 'w-3 h-3' : ' opacity-0 w-3 h-3 '}`}>
+                <div
+                  className={`${
+                    task.descendants_count > 0 && !isBlockToOpenSubtasks ? 'w-3 h-3' : ' opacity-0 w-3 h-3 '
+                  }`}
+                >
                   <CloseSubtask />
                 </div>
               ) : (
-                <div className={`${task.descendants_count > 0 ? 'w-3 h-3' : ' opacity-0 w-3 h-3'}`}>
+                <div
+                  className={`${
+                    task.descendants_count > 0 && !isBlockToOpenSubtasks ? 'w-3 h-3' : ' opacity-0 w-3 h-3'
+                  }`}
+                >
                   <OpenSubtask />
                 </div>
               )}
@@ -409,16 +419,14 @@ export function StickyCol({
           className="sticky left-0 flex items-start justify-start text-sm font-medium text-gray-900 cursor-pointer text-start"
           {...props}
         >
-          <div className="flex items-center h-full space-x-1 opacity-0">
-            <RoundedCheckbox
-              onChange={onChange}
-              isChecked={isChecked}
-              styles={`w-4 h-4 rounded-full ${
-                selectedTasksArray.length > 0 ? 'opacity-100' : 'opacity-0'
-              } cursor-pointer focus:outline-1 focus:ring-transparent  focus:border-2 focus:opacity-100 group-hover:opacity-100`}
-            />
-            <div className="pr-2">{dragElement}</div>
-          </div>
+          <div
+            className={`w-11 flex items-center h-full space-x-1 ${isSplitSubtask && 'bg-white/90 border-t'}`}
+            style={{
+              padding: '15px 0',
+              paddingLeft: `${isSplitSubtask ? '4px' : 0}`,
+              height: '64px'
+            }}
+          />
           <div
             style={{ paddingLeft }}
             className={cl(

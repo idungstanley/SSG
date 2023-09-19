@@ -21,6 +21,7 @@ interface RowProps {
   parentId?: string;
   isListParent: boolean;
   task_status?: string;
+  isSplitSubtask?: boolean;
   handleClose?: () => void | void;
 }
 
@@ -32,6 +33,7 @@ export function AddSubTask({
   parentId,
   task_status,
   isListParent,
+  isSplitSubtask,
   handleClose
 }: RowProps) {
   const { subtaskDefaultStatusId } = useAppSelector((state) => state.task);
@@ -78,6 +80,7 @@ export function AddSubTask({
           onClose={handleClose}
           paddingLeft={paddingLeft}
           tags={'tags' in task ? <Tags tags={task.tags} taskId={task.id} /> : null}
+          isSplitSubtask={isSplitSubtask}
           dragElement={
             <span ref={setNodeRef} {...listeners} {...attributes}>
               <MdDragIndicator

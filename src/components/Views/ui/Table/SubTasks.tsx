@@ -16,9 +16,18 @@ interface SubTasksProps {
   paddingLeft: number;
   taskStatuses?: ITask_statuses[];
   level: number;
+  isSplitSubtask?: boolean;
 }
 
-export function SubTasks({ listId, parentId, columns, paddingLeft, taskStatuses, level }: SubTasksProps) {
+export function SubTasks({
+  listId,
+  parentId,
+  columns,
+  paddingLeft,
+  taskStatuses,
+  level,
+  isSplitSubtask
+}: SubTasksProps) {
   const dispatch = useAppDispatch();
 
   const { draggableItemId } = useAppSelector((state) => state.list);
@@ -59,6 +68,7 @@ export function SubTasks({ listId, parentId, columns, paddingLeft, taskStatuses,
               isListParent={false}
               taskStatuses={taskStatuses}
               level={level}
+              isSplitSubtask={isSplitSubtask}
             />
           ))}
         </>

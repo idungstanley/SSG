@@ -34,6 +34,7 @@ interface RowProps {
   isSplitSubtask?: boolean;
   taskStatuses?: ITask_statuses[];
   level: number;
+  isBlockToOpenSubtasks?: boolean;
 }
 
 export function Row({
@@ -49,13 +50,12 @@ export function Row({
   customFields,
   isSplitSubtask,
   taskStatuses,
-  level
+  level,
+  isBlockToOpenSubtasks
 }: RowProps) {
   const dispatch = useAppDispatch();
 
-  const { showNewTaskField, showNewTaskId, toggleAllSubtask, splitSubTaskState } = useAppSelector(
-    (state) => state.task
-  );
+  const { showNewTaskField, showNewTaskId, toggleAllSubtask } = useAppSelector((state) => state.task);
 
   const [showSubTasks, setShowSubTasks] = useState(toggleAllSubtask);
 
@@ -157,6 +157,7 @@ export function Row({
           paddingLeft={paddingLeft}
           tags={'tags' in task ? <TaskTag tags={task.tags} entity_id={task.id} entity_type="task" /> : null}
           isSplitSubtask={isSplitSubtask}
+          isBlockToOpenSubtasks={isBlockToOpenSubtasks}
           isLastSubtaskLevel={level >= MAX_SUBTASKS_LEVEL}
           dragElement={
             <div ref={setNodeRef} {...listeners} {...attributes}>
@@ -218,22 +219,24 @@ export function Row({
         <AddSubTask
           task={newSubTask}
           columns={columns}
-          paddingLeft={splitSubTaskState ? 0 : DEFAULT_LEFT_PADDING + paddingLeft}
+          paddingLeft={isSplitSubtask ? 0 : DEFAULT_LEFT_PADDING + paddingLeft}
           isListParent={false}
           listId={listId}
-          parentId={splitSubTaskState ? (task.parent_id as string) : task.id}
+          parentId={isSplitSubtask ? (task.parent_id as string) : task.id}
           task_status={task.status.id}
+          isSplitSubtask={isSplitSubtask}
           handleClose={onCloseAddTaskFIeld}
         />
       ) : null}
 
-      {showSubTasks && !isSplitSubtask ? (
+      {showSubTasks ? (
         <SubTasks
           paddingLeft={DEFAULT_LEFT_PADDING + paddingLeft}
           listId={listId}
           parentId={task.id}
           columns={columns}
           taskStatuses={taskStatuses}
+          isSplitSubtask={isSplitSubtask}
           level={level + 1}
         />
       ) : null}
