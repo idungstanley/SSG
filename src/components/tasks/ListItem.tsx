@@ -260,7 +260,7 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
       {paletteId === list.id && show ? (
         <Palette
           topContent={<ListIconSelection handleSelection={handleSelection} activeShape={activeShape} />}
-          title="List Colour"
+          title="List"
           listComboColour={listComboColour}
           shape={activeShape}
           cords={cords}

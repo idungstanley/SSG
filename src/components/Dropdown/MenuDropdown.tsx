@@ -408,13 +408,15 @@ function GroupMenuOptions({ items }: ItemsProps) {
   );
 }
 
-function InlineBorderLabel({ label, topElement }: InlineBorderProps) {
+export function InlineBorderLabel({ label, topElement }: InlineBorderProps) {
   return (
-    <div className="relative py-1 mb-3 border-b">
+    <div className="relative items-center">
       {topElement}
-      <span className="absolute text-xs text-gray-400 transform -translate-x-1/2 bg-white left-1/2 -bottom-2">
-        {label}
-      </span>
+      <div className="flex items-center py-1">
+        <div className="flex-grow border-t border-gray-400"></div>
+        <span className="flex-shrink mx-1 text-gray-400">{label}</span>
+        <div className="flex-grow border-t border-gray-400"></div>
+      </div>
     </div>
   );
 }
