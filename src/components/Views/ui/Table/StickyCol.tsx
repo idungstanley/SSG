@@ -377,7 +377,7 @@ export function StickyCol({
                         <div
                           style={{
                             maxWidth: '200px',
-                            overflow: '',
+                            overflow: 'hidden',
                             whiteSpace: 'nowrap'
                           }}
                         >
