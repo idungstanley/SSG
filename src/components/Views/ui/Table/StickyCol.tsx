@@ -435,12 +435,6 @@ export function StickyCol({
               <ImCheckmark2 onClick={(e) => handleOnSave(e as unknown as React.MouseEvent<HTMLButtonElement, MouseEvent>, task.id)}></ImCheckmark2>
               </div>
               </ToolTip>
-              {/* <button
-                onClick={(e) => handleOnSave(e as React.MouseEvent<HTMLButtonElement, MouseEvent>, task.id)}
-                className="px-6 h-6 text-white text-sm rounded-md bg-alsoit-success flex items-center"
-              >
-                Save
-              </button>  */}
             </div>
             <div className="ml-4 pt-2">
               <StatusDropdown TaskCurrentStatus={task.status} />
