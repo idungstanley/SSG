@@ -139,7 +139,7 @@ export function StickyCol({
   });
 
   const handleOnSave = async (
-    e: React.KeyboardEvent<HTMLDivElement> | React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    e: React.KeyboardEvent<HTMLDivElement> | React.MouseEvent<HTMLButtonElement, MouseEvent> | React.MouseEvent<SVGElement, MouseEvent>,
     id: string
   ) => {
     if (id !== '0') {
@@ -432,7 +432,7 @@ export function StickyCol({
               </ToolTip>
               <ToolTip title="Save">
               <div className="border rounded-md p-1" style={{ borderColor: '#FFE7E7' }}>
-              <ImCheckmark2 onClick={(e) => handleOnSave(e as unknown as React.MouseEvent<HTMLButtonElement, MouseEvent>, task.id)}></ImCheckmark2>
+              <ImCheckmark2 onClick={(e) => handleOnSave(e as React.MouseEvent<SVGElement, MouseEvent>, task.id)}></ImCheckmark2>
               </div>
               </ToolTip>
             </div>
