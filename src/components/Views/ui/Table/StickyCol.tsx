@@ -19,7 +19,7 @@ import {
 } from '../../../../features/task/taskSlice';
 import { setActiveItem } from '../../../../features/workspace/workspaceSlice';
 import { UniqueIdentifier, useDraggable, useDroppable } from '@dnd-kit/core';
-import { ImCancelCircle } from 'react-icons/im';
+import { ImCancelCircle, ImCheckmark2 } from 'react-icons/im';
 import CloseSubtask from '../../../../assets/icons/CloseSubtask';
 import OpenSubtask from '../../../../assets/icons/OpenSubtask';
 import { Capitalize } from '../../../../utils/NoCapWords/Capitalize';
@@ -377,7 +377,7 @@ export function StickyCol({
                         <div
                           style={{
                             maxWidth: '200px',
-                            overflow: 'hidden',
+                            overflow: '',
                             whiteSpace: 'nowrap'
                           }}
                         >
@@ -424,18 +424,23 @@ export function StickyCol({
               `relative border-t ${verticalGrid && 'border-r'} w-full h-16  py-4 p-4 flex items-center`
             )}
           >
-            <div className="absolute flex ml-2 space-x-1 -mt-10">
+            <div className="absolute flex ml-2 space-x-1 -mt-10 bottom-0 right-0">
               <ToolTip title="Cancel">
                 <div className="border rounded-md p-1" style={{ borderColor: '#FFE7E7' }}>
                   <ImCancelCircle onClick={onClose} />
                 </div>
               </ToolTip>
-              <button
+              <ToolTip title="Save">
+              <div className="border rounded-md p-1" style={{ borderColor: '#FFE7E7' }}>
+              <ImCheckmark2 onClick={(e) => handleOnSave(e as unknown as React.MouseEvent<HTMLButtonElement, MouseEvent>, task.id)}></ImCheckmark2>
+              </div>
+              </ToolTip>
+              {/* <button
                 onClick={(e) => handleOnSave(e as React.MouseEvent<HTMLButtonElement, MouseEvent>, task.id)}
                 className="px-6 h-6 text-white text-sm rounded-md bg-alsoit-success flex items-center"
               >
                 Save
-              </button>
+              </button>  */}
             </div>
             <div className="ml-4 pt-2">
               <StatusDropdown TaskCurrentStatus={task.status} />
