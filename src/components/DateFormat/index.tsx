@@ -13,9 +13,10 @@ interface dateFormatProps {
   date: string | undefined;
   font?: string;
   task?: Task;
+  type?: 'start_date' | 'end_date' | 'created_at' | 'updated_at';
 }
 
-export default function DateFormat({ date, task, font = 'text-sm' }: dateFormatProps) {
+export default function DateFormat({ date, task, font = 'text-sm', type }: dateFormatProps) {
   const dispatch = useAppDispatch();
 
   const { date_format } = useAppSelector((state) => state.userSetting);
@@ -31,6 +32,7 @@ export default function DateFormat({ date, task, font = 'text-sm' }: dateFormatP
     task_id: taskId as string,
     taskDate: resetDate ? '' : (selectedDate?.date.format('YYYY-MM-DD HH:mm:ss') as string),
     listIds: selectedListIds.length ? selectedListIds : [selectedTaskParentId],
+    type: type as string,
     setTaskId,
     setResetDate
   });
