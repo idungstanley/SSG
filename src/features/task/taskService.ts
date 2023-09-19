@@ -821,7 +821,7 @@ export const GetTimeEntriesService = ({
           team_member_group_ids: null,
           is_active: is_active,
           page,
-          include_filters,
+          include_filters: 1,
           sorting: updatesortArr
         }
       });

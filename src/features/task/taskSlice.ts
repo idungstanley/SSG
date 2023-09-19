@@ -565,6 +565,9 @@ export const taskSlice = createSlice({
     setTimeSortArr(state, action: PayloadAction<SortOption[]>) {
       state.timeSortArr = action.payload;
     },
+    setTimeLogColumnData(state, action: PayloadAction<Header[]>) {
+      state.timeLogColumnData = action.payload;
+    },
     setScreenRecording(state, action: PayloadAction<'idle' | 'recording'>) {
       state.screenRecording = action.payload;
     },
@@ -686,6 +689,7 @@ export const {
   setTimeSortStatus,
   setTimeArr,
   setTimeSortArr,
+  setTimeLogColumnData,
   setScreenRecording,
   setScreenRecordingMedia,
   setUpdateCords,

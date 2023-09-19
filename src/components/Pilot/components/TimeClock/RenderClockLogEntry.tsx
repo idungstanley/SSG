@@ -41,7 +41,7 @@ export function RenderItemEntries({
 
   const { mutateAsync } = useSaveData();
 
-  const { timeArr, timeSortArr, timeSortStatus } = useAppSelector((state) => state.task);
+  const { timeArr, timeSortArr, timeSortStatus, timeLogColumnData } = useAppSelector((state) => state.task);
 
   const [icontoggle, setIconToggle] = useState<{ cancelIcon: boolean; plusIcon: boolean }>({
     cancelIcon: false,
@@ -80,11 +80,16 @@ export function RenderItemEntries({
     setViewChanges((prev) => ({ ...prev, logColumns: !prev.logColumns }));
   };
 
-  const handleSort = (header?: { field: string; dir: 'asc' | 'desc' }) => {
+  const handleSort = (header: { field: string; dir: 'asc' | 'desc' }, index: number) => {
     if (header) {
       if (timeSortArr.some((entry) => entry.field === header.field && entry.dir === header.dir)) return;
       dispatch(setTimeSortArr([...timeSortArr, header]));
       dispatch(setTimeSortStatus(!timeSortStatus));
+      setHeaders((prev) => {
+        return prev.map((header, currentIndex) => {
+          return currentIndex === index ? { ...header, sorted: true } : header;
+        });
+      });
     }
   };
 
@@ -116,7 +121,7 @@ export function RenderItemEntries({
           <table className="relative w-full">
             <thead className="relative flex items-center justify-between pb-2 text-xs border-b border-gray-400 font-extralight w-full">
               <tr className="flex items-center justify-between w-10/12">
-                {headers.map((col) => {
+                {timeLogColumnData.map((col, i) => {
                   return (
                     !col.hidden && (
                       <th
@@ -125,20 +130,10 @@ export function RenderItemEntries({
                       >
                         <span className="cursor-pointer">{col.title}</span>
                         <div
-                          className="flex items-center invisible group-hover:visible"
-                          onClick={() => handleSort({ field: col.value, dir: 'desc' })}
+                          className={`flex items-center ${col.sorted ? 'visible' : 'invisible'} group-hover:visible`}
+                          onClick={() => handleSort({ field: col.value, dir: 'desc' }, i)}
                         >
-                          {timeSortArr.length > 0 ? (
-                            timeSortArr.map((header) =>
-                              header.field === col.value ? (
-                                <ArrowUpIcon key={header.dir} />
-                              ) : (
-                                <SortIcon key={header.dir} active={!!timeArr.length} />
-                              )
-                            )
-                          ) : !timeSortStatus ? (
-                            <SortIcon active={!!timeArr.length} />
-                          ) : null}
+                          {col.sorted ? <ArrowUpIcon /> : <SortIcon active={!!timeArr.length} />}
                         </div>
                       </th>
                     )
@@ -198,32 +193,4 @@ export function RenderItemEntries({
       </div>
     );
   }
-}
-
-{
-  /* {col.title === 'user' && (
-                          <>
-                            {headerId === '' && timeSortArr.length === 0 && (
-                              <FaSort
-                                className="w-3 h-3 transition duration-200 rounded-full opacity-0 cursor-pointer text-alsoit-text-lg text-alsoit-gray-50 bg-alsoit-gray-200 group-hover:opacity-100"
-                                onClick={() => handleSort(col.title, col.id)}
-                              />
-                            )}
-                            {timeArr.includes(col.title) && timeSortArr.length && (
-                              <HeaderSort
-                                col={col}
-                                handleRemoveFilter={handleRemoveFilter}
-                                icontoggle={icontoggle}
-                                setIconToggle={setIconToggle}
-                              />
-                            )}
-                          </>
-                        )}
-                        {showSortModal && col.id === headerId && (
-                          <UserSortDropDown
-                            arr={teamMember}
-                            toggleModalFn={setShowSortModal}
-                            memberIds={teamMemberId}
-                          />
-                        )} */
 }
