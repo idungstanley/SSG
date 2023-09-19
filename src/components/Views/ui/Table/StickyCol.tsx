@@ -139,11 +139,11 @@ export function StickyCol({
   });
 
   const handleOnSave = async (
-    e: React.KeyboardEvent<HTMLDivElement> | React.MouseEvent<HTMLButtonElement, MouseEvent> | React.MouseEvent<SVGElement, MouseEvent>,
+    e: React.KeyboardEvent<HTMLDivElement> | React.MouseEvent<HTMLButtonElement, MouseEvent>,
     id: string
   ) => {
     if (id !== '0') {
-      handleEditTask(e as React.KeyboardEvent<HTMLDivElement> | React.MouseEvent<HTMLButtonElement, MouseEvent> | React.MouseEvent<SVGElement, MouseEvent>, id);
+      handleEditTask(e as React.KeyboardEvent<HTMLDivElement>, id);
     } else {
       onClickSave();
       onClose && onClose();
@@ -164,7 +164,7 @@ export function StickyCol({
     }
   };
 
-  const handleEditTask = async (e: React.KeyboardEvent<HTMLDivElement> | React.MouseEvent<HTMLButtonElement, MouseEvent> | React.MouseEvent<SVGElement, MouseEvent>, id: string) => {
+  const handleEditTask = async (e: React.KeyboardEvent<HTMLDivElement>, id: string) => {
     e.preventDefault();
     await editTaskMutation.mutateAsync({
       name: inputRef.current?.innerText as string,
@@ -432,7 +432,9 @@ export function StickyCol({
               </ToolTip>
               <ToolTip title="Save">
               <div className="border rounded-md p-1" style={{ borderColor: '#FFE7E7' }}>
-              <ImCheckmark2 onClick={(e) => handleOnSave(e as React.MouseEvent<SVGElement, MouseEvent>, task.id)}></ImCheckmark2>
+                <button className='h-0' onClick={(e) => handleOnSave(e as React.MouseEvent<HTMLButtonElement, MouseEvent>, task.id)}>
+              <ImCheckmark2 />
+              </button>
               </div>
               </ToolTip>
             </div>
