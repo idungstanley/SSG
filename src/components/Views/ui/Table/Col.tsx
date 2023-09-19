@@ -28,6 +28,7 @@ import PhoneField from './CustomField/Phone/PhoneField';
 import CheckboxField from './CustomField/Checkbox/CheckboxField';
 import StatusDropdown from '../../../status/StatusDropdown';
 import RatingField from './CustomField/Ratings/RatingField';
+import TimeField from './CustomField/TimeField/TimeField';
 
 interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   value: TaskValue;
@@ -132,6 +133,13 @@ export function Col({ value, field, fieldId, task, customFields, taskStatuses, .
       />
     ),
     date: <DateField />,
+    time: (
+      <TimeField
+        taskId={task.id}
+        taskCustomFields={task.custom_fields?.find((i) => i.id === fieldId)}
+        fieldId={fieldId}
+      />
+    ),
     website: (
       <EmailWebsiteField
         taskId={task.id}
