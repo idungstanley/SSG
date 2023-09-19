@@ -464,12 +464,14 @@ export const UseUpdateTaskDateService = ({
   task_id,
   taskDate,
   listIds,
+  type,
   setTaskId,
   setResetDate
 }: {
   task_id: string;
   taskDate: string;
   listIds: string[];
+  type?: string;
   setTaskId: React.Dispatch<React.SetStateAction<string | null>>;
   setResetDate: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
@@ -485,7 +487,7 @@ export const UseUpdateTaskDateService = ({
         url: `tasks/${task_id}`,
         method: 'PUT',
         data: {
-          start_date: taskDate
+          [type as string]: taskDate
         }
       });
       return data;
@@ -501,7 +503,7 @@ export const UseUpdateTaskDateService = ({
           task_id as string,
           listIds as string[],
           selectedTaskType === EntityType.task ? tasks : subtasks,
-          'start_date',
+          type as string,
           data.data.task.start_date as string
         );
         if (selectedTaskType === EntityType.task) {
