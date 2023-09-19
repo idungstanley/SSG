@@ -5,13 +5,12 @@ import { autoProgressProperties } from '../../../../../../features/task/interfac
 
 interface AutoProgressProps {
   task: ImyTaskData;
-  fieldId: string;
   entityCustomProperty?: IField;
 }
 
 const calcaluatePercent = (part: number, whole: number) => (part / whole) * 100;
 
-function AutoProgress({ task, fieldId, entityCustomProperty }: AutoProgressProps) {
+function AutoProgress({ task, entityCustomProperty }: AutoProgressProps) {
   const criteria: autoProgressProperties = entityCustomProperty?.properties as autoProgressProperties;
   const all_checklists = criteria.tracking.Checklists ? task.checklist_items_count : 0;
   const done_checklists = criteria.tracking.Checklists ? task.checklist_done_items_count : 0;

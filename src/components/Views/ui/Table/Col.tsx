@@ -154,13 +154,9 @@ export function Col({ value, field, fieldId, task, customFields, taskStatuses, .
         option={`${task.id !== '0' ? EntityType.task : 'getTeamId'}`}
       />
     ),
-    progress_manual: <AutoProgress task={task as ImyTaskData} fieldId={fieldId} />,
+    progress_manual: <AutoProgress task={task as ImyTaskData} />,
     progress_auto: (
-      <AutoProgress
-        task={task as ImyTaskData}
-        fieldId={fieldId}
-        entityCustomProperty={customFields?.find((i) => i.id === fieldId)}
-      />
+      <AutoProgress task={task as ImyTaskData} entityCustomProperty={customFields?.find((i) => i.id === fieldId)} />
     ),
     checkbox: (
       <CheckboxField
