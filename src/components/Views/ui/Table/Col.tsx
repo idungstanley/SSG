@@ -28,6 +28,7 @@ import PhoneField from './CustomField/Phone/PhoneField';
 import CheckboxField from './CustomField/Checkbox/CheckboxField';
 import StatusDropdown from '../../../status/StatusDropdown';
 import RatingField from './CustomField/Ratings/RatingField';
+import AutoProgress from './CustomField/Progress/AutoProgress';
 
 interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   value: TaskValue;
@@ -153,6 +154,10 @@ export function Col({ value, field, fieldId, task, customFields, taskStatuses, .
         itemId={task.id}
         option={`${task.id !== '0' ? EntityType.task : 'getTeamId'}`}
       />
+    ),
+    progress_manual: <AutoProgress task={task as ImyTaskData} />,
+    progress_auto: (
+      <AutoProgress task={task as ImyTaskData} entityCustomProperty={customFields?.find((i) => i.id === fieldId)} />
     ),
     checkbox: (
       <CheckboxField

@@ -111,6 +111,7 @@ export interface ITaskFullList {
   status: IStatus;
   has_descendants: boolean;
   descendants_count: number;
+  closed_subtasks_count: number;
   checklist_items_count: number;
   checklist_done_items_count: number;
   has_attachments: boolean;
