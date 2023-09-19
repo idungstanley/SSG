@@ -32,9 +32,7 @@ export default function CreateList() {
 
   const [paletteColor, setPaletteColor] = useState<string | ListColourProps | undefined>('black');
   const [showPalette, setShowPalette] = useState<boolean>(false);
-
   const { type, id } = selectedTreeDetails;
-
   const createList = useMutation(createListService, {
     onSuccess: (data) => {
       dispatch(setCreateListSlideOverVisibility(false));
