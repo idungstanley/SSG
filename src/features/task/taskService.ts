@@ -465,11 +465,13 @@ export const UseUpdateTaskDateService = ({
   taskDate,
   listIds,
   setTaskId,
+  type,
   setResetDate
 }: {
   task_id: string;
   taskDate: string;
   listIds: string[];
+  type: string;
   setTaskId: React.Dispatch<React.SetStateAction<string | null>>;
   setResetDate: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
