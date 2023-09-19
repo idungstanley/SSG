@@ -143,7 +143,7 @@ export function StickyCol({
     id: string
   ) => {
     if (id !== '0') {
-      handleEditTask(e as React.KeyboardEvent<HTMLDivElement>, id);
+      handleEditTask(e as React.KeyboardEvent<HTMLDivElement> | React.MouseEvent<HTMLButtonElement, MouseEvent> | React.MouseEvent<SVGElement, MouseEvent>, id);
     } else {
       onClickSave();
       onClose && onClose();
@@ -164,7 +164,7 @@ export function StickyCol({
     }
   };
 
-  const handleEditTask = async (e: React.KeyboardEvent<HTMLDivElement>, id: string) => {
+  const handleEditTask = async (e: React.KeyboardEvent<HTMLDivElement> | React.MouseEvent<HTMLButtonElement, MouseEvent> | React.MouseEvent<SVGElement, MouseEvent>, id: string) => {
     e.preventDefault();
     await editTaskMutation.mutateAsync({
       name: inputRef.current?.innerText as string,
