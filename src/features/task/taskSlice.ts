@@ -67,6 +67,7 @@ export interface ImyTaskData {
   priority: string | null | [{ id: string; initials: string; color: string; name: string }];
   start_date: string | null;
   descendants_count: number;
+  closed_subtasks_count: number;
   checklist_items_count: number;
   checklist_done_items_count: number;
   has_descendants: boolean;

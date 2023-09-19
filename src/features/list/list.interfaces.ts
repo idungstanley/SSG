@@ -2,6 +2,7 @@ import { ListColourProps } from '../../components/tasks/ListItem';
 import { IList, ItaskViews } from '../hubs/hubs.interfaces';
 import {
   ICheckListRes,
+  autoProgressProperties,
   currencyProperties,
   manualProgressProperties,
   ratingProperties
@@ -18,7 +19,7 @@ export interface IField {
   options: Options;
   name: string;
   type: string;
-  properties?: currencyProperties | ratingProperties | manualProgressProperties;
+  properties?: currencyProperties | ratingProperties | manualProgressProperties | autoProgressProperties;
 }
 
 export interface taskCountFields {

@@ -155,6 +155,13 @@ export function Col({ value, field, fieldId, task, customFields, taskStatuses, .
       />
     ),
     progress_manual: <AutoProgress task={task as ImyTaskData} fieldId={fieldId} />,
+    progress_auto: (
+      <AutoProgress
+        task={task as ImyTaskData}
+        fieldId={fieldId}
+        entityCustomProperty={customFields?.find((i) => i.id === fieldId)}
+      />
+    ),
     checkbox: (
       <CheckboxField
         taskId={task.id}
