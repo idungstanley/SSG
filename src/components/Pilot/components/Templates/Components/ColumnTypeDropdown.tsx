@@ -1,22 +1,23 @@
 import * as React from 'react';
 import MenuItem from '@mui/material/MenuItem';
-import ArrowDown from '../../../../../../assets/icons/ArrowDown';
-import { useAppSelector } from '../../../../../../app/hooks';
-import { Capitalize } from '../../../../../../utils/NoCapWords/Capitalize';
+import ArrowDown from '../../../../../assets/icons/ArrowDown';
+import { useAppSelector } from '../../../../../app/hooks';
+import { Capitalize } from '../../../../../utils/NoCapWords/Capitalize';
 import { Dialog, Transition } from '@headlessui/react';
-import { useAbsolute } from '../../../../../../hooks/useAbsolute';
-import DropdownOptions from './Dropdown';
-import TextOptions from '../Texts/Text';
-import DateOptions from '../Date/Date';
-import CurrencyOptions from '../Currency/Currency';
-import NumberOptions from '../Number/Number';
-import EmailOptions from '../Email/Email';
-import WebsiteOptions from '../Websites/WebsiteOptions';
-import PhoneOptions from '../Phone/PhoneOptions';
-import CheckBoxOptions from '../Checkbox/CheckboxOptions';
-import RatingOption from '../Rating/RatingOptions';
-import { VerticalScroll } from '../../../../../ScrollableContainer/VerticalScroll';
-import ProgressOptions from '../Progress/Progress';
+import { useAbsolute } from '../../../../../hooks/useAbsolute';
+import DropdownOptions from './Dropdown/Dropdown';
+import TextOptions from './Texts/Text';
+import DateOptions from './Date/Date';
+import CurrencyOptions from './Currency/Currency';
+import NumberOptions from './Number/Number';
+import EmailOptions from './Email/Email';
+import WebsiteOptions from './Websites/WebsiteOptions';
+import PhoneOptions from './Phone/PhoneOptions';
+import CheckBoxOptions from './Checkbox/CheckboxOptions';
+import RatingOption from './Rating/RatingOptions';
+import { VerticalScroll } from '../../../../ScrollableContainer/VerticalScroll';
+import ProgressOptions from './Progress/Progress';
+import TimeOption from './Time/TimeOptions';
 
 const columnTypes = [
   {
@@ -73,6 +74,11 @@ const columnTypes = [
     id: 'Progress',
     title: 'Progress',
     options: <ProgressOptions />
+  },
+  {
+    id: 'Time',
+    title: 'Time',
+    options: <TimeOption />
   }
 ];
 
