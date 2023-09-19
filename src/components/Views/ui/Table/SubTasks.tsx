@@ -12,13 +12,14 @@ import { ITask_statuses } from '../../../../features/list/list.interfaces';
 interface SubTasksProps {
   listId: string;
   parentId: string;
+  parentName: string;
   columns: listColumnProps[];
   paddingLeft: number;
   taskStatuses?: ITask_statuses[];
   level: number;
 }
 
-export function SubTasks({ listId, parentId, columns, paddingLeft, taskStatuses, level }: SubTasksProps) {
+export function SubTasks({ listId, parentId, parentName, columns, paddingLeft, taskStatuses, level }: SubTasksProps) {
   const dispatch = useAppDispatch();
 
   const { draggableItemId } = useAppSelector((state) => state.list);
@@ -33,6 +34,7 @@ export function SubTasks({ listId, parentId, columns, paddingLeft, taskStatuses,
       const tasksWithListId = tasks.map((item) => {
         return {
           ...item,
+          parentName,
           list_id: listId
         };
       });

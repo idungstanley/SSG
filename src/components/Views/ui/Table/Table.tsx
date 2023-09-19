@@ -185,7 +185,7 @@ export function Table({ heads, data, label, listName, customFields, listColor, l
                         level={0}
                       />
                       {separateSubtasksMode ? (
-                        <SeparateSubtasks listId={task.list_id as string} parentId={task.id} />
+                        <SeparateSubtasks listId={task.list_id as string} parentId={task.id} parentName={task.name} />
                       ) : null}
                     </Fragment>
                   ) : null

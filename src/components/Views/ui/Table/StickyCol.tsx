@@ -28,6 +28,7 @@ import ToolTip from '../../../Tooltip/Tooltip';
 import Badges from '../../../badges';
 import DetailsOnHover from '../../../Dropdown/DetailsOnHover/DetailsOnHover';
 import { EntityType } from '../../../../utils/EntityTypes/EntityType';
+import SubtasksIcon from '../../../../assets/icons/SubtasksIcon';
 
 interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   task: Task;
@@ -81,7 +82,8 @@ export function StickyCol({
     toggleAllSubtask,
     selectedListIds,
     dragToBecomeSubTask,
-    saveSettingOnline
+    saveSettingOnline,
+    separateSubtasksMode
   } = useAppSelector((state) => state.task);
 
   const [isChecked, setIsChecked] = useState(false);
@@ -328,6 +330,13 @@ export function StickyCol({
                 <span className={cl('h-0.5 bg-alsoit-purple-300 w-full m-0')}></span>
               </span>
             )}
+            {separateSubtasksMode && task?.parentName ? (
+              <ToolTip title={task.parentName}>
+                <button className="p-1 rounded-md bg-white">
+                  <SubtasksIcon className="w-3 h-3" />
+                </button>
+              </ToolTip>
+            ) : null}
             <button onClick={onToggleDisplayingSubTasks} className="pl-1">
               {showSubTasks || toggleAllSubtask ? (
                 <div className={`${task.descendants_count > 0 ? 'w-3 h-3' : ' opacity-0 w-3 h-3 '}`}>

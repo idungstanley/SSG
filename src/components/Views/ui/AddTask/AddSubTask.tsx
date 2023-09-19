@@ -2,7 +2,6 @@ import { useState } from 'react';
 import SubtasksIcon from '../../../../assets/icons/SubtasksIcon';
 import { Tag, Task } from '../../../../features/task/interface.tasks';
 import { DEFAULT_LEFT_PADDING } from '../../config';
-import { AddTask } from '../AddTask/AddTask';
 import { Col } from '../Table/Col';
 import { StickyCol } from '../Table/StickyCol';
 import { SubTasks } from '../Table/SubTasks';
@@ -36,7 +35,6 @@ export function AddSubTask({
 }: RowProps) {
   const { subtaskDefaultStatusId } = useAppSelector((state) => state.task);
 
-  const [showNewTaskField] = useState(false);
   const [showSubTasks, setShowSubTasks] = useState(false);
 
   const otherColumns = columns.slice(1);
@@ -44,11 +42,6 @@ export function AddSubTask({
   const onShowAddSubtaskField = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.stopPropagation();
     // setShowNewTaskField(true);
-  };
-
-  const onCloseAddTaskFIeld = () => {
-    // setShowNewTaskField(false);
-    setShowSubTasks(true);
   };
 
   const { attributes, listeners, setNodeRef, transform } = useDraggable({
@@ -114,17 +107,15 @@ export function AddSubTask({
         ))}
       </tr>
 
-      {/* {showNewTaskField ? (
-        <AddTask
-          columns={otherColumns}
+      {showSubTasks ? (
+        <SubTasks
+          listId={listId}
           paddingLeft={DEFAULT_LEFT_PADDING}
           parentId={task.id}
-          onClose={onCloseAddTaskFIeld}
+          parentName={task.name}
+          columns={columns}
+          level={0}
         />
-      ) : null} */}
-
-      {showSubTasks ? (
-        <SubTasks listId={listId} paddingLeft={DEFAULT_LEFT_PADDING} parentId={task.id} columns={columns} level={0} />
       ) : null}
     </>
   );
