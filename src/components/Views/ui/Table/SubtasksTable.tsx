@@ -174,6 +174,7 @@ export function SubtasksTable({ data, heads, customFields, listId, paddingLeft =
                               customFields={customFields}
                               isSplitSubtask={true}
                               level={level}
+                              isBlockToOpenSubtasks={isShowNewLevel()}
                             />
                           ) : null
                         )}
