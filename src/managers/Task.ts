@@ -128,12 +128,10 @@ export const taskDateUpdateManager = (
     for (let i = 0; i < listIds.length; i++) {
       updatedTasks[listIds[i]] = updatedTasks[listIds[i]].map((task) => {
         if (taskId === task.id) {
-          if (dateType === 'start_date') {
-            return {
-              ...task,
-              start_date: newDate
-            };
-          }
+          return {
+            ...task,
+            [dateType]: newDate
+          };
         }
         return task;
       });

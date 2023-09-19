@@ -1,38 +1,41 @@
-import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
+import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/outline';
 import React, { useState, useEffect, useRef, useCallback, ReactNode, HTMLAttributes } from 'react';
-import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { setGroupScrollSettings } from '../../features/general/slideOver/slideOverSlice';
-import { IListColor } from '../Views/ui/List/List';
-import LightenColor from '../Views/ui/List/lightenColor/LightenColor';
+import { useAppSelector } from '../../app/hooks';
 
 interface CustomScrollableContainerProps extends HTMLAttributes<HTMLDivElement> {
   children: ReactNode;
-  ListColor?: IListColor;
 }
 const DEFAULT_THUMB_WIDTH = 20;
-const ARROWS_WRAPPER_WIDTH = 35;
+const ARROWS_WRAPPER_HEIGHT = 27;
 
-export function ScrollableHorizontalListsContainer({ children, ListColor, ...props }: CustomScrollableContainerProps) {
-  const dispatch = useAppDispatch();
-
+export function VerticalScroll({ children, ...props }: CustomScrollableContainerProps) {
   // update size is pilot is visible / invisible
   const { show: showFullPilot } = useAppSelector((state) => state.slideOver.pilotSideOver);
-  const { showMore, currentItemId, showTabLabel, isResize, activeItemId, activePlaceId } = useAppSelector(
-    (state) => state.workspace
-  );
-  const { groupScroll } = useAppSelector((state) => state.slideOver);
-  const { showExtendedBar } = useAppSelector((state) => state.workspace);
-  const { showSidebar } = useAppSelector((state) => state.account);
+  const {
+    showMore,
+    currentItemId,
+    activeTabId,
+    activeSubDetailsTabId,
+    activeSubTimeClockTabId,
+    activeSubHubManagerTabId,
+    activeSubCommunicationTabId,
+    activeSubChecklistTabId,
+    showTabLabel,
+    isResize,
+    activeItemId,
+    activePlaceId
+  } = useAppSelector((state) => state.workspace);
 
   const [thumbWidth, setThumbWidth] = useState(DEFAULT_THUMB_WIDTH);
   const [isThumbVisible, setIsThumbVisible] = useState(true);
-  const [leftPosition, setLeftPosition] = useState<number>(-ARROWS_WRAPPER_WIDTH);
+  const [topPosition, setTopPosition] = useState<number>(-ARROWS_WRAPPER_HEIGHT);
   const [scrollStartPosition, setScrollStartPosition] = useState<number | null>(null);
   const [initialScrollTop, setInitialScrollTop] = useState<number>(0);
   const [isDragging, setIsDragging] = useState(false);
 
   const contentRef = useRef<HTMLDivElement>(null);
   const scrollTrackRef = useRef<HTMLDivElement>(null);
+  const scrollThumbRef = useRef<HTMLDivElement>(null);
   const observer = useRef<ResizeObserver | null>(null);
 
   const handleTrackClick = useCallback(
@@ -42,15 +45,15 @@ export function ScrollableHorizontalListsContainer({ children, ListColor, ...pro
       const { current: trackCurrent } = scrollTrackRef;
       const { current: contentCurrent } = contentRef;
       if (trackCurrent && contentCurrent) {
-        const { clientX } = e;
+        const { clientY } = e;
         const target = e.target as HTMLDivElement;
         const rect = target.getBoundingClientRect();
-        const trackLeft = rect.left;
+        const trackTop = rect.top;
         const thumbOffset = -(thumbWidth / 2);
-        const clickRatio = (clientX - trackLeft + thumbOffset) / trackCurrent.clientWidth;
-        const scrollAmount = Math.floor(clickRatio * contentCurrent.scrollWidth);
+        const clickRatio = (clientY - trackTop + thumbOffset) / trackCurrent.clientHeight;
+        const scrollAmount = Math.floor(clickRatio * contentCurrent.scrollHeight);
         contentCurrent.scrollTo({
-          left: scrollAmount,
+          top: scrollAmount,
           behavior: 'smooth'
         });
       }
@@ -59,22 +62,24 @@ export function ScrollableHorizontalListsContainer({ children, ListColor, ...pro
   );
 
   const handleThumbPosition = useCallback(() => {
-    if (!contentRef.current || !scrollTrackRef.current) {
+    if (!contentRef.current || !scrollTrackRef.current || !scrollThumbRef.current) {
       return;
     }
-    const { scrollLeft: contentLeft, scrollWidth: contentWidth } = contentRef.current;
-    const { clientWidth: trackWidth } = scrollTrackRef.current;
-    let newLeft;
-    newLeft = (+contentLeft / +contentWidth) * trackWidth;
-    newLeft = Math.min(newLeft, trackWidth - thumbWidth) - ARROWS_WRAPPER_WIDTH;
-    setLeftPosition(newLeft);
+    const { scrollTop: contentTop, scrollHeight: contentHeight } = contentRef.current;
+    const { clientHeight: trackHeight } = scrollTrackRef.current;
+    let newTop;
+    newTop = (+contentTop / +contentHeight) * trackHeight;
+    newTop = Math.min(newTop, trackHeight - thumbWidth) - ARROWS_WRAPPER_HEIGHT;
+    setTopPosition(newTop);
+    const thumb = scrollThumbRef.current;
+    thumb.style.top = `${newTop}px`;
   }, []);
 
   const handleThumbMousedown = useCallback((e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     e.preventDefault();
     e.stopPropagation();
-    setScrollStartPosition(e.clientX);
-    if (contentRef.current) setInitialScrollTop(contentRef.current.scrollLeft);
+    setScrollStartPosition(e.clientY);
+    if (contentRef.current) setInitialScrollTop(contentRef.current.scrollTop);
     setIsDragging(true);
   }, []);
 
@@ -94,13 +99,12 @@ export function ScrollableHorizontalListsContainer({ children, ListColor, ...pro
       e.preventDefault();
       e.stopPropagation();
       if (isDragging && contentRef.current && scrollStartPosition) {
-        const { scrollWidth: contentWidth, offsetWidth: contentOffsetWidth } = contentRef.current;
+        const { scrollHeight: contentHeight, offsetHeight: contentOffsetHeight } = contentRef.current;
 
-        const delta = e.clientX - scrollStartPosition;
-        const deltaX = delta * (contentOffsetWidth / thumbWidth);
-        const newScroll = Math.min(initialScrollTop + deltaX, contentWidth - contentOffsetWidth);
-
-        contentRef.current.scrollLeft = newScroll;
+        const delta = e.clientY - scrollStartPosition;
+        const deltaY = delta * (contentOffsetHeight / thumbWidth);
+        const newScroll = Math.min(initialScrollTop + deltaY, contentHeight - contentOffsetHeight);
+        contentRef.current.scrollTop = newScroll;
       }
     },
     [isDragging, scrollStartPosition, thumbWidth]
@@ -117,28 +121,18 @@ export function ScrollableHorizontalListsContainer({ children, ListColor, ...pro
   // If the content and the scrollbar track exist, use a ResizeObserver to adjust height of thumb and listen for scroll event to move the thumb
   useEffect(() => {
     const handleResize = (ref: HTMLDivElement, trackSize: number) => {
-      const { clientWidth, scrollWidth } = ref;
-      const THUMB_WIDTH = (clientWidth / scrollWidth) * trackSize;
-      setThumbWidth(Math.max(THUMB_WIDTH + 65, DEFAULT_THUMB_WIDTH));
-      setIsThumbVisible(scrollWidth > clientWidth); // Check if the content width is greater than the track width
-      dispatch(
-        setGroupScrollSettings({
-          offsetWidth: ref.offsetWidth,
-          scrollLeft: ref.scrollLeft,
-          scrollWidth: ref.scrollWidth,
-          clientWidth: ref.clientWidth,
-          thumbWidth: Math.max(THUMB_WIDTH + 65, DEFAULT_THUMB_WIDTH)
-        })
-      );
+      const { clientHeight, scrollHeight } = ref;
+      const THUMB_HEIGHT = (clientHeight / scrollHeight) * trackSize;
+      setThumbWidth(Math.max(THUMB_HEIGHT + 27, DEFAULT_THUMB_WIDTH));
+      setIsThumbVisible(scrollHeight > clientHeight); // Check if the content height is greater than the track height
     };
 
     const calculateThumbSize = () => {
       if (contentRef.current && scrollTrackRef.current) {
         const ref = contentRef.current;
-        const { clientWidth: trackWidth } = scrollTrackRef.current;
-
+        const { clientHeight: trackHeight } = scrollTrackRef.current;
         observer.current = new ResizeObserver(() => {
-          handleResize(ref, trackWidth);
+          handleResize(ref, trackHeight);
         });
         observer.current.observe(ref);
         ref.addEventListener('scroll', handleThumbPosition);
@@ -163,8 +157,12 @@ export function ScrollableHorizontalListsContainer({ children, ListColor, ...pro
     currentItemId,
     activeItemId,
     activePlaceId,
-    showExtendedBar,
-    showSidebar
+    activeTabId,
+    activeSubDetailsTabId,
+    activeSubTimeClockTabId,
+    activeSubHubManagerTabId,
+    activeSubCommunicationTabId,
+    activeSubChecklistTabId
   ]);
 
   // Listen for mouse events to handle scrolling by dragging the thumb
@@ -180,72 +178,56 @@ export function ScrollableHorizontalListsContainer({ children, ListColor, ...pro
   }, [handleThumbMousemove, handleThumbMouseup]);
 
   // scroll buttons
-  function handleScrollButton(direction: 'left' | 'right') {
+  function handleScrollButton(direction: 'up' | 'down') {
     if (contentRef.current) {
-      const width = contentRef.current.offsetWidth;
-      const scrollAmount = direction === 'left' ? 0 : width;
-      contentRef.current.scrollTo({ left: scrollAmount, behavior: 'smooth' });
+      const height = contentRef.current.offsetHeight;
+      const scrollAmount = direction === 'up' ? 0 : height;
+      contentRef.current.scrollTo({ top: scrollAmount, behavior: 'smooth' });
     }
   }
 
-  useEffect(() => {
-    if (groupScroll && contentRef.current) {
-      const width = contentRef.current.offsetWidth;
-      const scrollAmount = groupScroll.leftPosition <= 0 ? 0 : width;
-      if (groupScroll.scrollLeft) {
-        contentRef.current.scrollLeft = groupScroll.scrollLeft;
-      } else {
-        contentRef.current.scrollTo({ left: scrollAmount, behavior: 'smooth' });
-      }
-    }
-  }, [groupScroll]);
-
   const renderScrollArrows = () => {
     return (
-      <div className="flex z-10 gap-1.5 bg-alsoit-gray-50 bg-opacity-75 opacity-0 group-hover:opacity-100 rounded-md flex-row ml-2">
+      <div className="flex z-10 gap-1.5 bg-alsoit-gray-50 bg-opacity-75 opacity-0 group-hover:opacity-100 rounded-md flex-col">
         <button
           className="flex items-center justify-center w-3 h-3 bg-gray-200 rounded-full"
-          onClick={() => handleScrollButton('left')}
+          onClick={() => handleScrollButton('up')}
         >
-          <ChevronLeftIcon className="w-2 h-2 text-gray-700" />
+          <ChevronUpIcon className="w-2 h-2 text-gray-700" />
         </button>
         <button
           className="flex items-center justify-center w-3 h-3 bg-gray-200 rounded-full"
-          onClick={() => handleScrollButton('right')}
+          onClick={() => handleScrollButton('down')}
         >
-          <ChevronRightIcon className="w-2 h-2 text-gray-700" />
+          <ChevronDownIcon className="w-2 h-2 text-gray-700" />
         </button>
       </div>
     );
   };
 
   return (
-    <>
-      <div className="relative w-full overflow-hidden px-2">
-        <div className="scrollbar-hide" ref={contentRef} {...props}>
-          {children}
-        </div>
+    <div className="relative flex w-full pr-1 overflow-hidden">
+      <div className="mr-1 scrollbar-hide grow" ref={contentRef} {...props}>
+        {children}
       </div>
       {isThumbVisible && (
-        <div
-          className="sticky bottom-0 pt-4 pr-2 group grid w-full grid-cols-2 bg-purple-50 rounded-3xl"
-          style={{ backgroundColor: LightenColor(ListColor?.outerColour as string, 0.95), zIndex: 2 }}
-        >
+        <div className="flex flex-col items-center w-4 mt-2 group">
           <div />
-          <div className="flex items-center mb-4 flex-row space-x-2">
+          <div className="flex flex-col items-center h-full mb-4">
             {renderScrollArrows()}
-            <div className="relative flex flex-grow w-full h-2">
+            <div className="relative flex items-center flex-grow block w-2">
               <div
-                className="absolute top-0 -bottom-7 bg-transparent cursor-pointer rounded-xl w-full h-2 -right-12"
+                className="absolute top-0 w-2 bg-transparent cursor-pointer -bottom-7 rounded-xl"
                 ref={scrollTrackRef}
                 onClick={handleTrackClick}
               ></div>
               <div
-                className="absolute bg-alsoit-gray-75 hover:bg-alsoit-gray-300 cursor-pointer rounded-xl w-full h-2 hover:h-3 hover:-top-0.5"
+                className="absolute bg-alsoit-gray-75 hover:bg-alsoit-gray-300 cursor-pointer rounded-xl w-2 hover:w-3 hover:-left-0.5"
+                ref={scrollThumbRef}
                 onMouseDown={handleThumbMousedown}
                 style={{
-                  width: `${thumbWidth}px`,
-                  left: `${leftPosition}px`,
+                  height: `${thumbWidth}px`,
+                  top: `${topPosition}px`,
                   cursor: isDragging ? 'grabbing' : 'grab'
                 }}
               ></div>
@@ -254,6 +236,6 @@ export function ScrollableHorizontalListsContainer({ children, ListColor, ...pro
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 }

@@ -24,7 +24,11 @@ export function HistoryfilterModal({ logData, toggleFn }: HistoryfiltermodalProp
   const { HistoryFilterMemory, selectedDate } = useAppSelector((state) => state.task);
   const [checkedStates, setCheckedStates] = useState<boolean[]>([]);
   const [dateEntries, setEntries] = useState<boolean>(false);
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+
   const modalRef = useRef<HTMLDivElement>(null);
+
+  const handleClose = () => setAnchorEl(null);
 
   const handleChange = (index: number, state?: string): void => {
     const newCheckedStates = [...checkedStates];
@@ -58,7 +62,11 @@ export function HistoryfilterModal({ logData, toggleFn }: HistoryfiltermodalProp
         </div>
         <div className="flex flex-col space-y-3 w-full">
           {filterKeys.map((keys, index) => (
-            <div key={index} className="flex w-full space-x-2 items-center">
+            <div
+              key={index}
+              className="flex w-full space-x-2 items-center"
+              onClick={(e: React.MouseEvent<HTMLDivElement>) => keys.main === 'date' && setAnchorEl(e.currentTarget)}
+            >
               <p className="flex space-x-2 capitalize w-1/5">
                 <span className="w-1/2">{keys.main}</span>
                 <SlideButton
@@ -74,9 +82,11 @@ export function HistoryfilterModal({ logData, toggleFn }: HistoryfiltermodalProp
                     <label htmlFor={`${keys.main}1`} className="w-full">
                       {dateEntries && checkedStates[0] && (
                         <DatePicker
-                          styles="absolute z-50 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none right-12 top-64 flex justify-center"
+                          styles="flex"
                           range={true}
                           toggleFn={setEntries}
+                          anchorEl={anchorEl}
+                          handleClose={handleClose}
                         />
                       )}
                       <div className="flex items-center justify-evenly w-full">

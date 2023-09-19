@@ -265,8 +265,10 @@ export function StickyCol({
           {...props}
         >
           <div
-            className={`flex items-center h-full space-x-1 ${isSplitSubtask && 'bg-white/90'}`}
+            className={`flex items-center h-full space-x-1 ${isSplitSubtask && 'bg-white/90 border-t'}`}
             style={{
+              padding: '15px 0',
+              paddingLeft: `${isSplitSubtask ? '4px' : 0}`,
               height:
                 saveSettingOnline?.singleLineView && !saveSettingOnline?.CompactView
                   ? '42px'
@@ -342,7 +344,7 @@ export function StickyCol({
             </div>
             <div className="flex flex-col flex-grow items-start justify-start pl-2 space-y-1">
               <div
-                className="flex w-full mt-1 items-center text-left"
+                className="flex w-full items-center text-left"
                 onKeyDown={(e) => (e.key === 'Enter' ? handleEditTask(e, task.id) : null)}
                 ref={droppabbleRef}
               >
