@@ -232,6 +232,7 @@ export function Row({
           paddingLeft={DEFAULT_LEFT_PADDING + paddingLeft}
           listId={listId}
           parentId={task.id}
+          parentName={task.name}
           columns={columns}
           taskStatuses={taskStatuses}
           level={level + 1}

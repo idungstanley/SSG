@@ -107,6 +107,7 @@ export interface ITaskFullList {
   avatar_path: string | null;
   list_id: string;
   parent_id: string | null;
+  parentName?: string;
   priority: string | null | [{ id: string; initials: string; color: string; name: string }];
   status: IStatus;
   has_descendants: boolean;
