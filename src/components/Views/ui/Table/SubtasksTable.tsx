@@ -56,6 +56,7 @@ export function SubtasksTable({ data, heads, customFields, listId, paddingLeft =
         return {
           ...item,
           custom_field_columns: customFields,
+          parentName: data.name,
           list_id: listId
         };
       });

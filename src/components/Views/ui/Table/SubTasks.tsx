@@ -12,6 +12,7 @@ import { ITask_statuses } from '../../../../features/list/list.interfaces';
 interface SubTasksProps {
   listId: string;
   parentId: string;
+  parentName: string;
   columns: listColumnProps[];
   paddingLeft: number;
   taskStatuses?: ITask_statuses[];
@@ -22,6 +23,7 @@ interface SubTasksProps {
 export function SubTasks({
   listId,
   parentId,
+  parentName,
   columns,
   paddingLeft,
   taskStatuses,
@@ -42,6 +44,7 @@ export function SubTasks({
       const tasksWithListId = tasks.map((item) => {
         return {
           ...item,
+          parentName,
           list_id: listId
         };
       });

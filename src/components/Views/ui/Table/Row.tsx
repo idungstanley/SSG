@@ -73,6 +73,7 @@ export function Row({
     custom_fields: [],
     custom_field_columns: [],
     deleted_at: null,
+    closed_subtasks_count: 0,
     descendants_count: 0,
     checklist_items_count: 0,
     checklist_done_items_count: 0,
@@ -234,6 +235,7 @@ export function Row({
           paddingLeft={DEFAULT_LEFT_PADDING + paddingLeft}
           listId={listId}
           parentId={task.id}
+          parentName={task.name}
           columns={columns}
           taskStatuses={taskStatuses}
           isSplitSubtask={isSplitSubtask}

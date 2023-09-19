@@ -196,7 +196,7 @@ export function Table({
                         level={0}
                       />
                       {separateSubtasksMode ? (
-                        <SeparateSubtasks listId={task.list_id as string} parentId={task.id} />
+                        <SeparateSubtasks listId={task.list_id as string} parentId={task.id} parentName={task.name} />
                       ) : null}
                     </Fragment>
                   ) : null
