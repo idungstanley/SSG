@@ -201,7 +201,7 @@ export default function SortModal({ toggleModal, setAnchorEl, anchorEl, handleCl
                 sortCriteria="dir"
               />
               <div className="flex items-center">
-                <div className="flex flex-col items-center justify-center -space-y-1">
+                <div className="flex flex-col items-center justify-center">
                   <IoIosArrowUp
                     className="text-gray-600"
                     style={{ color: getOrder?.dir === 'asc' ? baseColor : '' }}

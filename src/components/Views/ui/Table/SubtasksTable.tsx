@@ -56,6 +56,7 @@ export function SubtasksTable({ data, heads, customFields, listId, paddingLeft =
         return {
           ...item,
           custom_field_columns: customFields,
+          parentName: data.name,
           list_id: listId
         };
       });
@@ -173,6 +174,7 @@ export function SubtasksTable({ data, heads, customFields, listId, paddingLeft =
                               customFields={customFields}
                               isSplitSubtask={true}
                               level={level}
+                              isBlockToOpenSubtasks={isShowNewLevel()}
                             />
                           ) : null
                         )}

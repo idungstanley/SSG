@@ -191,6 +191,7 @@ export function List({ tasks, subtasksCustomeFields, listDetails }: ListProps) {
                         data={[task]}
                         customFields={tasks[0].custom_field_columns as IField[]}
                         listDetails={listDetails}
+                        isBlockToOpenSubtasks={true}
                       />
                       <SubtasksTable
                         data={task}

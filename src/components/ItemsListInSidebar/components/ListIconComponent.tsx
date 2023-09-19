@@ -30,13 +30,15 @@ export default function ListIconComponent({
   return (
     <>
       {type === 'colourToggle' ? (
-        <div className="flex items-center justify-between border border-gray-300 divide-x divide-gray-400 rounded-md">
+        <div className="relative flex items-center justify-between" style={{ height: '22px', width: '44px' }}>
           <button
-            className={`${isOutterFrameActive && 'bg-green-200'} flex items-center justify-center p-1 `}
+            className={`${
+              isOutterFrameActive ? 'border-primary-500 border rounded-l-md z-2' : 'border-gray-200'
+            } flex items-center justify-center p-1 absolute left-0 border rounded-l-md`}
             onClick={outterFrameClick}
           >
             <span
-              className={`w-3 h-3 border border-current ${
+              className={`w-3 h-3 ${
                 shape === TwoCircle || shape === SquareInCircle || shape === SolidCircle
                   ? 'rounded-full'
                   : shape === TwoSquare || shape === CircleInSquare || shape === SolidSquare
@@ -50,11 +52,13 @@ export default function ListIconComponent({
           </button>
           {shape !== SolidCircle && shape !== SolidSquare && (
             <button
-              className={`${isInnerFrameActive && 'bg-green-200'} flex items-center justify-center p-1 `}
+              className={`${
+                isInnerFrameActive ? 'border-primary-500 rounded-r-md z-2' : 'border-gray-200'
+              } flex items-center justify-center p-1 absolute right-0 border rounded-r-md`}
               onClick={innerFrameClick}
             >
               <span
-                className={`w-3 h-3 border border-current ${
+                className={`w-3 h-3 ${
                   shape === TwoSquare || shape === SquareInCircle
                     ? ''
                     : shape === TwoCircle || shape === CircleInSquare
