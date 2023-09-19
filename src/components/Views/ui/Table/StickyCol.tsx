@@ -424,7 +424,7 @@ export function StickyCol({
               `relative border-t ${verticalGrid && 'border-r'} w-full h-16  py-4 p-4 flex items-center`
             )}
           >
-            <div className="absolute flex ml-2 space-x-1 -mt-10 bottom-0 right-0">
+            <div className="absolute flex space-x-1 bottom-0 right-0">
               <ToolTip title="Cancel">
                 <div className="border rounded-md p-1" style={{ borderColor: '#FFE7E7' }}>
                   <ImCancelCircle onClick={onClose} />
