@@ -22,6 +22,9 @@ import Palette from '../../../../../../components/ColorPalette';
 import { ListColourProps } from '../../../../../../components/tasks/ListItem';
 import { createWalletManager } from '../../../../../../managers/Wallet';
 import { setFilteredResults } from '../../../../../../features/search/searchSlice';
+import { ErrorHasDescendant } from '../../../../../../types';
+import { toast } from 'react-hot-toast';
+import Toast from '../../../../../../common/Toast';
 
 export default function CreateWallet() {
   const dispatch = useAppDispatch();
@@ -68,12 +71,22 @@ export default function CreateWallet() {
 
   const { name } = formState;
   const onSubmit = async () => {
-    await createWallet.mutateAsync({
-      name,
-      color: paletteColor as string,
-      hubID: (createWLID ? createWLID : null) || type === EntityType.hub ? id : null,
-      walletId: type === EntityType.wallet ? id : null
-    });
+    try {
+      await createWallet.mutateAsync({
+        name,
+        color: paletteColor as string,
+        hubID: (createWLID ? createWLID : null) || type === EntityType.hub ? id : null,
+        walletId: type === EntityType.wallet ? id : null
+      });
+    } catch (error) {
+      const errorResponse = error as ErrorHasDescendant;
+      const isHasDescendant = errorResponse.data.data.has_descendants;
+      if (isHasDescendant) {
+        toast.custom((t) => (
+          <Toast type="error" title="Error Creating Entity" body="Parent Entity has a descendant" toastId={t.id} />
+        ));
+      }
+    }
   };
   return (
     <div className="h-auto p-2 overflow-y-auto" style={{ maxHeight: '420px' }}>
