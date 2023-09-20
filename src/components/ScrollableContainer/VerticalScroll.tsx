@@ -124,7 +124,9 @@ export function VerticalScroll({ children, ...props }: CustomScrollableContainer
       const { clientHeight, scrollHeight } = ref;
       const THUMB_HEIGHT = (clientHeight / scrollHeight) * trackSize;
       setThumbWidth(Math.max(THUMB_HEIGHT + 27, DEFAULT_THUMB_WIDTH));
-      setIsThumbVisible(scrollHeight > clientHeight); // Check if the content height is greater than the track height
+      const showScrollHeight = scrollHeight - 10;
+
+      setIsThumbVisible(showScrollHeight > clientHeight); // Check if the content height is greater than the track height
     };
 
     const calculateThumbSize = () => {
