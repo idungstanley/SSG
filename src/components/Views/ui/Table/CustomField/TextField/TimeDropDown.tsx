@@ -35,7 +35,14 @@ export default function TimeDropdown({ handleClick, options, activeValue }: Time
             activeItem === option ? 'bg-alsoit-purple-50' : 'hover:bg-purple-400 hover:text-white'
           }`}
         >
-          <input checked={activeItem === option} type="radio" id="myRadio" name="myRadioGroup" className="hidden" />
+          <input
+            checked={activeItem === option}
+            type="radio"
+            id="myRadio"
+            name="myRadioGroup"
+            className="hidden"
+            onChange={() => null}
+          />
           <label
             htmlFor="myRadio"
             className={
