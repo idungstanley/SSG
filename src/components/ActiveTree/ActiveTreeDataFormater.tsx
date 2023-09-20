@@ -8,9 +8,15 @@ interface IActiveTreeDataFormaterProps {
   data: Hub[];
   openNewHub: (id: string) => void;
   setToggleTree?: React.Dispatch<React.SetStateAction<boolean>>;
+  option?: string;
 }
 
-export default function ActiveTreeDataFormater({ data, openNewHub, setToggleTree }: IActiveTreeDataFormaterProps) {
+export default function ActiveTreeDataFormater({
+  data,
+  openNewHub,
+  setToggleTree,
+  option
+}: IActiveTreeDataFormaterProps) {
   return data.length ? (
     <div
       className="max-h-48 left-0 right-0 h-auto px-1 space-x-2 overflow-y-scroll bg-white border border-gray-100 rounded-md top-0 ring-1 ring-black ring-opacity-5 focus:outline-none"
@@ -19,7 +25,7 @@ export default function ActiveTreeDataFormater({ data, openNewHub, setToggleTree
       <div className="sticky top-0 z-50 pt-3 bg-white">
         <Input leadingIcon={<CiSearch />} placeholder="Choose Location" name="search" onChange={() => ({})} />
       </div>
-      <ActiveTreeList hubs={data} openNewHub={openNewHub} setToggleTree={setToggleTree} />
+      <ActiveTreeList hubs={data} openNewHub={openNewHub} setToggleTree={setToggleTree} option="taskDuplicate" />
     </div>
   ) : null;
 }
