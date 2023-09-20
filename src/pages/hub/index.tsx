@@ -72,29 +72,6 @@ export default function HubPage() {
   const tasks = useMemo(() => (data ? data.pages.flatMap((page) => page.data.tasks) : []), [data]);
   const lists = useMemo(() => generateLists(tasks, hub?.data.hub?.custom_field_columns as IField[]), [tasks, hub]);
 
-  // infinite scroll
-  useEffect(() => {
-    function handleScroll(event: Event) {
-      const container = event.target as HTMLElement;
-      const scrollDifference = container.scrollHeight - container.scrollTop - container.clientHeight;
-      const range = 1;
-
-      if (scrollDifference <= range && scrollDifference >= -range && hasNextPage) {
-        fetchNextPage();
-      }
-    }
-
-    if (containerRef.current) {
-      containerRef.current.addEventListener('scroll', handleScroll);
-    }
-
-    return () => {
-      if (containerRef.current) {
-        containerRef.current.removeEventListener('scroll', handleScroll);
-      }
-    };
-  }, [hasNextPage]);
-
   useEffect(() => {
     if (Object.keys(lists).length) {
       dispatch(setTasks({ ...tasksStore, ...lists }));
