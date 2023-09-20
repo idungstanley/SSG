@@ -3,24 +3,17 @@ import ArrowDown from '../../assets/icons/ArrowDown';
 import ArrowUp from '../../assets/icons/ArrowUp';
 import RadioWrapper from './RadioWrapper';
 import FileIcon from '../../assets/icons/FileIcon';
-import { useGetTaskRecuring } from '../../features/task/taskService';
-import { useParams } from 'react-router-dom';
 
 const IntervalArr = ['daily', 'weekly', 'fortnightly', 'monthly', 'days after', 'custom'];
 const statusArr = ['When Complete'];
 
 export default function Recurring() {
-  const { taskId } = useParams();
   const [recuringInterval, setRecurringInterval] = useState<string>('daily');
   const [statusInterval, setStatusInterval] = useState<string>('When Complete');
   const [dropRecurring, setDropRecurring] = useState<{ recurringInterval: boolean; statusInterval: boolean }>({
     recurringInterval: false,
     statusInterval: false
   });
-
-  const { data } = useGetTaskRecuring({ taskId });
-
-  console.log(data);
 
   return (
     <div className="flex flex-col space-y-2 p-2">
