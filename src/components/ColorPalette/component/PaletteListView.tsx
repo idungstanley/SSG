@@ -1,6 +1,6 @@
 import React from 'react';
 import { palette } from '../../../utils/Colors';
-import { VerticalScroll } from '../../ScrollableContainer/VerticalScroll 2';
+import { VerticalScroll } from '../../ScrollableContainer/VerticalScroll';
 
 interface ItemProps {
   item: {
