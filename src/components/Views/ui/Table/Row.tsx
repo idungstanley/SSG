@@ -17,6 +17,7 @@ import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import Dradnddrop from '../../../../assets/icons/Dradnddrop';
 import { IField, ITask_statuses } from '../../../../features/list/list.interfaces';
 import { listColumnProps } from '../../../../pages/workspace/tasks/component/views/ListColumns';
+import Copy from '../../../../assets/icons/Copy';
 
 export const MAX_SUBTASKS_LEVEL = 10;
 
@@ -58,6 +59,7 @@ export function Row({
   const { showNewTaskField, showNewTaskId, toggleAllSubtask } = useAppSelector((state) => state.task);
 
   const [showSubTasks, setShowSubTasks] = useState(toggleAllSubtask);
+  const [isCopied, setIsCopied] = useState<number>(0);
 
   useEffect(() => {
     setShowSubTasks(toggleAllSubtask);
@@ -135,6 +137,14 @@ export function Row({
     }
   });
 
+  const handleCopyTexts = async () => {
+    await navigator.clipboard.writeText(task.name);
+    setIsCopied(1);
+    setTimeout(() => {
+      setIsCopied(0);
+    }, 1000);
+  };
+
   // hide element if is currently grabbing
   const style = {
     opacity: transform ? 0 : 100
@@ -170,6 +180,13 @@ export function Row({
         >
           {/* actions */}
           <div className="opacity-0 absolute right-0 group-hover:opacity-100 flex items-center justify-center mr-1 space-x-1">
+            {/* Copy */}
+            <ToolTip title={isCopied === 0 ? 'Copy Task Name' : 'Copied'}>
+              <button className="p-1 border rounded-md bg-white" onClick={handleCopyTexts}>
+                <Copy />
+              </button>
+            </ToolTip>
+
             {/* effects */}
             <ToolTip title="Apply Effects">
               <button className="p-1 border rounded-md bg-white" onClick={(e) => e.stopPropagation()}>
