@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, UIEvent } from 'react';
 import { useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { UseUpdateTaskViewSettings, getTaskListService } from '../../features/task/taskService';
@@ -10,8 +10,7 @@ import AdditionalHeader from '../../layout/components/MainLayout/Header/Addition
 import ActiveHub from '../../layout/components/MainLayout/extendedNavigation/ActiveParents/ActiveHub';
 import hubIcon from '../../assets/branding/hub.png';
 import FilterByAssigneesSliderOver from '../workspace/lists/components/renderlist/filters/FilterByAssigneesSliderOver';
-import { useScroll } from '../../hooks/useScroll';
-import { setSaveSettingList, setSaveSettingOnline, setTasks, setUpdateCords } from '../../features/task/taskSlice';
+import { setSaveSettingList, setSaveSettingOnline, setTasks } from '../../features/task/taskSlice';
 import TaskQuickAction from '../workspace/tasks/component/taskQuickActions/TaskQuickAction';
 import { List } from '../../components/Views/ui/List/List';
 import { Header } from '../../components/TasksHeader';
@@ -19,6 +18,7 @@ import { EntityType } from '../../utils/EntityTypes/EntityType';
 import { ITaskFullList } from '../../features/task/interface.tasks';
 import { useformatSettings } from '../workspace/tasks/TaskSettingsModal/ShowSettingsModal/FormatSettings';
 import { IListDetailRes } from '../../features/list/list.interfaces';
+import { VerticalScroll } from '../../components/ScrollableContainer/VerticalScroll';
 
 export function ListPage() {
   const dispatch = useAppDispatch();
@@ -47,7 +47,7 @@ export function ListPage() {
   });
 
   // get list tasks
-  const { data, hasNextPage, fetchNextPage } = getTaskListService(listId);
+  const { data, hasNextPage, fetchNextPage, isFetching } = getTaskListService(listId);
 
   useEffect(() => {
     if (listId) {
@@ -57,7 +57,7 @@ export function ListPage() {
   }, [listId]);
 
   useEffect(() => {
-    if (data && !tasksFromRes.length) {
+    if (data) {
       setTasksFromRes(data.pages.flatMap((page) => page.data.tasks as ITaskFullList[]));
     }
   }, [data]);
@@ -85,35 +85,8 @@ export function ListPage() {
     }
   }, [listDetails]);
 
-  // infinite scroll
   useEffect(() => {
-    function handleScroll(event: UIEvent | Event) {
-      const container = event.target as HTMLElement;
-      const twoThirdsOfScroll = 0.66;
-      const scrollDifference =
-        container?.scrollHeight * twoThirdsOfScroll - container.scrollTop - container.clientHeight;
-      const range = 1;
-      if (scrollDifference <= range && hasNextPage) {
-        fetchNextPage();
-      }
-    }
-
-    if (containerRef.current) {
-      containerRef.current.addEventListener('scroll', handleScroll);
-    }
-
-    return () => {
-      if (containerRef.current) {
-        containerRef.current.removeEventListener('scroll', handleScroll);
-      }
-    };
-  }, [hasNextPage]);
-
-  // update cords for modal on scroll
-  const onScroll = useScroll(() => dispatch(setUpdateCords()));
-
-  useEffect(() => {
-    if (tasksFromRes.length && listId && !tasksStore[listId] && listDetailsFromRes?.data.list.custom_field_columns) {
+    if (tasksFromRes.length && listId && listDetailsFromRes?.data.list.custom_field_columns) {
       const tasksWithCustomFields = tasksFromRes.map((task) => {
         return {
           ...task,
@@ -123,6 +96,24 @@ export function ListPage() {
       dispatch(setTasks({ ...tasksStore, [listId]: tasksWithCustomFields as ITaskFullList[] }));
     }
   }, [tasksFromRes, listDetailsFromRes]);
+
+  // infinite scroll
+  const onScroll = (e: UIEvent<HTMLDivElement>) => {
+    handleScroll(e);
+  };
+
+  const handleScroll = (e: UIEvent<HTMLDivElement>) => {
+    if (hasNextPage && !isFetching) {
+      const container = e.target as HTMLElement;
+      const twoThirdsOfScroll = 0.66;
+      const scrollDifference =
+        container?.scrollHeight * twoThirdsOfScroll - container.scrollTop - container.clientHeight;
+      const range = 1;
+      if (scrollDifference <= range) {
+        fetchNextPage();
+      }
+    }
+  };
 
   return (
     <>
@@ -139,24 +130,24 @@ export function ListPage() {
       >
         <>
           <Header />
+          <VerticalScroll onScroll={onScroll}>
+            {/* main content */}
+            <section
+              ref={containerRef}
+              style={{ minHeight: '0', maxHeight: '83vh', maxWidth: '' }}
+              className="w-full h-full p-4 pb-0 space-y-10"
+            >
+              <TaskQuickAction listDetailsData={listName} />
 
-          {/* main content */}
-          <div
-            style={{ minHeight: '0', maxHeight: '83vh' }}
-            ref={containerRef}
-            className="w-full h-full p-4 pb-0 space-y-10 overflow-y-scroll"
-            onScroll={onScroll}
-          >
-            <TaskQuickAction listDetailsData={listName} />
-
-            {tasksStore[listId as string] && tasksFromRes.length ? (
-              <List
-                tasks={tasksStore[listId as string]}
-                subtasksCustomeFields={tasksFromRes[0].custom_field_columns}
-                listDetails={listDetailsFromRes}
-              />
-            ) : null}
-          </div>
+              {tasksStore[listId as string] && tasksFromRes.length ? (
+                <List
+                  tasks={tasksStore[listId as string]}
+                  subtasksCustomeFields={tasksFromRes[0].custom_field_columns}
+                  listDetails={listDetailsFromRes}
+                />
+              ) : null}
+            </section>
+          </VerticalScroll>
         </>
       </Page>
     </>

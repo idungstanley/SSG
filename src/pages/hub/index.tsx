@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, Fragment } from 'react';
+import { useEffect, useMemo, useRef, Fragment, UIEvent } from 'react';
 import { useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import Page from '../../components/Page';
@@ -64,7 +64,7 @@ export default function HubPage() {
     }
   }, [hub]);
 
-  const { data, hasNextPage, fetchNextPage } = UseGetFullTaskList({
+  const { data, hasNextPage, fetchNextPage, isFetching } = UseGetFullTaskList({
     itemId: hubId || subhubId,
     itemType: EntityType.hub
   });
@@ -101,6 +101,24 @@ export default function HubPage() {
     }
   }, [lists]);
 
+  // infinite scroll
+  const onScroll = (e: UIEvent<HTMLDivElement>) => {
+    handleScroll(e);
+  };
+
+  const handleScroll = (e: UIEvent<HTMLDivElement>) => {
+    if (hasNextPage && !isFetching) {
+      const container = e.target as HTMLElement;
+      const twoThirdsOfScroll = 0.66;
+      const scrollDifference =
+        container?.scrollHeight * twoThirdsOfScroll - container.scrollTop - container.clientHeight;
+      const range = 1;
+      if (scrollDifference <= range) {
+        fetchNextPage();
+      }
+    }
+  };
+
   return (
     <>
       <PilotSection />
@@ -115,7 +133,7 @@ export default function HubPage() {
         additional={<FilterByAssigneesSliderOver />}
       >
         <Header />
-        <VerticalScroll>
+        <VerticalScroll onScroll={onScroll}>
           <section
             ref={containerRef}
             style={{ minHeight: '0', maxHeight: '83vh', maxWidth: '' }}
