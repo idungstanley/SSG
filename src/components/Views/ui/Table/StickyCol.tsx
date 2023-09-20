@@ -15,7 +15,8 @@ import {
   setSelectedIndexStatus,
   setSelectedTasksArray,
   setShowTaskNavigation,
-  setTaskIdForPilot
+  setTaskIdForPilot,
+  getVerticalGridlinesTask
 } from '../../../../features/task/taskSlice';
 import { setActiveItem } from '../../../../features/workspace/workspaceSlice';
 import { UniqueIdentifier, useDraggable, useDroppable } from '@dnd-kit/core';
@@ -361,7 +362,7 @@ export function StickyCol({
                                 saveSettingOnline?.CompactView ? 'text-alsoit-text-md' : 'text-alsoit-text-lg'
                               }`}
                               style={{
-                                maxWidth: '200px',
+                                maxWidth: verticalGridlinesTask ? '960px' : '200px',
                                 overflow: 'hidden',
                                 textOverflow: 'ellipsis',
                                 whiteSpace: 'nowrap'
@@ -448,11 +449,11 @@ export function StickyCol({
                 placeholder="Add New Task"
                 ref={inputRef}
                 onKeyDown={(e) => (e.key === 'Enter' ? handleOnSave(e, task.id) : null)}
-              ></p>
-            </div>
+             ></p>
           </div>
-        </td>
-      )}
-    </div>
-  )
+        </div>
+      </td>
+    )}
+  </div>
+ );
 }
