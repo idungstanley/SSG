@@ -106,7 +106,7 @@ export function StickyCol({
         ? navigate(`/${currentWorkspaceId}/tasks/sh/${subhubId}/t/${task.id}`, { replace: true })
         : walletId
         ? navigate(`/${currentWorkspaceId}/tasks/w/${walletId}/t/${task.id}`, { replace: true })
-        : navigate(`/${currentWorkspaceId}/tasks/l/${listId}/t/${task.id}`, { replace: true });
+        : navigate(`/${currentWorkspaceId}/tasks/l/${listId || task.list_id}/t/${task.id}`, { replace: true });
       dispatch(
         setShowPilotSideOver({
           id: task.id,
