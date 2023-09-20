@@ -285,6 +285,7 @@ export const useCreateDropdownField = () => {
 
 const updateEntityCustomFieldValue = (data: { taskId?: string; fieldId: string; value: { value: string }[] }) => {
   const { taskId, fieldId, value } = data;
+  console.log(value);
 
   const response = requestNew({
     url: `custom-fields/${fieldId}/value`,

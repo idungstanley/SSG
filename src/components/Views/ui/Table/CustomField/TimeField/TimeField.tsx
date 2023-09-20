@@ -5,6 +5,7 @@ import AlsoitMenuDropdown from '../../../../../DropDowns';
 import TimeDropdown from '../TextField/TimeDropDown';
 import { ICustomField } from '../../../../../../features/task/taskSlice';
 import { useUpdateEntityCustomFieldValue } from '../../../../../../features/list/listService';
+import { convert12to24, convert24to12 } from './Convert/Index';
 
 interface timeFieldProp {
   taskCustomFields?: ICustomField;
@@ -14,7 +15,7 @@ interface timeFieldProp {
 
 function TimeField({ taskCustomFields, taskId, fieldId }: timeFieldProp) {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const [activeItem, setActiveItem] = useState<string | undefined>(taskCustomFields?.values[0].value);
+  const [activeItem, setActiveItem] = useState<string | undefined>(convert24to12(taskCustomFields?.values[0].value));
   const { timezone } = useAppSelector((state) => state.userSetting);
   const { timeInterval } = useAppSelector((state) => state.calendar);
 
@@ -25,13 +26,15 @@ function TimeField({ taskCustomFields, taskId, fieldId }: timeFieldProp) {
   };
 
   const handleOption = (option: string) => {
+    const convertTo24 = convert12to24(option);
     setActiveItem(option);
     onUpdate({
       taskId,
-      value: [{ value: option }],
+      value: [{ value: convertTo24 }],
       fieldId
     });
   };
+
   return (
     <div>
       <h1 onClick={(event) => setAnchorEl(event.currentTarget)} className="cursor-pointer">
