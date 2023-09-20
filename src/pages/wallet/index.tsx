@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, Fragment, UIEvent } from 'react';
+import { useEffect, useMemo, Fragment, UIEvent } from 'react';
 import { useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import Page from '../../components/Page';
@@ -25,7 +25,6 @@ export function WalletPage() {
 
   const { tasks: tasksStore, saveSettingLocal } = useAppSelector((state) => state.task);
 
-  const containerRef = useRef<HTMLDivElement>(null);
   const formatSettings = useformatSettings();
 
   // get wallet details to set active entity
@@ -111,11 +110,7 @@ export function WalletPage() {
           <Header />
           <VerticalScroll onScroll={onScroll}>
             {/* main content */}
-            <section
-              ref={containerRef}
-              style={{ minHeight: '0', maxHeight: '83vh', maxWidth: '' }}
-              className="w-full h-full p-4 pb-0 space-y-10"
-            >
+            <section style={{ minHeight: '0', maxHeight: '83vh' }} className="w-full h-full p-4 pb-0 space-y-10">
               {/* lists */}
               {Object.keys(lists).map((listId) => (
                 <Fragment key={listId}>{tasksStore[listId] ? <List tasks={tasksStore[listId]} /> : null}</Fragment>

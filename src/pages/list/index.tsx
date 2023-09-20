@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, UIEvent } from 'react';
+import { useState, useEffect, UIEvent } from 'react';
 import { useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { UseUpdateTaskViewSettings, getTaskListService } from '../../features/task/taskService';
@@ -28,8 +28,6 @@ export function ListPage() {
 
   const [tasksFromRes, setTasksFromRes] = useState<ITaskFullList[]>([]);
   const [listDetailsFromRes, setListDetailsFromRes] = useState<IListDetailRes>();
-
-  const containerRef = useRef<HTMLDivElement>(null);
 
   const formatSettings = useformatSettings();
 
@@ -132,11 +130,7 @@ export function ListPage() {
           <Header />
           <VerticalScroll onScroll={onScroll}>
             {/* main content */}
-            <section
-              ref={containerRef}
-              style={{ minHeight: '0', maxHeight: '83vh', maxWidth: '' }}
-              className="w-full h-full p-4 pb-0 space-y-10"
-            >
+            <section style={{ minHeight: '0', maxHeight: '83vh' }} className="w-full h-full p-4 pb-0 space-y-10">
               <TaskQuickAction listDetailsData={listName} />
 
               {tasksStore[listId as string] && tasksFromRes.length ? (

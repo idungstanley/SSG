@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, Fragment, UIEvent } from 'react';
+import { useEffect, useMemo, Fragment, UIEvent } from 'react';
 import { useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import Page from '../../components/Page';
@@ -27,8 +27,6 @@ export default function HubPage() {
   const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
   const { tasks: tasksStore, saveSettingLocal } = useAppSelector((state) => state.task);
   const formatSettings = useformatSettings();
-
-  const containerRef = useRef<HTMLDivElement>(null);
 
   const { data: hub } = UseGetHubDetails({ activeItemId: hubId, activeItemType: EntityType.hub });
 
@@ -111,11 +109,7 @@ export default function HubPage() {
       >
         <Header />
         <VerticalScroll onScroll={onScroll}>
-          <section
-            ref={containerRef}
-            style={{ minHeight: '0', maxHeight: '83vh', maxWidth: '' }}
-            className="w-full h-full p-4 pb-0 space-y-10"
-          >
+          <section style={{ minHeight: '0', maxHeight: '83vh' }} className="w-full h-full p-4 pb-0 space-y-10">
             {/* lists */}
             {Object.keys(lists).map((listId) => (
               <Fragment key={listId}>{tasksStore[listId] ? <List tasks={tasksStore[listId]} /> : null}</Fragment>
