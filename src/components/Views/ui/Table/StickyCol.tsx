@@ -15,7 +15,7 @@ import {
   setSelectedIndexStatus,
   setSelectedTasksArray,
   setShowTaskNavigation,
-  setTaskIdForPilot,
+  setTaskIdForPilot
 } from '../../../../features/task/taskSlice';
 import { setActiveItem } from '../../../../features/workspace/workspaceSlice';
 import { UniqueIdentifier, useDraggable, useDroppable } from '@dnd-kit/core';
@@ -451,8 +451,8 @@ export function StickyCol({
              ></p>
           </div>
         </div>
-      </td>  
-    )}  
-  </div>    
- );    
+      </td>
+    )}
+  </div>
+ );
 }
