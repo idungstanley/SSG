@@ -109,7 +109,7 @@ function ExtendedBar({ children, name, icon, source }: ExtendedBarProps) {
     <aside
       style={{ width: !showExtendedBar ? SIDEBAR_MIN_WIDTH : SIDEBAR_MAX_WIDTH }}
       ref={blockRef}
-      className={cl(showExtendedBar && 'border', 'relative w-60 h-full transition-all duration-300')}
+      className={cl(showExtendedBar && 'border-r', 'relative w-60 h-full transition-all duration-300')}
     >
       <span
         onClick={handleToggle}

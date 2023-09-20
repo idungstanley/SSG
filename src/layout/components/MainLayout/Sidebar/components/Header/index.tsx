@@ -46,8 +46,8 @@ export default function Header({
   const { showSidebar } = useAppSelector((state) => state.account);
   return (
     <div
-      className={cl('flex border-b-2 gap-2 px-2', !showSidebar ? 'flex-col pb-3 items-center' : 'items-center py-4')}
-      style={{ height: `${showSidebar ? '115px' : ''}` }}
+      className={cl('flex border-b gap-2 px-2', !showSidebar ? 'flex-col pb-3 items-center' : 'items-center py-4')}
+      style={{ height: `${showSidebar ? '100px' : ''}` }}
     >
       <Link to="/" className="flex-shrink-0">
         <AlsoitIcon />
