@@ -97,7 +97,9 @@ export default function ActiveTreeSearch({ closeDropdown }: ActiveTreeSearchProp
         >
           <div className="flex items-center justify-between" onClick={() => fetchAndToggle()}>
             <CiSearch className="mr-2 text-lg hover:text-fuchsia-500" />
-            <p>{selectedTreeDetails.name ? selectedTreeDetails.name : 'Choose Location'}</p>
+            <p className="whitespace-nowrap">
+              {selectedTreeDetails.name ? selectedTreeDetails.name : 'Choose Location'}
+            </p>
           </div>
           <BiRightArrowCircle className="mr-6 text-lg hover:text-fuchsia-500" onClick={() => directToPilot()} />
         </div>
