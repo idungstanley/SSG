@@ -137,7 +137,7 @@ export function Table({ heads, data, label, listName, customFields, listColor, l
           <OverlayRow columns={columns} task={draggableItem} />
         </DragOverlay>
       ) : null}
-      <div className="table-container py-2" id={label}>
+      <div className="py-2 table-container" id={label}>
         <table
           onScroll={splitSubTaskMode ? () => null : onScroll}
           style={
@@ -163,7 +163,6 @@ export function Table({ heads, data, label, listName, customFields, listColor, l
             listId={data[0].list_id}
             groupedTask={data}
           />
-
           {/* rows */}
           {!collapseTasks ? (
             <tbody className="contents">
