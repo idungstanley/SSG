@@ -34,7 +34,7 @@ function TimeField({ taskCustomFields, taskId, fieldId }: timeFieldProp) {
 
   const handleOption = (option: string) => {
     const convertedTime = dayjs(option.toLowerCase(), 'h:mma').format('HH:mm');
-    setActiveItem(option);
+    setActiveItem(handleConversion(userFormat, convertedTime));
     onUpdate({
       taskId,
       value: [{ value: convertedTime }],
