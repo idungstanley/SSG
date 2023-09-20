@@ -362,7 +362,7 @@ export function StickyCol({
                                 saveSettingOnline?.CompactView ? 'text-alsoit-text-md' : 'text-alsoit-text-lg'
                               }`}
                               style={{
-                                maxWidth: verticalGridlinesTask ? '960px' : '200px',
+                                maxWidth: '200px',
                                 overflow: 'hidden',
                                 textOverflow: 'ellipsis',
                                 whiteSpace: 'nowrap'
