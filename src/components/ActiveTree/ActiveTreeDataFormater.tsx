@@ -25,7 +25,7 @@ export default function ActiveTreeDataFormater({
       <div className="sticky top-0 z-50 pt-3 bg-white">
         <Input leadingIcon={<CiSearch />} placeholder="Choose Location" name="search" onChange={() => ({})} />
       </div>
-      <ActiveTreeList hubs={data} openNewHub={openNewHub} setToggleTree={setToggleTree} option="taskDuplicate" />
+      <ActiveTreeList hubs={data} openNewHub={openNewHub} setToggleTree={setToggleTree} option={option} />
     </div>
   ) : null;
 }

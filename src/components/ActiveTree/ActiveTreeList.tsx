@@ -80,7 +80,7 @@ export default function ActiveTreeList({ hubs, openNewHub, setToggleTree, option
               type={EntityType.hub}
             />
             {hub?.children?.length && isCanBeOpen(hub.id) ? (
-              <SearchSubHList hubs={hub.children as Hub[]} handleTabClick={handleTabClick} />
+              <SearchSubHList option={option} hubs={hub.children as Hub[]} handleTabClick={handleTabClick} />
             ) : null}
             <div
               style={
@@ -91,6 +91,7 @@ export default function ActiveTreeList({ hubs, openNewHub, setToggleTree, option
             >
               {hub?.wallets?.length && showChildren && isCanBeOpen(hub.id) ? (
                 <SearchWList
+                  option={option}
                   wallets={hub.wallets}
                   leftMargin={false}
                   type="wallet"

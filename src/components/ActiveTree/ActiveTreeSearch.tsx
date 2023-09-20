@@ -121,7 +121,7 @@ export default function ActiveTreeSearch({ closeDropdown, option }: ActiveTreeSe
           data={hubs}
           openNewHub={handleOpenNewHub}
           setToggleTree={setToggleTree}
-          option="taskDuplicate"
+          option={option}
         />
       )}
     </div>
