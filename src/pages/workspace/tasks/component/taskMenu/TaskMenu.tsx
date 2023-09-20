@@ -9,7 +9,7 @@ import { HiOutlineDocumentDuplicate, HiInbox } from 'react-icons/hi';
 import { TbFolderX } from 'react-icons/tb';
 import { GiStoneStack, GiJusticeStar } from 'react-icons/gi';
 import { BiMerge, BiEdit } from 'react-icons/bi';
-import { FlagIcon, UserPlusIcon } from '@heroicons/react/24/outline';
+import { UserPlusIcon } from '@heroicons/react/24/outline';
 import { deleteTask } from '../../../../../features/task/taskService';
 import { useDispatch } from 'react-redux';
 import { displayPrompt, setVisibility } from '../../../../../features/general/prompt/promptSlice';
@@ -29,7 +29,6 @@ export default function TaskMenu() {
   const queryClient = useQueryClient();
 
   const [isVisible, setIsVisible] = useState(false);
-  const [toggleDuplicateMoal, setToggleDuplicateMoal] = useState(false);
   const [showSelectDropdown, setShowSelectDropdown] = useState<null | HTMLSpanElement | HTMLDivElement>(null);
 
   useEffect(() => {

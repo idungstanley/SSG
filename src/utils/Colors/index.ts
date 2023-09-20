@@ -33,7 +33,7 @@ const palette = [
   '#E6E6FA'
 ];
 
-function colourNameToHex(colour: string) {
+export function colourNameToHex(colour: string) {
   const colours: { [key: string]: string } = {
     aliceblue: '#f0f8ff',
     antiquewhite: '#faebd7',
