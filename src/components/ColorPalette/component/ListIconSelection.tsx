@@ -41,7 +41,7 @@ export default function ListIconSelection({ activeShape, handleSelection }: Item
   ));
 
   return (
-    <div className="py-1 my-1 bg-white border border-gray-300 rounded-md w-28 h-fit">
+    <div className="py-1 my-1 bg-white border border-gray-300 rounded-md h-fit">
       <span className="flex flex-col items-center justify-between w-full gap-1">{listIcons}</span>
     </div>
   );
