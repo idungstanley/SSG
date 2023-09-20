@@ -5,7 +5,11 @@ import AlsoitMenuDropdown from '../../../../../DropDowns';
 import TimeDropdown from '../TextField/TimeDropDown';
 import { ICustomField } from '../../../../../../features/task/taskSlice';
 import { useUpdateEntityCustomFieldValue } from '../../../../../../features/list/listService';
-import { convert12to24, convert24to12 } from './Convert/Index';
+import { handleConversion } from './Convert/Index';
+import dayjs from 'dayjs';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
+
+dayjs.extend(customParseFormat);
 
 interface timeFieldProp {
   taskCustomFields?: ICustomField;
@@ -14,9 +18,12 @@ interface timeFieldProp {
 }
 
 function TimeField({ taskCustomFields, taskId, fieldId }: timeFieldProp) {
+  const { timezone, time_format } = useAppSelector((state) => state.userSetting);
+  const userFormat = time_format === '0' ? 'h:mm A' : 'HH:mm';
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const [activeItem, setActiveItem] = useState<string | undefined>(convert24to12(taskCustomFields?.values[0].value));
-  const { timezone } = useAppSelector((state) => state.userSetting);
+  const [activeItem, setActiveItem] = useState<string | undefined>(
+    handleConversion(userFormat, taskCustomFields?.values[0].value)
+  );
   const { timeInterval } = useAppSelector((state) => state.calendar);
 
   const { mutate: onUpdate } = useUpdateEntityCustomFieldValue(taskId);
@@ -26,11 +33,11 @@ function TimeField({ taskCustomFields, taskId, fieldId }: timeFieldProp) {
   };
 
   const handleOption = (option: string) => {
-    const convertTo24 = convert12to24(option);
+    const convertedTime = dayjs(option.toLowerCase(), 'h:mma').format('HH:mm');
     setActiveItem(option);
     onUpdate({
       taskId,
-      value: [{ value: convertTo24 }],
+      value: [{ value: convertedTime }],
       fieldId
     });
   };
