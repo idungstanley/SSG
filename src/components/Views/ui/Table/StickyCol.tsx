@@ -454,5 +454,5 @@ export function StickyCol({
         </td>
       )}
     </div>
-  );
+  )
 }
