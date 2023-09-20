@@ -6,7 +6,7 @@ import FileIcon from '../../assets/icons/FileIcon';
 import { CreateTaskOptions } from './RecurringSubUI/CreateTaskOptions';
 
 const IntervalArr = ['daily', 'weekly', 'fortnightly', 'monthly', 'yearly', 'days after', 'custom'];
-const statusArr = ['When Complete', 'When Done', 'Any'];
+const statusArr = ['When Complete', 'When Done'];
 
 export default function Recurring() {
   const [recuringInterval, setRecurringInterval] = useState<string>('daily');
