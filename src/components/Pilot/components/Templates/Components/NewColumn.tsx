@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import ColumnTypeDropdown from './Dropdown/ColumnTypeDropdown';
+import ColumnTypeDropdown from './ColumnTypeDropdown';
 import CreateDropdownField from './Dropdown/CreateDropdownField';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import { setNewCustomPropertyDetails } from '../../../../../features/task/taskSlice';
@@ -21,6 +21,7 @@ import Palletes from '../../../../ColorPalette/Palettes';
 import CreateRatings from './Rating/CreateRatings';
 import CreateManualProgress from './Progress/CreateManualProgress';
 import CreateAutoProgress from './Progress/CreateAutoProgress';
+import CreateTime from './Time/CreateTime';
 
 function NewColumn() {
   const dispatch = useAppDispatch();
@@ -54,7 +55,8 @@ function NewColumn() {
     checkbox: <CreateCheckbox />,
     rating: <CreateRatings />,
     'progress(auto)': <CreateAutoProgress />,
-    'progress(manual)': <CreateManualProgress />
+    'progress(manual)': <CreateManualProgress />,
+    time: <CreateTime />
   };
 
   return (

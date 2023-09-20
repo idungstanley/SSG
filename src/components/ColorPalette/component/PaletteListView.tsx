@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { palette } from '../../../utils/Colors';
-import { VerticalScroll } from '../../ScrollableContainer/VerticalScroll 2';
+import { VerticalScroll } from '../../ScrollableContainer/VerticalScroll';
 import RoundedCheckbox from '../../Checkbox/RoundedCheckbox';
 
 interface ItemProps {

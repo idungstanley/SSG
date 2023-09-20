@@ -5,7 +5,7 @@ import { useAppSelector } from '../../app/hooks';
 interface CustomScrollableContainerProps extends HTMLAttributes<HTMLDivElement> {
   children: ReactNode;
 }
-const DEFAULT_THUMB_WIDTH = 20;
+const DEFAULT_THUMB_HEIGHT = 20;
 const ARROWS_WRAPPER_HEIGHT = 27;
 
 export function VerticalScroll({ children, ...props }: CustomScrollableContainerProps) {
@@ -26,7 +26,7 @@ export function VerticalScroll({ children, ...props }: CustomScrollableContainer
     activePlaceId
   } = useAppSelector((state) => state.workspace);
 
-  const [thumbWidth, setThumbWidth] = useState(DEFAULT_THUMB_WIDTH);
+  const [thumbHeight, setThumbHeight] = useState(DEFAULT_THUMB_HEIGHT);
   const [isThumbVisible, setIsThumbVisible] = useState(true);
   const [topPosition, setTopPosition] = useState<number>(-ARROWS_WRAPPER_HEIGHT);
   const [scrollStartPosition, setScrollStartPosition] = useState<number | null>(null);
@@ -49,7 +49,7 @@ export function VerticalScroll({ children, ...props }: CustomScrollableContainer
         const target = e.target as HTMLDivElement;
         const rect = target.getBoundingClientRect();
         const trackTop = rect.top;
-        const thumbOffset = -(thumbWidth / 2);
+        const thumbOffset = -(thumbHeight / 2);
         const clickRatio = (clientY - trackTop + thumbOffset) / trackCurrent.clientHeight;
         const scrollAmount = Math.floor(clickRatio * contentCurrent.scrollHeight);
         contentCurrent.scrollTo({
@@ -58,7 +58,7 @@ export function VerticalScroll({ children, ...props }: CustomScrollableContainer
         });
       }
     },
-    [thumbWidth]
+    [thumbHeight]
   );
 
   const handleThumbPosition = useCallback(() => {
@@ -69,7 +69,7 @@ export function VerticalScroll({ children, ...props }: CustomScrollableContainer
     const { clientHeight: trackHeight } = scrollTrackRef.current;
     let newTop;
     newTop = (+contentTop / +contentHeight) * trackHeight;
-    newTop = Math.min(newTop, trackHeight - thumbWidth) - ARROWS_WRAPPER_HEIGHT;
+    newTop = Math.min(newTop, trackHeight - thumbHeight) - ARROWS_WRAPPER_HEIGHT;
     setTopPosition(newTop);
     const thumb = scrollThumbRef.current;
     thumb.style.top = `${newTop}px`;
@@ -102,12 +102,12 @@ export function VerticalScroll({ children, ...props }: CustomScrollableContainer
         const { scrollHeight: contentHeight, offsetHeight: contentOffsetHeight } = contentRef.current;
 
         const delta = e.clientY - scrollStartPosition;
-        const deltaY = delta * (contentOffsetHeight / thumbWidth);
+        const deltaY = delta * (contentOffsetHeight / thumbHeight);
         const newScroll = Math.min(initialScrollTop + deltaY, contentHeight - contentOffsetHeight);
         contentRef.current.scrollTop = newScroll;
       }
     },
-    [isDragging, scrollStartPosition, thumbWidth]
+    [isDragging, scrollStartPosition, thumbHeight]
   );
 
   const pilotFromLS = JSON.parse(localStorage.getItem('pilot') || '""') as {
@@ -120,21 +120,19 @@ export function VerticalScroll({ children, ...props }: CustomScrollableContainer
 
   // If the content and the scrollbar track exist, use a ResizeObserver to adjust height of thumb and listen for scroll event to move the thumb
   useEffect(() => {
-    const handleResize = (ref: HTMLDivElement, trackSize: number) => {
+    const handleResize = (ref: HTMLDivElement) => {
       const { clientHeight, scrollHeight } = ref;
-      const THUMB_HEIGHT = (clientHeight / scrollHeight) * trackSize;
-      setThumbWidth(Math.max(THUMB_HEIGHT + 27, DEFAULT_THUMB_WIDTH));
       const showScrollHeight = scrollHeight - 10;
-
+      const THUMB_HEIGHT = (clientHeight / scrollHeight) * clientHeight;
+      setThumbHeight(Math.max(THUMB_HEIGHT, DEFAULT_THUMB_HEIGHT));
       setIsThumbVisible(showScrollHeight > clientHeight); // Check if the content height is greater than the track height
     };
 
     const calculateThumbSize = () => {
       if (contentRef.current && scrollTrackRef.current) {
         const ref = contentRef.current;
-        const { clientHeight: trackHeight } = scrollTrackRef.current;
         observer.current = new ResizeObserver(() => {
-          handleResize(ref, trackHeight);
+          handleResize(ref);
         });
         observer.current.observe(ref);
         ref.addEventListener('scroll', handleThumbPosition);
@@ -215,7 +213,7 @@ export function VerticalScroll({ children, ...props }: CustomScrollableContainer
       {isThumbVisible && (
         <div className="flex flex-col items-center w-4 mt-2 group">
           <div />
-          <div className="flex flex-col items-center h-full mb-4">
+          <div className="flex flex-col items-center h-full">
             {renderScrollArrows()}
             <div className="relative flex items-center flex-grow block w-2">
               <div
@@ -228,7 +226,7 @@ export function VerticalScroll({ children, ...props }: CustomScrollableContainer
                 ref={scrollThumbRef}
                 onMouseDown={handleThumbMousedown}
                 style={{
-                  height: `${thumbWidth}px`,
+                  height: `${thumbHeight}px`,
                   top: `${topPosition}px`,
                   cursor: isDragging ? 'grabbing' : 'grab'
                 }}

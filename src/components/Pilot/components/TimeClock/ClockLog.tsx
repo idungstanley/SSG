@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
-import { setTimeArr, setTimeSortArr } from '../../../../features/task/taskSlice';
+import { setTimeArr, setTimeLogColumnData, setTimeSortArr } from '../../../../features/task/taskSlice';
 import { IEntries, ITimeEntriesRes } from '../../../../features/task/interface.tasks';
 import { useEffect, useRef, useState } from 'react';
 import { useGetUserSettingsData } from '../../../../features/task/taskService';
@@ -13,6 +13,7 @@ export type Header = {
   id: string;
   hidden: boolean;
   value: string;
+  sorted: boolean;
 };
 
 export interface User {
@@ -28,18 +29,16 @@ interface LogProps {
 }
 
 export default function ClockLog({ getTaskEntries }: LogProps) {
-  const { timeSortStatus, timeLogColumnData } = useAppSelector((state) => state.task);
+  const { timeLogColumnData } = useAppSelector((state) => state.task);
 
   const dispatch = useAppDispatch();
 
-  const fetchSortData = useGetUserSettingsData({ keys: 'time_entry' });
-
   const [headers, setHeaders] = useState<Header[]>([
-    { title: 'user', id: '1', hidden: false, value: 'team_member_id' },
-    { title: 'duration', id: '2', hidden: false, value: 'duration' },
-    { title: 'start date', id: '3', hidden: false, value: 'start_date' },
-    { title: 'end date', id: '4', hidden: false, value: 'end_date' },
-    { title: 'description', id: '5', hidden: true, value: '' }
+    { title: 'user', id: '1', hidden: false, value: 'team_member_id', sorted: false },
+    { title: 'duration', id: '2', hidden: false, value: 'duration', sorted: false },
+    { title: 'start date', id: '3', hidden: false, value: 'start_date', sorted: false },
+    { title: 'end date', id: '4', hidden: false, value: 'end_date', sorted: false },
+    { title: 'description', id: '5', hidden: true, value: '', sorted: false }
   ]);
   const [teamMember, setTeamMember] = useState<User[]>([]);
   const [teamMemberId, setTeamMemberId] = useState<string[]>([]);
@@ -67,35 +66,8 @@ export default function ClockLog({ getTaskEntries }: LogProps) {
   }, [getTaskEntries?.data.filters.team_members]);
 
   useEffect(() => {
-    fetchSortData;
-    if (timeSortStatus) {
-      toast.custom(
-        (t) => (
-          <SaveFilterToast
-            body="Sort Data Saved successfully"
-            title="Sorting Saved"
-            toastId={t.id}
-            extended="timeSort"
-          />
-        ),
-        {
-          position: 'bottom-right',
-          duration: Infinity
-        }
-      );
-    }
-  }, [timeSortStatus]);
-
-  useEffect(() => {
-    if (timeLogColumnData) {
-      if (timeLogColumnData.length && !isArray(timeLogColumnData[0])) {
-        setHeaders(timeLogColumnData);
-      } else if (isArray(timeLogColumnData[0])) {
-        dispatch(setTimeSortArr([]));
-        dispatch(setTimeArr([]));
-      }
-    }
-  }, [timeLogColumnData]);
+    dispatch(setTimeLogColumnData(headers));
+  }, [headers]);
 
   useEffect(() => {
     if (prevLogColumnsRef.current !== viewChanges.logColumns && viewChanges.logColumns) {
