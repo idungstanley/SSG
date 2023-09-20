@@ -26,8 +26,8 @@ import FormatListBullet from '../../assets/icons/FormatListBullet';
 import Input from '../input/Input';
 import { CiSearch } from 'react-icons/ci';
 import Button from '../Button';
-import ArrowDown from '../../assets/icons/ArrowDown';
 import ArrowDownFilled from '../../assets/icons/ArrowDownFilled';
+import PaletteListView from './component/PaletteListView';
 
 interface PaletteProps {
   title?: string;
@@ -43,6 +43,12 @@ interface PaletteProps {
 interface ChromePickerProps {
   hex: string;
 }
+
+const paletteViews = {
+  BOARD: 'Board',
+  LIST: 'List'
+};
+
 export default function PaletteManager({
   title,
   setPaletteColor,
@@ -62,7 +68,7 @@ export default function PaletteManager({
   const [isInnerFrameActive, setIsInnerFrameActive] = useState<boolean>(false);
   const [displayColorPicker, setDisplayColorPicker] = useState<boolean>(false);
   const [customColor, setCustomColor] = useState<string>('');
-  const [views, setViews] = useState<string>('board');
+  const [selectedViews, setSelectedViews] = useState<string>(paletteViews.BOARD);
   const [isSearch, setIsSearch] = useState<boolean>(false);
   const [showListShapes, setShowListShapes] = useState<boolean>(false);
 
@@ -158,9 +164,20 @@ export default function PaletteManager({
     dispatch(setPaletteDropDown({ ...paletteDropdown, show: false }));
   };
 
-  // const views = [
-  //   {label: 'Board', element: }
-  // ]
+  const views = [
+    {
+      label: paletteViews.BOARD,
+      element: <ColorPalette handleClick={handleClick} />,
+      icon: <GridViews color={selectedViews === paletteViews.BOARD ? 'white' : 'rgb(191, 0, 255)'} />
+    },
+    {
+      label: paletteViews.LIST,
+      element: <PaletteListView />,
+      icon: <FormatListBullet color={selectedViews === paletteViews.LIST ? 'white' : 'rgb(191, 0, 255)'} />
+    }
+  ];
+
+  const selectedElement = views.find((items) => items.label === selectedViews)?.element;
 
   return (
     <Menu
@@ -176,15 +193,20 @@ export default function PaletteManager({
       <div className="w-auto p-2 overflow-y-auto rounded-full drop-shadow-2xl" style={{ borderRadius: '5px' }}>
         <div className="z-50 flex flex-col">
           {!isSearch && (
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between mb-2">
               <p className="justify-center ml-2 text-gray-500">COLOUR LIBRARY</p>
               <div className="flex items-center gap-1">
-                <span className={` p-1 rounded ${views === 'board' ? 'bg-primary-500' : 'border border-primary-200'}`}>
-                  <GridViews color={views === 'board' ? 'white' : undefined} />
-                </span>
-                <span className="p-1 border rounded border-primary-200" onClick={() => setViews('list')}>
-                  <FormatListBullet />
-                </span>
+                {views.map((item, index) => (
+                  <span
+                    className={` p-1 rounded ${
+                      selectedViews === item.label ? 'bg-primary-500' : 'border border-primary-200'
+                    }`}
+                    key={index}
+                    onClick={() => setSelectedViews(item.label)}
+                  >
+                    {item.icon}
+                  </span>
+                ))}
                 <span className="p-1 border rounded border-primary-200" onClick={() => setIsSearch(true)}>
                   <SearchIcon />
                 </span>
@@ -213,8 +235,8 @@ export default function PaletteManager({
                 onClick={() => setShowListShapes((prev) => !prev)}
               >
                 <p>{title + ' Shapes'}</p>
-                <ArrowDownFilled />
-                {showListShapes && <span className="absolute left-0 top-6">{topContent}</span>}
+                <ArrowDownFilled color={showListShapes ? 'white' : undefined} />
+                {showListShapes && <span className="absolute left-0 right-0 top-6">{topContent}</span>}
               </span>
               <ListIconComponent
                 shape={shape}
@@ -233,7 +255,7 @@ export default function PaletteManager({
               <hr className="h-px bg-gray-200 border-0 dark:bg-gray-400" />
             </span>
           )}
-          <ColorPalette handleClick={handleClick} />
+          {selectedElement && selectedElement}
           <div className="flex items-center justify-between mt-2">
             <span className="flex items-center p-1 ml-2 border rounded-md border-primary-200">
               <BiPaint
