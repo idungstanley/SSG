@@ -3,6 +3,7 @@ import ArrowDown from '../../assets/icons/ArrowDown';
 import ArrowUp from '../../assets/icons/ArrowUp';
 import RadioWrapper from './RadioWrapper';
 import FileIcon from '../../assets/icons/FileIcon';
+import { CreateTaskOptions } from './RecurringSubUI/CreateTaskOptions';
 
 const IntervalArr = ['daily', 'weekly', 'fortnightly', 'monthly', 'yearly', 'days after', 'custom'];
 const statusArr = ['When Complete', 'When Done', 'Any'];
@@ -10,9 +11,14 @@ const statusArr = ['When Complete', 'When Done', 'Any'];
 export default function Recurring() {
   const [recuringInterval, setRecurringInterval] = useState<string>('daily');
   const [statusInterval, setStatusInterval] = useState<string>('When Complete');
-  const [dropRecurring, setDropRecurring] = useState<{ recurringInterval: boolean; statusInterval: boolean }>({
+  const [dropRecurring, setDropRecurring] = useState<{
+    recurringInterval: boolean;
+    statusInterval: boolean;
+    createTaskOption: boolean;
+  }>({
     recurringInterval: false,
-    statusInterval: false
+    statusInterval: false,
+    createTaskOption: false
   });
   const [btnCheckStatus, setbtnCheck] = useState<{ [key: string]: boolean }>({
     frequency: true,
@@ -46,9 +52,18 @@ export default function Recurring() {
         </div>
       </label>
       <div className="px-3 flex flex-col space-y-4">
-        <RadioWrapper btnCheckState={btnCheckStatus.task} checkStateFn={setbtnCheck} stateValue="task">
-          <span className="text-alsoit-text-md font-semibold">Create Task</span>
-        </RadioWrapper>
+        <div className="flex justify-between w-full relative">
+          <RadioWrapper btnCheckState={btnCheckStatus.task} checkStateFn={setbtnCheck} stateValue="task">
+            <span className="text-alsoit-text-md font-semibold">Create Task</span>
+          </RadioWrapper>
+          <span
+            className="text-alsoit-gray-75 cursor-pointer"
+            onClick={() => setDropRecurring((prev) => ({ ...prev, createTaskOption: !prev.createTaskOption }))}
+          >
+            Options
+          </span>
+          {dropRecurring.createTaskOption && <CreateTaskOptions />}
+        </div>
         <RadioWrapper btnCheckState={btnCheckStatus['frequency']} checkStateFn={setbtnCheck} stateValue="frequency">
           <span className="text-alsoit-text-md font-semibold">Recur Forever</span>
         </RadioWrapper>
