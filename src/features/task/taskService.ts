@@ -56,7 +56,7 @@ import { getHub } from '../hubs/hubSlice';
 import { setFilteredResults } from '../search/searchSlice';
 import { addNewSubtaskManager } from '../../managers/Subtask';
 import { IList } from '../hubs/hubs.interfaces';
-import { setDraggableItem } from '../list/listSlice';
+import { setDragOverList, setDragOverTask, setDraggableItem } from '../list/listSlice';
 
 //edit a custom field
 export const UseEditCustomFieldService = (data: {
@@ -170,7 +170,8 @@ export const useMoveTask = () => {
         dispatch(setSubtasks(updatedSubtasks));
         dispatch(getHub(updatedTree));
         dispatch(setFilteredResults(updatedTree));
-      } else {
+      }
+      if (dragOverTask) {
         // move like sub
         const { updatedTasks, updatedSubtasks, updatedTree } = taskMoveToSubtaskManager(
           draggableTask as ITaskFullList,
@@ -185,6 +186,8 @@ export const useMoveTask = () => {
         dispatch(setFilteredResults(updatedTree));
       }
       dispatch(setDraggableItem(null));
+      dispatch(setDragOverList(null));
+      dispatch(setDragOverTask(null));
     }
   });
 };

@@ -123,17 +123,9 @@ export function List({ tasks, subtasksCustomeFields, listDetails }: ListProps) {
     dispatch(setCurrTeamMemId(null));
   };
 
-  const { setNodeRef } = useDroppable({
-    id: tasks[0].list_id,
-    data: {
-      isOverList: true
-    }
-  });
-
   return (
     <div
       className="pt-1 border-t-4 border-l-4 border-purple-500 rounded-3xl bg-purple-50"
-      ref={setNodeRef}
       style={{
         borderColor: ListColor?.outerColour,
         backgroundColor: LightenColor(ListColor?.outerColour, 0.95),

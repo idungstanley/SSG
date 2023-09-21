@@ -239,7 +239,7 @@ export default function AdditionalHeader() {
             )}
           </div>
         )}
-        <MdTab className="w-5 h-5" />
+        <MdTab className="w-5 h-5" style={{ color: 'orange' }} />
         {screenRecording === 'recording' && tabsId !== 6 && (
           <div className="relative w-16 flex space-x-0.5" onMouseEnter={() => setRecordBlinker(!recordBlinker)}>
             <div className="flex items-center justify-start w-5 h-5 border-alsoit-danger rounded-full">
@@ -257,9 +257,9 @@ export default function AdditionalHeader() {
             )}
           </div>
         )}
-        <HiOutlineUpload className="w-5 h-5" />
-        <BsFillGrid3X3GapFill className="w-5 h-5" />
-        <MdHelpOutline className="w-5 h-5" />
+        <HiOutlineUpload className="w-5 h-5" style={{ color: 'orange' }} />
+        <BsFillGrid3X3GapFill className="w-5 h-5" style={{ color: 'orange' }} />
+        <MdHelpOutline className="w-5 h-5" style={{ color: 'orange' }} />
         {is_clock_time === 1 && (
           <div
             className="relative w-16 font-semibold text-alsoit-text-lg text-alsoit-text border-alsoit-border-base border-alsoit-text rounded-md p-0.5 flex justify-center flex-col space-y-0 cursor-pointer"
