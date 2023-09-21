@@ -58,14 +58,6 @@ interface customPropertyInfo {
   };
 }
 
-interface IDuplicateTaskObj {
-  task_name: string;
-  task_id: string;
-  list_id: string;
-  is_everything: boolean;
-  popDuplicateTaskModal: boolean;
-}
-
 export interface ImyTaskData {
   id: string;
   name: string;
@@ -154,7 +146,6 @@ interface TaskState {
   comfortableViewWrap: boolean;
   verticalGrid: boolean;
   showNewTaskField: boolean;
-  duplicateTaskObj: IDuplicateTaskObj;
   showNewTaskId: string;
   singleLineView: boolean;
   toggleAllSubtask: boolean;
@@ -254,7 +245,6 @@ const initialState: TaskState = {
   saveSettingOnline: null,
   selectedTasksArray: [],
   verticalGrid: false,
-  duplicateTaskObj: { task_name: '', task_id: '', list_id: '', is_everything: true, popDuplicateTaskModal: true },
   taskUpperCase: false,
   triggerSaveSettings: false,
   triggerAutoSave: false,
@@ -363,9 +353,6 @@ export const taskSlice = createSlice({
     },
     setCurrTaskListId(state, action: PayloadAction<string>) {
       state.currTaskListId = action.payload;
-    },
-    setDuplicateTaskObj(state, action: PayloadAction<IDuplicateTaskObj>) {
-      state.duplicateTaskObj = action.payload;
     },
     setSearchValue(state, action: PayloadAction<string>) {
       state.searchValue = action.payload;
@@ -644,7 +631,6 @@ export const {
   setStatusId,
   setCurrTaskListId,
   setSearchValue,
-  setDuplicateTaskObj,
   setTaskIdForPilot,
   setCurrTeamMemId,
   getTaskColumns,
