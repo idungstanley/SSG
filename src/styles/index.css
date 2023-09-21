@@ -182,3 +182,14 @@ input:focus {
   border-radius: 6px;
   border: none;
 }
+
+.no-control-num-input {
+  -moz-appearance: textfield;
+  -webkit-appearance: none;
+}
+
+.no-control-num-input::-webkit-inner-spin-button,
+.no-control-num-input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
