@@ -322,3 +322,23 @@ export interface autoProgressProperties {
   };
   complete_on?: number;
 }
+
+export interface ITaskRecurResponse {
+  data: {
+    task_recur: {
+      id: string;
+      type: string;
+      execution_type: string;
+      new_task: string | string[];
+    };
+  };
+}
+
+export interface ITaskCreateProps {
+  taskId?: string;
+  type: string;
+  execution_type: string;
+  type_options?: string[];
+  new_task?: string | string[];
+  recur_options?: string[] | number[];
+}
