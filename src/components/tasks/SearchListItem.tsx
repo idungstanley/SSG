@@ -42,7 +42,10 @@ export default function SearchListItem({ list, paddingLeft }: ListItemProps) {
         {list.id === listId && (
           <span className="absolute top-0 bottom-0 left-0 rounded-r-lg w-0.5" style={{ backgroundColor: baseColor }} />
         )}
-        <div className="flex items-center space-x-1 overflow-hidden capitalize cursor-pointer">
+        <div
+          className="flex items-center space-x-1 overflow-hidden capitalize cursor-pointer"
+          onClick={() => console.log('connected')}
+        >
           <div>
             <ListIconComponent
               shape={activeShape ? activeShape : 'solid-circle'}
@@ -60,7 +63,7 @@ export default function SearchListItem({ list, paddingLeft }: ListItemProps) {
             }}
             className="pl-4 capitalize truncate cursor-pointer"
           >
-            {list.name}
+            <p>{list.name}</p>
           </div>
         </div>
       </section>

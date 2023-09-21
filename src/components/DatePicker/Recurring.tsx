@@ -14,6 +14,7 @@ export default function Recurring() {
     recurringInterval: false,
     statusInterval: false
   });
+
   return (
     <div className="flex flex-col space-y-2 p-2">
       <label htmlFor="recur" className="flex flex-col space-y-1">

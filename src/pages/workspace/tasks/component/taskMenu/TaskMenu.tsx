@@ -218,7 +218,7 @@ export default function TaskMenu() {
             <>
               <ToolTip className="pt-2" title={menu.label} placement="bottom">
                 <p
-                  className="flex items-center px-2 cursor-pointer mt-0 text-white text-lg "
+                  className="flex items-center px-2 cursor-pointer mt-0 text-white text-lg"
                   onClick={(e) => menu.handleClick(e)}
                   key={menu.id}
                 >
@@ -237,7 +237,7 @@ export default function TaskMenu() {
       <div className="absolute z-50">
         {
           <AlsoitMenuDropdown handleClose={handleClose} anchorEl={showSelectDropdown}>
-            <ActiveTreeSearch />
+            <ActiveTreeSearch option="taskDuplicate" />
           </AlsoitMenuDropdown>
         }
       </div>

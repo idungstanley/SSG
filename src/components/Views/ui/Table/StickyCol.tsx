@@ -106,7 +106,7 @@ export function StickyCol({
         ? navigate(`/${currentWorkspaceId}/tasks/sh/${subhubId}/t/${task.id}`, { replace: true })
         : walletId
         ? navigate(`/${currentWorkspaceId}/tasks/w/${walletId}/t/${task.id}`, { replace: true })
-        : navigate(`/${currentWorkspaceId}/tasks/l/${listId}/t/${task.id}`, { replace: true });
+        : navigate(`/${currentWorkspaceId}/tasks/l/${listId || task.list_id}/t/${task.id}`, { replace: true });
       dispatch(
         setShowPilotSideOver({
           id: task.id,
@@ -332,13 +332,6 @@ export function StickyCol({
                 <span className={cl('h-0.5 bg-alsoit-purple-300 w-full m-0')}></span>
               </span>
             )}
-            {separateSubtasksMode && task?.parentName ? (
-              <ToolTip title={task.parentName}>
-                <button className="p-1 rounded-md bg-white">
-                  <SubtasksIcon className="w-3 h-3" />
-                </button>
-              </ToolTip>
-            ) : null}
             <button onClick={isBlockToOpenSubtasks ? () => null : onToggleDisplayingSubTasks} className="pl-1">
               {showSubTasks || toggleAllSubtask ? (
                 <div
@@ -361,6 +354,13 @@ export function StickyCol({
             <div onClick={() => dispatch(setCurrentTaskStatusId(task.id as string))}>
               <StatusDropdown TaskCurrentStatus={task.status} />
             </div>
+            {separateSubtasksMode && task?.parentName && !paddingLeft ? (
+              <ToolTip title={task.parentName}>
+                <button className="pl-3">
+                  <SubtasksIcon className="w-4 h-4" />
+                </button>
+              </ToolTip>
+            ) : null}
             <div className="flex flex-col flex-grow items-start justify-start pl-2 space-y-1">
               <div
                 className="flex w-full items-center text-left"
