@@ -55,15 +55,10 @@ export function DatePickerManualDates({ range }: DatePickerManualDatesProps) {
   const handleChange = (event: ChangeEvent<HTMLInputElement>, point: string) => {
     const inputData = event.target;
     const allowedChars = inputData.getAttribute('data-allowed-chars');
-    const currentValue = inputData.value; // Use .value instead of .textContent
-
-    // Define a regular expression pattern based on the allowed characters
+    const currentValue = inputData.value;
     const pattern = new RegExp(`^[${allowedChars}]*$`);
-
-    // Check if the input matches the pattern
     if (currentValue) {
       if (!pattern.test(currentValue)) {
-        // If it doesn't match, remove invalid characters
         inputData.value = currentValue.replace(new RegExp(`[^${allowedChars}]`, 'g'), '');
       }
     }
