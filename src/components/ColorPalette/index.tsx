@@ -188,7 +188,11 @@ export default function PaletteManager({
         vertical: cords?.top || 'center',
         horizontal: 15
       }}
-      sx={{ borderRadius: '16px' }}
+      PaperProps={{
+        style: {
+          borderRadius: '12px'
+        }
+      }}
     >
       <div className="w-auto p-2 overflow-y-auto rounded-full drop-shadow-2xl" style={{ borderRadius: '5px' }}>
         <div className="z-50 flex flex-col">

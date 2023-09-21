@@ -28,7 +28,7 @@ export default function Page({ header, additionalHeader, children, additional, p
   const { showOverlay } = useAppSelector((state) => state.workspace);
   const { sidebarWidthRD, showExtendedBar } = useAppSelector((state) => state.workspace);
   const { showSidebar, userSettingsData } = useAppSelector((state) => state.account);
-  const { show: showFullPilot } = useAppSelector((state) => state.slideOver.pilotSideOver);
+  const { show: showFullPilot, id } = useAppSelector((state) => state.slideOver.pilotSideOver);
 
   const DEFAULT_PILOT_WIDTH = dimensions.pilot.default;
   const LS_PILOT_KEY = 'pilotWidth';
@@ -36,7 +36,12 @@ export default function Page({ header, additionalHeader, children, additional, p
   const culculateWidthForContent = () => {
     const sidebarWidth = showSidebar ? userSettingsData?.sidebarWidth : sidebarWidthRD;
     const extendedBarWidth = showExtendedBar ? SIDEBAR_MAX_WIDTH : SIDEBAR_MIN_WIDTH;
-    const pilotWidth = showFullPilot ? pilotWidthFromLS + PILOT_SCROLLBAR_WIDTH : PILOT_COLLAPSE_WIDTH;
+    const pilotWidth =
+      showFullPilot && id
+        ? pilotWidthFromLS + PILOT_SCROLLBAR_WIDTH
+        : PILOT_COLLAPSE_WIDTH && id
+        ? PILOT_COLLAPSE_WIDTH
+        : undefined;
     return `calc(100vw - ${sidebarWidth}px - ${extendedBarWidth}px - ${pilotWidth}px)`;
   };
 
