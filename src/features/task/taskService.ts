@@ -1,8 +1,10 @@
 import requestNew from '../../app/requestNew';
 import {
   IFullTaskRes,
+  ITaskCreateProps,
   ITaskFullList,
   ITaskListRes,
+  ITaskRecurResponse,
   ITaskRes,
   ITimeEntriesRes,
   ITimeEntryParams,
@@ -13,7 +15,7 @@ import {
   TaskId,
   newTaskDataRes
 } from './interface.tasks';
-import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { QueryClient, useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import {
   setScreenRecording,
@@ -1065,10 +1067,7 @@ export function useMediaStream() {
         activeItemId,
         activeItemType
       });
-      // const tracks = stream?.getTracks();
-      // if (tracks) {
-      //   tracks.forEach((track) => track.stop());
-      // }
+
       // Invalidate React Query
       queryClient.invalidateQueries(['attachments']);
     }
@@ -1097,4 +1096,40 @@ export function useMediaStream() {
     handleToggleMute,
     isStarting
   };
+}
+
+export function useGetTaskRecuring({ taskId }: { taskId?: string }) {
+  return useQuery(['recurring'], async () => {
+    const data = await requestNew<ITaskRecurResponse>({
+      url: `tasks/${taskId}/recur`,
+      method: 'GET'
+    });
+
+    return data.data;
+  });
+}
+
+export function useCreateTaskRecuring() {
+  const queryClient = new QueryClient();
+  return useMutation(
+    async ({ taskId, execution_type, type, new_task, recur_options, type_options }: ITaskCreateProps) => {
+      const data = await requestNew<ITaskRecurResponse>({
+        url: `tasks/${taskId}/recur`,
+        method: 'POST',
+        data: {
+          execution_type,
+          type,
+          new_task,
+          recur_options,
+          type_options
+        }
+      });
+      return data.data;
+    },
+    {
+      onSuccess() {
+        queryClient.invalidateQueries(['recurring']);
+      }
+    }
+  );
 }

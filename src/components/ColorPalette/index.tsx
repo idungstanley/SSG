@@ -193,7 +193,7 @@ export default function PaletteManager({
       <div className="w-auto p-2 overflow-y-auto rounded-full drop-shadow-2xl" style={{ borderRadius: '5px' }}>
         <div className="z-50 flex flex-col">
           {!isSearch && (
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between mb-2">
               <p className="justify-center ml-2 text-gray-500">COLOUR LIBRARY</p>
               <div className="flex items-center gap-1">
                 {views.map((item, index) => (
