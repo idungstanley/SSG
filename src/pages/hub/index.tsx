@@ -28,6 +28,8 @@ export default function HubPage() {
   const { tasks: tasksStore, saveSettingLocal } = useAppSelector((state) => state.task);
   const formatSettings = useformatSettings();
 
+  console.log(tasksStore['840808ef'], 'tasksStore');
+
   const { data: hub } = UseGetHubDetails({ activeItemId: hubId, activeItemType: EntityType.hub });
 
   // get task_view id for list view
@@ -69,6 +71,7 @@ export default function HubPage() {
 
   const tasks = useMemo(() => (data ? data.pages.flatMap((page) => page.data.tasks) : []), [data]);
   const lists = useMemo(() => generateLists(tasks, hub?.data.hub?.custom_field_columns as IField[]), [tasks, hub]);
+  console.log(lists, 'lists');
 
   useEffect(() => {
     if (Object.keys(lists).length) {
@@ -112,7 +115,9 @@ export default function HubPage() {
           <section style={{ minHeight: '0', maxHeight: '83vh' }} className="w-full h-full p-4 pb-0 space-y-10">
             {/* lists */}
             {Object.keys(lists).map((listId) => (
-              <Fragment key={listId}>{tasksStore[listId] ? <List tasks={tasksStore[listId]} /> : null}</Fragment>
+              <Fragment key={listId}>
+                {tasksStore[listId] ? <List listId={listId} tasks={tasksStore[listId]} /> : null}
+              </Fragment>
             ))}
           </section>
         </VerticalScroll>

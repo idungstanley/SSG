@@ -144,7 +144,7 @@ export function Row({
     <>
       {/* current task */}
 
-      <tr style={style} className="contents relative group dNFlex">
+      <tr style={style} className="relative contents group dNFlex">
         <StickyCol
           showSubTasks={showSubTasks}
           setShowSubTasks={setShowSubTasks}
@@ -152,6 +152,7 @@ export function Row({
           isListParent={isListParent}
           task={task}
           taskIndex={taskIndex}
+          taskStatuses={taskStatuses}
           parentId={parentId as string}
           task_status={task_status as string}
           onClose={handleClose as VoidFunction}
@@ -169,10 +170,10 @@ export function Row({
           }
         >
           {/* actions */}
-          <div className="opacity-0 absolute right-0 group-hover:opacity-100 flex items-center justify-center mr-1 space-x-1">
+          <div className="absolute right-0 flex items-center justify-center mr-1 space-x-1 opacity-0 group-hover:opacity-100">
             {/* effects */}
             <ToolTip title="Apply Effects">
-              <button className="p-1 border rounded-md bg-white" onClick={(e) => e.stopPropagation()}>
+              <button className="p-1 bg-white border rounded-md" onClick={(e) => e.stopPropagation()}>
                 <Effect className="w-3 h-3" />
               </button>
             </ToolTip>
@@ -180,7 +181,7 @@ export function Row({
             {/* tags */}
             {'tags' in task ? (
               <ToolTip title="Tags">
-                <button className=" border rounded-md bg-white">
+                <button className="bg-white border rounded-md ">
                   <ManageTagsDropdown entityId={task.id} tagsArr={task.tags as Tag[]} entityType="task" />
                 </button>
               </ToolTip>
@@ -189,13 +190,13 @@ export function Row({
             {/* show create subtask field */}
             {task.descendants_count < 1 && (
               <ToolTip title="Subtask">
-                <button className="p-1 border rounded-md bg-white" onClick={(e) => onShowAddSubtaskField(e, task.id)}>
+                <button className="p-1 bg-white border rounded-md" onClick={(e) => onShowAddSubtaskField(e, task.id)}>
                   <SubtasksIcon className="w-3 h-3" />
                 </button>
               </ToolTip>
             )}
             <ToolTip title="Enhance View">
-              <button className="p-1 pl-4 rounded-md bg-white" onClick={(e) => e.stopPropagation()}>
+              <button className="p-1 pl-4 bg-white rounded-md" onClick={(e) => e.stopPropagation()}>
                 <Enhance className="w-3 h-3" />
               </button>
             </ToolTip>
