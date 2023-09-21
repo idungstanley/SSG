@@ -11,6 +11,7 @@ interface IWListProps {
   leftMargin: boolean;
   paddingLeft: string | number;
   type: string;
+  option?: string;
   level?: number;
   handleTabClick: (
     e: React.MouseEvent<HTMLParagraphElement, MouseEvent>,
@@ -20,7 +21,14 @@ interface IWListProps {
   ) => void;
 }
 
-export default function SearchWList({ wallets, leftMargin, paddingLeft, level = 1, handleTabClick }: IWListProps) {
+export default function SearchWList({
+  wallets,
+  leftMargin,
+  option,
+  paddingLeft,
+  level = 1,
+  handleTabClick
+}: IWListProps) {
   const dispatch = useAppDispatch();
   const { showExtendedBar } = useAppSelector((state) => state.workspace);
 
@@ -55,6 +63,7 @@ export default function SearchWList({ wallets, leftMargin, paddingLeft, level = 
           {wallet.children.length && showSubWallet.includes(wallet.id) ? (
             <SearchWList
               wallets={wallet.children}
+              option={option}
               leftMargin={false}
               type="subwallet2"
               handleTabClick={handleTabClick}
@@ -62,7 +71,7 @@ export default function SearchWList({ wallets, leftMargin, paddingLeft, level = 
               level={level + 1}
             />
           ) : null}
-          <div style={{ opacity: '0.5', pointerEvents: 'none' }}>
+          <div style={option !== 'taskDuplicate' ? { opacity: '0.5', pointerEvents: 'none' } : {}}>
             {wallet.lists.length && showSubWallet.includes(wallet.id) && !showExtendedBar ? (
               <SearchLList list={wallet.lists} leftMargin={false} paddingLeft={Number(paddingLeft) + 32} />
             ) : null}
