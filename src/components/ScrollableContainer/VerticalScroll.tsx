@@ -25,6 +25,7 @@ export function VerticalScroll({ children, ...props }: CustomScrollableContainer
     activeItemId,
     activePlaceId
   } = useAppSelector((state) => state.workspace);
+  const { tasks, subtasks } = useAppSelector((state) => state.task);
 
   const [thumbHeight, setThumbHeight] = useState(DEFAULT_THUMB_HEIGHT);
   const [isThumbVisible, setIsThumbVisible] = useState(true);
@@ -120,10 +121,10 @@ export function VerticalScroll({ children, ...props }: CustomScrollableContainer
 
   // If the content and the scrollbar track exist, use a ResizeObserver to adjust height of thumb and listen for scroll event to move the thumb
   useEffect(() => {
-    const handleResize = (ref: HTMLDivElement) => {
+    const handleResize = (ref: HTMLDivElement, trackSize: number) => {
       const { clientHeight, scrollHeight } = ref;
       const showScrollHeight = scrollHeight - 10;
-      const THUMB_HEIGHT = (clientHeight / scrollHeight) * clientHeight;
+      const THUMB_HEIGHT = (clientHeight / scrollHeight) * trackSize;
       setThumbHeight(Math.max(THUMB_HEIGHT, DEFAULT_THUMB_HEIGHT));
       setIsThumbVisible(showScrollHeight > clientHeight); // Check if the content height is greater than the track height
     };
@@ -131,8 +132,9 @@ export function VerticalScroll({ children, ...props }: CustomScrollableContainer
     const calculateThumbSize = () => {
       if (contentRef.current && scrollTrackRef.current) {
         const ref = contentRef.current;
+        const { clientHeight: trackHeight } = scrollTrackRef.current;
         observer.current = new ResizeObserver(() => {
-          handleResize(ref);
+          handleResize(ref, trackHeight);
         });
         observer.current.observe(ref);
         ref.addEventListener('scroll', handleThumbPosition);
@@ -162,7 +164,10 @@ export function VerticalScroll({ children, ...props }: CustomScrollableContainer
     activeSubTimeClockTabId,
     activeSubHubManagerTabId,
     activeSubCommunicationTabId,
-    activeSubChecklistTabId
+    activeSubChecklistTabId,
+    tasks,
+    subtasks,
+    thumbHeight
   ]);
 
   // Listen for mouse events to handle scrolling by dragging the thumb
@@ -213,7 +218,7 @@ export function VerticalScroll({ children, ...props }: CustomScrollableContainer
       {isThumbVisible && (
         <div className="flex flex-col items-center w-4 mt-2 group">
           <div />
-          <div className="flex flex-col items-center h-full">
+          <div className="flex flex-col items-center h-full mb-4">
             {renderScrollArrows()}
             <div className="relative flex items-center flex-grow block w-2">
               <div

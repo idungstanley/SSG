@@ -324,7 +324,7 @@ export const UseGetFullTaskList = ({
     },
     {
       keepPreviousData: true,
-      enabled: !!hub_id || !!wallet_id || !draggableItemId,
+      enabled: (!!hub_id || !!wallet_id) && !draggableItemId,
       onSuccess: (data) => {
         data.pages.map((page) => page.data.tasks.map((task) => queryClient.setQueryData(['task', task.id], task)));
       },
@@ -489,7 +489,7 @@ export const UseUpdateTaskDateService = ({
         url: `tasks/${task_id}`,
         method: 'PUT',
         data: {
-          start_date: taskDate
+          [type as string]: taskDate
         }
       });
       return data;
@@ -505,7 +505,7 @@ export const UseUpdateTaskDateService = ({
           task_id as string,
           listIds as string[],
           selectedTaskType === EntityType.task ? tasks : subtasks,
-          'start_date',
+          type as string,
           data.data.task.start_date as string
         );
         if (selectedTaskType === EntityType.task) {

@@ -66,7 +66,7 @@ import { WalletPage } from './pages/wallet';
 import Construction from './pages/settings/UserSettings/Pages/Construction';
 import TaskInvite from './pages/workspace/tasks/taskInvite/TaskInvite';
 import WorkSpaceTable from './pages/settings/WorkspaceSettings/GeneralWorkSpaceSettings/Table';
-import AllListsPage from './pages/all-lists';
+import EverythingPage from './pages/everything';
 
 const inbox = [
   {
@@ -170,7 +170,7 @@ export const routes = (user: IUser | null) => {
         { path: 'tasks/l/:listId', element: <ListPage /> },
         { path: 'tasks/l/:listId/t/:taskId', element: <ListPage /> },
         { path: 't/:taskId', element: <RenderTaskModal /> },
-        { path: 'all-lists', element: <AllListsPage /> },
+        { path: 'everything', element: <EverythingPage /> },
         ...inbox,
         { path: 'shared', element: <SharedPage /> },
         { path: 'search', element: <SearchPage /> },

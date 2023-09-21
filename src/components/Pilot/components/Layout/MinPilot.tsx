@@ -20,7 +20,7 @@ export default function MinPilot({ featureTabs, activeSection, setShowModal, sho
   return (
     <div
       onMouseLeave={() => (activeTabId ? dispatch(setActiveTabId()) : undefined)}
-      className="border-l relative divide-y h-full"
+      className="relative h-full border-l divide-y"
     >
       <div
         style={{
@@ -38,7 +38,7 @@ export default function MinPilot({ featureTabs, activeSection, setShowModal, sho
 
       <MinHotkeysList tabs={featureTabs} setShowModal={setShowModal} showModal={showModal} />
 
-      <MinTabs tabs={featureTabs} />
+      <MinTabs tabs={featureTabs} isMinified />
     </div>
   );
 }

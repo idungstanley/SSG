@@ -3,14 +3,6 @@ import { palette } from '../../../utils/Colors';
 import { VerticalScroll } from '../../ScrollableContainer/VerticalScroll';
 import RoundedCheckbox from '../../Checkbox/RoundedCheckbox';
 
-interface ItemProps {
-  item: {
-    hex_code: string;
-    library_name: string;
-    colour: string;
-  };
-}
-
 export default function PaletteListView() {
   return (
     <VerticalScroll>

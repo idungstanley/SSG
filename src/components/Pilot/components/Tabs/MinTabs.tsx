@@ -6,13 +6,14 @@ import { setActiveTabId } from '../../../../features/workspace/workspaceSlice';
 
 interface TabsProps {
   tabs: IPilotTab[];
+  isMinified: boolean;
 }
 
 const pilotFromLS = JSON.parse(localStorage.getItem('pilot') || '""') as { tabOrder: number[]; showTabLabel: boolean };
 
 const tabIdsFromLS = pilotFromLS.tabOrder || [];
 
-export default function MinTabs({ tabs }: TabsProps) {
+export default function MinTabs({ tabs, isMinified }: TabsProps) {
   const { activeTabId } = useAppSelector((state) => state.workspace);
   const dispatch = useAppDispatch();
   const tabItems = useMemo(
@@ -25,7 +26,7 @@ export default function MinTabs({ tabs }: TabsProps) {
   };
 
   return (
-    <nav className="flex py-2 px-2 col-span-1 h-fit flex-col gap-2 w-min">
+    <nav className={`flex flex-col col-span-1 gap-2 px-2 py-2 h-fit w-min ${isMinified ? 'border-none' : 'border-b'}`}>
       {tabItems.map((tab) => (
         <button
           key={tab.id}
