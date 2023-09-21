@@ -431,11 +431,11 @@ export function StickyCol({
                 </div>
               </ToolTip>
               <ToolTip title="Save">
-              <div className="border rounded-md p-1" style={{ borderColor: '#FFE7E7' }}>
-                <span onClick={(e) => handleOnSave(e as React.MouseEvent<HTMLButtonElement, MouseEvent>, task.id)}>
-              <ImCheckmark2 />
-              </span>
-              </div>
+                <div className="border rounded-md p-1" style={{ borderColor: '#FFE7E7' }}>
+                  <span onClick={(e) => handleOnSave(e as React.MouseEvent<HTMLButtonElement, MouseEvent>, task.id)}>
+                    <ImCheckmark2 />
+                  </span>
+                </div>
               </ToolTip>
             </div>
             <div className="ml-4 pt-2">
