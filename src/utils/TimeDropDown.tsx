@@ -3,7 +3,7 @@ import dayjs from 'dayjs';
 import { useAppSelector } from '../app/hooks';
 import { findNearestTime } from './FindNearesttime';
 
-type Option = string; // Change this type to match the type of your options
+type Option = string;
 
 interface ReusableSelectProps {
   value?: string;
