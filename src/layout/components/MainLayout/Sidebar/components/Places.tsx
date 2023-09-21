@@ -166,7 +166,7 @@ function Places() {
       <section>
         <ul
           aria-labelledby="projects-headline relative"
-          className={`border-t-2 border-b border-gray-200 divide-y divide-gray-200 ${
+          className={`border-t border-b border-gray-200 divide-y divide-gray-200 ${
             showSidebar ? '' : 'flex flex-col items-center'
           }`}
         >
