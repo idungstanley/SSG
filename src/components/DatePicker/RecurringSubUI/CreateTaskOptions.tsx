@@ -27,7 +27,7 @@ export function CreateTaskOptions() {
   }, [task]);
 
   useEffect(() => {
-    setItemsState(new Array(taskDetails.length - 3).fill(true));
+    setItemsState(new Array(taskDetails.length).fill(true));
   }, [taskDetails]);
 
   return (

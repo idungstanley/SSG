@@ -1,11 +1,12 @@
 import { useState } from 'react';
-import { RecurringIntervals } from '../Recurring';
 import ArrowUp from '../../../assets/icons/ArrowUp';
 import ArrowDown from '../../../assets/icons/ArrowDown';
+import { RecurringIntervals } from './RecuringInterval';
 
 export function FrequencyOption() {
   const [frequency, setFrequency] = useState<string>('repeat');
   const [dropdown, setDropDown] = useState<boolean>(false);
+  const [frequencyValue, setValue] = useState<string>('1');
   return (
     <div className="flex w-full justify-between items-center space-x-1.5">
       <div
@@ -25,6 +26,8 @@ export function FrequencyOption() {
       </div>
       <input
         type="number"
+        value={frequencyValue}
+        onChange={(e) => setValue(e.target.value)}
         className="no-control-num-input border-alsoit-gray-75 border rounded-md text-alsoit-text-md p-0.5 px-1.5 w-12"
       />
       <span>times</span>
