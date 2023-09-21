@@ -56,12 +56,14 @@ export default function Recurring() {
           <RadioWrapper btnCheckState={btnCheckStatus.task} checkStateFn={setbtnCheck} stateValue="task">
             <span className="text-alsoit-text-md font-semibold">Create Task</span>
           </RadioWrapper>
-          <span
-            className="text-alsoit-gray-75 cursor-pointer"
-            onClick={() => setDropRecurring((prev) => ({ ...prev, createTaskOption: !prev.createTaskOption }))}
-          >
-            Options
-          </span>
+          {btnCheckStatus.task && (
+            <span
+              className="text-alsoit-gray-75 cursor-pointer"
+              onClick={() => setDropRecurring((prev) => ({ ...prev, createTaskOption: !prev.createTaskOption }))}
+            >
+              Options
+            </span>
+          )}
           {dropRecurring.createTaskOption && <CreateTaskOptions />}
         </div>
         <RadioWrapper btnCheckState={btnCheckStatus['frequency']} checkStateFn={setbtnCheck} stateValue="frequency">
