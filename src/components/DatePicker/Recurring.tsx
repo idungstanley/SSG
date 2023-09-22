@@ -36,8 +36,6 @@ export default function Recurring() {
   const [statusStr, setStatus] = useState<string>('to do');
   const [taskColumns, setColumns] = useState<string[] | 'everything'>([]);
 
-  console.log(taskColumns);
-
   useEffect(() => {
     if (spaceStatuses) {
       spaceStatuses.map((status) => setStatusData((prev) => [...prev, status.name]));
