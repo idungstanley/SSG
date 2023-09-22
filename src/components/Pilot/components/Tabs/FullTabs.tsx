@@ -20,6 +20,7 @@ import Tab from './components/Tab';
 import { VerticalScroll } from '../../../ScrollableContainer/VerticalScroll';
 import { useAppSelector } from '../../../../app/hooks';
 import { HorizontalScroll } from '../../../ScrollableContainer/HorizontalScroll';
+import ToolTip from '../../../Tooltip/Tooltip';
 
 interface TabsProps {
   tabs: IPilotTab[];
@@ -97,7 +98,11 @@ export default function FullTabs({ tabs }: TabsProps) {
             >
               <SortableProvider disableOverflow={disableOverflow} items={tabItems} setItems={setTabItems}>
                 {tabItems.map((tab) => (
-                  <Tab key={tab.id} id={tab.id} icon={tab.icon} label={tab.label} showTabLabel={showTabLabel} />
+                  <div key={tab.label}>
+                    <ToolTip title={tab.label}>
+                      <Tab key={tab.id} id={tab.id} icon={tab.icon} label={tab.label} showTabLabel={showTabLabel} />
+                    </ToolTip>
+                  </div>
                 ))}
               </SortableProvider>
             </nav>

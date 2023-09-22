@@ -112,7 +112,9 @@ export default function HubPage() {
           <section style={{ minHeight: '0', maxHeight: '83vh' }} className="w-full h-full p-4 pb-0 space-y-10">
             {/* lists */}
             {Object.keys(lists).map((listId) => (
-              <Fragment key={listId}>{tasksStore[listId] ? <List tasks={tasksStore[listId]} /> : null}</Fragment>
+              <Fragment key={listId}>
+                {tasksStore[listId] ? <List listId={listId} tasks={tasksStore[listId]} /> : null}
+              </Fragment>
             ))}
           </section>
         </VerticalScroll>
