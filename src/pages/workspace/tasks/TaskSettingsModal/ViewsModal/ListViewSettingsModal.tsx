@@ -152,8 +152,7 @@ export default function ListViewSettingsModal({
       <div className="flex items-center justify-center viewSettingsParent">
         <Menu.Button>
           <Button active={true}>
-            <Icons src={List} /> <span className="mx-1">Views:</span> <span>{isActive}</span>
-            <ArrowDownFilled active={true} />
+            <Icons src={List} /> <span>{isActive}</span> <ArrowDownFilled active={true} />
           </Button>
         </Menu.Button>
       </div>
@@ -188,8 +187,7 @@ export default function ListViewSettingsModal({
               {View.label !== 'Create New View' ? (
                 <button onClick={View.handleClick} className="flex items-center justify-between w-full  group">
                   <p className="flex items-center pl-2 space-x-2 text-md">
-                    <span className="p-0.5">{View.icon}</span>
-                    <span>{View.label}</span>
+                    <span className="p-0.5">{View.icon}</span> <span>{View.label}</span>
                   </p>
                   <p
                     className={`${
