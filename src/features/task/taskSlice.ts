@@ -58,6 +58,14 @@ interface customPropertyInfo {
   };
 }
 
+interface IDuplicateTaskObj {
+  task_name: string;
+  task_id: string;
+  list_id: string;
+  is_everything: boolean;
+  popDuplicateTaskModal: boolean;
+}
+
 export interface ImyTaskData {
   id: string;
   name: string;
@@ -146,6 +154,7 @@ interface TaskState {
   saveSettingOnline: { [key: string]: boolean } | null;
   comfortableView: boolean;
   comfortableViewWrap: boolean;
+  duplicateTaskObj: IDuplicateTaskObj;
   verticalGrid: boolean;
   showNewTaskField: boolean;
   showNewTaskId: string;
@@ -245,6 +254,7 @@ const initialState: TaskState = {
   saveSettingLocal: null,
   saveSettingList: undefined,
   saveSettingOnline: null,
+  duplicateTaskObj: { task_name: '', task_id: '', list_id: '', is_everything: true, popDuplicateTaskModal: true },
   selectedTasksArray: [],
   verticalGrid: false,
   taskUpperCase: false,
@@ -355,6 +365,9 @@ export const taskSlice = createSlice({
     },
     setCurrTaskListId(state, action: PayloadAction<string>) {
       state.currTaskListId = action.payload;
+    },
+    setDuplicateTaskObj(state, action: PayloadAction<IDuplicateTaskObj>) {
+      state.duplicateTaskObj = action.payload;
     },
     setSearchValue(state, action: PayloadAction<string>) {
       state.searchValue = action.payload;
@@ -644,6 +657,7 @@ export const {
   getVerticalGrid,
   getSingleLineView,
   getTaskUpperCase,
+  setDuplicateTaskObj,
   getVerticalGridlinesTask,
   getSplitSubTask,
   getSplitSubTaskLevels,
