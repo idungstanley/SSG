@@ -34,6 +34,9 @@ export default function Recurring() {
   });
   const [statusData, setStatusData] = useState<string[]>([]);
   const [statusStr, setStatus] = useState<string>('to do');
+  const [taskColumns, setColumns] = useState<string[] | 'everything'>([]);
+
+  console.log(taskColumns);
 
   useEffect(() => {
     if (spaceStatuses) {
@@ -79,7 +82,14 @@ export default function Recurring() {
               Options
             </span>
           )}
-          {dropRecurring.createTaskOption && <CreateTaskOptions />}
+          {dropRecurring.createTaskOption && (
+            <CreateTaskOptions
+              setColumns={setColumns}
+              closeFn={() => setDropRecurring((prev) => ({ ...prev, createTaskOption: !prev.createTaskOption }))}
+              parentBtnFn={setbtnCheck}
+              parentBtnState="task"
+            />
+          )}
         </div>
         <RadioWrapper btnCheckState={btnCheckStatus['frequency']} checkStateFn={setbtnCheck} stateValue="frequency">
           <span className="text-alsoit-text-md font-semibold">Recur Forever</span>
