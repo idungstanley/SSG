@@ -189,6 +189,8 @@ export function Col({ value, field, fieldId, task, customFields, taskStatuses, .
         className={cl(
           dragOverItemId === task.id && draggableItemId !== dragOverItemId && !dragToBecomeSubTask
             ? 'border-b-2 border-alsoit-purple-300'
+            : dragOverItemId === task.id && draggableItemId !== dragOverItemId && dragToBecomeSubTask
+            ? 'mb-0.5'
             : 'border-t',
           COL_BG,
           `relative flex ${isSelected && 'tdListVNoSticky'} ${
@@ -210,7 +212,7 @@ export function Col({ value, field, fieldId, task, customFields, taskStatuses, .
         }}
       >
         {dragOverItemId === task.id && draggableItemId !== dragOverItemId && dragToBecomeSubTask && (
-          <span className={cl('absolute h-0.5 bg-alsoit-purple-300 w-full -bottom-px right-0')}></span>
+          <span className={cl('absolute h-0.5 bg-alsoit-purple-300 w-full bottom-px right-0')}></span>
         )}
         {field in fields ? fields[field] : String(value)}
       </td>
