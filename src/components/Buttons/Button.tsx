@@ -6,10 +6,11 @@ interface buttonComponentProps {
   active: boolean;
   children?: ReactNode;
   withoutBg?: boolean;
+  unusing?: boolean;
   onClick?: () => void;
 }
 
-function Button({ active, children, withoutBg, onClick }: buttonComponentProps) {
+function Button({ active, children, withoutBg, unusing, onClick }: buttonComponentProps) {
   const style = active ? ACTIVE_BUTTON : DEFAULT_BUTTON;
 
   const generateBg = () => {
@@ -20,9 +21,20 @@ function Button({ active, children, withoutBg, onClick }: buttonComponentProps) 
     return 'bg-alsoit-gray-50 hover:bg-alsoit-purple-50';
   };
 
+  const unusingStyles = unusing
+    ? {
+        background: 'orange',
+        opacity: '0.5'
+      }
+    : {};
+
   return (
     <div>
-      <div style={style} className={cl('flex items-center font-semibold', generateBg())} onClick={onClick}>
+      <div
+        style={{ ...style, ...unusingStyles }}
+        className={cl('flex items-center font-semibold', generateBg())}
+        onClick={onClick}
+      >
         {children}
       </div>
     </div>
