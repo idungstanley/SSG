@@ -28,8 +28,6 @@ export default function HubPage() {
   const { tasks: tasksStore, saveSettingLocal } = useAppSelector((state) => state.task);
   const formatSettings = useformatSettings();
 
-  console.log(tasksStore['840808ef'], 'tasksStore');
-
   const { data: hub } = UseGetHubDetails({ activeItemId: hubId, activeItemType: EntityType.hub });
 
   // get task_view id for list view
@@ -71,7 +69,6 @@ export default function HubPage() {
 
   const tasks = useMemo(() => (data ? data.pages.flatMap((page) => page.data.tasks) : []), [data]);
   const lists = useMemo(() => generateLists(tasks, hub?.data.hub?.custom_field_columns as IField[]), [tasks, hub]);
-  console.log(lists, 'lists');
 
   useEffect(() => {
     if (Object.keys(lists).length) {
