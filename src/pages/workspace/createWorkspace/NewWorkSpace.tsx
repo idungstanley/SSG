@@ -33,6 +33,7 @@ function CreateNewWorkspace() {
   const dispatch = useAppDispatch();
   const createWSMutation = useMutation(createWorkspaceService, {
     onSuccess: (successData) => {
+      handleGetStarted();
       setCurrentPage({ ...currentPage, email: false, apps: true });
       localStorage.setItem(
         'user',
@@ -112,16 +113,16 @@ function CreateNewWorkspace() {
           </div>
           {currentPage.name && (
             <div className="w-full -ml-32 flex items-center justify-center" style={{ height: '60vh' }}>
-              <div>
+              <div className="w-full">
                 <h1 style={{ fontSize: '40px' }}>Name your work space</h1>
                 <input
                   type="text"
                   className={cl(
-                    'mt-8 rounded text-3xl focus:outline-none',
+                    'mt-8 rounded text-3xl focus:outline-none w-full',
                     errorMsg.name ? 'border-4 border-solid border-red-600 focus:border-red-600 placeholder-red-500' : ''
                   )}
                   placeholder={errorMsg.name ? 'Name cannot be empty' : ''}
-                  style={{ width: '1000px', height: '100px' }}
+                  style={{ height: '100px' }}
                   value={formState.name}
                   onChange={(e) => setFormState({ ...formState, name: e.target.value })}
                 />
@@ -143,7 +144,7 @@ function CreateNewWorkspace() {
             </div>
           )}
           {currentPage.color && (
-            <div className="w-full -ml-32 flex items-center justify-center" style={{ height: '60vh' }}>
+            <div className="w-full -ml-24 flex items-center justify-center" style={{ height: '60vh' }}>
               <div>
                 <h1 style={{ fontSize: '40px' }}>Customize your workspace</h1>
                 <div className="flex items-center w-full justify-center gap-20 mt-8 mb-20">
@@ -229,12 +230,12 @@ function CreateNewWorkspace() {
           )}
           {currentPage.email && (
             <div className="w-full -ml-32 flex items-center justify-center" style={{ height: '60vh' }}>
-              <div>
+              <div className="w-full">
                 <h1 style={{ fontSize: '40px' }}>Invite people to your workspace</h1>
                 <input
                   type="text"
-                  className="mt-8 rounded text-3xl"
-                  style={{ width: '1000px', height: '100px' }}
+                  className="mt-8 rounded text-3xl w-full"
+                  style={{ height: '100px' }}
                   placeholder="Enter email addresses"
                   onChange={(e) => setFormState({ ...formState, emails: e.target.value })}
                 />
@@ -243,7 +244,7 @@ function CreateNewWorkspace() {
                   <button
                     className="bg-fuchsia-600 text-white p-2 rounded-lg"
                     style={{ fontSize: '35px' }}
-                    onClick={handleSubmit}
+                    onClick={() => setCurrentPage({ ...currentPage, email: false, completed: true })}
                   >
                     Done
                   </button>
@@ -251,7 +252,7 @@ function CreateNewWorkspace() {
               </div>
             </div>
           )}
-          {currentPage.apps && (
+          {/* {currentPage.apps && (
             <div className="w-full -ml-32 flex items-center justify-center" style={{ height: '60vh' }}>
               <div>
                 <h1 style={{ fontSize: '40px' }}>Do you use any of these apps?</h1>
@@ -267,8 +268,8 @@ function CreateNewWorkspace() {
                 </div>
               </div>
             </div>
-          )}
-          {currentPage.pm_tools && (
+          )} */}
+          {/* {currentPage.pm_tools && (
             <div className="w-full -ml-32 flex items-center justify-center" style={{ height: '60vh' }}>
               <div>
                 <h1 style={{ fontSize: '40px' }}>Do you use any of these project management tools?</h1>
@@ -284,7 +285,7 @@ function CreateNewWorkspace() {
                 </div>
               </div>
             </div>
-          )}
+          )} */}
           {currentPage.completed && (
             <div className="w-full -ml-32 flex items-center justify-center" style={{ height: '60vh' }}>
               <div>
@@ -295,7 +296,7 @@ function CreateNewWorkspace() {
                   <button
                     className="bg-fuchsia-600 text-white p-2 rounded-lg"
                     style={{ fontSize: '35px' }}
-                    onClick={handleGetStarted}
+                    onClick={handleSubmit}
                   >
                     Get started
                   </button>
@@ -335,20 +336,20 @@ function CreateNewWorkspace() {
               )}
               onClick={() => setCurrentPage({ ...initPage, email: true })}
             />
-            <VscTriangleRight
+            {/* <VscTriangleRight
               className={cl(
                 currentPage.apps ? 'bg-fuchsia-600' : 'bg-gray-300',
                 'w-8 h-8 cursor-pointer rounded-full text-transparent mx-2'
               )}
               onClick={() => setCurrentPage({ ...initPage, apps: true })}
-            />
-            <VscTriangleRight
+            /> */}
+            {/* <VscTriangleRight
               className={cl(
                 currentPage.pm_tools ? 'bg-fuchsia-600' : 'bg-gray-300',
                 'w-8 h-8 cursor-pointer rounded-full text-transparent mx-2'
               )}
               onClick={() => setCurrentPage({ ...initPage, pm_tools: true })}
-            />
+            /> */}
             <VscTriangleRight
               className={cl(
                 currentPage.completed ? 'bg-fuchsia-600' : 'bg-gray-300',
