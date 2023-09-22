@@ -281,7 +281,9 @@ export default function HubItem({
         </div>
       </div>
       <UploadImage endpoint={`hubs/${uploadId}`} invalidateQuery={['hubs'] as InvalidateQueryFilters<unknown>} />
-      {paletteId === item.id && show ? <Palette title="Hub" setPaletteColor={setPaletteColor} cords={cords} /> : null}
+      {paletteId === item.id && show ? (
+        <Palette title="Hub" setPaletteColor={setPaletteColor} activeOutterColor={item.color as string} cords={cords} />
+      ) : null}
       {showMenuDropdown === item.id && showSidebar ? (
         <MenuDropdown isExtendedBar={isExtendedBar} cords={menuCords} />
       ) : null}
