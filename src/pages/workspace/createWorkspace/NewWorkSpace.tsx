@@ -252,6 +252,7 @@ function CreateNewWorkspace() {
               </div>
             </div>
           )}
+          {/* TO DO- WILL BE IMPLEMENTED IN THE FUTURE */}
           {/* {currentPage.apps && (
             <div className="w-full -ml-32 flex items-center justify-center" style={{ height: '60vh' }}>
               <div>
