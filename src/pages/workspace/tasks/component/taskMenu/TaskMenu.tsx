@@ -24,7 +24,7 @@ import AlsoitMenuDropdown from '../../../../../components/DropDowns';
 export default function TaskMenu() {
   const dispatch = useDispatch();
 
-  const { selectedTasksArray } = useAppSelector((state) => state.task);
+  const { selectedTasksArray, duplicateTaskObj } = useAppSelector((state) => state.task);
 
   const queryClient = useQueryClient();
 
@@ -38,6 +38,12 @@ export default function TaskMenu() {
       setIsVisible(false);
     }
   }, [selectedTasksArray]);
+
+  useEffect(() => {
+    if (!duplicateTaskObj.popDuplicateTaskModal) {
+      handleClose();
+    }
+  }, [duplicateTaskObj.popDuplicateTaskModal]);
 
   const useDeleteTask = useMutation(deleteTask, {
     onSuccess: () => {

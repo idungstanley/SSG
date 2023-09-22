@@ -15,7 +15,8 @@ import {
   setSelectedIndexStatus,
   setSelectedTasksArray,
   setShowTaskNavigation,
-  setTaskIdForPilot
+  setTaskIdForPilot,
+  setDuplicateTaskObj
 } from '../../../../features/task/taskSlice';
 import { setActiveItem } from '../../../../features/workspace/workspaceSlice';
 import { UniqueIdentifier, useDraggable, useDroppable } from '@dnd-kit/core';
@@ -88,6 +89,7 @@ export function StickyCol({
     selectedListIds,
     dragToBecomeSubTask,
     saveSettingOnline,
+    duplicateTaskObj,
     separateSubtasksMode
   } = useAppSelector((state) => state.task);
 
@@ -216,6 +218,7 @@ export function StickyCol({
   }, [selectedTasksArray, task.id]);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    dispatch(setDuplicateTaskObj({ ...duplicateTaskObj, task_name: task.name, task_id: task.id }));
     const indexInArray = selectedIndexArray.indexOf(taskIndex as number);
     if (!selectedIndexArray.includes(taskIndex as number)) {
       setSelectedIndexArray((prev) => {
