@@ -23,6 +23,7 @@ export const generateSubtasksArray = (lists: Record<string, ITaskFullList[]>): I
           const parentName = newSubtasksArr.find((i) => i.id === sub.parent_id)?.name;
           newSubtasksArr.push({
             ...sub,
+            list: task.list,
             parentName: parentName ? parentName : task.name,
             list_id: task.list_id
           });
