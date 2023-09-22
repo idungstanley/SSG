@@ -4,7 +4,6 @@ import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import ListIconComponent from '../ItemsListInSidebar/components/ListIconComponent';
 import { cl } from '../../utils';
 import { IList } from '../../features/hubs/hubs.interfaces';
-// import { setDuplicateTaskObj } from '../../features/task/taskSlice';
 
 interface ListItemProps {
   list: IList;
