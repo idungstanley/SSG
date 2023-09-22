@@ -15,7 +15,8 @@ import {
   setSelectedIndexStatus,
   setSelectedTasksArray,
   setShowTaskNavigation,
-  setTaskIdForPilot
+  setTaskIdForPilot,
+  setDuplicateTaskObj
 } from '../../../../features/task/taskSlice';
 import { setActiveItem } from '../../../../features/workspace/workspaceSlice';
 import { UniqueIdentifier, useDraggable, useDroppable } from '@dnd-kit/core';
@@ -88,6 +89,7 @@ export function StickyCol({
     selectedListIds,
     dragToBecomeSubTask,
     saveSettingOnline,
+    duplicateTaskObj,
     separateSubtasksMode
   } = useAppSelector((state) => state.task);
 
@@ -216,6 +218,7 @@ export function StickyCol({
   }, [selectedTasksArray, task.id]);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    dispatch(setDuplicateTaskObj({ ...duplicateTaskObj, task_name: task.name, task_id: task.id }));
     const indexInArray = selectedIndexArray.indexOf(taskIndex as number);
     if (!selectedIndexArray.includes(taskIndex as number)) {
       setSelectedIndexArray((prev) => {
@@ -315,19 +318,24 @@ export function StickyCol({
               COL_BG,
               ` ${isChecked && 'tdListV'} ${verticalGrid && 'border-r'} ${
                 verticalGridlinesTask && 'border-r'
-              } w-full py-4 flex items-center`,
+              } relative w-full py-4 flex items-center`,
               isOver && draggableItemId !== dragOverItemId && !dragToBecomeSubTask
                 ? 'border-b-2 border-alsoit-purple-300'
                 : dragToBecomeSubTask && isOver && draggableItemId !== dragOverItemId
-                ? 'mb-2'
+                ? 'mb-0'
                 : 'border-t relative'
             )}
           >
+            <div
+              ref={droppabbleRef}
+              className="absolute w-2 h-full"
+              style={{ left: '30px', background: 'transparent', height: '100%', width: '30px' }}
+            />
             {dragToBecomeSubTask && isOver && draggableItemId !== dragOverItemId && (
               <span
                 className={cl(
                   dragToBecomeSubTask && isOver && draggableItemId !== dragOverItemId
-                    ? 'absolute content-start z-50 flex items-center left-20 w-full right-0 bottom-1 gap-0'
+                    ? 'absolute content-start z-50 flex items-center left-12 w-full bottom-0 gap-0'
                     : ''
                 )}
               >
@@ -368,7 +376,6 @@ export function StickyCol({
               <div
                 className="flex items-center w-full text-left"
                 onKeyDown={(e) => (e.key === 'Enter' ? handleEditTask(e, task.id) : null)}
-                ref={droppabbleRef}
               >
                 <div
                   className={`font-semibold alsoit-gray-300 ${

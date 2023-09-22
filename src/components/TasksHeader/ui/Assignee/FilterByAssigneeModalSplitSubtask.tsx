@@ -197,7 +197,6 @@ export default function FilterByAssigneeModalSplitSubtask({
                       <p className="text-alsoit-text-md">{member.user.email}</p>
                     </div>
                   </div>
-
                   <button>
                     {currentAssignees?.map((i) => i.id).includes(member.id) ? (
                       <AiFillCheckCircle />

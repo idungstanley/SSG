@@ -151,8 +151,10 @@ export default function ListViewSettingsModal({
     <Menu>
       <div className="flex items-center justify-center viewSettingsParent">
         <Menu.Button>
-          <Button active={true}>
-            <Icons src={List} /> <span className="mx-1">Views:</span> <span>{isActive}</span>
+          <Button active={true} unusing={true}>
+            <Icons src={List} />
+            <span className="mr-2 ml-1">View:</span>
+            <span>{isActive}</span>
             <ArrowDownFilled active={true} />
           </Button>
         </Menu.Button>
