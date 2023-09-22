@@ -18,6 +18,7 @@ import {
 import { QueryClient, useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import {
+  setDuplicateTaskObj,
   setScreenRecording,
   setScreenRecordingMedia,
   setSelectedListIds,
@@ -253,6 +254,32 @@ export const useAddTask = (task?: Task) => {
         dispatch(getHub(updatedTree));
         dispatch(setFilteredResults(updatedTree));
       }
+    }
+  });
+};
+
+const duplicateTask = (data: { task_name: string; task_id: string; list_id: string; is_everything: boolean }) => {
+  const { task_name, task_id, list_id, is_everything } = data;
+
+  const response = requestNew<newTaskDataRes>({
+    url: `tasks/${task_id}/duplicate`,
+    method: 'POST',
+    data: {
+      name: task_name,
+      list_id,
+      is_everything
+    }
+  });
+  return response;
+};
+
+export const useDuplicateTask = () => {
+  const { duplicateTaskObj } = useAppSelector((state) => state.task);
+
+  const dispatch = useAppDispatch();
+  return useMutation(duplicateTask, {
+    onSuccess: (data) => {
+      dispatch(setDuplicateTaskObj({ ...duplicateTaskObj, popDuplicateTaskModal: true }));
     }
   });
 };
