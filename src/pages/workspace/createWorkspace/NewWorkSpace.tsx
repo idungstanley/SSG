@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import Working from '../../../assets/icons/Working.svg';
 import MainLogo from '../../../assets/icons/mainIcon.svg';
-import Apps from '../../../assets/icons/any_app.svg';
-import PmTools from '../../../assets/icons/pm-tool.png';
+// import Apps from '../../../assets/icons/any_app.svg';
+// import PmTools from '../../../assets/icons/pm-tool.png';
 import { InputAvatar } from '../../../components';
 import { avatarBg, companySizeBtn } from './colors';
 import { cl } from '../../../utils';
