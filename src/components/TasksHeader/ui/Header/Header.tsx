@@ -1,4 +1,4 @@
-import { BsPower, BsThreeDotsVertical } from 'react-icons/bs';
+import { BsPower } from 'react-icons/bs';
 import { useAppSelector } from '../../../../app/hooks';
 import TaskMenu from '../../../../pages/workspace/tasks/component/taskMenu/TaskMenu';
 import { Assignee } from '../Assignee/Assignee';
@@ -50,7 +50,7 @@ export function Header() {
 
   return (
     <>
-      <section className="p-1.5 h-12 w-full flex items-center justify-between border-b">
+      <section className="flex items-center justify-between w-full p-1 border-b" style={{ height: '50px' }}>
         <ChangeView />
 
         <div className="flex items-center justify-end">
@@ -73,8 +73,8 @@ export function Header() {
         </div>
       </section>
       {selectedTasksArray.length > 0 && (
-        <div className="w-full z-50">
-          <span className="w-12/12 transition duration-300 ease-in-out ">
+        <div className="z-50 w-full">
+          <span className="transition duration-300 ease-in-out w-12/12 ">
             <TaskMenu />
           </span>
         </div>

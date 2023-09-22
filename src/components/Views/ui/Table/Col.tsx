@@ -28,6 +28,8 @@ import PhoneField from './CustomField/Phone/PhoneField';
 import CheckboxField from './CustomField/Checkbox/CheckboxField';
 import StatusDropdown from '../../../status/StatusDropdown';
 import RatingField from './CustomField/Ratings/RatingField';
+import TimeField from './CustomField/TimeField/TimeField';
+import AutoProgress from './CustomField/Progress/AutoProgress';
 
 interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   value: TaskValue;
@@ -132,6 +134,13 @@ export function Col({ value, field, fieldId, task, customFields, taskStatuses, .
       />
     ),
     date: <DateField />,
+    time: (
+      <TimeField
+        taskId={task.id}
+        taskCustomFields={task.custom_fields?.find((i) => i.id === fieldId)}
+        fieldId={fieldId}
+      />
+    ),
     website: (
       <EmailWebsiteField
         taskId={task.id}
@@ -153,6 +162,10 @@ export function Col({ value, field, fieldId, task, customFields, taskStatuses, .
         itemId={task.id}
         option={`${task.id !== '0' ? EntityType.task : 'getTeamId'}`}
       />
+    ),
+    progress_manual: <AutoProgress task={task as ImyTaskData} />,
+    progress_auto: (
+      <AutoProgress task={task as ImyTaskData} entityCustomProperty={customFields?.find((i) => i.id === fieldId)} />
     ),
     checkbox: (
       <CheckboxField
@@ -176,6 +189,8 @@ export function Col({ value, field, fieldId, task, customFields, taskStatuses, .
         className={cl(
           dragOverItemId === task.id && draggableItemId !== dragOverItemId && !dragToBecomeSubTask
             ? 'border-b-2 border-alsoit-purple-300'
+            : dragOverItemId === task.id && draggableItemId !== dragOverItemId && dragToBecomeSubTask
+            ? 'mb-0.5'
             : 'border-t',
           COL_BG,
           `relative flex ${isSelected && 'tdListVNoSticky'} ${
@@ -197,7 +212,7 @@ export function Col({ value, field, fieldId, task, customFields, taskStatuses, .
         }}
       >
         {dragOverItemId === task.id && draggableItemId !== dragOverItemId && dragToBecomeSubTask && (
-          <span className={cl('absolute h-0.5 bg-alsoit-purple-300 w-full -bottom-px right-0')}></span>
+          <span className={cl('absolute h-0.5 bg-alsoit-purple-300 w-full bottom-px right-0')}></span>
         )}
         {field in fields ? fields[field] : String(value)}
       </td>

@@ -13,8 +13,9 @@ interface hubsProps {
   hubs: Hub[];
   openNewHub: (id: string) => void;
   setToggleTree?: React.Dispatch<React.SetStateAction<boolean>>;
+  option?: string;
 }
-export default function ActiveTreeList({ hubs, openNewHub, setToggleTree }: hubsProps) {
+export default function ActiveTreeList({ hubs, openNewHub, setToggleTree, option }: hubsProps) {
   const dispatch = useAppDispatch();
 
   const { lastActiveItem } = useAppSelector((state) => state.workspace);
@@ -28,9 +29,11 @@ export default function ActiveTreeList({ hubs, openNewHub, setToggleTree }: hubs
     name: string,
     type: string
   ) => {
-    e.stopPropagation();
-    dispatch(setSelectedTreeDetails({ name, id, type }));
-    setToggleTree?.(false);
+    if (option !== 'taskDuplicate') {
+      e.stopPropagation();
+      dispatch(setSelectedTreeDetails({ name, id, type }));
+      setToggleTree?.(false);
+    }
   };
 
   const handleClick = (id: string) => {
@@ -77,17 +80,18 @@ export default function ActiveTreeList({ hubs, openNewHub, setToggleTree }: hubs
               type={EntityType.hub}
             />
             {hub?.children?.length && isCanBeOpen(hub.id) ? (
-              <SearchSubHList hubs={hub.children as Hub[]} handleTabClick={handleTabClick} />
+              <SearchSubHList option={option} hubs={hub.children as Hub[]} handleTabClick={handleTabClick} />
             ) : null}
             <div
               style={
-                lastActiveItem === 'Sub Hub' || lastActiveItem === 'Wallet'
+                (lastActiveItem === 'Sub Hub' || lastActiveItem === 'Wallet') && option !== 'taskDuplicate'
                   ? { opacity: '0.5', pointerEvents: 'none' }
                   : {}
               }
             >
               {hub?.wallets?.length && showChildren && isCanBeOpen(hub.id) ? (
                 <SearchWList
+                  option={option}
                   wallets={hub.wallets}
                   leftMargin={false}
                   type="wallet"
@@ -96,7 +100,7 @@ export default function ActiveTreeList({ hubs, openNewHub, setToggleTree }: hubs
                 />
               ) : null}
             </div>
-            <div style={{ opacity: '0.5', pointerEvents: 'none' }}>
+            <div style={option !== 'taskDuplicate' ? { opacity: '0.5', pointerEvents: 'none' } : {}}>
               {hub?.lists?.length && showChildren && isCanBeOpen(hub.id) ? (
                 <SearchLList list={hub.lists} leftMargin={false} paddingLeft="48" />
               ) : null}

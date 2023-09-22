@@ -28,6 +28,8 @@ import ToolTip from '../../../Tooltip/Tooltip';
 import Badges from '../../../badges';
 import DetailsOnHover from '../../../Dropdown/DetailsOnHover/DetailsOnHover';
 import { EntityType } from '../../../../utils/EntityTypes/EntityType';
+import SubtasksIcon from '../../../../assets/icons/SubtasksIcon';
+import { ITask_statuses } from '../../../../features/list/list.interfaces';
 
 interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   task: Task;
@@ -45,6 +47,8 @@ interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   isOver?: boolean;
   isSplitSubtask?: boolean;
   isLastSubtaskLevel: boolean;
+  isBlockToOpenSubtasks?: boolean;
+  taskStatuses?: ITask_statuses[];
 }
 
 export function StickyCol({
@@ -58,10 +62,12 @@ export function StickyCol({
   task_status,
   onClose,
   task,
+  taskStatuses,
   paddingLeft = 0,
   dragElement,
   isSplitSubtask,
   isLastSubtaskLevel,
+  isBlockToOpenSubtasks,
   ...props
 }: ColProps) {
   const dispatch = useAppDispatch();
@@ -81,7 +87,8 @@ export function StickyCol({
     toggleAllSubtask,
     selectedListIds,
     dragToBecomeSubTask,
-    saveSettingOnline
+    saveSettingOnline,
+    separateSubtasksMode
   } = useAppSelector((state) => state.task);
 
   const [isChecked, setIsChecked] = useState(false);
@@ -102,7 +109,7 @@ export function StickyCol({
         ? navigate(`/${currentWorkspaceId}/tasks/sh/${subhubId}/t/${task.id}`, { replace: true })
         : walletId
         ? navigate(`/${currentWorkspaceId}/tasks/w/${walletId}/t/${task.id}`, { replace: true })
-        : navigate(`/${currentWorkspaceId}/tasks/l/${listId}/t/${task.id}`, { replace: true });
+        : navigate(`/${currentWorkspaceId}/tasks/l/${listId || task.list_id}/t/${task.id}`, { replace: true });
       dispatch(
         setShowPilotSideOver({
           id: task.id,
@@ -308,19 +315,24 @@ export function StickyCol({
               COL_BG,
               ` ${isChecked && 'tdListV'} ${verticalGrid && 'border-r'} ${
                 verticalGridlinesTask && 'border-r'
-              } w-full py-4 flex items-center`,
+              } relative w-full py-4 flex items-center`,
               isOver && draggableItemId !== dragOverItemId && !dragToBecomeSubTask
                 ? 'border-b-2 border-alsoit-purple-300'
                 : dragToBecomeSubTask && isOver && draggableItemId !== dragOverItemId
-                ? 'mb-2'
+                ? 'mb-0'
                 : 'border-t relative'
             )}
           >
+            <div
+              ref={droppabbleRef}
+              className="absolute w-2 h-full"
+              style={{ left: '30px', background: 'transparent', height: '100%', width: '30px' }}
+            />
             {dragToBecomeSubTask && isOver && draggableItemId !== dragOverItemId && (
               <span
                 className={cl(
                   dragToBecomeSubTask && isOver && draggableItemId !== dragOverItemId
-                    ? 'absolute content-start z-50 flex items-center left-20 w-full right-0 bottom-1 gap-0'
+                    ? 'absolute content-start z-50 flex items-center left-12 w-full bottom-0 gap-0'
                     : ''
                 )}
               >
@@ -328,25 +340,39 @@ export function StickyCol({
                 <span className={cl('h-0.5 bg-alsoit-purple-300 w-full m-0')}></span>
               </span>
             )}
-            <button onClick={onToggleDisplayingSubTasks} className="pl-1">
+            <button onClick={isBlockToOpenSubtasks ? () => null : onToggleDisplayingSubTasks} className="pl-1">
               {showSubTasks || toggleAllSubtask ? (
-                <div className={`${task.descendants_count > 0 ? 'w-3 h-3' : ' opacity-0 w-3 h-3 '}`}>
+                <div
+                  className={`${
+                    task.descendants_count > 0 && !isBlockToOpenSubtasks ? 'w-3 h-3' : ' opacity-0 w-3 h-3 '
+                  }`}
+                >
                   <CloseSubtask />
                 </div>
               ) : (
-                <div className={`${task.descendants_count > 0 ? 'w-3 h-3' : ' opacity-0 w-3 h-3'}`}>
+                <div
+                  className={`${
+                    task.descendants_count > 0 && !isBlockToOpenSubtasks ? 'w-3 h-3' : ' opacity-0 w-3 h-3'
+                  }`}
+                >
                   <OpenSubtask />
                 </div>
               )}
             </button>
             <div onClick={() => dispatch(setCurrentTaskStatusId(task.id as string))}>
-              <StatusDropdown TaskCurrentStatus={task.status} />
+              <StatusDropdown TaskCurrentStatus={task.status} taskStatuses={taskStatuses} />
             </div>
-            <div className="flex flex-col flex-grow items-start justify-start pl-2 space-y-1">
+            {separateSubtasksMode && task?.parentName && !paddingLeft ? (
+              <ToolTip title={task.parentName}>
+                <button className="pl-3">
+                  <SubtasksIcon className="w-4 h-4" />
+                </button>
+              </ToolTip>
+            ) : null}
+            <div className="flex flex-col items-start justify-start flex-grow pl-2 space-y-1">
               <div
-                className="flex w-full items-center text-left"
+                className="flex items-center w-full text-left"
                 onKeyDown={(e) => (e.key === 'Enter' ? handleEditTask(e, task.id) : null)}
-                ref={droppabbleRef}
               >
                 <div
                   className={`font-semibold alsoit-gray-300 ${
@@ -392,7 +418,7 @@ export function StickyCol({
                   )}
                 </div>
                 {/* non default badges here */}
-                <div onClick={(e) => e.stopPropagation()} className="pl-3 flex flex-grow items-center justify-between">
+                <div onClick={(e) => e.stopPropagation()} className="flex items-center justify-between flex-grow pl-3">
                   {!isLastSubtaskLevel ? <Badges task={task} /> : null}
                   {/*  default badges here */}
                   {children}
@@ -409,16 +435,14 @@ export function StickyCol({
           className="sticky left-0 flex items-start justify-start text-sm font-medium text-gray-900 cursor-pointer text-start"
           {...props}
         >
-          <div className="flex items-center h-full space-x-1 opacity-0">
-            <RoundedCheckbox
-              onChange={onChange}
-              isChecked={isChecked}
-              styles={`w-4 h-4 rounded-full ${
-                selectedTasksArray.length > 0 ? 'opacity-100' : 'opacity-0'
-              } cursor-pointer focus:outline-1 focus:ring-transparent  focus:border-2 focus:opacity-100 group-hover:opacity-100`}
-            />
-            <div className="pr-2">{dragElement}</div>
-          </div>
+          <div
+            className={`w-11 flex items-center h-full space-x-1 ${isSplitSubtask && 'bg-white/90 border-t'}`}
+            style={{
+              padding: '15px 0',
+              paddingLeft: `${isSplitSubtask ? '4px' : 0}`,
+              height: '64px'
+            }}
+          />
           <div
             style={{ paddingLeft }}
             className={cl(
@@ -426,23 +450,23 @@ export function StickyCol({
               `relative border-t ${verticalGrid && 'border-r'} w-full h-16  py-4 p-4 flex items-center`
             )}
           >
-            <div className="absolute flex ml-2 space-x-1 -mt-10">
+            <div className="absolute flex ml-2 -mt-10 space-x-1">
               <ToolTip title="Cancel">
-                <div className="border rounded-md p-1" style={{ borderColor: '#FFE7E7' }}>
+                <div className="p-1 border rounded-md" style={{ borderColor: '#FFE7E7' }}>
                   <ImCancelCircle onClick={onClose} />
                 </div>
               </ToolTip>
               <button
                 onClick={(e) => handleOnSave(e as React.MouseEvent<HTMLButtonElement, MouseEvent>, task.id)}
-                className="px-6 h-6 text-white text-sm rounded-md bg-alsoit-success flex items-center"
+                className="flex items-center h-6 px-6 text-sm text-white rounded-md bg-alsoit-success"
               >
                 Save
               </button>
             </div>
-            <div className="ml-4 pt-2">
+            <div className="pt-2 ml-4">
               <StatusDropdown TaskCurrentStatus={task.status} />
             </div>
-            <div className="flex flex-col pt-2 items-start justify-start pl-2 space-y-1">
+            <div className="flex flex-col items-start justify-start pt-2 pl-2 space-y-1">
               <p
                 className="flex text-left empty:before:content-[attr(placeholder)]"
                 contentEditable={true}

@@ -132,14 +132,6 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
     dispatch(setListPaletteColor(list?.color === null ? { innerColour: 'white', outerColour: 'black' } : color));
   };
 
-  const { isOver, setNodeRef } = useDroppable({
-    id: list.id,
-    data: {
-      isOverList: true,
-      overList: list
-    }
-  });
-
   const {
     attributes,
     listeners,
@@ -149,6 +141,14 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
     id: list.id,
     data: {
       isList: true
+    }
+  });
+
+  const { isOver, setNodeRef } = useDroppable({
+    id: list.id,
+    data: {
+      isOverList: true,
+      overList: list
     }
   });
 
@@ -260,7 +260,7 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
       {paletteId === list.id && show ? (
         <Palette
           topContent={<ListIconSelection handleSelection={handleSelection} activeShape={activeShape} />}
-          title="List Colour"
+          title="List"
           listComboColour={listComboColour}
           shape={activeShape}
           cords={cords}

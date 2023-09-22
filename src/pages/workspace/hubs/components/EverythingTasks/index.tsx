@@ -15,14 +15,14 @@ function EverythingTasks() {
   const { showSidebar } = useAppSelector((state) => state.account);
 
   const handleLoadAllTasks = () => {
-    navigate('all-lists', {
+    navigate('everything', {
       replace: true
     });
     dispatch(
       setActiveItem({
         activeItemId: '',
         activeItemType: '',
-        activeItemName: 'All lists'
+        activeItemName: 'Everything page'
       })
     );
   };
@@ -34,8 +34,8 @@ function EverythingTasks() {
         'relative flex items-center justify-between hover:bg-gray-100'
       )}
     >
-      <ActiveBackground showBgColor={location.pathname.includes('all-lists')} />
-      <ActiveBarIdentification showBar={location.pathname.includes('all-lists')} />
+      <ActiveBackground showBgColor={location.pathname.includes('everything')} />
+      <ActiveBarIdentification showBar={location.pathname.includes('everything')} />
       <div
         className="flex items-center content-center self-center gap-6 py-2 cursor-pointer"
         style={{ zIndex: 1 }}

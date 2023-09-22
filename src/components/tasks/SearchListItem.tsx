@@ -1,6 +1,6 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
-import { useAppSelector } from '../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import ListIconComponent from '../ItemsListInSidebar/components/ListIconComponent';
 import { cl } from '../../utils';
 import { IList } from '../../features/hubs/hubs.interfaces';
@@ -19,6 +19,13 @@ export default function SearchListItem({ list, paddingLeft }: ListItemProps) {
   const { activeItemId } = useAppSelector((state) => state.workspace);
   const { lightBaseColor, baseColor } = useAppSelector((state) => state.account);
   const { listColour } = useAppSelector((state) => state.list);
+  // const { duplicateTaskObj } = useAppSelector((state) => state.task);
+
+  const dispatch = useAppDispatch();
+
+  const handleClick = () => {
+    // dispatch(setDuplicateTaskObj({ ...duplicateTaskObj, list_id: list.id }));
+  };
 
   const color: ListColourProps = JSON.parse(list.color as string) as ListColourProps;
   const innerColour = list?.color ? (color.innerColour as string) : (listColour as ListColourProps)?.innerColour;
@@ -42,7 +49,7 @@ export default function SearchListItem({ list, paddingLeft }: ListItemProps) {
         {list.id === listId && (
           <span className="absolute top-0 bottom-0 left-0 rounded-r-lg w-0.5" style={{ backgroundColor: baseColor }} />
         )}
-        <div className="flex items-center space-x-1 overflow-hidden capitalize cursor-pointer">
+        <div className="flex items-center space-x-1 overflow-hidden capitalize cursor-pointer" onClick={handleClick}>
           <div>
             <ListIconComponent
               shape={activeShape ? activeShape : 'solid-circle'}
@@ -60,7 +67,7 @@ export default function SearchListItem({ list, paddingLeft }: ListItemProps) {
             }}
             className="pl-4 capitalize truncate cursor-pointer"
           >
-            {list.name}
+            <p>{list.name}</p>
           </div>
         </div>
       </section>

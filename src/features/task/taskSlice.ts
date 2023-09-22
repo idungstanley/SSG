@@ -64,9 +64,11 @@ export interface ImyTaskData {
   description: string | null;
   list_id: string;
   parent_id: string | null;
+  parentName?: string;
   priority: string | null | [{ id: string; initials: string; color: string; name: string }];
   start_date: string | null;
   descendants_count: number;
+  closed_subtasks_count: number;
   checklist_items_count: number;
   checklist_done_items_count: number;
   has_descendants: boolean;
@@ -565,6 +567,9 @@ export const taskSlice = createSlice({
     setTimeSortArr(state, action: PayloadAction<SortOption[]>) {
       state.timeSortArr = action.payload;
     },
+    setTimeLogColumnData(state, action: PayloadAction<Header[]>) {
+      state.timeLogColumnData = action.payload;
+    },
     setScreenRecording(state, action: PayloadAction<'idle' | 'recording'>) {
       state.screenRecording = action.payload;
     },
@@ -686,6 +691,7 @@ export const {
   setTimeSortStatus,
   setTimeArr,
   setTimeSortArr,
+  setTimeLogColumnData,
   setScreenRecording,
   setScreenRecordingMedia,
   setUpdateCords,

@@ -28,9 +28,19 @@ interface TableProps {
   listColor?: IListColor;
   customFields?: IField[];
   listDetails?: IListDetailRes;
+  isBlockToOpenSubtasks?: boolean;
 }
 
-export function Table({ heads, data, label, listName, customFields, listColor, listDetails }: TableProps) {
+export function Table({
+  heads,
+  data,
+  label,
+  listName,
+  customFields,
+  listColor,
+  listDetails,
+  isBlockToOpenSubtasks
+}: TableProps) {
   const dispatch = useAppDispatch();
 
   const { draggableItemId } = useAppSelector((state) => state.list);
@@ -137,7 +147,7 @@ export function Table({ heads, data, label, listName, customFields, listColor, l
           <OverlayRow columns={columns} task={draggableItem} />
         </DragOverlay>
       ) : null}
-      <div className="table-container py-2" id={label}>
+      <div className="py-2 table-container" id={label}>
         <table
           onScroll={splitSubTaskMode ? () => null : onScroll}
           style={
@@ -163,7 +173,6 @@ export function Table({ heads, data, label, listName, customFields, listColor, l
             listId={data[0].list_id}
             groupedTask={data}
           />
-
           {/* rows */}
           {!collapseTasks ? (
             <tbody className="contents">
@@ -182,10 +191,11 @@ export function Table({ heads, data, label, listName, customFields, listColor, l
                         handleClose={handleClose}
                         customFields={customFields}
                         taskStatuses={listDetails?.data.list.task_statuses}
+                        isBlockToOpenSubtasks={isBlockToOpenSubtasks}
                         level={0}
                       />
                       {separateSubtasksMode ? (
-                        <SeparateSubtasks listId={task.list_id as string} parentId={task.id} />
+                        <SeparateSubtasks listId={task.list_id as string} parentId={task.id} parentName={task.name} />
                       ) : null}
                     </Fragment>
                   ) : null

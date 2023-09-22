@@ -1,8 +1,10 @@
 import requestNew from '../../app/requestNew';
 import {
   IFullTaskRes,
+  ITaskCreateProps,
   ITaskFullList,
   ITaskListRes,
+  ITaskRecurResponse,
   ITaskRes,
   ITimeEntriesRes,
   ITimeEntryParams,
@@ -13,7 +15,7 @@ import {
   TaskId,
   newTaskDataRes
 } from './interface.tasks';
-import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { QueryClient, useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import {
   setScreenRecording,
@@ -54,7 +56,7 @@ import { getHub } from '../hubs/hubSlice';
 import { setFilteredResults } from '../search/searchSlice';
 import { addNewSubtaskManager } from '../../managers/Subtask';
 import { IList } from '../hubs/hubs.interfaces';
-import { setDraggableItem } from '../list/listSlice';
+import { setDragOverList, setDragOverTask, setDraggableItem } from '../list/listSlice';
 
 //edit a custom field
 export const UseEditCustomFieldService = (data: {
@@ -168,7 +170,8 @@ export const useMoveTask = () => {
         dispatch(setSubtasks(updatedSubtasks));
         dispatch(getHub(updatedTree));
         dispatch(setFilteredResults(updatedTree));
-      } else {
+      }
+      if (dragOverTask) {
         // move like sub
         const { updatedTasks, updatedSubtasks, updatedTree } = taskMoveToSubtaskManager(
           draggableTask as ITaskFullList,
@@ -183,6 +186,8 @@ export const useMoveTask = () => {
         dispatch(setFilteredResults(updatedTree));
       }
       dispatch(setDraggableItem(null));
+      dispatch(setDragOverList(null));
+      dispatch(setDragOverTask(null));
     }
   });
 };
@@ -322,7 +327,7 @@ export const UseGetFullTaskList = ({
     },
     {
       keepPreviousData: true,
-      enabled: !!hub_id || !!wallet_id || !draggableItemId,
+      enabled: (!!hub_id || !!wallet_id) && !draggableItemId,
       onSuccess: (data) => {
         data.pages.map((page) => page.data.tasks.map((task) => queryClient.setQueryData(['task', task.id], task)));
       },
@@ -464,14 +469,14 @@ export const UseUpdateTaskDateService = ({
   task_id,
   taskDate,
   listIds,
-  type,
   setTaskId,
+  type,
   setResetDate
 }: {
   task_id: string;
   taskDate: string;
   listIds: string[];
-  type?: string;
+  type: string;
   setTaskId: React.Dispatch<React.SetStateAction<string | null>>;
   setResetDate: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
@@ -823,7 +828,7 @@ export const GetTimeEntriesService = ({
           team_member_group_ids: null,
           is_active: is_active,
           page,
-          include_filters,
+          include_filters: include_filters ? 1 : 0,
           sorting: updatesortArr
         }
       });
@@ -1065,10 +1070,7 @@ export function useMediaStream() {
         activeItemId,
         activeItemType
       });
-      // const tracks = stream?.getTracks();
-      // if (tracks) {
-      //   tracks.forEach((track) => track.stop());
-      // }
+
       // Invalidate React Query
       queryClient.invalidateQueries(['attachments']);
     }
@@ -1097,4 +1099,40 @@ export function useMediaStream() {
     handleToggleMute,
     isStarting
   };
+}
+
+export function useGetTaskRecuring({ taskId }: { taskId?: string }) {
+  return useQuery(['recurring'], async () => {
+    const data = await requestNew<ITaskRecurResponse>({
+      url: `tasks/${taskId}/recur`,
+      method: 'GET'
+    });
+
+    return data.data;
+  });
+}
+
+export function useCreateTaskRecuring() {
+  const queryClient = new QueryClient();
+  return useMutation(
+    async ({ taskId, execution_type, type, new_task, recur_options, type_options }: ITaskCreateProps) => {
+      const data = await requestNew<ITaskRecurResponse>({
+        url: `tasks/${taskId}/recur`,
+        method: 'POST',
+        data: {
+          execution_type,
+          type,
+          new_task,
+          recur_options,
+          type_options
+        }
+      });
+      return data.data;
+    },
+    {
+      onSuccess() {
+        queryClient.invalidateQueries(['recurring']);
+      }
+    }
+  );
 }

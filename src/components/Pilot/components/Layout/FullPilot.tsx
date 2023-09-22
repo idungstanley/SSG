@@ -57,15 +57,15 @@ export default function FullPilot({ featureTabs, activeSection, setShowModal, sh
             menu={<Header.Menu setShowModal={setShowModal} />}
             additionalNavItems={
               <>
-                <EditPageIcon className="w-4 h-4" />
+                <EditPageIcon className="w-4 h-4" stroke="orange" />
 
-                <UploadIcon className="w-4 h-4" />
+                <UploadIcon className="w-4 h-4" stroke="orange" />
 
-                <CopyIcon className="w-6 h-6" />
+                <CopyIcon className="w-6 h-6" stroke="orange" />
 
-                <ShareIcon active />
+                <ShareIcon active={false} color="orange" />
 
-                <PrintIcon className="w-4 h-4" />
+                <PrintIcon className="w-4 h-4" stroke="orange" />
               </>
             }
           >

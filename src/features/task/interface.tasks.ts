@@ -107,10 +107,12 @@ export interface ITaskFullList {
   avatar_path: string | null;
   list_id: string;
   parent_id: string | null;
+  parentName?: string;
   priority: string | null | [{ id: string; initials: string; color: string; name: string }];
   status: IStatus;
   has_descendants: boolean;
   descendants_count: number;
+  closed_subtasks_count: number;
   checklist_items_count: number;
   checklist_done_items_count: number;
   has_attachments: boolean;
@@ -319,4 +321,24 @@ export interface autoProgressProperties {
     Checklists: boolean;
   };
   complete_on?: number;
+}
+
+export interface ITaskRecurResponse {
+  data: {
+    task_recur: {
+      id: string;
+      type: string;
+      execution_type: string;
+      new_task: string | string[];
+    };
+  };
+}
+
+export interface ITaskCreateProps {
+  taskId?: string;
+  type: string;
+  execution_type: string;
+  type_options?: string[];
+  new_task?: string | string[];
+  recur_options?: string[] | number[];
 }

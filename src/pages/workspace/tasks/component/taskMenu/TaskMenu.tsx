@@ -9,7 +9,7 @@ import { HiOutlineDocumentDuplicate, HiInbox } from 'react-icons/hi';
 import { TbFolderX } from 'react-icons/tb';
 import { GiStoneStack, GiJusticeStar } from 'react-icons/gi';
 import { BiMerge, BiEdit } from 'react-icons/bi';
-import { FlagIcon, UserPlusIcon } from '@heroicons/react/24/outline';
+import { UserPlusIcon } from '@heroicons/react/24/outline';
 import { deleteTask } from '../../../../../features/task/taskService';
 import { useDispatch } from 'react-redux';
 import { displayPrompt, setVisibility } from '../../../../../features/general/prompt/promptSlice';
@@ -18,6 +18,8 @@ import { setSelectedTasksArray, setShowTaskNavigation } from '../../../../../fea
 import RoundedCheckbox from '../../../../../components/Checkbox/RoundedCheckbox';
 import PriorityDropdown from '../../../../../components/priority/PriorityDropdown';
 import ToolTip from '../../../../../components/Tooltip/Tooltip';
+import ActiveTreeSearch from '../../../../../components/ActiveTree/ActiveTreeSearch';
+import AlsoitMenuDropdown from '../../../../../components/DropDowns';
 
 export default function TaskMenu() {
   const dispatch = useDispatch();
@@ -27,6 +29,7 @@ export default function TaskMenu() {
   const queryClient = useQueryClient();
 
   const [isVisible, setIsVisible] = useState(false);
+  const [showSelectDropdown, setShowSelectDropdown] = useState<null | HTMLSpanElement | HTMLDivElement>(null);
 
   useEffect(() => {
     if (selectedTasksArray.length) {
@@ -42,6 +45,15 @@ export default function TaskMenu() {
       queryClient.invalidateQueries(['task']);
     }
   });
+
+  const handleShowSelectDropdown = (event: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
+    setShowSelectDropdown(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setShowSelectDropdown(null);
+    // setToggleDuplicateMoal(false);
+  };
 
   const TaskIcons = [
     {
@@ -81,21 +93,24 @@ export default function TaskMenu() {
     },
     {
       id: 6,
-      label: 'Convert to Subtask',
+      label: ' Convert to Subtask ',
       icons: <MdOutlineDriveFileMove />,
       handleClick: () => ({}),
       isVisible: true
     },
     {
       id: 7,
-      label: 'Move tasks or add tasks in multiple Lists',
+      label: 'Duplicate tasks',
       icons: <HiOutlineDocumentDuplicate />,
-      handleClick: () => ({}),
+      handleClick: (e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
+        handleShowSelectDropdown(e);
+        // setToggleDuplicateMoal(!toggleDuplicateMoal);
+      },
       isVisible: true
     },
     {
       id: 8,
-      label: 'Duplicate tasks',
+      label: 'Move tasks or add tasks in multiple Lists',
       icons: <TbFolderX />,
       handleClick: () => ({}),
       isVisible: true
@@ -107,13 +122,6 @@ export default function TaskMenu() {
       handleClick: () => ({}),
       isVisible: true
     },
-    // {
-    //   id: 10,
-    //   label: 'Priority',
-    //   icons: <FlagIcon />,
-    //   handleClick: () => ({}),
-    //   isVisible: true
-    // },
     {
       id: 10,
       label: 'Priority',
@@ -210,8 +218,8 @@ export default function TaskMenu() {
             <>
               <ToolTip className="pt-2" title={menu.label} placement="bottom">
                 <p
-                  className="flex items-center px-2 cursor-pointer mt-0 text-white text-lg "
-                  onClick={() => menu.handleClick()}
+                  className="flex items-center px-2 cursor-pointer mt-0 text-white text-lg"
+                  onClick={(e) => menu.handleClick(e)}
                   key={menu.id}
                 >
                   {menu.icons}
@@ -220,10 +228,18 @@ export default function TaskMenu() {
             </>
           ))}
         </div>
+
         <div className="flex items-center pr-5 gap-2 ">
           <MdFileCopy className="text-white text-lg" />
           <input type="text" placeholder="type '/' for commands" className="h-8 rounded bg-transparent text-xs  " />
         </div>
+      </div>
+      <div className="absolute z-50">
+        {
+          <AlsoitMenuDropdown handleClose={handleClose} anchorEl={showSelectDropdown}>
+            <ActiveTreeSearch option="taskDuplicate" />
+          </AlsoitMenuDropdown>
+        }
       </div>
       <div className="flex justify-center">
         <p
@@ -232,7 +248,7 @@ export default function TaskMenu() {
             dispatch(setSelectedTasksArray([]));
           }}
         >
-          <span className="text-gray-300 ">X</span> Dismiss
+          <span className="text-gray-300">X</span> Dismiss
         </p>
       </div>
     </div>

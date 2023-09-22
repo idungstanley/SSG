@@ -17,6 +17,7 @@ import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import Dradnddrop from '../../../../assets/icons/Dradnddrop';
 import { IField, ITask_statuses } from '../../../../features/list/list.interfaces';
 import { listColumnProps } from '../../../../pages/workspace/tasks/component/views/ListColumns';
+import Copy from '../../../../assets/icons/Copy';
 
 export const MAX_SUBTASKS_LEVEL = 10;
 
@@ -34,6 +35,7 @@ interface RowProps {
   isSplitSubtask?: boolean;
   taskStatuses?: ITask_statuses[];
   level: number;
+  isBlockToOpenSubtasks?: boolean;
 }
 
 export function Row({
@@ -49,15 +51,15 @@ export function Row({
   customFields,
   isSplitSubtask,
   taskStatuses,
-  level
+  level,
+  isBlockToOpenSubtasks
 }: RowProps) {
   const dispatch = useAppDispatch();
 
-  const { showNewTaskField, showNewTaskId, toggleAllSubtask, splitSubTaskState } = useAppSelector(
-    (state) => state.task
-  );
+  const { showNewTaskField, showNewTaskId, toggleAllSubtask } = useAppSelector((state) => state.task);
 
   const [showSubTasks, setShowSubTasks] = useState(toggleAllSubtask);
+  const [isCopied, setIsCopied] = useState<number>(0);
 
   useEffect(() => {
     setShowSubTasks(toggleAllSubtask);
@@ -73,6 +75,7 @@ export function Row({
     custom_fields: [],
     custom_field_columns: [],
     deleted_at: null,
+    closed_subtasks_count: 0,
     descendants_count: 0,
     checklist_items_count: 0,
     checklist_done_items_count: 0,
@@ -134,6 +137,14 @@ export function Row({
     }
   });
 
+  const handleCopyTexts = async () => {
+    await navigator.clipboard.writeText(task.name);
+    setIsCopied(1);
+    setTimeout(() => {
+      setIsCopied(0);
+    }, 1000);
+  };
+
   // hide element if is currently grabbing
   const style = {
     opacity: transform ? 0 : 100
@@ -143,7 +154,7 @@ export function Row({
     <>
       {/* current task */}
 
-      <tr style={style} className="contents relative group dNFlex">
+      <tr style={style} className="relative contents group dNFlex">
         <StickyCol
           showSubTasks={showSubTasks}
           setShowSubTasks={setShowSubTasks}
@@ -151,12 +162,14 @@ export function Row({
           isListParent={isListParent}
           task={task}
           taskIndex={taskIndex}
+          taskStatuses={taskStatuses}
           parentId={parentId as string}
           task_status={task_status as string}
           onClose={handleClose as VoidFunction}
           paddingLeft={paddingLeft}
           tags={'tags' in task ? <TaskTag tags={task.tags} entity_id={task.id} entity_type="task" /> : null}
           isSplitSubtask={isSplitSubtask}
+          isBlockToOpenSubtasks={isBlockToOpenSubtasks}
           isLastSubtaskLevel={level >= MAX_SUBTASKS_LEVEL}
           dragElement={
             <div ref={setNodeRef} {...listeners} {...attributes}>
@@ -167,10 +180,17 @@ export function Row({
           }
         >
           {/* actions */}
-          <div className="opacity-0 absolute right-0 group-hover:opacity-100 flex items-center justify-center mr-1 space-x-1">
+          <div className="absolute right-0 flex items-center justify-center mr-1 space-x-1 opacity-0 group-hover:opacity-100">
+            {/* Copy */}
+            <ToolTip title={isCopied === 0 ? 'Copy Task Name' : 'Copied'}>
+              <button className="p-1 bg-white border rounded-md" onClick={handleCopyTexts}>
+                <Copy />
+              </button>
+            </ToolTip>
+
             {/* effects */}
             <ToolTip title="Apply Effects">
-              <button className="p-1 border rounded-md bg-white" onClick={(e) => e.stopPropagation()}>
+              <button className="p-1 bg-white border rounded-md" onClick={(e) => e.stopPropagation()}>
                 <Effect className="w-3 h-3" />
               </button>
             </ToolTip>
@@ -178,7 +198,7 @@ export function Row({
             {/* tags */}
             {'tags' in task ? (
               <ToolTip title="Tags">
-                <button className=" border rounded-md bg-white">
+                <button className="bg-white border rounded-md ">
                   <ManageTagsDropdown entityId={task.id} tagsArr={task.tags as Tag[]} entityType="task" />
                 </button>
               </ToolTip>
@@ -187,13 +207,13 @@ export function Row({
             {/* show create subtask field */}
             {task.descendants_count < 1 && (
               <ToolTip title="Subtask">
-                <button className="p-1 border rounded-md bg-white" onClick={(e) => onShowAddSubtaskField(e, task.id)}>
+                <button className="p-1 bg-white border rounded-md" onClick={(e) => onShowAddSubtaskField(e, task.id)}>
                   <SubtasksIcon className="w-3 h-3" />
                 </button>
               </ToolTip>
             )}
             <ToolTip title="Enhance View">
-              <button className="p-1 pl-4 rounded-md bg-white" onClick={(e) => e.stopPropagation()}>
+              <button className="p-1 pl-4 bg-white rounded-md" onClick={(e) => e.stopPropagation()}>
                 <Enhance className="w-3 h-3" />
               </button>
             </ToolTip>
@@ -218,22 +238,25 @@ export function Row({
         <AddSubTask
           task={newSubTask}
           columns={columns}
-          paddingLeft={splitSubTaskState ? 0 : DEFAULT_LEFT_PADDING + paddingLeft}
+          paddingLeft={isSplitSubtask ? 0 : DEFAULT_LEFT_PADDING + paddingLeft}
           isListParent={false}
           listId={listId}
-          parentId={splitSubTaskState ? (task.parent_id as string) : task.id}
+          parentId={isSplitSubtask ? (task.parent_id as string) : task.id}
           task_status={task.status.id}
+          isSplitSubtask={isSplitSubtask}
           handleClose={onCloseAddTaskFIeld}
         />
       ) : null}
 
-      {showSubTasks && !isSplitSubtask ? (
+      {showSubTasks ? (
         <SubTasks
           paddingLeft={DEFAULT_LEFT_PADDING + paddingLeft}
           listId={listId}
           parentId={task.id}
+          parentName={task.name}
           columns={columns}
           taskStatuses={taskStatuses}
+          isSplitSubtask={isSplitSubtask}
           level={level + 1}
         />
       ) : null}

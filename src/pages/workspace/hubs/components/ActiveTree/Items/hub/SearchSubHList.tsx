@@ -10,6 +10,7 @@ import SearchLList from '../list/SearchLList';
 
 interface ISearchSubHListProps {
   hubs: Hub[];
+  option?: string;
   handleTabClick: (
     e: React.MouseEvent<HTMLParagraphElement, MouseEvent>,
     id: string,
@@ -18,7 +19,7 @@ interface ISearchSubHListProps {
   ) => void;
 }
 
-export default function SearchSubHList({ hubs, handleTabClick }: ISearchSubHListProps) {
+export default function SearchSubHList({ hubs, handleTabClick, option }: ISearchSubHListProps) {
   const dispatch = useAppDispatch();
   const { hubId, walletId, listId } = useParams();
   const { currentItemId, showExtendedBar } = useAppSelector((state) => state.workspace);
@@ -72,7 +73,11 @@ export default function SearchSubHList({ hubs, handleTabClick }: ISearchSubHList
         <div key={hub.id}>
           <div
             className="relative flex flex-col"
-            style={lastActiveItem === 'Sub Hub' ? { opacity: '0.5', pointerEvents: 'none' } : {}}
+            style={
+              lastActiveItem === 'Sub Hub' && option !== 'taskDuplicate'
+                ? { opacity: '0.5', pointerEvents: 'none' }
+                : {}
+            }
           >
             <SearchHubItem
               item={hub}
@@ -85,18 +90,25 @@ export default function SearchSubHList({ hubs, handleTabClick }: ISearchSubHList
               }
               type={EntityType.subHub}
             />
-            <div style={lastActiveItem === 'Wallet' ? { opacity: '0.5', pointerEvents: 'none' } : {}}>
+            <div
+              style={
+                lastActiveItem === 'Wallet' && option !== 'taskDuplicate'
+                  ? { opacity: '0.5', pointerEvents: 'none' }
+                  : {}
+              }
+            >
               {hub.wallets.length && isCanBeOpen(hub.id) ? (
                 <SearchWList
                   wallets={hub.wallets}
                   leftMargin={false}
                   type="wallet"
                   paddingLeft="35"
+                  option={option}
                   handleTabClick={handleTabClick}
                 />
               ) : null}
             </div>
-            <div style={{ opacity: '0.5', pointerEvents: 'none' }}>
+            <div style={option !== 'taskDuplicate' ? { opacity: '0.5', pointerEvents: 'none' } : {}}>
               {hub.lists.length && isCanBeOpen(hub.id) && !showExtendedBar ? (
                 <SearchLList list={hub.lists} leftMargin={false} paddingLeft="50" />
               ) : null}
