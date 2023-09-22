@@ -1,4 +1,4 @@
-import { BsPower, BsThreeDotsVertical } from 'react-icons/bs';
+import { BsPower } from 'react-icons/bs';
 import { useAppSelector } from '../../../../app/hooks';
 import TaskMenu from '../../../../pages/workspace/tasks/component/taskMenu/TaskMenu';
 import { Assignee } from '../Assignee/Assignee';

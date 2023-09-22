@@ -29,6 +29,7 @@ import Badges from '../../../badges';
 import DetailsOnHover from '../../../Dropdown/DetailsOnHover/DetailsOnHover';
 import { EntityType } from '../../../../utils/EntityTypes/EntityType';
 import SubtasksIcon from '../../../../assets/icons/SubtasksIcon';
+import { ITask_statuses } from '../../../../features/list/list.interfaces';
 
 interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   task: Task;
@@ -47,6 +48,7 @@ interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   isSplitSubtask?: boolean;
   isLastSubtaskLevel: boolean;
   isBlockToOpenSubtasks?: boolean;
+  taskStatuses?: ITask_statuses[];
 }
 
 export function StickyCol({
@@ -60,6 +62,7 @@ export function StickyCol({
   task_status,
   onClose,
   task,
+  taskStatuses,
   paddingLeft = 0,
   dragElement,
   isSplitSubtask,
@@ -357,7 +360,7 @@ export function StickyCol({
               )}
             </button>
             <div onClick={() => dispatch(setCurrentTaskStatusId(task.id as string))}>
-              <StatusDropdown TaskCurrentStatus={task.status} />
+              <StatusDropdown TaskCurrentStatus={task.status} taskStatuses={taskStatuses} />
             </div>
             {separateSubtasksMode && task?.parentName && !paddingLeft ? (
               <ToolTip title={task.parentName}>
@@ -366,9 +369,9 @@ export function StickyCol({
                 </button>
               </ToolTip>
             ) : null}
-            <div className="flex flex-col flex-grow items-start justify-start pl-2 space-y-1">
+            <div className="flex flex-col items-start justify-start flex-grow pl-2 space-y-1">
               <div
-                className="flex w-full items-center text-left"
+                className="flex items-center w-full text-left"
                 onKeyDown={(e) => (e.key === 'Enter' ? handleEditTask(e, task.id) : null)}
               >
                 <div
@@ -415,7 +418,7 @@ export function StickyCol({
                   )}
                 </div>
                 {/* non default badges here */}
-                <div onClick={(e) => e.stopPropagation()} className="pl-3 flex flex-grow items-center justify-between">
+                <div onClick={(e) => e.stopPropagation()} className="flex items-center justify-between flex-grow pl-3">
                   {!isLastSubtaskLevel ? <Badges task={task} /> : null}
                   {/*  default badges here */}
                   {children}
@@ -447,23 +450,23 @@ export function StickyCol({
               `relative border-t ${verticalGrid && 'border-r'} w-full h-16  py-4 p-4 flex items-center`
             )}
           >
-            <div className="absolute flex ml-2 space-x-1 -mt-10">
+            <div className="absolute flex ml-2 -mt-10 space-x-1">
               <ToolTip title="Cancel">
-                <div className="border rounded-md p-1" style={{ borderColor: '#FFE7E7' }}>
+                <div className="p-1 border rounded-md" style={{ borderColor: '#FFE7E7' }}>
                   <ImCancelCircle onClick={onClose} />
                 </div>
               </ToolTip>
               <button
                 onClick={(e) => handleOnSave(e as React.MouseEvent<HTMLButtonElement, MouseEvent>, task.id)}
-                className="px-6 h-6 text-white text-sm rounded-md bg-alsoit-success flex items-center"
+                className="flex items-center h-6 px-6 text-sm text-white rounded-md bg-alsoit-success"
               >
                 Save
               </button>
             </div>
-            <div className="ml-4 pt-2">
+            <div className="pt-2 ml-4">
               <StatusDropdown TaskCurrentStatus={task.status} />
             </div>
-            <div className="flex flex-col pt-2 items-start justify-start pl-2 space-y-1">
+            <div className="flex flex-col items-start justify-start pt-2 pl-2 space-y-1">
               <p
                 className="flex text-left empty:before:content-[attr(placeholder)]"
                 contentEditable={true}

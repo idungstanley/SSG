@@ -14,12 +14,14 @@ import { Hub } from '../../../../pages/workspace/hubs/components/ActiveTree/acti
 import { findCurrentHub } from '../../../../managers/Hub';
 import LightenColor from './lightenColor/LightenColor';
 import { SubtasksTable } from '../Table/SubtasksTable';
+import { UseGetListDetails } from '../../../../features/list/listService';
 
 interface ListProps {
   tasks: Task[];
   subtasksCustomeFields?: IField[];
   customProperty?: IField[];
   listDetails?: IListDetailRes;
+  listId?: string;
 }
 
 export interface IListColor {
@@ -28,8 +30,9 @@ export interface IListColor {
 
 const unique = (arr: listColumnProps[]) => [...new Set(arr)];
 
-export function List({ tasks, subtasksCustomeFields, listDetails }: ListProps) {
+export function List({ tasks, subtasksCustomeFields, listDetails, listId }: ListProps) {
   const dispatch = useAppDispatch();
+  console.log(listId);
 
   const {
     sortType,
@@ -42,15 +45,25 @@ export function List({ tasks, subtasksCustomeFields, listDetails }: ListProps) {
   const { parentHubExt, hub } = useAppSelector((state) => state.hub);
 
   const [collapseTable, setCollapseTable] = useState(false);
+  const [listDetailsFromRes, setListDetailsFromRes] = useState<IListDetailRes>();
+
   const [showNewTaskField, setShowNewTaskField] = useState(false);
   const [parentHub, setParentHub] = useState<Hub>();
   const [fullTasksLists, setFullTasksLists] = useState<ITaskFullList[]>([]);
+
+  const { data: listDet } = UseGetListDetails(listId);
 
   useEffect(() => {
     if (parentHubExt.id) {
       setParentHub(findCurrentHub(parentHubExt.id, hub));
     }
   }, [parentHubExt]);
+
+  useEffect(() => {
+    if (listDet) {
+      setListDetailsFromRes(listDet);
+    }
+  }, [listDet]);
 
   const ListColor: IListColor = tasks[0].list?.color
     ? JSON.parse(tasks[0].list?.color as string)
@@ -123,6 +136,8 @@ export function List({ tasks, subtasksCustomeFields, listDetails }: ListProps) {
     dispatch(setCurrTeamMemId(null));
   };
 
+  const detailsFromList = listDetails ? listDetails : listDet;
+
   return (
     <div
       className="pt-1 border-t-4 border-l-4 border-purple-500 rounded-3xl bg-purple-50"
@@ -133,7 +148,7 @@ export function List({ tasks, subtasksCustomeFields, listDetails }: ListProps) {
       }}
     >
       <Label
-        listName={tasks[0].list?.name || listDetails?.data.list.name}
+        listName={tasks[0].list?.name || detailsFromList?.data.list.name}
         hubName={parentHub?.name}
         tasks={tasks}
         ListColor={ListColor}
@@ -169,7 +184,7 @@ export function List({ tasks, subtasksCustomeFields, listDetails }: ListProps) {
                   heads={hideTask.length ? hideTask : generateColumns}
                   data={sortedTasks[key]}
                   customFields={tasks[0].custom_field_columns as IField[]}
-                  listDetails={listDetails}
+                  listDetails={detailsFromList}
                 />
               ) : (
                 <>
@@ -182,7 +197,7 @@ export function List({ tasks, subtasksCustomeFields, listDetails }: ListProps) {
                         heads={hideTask.length ? hideTask : generateColumns}
                         data={[task]}
                         customFields={tasks[0].custom_field_columns as IField[]}
-                        listDetails={listDetails}
+                        listDetails={detailsFromList}
                         isBlockToOpenSubtasks={true}
                       />
                       <SubtasksTable
