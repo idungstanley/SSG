@@ -32,7 +32,6 @@ const unique = (arr: listColumnProps[]) => [...new Set(arr)];
 
 export function List({ tasks, subtasksCustomeFields, listDetails, listId }: ListProps) {
   const dispatch = useAppDispatch();
-  console.log(listId);
 
   const {
     sortType,
@@ -143,7 +142,7 @@ export function List({ tasks, subtasksCustomeFields, listDetails, listId }: List
     }
   });
 
-  const detailsFromList = listDetails ? listDetails : listDet;
+  const detailsFromList = listDetails ? listDetails : listDetailsFromRes;
 
   return (
     <div
