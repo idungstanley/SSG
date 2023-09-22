@@ -10,21 +10,22 @@ import AdditionalHeader from '../../layout/components/MainLayout/Header/Addition
 import ActiveHub from '../../layout/components/MainLayout/extendedNavigation/ActiveParents/ActiveHub';
 import hubIcon from '../../assets/branding/hub.png';
 import FilterByAssigneesSliderOver from '../workspace/lists/components/renderlist/filters/FilterByAssigneesSliderOver';
-import { setSaveSettingList, setSaveSettingOnline, setTasks } from '../../features/task/taskSlice';
+import { setSaveSettingList, setSaveSettingOnline, setSubtasks, setTasks } from '../../features/task/taskSlice';
 import TaskQuickAction from '../workspace/tasks/component/taskQuickActions/TaskQuickAction';
 import { List } from '../../components/Views/ui/List/List';
 import { Header } from '../../components/TasksHeader';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
 import { ITaskFullList } from '../../features/task/interface.tasks';
 import { useformatSettings } from '../workspace/tasks/TaskSettingsModal/ShowSettingsModal/FormatSettings';
-import { IListDetailRes } from '../../features/list/list.interfaces';
+import { IField, IListDetailRes } from '../../features/list/list.interfaces';
 import { VerticalScroll } from '../../components/ScrollableContainer/VerticalScroll';
+import { generateSubtasksList } from '../../utils/generateLists';
 
 export function ListPage() {
   const dispatch = useAppDispatch();
   const { listId, taskId } = useParams();
 
-  const { tasks: tasksStore, saveSettingLocal } = useAppSelector((state) => state.task);
+  const { tasks: tasksStore, saveSettingLocal, subtasks } = useAppSelector((state) => state.task);
 
   const [tasksFromRes, setTasksFromRes] = useState<ITaskFullList[]>([]);
   const [listDetailsFromRes, setListDetailsFromRes] = useState<IListDetailRes>();
@@ -92,6 +93,28 @@ export function ListPage() {
         };
       });
       dispatch(setTasks({ ...tasksStore, [listId]: tasksWithCustomFields as ITaskFullList[] }));
+
+      const newSubtasksArr: ITaskFullList[] = [];
+      tasksFromRes.forEach((task) => {
+        if (task?.descendants) {
+          (task.descendants as ITaskFullList[]).forEach((sub) => {
+            const parentName = newSubtasksArr.find((i) => i.id === sub.parent_id)?.name;
+            newSubtasksArr.push({
+              ...sub,
+              parentName: parentName ? parentName : task.name,
+              list_id: task.list_id
+            });
+          });
+        }
+      });
+
+      if (newSubtasksArr.length) {
+        const newSubtasks = generateSubtasksList(
+          newSubtasksArr,
+          listDetailsFromRes.data.list.custom_field_columns as IField[]
+        );
+        dispatch(setSubtasks({ ...subtasks, ...newSubtasks }));
+      }
     }
   }, [tasksFromRes, listDetailsFromRes]);
 

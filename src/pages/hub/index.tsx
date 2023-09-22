@@ -16,16 +16,17 @@ import { Header } from '../../components/TasksHeader';
 import { VerticalScroll } from '../../components/ScrollableContainer/VerticalScroll';
 import { GroupHorizontalScroll } from '../../components/ScrollableContainer/GroupHorizontalScroll';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
-import { setSaveSettingList, setSaveSettingOnline, setTasks } from '../../features/task/taskSlice';
+import { setSaveSettingList, setSaveSettingOnline, setSubtasks, setTasks } from '../../features/task/taskSlice';
 import { useformatSettings } from '../workspace/tasks/TaskSettingsModal/ShowSettingsModal/FormatSettings';
 import { IField } from '../../features/list/list.interfaces';
+import { generateSubtasksList, generateSubtasksArray } from '../../utils/generateLists';
 
 export default function HubPage() {
   const dispatch = useAppDispatch();
   const { hubId, subhubId, taskId } = useParams();
 
   const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
-  const { tasks: tasksStore, saveSettingLocal } = useAppSelector((state) => state.task);
+  const { tasks: tasksStore, saveSettingLocal, subtasks } = useAppSelector((state) => state.task);
   const formatSettings = useformatSettings();
 
   const { data: hub } = UseGetHubDetails({ activeItemId: hubId, activeItemType: EntityType.hub });
@@ -73,6 +74,12 @@ export default function HubPage() {
   useEffect(() => {
     if (Object.keys(lists).length) {
       dispatch(setTasks({ ...tasksStore, ...lists }));
+
+      const newSubtasksArr = generateSubtasksArray(lists);
+      if (newSubtasksArr.length) {
+        const newSubtasks = generateSubtasksList(newSubtasksArr, hub?.data.hub?.custom_field_columns as IField[]);
+        dispatch(setSubtasks({ ...subtasks, ...newSubtasks }));
+      }
     }
   }, [lists]);
 

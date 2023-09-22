@@ -35,12 +35,14 @@ export function SubTasks({
   const { draggableItemId } = useAppSelector((state) => state.list);
   const { subtasks } = useAppSelector((state) => state.task);
 
-  const { data: tasks } = useSubTasks(parentId);
+  const { data: tasks } = useSubTasks(parentId, subtasks);
 
-  const draggableItem = draggableItemId ? tasks?.find((i) => i.id === draggableItemId) : null;
+  const draggableItem = draggableItemId
+    ? (tasks || subtasks[parentId])?.find((i: ITaskFullList) => i.id === draggableItemId)
+    : null;
 
   useEffect(() => {
-    if (tasks?.length) {
+    if (tasks?.length && !subtasks[parentId]) {
       const tasksWithListId = tasks.map((item) => {
         return {
           ...item,

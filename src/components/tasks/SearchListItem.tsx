@@ -1,6 +1,6 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
-import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { useAppSelector } from '../../app/hooks';
 import ListIconComponent from '../ItemsListInSidebar/components/ListIconComponent';
 import { cl } from '../../utils';
 import { IList } from '../../features/hubs/hubs.interfaces';
@@ -19,9 +19,6 @@ export default function SearchListItem({ list, paddingLeft }: ListItemProps) {
   const { activeItemId } = useAppSelector((state) => state.workspace);
   const { lightBaseColor, baseColor } = useAppSelector((state) => state.account);
   const { listColour } = useAppSelector((state) => state.list);
-  // const { duplicateTaskObj } = useAppSelector((state) => state.task);
-
-  const dispatch = useAppDispatch();
 
   const handleClick = () => {
     // dispatch(setDuplicateTaskObj({ ...duplicateTaskObj, list_id: list.id }));

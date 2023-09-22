@@ -111,6 +111,7 @@ export interface ITaskFullList {
   priority: string | null | [{ id: string; initials: string; color: string; name: string }];
   status: IStatus;
   has_descendants: boolean;
+  descendants?: ITaskFullList[];
   descendants_count: number;
   closed_subtasks_count: number;
   checklist_items_count: number;
@@ -163,7 +164,7 @@ export interface IFullTaskRes2 {
 
 export interface ITaskListRes {
   data: {
-    tasks: ImyTaskData[];
+    tasks: ITaskFullList[];
     paginator: IPaginator;
   };
 }
