@@ -102,7 +102,7 @@ function RegisterPage() {
         <div className="bg-white py-8 px-4 shadow-lg sm:rounded-lg sm:px-10 flex flex-col gap-7">
           <h2 className="text-center text-2xl font-bold">Let&apos;s go!</h2>
 
-          <InviteDetails />
+          {inviteCode && <InviteDetails />}
 
           <Form onSubmit={(values) => onSubmit(values)} formikConfig={formikConfig} checkboxConfig={checkboxConfig} />
 
