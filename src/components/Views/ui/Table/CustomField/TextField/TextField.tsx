@@ -43,15 +43,11 @@ function TextField({ taskCustomFields, taskId, fieldId }: TextFielProps) {
   };
 
   const handleCopyTexts = async () => {
-    try {
-      await navigator.clipboard.writeText(currentValue);
-      setIsCopied(1);
-      setTimeout(() => {
-        setIsCopied(0);
-      }, 500);
-    } catch (error) {
-      console.warn(`Failed to copy: ${error}`);
-    }
+    await navigator.clipboard.writeText(currentValue);
+    setIsCopied(1);
+    setTimeout(() => {
+      setIsCopied(0);
+    }, 500);
   };
 
   return (

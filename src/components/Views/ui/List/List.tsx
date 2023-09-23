@@ -8,7 +8,6 @@ import { AddTask } from '../AddTask/AddTask';
 import { setCurrTeamMemId } from '../../../../features/task/taskSlice';
 import { columnsHead, listColumnProps } from '../../../../pages/workspace/tasks/component/views/ListColumns';
 import { cl } from '../../../../utils';
-import { useDroppable } from '@dnd-kit/core';
 import { IField, IListDetailRes } from '../../../../features/list/list.interfaces';
 import { Hub } from '../../../../pages/workspace/hubs/components/ActiveTree/activetree.interfaces';
 import { findCurrentHub } from '../../../../managers/Hub';
@@ -32,7 +31,6 @@ const unique = (arr: listColumnProps[]) => [...new Set(arr)];
 
 export function List({ tasks, subtasksCustomeFields, listDetails, listId }: ListProps) {
   const dispatch = useAppDispatch();
-  console.log(listId);
 
   const {
     sortType,
