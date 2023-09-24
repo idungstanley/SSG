@@ -28,6 +28,7 @@ import { CiSearch } from 'react-icons/ci';
 import Button from '../Button';
 import ArrowDownFilled from '../../assets/icons/ArrowDownFilled';
 import PaletteListView from './component/PaletteListView';
+import ToolTip from '../Tooltip/Tooltip';
 
 interface PaletteProps {
   title?: string;
@@ -211,18 +212,21 @@ export default function PaletteManager({
               <div className="flex items-center gap-1">
                 {views.map((item, index) => (
                   <span
-                    className={` p-1 rounded ${
+                    key={index}
+                    className={`rounded p-1 cursor-pointer ${
                       selectedViews === item.label ? 'bg-primary-500' : 'border border-primary-200'
                     }`}
-                    key={index}
                     onClick={() => setSelectedViews(item.label)}
                   >
-                    {item.icon}
+                    <ToolTip title={item.label}>{item.icon}</ToolTip>
                   </span>
                 ))}
-                <span className="p-1 border rounded border-primary-200" onClick={() => setIsSearch(true)}>
-                  <SearchIcon />
-                </span>
+
+                <ToolTip title="Open Search">
+                  <span className="p-1 border rounded border-primary-200" onClick={() => setIsSearch(true)}>
+                    <SearchIcon />
+                  </span>
+                </ToolTip>
               </div>
             </div>
           )}
