@@ -288,12 +288,14 @@ export default function PaletteManager({
           )}
           {selectedElement && selectedElement}
           <div className="flex items-center justify-between mt-2">
-            <span className="flex items-center p-1 ml-2 border rounded-md border-primary-200">
-              <BiPaint
-                onClick={() => handleEditColor(true)}
-                className={`${displayColorPicker ? 'hidden' : 'block cursor-pointer'}`}
-              />
-            </span>
+            <ToolTip title="Advance Settings">
+              <span className="flex items-center p-1 ml-2 border rounded-md border-primary-200">
+                <BiPaint
+                  onClick={() => handleEditColor(true)}
+                  className={`${displayColorPicker ? 'hidden' : 'block cursor-pointer'}`}
+                />
+              </span>
+            </ToolTip>
             <RiArrowUpSFill
               onClick={() => handleEditColor(false)}
               className={`${!displayColorPicker ? 'hidden' : 'block cursor-pointer'}`}
