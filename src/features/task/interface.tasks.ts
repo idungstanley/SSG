@@ -130,10 +130,11 @@ export interface ITaskFullList {
   deleted_at: string | null;
   directory_items?: [];
   checklists?: ICheckListRes[];
+  listColor?: unknown;
   list?: {
     id: string;
     name: string;
-    parents: IParent;
+    parents?: IParent;
     color?: string;
   };
 }

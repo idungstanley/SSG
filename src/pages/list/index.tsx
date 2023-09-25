@@ -89,6 +89,11 @@ export function ListPage() {
       const tasksWithCustomFields = tasksFromRes.map((task) => {
         return {
           ...task,
+          list: {
+            id: listDetailsFromRes.data.list.id,
+            name: listDetailsFromRes.data.list.name,
+            color: listDetailsFromRes.data.list.color as unknown as string
+          },
           custom_field_columns: listDetailsFromRes.data.list.custom_field_columns
         };
       });
