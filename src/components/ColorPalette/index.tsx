@@ -267,7 +267,7 @@ export default function PaletteManager({
               >
                 <p>{title + ' Shapes'}</p>
                 <ArrowDownFilled color={showListShapes ? 'white' : undefined} />
-                {showListShapes && <span className="absolute left-0 right-0 top-6">{topContent}</span>}
+                {showListShapes && <span className="absolute left-0 right-0 z-20 top-6">{topContent}</span>}
               </span>
               <ListIconComponent
                 shape={shape}
@@ -288,7 +288,7 @@ export default function PaletteManager({
           )}
           {selectedElement && selectedElement}
           <div className="flex items-center justify-between mt-2">
-            <ToolTip title="Advance Settings">
+            <ToolTip title="Advance color option">
               <span className="flex items-center p-1 ml-2 border rounded-md border-primary-200">
                 <BiPaint
                   onClick={() => handleEditColor(true)}
