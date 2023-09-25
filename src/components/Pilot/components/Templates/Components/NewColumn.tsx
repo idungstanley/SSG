@@ -24,6 +24,7 @@ import CreateAutoProgress from './Progress/CreateAutoProgress';
 import CreateTime from './Time/CreateTime';
 import CreateFiles from './Files/CreateFiles';
 import CreatePeople from './People/CreatePeople';
+import CreateLocationField from './Location/CreateLocation';
 
 function NewColumn() {
   const dispatch = useAppDispatch();
@@ -60,7 +61,8 @@ function NewColumn() {
     'progress(manual)': <CreateManualProgress />,
     time: <CreateTime />,
     attachments: <CreateFiles />,
-    people: <CreatePeople />
+    people: <CreatePeople />,
+    location: <CreateLocationField />
   };
 
   return (
