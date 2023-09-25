@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { UseEditHubService } from '../../features/hubs/hubService';
@@ -30,6 +30,8 @@ import ArrowDownFilled from '../../assets/icons/ArrowDownFilled';
 import PaletteListView from './component/PaletteListView';
 import ToolTip from '../Tooltip/Tooltip';
 import { AiFillCloseCircle } from 'react-icons/ai';
+import { ColorResult } from './Type';
+import { cl } from '../../utils';
 
 interface PaletteProps {
   title?: string;
@@ -73,6 +75,7 @@ export default function PaletteManager({
   const [isOutterFrameActive, setIsOutterFrameActive] = useState<boolean>(true);
   const [isInnerFrameActive, setIsInnerFrameActive] = useState<boolean>(false);
   const [displayColorPicker, setDisplayColorPicker] = useState<boolean>(false);
+  const [color, setColor] = useState<ColorResult | undefined>(undefined);
   const [customColor, setCustomColor] = useState<string>('');
   const [selectedViews, setSelectedViews] = useState<string>(paletteViews.BOARD);
   const [isSearch, setIsSearch] = useState<boolean>(false);
@@ -80,6 +83,9 @@ export default function PaletteManager({
   const [showListShapes, setShowListShapes] = useState<boolean>(false);
 
   const { paletteId, paletteType } = paletteDropdown;
+  const { rgb } = color || {};
+  const updateColor = useCallback((color: ColorResult) => setColor(color), []);
+  console.log(color);
 
   const closeMenu = () => {
     setOpen(false);
@@ -210,11 +216,14 @@ export default function PaletteManager({
         }
       }}
     >
-      <div className="w-auto p-2 overflow-y-auto rounded-full drop-shadow-2xl" style={{ borderRadius: '5px' }}>
+      <div
+        className="w-auto p-2 overflow-y-auto text-gray-500 rounded-full drop-shadow-2xl"
+        style={{ borderRadius: '5px' }}
+      >
         <div className="z-50 flex flex-col">
           {!isSearch && (
             <div className="flex items-center justify-between mb-2">
-              <p className="justify-center ml-2 text-gray-500">COLOUR LIBRARY</p>
+              <p className="justify-center ml-2">COLOUR LIBRARY</p>
               <div className="flex items-center gap-1">
                 {views.map((item, index) => (
                   <div
@@ -288,15 +297,14 @@ export default function PaletteManager({
             </span>
           )}
           {selectedElement && selectedElement}
-          <div className="flex items-center justify-between mt-2">
-            <ToolTip title="Advance color option">
-              <span className="flex items-center p-1 ml-2 border rounded-md border-primary-200">
-                <BiPaint
-                  onClick={() => handleEditColor(true)}
-                  className={`${displayColorPicker ? 'hidden' : 'block cursor-pointer'}`}
-                />
-              </span>
-            </ToolTip>
+          <div className={cl('flex items-center mt-2', displayColorPicker ? 'justify-center' : 'justify-between')}>
+            {!displayColorPicker && (
+              <ToolTip title="Advance color option">
+                <span className="flex items-center p-1 ml-2 border rounded-md border-primary-200">
+                  <BiPaint onClick={() => handleEditColor(true)} className="cursor-pointer" />
+                </span>
+              </ToolTip>
+            )}
             <RiArrowUpSFill
               onClick={() => handleEditColor(false)}
               className={`${!displayColorPicker ? 'hidden' : 'block cursor-pointer'}`}
@@ -336,20 +344,44 @@ export default function PaletteManager({
                   <span className="w-6 h-6 p-2 rounded" style={{ backgroundColor: customColor }}></span>
                 </span>
               </div>
-              <HuePicker
-                style={{ borderRadius: '10px' }}
-                color={customColor}
-                onChange={handleCustomColor}
-                onChangeComplete={handleCustomColor}
+              <HuePicker style={{ borderRadius: '10px' }} color={rgb} onChange={updateColor} />
+              <AlphaPicker color={rgb} onChange={updateColor} />
+              <Input
+                placeholder="Please input library name"
+                bgColor="bg-gray-200"
+                borderRadius="rounded-md py-0.5"
+                type="text"
+                name="name"
+                label="LIBRARY COLOUR NAME"
+                onChange={() => ({})}
               />
-              <AlphaPicker color={customColor} onChange={handleCustomColor} onChangeComplete={handleCustomColor} />
-              <button
-                onClick={() => handleClick(customColor)}
-                className={`p-1 mt-2 border rounded ${customColor !== '' ? 'text-white' : 'text-black'}`}
-                style={{ backgroundColor: `${customColor}` }}
-              >
-                Save Color
-              </button>
+              <div className="flex items-center justify-between gap-2">
+                <Button
+                  height="h-6"
+                  label="Cancel"
+                  labelSize="text-xs"
+                  padding="p-1"
+                  buttonStyle="danger"
+                  onClick={handleCancel}
+                />
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => handleClick(customColor)}
+                    className={`p-1 h-6 text-xs border rounded ${customColor !== '' ? 'text-white' : 'text-black'}`}
+                    style={{ backgroundColor: `${customColor}` }}
+                  >
+                    Save
+                  </button>
+                  <Button
+                    height="h-6"
+                    customHoverColor="hover:bg-alsoit-purple-300"
+                    label="Save as new"
+                    labelSize="text-xs"
+                    padding="p-1"
+                    buttonStyle="custom"
+                  />
+                </div>
+              </div>
             </div>
           )}
 
