@@ -29,6 +29,7 @@ import Button from '../Button';
 import ArrowDownFilled from '../../assets/icons/ArrowDownFilled';
 import PaletteListView from './component/PaletteListView';
 import ToolTip from '../Tooltip/Tooltip';
+import { AiFillCloseCircle } from 'react-icons/ai';
 
 interface PaletteProps {
   title?: string;
@@ -138,6 +139,10 @@ export default function PaletteManager({
     }
   });
 
+  const handleCloseSearch = () => {
+    setIsSearch(false);
+  };
+
   const handleClick = (color?: string | ListColourProps) => {
     if (paletteType === EntityType.hub) {
       editHubColorMutation.mutateAsync({
@@ -211,17 +216,18 @@ export default function PaletteManager({
               <p className="justify-center ml-2 text-gray-500">COLOUR LIBRARY</p>
               <div className="flex items-center gap-1">
                 {views.map((item, index) => (
-                  <span
+                  <div
                     key={index}
                     className={`rounded p-1 cursor-pointer ${
                       selectedViews === item.label ? 'bg-primary-500' : 'border border-primary-200'
                     }`}
                     onClick={() => setSelectedViews(item.label)}
                   >
-                    <ToolTip title={item.label}>{item.icon}</ToolTip>
-                  </span>
+                    <ToolTip title={item.label + ' View'}>
+                      <span>{item.icon}</span>
+                    </ToolTip>
+                  </div>
                 ))}
-
                 <ToolTip title="Open Search">
                   <span className="p-1 border rounded border-primary-200" onClick={() => setIsSearch(true)}>
                     <SearchIcon />
@@ -239,6 +245,14 @@ export default function PaletteManager({
                 type="text"
                 name="search"
                 leadingIcon={<CiSearch />}
+                trailingIcon={
+                  <ToolTip title="Close Search">
+                    <span>
+                      <AiFillCloseCircle style={{ color: 'rgb(191, 0, 255)' }} />
+                    </span>
+                  </ToolTip>
+                }
+                trailingClick={handleCloseSearch}
                 onChange={() => null}
               />
             </div>
