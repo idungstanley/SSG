@@ -7,7 +7,7 @@ import { UseEditListService } from '../../features/list/listService';
 import { setPaletteDropDown } from '../../features/account/accountSlice';
 import { BiPaint } from 'react-icons/bi';
 import { RiArrowUpSFill } from 'react-icons/ri';
-import { ChromePicker } from 'react-color';
+import { ChromePicker, AlphaPicker, HuePicker } from 'react-color';
 import ListIconComponent from '../ItemsListInSidebar/components/ListIconComponent';
 import { ListColourProps } from '../tasks/ListItem';
 import { changeListManager } from '../../managers/List';
@@ -76,6 +76,7 @@ export default function PaletteManager({
   const [customColor, setCustomColor] = useState<string>('');
   const [selectedViews, setSelectedViews] = useState<string>(paletteViews.BOARD);
   const [isSearch, setIsSearch] = useState<boolean>(false);
+  const [isAdvanceSearch, setIsAdvanceSearch] = useState<boolean>(false);
   const [showListShapes, setShowListShapes] = useState<boolean>(false);
 
   const { paletteId, paletteType } = paletteDropdown;
@@ -321,9 +322,27 @@ export default function PaletteManager({
               </div>
             )}
           </div>
-          <div className="flex flex-col justify-center">
-            {displayColorPicker && <ChromePicker color={customColor} onChangeComplete={handleCustomColor} />}
-            {displayColorPicker && (
+          {/* {displayColorPicker && <ChromePicker color={customColor} onChangeComplete={handleCustomColor} />} */}
+          {displayColorPicker && (
+            <div className="flex flex-col justify-center w-full gap-2">
+              <div className="flex items-center justify-between p-1">
+                <p>ADVANCE COLOUR SETTINGS</p>
+                <span className="flex items-center justify-between gap-2">
+                  <ToolTip title="Search Advance Colour">
+                    <span onClick={() => setIsAdvanceSearch(true)}>
+                      <SearchIcon />
+                    </span>
+                  </ToolTip>
+                  <span className="w-6 h-6 p-2 rounded" style={{ backgroundColor: customColor }}></span>
+                </span>
+              </div>
+              <HuePicker
+                style={{ borderRadius: '10px' }}
+                color={customColor}
+                onChange={handleCustomColor}
+                onChangeComplete={handleCustomColor}
+              />
+              <AlphaPicker color={customColor} onChange={handleCustomColor} onChangeComplete={handleCustomColor} />
               <button
                 onClick={() => handleClick(customColor)}
                 className={`p-1 mt-2 border rounded ${customColor !== '' ? 'text-white' : 'text-black'}`}
@@ -331,8 +350,9 @@ export default function PaletteManager({
               >
                 Save Color
               </button>
-            )}
-          </div>
+            </div>
+          )}
+
           {bottomContent}
         </div>
       </div>
