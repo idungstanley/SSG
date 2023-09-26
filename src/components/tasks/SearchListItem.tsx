@@ -17,7 +17,9 @@ export interface ListColourProps {
   outerColour?: string;
 }
 export default function SearchListItem({ list, paddingLeft }: ListItemProps) {
+  const dispatch = useAppDispatch();
   const { listId } = useParams();
+
   const { activeItemId } = useAppSelector((state) => state.workspace);
   const { lightBaseColor, baseColor } = useAppSelector((state) => state.account);
   const { listColour } = useAppSelector((state) => state.list);
@@ -25,11 +27,8 @@ export default function SearchListItem({ list, paddingLeft }: ListItemProps) {
 
   const { mutate: duplicateTask } = useDuplicateTask();
 
-  const dispatch = useAppDispatch();
-
   const handleClick = () => {
     dispatch(setDuplicateTaskObj({ ...duplicateTaskObj, popDuplicateTaskModal: false }));
-
     duplicateTask({
       ...duplicateTaskObj,
       list_id: list.id
