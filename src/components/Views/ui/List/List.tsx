@@ -14,6 +14,7 @@ import { findCurrentHub } from '../../../../managers/Hub';
 import LightenColor from './lightenColor/LightenColor';
 import { SubtasksTable } from '../Table/SubtasksTable';
 import { UseGetListDetails } from '../../../../features/list/listService';
+import { useDroppable } from '@dnd-kit/core';
 
 interface ListProps {
   tasks: Task[];
