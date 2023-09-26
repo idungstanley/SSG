@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { UseEditHubService } from '../../features/hubs/hubService';
@@ -8,6 +8,8 @@ import { setPaletteDropDown } from '../../features/account/accountSlice';
 import { BiPaint } from 'react-icons/bi';
 import { RiArrowUpSFill } from 'react-icons/ri';
 import { ChromePicker, AlphaPicker, HuePicker } from 'react-color';
+import { getColorName, initColors, ORIGINAL_COLORS } from 'ntc-ts';
+import { EditableInput } from 'react-color/lib/components/common';
 import ListIconComponent from '../ItemsListInSidebar/components/ListIconComponent';
 import { ListColourProps } from '../tasks/ListItem';
 import { changeListManager } from '../../managers/List';
@@ -27,11 +29,12 @@ import Input from '../input/Input';
 import { CiSearch } from 'react-icons/ci';
 import Button from '../Button';
 import ArrowDownFilled from '../../assets/icons/ArrowDownFilled';
-import PaletteListView from './component/PaletteListView';
+import PaletteListView, { FORMATTED_COLOR } from './component/PaletteListView';
 import ToolTip from '../Tooltip/Tooltip';
 import { AiFillCloseCircle } from 'react-icons/ai';
 import { ColorResult } from './Type';
 import { cl } from '../../utils';
+import RoundedCheckbox from '../Checkbox/RoundedCheckbox';
 
 interface PaletteProps {
   title?: string;
@@ -75,17 +78,60 @@ export default function PaletteManager({
   const [isOutterFrameActive, setIsOutterFrameActive] = useState<boolean>(true);
   const [isInnerFrameActive, setIsInnerFrameActive] = useState<boolean>(false);
   const [displayColorPicker, setDisplayColorPicker] = useState<boolean>(false);
-  const [color, setColor] = useState<ColorResult | undefined>(undefined);
+  const [color, setColor] = useState<ColorResult>({
+    hex: '#FFE7E72',
+    rgb: {
+      a: 0.45,
+      r: 200,
+      g: 24,
+      b: 201
+    },
+    hsl: {
+      a: 0.45,
+      h: 200,
+      s: 24,
+      l: 201
+    }
+  });
   const [customColor, setCustomColor] = useState<string>('');
+  const [colorType, setColorType] = useState<string>('hex');
+  const [showColorTypes, setShowColorTypes] = useState<boolean>(false);
   const [selectedViews, setSelectedViews] = useState<string>(paletteViews.BOARD);
   const [isSearch, setIsSearch] = useState<boolean>(false);
   const [isAdvanceSearch, setIsAdvanceSearch] = useState<boolean>(false);
   const [showListShapes, setShowListShapes] = useState<boolean>(false);
+  const [colorName, setColorName] = useState<string>('Missing Color');
+
+  const onChange = (color: string) => {
+    console.log(color, 'onChange');
+    setColor((prev) => {
+      return { ...prev, ['hex']: color };
+    });
+  };
 
   const { paletteId, paletteType } = paletteDropdown;
   const { rgb } = color || {};
   const updateColor = useCallback((color: ColorResult) => setColor(color), []);
-  console.log(color);
+
+  console.log(color.hex, 'color.hex');
+  console.log(colorName, 'colorName');
+  useEffect(() => {
+    const colorProperty: FORMATTED_COLOR = getColorName(color.hex);
+    setColorName(colorProperty.name);
+    console.log(colorProperty, 'colorProperty');
+    console.log(color, 'color');
+  }, [updateColor, color]);
+
+  const inputStyles = {
+    input: {
+      border: '1px',
+      width: '70px',
+      padding: '5px',
+      fontSize: '10px',
+      color: '#000',
+      borderRadius: '5px'
+    }
+  };
 
   const closeMenu = () => {
     setOpen(false);
@@ -200,6 +246,10 @@ export default function PaletteManager({
   ];
 
   const selectedElement = views.find((items) => items.label === selectedViews)?.element;
+
+  const filteredKeys = ['hex', 'hsv', 'rgb'];
+
+  const filteredObject = Object.fromEntries(Object.entries(color).filter(([key]) => filteredKeys.includes(key)));
 
   return (
     <Menu
@@ -341,11 +391,56 @@ export default function PaletteManager({
                       <SearchIcon />
                     </span>
                   </ToolTip>
-                  <span className="w-6 h-6 p-2 rounded" style={{ backgroundColor: customColor }}></span>
+                  <span className="w-6 h-6 p-2 rounded" style={{ backgroundColor: color?.hex }}></span>
                 </span>
               </div>
               <HuePicker style={{ borderRadius: '10px' }} color={rgb} onChange={updateColor} />
               <AlphaPicker color={rgb} onChange={updateColor} />
+              <div className="flex items-center gap-1 mt-4">
+                <span
+                  className={`relative flex w-fit items-center justify-between gap-2 p-1 px-2.5 text-xs text-gray-500 bg-gray-200 rounded-md hover:text-primary-600 hover:bg-primary-100 ${
+                    showListShapes && 'text-white bg-primary-500'
+                  }`}
+                  onClick={() => setShowColorTypes((prev) => !prev)}
+                >
+                  <p className="uppercase">{colorType}</p>
+                  <ArrowDownFilled color={showColorTypes ? 'white' : undefined} />
+                  {showColorTypes && color && (
+                    <span className="absolute left-0 right-0 z-20 p-1 bg-white border rounded-md top-6">
+                      {Object.keys(filteredObject).map((colorFormat, colorIndex) => (
+                        <span
+                          key={colorIndex}
+                          className="flex items-center h-4 gap-2 p-1 text-gray-500 uppercase rounded hover:bg-alsoit-gray-75"
+                          onClick={() => setColorType(colorFormat)}
+                        >
+                          <RoundedCheckbox
+                            onChange={() => ({})}
+                            isChecked={colorFormat === colorType}
+                            styles="w-2 h-2 rounded-full cursor-pointer focus:outline-1 focus:ring-transparent  focus:border-2 focus:opacity-100 group-hover:opacity-100 text-alsoit-purple-300"
+                          />
+                          <p>{colorFormat}</p>
+                        </span>
+                      ))}
+                    </span>
+                  )}
+                </span>
+                <div className="flex items-center justify-between w-full gap-2 -mt-5 grow">
+                  <div className="flex flex-col items-center justify-center">
+                    <p>HEX CODE</p>
+                    <EditableInput value={color.hex} style={inputStyles} onChange={onChange} />
+                  </div>
+                  <div className="flex flex-col items-center justify-center">
+                    <p>NAME</p>
+                    <span className="flex items-center h-6">{colorName}</span>
+                  </div>
+                  <div className="flex flex-col items-center justify-center">
+                    <p>OPACITY</p>
+                    <span className="flex items-center h-6">
+                      {color && color.rgb && color.rgb.a !== undefined && color.rgb.a * 100}%
+                    </span>
+                  </div>
+                </div>
+              </div>
               <Input
                 placeholder="Please input library name"
                 bgColor="bg-gray-200"
@@ -365,16 +460,17 @@ export default function PaletteManager({
                   onClick={handleCancel}
                 />
                 <div className="flex items-center gap-2">
-                  <button
-                    onClick={() => handleClick(customColor)}
-                    className={`p-1 h-6 text-xs border rounded ${customColor !== '' ? 'text-white' : 'text-black'}`}
-                    style={{ backgroundColor: `${customColor}` }}
-                  >
-                    Save
-                  </button>
                   <Button
                     height="h-6"
-                    customHoverColor="hover:bg-alsoit-purple-300"
+                    customHoverColor="hover:bg-green-500"
+                    label="Save"
+                    labelSize="text-xs"
+                    padding="p-1"
+                    buttonStyle="custom"
+                  />
+                  <Button
+                    height="h-6"
+                    customHoverColor="hover:bg-green-500"
                     label="Save as new"
                     labelSize="text-xs"
                     padding="p-1"
