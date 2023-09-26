@@ -3,7 +3,7 @@ import ArrowUp from '../../../assets/icons/ArrowUp';
 import ArrowDown from '../../../assets/icons/ArrowDown';
 import dayjs from 'dayjs';
 import RadioWrapper from '../RadioWrapper';
-import { monthOptionsArr } from '../../../utils/Constants/DatesConstants';
+import { MonthOption, getMonthOptionString, monthOptionsArr } from '../../../utils/Constants/DatesConstants';
 
 export function MonthsOption() {
   const [value, setValue] = useState<string>('same day each month');
@@ -19,15 +19,7 @@ export function MonthsOption() {
     return (
       <div className="flex flex-col space-y-1.5 absolute bg-alsoit-gray-50 shadow-2xl z-30 px-2">
         {monthOptionsArr.map((option) => {
-          let monthValue = '';
-
-          option === 'same_day'
-            ? (monthValue = 'same day each month')
-            : option === 'second_monday'
-            ? (monthValue = `Last ${dayjs().format('dddd')}`)
-            : option === 'first_day'
-            ? (monthValue = 'first day of the month')
-            : (monthValue = 'last day of the month');
+          const monthValue = getMonthOptionString(option as MonthOption);
           return (
             <div
               key={`${option}-data`}
