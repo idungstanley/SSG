@@ -19,7 +19,6 @@ import {
 } from '../../../../features/task/taskSlice';
 import { setActiveItem } from '../../../../features/workspace/workspaceSlice';
 import { UniqueIdentifier, useDraggable, useDroppable } from '@dnd-kit/core';
-import { ImCancelCircle, ImCheckmark2 } from 'react-icons/im';
 import CloseSubtask from '../../../../assets/icons/CloseSubtask';
 import OpenSubtask from '../../../../assets/icons/OpenSubtask';
 import { Capitalize } from '../../../../utils/NoCapWords/Capitalize';
@@ -28,6 +27,8 @@ import ToolTip from '../../../Tooltip/Tooltip';
 import Badges from '../../../badges';
 import DetailsOnHover from '../../../Dropdown/DetailsOnHover/DetailsOnHover';
 import { EntityType } from '../../../../utils/EntityTypes/EntityType';
+import SaveIcon from '../../../../assets/icons/SaveIcon.svg';
+import Close from '../../../../assets/icons/Close.svg';
 
 interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   task: Task;
@@ -426,16 +427,18 @@ export function StickyCol({
           >
             <div className="absolute flex space-x-1 bottom-0 right-0">
               <ToolTip title="Cancel">
-                <div className="border rounded-md p-1" style={{ borderColor: '#FFE7E7' }}>
-                  <ImCancelCircle onClick={onClose} />
+                <div
+                  className="border rounded-sm"
+                  style={{ borderColor: '#B2B2B280', borderWidth: '0.5px', width: '20px' }}
+                  onClick={onClose}
+                >
+                  <img src={Close}></img>
                 </div>
               </ToolTip>
               <ToolTip title="Save">
-                <div className="border rounded-md p-1" style={{ borderColor: '#FFE7E7' }}>
-                  <span onClick={(e) => handleOnSave(e as React.MouseEvent<HTMLButtonElement, MouseEvent>, task.id)}>
-                    <ImCheckmark2 />
-                  </span>
-                </div>
+                <span onClick={(e) => handleOnSave(e as React.MouseEvent<HTMLButtonElement, MouseEvent>, task.id)}>
+                  <img src={SaveIcon}></img>
+                </span>
               </ToolTip>
             </div>
             <div className="ml-4 pt-2">
