@@ -79,7 +79,7 @@ export default function PaletteManager({
   const [isInnerFrameActive, setIsInnerFrameActive] = useState<boolean>(false);
   const [displayColorPicker, setDisplayColorPicker] = useState<boolean>(false);
   const [color, setColor] = useState<ColorResult>({
-    hex: '#FFE7E72',
+    hex: '#000',
     rgb: {
       a: 0.45,
       r: 200,
@@ -190,6 +190,9 @@ export default function PaletteManager({
   const handleCloseSearch = () => {
     setIsSearch(false);
   };
+  const handleCloseAdvanceSearch = () => {
+    setIsAdvanceSearch(false);
+  };
 
   const handleClick = (color?: string | ListColourProps) => {
     if (paletteType === EntityType.hub) {
@@ -265,7 +268,7 @@ export default function PaletteManager({
         className="w-auto p-2 overflow-y-auto text-gray-500 rounded-full drop-shadow-2xl"
         style={{ borderRadius: '5px' }}
       >
-        <div className="z-50 flex flex-col">
+        <div className="z-50 flex flex-col w-full px-2">
           {!isSearch && (
             <div className="flex items-center justify-between mb-2">
               <p className="justify-center ml-2">COLOUR LIBRARY</p>
@@ -378,19 +381,44 @@ export default function PaletteManager({
           {/* {displayColorPicker && <ChromePicker color={customColor} onChangeComplete={handleCustomColor} />} */}
           {displayColorPicker && (
             <div className="flex flex-col justify-center w-full gap-2">
-              <div className="flex items-center justify-between p-1">
-                <p>ADVANCE COLOUR SETTINGS</p>
+              <div className={cl(isAdvanceSearch && 'w-full', 'flex items-center justify-between p-1')}>
+                {!isAdvanceSearch && <p>ADVANCE COLOUR SETTINGS</p>}
                 <span className="flex items-center justify-between gap-2">
-                  <ToolTip title="Search Advance Colour">
-                    <span onClick={() => setIsAdvanceSearch(true)}>
-                      <SearchIcon />
-                    </span>
-                  </ToolTip>
+                  {!isAdvanceSearch && (
+                    <ToolTip title="Search Advance Colour">
+                      <span onClick={() => setIsAdvanceSearch(true)}>
+                        <SearchIcon />
+                      </span>
+                    </ToolTip>
+                  )}
+                  {isAdvanceSearch && (
+                    <div className="grow">
+                      <Input
+                        placeholder="Search"
+                        bgColor="bg-gray-200"
+                        borderRadius="rounded-md py-0.5"
+                        type="text"
+                        name="Advance Search. . ."
+                        leadingIcon={<CiSearch />}
+                        trailingIcon={
+                          <ToolTip title="Close Advance Search">
+                            <span>
+                              <AiFillCloseCircle style={{ color: 'rgb(191, 0, 255)' }} />
+                            </span>
+                          </ToolTip>
+                        }
+                        trailingClick={handleCloseAdvanceSearch}
+                        onChange={() => null}
+                      />
+                    </div>
+                  )}
                   <span className="w-6 h-6 p-2 rounded" style={{ backgroundColor: color?.hex }}></span>
                 </span>
               </div>
-              <HuePicker style={{ borderRadius: '10px' }} color={rgb} onChange={updateColor} />
-              <AlphaPicker color={rgb} onChange={updateColor} />
+              <div className="flex flex-col items-center gap-2 w-fit">
+                <HuePicker style={{ borderRadius: '10px' }} color={rgb} onChange={updateColor} />
+                <AlphaPicker color={rgb} onChange={updateColor} />
+              </div>
               <div className="flex items-center gap-1 mt-4">
                 <span
                   className={`relative flex w-fit items-center justify-between gap-2 p-1 px-2.5 text-xs text-gray-500 bg-gray-200 rounded-md hover:text-primary-600 hover:bg-primary-100 ${
