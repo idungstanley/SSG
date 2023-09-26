@@ -432,12 +432,12 @@ export function StickyCol({
                   style={{ borderColor: '#B2B2B280', borderWidth: '0.5px', width: '20px' }}
                   onClick={onClose}
                 >
-                  <img src={Close}></img>
+                  <img src={Close} alt="Cancel"></img>
                 </div>
               </ToolTip>
               <ToolTip title="Save">
                 <span onClick={(e) => handleOnSave(e as React.MouseEvent<HTMLButtonElement, MouseEvent>, task.id)}>
-                  <img src={SaveIcon}></img>
+                  <img src={SaveIcon} alt="Save"></img>
                 </span>
               </ToolTip>
             </div>
