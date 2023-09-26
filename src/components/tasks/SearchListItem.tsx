@@ -4,6 +4,8 @@ import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import ListIconComponent from '../ItemsListInSidebar/components/ListIconComponent';
 import { cl } from '../../utils';
 import { IList } from '../../features/hubs/hubs.interfaces';
+import { setDuplicateTaskObj } from '../../features/task/taskSlice';
+import { useDuplicateTask } from '../../features/task/taskService';
 
 interface ListItemProps {
   list: IList;
@@ -15,16 +17,22 @@ export interface ListColourProps {
   outerColour?: string;
 }
 export default function SearchListItem({ list, paddingLeft }: ListItemProps) {
+  const dispatch = useAppDispatch();
   const { listId } = useParams();
+
   const { activeItemId } = useAppSelector((state) => state.workspace);
   const { lightBaseColor, baseColor } = useAppSelector((state) => state.account);
   const { listColour } = useAppSelector((state) => state.list);
-  // const { duplicateTaskObj } = useAppSelector((state) => state.task);
+  const { duplicateTaskObj } = useAppSelector((state) => state.task);
 
-  const dispatch = useAppDispatch();
+  const { mutate: duplicateTask } = useDuplicateTask();
 
   const handleClick = () => {
-    // dispatch(setDuplicateTaskObj({ ...duplicateTaskObj, list_id: list.id }));
+    dispatch(setDuplicateTaskObj({ ...duplicateTaskObj, popDuplicateTaskModal: false }));
+    duplicateTask({
+      ...duplicateTaskObj,
+      list_id: list.id
+    });
   };
 
   const color: ListColourProps = JSON.parse(list.color as string) as ListColourProps;
@@ -65,9 +73,10 @@ export default function SearchListItem({ list, paddingLeft }: ListItemProps) {
               letterSpacing: '0.28px',
               color: listId === list.id ? (baseColor as string) : undefined
             }}
-            className="pl-4 capitalize truncate cursor-pointer"
+            className="flex pl-4 capitalize truncate cursor-pointer"
           >
             <p>{list.name}</p>
+            {/* <p>Advanced</p> */}
           </div>
         </div>
       </section>

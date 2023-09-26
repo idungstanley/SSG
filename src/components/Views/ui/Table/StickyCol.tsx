@@ -15,7 +15,8 @@ import {
   setSelectedIndexStatus,
   setSelectedTasksArray,
   setShowTaskNavigation,
-  setTaskIdForPilot
+  setTaskIdForPilot,
+  setDuplicateTaskObj
 } from '../../../../features/task/taskSlice';
 import { setActiveItem } from '../../../../features/workspace/workspaceSlice';
 import { UniqueIdentifier, useDraggable, useDroppable } from '@dnd-kit/core';
@@ -88,6 +89,7 @@ export function StickyCol({
     selectedListIds,
     dragToBecomeSubTask,
     saveSettingOnline,
+    duplicateTaskObj,
     separateSubtasksMode
   } = useAppSelector((state) => state.task);
 
@@ -216,6 +218,7 @@ export function StickyCol({
   }, [selectedTasksArray, task.id]);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    dispatch(setDuplicateTaskObj({ ...duplicateTaskObj, task_name: task.name, task_id: task.id }));
     const indexInArray = selectedIndexArray.indexOf(taskIndex as number);
     if (!selectedIndexArray.includes(taskIndex as number)) {
       setSelectedIndexArray((prev) => {
@@ -326,7 +329,7 @@ export function StickyCol({
             <div
               ref={droppabbleRef}
               className="absolute w-2 h-full"
-              style={{ left: '30px', background: 'transparent', height: '100%', width: '30px' }}
+              style={{ left: '30px', background: 'transparent', height: '100%', width: '30px', zIndex: -1 }}
             />
             {dragToBecomeSubTask && isOver && draggableItemId !== dragOverItemId && (
               <span
@@ -344,7 +347,7 @@ export function StickyCol({
               {showSubTasks || toggleAllSubtask ? (
                 <div
                   className={`${
-                    task.descendants_count > 0 && !isBlockToOpenSubtasks ? 'w-3 h-3' : ' opacity-0 w-3 h-3 '
+                    task.descendants_count > 0 && !isBlockToOpenSubtasks ? 'w-3 h-3' : 'opacity-0 w-3 h-3'
                   }`}
                 >
                   <CloseSubtask />
@@ -352,7 +355,7 @@ export function StickyCol({
               ) : (
                 <div
                   className={`${
-                    task.descendants_count > 0 && !isBlockToOpenSubtasks ? 'w-3 h-3' : ' opacity-0 w-3 h-3'
+                    task.descendants_count > 0 && !isBlockToOpenSubtasks ? 'w-3 h-3' : 'opacity-0 w-3 h-3'
                   }`}
                 >
                   <OpenSubtask />

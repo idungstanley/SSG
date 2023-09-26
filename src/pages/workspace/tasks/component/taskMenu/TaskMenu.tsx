@@ -20,11 +20,12 @@ import PriorityDropdown from '../../../../../components/priority/PriorityDropdow
 import ToolTip from '../../../../../components/Tooltip/Tooltip';
 import ActiveTreeSearch from '../../../../../components/ActiveTree/ActiveTreeSearch';
 import AlsoitMenuDropdown from '../../../../../components/DropDowns';
+import { ImCheckmark2 } from 'react-icons/im';
 
 export default function TaskMenu() {
   const dispatch = useDispatch();
 
-  const { selectedTasksArray } = useAppSelector((state) => state.task);
+  const { selectedTasksArray, duplicateTaskObj } = useAppSelector((state) => state.task);
 
   const queryClient = useQueryClient();
 
@@ -38,6 +39,12 @@ export default function TaskMenu() {
       setIsVisible(false);
     }
   }, [selectedTasksArray]);
+
+  useEffect(() => {
+    if (!duplicateTaskObj.popDuplicateTaskModal) {
+      handleClose();
+    }
+  }, [duplicateTaskObj.popDuplicateTaskModal]);
 
   const useDeleteTask = useMutation(deleteTask, {
     onSuccess: () => {
@@ -248,7 +255,8 @@ export default function TaskMenu() {
             dispatch(setSelectedTasksArray([]));
           }}
         >
-          <span className="text-gray-300">X</span> Dismiss
+          <span className="text-gray-300">X</span>
+          Dismiss
         </p>
       </div>
     </div>
