@@ -64,11 +64,6 @@ function FormulaField({
   const { mutate: onUpdate } = useUpdateEntityCustomFieldValue(taskId);
   const { mutate: onUpdateColumn } = useUpdateDropdownField(parentId);
 
-  // console.log('currentCustomField', currentCustomField);
-  // console.log('currentCustomFieldColumn', currentCustomFieldColumn);
-  // console.log('taskCustomFields', taskCustomFields);
-  // console.log('taskCustomFieldsColumns', taskCustomFieldsColumns);
-
   const closeAllDropdowns = () => {
     setAnchorEl(null);
     setAnchorOne(null);
