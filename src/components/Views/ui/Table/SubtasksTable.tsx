@@ -3,7 +3,6 @@ import { ITaskFullList, Task } from '../../../../features/task/interface.tasks';
 import { createHeaders, generateGrid } from '../../lib';
 import { Head } from './Head/Head';
 import { MAX_SUBTASKS_LEVEL, Row } from './Row';
-import { useSubTasks } from '../../../../features/task/taskService';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { IField } from '../../../../features/list/list.interfaces';
 import { DEFAULT_LEFT_PADDING } from '../../config';
@@ -19,7 +18,6 @@ import {
   TWO_SUBTASKS_LEVELS,
   setShowNewTaskField,
   setShowNewTaskId,
-  setSubtasks,
   setUpdateCords
 } from '../../../../features/task/taskSlice';
 import { filterSubtasks } from '../../../../utils/filterSubtasks';
@@ -27,6 +25,7 @@ import { listColumnProps } from '../../../../pages/workspace/tasks/component/vie
 
 interface ISubtasksTableProps {
   data: Task;
+  subtasksData: ITaskFullList[];
   heads: listColumnProps[];
   customFields?: IField[];
   listId: string;
@@ -34,7 +33,15 @@ interface ISubtasksTableProps {
   level: number;
 }
 
-export function SubtasksTable({ data, heads, customFields, listId, paddingLeft = 0, level }: ISubtasksTableProps) {
+export function SubtasksTable({
+  data,
+  subtasksData,
+  heads,
+  customFields,
+  listId,
+  paddingLeft = 0,
+  level
+}: ISubtasksTableProps) {
   const dispatch = useAppDispatch();
 
   const { statusId, subtasks, subtasksfilters, splitSubTaskLevels } = useAppSelector((state) => state.task);
@@ -47,24 +54,7 @@ export function SubtasksTable({ data, heads, customFields, listId, paddingLeft =
 
   const columns = createHeaders(heads).filter((i) => !i.hidden);
 
-  const { data: tasks } = useSubTasks(data.id);
-  const taskLength = tasks?.length;
-
-  useEffect(() => {
-    if (tasks?.length) {
-      const tasksWithListId = tasks.map((item) => {
-        return {
-          ...item,
-          custom_field_columns: customFields,
-          parentName: data.name,
-          list_id: listId
-        };
-      });
-      if (!subtasks[data.id]) {
-        dispatch(setSubtasks({ ...subtasks, [data.id]: tasksWithListId as ITaskFullList[] }));
-      }
-    }
-  }, [tasks]);
+  const taskLength = subtasksData?.length;
 
   useEffect(() => {
     if (Object.keys(subtasks).length && data.id) {
@@ -101,7 +91,7 @@ export function SubtasksTable({ data, heads, customFields, listId, paddingLeft =
     return true;
   };
 
-  return tasks && tasks.length ? (
+  return subtasksData && subtasksData.length ? (
     <>
       <div
         className="border-t-4 border-l-4 border-purple-500 rounded-3xl bg-purple-50 ml-10 mt-2"
@@ -114,8 +104,8 @@ export function SubtasksTable({ data, heads, customFields, listId, paddingLeft =
       >
         <Label
           listName={data.name}
-          hubName={parentHub?.name}
-          tasks={tasks}
+          hubName={data.parentName || parentHub?.name}
+          tasks={subtasksData}
           ListColor={ListColor}
           showTable={collapseTable}
           onClickChevron={() => setCollapseTable((prev) => !prev)}
@@ -142,13 +132,13 @@ export function SubtasksTable({ data, heads, customFields, listId, paddingLeft =
                   collapseTasks={collapseTasks}
                   taskLength={taskLength || 0}
                   onToggleCollapseTasks={() => setCollapseTasks((prev) => !prev)}
-                  label={tasks[0].status.name}
-                  headerStatusColor={tasks[0].status.color as string}
+                  label={subtasksData[0].status.name}
+                  headerStatusColor={subtasksData[0].status.color as string}
                   columns={columns}
                   listName={data.list?.name}
                   tableHeight="auto"
-                  listId={tasks[0].list_id}
-                  groupedTask={tasks}
+                  listId={subtasksData[0].list_id}
+                  groupedTask={subtasksData}
                   isSplitSubtask={true}
                   parentId={data.id}
                 />
@@ -189,7 +179,7 @@ export function SubtasksTable({ data, heads, customFields, listId, paddingLeft =
                 {level <= MAX_SUBTASKS_LEVEL ? (
                   <tbody className="h-5">
                     <tr
-                      onClick={(e) => onShowAddSubtaskField(e, tasks[tasks.length - 1].id)}
+                      onClick={(e) => onShowAddSubtaskField(e, subtasksData[subtasksData.length - 1].id)}
                       className="absolute left-0 p-1.5 pl-5 text-left w-fit text-xs"
                     >
                       <td className="font-semibold cursor-pointer alsoit-gray-300">+ New Subtask</td>
@@ -203,10 +193,11 @@ export function SubtasksTable({ data, heads, customFields, listId, paddingLeft =
       </div>
 
       {isShowNewLevel()
-        ? tasks.map((item) => (
+        ? subtasksData.map((item) => (
             <SubtasksTable
               key={item.id}
               data={item}
+              subtasksData={subtasks[item.id]}
               heads={heads}
               listId={listId}
               paddingLeft={paddingLeft + DEFAULT_LEFT_PADDING}

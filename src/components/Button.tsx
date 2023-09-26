@@ -71,7 +71,7 @@ function Button({
   } else if (buttonStyle === 'custom') {
     hoverBackgroundColor = `${customHoverColor} hover:text-white`;
     buttonClassName =
-      'border border-gray-300 rounded shadow-sm font-medium  focus:outline-none text-gray-500 bg-gray-200';
+      'border border-gray-300 border-transparent rounded shadow-sm font-medium  focus:outline-none text-gray-500 bg-gray-300';
   }
 
   if (ringOnFocus === true) {

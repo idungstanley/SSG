@@ -10,7 +10,10 @@ interface Props {
 
 export default function RadioWrapper({ children, styles, btnCheckState, checkStateFn, stateValue }: Props) {
   return (
-    <label htmlFor="radio" className={styles ? styles : 'flex space-x-2 items-center'}>
+    <label
+      htmlFor="radio"
+      className={styles ? styles : 'flex space-x-2 py-1.5 items-center hover:bg-alsoit-purple-50 cursor-pointer'}
+    >
       <input
         type="radio"
         checked={btnCheckState}
