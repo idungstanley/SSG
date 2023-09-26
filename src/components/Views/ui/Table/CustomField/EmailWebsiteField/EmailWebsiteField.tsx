@@ -21,7 +21,6 @@ const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 const websitePattern = /^(?:(https?:\/\/|www\.)[\w.-]+\.[a-zA-Z]{2,}(?:\.[a-zA-Z]{2,})|[\w.-]+\.[a-zA-Z]{2,})$/;
 
 function EmailWebsiteField({ taskCustomFields, taskId, fieldId, fieldType }: EmailFieldProps) {
-  console.log(taskCustomFields?.values[0]);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const activeValue = taskCustomFields?.values[0].value ? taskCustomFields?.values[0].value : '-';
   const [currentValue, setCurrentValue] = useState<string>(activeValue);
