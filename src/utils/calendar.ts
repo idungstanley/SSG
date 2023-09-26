@@ -1,9 +1,15 @@
 import dayjs, { Dayjs } from 'dayjs';
 import timezone from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
+import advancedFormat from 'dayjs/plugin/advancedFormat';
+import weekOfYear from 'dayjs/plugin/weekOfYear';
+import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
+dayjs.extend(weekOfYear);
+dayjs.extend(advancedFormat);
+dayjs.extend(isSameOrBefore);
 
 export interface DateObject {
   currentMonth: boolean;
@@ -261,4 +267,82 @@ export function getCalendarRows(
   }
 
   return rows;
+}
+
+type DayWithSuffix = string;
+
+export function getDaysOfMonthWithSuffix(month: number, year: number): DayWithSuffix[] {
+  const daysInMonth = dayjs(`${year}-${month}-01`).endOf('month').date();
+  const daysArray: DayWithSuffix[] = [];
+
+  for (let day = 1; day <= daysInMonth; day++) {
+    const formattedDay = dayjs(`${year}-${month}-${day}`).format('Do') as DayWithSuffix;
+    daysArray.push(formattedDay);
+  }
+
+  return daysArray;
+}
+
+export function getWeekNumberAsOrdinal(date: dayjs.Dayjs): string {
+  // Calculate the week number
+  const startOfMonth = date.startOf('month');
+  const weekNumber = Math.ceil((date.date() + startOfMonth.day()) / 7);
+
+  return `${weekNumber}${suffixes(weekNumber)}`;
+}
+
+export const suffixes = (weekNumber: number) => {
+  let suffix = 'th';
+  if (weekNumber % 10 === 1 && weekNumber !== 11) {
+    suffix = 'st';
+  } else if (weekNumber % 10 === 2 && weekNumber !== 12) {
+    suffix = 'nd';
+  } else if (weekNumber % 10 === 3 && weekNumber !== 13) {
+    suffix = 'rd';
+  }
+  return suffix;
+};
+
+export function weekNumberToOrdinal(arr: string[]) {
+  const suffixes = ['first', 'second', 'third', 'fourth', 'fifth', 'sixth', 'seventh'];
+  const strArr: string[] = [];
+
+  if (arr.length >= 1) {
+    arr.map((_, i) => strArr.push(suffixes[i]));
+    // return suffixes[number - 1];
+  }
+  return strArr;
+}
+
+export function getWeekNumbersForMonth(month: number, year: number) {
+  const weeksArray = [];
+  const firstDayOfMonth = dayjs(`${year}-${month}-01`);
+  const lastDayOfMonth = firstDayOfMonth.endOf('month');
+  let currentWeek = [];
+
+  for (let day = firstDayOfMonth; day <= lastDayOfMonth; day = day.add(1, 'day')) {
+    currentWeek.push(day.date());
+
+    if (day.day() === 6 || day.isSame(lastDayOfMonth, 'day')) {
+      weeksArray.push(currentWeek);
+      currentWeek = [];
+    }
+  }
+
+  const weekNumbersArr: string[] = [];
+
+  for (let i = 0; i < weeksArray.length; i++) {
+    weekNumbersArr.push(`${i + 1}${suffixes(i + 1)}`);
+  }
+  // console.log(weekNumberToOrdinal(weekNumbersArr));
+  return weekNumbersArr;
+}
+
+export function generateMonthsInYear(year: number) {
+  const monthsArray = [];
+  for (let month = 1; month <= 12; month++) {
+    const monthName = dayjs(`${year}-${month}-01`).format('MMMM');
+    monthsArray.push(monthName);
+  }
+  return monthsArray;
 }
