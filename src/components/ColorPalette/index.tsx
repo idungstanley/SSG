@@ -7,7 +7,7 @@ import { UseEditListService } from '../../features/list/listService';
 import { setPaletteDropDown } from '../../features/account/accountSlice';
 import { BiPaint } from 'react-icons/bi';
 import { RiArrowUpSFill } from 'react-icons/ri';
-import { ChromePicker } from 'react-color';
+import { ChromePicker, AlphaPicker, HuePicker } from 'react-color';
 import ListIconComponent from '../ItemsListInSidebar/components/ListIconComponent';
 import { ListColourProps } from '../tasks/ListItem';
 import { changeListManager } from '../../managers/List';
@@ -28,6 +28,8 @@ import { CiSearch } from 'react-icons/ci';
 import Button from '../Button';
 import ArrowDownFilled from '../../assets/icons/ArrowDownFilled';
 import PaletteListView from './component/PaletteListView';
+import ToolTip from '../Tooltip/Tooltip';
+import { AiFillCloseCircle } from 'react-icons/ai';
 
 interface PaletteProps {
   title?: string;
@@ -74,6 +76,7 @@ export default function PaletteManager({
   const [customColor, setCustomColor] = useState<string>('');
   const [selectedViews, setSelectedViews] = useState<string>(paletteViews.BOARD);
   const [isSearch, setIsSearch] = useState<boolean>(false);
+  const [isAdvanceSearch, setIsAdvanceSearch] = useState<boolean>(false);
   const [showListShapes, setShowListShapes] = useState<boolean>(false);
 
   const { paletteId, paletteType } = paletteDropdown;
@@ -136,6 +139,10 @@ export default function PaletteManager({
       dispatch(setFilteredResults(updatedTree));
     }
   });
+
+  const handleCloseSearch = () => {
+    setIsSearch(false);
+  };
 
   const handleClick = (color?: string | ListColourProps) => {
     if (paletteType === EntityType.hub) {
@@ -210,19 +217,23 @@ export default function PaletteManager({
               <p className="justify-center ml-2 text-gray-500">COLOUR LIBRARY</p>
               <div className="flex items-center gap-1">
                 {views.map((item, index) => (
-                  <span
-                    className={` p-1 rounded ${
+                  <div
+                    key={index}
+                    className={`rounded p-1 cursor-pointer ${
                       selectedViews === item.label ? 'bg-primary-500' : 'border border-primary-200'
                     }`}
-                    key={index}
                     onClick={() => setSelectedViews(item.label)}
                   >
-                    {item.icon}
-                  </span>
+                    <ToolTip title={item.label + ' View'}>
+                      <span>{item.icon}</span>
+                    </ToolTip>
+                  </div>
                 ))}
-                <span className="p-1 border rounded border-primary-200" onClick={() => setIsSearch(true)}>
-                  <SearchIcon />
-                </span>
+                <ToolTip title="Open Search">
+                  <span className="p-1 border rounded border-primary-200" onClick={() => setIsSearch(true)}>
+                    <SearchIcon />
+                  </span>
+                </ToolTip>
               </div>
             </div>
           )}
@@ -235,6 +246,14 @@ export default function PaletteManager({
                 type="text"
                 name="search"
                 leadingIcon={<CiSearch />}
+                trailingIcon={
+                  <ToolTip title="Close Search">
+                    <span>
+                      <AiFillCloseCircle style={{ color: 'rgb(191, 0, 255)' }} />
+                    </span>
+                  </ToolTip>
+                }
+                trailingClick={handleCloseSearch}
                 onChange={() => null}
               />
             </div>
@@ -249,7 +268,7 @@ export default function PaletteManager({
               >
                 <p>{title + ' Shapes'}</p>
                 <ArrowDownFilled color={showListShapes ? 'white' : undefined} />
-                {showListShapes && <span className="absolute left-0 right-0 top-6">{topContent}</span>}
+                {showListShapes && <span className="absolute left-0 right-0 z-20 top-6">{topContent}</span>}
               </span>
               <ListIconComponent
                 shape={shape}
@@ -270,12 +289,14 @@ export default function PaletteManager({
           )}
           {selectedElement && selectedElement}
           <div className="flex items-center justify-between mt-2">
-            <span className="flex items-center p-1 ml-2 border rounded-md border-primary-200">
-              <BiPaint
-                onClick={() => handleEditColor(true)}
-                className={`${displayColorPicker ? 'hidden' : 'block cursor-pointer'}`}
-              />
-            </span>
+            <ToolTip title="Advance color option">
+              <span className="flex items-center p-1 ml-2 border rounded-md border-primary-200">
+                <BiPaint
+                  onClick={() => handleEditColor(true)}
+                  className={`${displayColorPicker ? 'hidden' : 'block cursor-pointer'}`}
+                />
+              </span>
+            </ToolTip>
             <RiArrowUpSFill
               onClick={() => handleEditColor(false)}
               className={`${!displayColorPicker ? 'hidden' : 'block cursor-pointer'}`}
@@ -301,9 +322,27 @@ export default function PaletteManager({
               </div>
             )}
           </div>
-          <div className="flex flex-col justify-center">
-            {displayColorPicker && <ChromePicker color={customColor} onChangeComplete={handleCustomColor} />}
-            {displayColorPicker && (
+          {/* {displayColorPicker && <ChromePicker color={customColor} onChangeComplete={handleCustomColor} />} */}
+          {displayColorPicker && (
+            <div className="flex flex-col justify-center w-full gap-2">
+              <div className="flex items-center justify-between p-1">
+                <p>ADVANCE COLOUR SETTINGS</p>
+                <span className="flex items-center justify-between gap-2">
+                  <ToolTip title="Search Advance Colour">
+                    <span onClick={() => setIsAdvanceSearch(true)}>
+                      <SearchIcon />
+                    </span>
+                  </ToolTip>
+                  <span className="w-6 h-6 p-2 rounded" style={{ backgroundColor: customColor }}></span>
+                </span>
+              </div>
+              <HuePicker
+                style={{ borderRadius: '10px' }}
+                color={customColor}
+                onChange={handleCustomColor}
+                onChangeComplete={handleCustomColor}
+              />
+              <AlphaPicker color={customColor} onChange={handleCustomColor} onChangeComplete={handleCustomColor} />
               <button
                 onClick={() => handleClick(customColor)}
                 className={`p-1 mt-2 border rounded ${customColor !== '' ? 'text-white' : 'text-black'}`}
@@ -311,8 +350,9 @@ export default function PaletteManager({
               >
                 Save Color
               </button>
-            )}
-          </div>
+            </div>
+          )}
+
           {bottomContent}
         </div>
       </div>
