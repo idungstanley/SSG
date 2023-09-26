@@ -302,27 +302,20 @@ export interface newTaskDataRes {
   };
 }
 
-export interface currencyProperties {
-  currency: string;
-  symbol: string;
-}
-
-export interface ratingProperties {
-  emoji: string;
-  number: number;
-}
-
-export interface manualProgressProperties {
-  start_value: number;
-  end_value: number;
-}
-
-export interface autoProgressProperties {
-  tracking: {
+export interface customPropertiesProps {
+  tracking?: {
     Subtasks: boolean;
     Checklists: boolean;
   };
   complete_on?: number;
+  start_value?: number;
+  end_value?: number;
+  emoji?: string;
+  number?: number;
+  currency?: string;
+  symbol?: string;
+  include_groups?: boolean;
+  single_user?: boolean;
 }
 
 export interface ITaskRecurResponse {

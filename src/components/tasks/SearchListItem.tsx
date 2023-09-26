@@ -73,9 +73,10 @@ export default function SearchListItem({ list, paddingLeft }: ListItemProps) {
               letterSpacing: '0.28px',
               color: listId === list.id ? (baseColor as string) : undefined
             }}
-            className="pl-4 capitalize truncate cursor-pointer"
+            className="flex pl-4 capitalize truncate cursor-pointer"
           >
             <p>{list.name}</p>
+            {/* <p>Advanced</p> */}
           </div>
         </div>
       </section>
