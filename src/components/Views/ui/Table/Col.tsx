@@ -1,6 +1,7 @@
 import { TdHTMLAttributes } from 'react';
 import { useParams } from 'react-router-dom';
 import {
+  ICustomField,
   ImyTaskData,
   setCurrentTaskStatusId,
   setSelectedTaskParentId,
@@ -30,6 +31,7 @@ import StatusDropdown from '../../../status/StatusDropdown';
 import RatingField from './CustomField/Ratings/RatingField';
 import TimeField from './CustomField/TimeField/TimeField';
 import AutoProgress from './CustomField/Progress/AutoProgress';
+import FormulaField from './CustomField/Formula/FormulaField';
 
 interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   value: TaskValue;
@@ -181,8 +183,18 @@ export function Col({ value, field, fieldId, task, customFields, taskStatuses, .
         taskCustomFields={task.custom_fields?.find((i) => i.id === fieldId)}
         fieldId={fieldId}
       />
+    ),
+    formula: (
+      <FormulaField
+        taskId={task.id}
+        currentCustomField={task.custom_fields?.find((i) => i.id === fieldId) as ICustomField}
+        taskCustomFields={task.custom_fields as ICustomField[]}
+        taskCustomFieldsColumns={task.custom_field_columns}
+        fieldId={fieldId}
+      />
     )
   };
+
   return (
     <>
       <td

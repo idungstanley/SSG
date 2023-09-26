@@ -22,6 +22,7 @@ import CreateRatings from './Rating/CreateRatings';
 import CreateManualProgress from './Progress/CreateManualProgress';
 import CreateAutoProgress from './Progress/CreateAutoProgress';
 import CreateTime from './Time/CreateTime';
+import CreateFormulaField from './Formula/CreateFormulaField';
 
 function NewColumn() {
   const dispatch = useAppDispatch();
@@ -56,7 +57,8 @@ function NewColumn() {
     rating: <CreateRatings />,
     'progress(auto)': <CreateAutoProgress />,
     'progress(manual)': <CreateManualProgress />,
-    time: <CreateTime />
+    time: <CreateTime />,
+    formula: <CreateFormulaField />
   };
 
   return (

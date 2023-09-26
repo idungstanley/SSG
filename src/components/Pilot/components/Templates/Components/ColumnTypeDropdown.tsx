@@ -18,6 +18,7 @@ import RatingOption from './Rating/RatingOptions';
 import { VerticalScroll } from '../../../../ScrollableContainer/VerticalScroll';
 import ProgressOptions from './Progress/Progress';
 import TimeOption from './Time/TimeOptions';
+import FormulaOptions from './Formula/Formula';
 
 const columnTypes = [
   {
@@ -79,6 +80,11 @@ const columnTypes = [
     id: 'Time',
     title: 'Time',
     options: <TimeOption />
+  },
+  {
+    id: 'Formula',
+    title: 'Formula',
+    options: <FormulaOptions />
   }
 ];
 
