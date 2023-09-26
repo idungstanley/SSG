@@ -264,6 +264,8 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
           listComboColour={listComboColour}
           shape={activeShape}
           cords={cords}
+          activeInnerColor={innerColour}
+          activeOutterColor={outerColour}
         />
       ) : null}
       {showMenuDropdown === list.id ? <MenuDropdown cords={menuCords} /> : null}

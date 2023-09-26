@@ -38,6 +38,8 @@ interface PaletteProps {
   shape?: string;
   listComboColour?: ListColourProps;
   cords?: Cords;
+  activeInnerColor?: string;
+  activeOutterColor?: string;
 }
 
 interface ChromePickerProps {
@@ -56,7 +58,9 @@ export default function PaletteManager({
   topContent,
   shape,
   listComboColour,
-  cords
+  cords,
+  activeOutterColor,
+  activeInnerColor
 }: PaletteProps) {
   const dispatch = useAppDispatch();
 
@@ -167,7 +171,12 @@ export default function PaletteManager({
   const views = [
     {
       label: paletteViews.BOARD,
-      element: <ColorPalette handleClick={handleClick} />,
+      element: (
+        <ColorPalette
+          activeColor={isInnerFrameActive ? activeInnerColor : activeOutterColor}
+          handleClick={handleClick}
+        />
+      ),
       icon: <GridViews color={selectedViews === paletteViews.BOARD ? 'white' : 'rgb(191, 0, 255)'} />
     },
     {
