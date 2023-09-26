@@ -12,7 +12,7 @@ export default function RadioWrapper({ children, styles, btnCheckState, checkSta
   return (
     <label
       htmlFor="radio"
-      className={styles ? styles : 'flex space-x-2 items-center hover:bg-alsoit-purple-50 cursor-pointer'}
+      className={styles ? styles : 'flex space-x-2 py-1.5 items-center hover:bg-alsoit-purple-50 cursor-pointer'}
     >
       <input
         type="radio"

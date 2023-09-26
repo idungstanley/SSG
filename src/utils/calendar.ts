@@ -288,19 +288,15 @@ export function getWeekNumberAsOrdinal(date: dayjs.Dayjs): string {
   const startOfMonth = date.startOf('month');
   const weekNumber = Math.ceil((date.date() + startOfMonth.day()) / 7);
 
-  return `${weekNumber}${suffixes(weekNumber)}`;
+  return `${weekNumber}${ordinalSuffixes(weekNumber)}`;
 }
 
-export const suffixes = (weekNumber: number) => {
-  let suffix = 'th';
-  if (weekNumber % 10 === 1 && weekNumber !== 11) {
-    suffix = 'st';
-  } else if (weekNumber % 10 === 2 && weekNumber !== 12) {
-    suffix = 'nd';
-  } else if (weekNumber % 10 === 3 && weekNumber !== 13) {
-    suffix = 'rd';
+export const ordinalSuffixes = (value: number) => {
+  if (value >= 11 && value <= 13) {
+    return 'th';
   }
-  return suffix;
+  const lastDigit = value % 10;
+  return lastDigit === 1 ? 'st' : lastDigit === 2 ? 'nd' : lastDigit === 3 ? 'rd' : 'th';
 };
 
 export function weekNumberToOrdinal(arr: string[]) {
@@ -332,9 +328,8 @@ export function getWeekNumbersForMonth(month: number, year: number) {
   const weekNumbersArr: string[] = [];
 
   for (let i = 0; i < weeksArray.length; i++) {
-    weekNumbersArr.push(`${i + 1}${suffixes(i + 1)}`);
+    weekNumbersArr.push(`${i + 1}${ordinalSuffixes(i + 1)}`);
   }
-  // console.log(weekNumberToOrdinal(weekNumbersArr));
   return weekNumbersArr;
 }
 

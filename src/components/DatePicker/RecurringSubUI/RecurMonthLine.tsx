@@ -12,10 +12,9 @@ import ArrowUp from '../../../assets/icons/ArrowUp';
 import ArrowDown from '../../../assets/icons/ArrowDown';
 import advancedFormat from 'dayjs/plugin/advancedFormat';
 import { VerticalScroll } from '../../ScrollableContainer/VerticalScroll';
+import { dataArr } from '../../../utils/Constants/DatesConstants';
 
 dayjs.extend(advancedFormat);
-
-const dataArr = ['on date', 'by week'];
 
 export function CustomMonthLine() {
   const currentDate = dayjs();

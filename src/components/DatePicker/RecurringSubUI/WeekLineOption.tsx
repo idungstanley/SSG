@@ -1,15 +1,6 @@
 import dayjs from 'dayjs';
 import { useState } from 'react';
-
-const weekArr = [
-  { title: 'monday', value: 1 },
-  { title: 'tuesday', value: 2 },
-  { title: 'wednesday', value: 3 },
-  { title: 'thursday', value: 4 },
-  { title: 'friday', value: 5 },
-  { title: 'saturday', value: 6 },
-  { title: 'sunday', value: 0 }
-];
+import { weekArr } from '../../../utils/Constants/DatesConstants';
 
 export function WeekLineOption() {
   const [weekValue, setValue] = useState<number[]>([]);

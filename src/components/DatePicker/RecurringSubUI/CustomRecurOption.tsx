@@ -5,8 +5,7 @@ import ArrowDown from '../../../assets/icons/ArrowDown';
 import { WeekLineOption } from './WeekLineOption';
 import { CustomMonthLine } from './RecurMonthLine';
 import { YearLineOption } from './YearLineOption';
-
-const customTypesArr = ['day', 'week', 'month', 'year'];
+import { customTypesArr } from '../../../utils/Constants/DatesConstants';
 
 export function CustomRecurOption() {
   const [dropDown, setDropDown] = useState<{ type: boolean }>({ type: false });

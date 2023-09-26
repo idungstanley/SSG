@@ -9,6 +9,7 @@ import { RecurringIntervals } from './RecurringSubUI/RecuringInterval';
 import { useAppSelector } from '../../app/hooks';
 import { DaysAfterOption } from './RecurringSubUI/DaysAfterOption';
 import { CustomRecurOption } from './RecurringSubUI/CustomRecurOption';
+import { MonthsOption } from './RecurringSubUI/MonthsOption';
 
 const IntervalArr = ['daily', 'weekly', 'monthly', 'yearly', 'days after', 'custom'];
 const statusArr = ['When Complete', 'When Done'];
@@ -60,6 +61,7 @@ export default function Recurring() {
         </div>
         {recuringInterval === 'custom' && <CustomRecurOption />}
         {recuringInterval === 'days after' && <DaysAfterOption />}
+        {recuringInterval === 'monthly' && <MonthsOption />}
         <div
           onClick={() => setDropRecurring((prev) => ({ ...prev, statusInterval: !prev.statusInterval }))}
           className="border-alsoit-gray-75 border rounded-md text-alsoit-text-md p-2 relative flex justify-between items-center"
