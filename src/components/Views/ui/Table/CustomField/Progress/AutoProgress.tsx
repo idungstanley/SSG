@@ -1,7 +1,6 @@
 import React from 'react';
 import { ImyTaskData } from '../../../../../../features/task/taskSlice';
 import { IField } from '../../../../../../features/list/list.interfaces';
-import { autoProgressProperties } from '../../../../../../features/task/interface.tasks';
 
 interface AutoProgressProps {
   task: ImyTaskData;
@@ -11,15 +10,15 @@ interface AutoProgressProps {
 const calcaluatePercent = (part: number, whole: number) => (part / whole) * 100;
 
 function AutoProgress({ task, entityCustomProperty }: AutoProgressProps) {
-  const criteria: autoProgressProperties = entityCustomProperty?.properties as autoProgressProperties;
-  const all_checklists = criteria.tracking.Checklists ? task.checklist_items_count : 0;
-  const done_checklists = criteria.tracking.Checklists ? task.checklist_done_items_count : 0;
-  const all_subtasks = criteria.tracking.Subtasks ? task.descendants_count : 0;
-  const done_subtasks = criteria.tracking.Subtasks ? task.closed_subtasks_count : 0;
+  const criteria = entityCustomProperty?.properties;
+  const all_checklists = criteria?.tracking?.Checklists ? task.checklist_items_count : 0;
+  const done_checklists = criteria?.tracking?.Checklists ? task.checklist_done_items_count : 0;
+  const all_subtasks = criteria?.tracking?.Subtasks ? task.descendants_count : 0;
+  const done_subtasks = criteria?.tracking?.Subtasks ? task.closed_subtasks_count : 0;
 
   const part = done_checklists + done_subtasks;
   const whole = all_subtasks + all_checklists;
-  const noDescendantsVal = criteria.complete_on === 1 ? 100 : 0;
+  const noDescendantsVal = criteria?.complete_on === 1 ? 100 : 0;
 
   const totalPercentage = calcaluatePercent(part, whole);
 

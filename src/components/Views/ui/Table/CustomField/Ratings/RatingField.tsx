@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { ICustomField } from '../../../../../../features/task/taskSlice';
 import { IField } from '../../../../../../features/list/list.interfaces';
 import { useUpdateEntityCustomFieldValue } from '../../../../../../features/list/listService';
-import { ratingProperties } from '../../../../../../features/task/interface.tasks';
 
 interface RatingField {
   taskCustomFields?: ICustomField;
@@ -12,8 +11,8 @@ interface RatingField {
 }
 
 function RatingField({ taskCustomFields, taskId, fieldId, entityCustomProperty }: RatingField) {
-  const ratingLen = (entityCustomProperty?.properties as ratingProperties).number;
-  const emoji = (entityCustomProperty?.properties as ratingProperties).emoji;
+  const ratingLen = entityCustomProperty?.properties?.number;
+  const emoji = entityCustomProperty?.properties?.emoji;
   const emojiArr = new Array(ratingLen).fill(emoji);
   const [taskrating, setTaskRating] = useState(taskCustomFields ? parseInt(taskCustomFields.values[0].value) : 0);
 
