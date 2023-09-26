@@ -10,9 +10,7 @@ import { useAppSelector } from '../../app/hooks';
 import { DaysAfterOption } from './RecurringSubUI/DaysAfterOption';
 import { CustomRecurOption } from './RecurringSubUI/CustomRecurOption';
 import { MonthsOption } from './RecurringSubUI/MonthsOption';
-
-const IntervalArr = ['daily', 'weekly', 'monthly', 'yearly', 'days after', 'custom'];
-const statusArr = ['When Complete', 'When Done'];
+import { IntervalArr, statusArr } from '../../utils/Constants/DatesConstants';
 
 export default function Recurring() {
   const { spaceStatuses } = useAppSelector((state) => state.hub);
@@ -60,7 +58,7 @@ export default function Recurring() {
           )}
         </div>
         {recuringInterval === 'custom' && <CustomRecurOption />}
-        {recuringInterval === 'days after' && <DaysAfterOption />}
+        {recuringInterval === 'days_after' && <DaysAfterOption />}
         {recuringInterval === 'monthly' && <MonthsOption />}
         <div
           onClick={() => setDropRecurring((prev) => ({ ...prev, statusInterval: !prev.statusInterval }))}
