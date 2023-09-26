@@ -273,13 +273,22 @@ const duplicateTask = (data: { task_name: string; task_id: string; list_id: stri
   return response;
 };
 
-export const useDuplicateTask = () => {
+export const useDuplicateTask = (task?: Task) => {
   const { duplicateTaskObj } = useAppSelector((state) => state.task);
+  const { tasks } = useAppSelector((state) => state.task);
+  const { hub } = useAppSelector((state) => state.hub);
 
   const dispatch = useAppDispatch();
   return useMutation(duplicateTask, {
     onSuccess: (data) => {
       dispatch(setDuplicateTaskObj({ ...duplicateTaskObj, popDuplicateTaskModal: true }));
+
+      const updatedTasks = addNewTaskManager(tasks, data.data.task as ITaskFullList, task?.custom_field_columns || []);
+      dispatch(setTasks(updatedTasks));
+      const listId = data.data.task.list_id;
+      const updatedTree = updateListTasksCountManager(listId as string, hub, updatedTasks[listId].length);
+      dispatch(getHub(updatedTree));
+      dispatch(setFilteredResults(updatedTree));
     }
   });
 };
@@ -417,7 +426,6 @@ export const getOneTaskService = ({
       return data;
     },
     {
-      // enabled: false
       enabled: activeItemType === EntityType.task && task_id != null
     }
   );
