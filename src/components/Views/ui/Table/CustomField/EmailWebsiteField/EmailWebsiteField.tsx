@@ -71,16 +71,12 @@ function EmailWebsiteField({ taskCustomFields, taskId, fieldId, fieldType }: Ema
   };
 
   const handleCopyTexts = async () => {
-    try {
-      await navigator.clipboard.writeText(currentValue);
-      setIsCopied(1);
-      setTimeout(() => {
-        setAnchorEl(null);
-        setIsCopied(0);
-      }, 500);
-    } catch (error) {
-      console.warn(`Failed to copy: ${error}`);
-    }
+    await navigator.clipboard.writeText(currentValue);
+    setIsCopied(1);
+    setTimeout(() => {
+      setAnchorEl(null);
+      setIsCopied(0);
+    }, 500);
   };
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {

@@ -22,6 +22,9 @@ import CreateRatings from './Rating/CreateRatings';
 import CreateManualProgress from './Progress/CreateManualProgress';
 import CreateAutoProgress from './Progress/CreateAutoProgress';
 import CreateTime from './Time/CreateTime';
+import CreateFiles from './Files/CreateFiles';
+import CreatePeople from './People/CreatePeople';
+import CreateLocationField from './Location/CreateLocation';
 
 function NewColumn() {
   const dispatch = useAppDispatch();
@@ -56,7 +59,10 @@ function NewColumn() {
     rating: <CreateRatings />,
     'progress(auto)': <CreateAutoProgress />,
     'progress(manual)': <CreateManualProgress />,
-    time: <CreateTime />
+    time: <CreateTime />,
+    attachments: <CreateFiles />,
+    people: <CreatePeople />,
+    location: <CreateLocationField />
   };
 
   return (
