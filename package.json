@@ -59,7 +59,6 @@
     "react-top-loading-bar": "^2.1.0",
     "title-case": "^3.0.3",
     "uppy": "^2.4.1",
-    "webrix": "^1.5.13",
     "yup": "^0.32.11"
   },
   "scripts": {
