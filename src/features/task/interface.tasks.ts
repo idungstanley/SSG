@@ -316,6 +316,7 @@ export interface customPropertiesProps {
   symbol?: string;
   include_groups?: boolean;
   single_user?: boolean;
+  formula?: string;
 }
 
 export interface ITaskRecurResponse {

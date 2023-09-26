@@ -7,7 +7,7 @@ import { Parser as FormulaParser, SUPPORTED_FORMULAS } from 'hot-formula-parser'
 import { IField } from '../../../../../../features/list/list.interfaces';
 import Number from '../../../../../../assets/branding/Number';
 import { ICustomField } from '../../../../../../features/task/taskSlice';
-import { useUpdateEntityCustomFieldValue } from '../../../../../../features/list/listService';
+import { useUpdateDropdownField, useUpdateEntityCustomFieldValue } from '../../../../../../features/list/listService';
 
 const actions = [
   { id: 'SUM', icon: <BsPlusSquareFill color="#6bc950" size={25} /> },
@@ -18,16 +18,20 @@ const actions = [
 
 interface DropdownFieldWrapperProps {
   currentCustomField: ICustomField;
+  currentCustomFieldColumn: IField;
   taskCustomFields: ICustomField[];
   taskCustomFieldsColumns: IField[];
+  parentId: string;
   taskId: string;
   fieldId: string;
 }
 
 function FormulaField({
   currentCustomField,
+  currentCustomFieldColumn,
   taskCustomFields,
   taskCustomFieldsColumns,
+  parentId,
   taskId,
   fieldId
 }: DropdownFieldWrapperProps) {
@@ -58,6 +62,12 @@ function FormulaField({
   }, [taskCustomFieldsColumns]);
 
   const { mutate: onUpdate } = useUpdateEntityCustomFieldValue(taskId);
+  const { mutate: onUpdateColumn } = useUpdateDropdownField(parentId);
+
+  // console.log('currentCustomField', currentCustomField);
+  // console.log('currentCustomFieldColumn', currentCustomFieldColumn);
+  // console.log('taskCustomFields', taskCustomFields);
+  // console.log('taskCustomFieldsColumns', taskCustomFieldsColumns);
 
   const closeAllDropdowns = () => {
     setAnchorEl(null);
@@ -70,8 +80,16 @@ function FormulaField({
     closeAllDropdowns();
     onUpdate({
       taskId,
-      value: [{ value: `${selectAction} ${selectOne?.id} ${selectTwo?.id}` }], // TODO
+      value: [{ value: result }],
       fieldId
+    });
+    onUpdateColumn({
+      data: currentCustomFieldColumn,
+      newFields: {
+        properties: {
+          formula: `${selectAction} ${selectOne?.id} ${selectTwo?.id}`
+        }
+      }
     });
   };
 
@@ -106,16 +124,6 @@ function FormulaField({
   // console.log('TEST', parser.parse('(1 + 5 + (5 * 10)) / 10'));
   // console.log('SUPPORTED_FORMULAS', SUPPORTED_FORMULAS);
 
-  // useEffect(() => {
-  //   const one = taskCustomFields?.find((item) => item.id === selectOne?.id)?.values[0].value;
-  //   const two = taskCustomFields?.find((item) => item.id === selectTwo?.id)?.values[0].value;
-  //   if (one && two) {
-  //     setResult(parser.parse(`${selectAction}(${one}, ${two})`).result as string);
-  //   } else {
-  //     setResult('-');
-  //   }
-  // }, [selectOne, selectTwo, selectAction]);
-
   const resultParser = (value: string, allFields: ICustomField[]) => {
     const arr = value.split(' ');
     const action = arr[0];
@@ -128,12 +136,13 @@ function FormulaField({
   };
 
   useEffect(() => {
-    if (taskCustomFields?.length && currentCustomField?.values[0].value) {
-      const value = currentCustomField?.values[0].value as string;
+    if (taskCustomFields?.length && currentCustomFieldColumn.properties?.formula) {
+      const value = currentCustomFieldColumn.properties?.formula as string;
       const res = parser.parse(resultParser(value, taskCustomFields)).result as string;
-      setResult(res);
+      // fixed result
+      setResult(String(Math.round(+res * 1e2) / 1e2));
     }
-  }, [taskCustomFields, currentCustomField]);
+  }, [taskCustomFields, currentCustomFieldColumn]);
 
   return (
     <div className="w-full h-full flex justify-center items-center">
@@ -262,7 +271,6 @@ function FormulaField({
               open={isOpenSelectTwo}
               onClose={() => setIsOpenSelectTwo(false)}
               style={{
-                // marginLeft: '-96px',
                 borderRadius: '20px'
               }}
               MenuListProps={{
