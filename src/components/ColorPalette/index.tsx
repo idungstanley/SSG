@@ -102,25 +102,20 @@ export default function PaletteManager({
   const [showListShapes, setShowListShapes] = useState<boolean>(false);
   const [colorName, setColorName] = useState<string>('Missing Color');
 
-  const onChange = (color: string) => {
-    console.log(color, 'onChange');
-    setColor((prev) => {
-      return { ...prev, ['hex']: color };
-    });
-  };
-
   const { paletteId, paletteType } = paletteDropdown;
   const { rgb } = color || {};
   const updateColor = useCallback((color: ColorResult) => setColor(color), []);
 
-  console.log(color.hex, 'color.hex');
-  console.log(colorName, 'colorName');
   useEffect(() => {
     const colorProperty: FORMATTED_COLOR = getColorName(color.hex);
     setColorName(colorProperty.name);
-    console.log(colorProperty, 'colorProperty');
-    console.log(color, 'color');
   }, [updateColor, color]);
+
+  const onChange = (color: string) => {
+    setColor((prev) => {
+      return { ...prev, ['hex']: color };
+    });
+  };
 
   const inputStyles = {
     input: {
