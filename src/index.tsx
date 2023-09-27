@@ -11,6 +11,7 @@ import Toast from './common/Toast';
 import { IErrorRequest, ISuccessRequest } from './types';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { newTaskDataRes } from './features/task/interface.tasks';
+import { clearUserFromLS } from './utils/ClearStorage';
 
 const onError = (error: unknown): unknown => {
   const typedError = error as IErrorRequest;
@@ -26,7 +27,9 @@ const onError = (error: unknown): unknown => {
   if (typedError.status === 403) {
     title = 'Oops! You are not authorized to perform this action.';
   } else if (typedError.status === 401) {
-    title = 'Oops! You are no longer authenticated. Please logout and login again.';
+    title = 'Oops! You are no longer authenticated.';
+    clearUserFromLS();
+    window.location.href = '/auth/login';
   } else if (typedError.status === 500 || !typedError) {
     title = 'Oops! An internal server error occurred.';
   } else if (typedError.status === 404) {

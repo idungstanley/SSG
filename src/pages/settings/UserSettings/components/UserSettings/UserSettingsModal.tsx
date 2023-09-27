@@ -11,6 +11,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAppSelector } from '../../../../../app/hooks';
 import ToolTip from '../../../../../components/Tooltip/Tooltip';
 import ArrowDownFilled from '../../../../../assets/icons/ArrowDownFilled';
+import { clearUserFromLS } from '../../../../../utils/ClearStorage';
 
 interface UserSettingsType {
   id: number;
@@ -33,12 +34,7 @@ export default function UserSettingsModal({ setShowModal }: UserProps) {
   const logoutMutation = useMutation(logoutService, {
     onSuccess: () => {
       dispatch(setVisibility(false));
-
-      localStorage.removeItem('user');
-      localStorage.removeItem('accessToken');
-      localStorage.removeItem('currentWorkspaceId');
-      localStorage.removeItem('teamMemberInviteCode');
-      localStorage.removeItem('currentUserId');
+      clearUserFromLS();
 
       dispatch(
         setAuthData({
