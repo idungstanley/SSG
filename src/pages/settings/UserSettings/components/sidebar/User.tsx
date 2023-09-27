@@ -172,11 +172,7 @@ function User() {
     onSuccess: () => {
       dispatch(setVisibility(false));
 
-      localStorage.removeItem('user');
-      localStorage.removeItem('accessToken');
-      localStorage.removeItem('currentWorkspaceId');
-      localStorage.removeItem('teamMemberInviteCode');
-      localStorage.removeItem('currentUserId');
+      localStorage.clear();
 
       dispatch(
         setAuthData({
