@@ -247,8 +247,8 @@ const createDropdownField = (data: {
       is_bold: style?.is_bold,
       is_italic: style?.is_italic,
       is_underlined: style?.is_underlined,
-      entity_id: id,
-      entity_type: type,
+      model_id: id,
+      model: type,
       options,
       properties
     }
@@ -278,7 +278,11 @@ export const useCreateDropdownField = () => {
   });
 };
 
-const updateEntityCustomFieldValue = (data: { taskId?: string; fieldId: string; value: { value: string }[] }) => {
+const updateEntityCustomFieldValue = (data: {
+  taskId?: string;
+  fieldId: string;
+  value: { value: string; type?: string }[];
+}) => {
   const { taskId, fieldId, value } = data;
 
   const response = requestNew({
