@@ -85,27 +85,27 @@ export default function StatusCollectionBoard() {
                 <p>{item.label}</p>
               </div>
             ))}
-          {isSelected &&
-            activeCollection === COLLECTION_TYPES.TEMPLATE_COLLECTION &&
-            templateNames.map((item, index) => (
-              <div
-                className="flex items-center gap-2 p-1 rounded cursor-pointer hover:bg-primary-200 hover:text-primary-600"
-                key={index}
-              >
-                <div className="mx-2">
-                  <Input
-                    placeholder="Search"
-                    bgColor="bg-gray-200"
-                    borderRadius="rounded-md py-0.5"
-                    type="text"
-                    name="search"
-                    leadingIcon={<CiSearch />}
-                    onChange={() => null}
-                  />
+          {isSelected && activeCollection === COLLECTION_TYPES.TEMPLATE_COLLECTION && (
+            <>
+              <Input
+                placeholder="Search"
+                bgColor="bg-gray-200"
+                borderRadius="rounded-md py-0.5"
+                type="text"
+                name="search"
+                leadingIcon={<CiSearch />}
+                onChange={() => null}
+              />
+              {templateNames.map((item, index) => (
+                <div
+                  className="flex items-center gap-2 p-1 rounded cursor-pointer hover:bg-primary-200 hover:text-primary-600"
+                  key={index}
+                >
+                  <p>{item}</p>
                 </div>
-                <p>{item}</p>
-              </div>
-            ))}
+              ))}
+            </>
+          )}
         </div>
       </AlsoitMenuDropdown>
     </div>
