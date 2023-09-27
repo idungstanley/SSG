@@ -30,6 +30,7 @@ import Button from '../Button';
 import MatchStatusPopUp from './Components/MatchStatusPopUp';
 import { setMatchData } from '../../features/general/prompt/promptSlice';
 import { BOARD_SECTIONS } from '../../utils/StatusManagement/Constant';
+import { useGetStatusTemplates } from '../../features/statusManager/statusManagerService';
 
 interface ErrorResponse {
   data: {
@@ -77,6 +78,7 @@ export default function CustomStatus() {
       coordinateGetter: sortableKeyboardCoordinates
     })
   );
+  useGetStatusTemplates();
 
   useEffect(() => {
     createModelIdAndTypeHandler(activeItemId, activeItemType, setModelData, modelData);
@@ -90,7 +92,6 @@ export default function CustomStatus() {
   const handleDragStart = ({ active }: DragEndEvent) => {
     dispatch(setDraggableActiveStatusId(active.id as string));
   };
-
   const handleDragOver = ({ active, over }: DragOverEvent) => {
     // Find the containers
     const dragDirection = getDragDirection({ active, over } as DragOverEvent);
