@@ -10,6 +10,7 @@ import { logoutService } from '../../../../../features/auth/authService';
 import { setVisibility } from '../../../../../features/general/prompt/promptSlice';
 import { setAuthData } from '../../../../../features/auth/authSlice';
 import { logout } from '../../../../../features/auth/authSlice';
+import { clearUserFromLS } from '../../../../../utils/ClearStorage';
 
 function User() {
   const { activeTab, theme_color, userData } = useAppSelector((state) => state.userSetting);
@@ -172,10 +173,7 @@ function User() {
     onSuccess: () => {
       dispatch(setVisibility(false));
 
-      localStorage.removeItem('accessToken');
-      localStorage.removeItem('currentUserId');
-      localStorage.removeItem('user');
-      localStorage.removeItem('currentWorkspaceId');
+      clearUserFromLS();
 
       dispatch(
         setAuthData({
