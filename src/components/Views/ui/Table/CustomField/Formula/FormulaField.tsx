@@ -8,6 +8,7 @@ import { IField } from '../../../../../../features/list/list.interfaces';
 import Number from '../../../../../../assets/branding/Number';
 import { ICustomField } from '../../../../../../features/task/taskSlice';
 import { useUpdateDropdownField, useUpdateEntityCustomFieldValue } from '../../../../../../features/list/listService';
+import AdditionalFormulasField from './AdditionalFormulasField';
 
 const actions = [
   { id: 'SUM', icon: <BsPlusSquareFill color="#6bc950" size={25} /> },
@@ -50,6 +51,7 @@ function FormulaField({
   const [selectAction, setSelectAction] = useState<string>('SUM');
   const [currentFields, setCurrentFields] = useState<IField[]>([]);
   const [result, setResult] = useState('-');
+  const [isShowAdditionalFormulas, setShowAdditionalFormulas] = useState<boolean>(false);
 
   useEffect(() => {
     const newCurrentFields: IField[] = [];
@@ -100,6 +102,7 @@ function FormulaField({
 
   const handleClose = () => {
     setAnchorEl(null);
+    setShowAdditionalFormulas(false);
   };
 
   const renderIcon = () => {
@@ -139,6 +142,10 @@ function FormulaField({
     }
   }, [taskCustomFields, currentCustomFieldColumn]);
 
+  const handleCalculate = (str: string) => {
+    console.log(str);
+  };
+
   return (
     <div className="w-full h-full flex justify-center items-center">
       <h1 className="text-alsoit-text-lg font-semibold max-w-full break-words cursor-pointer" onClick={handleClick}>
@@ -150,7 +157,7 @@ function FormulaField({
         open={open}
         onClose={handleClose}
         style={{
-          marginLeft: '-110px',
+          marginLeft: '-160px',
           borderRadius: '20px'
         }}
         MenuListProps={{
@@ -160,9 +167,8 @@ function FormulaField({
           }
         }}
       >
-        {/* SELECT */}
         <div className="flex items-center justify-start space-x-1 p-2 pl-4">
-          <div>
+          <div className="w-full">
             <div
               onClick={(e: React.MouseEvent<HTMLDivElement>) => {
                 setIsOpenSelectOne(true);
@@ -170,7 +176,7 @@ function FormulaField({
               }}
             >
               <Button active={false}>
-                <span className="whitespace-nowrap">{selectOne ? selectOne.name : 'Select field'}</span>
+                <span className="whitespace-nowrap w-full pl-1">{selectOne ? selectOne.name : 'Select field'}</span>
                 <ArrowDownFilled active={false} />
               </Button>
             </div>
@@ -180,7 +186,6 @@ function FormulaField({
               open={isOpenSelectOne}
               onClose={() => setIsOpenSelectOne(false)}
               style={{
-                marginLeft: '-50px',
                 borderRadius: '20px'
               }}
               MenuListProps={{
@@ -205,7 +210,9 @@ function FormulaField({
                     </div>
                   ))}
                 </>
-              ) : null}
+              ) : (
+                <></>
+              )}
             </Menu>
           </div>
           <div>
@@ -248,7 +255,7 @@ function FormulaField({
               ))}
             </Menu>
           </div>
-          <div>
+          <div className="w-full">
             <div
               onClick={(e: React.MouseEvent<HTMLDivElement>) => {
                 setIsOpenSelectTwo(true);
@@ -256,7 +263,7 @@ function FormulaField({
               }}
             >
               <Button active={false}>
-                <span className="whitespace-nowrap">{selectTwo ? selectTwo.name : 'Select field'}</span>
+                <span className="whitespace-nowrap w-full pl-1">{selectTwo ? selectTwo.name : 'Select field'}</span>
                 <ArrowDownFilled active={false} />
               </Button>
             </div>
@@ -290,11 +297,27 @@ function FormulaField({
                     </div>
                   ))}
                 </>
-              ) : null}
+              ) : (
+                <></>
+              )}
             </Menu>
           </div>
         </div>
         <div className="flex gap-1 items-end justify-end p-4">
+          <button>
+            <div className="flex items-center pr-2">
+              <label className="switch" onClick={(event) => event.stopPropagation()}>
+                <input
+                  className="inputShow"
+                  type="checkbox"
+                  checked={isShowAdditionalFormulas}
+                  onChange={() => setShowAdditionalFormulas(!isShowAdditionalFormulas)}
+                />
+                <div className={`slider ${isShowAdditionalFormulas ? 'checked' : ''}`} />
+              </label>
+              <span className="ml-2 text-xs">Advanced Editor</span>
+            </div>
+          </button>
           <button
             className="p-1 bg-white rounded text-alsoit-danger h-6"
             style={{ width: '79px' }}
@@ -307,6 +330,32 @@ function FormulaField({
           </button>
         </div>
       </Menu>
+      {isShowAdditionalFormulas && (
+        <Menu
+          id="basic-menu"
+          anchorEl={anchorEl}
+          open={isShowAdditionalFormulas}
+          onClose={handleClose}
+          style={{
+            marginLeft: '-160px',
+            borderRadius: '20px'
+          }}
+          MenuListProps={{
+            'aria-labelledby': 'basic-button',
+            style: {
+              borderRadius: '20px'
+            }
+          }}
+        >
+          <AdditionalFormulasField
+            variables={currentFields}
+            taskCustomFields={taskCustomFields}
+            handleCalculate={handleCalculate}
+            handleClose={() => setShowAdditionalFormulas(false)}
+          />
+          <></>
+        </Menu>
+      )}
     </div>
   );
 }
