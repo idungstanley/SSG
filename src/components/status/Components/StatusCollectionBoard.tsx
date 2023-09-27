@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import ThreeDotIcon from '../../../assets/icons/ThreeDotIcon';
 import AlsoitMenuDropdown from '../../DropDowns';
 import { InlineBorderLabel } from '../../Dropdown/MenuDropdown';
+import { useAppSelector } from '../../../app/hooks';
 
 const COLLECTION_TYPES = {
   BESPOKE_TO_ENTITY: 'Bespoke to Entity',
@@ -13,6 +14,9 @@ const COLLECTION_TYPES = {
 export default function StatusCollectionBoard() {
   const [showCollectionDropdown, setShowCollectionDropdown] = useState<null | HTMLDivElement>(null);
   const [activeCollection, setActiveCollection] = useState<string>(COLLECTION_TYPES.BESPOKE_TO_ENTITY);
+  const [isSelected, setIsSelected] = useState<boolean>(false);
+
+  const { templateNames } = useAppSelector((state) => state.statusManager);
 
   const handleShowCollection = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     setShowCollectionDropdown(event.currentTarget);
@@ -43,6 +47,7 @@ export default function StatusCollectionBoard() {
     {
       label: COLLECTION_TYPES.TEMPLATE_COLLECTION,
       handleClick: () => {
+        setIsSelected(true);
         setActiveCollection(COLLECTION_TYPES.TEMPLATE_COLLECTION);
       }
     }
@@ -71,16 +76,28 @@ export default function StatusCollectionBoard() {
           label="SELECT ENTITY"
           topElement={<p className="flex items-center justify-center">{activeCollection}</p>}
         />
+
         <div className="flex flex-col w-48 p-2 space-y-2">
-          {collections.map((item, index) => (
-            <div
-              className="flex items-center gap-2 p-1 rounded cursor-pointer hover:bg-primary-200 hover:text-primary-600"
-              key={index}
-              onClick={item.handleClick}
-            >
-              <p>{item.label}</p>
-            </div>
-          ))}
+          {!isSelected &&
+            collections.map((item, index) => (
+              <div
+                className="flex items-center gap-2 p-1 rounded cursor-pointer hover:bg-primary-200 hover:text-primary-600"
+                key={index}
+                onClick={item.handleClick}
+              >
+                <p>{item.label}</p>
+              </div>
+            ))}
+          {isSelected &&
+            activeCollection === COLLECTION_TYPES.TEMPLATE_COLLECTION &&
+            templateNames.map((item, index) => (
+              <div
+                className="flex items-center gap-2 p-1 rounded cursor-pointer hover:bg-primary-200 hover:text-primary-600"
+                key={index}
+              >
+                <p>{item}</p>
+              </div>
+            ))}
         </div>
       </AlsoitMenuDropdown>
     </div>
