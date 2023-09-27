@@ -23,6 +23,7 @@ export default function StatusCollectionBoard() {
   };
   const handleCloseCollectionMenu = () => {
     setShowCollectionDropdown(null);
+    setIsSelected(false);
   };
 
   const collections = [
