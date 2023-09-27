@@ -7,19 +7,18 @@ import { Label } from './Label';
 import { AddTask } from '../AddTask/AddTask';
 import { setCurrTeamMemId } from '../../../../features/task/taskSlice';
 import { columnsHead, listColumnProps } from '../../../../pages/workspace/tasks/component/views/ListColumns';
-import { useParams } from 'react-router-dom';
 import { cl } from '../../../../utils';
-import { useDroppable } from '@dnd-kit/core';
-import { IField } from '../../../../features/list/list.interfaces';
-import { Hub, List as ListType } from '../../../../pages/workspace/hubs/components/ActiveTree/activetree.interfaces';
+import { IField, IListDetailRes } from '../../../../features/list/list.interfaces';
+import { Hub } from '../../../../pages/workspace/hubs/components/ActiveTree/activetree.interfaces';
 import { findCurrentHub } from '../../../../managers/Hub';
-import { findCurrentList } from '../../../../managers/List';
 import LightenColor from './lightenColor/LightenColor';
 import { SubtasksTable } from '../Table/SubtasksTable';
 
 interface ListProps {
   tasks: Task[];
+  subtasksCustomeFields?: IField[];
   customProperty?: IField[];
+  listDetails?: IListDetailRes;
 }
 
 export interface IListColor {
@@ -28,9 +27,8 @@ export interface IListColor {
 
 const unique = (arr: listColumnProps[]) => [...new Set(arr)];
 
-export function List({ tasks }: ListProps) {
+export function List({ tasks, subtasksCustomeFields, listDetails }: ListProps) {
   const dispatch = useAppDispatch();
-  const { listId } = useParams();
 
   const {
     sortType,
@@ -43,9 +41,9 @@ export function List({ tasks }: ListProps) {
   const { parentHubExt, hub } = useAppSelector((state) => state.hub);
 
   const [collapseTable, setCollapseTable] = useState(false);
+
   const [showNewTaskField, setShowNewTaskField] = useState(false);
   const [parentHub, setParentHub] = useState<Hub>();
-  const [currentList, setCurrentList] = useState<ListType>();
   const [fullTasksLists, setFullTasksLists] = useState<ITaskFullList[]>([]);
 
   useEffect(() => {
@@ -53,12 +51,6 @@ export function List({ tasks }: ListProps) {
       setParentHub(findCurrentHub(parentHubExt.id, hub));
     }
   }, [parentHubExt]);
-
-  useEffect(() => {
-    if (listId) {
-      setCurrentList(findCurrentList(listId, hub));
-    }
-  }, [listId]);
 
   const ListColor: IListColor = tasks[0].list?.color
     ? JSON.parse(tasks[0].list?.color as string)
@@ -76,6 +68,20 @@ export function List({ tasks }: ListProps) {
     }));
     return unique([...columnsHead, ...customFieldNames]);
   }, [tasks]);
+
+  const generateSubtasksColumns = useMemo(() => {
+    let customFieldNames: listColumnProps[] = [];
+    if (subtasksCustomeFields?.length) {
+      customFieldNames = subtasksCustomeFields.map((i) => ({
+        value: i.name,
+        id: i.id,
+        field: i.type,
+        hidden: false,
+        color: i.color
+      }));
+    }
+    return unique([...columnsHead, ...customFieldNames]);
+  }, [subtasksCustomeFields]);
 
   const createFullTasksList = () => {
     const newFullTasksList: ITaskFullList[] = [];
@@ -117,17 +123,9 @@ export function List({ tasks }: ListProps) {
     dispatch(setCurrTeamMemId(null));
   };
 
-  const { setNodeRef } = useDroppable({
-    id: tasks[0].list_id,
-    data: {
-      isOverList: true
-    }
-  });
-
   return (
     <div
       className="pt-1 border-t-4 border-l-4 border-purple-500 rounded-3xl bg-purple-50"
-      ref={setNodeRef}
       style={{
         borderColor: ListColor?.outerColour,
         backgroundColor: LightenColor(ListColor?.outerColour, 0.95),
@@ -135,7 +133,7 @@ export function List({ tasks }: ListProps) {
       }}
     >
       <Label
-        listName={tasks[0].list?.name || currentList?.name}
+        listName={tasks[0].list?.name || listDetails?.data.list.name}
         hubName={parentHub?.name}
         tasks={tasks}
         ListColor={ListColor}
@@ -146,7 +144,12 @@ export function List({ tasks }: ListProps) {
         <div className="relative" style={{ paddingRight: '30px' }}>
           {showNewTaskField ? (
             <div className="pl-2">
-              <AddTask parentId={tasks[0].list?.id as string} isListParent onClose={() => handleClose()} />
+              <AddTask
+                parentId={tasks[0].list_id as string}
+                isListParent={true}
+                task={tasks[0]}
+                onClose={() => handleClose()}
+              />
             </div>
           ) : null}
           {!showNewTaskField ? (
@@ -162,11 +165,11 @@ export function List({ tasks }: ListProps) {
                 <Table
                   listName={tasks[0].list?.name}
                   label={key}
-                  ListColor={ListColor}
-                  key={key}
+                  listColor={ListColor}
                   heads={hideTask.length ? hideTask : generateColumns}
                   data={sortedTasks[key]}
                   customFields={tasks[0].custom_field_columns as IField[]}
+                  listDetails={listDetails}
                 />
               ) : (
                 <>
@@ -175,18 +178,19 @@ export function List({ tasks }: ListProps) {
                       <Table
                         listName={tasks[0].list?.name}
                         label={key}
-                        ListColor={ListColor}
-                        key={key}
+                        listColor={ListColor}
                         heads={hideTask.length ? hideTask : generateColumns}
                         data={[task]}
                         customFields={tasks[0].custom_field_columns as IField[]}
+                        listDetails={listDetails}
+                        isBlockToOpenSubtasks={true}
                       />
                       <SubtasksTable
-                        key={task.id}
                         data={task}
+                        subtasksData={subtasks[task.id]}
                         listId={task.list_id}
-                        heads={hideTask.length ? hideTask : generateColumns}
-                        customFields={tasks[0].custom_field_columns as IField[]}
+                        heads={hideTask.length ? hideTask : generateSubtasksColumns}
+                        customFields={subtasksCustomeFields as IField[]}
                         level={1}
                       />
                     </Fragment>

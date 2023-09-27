@@ -6,7 +6,7 @@ import {
   UseChecklistItemUnassignee
 } from '../../../../features/task/checklist/checklistService';
 import { UseTaskAssignService, UseTaskUnassignService } from '../../../../features/task/taskService';
-import { useAppDispatch } from '../../../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { setCurrTeamMemId } from '../../../../features/task/taskSlice';
 import AvatarWithImage from '../../../../components/avatar/AvatarWithImage';
 import { TrashIcon } from '@heroicons/react/24/outline';
@@ -25,6 +25,8 @@ interface AssigneeItem {
 function AssigneeItem({ item, option, entity_id, teams, handleClose, isAssigned }: AssigneeItem) {
   const dispatch = useAppDispatch();
 
+  const { selectedTasksArray, selectedListIds, selectedTaskParentId } = useAppSelector((state) => state.task);
+
   const { mutate: onCheklistItemAssign } = UseChecklistItemAssignee();
 
   const handleAssignChecklist = (id: string) => {
@@ -34,22 +36,31 @@ function AssigneeItem({ item, option, entity_id, teams, handleClose, isAssigned 
     });
   };
 
-  const { mutate: onTaskAssign } = UseTaskAssignService(entity_id as string, item);
+  const { mutate: onTaskAssign } = UseTaskAssignService(
+    selectedTasksArray.length ? selectedTasksArray : [entity_id as string],
+    item,
+    selectedListIds.length ? selectedListIds : [selectedTaskParentId]
+  );
+
   const handleAssignTask = (id: string) => {
     onTaskAssign({
-      taskId: entity_id,
+      taskIds: selectedTasksArray.length ? selectedTasksArray : [entity_id as string],
       team_member_id: id,
-      teams: teams
+      teams
     });
   };
 
-  const { mutate: onTaskUnassign } = UseTaskUnassignService(entity_id as string, item);
+  const { mutate: onTaskUnassign } = UseTaskUnassignService(
+    selectedTasksArray.length ? selectedTasksArray : [entity_id as string],
+    item,
+    selectedListIds.length ? selectedListIds : [selectedTaskParentId]
+  );
   const handleUnAssignTask = (id: string) => {
     handleClose();
     onTaskUnassign({
-      taskId: entity_id,
+      taskId: entity_id as string,
       team_member_id: id,
-      teams: teams
+      teams
     });
   };
 

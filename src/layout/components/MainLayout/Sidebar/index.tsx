@@ -87,7 +87,7 @@ export default function Sidebar() {
   const onScroll = useScroll(() => dispatch(setUpdateCords()));
 
   return (
-    <aside className={cl('flex h-full text-center relative overflow-x-visible')}>
+    <aside className={cl('flex text-center relative overflow-x-visible')}>
       <Dividers />
       {/* show / hide sidebar icon */}
       {/* sidebar */}
@@ -106,7 +106,7 @@ export default function Sidebar() {
           setActiveTabId={setActiveTabId}
         />
         <VerticalScroll onScroll={onScroll} style={{ overflowX: 'hidden' }}>
-          <section>
+          <section className="h-[calc(100vh-120px)]">
             {showSidebar ? (
               <NonInteractiveSearch
                 setAction={setCommandSearchModal}

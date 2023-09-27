@@ -16,7 +16,7 @@ export type BoardSectionsType = {
 };
 
 export interface GroupStyles {
-  backgroundColor: string;
+  backgroundColor?: string;
   boxShadow: string;
 }
 

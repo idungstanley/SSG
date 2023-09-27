@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Hub, ListProps } from '../../activetree.interfaces';
 import WList from '../wallet/WList';
 import LList from '../list/LList';
@@ -28,10 +28,11 @@ export default function HList({ hubs }: ListProps) {
   const navigate = useNavigate();
 
   const { showExtendedBar, createEntityType, openedEntitiesIds } = useAppSelector((state) => state.workspace);
-  const { entityToCreate } = useAppSelector((state) => state.hub);
+  const { entityToCreate, hub } = useAppSelector((state) => state.hub);
   const { showSidebar } = useAppSelector((state) => state.account);
 
   const [openedNewHubId, setOpenedNewHubId] = useState<string>('');
+  const [allHubsId, setAllHubsId] = useState<string[]>([]);
 
   const CapitalizeType = Capitalize(entityToCreate);
   const hubCreationStatus = 'New ' + CapitalizeType + ' Under Construction';
@@ -45,6 +46,12 @@ export default function HList({ hubs }: ListProps) {
 
   const hubsSpread = [...hubs, dummyHub];
   const hubsWithEntity = createEntityType === EntityType.hub ? (hubsSpread as Hub[]) : hubs;
+
+  useEffect(() => {
+    if (hub.length) {
+      setAllHubsId(hub.map((item) => item.id));
+    }
+  }, [hub]);
 
   const handleLocation = (id: string, name: string, item: IHub) => {
     const viewsUrl = generateViewsUrl(id, item, EntityType.hub) as string;
@@ -66,16 +73,25 @@ export default function HList({ hubs }: ListProps) {
     }
   };
 
-  const handleClick = (id: string) => {
+  const handleClick = (id: string, type?: string) => {
     dispatch(setParentHubExt({ id, type: EntityType.hub }));
 
-    if (id === openedNewHubId) {
+    if (id === openedNewHubId && type !== 'isOver') {
       setOpenedNewHubId('');
       dispatch(setOpenedEntitiesIds(openedEntitiesIds.filter((item) => item !== id)));
     } else {
       setOpenedNewHubId(id);
-      dispatch(setOpenedEntitiesIds([...openedEntitiesIds, id]));
+      dispatch(setOpenedEntitiesIds([...openedEntitiesIds.filter((openedId) => !allHubsId.includes(openedId)), id]));
     }
+
+    hub.forEach((item) => {
+      if (item.id === id && !item.children) {
+        const viewsUrl = generateViewsUrl(id, item, EntityType.hub) as string;
+        navigate(viewsUrl, {
+          replace: true
+        });
+      }
+    });
 
     dispatch(
       setCurrentItem({

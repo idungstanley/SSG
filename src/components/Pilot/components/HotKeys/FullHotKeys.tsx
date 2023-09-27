@@ -5,6 +5,7 @@ import { cl } from '../../../../utils';
 import { Modal } from './components/Modal';
 import { setActiveTabId } from '../../../../features/workspace/workspaceSlice';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
+import ToolTip from '../../../Tooltip/Tooltip';
 
 interface HotkeysListProps {
   tabs: IPilotTab[];
@@ -37,7 +38,7 @@ export default function FullHotkeysList({ tabs, showModal, setShowModal }: Hotke
   return (
     <>
       {activeHotkeyIds.length !== 0 ? (
-        <div className="flex border-t">
+        <div className="flex">
           {/* unknown */}
           <div className="flex flex-col p-1 m-1 text-gray-700 bg-gray-50">
             <ChevronRightIcon className="w-2 h-2" aria-hidden="true" />
@@ -47,19 +48,23 @@ export default function FullHotkeysList({ tabs, showModal, setShowModal }: Hotke
             <ChevronLeftIcon className="w-2 h-2 text-gray-400" aria-hidden="true" />
           </div>
 
-          <div className="flex flex-row flex-wrap w-full col-span-1 p-2 gap-y-2">
+          <div className="flex flex-row flex-wrap w-full col-span-1 gap-2 p-2">
             {hotkeys.map((hotkey) => (
-              <button
-                onClick={() => dispatch(setActiveTabId(activeTabId === hotkey.id ? undefined : hotkey.id))}
-                title={hotkey.label}
-                className={cl(
-                  activeTabId === hotkey.id ? 'text-primary-500 bg-primary-200' : 'text-gray-600',
-                  'flex items-center justify-center border-r border-l px-4 py-1 rounded-md'
-                )}
-                key={hotkey.id}
-              >
-                {hotkey.icon}
-              </button>
+              <div key={hotkey.label}>
+                <ToolTip title={hotkey.label}>
+                  <button
+                    onClick={() => dispatch(setActiveTabId(activeTabId === hotkey.id ? undefined : hotkey.id))}
+                    title={hotkey.label}
+                    className={cl(
+                      activeTabId === hotkey.id ? 'text-primary-500 bg-primary-200' : 'text-gray-600',
+                      'flex items-center justify-center border-r border-l px-4 py-1 rounded-md'
+                    )}
+                    key={hotkey.id}
+                  >
+                    {hotkey.icon}
+                  </button>
+                </ToolTip>
+              </div>
             ))}
           </div>
         </div>

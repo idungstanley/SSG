@@ -48,7 +48,7 @@ export default function WList({ wallets, leftMargin, paddingLeft, type, level = 
     );
   };
 
-  const handleShowSubWallet = (id: string) => {
+  const handleShowSubWallet = (id: string, clickType?: string) => {
     dispatch(
       setActiveItem({
         activeItemType: type,
@@ -56,7 +56,7 @@ export default function WList({ wallets, leftMargin, paddingLeft, type, level = 
       })
     );
 
-    if (openedEntitiesIds.includes(id)) {
+    if (openedEntitiesIds.includes(id) && clickType !== 'isOver') {
       dispatch(setOpenedEntitiesIds(openedEntitiesIds.filter((item) => item !== id)));
     } else {
       dispatch(setOpenedEntitiesIds([...openedEntitiesIds, id]));

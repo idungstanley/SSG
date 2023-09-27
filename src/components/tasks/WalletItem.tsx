@@ -45,7 +45,7 @@ interface WalletItemProps {
   topNumber?: number;
   zNumber?: string;
   isExtendedBar?: boolean;
-  handleShowSubWallet: (id: string) => void;
+  handleShowSubWallet: (id: string, type?: string) => void;
   handleLocation: (id: string, name: string, item: IWallet) => void;
 }
 export default function WalletItem({
@@ -154,7 +154,7 @@ export default function WalletItem({
 
   useEffect(() => {
     if (isOver) {
-      handleShowSubWallet(wallet.id);
+      handleShowSubWallet(wallet.id, 'isOver');
     }
   }, [isOver]);
 
@@ -249,7 +249,12 @@ export default function WalletItem({
         </div>
       </section>
       {paletteId === wallet.id && show ? (
-        <Palette title="Wallet Colour" setPaletteColor={setPaletteColor} cords={cords} />
+        <Palette
+          title="Wallet Colour"
+          activeOutterColor={wallet.color}
+          setPaletteColor={setPaletteColor}
+          cords={cords}
+        />
       ) : null}
       {showMenuDropdown === wallet.id ? <MenuDropdown isExtendedBar={isExtendedBar} cords={menuCords} /> : null}
       {SubMenuId === wallet.id ? <SubDropdown cords={menuCords} /> : null}

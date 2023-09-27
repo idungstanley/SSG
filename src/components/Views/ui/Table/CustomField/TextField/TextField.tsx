@@ -11,7 +11,6 @@ interface TextFielProps {
 }
 
 function TextField({ taskCustomFields, taskId, fieldId }: TextFielProps) {
-  // console.log(taskCustomFields);
   const activeValue = taskCustomFields?.values[0].value ? taskCustomFields?.values[0].value : '-';
   const [currentValue, setCurrentValue] = useState<string>(activeValue);
   const [editMode, setEditMode] = useState(false);
@@ -44,15 +43,11 @@ function TextField({ taskCustomFields, taskId, fieldId }: TextFielProps) {
   };
 
   const handleCopyTexts = async () => {
-    try {
-      await navigator.clipboard.writeText(currentValue);
-      setIsCopied(1);
-      setTimeout(() => {
-        setIsCopied(0);
-      }, 500);
-    } catch (error) {
-      console.warn(`Failed to copy: ${error}`);
-    }
+    await navigator.clipboard.writeText(currentValue);
+    setIsCopied(1);
+    setTimeout(() => {
+      setIsCopied(0);
+    }, 500);
   };
 
   return (

@@ -17,8 +17,8 @@ import Favorites from '../../../pages/workspace/favorites';
 function MainLayout() {
   const location = useLocation();
   const navigate = useNavigate();
-  const { activeItemType, activeItemId } = useAppSelector((state) => state.workspace);
   const { workSpaceId } = useParams();
+
   const { currentWorkspaceId } = useAppSelector((state) => state.auth);
   const { userSettingsData } = useAppSelector((state) => state.account);
   const user = useAppSelector(selectCurrentUser);
@@ -61,7 +61,6 @@ function MainLayout() {
     <div className={cl('h-full flex flex-col')}>
       <ProgressBar />
       {/* <TopMenu /> */}
-      {userSettingsData?.isFavoritePinned && <Favorites />}
       <Toaster position="bottom-left" />
       <DragContext>
         <div className="flex h-full">
@@ -71,12 +70,13 @@ function MainLayout() {
             </div>
             <div className="w-full h-full">
               {/* <AdditionalHeader /> */}
+              {userSettingsData?.isFavoritePinned && <Favorites />}
               <Header />
               <div className="w-full h-full">
                 <Outlet />
               </div>
               <AddFileModal
-                endpoint={`attachments?id=${activeItemId}?type=${activeItemType}`}
+                endpoint={'attachments'}
                 invalidateQuery={['attachments'] as InvalidateQueryFilters<unknown>}
               />
             </div>

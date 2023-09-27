@@ -13,6 +13,8 @@ interface InputDataTypes {
   trailingIcon?: string | JSX.Element;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   trailingClick?: () => void;
+  bgColor?: string;
+  borderRadius?: string;
 }
 function Input({
   label,
@@ -26,7 +28,9 @@ function Input({
   onChange,
   leadingIcon,
   trailingIcon,
-  trailingClick
+  trailingClick,
+  bgColor,
+  borderRadius
 }: InputDataTypes) {
   const handleTrailingIconClick = () => {
     if (trailingClick) {
@@ -45,7 +49,7 @@ function Input({
       )}
       <div className="relative">
         {leadingIcon && (
-          <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">{leadingIcon}</div>
+          <div className="absolute inset-y-0 left-0 flex items-center pl-1.5 pointer-events-none">{leadingIcon}</div>
         )}
 
         <input
@@ -56,8 +60,8 @@ function Input({
           className={`appearance-none block w-full px-3  ${leadingIcon && 'pl-8'} ${
             trailingIcon && 'pr-10'
           } border border-gray-300 ${
-            name === 'search' ? 'rounded-full py-0.5' : 'rounded-md py-2'
-          } shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm`}
+            borderRadius ? borderRadius : name === 'search' && !borderRadius ? 'rounded-md py-0.5' : 'rounded-md py-2'
+          } shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm ${bgColor}`}
           placeholder={placeholder}
           value={value}
           onChange={onChange}

@@ -5,7 +5,7 @@ import { useAppSelector } from '../../app/hooks';
 interface CustomScrollableContainerProps extends HTMLAttributes<HTMLDivElement> {
   children: ReactNode;
 }
-const DEFAULT_THUMB_WIDTH = 20;
+const DEFAULT_THUMB_HEIGHT = 20;
 const ARROWS_WRAPPER_HEIGHT = 27;
 
 export function VerticalScroll({ children, ...props }: CustomScrollableContainerProps) {
@@ -25,8 +25,9 @@ export function VerticalScroll({ children, ...props }: CustomScrollableContainer
     activeItemId,
     activePlaceId
   } = useAppSelector((state) => state.workspace);
+  const { tasks, subtasks } = useAppSelector((state) => state.task);
 
-  const [thumbWidth, setThumbWidth] = useState(DEFAULT_THUMB_WIDTH);
+  const [thumbHeight, setThumbHeight] = useState(DEFAULT_THUMB_HEIGHT);
   const [isThumbVisible, setIsThumbVisible] = useState(true);
   const [topPosition, setTopPosition] = useState<number>(-ARROWS_WRAPPER_HEIGHT);
   const [scrollStartPosition, setScrollStartPosition] = useState<number | null>(null);
@@ -49,7 +50,7 @@ export function VerticalScroll({ children, ...props }: CustomScrollableContainer
         const target = e.target as HTMLDivElement;
         const rect = target.getBoundingClientRect();
         const trackTop = rect.top;
-        const thumbOffset = -(thumbWidth / 2);
+        const thumbOffset = -(thumbHeight / 2);
         const clickRatio = (clientY - trackTop + thumbOffset) / trackCurrent.clientHeight;
         const scrollAmount = Math.floor(clickRatio * contentCurrent.scrollHeight);
         contentCurrent.scrollTo({
@@ -58,7 +59,7 @@ export function VerticalScroll({ children, ...props }: CustomScrollableContainer
         });
       }
     },
-    [thumbWidth]
+    [thumbHeight]
   );
 
   const handleThumbPosition = useCallback(() => {
@@ -69,7 +70,7 @@ export function VerticalScroll({ children, ...props }: CustomScrollableContainer
     const { clientHeight: trackHeight } = scrollTrackRef.current;
     let newTop;
     newTop = (+contentTop / +contentHeight) * trackHeight;
-    newTop = Math.min(newTop, trackHeight - thumbWidth) - ARROWS_WRAPPER_HEIGHT;
+    newTop = Math.min(newTop, trackHeight - thumbHeight) - ARROWS_WRAPPER_HEIGHT;
     setTopPosition(newTop);
     const thumb = scrollThumbRef.current;
     thumb.style.top = `${newTop}px`;
@@ -102,12 +103,12 @@ export function VerticalScroll({ children, ...props }: CustomScrollableContainer
         const { scrollHeight: contentHeight, offsetHeight: contentOffsetHeight } = contentRef.current;
 
         const delta = e.clientY - scrollStartPosition;
-        const deltaY = delta * (contentOffsetHeight / thumbWidth);
+        const deltaY = delta * (contentOffsetHeight / thumbHeight);
         const newScroll = Math.min(initialScrollTop + deltaY, contentHeight - contentOffsetHeight);
         contentRef.current.scrollTop = newScroll;
       }
     },
-    [isDragging, scrollStartPosition, thumbWidth]
+    [isDragging, scrollStartPosition, thumbHeight]
   );
 
   const pilotFromLS = JSON.parse(localStorage.getItem('pilot') || '""') as {
@@ -122,9 +123,10 @@ export function VerticalScroll({ children, ...props }: CustomScrollableContainer
   useEffect(() => {
     const handleResize = (ref: HTMLDivElement, trackSize: number) => {
       const { clientHeight, scrollHeight } = ref;
+      const showScrollHeight = scrollHeight - 10;
       const THUMB_HEIGHT = (clientHeight / scrollHeight) * trackSize;
-      setThumbWidth(Math.max(THUMB_HEIGHT + 27, DEFAULT_THUMB_WIDTH));
-      setIsThumbVisible(scrollHeight > clientHeight); // Check if the content height is greater than the track height
+      setThumbHeight(Math.max(THUMB_HEIGHT, DEFAULT_THUMB_HEIGHT));
+      setIsThumbVisible(showScrollHeight > clientHeight); // Check if the content height is greater than the track height
     };
 
     const calculateThumbSize = () => {
@@ -162,7 +164,10 @@ export function VerticalScroll({ children, ...props }: CustomScrollableContainer
     activeSubTimeClockTabId,
     activeSubHubManagerTabId,
     activeSubCommunicationTabId,
-    activeSubChecklistTabId
+    activeSubChecklistTabId,
+    tasks,
+    subtasks,
+    thumbHeight
   ]);
 
   // Listen for mouse events to handle scrolling by dragging the thumb
@@ -226,7 +231,7 @@ export function VerticalScroll({ children, ...props }: CustomScrollableContainer
                 ref={scrollThumbRef}
                 onMouseDown={handleThumbMousedown}
                 style={{
-                  height: `${thumbWidth}px`,
+                  height: `${thumbHeight}px`,
                   top: `${topPosition}px`,
                   cursor: isDragging ? 'grabbing' : 'grab'
                 }}

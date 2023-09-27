@@ -3,7 +3,6 @@ import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import RoundedArrowUpDown from '../../../../../pages/workspace/tasks/component/views/listLevel/component/RoundedArrowUpDown';
 import SortDirectionCheck from '../../../../../pages/workspace/tasks/component/views/listLevel/component/SortDirectionCheck';
 import { parseLabel } from '../../../../TasksHeader/lib';
-import { Column } from '../../../types/table';
 import {
   SortOption,
   setActiveTaskColumn,
@@ -35,20 +34,22 @@ import { Task } from '../../../../../features/task/interface.tasks';
 import CollapseIcon from '../../collapseIcon/CollapseIcon';
 
 import '../../../../../styles/task.css';
+import { EntityType } from '../../../../../utils/EntityTypes/EntityType';
+import { listColumnProps } from '../../../../../pages/workspace/tasks/component/views/ListColumns';
 
 interface HeadProps {
-  columns: Column[];
+  columns: listColumnProps[];
   tableHeight: string | number;
-  mouseDown: (i: number) => void;
   label: string;
   collapseTasks: boolean;
   headerStatusColor?: string;
   taskLength: number;
-  onToggleCollapseTasks: VoidFunction;
   listId: string | undefined;
   listName?: string;
   groupedTask?: Task[];
   isSplitSubtask?: boolean;
+  parentId?: string;
+  onToggleCollapseTasks: VoidFunction;
 }
 
 export function Head({
@@ -57,13 +58,13 @@ export function Head({
   taskLength,
   collapseTasks,
   headerStatusColor,
-  onToggleCollapseTasks,
-  mouseDown,
   label,
   listId,
   listName,
   groupedTask,
-  isSplitSubtask
+  isSplitSubtask,
+  parentId,
+  onToggleCollapseTasks
 }: HeadProps) {
   const parsedLabel = parseLabel(label);
   const dispatch = useAppDispatch();
@@ -172,10 +173,6 @@ export function Head({
     setAnchorEl(event.currentTarget);
   };
 
-  // const handleCloseManageStatus = () => {
-  //   dispatch(setIsManageStatus);
-  // };
-
   const dirCheck = (col: string): SortOption | undefined => {
     return sortAbleArr.find((el) => el.field === headerTxt(col));
   };
@@ -207,8 +204,16 @@ export function Head({
   ];
 
   const handleAddCustomProperty = () => {
-    const type = hubId ? 'hub' : walletId ? 'wallet' : 'list';
-    dispatch(setEntityForCustom({ id: hubId ?? walletId ?? list_id, type }));
+    let id = '';
+    let type = '';
+    if (isSplitSubtask && parentId) {
+      id = parentId;
+      type = EntityType.task;
+    } else {
+      id = hubId || walletId || list_id || '';
+      type = hubId ? EntityType.hub : walletId ? EntityType.wallet : EntityType.list;
+    }
+    dispatch(setEntityForCustom({ id, type }));
     dispatch(setEditCustomProperty(undefined));
     dispatch(setActiveTabId(10));
   };
@@ -217,7 +222,7 @@ export function Head({
     <thead className="contents">
       <tr className="contents">
         {/* first sticky col */}
-        <th style={{ zIndex: 2 }} className="sticky left-0 flex items-center -mb-2 font-extrabold" ref={columns[0].ref}>
+        <th style={{ zIndex: 2 }} className="sticky left-0 flex items-center -mb-2 font-extrabold">
           <div className="flex items-center "></div>
           <div className="flex items-center w-full gap-3 py-2 truncate dBlock group opacity-90">
             <div
@@ -231,14 +236,14 @@ export function Head({
             >
               <div>
                 <div className="flex items-center">
-                  <p className="pr-1.5 -ml-1.5">
+                  <div className="pr-1.5 -ml-1.5">
                     <CollapseIcon
                       color={headerStatusColor}
                       active={collapseTasks}
                       onToggle={onToggleCollapseTasks}
                       hoverBg="white"
                     />
-                  </p>
+                  </div>
                   <span ref={scrollToRef} style={{ fontSize: '11px', WebkitTextStroke: '0.5px' }}>
                     {parsedLabel}
                   </span>
@@ -318,8 +323,8 @@ export function Head({
           )}
         </th>
         {!collapseTasks
-          ? columns.slice(1).map(({ ref, value, id, color }, index) => (
-              <th key={id} className="relative w-full py-2 -mb-1.5 font-extrabold opacity-90" ref={ref}>
+          ? columns.slice(1).map(({ value, id, color }) => (
+              <th key={id} className="relative w-full py-2 -mb-1.5 font-extrabold opacity-90">
                 <div
                   className="text-alsoit-gray-200 font-semibold flex dBlock items-center justify-center w-full h-full my-auto cursor-pointer group hover:bg-gray-200 p-0.5 rounded-xs space-x-1 border-l-2 border-r-2 border-t-2 border-transparent hover:border-r-gray-500 "
                   style={{ fontSize: '11px', WebkitTextStroke: '0.5px' }}
@@ -352,11 +357,7 @@ export function Head({
                     </span>
                   )}
                 </div>
-                <div
-                  className="absolute top-0 block pl-1 cursor-move right-0 idle"
-                  style={{ height: tableHeight }}
-                  onMouseDown={() => mouseDown(index + 1)}
-                >
+                <div className="absolute top-0 block pl-1 right-0 idle" style={{ height: tableHeight }}>
                   <div className="w-0.5 mx-auto bg-gray-100" style={{ height: '75px' }} />
                 </div>
                 {headerId === id && sortAbles.includes(value) && (

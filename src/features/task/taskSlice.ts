@@ -12,7 +12,6 @@ import {
   Status,
   TaskKey
 } from './interface.tasks';
-import RecordRTC from 'recordrtc';
 import {
   FilterFieldsWithOption,
   FiltersOption,
@@ -32,12 +31,31 @@ export interface ICustomField {
   type: string;
   values: [
     {
+      color?: string | null;
       id: string;
+      is_bold?: string | null;
+      is_italic?: string | null;
+      is_strike?: string | null;
+      is_underlined?: string | null;
+      model?: string;
+      model_id?: string;
       value: string;
       name: string;
     }
   ];
 }
+
+// color: null;
+// id: '9ed486ae-ff6d-4ea9-8ed8-50b977eb5b6f';
+// is_bold: null;
+// is_italic: null;
+// is_strike: null;
+// is_underlined: null;
+// lan: null;
+// lon: null;
+// model: 'team_member';
+// model_id: 'c12503d2-eec1-414c-9cd4-f71cce4c3e45';
+// value: 'c12503d2-eec1-414c-9cd4-f71cce4c3e45';
 export interface ActiveTaskColumnProps {
   id: string;
   header: string;
@@ -59,15 +77,25 @@ interface customPropertyInfo {
   };
 }
 
+interface IDuplicateTaskObj {
+  task_name: string;
+  task_id: string;
+  list_id: string;
+  is_everything: boolean;
+  popDuplicateTaskModal: boolean;
+}
+
 export interface ImyTaskData {
   id: string;
   name: string;
   description: string | null;
   list_id: string;
   parent_id: string | null;
+  parentName?: string;
   priority: string | null | [{ id: string; initials: string; color: string; name: string }];
   start_date: string | null;
   descendants_count: number;
+  closed_subtasks_count: number;
   checklist_items_count: number;
   checklist_done_items_count: number;
   has_descendants: boolean;
@@ -145,6 +173,7 @@ interface TaskState {
   saveSettingOnline: { [key: string]: boolean } | null;
   comfortableView: boolean;
   comfortableViewWrap: boolean;
+  duplicateTaskObj: IDuplicateTaskObj;
   verticalGrid: boolean;
   showNewTaskField: boolean;
   showNewTaskId: string;
@@ -158,8 +187,10 @@ interface TaskState {
   splitSubTaskLevels: string;
   CompactViewWrap: boolean;
   triggerSaveSettings: boolean;
+  triggerAutoSave: boolean;
   triggerSaveSettingsModal: boolean;
   meMode: boolean;
+  autoSave: boolean;
   showTaskNavigation: boolean;
   addNewTaskItem: boolean;
   selectedIndex: number | null;
@@ -191,7 +222,7 @@ interface TaskState {
   timeSortArr: SortOption[];
   timeLogColumnData: Header[];
   screenRecording: 'idle' | 'recording';
-  recorder: RecordRTC | null;
+  recorder: MediaRecorder | null;
   stream: MediaStream | null;
   updateCords: number;
   activeTaskColumn: ActiveTaskColumnProps;
@@ -218,7 +249,6 @@ interface TaskState {
   newTaskData: ImyTaskData | undefined;
   newCustomPropertyDetails: customPropertyInfo;
   editCustomProperty: IField | undefined;
-  isTasksUpdated: boolean;
   dragToBecomeSubTask: boolean;
 }
 
@@ -237,15 +267,18 @@ const initialState: TaskState = {
   comfortableViewWrap: false,
   showNewTaskField: false,
   meMode: false,
+  autoSave: false,
   showNewTaskId: '',
   singleLineView: false,
   saveSettingLocal: null,
   saveSettingList: undefined,
   saveSettingOnline: null,
+  duplicateTaskObj: { task_name: '', task_id: '', list_id: '', is_everything: true, popDuplicateTaskModal: true },
   selectedTasksArray: [],
   verticalGrid: false,
   taskUpperCase: false,
   triggerSaveSettings: false,
+  triggerAutoSave: false,
   triggerSaveSettingsModal: false,
   toggleAllSubtask: false,
   verticalGridlinesTask: false,
@@ -321,7 +354,6 @@ const initialState: TaskState = {
     }
   },
   editCustomProperty: undefined,
-  isTasksUpdated: false,
   dragToBecomeSubTask: false
 };
 
@@ -352,6 +384,9 @@ export const taskSlice = createSlice({
     },
     setCurrTaskListId(state, action: PayloadAction<string>) {
       state.currTaskListId = action.payload;
+    },
+    setDuplicateTaskObj(state, action: PayloadAction<IDuplicateTaskObj>) {
+      state.duplicateTaskObj = action.payload;
     },
     setSearchValue(state, action: PayloadAction<string>) {
       state.searchValue = action.payload;
@@ -428,6 +463,9 @@ export const taskSlice = createSlice({
     setTriggerSaveSettings(state, action: PayloadAction<boolean>) {
       state.triggerSaveSettings = action.payload;
     },
+    setTriggerAutoSave(state, action: PayloadAction<boolean>) {
+      state.triggerAutoSave = action.payload;
+    },
     setTriggerSaveSettingsModal(state, action: PayloadAction<boolean>) {
       state.triggerSaveSettingsModal = action.payload;
     },
@@ -442,6 +480,9 @@ export const taskSlice = createSlice({
     },
     setMeMode(state, action: PayloadAction<boolean>) {
       state.meMode = action.payload;
+    },
+    setAutoSave(state, action: PayloadAction<boolean>) {
+      state.autoSave = action.payload;
     },
     setToggleAllSubtask(state, action: PayloadAction<boolean>) {
       state.toggleAllSubtask = action.payload;
@@ -558,10 +599,16 @@ export const taskSlice = createSlice({
     setTimeSortArr(state, action: PayloadAction<SortOption[]>) {
       state.timeSortArr = action.payload;
     },
+    setTimeLogColumnData(state, action: PayloadAction<Header[]>) {
+      state.timeLogColumnData = action.payload;
+    },
     setScreenRecording(state, action: PayloadAction<'idle' | 'recording'>) {
       state.screenRecording = action.payload;
     },
-    setScreenRecordingMedia(state, action: PayloadAction<{ recorder: RecordRTC | null; stream: MediaStream | null }>) {
+    setScreenRecordingMedia(
+      state,
+      action: PayloadAction<{ recorder: MediaRecorder | null; stream: MediaStream | null }>
+    ) {
       const { recorder, stream } = action.payload;
       state.stream = stream;
       state.recorder = recorder;
@@ -607,9 +654,6 @@ export const taskSlice = createSlice({
     },
     setEditCustomProperty(state, action: PayloadAction<IField | undefined>) {
       state.editCustomProperty = action.payload;
-    },
-    setIsTasksUpdated(state, action: PayloadAction<boolean>) {
-      state.isTasksUpdated = action.payload;
     }
   }
 });
@@ -632,6 +676,7 @@ export const {
   getVerticalGrid,
   getSingleLineView,
   getTaskUpperCase,
+  setDuplicateTaskObj,
   getVerticalGridlinesTask,
   getSplitSubTask,
   getSplitSubTaskLevels,
@@ -645,6 +690,7 @@ export const {
   setSelectedTaskParentId,
   setSelectedTaskType,
   setMeMode,
+  setAutoSave,
   setShowTaskNavigation,
   setShowNewTaskField,
   setShowNewTaskId,
@@ -657,6 +703,7 @@ export const {
   setAddNewTaskItem,
   setCloseTaskListView,
   setTriggerSaveSettings,
+  setTriggerAutoSave,
   setToggleAssignCurrentTaskId,
   setCurrentParentTaskId,
   setGetSubTaskId,
@@ -677,6 +724,7 @@ export const {
   setTimeSortStatus,
   setTimeArr,
   setTimeSortArr,
+  setTimeLogColumnData,
   setScreenRecording,
   setScreenRecordingMedia,
   setUpdateCords,
@@ -694,7 +742,6 @@ export const {
   setCustomSuggetionsField,
   setNewCustomPropertyDetails,
   setEditCustomProperty,
-  setDragToBecomeSubTask,
-  setIsTasksUpdated
+  setDragToBecomeSubTask
 } = taskSlice.actions;
 export default taskSlice.reducer;

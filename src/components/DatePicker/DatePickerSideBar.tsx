@@ -34,29 +34,27 @@ export function DatePickerSideBar({ currentDate, setOpenSideBar }: DatePickerSid
   const customSuggestion = (field: extraFields) => {
     if (field.type === 'week') {
       return (
-        <p
-          className="font-extrabold rounded-md border hover:bg-alsoit-gray-75 hover:text-white text-xl flex justify-between px-2 py-0.5 w-full group"
-          onClick={() => handleWeekButtonClick(field.depth)}
-        >
-          <span className="font-extrabold text-alsoit-text-md">Next {field.depth} weeks</span>
-          <span className="text-right text-alsoit-gray-200 group-hover:text-white text-alsoit-text-md">
-            {dayjs(weeks(field.depth)).format('ddd D MMM')}
-          </span>
-        </p>
+        <QuickItemsWrapper handleClick={() => handleWeekButtonClick(field.depth)} settingValue={''}>
+          <>
+            <span className="font-extrabold text-alsoit-text-md">Next {field.depth} weeks</span>
+            <span className="text-right text-alsoit-gray-200 group-hover:text-white text-alsoit-text-md">
+              {dayjs(weeks(field.depth)).format('ddd D MMM')}
+            </span>
+          </>
+        </QuickItemsWrapper>
       );
     }
 
     if (field.type === 'month') {
       return (
-        <p
-          className="font-extrabold rounded-md hover:bg-alsoit-gray-75 hover:text-white text-xl flex justify-between px-2 py-0.5 w-full group"
-          onClick={() => handleWeekButtonClick(field.depth * 4)}
-        >
-          <span className="font-extrabold text-alsoit-text-md">Next {field.depth} months</span>
-          <span className="text-right text-alsoit-gray-200 group-hover:text-white text-alsoit-text-md">
-            {dayjs().add(field.depth, 'months').format('ddd D, MMM')}
-          </span>
-        </p>
+        <QuickItemsWrapper handleClick={() => handleWeekButtonClick(field.depth * 4)} settingValue={''}>
+          <>
+            <span className="font-extrabold text-alsoit-text-md">Next {field.depth} months</span>
+            <span className="text-right text-alsoit-gray-200 group-hover:text-white text-alsoit-text-md">
+              {dayjs().add(field.depth, 'months').format('ddd D, MMM')}
+            </span>
+          </>
+        </QuickItemsWrapper>
       );
     }
   };
@@ -187,18 +185,16 @@ export function DatePickerSideBar({ currentDate, setOpenSideBar }: DatePickerSid
       ) : (
         <VerticalScroll>
           <div className="flex flex-col w-full mt-1 space-y-2" style={{ height: '340px' }}>
-            <p
-              className="font-extrabold rounded-md border hover:bg-alsoit-gray-75 hover:text-white text-xl flex justify-between px-2 py-0.5 w-full group"
-              onClick={() => handleDayClick('today')}
-            >
-              <span className="font-extrabold text-alsoit-text-md">Today</span>
-              <span className="text-right text-alsoit-gray-200 group-hover:text-white text-alsoit-text-md">
-                {dayjs().format('ddd')}
-              </span>
-            </p>
-            <p
-              className="font-extrabold rounded-md border hover:bg-alsoit-gray-75 hover:text-white text-xl flex justify-between px-2 py-0.5 w-full group"
-              onClick={() =>
+            <QuickItemsWrapper handleClick={handleDayClick} settingValue="today">
+              <>
+                <span className="font-extrabold text-alsoit-text-md">Today</span>
+                <span className="text-right text-alsoit-gray-200 group-hover:text-white text-alsoit-text-md">
+                  {dayjs().format('ddd')}
+                </span>
+              </>
+            </QuickItemsWrapper>
+            <QuickItemsWrapper
+              handleClick={() =>
                 dispatch(
                   setHistoryMemory({
                     ...HistoryFilterMemory,
@@ -209,66 +205,63 @@ export function DatePickerSideBar({ currentDate, setOpenSideBar }: DatePickerSid
                   })
                 )
               }
+              settingValue=""
             >
-              <span className="font-extrabold text-alsoit-text-md">Later</span>
-              <span className="text-right text-alsoit-gray-200 group-hover:text-white text-alsoit-text-md">
-                {dayjs().add(4, 'hour').format('h:mm A')}
-              </span>
-            </p>
-            <p
-              className="font-extrabold rounded-md border hover:bg-alsoit-gray-75 hover:text-white text-xl flex justify-between px-2 py-0.5 w-full group"
-              onClick={() => handleDayClick('tomorrow')}
-            >
-              <span className="font-extrabold text-alsoit-text-md">Tomorrow</span>
-              <span className="text-right text-alsoit-gray-200 group-hover:text-white text-alsoit-text-md">
-                {dayjs().add(1, 'day').format('ddd')}
-              </span>
-            </p>
-            <p
-              className="font-extrabold rounded-md border hover:bg-alsoit-gray-75 hover:text-white text-xl flex justify-between px-2 py-0.5 w-full group"
-              onClick={() => handleWeekendButtonClick('weekend')}
-            >
-              <span className="font-extrabold text-alsoit-text-md">This Weekend</span>
-              <span className="text-right text-alsoit-gray-200 group-hover:text-white text-alsoit-text-md">
-                {dayjs(weekends('weekend')[1]).format('ddd')}
-              </span>
-            </p>
-            <p
-              className="font-extrabold rounded-md border hover:bg-alsoit-gray-75 hover:text-white text-xl flex justify-between px-2 py-0.5 w-full group"
-              onClick={() => handleWeekendButtonClick('next weekend')}
-            >
-              <span className="font-extrabold text-alsoit-text-md">Next Weekend</span>
-              <span className="text-right text-alsoit-gray-200 group-hover:text-white text-alsoit-text-md">
-                {dayjs(weekends('nweekend')[1]).format('ddd D')}
-              </span>
-            </p>
-            <p
-              className="font-extrabold rounded-md border hover:bg-alsoit-gray-75 hover:text-white text-xl flex justify-between px-2 py-0.5 w-full group"
-              onClick={() => handleWeekClick()}
-            >
-              <span className="font-extrabold text-alsoit-text-md">Next Week</span>
-              <span className="text-right text-alsoit-gray-200 group-hover:text-white text-alsoit-text-md">
-                {dayjs().add(8, 'days').format('ddd D')}
-              </span>
-            </p>
-            <p
-              className="font-extrabold rounded-md border hover:bg-alsoit-gray-75 hover:text-white text-xl flex justify-between px-2 py-0.5 w-full group"
-              onClick={() => handleWeekButtonClick(1)}
-            >
-              <span className="font-extrabold text-alsoit-text-md">Next Work Week</span>
-              <span className="text-right text-alsoit-gray-200 group-hover:text-white text-alsoit-text-md">
-                {dayjs(weeks(1)).format('ddd D')}
-              </span>
-            </p>
-            <p
-              className="font-extrabold rounded-md border hover:bg-alsoit-gray-75 hover:text-white text-xl flex justify-between px-2 py-0.5 w-full group"
-              onClick={() => handleWeekButtonClick(2)}
-            >
-              <span className="font-extrabold text-alsoit-text-md">Next 2 Work Weeks</span>
-              <span className="text-right text-alsoit-gray-200 group-hover:text-white text-alsoit-text-md">
-                {dayjs(weeks(2)).format('ddd D')}
-              </span>
-            </p>
+              <>
+                <span className="font-extrabold text-alsoit-text-md">Later</span>
+                <span className="text-right text-alsoit-gray-200 group-hover:text-white text-alsoit-text-md">
+                  {dayjs().add(4, 'hour').format('h:mm A')}
+                </span>
+              </>
+            </QuickItemsWrapper>
+            <QuickItemsWrapper handleClick={handleDayClick} settingValue="tomorrow">
+              <>
+                <span className="font-extrabold text-alsoit-text-md">Tomorrow</span>
+                <span className="text-right text-alsoit-gray-200 group-hover:text-white text-alsoit-text-md">
+                  {dayjs().add(1, 'day').format('ddd')}
+                </span>
+              </>
+            </QuickItemsWrapper>
+            <QuickItemsWrapper handleClick={() => handleWeekendButtonClick('weekend')} settingValue="">
+              <>
+                <span className="font-extrabold text-alsoit-text-md">This Weekend</span>
+                <span className="text-right text-alsoit-gray-200 group-hover:text-white text-alsoit-text-md">
+                  {dayjs(weekends('weekend')[1]).format('ddd')}
+                </span>
+              </>
+            </QuickItemsWrapper>
+            <QuickItemsWrapper handleClick={() => handleWeekendButtonClick('next weekend')} settingValue="">
+              <>
+                <span className="font-extrabold text-alsoit-text-md">Next Weekend</span>
+                <span className="text-right text-alsoit-gray-200 group-hover:text-white text-alsoit-text-md">
+                  {dayjs(weekends('nweekend')[1]).format('ddd D')}
+                </span>
+              </>
+            </QuickItemsWrapper>
+            <QuickItemsWrapper handleClick={() => handleWeekClick()} settingValue="">
+              <>
+                <span className="font-extrabold text-alsoit-text-md">Next Week</span>
+                <span className="text-right text-alsoit-gray-200 group-hover:text-white text-alsoit-text-md">
+                  {dayjs().add(8, 'days').format('ddd D')}
+                </span>
+              </>
+            </QuickItemsWrapper>
+            <QuickItemsWrapper handleClick={() => handleWeekButtonClick(1)} settingValue={''}>
+              <>
+                <span className="font-extrabold text-alsoit-text-md">Next Work Week</span>
+                <span className="text-right text-alsoit-gray-200 group-hover:text-white text-alsoit-text-md">
+                  {dayjs(weeks(1)).format('ddd D')}
+                </span>
+              </>
+            </QuickItemsWrapper>
+            <QuickItemsWrapper handleClick={() => handleWeekButtonClick(2)} settingValue={''}>
+              <>
+                <span className="font-extrabold text-alsoit-text-md">Next 2 Work Weeks</span>
+                <span className="text-right text-alsoit-gray-200 group-hover:text-white text-alsoit-text-md">
+                  {dayjs(weeks(2)).format('ddd D')}
+                </span>
+              </>
+            </QuickItemsWrapper>
             {customSuggestionField.map((field) => {
               return customSuggestion(field);
             })}
@@ -276,5 +269,22 @@ export function DatePickerSideBar({ currentDate, setOpenSideBar }: DatePickerSid
         </VerticalScroll>
       )}
     </div>
+  );
+}
+
+interface Props {
+  handleClick: (value: string) => void;
+  settingValue: string;
+  children: JSX.Element;
+}
+
+function QuickItemsWrapper({ handleClick, settingValue, children }: Props) {
+  return (
+    <p
+      className="font-extrabold rounded-md border hover:bg-alsoit-gray-75 cursor-pointer hover:text-white text-xl flex justify-between px-2 py-0.5 w-full group"
+      onClick={() => handleClick(settingValue)}
+    >
+      {children}
+    </p>
   );
 }

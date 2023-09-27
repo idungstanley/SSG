@@ -72,7 +72,7 @@ export default function ActiveHub() {
           item.id === parentHubId && (
             <li key={item.id} className="flex flex-col">
               <div
-                className={`flex justify-between items-center hover:bg-gray-100 relative ${
+                className={`flex justify-between border-b items-center hover:bg-gray-100 relative ${
                   item.id === parentHubId && 'text-black-500'
                 }`}
                 style={{ height: '50px', backgroundColor: `${item.id === activeItemId ? '#BF00FF21' : ''}` }}
@@ -107,7 +107,6 @@ export default function ActiveHub() {
               <div className="flex items-center w-full" style={{ backgroundColor: '#BF00FF21' }}>
                 {displayClickedParent()}
               </div>
-              <hr />
               <div>{displayActiveItem()}</div>
             </li>
           )

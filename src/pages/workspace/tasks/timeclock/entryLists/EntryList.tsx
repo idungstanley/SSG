@@ -61,7 +61,7 @@ export default function EntryList({ entries, switchHeader }: EntryListProps) {
 
   return (
     <tr key={entries.id} id="getTimeEntries" className="flex justify-between border-b w-full py-0.5">
-      <td id="left" className="w-10/12 flex items-center justify-between">
+      <div id="left" className="w-10/12 flex items-center justify-between">
         {headers.map((col) => {
           if (col.title === 'user' && !col.hidden) {
             return (
@@ -127,7 +127,7 @@ export default function EntryList({ entries, switchHeader }: EntryListProps) {
             );
           }
         })}
-      </td>
+      </div>
       {/* action buttons */}
       <td
         className="relative flex items-center"

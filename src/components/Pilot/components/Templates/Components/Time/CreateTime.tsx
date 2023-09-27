@@ -1,12 +1,9 @@
 import React from 'react';
 import SaveCols from '../SaveCols';
-import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
+import { useAppSelector } from '../../../../../../app/hooks';
 import { useCreateDropdownField } from '../../../../../../features/list/listService';
-import { setIsTasksUpdated } from '../../../../../../features/task/taskSlice';
 
-function CraeteWebsite() {
-  const dispatch = useAppDispatch();
-
+function CreateTime() {
   const { newCustomPropertyDetails, entityForCustom } = useAppSelector((state) => state.task);
 
   const { mutate: onCreate } = useCreateDropdownField();
@@ -23,8 +20,7 @@ function CraeteWebsite() {
         is_italic: is_italic as string,
         is_underlined: is_underlined as string
       };
-      const customType = newCustomPropertyDetails.type.toLowerCase();
-      dispatch(setIsTasksUpdated(false));
+      const customType = newCustomPropertyDetails.type === 'Short Text' ? 'text' : newCustomPropertyDetails.type;
       onCreate({
         name,
         style,
@@ -40,11 +36,11 @@ function CraeteWebsite() {
     <div>
       <SaveCols
         handleSubmit={handleSubmit}
-        header="Websites"
-        body="This custom property which allows to track clients, vendors, leads and more by entering websites"
+        header="Time"
+        body="This custom property which allows to track time against a task"
       />
     </div>
   );
 }
 
-export default CraeteWebsite;
+export default CreateTime;

@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { ListColourProps } from '../../components/tasks/ListItem';
 import { ITaskFullList, TaskId } from '../task/interface.tasks';
 import { StatusTaskListProps } from './list.interfaces';
+import { IList } from '../hubs/hubs.interfaces';
 
 interface ListState {
   list: string[];
@@ -14,6 +15,7 @@ interface ListState {
   draggableItemId: null | TaskId;
   draggableTask: null | ITaskFullList;
   dragOverTask: null | ITaskFullList;
+  dragOverList: null | IList;
   dragOverItemId: null | string;
   statusTaskListDetails: StatusTaskListProps;
 }
@@ -29,6 +31,7 @@ const initialState: ListState = {
   draggableItemId: null,
   draggableTask: null,
   dragOverTask: null,
+  dragOverList: null,
   dragOverItemId: null,
   statusTaskListDetails: { listId: undefined, listName: undefined }
 };
@@ -43,8 +46,11 @@ export const listSlice = createSlice({
     setDraggableTask: (state, action: PayloadAction<ITaskFullList>) => {
       state.draggableTask = action.payload;
     },
-    setDragOverTask: (state, action: PayloadAction<ITaskFullList>) => {
+    setDragOverTask: (state, action: PayloadAction<ITaskFullList | null>) => {
       state.dragOverTask = action.payload;
+    },
+    setDragOverList: (state, action: PayloadAction<IList | null>) => {
+      state.dragOverList = action.payload;
     },
     setDragOverItem: (state, action: PayloadAction<TaskId | null>) => {
       state.dragOverItemId = action.payload;
@@ -85,6 +91,7 @@ export const {
   setDraggableItem,
   setDraggableTask,
   setDragOverTask,
+  setDragOverList,
   createList,
   checkIfList,
   getList,

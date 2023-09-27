@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, UIEvent, Fragment } from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import Page from '../../components/Page';
 import { UseGetHubDetails } from '../../features/hubs/hubService';
@@ -12,67 +12,63 @@ import { Header } from '../../components/TasksHeader';
 import { VerticalScroll } from '../../components/ScrollableContainer/VerticalScroll';
 import { GroupHorizontalScroll } from '../../components/ScrollableContainer/GroupHorizontalScroll';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
-import { ITaskFullList } from '../../features/task/interface.tasks';
-import { setIsTasksUpdated, setTasks } from '../../features/task/taskSlice';
+import { setTasks } from '../../features/task/taskSlice';
+import { IField } from '../../features/list/list.interfaces';
 
-export default function AllListsPage() {
+export default function EverythingPage() {
   const dispatch = useAppDispatch();
 
   const { hub } = useAppSelector((state) => state.hub);
-  const { tasks: tasksStore, isTasksUpdated } = useAppSelector((state) => state.task);
+  const { tasks: tasksStore } = useAppSelector((state) => state.task);
 
   const [allHubsId, setAllHubsId] = useState<string[]>([]);
   const [currentHubIdInOrder, setCurrentHubIdInOrder] = useState<string>('');
-  const [allTasks, setAllTasks] = useState<ITaskFullList[]>([]);
 
   const { data: hubsData } = UseGetHubDetails({ activeItemId: currentHubIdInOrder, activeItemType: EntityType.hub });
 
-  const { data, hasNextPage, fetchNextPage, isLoading } = UseGetFullTaskList({
+  const { data, hasNextPage, fetchNextPage, isFetching } = UseGetFullTaskList({
     itemId: currentHubIdInOrder,
-    itemType: EntityType.hub,
-    isEverythingPage: true
+    itemType: EntityType.hub
   });
 
   useEffect(() => {
     if (hub.length) {
       setAllHubsId(hub.map((item) => item.id));
+      setCurrentHubIdInOrder(hub[0].id);
     }
-  }, hub);
+  }, [hub]);
 
-  useEffect(() => {
-    if (data && !isLoading) {
-      const newTasks = data.pages[0].data.tasks;
-      setAllTasks((prev) => [...prev, ...newTasks]);
-      if (hasNextPage) {
-        fetchNextPage();
-      } else {
-        setAllHubsId((prev) => prev.slice(1));
-      }
-    }
-  }, [data]);
-
-  useEffect(() => {
-    if (allHubsId.length) {
-      setCurrentHubIdInOrder(allHubsId[0]);
-    }
-  }, [allHubsId]);
-
+  const tasks = useMemo(() => (data ? data.pages.flatMap((page) => page.data.tasks) : []), [data]);
   const lists = useMemo(
-    () => generateLists([...new Set(allTasks)], hubsData?.data.hub.custom_fields),
-    [allTasks, hubsData]
+    () => generateLists(tasks, hubsData?.data.hub?.custom_field_columns as IField[]),
+    [tasks, hubsData]
   );
 
   useEffect(() => {
-    if (lists) {
+    if (Object.keys(lists).length) {
       dispatch(setTasks({ ...tasksStore, ...lists }));
     }
   }, [lists]);
 
-  useEffect(() => {
-    if (!allHubsId.length && Object.keys(tasksStore).length) {
-      dispatch(setIsTasksUpdated(true));
+  // infinite scroll
+  const onScroll = (e: UIEvent<HTMLDivElement>) => {
+    if (!isFetching && allHubsId.length) handleScroll(e);
+  };
+
+  const handleScroll = (e: UIEvent<HTMLDivElement>) => {
+    const container = e.target as HTMLElement;
+    const twoThirdsOfScroll = 0.66;
+    const scrollDifference = container?.scrollHeight * twoThirdsOfScroll - container.scrollTop - container.clientHeight;
+    const range = 1;
+    if (scrollDifference <= range) {
+      if (hasNextPage) {
+        fetchNextPage();
+      } else {
+        setAllHubsId((prev) => prev.slice(1));
+        setCurrentHubIdInOrder(allHubsId[1]);
+      }
     }
-  }, [allHubsId]);
+  };
 
   return (
     <>
@@ -83,17 +79,13 @@ export default function AllListsPage() {
         additional={<FilterByAssigneesSliderOver />}
       >
         <Header />
-        <VerticalScroll>
+        <VerticalScroll onScroll={onScroll}>
           <section style={{ minHeight: '0', maxHeight: '83vh' }} className="w-full h-full p-4 pb-0 space-y-10">
             {/* lists */}
-            {Object.keys(lists).map((listId) => (
-              <>
-                {tasksStore[listId] && isTasksUpdated ? (
-                  <div key={listId}>
-                    <List tasks={lists[listId]} />
-                  </div>
-                ) : null}
-              </>
+            {Object.keys(tasksStore).map((listId) => (
+              <Fragment key={listId}>
+                <List tasks={tasksStore[listId]} />
+              </Fragment>
             ))}
           </section>
         </VerticalScroll>

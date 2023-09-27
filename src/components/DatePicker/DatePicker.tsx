@@ -99,7 +99,7 @@ export default function DatePicker({
           styles ??
           'absolute z-50 mt-1 shadow-2xl bg-white rounded-md ring-1 ring-black ring-opacity-5 focus:outline-none top-56 right-12 flex justify-center'
         }
-        style={{ height: height ?? '425px', width: openSideBar ? width ?? '570px' : '430px' }}
+        style={{ height: height ?? 'min-content', width: openSideBar ? width ?? '570px' : '430px' }}
       >
         {openSideBar && (
           <div className="w-5/12 h-full">
@@ -120,8 +120,8 @@ export default function DatePicker({
           </div>
           <div
             onClick={() => {
-              setShowDatePickerOption ? dispatch(setPickedDateState(true)) : null;
-              handleClose && handleClose();
+              !range && setShowDatePickerOption ? dispatch(setPickedDateState(true)) : null;
+              !range && handleClose && handleClose();
             }}
           >
             <MiniDatePicker range={range} miniMode={openSideBar} fullCalendar />

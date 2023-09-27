@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { UseEditHubService } from '../../features/hubs/hubService';
@@ -7,7 +7,9 @@ import { UseEditListService } from '../../features/list/listService';
 import { setPaletteDropDown } from '../../features/account/accountSlice';
 import { BiPaint } from 'react-icons/bi';
 import { RiArrowUpSFill } from 'react-icons/ri';
-import { ChromePicker } from 'react-color';
+import { ChromePicker, AlphaPicker, HuePicker } from 'react-color';
+import { getColorName, initColors, ORIGINAL_COLORS } from 'ntc-ts';
+import { EditableInput } from 'react-color/lib/components/common';
 import ListIconComponent from '../ItemsListInSidebar/components/ListIconComponent';
 import { ListColourProps } from '../tasks/ListItem';
 import { changeListManager } from '../../managers/List';
@@ -20,6 +22,19 @@ import { EntityType } from '../../utils/EntityTypes/EntityType';
 import { Fade, Menu } from '@mui/material';
 import { setListPaletteColor } from '../../features/list/listSlice';
 import { Cords } from '../../hooks/useAbsolute';
+import GridViews from '../../assets/icons/GridViews';
+import SearchIcon from '../../assets/icons/SearchIcon';
+import FormatListBullet from '../../assets/icons/FormatListBullet';
+import Input from '../input/Input';
+import { CiSearch } from 'react-icons/ci';
+import Button from '../Button';
+import ArrowDownFilled from '../../assets/icons/ArrowDownFilled';
+import PaletteListView, { FORMATTED_COLOR } from './component/PaletteListView';
+import ToolTip from '../Tooltip/Tooltip';
+import { AiFillCloseCircle } from 'react-icons/ai';
+import { ColorResult } from './Type';
+import { cl } from '../../utils';
+import RoundedCheckbox from '../Checkbox/RoundedCheckbox';
 
 interface PaletteProps {
   title?: string;
@@ -30,11 +45,19 @@ interface PaletteProps {
   shape?: string;
   listComboColour?: ListColourProps;
   cords?: Cords;
+  activeInnerColor?: string;
+  activeOutterColor?: string;
 }
 
 interface ChromePickerProps {
   hex: string;
 }
+
+const paletteViews = {
+  BOARD: 'Board',
+  LIST: 'List'
+};
+
 export default function PaletteManager({
   title,
   setPaletteColor,
@@ -42,7 +65,9 @@ export default function PaletteManager({
   topContent,
   shape,
   listComboColour,
-  cords
+  cords,
+  activeOutterColor,
+  activeInnerColor
 }: PaletteProps) {
   const dispatch = useAppDispatch();
 
@@ -53,14 +78,69 @@ export default function PaletteManager({
   const [isOutterFrameActive, setIsOutterFrameActive] = useState<boolean>(true);
   const [isInnerFrameActive, setIsInnerFrameActive] = useState<boolean>(false);
   const [displayColorPicker, setDisplayColorPicker] = useState<boolean>(false);
+  const [color, setColor] = useState<ColorResult>({
+    hex: '#000',
+    rgb: {
+      a: 0.45,
+      r: 200,
+      g: 24,
+      b: 201
+    },
+    hsl: {
+      a: 0.45,
+      h: 200,
+      s: 24,
+      l: 201
+    }
+  });
   const [customColor, setCustomColor] = useState<string>('');
+  const [colorType, setColorType] = useState<string>('hex');
+  const [showColorTypes, setShowColorTypes] = useState<boolean>(false);
+  const [selectedViews, setSelectedViews] = useState<string>(paletteViews.BOARD);
+  const [isSearch, setIsSearch] = useState<boolean>(false);
+  const [isAdvanceSearch, setIsAdvanceSearch] = useState<boolean>(false);
+  const [showListShapes, setShowListShapes] = useState<boolean>(false);
+  const [colorName, setColorName] = useState<string>('Missing Color');
 
   const { paletteId, paletteType } = paletteDropdown;
+  const { rgb } = color || {};
+  const updateColor = useCallback((color: ColorResult) => setColor(color), []);
+
+  useEffect(() => {
+    const colorProperty: FORMATTED_COLOR = getColorName(color.hex);
+    setColorName(colorProperty.name);
+  }, [updateColor, color]);
+
+  const onChange = (color: string) => {
+    setColor((prev) => {
+      return { ...prev, ['hex']: color };
+    });
+  };
+
+  const inputStyles = {
+    input: {
+      border: '1px',
+      width: '70px',
+      padding: '5px',
+      fontSize: '10px',
+      color: '#000',
+      borderRadius: '5px'
+    }
+  };
 
   const closeMenu = () => {
     setOpen(false);
     dispatch(setPaletteDropDown({ ...paletteDropdown, show: false }));
     dispatch(setListPaletteColor({ innerColour: 'white', outerColour: 'black' }));
+  };
+
+  const handleCancel = () => {
+    if (isSearch) {
+      setIsSearch(false);
+    } else {
+      setOpen(false);
+      dispatch(setPaletteDropDown({ ...paletteDropdown, show: false }));
+    }
   };
 
   const handleEditColor = (state: boolean) => {
@@ -107,6 +187,13 @@ export default function PaletteManager({
     }
   });
 
+  const handleCloseSearch = () => {
+    setIsSearch(false);
+  };
+  const handleCloseAdvanceSearch = () => {
+    setIsAdvanceSearch(false);
+  };
+
   const handleClick = (color?: string | ListColourProps) => {
     if (paletteType === EntityType.hub) {
       editHubColorMutation.mutateAsync({
@@ -138,6 +225,30 @@ export default function PaletteManager({
     dispatch(setPaletteDropDown({ ...paletteDropdown, show: false }));
   };
 
+  const views = [
+    {
+      label: paletteViews.BOARD,
+      element: (
+        <ColorPalette
+          activeColor={isInnerFrameActive ? activeInnerColor : activeOutterColor}
+          handleClick={handleClick}
+        />
+      ),
+      icon: <GridViews color={selectedViews === paletteViews.BOARD ? 'white' : 'rgb(191, 0, 255)'} />
+    },
+    {
+      label: paletteViews.LIST,
+      element: <PaletteListView />,
+      icon: <FormatListBullet color={selectedViews === paletteViews.LIST ? 'white' : 'rgb(191, 0, 255)'} />
+    }
+  ];
+
+  const selectedElement = views.find((items) => items.label === selectedViews)?.element;
+
+  const filteredKeys = ['hex', 'hsv', 'rgb'];
+
+  const filteredObject = Object.fromEntries(Object.entries(color).filter(([key]) => filteredKeys.includes(key)));
+
   return (
     <Menu
       open={open}
@@ -147,14 +258,75 @@ export default function PaletteManager({
         vertical: cords?.top || 'center',
         horizontal: 15
       }}
+      PaperProps={{
+        style: {
+          borderRadius: '12px'
+        }
+      }}
     >
-      <div className="w-auto p-2 overflow-y-auto drop-shadow-2xl">
-        <div className="z-50 flex flex-col">
-          {paletteType !== EntityType.list && <p className="justify-center">{title}</p>}
-          {topContent}
+      <div
+        className="w-auto p-2 overflow-y-auto text-gray-500 rounded-full drop-shadow-2xl"
+        style={{ borderRadius: '5px' }}
+      >
+        <div className="z-50 flex flex-col w-full px-2">
+          {!isSearch && (
+            <div className="flex items-center justify-between mb-2">
+              <p className="justify-center ml-2">COLOUR LIBRARY</p>
+              <div className="flex items-center gap-1">
+                {views.map((item, index) => (
+                  <div
+                    key={index}
+                    className={`rounded p-1 cursor-pointer ${
+                      selectedViews === item.label ? 'bg-primary-500' : 'border border-primary-200'
+                    }`}
+                    onClick={() => setSelectedViews(item.label)}
+                  >
+                    <ToolTip title={item.label + ' View'}>
+                      <span>{item.icon}</span>
+                    </ToolTip>
+                  </div>
+                ))}
+                <ToolTip title="Open Search">
+                  <span className="p-1 border rounded border-primary-200" onClick={() => setIsSearch(true)}>
+                    <SearchIcon />
+                  </span>
+                </ToolTip>
+              </div>
+            </div>
+          )}
+          {isSearch && (
+            <div className="mx-2">
+              <Input
+                placeholder="Search"
+                bgColor="bg-gray-200"
+                borderRadius="rounded-md py-0.5"
+                type="text"
+                name="search"
+                leadingIcon={<CiSearch />}
+                trailingIcon={
+                  <ToolTip title="Close Search">
+                    <span>
+                      <AiFillCloseCircle style={{ color: 'rgb(191, 0, 255)' }} />
+                    </span>
+                  </ToolTip>
+                }
+                trailingClick={handleCloseSearch}
+                onChange={() => null}
+              />
+            </div>
+          )}
           {paletteType === EntityType.list && (
-            <div className="flex justify-between mt-1">
-              <span>{title}</span>
+            <div className="flex items-center justify-between mt-1 ml-2">
+              <span
+                className={`relative flex w-fit items-center justify-between gap-2 p-1 px-2.5 text-xs text-gray-500 bg-gray-200 rounded-md hover:text-primary-600 hover:bg-primary-100 ${
+                  showListShapes && 'text-white bg-primary-500'
+                }`}
+                onClick={() => setShowListShapes((prev) => !prev)}
+              >
+                <p>{title + ' Shapes'}</p>
+                <ArrowDownFilled color={showListShapes ? 'white' : undefined} />
+                {showListShapes && <span className="absolute left-0 right-0 z-20 top-6">{topContent}</span>}
+              </span>
               <ListIconComponent
                 shape={shape}
                 type="colourToggle"
@@ -167,29 +339,171 @@ export default function PaletteManager({
               />
             </div>
           )}
-          <ColorPalette handleClick={handleClick} />
-          <div className="flex justify-center">
-            <BiPaint
-              onClick={() => handleEditColor(true)}
-              className={`${displayColorPicker ? 'hidden' : 'block cursor-pointer'}`}
-            />
+          {title === 'List' && (
+            <span className="h-px my-2 ml-2">
+              <hr className="h-px bg-gray-200 border-0 dark:bg-gray-400" />
+            </span>
+          )}
+          {selectedElement && selectedElement}
+          <div className={cl('flex items-center mt-2', displayColorPicker ? 'justify-center' : 'justify-between')}>
+            {!displayColorPicker && (
+              <ToolTip title="Advance color option">
+                <span className="flex items-center p-1 ml-2 border rounded-md border-primary-200">
+                  <BiPaint onClick={() => handleEditColor(true)} className="cursor-pointer" />
+                </span>
+              </ToolTip>
+            )}
             <RiArrowUpSFill
               onClick={() => handleEditColor(false)}
               className={`${!displayColorPicker ? 'hidden' : 'block cursor-pointer'}`}
             />
-          </div>
-          <div className="flex flex-col justify-center">
-            {displayColorPicker && <ChromePicker color={customColor} onChangeComplete={handleCustomColor} />}
-            {displayColorPicker && (
-              <button
-                onClick={() => handleClick(customColor)}
-                className={`p-1 mt-2 border rounded ${customColor !== '' ? 'text-white' : 'text-black'}`}
-                style={{ backgroundColor: `${customColor}` }}
-              >
-                Save Color
-              </button>
+            {!displayColorPicker && (
+              <div className="flex items-center justify-between gap-2">
+                <Button
+                  height="h-6"
+                  label="Cancel"
+                  labelSize="text-xs"
+                  padding="p-1"
+                  buttonStyle="danger"
+                  onClick={handleCancel}
+                />
+                <Button
+                  height="h-6"
+                  customHoverColor="hover:bg-alsoit-purple-300"
+                  label={'Update ' + title}
+                  labelSize="text-xs"
+                  padding="p-1"
+                  buttonStyle="custom"
+                />
+              </div>
             )}
           </div>
+          {/* {displayColorPicker && <ChromePicker color={customColor} onChangeComplete={handleCustomColor} />} */}
+          {displayColorPicker && (
+            <div className="flex flex-col justify-center w-full gap-2">
+              <div className={cl(isAdvanceSearch && 'w-full', 'flex items-center justify-between p-1')}>
+                {!isAdvanceSearch && <p>ADVANCE COLOUR SETTINGS</p>}
+                <span className="flex items-center justify-between gap-2">
+                  {!isAdvanceSearch && (
+                    <ToolTip title="Search Advance Colour">
+                      <span onClick={() => setIsAdvanceSearch(true)}>
+                        <SearchIcon />
+                      </span>
+                    </ToolTip>
+                  )}
+                  {isAdvanceSearch && (
+                    <div className="grow">
+                      <Input
+                        placeholder="Search"
+                        bgColor="bg-gray-200"
+                        borderRadius="rounded-md py-0.5"
+                        type="text"
+                        name="Advance Search. . ."
+                        leadingIcon={<CiSearch />}
+                        trailingIcon={
+                          <ToolTip title="Close Advance Search">
+                            <span>
+                              <AiFillCloseCircle style={{ color: 'rgb(191, 0, 255)' }} />
+                            </span>
+                          </ToolTip>
+                        }
+                        trailingClick={handleCloseAdvanceSearch}
+                        onChange={() => null}
+                      />
+                    </div>
+                  )}
+                  <span className="w-6 h-6 p-2 rounded" style={{ backgroundColor: color?.hex }}></span>
+                </span>
+              </div>
+              <div className="flex flex-col items-center gap-2 w-fit">
+                <HuePicker style={{ borderRadius: '10px' }} color={rgb} onChange={updateColor} />
+                <AlphaPicker color={rgb} onChange={updateColor} />
+              </div>
+              <div className="flex items-center gap-1 mt-4">
+                <span
+                  className={`relative flex w-fit items-center justify-between gap-2 p-1 px-2.5 text-xs text-gray-500 bg-gray-200 rounded-md hover:text-primary-600 hover:bg-primary-100 ${
+                    showListShapes && 'text-white bg-primary-500'
+                  }`}
+                  onClick={() => setShowColorTypes((prev) => !prev)}
+                >
+                  <p className="uppercase">{colorType}</p>
+                  <ArrowDownFilled color={showColorTypes ? 'white' : undefined} />
+                  {showColorTypes && color && (
+                    <span className="absolute left-0 right-0 z-20 p-1 bg-white border rounded-md top-6">
+                      {Object.keys(filteredObject).map((colorFormat, colorIndex) => (
+                        <span
+                          key={colorIndex}
+                          className="flex items-center h-4 gap-2 p-1 text-gray-500 uppercase rounded hover:bg-alsoit-gray-75"
+                          onClick={() => setColorType(colorFormat)}
+                        >
+                          <RoundedCheckbox
+                            onChange={() => ({})}
+                            isChecked={colorFormat === colorType}
+                            styles="w-2 h-2 rounded-full cursor-pointer focus:outline-1 focus:ring-transparent  focus:border-2 focus:opacity-100 group-hover:opacity-100 text-alsoit-purple-300"
+                          />
+                          <p>{colorFormat}</p>
+                        </span>
+                      ))}
+                    </span>
+                  )}
+                </span>
+                <div className="flex items-center justify-between w-full gap-2 -mt-5 grow">
+                  <div className="flex flex-col items-center justify-center">
+                    <p>HEX CODE</p>
+                    <EditableInput value={color.hex} style={inputStyles} onChange={onChange} />
+                  </div>
+                  <div className="flex flex-col items-center justify-center">
+                    <p>NAME</p>
+                    <span className="flex items-center h-6">{colorName}</span>
+                  </div>
+                  <div className="flex flex-col items-center justify-center">
+                    <p>OPACITY</p>
+                    <span className="flex items-center h-6">
+                      {color && color.rgb && color.rgb.a !== undefined && color.rgb.a * 100}%
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <Input
+                placeholder="Please input library name"
+                bgColor="bg-gray-200"
+                borderRadius="rounded-md py-0.5"
+                type="text"
+                name="name"
+                label="LIBRARY COLOUR NAME"
+                onChange={() => ({})}
+              />
+              <div className="flex items-center justify-between gap-2">
+                <Button
+                  height="h-6"
+                  label="Cancel"
+                  labelSize="text-xs"
+                  padding="p-1"
+                  buttonStyle="danger"
+                  onClick={handleCancel}
+                />
+                <div className="flex items-center gap-2">
+                  <Button
+                    height="h-6"
+                    customHoverColor="hover:bg-green-500"
+                    label="Save"
+                    labelSize="text-xs"
+                    padding="p-1"
+                    buttonStyle="custom"
+                  />
+                  <Button
+                    height="h-6"
+                    customHoverColor="hover:bg-green-500"
+                    label="Save as new"
+                    labelSize="text-xs"
+                    padding="p-1"
+                    buttonStyle="custom"
+                  />
+                </div>
+              </div>
+            </div>
+          )}
+
           {bottomContent}
         </div>
       </div>

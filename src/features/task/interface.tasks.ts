@@ -107,10 +107,13 @@ export interface ITaskFullList {
   avatar_path: string | null;
   list_id: string;
   parent_id: string | null;
+  parentName?: string;
   priority: string | null | [{ id: string; initials: string; color: string; name: string }];
   status: IStatus;
   has_descendants: boolean;
+  descendants?: ITaskFullList[];
   descendants_count: number;
+  closed_subtasks_count: number;
   checklist_items_count: number;
   checklist_done_items_count: number;
   has_attachments: boolean;
@@ -127,10 +130,11 @@ export interface ITaskFullList {
   deleted_at: string | null;
   directory_items?: [];
   checklists?: ICheckListRes[];
+  listColor?: unknown;
   list?: {
     id: string;
     name: string;
-    parents: IParent;
+    parents?: IParent;
     color?: string;
   };
 }
@@ -161,7 +165,7 @@ export interface IFullTaskRes2 {
 
 export interface ITaskListRes {
   data: {
-    tasks: ImyTaskData[];
+    tasks: ITaskFullList[];
     paginator: IPaginator;
   };
 }
@@ -296,4 +300,40 @@ export interface newTaskDataRes {
   data: {
     task: ImyTaskData;
   };
+}
+
+export interface customPropertiesProps {
+  tracking?: {
+    Subtasks: boolean;
+    Checklists: boolean;
+  };
+  complete_on?: number;
+  start_value?: number;
+  end_value?: number;
+  emoji?: string;
+  number?: number;
+  currency?: string;
+  symbol?: string;
+  include_groups?: boolean;
+  single_user?: boolean;
+}
+
+export interface ITaskRecurResponse {
+  data: {
+    task_recur: {
+      id: string;
+      type: string;
+      execution_type: string;
+      new_task: string | string[];
+    };
+  };
+}
+
+export interface ITaskCreateProps {
+  taskId?: string;
+  type: string;
+  execution_type: string;
+  type_options?: string[];
+  new_task?: string | string[];
+  recur_options?: string[] | number[];
 }

@@ -15,6 +15,7 @@ import {
   getSplitSubTaskLevels,
   setSaveSettingLocal,
   setSaveSettingOnline,
+  setTriggerSaveSettings,
   setTriggerSaveSettingsModal
 } from '../../../../../features/task/taskSlice';
 
@@ -52,6 +53,7 @@ export default function ShowHideSettings({
     verticalGridlinesTask,
     saveSettingList,
     splitSubTaskState,
+    autoSave,
     splitSubTaskLevels,
     saveSettingOnline
   } = useAppSelector((state) => state.task);
@@ -70,7 +72,8 @@ export default function ShowHideSettings({
     verticalGrid,
     taskUpperCase,
     verticalGridlinesTask,
-    splitSubTaskState
+    splitSubTaskState,
+    autoSave
   };
 
   useEffect(() => {
@@ -144,7 +147,7 @@ export default function ShowHideSettings({
   }, [checkedStates]);
 
   useEffect(() => {
-    if (triggerSaveSettingsModal) {
+    if (triggerSaveSettingsModal && !autoSave) {
       toast.custom((t) => <SaveSettingsModal title="This view has unsaved changes" toastId={t.id} />, {
         position: 'bottom-right',
         duration: Infinity
@@ -198,6 +201,10 @@ export default function ShowHideSettings({
     newCheckedStates[index] = !newCheckedStates[index];
     setCheckedStates(newCheckedStates);
     switchSettings(viewMode);
+
+    if (autoSave) {
+      dispatch(setTriggerSaveSettings(true));
+    }
   };
 
   const handleClick = (option: string) => {

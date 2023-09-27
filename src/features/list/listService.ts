@@ -10,8 +10,9 @@ import { generateFilters } from '../../components/TasksHeader/lib/generateFilter
 import { UseGetHubDetails } from '../hubs/hubService';
 import { IList } from '../hubs/hubs.interfaces';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
-import { setIsTasksUpdated, setNewCustomPropertyDetails, setTasks } from '../task/taskSlice';
+import { setNewCustomPropertyDetails, setSubtasks, setTasks } from '../task/taskSlice';
 import { updateCustomFieldsManager } from '../../managers/Task';
+import { customPropertiesProps } from '../task/interface.tasks';
 
 interface TaskCountProps {
   data: {
@@ -192,7 +193,8 @@ export const UseGetListDetails = (listId: string | null | undefined) => {
         if (activeItemType === 'list') {
           dispatch(setSpaceStatuses(listStatusTypes));
         }
-      }
+      },
+      cacheTime: 0
     }
   );
 };
@@ -232,7 +234,7 @@ const createDropdownField = (data: {
   type?: string;
   customType: string;
   style?: { is_bold: string; is_underlined: string; is_italic: string };
-  properties?: { currency: string; symbol: string };
+  properties?: customPropertiesProps;
 }) => {
   const { id, options, name, type, customType, style, color, properties } = data;
   const response = requestNew<IResCustomfield>({
@@ -245,8 +247,8 @@ const createDropdownField = (data: {
       is_bold: style?.is_bold,
       is_italic: style?.is_italic,
       is_underlined: style?.is_underlined,
-      entity_id: id,
-      entity_type: type,
+      model_id: id,
+      model: type,
       options,
       properties
     }
@@ -257,19 +259,30 @@ const createDropdownField = (data: {
 export const useCreateDropdownField = () => {
   const dispatch = useAppDispatch();
 
-  const { tasks } = useAppSelector((state) => state.task);
+  const { tasks, subtasks, entityForCustom } = useAppSelector((state) => state.task);
 
   return useMutation(createDropdownField, {
     onSuccess: (data) => {
       dispatch(setNewCustomPropertyDetails({ name: '', type: 'Select Property Type', color: null }));
-      const updatedList = updateCustomFieldsManager(tasks, data.data.custom_field);
-      dispatch(setTasks(updatedList));
-      dispatch(setIsTasksUpdated(true));
+      const updatedList = updateCustomFieldsManager(
+        entityForCustom.type === EntityType.task ? subtasks : tasks,
+        data.data.custom_field,
+        entityForCustom.type === EntityType.task ? entityForCustom.id : ''
+      );
+      if (entityForCustom.type === EntityType.task) {
+        dispatch(setSubtasks(updatedList));
+      } else {
+        dispatch(setTasks(updatedList));
+      }
     }
   });
 };
 
-const updateEntityCustomFieldValue = (data: { taskId?: string; fieldId: string; value: { value: string }[] }) => {
+const updateEntityCustomFieldValue = (data: {
+  taskId?: string;
+  fieldId: string;
+  value: { value: string; type?: string }[];
+}) => {
   const { taskId, fieldId, value } = data;
 
   const response = requestNew({

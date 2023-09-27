@@ -41,7 +41,7 @@ export default function MinHotkeysList({ tabs, showModal, setShowModal }: Hotkey
   return (
     <>
       {activeHotkeyIds.length !== 0 ? (
-        <div className="flex flex-wrap gap-y-2 p-2 col-span-1 flex-col gap-2">
+        <div className="flex flex-col flex-wrap col-span-1 gap-2 p-2 border-none gap-y-2">
           {hotkeys.map((hotkey) => (
             <button
               onClick={() => dispatch(setActiveTabId(activeTabId === hotkey.id ? undefined : hotkey.id))}
@@ -60,7 +60,7 @@ export default function MinHotkeysList({ tabs, showModal, setShowModal }: Hotkey
 
       <Modal setShowModal={setShowModal} showModal={showModal}>
         {/* hotkeys list */}
-        <div className="flex items-start flex-col mt-4 z-50">
+        <div className="z-50 flex flex-col items-start mt-4">
           {tabs.map((tab) => (
             <button
               onClick={() => handleClick(tab.id)}
@@ -75,7 +75,7 @@ export default function MinHotkeysList({ tabs, showModal, setShowModal }: Hotkey
                 <span className="block truncate">{tab.label}</span>
               </div>
 
-              {activeHotkeyIds.includes(tab.id) && <CheckIcon className="h-4 w-4" aria-hidden="true" />}
+              {activeHotkeyIds.includes(tab.id) && <CheckIcon className="w-4 h-4" aria-hidden="true" />}
             </button>
           ))}
         </div>

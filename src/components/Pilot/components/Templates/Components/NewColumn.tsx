@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import ColumnTypeDropdown from './Dropdown/ColumnTypeDropdown';
+import ColumnTypeDropdown from './ColumnTypeDropdown';
 import CreateDropdownField from './Dropdown/CreateDropdownField';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import { setNewCustomPropertyDetails } from '../../../../../features/task/taskSlice';
@@ -13,11 +13,18 @@ import { cl } from '../../../../../utils';
 import FontStyle from './FontStyles/FontStyle';
 import CreateNumberField from './Number/CreateNumberField';
 import CreateEmailField from './Email/CreateEmailField';
-import CraeteWebsite from './Websites/CraeteWebsite';
+import CreateWebsite from './Websites/CreateWebsite';
 import CreateCurrencyField from './Currency/CreateCurrencyField';
 import CreatePhone from './Phone/CreatePhone';
 import CreateCheckbox from './Checkbox/CreateCheckbox';
 import Palletes from '../../../../ColorPalette/Palettes';
+import CreateRatings from './Rating/CreateRatings';
+import CreateManualProgress from './Progress/CreateManualProgress';
+import CreateAutoProgress from './Progress/CreateAutoProgress';
+import CreateTime from './Time/CreateTime';
+import CreateFiles from './Files/CreateFiles';
+import CreatePeople from './People/CreatePeople';
+import CreateLocationField from './Location/CreateLocation';
 
 function NewColumn() {
   const dispatch = useAppDispatch();
@@ -45,10 +52,17 @@ function NewColumn() {
     'long text': <CreateTextField />,
     number: <CreateNumberField />,
     email: <CreateEmailField />,
-    website: <CraeteWebsite />,
+    website: <CreateWebsite />,
     currency: <CreateCurrencyField />,
     phone: <CreatePhone />,
-    checkbox: <CreateCheckbox />
+    checkbox: <CreateCheckbox />,
+    rating: <CreateRatings />,
+    'progress(auto)': <CreateAutoProgress />,
+    'progress(manual)': <CreateManualProgress />,
+    time: <CreateTime />,
+    attachments: <CreateFiles />,
+    people: <CreatePeople />,
+    location: <CreateLocationField />
   };
 
   return (
@@ -63,7 +77,7 @@ function NewColumn() {
               <ColumnTypeDropdown />
             </div>
             <div className="w-2/4">
-              <p className="text-alsoit-text-xi text-alsoit-gray-100">TITTLE</p>
+              <p className="text-alsoit-text-xi text-alsoit-gray-100">TITLE</p>
               <div
                 className="flex items-center w-full rounded-md bg-white gap-1"
                 style={{ height: '30px', borderRadius: '6px' }}

@@ -15,7 +15,6 @@ import Palette from '../ColorPalette';
 import UploadImage from '../ColorPalette/component/UploadImage';
 import { InvalidateQueryFilters } from '@tanstack/react-query';
 import { setCreateWlLink } from '../../features/workspace/workspaceSlice';
-import SearchIconUpload from '../ColorPalette/component/SearchIconUpload';
 import { ListColourProps } from './ListItem';
 import { useParams } from 'react-router-dom';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
@@ -50,7 +49,7 @@ interface TaskItemProps {
   topNumber?: string;
   zNumber?: string;
   isExtendedBar?: boolean;
-  handleClick: (id: string) => void;
+  handleClick: (id: string, type?: string) => void;
   handleLocation: (id: string, name: string, item: IHub) => void;
 }
 export default function HubItem({
@@ -133,7 +132,7 @@ export default function HubItem({
 
   useEffect(() => {
     if (isOver) {
-      handleClick(item.id);
+      handleClick(item.id, 'isOver');
     }
   }, [isOver]);
 
@@ -283,12 +282,7 @@ export default function HubItem({
       </div>
       <UploadImage endpoint={`hubs/${uploadId}`} invalidateQuery={['hubs'] as InvalidateQueryFilters<unknown>} />
       {paletteId === item.id && show ? (
-        <Palette
-          title="Hub Colour"
-          setPaletteColor={setPaletteColor}
-          bottomContent={<SearchIconUpload />}
-          cords={cords}
-        />
+        <Palette title="Hub" setPaletteColor={setPaletteColor} activeOutterColor={item.color as string} cords={cords} />
       ) : null}
       {showMenuDropdown === item.id && showSidebar ? (
         <MenuDropdown isExtendedBar={isExtendedBar} cords={menuCords} />

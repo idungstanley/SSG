@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, Fragment } from 'react';
+import { useEffect, useMemo, Fragment, UIEvent } from 'react';
 import { useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import Page from '../../components/Page';
@@ -16,18 +16,18 @@ import { Header } from '../../components/TasksHeader';
 import { VerticalScroll } from '../../components/ScrollableContainer/VerticalScroll';
 import { GroupHorizontalScroll } from '../../components/ScrollableContainer/GroupHorizontalScroll';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
-import { setIsTasksUpdated, setSaveSettingList, setSaveSettingOnline, setTasks } from '../../features/task/taskSlice';
+import { setSaveSettingList, setSaveSettingOnline, setSubtasks, setTasks } from '../../features/task/taskSlice';
 import { useformatSettings } from '../workspace/tasks/TaskSettingsModal/ShowSettingsModal/FormatSettings';
+import { IField } from '../../features/list/list.interfaces';
+import { generateSubtasksList, generateSubtasksArray } from '../../utils/generateLists';
 
 export default function HubPage() {
   const dispatch = useAppDispatch();
   const { hubId, subhubId, taskId } = useParams();
 
   const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
-  const { tasks: tasksStore, isTasksUpdated, saveSettingLocal } = useAppSelector((state) => state.task);
+  const { tasks: tasksStore, saveSettingLocal, subtasks } = useAppSelector((state) => state.task);
   const formatSettings = useformatSettings();
-
-  const containerRef = useRef<HTMLDivElement>(null);
 
   const { data: hub } = UseGetHubDetails({ activeItemId: hubId, activeItemType: EntityType.hub });
 
@@ -35,7 +35,7 @@ export default function HubPage() {
   const saveSettingList = hub?.data.hub.task_views?.find((element) => element.type === 'list');
   const task_views_id = saveSettingList ? saveSettingList.id : '';
 
-  const { isSuccess } = UseUpdateTaskViewSettings({
+  UseUpdateTaskViewSettings({
     task_views_id,
     taskDate: saveSettingLocal as { [key: string]: boolean }
   });
@@ -63,43 +63,43 @@ export default function HubPage() {
     }
   }, [hub]);
 
-  const { data, hasNextPage, fetchNextPage } = UseGetFullTaskList({
+  const { data, hasNextPage, fetchNextPage, isFetching } = UseGetFullTaskList({
     itemId: hubId || subhubId,
     itemType: EntityType.hub
   });
 
   const tasks = useMemo(() => (data ? data.pages.flatMap((page) => page.data.tasks) : []), [data]);
-  const lists = useMemo(() => generateLists(tasks, hub?.data.hub.custom_fields), [tasks, hub]);
+  const lists = useMemo(() => generateLists(tasks, hub?.data.hub?.custom_field_columns as IField[]), [tasks, hub]);
+
+  useEffect(() => {
+    if (Object.keys(lists).length) {
+      dispatch(setTasks({ ...tasksStore, ...lists }));
+
+      const newSubtasksArr = generateSubtasksArray(lists);
+      if (newSubtasksArr.length) {
+        const newSubtasks = generateSubtasksList(newSubtasksArr, hub?.data.hub?.custom_field_columns as IField[]);
+        dispatch(setSubtasks({ ...subtasks, ...newSubtasks }));
+      }
+    }
+  }, [lists]);
 
   // infinite scroll
-  useEffect(() => {
-    function handleScroll(event: Event) {
-      const container = event.target as HTMLElement;
-      const scrollDifference = container.scrollHeight - container.scrollTop - container.clientHeight;
-      const range = 1;
+  const onScroll = (e: UIEvent<HTMLDivElement>) => {
+    handleScroll(e);
+  };
 
-      if (scrollDifference <= range && scrollDifference >= -range && hasNextPage) {
+  const handleScroll = (e: UIEvent<HTMLDivElement>) => {
+    if (hasNextPage && !isFetching) {
+      const container = e.target as HTMLElement;
+      const twoThirdsOfScroll = 0.66;
+      const scrollDifference =
+        container?.scrollHeight * twoThirdsOfScroll - container.scrollTop - container.clientHeight;
+      const range = 1;
+      if (scrollDifference <= range) {
         fetchNextPage();
       }
     }
-
-    if (containerRef.current) {
-      containerRef.current.addEventListener('scroll', handleScroll);
-    }
-
-    return () => {
-      if (containerRef.current) {
-        containerRef.current.removeEventListener('scroll', handleScroll);
-      }
-    };
-  }, [hasNextPage]);
-
-  useEffect(() => {
-    if (lists && !Object.keys(tasksStore).length) {
-      dispatch(setTasks({ ...tasksStore, ...lists }));
-      dispatch(setIsTasksUpdated(true));
-    }
-  }, [lists, tasksStore]);
+  };
 
   return (
     <>
@@ -115,21 +115,11 @@ export default function HubPage() {
         additional={<FilterByAssigneesSliderOver />}
       >
         <Header />
-        <VerticalScroll>
-          <section
-            ref={containerRef}
-            style={{ minHeight: '0', maxHeight: '83vh', maxWidth: '' }}
-            className="w-full h-full p-4 pb-0 space-y-10"
-          >
+        <VerticalScroll onScroll={onScroll}>
+          <section style={{ minHeight: '0', maxHeight: '83vh' }} className="w-full h-full p-4 pb-0 space-y-10">
             {/* lists */}
             {Object.keys(lists).map((listId) => (
-              <Fragment key={listId}>
-                {tasksStore[listId] && tasks.length && isTasksUpdated ? (
-                  <div key={listId}>
-                    <List tasks={tasksStore[listId]} />
-                  </div>
-                ) : null}
-              </Fragment>
+              <Fragment key={listId}>{tasksStore[listId] ? <List tasks={tasksStore[listId]} /> : null}</Fragment>
             ))}
           </section>
         </VerticalScroll>

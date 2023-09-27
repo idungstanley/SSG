@@ -55,6 +55,7 @@ export default function AdditionalHeader() {
 
   const { refetch } = useCurrentTime({ workspaceId });
   const { mutate } = EndTimeEntriesService();
+
   const stop = () => {
     mutate({
       id: activeItemId,
@@ -167,7 +168,7 @@ export default function AdditionalHeader() {
         </p>
         <span className="text-alsoit-text-lg font-bold">{activeItemName}</span>
       </h1>
-      <div className="relative flex items-center justify-center space-x-2">
+      <div className="relative flex items-center justify-center space-x-2.5">
         {timeBlinkerCheck() && (
           <div
             className="flex items-center px-2 py-1 space-x-1 border border-alsoit-purple-300 rounded-lg cursor-pointer"
@@ -238,9 +239,9 @@ export default function AdditionalHeader() {
             )}
           </div>
         )}
-        <MdTab className="w-5 h-5" />
+        <MdTab className="w-5 h-5" style={{ color: 'orange' }} />
         {screenRecording === 'recording' && tabsId !== 6 && (
-          <div className="relative w-16 flex space-x-0.5 mr-1.5" onMouseEnter={() => setRecordBlinker(!recordBlinker)}>
+          <div className="relative w-16 flex space-x-0.5" onMouseEnter={() => setRecordBlinker(!recordBlinker)}>
             <div className="flex items-center justify-start w-5 h-5 border-alsoit-danger rounded-full">
               <div className="w-3 h-3 bg-alsoit-danger rounded-full pulsate"></div>
             </div>
@@ -256,9 +257,9 @@ export default function AdditionalHeader() {
             )}
           </div>
         )}
-        <HiOutlineUpload className="w-5 h-5" />
-        <BsFillGrid3X3GapFill className="w-5 h-5" />
-        <MdHelpOutline className="w-5 h-5" />
+        <HiOutlineUpload className="w-5 h-5" style={{ color: 'orange' }} />
+        <BsFillGrid3X3GapFill className="w-5 h-5" style={{ color: 'orange' }} />
+        <MdHelpOutline className="w-5 h-5" style={{ color: 'orange' }} />
         {is_clock_time === 1 && (
           <div
             className="relative w-16 font-semibold text-alsoit-text-lg text-alsoit-text border-alsoit-border-base border-alsoit-text rounded-md p-0.5 flex justify-center flex-col space-y-0 cursor-pointer"

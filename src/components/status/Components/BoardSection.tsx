@@ -103,6 +103,11 @@ export default function BoardSection({
             ))}
         </div>
       </SortableContext>
+      {!collapsedStatusGroups[id] && id === 'done' && status.length === 0 && (
+        <div className="w-full border h-10 border-dashed p-2 flex items-center justify-center">
+          <span>Move statuses here to consider tasks Done.</span>
+        </div>
+      )}
 
       {addStatus && title === activeStatusType && (
         <span className="flex justify-items-start">

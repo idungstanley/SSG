@@ -1,16 +1,13 @@
 import { PlusCircleIcon, TrashIcon } from '@heroicons/react/24/outline';
 import React, { useState } from 'react';
-import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
+import { useAppSelector } from '../../../../../../app/hooks';
 import { useCreateDropdownField } from '../../../../../../features/list/listService';
 import SaveCols from '../SaveCols';
 import AlsoitMenuDropdown from '../../../../../DropDowns';
 import ColorPalette from '../../../../../ColorPalette/component/ColorPalette';
 import { ListColourProps } from '../../../../../tasks/ListItem';
-import { setIsTasksUpdated } from '../../../../../../features/task/taskSlice';
 
 function CreateDropdownField() {
-  const dispatch = useAppDispatch();
-
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [itemId, setItemId] = useState<number>();
   const [formInputs, setFormInputs] = useState<{ id: number; value?: string; color: null | string }[]>([
@@ -63,7 +60,6 @@ function CreateDropdownField() {
       const options = formInputs.map((i) => {
         return { name: (i.value as string).trim(), color: i.color };
       });
-      dispatch(setIsTasksUpdated(false));
       onCreate({
         name,
         color,

@@ -3,13 +3,12 @@ import { DndContext, DragEndEvent, DragOverEvent, DragStartEvent, UniqueIdentifi
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import {
   setDragOverItem,
+  setDragOverList,
   setDragOverTask,
   setDraggableItem,
   setDraggableTask
 } from '../../../../features/list/listSlice';
 import { useMoveTask } from '../../../../features/task/taskService';
-import { useQueryClient } from '@tanstack/react-query';
-import { generateFilters } from '../../../../components/TasksHeader/lib/generateFilters';
 import { setPlaces } from '../../../../features/account/accountSlice';
 import { arrayMove } from '@dnd-kit/sortable';
 import { useMoveListService } from '../../../../features/list/listService';
@@ -18,6 +17,7 @@ import { useMoveWalletsService } from '../../../../features/wallet/walletService
 import { EntityType } from '../../../../utils/EntityTypes/EntityType';
 import { setDragToBecomeSubTask } from '../../../../features/task/taskSlice';
 import { ITaskFullList } from '../../../../features/task/interface.tasks';
+import { IList } from '../../../../features/hubs/hubs.interfaces';
 
 interface DragContextProps {
   children: ReactNode;
@@ -28,15 +28,10 @@ export default function DragContext({ children }: DragContextProps) {
 
   //App hooks
   const dispatch = useAppDispatch();
-  const queryClient = useQueryClient();
 
   // needed for invalidation
-  const { sortAbleArr, dragToBecomeSubTask } = useAppSelector((state) => state.task);
+  const { dragToBecomeSubTask } = useAppSelector((state) => state.task);
   const { places } = useAppSelector((state) => state.account);
-
-  const sortArrUpdate = sortAbleArr.length <= 0 ? null : sortAbleArr;
-
-  const { filters } = generateFilters();
 
   const { mutate: onMove } = useMoveTask();
   const { mutate: onMoveList } = useMoveListService();
@@ -86,9 +81,6 @@ export default function DragContext({ children }: DragContextProps) {
           overType: EntityType.list
         });
       }
-      // reset dragging item
-      dispatch(setDraggableItem(null));
-      queryClient.invalidateQueries(['task', { listId: overId, sortArrUpdate, filters }]);
     }
     if (isListToHub) {
       onMoveList({
@@ -121,7 +113,6 @@ export default function DragContext({ children }: DragContextProps) {
             overType: EntityType.task
           });
         }
-        dispatch(setDraggableItem(null));
       }
     }
 
@@ -176,7 +167,12 @@ export default function DragContext({ children }: DragContextProps) {
     dispatch(setDragOverItem(id));
 
     if (e.over?.data.current?.isOverTask) {
+      dispatch(setDragOverList(null));
       dispatch(setDragOverTask(e.over?.data.current?.overTask as ITaskFullList));
+    }
+    if (e.over?.data.current?.isOverList) {
+      dispatch(setDragOverTask(null));
+      dispatch(setDragOverList(e.over?.data.current?.overList as IList));
     }
 
     // Determine if the task should become a subtask
