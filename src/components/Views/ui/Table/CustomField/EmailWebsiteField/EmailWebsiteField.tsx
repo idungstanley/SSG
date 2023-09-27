@@ -25,6 +25,7 @@ function EmailWebsiteField({ taskCustomFields, taskId, fieldId, fieldType }: Ema
   const activeValue = taskCustomFields?.values[0].value ? taskCustomFields?.values[0].value : '-';
   const [currentValue, setCurrentValue] = useState<string>(activeValue);
   const [editMode, setEditMode] = useState(false);
+  const [isValidValue, setIsValidValue] = useState(false);
   const [isCopied, setIsCopied] = useState<number>(0);
 
   const { mutate: onUpdate } = useUpdateEntityCustomFieldValue(taskId);
@@ -43,6 +44,8 @@ function EmailWebsiteField({ taskCustomFields, taskId, fieldId, fieldType }: Ema
         fieldId
       });
       setAnchorEl(null);
+    } else if (!isValidEntry(currentValue)) {
+      setCurrentValue('-');
     }
   };
 
@@ -92,6 +95,11 @@ function EmailWebsiteField({ taskCustomFields, taskId, fieldId, fieldType }: Ema
     setTimeout(() => {
       setEditMode(true);
     }, 100);
+  };
+
+  const handleInputChange = (e: { target: { value: React.SetStateAction<string> } }) => {
+    setCurrentValue(e.target.value);
+    setIsValidValue(isValidEntry(e.target.value as string));
   };
 
   return (
@@ -144,10 +152,15 @@ function EmailWebsiteField({ taskCustomFields, taskId, fieldId, fieldType }: Ema
             type="text"
             autoFocus={true}
             value={currentValue === '-' ? '' : currentValue}
-            onChange={(e) => setCurrentValue(e.target.value)}
+            onChange={handleInputChange}
             onKeyDown={handleKeyDown}
             onBlur={handleInputBlur}
-            className="max-w-full h-fit border-0 outline-0 ring-0 focus:border-0 focus:outline-0 focus:ring-0"
+            className={cl(
+              'max-w-full h-fit',
+              !isValidValue
+                ? 'ring-2 focus:ring-2 ring-red-500 focus:ring-red-500'
+                : 'border-0 outline-0 ring-0 focus:border-0 focus:outline-0 focus:ring-0'
+            )}
           />
         </div>
       )}
