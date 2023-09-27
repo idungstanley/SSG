@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import ListIconComponent from '../ItemsListInSidebar/components/ListIconComponent';
@@ -6,6 +6,7 @@ import { cl } from '../../utils';
 import { IList } from '../../features/hubs/hubs.interfaces';
 import { setDuplicateTaskObj } from '../../features/task/taskSlice';
 import { useDuplicateTask } from '../../features/task/taskService';
+import DuplicateTaskAdvanceModal from '../../pages/workspace/tasks/component/taskMenu/DuplicateTaskAdvanceModal';
 
 interface ListItemProps {
   list: IList;
@@ -24,6 +25,7 @@ export default function SearchListItem({ list, paddingLeft }: ListItemProps) {
   const { lightBaseColor, baseColor } = useAppSelector((state) => state.account);
   const { listColour } = useAppSelector((state) => state.list);
   const { duplicateTaskObj } = useAppSelector((state) => state.task);
+  const [showSelectDropdown, setShowSelectDropdown] = useState<null | HTMLSpanElement | HTMLDivElement>(null);
 
   const { mutate: duplicateTask } = useDuplicateTask();
 
@@ -33,6 +35,16 @@ export default function SearchListItem({ list, paddingLeft }: ListItemProps) {
       ...duplicateTaskObj,
       list_id: list.id
     });
+  };
+
+  const handleAdvance = (e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
+    e.stopPropagation();
+    setShowSelectDropdown(e.currentTarget);
+  };
+
+  const handleClose = () => {
+    setShowSelectDropdown(null);
+    // setToggleDuplicateMoal(false);
   };
 
   const color: ListColourProps = JSON.parse(list.color as string) as ListColourProps;
@@ -71,14 +83,22 @@ export default function SearchListItem({ list, paddingLeft }: ListItemProps) {
               lineHeight: '15.56px',
               verticalAlign: 'baseline',
               letterSpacing: '0.28px',
+              minWidth: '300px',
               color: listId === list.id ? (baseColor as string) : undefined
             }}
-            className="flex pl-4 capitalize truncate cursor-pointer"
+            className="flex items-center justify-between pl-4 capitalize truncate cursor-pointer"
           >
             <p>{list.name}</p>
-            {/* <p>Advanced</p> */}
+            <p
+              className="border-b-2 border-dotted border-black hover:text-alsoit-purple-300"
+              onClick={(e) => handleAdvance(e)}
+            >
+              Advanced
+            </p>
           </div>
         </div>
+
+        <DuplicateTaskAdvanceModal handleClose={handleClose} anchorEl={showSelectDropdown} />
       </section>
     </>
   );
