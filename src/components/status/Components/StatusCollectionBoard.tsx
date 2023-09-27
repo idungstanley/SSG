@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import ThreeDotIcon from '../../../assets/icons/ThreeDotIcon';
 import AlsoitMenuDropdown from '../../DropDowns';
 import { InlineBorderLabel } from '../../Dropdown/MenuDropdown';
@@ -11,6 +11,8 @@ export default function StatusCollectionBoard() {
   const [showCollectionDropdown, setShowCollectionDropdown] = useState<null | HTMLDivElement>(null);
   const [activeCollection, setActiveCollection] = useState<string>(COLLECTION_TYPES.BESPOKE_TO_ENTITY);
   const [isSelected, setIsSelected] = useState<boolean>(false);
+  const [searchInput, setSearchInput] = useState<string>('');
+  const [filteredResults, setFilteredResults] = useState<string[]>([]);
 
   const { templateNames } = useAppSelector((state) => state.statusManager);
 
@@ -20,6 +22,20 @@ export default function StatusCollectionBoard() {
   const handleCloseCollectionMenu = () => {
     setShowCollectionDropdown(null);
     setIsSelected(false);
+  };
+
+  useEffect(() => {
+    setFilteredResults(templateNames);
+  }, [templateNames, searchInput == '']);
+
+  const searchTemplateName = (value: string) => {
+    setSearchInput(value);
+    if (value != '') {
+      const filteredData = templateNames.filter((item) => item.toLowerCase().includes(value.toLowerCase()));
+      setFilteredResults(filteredData);
+    } else {
+      setFilteredResults(templateNames);
+    }
   };
 
   const collections = [
@@ -93,10 +109,11 @@ export default function StatusCollectionBoard() {
                 borderRadius="rounded-md py-0.5"
                 type="text"
                 name="search"
+                value={searchInput}
                 leadingIcon={<CiSearch />}
-                onChange={() => null}
+                onChange={(e) => searchTemplateName(e.target.value)}
               />
-              {templateNames.map((item, index) => (
+              {filteredResults.map((item, index) => (
                 <div
                   className="flex items-center gap-2 p-1 rounded cursor-pointer hover:bg-primary-200 hover:text-primary-600"
                   key={index}
