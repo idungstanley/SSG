@@ -15,3 +15,10 @@ export interface getStatusTemplateRes {
     task_status_templates: taskStatusProps[];
   };
 }
+
+export const COLLECTION_TYPES = {
+  BESPOKE_TO_ENTITY: 'Bespoke to Entity',
+  PARENT_ENTITY: 'Parent Entity',
+  SHARED_ENTITY: 'Shared Entity',
+  TEMPLATE_COLLECTION: 'Template Collection'
+};

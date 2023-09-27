@@ -3,13 +3,9 @@ import ThreeDotIcon from '../../../assets/icons/ThreeDotIcon';
 import AlsoitMenuDropdown from '../../DropDowns';
 import { InlineBorderLabel } from '../../Dropdown/MenuDropdown';
 import { useAppSelector } from '../../../app/hooks';
-
-const COLLECTION_TYPES = {
-  BESPOKE_TO_ENTITY: 'Bespoke to Entity',
-  PARENT_ENTITY: 'Parent Entity',
-  SHARED_ENTITY: 'Shared Entity',
-  TEMPLATE_COLLECTION: 'Template Collection'
-};
+import Input from '../../input/Input';
+import { CiSearch } from 'react-icons/ci';
+import { COLLECTION_TYPES } from '../../../features/statusManager/statusManager.interface';
 
 export default function StatusCollectionBoard() {
   const [showCollectionDropdown, setShowCollectionDropdown] = useState<null | HTMLDivElement>(null);
@@ -96,6 +92,17 @@ export default function StatusCollectionBoard() {
                 className="flex items-center gap-2 p-1 rounded cursor-pointer hover:bg-primary-200 hover:text-primary-600"
                 key={index}
               >
+                <div className="mx-2">
+                  <Input
+                    placeholder="Search"
+                    bgColor="bg-gray-200"
+                    borderRadius="rounded-md py-0.5"
+                    type="text"
+                    name="search"
+                    leadingIcon={<CiSearch />}
+                    onChange={() => null}
+                  />
+                </div>
                 <p>{item}</p>
               </div>
             ))}
