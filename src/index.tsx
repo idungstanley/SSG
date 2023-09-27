@@ -27,8 +27,11 @@ const onError = (error: unknown): unknown => {
     title = 'Oops! You are not authorized to perform this action.';
   } else if (typedError.status === 401) {
     title = 'Oops! You are no longer authenticated.';
-    localStorage.clear();
-    window.location.reload();
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('currentUserId');
+    localStorage.removeItem('user');
+    localStorage.removeItem('currentWorkspaceId');
+    window.location.href = '/auth/login';
   } else if (typedError.status === 500 || !typedError) {
     title = 'Oops! An internal server error occurred.';
   } else if (typedError.status === 404) {
