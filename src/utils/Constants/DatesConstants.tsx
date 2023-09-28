@@ -1,9 +1,38 @@
+export const RECUR_STR_CONSTANTS = {
+  week: 'week',
+  month: 'month',
+  year: 'year',
+  day: 'day',
+  daysAfter: 'days_after',
+  custom: 'custom',
+  byWeek: 'by week',
+  onDate: 'on date',
+  monthly: 'monthly',
+  daily: 'daily',
+  weekly: 'weekly',
+  yearly: 'yearly',
+  repeat: 'repeat',
+  endOn: 'end on',
+  done: 'done',
+  completed: 'completed',
+  sameDay: 'same_day',
+  lastDay: 'last_day',
+  firstDay: 'first_day'
+};
+
 // Define a type for the options
 export type MonthOption = 'same_day' | 'first_day' | 'last_day' | 'days_after' | 'done' | 'completed';
 
-export const IntervalArr = ['daily', 'weekly', 'monthly', 'yearly', 'days_after', 'custom'];
+export const IntervalArr = [
+  RECUR_STR_CONSTANTS.daily,
+  RECUR_STR_CONSTANTS.weekly,
+  RECUR_STR_CONSTANTS.monthly,
+  RECUR_STR_CONSTANTS.yearly,
+  RECUR_STR_CONSTANTS.daysAfter,
+  RECUR_STR_CONSTANTS.custom
+];
 
-export const statusArr = ['completed', 'done'];
+export const statusArr = [RECUR_STR_CONSTANTS.completed, RECUR_STR_CONSTANTS.done];
 
 export const weekArr = [
   { title: 'monday', value: 1 },
@@ -15,11 +44,16 @@ export const weekArr = [
   { title: 'sunday', value: 0 }
 ];
 
-export const monthOptionsArr = ['same_day', 'first_day', 'last_day'];
+export const monthOptionsArr = [RECUR_STR_CONSTANTS.sameDay, RECUR_STR_CONSTANTS.firstDay, RECUR_STR_CONSTANTS.lastDay];
 
-export const customTypesArr = ['day', 'week', 'month', 'year'];
+export const customTypesArr = [
+  RECUR_STR_CONSTANTS.day,
+  RECUR_STR_CONSTANTS.week,
+  RECUR_STR_CONSTANTS.month,
+  RECUR_STR_CONSTANTS.year
+];
 
-export const dataArr = ['on date', 'by week'];
+export const dataArr = [RECUR_STR_CONSTANTS.onDate, RECUR_STR_CONSTANTS.byWeek];
 
 // Define the option-to-string mapping
 const optionMap: Record<MonthOption, string> = {
@@ -61,16 +95,3 @@ export function wordToNumber(word: Word): number | null {
 
   return wordsToNumbers[word] || null; // Return null for unknown words
 }
-
-export const RECUR_STR_CONSTANTS = {
-  week: 'week',
-  month: 'month',
-  year: 'year',
-  daysAfter: 'days_after',
-  custom: 'custom',
-  byWeek: 'by week',
-  onDate: 'on date',
-  monthly: 'monthly',
-  repeat: 'repeat',
-  endOn: 'end on'
-};

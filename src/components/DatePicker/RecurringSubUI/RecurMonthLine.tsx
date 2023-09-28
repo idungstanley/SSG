@@ -104,10 +104,16 @@ export function CustomMonthLine({ setOptions }: Props) {
   useEffect(() => {
     const numericPart = ordinalDay.match(/\d+/);
     const weekNumber = wordToNumber(ordinalWeek as Word);
-    numericPart &&
-      weekNumber &&
-      setOptions((prev) => ({ ...prev, monthly_day_number: numericPart[0], monthly_week_number: `${weekNumber}` }));
-  }, [ordinalDay, ordinalWeek]);
+    const syncedWeekNumber = value === RECUR_STR_CONSTANTS.byWeek ? `${weekNumber}` : undefined;
+    const syncedMonthDay = value === RECUR_STR_CONSTANTS.onDate && numericPart ? numericPart[0] : undefined;
+
+    weekNumber &&
+      setOptions((prev) => ({
+        ...prev,
+        monthly_day_number: syncedMonthDay,
+        monthly_week_number: syncedWeekNumber
+      }));
+  }, [ordinalDay, ordinalWeek, value]);
 
   return (
     <div className="flex flex-col space-y-2 w-full">

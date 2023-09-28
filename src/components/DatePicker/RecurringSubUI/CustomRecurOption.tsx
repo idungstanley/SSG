@@ -45,7 +45,7 @@ export function CustomRecurOption({ setOptions }: Props) {
         </div>
       </div>
       {type === RECUR_STR_CONSTANTS.week && <WeekLineOption setOptions={setOptions} />}
-      {type === RECUR_STR_CONSTANTS.year && <YearLineOption />}
+      {type === RECUR_STR_CONSTANTS.year && <YearLineOption setOptions={setOptions} />}
       {type === RECUR_STR_CONSTANTS.month && <CustomMonthLine setOptions={setOptions} />}
     </div>
   );

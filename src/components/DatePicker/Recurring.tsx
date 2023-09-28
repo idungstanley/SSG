@@ -71,7 +71,9 @@ export default function Recurring() {
           onClick={() => setDropRecurring((prev) => ({ ...prev, recurringInterval: !prev.recurringInterval }))}
           className="border-alsoit-gray-75 border rounded-md text-alsoit-text-md p-2 relative flex justify-between items-center"
         >
-          <span className="capitalize">{recuringInterval}</span>
+          <span className="capitalize">
+            {recuringInterval === RECUR_STR_CONSTANTS.daysAfter ? recuringInterval.replace('_', ' ') : recuringInterval}
+          </span>
           {dropRecurring.recurringInterval ? <ArrowUp /> : <ArrowDown dimensions={{ height: 7, width: 7 }} />}
           {dropRecurring.recurringInterval && (
             <RecurringIntervals setFn={setRecurringInterval} arr={IntervalArr} activeItem={recuringInterval} />
