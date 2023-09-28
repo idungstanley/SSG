@@ -61,3 +61,16 @@ export function wordToNumber(word: Word): number | null {
 
   return wordsToNumbers[word] || null; // Return null for unknown words
 }
+
+export const STR_CONSTANTS = {
+  week: 'week',
+  month: 'month',
+  year: 'year',
+  daysAfter: 'days_after',
+  custom: 'custom',
+  byWeek: 'by week',
+  onDate: 'on date',
+  monthly: 'monthly',
+  repeat: 'repeat',
+  endOn: 'end on'
+};

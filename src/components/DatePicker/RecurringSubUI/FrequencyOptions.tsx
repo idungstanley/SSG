@@ -5,6 +5,7 @@ import { RecurringIntervals } from './RecuringInterval';
 import dayjs from 'dayjs';
 import { useAppSelector } from '../../../app/hooks';
 import { RecurFrequency } from '../RecurringTypes';
+import { STR_CONSTANTS } from '../../../utils/Constants/DatesConstants';
 
 interface Props {
   setRepeat: Dispatch<SetStateAction<RecurFrequency | undefined>>;
@@ -21,7 +22,7 @@ export function FrequencyOption({ setRepeat }: Props) {
     repeat: 1,
     end_on: dayjs().format(date_format?.toUpperCase() ?? 'D/M/YY')
   });
-  const [value, setValue] = useState<'repeat' | 'end on'>('repeat');
+  const [value, setValue] = useState<string>(STR_CONSTANTS.repeat);
   const [dropdown, setDropDown] = useState<boolean>(false);
 
   useEffect(() => {
@@ -39,13 +40,13 @@ export function FrequencyOption({ setRepeat }: Props) {
         {dropdown && (
           <RecurringIntervals
             activeItem={value}
-            arr={['repeat', 'end on']}
-            setFn={() => setValue(value === 'repeat' ? 'end on' : 'repeat')}
+            arr={[STR_CONSTANTS.repeat, STR_CONSTANTS.endOn]}
+            setFn={() => setValue(value === STR_CONSTANTS.repeat ? STR_CONSTANTS.endOn : STR_CONSTANTS.repeat)}
             styles="flex flex-col space-y-1 w-36 h-min rounded-md shadow-2xl absolute top-8 left-0 bg-alsoit-gray-50 p-2 z-20"
           />
         )}
       </div>
-      {value === 'repeat' && (
+      {value === STR_CONSTANTS.repeat && (
         <>
           <input
             type="number"
@@ -56,7 +57,7 @@ export function FrequencyOption({ setRepeat }: Props) {
           <span>times</span>
         </>
       )}
-      {value !== 'repeat' && (
+      {value === STR_CONSTANTS.endOn && (
         <input
           type="text"
           className=" w-6/12 text-alsoit-text-md ring-0 focus:ring-0 border-none"

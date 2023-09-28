@@ -5,7 +5,7 @@ import ArrowDown from '../../../assets/icons/ArrowDown';
 import { WeekLineOption } from './WeekLineOption';
 import { CustomMonthLine } from './RecurMonthLine';
 import { YearLineOption } from './YearLineOption';
-import { customTypesArr } from '../../../utils/Constants/DatesConstants';
+import { STR_CONSTANTS, customTypesArr } from '../../../utils/Constants/DatesConstants';
 import { TypeOptionsProps } from '../RecurringTypes';
 
 interface Props {
@@ -25,7 +25,7 @@ export function CustomRecurOption({ setOptions }: Props) {
         <span>Every</span>
         <input
           type="number"
-          className="no-control-num-input w-10 h-7 px-1.5 rounded-md border-alsoit-gray-75 border"
+          className="no-control-num-input w-10 h-7 px-1.5 rounded-md border-alsoit-gray-75 border text-alsoit-text-md"
           onChange={(e) => setOptions((prev) => ({ ...prev, every_count: Number(e.target.value) }))}
         />
         <div
@@ -44,9 +44,9 @@ export function CustomRecurOption({ setOptions }: Props) {
           )}
         </div>
       </div>
-      {type === 'week' && <WeekLineOption setOptions={setOptions} />}
-      {type === 'year' && <YearLineOption />}
-      {type === 'month' && <CustomMonthLine setOptions={setOptions} />}
+      {type === STR_CONSTANTS.week && <WeekLineOption setOptions={setOptions} />}
+      {type === STR_CONSTANTS.year && <YearLineOption />}
+      {type === STR_CONSTANTS.month && <CustomMonthLine setOptions={setOptions} />}
     </div>
   );
 }

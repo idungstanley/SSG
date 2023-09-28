@@ -10,7 +10,13 @@ import { useAppSelector } from '../../app/hooks';
 import { DaysAfterOption } from './RecurringSubUI/DaysAfterOption';
 import { CustomRecurOption } from './RecurringSubUI/CustomRecurOption';
 import { MonthsOption } from './RecurringSubUI/MonthsOption';
-import { IntervalArr, MonthOption, getMonthOptionString, statusArr } from '../../utils/Constants/DatesConstants';
+import {
+  IntervalArr,
+  MonthOption,
+  STR_CONSTANTS,
+  getMonthOptionString,
+  statusArr
+} from '../../utils/Constants/DatesConstants';
 import { useCreateTaskRecuring } from '../../features/task/taskService';
 import { useParams } from 'react-router-dom';
 import { DropProps, RecurFrequency, TypeOptionsProps } from './RecurringTypes';
@@ -71,9 +77,9 @@ export default function Recurring() {
             <RecurringIntervals setFn={setRecurringInterval} arr={IntervalArr} activeItem={recuringInterval} />
           )}
         </div>
-        {recuringInterval === 'custom' && <CustomRecurOption setOptions={setOptions} />}
-        {recuringInterval === 'days_after' && <DaysAfterOption setOptions={setOptions} />}
-        {recuringInterval === 'monthly' && <MonthsOption setOptions={setOptions} />}
+        {recuringInterval === STR_CONSTANTS.custom && <CustomRecurOption setOptions={setOptions} />}
+        {recuringInterval === STR_CONSTANTS.daysAfter && <DaysAfterOption setOptions={setOptions} />}
+        {recuringInterval === STR_CONSTANTS.monthly && <MonthsOption setOptions={setOptions} />}
         <div
           onClick={() => setDropRecurring((prev) => ({ ...prev, statusInterval: !prev.statusInterval }))}
           className="border-alsoit-gray-75 border rounded-md text-alsoit-text-md p-2 relative flex justify-between items-center"

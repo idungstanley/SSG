@@ -41,36 +41,41 @@ export default function History() {
   }, [pilotSideOver.id]);
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col space-x-0.5">
       <div className="flex items-center space-x-4 border-b-2 py-1">
         <div className="w-1/5">
           <SectionArea label="Logs" icon={<DocumentTextIcon className="w-4 h-4" />} />
         </div>
-        <div className="relative flex items-center">
+        {/* search Component */}
+        <div className="relative flex items-center w-3/5">
           <input
             type="text"
-            className="w-64 px-6 text-xs border-gray-400 focus:ring-purple-100 focus:ring focus:outline-none focus:border-0 rounded-2xl h-7"
+            className="w-full px-6 text-xs border-gray-400 focus:ring-purple-100 focus:ring focus:outline-none focus:border-0 rounded-2xl h-7"
             placeholder="Search..."
           />
           <BiSearch className="absolute w-4 h-4 left-2" />
         </div>
-        <div
-          className={
-            selectedDate?.from || selectedDate?.to
-              ? 'flex space-x-2 items-center bg-purple-200 h-5 border-purple-500 rounded-lg px-1 relative cursor-pointer'
-              : 'flex space-x-2 items-center bg-gray-200 h-5 border-purple-500 rounded-lg px-1 relative cursor-pointer'
-          }
-          onClick={() => {
-            setShow((prev) => ({ ...prev, filterLogModal: !prev.filterLogModal }));
-          }}
-        >
-          <BsFilter />
-          <span className="capitalize text-xs">filter</span>
-          {showModal.filterLogModal && <HistoryfilterModal logData={logs} toggleFn={setShow} />}
-        </div>
-        <div className="relative">
-          <BsThreeDots onClick={() => setShow((prev) => ({ ...prev, showHideColModal: !prev.showHideColModal }))} />
-          {showModal.showHideColModal && <HistoryColModal model={logs} toggleFn={setShow} />}
+        <div className="flex w-1/5 items-center space-x-0.5">
+          {/* Filter box component */}
+          <div
+            className={
+              selectedDate?.from || selectedDate?.to
+                ? 'flex space-x-2 items-center bg-purple-200 h-5 border-purple-500 rounded-lg px-1 relative cursor-pointer'
+                : 'flex space-x-2 items-center bg-gray-200 h-5 border-purple-500 rounded-lg px-1 relative cursor-pointer'
+            }
+            onClick={() => {
+              setShow((prev) => ({ ...prev, filterLogModal: !prev.filterLogModal }));
+            }}
+          >
+            <BsFilter />
+            <span className="capitalize text-xs">filter</span>
+            {showModal.filterLogModal && <HistoryfilterModal logData={logs} toggleFn={setShow} />}
+          </div>
+          {/* three dots icon */}
+          <div className="relative">
+            <BsThreeDots onClick={() => setShow((prev) => ({ ...prev, showHideColModal: !prev.showHideColModal }))} />
+            {showModal.showHideColModal && <HistoryColModal model={logs} toggleFn={setShow} />}
+          </div>
         </div>
       </div>
       <div className="flex w-full space-x-1">
