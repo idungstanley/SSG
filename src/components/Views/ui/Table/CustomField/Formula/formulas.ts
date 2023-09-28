@@ -369,20 +369,20 @@ export const FORMULAS = [
     expectedResult: '2'
   },
   {
-    id: 'COUNTIF', // check
+    id: 'COUNTIF',
     name: 'COUNTIF',
     description: 'Returns a conditional count across a range.',
     syntax: 'COUNTIF(range, criterion)',
-    example: 'COUNTIF([1, 0, 1, 0, 1], 1)',
+    example: "COUNTIF('[1, 0, 1, 0, 1]', 1)",
     expectedResult: '3'
   },
   {
-    id: 'COUNTIFS', // check
+    id: 'COUNTIFS',
     name: 'COUNTIFS',
     description: 'Returns the count of a range depending on multiple criteria.',
     syntax: 'COUNTIFS(criteria_range1, criterion1, [criteria_range2, criterion2, ...])',
-    example: "COUNTIFS([2,4,8,16], [1,2,3,4], '&gt;=2', [1,2,4,8], '&lt;=4')",
-    expectedResult: '2'
+    example: "COUNTIFS('[2,4,8,16], [1,2,3,4]', '>=2', '[1,2,4,8]', '<=4')",
+    expectedResult: '6'
   },
   {
     id: 'COUNTUNIQUE',

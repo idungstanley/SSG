@@ -47,9 +47,9 @@ function FormulaField({
   const [isOpenSelectTwo, setIsOpenSelectTwo] = useState(false);
   const [isOpenSelectAction, setIsOpenSelectAction] = useState(false);
   // main states
-  const [selectOne, setSelectOne] = useState<IFormulaData | null>(null);
-  const [selectTwo, setSelectTwo] = useState<IFormulaData | null>(null);
-  const [selectAction, setSelectAction] = useState<string>('SUM');
+  const [selectedItemOne, setSelectedItemOne] = useState<IFormulaData | null>(null);
+  const [selectedItemTwo, setSelectedItemTwo] = useState<IFormulaData | null>(null);
+  const [selectedAction, setSelectedAction] = useState<string>('SUM');
   const [currentFields, setCurrentFields] = useState<IField[]>([]);
   const [result, setResult] = useState('-');
   const [isShowAdditionalFormulas, setShowAdditionalFormulas] = useState<boolean>(false);
@@ -87,7 +87,7 @@ function FormulaField({
       data: currentCustomFieldColumn,
       newFields: {
         properties: {
-          formula: `${selectAction}("${selectOne?.id}", "${selectTwo?.id}")`
+          formula: `${selectedAction}("${selectedItemOne?.id}", "${selectedItemTwo?.id}")`
         }
       }
     });
@@ -109,7 +109,7 @@ function FormulaField({
   };
 
   const renderIcon = () => {
-    switch (selectAction) {
+    switch (selectedAction) {
       case 'SUM':
         return <BsPlusSquareFill color="#6bc950" size={25} />;
       case 'MINUS':
@@ -128,13 +128,13 @@ function FormulaField({
     const action = value.split('(')[0];
     if (selectedItems.length === 2 && BASE_ACTIONS.includes(action)) {
       setShowAdditionalFormulas(false);
-      setSelectAction(action);
-      setSelectOne(selectedItems[0]);
-      setSelectTwo(selectedItems[1]);
+      setSelectedAction(action);
+      setSelectedItemOne(selectedItems[0]);
+      setSelectedItemTwo(selectedItems[1]);
     } else {
       setShowAdditionalFormulas(true);
-      setSelectOne(null);
-      setSelectTwo(null);
+      setSelectedItemOne(null);
+      setSelectedItemTwo(null);
     }
     let strWithCurrentValues = value;
     let strWithCurrentNames = value;
@@ -159,6 +159,8 @@ function FormulaField({
       } else if (typeof res === 'number') {
         // fixed result
         res = String(Math.round(+res * 1e2) / 1e2);
+      } else if (typeof res === 'boolean') {
+        res = String(res);
       }
       setResult(res);
       setPrevFormula(strWithCurrentNames);
@@ -211,9 +213,11 @@ function FormulaField({
                 setAnchorOne(e.currentTarget);
               }}
             >
-              <Button active={false}>
-                <span className="whitespace-nowrap w-full pl-1">{selectOne ? selectOne.name : 'Select field'}</span>
-                <ArrowDownFilled active={false} />
+              <Button active={!!selectedItemOne}>
+                <span className="whitespace-nowrap w-full pl-1">
+                  {selectedItemOne ? selectedItemOne.name : 'Select field'}
+                </span>
+                <ArrowDownFilled active={!!selectedItemOne} />
               </Button>
             </div>
             <Menu
@@ -237,7 +241,7 @@ function FormulaField({
                     <div
                       key={field.id}
                       className="flex px-2 py-1 w-44 cursor-pointer hover:bg-gray-100"
-                      onClick={() => setSelectOne({ id: field.id, name: field.name, value: '' })}
+                      onClick={() => setSelectedItemOne({ id: field.id, name: field.name, value: '' })}
                     >
                       <span className="mx-1 w-5 h-5">
                         <Number />
@@ -282,7 +286,7 @@ function FormulaField({
                   key={action.id}
                   className="w-30 px-2 py-1 cursor-pointer hover:bg-gray-100"
                   onClick={() => {
-                    setSelectAction(action.id);
+                    setSelectedAction(action.id);
                     setIsOpenSelectAction(false);
                   }}
                 >
@@ -298,9 +302,11 @@ function FormulaField({
                 setAnchorTwo(e.currentTarget);
               }}
             >
-              <Button active={false}>
-                <span className="whitespace-nowrap w-full pl-1">{selectTwo ? selectTwo.name : 'Select field'}</span>
-                <ArrowDownFilled active={false} />
+              <Button active={!!selectedItemTwo}>
+                <span className="whitespace-nowrap w-full pl-1">
+                  {selectedItemTwo ? selectedItemTwo.name : 'Select field'}
+                </span>
+                <ArrowDownFilled active={!!selectedItemTwo} />
               </Button>
             </div>
             <Menu
@@ -324,7 +330,7 @@ function FormulaField({
                     <div
                       key={field.id}
                       className="flex px-2 py-1 w-44 cursor-pointer hover:bg-gray-100"
-                      onClick={() => setSelectTwo({ id: field.id, name: field.name, value: '' })}
+                      onClick={() => setSelectedItemTwo({ id: field.id, name: field.name, value: '' })}
                     >
                       <span className="mx-1 w-5 h-5">
                         <Number />
