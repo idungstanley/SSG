@@ -3,12 +3,13 @@ import { Menu } from '@mui/material';
 import Button from '../../../../../Buttons/Button';
 import ArrowDownFilled from '../../../../../../assets/icons/ArrowDownFilled';
 import { BsFillDashSquareFill, BsFillSlashSquareFill, BsFillXSquareFill, BsPlusSquareFill } from 'react-icons/bs';
-import { Parser as FormulaParser, SUPPORTED_FORMULAS } from 'hot-formula-parser';
+import { Parser as FormulaParser } from 'hot-formula-parser';
 import { IField } from '../../../../../../features/list/list.interfaces';
 import Number from '../../../../../../assets/branding/Number';
 import { ICustomField } from '../../../../../../features/task/taskSlice';
 import { useUpdateDropdownField, useUpdateEntityCustomFieldValue } from '../../../../../../features/list/listService';
 import AdditionalFormulasField from './AdditionalFormulasField';
+import { IFormulaData, findSelectedItemsInFormula } from './findSelectedItemsInFormula';
 
 const actions = [
   { id: 'SUM', icon: <BsPlusSquareFill color="#6bc950" size={25} /> },
@@ -17,8 +18,9 @@ const actions = [
   { id: 'DIVIDE', icon: <BsFillSlashSquareFill color="#49ccf9" size={25} /> }
 ];
 
+const BASE_ACTIONS = ['SUM', 'MINUS', 'MULTIPLY', 'DIVIDE'];
+
 interface DropdownFieldWrapperProps {
-  currentCustomField: ICustomField;
   currentCustomFieldColumn: IField;
   taskCustomFields: ICustomField[];
   taskCustomFieldsColumns: IField[];
@@ -28,7 +30,6 @@ interface DropdownFieldWrapperProps {
 }
 
 function FormulaField({
-  currentCustomField,
   currentCustomFieldColumn,
   taskCustomFields,
   taskCustomFieldsColumns,
@@ -46,12 +47,13 @@ function FormulaField({
   const [isOpenSelectTwo, setIsOpenSelectTwo] = useState(false);
   const [isOpenSelectAction, setIsOpenSelectAction] = useState(false);
   // main states
-  const [selectOne, setSelectOne] = useState<IField | null>(null);
-  const [selectTwo, setSelectTwo] = useState<IField | null>(null);
+  const [selectOne, setSelectOne] = useState<IFormulaData | null>(null);
+  const [selectTwo, setSelectTwo] = useState<IFormulaData | null>(null);
   const [selectAction, setSelectAction] = useState<string>('SUM');
   const [currentFields, setCurrentFields] = useState<IField[]>([]);
   const [result, setResult] = useState('-');
   const [isShowAdditionalFormulas, setShowAdditionalFormulas] = useState<boolean>(false);
+  const [prevFormula, setPrevFormula] = useState<string>('');
 
   useEffect(() => {
     const newCurrentFields: IField[] = [];
@@ -71,6 +73,7 @@ function FormulaField({
     setAnchorOne(null);
     setAnchorTwo(null);
     setAnchorAction(null);
+    setShowAdditionalFormulas(false);
   };
 
   const handleSave = () => {
@@ -84,7 +87,7 @@ function FormulaField({
       data: currentCustomFieldColumn,
       newFields: {
         properties: {
-          formula: `${selectAction} ${selectOne?.id} ${selectTwo?.id}`
+          formula: `${selectAction}("${selectOne?.id}", "${selectTwo?.id}")`
         }
       }
     });
@@ -119,31 +122,64 @@ function FormulaField({
   };
 
   const parser = new FormulaParser();
-  // console.log('TEST', parser.parse('(1 + 5 + (5 * 10)) / 10'));
-  // console.log('SUPPORTED_FORMULAS', SUPPORTED_FORMULAS);
 
-  const resultParser = (value: string, allFields: ICustomField[]) => {
-    const arr = value.split(' ');
-    const action = arr[0];
-    setSelectAction(arr[0]);
-    const one = allFields?.find((item) => item.id === arr[1])?.values[0].value;
-    setSelectOne(taskCustomFieldsColumns.find((item) => item.id === arr[1]) || null);
-    const two = allFields?.find((item) => item.id === arr[2])?.values[0].value;
-    setSelectTwo(taskCustomFieldsColumns.find((item) => item.id === arr[2]) || null);
-    return `${action}(${one}, ${two})`;
+  const resultParser = (value: string, allColumns: IField[], allFields: ICustomField[]) => {
+    const selectedItems = findSelectedItemsInFormula(value, allColumns, allFields);
+    const action = value.split('(')[0];
+    if (selectedItems.length === 2 && BASE_ACTIONS.includes(action)) {
+      setShowAdditionalFormulas(false);
+      setSelectAction(action);
+      setSelectOne(selectedItems[0]);
+      setSelectTwo(selectedItems[1]);
+    } else {
+      setShowAdditionalFormulas(true);
+      setSelectOne(null);
+      setSelectTwo(null);
+    }
+    let strWithCurrentValues = value;
+    let strWithCurrentNames = value;
+    selectedItems.forEach((item) => {
+      strWithCurrentValues = strWithCurrentValues.replaceAll(`"${item.id}"`, item.value);
+      strWithCurrentNames = strWithCurrentNames.replaceAll(`"${item.id}"`, `field("${item.name}")`);
+    });
+    return { strWithCurrentValues, strWithCurrentNames };
   };
 
   useEffect(() => {
     if (taskCustomFields?.length && currentCustomFieldColumn.properties?.formula) {
       const value = currentCustomFieldColumn.properties?.formula as string;
-      const res = parser.parse(resultParser(value, taskCustomFields)).result as string;
-      // fixed result
-      setResult(String(Math.round(+res * 1e2) / 1e2));
+      const { strWithCurrentValues, strWithCurrentNames } = resultParser(
+        value,
+        taskCustomFieldsColumns,
+        taskCustomFields
+      );
+      let res = parser.parse(strWithCurrentValues).result as string;
+      if (typeof res === 'object') {
+        res = new Date(res).toLocaleDateString('en-US');
+      } else if (typeof res === 'number') {
+        // fixed result
+        res = String(Math.round(+res * 1e2) / 1e2);
+      }
+      setResult(res);
+      setPrevFormula(strWithCurrentNames);
     }
-  }, [taskCustomFields, currentCustomFieldColumn]);
+  }, [taskCustomFields, currentCustomFieldColumn, taskCustomFieldsColumns, anchorEl]);
 
-  const handleCalculate = (str: string) => {
-    console.log(str);
+  const handleCalculate = (str: string, result: string) => {
+    closeAllDropdowns();
+    onUpdate({
+      taskId,
+      value: [{ value: result }],
+      fieldId
+    });
+    onUpdateColumn({
+      data: currentCustomFieldColumn,
+      newFields: {
+        properties: {
+          formula: str
+        }
+      }
+    });
   };
 
   return (
@@ -201,7 +237,7 @@ function FormulaField({
                     <div
                       key={field.id}
                       className="flex px-2 py-1 w-44 cursor-pointer hover:bg-gray-100"
-                      onClick={() => setSelectOne(field)}
+                      onClick={() => setSelectOne({ id: field.id, name: field.name, value: '' })}
                     >
                       <span className="mx-1 w-5 h-5">
                         <Number />
@@ -288,7 +324,7 @@ function FormulaField({
                     <div
                       key={field.id}
                       className="flex px-2 py-1 w-44 cursor-pointer hover:bg-gray-100"
-                      onClick={() => setSelectTwo(field)}
+                      onClick={() => setSelectTwo({ id: field.id, name: field.name, value: '' })}
                     >
                       <span className="mx-1 w-5 h-5">
                         <Number />
@@ -330,7 +366,7 @@ function FormulaField({
           </button>
         </div>
       </Menu>
-      {isShowAdditionalFormulas && (
+      {anchorEl && isShowAdditionalFormulas && (
         <Menu
           id="basic-menu"
           anchorEl={anchorEl}
@@ -350,6 +386,7 @@ function FormulaField({
           <AdditionalFormulasField
             variables={currentFields}
             taskCustomFields={taskCustomFields}
+            prevFormula={prevFormula}
             handleCalculate={handleCalculate}
             handleClose={() => setShowAdditionalFormulas(false)}
           />

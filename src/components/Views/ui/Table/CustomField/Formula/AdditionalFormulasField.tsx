@@ -6,46 +6,28 @@ import { CiWarning } from 'react-icons/ci';
 import { IField } from '../../../../../../features/list/list.interfaces';
 import Number from '../../../../../../assets/branding/Number';
 import { ICustomField } from '../../../../../../features/task/taskSlice';
-
-const findSelectedItemsInFormula = (str: string, columns: IField[], fields: ICustomField[]) => {
-  const splitedString = str.split('"');
-  const currentFields: { id: string; name: string }[] = [];
-  const currentFieldsWithValue: { id: string; name: string; value: string }[] = [];
-
-  splitedString.forEach((strPath) => {
-    columns.forEach((v) => {
-      if (strPath === v.name) {
-        currentFields.push({ id: v.id, name: v.name });
-      }
-    });
-  });
-  fields.forEach((value) => {
-    currentFields.forEach((id) => {
-      if (id.id === value.id) {
-        currentFieldsWithValue.push({ ...id, value: value.values[0].value });
-      }
-    });
-  });
-  return currentFieldsWithValue;
-};
+import { findSelectedItemsInFormula } from './findSelectedItemsInFormula';
 
 interface AdditionalFormulasFieldProps {
   variables: IField[];
   taskCustomFields: ICustomField[];
-  handleCalculate: (str: string) => void;
+  prevFormula: string;
+  handleCalculate: (str: string, result: string) => void;
   handleClose: () => void;
 }
 
 function AdditionalFormulasField({
   variables,
   taskCustomFields,
+  prevFormula,
   handleCalculate,
   handleClose
 }: AdditionalFormulasFieldProps) {
   const [activeFormula, setActiveFormula] = useState<IFormula>();
-  const [inputText, setInputText] = useState<string>('');
+  const [inputText, setInputText] = useState<string>(prevFormula);
   const [isError, setError] = useState(false);
   const [currentInputText, setCurrentInputText] = useState<string>('');
+  const [currentResult, setCurrentResult] = useState<string>('');
 
   const parser = new FormulaParser();
 
@@ -57,8 +39,9 @@ function AdditionalFormulasField({
       } else {
         setError(false);
         setCurrentInputText(transformFormula(inputText).strWithCurrentIds);
+        setCurrentResult(parseText.result as string);
         console.log('inputText', inputText);
-        console.log('RESULT: ', parseText.result);
+        console.log('RESULT: ', parseText.result as string);
       }
     } else {
       setError(false);
@@ -75,7 +58,7 @@ function AdditionalFormulasField({
     // replace variables in formula
     selectedItems.forEach((item) => {
       strWithCurrentValues = strWithCurrentValues.replaceAll(`field("${item.name}")`, item.value);
-      strWithCurrentIds = strWithCurrentIds.replaceAll(`field("${item.name}")`, item.id);
+      strWithCurrentIds = strWithCurrentIds.replaceAll(`field("${item.name}")`, `"${item.id}"`);
     });
     return { strWithCurrentValues, strWithCurrentIds };
   };
@@ -95,8 +78,6 @@ function AdditionalFormulasField({
     };
   };
 
-  // console.log('SUPPORTED_FORMULAS', SUPPORTED_FORMULAS);
-
   return (
     <div className="h-full" style={{ width: '480px', height: '370px', overflow: 'hidden' }}>
       <div className="flex align-center border-b-2 px-2">
@@ -113,7 +94,7 @@ function AdditionalFormulasField({
         <button
           style={{ width: '79px' }}
           className={`${isError ? 'bg-alsoit-danger' : 'bg-alsoit-blue-100'} text-white rounded h-6`}
-          onClick={() => handleCalculate(currentInputText)}
+          onClick={() => handleCalculate(currentInputText, currentResult)}
           disabled={isError || !inputText}
         >
           Calculate

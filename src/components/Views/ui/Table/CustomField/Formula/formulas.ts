@@ -9,7 +9,7 @@ export interface IFormula {
 
 export const FORMULAS = [
   {
-    id: 'DATE', // check
+    id: 'DATE',
     name: 'DATE',
     description: 'Converts a provided year, month, and day into a date.',
     syntax: 'DATE(year, month, day)',
@@ -33,7 +33,7 @@ export const FORMULAS = [
     expectedResult: '42'
   },
   {
-    id: 'EDATE', // check
+    id: 'EDATE',
     name: 'EDATE',
     description: 'Returns a date a specified number of months before or after another date.',
     syntax: 'EDATE(start_date, months)',
@@ -41,7 +41,7 @@ export const FORMULAS = [
     expectedResult: '12/15/10'
   },
   {
-    id: 'EOMONTH', // check
+    id: 'EOMONTH',
     name: 'EOMONTH',
     description:
       'Returns a date representing the last day of a month which falls a specified number of months before or after another date.',
@@ -74,11 +74,11 @@ export const FORMULAS = [
     expectedResult: '4'
   },
   {
-    id: 'NETWORKDAYS', // check
+    id: 'NETWORKDAYS',
     name: 'NETWORKDAYS',
     description: 'Returns the number of net working days between two provided days.',
-    syntax: 'NETWORKDAYS(start_date, end_date, [holidays])',
-    example: "NETWORKDAYS('10/1/2012', '3/1/2013', ['11/22/2012'])",
+    syntax: 'NETWORKDAYS(start_date, end_date, holidays)',
+    example: "NETWORKDAYS('10/1/2012', '3/1/2013', '11/22/2012')",
     expectedResult: '109'
   },
   {
@@ -115,12 +115,12 @@ export const FORMULAS = [
     expectedResult: '11'
   },
   {
-    id: 'WORKDAY', // check
+    id: 'WORKDAY',
     name: 'WORKDAY',
     description: 'Calculates the end date after a specified number of working days.',
-    syntax: 'WORKDAY(start_date, num_days, [holidays])',
-    example: "WORKDAY('10/1/2008', 151, ['11/26/2008', '12/4/2008'])",
-    expectedResult: '5/4/09'
+    syntax: 'WORKDAY(start_date, num_days, holidays)',
+    example: "WORKDAY('10/1/2008', 151, '11/26/2008', '12/4/2008')",
+    expectedResult: '5/1/2009'
   },
   {
     id: 'AND',

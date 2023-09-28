@@ -188,7 +188,6 @@ export function Col({ value, field, fieldId, task, customFields, taskStatuses, .
       <FormulaField
         taskId={task.id}
         parentId={task.parent_id || task.list_id}
-        currentCustomField={task.custom_fields?.find((i) => i.id === fieldId) as ICustomField}
         currentCustomFieldColumn={task.custom_field_columns?.find((i) => i.id === fieldId) as IField}
         taskCustomFields={task.custom_fields as ICustomField[]}
         taskCustomFieldsColumns={task.custom_field_columns}
