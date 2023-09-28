@@ -135,7 +135,7 @@ function CreateDropdownField() {
               </div>
             </div>
             <AlsoitMenuDropdown handleClose={handleClose} anchorEl={anchorEl}>
-              <ColorPalette handleClick={handleColor} />
+              <ColorPalette handleClick={handleColor} activeColor={i.color ? i.color : undefined} />
             </AlsoitMenuDropdown>
           </div>
         ))}

@@ -3,10 +3,7 @@ import AlsoitMenuDropdown from '../../../../../components/DropDowns';
 import Button from '../../../../../components/Buttons/Button';
 import Assignee from '../../assignTask/Assignee';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
-import { setCurrTeamMemId, setSelectedTaskParentId, setSelectedTaskType } from '../../../../../features/task/taskSlice';
-import { EntityType } from '../../../../../utils/EntityTypes/EntityType';
-import { useGetTeamMemberGroups } from '../../../../../features/settings/teamMemberGroups/teamMemberGroupService';
-import { useGetTeamMembers } from '../../../../../features/settings/teamMembers/teamMemberService';
+import { setCurrTeamMemId } from '../../../../../features/task/taskSlice';
 
 export default function DuplicateTaskAdvanceModal({
   handleClose,

@@ -4,7 +4,7 @@ import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import ListIconComponent from '../ItemsListInSidebar/components/ListIconComponent';
 import { cl } from '../../utils';
 import { IList } from '../../features/hubs/hubs.interfaces';
-import { setCurrTeamMemId, setDuplicateTaskObj, setSelectedTasksArray } from '../../features/task/taskSlice';
+import { setDuplicateTaskObj, setSelectedTasksArray } from '../../features/task/taskSlice';
 import { useDuplicateTask } from '../../features/task/taskService';
 import DuplicateTaskAdvanceModal from '../../pages/workspace/tasks/component/taskMenu/DuplicateTaskAdvanceModal';
 
