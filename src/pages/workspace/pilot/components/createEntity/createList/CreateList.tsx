@@ -101,7 +101,7 @@ export default function CreateList() {
   };
 
   return (
-    <div className="h-auto p-2 overflow-y-auto" style={{ maxHeight: '420px' }}>
+    <div className="h-auto p-2 overflow-y-auto bg-white" style={{ maxHeight: '420px' }}>
       <div className="flex flex-col mb-2">
         <span className="font-bold">Create A List</span>
         <span className="font-medium">Allows you manage all entities within the workspace</span>
