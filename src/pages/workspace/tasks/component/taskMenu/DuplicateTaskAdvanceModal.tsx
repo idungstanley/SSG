@@ -35,7 +35,7 @@ export default function DuplicateTaskAdvanceModal({
     { label: 'Tags' }
   ];
   const asigneeWatcher = [
-    { label: 'Assignee', asigneeWatcher: <Assignee option="getTeamId" /> },
+    { label: 'Assignees', asigneeWatcher: <Assignee option="getTeamId" /> },
     { label: 'Watcher', asigneeWatcher: <Assignee option="getTeamId" /> },
     { label: 'Send Notifications' }
   ];
@@ -58,7 +58,7 @@ export default function DuplicateTaskAdvanceModal({
     }
 
     if (duplicateTaskObj.fullTask?.assignees.length) {
-      const label = 'assignee';
+      const label = 'assignees';
       setCurrentSelected((prevSelected) => [...prevSelected, label]);
     }
     if (duplicateTaskObj.fullTask?.description) {
@@ -73,6 +73,8 @@ export default function DuplicateTaskAdvanceModal({
       list_id: duplicateTaskObj.list_id,
       copy: currentSelected
     });
+
+    handleClose();
   };
 
   const onChange = (attribute: string) => {
@@ -83,8 +85,6 @@ export default function DuplicateTaskAdvanceModal({
         : [...prevSelected, attribute]
     );
   };
-
-  console.log(currentSelected);
 
   return (
     <div>
