@@ -260,13 +260,14 @@ export default function PaletteManager({
       }}
       PaperProps={{
         style: {
-          borderRadius: '12px'
+          borderRadius: '12px',
+          backgroundColor: 'white'
         }
       }}
     >
       <div
         className="w-auto p-2 overflow-y-auto text-gray-500 rounded-full drop-shadow-2xl"
-        style={{ borderRadius: '5px' }}
+        style={{ borderRadius: '5px', backgroundColor: 'white' }}
       >
         <div className="z-50 flex flex-col w-full px-2">
           {!isSearch && (
