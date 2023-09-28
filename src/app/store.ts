@@ -23,6 +23,7 @@ import accountSlice from '../features/account/accountSlice';
 import checklistSlice from '../features/task/checklist/checklistSlice';
 import userSettingSlice from '../features/settings/user/userSettingsSlice';
 import calendarSlice from '../features/calendar/slice/calendarSlice';
+import statusManagerSlice from '../features/statusManager/statusManagerSlice';
 
 export const store = configureStore({
   reducer: {
@@ -48,7 +49,8 @@ export const store = configureStore({
     checklist: checklistSlice,
     tag: tagSlice,
     userSetting: userSettingSlice,
-    calendar: calendarSlice
+    calendar: calendarSlice,
+    statusManager: statusManagerSlice
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

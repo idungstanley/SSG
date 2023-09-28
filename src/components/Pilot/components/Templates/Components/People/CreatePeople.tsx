@@ -34,7 +34,7 @@ function CreatePeople() {
         customType,
         properties: {
           include_groups: teams,
-          single_user: singleUser
+          single_user: !singleUser
         }
       });
     }

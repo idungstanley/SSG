@@ -18,7 +18,6 @@ import { OverlayRow } from './OverlayRow';
 import { Row } from './Row';
 import { IField, IListDetailRes, ITask_statuses } from '../../../../features/list/list.interfaces';
 import { IListColor } from '../List/List';
-import { SeparateSubtasks } from './SeparateSubtasks';
 
 interface TableProps {
   heads: listColumnProps[];
@@ -44,12 +43,7 @@ export function Table({
   const dispatch = useAppDispatch();
 
   const { draggableItemId } = useAppSelector((state) => state.list);
-  const {
-    statusId,
-    defaultSubtaskListId,
-    splitSubTaskState: splitSubTaskMode,
-    separateSubtasksMode
-  } = useAppSelector((state) => state.task);
+  const { statusId, defaultSubtaskListId, splitSubTaskState: splitSubTaskMode } = useAppSelector((state) => state.task);
 
   const [listId, setListId] = useState<string>('');
   const [tableHeight, setTableHeight] = useState<string | number>('auto');
@@ -194,9 +188,6 @@ export function Table({
                         isBlockToOpenSubtasks={isBlockToOpenSubtasks}
                         level={0}
                       />
-                      {separateSubtasksMode ? (
-                        <SeparateSubtasks listId={task.list_id as string} parentId={task.id} parentName={task.name} />
-                      ) : null}
                     </Fragment>
                   ) : null
                 )

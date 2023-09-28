@@ -30,6 +30,7 @@ import StatusDropdown from '../../../status/StatusDropdown';
 import RatingField from './CustomField/Ratings/RatingField';
 import TimeField from './CustomField/TimeField/TimeField';
 import AutoProgress from './CustomField/Progress/AutoProgress';
+import PeopleField from './CustomField/PeopleField/PeopleField';
 
 interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   value: TaskValue;
@@ -176,6 +177,14 @@ export function Col({ value, field, fieldId, task, customFields, taskStatuses, .
     ),
     rating: (
       <RatingField
+        entityCustomProperty={customFields?.find((i) => i.id === fieldId)}
+        taskId={task.id}
+        taskCustomFields={task.custom_fields?.find((i) => i.id === fieldId)}
+        fieldId={fieldId}
+      />
+    ),
+    people: (
+      <PeopleField
         entityCustomProperty={customFields?.find((i) => i.id === fieldId)}
         taskId={task.id}
         taskCustomFields={task.custom_fields?.find((i) => i.id === fieldId)}
