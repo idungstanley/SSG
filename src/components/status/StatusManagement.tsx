@@ -12,7 +12,7 @@ import {
 import { arrayMove, sortableKeyboardCoordinates } from '@dnd-kit/sortable';
 import { useMutation } from '@tanstack/react-query';
 import { StatusProps } from '../../pages/workspace/hubs/components/ActiveTree/activetree.interfaces';
-import { BoardSectionsType, GroupStyles, ModelType } from '../../utils/StatusManagement/Types';
+import { BoardSectionsType, GroupStyles, ModelType, StatusType } from '../../utils/StatusManagement/Types';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { statusTypesService } from '../../features/hubs/hubService';
 import { findBoardSectionContainer, initializeBoard } from '../../utils/StatusManagement/board';
@@ -31,6 +31,7 @@ import MatchStatusPopUp from './Components/MatchStatusPopUp';
 import { setMatchData } from '../../features/general/prompt/promptSlice';
 import { BOARD_SECTIONS } from '../../utils/StatusManagement/Constant';
 import { useGetStatusTemplates } from '../../features/statusManager/statusManagerService';
+import { COLLECTION_TYPES } from '../../features/statusManager/statusManager.interface';
 
 interface ErrorResponse {
   data: {
@@ -55,10 +56,12 @@ export default function CustomStatus() {
   const createStatusTypes = useMutation(statusTypesService);
 
   const { matchData } = useAppSelector((state) => state.prompt);
+  const { templateCollections } = useAppSelector((state) => state.statusManager);
   const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
   const { statusTaskListDetails } = useAppSelector((state) => state.list);
   const { spaceStatuses, matchedStatus } = useAppSelector((state) => state.hub);
-
+  const [activeCollection, setActiveCollection] = useState<string>(COLLECTION_TYPES.BESPOKE_TO_ENTITY);
+  const [activeTemplateStatus, setActiveTemplateStatus] = useState<string | undefined>(undefined);
   const [validationMessage, setValidationMessage] = useState<string>('');
   const [showMatchStatusPop, setShowMatchStatusPopup] = useState<boolean>(false);
   const [modelData, setModelData] = useState<ModelType>({
@@ -67,7 +70,14 @@ export default function CustomStatus() {
   });
   const [matchingStatusValidation, setMatchingStatusValidation] = useState<string | null>(null);
 
-  const initialBoardSections = initializeBoard(spaceStatuses);
+  const selectedTemplateStatus = templateCollections.find((item) => item.name === activeTemplateStatus);
+
+  const initialBoardSections = initializeBoard(
+    activeCollection === COLLECTION_TYPES.TEMPLATE_COLLECTION && activeTemplateStatus
+      ? (selectedTemplateStatus?.items as StatusType[])
+      : spaceStatuses
+  );
+
   const [boardSections, setBoardSections] = useState<BoardSectionsType>(initialBoardSections);
 
   const [is_default_name, setIsDefaultName] = useState<string | null>(boardSections['open'][0]?.name || null); // Initialize with the name of the item at position 0 or null if no item
@@ -78,6 +88,7 @@ export default function CustomStatus() {
       coordinateGetter: sortableKeyboardCoordinates
     })
   );
+
   useGetStatusTemplates();
 
   useEffect(() => {
@@ -250,7 +261,12 @@ export default function CustomStatus() {
 
   return (
     <section className="flex flex-col gap-2 p-4">
-      <StatusCollectionBoard />
+      <StatusCollectionBoard
+        activeCollection={activeCollection}
+        setActiveCollection={setActiveCollection}
+        activeTemplateStatus={activeTemplateStatus}
+        setActiveTemplateStatus={setActiveTemplateStatus}
+      />
       <div className="flex flex-col space-y-6">
         <DndContext
           sensors={sensors}
