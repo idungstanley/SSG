@@ -1,15 +1,26 @@
 import dayjs from 'dayjs';
-import { useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { weekArr } from '../../../utils/Constants/DatesConstants';
+import { TypeOptionsProps } from '../RecurringTypes';
 
-export function WeekLineOption() {
-  const [weekValue, setValue] = useState<number[]>([]);
+interface Props {
+  setOptions?: Dispatch<SetStateAction<TypeOptionsProps | undefined>>;
+  extended?: boolean;
+}
+export function WeekLineOption({ setOptions, extended }: Props) {
+  const [weekValue, setValue] = useState<string>(`${dayjs().day()}`);
   const [activeDay, setActiveDay] = useState<string>(dayjs().format('ddd'));
 
   const handleClick = (week: { title: string; value: number }) => {
     setActiveDay(week.title.slice(0, 3));
-    setValue([week.value]);
+    setValue(`${week.value}`);
   };
+
+  useEffect(() => {
+    setOptions && !extended
+      ? setOptions((prev) => ({ ...prev, weekly_day_numbers: [...(prev?.weekly_day_numbers || []), weekValue] }))
+      : extended && setOptions && setOptions((prev) => ({ ...prev, monthly_week_day_number: weekValue }));
+  }, [weekValue]);
 
   return (
     <div className="flex w-full">

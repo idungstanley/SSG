@@ -1,11 +1,15 @@
-import { useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import ArrowUp from '../../../assets/icons/ArrowUp';
 import ArrowDown from '../../../assets/icons/ArrowDown';
-import dayjs from 'dayjs';
 import RadioWrapper from '../RadioWrapper';
 import { MonthOption, getMonthOptionString, monthOptionsArr } from '../../../utils/Constants/DatesConstants';
+import { TypeOptionsProps } from '../RecurringTypes';
 
-export function MonthsOption() {
+interface Props {
+  setOptions: Dispatch<SetStateAction<TypeOptionsProps | undefined>>;
+}
+
+export function MonthsOption({ setOptions }: Props) {
   const [value, setValue] = useState<string>('same day each month');
   const [dropDown, setDropDown] = useState<boolean>(false);
   const [requestValue, setRequestValue] = useState<string>('');
@@ -14,6 +18,10 @@ export function MonthsOption() {
     setRequestValue(value);
     setValue(title);
   };
+
+  useEffect(() => {
+    setOptions((prev) => ({ ...prev, monthly: requestValue }));
+  }, [requestValue]);
 
   const monthlyList = () => {
     return (

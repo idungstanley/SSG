@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { RecurringIntervals } from './RecuringInterval';
 import ArrowUp from '../../../assets/icons/ArrowUp';
 import ArrowDown from '../../../assets/icons/ArrowDown';
@@ -6,15 +6,28 @@ import { WeekLineOption } from './WeekLineOption';
 import { CustomMonthLine } from './RecurMonthLine';
 import { YearLineOption } from './YearLineOption';
 import { customTypesArr } from '../../../utils/Constants/DatesConstants';
+import { TypeOptionsProps } from '../RecurringTypes';
 
-export function CustomRecurOption() {
+interface Props {
+  setOptions: Dispatch<SetStateAction<TypeOptionsProps | undefined>>;
+}
+export function CustomRecurOption({ setOptions }: Props) {
   const [dropDown, setDropDown] = useState<{ type: boolean }>({ type: false });
   const [type, setType] = useState<string>('day');
+
+  useEffect(() => {
+    setOptions((prev) => ({ ...prev, every_type: type }));
+  }, [type]);
+
   return (
     <div className="flex flex-col space-y-2.5 py-2.5 items-center w-full">
       <div className="flex space-x-1.5 items-center text-alsoit-text-md w-full">
         <span>Every</span>
-        <input type="number" className="no-control-num-input w-10 h-7 px-1.5 rounded-md border-alsoit-gray-75 border" />
+        <input
+          type="number"
+          className="no-control-num-input w-10 h-7 px-1.5 rounded-md border-alsoit-gray-75 border"
+          onChange={(e) => setOptions((prev) => ({ ...prev, every_count: Number(e.target.value) }))}
+        />
         <div
           className="border-alsoit-gray-75 border rounded-md text-alsoit-text-md h-7 px-1 w-14 relative flex justify-between items-center cursor-pointer"
           onClick={() => setDropDown((prev) => ({ ...prev, type: !prev.type }))}
@@ -31,9 +44,9 @@ export function CustomRecurOption() {
           )}
         </div>
       </div>
-      {type === 'week' && <WeekLineOption />}
+      {type === 'week' && <WeekLineOption setOptions={setOptions} />}
       {type === 'year' && <YearLineOption />}
-      {type === 'month' && <CustomMonthLine />}
+      {type === 'month' && <CustomMonthLine setOptions={setOptions} />}
     </div>
   );
 }
