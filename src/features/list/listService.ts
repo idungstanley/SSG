@@ -12,12 +12,7 @@ import { IList } from '../hubs/hubs.interfaces';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
 import { setNewCustomPropertyDetails, setSubtasks, setTasks } from '../task/taskSlice';
 import { updateCustomFieldsManager } from '../../managers/Task';
-import {
-  autoProgressProperties,
-  currencyProperties,
-  manualProgressProperties,
-  ratingProperties
-} from '../task/interface.tasks';
+import { customPropertiesProps } from '../task/interface.tasks';
 
 interface TaskCountProps {
   data: {
@@ -239,7 +234,7 @@ const createDropdownField = (data: {
   type?: string;
   customType: string;
   style?: { is_bold: string; is_underlined: string; is_italic: string };
-  properties?: currencyProperties | ratingProperties | manualProgressProperties | autoProgressProperties;
+  properties?: customPropertiesProps;
 }) => {
   const { id, options, name, type, customType, style, color, properties } = data;
   const response = requestNew<IResCustomfield>({
@@ -252,8 +247,8 @@ const createDropdownField = (data: {
       is_bold: style?.is_bold,
       is_italic: style?.is_italic,
       is_underlined: style?.is_underlined,
-      entity_id: id,
-      entity_type: type,
+      model_id: id,
+      model: type,
       options,
       properties
     }
@@ -283,7 +278,11 @@ export const useCreateDropdownField = () => {
   });
 };
 
-const updateEntityCustomFieldValue = (data: { taskId?: string; fieldId: string; value: { value: string }[] }) => {
+const updateEntityCustomFieldValue = (data: {
+  taskId?: string;
+  fieldId: string;
+  value: { value: string; type?: string }[];
+}) => {
   const { taskId, fieldId, value } = data;
 
   const response = requestNew({

@@ -22,7 +22,7 @@ function TimeField({ taskCustomFields, taskId, fieldId }: timeFieldProp) {
   const userFormat = time_format === '0' ? 'h:mm A' : 'HH:mm';
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [activeItem, setActiveItem] = useState<string | undefined>(
-    handleConversion(userFormat, taskCustomFields?.values[0].value)
+    taskCustomFields?.values[0].value ? handleConversion(userFormat, taskCustomFields?.values[0].value) : undefined
   );
   const { timeInterval } = useAppSelector((state) => state.calendar);
 

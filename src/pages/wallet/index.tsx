@@ -10,7 +10,7 @@ import PilotSection, { pilotConfig } from '../workspace/wallet/components/PilotS
 import hubIcon from '../../assets/branding/hub.png';
 import ActiveHub from '../../layout/components/MainLayout/extendedNavigation/ActiveParents/ActiveHub';
 import FilterByAssigneesSliderOver from '../workspace/lists/components/renderlist/filters/FilterByAssigneesSliderOver';
-import { setSaveSettingList, setSaveSettingOnline, setTasks } from '../../features/task/taskSlice';
+import { setSaveSettingList, setSaveSettingOnline, setSubtasks, setTasks } from '../../features/task/taskSlice';
 import { List } from '../../components/Views/ui/List/List';
 import { Header } from '../../components/TasksHeader';
 import { GroupHorizontalScroll } from '../../components/ScrollableContainer/GroupHorizontalScroll';
@@ -18,12 +18,14 @@ import { EntityType } from '../../utils/EntityTypes/EntityType';
 import { setActiveItem } from '../../features/workspace/workspaceSlice';
 import { useformatSettings } from '../workspace/tasks/TaskSettingsModal/ShowSettingsModal/FormatSettings';
 import { VerticalScroll } from '../../components/ScrollableContainer/VerticalScroll';
+import { generateSubtasksArray, generateSubtasksList } from '../../utils/generateLists';
+import { IField } from '../../features/list/list.interfaces';
 
 export function WalletPage() {
   const dispatch = useAppDispatch();
   const { walletId, taskId } = useParams();
 
-  const { tasks: tasksStore, saveSettingLocal } = useAppSelector((state) => state.task);
+  const { tasks: tasksStore, saveSettingLocal, subtasks } = useAppSelector((state) => state.task);
 
   const formatSettings = useformatSettings();
 
@@ -72,6 +74,12 @@ export function WalletPage() {
   useEffect(() => {
     if (Object.keys(lists).length) {
       dispatch(setTasks({ ...tasksStore, ...lists }));
+
+      const newSubtasksArr = generateSubtasksArray(lists);
+      if (newSubtasksArr.length) {
+        const newSubtasks = generateSubtasksList(newSubtasksArr, wallet?.data.wallet?.custom_field_columns as IField[]);
+        dispatch(setSubtasks({ ...subtasks, ...newSubtasks }));
+      }
     }
   }, [lists]);
 
@@ -113,9 +121,7 @@ export function WalletPage() {
             <section style={{ minHeight: '0', maxHeight: '83vh' }} className="w-full h-full p-4 pb-0 space-y-10">
               {/* lists */}
               {Object.keys(lists).map((listId) => (
-                <Fragment key={listId}>
-                  {tasksStore[listId] ? <List listId={listId} tasks={tasksStore[listId]} /> : null}
-                </Fragment>
+                <Fragment key={listId}>{tasksStore[listId] ? <List tasks={tasksStore[listId]} /> : null}</Fragment>
               ))}
             </section>
             {Object.keys(lists).length > 1 && <GroupHorizontalScroll />}

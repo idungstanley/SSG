@@ -273,13 +273,22 @@ const duplicateTask = (data: { task_name: string; task_id: string; list_id: stri
   return response;
 };
 
-export const useDuplicateTask = () => {
+export const useDuplicateTask = (task?: Task) => {
   const { duplicateTaskObj } = useAppSelector((state) => state.task);
+  const { tasks } = useAppSelector((state) => state.task);
+  const { hub } = useAppSelector((state) => state.hub);
 
   const dispatch = useAppDispatch();
   return useMutation(duplicateTask, {
     onSuccess: (data) => {
       dispatch(setDuplicateTaskObj({ ...duplicateTaskObj, popDuplicateTaskModal: true }));
+
+      const updatedTasks = addNewTaskManager(tasks, data.data.task as ITaskFullList, task?.custom_field_columns || []);
+      dispatch(setTasks(updatedTasks));
+      const listId = data.data.task.list_id;
+      const updatedTree = updateListTasksCountManager(listId as string, hub, updatedTasks[listId].length);
+      dispatch(getHub(updatedTree));
+      dispatch(setFilteredResults(updatedTree));
     }
   });
 };
@@ -330,18 +339,31 @@ export const UseGetFullTaskList = ({
 
   const hub_id = itemType === EntityType.hub || itemType === EntityType.subHub ? itemId : null;
   const wallet_id = itemType === EntityType.wallet || itemType === EntityType.subWallet ? itemId : null;
-  const { sortAbleArr } = useAppSelector((state) => state.task);
+  const { sortAbleArr, toggleAllSubtask, separateSubtasksMode, splitSubTaskState } = useAppSelector(
+    (state) => state.task
+  );
   const sortArrUpdate = sortAbleArr.length <= 0 ? null : sortAbleArr;
 
   const { filters } = generateFilters();
 
   return useInfiniteQuery(
-    ['task', itemId, itemType, filters, sortArrUpdate, draggableItemId],
+    [
+      'task',
+      itemId,
+      itemType,
+      filters,
+      sortArrUpdate,
+      draggableItemId,
+      toggleAllSubtask,
+      separateSubtasksMode,
+      splitSubTaskState
+    ],
     async ({ pageParam = 0 }: { pageParam?: number }) => {
       return requestNew<IFullTaskRes>({
         url: 'tasks/full-list',
         method: 'POST',
         params: {
+          expand_all: toggleAllSubtask || separateSubtasksMode || splitSubTaskState ? 1 : 0,
           page: pageParam,
           hub_id,
           wallet_id
@@ -404,7 +426,6 @@ export const getOneTaskService = ({
       return data;
     },
     {
-      // enabled: false
       enabled: activeItemType === EntityType.task && task_id != null
     }
   );
@@ -625,7 +646,9 @@ export const UseUpdateTaskPrioritiesServices = ({ task_id_array, priorityDataUpd
 export const getTaskListService = (listId: string | null | undefined) => {
   const { workSpaceId } = useParams();
 
-  const { sortAbleArr, tasks } = useAppSelector((state) => state.task);
+  const { sortAbleArr, tasks, toggleAllSubtask, separateSubtasksMode, splitSubTaskState } = useAppSelector(
+    (state) => state.task
+  );
   const { currentWorkspaceId } = useAppSelector((state) => state.auth);
 
   const sortArrUpdate = sortAbleArr.length <= 0 ? null : sortAbleArr;
@@ -635,13 +658,14 @@ export const getTaskListService = (listId: string | null | undefined) => {
   const { filters } = generateFilters();
 
   return useInfiniteQuery(
-    ['task', listId, { sortArrUpdate, filters }],
+    ['task', listId, { sortArrUpdate, filters }, toggleAllSubtask, separateSubtasksMode, splitSubTaskState],
 
     async ({ pageParam = 0 }: { pageParam?: number }) => {
       return requestNew<ITaskListRes>({
         url: 'tasks/list',
         method: 'POST',
         params: {
+          expand_all: toggleAllSubtask || separateSubtasksMode || splitSubTaskState ? 1 : 0,
           list_id: listId,
           page: pageParam
         },
@@ -652,7 +676,7 @@ export const getTaskListService = (listId: string | null | undefined) => {
       });
     },
     {
-      enabled: fetch && !tasks[listId as string],
+      enabled: fetch && (!tasks[listId as string] || separateSubtasksMode || splitSubTaskState || toggleAllSubtask),
       getNextPageParam: (lastPage) => {
         if (lastPage?.data?.paginator.has_more_pages) {
           return Number(lastPage.data.paginator.page) + 1;
@@ -664,7 +688,7 @@ export const getTaskListService = (listId: string | null | undefined) => {
   );
 };
 
-export const useSubTasks = (parentId: string) =>
+export const useSubTasks = (parentId: string, subtasks: Record<string, ITaskFullList[]>) =>
   useQuery(
     ['sub-tasks', parentId],
     () =>
@@ -676,7 +700,7 @@ export const useSubTasks = (parentId: string) =>
         }
       }),
     {
-      enabled: !!parentId,
+      enabled: !!parentId && !subtasks[parentId],
       select: (res) => res.data.tasks,
       cacheTime: 0
     }

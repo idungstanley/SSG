@@ -56,14 +56,10 @@ export function Row({
 }: RowProps) {
   const dispatch = useAppDispatch();
 
-  const { showNewTaskField, showNewTaskId, toggleAllSubtask } = useAppSelector((state) => state.task);
+  const { showNewTaskField, showNewTaskId, toggleAllSubtask, subtasks } = useAppSelector((state) => state.task);
 
-  const [showSubTasks, setShowSubTasks] = useState(toggleAllSubtask);
+  const [showSubTasks, setShowSubTasks] = useState(false);
   const [isCopied, setIsCopied] = useState<number>(0);
-
-  useEffect(() => {
-    setShowSubTasks(toggleAllSubtask);
-  }, [toggleAllSubtask]);
 
   const otherColumns = columns.slice(1);
 
@@ -248,7 +244,7 @@ export function Row({
         />
       ) : null}
 
-      {showSubTasks ? (
+      {showSubTasks || (toggleAllSubtask && subtasks[task.id]) ? (
         <SubTasks
           paddingLeft={DEFAULT_LEFT_PADDING + paddingLeft}
           listId={listId}

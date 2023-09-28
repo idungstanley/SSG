@@ -20,6 +20,7 @@ import PriorityDropdown from '../../../../../components/priority/PriorityDropdow
 import ToolTip from '../../../../../components/Tooltip/Tooltip';
 import ActiveTreeSearch from '../../../../../components/ActiveTree/ActiveTreeSearch';
 import AlsoitMenuDropdown from '../../../../../components/DropDowns';
+import { ImCheckmark2 } from 'react-icons/im';
 
 export default function TaskMenu() {
   const dispatch = useDispatch();
@@ -254,7 +255,8 @@ export default function TaskMenu() {
             dispatch(setSelectedTasksArray([]));
           }}
         >
-          <span className="text-gray-300">X</span> Dismiss
+          <span className="text-gray-300 mr-2">X</span>
+          Dismiss
         </p>
       </div>
     </div>

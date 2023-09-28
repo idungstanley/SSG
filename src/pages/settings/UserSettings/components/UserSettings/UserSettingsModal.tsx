@@ -1,5 +1,4 @@
 import React, { Fragment, useState } from 'react';
-import { Menu, Transition } from '@headlessui/react';
 import { BsToggleOff } from 'react-icons/bs';
 import { useMutation } from '@tanstack/react-query';
 import { AvatarWithInitials } from '../../../../../components';
@@ -36,7 +35,6 @@ export default function UserSettingsModal({ setShowModal }: UserProps) {
     setShowSettingsMenu(null);
   };
 
-  const { showSidebar } = useAppSelector((state) => state.account);
   const { currentWorkspaceId } = useAppSelector((state) => state.auth);
   const { userData } = useAppSelector((state) => state.userSetting);
 

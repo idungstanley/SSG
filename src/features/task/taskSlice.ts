@@ -10,6 +10,7 @@ import {
   ITaskFullList,
   ITimerDetails,
   Status,
+  Task,
   TaskKey
 } from './interface.tasks';
 import {
@@ -31,12 +32,31 @@ export interface ICustomField {
   type: string;
   values: [
     {
+      color?: string | null;
       id: string;
+      is_bold?: string | null;
+      is_italic?: string | null;
+      is_strike?: string | null;
+      is_underlined?: string | null;
+      model?: string;
+      model_id?: string;
       value: string;
       name: string;
     }
   ];
 }
+
+// color: null;
+// id: '9ed486ae-ff6d-4ea9-8ed8-50b977eb5b6f';
+// is_bold: null;
+// is_italic: null;
+// is_strike: null;
+// is_underlined: null;
+// lan: null;
+// lon: null;
+// model: 'team_member';
+// model_id: 'c12503d2-eec1-414c-9cd4-f71cce4c3e45';
+// value: 'c12503d2-eec1-414c-9cd4-f71cce4c3e45';
 export interface ActiveTaskColumnProps {
   id: string;
   header: string;
@@ -64,6 +84,7 @@ interface IDuplicateTaskObj {
   list_id: string;
   is_everything: boolean;
   popDuplicateTaskModal: boolean;
+  fullTask: Task | null;
 }
 
 export interface ImyTaskData {
@@ -254,7 +275,14 @@ const initialState: TaskState = {
   saveSettingLocal: null,
   saveSettingList: undefined,
   saveSettingOnline: null,
-  duplicateTaskObj: { task_name: '', task_id: '', list_id: '', is_everything: true, popDuplicateTaskModal: true },
+  duplicateTaskObj: {
+    task_name: '',
+    task_id: '',
+    list_id: '',
+    is_everything: true,
+    popDuplicateTaskModal: true,
+    fullTask: null
+  },
   selectedTasksArray: [],
   verticalGrid: false,
   taskUpperCase: false,
