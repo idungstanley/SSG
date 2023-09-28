@@ -5,7 +5,7 @@ import ArrowDown from '../../../assets/icons/ArrowDown';
 import { WeekLineOption } from './WeekLineOption';
 import { CustomMonthLine } from './RecurMonthLine';
 import { YearLineOption } from './YearLineOption';
-import { STR_CONSTANTS, customTypesArr } from '../../../utils/Constants/DatesConstants';
+import { RECUR_STR_CONSTANTS, customTypesArr } from '../../../utils/Constants/DatesConstants';
 import { TypeOptionsProps } from '../RecurringTypes';
 
 interface Props {
@@ -44,9 +44,9 @@ export function CustomRecurOption({ setOptions }: Props) {
           )}
         </div>
       </div>
-      {type === STR_CONSTANTS.week && <WeekLineOption setOptions={setOptions} />}
-      {type === STR_CONSTANTS.year && <YearLineOption />}
-      {type === STR_CONSTANTS.month && <CustomMonthLine setOptions={setOptions} />}
+      {type === RECUR_STR_CONSTANTS.week && <WeekLineOption setOptions={setOptions} />}
+      {type === RECUR_STR_CONSTANTS.year && <YearLineOption />}
+      {type === RECUR_STR_CONSTANTS.month && <CustomMonthLine setOptions={setOptions} />}
     </div>
   );
 }

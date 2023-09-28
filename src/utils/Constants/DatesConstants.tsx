@@ -62,7 +62,7 @@ export function wordToNumber(word: Word): number | null {
   return wordsToNumbers[word] || null; // Return null for unknown words
 }
 
-export const STR_CONSTANTS = {
+export const RECUR_STR_CONSTANTS = {
   week: 'week',
   month: 'month',
   year: 'year',

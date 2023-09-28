@@ -7,7 +7,7 @@ import ArrowUp from '../../../assets/icons/ArrowUp';
 import ArrowDown from '../../../assets/icons/ArrowDown';
 import advancedFormat from 'dayjs/plugin/advancedFormat';
 import { VerticalScroll } from '../../ScrollableContainer/VerticalScroll';
-import { STR_CONSTANTS, Word, dataArr, wordToNumber } from '../../../utils/Constants/DatesConstants';
+import { RECUR_STR_CONSTANTS, Word, dataArr, wordToNumber } from '../../../utils/Constants/DatesConstants';
 import { TypeOptionsProps } from '../RecurringTypes';
 
 interface Props {
@@ -118,7 +118,7 @@ export function CustomMonthLine({ setOptions }: Props) {
           </RadioWrapper>
         ))}
       </div>
-      {value === STR_CONSTANTS.onDate && (
+      {value === RECUR_STR_CONSTANTS.onDate && (
         <div className="relative">
           <div
             className="border-alsoit-gray-75 border rounded-md text-alsoit-text-md h-7 px-1 w-full relative flex justify-between items-center cursor-pointer"
@@ -130,7 +130,7 @@ export function CustomMonthLine({ setOptions }: Props) {
           {dropDown.ordinalDays && ordinalDaysList()}
         </div>
       )}
-      {value === STR_CONSTANTS.byWeek && (
+      {value === RECUR_STR_CONSTANTS.byWeek && (
         <div className="flex flex-col space-y-1.5">
           <div
             className="border-alsoit-gray-75 border rounded-md text-alsoit-text-md h-7 px-1 w-full relative flex justify-between items-center cursor-pointer"

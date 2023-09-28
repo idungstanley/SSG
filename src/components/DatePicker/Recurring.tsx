@@ -13,7 +13,7 @@ import { MonthsOption } from './RecurringSubUI/MonthsOption';
 import {
   IntervalArr,
   MonthOption,
-  STR_CONSTANTS,
+  RECUR_STR_CONSTANTS,
   getMonthOptionString,
   statusArr
 } from '../../utils/Constants/DatesConstants';
@@ -77,9 +77,9 @@ export default function Recurring() {
             <RecurringIntervals setFn={setRecurringInterval} arr={IntervalArr} activeItem={recuringInterval} />
           )}
         </div>
-        {recuringInterval === STR_CONSTANTS.custom && <CustomRecurOption setOptions={setOptions} />}
-        {recuringInterval === STR_CONSTANTS.daysAfter && <DaysAfterOption setOptions={setOptions} />}
-        {recuringInterval === STR_CONSTANTS.monthly && <MonthsOption setOptions={setOptions} />}
+        {recuringInterval === RECUR_STR_CONSTANTS.custom && <CustomRecurOption setOptions={setOptions} />}
+        {recuringInterval === RECUR_STR_CONSTANTS.daysAfter && <DaysAfterOption setOptions={setOptions} />}
+        {recuringInterval === RECUR_STR_CONSTANTS.monthly && <MonthsOption setOptions={setOptions} />}
         <div
           onClick={() => setDropRecurring((prev) => ({ ...prev, statusInterval: !prev.statusInterval }))}
           className="border-alsoit-gray-75 border rounded-md text-alsoit-text-md p-2 relative flex justify-between items-center"
