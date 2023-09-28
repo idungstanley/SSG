@@ -157,6 +157,7 @@ interface TaskState {
   comfortableView: boolean;
   comfortableViewWrap: boolean;
   duplicateTaskObj: IDuplicateTaskObj;
+  currentSelectedDuplicateArr: string[];
   verticalGrid: boolean;
   showNewTaskField: boolean;
   showNewTaskId: string;
@@ -267,6 +268,7 @@ const initialState: TaskState = {
   selectedTasksArray: [],
   verticalGrid: false,
   taskUpperCase: false,
+  currentSelectedDuplicateArr: [],
   triggerSaveSettings: false,
   triggerAutoSave: false,
   triggerSaveSettingsModal: false,
@@ -377,6 +379,9 @@ export const taskSlice = createSlice({
     },
     setDuplicateTaskObj(state, action: PayloadAction<IDuplicateTaskObj>) {
       state.duplicateTaskObj = action.payload;
+    },
+    setCurrentSelectedDuplicateArr(state, action: PayloadAction<string[]>) {
+      state.currentSelectedDuplicateArr = action.payload;
     },
     setSearchValue(state, action: PayloadAction<string>) {
       state.searchValue = action.payload;
@@ -667,6 +672,7 @@ export const {
   getSingleLineView,
   getTaskUpperCase,
   setDuplicateTaskObj,
+  setCurrentSelectedDuplicateArr,
   getVerticalGridlinesTask,
   getSplitSubTask,
   getSplitSubTaskLevels,

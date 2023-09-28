@@ -1,12 +1,10 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import AlsoitMenuDropdown from '../../../../../components/DropDowns';
 import Button from '../../../../../components/Buttons/Button';
 import Assignee from '../../assignTask/Assignee';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
-import { setCurrTeamMemId, setSelectedTaskParentId, setSelectedTaskType } from '../../../../../features/task/taskSlice';
-import { EntityType } from '../../../../../utils/EntityTypes/EntityType';
-import { useGetTeamMemberGroups } from '../../../../../features/settings/teamMemberGroups/teamMemberGroupService';
-import { useGetTeamMembers } from '../../../../../features/settings/teamMembers/teamMemberService';
+import { setCurrTeamMemId } from '../../../../../features/task/taskSlice';
+import { useDuplicateTask } from '../../../../../features/task/taskService';
 
 export default function DuplicateTaskAdvanceModal({
   handleClose,
@@ -16,7 +14,11 @@ export default function DuplicateTaskAdvanceModal({
   anchorEl: null | HTMLSpanElement | HTMLDivElement;
 }) {
   const { duplicateTaskObj } = useAppSelector((state) => state.task);
+
+  const { mutate: duplicateTask } = useDuplicateTask();
   const dispatch = useAppDispatch();
+
+  const [currentSelected, setCurrentSelected] = useState<string[]>([]);
 
   const attributes = [
     { label: 'Everything' },
@@ -54,7 +56,35 @@ export default function DuplicateTaskAdvanceModal({
     } else {
       dispatch(setCurrTeamMemId(null));
     }
+
+    if (duplicateTaskObj.fullTask?.assignees.length) {
+      const label = 'assignee';
+      setCurrentSelected((prevSelected) => [...prevSelected, label]);
+    }
+    if (duplicateTaskObj.fullTask?.description) {
+      const label = 'comments';
+      setCurrentSelected((prevSelected) => [...prevSelected, label]);
+    }
   }, []);
+
+  const handleDuplicateSave = () => {
+    duplicateTask({
+      ...duplicateTaskObj,
+      list_id: duplicateTaskObj.list_id,
+      copy: currentSelected
+    });
+  };
+
+  const onChange = (attribute: string) => {
+    // Toggle the selected state
+    setCurrentSelected((prevSelected) =>
+      prevSelected.includes(attribute)
+        ? prevSelected.filter((selected) => selected !== attribute)
+        : [...prevSelected, attribute]
+    );
+  };
+
+  console.log(currentSelected);
 
   return (
     <div>
@@ -85,7 +115,13 @@ export default function DuplicateTaskAdvanceModal({
                 {attributes.map((attribute) => {
                   return (
                     <div key={attribute.label} className="flex items-center ">
-                      <input type="checkbox" style={checkBox} /> <span className="pl-5">{attribute.label}</span>
+                      <input
+                        type="checkbox"
+                        checked={currentSelected.includes(attribute.label.toLowerCase())}
+                        onChange={() => onChange(attribute.label.toLowerCase())}
+                        style={checkBox}
+                      />
+                      <span className="pl-5">{attribute.label}</span>
                     </div>
                   );
                 })}
@@ -99,7 +135,13 @@ export default function DuplicateTaskAdvanceModal({
                       className={`flex flex-col justify-center ${attribute.asigneeWatcher && 'border-b-2 pb-3'}`}
                     >
                       <div className="flex items-center">
-                        <input type="checkbox" style={checkBox} /> <span className="pl-3">{attribute.label}</span>
+                        <input
+                          type="checkbox"
+                          checked={currentSelected.includes(attribute.label.toLowerCase())}
+                          onChange={() => onChange(attribute.label.toLowerCase())}
+                          style={checkBox}
+                        />
+                        <span className="pl-3">{attribute.label}</span>
                       </div>
                       <p className="ml-16 my-3 ">{attribute.asigneeWatcher}</p>
                     </div>
@@ -111,7 +153,7 @@ export default function DuplicateTaskAdvanceModal({
 
           <div className="flex justify-between my-5">
             <p></p>
-            <p className="cursor-pointer">
+            <p className="cursor-pointer" onClick={handleDuplicateSave}>
               <Button active={true}>Duplicate task</Button>
             </p>
           </div>
