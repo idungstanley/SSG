@@ -267,7 +267,7 @@ export default function PaletteManager({
     >
       <div
         className="w-auto p-3 overflow-y-auto text-gray-500 rounded-full drop-shadow-2xl"
-        style={{ borderRadius: '5px', backgroundColor: 'white' }}
+        style={{ borderRadius: '5px' }}
       >
         <div className="z-50 flex flex-col w-full">
           {!isSearch && (
@@ -451,17 +451,17 @@ export default function PaletteManager({
                 <div className="grid w-full grid-cols-3 -mt-4 text-xs grow">
                   <div className="flex flex-col items-center justify-center">
                     <p>HEX CODE</p>
-                    <span className="w-full border h-7 rounded-l-md">
+                    <span className="w-full bg-white border h-7 rounded-l-md">
                       <EditableInput value={color.hex} style={inputStyles} onChange={onChange} />
                     </span>
                   </div>
                   <div className="flex flex-col items-center justify-center">
                     <p className="w-full pl-2 text-left">NAME</p>
-                    <span className="flex items-center w-full pl-1 border-y h-7">{colorName}</span>
+                    <span className="flex items-center w-full pl-1 bg-white border-y h-7">{colorName}</span>
                   </div>
                   <div className="flex flex-col items-center justify-center">
                     <p className="w-full pl-2 text-left">OPACITY</p>
-                    <span className="flex items-center w-full pl-1 border rounded-r-md h-7">
+                    <span className="flex items-center w-full pl-1 bg-white border rounded-r-md h-7">
                       {color && color.rgb && color.rgb.a !== undefined && Math.floor(color.rgb.a * 100)}%
                     </span>
                   </div>
