@@ -1,3 +1,5 @@
+import { MonthOption } from '../../components/DatePicker/RecurringTypes';
+
 export const RECUR_STR_CONSTANTS = {
   week: 'week',
   month: 'month',
@@ -19,9 +21,6 @@ export const RECUR_STR_CONSTANTS = {
   lastDay: 'last_day',
   firstDay: 'first_day'
 };
-
-// Define a type for the options
-export type MonthOption = 'same_day' | 'first_day' | 'last_day' | 'days_after' | 'done' | 'completed';
 
 export const IntervalArr = [
   RECUR_STR_CONSTANTS.daily,

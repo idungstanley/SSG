@@ -12,14 +12,13 @@ import { CustomRecurOption } from './RecurringSubUI/CustomRecurOption';
 import { MonthsOption } from './RecurringSubUI/MonthsOption';
 import {
   IntervalArr,
-  MonthOption,
   RECUR_STR_CONSTANTS,
   getMonthOptionString,
   statusArr
 } from '../../utils/Constants/DatesConstants';
 import { useCreateTaskRecuring } from '../../features/task/taskService';
 import { useParams } from 'react-router-dom';
-import { DropProps, RecurFrequency, TypeOptionsProps } from './RecurringTypes';
+import { DropProps, MonthOption, RecurFrequency, TypeOptionsProps } from './RecurringTypes';
 
 export default function Recurring() {
   const { taskId } = useParams();

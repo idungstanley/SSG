@@ -29,3 +29,6 @@ export type customOptionsProps = {
   yearly_month_number?: string;
   yearly_month_day_number?: string;
 };
+
+// Define a type for the options
+export type MonthOption = 'same_day' | 'first_day' | 'last_day' | 'days_after' | 'done' | 'completed';

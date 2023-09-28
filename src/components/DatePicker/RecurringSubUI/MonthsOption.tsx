@@ -2,8 +2,8 @@ import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import ArrowUp from '../../../assets/icons/ArrowUp';
 import ArrowDown from '../../../assets/icons/ArrowDown';
 import RadioWrapper from '../RadioWrapper';
-import { MonthOption, getMonthOptionString, monthOptionsArr } from '../../../utils/Constants/DatesConstants';
-import { TypeOptionsProps } from '../RecurringTypes';
+import { getMonthOptionString, monthOptionsArr } from '../../../utils/Constants/DatesConstants';
+import { MonthOption, TypeOptionsProps } from '../RecurringTypes';
 
 interface Props {
   setOptions: Dispatch<SetStateAction<TypeOptionsProps | undefined>>;
