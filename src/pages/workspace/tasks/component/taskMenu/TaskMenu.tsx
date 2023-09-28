@@ -255,7 +255,7 @@ export default function TaskMenu() {
             dispatch(setSelectedTasksArray([]));
           }}
         >
-          <span className="text-gray-300">X</span>
+          <span className="text-gray-300 mr-2">X</span>
           Dismiss
         </p>
       </div>

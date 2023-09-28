@@ -1,7 +1,12 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import AlsoitMenuDropdown from '../../../../../components/DropDowns';
 import Button from '../../../../../components/Buttons/Button';
 import Assignee from '../../assignTask/Assignee';
+import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
+import { setCurrTeamMemId, setSelectedTaskParentId, setSelectedTaskType } from '../../../../../features/task/taskSlice';
+import { EntityType } from '../../../../../utils/EntityTypes/EntityType';
+import { useGetTeamMemberGroups } from '../../../../../features/settings/teamMemberGroups/teamMemberGroupService';
+import { useGetTeamMembers } from '../../../../../features/settings/teamMembers/teamMemberService';
 
 export default function DuplicateTaskAdvanceModal({
   handleClose,
@@ -10,6 +15,9 @@ export default function DuplicateTaskAdvanceModal({
   handleClose: () => void;
   anchorEl: null | HTMLSpanElement | HTMLDivElement;
 }) {
+  const { duplicateTaskObj } = useAppSelector((state) => state.task);
+  const dispatch = useAppDispatch();
+
   const attributes = [
     { label: 'Everything' },
     { label: 'Activity' },
@@ -39,6 +47,14 @@ export default function DuplicateTaskAdvanceModal({
     cursor: 'pointer',
     color: '#7F76F0'
   };
+
+  useEffect(() => {
+    if (duplicateTaskObj.fullTask?.assignees.length) {
+      dispatch(setCurrTeamMemId(duplicateTaskObj.fullTask?.assignees[0]?.id as string));
+    } else {
+      dispatch(setCurrTeamMemId(null));
+    }
+  }, []);
 
   return (
     <div>

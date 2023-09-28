@@ -219,7 +219,7 @@ export function StickyCol({
   }, [selectedTasksArray, task.id]);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    dispatch(setDuplicateTaskObj({ ...duplicateTaskObj, task_name: task.name, task_id: task.id }));
+    dispatch(setDuplicateTaskObj({ ...duplicateTaskObj, task_name: task.name, task_id: task.id, fullTask: task }));
     const indexInArray = selectedIndexArray.indexOf(taskIndex as number);
     if (!selectedIndexArray.includes(taskIndex as number)) {
       setSelectedIndexArray((prev) => {
