@@ -3,9 +3,11 @@ import { taskStatusProps } from './statusManager.interface';
 
 interface StatusManagerState {
   templateNames: string[];
+  templateCollections: taskStatusProps[];
 }
 const initialState: StatusManagerState = {
-  templateNames: []
+  templateNames: [],
+  templateCollections: []
 };
 export const statusManagerSlice = createSlice({
   name: 'statusManager',
@@ -15,6 +17,7 @@ export const statusManagerSlice = createSlice({
       state.templateNames = action.payload.map((item) => {
         return item.name;
       });
+      state.templateCollections = action.payload;
     }
   }
 });

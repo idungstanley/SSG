@@ -1,3 +1,5 @@
+import { StatusType } from '../../utils/StatusManagement/Types';
+
 export interface statusItemsProps {
   color: string;
   position: number;
@@ -7,7 +9,7 @@ export interface statusItemsProps {
 export interface taskStatusProps {
   checksum: string;
   id: string;
-  items: statusItemsProps[];
+  items: StatusType[];
   name: string;
 }
 export interface getStatusTemplateRes {

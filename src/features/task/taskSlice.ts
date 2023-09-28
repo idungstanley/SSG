@@ -10,6 +10,7 @@ import {
   ITaskFullList,
   ITimerDetails,
   Status,
+  Task,
   TaskKey
 } from './interface.tasks';
 import {
@@ -83,6 +84,7 @@ interface IDuplicateTaskObj {
   list_id: string;
   is_everything: boolean;
   popDuplicateTaskModal: boolean;
+  fullTask: Task | null;
 }
 
 export interface ImyTaskData {
@@ -273,7 +275,14 @@ const initialState: TaskState = {
   saveSettingLocal: null,
   saveSettingList: undefined,
   saveSettingOnline: null,
-  duplicateTaskObj: { task_name: '', task_id: '', list_id: '', is_everything: true, popDuplicateTaskModal: true },
+  duplicateTaskObj: {
+    task_name: '',
+    task_id: '',
+    list_id: '',
+    is_everything: true,
+    popDuplicateTaskModal: true,
+    fullTask: null
+  },
   selectedTasksArray: [],
   verticalGrid: false,
   taskUpperCase: false,
