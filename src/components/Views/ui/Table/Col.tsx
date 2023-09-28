@@ -32,6 +32,7 @@ import RatingField from './CustomField/Ratings/RatingField';
 import TimeField from './CustomField/TimeField/TimeField';
 import AutoProgress from './CustomField/Progress/AutoProgress';
 import FormulaField from './CustomField/Formula/FormulaField';
+import PeopleField from './CustomField/PeopleField/PeopleField';
 
 interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   value: TaskValue;
@@ -191,6 +192,13 @@ export function Col({ value, field, fieldId, task, customFields, taskStatuses, .
         currentCustomFieldColumn={task.custom_field_columns?.find((i) => i.id === fieldId) as IField}
         taskCustomFields={task.custom_fields as ICustomField[]}
         taskCustomFieldsColumns={task.custom_field_columns}
+      />
+    ),
+    people: (
+      <PeopleField
+        entityCustomProperty={customFields?.find((i) => i.id === fieldId)}
+        taskId={task.id}
+        taskCustomFields={task.custom_fields?.find((i) => i.id === fieldId)}
         fieldId={fieldId}
       />
     )

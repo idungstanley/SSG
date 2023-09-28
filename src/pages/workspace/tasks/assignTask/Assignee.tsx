@@ -29,6 +29,8 @@ export default function Assignee({
 
   const { currTeamMemberId } = useAppSelector((state) => state.task);
 
+  console.log(currTeamMemberId);
+
   const [searchInput, setSearchInput] = useState<string>('');
   const [teams, setTeams] = useState<boolean>(false);
   const [filteredMembers, setFilteredMembers] = useState<ITeamMembersAndGroup[] | undefined>([]);

@@ -34,7 +34,7 @@ export default function PaletteListView() {
   );
 }
 
-type FORMATTED_COLOR = {
+export type FORMATTED_COLOR = {
   exactMatch: boolean;
   name: string;
   rgb: string | null;
@@ -42,8 +42,10 @@ type FORMATTED_COLOR = {
 
 function Row({ item, key }: { item: string; key: number }) {
   initColors(ORIGINAL_COLORS);
+
   const [isChecked, setIsChecked] = useState<boolean>(false);
   const [colorName, setColorName] = useState<string>('Missing Color');
+
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const isChecked = e.target.checked;
     setIsChecked(isChecked);

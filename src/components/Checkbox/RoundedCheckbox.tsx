@@ -17,9 +17,6 @@ export default function RoundedCheckbox({
       className={styles}
       style={{ marginLeft: '-0.3px' }}
       onChange={onChange}
-      // onClick={() => {
-      //   displayNav(task?.id as string);
-      // }}
     />
   );
 }

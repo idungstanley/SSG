@@ -6,3 +6,4 @@ declare module 'ntc-ts';
 declare module 'react-timer-wrapper';
 declare module 'react-color';
 declare module 'cypress';
+declare module 'react-color/lib/components/common';
