@@ -266,10 +266,10 @@ export default function PaletteManager({
       }}
     >
       <div
-        className="w-auto p-2 overflow-y-auto text-gray-500 rounded-full drop-shadow-2xl"
+        className="w-auto p-3 overflow-y-auto text-gray-500 rounded-full drop-shadow-2xl"
         style={{ borderRadius: '5px', backgroundColor: 'white' }}
       >
-        <div className="z-50 flex flex-col w-full px-2">
+        <div className="z-50 flex flex-col w-full">
           {!isSearch && (
             <div className="flex items-center justify-between mb-2">
               <p className="justify-center ml-2">COLOUR LIBRARY</p>
