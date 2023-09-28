@@ -44,7 +44,7 @@ export default function FullPilot({ featureTabs, activeSection, setShowModal, sh
           height: `${adjustedHeight}px`
         }}
         className={cl(
-          showFullPilot ? 'relative translate-x-0' : 'w-96 absolute top-0 translate-x-full z-20',
+          showFullPilot ? 'relative translate-x-0' : 'w-96 absolute top-0 translate-x-full z-10',
           !showOverlay ? 'border-l' : '',
           'right-0  bottom-0 mb-10 pb-6 transform bg-white flex flex-col transition-transform duration-500'
         )}
