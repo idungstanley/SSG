@@ -41,7 +41,7 @@ function Input({
     <div className="w-full">
       {label && (
         <div className="flex justify-between mb-1">
-          <label htmlFor={name} className="block text-sm font-medium text-gray-700">
+          <label htmlFor={name} className="block text-sm text-gray-700">
             {label}
           </label>
           {cornerHint && <span className="text-sm text-gray-500">{cornerHint}</span>}
