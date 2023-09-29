@@ -9,7 +9,7 @@ interface CustomScrollableContainerProps extends HTMLAttributes<HTMLDivElement> 
 const DEFAULT_THUMB_HEIGHT = 20;
 const ARROWS_WRAPPER_HEIGHT = 27;
 
-export function VerticalScroll({ children, ...props, bgColor }: CustomScrollableContainerProps) {
+export function VerticalScroll({ children, bgColor, ...props }: CustomScrollableContainerProps) {
   // update size is pilot is visible / invisible
   const { show: showFullPilot } = useAppSelector((state) => state.slideOver.pilotSideOver);
   const {
