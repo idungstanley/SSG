@@ -258,8 +258,16 @@ export const useAddTask = (task?: Task) => {
   });
 };
 
-const duplicateTask = (data: { task_name: string; task_id: string; list_id: string; is_everything: boolean }) => {
-  const { task_name, task_id, list_id, is_everything } = data;
+const duplicateTask = (data: {
+  task_name: string;
+  task_id: string;
+  list_id: string;
+  is_everything: boolean;
+  copy?: string[];
+}) => {
+  const { task_name, task_id, list_id, is_everything, copy } = data;
+
+  const custom_is_everything = copy?.includes('Everything');
 
   const response = requestNew<newTaskDataRes>({
     url: `tasks/${task_id}/duplicate`,
@@ -267,7 +275,8 @@ const duplicateTask = (data: { task_name: string; task_id: string; list_id: stri
     data: {
       name: task_name,
       list_id,
-      is_everything
+      is_everything: copy?.length ? custom_is_everything : is_everything,
+      copy: copy || null
     }
   });
   return response;
