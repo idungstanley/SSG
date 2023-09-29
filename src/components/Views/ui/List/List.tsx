@@ -5,7 +5,7 @@ import { filterByAssignee, filterBySearchValue, sortTasks } from '../../../Tasks
 import { Table } from '../Table/Table';
 import { Label } from './Label';
 import { AddTask } from '../AddTask/AddTask';
-import { setCurrTeamMemId } from '../../../../features/task/taskSlice';
+import { getTaskColumns, setCurrTeamMemId } from '../../../../features/task/taskSlice';
 import { columnsHead, listColumnProps } from '../../../../pages/workspace/tasks/component/views/ListColumns';
 import { cl } from '../../../../utils';
 import { IField, IListDetailRes } from '../../../../features/list/list.interfaces';
@@ -66,7 +66,9 @@ export function List({ tasks, subtasksCustomeFields, listDetails }: ListProps) {
       hidden: false,
       color: i.color
     }));
-    return unique([...columnsHead, ...customFieldNames]);
+    const uniqueColumns = unique([...columnsHead, ...customFieldNames]);
+    dispatch(getTaskColumns(uniqueColumns));
+    return uniqueColumns;
   }, [tasks]);
 
   const generateSubtasksColumns = useMemo(() => {

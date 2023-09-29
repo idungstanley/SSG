@@ -429,28 +429,25 @@ export const taskSlice = createSlice({
     hideTaskColumns(state, action) {
       return {
         ...state,
-        hideTask:
-          state.hideTask.length != 0
-            ? state.hideTask.map((prev) => {
-                if (prev.field === action.payload) {
-                  return {
-                    ...prev,
-                    hidden: !prev.hidden
-                  };
-                } else {
-                  return prev;
-                }
-              })
-            : state.taskColumns.map((prev) => {
-                if (prev.field === action.payload) {
-                  return {
-                    ...prev,
-                    hidden: !prev.hidden
-                  };
-                } else {
-                  return prev;
-                }
-              })
+        hideTask: state.hideTask.length
+          ? state.hideTask.map((prev) => {
+              if (prev.id === action.payload) {
+                return {
+                  ...prev,
+                  hidden: !prev.hidden
+                };
+              }
+              return prev;
+            })
+          : state.taskColumns.map((prev) => {
+              if (prev.id === action.payload) {
+                return {
+                  ...prev,
+                  hidden: !prev.hidden
+                };
+              }
+              return prev;
+            })
       };
     },
     getComfortableView(state, action: PayloadAction<boolean>) {
