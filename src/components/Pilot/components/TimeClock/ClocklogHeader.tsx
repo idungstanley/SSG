@@ -8,6 +8,7 @@ import ShowIcon from '../../../../assets/icons/ShowIcon';
 import CollapseIcon from '../../../Views/ui/collapseIcon/CollapseIcon';
 import { User } from './ClockLog';
 import { TimeLogAssigneeDropDown } from './ClockLogAssigneeDropDown';
+import { Tooltip } from '@mui/material';
 
 interface Props {
   handleShowLogs: () => void;
@@ -41,7 +42,9 @@ export function ClockLogHeader({ handleShowLogs, showLogs, handleFilters, meMode
           </div>
           Time Inventory
         </label>
-        <span className="text-alsoit-text-md">{activeItemName}</span>
+        <Tooltip title={activeItemName}>
+          <span className="text-alsoit-text-md cursor-help">{activeItemName?.slice(0, 10)}..</span>
+        </Tooltip>
       </div>
       <div className="flex justify-end space-x-1 px-1.5">
         <div className="p-1 rounded-sm bg-alsoit-gray-50">

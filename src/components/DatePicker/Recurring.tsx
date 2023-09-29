@@ -43,14 +43,14 @@ export default function Recurring() {
   const [repeat, setRepeat] = useState<RecurFrequency>();
   const [options, setOptions] = useState<TypeOptionsProps>();
 
-  const { mutateAsync } = useCreateTaskRecuring();
+  const { mutateAsync, isError, error } = useCreateTaskRecuring();
 
   const handleSubmit = () => {
     mutateAsync({
       type: recuringInterval,
       execution_type: statusInterval,
-      taskId,
       new_task: taskColumns,
+      taskId,
       recur_options: repeat,
       type_options: options
     });
@@ -61,6 +61,11 @@ export default function Recurring() {
       spaceStatuses.map((status) => setStatusData((prev) => [...prev, status.name]));
     }
   }, [spaceStatuses]);
+
+  if (isError) {
+    const resErr = error;
+    return <div className="text-center text-alsoit-text-md">Opps! {resErr.statusText}</div>;
+  }
 
   return (
     <div className="flex flex-col space-y-2 p-2">
