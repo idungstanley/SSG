@@ -80,6 +80,13 @@ code {
   height: 64px;
 }
 
+.base-input:focus {
+  border: 1px solid #e0e0e0;
+  border-radius: 0;
+  box-shadow: none;
+  overflow-x: auto;
+}
+
 /* .color_theme {
   width: 32px;
   height: 32px;

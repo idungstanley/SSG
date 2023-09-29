@@ -44,7 +44,7 @@ function PeopleField({ taskCustomFields, taskId, fieldId, entityCustomProperty }
       : [];
     onUpdate({
       taskId,
-      value: singleUser ? [{ value: member.id, type }] : [...existValues, { value: member.id, type }],
+      value: singleUser ? [{ value: member.id, type: type }] : [...existValues, { value: member.id, type }],
       fieldId
     });
   };

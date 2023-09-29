@@ -10,8 +10,12 @@ import { generateFilters } from '../../components/TasksHeader/lib/generateFilter
 import { UseGetHubDetails } from '../hubs/hubService';
 import { IList } from '../hubs/hubs.interfaces';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
-import { setNewCustomPropertyDetails, setSubtasks, setTasks } from '../task/taskSlice';
-import { updateCustomFieldsManager } from '../../managers/Task';
+import { ICustomField, setNewCustomPropertyDetails, setSubtasks, setTasks } from '../task/taskSlice';
+import {
+  createCustomFieldColumnManager,
+  updateCustomFieldColumnManager,
+  updateCustomFieldManager
+} from '../../managers/Task';
 import { customPropertiesProps } from '../task/interface.tasks';
 
 interface TaskCountProps {
@@ -26,9 +30,15 @@ interface IResponseList {
   };
 }
 
-interface IResCustomfield {
+interface IResCustomfieldColumns {
   data: {
     custom_field: IField;
+  };
+}
+
+interface IResCustomfield {
+  data: {
+    custom_field: ICustomField;
   };
 }
 
@@ -237,7 +247,7 @@ const createDropdownField = (data: {
   properties?: customPropertiesProps;
 }) => {
   const { id, options, name, type, customType, style, color, properties } = data;
-  const response = requestNew<IResCustomfield>({
+  const response = requestNew<IResCustomfieldColumns>({
     url: 'custom-fields',
     method: 'POST',
     data: {
@@ -264,7 +274,7 @@ export const useCreateDropdownField = () => {
   return useMutation(createDropdownField, {
     onSuccess: (data) => {
       dispatch(setNewCustomPropertyDetails({ name: '', type: 'Select Property Type', color: null }));
-      const updatedList = updateCustomFieldsManager(
+      const updatedList = createCustomFieldColumnManager(
         entityForCustom.type === EntityType.task ? subtasks : tasks,
         data.data.custom_field,
         entityForCustom.type === EntityType.task ? entityForCustom.id : ''
@@ -278,6 +288,38 @@ export const useCreateDropdownField = () => {
   });
 };
 
+const updateDropdownField = (data: { data: IField; newFields: { [key: string]: unknown } }) => {
+  const response = requestNew<IResCustomfieldColumns>({
+    url: `custom-fields/${data.data.id}`,
+    method: 'PUT',
+    data: {
+      ...data.data,
+      ...data.newFields
+    }
+  });
+  return response;
+};
+
+export const useUpdateDropdownField = (parentId: string) => {
+  const dispatch = useAppDispatch();
+
+  const { tasks, subtasks } = useAppSelector((state) => state.task);
+
+  return useMutation(updateDropdownField, {
+    onSuccess: (data) => {
+      dispatch(setNewCustomPropertyDetails({ name: '', type: 'Select Property Type', color: null }));
+      const { updatedTasks, updatedSubtasks } = updateCustomFieldColumnManager(
+        tasks,
+        subtasks,
+        data.data.custom_field,
+        parentId
+      );
+      dispatch(setTasks(updatedTasks));
+      dispatch(setSubtasks(updatedSubtasks));
+    }
+  });
+};
+
 const updateEntityCustomFieldValue = (data: {
   taskId?: string;
   fieldId: string;
@@ -285,7 +327,7 @@ const updateEntityCustomFieldValue = (data: {
 }) => {
   const { taskId, fieldId, value } = data;
 
-  const response = requestNew({
+  const response = requestNew<IResCustomfield>({
     url: `custom-fields/${fieldId}/value`,
     method: 'PUT',
     data: {
@@ -297,17 +339,21 @@ const updateEntityCustomFieldValue = (data: {
   return response;
 };
 
-export const useUpdateEntityCustomFieldValue = (listId?: string) => {
-  const queryClient = useQueryClient();
+export const useUpdateEntityCustomFieldValue = (taskId: string) => {
+  const dispatch = useAppDispatch();
 
-  const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
-  const { filters } = generateFilters();
+  const { tasks, subtasks } = useAppSelector((state) => state.task);
 
   return useMutation(updateEntityCustomFieldValue, {
-    onSuccess: () => {
-      queryClient.invalidateQueries(['task', activeItemId, activeItemType]);
-      queryClient.invalidateQueries(['task', { listId }]);
-      queryClient.invalidateQueries(['task', listId, 'hub', filters]);
+    onSuccess: (data) => {
+      const { updatedTasks, updatedSubtasks } = updateCustomFieldManager(
+        tasks,
+        subtasks,
+        data.data.custom_field,
+        taskId
+      );
+      dispatch(setTasks(updatedTasks));
+      dispatch(setSubtasks(updatedSubtasks));
     }
   });
 };

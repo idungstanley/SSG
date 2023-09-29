@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import SubtasksIcon from '../../../../assets/icons/SubtasksIcon';
 import { ITaskFullList, Tag, Task } from '../../../../features/task/interface.tasks';
 import { DEFAULT_LEFT_PADDING } from '../../config';
@@ -248,8 +248,7 @@ export function Row({
         <SubTasks
           paddingLeft={DEFAULT_LEFT_PADDING + paddingLeft}
           listId={listId}
-          parentId={task.id}
-          parentName={task.name}
+          parentTask={task}
           columns={columns}
           taskStatuses={taskStatuses}
           isSplitSubtask={isSplitSubtask}

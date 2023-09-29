@@ -57,7 +57,7 @@ function NumberField({ taskCustomFields, taskId, fieldId }: DropdownFieldWrapper
         setIsCopied(0);
       }, 500);
     } catch (error) {
-      console.warn(`Failed to copy: ${error}`);
+      // console.warn(`Failed to copy: ${error}`);
     }
   };
 

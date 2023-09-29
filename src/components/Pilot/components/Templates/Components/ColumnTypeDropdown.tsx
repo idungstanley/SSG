@@ -18,6 +18,7 @@ import RatingOption from './Rating/RatingOptions';
 import { VerticalScroll } from '../../../../ScrollableContainer/VerticalScroll';
 import ProgressOptions from './Progress/Progress';
 import TimeOption from './Time/TimeOptions';
+import FormulaOptions from './Formula/Formula';
 import FilesOptions from './Files/FileOption';
 import PeopleOptions from './People/PeopleOptions';
 import LocationOptions from './Location/LocationOptions';
@@ -82,6 +83,11 @@ const columnTypes = [
     id: 'Time',
     title: 'Time',
     options: <TimeOption />
+  },
+  {
+    id: 'Formula',
+    title: 'Formula',
+    options: <FormulaOptions />
   },
   {
     id: 'Files',

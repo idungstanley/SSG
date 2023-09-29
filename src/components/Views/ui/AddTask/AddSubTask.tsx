@@ -111,14 +111,7 @@ export function AddSubTask({
       </tr>
 
       {showSubTasks ? (
-        <SubTasks
-          listId={listId}
-          paddingLeft={DEFAULT_LEFT_PADDING}
-          parentId={task.id}
-          parentName={task.name}
-          columns={columns}
-          level={0}
-        />
+        <SubTasks listId={listId} paddingLeft={DEFAULT_LEFT_PADDING} parentTask={task} columns={columns} level={0} />
       ) : null}
     </>
   );
