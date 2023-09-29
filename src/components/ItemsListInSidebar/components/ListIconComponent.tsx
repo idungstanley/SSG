@@ -30,11 +30,14 @@ export default function ListIconComponent({
   return (
     <>
       {type === 'colourToggle' ? (
-        <div className="relative flex items-center justify-between" style={{ height: '22px', width: '44px' }}>
+        <div
+          className="relative flex items-center justify-between"
+          style={{ height: '22px', width: shape === SolidSquare || shape === SolidCircle ? '22px' : '44px' }}
+        >
           <button
-            className={`${
-              isOutterFrameActive ? 'border-primary-500 border rounded-l-md z-2' : 'border-gray-200'
-            } flex items-center justify-center p-1 absolute left-0 border rounded-l-md`}
+            className={`${isOutterFrameActive ? 'border-primary-500 border z-2' : 'border-gray-200'}  ${
+              shape === SolidSquare || shape === SolidCircle ? 'rounded' : 'rounded-l-md'
+            } flex items-center justify-center p-1 absolute left-0 border`}
             onClick={outterFrameClick}
           >
             <span

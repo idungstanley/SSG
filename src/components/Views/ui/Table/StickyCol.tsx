@@ -20,7 +20,6 @@ import {
 } from '../../../../features/task/taskSlice';
 import { setActiveItem } from '../../../../features/workspace/workspaceSlice';
 import { UniqueIdentifier, useDraggable, useDroppable } from '@dnd-kit/core';
-import { ImCancelCircle } from 'react-icons/im';
 import CloseSubtask from '../../../../assets/icons/CloseSubtask';
 import OpenSubtask from '../../../../assets/icons/OpenSubtask';
 import { Capitalize } from '../../../../utils/NoCapWords/Capitalize';
@@ -31,6 +30,8 @@ import DetailsOnHover from '../../../Dropdown/DetailsOnHover/DetailsOnHover';
 import { EntityType } from '../../../../utils/EntityTypes/EntityType';
 import SubtasksIcon from '../../../../assets/icons/SubtasksIcon';
 import { ITask_statuses } from '../../../../features/list/list.interfaces';
+import SaveIcon from '../../../../assets/icons/SaveIcon.svg';
+import Close from '../../../../assets/icons/Close.svg';
 
 interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   task: Task;
@@ -218,7 +219,7 @@ export function StickyCol({
   }, [selectedTasksArray, task.id]);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    dispatch(setDuplicateTaskObj({ ...duplicateTaskObj, task_name: task.name, task_id: task.id }));
+    dispatch(setDuplicateTaskObj({ ...duplicateTaskObj, task_name: task.name, task_id: task.id, fullTask: task }));
     const indexInArray = selectedIndexArray.indexOf(taskIndex as number);
     if (!selectedIndexArray.includes(taskIndex as number)) {
       setSelectedIndexArray((prev) => {
@@ -453,18 +454,21 @@ export function StickyCol({
               `relative border-t ${verticalGrid && 'border-r'} w-full h-16  py-4 p-4 flex items-center`
             )}
           >
-            <div className="absolute flex ml-2 -mt-10 space-x-1">
+            <div className="absolute flex space-x-1 bottom-0 right-0">
               <ToolTip title="Cancel">
-                <div className="p-1 border rounded-md" style={{ borderColor: '#FFE7E7' }}>
-                  <ImCancelCircle onClick={onClose} />
+                <div
+                  className="border rounded-sm"
+                  style={{ borderColor: '#B2B2B280', borderWidth: '0.5px', width: '20px' }}
+                  onClick={onClose}
+                >
+                  <img src={Close} alt="Cancel"></img>
                 </div>
               </ToolTip>
-              <button
-                onClick={(e) => handleOnSave(e as React.MouseEvent<HTMLButtonElement, MouseEvent>, task.id)}
-                className="flex items-center h-6 px-6 text-sm text-white rounded-md bg-alsoit-success"
-              >
-                Save
-              </button>
+              <ToolTip title="Save">
+                <span onClick={(e) => handleOnSave(e as React.MouseEvent<HTMLButtonElement, MouseEvent>, task.id)}>
+                  <img src={SaveIcon} alt="Save"></img>
+                </span>
+              </ToolTip>
             </div>
             <div className="pt-2 ml-4">
               <StatusDropdown TaskCurrentStatus={task.status} />

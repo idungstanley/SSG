@@ -1,5 +1,6 @@
 import { Dispatch, SetStateAction } from 'react';
 import RadioWrapper from '../RadioWrapper';
+import { getMonthOptionString } from '../../../utils/Constants/DatesConstants';
 
 interface RecurringIntervalsProps {
   arr: string[];
@@ -23,7 +24,11 @@ export function RecurringIntervals({ arr, setFn, activeItem, styles }: Recurring
               styles="text-alsoit-text-md p-2 hover:bg-alsoit-purple-50 capitalize cursor-pointer font-semibold flex space-x-1 p-1"
               btnCheckState={activeItem === interval}
             >
-              <span>{interval}</span>
+              <span>
+                {interval === 'days_after' || interval === 'done' || interval === 'completed'
+                  ? getMonthOptionString(interval)
+                  : interval}
+              </span>
             </RadioWrapper>
           </div>
         );
