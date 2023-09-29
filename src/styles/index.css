@@ -193,3 +193,13 @@ input:focus {
   -webkit-appearance: none;
   margin: 0;
 }
+
+.no-border-input {
+  border: none !important;
+  outline: none !important;
+}
+
+.no-border-input:focus {
+  border: none !important;
+  outline: none !important;
+}

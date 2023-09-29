@@ -1,28 +1,48 @@
 import dayjs from 'dayjs';
-import { useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import ArrowUp from '../../../assets/icons/ArrowUp';
 import ArrowDown from '../../../assets/icons/ArrowDown';
 import { generateMonthsInYear } from '../../../utils/calendar';
 import RadioWrapper from '../RadioWrapper';
+import { TypeOptionsProps } from '../RecurringTypes';
 
-export function YearLineOption() {
+interface Props {
+  setOptions: Dispatch<SetStateAction<TypeOptionsProps | undefined>>;
+}
+
+export function YearLineOption({ setOptions }: Props) {
   const [value, setValue] = useState<{ [key: string]: string }>({
     day: dayjs().format('D'),
     months: dayjs().format('MMMM')
   });
+  const [monthNumber, setMonthNumber] = useState<string>('');
   const [dropDown, setDropDown] = useState<boolean>(false);
 
-  const handleCloseModal = (value: string, target: string) => {
+  const handleCloseModal = (value: string, target: string, monthNumber: number) => {
     setValue((prev) => ({ ...prev, [target]: value }));
+    setMonthNumber(`${monthNumber + 1}`);
     setDropDown(!dropDown);
   };
+
+  useEffect(() => {
+    monthNumber &&
+      setOptions((prev) => ({
+        ...prev,
+        yearly_month_day_number: value['day'],
+        yearly_month_number: monthNumber
+      }));
+  }, [value, monthNumber]);
 
   const yearDropDown = () => {
     return (
       <div className="flex flex-col space-y-1.5 absolute bg-alsoit-gray-50 shadow-2xl z-30 px-2">
-        {generateMonthsInYear(dayjs().year()).map((item) => {
+        {generateMonthsInYear(dayjs().year()).map((item, index) => {
           return (
-            <div key={`${item}-data`} className="cursor-pointer" onClick={() => handleCloseModal(item, 'months')}>
+            <div
+              key={`${item}-data`}
+              className="cursor-pointer"
+              onClick={() => handleCloseModal(item, 'months', index)}
+            >
               <RadioWrapper
                 btnCheckState={value.months === item}
                 checkStateFn={() => setValue((prev) => ({ ...prev, months: item }))}
