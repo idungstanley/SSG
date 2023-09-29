@@ -1,26 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { Menu } from '@mui/material';
-import Button from '../../../../../Buttons/Button';
-import ArrowDownFilled from '../../../../../../assets/icons/ArrowDownFilled';
-import { BsFillDashSquareFill, BsFillSlashSquareFill, BsFillXSquareFill, BsPlusSquareFill } from 'react-icons/bs';
 import { Parser as FormulaParser } from 'hot-formula-parser';
 import { IField } from '../../../../../../features/list/list.interfaces';
-import Number from '../../../../../../assets/branding/Number';
 import { ICustomField } from '../../../../../../features/task/taskSlice';
 import { useUpdateDropdownField, useUpdateEntityCustomFieldValue } from '../../../../../../features/list/listService';
 import AdditionalFormulasField from './AdditionalFormulasField';
-import { IFormulaData, findSelectedItemsInFormula } from './findSelectedItemsInFormula';
-
-const actions = [
-  { id: 'SUM', icon: <BsPlusSquareFill color="#6bc950" size={25} /> },
-  { id: 'MINUS', icon: <BsFillDashSquareFill color="#fd7171" size={25} /> },
-  { id: 'MULTIPLY', icon: <BsFillXSquareFill color="#ffc800" size={25} /> },
-  { id: 'DIVIDE', icon: <BsFillSlashSquareFill color="#49ccf9" size={25} /> }
-];
+import { findSelectedItemsInFormula } from './findSelectedItemsInFormula';
+import SimpleFormulasField from './SimpleFormulasField';
 
 const BASE_ACTIONS = ['SUM', 'MINUS', 'MULTIPLY', 'DIVIDE'];
+const ALLOWED_TYPES = ['number', 'formula'];
 
 interface DropdownFieldWrapperProps {
+  currentCustomFields: ICustomField;
   currentCustomFieldColumn: IField;
   taskCustomFields: ICustomField[];
   taskCustomFieldsColumns: IField[];
@@ -30,6 +22,7 @@ interface DropdownFieldWrapperProps {
 }
 
 function FormulaField({
+  currentCustomFields,
   currentCustomFieldColumn,
   taskCustomFields,
   taskCustomFieldsColumns,
@@ -37,19 +30,7 @@ function FormulaField({
   taskId,
   fieldId
 }: DropdownFieldWrapperProps) {
-  // menu positions
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [anchorOne, setAnchorOne] = useState<null | HTMLElement>(null);
-  const [anchorTwo, setAnchorTwo] = useState<null | HTMLElement>(null);
-  const [anchorAction, setAnchorAction] = useState<null | HTMLElement>(null);
-  // open/close state
-  const [isOpenSelectOne, setIsOpenSelectOne] = useState(false);
-  const [isOpenSelectTwo, setIsOpenSelectTwo] = useState(false);
-  const [isOpenSelectAction, setIsOpenSelectAction] = useState(false);
-  // main states
-  const [selectedItemOne, setSelectedItemOne] = useState<IFormulaData | null>(null);
-  const [selectedItemTwo, setSelectedItemTwo] = useState<IFormulaData | null>(null);
-  const [selectedAction, setSelectedAction] = useState<string>('SUM');
   const [currentFields, setCurrentFields] = useState<IField[]>([]);
   const [result, setResult] = useState('-');
   const [isShowAdditionalFormulas, setShowAdditionalFormulas] = useState<boolean>(false);
@@ -58,7 +39,7 @@ function FormulaField({
   useEffect(() => {
     const newCurrentFields: IField[] = [];
     taskCustomFieldsColumns?.forEach((field) => {
-      if (field.type === 'number') {
+      if (ALLOWED_TYPES.includes(field.type)) {
         newCurrentFields.push(field);
       }
     });
@@ -68,33 +49,21 @@ function FormulaField({
   const { mutate: onUpdate } = useUpdateEntityCustomFieldValue(taskId);
   const { mutate: onUpdateColumn } = useUpdateDropdownField(parentId);
 
-  const closeAllDropdowns = () => {
+  const handleSaveFormula = (newResult: string, newFormula: string) => {
     setAnchorEl(null);
-    setAnchorOne(null);
-    setAnchorTwo(null);
-    setAnchorAction(null);
-    setShowAdditionalFormulas(false);
-  };
-
-  const handleSave = () => {
-    closeAllDropdowns();
     onUpdate({
       taskId,
-      value: [{ value: result }],
+      value: [{ value: newResult }],
       fieldId
     });
     onUpdateColumn({
       data: currentCustomFieldColumn,
       newFields: {
         properties: {
-          formula: `${selectedAction}("${selectedItemOne?.id}", "${selectedItemTwo?.id}")`
+          formula: newFormula
         }
       }
     });
-  };
-
-  const handleCancel = () => {
-    closeAllDropdowns();
   };
 
   const open = Boolean(anchorEl);
@@ -108,33 +77,15 @@ function FormulaField({
     setShowAdditionalFormulas(false);
   };
 
-  const renderIcon = () => {
-    switch (selectedAction) {
-      case 'SUM':
-        return <BsPlusSquareFill color="#6bc950" size={25} />;
-      case 'MINUS':
-        return <BsFillDashSquareFill color="#fd7171" size={25} />;
-      case 'MULTIPLY':
-        return <BsFillXSquareFill color="#ffc800" size={25} />;
-      case 'DIVIDE':
-        return <BsFillSlashSquareFill color="#49ccf9" size={25} />;
-    }
-  };
-
   const parser = new FormulaParser();
 
   const resultParser = (value: string, allColumns: IField[], allFields: ICustomField[]) => {
     const selectedItems = findSelectedItemsInFormula(value, allColumns, allFields);
     const action = value.split('(')[0];
-    if (selectedItems.length === 2 && BASE_ACTIONS.includes(action)) {
+    if (selectedItems.length <= 2 && BASE_ACTIONS.includes(action)) {
       setShowAdditionalFormulas(false);
-      setSelectedAction(action);
-      setSelectedItemOne(selectedItems[0]);
-      setSelectedItemTwo(selectedItems[1]);
     } else {
       setShowAdditionalFormulas(true);
-      setSelectedItemOne(null);
-      setSelectedItemTwo(null);
     }
     let strWithCurrentValues = value;
     let strWithCurrentNames = value;
@@ -146,7 +97,8 @@ function FormulaField({
   };
 
   useEffect(() => {
-    if (taskCustomFields?.length && currentCustomFieldColumn.properties?.formula) {
+    // check result after load column
+    if (taskCustomFields?.length && currentCustomFieldColumn?.properties?.formula) {
       const value = currentCustomFieldColumn.properties?.formula as string;
       const { strWithCurrentValues, strWithCurrentNames } = resultParser(
         value,
@@ -167,211 +119,50 @@ function FormulaField({
     }
   }, [taskCustomFields, currentCustomFieldColumn, taskCustomFieldsColumns, anchorEl]);
 
-  const handleCalculate = (str: string, result: string) => {
-    closeAllDropdowns();
-    onUpdate({
-      taskId,
-      value: [{ value: result }],
-      fieldId
-    });
-    onUpdateColumn({
-      data: currentCustomFieldColumn,
-      newFields: {
-        properties: {
-          formula: str
-        }
-      }
-    });
-  };
+  useEffect(() => {
+    // update results on BE if any column change
+    if (result && currentCustomFields?.values[0].value !== result) {
+      onUpdate({
+        taskId,
+        value: [{ value: result }],
+        fieldId
+      });
+    }
+  }, [result]);
 
   return (
     <div className="w-full h-full flex justify-center items-center">
       <h1 className="text-alsoit-text-lg font-semibold max-w-full break-words cursor-pointer" onClick={handleClick}>
         {result}
       </h1>
-      <Menu
-        id="basic-menu"
-        anchorEl={anchorEl}
-        open={open}
-        onClose={handleClose}
-        style={{
-          marginLeft: '-160px',
-          borderRadius: '20px'
-        }}
-        MenuListProps={{
-          'aria-labelledby': 'basic-button',
-          style: {
+      {anchorEl && !isShowAdditionalFormulas && (
+        <Menu
+          id="basic-menu"
+          anchorEl={anchorEl}
+          open={open}
+          onClose={handleClose}
+          style={{
+            marginLeft: '-160px',
             borderRadius: '20px'
-          }
-        }}
-      >
-        <div className="flex items-center justify-start space-x-1 p-2 pl-4">
-          <div className="w-full">
-            <div
-              onClick={(e: React.MouseEvent<HTMLDivElement>) => {
-                setIsOpenSelectOne(true);
-                setAnchorOne(e.currentTarget);
-              }}
-            >
-              <Button active={!!selectedItemOne}>
-                <span className="whitespace-nowrap w-full pl-1">
-                  {selectedItemOne ? selectedItemOne.name : 'Select field'}
-                </span>
-                <ArrowDownFilled active={!!selectedItemOne} />
-              </Button>
-            </div>
-            <Menu
-              id="basic-menu"
-              anchorEl={anchorOne}
-              open={isOpenSelectOne}
-              onClose={() => setIsOpenSelectOne(false)}
-              style={{
-                borderRadius: '20px'
-              }}
-              MenuListProps={{
-                'aria-labelledby': 'basic-button',
-                style: {
-                  borderRadius: '20px'
-                }
-              }}
-            >
-              {currentFields.length ? (
-                <>
-                  {currentFields.map((field) => (
-                    <div
-                      key={field.id}
-                      className="flex px-2 py-1 w-44 cursor-pointer hover:bg-gray-100"
-                      onClick={() => setSelectedItemOne({ id: field.id, name: field.name, value: '' })}
-                    >
-                      <span className="mx-1 w-5 h-5">
-                        <Number />
-                      </span>
-                      {field.name}
-                    </div>
-                  ))}
-                </>
-              ) : (
-                <></>
-              )}
-            </Menu>
-          </div>
-          <div>
-            <div
-              style={{ marginRight: '10px' }}
-              onClick={(e: React.MouseEvent<HTMLDivElement>) => {
-                setIsOpenSelectAction(true);
-                setAnchorAction(e.currentTarget);
-              }}
-            >
-              {renderIcon()}
-            </div>
-            <Menu
-              id="basic-menu"
-              anchorEl={anchorAction}
-              open={isOpenSelectAction}
-              onClose={() => setIsOpenSelectAction(false)}
-              style={{
-                marginLeft: '-8px',
-                borderRadius: '20px'
-              }}
-              MenuListProps={{
-                'aria-labelledby': 'basic-button',
-                style: {
-                  borderRadius: '20px'
-                }
-              }}
-            >
-              {actions.map((action) => (
-                <div
-                  key={action.id}
-                  className="w-30 px-2 py-1 cursor-pointer hover:bg-gray-100"
-                  onClick={() => {
-                    setSelectedAction(action.id);
-                    setIsOpenSelectAction(false);
-                  }}
-                >
-                  {action.icon}
-                </div>
-              ))}
-            </Menu>
-          </div>
-          <div className="w-full">
-            <div
-              onClick={(e: React.MouseEvent<HTMLDivElement>) => {
-                setIsOpenSelectTwo(true);
-                setAnchorTwo(e.currentTarget);
-              }}
-            >
-              <Button active={!!selectedItemTwo}>
-                <span className="whitespace-nowrap w-full pl-1">
-                  {selectedItemTwo ? selectedItemTwo.name : 'Select field'}
-                </span>
-                <ArrowDownFilled active={!!selectedItemTwo} />
-              </Button>
-            </div>
-            <Menu
-              id="basic-menu"
-              anchorEl={anchorTwo}
-              open={isOpenSelectTwo}
-              onClose={() => setIsOpenSelectTwo(false)}
-              style={{
-                borderRadius: '20px'
-              }}
-              MenuListProps={{
-                'aria-labelledby': 'basic-button',
-                style: {
-                  borderRadius: '20px'
-                }
-              }}
-            >
-              {currentFields.length ? (
-                <>
-                  {currentFields.map((field) => (
-                    <div
-                      key={field.id}
-                      className="flex px-2 py-1 w-44 cursor-pointer hover:bg-gray-100"
-                      onClick={() => setSelectedItemTwo({ id: field.id, name: field.name, value: '' })}
-                    >
-                      <span className="mx-1 w-5 h-5">
-                        <Number />
-                      </span>
-                      {field.name}
-                    </div>
-                  ))}
-                </>
-              ) : (
-                <></>
-              )}
-            </Menu>
-          </div>
-        </div>
-        <div className="flex gap-1 items-end justify-end p-4">
-          <button>
-            <div className="flex items-center pr-2">
-              <label className="switch" onClick={(event) => event.stopPropagation()}>
-                <input
-                  className="inputShow"
-                  type="checkbox"
-                  checked={isShowAdditionalFormulas}
-                  onChange={() => setShowAdditionalFormulas(!isShowAdditionalFormulas)}
-                />
-                <div className={`slider ${isShowAdditionalFormulas ? 'checked' : ''}`} />
-              </label>
-              <span className="ml-2 text-xs">Advanced Editor</span>
-            </div>
-          </button>
-          <button
-            className="p-1 bg-white rounded text-alsoit-danger h-6"
-            style={{ width: '79px' }}
-            onClick={handleCancel}
-          >
-            Cancel
-          </button>
-          <button style={{ width: '79px' }} className="bg-alsoit-success text-white rounded h-6" onClick={handleSave}>
-            Save
-          </button>
-        </div>
-      </Menu>
+          }}
+          MenuListProps={{
+            'aria-labelledby': 'basic-button',
+            style: {
+              borderRadius: '20px'
+            }
+          }}
+        >
+          <SimpleFormulasField
+            taskCustomFieldsColumns={taskCustomFieldsColumns}
+            taskCustomFields={taskCustomFields}
+            currentFields={currentFields}
+            prevFormula={prevFormula}
+            showAdditionalFormulas={() => setShowAdditionalFormulas(true)}
+            handleSave={handleSaveFormula}
+            handleClose={handleClose}
+          />
+        </Menu>
+      )}
       {anchorEl && isShowAdditionalFormulas && (
         <Menu
           id="basic-menu"
@@ -390,13 +181,12 @@ function FormulaField({
           }}
         >
           <AdditionalFormulasField
-            variables={currentFields}
+            currentFields={currentFields}
             taskCustomFields={taskCustomFields}
             prevFormula={prevFormula}
-            handleCalculate={handleCalculate}
+            handleSave={handleSaveFormula}
             handleClose={() => setShowAdditionalFormulas(false)}
           />
-          <></>
         </Menu>
       )}
     </div>

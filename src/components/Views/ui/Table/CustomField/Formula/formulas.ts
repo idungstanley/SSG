@@ -288,30 +288,30 @@ export const FORMULAS = [
     example: "SUM(-5, 15, 32, 'Hello World!')",
     expectedResult: '42'
   },
-  {
-    id: 'SUMIF', // check
-    name: 'SUMIF',
-    description: 'Returns a conditional sum across a range. Learn more',
-    syntax: 'SUMIF(range, criterion, [sum_range])',
-    example: "SUMIF([2,4,8,16], '&gt;5')",
-    expectedResult: '24'
-  },
-  {
-    id: 'SUMIFS', // check
-    name: 'SUMIFS',
-    description: 'Returns the sum of a range depending on multiple criteria.',
-    syntax: 'SUMIFS(sum_range, criteria_range1, criterion1, [criteria_range2, criterion2, ...])',
-    example: "SUMIFS([2,4,8,16], [1,2,3,4], '&gt;=2', [1,2,4,8], '&lt;=4')",
-    expectedResult: '12'
-  },
-  {
-    id: 'SUMPRODUCT', // check
-    name: 'SUMPRODUCT',
-    description: 'Calculates the sum of the products of corresponding entries in two equal-sized arrays or ranges.',
-    syntax: 'SUMPRODUCT(array1, [array2, ...])',
-    example: 'SUMPRODUCT([[1,2],[3,4]], [[1,0],[0,1]])',
-    expectedResult: '5'
-  },
+  // {
+  //   id: 'SUMIF', // check
+  //   name: 'SUMIF',
+  //   description: 'Returns a conditional sum across a range. Learn more',
+  //   syntax: 'SUMIF(range, criterion, [sum_range])',
+  //   example: "SUMIF([2,4,8,16], '&gt;5')",
+  //   expectedResult: '24'
+  // },
+  // {
+  //   id: 'SUMIFS', // check
+  //   name: 'SUMIFS',
+  //   description: 'Returns the sum of a range depending on multiple criteria.',
+  //   syntax: 'SUMIFS(sum_range, criteria_range1, criterion1, [criteria_range2, criterion2, ...])',
+  //   example: "SUMIFS([2,4,8,16], [1,2,3,4], '&gt;=2', [1,2,4,8], '&lt;=4')",
+  //   expectedResult: '12'
+  // },
+  // {
+  //   id: 'SUMPRODUCT', // check
+  //   name: 'SUMPRODUCT',
+  //   description: 'Calculates the sum of the products of corresponding entries in two equal-sized arrays or ranges.',
+  //   syntax: 'SUMPRODUCT(array1, [array2, ...])',
+  //   example: 'SUMPRODUCT([[1,2],[3,4]], [[1,0],[0,1]])',
+  //   expectedResult: '5'
+  // },
   {
     id: 'TAN',
     name: 'TAN',
@@ -336,22 +336,22 @@ export const FORMULAS = [
     example: "AVERAGE(2, 4, 8, 16, 'text')",
     expectedResult: '7.5'
   },
-  {
-    id: 'AVERAGEIF', // check
-    name: 'AVERAGEIF',
-    description: 'Returns the average of a range depending on criteria.',
-    syntax: 'AVERAGEIF(criteria_range, criterion, [average_range])',
-    example: "AVERAGEIF([2,4,8,16], '&gt;5', [1, 2, 3, 4])",
-    expectedResult: '3.5'
-  },
-  {
-    id: 'AVERAGEIFS', // check
-    name: 'AVERAGEIFS',
-    description: 'Returns the average of a range depending on multiple criteria.',
-    syntax: 'AVERAGEIFS(average_range, criteria_range1, criterion1, [criteria_range2, criterion2, ...])',
-    example: "AVERAGEIFS([2,4,8,16], [1,2,3,4], '&gt;=2', [1,2,4,8], '&lt;=4')",
-    expectedResult: '6'
-  },
+  // {
+  //   id: 'AVERAGEIF', // check
+  //   name: 'AVERAGEIF',
+  //   description: 'Returns the average of a range depending on criteria.',
+  //   syntax: 'AVERAGEIF(criteria_range, criterion, [average_range])',
+  //   example: "AVERAGEIF([2,4,8,16], '&gt;5', [1, 2, 3, 4])",
+  //   expectedResult: '3.5'
+  // },
+  // {
+  //   id: 'AVERAGEIFS', // check
+  //   name: 'AVERAGEIFS',
+  //   description: 'Returns the average of a range depending on multiple criteria.',
+  //   syntax: 'AVERAGEIFS(average_range, criteria_range1, criterion1, [criteria_range2, criterion2, ...])',
+  //   example: "AVERAGEIFS([2,4,8,16], [1,2,3,4], '&gt;=2', [1,2,4,8], '&lt;=4')",
+  //   expectedResult: '6'
+  // },
   {
     id: 'COUNT',
     name: 'COUNT',
@@ -392,14 +392,14 @@ export const FORMULAS = [
     example: 'COUNTUNIQUE([1,1,2,2,3,3])',
     expectedResult: '3'
   },
-  {
-    id: 'LARGE', // check
-    name: 'LARGE',
-    description: 'Returns the nth largest element from a data set, where n is user-defined.',
-    syntax: 'LARGE(data, n)',
-    example: 'LARGE([3,5,3,5,4,4,2,4,6,7], 3)',
-    expectedResult: '5'
-  },
+  // {
+  //   id: 'LARGE', // check
+  //   name: 'LARGE',
+  //   description: 'Returns the nth largest element from a data set, where n is user-defined.',
+  //   syntax: 'LARGE(data, n)',
+  //   example: 'LARGE([3,5,3,5,4,4,2,4,6,7], 3)',
+  //   expectedResult: '5'
+  // },
   {
     id: 'MAX',
     name: 'MAX',
@@ -424,14 +424,14 @@ export const FORMULAS = [
     example: 'MIN(0.4, 0.3, 0.2, 0.1)',
     expectedResult: '0.1'
   },
-  {
-    id: 'SMALL', // check
-    name: 'SMALL',
-    description: 'Returns the nth smallest element from a data set, where n is user-defined.',
-    syntax: 'SMALL(data, n)',
-    example: 'SMALL([3,5,3,5,4,4,2,4,6,7], 3)',
-    expectedResult: '3'
-  },
+  // {
+  //   id: 'SMALL', // check
+  //   name: 'SMALL',
+  //   description: 'Returns the nth smallest element from a data set, where n is user-defined.',
+  //   syntax: 'SMALL(data, n)',
+  //   example: 'SMALL([3,5,3,5,4,4,2,4,6,7], 3)',
+  //   expectedResult: '3'
+  // },
   {
     id: 'CHAR',
     name: 'CHAR',
@@ -586,14 +586,3 @@ export const FORMULAS = [
     expectedResult: 'TOTAL'
   }
 ];
-
-/*
-  {
-    id: '',
-    name: '',
-    description: '',
-    syntax: '',
-    example: '',
-    expectedResult: ''
-  }
-*/

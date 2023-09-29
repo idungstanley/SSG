@@ -320,7 +320,11 @@ export const useUpdateDropdownField = (parentId: string) => {
   });
 };
 
-const updateEntityCustomFieldValue = (data: { taskId?: string; fieldId: string; value: { value: string }[] }) => {
+const updateEntityCustomFieldValue = (data: {
+  taskId?: string;
+  fieldId: string;
+  value: { value: string; type?: string }[];
+}) => {
   const { taskId, fieldId, value } = data;
 
   const response = requestNew<IResCustomfield>({

@@ -17,17 +17,16 @@ export interface IField {
 }
 
 export interface IFieldValue {
-  color: null | string;
+  color?: string | null;
   id: string;
-  is_bold: null | string;
-  is_italic: null | string;
-  is_strike: null | string;
-  is_underlined: null | string;
-  lan: null
-  lon: null
-  model: null
-  model_id: null
-  value: string
+  is_bold?: string | null;
+  is_italic?: string | null;
+  is_strike?: string | null;
+  is_underlined?: string | null;
+  model?: string;
+  model_id?: string;
+  value: string;
+  name: string;
 }
 
 export interface taskCountFields {

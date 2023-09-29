@@ -1,26 +1,26 @@
 import React, { useState, useEffect } from 'react';
-import { Parser as FormulaParser, SUPPORTED_FORMULAS } from 'hot-formula-parser';
-import { VerticalScroll } from '../../../../../ScrollableContainer/VerticalScroll';
+import { Parser as FormulaParser } from 'hot-formula-parser';
 import { IFormula, FORMULAS } from './formulas';
 import { CiWarning } from 'react-icons/ci';
 import { IField } from '../../../../../../features/list/list.interfaces';
 import Number from '../../../../../../assets/branding/Number';
 import { ICustomField } from '../../../../../../features/task/taskSlice';
 import { findSelectedItemsInFormula } from './findSelectedItemsInFormula';
+import { TbMathFunction } from 'react-icons/tb';
 
 interface AdditionalFormulasFieldProps {
-  variables: IField[];
+  currentFields: IField[];
   taskCustomFields: ICustomField[];
   prevFormula: string;
-  handleCalculate: (str: string, result: string) => void;
+  handleSave: (str: string, result: string) => void;
   handleClose: () => void;
 }
 
 function AdditionalFormulasField({
-  variables,
+  currentFields,
   taskCustomFields,
   prevFormula,
-  handleCalculate,
+  handleSave,
   handleClose
 }: AdditionalFormulasFieldProps) {
   const [activeFormula, setActiveFormula] = useState<IFormula>();
@@ -40,8 +40,6 @@ function AdditionalFormulasField({
         setError(false);
         setCurrentInputText(transformFormula(inputText).strWithCurrentIds);
         setCurrentResult(parseText.result as string);
-        console.log('inputText', inputText);
-        console.log('RESULT: ', parseText.result as string);
       }
     } else {
       setError(false);
@@ -49,7 +47,7 @@ function AdditionalFormulasField({
   }, [inputText]);
 
   const transformFormula = (str: string) => {
-    const selectedItems = findSelectedItemsInFormula(str, variables, taskCustomFields);
+    const selectedItems = findSelectedItemsInFormula(str, currentFields, taskCustomFields);
     // replace base values in formula
     const newString = str.replaceAll('true', 'TRUE').replaceAll('false', 'FALSE');
 
@@ -78,6 +76,15 @@ function AdditionalFormulasField({
     };
   };
 
+  const renderItemIcon = (field: IField) => {
+    switch (field.type) {
+      case 'number':
+        return <Number />;
+      case 'formula':
+        return <TbMathFunction />;
+    }
+  };
+
   return (
     <div className="h-full" style={{ width: '480px', height: '370px', overflow: 'hidden' }}>
       <div className="flex align-center border-b-2 px-2">
@@ -94,7 +101,7 @@ function AdditionalFormulasField({
         <button
           style={{ width: '79px' }}
           className={`${isError ? 'bg-alsoit-danger' : 'bg-alsoit-blue-100'} text-white rounded h-6`}
-          onClick={() => handleCalculate(currentInputText, currentResult)}
+          onClick={() => handleSave(currentResult, currentInputText)}
           disabled={isError || !inputText}
         >
           Calculate
@@ -102,12 +109,11 @@ function AdditionalFormulasField({
       </div>
       <div className="flex">
         <div className="border-r-2 w-full">
-          {/* <VerticalScroll> */}
           <div style={{ overflowY: 'scroll', maxHeight: '300px' }}>
-            {variables.length ? (
+            {currentFields.length ? (
               <>
                 <p className="text-xs px-2 py-3">Variables</p>
-                {variables.map((field) => (
+                {currentFields.map((field) => (
                   <div
                     key={field.id}
                     className="px-1"
@@ -121,9 +127,7 @@ function AdditionalFormulasField({
                         activeFormula?.id === field.id ? 'bg-alsoit-purple-50' : ''
                       }`}
                     >
-                      <span className="mx-1 w-5 h-5">
-                        <Number />
-                      </span>
+                      <span className="flex justify-center align-center mx-1 w-5 h-5">{renderItemIcon(field)}</span>
                       {field.name}
                     </div>
                   </div>
@@ -148,7 +152,6 @@ function AdditionalFormulasField({
               </div>
             ))}
           </div>
-          {/* </VerticalScroll> */}
           <div className="p-2 border-t-2">
             <button>
               <div className="flex items-center pr-2">
@@ -169,41 +172,25 @@ function AdditionalFormulasField({
         </div>
         <div className="px-4 py-5" style={{ minWidth: '312px', background: '#fafbfc' }}>
           {activeFormula ? (
-            <VerticalScroll>
-              <div>
-                <h2 className="mb-3 text-base">{activeFormula.name}</h2>
-                <p className="text-xs">{activeFormula.description}</p>
-                <h6 className="mt-4 mb-1 text-xs">SYNTAX</h6>
-                <input
-                  className="w-full text-xs px-1 base-input"
-                  type="text"
-                  value={activeFormula.syntax}
-                  readOnly
-                  placeholder=""
-                  // onClick={() => setActiveSyntax(activeFormula)}
-                />
-                <h6 className="mt-4 mb-1 text-xs">EXAMPLE</h6>
-                <input
-                  className="w-full text-xs px-1 base-input"
-                  type="text"
-                  value={activeFormula.example}
-                  readOnly
-                  placeholder=""
-                />
-                {activeFormula?.expectedResult ? (
-                  <>
-                    <h6 className="mt-4 mb-1 text-xs">EXPECTED RESULT</h6>
-                    <input
-                      className="w-full text-xs px-1 base-input"
-                      type="text"
-                      value={activeFormula.expectedResult}
-                      readOnly
-                      placeholder=""
-                    />
-                  </>
-                ) : null}
-              </div>
-            </VerticalScroll>
+            <div>
+              <h2 className="mb-3 text-base">{activeFormula.name}</h2>
+              <p className="text-xs">{activeFormula.description}</p>
+              <h6 className="mt-4 mb-1 text-xs">SYNTAX</h6>
+              <input className="w-full text-xs px-1 base-input" type="text" value={activeFormula.syntax} readOnly />
+              <h6 className="mt-4 mb-1 text-xs">EXAMPLE</h6>
+              <input className="w-full text-xs px-1 base-input" type="text" value={activeFormula.example} readOnly />
+              {activeFormula?.expectedResult ? (
+                <>
+                  <h6 className="mt-4 mb-1 text-xs">EXPECTED RESULT</h6>
+                  <input
+                    className="w-full text-xs px-1 base-input"
+                    type="text"
+                    value={activeFormula.expectedResult}
+                    readOnly
+                  />
+                </>
+              ) : null}
+            </div>
           ) : null}
         </div>
       </div>

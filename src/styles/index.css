@@ -81,7 +81,7 @@ code {
 }
 
 .base-input:focus {
-  border: 1px solid #6b7280;
+  border: 1px solid #e0e0e0;
   border-radius: 0;
   box-shadow: none;
   overflow-x: auto;
