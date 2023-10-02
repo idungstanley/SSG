@@ -49,9 +49,9 @@ interface PaletteProps {
   activeOutterColor?: string;
 }
 
-interface ChromePickerProps {
-  hex: string;
-}
+// interface ChromePickerProps {
+//   hex: string;
+// }
 
 const paletteViews = {
   BOARD: 'Board',
@@ -93,7 +93,7 @@ export default function PaletteManager({
       l: 201
     }
   });
-  const [customColor, setCustomColor] = useState<string>('');
+  // const [customColor, setCustomColor] = useState<string>('');
   const [colorType, setColorType] = useState<string>('hex');
   const [showColorTypes, setShowColorTypes] = useState<boolean>(false);
   const [selectedViews, setSelectedViews] = useState<string>(paletteViews.BOARD);
@@ -146,9 +146,9 @@ export default function PaletteManager({
   const handleEditColor = (state: boolean) => {
     setDisplayColorPicker(state);
   };
-  const handleCustomColor = (color: ChromePickerProps) => {
-    setCustomColor(color.hex);
-  };
+  // const handleCustomColor = (color: ChromePickerProps) => {
+  //   setCustomColor(color.hex);
+  // };
 
   const handleOutterFrameClick = () => {
     setIsOutterFrameActive((prev) => !prev);
