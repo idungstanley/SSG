@@ -10,21 +10,23 @@ import { useAppSelector } from '../../app/hooks';
 import { DaysAfterOption } from './RecurringSubUI/DaysAfterOption';
 import { CustomRecurOption } from './RecurringSubUI/CustomRecurOption';
 import { MonthsOption } from './RecurringSubUI/MonthsOption';
-
-const IntervalArr = ['daily', 'weekly', 'monthly', 'yearly', 'days after', 'custom'];
-const statusArr = ['When Complete', 'When Done'];
+import {
+  IntervalArr,
+  RECUR_STR_CONSTANTS,
+  getMonthOptionString,
+  statusArr
+} from '../../utils/Constants/DatesConstants';
+import { useCreateTaskRecuring } from '../../features/task/taskService';
+import { useParams } from 'react-router-dom';
+import { DropProps, MonthOption, RecurFrequency, TypeOptionsProps } from './RecurringTypes';
 
 export default function Recurring() {
+  const { taskId } = useParams();
   const { spaceStatuses } = useAppSelector((state) => state.hub);
 
   const [recuringInterval, setRecurringInterval] = useState<string>('daily');
-  const [statusInterval, setStatusInterval] = useState<string>('When Complete');
-  const [dropRecurring, setDropRecurring] = useState<{
-    recurringInterval: boolean;
-    statusInterval: boolean;
-    createTaskOption: boolean;
-    statusUpdate: boolean;
-  }>({
+  const [statusInterval, setStatusInterval] = useState<string>('completed');
+  const [dropRecurring, setDropRecurring] = useState<DropProps>({
     recurringInterval: false,
     statusInterval: false,
     createTaskOption: false,
@@ -38,6 +40,21 @@ export default function Recurring() {
   const [statusData, setStatusData] = useState<string[]>([]);
   const [statusStr, setStatus] = useState<string>('to do');
   const [taskColumns, setColumns] = useState<string[] | 'everything'>([]);
+  const [repeat, setRepeat] = useState<RecurFrequency>();
+  const [options, setOptions] = useState<TypeOptionsProps>();
+
+  const { mutateAsync } = useCreateTaskRecuring();
+
+  const handleSubmit = () => {
+    mutateAsync({
+      type: recuringInterval,
+      execution_type: statusInterval,
+      taskId,
+      new_task: taskColumns,
+      recur_options: repeat,
+      type_options: options
+    });
+  };
 
   useEffect(() => {
     if (spaceStatuses) {
@@ -53,20 +70,22 @@ export default function Recurring() {
           onClick={() => setDropRecurring((prev) => ({ ...prev, recurringInterval: !prev.recurringInterval }))}
           className="border-alsoit-gray-75 border rounded-md text-alsoit-text-md p-2 relative flex justify-between items-center"
         >
-          <span className="capitalize">{recuringInterval}</span>
+          <span className="capitalize">
+            {recuringInterval === RECUR_STR_CONSTANTS.daysAfter ? recuringInterval.replace('_', ' ') : recuringInterval}
+          </span>
           {dropRecurring.recurringInterval ? <ArrowUp /> : <ArrowDown dimensions={{ height: 7, width: 7 }} />}
           {dropRecurring.recurringInterval && (
             <RecurringIntervals setFn={setRecurringInterval} arr={IntervalArr} activeItem={recuringInterval} />
           )}
         </div>
-        {recuringInterval === 'custom' && <CustomRecurOption />}
-        {recuringInterval === 'days after' && <DaysAfterOption />}
-        {recuringInterval === 'monthly' && <MonthsOption />}
+        {recuringInterval === RECUR_STR_CONSTANTS.custom && <CustomRecurOption setOptions={setOptions} />}
+        {recuringInterval === RECUR_STR_CONSTANTS.daysAfter && <DaysAfterOption setOptions={setOptions} />}
+        {recuringInterval === RECUR_STR_CONSTANTS.monthly && <MonthsOption setOptions={setOptions} />}
         <div
           onClick={() => setDropRecurring((prev) => ({ ...prev, statusInterval: !prev.statusInterval }))}
           className="border-alsoit-gray-75 border rounded-md text-alsoit-text-md p-2 relative flex justify-between items-center"
         >
-          <span className="capitalize">{statusInterval}</span>
+          <span className="capitalize">{getMonthOptionString(statusInterval as MonthOption)}</span>
           {dropRecurring.statusInterval ? <ArrowUp /> : <ArrowDown dimensions={{ height: 7, width: 7 }} />}
           {dropRecurring.statusInterval && (
             <RecurringIntervals setFn={setStatusInterval} arr={statusArr} activeItem={statusInterval} />
@@ -124,13 +143,16 @@ export default function Recurring() {
             )}
           </div>
         </div>
-        {!btnCheckStatus['frequency'] && <FrequencyOption />}
+        {!btnCheckStatus['frequency'] && <FrequencyOption setRepeat={setRepeat} />}
       </div>
       <div className="flex justify-end space-x-1">
         <button className="border p-1 rounded-md text-alsoit-text-md font-semibold border-alsoit-danger text-alsoit-danger w-16 h-8">
           Cancel
         </button>
-        <button className="border p-1 rounded-md text-alsoit-text-md font-semibold text-white bg-alsoit-success w-16 h-8 border-none">
+        <button
+          className="border p-1 rounded-md text-alsoit-text-md font-semibold text-white bg-alsoit-success w-16 h-8 border-none"
+          onClick={handleSubmit}
+        >
           Save
         </button>
       </div>

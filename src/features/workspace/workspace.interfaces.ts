@@ -70,6 +70,8 @@ export interface IUserData {
 }
 
 export interface IUserRes {
+  success: string;
+  message: string;
   data: {
     user: IUserData;
   };

@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { listColumnProps } from '../../pages/workspace/tasks/component/views/ListColumns';
-import { IField } from '../list/list.interfaces';
+import { IField, IFieldValue } from '../list/list.interfaces';
 import {
   IDuration,
   IExtraFields,
@@ -25,19 +25,20 @@ import { ItaskViews } from '../hubs/hubs.interfaces';
 
 export interface ICustomField {
   id: string;
-  task_id: null | string;
-  custom_field_id: string;
-  custom_field: IField;
-  name: string;
-  type: string;
-  values: [
-    {
-      id: string;
-      value: string;
-      name: string;
-    }
-  ];
+  values: IFieldValue[];
 }
+
+// color: null;
+// id: '9ed486ae-ff6d-4ea9-8ed8-50b977eb5b6f';
+// is_bold: null;
+// is_italic: null;
+// is_strike: null;
+// is_underlined: null;
+// lan: null;
+// lon: null;
+// model: 'team_member';
+// model_id: 'c12503d2-eec1-414c-9cd4-f71cce4c3e45';
+// value: 'c12503d2-eec1-414c-9cd4-f71cce4c3e45';
 export interface ActiveTaskColumnProps {
   id: string;
   header: string;
@@ -428,28 +429,25 @@ export const taskSlice = createSlice({
     hideTaskColumns(state, action) {
       return {
         ...state,
-        hideTask:
-          state.hideTask.length != 0
-            ? state.hideTask.map((prev) => {
-                if (prev.field === action.payload) {
-                  return {
-                    ...prev,
-                    hidden: !prev.hidden
-                  };
-                } else {
-                  return prev;
-                }
-              })
-            : state.taskColumns.map((prev) => {
-                if (prev.field === action.payload) {
-                  return {
-                    ...prev,
-                    hidden: !prev.hidden
-                  };
-                } else {
-                  return prev;
-                }
-              })
+        hideTask: state.hideTask.length
+          ? state.hideTask.map((prev) => {
+              if (prev.id === action.payload) {
+                return {
+                  ...prev,
+                  hidden: !prev.hidden
+                };
+              }
+              return prev;
+            })
+          : state.taskColumns.map((prev) => {
+              if (prev.id === action.payload) {
+                return {
+                  ...prev,
+                  hidden: !prev.hidden
+                };
+              }
+              return prev;
+            })
       };
     },
     getComfortableView(state, action: PayloadAction<boolean>) {

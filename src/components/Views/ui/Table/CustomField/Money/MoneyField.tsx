@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { ICustomField } from '../../../../../../features/task/taskSlice';
 import { IField } from '../../../../../../features/list/list.interfaces';
 import { useUpdateEntityCustomFieldValue } from '../../../../../../features/list/listService';
+import { formatNumberWithCommas } from '../../../../../../utils/FormatNumbers';
 
 interface MoneyField {
   taskCustomFields?: ICustomField;
@@ -61,7 +62,7 @@ function MoneyField({ taskCustomFields, taskId, fieldId, entityCustomProperty }:
                 setEditMode(true);
               }}
             >
-              {currentValue === '-' ? currentValue : `${avtiveCurrency + currentValue}`}
+              {currentValue === '-' ? currentValue : `${avtiveCurrency + formatNumberWithCommas(currentValue)}`}
             </h1>
           </span>
         </div>

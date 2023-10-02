@@ -1,6 +1,7 @@
 import { TdHTMLAttributes } from 'react';
 import { useParams } from 'react-router-dom';
 import {
+  ICustomField,
   ImyTaskData,
   setCurrentTaskStatusId,
   setSelectedTaskParentId,
@@ -30,6 +31,8 @@ import StatusDropdown from '../../../status/StatusDropdown';
 import RatingField from './CustomField/Ratings/RatingField';
 import TimeField from './CustomField/TimeField/TimeField';
 import AutoProgress from './CustomField/Progress/AutoProgress';
+import FormulaField from './CustomField/Formula/FormulaField';
+import PeopleField from './CustomField/PeopleField/PeopleField';
 
 interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   value: TaskValue;
@@ -181,8 +184,28 @@ export function Col({ value, field, fieldId, task, customFields, taskStatuses, .
         taskCustomFields={task.custom_fields?.find((i) => i.id === fieldId)}
         fieldId={fieldId}
       />
+    ),
+    formula: (
+      <FormulaField
+        taskId={task.id}
+        parentId={task.parent_id || task.list_id}
+        currentCustomFields={task.custom_fields?.find((i) => i.id === fieldId) as ICustomField}
+        currentCustomFieldColumn={task.custom_field_columns?.find((i) => i.id === fieldId) as IField}
+        taskCustomFields={task.custom_fields as ICustomField[]}
+        taskCustomFieldsColumns={task.custom_field_columns}
+        fieldId={fieldId}
+      />
+    ),
+    people: (
+      <PeopleField
+        entityCustomProperty={customFields?.find((i) => i.id === fieldId)}
+        taskId={task.id}
+        taskCustomFields={task.custom_fields?.find((i) => i.id === fieldId)}
+        fieldId={fieldId}
+      />
     )
   };
+
   return (
     <>
       <td

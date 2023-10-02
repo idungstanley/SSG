@@ -1,5 +1,4 @@
-import React, { Fragment } from 'react';
-import { Menu, Transition } from '@headlessui/react';
+import React, { Fragment, useState } from 'react';
 import { BsToggleOff } from 'react-icons/bs';
 import { useMutation } from '@tanstack/react-query';
 import { AvatarWithInitials } from '../../../../../components';
@@ -11,6 +10,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAppSelector } from '../../../../../app/hooks';
 import ToolTip from '../../../../../components/Tooltip/Tooltip';
 import ArrowDownFilled from '../../../../../assets/icons/ArrowDownFilled';
+import AlsoitMenuDropdown from '../../../../../components/DropDowns';
 
 interface UserSettingsType {
   id: number;
@@ -26,7 +26,15 @@ export default function UserSettingsModal({ setShowModal }: UserProps) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { showSidebar } = useAppSelector((state) => state.account);
+  const [showSettingsMenu, setShowSettingsMenu] = useState<null | HTMLDivElement>(null);
+
+  const handleOpenSettingsMenu = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    setShowSettingsMenu(event.currentTarget);
+  };
+  const handleCloseSettingsMenu = () => {
+    setShowSettingsMenu(null);
+  };
+
   const { currentWorkspaceId } = useAppSelector((state) => state.auth);
   const { userData } = useAppSelector((state) => state.userSetting);
 
@@ -122,63 +130,45 @@ export default function UserSettingsModal({ setShowModal }: UserProps) {
   ];
 
   return (
-    <Menu as="div" className="relative inline-block text-left">
-      <div>
-        <Menu.Button>
-          <ToolTip title="User Settings">
-            <div className="relative flex mr-2">
-              <AvatarWithInitials
-                initials={userData?.initials.toUpperCase() as string}
-                height="h-5"
-                width="w-5"
-                backgroundColour={userData?.color as string | undefined}
-              />
-              <span className="absolute -bottom-2 left-3">
-                <ArrowDownFilled />
-              </span>
-            </div>
-          </ToolTip>
-        </Menu.Button>
-      </div>
-
-      <Transition
-        as={Fragment}
-        enter="transition ease-out duration-100"
-        enterFrom="transform opacity-0 scale-95"
-        enterTo="transform opacity-100 scale-100"
-        leave="transition ease-in duration-75"
-        leaveFrom="transform opacity-100 scale-100"
-        leaveTo="transform opacity-0 scale-95"
-      >
-        <Menu.Items
-          className={`mt-2 w-48 px-1 rounded shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-200 focus:outline-none ${
-            showSidebar ? 'absolute -right-2' : 'fixed left-10'
-          }`}
-          style={{ zIndex: '9999' }}
-        >
-          <div className="pt-3">
-            {userSettings?.map((i) => (
-              <Menu.Item key={i.id}>
-                <div
-                  className="flex items-center w-full px-4 py-2 text-xs text-gray-600 cursor-pointer hover:bg-gray-100"
-                  onClick={i.handleClick}
-                >
-                  <div className="flex items-center justify-between">
-                    <p>{i.title}</p>
-                    <span>
-                      {i.id === 7 ? (
-                        <button className="flex ml-14 items-center text-gray-400 cursor-pointer p-0.5 rounded-md space-x-1 ">
-                          <BsToggleOff className="w-4 h-4 test-sm" />
-                        </button>
-                      ) : null}
-                    </span>
-                  </div>
-                </div>
-              </Menu.Item>
-            ))}
+    <>
+      <div onClick={(e) => handleOpenSettingsMenu(e)}>
+        <ToolTip title="User Settings">
+          <div className="relative flex mr-2">
+            <AvatarWithInitials
+              initials={userData?.initials.toUpperCase() as string}
+              height="h-5"
+              width="w-5"
+              backgroundColour={userData?.color as string | undefined}
+            />
+            <span className="absolute -bottom-2 left-3">
+              <ArrowDownFilled />
+            </span>
           </div>
-        </Menu.Items>
-      </Transition>
-    </Menu>
+        </ToolTip>
+      </div>
+      <AlsoitMenuDropdown anchorEl={showSettingsMenu} handleClose={handleCloseSettingsMenu}>
+        <div className="px-1">
+          {userSettings?.map((i) => (
+            <div key={i.id}>
+              <div
+                className="flex items-center w-full px-4 py-2 text-xs text-gray-600 rounded cursor-pointer hover:bg-primary-200 hover:text-primary-500"
+                onClick={i.handleClick}
+              >
+                <div className="flex items-center justify-between">
+                  <p>{i.title}</p>
+                  <span>
+                    {i.id === 7 ? (
+                      <button className="flex ml-14 items-center text-gray-400 cursor-pointer p-0.5 rounded-md space-x-1 ">
+                        <BsToggleOff className="w-4 h-4 test-sm" />
+                      </button>
+                    ) : null}
+                  </span>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </AlsoitMenuDropdown>
+    </>
   );
 }
