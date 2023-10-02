@@ -199,7 +199,7 @@ export default function PaletteManager({
     if (paletteType === EntityType.hub) {
       editHubColorMutation.mutateAsync({
         hubId: paletteId,
-        color: color === null ? null : color
+        color
       });
     } else if (paletteType === EntityType.wallet) {
       editWalletColorMutation.mutateAsync({
