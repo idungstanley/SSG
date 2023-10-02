@@ -268,7 +268,7 @@ const duplicateTask = (data: {
   const { task_name, task_id, list_id, is_everything, copy } = data;
 
   const availableFilter = copy?.filter((item) => {
-    return item === 'assignees' || item === 'comments';
+    return item !== 'everything';
   });
 
   const custom_is_everything = copy?.includes('everything');
