@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { listColumnProps } from '../../pages/workspace/tasks/component/views/ListColumns';
-import { IField } from '../list/list.interfaces';
+import { IField, IFieldValue } from '../list/list.interfaces';
 import {
   IDuration,
   IExtraFields,
@@ -25,25 +25,7 @@ import { ItaskViews } from '../hubs/hubs.interfaces';
 
 export interface ICustomField {
   id: string;
-  task_id: null | string;
-  custom_field_id: string;
-  custom_field: IField;
-  name: string;
-  type: string;
-  values: [
-    {
-      color?: string | null;
-      id: string;
-      is_bold?: string | null;
-      is_italic?: string | null;
-      is_strike?: string | null;
-      is_underlined?: string | null;
-      model?: string;
-      model_id?: string;
-      value: string;
-      name: string;
-    }
-  ];
+  values: IFieldValue[];
 }
 
 // color: null;

@@ -16,6 +16,19 @@ export interface IField {
   properties?: customPropertiesProps;
 }
 
+export interface IFieldValue {
+  color?: string | null;
+  id: string;
+  is_bold?: string | null;
+  is_italic?: string | null;
+  is_strike?: string | null;
+  is_underlined?: string | null;
+  model?: string;
+  model_id?: string;
+  value: string;
+  name: string;
+}
+
 export interface taskCountFields {
   created_at: string;
   id: string;
