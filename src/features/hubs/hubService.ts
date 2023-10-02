@@ -142,7 +142,7 @@ export const UseEditHubService = (data: {
   const response = requestNew<IResponseHub>({
     url: `hubs/${data.hubId}`,
     method: 'POST',
-    params: {
+    data: {
       name: data.name,
       color: data.color,
       current_workspace_id: data.currentWorkspaceId,

@@ -1,5 +1,5 @@
 const palette = [
-  '#00FF00',
+  null,
   '#DC143C',
   '#0000FF',
   '#FFD700',

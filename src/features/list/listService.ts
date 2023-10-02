@@ -108,7 +108,7 @@ export const UseEditListService = (data: {
   const response = requestNew<IResponseList>({
     url: `lists/${data.listId}`,
     method: 'PUT',
-    params: {
+    data: {
       name: data.listName,
       color: data.color,
       shape: data.shape,

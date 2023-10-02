@@ -30,7 +30,7 @@ export default function CreateWallet() {
   const dispatch = useAppDispatch();
   const { createWLID, selectedTreeDetails, hub } = useAppSelector((state) => state.hub);
 
-  const [paletteColor, setPaletteColor] = useState<string | ListColourProps | undefined>('');
+  const [paletteColor, setPaletteColor] = useState<string | ListColourProps | undefined | null>('');
   const [showPalette, setShowPalette] = useState<boolean>(false);
 
   const { type, id } = selectedTreeDetails;

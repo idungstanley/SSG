@@ -94,11 +94,14 @@ export function SubtasksTable({
   return subtasksData && subtasksData.length ? (
     <>
       <div
-        className="border-t-4 border-l-4 border-purple-500 rounded-3xl bg-purple-50 ml-10 mt-2"
+        className="mt-2 ml-10 border-t-4 border-l-4 border-purple-500 rounded-3xl bg-purple-50"
         // ref={setNodeRef}
         style={{
-          borderColor: ListColor?.outerColour,
-          backgroundColor: LightenColor(ListColor?.outerColour, 0.95),
+          borderColor: ListColor?.outerColour === null ? 'black' : (ListColor?.outerColour as string),
+          backgroundColor: LightenColor(
+            ListColor?.outerColour === null ? 'black' : (ListColor?.outerColour as string),
+            0.95
+          ),
           overflow: collapseTable ? 'hidden' : 'unset'
         }}
       >
