@@ -92,7 +92,10 @@ export default function AdditionalHeader() {
     );
   };
 
-  const sameEntity = () => activeItemId === (timerLastMemory.hubId || timerLastMemory.listId || timerLastMemory.taskId);
+  const sameEntity = () =>
+    activeItemId === timerLastMemory.hubId ||
+    activeItemId === timerLastMemory.listId ||
+    activeItemId === timerLastMemory.taskId;
 
   const timeBlinkerCheck = () => (timerStatus && sameEntity() && tabsId !== 6) || (!sameEntity() && timerStatus);
 
