@@ -13,7 +13,7 @@ import { VerticalScroll } from '../../components/ScrollableContainer/VerticalScr
 import { GroupHorizontalScroll } from '../../components/ScrollableContainer/GroupHorizontalScroll';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
 import { setTasks } from '../../features/task/taskSlice';
-import { IField } from '../../features/list/list.interfaces';
+import { IHubDetails } from '../../features/hubs/hubs.interfaces';
 
 export default function EverythingPage() {
   const dispatch = useAppDispatch();
@@ -39,10 +39,7 @@ export default function EverythingPage() {
   }, [hub]);
 
   const tasks = useMemo(() => (data ? data.pages.flatMap((page) => page.data.tasks) : []), [data]);
-  const lists = useMemo(
-    () => generateLists(tasks, hubsData?.data.hub?.custom_field_columns as IField[]),
-    [tasks, hubsData]
-  );
+  const lists = useMemo(() => generateLists(tasks, hubsData?.data.hub as IHubDetails), [tasks, hubsData]);
 
   useEffect(() => {
     if (Object.keys(lists).length) {

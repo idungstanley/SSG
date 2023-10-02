@@ -15,7 +15,6 @@ import { setDefaultSubtaskId, setShowNewTaskField, setShowNewTaskId } from '../.
 import ToolTip from '../../../Tooltip/Tooltip';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import Dradnddrop from '../../../../assets/icons/Dradnddrop';
-import { IField, ITask_statuses } from '../../../../features/list/list.interfaces';
 import { listColumnProps } from '../../../../pages/workspace/tasks/component/views/ListColumns';
 import Copy from '../../../../assets/icons/Copy';
 
@@ -29,11 +28,9 @@ interface RowProps {
   paddingLeft?: number;
   parentId?: string;
   isListParent: boolean;
-  task_status?: string;
+  taskStatusId?: string;
   handleClose?: VoidFunction;
-  customFields?: IField[];
   isSplitSubtask?: boolean;
-  taskStatuses?: ITask_statuses[];
   level: number;
   isBlockToOpenSubtasks?: boolean;
 }
@@ -45,12 +42,10 @@ export function Row({
   taskIndex,
   paddingLeft = 0,
   parentId,
-  task_status,
+  taskStatusId,
   isListParent,
   handleClose,
-  customFields,
   isSplitSubtask,
-  taskStatuses,
   level,
   isBlockToOpenSubtasks
 }: RowProps) {
@@ -104,7 +99,8 @@ export function Row({
       updated_at: ''
     },
     tags: [],
-    updated_at: ''
+    updated_at: '',
+    task_statuses: []
   };
 
   const onShowAddSubtaskField = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, taskId: string) => {
@@ -158,9 +154,8 @@ export function Row({
           isListParent={isListParent}
           task={task}
           taskIndex={taskIndex}
-          taskStatuses={taskStatuses}
           parentId={parentId as string}
-          task_status={task_status as string}
+          taskStatusId={taskStatusId as string}
           onClose={handleClose as VoidFunction}
           paddingLeft={paddingLeft}
           tags={'tags' in task ? <TaskTag tags={task.tags} entity_id={task.id} entity_type="task" /> : null}
@@ -224,8 +219,6 @@ export function Row({
             value={task[col.field as keyof Task]}
             key={col.id}
             style={{ zIndex: 0 }}
-            customFields={customFields}
-            taskStatuses={taskStatuses}
           />
         ))}
       </tr>
@@ -238,7 +231,7 @@ export function Row({
           isListParent={false}
           listId={listId}
           parentId={isSplitSubtask ? (task.parent_id as string) : task.id}
-          task_status={task.status.id}
+          taskStatusId={task.status.id}
           isSplitSubtask={isSplitSubtask}
           handleClose={onCloseAddTaskFIeld}
         />
@@ -250,7 +243,6 @@ export function Row({
           listId={listId}
           parentTask={task}
           columns={columns}
-          taskStatuses={taskStatuses}
           isSplitSubtask={isSplitSubtask}
           level={level + 1}
         />

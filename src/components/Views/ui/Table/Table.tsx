@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, Fragment } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { DragOverlay } from '@dnd-kit/core';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { ITaskFullList, Task } from '../../../../features/task/interface.tasks';
@@ -16,7 +16,7 @@ import { ScrollableHorizontalListsContainer } from '../../../ScrollableContainer
 import { Head } from './Head/Head';
 import { OverlayRow } from './OverlayRow';
 import { Row } from './Row';
-import { IField, IListDetailRes, ITask_statuses } from '../../../../features/list/list.interfaces';
+import { ITask_statuses } from '../../../../features/list/list.interfaces';
 import { IListColor } from '../List/List';
 
 interface TableProps {
@@ -25,21 +25,9 @@ interface TableProps {
   label: string;
   listName?: string;
   listColor?: IListColor;
-  customFields?: IField[];
-  listDetails?: IListDetailRes;
-  isBlockToOpenSubtasks?: boolean;
 }
 
-export function Table({
-  heads,
-  data,
-  label,
-  listName,
-  customFields,
-  listColor,
-  listDetails,
-  isBlockToOpenSubtasks
-}: TableProps) {
+export function Table({ heads, data, label, listName, listColor }: TableProps) {
   const dispatch = useAppDispatch();
 
   const { draggableItemId } = useAppSelector((state) => state.list);
@@ -63,7 +51,7 @@ export function Table({
       assignees: [],
       checklists: [],
       created_at: Date.now(),
-      custom_field_columns: listDetails?.data.list.custom_field_columns || [],
+      custom_field_columns: data[0].custom_field_columns || [],
       custom_fields: [],
       deleted_at: null,
       description: null,
@@ -81,6 +69,7 @@ export function Table({
       start_date: null,
       status: { name: label, color: data[0].status.color },
       tags: [],
+      task_statuses: data[0].task_statuses || [],
       time_entries_duration: 0,
       updated_at: '',
       watchers_count: 0
@@ -93,7 +82,7 @@ export function Table({
   useEffect(() => {
     setListId(data[0].list_id);
     dispatch(setCurrTaskListId(data[0].list_id));
-    const statusObj: ITask_statuses | undefined = listDetails?.data.list.task_statuses.find(
+    const statusObj: ITask_statuses | undefined = (data[0].task_statuses as ITask_statuses[]).find(
       (statusObj: ITask_statuses) => statusObj?.name === dataSpread[0].status.name
     );
 
@@ -103,9 +92,11 @@ export function Table({
     }
 
     // get default list_status_id
-    const minPosition = Math.min(...(listDetails?.data.list.task_statuses.map((status) => status.position) || []));
+    const minPosition = Math.min(
+      ...((data[0].task_statuses as ITask_statuses[]).map((status) => status.position) || [])
+    );
 
-    const defaultStatusObj: ITask_statuses | undefined = listDetails?.data.list.task_statuses.find(
+    const defaultStatusObj: ITask_statuses | undefined = (data[0].task_statuses as ITask_statuses[]).find(
       (statusObj: ITask_statuses) =>
         statusObj?.is_default === 1 ? statusObj?.is_default : statusObj.position === minPosition
     );
@@ -173,22 +164,18 @@ export function Table({
               {dataSpread.length ? (
                 dataSpread.map((task, index) =>
                   'tags' in task ? (
-                    <Fragment key={task.id}>
-                      <Row
-                        columns={columns}
-                        task={task as ITaskFullList}
-                        listId={task.list_id as string}
-                        taskIndex={index}
-                        isListParent={true}
-                        parentId={listId}
-                        task_status={statusId}
-                        handleClose={handleClose}
-                        customFields={customFields}
-                        taskStatuses={listDetails?.data.list.task_statuses}
-                        isBlockToOpenSubtasks={isBlockToOpenSubtasks}
-                        level={0}
-                      />
-                    </Fragment>
+                    <Row
+                      key={task.id}
+                      columns={columns}
+                      task={task as ITaskFullList}
+                      listId={task.list_id as string}
+                      taskIndex={index}
+                      isListParent={true}
+                      parentId={listId}
+                      taskStatusId={statusId}
+                      handleClose={handleClose}
+                      level={0}
+                    />
                   ) : null
                 )
               ) : (
