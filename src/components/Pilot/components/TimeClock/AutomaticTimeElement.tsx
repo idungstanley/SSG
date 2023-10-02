@@ -45,7 +45,7 @@ export default function AutomaticTimeElement({
           <div className="flex space-x-1">
             {/* Avatar */}
             <div className="flex items-center">
-              <AvatarWithInitials height="h-4" width="w-4" initials={initials ?? 'UN'} backgroundColour={color} />
+              <AvatarWithInitials height="h-5" width="w-5" initials={initials ?? 'UN'} backgroundColour={color} />
             </div>
             {/* Timer */}
             <div

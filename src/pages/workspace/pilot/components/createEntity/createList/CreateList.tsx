@@ -33,7 +33,7 @@ export default function CreateList() {
   const { selectedTreeDetails, createWLID, hub } = useAppSelector((state) => state.hub);
   const { createWlLink } = useAppSelector((state) => state.workspace);
 
-  const [paletteColor, setPaletteColor] = useState<string | ListColourProps | undefined>('black');
+  const [paletteColor, setPaletteColor] = useState<string | ListColourProps | undefined | null>('black');
   const [showPalette, setShowPalette] = useState<boolean>(false);
   const { type, id } = selectedTreeDetails;
   const createList = useMutation(createListService, {
