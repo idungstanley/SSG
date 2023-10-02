@@ -15,7 +15,7 @@ function ShowHide() {
               <div key={listItem.field}>
                 <div
                   className="capitalize gap-3 flex items-center cursor-pointer mt-0 pl-4 py-2 text-slate-600 hover:bg-gray-300 z-30 w-full"
-                  onClick={() => dispatch(hideTaskColumns(listItem.field))}
+                  onClick={() => dispatch(hideTaskColumns(listItem.id))}
                   key={listItem.field}
                 >
                   {!listItem.hidden ? (
@@ -36,7 +36,7 @@ function ShowHide() {
             <div key={listItem.field}>
               <div
                 className="capitalize gap-3 flex items-center cursor-pointer mt-0 pl-4 py-2 text-slate-600 hover:bg-gray-300 z-30 w-full"
-                onClick={() => dispatch(hideTaskColumns(listItem.field))}
+                onClick={() => dispatch(hideTaskColumns(listItem.id))}
                 key={listItem.field}
               >
                 {!listItem.hidden ? (

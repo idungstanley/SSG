@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useAppSelector } from '../../../app/hooks';
 import { TeamMemberWithStatus } from '../../../features/community/community';
 import { cl } from '../../../utils';
+import AvatarWithImage from '../../../components/avatar/AvatarWithImage';
 
 interface UsersListProps {
   users: TeamMemberWithStatus[];
@@ -40,7 +41,7 @@ export default function UsersList({ users, title, isColored, showDetails }: User
 
       {/* users list */}
       {showUsers ? (
-        <div className="flex items-center gap-4">
+        <div className="flex items-top gap-4 flex-wrap">
           {users.map((user) => (
             <div
               key={user.id}
@@ -53,21 +54,36 @@ export default function UsersList({ users, title, isColored, showDetails }: User
                 <div
                   title={user.user.name}
                   className={cl(
-                    isColored ? 'bg-orange-500' : 'bg-gray-200',
-                    'relative w-10 h-10 rounded-full p-2 flex items-center justify-center transform transition hover:scale-125'
+                    'bg-gray-200 relative w-10 h-10 rounded-full p-2 flex items-center justify-center transform transition hover:scale-125'
                   )}
+                  // Set bg color if user has saved color in profile
+                  style={{
+                    backgroundColor: isColored ? user.user.color : ''
+                  }}
                 >
                   {isColored ? (
-                    <span className="absolute top-0 right-0 border-2 border-white w-3 h-3 rounded-full bg-green-500" />
+                    <span className="absolute z-10 top-0 right-0 border-2 border-white w-3 h-3 rounded-full bg-green-500" />
                   ) : null}
 
-                  <span>{user.user.initials}</span>
+                  {user.user.avatar_path ? (
+                    <div
+                      className={cl(
+                        isColored
+                          ? 'border-2 border-red-400 rounded-full'
+                          : 'grayscale opacity-50 border-2 border-red-400 rounded-full'
+                      )}
+                    >
+                      <AvatarWithImage image_path={user.user.avatar_path} height="h-10" width="w-10" />
+                    </div>
+                  ) : (
+                    <span>{user.user.initials}</span>
+                  )}
                 </div>
 
                 <p
                   className={cl(
                     isColored ? 'text-gray-500 group-hover:text-orange-500' : 'text-gray-200 group-hover:text-gray-500',
-                    'truncate text-xs'
+                    'text-center w-[95px] truncate text-xs'
                   )}
                 >
                   {user.user.id === currentUserId ? 'You' : user.user.name}

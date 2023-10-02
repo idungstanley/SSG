@@ -51,6 +51,7 @@ import { ShareIcon } from '../../assets/icons';
 import ArrowRight from '../../assets/icons/ArrowRight';
 import { VerticalScroll } from '../ScrollableContainer/VerticalScroll';
 import { Capitalize } from '../../utils/NoCapWords/Capitalize';
+import { displayPrompt, setVisibility } from '../../features/general/prompt/promptSlice';
 
 interface IMenuDropdownProps {
   isExtendedBar?: boolean;
@@ -309,19 +310,42 @@ export default function MenuDropdown({ isExtendedBar, cords }: IMenuDropdownProp
     {
       title: 'Delete',
       handleClick: () => {
-        if (showMenuDropdownType?.includes(EntityType.hub)) {
-          deleteHubMutation.mutateAsync({
-            id: showMenuDropdown
-          });
-        } else if (showMenuDropdownType?.includes(EntityType.wallet)) {
-          deleteWalletMutation.mutateAsync({
-            id: showMenuDropdown
-          });
-        } else {
-          deleteListMutation.mutateAsync({
-            id: showMenuDropdown
-          });
-        }
+        dispatch(
+          displayPrompt(
+            `Delete ${showMenuDropdownType}`,
+            `Would you like delete this ${showMenuDropdownType} from the workspace?`,
+            [
+              {
+                label: `Delete ${showMenuDropdownType}`,
+                style: 'danger',
+                callback: () => {
+                  if (showMenuDropdownType?.includes(EntityType.hub)) {
+                    deleteHubMutation.mutateAsync({
+                      id: showMenuDropdown
+                    });
+                  } else if (showMenuDropdownType?.includes(EntityType.wallet)) {
+                    deleteWalletMutation.mutateAsync({
+                      id: showMenuDropdown
+                    });
+                  } else {
+                    deleteListMutation.mutateAsync({
+                      id: showMenuDropdown
+                    });
+                  }
+                  dispatch(setVisibility(false));
+                }
+              },
+              {
+                label: 'Cancel',
+                style: 'plain',
+                callback: () => {
+                  dispatch(setVisibility(false));
+                }
+              }
+            ]
+          )
+        );
+        dispatch(setshowMenuDropdown({ showMenuDropdown: null, showMenuDropdownType: null }));
       },
       icon: <TrashIcon className="w-4 h-4 text-red-500" aria-hidden="true" />,
       isVisible: true

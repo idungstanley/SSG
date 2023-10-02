@@ -1,9 +1,10 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import AlsoitMenuDropdown from '../../../../../components/DropDowns';
 import Button from '../../../../../components/Buttons/Button';
 import Assignee from '../../assignTask/Assignee';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import { setCurrTeamMemId } from '../../../../../features/task/taskSlice';
+import { useDuplicateTask } from '../../../../../features/task/taskService';
 
 export default function DuplicateTaskAdvanceModal({
   handleClose,
@@ -13,25 +14,30 @@ export default function DuplicateTaskAdvanceModal({
   anchorEl: null | HTMLSpanElement | HTMLDivElement;
 }) {
   const { duplicateTaskObj } = useAppSelector((state) => state.task);
+
+  const { mutate: duplicateTask } = useDuplicateTask();
   const dispatch = useAppDispatch();
 
+  const [currentSelected, setCurrentSelected] = useState<string[]>([]);
+
   const attributes = [
-    { label: 'Everything' },
-    { label: 'Activity' },
-    { label: 'Attachments' },
-    { label: 'Comments' },
-    { label: 'Only Assigned Comments' },
-    { label: 'Comment Attachments' },
-    { label: 'Custom Fields' },
-    { label: 'Dependencies' },
-    { label: 'Due Date' },
-    { label: 'Keep Task Status' },
-    { label: 'Recurring Settings' },
-    { label: 'Tags' }
+    { label: 'Everything', value: 'everything' },
+    { label: 'Activity', value: 'activity' },
+    { label: 'Attachments', value: 'attachments' },
+    { label: 'Comments', value: 'comments' },
+    { label: 'Only Assigned Comments', value: 'only-assigned-comments' },
+    { label: 'Comment Attachments', value: 'comment_attachments' },
+    { label: 'Custom Fields', value: 'custom_fields' },
+    { label: 'Dependencies', value: 'dependencies' },
+    { label: 'Due Date', value: 'due_date' },
+    { label: 'Keep Task Status', value: 'keep_task_status' },
+    { label: 'Recurring Settings', value: 'recurring_settings' },
+    { label: 'Tags', value: 'tag' }
   ];
+
   const asigneeWatcher = [
-    { label: 'Assignee', asigneeWatcher: <Assignee option="getTeamId" /> },
-    { label: 'Watcher', asigneeWatcher: <Assignee option="getTeamId" /> },
+    { label: 'Assignees', value: 'assignees', asigneeWatcher: <Assignee option="getTeamId" /> },
+    { label: 'Watcher', value: 'watcher', asigneeWatcher: <Assignee option="getTeamId" /> },
     { label: 'Send Notifications' }
   ];
 
@@ -51,7 +57,45 @@ export default function DuplicateTaskAdvanceModal({
     } else {
       dispatch(setCurrTeamMemId(null));
     }
+
+    if (duplicateTaskObj.fullTask?.assignees.length) {
+      const label = 'assignees';
+      setCurrentSelected((prevSelected) => [...prevSelected, label]);
+    }
+    if (duplicateTaskObj.fullTask?.description) {
+      const label = 'comments';
+      setCurrentSelected((prevSelected) => [...prevSelected, label]);
+    }
+    if (duplicateTaskObj.fullTask?.custom_field_columns) {
+      const label = 'custom_fields';
+      setCurrentSelected((prevSelected) => [...prevSelected, label]);
+    }
+    if (duplicateTaskObj.fullTask?.end_date) {
+      const label = 'due_date';
+      setCurrentSelected((prevSelected) => [...prevSelected, label]);
+    }
+    if (duplicateTaskObj.fullTask?.status) {
+      const label = 'keep_task_status';
+      setCurrentSelected((prevSelected) => [...prevSelected, label]);
+    }
   }, []);
+
+  const handleDuplicateSave = () => {
+    duplicateTask({
+      ...duplicateTaskObj,
+      list_id: duplicateTaskObj.list_id,
+      copy: currentSelected
+    });
+
+    handleClose();
+  };
+
+  const onChange = (label: string, value: string) => {
+    // Toggle the selected state
+    setCurrentSelected((prevSelected) =>
+      prevSelected.includes(value) ? prevSelected.filter((selected) => selected !== value) : [...prevSelected, value]
+    );
+  };
 
   return (
     <div>
@@ -82,7 +126,13 @@ export default function DuplicateTaskAdvanceModal({
                 {attributes.map((attribute) => {
                   return (
                     <div key={attribute.label} className="flex items-center ">
-                      <input type="checkbox" style={checkBox} /> <span className="pl-5">{attribute.label}</span>
+                      <input
+                        type="checkbox"
+                        checked={currentSelected.includes(attribute.value as string)}
+                        onChange={() => onChange(attribute.label.toLowerCase(), attribute.value as string)}
+                        style={checkBox}
+                      />
+                      <span className="pl-5">{attribute.label}</span>
                     </div>
                   );
                 })}
@@ -96,7 +146,13 @@ export default function DuplicateTaskAdvanceModal({
                       className={`flex flex-col justify-center ${attribute.asigneeWatcher && 'border-b-2 pb-3'}`}
                     >
                       <div className="flex items-center">
-                        <input type="checkbox" style={checkBox} /> <span className="pl-3">{attribute.label}</span>
+                        <input
+                          type="checkbox"
+                          checked={currentSelected.includes(attribute.value as string)}
+                          onChange={() => onChange(attribute.label.toLowerCase(), attribute.value as string)}
+                          style={checkBox}
+                        />
+                        <span className="pl-3">{attribute.label}</span>
                       </div>
                       <p className="ml-16 my-3 ">{attribute.asigneeWatcher}</p>
                     </div>
@@ -108,7 +164,7 @@ export default function DuplicateTaskAdvanceModal({
 
           <div className="flex justify-between my-5">
             <p></p>
-            <p className="cursor-pointer">
+            <p className="cursor-pointer" onClick={handleDuplicateSave}>
               <Button active={true}>Duplicate task</Button>
             </p>
           </div>

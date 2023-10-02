@@ -4,11 +4,12 @@ import { useAppSelector } from '../../app/hooks';
 
 interface CustomScrollableContainerProps extends HTMLAttributes<HTMLDivElement> {
   children: ReactNode;
+  bgColor?: string;
 }
 const DEFAULT_THUMB_HEIGHT = 20;
 const ARROWS_WRAPPER_HEIGHT = 27;
 
-export function VerticalScroll({ children, ...props }: CustomScrollableContainerProps) {
+export function VerticalScroll({ children, bgColor, ...props }: CustomScrollableContainerProps) {
   // update size is pilot is visible / invisible
   const { show: showFullPilot } = useAppSelector((state) => state.slideOver.pilotSideOver);
   const {
@@ -211,7 +212,7 @@ export function VerticalScroll({ children, ...props }: CustomScrollableContainer
   };
 
   return (
-    <div className="relative flex w-full pr-1 overflow-hidden">
+    <div className={`relative flex w-full pr-1 overflow-hidden ${bgColor}`}>
       <div className="mr-1 scrollbar-hide grow" ref={contentRef} {...props}>
         {children}
       </div>

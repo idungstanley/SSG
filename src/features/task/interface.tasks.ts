@@ -4,6 +4,7 @@ import { ICustomField, ImyTaskData } from './taskSlice';
 import { ITeamMembersAndGroup } from '../settings/teamMembersAndGroups.interfaces';
 import { Header } from '../../components/Pilot/components/TimeClock/ClockLog';
 import { IField } from '../list/list.interfaces';
+import { RecurFrequency, TypeOptionsProps } from '../../components/DatePicker/RecurringTypes';
 
 export interface UpdateTaskProps {
   task_id_array?: string[];
@@ -316,6 +317,7 @@ export interface customPropertiesProps {
   symbol?: string;
   include_groups?: boolean;
   single_user?: boolean;
+  formula?: string;
 }
 
 export interface ITaskRecurResponse {
@@ -333,7 +335,7 @@ export interface ITaskCreateProps {
   taskId?: string;
   type: string;
   execution_type: string;
-  type_options?: string[];
+  type_options?: TypeOptionsProps;
   new_task?: string | string[];
-  recur_options?: string[] | number[];
+  recur_options?: RecurFrequency;
 }

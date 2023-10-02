@@ -69,7 +69,7 @@ export default function WalletItem({
 
   const { paletteId, show } = paletteDropdown;
 
-  const [paletteColor, setPaletteColor] = useState<string | undefined | ListColourProps>('');
+  const [paletteColor, setPaletteColor] = useState<string | undefined | ListColourProps | null>('');
 
   const handleItemAction = (id: string, name: string | null) => {
     dispatch(setSelectedTreeDetails({ name, id, type: EntityType.wallet }));

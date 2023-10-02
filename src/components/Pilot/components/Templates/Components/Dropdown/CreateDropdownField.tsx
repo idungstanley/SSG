@@ -74,7 +74,7 @@ function CreateDropdownField() {
     }
   };
 
-  const handleColor = (color: string | ListColourProps) => {
+  const handleColor = (color: string | ListColourProps | null) => {
     setFormInputs((prevInputs) => {
       const newInputs = [...prevInputs];
 
@@ -103,9 +103,9 @@ function CreateDropdownField() {
           <div className="relative" key={i.id}>
             <label
               htmlFor={`input_${i.id}`}
-              className="block text-alsoit-gray-100 font-medium text-alsoit-text-xi uppercase mb-1"
+              className="block mb-1 font-medium uppercase text-alsoit-gray-100 text-alsoit-text-xi"
             >{`OPTION ${index + 1}`}</label>
-            <div className="flex items-center j rounded-md bg-white">
+            <div className="flex items-center bg-white rounded-md j">
               {i.color && (
                 <span
                   className="w-2"
@@ -120,17 +120,17 @@ function CreateDropdownField() {
                 name={`input_${index + 1}`}
                 value={i.value}
                 onChange={(event) => handleInputChange(event, i.id)}
-                className="block border-0 py-1 shadow-sm ring-0 ring-inset placeholder-gray-300 focus:ring-0 focus:ring-inset focus:ring-indigo-600 text-alsoit-gray-300 text-alsoit-text-xi sm:text-sm sm:leading-6 w-2/3"
+                className="block w-2/3 py-1 placeholder-gray-300 border-0 shadow-sm ring-0 ring-inset focus:ring-0 focus:ring-inset focus:ring-indigo-600 text-alsoit-gray-300 text-alsoit-text-xi sm:text-sm sm:leading-6"
               />
               <div className="flex items-center gap-1">
                 <button
-                  className="text-alsoit-text-xi text-alsoit-gray-300 font-semibold hover:text-alsoit-purple-300 cursor-pointer"
+                  className="font-semibold cursor-pointer text-alsoit-text-xi text-alsoit-gray-300 hover:text-alsoit-purple-300"
                   onClick={(e) => handleClick(e, i.id)}
                 >
                   Change Option Color
                 </button>
                 <button onClick={() => handleRemoveOption(i.id)}>
-                  <TrashIcon className="w-4 h-4 text-gray-300 cursor-pointer hover:text-primary-300 transition" />
+                  <TrashIcon className="w-4 h-4 text-gray-300 transition cursor-pointer hover:text-primary-300" />
                 </button>
               </div>
             </div>
@@ -143,7 +143,7 @@ function CreateDropdownField() {
       {/* add new option */}
       <button
         onClick={handleAddOption}
-        className="text-white flex items-center gap-2 my-2 bg-alsoit-purple-300 p-1 rounded"
+        className="flex items-center gap-2 p-1 my-2 text-white rounded bg-alsoit-purple-300"
       >
         <PlusCircleIcon className="w-5 h-5 text-white" />
         <span>Add new option</span>

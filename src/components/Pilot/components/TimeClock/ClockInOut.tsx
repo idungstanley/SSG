@@ -117,7 +117,7 @@ export default function ClockInOut() {
   }
 
   const activeTimerCheck = () => {
-    if (timerStatus) {
+    if (timerStatus && !prompt) {
       setPrompt(true);
     } else {
       start();

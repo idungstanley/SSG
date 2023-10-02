@@ -131,8 +131,10 @@ export default function ListAddModal({
         aria-expanded={open ? 'true' : undefined}
         onClick={handleClick}
       >
-        <span style={{ color: ListColor?.outerColour }}>Add</span>
-        <AiOutlineCaretDown className="text-gray-500 pl-1 w-3 h-3 " />
+        <span style={{ color: ListColor?.outerColour === null ? 'black' : (ListColor?.outerColour as string) }}>
+          Add
+        </span>
+        <AiOutlineCaretDown className="w-3 h-3 pl-1 text-gray-500 " />
       </Button>
       <Menu
         id="basic-menu"
@@ -147,7 +149,7 @@ export default function ListAddModal({
         {items.map((item) => (
           <div key={item.id}>
             <div className="w-full m-2">
-              {(item.label === 'List Info' || item.label === 'Archive') && <p className="border-t-2 mr-5"></p>}
+              {(item.label === 'List Info' || item.label === 'Archive') && <p className="mr-5 border-t-2"></p>}
             </div>
             <MenuItem
               key={item.label}
@@ -156,7 +158,7 @@ export default function ListAddModal({
                 handleClose();
               }}
             >
-              <div className="flex items-center space-x-1 w-full ">
+              <div className="flex items-center w-full space-x-1 ">
                 <p className="mr-2">{item.icon}</p>
                 <p>{item.label}</p>
               </div>
@@ -166,7 +168,7 @@ export default function ListAddModal({
         ))}
         <p className="border-t-2"></p>
         <p
-          className="border-y-2 flex items-center p-2 mx-3 my-2 cursor-pointer text-white rounded-md"
+          className="flex items-center p-2 mx-3 my-2 text-white rounded-md cursor-pointer border-y-2"
           style={{ backgroundColor: '#5A43EA' }}
         >
           <AiOutlineShareAlt className="mr-2" />
@@ -174,7 +176,7 @@ export default function ListAddModal({
         </p>
         <p className="border-t-2"></p>
         <MenuItem
-          className="p-3 flex items-center cursor-pointer"
+          className="flex items-center p-3 cursor-pointer"
           onClick={() => {
             handleCheckedGroupTasks();
           }}

@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { listColumnProps } from '../../pages/workspace/tasks/component/views/ListColumns';
-import { IField } from '../list/list.interfaces';
+import { IField, IFieldValue } from '../list/list.interfaces';
 import {
   IDuration,
   IExtraFields,
@@ -25,25 +25,7 @@ import { ItaskViews } from '../hubs/hubs.interfaces';
 
 export interface ICustomField {
   id: string;
-  task_id: null | string;
-  custom_field_id: string;
-  custom_field: IField;
-  name: string;
-  type: string;
-  values: [
-    {
-      color?: string | null;
-      id: string;
-      is_bold?: string | null;
-      is_italic?: string | null;
-      is_strike?: string | null;
-      is_underlined?: string | null;
-      model?: string;
-      model_id?: string;
-      value: string;
-      name: string;
-    }
-  ];
+  values: IFieldValue[];
 }
 
 // color: null;
@@ -78,7 +60,7 @@ interface customPropertyInfo {
   };
 }
 
-interface IDuplicateTaskObj {
+export interface IDuplicateTaskObj {
   task_name: string;
   task_id: string;
   list_id: string;
@@ -176,6 +158,7 @@ interface TaskState {
   comfortableView: boolean;
   comfortableViewWrap: boolean;
   duplicateTaskObj: IDuplicateTaskObj;
+  currentSelectedDuplicateArr: string[];
   verticalGrid: boolean;
   showNewTaskField: boolean;
   showNewTaskId: string;
@@ -286,6 +269,7 @@ const initialState: TaskState = {
   selectedTasksArray: [],
   verticalGrid: false,
   taskUpperCase: false,
+  currentSelectedDuplicateArr: [],
   triggerSaveSettings: false,
   triggerAutoSave: false,
   triggerSaveSettingsModal: false,
@@ -397,6 +381,9 @@ export const taskSlice = createSlice({
     setDuplicateTaskObj(state, action: PayloadAction<IDuplicateTaskObj>) {
       state.duplicateTaskObj = action.payload;
     },
+    setCurrentSelectedDuplicateArr(state, action: PayloadAction<string[]>) {
+      state.currentSelectedDuplicateArr = action.payload;
+    },
     setSearchValue(state, action: PayloadAction<string>) {
       state.searchValue = action.payload;
     },
@@ -442,28 +429,25 @@ export const taskSlice = createSlice({
     hideTaskColumns(state, action) {
       return {
         ...state,
-        hideTask:
-          state.hideTask.length != 0
-            ? state.hideTask.map((prev) => {
-                if (prev.field === action.payload) {
-                  return {
-                    ...prev,
-                    hidden: !prev.hidden
-                  };
-                } else {
-                  return prev;
-                }
-              })
-            : state.taskColumns.map((prev) => {
-                if (prev.field === action.payload) {
-                  return {
-                    ...prev,
-                    hidden: !prev.hidden
-                  };
-                } else {
-                  return prev;
-                }
-              })
+        hideTask: state.hideTask.length
+          ? state.hideTask.map((prev) => {
+              if (prev.id === action.payload) {
+                return {
+                  ...prev,
+                  hidden: !prev.hidden
+                };
+              }
+              return prev;
+            })
+          : state.taskColumns.map((prev) => {
+              if (prev.id === action.payload) {
+                return {
+                  ...prev,
+                  hidden: !prev.hidden
+                };
+              }
+              return prev;
+            })
       };
     },
     getComfortableView(state, action: PayloadAction<boolean>) {
@@ -686,6 +670,7 @@ export const {
   getSingleLineView,
   getTaskUpperCase,
   setDuplicateTaskObj,
+  setCurrentSelectedDuplicateArr,
   getVerticalGridlinesTask,
   getSplitSubTask,
   getSplitSubTaskLevels,
