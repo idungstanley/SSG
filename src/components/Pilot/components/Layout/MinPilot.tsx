@@ -20,7 +20,7 @@ export default function MinPilot({ featureTabs, activeSection, setShowModal, sho
   return (
     <div
       onMouseLeave={() => (activeTabId ? dispatch(setActiveTabId()) : undefined)}
-      className="relative h-full border-l divide-y"
+      className="relative h-full bg-white divide-y"
     >
       <div
         style={{
