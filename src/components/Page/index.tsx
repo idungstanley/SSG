@@ -55,22 +55,18 @@ export default function Page({ header, additionalHeader, children, additional, p
       ) : (
         <div></div>
       )}
-
       <section className="flex flex-col w-full h-full">
         {additionalHeader}
         {header}
-
         <div className="relative grid w-full h-full grid-cols-frAuto">
           <div className="relative" style={{ width: culculateWidthForContent() }}>
             {children}
           </div>
-
-          <span className={`${showOverlay && 'relative z-50'}`}>
+          <span className={`${showOverlay ? 'relative z-50' : 'border-l'}`}>
             {pilotConfig ? <Pilot pilotConfig={pilotConfig} /> : null}
           </span>
         </div>
       </section>
-
       {additional}
     </main>
   );

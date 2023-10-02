@@ -221,22 +221,28 @@ export function ScrollableHorizontalListsContainer({ children, ListColor, ...pro
 
   return (
     <>
-      <div className="relative w-full overflow-hidden px-2">
+      <div className="relative w-full px-2 overflow-hidden">
         <div className="scrollbar-hide" ref={contentRef} {...props}>
           {children}
         </div>
       </div>
       {isThumbVisible && (
         <div
-          className="sticky bottom-0 pt-4 pr-2 group grid w-full grid-cols-2 bg-purple-50 rounded-3xl"
-          style={{ backgroundColor: LightenColor(ListColor?.outerColour as string, 0.95), zIndex: 2 }}
+          className="sticky bottom-0 grid w-full grid-cols-2 pt-4 pr-2 group bg-purple-50 rounded-3xl"
+          style={{
+            backgroundColor: LightenColor(
+              ListColor?.outerColour === null ? 'black' : (ListColor?.outerColour as string),
+              0.95
+            ),
+            zIndex: 2
+          }}
         >
           <div />
-          <div className="flex items-center mb-4 flex-row space-x-2">
+          <div className="flex flex-row items-center mb-4 space-x-2">
             {renderScrollArrows()}
             <div className="relative flex flex-grow w-full h-2">
               <div
-                className="absolute top-0 -bottom-7 bg-transparent cursor-pointer rounded-xl w-full h-2 -right-12"
+                className="absolute top-0 w-full h-2 bg-transparent cursor-pointer -bottom-7 rounded-xl -right-12"
                 ref={scrollTrackRef}
                 onClick={handleTrackClick}
               ></div>

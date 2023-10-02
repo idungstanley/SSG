@@ -4,7 +4,12 @@ import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import ListIconComponent from '../ItemsListInSidebar/components/ListIconComponent';
 import { cl } from '../../utils';
 import { IList } from '../../features/hubs/hubs.interfaces';
-import { setDuplicateTaskObj, setSelectedTasksArray } from '../../features/task/taskSlice';
+import {
+  setCurrTeamMemId,
+  setCurrentSelectedDuplicateArr,
+  setDuplicateTaskObj,
+  setSelectedTasksArray
+} from '../../features/task/taskSlice';
 import { useDuplicateTask } from '../../features/task/taskService';
 import DuplicateTaskAdvanceModal from '../../pages/workspace/tasks/component/taskMenu/DuplicateTaskAdvanceModal';
 
@@ -24,13 +29,14 @@ export default function SearchListItem({ list, paddingLeft }: ListItemProps) {
   const { activeItemId } = useAppSelector((state) => state.workspace);
   const { lightBaseColor, baseColor } = useAppSelector((state) => state.account);
   const { listColour } = useAppSelector((state) => state.list);
-  const { duplicateTaskObj } = useAppSelector((state) => state.task);
+  const { duplicateTaskObj, currentSelectedDuplicateArr } = useAppSelector((state) => state.task);
   const [showSelectDropdown, setShowSelectDropdown] = useState<null | HTMLSpanElement | HTMLDivElement>(null);
 
   const { mutate: duplicateTask } = useDuplicateTask();
 
   const handleClick = () => {
     dispatch(setDuplicateTaskObj({ ...duplicateTaskObj, popDuplicateTaskModal: false }));
+
     duplicateTask({
       ...duplicateTaskObj,
       list_id: list.id
@@ -40,10 +46,12 @@ export default function SearchListItem({ list, paddingLeft }: ListItemProps) {
 
   const handleAdvance = (e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
     e.stopPropagation();
+    dispatch(setDuplicateTaskObj({ ...duplicateTaskObj, list_id: list.id }));
     setShowSelectDropdown(e.currentTarget);
   };
 
   const handleClose = () => {
+    dispatch(setCurrentSelectedDuplicateArr([]));
     dispatch(setSelectedTasksArray([]));
     setShowSelectDropdown(null);
   };

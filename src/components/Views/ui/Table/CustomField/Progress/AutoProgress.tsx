@@ -24,7 +24,7 @@ function AutoProgress({ task, entityCustomProperty }: AutoProgressProps) {
 
   return (
     <div className="w-full">
-      <div className="w-full flex justify-center -mb-2">
+      <div className="flex justify-center w-full -mb-2">
         <h2 className="text-alsoit-text-md">{task.has_descendants ? totalPercentage : noDescendantsVal}</h2>
       </div>
       <input

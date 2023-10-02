@@ -248,8 +248,7 @@ export function Row({
         <SubTasks
           paddingLeft={DEFAULT_LEFT_PADDING + paddingLeft}
           listId={listId}
-          parentId={task.id}
-          parentName={task.name}
+          parentTask={task}
           columns={columns}
           taskStatuses={taskStatuses}
           isSplitSubtask={isSplitSubtask}

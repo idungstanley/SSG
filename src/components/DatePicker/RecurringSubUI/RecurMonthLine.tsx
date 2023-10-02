@@ -1,32 +1,27 @@
-import { useEffect, useRef, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 import RadioWrapper from '../RadioWrapper';
 import { WeekLineOption } from './WeekLineOption';
 import dayjs from 'dayjs';
-import {
-  getDaysOfMonthWithSuffix,
-  getWeekNumberAsOrdinal,
-  getWeekNumbersForMonth,
-  weekNumberToOrdinal
-} from '../../../utils/calendar';
+import { getDaysOfMonthWithSuffix, getWeekNumbersForMonth, weekNumberToOrdinal } from '../../../utils/calendar';
 import ArrowUp from '../../../assets/icons/ArrowUp';
 import ArrowDown from '../../../assets/icons/ArrowDown';
 import advancedFormat from 'dayjs/plugin/advancedFormat';
 import { VerticalScroll } from '../../ScrollableContainer/VerticalScroll';
-import { dataArr } from '../../../utils/Constants/DatesConstants';
+import { RECUR_STR_CONSTANTS, Word, dataArr, wordToNumber } from '../../../utils/Constants/DatesConstants';
+import { TypeOptionsProps } from '../RecurringTypes';
+
+interface Props {
+  setOptions: Dispatch<SetStateAction<TypeOptionsProps | undefined>>;
+}
 
 dayjs.extend(advancedFormat);
 
-export function CustomMonthLine() {
+export function CustomMonthLine({ setOptions }: Props) {
   const currentDate = dayjs();
-  const currentDay = currentDate.date();
 
   const listRef = useRef<HTMLDivElement | null>(null);
 
   const [value, setValue] = useState<string>('on date');
-  const [dataValues, setDataValues] = useState<{ date: string; week: string }>({ date: '', week: '' });
-  const [ordinalDays, setOrdinalDays] = useState<string[]>(
-    getDaysOfMonthWithSuffix(dayjs().month() + 1, dayjs().year())
-  );
   const [ordinalDay, setOrdinalDay] = useState<string>(currentDate.format('Do'));
   const [dropDown, setDropDown] = useState<{ [key: string]: boolean }>({
     ordinalDays: false,
@@ -53,7 +48,7 @@ export function CustomMonthLine() {
     return (
       <div className="absolute bg-alsoit-gray-50 shadow-2xl z-30 px-2 h-44 overflow-auto" ref={listRef}>
         <VerticalScroll>
-          {ordinalDays.map((day, index) => (
+          {getDaysOfMonthWithSuffix(dayjs().month() + 1, dayjs().year()).map((day, index) => (
             <div
               key={index}
               className="flex flex-col py-1.5 cursor-pointer"
@@ -106,6 +101,20 @@ export function CustomMonthLine() {
     }
   }, [dropDown.ordinalDays]);
 
+  useEffect(() => {
+    const numericPart = ordinalDay.match(/\d+/);
+    const weekNumber = wordToNumber(ordinalWeek as Word);
+    const syncedWeekNumber = value === RECUR_STR_CONSTANTS.byWeek ? `${weekNumber}` : undefined;
+    const syncedMonthDay = value === RECUR_STR_CONSTANTS.onDate && numericPart ? numericPart[0] : undefined;
+
+    weekNumber &&
+      setOptions((prev) => ({
+        ...prev,
+        monthly_day_number: syncedMonthDay,
+        monthly_week_number: syncedWeekNumber
+      }));
+  }, [ordinalDay, ordinalWeek, value]);
+
   return (
     <div className="flex flex-col space-y-2 w-full">
       <div className="flex justify-between w-full">
@@ -115,7 +124,7 @@ export function CustomMonthLine() {
           </RadioWrapper>
         ))}
       </div>
-      {value === 'on date' && (
+      {value === RECUR_STR_CONSTANTS.onDate && (
         <div className="relative">
           <div
             className="border-alsoit-gray-75 border rounded-md text-alsoit-text-md h-7 px-1 w-full relative flex justify-between items-center cursor-pointer"
@@ -127,7 +136,7 @@ export function CustomMonthLine() {
           {dropDown.ordinalDays && ordinalDaysList()}
         </div>
       )}
-      {value === 'by week' && (
+      {value === RECUR_STR_CONSTANTS.byWeek && (
         <div className="flex flex-col space-y-1.5">
           <div
             className="border-alsoit-gray-75 border rounded-md text-alsoit-text-md h-7 px-1 w-full relative flex justify-between items-center cursor-pointer"
@@ -137,7 +146,7 @@ export function CustomMonthLine() {
             {dropDown.ordinalWeeks ? <ArrowUp /> : <ArrowDown dimensions={{ height: 7, width: 7 }} />}
           </div>
           {dropDown.ordinalWeeks && ordinalWeeksList()}
-          <WeekLineOption />
+          <WeekLineOption extended={true} setOptions={setOptions} />
         </div>
       )}
     </div>

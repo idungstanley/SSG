@@ -5,7 +5,7 @@ import { filterByAssignee, filterBySearchValue, sortTasks } from '../../../Tasks
 import { Table } from '../Table/Table';
 import { Label } from './Label';
 import { AddTask } from '../AddTask/AddTask';
-import { setCurrTeamMemId } from '../../../../features/task/taskSlice';
+import { getTaskColumns, setCurrTeamMemId } from '../../../../features/task/taskSlice';
 import { columnsHead, listColumnProps } from '../../../../pages/workspace/tasks/component/views/ListColumns';
 import { cl } from '../../../../utils';
 import { IField, IListDetailRes } from '../../../../features/list/list.interfaces';
@@ -22,7 +22,7 @@ interface ListProps {
 }
 
 export interface IListColor {
-  outerColour: string;
+  outerColour: string | null;
 }
 
 const unique = (arr: listColumnProps[]) => [...new Set(arr)];
@@ -66,7 +66,9 @@ export function List({ tasks, subtasksCustomeFields, listDetails }: ListProps) {
       hidden: false,
       color: i.color
     }));
-    return unique([...columnsHead, ...customFieldNames]);
+    const uniqueColumns = unique([...columnsHead, ...customFieldNames]);
+    dispatch(getTaskColumns(uniqueColumns));
+    return uniqueColumns;
   }, [tasks]);
 
   const generateSubtasksColumns = useMemo(() => {
@@ -127,8 +129,11 @@ export function List({ tasks, subtasksCustomeFields, listDetails }: ListProps) {
     <div
       className="pt-1 border-t-4 border-l-4 border-purple-500 rounded-3xl bg-purple-50"
       style={{
-        borderColor: ListColor?.outerColour,
-        backgroundColor: LightenColor(ListColor?.outerColour, 0.95),
+        borderColor: ListColor?.outerColour === null ? 'black' : (ListColor?.outerColour as string),
+        backgroundColor: LightenColor(
+          ListColor?.outerColour === null ? 'black' : (ListColor?.outerColour as string),
+          0.95
+        ),
         overflow: collapseTable ? 'hidden' : 'unset'
       }}
     >

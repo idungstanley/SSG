@@ -2,9 +2,10 @@ import React from 'react';
 import { palette } from '../../../utils/Colors';
 import { ListColourProps } from '../../tasks/ListItem';
 import { cl } from '../../../utils';
+import DefaultColour from '../../../assets/icons/DefaultColour';
 
 interface PaletteProps {
-  handleClick: (value: string | ListColourProps) => void;
+  handleClick: (value: string | null | ListColourProps) => void;
   activeColor?: string;
 }
 
@@ -19,8 +20,13 @@ export default function ColorPalette({ handleClick, activeColor }: PaletteProps)
       key={c}
       className={cl(activeColor === c ? 'border rounded-md flex items-center justify-center w-6 h-6' : '')}
       style={{ borderColor: activeColor === c ? `${c}` : '' }}
+      onClick={() => handleClick(c)}
     >
-      <div style={{ backgroundColor: `${c}`, ...style }} className="rounded-md" onClick={() => handleClick(c)}></div>
+      {c === null ? (
+        <DefaultColour />
+      ) : (
+        <div style={{ backgroundColor: `${c}`, ...style }} className="rounded-md"></div>
+      )}
     </div>
   ));
 

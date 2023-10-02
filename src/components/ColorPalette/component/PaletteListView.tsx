@@ -40,7 +40,7 @@ export type FORMATTED_COLOR = {
   rgb: string | null;
 };
 
-function Row({ item, key }: { item: string; key: number }) {
+function Row({ item, key }: { item: string | null; key: number }) {
   initColors(ORIGINAL_COLORS);
 
   const [isChecked, setIsChecked] = useState<boolean>(false);
