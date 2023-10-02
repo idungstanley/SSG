@@ -21,22 +21,23 @@ export default function DuplicateTaskAdvanceModal({
   const [currentSelected, setCurrentSelected] = useState<string[]>([]);
 
   const attributes = [
-    { label: 'Everything' },
-    { label: 'Activity' },
-    { label: 'Attachments' },
-    { label: 'Comments' },
-    { label: 'Only Assigned Comments' },
-    { label: 'Comment Attachments' },
-    { label: 'Custom Fields' },
-    { label: 'Dependencies' },
-    { label: 'Due Date' },
-    { label: 'Keep Task Status' },
-    { label: 'Recurring Settings' },
-    { label: 'Tags' }
+    { label: 'Everything', value: 'everything' },
+    { label: 'Activity', value: 'activity' },
+    { label: 'Attachments', value: 'attachments' },
+    { label: 'Comments', value: 'comments' },
+    { label: 'Only Assigned Comments', value: 'only-assigned-comments' },
+    { label: 'Comment Attachments', value: 'comment_attachments' },
+    { label: 'Custom Fields', value: 'custom_fields' },
+    { label: 'Dependencies', value: 'dependencies' },
+    { label: 'Due Date', value: 'due_date' },
+    { label: 'Keep Task Status', value: 'keep_task_status' },
+    { label: 'Recurring Settings', value: 'recurring_settings' },
+    { label: 'Tags', value: 'tag' }
   ];
+
   const asigneeWatcher = [
-    { label: 'Assignees', asigneeWatcher: <Assignee option="getTeamId" /> },
-    { label: 'Watcher', asigneeWatcher: <Assignee option="getTeamId" /> },
+    { label: 'Assignees', value: 'assignees', asigneeWatcher: <Assignee option="getTeamId" /> },
+    { label: 'Watcher', value: 'watcher', asigneeWatcher: <Assignee option="getTeamId" /> },
     { label: 'Send Notifications' }
   ];
 
@@ -65,6 +66,18 @@ export default function DuplicateTaskAdvanceModal({
       const label = 'comments';
       setCurrentSelected((prevSelected) => [...prevSelected, label]);
     }
+    if (duplicateTaskObj.fullTask?.custom_field_columns) {
+      const label = 'custom_fields';
+      setCurrentSelected((prevSelected) => [...prevSelected, label]);
+    }
+    if (duplicateTaskObj.fullTask?.end_date) {
+      const label = 'due_date';
+      setCurrentSelected((prevSelected) => [...prevSelected, label]);
+    }
+    if (duplicateTaskObj.fullTask?.status) {
+      const label = 'keep_task_status';
+      setCurrentSelected((prevSelected) => [...prevSelected, label]);
+    }
   }, []);
 
   const handleDuplicateSave = () => {
@@ -77,12 +90,10 @@ export default function DuplicateTaskAdvanceModal({
     handleClose();
   };
 
-  const onChange = (attribute: string) => {
+  const onChange = (label: string, value: string) => {
     // Toggle the selected state
     setCurrentSelected((prevSelected) =>
-      prevSelected.includes(attribute)
-        ? prevSelected.filter((selected) => selected !== attribute)
-        : [...prevSelected, attribute]
+      prevSelected.includes(value) ? prevSelected.filter((selected) => selected !== value) : [...prevSelected, value]
     );
   };
 
@@ -117,8 +128,8 @@ export default function DuplicateTaskAdvanceModal({
                     <div key={attribute.label} className="flex items-center ">
                       <input
                         type="checkbox"
-                        checked={currentSelected.includes(attribute.label.toLowerCase())}
-                        onChange={() => onChange(attribute.label.toLowerCase())}
+                        checked={currentSelected.includes(attribute.value as string)}
+                        onChange={() => onChange(attribute.label.toLowerCase(), attribute.value as string)}
                         style={checkBox}
                       />
                       <span className="pl-5">{attribute.label}</span>
@@ -137,8 +148,8 @@ export default function DuplicateTaskAdvanceModal({
                       <div className="flex items-center">
                         <input
                           type="checkbox"
-                          checked={currentSelected.includes(attribute.label.toLowerCase())}
-                          onChange={() => onChange(attribute.label.toLowerCase())}
+                          checked={currentSelected.includes(attribute.value as string)}
+                          onChange={() => onChange(attribute.label.toLowerCase(), attribute.value as string)}
                           style={checkBox}
                         />
                         <span className="pl-3">{attribute.label}</span>

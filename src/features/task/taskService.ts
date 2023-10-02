@@ -267,7 +267,11 @@ const duplicateTask = (data: {
 }) => {
   const { task_name, task_id, list_id, is_everything, copy } = data;
 
-  const custom_is_everything = copy?.includes('Everything');
+  const availableFilter = copy?.filter((item) => {
+    return item !== 'everything';
+  });
+
+  const custom_is_everything = copy?.includes('everything');
 
   const response = requestNew<newTaskDataRes>({
     url: `tasks/${task_id}/duplicate`,
@@ -276,7 +280,7 @@ const duplicateTask = (data: {
       name: task_name,
       list_id,
       is_everything: copy?.length ? custom_is_everything : is_everything,
-      copy: copy || null
+      copy: custom_is_everything ? null : availableFilter
     }
   });
   return response;
