@@ -784,6 +784,16 @@ export const useCurrentTime = ({ workspaceId }: { workspaceId?: string }) => {
       onSuccess: (data) => {
         const dateData = data?.data;
         const dateString = dateData?.time_entry;
+        const entityCheck = () =>
+          dateString?.model_type ===
+          (EntityType.hub ||
+            EntityType.list ||
+            EntityType.subHub ||
+            EntityType.subWallet ||
+            EntityType.subtask ||
+            EntityType.task ||
+            EntityType.wallet);
+
         if (dateData?.time_entry === null) {
           dispatch(setTimerStatus(false));
           dispatch(setUpdateTimerDuration({ s: 0, m: 0, h: 0 }));
@@ -792,21 +802,15 @@ export const useCurrentTime = ({ workspaceId }: { workspaceId?: string }) => {
           const { hours, minutes, seconds } = Duration({ dateString });
           dispatch(setTimerStatus(true));
           dispatch(setUpdateTimerDuration({ s: seconds, m: minutes, h: hours }));
-          dateString.model_type ===
-            (EntityType.hub ||
-              EntityType.list ||
-              EntityType.subHub ||
-              EntityType.subWallet ||
-              EntityType.subtask ||
-              EntityType.task ||
-              EntityType.wallet) &&
+
+          entityCheck() &&
             dispatch(
               setTimerLastMemory({
-                hubId: dateString.model_type === EntityType.hub ? dateString.model_id : undefined,
+                hubId: dateString.model_type === EntityType.hub ? dateString.model_id : null,
                 activeTabId: 6,
-                subhubId: dateString.model_type === EntityType.subHub ? dateString.model_id : undefined,
-                listId: dateString.model_type === EntityType.list ? dateString.model_id : undefined,
-                taskId: dateString.model_type === EntityType.task ? dateString.model_id : undefined,
+                subhubId: dateString.model_type === EntityType.subHub ? dateString.model_id : null,
+                listId: dateString.model_type === EntityType.list ? dateString.model_id : null,
+                taskId: dateString.model_type === EntityType.task ? dateString.model_id : null,
                 workSpaceId: workspaceId
               })
             );
