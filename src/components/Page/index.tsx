@@ -1,6 +1,6 @@
 import { ReactNode, useEffect } from 'react';
 import { RiArrowLeftSLine, RiArrowRightSLine } from 'react-icons/ri';
-import { dimensions } from '../../app/config/dimensions';
+import { STORAGE_KEYS, calculateWidthForContent, dimensions } from '../../app/config/dimensions';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { setExtendedSidebarWidth, setShowExtendedBar } from '../../features/workspace/workspaceSlice';
 import { useResize } from '../../hooks/useResize';
@@ -33,17 +33,27 @@ export default function Page({ header, additionalHeader, children, additional, p
   const DEFAULT_PILOT_WIDTH = dimensions.pilot.default;
   const LS_PILOT_KEY = 'pilotWidth';
   const pilotWidthFromLS = JSON.parse(localStorage.getItem(LS_PILOT_KEY) ?? `${DEFAULT_PILOT_WIDTH}`) as number;
-  const culculateWidthForContent = () => {
-    const sidebarWidth = showSidebar ? userSettingsData?.sidebarWidth : sidebarWidthRD;
-    const extendedBarWidth = showExtendedBar ? SIDEBAR_MAX_WIDTH : SIDEBAR_MIN_WIDTH;
-    const pilotWidth =
-      showFullPilot && id
-        ? pilotWidthFromLS + PILOT_SCROLLBAR_WIDTH
-        : PILOT_COLLAPSE_WIDTH && id
-        ? PILOT_COLLAPSE_WIDTH
-        : undefined;
-    return `calc(100vw - ${sidebarWidth}px - ${extendedBarWidth}px - ${pilotWidth}px)`;
-  };
+
+  const { blockRef, Dividers } = useResize({
+    dimensions: {
+      min: dimensions.pilot.min,
+      max: dimensions.pilot.max
+    },
+    storageKey: STORAGE_KEYS.PILOT_WIDTH,
+    direction: 'XL',
+    apiKey: 'pilot'
+  });
+  // const culculateWidthForContent = () => {
+  //   const sidebarWidth = showSidebar ? userSettingsData?.sidebarWidth : sidebarWidthRD;
+  //   const extendedBarWidth = showExtendedBar ? SIDEBAR_MAX_WIDTH : SIDEBAR_MIN_WIDTH;
+  //   const pilotWidth =
+  //     showFullPilot && id
+  //       ? pilotWidthFromLS + PILOT_SCROLLBAR_WIDTH
+  //       : PILOT_COLLAPSE_WIDTH && id
+  //       ? PILOT_COLLAPSE_WIDTH
+  //       : undefined;
+  //   return `calc(100vw - ${sidebarWidth}px - ${extendedBarWidth}px - ${pilotWidth}px)`;
+  // };
 
   return (
     <main className="grid w-full h-full grid-cols-autoFr">
@@ -59,10 +69,17 @@ export default function Page({ header, additionalHeader, children, additional, p
         {additionalHeader}
         {header}
         <div className="relative grid w-full h-full grid-cols-frAuto">
-          <div className="relative" style={{ width: culculateWidthForContent() }}>
+          <div className="relative" style={{ width: calculateWidthForContent() }}>
             {children}
           </div>
-          <span className={`${showOverlay ? 'relative z-50' : 'border-l'}`}>
+          <span
+            className={`${showOverlay ? 'z-50' : 'border-l relative'}`}
+            ref={blockRef}
+            style={{
+              width: showFullPilot ? pilotWidthFromLS : undefined
+            }}
+          >
+            {showFullPilot ? <Dividers /> : null}
             {pilotConfig ? <Pilot pilotConfig={pilotConfig} /> : null}
           </span>
         </div>

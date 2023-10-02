@@ -5,7 +5,7 @@ import { setIsFavoritePinned, setSidebarWidthRD } from '../../../../features/wor
 import Header from './components/Header';
 import NavigationItems from './components/NavigationItems';
 import Places from './components/Places';
-import { dimensions } from '../../../../app/config/dimensions';
+import { STORAGE_KEYS, dimensions } from '../../../../app/config/dimensions';
 import { useResize } from '../../../../hooks/useResize';
 import { isAllowIncreaseWidth } from '../../../../utils/widthUtils';
 import { NavigationList } from './components/NavigationItems/components/NavigationList';
@@ -18,6 +18,7 @@ import { setUpdateCords } from '../../../../features/hubs/hubSlice';
 import { useScroll } from '../../../../hooks/useScroll';
 import { VerticalScroll } from '../../../../components/ScrollableContainer/VerticalScroll';
 import { useQueryClient } from '@tanstack/react-query';
+import { SetUserSettingsStore } from '../../../../features/account/accountSlice';
 
 const MAX_SIDEBAR_WIDTH = dimensions.navigationBar.max;
 const MIN_SIDEBAR_WIDTH = dimensions.navigationBar.min;
@@ -31,21 +32,32 @@ export default function Sidebar() {
   const queryClient = useQueryClient();
 
   const { showSidebar, userSettingsData } = useAppSelector((state) => state.account);
+
   const [commandSearchModal, setCommandSearchModal] = useState<boolean>(false);
 
-  const { blockRef, Dividers, size, isMouseUp, isDrag } = useResize({
+  const { blockRef, Dividers, size, isDrag } = useResize({
     dimensions: {
       min: MIN_SIDEBAR_WIDTH,
       max: MAX_SIDEBAR_WIDTH
     },
     storageKey: 'sidebarWidth',
     direction: 'XR',
-    defaultSize: dimensions.navigationBar.default
+    defaultSize: dimensions.navigationBar.default,
+    apiKey: 'sidebar'
   });
 
   const resolution = useResolution();
+  console.log(resolution);
 
-  useGetUserSettingsKeys(true, key, resolution);
+  const { data } = useGetUserSettingsKeys(true, key, resolution);
+  useEffect(() => {
+    if (data) {
+      const value = data.value;
+      localStorage.setItem(STORAGE_KEYS.SIDEBAR_WIDTH, JSON.stringify(value.sidebarWidth));
+      localStorage.setItem(STORAGE_KEYS.PILOT_WIDTH, JSON.stringify(value.pilotWidth));
+      dispatch(SetUserSettingsStore({ ...userSettingsData, ...value }));
+    }
+  }, [data]);
 
   const [activeTabId, setActiveTabId] = useState<string | null>('');
   const hotkeyIdsFromLS = JSON.parse(localStorage.getItem('navhotkeys') ?? '[]') as string[];
@@ -78,7 +90,7 @@ export default function Sidebar() {
     [activeHotkeyIds]
   );
 
-  setUserSettingsData(isMouseUp, key, { ...userSettingsData, sidebarWidth: size, isFavoritePinned }, resolution);
+  // setUserSettingsData(isMouseUp, key, { ...userSettingsData, sidebarWidth: size, isFavoritePinned }, resolution);
 
   useEffect(() => {
     const { isAllow, allowedSize } = isAllowIncreaseWidth(size, extendedSidebarWidth);

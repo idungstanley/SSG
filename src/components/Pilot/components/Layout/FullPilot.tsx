@@ -6,7 +6,7 @@ import FullTabs from '../Tabs/FullTabs';
 import { useResize } from '../../../../hooks/useResize';
 import Header from '../Header';
 import { ShareIcon, EditPageIcon, PrintIcon, CopyIcon, UploadIcon } from '../../../../assets/icons';
-import { dimensions } from '../../../../app/config/dimensions';
+import { STORAGE_KEYS, dimensions } from '../../../../app/config/dimensions';
 import { VerticalScroll } from '../../../ScrollableContainer/VerticalScroll';
 import useAdjustedHeight from '../../../../hooks/useAdjustedHeight';
 
@@ -18,8 +18,9 @@ interface FullPilotProps {
 }
 
 const DEFAULT_PILOT_WIDTH = dimensions.pilot.default;
-const LS_PILOT_KEY = 'pilotWidth';
-const pilotWidthFromLS = JSON.parse(localStorage.getItem(LS_PILOT_KEY) ?? `${DEFAULT_PILOT_WIDTH}`) as number;
+const pilotWidthFromLS = JSON.parse(
+  localStorage.getItem(STORAGE_KEYS.PILOT_WIDTH) ?? `${DEFAULT_PILOT_WIDTH}`
+) as number;
 
 export default function FullPilot({ featureTabs, activeSection, setShowModal, showModal }: FullPilotProps) {
   const { blockRef, Dividers } = useResize({
@@ -27,8 +28,9 @@ export default function FullPilot({ featureTabs, activeSection, setShowModal, sh
       min: dimensions.pilot.min,
       max: dimensions.pilot.max
     },
-    storageKey: LS_PILOT_KEY,
-    direction: 'XL'
+    storageKey: STORAGE_KEYS.PILOT_WIDTH,
+    direction: 'XL',
+    apiKey: 'pilot'
   });
   const { showOverlay } = useAppSelector((state) => state.workspace);
   const adjustedHeight = useAdjustedHeight(100);
@@ -38,9 +40,8 @@ export default function FullPilot({ featureTabs, activeSection, setShowModal, sh
   return (
     <VerticalScroll bgColor="bg-white">
       <div
-        ref={blockRef}
+        // ref={blockRef}
         style={{
-          width: showFullPilot ? pilotWidthFromLS : undefined,
           height: `${adjustedHeight}px`
         }}
         className={cl(
@@ -48,7 +49,7 @@ export default function FullPilot({ featureTabs, activeSection, setShowModal, sh
           'right-0  bottom-0 mb-10 pb-6 transform bg-white flex flex-col transition-transform duration-500'
         )}
       >
-        {showFullPilot ? <Dividers /> : null}
+        {/* {showFullPilot ? <Dividers /> : null} */}
         <div className="relative grid grid-rows-autoAutoAutoFr grid-col-1">
           {showOverlay && <div className="absolute inset-0 top-0 left-0 z-10 bg-black opacity-50" />}
           <Header

@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import requestNew from '../../app/requestNew';
 import { IAccountReq, IUserCalendarParams, IUserParams, IUserSettings, IUserSettingsRes } from './account.interfaces';
-import { SetUserSettingsData } from './accountSlice';
+import { SetUserSettingsStore } from './accountSlice';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 
 // Get all user's workspaces
@@ -52,19 +52,19 @@ export const useGetUserSettingsKeys = (enabled: boolean, key: string, resolution
       onSuccess: (data) => {
         localStorage.setItem('userSettingsData', JSON.stringify(data));
         if (data && data.value) {
-          dispatch(SetUserSettingsData(data.value));
+          dispatch(SetUserSettingsStore(data.value));
         }
       }
     }
   );
 };
 
-export const setUserSettingsKeys = (value: IUserParams, resolution?: string | null) => {
+export const setUserSettingsKeys = (data: { value: IUserParams; resolution?: string | null }) => {
   const request = requestNew({
     url: 'user/settings',
     method: 'PUT',
     data: {
-      keys: [{ key: 'sidebar', value, resolution: resolution }]
+      keys: [{ key: 'sidebar', value: data.value, resolution: data.resolution }]
     }
   });
   return request;
@@ -76,8 +76,6 @@ export const setUserSettingsData = (
   value: IUserParams | IUserCalendarParams,
   resolution?: string | null
 ) => {
-  const queryClient = useQueryClient();
-
   const { isFavoritePinned } = useAppSelector((state) => state.workspace);
 
   const { sidebarWidth, showPreview, isFavoritePinned: isFavoritePinnedValue } = value as IUserParams;

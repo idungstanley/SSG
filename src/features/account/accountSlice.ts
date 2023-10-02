@@ -11,6 +11,8 @@ const sidebarFromLS = localStorage.getItem('sidebar');
 //get sidebar width from local storage
 const sidebarWidthFromLS = JSON.parse(localStorage.getItem('sidebarWidth') || '""') as number;
 
+const pilotWidthFromLS = JSON.parse(localStorage.getItem('pilotWidth') || '""') as number;
+
 const idsFromLS = JSON.parse(localStorage.getItem('placeItem') || '[]') as string[];
 
 const showSidebar = sidebarFromLS
@@ -39,6 +41,7 @@ interface AccountState {
   lightBaseColor: string;
   userSettingsData?: IUserParams;
   places: Place[];
+  calculatedContentWidth: string;
 }
 
 const initialState: AccountState = {
@@ -52,8 +55,14 @@ const initialState: AccountState = {
   scrollTop: '',
   baseColor: '#BF00FFB2',
   lightBaseColor: '#BF00FF21',
-  userSettingsData: { showPreview: '', sidebarWidth: sidebarWidthFromLS, isFavoritePinned: false },
-  places: [...initialPlaces.sort((a, b) => idsFromLS.indexOf(a.id) - idsFromLS.indexOf(b.id))]
+  userSettingsData: {
+    showPreview: '',
+    sidebarWidth: sidebarWidthFromLS,
+    isFavoritePinned: false,
+    pilotWidth: pilotWidthFromLS
+  },
+  places: [...initialPlaces.sort((a, b) => idsFromLS.indexOf(a.id) - idsFromLS.indexOf(b.id))],
+  calculatedContentWidth: ''
 };
 
 export const accountSlice = createSlice({
@@ -66,7 +75,7 @@ export const accountSlice = createSlice({
     setAccountSettings: (state, action: PayloadAction<IUserState>) => {
       state.settings = action.payload;
     },
-    SetUserSettingsData: (state, action: PayloadAction<IUserParams>) => {
+    SetUserSettingsStore: (state, action: PayloadAction<IUserParams>) => {
       state.userSettingsData = action.payload;
     },
     setShowSidebar: (state, action: PayloadAction<boolean>) => {
@@ -80,6 +89,9 @@ export const accountSlice = createSlice({
     },
     setUserName: (state, action: PayloadAction<string>) => {
       state.userName = action.payload;
+    },
+    setCalculatedContentWidth: (state, action: PayloadAction<string>) => {
+      state.calculatedContentWidth = action.payload;
     },
     setScrollTop: (state, action: PayloadAction<string | number>) => {
       state.scrollTop = action.payload;
@@ -95,7 +107,8 @@ export const {
   setPaletteDropDown,
   setShowUploadImage,
   setUserName,
-  SetUserSettingsData
+  SetUserSettingsStore,
+  setCalculatedContentWidth
 } = accountSlice.actions;
 
 export default accountSlice.reducer;

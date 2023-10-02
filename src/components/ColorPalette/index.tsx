@@ -191,6 +191,7 @@ export default function PaletteManager({
   const handleCloseSearch = () => {
     setIsSearch(false);
   };
+
   const handleCloseAdvanceSearch = () => {
     setIsAdvanceSearch(false);
   };
