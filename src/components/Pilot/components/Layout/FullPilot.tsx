@@ -24,7 +24,6 @@ export default function FullPilot({ featureTabs, activeSection, setShowModal, sh
   return (
     <VerticalScroll bgColor="bg-white">
       <div
-        // ref={blockRef}
         style={{
           height: `${adjustedHeight}px`
         }}
@@ -33,7 +32,6 @@ export default function FullPilot({ featureTabs, activeSection, setShowModal, sh
           'right-0  bottom-0 mb-10 pb-6 transform bg-white flex flex-col transition-transform duration-500'
         )}
       >
-        {/* {showFullPilot ? <Dividers /> : null} */}
         <div className="relative grid grid-rows-autoAutoAutoFr grid-col-1">
           {showOverlay && <div className="absolute inset-0 top-0 left-0 z-10 bg-black opacity-50" />}
           <Header
