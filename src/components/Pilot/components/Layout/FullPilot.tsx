@@ -3,10 +3,8 @@ import { cl } from '../../../../utils';
 import { useAppSelector } from '../../../../app/hooks';
 import FullHotkeysList from '../HotKeys/FullHotKeys';
 import FullTabs from '../Tabs/FullTabs';
-import { useResize } from '../../../../hooks/useResize';
 import Header from '../Header';
 import { ShareIcon, EditPageIcon, PrintIcon, CopyIcon, UploadIcon } from '../../../../assets/icons';
-import { STORAGE_KEYS, dimensions } from '../../../../app/config/dimensions';
 import { VerticalScroll } from '../../../ScrollableContainer/VerticalScroll';
 import useAdjustedHeight from '../../../../hooks/useAdjustedHeight';
 
@@ -17,21 +15,7 @@ interface FullPilotProps {
   showModal: boolean;
 }
 
-const DEFAULT_PILOT_WIDTH = dimensions.pilot.default;
-const pilotWidthFromLS = JSON.parse(
-  localStorage.getItem(STORAGE_KEYS.PILOT_WIDTH) ?? `${DEFAULT_PILOT_WIDTH}`
-) as number;
-
 export default function FullPilot({ featureTabs, activeSection, setShowModal, showModal }: FullPilotProps) {
-  const { blockRef, Dividers } = useResize({
-    dimensions: {
-      min: dimensions.pilot.min,
-      max: dimensions.pilot.max
-    },
-    storageKey: STORAGE_KEYS.PILOT_WIDTH,
-    direction: 'XL',
-    apiKey: 'pilot'
-  });
   const { showOverlay } = useAppSelector((state) => state.workspace);
   const adjustedHeight = useAdjustedHeight(100);
   const { show: showFullPilot, title } = useAppSelector((state) => state.slideOver.pilotSideOver);

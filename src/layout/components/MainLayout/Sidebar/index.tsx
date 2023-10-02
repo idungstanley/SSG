@@ -10,7 +10,7 @@ import { useResize } from '../../../../hooks/useResize';
 import { isAllowIncreaseWidth } from '../../../../utils/widthUtils';
 import { NavigationList } from './components/NavigationItems/components/NavigationList';
 import useResolution from '../../../../hooks/useResolution';
-import { setUserSettingsData, useGetUserSettingsKeys } from '../../../../features/account/accountService';
+import { useGetUserSettingsKeys } from '../../../../features/account/accountService';
 import NonInteractiveSearch from '../../../../components/Search/NonInteractiveSearch';
 import CommandSearchModal from './components/CommandSearchModal';
 import SearchIcon from '../../../../assets/icons/SearchIcon';
@@ -42,12 +42,10 @@ export default function Sidebar() {
     },
     storageKey: 'sidebarWidth',
     direction: 'XR',
-    defaultSize: dimensions.navigationBar.default,
-    apiKey: 'sidebar'
+    defaultSize: dimensions.navigationBar.default
   });
 
   const resolution = useResolution();
-  console.log(resolution);
 
   const { data } = useGetUserSettingsKeys(true, key, resolution);
   useEffect(() => {

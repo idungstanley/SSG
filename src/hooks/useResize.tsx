@@ -3,7 +3,7 @@ import { cl } from '../utils';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
 import { setIsResize } from '../features/workspace/workspaceSlice';
-import { setUserSettingsData, setUserSettingsKeys } from '../features/account/accountService';
+import { setUserSettingsKeys } from '../features/account/accountService';
 import useResolution from './useResolution';
 
 interface UseResizeProps {
@@ -11,10 +11,9 @@ interface UseResizeProps {
   storageKey: string;
   direction: 'XL' | 'YB' | 'XR';
   defaultSize?: number;
-  apiKey?: string;
 }
 
-export function useResize({ dimensions, direction, defaultSize, storageKey, apiKey }: UseResizeProps) {
+export function useResize({ dimensions, direction, defaultSize, storageKey }: UseResizeProps) {
   const blockRef = useRef<HTMLDivElement>(null);
   const queryClient = useQueryClient();
   const dispatch = useAppDispatch();
@@ -29,7 +28,7 @@ export function useResize({ dimensions, direction, defaultSize, storageKey, apiK
   const [isMouseUp, setIsMouseUp] = useState<boolean>(false);
 
   const updateAdjustWidth = useMutation(setUserSettingsKeys, {
-    onSuccess: (data) => {
+    onSuccess: () => {
       queryClient.invalidateQueries(['user-settings']);
     }
   });
@@ -111,7 +110,6 @@ export function useResize({ dimensions, direction, defaultSize, storageKey, apiK
       // add current size to localStorage
       localStorage.setItem(storageKey, JSON.stringify(newSize));
 
-      console.log(newSize, 'size from function');
       setIsDrag(false);
       dispatch(setIsResize(false));
     }

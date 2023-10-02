@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react';
+import { useMemo } from 'react';
 import { getRelativeWidth } from '../../utils/widthUtils';
 import { useAppSelector } from '../hooks';
 

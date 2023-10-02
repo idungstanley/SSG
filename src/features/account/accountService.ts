@@ -3,6 +3,7 @@ import requestNew from '../../app/requestNew';
 import { IAccountReq, IUserCalendarParams, IUserParams, IUserSettings, IUserSettingsRes } from './account.interfaces';
 import { SetUserSettingsStore } from './accountSlice';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { STORAGE_KEYS } from '../../app/config/dimensions';
 
 // Get all user's workspaces
 export const useGetMyWorkspaces = () => {
@@ -50,7 +51,7 @@ export const useGetUserSettingsKeys = (enabled: boolean, key: string, resolution
       enabled: enabled,
       select: (res) => res.data.settings[0],
       onSuccess: (data) => {
-        localStorage.setItem('userSettingsData', JSON.stringify(data));
+        localStorage.setItem(STORAGE_KEYS.USER_SETTINGS_DATA, JSON.stringify(data));
         if (data && data.value) {
           dispatch(SetUserSettingsStore(data.value));
         }

@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { initialPlaces } from '../../layout/components/MainLayout/Sidebar/components/Places';
 import { IUserParams, IUserState, Place } from './account.interfaces';
+import { STORAGE_KEYS } from '../../app/config/dimensions';
 
 const showPreviewFromLS = localStorage.getItem('showPreview') as string;
 
@@ -9,9 +10,9 @@ const showPreviewFromLS = localStorage.getItem('showPreview') as string;
 
 const sidebarFromLS = localStorage.getItem('sidebar');
 //get sidebar width from local storage
-const sidebarWidthFromLS = JSON.parse(localStorage.getItem('sidebarWidth') || '""') as number;
+const sidebarWidthFromLS = JSON.parse(localStorage.getItem(STORAGE_KEYS.SIDEBAR_WIDTH) || '""') as number;
 
-const pilotWidthFromLS = JSON.parse(localStorage.getItem('pilotWidth') || '""') as number;
+const pilotWidthFromLS = JSON.parse(localStorage.getItem(STORAGE_KEYS.PILOT_WIDTH) || '""') as number;
 
 const idsFromLS = JSON.parse(localStorage.getItem('placeItem') || '[]') as string[];
 
