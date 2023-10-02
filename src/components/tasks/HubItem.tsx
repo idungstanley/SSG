@@ -72,7 +72,7 @@ export default function HubItem({
   const { updateCords } = useAppSelector((state) => state.task);
 
   const [uploadId, setUploadId] = useState<string | null | undefined>('');
-  const [paletteColor, setPaletteColor] = useState<string | undefined | ListColourProps>(
+  const [paletteColor, setPaletteColor] = useState<string | undefined | ListColourProps | null>(
     type === EntityType.hub ? 'blue' : 'orange'
   );
 
@@ -235,7 +235,15 @@ export default function HubItem({
                     initials={getInitials(item.name)}
                     height="h-5"
                     width="w-5"
-                    backgroundColour={item.color !== null ? item.color : (paletteColor as string)}
+                    backgroundColour={
+                      item.color
+                        ? item.color
+                        : !paletteColor && type === EntityType.hub
+                        ? 'blue'
+                        : !paletteColor && type === EntityType.subHub
+                        ? 'orange'
+                        : (paletteColor as string)
+                    }
                     roundedStyle="rounded"
                   />
                 )}

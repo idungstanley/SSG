@@ -40,7 +40,7 @@ interface PaletteProps {
   title?: string;
   topContent?: JSX.Element;
   bottomContent?: JSX.Element;
-  setPaletteColor?: (color?: string | ListColourProps) => void;
+  setPaletteColor?: (color?: string | ListColourProps | null) => void;
   setListPaletteColor?: (value: { innerColour: string; outterColour: string }) => void;
   shape?: string;
   listComboColour?: ListColourProps;
@@ -163,6 +163,7 @@ export default function PaletteManager({
   const editHubColorMutation = useMutation(UseEditHubService, {
     onSuccess: (data) => {
       const hubData = data.data.hub;
+      console.log(hubData);
       const updatedTree = changeHubManager(hubData.id as string, hub, hubData);
       dispatch(getHub(updatedTree));
       dispatch(setFilteredResults(updatedTree));
@@ -194,7 +195,7 @@ export default function PaletteManager({
     setIsAdvanceSearch(false);
   };
 
-  const handleClick = (color?: string | ListColourProps) => {
+  const handleClick = (color?: string | ListColourProps | null) => {
     if (paletteType === EntityType.hub) {
       editHubColorMutation.mutateAsync({
         hubId: paletteId,

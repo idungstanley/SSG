@@ -22,7 +22,7 @@ interface ListProps {
 }
 
 export interface IListColor {
-  outerColour: string;
+  outerColour: string | null;
 }
 
 const unique = (arr: listColumnProps[]) => [...new Set(arr)];
@@ -129,8 +129,11 @@ export function List({ tasks, subtasksCustomeFields, listDetails }: ListProps) {
     <div
       className="pt-1 border-t-4 border-l-4 border-purple-500 rounded-3xl bg-purple-50"
       style={{
-        borderColor: ListColor?.outerColour,
-        backgroundColor: LightenColor(ListColor?.outerColour, 0.95),
+        borderColor: ListColor?.outerColour === null ? 'black' : (ListColor?.outerColour as string),
+        backgroundColor: LightenColor(
+          ListColor?.outerColour === null ? 'black' : (ListColor?.outerColour as string),
+          0.95
+        ),
         overflow: collapseTable ? 'hidden' : 'unset'
       }}
     >

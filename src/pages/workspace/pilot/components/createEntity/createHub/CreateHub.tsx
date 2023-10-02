@@ -32,7 +32,7 @@ export default function CreateHub() {
 
   const { selectedTreeDetails, currHubId, hub } = useAppSelector((state) => state.hub);
 
-  const [paletteColor, setPaletteColor] = useState<string | ListColourProps | undefined>('');
+  const [paletteColor, setPaletteColor] = useState<string | ListColourProps | undefined | null>('');
   const [showPalette, setShowPalette] = useState<boolean>(false);
 
   const { type, id } = selectedTreeDetails;
