@@ -32,6 +32,7 @@ import TimeField from './CustomField/TimeField/TimeField';
 import AutoProgress from './CustomField/Progress/AutoProgress';
 import PeopleField from './CustomField/PeopleField/PeopleField';
 import FilesField from './CustomField/Files/FilesField';
+import LocationField from './CustomField/Location/LocationField';
 
 interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   value: TaskValue;
@@ -198,6 +199,13 @@ export function Col({ value, field, fieldId, task, customFields, taskStatuses, .
         taskCustomFields={task.custom_fields?.find((i) => i.id === fieldId)}
         fieldId={fieldId}
         listId={task.list_id}
+      />
+    ),
+    location: (
+      <LocationField
+        taskId={task.id}
+        taskCustomFields={task.custom_fields?.find((i) => i.id === fieldId)}
+        fieldId={fieldId}
       />
     )
   };
