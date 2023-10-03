@@ -53,6 +53,7 @@ export default function Sidebar() {
       const value = data.value;
       localStorage.setItem(STORAGE_KEYS.SIDEBAR_WIDTH, JSON.stringify(value.sidebarWidth));
       localStorage.setItem(STORAGE_KEYS.PILOT_WIDTH, JSON.stringify(value.pilotWidth));
+      localStorage.setItem(STORAGE_KEYS.IS_PILOT_MINIFIED, JSON.stringify(value.isPilotMinified));
       dispatch(SetUserSettingsStore({ ...userSettingsData, ...value }));
     }
   }, [data]);
