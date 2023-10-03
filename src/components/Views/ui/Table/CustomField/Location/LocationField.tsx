@@ -44,7 +44,7 @@ function LocationField({ taskCustomFields, taskId, fieldId }: LocationProps) {
     <div className="w-full flex justify-center group/parent">
       <Autocomplete
         style={{ width: '90%', backgroundColor: 'transparent' }}
-        apiKey={'AIzaSyABX4LTqTLQGg_b3jFOH8Z6_H5CDqn8tbc'}
+        apiKey={process.env.REACT_APP_GOOGLE_APIKEY}
         onPlaceSelected={(place) => {
           handleSetNewLocation(place);
         }}
