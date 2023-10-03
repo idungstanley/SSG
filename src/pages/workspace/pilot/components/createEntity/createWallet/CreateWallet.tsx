@@ -25,13 +25,15 @@ import { setFilteredResults } from '../../../../../../features/search/searchSlic
 import { ErrorHasDescendant } from '../../../../../../types';
 import { toast } from 'react-hot-toast';
 import Toast from '../../../../../../common/Toast';
+import AlsoitMenuDropdown from '../../../../../../components/DropDowns';
+import ColorPalette from '../../../../../../components/ColorPalette/component/ColorPalette';
 
 export default function CreateWallet() {
   const dispatch = useAppDispatch();
   const { createWLID, selectedTreeDetails, hub } = useAppSelector((state) => state.hub);
 
   const [paletteColor, setPaletteColor] = useState<string | ListColourProps | undefined | null>('');
-  const [showPalette, setShowPalette] = useState<boolean>(false);
+  const [showPalette, setShowPalette] = useState<null | HTMLDivElement>(null);
 
   const { type, id } = selectedTreeDetails;
 
@@ -64,9 +66,16 @@ export default function CreateWallet() {
   const handleWalletChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormState({ ...formState, [e.target.name]: e.target.value });
   };
+  const handlePaletteColor = (value: string | ListColourProps | undefined | null) => {
+    setPaletteColor(value);
+  };
   const handleShowPalette = (e: React.MouseEvent<HTMLDivElement | HTMLButtonElement, MouseEvent>) => {
     e.stopPropagation();
-    setShowPalette((prev) => !prev);
+    setShowPalette((e as React.MouseEvent<HTMLDivElement, MouseEvent>).currentTarget);
+  };
+
+  const handleClosePalette = () => {
+    setShowPalette(null);
   };
 
   const { name } = formState;
@@ -124,9 +133,9 @@ export default function CreateWallet() {
           <Checkbox checked={false} onChange={() => ({})} description="Host other entities" height="5" width="5" />
           <Checkbox checked={false} onChange={() => ({})} description="Host other entities" height="5" width="5" />
         </div>
-        <div className="relative mt-32 ml-24">
-          {showPalette ? <Palette title="Wallet Colour" setPaletteColor={setPaletteColor} /> : null}
-        </div>
+        <AlsoitMenuDropdown handleClose={handleClosePalette} anchorEl={showPalette}>
+          <ColorPalette handleClick={handlePaletteColor} />
+        </AlsoitMenuDropdown>
       </div>
       <div className="flex justify-between pt-2 space-x-3">
         <Button buttonStyle="white" onClick={onClose} loading={false} label="Cancel" width={20} height="h-7" />

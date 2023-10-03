@@ -28,7 +28,6 @@ interface ExtendedBarProps {
 
 const MIN_SIDEBAR_WIDTH = dimensions.extendedBar.min;
 const MAX_SIDEBAR_WIDTH = dimensions.extendedBar.max;
-const DEFAULT_PILOT_WIDTH = dimensions.pilot.default;
 
 export default function Page({ header, additionalHeader, children, additional, pilotConfig, extendedBar }: PageProps) {
   const { showOverlay } = useAppSelector((state) => state.workspace);
@@ -37,9 +36,6 @@ export default function Page({ header, additionalHeader, children, additional, p
   const DEFAULT_PILOT_WIDTH = dimensions.pilot.default;
   const pilotWidthFromLS = JSON.parse(
     localStorage.getItem(STORAGE_KEYS.PILOT_WIDTH) ?? `${DEFAULT_PILOT_WIDTH}`
-  ) as number;
-  const extendedBarWidthFromLS = JSON.parse(
-    localStorage.getItem(STORAGE_KEYS.EXTENDED_BAR_WIDTH) ?? `${DEFAULT_PILOT_WIDTH}`
   ) as number;
 
   const { blockRef, Dividers } = useResize({
@@ -100,10 +96,6 @@ function ExtendedBar({ children, name, icon, source }: ExtendedBarProps) {
     direction: 'XR',
     defaultSize: dimensions.extendedBar.default
   });
-
-  const extendedBarWidthFromLS = JSON.parse(
-    localStorage.getItem(STORAGE_KEYS.EXTENDED_BAR_WIDTH) ?? `${DEFAULT_PILOT_WIDTH}`
-  ) as number;
 
   const handleToggle = () => {
     dispatch(setShowExtendedBar(!showExtendedBar));
