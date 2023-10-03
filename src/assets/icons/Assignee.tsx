@@ -1,12 +1,12 @@
-import React from 'react';
+import React, { DetailedHTMLProps, SVGAttributes } from 'react';
 import interactions from '../../utils/Constants/IconInteractions';
 
-interface ArrowDownProps {
+interface ArrowDownProps extends DetailedHTMLProps<SVGAttributes<SVGSVGElement>, SVGSVGElement> {
   active?: boolean;
 }
-function AssigneeIcon({ active = false }: ArrowDownProps) {
+function AssigneeIcon({ active = false, ...props }: ArrowDownProps) {
   return (
-    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg {...props} viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
       <g id="Assignee">
         <mask
           id="mask0_10191_2921"

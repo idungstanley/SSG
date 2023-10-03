@@ -112,7 +112,7 @@ export function AssigneeSplitSubtasks({ parentId }: IAssigneeSplitSubtasksProps)
   return (
     <div className="flex items-center rounded-2xl h-8 cursor-pointer">
       <Button active={isMeMode} withoutBg={true} onClick={onToggleMe}>
-        <Me active={isMeMode} />
+        <Me active={isMeMode} className="w-5 h-5" />
         <span>Me</span>
       </Button>
 
