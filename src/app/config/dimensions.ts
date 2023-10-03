@@ -60,7 +60,8 @@ const STORAGE_KEYS = {
   USER_SETTINGS_DATA: 'userSettingsData',
   ACCESS_TOKEN: 'accessToken',
   CURRENT_WORKSPACE_ID: 'currentWorkspaceId',
-  IS_PILOT_MINIFIED: 'isPilotMinified'
+  IS_PILOT_MINIFIED: 'isPilotMinified',
+  EXTENDED_BAR_WIDTH: 'extendedBarWidth'
 };
 
 const pilotWidthFromLS = JSON.parse(

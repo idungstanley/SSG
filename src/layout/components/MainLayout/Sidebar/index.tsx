@@ -51,9 +51,14 @@ export default function Sidebar() {
   useEffect(() => {
     if (data) {
       const value = data.value;
-      localStorage.setItem(STORAGE_KEYS.SIDEBAR_WIDTH, JSON.stringify(value.sidebarWidth));
-      localStorage.setItem(STORAGE_KEYS.PILOT_WIDTH, JSON.stringify(value.pilotWidth));
-      localStorage.setItem(STORAGE_KEYS.IS_PILOT_MINIFIED, JSON.stringify(value.isPilotMinified));
+      localStorage.setItem(
+        STORAGE_KEYS.SIDEBAR_WIDTH,
+        JSON.stringify(value.sidebarWidth ? value.sidebarWidth : dimensions.navigationBar.default)
+      );
+      localStorage.setItem(
+        STORAGE_KEYS.PILOT_WIDTH,
+        JSON.stringify(value.pilotWidth ? value.pilotWidth : dimensions.pilot.default)
+      );
       dispatch(SetUserSettingsStore({ ...userSettingsData, ...value }));
     }
   }, [data]);
