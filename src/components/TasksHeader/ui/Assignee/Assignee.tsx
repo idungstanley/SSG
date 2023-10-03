@@ -70,7 +70,7 @@ export function Assignee() {
   return (
     <div className="flex items-center rounded-2xl h-8 cursor-pointer">
       <Button active={forMe && meMode} onClick={onToggleMe}>
-        <Me active={forMe && meMode} />
+        <Me active={forMe && meMode} className="w-5 h-5" />
         <span>Me</span>
       </Button>
 
