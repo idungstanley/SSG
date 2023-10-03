@@ -3,7 +3,7 @@ import { DocumentDuplicateIcon, StarIcon, PlusIcon, LinkIcon, SwatchIcon } from 
 import { useAppSelector } from '../../app/hooks';
 import { useDispatch } from 'react-redux';
 import { setCreateTaskSlideOverVisibility } from '../../features/general/slideOver/slideOverSlice';
-import { getSubMenu, setEntityToCreate, setSubDropdownMenu } from '../../features/hubs/hubSlice';
+import { getSubMenu, setEntityToCreate, setSubDropdownMenu, setshowMenuDropdown } from '../../features/hubs/hubSlice';
 import { useParams } from 'react-router-dom';
 import {
   setActiveItem,
@@ -166,6 +166,8 @@ export default function SubDropdown({ cords }: SubDropdownProps) {
       title: 'Task',
       handleClick: () => {
         dispatch(setCreateTaskSlideOverVisibility(true));
+        dispatch(setSubDropdownMenu(false));
+        dispatch(setshowMenuDropdown({ showMenuDropdown: null, showMenuDropdownType: null }));
         // navigate(`/${currentWorkspaceId}/tasks`);
         // dispatch(setLastActiveItem('Task'));
       },
