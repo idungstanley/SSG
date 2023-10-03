@@ -16,6 +16,8 @@ const pilotWidthFromLS = JSON.parse(localStorage.getItem(STORAGE_KEYS.PILOT_WIDT
 
 const idsFromLS = JSON.parse(localStorage.getItem('placeItem') || '[]') as string[];
 
+const isPilotMinifiedFromLS = JSON.parse(localStorage.getItem(STORAGE_KEYS.IS_PILOT_MINIFIED) || 'false') as boolean;
+
 const showSidebar = sidebarFromLS
   ? (
       JSON.parse(sidebarFromLS) as {
@@ -60,7 +62,8 @@ const initialState: AccountState = {
     showPreview: '',
     sidebarWidth: sidebarWidthFromLS,
     isFavoritePinned: false,
-    pilotWidth: pilotWidthFromLS
+    pilotWidth: pilotWidthFromLS,
+    isPilotMinified: isPilotMinifiedFromLS
   },
   places: [...initialPlaces.sort((a, b) => idsFromLS.indexOf(a.id) - idsFromLS.indexOf(b.id))],
   calculatedContentWidth: ''

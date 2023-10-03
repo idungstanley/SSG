@@ -19,6 +19,7 @@ export interface IUserParams {
   showPreview?: string;
   sidebarWidth?: number;
   pilotWidth?: number;
+  isPilotMinified?: boolean;
   isFavoritePinned?: boolean;
 }
 
