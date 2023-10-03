@@ -144,9 +144,6 @@ export function useResize({ dimensions, direction, defaultSize, storageKey }: Us
       }
     };
 
-    // console.log(isMouseUp);
-    // setUserSettingsData(isMouseUp, apiKey as string, { ...userSettingsData, [storageKey]: size }, resolution);
-
     return (
       <div
         style={{ cursor: 'col-resize' }}
