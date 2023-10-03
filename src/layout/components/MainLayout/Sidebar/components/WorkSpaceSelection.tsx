@@ -41,6 +41,7 @@ function WorkSpaceSelection() {
   const queryClient = useQueryClient();
   const { showSidebar } = useAppSelector((state) => state.account);
   const { sidebarWidthRD } = useAppSelector((state) => state.workspace);
+  const { currentWorkspaceId } = useAppSelector((state) => state.auth);
   const [showModal, setShowModal] = useState<boolean>(false);
   const [isSearch, setIssearch] = useState<boolean>(false);
   const [searchInput, setSearchInput] = useState<string>('');
@@ -118,7 +119,7 @@ function WorkSpaceSelection() {
     },
     {
       title: 'People',
-      handleClick: () => navigate('settings/team-members/invites')
+      handleClick: () => navigate(`/${currentWorkspaceId}/settings/team-members/invites`, { replace: true })
     },
     {
       title: 'Analytics',
