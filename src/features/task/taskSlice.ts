@@ -60,7 +60,7 @@ interface customPropertyInfo {
   };
 }
 
-interface IDuplicateTaskObj {
+export interface IDuplicateTaskObj {
   task_name: string;
   task_id: string;
   list_id: string;

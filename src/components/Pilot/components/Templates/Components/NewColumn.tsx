@@ -17,7 +17,6 @@ import CreateWebsite from './Websites/CreateWebsite';
 import CreateCurrencyField from './Currency/CreateCurrencyField';
 import CreatePhone from './Phone/CreatePhone';
 import CreateCheckbox from './Checkbox/CreateCheckbox';
-import Palletes from '../../../../ColorPalette/Palettes';
 import CreateRatings from './Rating/CreateRatings';
 import CreateManualProgress from './Progress/CreateManualProgress';
 import CreateAutoProgress from './Progress/CreateAutoProgress';
@@ -26,6 +25,7 @@ import CreateFormulaField from './Formula/CreateFormulaField';
 import CreateFiles from './Files/CreateFiles';
 import CreatePeople from './People/CreatePeople';
 import CreateLocationField from './Location/CreateLocation';
+import ColorPalette from '../../../../ColorPalette/component/ColorPalette';
 
 function NewColumn() {
   const dispatch = useAppDispatch();
@@ -90,7 +90,7 @@ function NewColumn() {
                   }
                   type="text"
                   className={cl(
-                    'block border-0 py-1 ring-0  placeholder-gray-300 focus:ring-0 focus:ring-inset text-alsoit-text-xi sm:text-sm sm:leading-6 w-11/12',
+                    'block border-0 py-1 ring-0  placeholder-gray-300 focus:ring-0 focus:ring-inset text-alsoit-text-xi sm:text-sm sm:leading-6 w-10/12',
                     newCustomPropertyDetails.style?.is_bold === '1' ? 'font-extrabold' : 'font-semibold',
                     newCustomPropertyDetails.style?.is_italic === '1' && 'italic',
                     newCustomPropertyDetails.style?.is_underlined === '1' && 'underline underline-offset-2'
@@ -98,7 +98,7 @@ function NewColumn() {
                   value={newCustomPropertyDetails.name}
                   style={{ color: newCustomPropertyDetails.color ? newCustomPropertyDetails.color : '#242424' }}
                 />
-                <button onClick={handleClick} className="1/12 flex justify-center items-center">
+                <button onClick={handleClick} className="2/12 flex justify-center items-center">
                   <Picker />
                 </button>
                 <AlsoitMenuDropdown handleClose={handleClose} anchorEl={anchorEl}>
@@ -135,7 +135,13 @@ function NewColumn() {
                         Font Size
                       </button>
                     </div>
-                    {activeBtn === '1' && <Palletes handleClick={handleColor} />}
+                    {activeBtn === '1' && (
+                      <ColorPalette
+                        handleClick={handleColor}
+                        activeColor={newCustomPropertyDetails.color ? newCustomPropertyDetails.color : undefined}
+                      />
+                    )}
+
                     {activeBtn === '2' && <FontStyle />}
                   </div>
                 </AlsoitMenuDropdown>
