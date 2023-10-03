@@ -25,7 +25,6 @@ export default function Header({ menu, children, isMinified, additionalNavItems 
 
   const { pilotSideOver } = useAppSelector((state) => state.slideOver);
   const { userSettingsData } = useAppSelector((state) => state.account);
-  const isPilotMinified = userSettingsData?.isPilotMinified;
 
   const postIsPilotMinified = useMutation(setUserSettingsKeys, {
     onSuccess: () => {
