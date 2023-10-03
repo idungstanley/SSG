@@ -30,6 +30,9 @@ export default function Page({ header, additionalHeader, children, additional, p
   const pilotWidthFromLS = JSON.parse(
     localStorage.getItem(STORAGE_KEYS.PILOT_WIDTH) ?? `${DEFAULT_PILOT_WIDTH}`
   ) as number;
+  const extendedBarWidthFromLS = JSON.parse(
+    localStorage.getItem(STORAGE_KEYS.EXTENDED_BAR_WIDTH) ?? `${DEFAULT_PILOT_WIDTH}`
+  ) as number;
 
   const { blockRef, Dividers } = useResize({
     dimensions: {
@@ -83,6 +86,7 @@ interface ExtendedBarProps {
 
 const MIN_SIDEBAR_WIDTH = dimensions.extendedBar.min;
 const MAX_SIDEBAR_WIDTH = dimensions.extendedBar.max;
+const DEFAULT_PILOT_WIDTH = dimensions.pilot.default;
 
 function ExtendedBar({ children, name, icon, source }: ExtendedBarProps) {
   const dispatch = useAppDispatch();
@@ -99,6 +103,10 @@ function ExtendedBar({ children, name, icon, source }: ExtendedBarProps) {
     defaultSize: dimensions.extendedBar.default
   });
 
+  const extendedBarWidthFromLS = JSON.parse(
+    localStorage.getItem(STORAGE_KEYS.EXTENDED_BAR_WIDTH) ?? `${DEFAULT_PILOT_WIDTH}`
+  ) as number;
+
   const handleToggle = () => {
     dispatch(setShowExtendedBar(!showExtendedBar));
   };
@@ -110,7 +118,7 @@ function ExtendedBar({ children, name, icon, source }: ExtendedBarProps) {
 
   return (
     <aside
-      style={{ width: !showExtendedBar ? SIDEBAR_MIN_WIDTH : SIDEBAR_MAX_WIDTH }}
+      style={{ width: showExtendedBar ? extendedBarWidthFromLS : 0 }}
       ref={blockRef}
       className={cl(showExtendedBar && 'border-r', 'relative w-60 h-full transition-all duration-300')}
     >
