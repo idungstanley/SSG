@@ -80,8 +80,8 @@ export default function AddTo() {
   ];
 
   return (
-    <div className="text-left w-full h-full mx-2">
-      <div className="origin-top-right absolute z-40 mt-2 w-full mr-4 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none ">
+    <div className="text-left w-full h-full">
+      <div className="origin-top-right absolute w-full mr-4 rounded-md">
         {statusList.map((i) => (
           <div key={i.id}>
             <button

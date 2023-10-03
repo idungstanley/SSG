@@ -79,7 +79,6 @@ export default function UploadToFile({ fieldId, listId, setOpen, open, taskId }:
         onRequestClose={() => setOpen(false)}
         showRemoveButtonAfterComplete={false}
         animateOpenClose={true}
-        style={{ zIndex: 999 }}
       />
     </div>
   );
