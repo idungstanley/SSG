@@ -12,8 +12,6 @@ const showSidebar = sidebarFromLS?.showSidebar;
 const INNER_WIDTH = window.innerWidth;
 //RELATIVE_WIDTH IN PIXEL.
 const COMMON_WIDTH = 1550;
-const PILOT_SCROLLBAR_WIDTH = 0;
-const PILOT_COLLAPSE_WIDTH = 54;
 
 const PILOT_WIDTH = {
   DEFAULT: 22,
@@ -61,7 +59,9 @@ const STORAGE_KEYS = {
   USER: 'user',
   USER_SETTINGS_DATA: 'userSettingsData',
   ACCESS_TOKEN: 'accessToken',
-  CURRENT_WORKSPACE_ID: 'currentWorkspaceId'
+  CURRENT_WORKSPACE_ID: 'currentWorkspaceId',
+  IS_PILOT_MINIFIED: 'isPilotMinified',
+  EXTENDED_BAR_WIDTH: 'extendedBarWidth'
 };
 
 const pilotWidthFromLS = JSON.parse(
@@ -74,15 +74,19 @@ const calculateWidthForContent = () => {
   const { sidebarWidthRD, showExtendedBar } = useAppSelector((state) => state.workspace);
   const sidebarWidth = showSidebar ? userSettingsData?.sidebarWidth : sidebarWidthRD;
   const extendedBarWidth = showExtendedBar ? dimensions.extendedBar.max : 0;
-  const pilotWidth =
-    showFullPilot && id
-      ? pilotWidthFromLS + PILOT_SCROLLBAR_WIDTH
-      : PILOT_COLLAPSE_WIDTH && id
-      ? PILOT_COLLAPSE_WIDTH
-      : undefined;
+  const pilotWidth = showFullPilot && id ? userSettingsData?.pilotWidth : !showFullPilot && id ? 50 : undefined;
   const calculatedContentWidth = useMemo(() => {
     return `calc(100vw - ${sidebarWidth}px - ${extendedBarWidth}px - ${pilotWidth}px)`;
-  }, [pilotWidth, sidebarWidth, extendedBarWidth]);
+  }, [
+    pilotWidth,
+    sidebarWidth,
+    extendedBarWidth,
+    pilotWidthFromLS,
+    userSettingsData?.sidebarWidth,
+    showFullPilot,
+    showSidebar,
+    userSettingsData?.pilotWidth
+  ]);
   return calculatedContentWidth;
 };
 
