@@ -21,6 +21,7 @@ export interface IUserParams {
   pilotWidth?: number;
   isPilotMinified?: boolean;
   isFavoritePinned?: boolean;
+  extendedBarWidth?: number;
 }
 
 export interface IUserCalendarParams {

@@ -73,7 +73,7 @@ const calculateWidthForContent = () => {
   const { show: showFullPilot, id } = useAppSelector((state) => state.slideOver.pilotSideOver);
   const { sidebarWidthRD, showExtendedBar } = useAppSelector((state) => state.workspace);
   const sidebarWidth = showSidebar ? userSettingsData?.sidebarWidth : sidebarWidthRD;
-  const extendedBarWidth = showExtendedBar ? dimensions.extendedBar.max : 0;
+  const extendedBarWidth = showExtendedBar ? userSettingsData?.extendedBarWidth : 0;
   const pilotWidth = showFullPilot && id ? userSettingsData?.pilotWidth : !showFullPilot && id ? 50 : undefined;
   const calculatedContentWidth = useMemo(() => {
     return `calc(100vw - ${sidebarWidth}px - ${extendedBarWidth}px - ${pilotWidth}px)`;
@@ -85,7 +85,9 @@ const calculateWidthForContent = () => {
     userSettingsData?.sidebarWidth,
     showFullPilot,
     showSidebar,
-    userSettingsData?.pilotWidth
+    userSettingsData?.pilotWidth,
+    userSettingsData?.extendedBarWidth,
+    showExtendedBar
   ]);
   return calculatedContentWidth;
 };
