@@ -1,8 +1,10 @@
 import { useCallback, useRef, useState } from 'react';
 import { cl } from '../utils';
-import { useQueryClient } from '@tanstack/react-query';
-import { useAppDispatch } from '../app/hooks';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useAppDispatch, useAppSelector } from '../app/hooks';
 import { setIsResize } from '../features/workspace/workspaceSlice';
+import { setUserSettingsKeys } from '../features/account/accountService';
+import useResolution from './useResolution';
 
 interface UseResizeProps {
   dimensions: { min: number; max: number };
@@ -15,11 +17,22 @@ export function useResize({ dimensions, direction, defaultSize, storageKey }: Us
   const blockRef = useRef<HTMLDivElement>(null);
   const queryClient = useQueryClient();
   const dispatch = useAppDispatch();
+  const resolution = useResolution();
 
   const { min, max } = dimensions;
+
+  const { userSettingsData } = useAppSelector((state) => state.account);
+
   const [size, setSize] = useState(defaultSize ?? min);
   const [isDrag, setIsDrag] = useState<boolean>(false);
   const [isMouseUp, setIsMouseUp] = useState<boolean>(false);
+
+  const updateAdjustWidth = useMutation(setUserSettingsKeys, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['user-settings']);
+    }
+  });
+
   const handleMouseMoveXR = useCallback((e: MouseEvent) => {
     if (blockRef.current) {
       setIsDrag(true);
@@ -88,9 +101,15 @@ export function useResize({ dimensions, direction, defaultSize, storageKey }: Us
       document.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseup', handleMouseUp);
 
+      // save to backend
+      updateAdjustWidth.mutateAsync({
+        value: { ...userSettingsData, [storageKey]: newSize },
+        resolution
+      });
+
       // add current size to localStorage
       localStorage.setItem(storageKey, JSON.stringify(newSize));
-      queryClient.invalidateQueries(['user-settings']);
+
       setIsDrag(false);
       dispatch(setIsResize(false));
     }
@@ -124,6 +143,9 @@ export function useResize({ dimensions, direction, defaultSize, storageKey }: Us
         secondDivider: 'top-0 right-0 w-0.5 h-full'
       }
     };
+
+    // console.log(isMouseUp);
+    // setUserSettingsData(isMouseUp, apiKey as string, { ...userSettingsData, [storageKey]: size }, resolution);
 
     return (
       <div
