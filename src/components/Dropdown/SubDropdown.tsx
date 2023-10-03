@@ -167,7 +167,7 @@ export default function SubDropdown({ cords }: SubDropdownProps) {
       handleClick: () => {
         dispatch(setCreateTaskSlideOverVisibility(true));
         // navigate(`/${currentWorkspaceId}/tasks`);
-        dispatch(setLastActiveItem('Task'));
+        // dispatch(setLastActiveItem('Task'));
       },
       icon: <PlusIcon className="w-5 text-gray-700 h-7" aria-hidden="true" />,
       isVisible: showMenuDropdownType === EntityType.list ? true : false
