@@ -1,6 +1,7 @@
 import React from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { setActiveStatusManagementTabId } from '../../features/workspace/workspaceSlice';
+import { STORAGE_KEYS } from '../../app/config/dimensions';
 
 export const HubManagerOptions = [
   {
@@ -45,7 +46,7 @@ export default function StatusManagementSubTab() {
   const handleClick = (id: number) => {
     dispatch(setActiveStatusManagementTabId(id));
   };
-  const pilotWidth = JSON.parse(localStorage.getItem('pilotWidth') || '""') as number;
+  const pilotWidth = JSON.parse(localStorage.getItem(STORAGE_KEYS.PILOT_WIDTH) || '""') as number;
 
   return (
     <section>
