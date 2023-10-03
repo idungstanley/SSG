@@ -98,6 +98,10 @@ code {
   animation-fill-mode: forwards;
 }
 
+.rounded-top {
+  border-top-left-radius: 8px;
+}
+
 @keyframes grow {
   from {
     width: 40px;

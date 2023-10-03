@@ -1,11 +1,12 @@
-import React from 'react';
+import { DetailedHTMLProps, SVGAttributes } from 'react';
 import interactions from '../../utils/Constants/IconInteractions';
-interface meProps {
+interface meProps extends DetailedHTMLProps<SVGAttributes<SVGSVGElement>, SVGSVGElement> {
   active: boolean;
 }
-function Me({ active }: meProps) {
+
+function Me({ active, ...props }: meProps) {
   return (
-    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg {...props} viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
       <g id="me">
         <mask
           id="mask0_10191_2915"
