@@ -48,8 +48,8 @@ export function Table({ heads, data, label, listName, listColor }: TableProps) {
   const newTaskObj = NewTaskTemplate({
     data,
     label,
-    custom_field_columns:  data[0].custom_field_columns || [],
-    task_statuses: data[0].task_statuses || [],
+    custom_field_columns: data[0].custom_field_columns || [],
+    task_statuses: data[0].task_statuses || []
   });
 
   const dataSpread = showNewTaskField ? newTaskObj : data;

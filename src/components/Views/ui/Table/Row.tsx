@@ -23,11 +23,11 @@ import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import Dradnddrop from '../../../../assets/icons/Dradnddrop';
 import { listColumnProps } from '../../../../pages/workspace/tasks/component/views/ListColumns';
 import Copy from '../../../../assets/icons/Copy';
-import NewSubTaskTemplate from './newTaskTemplate/NewSubTaskTemplate';
 import {
   EXPAND_ALL_THREE,
   EXPAND_ALL_TWO
 } from '../../../../pages/workspace/lists/components/renderlist/listDetails/listSubtask/ListSubtasks';
+import NewSubTaskTemplate from './newTaskTemplate/NewSubTaskTemplate';
 
 export const MAX_SUBTASKS_LEVEL = 10;
 
