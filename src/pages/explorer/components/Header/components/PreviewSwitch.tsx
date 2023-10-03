@@ -27,10 +27,11 @@ function PreviewSwitch() {
 
   const onSwitch = (value: boolean) => {
     // update backend, localStorage and store
-    onChangeKeys({ showPreview: JSON.stringify(value) });
+    onChangeKeys({
+      value: { showPreview: JSON.stringify(value) }
+    });
 
     localStorage.setItem('showPreview', JSON.stringify(value));
-
     dispatch(setAccountSettings({ ...settings, showPreview: value }));
   };
 
