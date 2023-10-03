@@ -12,8 +12,6 @@ const showSidebar = sidebarFromLS?.showSidebar;
 const INNER_WIDTH = window.innerWidth;
 //RELATIVE_WIDTH IN PIXEL.
 const COMMON_WIDTH = 1550;
-const PILOT_SCROLLBAR_WIDTH = 0;
-const PILOT_COLLAPSE_WIDTH = 54;
 
 const PILOT_WIDTH = {
   DEFAULT: 22,
