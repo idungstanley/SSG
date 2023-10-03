@@ -90,7 +90,7 @@ export function Row({
     list_id: '',
     name: 'Add Subtask',
     parent_id: null,
-    priority: 'low',
+    priority: 'normal',
     start_date: null,
     status: {
       color: '#AEADAE',
