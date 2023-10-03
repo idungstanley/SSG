@@ -113,6 +113,7 @@ export default function SubDropdown({ cords }: SubDropdownProps) {
         dispatch(setVisibility(false));
         dispatch(setShowTreeInput(false));
         dispatch(setSubDropdownMenu(false));
+        dispatch(setshowMenuDropdown({ showMenuDropdown: null, showMenuDropdownType: null }));
         dispatch(setLastActiveItem(''));
         if (entityToCreate === EntityType.hub || entityToCreate === EntityType.subHub) {
           dispatch(setActiveSubHubManagerTabId(EntityManagerTabsId.hub));
@@ -137,6 +138,8 @@ export default function SubDropdown({ cords }: SubDropdownProps) {
       handleClick: () => {
         dispatch(setEntityToCreate(EntityType.subHub));
         dispatch(setLastActiveItem('Sub Hub'));
+        // dispatch(setSubDropdownMenu(false));
+        // dispatch(setshowMenuDropdown({ showMenuDropdown: null, showMenuDropdownType: null }));
       },
       icon: <AddHubIcon />,
       isVisible: showMenuDropdownType === EntityType.hub ? true : false || SubMenuType === EntityType.hub ? true : false
@@ -153,6 +156,8 @@ export default function SubDropdown({ cords }: SubDropdownProps) {
       handleClick: () => {
         dispatch(setEntityToCreate(EntityType.wallet));
         dispatch(setLastActiveItem(selectedTreeDetails.type === EntityType.wallet ? 'Sub Wallet' : 'Wallet'));
+        // dispatch(setSubDropdownMenu(false));
+        // dispatch(setshowMenuDropdown({ showMenuDropdown: null, showMenuDropdownType: null }));
       },
       icon: <AddWalletIcon />,
       isVisible:
@@ -179,6 +184,8 @@ export default function SubDropdown({ cords }: SubDropdownProps) {
       handleClick: () => {
         dispatch(setLastActiveItem('List'));
         dispatch(setEntityToCreate(EntityType.list));
+        // dispatch(setSubDropdownMenu(false));
+        // dispatch(setshowMenuDropdown({ showMenuDropdown: null, showMenuDropdownType: null }));
       },
       icon: <AddListIcon />,
       isVisible: showMenuDropdownType === EntityType.list ? false : true
