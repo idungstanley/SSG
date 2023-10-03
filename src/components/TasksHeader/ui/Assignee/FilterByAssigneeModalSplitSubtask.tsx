@@ -37,11 +37,13 @@ const unassigned = {
 interface IFilterByAssigneeModalSplitSubtaskProps {
   isMeMode: boolean;
   parentId: string;
+  isSplitSubtasks?: boolean;
 }
 
 export default function FilterByAssigneeModalSplitSubtask({
   isMeMode,
-  parentId
+  parentId,
+  isSplitSubtasks
 }: IFilterByAssigneeModalSplitSubtaskProps) {
   const dispatch = useAppDispatch();
 
@@ -144,8 +146,12 @@ export default function FilterByAssigneeModalSplitSubtask({
       <div className="relative">
         <Menu.Button className="flex items-center">
           <AssigneeIcon active={isAssignee && !isMeMode} />
-          <span>Assignee</span>
-          <ArrowDownFilled active={isAssignee && !isMeMode} />
+          {!isSplitSubtasks ? (
+            <>
+              <span>Assignee</span>
+              <ArrowDownFilled active={isAssignee && !isMeMode} />
+            </>
+          ) : null}
         </Menu.Button>
       </div>
       <Transition
