@@ -18,7 +18,6 @@ import { EntityType } from '../../../../../../utils/EntityTypes/EntityType';
 import ArrowDown from '../../../../../../assets/icons/ArrowDown';
 import Wand from '../../../../../../assets/icons/Wand';
 import Assignee from '../../../../tasks/assignTask/Assignee';
-import Palette from '../../../../../../components/ColorPalette';
 import { ListColourProps } from '../../../../../../components/tasks/ListItem';
 import { createWalletManager } from '../../../../../../managers/Wallet';
 import { setFilteredResults } from '../../../../../../features/search/searchSlice';
