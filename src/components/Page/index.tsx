@@ -10,9 +10,6 @@ import { cl } from '../../utils';
 import { isAllowIncreaseWidth } from '../../utils/widthUtils';
 import Pilot from '../Pilot';
 
-const SIDEBAR_MIN_WIDTH = 0;
-const SIDEBAR_MAX_WIDTH = 288;
-
 interface PageProps {
   header?: JSX.Element;
   additionalHeader?: JSX.Element;
@@ -21,6 +18,17 @@ interface PageProps {
   extendedBar?: ExtendedBarProps;
   pilotConfig?: { tabs: IPilotTab[]; sections: IPilotSection[] };
 }
+
+interface ExtendedBarProps {
+  children: ReactNode;
+  name: string;
+  icon?: JSX.Element;
+  source?: string;
+}
+
+const MIN_SIDEBAR_WIDTH = dimensions.extendedBar.min;
+const MAX_SIDEBAR_WIDTH = dimensions.extendedBar.max;
+const DEFAULT_PILOT_WIDTH = dimensions.pilot.default;
 
 export default function Page({ header, additionalHeader, children, additional, pilotConfig, extendedBar }: PageProps) {
   const { showOverlay } = useAppSelector((state) => state.workspace);
@@ -77,21 +85,11 @@ export default function Page({ header, additionalHeader, children, additional, p
   );
 }
 
-interface ExtendedBarProps {
-  children: ReactNode;
-  name: string;
-  icon?: JSX.Element;
-  source?: string;
-}
-
-const MIN_SIDEBAR_WIDTH = dimensions.extendedBar.min;
-const MAX_SIDEBAR_WIDTH = dimensions.extendedBar.max;
-const DEFAULT_PILOT_WIDTH = dimensions.pilot.default;
-
 function ExtendedBar({ children, name, icon, source }: ExtendedBarProps) {
   const dispatch = useAppDispatch();
 
   const { sidebarWidthRD, showExtendedBar } = useAppSelector((state) => state.workspace);
+  const { userSettingsData } = useAppSelector((state) => state.account);
 
   const { blockRef, Dividers, size } = useResize({
     dimensions: {
@@ -118,7 +116,7 @@ function ExtendedBar({ children, name, icon, source }: ExtendedBarProps) {
 
   return (
     <aside
-      style={{ width: showExtendedBar ? extendedBarWidthFromLS : 0 }}
+      style={{ width: showExtendedBar ? userSettingsData?.extendedBarWidth : 0 }}
       ref={blockRef}
       className={cl(showExtendedBar && 'border-r', 'relative w-60 h-full transition-all duration-300')}
     >
