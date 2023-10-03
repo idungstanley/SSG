@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import SubtasksIcon from '../../../../assets/icons/SubtasksIcon';
 import { ITaskFullList, Tag, Task } from '../../../../features/task/interface.tasks';
 import { DEFAULT_LEFT_PADDING } from '../../config';
@@ -11,12 +11,22 @@ import { AddSubTask } from '../AddTask/AddSubTask';
 import TaskTag from '../../../Tag/ui/TaskTag';
 import Effect from '../../../../assets/icons/Effect';
 import Enhance from '../../../badges/Enhance';
-import { setDefaultSubtaskId, setShowNewTaskField, setShowNewTaskId } from '../../../../features/task/taskSlice';
+import {
+  THREE_SUBTASKS_LEVELS,
+  TWO_SUBTASKS_LEVELS,
+  setDefaultSubtaskId,
+  setShowNewTaskField,
+  setShowNewTaskId
+} from '../../../../features/task/taskSlice';
 import ToolTip from '../../../Tooltip/Tooltip';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import Dradnddrop from '../../../../assets/icons/Dradnddrop';
 import { listColumnProps } from '../../../../pages/workspace/tasks/component/views/ListColumns';
 import Copy from '../../../../assets/icons/Copy';
+import {
+  EXPAND_ALL_THREE,
+  EXPAND_ALL_TWO
+} from '../../../../pages/workspace/lists/components/renderlist/listDetails/listSubtask/ListSubtasks';
 
 export const MAX_SUBTASKS_LEVEL = 10;
 
@@ -32,7 +42,7 @@ interface RowProps {
   handleClose?: VoidFunction;
   isSplitSubtask?: boolean;
   level: number;
-  isBlockToOpenSubtasks?: boolean;
+  isShowAllChildren?: boolean;
 }
 
 export function Row({
@@ -47,11 +57,12 @@ export function Row({
   handleClose,
   isSplitSubtask,
   level,
-  isBlockToOpenSubtasks
+  isShowAllChildren
 }: RowProps) {
   const dispatch = useAppDispatch();
 
-  const { showNewTaskField, showNewTaskId, toggleAllSubtask, subtasks } = useAppSelector((state) => state.task);
+  const { showNewTaskField, showNewTaskId, toggleAllSubtask, toggleAllSubtaskSplit, splitSubTaskLevels, subtasks } =
+    useAppSelector((state) => state.task);
 
   const [showSubTasks, setShowSubTasks] = useState(false);
   const [isCopied, setIsCopied] = useState<number>(0);
@@ -142,6 +153,32 @@ export function Row({
     opacity: transform ? 0 : 100
   };
 
+  const showChildren = useMemo(() => {
+    const isOnToggleTwo = toggleAllSubtaskSplit.includes(EXPAND_ALL_TWO);
+    const isOnToggleThree = toggleAllSubtaskSplit.includes(EXPAND_ALL_THREE);
+    if (showSubTasks) {
+      return true;
+    } else if (toggleAllSubtask && subtasks[task.id]) {
+      return true;
+    } else if (isOnToggleTwo && splitSubTaskLevels.includes(TWO_SUBTASKS_LEVELS) && level === 1) {
+      return true;
+    } else if (isOnToggleThree && splitSubTaskLevels.includes(THREE_SUBTASKS_LEVELS) && level === 2) {
+      return true;
+    }
+    return false;
+  }, [showSubTasks, subtasks, toggleAllSubtask, toggleAllSubtaskSplit, splitSubTaskLevels]);
+
+  const showAllChildren = useMemo(() => {
+    const isOnToggleTwo = toggleAllSubtaskSplit.includes(EXPAND_ALL_TWO);
+    const isOnToggleThree = toggleAllSubtaskSplit.includes(EXPAND_ALL_THREE);
+    if (isOnToggleTwo && splitSubTaskLevels.includes(TWO_SUBTASKS_LEVELS) && level === 1) {
+      return true;
+    } else if (isOnToggleThree && splitSubTaskLevels.includes(THREE_SUBTASKS_LEVELS) && level === 2) {
+      return true;
+    }
+    return false;
+  }, [toggleAllSubtaskSplit, splitSubTaskLevels]);
+
   return (
     <>
       {/* current task */}
@@ -160,7 +197,6 @@ export function Row({
           paddingLeft={paddingLeft}
           tags={'tags' in task ? <TaskTag tags={task.tags} entity_id={task.id} entity_type="task" /> : null}
           isSplitSubtask={isSplitSubtask}
-          isBlockToOpenSubtasks={isBlockToOpenSubtasks}
           isLastSubtaskLevel={level >= MAX_SUBTASKS_LEVEL}
           dragElement={
             <div ref={setNodeRef} {...listeners} {...attributes}>
@@ -237,13 +273,14 @@ export function Row({
         />
       ) : null}
 
-      {showSubTasks || (toggleAllSubtask && subtasks[task.id]) ? (
+      {showChildren || isShowAllChildren ? (
         <SubTasks
           paddingLeft={DEFAULT_LEFT_PADDING + paddingLeft}
           listId={listId}
           parentTask={task}
           columns={columns}
           isSplitSubtask={isSplitSubtask}
+          isShowAllChildren={isShowAllChildren || showAllChildren}
           level={level + 1}
         />
       ) : null}

@@ -15,9 +15,18 @@ interface SubTasksProps {
   paddingLeft: number;
   level: number;
   isSplitSubtask?: boolean;
+  isShowAllChildren?: boolean;
 }
 
-export function SubTasks({ listId, parentTask, columns, paddingLeft, level, isSplitSubtask }: SubTasksProps) {
+export function SubTasks({
+  listId,
+  parentTask,
+  columns,
+  paddingLeft,
+  level,
+  isSplitSubtask,
+  isShowAllChildren
+}: SubTasksProps) {
   const dispatch = useAppDispatch();
 
   const { draggableItemId } = useAppSelector((state) => state.list);
@@ -63,6 +72,7 @@ export function SubTasks({ listId, parentTask, columns, paddingLeft, level, isSp
               isListParent={false}
               level={level}
               isSplitSubtask={isSplitSubtask}
+              isShowAllChildren={isShowAllChildren}
             />
           ))}
         </>

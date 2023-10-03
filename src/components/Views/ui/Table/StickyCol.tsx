@@ -48,7 +48,6 @@ interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   isOver?: boolean;
   isSplitSubtask?: boolean;
   isLastSubtaskLevel: boolean;
-  isBlockToOpenSubtasks?: boolean;
 }
 
 export function StickyCol({
@@ -66,7 +65,6 @@ export function StickyCol({
   dragElement,
   isSplitSubtask,
   isLastSubtaskLevel,
-  isBlockToOpenSubtasks,
   ...props
 }: ColProps) {
   const dispatch = useAppDispatch();
@@ -341,21 +339,13 @@ export function StickyCol({
                 <span className={cl('h-0.5 bg-alsoit-purple-300 w-full m-0')}></span>
               </span>
             )}
-            <button onClick={isBlockToOpenSubtasks ? () => null : onToggleDisplayingSubTasks} className="pl-1">
+            <button onClick={onToggleDisplayingSubTasks} className="pl-1">
               {showSubTasks || toggleAllSubtask ? (
-                <div
-                  className={`${
-                    task.descendants_count > 0 && !isBlockToOpenSubtasks ? 'w-3 h-3' : 'opacity-0 w-3 h-3'
-                  }`}
-                >
+                <div className={`${task.descendants_count > 0 ? 'w-3 h-3' : 'opacity-0 w-3 h-3'}`}>
                   <CloseSubtask />
                 </div>
               ) : (
-                <div
-                  className={`${
-                    task.descendants_count > 0 && !isBlockToOpenSubtasks ? 'w-3 h-3' : 'opacity-0 w-3 h-3'
-                  }`}
-                >
+                <div className={`${task.descendants_count > 0 ? 'w-3 h-3' : 'opacity-0 w-3 h-3'}`}>
                   <OpenSubtask />
                 </div>
               )}

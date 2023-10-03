@@ -106,7 +106,7 @@ function FormulaField({
         taskCustomFields
       );
       let res = parser.parse(strWithCurrentValues).result as string;
-      if (typeof res === 'object') {
+      if (typeof res === 'object' && res !== null) {
         res = new Date(res).toLocaleDateString('en-US');
       } else if (typeof res === 'number') {
         // fixed result
@@ -114,14 +114,23 @@ function FormulaField({
       } else if (typeof res === 'boolean') {
         res = String(res);
       }
-      setResult(res);
-      setPrevFormula(strWithCurrentNames);
+      if (res) {
+        setResult(res);
+        setPrevFormula(strWithCurrentNames);
+      } else {
+        setResult('-');
+      }
     }
   }, [taskCustomFields, currentCustomFieldColumn, taskCustomFieldsColumns, anchorEl]);
 
   useEffect(() => {
     // update results on BE if any column change
-    if (result && currentCustomFields?.values[0].value !== result) {
+    if (
+      result &&
+      result !== '-' &&
+      currentCustomFields?.values[0].value &&
+      currentCustomFields?.values[0].value !== result
+    ) {
       onUpdate({
         taskId,
         value: [{ value: result }],

@@ -57,6 +57,13 @@ export const generateSubtasksList = (
 
     lists[parentId].push({
       ...task,
+      list: task.list
+        ? task.list
+        : {
+            id: details?.id || '',
+            name: details?.name || '',
+            color: details?.color as unknown as string
+          },
       descendants_count: childrenCount,
       task_statuses: details?.task_statuses || [],
       custom_field_columns: details?.custom_field_columns || []
