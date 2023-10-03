@@ -23,6 +23,7 @@ import AutomaticTimeElement from './AutomaticTimeElement';
 import { ClockIcon } from '../../../../assets/icons/ClockIcon';
 import { ManualTimeElement } from './ManualTimeElement';
 import { runTimer } from '../../../../utils/TimerCounter';
+import { CombinedTime } from './CombinedTimeUI';
 
 export interface User {
   initials: string;
@@ -190,9 +191,9 @@ export default function ClockInOut() {
   return (
     <div className="p-2 mt-6 bg-white">
       {/* Clock Counter */}
-      <div className="bg-alsoit-gray-50 rounded-lg py-2 px-0.5 flex flex-col space-y-2">
+      <div className="bg-alsoit-gray-50 rounded-lg py-2 px-0.5 flex flex-col space-y-2 relative">
         {/* Timer section */}
-        <div className="flex w-1/2 justify-between items-center">
+        {/* <div className="flex w-1/2 justify-between items-center">
           {timeTabs.map((entry) => (
             <div
               key={entry.id}
@@ -205,23 +206,19 @@ export default function ClockInOut() {
               {entry.title}
             </div>
           ))}
-        </div>
+        </div> */}
         {/* Automatic Timers */}
-        {activeClockTab === 'Real Time' && (
-          <>
-            <section
-              id="body"
-              className="px-2 text-white bg-alsoit-gray-50 rounded-md border-t-2 border-l-2 border-alsoit-gray-100 relative"
-            >
-              <label
+        {/* {activeClockTab === 'Real Time' && (
+          <> */}
+        {/* <label
                 htmlFor=""
                 className="absolute -top-0 -left-0 bg-alsoit-gray-75 text-alsoit-gray-50 rounded-t-sm p-0.5 flex space-x-1 items-center font-semibold pr-1"
               >
                 <ClockIcon fixed />
                 <span className="text-alsoit-text-md">REAL TIME</span>
-              </label>
-              {/* Interface Tabs */}
-              {activeSubTimeClockTabId === 0 && (
+              </label> */}
+        {/* Interface Tabs */}
+        {/* {activeSubTimeClockTabId === 0 && (
                 <AutomaticTimeElement
                   activeTimerCheck={activeTimerCheck}
                   activeTrackers={activeTrackers}
@@ -233,21 +230,10 @@ export default function ClockInOut() {
                   stop={stop}
                   timerCheck={timerCheck}
                 />
-              )}
-            </section>
-            {/* Memo and tags */}
-            <div id="descNote" className="w-full mt-1 text-white">
-              <input
-                type="text"
-                name="description"
-                onChange={(e) => handleEndTimeChange(e.target.value)}
-                placeholder="Enter memo"
-                className="w-full border rounded-md shadow-sm py-0.5 text-alsoit-gray-200 text-alsoit-text-xi"
-              />
-            </div>
-          </>
-        )}
-        {activeClockTab === 'Manual' && <ManualTimeElement activeTrackers={activeTrackers} />}
+              )} */}
+        <CombinedTime />
+        {/* </>
+        )} */}
       </div>
       {/* Clock Log */}
       <div className="w-full p-2 my-4 flex flex-col space-y-2 bg-alsoit-gray-50 rounded-lg">
