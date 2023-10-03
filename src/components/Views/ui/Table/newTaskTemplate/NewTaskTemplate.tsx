@@ -28,7 +28,7 @@ export default function NewTaskTemplate({ data, label, custom_field_columns }: N
       main_list_id: '',
       name: 'Enter New Task',
       parent_id: null,
-      position: 125,
+      position: null,
       priority: 'normal',
       short_id: '',
       start_date: null,
