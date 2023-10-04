@@ -236,7 +236,7 @@ export function Head({
                 isChecked={allChecked as boolean}
                 styles={`w-4 h-4 rounded-full ${
                   selectedTasksArray.length > 0 ? 'opacity-100' : 'opacity-0'
-                } cursor-pointer focus:outline-1 focus:ring-transparent  focus:border-2 focus:opacity-100 top-3.5 text-alsoit-purple-300 absolute left-1 group-hover:opacity-100`}
+                } cursor-pointer focus:outline-1 focus:ring-transparent focus:border-2 focus:opacity-100 top-3.5 text-alsoit-purple-300 absolute left-1 group-hover:opacity-100`}
               />
             </div>
             <div
