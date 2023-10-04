@@ -7,16 +7,15 @@ import { OverlayRow } from './OverlayRow';
 import { setSubtasks } from '../../../../features/task/taskSlice';
 import { ITaskFullList, Task } from '../../../../features/task/interface.tasks';
 import { listColumnProps } from '../../../../pages/workspace/tasks/component/views/ListColumns';
-import { ITask_statuses } from '../../../../features/list/list.interfaces';
 
 interface SubTasksProps {
   listId: string;
   parentTask: Task;
   columns: listColumnProps[];
   paddingLeft: number;
-  taskStatuses?: ITask_statuses[];
   level: number;
   isSplitSubtask?: boolean;
+  isShowAllChildren?: boolean;
 }
 
 export function SubTasks({
@@ -24,9 +23,9 @@ export function SubTasks({
   parentTask,
   columns,
   paddingLeft,
-  taskStatuses,
   level,
-  isSplitSubtask
+  isSplitSubtask,
+  isShowAllChildren
 }: SubTasksProps) {
   const dispatch = useAppDispatch();
 
@@ -45,6 +44,7 @@ export function SubTasks({
         return {
           ...item,
           parentName: parentTask.name,
+          task_statuses: parentTask.task_statuses,
           custom_field_columns: parentTask.custom_field_columns,
           list_id: listId
         };
@@ -64,15 +64,15 @@ export function SubTasks({
         <>
           {subtasks[parentTask.id]?.map((i) => (
             <Row
+              key={i.id}
               paddingLeft={paddingLeft}
               listId={listId}
               columns={columns}
               task={i}
-              key={i.id}
               isListParent={false}
-              taskStatuses={taskStatuses}
               level={level}
               isSplitSubtask={isSplitSubtask}
+              isShowAllChildren={isShowAllChildren}
             />
           ))}
         </>

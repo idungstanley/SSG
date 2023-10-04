@@ -29,7 +29,6 @@ import Badges from '../../../badges';
 import DetailsOnHover from '../../../Dropdown/DetailsOnHover/DetailsOnHover';
 import { EntityType } from '../../../../utils/EntityTypes/EntityType';
 import SubtasksIcon from '../../../../assets/icons/SubtasksIcon';
-import { ITask_statuses } from '../../../../features/list/list.interfaces';
 import SaveIcon from '../../../../assets/icons/SaveIcon.svg';
 import Close from '../../../../assets/icons/Close.svg';
 
@@ -40,7 +39,7 @@ interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   showSubTasks?: boolean;
   setShowSubTasks: (i: boolean) => void;
   paddingLeft?: number;
-  task_status?: string;
+  taskStatusId?: string;
   isListParent: boolean;
   tags: ReactNode;
   dragElement?: ReactNode;
@@ -49,8 +48,6 @@ interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   isOver?: boolean;
   isSplitSubtask?: boolean;
   isLastSubtaskLevel: boolean;
-  isBlockToOpenSubtasks?: boolean;
-  taskStatuses?: ITask_statuses[];
 }
 
 export function StickyCol({
@@ -61,15 +58,13 @@ export function StickyCol({
   taskIndex,
   parentId,
   isListParent,
-  task_status,
+  taskStatusId,
   onClose,
   task,
-  taskStatuses,
   paddingLeft = 0,
   dragElement,
   isSplitSubtask,
   isLastSubtaskLevel,
-  isBlockToOpenSubtasks,
   ...props
 }: ColProps) {
   const dispatch = useAppDispatch();
@@ -169,7 +164,7 @@ export function StickyCol({
         isListParent,
         id: parentId as string,
         assignees: [currTeamMemberId] as string[],
-        task_status_id: task_status as string
+        task_status_id: taskStatusId as string
       });
     }
   };
@@ -344,27 +339,19 @@ export function StickyCol({
                 <span className={cl('h-0.5 bg-alsoit-purple-300 w-full m-0')}></span>
               </span>
             )}
-            <button onClick={isBlockToOpenSubtasks ? () => null : onToggleDisplayingSubTasks} className="pl-1">
+            <button onClick={onToggleDisplayingSubTasks} className="pl-1">
               {showSubTasks || toggleAllSubtask ? (
-                <div
-                  className={`${
-                    task.descendants_count > 0 && !isBlockToOpenSubtasks ? 'w-3 h-3' : 'opacity-0 w-3 h-3'
-                  }`}
-                >
+                <div className={`${task.descendants_count > 0 ? 'w-3 h-3' : 'opacity-0 w-3 h-3'}`}>
                   <CloseSubtask />
                 </div>
               ) : (
-                <div
-                  className={`${
-                    task.descendants_count > 0 && !isBlockToOpenSubtasks ? 'w-3 h-3' : 'opacity-0 w-3 h-3'
-                  }`}
-                >
+                <div className={`${task.descendants_count > 0 ? 'w-3 h-3' : 'opacity-0 w-3 h-3'}`}>
                   <OpenSubtask />
                 </div>
               )}
             </button>
             <div onClick={() => dispatch(setCurrentTaskStatusId(task.id as string))}>
-              <StatusDropdown TaskCurrentStatus={task.status} taskStatuses={taskStatuses} />
+              <StatusDropdown taskCurrentStatus={task.status} taskStatuses={task.task_statuses} />
             </div>
             {separateSubtasksMode && task?.parentName && !paddingLeft ? (
               <ToolTip title={task.parentName}>
@@ -471,7 +458,7 @@ export function StickyCol({
               </ToolTip>
             </div>
             <div className="pt-2 ml-4">
-              <StatusDropdown TaskCurrentStatus={task.status} />
+              <StatusDropdown taskCurrentStatus={task.status} taskStatuses={task.task_statuses} />
             </div>
             <div className="flex flex-col items-start justify-start pt-2 pl-2 space-y-1">
               <p

@@ -59,6 +59,10 @@ export default function Sidebar() {
         STORAGE_KEYS.PILOT_WIDTH,
         JSON.stringify(value.pilotWidth ? value.pilotWidth : dimensions.pilot.default)
       );
+      localStorage.setItem(
+        STORAGE_KEYS.EXTENDED_BAR_WIDTH,
+        JSON.stringify(value.extendedBarWidth ? value.extendedBarWidth : dimensions.extendedBar.default)
+      );
       dispatch(SetUserSettingsStore({ ...userSettingsData, ...value }));
     }
   }, [data]);
@@ -104,7 +108,7 @@ export default function Sidebar() {
 
   return (
     <aside className={cl('flex text-center relative overflow-x-visible')}>
-      <Dividers />
+      {showSidebar && <Dividers />}
       {/* show / hide sidebar icon */}
       {/* sidebar */}
       <section

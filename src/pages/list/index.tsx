@@ -17,7 +17,7 @@ import { Header } from '../../components/TasksHeader';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
 import { ITaskFullList } from '../../features/task/interface.tasks';
 import { useformatSettings } from '../workspace/tasks/TaskSettingsModal/ShowSettingsModal/FormatSettings';
-import { IField, IListDetailRes } from '../../features/list/list.interfaces';
+import { IListDetailRes, IListDetails } from '../../features/list/list.interfaces';
 import { VerticalScroll } from '../../components/ScrollableContainer/VerticalScroll';
 import { generateSubtasksList } from '../../utils/generateLists';
 
@@ -94,6 +94,7 @@ export function ListPage() {
             name: listDetailsFromRes.data.list.name,
             color: listDetailsFromRes.data.list.color as unknown as string
           },
+          task_statuses: listDetailsFromRes.data.list.task_statuses,
           custom_field_columns: listDetailsFromRes.data.list.custom_field_columns
         };
       });
@@ -106,7 +107,7 @@ export function ListPage() {
             const parentName = newSubtasksArr.find((i) => i.id === sub.parent_id)?.name;
             newSubtasksArr.push({
               ...sub,
-              parentName: parentName ? parentName : task.name,
+              parentName: parentName || task.name,
               list_id: task.list_id
             });
           });
@@ -114,10 +115,7 @@ export function ListPage() {
       });
 
       if (newSubtasksArr.length) {
-        const newSubtasks = generateSubtasksList(
-          newSubtasksArr,
-          listDetailsFromRes.data.list.custom_field_columns as IField[]
-        );
+        const newSubtasks = generateSubtasksList(newSubtasksArr, listDetailsFromRes.data.list as IListDetails);
         dispatch(setSubtasks({ ...subtasks, ...newSubtasks }));
       }
     }
@@ -162,11 +160,7 @@ export function ListPage() {
               <TaskQuickAction listDetailsData={listName} />
 
               {tasksStore[listId as string] && tasksFromRes.length ? (
-                <List
-                  tasks={tasksStore[listId as string]}
-                  subtasksCustomeFields={tasksFromRes[0].custom_field_columns}
-                  listDetails={listDetailsFromRes}
-                />
+                <List tasks={tasksStore[listId as string]} />
               ) : null}
             </section>
           </VerticalScroll>

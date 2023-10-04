@@ -9,6 +9,7 @@ import FilterByAssigneeModalSplitSubtask from './FilterByAssigneeModalSplitSubta
 
 interface IAssigneeSplitSubtasksProps {
   parentId: string;
+  isSplitSubtasks?: boolean;
 }
 
 export interface IAssigneesItem {
@@ -18,7 +19,7 @@ export interface IAssigneesItem {
 
 export const ASSIGNEES = 'assignees';
 
-export function AssigneeSplitSubtasks({ parentId }: IAssigneeSplitSubtasksProps) {
+export function AssigneeSplitSubtasks({ parentId, isSplitSubtasks }: IAssigneeSplitSubtasksProps) {
   const dispatch = useAppDispatch();
 
   const { currentUserId } = useAppSelector((state) => state.auth);
@@ -113,7 +114,7 @@ export function AssigneeSplitSubtasks({ parentId }: IAssigneeSplitSubtasksProps)
     <div className="flex items-center rounded-2xl h-8 cursor-pointer">
       <Button active={isMeMode} withoutBg={true} onClick={onToggleMe}>
         <Me active={isMeMode} className="w-5 h-5" />
-        <span>Me</span>
+        {!isSplitSubtasks ? <span>Me</span> : null}
       </Button>
 
       <Button
@@ -121,7 +122,7 @@ export function AssigneeSplitSubtasks({ parentId }: IAssigneeSplitSubtasksProps)
         withoutBg={true}
         onClick={() => dispatch(setSelectedTaskParentId(parentId as string))}
       >
-        <FilterByAssigneeModalSplitSubtask isMeMode={isMeMode} parentId={parentId} />
+        <FilterByAssigneeModalSplitSubtask isMeMode={isMeMode} parentId={parentId} isSplitSubtasks={isSplitSubtasks} />
       </Button>
     </div>
   );

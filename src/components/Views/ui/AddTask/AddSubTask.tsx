@@ -19,7 +19,7 @@ interface RowProps {
   paddingLeft?: number;
   parentId?: string;
   isListParent: boolean;
-  task_status?: string;
+  taskStatusId?: string;
   isSplitSubtask?: boolean;
   handleClose?: () => void | void;
 }
@@ -30,7 +30,7 @@ export function AddSubTask({
   listId,
   paddingLeft,
   parentId,
-  task_status,
+  taskStatusId,
   isListParent,
   isSplitSubtask,
   handleClose
@@ -69,7 +69,7 @@ export function AddSubTask({
           task={task}
           isListParent={isListParent}
           parentId={parentId as string}
-          task_status={(subtaskDefaultStatusId as string) || task_status}
+          taskStatusId={(subtaskDefaultStatusId as string) || taskStatusId}
           onClose={handleClose}
           paddingLeft={paddingLeft}
           tags={'tags' in task ? <Tags tags={task.tags} taskId={task.id} /> : null}

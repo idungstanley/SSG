@@ -19,7 +19,7 @@ import { setActiveItem } from '../../features/workspace/workspaceSlice';
 import { useformatSettings } from '../workspace/tasks/TaskSettingsModal/ShowSettingsModal/FormatSettings';
 import { VerticalScroll } from '../../components/ScrollableContainer/VerticalScroll';
 import { generateSubtasksArray, generateSubtasksList } from '../../utils/generateLists';
-import { IField } from '../../features/list/list.interfaces';
+import { IWalletDetails } from '../../features/wallet/wallet.interfaces';
 
 export function WalletPage() {
   const dispatch = useAppDispatch();
@@ -69,7 +69,7 @@ export function WalletPage() {
   });
 
   const tasks = useMemo(() => (data ? data.pages.flatMap((page) => page.data.tasks) : []), [data]);
-  const lists = useMemo(() => generateLists(tasks, wallet?.data.wallet?.custom_field_columns), [tasks, wallet]);
+  const lists = useMemo(() => generateLists(tasks, wallet?.data.wallet as IWalletDetails), [tasks, wallet]);
 
   useEffect(() => {
     if (Object.keys(lists).length) {
@@ -77,7 +77,7 @@ export function WalletPage() {
 
       const newSubtasksArr = generateSubtasksArray(lists);
       if (newSubtasksArr.length) {
-        const newSubtasks = generateSubtasksList(newSubtasksArr, wallet?.data.wallet?.custom_field_columns as IField[]);
+        const newSubtasks = generateSubtasksList(newSubtasksArr, wallet?.data.wallet as IWalletDetails);
         dispatch(setSubtasks({ ...subtasks, ...newSubtasks }));
       }
     }

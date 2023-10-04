@@ -43,8 +43,6 @@ function LabelsDropdown({ optionsFromField, allOptions, currentProperty, taskId 
 
   const filteredOptions = allOptions?.filter((option) => option.name.toLowerCase().includes(searchValue.toLowerCase()));
 
-  // console.log(allOptions);
-
   const inputRef = useRef<HTMLInputElement>(null);
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {

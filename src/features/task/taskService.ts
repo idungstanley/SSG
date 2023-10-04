@@ -658,10 +658,11 @@ export const UseUpdateTaskPrioritiesServices = ({ task_id_array, priorityDataUpd
 export const getTaskListService = (listId: string | null | undefined) => {
   const { workSpaceId } = useParams();
 
-  const { sortAbleArr, tasks, toggleAllSubtask, separateSubtasksMode, splitSubTaskState } = useAppSelector(
+  const { sortAbleArr, toggleAllSubtask, separateSubtasksMode, splitSubTaskState } = useAppSelector(
     (state) => state.task
   );
   const { currentWorkspaceId } = useAppSelector((state) => state.auth);
+  const { draggableItemId } = useAppSelector((state) => state.list);
 
   const sortArrUpdate = sortAbleArr.length <= 0 ? null : sortAbleArr;
 
@@ -670,8 +671,16 @@ export const getTaskListService = (listId: string | null | undefined) => {
   const { filters } = generateFilters();
 
   return useInfiniteQuery(
-    ['task', listId, { sortArrUpdate, filters }, toggleAllSubtask, separateSubtasksMode, splitSubTaskState],
-
+    [
+      'task',
+      listId,
+      filters,
+      sortArrUpdate,
+      draggableItemId,
+      toggleAllSubtask,
+      separateSubtasksMode,
+      splitSubTaskState
+    ],
     async ({ pageParam = 0 }: { pageParam?: number }) => {
       return requestNew<ITaskListRes>({
         url: 'tasks/list',
@@ -688,7 +697,7 @@ export const getTaskListService = (listId: string | null | undefined) => {
       });
     },
     {
-      enabled: fetch && (!tasks[listId as string] || separateSubtasksMode || splitSubTaskState || toggleAllSubtask),
+      enabled: fetch && (!!listId || separateSubtasksMode || splitSubTaskState || toggleAllSubtask),
       getNextPageParam: (lastPage) => {
         if (lastPage?.data?.paginator.has_more_pages) {
           return Number(lastPage.data.paginator.page) + 1;
