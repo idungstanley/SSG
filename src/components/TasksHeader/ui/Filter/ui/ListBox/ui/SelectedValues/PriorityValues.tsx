@@ -8,14 +8,14 @@ interface PriorityValuesProps {
 interface PriorityConfig {
   low: JSX.Element;
   normal: JSX.Element;
-  hight: JSX.Element;
+  high: JSX.Element;
   urgent: JSX.Element;
 }
 
 const priorityConfig: PriorityConfig = {
   low: <AiFillFlag className="h-5 w-7  text-gray-400" />,
   normal: <AiFillFlag className="h-5 w-7" style={{ color: '#6fddff' }} />,
-  hight: <AiFillFlag className="h-5 w-7  text-yellow-400" />,
+  high: <AiFillFlag className="h-5 w-7  text-yellow-400" />,
   urgent: <AiFillFlag className="h-5 w-7  text-red-400 " />
 };
 
