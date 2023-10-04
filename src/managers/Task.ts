@@ -1,3 +1,4 @@
+import { useAppSelector } from '../app/hooks';
 import { IList } from '../features/hubs/hubs.interfaces';
 import { IField, IFieldValue } from '../features/list/list.interfaces';
 import { ITeamMembersAndGroup } from '../features/settings/teamMembersAndGroups.interfaces';
@@ -136,6 +137,17 @@ export const taskDateUpdateManager = (
         }
         return task;
       });
+    }
+    return updatedTasks;
+  }
+  return tasks;
+};
+
+export const deleteTaskManager = (taskIds: string[], listIds: string[], tasks: Record<string, ITaskFullList[]>) => {
+  if (listIds.length) {
+    const updatedTasks: Record<string, ITaskFullList[]> = { ...tasks };
+    for (let i = 0; i < listIds.length; i++) {
+      if (taskIds.length) updatedTasks[listIds[i]] = tasks[listIds[i]]?.filter((task) => !taskIds.includes(task.id));
     }
     return updatedTasks;
   }
