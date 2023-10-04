@@ -182,7 +182,7 @@ export function Row({
             {/* tags */}
             {'tags' in task ? (
               <ToolTip title="Tags">
-                <button className="bg-white border rounded-md ">
+                <button className="bg-white border rounded-md " onClick={(e) => e.preventDefault()}>
                   <ManageTagsDropdown entityId={task.id} tagsArr={task.tags as Tag[]} entityType="task" />
                 </button>
               </ToolTip>
