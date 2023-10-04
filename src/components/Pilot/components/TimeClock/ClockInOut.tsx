@@ -37,13 +37,6 @@ export default function ClockInOut() {
   //   }
   // };
 
-  // const handleTimeSwitch = () => {
-  //   stop();
-  //   setPrompt(false);
-  //   setNewtimer(!newTimer);
-  // };
-
-  // const sameEntity = () => activeItemId === (timerLastMemory.taskId || timerLastMemory.hubId || timerLastMemory.listId);
   // const handleEndTimeChange = (value: string) => {
   //   dispatch(setTimerDetails({ ...timerDetails, isBillable: timerDetails.isBillable, description: value }));
   // };
