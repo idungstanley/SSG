@@ -271,7 +271,7 @@ export function StickyCol({
           {...props}
         >
           <div
-            className={`flex items-center h-full space-x-1 ${isSplitSubtask && 'bg-white/90 border-t'}`}
+            className={`flex ml-1 items-center h-full space-x-1 ${isSplitSubtask && 'bg-white/90 border-t'}`}
             style={{
               padding: '15px 0',
               paddingLeft: `${isSplitSubtask ? '4px' : 0}`,
@@ -441,7 +441,7 @@ export function StickyCol({
               `relative border-t ${verticalGrid && 'border-r'} w-full h-16  py-4 p-4 flex items-center`
             )}
           >
-            <div className="absolute flex space-x-1 bottom-0 right-0">
+            <div className="absolute bottom-0 right-0 flex space-x-1">
               <ToolTip title="Cancel">
                 <div
                   className="border rounded-sm"
