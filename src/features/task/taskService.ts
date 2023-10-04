@@ -773,7 +773,6 @@ export const createManualTimeEntry = () => {
 
 export const useCurrentTime = ({ workspaceId }: { workspaceId?: string }) => {
   const dispatch = useAppDispatch();
-  const { timerStatus } = useAppSelector((state) => state.task);
   const { data, isLoading, isError, refetch } = useQuery(
     ['timeData'],
     async () => {

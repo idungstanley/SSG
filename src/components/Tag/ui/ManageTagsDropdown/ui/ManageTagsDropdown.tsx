@@ -33,6 +33,7 @@ export function ManageTagsDropdown({ tagsArr, entityId, entityType }: ManageTags
 
   const onClickOpenDropdown = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.stopPropagation();
+    e.preventDefault();
     setIsOpen(true);
   };
 
