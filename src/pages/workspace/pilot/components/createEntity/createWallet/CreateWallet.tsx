@@ -88,7 +88,7 @@ export default function CreateWallet() {
       });
     } catch (error) {
       const errorResponse = error as ErrorHasDescendant;
-      const isHasDescendant = errorResponse.data.data.has_descendants;
+      const isHasDescendant = errorResponse.data.data?.has_descendants;
       if (isHasDescendant) {
         toast.custom((t) => (
           <Toast type="error" title="Error Creating Entity" body="Parent Entity has a descendant" toastId={t.id} />

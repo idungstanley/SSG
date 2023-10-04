@@ -43,6 +43,7 @@ export const createWalletManager = (type: string, hubs: Hub[], newWalletFromData
   const createWallet = (parent: Wallet | Hub) => {
     const newWallet = {
       ...newWalletFromData,
+      type: EntityType.wallet,
       children: [],
       lists: []
     };
