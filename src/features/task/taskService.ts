@@ -352,7 +352,7 @@ export const UseGetFullTaskList = ({
 
   const hub_id = itemType === EntityType.hub || itemType === EntityType.subHub ? itemId : null;
   const wallet_id = itemType === EntityType.wallet || itemType === EntityType.subWallet ? itemId : null;
-  const { sortAbleArr, toggleAllSubtask, separateSubtasksMode, splitSubTaskState } = useAppSelector(
+  const { sortAbleArr, toggleAllSubtask, separateSubtasksMode, splitSubTaskState, isFiltersUpdated } = useAppSelector(
     (state) => state.task
   );
   const sortArrUpdate = sortAbleArr.length <= 0 ? null : sortAbleArr;
@@ -365,6 +365,7 @@ export const UseGetFullTaskList = ({
       itemId,
       itemType,
       filters,
+      isFiltersUpdated,
       sortArrUpdate,
       draggableItemId,
       toggleAllSubtask,
@@ -389,7 +390,7 @@ export const UseGetFullTaskList = ({
     },
     {
       keepPreviousData: true,
-      enabled: (!!hub_id || !!wallet_id) && !draggableItemId,
+      enabled: (!!hub_id || !!wallet_id) && !draggableItemId && isFiltersUpdated,
       onSuccess: (data) => {
         data.pages.map((page) => page.data.tasks.map((task) => queryClient.setQueryData(['task', task.id], task)));
       },
@@ -659,7 +660,7 @@ export const UseUpdateTaskPrioritiesServices = ({ task_id_array, priorityDataUpd
 export const getTaskListService = (listId: string | null | undefined) => {
   const { workSpaceId } = useParams();
 
-  const { sortAbleArr, toggleAllSubtask, separateSubtasksMode, splitSubTaskState } = useAppSelector(
+  const { sortAbleArr, toggleAllSubtask, separateSubtasksMode, splitSubTaskState, isFiltersUpdated } = useAppSelector(
     (state) => state.task
   );
   const { currentWorkspaceId } = useAppSelector((state) => state.auth);
@@ -676,6 +677,7 @@ export const getTaskListService = (listId: string | null | undefined) => {
       'task',
       listId,
       filters,
+      isFiltersUpdated,
       sortArrUpdate,
       draggableItemId,
       toggleAllSubtask,
@@ -698,7 +700,7 @@ export const getTaskListService = (listId: string | null | undefined) => {
       });
     },
     {
-      enabled: fetch && (!!listId || separateSubtasksMode || splitSubTaskState || toggleAllSubtask),
+      enabled: fetch && isFiltersUpdated && (!!listId || separateSubtasksMode || splitSubTaskState || toggleAllSubtask),
       getNextPageParam: (lastPage) => {
         if (lastPage?.data?.paginator.has_more_pages) {
           return Number(lastPage.data.paginator.page) + 1;

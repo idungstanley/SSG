@@ -25,15 +25,14 @@ const MIN_SIDEBAR_WIDTH = dimensions.navigationBar.min;
 
 export default function Sidebar() {
   const dispatch = useAppDispatch();
-  const { extendedSidebarWidth, sidebarWidthRD, showExtendedBar, isFavoritePinned } = useAppSelector(
-    (state) => state.workspace
-  );
-  const key = 'sidebar';
   const queryClient = useQueryClient();
 
+  const { extendedSidebarWidth, sidebarWidthRD, showExtendedBar } = useAppSelector((state) => state.workspace);
   const { showSidebar, userSettingsData } = useAppSelector((state) => state.account);
 
   const [commandSearchModal, setCommandSearchModal] = useState<boolean>(false);
+
+  const key = 'sidebar';
 
   const { blockRef, Dividers, size, isDrag } = useResize({
     dimensions: {
