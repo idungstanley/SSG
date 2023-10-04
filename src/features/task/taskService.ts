@@ -742,7 +742,7 @@ export const createTimeEntriesService = (data: { queryKey: (string | undefined)[
 
 export const createManualTimeEntry = () => {
   const queryClient = useQueryClient();
-  const mutation = useMutation(
+  const { data, isError, isLoading, mutateAsync, isSuccess } = useMutation(
     async ({
       start_date,
       end_date,
@@ -776,7 +776,7 @@ export const createManualTimeEntry = () => {
       onSuccess: () => queryClient.invalidateQueries(['timeclock'])
     }
   );
-  return mutation;
+  return { data, isError, isLoading, mutateAsync, isSuccess };
 };
 
 export const useCurrentTime = ({ workspaceId }: { workspaceId?: string }) => {

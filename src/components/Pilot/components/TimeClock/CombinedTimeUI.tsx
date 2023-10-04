@@ -12,7 +12,7 @@ import { setActiveClockTab } from '../../../../features/workspace/workspaceSlice
 import { HeaderIcons } from './TimeHeaderIcons';
 import { TimerCheck } from './TimeCounter';
 import { HourGlassIcon } from '../../../../assets/icons/HourGlass';
-import { ManualTags } from './ManualTags';
+import { ManualTime } from './ManualTime';
 
 export function CombinedTime() {
   const dispatch = useAppDispatch();
@@ -101,33 +101,7 @@ export function CombinedTime() {
         )}
       </div>
       {/* Manual Time */}
-      {activeClockTab === TIME_TABS.manual && (
-        <div className="flex flex-col space-y-2.5 w-full py-4">
-          <div className="flex items-center justify-center space-x-2">
-            <label htmlFor="timeDetails" className="flex flex-col space-y-1.5 w-1/3">
-              <span className="uppercase text-alsoit-gray-100 text-alsoit-text-xi">Enter Time</span>
-              <input
-                type="text"
-                className="w-full py-0.5 px-1.5 text-alsoit-gray-75 text-alsoit-text-md rounded-sm ring-0 hover:ring-0 focus:ring-0 border-none"
-                placeholder="E.g 3 hours 40 mins"
-              />
-            </label>
-            <label htmlFor="detailsDate" className="flex flex-col space-y-1.5">
-              <span className="uppercase text-alsoit-gray-100 text-alsoit-text-xi">Date</span>
-              {/* change this value */}
-              <span className="w-28 p-1.5 text-alsoit-gray-100 text-alsoit-text-md rounded-sm bg-white">Now</span>
-            </label>
-            <label htmlFor="manualTags" className="flex flex-col space-y-1.5 w-1/3">
-              <ManualTags />
-            </label>
-          </div>
-          <div className="flex justify-end w-11/12">
-            <button className="bg-alsoit-success py-1.5 px-8 capitalize text-alsoit-text-xi font-semibold text-white rounded-lg tracking-wide">
-              save
-            </button>
-          </div>
-        </div>
-      )}
+      {activeClockTab === TIME_TABS.manual && <ManualTime />}
       {/* Other Active Time Log entries */}
       <div className="flex flex-col">
         {/* Log headers */}
