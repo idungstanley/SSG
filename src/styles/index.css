@@ -80,6 +80,13 @@ code {
   height: 64px;
 }
 
+.base-input:focus {
+  border: 1px solid #e0e0e0;
+  border-radius: 0;
+  box-shadow: none;
+  overflow-x: auto;
+}
+
 /* .color_theme {
   width: 32px;
   height: 32px;
@@ -89,6 +96,10 @@ code {
   animation-name: grow;
   animation-duration: 0.2s;
   animation-fill-mode: forwards;
+}
+
+.rounded-top {
+  border-top-left-radius: 8px;
 }
 
 @keyframes grow {
@@ -192,4 +203,14 @@ input:focus {
 .no-control-num-input::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
+}
+
+.no-border-input {
+  border: none !important;
+  outline: none !important;
+}
+
+.no-border-input:focus {
+  border: none !important;
+  outline: none !important;
 }

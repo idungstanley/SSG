@@ -5,52 +5,51 @@ import { useSubTasks } from '../../../../features/task/taskService';
 import { Row } from './Row';
 import { OverlayRow } from './OverlayRow';
 import { setSubtasks } from '../../../../features/task/taskSlice';
-import { ITaskFullList } from '../../../../features/task/interface.tasks';
+import { ITaskFullList, Task } from '../../../../features/task/interface.tasks';
 import { listColumnProps } from '../../../../pages/workspace/tasks/component/views/ListColumns';
-import { ITask_statuses } from '../../../../features/list/list.interfaces';
 
 interface SubTasksProps {
   listId: string;
-  parentId: string;
-  parentName: string;
+  parentTask: Task;
   columns: listColumnProps[];
   paddingLeft: number;
-  taskStatuses?: ITask_statuses[];
   level: number;
   isSplitSubtask?: boolean;
+  isShowAllChildren?: boolean;
 }
 
 export function SubTasks({
   listId,
-  parentId,
-  parentName,
+  parentTask,
   columns,
   paddingLeft,
-  taskStatuses,
   level,
-  isSplitSubtask
+  isSplitSubtask,
+  isShowAllChildren
 }: SubTasksProps) {
   const dispatch = useAppDispatch();
 
   const { draggableItemId } = useAppSelector((state) => state.list);
   const { subtasks } = useAppSelector((state) => state.task);
 
-  const { data: tasks } = useSubTasks(parentId, subtasks);
+  const { data: tasks } = useSubTasks(parentTask.id, subtasks);
 
   const draggableItem = draggableItemId
-    ? (tasks || subtasks[parentId])?.find((i: ITaskFullList) => i.id === draggableItemId)
+    ? (tasks || subtasks[parentTask.id])?.find((i: ITaskFullList) => i.id === draggableItemId)
     : null;
 
   useEffect(() => {
-    if (tasks?.length && !subtasks[parentId]) {
+    if (tasks?.length && !subtasks[parentTask.id]) {
       const tasksWithListId = tasks.map((item) => {
         return {
           ...item,
-          parentName,
+          parentName: parentTask.name,
+          task_statuses: parentTask.task_statuses,
+          custom_field_columns: parentTask.custom_field_columns,
           list_id: listId
         };
       });
-      dispatch(setSubtasks({ ...subtasks, [parentId]: tasksWithListId as ITaskFullList[] }));
+      dispatch(setSubtasks({ ...subtasks, [parentTask.id]: tasksWithListId as ITaskFullList[] }));
     }
   }, [tasks]);
 
@@ -63,17 +62,17 @@ export function SubTasks({
       ) : null}
       {Object.keys(subtasks).length ? (
         <>
-          {subtasks[parentId]?.map((i) => (
+          {subtasks[parentTask.id]?.map((i) => (
             <Row
+              key={i.id}
               paddingLeft={paddingLeft}
               listId={listId}
               columns={columns}
               task={i}
-              key={i.id}
               isListParent={false}
-              taskStatuses={taskStatuses}
               level={level}
               isSplitSubtask={isSplitSubtask}
+              isShowAllChildren={isShowAllChildren}
             />
           ))}
         </>

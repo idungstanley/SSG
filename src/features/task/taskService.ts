@@ -51,7 +51,6 @@ import {
 } from '../../managers/Task';
 import { ITeamMembersAndGroup } from '../settings/teamMembersAndGroups.interfaces';
 import { useDispatch } from 'react-redux';
-import { runTimer } from '../../utils/TimerCounter';
 import { updateListTasksCountManager } from '../../managers/List';
 import { getHub } from '../hubs/hubSlice';
 import { setFilteredResults } from '../search/searchSlice';
@@ -258,8 +257,20 @@ export const useAddTask = (task?: Task) => {
   });
 };
 
-const duplicateTask = (data: { task_name: string; task_id: string; list_id: string; is_everything: boolean }) => {
-  const { task_name, task_id, list_id, is_everything } = data;
+const duplicateTask = (data: {
+  task_name: string;
+  task_id: string;
+  list_id: string;
+  is_everything: boolean;
+  copy?: string[];
+}) => {
+  const { task_name, task_id, list_id, is_everything, copy } = data;
+
+  const availableFilter = copy?.filter((item) => {
+    return item !== 'everything';
+  });
+
+  const custom_is_everything = copy?.includes('everything');
 
   const response = requestNew<newTaskDataRes>({
     url: `tasks/${task_id}/duplicate`,
@@ -267,7 +278,8 @@ const duplicateTask = (data: { task_name: string; task_id: string; list_id: stri
     data: {
       name: task_name,
       list_id,
-      is_everything
+      is_everything: copy?.length ? custom_is_everything : is_everything,
+      copy: custom_is_everything ? null : availableFilter
     }
   });
   return response;
@@ -339,7 +351,7 @@ export const UseGetFullTaskList = ({
 
   const hub_id = itemType === EntityType.hub || itemType === EntityType.subHub ? itemId : null;
   const wallet_id = itemType === EntityType.wallet || itemType === EntityType.subWallet ? itemId : null;
-  const { sortAbleArr, toggleAllSubtask, separateSubtasksMode, splitSubTaskState } = useAppSelector(
+  const { sortAbleArr, toggleAllSubtask, separateSubtasksMode, splitSubTaskState, isFiltersUpdated } = useAppSelector(
     (state) => state.task
   );
   const sortArrUpdate = sortAbleArr.length <= 0 ? null : sortAbleArr;
@@ -352,6 +364,7 @@ export const UseGetFullTaskList = ({
       itemId,
       itemType,
       filters,
+      isFiltersUpdated,
       sortArrUpdate,
       draggableItemId,
       toggleAllSubtask,
@@ -376,7 +389,7 @@ export const UseGetFullTaskList = ({
     },
     {
       keepPreviousData: true,
-      enabled: (!!hub_id || !!wallet_id) && !draggableItemId,
+      enabled: (!!hub_id || !!wallet_id) && !draggableItemId && isFiltersUpdated,
       onSuccess: (data) => {
         data.pages.map((page) => page.data.tasks.map((task) => queryClient.setQueryData(['task', task.id], task)));
       },
@@ -646,10 +659,11 @@ export const UseUpdateTaskPrioritiesServices = ({ task_id_array, priorityDataUpd
 export const getTaskListService = (listId: string | null | undefined) => {
   const { workSpaceId } = useParams();
 
-  const { sortAbleArr, tasks, toggleAllSubtask, separateSubtasksMode, splitSubTaskState } = useAppSelector(
+  const { sortAbleArr, toggleAllSubtask, separateSubtasksMode, splitSubTaskState, isFiltersUpdated } = useAppSelector(
     (state) => state.task
   );
   const { currentWorkspaceId } = useAppSelector((state) => state.auth);
+  const { draggableItemId } = useAppSelector((state) => state.list);
 
   const sortArrUpdate = sortAbleArr.length <= 0 ? null : sortAbleArr;
 
@@ -658,8 +672,17 @@ export const getTaskListService = (listId: string | null | undefined) => {
   const { filters } = generateFilters();
 
   return useInfiniteQuery(
-    ['task', listId, { sortArrUpdate, filters }, toggleAllSubtask, separateSubtasksMode, splitSubTaskState],
-
+    [
+      'task',
+      listId,
+      filters,
+      isFiltersUpdated,
+      sortArrUpdate,
+      draggableItemId,
+      toggleAllSubtask,
+      separateSubtasksMode,
+      splitSubTaskState
+    ],
     async ({ pageParam = 0 }: { pageParam?: number }) => {
       return requestNew<ITaskListRes>({
         url: 'tasks/list',
@@ -676,7 +699,7 @@ export const getTaskListService = (listId: string | null | undefined) => {
       });
     },
     {
-      enabled: fetch && (!tasks[listId as string] || separateSubtasksMode || splitSubTaskState || toggleAllSubtask),
+      enabled: fetch && isFiltersUpdated && (!!listId || separateSubtasksMode || splitSubTaskState || toggleAllSubtask),
       getNextPageParam: (lastPage) => {
         if (lastPage?.data?.paginator.has_more_pages) {
           return Number(lastPage.data.paginator.page) + 1;
@@ -760,11 +783,11 @@ export const createManualTimeEntry = () => {
 
 export const useCurrentTime = ({ workspaceId }: { workspaceId?: string }) => {
   const dispatch = useAppDispatch();
-  const { data, isLoading, isError, refetch } = useQuery(
+  const { status, refetch, data } = useQuery(
     ['timeData'],
     async () => {
       const response = await requestNew<
-        { data: { time_entry: { start_date: string; model_type: string; model_id: string } } } | undefined
+        { data: { time_entry: { start_date: string; model: string; model_id: string } } } | undefined
       >({
         method: 'GET',
         url: 'time-entries/current'
@@ -775,6 +798,25 @@ export const useCurrentTime = ({ workspaceId }: { workspaceId?: string }) => {
       onSuccess: (data) => {
         const dateData = data?.data;
         const dateString = dateData?.time_entry;
+
+        const entityCheck = (): boolean => {
+          const validEntityTypes = [
+            EntityType.hub,
+            EntityType.list,
+            EntityType.subHub,
+            EntityType.subWallet,
+            EntityType.subtask,
+            EntityType.task,
+            EntityType.wallet
+          ];
+
+          if (dateString?.model !== undefined) {
+            return validEntityTypes.includes(dateString.model);
+          }
+
+          return false;
+        };
+
         if (dateData?.time_entry === null) {
           dispatch(setTimerStatus(false));
           dispatch(setUpdateTimerDuration({ s: 0, m: 0, h: 0 }));
@@ -783,23 +825,24 @@ export const useCurrentTime = ({ workspaceId }: { workspaceId?: string }) => {
           const { hours, minutes, seconds } = Duration({ dateString });
           dispatch(setTimerStatus(true));
           dispatch(setUpdateTimerDuration({ s: seconds, m: minutes, h: hours }));
-          dispatch(
-            setTimerLastMemory({
-              hubId: dateString.model_type === EntityType.hub ? dateString.model_id : null,
-              activeTabId: 6,
-              subhubId: dateString.model_type === EntityType.subHub ? dateString.model_id : null,
-              listId: dateString.model_type === EntityType.list ? dateString.model_id : null,
-              taskId: dateString.model_type === EntityType.task ? dateString.model_id : null,
-              workSpaceId: workspaceId
-            })
-          );
+
+          entityCheck() &&
+            dispatch(
+              setTimerLastMemory({
+                hubId: dateString.model === EntityType.hub ? dateString.model_id : null,
+                activeTabId: 6,
+                subhubId: dateString.model === EntityType.subHub ? dateString.model_id : null,
+                listId: dateString.model === EntityType.list ? dateString.model_id : null,
+                taskId: dateString.model === EntityType.task ? dateString.model_id : null,
+                workSpaceId: workspaceId
+              })
+            );
         }
       }
     }
   );
-  runTimer({ isRunning: !!data?.data.time_entry });
 
-  return { data, isLoading, isError, refetch };
+  return { status, refetch, data };
 };
 
 export const StartTimeEntryService = () => {
@@ -1183,6 +1226,9 @@ export function useCreateTaskRecuring() {
     {
       onSuccess() {
         queryClient.invalidateQueries(['recurring']);
+      },
+      onError(err: { statusText: string }) {
+        console.error(err.statusText);
       }
     }
   );

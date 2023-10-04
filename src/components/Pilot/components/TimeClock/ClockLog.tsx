@@ -1,11 +1,9 @@
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
-import { setTimeArr, setTimeLogColumnData, setTimeSortArr } from '../../../../features/task/taskSlice';
+import { setTimeLogColumnData } from '../../../../features/task/taskSlice';
 import { IEntries, ITimeEntriesRes } from '../../../../features/task/interface.tasks';
 import { useEffect, useRef, useState } from 'react';
-import { useGetUserSettingsData } from '../../../../features/task/taskService';
 import { toast } from 'react-hot-toast';
 import SaveFilterToast from '../../../TasksHeader/ui/Filter/ui/Toast';
-import { isArray } from '../../../../utils/typeGuards';
 import { RenderItemEntries } from './RenderClockLogEntry';
 
 export type Header = {

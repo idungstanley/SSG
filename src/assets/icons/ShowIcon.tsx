@@ -1,9 +1,13 @@
-import React from 'react';
+import { DetailedHTMLProps, SVGAttributes } from 'react';
 
-export default function ShowIcon({ color }: { color: string }) {
+interface Props extends DetailedHTMLProps<SVGAttributes<SVGSVGElement>, SVGSVGElement> {
+  color: string;
+}
+
+export default function ShowIcon({ color, ...props }: Props) {
   return (
     <div>
-      <svg width="21" height="20" viewBox="0 0 21 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <svg {...props} viewBox="0 0 21 20" fill="none" xmlns="http://www.w3.org/2000/svg">
         <g id="Watchers">
           <mask
             id="mask0_10191_2881"

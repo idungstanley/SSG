@@ -5,12 +5,12 @@ import { setIsFavoritePinned, setSidebarWidthRD } from '../../../../features/wor
 import Header from './components/Header';
 import NavigationItems from './components/NavigationItems';
 import Places from './components/Places';
-import { dimensions } from '../../../../app/config/dimensions';
+import { STORAGE_KEYS, dimensions } from '../../../../app/config/dimensions';
 import { useResize } from '../../../../hooks/useResize';
 import { isAllowIncreaseWidth } from '../../../../utils/widthUtils';
 import { NavigationList } from './components/NavigationItems/components/NavigationList';
 import useResolution from '../../../../hooks/useResolution';
-import { setUserSettingsData, useGetUserSettingsKeys } from '../../../../features/account/accountService';
+import { useGetUserSettingsKeys } from '../../../../features/account/accountService';
 import NonInteractiveSearch from '../../../../components/Search/NonInteractiveSearch';
 import CommandSearchModal from './components/CommandSearchModal';
 import SearchIcon from '../../../../assets/icons/SearchIcon';
@@ -18,22 +18,23 @@ import { setUpdateCords } from '../../../../features/hubs/hubSlice';
 import { useScroll } from '../../../../hooks/useScroll';
 import { VerticalScroll } from '../../../../components/ScrollableContainer/VerticalScroll';
 import { useQueryClient } from '@tanstack/react-query';
+import { SetUserSettingsStore } from '../../../../features/account/accountSlice';
 
 const MAX_SIDEBAR_WIDTH = dimensions.navigationBar.max;
 const MIN_SIDEBAR_WIDTH = dimensions.navigationBar.min;
 
 export default function Sidebar() {
   const dispatch = useAppDispatch();
-  const { extendedSidebarWidth, sidebarWidthRD, showExtendedBar, isFavoritePinned } = useAppSelector(
-    (state) => state.workspace
-  );
-  const key = 'sidebar';
   const queryClient = useQueryClient();
 
+  const { extendedSidebarWidth, sidebarWidthRD, showExtendedBar } = useAppSelector((state) => state.workspace);
   const { showSidebar, userSettingsData } = useAppSelector((state) => state.account);
+
   const [commandSearchModal, setCommandSearchModal] = useState<boolean>(false);
 
-  const { blockRef, Dividers, size, isMouseUp, isDrag } = useResize({
+  const key = 'sidebar';
+
+  const { blockRef, Dividers, size, isDrag } = useResize({
     dimensions: {
       min: MIN_SIDEBAR_WIDTH,
       max: MAX_SIDEBAR_WIDTH
@@ -45,7 +46,25 @@ export default function Sidebar() {
 
   const resolution = useResolution();
 
-  useGetUserSettingsKeys(true, key, resolution);
+  const { data } = useGetUserSettingsKeys(true, key, resolution);
+  useEffect(() => {
+    if (data) {
+      const value = data.value;
+      localStorage.setItem(
+        STORAGE_KEYS.SIDEBAR_WIDTH,
+        JSON.stringify(value.sidebarWidth ? value.sidebarWidth : dimensions.navigationBar.default)
+      );
+      localStorage.setItem(
+        STORAGE_KEYS.PILOT_WIDTH,
+        JSON.stringify(value.pilotWidth ? value.pilotWidth : dimensions.pilot.default)
+      );
+      localStorage.setItem(
+        STORAGE_KEYS.EXTENDED_BAR_WIDTH,
+        JSON.stringify(value.extendedBarWidth ? value.extendedBarWidth : dimensions.extendedBar.default)
+      );
+      dispatch(SetUserSettingsStore({ ...userSettingsData, ...value }));
+    }
+  }, [data]);
 
   const [activeTabId, setActiveTabId] = useState<string | null>('');
   const hotkeyIdsFromLS = JSON.parse(localStorage.getItem('navhotkeys') ?? '[]') as string[];
@@ -78,7 +97,7 @@ export default function Sidebar() {
     [activeHotkeyIds]
   );
 
-  setUserSettingsData(isMouseUp, key, { ...userSettingsData, sidebarWidth: size, isFavoritePinned }, resolution);
+  // setUserSettingsData(isMouseUp, key, { ...userSettingsData, sidebarWidth: size, isFavoritePinned }, resolution);
 
   useEffect(() => {
     const { isAllow, allowedSize } = isAllowIncreaseWidth(size, extendedSidebarWidth);
@@ -88,7 +107,7 @@ export default function Sidebar() {
 
   return (
     <aside className={cl('flex text-center relative overflow-x-visible')}>
-      <Dividers />
+      {showSidebar && <Dividers />}
       {/* show / hide sidebar icon */}
       {/* sidebar */}
       <section

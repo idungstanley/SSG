@@ -228,8 +228,8 @@ export default function NavigationItems({
             <div
               onClick={handleToggleMore}
               className={cl(
-                !showSidebar ? 'justify-center pl-5' : 'gap-2 items-center pl-7',
-                'flex cursor-pointer gap-2 items-center justify-between p-2 w-full hover:text-gray-500 hover:bg-gray-100 mb-4'
+                !showSidebar ? 'justify-center pl-5' : 'gap-2 items-center pl-7 justify-between',
+                'flex cursor-pointer gap-2 items-center  p-2 w-full hover:text-gray-500 hover:bg-gray-100 mb-4'
               )}
               style={{ height: '30px', fontWeight: '600' }}
             >
@@ -237,14 +237,16 @@ export default function NavigationItems({
                 {showLessOrMore[showMore ? 0 : 1].icon}
                 {showSidebar ? <p className="ml-4 text-xs truncate">{showLessOrMore[showMore ? 0 : 1].name}</p> : null}
               </span>
-              <span onClick={(e) => handleOpenDropdown(e)}>
-                <ThreeDotIcon />
-              </span>
+              {showSidebar && (
+                <span onClick={(e) => handleOpenDropdown(e)}>
+                  <ThreeDotIcon />
+                </span>
+              )}
             </div>
             {/* )} */}
           </nav>
           <AlsoitMenuDropdown handleClose={handleCloseDropdown} anchorEl={showDropdown}>
-            <div className="flex flex-col p-2 w-40 gap-2">
+            <div className="flex flex-col w-40 gap-2 p-2">
               <p>How many items would you like to show when showing less?</p>
               <Input type="number" onChange={handleOnChange} name="show more count" />
               <Button label="Save" buttonStyle="base" height="h-6" onClick={handleSaveToLS} />

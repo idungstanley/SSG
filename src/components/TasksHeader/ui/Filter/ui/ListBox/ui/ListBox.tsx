@@ -12,6 +12,8 @@ import { isDefined } from '../../../../../../../utils/typeGuards';
 import { AdditionalListBox } from './AdditionalListBox';
 import toast from 'react-hot-toast';
 import SaveFilterToast from '../../Toast';
+import { useAppDispatch } from '../../../../../../../app/hooks';
+import { setFiltersUpdated } from '../../../../../../../features/task/taskSlice';
 
 interface ListBoxProps {
   values: FilterValue[] | Operator[] | string[] | Unit[];
@@ -41,6 +43,8 @@ export function ListBox({
   onSelectOrDeselectAll,
   onUndoChanges
 }: ListBoxProps) {
+  const dispatch = useAppDispatch();
+
   const [query, setQuery] = useState('');
   const [showOptions, setShowOptions] = useState(false);
   const [selectAll, setSelectAll] = useState<'select' | 'deselect'>('select');
@@ -58,8 +62,8 @@ export function ListBox({
     const availableValues = values as FilterValue[];
 
     if (
-      selectedValues.length !== 0 &&
-      availableValues.length !== 0 &&
+      selectedValues.length &&
+      availableValues.length &&
       selectedValues.length === availableValues.length &&
       selectAll === 'select'
     ) {
@@ -89,6 +93,7 @@ export function ListBox({
   const onClickConfirm = () => {
     setShowOptions(false);
     resetPrevState();
+    dispatch(setFiltersUpdated(true));
     toast.custom(
       (t) => (
         <SaveFilterToast

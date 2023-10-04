@@ -14,6 +14,7 @@ import { useGetInboxUnfiledCount } from '../../../../features/inbox/inboxesServi
 import MainLogo from '../../../../assets/branding/main-logo.png';
 import MenuWithTransition from '../../../../components/MenuLists/MenuWithTransition';
 import { cl } from '../../../../utils';
+import { clearUserFromLS } from '../../../../utils/ClearStorage';
 
 const navigation = [
   { name: 'Explorer', href: '/explorer', current: false },
@@ -60,11 +61,7 @@ function TopMenu() {
     onSuccess: () => {
       dispatch(setVisibility(false));
 
-      localStorage.removeItem('user');
-      localStorage.removeItem('accessToken');
-      localStorage.removeItem('currentWorkspaceId');
-      localStorage.removeItem('teamMemberInviteCode');
-      localStorage.removeItem('currentUserId');
+      clearUserFromLS();
 
       dispatch(
         setAuthData({

@@ -4,7 +4,7 @@ import { CiSearch } from 'react-icons/ci';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { setActiveSubHubManagerTabId, setActiveTabId, setShowOverlay } from '../../features/workspace/workspaceSlice';
-import { getHub, getSubMenu } from '../../features/hubs/hubSlice';
+import { getHub, getSubMenu, setSubDropdownMenu, setshowMenuDropdown } from '../../features/hubs/hubSlice';
 import { EntityManagerTabsId, PilotTabsId } from '../../utils/PilotUtils';
 import { Hub } from '../../pages/workspace/hubs/components/ActiveTree/activetree.interfaces';
 import ActiveTreeDataFormater from './ActiveTreeDataFormater';
@@ -88,6 +88,8 @@ export default function ActiveTreeSearch({ closeDropdown, option }: ActiveTreeSe
       })
     );
     closeDropdown?.(false);
+    dispatch(setSubDropdownMenu(false));
+    dispatch(setshowMenuDropdown({ showMenuDropdown: null, showMenuDropdownType: null }));
   };
 
   return (

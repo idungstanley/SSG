@@ -21,6 +21,8 @@ import { ListColourProps } from '../../../../../../components/tasks/ListItem';
 import { displayPrompt, setVisibility } from '../../../../../../features/general/prompt/promptSlice';
 import { createHubManager } from '../../../../../../managers/Hub';
 import { setFilteredResults } from '../../../../../../features/search/searchSlice';
+import AlsoitMenuDropdown from '../../../../../../components/DropDowns';
+import ColorPalette from '../../../../../../components/ColorPalette/component/ColorPalette';
 
 interface formProps {
   name: string;
@@ -32,8 +34,8 @@ export default function CreateHub() {
 
   const { selectedTreeDetails, currHubId, hub } = useAppSelector((state) => state.hub);
 
-  const [paletteColor, setPaletteColor] = useState<string | ListColourProps | undefined>('');
-  const [showPalette, setShowPalette] = useState<boolean>(false);
+  const [paletteColor, setPaletteColor] = useState<string | ListColourProps | undefined | null>('');
+  const [showPalette, setShowPalette] = useState<null | HTMLDivElement>(null);
 
   const { type, id } = selectedTreeDetails;
   const createHub = useMutation(createHubService, {
@@ -82,9 +84,17 @@ export default function CreateHub() {
     dispatch(setEntityToCreate(null));
   };
 
+  const handlePaletteColor = (value: string | ListColourProps | undefined | null) => {
+    setPaletteColor(value);
+  };
+
   const handleShowPalette = (e: React.MouseEvent<HTMLDivElement | HTMLButtonElement, MouseEvent>) => {
     e.stopPropagation();
-    setShowPalette((prev) => !prev);
+    setShowPalette((e as React.MouseEvent<HTMLDivElement, MouseEvent>).currentTarget);
+  };
+
+  const handleClosePalette = () => {
+    setShowPalette(null);
   };
 
   const currentWorkspaceId: string | undefined = JSON.parse(
@@ -134,7 +144,7 @@ export default function CreateHub() {
     }
   };
   return (
-    <div className="w-full h-auto p-2 overflow-y-auto" style={{ maxHeight: '420px' }}>
+    <div className="w-full h-auto p-2 overflow-y-auto bg-white" style={{ maxHeight: '420px' }}>
       <div className="flex flex-col mb-2">
         <span className="font-bold">Create A Hub</span>
         <span className="font-medium">Allows you manage all entities within the workspace</span>
@@ -169,9 +179,9 @@ export default function CreateHub() {
           <Checkbox checked={false} onChange={() => ({})} description="Host other entities" height="5" width="5" />
           <Checkbox checked={false} onChange={() => ({})} description="Host other entities" height="5" width="5" />
         </div>
-        <div className="relative mt-32 ml-24">
-          {showPalette ? <Palette title="Hub Colour" setPaletteColor={setPaletteColor} /> : null}
-        </div>
+        <AlsoitMenuDropdown handleClose={handleClosePalette} anchorEl={showPalette}>
+          <ColorPalette handleClick={handlePaletteColor} />
+        </AlsoitMenuDropdown>
       </div>
       <div className="flex justify-between pt-2 space-x-3">
         <Button buttonStyle="white" onClick={onClose} loading={false} label="Cancel" width={20} height="h-7" />

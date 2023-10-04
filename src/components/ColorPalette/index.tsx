@@ -7,8 +7,8 @@ import { UseEditListService } from '../../features/list/listService';
 import { setPaletteDropDown } from '../../features/account/accountSlice';
 import { BiPaint } from 'react-icons/bi';
 import { RiArrowUpSFill } from 'react-icons/ri';
-import { ChromePicker, AlphaPicker, HuePicker } from 'react-color';
-import { getColorName, initColors, ORIGINAL_COLORS } from 'ntc-ts';
+import { AlphaPicker, HuePicker } from 'react-color';
+import { getColorName } from 'ntc-ts';
 import { EditableInput } from 'react-color/lib/components/common';
 import ListIconComponent from '../ItemsListInSidebar/components/ListIconComponent';
 import { ListColourProps } from '../tasks/ListItem';
@@ -40,7 +40,7 @@ interface PaletteProps {
   title?: string;
   topContent?: JSX.Element;
   bottomContent?: JSX.Element;
-  setPaletteColor?: (color?: string | ListColourProps) => void;
+  setPaletteColor?: (color?: string | ListColourProps | null) => void;
   setListPaletteColor?: (value: { innerColour: string; outterColour: string }) => void;
   shape?: string;
   listComboColour?: ListColourProps;
@@ -49,9 +49,9 @@ interface PaletteProps {
   activeOutterColor?: string;
 }
 
-interface ChromePickerProps {
-  hex: string;
-}
+// interface ChromePickerProps {
+//   hex: string;
+// }
 
 const paletteViews = {
   BOARD: 'Board',
@@ -93,7 +93,7 @@ export default function PaletteManager({
       l: 201
     }
   });
-  const [customColor, setCustomColor] = useState<string>('');
+  // const [customColor, setCustomColor] = useState<string>('');
   const [colorType, setColorType] = useState<string>('hex');
   const [showColorTypes, setShowColorTypes] = useState<boolean>(false);
   const [selectedViews, setSelectedViews] = useState<string>(paletteViews.BOARD);
@@ -146,9 +146,9 @@ export default function PaletteManager({
   const handleEditColor = (state: boolean) => {
     setDisplayColorPicker(state);
   };
-  const handleCustomColor = (color: ChromePickerProps) => {
-    setCustomColor(color.hex);
-  };
+  // const handleCustomColor = (color: ChromePickerProps) => {
+  //   setCustomColor(color.hex);
+  // };
 
   const handleOutterFrameClick = () => {
     setIsOutterFrameActive((prev) => !prev);
@@ -190,11 +190,12 @@ export default function PaletteManager({
   const handleCloseSearch = () => {
     setIsSearch(false);
   };
+
   const handleCloseAdvanceSearch = () => {
     setIsAdvanceSearch(false);
   };
 
-  const handleClick = (color?: string | ListColourProps) => {
+  const handleClick = (color?: string | ListColourProps | null) => {
     if (paletteType === EntityType.hub) {
       editHubColorMutation.mutateAsync({
         hubId: paletteId,
@@ -260,15 +261,16 @@ export default function PaletteManager({
       }}
       PaperProps={{
         style: {
-          borderRadius: '12px'
+          borderRadius: '12px',
+          backgroundColor: 'white'
         }
       }}
     >
       <div
-        className="w-auto p-2 overflow-y-auto text-gray-500 rounded-full drop-shadow-2xl"
+        className="w-auto p-3 overflow-y-auto text-gray-500 rounded-full drop-shadow-2xl"
         style={{ borderRadius: '5px' }}
       >
-        <div className="z-50 flex flex-col w-full px-2">
+        <div className="z-50 flex flex-col w-full">
           {!isSearch && (
             <div className="flex items-center justify-between mb-2">
               <p className="justify-center ml-2">COLOUR LIBRARY</p>
@@ -383,7 +385,7 @@ export default function PaletteManager({
             <div className="flex flex-col justify-center w-full gap-2">
               <div className={cl(isAdvanceSearch && 'w-full', 'flex items-center justify-between p-1')}>
                 {!isAdvanceSearch && <p>ADVANCE COLOUR SETTINGS</p>}
-                <span className="flex items-center justify-between gap-2">
+                <span className={cl(isAdvanceSearch && 'w-full', 'flex items-center justify-between gap-2')}>
                   {!isAdvanceSearch && (
                     <ToolTip title="Search Advance Colour">
                       <span onClick={() => setIsAdvanceSearch(true)}>
@@ -421,7 +423,7 @@ export default function PaletteManager({
               </div>
               <div className="flex items-center gap-1 mt-4">
                 <span
-                  className={`relative flex w-fit items-center justify-between gap-2 p-1 px-2.5 text-xs text-gray-500 bg-gray-200 rounded-md hover:text-primary-600 hover:bg-primary-100 ${
+                  className={`relative flex w-fit items-center justify-between gap-2 p-1 px-2.5 text-xs text-gray-500 bg-white border rounded-md hover:text-primary-600 hover:bg-primary-100 ${
                     showListShapes && 'text-white bg-primary-500'
                   }`}
                   onClick={() => setShowColorTypes((prev) => !prev)}
@@ -447,26 +449,28 @@ export default function PaletteManager({
                     </span>
                   )}
                 </span>
-                <div className="flex items-center justify-between w-full gap-2 -mt-5 grow">
+                <div className="grid w-full grid-cols-3 -mt-4 text-xs grow">
                   <div className="flex flex-col items-center justify-center">
                     <p>HEX CODE</p>
-                    <EditableInput value={color.hex} style={inputStyles} onChange={onChange} />
+                    <span className="w-full bg-white border h-7 rounded-l-md">
+                      <EditableInput value={color.hex} style={inputStyles} onChange={onChange} />
+                    </span>
                   </div>
                   <div className="flex flex-col items-center justify-center">
-                    <p>NAME</p>
-                    <span className="flex items-center h-6">{colorName}</span>
+                    <p className="w-full pl-2 text-left">NAME</p>
+                    <span className="flex items-center w-full pl-1 bg-white border-y h-7">{colorName}</span>
                   </div>
                   <div className="flex flex-col items-center justify-center">
-                    <p>OPACITY</p>
-                    <span className="flex items-center h-6">
-                      {color && color.rgb && color.rgb.a !== undefined && color.rgb.a * 100}%
+                    <p className="w-full pl-2 text-left">OPACITY</p>
+                    <span className="flex items-center w-full pl-1 bg-white border rounded-r-md h-7">
+                      {color && color.rgb && color.rgb.a !== undefined && Math.floor(color.rgb.a * 100)}%
                     </span>
                   </div>
                 </div>
               </div>
               <Input
                 placeholder="Please input library name"
-                bgColor="bg-gray-200"
+                bgColor="bg-white"
                 borderRadius="rounded-md py-0.5"
                 type="text"
                 name="name"

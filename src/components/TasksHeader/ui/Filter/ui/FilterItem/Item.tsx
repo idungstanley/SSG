@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
-import { setFilterFields } from '../../../../../../features/task/taskSlice';
+import { setFilterFields, setFiltersUpdated } from '../../../../../../features/task/taskSlice';
 import { ADDITIONAL_OPERATORS, unitValues } from '../../config/filterConfig';
 import {
   FilterId,
@@ -31,17 +31,25 @@ export function Item({ filter, initialFilters }: ItemProps) {
 
   const { key, values, operator, id } = filter;
 
-  const onDelete = (id: FilterId) => dispatch(setFilterFields(filters.filter((i) => i.id !== id)));
+  const onDelete = (id: FilterId) => {
+    dispatch(setFilterFields(filters.filter((i) => i.id !== id)));
+    dispatch(setFiltersUpdated(true));
+  };
 
   const onChange = (data: onChangeProps) => {
     dispatch(setFilterFields(modifyFilters(data, filters)));
+    dispatch(setFiltersUpdated(false));
   };
 
-  const onSelectOrDeselectAll = ({ type }: Pick<onSelectOrDeselectAllProps, 'type'>) =>
+  const onSelectOrDeselectAll = ({ type }: Pick<onSelectOrDeselectAllProps, 'type'>) => {
     dispatch(setFilterFields(selectOrDeselectAllFilter({ type, newValues: initialFilters[key].values, id }, filters)));
+    dispatch(setFiltersUpdated(false));
+  };
 
-  const onUndoChanges = (prevState: FilterValue[]) =>
+  const onUndoChanges = (prevState: FilterValue[]) => {
     dispatch(setFilterFields(undoChanges({ prevState, id }, filters)));
+    dispatch(setFiltersUpdated(false));
+  };
 
   return (
     <div className="flex items-center w-full space-x-2">

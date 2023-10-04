@@ -1,7 +1,9 @@
+import { useAppSelector } from '../app/hooks';
 import { IList } from '../features/hubs/hubs.interfaces';
-import { IField } from '../features/list/list.interfaces';
+import { IField, IFieldValue } from '../features/list/list.interfaces';
 import { ITeamMembersAndGroup } from '../features/settings/teamMembersAndGroups.interfaces';
 import { IStatus, ITaskFullList } from '../features/task/interface.tasks';
+import { ICustomField } from '../features/task/taskSlice';
 import { Hub } from '../pages/workspace/hubs/components/ActiveTree/activetree.interfaces';
 import { findCurrentList, updateListTasksCountManager } from './List';
 
@@ -141,6 +143,17 @@ export const taskDateUpdateManager = (
   return tasks;
 };
 
+export const deleteTaskManager = (taskIds: string[], listIds: string[], tasks: Record<string, ITaskFullList[]>) => {
+  if (listIds.length) {
+    const updatedTasks: Record<string, ITaskFullList[]> = { ...tasks };
+    for (let i = 0; i < listIds.length; i++) {
+      if (taskIds.length) updatedTasks[listIds[i]] = tasks[listIds[i]]?.filter((task) => !taskIds.includes(task.id));
+    }
+    return updatedTasks;
+  }
+  return tasks;
+};
+
 export const taskAssignessUpdateManager = (
   taskIds: string[],
   listIds: string[],
@@ -195,7 +208,7 @@ export const taskAssignessUpdateManager = (
   return tasks;
 };
 
-export const updateCustomFieldsManager = (
+export const createCustomFieldColumnManager = (
   tasks: Record<string, ITaskFullList[]>,
   customFieldData: IField,
   taskId?: string
@@ -221,6 +234,84 @@ export const updateCustomFieldsManager = (
   }
 
   return updatedTasks;
+};
+
+export const updateCustomFieldColumnManager = (
+  tasks: Record<string, ITaskFullList[]>,
+  subtasks: Record<string, ITaskFullList[]>,
+  customFieldColumnData: IField,
+  parentId: string
+) => {
+  const updatedTasks = { ...tasks };
+  const updatedSubtasks = { ...subtasks };
+
+  if (updatedTasks[parentId]) {
+    updatedTasks[parentId] = updatedTasks[parentId].map((task) => {
+      const filteredCustomFieldColumns = task.custom_field_columns?.filter(
+        (field) => field.id !== customFieldColumnData.id
+      ) as IField[];
+      return {
+        ...task,
+        custom_field_columns: [...filteredCustomFieldColumns, customFieldColumnData]
+      };
+    });
+  }
+
+  if (updatedSubtasks[parentId]) {
+    updatedSubtasks[parentId] = updatedSubtasks[parentId].map((task) => {
+      const filteredCustomFieldColumns = task.custom_field_columns?.filter(
+        (field) => field.id !== customFieldColumnData.id
+      ) as IField[];
+      return {
+        ...task,
+        custom_field_columns: [...filteredCustomFieldColumns, customFieldColumnData]
+      };
+    });
+  }
+
+  return { updatedTasks, updatedSubtasks };
+};
+
+export const updateCustomFieldManager = (
+  tasks: Record<string, ITaskFullList[]>,
+  subtasks: Record<string, ITaskFullList[]>,
+  customFieldData: { id: string; values: IFieldValue[] },
+  taskId: string
+) => {
+  const updatedTasks = { ...tasks };
+  const updatedSubtasks = { ...subtasks };
+
+  Object.keys(updatedTasks).map((listId) => {
+    updatedTasks[listId] = updatedTasks[listId].map((task) => {
+      if (taskId === task.id) {
+        const filteredCustomFields = task.custom_fields?.filter(
+          (field) => field.id !== customFieldData.id
+        ) as ICustomField[];
+        return {
+          ...task,
+          custom_fields: [...filteredCustomFields, customFieldData]
+        };
+      }
+      return task;
+    });
+  });
+
+  Object.keys(updatedSubtasks).map((listId) => {
+    updatedSubtasks[listId] = updatedSubtasks[listId].map((task) => {
+      if (task.id === taskId) {
+        const filteredCustomFields = task.custom_fields?.filter(
+          (field) => field.id !== customFieldData.id
+        ) as ICustomField[];
+        return {
+          ...task,
+          custom_fields: [...filteredCustomFields, customFieldData]
+        };
+      }
+      return task;
+    });
+  });
+
+  return { updatedTasks, updatedSubtasks };
 };
 
 const removeTaskFromOldPlace = (

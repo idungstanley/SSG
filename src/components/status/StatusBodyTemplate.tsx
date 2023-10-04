@@ -58,7 +58,7 @@ export default function StatusBodyTemplate({ item, setStatusTypesState }: Status
     if (item.type !== 'closed') setShowStatusColorDropdown(event.currentTarget);
   };
 
-  const handleStatusColor = (color: string | ListColourProps) => {
+  const handleStatusColor = (color: string | ListColourProps | null) => {
     if (setStatusTypesState) {
       setStatusTypesState((prevState) => {
         return Object.entries(prevState).reduce((acc, [name, statuses]) => {

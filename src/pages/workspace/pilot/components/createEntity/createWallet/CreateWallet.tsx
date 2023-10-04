@@ -18,20 +18,21 @@ import { EntityType } from '../../../../../../utils/EntityTypes/EntityType';
 import ArrowDown from '../../../../../../assets/icons/ArrowDown';
 import Wand from '../../../../../../assets/icons/Wand';
 import Assignee from '../../../../tasks/assignTask/Assignee';
-import Palette from '../../../../../../components/ColorPalette';
 import { ListColourProps } from '../../../../../../components/tasks/ListItem';
 import { createWalletManager } from '../../../../../../managers/Wallet';
 import { setFilteredResults } from '../../../../../../features/search/searchSlice';
 import { ErrorHasDescendant } from '../../../../../../types';
 import { toast } from 'react-hot-toast';
 import Toast from '../../../../../../common/Toast';
+import AlsoitMenuDropdown from '../../../../../../components/DropDowns';
+import ColorPalette from '../../../../../../components/ColorPalette/component/ColorPalette';
 
 export default function CreateWallet() {
   const dispatch = useAppDispatch();
   const { createWLID, selectedTreeDetails, hub } = useAppSelector((state) => state.hub);
 
-  const [paletteColor, setPaletteColor] = useState<string | ListColourProps | undefined>('');
-  const [showPalette, setShowPalette] = useState<boolean>(false);
+  const [paletteColor, setPaletteColor] = useState<string | ListColourProps | undefined | null>('');
+  const [showPalette, setShowPalette] = useState<null | HTMLDivElement>(null);
 
   const { type, id } = selectedTreeDetails;
 
@@ -64,9 +65,16 @@ export default function CreateWallet() {
   const handleWalletChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormState({ ...formState, [e.target.name]: e.target.value });
   };
+  const handlePaletteColor = (value: string | ListColourProps | undefined | null) => {
+    setPaletteColor(value);
+  };
   const handleShowPalette = (e: React.MouseEvent<HTMLDivElement | HTMLButtonElement, MouseEvent>) => {
     e.stopPropagation();
-    setShowPalette((prev) => !prev);
+    setShowPalette((e as React.MouseEvent<HTMLDivElement, MouseEvent>).currentTarget);
+  };
+
+  const handleClosePalette = () => {
+    setShowPalette(null);
   };
 
   const { name } = formState;
@@ -80,7 +88,7 @@ export default function CreateWallet() {
       });
     } catch (error) {
       const errorResponse = error as ErrorHasDescendant;
-      const isHasDescendant = errorResponse.data.data.has_descendants;
+      const isHasDescendant = errorResponse.data.data?.has_descendants;
       if (isHasDescendant) {
         toast.custom((t) => (
           <Toast type="error" title="Error Creating Entity" body="Parent Entity has a descendant" toastId={t.id} />
@@ -89,7 +97,7 @@ export default function CreateWallet() {
     }
   };
   return (
-    <div className="h-auto p-2 overflow-y-auto" style={{ maxHeight: '420px' }}>
+    <div className="h-auto p-2 overflow-y-auto bg-white" style={{ maxHeight: '420px' }}>
       <div className="flex flex-col mb-2">
         <span className="font-bold">Create A Wallet</span>
         <span className="font-medium">Allows you manage all entities within the workspace</span>
@@ -124,9 +132,9 @@ export default function CreateWallet() {
           <Checkbox checked={false} onChange={() => ({})} description="Host other entities" height="5" width="5" />
           <Checkbox checked={false} onChange={() => ({})} description="Host other entities" height="5" width="5" />
         </div>
-        <div className="relative mt-32 ml-24">
-          {showPalette ? <Palette title="Wallet Colour" setPaletteColor={setPaletteColor} /> : null}
-        </div>
+        <AlsoitMenuDropdown handleClose={handleClosePalette} anchorEl={showPalette}>
+          <ColorPalette handleClick={handlePaletteColor} />
+        </AlsoitMenuDropdown>
       </div>
       <div className="flex justify-between pt-2 space-x-3">
         <Button buttonStyle="white" onClick={onClose} loading={false} label="Cancel" width={20} height="h-7" />

@@ -20,7 +20,6 @@ import {
 } from '../../../../features/task/taskSlice';
 import { setActiveItem } from '../../../../features/workspace/workspaceSlice';
 import { UniqueIdentifier, useDraggable, useDroppable } from '@dnd-kit/core';
-import { ImCancelCircle } from 'react-icons/im';
 import CloseSubtask from '../../../../assets/icons/CloseSubtask';
 import OpenSubtask from '../../../../assets/icons/OpenSubtask';
 import { Capitalize } from '../../../../utils/NoCapWords/Capitalize';
@@ -30,7 +29,8 @@ import Badges from '../../../badges';
 import DetailsOnHover from '../../../Dropdown/DetailsOnHover/DetailsOnHover';
 import { EntityType } from '../../../../utils/EntityTypes/EntityType';
 import SubtasksIcon from '../../../../assets/icons/SubtasksIcon';
-import { ITask_statuses } from '../../../../features/list/list.interfaces';
+import SaveIcon from '../../../../assets/icons/SaveIcon.svg';
+import Close from '../../../../assets/icons/Close.svg';
 
 interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   task: Task;
@@ -39,7 +39,7 @@ interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   showSubTasks?: boolean;
   setShowSubTasks: (i: boolean) => void;
   paddingLeft?: number;
-  task_status?: string;
+  taskStatusId?: string;
   isListParent: boolean;
   tags: ReactNode;
   dragElement?: ReactNode;
@@ -48,8 +48,6 @@ interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   isOver?: boolean;
   isSplitSubtask?: boolean;
   isLastSubtaskLevel: boolean;
-  isBlockToOpenSubtasks?: boolean;
-  taskStatuses?: ITask_statuses[];
 }
 
 export function StickyCol({
@@ -60,15 +58,13 @@ export function StickyCol({
   taskIndex,
   parentId,
   isListParent,
-  task_status,
+  taskStatusId,
   onClose,
   task,
-  taskStatuses,
   paddingLeft = 0,
   dragElement,
   isSplitSubtask,
   isLastSubtaskLevel,
-  isBlockToOpenSubtasks,
   ...props
 }: ColProps) {
   const dispatch = useAppDispatch();
@@ -168,7 +164,7 @@ export function StickyCol({
         isListParent,
         id: parentId as string,
         assignees: [currTeamMemberId] as string[],
-        task_status_id: task_status as string
+        task_status_id: taskStatusId as string
       });
     }
   };
@@ -218,7 +214,7 @@ export function StickyCol({
   }, [selectedTasksArray, task.id]);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    dispatch(setDuplicateTaskObj({ ...duplicateTaskObj, task_name: task.name, task_id: task.id }));
+    dispatch(setDuplicateTaskObj({ ...duplicateTaskObj, task_name: task.name, task_id: task.id, fullTask: task }));
     const indexInArray = selectedIndexArray.indexOf(taskIndex as number);
     if (!selectedIndexArray.includes(taskIndex as number)) {
       setSelectedIndexArray((prev) => {
@@ -343,27 +339,19 @@ export function StickyCol({
                 <span className={cl('h-0.5 bg-alsoit-purple-300 w-full m-0')}></span>
               </span>
             )}
-            <button onClick={isBlockToOpenSubtasks ? () => null : onToggleDisplayingSubTasks} className="pl-1">
+            <button onClick={onToggleDisplayingSubTasks} className="pl-1">
               {showSubTasks || toggleAllSubtask ? (
-                <div
-                  className={`${
-                    task.descendants_count > 0 && !isBlockToOpenSubtasks ? 'w-3 h-3' : 'opacity-0 w-3 h-3'
-                  }`}
-                >
+                <div className={`${task.descendants_count > 0 ? 'w-3 h-3' : 'opacity-0 w-3 h-3'}`}>
                   <CloseSubtask />
                 </div>
               ) : (
-                <div
-                  className={`${
-                    task.descendants_count > 0 && !isBlockToOpenSubtasks ? 'w-3 h-3' : 'opacity-0 w-3 h-3'
-                  }`}
-                >
+                <div className={`${task.descendants_count > 0 ? 'w-3 h-3' : 'opacity-0 w-3 h-3'}`}>
                   <OpenSubtask />
                 </div>
               )}
             </button>
             <div onClick={() => dispatch(setCurrentTaskStatusId(task.id as string))}>
-              <StatusDropdown TaskCurrentStatus={task.status} taskStatuses={taskStatuses} />
+              <StatusDropdown taskCurrentStatus={task.status} taskStatuses={task.task_statuses} />
             </div>
             {separateSubtasksMode && task?.parentName && !paddingLeft ? (
               <ToolTip title={task.parentName}>
@@ -453,21 +441,24 @@ export function StickyCol({
               `relative border-t ${verticalGrid && 'border-r'} w-full h-16  py-4 p-4 flex items-center`
             )}
           >
-            <div className="absolute flex ml-2 -mt-10 space-x-1">
+            <div className="absolute flex space-x-1 bottom-0 right-0">
               <ToolTip title="Cancel">
-                <div className="p-1 border rounded-md" style={{ borderColor: '#FFE7E7' }}>
-                  <ImCancelCircle onClick={onClose} />
+                <div
+                  className="border rounded-sm"
+                  style={{ borderColor: '#B2B2B280', borderWidth: '0.5px', width: '20px' }}
+                  onClick={onClose}
+                >
+                  <img src={Close} alt="Cancel"></img>
                 </div>
               </ToolTip>
-              <button
-                onClick={(e) => handleOnSave(e as React.MouseEvent<HTMLButtonElement, MouseEvent>, task.id)}
-                className="flex items-center h-6 px-6 text-sm text-white rounded-md bg-alsoit-success"
-              >
-                Save
-              </button>
+              <ToolTip title="Save">
+                <span onClick={(e) => handleOnSave(e as React.MouseEvent<HTMLButtonElement, MouseEvent>, task.id)}>
+                  <img src={SaveIcon} alt="Save"></img>
+                </span>
+              </ToolTip>
             </div>
             <div className="pt-2 ml-4">
-              <StatusDropdown TaskCurrentStatus={task.status} />
+              <StatusDropdown taskCurrentStatus={task.status} taskStatuses={task.task_statuses} />
             </div>
             <div className="flex flex-col items-start justify-start pt-2 pl-2 space-y-1">
               <p

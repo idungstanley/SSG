@@ -3,7 +3,8 @@ import { teamGroups, teamMember } from '../../pages/workspace/tasks/timeclock/en
 import { ICustomField, ImyTaskData } from './taskSlice';
 import { ITeamMembersAndGroup } from '../settings/teamMembersAndGroups.interfaces';
 import { Header } from '../../components/Pilot/components/TimeClock/ClockLog';
-import { IField } from '../list/list.interfaces';
+import { IField, ITask_statuses } from '../list/list.interfaces';
+import { RecurFrequency, TypeOptionsProps } from '../../components/DatePicker/RecurringTypes';
 
 export interface UpdateTaskProps {
   task_id_array?: string[];
@@ -117,6 +118,7 @@ export interface ITaskFullList {
   checklist_items_count: number;
   checklist_done_items_count: number;
   has_attachments: boolean;
+  task_statuses: ITask_statuses[];
   start_date: string | null;
   end_date: string | null;
   assignees: ITeamMembersAndGroup[];
@@ -316,6 +318,7 @@ export interface customPropertiesProps {
   symbol?: string;
   include_groups?: boolean;
   single_user?: boolean;
+  formula?: string;
 }
 
 export interface ITaskRecurResponse {
@@ -333,7 +336,7 @@ export interface ITaskCreateProps {
   taskId?: string;
   type: string;
   execution_type: string;
-  type_options?: string[];
+  type_options?: TypeOptionsProps;
   new_task?: string | string[];
-  recur_options?: string[] | number[];
+  recur_options?: RecurFrequency;
 }

@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { listColumnProps } from '../../pages/workspace/tasks/component/views/ListColumns';
-import { IField } from '../list/list.interfaces';
+import { IField, IFieldValue, ITask_statuses } from '../list/list.interfaces';
 import {
   IDuration,
   IExtraFields,
@@ -10,6 +10,7 @@ import {
   ITaskFullList,
   ITimerDetails,
   Status,
+  Task,
   TaskKey
 } from './interface.tasks';
 import {
@@ -24,19 +25,9 @@ import { ItaskViews } from '../hubs/hubs.interfaces';
 
 export interface ICustomField {
   id: string;
-  task_id: null | string;
-  custom_field_id: string;
-  custom_field: IField;
-  name: string;
-  type: string;
-  values: [
-    {
-      id: string;
-      value: string;
-      name: string;
-    }
-  ];
+  values: IFieldValue[];
 }
+
 export interface ActiveTaskColumnProps {
   id: string;
   header: string;
@@ -58,12 +49,13 @@ interface customPropertyInfo {
   };
 }
 
-interface IDuplicateTaskObj {
+export interface IDuplicateTaskObj {
   task_name: string;
   task_id: string;
   list_id: string;
   is_everything: boolean;
   popDuplicateTaskModal: boolean;
+  fullTask: Task | null;
 }
 
 export interface ImyTaskData {
@@ -79,6 +71,7 @@ export interface ImyTaskData {
   closed_subtasks_count: number;
   checklist_items_count: number;
   checklist_done_items_count: number;
+  task_statuses: ITask_statuses[];
   has_descendants: boolean;
   has_attachments: boolean;
   end_date: string | null;
@@ -155,17 +148,19 @@ interface TaskState {
   comfortableView: boolean;
   comfortableViewWrap: boolean;
   duplicateTaskObj: IDuplicateTaskObj;
+  currentSelectedDuplicateArr: string[];
   verticalGrid: boolean;
   showNewTaskField: boolean;
   showNewTaskId: string;
   singleLineView: boolean;
   toggleAllSubtask: boolean;
+  toggleAllSubtaskSplit: string[];
   separateSubtasksMode: boolean;
   CompactView: boolean;
   taskUpperCase: boolean;
   verticalGridlinesTask: boolean;
   splitSubTaskState: boolean;
-  splitSubTaskLevels: string;
+  splitSubTaskLevels: string[];
   CompactViewWrap: boolean;
   triggerSaveSettings: boolean;
   triggerAutoSave: boolean;
@@ -223,6 +218,7 @@ interface TaskState {
   HistoryFilterMemory: IHistoryFilterMemory | null;
   filters: FilterFieldsWithOption;
   subtasksfilters: Record<string, FilterFieldsWithOption>;
+  isFiltersUpdated: boolean;
   statusId: string;
   currTaskListId: string;
   entityForCustom: entityForCustom;
@@ -254,17 +250,26 @@ const initialState: TaskState = {
   saveSettingLocal: null,
   saveSettingList: undefined,
   saveSettingOnline: null,
-  duplicateTaskObj: { task_name: '', task_id: '', list_id: '', is_everything: true, popDuplicateTaskModal: true },
+  duplicateTaskObj: {
+    task_name: '',
+    task_id: '',
+    list_id: '',
+    is_everything: true,
+    popDuplicateTaskModal: true,
+    fullTask: null
+  },
   selectedTasksArray: [],
   verticalGrid: false,
   taskUpperCase: false,
+  currentSelectedDuplicateArr: [],
   triggerSaveSettings: false,
   triggerAutoSave: false,
   triggerSaveSettingsModal: false,
   toggleAllSubtask: false,
+  toggleAllSubtaskSplit: [],
   verticalGridlinesTask: false,
   splitSubTaskState: false,
-  splitSubTaskLevels: TWO_SUBTASKS_LEVELS,
+  splitSubTaskLevels: [],
   separateSubtasksMode: false,
   CompactView: false,
   CompactViewWrap: false,
@@ -317,6 +322,7 @@ const initialState: TaskState = {
     option: DEFAULT_FILTERS_OPTION
   },
   subtasksfilters: {},
+  isFiltersUpdated: true,
   selectedDate: null,
   HistoryFilterMemory: null,
   statusId: '',
@@ -357,6 +363,9 @@ export const taskSlice = createSlice({
     setSubtasksFilters(state, action: PayloadAction<Record<string, FilterFieldsWithOption>>) {
       state.subtasksfilters = action.payload;
     },
+    setFiltersUpdated(state, action: PayloadAction<boolean>) {
+      state.isFiltersUpdated = action.payload;
+    },
     setAssigneeIds(state, action: PayloadAction<string[]>) {
       state.assigneeIds = action.payload;
     },
@@ -368,6 +377,9 @@ export const taskSlice = createSlice({
     },
     setDuplicateTaskObj(state, action: PayloadAction<IDuplicateTaskObj>) {
       state.duplicateTaskObj = action.payload;
+    },
+    setCurrentSelectedDuplicateArr(state, action: PayloadAction<string[]>) {
+      state.currentSelectedDuplicateArr = action.payload;
     },
     setSearchValue(state, action: PayloadAction<string>) {
       state.searchValue = action.payload;
@@ -414,28 +426,25 @@ export const taskSlice = createSlice({
     hideTaskColumns(state, action) {
       return {
         ...state,
-        hideTask:
-          state.hideTask.length != 0
-            ? state.hideTask.map((prev) => {
-                if (prev.field === action.payload) {
-                  return {
-                    ...prev,
-                    hidden: !prev.hidden
-                  };
-                } else {
-                  return prev;
-                }
-              })
-            : state.taskColumns.map((prev) => {
-                if (prev.field === action.payload) {
-                  return {
-                    ...prev,
-                    hidden: !prev.hidden
-                  };
-                } else {
-                  return prev;
-                }
-              })
+        hideTask: state.hideTask.length
+          ? state.hideTask.map((prev) => {
+              if (prev.id === action.payload) {
+                return {
+                  ...prev,
+                  hidden: !prev.hidden
+                };
+              }
+              return prev;
+            })
+          : state.taskColumns.map((prev) => {
+              if (prev.id === action.payload) {
+                return {
+                  ...prev,
+                  hidden: !prev.hidden
+                };
+              }
+              return prev;
+            })
       };
     },
     getComfortableView(state, action: PayloadAction<boolean>) {
@@ -472,6 +481,12 @@ export const taskSlice = createSlice({
     setSeparateSubtasksMode(state, action: PayloadAction<boolean>) {
       state.separateSubtasksMode = action.payload;
       state.toggleAllSubtask = false;
+      state.toggleAllSubtaskSplit = [];
+    },
+    setToggleAllSubtaskSplit(state, action: PayloadAction<string[]>) {
+      state.toggleAllSubtaskSplit = action.payload;
+      state.toggleAllSubtask = false;
+      state.separateSubtasksMode = false;
     },
     setShowNewTaskField(state, action: PayloadAction<boolean>) {
       state.showNewTaskField = action.payload;
@@ -488,7 +503,7 @@ export const taskSlice = createSlice({
     getSplitSubTask(state, action: PayloadAction<boolean>) {
       state.splitSubTaskState = action.payload;
     },
-    getSplitSubTaskLevels(state, action: PayloadAction<string>) {
+    getSplitSubTaskLevels(state, action: PayloadAction<string[]>) {
       state.splitSubTaskLevels = action.payload;
     },
     setSelectedTasksArray(state, action: PayloadAction<string[]>) {
@@ -645,6 +660,7 @@ export const {
   setFilterFields,
   setFilterOption,
   setSubtasksFilters,
+  setFiltersUpdated,
   setAssigneeIds,
   setStatusId,
   setCurrTaskListId,
@@ -658,6 +674,7 @@ export const {
   getSingleLineView,
   getTaskUpperCase,
   setDuplicateTaskObj,
+  setCurrentSelectedDuplicateArr,
   getVerticalGridlinesTask,
   getSplitSubTask,
   getSplitSubTaskLevels,
@@ -679,6 +696,7 @@ export const {
   setCurrentTaskId,
   setDefaultSubtaskId,
   setToggleAllSubtask,
+  setToggleAllSubtaskSplit,
   setSeparateSubtasksMode,
   setSelectedTasksArray,
   setAddNewTaskItem,

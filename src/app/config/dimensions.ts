@@ -1,4 +1,6 @@
+import { useMemo } from 'react';
 import { getRelativeWidth } from '../../utils/widthUtils';
+import { useAppSelector } from '../hooks';
 
 const sidebarFromLS = JSON.parse(localStorage.getItem('sidebar') || '""') as
   | {
@@ -50,4 +52,44 @@ const dimensions = {
   }
 };
 
-export { dimensions, NAVIGATION_AND_EXTENDED_MAX_ALLOWED };
+const STORAGE_KEYS = {
+  SIDEBAR_WIDTH: 'sidebarWidth',
+  PILOT_WIDTH: 'pilotWidth',
+  CURRENT_USER_ID: 'currentUserId',
+  USER: 'user',
+  USER_SETTINGS_DATA: 'userSettingsData',
+  ACCESS_TOKEN: 'accessToken',
+  CURRENT_WORKSPACE_ID: 'currentWorkspaceId',
+  IS_PILOT_MINIFIED: 'isPilotMinified',
+  EXTENDED_BAR_WIDTH: 'extendedBarWidth'
+};
+
+const pilotWidthFromLS = JSON.parse(
+  localStorage.getItem(STORAGE_KEYS.PILOT_WIDTH) ?? `${dimensions.pilot.default}`
+) as number;
+
+const calculateWidthForContent = () => {
+  const { showSidebar, userSettingsData } = useAppSelector((state) => state.account);
+  const { show: showFullPilot, id } = useAppSelector((state) => state.slideOver.pilotSideOver);
+  const { sidebarWidthRD, showExtendedBar } = useAppSelector((state) => state.workspace);
+  const sidebarWidth = showSidebar ? userSettingsData?.sidebarWidth : sidebarWidthRD;
+  const extendedBarWidth = showExtendedBar ? userSettingsData?.extendedBarWidth : 0;
+  const pilotWidth = showFullPilot && id ? userSettingsData?.pilotWidth : !showFullPilot && id ? 50 : undefined;
+  const calculatedContentWidth = useMemo(() => {
+    return `calc(100vw - ${sidebarWidth}px - ${extendedBarWidth}px - ${pilotWidth}px)`;
+  }, [
+    pilotWidth,
+    sidebarWidth,
+    extendedBarWidth,
+    pilotWidthFromLS,
+    userSettingsData?.sidebarWidth,
+    showFullPilot,
+    showSidebar,
+    userSettingsData?.pilotWidth,
+    userSettingsData?.extendedBarWidth,
+    showExtendedBar
+  ]);
+  return calculatedContentWidth;
+};
+
+export { dimensions, NAVIGATION_AND_EXTENDED_MAX_ALLOWED, STORAGE_KEYS, calculateWidthForContent };

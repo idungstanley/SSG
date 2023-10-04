@@ -58,7 +58,7 @@ function EditDropdown() {
     setAnchorEl(null);
   };
 
-  const handleColor = (color: string | ListColourProps) => {
+  const handleColor = (color: string | ListColourProps | null) => {
     const colorValue = typeof color === 'string' ? color : '';
     setFormInputs((prevInputs) => {
       return prevInputs?.map((i) => {
@@ -82,16 +82,16 @@ function EditDropdown() {
     });
   };
 
-  const handleNameColor = (color: string | ListColourProps) => {
+  const handleNameColor = (color: string | ListColourProps | null) => {
     setPropertyColor(color as string);
   };
 
   return (
-    <div className="bg-alsoit-gray-50 p-4 my-2 rounded-2xl">
+    <div className="p-4 my-2 bg-alsoit-gray-50 rounded-2xl">
       <div className="w-full">
-        <p className="text-alsoit-text-xi text-alsoit-gray-100 my-2 font-semibold">Tittle</p>
+        <p className="my-2 font-semibold text-alsoit-text-xi text-alsoit-gray-100">Tittle</p>
         <div
-          className="flex items-center w-full rounded-md gap-1 w-full bg-white"
+          className="flex items-center w-full gap-1 bg-white rounded-md"
           style={{ height: '30px', borderRadius: '6px' }}
         >
           <input
@@ -112,11 +112,11 @@ function EditDropdown() {
         </div>
       </div>
       <div>
-        <h2 className="text-alsoit-text-xi mt-4 font-semibold">DEFINE PROPERTY OPTION</h2>
+        <h2 className="mt-4 font-semibold text-alsoit-text-xi">DEFINE PROPERTY OPTION</h2>
       </div>
       {formInputs?.map((i, index) => (
         <div className="relative w-full" key={i.id}>
-          <div className="flex items-center justify-between rounded-md bg-white my-2 w-full">
+          <div className="flex items-center justify-between w-full my-2 bg-white rounded-md">
             {i.color && (
               <span
                 className="w-2"
@@ -131,17 +131,17 @@ function EditDropdown() {
               name={`input_${index + 1}`}
               value={i.name}
               onChange={(event) => handleInputChange(event, i.id)}
-              className="block border-0 py-1 shadow-sm ring-0 ring-inset placeholder-gray-300 focus:ring-0 focus:ring-inset focus:ring-indigo-600 text-alsoit-gray-300 text-alsoit-text-xi sm:text-sm sm:leading-6 w-2/3"
+              className="block w-2/3 py-1 placeholder-gray-300 border-0 shadow-sm ring-0 ring-inset focus:ring-0 focus:ring-inset focus:ring-indigo-600 text-alsoit-gray-300 text-alsoit-text-xi sm:text-sm sm:leading-6"
             />
             <div className="flex items-center gap-1">
               <button
-                className="text-alsoit-text-xi text-alsoit-gray-300 font-semibold hover:text-alsoit-purple-300 cursor-pointer"
+                className="font-semibold cursor-pointer text-alsoit-text-xi text-alsoit-gray-300 hover:text-alsoit-purple-300"
                 onClick={(e) => handleClick(e, i.id)}
               >
                 Change Option Color
               </button>
               <button>
-                <TrashIcon className="w-4 h-4 text-gray-300 cursor-pointer hover:text-primary-300 transition" />
+                <TrashIcon className="w-4 h-4 text-gray-300 transition cursor-pointer hover:text-primary-300" />
               </button>
             </div>
           </div>
@@ -151,36 +151,36 @@ function EditDropdown() {
         </div>
       ))}
       <button
-        className="text-white bg-alsoit-purple-300 p-2 rounded flex items-center gap-2"
+        className="flex items-center gap-2 p-2 text-white rounded bg-alsoit-purple-300"
         onClick={handleAddNewOption}
       >
         <PlusCircleIcon className="w-5 h-5" />
         <span>Add new option</span>
       </button>
 
-      <div className="mt-4 w-full flex justify-between">
+      <div className="flex justify-between w-full mt-4">
         <button
           style={{ width: '79px', height: '24px' }}
-          className="bg-white text-alsoit-text-md text-alsoit-danger rounded"
+          className="bg-white rounded text-alsoit-text-md text-alsoit-danger"
         >
           Delete Field
         </button>
         <div className="flex gap-2">
           <button
             style={{ width: '79px', height: '24px' }}
-            className="bg-white text-alsoit-text-md text-alsoit-danger rounded"
+            className="bg-white rounded text-alsoit-text-md text-alsoit-danger"
           >
             Cancel
           </button>
           <button
             style={{ width: '79px', height: '24px' }}
-            className="bg-white text-alsoit-text-md text-alsoit-gray-300 rounded"
+            className="bg-white rounded text-alsoit-text-md text-alsoit-gray-300"
           >
             Replace
           </button>
           <button
             style={{ width: '79px', height: '24px' }}
-            className="bg-alsoit-success text-alsoit-text-md text-white rounded"
+            className="text-white rounded bg-alsoit-success text-alsoit-text-md"
             onClick={handleEditCustomField}
           >
             Save
