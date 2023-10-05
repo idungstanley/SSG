@@ -37,7 +37,13 @@ export default function Header({ menu, children, isMinified, additionalNavItems 
       value: { ...userSettingsData, isPilotMinified: isMinified },
       resolution: resolution
     });
-    localStorage.setItem(STORAGE_KEYS.IS_PILOT_MINIFIED, JSON.stringify(isMinified));
+    localStorage.setItem(
+      STORAGE_KEYS.USER_SETTINGS_DATA,
+      JSON.stringify({
+        ...userSettingsData,
+        isPilotMinified: isMinified
+      })
+    );
     dispatch(setActiveTabId());
     dispatch(setShowPilotSideOver({ ...pilotSideOver, show: isMinified }));
   };
