@@ -6,6 +6,7 @@ import { useDeleteTag, useUpdateTag } from '../../../../../features/workspace/ta
 import { cl } from '../../../../../utils';
 import { SelectColor } from './SelectColor';
 import TagActions from './TagActions';
+import { FaTags } from 'react-icons/fa';
 
 interface TagItemProps {
   tag: Tag;
@@ -27,7 +28,6 @@ export function TagItem({ tag, onClick, entityId, entityType }: TagItemProps) {
 
   const updateTag = (data: { name?: string; color?: string }) => {
     setIsEditable(false);
-
     onUpdate({
       id,
       name: data.name?.trim(),
@@ -39,7 +39,7 @@ export function TagItem({ tag, onClick, entityId, entityType }: TagItemProps) {
     {
       name: 'Assign Tag',
       onClick: () => onClick(id),
-      icon: <TrashIcon className="w-4 h-4" />
+      icon: <FaTags className="w-4 h-4" />
     },
     {
       name: 'Delete',
@@ -68,12 +68,6 @@ export function TagItem({ tag, onClick, entityId, entityType }: TagItemProps) {
     }
   };
 
-  const handleClick = () => {
-    if (!isEditable) {
-      onClick(id);
-    }
-  };
-
   const handleClickColor = (i: string) => {
     setColor(i);
 
@@ -91,6 +85,7 @@ export function TagItem({ tag, onClick, entityId, entityType }: TagItemProps) {
           onKeyDown={handleKeyDown}
           required
           value={name}
+          autoFocus={isEditable}
           minLength={2}
           type="text"
           className={cl(
