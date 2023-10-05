@@ -16,7 +16,8 @@ import {
   setSelectedTasksArray,
   setShowTaskNavigation,
   setTaskIdForPilot,
-  setDuplicateTaskObj
+  setDuplicateTaskObj,
+  setSelectedIndexListId
 } from '../../../../features/task/taskSlice';
 import { setActiveItem } from '../../../../features/workspace/workspaceSlice';
 import { UniqueIdentifier, useDraggable, useDroppable } from '@dnd-kit/core';
@@ -229,6 +230,8 @@ export function StickyCol({
       setSelectedIndexArray(updatedArray);
     }
     dispatch(setSelectedIndexStatus(task.status.name));
+    dispatch(setSelectedIndexListId(task.list_id));
+
     const isChecked = e.target.checked;
     dispatch(setShowTaskNavigation(isChecked));
     if (isChecked) {
