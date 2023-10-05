@@ -19,6 +19,7 @@ import { QueryClient, useInfiniteQuery, useMutation, useQuery, useQueryClient } 
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import {
   setDuplicateTaskObj,
+  setNewTaskPriority,
   setScreenRecording,
   setScreenRecordingMedia,
   setSelectedListIds,
@@ -51,7 +52,6 @@ import {
 } from '../../managers/Task';
 import { ITeamMembersAndGroup } from '../settings/teamMembersAndGroups.interfaces';
 import { useDispatch } from 'react-redux';
-import { runTimer } from '../../utils/TimerCounter';
 import { updateListTasksCountManager } from '../../managers/List';
 import { getHub } from '../hubs/hubSlice';
 import { setFilteredResults } from '../search/searchSlice';
@@ -200,8 +200,9 @@ const addTask = (data: {
   isListParent: boolean;
   task_status_id: string;
   assignees?: string[];
+  newTaskPriority?: string;
 }) => {
-  const { name, id, isListParent, task_status_id, assignees } = data;
+  const { name, id, isListParent, task_status_id, assignees, newTaskPriority: priority } = data;
 
   const parentId = isListParent ? { list_id: id } : { parent_id: id };
 
@@ -212,7 +213,8 @@ const addTask = (data: {
       name,
       ...parentId,
       assignees,
-      task_status_id
+      task_status_id,
+      priority
     }
   });
   return response;
@@ -226,6 +228,7 @@ export const useAddTask = (task?: Task) => {
 
   return useMutation(addTask, {
     onSuccess: (data) => {
+      dispatch(setNewTaskPriority('normal'));
       if (data.data.task.parent_id) {
         // add subtask
         const updatedSubtasks = addNewSubtaskManager(
@@ -637,7 +640,7 @@ export const UseUpdateTaskPrioritiesServices = ({ task_id_array, priorityDataUpd
       return data;
     },
     {
-      enabled: !!currentTaskIds.length && !!priorityDataUpdate,
+      enabled: !!currentTaskIds.length && !!priorityDataUpdate && currentTaskPriorityId != '0',
       cacheTime: 0,
       onSuccess: () => {
         if (listIds) {
@@ -746,7 +749,7 @@ export const createTimeEntriesService = (data: { queryKey: (string | undefined)[
 
 export const createManualTimeEntry = () => {
   const queryClient = useQueryClient();
-  const mutation = useMutation(
+  const { data, isError, isLoading, mutateAsync, isSuccess } = useMutation(
     async ({
       start_date,
       end_date,
@@ -780,17 +783,16 @@ export const createManualTimeEntry = () => {
       onSuccess: () => queryClient.invalidateQueries(['timeclock'])
     }
   );
-  return mutation;
+  return { data, isError, isLoading, mutateAsync, isSuccess };
 };
 
 export const useCurrentTime = ({ workspaceId }: { workspaceId?: string }) => {
   const dispatch = useAppDispatch();
-
-  const { data, isLoading, isError, refetch } = useQuery(
+  const { status, refetch, data } = useQuery(
     ['timeData'],
     async () => {
       const response = await requestNew<
-        { data: { time_entry: { start_date: string; model_type: string; model_id: string } } } | undefined
+        { data: { time_entry: { start_date: string; model: string; model_id: string } } } | undefined
       >({
         method: 'GET',
         url: 'time-entries/current'
@@ -801,15 +803,24 @@ export const useCurrentTime = ({ workspaceId }: { workspaceId?: string }) => {
       onSuccess: (data) => {
         const dateData = data?.data;
         const dateString = dateData?.time_entry;
-        const entityCheck = () =>
-          dateString?.model_type ===
-          (EntityType.hub ||
-            EntityType.list ||
-            EntityType.subHub ||
-            EntityType.subWallet ||
-            EntityType.subtask ||
-            EntityType.task ||
-            EntityType.wallet);
+
+        const entityCheck = (): boolean => {
+          const validEntityTypes = [
+            EntityType.hub,
+            EntityType.list,
+            EntityType.subHub,
+            EntityType.subWallet,
+            EntityType.subtask,
+            EntityType.task,
+            EntityType.wallet
+          ];
+
+          if (dateString?.model !== undefined) {
+            return validEntityTypes.includes(dateString.model);
+          }
+
+          return false;
+        };
 
         if (dateData?.time_entry === null) {
           dispatch(setTimerStatus(false));
@@ -823,11 +834,11 @@ export const useCurrentTime = ({ workspaceId }: { workspaceId?: string }) => {
           entityCheck() &&
             dispatch(
               setTimerLastMemory({
-                hubId: dateString.model_type === EntityType.hub ? dateString.model_id : null,
+                hubId: dateString.model === EntityType.hub ? dateString.model_id : null,
                 activeTabId: 6,
-                subhubId: dateString.model_type === EntityType.subHub ? dateString.model_id : null,
-                listId: dateString.model_type === EntityType.list ? dateString.model_id : null,
-                taskId: dateString.model_type === EntityType.task ? dateString.model_id : null,
+                subhubId: dateString.model === EntityType.subHub ? dateString.model_id : null,
+                listId: dateString.model === EntityType.list ? dateString.model_id : null,
+                taskId: dateString.model === EntityType.task ? dateString.model_id : null,
                 workSpaceId: workspaceId
               })
             );
@@ -835,9 +846,8 @@ export const useCurrentTime = ({ workspaceId }: { workspaceId?: string }) => {
       }
     }
   );
-  runTimer({ isRunning: !!data?.data.time_entry });
 
-  return { data, isLoading, isError, refetch };
+  return { status, refetch, data };
 };
 
 export const StartTimeEntryService = () => {

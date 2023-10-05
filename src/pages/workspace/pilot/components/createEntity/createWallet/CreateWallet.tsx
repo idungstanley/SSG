@@ -10,6 +10,7 @@ import {
 } from '../../../../../../features/hubs/hubSlice';
 import { createWalletService } from '../../../../../../features/wallet/walletService';
 import {
+  setActiveItem,
   setCreateEntityType,
   setCreateWlLink,
   setShowOverlay
@@ -26,18 +27,32 @@ import { toast } from 'react-hot-toast';
 import Toast from '../../../../../../common/Toast';
 import AlsoitMenuDropdown from '../../../../../../components/DropDowns';
 import ColorPalette from '../../../../../../components/ColorPalette/component/ColorPalette';
+import { useNavigate } from 'react-router-dom';
 
 export default function CreateWallet() {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const { createWLID, selectedTreeDetails, hub } = useAppSelector((state) => state.hub);
 
   const [paletteColor, setPaletteColor] = useState<string | ListColourProps | undefined | null>('');
   const [showPalette, setShowPalette] = useState<null | HTMLDivElement>(null);
+  const { currentWorkspaceId } = useAppSelector((state) => state.auth);
 
   const { type, id } = selectedTreeDetails;
 
   const createWallet = useMutation(createWalletService, {
     onSuccess: (data) => {
+      const listDetails = data?.data.wallet;
+      navigate(`/${currentWorkspaceId}/tasks/w/${listDetails.id}`, {
+        replace: true
+      });
+      dispatch(
+        setActiveItem({
+          activeItemType: EntityType.wallet,
+          activeItemId: listDetails.id,
+          activeItemName: listDetails.name
+        })
+      );
       dispatch(setCreateEntityType(null));
       dispatch(setSubDropdownMenu(false));
       dispatch(setShowOverlay(false));

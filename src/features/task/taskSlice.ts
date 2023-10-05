@@ -141,7 +141,9 @@ interface TaskState {
   taskColumns: listColumnProps[];
   hideTask: listColumnProps[];
   currentTaskId: string | null;
+  newTaskPriority: string;
   selectedTasksArray: string[];
+  selectedIndexListId: string | null;
   saveSettingLocal: { [key: string]: boolean } | null;
   saveSettingList: ItaskViews | undefined;
   saveSettingOnline: { [key: string]: boolean } | null;
@@ -260,8 +262,10 @@ const initialState: TaskState = {
     fullTask: null
   },
   selectedTasksArray: [],
+  selectedIndexListId: null,
   verticalGrid: false,
   taskUpperCase: false,
+  newTaskPriority: 'normal',
   currentSelectedDuplicateArr: [],
   triggerSaveSettings: false,
   triggerAutoSave: false,
@@ -499,6 +503,9 @@ export const taskSlice = createSlice({
     setShowNewTaskId(state, action: PayloadAction<string>) {
       state.showNewTaskId = action.payload;
     },
+    setNewTaskPriority(state, action: PayloadAction<string>) {
+      state.newTaskPriority = action.payload;
+    },
     getTaskUpperCase(state, action: PayloadAction<boolean>) {
       state.taskUpperCase = action.payload;
     },
@@ -513,6 +520,9 @@ export const taskSlice = createSlice({
     },
     setSelectedTasksArray(state, action: PayloadAction<string[]>) {
       state.selectedTasksArray = action.payload;
+    },
+    setSelectedIndexListId(state, action: PayloadAction<string | null>) {
+      state.selectedIndexListId = action.payload;
     },
     getSingleLineView(state, action: PayloadAction<boolean>) {
       state.singleLineView = action.payload;
@@ -698,6 +708,7 @@ export const {
   setShowTaskNavigation,
   setShowNewTaskField,
   setShowNewTaskId,
+  setNewTaskPriority,
   setRmWatcher,
   setCurrentTaskId,
   setDefaultSubtaskId,
@@ -705,6 +716,7 @@ export const {
   setToggleAllSubtaskSplit,
   setSeparateSubtasksMode,
   setSelectedTasksArray,
+  setSelectedIndexListId,
   setAddNewTaskItem,
   setCloseTaskListView,
   setTriggerSaveSettings,

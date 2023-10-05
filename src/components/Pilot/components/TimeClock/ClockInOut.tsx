@@ -22,32 +22,6 @@ export default function ClockInOut() {
     include_filters: true
   });
 
-  // Get currently active timers
-  // const { data: getCurrent } = GetTimeEntriesService({
-  //   itemId: activeItemId,
-  //   trigger: activeItemType === EntityType.subHub ? EntityType.hub : activeItemType,
-  //   is_active: 1
-  // });
-
-  // const activeTimerCheck = () => {
-  //   if (timerStatus && !prompt) {
-  //     setPrompt(true);
-  //   } else {
-  //     setPrompt(false);
-  //   }
-  // };
-
-  // const handleTimeSwitch = () => {
-  //   stop();
-  //   setPrompt(false);
-  //   setNewtimer(!newTimer);
-  // };
-
-  // const sameEntity = () => activeItemId === (timerLastMemory.taskId || timerLastMemory.hubId || timerLastMemory.listId);
-  // const handleEndTimeChange = (value: string) => {
-  //   dispatch(setTimerDetails({ ...timerDetails, isBillable: timerDetails.isBillable, description: value }));
-  // };
-
   const firstPage = () => setPage(1);
   const lastPage = () => setPage((page * 100) / 100);
   const pageLinks = Array(getTaskEntries?.data.pagination.page)

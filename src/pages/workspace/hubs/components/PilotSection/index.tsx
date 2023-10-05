@@ -25,6 +25,8 @@ import CalendarIcon from '../../../../../assets/icons/CalendarIcon';
 import { EntityType } from '../../../../../utils/EntityTypes/EntityType';
 import EntityManagerIcon from '../../../../../assets/icons/EntityManagerIcon';
 import { UtilityIcon } from '../../../../../assets/icons/Utility';
+import { STORAGE_KEYS } from '../../../../../app/config/dimensions';
+import { IUserParams } from '../../../../../features/account/account.interfaces';
 
 const sections = [
   {
@@ -129,6 +131,9 @@ export default function PilotSection() {
 
   const { hubId } = useParams();
   const { activeItemName } = useAppSelector((state) => state.workspace);
+  const isPilotMinifiedFromLS = (
+    JSON.parse(localStorage.getItem(STORAGE_KEYS.USER_SETTINGS_DATA) || '""') as IUserParams
+  ).isPilotMinified as boolean;
 
   // set data for pilot
   useEffect(() => {
@@ -139,7 +144,7 @@ export default function PilotSection() {
         setShowPilotSideOver({
           id: selectedItemId,
           type: EntityType.hub,
-          show: true,
+          show: isPilotMinifiedFromLS || true,
           title: activeItemName ?? ''
         })
       );

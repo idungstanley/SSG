@@ -11,7 +11,11 @@ import {
   setSubDropdownMenu,
   setshowMenuDropdown
 } from '../../../../../../features/hubs/hubSlice';
-import { setCreateEntityType, setShowOverlay } from '../../../../../../features/workspace/workspaceSlice';
+import {
+  setActiveItem,
+  setCreateEntityType,
+  setShowOverlay
+} from '../../../../../../features/workspace/workspaceSlice';
 import { EntityType } from '../../../../../../utils/EntityTypes/EntityType';
 import Assignee from '../../../../tasks/assignTask/Assignee';
 import Wand from '../../../../../../assets/icons/Wand';
@@ -22,6 +26,7 @@ import { createHubManager } from '../../../../../../managers/Hub';
 import { setFilteredResults } from '../../../../../../features/search/searchSlice';
 import AlsoitMenuDropdown from '../../../../../../components/DropDowns';
 import ColorPalette from '../../../../../../components/ColorPalette/component/ColorPalette';
+import { useNavigate } from 'react-router-dom';
 
 interface formProps {
   name: string;
@@ -30,15 +35,35 @@ interface formProps {
 
 export default function CreateHub() {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const { selectedTreeDetails, currHubId, hub } = useAppSelector((state) => state.hub);
 
   const [paletteColor, setPaletteColor] = useState<string | ListColourProps | undefined | null>('');
   const [showPalette, setShowPalette] = useState<null | HTMLDivElement>(null);
+  const { currentWorkspaceId: workSpaceId } = useAppSelector((state) => state.auth);
 
   const { type, id } = selectedTreeDetails;
+  const { data } = useGetHubChildren({
+    query: type === EntityType.hub ? id : currHubId
+  });
+
+  const isCreateAllowed = !!data && (data?.data.wallets?.length > 0 || data?.data?.lists?.length > 0);
+
   const createHub = useMutation(createHubService, {
     onSuccess: (data) => {
+      const listDetails = data?.data.hub;
+      const routeVariable = id ? 'tasks/sh' : 'tasks/h';
+      navigate(`/${workSpaceId}/${routeVariable}/${listDetails.id}`, {
+        replace: true
+      });
+      dispatch(
+        setActiveItem({
+          activeItemType: EntityType.hub,
+          activeItemId: listDetails.id,
+          activeItemName: listDetails.name
+        })
+      );
       dispatch(setCreateEntityType(null));
       dispatch(setSubDropdownMenu(false));
       dispatch(setShowOverlay(false));
@@ -99,11 +124,7 @@ export default function CreateHub() {
   const currentWorkspaceId: string | undefined = JSON.parse(
     localStorage.getItem('currentWorkspaceId') || '"'
   ) as string;
-  const { data } = useGetHubChildren({
-    query: type === EntityType.hub ? id : currHubId
-  });
 
-  const isCreateAllowed = !!data && (data?.data.wallets?.length > 0 || data?.data?.lists?.length > 0);
   const { name } = formState;
 
   const onSubmit = async () => {

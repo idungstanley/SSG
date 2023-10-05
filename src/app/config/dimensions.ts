@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import { getRelativeWidth } from '../../utils/widthUtils';
 import { useAppSelector } from '../hooks';
+import { IUserParams } from '../../features/account/account.interfaces';
 
 const sidebarFromLS = JSON.parse(localStorage.getItem('sidebar') || '""') as
   | {
@@ -61,14 +62,18 @@ const STORAGE_KEYS = {
   ACCESS_TOKEN: 'accessToken',
   CURRENT_WORKSPACE_ID: 'currentWorkspaceId',
   IS_PILOT_MINIFIED: 'isPilotMinified',
-  EXTENDED_BAR_WIDTH: 'extendedBarWidth'
+  EXTENDED_BAR_WIDTH: 'extendedBarWidth',
+  HOT_KEYS: 'hotkeys'
 };
 
-const pilotWidthFromLS = JSON.parse(
-  localStorage.getItem(STORAGE_KEYS.PILOT_WIDTH) ?? `${dimensions.pilot.default}`
-) as number;
-
 const calculateWidthForContent = () => {
+  const pilotWidthFromLS = (JSON.parse(localStorage.getItem(STORAGE_KEYS.USER_SETTINGS_DATA) || '""') as IUserParams)
+    .pilotWidth;
+
+  const isPilotMinifiedFromLS = (
+    JSON.parse(localStorage.getItem(STORAGE_KEYS.USER_SETTINGS_DATA) || '""') as IUserParams
+  ).isPilotMinified as boolean;
+
   const { showSidebar, userSettingsData } = useAppSelector((state) => state.account);
   const { show: showFullPilot, id } = useAppSelector((state) => state.slideOver.pilotSideOver);
   const { sidebarWidthRD, showExtendedBar } = useAppSelector((state) => state.workspace);
@@ -87,7 +92,9 @@ const calculateWidthForContent = () => {
     showSidebar,
     userSettingsData?.pilotWidth,
     userSettingsData?.extendedBarWidth,
-    showExtendedBar
+    userSettingsData?.isPilotMinified,
+    showExtendedBar,
+    isPilotMinifiedFromLS
   ]);
   return calculatedContentWidth;
 };
