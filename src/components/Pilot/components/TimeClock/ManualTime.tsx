@@ -44,7 +44,7 @@ export function ManualTime() {
       toast.custom(
         (t) => (
           <SaveFilterToast
-            body={`Please enter a duration in the format ${data.memo.slice(2)}`}
+            body={`Please enter a duration in the format ${data.memo.slice(3)}`}
             title="Entry Not Saved!"
             toastId={t.id}
           />
@@ -77,7 +77,7 @@ export function ManualTime() {
 
   return (
     <div className="flex flex-col space-y-2.5 w-full py-4">
-      <div className="flex items-center justify-center space-x-2">
+      <div className="flex items-center px-2 space-x-2">
         <label htmlFor="timeDetails" className="flex flex-col space-y-1.5 w-1/3">
           <span className="uppercase text-alsoit-gray-100 text-alsoit-text-xi">Enter Time</span>
           <input
@@ -100,10 +100,10 @@ export function ManualTime() {
           </span>
         </label>
         <label htmlFor="manualTags" className="flex flex-col space-y-1.5 w-1/3">
-          <ManualTags />
+          <ManualTags IconsInteractions={data} billable={isBillable} />
         </label>
       </div>
-      <div className="flex justify-end w-11/12">
+      <div className="flex justify-end px-2.5">
         <button
           className="bg-alsoit-success py-1.5 px-8 capitalize text-alsoit-text-xi font-semibold text-white rounded-lg tracking-wide"
           onClick={handleSubmit}
