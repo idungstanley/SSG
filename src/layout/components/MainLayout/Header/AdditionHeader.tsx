@@ -18,6 +18,7 @@ import moment from 'moment-timezone';
 import { toast } from 'react-hot-toast';
 import SaveFilterToast from '../../../../components/TasksHeader/ui/Filter/ui/Toast';
 import { setTimerInterval, setTimerStatus, setUpdateTimerDuration } from '../../../../features/task/taskSlice';
+import { runTimer } from '../../../../utils/TimerCounter';
 
 const hoursToMilliseconds = 60 * 60 * 1000;
 const minutesToMilliseconds = 60 * 1000;
@@ -52,9 +53,12 @@ export default function AdditionalHeader() {
     arrowUp: false,
     arrowDown: false
   });
+  const [timerefetched, setTimeRefetch] = useState<boolean>(false);
 
-  const { refetch } = useCurrentTime({ workspaceId });
+  const { refetch, status, data } = useCurrentTime({ workspaceId });
   const { mutate } = EndTimeEntriesService();
+
+  const RunTimer = runTimer({ isRunning: timerefetched });
 
   const stop = () => {
     mutate({
@@ -132,6 +136,12 @@ export default function AdditionalHeader() {
   }, [isVisible, refetch, timerStatus]);
 
   useEffect(() => {
+    if (data?.data.time_entry) {
+      setTimeRefetch(!timerefetched);
+    }
+  }, [data]);
+
+  useEffect(() => {
     if (dayjs.tz.guess() !== zone && (!userTimeZoneFromLS || userTimeZoneFromLS !== dayjs.tz.guess())) {
       toast.custom(
         (t) => (
@@ -162,6 +172,10 @@ export default function AdditionalHeader() {
 
     return () => document.addEventListener('visibilitychange', headerClockFn);
   }, [zone]);
+
+  useEffect(() => {
+    RunTimer;
+  }, [timerefetched]);
 
   return (
     <div className="flex items-center justify-between w-full px-4 border-b" style={{ height: '50px' }}>

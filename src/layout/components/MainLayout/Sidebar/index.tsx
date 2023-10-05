@@ -24,9 +24,7 @@ export default function Sidebar() {
   const dispatch = useAppDispatch();
   const queryClient = useQueryClient();
 
-  const { extendedSidebarWidth, sidebarWidthRD, showExtendedBar, isFavoritePinned } = useAppSelector(
-    (state) => state.workspace
-  );
+  const { extendedSidebarWidth, sidebarWidthRD, showExtendedBar } = useAppSelector((state) => state.workspace);
   const { showSidebar, userSettingsData } = useAppSelector((state) => state.account);
 
   const [commandSearchModal, setCommandSearchModal] = useState<boolean>(false);
