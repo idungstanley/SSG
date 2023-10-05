@@ -5,12 +5,10 @@ import { setIsFavoritePinned, setSidebarWidthRD } from '../../../../features/wor
 import Header from './components/Header';
 import NavigationItems from './components/NavigationItems';
 import Places from './components/Places';
-import { STORAGE_KEYS, dimensions } from '../../../../app/config/dimensions';
+import { dimensions } from '../../../../app/config/dimensions';
 import { useResize } from '../../../../hooks/useResize';
 import { isAllowIncreaseWidth } from '../../../../utils/widthUtils';
 import { NavigationList } from './components/NavigationItems/components/NavigationList';
-import useResolution from '../../../../hooks/useResolution';
-import { useGetUserSettingsKeys } from '../../../../features/account/accountService';
 import NonInteractiveSearch from '../../../../components/Search/NonInteractiveSearch';
 import CommandSearchModal from './components/CommandSearchModal';
 import SearchIcon from '../../../../assets/icons/SearchIcon';
@@ -18,19 +16,17 @@ import { setUpdateCords } from '../../../../features/hubs/hubSlice';
 import { useScroll } from '../../../../hooks/useScroll';
 import { VerticalScroll } from '../../../../components/ScrollableContainer/VerticalScroll';
 import { useQueryClient } from '@tanstack/react-query';
-import { SetUserSettingsStore } from '../../../../features/account/accountSlice';
 
 const MAX_SIDEBAR_WIDTH = dimensions.navigationBar.max;
 const MIN_SIDEBAR_WIDTH = dimensions.navigationBar.min;
 
 export default function Sidebar() {
   const dispatch = useAppDispatch();
+  const queryClient = useQueryClient();
+
   const { extendedSidebarWidth, sidebarWidthRD, showExtendedBar, isFavoritePinned } = useAppSelector(
     (state) => state.workspace
   );
-  const key = 'sidebar';
-  const queryClient = useQueryClient();
-
   const { showSidebar, userSettingsData } = useAppSelector((state) => state.account);
 
   const [commandSearchModal, setCommandSearchModal] = useState<boolean>(false);
@@ -44,28 +40,6 @@ export default function Sidebar() {
     direction: 'XR',
     defaultSize: dimensions.navigationBar.default
   });
-
-  const resolution = useResolution();
-
-  const { data } = useGetUserSettingsKeys(true, key, resolution);
-  useEffect(() => {
-    if (data) {
-      const value = data.value;
-      localStorage.setItem(
-        STORAGE_KEYS.SIDEBAR_WIDTH,
-        JSON.stringify(value.sidebarWidth ? value.sidebarWidth : dimensions.navigationBar.default)
-      );
-      localStorage.setItem(
-        STORAGE_KEYS.PILOT_WIDTH,
-        JSON.stringify(value.pilotWidth ? value.pilotWidth : dimensions.pilot.default)
-      );
-      localStorage.setItem(
-        STORAGE_KEYS.EXTENDED_BAR_WIDTH,
-        JSON.stringify(value.extendedBarWidth ? value.extendedBarWidth : dimensions.extendedBar.default)
-      );
-      dispatch(SetUserSettingsStore({ ...userSettingsData, ...value }));
-    }
-  }, [data]);
 
   const [activeTabId, setActiveTabId] = useState<string | null>('');
   const hotkeyIdsFromLS = JSON.parse(localStorage.getItem('navhotkeys') ?? '[]') as string[];

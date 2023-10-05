@@ -16,6 +16,8 @@ const pilotWidthFromLS = JSON.parse(localStorage.getItem(STORAGE_KEYS.PILOT_WIDT
 
 const extendedBarWidthFromLS = JSON.parse(localStorage.getItem(STORAGE_KEYS.EXTENDED_BAR_WIDTH) || '""') as number;
 
+const hotKeysFromLS = JSON.parse(localStorage.getItem(STORAGE_KEYS.HOT_KEYS) || '""') as number[];
+
 const idsFromLS = JSON.parse(localStorage.getItem('placeItem') || '[]') as string[];
 
 const isPilotMinifiedFromLS = JSON.parse(localStorage.getItem(STORAGE_KEYS.IS_PILOT_MINIFIED) || 'false') as boolean;
@@ -66,7 +68,8 @@ const initialState: AccountState = {
     isFavoritePinned: false,
     pilotWidth: pilotWidthFromLS,
     isPilotMinified: isPilotMinifiedFromLS,
-    extendedBarWidth: extendedBarWidthFromLS
+    extendedBarWidth: extendedBarWidthFromLS,
+    hotkeys: hotKeysFromLS
   },
   places: [...initialPlaces.sort((a, b) => idsFromLS.indexOf(a.id) - idsFromLS.indexOf(b.id))],
   calculatedContentWidth: ''

@@ -61,7 +61,8 @@ const STORAGE_KEYS = {
   ACCESS_TOKEN: 'accessToken',
   CURRENT_WORKSPACE_ID: 'currentWorkspaceId',
   IS_PILOT_MINIFIED: 'isPilotMinified',
-  EXTENDED_BAR_WIDTH: 'extendedBarWidth'
+  EXTENDED_BAR_WIDTH: 'extendedBarWidth',
+  HOT_KEYS: 'hotkeys'
 };
 
 const pilotWidthFromLS = JSON.parse(
