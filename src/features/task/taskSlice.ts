@@ -141,6 +141,7 @@ interface TaskState {
   taskColumns: listColumnProps[];
   hideTask: listColumnProps[];
   currentTaskId: string | null;
+  newTaskPriority: string;
   selectedTasksArray: string[];
   selectedIndexListId: string | null;
   saveSettingLocal: { [key: string]: boolean } | null;
@@ -263,6 +264,7 @@ const initialState: TaskState = {
   selectedIndexListId: null,
   verticalGrid: false,
   taskUpperCase: false,
+  newTaskPriority: 'normal',
   currentSelectedDuplicateArr: [],
   triggerSaveSettings: false,
   triggerAutoSave: false,
@@ -496,6 +498,9 @@ export const taskSlice = createSlice({
     setShowNewTaskId(state, action: PayloadAction<string>) {
       state.showNewTaskId = action.payload;
     },
+    setNewTaskPriority(state, action: PayloadAction<string>) {
+      state.newTaskPriority = action.payload;
+    },
     getTaskUpperCase(state, action: PayloadAction<boolean>) {
       state.taskUpperCase = action.payload;
     },
@@ -697,6 +702,7 @@ export const {
   setShowTaskNavigation,
   setShowNewTaskField,
   setShowNewTaskId,
+  setNewTaskPriority,
   setRmWatcher,
   setCurrentTaskId,
   setDefaultSubtaskId,

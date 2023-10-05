@@ -19,6 +19,7 @@ import { QueryClient, useInfiniteQuery, useMutation, useQuery, useQueryClient } 
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import {
   setDuplicateTaskObj,
+  setNewTaskPriority,
   setScreenRecording,
   setScreenRecordingMedia,
   setSelectedListIds,
@@ -198,8 +199,9 @@ const addTask = (data: {
   isListParent: boolean;
   task_status_id: string;
   assignees?: string[];
+  newTaskPriority?: string;
 }) => {
-  const { name, id, isListParent, task_status_id, assignees } = data;
+  const { name, id, isListParent, task_status_id, assignees, newTaskPriority: priority } = data;
 
   const parentId = isListParent ? { list_id: id } : { parent_id: id };
 
@@ -210,7 +212,8 @@ const addTask = (data: {
       name,
       ...parentId,
       assignees,
-      task_status_id
+      task_status_id,
+      priority
     }
   });
   return response;
@@ -224,6 +227,7 @@ export const useAddTask = (task?: Task) => {
 
   return useMutation(addTask, {
     onSuccess: (data) => {
+      dispatch(setNewTaskPriority('normal'));
       if (data.data.task.parent_id) {
         // add subtask
         const updatedSubtasks = addNewSubtaskManager(
@@ -635,7 +639,7 @@ export const UseUpdateTaskPrioritiesServices = ({ task_id_array, priorityDataUpd
       return data;
     },
     {
-      enabled: !!currentTaskIds.length && !!priorityDataUpdate,
+      enabled: !!currentTaskIds.length && !!priorityDataUpdate && currentTaskPriorityId != '0',
       cacheTime: 0,
       onSuccess: () => {
         if (listIds) {

@@ -20,7 +20,8 @@ const hotKeysFromLS = JSON.parse(localStorage.getItem(STORAGE_KEYS.HOT_KEYS) || 
 
 const idsFromLS = JSON.parse(localStorage.getItem('placeItem') || '[]') as string[];
 
-const isPilotMinifiedFromLS = JSON.parse(localStorage.getItem(STORAGE_KEYS.IS_PILOT_MINIFIED) || 'false') as boolean;
+const isPilotMinifiedFromLS = (JSON.parse(localStorage.getItem(STORAGE_KEYS.USER_SETTINGS_DATA) || '""') as IUserParams)
+  .isPilotMinified;
 
 const showSidebar = sidebarFromLS
   ? (
