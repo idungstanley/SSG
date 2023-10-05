@@ -219,31 +219,56 @@ export function DatePickerManualDates({ range }: DatePickerManualDatesProps) {
         </div>
       ) : (
         // Default Set date
-        <label
-          htmlFor="from"
-          className="flex items-center w-48 p-1 space-x-1 space-y-1 text-xs border rounded-md border-alsoit-purple-300"
-        >
-          <div className="p-1 rounded-md bg-alsoit-purple-300">
+        <div className="relative">
+          {taskTime?.from && (
+            <div className="absolute bg-white w-max px-1 -top-1.5 left-3 text-alsoit-text-sm z-20">Set Date</div>
+          )}
+          <input
+            type="text"
+            className="w-40 h-10 border border-alsoit-purple-300 rounded-md py-1.5 px-8 relative text-alsoit-text-sm font-semibold"
+            onBlur={() => handleFilterDateDispatch('start')}
+            value={dateString?.start}
+            data-allowed-chars="0123456789/-"
+            onChange={(e) => handleChange(e, 'from')}
+          />
+          <div className="bg-alsoit-purple-300 rounded-md p-1 flex items-center w-6 h-6 absolute top-2 left-1">
             <CalendarIcon active={iconToggle.startIcon} fixed />
           </div>
-          <div className="relative">
-            <div
-              className="h-4 px-1 font-semibold w-28 text-alsoit-text-lg"
-              contentEditable
-              suppressContentEditableWarning
-              onBlur={() => handleFilterDateDispatch('start')}
-              onClick={() => dispatch(setHistoryMemory({ ...HistoryFilterMemory, timePoint: 'start' }))}
-              onInput={(e: ChangeEvent<HTMLInputElement>) => handleChange(e, 'due')}
-            >
-              {(taskTime?.from && dayjs(taskTime?.from).format(date_format?.toUpperCase())) ?? 'Start Date'}
+          {taskTime?.from && (
+            <div className="pt-1.5 absolute top-1.5 left-20" onClick={() => clearDatesFilter('start')}>
+              <CancelIcon active dimensions={{ height: 20, width: 20 }} />
             </div>
-            {taskTime?.from && (
-              <div onClick={() => clearDatesFilter('start')}>
-                <CancelIcon active dimensions={{ height: 2, width: 2 }} />
+          )}
+          <div className="absolute top-5 left-24">
+            {selectedDate?.date && taskTime?.from ? (
+              <ReusableSelect
+                options={createDynamicTimeComponent(timeInterval, timezone)}
+                value={HistoryFilterMemory?.time?.from || ''}
+                style="top-3"
+                onclick={(e: string) => {
+                  dispatch(
+                    setHistoryMemory({
+                      ...HistoryFilterMemory,
+                      time: {
+                        ...HistoryFilterMemory?.time,
+                        from: e
+                      }
+                    })
+                  );
+                }}
+              />
+            ) : (
+              <span className="w-1/3 text-alsoit-text-sm">
+                {(HistoryFilterMemory?.time?.from && `${HistoryFilterMemory?.time?.from}`) ?? undefined}
+              </span>
+            )}
+            {HistoryFilterMemory?.time?.from && (
+              <div className="pt-1.5 absolute -top-3.5 left-10" onClick={() => handleClearTime('start')}>
+                <CancelIcon active dimensions={{ height: 20, width: 20 }} />
               </div>
             )}
           </div>
-        </label>
+        </div>
       )}
     </div>
   );
