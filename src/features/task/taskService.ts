@@ -1233,9 +1233,13 @@ export function useCreateTaskRecuring() {
 }
 
 interface IFilterRes {
-  data: FilterWithId[];
-  model: string;
-  model_id: string;
+  data: {
+    filter: {
+      data: FilterWithId[];
+      model: string;
+      model_id: string;
+    };
+  };
 }
 
 const addFiltersForTask = (data: { taskId?: string; filters: FilterWithId[] | null }) => {
@@ -1254,7 +1258,44 @@ const addFiltersForTask = (data: { taskId?: string; filters: FilterWithId[] | nu
 };
 
 export const useAddFiltersForTask = () => {
-  return useMutation(addFiltersForTask);
+  const dispatch = useAppDispatch();
+
+  const { tasks, subtasks } = useAppSelector((state) => state.task);
+
+  return useMutation(addFiltersForTask, {
+    onSuccess: (data) => {
+      const parentId = data.data.filter.model_id;
+      const updatedTasks = { ...tasks };
+      const updatedSubtasks = { ...subtasks };
+
+      Object.keys(tasks).forEach((listId) => {
+        updatedTasks[listId] = updatedTasks[listId].map((task) => {
+          if (parentId === task.id) {
+            return {
+              ...task,
+              filters: data.data.filter
+            };
+          }
+          return task;
+        });
+      });
+      Object.keys(subtasks).forEach((listId) => {
+        updatedSubtasks[listId] = updatedSubtasks[listId].map((task) => {
+          if (parentId === task.id) {
+            console.log('aaa', task);
+            return {
+              ...task,
+              filters: data.data.filter
+            };
+          }
+          return task;
+        });
+      });
+
+      dispatch(setTasks(updatedTasks));
+      dispatch(setSubtasks(updatedSubtasks));
+    }
+  });
 };
 
 const updateSubtaskFilters = (data: { parentId: string; filters: { op: FiltersOption; fields: FilterWithId[] } }) => {
@@ -1272,22 +1313,24 @@ const updateSubtaskFilters = (data: { parentId: string; filters: { op: FiltersOp
   return response;
 };
 
-export const useUpdateSubtaskFilters = (parentId: string) => {
+export const useUpdateSubtaskFilters = () => {
   const dispatch = useAppDispatch();
 
   const { tasks, subtasks } = useAppSelector((state) => state.task);
 
   return useMutation(updateSubtaskFilters, {
     onSuccess: (data) => {
-      let parent: ITaskFullList | null = null;
-      Object.keys(tasks).forEach((listId) => {
-        tasks[listId].forEach((task) => {
-          if (parentId === task.id) {
-            parent = task;
-          }
+      if (data.data.tasks.length) {
+        const parentId = data.data.tasks[0].parent_id;
+        let parent: ITaskFullList | null = null;
+        Object.keys(tasks).forEach((listId) => {
+          tasks[listId].forEach((task) => {
+            if (parentId === task.id) {
+              parent = task;
+            }
+          });
         });
-      });
-      if (!parent) {
+
         Object.keys(subtasks).forEach((listId) => {
           subtasks[listId].forEach((task) => {
             if (parentId === task.id) {
@@ -1295,18 +1338,18 @@ export const useUpdateSubtaskFilters = (parentId: string) => {
             }
           });
         });
-      }
-      const tasksWithListId = data.data.tasks.map((item) => {
-        return {
-          ...item,
-          parentName: parent?.name,
-          task_statuses: parent?.task_statuses,
-          custom_field_columns: parent?.custom_field_columns,
-          list_id: parent?.list_id
-        };
-      });
-      if (data.data.tasks.length) {
-        dispatch(setSubtasks({ ...subtasks, [parentId]: tasksWithListId as ITaskFullList[] }));
+
+        const tasksWithListId = data.data.tasks.map((item) => {
+          return {
+            ...item,
+            parentName: parent?.name,
+            task_statuses: parent?.task_statuses,
+            custom_field_columns: parent?.custom_field_columns,
+            list_id: parent?.list_id,
+            list: parent?.list
+          };
+        });
+        dispatch(setSubtasks({ ...subtasks, [parentId as string]: tasksWithListId as ITaskFullList[] }));
       }
     }
   });

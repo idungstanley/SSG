@@ -40,7 +40,7 @@ export function Item({ filter, initialFilters }: ItemProps) {
   const [subtasksFilters, setSubtasksFilters] = useState<FilterWithId[]>([]);
 
   const { mutate: addFilter } = useAddFiltersForTask();
-  const { mutate: updateSubtaskFilter } = useUpdateSubtaskFilters(selectedTaskParentId);
+  const { mutate: updateSubtaskFilter } = useUpdateSubtaskFilters();
 
   const { key, values, operator, id } = filter;
 

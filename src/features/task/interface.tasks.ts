@@ -5,6 +5,7 @@ import { ITeamMembersAndGroup } from '../settings/teamMembersAndGroups.interface
 import { Header } from '../../components/Pilot/components/TimeClock/ClockLog';
 import { IField, ITask_statuses } from '../list/list.interfaces';
 import { RecurFrequency, TypeOptionsProps } from '../../components/DatePicker/RecurringTypes';
+import { FilterWithId } from '../../components/TasksHeader/ui/Filter/types/filters';
 
 export interface UpdateTaskProps {
   task_id_array?: string[];
@@ -112,6 +113,7 @@ export interface ITaskFullList {
   priority: string | null | [{ id: string; initials: string; color: string; name: string }];
   status: IStatus;
   has_descendants: boolean;
+  filters: { model: string; model_id: string, data: FilterWithId[] } | null;
   descendants?: ITaskFullList[];
   descendants_count: number;
   closed_subtasks_count: number;
