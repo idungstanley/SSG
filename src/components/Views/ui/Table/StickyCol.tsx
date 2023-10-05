@@ -87,7 +87,8 @@ export function StickyCol({
     dragToBecomeSubTask,
     saveSettingOnline,
     duplicateTaskObj,
-    separateSubtasksMode
+    separateSubtasksMode,
+    newTaskPriority
   } = useAppSelector((state) => state.task);
 
   const [isChecked, setIsChecked] = useState(false);
@@ -165,6 +166,7 @@ export function StickyCol({
         isListParent,
         id: parentId as string,
         assignees: [currTeamMemberId] as string[],
+        newTaskPriority,
         task_status_id: taskStatusId as string
       });
     }
