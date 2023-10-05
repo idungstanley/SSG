@@ -1,7 +1,7 @@
 import { useAppSelector } from '../../../app/hooks';
 import { isString } from '../../../utils/typeGuards';
 import { SPECIAL_CHAR } from '../ui/Filter/config/filterConfig';
-import { FilterKey, FilterValue } from '../ui/Filter/types/filters';
+import { FilterKey, FilterValue, FilterWithId, FiltersOption } from '../ui/Filter/types/filters';
 
 const DATE_KEYS: Partial<FilterKey>[] = ['created_at', 'end_date', 'start_date'];
 
@@ -16,6 +16,51 @@ export const generateFilters = () => {
     filters: { fields: filters, option: op }
   } = useAppSelector((state) => state.task);
 
+  const assignee = filters.find((i) => i.key === 'assignees');
+  const tags = filters.find((i) => i.key === 'tags');
+
+  const dates = filters.filter((i) => DATE_KEYS.includes(i.key));
+
+  const other = filters.filter((i) => !SPECIAL_KEYS.includes(i.key));
+
+  return {
+    filters: {
+      op,
+      assignees:
+        assignee && assignee.operator.key === 'eq'
+          ? assignee.values.length
+            ? getValues(assignee.values)
+            : assignee.operator.key
+          : undefined,
+      fields: [
+        tags
+          ? {
+              field: 'tag',
+              op: tags.operator.key,
+              values: tags.values.length ? getValues(tags.values) : undefined
+            }
+          : null,
+
+        ...dates.map((i) => ({
+          field: i.key,
+          op: i.operator.key,
+          values: i.values.length ? i.values : undefined,
+          start: i.operator.start,
+          count: i.operator.count,
+          unit: i.operator.unit?.key
+        })),
+
+        ...other.map((i) => ({
+          field: getKey(i.key),
+          op: i.operator.key,
+          values: i.values.length ? getValues(i.values) : undefined
+        }))
+      ].filter(Boolean)
+    }
+  };
+};
+
+export const generateFiltersSubtasks = (op: FiltersOption, filters: FilterWithId[]) => {
   const assignee = filters.find((i) => i.key === 'assignees');
   const tags = filters.find((i) => i.key === 'tags');
 

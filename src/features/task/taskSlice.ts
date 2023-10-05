@@ -219,6 +219,7 @@ interface TaskState {
   filters: FilterFieldsWithOption;
   subtasksfilters: Record<string, FilterFieldsWithOption>;
   isFiltersUpdated: boolean;
+  isSubtasksFiltersUpdated: boolean;
   statusId: string;
   currTaskListId: string;
   entityForCustom: entityForCustom;
@@ -323,6 +324,7 @@ const initialState: TaskState = {
   },
   subtasksfilters: {},
   isFiltersUpdated: true,
+  isSubtasksFiltersUpdated: false,
   selectedDate: null,
   HistoryFilterMemory: null,
   statusId: '',
@@ -365,6 +367,9 @@ export const taskSlice = createSlice({
     },
     setFiltersUpdated(state, action: PayloadAction<boolean>) {
       state.isFiltersUpdated = action.payload;
+    },
+    setSubtasksFiltersUpdated(state, action: PayloadAction<boolean>) {
+      state.isSubtasksFiltersUpdated = action.payload;
     },
     setAssigneeIds(state, action: PayloadAction<string[]>) {
       state.assigneeIds = action.payload;
@@ -661,6 +666,7 @@ export const {
   setFilterOption,
   setSubtasksFilters,
   setFiltersUpdated,
+  setSubtasksFiltersUpdated,
   setAssigneeIds,
   setStatusId,
   setCurrTaskListId,
