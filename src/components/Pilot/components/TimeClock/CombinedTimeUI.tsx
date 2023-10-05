@@ -99,8 +99,6 @@ export function CombinedTime() {
     );
   }
 
-  console.log(getCurrent?.data.time_entries);
-
   return (
     <div
       className={`flex flex-col space-y-3.5 w-full bg-alsoit-gray-50 rounded-md ${
