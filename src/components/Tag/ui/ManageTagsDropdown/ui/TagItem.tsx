@@ -79,7 +79,7 @@ export function TagItem({ tag, onClick, entityId, entityType }: TagItemProps) {
 
   return (
     <div className="flex space-x-2 items-center py-2 text-left px-3 w-full">
-      <button onClick={handleClick} type="button">
+      {/* <button onClick={handleClick} type="button">
         <input
           onChange={(e) => setName(e.target.value)}
           onBlur={handleFocusOff}
@@ -95,7 +95,8 @@ export function TagItem({ tag, onClick, entityId, entityType }: TagItemProps) {
           )}
           placeholder=""
         />
-      </button>
+      </button> */}
+      <input type="text" disabled onClick={() => console.log('first')} />
 
       <TagActions items={actionsConfig} />
 
