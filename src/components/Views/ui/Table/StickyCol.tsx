@@ -258,8 +258,8 @@ export function StickyCol({
   const { isOver, setNodeRef: droppabbleRef } = useDroppable({
     id: task.id,
     data: {
-      isOverTask: true,
-      overTask: task
+      isOverTask: true
+      // overTask: task
     }
   });
 
