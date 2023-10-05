@@ -37,6 +37,11 @@ export function TagItem({ tag, onClick, entityId, entityType }: TagItemProps) {
 
   const actionsConfig = [
     {
+      name: 'Assign Tag',
+      onClick: () => onClick(id),
+      icon: <TrashIcon className="w-4 h-4" />
+    },
+    {
       name: 'Delete',
       onClick: () => onDelete({ tagId: id }),
       icon: <TrashIcon className="w-4 h-4" />
@@ -79,14 +84,13 @@ export function TagItem({ tag, onClick, entityId, entityType }: TagItemProps) {
 
   return (
     <div className="flex space-x-2 items-center py-2 text-left px-3 w-full">
-      {/* <button onClick={handleClick} type="button">
+      <button type="button">
         <input
           onChange={(e) => setName(e.target.value)}
           onBlur={handleFocusOff}
           onKeyDown={handleKeyDown}
           required
           value={name}
-          disabled={!isEditable}
           minLength={2}
           type="text"
           className={cl(
@@ -95,8 +99,7 @@ export function TagItem({ tag, onClick, entityId, entityType }: TagItemProps) {
           )}
           placeholder=""
         />
-      </button> */}
-      <input type="text" disabled onClick={() => console.log('first')} />
+      </button>
 
       <TagActions items={actionsConfig} />
 
