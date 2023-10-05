@@ -12,21 +12,34 @@ import { BiMerge, BiEdit } from 'react-icons/bi';
 import { UserPlusIcon } from '@heroicons/react/24/outline';
 import { deleteTask } from '../../../../../features/task/taskService';
 import { useDispatch } from 'react-redux';
+import { EntityType } from '../../../../../utils/EntityTypes/EntityType';
+
 import { displayPrompt, setVisibility } from '../../../../../features/general/prompt/promptSlice';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { setSelectedTasksArray, setShowTaskNavigation } from '../../../../../features/task/taskSlice';
+import { useMutation } from '@tanstack/react-query';
+import {
+  setSelectedListIds,
+  setSelectedTasksArray,
+  setShowTaskNavigation,
+  setSubtasks,
+  setTasks
+} from '../../../../../features/task/taskSlice';
 import RoundedCheckbox from '../../../../../components/Checkbox/RoundedCheckbox';
 import PriorityDropdown from '../../../../../components/priority/PriorityDropdown';
 import ToolTip from '../../../../../components/Tooltip/Tooltip';
 import ActiveTreeSearch from '../../../../../components/ActiveTree/ActiveTreeSearch';
 import AlsoitMenuDropdown from '../../../../../components/DropDowns';
+import { deleteTaskManager } from '../../../../../managers/Task';
 
 export default function TaskMenu() {
   const dispatch = useDispatch();
 
-  const { selectedTasksArray, duplicateTaskObj } = useAppSelector((state) => state.task);
-
-  const queryClient = useQueryClient();
+  const {
+    selectedTasksArray,
+    duplicateTaskObj,
+    selectedListIds,
+    selectedTaskParentId,
+    tasks: taskData
+  } = useAppSelector((state) => state.task);
 
   const [isVisible, setIsVisible] = useState(false);
   const [showSelectDropdown, setShowSelectDropdown] = useState<null | HTMLSpanElement | HTMLDivElement>(null);
@@ -47,8 +60,19 @@ export default function TaskMenu() {
 
   const useDeleteTask = useMutation(deleteTask, {
     onSuccess: () => {
+      const updatedTasks = deleteTaskManager(
+        selectedTasksArray as string[],
+        selectedListIds.length ? selectedListIds : [selectedTaskParentId],
+        taskData
+      );
+      // const selectedTaskType === EntityType.task ? taskData : subtasks;
+
+      if (EntityType.task) {
+        dispatch(setTasks(updatedTasks));
+      } else {
+        dispatch(setSubtasks(updatedTasks));
+      }
       dispatch(setSelectedTasksArray([]));
-      queryClient.invalidateQueries(['task']);
     }
   });
 
@@ -214,6 +238,7 @@ export default function TaskMenu() {
             isChecked={true}
             onChange={() => {
               dispatch(setSelectedTasksArray([]));
+              dispatch(setSelectedListIds([]));
             }}
           />
           <span className="text-white text-xs">{selectedTasksArray.length} Selected</span>
@@ -252,6 +277,7 @@ export default function TaskMenu() {
           className=" bg-gray-800 text-white p-2 rounded-3xl border border-white -mt-1 cursor-pointer"
           onClick={() => {
             dispatch(setSelectedTasksArray([]));
+            dispatch(setSelectedListIds([]));
           }}
         >
           <span className="text-gray-300 mr-2">X</span>

@@ -142,6 +142,7 @@ interface TaskState {
   hideTask: listColumnProps[];
   currentTaskId: string | null;
   selectedTasksArray: string[];
+  selectedIndexListId: string | null;
   saveSettingLocal: { [key: string]: boolean } | null;
   saveSettingList: ItaskViews | undefined;
   saveSettingOnline: { [key: string]: boolean } | null;
@@ -218,6 +219,7 @@ interface TaskState {
   HistoryFilterMemory: IHistoryFilterMemory | null;
   filters: FilterFieldsWithOption;
   subtasksfilters: Record<string, FilterFieldsWithOption>;
+  isFiltersUpdated: boolean;
   statusId: string;
   currTaskListId: string;
   entityForCustom: entityForCustom;
@@ -258,6 +260,7 @@ const initialState: TaskState = {
     fullTask: null
   },
   selectedTasksArray: [],
+  selectedIndexListId: null,
   verticalGrid: false,
   taskUpperCase: false,
   currentSelectedDuplicateArr: [],
@@ -321,6 +324,7 @@ const initialState: TaskState = {
     option: DEFAULT_FILTERS_OPTION
   },
   subtasksfilters: {},
+  isFiltersUpdated: true,
   selectedDate: null,
   HistoryFilterMemory: null,
   statusId: '',
@@ -360,6 +364,9 @@ export const taskSlice = createSlice({
     },
     setSubtasksFilters(state, action: PayloadAction<Record<string, FilterFieldsWithOption>>) {
       state.subtasksfilters = action.payload;
+    },
+    setFiltersUpdated(state, action: PayloadAction<boolean>) {
+      state.isFiltersUpdated = action.payload;
     },
     setAssigneeIds(state, action: PayloadAction<string[]>) {
       state.assigneeIds = action.payload;
@@ -503,6 +510,9 @@ export const taskSlice = createSlice({
     },
     setSelectedTasksArray(state, action: PayloadAction<string[]>) {
       state.selectedTasksArray = action.payload;
+    },
+    setSelectedIndexListId(state, action: PayloadAction<string | null>) {
+      state.selectedIndexListId = action.payload;
     },
     getSingleLineView(state, action: PayloadAction<boolean>) {
       state.singleLineView = action.payload;
@@ -655,6 +665,7 @@ export const {
   setFilterFields,
   setFilterOption,
   setSubtasksFilters,
+  setFiltersUpdated,
   setAssigneeIds,
   setStatusId,
   setCurrTaskListId,
@@ -693,6 +704,7 @@ export const {
   setToggleAllSubtaskSplit,
   setSeparateSubtasksMode,
   setSelectedTasksArray,
+  setSelectedIndexListId,
   setAddNewTaskItem,
   setCloseTaskListView,
   setTriggerSaveSettings,

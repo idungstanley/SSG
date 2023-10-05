@@ -51,7 +51,6 @@ import {
 } from '../../managers/Task';
 import { ITeamMembersAndGroup } from '../settings/teamMembersAndGroups.interfaces';
 import { useDispatch } from 'react-redux';
-import { runTimer } from '../../utils/TimerCounter';
 import { updateListTasksCountManager } from '../../managers/List';
 import { getHub } from '../hubs/hubSlice';
 import { setFilteredResults } from '../search/searchSlice';
@@ -352,7 +351,7 @@ export const UseGetFullTaskList = ({
 
   const hub_id = itemType === EntityType.hub || itemType === EntityType.subHub ? itemId : null;
   const wallet_id = itemType === EntityType.wallet || itemType === EntityType.subWallet ? itemId : null;
-  const { sortAbleArr, toggleAllSubtask, separateSubtasksMode, splitSubTaskState } = useAppSelector(
+  const { sortAbleArr, toggleAllSubtask, separateSubtasksMode, splitSubTaskState, isFiltersUpdated } = useAppSelector(
     (state) => state.task
   );
   const sortArrUpdate = sortAbleArr.length <= 0 ? null : sortAbleArr;
@@ -365,6 +364,7 @@ export const UseGetFullTaskList = ({
       itemId,
       itemType,
       filters,
+      isFiltersUpdated,
       sortArrUpdate,
       draggableItemId,
       toggleAllSubtask,
@@ -389,7 +389,7 @@ export const UseGetFullTaskList = ({
     },
     {
       keepPreviousData: true,
-      enabled: (!!hub_id || !!wallet_id) && !draggableItemId,
+      enabled: (!!hub_id || !!wallet_id) && !draggableItemId && isFiltersUpdated,
       onSuccess: (data) => {
         data.pages.map((page) => page.data.tasks.map((task) => queryClient.setQueryData(['task', task.id], task)));
       },
@@ -659,10 +659,11 @@ export const UseUpdateTaskPrioritiesServices = ({ task_id_array, priorityDataUpd
 export const getTaskListService = (listId: string | null | undefined) => {
   const { workSpaceId } = useParams();
 
-  const { sortAbleArr, tasks, toggleAllSubtask, separateSubtasksMode, splitSubTaskState } = useAppSelector(
+  const { sortAbleArr, toggleAllSubtask, separateSubtasksMode, splitSubTaskState, isFiltersUpdated } = useAppSelector(
     (state) => state.task
   );
   const { currentWorkspaceId } = useAppSelector((state) => state.auth);
+  const { draggableItemId } = useAppSelector((state) => state.list);
 
   const sortArrUpdate = sortAbleArr.length <= 0 ? null : sortAbleArr;
 
@@ -671,8 +672,17 @@ export const getTaskListService = (listId: string | null | undefined) => {
   const { filters } = generateFilters();
 
   return useInfiniteQuery(
-    ['task', listId, { sortArrUpdate, filters }, toggleAllSubtask, separateSubtasksMode, splitSubTaskState],
-
+    [
+      'task',
+      listId,
+      filters,
+      isFiltersUpdated,
+      sortArrUpdate,
+      draggableItemId,
+      toggleAllSubtask,
+      separateSubtasksMode,
+      splitSubTaskState
+    ],
     async ({ pageParam = 0 }: { pageParam?: number }) => {
       return requestNew<ITaskListRes>({
         url: 'tasks/list',
@@ -689,7 +699,7 @@ export const getTaskListService = (listId: string | null | undefined) => {
       });
     },
     {
-      enabled: fetch && (!tasks[listId as string] || separateSubtasksMode || splitSubTaskState || toggleAllSubtask),
+      enabled: fetch && isFiltersUpdated && (!!listId || separateSubtasksMode || splitSubTaskState || toggleAllSubtask),
       getNextPageParam: (lastPage) => {
         if (lastPage?.data?.paginator.has_more_pages) {
           return Number(lastPage.data.paginator.page) + 1;
@@ -734,7 +744,7 @@ export const createTimeEntriesService = (data: { queryKey: (string | undefined)[
 
 export const createManualTimeEntry = () => {
   const queryClient = useQueryClient();
-  const mutation = useMutation(
+  const { data, isError, isLoading, mutateAsync, isSuccess } = useMutation(
     async ({
       start_date,
       end_date,
@@ -768,16 +778,16 @@ export const createManualTimeEntry = () => {
       onSuccess: () => queryClient.invalidateQueries(['timeclock'])
     }
   );
-  return mutation;
+  return { data, isError, isLoading, mutateAsync, isSuccess };
 };
 
 export const useCurrentTime = ({ workspaceId }: { workspaceId?: string }) => {
   const dispatch = useAppDispatch();
-  const { data, isLoading, isError, refetch } = useQuery(
+  const { status, refetch, data } = useQuery(
     ['timeData'],
     async () => {
       const response = await requestNew<
-        { data: { time_entry: { start_date: string; model_type: string; model_id: string } } } | undefined
+        { data: { time_entry: { start_date: string; model: string; model_id: string } } } | undefined
       >({
         method: 'GET',
         url: 'time-entries/current'
@@ -788,15 +798,24 @@ export const useCurrentTime = ({ workspaceId }: { workspaceId?: string }) => {
       onSuccess: (data) => {
         const dateData = data?.data;
         const dateString = dateData?.time_entry;
-        const entityCheck = () =>
-          dateString?.model_type ===
-          (EntityType.hub ||
-            EntityType.list ||
-            EntityType.subHub ||
-            EntityType.subWallet ||
-            EntityType.subtask ||
-            EntityType.task ||
-            EntityType.wallet);
+
+        const entityCheck = (): boolean => {
+          const validEntityTypes = [
+            EntityType.hub,
+            EntityType.list,
+            EntityType.subHub,
+            EntityType.subWallet,
+            EntityType.subtask,
+            EntityType.task,
+            EntityType.wallet
+          ];
+
+          if (dateString?.model !== undefined) {
+            return validEntityTypes.includes(dateString.model);
+          }
+
+          return false;
+        };
 
         if (dateData?.time_entry === null) {
           dispatch(setTimerStatus(false));
@@ -810,11 +829,11 @@ export const useCurrentTime = ({ workspaceId }: { workspaceId?: string }) => {
           entityCheck() &&
             dispatch(
               setTimerLastMemory({
-                hubId: dateString.model_type === EntityType.hub ? dateString.model_id : null,
+                hubId: dateString.model === EntityType.hub ? dateString.model_id : null,
                 activeTabId: 6,
-                subhubId: dateString.model_type === EntityType.subHub ? dateString.model_id : null,
-                listId: dateString.model_type === EntityType.list ? dateString.model_id : null,
-                taskId: dateString.model_type === EntityType.task ? dateString.model_id : null,
+                subhubId: dateString.model === EntityType.subHub ? dateString.model_id : null,
+                listId: dateString.model === EntityType.list ? dateString.model_id : null,
+                taskId: dateString.model === EntityType.task ? dateString.model_id : null,
                 workSpaceId: workspaceId
               })
             );
@@ -822,9 +841,8 @@ export const useCurrentTime = ({ workspaceId }: { workspaceId?: string }) => {
       }
     }
   );
-  runTimer({ isRunning: !!data?.data.time_entry });
 
-  return { data, isLoading, isError, refetch };
+  return { status, refetch, data };
 };
 
 export const StartTimeEntryService = () => {

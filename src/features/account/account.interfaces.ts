@@ -21,6 +21,8 @@ export interface IUserParams {
   pilotWidth?: number;
   isPilotMinified?: boolean;
   isFavoritePinned?: boolean;
+  extendedBarWidth?: number;
+  hotkeys?: number[];
 }
 
 export interface IUserCalendarParams {

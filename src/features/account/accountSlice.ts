@@ -14,6 +14,10 @@ const sidebarWidthFromLS = JSON.parse(localStorage.getItem(STORAGE_KEYS.SIDEBAR_
 
 const pilotWidthFromLS = JSON.parse(localStorage.getItem(STORAGE_KEYS.PILOT_WIDTH) || '""') as number;
 
+const extendedBarWidthFromLS = JSON.parse(localStorage.getItem(STORAGE_KEYS.EXTENDED_BAR_WIDTH) || '""') as number;
+
+const hotKeysFromLS = JSON.parse(localStorage.getItem(STORAGE_KEYS.HOT_KEYS) || '""') as number[];
+
 const idsFromLS = JSON.parse(localStorage.getItem('placeItem') || '[]') as string[];
 
 const isPilotMinifiedFromLS = JSON.parse(localStorage.getItem(STORAGE_KEYS.IS_PILOT_MINIFIED) || 'false') as boolean;
@@ -63,7 +67,9 @@ const initialState: AccountState = {
     sidebarWidth: sidebarWidthFromLS,
     isFavoritePinned: false,
     pilotWidth: pilotWidthFromLS,
-    isPilotMinified: isPilotMinifiedFromLS
+    isPilotMinified: isPilotMinifiedFromLS,
+    extendedBarWidth: extendedBarWidthFromLS,
+    hotkeys: hotKeysFromLS
   },
   places: [...initialPlaces.sort((a, b) => idsFromLS.indexOf(a.id) - idsFromLS.indexOf(b.id))],
   calculatedContentWidth: ''

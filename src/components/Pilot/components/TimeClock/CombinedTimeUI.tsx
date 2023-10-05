@@ -12,6 +12,7 @@ import { setActiveClockTab } from '../../../../features/workspace/workspaceSlice
 import { HeaderIcons } from './TimeHeaderIcons';
 import { TimerCheck } from './TimeCounter';
 import { HourGlassIcon } from '../../../../assets/icons/HourGlass';
+import { ManualTime } from './ManualTime';
 
 export function CombinedTime() {
   const dispatch = useAppDispatch();
@@ -62,7 +63,7 @@ export function CombinedTime() {
   return (
     <div
       className={`flex flex-col space-y-1.5 w-full bg-alsoit-gray-50 rounded-md ${
-        activeTrackers?.length ? 'h-min' : 'h-4'
+        activeTrackers?.length || activeClockTab === TIME_TABS.manual ? 'h-min' : 'h-4'
       }`}
     >
       {/* Time Trackers */}
@@ -86,17 +87,21 @@ export function CombinedTime() {
           {dropDown.tabDrop && TabsDropDown()}
         </label>
         {/* Counter and Icons */}
-        <div className="flex items-center space-x-1">
-          <div className="flex items-center relative border bg-white rounded px-2.5 py-1 border-alsoit-success">
-            <TimerCheck />
-            <span className="absolute -top-1.5 bg-white px-0.5 text-alsoit-text-sm">My Time</span>
+        {activeClockTab === TIME_TABS.realTime && (
+          <div className="flex items-center space-x-1">
+            <div className="flex items-center relative border bg-white rounded px-2.5 py-1 border-alsoit-success">
+              <TimerCheck />
+              <span className="absolute -top-1.5 bg-white px-0.5 text-alsoit-text-sm">My Time</span>
+            </div>
+            <div className="bg-white p-0.5 rounded cursor-pointer">
+              <HourGlassIcon className=" w-4 h-4" />
+            </div>
+            <HeaderIcons />
           </div>
-          <div className="bg-white p-0.5 rounded cursor-pointer">
-            <HourGlassIcon className=" w-4 h-4" />
-          </div>
-          <HeaderIcons />
-        </div>
+        )}
       </div>
+      {/* Manual Time */}
+      {activeClockTab === TIME_TABS.manual && <ManualTime />}
       {/* Other Active Time Log entries */}
       <div className="flex flex-col">
         {/* Log headers */}

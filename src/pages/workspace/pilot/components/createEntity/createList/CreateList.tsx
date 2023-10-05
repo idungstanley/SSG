@@ -10,13 +10,13 @@ import {
   setshowMenuDropdown
 } from '../../../../../../features/hubs/hubSlice';
 import {
+  setActiveItem,
   setCreateEntityType,
   setCreateWlLink,
   setShowOverlay
 } from '../../../../../../features/workspace/workspaceSlice';
 import { createListService } from '../../../../../../features/list/listService';
 import { EntityType } from '../../../../../../utils/EntityTypes/EntityType';
-import Palette from '../../../../../../components/ColorPalette';
 import Assignee from '../../../../tasks/assignTask/Assignee';
 import ArrowDown from '../../../../../../assets/icons/ArrowDown';
 import Wand from '../../../../../../assets/icons/Wand';
@@ -26,18 +26,34 @@ import { setFilteredResults } from '../../../../../../features/search/searchSlic
 import { ErrorHasDescendant } from '../../../../../../types';
 import Toast from '../../../../../../common/Toast';
 import { toast } from 'react-hot-toast';
+import AlsoitMenuDropdown from '../../../../../../components/DropDowns';
+import ColorPalette from '../../../../../../components/ColorPalette/component/ColorPalette';
+import { useNavigate } from 'react-router-dom';
 
 export default function CreateList() {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const { selectedTreeDetails, createWLID, hub } = useAppSelector((state) => state.hub);
   const { createWlLink } = useAppSelector((state) => state.workspace);
+  const { currentWorkspaceId } = useAppSelector((state) => state.auth);
 
   const [paletteColor, setPaletteColor] = useState<string | ListColourProps | undefined | null>('black');
-  const [showPalette, setShowPalette] = useState<boolean>(false);
+  const [showPalette, setShowPalette] = useState<null | HTMLDivElement>(null);
   const { type, id } = selectedTreeDetails;
   const createList = useMutation(createListService, {
     onSuccess: (data) => {
+      const listDetails = data?.data.list;
+      navigate(`/${currentWorkspaceId}/tasks/l/${listDetails.id}`, {
+        replace: true
+      });
+      dispatch(
+        setActiveItem({
+          activeItemType: EntityType.list,
+          activeItemId: listDetails.id,
+          activeItemName: listDetails.name
+        })
+      );
       dispatch(setCreateListSlideOverVisibility(false));
       dispatch(setShowOverlay(false));
       dispatch(setSubDropdownMenu(false));
@@ -75,9 +91,16 @@ export default function CreateList() {
     });
   };
 
+  const handlePaletteColor = (value: string | ListColourProps | undefined | null) => {
+    setPaletteColor(value);
+  };
   const handleShowPalette = (e: React.MouseEvent<HTMLDivElement | HTMLButtonElement, MouseEvent>) => {
     e.stopPropagation();
-    setShowPalette((prev) => !prev);
+    setShowPalette((e as React.MouseEvent<HTMLDivElement, MouseEvent>).currentTarget);
+  };
+
+  const handleClosePalette = () => {
+    setShowPalette(null);
   };
   const jsonColorString = JSON.stringify({ outerColour: paletteColor as string, innerColour: undefined });
   const { name } = formState;
@@ -91,11 +114,13 @@ export default function CreateList() {
       });
     } catch (error) {
       const errorResponse = error as ErrorHasDescendant;
-      const isHasDescendant = errorResponse.data.data.has_descendants;
-      if (isHasDescendant) {
-        toast.custom((t) => (
-          <Toast type="error" title="Error Creating List" body="Parent Entity has a descendant" toastId={t.id} />
-        ));
+      if (errorResponse.data) {
+        const isHasDescendant = errorResponse.data.data.has_descendants;
+        if (isHasDescendant) {
+          toast.custom((t) => (
+            <Toast type="error" title="Error Creating List" body="Parent Entity has a descendant" toastId={t.id} />
+          ));
+        }
       }
     }
   };
@@ -142,9 +167,9 @@ export default function CreateList() {
           />
           <Checkbox checked={false} onChange={() => ({})} description="Show list to everyone" height="5" width="5" />
         </div>
-        <div className="relative mt-32 ml-24">
-          {showPalette ? <Palette title="List Colour" setPaletteColor={setPaletteColor} /> : null}
-        </div>
+        <AlsoitMenuDropdown handleClose={handleClosePalette} anchorEl={showPalette}>
+          <ColorPalette handleClick={handlePaletteColor} />
+        </AlsoitMenuDropdown>
       </div>
       <div className="flex justify-between pt-2 space-x-3">
         <Button buttonStyle="white" onClick={onClose} loading={false} label="Cancel" width={20} height="h-7" />

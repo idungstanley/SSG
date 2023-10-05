@@ -18,6 +18,7 @@ export default function LList({
 }) {
   const { draggableItemId } = useAppSelector((state) => state.list);
   const draggableItem = draggableItemId ? list.find((i: IList) => i.id === draggableItemId) : null;
+
   return (
     <>
       {draggableItem ? (

@@ -11,16 +11,22 @@ import {
   setSubDropdownMenu,
   setshowMenuDropdown
 } from '../../../../../../features/hubs/hubSlice';
-import { setCreateEntityType, setShowOverlay } from '../../../../../../features/workspace/workspaceSlice';
+import {
+  setActiveItem,
+  setCreateEntityType,
+  setShowOverlay
+} from '../../../../../../features/workspace/workspaceSlice';
 import { EntityType } from '../../../../../../utils/EntityTypes/EntityType';
 import Assignee from '../../../../tasks/assignTask/Assignee';
 import Wand from '../../../../../../assets/icons/Wand';
 import ArrowDown from '../../../../../../assets/icons/ArrowDown';
-import Palette from '../../../../../../components/ColorPalette';
 import { ListColourProps } from '../../../../../../components/tasks/ListItem';
 import { displayPrompt, setVisibility } from '../../../../../../features/general/prompt/promptSlice';
 import { createHubManager } from '../../../../../../managers/Hub';
 import { setFilteredResults } from '../../../../../../features/search/searchSlice';
+import AlsoitMenuDropdown from '../../../../../../components/DropDowns';
+import ColorPalette from '../../../../../../components/ColorPalette/component/ColorPalette';
+import { useNavigate } from 'react-router-dom';
 
 interface formProps {
   name: string;
@@ -29,15 +35,35 @@ interface formProps {
 
 export default function CreateHub() {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const { selectedTreeDetails, currHubId, hub } = useAppSelector((state) => state.hub);
 
   const [paletteColor, setPaletteColor] = useState<string | ListColourProps | undefined | null>('');
-  const [showPalette, setShowPalette] = useState<boolean>(false);
+  const [showPalette, setShowPalette] = useState<null | HTMLDivElement>(null);
+  const { currentWorkspaceId: workSpaceId } = useAppSelector((state) => state.auth);
 
   const { type, id } = selectedTreeDetails;
+  const { data } = useGetHubChildren({
+    query: type === EntityType.hub ? id : currHubId
+  });
+
+  const isCreateAllowed = !!data && (data?.data.wallets?.length > 0 || data?.data?.lists?.length > 0);
+
   const createHub = useMutation(createHubService, {
     onSuccess: (data) => {
+      const listDetails = data?.data.hub;
+      const routeVariable = id ? 'tasks/sh' : 'tasks/h';
+      navigate(`/${workSpaceId}/${routeVariable}/${listDetails.id}`, {
+        replace: true
+      });
+      dispatch(
+        setActiveItem({
+          activeItemType: EntityType.hub,
+          activeItemId: listDetails.id,
+          activeItemName: listDetails.name
+        })
+      );
       dispatch(setCreateEntityType(null));
       dispatch(setSubDropdownMenu(false));
       dispatch(setShowOverlay(false));
@@ -82,19 +108,23 @@ export default function CreateHub() {
     dispatch(setEntityToCreate(null));
   };
 
+  const handlePaletteColor = (value: string | ListColourProps | undefined | null) => {
+    setPaletteColor(value);
+  };
+
   const handleShowPalette = (e: React.MouseEvent<HTMLDivElement | HTMLButtonElement, MouseEvent>) => {
     e.stopPropagation();
-    setShowPalette((prev) => !prev);
+    setShowPalette((e as React.MouseEvent<HTMLDivElement, MouseEvent>).currentTarget);
+  };
+
+  const handleClosePalette = () => {
+    setShowPalette(null);
   };
 
   const currentWorkspaceId: string | undefined = JSON.parse(
     localStorage.getItem('currentWorkspaceId') || '"'
   ) as string;
-  const { data } = useGetHubChildren({
-    query: type === EntityType.hub ? id : currHubId
-  });
 
-  const isCreateAllowed = !!data && (data?.data.wallets?.length > 0 || data?.data?.lists?.length > 0);
   const { name } = formState;
 
   const onSubmit = async () => {
@@ -169,9 +199,9 @@ export default function CreateHub() {
           <Checkbox checked={false} onChange={() => ({})} description="Host other entities" height="5" width="5" />
           <Checkbox checked={false} onChange={() => ({})} description="Host other entities" height="5" width="5" />
         </div>
-        <div className="relative mt-32 ml-24">
-          {showPalette ? <Palette title="Hub Colour" setPaletteColor={setPaletteColor} /> : null}
-        </div>
+        <AlsoitMenuDropdown handleClose={handleClosePalette} anchorEl={showPalette}>
+          <ColorPalette handleClick={handlePaletteColor} />
+        </AlsoitMenuDropdown>
       </div>
       <div className="flex justify-between pt-2 space-x-3">
         <Button buttonStyle="white" onClick={onClose} loading={false} label="Cancel" width={20} height="h-7" />
