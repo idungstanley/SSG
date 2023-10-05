@@ -152,6 +152,7 @@ interface TaskState {
   hideTask: listColumnProps[];
   currentTaskId: string | null;
   selectedTasksArray: string[];
+  selectedIndexListId: string | null;
   saveSettingLocal: { [key: string]: boolean } | null;
   saveSettingList: ItaskViews | undefined;
   saveSettingOnline: { [key: string]: boolean } | null;
@@ -267,6 +268,7 @@ const initialState: TaskState = {
     fullTask: null
   },
   selectedTasksArray: [],
+  selectedIndexListId: null,
   verticalGrid: false,
   taskUpperCase: false,
   currentSelectedDuplicateArr: [],
@@ -506,6 +508,9 @@ export const taskSlice = createSlice({
     setSelectedTasksArray(state, action: PayloadAction<string[]>) {
       state.selectedTasksArray = action.payload;
     },
+    setSelectedIndexListId(state, action: PayloadAction<string | null>) {
+      state.selectedIndexListId = action.payload;
+    },
     getSingleLineView(state, action: PayloadAction<boolean>) {
       state.singleLineView = action.payload;
     },
@@ -694,6 +699,7 @@ export const {
   setToggleAllSubtask,
   setSeparateSubtasksMode,
   setSelectedTasksArray,
+  setSelectedIndexListId,
   setAddNewTaskItem,
   setCloseTaskListView,
   setTriggerSaveSettings,

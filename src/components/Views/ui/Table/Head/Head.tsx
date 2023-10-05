@@ -76,7 +76,7 @@ export function Head({
   const [headerId, setheaderId] = useState<string>('');
   const [showStatusDropdown, setShowStatusDropdown] = useState<null | SVGElement>(null);
   const [showSortModal, setShowSortModal] = useState<boolean>(false);
-  const { sortArr, sortAbleArr, selectedTasksArray, selectedIndex, selectedIndexStatus, selectedListIds } =
+  const { sortArr, sortAbleArr, selectedTasksArray, selectedIndex, selectedIndexStatus, selectedIndexListId } =
     useAppSelector((state) => state.task);
   const { baseColor } = useAppSelector((state) => state.account);
   const { isManageStatus } = useAppSelector((state) => state.workspace);
@@ -97,11 +97,7 @@ export function Head({
     if (selectedIndex !== null) {
       const updatedTaskIds: string[] = [...selectedTasksArray];
       groupedTask?.map((task, index) => {
-        if (
-          selectedIndex === index &&
-          selectedIndexStatus === task.status.name &&
-          selectedListIds.includes(listId as string)
-        ) {
+        if (selectedIndex === index && selectedIndexStatus === task.status.name && listId == selectedIndexListId) {
           const taskIndex = updatedTaskIds.indexOf(task.id);
           if (taskIndex === -1) {
             updatedTaskIds.push(task.id);
