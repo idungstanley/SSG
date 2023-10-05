@@ -19,6 +19,7 @@ import { QueryClient, useInfiniteQuery, useMutation, useQuery, useQueryClient } 
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import {
   setDuplicateTaskObj,
+  setNewTaskPriority,
   setScreenRecording,
   setScreenRecordingMedia,
   setSelectedListIds,
@@ -226,6 +227,7 @@ export const useAddTask = (task?: Task) => {
 
   return useMutation(addTask, {
     onSuccess: (data) => {
+      dispatch(setNewTaskPriority('normal'));
       if (data.data.task.parent_id) {
         // add subtask
         const updatedSubtasks = addNewSubtaskManager(
