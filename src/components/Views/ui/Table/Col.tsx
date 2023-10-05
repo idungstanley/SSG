@@ -17,7 +17,7 @@ import { ACTIVE_COL_BG, DEFAULT_COL_BG } from '../../config';
 import DateFormat from '../../../DateFormat';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { EntityType } from '../../../../utils/EntityTypes/EntityType';
-import { IField, ITask_statuses } from '../../../../features/list/list.interfaces';
+import { IField } from '../../../../features/list/list.interfaces';
 import TextField from './CustomField/TextField/TextField';
 import LabelsWrapper from './CustomField/Labels/LabelsWrapper';
 import NumberField from './CustomField/Number/NumberField';
@@ -33,17 +33,17 @@ import TimeField from './CustomField/TimeField/TimeField';
 import AutoProgress from './CustomField/Progress/AutoProgress';
 import FormulaField from './CustomField/Formula/FormulaField';
 import PeopleField from './CustomField/PeopleField/PeopleField';
+import FilesField from './CustomField/Files/FilesField';
+import LocationField from './CustomField/Location/LocationField';
 
 interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   value: TaskValue;
   field: Pick<listColumnProps, 'field'>['field'];
   task: Task;
   fieldId: string;
-  customFields?: IField[];
-  taskStatuses?: ITask_statuses[];
 }
 
-export function Col({ value, field, fieldId, task, customFields, taskStatuses, ...props }: ColProps) {
+export function Col({ value, field, fieldId, task, ...props }: ColProps) {
   const dispatch = useAppDispatch();
   const { taskId } = useParams();
 
@@ -68,7 +68,7 @@ export function Col({ value, field, fieldId, task, customFields, taskStatuses, .
           dispatch(setSelectedTaskType(task?.parent_id ? EntityType.subtask : EntityType.task));
         }}
       >
-        <StatusDropdown TaskCurrentStatus={task.status} taskStatuses={taskStatuses} statusDropdownType="name" />
+        <StatusDropdown taskCurrentStatus={task.status} taskStatuses={task.task_statuses} statusDropdownType="name" />
       </div>
     ) : (
       <></>
@@ -82,19 +82,19 @@ export function Col({ value, field, fieldId, task, customFields, taskStatuses, .
         taskId={task.id}
         fieldId={fieldId}
         taskCustomFields={task.custom_fields}
-        entityCustomProperty={customFields}
+        entityCustomProperty={task.custom_field_columns}
       />
     ),
     labels: (
       <LabelsWrapper
-        entityCustomProperty={customFields?.find((i) => i.id === fieldId)}
+        entityCustomProperty={task.custom_field_columns?.find((i) => i.id === fieldId)}
         taskCustomFields={task.custom_fields?.find((i) => i.id === fieldId)}
         taskId={task.id}
       />
     ),
     tags: (
       <TagsWrapper
-        entityCustomProperty={customFields?.find((i) => i.id === fieldId)}
+        entityCustomProperty={task.custom_field_columns?.find((i) => i.id === fieldId)}
         taskCustomFields={task.custom_fields?.find((i) => i.id === fieldId)}
         taskId={task.id}
       />
@@ -130,7 +130,7 @@ export function Col({ value, field, fieldId, task, customFields, taskStatuses, .
     ),
     money: (
       <MoneyField
-        entityCustomProperty={customFields?.find((i) => i.id === fieldId)}
+        entityCustomProperty={task.custom_field_columns?.find((i) => i.id === fieldId)}
         taskId={task.id}
         taskCustomFields={task.custom_fields?.find((i) => i.id === fieldId)}
         fieldId={fieldId}
@@ -168,7 +168,10 @@ export function Col({ value, field, fieldId, task, customFields, taskStatuses, .
     ),
     progress_manual: <AutoProgress task={task as ImyTaskData} />,
     progress_auto: (
-      <AutoProgress task={task as ImyTaskData} entityCustomProperty={customFields?.find((i) => i.id === fieldId)} />
+      <AutoProgress
+        task={task as ImyTaskData}
+        entityCustomProperty={task.custom_field_columns?.find((i) => i.id === fieldId)}
+      />
     ),
     checkbox: (
       <CheckboxField
@@ -179,7 +182,7 @@ export function Col({ value, field, fieldId, task, customFields, taskStatuses, .
     ),
     rating: (
       <RatingField
-        entityCustomProperty={customFields?.find((i) => i.id === fieldId)}
+        entityCustomProperty={task.custom_field_columns?.find((i) => i.id === fieldId)}
         taskId={task.id}
         taskCustomFields={task.custom_fields?.find((i) => i.id === fieldId)}
         fieldId={fieldId}
@@ -198,7 +201,22 @@ export function Col({ value, field, fieldId, task, customFields, taskStatuses, .
     ),
     people: (
       <PeopleField
-        entityCustomProperty={customFields?.find((i) => i.id === fieldId)}
+        entityCustomProperty={task.custom_field_columns?.find((i) => i.id === fieldId)}
+        taskId={task.id}
+        taskCustomFields={task.custom_fields?.find((i) => i.id === fieldId)}
+        fieldId={fieldId}
+      />
+    ),
+    files: (
+      <FilesField
+        taskId={task.id}
+        taskCustomFields={task.custom_fields?.find((i) => i.id === fieldId)}
+        fieldId={fieldId}
+        listId={task.list_id}
+      />
+    ),
+    location: (
+      <LocationField
         taskId={task.id}
         taskCustomFields={task.custom_fields?.find((i) => i.id === fieldId)}
         fieldId={fieldId}

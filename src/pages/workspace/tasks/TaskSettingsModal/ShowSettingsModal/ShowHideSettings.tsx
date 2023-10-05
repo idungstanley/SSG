@@ -60,7 +60,7 @@ export default function ShowHideSettings({
 
   const [checkedStates, setCheckedStates] = useState<boolean[]>([]);
   const [isAnyactive, setIsAnyactive] = useState<boolean>();
-  const [activeItem, setActiveItem] = useState<string>(splitSubTaskLevels);
+  const [levelItems, setLevelItems] = useState<string[]>(splitSubTaskLevels);
 
   const isActiveColor = isAnyactive ? '#BF01FE' : 'black';
 
@@ -207,9 +207,15 @@ export default function ShowHideSettings({
     }
   };
 
-  const handleClick = (option: string) => {
-    setActiveItem(option);
-    dispatch(getSplitSubTaskLevels(option));
+  const handleChangeSplitLevel = (levelId: string) => {
+    let levelOptions: string[] = [];
+    if (levelItems.includes(levelId)) {
+      levelOptions = levelItems.filter((id) => id !== levelId);
+    } else {
+      levelOptions = [...levelItems, levelId];
+    }
+    setLevelItems(levelOptions);
+    dispatch(getSplitSubTaskLevels(levelOptions));
   };
 
   return (
@@ -314,28 +320,21 @@ export default function ShowHideSettings({
                 <ul>
                   {splitSubtasksOptions.map((option) => (
                     <li
-                      onClick={() => handleClick(option.id)}
                       key={option.id}
-                      className={`text-alsoit-text-lg font-semibold py-1.5 flex space-x-2 items-center px-2 ${
-                        activeItem === option.id ? 'bg-alsoit-purple-50' : 'hover:bg-alsoit-purple-50'
-                      }`}
+                      className="flex justify-between text-alsoit-text-lg font-semibold py-1.5 flex space-x-2 items-center pl-2"
                     >
-                      <input
-                        checked={activeItem === option.id}
-                        type="radio"
-                        id="myRadio"
-                        name="myRadioGroup"
-                        className="hidden"
-                      />
-                      <label
-                        htmlFor="myRadio"
-                        className={
-                          activeItem === option.id
-                            ? 'bg-alsoit-purple-300 inline-block p-2 border border-alsoit-purple-300 rounded-full cursor-pointer text-purple-600'
-                            : 'inline-block p-2 border border-alsoit-purple-300 rounded-full cursor-pointer text-purple-600'
-                        }
-                      ></label>
                       <span className="font-semibold">{option.label}</span>
+                      <p className="flex items-center pr-2 ">
+                        <label className="switch" onClick={(event) => event.stopPropagation()}>
+                          <input
+                            className="inputShow"
+                            type="checkbox"
+                            checked={levelItems.includes(option.id)}
+                            onChange={() => handleChangeSplitLevel(option.id)}
+                          />
+                          <div className={`slider ${levelItems.includes(option.id) ? 'checked' : ''}`}></div>
+                        </label>
+                      </p>
                     </li>
                   ))}
                 </ul>

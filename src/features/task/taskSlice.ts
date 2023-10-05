@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { listColumnProps } from '../../pages/workspace/tasks/component/views/ListColumns';
-import { IField, IFieldValue } from '../list/list.interfaces';
+import { IField, IFieldValue, ITask_statuses } from '../list/list.interfaces';
 import {
   IDuration,
   IExtraFields,
@@ -28,17 +28,6 @@ export interface ICustomField {
   values: IFieldValue[];
 }
 
-// color: null;
-// id: '9ed486ae-ff6d-4ea9-8ed8-50b977eb5b6f';
-// is_bold: null;
-// is_italic: null;
-// is_strike: null;
-// is_underlined: null;
-// lan: null;
-// lon: null;
-// model: 'team_member';
-// model_id: 'c12503d2-eec1-414c-9cd4-f71cce4c3e45';
-// value: 'c12503d2-eec1-414c-9cd4-f71cce4c3e45';
 export interface ActiveTaskColumnProps {
   id: string;
   header: string;
@@ -82,6 +71,7 @@ export interface ImyTaskData {
   closed_subtasks_count: number;
   checklist_items_count: number;
   checklist_done_items_count: number;
+  task_statuses: ITask_statuses[];
   has_descendants: boolean;
   has_attachments: boolean;
   end_date: string | null;
@@ -166,12 +156,13 @@ interface TaskState {
   showNewTaskId: string;
   singleLineView: boolean;
   toggleAllSubtask: boolean;
+  toggleAllSubtaskSplit: string[];
   separateSubtasksMode: boolean;
   CompactView: boolean;
   taskUpperCase: boolean;
   verticalGridlinesTask: boolean;
   splitSubTaskState: boolean;
-  splitSubTaskLevels: string;
+  splitSubTaskLevels: string[];
   CompactViewWrap: boolean;
   triggerSaveSettings: boolean;
   triggerAutoSave: boolean;
@@ -229,6 +220,7 @@ interface TaskState {
   HistoryFilterMemory: IHistoryFilterMemory | null;
   filters: FilterFieldsWithOption;
   subtasksfilters: Record<string, FilterFieldsWithOption>;
+  isFiltersUpdated: boolean;
   statusId: string;
   currTaskListId: string;
   entityForCustom: entityForCustom;
@@ -278,9 +270,10 @@ const initialState: TaskState = {
   triggerAutoSave: false,
   triggerSaveSettingsModal: false,
   toggleAllSubtask: false,
+  toggleAllSubtaskSplit: [],
   verticalGridlinesTask: false,
   splitSubTaskState: false,
-  splitSubTaskLevels: TWO_SUBTASKS_LEVELS,
+  splitSubTaskLevels: [],
   separateSubtasksMode: false,
   CompactView: false,
   CompactViewWrap: false,
@@ -333,6 +326,7 @@ const initialState: TaskState = {
     option: DEFAULT_FILTERS_OPTION
   },
   subtasksfilters: {},
+  isFiltersUpdated: true,
   selectedDate: null,
   HistoryFilterMemory: null,
   statusId: '',
@@ -372,6 +366,9 @@ export const taskSlice = createSlice({
     },
     setSubtasksFilters(state, action: PayloadAction<Record<string, FilterFieldsWithOption>>) {
       state.subtasksfilters = action.payload;
+    },
+    setFiltersUpdated(state, action: PayloadAction<boolean>) {
+      state.isFiltersUpdated = action.payload;
     },
     setAssigneeIds(state, action: PayloadAction<string[]>) {
       state.assigneeIds = action.payload;
@@ -488,6 +485,12 @@ export const taskSlice = createSlice({
     setSeparateSubtasksMode(state, action: PayloadAction<boolean>) {
       state.separateSubtasksMode = action.payload;
       state.toggleAllSubtask = false;
+      state.toggleAllSubtaskSplit = [];
+    },
+    setToggleAllSubtaskSplit(state, action: PayloadAction<string[]>) {
+      state.toggleAllSubtaskSplit = action.payload;
+      state.toggleAllSubtask = false;
+      state.separateSubtasksMode = false;
     },
     setShowNewTaskField(state, action: PayloadAction<boolean>) {
       state.showNewTaskField = action.payload;
@@ -507,7 +510,7 @@ export const taskSlice = createSlice({
     getSplitSubTask(state, action: PayloadAction<boolean>) {
       state.splitSubTaskState = action.payload;
     },
-    getSplitSubTaskLevels(state, action: PayloadAction<string>) {
+    getSplitSubTaskLevels(state, action: PayloadAction<string[]>) {
       state.splitSubTaskLevels = action.payload;
     },
     setSelectedTasksArray(state, action: PayloadAction<string[]>) {
@@ -667,6 +670,7 @@ export const {
   setFilterFields,
   setFilterOption,
   setSubtasksFilters,
+  setFiltersUpdated,
   setAssigneeIds,
   setStatusId,
   setCurrTaskListId,
@@ -703,6 +707,7 @@ export const {
   setCurrentTaskId,
   setDefaultSubtaskId,
   setToggleAllSubtask,
+  setToggleAllSubtaskSplit,
   setSeparateSubtasksMode,
   setSelectedTasksArray,
   setSelectedIndexListId,

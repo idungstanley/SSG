@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { dimensions } from '../../app/config/dimensions';
+import { dimensions, STORAGE_KEYS } from '../../app/config/dimensions';
 import {
   IRecorderLastMemory,
   ITimerLastMemory,
@@ -17,6 +17,7 @@ const pilotFromLS = JSON.parse(localStorage.getItem('pilot') || '""') as {
   showTabLabel: boolean;
 };
 const showTabLabelFromLS = !!pilotFromLS.showTabLabel;
+const hotkeyIdsFromLS = JSON.parse(localStorage.getItem(STORAGE_KEYS.HOT_KEYS) ?? '[]') as number[];
 
 interface workspaceState {
   workspace: string[];
@@ -57,6 +58,7 @@ interface workspaceState {
   activeStatusManagementTabId: number | null;
   activeSubDetailsTabId: number | null;
   activeSubTimeClockTabId: number | null;
+  activeClockTab: string;
   activeSubChecklistTabId: number | null;
   showExtendedBar: boolean;
   activePlaceNameForNavigation: string | null;
@@ -79,6 +81,7 @@ interface workspaceState {
   workSpaceSettingsObj: WorkSpaceSettingsUpdateRes | undefined;
   draggableActiveStatusId: string | null;
   isFavoritePinned: boolean;
+  activeHotkeyIds: number[];
 }
 
 const initialState: workspaceState = {
@@ -114,6 +117,7 @@ const initialState: workspaceState = {
   activeHotKeyTabId: 0,
   activeSubDetailsTabId: 1,
   activeSubTimeClockTabId: 0,
+  activeClockTab: 'Real Time',
   activeStatusManagementTabId: 1,
   activeSubHubManagerTabId: 1,
   activeSubCommunicationTabId: 1,
@@ -141,7 +145,8 @@ const initialState: workspaceState = {
   workSpaceSettings: [],
   workSpaceSettingsObj: undefined,
   draggableActiveStatusId: null,
-  isFavoritePinned: false
+  isFavoritePinned: false,
+  activeHotkeyIds: hotkeyIdsFromLS
 };
 
 export const wsSlice = createSlice({
@@ -239,6 +244,9 @@ export const wsSlice = createSlice({
     setSidebarWidthRD(state, action: PayloadAction<number>) {
       state.sidebarWidthRD = action.payload;
     },
+    setActiveHotkeyIds(state, action: PayloadAction<number[]>) {
+      state.activeHotkeyIds = action.payload;
+    },
     setShowWallet(state, action: PayloadAction<boolean>) {
       state.showWallet = action.payload;
     },
@@ -287,6 +295,9 @@ export const wsSlice = createSlice({
     },
     setActiveSubTimeClockTabId(state, action: PayloadAction<number | null>) {
       state.activeSubTimeClockTabId = action.payload;
+    },
+    setActiveClockTab(state, action: PayloadAction<string>) {
+      state.activeClockTab = action.payload;
     },
     setActiveSubChecklistTabId(state, action: PayloadAction<number | null>) {
       state.activeSubChecklistTabId = action.payload;
@@ -383,6 +394,7 @@ export const {
   setActiveSubCommunicationTabId,
   setActiveSubDetailsTabId,
   setActiveSubTimeClockTabId,
+  setActiveClockTab,
   setPilotWidth,
   setShowPilotListView,
   setActiveTabId,
@@ -420,7 +432,8 @@ export const {
   setWorkSpaceSetting,
   setIsFavoritePinned,
   setWorkSpaceSettingsObj,
-  setDraggableActiveStatusId
+  setDraggableActiveStatusId,
+  setActiveHotkeyIds
 } = wsSlice.actions;
 
 export default wsSlice.reducer;

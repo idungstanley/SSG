@@ -21,7 +21,7 @@ function Duration({ dateString }: DurationProps) {
 
 type TimeFormat = '12-hour' | '24-hour';
 
-export function parseAndUpdateTime(timeStr: string | undefined): string {
+export function parseAndUpdateTime(timeStr: string | undefined, setDate?: Date): string {
   if (!timeStr) {
     return ''; // Return an empty string for undefined timeStr
   }
@@ -41,7 +41,7 @@ export function parseAndUpdateTime(timeStr: string | undefined): string {
   }
 
   // Create a new Date object with the parsed time
-  const date = new Date();
+  const date = setDate ?? new Date();
   date.setHours(hours, minutes, 0);
 
   // Format the date as a string (e.g., "2023-06-01T16:45:00")
@@ -49,4 +49,39 @@ export function parseAndUpdateTime(timeStr: string | undefined): string {
 
   return formattedDate;
 }
+
+type TimeUnits = {
+  [key: string]: number;
+};
+
+export function formatTimeString(inputString: string): string {
+  // Split the input string into individual components
+  const components = inputString.split(' ');
+
+  // Define a mapping of time units to their corresponding multipliers (e.g., "hours" => 60, "mins" => 1)
+  const unitMap: TimeUnits = {
+    hours: 60,
+    mins: 1
+  };
+
+  // Use the reduce method to calculate the total time in minutes
+  const totalMinutes = components.reduce((total, component, index, arr) => {
+    if (index % 2 === 0) {
+      // If it's an even-indexed component (a number), parse it and multiply by the corresponding unit
+      return total + parseInt(component) * unitMap[arr[index + 1]];
+    }
+    // For odd-indexed components (unit strings), return the total as is
+    return total;
+  }, 0);
+
+  // Calculate hours and minutes from totalMinutes
+  const hours = Math.floor(totalMinutes / 60);
+  const minutes = totalMinutes % 60;
+
+  // Format hours and minutes into a valid time string
+  const formattedTime = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+
+  return formattedTime;
+}
+
 export default Duration;

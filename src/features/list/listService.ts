@@ -323,7 +323,7 @@ export const useUpdateDropdownField = (parentId: string) => {
 const updateEntityCustomFieldValue = (data: {
   taskId?: string;
   fieldId: string;
-  value: { value: string; type?: string }[];
+  value: { value: string; type?: string; lat?: number; lon?: number }[];
 }) => {
   const { taskId, fieldId, value } = data;
 

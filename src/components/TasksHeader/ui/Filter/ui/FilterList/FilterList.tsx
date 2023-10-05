@@ -29,10 +29,9 @@ export function FilterList() {
 
   useEffect(() => {
     const teamMembers = members?.data.team_members;
-
     // set team members and tags to config
     // check if not exist to prevent duplication
-    if (teamMembers?.length && tags?.length && taskStatuses) {
+    if (teamMembers?.length) {
       setInitialFilters((prev) => ({
         ...prev,
         assignees: {
@@ -45,12 +44,30 @@ export function FilterList() {
               initials: i.user.initials
             }))
           ]
-        },
-        tags: { ...prev.tags, values: [...tags.map((i) => ({ value: i.name, id: i.id, color: i.color }))] },
+        }
+      }));
+    }
+  }, [members]);
+
+  useEffect(() => {
+    if (tags?.length) {
+      setInitialFilters((prev) => ({
+        ...prev,
+        tags: { ...prev.tags, values: [...tags.map((i) => ({ value: i.name, id: i.id, color: i.color }))] }
+      }));
+    }
+  }, [tags]);
+
+  useEffect(() => {
+    if (taskStatuses?.length) {
+      setInitialFilters((prev) => ({
+        ...prev,
         status: { ...prev.status, values: [...taskStatuses.map((i) => ({ value: i.name.toLowerCase(), id: i.id }))] }
       }));
     }
+  }, [taskStatuses]);
 
+  useEffect(() => {
     // set custom fields to config
     // check if not exist to prevent duplication
     if (list?.custom_field_columns.length) {
@@ -71,7 +88,7 @@ export function FilterList() {
         ...customFields
       }));
     }
-  }, [members, tags, list]);
+  }, [list]);
 
   const showingFilters =
     splitMode && subtasksfilters[selectedTaskParentId] ? subtasksfilters[selectedTaskParentId]?.fields : filters;

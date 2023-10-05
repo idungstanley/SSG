@@ -163,7 +163,6 @@ export default function PaletteManager({
   const editHubColorMutation = useMutation(UseEditHubService, {
     onSuccess: (data) => {
       const hubData = data.data.hub;
-      console.log(hubData);
       const updatedTree = changeHubManager(hubData.id as string, hub, hubData);
       dispatch(getHub(updatedTree));
       dispatch(setFilteredResults(updatedTree));
@@ -191,6 +190,7 @@ export default function PaletteManager({
   const handleCloseSearch = () => {
     setIsSearch(false);
   };
+
   const handleCloseAdvanceSearch = () => {
     setIsAdvanceSearch(false);
   };

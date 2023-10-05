@@ -18,7 +18,11 @@ export interface IUserParams {
   // add darkTheme or showArchived values
   showPreview?: string;
   sidebarWidth?: number;
+  pilotWidth?: number;
+  isPilotMinified?: boolean;
   isFavoritePinned?: boolean;
+  extendedBarWidth?: number;
+  hotkeys?: number[];
 }
 
 export interface IUserCalendarParams {

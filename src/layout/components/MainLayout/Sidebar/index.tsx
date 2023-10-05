@@ -9,8 +9,6 @@ import { dimensions } from '../../../../app/config/dimensions';
 import { useResize } from '../../../../hooks/useResize';
 import { isAllowIncreaseWidth } from '../../../../utils/widthUtils';
 import { NavigationList } from './components/NavigationItems/components/NavigationList';
-import useResolution from '../../../../hooks/useResolution';
-import { setUserSettingsData, useGetUserSettingsKeys } from '../../../../features/account/accountService';
 import NonInteractiveSearch from '../../../../components/Search/NonInteractiveSearch';
 import CommandSearchModal from './components/CommandSearchModal';
 import SearchIcon from '../../../../assets/icons/SearchIcon';
@@ -24,16 +22,14 @@ const MIN_SIDEBAR_WIDTH = dimensions.navigationBar.min;
 
 export default function Sidebar() {
   const dispatch = useAppDispatch();
-  const { extendedSidebarWidth, sidebarWidthRD, showExtendedBar, isFavoritePinned } = useAppSelector(
-    (state) => state.workspace
-  );
-  const key = 'sidebar';
   const queryClient = useQueryClient();
 
+  const { extendedSidebarWidth, sidebarWidthRD, showExtendedBar } = useAppSelector((state) => state.workspace);
   const { showSidebar, userSettingsData } = useAppSelector((state) => state.account);
+
   const [commandSearchModal, setCommandSearchModal] = useState<boolean>(false);
 
-  const { blockRef, Dividers, size, isMouseUp, isDrag } = useResize({
+  const { blockRef, Dividers, size, isDrag } = useResize({
     dimensions: {
       min: MIN_SIDEBAR_WIDTH,
       max: MAX_SIDEBAR_WIDTH
@@ -42,10 +38,6 @@ export default function Sidebar() {
     direction: 'XR',
     defaultSize: dimensions.navigationBar.default
   });
-
-  const resolution = useResolution();
-
-  useGetUserSettingsKeys(true, key, resolution);
 
   const [activeTabId, setActiveTabId] = useState<string | null>('');
   const hotkeyIdsFromLS = JSON.parse(localStorage.getItem('navhotkeys') ?? '[]') as string[];
@@ -78,7 +70,7 @@ export default function Sidebar() {
     [activeHotkeyIds]
   );
 
-  setUserSettingsData(isMouseUp, key, { ...userSettingsData, sidebarWidth: size, isFavoritePinned }, resolution);
+  // setUserSettingsData(isMouseUp, key, { ...userSettingsData, sidebarWidth: size, isFavoritePinned }, resolution);
 
   useEffect(() => {
     const { isAllow, allowedSize } = isAllowIncreaseWidth(size, extendedSidebarWidth);
@@ -88,7 +80,7 @@ export default function Sidebar() {
 
   return (
     <aside className={cl('flex text-center relative overflow-x-visible')}>
-      <Dividers />
+      {showSidebar && <Dividers />}
       {/* show / hide sidebar icon */}
       {/* sidebar */}
       <section

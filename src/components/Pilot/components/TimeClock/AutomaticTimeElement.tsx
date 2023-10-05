@@ -95,7 +95,7 @@ export default function AutomaticTimeElement({
                 onClick={() => dispatch(setTimerDetails({ ...timerDetails, isBillable: !timerDetails.isBillable }))}
                 className="flex space-x-0.5 p-0.5 bg-white rounded-full"
               >
-                <PoundsIcon active={timerDetails.isBillable} dimensions={{ height: 19, width: 16 }} />
+                <PoundsIcon active={timerDetails.isBillable} className="w-20 h-20" />
               </div>
               <span className="flex items-center justify-center">
                 <TagIcon />

@@ -12,12 +12,12 @@ import { VerticalScroll } from '../ScrollableContainer/VerticalScroll';
 import { ITask_statuses } from '../../features/list/list.interfaces';
 
 interface StatusDropdownProps {
-  TaskCurrentStatus: Status;
+  taskCurrentStatus: Status;
   statusDropdownType?: string;
   taskStatuses?: ITask_statuses[];
 }
 
-export default function StatusDropdown({ TaskCurrentStatus, statusDropdownType, taskStatuses }: StatusDropdownProps) {
+export default function StatusDropdown({ taskCurrentStatus, statusDropdownType, taskStatuses }: StatusDropdownProps) {
   const { currentTaskStatusId } = useAppSelector((state) => state.task);
   const { updateCords } = useAppSelector((state) => state.task);
 
@@ -56,7 +56,7 @@ export default function StatusDropdown({ TaskCurrentStatus, statusDropdownType, 
   return (
     <>
       <div>
-        <ToolTip title={TaskCurrentStatus.name}>
+        <ToolTip title={taskCurrentStatus.name}>
           <button
             type="button"
             onClick={(e) => handleOpenStatusDropdown(e)}
@@ -64,9 +64,9 @@ export default function StatusDropdown({ TaskCurrentStatus, statusDropdownType, 
           >
             <div ref={relativeRef} className="mb-1">
               {statusDropdownType === 'name' ? (
-                TaskCurrentStatus.name
+                taskCurrentStatus.name
               ) : (
-                <StatusIconComp color={TaskCurrentStatus.color} />
+                <StatusIconComp color={taskCurrentStatus.color} />
               )}
             </div>
           </button>
@@ -84,7 +84,7 @@ export default function StatusDropdown({ TaskCurrentStatus, statusDropdownType, 
                         key={statuses.id}
                         type="button"
                         className={cl(
-                          TaskCurrentStatus?.name.toLowerCase() === statuses.name.toLowerCase()
+                          taskCurrentStatus?.name.toLowerCase() === statuses.name.toLowerCase()
                             ? `bg-${statuses.color}-200`
                             : '',
                           'flex items-center px-4 py-2 text-sm text-gray-600 rounded hover:bg-alsoit-gray-75 text-left space-x-2 w-full'

@@ -18,8 +18,12 @@ export function FilterDropdown({ isSplitSubtasks }: IFilterDropdownProps) {
         <Menu.Button className="inline-flex text-gay-500">
           <Button active={false} withoutBg={isSplitSubtasks}>
             <Icons src={Filter} />
-            Filter
-            <ArrowDownFilled />
+            {!isSplitSubtasks ? (
+              <>
+                Filter
+                <ArrowDownFilled />
+              </>
+            ) : null}
           </Button>
         </Menu.Button>
       </div>

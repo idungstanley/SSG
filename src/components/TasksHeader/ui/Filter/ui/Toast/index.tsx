@@ -89,24 +89,33 @@ function SaveFilterToast({ title, body, showClose = true, toastId, extended, ext
                 )}
               </div>
               <div className="my-1">
-                <section className="flex justify-between my-1">
-                  <div className="flex items-center cursor-pointer gap-0.5">
-                    <button
-                      className="w-28 h-7 bg-alsoit-purple-300 rounded text-white text-alsoit-text-sm font-semibold"
-                      onClick={handleSaveFilters}
-                    >
-                      {extended === 'clockReminder' ? 'Stop Timer Now' : 'Save'}
-                    </button>
-                  </div>
-                  <div className="flex items-center cursor-pointer gap-0.5">
-                    <button
-                      className="w-28 h-7 bg-alsoit-gray-50 rounded hover:bg-alsoit-purple-50 text-alsoit-text-sm font-semibold"
-                      onClick={() => toast.remove(toastId)}
-                    >
-                      {extended === 'clockReminder' ? 'Continue' : 'Cancel'}
-                    </button>
-                  </div>
-                </section>
+                {extended ? (
+                  <section className="flex justify-between my-1">
+                    <div className="flex items-center cursor-pointer gap-0.5">
+                      <button
+                        className="w-28 h-7 bg-alsoit-purple-300 rounded text-white text-alsoit-text-sm font-semibold"
+                        onClick={handleSaveFilters}
+                      >
+                        {extended === 'clockReminder' ? 'Stop Timer Now' : 'Save'}
+                      </button>
+                    </div>
+                    <div className="flex items-center cursor-pointer gap-0.5">
+                      <button
+                        className="w-28 h-7 bg-alsoit-gray-50 rounded hover:bg-alsoit-purple-50 text-alsoit-text-sm font-semibold"
+                        onClick={() => toast.remove(toastId)}
+                      >
+                        {extended === 'clockReminder' ? 'Continue' : 'Cancel'}
+                      </button>
+                    </div>
+                  </section>
+                ) : (
+                  <button
+                    className="w-28 h-7 bg-alsoit-gray-50 rounded hover:bg-alsoit-purple-50 text-alsoit-text-sm font-semibold"
+                    onClick={() => toast.remove(toastId)}
+                  >
+                    Close
+                  </button>
+                )}
               </div>
             </div>
             {showClose && (
