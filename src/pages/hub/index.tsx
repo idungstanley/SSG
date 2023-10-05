@@ -20,8 +20,15 @@ import { setSaveSettingList, setSaveSettingOnline, setSubtasks, setTasks } from 
 import { useformatSettings } from '../workspace/tasks/TaskSettingsModal/ShowSettingsModal/FormatSettings';
 import { generateSubtasksList, generateSubtasksArray } from '../../utils/generateLists';
 import { IHubDetails } from '../../features/hubs/hubs.interfaces';
+import { updatePageTitle } from '../../utils/updatePageTitle';
 
 export default function HubPage() {
+  useEffect(() => {
+    updatePageTitle('Tasks');
+    return () => {
+      updatePageTitle('');
+    };
+  }, []);
   const dispatch = useAppDispatch();
   const { hubId, subhubId, taskId } = useParams();
 
