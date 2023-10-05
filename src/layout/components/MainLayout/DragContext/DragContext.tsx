@@ -165,6 +165,12 @@ export default function DragContext({ children }: DragContextProps) {
   const onDragOver = (e: DragOverEvent) => {
     const id = e.over?.id as string;
     dispatch(setDragOverItem(id));
+    // Determine if the task should become a subtask
+    if (e.delta?.x >= minDistanceToMakeSubtask) {
+      dispatch(setDragToBecomeSubTask(true));
+    } else {
+      dispatch(setDragToBecomeSubTask(false));
+    }
 
     if (e.over?.data.current?.isOverTask) {
       dispatch(setDragOverList(null));
@@ -173,13 +179,6 @@ export default function DragContext({ children }: DragContextProps) {
     if (e.over?.data.current?.isOverList) {
       dispatch(setDragOverTask(null));
       dispatch(setDragOverList(e.over?.data.current?.overList as IList));
-    }
-
-    // Determine if the task should become a subtask
-    if (e.delta?.x >= minDistanceToMakeSubtask) {
-      dispatch(setDragToBecomeSubTask(true));
-    } else {
-      dispatch(setDragToBecomeSubTask(false));
     }
   };
 

@@ -1,11 +1,15 @@
 import { CheckIcon, ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { IPilotTab } from '../../../../types';
 import { cl } from '../../../../utils';
 import { Modal } from './components/Modal';
-import { setActiveTabId } from '../../../../features/workspace/workspaceSlice';
+import { setActiveHotkeyIds, setActiveTabId } from '../../../../features/workspace/workspaceSlice';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import ToolTip from '../../../Tooltip/Tooltip';
+import { STORAGE_KEYS } from '../../../../app/config/dimensions';
+import { setUserSettingsKeys } from '../../../../features/account/accountService';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import useResolution from '../../../../hooks/useResolution';
 
 interface HotkeysListProps {
   tabs: IPilotTab[];
@@ -13,13 +17,21 @@ interface HotkeysListProps {
   setShowModal: (i: boolean) => void;
 }
 
-const hotkeyIdsFromLS = JSON.parse(localStorage.getItem('hotkeys') ?? '[]') as number[];
+const hotkeyIdsFromLS = JSON.parse(localStorage.getItem(STORAGE_KEYS.HOT_KEYS) ?? '[]') as number[];
 
 export default function FullHotkeysList({ tabs, showModal, setShowModal }: HotkeysListProps) {
-  const [activeHotkeyIds, setActiveHotkeyIds] = useState<number[]>(hotkeyIdsFromLS);
   const dispatch = useAppDispatch();
+  const queryClient = useQueryClient();
+  const resolution = useResolution();
 
-  const { activeTabId } = useAppSelector((state) => state.workspace);
+  const { activeTabId, activeHotkeyIds } = useAppSelector((state) => state.workspace);
+  const { userSettingsData } = useAppSelector((state) => state.account);
+
+  const saveHotKeysToBE = useMutation(setUserSettingsKeys, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['user-settings']);
+    }
+  });
 
   const hotkeys = useMemo(() => tabs.filter((i) => activeHotkeyIds.includes(i.id)), [activeHotkeyIds, tabs]);
 
@@ -29,10 +41,14 @@ export default function FullHotkeysList({ tabs, showModal, setShowModal }: Hotke
 
       const newHotkeyIds = isIncludes ? [...activeHotkeyIds.filter((i) => i !== tabId)] : [...activeHotkeyIds, tabId];
 
-      setActiveHotkeyIds(newHotkeyIds);
-      localStorage.setItem('hotkeys', JSON.stringify(newHotkeyIds));
+      dispatch(setActiveHotkeyIds(newHotkeyIds));
+      saveHotKeysToBE.mutateAsync({
+        value: { ...userSettingsData, [STORAGE_KEYS.HOT_KEYS]: newHotkeyIds },
+        resolution
+      });
+      localStorage.setItem(STORAGE_KEYS.HOT_KEYS, JSON.stringify(newHotkeyIds));
     },
-    [activeHotkeyIds]
+    [activeHotkeyIds, hotkeyIdsFromLS]
   );
 
   return (
