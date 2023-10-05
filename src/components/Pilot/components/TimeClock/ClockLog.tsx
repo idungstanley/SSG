@@ -51,17 +51,17 @@ export default function ClockLog({ getTaskEntries }: LogProps) {
     getTaskEntries?.data?.time_entries && setLogData(getTaskEntries?.data?.time_entries);
   }, [getTaskEntries?.data?.time_entries]);
 
-  useEffect(() => {
-    const handleTeamMember = () => {
-      const newTeamMembers = getTaskEntries?.data.filters.team_members.map((member) => member.user);
-      const newTeamMemberIds = getTaskEntries?.data.filters.team_members.map((member) => member.id);
+  // useEffect(() => {
+  //   const handleTeamMember = () => {
+  //     const newTeamMembers = getTaskEntries?.data.filters.team_members.map((member) => member.user);
+  //     const newTeamMemberIds = getTaskEntries?.data.filters.team_members.map((member) => member.id);
 
-      newTeamMembers && setTeamMember((prevTeamMembers) => [...prevTeamMembers, ...newTeamMembers]);
-      newTeamMemberIds && setTeamMemberId((prevIds) => [...prevIds, ...newTeamMemberIds]);
-    };
+  //     newTeamMembers && setTeamMember((prevTeamMembers) => [...prevTeamMembers, ...newTeamMembers]);
+  //     newTeamMemberIds && setTeamMemberId((prevIds) => [...prevIds, ...newTeamMemberIds]);
+  //   };
 
-    handleTeamMember();
-  }, [getTaskEntries?.data.filters.team_members]);
+  //   handleTeamMember();
+  // }, [getTaskEntries?.data.filters.team_members]);
 
   useEffect(() => {
     dispatch(setTimeLogColumnData(headers));
