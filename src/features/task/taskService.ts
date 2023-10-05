@@ -713,7 +713,7 @@ export const getTaskListService = (listId: string | null | undefined) => {
   );
 };
 
-export const useSubTasks = (parentId: string, subtasks: Record<string, ITaskFullList[]>, filters?: FilterWithId[]) =>
+export const useSubTasks = (parentId: string, subtasks: Record<string, ITaskFullList[]>) =>
   useQuery(
     ['sub-tasks', parentId],
     () =>
@@ -722,9 +722,6 @@ export const useSubTasks = (parentId: string, subtasks: Record<string, ITaskFull
         method: 'POST',
         params: {
           parent_id: parentId
-        },
-        data: {
-          filters
         }
       }),
     {
