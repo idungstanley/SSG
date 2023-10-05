@@ -29,6 +29,7 @@ export default function HubPage() {
       updatePageTitle('');
     };
   }, []);
+
   const dispatch = useAppDispatch();
   const { hubId, subhubId, taskId } = useParams();
 
