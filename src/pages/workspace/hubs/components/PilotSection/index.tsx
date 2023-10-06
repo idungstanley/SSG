@@ -27,6 +27,7 @@ import EntityManagerIcon from '../../../../../assets/icons/EntityManagerIcon';
 import { UtilityIcon } from '../../../../../assets/icons/Utility';
 import { STORAGE_KEYS } from '../../../../../app/config/dimensions';
 import { IUserParams } from '../../../../../features/account/account.interfaces';
+import { stubTrue } from 'cypress/types/lodash';
 
 const sections = [
   {
@@ -131,9 +132,9 @@ export default function PilotSection() {
 
   const { hubId } = useParams();
   const { activeItemName } = useAppSelector((state) => state.workspace);
-  const isPilotMinifiedFromLS = (
-    JSON.parse(localStorage.getItem(STORAGE_KEYS.USER_SETTINGS_DATA) || '""') as IUserParams
-  ).isPilotMinified as boolean;
+  // const isPilotMinifiedFromLS = (
+  //   JSON.parse(localStorage.getItem(STORAGE_KEYS.USER_SETTINGS_DATA) || '""') as IUserParams
+  // ).isPilotMinified as boolean;
 
   // set data for pilot
   useEffect(() => {
@@ -144,7 +145,7 @@ export default function PilotSection() {
         setShowPilotSideOver({
           id: selectedItemId,
           type: EntityType.hub,
-          show: isPilotMinifiedFromLS || true,
+          show: true,
           title: activeItemName ?? ''
         })
       );

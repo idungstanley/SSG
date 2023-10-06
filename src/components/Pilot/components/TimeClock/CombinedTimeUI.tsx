@@ -40,7 +40,7 @@ export function CombinedTime() {
 
   function TabsDropDown() {
     return (
-      <div className="flex flex-col p-2 rounded-md bg-white shadow-xl w-44 absolute top-7 left-7 z-40">
+      <div className="absolute z-40 flex flex-col p-2 bg-white rounded-md shadow-xl w-44 top-7 left-7">
         {[
           { entry: TIME_TABS.realTime, icon: <RealTimeIcon /> },
           { entry: TIME_TABS.manual, icon: <ManualTimeIcon /> }
@@ -67,10 +67,10 @@ export function CombinedTime() {
       }`}
     >
       {/* Time Trackers */}
-      <div className="flex justify-between items-center w-full absolute -top-0">
+      <div className="absolute flex items-center justify-between w-full -top-0">
         <label
           htmlFor="timeClockTrackers"
-          className="flex items-center justify-between rounded-top w-32 px-2 h-7 relative"
+          className="relative flex items-center justify-between w-32 px-2 cursor-pointer rounded-top h-7"
           onClick={() => setDropDown((prev) => ({ ...prev, tabDrop: !prev.tabDrop }))}
         >
           <div className="cursor-pointer">
@@ -94,7 +94,7 @@ export function CombinedTime() {
               <span className="absolute -top-1.5 bg-white px-0.5 text-alsoit-text-sm">My Time</span>
             </div>
             <div className="bg-white p-0.5 rounded cursor-pointer">
-              <HourGlassIcon className=" w-4 h-4" />
+              <HourGlassIcon className="w-4 h-4 " />
             </div>
             <HeaderIcons />
           </div>

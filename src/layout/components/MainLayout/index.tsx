@@ -8,10 +8,7 @@ import AddFileModal from '../../../components/Pilot/components/details/propertie
 import { InvalidateQueryFilters, useMutation, useQueryClient } from '@tanstack/react-query';
 import { switchWorkspaceService, useGetUserSettingsKeys } from '../../../features/account/accountService';
 import { selectCurrentUser, setCurrentWorkspace, switchWorkspace } from '../../../features/auth/authSlice';
-import {
-  setMyWorkspacesSlideOverVisibility,
-  setShowPilotSideOver
-} from '../../../features/general/slideOver/slideOverSlice';
+import { setMyWorkspacesSlideOverVisibility } from '../../../features/general/slideOver/slideOverSlice';
 import { useEffect } from 'react';
 import DragContext from './DragContext/DragContext';
 import { Toaster } from 'react-hot-toast';
@@ -32,7 +29,6 @@ function MainLayout() {
 
   const { currentWorkspaceId } = useAppSelector((state) => state.auth);
   const { userSettingsData } = useAppSelector((state) => state.account);
-  const { pilotSideOver } = useAppSelector((state) => state.slideOver);
 
   const user = useAppSelector(selectCurrentUser);
 
@@ -67,7 +63,6 @@ function MainLayout() {
           ...userSettingsData,
           [STORAGE_KEYS.SIDEBAR_WIDTH]: value.sidebarWidth ? value.sidebarWidth : dimensions.navigationBar.default,
           [STORAGE_KEYS.PILOT_WIDTH]: value.pilotWidth ? value.pilotWidth : dimensions.pilot.default,
-          [STORAGE_KEYS.IS_PILOT_MINIFIED]: value.isPilotMinified ? value.isPilotMinified : false,
           [STORAGE_KEYS.EXTENDED_BAR_WIDTH]: value.extendedBarWidth
             ? value.extendedBarWidth
             : dimensions.extendedBar.default,
@@ -76,7 +71,6 @@ function MainLayout() {
       );
       dispatch(setActiveHotkeyIds(value.hotkeys ? value.hotkeys : []));
       dispatch(SetUserSettingsStore({ ...userSettingsData, ...value }));
-      dispatch(setShowPilotSideOver({ ...pilotSideOver, show: value.isPilotMinified ? value.isPilotMinified : false }));
     }
   }, [userData]);
 

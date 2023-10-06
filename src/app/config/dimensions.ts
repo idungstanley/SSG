@@ -94,7 +94,8 @@ const calculateWidthForContent = () => {
     userSettingsData?.extendedBarWidth,
     userSettingsData?.isPilotMinified,
     showExtendedBar,
-    isPilotMinifiedFromLS
+    isPilotMinifiedFromLS,
+    id
   ]);
   return calculatedContentWidth;
 };

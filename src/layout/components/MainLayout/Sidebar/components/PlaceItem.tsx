@@ -86,7 +86,7 @@ export default function PlaceItem({
     >
       {!searchStatus && (
         <div
-          className="relative flex items-center justify-center"
+          className="relative flex items-center justify-center cursor-pointer"
           style={{ height: '50px', paddingLeft: showSidebar ? '25px' : '20px' }}
         >
           {placeActive && (

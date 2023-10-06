@@ -9,6 +9,7 @@ import { IPilotSection, IPilotTab } from '../../types';
 import { cl } from '../../utils';
 import { isAllowIncreaseWidth } from '../../utils/widthUtils';
 import Pilot from '../Pilot';
+import { IUserParams } from '../../features/account/account.interfaces';
 
 interface PageProps {
   header?: JSX.Element;
@@ -34,9 +35,9 @@ export default function Page({ header, additionalHeader, children, additional, p
   const { show: showFullPilot } = useAppSelector((state) => state.slideOver.pilotSideOver);
 
   const DEFAULT_PILOT_WIDTH = dimensions.pilot.default;
-  const pilotWidthFromLS = JSON.parse(
-    localStorage.getItem(STORAGE_KEYS.PILOT_WIDTH) ?? `${DEFAULT_PILOT_WIDTH}`
-  ) as number;
+  const pilotWidthFromLS =
+    (JSON.parse(localStorage.getItem(STORAGE_KEYS.USER_SETTINGS_DATA) || '""') as IUserParams).pilotWidth ??
+    DEFAULT_PILOT_WIDTH;
 
   const { blockRef, Dividers } = useResize({
     dimensions: {
