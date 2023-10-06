@@ -1,4 +1,3 @@
-import React from 'react';
 import { ITaskFullList } from '../../../../../features/task/interface.tasks';
 
 export default function NewSubTaskTemplate() {

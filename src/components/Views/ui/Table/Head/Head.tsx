@@ -239,7 +239,7 @@ export function Head({
               className="py-0.5 relative px-2 rounded-tr-md -mb-1 flex items-center space-x-1 text-white dFlex "
               style={{
                 backgroundColor: headerStatusColor,
-                marginLeft: isSplitSubtask ? 0 : '38px',
+                marginLeft: '38px',
                 height: '25px',
                 gap: '5px'
               }}
