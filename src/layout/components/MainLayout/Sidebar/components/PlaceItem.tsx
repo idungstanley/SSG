@@ -1,5 +1,4 @@
 import React, { ReactNode } from 'react';
-import { MdDragIndicator } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import { setActivePlaceId } from '../../../../../features/workspace/workspaceSlice';

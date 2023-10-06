@@ -132,9 +132,6 @@ export default function PilotSection() {
 
   const { hubId } = useParams();
   const { activeItemName } = useAppSelector((state) => state.workspace);
-  // const isPilotMinifiedFromLS = (
-  //   JSON.parse(localStorage.getItem(STORAGE_KEYS.USER_SETTINGS_DATA) || '""') as IUserParams
-  // ).isPilotMinified as boolean;
 
   // set data for pilot
   useEffect(() => {
