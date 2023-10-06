@@ -5,6 +5,8 @@ import Button from '../../../Buttons/Button';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { useSwitchSettings } from '../../../../pages/workspace/tasks/TaskSettingsModal/ShowSettingsModal/SwitchSettings';
 import {
+  THREE_SUBTASKS_LEVELS,
+  TWO_SUBTASKS_LEVELS,
   setAutoSave,
   setSaveSettingLocal,
   setSaveSettingOnline,
@@ -32,7 +34,8 @@ export default function ListSettingsModal({ itemsArray }: IShowHideSettings) {
     taskUpperCase,
     saveSettingOnline,
     verticalGridlinesTask,
-    splitSubTaskState
+    splitSubTaskState,
+    splitSubTaskLevels
   } = useAppSelector((state) => state.task);
   const { activeItemId } = useAppSelector((state) => state.workspace);
 
@@ -46,6 +49,8 @@ export default function ListSettingsModal({ itemsArray }: IShowHideSettings) {
     taskUpperCase,
     verticalGridlinesTask,
     splitSubTaskState,
+    splitSubtaskTwoState: splitSubTaskLevels.includes(TWO_SUBTASKS_LEVELS),
+    splitSubtaskThreeState: splitSubTaskLevels.includes(THREE_SUBTASKS_LEVELS),
     autoSave
   };
 
