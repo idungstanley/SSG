@@ -153,7 +153,6 @@ export function Row({
           onClose={handleClose as VoidFunction}
           paddingLeft={paddingLeft}
           tags={'tags' in task ? <TaskTag tags={task.tags} entity_id={task.id} entity_type="task" /> : null}
-          isSplitSubtask={isSplitSubtask}
           isLastSubtaskLevel={level >= MAX_SUBTASKS_LEVEL}
           dragElement={
             <div ref={setNodeRef} {...listeners} {...attributes}>
@@ -223,12 +222,11 @@ export function Row({
         <AddSubTask
           task={newSubTask}
           columns={columns}
-          paddingLeft={isSplitSubtask ? 0 : DEFAULT_LEFT_PADDING + paddingLeft}
+          paddingLeft={DEFAULT_LEFT_PADDING + paddingLeft}
           isListParent={false}
           listId={listId}
           parentId={isSplitSubtask ? (task.parent_id as string) : task.id}
           taskStatusId={task.status.id}
-          isSplitSubtask={isSplitSubtask}
           handleClose={onCloseAddTaskFIeld}
         />
       ) : null}
