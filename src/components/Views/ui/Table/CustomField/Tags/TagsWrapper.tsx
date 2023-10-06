@@ -1,7 +1,4 @@
 import React from 'react';
-import { IField, Options } from '../../../../../../features/list/list.interfaces';
-import { ICustomField } from '../../../../../../features/task/taskSlice';
-import TagsDropdown from './TagsDropdown';
 import { Tag } from '../../../../../../features/task/interface.tasks';
 import { cl } from '../../../../../../utils';
 import { FaTags } from 'react-icons/fa';
