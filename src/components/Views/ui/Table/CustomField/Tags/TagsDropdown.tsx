@@ -13,7 +13,6 @@ import {
 import { setActiveTabId } from '../../../../../../features/workspace/workspaceSlice';
 import { useUpdateEntityCustomFieldValue } from '../../../../../../features/list/listService';
 import '../../../../../../styles/task.css';
-import { UseGetAllTagsService } from '../../../../../../features/workspace/tags/tagService';
 
 interface dropdownProps {
   optionsFromField:
