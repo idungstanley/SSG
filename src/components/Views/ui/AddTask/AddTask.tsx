@@ -12,6 +12,8 @@ import CreateTaskTaskEdit from '../../../../assets/icons/CreateTaskTaskEdit';
 import CreateTaskTaskCancel from '../../../../assets/icons/CreateTaskTaskCancel';
 import { listColumnProps } from '../../../../pages/workspace/tasks/component/views/ListColumns';
 import { Task } from '../../../../features/task/interface.tasks';
+import TaskPriority from '../../../../pages/workspace/tasks/component/taskData/priority';
+import NewSubTaskTemplate from '../Table/newTaskTemplate/NewSubTaskTemplate';
 
 interface AddTaskFieldProps {
   parentId: string;
@@ -24,7 +26,7 @@ interface AddTaskFieldProps {
 }
 
 export function AddTask({ onClose, paddingLeft, parentId, isListParent, columns, task }: AddTaskFieldProps) {
-  const { currTeamMemberId } = useAppSelector((state) => state.task);
+  const { currTeamMemberId, newTaskPriority } = useAppSelector((state) => state.task);
 
   const [statusId, setStatusId] = useState<string>('');
 
@@ -33,6 +35,8 @@ export function AddTask({ onClose, paddingLeft, parentId, isListParent, columns,
   const { mutate: onAdd } = useAddTask(task);
 
   const { data: list } = UseGetListDetails(parentId);
+
+  const taskTemplate = NewSubTaskTemplate();
 
   useEffect(() => {
     const minPosition = Math.min(...(list?.data.list.task_statuses.map((status) => status.position) || []));
@@ -54,6 +58,7 @@ export function AddTask({ onClose, paddingLeft, parentId, isListParent, columns,
         isListParent,
         id: parentId,
         assignees: [currTeamMemberId] as string[],
+        newTaskPriority,
         task_status_id: statusId as string
       });
 
@@ -83,7 +88,8 @@ export function AddTask({ onClose, paddingLeft, parentId, isListParent, columns,
             <CreateTaskTaskEdit />
             <CreateTaskTaskTag />
             <Assignee option="getTeamId" />
-            <CreateTaskPriority />
+            <TaskPriority task={taskTemplate} />
+            {/* <CreateTaskPriority /> */}
             <CreateTaskCalender />
             <button
               onClick={onClickSave}
