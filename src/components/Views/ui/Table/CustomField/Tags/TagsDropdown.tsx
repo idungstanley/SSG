@@ -37,8 +37,6 @@ function TagsDropdown({ optionsFromField, allOptions, currentProperty, taskId }:
   const { updateCords } = useAppSelector((state) => state.task);
   const { cords, relativeRef } = useAbsolute(updateCords, 160);
 
-  const { data: tagsData, status } = UseGetAllTagsService();
-
   const valueIds = optionsFromField?.map((obj) => ({ value: obj.id }));
 
   const filteredOptions = allOptions?.filter((option) => option.name.toLowerCase().includes(searchValue.toLowerCase()));
