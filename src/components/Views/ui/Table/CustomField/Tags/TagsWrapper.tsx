@@ -2,35 +2,40 @@ import React from 'react';
 import { IField, Options } from '../../../../../../features/list/list.interfaces';
 import { ICustomField } from '../../../../../../features/task/taskSlice';
 import TagsDropdown from './TagsDropdown';
+import { Tag } from '../../../../../../features/task/interface.tasks';
+import { cl } from '../../../../../../utils';
+import { FaTags } from 'react-icons/fa';
+import '../../../../../../styles/task.css';
 
-interface LabelFieldWrapperProps {
-  taskCustomFields?: ICustomField;
-  fieldId: string;
-  taskId: string;
-  entityCustomProperty?: IField;
+interface TagsProps {
+  tags: Tag[];
 }
 
-interface array2 {
-  id: string;
-  value: string;
-}
-
-const getActiveOptions = (arr1: Options | undefined, arr2: array2[] | undefined) => {
-  return arr1?.filter((obj1) => arr2?.find((obj2) => obj2.value === obj1.id));
-};
-
-function TagsWrapper({ entityCustomProperty, taskCustomFields, taskId, fieldId }: LabelFieldWrapperProps) {
-  const activeOptions = taskCustomFields?.values;
-  const allOptions = entityCustomProperty?.options;
-  const optionsFromField = getActiveOptions(allOptions, activeOptions);
+function TagsWrapper({ tags }: TagsProps) {
   return (
     <div className="w-full">
-      <TagsDropdown
-        optionsFromField={optionsFromField}
-        allOptions={allOptions}
-        currentProperty={entityCustomProperty as IField}
-        taskId={taskId}
-      />
+      {tags.length ? (
+        <div className="w-full flex flex-wrap justify-center gap-1 items-center p-1">
+          {tags?.map((value) => {
+            return (
+              <div
+                key={value.id}
+                className={cl(
+                  value.color ? 'text-white' : 'border-2 border-gray-500',
+                  'rounded py-2 px-4 max-w-full custom-property-tags flex items-center'
+                )}
+                style={{ backgroundColor: value.color }}
+              >
+                <h3 className="text-alsoit-text-md max-w-full truncate">{value.name}</h3>
+              </div>
+            );
+          })}
+        </div>
+      ) : (
+        <div className="flex items-center justify-center">
+          <FaTags className="w-4 h-4" />
+        </div>
+      )}
     </div>
   );
 }
