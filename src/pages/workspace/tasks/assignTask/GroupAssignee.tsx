@@ -7,6 +7,7 @@ import ToolTip from '../../../../components/Tooltip/Tooltip';
 import AvatarForOwner from '../../../../components/avatar/AvatarForOwner';
 import AvatarWithImage from '../../../../components/avatar/AvatarWithImage';
 import { ITeamMembersAndGroup } from '../../../../features/settings/teamMembersAndGroups.interfaces';
+import AvatarForOwnerWithImage from '../../../../components/avatar/AvatarForOwnerWithImage';
 
 function GroupAssignee({
   data,
@@ -21,6 +22,16 @@ function GroupAssignee({
 }) {
   const { CompactView, CompactViewWrap } = useAppSelector((state) => state.task);
   const { selectedTasksArray, selectedListIds, selectedTaskParentId } = useAppSelector((state) => state.task);
+
+  // check if length is greater than 5
+  // Define a variable to store the number of remaining items
+  let remainingCount = 0;
+
+  // Create a new array with the first three items and update the remaining count
+  const displayedData = data.slice(0, 3);
+  if (data.length > 3) {
+    remainingCount = data.length - 3;
+  }
 
   const [hoverInterval, setHoverInterval] = useState(false);
   const [modalLoader, setModalLoader] = useState(true);
@@ -93,86 +104,21 @@ function GroupAssignee({
 
   return (
     <>
-      {data && data?.length >= 5 ? (
-        <div className="relative flex items-center justify-center">
-          {data?.slice(0, 3).map((newData, index) => (
-            <div
-              key={newData.id}
-              className={`scaleBigger cursor-pointer ${index === 0 ? ' z-30   ' : ''} ${index === 1 ? 'z-20 ' : ''} ${
-                index === 2 ? 'z-10' : 'z-0'
-              }  `}
-              onMouseEnter={(e) => {
-                handleHoverIntervalMouseIn(index, e);
-              }}
-              onMouseLeave={() => handleHoverIntervalMouseOut()}
-            >
-              <div className=" flex items-center justify-center -ml-2.5 rounded-full relative ">
-                <ToolTip title={newData.name}>
-                  <div>
-                    <span onClick={handleClick}>
-                      {newData.role.key === 'owner' ? (
-                        <AvatarForOwner initials="me" />
-                      ) : (
-                        <div className="border-2 border-red-400 rounded-full">
-                          <AvatarWithInitials
-                            initials={newData.user && (newData.user.initials as string)}
-                            backgroundColour={newData.user && (newData.user.color as string)}
-                            badge={true}
-                            height={CompactView ? 'h-6' : 'h-7'}
-                            width={CompactView ? 'w-6' : 'w-7'}
-                          />
-                        </div>
-                      )}
-                    </span>
-                    {displayed.show && index === displayed?.index && renderUnassignButton(newData.id)}
-                  </div>
-                </ToolTip>
-              </div>
-              {displayed.show && index === displayed?.index ? (
-                renderUnassignButton(newData.id)
-              ) : (
-                <span className="absolute top-0 right-0 w-2 h-2 bg-green-500 border rounded-full" />
-              )}
-
-              {hoverInterval && displayed.show && index === displayed?.index && (
-                <PopAssignModal
-                  modalLoader={modalLoader}
-                  spinnerSize={20}
-                  currHoveredOnUser={newData.id ?? ''}
-                  anchorEl={anchorEl}
-                  handleClose={handleClose}
-                />
-              )}
-            </div>
-          ))}
-          <span>
-            {data?.length - 3 !== 0 ? (
-              <span
-                className="-ml-3 bg-gray-100 border-2 border-white rounded-full "
-                style={{ padding: `${CompactView || CompactViewWrap ? '3px' : '7px'}` }}
-              >
-                +{data?.length - 3}
-              </span>
-            ) : null}
-          </span>
-        </div>
-      ) : (
-        data?.map((newData, index: number) => (
+      <div className="relative flex items-center justify-center">
+        {displayedData.map((newData, index) => (
           <div
             key={newData.id}
-            className={`scaleBigger ${index === 0 ? ' z-30  ' : ''} ${index === 1 ? 'z-20 ' : ''} ${
+            className={`scaleBigger cursor-pointer ${index === 0 ? ' z-30   ' : ''} ${index === 1 ? 'z-20 ' : ''} ${
               index === 2 ? 'z-10' : 'z-0'
-            } `}
+            }  `}
+            onMouseEnter={(e) => {
+              handleHoverIntervalMouseIn(index, e);
+            }}
+            onMouseLeave={() => handleHoverIntervalMouseOut()}
           >
-            <div className="flex items-center justify-center -ml-2.5 rounded-full relative">
+            <div className=" flex items-center justify-center -ml-2.5 rounded-full relative ">
               <ToolTip title={newData.name}>
-                <div
-                  onMouseEnter={(e) => {
-                    handleHoverIntervalMouseIn(index, e);
-                  }}
-                  onMouseLeave={() => handleHoverIntervalMouseOut()}
-                  className="relative cursor-pointer"
-                >
+                <div className="relative cursor-pointer">
                   {!newData.user.avatar_path ? (
                     <span onClick={handleClick}>
                       {newData.role.key === 'owner' ? (
@@ -191,13 +137,13 @@ function GroupAssignee({
                     </span>
                   ) : (
                     <span onClick={handleClick}>
-                      {newData.role.key === 'owner' ? (
-                        <AvatarForOwner initials={newData.initials} />
-                      ) : (
-                        <div className="border-2 border-red-400 rounded-full">
+                      <div className="border-2 border-red-400 rounded-full">
+                        {newData.role.key === 'owner' ? (
+                          <AvatarForOwnerWithImage image_path={newData.user.avatar_path} />
+                        ) : (
                           <AvatarWithImage image_path={newData.user.avatar_path} height="h-8" width="w-8" />
-                        </div>
-                      )}
+                        )}
+                      </div>
                     </span>
                   )}
 
@@ -206,7 +152,6 @@ function GroupAssignee({
                   ) : (
                     <span className="absolute top-0 right-0 w-2 h-2 bg-green-500 border rounded-full" />
                   )}
-
                   {hoverInterval && displayed.show && index === displayed?.index && (
                     <PopAssignModal
                       modalLoader={modalLoader}
@@ -219,9 +164,26 @@ function GroupAssignee({
                 </div>
               </ToolTip>
             </div>
+            {displayed.show && index === displayed?.index ? (
+              renderUnassignButton(newData.id)
+            ) : (
+              <span className="absolute top-0 right-0 w-2 h-2 bg-green-500 border rounded-full" />
+            )}
           </div>
-        ))
-      )}
+        ))}
+        {remainingCount > 0 ? (
+          <span>
+            {data?.length - 3 !== 0 ? (
+              <span
+                className="-ml-3 bg-gray-100 border-2 border-white rounded-full "
+                style={{ padding: `${CompactView || CompactViewWrap ? '3px' : '7px'}` }}
+              >
+                +{data?.length - 3}
+              </span>
+            ) : null}
+          </span>
+        ) : null}
+      </div>
     </>
   );
 }
