@@ -249,7 +249,6 @@ export default function PaletteManager({
   const filteredKeys = ['hex', 'hsl', 'rgb'];
 
   const filteredObject = Object.fromEntries(Object.entries(color).filter(([key]) => filteredKeys.includes(key)));
-  console.log(color);
   const handleColorTypeSwitch = () => {
     switch (colorType) {
       case 'hex':
