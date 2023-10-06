@@ -113,7 +113,7 @@ export function List({ tasks }: ListProps) {
 
   return (
     <div
-      className="pt-1 border-t-4 border-l-4 border-purple-500 rounded-3xl bg-purple-50"
+      className="pt-1 border-t-4 border-l-4 border-purple-500 rounded-3xl bg-purple-50 pb-3"
       style={{
         borderColor: ListColor?.outerColour === null ? 'black' : (ListColor?.outerColour as string),
         backgroundColor: LightenColor(
