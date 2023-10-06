@@ -18,7 +18,6 @@ export default function Pilot({ pilotConfig }: PilotProps) {
   const { sections, tabs } = pilotConfig;
 
   const { activeTabId } = useAppSelector((state) => state.workspace);
-  const { userSettingsData } = useAppSelector((state) => state.account);
   const { show: showFullPilot, id } = useAppSelector((state) => state.slideOver.pilotSideOver);
 
   // set first tab as active on open full pilot

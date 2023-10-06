@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
 import SubtasksIcon from '../../../../assets/icons/SubtasksIcon';
-import { ITaskFullList, Tag, Task } from '../../../../features/task/interface.tasks';
+import { Tag, Task } from '../../../../features/task/interface.tasks';
 import { DEFAULT_LEFT_PADDING } from '../../config';
 import { Col } from './Col';
 import { StickyCol } from './StickyCol';
@@ -171,10 +171,13 @@ export function Row({
                 <Copy />
               </button>
             </ToolTip>
-
             {/* effects */}
             <ToolTip title="Apply Effects">
-              <button className="p-1 bg-white border rounded-md" onClick={(e) => e.stopPropagation()}>
+              <button
+                className="p-1 bg-white border rounded-md"
+                style={{ backgroundColor: 'orange' }}
+                onClick={(e) => e.stopPropagation()}
+              >
                 <Effect className="w-3 h-3" />
               </button>
             </ToolTip>
@@ -198,7 +201,7 @@ export function Row({
             )}
             <ToolTip title="Enhance View">
               <button className="p-1 pl-4 bg-white rounded-md" onClick={(e) => e.stopPropagation()}>
-                <Enhance className="w-3 h-3" />
+                <Enhance className="w-3 h-3" style={{ color: 'orange' }} />
               </button>
             </ToolTip>
           </div>

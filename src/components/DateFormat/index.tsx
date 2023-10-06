@@ -73,7 +73,7 @@ export default function DateFormat({ date, task, font = 'text-sm', type }: dateF
           />
         )}
         {date ? (
-          <div className="flex group/parent items-center">
+          <div className="flex items-center group/parent">
             <p
               className="rounded-full flex items-center justify-center bg-alsoit-purple-300 mr-1 h-3 w-3 text-white text-xs pb-0.5 opacity-0 group-hover/parent:opacity-100 cursor-pointer"
               onClick={(e) => handleResetDate(e)}
@@ -83,7 +83,7 @@ export default function DateFormat({ date, task, font = 'text-sm', type }: dateF
             <p>{moment(date as MomentInput).format(date_format?.toUpperCase())}</p>
           </div>
         ) : (
-          <div className="flex group/parent items-center">
+          <div className="flex items-center cursor-pointer group/parent">
             <CalenderIcon />
           </div>
         )}
