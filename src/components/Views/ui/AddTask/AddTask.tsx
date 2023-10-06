@@ -86,10 +86,10 @@ export function AddTask({ onClose, paddingLeft, parentId, isListParent, columns,
         <div className="absolute flex items-center space-x-2 right-4">
           <div className="flex items-center ml-2 space-x-1">
             <span className="cursor-pointer">
-              <CreateTaskTaskEdit />
+              <CreateTaskTaskEdit color="orange" />
             </span>
             <span className="cursor-pointer">
-              <CreateTaskTaskTag />
+              <CreateTaskTaskTag color="orange" />
             </span>
             <span className="cursor-pointer">
               <Assignee option="getTeamId" />
@@ -98,7 +98,7 @@ export function AddTask({ onClose, paddingLeft, parentId, isListParent, columns,
               <TaskPriority task={taskTemplate} />
             </span>
             <span className="cursor-pointer">
-              <CreateTaskCalender />
+              <CreateTaskCalender color="orange" />
             </span>
             <button
               onClick={onClickSave}
