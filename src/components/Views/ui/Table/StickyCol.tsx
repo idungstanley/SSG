@@ -301,6 +301,7 @@ export function StickyCol({
           </div>
           <div
             style={{
+              paddingLeft,
               height:
                 saveSettingOnline?.singleLineView && !saveSettingOnline?.CompactView
                   ? '42px'
