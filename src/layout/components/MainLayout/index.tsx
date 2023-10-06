@@ -29,6 +29,7 @@ function MainLayout() {
 
   const { currentWorkspaceId } = useAppSelector((state) => state.auth);
   const { userSettingsData } = useAppSelector((state) => state.account);
+
   const user = useAppSelector(selectCurrentUser);
 
   const switchWorkspaceMutation = useMutation(switchWorkspaceService, {
@@ -57,18 +58,17 @@ function MainLayout() {
     if (userData) {
       const value = userData.value;
       localStorage.setItem(
-        STORAGE_KEYS.SIDEBAR_WIDTH,
-        JSON.stringify(value.sidebarWidth ? value.sidebarWidth : dimensions.navigationBar.default)
+        STORAGE_KEYS.USER_SETTINGS_DATA,
+        JSON.stringify({
+          ...userSettingsData,
+          [STORAGE_KEYS.SIDEBAR_WIDTH]: value.sidebarWidth ? value.sidebarWidth : dimensions.navigationBar.default,
+          [STORAGE_KEYS.PILOT_WIDTH]: value.pilotWidth ? value.pilotWidth : dimensions.pilot.default,
+          [STORAGE_KEYS.EXTENDED_BAR_WIDTH]: value.extendedBarWidth
+            ? value.extendedBarWidth
+            : dimensions.extendedBar.default,
+          [STORAGE_KEYS.HOT_KEYS]: value.hotkeys ? value.hotkeys : []
+        })
       );
-      localStorage.setItem(
-        STORAGE_KEYS.PILOT_WIDTH,
-        JSON.stringify(value.pilotWidth ? value.pilotWidth : dimensions.pilot.default)
-      );
-      localStorage.setItem(
-        STORAGE_KEYS.EXTENDED_BAR_WIDTH,
-        JSON.stringify(value.extendedBarWidth ? value.extendedBarWidth : dimensions.extendedBar.default)
-      );
-      localStorage.setItem(STORAGE_KEYS.HOT_KEYS, JSON.stringify(value.hotkeys ? value.hotkeys : []));
       dispatch(setActiveHotkeyIds(value.hotkeys ? value.hotkeys : []));
       dispatch(SetUserSettingsStore({ ...userSettingsData, ...value }));
     }

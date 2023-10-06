@@ -133,7 +133,7 @@ export default function UserSettingsModal({ setShowModal }: UserProps) {
     <>
       <div onClick={(e) => handleOpenSettingsMenu(e)}>
         <ToolTip title="User Settings">
-          <div className="relative flex mr-2">
+          <div className="relative flex mr-2 cursor-pointer">
             <AvatarWithInitials
               initials={userData?.initials.toUpperCase() as string}
               height="h-5"

@@ -1,7 +1,11 @@
 import { useState, useEffect, UIEvent } from 'react';
 import { useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { UseUpdateTaskViewSettings, getTaskListService } from '../../features/task/taskService';
+import {
+  UseUpdateTaskViewSettings,
+  getTaskListService,
+  useUpdateSubtaskFilters
+} from '../../features/task/taskService';
 import { setActiveItem } from '../../features/workspace/workspaceSlice';
 import { UseGetListDetails } from '../../features/list/listService';
 import PilotSection, { pilotConfig } from '../workspace/lists/components/PilotSection';
@@ -25,10 +29,17 @@ export function ListPage() {
   const dispatch = useAppDispatch();
   const { listId, taskId } = useParams();
 
-  const { tasks: tasksStore, saveSettingLocal, subtasks } = useAppSelector((state) => state.task);
+  const {
+    tasks: tasksStore,
+    saveSettingLocal,
+    subtasks,
+    splitSubTaskState: isSplitMode,
+    filters: { option }
+  } = useAppSelector((state) => state.task);
 
   const [tasksFromRes, setTasksFromRes] = useState<ITaskFullList[]>([]);
   const [listDetailsFromRes, setListDetailsFromRes] = useState<IListDetailRes>();
+  const [isFiltersChecked, setFiltersChecked] = useState<boolean>(false);
 
   const formatSettings = useformatSettings();
 
@@ -120,6 +131,33 @@ export function ListPage() {
       }
     }
   }, [tasksFromRes, listDetailsFromRes]);
+
+  const { mutate: updateSubtaskFilter } = useUpdateSubtaskFilters();
+  useEffect(() => {
+    if (Object.keys(tasksStore).length && Object.keys(subtasks).length && isSplitMode && !isFiltersChecked) {
+      Object.keys(tasksStore).forEach((listId) => {
+        tasksStore[listId].forEach((task) => {
+          if (task.filters) {
+            updateSubtaskFilter({
+              parentId: task.filters?.model_id as string,
+              filters: { op: option, fields: task.filters.data }
+            });
+          }
+        });
+      });
+      Object.keys(subtasks).forEach((listId) => {
+        subtasks[listId].forEach((task) => {
+          if (task.filters) {
+            updateSubtaskFilter({
+              parentId: task.filters.model_id as string,
+              filters: { op: option, fields: task.filters.data }
+            });
+          }
+        });
+      });
+      setFiltersChecked(true);
+    }
+  }, [tasksStore, subtasks, isFiltersChecked, isSplitMode]);
 
   // infinite scroll
   const onScroll = (e: UIEvent<HTMLDivElement>) => {

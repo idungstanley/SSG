@@ -37,7 +37,7 @@ import { UpdateTaskProps } from './interface.tasks';
 import { useUploadRecording } from '../workspace/workspaceService';
 import { useParams } from 'react-router-dom';
 import { setPickedDateState, setTimerLastMemory, toggleMute } from '../workspace/workspaceSlice';
-import { generateFilters } from '../../components/TasksHeader/lib/generateFilters';
+import { generateFilters, generateFiltersSubtasks } from '../../components/TasksHeader/lib/generateFilters';
 import Duration from '../../utils/TimerDuration';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
 import {
@@ -58,6 +58,7 @@ import { setFilteredResults } from '../search/searchSlice';
 import { addNewSubtaskManager } from '../../managers/Subtask';
 import { IList } from '../hubs/hubs.interfaces';
 import { setDragOverList, setDragOverTask, setDraggableItem } from '../list/listSlice';
+import { FilterWithId, FiltersOption } from '../../components/TasksHeader/ui/Filter/types/filters';
 
 //edit a custom field
 export const UseEditCustomFieldService = (data: {
@@ -1237,3 +1238,126 @@ export function useCreateTaskRecuring() {
     }
   );
 }
+
+interface IFilterRes {
+  data: {
+    filter: {
+      data: FilterWithId[];
+      model: string;
+      model_id: string;
+    };
+  };
+}
+
+const addFiltersForTask = (data: { taskId?: string; filters: FilterWithId[] | null }) => {
+  const { taskId, filters } = data;
+
+  const response = requestNew<IFilterRes>({
+    url: 'filters',
+    method: 'POST',
+    data: {
+      model: 'task',
+      model_id: taskId,
+      filters
+    }
+  });
+  return response;
+};
+
+export const useAddFiltersForTask = () => {
+  const dispatch = useAppDispatch();
+
+  const { tasks, subtasks } = useAppSelector((state) => state.task);
+
+  return useMutation(addFiltersForTask, {
+    onSuccess: (data) => {
+      const parentId = data.data.filter.model_id;
+      const updatedTasks = { ...tasks };
+      const updatedSubtasks = { ...subtasks };
+
+      Object.keys(tasks).forEach((listId) => {
+        updatedTasks[listId] = updatedTasks[listId].map((task) => {
+          if (parentId === task.id) {
+            return {
+              ...task,
+              filters: data.data.filter
+            };
+          }
+          return task;
+        });
+      });
+      Object.keys(subtasks).forEach((listId) => {
+        updatedSubtasks[listId] = updatedSubtasks[listId].map((task) => {
+          if (parentId === task.id) {
+            console.log('aaa', task);
+            return {
+              ...task,
+              filters: data.data.filter
+            };
+          }
+          return task;
+        });
+      });
+
+      dispatch(setTasks(updatedTasks));
+      dispatch(setSubtasks(updatedSubtasks));
+    }
+  });
+};
+
+const updateSubtaskFilters = (data: { parentId: string; filters: { op: FiltersOption; fields: FilterWithId[] } }) => {
+  const { filters } = generateFiltersSubtasks(data.filters.op, data.filters.fields);
+  const response = requestNew<IFullTaskRes>({
+    url: 'tasks/list',
+    method: 'POST',
+    params: {
+      parent_id: data.parentId
+    },
+    data: {
+      filters
+    }
+  });
+  return response;
+};
+
+export const useUpdateSubtaskFilters = () => {
+  const dispatch = useAppDispatch();
+
+  const { tasks, subtasks } = useAppSelector((state) => state.task);
+
+  return useMutation(updateSubtaskFilters, {
+    onSuccess: (data) => {
+      if (data.data.tasks.length) {
+        const parentId = data.data.tasks[0].parent_id;
+        let parent: ITaskFullList | null = null;
+        Object.keys(tasks).forEach((listId) => {
+          tasks[listId].forEach((task) => {
+            if (parentId === task.id) {
+              parent = task;
+            }
+          });
+        });
+
+        Object.keys(subtasks).forEach((listId) => {
+          subtasks[listId].forEach((task) => {
+            if (parentId === task.id) {
+              parent = task;
+            }
+          });
+        });
+
+        const tasksWithListId = data.data.tasks.map((item) => {
+          return {
+            ...item,
+            parentName: parent?.name,
+            task_statuses: parent?.task_statuses,
+            custom_field_columns: parent?.custom_field_columns,
+            list_id: parent?.list_id,
+            list: parent?.list
+          };
+        });
+        dispatch(setSubtasks({ ...subtasks, [parentId as string]: tasksWithListId as ITaskFullList[] }));
+      }
+    }
+  });
+};

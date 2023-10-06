@@ -19,6 +19,7 @@ export default function NewSubTaskTemplate() {
     checklist_done_items_count: 0,
     has_attachments: false,
     description: null,
+    filters: null,
     directory_items: [],
     end_date: null,
     group_assignees: [],
