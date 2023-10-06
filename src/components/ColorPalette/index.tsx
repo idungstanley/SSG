@@ -290,7 +290,7 @@ export default function PaletteManager({
                 ))}
                 <ToolTip title="Open Search">
                   <span className="p-1 border rounded border-primary-200" onClick={() => setIsSearch(true)}>
-                    <SearchIcon />
+                    <SearchIcon className="w-4 h-4" />
                   </span>
                 </ToolTip>
               </div>
