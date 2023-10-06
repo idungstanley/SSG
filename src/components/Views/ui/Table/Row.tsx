@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
 import SubtasksIcon from '../../../../assets/icons/SubtasksIcon';
-import { ITaskFullList, Tag, Task } from '../../../../features/task/interface.tasks';
+import { Tag, Task } from '../../../../features/task/interface.tasks';
 import { DEFAULT_LEFT_PADDING } from '../../config';
 import { Col } from './Col';
 import { StickyCol } from './StickyCol';
