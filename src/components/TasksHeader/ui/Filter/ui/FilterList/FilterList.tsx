@@ -1,22 +1,25 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { useAppSelector } from '../../../../../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
 import { useList, useTaskStatuses } from '../../../../../../features/list/listService';
 import { useTags } from '../../../../../../features/workspace/tags/tagService';
 import { filterConfig, operators, SPECIAL_CHAR } from '../../config/filterConfig';
 import { AddNewItem } from '../AddNewItem';
 import { Item } from '../FilterItem/Item';
 import { useGetTeamMembers } from '../../../../../../features/settings/teamMembers/teamMemberService';
-import { FilterOption } from '../../types/filters';
+import { FilterOption, FilterWithId } from '../../types/filters';
+import { setFilterFields, setFiltersUpdated } from '../../../../../../features/task/taskSlice';
 
 export function FilterList() {
+  const dispatch = useAppDispatch();
   const { listId } = useParams();
 
   const {
     filters: { fields: filters },
-    subtasksfilters,
     selectedTaskParentId,
-    splitSubTaskState: splitMode
+    splitSubTaskState: splitMode,
+    tasks,
+    subtasks
   } = useAppSelector((state) => state.task);
 
   const [showAddNewItem, setShowAddNewItem] = useState(false);
@@ -90,14 +93,41 @@ export function FilterList() {
     }
   }, [list]);
 
-  const showingFilters =
-    splitMode && subtasksfilters[selectedTaskParentId] ? subtasksfilters[selectedTaskParentId]?.fields : filters;
+  const returnParentFilters = (parentId: string) => {
+    let currentFilters: FilterWithId[] = [];
+    if (Object.keys(tasks).length && Object.keys(subtasks).length) {
+      Object.keys(tasks).forEach((id) => {
+        tasks[id].forEach((task) => {
+          if (task.id === parentId && task.filters?.data) {
+            currentFilters = task.filters.data as FilterWithId[];
+          }
+        });
+      });
+      if (!currentFilters.length) {
+        Object.keys(subtasks).forEach((id) => {
+          subtasks[id].forEach((sub) => {
+            if (sub.id === parentId && sub.filters?.data) {
+              currentFilters = sub.filters.data as FilterWithId[];
+            }
+          });
+        });
+      }
+    }
+    return currentFilters;
+  };
+
+  useEffect(() => {
+    if (splitMode && selectedTaskParentId) {
+      dispatch(setFiltersUpdated(false));
+      dispatch(setFilterFields(returnParentFilters(selectedTaskParentId)));
+    }
+  }, [splitMode, selectedTaskParentId]);
 
   return (
     <div className="w-full p-2 space-y-4">
-      {showingFilters.map((filter) => (
-        <Item initialFilters={initialFilters} filter={filter} key={filter.key} />
-      ))}
+      {filters?.length
+        ? filters.map((filter) => <Item initialFilters={initialFilters} filter={filter} key={filter.key} />)
+        : null}
 
       {showAddNewItem ? (
         <AddNewItem initialFilters={initialFilters} onHideNewItem={() => setShowAddNewItem(false)} />

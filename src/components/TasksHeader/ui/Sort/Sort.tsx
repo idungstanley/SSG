@@ -41,14 +41,10 @@ export function Sort({ isSplitSubtasks }: ISortProps) {
         <Listbox.Button className="relative w-full rounded-md outline-none cursor-pointer">
           <Button active={isSplitSubtasks ? false : true} withoutBg={isSplitSubtasks}>
             <Icons src={GroupBy} />
-            {!isSplitSubtasks ? (
-              <>
-                <p className="block truncate">
-                  Group by: <span className="capitalize">{sortType}</span>
-                </p>
-                <ArrowDownFilled active={true} />
-              </>
-            ) : null}
+            <p className="block truncate">
+              Group by: <span className="capitalize">{sortType}</span>
+            </p>
+            <ArrowDownFilled active={true} />
           </Button>
         </Listbox.Button>
         <Transition as={Fragment} leave="transition ease-in duration-100" leaveFrom="opacity-100" leaveTo="opacity-0">
