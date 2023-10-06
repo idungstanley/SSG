@@ -6,7 +6,10 @@ export const Capitalize = (title: string | null) => {
   }
   const words = title.split(' ');
   const capitalizedWords = words.map((word) => {
-    return word.charAt(0).toUpperCase() + word.slice(1);
+    if (!NoCapWords.includes(word)) {
+      return word.charAt(0).toUpperCase() + word.slice(1);
+    }
+    return word;
   });
   return capitalizedWords.join(' ');
 };
