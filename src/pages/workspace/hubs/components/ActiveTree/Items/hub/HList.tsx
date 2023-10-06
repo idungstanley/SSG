@@ -23,7 +23,7 @@ import HubItemOverlay from '../../../../../../../components/tasks/HubItemOverLay
 import { generateViewsUrl } from '../../../../../../../utils/generateViewsUrl';
 import { IHub } from '../../../../../../../features/hubs/hubs.interfaces';
 
-export default function HList({ hubs }: ListProps) {
+export default function HList({ hubs, openNewHub }: ListProps) {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
@@ -84,21 +84,13 @@ export default function HList({ hubs }: ListProps) {
       dispatch(setOpenedEntitiesIds([...openedEntitiesIds.filter((openedId) => !allHubsId.includes(openedId)), id]));
     }
 
-    hub.forEach((item) => {
-      if (item.id === id && !item.children) {
-        const viewsUrl = generateViewsUrl(id, item, EntityType.hub) as string;
-        navigate(viewsUrl, {
-          replace: true
-        });
-      }
-    });
-
     dispatch(
       setCurrentItem({
         currentItemId: id,
         currentItemType: EntityType.hub
       })
     );
+    openNewHub && openNewHub(id);
   };
 
   const isCanBeOpen = (id: string) => {
