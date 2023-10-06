@@ -27,9 +27,18 @@ interface ISubtasksTableProps {
   listId: string;
   paddingLeft?: number;
   level: number;
+  breadcrumbs: string;
 }
 
-export function SubtasksTable({ task, subtasksData, heads, listId, paddingLeft = 0, level }: ISubtasksTableProps) {
+export function SubtasksTable({
+  task,
+  subtasksData,
+  heads,
+  listId,
+  paddingLeft = 0,
+  level,
+  breadcrumbs
+}: ISubtasksTableProps) {
   const dispatch = useAppDispatch();
 
   const { statusId, subtasks, subtasksfilters, splitSubTaskLevels } = useAppSelector((state) => state.task);
@@ -93,7 +102,7 @@ export function SubtasksTable({ task, subtasksData, heads, listId, paddingLeft =
         >
           <Label
             listName={task.name}
-            hubName={task.parentName || task.list?.name}
+            hubName={`${breadcrumbs} > ${task.name}`}
             tasks={subtasksData}
             ListColor={ListColor}
             showTable={collapseTable}
@@ -190,6 +199,7 @@ export function SubtasksTable({ task, subtasksData, heads, listId, paddingLeft =
               listId={listId}
               paddingLeft={paddingLeft + DEFAULT_LEFT_PADDING}
               level={level + 1}
+              breadcrumbs={`${breadcrumbs} > ${task.name}`}
             />
           ))
         : null}
