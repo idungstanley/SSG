@@ -2,9 +2,10 @@ import React, { useState } from 'react';
 import { cl } from '../../utils';
 import { AiFillFlag } from 'react-icons/ai';
 import { UseUpdateTaskPrioritiesServices } from '../../features/task/taskService';
-import { useAppSelector } from '../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { useAbsolute } from '../../hooks/useAbsolute';
 import { Fade, Menu } from '@mui/material';
+import { setNewTaskPriority } from '../../features/task/taskSlice';
 
 interface priorityType {
   id: number;
@@ -24,6 +25,7 @@ const HIGH = 'high';
 const URGENT = 'urgent';
 
 export default function PriorityDropdown({ taskCurrentPriority }: TaskCurrentPriorityProps) {
+  const dispatch = useAppDispatch();
   const { selectedTasksArray, updateCords, selectedListIds, selectedTaskParentId } = useAppSelector(
     (state) => state.task
   );
@@ -47,6 +49,7 @@ export default function PriorityDropdown({ taskCurrentPriority }: TaskCurrentPri
       bg: 'gray',
       handleClick: () => {
         setPriority(LOW);
+        dispatch(setNewTaskPriority(LOW));
       }
     },
     {
@@ -56,6 +59,7 @@ export default function PriorityDropdown({ taskCurrentPriority }: TaskCurrentPri
       bg: 'blue',
       handleClick: () => {
         setPriority(NORMAL);
+        dispatch(setNewTaskPriority(NORMAL));
       }
     },
     {
@@ -65,6 +69,7 @@ export default function PriorityDropdown({ taskCurrentPriority }: TaskCurrentPri
       bg: 'yellow',
       handleClick: () => {
         setPriority(HIGH);
+        dispatch(setNewTaskPriority(HIGH));
       }
     },
     {
@@ -74,6 +79,7 @@ export default function PriorityDropdown({ taskCurrentPriority }: TaskCurrentPri
       bg: 'red',
       handleClick: () => {
         setPriority(URGENT);
+        dispatch(setNewTaskPriority(URGENT));
       }
     }
   ];

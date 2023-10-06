@@ -4,6 +4,7 @@ import { useAppSelector } from '../../app/hooks';
 import AvatarWithInitials from '../avatar/AvatarWithInitials';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
 import { getInitials } from '../../app/helpers';
+import { Hub, List, Wallet } from '../../pages/workspace/hubs/components/ActiveTree/activetree.interfaces';
 
 interface TaskItemProps {
   item: {
@@ -12,6 +13,10 @@ interface TaskItemProps {
     path?: string | null;
     color?: string | null;
     parent_id?: string | null;
+    children?: Hub[];
+    has_descendants: boolean;
+    wallets?: Wallet[];
+    lists?: List[];
   };
   showChildren: boolean;
   type: string;
@@ -59,7 +64,7 @@ export default function SearchHubItem({ item, showChildren, type, handleTabClick
                 type === EntityType.subHub && !showSidebar ? '5px' : type === EntityType.subHub ? '15px' : '5px'
             }}
           >
-            {!collapseNavAndSubhub ? (
+            {item?.wallets?.length || item?.lists?.length || item.has_descendants ? (
               <div onClick={() => handleClick(item.id)}>
                 {showChildren ? (
                   <span className="flex flex-col">

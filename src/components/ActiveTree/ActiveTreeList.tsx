@@ -37,8 +37,6 @@ export default function ActiveTreeList({ hubs, openNewHub, setToggleTree, option
   };
 
   const handleClick = (id: string) => {
-    dispatch(setParentHubExt({ id, type: EntityType.hub }));
-
     if (id === openedNewHubId) {
       setShowChidren(null);
       setOpenedNewHubId('');

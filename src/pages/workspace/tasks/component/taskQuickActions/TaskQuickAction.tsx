@@ -1,6 +1,4 @@
-import { CheckIcon, ChevronDownIcon, InformationCircleIcon } from '@heroicons/react/24/outline';
 import React from 'react';
-import { setCreateTaskFromTop } from '../../../../../features/list/listSlice';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import AddNewItem from '../taskColumn/AddNewItem';
 import { useParams } from 'react-router-dom';

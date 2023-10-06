@@ -1,5 +1,6 @@
 import React from 'react';
 import { Task } from '../../../../../features/task/interface.tasks';
+import { useAppSelector } from '../../../../../app/hooks';
 import { IField, ITask_statuses } from '../../../../../features/list/list.interfaces';
 
 interface NewTaskObjProps {
@@ -10,6 +11,7 @@ interface NewTaskObjProps {
 }
 
 export default function NewTaskTemplate({ data, label, custom_field_columns, task_statuses }: NewTaskObjProps) {
+  const { newTaskPriority } = useAppSelector((state) => state.task);
   const newTaskObj = [
     ...data,
     {
@@ -30,7 +32,7 @@ export default function NewTaskTemplate({ data, label, custom_field_columns, tas
       name: 'Enter New Task',
       parent_id: null,
       position: null,
-      priority: 'normal',
+      priority: newTaskPriority,
       short_id: '',
       start_date: null,
       status: { name: label, color: data[0].status.color },

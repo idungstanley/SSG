@@ -16,7 +16,8 @@ import {
   setSelectedTasksArray,
   setShowTaskNavigation,
   setTaskIdForPilot,
-  setDuplicateTaskObj
+  setDuplicateTaskObj,
+  setSelectedIndexListId
 } from '../../../../features/task/taskSlice';
 import { setActiveItem } from '../../../../features/workspace/workspaceSlice';
 import { UniqueIdentifier, useDraggable, useDroppable } from '@dnd-kit/core';
@@ -86,7 +87,8 @@ export function StickyCol({
     dragToBecomeSubTask,
     saveSettingOnline,
     duplicateTaskObj,
-    separateSubtasksMode
+    separateSubtasksMode,
+    newTaskPriority
   } = useAppSelector((state) => state.task);
 
   const [isChecked, setIsChecked] = useState(false);
@@ -164,6 +166,7 @@ export function StickyCol({
         isListParent,
         id: parentId as string,
         assignees: [currTeamMemberId] as string[],
+        newTaskPriority,
         task_status_id: taskStatusId as string
       });
     }
@@ -229,6 +232,8 @@ export function StickyCol({
       setSelectedIndexArray(updatedArray);
     }
     dispatch(setSelectedIndexStatus(task.status.name));
+    dispatch(setSelectedIndexListId(task.list_id));
+
     const isChecked = e.target.checked;
     dispatch(setShowTaskNavigation(isChecked));
     if (isChecked) {
@@ -363,7 +368,7 @@ export function StickyCol({
             <div className="flex flex-col items-start justify-start flex-grow pl-2 space-y-1">
               <div
                 className="flex items-center w-full text-left"
-                onKeyDown={(e) => (e.key === 'Enter' ? handleEditTask(e, task.id) : null)}
+                onKeyDown={(e) => (e.key === 'Enter' && eitableContent ? handleEditTask(e, task.id) : null)}
               >
                 <div
                   className={`font-semibold alsoit-gray-300 ${
