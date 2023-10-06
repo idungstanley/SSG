@@ -5,7 +5,7 @@ import TagsDropdown from './TagsDropdown';
 
 interface LabelFieldWrapperProps {
   taskCustomFields?: ICustomField;
-  // fieldId: string;
+  fieldId: string;
   taskId: string;
   entityCustomProperty?: IField;
 }
@@ -19,11 +19,10 @@ const getActiveOptions = (arr1: Options | undefined, arr2: array2[] | undefined)
   return arr1?.filter((obj1) => arr2?.find((obj2) => obj2.value === obj1.id));
 };
 
-function TagsWrapper({ entityCustomProperty, taskCustomFields, taskId }: LabelFieldWrapperProps) {
+function TagsWrapper({ entityCustomProperty, taskCustomFields, taskId, fieldId }: LabelFieldWrapperProps) {
   const activeOptions = taskCustomFields?.values;
   const allOptions = entityCustomProperty?.options;
   const optionsFromField = getActiveOptions(allOptions, activeOptions);
-
   return (
     <div className="w-full">
       <TagsDropdown
