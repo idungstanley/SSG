@@ -49,9 +49,11 @@ export function CombinedTime() {
       return (
         <span className="flex items-center justify-center w-12 tracking-wide text-alsoit-text-md">
           <TotalTimeIcon className="w-4 h-4" />
-          {`${String(duration.hours()).padStart(2, '0')}:${String(duration.minutes()).padStart(2, '0')}:${String(
-            duration.seconds()
-          ).padStart(2, '0')}`}
+          <span>
+            {`${String(duration.hours()).padStart(2, '0')}:${String(duration.minutes()).padStart(2, '0')}:${String(
+              duration.seconds()
+            ).padStart(2, '0')}`}
+          </span>
         </span>
       );
     }
