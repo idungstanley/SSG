@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { listColumnProps } from '../../pages/workspace/tasks/component/views/ListColumns';
 import { IField, IFieldValue, ITask_statuses } from '../list/list.interfaces';
 import {
+  Header,
   IDuration,
   IExtraFields,
   IHistoryFilterMemory,
@@ -20,7 +21,6 @@ import {
 } from '../../components/TasksHeader/ui/Filter/types/filters';
 import { DEFAULT_FILTERS_OPTION } from '../../components/TasksHeader/ui/Filter/config/filterConfig';
 import { ITeamMembersAndGroup } from '../settings/teamMembersAndGroups.interfaces';
-import { Header } from '../../components/Pilot/components/TimeClock/ClockLog';
 import { ItaskViews } from '../hubs/hubs.interfaces';
 
 export interface ICustomField {

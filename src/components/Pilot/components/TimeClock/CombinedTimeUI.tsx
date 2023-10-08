@@ -67,8 +67,6 @@ export function CombinedTime() {
     (tracker) => tracker.team_member.user.id !== currentUserId
   );
 
-  const activeTrackerCheck = (): boolean => (activeTrackers && activeTrackers?.length > 0 ? true : false);
-
   function TabsDropDown() {
     return (
       <div className="absolute z-40 flex flex-col p-2 space-y-3 bg-white rounded-md shadow-xl w-44 top-7 left-7">
@@ -112,17 +110,17 @@ export function CombinedTime() {
           className="relative flex items-center justify-between px-1 cursor-pointer rounded-top w-28 h-7"
           onClick={() => setDropDown((prev) => ({ ...prev, tabDrop: !prev.tabDrop }))}
         >
-          <div className="cursor-pointer">
+          <div className="cursor-pointer bg-alsoit-gray-100 rounded-xl">
             <CollapseIcon
-              active={activeTrackerCheck()}
+              active={!timerStatus}
               onToggle={() => setDropDown((prev) => ({ ...prev, activeTimeDrop: !prev.activeTimeDrop }))}
-              iconColor="#dedede"
-              color="#A854F7"
+              iconColor="rgb(145 145 145)"
+              color="rgb(145 145 145)"
             />
           </div>
           {/* Active Tracker Name */}
           <span className="text-alsoit-text-md text-alsoit-gray-200">{activeClockTab}</span>
-          {dropDown.tabDrop ? <ArrowUp /> : <ArrowDown />}
+          {dropDown.tabDrop ? <ArrowUp /> : <ArrowDown className="w-2 h-2" />}
           {dropDown.tabDrop && TabsDropDown()}
         </label>
         {/* Counter and Icons */}
