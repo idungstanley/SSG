@@ -14,7 +14,7 @@ import { useParams } from 'react-router-dom';
 import { useDraggable, useDroppable } from '@dnd-kit/core';
 import HubManagerIcon from '../../assets/icons/HubManager';
 
-interface TaskItemProps {
+interface HrHubItemProps {
   item: {
     id: string;
     name: string;
@@ -42,7 +42,7 @@ export default function HubItem({
   isExtendedBar,
   handleClick,
   handleLocation
-}: TaskItemProps) {
+}: HrHubItemProps) {
   const { hubId, subhubId } = useParams();
 
   const { activeItemId, openedEntitiesIds } = useAppSelector((state) => state.workspace);
