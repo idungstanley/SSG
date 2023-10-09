@@ -3,13 +3,15 @@ import { AiFillFile } from 'react-icons/ai';
 import { BsFiletypeDoc, BsFiletypePpt, BsFiletypeXls, BsFillFileEarmarkMusicFill } from 'react-icons/bs';
 import { FaFilePdf } from 'react-icons/fa';
 import { GrDocumentZip } from 'react-icons/gr';
+import ToolTip from '../../../../../Tooltip/Tooltip';
 
 interface fileIconProps {
   fileExtension?: string;
   filePath?: string;
+  fileName?: string;
 }
 
-function FileIcons({ fileExtension, filePath }: fileIconProps) {
+function FileIcons({ fileExtension, filePath, fileName }: fileIconProps) {
   const iconStyle = 'h5- w-5';
   let icon;
   switch (fileExtension) {
@@ -60,7 +62,7 @@ function FileIcons({ fileExtension, filePath }: fileIconProps) {
 
   return (
     <a href={filePath} download>
-      {icon}
+      <ToolTip title={fileName}>{icon}</ToolTip>
     </a>
   );
 }

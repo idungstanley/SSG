@@ -24,7 +24,12 @@ function FilesField({ taskCustomFields, taskId, fieldId, listId }: filesProps) {
       <div className="flex flex-wrap gap-2">
         {taskFiles.map((file) => {
           return (
-            <FileIcons fileExtension={file.file?.file_format.extension} filePath={file.file?.path} key={file.id} />
+            <FileIcons
+              fileExtension={file.file?.file_format.extension}
+              filePath={file.file?.path}
+              key={file.id}
+              fileName={file.name}
+            />
           );
         })}
         <button
