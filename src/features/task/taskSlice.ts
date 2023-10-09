@@ -165,7 +165,7 @@ interface TaskState {
   showNewTaskId: string;
   singleLineView: boolean;
   toggleAllSubtask: boolean;
-  toggleAllSubtaskSplit: string[];
+  toggleAllSubtaskSplit: string;
   separateSubtasksMode: boolean;
   CompactView: boolean;
   taskUpperCase: boolean;
@@ -281,7 +281,7 @@ const initialState: TaskState = {
   triggerAutoSave: false,
   triggerSaveSettingsModal: false,
   toggleAllSubtask: false,
-  toggleAllSubtaskSplit: [],
+  toggleAllSubtaskSplit: '',
   verticalGridlinesTask: false,
   splitSubTaskState: false,
   splitSubTaskLevels: [],
@@ -506,9 +506,9 @@ export const taskSlice = createSlice({
     setSeparateSubtasksMode(state, action: PayloadAction<boolean>) {
       state.separateSubtasksMode = action.payload;
       state.toggleAllSubtask = false;
-      state.toggleAllSubtaskSplit = [];
+      state.toggleAllSubtaskSplit = '';
     },
-    setToggleAllSubtaskSplit(state, action: PayloadAction<string[]>) {
+    setToggleAllSubtaskSplit(state, action: PayloadAction<string>) {
       state.toggleAllSubtaskSplit = action.payload;
       state.toggleAllSubtask = false;
       state.separateSubtasksMode = false;

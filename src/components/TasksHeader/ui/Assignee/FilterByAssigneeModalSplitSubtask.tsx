@@ -145,9 +145,13 @@ export default function FilterByAssigneeModalSplitSubtask({
     <Menu as="div" className="relative inline-block text-left group">
       <div className="relative">
         <Menu.Button className="flex items-center">
-          <AssigneeIcon active={isAssignee && !isMeMode} />
-          <span>Assignee</span>
-          <ArrowDownFilled active={isAssignee && !isMeMode} />
+          <AssigneeIcon active={isAssignee && !isMeMode} width={21} height={21} />
+          {!isSplitSubtasks ? (
+            <>
+              <span>Assignee</span>
+              <ArrowDownFilled active={isAssignee && !isMeMode} />
+            </>
+          ) : null}
         </Menu.Button>
       </div>
       <Transition
