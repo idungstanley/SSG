@@ -23,7 +23,7 @@ import HubItemOverlay from '../../../../../../../components/tasks/HubItemOverLay
 import { generateViewsUrl } from '../../../../../../../utils/generateViewsUrl';
 import { IHub } from '../../../../../../../features/hubs/hubs.interfaces';
 
-export default function HList({ hubs, openNewHub }: ListProps) {
+export default function HList({ hubs, openNewHub, placeHubType }: ListProps) {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
@@ -125,8 +125,10 @@ export default function HList({ hubs, openNewHub }: ListProps) {
               topNumber="50px"
               zNumber="5"
             />
-            {hub?.children?.length && isCanBeOpen(hub.id) ? <SubHList hubs={hub.children as Hub[]} /> : null}
-            {showSidebar && (
+            {hub?.children?.length && isCanBeOpen(hub.id) ? (
+              <SubHList hubs={hub.children as Hub[]} placeHubType={placeHubType} />
+            ) : null}
+            {showSidebar && placeHubType == 'Tasks' ? (
               <div>
                 {hub?.wallets?.length && isCanBeOpen(hub.id) ? (
                   <WList
@@ -141,7 +143,7 @@ export default function HList({ hubs, openNewHub }: ListProps) {
                   <LList list={hub.lists} leftMargin={false} paddingLeft="48" />
                 ) : null}
               </div>
-            )}
+            ) : null}
           </div>
         </div>
       ))}

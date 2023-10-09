@@ -18,9 +18,12 @@ import { EntityType } from '../../../../../../../utils/EntityTypes/EntityType';
 import HubItemOverlay from '../../../../../../../components/tasks/HubItemOverLay';
 import { DragOverlay } from '@dnd-kit/core';
 
-export default function SubHubList({ hubs }: ListProps) {
+export default function SubHubList({ hubs, placeHubType }: ListProps) {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+
+  const { currentWorkspaceId } = useAppSelector((state) => state.auth);
+  const subHubUrl = placeHubType == 'Also HR' ? '/hr/h/' : '/tasks/sh/';
 
   const { showExtendedBar, openedEntitiesIds } = useAppSelector((state) => state.workspace);
   const { showSidebar } = useAppSelector((state) => state.account);
@@ -40,7 +43,7 @@ export default function SubHubList({ hubs }: ListProps) {
     );
     dispatch(setShowPilot(true));
     dispatch(setActiveTabId(4));
-    navigate(`tasks/sh/${id}`, {
+    navigate(`/${currentWorkspaceId}${subHubUrl}${id}`, {
       replace: true
     });
     if (!showSidebar) {
@@ -85,7 +88,7 @@ export default function SubHubList({ hubs }: ListProps) {
               topNumber="80px"
               zNumber="4"
             />
-            {showSidebar && (
+            {showSidebar && placeHubType == 'Tasks' ? (
               <div>
                 {hub.wallets.length && openedEntitiesIds.includes(hub.id) ? (
                   <WList
@@ -100,7 +103,7 @@ export default function SubHubList({ hubs }: ListProps) {
                   <LList list={hub.lists} leftMargin={false} paddingLeft="50" />
                 ) : null}
               </div>
-            )}
+            ) : null}
           </div>
         </div>
       ))}

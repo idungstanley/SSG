@@ -67,7 +67,7 @@ import Construction from './pages/settings/UserSettings/Pages/Construction';
 import TaskInvite from './pages/workspace/tasks/taskInvite/TaskInvite';
 import WorkSpaceTable from './pages/settings/WorkspaceSettings/GeneralWorkSpaceSettings/Table';
 import EverythingPage from './pages/everything';
-import AlsoHr from './pages/workspace/alsoHr';
+import AlsoHr from './pages/hr';
 
 const inbox = [
   {

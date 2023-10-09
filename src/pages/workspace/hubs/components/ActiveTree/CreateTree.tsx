@@ -3,7 +3,12 @@
 import { IHub, IWallet, IList } from '../../../../../features/hubs/hubs.interfaces';
 import { Hub, List, Wallet } from './activetree.interfaces';
 
-export default function CreateTree(data: [IHub | IWallet | IList], currentHubId: string, hubs: Hub[]) {
+export default function CreateTree(
+  data: [IHub | IWallet | IList],
+  currentHubId: string,
+  hubs: Hub[],
+  placeHubType = 'Tasks'
+) {
   const newHubs = [...hubs];
   const hubsById: Map<string, Hub> = new Map();
   const subHubsById: Map<string, Hub> = new Map();
@@ -37,59 +42,61 @@ export default function CreateTree(data: [IHub | IWallet | IList], currentHubId:
     }
   }
 
-  const wallets = data.filter((item) => item.type === 'wallet') as Wallet[];
-  if (wallets.length) {
-    for (let wallet of wallets) {
-      wallet = {
-        ...wallet,
-        children: [],
-        lists: []
-      };
-      walletsById.set(wallet.id, wallet);
-    }
-  }
-
-  const lists = data.filter((item) => item.type === 'list') as List[];
-  if (lists.length) {
-    for (let list of lists) {
-      list = {
-        ...list,
-        children: []
-      };
-      listsById.set(list.id, list);
-    }
-  }
-
-  for (const wallet of walletsById.values()) {
-    if (wallet.parent_id) {
-      const hub = hubsById.get(wallet.parent_id);
-      const subHub = subHubsById.get(wallet.parent_id);
-      const parentWallet = walletsById.get(wallet.parent_id);
-      if (hub) {
-        hub.wallets.push(wallet);
-      }
-      if (subHub) {
-        subHub.wallets.push(wallet);
-      }
-      if (parentWallet) {
-        parentWallet.children?.push(wallet);
+  if (placeHubType === 'Tasks') {
+    const wallets = data.filter((item) => item.type === 'wallet') as Wallet[];
+    if (wallets.length) {
+      for (let wallet of wallets) {
+        wallet = {
+          ...wallet,
+          children: [],
+          lists: []
+        };
+        walletsById.set(wallet.id, wallet);
       }
     }
-  }
 
-  for (const list of listsById.values()) {
-    if (list.parent_id) {
-      const hub = hubsById.get(list.parent_id);
-      const subHub = subHubsById.get(list.parent_id);
-      const wallet = walletsById.get(list.parent_id);
-      if (hub) {
-        hub.lists.push(list);
+    const lists = data.filter((item) => item.type === 'list') as List[];
+    if (lists.length) {
+      for (let list of lists) {
+        list = {
+          ...list,
+          children: []
+        };
+        listsById.set(list.id, list);
       }
-      if (subHub) {
-        subHub.lists.push(list);
+    }
+
+    for (const wallet of walletsById.values()) {
+      if (wallet.parent_id) {
+        const hub = hubsById.get(wallet.parent_id);
+        const subHub = subHubsById.get(wallet.parent_id);
+        const parentWallet = walletsById.get(wallet.parent_id);
+        if (hub) {
+          hub.wallets.push(wallet);
+        }
+        if (subHub) {
+          subHub.wallets.push(wallet);
+        }
+        if (parentWallet) {
+          parentWallet.children?.push(wallet);
+        }
       }
-      if (wallet) {
-        wallet.lists.push(list);
+    }
+
+    for (const list of listsById.values()) {
+      if (list.parent_id) {
+        const hub = hubsById.get(list.parent_id);
+        const subHub = subHubsById.get(list.parent_id);
+        const wallet = walletsById.get(list.parent_id);
+        if (hub) {
+          hub.lists.push(list);
+        }
+        if (subHub) {
+          subHub.lists.push(list);
+        }
+        if (wallet) {
+          wallet.lists.push(list);
+        }
       }
     }
   }

@@ -16,7 +16,11 @@ import {
 import { setActiveItem, setOpenedEntitiesIds } from '../../../../../features/workspace/workspaceSlice';
 import { IHub } from '../../../../../features/hubs/hubs.interfaces';
 
-export default function ActiveTress() {
+interface HubProps {
+  placeHubType: string;
+}
+
+export default function ActiveTress({ placeHubType }: HubProps) {
   const dispatch = useAppDispatch();
   const location = useLocation();
 
@@ -37,7 +41,7 @@ export default function ActiveTress() {
       const currentHubId = allHubTree.tree[0].parent_id || hubId;
       const currentItem = hubs.find((item) => item.id === currentHubId);
       if (!currentItem?.children) {
-        setHubs(() => [...CreateTree(allHubTree.tree, currentHubId as string, hubs as Hub[])]);
+        setHubs(() => [...CreateTree(allHubTree.tree, currentHubId as string, hubs as Hub[], placeHubType)]);
       }
     }
   }, [allHubTree, allHubs, hubs]);
@@ -91,7 +95,7 @@ export default function ActiveTress() {
 
   return (
     <div className="flex flex-col gap-2">
-      <HList hubs={filteredResults} openNewHub={handleOpenNewHub} />
+      <HList hubs={filteredResults} openNewHub={handleOpenNewHub} placeHubType={placeHubType} />
     </div>
   );
 }
