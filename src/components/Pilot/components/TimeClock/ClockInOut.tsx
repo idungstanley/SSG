@@ -37,7 +37,7 @@ export default function ClockInOut() {
         <CombinedTime />
       </div>
       {/* Clock Log */}
-      <div className="w-full p-2 my-4 flex flex-col space-y-2 bg-alsoit-gray-50 rounded-lg">
+      <div className="w-full p-1 my-4 flex flex-col space-y-2 bg-alsoit-gray-50 rounded-lg">
         <div className="h-96">
           <TimeInventory getTimeEntries={getTaskTimeEntries} />
         </div>
