@@ -249,12 +249,7 @@ export default function WalletItem({
         </div>
       </section>
       {paletteId === wallet.id && show ? (
-        <Palette
-          title="Wallet Colour"
-          activeOutterColor={wallet.color}
-          setPaletteColor={setPaletteColor}
-          cords={cords}
-        />
+        <Palette title="Wallet" activeOutterColor={wallet.color} setPaletteColor={setPaletteColor} cords={cords} />
       ) : null}
       {showMenuDropdown === wallet.id ? <MenuDropdown isExtendedBar={isExtendedBar} cords={menuCords} /> : null}
       {SubMenuId === wallet.id ? <SubDropdown cords={menuCords} /> : null}
