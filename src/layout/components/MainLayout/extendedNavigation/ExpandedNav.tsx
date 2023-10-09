@@ -27,6 +27,7 @@ import LibraryData from '../../../../pages/directory/components/Sidebar/LibraryT
 import { dimensions } from '../../../../app/config/dimensions';
 import { isAllowIncreaseWidth } from '../../../../utils/widthUtils';
 import { useResize } from '../../../../hooks/useResize';
+import AlsoHr from '../../../../pages/hr';
 
 export interface ItemData {
   id?: number;
