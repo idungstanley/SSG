@@ -6,8 +6,10 @@ export default function ListShow({ changeViews }: { changeViews: string }) {
     <div className="flex items-center justify-start space-x-1">
       <span className="group cursor-pointer gap-2">
         <ShowHideSettings
+          isActive={changeViews}
           scrollByEachGroup="Scroll By Each Group"
-          splitSubTask="Split Sub Task"
+          splitSubtaskTwo="Split 2 level of subtasks"
+          splitSubtaskThree="Split 3 level of subtasks"
           verticalGridLines="Property Vertical Grid Line"
           entityLocation="Entity Location"
           subTaskParentsNames="Subtask Parent Names"

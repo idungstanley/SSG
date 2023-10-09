@@ -18,6 +18,7 @@ interface ManageTagsDropdownProps {
 
 export function ManageTagsDropdown({ tagsArr, entityId, entityType }: ManageTagsDropdownProps) {
   const { data: tags } = useTags();
+  // console.log(tags);
   const { mutate: onAssign } = useAssignTag(entityId);
   const [searchValue, setSearchValue] = useState('');
 

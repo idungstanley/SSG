@@ -27,8 +27,12 @@ export function FilterDropdown({ isSplitSubtasks, parentId }: IFilterDropdownPro
             onClick={() => dispatch(setSelectedTaskParentId(parentId ? (parentId as string) : ''))}
           >
             <Icons src={Filter} />
-            Filter
-            <ArrowDownFilled />
+            {!isSplitSubtasks ? (
+              <>
+                Filter
+                <ArrowDownFilled />
+              </>
+            ) : null}
           </Button>
         </Menu.Button>
       </div>
