@@ -18,10 +18,18 @@ import { GroupHorizontalScroll } from '../../components/ScrollableContainer/Grou
 import { EntityType } from '../../utils/EntityTypes/EntityType';
 import { setSaveSettingList, setSaveSettingOnline, setSubtasks, setTasks } from '../../features/task/taskSlice';
 import { useformatSettings } from '../workspace/tasks/TaskSettingsModal/ShowSettingsModal/FormatSettings';
-import { IField } from '../../features/list/list.interfaces';
 import { generateSubtasksList, generateSubtasksArray } from '../../utils/generateLists';
+import { IHubDetails } from '../../features/hubs/hubs.interfaces';
+import { updatePageTitle } from '../../utils/updatePageTitle';
 
 export default function HubPage() {
+  useEffect(() => {
+    updatePageTitle('Tasks');
+    return () => {
+      updatePageTitle('');
+    };
+  }, []);
+
   const dispatch = useAppDispatch();
   const { hubId, subhubId, taskId } = useParams();
 
@@ -69,7 +77,7 @@ export default function HubPage() {
   });
 
   const tasks = useMemo(() => (data ? data.pages.flatMap((page) => page.data.tasks) : []), [data]);
-  const lists = useMemo(() => generateLists(tasks, hub?.data.hub?.custom_field_columns as IField[]), [tasks, hub]);
+  const lists = useMemo(() => generateLists(tasks, hub?.data.hub as IHubDetails), [tasks, hub]);
 
   useEffect(() => {
     if (Object.keys(lists).length) {
@@ -77,7 +85,7 @@ export default function HubPage() {
 
       const newSubtasksArr = generateSubtasksArray(lists);
       if (newSubtasksArr.length) {
-        const newSubtasks = generateSubtasksList(newSubtasksArr, hub?.data.hub?.custom_field_columns as IField[]);
+        const newSubtasks = generateSubtasksList(newSubtasksArr, hub?.data.hub as IHubDetails);
         dispatch(setSubtasks({ ...subtasks, ...newSubtasks }));
       }
     }

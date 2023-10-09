@@ -1,8 +1,11 @@
 import { useAppDispatch } from '../../../../../app/hooks';
 import {
+  THREE_SUBTASKS_LEVELS,
+  TWO_SUBTASKS_LEVELS,
   getCompactView,
   getSingleLineView,
   getSplitSubTask,
+  getSplitSubTaskLevels,
   getTaskUpperCase,
   getVerticalGrid,
   getVerticalGridlinesTask,
@@ -20,6 +23,14 @@ export function useformatSettings() {
     dispatch(getVerticalGridlinesTask(settingsOng.verticalGridlinesTask));
     dispatch(getSplitSubTask(settingsOng.splitSubTaskState));
     dispatch(setAutoSave(settingsOng.autoSave));
+    const splitLevels: string[] = [];
+    if (settingsOng.splitSubtaskTwoState) {
+      splitLevels.push(TWO_SUBTASKS_LEVELS);
+    }
+    if (settingsOng.splitSubtaskThreeState) {
+      splitLevels.push(THREE_SUBTASKS_LEVELS);
+    }
+    dispatch(getSplitSubTaskLevels(splitLevels));
   };
 
   return formatSettings;

@@ -1,7 +1,12 @@
-import { IField } from '../features/list/list.interfaces';
+import { IHubDetails } from '../features/hubs/hubs.interfaces';
+import { IListDetails } from '../features/list/list.interfaces';
 import { ITaskFullList } from '../features/task/interface.tasks';
+import { IWalletDetails } from '../features/wallet/wallet.interfaces';
 
-export const generateLists = (tasks: ITaskFullList[], fields?: IField[]): Record<string, ITaskFullList[]> =>
+export const generateLists = (
+  tasks: ITaskFullList[],
+  details?: IHubDetails | IWalletDetails | IListDetails
+): Record<string, ITaskFullList[]> =>
   tasks.reduce((lists: Record<string, ITaskFullList[]>, task) => {
     const listId = task.list_id;
 
@@ -9,7 +14,11 @@ export const generateLists = (tasks: ITaskFullList[], fields?: IField[]): Record
       lists[listId] = [];
     }
 
-    lists[listId].push({ ...task, custom_field_columns: fields || [] });
+    lists[listId].push({
+      ...task,
+      task_statuses: details?.task_statuses || [],
+      custom_field_columns: details?.custom_field_columns || []
+    });
 
     return lists;
   }, {});
@@ -34,7 +43,10 @@ export const generateSubtasksArray = (lists: Record<string, ITaskFullList[]>): I
   return newSubtasksArr;
 };
 
-export const generateSubtasksList = (tasks: ITaskFullList[], fields?: IField[]): Record<string, ITaskFullList[]> =>
+export const generateSubtasksList = (
+  tasks: ITaskFullList[],
+  details?: IHubDetails | IWalletDetails | IListDetails
+): Record<string, ITaskFullList[]> =>
   tasks.reduce((lists: Record<string, ITaskFullList[]>, task) => {
     const parentId = task.parent_id as string;
     const childrenCount = tasks.filter((t) => t.parent_id === task.id).length;
@@ -45,8 +57,16 @@ export const generateSubtasksList = (tasks: ITaskFullList[], fields?: IField[]):
 
     lists[parentId].push({
       ...task,
+      list: task.list
+        ? task.list
+        : {
+            id: details?.id || '',
+            name: details?.name || '',
+            color: details?.color as unknown as string
+          },
       descendants_count: childrenCount,
-      custom_field_columns: fields || []
+      task_statuses: details?.task_statuses || [],
+      custom_field_columns: details?.custom_field_columns || []
     });
 
     return lists;

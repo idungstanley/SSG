@@ -37,11 +37,13 @@ const unassigned = {
 interface IFilterByAssigneeModalSplitSubtaskProps {
   isMeMode: boolean;
   parentId: string;
+  isSplitSubtasks?: boolean;
 }
 
 export default function FilterByAssigneeModalSplitSubtask({
   isMeMode,
-  parentId
+  parentId,
+  isSplitSubtasks
 }: IFilterByAssigneeModalSplitSubtaskProps) {
   const dispatch = useAppDispatch();
 

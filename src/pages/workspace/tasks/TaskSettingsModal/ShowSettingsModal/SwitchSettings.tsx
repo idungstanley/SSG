@@ -1,8 +1,11 @@
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import {
+  THREE_SUBTASKS_LEVELS,
+  TWO_SUBTASKS_LEVELS,
   getCompactView,
   getSingleLineView,
   getSplitSubTask,
+  getSplitSubTaskLevels,
   getTaskUpperCase,
   getVerticalGrid,
   getVerticalGridlinesTask,
@@ -17,9 +20,29 @@ export function useSwitchSettings() {
     verticalGrid,
     taskUpperCase,
     verticalGridlinesTask,
-    splitSubTaskState,
+    splitSubTaskLevels,
     autoSave
   } = useAppSelector((state) => state.task);
+
+  const splitSubtasks = (levelId: string) => {
+    if (!splitSubTaskLevels.length) {
+      dispatch(getSplitSubTask(true));
+      dispatch(getSplitSubTaskLevels([levelId]));
+    } else {
+      let levelOptions: string[] = [];
+      if (splitSubTaskLevels.includes(levelId)) {
+        levelOptions = splitSubTaskLevels.filter((id) => id !== levelId);
+      } else {
+        levelOptions = [...splitSubTaskLevels, levelId];
+      }
+      dispatch(getSplitSubTaskLevels(levelOptions));
+      if (!levelOptions.length) {
+        dispatch(getSplitSubTask(false));
+      } else {
+        dispatch(getSplitSubTask(true));
+      }
+    }
+  };
 
   const switchSettings = (viewMode: string) => {
     switch (viewMode) {
@@ -38,8 +61,11 @@ export function useSwitchSettings() {
       case 'Title Vertical Grid Line':
         dispatch(getVerticalGridlinesTask(!verticalGridlinesTask));
         break;
-      case 'Split Sub Task':
-        dispatch(getSplitSubTask(!splitSubTaskState));
+      case 'Split 2 level of subtasks':
+        splitSubtasks(TWO_SUBTASKS_LEVELS);
+        break;
+      case 'Split 3 level of subtasks':
+        splitSubtasks(THREE_SUBTASKS_LEVELS);
         break;
       case 'AutoSave View':
         dispatch(setAutoSave(!autoSave));

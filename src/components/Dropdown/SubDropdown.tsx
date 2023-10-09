@@ -3,7 +3,7 @@ import { DocumentDuplicateIcon, StarIcon, PlusIcon, LinkIcon, SwatchIcon } from 
 import { useAppSelector } from '../../app/hooks';
 import { useDispatch } from 'react-redux';
 import { setCreateTaskSlideOverVisibility } from '../../features/general/slideOver/slideOverSlice';
-import { getSubMenu, setEntityToCreate, setSubDropdownMenu } from '../../features/hubs/hubSlice';
+import { getSubMenu, setEntityToCreate, setSubDropdownMenu, setshowMenuDropdown } from '../../features/hubs/hubSlice';
 import { useParams } from 'react-router-dom';
 import {
   setActiveItem,
@@ -113,6 +113,7 @@ export default function SubDropdown({ cords }: SubDropdownProps) {
         dispatch(setVisibility(false));
         dispatch(setShowTreeInput(false));
         dispatch(setSubDropdownMenu(false));
+        dispatch(setshowMenuDropdown({ showMenuDropdown: null, showMenuDropdownType: null }));
         dispatch(setLastActiveItem(''));
         if (entityToCreate === EntityType.hub || entityToCreate === EntityType.subHub) {
           dispatch(setActiveSubHubManagerTabId(EntityManagerTabsId.hub));
@@ -137,6 +138,8 @@ export default function SubDropdown({ cords }: SubDropdownProps) {
       handleClick: () => {
         dispatch(setEntityToCreate(EntityType.subHub));
         dispatch(setLastActiveItem('Sub Hub'));
+        // dispatch(setSubDropdownMenu(false));
+        // dispatch(setshowMenuDropdown({ showMenuDropdown: null, showMenuDropdownType: null }));
       },
       icon: <AddHubIcon />,
       isVisible: showMenuDropdownType === EntityType.hub ? true : false || SubMenuType === EntityType.hub ? true : false
@@ -153,6 +156,8 @@ export default function SubDropdown({ cords }: SubDropdownProps) {
       handleClick: () => {
         dispatch(setEntityToCreate(EntityType.wallet));
         dispatch(setLastActiveItem(selectedTreeDetails.type === EntityType.wallet ? 'Sub Wallet' : 'Wallet'));
+        // dispatch(setSubDropdownMenu(false));
+        // dispatch(setshowMenuDropdown({ showMenuDropdown: null, showMenuDropdownType: null }));
       },
       icon: <AddWalletIcon />,
       isVisible:
@@ -166,8 +171,10 @@ export default function SubDropdown({ cords }: SubDropdownProps) {
       title: 'Task',
       handleClick: () => {
         dispatch(setCreateTaskSlideOverVisibility(true));
+        dispatch(setSubDropdownMenu(false));
+        dispatch(setshowMenuDropdown({ showMenuDropdown: null, showMenuDropdownType: null }));
         // navigate(`/${currentWorkspaceId}/tasks`);
-        dispatch(setLastActiveItem('Task'));
+        // dispatch(setLastActiveItem('Task'));
       },
       icon: <PlusIcon className="w-5 text-gray-700 h-7" aria-hidden="true" />,
       isVisible: showMenuDropdownType === EntityType.list ? true : false
@@ -177,6 +184,8 @@ export default function SubDropdown({ cords }: SubDropdownProps) {
       handleClick: () => {
         dispatch(setLastActiveItem('List'));
         dispatch(setEntityToCreate(EntityType.list));
+        // dispatch(setSubDropdownMenu(false));
+        // dispatch(setshowMenuDropdown({ showMenuDropdown: null, showMenuDropdownType: null }));
       },
       icon: <AddListIcon />,
       isVisible: showMenuDropdownType === EntityType.list ? false : true

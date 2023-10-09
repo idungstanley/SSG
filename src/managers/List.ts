@@ -47,9 +47,13 @@ export const deleteListManager = (id: string, hubs: Hub[]) => {
 export const createListManager = (type: string, hubs: Hub[], newList: IList) => {
   const createList = (parent: Wallet | Hub) => {
     const newParent = { ...parent };
+    const createdList = {
+      ...newList,
+      type: EntityType.list
+    };
     return {
       ...newParent,
-      lists: newParent?.lists?.length ? [...newParent.lists, newList] : [newList]
+      lists: newParent?.lists?.length ? [...newParent.lists, createdList] : [createdList]
     };
   };
 

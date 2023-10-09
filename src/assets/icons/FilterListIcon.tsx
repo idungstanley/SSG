@@ -1,33 +1,24 @@
+import { DetailedHTMLProps, SVGAttributes } from 'react';
 import ICONS_INTERACTIONS from '../../utils/Constants/IconInteractions';
 
 /* eslint-disable max-len */
-interface Props {
+interface Props extends DetailedHTMLProps<SVGAttributes<SVGSVGElement>, SVGSVGElement> {
   active: boolean;
-  dimensions?: {
-    height: number;
-    width: number;
-  };
 }
 
-export function FilterListIcon({ active, dimensions }: Props) {
+export function FilterListIcon({ active, ...props }: Props) {
   return (
-    <svg
-      width={dimensions?.width ?? '20'}
-      height={dimensions?.height ?? '20'}
-      viewBox="0 0 20 20"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg {...props} viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
       <mask
         id="mask0_190_62024"
         style={{ maskType: 'alpha' }}
         maskUnits="userSpaceOnUse"
         x="0"
         y="0"
-        width={dimensions?.width ?? '20'}
-        height={dimensions?.height ?? '20'}
+        width={'20'}
+        height={'20'}
       >
-        <rect width={dimensions?.width ?? '20'} height={dimensions?.height ?? '20'} fill="#D9D9D9" />
+        <rect width={'20'} height={'20'} fill="#D9D9D9" />
       </mask>
       <g mask="url(#mask0_190_62024)">
         <path

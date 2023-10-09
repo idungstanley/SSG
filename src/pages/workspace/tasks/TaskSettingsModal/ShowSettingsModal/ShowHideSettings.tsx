@@ -12,7 +12,6 @@ import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import {
   THREE_SUBTASKS_LEVELS,
   TWO_SUBTASKS_LEVELS,
-  getSplitSubTaskLevels,
   setSaveSettingLocal,
   setSaveSettingOnline,
   setTriggerSaveSettings,
@@ -21,7 +20,8 @@ import {
 
 interface IShowHideSettings {
   scrollByEachGroup: string;
-  splitSubTask: string;
+  splitSubtaskTwo: string;
+  splitSubtaskThree: string;
   verticalGridLines: string;
   entityLocation: string;
   subTaskParentsNames: string;
@@ -33,7 +33,8 @@ interface IShowHideSettings {
 
 export default function ShowHideSettings({
   scrollByEachGroup,
-  splitSubTask,
+  splitSubtaskTwo,
+  splitSubtaskThree,
   verticalGridLines,
   entityLocation,
   subTaskParentsNames,
@@ -53,14 +54,13 @@ export default function ShowHideSettings({
     verticalGridlinesTask,
     saveSettingList,
     splitSubTaskState,
-    autoSave,
     splitSubTaskLevels,
+    autoSave,
     saveSettingOnline
   } = useAppSelector((state) => state.task);
 
   const [checkedStates, setCheckedStates] = useState<boolean[]>([]);
   const [isAnyactive, setIsAnyactive] = useState<boolean>();
-  const [activeItem, setActiveItem] = useState<string>(splitSubTaskLevels);
 
   const isActiveColor = isAnyactive ? '#BF01FE' : 'black';
 
@@ -73,6 +73,8 @@ export default function ShowHideSettings({
     taskUpperCase,
     verticalGridlinesTask,
     splitSubTaskState,
+    splitSubtaskTwoState: splitSubTaskLevels.includes(TWO_SUBTASKS_LEVELS),
+    splitSubtaskThreeState: splitSubTaskLevels.includes(THREE_SUBTASKS_LEVELS),
     autoSave
   };
 
@@ -125,18 +127,22 @@ export default function ShowHideSettings({
     },
     {
       id: 11,
-      label: splitSubTask
+      label: splitSubtaskTwo
     },
     {
       id: 12,
-      label: closedSubtask
+      label: splitSubtaskThree
     },
     {
       id: 13,
-      label: subTaskInMultipleLists
+      label: closedSubtask
     },
     {
       id: 14,
+      label: subTaskInMultipleLists
+    },
+    {
+      id: 15,
       label: subTaskParentsNames
     }
   ];
@@ -164,15 +170,17 @@ export default function ShowHideSettings({
         const CompactView = viewSettings.findIndex((item) => item.label === 'Compact mode');
         const taskUpperCase = viewSettings.findIndex((item) => item.label === 'Upper Case');
         const verticalGrid = viewSettings.findIndex((item) => item.label === 'Property Vertical Grid Line');
-        const splitSubTaskState = viewSettings.findIndex((item) => item.label === 'Split Sub Task');
+        const splitSubtaskTwoState = viewSettings.findIndex((item) => item.label === 'Split 2 level of subtasks');
+        const splitSubtaskThreeState = viewSettings.findIndex((item) => item.label === 'Split 3 level of subtasks');
 
-        if (saveSettingList != undefined && saveSettingList?.view_settings != null) {
+        if (saveSettingList !== undefined && saveSettingList?.view_settings !== null) {
           newState[singleLineIndex] = saveSettingOnline?.singleLineView as boolean;
           newState[TitleVerticalGridLineIndex] = saveSettingOnline?.verticalGridlinesTask as boolean;
           newState[CompactView] = saveSettingOnline?.CompactView as boolean;
           newState[taskUpperCase] = saveSettingOnline?.taskUpperCase as boolean;
           newState[verticalGrid] = saveSettingOnline?.verticalGrid as boolean;
-          newState[splitSubTaskState] = saveSettingOnline?.splitSubTaskState as boolean;
+          newState[splitSubtaskTwoState] = saveSettingOnline?.splitSubtaskTwoState as boolean;
+          newState[splitSubtaskThreeState] = saveSettingOnline?.splitSubtaskThreeState as boolean;
         } else {
           newState[singleLineIndex] = true;
           newState[TitleVerticalGridLineIndex] = true;
@@ -183,17 +191,6 @@ export default function ShowHideSettings({
 
     handleCheckboxChange();
   }, [saveSettingList]);
-
-  const splitSubtasksOptions = [
-    {
-      id: TWO_SUBTASKS_LEVELS,
-      label: '2 levels of subtasks'
-    },
-    {
-      id: THREE_SUBTASKS_LEVELS,
-      label: '3 levels of subtasks'
-    }
-  ];
 
   const handleChange = (viewMode: string, index: number) => {
     dispatch(setTriggerSaveSettingsModal(true));
@@ -207,17 +204,13 @@ export default function ShowHideSettings({
     }
   };
 
-  const handleClick = (option: string) => {
-    setActiveItem(option);
-    dispatch(getSplitSubTaskLevels(option));
-  };
-
   return (
     <Menu>
       <div className={`viewSettingsParent flex justify-center items-center text-${isAnyactive && 'alsoit-purple-50'}`}>
         <Menu.Button className="flex ml-1">
           <Button active={isAnyactive as boolean}>
-            <ShowIcon color={isActiveColor} /> <span>Show</span> <ArrowDrop color={isActiveColor} />
+            <ShowIcon color={isActiveColor} width="21" height="21" /> <span>Show</span>{' '}
+            <ArrowDrop color={isActiveColor} />
           </Button>
         </Menu.Button>
       </div>
@@ -263,7 +256,7 @@ export default function ShowHideSettings({
                   className={`flex justify-between items-center w-full group ${
                     view.label === 'Title Vertical Grid Line' && 'border-t-2 pt-4'
                   } ${view.label === 'Task In Multiple Lists' && 'border-t-2 pt-4'} ${
-                    view.label === 'Split Sub Task' && 'border-t-2 pt-4'
+                    view.label === 'Split 2 level of subtasks' && 'border-t-2 pt-4'
                   }`}
                 >
                   <p className="flex items-center pl-2 space-x-2 text-md whitespace-nowrap">{view.label}</p>
@@ -287,11 +280,11 @@ export default function ShowHideSettings({
                       </p>
                     </p>
                   )}
-                  {view.label === 'Split Sub Task' && (
+                  {view.label === 'Split 2 level of subtasks' && (
                     <p className="relative">
                       <p
                         className="absolute text-center text-gray-400 bg-white border border-gray-100 whitespace-nowrap"
-                        style={{ top: '-35px', right: '-4px', fontSize: '8px' }}
+                        style={{ top: '-35px', right: '20px', fontSize: '8px' }}
                       >
                         SUB TASK SETTINGS
                       </p>
@@ -310,36 +303,6 @@ export default function ShowHideSettings({
                   </p>
                 </button>
               </Menu.Item>
-              {view.label === 'Split Sub Task' && splitSubTaskState ? (
-                <ul>
-                  {splitSubtasksOptions.map((option) => (
-                    <li
-                      onClick={() => handleClick(option.id)}
-                      key={option.id}
-                      className={`text-alsoit-text-lg font-semibold py-1.5 flex space-x-2 items-center px-2 ${
-                        activeItem === option.id ? 'bg-alsoit-purple-50' : 'hover:bg-alsoit-purple-50'
-                      }`}
-                    >
-                      <input
-                        checked={activeItem === option.id}
-                        type="radio"
-                        id="myRadio"
-                        name="myRadioGroup"
-                        className="hidden"
-                      />
-                      <label
-                        htmlFor="myRadio"
-                        className={
-                          activeItem === option.id
-                            ? 'bg-alsoit-purple-300 inline-block p-2 border border-alsoit-purple-300 rounded-full cursor-pointer text-purple-600'
-                            : 'inline-block p-2 border border-alsoit-purple-300 rounded-full cursor-pointer text-purple-600'
-                        }
-                      ></label>
-                      <span className="font-semibold">{option.label}</span>
-                    </li>
-                  ))}
-                </ul>
-              ) : null}
             </Fragment>
           ))}
         </Menu.Items>

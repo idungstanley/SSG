@@ -25,6 +25,9 @@ import CalendarIcon from '../../../../../assets/icons/CalendarIcon';
 import { EntityType } from '../../../../../utils/EntityTypes/EntityType';
 import EntityManagerIcon from '../../../../../assets/icons/EntityManagerIcon';
 import { UtilityIcon } from '../../../../../assets/icons/Utility';
+import { STORAGE_KEYS } from '../../../../../app/config/dimensions';
+import { IUserParams } from '../../../../../features/account/account.interfaces';
+import { stubTrue } from 'cypress/types/lodash';
 
 const sections = [
   {

@@ -27,7 +27,7 @@ export interface IListColor {
 
 const unique = (arr: listColumnProps[]) => [...new Set(arr)];
 
-export function List({ tasks, subtasksCustomeFields, listDetails }: ListProps) {
+export function List({ tasks }: ListProps) {
   const dispatch = useAppDispatch();
 
   const {
@@ -71,20 +71,6 @@ export function List({ tasks, subtasksCustomeFields, listDetails }: ListProps) {
     return uniqueColumns;
   }, [tasks]);
 
-  const generateSubtasksColumns = useMemo(() => {
-    let customFieldNames: listColumnProps[] = [];
-    if (subtasksCustomeFields?.length) {
-      customFieldNames = subtasksCustomeFields.map((i) => ({
-        value: i.name,
-        id: i.id,
-        field: i.type,
-        hidden: false,
-        color: i.color
-      }));
-    }
-    return unique([...columnsHead, ...customFieldNames]);
-  }, [subtasksCustomeFields]);
-
   const createFullTasksList = () => {
     const newFullTasksList: ITaskFullList[] = [];
     const allTasks = [
@@ -127,7 +113,7 @@ export function List({ tasks, subtasksCustomeFields, listDetails }: ListProps) {
 
   return (
     <div
-      className="pt-1 border-t-4 border-l-4 border-purple-500 rounded-3xl bg-purple-50"
+      className="pt-1 border-t-4 border-l-4 border-purple-500 rounded-3xl bg-purple-50 pb-3"
       style={{
         borderColor: ListColor?.outerColour === null ? 'black' : (ListColor?.outerColour as string),
         backgroundColor: LightenColor(
@@ -138,8 +124,8 @@ export function List({ tasks, subtasksCustomeFields, listDetails }: ListProps) {
       }}
     >
       <Label
-        listName={tasks[0].list?.name || listDetails?.data.list.name}
-        hubName={parentHub?.name}
+        listName={tasks[0].list?.name}
+        hubName={splitSubTaskMode ? `${parentHub?.name as string} > ${tasks[0].list?.name}` : parentHub?.name}
         tasks={tasks}
         ListColor={ListColor}
         showTable={collapseTable}
@@ -173,30 +159,25 @@ export function List({ tasks, subtasksCustomeFields, listDetails }: ListProps) {
                   listColor={ListColor}
                   heads={hideTask.length ? hideTask : generateColumns}
                   data={sortedTasks[key]}
-                  customFields={tasks[0].custom_field_columns as IField[]}
-                  listDetails={listDetails}
                 />
               ) : (
                 <>
                   {sortedTasks[key].map((task) => (
                     <Fragment key={task.id}>
                       <Table
-                        listName={tasks[0].list?.name}
+                        listName={task.list?.name}
                         label={key}
                         listColor={ListColor}
                         heads={hideTask.length ? hideTask : generateColumns}
                         data={[task]}
-                        customFields={tasks[0].custom_field_columns as IField[]}
-                        listDetails={listDetails}
-                        isBlockToOpenSubtasks={true}
                       />
                       <SubtasksTable
-                        data={task}
+                        task={task}
                         subtasksData={subtasks[task.id]}
                         listId={task.list_id}
-                        heads={hideTask.length ? hideTask : generateSubtasksColumns}
-                        customFields={subtasksCustomeFields as IField[]}
+                        heads={hideTask.length ? hideTask : generateColumns}
                         level={1}
+                        breadcrumbs={`${parentHub?.name as string} > ${task.list?.name}`}
                       />
                     </Fragment>
                   ))}
