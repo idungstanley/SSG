@@ -76,7 +76,7 @@ export function Col({ value, field, fieldId, task, ...props }: ColProps) {
     created_at: <DateFormat date={value as string} font="text-sm" type="created_at" />,
     updated_at: <DateFormat date={value as string} font="text-sm" type="updated_at" />,
     start_date: <DateFormat date={value as string} font="text-sm" task={task} type="start_date" />,
-    end_date: <DateFormat date={value as string} font="text-sm" task={task} type="end_date" />,
+    end_date: <DateFormat date={value as string} font="text-sm" task={task} type="end_date" isDueDate={true} />,
     dropdown: (
       <DropdownFieldWrapper
         taskId={task.id}
