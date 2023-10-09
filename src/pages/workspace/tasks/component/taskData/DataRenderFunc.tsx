@@ -4,7 +4,7 @@ import TaskName from './taskName';
 import TaskPriority from './priority/index';
 import TaskTag from './taskTag/index';
 import DropdownFieldWrapper from './dropdown/DropdownFieldWrapper';
-import { TaskValue } from '../../../../../features/task/interface.tasks';
+import { ITaskFullList, TaskValue } from '../../../../../features/task/interface.tasks';
 import DateFormat from '../../../../../components/DateFormat/index';
 
 export interface tagItem {
@@ -16,7 +16,7 @@ export interface tagItem {
 export interface renderDataProps {
   taskColField?: TaskValue;
   col?: { field: string; id: string };
-  task?: ImyTaskData | undefined;
+  task?: ImyTaskData | undefined | ITaskFullList;
   getSubTaskId?: string | null | undefined;
   handleGetSubTask?: (id: string | undefined) => void;
   ShowPlusIcon?: null | boolean;
@@ -35,7 +35,7 @@ export default function DataRenderFunc({
   if (col?.field === 'assignees') {
     return (
       <div className="-mt-0.5">
-        <Assignee task={task} itemId={task?.id} option="task" />
+        <Assignee task={task as ImyTaskData} itemId={task?.id} option="task" />
       </div>
     );
   } else if (col?.field === 'tags') {
