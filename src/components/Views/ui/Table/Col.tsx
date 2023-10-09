@@ -92,13 +92,7 @@ export function Col({ value, field, fieldId, task, ...props }: ColProps) {
         taskId={task.id}
       />
     ),
-    tags: (
-      <TagsWrapper
-        entityCustomProperty={task.custom_field_columns?.find((i) => i.id === fieldId)}
-        taskCustomFields={task.custom_fields?.find((i) => i.id === fieldId)}
-        taskId={task.id}
-      />
-    ),
+    tags: <TagsWrapper tags={task.tags} />,
     text: (
       <TextField
         taskId={task.id}

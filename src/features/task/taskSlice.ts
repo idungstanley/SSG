@@ -10,6 +10,7 @@ import {
   ITaskFullList,
   ITimerDetails,
   Status,
+  Tag,
   Task,
   TaskKey
 } from './interface.tasks';
@@ -90,6 +91,7 @@ export interface ImyTaskData {
   custom_fields: ICustomField[];
   custom_field_columns: IField[];
   list?: { id: string; name: string; parent: IParent; color?: string };
+  tags: Tag[];
 }
 
 export interface ImyTaskData2 {

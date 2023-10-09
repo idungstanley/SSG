@@ -13,7 +13,6 @@ import {
 import { setActiveTabId } from '../../../../../../features/workspace/workspaceSlice';
 import { useUpdateEntityCustomFieldValue } from '../../../../../../features/list/listService';
 import '../../../../../../styles/task.css';
-import { UseGetAllTagsService } from '../../../../../../features/workspace/tags/tagService';
 
 interface dropdownProps {
   optionsFromField:
@@ -36,8 +35,6 @@ function TagsDropdown({ optionsFromField, allOptions, currentProperty, taskId }:
   const [searchValue, setSearchValue] = useState<string>('');
   const { updateCords } = useAppSelector((state) => state.task);
   const { cords, relativeRef } = useAbsolute(updateCords, 160);
-
-  const { data: tagsData, status } = UseGetAllTagsService();
 
   const valueIds = optionsFromField?.map((obj) => ({ value: obj.id }));
 

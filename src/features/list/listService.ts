@@ -115,12 +115,13 @@ export const UseEditListService = (data: {
   color?: string | null | { innerColour?: string; outerColour?: string };
   shape?: string;
 }) => {
+  const convertToString = JSON.stringify(data.color);
   const response = requestNew<IResponseList>({
     url: `lists/${data.listId}`,
     method: 'PUT',
     data: {
       name: data.listName,
-      color: data.color,
+      color: convertToString,
       shape: data.shape,
       description: data.description
     }
