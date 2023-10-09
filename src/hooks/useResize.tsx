@@ -5,6 +5,7 @@ import { useAppDispatch, useAppSelector } from '../app/hooks';
 import { setIsResize } from '../features/workspace/workspaceSlice';
 import { setUserSettingsKeys } from '../features/account/accountService';
 import useResolution from './useResolution';
+import { STORAGE_KEYS } from '../app/config/dimensions';
 
 interface UseResizeProps {
   dimensions: { min: number; max: number };
@@ -108,7 +109,14 @@ export function useResize({ dimensions, direction, defaultSize, storageKey }: Us
       });
 
       // add current size to localStorage
-      localStorage.setItem(storageKey, JSON.stringify(newSize));
+      localStorage.setItem(
+        STORAGE_KEYS.USER_SETTINGS_DATA,
+        JSON.stringify({
+          ...userSettingsData,
+          [storageKey]: newSize
+        })
+      );
+      // localStorage.setItem(storageKey, JSON.stringify(newSize));
 
       setIsDrag(false);
       dispatch(setIsResize(false));

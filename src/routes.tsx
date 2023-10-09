@@ -67,6 +67,7 @@ import Construction from './pages/settings/UserSettings/Pages/Construction';
 import TaskInvite from './pages/workspace/tasks/taskInvite/TaskInvite';
 import WorkSpaceTable from './pages/settings/WorkspaceSettings/GeneralWorkSpaceSettings/Table';
 import EverythingPage from './pages/everything';
+import AlsoHr from './pages/workspace/alsoHr';
 
 const inbox = [
   {
@@ -155,6 +156,7 @@ export const routes = (user: IUser | null) => {
             }
           ]
         },
+        { path: 'hr/h/:hubId', element: <AlsoHr /> },
         { path: 'dashboard', element: <Dashboard /> },
         { path: 'tasks', element: <TasksIndex /> },
         { path: 'favorites', element: <Favorites /> },

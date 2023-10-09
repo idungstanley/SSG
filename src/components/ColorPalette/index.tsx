@@ -246,9 +246,21 @@ export default function PaletteManager({
 
   const selectedElement = views.find((items) => items.label === selectedViews)?.element;
 
-  const filteredKeys = ['hex', 'hsv', 'rgb'];
+  const filteredKeys = ['hex', 'hsl', 'rgb'];
 
   const filteredObject = Object.fromEntries(Object.entries(color).filter(([key]) => filteredKeys.includes(key)));
+  const handleColorTypeSwitch = () => {
+    switch (colorType) {
+      case 'hex':
+        return color.hex;
+      case 'rgb':
+        return `${Math.floor(color.rgb.r)} ${Math.floor(color.rgb.g)} ${Math.floor(color.rgb.b)}`;
+      case 'hsl':
+        return `${Math.floor(color.hsl.h)} ${Math.floor(color.hsl.s)} ${Math.floor(color.hsl.l)}`;
+      default:
+        return color.hex;
+    }
+  };
 
   return (
     <Menu
@@ -290,7 +302,7 @@ export default function PaletteManager({
                 ))}
                 <ToolTip title="Open Search">
                   <span className="p-1 border rounded border-primary-200" onClick={() => setIsSearch(true)}>
-                    <SearchIcon />
+                    <SearchIcon className="w-4 h-4" />
                   </span>
                 </ToolTip>
               </div>
@@ -431,11 +443,11 @@ export default function PaletteManager({
                   <p className="uppercase">{colorType}</p>
                   <ArrowDownFilled color={showColorTypes ? 'white' : undefined} />
                   {showColorTypes && color && (
-                    <span className="absolute left-0 right-0 z-20 p-1 bg-white border rounded-md top-6">
+                    <span className="absolute left-0 z-20 p-1 px-1 bg-white border rounded-md -right-5 top-6">
                       {Object.keys(filteredObject).map((colorFormat, colorIndex) => (
                         <span
                           key={colorIndex}
-                          className="flex items-center h-4 gap-2 p-1 text-gray-500 uppercase rounded hover:bg-alsoit-gray-75"
+                          className="flex items-center h-6 gap-2 p-1 text-gray-500 uppercase rounded hover:bg-primary-200"
                           onClick={() => setColorType(colorFormat)}
                         >
                           <RoundedCheckbox
@@ -451,9 +463,9 @@ export default function PaletteManager({
                 </span>
                 <div className="grid w-full grid-cols-3 -mt-4 text-xs grow">
                   <div className="flex flex-col items-center justify-center">
-                    <p>HEX CODE</p>
+                    <p className="uppercase">{colorType} CODE</p>
                     <span className="w-full bg-white border h-7 rounded-l-md">
-                      <EditableInput value={color.hex} style={inputStyles} onChange={onChange} />
+                      <EditableInput value={handleColorTypeSwitch()} style={inputStyles} onChange={onChange} />
                     </span>
                   </div>
                   <div className="flex flex-col items-center justify-center">

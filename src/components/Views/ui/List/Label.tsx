@@ -8,6 +8,7 @@ import { FilterDropdown } from '../../../TasksHeader/ui/Filter/FilterDropdown';
 import { Search } from '../../../TasksHeader/ui/Search/Search';
 import { Sort } from '../../../TasksHeader/ui/Sort/Sort';
 import { AssigneeSplitSubtasks } from '../../../TasksHeader/ui/Assignee/AssigneeSplitSubtasks';
+import statusbox from '../../../.././assets/icons/statusbox.svg';
 
 interface LabelProps {
   showTable: boolean;
@@ -59,6 +60,7 @@ export function Label({
           style={{ backgroundColor: ListColor?.outerColour === null ? 'black' : (ListColor?.outerColour as string) }}
         >
           <div className="flex items-center pl-2 space-x-2 text-sm text-white w-fit">
+            <img src={statusbox} alt="" className="pr-1 border-r cursor-pointer" onClick={handleCheckedGroupTasks} />
             <CollapseIcon color="#A854F7" active={showTable} onToggle={onClickChevron} hoverBg="white" />
             <h1>{listName ?? 'Loading...'}</h1>
           </div>
@@ -66,13 +68,12 @@ export function Label({
             <ListAddModal handleCheckedGroupTasks={handleCheckedGroupTasks} ListColor={ListColor} />
           </button>
         </div>
-
         <p className="ml-3">{hubName}</p>
       </div>
       {isSplitSubtasks ? (
         <div className="flex items-center justify-end mr-5">
           <Sort isSplitSubtasks={true} />
-          <FilterDropdown isSplitSubtasks={true} />
+          <FilterDropdown isSplitSubtasks={true} parentId={parentId as string} />
           <AssigneeSplitSubtasks isSplitSubtasks={true} parentId={parentId as string} />
           <Search isSplitSubtasks={true} parentId={parentId as string} />
         </div>

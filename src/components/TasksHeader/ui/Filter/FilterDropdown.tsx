@@ -6,24 +6,29 @@ import Button from '../../../Buttons/Button';
 import Icons from '../../../Icons/Icons';
 import Filter from '../../../../assets/icons/filter_alt.svg';
 import ArrowDownFilled from '../../../../assets/icons/ArrowDownFilled';
+import { setSelectedTaskParentId } from '../../../../features/task/taskSlice';
+import { useAppDispatch } from '../../../../app/hooks';
 
 interface IFilterDropdownProps {
   isSplitSubtasks?: boolean;
+  parentId?: string;
 }
 
-export function FilterDropdown({ isSplitSubtasks }: IFilterDropdownProps) {
+export function FilterDropdown({ isSplitSubtasks, parentId }: IFilterDropdownProps) {
+  const dispatch = useAppDispatch();
+
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
         <Menu.Button className="inline-flex text-gay-500">
-          <Button active={false} withoutBg={isSplitSubtasks}>
+          <Button
+            active={false}
+            withoutBg={isSplitSubtasks}
+            onClick={() => dispatch(setSelectedTaskParentId(parentId ? (parentId as string) : ''))}
+          >
             <Icons src={Filter} />
-            {!isSplitSubtasks ? (
-              <>
-                Filter
-                <ArrowDownFilled />
-              </>
-            ) : null}
+            Filter
+            <ArrowDownFilled />
           </Button>
         </Menu.Button>
       </div>

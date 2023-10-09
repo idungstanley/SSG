@@ -10,6 +10,7 @@ import {
   setshowMenuDropdown
 } from '../../../../../../features/hubs/hubSlice';
 import {
+  setActiveItem,
   setCreateEntityType,
   setCreateWlLink,
   setShowOverlay
@@ -27,18 +28,32 @@ import Toast from '../../../../../../common/Toast';
 import { toast } from 'react-hot-toast';
 import AlsoitMenuDropdown from '../../../../../../components/DropDowns';
 import ColorPalette from '../../../../../../components/ColorPalette/component/ColorPalette';
+import { useNavigate } from 'react-router-dom';
 
 export default function CreateList() {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const { selectedTreeDetails, createWLID, hub } = useAppSelector((state) => state.hub);
   const { createWlLink } = useAppSelector((state) => state.workspace);
+  const { currentWorkspaceId } = useAppSelector((state) => state.auth);
 
   const [paletteColor, setPaletteColor] = useState<string | ListColourProps | undefined | null>('black');
   const [showPalette, setShowPalette] = useState<null | HTMLDivElement>(null);
   const { type, id } = selectedTreeDetails;
   const createList = useMutation(createListService, {
     onSuccess: (data) => {
+      const listDetails = data?.data.list;
+      navigate(`/${currentWorkspaceId}/tasks/l/${listDetails.id}`, {
+        replace: true
+      });
+      dispatch(
+        setActiveItem({
+          activeItemType: EntityType.list,
+          activeItemId: listDetails.id,
+          activeItemName: listDetails.name
+        })
+      );
       dispatch(setCreateListSlideOverVisibility(false));
       dispatch(setShowOverlay(false));
       dispatch(setSubDropdownMenu(false));
@@ -99,11 +114,13 @@ export default function CreateList() {
       });
     } catch (error) {
       const errorResponse = error as ErrorHasDescendant;
-      const isHasDescendant = errorResponse.data.data.has_descendants;
-      if (isHasDescendant) {
-        toast.custom((t) => (
-          <Toast type="error" title="Error Creating List" body="Parent Entity has a descendant" toastId={t.id} />
-        ));
+      if (errorResponse.data) {
+        const isHasDescendant = errorResponse.data.data.has_descendants;
+        if (isHasDescendant) {
+          toast.custom((t) => (
+            <Toast type="error" title="Error Creating List" body="Parent Entity has a descendant" toastId={t.id} />
+          ));
+        }
       }
     }
   };
