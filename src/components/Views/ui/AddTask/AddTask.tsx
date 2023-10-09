@@ -6,7 +6,6 @@ import { ITask_statuses } from '../../../../features/list/list.interfaces';
 import { useAppSelector } from '../../../../app/hooks';
 import ToolTip from '../../../Tooltip/Tooltip';
 import CreateTaskCalender from '../../../../assets/icons/CreateTaskCalender';
-import CreateTaskPriority from '../../../../assets/icons/CreateTaskPriority';
 import CreateTaskTaskTag from '../../../../assets/icons/CreateTaskTaskTag';
 import CreateTaskTaskEdit from '../../../../assets/icons/CreateTaskTaskEdit';
 import CreateTaskTaskCancel from '../../../../assets/icons/CreateTaskTaskCancel';
