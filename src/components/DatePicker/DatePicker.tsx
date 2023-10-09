@@ -77,9 +77,8 @@ export default function DatePicker({
   }, [data]);
 
   const closeDateModal = () => {
-    if (toggleFn) {
-      toggleFn(false);
-    }
+    if (toggleFn) toggleFn(false);
+    if (handleClose) handleClose();
   };
 
   const calendarTime = () => setInterval(() => setTime(dayjs().format('ddd, DD MMM YYYY h:mm A')), 60000);
@@ -121,7 +120,6 @@ export default function DatePicker({
           <div
             onClick={() => {
               !range && setShowDatePickerOption ? dispatch(setPickedDateState(true)) : null;
-              !range && handleClose && handleClose();
             }}
           >
             <MiniDatePicker range={range} miniMode={openSideBar} fullCalendar />

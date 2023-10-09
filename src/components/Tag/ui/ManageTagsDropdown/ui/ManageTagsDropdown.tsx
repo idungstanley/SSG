@@ -18,6 +18,7 @@ interface ManageTagsDropdownProps {
 
 export function ManageTagsDropdown({ tagsArr, entityId, entityType }: ManageTagsDropdownProps) {
   const { data: tags } = useTags();
+  // console.log(tags);
   const { mutate: onAssign } = useAssignTag(entityId);
   const [searchValue, setSearchValue] = useState('');
 
@@ -33,6 +34,7 @@ export function ManageTagsDropdown({ tagsArr, entityId, entityType }: ManageTags
 
   const onClickOpenDropdown = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.stopPropagation();
+    e.preventDefault();
     setIsOpen(true);
   };
 

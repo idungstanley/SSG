@@ -16,7 +16,8 @@ import {
   setSelectedTasksArray,
   setShowTaskNavigation,
   setTaskIdForPilot,
-  setDuplicateTaskObj
+  setDuplicateTaskObj,
+  setSelectedIndexListId
 } from '../../../../features/task/taskSlice';
 import { setActiveItem } from '../../../../features/workspace/workspaceSlice';
 import { UniqueIdentifier, useDraggable, useDroppable } from '@dnd-kit/core';
@@ -46,7 +47,6 @@ interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   parentId?: string;
   onClose?: VoidFunction;
   isOver?: boolean;
-  isSplitSubtask?: boolean;
   isLastSubtaskLevel: boolean;
 }
 
@@ -63,7 +63,6 @@ export function StickyCol({
   task,
   paddingLeft = 0,
   dragElement,
-  isSplitSubtask,
   isLastSubtaskLevel,
   ...props
 }: ColProps) {
@@ -86,7 +85,8 @@ export function StickyCol({
     dragToBecomeSubTask,
     saveSettingOnline,
     duplicateTaskObj,
-    separateSubtasksMode
+    separateSubtasksMode,
+    newTaskPriority
   } = useAppSelector((state) => state.task);
 
   const [isChecked, setIsChecked] = useState(false);
@@ -164,6 +164,7 @@ export function StickyCol({
         isListParent,
         id: parentId as string,
         assignees: [currTeamMemberId] as string[],
+        newTaskPriority,
         task_status_id: taskStatusId as string
       });
     }
@@ -229,6 +230,8 @@ export function StickyCol({
       setSelectedIndexArray(updatedArray);
     }
     dispatch(setSelectedIndexStatus(task.status.name));
+    dispatch(setSelectedIndexListId(task.list_id));
+
     const isChecked = e.target.checked;
     dispatch(setShowTaskNavigation(isChecked));
     if (isChecked) {
@@ -258,8 +261,8 @@ export function StickyCol({
   const { isOver, setNodeRef: droppabbleRef } = useDroppable({
     id: task.id,
     data: {
-      isOverTask: true,
-      overTask: task
+      isOverTask: true
+      // overTask: task
     }
   });
 
@@ -271,10 +274,10 @@ export function StickyCol({
           {...props}
         >
           <div
-            className={`flex items-center h-full space-x-1 ${isSplitSubtask && 'bg-white/90 border-t'}`}
+            className="flex ml-1 items-center h-full space-x-1"
             style={{
               padding: '15px 0',
-              paddingLeft: `${isSplitSubtask ? '4px' : 0}`,
+              paddingLeft: 0,
               height:
                 saveSettingOnline?.singleLineView && !saveSettingOnline?.CompactView
                   ? '42px'
@@ -363,7 +366,7 @@ export function StickyCol({
             <div className="flex flex-col items-start justify-start flex-grow pl-2 space-y-1">
               <div
                 className="flex items-center w-full text-left"
-                onKeyDown={(e) => (e.key === 'Enter' ? handleEditTask(e, task.id) : null)}
+                onKeyDown={(e) => (e.key === 'Enter' && eitableContent ? handleEditTask(e, task.id) : null)}
               >
                 <div
                   className={`font-semibold alsoit-gray-300 ${
@@ -427,10 +430,10 @@ export function StickyCol({
           {...props}
         >
           <div
-            className={`w-11 flex items-center h-full space-x-1 ${isSplitSubtask && 'bg-white/90 border-t'}`}
+            className="w-11 flex items-center h-full space-x-1"
             style={{
               padding: '15px 0',
-              paddingLeft: `${isSplitSubtask ? '4px' : 0}`,
+              paddingLeft: 0,
               height: '64px'
             }}
           />
@@ -441,7 +444,7 @@ export function StickyCol({
               `relative border-t ${verticalGrid && 'border-r'} w-full h-16  py-4 p-4 flex items-center`
             )}
           >
-            <div className="absolute flex space-x-1 bottom-0 right-0">
+            <div className="absolute bottom-0 right-0 flex space-x-1">
               <ToolTip title="Cancel">
                 <div
                   className="border rounded-sm"
