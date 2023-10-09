@@ -87,7 +87,7 @@ export function CombinedTime() {
       <div className="absolute flex items-center justify-between w-full -top-0">
         <label
           htmlFor="timeClockTrackers"
-          className="relative flex items-center justify-between px-1 cursor-pointer rounded-top w-28 h-7"
+          className="relative flex items-center justify-between px-1 cursor-pointer rounded-top w-28 h-7 bg-alsoit-gray-100"
           onClick={() => setDropDown((prev) => ({ ...prev, tabDrop: !prev.tabDrop }))}
         >
           <div className="cursor-pointer bg-alsoit-gray-100 rounded-xl">
@@ -99,7 +99,7 @@ export function CombinedTime() {
             />
           </div>
           {/* Active Tracker Name */}
-          <span className="text-alsoit-text-md text-alsoit-gray-200">{activeClockTab}</span>
+          <span className="text-alsoit-text-xi text-alsoit-gray-50">{activeClockTab}</span>
           {dropDown.tabDrop ? <ArrowUp /> : <ArrowDown className="w-2 h-2" />}
           {dropDown.tabDrop && TabsDropDown()}
         </label>

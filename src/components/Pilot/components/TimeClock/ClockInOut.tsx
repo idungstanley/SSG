@@ -30,23 +30,31 @@ export default function ClockInOut() {
     .map((_, index) => index + 1);
 
   return (
-    <div className="p-2 mt-6 bg-white">
+    <div className="px-2 my-1.5 bg-white">
       {/* Clock Counter */}
       <div className="bg-alsoit-gray-50 rounded-lg py-2 px-0.5 flex flex-col space-y-2 relative">
         {/* Timer section */}
         <CombinedTime />
       </div>
       {/* Clock Log */}
-      <div className="w-full p-1 my-4 flex flex-col space-y-2 bg-alsoit-gray-50 rounded-lg">
-        <div className="h-96">
-          <TimeInventory getTimeEntries={getTaskTimeEntries} />
-        </div>
-        <div className="flex space-x-1">
-          <div className="cursor-pointer">
-            <ArrowLeft />
+      <div className="w-full p-1 my-2 flex flex-col space-y-2 bg-alsoit-gray-50 rounded-lg">
+        {getTaskTimeEntries?.data?.time_entries && getTaskTimeEntries?.data?.time_entries.length > 0 ? (
+          <>
+            <div className="h-96">
+              <TimeInventory getTimeEntries={getTaskTimeEntries} />
+            </div>
+            <div className="flex space-x-1">
+              <div className="cursor-pointer">
+                <ArrowLeft />
+              </div>
+              <PaginationLinks arr={pageLinks} />
+            </div>
+          </>
+        ) : (
+          <div className="w-full text-center">
+            <span className="text-center text-alsoit-text-lg capitalize text-blue-600 underline">No entries yet</span>
           </div>
-          <PaginationLinks arr={pageLinks} />
-        </div>
+        )}
       </div>
     </div>
   );
