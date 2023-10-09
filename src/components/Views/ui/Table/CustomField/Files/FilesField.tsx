@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import { ICustomField } from '../../../../../../features/task/taskSlice';
-import FileIcon from '../../../../../../assets/icons/FileIcon';
-import UploadToFile from './UploadToFileField';
+import React, { useState } from 'react';
+import { ICustomField, setOpenFileUploadModal } from '../../../../../../features/task/taskSlice';
 import PlusIcon from '../../../../../../assets/icons/PlusIcon';
 import AlsoitMenuDropdown from '../../../../../DropDowns';
 import AddTo from '../../../../../Pilot/components/details/properties/attachments/AddTo';
-import { useAppSelector } from '../../../../../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
+import FileIcons from './FileIcon';
 
 interface filesProps {
   taskCustomFields?: ICustomField;
@@ -15,31 +14,40 @@ interface filesProps {
 }
 
 function FilesField({ taskCustomFields, taskId, fieldId, listId }: filesProps) {
+  const taskFiles = taskCustomFields?.values ?? [];
+  const dispatch = useAppDispatch();
   const [open, setOpen] = useState<null | HTMLElement>(null);
-  const [pop, setPop] = useState<boolean>(false);
-  const { showTaskUploadModal } = useAppSelector((state) => state.task);
-  // <PlusIcon active />
+  const { fileUploadProps } = useAppSelector((state) => state.task);
 
-  useEffect(() => {
-    if (showTaskUploadModal) {
-      setOpen(null);
-    }
-  }, [showTaskUploadModal]);
   return (
     <div>
-      <button
-        className="w-4 h-4 border border-alsoit-gray-200 rounded hover:bg-alsoit-gray-100 flex justify-center items-center"
-        // onClick={(e) => setOpen(e.currentTarget)}
-        onClick={() => setPop(!pop)}
-      >
-        <PlusIcon />
-      </button>
-      <div>
-        <UploadToFile open={pop} setOpen={setPop} fieldId={fieldId} listId={listId} taskId={taskId} />
+      <div className="flex flex-wrap gap-2">
+        {taskFiles.map((file) => {
+          return (
+            <FileIcons fileExtension={file.file?.file_format.extension} filePath={file.file?.path} key={file.id} />
+          );
+        })}
+        <button
+          className="w-4 h-4 border border-alsoit-gray-200 rounded hover:bg-alsoit-gray-100 flex justify-center items-center"
+          onClick={(e) => {
+            dispatch(
+              setOpenFileUploadModal({
+                ...fileUploadProps,
+                listId,
+                taskId,
+                fieldId
+              })
+            );
+            setOpen(e.currentTarget);
+          }}
+        >
+          <PlusIcon />
+        </button>
       </div>
+
       <AlsoitMenuDropdown anchorEl={open} handleClose={() => setOpen(null)}>
         <div style={{ width: '230px', height: '320px' }}>
-          <AddTo />
+          <AddTo locationn="list view" />
         </div>
       </AlsoitMenuDropdown>
     </div>

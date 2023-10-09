@@ -13,11 +13,13 @@ import { useEffect } from 'react';
 import DragContext from './DragContext/DragContext';
 import { Toaster } from 'react-hot-toast';
 import Favorites from '../../../pages/workspace/favorites';
+import UploadToFile from '../../../components/Views/ui/Table/CustomField/Files/UploadToFileField';
 
 function MainLayout() {
   const location = useLocation();
   const navigate = useNavigate();
   const { workSpaceId } = useParams();
+  const { fileUploadProps } = useAppSelector((state) => state.task);
 
   const { currentWorkspaceId } = useAppSelector((state) => state.auth);
   const { userSettingsData } = useAppSelector((state) => state.account);
@@ -79,6 +81,7 @@ function MainLayout() {
                 endpoint={'attachments'}
                 invalidateQuery={['attachments'] as InvalidateQueryFilters<unknown>}
               />
+              {fileUploadProps.fieldId && <UploadToFile />}
             </div>
           </div>
         </div>

@@ -28,17 +28,6 @@ export interface ICustomField {
   values: IFieldValue[];
 }
 
-// color: null;
-// id: '9ed486ae-ff6d-4ea9-8ed8-50b977eb5b6f';
-// is_bold: null;
-// is_italic: null;
-// is_strike: null;
-// is_underlined: null;
-// lan: null;
-// lon: null;
-// model: 'team_member';
-// model_id: 'c12503d2-eec1-414c-9cd4-f71cce4c3e45';
-// value: 'c12503d2-eec1-414c-9cd4-f71cce4c3e45';
 export interface ActiveTaskColumnProps {
   id: string;
   header: string;
@@ -135,6 +124,13 @@ export interface ImyTaskData2 {
 interface entityForCustom {
   id: string | undefined;
   type: string | undefined;
+}
+
+interface fileUploadPropsType {
+  openModal: boolean;
+  fieldId?: string;
+  listId?: string;
+  taskId?: string;
 }
 
 export const TWO_SUBTASKS_LEVELS = 'two_levels';
@@ -235,6 +231,7 @@ interface TaskState {
   newCustomPropertyDetails: customPropertyInfo;
   editCustomProperty: IField | undefined;
   dragToBecomeSubTask: boolean;
+  fileUploadProps: fileUploadPropsType;
 }
 
 const initialState: TaskState = {
@@ -347,7 +344,13 @@ const initialState: TaskState = {
     }
   },
   editCustomProperty: undefined,
-  dragToBecomeSubTask: false
+  dragToBecomeSubTask: false,
+  fileUploadProps: {
+    fieldId: undefined,
+    taskId: undefined,
+    listId: undefined,
+    openModal: false
+  }
 };
 
 export const taskSlice = createSlice({
@@ -647,6 +650,9 @@ export const taskSlice = createSlice({
     },
     setEditCustomProperty(state, action: PayloadAction<IField | undefined>) {
       state.editCustomProperty = action.payload;
+    },
+    setOpenFileUploadModal(state, action: PayloadAction<fileUploadPropsType>) {
+      state.fileUploadProps = action.payload;
     }
   }
 });
@@ -736,6 +742,7 @@ export const {
   setCustomSuggetionsField,
   setNewCustomPropertyDetails,
   setEditCustomProperty,
-  setDragToBecomeSubTask
+  setDragToBecomeSubTask,
+  setOpenFileUploadModal
 } = taskSlice.actions;
 export default taskSlice.reducer;

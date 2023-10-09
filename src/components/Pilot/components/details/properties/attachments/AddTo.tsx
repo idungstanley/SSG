@@ -5,7 +5,8 @@ import { FcDocument, FcGoogle } from 'react-icons/fc';
 import { FaDropbox } from 'react-icons/fa';
 import { SiBox } from 'react-icons/si';
 import { useDispatch } from 'react-redux';
-import { setShowTaskUploadModal } from '../../../../../../features/task/taskSlice';
+import { setOpenFileUploadModal, setShowTaskUploadModal } from '../../../../../../features/task/taskSlice';
+import { useAppSelector } from '../../../../../../app/hooks';
 
 interface statusType {
   id: number;
@@ -16,14 +17,17 @@ interface statusType {
   icon: JSX.Element;
 }
 
-export default function AddTo() {
+export default function AddTo({ locationn }: { locationn?: string }) {
   const dispatch = useDispatch();
+  const { fileUploadProps } = useAppSelector((state) => state.task);
   const statusList: statusType[] = [
     {
       id: 1,
       title: 'Upload File',
       handleClick: () => {
-        dispatch(setShowTaskUploadModal(true));
+        locationn === 'list view'
+          ? dispatch(setOpenFileUploadModal({ ...fileUploadProps, openModal: true }))
+          : dispatch(setShowTaskUploadModal(true));
       },
       color: '#d3d3d3',
       bg: 'gray',
