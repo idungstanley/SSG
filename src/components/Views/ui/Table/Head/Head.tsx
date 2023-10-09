@@ -13,7 +13,6 @@ import {
   setSortArray
 } from '../../../../../features/task/taskSlice';
 import SortModal from '../../../../SortModal/SortModal';
-import statusbox from '../../../../../assets/icons/statusbox.svg';
 import { CiEdit, CiSettings } from 'react-icons/ci';
 import { BsThreeDots } from 'react-icons/bs';
 import { FiPlusCircle } from 'react-icons/fi';
@@ -36,6 +35,7 @@ import CollapseIcon from '../../collapseIcon/CollapseIcon';
 import '../../../../../styles/task.css';
 import { EntityType } from '../../../../../utils/EntityTypes/EntityType';
 import { listColumnProps } from '../../../../../pages/workspace/tasks/component/views/ListColumns';
+import RoundedCheckbox from '../../../../Checkbox/RoundedCheckbox';
 
 interface HeadProps {
   columns: listColumnProps[];
@@ -76,7 +76,7 @@ export function Head({
   const [headerId, setheaderId] = useState<string>('');
   const [showStatusDropdown, setShowStatusDropdown] = useState<null | SVGElement>(null);
   const [showSortModal, setShowSortModal] = useState<boolean>(false);
-  const { sortArr, sortAbleArr, selectedTasksArray, selectedIndex, selectedIndexStatus, selectedListIds } =
+  const { sortArr, sortAbleArr, selectedTasksArray, selectedIndex, selectedIndexStatus, selectedIndexListId } =
     useAppSelector((state) => state.task);
   const { baseColor } = useAppSelector((state) => state.account);
   const { isManageStatus } = useAppSelector((state) => state.workspace);
@@ -97,11 +97,7 @@ export function Head({
     if (selectedIndex !== null) {
       const updatedTaskIds: string[] = [...selectedTasksArray];
       groupedTask?.map((task, index) => {
-        if (
-          selectedIndex === index &&
-          selectedIndexStatus === task.status.name &&
-          selectedListIds.includes(listId as string)
-        ) {
+        if (selectedIndex === index && selectedIndexStatus === task.status.name && listId == selectedIndexListId) {
           const taskIndex = updatedTaskIds.indexOf(task.id);
           if (taskIndex === -1) {
             updatedTaskIds.push(task.id);
@@ -112,18 +108,23 @@ export function Head({
     }
   }, [selectedIndex]);
 
+  const allChecked = groupedTask?.every((value) => selectedTasksArray.includes(value.id));
+
   const handleCheckedGroupTasks = () => {
     const updatedTaskIds: string[] = [...selectedTasksArray];
-
-    groupedTask?.forEach((task) => {
-      const taskIndex = updatedTaskIds.indexOf(task.id);
-
-      if (taskIndex === -1) {
-        updatedTaskIds.push(task.id);
-      } else {
+    if (allChecked) {
+      groupedTask?.forEach((task) => {
+        const taskIndex = updatedTaskIds.indexOf(task.id);
         updatedTaskIds.splice(taskIndex, 1);
-      }
-    });
+      });
+    } else {
+      groupedTask?.forEach((task) => {
+        const taskIndex = updatedTaskIds.indexOf(task.id);
+        if (taskIndex === -1) {
+          updatedTaskIds.push(task.id);
+        }
+      });
+    }
     dispatch(setSelectedTasksArray(updatedTaskIds));
   };
 
@@ -220,16 +221,25 @@ export function Head({
 
   return columns.length > 0 ? (
     <thead className="contents">
-      <tr className="contents">
+      <tr className="relative contents group">
         {/* first sticky col */}
         <th style={{ zIndex: 2 }} className="sticky left-0 flex items-center -mb-2 font-extrabold">
           <div className="flex items-center "></div>
-          <div className="flex items-center w-full gap-3 py-2 truncate dBlock group opacity-90">
+          <div className="flex items-center w-full py-2 truncate dBlock group opacity-90 ml-0.5">
+            <div>
+              <RoundedCheckbox
+                onChange={handleCheckedGroupTasks}
+                isChecked={allChecked as boolean}
+                styles={`w-4 h-4 rounded-full ${
+                  selectedTasksArray.length > 0 ? 'opacity-100' : 'opacity-0'
+                } cursor-pointer focus:outline-1 focus:ring-transparent focus:border-2 focus:opacity-100 top-3.5 text-alsoit-purple-300 absolute left-1 group-hover:opacity-100`}
+              />
+            </div>
             <div
               className="py-0.5 relative px-2 rounded-tr-md -mb-1 flex items-center space-x-1 text-white dFlex "
               style={{
                 backgroundColor: headerStatusColor,
-                marginLeft: isSplitSubtask ? 0 : '38px',
+                marginLeft: '38px',
                 height: '25px',
                 gap: '5px'
               }}
@@ -248,13 +258,7 @@ export function Head({
                     {parsedLabel}
                   </span>
                   <div className="items-center pl-2 space-x-1 viewSettings" onClick={(e) => e.stopPropagation()}>
-                    <img
-                      src={statusbox}
-                      alt=""
-                      className="pr-1 border-r cursor-pointer"
-                      onClick={handleCheckedGroupTasks}
-                    />
-                    <CiEdit className="w-4 h-4 pr-1 border-r cursor-pointer" />
+                    <CiEdit className="w-4 h-4 pr-1 border-r cursor-pointer" style={{ color: 'orange' }} />
                     <BsThreeDots className="w-4 h-4 cursor-pointer" onClick={(e) => handleClick(e)} />
                   </div>
                 </div>
@@ -357,7 +361,7 @@ export function Head({
                     </span>
                   )}
                 </div>
-                <div className="absolute top-0 block pl-1 right-0 idle" style={{ height: tableHeight }}>
+                <div className="absolute top-0 right-0 block pl-1 idle" style={{ height: tableHeight }}>
                   <div className="w-0.5 mx-auto bg-gray-100" style={{ height: '75px' }} />
                 </div>
                 {headerId === id && sortAbles.includes(value) && (

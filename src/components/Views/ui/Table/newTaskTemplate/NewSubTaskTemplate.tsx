@@ -1,7 +1,9 @@
-import React from 'react';
 import { ITaskFullList } from '../../../../../features/task/interface.tasks';
+import { useAppSelector } from '../../../../../app/hooks';
 
 export default function NewSubTaskTemplate() {
+  const { newTaskPriority } = useAppSelector((state) => state.task);
+
   const newSubTask: ITaskFullList = {
     archived_at: null,
     assignees: [],
@@ -16,6 +18,7 @@ export default function NewSubTaskTemplate() {
     checklist_done_items_count: 0,
     has_attachments: false,
     description: null,
+    filters: null,
     directory_items: [],
     end_date: null,
     group_assignees: [],
@@ -29,7 +32,7 @@ export default function NewSubTaskTemplate() {
     list_id: '',
     name: 'Add Subtask',
     parent_id: null,
-    priority: 'normal',
+    priority: newTaskPriority,
     start_date: null,
     status: {
       color: '#AEADAE',

@@ -33,8 +33,8 @@ export default function ActiveTreeSearch({ closeDropdown, option }: ActiveTreeSe
   const { data: allHubTree } = useGetActiveHubChildren({ hub_id: newHubId || hubId, hubs: allHubs?.hubs as IHub[] });
 
   useEffect(() => {
-    if (allHubTree && allHubs && hubs.length) {
-      const currentHubId = hubId || allHubTree.tree[0].parent_id;
+    if (allHubTree?.tree.length && allHubs && hubs.length) {
+      const currentHubId = allHubTree.tree[0].parent_id || hubId;
       const currentItem = hubs.find((item) => item.id === currentHubId);
       if (!currentItem?.children) {
         setHubs(() => [...CreateTree(allHubTree.tree, currentHubId as string, hubs as Hub[])]);

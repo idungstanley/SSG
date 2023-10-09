@@ -14,7 +14,7 @@ import { StartIcon } from '../../../../assets/icons/StartIcon';
 import { StopIcon } from '@heroicons/react/24/solid';
 import { runTimer } from '../../../../utils/TimerCounter';
 
-export function TimerCheck() {
+export function RealTime() {
   const dispatch = useAppDispatch();
 
   const { workSpaceId, hubId, subhubId, listId, taskId } = useParams();
@@ -99,12 +99,12 @@ export function TimerCheck() {
       activeItemId === timerLastMemory.taskId)
   ) {
     return (
-      <div className="flex justify-center items-center text-alsoit-text-md w-14 tracking-widest relative">
+      <div className="flex justify-center items-center text-alsoit-text-md w-14 tracking-wide relative">
         <div>
           {timerStatus && sameEntity() ? (
-            <StopIcon className="w-4 h-4cursor-pointer" onClick={() => stop()} />
+            <StopIcon className="w-4 h-4 cursor-pointer" onClick={() => stop()} />
           ) : (
-            <StartIcon className="w-4 h-4cursor-pointer" onClick={() => handleStartTime()} />
+            <StartIcon className="w-4 h-4 cursor-pointer" onClick={() => handleStartTime()} />
           )}
         </div>
         <span>
@@ -139,7 +139,7 @@ export function TimerCheck() {
     );
   }
   return (
-    <div className="flex justify-center items-center text-alsoit-text-md w-14 tracking-widest">
+    <div className="flex justify-center items-center text-alsoit-text-md w-12 tracking-wide">
       <div>
         <StartIcon className="w-4 h-4 cursor-pointer" onClick={() => handleStartTime()} />
       </div>

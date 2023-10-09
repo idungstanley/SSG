@@ -51,7 +51,7 @@ export const useGetUserSettingsKeys = (enabled: boolean, key: string, resolution
       enabled: enabled,
       select: (res) => res.data.settings[0],
       onSuccess: (data) => {
-        localStorage.setItem(STORAGE_KEYS.USER_SETTINGS_DATA, JSON.stringify(data));
+        localStorage.setItem(STORAGE_KEYS.USER_SETTINGS_DATA, JSON.stringify(data.value));
         if (data && data.value) {
           dispatch(SetUserSettingsStore(data.value));
         }

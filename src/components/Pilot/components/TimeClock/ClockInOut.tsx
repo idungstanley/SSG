@@ -22,10 +22,6 @@ export default function ClockInOut() {
     include_filters: true
   });
 
-  // const handleEndTimeChange = (value: string) => {
-  //   dispatch(setTimerDetails({ ...timerDetails, isBillable: timerDetails.isBillable, description: value }));
-  // };
-
   const firstPage = () => setPage(1);
   const lastPage = () => setPage((page * 100) / 100);
   const pageLinks = Array(getTaskEntries?.data.pagination.page)

@@ -89,7 +89,7 @@ export default function StatusCollectionBoard({
             ? activeTemplateStatus
             : 'New Collection'}
         </div>
-        <div onClick={(e) => handleShowCollection(e)}>
+        <div onClick={(e) => handleShowCollection(e)} className="cursor-pointer">
           <ThreeDotIcon />
         </div>
       </div>

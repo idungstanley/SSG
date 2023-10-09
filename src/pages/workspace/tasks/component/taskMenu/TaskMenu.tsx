@@ -17,6 +17,7 @@ import { EntityType } from '../../../../../utils/EntityTypes/EntityType';
 import { displayPrompt, setVisibility } from '../../../../../features/general/prompt/promptSlice';
 import { useMutation } from '@tanstack/react-query';
 import {
+  setSelectedListIds,
   setSelectedTasksArray,
   setShowTaskNavigation,
   setSubtasks,
@@ -237,6 +238,7 @@ export default function TaskMenu() {
             isChecked={true}
             onChange={() => {
               dispatch(setSelectedTasksArray([]));
+              dispatch(setSelectedListIds([]));
             }}
           />
           <span className="text-white text-xs">{selectedTasksArray.length} Selected</span>
@@ -275,6 +277,7 @@ export default function TaskMenu() {
           className=" bg-gray-800 text-white p-2 rounded-3xl border border-white -mt-1 cursor-pointer"
           onClick={() => {
             dispatch(setSelectedTasksArray([]));
+            dispatch(setSelectedListIds([]));
           }}
         >
           <span className="text-gray-300 mr-2">X</span>

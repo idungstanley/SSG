@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { dimensions } from '../../app/config/dimensions';
+import { dimensions, STORAGE_KEYS } from '../../app/config/dimensions';
 import {
   IRecorderLastMemory,
   ITimerLastMemory,
@@ -17,6 +17,7 @@ const pilotFromLS = JSON.parse(localStorage.getItem('pilot') || '""') as {
   showTabLabel: boolean;
 };
 const showTabLabelFromLS = !!pilotFromLS.showTabLabel;
+const hotkeyIdsFromLS = JSON.parse(localStorage.getItem(STORAGE_KEYS.HOT_KEYS) ?? '[]') as number[];
 
 interface workspaceState {
   workspace: string[];
@@ -80,6 +81,7 @@ interface workspaceState {
   workSpaceSettingsObj: WorkSpaceSettingsUpdateRes | undefined;
   draggableActiveStatusId: string | null;
   isFavoritePinned: boolean;
+  activeHotkeyIds: number[];
 }
 
 const initialState: workspaceState = {
@@ -143,7 +145,8 @@ const initialState: workspaceState = {
   workSpaceSettings: [],
   workSpaceSettingsObj: undefined,
   draggableActiveStatusId: null,
-  isFavoritePinned: false
+  isFavoritePinned: false,
+  activeHotkeyIds: hotkeyIdsFromLS
 };
 
 export const wsSlice = createSlice({
@@ -240,6 +243,9 @@ export const wsSlice = createSlice({
     },
     setSidebarWidthRD(state, action: PayloadAction<number>) {
       state.sidebarWidthRD = action.payload;
+    },
+    setActiveHotkeyIds(state, action: PayloadAction<number[]>) {
+      state.activeHotkeyIds = action.payload;
     },
     setShowWallet(state, action: PayloadAction<boolean>) {
       state.showWallet = action.payload;
@@ -426,7 +432,8 @@ export const {
   setWorkSpaceSetting,
   setIsFavoritePinned,
   setWorkSpaceSettingsObj,
-  setDraggableActiveStatusId
+  setDraggableActiveStatusId,
+  setActiveHotkeyIds
 } = wsSlice.actions;
 
 export default wsSlice.reducer;

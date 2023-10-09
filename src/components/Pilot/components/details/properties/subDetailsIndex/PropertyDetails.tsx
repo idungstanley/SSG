@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import moment from 'moment';
 import CustomReference from '../customReference/CustomReference';
 import EntitySettings from '../entitySettings/EntitySettings';
@@ -21,6 +21,10 @@ import { IListDetails } from '../../../../../../features/list/list.interfaces';
 import { useParams } from 'react-router-dom';
 import { IWalletDetails } from '../../../../../../features/wallet/wallet.interfaces';
 import PlusIcon from '../../../../../../assets/icons/PlusIcon';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.bubble.css';
+import DOMPurify from 'dompurify';
+import { VerticalScroll } from '../../../../../ScrollableContainer/VerticalScroll';
 
 export interface tagItem {
   id: string;
@@ -38,7 +42,8 @@ export default function PropertyDetails({ Details, type }: PropertyDetailsProps)
   const [editingTitle, setEditingTitle] = useState(false);
   const [editingDescription, setEditingDescription] = useState(false);
   const [title, setTitle] = useState<string>(Details?.name as string);
-  const [description, setDescription] = useState<string | null>(Details?.description || null);
+  const [description, setDescription] = useState<string>(Details?.description ?? '');
+  const [serviceFire, setServiceFire] = useState<boolean>(false);
 
   const { hubId, walletId, listId, taskId } = useParams();
 
@@ -74,39 +79,43 @@ export default function PropertyDetails({ Details, type }: PropertyDetailsProps)
   const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(event.target.value);
   };
-  const handleDescriptionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setDescription(event.target.value);
+  const handleDescriptionChange = (value: string) => {
+    const sanitizedDescription = DOMPurify.sanitize(value);
+    setDescription(sanitizedDescription);
   };
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  const handleSubmit = async () => {
     handleBlur();
-    if (taskId != undefined) {
-      await editTaskMutation.mutateAsync({
+    setServiceFire(true);
+  };
+
+  useEffect(() => {
+    if (taskId != undefined && serviceFire) {
+      editTaskMutation.mutateAsync({
         name: title,
         task_id: taskId,
         description
       });
-    } else if (walletId != undefined) {
-      await editWalletMutation.mutateAsync({
+    } else if (walletId != undefined && serviceFire) {
+      editWalletMutation.mutateAsync({
         walletName: title,
         walletId: Details?.id,
         description
       });
-    } else if (listId != undefined) {
-      await editListMutation.mutateAsync({
+    } else if (listId != undefined && serviceFire) {
+      editListMutation.mutateAsync({
         listName: title,
         listId: Details?.id,
         description
       });
-    } else if (hubId) {
-      await editHubMutation.mutateAsync({
+    } else if (hubId && serviceFire) {
+      editHubMutation.mutateAsync({
         name: title,
         hubId: Details?.id,
         description
       });
     }
-  };
+  }, [serviceFire]);
 
   return (
     <>
@@ -180,19 +189,25 @@ export default function PropertyDetails({ Details, type }: PropertyDetailsProps)
             onClick={() => setEditingDescription(true)}
           >
             {editingDescription ? (
-              <form onSubmit={handleSubmit}>
-                <input
-                  type="text"
-                  value={description ?? ''}
+              <div>
+                <ReactQuill
+                  value={description}
                   onChange={handleDescriptionChange}
-                  onBlur={handleBlur}
-                  autoFocus
-                  className="bg-transparent border-none rounded-md outline-none focus:outline-none w-full h-20"
+                  onBlur={handleSubmit}
+                  style={{
+                    height: '80px',
+                    width: '100%',
+                    overflowY: 'auto',
+                    border: '1px solid #ccc'
+                  }}
+                  theme="bubble"
                 />
-              </form>
+              </div>
             ) : (
-              <div className="capitalize">
-                <p>{description ?? ''}</p>
+              <div className="capitalize h-36 overflow-scroll">
+                <VerticalScroll>
+                  <div className="h-20" dangerouslySetInnerHTML={{ __html: description }} />
+                </VerticalScroll>
               </div>
             )}
           </div>
