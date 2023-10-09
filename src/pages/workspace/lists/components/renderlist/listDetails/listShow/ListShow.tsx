@@ -7,7 +7,8 @@ export default function ListShow({ changeViews }: { changeViews: string }) {
       <span className="group cursor-pointer gap-2">
         <ShowHideSettings
           scrollByEachGroup="Scroll By Each Group"
-          splitSubTask="Split Sub Task"
+          splitSubtaskTwo="Split 2 level of subtasks"
+          splitSubtaskThree="Split 3 level of subtasks"
           verticalGridLines="Property Vertical Grid Line"
           entityLocation="Entity Location"
           subTaskParentsNames="Subtask Parent Names"
