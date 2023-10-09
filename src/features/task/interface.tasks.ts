@@ -241,7 +241,6 @@ export interface ITimerDetails {
   description: string;
 }
 
-
 export type Header = {
   title: string;
   hidden: boolean;
