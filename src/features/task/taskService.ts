@@ -1289,7 +1289,6 @@ export const useAddFiltersForTask = () => {
       Object.keys(subtasks).forEach((listId) => {
         updatedSubtasks[listId] = updatedSubtasks[listId].map((task) => {
           if (parentId === task.id) {
-            console.log('aaa', task);
             return {
               ...task,
               filters: data.data.filter

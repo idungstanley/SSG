@@ -19,6 +19,7 @@ import {
 } from '../../../../../features/task/taskSlice';
 
 interface IShowHideSettings {
+  isActive: string;
   scrollByEachGroup: string;
   splitSubtaskTwo: string;
   splitSubtaskThree: string;
@@ -32,6 +33,7 @@ interface IShowHideSettings {
 }
 
 export default function ShowHideSettings({
+  isActive,
   scrollByEachGroup,
   splitSubtaskTwo,
   splitSubtaskThree,
@@ -209,7 +211,7 @@ export default function ShowHideSettings({
       <div className={`viewSettingsParent flex justify-center items-center text-${isAnyactive && 'alsoit-purple-50'}`}>
         <Menu.Button className="flex ml-1">
           <Button active={isAnyactive as boolean}>
-            <ShowIcon color={isActiveColor} /> <span>Show</span> <ArrowDrop color={isActiveColor} />
+            <ShowIcon color={isActiveColor} /> <span>{isActive}</span> <ArrowDrop color={isActiveColor} />
           </Button>
         </Menu.Button>
       </div>

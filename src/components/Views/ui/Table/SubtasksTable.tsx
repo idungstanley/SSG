@@ -4,7 +4,6 @@ import { createHeaders, generateGrid } from '../../lib';
 import { Head } from './Head/Head';
 import { MAX_SUBTASKS_LEVEL, Row } from './Row';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
-import { DEFAULT_LEFT_PADDING } from '../../config';
 import { Label } from '../List/Label';
 import { IListColor } from '../List/List';
 import LightenColor from '../List/lightenColor/LightenColor';

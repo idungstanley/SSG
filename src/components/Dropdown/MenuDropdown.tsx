@@ -265,7 +265,7 @@ export default function MenuDropdown({ isExtendedBar, cords }: IMenuDropdownProp
         }
       },
       icon: <ExpandAllIcon aria-hidden="true" />,
-      isVisible: true
+      isVisible: openedEntitiesIds.includes(showMenuDropdown as string)
     },
     {
       title: 'Collapse all',
@@ -285,7 +285,7 @@ export default function MenuDropdown({ isExtendedBar, cords }: IMenuDropdownProp
         }
       },
       icon: <CollapseAllIcon aria-hidden="true" />,
-      isVisible: true
+      isVisible: openedEntitiesIds.includes(showMenuDropdown as string)
     }
   ];
 
