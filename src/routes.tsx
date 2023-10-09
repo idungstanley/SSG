@@ -155,6 +155,9 @@ export const routes = (user: IUser | null) => {
             }
           ]
         },
+        { path: 'hr', element: <AlsoHr /> },
+        { path: 'hr/h/:hubId', element: <AlsoHr /> },
+        { path: 'hr/sh/:subhubId', element: <AlsoHr /> },
         { path: 'dashboard', element: <Dashboard /> },
         { path: 'tasks', element: <TasksIndex /> },
         { path: 'favorites', element: <Favorites /> },

@@ -92,7 +92,7 @@ export const initialPlaces: Place[] = [
     id: '8',
     place: <AlsoHr />,
     icon: <AlsoHrIcon />,
-    link: '/calendar'
+    link: '/hr'
   },
   {
     name: 'TICKETS',
