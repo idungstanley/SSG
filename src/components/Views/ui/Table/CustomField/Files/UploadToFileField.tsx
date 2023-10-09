@@ -4,33 +4,32 @@ import { useUppy, DashboardModal } from '@uppy/react';
 import '@uppy/core/dist/style.css';
 import '@uppy/dashboard/dist/style.css';
 import { useQueryClient } from '@tanstack/react-query';
-import { useEffect } from 'react';
-import { useAppSelector } from '../../../../../../app/hooks';
+import { useAppSelector, useAppDispatch } from '../../../../../../app/hooks';
 import { generateFilters } from '../../../../../TasksHeader/lib/generateFilters';
+import { setOpenFileUploadModal } from '../../../../../../features/task/taskSlice';
 
-interface UploadFileModalProps {
-  fieldId: string;
-  listId: string;
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  open: boolean;
-  taskId: string;
-}
+const closeModal = { openModal: false, fieldId: undefined, listId: undefined, taskId: undefined };
 
-export default function UploadToFile({ fieldId, listId, setOpen, open, taskId }: UploadFileModalProps) {
+export default function UploadToFile() {
+  const dispatch = useAppDispatch();
   const queryClient = useQueryClient();
   const { filters } = generateFilters();
   const { currentWorkspaceId, accessToken } = useAppSelector((state) => state.auth);
+  const { fileUploadProps } = useAppSelector((state) => state.task);
+  const { taskId, fieldId, listId, openModal } = fileUploadProps;
 
   // init
   const uppy = useUppy(() =>
     new Uppy({
       debug: true,
       autoProceed: false,
+      restrictions: {
+        allowedFileTypes: null
+      },
       meta: {}
     }).use(XHRUpload, {
       fieldName: 'file',
-      allowedMetaFields: ['id', 'type'],
-      endpoint: `${process.env.REACT_APP_API_BASE_URL}/custom-fields/${fieldId}/file`,
+      endpoint: `${process.env.REACT_APP_API_BASE_URL}/api/custom-fields/${fieldId}/file`,
       headers: currentWorkspaceId
         ? {
             Authorization: `Bearer ${accessToken}`,
@@ -42,21 +41,13 @@ export default function UploadToFile({ fieldId, listId, setOpen, open, taskId }:
   );
 
   uppy.on('file-added', (file) => {
+    const fileExtension = file.extension || '';
     uppy.setFileMeta(file.id, {
       id: taskId,
-      type: 'task'
+      type: 'task',
+      extension: fileExtension
     });
   });
-
-  useEffect(() => {
-    uppy.on('upload-progress', () => {
-      uppy.close();
-    });
-
-    return () => {
-      uppy.off('upload-success', () => uppy.close());
-    };
-  }, [uppy]);
 
   // invalidate query
   uppy.on('upload-success', (_file, response) => {
@@ -75,11 +66,10 @@ export default function UploadToFile({ fieldId, listId, setOpen, open, taskId }:
         uppy={uppy}
         closeModalOnClickOutside
         proudlyDisplayPoweredByUppy={false}
-        open={open}
-        onRequestClose={() => setOpen(false)}
+        open={openModal}
+        onRequestClose={() => dispatch(setOpenFileUploadModal(closeModal))}
         showRemoveButtonAfterComplete={false}
         animateOpenClose={true}
-        style={{ zIndex: 999 }}
       />
     </div>
   );

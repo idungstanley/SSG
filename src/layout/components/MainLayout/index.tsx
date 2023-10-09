@@ -13,6 +13,7 @@ import { useEffect } from 'react';
 import DragContext from './DragContext/DragContext';
 import { Toaster } from 'react-hot-toast';
 import Favorites from '../../../pages/workspace/favorites';
+import UploadToFile from '../../../components/Views/ui/Table/CustomField/Files/UploadToFileField';
 import useResolution from '../../../hooks/useResolution';
 import { STORAGE_KEYS, dimensions } from '../../../app/config/dimensions';
 import { SetUserSettingsStore } from '../../../features/account/accountSlice';
@@ -23,6 +24,7 @@ function MainLayout() {
   const location = useLocation();
   const navigate = useNavigate();
   const { workSpaceId } = useParams();
+  const { fileUploadProps } = useAppSelector((state) => state.task);
   const queryClient = useQueryClient();
   const dispatch = useAppDispatch();
   const resolution = useResolution();
@@ -107,6 +109,7 @@ function MainLayout() {
                 endpoint={'attachments'}
                 invalidateQuery={['attachments'] as InvalidateQueryFilters<unknown>}
               />
+              {fileUploadProps.fieldId && <UploadToFile />}
             </div>
           </div>
         </div>

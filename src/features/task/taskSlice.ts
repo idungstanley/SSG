@@ -129,6 +129,13 @@ interface entityForCustom {
   type: string | undefined;
 }
 
+interface fileUploadPropsType {
+  openModal: boolean;
+  fieldId?: string;
+  listId?: string;
+  taskId?: string;
+}
+
 export const TWO_SUBTASKS_LEVELS = 'two_levels';
 export const THREE_SUBTASKS_LEVELS = 'three_levels';
 
@@ -232,6 +239,7 @@ interface TaskState {
   newCustomPropertyDetails: customPropertyInfo;
   editCustomProperty: IField | undefined;
   dragToBecomeSubTask: boolean;
+  fileUploadProps: fileUploadPropsType;
 }
 
 const initialState: TaskState = {
@@ -349,7 +357,13 @@ const initialState: TaskState = {
     }
   },
   editCustomProperty: undefined,
-  dragToBecomeSubTask: false
+  dragToBecomeSubTask: false,
+  fileUploadProps: {
+    fieldId: undefined,
+    taskId: undefined,
+    listId: undefined,
+    openModal: false
+  }
 };
 
 export const taskSlice = createSlice({
@@ -667,6 +681,9 @@ export const taskSlice = createSlice({
     },
     setEditCustomProperty(state, action: PayloadAction<IField | undefined>) {
       state.editCustomProperty = action.payload;
+    },
+    setOpenFileUploadModal(state, action: PayloadAction<fileUploadPropsType>) {
+      state.fileUploadProps = action.payload;
     }
   }
 });
@@ -761,6 +778,7 @@ export const {
   setCustomSuggetionsField,
   setNewCustomPropertyDetails,
   setEditCustomProperty,
-  setDragToBecomeSubTask
+  setDragToBecomeSubTask,
+  setOpenFileUploadModal
 } = taskSlice.actions;
 export default taskSlice.reducer;
