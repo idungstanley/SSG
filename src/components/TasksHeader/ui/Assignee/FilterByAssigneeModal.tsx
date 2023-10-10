@@ -161,7 +161,7 @@ export default function FilterByAssigneeModal() {
                       textColor={'white'}
                       height="h-8"
                       width="w-8"
-                      backgroundColour={member.color}
+                      backgroundColour={member.user.color}
                       textSize={'8px'}
                     />
                     <div className="flex flex-col text-left">
