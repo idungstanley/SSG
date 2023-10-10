@@ -67,10 +67,10 @@ import Construction from './pages/settings/UserSettings/Pages/Construction';
 import TaskInvite from './pages/workspace/tasks/taskInvite/TaskInvite';
 import WorkSpaceTable from './pages/settings/WorkspaceSettings/GeneralWorkSpaceSettings/Table';
 import EverythingPage from './pages/everything';
-import AlsoHr from './pages/workspace/alsoHr';
 import ForgotPassword from './pages/workspace/createWorkspace/auth/ForgotPassword/ForgotPassword';
 import EmailSentPage from './pages/workspace/createWorkspace/auth/ForgotPassword/EmailSentPage';
 import ResetPassword from './pages/workspace/createWorkspace/auth/ForgotPassword/ResetPassword';
+import AlsoHr from './pages/hr';
 
 const inbox = [
   {
