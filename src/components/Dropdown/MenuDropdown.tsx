@@ -52,6 +52,7 @@ import ArrowRight from '../../assets/icons/ArrowRight';
 import { VerticalScroll } from '../ScrollableContainer/VerticalScroll';
 import { Capitalize } from '../../utils/NoCapWords/Capitalize';
 import { displayPrompt, setVisibility } from '../../features/general/prompt/promptSlice';
+import { APP_TASKS } from '../../app/constants/app';
 
 interface IMenuDropdownProps {
   isExtendedBar?: boolean;
@@ -400,7 +401,7 @@ export default function MenuDropdown({ isExtendedBar, cords }: IMenuDropdownProp
             />
           </div>
         </div>
-        {SubDropdownMenu && <SubDropdown />}
+        {SubDropdownMenu && <SubDropdown placeHubType={APP_TASKS} />}
         <EditHubModal />
         <EditListModal />
         <EditWalletModal />
