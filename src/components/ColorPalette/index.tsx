@@ -262,8 +262,6 @@ export default function PaletteManager({
         style: {
           borderRadius: '12px',
           backgroundColor: 'white',
-          paddingTop: '0px',
-          paddingBottom: '0px'
         }
       }}
       sx={{
