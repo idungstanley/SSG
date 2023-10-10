@@ -42,9 +42,10 @@ interface optionsProps {
 
 interface SubDropdownProps {
   cords?: Cords;
+  placeHubType: string;
 }
 
-export default function SubDropdown({ cords }: SubDropdownProps) {
+export default function SubDropdown({ cords, placeHubType }: SubDropdownProps) {
   const dispatch = useDispatch();
   const { listId, hubId, walletId } = useParams();
 
@@ -132,95 +133,110 @@ export default function SubDropdown({ cords }: SubDropdownProps) {
     }
   ];
 
-  const itemsList: itemsType[] = [
-    {
-      title: 'Sub Hub',
-      handleClick: () => {
-        dispatch(setEntityToCreate(EntityType.subHub));
-        dispatch(setLastActiveItem('Sub Hub'));
-        // dispatch(setSubDropdownMenu(false));
-        // dispatch(setshowMenuDropdown({ showMenuDropdown: null, showMenuDropdownType: null }));
-      },
-      icon: <AddHubIcon />,
-      isVisible: showMenuDropdownType === EntityType.hub ? true : false || SubMenuType === EntityType.hub ? true : false
-    },
-    {
-      title:
-        SubMenuType === EntityType.wallet ||
-        SubMenuType === 'subwallet2' ||
-        showMenuDropdownType === EntityType.wallet ||
-        showMenuDropdownType === 'subwallet2' ||
-        showMenuDropdownType === EntityType.subWallet
-          ? 'Sub Wallet'
-          : 'Wallet',
-      handleClick: () => {
-        dispatch(setEntityToCreate(EntityType.wallet));
-        dispatch(setLastActiveItem(selectedTreeDetails.type === EntityType.wallet ? 'Sub Wallet' : 'Wallet'));
-        // dispatch(setSubDropdownMenu(false));
-        // dispatch(setshowMenuDropdown({ showMenuDropdown: null, showMenuDropdownType: null }));
-      },
-      icon: <AddWalletIcon />,
-      isVisible:
-        showMenuDropdownType === EntityType.list ||
-        showMenuDropdownType === 'subwallet3' ||
-        SubMenuType === 'subwallet3'
-          ? false
-          : true
-    },
-    {
-      title: 'Task',
-      handleClick: () => {
-        dispatch(setCreateTaskSlideOverVisibility(true));
-        dispatch(setSubDropdownMenu(false));
-        dispatch(setshowMenuDropdown({ showMenuDropdown: null, showMenuDropdownType: null }));
-        // navigate(`/${currentWorkspaceId}/tasks`);
-        // dispatch(setLastActiveItem('Task'));
-      },
-      icon: <PlusIcon className="w-5 text-gray-700 h-7" aria-hidden="true" />,
-      isVisible: showMenuDropdownType === EntityType.list ? true : false
-    },
-    {
-      title: 'List',
-      handleClick: () => {
-        dispatch(setLastActiveItem('List'));
-        dispatch(setEntityToCreate(EntityType.list));
-        // dispatch(setSubDropdownMenu(false));
-        // dispatch(setshowMenuDropdown({ showMenuDropdown: null, showMenuDropdownType: null }));
-      },
-      icon: <AddListIcon />,
-      isVisible: showMenuDropdownType === EntityType.list ? false : true
-    },
-    {
-      title: 'Sprint',
-      handleClick: () => ({}),
-      icon: <SwatchIcon className="w-5 text-gray-700 h-7" aria-hidden="true" />,
-      isVisible: true
-    },
-    {
-      title: 'Docs',
-      handleClick: () => ({}),
-      icon: <BsFiletypeDoc className="w-5 text-gray-700 h-7" aria-hidden="true" />,
-      isVisible: false
-    },
-    {
-      title: 'Folder',
-      handleClick: () => ({}),
-      icon: <LinkIcon className="w-4 h-4" aria-hidden="true" />,
-      isVisible: false
-    },
-    {
-      title: 'From Template',
-      handleClick: () => ({}),
-      icon: <DocumentDuplicateIcon className="w-4 h-4" aria-hidden="true" />,
-      isVisible: true
-    },
-    {
-      title: 'Import',
-      handleClick: () => ({}),
-      icon: <StarIcon className="w-4 h-4" aria-hidden="true" />,
-      isVisible: true
-    }
-  ];
+  const itemsList: itemsType[] =
+    placeHubType == 'Also HR'
+      ? [
+          {
+            title: 'Sub Hub',
+            handleClick: () => {
+              dispatch(setEntityToCreate(EntityType.subHub));
+              dispatch(setLastActiveItem('Sub Hub'));
+            },
+            icon: <AddHubIcon />,
+            isVisible:
+              showMenuDropdownType === EntityType.hub ? true : false || SubMenuType === EntityType.hub ? true : false
+          }
+        ]
+      : [
+          {
+            title: 'Sub Hub',
+            handleClick: () => {
+              dispatch(setEntityToCreate(EntityType.subHub));
+              dispatch(setLastActiveItem('Sub Hub'));
+              // dispatch(setSubDropdownMenu(false));
+              // dispatch(setshowMenuDropdown({ showMenuDropdown: null, showMenuDropdownType: null }));
+            },
+            icon: <AddHubIcon />,
+            isVisible:
+              showMenuDropdownType === EntityType.hub ? true : false || SubMenuType === EntityType.hub ? true : false
+          },
+          {
+            title:
+              SubMenuType === EntityType.wallet ||
+              SubMenuType === 'subwallet2' ||
+              showMenuDropdownType === EntityType.wallet ||
+              showMenuDropdownType === 'subwallet2' ||
+              showMenuDropdownType === EntityType.subWallet
+                ? 'Sub Wallet'
+                : 'Wallet',
+            handleClick: () => {
+              dispatch(setEntityToCreate(EntityType.wallet));
+              dispatch(setLastActiveItem(selectedTreeDetails.type === EntityType.wallet ? 'Sub Wallet' : 'Wallet'));
+              // dispatch(setSubDropdownMenu(false));
+              // dispatch(setshowMenuDropdown({ showMenuDropdown: null, showMenuDropdownType: null }));
+            },
+            icon: <AddWalletIcon />,
+            isVisible:
+              showMenuDropdownType === EntityType.list ||
+              showMenuDropdownType === 'subwallet3' ||
+              SubMenuType === 'subwallet3'
+                ? false
+                : true
+          },
+          {
+            title: 'Task',
+            handleClick: () => {
+              dispatch(setCreateTaskSlideOverVisibility(true));
+              dispatch(setSubDropdownMenu(false));
+              dispatch(setshowMenuDropdown({ showMenuDropdown: null, showMenuDropdownType: null }));
+              // navigate(`/${currentWorkspaceId}/tasks`);
+              // dispatch(setLastActiveItem('Task'));
+            },
+            icon: <PlusIcon className="w-5 text-gray-700 h-7" aria-hidden="true" />,
+            isVisible: showMenuDropdownType === EntityType.list ? true : false
+          },
+          {
+            title: 'List',
+            handleClick: () => {
+              dispatch(setLastActiveItem('List'));
+              dispatch(setEntityToCreate(EntityType.list));
+              // dispatch(setSubDropdownMenu(false));
+              // dispatch(setshowMenuDropdown({ showMenuDropdown: null, showMenuDropdownType: null }));
+            },
+            icon: <AddListIcon />,
+            isVisible: showMenuDropdownType === EntityType.list ? false : true
+          },
+          {
+            title: 'Sprint',
+            handleClick: () => ({}),
+            icon: <SwatchIcon className="w-5 text-gray-700 h-7" aria-hidden="true" />,
+            isVisible: true
+          },
+          {
+            title: 'Docs',
+            handleClick: () => ({}),
+            icon: <BsFiletypeDoc className="w-5 text-gray-700 h-7" aria-hidden="true" />,
+            isVisible: false
+          },
+          {
+            title: 'Folder',
+            handleClick: () => ({}),
+            icon: <LinkIcon className="w-4 h-4" aria-hidden="true" />,
+            isVisible: false
+          },
+          {
+            title: 'From Template',
+            handleClick: () => ({}),
+            icon: <DocumentDuplicateIcon className="w-4 h-4" aria-hidden="true" />,
+            isVisible: true
+          },
+          {
+            title: 'Import',
+            handleClick: () => ({}),
+            icon: <StarIcon className="w-4 h-4" aria-hidden="true" />,
+            isVisible: true
+          }
+        ];
 
   return (
     <Menu

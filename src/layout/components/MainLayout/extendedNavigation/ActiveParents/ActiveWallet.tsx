@@ -69,7 +69,7 @@ function ActiveWallet({ showHubList }: WalletIndexProps) {
           </div>
         </section>
         {showMenuDropdown === wallet.id ? <MenuDropdown /> : null}
-        {SubMenuId === wallet.id ? <SubDropdown /> : null}
+        {SubMenuId === wallet.id ? <SubDropdown placeHubType="Tasks" /> : null}
       </div>
     </div>
   ) : null;

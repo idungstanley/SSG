@@ -400,7 +400,7 @@ export default function MenuDropdown({ isExtendedBar, cords }: IMenuDropdownProp
             />
           </div>
         </div>
-        {SubDropdownMenu && <SubDropdown />}
+        {SubDropdownMenu && <SubDropdown placeHubType="Tasks" />}
         <EditHubModal />
         <EditListModal />
         <EditWalletModal />

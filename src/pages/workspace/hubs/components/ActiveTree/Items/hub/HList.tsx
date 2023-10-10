@@ -124,6 +124,7 @@ export default function HList({ hubs, openNewHub, placeHubType }: ListProps) {
               type={EntityType.hub}
               topNumber="50px"
               zNumber="5"
+              placeHubType={placeHubType}
             />
             {hub?.children?.length && isCanBeOpen(hub.id) ? (
               <SubHList hubs={hub.children as Hub[]} placeHubType={placeHubType} />

@@ -51,6 +51,7 @@ interface TaskItemProps {
   isExtendedBar?: boolean;
   handleClick: (id: string, type?: string) => void;
   handleLocation: (id: string, name: string, item: IHub) => void;
+  placeHubType: string;
 }
 export default function HubItem({
   item,
@@ -60,7 +61,8 @@ export default function HubItem({
   zNumber,
   isExtendedBar,
   handleClick,
-  handleLocation
+  handleLocation,
+  placeHubType = 'Tasks'
 }: TaskItemProps) {
   const dispatch = useAppDispatch();
   const { hubId, subhubId } = useParams();
@@ -272,9 +274,11 @@ export default function HubItem({
               onClick={(e) => e.stopPropagation()}
               ref={menuRef}
             >
-              <span onClick={() => handleItemAction(item.id, item.name)} className="cursor-pointer">
-                <PlusIcon />
-              </span>
+              {(placeHubType == 'Also HR' && !item.parent_id) || placeHubType == 'Tasks' ? (
+                <span onClick={() => handleItemAction(item.id, item.name)} className="cursor-pointer">
+                  <PlusIcon />
+                </span>
+              ) : null}
               <span
                 onClick={(e) => {
                   handleHubSettings(item.id, item.name, e);
@@ -295,7 +299,7 @@ export default function HubItem({
       {showMenuDropdown === item.id && showSidebar ? (
         <MenuDropdown isExtendedBar={isExtendedBar} cords={menuCords} />
       ) : null}
-      {SubMenuId === item.id && showSidebar ? <SubDropdown cords={menuCords} /> : null}
+      {SubMenuId === item.id && showSidebar ? <SubDropdown cords={menuCords} placeHubType={placeHubType} /> : null}
     </div>
   );
 }

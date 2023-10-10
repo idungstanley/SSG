@@ -69,6 +69,7 @@ export default function SubHubIndex({ data }: ISubHubIndexProps) {
               handleLocation={handleLocation}
               type="subhub"
               isExtendedBar={true}
+              placeHubType="Tasks"
             />
             {extendedBarOpenedEntitiesIds.includes(subhub.id) ? <SHubDropdownList parentId={subhub.id} /> : null}
           </div>

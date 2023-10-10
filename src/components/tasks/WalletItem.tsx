@@ -257,7 +257,7 @@ export default function WalletItem({
         />
       ) : null}
       {showMenuDropdown === wallet.id ? <MenuDropdown isExtendedBar={isExtendedBar} cords={menuCords} /> : null}
-      {SubMenuId === wallet.id ? <SubDropdown cords={menuCords} /> : null}
+      {SubMenuId === wallet.id ? <SubDropdown cords={menuCords} placeHubType="Tasks" /> : null}
     </div>
   );
 }

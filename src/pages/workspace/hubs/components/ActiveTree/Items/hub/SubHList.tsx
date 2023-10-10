@@ -17,18 +17,18 @@ import { cl } from '../../../../../../../utils';
 import { EntityType } from '../../../../../../../utils/EntityTypes/EntityType';
 import HubItemOverlay from '../../../../../../../components/tasks/HubItemOverLay';
 import { DragOverlay } from '@dnd-kit/core';
+import { generateViewsUrl } from '../../../../../../../utils/generateViewsUrl';
+import { IHub } from '../../../../../../../features/hubs/hubs.interfaces';
 
 export default function SubHubList({ hubs, placeHubType }: ListProps) {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const { currentWorkspaceId } = useAppSelector((state) => state.auth);
-  const subHubUrl = placeHubType == 'Also HR' ? '/hr/h/' : '/tasks/sh/';
-
   const { showExtendedBar, openedEntitiesIds } = useAppSelector((state) => state.workspace);
   const { showSidebar } = useAppSelector((state) => state.account);
 
-  const handleLocation = (id: string, name: string) => {
+  const handleLocation = (id: string, name: string, item: IHub) => {
+    const viewsUrl = generateViewsUrl(id, item, EntityType.hub) as string;
     if (openedEntitiesIds.includes(id)) {
       dispatch(setOpenedEntitiesIds(openedEntitiesIds.filter((item) => item !== id)));
     } else {
@@ -43,7 +43,7 @@ export default function SubHubList({ hubs, placeHubType }: ListProps) {
     );
     dispatch(setShowPilot(true));
     dispatch(setActiveTabId(4));
-    navigate(`/${currentWorkspaceId}${subHubUrl}${id}`, {
+    navigate(viewsUrl, {
       replace: true
     });
     if (!showSidebar) {
@@ -87,6 +87,7 @@ export default function SubHubList({ hubs, placeHubType }: ListProps) {
               type={EntityType.subHub}
               topNumber="80px"
               zNumber="4"
+              placeHubType={placeHubType}
             />
             {showSidebar && placeHubType == 'Tasks' ? (
               <div>
