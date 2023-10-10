@@ -17,6 +17,7 @@ import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 import { TotalTimeIcon } from '../../../../assets/icons/TotalTimeIcon';
 import { ActiveTimeStrip } from './ActiveTimeStrip';
+import { TabsDropDown } from './TabsDropDown';
 
 dayjs.extend(duration);
 
@@ -69,36 +70,6 @@ export function CombinedTime() {
 
   const activeTrackerCheck = (): boolean => (activeTrackers && activeTrackers?.length > 0 ? true : false);
 
-  function TabsDropDown() {
-    return (
-      <div className="absolute z-40 flex flex-col p-2 space-y-3 bg-white rounded-md shadow-xl w-44 top-7 left-7">
-        <div className="flex flex-col space-y-3.5">
-          <span className="font-semibold text-center uppercase">Time category</span>
-          <div className="relative border-b-2">
-            <span className="absolute bg-white px-1.5 py-0.5 capitalize text-alsoit-text-sm font-semibold -top-2 left-10">
-              select category
-            </span>
-          </div>
-        </div>
-        {[
-          { entry: TIME_TABS.realTime, icon: <RealTimeIcon /> },
-          { entry: TIME_TABS.manual, icon: <ManualTimeIcon /> }
-        ].map((item, index) => (
-          <div
-            key={index}
-            className="cursor-pointer p-2.5 hover:bg-alsoit-gray-50"
-            onClick={() => dispatch(setActiveClockTab(item.entry))}
-          >
-            <div className="flex space-x-1.5 w-full">
-              {item.icon}
-              <span>{item.entry}</span>
-            </div>
-          </div>
-        ))}
-      </div>
-    );
-  }
-
   return (
     <div
       className={`flex flex-col space-y-3.5 w-full bg-alsoit-gray-50 rounded-md ${
@@ -123,7 +94,25 @@ export function CombinedTime() {
           {/* Active Tracker Name */}
           <span className="text-alsoit-text-md text-alsoit-gray-200">{activeClockTab}</span>
           {dropDown.tabDrop ? <ArrowUp /> : <ArrowDown />}
-          {dropDown.tabDrop && TabsDropDown()}
+          {dropDown.tabDrop && (
+            <TabsDropDown header="time category" subHeader="select category" styles="w-44 top-7 left-7">
+              {[
+                { entry: TIME_TABS.realTime, icon: <RealTimeIcon /> },
+                { entry: TIME_TABS.manual, icon: <ManualTimeIcon /> }
+              ].map((item, index) => (
+                <div
+                  key={index}
+                  className="cursor-pointer p-2.5 hover:bg-alsoit-gray-50"
+                  onClick={() => dispatch(setActiveClockTab(item.entry))}
+                >
+                  <div className="flex space-x-1.5 w-full">
+                    {item.icon}
+                    <span>{item.entry}</span>
+                  </div>
+                </div>
+              ))}
+            </TabsDropDown>
+          )}
         </label>
         {/* Counter and Icons */}
         {activeClockTab === TIME_TABS.realTime && (
