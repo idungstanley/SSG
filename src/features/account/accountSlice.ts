@@ -49,6 +49,7 @@ interface AccountState {
   lightBaseColor: string;
   userSettingsData?: IUserParams;
   places: Place[];
+  selectListColours: string[];
   calculatedContentWidth: string;
 }
 
@@ -73,7 +74,8 @@ const initialState: AccountState = {
     hotkeys: hotKeysFromLS
   },
   places: [...initialPlaces.sort((a, b) => idsFromLS.indexOf(a.id) - idsFromLS.indexOf(b.id))],
-  calculatedContentWidth: ''
+  calculatedContentWidth: '',
+  selectListColours: []
 };
 
 export const accountSlice = createSlice({
@@ -98,6 +100,9 @@ export const accountSlice = createSlice({
     setShowUploadImage: (state, action: PayloadAction<boolean>) => {
       state.showUploadImage = action.payload;
     },
+    setSelectedListColours: (state, action: PayloadAction<string[]>) => {
+      state.selectListColours = action.payload;
+    },
     setUserName: (state, action: PayloadAction<string>) => {
       state.userName = action.payload;
     },
@@ -119,7 +124,8 @@ export const {
   setShowUploadImage,
   setUserName,
   SetUserSettingsStore,
-  setCalculatedContentWidth
+  setCalculatedContentWidth,
+  setSelectedListColours
 } = accountSlice.actions;
 
 export default accountSlice.reducer;
