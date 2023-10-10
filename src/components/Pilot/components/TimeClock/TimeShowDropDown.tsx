@@ -2,6 +2,8 @@ import { MouseEvent, useState } from 'react';
 import ArrowRight from '../../../../assets/icons/ArrowRight';
 import { TIME_ENTITY_SHOW_PROPERTY, TIME_TABS } from '../../../../utils/Constants/TimeClockConstants';
 import { TabsDropDown } from './TabsDropDown';
+import ActiveTreeSearch from '../../../ActiveTree/ActiveTreeSearch';
+import { VerticalScroll } from '../../../ScrollableContainer/VerticalScroll';
 
 export function TimeShowDropDown() {
   const [dropDown, setDropDown] = useState<{ [key: string]: boolean }>({
@@ -27,14 +29,14 @@ export function TimeShowDropDown() {
             <ArrowRight />
             {dropDown[TIME_TABS.nestedEntities] && property.value === TIME_TABS.nestedEntities && (
               <TabsDropDown
-                styles="w-44 -right-10 top-5 px-1.5"
+                styles="w-44 -right-10 top-5 px-1.5 h-max-24"
                 subStyles="left-12"
                 header="shared entity"
                 subHeader="select entity"
               >
-                <span className="flex w-full text-alsoit-text-md italic justify-center items-center">
-                  In Progress!!!
-                </span>
+                <VerticalScroll>
+                  <ActiveTreeSearch option={TIME_TABS.nestedEntities} />
+                </VerticalScroll>
               </TabsDropDown>
             )}
           </div>

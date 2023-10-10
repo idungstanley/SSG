@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import ArrowDownFilled from '../../../../assets/icons/ArrowDownFilled';
 import AssigneeIcon from '../../../../assets/icons/Assignee';
 import { FilterListIcon } from '../../../../assets/icons/FilterListIcon';
@@ -7,14 +7,33 @@ import SearchIcon from '../../../../assets/icons/SearchIcon';
 import ShowIcon from '../../../../assets/icons/ShowIcon';
 import { TabsDropDown } from './TabsDropDown';
 import { TimeShowDropDown } from './TimeShowDropDown';
+import { useAppSelector } from '../../../../app/hooks';
 
-export function HeaderIcons() {
+interface Props {
+  meMode?: boolean;
+}
+
+export function HeaderIcons({ meMode }: Props) {
+  const { nestedTimeEntityId } = useAppSelector((state) => state.workspace);
+
   const [dropDown, setDropDown] = useState<{ show: boolean; filter: boolean; assignee: boolean; me: boolean }>({
     assignee: false,
     filter: false,
     me: false,
     show: false
   });
+
+  // const { data: getTaskTimeEntries } = GetTimeEntriesService({
+  //   itemId: activeItemId,
+  //   trigger: activeItemType === EntityType.subHub ? EntityType.hub : activeItemType,
+  //   page,
+  //   include_filters: true
+  // });
+
+  useEffect(() => {
+    if (nestedTimeEntityId) setDropDown((prev) => ({ ...prev, show: !prev.show }));
+  }, [nestedTimeEntityId]);
+
   return (
     <div className="flex justify-end space-x-0.5 px-1.5">
       <div
