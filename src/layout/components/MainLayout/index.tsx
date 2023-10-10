@@ -113,7 +113,7 @@ function MainLayout() {
         </div>
       </DragContext>
 
-      <TaskShortCutModal />
+      {/* <TaskShortCutModal /> */}
     </div>
   ) : null;
 }
