@@ -15,9 +15,9 @@ import { HourGlassIcon } from '../../../../assets/icons/HourGlass';
 import { ManualTime } from './ManualTime';
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
-import { TotalTimeIcon } from '../../../../assets/icons/TotalTimeIcon';
 import { ActiveTimeStrip } from './ActiveTimeStrip';
 import { TabsDropDown } from './TabsDropDown';
+import { TotalTime } from './TotalTime';
 
 dayjs.extend(duration);
 
@@ -44,26 +44,6 @@ export function CombinedTime() {
     trigger: activeItemType === EntityType.subHub ? EntityType.hub : activeItemType
   });
 
-  const totalTime = () => {
-    if (getTimeEntries?.data.total_duration) {
-      const duration = dayjs.duration(getTimeEntries?.data.total_duration * 1000);
-      return (
-        <span className="flex items-center justify-center w-12 tracking-wide text-alsoit-text-md">
-          <TotalTimeIcon className="w-4 h-4" />
-          {`${String(duration.hours()).padStart(2, '0')}:${String(duration.minutes()).padStart(2, '0')}:${String(
-            duration.seconds()
-          ).padStart(2, '0')}`}
-        </span>
-      );
-    }
-    return (
-      <span className="flex items-center justify-center w-12 tracking-wide text-alsoit-text-md">{`${String(0).padStart(
-        2,
-        '0'
-      )}:${String(0).padStart(2, '0')}:${String(0).padStart(2, '0')}`}</span>
-    );
-  };
-
   const activeTrackers = getCurrent?.data.time_entries.filter(
     (tracker) => tracker.team_member.user.id !== currentUserId
   );
@@ -80,15 +60,15 @@ export function CombinedTime() {
       <div className="absolute flex items-center justify-between w-full -top-0">
         <label
           htmlFor="timeClockTrackers"
-          className="relative flex items-center justify-between px-1 cursor-pointer rounded-top w-28 h-7"
+          className="relative flex items-center justify-between px-1 cursor-pointer rounded-top w-28 h-7 bg-alsoit-gray-100"
           onClick={() => setDropDown((prev) => ({ ...prev, tabDrop: !prev.tabDrop }))}
         >
-          <div className="cursor-pointer">
+          <div className="cursor-pointer bg-alsoit-gray-100 rounded-xl">
             <CollapseIcon
-              active={activeTrackerCheck()}
+              active={!timerStatus}
               onToggle={() => setDropDown((prev) => ({ ...prev, activeTimeDrop: !prev.activeTimeDrop }))}
-              iconColor="#dedede"
-              color="#A854F7"
+              iconColor="rgb(145 145 145)"
+              color="rgb(145 145 145)"
             />
           </div>
           {/* Active Tracker Name */}
@@ -117,8 +97,8 @@ export function CombinedTime() {
         {/* Counter and Icons */}
         {activeClockTab === TIME_TABS.realTime && (
           <div className="flex items-center space-x-0.5">
-            <div className="flex items-center relative border bg-white rounded px-0.5 py-1 border-alsoit-success">
-              {totalTime()}
+            <div className="flex items-center relative border bg-white rounded px-1.5 border-alsoit-success w-20 h-6">
+              <TotalTime totalDuration={getTimeEntries?.data.total_duration} />
               <span className="absolute -top-1.5 bg-white px-0.5 text-alsoit-text-sm">Total Time</span>
             </div>
             <div className="relative flex items-center px-2 py-1 bg-white border rounded border-alsoit-success">

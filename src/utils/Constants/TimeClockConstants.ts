@@ -16,3 +16,12 @@ export const TIME_ENTITY_SHOW_PROPERTY = [
   { name: 'title vertical grid line', value: 'vertical_grid_line', sideTag: 'switch' },
   { name: 'property vertical grid line', value: 'property_grid_line', sideTag: 'switch' }
 ];
+
+export const TIME_INVENTORY_HEADER = [
+  { name: 'user', value: 'team_member', sorted: 'false', isHidden: false },
+  { name: 'duration', value: 'duration', sorted: 'false', isHidden: false },
+  { name: 'start date', value: 'start_date', sorted: 'false', isHidden: false },
+  { name: 'single label', value: 'single_label', sorted: 'false', isHidden: false },
+  { name: 'end date', value: 'end_date', sorted: 'false', isHidden: false },
+  { name: 'tags', value: 'tags', sorted: 'false', isHidden: false }
+];

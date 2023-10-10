@@ -55,7 +55,7 @@ export function MonthsOption({ setOptions }: Props) {
         onClick={() => setDropDown(!dropDown)}
       >
         <span className="capitalize">{value}</span>
-        {dropDown ? <ArrowUp /> : <ArrowDown dimensions={{ height: 7, width: 7 }} />}
+        {dropDown ? <ArrowUp /> : <ArrowDown className="w-2 h-2" />}
         {dropDown && monthlyList()}
       </div>
     </div>

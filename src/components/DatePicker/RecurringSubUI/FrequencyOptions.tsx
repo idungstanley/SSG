@@ -36,7 +36,7 @@ export function FrequencyOption({ setRepeat }: Props) {
         onClick={() => setDropDown(!dropdown)}
       >
         <span>{value}</span>
-        {dropdown ? <ArrowUp /> : <ArrowDown dimensions={{ height: 7, width: 7 }} />}
+        {dropdown ? <ArrowUp /> : <ArrowDown className="w-2 h-2" />}
         {dropdown && (
           <RecurringIntervals
             activeItem={value}

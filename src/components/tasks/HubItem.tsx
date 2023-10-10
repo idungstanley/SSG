@@ -31,6 +31,7 @@ import ActiveBarIdentification from './Component/ActiveBarIdentification';
 import ActiveBackground from './Component/ActiveBackground';
 import { useAbsolute } from '../../hooks/useAbsolute';
 import { IHub } from '../../features/hubs/hubs.interfaces';
+import { APP_HR, APP_TASKS } from '../../app/constants/app';
 
 interface TaskItemProps {
   item: {
@@ -51,6 +52,7 @@ interface TaskItemProps {
   isExtendedBar?: boolean;
   handleClick: (id: string, type?: string) => void;
   handleLocation: (id: string, name: string, item: IHub) => void;
+  placeHubType: string;
 }
 export default function HubItem({
   item,
@@ -60,7 +62,8 @@ export default function HubItem({
   zNumber,
   isExtendedBar,
   handleClick,
-  handleLocation
+  handleLocation,
+  placeHubType = APP_TASKS
 }: TaskItemProps) {
   const dispatch = useAppDispatch();
   const { hubId, subhubId } = useParams();
@@ -272,9 +275,11 @@ export default function HubItem({
               onClick={(e) => e.stopPropagation()}
               ref={menuRef}
             >
-              <span onClick={() => handleItemAction(item.id, item.name)} className="cursor-pointer">
-                <PlusIcon />
-              </span>
+              {(placeHubType == APP_HR && !item.parent_id) || placeHubType == APP_TASKS ? (
+                <span onClick={() => handleItemAction(item.id, item.name)} className="cursor-pointer">
+                  <PlusIcon />
+                </span>
+              ) : null}
               <span
                 onClick={(e) => {
                   handleHubSettings(item.id, item.name, e);
@@ -295,7 +300,7 @@ export default function HubItem({
       {showMenuDropdown === item.id && showSidebar ? (
         <MenuDropdown isExtendedBar={isExtendedBar} cords={menuCords} />
       ) : null}
-      {SubMenuId === item.id && showSidebar ? <SubDropdown cords={menuCords} /> : null}
+      {SubMenuId === item.id && showSidebar ? <SubDropdown cords={menuCords} placeHubType={placeHubType} /> : null}
     </div>
   );
 }

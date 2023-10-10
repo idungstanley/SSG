@@ -22,6 +22,7 @@ body {
   color: #4e5258;
   font-size: 13px;
   font-weight: 600;
+  line-height: 15.6px;
 }
 
 html {
@@ -101,6 +102,32 @@ code {
 .rounded-top {
   border-top-left-radius: 8px;
 }
+
+.gapFixes {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.header-cell {
+  min-width: 100px; /* Adjust the width as needed */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 0.5rem; /* Add padding for better styling */
+  box-sizing: border-box; /* Include padding in width */
+  text-transform: uppercase;
+}
+
+.header-cell-reduced {
+  min-width: 75px; /* Adjust the width as needed */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 0.5rem; /* Add padding for better styling */
+  box-sizing: border-box; /* Include padding in width */
+  text-transform: uppercase;
+}
+
 
 @keyframes grow {
   from {

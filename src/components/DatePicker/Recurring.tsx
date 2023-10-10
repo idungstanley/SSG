@@ -78,7 +78,7 @@ export default function Recurring() {
           <span className="capitalize">
             {recuringInterval === RECUR_STR_CONSTANTS.daysAfter ? recuringInterval.replace('_', ' ') : recuringInterval}
           </span>
-          {dropRecurring.recurringInterval ? <ArrowUp /> : <ArrowDown dimensions={{ height: 7, width: 7 }} />}
+          {dropRecurring.recurringInterval ? <ArrowUp /> : <ArrowDown className="w-2 h-2" />}
           {dropRecurring.recurringInterval && (
             <RecurringIntervals setFn={setRecurringInterval} arr={IntervalArr} activeItem={recuringInterval} />
           )}
@@ -91,7 +91,7 @@ export default function Recurring() {
           className="border-alsoit-gray-75 border rounded-md text-alsoit-text-md p-2 relative flex justify-between items-center"
         >
           <span className="capitalize">{getMonthOptionString(statusInterval as MonthOption)}</span>
-          {dropRecurring.statusInterval ? <ArrowUp /> : <ArrowDown dimensions={{ height: 7, width: 7 }} />}
+          {dropRecurring.statusInterval ? <ArrowUp /> : <ArrowDown className="w-2 h-2" />}
           {dropRecurring.statusInterval && (
             <RecurringIntervals setFn={setStatusInterval} arr={statusArr} activeItem={statusInterval} />
           )}
