@@ -14,14 +14,7 @@ interface HeaderProps {
   activeItemName: string | null | undefined;
 }
 
-export function Header({
-  onReset,
-  onToggleSearch,
-  onClickXIcon,
-  showSearch,
-  children,
-  activeItemName = ''
-}: HeaderProps) {
+export function Header({ onReset, onToggleSearch, onClickXIcon, showSearch, children, activeItemName }: HeaderProps) {
   const { blacklistIds } = useAppSelector(selectCalendar);
 
   return (
