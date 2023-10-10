@@ -5,12 +5,12 @@ import CommunicationSubTab from './CommunicationSubTab';
 
 export const communicationOptions = [
   {
-    id: 1,
+    id: 'chat_for_pilot_one',
     element: <ChatForPilot />
   },
-  { id: 2, element: <ChatForPilot /> },
+  { id: 'chat_for_pilot_two', element: <ChatForPilot /> },
   {
-    id: 3,
+    id: 'chat_for_pilot_three',
     element: <ChatForPilot />
   }
 ];

@@ -1,31 +1,33 @@
-import React, { useEffect, useMemo } from 'react';
+import { useMemo } from 'react';
 import { useAppSelector } from '../../../../../../app/hooks';
 import TimeSubTab from './TimeSubTab';
 import ClockInOut from '../../../../../../components/Pilot/components/TimeClock/ClockInOut';
-import ClockLog from '../../../../../../components/Pilot/components/TimeClock/ClockLog';
 import ClockPreferences from '../../../../../../components/Pilot/components/TimeClock/ClockPreferences';
 import ManualTimeAddDialog from '../../../../../../components/Pilot/components/TimeClock/ManualTimeDialog';
 
 export const TimeClockOptions = [
   {
-    id: 0,
+    id: 'in_out',
     element: <ClockInOut />
   },
   {
-    id: 1,
+    id: 'manual_time_add',
     element: <ManualTimeAddDialog />
   },
   {
-    id: 2,
+    id: 'clock_preference',
     element: <ClockPreferences />
   }
 ];
+
 export default function TimeClock() {
   const { activeSubTimeClockTabId, showPilot } = useAppSelector((state) => state.workspace);
+
   const selectedSubSection = useMemo(
     () => TimeClockOptions.find((option) => option.id === activeSubTimeClockTabId),
     [activeSubTimeClockTabId]
   );
+
   return (
     <section className="flex flex-col h-full">
       {showPilot && <TimeSubTab />}

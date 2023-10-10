@@ -33,50 +33,51 @@ import { AiOutlineFieldTime } from 'react-icons/ai';
 import { MdAppRegistration, MdSecurity } from 'react-icons/md';
 import { GiChecklist } from 'react-icons/gi';
 import { BiDetail } from 'react-icons/bi';
+import { pilotTabs } from '../../../../app/constants/pilotTabs';
 
 export const pilotOptions = [
   {
-    id: 1,
+    id: pilotTabs.CONNECT,
     name: 'Connect',
     source: communicationIcon,
     subTab: <CommunicationSubTab />,
     isVisible: false
   },
   {
-    id: 2,
+    id: pilotTabs.LOGS,
     name: 'Logs',
     icon: <MdAppRegistration />,
     isVisible: false
   },
   {
-    id: 3,
+    id: pilotTabs.PERMISSIONS,
     name: 'Permissions',
     icon: <MdSecurity />,
     isVisible: false
   },
 
   {
-    id: 4,
+    id: pilotTabs.DETAILS,
     name: 'Details',
     icon: <BiDetail />,
     subTab: <DetailsSubTab />,
     isVisible: false
   },
   {
-    id: 5,
+    id: pilotTabs.AUTOMATION,
     name: 'Automation',
     source: automationIcon,
     isVisible: false
   },
   {
-    id: 6,
+    id: pilotTabs.TIME_CLOCK,
     name: 'TimeClock',
     icon: <AiOutlineFieldTime />,
     subTab: <TimeSubTab />,
     isVisible: false
   },
   {
-    id: 7,
+    id: 'checklist',
     name: 'Checklist',
     icon: <GiChecklist />,
     isVisible: false
@@ -117,19 +118,19 @@ function Tab() {
   };
   const dropdownOptions = [
     {
-      id: 1,
+      id: 'add_hotkeys',
       label: 'Add HotKeys',
       icon: <SiHotjar />,
       onClick: handleAddHotKeys
     },
     {
-      id: 2,
+      id: 'remove_hotkeys',
       label: 'Remove HotKeys',
       icon: <IoMdRemoveCircle />,
       onClick: handleRemoveHotKeys
     }
   ];
-  const idsFromLS: number[] = JSON.parse(localStorage.getItem('pilotSections') || '[]') as number[];
+  const idsFromLS: string[] = JSON.parse(localStorage.getItem('pilotSections') || '[]') as string[];
 
   const [items, setItems] = useState(pilotOptions.sort((a, b) => idsFromLS.indexOf(a.id) - idsFromLS.indexOf(b.id)));
   const sensors = useSensors(

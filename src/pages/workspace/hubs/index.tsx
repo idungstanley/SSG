@@ -31,6 +31,7 @@ import ActiveTreeSearch from '../../../components/ActiveTree/ActiveTreeSearch';
 import { Modal } from '../../../components/Pilot/components/HotKeys/components/Modal';
 import { Capitalize } from '../../../utils/NoCapWords/Capitalize';
 import EverythingTasks from './components/EverythingTasks';
+import { pilotTabs } from '../../../app/constants/pilotTabs';
 
 function Hubs() {
   const dispatch = useDispatch();
@@ -71,9 +72,9 @@ function Hubs() {
     if (type === EntityType.hub) {
       setShowModal(false);
       navigate(`/${currentWorkspaceId}` + '/tasks');
-      dispatch(setActiveTabId(9));
+      dispatch(setActiveTabId(pilotTabs.ENTITY_MANAGER));
       dispatch(setShowOverlay(true));
-      dispatch(setActiveSubHubManagerTabId(1));
+      dispatch(setActiveSubHubManagerTabId(pilotTabs.CREATE_HUB));
     }
   };
 

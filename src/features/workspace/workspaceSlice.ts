@@ -17,7 +17,7 @@ const pilotFromLS = JSON.parse(localStorage.getItem('pilot') || '""') as {
   showTabLabel: boolean;
 };
 const showTabLabelFromLS = !!pilotFromLS.showTabLabel;
-const hotkeyIdsFromLS = JSON.parse(localStorage.getItem(STORAGE_KEYS.HOT_KEYS) ?? '[]') as number[];
+const hotkeyIdsFromLS = JSON.parse(localStorage.getItem(STORAGE_KEYS.HOT_KEYS) ?? '[]') as string[];
 
 interface workspaceState {
   workspace: string[];
@@ -49,17 +49,16 @@ interface workspaceState {
   getRecording: { id: string | null; type: string | null };
   isMuted: boolean;
   showPilotListView: boolean;
-  activeTabId: number | undefined;
+  activeTabId: string | undefined;
   showOverlay: boolean;
   pickedDateState: boolean;
   activeHotKeyTabId: number | null;
-  activeSubCommunicationTabId: number | null;
-  activeSubHubManagerTabId: number | null;
-  activeStatusManagementTabId: number | null;
-  activeSubDetailsTabId: number | null;
-  activeSubTimeClockTabId: number | null;
+  activeSubCommunicationTabId: string | null;
+  activeSubHubManagerTabId: string | null;
+  activeStatusManagementTabId: string | null;
+  activeSubDetailsTabId: string | null;
+  activeSubTimeClockTabId: string | null;
   activeClockTab: string;
-  activeSubChecklistTabId: number | null;
   showExtendedBar: boolean;
   activePlaceNameForNavigation: string | null;
   activePlaceIdForNavigation: number | null | string;
@@ -81,7 +80,7 @@ interface workspaceState {
   workSpaceSettingsObj: WorkSpaceSettingsUpdateRes | undefined;
   draggableActiveStatusId: string | null;
   isFavoritePinned: boolean;
-  activeHotkeyIds: number[];
+  activeHotkeyIds: string[];
 }
 
 const initialState: workspaceState = {
@@ -112,16 +111,15 @@ const initialState: workspaceState = {
   showPilotIconView: false,
   showPilotListView: false,
   extendedSidebarWidth: dimensions.extendedBar.default,
-  activeTabId: 0,
+  activeTabId: '',
   sidebarWidthRD: dimensions.navigationBar.default,
   activeHotKeyTabId: 0,
-  activeSubDetailsTabId: 1,
-  activeSubTimeClockTabId: 0,
+  activeSubDetailsTabId: 'properties',
+  activeSubTimeClockTabId: 'in_out',
   activeClockTab: 'Real Time',
-  activeStatusManagementTabId: 1,
-  activeSubHubManagerTabId: 1,
-  activeSubCommunicationTabId: 1,
-  activeSubChecklistTabId: 2,
+  activeStatusManagementTabId: 'custom',
+  activeSubHubManagerTabId: 'create_hub',
+  activeSubCommunicationTabId: 'email',
   fetchAllWorkspace: false,
   showAddHotKeyDropdown: false,
   showExtendedBar: false,
@@ -131,8 +129,8 @@ const initialState: workspaceState = {
   createWlLink: false,
   workspaceData: undefined,
   activeSubRecordsTabId: 0,
-  recorderLastMemory: { activeTabId: 0, workSpaceId: '', listId: '', hubId: '', subhubId: '', taskId: '' },
-  timerLastMemory: { activeTabId: 0, workSpaceId: '', listId: '', hubId: '', subhubId: '', taskId: '' },
+  recorderLastMemory: { activeTabId: '', workSpaceId: '', listId: '', hubId: '', subhubId: '', taskId: '' },
+  timerLastMemory: { activeTabId: '', workSpaceId: '', listId: '', hubId: '', subhubId: '', taskId: '' },
   activityArray: [],
   logType: 'activity',
   activeLogTab: 'activity',
@@ -244,7 +242,7 @@ export const wsSlice = createSlice({
     setSidebarWidthRD(state, action: PayloadAction<number>) {
       state.sidebarWidthRD = action.payload;
     },
-    setActiveHotkeyIds(state, action: PayloadAction<number[]>) {
+    setActiveHotkeyIds(state, action: PayloadAction<string[]>) {
       state.activeHotkeyIds = action.payload;
     },
     setShowWallet(state, action: PayloadAction<boolean>) {
@@ -275,32 +273,29 @@ export const wsSlice = createSlice({
       state.activeItemType = action.payload.activeItemType;
       state.activeItemName = action.payload.activeItemName || state.activeItemName;
     },
-    setActiveSubCommunicationTabId(state, action: PayloadAction<number | null>) {
+    setActiveSubCommunicationTabId(state, action: PayloadAction<string | null>) {
       state.activeSubCommunicationTabId = action.payload;
     },
-    setActiveStatusManagementTabId(state, action: PayloadAction<number | null>) {
+    setActiveStatusManagementTabId(state, action: PayloadAction<string | null>) {
       state.activeStatusManagementTabId = action.payload;
     },
-    setActiveSubDetailsTabId(state, action: PayloadAction<number | null>) {
+    setActiveSubDetailsTabId(state, action: PayloadAction<string | null>) {
       state.activeSubDetailsTabId = action.payload;
     },
-    setActiveSubHubManagerTabId(state, action: PayloadAction<number | null>) {
+    setActiveSubHubManagerTabId(state, action: PayloadAction<string | null>) {
       state.activeSubHubManagerTabId = action.payload;
     },
-    setActiveTabId(state, action: PayloadAction<number | undefined>) {
+    setActiveTabId(state, action: PayloadAction<string | undefined>) {
       state.activeTabId = action.payload;
     },
     setActiveHotKeyId(state, action: PayloadAction<number | null>) {
       state.activeHotKeyTabId = action.payload;
     },
-    setActiveSubTimeClockTabId(state, action: PayloadAction<number | null>) {
+    setActiveSubTimeClockTabId(state, action: PayloadAction<string | null>) {
       state.activeSubTimeClockTabId = action.payload;
     },
     setActiveClockTab(state, action: PayloadAction<string>) {
       state.activeClockTab = action.payload;
-    },
-    setActiveSubChecklistTabId(state, action: PayloadAction<number | null>) {
-      state.activeSubChecklistTabId = action.payload;
     },
     setExtendedSidebarWidth(state, action: PayloadAction<number>) {
       state.extendedSidebarWidth = action.payload;
@@ -335,11 +330,11 @@ export const wsSlice = createSlice({
     resetWorkSpace(state, action: PayloadAction<IRecorderLastMemory | ITimerLastMemory>) {
       const { activeTabId, hubId, listId } = action.payload;
       activeTabId
-        ? (state.activeTabId = activeTabId)
+        ? state.activeTabId === activeTabId
         : hubId
-        ? (state.activeItemId = hubId)
+        ? state.activeItemId === hubId
         : listId
-        ? (state.activeItemId = listId)
+        ? state.activeItemId === listId
         : '';
     },
     setActivityArray(state, action: PayloadAction<IActivityLog[]>) {
@@ -398,7 +393,6 @@ export const {
   setPilotWidth,
   setShowPilotListView,
   setActiveTabId,
-  setActiveSubChecklistTabId,
   setShowAddHotKeyDropdown,
   setShowRemoveHotKeyDropdown,
   setActiveHotKeyId,

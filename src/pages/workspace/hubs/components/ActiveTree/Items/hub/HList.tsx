@@ -22,6 +22,7 @@ import { DragOverlay } from '@dnd-kit/core';
 import HubItemOverlay from '../../../../../../../components/tasks/HubItemOverLay';
 import { generateViewsUrl } from '../../../../../../../utils/generateViewsUrl';
 import { IHub } from '../../../../../../../features/hubs/hubs.interfaces';
+import { pilotTabs } from '../../../../../../../app/constants/pilotTabs';
 
 export default function HList({ hubs, openNewHub }: ListProps) {
   const dispatch = useAppDispatch();
@@ -64,7 +65,7 @@ export default function HList({ hubs, openNewHub }: ListProps) {
       })
     );
     dispatch(setShowPilot(true));
-    dispatch(setActiveTabId(4));
+    dispatch(setActiveTabId(pilotTabs.WATCHERS));
     navigate(viewsUrl, {
       replace: true
     });

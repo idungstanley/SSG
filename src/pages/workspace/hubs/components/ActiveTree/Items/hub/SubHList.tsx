@@ -17,6 +17,7 @@ import { cl } from '../../../../../../../utils';
 import { EntityType } from '../../../../../../../utils/EntityTypes/EntityType';
 import HubItemOverlay from '../../../../../../../components/tasks/HubItemOverLay';
 import { DragOverlay } from '@dnd-kit/core';
+import { pilotTabs } from '../../../../../../../app/constants/pilotTabs';
 
 export default function SubHubList({ hubs }: ListProps) {
   const dispatch = useAppDispatch();
@@ -39,7 +40,7 @@ export default function SubHubList({ hubs }: ListProps) {
       })
     );
     dispatch(setShowPilot(true));
-    dispatch(setActiveTabId(4));
+    dispatch(setActiveTabId(pilotTabs.WATCHERS));
     navigate(`tasks/sh/${id}`, {
       replace: true
     });

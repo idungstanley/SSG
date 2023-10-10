@@ -13,7 +13,7 @@ import ArrowDownFilled from '../../../../../assets/icons/ArrowDownFilled';
 import AlsoitMenuDropdown from '../../../../../components/DropDowns';
 
 interface UserSettingsType {
-  id: number;
+  id: string;
   title: string;
   handleClick: () => void;
 }
@@ -64,47 +64,47 @@ export default function UserSettingsModal({ setShowModal }: UserProps) {
 
   const userSettings: UserSettingsType[] = [
     {
-      id: 1,
+      id: 'my_settings',
       title: 'My Settings',
       handleClick: () => {
         navigate(`/${currentWorkspaceId}/settings/profile`);
       }
     },
     {
-      id: 2,
+      id: 'notificaitons',
       title: 'Notificaitons',
       handleClick: () => {
         navigate(`/${currentWorkspaceId}/settings/notifications`);
       }
     },
     {
-      id: 3,
+      id: 'apps',
       title: 'Apps',
       handleClick: () => ({})
     },
 
     {
-      id: 4,
+      id: 'rewards',
       title: 'Rewards',
       handleClick: () => ({})
     },
     {
-      id: 5,
+      id: 'hot_keys',
       title: 'HotKeys',
       handleClick: () => setShowModal(true)
     },
     {
-      id: 6,
+      id: 'help',
       title: 'Help',
       handleClick: () => ({})
     },
     {
-      id: 7,
+      id: 'dark_mode',
       title: 'Dark Mode',
       handleClick: () => ({})
     },
     {
-      id: 8,
+      id: 'log_out',
       title: 'Log out',
       handleClick: () => {
         dispatch(
@@ -157,7 +157,7 @@ export default function UserSettingsModal({ setShowModal }: UserProps) {
                 <div className="flex items-center justify-between">
                   <p>{i.title}</p>
                   <span>
-                    {i.id === 7 ? (
+                    {i.id === 'dark_mode' ? (
                       <button className="flex ml-14 items-center text-gray-400 cursor-pointer p-0.5 rounded-md space-x-1 ">
                         <BsToggleOff className="w-4 h-4 test-sm" />
                       </button>

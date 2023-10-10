@@ -29,7 +29,7 @@ export default function NoEntriesFound() {
         <div className="mt-6">
           <div
             className="text-base font-medium text-indigo-600 hover:text-indigo-500"
-            onClick={() => dispatch(setActiveSubTimeClockTabId(0))}
+            onClick={() => dispatch(setActiveSubTimeClockTabId('in_out'))}
           >
             Start the time clock to get new entry
             <span aria-hidden="true"> &rarr;</span>

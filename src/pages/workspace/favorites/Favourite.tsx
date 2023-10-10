@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useAppSelector } from '../../../app/hooks';
 import { UseUpdateFavService } from '../../../features/hubs/hubService';
 import FavModal from './FavModal';
@@ -12,6 +12,7 @@ import { FiList } from 'react-icons/fi';
 import { getInitials } from '../../../app/helpers';
 import { EntityType } from '../../../utils/EntityTypes/EntityType';
 import { generateViewsUrl } from '../../../utils/generateViewsUrl';
+import { pilotTabs } from '../../../app/constants/pilotTabs';
 
 interface nameType {
   item: {
@@ -47,7 +48,7 @@ function Favourite({ item }: nameType) {
       })
     );
     dispatch(setShowPilot(true));
-    dispatch(setActiveTabId(4));
+    dispatch(setActiveTabId(pilotTabs.WATCHERS));
 
     navigate(viewsUrl, {
       replace: true

@@ -15,6 +15,7 @@ import {
   useClearEntityCustomFieldValue,
   useUpdateEntityCustomFieldValue
 } from '../../../../../../features/list/listService';
+import { pilotTabs } from '../../../../../../app/constants/pilotTabs';
 
 interface dropdownProps {
   optionsFromField:
@@ -55,7 +56,7 @@ function LabelsDropdown({ optionsFromField, allOptions, currentProperty, taskId 
 
   const handleEditCustom = () => {
     dispatch(setEditCustomProperty(currentProperty));
-    dispatch(setActiveTabId(10));
+    dispatch(setActiveTabId(pilotTabs.TEMPLATES));
     dispatch(setEntityForCustom({ id: undefined, type: undefined }));
     dispatch(
       setNewCustomPropertyDetails({ type: 'Multi Label', name: currentProperty.name, color: currentProperty.color })

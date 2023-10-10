@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, Fragment } from 'react';
 import { MdFileCopy } from 'react-icons/md';
 import { useAppSelector } from '../../../../../app/hooks';
 import { IoEyeOutline } from 'react-icons/io5';
@@ -87,49 +87,49 @@ export default function TaskMenu() {
 
   const TaskIcons = [
     {
-      id: 1,
+      id: 'set_watchers',
       label: 'Set watchers',
       icons: <IoEyeOutline />,
       handleClick: () => ({}),
       isVisible: true
     },
     {
-      id: 2,
+      id: 'set_assignees',
       label: 'Set assignees',
       icons: <UserPlusIcon />,
       handleClick: () => ({}),
       isVisible: true
     },
     {
-      id: 3,
+      id: 'set_status',
       label: 'Set Status',
       icons: <MdOutlineDeveloperBoard />,
       handleClick: () => ({}),
       isVisible: true
     },
     {
-      id: 4,
+      id: 'set_status_two',
       label: 'Set Status',
       icons: <BsTags />,
       handleClick: () => ({}),
       isVisible: true
     },
     {
-      id: 5,
+      id: 'set_tags',
       label: 'Set Tags',
       icons: <TbSubtask />,
       handleClick: () => ({}),
       isVisible: true
     },
     {
-      id: 6,
-      label: ' Convert to Subtask ',
+      id: 'convert_to_subtask',
+      label: 'Convert to Subtask',
       icons: <MdOutlineDriveFileMove />,
       handleClick: () => ({}),
       isVisible: true
     },
     {
-      id: 7,
+      id: 'duplicate_tasks',
       label: 'Duplicate tasks',
       icons: <HiOutlineDocumentDuplicate />,
       handleClick: (e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
@@ -139,63 +139,63 @@ export default function TaskMenu() {
       isVisible: true
     },
     {
-      id: 8,
+      id: 'move_tasks',
       label: 'Move tasks or add tasks in multiple Lists',
       icons: <TbFolderX />,
       handleClick: () => ({}),
       isVisible: true
     },
     {
-      id: 9,
+      id: 'set_dates',
       label: 'Set Dates',
       icons: <MdDateRange />,
       handleClick: () => ({}),
       isVisible: true
     },
     {
-      id: 10,
+      id: 'priority',
       label: 'Priority',
       icons: <PriorityDropdown taskCurrentPriority="low" />,
       handleClick: () => ({}),
       isVisible: true
     },
     {
-      id: 11,
+      id: 'dependencies',
       label: 'Dependencies',
       icons: <GiStoneStack />,
       handleClick: () => ({}),
       isVisible: true
     },
     {
-      id: 12,
+      id: 'merge_tasks',
       label: 'Merge tasks',
       icons: <BiMerge />,
       handleClick: () => ({}),
       isVisible: true
     },
     {
-      id: 13,
+      id: 'task_linking',
       label: 'Task Linking',
       icons: <GiJusticeStar />,
       handleClick: () => ({}),
       isVisible: true
     },
     {
-      id: 14,
+      id: 'set_custom_fields',
       label: 'Set Custom Fields',
       icons: <BiEdit />,
       handleClick: () => ({}),
       isVisible: true
     },
     {
-      id: 15,
+      id: 'archive_tasks',
       label: 'Archive tasks',
       icons: <HiInbox />,
       handleClick: () => ({}),
       isVisible: true
     },
     {
-      id: 16,
+      id: 'delete',
       icons: <MdDeleteForever />,
       label: 'Delete',
       handleClick: () => {
@@ -246,7 +246,7 @@ export default function TaskMenu() {
 
         <div className="flex">
           {TaskIcons.map((menu) => (
-            <>
+            <Fragment key={menu.id}>
               <ToolTip className="pt-2" title={menu.label} placement="bottom">
                 <p
                   className="flex items-center px-2 cursor-pointer mt-0 text-white text-lg"
@@ -256,7 +256,7 @@ export default function TaskMenu() {
                   {menu.icons}
                 </p>
               </ToolTip>
-            </>
+            </Fragment>
           ))}
         </div>
 

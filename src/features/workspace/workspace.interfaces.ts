@@ -112,7 +112,7 @@ export interface ITeamMembersRes {
 }
 
 export interface IRecorderLastMemory {
-  activeTabId: number | undefined;
+  activeTabId: string | undefined;
   hubId: string | undefined;
   subhubId: string | undefined;
   listId: string | undefined;
@@ -121,7 +121,7 @@ export interface IRecorderLastMemory {
 }
 
 export interface ITimerLastMemory {
-  activeTabId: number | undefined;
+  activeTabId: string | undefined;
   hubId: string | undefined | null;
   subhubId: string | undefined | null;
   listId: string | undefined | null;

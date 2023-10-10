@@ -10,7 +10,7 @@ interface TabsProps {
   isMinified: boolean;
 }
 
-const pilotFromLS = JSON.parse(localStorage.getItem('pilot') || '""') as { tabOrder: number[]; showTabLabel: boolean };
+const pilotFromLS = JSON.parse(localStorage.getItem('pilot') || '""') as { tabOrder: string[]; showTabLabel: boolean };
 
 const tabIdsFromLS = pilotFromLS.tabOrder || [];
 
@@ -22,7 +22,7 @@ export default function MinTabs({ tabs, isMinified }: TabsProps) {
     [tabs, tabIdsFromLS]
   );
 
-  const handleClick = (tabId: number) => {
+  const handleClick = (tabId: string) => {
     dispatch(setActiveTabId(activeTabId === tabId ? undefined : tabId));
   };
 
