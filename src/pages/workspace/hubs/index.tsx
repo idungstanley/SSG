@@ -32,6 +32,8 @@ import { Modal } from '../../../components/Pilot/components/HotKeys/components/M
 import { Capitalize } from '../../../utils/NoCapWords/Capitalize';
 import EverythingTasks from './components/EverythingTasks';
 import { pilotTabs } from '../../../app/constants/pilotTabs';
+import { FaHandsHelping } from 'react-icons/fa';
+import { APP_HR, APP_TASKS } from '../../../app/constants/app';
 
 function Hubs() {
   const dispatch = useDispatch();
@@ -44,6 +46,9 @@ function Hubs() {
 
   const [showModal, setShowModal] = useState<boolean>(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const initialActivePlaceId: string = (JSON.parse(localStorage.getItem('activePlaceIdLocale') as string) ||
+    null) as string;
+  const placeHubType = initialActivePlaceId == '8' ? APP_HR : APP_TASKS;
 
   const toggleSearch = (e: React.MouseEvent<SVGElement, MouseEvent>) => {
     e.stopPropagation();
@@ -78,33 +83,47 @@ function Hubs() {
     }
   };
 
-  const configForDropdown = [
-    {
-      label: 'Hub',
-      icon: <AddHubIcon />,
-      onclick: () => handleNavigateTask(EntityType.hub)
-    },
-    {
-      label: 'SubHub',
-      icon: <AddHubIcon />,
-      onclick: () => handleNavigateTask(EntityType.subHub)
-    },
-    {
-      label: 'Wallet',
-      icon: <AddWalletIcon />,
-      onclick: () => handleNavigateTask(EntityType.wallet)
-    },
-    {
-      label: 'Subwallet',
-      icon: <AddWalletIcon />,
-      onclick: () => handleNavigateTask(EntityType.subWallet)
-    },
-    {
-      label: 'List',
-      icon: <AddListIcon />,
-      onclick: () => handleNavigateTask(EntityType.list)
-    }
-  ];
+  const configForDropdown =
+    placeHubType == APP_HR
+      ? [
+          {
+            label: 'Hub',
+            icon: <AddHubIcon />,
+            onclick: () => handleNavigateTask(EntityType.hub)
+          },
+          {
+            label: 'SubHub',
+            icon: <AddHubIcon />,
+            onclick: () => handleNavigateTask(EntityType.subHub)
+          }
+        ]
+      : [
+          {
+            label: 'Hub',
+            icon: <AddHubIcon />,
+            onclick: () => handleNavigateTask(EntityType.hub)
+          },
+          {
+            label: 'SubHub',
+            icon: <AddHubIcon />,
+            onclick: () => handleNavigateTask(EntityType.subHub)
+          },
+          {
+            label: 'Wallet',
+            icon: <AddWalletIcon />,
+            onclick: () => handleNavigateTask(EntityType.wallet)
+          },
+          {
+            label: 'Subwallet',
+            icon: <AddWalletIcon />,
+            onclick: () => handleNavigateTask(EntityType.subWallet)
+          },
+          {
+            label: 'List',
+            icon: <AddListIcon />,
+            onclick: () => handleNavigateTask(EntityType.list)
+          }
+        ];
 
   const taskCreate = [
     {
@@ -117,10 +136,16 @@ function Hubs() {
   return (
     <>
       <PlaceItem
-        label="TASKS"
-        id="2"
+        label={placeHubType == APP_HR ? 'Also HR' : 'Tasks'}
+        id={initialActivePlaceId}
         isActiveLayoutCondition={!(!!listId || !!hubId || !!walletId)}
-        icon={<BsListCheck className="w-4 h-4" style={{ color: '#BF00FFB2' }} />}
+        icon={
+          placeHubType == APP_TASKS ? (
+            <BsListCheck className="w-4 h-4" style={{ color: '#BF00FFB2' }} />
+          ) : (
+            <FaHandsHelping className="w-4 h-4" />
+          )
+        }
         midContent={<BiSearch onClick={(e) => toggleSearch(e)} className="w-4 h-4" style={{ color: '#BF00FFB2' }} />}
         searchStatus={isSearchActive}
         rightContent={
@@ -129,7 +154,7 @@ function Hubs() {
           </div>
         }
       />
-      <EverythingTasks />
+      {placeHubType == APP_TASKS ? <EverythingTasks /> : null}
       <Modal setShowModal={setShowModal} position="left-44 top-72" showModal={showModal} width="w-64">
         {configForDropdown.map((item, index) => (
           <React.Fragment key={index}>
@@ -154,7 +179,7 @@ function Hubs() {
         anchorEl={anchorEl}
         handleClose={handleClose}
       />
-      <ActiveTress />
+      <ActiveTress placeHubType={placeHubType} />
       <SubHubModal />
       <SubWalletModal />
       <ListModal />

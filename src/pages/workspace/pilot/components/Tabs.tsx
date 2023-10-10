@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import communicationIcon from '../../../../assets/branding/communication.png';
 import automationIcon from '../../../../assets/branding/automation.png';
 import compactArrowIcon from '../../../../assets/branding/compact-arrow.png';
@@ -15,7 +15,6 @@ import { SiHotjar } from 'react-icons/si';
 import { IoMdRemoveCircle } from 'react-icons/io';
 import DetailsSubTab from './details/DetailsSubTab';
 import CommunicationSubTab from './communication/CommunicationSubTab';
-import TimeSubTab from './timeClock/subtabs/TimeSubTab';
 import TabDrag from './TabDrags';
 
 import {
@@ -70,14 +69,7 @@ export const pilotOptions = [
     isVisible: false
   },
   {
-    id: pilotTabs.TIME_CLOCK,
-    name: 'TimeClock',
-    icon: <AiOutlineFieldTime />,
-    subTab: <TimeSubTab />,
-    isVisible: false
-  },
-  {
-    id: 'checklist',
+    id: pilotTabs.CHECKLISTS,
     name: 'Checklist',
     icon: <GiChecklist />,
     isVisible: false

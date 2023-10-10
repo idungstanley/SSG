@@ -9,7 +9,7 @@ const generateViewsUrl = (id: string, item?: IList | IWallet | IHub | IFavorites
   if (!id) return;
 
   if (entityType === EntityType.hub || (item as IFavorites).model_type === EntityType.hub) {
-    if (initialActivePlaceId === 8) {
+    if (initialActivePlaceId == 8) {
       entityTypeAndId = `hr/h/${id}`;
     } else {
       entityTypeAndId =

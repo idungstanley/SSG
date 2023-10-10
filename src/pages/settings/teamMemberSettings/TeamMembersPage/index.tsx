@@ -12,7 +12,7 @@ export default function TeamMembersPage() {
 
   const { teamMembersPaginationPage, teamMembersSearchQuery } = useAppSelector((state) => state.teamMember);
 
-  const { status } = useGetTeamMembers({
+  const { data, status } = useGetTeamMembers({
     page: teamMembersPaginationPage,
     query: teamMembersSearchQuery
   });
@@ -44,7 +44,7 @@ export default function TeamMembersPage() {
             <Spinner size={8} color="#0F70B7" />
           </div>
         ) : (
-          <Table />
+          <div>{data && <Table teamMembers={data} />}</div>
         )}
       </main>
     </div>
