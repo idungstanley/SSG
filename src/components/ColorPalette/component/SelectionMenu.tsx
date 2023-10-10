@@ -9,6 +9,8 @@ import { TbSubtask } from 'react-icons/tb';
 
 interface SelectionProps {
   isVisible: true;
+  dismissPopUp: () => void;
+  selectedCount: number;
 }
 
 const TaskIcons = [
@@ -49,7 +51,7 @@ const TaskIcons = [
   }
 ];
 
-export default function SelectionMenu({ isVisible }: SelectionProps) {
+export default function SelectionMenu({ isVisible, dismissPopUp, selectedCount }: SelectionProps) {
   return (
     <div className={`overflow-hidden ${isVisible ? 'slide-in' : 'slide-out'} z-100 `}>
       <div
@@ -58,7 +60,7 @@ export default function SelectionMenu({ isVisible }: SelectionProps) {
       >
         <div className="pl-5 space-x-2">
           <RoundedCheckbox styles="rounded-full text-alsoit-purple-300" isChecked={true} onChange={() => ({})} />
-          <span className="text-xs text-white">Selected</span>
+          <span className="text-xs text-white">{selectedCount} Selected</span>
         </div>
 
         <div className="flex">
@@ -84,7 +86,7 @@ export default function SelectionMenu({ isVisible }: SelectionProps) {
       <div className="flex justify-center">
         <p
           className="p-2 -mt-1 text-white bg-gray-800 border border-white cursor-pointer rounded-3xl"
-          onClick={() => ({})}
+          onClick={() => dismissPopUp()}
         >
           <span className="mr-2 text-gray-300">X</span>
           Dismiss
