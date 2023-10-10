@@ -18,6 +18,56 @@ function TaskShortCutModal() {
     setOpen(false);
   };
 
+  const shortcutTabs1 = [
+    { text: 'Slash Commands (works when creating tasks and when viewing tasks)', key: '/' },
+    {
+      text: ' Assign task to self (works when hovering over tasks in List and Board views as well as when you are viewing a task) ',
+      key: 'm'
+    },
+    { text: 'Show/hide sidebar', key: 'q' },
+    { text: 'In task view, navigate left/right between tasks', key: 'Ctr ^ ', key2: 'Shift ^', key3: 'or ^ ' }
+  ];
+  const shortcutTabs2 = [
+    { text: 'Back to Task/Page views', key: 'l' },
+    {
+      text: ' inbox',
+      key: 'i'
+    },
+    { text: 'Notifications (press Space to reload notifications)', key: 'n' },
+    {
+      text: ' Reminder',
+      key: 'r'
+    },
+    {
+      text: ' Home',
+      key: 'h'
+    },
+    {
+      text: ' Dashboard',
+      key: 'd'
+    },
+    {
+      text: ' Open search',
+      key: 's'
+    },
+    {
+      text: ' Create task',
+      key: 't'
+    },
+    {
+      text: ' Open notepad',
+      key: 'p'
+    },
+    {
+      text: ' Close any task or window',
+      key: 'Esc'
+    },
+    {
+      text: ' Clear filters',
+      key: '-'
+    }
+  ];
+
   return (
     <div>
       <Button variant="contained" color="primary" onClick={openModal}>
@@ -29,76 +79,35 @@ function TaskShortCutModal() {
 
         <DialogContent>
           <div className="flex flex-col gap-7">
-            <div className="flex items-center space-x-2">
-              <p className="flex justify-center items-center shadow-md border-2 border-gray-200 w-12 h-12">/</p>
-              <p>Slash Commands (works when creating tasks and when viewing tasks)</p>
-            </div>
-
-            <div className="flex items-center space-x-2">
-              <p className="flex justify-center items-center shadow-md border-2 border-gray-200 w-16 h-12">m</p>
-              <p>
-                Assign task to self (works when hovering over tasks in List and Board views as well as when you are
-                viewing a task)
-              </p>
-            </div>
-
-            <div className="flex items-center space-x-2">
-              <p className="flex justify-center items-center shadow-md border-2 border-gray-200 w-12 h-12">q</p>
-              <p>Show/hide sidebar</p>
-            </div>
-
-            <div className="flex items-center space-x-2">
-              <p className="flex justify-center items-center shadow-md border-2 border-gray-200 w-16 h-11"> Ctr ^ </p>
-              <p className="flex justify-center items-center shadow-md border-2 border-gray-200 w-16 h-11"> Shift ^ </p>
-              <p className="flex justify-center items-center shadow-md border-2 border-gray-200 w-16 h-11"> or ^ </p>
-              <p>In task view, navigate left/right between tasks</p>
-            </div>
+            {shortcutTabs1.map((tab) => (
+              <div key={tab.key} className="flex items-center space-x-2">
+                <p className="flex justify-center items-center shadow-md border-2 border-gray-200 w-12 h-12">
+                  <p>{tab.key}</p>
+                </p>
+                {tab.key2 && tab.key3 && (
+                  <>
+                    <p className="flex justify-center items-center shadow-md border-2 border-gray-200 w-12 h-12">
+                      <p>{tab.key2}</p>
+                    </p>
+                    <p className="flex justify-center items-center shadow-md border-2 border-gray-200 w-12 h-12">
+                      <p>{tab.key3}</p>
+                    </p>
+                  </>
+                )}
+                <p>{tab.text}</p>
+              </div>
+            ))}
 
             <h1>Dashboard Navigation</h1>
-            <div className="flex items-center space-x-2">
-              <p className="flex justify-center items-center shadow-md border-2 border-gray-200 w-12 h-12">l</p>
-              <p>Back to Task/Page views</p>
-            </div>
-            <div className="flex items-center space-x-2">
-              <p className="flex justify-center items-center shadow-md border-2 border-gray-200 w-12 h-12">i</p>
-              <p>inbox</p>
-            </div>
-            <div className="flex items-center space-x-2">
-              <p className="flex justify-center items-center shadow-md border-2 border-gray-200 w-12 h-12">n</p>
-              <p>Notifications (press Space to reload notifications)</p>
-            </div>
-            <div className="flex items-center space-x-2">
-              <p className="flex justify-center items-center shadow-md border-2 border-gray-200 w-12 h-12">r</p>
-              <p>Reminder</p>
-            </div>
-            <div className="flex items-center space-x-2">
-              <p className="flex justify-center items-center shadow-md border-2 border-gray-200 w-12 h-12">h</p>
-              <p>Home</p>
-            </div>
-            <div className="flex items-center space-x-2">
-              <p className="flex justify-center items-center shadow-md border-2 border-gray-200 w-12 h-12">d</p>
-              <p>Dashboard</p>
-            </div>
-            <div className="flex items-center space-x-2">
-              <p className="flex justify-center items-center shadow-md border-2 border-gray-200 w-12 h-12">s</p>
-              <p>Open search</p>
-            </div>
-            <div className="flex items-center space-x-2">
-              <p className="flex justify-center items-center shadow-md border-2 border-gray-200 w-12 h-12">t</p>
-              <p>Create task</p>
-            </div>
-            <div className="flex items-center space-x-2">
-              <p className="flex justify-center items-center shadow-md border-2 border-gray-200 w-12 h-12">p</p>
-              <p>Open notepad</p>
-            </div>
-            <div className="flex items-center space-x-2">
-              <p className="flex justify-center items-center shadow-md border-2 border-gray-200 w-12 h-12">Esc</p>
-              <p>Close any task or window</p>
-            </div>
-            <div className="flex items-center space-x-2">
-              <p className="flex justify-center items-center shadow-md border-2 border-gray-200 w-12 h-12">-</p>
-              <p>Clear filters</p>
-            </div>
+
+            {shortcutTabs2.map((tab) => (
+              <div key={tab.key} className="flex items-center space-x-2">
+                <p className="flex justify-center items-center shadow-md border-2 border-gray-200 w-12 h-12">
+                  {tab.key}
+                </p>
+                <p>{tab.text}</p>
+              </div>
+            ))}
           </div>
         </DialogContent>
         <DialogActions>
