@@ -11,9 +11,17 @@ interface HeaderProps {
   onClickXIcon: VoidFunction;
   showSearch: boolean;
   children: ReactNode;
+  activeItemName: string | null | undefined;
 }
 
-export function Header({ onReset, onToggleSearch, onClickXIcon, showSearch, children }: HeaderProps) {
+export function Header({
+  onReset,
+  onToggleSearch,
+  onClickXIcon,
+  showSearch,
+  children,
+  activeItemName = ''
+}: HeaderProps) {
   const { blacklistIds } = useAppSelector(selectCalendar);
 
   return (
@@ -25,7 +33,7 @@ export function Header({ onReset, onToggleSearch, onClickXIcon, showSearch, chil
           setChecked={(e) => onReset(e)}
         />
 
-        <p>Hub 1</p>
+        <p className="capitalize">{activeItemName} Users</p>
       </div>
 
       <div
