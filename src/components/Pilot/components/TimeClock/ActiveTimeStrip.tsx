@@ -30,7 +30,7 @@ export function ActiveTimeStrip({ timeData }: Props) {
         <span className="text-alsoit-text-xi font-semibold w-20 flex justify-center items-center">
           <RealTime />
         </span>
-        <span className="text-alsoit-text-xi font-semibold w-20 flex justify-center items-center">
+        <span className="text-alsoit-text-md font-semibold w-24 flex justify-center items-center">
           {dayjs(entry.start_date).format('ddd D, HH:mm a')}
         </span>
       </div>
