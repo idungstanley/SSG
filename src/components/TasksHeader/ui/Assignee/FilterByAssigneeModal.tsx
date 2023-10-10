@@ -10,6 +10,7 @@ import { generateFilter } from '../Filter/lib/filterUtils';
 import { EllipsisHorizontalIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import AssigneeIcon from '../../../../assets/icons/Assignee';
 import { VerticalScroll } from '../../../ScrollableContainer/VerticalScroll';
+import AvatarWithImage from '../../../avatar/AvatarWithImage';
 
 const unassigned = {
   color: '#626262',
@@ -156,14 +157,19 @@ export default function FilterByAssigneeModal() {
                   onClick={() => onClickMember(member.id, member.user.name)}
                 >
                   <div className="flex items-center space-x-3">
-                    <AvatarWithInitials
-                      initials={member.user.initials}
-                      textColor={'white'}
-                      height="h-8"
-                      width="w-8"
-                      backgroundColour={member.user.color}
-                      textSize={'8px'}
-                    />
+                    {member.user.avatar_path ? (
+                      <AvatarWithImage image_path={member.user.avatar_path} height="h-8" width="w-8" />
+                    ) : (
+                      <AvatarWithInitials
+                        initials={member.user.initials}
+                        textColor={'white'}
+                        height="h-8"
+                        width="w-8"
+                        backgroundColour={member.user.color}
+                        textSize={'8px'}
+                      />
+                    )}
+
                     <div className="flex flex-col text-left">
                       <p className="capitalize text-alsoit-text-lg text-alsoit-gray-300">{member.user.name}</p>
                       <p className="text-alsoit-text-md">{member.user.email}</p>
