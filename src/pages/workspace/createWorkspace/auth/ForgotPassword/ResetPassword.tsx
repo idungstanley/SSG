@@ -52,7 +52,7 @@ function ResetPassword() {
     <Wrapper>
       <div className="relative mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="flex flex-col px-4 py-8 bg-white shadow-lg sm:rounded-lg sm:px-10 gap-7">
-          <h2 className="text-2xl font-bold text-center">Forgot your password?</h2>
+          <h2 className="text-2xl font-bold text-center">Create a new password!</h2>
           <Form onSubmit={(values) => onSubmit(values)} formikConfig={formikConfig} />
           <button className="text-primary-600" onClick={() => navigate('/auth/login')}>
             Or Sign in
