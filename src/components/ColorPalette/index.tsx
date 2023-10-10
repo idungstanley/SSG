@@ -130,6 +130,7 @@ export default function PaletteManager({
     setOpen(false);
     dispatch(setPaletteDropDown({ ...paletteDropdown, show: false }));
     dispatch(setListPaletteColor({ innerColour: 'white', outerColour: 'black' }));
+    dispatch(setSelectedListColours([]));
   };
 
   const handleCancel = () => {
@@ -139,6 +140,7 @@ export default function PaletteManager({
       setOpen(false);
       dispatch(setPaletteDropDown({ ...paletteDropdown, show: false }));
     }
+    dispatch(setSelectedListColours([]));
   };
 
   const handleOutterFrameClick = () => {
@@ -280,14 +282,14 @@ export default function PaletteManager({
         style={{ borderRadius: '5px', width: '400px' }}
       >
         <div className="z-50 flex flex-col w-full">
-          {selectListColours.length > 0 && (
+          {selectListColours.length > 0 && selectedViews === paletteViews.LIST && (
             <SelectionMenu
               isVisible={selectListColours.length > 0}
               dismissPopUp={handleDismissPopup}
               selectedCount={selectListColours.length}
             />
           )}
-          {!isSearch && selectListColours.length === 0 && (
+          {!isSearch && selectListColours.length === 0 && paletteViews.BOARD && (
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center justify-between gap-2 bg-gray-400 h-9">
                 <p className="justify-center ml-2 text-white">COLOUR LIBRARY</p>
