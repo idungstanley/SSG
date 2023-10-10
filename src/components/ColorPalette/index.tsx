@@ -261,7 +261,7 @@ export default function PaletteManager({
       PaperProps={{
         style: {
           borderRadius: '12px',
-          backgroundColor: 'white',
+          backgroundColor: 'white'
         }
       }}
       sx={{
