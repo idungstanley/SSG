@@ -13,7 +13,6 @@ import { useDispatch } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 import ExtendedBar from '../../../../../pages/explorer/components/Sidebar';
 import PlaceItem from './PlaceItem';
-import AlsoHr from '../../../../../pages/workspace/alsoHr';
 import Commerce from '../../../../../pages/workspace/commerce';
 import RoutePlanner from '../../../../../pages/workspace/routePlanner';
 import Email from '../../../../../pages/workspace/email';
@@ -90,7 +89,7 @@ export const initialPlaces: Place[] = [
   {
     name: 'Also HR',
     id: '8',
-    place: <AlsoHr />,
+    place: <Hubs />,
     icon: <AlsoHrIcon />
   },
   {

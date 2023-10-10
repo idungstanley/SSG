@@ -1,8 +1,6 @@
 import dayjs, { Dayjs } from 'dayjs';
-import { teamGroups, teamMember } from '../../pages/workspace/tasks/timeclock/entryLists/EntryList';
 import { ICustomField, ImyTaskData } from './taskSlice';
 import { ITeamMembersAndGroup } from '../settings/teamMembersAndGroups.interfaces';
-import { Header } from '../../components/Pilot/components/TimeClock/ClockLog';
 import { IField, ITask_statuses } from '../list/list.interfaces';
 import { RecurFrequency, TypeOptionsProps } from '../../components/DatePicker/RecurringTypes';
 import { FilterWithId } from '../../components/TasksHeader/ui/Filter/types/filters';
@@ -194,6 +192,24 @@ export interface ITaskRes {
   };
 }
 
+export interface teamMember {
+  id: string;
+  user: {
+    id: string;
+    initials: string;
+    name: string;
+    color: string;
+    avatar_path: string;
+  };
+}
+
+export interface teamGroups {
+  id: string;
+  name: string;
+  color: string;
+  initials: string;
+}
+
 export interface IEntries {
   id: string;
   duration: number;
@@ -224,6 +240,13 @@ export interface ITimerDetails {
   isBillable: boolean;
   description: string;
 }
+
+export type Header = {
+  title: string;
+  hidden: boolean;
+  value: string;
+  sorted: boolean;
+};
 
 export interface IDuration {
   s: number;

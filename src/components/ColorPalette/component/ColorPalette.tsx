@@ -18,7 +18,7 @@ export default function ColorPalette({ handleClick, activeColor }: PaletteProps)
   const colorBoxes = palette.map((c) => (
     <div
       key={c}
-      className={cl(activeColor === c ? 'border rounded-md flex items-center justify-center w-6 h-6' : '')}
+      className={cl(activeColor === c ? 'border rounded-md flex items-center justify-center' : '', 'w-6 h-6')}
       style={{ borderColor: activeColor === c ? `${c}` : '' }}
       onClick={() => handleClick(c)}
     >
@@ -31,7 +31,7 @@ export default function ColorPalette({ handleClick, activeColor }: PaletteProps)
   ));
 
   return (
-    <button type="button" className="grid grid-cols-8 gap-3.5 p-2 font-semibold">
+    <button type="button" className="grid grid-cols-8 gap-3.5 p-2 font-semibold bg-white w-full rounded">
       {colorBoxes}
     </button>
   );

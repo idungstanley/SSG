@@ -42,7 +42,7 @@ export default function AddAccess({ type, actualMemberIds }: AddAccessProps) {
       <SelectMenuTeamMembers
         teamMembers={membersWithoutActive.map((i) => ({
           id: i.id,
-          name: i.name || i.user.name,
+          name: i.user.name,
           email: i.user?.email,
           accessLevel: i.id,
           type

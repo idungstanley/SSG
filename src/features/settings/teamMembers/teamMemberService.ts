@@ -56,8 +56,8 @@ export const useGetTeamMember = (teamMemberId: string) => {
 // Deactivate team member service
 export const deactivateTeamMemberService = async (data: { teamMemberId: string }) => {
   const response = requestNew<{ data: { team_member: ITeamMember } }>({
-    url: `/settings/team-members/${data.teamMemberId}/deactivate`,
-    method: 'POST'
+    url: `/settings/team-members/${data.teamMemberId}?status=disabled`,
+    method: 'DELETE'
   });
   return response;
 };
