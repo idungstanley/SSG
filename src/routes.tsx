@@ -145,7 +145,6 @@ export const routes = (user: IUser | null) => {
               path: '',
               element: <WallchartPage />
             },
-
             {
               path: 'types',
               element: <LeaveTypesPage />
