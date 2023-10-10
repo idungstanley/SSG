@@ -81,6 +81,7 @@ interface workspaceState {
   draggableActiveStatusId: string | null;
   isFavoritePinned: boolean;
   activeHotkeyIds: string[];
+  nestedTimeEntityId: string | null;
 }
 
 const initialState: workspaceState = {
@@ -144,7 +145,8 @@ const initialState: workspaceState = {
   workSpaceSettingsObj: undefined,
   draggableActiveStatusId: null,
   isFavoritePinned: false,
-  activeHotkeyIds: hotkeyIdsFromLS
+  activeHotkeyIds: hotkeyIdsFromLS,
+  nestedTimeEntityId: null
 };
 
 export const wsSlice = createSlice({
@@ -363,6 +365,9 @@ export const wsSlice = createSlice({
     },
     setWorkSpaceSettingsObj(state, action: PayloadAction<WorkSpaceSettingsUpdateRes>) {
       state.workSpaceSettingsObj = action.payload;
+    },
+    setNestedTimeEntityId(state, action: PayloadAction<string | null>) {
+      state.nestedTimeEntityId = action.payload;
     }
   }
 });
@@ -427,7 +432,8 @@ export const {
   setIsFavoritePinned,
   setWorkSpaceSettingsObj,
   setDraggableActiveStatusId,
-  setActiveHotkeyIds
+  setActiveHotkeyIds,
+  setNestedTimeEntityId
 } = wsSlice.actions;
 
 export default wsSlice.reducer;

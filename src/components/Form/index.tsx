@@ -2,6 +2,7 @@ import React from 'react';
 import { useFormik } from 'formik';
 import InputWithValidation from '../input/InputWithValidation';
 import { formikConfig } from '../Comments/components/componentType';
+import { Capitalize } from '../../utils/NoCapWords/Capitalize';
 
 interface checkboxType {
   id: string;
@@ -11,7 +12,7 @@ interface checkboxType {
 }
 
 interface formType {
-  onSubmit: (values: { email: string; password: string; name?: string }) => void;
+  onSubmit: (values: { email?: string; password?: string; name?: string }) => void;
   formikConfig: formikConfig;
   checkboxConfig?: checkboxType[];
 }
@@ -35,8 +36,8 @@ export default function Form({ onSubmit, formikConfig, checkboxConfig }: formTyp
         <InputWithValidation
           key={i}
           id={i}
-          type={i === 'name' ? 'text' : i}
-          placeholder={`Enter ${i}`}
+          type={i === 'name' ? 'text' : i === 'confirm password' ? 'password' : i}
+          placeholder={i !== 'confirm password' ? `Enter ${i}` : Capitalize(i)}
           {...formik.getFieldProps(i)}
           isFocused={Object.keys(formik.values).indexOf(i) === 0}
           message={
@@ -45,7 +46,7 @@ export default function Form({ onSubmit, formikConfig, checkboxConfig }: formTyp
               : undefined
           }
           handleSubmit={formik.submitCount}
-          isNewPassword={formikConfig.buttonTitle === 'Sign Up'}
+          isNewPassword={formikConfig.buttonTitle === 'Sign Up' || formikConfig.buttonTitle === 'Create Password'}
         />
       ))}
 

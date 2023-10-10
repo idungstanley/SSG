@@ -13,6 +13,7 @@ import CreateTree from '../../pages/workspace/hubs/components/ActiveTree/CreateT
 import { setFilteredResults } from '../../features/search/searchSlice';
 import { IHub } from '../../features/hubs/hubs.interfaces';
 import { pilotTabs } from '../../app/constants/pilotTabs';
+import { TIME_TABS } from '../../utils/Constants/TimeClockConstants';
 
 interface ActiveTreeSearchProps {
   closeDropdown?: React.Dispatch<React.SetStateAction<boolean>>;
@@ -60,7 +61,7 @@ export default function ActiveTreeSearch({ closeDropdown, option }: ActiveTreeSe
   }, [hubs, allHubs]);
 
   useEffect(() => {
-    if (option === 'taskDuplicate') setToggleTree(true);
+    if (option === 'taskDuplicate' || option === TIME_TABS.nestedEntities) setToggleTree(true);
   }, []);
 
   const handleOpenNewHub = (id: string) => {
@@ -94,7 +95,7 @@ export default function ActiveTreeSearch({ closeDropdown, option }: ActiveTreeSe
 
   return (
     <div className="relative">
-      {option !== 'taskDuplicate' && (
+      {option !== 'taskDuplicate' && option !== TIME_TABS.nestedEntities && (
         <button
           type="button"
           className="relative flex items-center w-full p-1 px-1 mt-2 mb-1 transition duration-300 rounded-md cursor-pointer group"

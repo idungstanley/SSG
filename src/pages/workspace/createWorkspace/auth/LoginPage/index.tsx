@@ -47,10 +47,10 @@ function LoginPage() {
     }
   }, [data]);
 
-  const onSubmit = (values: { email: string; password: string }) => {
+  const onSubmit = (values: { email?: string; password?: string }) => {
     onLogin({
-      email: values.email,
-      password: values.password
+      email: values.email || '',
+      password: values.password || ''
     });
   };
 

@@ -62,8 +62,8 @@ export default function NavigationItems({
   const [countOfItemToShow, setCountOfItemToShow] = useState<number>(3);
   const [showDropdown, setShowDropdown] = useState<null | HTMLSpanElement | HTMLDivElement>(null);
 
-  const workspaceName = workspaceData?.data?.workspace.name;
-  const workspaceColor = workspaceData?.data?.workspace.color as string;
+  const workspaceName = workspaceData?.data?.workspace?.name;
+  const workspaceColor = workspaceData?.data?.workspace?.color as string;
 
   const idsFromLS = JSON.parse(localStorage.getItem('navItem') || '[]') as string[];
 

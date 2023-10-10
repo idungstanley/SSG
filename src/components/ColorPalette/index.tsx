@@ -98,7 +98,6 @@ export default function PaletteManager({
   const [isAdvanceSearch, setIsAdvanceSearch] = useState<boolean>(false);
   const [showListShapes, setShowListShapes] = useState<boolean>(false);
   const [colorName, setColorName] = useState<string>('Missing Color');
-
   const { paletteId, paletteType } = paletteDropdown;
   const { rgb } = color || {};
   const updateColor = useCallback((color: ColorResult) => setColor(color), []);
@@ -235,9 +234,7 @@ export default function PaletteManager({
   ];
 
   const selectedElement = views.find((items) => items.label === selectedViews)?.element;
-
   const filteredKeys = ['hex', 'hsl', 'rgb'];
-
   const filteredObject = Object.fromEntries(Object.entries(color).filter(([key]) => filteredKeys.includes(key)));
   const handleColorTypeSwitch = () => {
     switch (colorType) {
@@ -259,14 +256,17 @@ export default function PaletteManager({
       TransitionComponent={Fade}
       anchorOrigin={{
         vertical: cords?.top || 'center',
-        horizontal: 15
+        horizontal: 10
       }}
       PaperProps={{
         style: {
           borderRadius: '12px',
-          backgroundColor: 'white',
-          padding: '0px'
+          backgroundColor: 'white'
         }
+      }}
+      sx={{
+        pt: 0,
+        pb: 0
       }}
     >
       <div
