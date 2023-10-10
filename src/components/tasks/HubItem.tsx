@@ -63,7 +63,7 @@ export default function HubItem({
   isExtendedBar,
   handleClick,
   handleLocation,
-  placeHubType = 'Tasks'
+  placeHubType = APP_TASKS
 }: TaskItemProps) {
   const dispatch = useAppDispatch();
   const { hubId, subhubId } = useParams();
