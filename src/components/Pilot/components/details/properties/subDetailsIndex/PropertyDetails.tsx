@@ -33,9 +33,8 @@ export interface tagItem {
 }
 interface PropertyDetailsProps {
   Details?: IHubDetails | ITaskFullList | IListDetails | IWalletDetails;
-  type?: string;
 }
-export default function PropertyDetails({ Details, type }: PropertyDetailsProps) {
+export default function PropertyDetails({ Details }: PropertyDetailsProps) {
   const queryClient = useQueryClient();
 
   const [toggleSubTask, setToggleSubTask] = useState(false);

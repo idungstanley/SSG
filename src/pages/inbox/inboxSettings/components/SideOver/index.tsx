@@ -79,8 +79,8 @@ export default function SideOver({ isGroups }: SideOverProps) {
             <AvatarWithInitials
               height="h-6"
               width="w-6"
-              initials={item.initials}
-              backgroundColour={item.colour}
+              initials={item.user.initials}
+              backgroundColour={item.color}
               textSize="text-xs"
             />
           );

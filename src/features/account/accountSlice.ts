@@ -5,9 +5,6 @@ import { STORAGE_KEYS } from '../../app/config/dimensions';
 
 const showPreviewFromLS = localStorage.getItem('showPreview') as string;
 
-// const sidebarFromLS: { sidebarWidth: number; showSidebar: boolean } =
-//   JSON.parse(localStorage.getItem('sidebar') || '""');
-
 const sidebarFromLS = localStorage.getItem('sidebar');
 //get sidebar width from local storage
 const sidebarWidthFromLS = JSON.parse(localStorage.getItem(STORAGE_KEYS.SIDEBAR_WIDTH) || '""') as number;
