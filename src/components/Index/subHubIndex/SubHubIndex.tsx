@@ -10,6 +10,7 @@ import { DragOverlay } from '@dnd-kit/core';
 import HubItemOverlay from '../../tasks/HubItemOverLay';
 import { EntityType } from '../../../utils/EntityTypes/EntityType';
 import { Hub } from '../../../pages/workspace/hubs/components/ActiveTree/activetree.interfaces';
+import { APP_TASKS } from '../../../app/constants/app';
 
 interface ISubHubIndexProps {
   data: Hub[];
@@ -69,7 +70,7 @@ export default function SubHubIndex({ data }: ISubHubIndexProps) {
               handleLocation={handleLocation}
               type="subhub"
               isExtendedBar={true}
-              placeHubType="Tasks"
+              placeHubType={APP_TASKS}
             />
             {extendedBarOpenedEntitiesIds.includes(subhub.id) ? <SHubDropdownList parentId={subhub.id} /> : null}
           </div>

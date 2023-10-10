@@ -31,6 +31,7 @@ import ActiveBarIdentification from './Component/ActiveBarIdentification';
 import ActiveBackground from './Component/ActiveBackground';
 import { useAbsolute } from '../../hooks/useAbsolute';
 import { IHub } from '../../features/hubs/hubs.interfaces';
+import { APP_HR, APP_TASKS } from '../../app/constants/app';
 
 interface TaskItemProps {
   item: {
@@ -274,7 +275,7 @@ export default function HubItem({
               onClick={(e) => e.stopPropagation()}
               ref={menuRef}
             >
-              {(placeHubType == 'Also HR' && !item.parent_id) || placeHubType == 'Tasks' ? (
+              {(placeHubType == APP_HR && !item.parent_id) || placeHubType == APP_TASKS ? (
                 <span onClick={() => handleItemAction(item.id, item.name)} className="cursor-pointer">
                   <PlusIcon />
                 </span>

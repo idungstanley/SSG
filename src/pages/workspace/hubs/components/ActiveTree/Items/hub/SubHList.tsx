@@ -19,6 +19,7 @@ import HubItemOverlay from '../../../../../../../components/tasks/HubItemOverLay
 import { DragOverlay } from '@dnd-kit/core';
 import { generateViewsUrl } from '../../../../../../../utils/generateViewsUrl';
 import { IHub } from '../../../../../../../features/hubs/hubs.interfaces';
+import { APP_TASKS } from '../../../../../../../app/constants/app';
 
 export default function SubHubList({ hubs, placeHubType }: ListProps) {
   const dispatch = useAppDispatch();
@@ -89,7 +90,7 @@ export default function SubHubList({ hubs, placeHubType }: ListProps) {
               zNumber="4"
               placeHubType={placeHubType}
             />
-            {showSidebar && placeHubType == 'Tasks' ? (
+            {showSidebar && placeHubType == APP_TASKS ? (
               <div>
                 {hub.wallets.length && openedEntitiesIds.includes(hub.id) ? (
                   <WList

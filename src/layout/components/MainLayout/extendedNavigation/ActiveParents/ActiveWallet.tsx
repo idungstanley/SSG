@@ -12,6 +12,7 @@ import {
 import { EntityType } from '../../../../../utils/EntityTypes/EntityType';
 import { Wallet } from '../../../../../pages/workspace/hubs/components/ActiveTree/activetree.interfaces';
 import { findCurrentWallet } from '../../../../../managers/Wallet';
+import { APP_TASKS } from '../../../../../app/constants/app';
 
 interface WalletIndexProps {
   showHubList: boolean;
@@ -69,7 +70,7 @@ function ActiveWallet({ showHubList }: WalletIndexProps) {
           </div>
         </section>
         {showMenuDropdown === wallet.id ? <MenuDropdown /> : null}
-        {SubMenuId === wallet.id ? <SubDropdown placeHubType="Tasks" /> : null}
+        {SubMenuId === wallet.id ? <SubDropdown placeHubType={APP_TASKS} /> : null}
       </div>
     </div>
   ) : null;

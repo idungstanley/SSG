@@ -26,6 +26,7 @@ import { BsFiletypeDoc } from 'react-icons/bs';
 import AddHubIcon from '../../assets/icons/AddHub';
 import AddWalletIcon from '../../assets/icons/AddWallet';
 import AddListIcon from '../../assets/icons/AddList';
+import { APP_HR } from '../../app/constants/app';
 
 interface itemsType {
   title: string;
@@ -134,7 +135,7 @@ export default function SubDropdown({ cords, placeHubType }: SubDropdownProps) {
   ];
 
   const itemsList: itemsType[] =
-    placeHubType == 'Also HR'
+    placeHubType == APP_HR
       ? [
           {
             title: 'Sub Hub',

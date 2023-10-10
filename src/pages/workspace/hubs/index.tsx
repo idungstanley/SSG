@@ -32,6 +32,7 @@ import { Modal } from '../../../components/Pilot/components/HotKeys/components/M
 import { Capitalize } from '../../../utils/NoCapWords/Capitalize';
 import EverythingTasks from './components/EverythingTasks';
 import { FaHandsHelping } from 'react-icons/fa';
+import { APP_HR, APP_TASKS } from '../../../app/constants/app';
 
 function Hubs() {
   const dispatch = useDispatch();
@@ -46,7 +47,7 @@ function Hubs() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const initialActivePlaceId: string = (JSON.parse(localStorage.getItem('activePlaceIdLocale') as string) ||
     null) as string;
-  const placeName = initialActivePlaceId == '8' ? 'Also HR' : 'Tasks';
+  const placeHubType = initialActivePlaceId == '8' ? APP_HR : APP_TASKS;
 
   const toggleSearch = (e: React.MouseEvent<SVGElement, MouseEvent>) => {
     e.stopPropagation();
@@ -82,7 +83,7 @@ function Hubs() {
   };
 
   const configForDropdown =
-    placeName == 'Also HR'
+    placeHubType == APP_HR
       ? [
           {
             label: 'Hub',
@@ -134,11 +135,11 @@ function Hubs() {
   return (
     <>
       <PlaceItem
-        label={placeName}
+        label={placeHubType == APP_HR ? 'Also HR' : 'Tasks'}
         id={initialActivePlaceId}
         isActiveLayoutCondition={!(!!listId || !!hubId || !!walletId)}
         icon={
-          placeName == 'Tasks' ? (
+          placeHubType == APP_TASKS ? (
             <BsListCheck className="w-4 h-4" style={{ color: '#BF00FFB2' }} />
           ) : (
             <FaHandsHelping className="w-4 h-4" />
@@ -152,7 +153,7 @@ function Hubs() {
           </div>
         }
       />
-      {placeName == 'Tasks' ? <EverythingTasks /> : null}
+      {placeHubType == APP_TASKS ? <EverythingTasks /> : null}
       <Modal setShowModal={setShowModal} position="left-44 top-72" showModal={showModal} width="w-64">
         {configForDropdown.map((item, index) => (
           <React.Fragment key={index}>
@@ -177,7 +178,7 @@ function Hubs() {
         anchorEl={anchorEl}
         handleClose={handleClose}
       />
-      <ActiveTress placeHubType={placeName} />
+      <ActiveTress placeHubType={placeHubType} />
       <SubHubModal />
       <SubWalletModal />
       <ListModal />

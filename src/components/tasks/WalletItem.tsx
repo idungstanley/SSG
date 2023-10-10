@@ -28,6 +28,7 @@ import ActiveBackground from './Component/ActiveBackground';
 import ActiveBarIdentification from './Component/ActiveBarIdentification';
 import { useAbsolute } from '../../hooks/useAbsolute';
 import { IWallet } from '../../features/hubs/hubs.interfaces';
+import { APP_TASKS } from '../../app/constants/app';
 
 interface WalletItemProps {
   wallet: {
@@ -257,7 +258,7 @@ export default function WalletItem({
         />
       ) : null}
       {showMenuDropdown === wallet.id ? <MenuDropdown isExtendedBar={isExtendedBar} cords={menuCords} /> : null}
-      {SubMenuId === wallet.id ? <SubDropdown cords={menuCords} placeHubType="Tasks" /> : null}
+      {SubMenuId === wallet.id ? <SubDropdown cords={menuCords} placeHubType={APP_TASKS} /> : null}
     </div>
   );
 }

@@ -2,12 +2,13 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { IHub, IWallet, IList } from '../../../../../features/hubs/hubs.interfaces';
 import { Hub, List, Wallet } from './activetree.interfaces';
+import { APP_TASKS } from '../../../../../app/constants/app';
 
 export default function CreateTree(
   data: [IHub | IWallet | IList],
   currentHubId: string,
   hubs: Hub[],
-  placeHubType = 'Tasks'
+  placeHubType = APP_TASKS
 ) {
   const newHubs = [...hubs];
   const hubsById: Map<string, Hub> = new Map();
@@ -42,7 +43,7 @@ export default function CreateTree(
     }
   }
 
-  if (placeHubType === 'Tasks') {
+  if (placeHubType === APP_TASKS) {
     const wallets = data.filter((item) => item.type === 'wallet') as Wallet[];
     if (wallets.length) {
       for (let wallet of wallets) {

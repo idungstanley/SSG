@@ -22,6 +22,7 @@ import { DragOverlay } from '@dnd-kit/core';
 import HubItemOverlay from '../../../../../../../components/tasks/HubItemOverLay';
 import { generateViewsUrl } from '../../../../../../../utils/generateViewsUrl';
 import { IHub } from '../../../../../../../features/hubs/hubs.interfaces';
+import { APP_TASKS } from '../../../../../../../app/constants/app';
 
 export default function HList({ hubs, openNewHub, placeHubType }: ListProps) {
   const dispatch = useAppDispatch();
@@ -129,7 +130,7 @@ export default function HList({ hubs, openNewHub, placeHubType }: ListProps) {
             {hub?.children?.length && isCanBeOpen(hub.id) ? (
               <SubHList hubs={hub.children as Hub[]} placeHubType={placeHubType} />
             ) : null}
-            {showSidebar && placeHubType == 'Tasks' ? (
+            {showSidebar && placeHubType == APP_TASKS ? (
               <div>
                 {hub?.wallets?.length && isCanBeOpen(hub.id) ? (
                   <WList
