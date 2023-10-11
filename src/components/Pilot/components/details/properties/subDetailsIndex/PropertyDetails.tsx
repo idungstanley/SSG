@@ -197,7 +197,8 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
                     height: '80px',
                     width: '100%',
                     overflowY: 'auto',
-                    border: '1px solid #ccc'
+                    border: '1px solid #ccc',
+                    padding: '2px 0'
                   }}
                   theme="bubble"
                 />
