@@ -1,10 +1,7 @@
 import React from 'react';
 import RoundedCheckbox from '../../Checkbox/RoundedCheckbox';
-import { TiExportOutline } from 'react-icons/ti';
 import ToolTip from '../../Tooltip/Tooltip';
-import { MdDeleteForever, MdFileCopy } from 'react-icons/md';
-
-import { palette } from '../../../utils/Colors';
+import { MdDeleteForever } from 'react-icons/md';
 import { HiOutlineDuplicate } from 'react-icons/hi';
 import { RiFileCopyLine } from 'react-icons/ri';
 import { TbFileExport } from 'react-icons/tb';
@@ -13,6 +10,7 @@ interface SelectionProps {
   isVisible: boolean;
   dismissPopUp: () => void;
   selectedCount: number;
+  allSelected: boolean;
 }
 
 const TaskIcons = [
@@ -43,10 +41,7 @@ const TaskIcons = [
   }
 ];
 
-export default function SelectionMenu({ isVisible, dismissPopUp, selectedCount }: SelectionProps) {
-  const allColour = palette.filter((item) => item !== null);
-  const colourLength = allColour.length;
-
+export default function SelectionMenu({ isVisible, dismissPopUp, selectedCount, allSelected }: SelectionProps) {
   return (
     <div className={`overflow-hidden ${isVisible ? 'slide-in' : 'slide-out'} z-100 `}>
       <div
@@ -59,7 +54,7 @@ export default function SelectionMenu({ isVisible, dismissPopUp, selectedCount }
             isChecked={true}
             onChange={() => dismissPopUp()}
           />
-          <span className="text-xs text-white">{colourLength === selectedCount ? 'All' : selectedCount} Selected</span>
+          <span className="text-xs text-white">{allSelected ? 'All' : selectedCount} Selected</span>
         </div>
 
         <div className="flex">

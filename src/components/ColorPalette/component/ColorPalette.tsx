@@ -1,5 +1,4 @@
 import React from 'react';
-import { palette } from '../../../utils/Colors';
 import { ListColourProps } from '../../tasks/ListItem';
 import { cl } from '../../../utils';
 import DefaultColour from '../../../assets/icons/DefaultColour';

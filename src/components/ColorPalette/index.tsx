@@ -38,6 +38,8 @@ import ArrowOpenDown from '../../assets/icons/ArrowOpenDown';
 import DefaultColour from '../../assets/icons/DefaultColour';
 import SelectionMenu from './component/SelectionMenu';
 import { useGetColors } from '../../features/settings/user/userSettingsServices';
+import AlsoitMenuDropdown from '../DropDowns';
+import ListIconSelection from './component/ListIconSelection';
 
 interface PaletteProps {
   title?: string;
@@ -50,6 +52,7 @@ interface PaletteProps {
   cords?: Cords;
   activeInnerColor?: string;
   activeOutterColor?: string;
+  handleShapeSelection?: (value: string) => void;
 }
 
 const paletteViews = {
@@ -66,13 +69,14 @@ export default function PaletteManager({
   listComboColour,
   cords,
   activeOutterColor,
-  activeInnerColor
+  activeInnerColor,
+  handleShapeSelection
 }: PaletteProps) {
   const dispatch = useAppDispatch();
 
   const { paletteDropdown } = useAppSelector((state) => state.account);
   const { hub } = useAppSelector((state) => state.hub);
-  const { selectListColours } = useAppSelector((state) => state.account);
+  const { selectListColours, colourPaletteData } = useAppSelector((state) => state.account);
 
   const [open, setOpen] = useState<boolean>(true);
   const [isOutterFrameActive, setIsOutterFrameActive] = useState<boolean>(true);
@@ -101,6 +105,7 @@ export default function PaletteManager({
   const [isAdvanceSearch, setIsAdvanceSearch] = useState<boolean>(false);
   const [showListShapes, setShowListShapes] = useState<boolean>(false);
   const [colorName, setColorName] = useState<string>('Missing Color');
+  const [showListShapeSelection, setShowListShapeSelection] = useState<null | HTMLDivElement>(null);
   const { paletteId, paletteType } = paletteDropdown;
   const { rgb } = color || {};
   const updateColor = useCallback((color: ColorResult) => setColor(color), []);
@@ -143,6 +148,13 @@ export default function PaletteManager({
       dispatch(setPaletteDropDown({ ...paletteDropdown, show: false }));
     }
     dispatch(setSelectedListColours([]));
+  };
+
+  const handleCloseListShapeSelection = () => {
+    setShowListShapeSelection(null);
+  };
+  const handleOpenListShapeSelection = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    setShowListShapeSelection(e.currentTarget);
   };
 
   const handleOutterFrameClick = () => {
@@ -289,6 +301,7 @@ export default function PaletteManager({
               isVisible={selectListColours.length > 0}
               dismissPopUp={handleDismissPopup}
               selectedCount={selectListColours.length}
+              allSelected={colourPaletteData.length === selectListColours.length}
             />
           )}
           {!isSearch && selectListColours.length === 0 && paletteViews.BOARD && (
@@ -362,18 +375,25 @@ export default function PaletteManager({
                 />
               </div>
             )}
+            {topContent}
             {paletteType === EntityType.list && (
               <div className="flex items-center justify-between pb-1 mt-1 mb-1 border-b border-gray-300">
-                <span
-                  className={`relative flex w-fit items-center justify-between gap-2 p-1 px-2.5 text-xs text-gray-500 bg-gray-200 rounded-md hover:text-primary-600 hover:bg-primary-100 ${
+                <div
+                  className={`relative flex w-fit items-center justify-between gap-2 p-1 px-2.5 text-xs text-gray-500 rounded-md hover:text-primary-600 border border-gray-300 hover:bg-primary-100 ${
                     showListShapes && 'text-white bg-primary-500'
                   }`}
-                  onClick={() => setShowListShapes((prev) => !prev)}
+                  onClick={(e) => handleOpenListShapeSelection(e)}
                 >
                   <p>{title + ' Shapes'}</p>
                   <ArrowDownFilled color={showListShapes ? 'white' : undefined} />
-                  {showListShapes && <span className="absolute left-0 right-0 z-20 top-6">{topContent}</span>}
-                </span>
+                  {/* {showListShapes && <span className="absolute left-0 right-0 z-20 top-6">{topContent}</span>} */}
+                </div>
+                <AlsoitMenuDropdown handleClose={handleCloseListShapeSelection} anchorEl={showListShapeSelection}>
+                  <ListIconSelection
+                    handleSelection={handleShapeSelection as (value: string) => void}
+                    activeShape={shape}
+                  />
+                </AlsoitMenuDropdown>
                 <ListIconComponent
                   shape={shape}
                   type="colourToggle"
