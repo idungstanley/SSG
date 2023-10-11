@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import { Fragment } from 'react';
 import { EyeIcon, InformationCircleIcon, ClockIcon, ChatBubbleBottomCenterIcon } from '@heroicons/react/24/outline';
 import { Tab } from '@headlessui/react';
 import Preview from './Preview';

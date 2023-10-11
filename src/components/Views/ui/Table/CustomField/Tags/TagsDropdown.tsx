@@ -13,6 +13,7 @@ import {
 import { setActiveTabId } from '../../../../../../features/workspace/workspaceSlice';
 import { useUpdateEntityCustomFieldValue } from '../../../../../../features/list/listService';
 import '../../../../../../styles/task.css';
+import { pilotTabs } from '../../../../../../app/constants/pilotTabs';
 
 interface dropdownProps {
   optionsFromField:
@@ -52,7 +53,7 @@ function TagsDropdown({ optionsFromField, allOptions, currentProperty, taskId }:
 
   const handleEditCustom = () => {
     dispatch(setEditCustomProperty(currentProperty));
-    dispatch(setActiveTabId(10));
+    dispatch(setActiveTabId(pilotTabs.TEMPLATES));
     dispatch(setEntityForCustom({ id: undefined, type: undefined }));
     dispatch(setNewCustomPropertyDetails({ type: 'Tags', name: currentProperty.name, color: currentProperty.color }));
     setIsOpen(false);

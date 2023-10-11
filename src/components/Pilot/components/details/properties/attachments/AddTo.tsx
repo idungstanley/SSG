@@ -9,7 +9,7 @@ import { setOpenFileUploadModal, setShowTaskUploadModal } from '../../../../../.
 import { useAppSelector } from '../../../../../../app/hooks';
 
 interface statusType {
-  id: number;
+  id: string;
   title: string;
   handleClick: () => void;
   color: string;
@@ -22,7 +22,7 @@ export default function AddTo({ locationn }: { locationn?: string }) {
   const { fileUploadProps } = useAppSelector((state) => state.task);
   const statusList: statusType[] = [
     {
-      id: 1,
+      id: 'upload_file',
       title: 'Upload File',
       handleClick: () => {
         locationn === 'list view'
@@ -34,7 +34,7 @@ export default function AddTo({ locationn }: { locationn?: string }) {
       icon: <GrAttachment className="w-5 text-gray-400 h-7" aria-hidden="true" />
     },
     {
-      id: 2,
+      id: 'new_doc',
       title: 'New Doc',
       handleClick: () => ({}),
       color: '#a875ff',
@@ -42,7 +42,7 @@ export default function AddTo({ locationn }: { locationn?: string }) {
       icon: <FcDocument className="w-5 text-gray-200 h-7" aria-hidden="true" />
     },
     {
-      id: 3,
+      id: 'dropbox',
       title: 'Dropbox',
       handleClick: () => ({}),
       color: '#f7cb04',
@@ -50,7 +50,7 @@ export default function AddTo({ locationn }: { locationn?: string }) {
       icon: <FaDropbox className="w-5 text-blue-700 h-7" aria-hidden="true" />
     },
     {
-      id: 4,
+      id: 'one_drive_sharepoint',
       title: 'OneDrive/Sharepoint',
       handleClick: () => ({}),
       color: '#6bc951',
@@ -58,7 +58,7 @@ export default function AddTo({ locationn }: { locationn?: string }) {
       icon: <GrOnedrive className="w-5 text-blue-700 h-7" aria-hidden="true" />
     },
     {
-      id: 5,
+      id: 'box',
       title: 'Box',
       handleClick: () => ({}),
       color: '#6bc951',
@@ -66,7 +66,7 @@ export default function AddTo({ locationn }: { locationn?: string }) {
       icon: <SiBox className="w-5 text-blue-600 h-7" aria-hidden="true" />
     },
     {
-      id: 6,
+      id: 'google_drive',
       title: 'Google Drive',
       handleClick: () => ({}),
       color: '#6bc951',
@@ -74,7 +74,7 @@ export default function AddTo({ locationn }: { locationn?: string }) {
       icon: <FcGoogle className="w-5 h-7" aria-hidden="true" />
     },
     {
-      id: 7,
+      id: 'new_google_doc',
       title: 'New Google Doc',
       handleClick: () => ({}),
       color: '#6bc951',

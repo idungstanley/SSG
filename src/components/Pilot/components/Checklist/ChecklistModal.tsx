@@ -16,7 +16,7 @@ interface ChecklistModalProps {
   checklistItemId?: string;
   focus: () => void;
   options: {
-    id: number;
+    id: string;
     handleClick: () => void;
     name: string;
     icon: JSX.Element;

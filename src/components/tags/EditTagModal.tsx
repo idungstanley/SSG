@@ -18,7 +18,7 @@ import {
 import ColorPallete from './ColorsPalets';
 
 interface itemsType {
-  id: number;
+  id: string;
   title: string;
   icon: JSX.Element;
   handleClick: () => void;
@@ -63,7 +63,7 @@ export default function EditTagModal({ tagId, taskId }: EditTagModalProps) {
   });
   const EditTagOptions: itemsType[] = [
     {
-      id: 1,
+      id: 'delete',
       title: 'Delete',
       handleClick: () => {
         dispatch(
@@ -92,7 +92,7 @@ export default function EditTagModal({ tagId, taskId }: EditTagModalProps) {
       bg: 'red'
     },
     {
-      id: 2,
+      id: 'rename',
       title: 'Rename',
       handleClick: () => {
         dispatch(setRenameTagId(tagId));
@@ -102,7 +102,7 @@ export default function EditTagModal({ tagId, taskId }: EditTagModalProps) {
       bg: 'blue'
     },
     {
-      id: 3,
+      id: 'change_color',
       title: 'Change Color',
       handleClick: () => {
         dispatch(setShowTagColorDialogBox(!showTagColorDialogueBox));

@@ -7,7 +7,7 @@ import { setActiveTabId } from '../../../../../../features/workspace/workspaceSl
 import ActiveBarIdentification from '../../../../../tasks/Component/ActiveBarIdentification';
 
 interface TabProps {
-  id: number;
+  id: string;
   label: string;
   icon: JSX.Element;
   showTabLabel: boolean;
@@ -27,7 +27,7 @@ export default function Tab({ id, label, icon, showTabLabel }: TabProps) {
     zIndex: isDragging ? 1 : undefined // important for overlay
   };
 
-  const handleClick = (tabId: number) => {
+  const handleClick = (tabId: string) => {
     dispatch(setActiveTabId(activeTabId === tabId ? undefined : tabId));
   };
 

@@ -8,67 +8,67 @@ export interface listColumnProps {
 
 export const columnsHead: listColumnProps[] = [
   {
-    id: '1',
+    id: 'name',
     field: 'name',
     value: 'Task',
     hidden: false
   },
   {
-    id: '2',
+    id: 'assignees',
     field: 'assignees',
     value: 'Assignees',
     hidden: false
   },
   {
-    id: '3',
+    id: 'tags',
     field: 'tags',
     value: 'Tags',
     hidden: true
   },
   {
-    id: '4',
+    id: 'priority',
     field: 'priority',
     value: 'Priority',
     hidden: false
   },
   {
-    id: '5',
+    id: 'created_at',
     field: 'created_at',
     value: 'Created at',
     hidden: true
   },
   {
-    id: '6',
+    id: 'description',
     field: 'description',
     value: 'Description',
     hidden: true
   },
   {
-    id: '7',
+    id: 'status',
     field: 'status',
     value: 'Status',
     hidden: false
   },
   {
-    id: '8',
+    id: 'start_date',
     field: 'start_date',
     value: 'Start Date',
     hidden: false
   },
   {
-    id: '9',
+    id: 'end_date',
     field: 'end_date',
     value: 'End Date',
     hidden: true
   },
   {
-    id: '10',
+    id: 'updated_at',
     field: 'updated_at',
     value: 'Updated at',
     hidden: true
   },
   {
-    id: '11',
+    id: 'archived_at',
     field: 'archived_at',
     value: 'Archived at',
     hidden: true

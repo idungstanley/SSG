@@ -1,19 +1,18 @@
-import React from 'react';
 import { useSortable } from '@dnd-kit/sortable';
 import { useDispatch } from 'react-redux';
 import {
-  setActiveSubChecklistTabId,
   setActiveSubCommunicationTabId,
   setActiveSubDetailsTabId,
   setActiveSubHubManagerTabId
 } from '../../../../../features/workspace/workspaceSlice';
 import useFindNeighbors, { NeighborsProps } from '../../../../../hooks/useFindNeighbors';
+import { pilotTabs } from '../../../../../app/constants/pilotTabs';
 
 interface TabProps {
-  id: number;
+  id: string;
   icon?: JSX.Element;
   showPilot?: boolean;
-  activeSub?: number | null;
+  activeSub?: string | null;
   name: string;
   source?: string;
   item: NeighborsProps;
@@ -43,13 +42,11 @@ export default function SubtabDrag({ id, item, items, icon, showPilot, activeSub
     borderBottomLeftRadius: id === rightItem?.id ? '0.375rem' : ''
   };
 
-  const handleClick = (id: number) => {
-    if (name === 'connect') {
+  const handleClick = (id: string) => {
+    if (name === pilotTabs.CONNECT) {
       dispatch(setActiveSubCommunicationTabId(id));
-    } else if (name === 'details') {
+    } else if (name === pilotTabs.DETAILS) {
       dispatch(setActiveSubDetailsTabId(id));
-    } else if (name === 'Checklist') {
-      dispatch(setActiveSubChecklistTabId(id));
     } else if (name === 'hubmanager') {
       dispatch(setActiveSubHubManagerTabId(id));
     }
