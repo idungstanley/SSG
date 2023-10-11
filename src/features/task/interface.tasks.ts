@@ -4,6 +4,34 @@ import { ITeamMembersAndGroup } from '../settings/teamMembersAndGroups.interface
 import { IField, ITask_statuses } from '../list/list.interfaces';
 import { RecurFrequency, TypeOptionsProps } from '../../components/DatePicker/RecurringTypes';
 import { FilterWithId } from '../../components/TasksHeader/ui/Filter/types/filters';
+import { ITeamMember } from '../workspace/workspace.interfaces';
+
+interface fileFormat {
+  key: string;
+  extension: string;
+  name: string;
+  mime: string;
+  icon_name: string;
+}
+
+interface physicalFile {
+  id: string;
+  name: string;
+  display_name: string;
+  size: number;
+  file_format: fileFormat;
+}
+
+export interface IAttachmentsRes {
+  data: {
+    attachments: {
+      id: string;
+      physical_file: physicalFile;
+      path: string;
+      team_member: ITeamMember;
+    }[];
+  };
+}
 
 export interface UpdateTaskProps {
   task_id_array?: string[];
