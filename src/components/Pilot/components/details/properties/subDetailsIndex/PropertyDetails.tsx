@@ -240,18 +240,6 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
             ) : (
               <h1>No Attachments found</h1>
             )}
-            {/* {attachments?.data.attachments.map((file) => {
-              return (
-                <FileIcons
-                  fileExtension={file.physical_file.file_format.extension}
-                  filePath={file.path}
-                  key={file.id}
-                  fileName={file.physical_file.display_name}
-                  height="h-10"
-                  width="w-10"
-                />
-              );
-            })} */}
           </div>
         </div>
 
