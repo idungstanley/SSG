@@ -6,16 +6,15 @@ interface ItemProps {
   activeShape?: string;
   handleSelection: (value: string) => void;
 }
+export const listIconDetails = [
+  { shape: 'solid-circle', category: 'CIRCLE', label: 'Solid circle' },
+  { shape: 'solid-square', category: 'SQUARE', label: 'Solid Square' },
+  { shape: 'two-circle', category: 'CIRCLE', label: 'Double circles' },
+  { shape: 'two-square', category: 'SQUARE', label: 'Double Square' },
+  { shape: 'square-in-circle', category: 'CIRCLE', label: 'Square in circle' },
+  { shape: 'circle-in-square', category: 'SQUARE', label: 'Circle in square' }
+];
 export default function ListIconSelection({ activeShape, handleSelection }: ItemProps) {
-  const listIconDetails = [
-    { shape: 'solid-circle', category: 'CIRCLE', label: 'Solid circle' },
-    { shape: 'solid-square', category: 'SQUARE', label: 'Solid Square' },
-    { shape: 'two-circle', category: 'CIRCLE', label: 'Double circles' },
-    { shape: 'two-square', category: 'SQUARE', label: 'Double Square' },
-    { shape: 'square-in-circle', category: 'CIRCLE', label: 'Square in circle' },
-    { shape: 'circle-in-square', category: 'SQUARE', label: 'Circle in square' }
-  ];
-
   const Categories = [...new Set(listIconDetails.map(({ category }) => category))];
   const listIcons = Categories.map((uniqueCategory, categoryIndex) => (
     <div key={categoryIndex} className="flex flex-col w-full">

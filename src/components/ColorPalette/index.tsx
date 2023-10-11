@@ -39,7 +39,7 @@ import DefaultColour from '../../assets/icons/DefaultColour';
 import SelectionMenu from './component/SelectionMenu';
 import { useGetColors } from '../../features/settings/user/userSettingsServices';
 import AlsoitMenuDropdown from '../DropDowns';
-import ListIconSelection from './component/ListIconSelection';
+import ListIconSelection, { listIconDetails } from './component/ListIconSelection';
 
 interface PaletteProps {
   title?: string;
@@ -271,6 +271,8 @@ export default function PaletteManager({
     }
   };
 
+  const activeShapeName = listIconDetails.find((item) => item.shape === shape);
+
   return (
     <Menu
       open={open}
@@ -384,9 +386,8 @@ export default function PaletteManager({
                   }`}
                   onClick={(e) => handleOpenListShapeSelection(e)}
                 >
-                  <p>{title + ' Shapes'}</p>
+                  <p>{`${title} Shapes${shape ? `: ${activeShapeName?.label}` : ''}`}</p>
                   <ArrowDownFilled color={showListShapes ? 'white' : undefined} />
-                  {/* {showListShapes && <span className="absolute left-0 right-0 z-20 top-6">{topContent}</span>} */}
                 </div>
                 <AlsoitMenuDropdown handleClose={handleCloseListShapeSelection} anchorEl={showListShapeSelection}>
                   <ListIconSelection
