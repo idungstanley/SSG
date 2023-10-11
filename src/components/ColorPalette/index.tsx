@@ -37,6 +37,7 @@ import RoundedCheckbox from '../Checkbox/RoundedCheckbox';
 import ArrowOpenDown from '../../assets/icons/ArrowOpenDown';
 import DefaultColour from '../../assets/icons/DefaultColour';
 import SelectionMenu from './component/SelectionMenu';
+import { useGetColors } from '../../features/settings/user/userSettingsServices';
 
 interface PaletteProps {
   title?: string;
@@ -125,6 +126,7 @@ export default function PaletteManager({
       borderRadius: '5px'
     }
   };
+  useGetColors();
 
   const closeMenu = () => {
     setOpen(false);
@@ -315,14 +317,14 @@ export default function PaletteManager({
                     </ToolTip>
                   </div>
                 ))}
-                <ToolTip title="Open Search">
-                  <span className="p-1 border rounded border-primary-200" onClick={() => setIsSearch(true)}>
-                    <SearchIcon className="w-4 h-4" />
-                  </span>
-                </ToolTip>
                 <ToolTip title="View">
                   <span className="p-1 border rounded border-primary-200" onClick={() => ({})}>
                     <AiOutlineEye className="w-4 h-4" />
+                  </span>
+                </ToolTip>
+                <ToolTip title="Open Search">
+                  <span className="p-1 border rounded border-primary-200" onClick={() => setIsSearch(true)}>
+                    <SearchIcon className="w-4 h-4" />
                   </span>
                 </ToolTip>
                 {activeOutterColor === null ? (
@@ -393,7 +395,7 @@ export default function PaletteManager({
                   className="flex items-center gap-1 p-1 border rounded-md cursor-pointer border-primary-200"
                   onClick={() => setDisplayColorPicker((prev) => !prev)}
                 >
-                  <p className={`truncate w-fit ${displayColorPicker ? 'text-primary-600' : null}`}>
+                  <p className={`truncate text-xs w-fit ${displayColorPicker ? 'text-primary-600' : null}`}>
                     ADVANCED COLOR OPTIONS
                   </p>
                   {displayColorPicker ? <RiArrowUpSFill className="cursor-pointer" /> : <ArrowOpenDown />}

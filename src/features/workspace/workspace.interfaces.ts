@@ -76,6 +76,22 @@ export interface IUserRes {
     user: IUserData;
   };
 }
+export interface IColourRes {
+  success: string;
+  message: string;
+  data: IColourData;
+}
+export interface IPaletteData {
+  id: string;
+  name: string | null;
+  color: string;
+  color_name: string;
+  is_pinned: boolean;
+  count_uses: number;
+}
+export interface IColourData {
+  palette_colors: IPaletteData[];
+}
 
 export interface ITeamMember {
   id: string;
