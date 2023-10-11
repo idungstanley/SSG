@@ -9,7 +9,7 @@ import { InvalidateQueryFilters, useMutation, useQueryClient } from '@tanstack/r
 import { switchWorkspaceService, useGetUserSettingsKeys } from '../../../features/account/accountService';
 import { selectCurrentUser, setCurrentWorkspace, switchWorkspace } from '../../../features/auth/authSlice';
 import { setMyWorkspacesSlideOverVisibility } from '../../../features/general/slideOver/slideOverSlice';
-import { useEffect } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import DragContext from './DragContext/DragContext';
 import { Toaster } from 'react-hot-toast';
 import Favorites from '../../../pages/workspace/favorites';
@@ -30,6 +30,7 @@ function MainLayout() {
 
   const { currentWorkspaceId } = useAppSelector((state) => state.auth);
   const { userSettingsData } = useAppSelector((state) => state.account);
+  const [taskShortcut, setTaskShortcut] = useState(false);
 
   const user = useAppSelector(selectCurrentUser);
 
@@ -54,6 +55,20 @@ function MainLayout() {
   };
 
   const { data: userData } = useGetUserSettingsKeys(true, key, resolution);
+  document.addEventListener('keydown', function (event) {
+    if (event.shiftKey && event.key === '?') {
+      // Check if the active element is an input field (you can extend this to include other elements as needed)
+      if (
+        document.activeElement?.tagName === 'INPUT' ||
+        document.activeElement?.tagName === 'TEXTAREA' ||
+        document.activeElement?.getAttribute('contenteditable') === 'true'
+      ) {
+        return;
+      } else {
+        setTaskShortcut(true);
+      }
+    }
+  });
 
   useEffect(() => {
     if (userData) {
@@ -112,8 +127,7 @@ function MainLayout() {
           </div>
         </div>
       </DragContext>
-
-      {/* <TaskShortCutModal /> */}
+      {taskShortcut && <TaskShortCutModal setTaskShortcutModal={setTaskShortcut} />}
     </div>
   ) : null;
 }
