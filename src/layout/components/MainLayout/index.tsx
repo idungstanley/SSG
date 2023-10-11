@@ -18,6 +18,7 @@ import useResolution from '../../../hooks/useResolution';
 import { STORAGE_KEYS, dimensions } from '../../../app/config/dimensions';
 import { SetUserSettingsStore } from '../../../features/account/accountSlice';
 import { setActiveHotkeyIds } from '../../../features/workspace/workspaceSlice';
+import TaskShortCutModal from './taskShortCut/TaskShortCutModal';
 
 function MainLayout() {
   const key = 'sidebar';
@@ -114,6 +115,8 @@ function MainLayout() {
           </div>
         </div>
       </DragContext>
+
+      {/* <TaskShortCutModal /> */}
     </div>
   ) : null;
 }

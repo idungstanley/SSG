@@ -82,7 +82,6 @@ export default function TaskMenu() {
 
   const handleClose = () => {
     setShowSelectDropdown(null);
-    // setToggleDuplicateMoal(false);
   };
 
   const TaskIcons = [
@@ -229,7 +228,7 @@ export default function TaskMenu() {
   return (
     <div className={`overflow-hidden ${isVisible ? 'slide-in' : 'slide-out'} z-100 `}>
       <div
-        className="abolute flex justify-between items-center w-12/12 h-11 bg-gray-800"
+        className="flex items-center justify-between bg-gray-800 abolute w-12/12 h-11"
         style={{ transition: 'linear', transitionDelay: '100s' }}
       >
         <div className="pl-5 space-x-2">
@@ -241,7 +240,7 @@ export default function TaskMenu() {
               dispatch(setSelectedListIds([]));
             }}
           />
-          <span className="text-white text-xs">{selectedTasksArray.length} Selected</span>
+          <span className="text-xs text-white">{selectedTasksArray.length} Selected</span>
         </div>
 
         <div className="flex">
@@ -249,7 +248,7 @@ export default function TaskMenu() {
             <>
               <ToolTip className="pt-2" title={menu.label} placement="bottom">
                 <p
-                  className="flex items-center px-2 cursor-pointer mt-0 text-white text-lg"
+                  className="flex items-center px-2 mt-0 text-lg text-white cursor-pointer"
                   onClick={(e) => menu.handleClick(e)}
                   key={menu.id}
                 >
@@ -259,10 +258,9 @@ export default function TaskMenu() {
             </>
           ))}
         </div>
-
-        <div className="flex items-center pr-5 gap-2 ">
-          <MdFileCopy className="text-white text-lg" />
-          <input type="text" placeholder="type '/' for commands" className="h-8 rounded bg-transparent text-xs  " />
+        <div className="flex items-center gap-2 pr-5 ">
+          <MdFileCopy className="text-lg text-white" />
+          <input type="text" placeholder="type '/' for commands" className="h-8 text-xs bg-transparent rounded " />
         </div>
       </div>
       <div className="absolute z-50">
@@ -274,13 +272,13 @@ export default function TaskMenu() {
       </div>
       <div className="flex justify-center">
         <p
-          className=" bg-gray-800 text-white p-2 rounded-3xl border border-white -mt-1 cursor-pointer"
+          className="p-2 -mt-1 text-white bg-gray-800 border border-white cursor-pointer rounded-3xl"
           onClick={() => {
             dispatch(setSelectedTasksArray([]));
             dispatch(setSelectedListIds([]));
           }}
         >
-          <span className="text-gray-300 mr-2">X</span>
+          <span className="mr-2 text-gray-300">X</span>
           Dismiss
         </p>
       </div>
