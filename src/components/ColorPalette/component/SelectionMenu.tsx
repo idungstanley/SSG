@@ -2,65 +2,64 @@ import React from 'react';
 import RoundedCheckbox from '../../Checkbox/RoundedCheckbox';
 import { TiExportOutline } from 'react-icons/ti';
 import ToolTip from '../../Tooltip/Tooltip';
-import { MdFileCopy, MdOutlineDeveloperBoard } from 'react-icons/md';
-import { UserPlusIcon } from '@heroicons/react/24/outline';
-import { BsTags } from 'react-icons/bs';
-import { TbSubtask } from 'react-icons/tb';
+import { MdDeleteForever, MdFileCopy } from 'react-icons/md';
+
+import { palette } from '../../../utils/Colors';
+import { HiOutlineDuplicate } from 'react-icons/hi';
+import { RiFileCopyLine } from 'react-icons/ri';
+import { TbFileExport } from 'react-icons/tb';
 
 interface SelectionProps {
-  isVisible: true;
+  isVisible: boolean;
   dismissPopUp: () => void;
   selectedCount: number;
 }
 
 const TaskIcons = [
   {
-    id: 1,
     label: 'Export colour',
-    icons: <TiExportOutline />,
+    icons: <TbFileExport />,
+    handleClick: () => ({}),
+    isVisible: true
+  },
+
+  {
+    label: 'Duplicate',
+    icons: <HiOutlineDuplicate />,
     handleClick: () => ({}),
     isVisible: true
   },
   {
-    id: 2,
-    label: 'Set assignees',
-    icons: <UserPlusIcon />,
+    label: 'Copy',
+    icons: <RiFileCopyLine />,
     handleClick: () => ({}),
     isVisible: true
   },
   {
-    id: 3,
-    label: 'Set Status',
-    icons: <MdOutlineDeveloperBoard />,
-    handleClick: () => ({}),
-    isVisible: true
-  },
-  {
-    id: 4,
-    label: 'Set Status',
-    icons: <BsTags />,
-    handleClick: () => ({}),
-    isVisible: true
-  },
-  {
-    id: 5,
-    label: 'Set Tags',
-    icons: <TbSubtask />,
+    label: 'Delete',
+    icons: <MdDeleteForever />,
     handleClick: () => ({}),
     isVisible: true
   }
 ];
 
 export default function SelectionMenu({ isVisible, dismissPopUp, selectedCount }: SelectionProps) {
+  const allColour = palette.filter((item) => item !== null);
+  const colourLength = allColour.length;
+
   return (
     <div className={`overflow-hidden ${isVisible ? 'slide-in' : 'slide-out'} z-100 `}>
       <div
-        className="flex items-center justify-between bg-gray-800 abolute w-12/12 h-11"
+        className="left-0 right-0 flex items-center justify-between bg-black abolute h-11"
         style={{ transition: 'linear', transitionDelay: '100s' }}
       >
         <div className="pl-5 space-x-2">
-          <RoundedCheckbox styles="rounded-full text-alsoit-purple-300" isChecked={true} onChange={() => ({})} />
-          <span className="text-xs text-white">{selectedCount} Selected</span>
+          <RoundedCheckbox
+            styles="rounded-full text-alsoit-purple-300"
+            isChecked={true}
+            onChange={() => dismissPopUp()}
+          />
+          <span className="text-xs text-white">{colourLength === selectedCount ? 'All' : selectedCount} Selected</span>
         </div>
 
         <div className="flex">
@@ -70,7 +69,7 @@ export default function SelectionMenu({ isVisible, dismissPopUp, selectedCount }
                 <p
                   className="flex items-center px-2 mt-0 text-lg text-white cursor-pointer"
                   onClick={() => menu.handleClick()}
-                  key={menu.id}
+                  key={menu.label}
                 >
                   {menu.icons}
                 </p>
@@ -78,19 +77,6 @@ export default function SelectionMenu({ isVisible, dismissPopUp, selectedCount }
             </>
           ))}
         </div>
-        <div className="flex items-center gap-2 pr-5 ">
-          <MdFileCopy className="text-lg text-white" />
-          <input type="text" placeholder="type '/' for commands" className="h-8 text-xs bg-transparent rounded " />
-        </div>
-      </div>
-      <div className="flex justify-center">
-        <p
-          className="p-2 -mt-1 text-white bg-gray-800 border border-white cursor-pointer rounded-3xl"
-          onClick={() => dismissPopUp()}
-        >
-          <span className="mr-2 text-gray-300">X</span>
-          Dismiss
-        </p>
       </div>
     </div>
   );

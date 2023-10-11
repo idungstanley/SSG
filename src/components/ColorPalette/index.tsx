@@ -4,7 +4,7 @@ import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { UseEditHubService } from '../../features/hubs/hubService';
 import { UseEditWalletService } from '../../features/wallet/walletService';
 import { UseEditListService } from '../../features/list/listService';
-import { setPaletteDropDown } from '../../features/account/accountSlice';
+import { setPaletteDropDown, setSelectedListColours } from '../../features/account/accountSlice';
 import { RiArrowUpSFill } from 'react-icons/ri';
 import { AlphaPicker, HuePicker } from 'react-color';
 import { getColorName } from 'ntc-ts';
@@ -36,6 +36,7 @@ import { cl } from '../../utils';
 import RoundedCheckbox from '../Checkbox/RoundedCheckbox';
 import ArrowOpenDown from '../../assets/icons/ArrowOpenDown';
 import DefaultColour from '../../assets/icons/DefaultColour';
+import SelectionMenu from './component/SelectionMenu';
 
 interface PaletteProps {
   title?: string;
@@ -70,6 +71,7 @@ export default function PaletteManager({
 
   const { paletteDropdown } = useAppSelector((state) => state.account);
   const { hub } = useAppSelector((state) => state.hub);
+  const { selectListColours } = useAppSelector((state) => state.account);
 
   const [open, setOpen] = useState<boolean>(true);
   const [isOutterFrameActive, setIsOutterFrameActive] = useState<boolean>(true);
@@ -128,6 +130,7 @@ export default function PaletteManager({
     setOpen(false);
     dispatch(setPaletteDropDown({ ...paletteDropdown, show: false }));
     dispatch(setListPaletteColor({ innerColour: 'white', outerColour: 'black' }));
+    dispatch(setSelectedListColours([]));
   };
 
   const handleCancel = () => {
@@ -137,6 +140,7 @@ export default function PaletteManager({
       setOpen(false);
       dispatch(setPaletteDropDown({ ...paletteDropdown, show: false }));
     }
+    dispatch(setSelectedListColours([]));
   };
 
   const handleOutterFrameClick = () => {
@@ -182,6 +186,10 @@ export default function PaletteManager({
 
   const handleCloseAdvanceSearch = () => {
     setIsAdvanceSearch(false);
+  };
+
+  const handleDismissPopup = () => {
+    dispatch(setSelectedListColours([]));
   };
 
   const handleClick = (color?: string | ListColourProps | null) => {
@@ -274,7 +282,14 @@ export default function PaletteManager({
         style={{ borderRadius: '5px', width: '400px' }}
       >
         <div className="z-50 flex flex-col w-full">
-          {!isSearch && (
+          {selectListColours.length > 0 && selectedViews === paletteViews.LIST && (
+            <SelectionMenu
+              isVisible={selectListColours.length > 0}
+              dismissPopUp={handleDismissPopup}
+              selectedCount={selectListColours.length}
+            />
+          )}
+          {!isSearch && selectListColours.length === 0 && paletteViews.BOARD && (
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center justify-between gap-2 bg-gray-400 h-9">
                 <p className="justify-center ml-2 text-white">COLOUR LIBRARY</p>
