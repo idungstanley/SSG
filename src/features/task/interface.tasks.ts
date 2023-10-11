@@ -239,6 +239,8 @@ export interface ITimeEntriesRes {
 export interface ITimerDetails {
   isBillable: boolean;
   description: string;
+  label?: string;
+  tags?: string;
 }
 
 export type Header = {
