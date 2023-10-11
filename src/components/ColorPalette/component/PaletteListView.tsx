@@ -1,45 +1,38 @@
 import React, { useEffect, useState } from 'react';
-import { palette } from '../../../utils/Colors';
 import { VerticalScroll } from '../../ScrollableContainer/VerticalScroll';
 import RoundedCheckbox from '../../Checkbox/RoundedCheckbox';
-import { getColorName, initColors, ORIGINAL_COLORS } from 'ntc-ts';
 import DefaultColour from '../../../assets/icons/DefaultColour';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import { setSelectedListColours } from '../../../features/account/accountSlice';
+import { IPaletteData } from '../../../features/workspace/workspace.interfaces';
 
 export default function PaletteListView() {
   const dispatch = useAppDispatch();
-  const { selectListColours } = useAppSelector((state) => state.account);
-  const allChecked = palette
-    .filter((item) => item !== null)
-    ?.every((item) => selectListColours.includes(item as string));
+  const { selectListColours, colourPaletteData } = useAppSelector((state) => state.account);
+  const allChecked = colourPaletteData?.every((item) => selectListColours.includes(item.id as string));
 
   const handleGroupSelect = () => {
     const updatedSelectedColour = [...selectListColours];
     if (allChecked) {
-      palette
-        .filter((item) => item !== null)
-        .forEach((item) => {
-          const indexInArray = updatedSelectedColour.indexOf(item as string);
-          updatedSelectedColour.splice(indexInArray, 1);
-        });
+      colourPaletteData.forEach((item) => {
+        const indexInArray = updatedSelectedColour.indexOf(item.id as string);
+        updatedSelectedColour.splice(indexInArray, 1);
+      });
     } else {
-      palette
-        .filter((item) => item !== null)
-        .forEach((item) => {
-          const indexInArray = updatedSelectedColour.indexOf(item as string);
-          if (indexInArray === -1) {
-            updatedSelectedColour.push(item as string);
-          }
-        });
+      colourPaletteData.forEach((item) => {
+        const indexInArray = updatedSelectedColour.indexOf(item.id as string);
+        if (indexInArray === -1) {
+          updatedSelectedColour.push(item.id as string);
+        }
+      });
     }
     dispatch(setSelectedListColours(updatedSelectedColour));
   };
 
   return (
     <VerticalScroll>
-      <div className="w-full table-container">
-        <table className="w-full h-36" style={{ display: 'grid', gridTemplateColumns: '20px 44px 110px auto' }}>
+      <div className="w-full h-56 table-container">
+        <table className="w-full" style={{ display: 'grid', gridTemplateColumns: '20px 44px 110px auto' }}>
           <tr className="w-full h-6 text-xs text-left contents">
             <th className="p-2 text-center">
               <RoundedCheckbox
@@ -56,7 +49,7 @@ export default function PaletteListView() {
             <th className="p-2 border-b border-gray-300">HEX CODE</th>
             <th className="p-2 border-b border-gray-300">LIBRARY NAME</th>
           </tr>
-          {palette.map((item, index) => item !== null && <Row item={item} key={index} />)}
+          {colourPaletteData.map((item, index) => item !== null && <Row item={item} key={index} />)}
         </table>
       </div>
     </VerticalScroll>
@@ -69,18 +62,14 @@ export type FORMATTED_COLOR = {
   rgb: string | null;
 };
 
-function Row({ item, key }: { item: string | null; key: number }) {
-  initColors(ORIGINAL_COLORS);
-
+function Row({ item, key }: { item: IPaletteData; key: number }) {
   const dispatch = useAppDispatch();
 
   const [isChecked, setIsChecked] = useState<boolean>(false);
-  const [colorName, setColorName] = useState<string>('Missing Color');
-
   const { selectListColours } = useAppSelector((state) => state.account);
 
   useEffect(() => {
-    const isChecked = selectListColours.includes(item as string);
+    const isChecked = selectListColours.includes(item.id as string);
     if (isChecked) {
       setIsChecked(true);
     } else {
@@ -90,25 +79,16 @@ function Row({ item, key }: { item: string | null; key: number }) {
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const isChecked = e.target.checked;
-    const indexInArray = selectListColours.indexOf(item as string);
+    const indexInArray = selectListColours.indexOf(item.id as string);
     const updatedSelectedColour = [...selectListColours];
-    if (!selectListColours.includes(item as string)) {
-      updatedSelectedColour.push(item as string);
+    if (!selectListColours.includes(item.id as string)) {
+      updatedSelectedColour.push(item.id as string);
     } else {
       updatedSelectedColour.splice(indexInArray, 1);
     }
     dispatch(setSelectedListColours(updatedSelectedColour as string[]));
     setIsChecked(isChecked);
   };
-  const colorProperty: FORMATTED_COLOR = getColorName(item);
-  useEffect(() => {
-    setColorName(colorProperty.name);
-  }, [item]);
-
-  // const handleListColourSelection = () => {
-  //   const updatedSelectedColour = [...selectListColours];
-  //   palette.
-  // };
 
   return (
     <tr className="w-full bg-white contents" key={key}>
@@ -123,15 +103,15 @@ function Row({ item, key }: { item: string | null; key: number }) {
         <div className="flex items-center justify-between gap-1">
           <div
             className={`w-5 h-5 p-2 rounded ${isChecked ? 'bg-primary-100' : ''}`}
-            style={{ backgroundColor: `${item}` }}
+            style={{ backgroundColor: `${item.color}` }}
           ></div>
         </div>
       </td>
       <td className={`p-2 bg-white ${isChecked ? 'border-primary-400 border-y' : 'border-b border-gray-300'}`}>
-        <div>{item}</div>
+        <div>{item.color}</div>
       </td>
       <td className={`p-2 bg-white ${isChecked ? 'border-primary-400 border-y border-r' : 'border-b border-gray-300'}`}>
-        <div>{colorName}</div>
+        <div>{item.color_name}</div>
       </td>
     </tr>
   );

@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { initialPlaces } from '../../layout/components/MainLayout/Sidebar/components/Places';
 import { IUserParams, IUserState, Place } from './account.interfaces';
 import { STORAGE_KEYS } from '../../app/config/dimensions';
+import { IPaletteData } from '../workspace/workspace.interfaces';
 
 const showPreviewFromLS = localStorage.getItem('showPreview') as string;
 
@@ -48,6 +49,7 @@ interface AccountState {
   places: Place[];
   selectListColours: string[];
   calculatedContentWidth: string;
+  colourPaletteData: IPaletteData[];
 }
 
 const initialState: AccountState = {
@@ -72,7 +74,8 @@ const initialState: AccountState = {
   },
   places: [...initialPlaces.sort((a, b) => idsFromLS.indexOf(a.id) - idsFromLS.indexOf(b.id))],
   calculatedContentWidth: '',
-  selectListColours: []
+  selectListColours: [],
+  colourPaletteData: []
 };
 
 export const accountSlice = createSlice({
@@ -100,6 +103,9 @@ export const accountSlice = createSlice({
     setSelectedListColours: (state, action: PayloadAction<string[]>) => {
       state.selectListColours = action.payload;
     },
+    setColourPaletteData: (state, action: PayloadAction<IPaletteData[]>) => {
+      state.colourPaletteData = action.payload;
+    },
     setUserName: (state, action: PayloadAction<string>) => {
       state.userName = action.payload;
     },
@@ -122,7 +128,8 @@ export const {
   setUserName,
   SetUserSettingsStore,
   setCalculatedContentWidth,
-  setSelectedListColours
+  setSelectedListColours,
+  setColourPaletteData
 } = accountSlice.actions;
 
 export default accountSlice.reducer;
