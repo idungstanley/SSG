@@ -9,7 +9,7 @@ interface Props {
 export function TimeMemo({ timerDetails }: Props) {
   const dispatch = useAppDispatch();
   return (
-    <div className="w-full shadow-xl absolute top-7 right-64" onClick={(e) => e.stopPropagation()}>
+    <div className="w-full shadow-xl absolute top-7 right-64 z-40" onClick={(e) => e.stopPropagation()}>
       <textarea
         name="description"
         id="timeMemo"
