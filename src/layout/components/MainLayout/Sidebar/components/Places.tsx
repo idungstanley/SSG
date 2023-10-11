@@ -13,7 +13,6 @@ import { useDispatch } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 import ExtendedBar from '../../../../../pages/explorer/components/Sidebar';
 import PlaceItem from './PlaceItem';
-import AlsoHr from '../../../../../pages/workspace/alsoHr';
 import Commerce from '../../../../../pages/workspace/commerce';
 import RoutePlanner from '../../../../../pages/workspace/routePlanner';
 import Email from '../../../../../pages/workspace/email';
@@ -32,6 +31,7 @@ import CommerceIcon from '../../../../../assets/icons/CommerceIcon';
 import CrManagerIcon from '../../../../../assets/icons/CrManagerIcon';
 import TicketsIcon from '../../../../../assets/icons/TicketsIcon';
 import EmailIcon from '../../../../../assets/icons/EmailIcon';
+import { pages } from '../../../../../app/constants/pages';
 
 interface Place {
   name: string;
@@ -45,71 +45,70 @@ interface Place {
 export const initialPlaces: Place[] = [
   {
     name: 'Email',
-    id: '1',
+    id: pages.EMAIL,
     place: <Email />,
     icon: <EmailIcon />
   },
   {
     name: 'TASKS',
-    id: '2',
+    id: pages.TASKS,
     place: <Hubs />,
     icon: <TaskIcon />,
     link: '/tasks'
   },
   {
     name: 'In-tray',
-    id: '3',
+    id: pages.IN_TRAY,
     place: <Inbox />,
     icon: <IntraysIcons />
   },
   {
     name: 'Cabinet',
-    id: '4',
+    id: pages.CABINET,
     place: <ExtendedBar />,
     icon: <CabinetIcon />,
     link: '/explorer'
   },
   {
     name: 'Forms',
-    id: '5',
+    id: pages.FORMS,
     place: <Files />,
     icon: <FormsIcon />
   },
   {
     name: 'WORK INSIGHTS',
-    id: '6',
+    id: pages.WORK_INSIGHTS,
     place: <WorkInsights />,
     icon: <InsightsIcon />
   },
   {
     name: 'ROUTEPLAN',
-    id: '7',
+    id: pages.ROUTE_PLANNER,
     place: <RoutePlanner />,
     icon: <RouteIcon />
   },
   {
     name: 'Also HR',
-    id: '8',
-    place: <AlsoHr />,
-    icon: <AlsoHrIcon />,
-    link: '/calendar'
+    id: pages.ALSO_HR,
+    place: <Hubs />,
+    icon: <AlsoHrIcon />
   },
   {
     name: 'TICKETS',
-    id: '9',
+    id: pages.TICKETS,
     place: <Tickets />,
     icon: <TicketsIcon />
   },
   {
     name: 'CR MANAGER',
-    id: '10',
+    id: pages.CR_MANAGER,
     place: <CrManager />,
     icon: <CrManagerIcon />,
-    link: 'calendar'
+    link: '/calendar'
   },
   {
     name: 'Commerce',
-    id: '11',
+    id: pages.COMMERCE,
     place: <Commerce />,
     icon: <CommerceIcon />
   }

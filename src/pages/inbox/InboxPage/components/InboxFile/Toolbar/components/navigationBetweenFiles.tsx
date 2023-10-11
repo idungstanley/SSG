@@ -39,12 +39,12 @@ export default function NavigationBetweenFiles() {
 
   const navigateItems = [
     {
-      id: 1,
+      id: 'previous',
       onClick: () => handleNavigateToFile('previous'),
       icon: <ArrowRightCircleIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
     },
     {
-      id: 2,
+      id: 'next',
       onClick: () => handleNavigateToFile('next'),
       icon: <ArrowLeftCircleIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
     }

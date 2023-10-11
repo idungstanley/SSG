@@ -19,6 +19,7 @@ import {
 } from '../../../../../features/task/taskSlice';
 
 interface IShowHideSettings {
+  isActive: string;
   scrollByEachGroup: string;
   splitSubtaskTwo: string;
   splitSubtaskThree: string;
@@ -32,6 +33,7 @@ interface IShowHideSettings {
 }
 
 export default function ShowHideSettings({
+  isActive,
   scrollByEachGroup,
   splitSubtaskTwo,
   splitSubtaskThree,
@@ -88,61 +90,61 @@ export default function ShowHideSettings({
 
   const viewSettings = [
     {
-      id: 2,
+      id: scrollByEachGroup,
       label: scrollByEachGroup
     },
     {
-      id: 3,
+      id: emptyStatuses,
       label: emptyStatuses
     },
     {
-      id: 4,
+      id: 'single_line_mode',
       icon: <FiChevronRight />,
       label: 'Single Line mode'
     },
     {
-      id: 5,
+      id: 'compact_mode',
       icon: <FiChevronRight />,
       label: 'Compact mode'
     },
     {
-      id: 6,
+      id: TaskInMultipleLists,
       label: TaskInMultipleLists
     },
     {
-      id: 7,
+      id: 'upper_case',
       label: 'Upper Case'
     },
     {
-      id: 8,
+      id: entityLocation,
       label: entityLocation
     },
     {
-      id: 9,
+      id: 'title_vertical_grid_line',
       label: 'Title Vertical Grid Line'
     },
     {
-      id: 10,
+      id: verticalGridLines,
       label: verticalGridLines
     },
     {
-      id: 11,
+      id: splitSubtaskTwo,
       label: splitSubtaskTwo
     },
     {
-      id: 12,
+      id: splitSubtaskThree,
       label: splitSubtaskThree
     },
     {
-      id: 13,
+      id: closedSubtask,
       label: closedSubtask
     },
     {
-      id: 14,
+      id: subTaskInMultipleLists,
       label: subTaskInMultipleLists
     },
     {
-      id: 15,
+      id: subTaskParentsNames,
       label: subTaskParentsNames
     }
   ];
@@ -209,7 +211,8 @@ export default function ShowHideSettings({
       <div className={`viewSettingsParent flex justify-center items-center text-${isAnyactive && 'alsoit-purple-50'}`}>
         <Menu.Button className="flex ml-1">
           <Button active={isAnyactive as boolean}>
-            <ShowIcon color={isActiveColor} /> <span>Show</span> <ArrowDrop color={isActiveColor} />
+            <ShowIcon color={isActiveColor} width="21" height="21" /> <span>{isActive}</span>{' '}
+            <ArrowDrop color={isActiveColor} />
           </Button>
         </Menu.Button>
       </div>

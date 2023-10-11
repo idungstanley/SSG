@@ -99,7 +99,7 @@ export function RealTime() {
       activeItemId === timerLastMemory.taskId)
   ) {
     return (
-      <div className="flex justify-center items-center text-alsoit-text-md w-14 tracking-wide relative">
+      <div className="flex justify-center items-center text-alsoit-text-md w-14 tracking-widest relative z-30">
         <div>
           {timerStatus && sameEntity() ? (
             <StopIcon className="w-4 h-4 cursor-pointer" onClick={() => stop()} />
@@ -107,7 +107,7 @@ export function RealTime() {
             <StartIcon className="w-4 h-4 cursor-pointer" onClick={() => handleStartTime()} />
           )}
         </div>
-        <span>
+        <span className="z-30">
           {`${String(duration.h).padStart(2, '0')}:${String(duration.m).padStart(2, '0')}:${String(duration.s).padStart(
             2,
             '0'
@@ -139,7 +139,7 @@ export function RealTime() {
     );
   }
   return (
-    <div className="flex justify-center items-center text-alsoit-text-md w-12 tracking-wide">
+    <div className="flex justify-center items-center text-alsoit-text-md tracking-widest z-30">
       <div>
         <StartIcon className="w-4 h-4 cursor-pointer" onClick={() => handleStartTime()} />
       </div>

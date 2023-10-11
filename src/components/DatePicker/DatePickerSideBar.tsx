@@ -9,6 +9,7 @@ import DoubleArrowLeft from '../../assets/icons/DoubleArrowLeft';
 import { VerticalScroll } from '../ScrollableContainer/VerticalScroll';
 import ThreeDotIcon from '../../assets/icons/ThreeDotIcon';
 import Recurring from './Recurring';
+import { pilotTabs } from '../../app/constants/pilotTabs';
 
 interface DatePickerSideBarProp {
   currentDate: dayjs.Dayjs;
@@ -106,8 +107,8 @@ export function DatePickerSideBar({ currentDate, setOpenSideBar }: DatePickerSid
   };
 
   const handleTabSwitch = () => {
-    dispatch(setActiveSubHubManagerTabId(4));
-    dispatch(setActiveTabId(9));
+    dispatch(setActiveSubHubManagerTabId('calendar_settings'));
+    dispatch(setActiveTabId(pilotTabs.ENTITY_MANAGER));
   };
 
   const handleDayClick = (type: string) => {

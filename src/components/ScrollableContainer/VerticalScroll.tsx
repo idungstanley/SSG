@@ -20,7 +20,6 @@ export function VerticalScroll({ children, bgColor, ...props }: CustomScrollable
     activeSubTimeClockTabId,
     activeSubHubManagerTabId,
     activeSubCommunicationTabId,
-    activeSubChecklistTabId,
     showTabLabel,
     isResize,
     activeItemId,
@@ -165,7 +164,6 @@ export function VerticalScroll({ children, bgColor, ...props }: CustomScrollable
     activeSubTimeClockTabId,
     activeSubHubManagerTabId,
     activeSubCommunicationTabId,
-    activeSubChecklistTabId,
     tasks,
     subtasks,
     thumbHeight

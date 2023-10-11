@@ -3,16 +3,16 @@ import { MdDragIndicator } from 'react-icons/md';
 import { useSortable } from '@dnd-kit/sortable';
 import { useDispatch } from 'react-redux';
 import {
-  setActiveSubChecklistTabId,
   setActiveSubCommunicationTabId,
   setActiveSubDetailsTabId
 } from '../../../../../../../features/workspace/workspaceSlice';
+import { pilotTabs } from '../../../../../../../app/constants/pilotTabs';
 
 interface TabProps {
-  id: number;
+  id: string;
   icon?: JSX.Element;
   showPilot?: boolean;
-  activeSub?: number | null;
+  activeSub?: string | null;
   name: string;
   source?: string;
 }
@@ -31,13 +31,11 @@ export default function SubtabDrag({ id, icon, showPilot, activeSub, name, sourc
     zIndex: isDragging ? 1 : undefined
   };
 
-  const handleClick = (id: number) => {
-    if (name === 'connect') {
+  const handleClick = (id: string) => {
+    if (name === pilotTabs.CONNECT) {
       dispatch(setActiveSubCommunicationTabId(id));
-    } else if (name === 'details') {
+    } else if (name === pilotTabs.DETAILS) {
       dispatch(setActiveSubDetailsTabId(id));
-    } else if (name === 'Checklist') {
-      dispatch(setActiveSubChecklistTabId(id));
     }
   };
 

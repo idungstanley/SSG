@@ -55,31 +55,31 @@ export default function Menu({ inboxId, type }: MenuProps) {
 
   const menuItems = [
     {
-      id: 2,
+      id: 'view',
       onClick: onViewInbox,
       title: 'View',
       isVisible: type === 'active' || type === 'archived'
     },
     {
-      id: 3,
+      id: 'pin',
       onClick: onPinInbox,
       title: 'Pin',
       isVisible: type === 'active'
     },
     {
-      id: 4,
+      id: 'hide',
       onClick: onHideInbox,
       title: type === 'hidden' ? 'Unhide' : 'Hide',
       isVisible: type === 'active' || type === 'hidden'
     },
     {
-      id: 5,
+      id: 'archive',
       onClick: onArchiveInbox,
       title: type === 'archived' ? 'Unarchive' : 'Archive',
       isVisible: type === 'active' || type === 'archived'
     },
     {
-      id: 1,
+      id: 'delete',
       onClick: onRestoreInbox,
       title: type === 'trashed' ? 'Restore' : 'Delete',
       isVisible: true

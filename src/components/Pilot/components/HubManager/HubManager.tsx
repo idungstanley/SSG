@@ -8,20 +8,24 @@ import HubManagerSubTab from './HubManagerSubTab';
 import CustomSuggestion from '../../../DatePicker/CustomSuggestions';
 import EntityManagerIcon from '../../../../assets/icons/EntityManagerIcon';
 import StatusManagement from '../../../status/StatusManagement';
+import { pilotTabs } from '../../../../app/constants/pilotTabs';
 
 const HubsOptions = [
-  { id: 1, element: <CreateHub /> },
-  { id: 2, element: <CreateWallet /> },
-  { id: 3, element: <CreateList /> },
-  { id: 4, element: <CustomSuggestion /> },
-  { id: 5, element: <StatusManagement /> }
+  { id: pilotTabs.CREATE_HUB, element: <CreateHub /> },
+  { id: pilotTabs.CREATE_WALLET, element: <CreateWallet /> },
+  { id: pilotTabs.CREATE_LIST, element: <CreateList /> },
+  { id: 'calendar_settings', element: <CustomSuggestion /> },
+  { id: 'status_management', element: <StatusManagement /> }
 ];
+
 export default function HubManager() {
   const { activeSubHubManagerTabId } = useAppSelector((state) => state.workspace);
+
   const selectedSubSection = useMemo(
     () => HubsOptions.find((option) => option.id === activeSubHubManagerTabId),
     [activeSubHubManagerTabId]
   );
+
   return (
     <>
       <SectionArea label="Entity Manager" icon={<EntityManagerIcon />} />

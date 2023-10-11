@@ -5,10 +5,11 @@ import { FcDocument, FcGoogle } from 'react-icons/fc';
 import { FaDropbox } from 'react-icons/fa';
 import { SiBox } from 'react-icons/si';
 import { useDispatch } from 'react-redux';
-import { setShowTaskUploadModal } from '../../../../../../features/task/taskSlice';
+import { setOpenFileUploadModal, setShowTaskUploadModal } from '../../../../../../features/task/taskSlice';
+import { useAppSelector } from '../../../../../../app/hooks';
 
 interface statusType {
-  id: number;
+  id: string;
   title: string;
   handleClick: () => void;
   color: string;
@@ -16,21 +17,24 @@ interface statusType {
   icon: JSX.Element;
 }
 
-export default function AddTo() {
+export default function AddTo({ locationn }: { locationn?: string }) {
   const dispatch = useDispatch();
+  const { fileUploadProps } = useAppSelector((state) => state.task);
   const statusList: statusType[] = [
     {
-      id: 1,
+      id: 'upload_file',
       title: 'Upload File',
       handleClick: () => {
-        dispatch(setShowTaskUploadModal(true));
+        locationn === 'list view'
+          ? dispatch(setOpenFileUploadModal({ ...fileUploadProps, openModal: true }))
+          : dispatch(setShowTaskUploadModal(true));
       },
       color: '#d3d3d3',
       bg: 'gray',
       icon: <GrAttachment className="w-5 text-gray-400 h-7" aria-hidden="true" />
     },
     {
-      id: 2,
+      id: 'new_doc',
       title: 'New Doc',
       handleClick: () => ({}),
       color: '#a875ff',
@@ -38,7 +42,7 @@ export default function AddTo() {
       icon: <FcDocument className="w-5 text-gray-200 h-7" aria-hidden="true" />
     },
     {
-      id: 3,
+      id: 'dropbox',
       title: 'Dropbox',
       handleClick: () => ({}),
       color: '#f7cb04',
@@ -46,7 +50,7 @@ export default function AddTo() {
       icon: <FaDropbox className="w-5 text-blue-700 h-7" aria-hidden="true" />
     },
     {
-      id: 4,
+      id: 'one_drive_sharepoint',
       title: 'OneDrive/Sharepoint',
       handleClick: () => ({}),
       color: '#6bc951',
@@ -54,7 +58,7 @@ export default function AddTo() {
       icon: <GrOnedrive className="w-5 text-blue-700 h-7" aria-hidden="true" />
     },
     {
-      id: 5,
+      id: 'box',
       title: 'Box',
       handleClick: () => ({}),
       color: '#6bc951',
@@ -62,7 +66,7 @@ export default function AddTo() {
       icon: <SiBox className="w-5 text-blue-600 h-7" aria-hidden="true" />
     },
     {
-      id: 6,
+      id: 'google_drive',
       title: 'Google Drive',
       handleClick: () => ({}),
       color: '#6bc951',
@@ -70,7 +74,7 @@ export default function AddTo() {
       icon: <FcGoogle className="w-5 h-7" aria-hidden="true" />
     },
     {
-      id: 7,
+      id: 'new_google_doc',
       title: 'New Google Doc',
       handleClick: () => ({}),
       color: '#6bc951',
@@ -80,8 +84,8 @@ export default function AddTo() {
   ];
 
   return (
-    <div className="text-left w-full h-full mx-2">
-      <div className="origin-top-right absolute z-40 mt-2 w-full mr-4 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none ">
+    <div className="text-left w-full h-full">
+      <div className="origin-top-right absolute w-full mr-4 rounded-md">
         {statusList.map((i) => (
           <div key={i.id}>
             <button

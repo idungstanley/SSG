@@ -33,9 +33,8 @@ export interface tagItem {
 }
 interface PropertyDetailsProps {
   Details?: IHubDetails | ITaskFullList | IListDetails | IWalletDetails;
-  type?: string;
 }
-export default function PropertyDetails({ Details, type }: PropertyDetailsProps) {
+export default function PropertyDetails({ Details }: PropertyDetailsProps) {
   const queryClient = useQueryClient();
 
   const [toggleSubTask, setToggleSubTask] = useState(false);
@@ -126,7 +125,7 @@ export default function PropertyDetails({ Details, type }: PropertyDetailsProps)
             <Priority details={Details} />
           </ToolTip>
         </section>
-        <section className="z-0 flex items-center justify-center space-x-3">
+        <section className="flex items-center justify-center space-x-3 z-10">
           <CustomReference />
           <ToolTip title="Share">
             <Share taskId={Details?.id} taskName={title} />
@@ -198,7 +197,8 @@ export default function PropertyDetails({ Details, type }: PropertyDetailsProps)
                     height: '80px',
                     width: '100%',
                     overflowY: 'auto',
-                    border: '1px solid #ccc'
+                    border: '1px solid #ccc',
+                    padding: '2px 0'
                   }}
                   theme="bubble"
                 />

@@ -59,6 +59,7 @@ import { addNewSubtaskManager } from '../../managers/Subtask';
 import { IList } from '../hubs/hubs.interfaces';
 import { setDragOverList, setDragOverTask, setDraggableItem } from '../list/listSlice';
 import { FilterWithId, FiltersOption } from '../../components/TasksHeader/ui/Filter/types/filters';
+import { pilotTabs } from '../../app/constants/pilotTabs';
 
 //edit a custom field
 export const UseEditCustomFieldService = (data: {
@@ -835,7 +836,7 @@ export const useCurrentTime = ({ workspaceId }: { workspaceId?: string }) => {
             dispatch(
               setTimerLastMemory({
                 hubId: dateString.model === EntityType.hub ? dateString.model_id : null,
-                activeTabId: 6,
+                activeTabId: pilotTabs.TIME_CLOCK,
                 subhubId: dateString.model === EntityType.subHub ? dateString.model_id : null,
                 listId: dateString.model === EntityType.list ? dateString.model_id : null,
                 taskId: dateString.model === EntityType.task ? dateString.model_id : null,
@@ -1289,7 +1290,6 @@ export const useAddFiltersForTask = () => {
       Object.keys(subtasks).forEach((listId) => {
         updatedSubtasks[listId] = updatedSubtasks[listId].map((task) => {
           if (parentId === task.id) {
-            console.log('aaa', task);
             return {
               ...task,
               filters: data.data.filter
