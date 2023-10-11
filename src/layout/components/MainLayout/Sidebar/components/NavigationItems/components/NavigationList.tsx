@@ -14,49 +14,49 @@ import { GrFormClose } from 'react-icons/gr';
 
 export const NavigationList = [
   {
-    id: '1',
+    id: 'home',
     name: 'Home',
     icon: <HomeIcon />,
     alwaysShow: true
   },
   {
-    id: '2',
+    id: 'notifications',
     name: 'Notifications',
     icon: <NotificationIcon />,
     alwaysShow: true
   },
   {
-    id: '3',
+    id: 'calendar',
     name: 'Calendar',
     icon: <CalendarIcon active={false} />,
     alwaysShow: false
   },
   {
-    id: '4',
+    id: 'community',
     name: 'Community',
     icon: <HiOutlineUserGroup className="w-5 h-5" aria-hidden="true" />,
     alwaysShow: false
   },
   {
-    id: '5',
+    id: 'template_center',
     name: 'Template Center',
     icon: <TemplateIcon />,
     alwaysShow: false
   },
   {
-    id: '6',
+    id: 'goals',
     name: 'Goals',
     icon: <GoalIcon />,
     alwaysShow: false
   },
   {
-    id: '7',
+    id: 'dashboards',
     name: 'Dashboards',
     icon: <DashboardIcon />,
     alwaysShow: false
   },
   {
-    id: '8',
+    id: 'favorites',
     name: 'Favorites',
     icon: <FavoriteIcon />,
     alwaysShow: false

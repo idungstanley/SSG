@@ -11,7 +11,7 @@ import { Cog6ToothIcon } from '@heroicons/react/24/outline';
 // import { setToggleArchiveList } from '../../../../../features/list/listSlice';
 
 interface itemsType {
-  id: number;
+  id: string;
   title: string;
   icon: JSX.Element;
   handleClick: () => void;
@@ -27,7 +27,7 @@ export default function ArchiveMenu() {
 
   const itemsList: itemsType[] = [
     {
-      id: 1,
+      id: 'show_archived_hubs',
       title: 'Show archived Hubs',
       handleClick: () => {
         // if (toggleArchive === 0) {
@@ -40,8 +40,8 @@ export default function ArchiveMenu() {
       isVisible: true
     },
     {
-      id: 2,
-      title: 'Show archived Wallet',
+      id: 'show_archived_wallets',
+      title: 'Show archived Wallets',
       handleClick: () => {
         // dispatch(setToggleArchiveWallet(!toggleArchiveWallet));
       },
@@ -49,7 +49,7 @@ export default function ArchiveMenu() {
       isVisible: true
     },
     {
-      id: 3,
+      id: 'show_archived_lists',
       title: 'Show archived Lists',
       handleClick: () => {
         // dispatch(setToggleArchiveList(!toggleArchiveList));

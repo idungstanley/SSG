@@ -47,7 +47,6 @@ interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   parentId?: string;
   onClose?: VoidFunction;
   isOver?: boolean;
-  isSplitSubtask?: boolean;
   isLastSubtaskLevel: boolean;
 }
 
@@ -64,7 +63,6 @@ export function StickyCol({
   task,
   paddingLeft = 0,
   dragElement,
-  isSplitSubtask,
   isLastSubtaskLevel,
   ...props
 }: ColProps) {
@@ -276,10 +274,10 @@ export function StickyCol({
           {...props}
         >
           <div
-            className={`flex ml-1 items-center h-full space-x-1 ${isSplitSubtask && 'bg-white/90 border-t'}`}
+            className="flex ml-1 items-center h-full space-x-1"
             style={{
               padding: '15px 0',
-              paddingLeft: `${isSplitSubtask ? '4px' : 0}`,
+              paddingLeft: 0,
               height:
                 saveSettingOnline?.singleLineView && !saveSettingOnline?.CompactView
                   ? '42px'
@@ -432,10 +430,10 @@ export function StickyCol({
           {...props}
         >
           <div
-            className={`w-11 flex items-center h-full space-x-1 ${isSplitSubtask && 'bg-white/90 border-t'}`}
+            className="w-11 flex items-center h-full space-x-1"
             style={{
               padding: '15px 0',
-              paddingLeft: `${isSplitSubtask ? '4px' : 0}`,
+              paddingLeft: 0,
               height: '64px'
             }}
           />
@@ -443,10 +441,12 @@ export function StickyCol({
             style={{ paddingLeft }}
             className={cl(
               COL_BG,
-              `relative border-t ${verticalGrid && 'border-r'} w-full h-16  py-4 p-4 flex items-center`
+              `relative border-t ${verticalGrid && 'border-r'} ${
+                verticalGridlinesTask && 'border-r'
+              } w-full h-16  py-4 p-4 flex items-center`
             )}
           >
-            <div className="absolute bottom-0 right-0 flex space-x-1">
+            <div className="absolute bottom-0 right-0 flex space-x-1 p-1">
               <ToolTip title="Cancel">
                 <div
                   className="border rounded-sm"

@@ -36,6 +36,7 @@ import '../../../../../styles/task.css';
 import { EntityType } from '../../../../../utils/EntityTypes/EntityType';
 import { listColumnProps } from '../../../../../pages/workspace/tasks/component/views/ListColumns';
 import RoundedCheckbox from '../../../../Checkbox/RoundedCheckbox';
+import { pilotTabs } from '../../../../../app/constants/pilotTabs';
 
 interface HeadProps {
   columns: listColumnProps[];
@@ -196,9 +197,9 @@ export function Head({
       icon: <CiSettings />,
       handleClick: () => {
         dispatch(setIsManageStatus(!isManageStatus));
-        dispatch(setActiveTabId(9));
+        dispatch(setActiveTabId(pilotTabs.ENTITY_MANAGER));
         setShowStatusDropdown(null);
-        dispatch(setActiveSubHubManagerTabId(5));
+        dispatch(setActiveSubHubManagerTabId('status_management'));
         dispatch(setStatusTaskListDetails({ listId, listName }));
       }
     }
@@ -216,7 +217,7 @@ export function Head({
     }
     dispatch(setEntityForCustom({ id, type }));
     dispatch(setEditCustomProperty(undefined));
-    dispatch(setActiveTabId(10));
+    dispatch(setActiveTabId(pilotTabs.TEMPLATES));
   };
 
   return columns.length > 0 ? (
@@ -239,7 +240,7 @@ export function Head({
               className="py-0.5 relative px-2 rounded-tr-md -mb-1 flex items-center space-x-1 text-white dFlex "
               style={{
                 backgroundColor: headerStatusColor,
-                marginLeft: isSplitSubtask ? 0 : '38px',
+                marginLeft: '38px',
                 height: '25px',
                 gap: '5px'
               }}

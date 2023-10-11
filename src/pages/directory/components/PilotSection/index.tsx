@@ -5,17 +5,18 @@ import { useAppDispatch } from '../../../../app/hooks';
 import { setShowPilotSideOver } from '../../../../features/general/slideOver/slideOverSlice';
 import { useParams } from 'react-router-dom';
 import { useGetDirectory, useGetDirectoryTemplate } from '../../../../features/directory/directoryService';
+import { pilotTabs } from '../../../../app/constants/pilotTabs';
 
 export const sections = [
   {
-    id: 1,
+    id: pilotTabs.DETAILS,
     element: <Details />
   }
 ];
 
 export const tabs = [
   {
-    id: 1,
+    id: pilotTabs.DETAILS,
     label: 'Details',
     icon: <InformationCircleIcon className="w-4 h-4" />
   }

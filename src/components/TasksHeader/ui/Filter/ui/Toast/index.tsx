@@ -6,7 +6,7 @@ import { EndTimeEntriesService, UseSaveTaskFilters, useSaveData } from '../../..
 import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
 import { setTimeZone } from '../../../../../../features/settings/user/userSettingsSlice';
 import { setTimerInterval, setTimerStatus, setUpdateTimerDuration } from '../../../../../../features/task/taskSlice';
-import { Header } from '../../../../../Pilot/components/TimeClock/ClockLog';
+import { Header } from '../../../../../../features/task/interface.tasks';
 
 interface ToastProps {
   title: string;

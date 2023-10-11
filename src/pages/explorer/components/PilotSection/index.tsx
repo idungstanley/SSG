@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import {
   ChatBubbleLeftEllipsisIcon,
   DocumentTextIcon,
@@ -5,7 +6,6 @@ import {
   InformationCircleIcon,
   SignalIcon
 } from '@heroicons/react/24/outline';
-import React, { useEffect } from 'react';
 import { TbShield } from 'react-icons/tb';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import ChatForPilot from '../../../../components/Chat/ChatForPilot';
@@ -16,62 +16,63 @@ import WatchersForPilot from '../../../../components/Watchers/WatchersForPilot';
 import { useGetExplorerFile, useGetExplorerFolder } from '../../../../features/explorer/explorerService';
 import { setShowPilotSideOver } from '../../../../features/general/slideOver/slideOverSlice';
 import Details from './components/Details';
+import { pilotTabs } from '../../../../app/constants/pilotTabs';
 
 const sections = [
   {
-    id: 1,
+    id: pilotTabs.DETAILS,
     element: <Details />
   },
   {
-    id: 2,
+    id: pilotTabs.LOGS,
     element: <History />
   },
   {
-    id: 3,
+    id: pilotTabs.PERMISSIONS,
     element: <Permissions />
   },
   {
-    id: 4,
+    id: pilotTabs.COMMENTS,
     element: <CommentsForPilot />
   },
   {
-    id: 5,
+    id: pilotTabs.WATCHERS,
     element: <WatchersForPilot />
   },
   {
-    id: 6,
+    id: pilotTabs.CONNECT,
     element: <ChatForPilot />
   }
 ];
 
 const tabs = [
   {
-    id: 1,
+    id: pilotTabs.DETAILS,
     label: 'Details',
     icon: <InformationCircleIcon className="w-4 h-4" />
   },
   {
-    id: 2,
+    id: pilotTabs.LOGS,
     label: 'Logs',
     icon: <DocumentTextIcon className="w-4 h-4" />
   },
   {
-    id: 3,
+    id: pilotTabs.PERMISSIONS,
     label: 'Permissions',
     icon: <TbShield className="w-4 h-4" />
   },
   {
-    id: 4,
+    id: pilotTabs.COMMENTS,
     label: 'Comments',
     icon: <ChatBubbleLeftEllipsisIcon className="w-4 h-4" />
   },
   {
-    id: 5,
+    id: pilotTabs.WATCHERS,
     label: 'Watchers',
     icon: <EyeIcon className="w-4 h-4" />
   },
   {
-    id: 6,
+    id: pilotTabs.CONNECT,
     label: 'Connect',
     icon: <SignalIcon className="w-4 h-4" />
   }

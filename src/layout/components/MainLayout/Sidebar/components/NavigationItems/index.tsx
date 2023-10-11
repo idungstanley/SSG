@@ -62,8 +62,8 @@ export default function NavigationItems({
   const [countOfItemToShow, setCountOfItemToShow] = useState<number>(3);
   const [showDropdown, setShowDropdown] = useState<null | HTMLSpanElement | HTMLDivElement>(null);
 
-  const workspaceName = workspaceData?.data?.workspace.name;
-  const workspaceColor = workspaceData?.data?.workspace.color as string;
+  const workspaceName = workspaceData?.data?.workspace?.name;
+  const workspaceColor = workspaceData?.data?.workspace?.color as string;
 
   const idsFromLS = JSON.parse(localStorage.getItem('navItem') || '[]') as string[];
 
@@ -73,28 +73,28 @@ export default function NavigationItems({
 
   const navigation = [
     {
-      id: '1',
+      id: 'home',
       name: 'Home',
       href: '/',
       icon: <HomeIcon />,
       alwaysShow: true
     },
     {
-      id: '2',
+      id: 'notifications',
       name: 'Notifications',
       href: `/${currentWorkspaceId}/notification`,
       icon: <NotificationIcon />,
       alwaysShow: true
     },
     {
-      id: '3',
+      id: 'calendar',
       name: 'Calendar',
       href: `/${currentWorkspaceId}/calendar`,
       icon: <CalendarIcon active={false} />,
       alwaysShow: false
     },
     {
-      id: '4',
+      id: 'community',
       name: 'Community',
       href: `/${currentWorkspaceId}/community`,
       icon: (
@@ -110,28 +110,28 @@ export default function NavigationItems({
       alwaysShow: false
     },
     {
-      id: '5',
+      id: 'template_center',
       name: 'Template Center',
       href: `/${currentWorkspaceId}/directory`,
       icon: <TemplateIcon />,
       alwaysShow: false
     },
     {
-      id: '6',
+      id: 'goals',
       name: 'Goals',
       href: `/${currentWorkspaceId}/goals`,
       icon: <GoalIcon />,
       alwaysShow: false
     },
     {
-      id: '7',
+      id: 'dashboards',
       name: 'Dashboards',
       href: `/${currentWorkspaceId}/dashboard`,
       icon: <DashboardIcon />,
       alwaysShow: false
     },
     {
-      id: '8',
+      id: 'favorites',
       name: 'Favorites',
       href: `/${currentWorkspaceId}/favorites`,
       icon: <FavoriteIcon />,

@@ -12,7 +12,6 @@ import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import {
   THREE_SUBTASKS_LEVELS,
   TWO_SUBTASKS_LEVELS,
-  getSplitSubTaskLevels,
   setSaveSettingLocal,
   setSaveSettingOnline,
   setTriggerSaveSettings,
@@ -20,8 +19,10 @@ import {
 } from '../../../../../features/task/taskSlice';
 
 interface IShowHideSettings {
+  isActive: string;
   scrollByEachGroup: string;
-  splitSubTask: string;
+  splitSubtaskTwo: string;
+  splitSubtaskThree: string;
   verticalGridLines: string;
   entityLocation: string;
   subTaskParentsNames: string;
@@ -32,8 +33,10 @@ interface IShowHideSettings {
 }
 
 export default function ShowHideSettings({
+  isActive,
   scrollByEachGroup,
-  splitSubTask,
+  splitSubtaskTwo,
+  splitSubtaskThree,
   verticalGridLines,
   entityLocation,
   subTaskParentsNames,
@@ -53,14 +56,13 @@ export default function ShowHideSettings({
     verticalGridlinesTask,
     saveSettingList,
     splitSubTaskState,
-    autoSave,
     splitSubTaskLevels,
+    autoSave,
     saveSettingOnline
   } = useAppSelector((state) => state.task);
 
   const [checkedStates, setCheckedStates] = useState<boolean[]>([]);
   const [isAnyactive, setIsAnyactive] = useState<boolean>();
-  const [levelItems, setLevelItems] = useState<string[]>(splitSubTaskLevels);
 
   const isActiveColor = isAnyactive ? '#BF01FE' : 'black';
 
@@ -73,6 +75,8 @@ export default function ShowHideSettings({
     taskUpperCase,
     verticalGridlinesTask,
     splitSubTaskState,
+    splitSubtaskTwoState: splitSubTaskLevels.includes(TWO_SUBTASKS_LEVELS),
+    splitSubtaskThreeState: splitSubTaskLevels.includes(THREE_SUBTASKS_LEVELS),
     autoSave
   };
 
@@ -86,57 +90,61 @@ export default function ShowHideSettings({
 
   const viewSettings = [
     {
-      id: 2,
+      id: scrollByEachGroup,
       label: scrollByEachGroup
     },
     {
-      id: 3,
+      id: emptyStatuses,
       label: emptyStatuses
     },
     {
-      id: 4,
+      id: 'single_line_mode',
       icon: <FiChevronRight />,
       label: 'Single Line mode'
     },
     {
-      id: 5,
+      id: 'compact_mode',
       icon: <FiChevronRight />,
       label: 'Compact mode'
     },
     {
-      id: 6,
+      id: TaskInMultipleLists,
       label: TaskInMultipleLists
     },
     {
-      id: 7,
+      id: 'upper_case',
       label: 'Upper Case'
     },
     {
-      id: 8,
+      id: entityLocation,
       label: entityLocation
     },
     {
-      id: 9,
+      id: 'title_vertical_grid_line',
       label: 'Title Vertical Grid Line'
     },
     {
-      id: 10,
+      id: verticalGridLines,
       label: verticalGridLines
     },
     {
-      id: 11,
-      label: splitSubTask
+      id: splitSubtaskTwo,
+      label: splitSubtaskTwo
     },
     {
-      id: 12,
+      id: splitSubtaskThree,
+      label: splitSubtaskThree
+    },
+    {
+      id: closedSubtask,
       label: closedSubtask
     },
     {
-      id: 13,
+      id: subTaskInMultipleLists,
       label: subTaskInMultipleLists
     },
     {
-      id: 14,
+      id: subTaskParentsNames,
       label: subTaskParentsNames
     }
   ];
@@ -164,15 +172,17 @@ export default function ShowHideSettings({
         const CompactView = viewSettings.findIndex((item) => item.label === 'Compact mode');
         const taskUpperCase = viewSettings.findIndex((item) => item.label === 'Upper Case');
         const verticalGrid = viewSettings.findIndex((item) => item.label === 'Property Vertical Grid Line');
-        const splitSubTaskState = viewSettings.findIndex((item) => item.label === 'Split Sub Task');
+        const splitSubtaskTwoState = viewSettings.findIndex((item) => item.label === 'Split 2 level of subtasks');
+        const splitSubtaskThreeState = viewSettings.findIndex((item) => item.label === 'Split 3 level of subtasks');
 
-        if (saveSettingList != undefined && saveSettingList?.view_settings != null) {
+        if (saveSettingList !== undefined && saveSettingList?.view_settings !== null) {
           newState[singleLineIndex] = saveSettingOnline?.singleLineView as boolean;
           newState[TitleVerticalGridLineIndex] = saveSettingOnline?.verticalGridlinesTask as boolean;
           newState[CompactView] = saveSettingOnline?.CompactView as boolean;
           newState[taskUpperCase] = saveSettingOnline?.taskUpperCase as boolean;
           newState[verticalGrid] = saveSettingOnline?.verticalGrid as boolean;
-          newState[splitSubTaskState] = saveSettingOnline?.splitSubTaskState as boolean;
+          newState[splitSubtaskTwoState] = saveSettingOnline?.splitSubtaskTwoState as boolean;
+          newState[splitSubtaskThreeState] = saveSettingOnline?.splitSubtaskThreeState as boolean;
         } else {
           newState[singleLineIndex] = true;
           newState[TitleVerticalGridLineIndex] = true;
@@ -183,17 +193,6 @@ export default function ShowHideSettings({
 
     handleCheckboxChange();
   }, [saveSettingList]);
-
-  const splitSubtasksOptions = [
-    {
-      id: TWO_SUBTASKS_LEVELS,
-      label: '2 levels of subtasks'
-    },
-    {
-      id: THREE_SUBTASKS_LEVELS,
-      label: '3 levels of subtasks'
-    }
-  ];
 
   const handleChange = (viewMode: string, index: number) => {
     dispatch(setTriggerSaveSettingsModal(true));
@@ -207,23 +206,12 @@ export default function ShowHideSettings({
     }
   };
 
-  const handleChangeSplitLevel = (levelId: string) => {
-    let levelOptions: string[] = [];
-    if (levelItems.includes(levelId)) {
-      levelOptions = levelItems.filter((id) => id !== levelId);
-    } else {
-      levelOptions = [...levelItems, levelId];
-    }
-    setLevelItems(levelOptions);
-    dispatch(getSplitSubTaskLevels(levelOptions));
-  };
-
   return (
     <Menu>
       <div className={`viewSettingsParent flex justify-center items-center text-${isAnyactive && 'alsoit-purple-50'}`}>
         <Menu.Button className="flex ml-1">
           <Button active={isAnyactive as boolean}>
-            <ShowIcon color={isActiveColor} width="21" height="21" /> <span>Show</span>{' '}
+            <ShowIcon color={isActiveColor} width="21" height="21" /> <span>{isActive}</span>{' '}
             <ArrowDrop color={isActiveColor} />
           </Button>
         </Menu.Button>
@@ -270,7 +258,7 @@ export default function ShowHideSettings({
                   className={`flex justify-between items-center w-full group ${
                     view.label === 'Title Vertical Grid Line' && 'border-t-2 pt-4'
                   } ${view.label === 'Task In Multiple Lists' && 'border-t-2 pt-4'} ${
-                    view.label === 'Split Sub Task' && 'border-t-2 pt-4'
+                    view.label === 'Split 2 level of subtasks' && 'border-t-2 pt-4'
                   }`}
                 >
                   <p className="flex items-center pl-2 space-x-2 text-md whitespace-nowrap">{view.label}</p>
@@ -294,11 +282,11 @@ export default function ShowHideSettings({
                       </p>
                     </p>
                   )}
-                  {view.label === 'Split Sub Task' && (
+                  {view.label === 'Split 2 level of subtasks' && (
                     <p className="relative">
                       <p
                         className="absolute text-center text-gray-400 bg-white border border-gray-100 whitespace-nowrap"
-                        style={{ top: '-35px', right: '-4px', fontSize: '8px' }}
+                        style={{ top: '-35px', right: '20px', fontSize: '8px' }}
                       >
                         SUB TASK SETTINGS
                       </p>
@@ -317,29 +305,6 @@ export default function ShowHideSettings({
                   </p>
                 </button>
               </Menu.Item>
-              {view.label === 'Split Sub Task' && splitSubTaskState ? (
-                <ul>
-                  {splitSubtasksOptions.map((option) => (
-                    <li
-                      key={option.id}
-                      className="flex justify-between text-alsoit-text-lg font-semibold py-1.5 flex space-x-2 items-center pl-2"
-                    >
-                      <span className="font-semibold">{option.label}</span>
-                      <p className="flex items-center pr-2 ">
-                        <label className="switch" onClick={(event) => event.stopPropagation()}>
-                          <input
-                            className="inputShow"
-                            type="checkbox"
-                            checked={levelItems.includes(option.id)}
-                            onChange={() => handleChangeSplitLevel(option.id)}
-                          />
-                          <div className={`slider ${levelItems.includes(option.id) ? 'checked' : ''}`}></div>
-                        </label>
-                      </p>
-                    </li>
-                  ))}
-                </ul>
-              ) : null}
             </Fragment>
           ))}
         </Menu.Items>

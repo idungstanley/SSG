@@ -65,7 +65,7 @@ export function YearLineOption({ setOptions }: Props) {
           onClick={() => setDropDown(!dropDown)}
         >
           <span>{value.months}</span>
-          {dropDown ? <ArrowUp /> : <ArrowDown dimensions={{ height: 7, width: 7 }} />}
+          {dropDown ? <ArrowUp /> : <ArrowDown className="w-2 h-2" />}
         </div>
         {dropDown && yearDropDown()}
       </div>

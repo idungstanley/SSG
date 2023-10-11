@@ -14,21 +14,21 @@ import { useAppSelector } from '../../../../../../../../../app/hooks';
 import { setSelectedSorting } from '../../../../../../../../../features/explorer/explorerSlice';
 import { cl } from '../../../../../../../../../utils';
 
-export const sortItems = (items: IStringifiedFile[], sortType: number) =>
+export const sortItems = (items: IStringifiedFile[], sortType: string) =>
   items.sort((a, b) =>
-    sortType === 1
+    sortType === 'created_at_latest'
       ? b.created_at.localeCompare(a.created_at)
-      : sortType === 2
+      : sortType === 'created_at_oldest'
       ? a.created_at.localeCompare(b.created_at)
-      : sortType === 3
+      : sortType === 'modified_at_latest'
       ? b.updated_at.localeCompare(a.updated_at)
-      : sortType === 4
+      : sortType === 'modified_at_oldest'
       ? a.updated_at.localeCompare(b.updated_at)
-      : sortType === 5
+      : sortType === 'name_a_z'
       ? a.name.localeCompare(b.name)
-      : sortType === 6
+      : sortType === 'name_z_a'
       ? b.name.localeCompare(a.name)
-      : sortType === 7
+      : sortType === 'size_largest'
       ? +a.size < +b.size
         ? 1
         : -1
@@ -39,42 +39,42 @@ export const sortItems = (items: IStringifiedFile[], sortType: number) =>
 
 const sortingItems = [
   {
-    id: 1,
+    id: 'created_at_latest',
     title: 'Created at (latest)',
     icon: <ClockIcon className="mr-2 h-5 w-5 text-gray-400 group-hover:text-gray-500" aria-hidden="true" />
   },
   {
-    id: 2,
+    id: 'created_at_oldest',
     title: 'Created at (oldest)',
     icon: <ClockIcon className="mr-2 h-5 w-5 text-gray-400 group-hover:text-gray-500" aria-hidden="true" />
   },
   {
-    id: 3,
+    id: 'modified_at_latest',
     title: 'Modified at (latest)',
     icon: <PencilIcon className="mr-2 h-5 w-5 text-gray-400 group-hover:text-gray-500" aria-hidden="true" />
   },
   {
-    id: 4,
+    id: 'modified_at_oldest',
     title: 'Modified at (oldest)',
     icon: <PencilIcon className="mr-2 h-5 w-5 text-gray-400 group-hover:text-gray-500" aria-hidden="true" />
   },
   {
-    id: 5,
+    id: 'name_a_z',
     title: 'Name (A-Z)',
     icon: <BarsArrowUpIcon className="mr-2 h-5 w-5 text-gray-400 group-hover:text-gray-500" aria-hidden="true" />
   },
   {
-    id: 6,
+    id: 'name_z_a',
     title: 'Name (Z-A)',
     icon: <BarsArrowDownIcon className="mr-2 h-5 w-5 text-gray-400 group-hover:text-gray-500" aria-hidden="true" />
   },
   {
-    id: 7,
+    id: 'size_largest',
     title: 'Size (largest)',
     icon: <PaperClipIcon className="mr-2 h-5 w-5 text-gray-400 group-hover:text-gray-500" aria-hidden="true" />
   },
   {
-    id: 8,
+    id: 'size_smallest',
     title: 'Size (smallest)',
     icon: <PaperClipIcon className="mr-2 h-5 w-5 text-gray-400 group-hover:text-gray-500" aria-hidden="true" />
   }
@@ -84,7 +84,7 @@ export default function Sorting() {
   const dispatch = useDispatch();
   const { selectedSortingId } = useAppSelector((state) => state.explorer);
 
-  const handleClick = (itemId: number) => {
+  const handleClick = (itemId: string) => {
     dispatch(setSelectedSorting(itemId));
     localStorage.setItem('selectedSortingId', JSON.stringify(itemId));
   };

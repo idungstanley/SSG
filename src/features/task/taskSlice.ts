@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { listColumnProps } from '../../pages/workspace/tasks/component/views/ListColumns';
 import { IField, IFieldValue, ITask_statuses } from '../list/list.interfaces';
 import {
+  Header,
   IDuration,
   IExtraFields,
   IHistoryFilterMemory,
@@ -10,6 +11,7 @@ import {
   ITaskFullList,
   ITimerDetails,
   Status,
+  Tag,
   Task,
   TaskKey
 } from './interface.tasks';
@@ -20,7 +22,6 @@ import {
 } from '../../components/TasksHeader/ui/Filter/types/filters';
 import { DEFAULT_FILTERS_OPTION } from '../../components/TasksHeader/ui/Filter/config/filterConfig';
 import { ITeamMembersAndGroup } from '../settings/teamMembersAndGroups.interfaces';
-import { Header } from '../../components/Pilot/components/TimeClock/ClockLog';
 import { ItaskViews } from '../hubs/hubs.interfaces';
 
 export interface ICustomField {
@@ -90,6 +91,7 @@ export interface ImyTaskData {
   custom_fields: ICustomField[];
   custom_field_columns: IField[];
   list?: { id: string; name: string; parent: IParent; color?: string };
+  tags: Tag[];
 }
 
 export interface ImyTaskData2 {
@@ -127,6 +129,13 @@ interface entityForCustom {
   type: string | undefined;
 }
 
+interface fileUploadPropsType {
+  openModal: boolean;
+  fieldId?: string;
+  listId?: string;
+  taskId?: string;
+}
+
 export const TWO_SUBTASKS_LEVELS = 'two_levels';
 export const THREE_SUBTASKS_LEVELS = 'three_levels';
 
@@ -156,7 +165,7 @@ interface TaskState {
   showNewTaskId: string;
   singleLineView: boolean;
   toggleAllSubtask: boolean;
-  toggleAllSubtaskSplit: string[];
+  toggleAllSubtaskSplit: string;
   separateSubtasksMode: boolean;
   CompactView: boolean;
   taskUpperCase: boolean;
@@ -230,6 +239,7 @@ interface TaskState {
   newCustomPropertyDetails: customPropertyInfo;
   editCustomProperty: IField | undefined;
   dragToBecomeSubTask: boolean;
+  fileUploadProps: fileUploadPropsType;
 }
 
 const initialState: TaskState = {
@@ -271,7 +281,7 @@ const initialState: TaskState = {
   triggerAutoSave: false,
   triggerSaveSettingsModal: false,
   toggleAllSubtask: false,
-  toggleAllSubtaskSplit: [],
+  toggleAllSubtaskSplit: '',
   verticalGridlinesTask: false,
   splitSubTaskState: false,
   splitSubTaskLevels: [],
@@ -347,7 +357,13 @@ const initialState: TaskState = {
     }
   },
   editCustomProperty: undefined,
-  dragToBecomeSubTask: false
+  dragToBecomeSubTask: false,
+  fileUploadProps: {
+    fieldId: undefined,
+    taskId: undefined,
+    listId: undefined,
+    openModal: false
+  }
 };
 
 export const taskSlice = createSlice({
@@ -490,9 +506,9 @@ export const taskSlice = createSlice({
     setSeparateSubtasksMode(state, action: PayloadAction<boolean>) {
       state.separateSubtasksMode = action.payload;
       state.toggleAllSubtask = false;
-      state.toggleAllSubtaskSplit = [];
+      state.toggleAllSubtaskSplit = '';
     },
-    setToggleAllSubtaskSplit(state, action: PayloadAction<string[]>) {
+    setToggleAllSubtaskSplit(state, action: PayloadAction<string>) {
       state.toggleAllSubtaskSplit = action.payload;
       state.toggleAllSubtask = false;
       state.separateSubtasksMode = false;
@@ -665,6 +681,9 @@ export const taskSlice = createSlice({
     },
     setEditCustomProperty(state, action: PayloadAction<IField | undefined>) {
       state.editCustomProperty = action.payload;
+    },
+    setOpenFileUploadModal(state, action: PayloadAction<fileUploadPropsType>) {
+      state.fileUploadProps = action.payload;
     }
   }
 });
@@ -759,6 +778,7 @@ export const {
   setCustomSuggetionsField,
   setNewCustomPropertyDetails,
   setEditCustomProperty,
-  setDragToBecomeSubTask
+  setDragToBecomeSubTask,
+  setOpenFileUploadModal
 } = taskSlice.actions;
 export default taskSlice.reducer;

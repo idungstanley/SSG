@@ -13,7 +13,7 @@ import {
 import { setActiveTabId } from '../../../../../../features/workspace/workspaceSlice';
 import { useUpdateEntityCustomFieldValue } from '../../../../../../features/list/listService';
 import '../../../../../../styles/task.css';
-import { UseGetAllTagsService } from '../../../../../../features/workspace/tags/tagService';
+import { pilotTabs } from '../../../../../../app/constants/pilotTabs';
 
 interface dropdownProps {
   optionsFromField:
@@ -37,8 +37,6 @@ function TagsDropdown({ optionsFromField, allOptions, currentProperty, taskId }:
   const { updateCords } = useAppSelector((state) => state.task);
   const { cords, relativeRef } = useAbsolute(updateCords, 160);
 
-  const { data: tagsData, status } = UseGetAllTagsService();
-
   const valueIds = optionsFromField?.map((obj) => ({ value: obj.id }));
 
   const filteredOptions = allOptions?.filter((option) => option.name.toLowerCase().includes(searchValue.toLowerCase()));
@@ -55,7 +53,7 @@ function TagsDropdown({ optionsFromField, allOptions, currentProperty, taskId }:
 
   const handleEditCustom = () => {
     dispatch(setEditCustomProperty(currentProperty));
-    dispatch(setActiveTabId(10));
+    dispatch(setActiveTabId(pilotTabs.TEMPLATES));
     dispatch(setEntityForCustom({ id: undefined, type: undefined }));
     dispatch(setNewCustomPropertyDetails({ type: 'Tags', name: currentProperty.name, color: currentProperty.color }));
     setIsOpen(false);

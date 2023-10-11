@@ -67,6 +67,10 @@ import Construction from './pages/settings/UserSettings/Pages/Construction';
 import TaskInvite from './pages/workspace/tasks/taskInvite/TaskInvite';
 import WorkSpaceTable from './pages/settings/WorkspaceSettings/GeneralWorkSpaceSettings/Table';
 import EverythingPage from './pages/everything';
+import ForgotPassword from './pages/workspace/createWorkspace/auth/ForgotPassword/ForgotPassword';
+import EmailSentPage from './pages/workspace/createWorkspace/auth/ForgotPassword/EmailSentPage';
+import ResetPassword from './pages/workspace/createWorkspace/auth/ForgotPassword/ResetPassword';
+import AlsoHr from './pages/hr';
 
 const inbox = [
   {
@@ -144,7 +148,6 @@ export const routes = (user: IUser | null) => {
               path: '',
               element: <WallchartPage />
             },
-
             {
               path: 'types',
               element: <LeaveTypesPage />
@@ -155,6 +158,7 @@ export const routes = (user: IUser | null) => {
             }
           ]
         },
+        { path: 'hr/h/:hubId', element: <AlsoHr /> },
         { path: 'dashboard', element: <Dashboard /> },
         { path: 'tasks', element: <TasksIndex /> },
         { path: 'favorites', element: <Favorites /> },
@@ -183,7 +187,10 @@ export const routes = (user: IUser | null) => {
       children: [
         { path: 'login', element: <LoginPage /> },
         { path: 'register', element: <RegisterPage /> },
-        { path: 'register/:inviteCode', element: <RegisterPage /> }
+        { path: 'register/:inviteCode', element: <RegisterPage /> },
+        { path: 'forgot', element: <ForgotPassword /> },
+        { path: 'recover', element: <EmailSentPage /> },
+        { path: 'reset-password/:resetCode', element: <ResetPassword /> }
       ]
     },
     {

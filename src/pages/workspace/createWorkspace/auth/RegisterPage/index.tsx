@@ -51,11 +51,11 @@ function RegisterPage() {
     }
   }, [data]);
 
-  const onSubmit = (values: { name?: string; email: string; password: string }) => {
+  const onSubmit = (values: { name?: string; email?: string; password?: string }) => {
     onRegister({
       name: values.name || '',
-      email: values.email,
-      password: values.password,
+      email: values.email || '',
+      password: values.password || '',
       inviteCode
     });
   };

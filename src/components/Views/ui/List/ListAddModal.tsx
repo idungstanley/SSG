@@ -37,84 +37,84 @@ export default function ListAddModal({
 
   const items = [
     {
-      id: 1,
+      id: 'create_new',
       icon: <AiOutlinePlus />,
       arrowRight: <IoIosArrowForward />,
       label: 'Create new',
       handleClick: () => null
     },
     {
-      id: 2,
+      id: 'rename',
       icon: <GrEdit />,
       arrowRight: null,
       label: 'Rename',
       handleClick: () => null
     },
     {
-      id: 3,
+      id: 'copy_link',
       icon: <AiOutlineLink />,
       arrowRight: null,
       label: 'Copy link',
       handleClick: () => null
     },
     {
-      id: 4,
+      id: 'add_to_favorite',
       icon: <AiOutlineStar />,
       arrowRight: null,
       label: 'Add to favorite',
       handleClick: () => null
     },
     {
-      id: 5,
+      id: 'duplicate',
       icon: <HiOutlineDuplicate />,
       arrowRight: null,
       label: 'Duplicate',
       handleClick: () => null
     },
     {
-      id: 6,
+      id: 'move',
       icon: <MdOutlineSendToMobile />,
       arrowRight: null,
       label: 'Move',
       handleClick: () => null
     },
     {
-      id: 7,
+      id: 'email_to_list',
       icon: <HiOutlineMail />,
       arrowRight: null,
       label: 'Email to List',
       handleClick: () => null
     },
     {
-      id: 8,
+      id: 'list_info',
       icon: <HiOutlineInformationCircle />,
       arrowRight: null,
       label: 'List Info',
       handleClick: () => null
     },
     {
-      id: 9,
+      id: 'templates',
       icon: <CiEdit />,
       arrowRight: <IoIosArrowForward />,
       label: 'Templates',
       handleClick: () => null
     },
     {
-      id: 10,
+      id: 'list_setting',
       icon: <AiOutlineSetting />,
       arrowRight: <IoIosArrowForward />,
       label: 'List setting',
       handleClick: () => null
     },
     {
-      id: 11,
+      id: 'archive',
       icon: <BsArchive />,
       arrowRight: null,
       label: 'Archive',
       handleClick: () => null
     },
     {
-      id: 12,
+      id: 'delete',
       icon: <RiDeleteBin6Line />,
       arrowRight: null,
       label: 'Delete',

@@ -1,4 +1,3 @@
-import React from 'react';
 import { ITaskFullList } from '../../../../../features/task/interface.tasks';
 import { useAppSelector } from '../../../../../app/hooks';
 

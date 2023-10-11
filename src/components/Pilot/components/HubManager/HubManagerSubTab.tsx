@@ -17,34 +17,35 @@ import { useAppSelector } from '../../../../app/hooks';
 import CalendarIcon from '../../../../assets/icons/CalendarIcon';
 import StatusMgIcon from '../../../../assets/icons/StatusMgIcon';
 import { dimensions } from '../../../../app/config/dimensions';
+import { pilotTabs } from '../../../../app/constants/pilotTabs';
 
 export const HubManagerOptions = [
   {
-    id: 1,
+    id: pilotTabs.CREATE_HUB,
     name: 'Create Hub',
     icon: <AddHubIcon />,
     isVisible: false
   },
   {
-    id: 2,
+    id: pilotTabs.CREATE_WALLET,
     name: 'Create Wallet',
     icon: <AddWalletIcon />,
     isVisible: false
   },
   {
-    id: 3,
+    id: pilotTabs.CREATE_LIST,
     name: 'Create List',
     icon: <AddListIcon />,
     isVisible: false
   },
   {
-    id: 4,
+    id: 'calendar_settings',
     name: 'Calendar Settings',
     icon: <CalendarIcon active={false} />,
     isVisible: false
   },
   {
-    id: 5,
+    id: 'status_management',
     name: 'Status Management',
     icon: <StatusMgIcon />,
     isVisible: false
@@ -58,7 +59,7 @@ export default function HubManagerSubTab() {
   const { showPilot, activeSubHubManagerTabId } = useAppSelector((state) => state.workspace);
   const { show: showFullPilot } = useAppSelector((state) => state.slideOver.pilotSideOver);
 
-  const idsFromLS = JSON.parse(localStorage.getItem('subTab') || '[]') as number[];
+  const idsFromLS = JSON.parse(localStorage.getItem('subTab') || '[]') as string[];
 
   const sensors = useSensors(
     useSensor(PointerSensor),

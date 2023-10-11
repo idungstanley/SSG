@@ -35,6 +35,7 @@ import FormulaField from './CustomField/Formula/FormulaField';
 import PeopleField from './CustomField/PeopleField/PeopleField';
 import FilesField from './CustomField/Files/FilesField';
 import LocationField from './CustomField/Location/LocationField';
+import ManualProgress from './CustomField/Progress/ManualProgress';
 
 interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   value: TaskValue;
@@ -76,7 +77,7 @@ export function Col({ value, field, fieldId, task, ...props }: ColProps) {
     created_at: <DateFormat date={value as string} font="text-sm" type="created_at" />,
     updated_at: <DateFormat date={value as string} font="text-sm" type="updated_at" />,
     start_date: <DateFormat date={value as string} font="text-sm" task={task} type="start_date" />,
-    end_date: <DateFormat date={value as string} font="text-sm" task={task} type="end_date" />,
+    end_date: <DateFormat date={value as string} font="text-sm" task={task} type="end_date" isDueDate={true} />,
     dropdown: (
       <DropdownFieldWrapper
         taskId={task.id}
@@ -92,13 +93,7 @@ export function Col({ value, field, fieldId, task, ...props }: ColProps) {
         taskId={task.id}
       />
     ),
-    tags: (
-      <TagsWrapper
-        entityCustomProperty={task.custom_field_columns?.find((i) => i.id === fieldId)}
-        taskCustomFields={task.custom_fields?.find((i) => i.id === fieldId)}
-        taskId={task.id}
-      />
-    ),
+    tags: <TagsWrapper tags={task.tags} />,
     text: (
       <TextField
         taskId={task.id}
@@ -166,7 +161,14 @@ export function Col({ value, field, fieldId, task, ...props }: ColProps) {
         option={`${task.id !== '0' ? EntityType.task : 'getTeamId'}`}
       />
     ),
-    progress_manual: <AutoProgress task={task as ImyTaskData} />,
+    progress_manual: (
+      <ManualProgress
+        taskId={task.id}
+        taskCustomFields={task.custom_fields?.find((i) => i.id === fieldId)}
+        fieldId={fieldId}
+        entityCustomProperty={task.custom_field_columns?.find((i) => i.id === fieldId)}
+      />
+    ),
     progress_auto: (
       <AutoProgress
         task={task as ImyTaskData}
