@@ -259,13 +259,14 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
       </section>
       {paletteId === list.id && show ? (
         <Palette
-          topContent={<ListIconSelection handleSelection={handleSelection} activeShape={activeShape} />}
+          // topContent={<ListIconSelection handleSelection={handleSelection} activeShape={activeShape} />}
           title="List"
           listComboColour={listComboColour}
           shape={activeShape}
           cords={cords}
           activeInnerColor={innerColour}
           activeOutterColor={outerColour}
+          handleShapeSelection={handleSelection}
         />
       ) : null}
       {showMenuDropdown === list.id ? <MenuDropdown cords={menuCords} /> : null}

@@ -7,25 +7,25 @@ import DropdownIcon from '../../../../../../assets/branding/DropdownIcon';
 
 const items = [
   {
-    id: 1,
+    id: 'single_label',
     name: 'Single Label',
     icon: '',
     onclick: () => null
   },
   {
-    id: 2,
+    id: 'multi_label',
     name: 'Multi Label',
     icon: '',
     onclick: () => null
   },
   {
-    id: 3,
+    id: 'tags',
     name: 'Tags',
     icon: '',
     onclick: () => null
   },
   {
-    id: 4,
+    id: 'directories',
     name: 'Directories',
     icon: '',
     onclick: () => null

@@ -9,25 +9,25 @@ export default function TeamSettings() {
 
   const leftMenuItems = [
     {
-      id: 1,
+      id: 'team_members',
       type: 'link',
       onClick: `/${currentWorkspaceId}/settings/team-members`,
       title: 'Team members'
     },
     {
-      id: 2,
+      id: 'team_member_invites',
       type: 'link',
       onClick: `/${currentWorkspaceId}/settings/team-members/invites`,
       title: 'Team member invites'
     },
     {
-      id: 3,
+      id: 'team_member_groups',
       type: 'link',
       onClick: `/${currentWorkspaceId}/settings/team-members/groups`,
       title: 'Team member groups'
     },
     {
-      id: 4,
+      id: 'permissions',
       type: 'link',
       onClick: `/${currentWorkspaceId}/settings/permissions`,
       title: 'Permissions'

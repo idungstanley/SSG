@@ -15,6 +15,7 @@ import {
 } from '../../../../../../features/task/taskSlice';
 import { setActiveTabId } from '../../../../../../features/workspace/workspaceSlice';
 import SearchIcon from '../../../../../../assets/icons/SearchIcon';
+import { pilotTabs } from '../../../../../../app/constants/pilotTabs';
 
 interface DropdownModalProps {
   field: {
@@ -76,7 +77,7 @@ export default function DropdownField({ field, taskId, currentProperty }: Dropdo
 
   const handleEditCustom = () => {
     dispatch(setEditCustomProperty(currentProperty));
-    dispatch(setActiveTabId(10));
+    dispatch(setActiveTabId(pilotTabs.TEMPLATES));
     dispatch(setEntityForCustom({ id: undefined, type: undefined }));
     dispatch(setNewCustomPropertyDetails({ type: 'Single Label', name: currentProperty.name, color: '' }));
     setIsOpen(false);

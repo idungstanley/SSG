@@ -46,19 +46,19 @@ export default function ListViewSettingsModal({
   team: string;
 }) {
   const dispatch = useAppDispatch();
-  const [viewId, setViewId] = useState<number | null>(null);
+  const [viewId, setViewId] = useState<string | null>(null);
   const [listView] = useState<boolean | null>(true);
-  const [activeView, setActiveView] = useState<number | null>(1);
+  const [activeView, setActiveView] = useState<string | null>(list);
 
   const ViewSettings = [
     {
-      id: 1,
+      id: list,
       icon: <img src={listIcon} alt="listIcon" />,
       label: list,
       handleClick: () => dispatch(getComfortableView(true))
     },
     {
-      id: 2,
+      id: table,
       icon: <img src={tableIcon} alt="tableIcon" />,
       label: table,
       handleClick: () => {
@@ -69,7 +69,7 @@ export default function ListViewSettingsModal({
       }
     },
     {
-      id: 3,
+      id: board,
       icon: <img src={boardIcon} alt="boardIcon" />,
       label: board,
       handleClick: () => {
@@ -80,7 +80,7 @@ export default function ListViewSettingsModal({
       }
     },
     {
-      id: 4,
+      id: calender,
       icon: <img src={calenderIcon} alt="calenderIcon" />,
       label: calender,
       handleClick: () => {
@@ -91,7 +91,7 @@ export default function ListViewSettingsModal({
       }
     },
     {
-      id: 5,
+      id: timeChart,
       icon: <img src={timeChartIcon} alt="timeChartIcon" />,
       label: timeChart,
       handleClick: () => {
@@ -102,7 +102,7 @@ export default function ListViewSettingsModal({
       }
     },
     {
-      id: 6,
+      id: map,
       icon: <img src={mapIcon} alt="mapIcon" />,
       label: map,
       handleClick: () => {
@@ -113,7 +113,7 @@ export default function ListViewSettingsModal({
       }
     },
     {
-      id: 7,
+      id: gantt,
       icon: <img src={gantIcon} alt="gantIcon" />,
       label: gantt,
       handleClick: () => {
@@ -124,7 +124,7 @@ export default function ListViewSettingsModal({
       }
     },
     {
-      id: 8,
+      id: team,
       icon: <img src={teamIcon} alt="teamIcon" />,
       label: team,
       handleClick: () => {
@@ -135,7 +135,7 @@ export default function ListViewSettingsModal({
       }
     },
     {
-      id: 9,
+      id: 'create_new_view',
       icon: <FiChevronRight />,
       label: 'Create New View',
       handleClick: () => {

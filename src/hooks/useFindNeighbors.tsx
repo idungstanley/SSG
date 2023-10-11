@@ -1,5 +1,5 @@
 export interface NeighborsProps {
-  id: number;
+  id: string;
   name: string;
   icon: JSX.Element;
   isVisible: boolean;

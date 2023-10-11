@@ -8,19 +8,19 @@ import { FaBusinessTime } from 'react-icons/fa';
 
 export const TimeClockOptions = [
   {
-    id: 0,
+    id: 'in_out',
     name: 'In & Out',
     icon: <RiTimerFlashLine />,
     isVisible: false
   },
   {
-    id: 1,
+    id: 'clock_logs',
     name: 'Clock Logs',
     icon: <FaBusinessTime />,
     isVisible: false
   },
   {
-    id: 2,
+    id: 'clock_preference',
     name: 'Clock Preference',
     icon: <MdOutlineMoreTime />,
     isVisible: false

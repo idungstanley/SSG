@@ -17,7 +17,6 @@ import {
 import { EntityType } from '../../utils/EntityTypes/EntityType';
 import ActiveTreeSearch from '../ActiveTree/ActiveTreeSearch';
 import Button from '../Button';
-import { EntityManagerTabsId, PilotTabsId } from '../../utils/PilotUtils';
 import { setVisibility } from '../../features/general/prompt/promptSlice';
 import { Capitalize } from '../../utils/NoCapWords/Capitalize';
 import { Fade, Menu } from '@mui/material';
@@ -26,6 +25,7 @@ import { BsFiletypeDoc } from 'react-icons/bs';
 import AddHubIcon from '../../assets/icons/AddHub';
 import AddWalletIcon from '../../assets/icons/AddWallet';
 import AddListIcon from '../../assets/icons/AddList';
+import { pilotTabs } from '../../app/constants/pilotTabs';
 import { APP_HR } from '../../app/constants/app';
 
 interface itemsType {
@@ -111,18 +111,18 @@ export default function SubDropdown({ cords, placeHubType }: SubDropdownProps) {
         }
         dispatch(setShowOverlay(true));
         dispatch(setShowIndependentPilot(true));
-        dispatch(setActiveTabId(PilotTabsId.entityManager));
+        dispatch(setActiveTabId(pilotTabs.ENTITY_MANAGER));
         dispatch(setVisibility(false));
         dispatch(setShowTreeInput(false));
         dispatch(setSubDropdownMenu(false));
         dispatch(setshowMenuDropdown({ showMenuDropdown: null, showMenuDropdownType: null }));
         dispatch(setLastActiveItem(''));
         if (entityToCreate === EntityType.hub || entityToCreate === EntityType.subHub) {
-          dispatch(setActiveSubHubManagerTabId(EntityManagerTabsId.hub));
+          dispatch(setActiveSubHubManagerTabId(pilotTabs.CREATE_HUB));
         } else if (entityToCreate === EntityType.wallet) {
-          dispatch(setActiveSubHubManagerTabId(EntityManagerTabsId.wallet));
+          dispatch(setActiveSubHubManagerTabId(pilotTabs.CREATE_WALLET));
         } else if (entityToCreate === EntityType.list) {
-          dispatch(setActiveSubHubManagerTabId(EntityManagerTabsId.list));
+          dispatch(setActiveSubHubManagerTabId(pilotTabs.CREATE_LIST));
         }
         dispatch(
           getSubMenu({

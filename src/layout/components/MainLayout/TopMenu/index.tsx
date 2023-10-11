@@ -28,25 +28,25 @@ function TopMenu() {
 
   const leftMenuItems = [
     {
-      id: 1,
+      id: 'team_members',
       type: 'link',
       onClick: '/settings/team-members',
       title: 'Team members'
     },
     {
-      id: 2,
+      id: 'team_member_invites',
       type: 'link',
       onClick: '/settings/team-members/invites',
       title: 'Team member invites'
     },
     {
-      id: 3,
+      id: 'team_member_groups',
       type: 'link',
       onClick: '/settings/team-members/groups',
       title: 'Team member groups'
     },
     {
-      id: 4,
+      id: 'permissions',
       type: 'link',
       onClick: '/settings/permissions',
       title: 'Permissions'
@@ -101,19 +101,19 @@ function TopMenu() {
 
   const rightMenuItems = [
     {
-      id: 1,
+      id: 'my_workspaces',
       type: 'button',
       onClick: () => dispatch(setMyWorkspacesSlideOverVisibility(true)),
       title: 'My workspaces'
     },
     {
-      id: 2,
+      id: 'account',
       type: 'link',
       onClick: 'tempurl',
       title: 'Account'
     },
     {
-      id: 3,
+      id: 'sign_out',
       type: 'button',
       onClick: onLogout,
       title: 'Sign out'

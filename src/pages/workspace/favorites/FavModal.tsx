@@ -9,11 +9,11 @@ export default function FavModal({ id }: { id: string }) {
   const dispatch = useAppDispatch();
   const options = [
     {
-      id: 1,
+      id: 'unfavorite',
       name: 'Unfavorite'
     },
     {
-      id: 2,
+      id: 'rename',
       name: 'Rename'
     }
   ];
