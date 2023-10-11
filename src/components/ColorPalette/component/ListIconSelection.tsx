@@ -36,7 +36,7 @@ export default function ListIconSelection({ activeShape, handleSelection }: Item
                   <ListIconComponent shape={filteredShapes.shape} innerColour="white" outterColour="#626262" />
                   <p>{filteredShapes.label}</p>
                 </div>
-                <label className="switch" onClick={(event) => event.stopPropagation()}>
+                <label className="switch">
                   <input
                     className="inputShow"
                     type="checkbox"
