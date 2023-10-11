@@ -9,12 +9,10 @@ function TaskShortCutModal({ setTaskShortcutModal }: { setTaskShortcutModal: Dis
   const [open, setOpen] = useState(true);
   const customWidth = { maxWidth: 750 };
 
-  // Function to open the modal
   const openModal = () => {
     setOpen(true);
   };
 
-  // Function to close the modal
   const closeModal = () => {
     setOpen(false);
     setTaskShortcutModal(false);
