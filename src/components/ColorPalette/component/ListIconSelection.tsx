@@ -1,7 +1,6 @@
 import React from 'react';
 import ListIconComponent from '../../ItemsListInSidebar/components/ListIconComponent';
 import { InlineBorderLabel } from '../../Dropdown/MenuDropdown';
-import { stubTrue } from 'cypress/types/lodash';
 
 interface ItemProps {
   activeShape?: string;
