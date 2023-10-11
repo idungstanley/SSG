@@ -53,6 +53,7 @@ export function Label({
         }
       });
     }
+
     dispatch(setSelectedTasksArray(updatedTaskIds));
   };
 
