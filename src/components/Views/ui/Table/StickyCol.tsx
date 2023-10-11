@@ -441,7 +441,9 @@ export function StickyCol({
             style={{ paddingLeft }}
             className={cl(
               COL_BG,
-              `relative border-t ${verticalGrid && 'border-r'} w-full h-16  py-4 p-4 flex items-center`
+              `relative border-t ${verticalGrid && 'border-r'} ${
+                verticalGridlinesTask && 'border-r'
+              } w-full h-16  py-4 p-4 flex items-center`
             )}
           >
             <div className="absolute bottom-0 right-0 flex space-x-1 p-1">
