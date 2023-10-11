@@ -1,7 +1,7 @@
 import React, { Fragment, useState } from 'react';
 import { Menu, Transition } from '@headlessui/react';
 import { TfiWorld } from 'react-icons/tfi';
-import { BsInfoLg } from 'react-icons/bs';
+import { BsInfoLg, BsShare } from 'react-icons/bs';
 import { BiLinkAlt } from 'react-icons/bi';
 import { AiOutlineBranches } from 'react-icons/ai';
 
@@ -37,8 +37,9 @@ export default function ShareModal({ taskId, taskName }: { taskId?: string; task
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
-        <Menu.Button className="flex text-sm ">
-          <p className="text-gray-400 ">Share</p>
+        <Menu.Button className="flex text-sm items-center gap-1 px-0.5">
+          <BsShare className="text-xs h-2.5" />
+          <p className="text-gray-400 text-alsoit-text-lg">Share</p>
         </Menu.Button>
       </div>
       <Transition
