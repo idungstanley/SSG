@@ -4,7 +4,7 @@ import ShowHideSettings from '../../../../../tasks/TaskSettingsModal/ShowSetting
 export default function ListShow({ changeViews }: { changeViews: string }) {
   return (
     <div className="flex items-center justify-start space-x-1">
-      <span className="group cursor-pointer gap-2">
+      <span className="gap-2 cursor-pointer group">
         <ShowHideSettings
           scrollByEachGroup="Scroll By Each Group"
           splitSubTask="Split Sub Task"
