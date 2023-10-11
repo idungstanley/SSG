@@ -96,6 +96,7 @@ export function ManualTime() {
           </span>
         </label>
         <label htmlFor="manualTags" className="flex flex-col space-y-1.5 w-1/3">
+          <div className="py-2" />
           <ManualTags />
         </label>
       </div>
