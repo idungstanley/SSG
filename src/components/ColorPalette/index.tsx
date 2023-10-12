@@ -35,6 +35,7 @@ import AlsoitMenuDropdown from '../DropDowns';
 import ListIconSelection, { listIconDetails } from './component/ListIconSelection';
 import { useGetColors } from '../../features/account/accountService';
 import AdvanceColourPalette from './component/AdvanceColourPalette';
+import { CgSortAz } from 'react-icons/cg';
 
 interface PaletteProps {
   title?: string;
@@ -217,7 +218,7 @@ export default function PaletteManager({
       PaperProps={{
         style: {
           borderRadius: '12px',
-          backgroundColor: 'white',
+          backgroundColor: '#f4f4f4',
           padding: '0px'
         }
       }}
@@ -239,14 +240,14 @@ export default function PaletteManager({
           {!isSearch && selectListColours.length === 0 && paletteViews.BOARD && (
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center p-2 bg-alsoit-gray-75 h-9">
-                <p className="justify-center text-base text-white">COLOUR LIBRARY</p>
+                <p className="justify-center bg-['#b2b2b2'] text-white">COLOUR LIBRARY</p>
               </div>
               <div className="flex items-center gap-1 px-2">
                 {views.map((item, index) => (
                   <div
                     key={index}
                     className={`rounded p-1 cursor-pointer ${
-                      selectedViews === item.label ? 'bg-primary-500' : 'border border-primary-200'
+                      selectedViews === item.label ? 'bg-alsoit-purple-300' : 'rounded bg-white shadow-md'
                     }`}
                     onClick={() => setSelectedViews(item.label)}
                   >
@@ -256,12 +257,17 @@ export default function PaletteManager({
                   </div>
                 ))}
                 <ToolTip title="View">
-                  <span className="p-1 border rounded border-primary-200" onClick={() => ({})}>
+                  <span className="p-1 bg-white rounded shadow-md" onClick={() => ({})}>
                     <AiOutlineEye className="w-4 h-4" />
                   </span>
                 </ToolTip>
+                <ToolTip title="Sort">
+                  <span className="p-1 bg-white rounded shadow-md" onClick={() => ({})}>
+                    <CgSortAz className="w-4 h-4" />
+                  </span>
+                </ToolTip>
                 <ToolTip title="Open Search">
-                  <span className="p-1 border rounded border-primary-200" onClick={() => setIsSearch(true)}>
+                  <span className="p-1 bg-white rounded shadow-md" onClick={() => setIsSearch(true)}>
                     <SearchIcon className="w-4 h-4" />
                   </span>
                 </ToolTip>
@@ -302,7 +308,7 @@ export default function PaletteManager({
             )}
             {topContent}
             {paletteType === EntityType.list && (
-              <div className="flex items-center justify-between pb-1 mt-1 mb-1 border-b border-gray-300">
+              <div className="flex items-center justify-between pb-1 mt-1 mb-1">
                 <div
                   className={`relative flex w-fit items-center justify-between gap-2 p-1 px-2.5 text-xs  rounded-md hover:text-primary-600 border border-gray-300 hover:bg-primary-100 ${
                     showListShapeSelection && 'text-white bg-alsoit-purple-300'
