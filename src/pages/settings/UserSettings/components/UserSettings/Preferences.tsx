@@ -1,12 +1,41 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import '../../../../../styles/usersetting.css';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import { setPreferenceState } from '../../../../../features/task/taskSlice';
+import { setUserSettingsKeysProfile } from '../../../../../features/account/accountService';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 function Preferences() {
-  const { preferenceState } = useAppSelector((state) => state.task);
+  const { preferenceState, userSettingsProfile } = useAppSelector((state) => state.task);
 
   const dispatch = useAppDispatch();
+  const queryClient = useQueryClient();
+
+  const saveHotKeysToBE = useMutation(setUserSettingsKeysProfile, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['self']);
+    }
+  });
+
+  useEffect(() => {
+    userSettingsProfile.map((keys) => {
+      if (keys.key == 'hotkeys') {
+        const updatePreferenceState = {
+          ...preferenceState,
+          hotkeys: keys.value
+        };
+        dispatch(setPreferenceState(updatePreferenceState));
+      }
+    });
+  }, [userSettingsProfile]);
+
+  const handleHotkeys = (name: string, checked: boolean) => {
+    if (name == 'hotkeys') {
+      saveHotKeysToBE.mutateAsync({
+        value: checked
+      });
+    }
+  };
 
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, checked } = event.target;
@@ -14,8 +43,8 @@ function Preferences() {
       ...preferenceState,
       [name]: checked
     };
-
     dispatch(setPreferenceState(updatePreferenceState));
+    handleHotkeys(name, checked);
   };
 
   return (
@@ -79,7 +108,13 @@ function Preferences() {
       </section>
       <section className="flex items-center border-b-2 border-slate-400">
         <label className="switch">
-          <input type="checkbox" name="hotkeys" checked={preferenceState.hotkeys} onChange={handleCheckboxChange} />
+          <input
+            type="checkbox"
+            name="hotkeys"
+            className={`${preferenceState.hotkeys && 'bg-red-400'}`}
+            checked={preferenceState.hotkeys}
+            onChange={handleCheckboxChange}
+          />
           <span className="slider round"></span>
         </label>
         <div className="mx-6">

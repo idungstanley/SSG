@@ -144,6 +144,14 @@ export interface IPreferenceState {
   notepad: boolean;
 }
 
+export interface IUseSettingsProfile {
+  hotkeys: string;
+  is_json: number;
+  key: string;
+  resolution: null;
+  value: boolean;
+}
+
 export const TWO_SUBTASKS_LEVELS = 'two_levels';
 export const THREE_SUBTASKS_LEVELS = 'three_levels';
 
@@ -155,6 +163,7 @@ interface TaskState {
   removeWatcherId: null | string;
   currTeamMemberId: null | string;
   preferenceState: IPreferenceState;
+  userSettingsProfile: IUseSettingsProfile[];
   myTaskData: ImyTaskData[];
   taskColumns: listColumnProps[];
   hideTask: listColumnProps[];
@@ -264,6 +273,7 @@ const initialState: TaskState = {
     hotkeys: false,
     notepad: false
   },
+  userSettingsProfile: [],
   removeWatcherId: null,
   myTaskData: [],
   taskColumns: [],
@@ -403,6 +413,9 @@ export const taskSlice = createSlice({
     },
     setPreferenceState(state, action: PayloadAction<IPreferenceState>) {
       state.preferenceState = action.payload;
+    },
+    setUserSettingsProfile(state, action: PayloadAction<IUseSettingsProfile[]>) {
+      state.userSettingsProfile = action.payload;
     },
     setFiltersUpdated(state, action: PayloadAction<boolean>) {
       state.isFiltersUpdated = action.payload;
@@ -726,6 +739,7 @@ export const {
   getComfortableViewWrap,
   getVerticalGrid,
   setPreferenceState,
+  setUserSettingsProfile,
   getSingleLineView,
   getTaskUpperCase,
   setDuplicateTaskObj,

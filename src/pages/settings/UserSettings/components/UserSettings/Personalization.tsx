@@ -25,8 +25,6 @@ function Personalization({ data }: dataProps) {
     showConfirmationModal
   } = useAppSelector((state) => state.userSetting);
 
-  const { preferenceState } = useAppSelector((state) => state.task);
-
   const { mutate: onUserSettingsUpdate } = UseUpdateUserSettings();
   const handleSubmit = () => {
     onUserSettingsUpdate({
@@ -37,12 +35,9 @@ function Personalization({ data }: dataProps) {
       date_format: date_format !== userData?.date_format ? date_format : undefined,
       timezone: timezone !== userData?.timezone ? timezone : undefined,
       time_format: time_format !== userData?.time_format ? time_format : undefined,
-      color: color !== userData?.color ? color : undefined,
-      user_preferences: preferenceState
+      color: color !== userData?.color ? color : undefined
     });
   };
-
-  console.log(preferenceState);
 
   const isNewData =
     name === userData?.name &&
