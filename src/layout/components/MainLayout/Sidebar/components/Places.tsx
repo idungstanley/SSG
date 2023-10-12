@@ -79,7 +79,8 @@ export const initialPlaces: Place[] = [
     name: 'WORK INSIGHTS',
     id: pages.WORK_INSIGHTS,
     place: <WorkInsights />,
-    icon: <InsightsIcon />
+    icon: <InsightsIcon />,
+    link: '/insights'
   },
   {
     name: 'ROUTEPLAN',

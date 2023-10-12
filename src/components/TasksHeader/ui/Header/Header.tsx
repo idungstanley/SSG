@@ -12,8 +12,14 @@ import { ReactNode } from 'react';
 import { MdOutlinePrivacyTip } from 'react-icons/md';
 import { BiLock } from 'react-icons/bi';
 import { HiDownload } from 'react-icons/hi';
+import TimeClockInsightsIcon from '../../../../assets/icons/TimeClockInsightsIcon';
+import { ChangeViewInsights } from '../ChangeViewInsights/ChangeViewInsights';
 
-export function Header() {
+interface IHeader {
+  isInsights?: boolean;
+}
+
+export function Header({ isInsights }: IHeader) {
   const { selectedTasksArray } = useAppSelector((state) => state.task);
 
   const items = [
@@ -25,7 +31,6 @@ export function Header() {
       label: 'Protect View',
       icon: <MdOutlinePrivacyTip />
     },
-
     {
       label: 'Private View',
       icon: <BiLock />
@@ -48,16 +53,31 @@ export function Header() {
     }
   ];
 
+  const renderChangeView = () => {
+    if (isInsights) {
+      return (
+        <div className="flex items-center">
+          <div className="flex items-center px-5" style={{ minWidth: '230px' }}>
+            <TimeClockInsightsIcon />
+            <span className="ml-2">Time Clock</span>
+          </div>
+          <ChangeViewInsights />
+        </div>
+      );
+    } else {
+      return <ChangeView />;
+    }
+  };
+
   return (
     <>
       <section className="flex items-center justify-between w-full p-1 border-b" style={{ height: '50px' }}>
-        <ChangeView />
-
+        <div className="flex items-center">{renderChangeView()}</div>
         <div className="flex items-center justify-end">
           <Sort />
           <FilterDropdown />
           <Assignee />
-          <Search />
+          {isInsights ? <Search placeholder="Search Insights" /> : <Search />}
           <p>
             <ListSettingsModal
               itemsArray={

@@ -8,8 +8,9 @@ import { useThrottle } from '../../../../hooks/useThrottle';
 interface ISearchProps {
   isSplitSubtasks?: boolean;
   parentId?: string;
+  placeholder?: string;
 }
-export function Search({ isSplitSubtasks, parentId }: ISearchProps) {
+export function Search({ isSplitSubtasks, parentId, placeholder }: ISearchProps) {
   const dispatch = useAppDispatch();
 
   const { subtasksfilters } = useAppSelector((state) => state.task);
@@ -65,7 +66,7 @@ export function Search({ isSplitSubtasks, parentId }: ISearchProps) {
         ref={inputRef}
         type="text"
         className="block w-full h-5 alsoit-radius text-alsoit-gray-300-lg border-0 text-gray-700 ring-0 focus:ring-0 focus:outline-0 appearance-none"
-        placeholder="Search task"
+        placeholder={placeholder ?? 'Search task'}
       />
       <EllipsisHorizontalIcon className="w-5 h-5 group-hover:text-primary-400" />
     </div>

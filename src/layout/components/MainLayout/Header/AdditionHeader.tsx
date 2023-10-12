@@ -20,11 +20,16 @@ import SaveFilterToast from '../../../../components/TasksHeader/ui/Filter/ui/Toa
 import { setTimerInterval, setTimerStatus, setUpdateTimerDuration } from '../../../../features/task/taskSlice';
 import { runTimer } from '../../../../utils/TimerCounter';
 import { pilotTabs } from '../../../../app/constants/pilotTabs';
+import InsightsIcon from '../../../../assets/icons/InsightsIcon';
 
 const hoursToMilliseconds = 60 * 60 * 1000;
 const minutesToMilliseconds = 60 * 1000;
 
-export default function AdditionalHeader() {
+interface IAdditionalHeaderProps {
+  isInsights?: boolean;
+}
+
+export default function AdditionalHeader({ isInsights }: IAdditionalHeaderProps) {
   const { workSpaceId: workspaceId } = useParams();
   const dispatch = useAppDispatch();
   const userTimeZoneFromLS: string | null = localStorage.getItem('userTimeZone');
@@ -179,13 +184,30 @@ export default function AdditionalHeader() {
     RunTimer;
   }, [timerefetched]);
 
+  const renderPageTitle = () => {
+    if (isInsights) {
+      return (
+        <>
+          <InsightsIcon />
+          <span className="text-alsoit-text-lg font-bold">INSIGHTS</span>
+        </>
+      );
+    } else {
+      return (
+        <>
+          <p className="p-1 bg-gray-300 rounded-md ">
+            <img src={headerIcon} alt="" className="w-6 h-6" />
+          </p>
+          <span className="text-alsoit-text-lg font-bold">{activeItemName}</span>
+        </>
+      );
+    }
+  };
+
   return (
     <div className="flex items-center justify-between w-full px-4 border-b" style={{ height: '50px' }}>
       <h1 style={{ height: '50px' }} className="flex items-center ml-4 space-x-3 text-center">
-        <p className="p-1 bg-gray-300 rounded-md ">
-          <img src={headerIcon} alt="" className="w-6 h-6" />
-        </p>
-        <span className="text-alsoit-text-lg font-bold">{activeItemName}</span>
+        {renderPageTitle()}
       </h1>
       <div className="relative flex items-center justify-center space-x-2.5">
         {timeBlinkerCheck() && (
