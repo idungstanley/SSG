@@ -13,17 +13,18 @@ import {
 } from '@dnd-kit/core';
 import { arrayMove, rectSortingStrategy, SortableContext, sortableKeyboardCoordinates } from '@dnd-kit/sortable';
 import { BsClipboardData } from 'react-icons/bs';
+import { pilotTabs } from '../../../../../app/constants/pilotTabs';
 
 export const DetailOptions = [
   {
-    id: 1,
+    id: pilotTabs.PROPERTIES,
     name: 'Properties',
     icon: <BsClipboardData />,
     isVisible: false
   },
   {
-    id: 2,
-    name: 'attachments',
+    id: pilotTabs.ATTACHMENTS,
+    name: 'Attachments',
     icon: <MdAddToPhotos />,
     isVisible: false
   }
@@ -32,7 +33,7 @@ export const DetailOptions = [
 export default function DetailsSubTab() {
   const { showPilot, activeSubDetailsTabId } = useAppSelector((state) => state.workspace);
 
-  const idsFromLS: number[] = JSON.parse(localStorage.getItem('subTab') || '[]') as number[];
+  const idsFromLS: string[] = JSON.parse(localStorage.getItem('subTab') || '[]') as string[];
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -76,7 +77,7 @@ export default function DetailsSubTab() {
                 icon={item.icon}
                 activeSub={activeSubDetailsTabId}
                 showPilot={showPilot}
-                name={'details'}
+                name={pilotTabs.DETAILS}
                 item={item}
                 items={DetailOptions}
               />

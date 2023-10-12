@@ -7,24 +7,27 @@ import ManualTimeAddDialog from '../../../../../../components/Pilot/components/T
 
 export const TimeClockOptions = [
   {
-    id: 0,
+    id: 'in_out',
     element: <ClockInOut />
   },
   {
-    id: 1,
+    id: 'manual_time_add',
     element: <ManualTimeAddDialog />
   },
   {
-    id: 2,
+    id: 'clock_preference',
     element: <ClockPreferences />
   }
 ];
+
 export default function TimeClock() {
   const { activeSubTimeClockTabId, showPilot } = useAppSelector((state) => state.workspace);
+
   const selectedSubSection = useMemo(
     () => TimeClockOptions.find((option) => option.id === activeSubTimeClockTabId),
     [activeSubTimeClockTabId]
   );
+
   return (
     <section className="flex flex-col h-full">
       {showPilot && <TimeSubTab />}

@@ -4,6 +4,7 @@ import { IPilotSection, IPilotTab } from '../../types';
 import MinPilot from './components/Layout/MinPilot';
 import FullPilot from './components/Layout/FullPilot';
 import { setActiveTabId } from '../../features/workspace/workspaceSlice';
+import { pilotTabs } from '../../app/constants/pilotTabs';
 
 export const TAB_LIMIT = 8;
 
@@ -23,7 +24,7 @@ export default function Pilot({ pilotConfig }: PilotProps) {
   // set first tab as active on open full pilot
   useEffect(() => {
     if (showFullPilot && !activeTabId) {
-      dispatch(setActiveTabId(1));
+      dispatch(setActiveTabId(pilotTabs.DETAILS));
     }
   }, [showFullPilot]);
 

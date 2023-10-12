@@ -11,12 +11,12 @@ function WorkInsights() {
 
   const workInsightsType = [
     {
-      id: '1',
+      id: 'time_clock',
       label: 'TIME CLOCK',
       icon: <IoTimeOutline />
     },
     {
-      id: '2',
+      id: 'tracker',
       label: 'Tracker',
       icon: <SiPivotaltracker />
     }

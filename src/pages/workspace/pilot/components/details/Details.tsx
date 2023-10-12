@@ -3,14 +3,15 @@ import AddTo from '../../../../../components/Pilot/components/details/properties
 import DetailsIndex from './properties/DetailsIndex';
 import { useAppSelector } from '../../../../../app/hooks';
 import DetailsSubTab from './DetailsSubTab';
+import { pilotTabs } from '../../../../../app/constants/pilotTabs';
 
 export const DetailOptions = [
   {
-    id: 1,
+    id: pilotTabs.DETAILS,
     element: <DetailsIndex />
   },
   {
-    id: 2,
+    id: 'add_to',
     element: <AddTo />
   }
 ];

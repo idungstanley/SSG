@@ -11,80 +11,81 @@ import { ChatBubbleLeftEllipsisIcon, DocumentTextIcon, EyeIcon, SignalIcon } fro
 import { AiOutlineUnorderedList } from 'react-icons/ai';
 import CreateList from './CreateList';
 import { ClockIcon } from '../../../../../../assets/icons/ClockIcon';
+import { pilotTabs } from '../../../../../../app/constants/pilotTabs';
 
 const sections = [
   {
-    id: 1,
+    id: pilotTabs.CREATE_LIST,
     element: <CreateList />
   },
   {
-    id: 2,
+    id: pilotTabs.LOGS,
     element: <History />
   },
   {
-    id: 3,
+    id: pilotTabs.COMMENTS,
     element: <CommentsForPilot />
   },
   {
-    id: 4,
+    id: pilotTabs.WATCHERS,
     element: <WatchersForPilot />
   },
   {
-    id: 5,
+    id: pilotTabs.CONNECT,
     element: <ChatForPilot />
   },
   {
-    id: 6,
+    id: pilotTabs.TIME_CLOCK,
     element: <TimeClock />
   },
   {
-    id: 7,
+    id: pilotTabs.CHECKLISTS,
     element: <Checklists />
   },
   {
-    id: 8,
+    id: pilotTabs.SCREEN_RECORD,
     element: <RecordScreen />
   }
 ];
 
 const tabs = [
   {
-    id: 1,
+    id: pilotTabs.CREATE_LIST,
     label: 'Create List',
     icon: <AiOutlineUnorderedList className="w-4 h-4" aria-hidden="true" />
   },
   {
-    id: 2,
+    id: pilotTabs.LOGS,
     label: 'Logs',
     icon: <DocumentTextIcon className="w-4 h-4" />
   },
   {
-    id: 3,
+    id: pilotTabs.COMMENTS,
     label: 'Comments',
     icon: <ChatBubbleLeftEllipsisIcon className="w-4 h-4" />
   },
   {
-    id: 4,
+    id: pilotTabs.WATCHERS,
     label: 'Watchers',
     icon: <EyeIcon className="w-4 h-4" />
   },
   {
-    id: 5,
+    id: pilotTabs.CONNECT,
     label: 'Connect',
     icon: <SignalIcon className="w-4 h-4" />
   },
   {
-    id: 6,
+    id: pilotTabs.TIME_CLOCK,
     label: 'Time clock',
     icon: <ClockIcon />
   },
   {
-    id: 7,
+    id: pilotTabs.CHECKLISTS,
     label: 'Checklists',
     icon: <VscChecklist className="w-4 h-4" />
   },
   {
-    id: 8,
+    id: pilotTabs.SCREEN_RECORD,
     label: 'Screen Record',
     icon: <VscScreenFull className="w-4 h-4" />
   }

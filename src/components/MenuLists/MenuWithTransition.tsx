@@ -1,5 +1,5 @@
+import { Fragment } from 'react';
 import { Menu, Transition } from '@headlessui/react';
-import React, { Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import { useAppSelector } from '../../app/hooks';
 import { cl } from '../../utils';
@@ -9,7 +9,7 @@ interface MenuWithTransitionProps {
   icon: JSX.Element;
   tooltip?: string;
   menuItems: {
-    id: number;
+    id: string;
     type: string;
     title: string;
     onClick: (() => void) | string;

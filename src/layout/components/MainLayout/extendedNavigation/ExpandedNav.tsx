@@ -27,10 +27,11 @@ import LibraryData from '../../../../pages/directory/components/Sidebar/LibraryT
 import { dimensions } from '../../../../app/config/dimensions';
 import { isAllowIncreaseWidth } from '../../../../utils/widthUtils';
 import { useResize } from '../../../../hooks/useResize';
+import { pages } from '../../../../app/constants/pages';
 import AlsoHr from '../../../../pages/hr';
 
 export interface ItemData {
-  id?: number;
+  id?: string;
   icon?: JSX.Element;
   source?: string;
   name?: string;
@@ -41,74 +42,74 @@ export interface ItemData {
 export const secondaryNavigation: ItemData[] = [
   {
     name: 'Email',
-    id: 1,
+    id: pages.EMAIL,
     place: <Email />,
     source: emailIcon
   },
   {
     name: 'TASKS',
-    id: 2,
+    id: pages.TASKS,
     place: <ActiveHub />,
     source: hubIcon
   },
   {
     name: 'In-tray',
-    id: 3,
+    id: pages.IN_TRAY,
     place: <InboxData />,
     source: InboxIcon
   },
   {
     name: 'Cabinet',
-    id: 4,
+    id: pages.CABINET,
     place: <Extendedbar />,
     icon: <BiCabinet className="h-4 mr-4" />
   },
   {
     name: 'forms',
-    id: 5,
+    id: pages.FORMS,
     place: <Files />,
     icon: <FaWpforms className="h-4 mr-4" />
   },
   {
     name: 'time clock',
-    id: 6,
+    id: pages.TIME_CLOCK,
     place: <Dashboard />,
     source: timeClockIcon
   },
   {
     name: 'tracker',
-    id: 7,
+    id: pages.TRACKER,
     place: <Favourites />,
     source: trackerIcon
   },
   {
     name: 'Route Planner',
-    id: 8,
+    id: pages.ROUTE_PLANNER,
     place: <RoutePlanner />,
     icon: <FaRoute className="w-4 h-4" />
   },
   {
     name: 'Also HR',
-    id: 9,
+    id: pages.ALSO_HR,
     place: <AlsoHr />,
     icon: <FaHandsHelping className="w-4 h-4" />
   },
   {
     name: 'Commerce',
-    id: 10,
+    id: pages.COMMERCE,
     place: <Commerce />,
     icon: <IoBusinessOutline className="w-4 h-4" />
   },
   {
     name: 'Library',
-    id: 11,
+    id: pages.LIBRARY,
     place: <LibraryData />,
     source: libraryIcon,
     link: 'directory'
   },
   {
     name: 'Favorites',
-    id: 12,
+    id: pages.FAVORITES,
     place: <Favourites />,
     source: favoriteIcon,
     link: 'favorite'

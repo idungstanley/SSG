@@ -14,6 +14,7 @@ export interface BadgeTask extends TdHTMLAttributes<HTMLTableCellElement> {
 }
 export default function Badges({ task }: BadgeTask) {
   const { showNewTaskField } = useAppSelector((state) => state.task);
+
   const dispatch = useAppDispatch();
 
   const onShowAddSubtaskField = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, taskId: string) => {
@@ -26,6 +27,7 @@ export default function Badges({ task }: BadgeTask) {
       dispatch(setShowNewTaskField(true));
     }
   };
+
   return (
     <div className="absolute">
       <div className="flex items-center space-x-1">
