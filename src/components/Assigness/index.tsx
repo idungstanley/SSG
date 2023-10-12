@@ -78,7 +78,7 @@ function AssigneeDropdown({ anchor, setAnchor, handleClick, allowGroups = true }
                           )}
                         </div>
                       </span>
-                      <p className="text-sm text-black truncate hover:text-clip truncate w-full">
+                      <p className="text-sm text-black truncate hover:text-clip w-full">
                         {Capitalize(member.user.name)}
                       </p>
                     </div>
@@ -117,7 +117,7 @@ function AssigneeDropdown({ anchor, setAnchor, handleClick, allowGroups = true }
                               />
                             </div>
                           </span>
-                          <p className="text-sm text-black truncate hover:text-clip truncate w-full">
+                          <p className="text-sm text-black truncate hover:text-clip w-full">
                             {Capitalize(group.name as string)}
                           </p>
                         </div>
