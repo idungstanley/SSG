@@ -278,7 +278,7 @@ export default function PaletteManager({
               </div>
             </div>
           )}
-          <div className="p-2 mx-2">
+          <div className="px-2 mx-2">
             {isSearch && (
               <div>
                 <Input
@@ -336,10 +336,10 @@ export default function PaletteManager({
             >
               <ToolTip title="Advanced color options">
                 <span
-                  className="flex items-center gap-2 p-1 cursor-pointer hover:bg-primary-200"
+                  className="flex items-center gap-2 p-1 rounded cursor-pointer hover:bg-primary-200"
                   onClick={() => setDisplayColorPicker((prev) => !prev)}
                 >
-                  <p className={`truncate text-xs w-fit rounded ${displayColorPicker ? 'text-primary-600' : null}`}>
+                  <p className={`truncate text-xs w-fit ${displayColorPicker ? 'text-primary-600' : null}`}>
                     ADVANCED COLOR OPTIONS
                   </p>
                   {displayColorPicker ? (
@@ -352,7 +352,7 @@ export default function PaletteManager({
             </div>
           </div>
           <AdvanceColourPalette show={displayColorPicker} />
-          <div className="flex items-center justify-end gap-2 p-2 mx-2">
+          <div className="flex items-center justify-end gap-2 p-1 mx-3 mb-2">
             <Button
               height="h-6"
               width="w-20"
