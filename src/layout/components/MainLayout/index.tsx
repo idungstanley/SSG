@@ -9,7 +9,7 @@ import { InvalidateQueryFilters, useMutation, useQueryClient } from '@tanstack/r
 import { switchWorkspaceService, useGetUserSettingsKeys } from '../../../features/account/accountService';
 import { selectCurrentUser, setCurrentWorkspace, switchWorkspace } from '../../../features/auth/authSlice';
 import { setMyWorkspacesSlideOverVisibility } from '../../../features/general/slideOver/slideOverSlice';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import DragContext from './DragContext/DragContext';
 import { Toaster } from 'react-hot-toast';
 import Favorites from '../../../pages/workspace/favorites';
@@ -18,6 +18,8 @@ import useResolution from '../../../hooks/useResolution';
 import { STORAGE_KEYS, dimensions } from '../../../app/config/dimensions';
 import { SetUserSettingsStore } from '../../../features/account/accountSlice';
 import { setActiveHotkeyIds } from '../../../features/workspace/workspaceSlice';
+import TaskShortCutModal from '../../../utils/taskShortCut/TaskShortCutModal';
+import useTaskShortCut from '../../../utils/taskShortCut/useTaskShortCut';
 
 function MainLayout() {
   const key = 'sidebar';
@@ -31,8 +33,10 @@ function MainLayout() {
 
   const { currentWorkspaceId } = useAppSelector((state) => state.auth);
   const { userSettingsData } = useAppSelector((state) => state.account);
+  const [taskShortcut, setTaskShortcut] = useState(false);
 
   const user = useAppSelector(selectCurrentUser);
+  const TaskShortcutListener = useTaskShortCut();
 
   const switchWorkspaceMutation = useMutation(switchWorkspaceService, {
     onSuccess: (data) => {
@@ -55,6 +59,8 @@ function MainLayout() {
   };
 
   const { data: userData } = useGetUserSettingsKeys(true, key, resolution);
+
+  document.addEventListener('keydown', (event) => TaskShortcutListener(event, setTaskShortcut));
 
   useEffect(() => {
     if (userData) {
@@ -114,8 +120,7 @@ function MainLayout() {
           </div>
         </div>
       </DragContext>
-
-      {/* <TaskShortCutModal /> */}
+      {taskShortcut && <TaskShortCutModal setTaskShortcutModal={setTaskShortcut} />}
     </div>
   ) : null;
 }

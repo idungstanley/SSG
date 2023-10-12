@@ -1,22 +1,21 @@
-import React, { useState } from 'react';
+import React, { Dispatch, SetStateAction, useState } from 'react';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
 
-function TaskShortCutModal() {
+function TaskShortCutModal({ setTaskShortcutModal }: { setTaskShortcutModal: Dispatch<SetStateAction<boolean>> }) {
   const [open, setOpen] = useState(true);
   const customWidth = { maxWidth: 750 };
 
-  // Function to open the modal
   const openModal = () => {
     setOpen(true);
   };
 
-  // Function to close the modal
   const closeModal = () => {
     setOpen(false);
+    setTaskShortcutModal(false);
   };
 
   const coolThings = [
