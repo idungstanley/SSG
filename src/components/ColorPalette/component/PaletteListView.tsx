@@ -32,13 +32,15 @@ export default function PaletteListView() {
   return (
     <VerticalScroll>
       <div className="w-full h-56 table-container">
-        <table className="w-full" style={{ display: 'grid', gridTemplateColumns: '20px 44px 110px auto' }}>
-          <tr className="w-full h-6 text-xs text-left contents">
+        <table className="w-full" style={{ display: 'grid', gridTemplateColumns: '20px 36px 85px 120px auto' }}>
+          <tr className="w-full h-6 text-xs text-left contents group">
             <th className="p-2 text-center">
               <RoundedCheckbox
                 onChange={handleGroupSelect}
                 isChecked={allChecked}
-                styles="w-2 h-2 rounded-full cursor-pointer focus:outline-1 focus:ring-transparent focus:border-2 focus:opacity-100 group-hover:opacity-100 text-alsoit-purple-300"
+                styles={`w-2 h-2 rounded-full cursor-pointer focus:outline-1 focus:ring-transparent focus:border-2 focus:opacity-100 group-hover:opacity-100 text-alsoit-purple-300 ${
+                  allChecked ? 'opacity-100' : 'opacity-0'
+                }`}
               />
             </th>
             <th className="p-2 text-center border-b border-gray-300">
@@ -47,6 +49,7 @@ export default function PaletteListView() {
               </span>
             </th>
             <th className="p-2 border-b border-gray-300">HEX CODE</th>
+            <th className="p-2 border-b border-gray-300">COLOUR NAME</th>
             <th className="p-2 border-b border-gray-300">LIBRARY NAME</th>
           </tr>
           {colourPaletteData.map((item, index) => item !== null && <Row item={item} key={index} />)}
@@ -91,12 +94,14 @@ function Row({ item, key }: { item: IPaletteData; key: number }) {
   };
 
   return (
-    <tr className="w-full bg-white contents" key={key}>
+    <tr className="w-full bg-white contents group" key={key}>
       <td className="p-2">
         <RoundedCheckbox
           onChange={onChange}
           isChecked={isChecked}
-          styles="w-2 h-2 rounded-full cursor-pointer focus:outline-1 focus:ring-transparent  focus:border-2 focus:opacity-100 group-hover:opacity-100 text-alsoit-purple-300"
+          styles={`w-2 h-2 rounded-full cursor-pointer focus:outline-1 focus:ring-transparent  focus:border-2 focus:opacity-100 group-hover:opacity-100 text-alsoit-purple-300 ${
+            isChecked ? 'opacity-100' : 'opacity-0'
+          }`}
         />
       </td>
       <td className={`p-2 bg-white ${isChecked ? 'border-primary-400 border-y border-l' : 'border-b border-gray-300'}`}>
@@ -110,8 +115,11 @@ function Row({ item, key }: { item: IPaletteData; key: number }) {
       <td className={`p-2 bg-white ${isChecked ? 'border-primary-400 border-y' : 'border-b border-gray-300'}`}>
         <div>{item.color}</div>
       </td>
-      <td className={`p-2 bg-white ${isChecked ? 'border-primary-400 border-y border-r' : 'border-b border-gray-300'}`}>
+      <td className={`p-2 bg-white ${isChecked ? 'border-primary-400 border-y' : 'border-b border-gray-300'}`}>
         <div>{item.color_name}</div>
+      </td>
+      <td className={`p-2 bg-white ${isChecked ? 'border-primary-400 border-y border-r' : 'border-b border-gray-300'}`}>
+        <div>{item.name ? item.name : 'Add library name'}</div>
       </td>
     </tr>
   );
