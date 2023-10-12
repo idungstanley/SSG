@@ -323,15 +323,8 @@ export default function PaletteManager({
           )}
           {!isSearch && selectListColours.length === 0 && paletteViews.BOARD && (
             <div className="flex items-center justify-between mb-2">
-              <div className="flex items-center justify-between gap-2 bg-gray-400 h-9">
-                <p className="justify-center ml-2 text-white">COLOUR LIBRARY</p>
-                <span
-                  className="relative flex items-center justify-between h-5 gap-2 p-1 mr-1 text-xs text-gray-500 bg-white rounded w-fit hover:text-primary-600 hover:bg-primary-100"
-                  onClick={() => ({})}
-                >
-                  <p>Add</p>
-                  <ArrowDownFilled color="#B2B2B2" />
-                </span>
+              <div className="flex items-center p-2 bg-alsoit-gray-75 h-9">
+                <p className="justify-center text-base text-white">COLOUR LIBRARY</p>
               </div>
               <div className="flex items-center gap-1 px-2">
                 {views.map((item, index) => (
