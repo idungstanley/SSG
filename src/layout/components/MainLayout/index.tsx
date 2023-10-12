@@ -9,7 +9,7 @@ import { InvalidateQueryFilters, useMutation, useQueryClient } from '@tanstack/r
 import { switchWorkspaceService, useGetUserSettingsKeys } from '../../../features/account/accountService';
 import { selectCurrentUser, setCurrentWorkspace, switchWorkspace } from '../../../features/auth/authSlice';
 import { setMyWorkspacesSlideOverVisibility } from '../../../features/general/slideOver/slideOverSlice';
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import DragContext from './DragContext/DragContext';
 import { Toaster } from 'react-hot-toast';
 import Favorites from '../../../pages/workspace/favorites';
@@ -19,6 +19,7 @@ import { STORAGE_KEYS, dimensions } from '../../../app/config/dimensions';
 import { SetUserSettingsStore } from '../../../features/account/accountSlice';
 import { setActiveHotkeyIds } from '../../../features/workspace/workspaceSlice';
 import TaskShortCutModal from '../../../utils/taskShortCut/TaskShortCutModal';
+import useTaskShortCut from '../../../utils/taskShortCut/useTaskShortCut';
 
 function MainLayout() {
   const key = 'sidebar';
@@ -35,6 +36,7 @@ function MainLayout() {
   const [taskShortcut, setTaskShortcut] = useState(false);
 
   const user = useAppSelector(selectCurrentUser);
+  const TaskShortcutListener = useTaskShortCut();
 
   const switchWorkspaceMutation = useMutation(switchWorkspaceService, {
     onSuccess: (data) => {
@@ -57,20 +59,8 @@ function MainLayout() {
   };
 
   const { data: userData } = useGetUserSettingsKeys(true, key, resolution);
-  document.addEventListener('keydown', function (event) {
-    if (event.shiftKey && event.key === '?') {
-      // Check if the active element is an input field (you can extend this to include other elements as needed)
-      if (
-        document.activeElement?.tagName === 'INPUT' ||
-        document.activeElement?.tagName === 'TEXTAREA' ||
-        document.activeElement?.getAttribute('contenteditable') === 'true'
-      ) {
-        return;
-      } else {
-        setTaskShortcut(true);
-      }
-    }
-  });
+
+  document.addEventListener('keydown', (event) => TaskShortcutListener(event, setTaskShortcut));
 
   useEffect(() => {
     if (userData) {
