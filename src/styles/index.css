@@ -169,6 +169,11 @@ code {
   background-color: red;
 }
 
+.MuiMenu-list
+{
+  padding: 0 !important;
+}
+
 .minute {
   width: 2px;
   height: 40%;
