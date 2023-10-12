@@ -483,7 +483,7 @@ export const UseUpdateTaskService = ({
   const response = requestNew({
     url,
     method: 'PUT',
-    params: {
+    data: {
       name: name,
       description: description
     }
@@ -723,7 +723,7 @@ export const useSubTasks = (parentId: string, subtasks: Record<string, ITaskFull
       requestNew<ITaskListRes>({
         url: 'tasks/list',
         method: 'POST',
-        params: {
+        data: {
           parent_id: parentId
         }
       }),
