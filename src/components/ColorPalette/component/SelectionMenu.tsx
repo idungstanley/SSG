@@ -20,7 +20,6 @@ const TaskIcons = [
     handleClick: () => ({}),
     isVisible: true
   },
-
   {
     label: 'Duplicate',
     icons: <HiOutlineDuplicate />,

@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { UseEditHubService } from '../../features/hubs/hubService';
 import { UseEditWalletService } from '../../features/wallet/walletService';
@@ -37,9 +37,9 @@ import RoundedCheckbox from '../Checkbox/RoundedCheckbox';
 import ArrowOpenDown from '../../assets/icons/ArrowOpenDown';
 import DefaultColour from '../../assets/icons/DefaultColour';
 import SelectionMenu from './component/SelectionMenu';
-import { useGetColors } from '../../features/settings/user/userSettingsServices';
 import AlsoitMenuDropdown from '../DropDowns';
-import ListIconSelection from './component/ListIconSelection';
+import ListIconSelection, { listIconDetails } from './component/ListIconSelection';
+import { AddColour, useGetColors } from '../../features/account/accountService';
 
 interface PaletteProps {
   title?: string;
@@ -73,6 +73,7 @@ export default function PaletteManager({
   handleShapeSelection
 }: PaletteProps) {
   const dispatch = useAppDispatch();
+  const queryClient = useQueryClient();
 
   const { paletteDropdown } = useAppSelector((state) => state.account);
   const { hub } = useAppSelector((state) => state.hub);
@@ -105,6 +106,7 @@ export default function PaletteManager({
   const [isAdvanceSearch, setIsAdvanceSearch] = useState<boolean>(false);
   const [showListShapes, setShowListShapes] = useState<boolean>(false);
   const [colorName, setColorName] = useState<string>('Missing Color');
+  const [colorInputValue, setColorInputValue] = useState<string>('');
   const [showListShapeSelection, setShowListShapeSelection] = useState<null | HTMLDivElement>(null);
   const { paletteId, paletteType } = paletteDropdown;
   const { rgb } = color || {};
@@ -194,6 +196,13 @@ export default function PaletteManager({
     }
   });
 
+  const addColorMutation = useMutation(AddColour, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['user-colours']);
+      setColorInputValue('');
+    }
+  });
+
   const handleCloseSearch = () => {
     setIsSearch(false);
   };
@@ -269,6 +278,16 @@ export default function PaletteManager({
       default:
         return color.hex;
     }
+  };
+
+  const activeShapeName = listIconDetails.find((item) => item.shape === shape);
+
+  const handleAddColor = () => {
+    addColorMutation.mutateAsync({
+      color: color.hex,
+      color_name: colorName,
+      name: colorInputValue
+    });
   };
 
   return (
@@ -384,9 +403,8 @@ export default function PaletteManager({
                   }`}
                   onClick={(e) => handleOpenListShapeSelection(e)}
                 >
-                  <p>{title + ' Shapes'}</p>
+                  <p>{`${title} Shapes${shape ? `: ${activeShapeName?.label}` : ''}`}</p>
                   <ArrowDownFilled color={showListShapes ? 'white' : undefined} />
-                  {/* {showListShapes && <span className="absolute left-0 right-0 z-20 top-6">{topContent}</span>} */}
                 </div>
                 <AlsoitMenuDropdown handleClose={handleCloseListShapeSelection} anchorEl={showListShapeSelection}>
                   <ListIconSelection
@@ -536,8 +554,9 @@ export default function PaletteManager({
                   borderRadius="rounded-md py-0.5"
                   type="text"
                   name="name"
+                  value={colorInputValue}
                   label="LIBRARY COLOUR NAME"
-                  onChange={() => ({})}
+                  onChange={(e) => setColorInputValue(e.target.value)}
                 />
                 <div className="flex items-center justify-between gap-2">
                   <Button
@@ -556,6 +575,7 @@ export default function PaletteManager({
                       labelSize="text-xs"
                       padding="p-1"
                       buttonStyle="custom"
+                      onClick={handleAddColor}
                     />
                     <Button
                       height="h-6"
@@ -564,6 +584,7 @@ export default function PaletteManager({
                       labelSize="text-xs"
                       padding="p-1"
                       buttonStyle="custom"
+                      onClick={handleAddColor}
                     />
                   </div>
                 </div>
