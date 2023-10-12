@@ -28,7 +28,6 @@ import {
 } from '@dnd-kit/core';
 import { arrayMove, rectSortingStrategy, SortableContext, sortableKeyboardCoordinates } from '@dnd-kit/sortable';
 import Dropdown from '../../../../components/Dropdown';
-import { AiOutlineFieldTime } from 'react-icons/ai';
 import { MdAppRegistration, MdSecurity } from 'react-icons/md';
 import { GiChecklist } from 'react-icons/gi';
 import { BiDetail } from 'react-icons/bi';

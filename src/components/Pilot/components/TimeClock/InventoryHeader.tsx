@@ -1,13 +1,15 @@
 import ArrowDown from '../../../../assets/icons/ArrowDown';
+import { IEntries, ITimeEntriesRes } from '../../../../features/task/interface.tasks';
+import { ITeamMember } from '../../../../features/workspace/workspace.interfaces';
 import CollapseIcon from '../../../Views/ui/collapseIcon/CollapseIcon';
 import { HeaderIcons } from './TimeHeaderIcons';
 import { TotalTime } from './TotalTime';
 
 interface Props {
-  totalDuration: number | undefined;
+  timeData?: ITimeEntriesRes;
 }
 
-export function InventoryHeader({ totalDuration }: Props) {
+export function InventoryHeader({ timeData }: Props) {
   return (
     <div className="absolute -top-1.5 -left-1 flex justify-between items-center w-full">
       <div className="flex space-x-1.5 items-center">
@@ -32,11 +34,11 @@ export function InventoryHeader({ totalDuration }: Props) {
           </div>
         </label>
         <div className="flex items-center relative border bg-white rounded px-1.5 border-alsoit-gray-200 w-20 h-6">
-          <TotalTime totalDuration={totalDuration} />
+          <TotalTime totalDuration={timeData?.data.total_duration} />
           <span className="absolute -top-1.5 bg-white px-0.5 text-alsoit-text-sm">Total Time</span>
         </div>
       </div>
-      <HeaderIcons meMode />
+      <HeaderIcons timeData={timeData} />
     </div>
   );
 }
