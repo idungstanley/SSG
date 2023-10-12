@@ -12,9 +12,9 @@ export default function useTaskShortCut() {
     if (event.shiftKey && event.key === '?') {
       setTaskShortcut(true);
     }
-    if (event.key === 'h' || event.key === 'H') {
-      window.location.href = '/';
-    }
+    // if (event.key === 'h' || event.key === 'H') {
+    //   window.location.href = '/';
+    // }
   };
   return TaskShortcutListener;
 }
