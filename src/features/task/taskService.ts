@@ -244,7 +244,7 @@ const addTask = (data: {
   return response;
 };
 
-export const useAddTask = (task?: Task) => {
+export const useAddTask = (task: Task) => {
   const dispatch = useAppDispatch();
 
   const { tasks, subtasks } = useAppSelector((state) => state.task);
@@ -258,8 +258,8 @@ export const useAddTask = (task?: Task) => {
         const updatedSubtasks = addNewSubtaskManager(
           subtasks,
           data.data.task as ITaskFullList,
-          task?.custom_field_columns || [],
-          task?.task_statuses || []
+          task.custom_field_columns,
+          task.task_statuses
         );
         dispatch(setSubtasks(updatedSubtasks));
 
@@ -275,8 +275,8 @@ export const useAddTask = (task?: Task) => {
         const updatedTasks = addNewTaskManager(
           tasks,
           data.data.task as ITaskFullList,
-          task?.custom_field_columns || [],
-          task?.task_statuses || []
+          task.custom_field_columns,
+          task.task_statuses
         );
         dispatch(setTasks(updatedTasks));
         const listId = data.data.task.list_id;
