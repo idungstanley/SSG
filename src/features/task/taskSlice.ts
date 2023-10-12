@@ -4,6 +4,7 @@ import { IField, IFieldValue, ITask_statuses } from '../list/list.interfaces';
 import {
   Header,
   IDuration,
+  IEntries,
   IExtraFields,
   IHistoryFilterMemory,
   IParent,
@@ -227,6 +228,7 @@ interface TaskState {
   assigneeIds: string[];
   selectedDate: ISelectedDate | null;
   HistoryFilterMemory: IHistoryFilterMemory | null;
+  timeAssigneeFilter: IEntries[] | undefined;
   filters: FilterFieldsWithOption;
   subtasksfilters: Record<string, FilterFieldsWithOption>;
   isFiltersUpdated: boolean;
@@ -341,6 +343,7 @@ const initialState: TaskState = {
   isSubtasksFiltersUpdated: false,
   selectedDate: null,
   HistoryFilterMemory: null,
+  timeAssigneeFilter: undefined,
   statusId: '',
   currTaskListId: '',
   entityForCustom: { id: undefined, type: undefined },
@@ -670,6 +673,9 @@ export const taskSlice = createSlice({
     setHistoryMemory(state, action: PayloadAction<IHistoryFilterMemory | null>) {
       state.HistoryFilterMemory = action.payload;
     },
+    setTimeAssigneeFilter(state, action: PayloadAction<IEntries[] | undefined>) {
+      state.timeAssigneeFilter = action.payload;
+    },
     setEntityForCustom(state, action: PayloadAction<entityForCustom>) {
       state.entityForCustom = action.payload;
     },
@@ -774,6 +780,7 @@ export const {
   setSortType,
   setTaskSelectedDate,
   setHistoryMemory,
+  setTimeAssigneeFilter,
   setEntityForCustom,
   setCustomSuggetionsField,
   setNewCustomPropertyDetails,

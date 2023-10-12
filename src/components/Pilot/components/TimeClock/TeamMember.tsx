@@ -1,15 +1,19 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import SearchIcon from '../../../../assets/icons/SearchIcon';
 import { IEntries } from '../../../../features/task/interface.tasks';
 import { SlideButton } from '../../../SlideButton';
 import AvatarWithImage from '../../../avatar/AvatarWithImage';
 import AvatarWithInitials from '../../../avatar/AvatarWithInitials';
+import { useAppDispatch } from '../../../../app/hooks';
+import { setTimeAssigneeFilter } from '../../../../features/task/taskSlice';
 
 interface Props {
   timeData?: IEntries[];
 }
 
 export function TeamMemberFilter({ timeData }: Props) {
+  const dispatch = useAppDispatch();
+
   const [checkedState, setCheckedState] = useState<boolean[]>([]);
   const [teamMemberId, setTeamMemberId] = useState<string[]>([]);
 
@@ -32,6 +36,11 @@ export function TeamMemberFilter({ timeData }: Props) {
   });
 
   const uniqueTimeData = Array.from(uniqueUsersMap.values());
+
+  useEffect(() => {
+    const filteredArr = timeData?.filter((entry) => teamMemberId.includes(entry.team_member.id));
+    teamMemberId.length > 0 && dispatch(setTimeAssigneeFilter(filteredArr));
+  }, [teamMemberId]);
 
   return (
     <div

@@ -928,7 +928,8 @@ export const GetTimeEntriesService = ({
   trigger,
   is_active,
   page,
-  include_filters
+  include_filters,
+  team_member_group_ids
 }: {
   itemId: string | null | undefined;
   trigger: string | null | undefined;
@@ -948,7 +949,7 @@ export const GetTimeEntriesService = ({
         params: {
           type: trigger,
           id: itemId,
-          team_member_group_ids: null,
+          team_member_group_ids: team_member_group_ids,
           is_active: is_active,
           page,
           include_filters: include_filters ? 1 : 0,
