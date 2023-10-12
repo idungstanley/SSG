@@ -198,7 +198,7 @@ export default function PaletteManager({
 
   const addColorMutation = useMutation(AddColour, {
     onSuccess: () => {
-      queryClient.invalidateQueries(['user-colours']);
+      queryClient.invalidateQueries(['color-palette']);
       setColorInputValue('');
     }
   });
