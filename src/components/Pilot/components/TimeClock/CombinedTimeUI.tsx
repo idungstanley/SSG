@@ -58,7 +58,7 @@ export function CombinedTime() {
       }`}
     >
       {/* Time Trackers */}
-      <div className="absolute w-full -top-0 overflow-x-auto" style={{ whiteSpace: 'nowrap' }}>
+      <div className="absolute w-full -top-0 overflow-x-visible" style={{ whiteSpace: 'nowrap' }}>
         {/* <HorizontalScroll> */}
         <div className="flex items-center space-x-12 w-full">
           <div className="flex items-center space-x-1.5">
@@ -77,7 +77,7 @@ export function CombinedTime() {
               </div>
               {/* Active Tracker Name */}
               <span className="text-alsoit-text-md text-alsoit-gray-50">{activeClockTab}</span>
-              {dropDown.tabDrop ? <ArrowUp /> : <ArrowDown className="w-3 h-3" />}
+              {dropDown.tabDrop ? <ArrowUp className="w-3 h-3" /> : <ArrowDown color="#FFF" className="w-3 h-3" />}
               {dropDown.tabDrop && (
                 <TabsDropDown header="time category" subHeader="select category" styles="w-44 top-7 left-7">
                   {[

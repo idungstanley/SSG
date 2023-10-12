@@ -66,7 +66,8 @@ export default function ListViewSettingsModal({
         dispatch(getComfortableViewWrap(false));
         dispatch(getCompactView(false));
         dispatch(getCompactViewWrap(false));
-      }
+      },
+      unusing: true
     },
     {
       id: board,
@@ -77,7 +78,8 @@ export default function ListViewSettingsModal({
         dispatch(getComfortableViewWrap(false));
         dispatch(getCompactView(false));
         dispatch(getCompactViewWrap(false));
-      }
+      },
+      unusing: true
     },
     {
       id: calender,
@@ -88,7 +90,8 @@ export default function ListViewSettingsModal({
         dispatch(getComfortableViewWrap(true));
         dispatch(getCompactView(false));
         dispatch(getCompactViewWrap(false));
-      }
+      },
+      unusing: true
     },
     {
       id: timeChart,
@@ -99,7 +102,8 @@ export default function ListViewSettingsModal({
         dispatch(getComfortableViewWrap(false));
         dispatch(getCompactView(true));
         dispatch(getCompactViewWrap(false));
-      }
+      },
+      unusing: true
     },
     {
       id: map,
@@ -110,7 +114,8 @@ export default function ListViewSettingsModal({
         dispatch(getComfortableViewWrap(false));
         dispatch(getCompactView(false));
         dispatch(getCompactViewWrap(true));
-      }
+      },
+      unusing: true
     },
     {
       id: gantt,
@@ -121,7 +126,8 @@ export default function ListViewSettingsModal({
         dispatch(getComfortableViewWrap(false));
         dispatch(getCompactView(false));
         dispatch(getCompactViewWrap(true));
-      }
+      },
+      unusing: true
     },
     {
       id: team,
@@ -132,7 +138,8 @@ export default function ListViewSettingsModal({
         dispatch(getComfortableViewWrap(false));
         dispatch(getCompactView(false));
         dispatch(getCompactViewWrap(true));
-      }
+      },
+      unusing: true
     },
     {
       id: 'create_new_view',
@@ -143,7 +150,8 @@ export default function ListViewSettingsModal({
         dispatch(getComfortableViewWrap(false));
         dispatch(getCompactView(false));
         dispatch(getCompactViewWrap(true));
-      }
+      },
+      unusing: true
     }
   ];
 
@@ -151,7 +159,7 @@ export default function ListViewSettingsModal({
     <Menu>
       <div className="flex items-center justify-center viewSettingsParent">
         <Menu.Button>
-          <Button active={true} unusing={true}>
+          <Button active={true}>
             <Icons src={List} />
             <span className="mr-2 ml-1">View:</span>
             <span>{isActive}</span>
@@ -186,6 +194,7 @@ export default function ListViewSettingsModal({
               }`}
               onClick={() => setActiveView(View.id)}
               onMouseEnter={() => setViewId(View.id)}
+              style={{ background: View.unusing ? '#f6efe3' : '', pointerEvents: View.unusing ? 'none' : 'all' }}
             >
               {View.label !== 'Create New View' ? (
                 <button onClick={View.handleClick} className="flex items-center justify-between w-full  group">

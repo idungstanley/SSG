@@ -339,7 +339,7 @@ const initialState: TaskState = {
   recorder: null,
   updateCords: Date.now(),
   activeTaskColumn: { id: '', header: '' },
-  timerDetails: { description: '', isBillable: false },
+  timerDetails: { description: '', isBillable: false, label: '', tags: '' },
   duration: { s: 0, m: 0, h: 0 },
   recorderDuration: { s: 0, m: 0, h: 0 },
   period: undefined,
