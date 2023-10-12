@@ -35,7 +35,7 @@ export function AddTask({ onClose, paddingLeft, parentId, isListParent, columns,
 
   const { data: list } = UseGetListDetails(parentId);
 
-  const taskTemplate = NewSubTaskTemplate();
+  const taskTemplate = NewSubTaskTemplate(task);
 
   useEffect(() => {
     const minPosition = Math.min(...(list?.data.list.task_statuses.map((status) => status.position) || []));

@@ -1,7 +1,7 @@
-import { ITaskFullList } from '../../../../../features/task/interface.tasks';
+import { ITaskFullList, Task } from '../../../../../features/task/interface.tasks';
 import { useAppSelector } from '../../../../../app/hooks';
 
-export default function NewSubTaskTemplate() {
+export default function NewSubTaskTemplate(task: Task) {
   const { newTaskPriority } = useAppSelector((state) => state.task);
 
   const newSubTask: ITaskFullList = {
@@ -10,7 +10,7 @@ export default function NewSubTaskTemplate() {
     avatar_path: '',
     created_at: '',
     custom_fields: [],
-    custom_field_columns: [],
+    custom_field_columns: task.custom_field_columns || [],
     deleted_at: null,
     closed_subtasks_count: 0,
     descendants_count: 0,
@@ -46,7 +46,7 @@ export default function NewSubTaskTemplate() {
       updated_at: ''
     },
     tags: [],
-    task_statuses: [],
+    task_statuses: task.task_statuses || [],
     updated_at: ''
   };
   return newSubTask;

@@ -1,10 +1,11 @@
-import { IField } from '../features/list/list.interfaces';
+import { IField, ITask_statuses } from '../features/list/list.interfaces';
 import { ITaskFullList } from '../features/task/interface.tasks';
 
 export const addNewSubtaskManager = (
   subtasks: Record<string, ITaskFullList[]>,
   taskFromData: ITaskFullList,
-  custom_field_columns: IField[]
+  custom_field_columns: IField[],
+  task_statuses: ITask_statuses[]
 ): Record<string, ITaskFullList[]> => {
   const parentId = taskFromData.parent_id;
   if (parentId) {
@@ -12,6 +13,7 @@ export const addNewSubtaskManager = (
     const newTask = {
       ...taskFromData,
       custom_field_columns,
+      task_statuses,
       descendants_count: 0
     };
 

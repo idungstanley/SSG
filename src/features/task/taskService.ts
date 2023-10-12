@@ -258,7 +258,8 @@ export const useAddTask = (task?: Task) => {
         const updatedSubtasks = addNewSubtaskManager(
           subtasks,
           data.data.task as ITaskFullList,
-          task?.custom_field_columns || []
+          task?.custom_field_columns || [],
+          task?.task_statuses || []
         );
         dispatch(setSubtasks(updatedSubtasks));
 
@@ -274,7 +275,8 @@ export const useAddTask = (task?: Task) => {
         const updatedTasks = addNewTaskManager(
           tasks,
           data.data.task as ITaskFullList,
-          task?.custom_field_columns || []
+          task?.custom_field_columns || [],
+          task?.task_statuses || []
         );
         dispatch(setTasks(updatedTasks));
         const listId = data.data.task.list_id;
@@ -324,7 +326,12 @@ export const useDuplicateTask = (task?: Task) => {
     onSuccess: (data) => {
       dispatch(setDuplicateTaskObj({ ...duplicateTaskObj, popDuplicateTaskModal: true }));
 
-      const updatedTasks = addNewTaskManager(tasks, data.data.task as ITaskFullList, task?.custom_field_columns || []);
+      const updatedTasks = addNewTaskManager(
+        tasks,
+        data.data.task as ITaskFullList,
+        task?.custom_field_columns || [],
+        task?.task_statuses || []
+      );
       dispatch(setTasks(updatedTasks));
       const listId = data.data.task.list_id;
       const updatedTree = updateListTasksCountManager(listId as string, hub, updatedTasks[listId].length);
