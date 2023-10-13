@@ -15,6 +15,7 @@ interface InputDataTypes {
   trailingClick?: () => void;
   bgColor?: string;
   borderRadius?: string;
+  height?: string;
 }
 function Input({
   label,
@@ -30,7 +31,8 @@ function Input({
   trailingIcon,
   trailingClick,
   bgColor,
-  borderRadius
+  borderRadius,
+  height
 }: InputDataTypes) {
   const handleTrailingIconClick = () => {
     if (trailingClick) {
@@ -61,7 +63,7 @@ function Input({
             trailingIcon && 'pr-10'
           } border border-gray-300 ${
             borderRadius ? borderRadius : name === 'search' && !borderRadius ? 'rounded-md py-0.5' : 'rounded-md py-2'
-          } shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm ${bgColor}`}
+          } shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm ${bgColor} ${height}`}
           placeholder={placeholder}
           value={value}
           onChange={onChange}

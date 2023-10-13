@@ -3,6 +3,8 @@ import requestNew from '../../../app/requestNew';
 import { IUserRes } from '../../workspace/workspace.interfaces';
 import { setShowConfirmationModal } from './userSettingsSlice';
 import { useAppDispatch } from '../../../app/hooks';
+import { setColourPaletteData } from '../../account/accountSlice';
+import { IPreferenceState } from '../../task/taskSlice';
 // import { useAppDispatch } from '../../../app/hooks';
 interface IUserSettings {
   name?: string | undefined;
@@ -15,6 +17,7 @@ interface IUserSettings {
   color?: string;
   is_clock_time?: number | null;
   clock_type?: string | null;
+  user_preferences?: IPreferenceState;
 }
 
 interface IPasswordprops {
@@ -52,12 +55,13 @@ const updateUserSettings = ({
   time_format,
   color,
   clock_type,
-  is_clock_time
+  is_clock_time,
+  user_preferences
 }: IUserSettings) => {
   const request = requestNew({
     url: '/auth/account',
     method: 'PUT',
-    params: {
+    data: {
       name,
       date_format,
       email,
@@ -67,7 +71,8 @@ const updateUserSettings = ({
       time_format,
       color,
       clock_type,
-      is_clock_time
+      is_clock_time,
+      user_preferences
     }
   });
   return request;

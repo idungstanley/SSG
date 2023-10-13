@@ -22,7 +22,7 @@ body {
   color: #4e5258;
   font-size: 13px;
   font-weight: 600;
-  line-height: 15.6px;
+  /* line-height: 15.6px; */
 }
 
 html {
@@ -128,7 +128,6 @@ code {
   text-transform: uppercase;
 }
 
-
 @keyframes grow {
   from {
     width: 40px;
@@ -194,6 +193,11 @@ code {
   width: 1px;
   height: 46%;
   background-color: red;
+}
+
+.MuiMenu-list
+{
+  padding: 0 !important;
 }
 
 .minute {

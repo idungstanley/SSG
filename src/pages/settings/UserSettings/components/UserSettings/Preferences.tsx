@@ -1,7 +1,52 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import '../../../../../styles/usersetting.css';
+import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
+import { setPreferenceState } from '../../../../../features/task/taskSlice';
+import { setUserSettingsKeysProfile } from '../../../../../features/account/accountService';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 function Preferences() {
+  const { preferenceState, userSettingsProfile } = useAppSelector((state) => state.task);
+
+  const dispatch = useAppDispatch();
+  const queryClient = useQueryClient();
+
+  const saveHotKeysToBE = useMutation(setUserSettingsKeysProfile, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['self']);
+    }
+  });
+
+  useEffect(() => {
+    userSettingsProfile.map((keys) => {
+      if (keys.key == 'hotkeys') {
+        const updatePreferenceState = {
+          ...preferenceState,
+          hotkeys: keys.value
+        };
+        dispatch(setPreferenceState(updatePreferenceState));
+      }
+    });
+  }, [userSettingsProfile]);
+
+  const handleHotkeys = (name: string, checked: boolean) => {
+    if (name == 'hotkeys') {
+      saveHotKeysToBE.mutateAsync({
+        value: checked
+      });
+    }
+  };
+
+  const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, checked } = event.target;
+    const updatePreferenceState = {
+      ...preferenceState,
+      [name]: checked
+    };
+    dispatch(setPreferenceState(updatePreferenceState));
+    handleHotkeys(name, checked);
+  };
+
   return (
     <div className="my-4">
       <h1 className="font-bold my-2" style={{ fontSize: '15px' }}>
@@ -9,7 +54,12 @@ function Preferences() {
       </h1>
       <section className="flex items-center border-b-2 border-slate-400">
         <label className="switch">
-          <input type="checkbox" defaultChecked />
+          <input
+            type="checkbox"
+            name="flyoutToast"
+            checked={preferenceState.flyoutToast}
+            onChange={handleCheckboxChange}
+          />
           <span className="slider round"></span>
         </label>
         <div className="mx-6">
@@ -24,7 +74,12 @@ function Preferences() {
       </section>
       <section className="flex items-center border-b-2 border-slate-400">
         <label className="switch">
-          <input type="checkbox" defaultChecked />
+          <input
+            type="checkbox"
+            name="dontPostWithEnter"
+            checked={preferenceState.dontPostWithEnter}
+            onChange={handleCheckboxChange}
+          />
           <span className="slider round"></span>
         </label>
         <div className="mx-6">
@@ -39,12 +94,12 @@ function Preferences() {
       </section>
       <section className="flex items-center border-b-2 border-slate-400">
         <label className="switch">
-          <input type="checkbox" defaultChecked />
+          <input type="checkbox" name="markdown" checked={preferenceState.markdown} onChange={handleCheckboxChange} />
           <span className="slider round"></span>
         </label>
         <div className="mx-6">
           <h1 className="my-2 font-bold" style={{ fontSize: '15px' }}>
-            Markdown{' '}
+            Markdown
           </h1>
           <p className="mb-5" style={{ fontSize: '15px' }}>
             You can disable Markdown (shortcuts when typing) by turning it off here.
@@ -53,7 +108,13 @@ function Preferences() {
       </section>
       <section className="flex items-center border-b-2 border-slate-400">
         <label className="switch">
-          <input type="checkbox" defaultChecked />
+          <input
+            type="checkbox"
+            name="hotkeys"
+            className={`${preferenceState.hotkeys && 'bg-red-400'}`}
+            checked={preferenceState.hotkeys}
+            onChange={handleCheckboxChange}
+          />
           <span className="slider round"></span>
         </label>
         <div className="mx-6">
@@ -67,7 +128,7 @@ function Preferences() {
       </section>
       <section className="flex items-center border-b-2 border-slate-400">
         <label className="switch">
-          <input type="checkbox" defaultChecked />
+          <input type="checkbox" name="notepad" checked={preferenceState.notepad} onChange={handleCheckboxChange} />
           <span className="slider round"></span>
         </label>
         <div className="mx-6">
