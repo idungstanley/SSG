@@ -302,17 +302,15 @@ export default function PaletteManager({
       PaperProps={{
         style: {
           borderRadius: '12px',
-          backgroundColor: 'white'
+          backgroundColor: 'white',
+          padding: '0px'
         }
       }}
-      sx={{
-        pt: 0,
-        pb: 0
-      }}
+      className="MuiMenu-list"
     >
       <div
         className="overflow-y-auto text-gray-500 rounded-full drop-shadow-2xl"
-        style={{ borderRadius: '5px', width: '400px' }}
+        style={{ borderRadius: '5px', width: '450px' }}
       >
         <div className="z-50 flex flex-col w-full">
           {selectListColours.length > 0 && selectedViews === paletteViews.LIST && (
