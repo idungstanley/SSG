@@ -1,14 +1,31 @@
-import React, { Dispatch, SetStateAction, useState } from 'react';
+import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
 import { coolThings, dashboardNavigation, markdown, textAndCommentEditor } from './shortcutSections/shortcutSections';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { setPreferenceState } from '../../features/task/taskSlice';
 
 function TaskShortCutModal({ setTaskShortcutModal }: { setTaskShortcutModal: Dispatch<SetStateAction<boolean>> }) {
   const [open, setOpen] = useState(true);
   const customWidth = { maxWidth: 750 };
+
+  const { preferenceState, userSettingsProfile } = useAppSelector((state) => state.task);
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    userSettingsProfile.map((keys) => {
+      if (keys.key == 'hotkeys') {
+        const updatePreferenceState = {
+          ...preferenceState,
+          hotkeys: keys.value
+        };
+        dispatch(setPreferenceState(updatePreferenceState));
+      }
+    });
+  }, [userSettingsProfile]);
 
   const openModal = () => {
     setOpen(true);
