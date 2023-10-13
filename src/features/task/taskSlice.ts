@@ -136,6 +136,14 @@ interface fileUploadPropsType {
   taskId?: string;
 }
 
+export interface IPreferenceState {
+  flyoutToast: boolean;
+  dontPostWithEnter: boolean;
+  markdown: boolean;
+  hotkeys: boolean;
+  notepad: boolean;
+}
+
 export const TWO_SUBTASKS_LEVELS = 'two_levels';
 export const THREE_SUBTASKS_LEVELS = 'three_levels';
 
@@ -146,6 +154,7 @@ interface TaskState {
   watchersData: string[];
   removeWatcherId: null | string;
   currTeamMemberId: null | string;
+  preferenceState: IPreferenceState;
   myTaskData: ImyTaskData[];
   taskColumns: listColumnProps[];
   hideTask: listColumnProps[];
@@ -248,6 +257,13 @@ const initialState: TaskState = {
   currentTaskIdForPilot: null,
   watchersData: [],
   currTeamMemberId: null,
+  preferenceState: {
+    flyoutToast: false,
+    dontPostWithEnter: false,
+    markdown: false,
+    hotkeys: false,
+    notepad: false
+  },
   removeWatcherId: null,
   myTaskData: [],
   taskColumns: [],
@@ -384,6 +400,9 @@ export const taskSlice = createSlice({
     },
     setSubtasksFilters(state, action: PayloadAction<Record<string, FilterFieldsWithOption>>) {
       state.subtasksfilters = action.payload;
+    },
+    setPreferenceState(state, action: PayloadAction<IPreferenceState>) {
+      state.preferenceState = action.payload;
     },
     setFiltersUpdated(state, action: PayloadAction<boolean>) {
       state.isFiltersUpdated = action.payload;
@@ -706,6 +725,7 @@ export const {
   getComfortableView,
   getComfortableViewWrap,
   getVerticalGrid,
+  setPreferenceState,
   getSingleLineView,
   getTaskUpperCase,
   setDuplicateTaskObj,
