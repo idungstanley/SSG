@@ -26,6 +26,7 @@ import CreateFiles from './Files/CreateFiles';
 import CreatePeople from './People/CreatePeople';
 import CreateLocationField from './Location/CreateLocation';
 import ColorPalette from '../../../../ColorPalette/component/ColorPalette';
+import CreateTagsField from './Dropdown/CreateTags';
 
 function NewColumn() {
   const dispatch = useAppDispatch();
@@ -48,6 +49,7 @@ function NewColumn() {
   const properties: Record<string, JSX.Element> = {
     'single label': <CreateDropdownField />,
     'multi label': <CreateDropdownField />,
+    tags: <CreateTagsField />,
     date: <CreateDateField />,
     'short text': <CreateTextField />,
     'long text': <CreateTextField />,

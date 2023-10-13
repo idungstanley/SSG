@@ -7,19 +7,19 @@ import { Modal } from '../Modal';
 
 interface HotkeysListProps {
   tabs: IPilotTab[];
-  setActiveTabId: (i: number | null) => void;
-  activeTabId: number | null;
+  setActiveTabId: (i: string | null) => void;
+  activeTabId: string | null;
   showModal: boolean;
   setShowModal: (i: boolean) => void;
 }
 
-const hotkeyIdsFromLS = JSON.parse(localStorage.getItem('hotkeys') ?? '[]') as number[];
+const hotkeyIdsFromLS = JSON.parse(localStorage.getItem('hotkeys') ?? '[]') as string[];
 
 const HOTKEY_LIMIT = 3;
 
 export default function HotkeysList({ tabs, setActiveTabId, activeTabId, showModal, setShowModal }: HotkeysListProps) {
   const { show } = useAppSelector((state) => state.slideOver.pilotSideOver);
-  const [activeHotkeyIds, setActiveHotkeyIds] = useState<number[]>(hotkeyIdsFromLS);
+  const [activeHotkeyIds, setActiveHotkeyIds] = useState<string[]>(hotkeyIdsFromLS);
 
   const hotkeys = useMemo(
     () => tabs.filter((i) => activeHotkeyIds.includes(i.id)).slice(0, !show ? HOTKEY_LIMIT : undefined),
@@ -27,7 +27,7 @@ export default function HotkeysList({ tabs, setActiveTabId, activeTabId, showMod
   );
 
   const handleClick = useCallback(
-    (tabId: number) => {
+    (tabId: string) => {
       const isIncludes = activeHotkeyIds.includes(tabId);
 
       const newHotkeyIds = isIncludes ? [...activeHotkeyIds.filter((i) => i !== tabId)] : [...activeHotkeyIds, tabId];
@@ -40,7 +40,7 @@ export default function HotkeysList({ tabs, setActiveTabId, activeTabId, showMod
 
   return (
     <>
-      {activeHotkeyIds.length !== 0 ? (
+      {activeHotkeyIds.length ? (
         <div className={cl('flex flex-wrap gap-y-2 p-2 col-span-1', show ? 'flex-row w-full' : 'flex-col gap-2')}>
           {hotkeys.map((hotkey) => (
             <button

@@ -5,7 +5,6 @@ import { EntityType } from '../../utils/EntityTypes/EntityType';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { setActiveSubHubManagerTabId, setActiveTabId, setShowOverlay } from '../../features/workspace/workspaceSlice';
 import { getHub, getSubMenu, setSubDropdownMenu, setshowMenuDropdown } from '../../features/hubs/hubSlice';
-import { EntityManagerTabsId, PilotTabsId } from '../../utils/PilotUtils';
 import { Hub } from '../../pages/workspace/hubs/components/ActiveTree/activetree.interfaces';
 import ActiveTreeDataFormater from './ActiveTreeDataFormater';
 import { useGetAllHubs, useGetActiveHubChildren } from '../../features/hubs/hubService';
@@ -13,6 +12,8 @@ import { useParams } from 'react-router';
 import CreateTree from '../../pages/workspace/hubs/components/ActiveTree/CreateTree';
 import { setFilteredResults } from '../../features/search/searchSlice';
 import { IHub } from '../../features/hubs/hubs.interfaces';
+import { pilotTabs } from '../../app/constants/pilotTabs';
+import { TIME_TABS } from '../../utils/Constants/TimeClockConstants';
 
 interface ActiveTreeSearchProps {
   closeDropdown?: React.Dispatch<React.SetStateAction<boolean>>;
@@ -60,7 +61,7 @@ export default function ActiveTreeSearch({ closeDropdown, option }: ActiveTreeSe
   }, [hubs, allHubs]);
 
   useEffect(() => {
-    if (option === 'taskDuplicate') setToggleTree(true);
+    if (option === 'taskDuplicate' || option === TIME_TABS.nestedEntities) setToggleTree(true);
   }, []);
 
   const handleOpenNewHub = (id: string) => {
@@ -72,14 +73,14 @@ export default function ActiveTreeSearch({ closeDropdown, option }: ActiveTreeSe
   };
 
   const directToPilot = () => {
-    dispatch(setActiveTabId(PilotTabsId.entityManager));
+    dispatch(setActiveTabId(pilotTabs.ENTITY_MANAGER));
     dispatch(setShowOverlay(true));
     if (entityToCreate === EntityType.hub || entityToCreate === EntityType.subHub) {
-      dispatch(setActiveSubHubManagerTabId(EntityManagerTabsId.hub));
+      dispatch(setActiveSubHubManagerTabId(pilotTabs.CREATE_HUB));
     } else if (entityToCreate === EntityType.wallet || entityToCreate === EntityType.subWallet) {
-      dispatch(setActiveSubHubManagerTabId(EntityManagerTabsId.wallet));
+      dispatch(setActiveSubHubManagerTabId(pilotTabs.CREATE_WALLET));
     } else if (entityToCreate === EntityType.list) {
-      dispatch(setActiveSubHubManagerTabId(EntityManagerTabsId.list));
+      dispatch(setActiveSubHubManagerTabId(pilotTabs.CREATE_LIST));
     }
     dispatch(
       getSubMenu({
@@ -94,7 +95,7 @@ export default function ActiveTreeSearch({ closeDropdown, option }: ActiveTreeSe
 
   return (
     <div className="relative">
-      {option !== 'taskDuplicate' && (
+      {option !== 'taskDuplicate' && option !== TIME_TABS.nestedEntities && (
         <button
           type="button"
           className="relative flex items-center w-full p-1 px-1 mt-2 mb-1 transition duration-300 rounded-md cursor-pointer group"

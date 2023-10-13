@@ -8,15 +8,18 @@ import { Task } from '../../features/task/interface.tasks';
 import { setSelectedTaskParentId, setSelectedTaskType } from '../../features/task/taskSlice';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
 import { setPickedDateState } from '../../features/workspace/workspaceSlice';
+import { isDateInPast } from './CheckDate';
+import { cl } from '../../utils';
 
 interface dateFormatProps {
   date: string | undefined;
   font?: string;
   task?: Task;
   type?: 'start_date' | 'end_date' | 'created_at' | 'updated_at';
+  isDueDate?: boolean;
 }
 
-export default function DateFormat({ date, task, font = 'text-sm', type }: dateFormatProps) {
+export default function DateFormat({ date, task, font = 'text-sm', type, isDueDate = false }: dateFormatProps) {
   const dispatch = useAppDispatch();
 
   const { date_format } = useAppSelector((state) => state.userSetting);
@@ -80,7 +83,10 @@ export default function DateFormat({ date, task, font = 'text-sm', type }: dateF
             >
               x
             </p>
-            <p>{moment(date as MomentInput).format(date_format?.toUpperCase())}</p>
+            {}
+            <p className={cl(isDueDate && isDateInPast(date) ? 'text-alsoit-danger' : 'text-alsoit-gray-300')}>
+              {moment(date as MomentInput).format(date_format?.toUpperCase())}
+            </p>
           </div>
         ) : (
           <div className="flex items-center cursor-pointer group/parent">

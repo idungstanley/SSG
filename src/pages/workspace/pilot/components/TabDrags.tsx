@@ -1,4 +1,3 @@
-import React from 'react';
 import { cl } from '../../../../utils';
 import { useSortable } from '@dnd-kit/sortable';
 import { setActiveHotKeyId, setActiveTabId } from '../../../../features/workspace/workspaceSlice';
@@ -7,7 +6,7 @@ import { useAppSelector } from '../../../../app/hooks';
 import { GrDrag } from 'react-icons/gr';
 
 interface TabProps {
-  id: number;
+  id: string;
   name: string;
   source?: string;
   icon?: JSX.Element;
@@ -29,7 +28,7 @@ export default function TabDrag({ id, name, source, showPilot, icon, showPilotIc
     zIndex: isDragging ? 1 : undefined
   };
 
-  const handleClick = (tabId: number) => {
+  const handleClick = (tabId: string) => {
     dispatch(setActiveHotKeyId(0));
     dispatch(setActiveTabId(tabId));
   };

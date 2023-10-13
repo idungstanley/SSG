@@ -11,7 +11,7 @@ import EditIcon from '../../../assets/icons/Edit';
 import { BsCheck2All } from 'react-icons/bs';
 import { MdDeleteForever } from 'react-icons/md';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { deletePaletteColour } from '../../../features/account/accountService';
+import { deletePaletteColour, editPaletteColour } from '../../../features/account/accountService';
 
 export default function PaletteListView() {
   const dispatch = useAppDispatch();
@@ -113,6 +113,12 @@ function Row({ item, key }: { item: IPaletteData; key: number }) {
     }
   });
 
+  const handleEditMutation = useMutation(editPaletteColour, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['color-palette']);
+    }
+  });
+
   const handleOpenEditDropdown = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     setShowEditDropdown(e.currentTarget);
   };
@@ -120,6 +126,18 @@ function Row({ item, key }: { item: IPaletteData; key: number }) {
   const handleCloseEditDropwdown = () => {
     setShowEditDropdown(null);
     // setEditLibraryNameContent(false);
+  };
+
+  const handleEditLibraryName = (
+    e: React.MouseEvent<HTMLSpanElement, MouseEvent> | React.KeyboardEvent<HTMLSpanElement>
+  ) => {
+    e.stopPropagation();
+    handleEditMutation.mutateAsync({
+      id: item.id,
+      name: inputRef.current?.innerText.trim() || (item.name as string),
+      color_name: item.color_name,
+      color: item.color
+    });
   };
 
   const collections = [
@@ -180,7 +198,12 @@ function Row({ item, key }: { item: IPaletteData; key: number }) {
           isChecked ? 'border-primary-400 border-y border-r' : 'border-b border-gray-300'
         }`}
       >
-        <div className="w-20 truncate" ref={inputRef} contentEditable={editLibraryNameContent}>
+        <div
+          className="w-20 truncate"
+          ref={inputRef}
+          onKeyDown={(e) => (e.key === 'Enter' ? handleEditLibraryName(e) : null)}
+          contentEditable={editLibraryNameContent}
+        >
           {item.name ? item.name : 'Add library name'}
         </div>
         <div className="flex items-center gap-1 opacity-0 cursor-pointer right-1 group-hover:opacity-100">

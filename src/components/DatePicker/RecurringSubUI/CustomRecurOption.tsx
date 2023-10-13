@@ -33,7 +33,7 @@ export function CustomRecurOption({ setOptions }: Props) {
           onClick={() => setDropDown((prev) => ({ ...prev, type: !prev.type }))}
         >
           <span className="capitalize">{type}</span>
-          {dropDown.type ? <ArrowUp /> : <ArrowDown dimensions={{ height: 7, width: 7 }} />}
+          {dropDown.type ? <ArrowUp /> : <ArrowDown className="w-2 h-2" />}
           {dropDown.type && (
             <RecurringIntervals
               activeItem={type}

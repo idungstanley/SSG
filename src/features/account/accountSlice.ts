@@ -6,9 +6,6 @@ import { IPaletteData } from '../workspace/workspace.interfaces';
 
 const showPreviewFromLS = localStorage.getItem('showPreview') as string;
 
-// const sidebarFromLS: { sidebarWidth: number; showSidebar: boolean } =
-//   JSON.parse(localStorage.getItem('sidebar') || '""');
-
 const sidebarFromLS = localStorage.getItem('sidebar');
 //get sidebar width from local storage
 const sidebarWidthFromLS = JSON.parse(localStorage.getItem(STORAGE_KEYS.SIDEBAR_WIDTH) || '""') as number;
@@ -17,7 +14,7 @@ const pilotWidthFromLS = JSON.parse(localStorage.getItem(STORAGE_KEYS.PILOT_WIDT
 
 const extendedBarWidthFromLS = JSON.parse(localStorage.getItem(STORAGE_KEYS.EXTENDED_BAR_WIDTH) || '""') as number;
 
-const hotKeysFromLS = JSON.parse(localStorage.getItem(STORAGE_KEYS.HOT_KEYS) || '""') as number[];
+const hotKeysFromLS = JSON.parse(localStorage.getItem(STORAGE_KEYS.HOT_KEYS) || '""') as string[];
 
 const idsFromLS = JSON.parse(localStorage.getItem('placeItem') || '[]') as string[];
 

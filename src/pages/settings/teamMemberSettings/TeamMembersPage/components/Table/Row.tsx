@@ -112,10 +112,10 @@ export default function Row({ teamMemberId }: RowProps) {
       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
         <span
           className={`inline-flex rounded-full ${
-            teamMember.is_active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+            !teamMember.is_deleted ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
           }  px-2 text-xs font-semibold leading-5`}
         >
-          {teamMember.is_active ? 'Active' : 'Deactivated'}
+          {teamMember.is_deleted ? 'Deactivated' : 'Active'}
         </span>
       </td>
       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{teamMember.role.name}</td>
@@ -133,10 +133,10 @@ export default function Row({ teamMemberId }: RowProps) {
           <Dropdown
             items={[
               {
-                label: teamMember.is_active ? 'Deactivate' : 'Reactivate',
+                label: teamMember.is_deleted ? 'Reactivate' : 'Deactivate',
                 onClick: () =>
-                  teamMember.is_active ? deactivateTeamMemberConfirmation() : reactivateTeamMemberConfirmation(),
-                icon: teamMember.is_active ? (
+                  !teamMember.is_deleted ? deactivateTeamMemberConfirmation() : reactivateTeamMemberConfirmation(),
+                icon: !teamMember.is_deleted ? (
                   <NoSymbolIcon className="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500" aria-hidden="true" />
                 ) : (
                   <CheckCircleIcon

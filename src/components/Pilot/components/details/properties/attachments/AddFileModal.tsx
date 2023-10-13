@@ -26,6 +26,9 @@ export default function AddFileModal({ invalidateQuery, endpoint }: UploadFileMo
     new Uppy({
       debug: true,
       autoProceed: false,
+      restrictions: {
+        allowedFileTypes: null
+      },
       meta: {}
     }).use(XHRUpload, {
       fieldName: 'files[0]',
@@ -43,21 +46,23 @@ export default function AddFileModal({ invalidateQuery, endpoint }: UploadFileMo
 
   uppy.on('file-added', (file) => {
     // Set metadata for the file using uppy.setFileMeta
+    const fileExtension = file.extension || '';
     uppy.setFileMeta(file.id, {
       id: activeItemId,
-      type: activeItemType
+      type: activeItemType,
+      extension: fileExtension
     });
   });
 
-  useEffect(() => {
-    uppy.on('upload-progress', () => {
-      uppy.close();
-    });
+  // useEffect(() => {
+  //   uppy.on('upload-progress', () => {
+  //     uppy.close();
+  //   });
 
-    return () => {
-      uppy.off('upload-success', () => uppy.close());
-    };
-  }, [uppy]);
+  //   return () => {
+  //     uppy.off('upload-success', () => uppy.close());
+  //   };
+  // }, [uppy]);
 
   // invalidate query
   uppy.on('upload-success', (_file, response) => {

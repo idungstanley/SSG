@@ -1,4 +1,3 @@
-import React from 'react';
 import { ListColourProps } from '../../tasks/ListItem';
 import { cl } from '../../../utils';
 import DefaultColour from '../../../assets/icons/DefaultColour';

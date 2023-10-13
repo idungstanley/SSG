@@ -4,7 +4,6 @@ import { createHeaders, generateGrid } from '../../lib';
 import { Head } from './Head/Head';
 import { MAX_SUBTASKS_LEVEL, Row } from './Row';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
-import { DEFAULT_LEFT_PADDING } from '../../config';
 import { Label } from '../List/Label';
 import { IListColor } from '../List/List';
 import LightenColor from '../List/lightenColor/LightenColor';
@@ -25,11 +24,11 @@ interface ISubtasksTableProps {
   subtasksData: ITaskFullList[];
   heads: listColumnProps[];
   listId: string;
-  paddingLeft?: number;
   level: number;
+  breadcrumbs: string;
 }
 
-export function SubtasksTable({ task, subtasksData, heads, listId, paddingLeft = 0, level }: ISubtasksTableProps) {
+export function SubtasksTable({ task, subtasksData, heads, listId, level, breadcrumbs }: ISubtasksTableProps) {
   const dispatch = useAppDispatch();
 
   const { statusId, subtasks, subtasksfilters, splitSubTaskLevels } = useAppSelector((state) => state.task);
@@ -80,20 +79,24 @@ export function SubtasksTable({ task, subtasksData, heads, listId, paddingLeft =
   const isThirdLevel = useMemo(() => splitSubTaskLevels.includes(THREE_SUBTASKS_LEVELS), [splitSubTaskLevels]);
 
   return subtasksData && subtasksData.length ? (
-    <>
+    <div
+      className={`${
+        (isSecondLevel && level === 1) || (isThirdLevel && level === 2)
+          ? 'border-t-4 border-l-4 border-purple-500 rounded-3xl pb-3'
+          : ''
+      } bg-purple-50 ml-10 mt-2`}
+      // ref={setNodeRef}
+      style={{
+        borderColor: ListColor?.outerColour as string,
+        backgroundColor: LightenColor(ListColor?.outerColour as string, 0.95),
+        overflow: collapseTable ? 'hidden' : 'unset'
+      }}
+    >
       {(isSecondLevel && level === 1) || (isThirdLevel && level === 2) ? (
-        <div
-          className="border-t-4 border-l-4 border-purple-500 rounded-3xl bg-purple-50 ml-10 mt-2"
-          // ref={setNodeRef}
-          style={{
-            borderColor: ListColor?.outerColour as string,
-            backgroundColor: LightenColor(ListColor?.outerColour as string, 0.95),
-            overflow: collapseTable ? 'hidden' : 'unset'
-          }}
-        >
+        <>
           <Label
             listName={task.name}
-            hubName={task.parentName || task.list?.name}
+            hubName={`${breadcrumbs} > ${task.name}`}
             tasks={subtasksData}
             ListColor={ListColor}
             showTable={collapseTable}
@@ -146,7 +149,6 @@ export function SubtasksTable({ task, subtasksData, heads, listId, paddingLeft =
                                 taskIndex={index}
                                 listId={listId}
                                 isListParent={true}
-                                paddingLeft={paddingLeft}
                                 parentId={task.id}
                                 taskStatusId={statusId}
                                 // handleClose={handleClose}
@@ -167,7 +169,7 @@ export function SubtasksTable({ task, subtasksData, heads, listId, paddingLeft =
                     <tbody className="h-5">
                       <tr
                         onClick={(e) => onShowAddSubtaskField(e, subtasksData[subtasksData.length - 1].id)}
-                        className="absolute left-0 p-1.5 pl-5 text-left w-fit text-xs"
+                        className="absolute left-0 p-1.5 pl-12 text-left w-fit text-xs"
                       >
                         <td className="font-semibold cursor-pointer alsoit-gray-300">+ New Subtask</td>
                       </tr>
@@ -177,7 +179,7 @@ export function SubtasksTable({ task, subtasksData, heads, listId, paddingLeft =
               </div>
             ) : null}
           </ScrollableHorizontalListsContainer>
-        </div>
+        </>
       ) : null}
 
       {isShowNewLevel
@@ -188,11 +190,11 @@ export function SubtasksTable({ task, subtasksData, heads, listId, paddingLeft =
               subtasksData={subtasks[item.id]}
               heads={heads}
               listId={listId}
-              paddingLeft={paddingLeft + DEFAULT_LEFT_PADDING}
               level={level + 1}
+              breadcrumbs={`${breadcrumbs} > ${task.name}`}
             />
           ))
         : null}
-    </>
+    </div>
   ) : null;
 }

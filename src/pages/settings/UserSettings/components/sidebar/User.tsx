@@ -18,11 +18,11 @@ function User() {
   const navigate = useNavigate();
   const userOptions = [
     {
-      id: 1,
+      id: 'my_settings',
       title: 'My Settings',
       child: [
         {
-          id: 1,
+          id: 'my_account',
           title: 'My Account',
           onClick: () => {
             dispatch(setActiveTab('My Account'));
@@ -30,7 +30,7 @@ function User() {
           }
         },
         {
-          id: 2,
+          id: 'workspace_styles',
           title: 'Workspace Styles',
           onClick: () => {
             dispatch(setActiveTab('Workspace Styles'));
@@ -38,7 +38,7 @@ function User() {
           }
         },
         {
-          id: 3,
+          id: 'hot_keys',
           title: 'HotKeys',
           onClick: () => {
             dispatch(setActiveTab('HotKeys'));
@@ -46,7 +46,7 @@ function User() {
           }
         },
         {
-          id: 4,
+          id: 'themes',
           title: 'Themes',
           onClick: () => {
             dispatch(setActiveTab('Themes'));
@@ -56,11 +56,11 @@ function User() {
       ]
     },
     {
-      id: 2,
+      id: 'workspaces',
       title: 'Workspaces',
       child: [
         {
-          id: 1,
+          id: 'general_workspaces',
           title: 'General Workspaces',
           onClick: () => {
             dispatch(setActiveTab('General Workspaces'));
@@ -68,7 +68,7 @@ function User() {
           }
         },
         {
-          id: 2,
+          id: 'workspace_settings',
           title: 'Workspace settings',
           onClick: () => {
             dispatch(setActiveTab('Workspace settings'));
@@ -78,11 +78,11 @@ function User() {
       ]
     },
     {
-      id: 3,
+      id: 'notifications',
       title: 'Notifications',
       child: [
         {
-          id: 1,
+          id: 'general_information',
           title: 'General Information',
           onClick: () => {
             dispatch(setActiveTab('General Information'));
@@ -90,7 +90,7 @@ function User() {
           }
         },
         {
-          id: 2,
+          id: 'subscriber_settings',
           title: 'Subscriber Settings',
           onClick: () => {
             dispatch(setActiveTab('Subscriber Settings'));
@@ -98,7 +98,7 @@ function User() {
           }
         },
         {
-          id: 3,
+          id: 'smart_notifications',
           title: 'Smart Notifications',
           onClick: () => {
             dispatch(setActiveTab('Smart Notifications'));
@@ -108,7 +108,7 @@ function User() {
       ]
     },
     {
-      id: 4,
+      id: 'reward',
       title: 'Reward',
       onClick: () => {
         dispatch(setActiveTab('Reward'));
@@ -116,7 +116,7 @@ function User() {
       }
     },
     {
-      id: 5,
+      id: 'logout',
       title: 'Logout',
       onClick: () => {
         dispatch(setActiveTab('Logout'));
@@ -141,7 +141,7 @@ function User() {
       }
     },
     {
-      id: 7,
+      id: 'time_clock',
       title: 'Time Clock',
       category: 'my_app',
       onClick: () => {
@@ -150,7 +150,7 @@ function User() {
       }
     },
     {
-      id: 8,
+      id: 'time_tracker',
       title: 'Time Tracker',
       category: 'my_app',
       onClick: () => {
@@ -159,7 +159,7 @@ function User() {
       }
     },
     {
-      id: 9,
+      id: 'wiki_docs',
       title: 'Wiki Docs',
       category: 'my_app',
       onClick: () => {

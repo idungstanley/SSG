@@ -113,7 +113,7 @@ export function List({ tasks }: ListProps) {
 
   return (
     <div
-      className="pt-1 border-t-4 border-l-4 border-purple-500 rounded-3xl bg-purple-50"
+      className="pt-1 border-t-4 border-l-4 border-purple-500 rounded-3xl bg-purple-50 pb-3"
       style={{
         borderColor: ListColor?.outerColour === null ? 'black' : (ListColor?.outerColour as string),
         backgroundColor: LightenColor(
@@ -125,7 +125,7 @@ export function List({ tasks }: ListProps) {
     >
       <Label
         listName={tasks[0].list?.name}
-        hubName={parentHub?.name}
+        hubName={splitSubTaskMode ? `${parentHub?.name as string} > ${tasks[0].list?.name}` : parentHub?.name}
         tasks={tasks}
         ListColor={ListColor}
         showTable={collapseTable}
@@ -177,6 +177,7 @@ export function List({ tasks }: ListProps) {
                         listId={task.list_id}
                         heads={hideTask.length ? hideTask : generateColumns}
                         level={1}
+                        breadcrumbs={`${parentHub?.name as string} > ${task.list?.name}`}
                       />
                     </Fragment>
                   ))}

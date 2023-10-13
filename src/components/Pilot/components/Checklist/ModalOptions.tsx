@@ -8,31 +8,31 @@ import { FiPlus } from 'react-icons/fi';
 
 export const completeOptions = [
   {
-    id: 1,
+    id: 'new_item',
     name: 'New Item',
     handleClick: () => ({}),
     icon: <FiPlus />
   },
   {
-    id: 2,
+    id: 'assign_all',
     name: 'Assign all',
     handleClick: () => ({}),
     icon: <MdPersonOutline />
   },
   {
-    id: 3,
+    id: 'unassign_all',
     name: 'Unassign all',
     handleClick: () => ({}),
     icon: <MdOutlineNoAccounts />
   },
   {
-    id: 4,
+    id: 'rename',
     name: 'Rename',
     handleClick: () => ({}),
     icon: <BsPencil />
   },
   {
-    id: 5,
+    id: 'delete_checklist',
     name: 'Delete Checklist',
     handleClick: () => ({}),
     icon: <RiDeleteBin6Line />
@@ -41,25 +41,25 @@ export const completeOptions = [
 
 export const lessOptions = [
   {
-    id: 1,
+    id: 'rename',
     name: 'Rename',
     handleClick: () => ({}),
     icon: <BsPencil />
   },
   {
-    id: 2,
+    id: 'assign_to',
     name: 'Assign to',
     handleClick: () => ({}),
     icon: <CgProfile />
   },
   {
-    id: 3,
+    id: 'unassign',
     name: 'Unassign',
     handleClick: () => ({}),
     icon: <MdOutlineNoAccounts />
   },
   {
-    id: 4,
+    id: 'delete_item',
     name: 'Delete Item',
     handleClick: () => ({}),
     icon: <RiDeleteBin6Line />
