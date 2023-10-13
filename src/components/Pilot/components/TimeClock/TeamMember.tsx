@@ -4,24 +4,31 @@ import { IEntries } from '../../../../features/task/interface.tasks';
 import { SlideButton } from '../../../SlideButton';
 import AvatarWithImage from '../../../avatar/AvatarWithImage';
 import AvatarWithInitials from '../../../avatar/AvatarWithInitials';
-import { useAppDispatch } from '../../../../app/hooks';
-import { setTimeAssigneeFilter } from '../../../../features/task/taskSlice';
+import { useGetTimeEntriesMutation } from '../../../../features/task/taskService';
+import { useAppSelector } from '../../../../app/hooks';
+import { EntityType } from '../../../../utils/EntityTypes/EntityType';
+import { includes } from 'cypress/types/lodash';
 
 interface Props {
   timeData?: IEntries[];
 }
 
 export function TeamMemberFilter({ timeData }: Props) {
-  const dispatch = useAppDispatch();
+  const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
+  const { timeAssignees } = useAppSelector((state) => state.task);
 
   const [checkedState, setCheckedState] = useState<boolean[]>([]);
   const [teamMemberId, setTeamMemberId] = useState<string[]>([]);
 
+  const { mutateAsync } = useGetTimeEntriesMutation();
+
   const handleChange = (index: number) => {
     const newCheckedState = [...checkedState];
     newCheckedState[index] = !newCheckedState[index];
-    const memberId = (timeData && timeData[index].team_member.id) ?? '';
-    const arr = Array.from(new Set([...teamMemberId, memberId]));
+    const memberId = (timeAssignees && timeAssignees[index].id) ?? '';
+    const arr = !teamMemberId.includes(memberId)
+      ? Array.from(new Set([...teamMemberId, memberId]))
+      : teamMemberId.filter((items) => !items);
     setTeamMemberId(arr);
     setCheckedState(newCheckedState);
   };
@@ -38,8 +45,14 @@ export function TeamMemberFilter({ timeData }: Props) {
   const uniqueTimeData = Array.from(uniqueUsersMap.values());
 
   useEffect(() => {
-    const filteredArr = timeData?.filter((entry) => teamMemberId.includes(entry.team_member.id));
-    teamMemberId.length > 0 && dispatch(setTimeAssigneeFilter(filteredArr));
+    if (teamMemberId.length > 0)
+      mutateAsync({
+        itemId: activeItemId,
+        trigger:
+          activeItemType === EntityType.hub || activeItemType === EntityType.subHub ? EntityType.hub : activeItemType,
+        team_member_ids: teamMemberId,
+        include_filters: true
+      });
   }, [teamMemberId]);
 
   return (

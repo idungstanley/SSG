@@ -1,6 +1,5 @@
 import ArrowDown from '../../../../assets/icons/ArrowDown';
-import { IEntries, ITimeEntriesRes } from '../../../../features/task/interface.tasks';
-import { ITeamMember } from '../../../../features/workspace/workspace.interfaces';
+import { ITimeEntriesRes } from '../../../../features/task/interface.tasks';
 import CollapseIcon from '../../../Views/ui/collapseIcon/CollapseIcon';
 import { HeaderIcons } from './TimeHeaderIcons';
 import { TotalTime } from './TotalTime';

@@ -18,7 +18,7 @@ export function TimeInventory({ getTimeEntries }: Props) {
   const Entries = () => timeEntries?.map((timeEntry, index) => <TimeLogEntries key={index} timeEntry={timeEntry} />);
 
   useEffect(() => {
-    if (timeAssigneeFilter) setTimeEntries(timeAssigneeFilter);
+    if (timeAssigneeFilter) setTimeEntries(timeAssigneeFilter.data.time_entries);
   }, [timeAssigneeFilter]);
 
   return (
