@@ -13,6 +13,7 @@ import { createWorkspaceService } from '../../../features/workspace/workspaceSer
 import { useAppDispatch } from '../../../app/hooks';
 import { IoIosWarning } from 'react-icons/io';
 import { VscTriangleRight } from 'react-icons/vsc';
+import { Spinner } from '../../../common';
 
 interface currentPageProps {
   name: boolean;
@@ -112,7 +113,7 @@ function CreateNewWorkspace() {
             </div>
           </div>
           {currentPage.name && (
-            <div className="w-full -ml-32 flex items-center justify-center" style={{ height: '60vh' }}>
+            <div className="w-full -ml-32 flex items-center justify-center z-10" style={{ height: '60vh' }}>
               <div className="w-full">
                 <h1 style={{ fontSize: '40px' }}>Name your work space</h1>
                 <input
@@ -144,7 +145,7 @@ function CreateNewWorkspace() {
             </div>
           )}
           {currentPage.color && (
-            <div className="w-full -ml-24 flex items-center justify-center" style={{ height: '60vh' }}>
+            <div className="w-full -ml-24 flex items-center justify-center z-10" style={{ height: '60vh' }}>
               <div>
                 <h1 style={{ fontSize: '40px' }}>Customize your workspace</h1>
                 <div className="flex items-center w-full justify-center gap-20 mt-8 mb-20">
@@ -185,7 +186,7 @@ function CreateNewWorkspace() {
             </div>
           )}
           {currentPage.size && (
-            <div className="w-full -ml-32 flex items-center justify-center" style={{ height: '60vh' }}>
+            <div className="w-full -ml-32 flex items-center justify-center  my-auto z-10" style={{ height: '60vh' }}>
               <div>
                 <h1 style={{ fontSize: '40px' }}>How many people will you be working with?</h1>
                 <div className="flex justify-between my-8">
@@ -212,9 +213,9 @@ function CreateNewWorkspace() {
                     <h2 className="text-xl text-red-600">Please select your company size</h2>
                   </div>
                 )}
-                <div className="flex justify-center mb-8 mt-16">
+                <div className="flex justify-center mb-8 mt-16" style={{ height: '10%' }}>
                   <button
-                    className="bg-fuchsia-600 text-white p-2 rounded-lg"
+                    className="bg-fuchsia-600 text-white p-2 rounded-lg mt-8"
                     style={{ fontSize: '35px' }}
                     onClick={() => {
                       formState.companySize === ''
@@ -229,7 +230,7 @@ function CreateNewWorkspace() {
             </div>
           )}
           {currentPage.email && (
-            <div className="w-full -ml-32 flex items-center justify-center" style={{ height: '60vh' }}>
+            <div className="w-full -ml-32 flex items-center justify-center z-10" style={{ height: '60vh' }}>
               <div className="w-full">
                 <h1 style={{ fontSize: '40px' }}>Invite people to your workspace</h1>
                 <input
@@ -288,27 +289,28 @@ function CreateNewWorkspace() {
             </div>
           )} */}
           {currentPage.completed && (
-            <div className="w-full -ml-32 flex items-center justify-center" style={{ height: '60vh' }}>
+            <div className="w-full -ml-32 flex items-center justify-center z-10" style={{ height: '60vh' }}>
               <div>
                 <h1 style={{ fontSize: '40px' }}>
                   Your workspace is ready. Have a wonderful experience working with your team members and colleagues.
                 </h1>
                 <div className="flex justify-center my-8">
-                  <button
-                    className="bg-fuchsia-600 text-white p-2 rounded-lg"
-                    style={{ fontSize: '35px' }}
-                    onClick={handleSubmit}
-                  >
-                    Get started
-                  </button>
+                  {createWSMutation.isLoading ? (
+                    <Spinner size={10} />
+                  ) : (
+                    <button
+                      className="bg-fuchsia-600 text-white p-2 rounded-lg"
+                      style={{ fontSize: '35px' }}
+                      onClick={handleSubmit}
+                    >
+                      Get started
+                    </button>
+                  )}
                 </div>
               </div>
             </div>
           )}
-          <section
-            className="flex items-center fixed bottom-0 justify-center absolute w-4/5 m-auto"
-            style={{ height: '20vh' }}
-          >
+          <section className="flex items-center justify-center absolute w-4/5 m-auto z-0" style={{ height: '20%' }}>
             <VscTriangleRight
               className={cl(
                 currentPage.name ? 'bg-fuchsia-600' : 'bg-gray-300',
