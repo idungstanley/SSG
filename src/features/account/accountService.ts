@@ -1,9 +1,10 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import requestNew from '../../app/requestNew';
 import { IAccountReq, IUserCalendarParams, IUserParams, IUserSettings, IUserSettingsRes } from './account.interfaces';
-import { SetUserSettingsStore } from './accountSlice';
+import { SetUserSettingsStore, setColourPaletteData } from './accountSlice';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { STORAGE_KEYS } from '../../app/config/dimensions';
+import { IColourRes } from '../workspace/workspace.interfaces';
 
 // Get all user's workspaces
 export const useGetMyWorkspaces = () => {
@@ -71,6 +72,17 @@ export const setUserSettingsKeys = (data: { value: IUserParams; resolution?: str
   return request;
 };
 
+export const setUserSettingsKeysProfile = (data: { [key: string]: boolean }) => {
+  const request = requestNew({
+    url: 'user/settings',
+    method: 'PUT',
+    data: {
+      keys: [{ key: 'hotkeys', value: data.value }]
+    }
+  });
+  return request;
+};
+
 export const setUserSettingsData = (
   enabled: boolean,
   key: string,
@@ -105,4 +117,53 @@ export const useSetUserSettingsKeys = () => {
       queryClient.invalidateQueries(['user-settings']);
     }
   });
+};
+
+export const AddColour = (data: {
+  name: string;
+  color: string | null;
+  color_name: string | null;
+  is_pinned?: boolean;
+}) => {
+  const request = requestNew({
+    url: 'color-palette',
+    method: 'POST',
+    data: {
+      name: data.name,
+      color: data.color,
+      color_name: data.color_name,
+      is_pinned: data.is_pinned
+    }
+  });
+  return request;
+};
+
+//delete palette colour
+export const deletePaletteColour = ({ id }: { id: string }) => {
+  const request = requestNew({
+    url: `color-palette/${id}`,
+    method: 'DELETE'
+  });
+  return request;
+};
+
+// Get colours
+export const useGetColors = () => {
+  const dispatch = useAppDispatch();
+  return useQuery(
+    ['color-palette'],
+    async () => {
+      const data = await requestNew<IColourRes>({
+        url: 'color-palette',
+        method: 'GET'
+      });
+      return data;
+    },
+    {
+      onSuccess: (data) => {
+        const palettData = data.data.palette_colors;
+        dispatch(setColourPaletteData(palettData));
+      }
+    }
+  );
 };

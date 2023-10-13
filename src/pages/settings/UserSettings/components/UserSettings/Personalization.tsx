@@ -20,6 +20,7 @@ function Personalization({ data }: dataProps) {
     start_week,
     theme_color,
     userData,
+
     color,
     showConfirmationModal
   } = useAppSelector((state) => state.userSetting);

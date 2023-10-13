@@ -25,6 +25,7 @@ import { listColumnProps } from '../../../../pages/workspace/tasks/component/vie
 import Copy from '../../../../assets/icons/Copy';
 import { findExpandedLevels } from '../../../../pages/workspace/lists/components/renderlist/listDetails/listSubtask/ListSubtasks';
 import NewSubTaskTemplate from './newTaskTemplate/NewSubTaskTemplate';
+import Badges from '../../../badges';
 
 export const MAX_SUBTASKS_LEVEL = 10;
 
@@ -64,7 +65,7 @@ export function Row({
   const [isCopied, setIsCopied] = useState<number>(0);
 
   const otherColumns = columns.slice(1);
-  const newSubTask = NewSubTaskTemplate();
+  const newSubTask = NewSubTaskTemplate(task);
 
   const onShowAddSubtaskField = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, taskId: string) => {
     dispatch(setDefaultSubtaskId(task.list_id));
@@ -151,17 +152,21 @@ export function Row({
           }
         >
           {/* actions */}
-          <div className="absolute right-0 flex items-center justify-center mr-1 space-x-1 opacity-0 group-hover:opacity-100">
+          <div className="flex items-center justify-center mr-1 space-x-1">
+            {level < MAX_SUBTASKS_LEVEL ? <Badges task={task} /> : null}
             {/* Copy */}
             <ToolTip title={isCopied === 0 ? 'Copy Task Name' : 'Copied'}>
-              <button className="p-1 bg-white border rounded-md" onClick={handleCopyTexts}>
+              <button
+                className="p-1 bg-white border rounded-md opacity-0 group-hover:opacity-100"
+                onClick={handleCopyTexts}
+              >
                 <Copy />
               </button>
             </ToolTip>
             {/* effects */}
             <ToolTip title="Apply Effects">
               <button
-                className="p-1 bg-white border rounded-md"
+                className="p-1 bg-white border rounded-md opacity-0 group-hover:opacity-100"
                 style={{ backgroundColor: 'orange' }}
                 onClick={(e) => e.stopPropagation()}
               >
@@ -172,7 +177,10 @@ export function Row({
             {/* tags */}
             {'tags' in task ? (
               <ToolTip title="Tags">
-                <button className="bg-white border rounded-md " onClick={(e) => e.preventDefault()}>
+                <button
+                  className="bg-white border rounded-md opacity-0 group-hover:opacity-100"
+                  onClick={(e) => e.preventDefault()}
+                >
                   <ManageTagsDropdown entityId={task.id} tagsArr={task.tags as Tag[]} entityType="task" />
                 </button>
               </ToolTip>
@@ -181,13 +189,19 @@ export function Row({
             {/* show create subtask field */}
             {task.descendants_count < 1 && (
               <ToolTip title="Subtask">
-                <button className="p-1 bg-white border rounded-md" onClick={(e) => onShowAddSubtaskField(e, task.id)}>
+                <button
+                  className="p-1 bg-white border rounded-md opacity-0 group-hover:opacity-100"
+                  onClick={(e) => onShowAddSubtaskField(e, task.id)}
+                >
                   <SubtasksIcon className="w-3 h-3" />
                 </button>
               </ToolTip>
             )}
             <ToolTip title="Enhance View">
-              <button className="p-1 pl-4 bg-white rounded-md" onClick={(e) => e.stopPropagation()}>
+              <button
+                className="p-1 pl-4 bg-white rounded-md opacity-0 group-hover:opacity-100"
+                onClick={(e) => e.stopPropagation()}
+              >
                 <Enhance className="w-3 h-3" style={{ color: 'orange' }} />
               </button>
             </ToolTip>

@@ -86,6 +86,7 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
   const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(event.target.value);
   };
+
   const handleDescriptionChange = (value: string) => {
     const sanitizedDescription = DOMPurify.sanitize(value);
     setDescription(sanitizedDescription);
