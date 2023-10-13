@@ -2,7 +2,7 @@ import React, { Dispatch, SetStateAction, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { useNavigate } from 'react-router-dom';
 import { setPreferenceState } from '../../features/task/taskSlice';
-import { setShowExtendedBar } from '../../features/workspace/workspaceSlice';
+import { setActiveTabId, setShowExtendedBar } from '../../features/workspace/workspaceSlice';
 
 export default function useTaskShortCut() {
   const { preferenceState, userSettingsProfile } = useAppSelector((state) => state.task);
@@ -34,15 +34,28 @@ export default function useTaskShortCut() {
       return;
 
     if (preferenceState.hotkeys) {
-      if (event.shiftKey && event.key === '?') {
-        setTaskShortcut(true);
-      }
-      if (event.key === 'h' || event.key === 'H') {
-        // window.location.href = '/';
-        navigate(`/${currentWorkspaceId}`);
-      }
-      if (event.key === 'n' || event.key === 'N') {
-        dispatch(setShowExtendedBar(true));
+      if (preferenceState.hotkeys) {
+        switch (event.key) {
+          case '?':
+            if (event.shiftKey) {
+              setTaskShortcut(true);
+            }
+            break;
+          case 'h':
+          case 'H':
+            navigate(`/${currentWorkspaceId}`);
+            break;
+          case 'c':
+          case 'C':
+            dispatch(setActiveTabId('calendar'));
+            break;
+          case 'n':
+          case 'N':
+            dispatch(setShowExtendedBar(true));
+            break;
+          default:
+          // Handle other key events if needed
+        }
       }
     }
   };
