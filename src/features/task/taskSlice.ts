@@ -182,6 +182,7 @@ interface TaskState {
   showNewTaskField: boolean;
   showNewTaskId: string;
   singleLineView: boolean;
+  escapeKey: boolean;
   toggleAllSubtask: boolean;
   toggleAllSubtaskSplit: string;
   separateSubtasksMode: boolean;
@@ -283,6 +284,7 @@ const initialState: TaskState = {
   comfortableViewWrap: false,
   showNewTaskField: false,
   meMode: false,
+  escapeKey: false,
   autoSave: false,
   showNewTaskId: '',
   singleLineView: false,
@@ -422,6 +424,9 @@ export const taskSlice = createSlice({
     },
     setSubtasksFiltersUpdated(state, action: PayloadAction<boolean>) {
       state.isSubtasksFiltersUpdated = action.payload;
+    },
+    setEscapeKey(state, action: PayloadAction<boolean>) {
+      state.escapeKey = action.payload;
     },
     setAssigneeIds(state, action: PayloadAction<string[]>) {
       state.assigneeIds = action.payload;
@@ -734,6 +739,7 @@ export const {
   setSearchValue,
   setTaskIdForPilot,
   setCurrTeamMemId,
+  setEscapeKey,
   getTaskColumns,
   getComfortableView,
   getComfortableViewWrap,

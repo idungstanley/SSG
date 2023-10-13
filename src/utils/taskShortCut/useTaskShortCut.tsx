@@ -1,7 +1,7 @@
 import React, { Dispatch, SetStateAction, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { useNavigate } from 'react-router-dom';
-import { setPreferenceState } from '../../features/task/taskSlice';
+import { setEscapeKey, setPreferenceState, setShowNewTaskField } from '../../features/task/taskSlice';
 import { setActiveTabId, setShowExtendedBar } from '../../features/workspace/workspaceSlice';
 
 export default function useTaskShortCut() {
@@ -12,7 +12,7 @@ export default function useTaskShortCut() {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    userSettingsProfile.map((keys) => {
+    userSettingsProfile?.map((keys) => {
       if (keys.key == 'hotkeys') {
         const updatePreferenceState = {
           ...preferenceState,
@@ -26,15 +26,20 @@ export default function useTaskShortCut() {
   const navigate = useNavigate();
 
   const TaskShortcutListener = (event: KeyboardEvent, setTaskShortcut: Dispatch<SetStateAction<boolean>>) => {
-    if (
-      document.activeElement?.tagName === 'INPUT' ||
-      document.activeElement?.tagName === 'TEXTAREA' ||
-      document.activeElement?.getAttribute('contenteditable') === 'true'
-    )
-      return;
+    const handleInputFields = () => {
+      if (
+        document.activeElement?.tagName === 'INPUT' ||
+        document.activeElement?.tagName === 'TEXTAREA' ||
+        document.activeElement?.getAttribute('contenteditable') === 'true'
+      ) {
+        return false;
+      } else {
+        return true;
+      }
+    };
 
     if (preferenceState.hotkeys) {
-      if (preferenceState.hotkeys) {
+      if (handleInputFields() == true) {
         switch (event.key) {
           case '?':
             if (event.shiftKey) {
@@ -53,8 +58,17 @@ export default function useTaskShortCut() {
           case 'N':
             dispatch(setShowExtendedBar(true));
             break;
+          case 'Escape':
+            dispatch(setEscapeKey(true));
+            break;
           default:
         }
+      }
+      switch (event.key) {
+        case 'Escape':
+          dispatch(setEscapeKey(true));
+          break;
+        default:
       }
     }
   };
