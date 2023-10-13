@@ -8,14 +8,13 @@ import ShowIcon from '../../../../assets/icons/ShowIcon';
 import { TabsDropDown } from './TabsDropDown';
 import { TimeShowDropDown } from './TimeShowDropDown';
 import { useAppSelector } from '../../../../app/hooks';
-import { ITimeEntriesRes } from '../../../../features/task/interface.tasks';
 import { TeamMemberFilter } from './TeamMember';
 
 interface Props {
-  timeData?: ITimeEntriesRes;
+  extended?: boolean;
 }
 
-export function HeaderIcons({ timeData }: Props) {
+export function HeaderIcons({ extended }: Props) {
   const { nestedTimeEntityId } = useAppSelector((state) => state.workspace);
 
   const [dropDown, setDropDown] = useState<{ show: boolean; filter: boolean; assignee: boolean; me: boolean }>({
@@ -24,13 +23,6 @@ export function HeaderIcons({ timeData }: Props) {
     me: false,
     show: false
   });
-
-  // const { data: getTaskTimeEntries } = GetTimeEntriesService({
-  //   itemId: activeItemId,
-  //   trigger: activeItemType === EntityType.subHub ? EntityType.hub : activeItemType,
-  //   page,
-  //   include_filters: true
-  // });
 
   useEffect(() => {
     if (nestedTimeEntityId) setDropDown((prev) => ({ ...prev, show: !prev.show }));
@@ -69,11 +61,13 @@ export function HeaderIcons({ timeData }: Props) {
       >
         <AssigneeIcon className="w-4 h-4" active={false} />
         <ArrowDownFilled className="w-4 h-4" />
-        {dropDown.assignee && <TeamMemberFilter timeData={timeData?.data.time_entries} />}
+        {dropDown.assignee && <TeamMemberFilter />}
       </div>
-      <div className="p-1 rounded-md flex items-center bg-white hover:bg-alsoit-purple-50 cursor-pointer">
-        <SearchIcon className="w-4 h-4" />
-      </div>
+      {extended && (
+        <div className="p-1 rounded-md flex items-center bg-white hover:bg-alsoit-purple-50 cursor-pointer">
+          <SearchIcon className="w-4 h-4" />
+        </div>
+      )}
     </div>
   );
 }

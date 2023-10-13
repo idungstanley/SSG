@@ -56,8 +56,7 @@ export function CombinedTime() {
       <div className="absolute w-full -top-0" style={{ whiteSpace: 'nowrap' }}>
         <div className="flex items-center space-x-6 w-full">
           <div className="absolute w-full -top-0 overflow-x-visible" style={{ whiteSpace: 'nowrap' }}>
-            {/* <HorizontalScroll> */}
-            <div className="flex items-center space-x-12 w-full">
+            <div className="flex items-center space-x-6 w-full">
               <div className="flex items-center space-x-1.5">
                 <label
                   htmlFor="timeClockTrackers"
@@ -111,7 +110,7 @@ export function CombinedTime() {
                     <div className="bg-white p-0.5 rounded cursor-pointer">
                       <HourGlassIcon className="w-4 h-4 " />
                     </div>
-                    <HeaderIcons timeData={getTimeEntries} />
+                    <HeaderIcons />
                   </div>
                 )}
               </div>

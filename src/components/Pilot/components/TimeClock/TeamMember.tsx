@@ -1,19 +1,14 @@
 import { useEffect, useState } from 'react';
 import SearchIcon from '../../../../assets/icons/SearchIcon';
-import { IEntries } from '../../../../features/task/interface.tasks';
+import { teamMember } from '../../../../features/task/interface.tasks';
 import { SlideButton } from '../../../SlideButton';
 import AvatarWithImage from '../../../avatar/AvatarWithImage';
 import AvatarWithInitials from '../../../avatar/AvatarWithInitials';
 import { useGetTimeEntriesMutation } from '../../../../features/task/taskService';
 import { useAppSelector } from '../../../../app/hooks';
 import { EntityType } from '../../../../utils/EntityTypes/EntityType';
-import { includes } from 'cypress/types/lodash';
 
-interface Props {
-  timeData?: IEntries[];
-}
-
-export function TeamMemberFilter({ timeData }: Props) {
+export function TeamMemberFilter() {
   const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
   const { timeAssignees } = useAppSelector((state) => state.task);
 
@@ -33,10 +28,10 @@ export function TeamMemberFilter({ timeData }: Props) {
     setCheckedState(newCheckedState);
   };
 
-  const uniqueUsersMap = new Map<string, IEntries>();
+  const uniqueUsersMap = new Map<string, teamMember>();
 
-  timeData?.forEach((entry) => {
-    const userId = entry.team_member.user.id;
+  timeAssignees?.forEach((entry) => {
+    const userId = entry.user.id;
     if (!uniqueUsersMap.has(userId)) {
       uniqueUsersMap.set(userId, entry);
     }
@@ -73,18 +68,18 @@ export function TeamMemberFilter({ timeData }: Props) {
           return (
             <div key={index} className="flex w-full justify-between p-2.5 cursor-pointer hover:bg-alsoit-purple-50">
               <div className="flex items-center space-x-1.5">
-                {entry.team_member.user.avatar_path ? (
-                  <AvatarWithImage image_path={entry.team_member.user.avatar_path} height="h-6" width="w-6" />
+                {entry.user.avatar_path ? (
+                  <AvatarWithImage image_path={entry.user.avatar_path} height="h-6" width="w-6" />
                 ) : (
                   <AvatarWithInitials
-                    initials={entry.team_member.user.initials}
+                    initials={entry.user.initials}
                     height="h-6"
                     width="w-6"
                     roundedStyle="circular"
-                    backgroundColour={entry.team_member.user.color}
+                    backgroundColour={entry.user.color}
                   />
                 )}
-                <span className="text-alsoit-text-md font-semibold">{entry.team_member.user.name}</span>
+                <span className="text-alsoit-text-md font-semibold">{entry.user.name}</span>
               </div>
               <SlideButton index={index} state={checkedState} changeFn={handleChange} />
             </div>

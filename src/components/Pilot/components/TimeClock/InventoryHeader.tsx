@@ -37,7 +37,7 @@ export function InventoryHeader({ timeData }: Props) {
           <span className="absolute -top-1.5 bg-white px-0.5 text-alsoit-text-sm">Total Time</span>
         </div>
       </div>
-      <HeaderIcons timeData={timeData} />
+      <HeaderIcons extended />
     </div>
   );
 }
