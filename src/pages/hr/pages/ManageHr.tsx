@@ -73,6 +73,7 @@ export default function ManageHr() {
                     <td className="items-center text-center pb-1">Work Location</td>
                     <td className="items-center text-center pb-1">Start Date</td>
                     <td className="items-center text-center pb-1">Salary</td>
+                    <td className="items-center text-center pb-1">Time Taken Off</td>
                     <td className="items-center text-center pb-1">Allowance</td>
                   </tr>
                 </thead>
