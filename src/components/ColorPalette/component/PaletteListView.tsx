@@ -1,10 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { VerticalScroll } from '../../ScrollableContainer/VerticalScroll';
 import RoundedCheckbox from '../../Checkbox/RoundedCheckbox';
-import DefaultColour from '../../../assets/icons/DefaultColour';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import { setSelectedListColours } from '../../../features/account/accountSlice';
 import { IPaletteData } from '../../../features/workspace/workspace.interfaces';
+import UnpinnedIcon from '../../../assets/icons/UnpinnedIcon';
+import ThreeDotIcon from '../../../assets/icons/ThreeDotIcon';
+import AlsoitMenuDropdown from '../../DropDowns';
+import EditIcon from '../../../assets/icons/Edit';
+import { BsCheck2All } from 'react-icons/bs';
+import { MdDeleteForever } from 'react-icons/md';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { deletePaletteColour } from '../../../features/account/accountService';
 
 export default function PaletteListView() {
   const dispatch = useAppDispatch();
@@ -65,9 +72,18 @@ export type FORMATTED_COLOR = {
 
 function Row({ item, key }: { item: IPaletteData; key: number }) {
   const dispatch = useAppDispatch();
+  const queryClient = useQueryClient();
+  const inputRef = useRef<HTMLInputElement | null>(null);
 
   const [isChecked, setIsChecked] = useState<boolean>(false);
+  const [showEditDropdown, setShowEditDropdown] = useState<null | HTMLDivElement>(null);
+  const [editLibraryNameContent, setEditLibraryNameContent] = useState<boolean>(false);
   const { selectListColours } = useAppSelector((state) => state.account);
+
+  useEffect(() => {
+    const { current } = inputRef;
+    current?.focus();
+  }, [editLibraryNameContent]);
 
   useEffect(() => {
     const isChecked = selectListColours.includes(item.id as string);
@@ -90,6 +106,47 @@ function Row({ item, key }: { item: IPaletteData; key: number }) {
     dispatch(setSelectedListColours(updatedSelectedColour as string[]));
     setIsChecked(isChecked);
   };
+
+  const handleDeleteMutation = useMutation(deletePaletteColour, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['color-palette']);
+    }
+  });
+
+  const handleOpenEditDropdown = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    setShowEditDropdown(e.currentTarget);
+  };
+
+  const handleCloseEditDropwdown = () => {
+    setShowEditDropdown(null);
+    // setEditLibraryNameContent(false);
+  };
+
+  const collections = [
+    {
+      icons: <EditIcon active={false} />,
+      label: 'Edit',
+      handleClick: () => {
+        setEditLibraryNameContent(true);
+        handleCloseEditDropwdown();
+      }
+    },
+    {
+      icons: <BsCheck2All />,
+      label: 'Select',
+      handleClick: () => ({})
+    },
+    {
+      icons: <MdDeleteForever />,
+      label: 'Delete',
+      handleClick: () => {
+        handleDeleteMutation.mutateAsync({
+          id: item.id
+        });
+        handleCloseEditDropwdown();
+      }
+    }
+  ];
 
   return (
     <tr className="w-full bg-white contents group" key={key}>
@@ -118,9 +175,38 @@ function Row({ item, key }: { item: IPaletteData; key: number }) {
       <td className={`p-2 bg-white ${isChecked ? 'border-primary-400 border-y' : 'border-b border-gray-300'}`}>
         <div>{item.color_name}</div>
       </td>
-      <td className={`p-2 bg-white ${isChecked ? 'border-primary-400 border-y border-r' : 'border-b border-gray-300'}`}>
-        <div>{item.name ? item.name : 'Add library name'}</div>
+      <td
+        className={`p-2 bg-white group relative gap-2 justify-between flex items-center ${
+          isChecked ? 'border-primary-400 border-y border-r' : 'border-b border-gray-300'
+        }`}
+      >
+        <div className="w-20 truncate" ref={inputRef} contentEditable={editLibraryNameContent}>
+          {item.name ? item.name : 'Add library name'}
+        </div>
+        <div className="flex items-center gap-1 opacity-0 cursor-pointer right-1 group-hover:opacity-100">
+          <span>
+            <UnpinnedIcon />
+          </span>
+          <div onClick={(e) => handleOpenEditDropdown(e)}>
+            <ThreeDotIcon />
+          </div>
+        </div>
       </td>
+      <AlsoitMenuDropdown anchorEl={showEditDropdown} handleClose={handleCloseEditDropwdown}>
+        <div className="flex flex-col w-36 p-2.5 space-y-2">
+          <p>MORE SETTINGS</p>
+          {collections.map((item, index) => (
+            <div
+              className="flex items-center gap-2 p-1 rounded cursor-pointer hover:bg-primary-200 hover:text-primary-600"
+              key={index}
+              onClick={item.handleClick}
+            >
+              {item.icons}
+              <p>{item.label}</p>
+            </div>
+          ))}
+        </div>
+      </AlsoitMenuDropdown>
     </tr>
   );
 }
