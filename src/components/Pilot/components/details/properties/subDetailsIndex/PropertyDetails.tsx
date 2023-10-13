@@ -10,7 +10,7 @@ import ToolTip from '../../../../../Tooltip/Tooltip';
 import { ITaskFullList } from '../../../../../../features/task/interface.tasks';
 import { IHubDetails } from '../../../../../../features/hubs/hubs.interfaces';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { UseUpdateTaskService } from '../../../../../../features/task/taskService';
+import { UseUpdateTaskService, useGetAttachments } from '../../../../../../features/task/taskService';
 import Status from '../status/Status';
 import Priority from '../priority/Priority';
 import { UseEditHubService } from '../../../../../../features/hubs/hubService';
@@ -25,6 +25,8 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.bubble.css';
 import DOMPurify from 'dompurify';
 import { VerticalScroll } from '../../../../../ScrollableContainer/VerticalScroll';
+import { useAppSelector } from '../../../../../../app/hooks';
+import FileIcons from '../../../../../Views/ui/Table/CustomField/Files/FileIcon';
 
 export interface tagItem {
   id: string;
@@ -43,6 +45,7 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
   const [title, setTitle] = useState<string>(Details?.name as string);
   const [description, setDescription] = useState<string>(Details?.description ?? '');
   const [serviceFire, setServiceFire] = useState<boolean>(false);
+  const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
 
   const { hubId, walletId, listId, taskId } = useParams();
 
@@ -70,6 +73,11 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
     }
   });
 
+  const { data: attachments } = useGetAttachments({
+    activeItemId,
+    activeItemType
+  });
+
   const handleBlur = () => {
     setEditingTitle(false);
     setEditingDescription(false);
@@ -78,6 +86,7 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
   const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(event.target.value);
   };
+
   const handleDescriptionChange = (value: string) => {
     const sanitizedDescription = DOMPurify.sanitize(value);
     setDescription(sanitizedDescription);
@@ -212,6 +221,29 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
             )}
           </div>
         </div>
+        {/* Attachments */}
+        <div className="my-4">
+          <label className="text-xs text-gray-500 ">Attachments</label>
+          <div className="flex flex-wrap gap-2 items-center my-2">
+            {attachments?.data.attachments?.length ? (
+              attachments?.data.attachments.map((file) => {
+                return (
+                  <FileIcons
+                    fileExtension={file.physical_file.file_format.extension}
+                    filePath={file.path}
+                    key={file.id}
+                    fileName={file.physical_file.display_name}
+                    height="h-10"
+                    width="w-10"
+                  />
+                );
+              })
+            ) : (
+              <h1>No Attachments found</h1>
+            )}
+          </div>
+        </div>
+
         {/* created time */}
         <div id="created time" className="mt-2">
           <label className="text-xs text-gray-500">Created</label>

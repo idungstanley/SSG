@@ -1,4 +1,5 @@
 import React from 'react';
+import { COLOUR_SHAPES } from '../../../utils/Colors';
 
 interface Props {
   shape?: string;
@@ -21,30 +22,31 @@ export default function ListIconComponent({
   isOutterFrameActive,
   isInnerFrameActive
 }: Props) {
-  const SolidSquare = 'solid-square';
-  const SolidCircle = 'solid-circle';
-  const TwoSquare = 'two-square';
-  const TwoCircle = 'two-circle';
-  const SquareInCircle = 'square-in-circle';
-  const CircleInSquare = 'circle-in-square';
   return (
     <>
       {type === 'colourToggle' ? (
         <div
           className="relative flex items-center justify-between"
-          style={{ height: '22px', width: shape === SolidSquare || shape === SolidCircle ? '22px' : '44px' }}
+          style={{
+            height: '22px',
+            width: shape === COLOUR_SHAPES.SolidSquare || shape === COLOUR_SHAPES.SolidCircle ? '22px' : '44px'
+          }}
         >
           <button
             className={`${isOutterFrameActive ? 'border-primary-500 border z-2' : 'border-gray-200'}  ${
-              shape === SolidSquare || shape === SolidCircle ? 'rounded' : 'rounded-l-md'
+              shape === COLOUR_SHAPES.SolidSquare || shape === COLOUR_SHAPES.SolidCircle ? 'rounded' : 'rounded-l-md'
             } flex items-center justify-center p-1 absolute left-0 border`}
             onClick={outterFrameClick}
           >
             <span
               className={`w-3 h-3 ${
-                shape === TwoCircle || shape === SquareInCircle || shape === SolidCircle
+                shape === COLOUR_SHAPES.TwoCircle ||
+                shape === COLOUR_SHAPES.SquareInCircle ||
+                shape === COLOUR_SHAPES.SolidCircle
                   ? 'rounded-full'
-                  : shape === TwoSquare || shape === CircleInSquare || shape === SolidSquare
+                  : shape === COLOUR_SHAPES.TwoSquare ||
+                    shape === COLOUR_SHAPES.CircleInSquare ||
+                    shape === COLOUR_SHAPES.SolidSquare
                   ? ''
                   : 'rounded-full'
               }`}
@@ -53,7 +55,7 @@ export default function ListIconComponent({
               }}
             ></span>
           </button>
-          {shape !== SolidCircle && shape !== SolidSquare && (
+          {shape !== COLOUR_SHAPES.SolidCircle && shape !== COLOUR_SHAPES.SolidSquare && (
             <button
               className={`${
                 isInnerFrameActive ? 'border-primary-500 rounded-r-md z-2' : 'border-gray-200'
@@ -62,9 +64,9 @@ export default function ListIconComponent({
             >
               <span
                 className={`w-3 h-3 ${
-                  shape === TwoSquare || shape === SquareInCircle
+                  shape === COLOUR_SHAPES.TwoSquare || shape === COLOUR_SHAPES.SquareInCircle
                     ? ''
-                    : shape === TwoCircle || shape === CircleInSquare
+                    : shape === COLOUR_SHAPES.TwoCircle || shape === COLOUR_SHAPES.SquareInCircle
                     ? 'rounded-full'
                     : ''
                 }`}
@@ -79,9 +81,13 @@ export default function ListIconComponent({
         <div className="flex items-center justify-center">
           <span
             className={`flex items-center justify-center w-3 h-3 ${
-              shape === TwoCircle || shape === SquareInCircle || shape === SolidCircle
+              shape === COLOUR_SHAPES.TwoCircle ||
+              shape === COLOUR_SHAPES.SquareInCircle ||
+              shape === COLOUR_SHAPES.SolidCircle
                 ? 'rounded-full'
-                : shape === TwoSquare || shape === CircleInSquare || shape === SolidSquare
+                : shape === COLOUR_SHAPES.TwoCircle ||
+                  shape === COLOUR_SHAPES.CircleInSquare ||
+                  shape === COLOUR_SHAPES.SolidSquare
                 ? ''
                 : 'rounded-full'
             }`}
@@ -91,9 +97,9 @@ export default function ListIconComponent({
           >
             <span
               className={`${
-                shape === TwoSquare || shape === SquareInCircle
+                shape === COLOUR_SHAPES.TwoSquare || shape === COLOUR_SHAPES.SquareInCircle
                   ? 'w-1.5 h-1.5'
-                  : shape === TwoCircle || shape === CircleInSquare
+                  : shape === COLOUR_SHAPES.TwoCircle || shape === COLOUR_SHAPES.CircleInSquare
                   ? 'rounded-full w-1.5 h-1.5'
                   : ''
               }`}
