@@ -3,7 +3,7 @@ import ICONS_INTERACTIONS from '../../utils/Constants/IconInteractions';
 
 /* eslint-disable max-len */
 interface Props extends DetailedHTMLProps<SVGAttributes<SVGSVGElement>, SVGSVGElement> {
-  active: boolean;
+  active?: boolean;
 }
 
 export function FilterListIcon({ active, ...props }: Props) {
