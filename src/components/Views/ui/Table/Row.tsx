@@ -64,7 +64,7 @@ export function Row({
   const [isCopied, setIsCopied] = useState<number>(0);
 
   const otherColumns = columns.slice(1);
-  const newSubTask = NewSubTaskTemplate();
+  const newSubTask = NewSubTaskTemplate(task);
 
   const onShowAddSubtaskField = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, taskId: string) => {
     dispatch(setDefaultSubtaskId(task.list_id));
