@@ -54,7 +54,6 @@ export default function useTaskShortCut() {
             dispatch(setShowExtendedBar(true));
             break;
           default:
-          // Handle other key events if needed
         }
       }
     }
