@@ -9,18 +9,14 @@ import toast from 'react-hot-toast';
 import SaveFilterToast from '../../../TasksHeader/ui/Filter/ui/Toast';
 
 export function ManualTime() {
-  const { HistoryFilterMemory, selectedDate } = useAppSelector((state) => state.task);
+  const { HistoryFilterMemory, selectedDate, timerDetails } = useAppSelector((state) => state.task);
   const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
 
   const [data, setData] = useState<{ [key: string]: string }>({
     memo: 'E.g 3 hours 40 mins',
     startDate: '',
-    endDate: '',
-    description: '',
-    tag: '',
-    label: ''
+    endDate: ''
   });
-  const [isBillable, setIsBillable] = useState<boolean>(false);
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
 
   const { mutateAsync } = createManualTimeEntry();
@@ -33,10 +29,10 @@ export function ManualTime() {
     if (data.endDate.length > 0) {
       // alert(data.endDate);
       mutateAsync({
-        description: data.description,
+        description: timerDetails.description,
         end_date: data.endDate,
         id: activeItemId,
-        isBillable,
+        isBillable: timerDetails.isBillable,
         start_date: data.startDate,
         type: activeItemType
       });
@@ -100,7 +96,8 @@ export function ManualTime() {
           </span>
         </label>
         <label htmlFor="manualTags" className="flex flex-col space-y-1.5 w-1/3">
-          <ManualTags IconsInteractions={data} billable={isBillable} />
+          <div className="py-2" />
+          <ManualTags />
         </label>
       </div>
       <div className="flex justify-end px-2.5">

@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { UseEditHubService } from '../../features/hubs/hubService';
 import { UseEditWalletService } from '../../features/wallet/walletService';
@@ -37,7 +37,9 @@ import RoundedCheckbox from '../Checkbox/RoundedCheckbox';
 import ArrowOpenDown from '../../assets/icons/ArrowOpenDown';
 import DefaultColour from '../../assets/icons/DefaultColour';
 import SelectionMenu from './component/SelectionMenu';
-import { useGetColors } from '../../features/settings/user/userSettingsServices';
+import AlsoitMenuDropdown from '../DropDowns';
+import ListIconSelection, { listIconDetails } from './component/ListIconSelection';
+import { AddColour, useGetColors } from '../../features/account/accountService';
 
 interface PaletteProps {
   title?: string;
@@ -50,6 +52,7 @@ interface PaletteProps {
   cords?: Cords;
   activeInnerColor?: string;
   activeOutterColor?: string;
+  handleShapeSelection?: (value: string) => void;
 }
 
 const paletteViews = {
@@ -66,13 +69,15 @@ export default function PaletteManager({
   listComboColour,
   cords,
   activeOutterColor,
-  activeInnerColor
+  activeInnerColor,
+  handleShapeSelection
 }: PaletteProps) {
   const dispatch = useAppDispatch();
+  const queryClient = useQueryClient();
 
   const { paletteDropdown } = useAppSelector((state) => state.account);
   const { hub } = useAppSelector((state) => state.hub);
-  const { selectListColours } = useAppSelector((state) => state.account);
+  const { selectListColours, colourPaletteData } = useAppSelector((state) => state.account);
 
   const [open, setOpen] = useState<boolean>(true);
   const [isOutterFrameActive, setIsOutterFrameActive] = useState<boolean>(true);
@@ -101,6 +106,8 @@ export default function PaletteManager({
   const [isAdvanceSearch, setIsAdvanceSearch] = useState<boolean>(false);
   const [showListShapes, setShowListShapes] = useState<boolean>(false);
   const [colorName, setColorName] = useState<string>('Missing Color');
+  const [colorInputValue, setColorInputValue] = useState<string>('');
+  const [showListShapeSelection, setShowListShapeSelection] = useState<null | HTMLDivElement>(null);
   const { paletteId, paletteType } = paletteDropdown;
   const { rgb } = color || {};
   const updateColor = useCallback((color: ColorResult) => setColor(color), []);
@@ -145,6 +152,13 @@ export default function PaletteManager({
     dispatch(setSelectedListColours([]));
   };
 
+  const handleCloseListShapeSelection = () => {
+    setShowListShapeSelection(null);
+  };
+  const handleOpenListShapeSelection = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    setShowListShapeSelection(e.currentTarget);
+  };
+
   const handleOutterFrameClick = () => {
     setIsOutterFrameActive((prev) => !prev);
     setIsInnerFrameActive(false);
@@ -179,6 +193,13 @@ export default function PaletteManager({
       const updatedTree = changeListManager(list.id as string, hub, list);
       dispatch(getHub(updatedTree));
       dispatch(setFilteredResults(updatedTree));
+    }
+  });
+
+  const addColorMutation = useMutation(AddColour, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['user-colours']);
+      setColorInputValue('');
     }
   });
 
@@ -259,6 +280,16 @@ export default function PaletteManager({
     }
   };
 
+  const activeShapeName = listIconDetails.find((item) => item.shape === shape);
+
+  const handleAddColor = () => {
+    addColorMutation.mutateAsync({
+      color: color.hex,
+      color_name: colorName,
+      name: colorInputValue
+    });
+  };
+
   return (
     <Menu
       open={open}
@@ -289,6 +320,7 @@ export default function PaletteManager({
               isVisible={selectListColours.length > 0}
               dismissPopUp={handleDismissPopup}
               selectedCount={selectListColours.length}
+              allSelected={colourPaletteData.length === selectListColours.length}
             />
           )}
           {!isSearch && selectListColours.length === 0 && paletteViews.BOARD && (
@@ -362,18 +394,24 @@ export default function PaletteManager({
                 />
               </div>
             )}
+            {topContent}
             {paletteType === EntityType.list && (
               <div className="flex items-center justify-between pb-1 mt-1 mb-1 border-b border-gray-300">
-                <span
-                  className={`relative flex w-fit items-center justify-between gap-2 p-1 px-2.5 text-xs text-gray-500 bg-gray-200 rounded-md hover:text-primary-600 hover:bg-primary-100 ${
+                <div
+                  className={`relative flex w-fit items-center justify-between gap-2 p-1 px-2.5 text-xs text-gray-500 rounded-md hover:text-primary-600 border border-gray-300 hover:bg-primary-100 ${
                     showListShapes && 'text-white bg-primary-500'
                   }`}
-                  onClick={() => setShowListShapes((prev) => !prev)}
+                  onClick={(e) => handleOpenListShapeSelection(e)}
                 >
-                  <p>{title + ' Shapes'}</p>
+                  <p>{`${title} Shapes${shape ? `: ${activeShapeName?.label}` : ''}`}</p>
                   <ArrowDownFilled color={showListShapes ? 'white' : undefined} />
-                  {showListShapes && <span className="absolute left-0 right-0 z-20 top-6">{topContent}</span>}
-                </span>
+                </div>
+                <AlsoitMenuDropdown handleClose={handleCloseListShapeSelection} anchorEl={showListShapeSelection}>
+                  <ListIconSelection
+                    handleSelection={handleShapeSelection as (value: string) => void}
+                    activeShape={shape}
+                  />
+                </AlsoitMenuDropdown>
                 <ListIconComponent
                   shape={shape}
                   type="colourToggle"
@@ -516,8 +554,9 @@ export default function PaletteManager({
                   borderRadius="rounded-md py-0.5"
                   type="text"
                   name="name"
+                  value={colorInputValue}
                   label="LIBRARY COLOUR NAME"
-                  onChange={() => ({})}
+                  onChange={(e) => setColorInputValue(e.target.value)}
                 />
                 <div className="flex items-center justify-between gap-2">
                   <Button
@@ -536,6 +575,7 @@ export default function PaletteManager({
                       labelSize="text-xs"
                       padding="p-1"
                       buttonStyle="custom"
+                      onClick={handleAddColor}
                     />
                     <Button
                       height="h-6"
@@ -544,6 +584,7 @@ export default function PaletteManager({
                       labelSize="text-xs"
                       padding="p-1"
                       buttonStyle="custom"
+                      onClick={handleAddColor}
                     />
                   </div>
                 </div>

@@ -73,9 +73,9 @@ export default function Toast({ type = 'success', title, body, showClose = true,
             </div>
             <div style={{ width: '80%' }}>
               <div>
-                <p className="text-alsoit-text-lg font-semibold text-alsoit-gray-300 font-semibold my-1">{title}</p>
+                <p className="text-alsoit-text-lg font-semibold text-alsoit-gray-300  my-1">{title}</p>
                 {body != null && body !== '' && (
-                  <p className="text-alsoit-text-lg font-semibold text-alsoit-gray-300 font-semibold my-1">{body}</p>
+                  <p className="text-alsoit-text-lg font-semibold text-alsoit-gray-300  my-1">{body}</p>
                 )}
               </div>
               {taskData && (

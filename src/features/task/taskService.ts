@@ -1,5 +1,6 @@
 import requestNew from '../../app/requestNew';
 import {
+  IAttachmentsRes,
   IFullTaskRes,
   ITaskCreateProps,
   ITaskFullList,
@@ -60,6 +61,28 @@ import { IList } from '../hubs/hubs.interfaces';
 import { setDragOverList, setDragOverTask, setDraggableItem } from '../list/listSlice';
 import { FilterWithId, FiltersOption } from '../../components/TasksHeader/ui/Filter/types/filters';
 import { pilotTabs } from '../../app/constants/pilotTabs';
+
+export const useGetAttachments = (query: {
+  activeItemId: string | null | undefined;
+  activeItemType?: string | null;
+}) => {
+  const { activeItemType, activeItemId } = query;
+  const fetch = activeItemType && activeItemId ? true : false;
+  return useQuery(
+    ['attachments', { query }],
+    async () => {
+      const data = await requestNew<IAttachmentsRes>({
+        url: `attachments?type=${activeItemType}&id=${activeItemId}`,
+        method: 'GET'
+      });
+      return data;
+    },
+    {
+      enabled: fetch,
+      cacheTime: 0
+    }
+  );
+};
 
 //edit a custom field
 export const UseEditCustomFieldService = (data: {

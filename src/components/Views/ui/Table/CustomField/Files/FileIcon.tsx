@@ -9,10 +9,12 @@ interface fileIconProps {
   fileExtension?: string;
   filePath?: string;
   fileName?: string;
+  width: string;
+  height: string;
 }
 
-function FileIcons({ fileExtension, filePath, fileName }: fileIconProps) {
-  const iconStyle = 'h5- w-5';
+function FileIcons({ fileExtension, filePath, fileName, width, height }: fileIconProps) {
+  const iconStyle = `${width + ' ' + height}`;
   let icon;
   switch (fileExtension) {
     case 'pdf':
@@ -61,9 +63,11 @@ function FileIcons({ fileExtension, filePath, fileName }: fileIconProps) {
   }
 
   return (
-    <a href={filePath} download>
-      <ToolTip title={fileName}>{icon}</ToolTip>
-    </a>
+    <ToolTip title={fileName}>
+      <a href={filePath} download>
+        {icon}
+      </a>
+    </ToolTip>
   );
 }
 

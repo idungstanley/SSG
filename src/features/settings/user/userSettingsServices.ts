@@ -1,9 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import requestNew from '../../../app/requestNew';
-import { IColourRes, IUserRes } from '../../workspace/workspace.interfaces';
+import { IUserRes } from '../../workspace/workspace.interfaces';
 import { setShowConfirmationModal } from './userSettingsSlice';
 import { useAppDispatch } from '../../../app/hooks';
-import { setColourPaletteData } from '../../account/accountSlice';
 // import { useAppDispatch } from '../../../app/hooks';
 interface IUserSettings {
   name?: string | undefined;
@@ -117,25 +116,4 @@ export const UseChangePassword = () => {
       dispatch(setShowConfirmationModal(false));
     }
   });
-};
-
-// Get colours
-export const useGetColors = () => {
-  const dispatch = useAppDispatch();
-  return useQuery(
-    ['user-colours'],
-    async () => {
-      const data = await requestNew<IColourRes>({
-        url: 'color-palette',
-        method: 'GET'
-      });
-      return data;
-    },
-    {
-      onSuccess: (data) => {
-        const palettData = data.data.palette_colors;
-        dispatch(setColourPaletteData(palettData));
-      }
-    }
-  );
 };

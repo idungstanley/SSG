@@ -78,7 +78,7 @@ function CreateAutoProgress() {
           onClick={(e) => setAnchorEl(e.currentTarget)}
         >
           <h3 className="text-black text-alsoit-gray-300-md font-semibold">{selectedOpts}</h3>
-          <ArrowDown />
+          <ArrowDown className="w-4 h-4" />
         </button>
         <AlsoitMenuDropdown anchorEl={anchorEl} handleClose={() => setAnchorEl(null)}>
           <div className="rounded p-2">
@@ -118,7 +118,7 @@ function CreateAutoProgress() {
           onClick={(e) => setCompleteAnchor(e.currentTarget)}
         >
           <h3 className="text-black-md font-semibold text-alsoit-text-lg">{selectedType.title}</h3>
-          <ArrowDown />
+          <ArrowDown className="w-4 h-4" />
         </button>
         <AlsoitMenuDropdown anchorEl={CompleteAnchor} handleClose={() => setCompleteAnchor(null)}>
           <div className="p-2">
