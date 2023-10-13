@@ -32,7 +32,7 @@ export default function PaletteListView() {
   return (
     <VerticalScroll>
       <div className="w-full h-56 table-container">
-        <table className="w-full" style={{ display: 'grid', gridTemplateColumns: '20px 36px 85px 120px auto' }}>
+        <table className="w-full" style={{ display: 'grid', gridTemplateColumns: '20px 60px 82px 115px auto' }}>
           <tr className="w-full h-6 text-xs text-left contents group">
             <th className="p-2 text-center">
               <RoundedCheckbox
@@ -44,9 +44,7 @@ export default function PaletteListView() {
               />
             </th>
             <th className="p-2 text-center border-b border-gray-300">
-              <span className="flex items-center justify-between gap-1">
-                <DefaultColour dimensions={{ width: 20, height: 20 }} />
-              </span>
+              <span className="flex items-center justify-between">COLOUR</span>
             </th>
             <th className="p-2 border-b border-gray-300">HEX CODE</th>
             <th className="p-2 border-b border-gray-300">COLOUR NAME</th>
@@ -105,15 +103,17 @@ function Row({ item, key }: { item: IPaletteData; key: number }) {
         />
       </td>
       <td className={`p-2 bg-white ${isChecked ? 'border-primary-400 border-y border-l' : 'border-b border-gray-300'}`}>
-        <div className="flex items-center justify-between gap-1">
+        <div className="flex items-center justify-center">
           <div
             className={`w-5 h-5 p-2 rounded ${isChecked ? 'bg-primary-100' : ''}`}
             style={{ backgroundColor: `${item.color}` }}
           ></div>
         </div>
       </td>
-      <td className={`p-2 bg-white ${isChecked ? 'border-primary-400 border-y' : 'border-b border-gray-300'}`}>
-        <div>{item.color}</div>
+      <td
+        className={`p-2 bg-white uppercase ${isChecked ? 'border-primary-400 border-y' : 'border-b border-gray-300'}`}
+      >
+        <div>{item.color.substring(1)}</div>
       </td>
       <td className={`p-2 bg-white ${isChecked ? 'border-primary-400 border-y' : 'border-b border-gray-300'}`}>
         <div>{item.color_name}</div>
