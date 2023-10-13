@@ -1,6 +1,5 @@
 import ArrowDown from '../../../../assets/icons/ArrowDown';
-import { IEntries, ITimeEntriesRes } from '../../../../features/task/interface.tasks';
-import { ITeamMember } from '../../../../features/workspace/workspace.interfaces';
+import { ITimeEntriesRes } from '../../../../features/task/interface.tasks';
 import CollapseIcon from '../../../Views/ui/collapseIcon/CollapseIcon';
 import { HeaderIcons } from './TimeHeaderIcons';
 import { TotalTime } from './TotalTime';
@@ -38,7 +37,7 @@ export function InventoryHeader({ timeData }: Props) {
           <span className="absolute -top-1.5 bg-white px-0.5 text-alsoit-text-sm">Total Time</span>
         </div>
       </div>
-      <HeaderIcons timeData={timeData} />
+      <HeaderIcons extended />
     </div>
   );
 }
