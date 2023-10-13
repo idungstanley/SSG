@@ -71,6 +71,7 @@ import ForgotPassword from './pages/workspace/createWorkspace/auth/ForgotPasswor
 import EmailSentPage from './pages/workspace/createWorkspace/auth/ForgotPassword/EmailSentPage';
 import ResetPassword from './pages/workspace/createWorkspace/auth/ForgotPassword/ResetPassword';
 import AlsoHr from './pages/hr';
+import TimeClockPage from './pages/time-clock';
 
 const inbox = [
   {
@@ -161,6 +162,8 @@ export const routes = (user: IUser | null) => {
         { path: 'hr/h/:hubId', element: <AlsoHr /> },
         { path: 'dashboard', element: <Dashboard /> },
         { path: 'tasks', element: <TasksIndex /> },
+        { path: 'insights', element: <TasksIndex /> },
+        { path: 'insights/time-clock', element: <TimeClockPage /> },
         { path: 'favorites', element: <Favorites /> },
         { path: 'goals', element: <Goals /> },
         { path: 'docs', element: <Docs /> },
