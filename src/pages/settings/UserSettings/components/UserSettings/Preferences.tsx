@@ -14,7 +14,7 @@ function Preferences() {
         </label>
         <div className="mx-6">
           <h1 className="my-2 font-bold" style={{ fontSize: '15px' }}>
-            Flyout Toast Message{' '}
+            Flyout Toast Message
           </h1>
           <p className="mb-5" style={{ fontSize: '15px' }}>
             When performing actions, toast messages may appear in the bottom left-hand of your screen. You can disable

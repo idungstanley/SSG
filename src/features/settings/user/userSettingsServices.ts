@@ -58,7 +58,7 @@ const updateUserSettings = ({
   const request = requestNew({
     url: '/auth/account',
     method: 'PUT',
-    params: {
+    data: {
       name,
       date_format,
       email,
