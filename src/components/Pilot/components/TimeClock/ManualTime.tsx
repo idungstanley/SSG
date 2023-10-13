@@ -72,7 +72,7 @@ export function ManualTime() {
   }, [data.memo]);
 
   return (
-    <div className="flex flex-col space-y-2.5 w-full py-4">
+    <div className="flex flex-col space-y-2 w-full pt-7">
       <div className="flex items-center px-2 space-x-2">
         <label htmlFor="timeDetails" className="flex flex-col space-y-1.5 w-1/3">
           <span className="uppercase text-alsoit-gray-100 text-alsoit-text-xi">Enter Time</span>

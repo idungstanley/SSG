@@ -47,11 +47,7 @@ export function CombinedTime() {
   const activeTrackerCheck = (): boolean => (activeTrackers && activeTrackers?.length > 0 ? true : false);
 
   return (
-    <div
-      className={`flex flex-col space-y-3.5 w-full bg-alsoit-gray-50 rounded-md ${
-        activeTrackers?.length || timerStatus || activeClockTab === TIME_TABS.manual ? 'h-min' : 'h-4'
-      }`}
-    >
+    <div className={'flex flex-col w-full bg-alsoit-gray-50 rounded-md h-min'}>
       {/* Time Trackers */}
       <div className="absolute w-full -top-0" style={{ whiteSpace: 'nowrap' }}>
         <div className="flex items-center space-x-6 w-full">
@@ -116,28 +112,28 @@ export function CombinedTime() {
               </div>
             </div>
           </div>
-          {/* Manual Time */}
-          {activeClockTab === TIME_TABS.manual && <ManualTime />}
-          {/* Active Time Log entries */}
-          <div className="py-3.5 px-1.5 w-full">
-            {timerStatus && (
-              <div className="flex flex-col">
-                <div className="flex items-center w-full">
-                  <span className="flex items-center justify-center w-20 font-semibold uppercase text-alsoit-text-xi">
-                    user
-                  </span>
-                  <span className="flex items-center justify-center w-20 font-semibold uppercase text-alsoit-text-xi">
-                    timer
-                  </span>
-                  <span className="flex items-center justify-center w-20 font-semibold uppercase text-alsoit-text-xi">
-                    start date
-                  </span>
-                </div>
-                <ActiveTimeStrip timeData={getCurrent?.data.time_entries} />
-              </div>
-            )}
-          </div>
         </div>
+      </div>
+      {/* Manual Time */}
+      {activeClockTab === TIME_TABS.manual && <ManualTime />}
+      {/* Active Time Log entries */}
+      <div className="pt-7 px-1.5 w-full">
+        {timerStatus && (
+          <div className="flex flex-col">
+            <div className="flex items-center w-full">
+              <span className="flex items-center justify-center w-20 font-semibold uppercase text-alsoit-text-xi">
+                user
+              </span>
+              <span className="flex items-center justify-center w-20 font-semibold uppercase text-alsoit-text-xi">
+                timer
+              </span>
+              <span className="flex items-center justify-center w-20 font-semibold uppercase text-alsoit-text-xi">
+                start date
+              </span>
+            </div>
+            <ActiveTimeStrip timeData={getCurrent?.data.time_entries} />
+          </div>
+        )}
       </div>
     </div>
   );
