@@ -6,7 +6,7 @@ import Header from './Header';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import AddFileModal from '../../../components/Pilot/components/details/properties/attachments/AddFileModal';
 import { InvalidateQueryFilters, useMutation, useQueryClient } from '@tanstack/react-query';
-import { switchWorkspaceService, useGetUserSettingsKeys } from '../../../features/account/accountService';
+import { switchWorkspaceService, useGetColors, useGetUserSettingsKeys } from '../../../features/account/accountService';
 import { selectCurrentUser, setCurrentWorkspace, switchWorkspace } from '../../../features/auth/authSlice';
 import { setMyWorkspacesSlideOverVisibility } from '../../../features/general/slideOver/slideOverSlice';
 import { useEffect, useState } from 'react';
@@ -59,6 +59,7 @@ function MainLayout() {
   };
 
   const { data: userData } = useGetUserSettingsKeys(true, key, resolution);
+  useGetColors();
 
   document.addEventListener('keydown', (event) => TaskShortcutListener(event, setTaskShortcut));
 

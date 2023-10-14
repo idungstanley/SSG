@@ -125,7 +125,6 @@ function Row({ item, key }: { item: IPaletteData; key: number }) {
 
   const handleCloseEditDropwdown = () => {
     setShowEditDropdown(null);
-    // setEditLibraryNameContent(false);
   };
 
   const handleEditLibraryName = (
