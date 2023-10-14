@@ -72,6 +72,7 @@ import EmailSentPage from './pages/workspace/createWorkspace/auth/ForgotPassword
 import ResetPassword from './pages/workspace/createWorkspace/auth/ForgotPassword/ResetPassword';
 import AlsoHr from './pages/hr';
 import TimeClockPage from './pages/time-clock';
+import VerifyEmail from './pages/workspace/createWorkspace/auth/VerifyEmail/Index';
 
 const inbox = [
   {
@@ -193,7 +194,8 @@ export const routes = (user: IUser | null) => {
         { path: 'register/:inviteCode', element: <RegisterPage /> },
         { path: 'forgot', element: <ForgotPassword /> },
         { path: 'recover', element: <EmailSentPage /> },
-        { path: 'reset-password/:resetCode', element: <ResetPassword /> }
+        { path: 'reset-password/:resetCode', element: <ResetPassword /> },
+        { path: 'verify-email/:verificationCode', element: <VerifyEmail /> }
       ]
     },
     {
