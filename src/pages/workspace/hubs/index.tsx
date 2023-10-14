@@ -34,6 +34,7 @@ import EverythingTasks from './components/EverythingTasks';
 import { pilotTabs } from '../../../app/constants/pilotTabs';
 import { FaHandsHelping } from 'react-icons/fa';
 import { APP_HR, APP_TASKS } from '../../../app/constants/app';
+import { pages } from '../../../app/constants/pages';
 
 function Hubs() {
   const dispatch = useDispatch();
@@ -48,7 +49,7 @@ function Hubs() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const initialActivePlaceId: string = (JSON.parse(localStorage.getItem('activePlaceIdLocale') as string) ||
     null) as string;
-  const placeHubType = initialActivePlaceId == '8' ? APP_HR : APP_TASKS;
+  const placeHubType = initialActivePlaceId == pages.ALSO_HR ? APP_HR : APP_TASKS;
 
   const toggleSearch = (e: React.MouseEvent<SVGElement, MouseEvent>) => {
     e.stopPropagation();

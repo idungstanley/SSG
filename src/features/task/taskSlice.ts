@@ -9,11 +9,13 @@ import {
   IParent,
   ISelectedDate,
   ITaskFullList,
+  ITimeEntriesRes,
   ITimerDetails,
   Status,
   Tag,
   Task,
-  TaskKey
+  TaskKey,
+  teamMember
 } from './interface.tasks';
 import {
   FilterFieldsWithOption,
@@ -23,6 +25,7 @@ import {
 import { DEFAULT_FILTERS_OPTION } from '../../components/TasksHeader/ui/Filter/config/filterConfig';
 import { ITeamMembersAndGroup } from '../settings/teamMembersAndGroups.interfaces';
 import { ItaskViews } from '../hubs/hubs.interfaces';
+import { ITeamMember } from '../workspace/workspace.interfaces';
 
 export interface ICustomField {
   id: string;
@@ -136,6 +139,22 @@ interface fileUploadPropsType {
   taskId?: string;
 }
 
+export interface IPreferenceState {
+  flyoutToast: boolean;
+  dontPostWithEnter: boolean;
+  markdown: boolean;
+  hotkeys: boolean;
+  notepad: boolean;
+}
+
+export interface IUseSettingsProfile {
+  hotkeys: string;
+  is_json: number;
+  key: string;
+  resolution: null;
+  value: boolean;
+}
+
 export const TWO_SUBTASKS_LEVELS = 'two_levels';
 export const THREE_SUBTASKS_LEVELS = 'three_levels';
 
@@ -146,6 +165,8 @@ interface TaskState {
   watchersData: string[];
   removeWatcherId: null | string;
   currTeamMemberId: null | string;
+  preferenceState: IPreferenceState;
+  userSettingsProfile: IUseSettingsProfile[];
   myTaskData: ImyTaskData[];
   taskColumns: listColumnProps[];
   hideTask: listColumnProps[];
@@ -227,6 +248,8 @@ interface TaskState {
   assigneeIds: string[];
   selectedDate: ISelectedDate | null;
   HistoryFilterMemory: IHistoryFilterMemory | null;
+  timeAssigneeFilter: ITimeEntriesRes | undefined;
+  timeAssignees: teamMember[] | undefined;
   filters: FilterFieldsWithOption;
   subtasksfilters: Record<string, FilterFieldsWithOption>;
   isFiltersUpdated: boolean;
@@ -248,6 +271,14 @@ const initialState: TaskState = {
   currentTaskIdForPilot: null,
   watchersData: [],
   currTeamMemberId: null,
+  preferenceState: {
+    flyoutToast: false,
+    dontPostWithEnter: false,
+    markdown: false,
+    hotkeys: false,
+    notepad: false
+  },
+  userSettingsProfile: [],
   removeWatcherId: null,
   myTaskData: [],
   taskColumns: [],
@@ -341,6 +372,8 @@ const initialState: TaskState = {
   isSubtasksFiltersUpdated: false,
   selectedDate: null,
   HistoryFilterMemory: null,
+  timeAssigneeFilter: undefined,
+  timeAssignees: undefined,
   statusId: '',
   currTaskListId: '',
   entityForCustom: { id: undefined, type: undefined },
@@ -384,6 +417,12 @@ export const taskSlice = createSlice({
     },
     setSubtasksFilters(state, action: PayloadAction<Record<string, FilterFieldsWithOption>>) {
       state.subtasksfilters = action.payload;
+    },
+    setPreferenceState(state, action: PayloadAction<IPreferenceState>) {
+      state.preferenceState = action.payload;
+    },
+    setUserSettingsProfile(state, action: PayloadAction<IUseSettingsProfile[]>) {
+      state.userSettingsProfile = action.payload;
     },
     setFiltersUpdated(state, action: PayloadAction<boolean>) {
       state.isFiltersUpdated = action.payload;
@@ -670,6 +709,12 @@ export const taskSlice = createSlice({
     setHistoryMemory(state, action: PayloadAction<IHistoryFilterMemory | null>) {
       state.HistoryFilterMemory = action.payload;
     },
+    setTimeAssigneeFilter(state, action: PayloadAction<ITimeEntriesRes | undefined>) {
+      state.timeAssigneeFilter = action.payload;
+    },
+    setTimeAssignee(state, action: PayloadAction<teamMember[] | undefined>) {
+      state.timeAssignees = action.payload;
+    },
     setEntityForCustom(state, action: PayloadAction<entityForCustom>) {
       state.entityForCustom = action.payload;
     },
@@ -706,6 +751,8 @@ export const {
   getComfortableView,
   getComfortableViewWrap,
   getVerticalGrid,
+  setPreferenceState,
+  setUserSettingsProfile,
   getSingleLineView,
   getTaskUpperCase,
   setDuplicateTaskObj,
@@ -774,6 +821,8 @@ export const {
   setSortType,
   setTaskSelectedDate,
   setHistoryMemory,
+  setTimeAssigneeFilter,
+  setTimeAssignee,
   setEntityForCustom,
   setCustomSuggetionsField,
   setNewCustomPropertyDetails,

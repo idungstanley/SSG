@@ -27,6 +27,8 @@ import {
   setSelectedTasksArray,
   setSubtasks,
   setTasks,
+  setTimeAssignee,
+  setTimeAssigneeFilter,
   setTimerStatus,
   setToggleAssignCurrentTaskId,
   setTriggerAutoSave,
@@ -514,7 +516,7 @@ export const UseUpdateTaskService = ({
   const response = requestNew({
     url,
     method: 'PUT',
-    params: {
+    data: {
       name: name,
       description: description
     }
@@ -754,7 +756,7 @@ export const useSubTasks = (parentId: string, subtasks: Record<string, ITaskFull
       requestNew<ITaskListRes>({
         url: 'tasks/list',
         method: 'POST',
-        params: {
+        data: {
           parent_id: parentId
         }
       }),
@@ -935,7 +937,8 @@ export const GetTimeEntriesService = ({
   trigger,
   is_active,
   page,
-  include_filters
+  include_filters,
+  team_member_group_ids
 }: {
   itemId: string | null | undefined;
   trigger: string | null | undefined;
@@ -955,7 +958,7 @@ export const GetTimeEntriesService = ({
         params: {
           type: trigger,
           id: itemId,
-          team_member_group_ids: null,
+          team_member_group_ids: team_member_group_ids,
           is_active: is_active,
           page,
           include_filters: include_filters ? 1 : 0,
@@ -970,6 +973,50 @@ export const GetTimeEntriesService = ({
     }
   );
 };
+
+// Define a mutation function to fetch time entries
+async function fetchTimeEntries({
+  itemId,
+  trigger,
+  is_active,
+  page,
+  include_filters,
+  team_member_ids
+}: {
+  itemId: string | null | undefined;
+  trigger: string | null | undefined;
+  is_active?: number;
+  page?: number;
+  include_filters?: boolean;
+  team_member_ids?: string[];
+}) {
+  const data = await requestNew<ITimeEntriesRes | undefined>({
+    url: 'time-entries',
+    method: 'GET',
+    params: {
+      type: trigger,
+      id: itemId,
+      team_member_ids,
+      is_active,
+      page,
+      include_filters: include_filters ? 1 : 0,
+      sorting: null
+    }
+  });
+  return data;
+}
+
+export function useGetTimeEntriesMutation() {
+  const dispatch = useAppDispatch();
+  return useMutation(fetchTimeEntries, {
+    onSuccess(data) {
+      const teammembers = data?.data.time_entries.map((member) => member.team_member);
+
+      dispatch(setTimeAssigneeFilter(data));
+      dispatch(setTimeAssignee(teammembers));
+    }
+  });
+}
 
 export const UpdateTimeEntriesService = (data: {
   time_entry_id: string | undefined;

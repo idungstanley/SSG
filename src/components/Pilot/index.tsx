@@ -14,7 +14,6 @@ interface PilotProps {
 
 export default function Pilot({ pilotConfig }: PilotProps) {
   const dispatch = useAppDispatch();
-  // const [activeTabId, setActiveTabId] = useState<null | number>(1);
   const [showModal, setShowModal] = useState(false);
   const { sections, tabs } = pilotConfig;
 

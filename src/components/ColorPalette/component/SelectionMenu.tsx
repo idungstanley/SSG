@@ -5,6 +5,9 @@ import { MdDeleteForever } from 'react-icons/md';
 import { HiOutlineDuplicate } from 'react-icons/hi';
 import { RiFileCopyLine } from 'react-icons/ri';
 import { TbFileExport } from 'react-icons/tb';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { deletePaletteColour } from '../../../features/account/accountService';
+import { useAppSelector } from '../../../app/hooks';
 
 interface SelectionProps {
   isVisible: boolean;
@@ -13,34 +16,47 @@ interface SelectionProps {
   allSelected: boolean;
 }
 
-const TaskIcons = [
-  {
-    label: 'Export colour',
-    icons: <TbFileExport />,
-    handleClick: () => ({}),
-    isVisible: true
-  },
-  {
-    label: 'Duplicate',
-    icons: <HiOutlineDuplicate />,
-    handleClick: () => ({}),
-    isVisible: true
-  },
-  {
-    label: 'Copy',
-    icons: <RiFileCopyLine />,
-    handleClick: () => ({}),
-    isVisible: true
-  },
-  {
-    label: 'Delete',
-    icons: <MdDeleteForever />,
-    handleClick: () => ({}),
-    isVisible: true
-  }
-];
-
 export default function SelectionMenu({ isVisible, dismissPopUp, selectedCount, allSelected }: SelectionProps) {
+  const queryClient = useQueryClient();
+  const { selectListColours } = useAppSelector((state) => state.account);
+
+  const handleDeleteMutation = useMutation(deletePaletteColour, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['color-palette']);
+    }
+  });
+
+  const TaskIcons = [
+    {
+      label: 'Export colour',
+      icons: <TbFileExport />,
+      handleClick: () => ({}),
+      isVisible: true
+    },
+    {
+      label: 'Duplicate',
+      icons: <HiOutlineDuplicate />,
+      handleClick: () => ({}),
+      isVisible: true
+    },
+    {
+      label: 'Copy',
+      icons: <RiFileCopyLine />,
+      handleClick: () => ({}),
+      isVisible: true
+    },
+    {
+      label: 'Delete',
+      icons: <MdDeleteForever />,
+      handleClick: () => {
+        handleDeleteMutation.mutateAsync({
+          id: selectListColours[0]
+        });
+        dismissPopUp();
+      },
+      isVisible: true
+    }
+  ];
   return (
     <div className={`overflow-hidden ${isVisible ? 'slide-in' : 'slide-out'} z-100 `}>
       <div

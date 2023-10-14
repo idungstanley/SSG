@@ -116,7 +116,7 @@ const initialState: workspaceState = {
   sidebarWidthRD: dimensions.navigationBar.default,
   activeHotKeyTabId: 0,
   activeSubDetailsTabId: 'properties',
-  activeSubTimeClockTabId: 'in_out',
+  activeSubTimeClockTabId: 'time_clock',
   activeClockTab: 'Real Time',
   activeStatusManagementTabId: 'custom',
   activeSubHubManagerTabId: 'create_hub',

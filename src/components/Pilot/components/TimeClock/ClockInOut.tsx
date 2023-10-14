@@ -1,11 +1,10 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useAppSelector } from '../../../../app/hooks';
 import PaginationLinks from '../NavLinks/PaginationLinks';
 import ArrowLeft from '../../../../assets/icons/ArrowLeft';
 import { CombinedTime } from './CombinedTimeUI';
-import { GetTimeEntriesService } from '../../../../features/task/taskService';
+import { useGetTimeEntriesMutation } from '../../../../features/task/taskService';
 import { TimeInventory } from './TimeInventory';
-import { EntityType } from '../../../../utils/EntityTypes/EntityType';
 
 export interface User {
   initials: string;
@@ -13,21 +12,27 @@ export interface User {
 
 export default function ClockInOut() {
   const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
+  const { timeAssigneeFilter: getTaskTimeEntries } = useAppSelector((state) => state.task);
 
   const [page, setPage] = useState<number>(1);
 
-  const { data: getTaskTimeEntries } = GetTimeEntriesService({
-    itemId: activeItemId,
-    trigger: activeItemType === EntityType.subHub ? EntityType.hub : activeItemType,
-    page,
-    include_filters: true
-  });
+  const { mutateAsync } = useGetTimeEntriesMutation();
 
   const firstPage = () => setPage(1);
   const lastPage = () => setPage((page * 100) / 100);
   const pageLinks = Array(getTaskTimeEntries?.data.pagination.page)
     .fill(0)
     .map((_, index) => index + 1);
+
+  useEffect(() => {
+    if (!getTaskTimeEntries)
+      mutateAsync({
+        itemId: activeItemId,
+        trigger: activeItemType,
+        include_filters: false,
+        page
+      });
+  }, [getTaskTimeEntries]);
 
   return (
     <div className="px-2 my-1.5 bg-white">

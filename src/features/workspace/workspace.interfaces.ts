@@ -1,3 +1,4 @@
+import { IUseSettingsProfile } from '../task/taskSlice';
 export interface IWorkspaceRes {
   data: {
     workspace: {
@@ -74,6 +75,7 @@ export interface IUserRes {
   message: string;
   data: {
     user: IUserData;
+    user_settings: IUseSettingsProfile[];
   };
 }
 export interface IColourRes {
