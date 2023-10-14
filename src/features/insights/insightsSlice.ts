@@ -4,12 +4,14 @@ interface InsightsState {
   isShowGraphs: boolean;
   isShowFullMode: boolean;
   showedGraphs: string[];
+  movingGraphId: string;
 }
 
 const initialState: InsightsState = {
   isShowGraphs: true,
   isShowFullMode: false,
-  showedGraphs: []
+  showedGraphs: [],
+  movingGraphId: ''
 };
 
 export const insightsSlice = createSlice({
@@ -24,10 +26,13 @@ export const insightsSlice = createSlice({
     },
     setShowedGraphs: (state, action: PayloadAction<string[]>) => {
       state.showedGraphs = action.payload;
+    },
+    setMovingGraphId: (state, action: PayloadAction<string>) => {
+      state.movingGraphId = action.payload;
     }
   }
 });
 
-export const { setShowGraphs, setShowFullMode, setShowedGraphs } = insightsSlice.actions;
+export const { setShowGraphs, setShowFullMode, setShowedGraphs, setMovingGraphId } = insightsSlice.actions;
 
 export default insightsSlice.reducer;

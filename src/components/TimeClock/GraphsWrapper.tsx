@@ -17,7 +17,6 @@ import {
 } from 'chart.js';
 import { Line, Bar, Pie, Scatter } from 'react-chartjs-2';
 import GraphContainer from './GraphContainer';
-import { VerticalScroll } from '../ScrollableContainer/VerticalScroll';
 import { graphs } from '../../app/constants/graphs';
 
 ChartJS.register(
@@ -149,37 +148,37 @@ export default function GraphsWrapper() {
     switch (id) {
       case graphs.PIE_CHART:
         return (
-          <GraphContainer title="Title" isPieChart={true}>
+          <GraphContainer title="Title" isPieChart={true} id={graphs.PIE_CHART}>
             <Pie data={data3} />
           </GraphContainer>
         );
       case graphs.LINE_GRAPH:
         return (
-          <GraphContainer title="Title">
+          <GraphContainer title="Title" id={graphs.LINE_GRAPH}>
             <Line options={options} data={data1} />
           </GraphContainer>
         );
       case graphs.BAR_CHART:
         return (
-          <GraphContainer title="Title">
+          <GraphContainer title="Title" id={graphs.BAR_CHART}>
             <Bar options={options} data={data2} />
           </GraphContainer>
         );
       case graphs.HISTOGRAM:
         return (
-          <GraphContainer title="Title">
+          <GraphContainer title="Title" id={graphs.HISTOGRAM}>
             <Line options={options} data={data4} />
           </GraphContainer>
         );
       case graphs.SCATTER_PLOT:
         return (
-          <GraphContainer title="Title">
+          <GraphContainer title="Title" id={graphs.SCATTER_PLOT}>
             <Scatter options={options5} data={data5} />
           </GraphContainer>
         );
       case graphs.ADDITIONAL:
         return (
-          <GraphContainer title="Title">
+          <GraphContainer title="Title" id={graphs.ADDITIONAL}>
             <Line options={options} data={data6} />
           </GraphContainer>
         );
@@ -202,11 +201,9 @@ export default function GraphsWrapper() {
       >
         {'<|>'}
       </div>
-      <VerticalScroll>
-        <section style={{ minHeight: '0', maxHeight: '89vh' }} className="w-full h-full p-4 pb-0 space-y-10">
-          {showedGraphs.length ? <Fragment>{showedGraphs.map((graph) => renderGraph(graph))}</Fragment> : null}
-        </section>
-      </VerticalScroll>
+      <section style={{ minHeight: '0', maxHeight: '89vh' }} className="w-full h-full px-4 pb-0 overflow-auto">
+        {showedGraphs.length ? <Fragment>{showedGraphs.map((graph) => renderGraph(graph))}</Fragment> : null}
+      </section>
     </div>
   );
 }

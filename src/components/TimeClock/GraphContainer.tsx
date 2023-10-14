@@ -8,19 +8,25 @@ import TrashIcon from '../../assets/icons/TrashIcon';
 import PilotIcon from '../../assets/icons/PilotIcon';
 import PilotExtended from '../../assets/icons/PilotExtended';
 import FullScreenIcon from '../../assets/icons/FullScreenIcon';
+import DragMove from './DragMove';
+import { useAppSelector } from '../../app/hooks';
 
 interface IGraphContainerProps {
+  id: string;
   title: string;
   children: React.ReactNode;
   isPieChart?: boolean;
 }
 
-export default function GraphContainer({ title, children, isPieChart }: IGraphContainerProps) {
+export default function GraphContainer({ id, title, children, isPieChart }: IGraphContainerProps) {
+  const { movingGraphId } = useAppSelector((state) => state.insights);
+
   const [resizeDropdownEl, setResizeDropdownEl] = React.useState<null | HTMLElement>(null);
   const [resizeDropdownFullEl, setResizeDropdownFullEl] = React.useState<null | HTMLElement>(null);
   const [settingDropdownEl, setSettingDropdownEl] = React.useState<null | HTMLElement>(null);
   const [settingDropdownFullEl, setSettingDropdownFullEl] = React.useState<null | HTMLElement>(null);
 
+  const [translate, setTranslate] = useState({ x: 0, y: 0 });
   const [isShowSettings, setShowSettings] = useState<boolean>(false);
   const [fullMode, setFullMode] = useState<boolean>(false);
 
@@ -57,13 +63,22 @@ export default function GraphContainer({ title, children, isPieChart }: IGraphCo
     }
   };
 
+  const handleDragMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    setTranslate({
+      x: translate.x + e.movementX,
+      y: translate.y + e.movementY
+    });
+  };
+
   return (
     <>
       <div
         className="m-3 p-2 relative bg-white rounded-xl"
         style={{
           maxWidth: '330px',
-          boxShadow: '0px 0px 4px 0px rgba(0, 0, 0, 0.25)'
+          boxShadow: '0px 0px 4px 0px rgba(0, 0, 0, 0.25)',
+          transform: `translateX(${translate.x}px) translateY(${translate.y}px)`,
+          zIndex: id === movingGraphId ? 100 : 0
         }}
         onMouseOver={() => setShowSettings(true)}
         onMouseLeave={() => setShowSettings(false)}
@@ -83,7 +98,9 @@ export default function GraphContainer({ title, children, isPieChart }: IGraphCo
             ))}
           </div>
         ) : null}
-        <div className="text-center text-2xl">{title}</div>
+        <DragMove onDragMove={handleDragMove} id={id}>
+          <div className="text-center text-2xl cursor-move">{title}</div>
+        </DragMove>
         <div className={`${isPieChart ? 'flex justify-center' : ''}`} style={{ height: isPieChart ? '150px' : 'auto' }}>
           {children}
         </div>
