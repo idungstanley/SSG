@@ -13,28 +13,33 @@ export function TimeLogEntries({ timeEntry }: Props) {
     <div className="flex items-center w-full border-t-2">
       <div className="flex items-center space-x-14">
         {/* User Avatar */}
-        <div className="py-1.5 w-14 flex justify-center">
-          {timeEntry.team_member.user.avatar_path ? (
-            <AvatarWithImage
-              image_path={timeEntry.team_member.user.avatar_path}
-              height="h-4"
-              width="w-4"
-              roundedStyle="circular"
-            />
-          ) : (
-            <ToolTip title={timeEntry.team_member.user.name}>
-              <AvatarWithInitials
-                initials={timeEntry.team_member.user.initials}
-                height="h-4"
-                width="w-4"
-                textSize="7px"
-                backgroundColour={timeEntry.team_member.user.color}
+        <ToolTip title={timeEntry.team_member.user.name}>
+          <div className="py-1.5 w-14 flex justify-center">
+            {timeEntry.team_member.user.avatar_path ? (
+              <AvatarWithImage
+                image_path={timeEntry.team_member.user.avatar_path}
+                height="h-7"
+                width="w-7"
+                roundedStyle="circular"
               />
-            </ToolTip>
-          )}
-        </div>
+            ) : (
+              <ToolTip title={timeEntry.team_member.user.name}>
+                <AvatarWithInitials
+                  initials={timeEntry.team_member.user.initials}
+                  height="h-7"
+                  width="w-7"
+                  textSize="7px"
+                  backgroundColour={timeEntry.team_member.user.color}
+                />
+              </ToolTip>
+            )}
+          </div>
+        </ToolTip>
         {/* Duration */}
-        <div className="py-1.5 w-14 text-alsoit-text-sm text-center tracking-wide">
+        <div className="py-1.5 w-14 text-alsoit-text-sm text-center tracking-wide relative">
+          <div className="absolute text-alsoit-text-sm capitalize -top-0.5 -left-9 font-light px-0.5 bg-alsoit-gray-50 rounded-md">
+            {timeEntry.type === 'real' ? 'real time' : timeEntry.type}
+          </div>
           {dayjs.duration(timeEntry.duration, 'seconds').format('HH:mm:ss')}
         </div>
       </div>

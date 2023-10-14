@@ -84,4 +84,10 @@ export function formatTimeString(inputString: string): string {
   return formattedTime;
 }
 
+export function timeStringToMilliseconds(timeString: string) {
+  const [hours, minutes] = timeString.split(':').map(Number);
+  const milliseconds = (hours * 60 + minutes) * 60 * 1000;
+  return milliseconds;
+}
+
 export default Duration;

@@ -71,7 +71,12 @@ export function CombinedTime() {
                   <span className="text-alsoit-text-md text-alsoit-gray-50">{activeClockTab}</span>
                   {dropDown.tabDrop ? <ArrowUp className="w-3 h-3" /> : <ArrowDown color="#FFF" className="w-3 h-3" />}
                   {dropDown.tabDrop && (
-                    <TabsDropDown header="time category" subHeader="select category" styles="w-44 top-7 left-7">
+                    <TabsDropDown
+                      header="time category"
+                      subHeader="select category"
+                      styles="w-44 top-7 left-7"
+                      closeModal={() => setDropDown((prev) => ({ ...prev, tabDrop: !prev.tabDrop }))}
+                    >
                       {[
                         { entry: TIME_TABS.realTime, icon: <RealTimeIcon /> },
                         { entry: TIME_TABS.manual, icon: <ManualTimeIcon /> }

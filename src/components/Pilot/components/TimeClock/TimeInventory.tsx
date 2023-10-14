@@ -24,7 +24,7 @@ export function TimeInventory({ getTimeEntries }: Props) {
   return (
     <div className="relative bg-alsoit-gray-50 w-full rounded-md flex flex-col pt-10">
       <InventoryHeader timeData={getTimeEntries} />
-      <div className="w-full">
+      <div className="w-full bg-white">
         <HorizontalScroll>
           <LogHeaders />
           <div className="flex flex-col w-full">{Entries()}</div>

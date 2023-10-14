@@ -42,6 +42,7 @@ export function HeaderIcons({ extended }: Props) {
             subStyles="left-1/3"
             header="customize this view"
             subHeader="main settings"
+            closeModal={() => setDropDown((prev) => ({ ...prev, show: !prev.show }))}
           >
             <TimeShowDropDown />
           </TabsDropDown>
@@ -61,7 +62,9 @@ export function HeaderIcons({ extended }: Props) {
       >
         <AssigneeIcon className="w-4 h-4" active={false} />
         <ArrowDownFilled className="w-4 h-4" />
-        {dropDown.assignee && <TeamMemberFilter />}
+        {dropDown.assignee && (
+          <TeamMemberFilter closeModal={() => setDropDown((prev) => ({ ...prev, assignee: !prev.assignee }))} />
+        )}
       </div>
       {extended && (
         <div className="p-1 rounded-md flex items-center bg-white hover:bg-alsoit-purple-50 cursor-pointer">

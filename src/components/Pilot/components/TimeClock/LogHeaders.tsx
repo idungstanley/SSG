@@ -27,9 +27,7 @@ export function LogHeaders() {
     if (!newData.some((data) => data.field === field)) {
       newData.push({ field, dir: 'asc' });
     }
-    TIME_INVENTORY_HEADER.map((header) => {
-      if (header.value === field) header.sorted = true;
-    });
+
     dispatch(setTimeSortArr(newData));
   };
 
