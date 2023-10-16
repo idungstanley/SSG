@@ -34,7 +34,10 @@ import CollapseIcon from '../../collapseIcon/CollapseIcon';
 
 import '../../../../../styles/task.css';
 import { EntityType } from '../../../../../utils/EntityTypes/EntityType';
-import { listColumnProps } from '../../../../../pages/workspace/tasks/component/views/ListColumns';
+import {
+  ExtendedListColumnProps,
+  listColumnProps
+} from '../../../../../pages/workspace/tasks/component/views/ListColumns';
 import RoundedCheckbox from '../../../../Checkbox/RoundedCheckbox';
 import { pilotTabs } from '../../../../../app/constants/pilotTabs';
 
@@ -168,9 +171,9 @@ export function Head({
     }
   };
 
-  const setOptions = (event: React.MouseEvent<HTMLSpanElement, MouseEvent>, id: string, header: string) => {
-    dispatch(setActiveTaskColumn({ id: id, header: header }));
-    setheaderId(id);
+  const setOptions = (event: React.MouseEvent<HTMLSpanElement, MouseEvent>, item: ExtendedListColumnProps) => {
+    dispatch(setActiveTaskColumn(item));
+    setheaderId(item.id);
     setShowSortModal(!showSortModal);
     setAnchorEl(event.currentTarget);
   };
@@ -289,7 +292,7 @@ export function Head({
               className="flex items-center hover:bg-gray-200 p-0.5 rounded-xs space-x-1  border-t-2 border-l-2 border-r-2 border-transparent hover:border-r-gray-600 text-alsoit-gray-200 font-semibold"
               style={{ fontSize: '11px', WebkitTextStroke: '0.5px' }}
             >
-              <span onClick={(e) => setOptions(e, columns[0].id, columns[0].value)} className="cursor-pointer">
+              <span onClick={(e) => setOptions(e, columns[0])} className="cursor-pointer">
                 <span className="mr-1.5">{taskLength}</span>
                 {!collapseTasks ? columns[0].value.toUpperCase() : null}
               </span>
@@ -328,8 +331,8 @@ export function Head({
           )}
         </th>
         {!collapseTasks
-          ? columns.slice(1).map(({ value, id, color }) => (
-              <th key={id} className="relative w-full py-2 -mb-1.5 font-extrabold opacity-90">
+          ? columns.slice(1).map((item) => (
+              <th key={item.id} className="relative w-full py-2 -mb-1.5 font-extrabold opacity-90">
                 <div
                   className="text-alsoit-gray-200 font-semibold flex dBlock items-center justify-center w-full h-full my-auto cursor-pointer group hover:bg-gray-200 p-0.5 rounded-xs space-x-1 border-l-2 border-r-2 border-t-2 border-transparent hover:border-r-gray-500 "
                   style={{ fontSize: '11px', WebkitTextStroke: '0.5px', lineHeight: '13.2px' }}
@@ -337,25 +340,25 @@ export function Head({
                   <span className="dNone">
                     <MdOutlineDragIndicator className="h4 w4" />
                   </span>
-                  <span onClick={(e) => setOptions(e, id, value)} style={{ color: color ? color : '' }}>
-                    {value.toUpperCase()}
+                  <span onClick={(e) => setOptions(e, item)} style={{ color: item.color ? item.color : '' }}>
+                    {item.value.toUpperCase()}
                   </span>
-                  {sortAbles.includes(value) && (
+                  {sortAbles.includes(item.value) && (
                     <span className="ml-0.5">
-                      {sortArr.length >= 1 && sortArr.includes(value) ? (
+                      {sortArr.length >= 1 && sortArr.includes(item.value) ? (
                         ''
                       ) : (
-                        <RoundedArrowUpDown value={value} id={id} handleSort={handleSort} />
+                        <RoundedArrowUpDown value={item.value} id={item.id} handleSort={handleSort} />
                       )}
-                      {sortArr.includes(value) && sortAbles.includes(value) && (
+                      {sortArr.includes(item.value) && sortAbles.includes(item.value) && (
                         <SortDirectionCheck
                           bgColor={baseColor}
                           sortItemLength={sortArr.length}
-                          sortIndex={sortArr.indexOf(value)}
-                          sortValue={value}
-                          sortDesc={dirCheck(value)?.dir === 'desc'}
+                          sortIndex={sortArr.indexOf(item.value)}
+                          sortValue={item.value}
+                          sortDesc={dirCheck(item.value)?.dir === 'desc'}
                           handleRemoveSortFn={handleRemoveFilter}
-                          propertyHeaderTxt={headerTxt(value)}
+                          propertyHeaderTxt={headerTxt(item.value)}
                           handleOrder={handleOrder}
                         />
                       )}
@@ -365,7 +368,7 @@ export function Head({
                 <div className="absolute top-0 right-0 block pl-1 idle" style={{ height: tableHeight }}>
                   <div className="w-0.5 mx-auto bg-gray-100" style={{ height: '75px' }} />
                 </div>
-                {headerId === id && sortAbles.includes(value) && (
+                {headerId === item.id && (
                   <SortModal
                     handleClose={handleClose}
                     anchorEl={anchorEl}

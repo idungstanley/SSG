@@ -33,7 +33,6 @@ function EditDropdown() {
         if (i.id === id) {
           return { ...i, name: value };
         }
-
         return i;
       });
     });

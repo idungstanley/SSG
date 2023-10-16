@@ -6,7 +6,7 @@ import { Table } from '../Table/Table';
 import { Label } from './Label';
 import { AddTask } from '../AddTask/AddTask';
 import { getTaskColumns, setCurrTeamMemId, setEscapeKey } from '../../../../features/task/taskSlice';
-import { columnsHead, listColumnProps } from '../../../../pages/workspace/tasks/component/views/ListColumns';
+import { ExtendedListColumnProps, columnsHead } from '../../../../pages/workspace/tasks/component/views/ListColumns';
 import { cl } from '../../../../utils';
 import { IField, IListDetailRes } from '../../../../features/list/list.interfaces';
 import { Hub } from '../../../../pages/workspace/hubs/components/ActiveTree/activetree.interfaces';
@@ -25,7 +25,7 @@ export interface IListColor {
   outerColour: string | null;
 }
 
-const unique = (arr: listColumnProps[]) => [...new Set(arr)];
+const unique = (arr: ExtendedListColumnProps[]) => [...new Set(arr)];
 
 export function List({ tasks }: ListProps) {
   const dispatch = useAppDispatch();
@@ -69,13 +69,12 @@ export function List({ tasks }: ListProps) {
 
   const generateColumns = useMemo(() => {
     const customFieldNames = tasks[0].custom_field_columns.map((i) => ({
+      ...i,
       value: i.name,
-      id: i.id,
-      field: i.type,
       hidden: false,
-      color: i.color
+      field: i.type
     }));
-    const uniqueColumns = unique([...columnsHead, ...customFieldNames]);
+    const uniqueColumns = unique([...columnsHead, ...customFieldNames] as ExtendedListColumnProps[]);
     dispatch(getTaskColumns(uniqueColumns));
     return uniqueColumns;
   }, [tasks]);
