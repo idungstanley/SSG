@@ -89,8 +89,8 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
   };
 
   const handleDescriptionChange = (value: string) => {
-    const sanitizedDescription = DOMPurify.sanitize(value);
-    setDescription(sanitizedDescription);
+    // const sanitizedDescription = DOMPurify.sanitize(value);
+    setDescription(value);
   };
 
   const handleSubmit = async () => {

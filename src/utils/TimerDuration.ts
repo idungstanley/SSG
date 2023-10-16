@@ -1,3 +1,4 @@
+import dayjs from 'dayjs';
 import moment from 'moment-timezone';
 
 interface DurationProps {
@@ -85,9 +86,8 @@ export function formatTimeString(inputString: string): string {
 }
 
 export function timeStringToMilliseconds(timeString: string) {
-  const [hours, minutes] = timeString.split(':').map(Number);
-  const milliseconds = (hours * 60 + minutes) * 60 * 1000;
-  return milliseconds;
+  const time = dayjs(timeString, 'HH:mm');
+  return time.diff(dayjs().startOf('day'), 'millisecond');
 }
 
 export default Duration;

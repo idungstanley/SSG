@@ -48,19 +48,19 @@ export function TimeLogEntries({ timeEntry, index }: Props) {
           {dayjs.duration(timeEntry.duration, 'seconds').format('HH:mm:ss')}
         </div>
       </div>
-      <div className="flex justify-around space-x-9">
+      <div className={`flex justify-around space-x-9 h-10 ${index % 2 === 0 ? 'bg-alsoit-gray-50' : 'bg-white'}`}>
         {/* Start Date */}
-        <div className="py-1.5 w-40 text-alsoit-text-sm flex justify-center">
+        <div className="py-1.5 w-40 text-alsoit-text-sm flex justify-center items-center">
           {dayjs(timeEntry.start_date).format('ddd DD, MMM')}
         </div>
         {/* single label */}
-        <div className="py-1.5 w-40 flex justify-center gapFixes">-</div>
+        <div className="py-1.5 w-40 flex justify-center items-center gapFixes">-</div>
         {/* End Date */}
-        <div className="py-1.5 w-40 flex justify-center text-alsoit-text-sm gapFixes">
+        <div className="py-1.5 w-40 flex justify-center items-center text-alsoit-text-sm gapFixes">
           {dayjs(timeEntry.end_date).format('ddd DD, MMM')}
         </div>
         {/* tags */}
-        <div className="py-1.5 w-40 flex justify-center gapFixes">-</div>
+        <div className="py-1.5 w-40 flex justify-center items-center gapFixes">-</div>
       </div>
     </div>
   );
