@@ -40,7 +40,7 @@ function ActiveWallet({ showHubList }: WalletIndexProps) {
 
   return wallet ? (
     <div id="createWallet" className={`${showHubList ? 'block' : 'hidden'}`}>
-      {!wallet.children.length && !wallet.lists.length ? (
+      {!wallet?.children?.length && !wallet?.lists?.length ? (
         <div className="flex space-x-1 text-xs pl-7 py-1.5 h-8">
           <span className="text-gray-600">
             Create a
