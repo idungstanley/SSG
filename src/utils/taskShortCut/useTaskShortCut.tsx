@@ -1,7 +1,7 @@
 import React, { Dispatch, SetStateAction, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { useNavigate } from 'react-router-dom';
-import { setEscapeKey, setPreferenceState, setShowNewTaskField } from '../../features/task/taskSlice';
+import { setEscapeKey, setPreferenceState } from '../../features/task/taskSlice';
 import { setActiveTabId, setShowExtendedBar } from '../../features/workspace/workspaceSlice';
 
 export default function useTaskShortCut() {
@@ -12,7 +12,7 @@ export default function useTaskShortCut() {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    userSettingsProfile?.map((keys) => {
+    userSettingsProfile.map((keys) => {
       if (keys.key == 'hotkeys') {
         const updatePreferenceState = {
           ...preferenceState,
