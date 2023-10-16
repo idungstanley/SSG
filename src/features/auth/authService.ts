@@ -2,6 +2,15 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import requestNew from '../../app/requestNew';
 import { IUser } from './authSlice';
 
+//Accept team member invite
+export const useVerifyEmailService = ({ verificationCode }: { verificationCode: string | undefined }) => {
+  const data = requestNew({
+    url: `auth/verify-email?code=${verificationCode}`,
+    method: 'GET'
+  });
+  return data;
+};
+
 // Forgot password
 export const UseForgotPassword = (data: { email: string | null | undefined }) => {
   const { email } = data;

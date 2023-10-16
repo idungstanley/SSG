@@ -113,6 +113,7 @@ export const routes = (user: IUser | null) => {
       path: 'accept-invite/:inviteCode',
       element: <TeamMemberAcceptInvite />
     },
+    { path: 'auth/verify-email/:verificationCode', element: <VerifyEmail /> },
     {
       path: 'auth/verify-email/:verificationCode',
       element: <TeamMemberAcceptInvite />
@@ -198,8 +199,7 @@ export const routes = (user: IUser | null) => {
         { path: 'register/:inviteCode', element: <RegisterPage /> },
         { path: 'forgot', element: <ForgotPassword /> },
         { path: 'recover', element: <EmailSentPage /> },
-        { path: 'reset-password/:resetCode', element: <ResetPassword /> },
-        { path: 'verify-email/:verificationCode', element: <VerifyEmail /> }
+        { path: 'reset-password/:resetCode', element: <ResetPassword /> }
       ]
     },
     {
