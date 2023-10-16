@@ -50,6 +50,7 @@ function Hubs() {
   const initialActivePlaceId: string = (JSON.parse(localStorage.getItem('activePlaceIdLocale') as string) ||
     null) as string;
   const placeHubType = initialActivePlaceId == pages.ALSO_HR ? APP_HR : APP_TASKS;
+  const baseColour = '#BF01FE';
 
   const toggleSearch = (e: React.MouseEvent<SVGElement, MouseEvent>) => {
     e.stopPropagation();
@@ -139,19 +140,19 @@ function Hubs() {
       <PlaceItem
         label={placeHubType == APP_HR ? 'Also HR' : 'Tasks'}
         id={initialActivePlaceId}
-        isActiveLayoutCondition={!(!!listId || !!hubId || !!walletId)}
+        isActiveLayoutCondition={!activeItemId && !(placeHubType == APP_TASKS)}
         icon={
           placeHubType == APP_TASKS ? (
-            <BsListCheck className="w-4 h-4" style={{ color: '#BF00FFB2' }} />
+            <BsListCheck className="w-4 h-4" style={{ color: baseColour }} />
           ) : (
             <FaHandsHelping className="w-4 h-4" />
           )
         }
-        midContent={<BiSearch onClick={(e) => toggleSearch(e)} className="w-4 h-4" style={{ color: '#BF00FFB2' }} />}
+        midContent={<BiSearch onClick={(e) => toggleSearch(e)} className="w-4 h-4" style={{ color: baseColour }} />}
         searchStatus={isSearchActive}
         rightContent={
           <div className="flex gap-2" onClick={(e) => e.stopPropagation()}>
-            <DropdownWithIcon config={taskCreate} iconType="plus" iconColor="#BF00FFB2" />
+            <DropdownWithIcon config={taskCreate} iconType="plus" iconColor={baseColour} />
           </div>
         }
       />

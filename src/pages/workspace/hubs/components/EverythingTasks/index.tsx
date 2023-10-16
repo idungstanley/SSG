@@ -41,8 +41,14 @@ function EverythingTasks() {
         style={{ zIndex: 1 }}
         onClick={handleLoadAllTasks}
       >
-        <EverythingIcon />
-        <p className="block text-xs tracking-wider capitalize truncate">Everything</p>
+        <EverythingIcon color={location.pathname.includes('everything') ? '#BF01FE' : undefined} />
+        <p
+          className={`block text-xs tracking-wider capitalize truncate ${
+            location.pathname.includes('everything') ? 'text-alsoit-purple-300' : ''
+          }`}
+        >
+          Everything
+        </p>
       </div>
     </div>
   );
