@@ -78,7 +78,7 @@ export function TeamMemberFilter({ closeModal }: Props) {
         <input
           type="text"
           placeholder="Search"
-          className="w-full rounded-md ring-0 focus:ring-0 border-none bg-white px-5 text-alsoit-text-md"
+          className="w-full px-5 bg-white border-none rounded-md ring-0 focus:ring-0 text-alsoit-text-md"
         />
         <SearchIcon className="absolute w-3 h-3 top-3.5 left-1.5" />
       </div>
@@ -98,7 +98,7 @@ export function TeamMemberFilter({ closeModal }: Props) {
                     backgroundColour={entry.user.color}
                   />
                 )}
-                <span className="text-alsoit-text-md font-semibold">{entry.user.name}</span>
+                <span className="font-semibold text-alsoit-text-md">{entry.user.name}</span>
               </div>
               <SlideButton index={index} state={checkedState} changeFn={handleChange} />
             </div>

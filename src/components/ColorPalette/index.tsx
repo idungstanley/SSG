@@ -33,7 +33,6 @@ import DefaultColour from '../../assets/icons/DefaultColour';
 import SelectionMenu from './component/SelectionMenu';
 import AlsoitMenuDropdown from '../DropDowns';
 import ListIconSelection, { listIconDetails } from './component/ListIconSelection';
-import { useGetColors } from '../../features/account/accountService';
 import AdvanceColourPalette from './component/AdvanceColourPalette';
 import { CgSortAz } from 'react-icons/cg';
 
@@ -82,8 +81,6 @@ export default function PaletteManager({
   const [isSearch, setIsSearch] = useState<boolean>(false);
   const [showListShapeSelection, setShowListShapeSelection] = useState<null | HTMLDivElement>(null);
   const { paletteId, paletteType } = paletteDropdown;
-
-  useGetColors();
 
   const closeMenu = () => {
     setOpen(false);
@@ -226,7 +223,7 @@ export default function PaletteManager({
     >
       <div
         className="overflow-y-auto text-gray-500 rounded-full drop-shadow-2xl"
-        style={{ borderRadius: '5px', width: '450px' }}
+        style={{ borderRadius: '5px', minWidth: '400px' }}
       >
         <div className="z-50 flex flex-col w-full">
           {selectListColours.length > 0 && selectedViews === paletteViews.LIST && (

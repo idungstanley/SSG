@@ -2,6 +2,7 @@ import ListViews from './listDetails/listViews/ListViews';
 import ListShow from './listDetails/listShow/ListShow';
 import ListSubtasks from './listDetails/listSubtask/ListSubtasks';
 import ListGraphs from './listDetails/listGraphs/ListGraphs';
+import ListShowGraphs from './listDetails/listShowGraphs/ListShowGraphs';
 
 interface ListNavProps {
   navName?: string | null;
@@ -14,16 +15,18 @@ interface ListNavProps {
   Assigned?: string;
   buttonLabel?: string;
   viewsGraphs?: string;
+  changeViewsInsights?: string;
 }
 
-function ListNav({ viewsList, changeViews, viewsSubtasks, viewsGraphs }: ListNavProps) {
+function ListNav({ viewsList, changeViews, viewsSubtasks, changeViewsInsights, viewsGraphs }: ListNavProps) {
   return (
     <>
       <nav className="flex items-center justify-between overflow-hidden bg-white">
         <section className="flex items-center justify-start">
           <div className="flex items-center">
             <ListViews viewsList={viewsList as string} />
-            <ListShow changeViews={changeViews as string} />
+            {changeViews ? <ListShow changeViews={changeViews as string} /> : null}
+            {changeViewsInsights ? <ListShowGraphs /> : null}
             {viewsSubtasks ? <ListSubtasks subtasksTitle={viewsSubtasks as string} /> : null}
             {viewsGraphs ? <ListGraphs graphsTitle={viewsGraphs as string} /> : null}
           </div>

@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import SubtasksIcon from '../../../../assets/icons/SubtasksIcon';
 import { Tag, Task } from '../../../../features/task/interface.tasks';
 import { DEFAULT_LEFT_PADDING } from '../../config';
@@ -15,6 +15,7 @@ import {
   THREE_SUBTASKS_LEVELS,
   TWO_SUBTASKS_LEVELS,
   setDefaultSubtaskId,
+  setEscapeKey,
   setShowNewTaskField,
   setShowNewTaskId
 } from '../../../../features/task/taskSlice';
@@ -58,8 +59,15 @@ export function Row({
 }: RowProps) {
   const dispatch = useAppDispatch();
 
-  const { showNewTaskField, showNewTaskId, toggleAllSubtask, toggleAllSubtaskSplit, splitSubTaskLevels, subtasks } =
-    useAppSelector((state) => state.task);
+  const {
+    showNewTaskField,
+    showNewTaskId,
+    toggleAllSubtask,
+    toggleAllSubtaskSplit,
+    splitSubTaskLevels,
+    subtasks,
+    escapeKey
+  } = useAppSelector((state) => state.task);
 
   const [showSubTasks, setShowSubTasks] = useState(false);
   const [isCopied, setIsCopied] = useState<number>(0);

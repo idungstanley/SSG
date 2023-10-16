@@ -3,7 +3,7 @@ import ListNav from '../../../../pages/workspace/lists/components/renderlist/Lis
 export function ChangeViewInsights() {
   return (
     <div>
-      <ListNav viewsList="List" changeViews="Show" viewsGraphs="Show Graphs" />
+      <ListNav viewsList="List" changeViewsInsights="Show" viewsGraphs="Show Graphs" />
     </div>
   );
 }

@@ -106,7 +106,7 @@ export default function AdvanceColourPalette({ show }: { show: boolean }) {
   };
 
   return show ? (
-    <div className="px-4 py-2 border-t border-gray-300">
+    <div className="px-4 py-2 border-t border-gray-500">
       <div className="flex flex-col justify-center w-full gap-2">
         <div className={cl(isAdvanceSearch && 'w-full', 'flex items-center justify-between p-1')}>
           {!isAdvanceSearch && <p>ADVANCE COLOUR PALETTE</p>}

@@ -5,7 +5,7 @@ import { filterByAssignee, filterBySearchValue, sortTasks } from '../../../Tasks
 import { Table } from '../Table/Table';
 import { Label } from './Label';
 import { AddTask } from '../AddTask/AddTask';
-import { getTaskColumns, setCurrTeamMemId } from '../../../../features/task/taskSlice';
+import { getTaskColumns, setCurrTeamMemId, setEscapeKey } from '../../../../features/task/taskSlice';
 import { columnsHead, listColumnProps } from '../../../../pages/workspace/tasks/component/views/ListColumns';
 import { cl } from '../../../../utils';
 import { IField, IListDetailRes } from '../../../../features/list/list.interfaces';
@@ -36,6 +36,7 @@ export function List({ tasks }: ListProps) {
     splitSubTaskState: splitSubTaskMode,
     subtasks,
     tasks: storeTasks,
+    escapeKey,
     separateSubtasksMode
   } = useAppSelector((state) => state.task);
   const { parentHubExt, hub } = useAppSelector((state) => state.hub);
@@ -45,6 +46,14 @@ export function List({ tasks }: ListProps) {
   const [showNewTaskField, setShowNewTaskField] = useState(false);
   const [parentHub, setParentHub] = useState<Hub>();
   const [fullTasksLists, setFullTasksLists] = useState<ITaskFullList[]>([]);
+
+  // reset showNewTaskField with eskLey
+  useEffect(() => {
+    if (escapeKey) {
+      setShowNewTaskField(false);
+    }
+    dispatch(setEscapeKey(false));
+  }, [escapeKey, showNewTaskField]);
 
   useEffect(() => {
     if (parentHubExt.id) {

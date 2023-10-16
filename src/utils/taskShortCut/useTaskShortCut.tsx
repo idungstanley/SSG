@@ -1,8 +1,8 @@
 import React, { Dispatch, SetStateAction, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { useNavigate } from 'react-router-dom';
-import { setPreferenceState } from '../../features/task/taskSlice';
-import { setShowExtendedBar } from '../../features/workspace/workspaceSlice';
+import { setEscapeKey, setPreferenceState } from '../../features/task/taskSlice';
+import { setActiveTabId, setShowExtendedBar } from '../../features/workspace/workspaceSlice';
 
 export default function useTaskShortCut() {
   const { preferenceState, userSettingsProfile } = useAppSelector((state) => state.task);
@@ -26,23 +26,49 @@ export default function useTaskShortCut() {
   const navigate = useNavigate();
 
   const TaskShortcutListener = (event: KeyboardEvent, setTaskShortcut: Dispatch<SetStateAction<boolean>>) => {
-    if (
-      document.activeElement?.tagName === 'INPUT' ||
-      document.activeElement?.tagName === 'TEXTAREA' ||
-      document.activeElement?.getAttribute('contenteditable') === 'true'
-    )
-      return;
+    const handleInputFields = () => {
+      if (
+        document.activeElement?.tagName === 'INPUT' ||
+        document.activeElement?.tagName === 'TEXTAREA' ||
+        document.activeElement?.getAttribute('contenteditable') === 'true'
+      ) {
+        return false;
+      } else {
+        return true;
+      }
+    };
 
     if (preferenceState.hotkeys) {
-      if (event.shiftKey && event.key === '?') {
-        setTaskShortcut(true);
+      if (handleInputFields() == true) {
+        switch (event.key) {
+          case '?':
+            if (event.shiftKey) {
+              setTaskShortcut(true);
+            }
+            break;
+          case 'h':
+          case 'H':
+            navigate(`/${currentWorkspaceId}`);
+            break;
+          case 'c':
+          case 'C':
+            dispatch(setActiveTabId('calendar'));
+            break;
+          case 'n':
+          case 'N':
+            dispatch(setShowExtendedBar(true));
+            break;
+          case 'Escape':
+            dispatch(setEscapeKey(true));
+            break;
+          default:
+        }
       }
-      if (event.key === 'h' || event.key === 'H') {
-        // window.location.href = '/';
-        navigate(`/${currentWorkspaceId}`);
-      }
-      if (event.key === 'n' || event.key === 'N') {
-        dispatch(setShowExtendedBar(true));
+      switch (event.key) {
+        case 'Escape':
+          dispatch(setEscapeKey(true));
+          break;
+        default:
       }
     }
   };
