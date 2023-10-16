@@ -366,7 +366,7 @@ export function Head({
                 <div className="absolute top-0 right-0 block pl-1 idle" style={{ height: tableHeight }}>
                   <div className="w-0.5 mx-auto bg-gray-100" style={{ height: '75px' }} />
                 </div>
-                {headerId === id && (
+                {headerId === id && sortAbles.includes(value) && (
                   <SortModal
                     handleClose={handleClose}
                     anchorEl={anchorEl}

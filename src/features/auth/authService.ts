@@ -2,7 +2,7 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import requestNew from '../../app/requestNew';
 import { IUser } from './authSlice';
 
-//Accept team member invite
+//Verify Email address
 export const useVerifyEmailService = ({ verificationCode }: { verificationCode: string | undefined }) => {
   const data = requestNew({
     url: `auth/verify-email?code=${verificationCode}`,
