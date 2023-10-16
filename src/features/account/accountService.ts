@@ -146,6 +146,32 @@ export const deletePaletteColour = ({ id }: { id: string }) => {
   });
   return request;
 };
+//delete palette colour
+export const editPaletteColour = ({
+  id,
+  color,
+  color_name,
+  is_pinned,
+  name
+}: {
+  name: string;
+  color: string | null;
+  color_name: string | null;
+  is_pinned?: boolean;
+  id: string;
+}) => {
+  const request = requestNew({
+    url: `color-palette/${id}`,
+    method: 'PUT',
+    data: {
+      color: color,
+      color_name: color_name,
+      is_pinned: is_pinned,
+      name: name
+    }
+  });
+  return request;
+};
 
 // Get colours
 export const useGetColors = () => {
