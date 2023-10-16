@@ -52,7 +52,6 @@ export default function TimeClockPage() {
               </section>
             </VerticalScroll>
           </div>
-
           <div className="w-full" style={{ borderTop: '1px solid #B2B2B2' }}>
             <VerticalScroll onScroll={onScroll}>
               <section style={{ minHeight: '0', maxHeight: '83vh' }} className="w-full h-full p-4 pb-0 space-y-10">

@@ -12,6 +12,7 @@ import { BsCheck2All } from 'react-icons/bs';
 import { MdDeleteForever } from 'react-icons/md';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { deletePaletteColour, editPaletteColour } from '../../../features/account/accountService';
+import PinnedIcon from '../../../assets/icons/PinnedIcon';
 
 export default function PaletteListView() {
   const dispatch = useAppDispatch();
@@ -74,11 +75,10 @@ function Row({ item, key }: { item: IPaletteData; key: number }) {
   const dispatch = useAppDispatch();
   const queryClient = useQueryClient();
   const inputRef = useRef<HTMLInputElement | null>(null);
-
   const [isChecked, setIsChecked] = useState<boolean>(false);
   const [showEditDropdown, setShowEditDropdown] = useState<null | HTMLDivElement>(null);
   const [editLibraryNameContent, setEditLibraryNameContent] = useState<boolean>(false);
-  const { selectListColours } = useAppSelector((state) => state.account);
+  const { selectListColours, colourPaletteData } = useAppSelector((state) => state.account);
 
   useEffect(() => {
     const { current } = inputRef;
@@ -127,15 +127,20 @@ function Row({ item, key }: { item: IPaletteData; key: number }) {
     setShowEditDropdown(null);
   };
 
+  const getSelectedColorDetail = colourPaletteData.find((select) => select.id === item.id);
+
+  const { is_pinned } = getSelectedColorDetail as IPaletteData;
   const handleEditLibraryName = (
-    e: React.MouseEvent<HTMLSpanElement, MouseEvent> | React.KeyboardEvent<HTMLSpanElement>
+    e: React.MouseEvent<HTMLSpanElement, MouseEvent> | React.KeyboardEvent<HTMLSpanElement>,
+    pinned?: boolean
   ) => {
     e.stopPropagation();
     handleEditMutation.mutateAsync({
       id: item.id,
       name: inputRef.current?.innerText.trim() || (item.name as string),
       color_name: item.color_name,
-      color: item.color
+      color: item.color,
+      is_pinned: pinned
     });
   };
 
@@ -206,9 +211,15 @@ function Row({ item, key }: { item: IPaletteData; key: number }) {
           {item.name ? item.name : 'Add library name'}
         </div>
         <div className="flex items-center gap-1 opacity-0 cursor-pointer right-1 group-hover:opacity-100">
-          <span>
-            <UnpinnedIcon />
-          </span>
+          {is_pinned ? (
+            <span onClick={(e) => handleEditLibraryName(e, false)}>
+              <PinnedIcon />
+            </span>
+          ) : (
+            <span onClick={(e) => handleEditLibraryName(e, true)}>
+              <UnpinnedIcon />
+            </span>
+          )}
           <div onClick={(e) => handleOpenEditDropdown(e)}>
             <ThreeDotIcon />
           </div>
