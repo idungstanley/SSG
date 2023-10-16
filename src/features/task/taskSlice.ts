@@ -9,11 +9,13 @@ import {
   IParent,
   ISelectedDate,
   ITaskFullList,
+  ITimeEntriesRes,
   ITimerDetails,
   Status,
   Tag,
   Task,
-  TaskKey
+  TaskKey,
+  teamMember
 } from './interface.tasks';
 import {
   FilterFieldsWithOption,
@@ -23,6 +25,7 @@ import {
 import { DEFAULT_FILTERS_OPTION } from '../../components/TasksHeader/ui/Filter/config/filterConfig';
 import { ITeamMembersAndGroup } from '../settings/teamMembersAndGroups.interfaces';
 import { ItaskViews } from '../hubs/hubs.interfaces';
+import { ITeamMember } from '../workspace/workspace.interfaces';
 
 export interface ICustomField {
   id: string;
@@ -246,6 +249,8 @@ interface TaskState {
   assigneeIds: string[];
   selectedDate: ISelectedDate | null;
   HistoryFilterMemory: IHistoryFilterMemory | null;
+  timeAssigneeFilter: ITimeEntriesRes | undefined;
+  timeAssignees: teamMember[] | undefined;
   filters: FilterFieldsWithOption;
   subtasksfilters: Record<string, FilterFieldsWithOption>;
   isFiltersUpdated: boolean;
@@ -369,6 +374,8 @@ const initialState: TaskState = {
   isSubtasksFiltersUpdated: false,
   selectedDate: null,
   HistoryFilterMemory: null,
+  timeAssigneeFilter: undefined,
+  timeAssignees: undefined,
   statusId: '',
   currTaskListId: '',
   entityForCustom: { id: undefined, type: undefined },
@@ -707,6 +714,12 @@ export const taskSlice = createSlice({
     setHistoryMemory(state, action: PayloadAction<IHistoryFilterMemory | null>) {
       state.HistoryFilterMemory = action.payload;
     },
+    setTimeAssigneeFilter(state, action: PayloadAction<ITimeEntriesRes | undefined>) {
+      state.timeAssigneeFilter = action.payload;
+    },
+    setTimeAssignee(state, action: PayloadAction<teamMember[] | undefined>) {
+      state.timeAssignees = action.payload;
+    },
     setEntityForCustom(state, action: PayloadAction<entityForCustom>) {
       state.entityForCustom = action.payload;
     },
@@ -814,6 +827,8 @@ export const {
   setSortType,
   setTaskSelectedDate,
   setHistoryMemory,
+  setTimeAssigneeFilter,
+  setTimeAssignee,
   setEntityForCustom,
   setCustomSuggetionsField,
   setNewCustomPropertyDetails,

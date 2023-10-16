@@ -138,11 +138,20 @@ export const AddColour = (data: {
   return request;
 };
 
+//delete palette colour
+export const deletePaletteColour = ({ id }: { id: string }) => {
+  const request = requestNew({
+    url: `color-palette/${id}`,
+    method: 'DELETE'
+  });
+  return request;
+};
+
 // Get colours
 export const useGetColors = () => {
   const dispatch = useAppDispatch();
   return useQuery(
-    ['user-colours'],
+    ['color-palette'],
     async () => {
       const data = await requestNew<IColourRes>({
         url: 'color-palette',

@@ -64,7 +64,7 @@ function FileIcons({ fileExtension, filePath, fileName, width, height }: fileIco
 
   return (
     <ToolTip title={fileName}>
-      <a href={filePath} download>
+      <a href={filePath} download target="_blank" rel="noreferrer">
         {icon}
       </a>
     </ToolTip>
