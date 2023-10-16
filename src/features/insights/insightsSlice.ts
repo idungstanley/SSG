@@ -3,15 +3,17 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 interface InsightsState {
   isShowGraphs: boolean;
   isShowFullMode: boolean;
-  showedGraphs: string[];
+  showedGraph: string;
   movingGraphId: string;
+  isUpdatePosition: boolean;
 }
 
 const initialState: InsightsState = {
   isShowGraphs: true,
   isShowFullMode: false,
-  showedGraphs: [],
-  movingGraphId: ''
+  showedGraph: '',
+  movingGraphId: '',
+  isUpdatePosition: false
 };
 
 export const insightsSlice = createSlice({
@@ -24,15 +26,19 @@ export const insightsSlice = createSlice({
     setShowFullMode: (state, action: PayloadAction<boolean>) => {
       state.isShowFullMode = action.payload;
     },
-    setShowedGraphs: (state, action: PayloadAction<string[]>) => {
-      state.showedGraphs = action.payload;
+    setShowedGraph: (state, action: PayloadAction<string>) => {
+      state.showedGraph = action.payload;
     },
     setMovingGraphId: (state, action: PayloadAction<string>) => {
       state.movingGraphId = action.payload;
+    },
+    setUpdatePosition: (state, action: PayloadAction<boolean>) => {
+      state.isUpdatePosition = action.payload;
     }
   }
 });
 
-export const { setShowGraphs, setShowFullMode, setShowedGraphs, setMovingGraphId } = insightsSlice.actions;
+export const { setShowGraphs, setShowFullMode, setShowedGraph, setMovingGraphId, setUpdatePosition } =
+  insightsSlice.actions;
 
 export default insightsSlice.reducer;
