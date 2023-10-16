@@ -64,8 +64,7 @@ export function List({ tasks }: ListProps) {
       id: i.id,
       field: i.type,
       hidden: false,
-      color: i.color,
-      defaultField: false
+      color: i.color
     }));
     const uniqueColumns = unique([...columnsHead, ...customFieldNames]);
     dispatch(getTaskColumns(uniqueColumns));
