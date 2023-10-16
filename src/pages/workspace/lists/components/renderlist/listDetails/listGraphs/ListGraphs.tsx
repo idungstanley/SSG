@@ -1,9 +1,12 @@
-import { useState } from 'react';
 import { Menu } from '@headlessui/react';
 import Button from '../../../../../../../components/Buttons/Button';
+import { useAppDispatch, useAppSelector } from '../../../../../../../app/hooks';
+import { setShowGraphs } from '../../../../../../../features/insights/insightsSlice';
 
 export default function ListGraphs({ graphsTitle }: { graphsTitle: string }) {
-  const [showGraphs, setShowGraphs] = useState<boolean>(false);
+  const dispatch = useAppDispatch();
+
+  const { isShowGraphs } = useAppSelector((state) => state.insights);
 
   return (
     <div className="flex items-center justify-start space-x-1 ">
@@ -11,7 +14,7 @@ export default function ListGraphs({ graphsTitle }: { graphsTitle: string }) {
         <Menu>
           <div className="flex items-center justify-center viewSettingsParent">
             <Menu.Button>
-              <Button active={showGraphs} onClick={() => setShowGraphs(!showGraphs)}>
+              <Button active={isShowGraphs} onClick={() => dispatch(setShowGraphs(!isShowGraphs))}>
                 <span className="whitespace-nowrap">{graphsTitle}</span>
               </Button>
             </Menu.Button>

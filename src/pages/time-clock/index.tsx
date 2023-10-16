@@ -8,8 +8,12 @@ import { updatePageTitle } from '../../utils/updatePageTitle';
 import { mockHubList, mockLists } from './mockData';
 import TimeHubItem from '../../components/TimeClock/TimeHubItem';
 import { List } from '../../components/Views/ui/List/List';
+import { useAppSelector } from '../../app/hooks';
+import GraphsWrapper from '../../components/TimeClock/GraphsWrapper';
 
 export default function TimeClockPage() {
+  const { isShowGraphs } = useAppSelector((state) => state.insights);
+
   useEffect(() => {
     updatePageTitle('Time Clock');
     return () => {
@@ -62,6 +66,8 @@ export default function TimeClockPage() {
               </section>
             </VerticalScroll>
           </div>
+
+          {isShowGraphs ? <GraphsWrapper /> : null}
         </div>
       </Page>
     </>

@@ -1,0 +1,42 @@
+.resizer {
+  width: 10px;
+  height: 10px;
+  padding: 20px;
+  border-radius: 50%;
+  position: absolute;
+  z-index: 1;
+}
+
+.resizer:before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #bf01fe;
+}
+
+.resizer.top-left {
+  left: -20px;
+  top: -20px;
+  cursor: nwse-resize;
+}
+.resizer.top-right {
+  right: -20px;
+  top: -20px;
+  cursor: nesw-resize;
+}
+.resizer.bottom-left {
+  left: -20px;
+  bottom: -20px;
+  cursor: nesw-resize;
+}
+.resizer.bottom-right {
+  right: -20px;
+  bottom: -20px;
+  cursor: nwse-resize;
+}
