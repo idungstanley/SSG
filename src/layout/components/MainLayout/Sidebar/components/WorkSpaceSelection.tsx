@@ -103,8 +103,8 @@ function WorkSpaceSelection() {
     queryClient.invalidateQueries();
   };
   // const [isDropdownActive, setDropDownActive] = useState<boolean>();
-  const workspaceName = workSpaceData?.data?.workspace.name;
-  const workspaceColor = workSpaceData?.data?.workspace.color as string;
+  const workspaceName = workSpaceData?.data?.workspace?.name;
+  const workspaceColor = workSpaceData?.data?.workspace?.color as string;
   const joinName = workspaceName?.split(' ').slice(0, 2).join('').toUpperCase();
   const truncateName = joinName?.substring(0, 6) + '...';
 

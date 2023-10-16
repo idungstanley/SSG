@@ -7,22 +7,22 @@ import { setNewCustomPropertyDetails } from '../../../../../../features/task/tas
 
 const items = [
   {
-    id: 1,
+    id: 'short_text',
     name: 'Short Text',
     onclick: () => null
   },
   {
-    id: 2,
+    id: 'long_text',
     name: 'Long Text',
     onclick: () => null
   },
   {
-    id: 3,
+    id: 'email',
     name: 'Email',
     onclick: () => null
   },
   {
-    id: 4,
+    id: 'website',
     name: 'Website',
     onclick: () => null
   }

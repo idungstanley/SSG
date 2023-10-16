@@ -1,5 +1,6 @@
 import requestNew from '../../app/requestNew';
 import {
+  IAttachmentsRes,
   IFullTaskRes,
   ITaskCreateProps,
   ITaskFullList,
@@ -26,6 +27,8 @@ import {
   setSelectedTasksArray,
   setSubtasks,
   setTasks,
+  setTimeAssignee,
+  setTimeAssigneeFilter,
   setTimerStatus,
   setToggleAssignCurrentTaskId,
   setTriggerAutoSave,
@@ -59,6 +62,29 @@ import { addNewSubtaskManager } from '../../managers/Subtask';
 import { IList } from '../hubs/hubs.interfaces';
 import { setDragOverList, setDragOverTask, setDraggableItem } from '../list/listSlice';
 import { FilterWithId, FiltersOption } from '../../components/TasksHeader/ui/Filter/types/filters';
+import { pilotTabs } from '../../app/constants/pilotTabs';
+
+export const useGetAttachments = (query: {
+  activeItemId: string | null | undefined;
+  activeItemType?: string | null;
+}) => {
+  const { activeItemType, activeItemId } = query;
+  const fetch = activeItemType && activeItemId ? true : false;
+  return useQuery(
+    ['attachments', { query }],
+    async () => {
+      const data = await requestNew<IAttachmentsRes>({
+        url: `attachments?type=${activeItemType}&id=${activeItemId}`,
+        method: 'GET'
+      });
+      return data;
+    },
+    {
+      enabled: fetch,
+      cacheTime: 0
+    }
+  );
+};
 
 //edit a custom field
 export const UseEditCustomFieldService = (data: {
@@ -220,7 +246,7 @@ const addTask = (data: {
   return response;
 };
 
-export const useAddTask = (task?: Task) => {
+export const useAddTask = (task: Task) => {
   const dispatch = useAppDispatch();
 
   const { tasks, subtasks } = useAppSelector((state) => state.task);
@@ -234,7 +260,8 @@ export const useAddTask = (task?: Task) => {
         const updatedSubtasks = addNewSubtaskManager(
           subtasks,
           data.data.task as ITaskFullList,
-          task?.custom_field_columns || []
+          task.custom_field_columns,
+          task.task_statuses
         );
         dispatch(setSubtasks(updatedSubtasks));
 
@@ -250,7 +277,8 @@ export const useAddTask = (task?: Task) => {
         const updatedTasks = addNewTaskManager(
           tasks,
           data.data.task as ITaskFullList,
-          task?.custom_field_columns || []
+          task.custom_field_columns,
+          task.task_statuses
         );
         dispatch(setTasks(updatedTasks));
         const listId = data.data.task.list_id;
@@ -300,7 +328,12 @@ export const useDuplicateTask = (task?: Task) => {
     onSuccess: (data) => {
       dispatch(setDuplicateTaskObj({ ...duplicateTaskObj, popDuplicateTaskModal: true }));
 
-      const updatedTasks = addNewTaskManager(tasks, data.data.task as ITaskFullList, task?.custom_field_columns || []);
+      const updatedTasks = addNewTaskManager(
+        tasks,
+        data.data.task as ITaskFullList,
+        task?.custom_field_columns || [],
+        task?.task_statuses || []
+      );
       dispatch(setTasks(updatedTasks));
       const listId = data.data.task.list_id;
       const updatedTree = updateListTasksCountManager(listId as string, hub, updatedTasks[listId].length);
@@ -483,7 +516,7 @@ export const UseUpdateTaskService = ({
   const response = requestNew({
     url,
     method: 'PUT',
-    params: {
+    data: {
       name: name,
       description: description
     }
@@ -723,7 +756,7 @@ export const useSubTasks = (parentId: string, subtasks: Record<string, ITaskFull
       requestNew<ITaskListRes>({
         url: 'tasks/list',
         method: 'POST',
-        params: {
+        data: {
           parent_id: parentId
         }
       }),
@@ -835,7 +868,7 @@ export const useCurrentTime = ({ workspaceId }: { workspaceId?: string }) => {
             dispatch(
               setTimerLastMemory({
                 hubId: dateString.model === EntityType.hub ? dateString.model_id : null,
-                activeTabId: 6,
+                activeTabId: pilotTabs.TIME_CLOCK,
                 subhubId: dateString.model === EntityType.subHub ? dateString.model_id : null,
                 listId: dateString.model === EntityType.list ? dateString.model_id : null,
                 taskId: dateString.model === EntityType.task ? dateString.model_id : null,
@@ -904,7 +937,8 @@ export const GetTimeEntriesService = ({
   trigger,
   is_active,
   page,
-  include_filters
+  include_filters,
+  team_member_group_ids
 }: {
   itemId: string | null | undefined;
   trigger: string | null | undefined;
@@ -924,7 +958,7 @@ export const GetTimeEntriesService = ({
         params: {
           type: trigger,
           id: itemId,
-          team_member_group_ids: null,
+          team_member_group_ids: team_member_group_ids,
           is_active: is_active,
           page,
           include_filters: include_filters ? 1 : 0,
@@ -939,6 +973,50 @@ export const GetTimeEntriesService = ({
     }
   );
 };
+
+// Define a mutation function to fetch time entries
+async function fetchTimeEntries({
+  itemId,
+  trigger,
+  is_active,
+  page,
+  include_filters,
+  team_member_ids
+}: {
+  itemId: string | null | undefined;
+  trigger: string | null | undefined;
+  is_active?: number;
+  page?: number;
+  include_filters?: boolean;
+  team_member_ids?: string[];
+}) {
+  const data = await requestNew<ITimeEntriesRes | undefined>({
+    url: 'time-entries',
+    method: 'GET',
+    params: {
+      type: trigger,
+      id: itemId,
+      team_member_ids,
+      is_active,
+      page,
+      include_filters: include_filters ? 1 : 0,
+      sorting: null
+    }
+  });
+  return data;
+}
+
+export function useGetTimeEntriesMutation() {
+  const dispatch = useAppDispatch();
+  return useMutation(fetchTimeEntries, {
+    onSuccess(data) {
+      const teammembers = data?.data.time_entries.map((member) => member.team_member);
+
+      dispatch(setTimeAssigneeFilter(data));
+      dispatch(setTimeAssignee(teammembers));
+    }
+  });
+}
 
 export const UpdateTimeEntriesService = (data: {
   time_entry_id: string | undefined;
@@ -1289,7 +1367,6 @@ export const useAddFiltersForTask = () => {
       Object.keys(subtasks).forEach((listId) => {
         updatedSubtasks[listId] = updatedSubtasks[listId].map((task) => {
           if (parentId === task.id) {
-            console.log('aaa', task);
             return {
               ...task,
               filters: data.data.filter

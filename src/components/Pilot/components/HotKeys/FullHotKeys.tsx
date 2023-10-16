@@ -17,7 +17,7 @@ interface HotkeysListProps {
   setShowModal: (i: boolean) => void;
 }
 
-const hotkeyIdsFromLS = JSON.parse(localStorage.getItem(STORAGE_KEYS.HOT_KEYS) ?? '[]') as number[];
+const hotkeyIdsFromLS = JSON.parse(localStorage.getItem(STORAGE_KEYS.HOT_KEYS) ?? '[]') as string[];
 
 export default function FullHotkeysList({ tabs, showModal, setShowModal }: HotkeysListProps) {
   const dispatch = useAppDispatch();
@@ -36,7 +36,7 @@ export default function FullHotkeysList({ tabs, showModal, setShowModal }: Hotke
   const hotkeys = useMemo(() => tabs.filter((i) => activeHotkeyIds.includes(i.id)), [activeHotkeyIds, tabs]);
 
   const handleClick = useCallback(
-    (tabId: number) => {
+    (tabId: string) => {
       const isIncludes = activeHotkeyIds.includes(tabId);
 
       const newHotkeyIds = isIncludes ? [...activeHotkeyIds.filter((i) => i !== tabId)] : [...activeHotkeyIds, tabId];

@@ -13,17 +13,18 @@ import {
 import { arrayMove, rectSortingStrategy, SortableContext, sortableKeyboardCoordinates } from '@dnd-kit/sortable';
 import { BsClipboardData } from 'react-icons/bs';
 import { useAppSelector } from '../../../../app/hooks';
+import { pilotTabs } from '../../../../app/constants/pilotTabs';
 
-export const DetailOptions = [
+export const detailOptions = [
   {
-    id: 1,
+    id: pilotTabs.PROPERTIES,
     name: 'Properties',
     icon: <BsClipboardData />,
     isVisible: false
   },
   {
-    id: 2,
-    name: 'attachments',
+    id: pilotTabs.ATTACHMENTS,
+    name: 'Attachments',
     icon: <MdAddToPhotos />,
     isVisible: false
   }
@@ -32,7 +33,7 @@ export const DetailOptions = [
 export default function DetailsSubTab() {
   const { showPilot, activeSubDetailsTabId } = useAppSelector((state) => state.workspace);
 
-  const idsFromLS = JSON.parse(localStorage.getItem('subTab') || '[]') as number[];
+  const idsFromLS = JSON.parse(localStorage.getItem('subTab') || '[]') as string[];
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -41,7 +42,7 @@ export default function DetailsSubTab() {
     })
   );
 
-  const [items, setItems] = useState(DetailOptions.sort((a, b) => idsFromLS.indexOf(a.id) - idsFromLS.indexOf(b.id)));
+  const [items, setItems] = useState(detailOptions.sort((a, b) => idsFromLS.indexOf(a.id) - idsFromLS.indexOf(b.id)));
 
   const handleDragEnd = (e: DragEndEvent) => {
     const { active, over } = e;
@@ -64,21 +65,22 @@ export default function DetailsSubTab() {
       }
     }
   };
+
   return (
     <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={(e) => handleDragEnd(e)}>
       <SortableContext strategy={rectSortingStrategy} items={items}>
         <section>
           <div className="flex  bg-primary-200 pb-0.5 flex-row">
-            {DetailOptions.map((item) => (
+            {detailOptions.map((item) => (
               <SubtabDrag
                 key={item.id}
                 id={item.id}
                 icon={item.icon}
                 activeSub={activeSubDetailsTabId}
                 showPilot={showPilot}
-                name={'details'}
+                name={pilotTabs.DETAILS}
                 item={item}
-                items={DetailOptions}
+                items={detailOptions}
               />
             ))}
           </div>

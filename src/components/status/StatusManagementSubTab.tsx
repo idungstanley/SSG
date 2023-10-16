@@ -5,47 +5,50 @@ import { STORAGE_KEYS } from '../../app/config/dimensions';
 
 export const HubManagerOptions = [
   {
-    id: 1,
+    id: 'custom',
     name: 'Custom',
     isVisible: false
   },
   {
-    id: 2,
+    id: 'advance',
     name: 'Advance',
     isVisible: false
   },
   {
-    id: 3,
+    id: 'content',
     name: 'Content',
     isVisible: false
   },
   {
-    id: 4,
+    id: 'kanban',
     name: 'Kanban',
     isVisible: false
   },
   {
-    id: 5,
+    id: 'marketing',
     name: 'Marketing',
     isVisible: false
   },
   {
-    id: 6,
+    id: 'normal',
     name: 'Normal',
     isVisible: false
   },
   {
-    id: 5,
+    id: 'marketing',
     name: 'Marketing',
     isVisible: false
   }
 ];
 export default function StatusManagementSubTab() {
   const dispatch = useAppDispatch();
+
   const { activeStatusManagementTabId } = useAppSelector((state) => state.workspace);
-  const handleClick = (id: number) => {
+
+  const handleClick = (id: string) => {
     dispatch(setActiveStatusManagementTabId(id));
   };
+
   const pilotWidth = JSON.parse(localStorage.getItem(STORAGE_KEYS.PILOT_WIDTH) || '""') as number;
 
   return (

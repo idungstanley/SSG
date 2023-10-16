@@ -411,10 +411,7 @@ export function StickyCol({
                     <div>{taskUpperCase ? task.name.toUpperCase() : Capitalize(task.name)}</div>
                   )}
                 </div>
-                {/* non default badges here */}
                 <div onClick={(e) => e.stopPropagation()} className="flex items-center justify-between flex-grow pl-3">
-                  {!isLastSubtaskLevel ? <Badges task={task} /> : null}
-                  {/*  default badges here */}
                   {children}
                 </div>
               </div>
@@ -448,9 +445,14 @@ export function StickyCol({
                   ? '25px'
                   : ''
             }}
-            className={cl(COL_BG, `relative border-t ${verticalGrid && 'border-r'} w-full py-4 p-4 flex items-center`)}
+            className={cl(
+              COL_BG,
+              `relative border-t ${verticalGrid && 'border-r'} ${
+                verticalGridlinesTask && 'border-r'
+              } w-full py-4 p-4 flex items-center`
+            )}
           >
-            <div className="absolute bottom-0 right-0 flex space-x-1">
+            <div className="absolute bottom-0 right-0 flex space-x-1 p-1">
               <ToolTip title="Cancel">
                 <div
                   className="border rounded-sm"

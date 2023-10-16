@@ -1,6 +1,7 @@
 import { Button } from '@mui/material';
 import { useAppSelector } from '../../app/hooks';
 import { useSaveData } from '../../features/task/taskService';
+import { pilotTabs } from '../../app/constants/pilotTabs';
 
 interface DatePickerFooterProps {
   time: string;
@@ -11,9 +12,9 @@ interface DatePickerFooterProps {
 export default function DatePickerFooter({ closeDateModal, time }: DatePickerFooterProps) {
   const { selectedDate, HistoryFilterMemory } = useAppSelector((state) => state.task);
 
-  const { mutateAsync, isError } = useSaveData();
+  const { mutateAsync } = useSaveData();
   const handleSubmit = () => {
-    mutateAsync({ key: 'calendar', value: { selectedDate, HistoryFilterMemory } });
+    mutateAsync({ key: pilotTabs.CALENDAR, value: { selectedDate, HistoryFilterMemory } });
   };
 
   return (

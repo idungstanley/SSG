@@ -1,6 +1,8 @@
 import React, { memo, ReactNode } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import MainLogo from '../../../../assets/branding/main-logo.png';
+import AlsoitIcon from '../../../../assets/icons/AlsoitIcon';
+import ProgressBar from '../../../../layout/components/MainLayout/ProgressBar';
+import { Toaster } from 'react-hot-toast';
 
 const data = [
   {
@@ -22,15 +24,18 @@ interface WrapperProps {
 function Wrapper({ children }: WrapperProps) {
   const { pathname } = useLocation();
 
-  const isSignInPath = pathname.split('/')[2] === 'login';
-  const selectedData = data[isSignInPath ? 0 : 1];
+  const isSignUpPath = pathname.split('/')[2] === 'signup';
+  const selectedData = data[isSignUpPath ? 1 : 0];
 
   return (
     <div className="min-h-full relative flex items-center justify-center">
+      <ProgressBar />
+      {/* <TopMenu /> */}
+      <Toaster position="bottom-left" />
       <div className="flex justify-between p-6 absolute top-0 left-0 right-0">
         <div className="flex items-center gap-3">
-          <img className="mx-auto h-10 w-auto" src={MainLogo} alt="Workflow" />
-          <h2 className="hidden sm:block text-xl font-bold tracking-tight text-gray-900">ALSO WORKSPACE</h2>
+          <AlsoitIcon />
+          <h2 className="hidden sm:block text-xl font-bold tracking-tight text-gray-900">ALSOIT.IO</h2>
         </div>
         <div className="flex items-center gap-3">
           <p className="hidden sm:block whitespace-nowrap">{selectedData.massage}</p>

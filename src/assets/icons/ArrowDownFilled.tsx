@@ -1,10 +1,10 @@
-import React from 'react';
 import { IconProps } from './IconType';
 import ICONS_INTERACTIONS from '../../utils/Constants/IconInteractions';
 
-function ArrowDownFilled({ active = false, dimensions, color }: IconProps) {
+function ArrowDownFilled({ active = false, dimensions, color, ...props }: IconProps) {
   return (
     <svg
+      {...props}
       width={dimensions?.width ?? '21'}
       height={dimensions?.height ?? '20'}
       viewBox="0 0 21 20"

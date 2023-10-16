@@ -6,9 +6,10 @@ import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { useAbsolute } from '../../hooks/useAbsolute';
 import { Fade, Menu } from '@mui/material';
 import { setNewTaskPriority } from '../../features/task/taskSlice';
+import { priorities } from '../../app/constants/priorities';
 
 interface priorityType {
-  id: number;
+  id: string;
   title: string;
   handleClick: () => void;
   color: string;
@@ -18,11 +19,6 @@ interface priorityType {
 interface TaskCurrentPriorityProps {
   taskCurrentPriority: string | [{ id: string; initials: string; color: string }] | null | undefined;
 }
-
-const LOW = 'low';
-const NORMAL = 'normal';
-const HIGH = 'high';
-const URGENT = 'urgent';
 
 export default function PriorityDropdown({ taskCurrentPriority }: TaskCurrentPriorityProps) {
   const dispatch = useAppDispatch();
@@ -43,43 +39,43 @@ export default function PriorityDropdown({ taskCurrentPriority }: TaskCurrentPri
 
   const priorityList: priorityType[] = [
     {
-      id: 1,
+      id: priorities.LOW,
       title: 'Low',
       color: '#d3d3d3',
       bg: 'gray',
       handleClick: () => {
-        setPriority(LOW);
-        dispatch(setNewTaskPriority(LOW));
+        setPriority(priorities.LOW);
+        dispatch(setNewTaskPriority(priorities.LOW));
       }
     },
     {
-      id: 2,
+      id: priorities.NORMAL,
       title: 'Normal',
       color: '#6fddff',
       bg: 'blue',
       handleClick: () => {
-        setPriority(NORMAL);
-        dispatch(setNewTaskPriority(NORMAL));
+        setPriority(priorities.NORMAL);
+        dispatch(setNewTaskPriority(priorities.NORMAL));
       }
     },
     {
-      id: 3,
+      id: priorities.HIGH,
       title: 'High',
       color: '#f7cb04',
       bg: 'yellow',
       handleClick: () => {
-        setPriority(HIGH);
-        dispatch(setNewTaskPriority(HIGH));
+        setPriority(priorities.HIGH);
+        dispatch(setNewTaskPriority(priorities.HIGH));
       }
     },
     {
-      id: 4,
+      id: priorities.URGENT,
       title: 'Urgent',
       color: '#f32100',
       bg: 'red',
       handleClick: () => {
-        setPriority(URGENT);
-        dispatch(setNewTaskPriority(URGENT));
+        setPriority(priorities.URGENT);
+        dispatch(setNewTaskPriority(priorities.URGENT));
       }
     }
   ];
@@ -87,13 +83,13 @@ export default function PriorityDropdown({ taskCurrentPriority }: TaskCurrentPri
   const setPriorityColor = (
     priority: string | null | undefined | [{ id: string; initials: string; color: string }]
   ) => {
-    if (priority === LOW) {
+    if (priority === priorities.LOW) {
       return <AiFillFlag className="h-5 w-7  text-gray-400" aria-hidden="true" />;
-    } else if (priority === NORMAL) {
+    } else if (priority === priorities.NORMAL) {
       return <AiFillFlag className="h-5 w-7" style={{ color: '#6fddff' }} aria-hidden="true" />;
-    } else if (priority === HIGH) {
+    } else if (priority === priorities.HIGH) {
       return <AiFillFlag className="h-5 w-7  text-yellow-400 " aria-hidden="true" />;
-    } else if (priority === URGENT) {
+    } else if (priority === priorities.URGENT) {
       return <AiFillFlag className="h-5 w-7  text-red-400 " aria-hidden="true" />;
     }
   };

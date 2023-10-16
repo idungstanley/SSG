@@ -19,12 +19,12 @@ export default function Details() {
   const config = data
     ? [
         {
-          id: 1,
+          id: 'last_modified_at',
           key: 'Last modified at',
           value: OutputDateTime(data.updated_at)
         },
         {
-          id: 2,
+          id: 'created_at',
           key: 'Created at',
           value: OutputDateTime(data.created_at)
         }

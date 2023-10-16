@@ -16,6 +16,23 @@ export interface IField {
   properties?: customPropertiesProps;
 }
 
+interface fileProp {
+  id: string;
+  path: string;
+  size: number;
+  name: string;
+  display_name: string;
+  file_format: fileFormat;
+}
+
+interface fileFormat {
+  extension: string;
+  icon_name: string;
+  key: string;
+  mime: string;
+  name: string;
+}
+
 export interface IFieldValue {
   color?: string | null;
   id: string;
@@ -27,6 +44,7 @@ export interface IFieldValue {
   model_id?: string;
   value: string;
   name: string;
+  file?: fileProp;
 }
 
 export interface taskCountFields {

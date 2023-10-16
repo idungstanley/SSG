@@ -4,10 +4,11 @@ import ArrowRight from '../../../../../../assets/icons/ArrowRight';
 import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
 import { setNewCustomPropertyDetails } from '../../../../../../features/task/taskSlice';
 import { FaFileSignature } from 'react-icons/fa';
+import { pilotTabs } from '../../../../../../app/constants/pilotTabs';
 
 const items = [
   {
-    id: 1,
+    id: pilotTabs.ATTACHMENTS,
     name: 'Attachments',
     onclick: () => null
   }

@@ -9,8 +9,7 @@ function useAdjustedHeight(subtractAmount: number) {
     activeSubDetailsTabId,
     activeSubTimeClockTabId,
     activeSubHubManagerTabId,
-    activeSubCommunicationTabId,
-    activeSubChecklistTabId
+    activeSubCommunicationTabId
   } = useAppSelector((state) => state.workspace);
 
   useEffect(() => {
@@ -37,8 +36,7 @@ function useAdjustedHeight(subtractAmount: number) {
     activeSubDetailsTabId,
     activeSubTimeClockTabId,
     activeSubHubManagerTabId,
-    activeSubCommunicationTabId,
-    activeSubChecklistTabId
+    activeSubCommunicationTabId
   ]);
 
   return adjustedHeight;

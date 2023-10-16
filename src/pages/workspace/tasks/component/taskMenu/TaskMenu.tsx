@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, Fragment } from 'react';
 import { MdFileCopy } from 'react-icons/md';
 import { useAppSelector } from '../../../../../app/hooks';
 import { IoEyeOutline } from 'react-icons/io5';
@@ -82,54 +82,53 @@ export default function TaskMenu() {
 
   const handleClose = () => {
     setShowSelectDropdown(null);
-    // setToggleDuplicateMoal(false);
   };
 
   const TaskIcons = [
     {
-      id: 1,
+      id: 'set_watchers',
       label: 'Set watchers',
       icons: <IoEyeOutline />,
       handleClick: () => ({}),
       isVisible: true
     },
     {
-      id: 2,
+      id: 'set_assignees',
       label: 'Set assignees',
       icons: <UserPlusIcon />,
       handleClick: () => ({}),
       isVisible: true
     },
     {
-      id: 3,
+      id: 'set_status',
       label: 'Set Status',
       icons: <MdOutlineDeveloperBoard />,
       handleClick: () => ({}),
       isVisible: true
     },
     {
-      id: 4,
+      id: 'set_status_two',
       label: 'Set Status',
       icons: <BsTags />,
       handleClick: () => ({}),
       isVisible: true
     },
     {
-      id: 5,
+      id: 'set_tags',
       label: 'Set Tags',
       icons: <TbSubtask />,
       handleClick: () => ({}),
       isVisible: true
     },
     {
-      id: 6,
-      label: ' Convert to Subtask ',
+      id: 'convert_to_subtask',
+      label: 'Convert to Subtask',
       icons: <MdOutlineDriveFileMove />,
       handleClick: () => ({}),
       isVisible: true
     },
     {
-      id: 7,
+      id: 'duplicate_tasks',
       label: 'Duplicate tasks',
       icons: <HiOutlineDocumentDuplicate />,
       handleClick: (e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
@@ -139,63 +138,63 @@ export default function TaskMenu() {
       isVisible: true
     },
     {
-      id: 8,
+      id: 'move_tasks',
       label: 'Move tasks or add tasks in multiple Lists',
       icons: <TbFolderX />,
       handleClick: () => ({}),
       isVisible: true
     },
     {
-      id: 9,
+      id: 'set_dates',
       label: 'Set Dates',
       icons: <MdDateRange />,
       handleClick: () => ({}),
       isVisible: true
     },
     {
-      id: 10,
+      id: 'priority',
       label: 'Priority',
       icons: <PriorityDropdown taskCurrentPriority="low" />,
       handleClick: () => ({}),
       isVisible: true
     },
     {
-      id: 11,
+      id: 'dependencies',
       label: 'Dependencies',
       icons: <GiStoneStack />,
       handleClick: () => ({}),
       isVisible: true
     },
     {
-      id: 12,
+      id: 'merge_tasks',
       label: 'Merge tasks',
       icons: <BiMerge />,
       handleClick: () => ({}),
       isVisible: true
     },
     {
-      id: 13,
+      id: 'task_linking',
       label: 'Task Linking',
       icons: <GiJusticeStar />,
       handleClick: () => ({}),
       isVisible: true
     },
     {
-      id: 14,
+      id: 'set_custom_fields',
       label: 'Set Custom Fields',
       icons: <BiEdit />,
       handleClick: () => ({}),
       isVisible: true
     },
     {
-      id: 15,
+      id: 'archive_tasks',
       label: 'Archive tasks',
       icons: <HiInbox />,
       handleClick: () => ({}),
       isVisible: true
     },
     {
-      id: 16,
+      id: 'delete',
       icons: <MdDeleteForever />,
       label: 'Delete',
       handleClick: () => {
@@ -229,7 +228,7 @@ export default function TaskMenu() {
   return (
     <div className={`overflow-hidden ${isVisible ? 'slide-in' : 'slide-out'} z-100 `}>
       <div
-        className="abolute flex justify-between items-center w-12/12 h-11 bg-gray-800"
+        className="flex items-center justify-between bg-gray-800 abolute w-12/12 h-11"
         style={{ transition: 'linear', transitionDelay: '100s' }}
       >
         <div className="pl-5 space-x-2">
@@ -241,28 +240,27 @@ export default function TaskMenu() {
               dispatch(setSelectedListIds([]));
             }}
           />
-          <span className="text-white text-xs">{selectedTasksArray.length} Selected</span>
+          <span className="text-xs text-white">{selectedTasksArray.length} Selected</span>
         </div>
 
         <div className="flex">
           {TaskIcons.map((menu) => (
-            <>
+            <Fragment key={menu.id}>
               <ToolTip className="pt-2" title={menu.label} placement="bottom">
                 <p
-                  className="flex items-center px-2 cursor-pointer mt-0 text-white text-lg"
+                  className="flex items-center px-2 mt-0 text-lg text-white cursor-pointer"
                   onClick={(e) => menu.handleClick(e)}
                   key={menu.id}
                 >
                   {menu.icons}
                 </p>
               </ToolTip>
-            </>
+            </Fragment>
           ))}
         </div>
-
-        <div className="flex items-center pr-5 gap-2 ">
-          <MdFileCopy className="text-white text-lg" />
-          <input type="text" placeholder="type '/' for commands" className="h-8 rounded bg-transparent text-xs  " />
+        <div className="flex items-center gap-2 pr-5 ">
+          <MdFileCopy className="text-lg text-white" />
+          <input type="text" placeholder="type '/' for commands" className="h-8 text-xs bg-transparent rounded " />
         </div>
       </div>
       <div className="absolute z-50">
@@ -274,13 +272,13 @@ export default function TaskMenu() {
       </div>
       <div className="flex justify-center">
         <p
-          className=" bg-gray-800 text-white p-2 rounded-3xl border border-white -mt-1 cursor-pointer"
+          className="p-2 -mt-1 text-white bg-gray-800 border border-white cursor-pointer rounded-3xl"
           onClick={() => {
             dispatch(setSelectedTasksArray([]));
             dispatch(setSelectedListIds([]));
           }}
         >
-          <span className="text-gray-300 mr-2">X</span>
+          <span className="mr-2 text-gray-300">X</span>
           Dismiss
         </p>
       </div>

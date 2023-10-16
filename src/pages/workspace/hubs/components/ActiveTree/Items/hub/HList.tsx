@@ -22,8 +22,10 @@ import { DragOverlay } from '@dnd-kit/core';
 import HubItemOverlay from '../../../../../../../components/tasks/HubItemOverLay';
 import { generateViewsUrl } from '../../../../../../../utils/generateViewsUrl';
 import { IHub } from '../../../../../../../features/hubs/hubs.interfaces';
+import { pilotTabs } from '../../../../../../../app/constants/pilotTabs';
+import { APP_TASKS } from '../../../../../../../app/constants/app';
 
-export default function HList({ hubs, openNewHub }: ListProps) {
+export default function HList({ hubs, openNewHub, placeHubType }: ListProps) {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
@@ -64,7 +66,7 @@ export default function HList({ hubs, openNewHub }: ListProps) {
       })
     );
     dispatch(setShowPilot(true));
-    dispatch(setActiveTabId(4));
+    dispatch(setActiveTabId(pilotTabs.WATCHERS));
     navigate(viewsUrl, {
       replace: true
     });
@@ -124,9 +126,12 @@ export default function HList({ hubs, openNewHub }: ListProps) {
               type={EntityType.hub}
               topNumber="50px"
               zNumber="5"
+              placeHubType={placeHubType}
             />
-            {hub?.children?.length && isCanBeOpen(hub.id) ? <SubHList hubs={hub.children as Hub[]} /> : null}
-            {showSidebar && (
+            {hub?.children?.length && isCanBeOpen(hub.id) ? (
+              <SubHList hubs={hub.children as Hub[]} placeHubType={placeHubType} />
+            ) : null}
+            {showSidebar && placeHubType == APP_TASKS ? (
               <div>
                 {hub?.wallets?.length && isCanBeOpen(hub.id) ? (
                   <WList
@@ -141,7 +146,7 @@ export default function HList({ hubs, openNewHub }: ListProps) {
                   <LList list={hub.lists} leftMargin={false} paddingLeft="48" />
                 ) : null}
               </div>
-            )}
+            ) : null}
           </div>
         </div>
       ))}

@@ -1,5 +1,19 @@
 export interface ITeamMember {
+  accepted_invite_at: string;
+  color: string;
+  created_at: string;
+  deleted_status: null | string;
+  hub_id: string;
   id: string;
+  invited_at: string;
+  is_deleted: boolean;
+  is_online: boolean;
+  last_activity_at: string;
+  role: {
+    key: string;
+    name: string;
+  };
+  updated_at: string;
   user: {
     id: string;
     name: string;
@@ -10,18 +24,7 @@ export interface ITeamMember {
     timezone: string;
   };
   name: string;
-  role: {
-    key: string;
-    name: string;
-  };
-  last_activity_at: string;
-  invited_at: string;
-  accepted_invite_at: string;
-  colour: string;
   initials: string;
-  is_active: boolean;
-  created_at: string;
-  updated_at: string;
 }
 
 export interface ITeamMembersAndGroupsReq {

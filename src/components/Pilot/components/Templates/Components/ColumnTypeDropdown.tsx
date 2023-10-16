@@ -130,7 +130,7 @@ export default function ColumnTypeDropdown() {
           <p className="text-black text-alsoit-gray-300-md font-semibold">
             {Capitalize(newCustomPropertyDetails.type)}
           </p>
-          <ArrowDown />
+          <ArrowDown className="w-4 h-4" />
         </button>
       </div>
       <Transition appear show={isOpen} as="div">

@@ -46,19 +46,19 @@ export default function ListViewSettingsModal({
   team: string;
 }) {
   const dispatch = useAppDispatch();
-  const [viewId, setViewId] = useState<number | null>(null);
+  const [viewId, setViewId] = useState<string | null>(null);
   const [listView] = useState<boolean | null>(true);
-  const [activeView, setActiveView] = useState<number | null>(1);
+  const [activeView, setActiveView] = useState<string | null>(list);
 
   const ViewSettings = [
     {
-      id: 1,
+      id: list,
       icon: <img src={listIcon} alt="listIcon" />,
       label: list,
       handleClick: () => dispatch(getComfortableView(true))
     },
     {
-      id: 2,
+      id: table,
       icon: <img src={tableIcon} alt="tableIcon" />,
       label: table,
       handleClick: () => {
@@ -66,10 +66,11 @@ export default function ListViewSettingsModal({
         dispatch(getComfortableViewWrap(false));
         dispatch(getCompactView(false));
         dispatch(getCompactViewWrap(false));
-      }
+      },
+      unusing: true
     },
     {
-      id: 3,
+      id: board,
       icon: <img src={boardIcon} alt="boardIcon" />,
       label: board,
       handleClick: () => {
@@ -77,10 +78,11 @@ export default function ListViewSettingsModal({
         dispatch(getComfortableViewWrap(false));
         dispatch(getCompactView(false));
         dispatch(getCompactViewWrap(false));
-      }
+      },
+      unusing: true
     },
     {
-      id: 4,
+      id: calender,
       icon: <img src={calenderIcon} alt="calenderIcon" />,
       label: calender,
       handleClick: () => {
@@ -88,10 +90,11 @@ export default function ListViewSettingsModal({
         dispatch(getComfortableViewWrap(true));
         dispatch(getCompactView(false));
         dispatch(getCompactViewWrap(false));
-      }
+      },
+      unusing: true
     },
     {
-      id: 5,
+      id: timeChart,
       icon: <img src={timeChartIcon} alt="timeChartIcon" />,
       label: timeChart,
       handleClick: () => {
@@ -99,10 +102,11 @@ export default function ListViewSettingsModal({
         dispatch(getComfortableViewWrap(false));
         dispatch(getCompactView(true));
         dispatch(getCompactViewWrap(false));
-      }
+      },
+      unusing: true
     },
     {
-      id: 6,
+      id: map,
       icon: <img src={mapIcon} alt="mapIcon" />,
       label: map,
       handleClick: () => {
@@ -110,10 +114,11 @@ export default function ListViewSettingsModal({
         dispatch(getComfortableViewWrap(false));
         dispatch(getCompactView(false));
         dispatch(getCompactViewWrap(true));
-      }
+      },
+      unusing: true
     },
     {
-      id: 7,
+      id: gantt,
       icon: <img src={gantIcon} alt="gantIcon" />,
       label: gantt,
       handleClick: () => {
@@ -121,10 +126,11 @@ export default function ListViewSettingsModal({
         dispatch(getComfortableViewWrap(false));
         dispatch(getCompactView(false));
         dispatch(getCompactViewWrap(true));
-      }
+      },
+      unusing: true
     },
     {
-      id: 8,
+      id: team,
       icon: <img src={teamIcon} alt="teamIcon" />,
       label: team,
       handleClick: () => {
@@ -132,10 +138,11 @@ export default function ListViewSettingsModal({
         dispatch(getComfortableViewWrap(false));
         dispatch(getCompactView(false));
         dispatch(getCompactViewWrap(true));
-      }
+      },
+      unusing: true
     },
     {
-      id: 9,
+      id: 'create_new_view',
       icon: <FiChevronRight />,
       label: 'Create New View',
       handleClick: () => {
@@ -143,7 +150,8 @@ export default function ListViewSettingsModal({
         dispatch(getComfortableViewWrap(false));
         dispatch(getCompactView(false));
         dispatch(getCompactViewWrap(true));
-      }
+      },
+      unusing: true
     }
   ];
 
@@ -151,7 +159,7 @@ export default function ListViewSettingsModal({
     <Menu>
       <div className="flex items-center justify-center viewSettingsParent">
         <Menu.Button>
-          <Button active={true} unusing={true}>
+          <Button active={true}>
             <Icons src={List} />
             <span className="mr-2 ml-1">View:</span>
             <span>{isActive}</span>
@@ -186,6 +194,7 @@ export default function ListViewSettingsModal({
               }`}
               onClick={() => setActiveView(View.id)}
               onMouseEnter={() => setViewId(View.id)}
+              style={{ background: View.unusing ? '#f6efe3' : '', pointerEvents: View.unusing ? 'none' : 'all' }}
             >
               {View.label !== 'Create New View' ? (
                 <button onClick={View.handleClick} className="flex items-center justify-between w-full  group">

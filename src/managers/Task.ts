@@ -1,6 +1,5 @@
-import { useAppSelector } from '../app/hooks';
 import { IList } from '../features/hubs/hubs.interfaces';
-import { IField, IFieldValue } from '../features/list/list.interfaces';
+import { IField, IFieldValue, ITask_statuses } from '../features/list/list.interfaces';
 import { ITeamMembersAndGroup } from '../features/settings/teamMembersAndGroups.interfaces';
 import { IStatus, ITaskFullList } from '../features/task/interface.tasks';
 import { ICustomField } from '../features/task/taskSlice';
@@ -10,7 +9,8 @@ import { findCurrentList, updateListTasksCountManager } from './List';
 export const addNewTaskManager = (
   tasks: Record<string, ITaskFullList[]>,
   taskFromData: ITaskFullList,
-  custom_field_columns: IField[]
+  custom_field_columns: IField[],
+  task_statuses: ITask_statuses[]
 ): Record<string, ITaskFullList[]> => {
   const listId = taskFromData.list_id;
   if (listId) {
@@ -18,6 +18,7 @@ export const addNewTaskManager = (
     const newTask = {
       ...taskFromData,
       custom_field_columns,
+      task_statuses,
       descendants_count: 0
     };
 

@@ -7,12 +7,12 @@ import { GiProgression } from 'react-icons/gi';
 
 const items = [
   {
-    id: 1,
+    id: 'progress_auto',
     name: 'Progress(Auto)',
     type: 'progress_auto'
   },
   {
-    id: 2,
+    id: 'progress_manual',
     name: 'Progress(Manual)',
     type: 'progress_manual'
   }

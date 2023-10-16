@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import SubtasksIcon from '../../../../assets/icons/SubtasksIcon';
 import { Tag, Task } from '../../../../features/task/interface.tasks';
 import { DEFAULT_LEFT_PADDING } from '../../config';
@@ -15,6 +15,7 @@ import {
   THREE_SUBTASKS_LEVELS,
   TWO_SUBTASKS_LEVELS,
   setDefaultSubtaskId,
+  setEscapeKey,
   setShowNewTaskField,
   setShowNewTaskId
 } from '../../../../features/task/taskSlice';
@@ -23,11 +24,9 @@ import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import Dradnddrop from '../../../../assets/icons/Dradnddrop';
 import { listColumnProps } from '../../../../pages/workspace/tasks/component/views/ListColumns';
 import Copy from '../../../../assets/icons/Copy';
-import {
-  EXPAND_ALL_THREE,
-  EXPAND_ALL_TWO
-} from '../../../../pages/workspace/lists/components/renderlist/listDetails/listSubtask/ListSubtasks';
+import { findExpandedLevels } from '../../../../pages/workspace/lists/components/renderlist/listDetails/listSubtask/ListSubtasks';
 import NewSubTaskTemplate from './newTaskTemplate/NewSubTaskTemplate';
+import Badges from '../../../badges';
 
 export const MAX_SUBTASKS_LEVEL = 10;
 
@@ -43,7 +42,6 @@ interface RowProps {
   handleClose?: VoidFunction;
   isSplitSubtask?: boolean;
   level: number;
-  isShowAllChildren?: boolean;
 }
 
 export function Row({
@@ -57,19 +55,25 @@ export function Row({
   isListParent,
   handleClose,
   isSplitSubtask,
-  level,
-  isShowAllChildren
+  level
 }: RowProps) {
   const dispatch = useAppDispatch();
 
-  const { showNewTaskField, showNewTaskId, toggleAllSubtask, toggleAllSubtaskSplit, splitSubTaskLevels, subtasks } =
-    useAppSelector((state) => state.task);
+  const {
+    showNewTaskField,
+    showNewTaskId,
+    toggleAllSubtask,
+    toggleAllSubtaskSplit,
+    splitSubTaskLevels,
+    subtasks,
+    escapeKey
+  } = useAppSelector((state) => state.task);
 
   const [showSubTasks, setShowSubTasks] = useState(false);
   const [isCopied, setIsCopied] = useState<number>(0);
 
   const otherColumns = columns.slice(1);
-  const newSubTask = NewSubTaskTemplate();
+  const newSubTask = NewSubTaskTemplate(task);
 
   const onShowAddSubtaskField = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, taskId: string) => {
     dispatch(setDefaultSubtaskId(task.list_id));
@@ -111,38 +115,31 @@ export function Row({
   };
 
   const showChildren = useMemo(() => {
-    const isOnToggleTwo = toggleAllSubtaskSplit.includes(EXPAND_ALL_TWO);
-    const isOnToggleThree = toggleAllSubtaskSplit.includes(EXPAND_ALL_THREE);
+    const findAllExpandedLevels = findExpandedLevels(toggleAllSubtaskSplit);
+    const isLevelActive = Number(findAllExpandedLevels) >= level;
     if (showSubTasks) {
       return true;
     } else if (toggleAllSubtask && subtasks[task.id]) {
       return true;
-    } else if (isOnToggleTwo && splitSubTaskLevels.includes(TWO_SUBTASKS_LEVELS) && level === 1) {
+    } else if (
+      isLevelActive &&
+      splitSubTaskLevels.includes(TWO_SUBTASKS_LEVELS) &&
+      !splitSubTaskLevels.includes(THREE_SUBTASKS_LEVELS) &&
+      level >= 1
+    ) {
       return true;
-    } else if (isOnToggleThree && splitSubTaskLevels.includes(THREE_SUBTASKS_LEVELS) && level === 2) {
+    } else if (isLevelActive && splitSubTaskLevels.includes(THREE_SUBTASKS_LEVELS) && level >= 2) {
       return true;
     }
     return false;
   }, [showSubTasks, subtasks, toggleAllSubtask, toggleAllSubtaskSplit, splitSubTaskLevels]);
 
-  const showAllChildren = useMemo(() => {
-    const isOnToggleTwo = toggleAllSubtaskSplit.includes(EXPAND_ALL_TWO);
-    const isOnToggleThree = toggleAllSubtaskSplit.includes(EXPAND_ALL_THREE);
-    if (isOnToggleTwo && splitSubTaskLevels.includes(TWO_SUBTASKS_LEVELS) && level === 1) {
-      return true;
-    } else if (isOnToggleThree && splitSubTaskLevels.includes(THREE_SUBTASKS_LEVELS) && level === 2) {
-      return true;
-    }
-    return false;
-  }, [toggleAllSubtaskSplit, splitSubTaskLevels]);
-
   return (
     <>
       {/* current task */}
-
       <tr style={style} className="relative contents group dNFlex">
         <StickyCol
-          showSubTasks={showSubTasks}
+          showSubTasks={showChildren}
           setShowSubTasks={setShowSubTasks}
           style={{ zIndex: 1 }}
           isListParent={isListParent}
@@ -163,17 +160,21 @@ export function Row({
           }
         >
           {/* actions */}
-          <div className="absolute right-0 flex items-center justify-center mr-1 space-x-1 opacity-0 group-hover:opacity-100">
+          <div className="flex items-center justify-center mr-1 space-x-1">
+            {level < MAX_SUBTASKS_LEVEL ? <Badges task={task} /> : null}
             {/* Copy */}
             <ToolTip title={isCopied === 0 ? 'Copy Task Name' : 'Copied'}>
-              <button className="p-1 bg-white border rounded-md" onClick={handleCopyTexts}>
+              <button
+                className="p-1 bg-white border rounded-md opacity-0 group-hover:opacity-100"
+                onClick={handleCopyTexts}
+              >
                 <Copy />
               </button>
             </ToolTip>
             {/* effects */}
             <ToolTip title="Apply Effects">
               <button
-                className="p-1 bg-white border rounded-md"
+                className="p-1 bg-white border rounded-md opacity-0 group-hover:opacity-100"
                 style={{ backgroundColor: 'orange' }}
                 onClick={(e) => e.stopPropagation()}
               >
@@ -184,7 +185,10 @@ export function Row({
             {/* tags */}
             {'tags' in task ? (
               <ToolTip title="Tags">
-                <button className="bg-white border rounded-md " onClick={(e) => e.preventDefault()}>
+                <button
+                  className="bg-white border rounded-md opacity-0 group-hover:opacity-100"
+                  onClick={(e) => e.preventDefault()}
+                >
                   <ManageTagsDropdown entityId={task.id} tagsArr={task.tags as Tag[]} entityType="task" />
                 </button>
               </ToolTip>
@@ -193,13 +197,19 @@ export function Row({
             {/* show create subtask field */}
             {task.descendants_count < 1 && (
               <ToolTip title="Subtask">
-                <button className="p-1 bg-white border rounded-md" onClick={(e) => onShowAddSubtaskField(e, task.id)}>
+                <button
+                  className="p-1 bg-white border rounded-md opacity-0 group-hover:opacity-100"
+                  onClick={(e) => onShowAddSubtaskField(e, task.id)}
+                >
                   <SubtasksIcon className="w-3 h-3" />
                 </button>
               </ToolTip>
             )}
             <ToolTip title="Enhance View">
-              <button className="p-1 pl-4 bg-white rounded-md" onClick={(e) => e.stopPropagation()}>
+              <button
+                className="p-1 pl-4 bg-white rounded-md opacity-0 group-hover:opacity-100"
+                onClick={(e) => e.stopPropagation()}
+              >
                 <Enhance className="w-3 h-3" style={{ color: 'orange' }} />
               </button>
             </ToolTip>
@@ -231,14 +241,13 @@ export function Row({
         />
       ) : null}
 
-      {showChildren || isShowAllChildren ? (
+      {showChildren ? (
         <SubTasks
           paddingLeft={DEFAULT_LEFT_PADDING + paddingLeft}
           listId={listId}
           parentTask={task}
           columns={columns}
           isSplitSubtask={isSplitSubtask}
-          isShowAllChildren={isShowAllChildren || showAllChildren}
           level={level + 1}
         />
       ) : null}

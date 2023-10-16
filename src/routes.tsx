@@ -67,6 +67,11 @@ import Construction from './pages/settings/UserSettings/Pages/Construction';
 import TaskInvite from './pages/workspace/tasks/taskInvite/TaskInvite';
 import WorkSpaceTable from './pages/settings/WorkspaceSettings/GeneralWorkSpaceSettings/Table';
 import EverythingPage from './pages/everything';
+import ForgotPassword from './pages/workspace/createWorkspace/auth/ForgotPassword/ForgotPassword';
+import EmailSentPage from './pages/workspace/createWorkspace/auth/ForgotPassword/EmailSentPage';
+import ResetPassword from './pages/workspace/createWorkspace/auth/ForgotPassword/ResetPassword';
+import AlsoHr from './pages/hr';
+import TimeClockPage from './pages/time-clock';
 
 const inbox = [
   {
@@ -144,7 +149,6 @@ export const routes = (user: IUser | null) => {
               path: '',
               element: <WallchartPage />
             },
-
             {
               path: 'types',
               element: <LeaveTypesPage />
@@ -155,8 +159,11 @@ export const routes = (user: IUser | null) => {
             }
           ]
         },
+        { path: 'hr/h/:hubId', element: <AlsoHr /> },
         { path: 'dashboard', element: <Dashboard /> },
         { path: 'tasks', element: <TasksIndex /> },
+        { path: 'insights', element: <TasksIndex /> },
+        { path: 'insights/time-clock', element: <TimeClockPage /> },
         { path: 'favorites', element: <Favorites /> },
         { path: 'goals', element: <Goals /> },
         { path: 'docs', element: <Docs /> },
@@ -183,7 +190,10 @@ export const routes = (user: IUser | null) => {
       children: [
         { path: 'login', element: <LoginPage /> },
         { path: 'register', element: <RegisterPage /> },
-        { path: 'register/:inviteCode', element: <RegisterPage /> }
+        { path: 'register/:inviteCode', element: <RegisterPage /> },
+        { path: 'forgot', element: <ForgotPassword /> },
+        { path: 'recover', element: <EmailSentPage /> },
+        { path: 'reset-password/:resetCode', element: <ResetPassword /> }
       ]
     },
     {

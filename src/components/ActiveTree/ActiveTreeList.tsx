@@ -3,11 +3,12 @@ import { Hub } from '../../pages/workspace/hubs/components/ActiveTree/activetree
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { setParentHubExt, setSelectedTreeDetails } from '../../features/hubs/hubSlice';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
-import { setCurrentItem } from '../../features/workspace/workspaceSlice';
+import { setCurrentItem, setNestedTimeEntityId } from '../../features/workspace/workspaceSlice';
 import SearchHubItem from '../tasks/SearchHubItem';
 import SearchSubHList from '../../pages/workspace/hubs/components/ActiveTree/Items/hub/SearchSubHList';
 import SearchWList from '../../pages/workspace/hubs/components/ActiveTree/Items/wallet/SearchWList';
 import SearchLList from '../../pages/workspace/hubs/components/ActiveTree/Items/list/SearchLList';
+import { TIME_TABS } from '../../utils/Constants/TimeClockConstants';
 
 interface hubsProps {
   hubs: Hub[];
@@ -33,6 +34,10 @@ export default function ActiveTreeList({ hubs, openNewHub, setToggleTree, option
       e.stopPropagation();
       dispatch(setSelectedTreeDetails({ name, id, type }));
       setToggleTree?.(false);
+    }
+
+    if (option === TIME_TABS.nestedEntities) {
+      dispatch(setNestedTimeEntityId(id));
     }
   };
 
