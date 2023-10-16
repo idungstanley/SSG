@@ -5,7 +5,6 @@ import { useUppy, DashboardModal } from '@uppy/react';
 import '@uppy/core/dist/style.css';
 import '@uppy/dashboard/dist/style.css';
 import { InvalidateQueryFilters, useQueryClient } from '@tanstack/react-query';
-import { useEffect } from 'react';
 import { useAppSelector } from '../../../../../../app/hooks';
 import { setShowTaskUploadModal } from '../../../../../../features/task/taskSlice';
 
