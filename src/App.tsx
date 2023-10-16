@@ -17,7 +17,7 @@ function App() {
     if (status === 'success') {
       dispatch(setUserData(data?.data.user));
       dispatch(setUserInfo({ ...data?.data.user }));
-      dispatch(setUserSettingsProfile(data?.data.user_settings as IUseSettingsProfile[]));
+      dispatch(setUserSettingsProfile(data?.data.user_settings ?? []));
     }
   }, [data]);
 
