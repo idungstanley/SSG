@@ -15,6 +15,7 @@ export const listIconDetails = [
   { shape: COLOUR_SHAPES.SquareInCircle, category: 'CIRCLE', label: 'Square in circle' },
   { shape: COLOUR_SHAPES.CircleInSquare, category: 'SQUARE', label: 'Circle in square' }
 ];
+
 export default function ListIconSelection({ activeShape, handleSelection }: ItemProps) {
   const Categories = [...new Set(listIconDetails.map(({ category }) => category))];
   const listIcons = Categories.map((uniqueCategory, categoryIndex) => (
