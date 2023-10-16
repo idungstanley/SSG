@@ -224,6 +224,7 @@ interface TaskState {
   showTaskUploadModal: boolean;
   subtaskDefaultStatusId: string | null;
   timerStatus: boolean;
+  timeType: string;
   sortAbleArr: SortOption[];
   sortArr: string[];
   timeSortStatus: boolean;
@@ -345,6 +346,7 @@ const initialState: TaskState = {
   groupByStatus: 'status',
   showTaskUploadModal: false,
   timerStatus: false,
+  timeType: 'clock',
   sortAbleArr: [],
   sortArr: [],
   timeSortStatus: false,
@@ -655,6 +657,9 @@ export const taskSlice = createSlice({
     setTimerStatus(state, action: PayloadAction<boolean>) {
       state.timerStatus = action.payload;
     },
+    setTimeType(state, action: PayloadAction<string>) {
+      state.timeType = action.payload;
+    },
     setSortArray(state, action: PayloadAction<SortOption[]>) {
       state.sortAbleArr = action.payload;
     },
@@ -807,6 +812,7 @@ export const {
   setGroupByStatus,
   setShowTaskUploadModal,
   setTimerStatus,
+  setTimeType,
   setTimerDetails,
   setSortArray,
   setSortArr,

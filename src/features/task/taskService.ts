@@ -19,6 +19,7 @@ import {
 import { QueryClient, useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import {
+  SortOption,
   setDuplicateTaskObj,
   setNewTaskPriority,
   setScreenRecording,
@@ -946,6 +947,7 @@ export const GetTimeEntriesService = ({
   page?: number;
   include_filters?: boolean;
   team_member_group_ids?: string[];
+  sorting?: string[];
 }) => {
   const { timeSortArr } = useAppSelector((state) => state.task);
   const updatesortArr = timeSortArr.length === 0 ? null : timeSortArr;
@@ -981,7 +983,8 @@ async function fetchTimeEntries({
   is_active,
   page,
   include_filters,
-  team_member_ids
+  team_member_ids,
+  sorting
 }: {
   itemId: string | null | undefined;
   trigger: string | null | undefined;
@@ -989,6 +992,7 @@ async function fetchTimeEntries({
   page?: number;
   include_filters?: boolean;
   team_member_ids?: string[];
+  sorting?: SortOption[];
 }) {
   const data = await requestNew<ITimeEntriesRes | undefined>({
     url: 'time-entries',
@@ -1000,7 +1004,7 @@ async function fetchTimeEntries({
       is_active,
       page,
       include_filters: include_filters ? 1 : 0,
-      sorting: null
+      sorting
     }
   });
   return data;
