@@ -179,6 +179,7 @@ export function List({ tasks }: ListProps) {
                         listColor={ListColor}
                         heads={hideTask.length ? hideTask : generateColumns}
                         data={[task]}
+                        isBlockedShowChildren={true}
                       />
                       <SubtasksTable
                         task={task}

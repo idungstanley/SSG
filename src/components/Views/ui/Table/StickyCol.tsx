@@ -48,6 +48,7 @@ interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   onClose?: VoidFunction;
   isOver?: boolean;
   isLastSubtaskLevel: boolean;
+  isBlockedShowChildren?: boolean;
 }
 
 export function StickyCol({
@@ -64,6 +65,7 @@ export function StickyCol({
   paddingLeft = 0,
   dragElement,
   isLastSubtaskLevel,
+  isBlockedShowChildren,
   ...props
 }: ColProps) {
   const dispatch = useAppDispatch();
@@ -342,17 +344,21 @@ export function StickyCol({
                 <span className={cl('h-0.5 bg-alsoit-purple-300 w-full m-0')}></span>
               </span>
             )}
-            <button onClick={onToggleDisplayingSubTasks} className="pl-1">
-              {showSubTasks || toggleAllSubtask ? (
-                <div className={`${task.descendants_count > 0 ? 'w-3 h-3' : 'opacity-0 w-3 h-3'}`}>
-                  <CloseSubtask />
-                </div>
-              ) : (
-                <div className={`${task.descendants_count > 0 ? 'w-3 h-3' : 'opacity-0 w-3 h-3'}`}>
-                  <OpenSubtask />
-                </div>
-              )}
-            </button>
+            {isBlockedShowChildren ? (
+              <div className="w-4" />
+            ) : (
+              <button onClick={onToggleDisplayingSubTasks} className="pl-1">
+                {showSubTasks || toggleAllSubtask ? (
+                  <div className={`${task.descendants_count > 0 ? 'w-3 h-3' : 'opacity-0 w-3 h-3'}`}>
+                    <CloseSubtask />
+                  </div>
+                ) : (
+                  <div className={`${task.descendants_count > 0 ? 'w-3 h-3' : 'opacity-0 w-3 h-3'}`}>
+                    <OpenSubtask />
+                  </div>
+                )}
+              </button>
+            )}
             <div onClick={() => dispatch(setCurrentTaskStatusId(task.id as string))}>
               <StatusDropdown taskCurrentStatus={task.status} taskStatuses={task.task_statuses} />
             </div>
