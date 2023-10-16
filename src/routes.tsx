@@ -114,6 +114,10 @@ export const routes = (user: IUser | null) => {
       element: <TeamMemberAcceptInvite />
     },
     {
+      path: 'auth/verify-email/:verificationCode',
+      element: <TeamMemberAcceptInvite />
+    },
+    {
       path: '/',
       element: user ? (
         user.default_workspace_id ? (

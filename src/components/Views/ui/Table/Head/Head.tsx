@@ -151,6 +151,7 @@ export function Head({
       dispatch(setSortArray([...sortAbleArr, { dir: order, field: headerTxt(header) }]));
     }
   };
+
   const handleRemoveFilter = (title?: string): void => {
     dispatch(setSortArr(sortArr.filter((el) => el !== title)));
     dispatch(setSortArray(sortAbleArr.filter((el) => el.field !== headerTxt(title as string))));
@@ -365,7 +366,7 @@ export function Head({
                 <div className="absolute top-0 right-0 block pl-1 idle" style={{ height: tableHeight }}>
                   <div className="w-0.5 mx-auto bg-gray-100" style={{ height: '75px' }} />
                 </div>
-                {headerId === id && sortAbles.includes(value) && (
+                {headerId === id && (
                   <SortModal
                     handleClose={handleClose}
                     anchorEl={anchorEl}
