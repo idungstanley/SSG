@@ -6,11 +6,12 @@ import AvatarWithInitials from '../../../avatar/AvatarWithInitials';
 
 interface Props {
   timeEntry: IEntries;
+  index: number;
 }
 
-export function TimeLogEntries({ timeEntry }: Props) {
+export function TimeLogEntries({ timeEntry, index }: Props) {
   return (
-    <div className="flex items-center w-full border-t-2">
+    <div className={`flex items-center w-full ${index % 2 === 0 ? 'bg-alsoit-gray-50' : 'bg-white'}`}>
       <div className="flex items-center space-x-14">
         {/* User Avatar */}
         <ToolTip title={timeEntry.team_member.user.name}>
@@ -37,7 +38,11 @@ export function TimeLogEntries({ timeEntry }: Props) {
         </ToolTip>
         {/* Duration */}
         <div className="py-1.5 w-14 text-alsoit-text-sm text-center tracking-wide relative">
-          <div className="absolute text-alsoit-text-sm capitalize -top-0.5 -left-9 font-light px-0.5 bg-alsoit-gray-50 rounded-md">
+          <div
+            className={`absolute text-alsoit-text-sm capitalize -top-0.5 -left-9 font-light px-0.5 ${
+              index % 2 === 0 ? 'bg-white' : 'bg-alsoit-gray-50'
+            } rounded-md`}
+          >
             {timeEntry.type === 'real' ? 'real time' : timeEntry.type}
           </div>
           {dayjs.duration(timeEntry.duration, 'seconds').format('HH:mm:ss')}
@@ -45,17 +50,17 @@ export function TimeLogEntries({ timeEntry }: Props) {
       </div>
       <div className="flex justify-around space-x-9">
         {/* Start Date */}
-        <div className="py-1.5 w-40 text-alsoit-text-sm flex justify-center border-r-2">
+        <div className="py-1.5 w-40 text-alsoit-text-sm flex justify-center">
           {dayjs(timeEntry.start_date).format('ddd DD, MMM')}
         </div>
         {/* single label */}
-        <div className="py-1.5 w-40 flex justify-center border-r-2 gapFixes">-</div>
+        <div className="py-1.5 w-40 flex justify-center gapFixes">-</div>
         {/* End Date */}
-        <div className="py-1.5 w-40 flex justify-center text-alsoit-text-sm border-r-2 gapFixes">
+        <div className="py-1.5 w-40 flex justify-center text-alsoit-text-sm gapFixes">
           {dayjs(timeEntry.end_date).format('ddd DD, MMM')}
         </div>
         {/* tags */}
-        <div className="py-1.5 w-40 flex justify-center border-r-2 gapFixes">-</div>
+        <div className="py-1.5 w-40 flex justify-center gapFixes">-</div>
       </div>
     </div>
   );

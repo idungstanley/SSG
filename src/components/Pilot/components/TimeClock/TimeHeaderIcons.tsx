@@ -51,9 +51,11 @@ export function HeaderIcons({ extended }: Props) {
       <div className="p-1 rounded-md flex items-center bg-white hover:bg-alsoit-purple-50 cursor-pointer">
         <FilterListIcon active={false} className="w-4 h-4" />
       </div>
-      <div className={'p-1 rounded-md flex items-center bg-white hover:bg-alsoit-purple-50 cursor-pointer '}>
-        <Me active={false} className="w-4 h-4" />
-      </div>
+      {extended && (
+        <div className={'p-1 rounded-md flex items-center bg-white hover:bg-alsoit-purple-50 cursor-pointer '}>
+          <Me active={false} className="w-4 h-4" />
+        </div>
+      )}
       <div
         className={
           'relative p-1 rounded-md flex items-center justify-between bg-white hover:bg-alsoit-purple-50 cursor-pointer '
@@ -66,11 +68,9 @@ export function HeaderIcons({ extended }: Props) {
           <TeamMemberFilter closeModal={() => setDropDown((prev) => ({ ...prev, assignee: !prev.assignee }))} />
         )}
       </div>
-      {extended && (
-        <div className="p-1 rounded-md flex items-center bg-white hover:bg-alsoit-purple-50 cursor-pointer">
-          <SearchIcon className="w-4 h-4" />
-        </div>
-      )}
+      <div className="p-1 rounded-md flex items-center bg-white hover:bg-alsoit-purple-50 cursor-pointer">
+        <SearchIcon className="w-4 h-4" />
+      </div>
     </div>
   );
 }

@@ -1,6 +1,8 @@
 export const TIME_TABS = {
   realTime: 'Real Time',
   manual: 'Manual Time',
+  clock: 'clock',
+  timer: 'timer',
   propertyColumn: 'property_columns',
   nestedEntities: 'nested_entities',
   singleLine: 'single_line_mode',

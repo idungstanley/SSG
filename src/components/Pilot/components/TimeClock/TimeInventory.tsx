@@ -5,6 +5,7 @@ import { InventoryHeader } from './InventoryHeader';
 import { TimeLogEntries } from './LogEntries';
 import { LogHeaders } from './LogHeaders';
 import { useAppSelector } from '../../../../app/hooks';
+import { VerticalScroll } from '../../../ScrollableContainer/VerticalScroll';
 
 interface Props {
   getTimeEntries?: ITimeEntriesRes;
@@ -15,7 +16,8 @@ export function TimeInventory({ getTimeEntries }: Props) {
 
   const [timeEntries, setTimeEntries] = useState<IEntries[] | undefined>(getTimeEntries?.data.time_entries);
 
-  const Entries = () => timeEntries?.map((timeEntry, index) => <TimeLogEntries key={index} timeEntry={timeEntry} />);
+  const Entries = () =>
+    timeEntries?.map((timeEntry, index) => <TimeLogEntries key={index} timeEntry={timeEntry} index={index} />);
 
   useEffect(() => {
     if (timeAssigneeFilter) setTimeEntries(timeAssigneeFilter.data.time_entries);
@@ -26,8 +28,12 @@ export function TimeInventory({ getTimeEntries }: Props) {
       <InventoryHeader timeData={getTimeEntries} />
       <div className="w-full bg-white">
         <HorizontalScroll>
-          <LogHeaders />
-          <div className="flex flex-col w-full">{Entries()}</div>
+          <div className="flex flex-col h-72">
+            <VerticalScroll>
+              <LogHeaders />
+              <div className="flex flex-col w-full">{Entries()}</div>
+            </VerticalScroll>
+          </div>
         </HorizontalScroll>
       </div>
     </div>

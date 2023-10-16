@@ -21,8 +21,9 @@ import { IListDetails } from '../../../../../../features/list/list.interfaces';
 import { useParams } from 'react-router-dom';
 import { IWalletDetails } from '../../../../../../features/wallet/wallet.interfaces';
 import PlusIcon from '../../../../../../assets/icons/PlusIcon';
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.bubble.css';
+import ReactMarkDown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import rehypeRaw from 'rehype-raw';
 import DOMPurify from 'dompurify';
 import { VerticalScroll } from '../../../../../ScrollableContainer/VerticalScroll';
 import { useAppSelector } from '../../../../../../app/hooks';
@@ -193,29 +194,24 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
         <div id="entity description" className="mt-5">
           <label className="text-xs text-gray-500">Description</label>
           <div
-            className="border p-1 bg-gray-100 border-white rounded-md h-20 cursor-text"
+            className="border bg-gray-100 border-white rounded-md h-20 cursor-text"
             onClick={() => setEditingDescription(true)}
           >
             {editingDescription ? (
-              <div>
-                <ReactQuill
+              <div className="w-full h-min">
+                <textarea
+                  onChange={(e) => handleDescriptionChange(e.target.value)}
                   value={description}
-                  onChange={handleDescriptionChange}
                   onBlur={handleSubmit}
-                  style={{
-                    height: '80px',
-                    width: '100%',
-                    overflowY: 'auto',
-                    border: '1px solid #ccc',
-                    padding: '2px 0'
-                  }}
-                  theme="bubble"
-                />
+                  className="w-full text-alsoit-gray-200 h-20 border-none focus:ring-1 focus:ring-alsoit-gray-75 rounded-md text-alsoit-text-lg font-semibold"
+                ></textarea>
               </div>
             ) : (
-              <div className="capitalize h-36 overflow-scroll">
+              <div className="capitalize h-20 overflow-scroll p-1.5">
                 <VerticalScroll>
-                  <div className="h-20" dangerouslySetInnerHTML={{ __html: description }} />
+                  <ReactMarkDown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>
+                    {description}
+                  </ReactMarkDown>
                 </VerticalScroll>
               </div>
             )}
