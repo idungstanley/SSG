@@ -186,6 +186,8 @@ interface TaskState {
   showNewTaskId: string;
   singleLineView: boolean;
   escapeKey: boolean;
+  hilightNewlyCreatedTask: boolean;
+  copyNewlyCreatedTask: boolean;
   toggleAllSubtask: boolean;
   toggleAllSubtaskSplit: string;
   separateSubtasksMode: boolean;
@@ -290,6 +292,8 @@ const initialState: TaskState = {
   showNewTaskField: false,
   meMode: false,
   escapeKey: false,
+  hilightNewlyCreatedTask: false,
+  copyNewlyCreatedTask: false,
   autoSave: false,
   showNewTaskId: '',
   singleLineView: false,
@@ -434,6 +438,12 @@ export const taskSlice = createSlice({
     },
     setEscapeKey(state, action: PayloadAction<boolean>) {
       state.escapeKey = action.payload;
+    },
+    setHilightNewlyCreatedTask(state, action: PayloadAction<boolean>) {
+      state.hilightNewlyCreatedTask = action.payload;
+    },
+    setCopyNewlyCreatedTask(state, action: PayloadAction<boolean>) {
+      state.copyNewlyCreatedTask = action.payload;
     },
     setAssigneeIds(state, action: PayloadAction<string[]>) {
       state.assigneeIds = action.payload;
@@ -753,6 +763,8 @@ export const {
   setTaskIdForPilot,
   setCurrTeamMemId,
   setEscapeKey,
+  setHilightNewlyCreatedTask,
+  setCopyNewlyCreatedTask,
   getTaskColumns,
   getComfortableView,
   getComfortableViewWrap,
