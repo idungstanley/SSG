@@ -142,7 +142,7 @@ export const data6 = {
 export default function GraphsWrapper() {
   const dispatch = useAppDispatch();
 
-  const { isShowFullMode, showedGraphs } = useAppSelector((state) => state.insights);
+  const { isShowFullMode, showedGraph, isUpdatePosition } = useAppSelector((state) => state.insights);
 
   const renderGraph = (id: string) => {
     switch (id) {
@@ -185,12 +185,23 @@ export default function GraphsWrapper() {
     }
   };
 
+  const renderBackground = () => {
+    if (isUpdatePosition) {
+      if (isShowFullMode) {
+        return graphsBgFull;
+      } else {
+        return graphsBg;
+      }
+    }
+    return '';
+  };
+
   return (
     <div
       style={{
         minWidth: isShowFullMode ? '752px' : '390px',
         transition: '0.2s',
-        backgroundImage: `url(${isShowFullMode ? graphsBgFull : graphsBg})`
+        backgroundImage: `url(${renderBackground()})`
       }}
       className="relative"
     >
@@ -202,7 +213,7 @@ export default function GraphsWrapper() {
         {'<|>'}
       </div>
       <section style={{ minHeight: '0', maxHeight: '89vh' }} className="w-full h-full px-4 pb-0 overflow-auto">
-        {showedGraphs.length ? <Fragment>{showedGraphs.map((graph) => renderGraph(graph))}</Fragment> : null}
+        {showedGraph ? <Fragment>{renderGraph(showedGraph)}</Fragment> : null}
       </section>
     </div>
   );

@@ -4,15 +4,15 @@ import Button from '../../../../../../../components/Buttons/Button';
 import ShowIcon from '../../../../../../../assets/icons/ShowIcon';
 import ArrowDrop from '../../../../../../../assets/icons/ArrowDrop';
 import { useAppDispatch, useAppSelector } from '../../../../../../../app/hooks';
-import { setShowedGraphs } from '../../../../../../../features/insights/insightsSlice';
+import { setShowedGraph } from '../../../../../../../features/insights/insightsSlice';
 import { graphs } from '../../../../../../../app/constants/graphs';
 
 export default function ListShowGraphs() {
   const dispatch = useAppDispatch();
 
-  const { showedGraphs } = useAppSelector((state) => state.insights);
+  const { showedGraph } = useAppSelector((state) => state.insights);
 
-  const isActiveColor = showedGraphs.length ? '#BF01FE' : 'black';
+  const isActiveColor = showedGraph ? '#BF01FE' : 'black';
 
   const viewSettings = [
     {
@@ -42,24 +42,14 @@ export default function ListShowGraphs() {
   ];
 
   const handleChange = (id: string) => {
-    let graphIds: string[] = [...showedGraphs];
-    if (showedGraphs.includes(id)) {
-      graphIds = graphIds.filter((item) => item !== id);
-    } else {
-      graphIds.push(id);
-    }
-    dispatch(setShowedGraphs(graphIds));
+    dispatch(setShowedGraph(showedGraph === id ? '' : id));
   };
 
   return (
     <Menu>
-      <div
-        className={`viewSettingsParent flex justify-center items-center text-${
-          showedGraphs.length && 'alsoit-purple-50'
-        }`}
-      >
+      <div className={`viewSettingsParent flex justify-center items-center text-${showedGraph && 'alsoit-purple-50'}`}>
         <Menu.Button className="flex ml-1">
-          <Button active={!!showedGraphs.length as boolean}>
+          <Button active={!!showedGraph as boolean}>
             <ShowIcon color={isActiveColor} width="21" height="21" /> <span>Show</span>{' '}
             <ArrowDrop color={isActiveColor} />
           </Button>
@@ -103,10 +93,10 @@ export default function ListShowGraphs() {
                       <input
                         className="inputShow"
                         type="checkbox"
-                        checked={showedGraphs.includes(view.id)}
+                        checked={showedGraph === view.id}
                         onChange={() => handleChange(view.id)}
                       />
-                      <div className={`slider ${showedGraphs.includes(view.id) ? 'checked' : ''}`}></div>
+                      <div className={`slider ${showedGraph === view.id ? 'checked' : ''}`}></div>
                     </label>
                   </div>
                 </button>
