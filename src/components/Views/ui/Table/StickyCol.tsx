@@ -430,17 +430,26 @@ export function StickyCol({
             className="w-11 flex items-center h-full space-x-1"
             style={{
               padding: '15px 0',
-              paddingLeft: 0,
-              height: '64px'
+              paddingLeft: 0
             }}
           />
           <div
-            style={{ paddingLeft }}
+            style={{
+              paddingLeft,
+              height:
+                saveSettingOnline?.singleLineView && !saveSettingOnline?.CompactView
+                  ? '42px'
+                  : saveSettingOnline?.CompactView && saveSettingOnline?.singleLineView
+                  ? '25px'
+                  : !saveSettingOnline?.singleLineView && saveSettingOnline?.CompactView && task.name.length < 30
+                  ? '25px'
+                  : ''
+            }}
             className={cl(
               COL_BG,
               `relative border-t ${verticalGrid && 'border-r'} ${
                 verticalGridlinesTask && 'border-r'
-              } w-full h-16  py-4 p-4 flex items-center`
+              } w-full py-4 p-4 flex items-center`
             )}
           >
             <div className="absolute bottom-0 right-0 flex space-x-1 p-1">
@@ -459,10 +468,10 @@ export function StickyCol({
                 </span>
               </ToolTip>
             </div>
-            <div className="pt-2 ml-4">
+            <div className="pt-1 ml-4">
               <StatusDropdown taskCurrentStatus={task.status} taskStatuses={task.task_statuses} />
             </div>
-            <div className="flex flex-col items-start justify-start pt-2 pl-2 space-y-1">
+            <div className="flex flex-col items-start justify-start pt-1 pl-2 space-y-1">
               <p
                 className="flex text-left empty:before:content-[attr(placeholder)]"
                 contentEditable={true}
