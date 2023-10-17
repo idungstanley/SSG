@@ -36,6 +36,13 @@ function ChangeRole({ anchor, setAnchor, presentRole, teamMember }: changeRolePr
 
   return (
     <AlsoitMenuDropdown anchorEl={anchor} handleClose={() => setAnchor(null)}>
+      <p className="text-alsoit-text-sm font-bold flex justify-center pt-3 w-full">ROLES</p>
+      <div className="relative flex justify-center mt-2 w-full">
+        <hr className="bg-gray-300 h-0.5 w-full relative" />
+        <span className="text-alsoit-text-sm font-bold text-gray-400 text-center absolute -top-1 px-1 bg-white">
+          Select new role
+        </span>
+      </div>
       <div style={{ width: '100px' }}>
         {TEAM_MEMBER_ROLES.map((role) => {
           return (
