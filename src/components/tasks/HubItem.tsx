@@ -211,10 +211,10 @@ export default function HubItem({
               <div>
                 {showChildren ? (
                   <span className="flex flex-col">
-                    <VscTriangleDown className="flex-shrink-0 h-2" aria-hidden="true" color="rgba(72, 67, 67, 0.64)" />
+                    <VscTriangleDown className="flex-shrink-0 h-2" aria-hidden="true" color="#919191" />
                   </span>
                 ) : (
-                  <VscTriangleRight className="flex-shrink-0 h-2" aria-hidden="true" color="#BBBDC0" />
+                  <VscTriangleRight className="flex-shrink-0 h-2" aria-hidden="true" color="#919191" />
                 )}
               </div>
             ) : (
