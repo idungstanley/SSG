@@ -269,10 +269,10 @@ export function StickyCol({
   });
 
   return (
-    <div className="sticky left-0 z-10">
+    <>
       {task.id !== '0' && (
         <td
-          className="flex items-center justify-start text-sm font-medium text-gray-900 cursor-pointer text-start"
+          className="sticky left-0 z-10 flex items-center justify-start text-sm font-medium text-gray-900 cursor-pointer text-start"
           {...props}
         >
           <div
@@ -489,6 +489,6 @@ export function StickyCol({
           </div>
         </td>
       )}
-    </div>
+    </>
   );
 }
