@@ -2,6 +2,7 @@ import React, { Dispatch, SetStateAction, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { useNavigate } from 'react-router-dom';
 import {
+  setAssignOnHoverState,
   setCopyNewlyCreatedTask,
   setEscapeKey,
   setHilightNewlyCreatedTask,
@@ -70,6 +71,9 @@ export default function useTaskShortCut() {
             break;
           case '3':
             dispatch(setCopyNewlyCreatedTask(true));
+            break;
+          case 'm':
+            dispatch(setAssignOnHoverState(true));
             break;
           default:
         }

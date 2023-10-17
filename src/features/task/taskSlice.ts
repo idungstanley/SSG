@@ -203,6 +203,9 @@ interface TaskState {
   meMode: boolean;
   autoSave: boolean;
   showTaskNavigation: boolean;
+  assignOnHoverTaskId: string;
+  assignOnHoverListId: string;
+  assignOnHoverState: boolean;
   addNewTaskItem: boolean;
   selectedIndex: number | null;
   defaultSubtaskListId: null | string;
@@ -327,6 +330,9 @@ const initialState: TaskState = {
   CompactView: false,
   CompactViewWrap: false,
   showTaskNavigation: false,
+  assignOnHoverTaskId: '',
+  assignOnHoverListId: '',
+  assignOnHoverState: false,
   addNewTaskItem: false,
   closeTaskListView: true,
   selectedIndex: null,
@@ -578,6 +584,15 @@ export const taskSlice = createSlice({
     setNewTaskPriority(state, action: PayloadAction<string>) {
       state.newTaskPriority = action.payload;
     },
+    setAssignOnHoverTaskId(state, action: PayloadAction<string>) {
+      state.assignOnHoverTaskId = action.payload;
+    },
+    setAssignOnHoverListId(state, action: PayloadAction<string>) {
+      state.assignOnHoverListId = action.payload;
+    },
+    setAssignOnHoverState(state, action: PayloadAction<boolean>) {
+      state.assignOnHoverState = action.payload;
+    },
     getTaskUpperCase(state, action: PayloadAction<boolean>) {
       state.taskUpperCase = action.payload;
     },
@@ -815,6 +830,9 @@ export const {
   setGetSubTaskId,
   hideTaskColumns,
   setSubtaskDefaultStatusId,
+  setAssignOnHoverTaskId,
+  setAssignOnHoverListId,
+  setAssignOnHoverState,
   setUpdateEntries,
   setTriggerSaveSettingsModal,
   setSaveSettingOnline,
