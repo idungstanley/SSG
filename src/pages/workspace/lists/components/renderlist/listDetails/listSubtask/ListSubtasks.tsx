@@ -125,13 +125,13 @@ export default function ListSubtasks({ subtasksTitle }: { subtasksTitle: string 
 
   return (
     <div className="flex items-center justify-start space-x-1 ">
-      <span className="group cursor-pointer gap-2">
+      <span className="gap-2 cursor-pointer group">
         <Menu>
           <div className="flex items-center justify-center viewSettingsParent">
             <Menu.Button>
               <Button active={toggleAllSubtask}>
                 <SubtaskIcon color={toggleAllSubtask ? '#BF01FE' : '#424242'} />
-                <span className="whitespace-nowrap">
+                <span className="mr-2 whitespace-nowrap">
                   {subtasksTitle}: {activeLabel}
                 </span>
                 <ArrowDownFilled active={toggleAllSubtask} />
@@ -180,10 +180,10 @@ export default function ListSubtasks({ subtasksTitle }: { subtasksTitle: string 
 
                         {view.isUseDropdown ? (
                           <Menu>
-                            <div className="flex items-center justify-center viewSettingsParent ml-1">
+                            <div className="flex items-center justify-center ml-1 viewSettingsParent">
                               <Menu.Button>
                                 <Button active={false} withoutBg={true}>
-                                  <span className="whitespace-nowrap">
+                                  <span className="mr-2 whitespace-nowrap">
                                     {view.id === COLLAPSE ? collapseDropdownId.value : expandDropdownId.value}
                                   </span>
                                   <ArrowDownFilled active={false} />
@@ -208,7 +208,7 @@ export default function ListSubtasks({ subtasksTitle }: { subtasksTitle: string 
                                     {view.isShow ? (
                                       <Menu.Item
                                         as="div"
-                                        className="flex items-center text-sm text-gray-600 text-left w-full hover:bg-gray-300"
+                                        className="flex items-center w-full text-sm text-left text-gray-600 hover:bg-gray-300"
                                       >
                                         <button
                                           onClick={() => {
