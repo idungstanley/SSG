@@ -142,7 +142,9 @@ function Hubs() {
         label={placeHubType == APP_HR ? 'Also HR' : 'Tasks'}
         id={initialActivePlaceId}
         isActiveLayoutCondition={
-          !(!!listId || !!hubId || !!walletId || !!subhubId) && !location.pathname.includes('everything')
+          !(!!listId || !!hubId || !!walletId || !!subhubId) &&
+          !location.pathname.includes('everything') &&
+          location.pathname.includes(APP_TASKS)
         }
         icon={
           placeHubType == APP_TASKS ? (
