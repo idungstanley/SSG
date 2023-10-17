@@ -27,9 +27,10 @@ interface TableProps {
   label: string;
   listName?: string;
   listColor?: IListColor;
+  isBlockedShowChildren?: boolean;
 }
 
-export function Table({ heads, data, label, listName, listColor }: TableProps) {
+export function Table({ heads, data, label, listName, listColor, isBlockedShowChildren }: TableProps) {
   const dispatch = useAppDispatch();
 
   const { draggableItemId } = useAppSelector((state) => state.list);
@@ -165,6 +166,7 @@ export function Table({ heads, data, label, listName, listColor }: TableProps) {
                       taskStatusId={statusId}
                       handleClose={handleClose}
                       level={0}
+                      isBlockedShowChildren={isBlockedShowChildren}
                     />
                   ) : null
                 )

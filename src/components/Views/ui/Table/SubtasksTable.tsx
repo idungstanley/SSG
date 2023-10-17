@@ -154,6 +154,7 @@ export function SubtasksTable({ task, subtasksData, heads, listId, level, breadc
                                 // handleClose={handleClose}
                                 isSplitSubtask={true}
                                 level={level}
+                                isBlockedShowChildren={level === 1 && isThirdLevel}
                               />
                             ) : null
                           )}
