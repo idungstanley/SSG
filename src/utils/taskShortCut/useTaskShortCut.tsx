@@ -1,7 +1,12 @@
 import React, { Dispatch, SetStateAction, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { useNavigate } from 'react-router-dom';
-import { setEscapeKey, setPreferenceState } from '../../features/task/taskSlice';
+import {
+  setCopyNewlyCreatedTask,
+  setEscapeKey,
+  setHilightNewlyCreatedTask,
+  setPreferenceState
+} from '../../features/task/taskSlice';
 import { setActiveTabId, setShowExtendedBar } from '../../features/workspace/workspaceSlice';
 
 export default function useTaskShortCut() {
@@ -32,6 +37,8 @@ export default function useTaskShortCut() {
         document.activeElement?.tagName === 'TEXTAREA' ||
         document.activeElement?.getAttribute('contenteditable') === 'true'
       ) {
+        dispatch(setHilightNewlyCreatedTask(false));
+        dispatch(setCopyNewlyCreatedTask(false));
         return false;
       } else {
         return true;
@@ -58,8 +65,11 @@ export default function useTaskShortCut() {
           case 'N':
             dispatch(setShowExtendedBar(true));
             break;
-          case 'Escape':
-            dispatch(setEscapeKey(true));
+          case '1':
+            dispatch(setHilightNewlyCreatedTask(true));
+            break;
+          case '3':
+            dispatch(setCopyNewlyCreatedTask(true));
             break;
           default:
         }

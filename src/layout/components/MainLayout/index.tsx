@@ -62,22 +62,21 @@ function MainLayout() {
   useGetColors();
 
   document.addEventListener('keydown', (event) => TaskShortcutListener(event, setTaskShortcut));
+  const storedData = JSON.parse(localStorage.getItem(STORAGE_KEYS.USER_SETTINGS_DATA) || '{}');
 
   useEffect(() => {
     if (userData) {
       const value = userData.value;
-      localStorage.setItem(
-        STORAGE_KEYS.USER_SETTINGS_DATA,
-        JSON.stringify({
-          ...userSettingsData,
-          [STORAGE_KEYS.SIDEBAR_WIDTH]: value.sidebarWidth ? value.sidebarWidth : dimensions.navigationBar.default,
-          [STORAGE_KEYS.PILOT_WIDTH]: value.pilotWidth ? value.pilotWidth : dimensions.pilot.default,
-          [STORAGE_KEYS.EXTENDED_BAR_WIDTH]: value.extendedBarWidth
-            ? value.extendedBarWidth
-            : dimensions.extendedBar.default,
-          [STORAGE_KEYS.HOT_KEYS]: value.hotkeys ? value.hotkeys : []
-        })
-      );
+      const updatedData = {
+        ...storedData,
+        [STORAGE_KEYS.SIDEBAR_WIDTH]: value.sidebarWidth ? value.sidebarWidth : dimensions.navigationBar.default,
+        [STORAGE_KEYS.PILOT_WIDTH]: value.pilotWidth ? value.pilotWidth : dimensions.pilot.default,
+        [STORAGE_KEYS.EXTENDED_BAR_WIDTH]: value.extendedBarWidth
+          ? value.extendedBarWidth
+          : dimensions.extendedBar.default,
+        [STORAGE_KEYS.HOT_KEYS]: value.hotkeys ? value.hotkeys : []
+      };
+      localStorage.setItem(STORAGE_KEYS.USER_SETTINGS_DATA, JSON.stringify(updatedData));
       dispatch(setActiveHotkeyIds(value.hotkeys ? value.hotkeys : []));
       dispatch(SetUserSettingsStore({ ...userSettingsData, ...value }));
     }

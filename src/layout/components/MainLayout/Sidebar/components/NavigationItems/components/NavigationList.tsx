@@ -98,7 +98,7 @@ export default function PinnedNavigationItem({
     setActiveTabId(activeTabId === id ? null : id);
   };
   return (
-    <div className="flex flex-row flex-wrap w-full col-span-1 gap-y-2">
+    <div className={`flex flex-row flex-wrap w-full col-span-1 ${hotkeys.length > 2 ? 'justify-between' : 'gap-4'}`}>
       {hotkeys.map((item) => (
         <div
           onClick={() => handleClick(item.name, item.id)}
