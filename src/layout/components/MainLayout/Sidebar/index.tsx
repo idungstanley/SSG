@@ -110,11 +110,11 @@ export default function Sidebar() {
                 }
               >
                 <div
-                  className="absolute flex items-center justify-between w-auto w-full font-bold tracking-wider text-gray-400 grow left-6 hover:text-fuchsia-500"
-                  style={{ fontSize: '13px' }}
+                  className="absolute flex items-center justify-between w-auto w-full font-bold tracking-wider text-gray-500 grow hover:text-fuchsia-500"
+                  style={{ fontSize: '13px', left: '34px' }}
                 >
                   <div className="flex items-center justify-between">
-                    <SearchIcon />
+                    <SearchIcon width={13} height={13} />
                     <p className="ml-2">Search</p>
                   </div>
                   <p className="mr-14">Ctrl+k</p>

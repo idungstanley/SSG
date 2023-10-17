@@ -7,6 +7,7 @@ import { useSortable } from '@dnd-kit/sortable';
 import { useGetNotificationCountService } from '../../../../../../../features/general/notification/notificationService';
 import Drag from '../../../../../../../assets/icons/Drag';
 import UnpinnedIcon from '../../../../../../../assets/icons/UnpinnedIcon';
+import ActiveBarIdentification from '../../../../../../../components/tasks/Component/ActiveBarIdentification';
 
 interface NavigationItemProps {
   item: {
@@ -48,26 +49,19 @@ export default function NavigationItem({ item, handleHotkeyClick }: NavigationIt
     backgroundColor: isDragging ? '#f3f4f6' : activePlaceName === name ? '#BF00FF21' : undefined,
     zIndex: isDragging ? 1 : undefined,
     height: '30px',
-    paddingLeft: showSidebar ? '24px' : '18px'
+    paddingLeft: showSidebar ? '32px' : '18px'
   };
-
-  // if (!isVisible) {
-  //   return null;
-  // }
 
   return (
     <div
       className={cl(
-        activePlaceName === item.name ? 'hover:bg-green-200' : 'hover:bg-gray-100',
         !showSidebar ? 'justify-center' : 'gap-2 items-center justify-between',
-        'relative flex cursor-pointer p-2 w-full group'
+        'relative flex cursor-pointer w-full group hover:bg-alsoit-gray-50'
       )}
       onClick={() => handleClick(item.name, item.href)}
       style={style}
     >
-      {activePlaceName === item.name ? (
-        <span className="absolute top-0 bottom-0 left-0 w-0.5 rounded-r-lg " style={{ backgroundColor: '#BF00FF' }} />
-      ) : null}
+      <ActiveBarIdentification showBar={activePlaceName === item.name} />
       <span
         className={`absolute justify-center text-xl opacity-0 cursor-move left-1.5 group-hover:opacity-100 ${
           name !== 'Home' ? 'block' : 'hidden'
@@ -97,7 +91,7 @@ export default function NavigationItem({ item, handleHotkeyClick }: NavigationIt
         </span>
         {showSidebar ? (
           <p
-            className="ml-3 truncate"
+            className={`ml-3 truncate ${activePlaceName === item.name ? 'text-alsoit-purple-300' : ''}`}
             style={{
               fontSize: '13px',
               lineHeight: '12px',
