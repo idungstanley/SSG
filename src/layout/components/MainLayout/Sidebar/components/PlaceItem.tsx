@@ -9,6 +9,8 @@ import { setIsSearchActive } from '../../../../../features/search/searchSlice';
 import ArrowRight from '../../../../../assets/icons/ArrowRight';
 import ArrowOpenDown from '../../../../../assets/icons/ArrowOpenDown';
 import Drag from '../../../../../assets/icons/Drag';
+import ActiveBarIdentification from '../../../../../components/tasks/Component/ActiveBarIdentification';
+import ActiveBackground from '../../../../../components/tasks/Component/ActiveBackground';
 
 interface PlaceItemProps {
   label: string;
@@ -46,7 +48,6 @@ export default function PlaceItem({
   const isActivePlace = !onClick;
   const placeActive = isActivePlace && isActiveLayoutCondition;
 
-  // const baseColor = '#BF00FFB2';
   const style = {
     transform: transform ? `translate(${transform.x}px, ${transform.y}px)` : undefined,
     transition,
@@ -88,18 +89,8 @@ export default function PlaceItem({
           className="relative flex items-center justify-center cursor-pointer"
           style={{ height: '50px', paddingLeft: showSidebar ? '25px' : '20px' }}
         >
-          {placeActive && (
-            <span
-              className="absolute inset-0 z-0 before:content before:absolute before:inset-0"
-              style={{ backgroundColor: lightBaseColor }}
-            />
-          )}
-          {placeActive && (
-            <span
-              className="absolute top-0 bottom-0 left-0 w-0.5 rounded-r-lg"
-              style={{ backgroundColor: baseColor }}
-            />
-          )}
+          <ActiveBackground showBgColor={placeActive as boolean} />
+          <ActiveBarIdentification showBar={placeActive as boolean} />
           <span
             className="absolute justify-center text-xl text-gray-500 opacity-0 cursor-move left-1 group-hover:opacity-100"
             ref={setNodeRef}
@@ -120,10 +111,9 @@ export default function PlaceItem({
                 className={cl(
                   showSidebar ? 'block' : 'hidden',
                   'w-32 text-left cursor-pointer uppercase truncate',
-                  isActivePlace ? 'font-black' : ''
+                  isActivePlace ? 'font-black text-alsoit-purple-300' : ''
                 )}
                 style={{
-                  color: `${isActivePlace ? baseColor : ''}`,
                   fontSize: '13px',
                   lineHeight: '16px',
                   verticalAlign: 'baseline',

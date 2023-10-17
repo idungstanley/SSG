@@ -216,7 +216,9 @@ export default function WalletItem({
           >
             <ToolTip title={wallet.name}>
               <p
-                className="capitalize truncate cursor-pointer"
+                className={`capitalize truncate cursor-pointer ${
+                  wallet.id === walletId ? 'text-alsoit-purple-300' : ''
+                }`}
                 style={{
                   fontSize: '13px',
                   lineHeight: '15.56px',
