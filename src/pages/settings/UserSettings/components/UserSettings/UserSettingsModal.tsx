@@ -147,7 +147,7 @@ export default function UserSettingsModal({ setShowModal }: UserProps) {
         </ToolTip>
       </div>
       <AlsoitMenuDropdown anchorEl={showSettingsMenu} handleClose={handleCloseSettingsMenu}>
-        <div className="px-1">
+        <div className="p-2">
           {userSettings?.map((i) => (
             <div key={i.id}>
               <div
