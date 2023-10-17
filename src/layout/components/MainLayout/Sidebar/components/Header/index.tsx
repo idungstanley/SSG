@@ -61,7 +61,7 @@ export default function Header({
         <WorkSpaceSelection />
         <div className={cl('flex', !showSidebar ? 'flex-col items-center justify-center' : 'items-center')}>
           <div
-            className={`flex items-center flex-grow flex-shrink-0 ${
+            className={`flex gap-4 items-center flex-grow flex-shrink-0 ${
               hotkeys.length > 0 && showSidebar ? 'justify-between' : 'justify-end'
             }`}
           >

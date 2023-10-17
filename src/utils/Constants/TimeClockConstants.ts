@@ -34,3 +34,8 @@ export const TIME_LABEL_PROPERTY = [
   { name: 'single label', value: 'single_label' },
   { name: 'multi label', value: 'multi_label' }
 ];
+
+export const CLOCK_TYPE = [
+  { name: 'clock', value: 'clock' },
+  { name: 'timer', value: 'timer' }
+];

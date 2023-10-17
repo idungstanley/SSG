@@ -30,8 +30,8 @@ function EverythingTasks() {
   return (
     <div
       className={cl(
-        !showSidebar ? 'overflow-x-hidden w-12 pl-5' : 'pl-6',
-        'relative flex items-center justify-between hover:bg-gray-100'
+        !showSidebar ? 'overflow-x-hidden w-12 pl-5' : 'pl-8',
+        'relative flex items-center justify-between hover:bg-alsoit-gray-50'
       )}
     >
       <ActiveBackground showBgColor={location.pathname.includes('everything')} />
@@ -41,8 +41,14 @@ function EverythingTasks() {
         style={{ zIndex: 1 }}
         onClick={handleLoadAllTasks}
       >
-        <EverythingIcon />
-        <p className="block text-xs tracking-wider capitalize truncate">Everything</p>
+        <EverythingIcon color={location.pathname.includes('everything') ? '#BF01FE' : undefined} />
+        <p
+          className={`block text-xs tracking-wider capitalize truncate ${
+            location.pathname.includes('everything') ? 'text-alsoit-purple-300' : ''
+          }`}
+        >
+          Everything
+        </p>
       </div>
     </div>
   );

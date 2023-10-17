@@ -78,18 +78,16 @@ export function Header({ isInsights }: IHeader) {
           <FilterDropdown />
           <Assignee />
           {isInsights ? <Search placeholder="Search Insights" /> : <Search />}
-          <p>
-            <ListSettingsModal
-              itemsArray={
-                items as [
-                  {
-                    label: 'string';
-                    icon?: ReactNode;
-                  }
-                ]
-              }
-            />
-          </p>
+          <ListSettingsModal
+            itemsArray={
+              items as [
+                {
+                  label: 'string';
+                  icon?: ReactNode;
+                }
+              ]
+            }
+          />
         </div>
       </section>
       {selectedTasksArray.length > 0 && (

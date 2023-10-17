@@ -72,6 +72,7 @@ import EmailSentPage from './pages/workspace/createWorkspace/auth/ForgotPassword
 import ResetPassword from './pages/workspace/createWorkspace/auth/ForgotPassword/ResetPassword';
 import AlsoHr from './pages/hr';
 import TimeClockPage from './pages/time-clock';
+import VerifyEmail from './pages/workspace/createWorkspace/auth/VerifyEmail/Index';
 
 const inbox = [
   {
@@ -110,6 +111,11 @@ export const routes = (user: IUser | null) => {
     },
     {
       path: 'accept-invite/:inviteCode',
+      element: <TeamMemberAcceptInvite />
+    },
+    { path: 'auth/verify-email/:verificationCode', element: <VerifyEmail /> },
+    {
+      path: 'auth/verify-email/:verificationCode',
       element: <TeamMemberAcceptInvite />
     },
     {

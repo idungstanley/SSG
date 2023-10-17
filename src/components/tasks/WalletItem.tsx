@@ -185,7 +185,7 @@ export default function WalletItem({
     >
       <section
         className={`bg-white items-center truncate text-sm group ${
-          wallet.id === activeItemId ? 'font-medium' : 'hover:bg-gray-100'
+          wallet.id === activeItemId ? 'font-medium' : 'hover:bg-alsoit-gray-50'
         } ${isOver ? 'bg-primary-100 border-primary-500 shadow-inner shadow-primary-300' : ''}`}
         ref={setNodeRef}
         onClick={() => handleShowSubWallet(wallet.id)}
@@ -216,7 +216,9 @@ export default function WalletItem({
           >
             <ToolTip title={wallet.name}>
               <p
-                className="capitalize truncate cursor-pointer"
+                className={`capitalize truncate cursor-pointer ${
+                  wallet.id === walletId ? 'text-alsoit-purple-300' : ''
+                }`}
                 style={{
                   fontSize: '13px',
                   lineHeight: '15.56px',

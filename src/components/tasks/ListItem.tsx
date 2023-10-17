@@ -160,7 +160,7 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
       <section
         className={cl(
           'relative flex items-center justify-between h-8 group',
-          list.id === activeItemId ? 'font-medium' : 'hover:bg-gray-100',
+          list.id === activeItemId ? 'font-medium' : 'hover:bg-alsoit-gray-50',
           isOver ? 'bg-primary-100 border-primary-500 shadow-inner shadow-primary-300' : ''
         )}
         ref={setNodeRef}

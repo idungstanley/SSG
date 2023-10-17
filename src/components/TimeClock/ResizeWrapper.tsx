@@ -27,7 +27,8 @@ export default function ResizeWrapper({ children, positions }: IResizeWrapperPro
   const topRightRef = useRef(null);
   const bottomLeftRef = useRef(null);
   const bottomRightRef = useRef(null);
-  const minimum_size = 20;
+  const minimumWidthSize = 250;
+  const minimumHeightSize = 180;
 
   const handlePointerDown = (e: React.MouseEvent<HTMLDivElement>) => {
     setIsDragging(true);
@@ -62,40 +63,40 @@ export default function ResizeWrapper({ children, positions }: IResizeWrapperPro
       if (activeCorner === BOTTOM_RIGHT) {
         const width = startSize.width + (e.pageX - startMousePosition.x);
         const height = startSize.height + (e.pageY - startMousePosition.y);
-        if (width > minimum_size) {
+        if (width > minimumWidthSize) {
           element.style.width = width + 'px';
         }
-        if (height > minimum_size) {
+        if (height > minimumHeightSize) {
           element.style.height = height + 'px';
         }
       } else if (activeCorner === BOTTOM_LEFT) {
         const width = startSize.width - (e.pageX - startMousePosition.x);
         const height = startSize.height + (e.pageY - startMousePosition.y);
-        if (height > minimum_size) {
+        if (height > minimumHeightSize) {
           element.style.height = height + 'px';
         }
-        if (width > minimum_size) {
+        if (width > minimumWidthSize) {
           element.style.width = width + 'px';
           element.style.left = startPosition.left + (e.pageX - startMousePosition.x) + 'px';
         }
       } else if (activeCorner === TOP_RIGHT) {
         const width = startSize.width + (e.pageX - startMousePosition.x);
         const height = startSize.height - (e.pageY - startMousePosition.y);
-        if (width > minimum_size) {
+        if (width > minimumWidthSize) {
           element.style.width = width + 'px';
         }
-        if (height > minimum_size) {
+        if (height > minimumHeightSize) {
           element.style.height = height + 'px';
           element.style.top = startPosition.top + (e.pageY - startMousePosition.y) + 'px';
         }
       } else {
         const width = startSize.width - (e.pageX - startMousePosition.x);
         const height = startSize.height - (e.pageY - startMousePosition.y);
-        if (width > minimum_size) {
+        if (width > minimumWidthSize) {
           element.style.width = width + 'px';
           element.style.left = startPosition.left + (e.pageX - startMousePosition.x) + 'px';
         }
-        if (height > minimum_size) {
+        if (height > minimumHeightSize) {
           element.style.height = height + 'px';
           element.style.top = startPosition.top + (e.pageY - startMousePosition.y) + 'px';
         }
