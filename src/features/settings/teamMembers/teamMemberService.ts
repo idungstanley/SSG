@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import requestNew from '../../../app/requestNew';
-import { ITeamMember } from '../../workspace/teamMembers.intrfaces';
+import { ITeamMember, RoleRes } from '../../workspace/teamMembers.intrfaces';
 import { ITeamMembersAndGroupsReq } from '../teamMembersAndGroups.interfaces';
 
 // Get team members
@@ -52,6 +52,40 @@ export const useGetTeamMember = (teamMemberId: string) => {
     }
   );
 };
+
+//Change Team Member Role
+export const useChangeRole = ({ teamMember, role }: { teamMember: string; role: string }) => {
+  const data = requestNew<{ data: RoleRes }>({
+    url: `settings/team-members/${teamMember}/change-role`,
+    method: 'POST',
+    data: {
+      team_member_role_key: role
+    }
+  });
+  return data;
+};
+
+// Deactivate team member service
+export const changeTeamMemberRole = async (data: { teamMemberId: string }) => {
+  const response = requestNew<{ data: { team_member: ITeamMember } }>({
+    url: `/settings/team-members/${data.teamMemberId}/change-role`,
+    method: 'POST',
+    data: {
+      role: 'high'
+    }
+  });
+  return response;
+};
+
+export function useChangeTeamMeberRole(teamMemberId: string) {
+  const queryClient = useQueryClient();
+
+  return useMutation(() => changeTeamMemberRole({ teamMemberId }), {
+    onSuccess: (successData) => {
+      queryClient.setQueryData(['team_member', teamMemberId], successData.data.team_member);
+    }
+  });
+}
 
 // Deactivate team member service
 export const deactivateTeamMemberService = async (data: { teamMemberId: string }) => {
