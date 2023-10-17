@@ -42,6 +42,7 @@ interface RowProps {
   handleClose?: VoidFunction;
   isSplitSubtask?: boolean;
   level: number;
+  isBlockedShowChildren?: boolean;
 }
 
 export function Row({
@@ -55,7 +56,8 @@ export function Row({
   isListParent,
   handleClose,
   isSplitSubtask,
-  level
+  level,
+  isBlockedShowChildren
 }: RowProps) {
   const dispatch = useAppDispatch();
 
@@ -151,6 +153,7 @@ export function Row({
           paddingLeft={paddingLeft}
           tags={'tags' in task ? <TaskTag tags={task.tags} entity_id={task.id} entity_type="task" /> : null}
           isLastSubtaskLevel={level >= MAX_SUBTASKS_LEVEL}
+          isBlockedShowChildren={isBlockedShowChildren}
           dragElement={
             <div ref={setNodeRef} {...listeners} {...attributes}>
               <div className="text-lg text-gray-400 transition duration-200 opacity-0 cursor-move group-hover:opacity-100">
@@ -185,12 +188,12 @@ export function Row({
             {/* tags */}
             {'tags' in task ? (
               <ToolTip title="Tags">
-                <button
+                <div
                   className="bg-white border rounded-md opacity-0 group-hover:opacity-100"
                   onClick={(e) => e.preventDefault()}
                 >
                   <ManageTagsDropdown entityId={task.id} tagsArr={task.tags as Tag[]} entityType="task" />
-                </button>
+                </div>
               </ToolTip>
             ) : null}
 

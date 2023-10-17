@@ -186,6 +186,8 @@ interface TaskState {
   showNewTaskId: string;
   singleLineView: boolean;
   escapeKey: boolean;
+  hilightNewlyCreatedTask: boolean;
+  copyNewlyCreatedTask: boolean;
   toggleAllSubtask: boolean;
   toggleAllSubtaskSplit: string;
   separateSubtasksMode: boolean;
@@ -224,6 +226,7 @@ interface TaskState {
   showTaskUploadModal: boolean;
   subtaskDefaultStatusId: string | null;
   timerStatus: boolean;
+  timeType: string;
   sortAbleArr: SortOption[];
   sortArr: string[];
   timeSortStatus: boolean;
@@ -290,6 +293,8 @@ const initialState: TaskState = {
   showNewTaskField: false,
   meMode: false,
   escapeKey: false,
+  hilightNewlyCreatedTask: false,
+  copyNewlyCreatedTask: false,
   autoSave: false,
   showNewTaskId: '',
   singleLineView: false,
@@ -345,6 +350,7 @@ const initialState: TaskState = {
   groupByStatus: 'status',
   showTaskUploadModal: false,
   timerStatus: false,
+  timeType: 'clock',
   sortAbleArr: [],
   sortArr: [],
   timeSortStatus: false,
@@ -434,6 +440,12 @@ export const taskSlice = createSlice({
     },
     setEscapeKey(state, action: PayloadAction<boolean>) {
       state.escapeKey = action.payload;
+    },
+    setHilightNewlyCreatedTask(state, action: PayloadAction<boolean>) {
+      state.hilightNewlyCreatedTask = action.payload;
+    },
+    setCopyNewlyCreatedTask(state, action: PayloadAction<boolean>) {
+      state.copyNewlyCreatedTask = action.payload;
     },
     setAssigneeIds(state, action: PayloadAction<string[]>) {
       state.assigneeIds = action.payload;
@@ -655,6 +667,9 @@ export const taskSlice = createSlice({
     setTimerStatus(state, action: PayloadAction<boolean>) {
       state.timerStatus = action.payload;
     },
+    setTimeType(state, action: PayloadAction<string>) {
+      state.timeType = action.payload;
+    },
     setSortArray(state, action: PayloadAction<SortOption[]>) {
       state.sortAbleArr = action.payload;
     },
@@ -753,6 +768,8 @@ export const {
   setTaskIdForPilot,
   setCurrTeamMemId,
   setEscapeKey,
+  setHilightNewlyCreatedTask,
+  setCopyNewlyCreatedTask,
   getTaskColumns,
   getComfortableView,
   getComfortableViewWrap,
@@ -807,6 +824,7 @@ export const {
   setGroupByStatus,
   setShowTaskUploadModal,
   setTimerStatus,
+  setTimeType,
   setTimerDetails,
   setSortArray,
   setSortArr,

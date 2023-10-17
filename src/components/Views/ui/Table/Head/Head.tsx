@@ -151,6 +151,7 @@ export function Head({
       dispatch(setSortArray([...sortAbleArr, { dir: order, field: headerTxt(header) }]));
     }
   };
+
   const handleRemoveFilter = (title?: string): void => {
     dispatch(setSortArr(sortArr.filter((el) => el !== title)));
     dispatch(setSortArray(sortAbleArr.filter((el) => el.field !== headerTxt(title as string))));

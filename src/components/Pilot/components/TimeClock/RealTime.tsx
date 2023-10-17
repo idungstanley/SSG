@@ -13,13 +13,16 @@ import { EndTimeEntriesService, StartTimeEntryService } from '../../../../featur
 import { StartIcon } from '../../../../assets/icons/StartIcon';
 import { StopIcon } from '@heroicons/react/24/solid';
 import { runTimer } from '../../../../utils/TimerCounter';
+import { TIME_TABS } from '../../../../utils/Constants/TimeClockConstants';
+import { TotalTimeIcon } from '../../../../assets/icons/TotalTimeIcon';
+import ArrowDownFilled from '../../../../assets/icons/ArrowDownFilled';
 
 export function RealTime() {
   const dispatch = useAppDispatch();
 
   const { workSpaceId, hubId, subhubId, listId, taskId } = useParams();
   const { activeItemId, activeItemType, timerLastMemory, activeTabId } = useAppSelector((state) => state.workspace);
-  const { duration, timerStatus, period, timerDetails } = useAppSelector((state) => state.task);
+  const { duration, timerStatus, period, timerDetails, timeType } = useAppSelector((state) => state.task);
   const { clock_limit, clock_stop_reminder } = useAppSelector((state) => state.userSetting);
 
   const [time, setTime] = useState({ s: 0, m: 0, h: 0 });
@@ -99,20 +102,33 @@ export function RealTime() {
       activeItemId === timerLastMemory.taskId)
   ) {
     return (
-      <div className="flex justify-center items-center text-alsoit-text-md w-14 tracking-widest relative z-30">
-        <div>
-          {timerStatus && sameEntity() ? (
-            <StopIcon className="w-4 h-4 cursor-pointer" onClick={() => stop()} />
-          ) : (
-            <StartIcon className="w-4 h-4 cursor-pointer" onClick={() => handleStartTime()} />
-          )}
-        </div>
-        <span className="z-30">
-          {`${String(duration.h).padStart(2, '0')}:${String(duration.m).padStart(2, '0')}:${String(duration.s).padStart(
-            2,
-            '0'
-          )}`}
-        </span>
+      <div className="flex justify-center items-center text-alsoit-text-md w-full tracking-widest relative z-30">
+        {timeType === TIME_TABS.clock ? (
+          // clock timer
+          <div className="flex w-full -space-x-1.5">
+            <div className="w-1/3 flex items-center -space-x-2 cursor-pointer">
+              <TotalTimeIcon className="w-4 h-4" />
+              <ArrowDownFilled />
+            </div>
+            <div className="flex items-center">
+              <div className="flex items-center">
+                {timerStatus && sameEntity() ? (
+                  <StopIcon className="w-4 h-4 cursor-pointer" onClick={() => stop()} />
+                ) : (
+                  <StartIcon className="w-4 h-4 cursor-pointer" onClick={() => handleStartTime()} />
+                )}
+              </div>
+              <span className="z-30 flex items-center">
+                {`${String(duration.h).padStart(2, '0')}:${String(duration.m).padStart(2, '0')}:${String(
+                  duration.s
+                ).padStart(2, '0')}`}
+              </span>
+            </div>
+          </div>
+        ) : (
+          // Estimated Timer
+          <></>
+        )}
         {/* Active Timer Prompt */}
         {prompt && (
           <div className="absolute z-40 flex flex-col p-2 space-y-1 rounded-lg shadow-2xl top-5 bg-alsoit-gray-75 w-72">
@@ -140,12 +156,27 @@ export function RealTime() {
   }
   return (
     <div className="flex justify-center items-center text-alsoit-text-md tracking-widest z-30">
-      <div>
-        <StartIcon className="w-4 h-4 cursor-pointer" onClick={() => handleStartTime()} />
-      </div>
-      <span>
-        {`${String(time.h).padStart(2, '0')}:${String(time.m).padStart(2, '0')}:${String(time.s).padStart(2, '0')}`}
-      </span>
+      {timeType === TIME_TABS.clock ? (
+        <div className="flex items-center w-full -space-x-2">
+          <div className="w-1/3 flex items-center -space-x-2">
+            <TotalTimeIcon className="w-4 h-4" />
+            <ArrowDownFilled />
+          </div>
+          <div className="flex items-center">
+            <div>
+              <StartIcon className="w-4 h-4 cursor-pointer" onClick={() => handleStartTime()} />
+            </div>
+            <span>
+              {`${String(time.h).padStart(2, '0')}:${String(time.m).padStart(2, '0')}:${String(time.s).padStart(
+                2,
+                '0'
+              )}`}
+            </span>
+          </div>
+        </div>
+      ) : (
+        <></>
+      )}
     </div>
   );
 }

@@ -103,7 +103,7 @@ export default function GraphContainer({ id, title, children, isPieChart }: IGra
             <div className="text-center text-2xl cursor-move">{title}</div>
           </DragMove>
           <div
-            className={`p-3${isPieChart ? 'flex justify-center' : ''}`}
+            className={`p-3 ${isPieChart ? 'flex justify-center' : ''}`}
             style={{ height: isPieChart ? '150px' : '100%' }}
           >
             {children}

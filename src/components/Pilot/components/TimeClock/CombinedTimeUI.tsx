@@ -11,7 +11,6 @@ import { ManualTimeIcon } from '../../../../assets/icons/ManualTimeIcon';
 import { setActiveClockTab } from '../../../../features/workspace/workspaceSlice';
 import { HeaderIcons } from './TimeHeaderIcons';
 import { RealTime } from './RealTime';
-import { HourGlassIcon } from '../../../../assets/icons/HourGlass';
 import { ManualTime } from './ManualTime';
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
@@ -71,7 +70,12 @@ export function CombinedTime() {
                   <span className="text-alsoit-text-md text-alsoit-gray-50">{activeClockTab}</span>
                   {dropDown.tabDrop ? <ArrowUp className="w-3 h-3" /> : <ArrowDown color="#FFF" className="w-3 h-3" />}
                   {dropDown.tabDrop && (
-                    <TabsDropDown header="time category" subHeader="select category" styles="w-44 top-7 left-7">
+                    <TabsDropDown
+                      header="time category"
+                      subHeader="select category"
+                      styles="w-44 top-7 left-7"
+                      closeModal={() => setDropDown((prev) => ({ ...prev, tabDrop: !prev.tabDrop }))}
+                    >
                       {[
                         { entry: TIME_TABS.realTime, icon: <RealTimeIcon /> },
                         { entry: TIME_TABS.manual, icon: <ManualTimeIcon /> }
@@ -99,12 +103,9 @@ export function CombinedTime() {
               <div className="w-3/6">
                 {activeClockTab === TIME_TABS.realTime && (
                   <div className="flex items-center space-x-0.5">
-                    <div className="relative flex items-center px-2 py-1 bg-white border rounded border-alsoit-success w-20 h-6">
+                    <div className="relative flex items-center px-0.5 py-1 bg-white border rounded border-alsoit-success w-36 h-6">
                       <RealTime />
-                      <span className="absolute -top-1.5 bg-white px-0.5 text-alsoit-text-sm">My Time</span>
-                    </div>
-                    <div className="bg-white p-0.5 rounded cursor-pointer">
-                      <HourGlassIcon className="w-4 h-4 " />
+                      <span className="absolute -top-1.5 left-1.5 bg-white px-0.5 text-alsoit-text-sm">My Time</span>
                     </div>
                     <HeaderIcons />
                   </div>
@@ -120,7 +121,7 @@ export function CombinedTime() {
       <div className="pt-7 px-1.5 w-full">
         {timerStatus && (
           <div className="flex flex-col">
-            <div className="flex items-center w-full">
+            <div className="flex items-center space-x-2 w-full">
               <span className="flex items-center justify-center w-20 font-semibold uppercase text-alsoit-text-xi">
                 user
               </span>

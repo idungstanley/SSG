@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import SearchIcon from '../../../../assets/icons/SearchIcon';
 import { teamMember } from '../../../../features/task/interface.tasks';
 import { SlideButton } from '../../../SlideButton';
@@ -8,12 +8,18 @@ import { useGetTimeEntriesMutation } from '../../../../features/task/taskService
 import { useAppSelector } from '../../../../app/hooks';
 import { EntityType } from '../../../../utils/EntityTypes/EntityType';
 
-export function TeamMemberFilter() {
+interface Props {
+  closeModal: () => void;
+}
+
+export function TeamMemberFilter({ closeModal }: Props) {
   const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
   const { timeAssignees } = useAppSelector((state) => state.task);
 
   const [checkedState, setCheckedState] = useState<boolean[]>([]);
   const [teamMemberId, setTeamMemberId] = useState<string[]>([]);
+
+  const modalRef = useRef<HTMLDivElement | null>(null);
 
   const { mutateAsync } = useGetTimeEntriesMutation();
 
@@ -40,6 +46,18 @@ export function TeamMemberFilter() {
   const uniqueTimeData = Array.from(uniqueUsersMap.values());
 
   useEffect(() => {
+    const handleClickAway = (event: MouseEvent) => {
+      if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
+        closeModal();
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickAway);
+
+    return () => document.removeEventListener('mousedown', handleClickAway);
+  }, []);
+
+  useEffect(() => {
     if (teamMemberId.length > 0)
       mutateAsync({
         itemId: activeItemId,
@@ -54,6 +72,7 @@ export function TeamMemberFilter() {
     <div
       className="absolute right-0 top-5 z-40 flex flex-col space-y-1.5 py-1.5 w-56 rounded shadow-xl bg-white"
       onClick={(e) => e.stopPropagation()}
+      ref={modalRef}
     >
       <div className="relative w-full border-b">
         <input
