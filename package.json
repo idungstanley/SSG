@@ -44,7 +44,6 @@
     "eslint-plugin-cypress": "^2.13.3",
     "formik": "^2.2.9",
     "hot-formula-parser": "^4.0.0",
-    "isomorphic-dompurify": "^1.9.0",
     "js-file-download": "^0.4.12",
     "moment-timezone": "^0.5.43",
     "ntc-ts": "^0.0.8",
@@ -66,8 +65,6 @@
     "react-scripts": "5.0.1",
     "react-timer-wrapper": "^0.4.1",
     "react-top-loading-bar": "^2.1.0",
-    "rehype-raw": "^7.0.0",
-    "remark-gfm": "^4.0.0",
     "title-case": "^3.0.3",
     "uppy": "^2.4.1",
     "yup": "^0.32.11"
