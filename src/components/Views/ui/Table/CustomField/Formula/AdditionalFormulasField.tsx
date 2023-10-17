@@ -48,17 +48,20 @@ function AdditionalFormulasField({
 
   const transformFormula = (str: string) => {
     const selectedItems = findSelectedItemsInFormula(str, currentFields, taskCustomFields);
-    // replace base values in formula
-    const newString = str.replaceAll('true', 'TRUE').replaceAll('false', 'FALSE');
+    if (selectedItems) {
+      // replace base values in formula
+      const newString = str.replaceAll('true', 'TRUE').replaceAll('false', 'FALSE');
 
-    let strWithCurrentValues = newString;
-    let strWithCurrentIds = newString;
-    // replace variables in formula
-    selectedItems.forEach((item) => {
-      strWithCurrentValues = strWithCurrentValues.replaceAll(`field("${item.name}")`, item.value);
-      strWithCurrentIds = strWithCurrentIds.replaceAll(`field("${item.name}")`, `"${item.id}"`);
-    });
-    return { strWithCurrentValues, strWithCurrentIds };
+      let strWithCurrentValues = newString;
+      let strWithCurrentIds = newString;
+      // replace variables in formula
+      selectedItems.forEach((item) => {
+        strWithCurrentValues = strWithCurrentValues.replaceAll(`field("${item.name}")`, item.value);
+        strWithCurrentIds = strWithCurrentIds.replaceAll(`field("${item.name}")`, `"${item.id}"`);
+      });
+      return { strWithCurrentValues, strWithCurrentIds };
+    }
+    return { strWithCurrentValues: '', strWithCurrentIds: '' };
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

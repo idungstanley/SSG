@@ -37,6 +37,9 @@ import { EntityType } from '../../../../../utils/EntityTypes/EntityType';
 import { listColumnProps } from '../../../../../pages/workspace/tasks/component/views/ListColumns';
 import RoundedCheckbox from '../../../../Checkbox/RoundedCheckbox';
 import { pilotTabs } from '../../../../../app/constants/pilotTabs';
+import { Fade, Menu, MenuItem } from '@mui/material';
+import TrashIcon from '../../../../../assets/icons/TrashIcon';
+import { useDeleteCustomField } from '../../../../../features/list/listService';
 
 interface HeadProps {
   columns: listColumnProps[];
@@ -67,20 +70,28 @@ export function Head({
   parentId,
   onToggleCollapseTasks
 }: HeadProps) {
-  const parsedLabel = parseLabel(label);
   const dispatch = useAppDispatch();
-  const scrollToRef = useRef(null);
   const { listId: list_id, hubId, walletId } = useParams();
-  const sortAbles: string[] = ['Task', 'Updated at', 'Created at', 'Status', 'Priority', 'Assignees'];
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
-  const [headerId, setheaderId] = useState<string>('');
-  const [showStatusDropdown, setShowStatusDropdown] = useState<null | SVGElement>(null);
-  const [showSortModal, setShowSortModal] = useState<boolean>(false);
   const { sortArr, sortAbleArr, selectedTasksArray, selectedIndex, selectedIndexStatus, selectedIndexListId } =
     useAppSelector((state) => state.task);
   const { baseColor } = useAppSelector((state) => state.account);
   const { isManageStatus } = useAppSelector((state) => state.workspace);
+
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [headerId, setheaderId] = useState<string>('');
+  const [showStatusDropdown, setShowStatusDropdown] = useState<null | SVGElement>(null);
+  const [showSortModal, setShowSortModal] = useState<boolean>(false);
+  const [clickedColumn, setClickedColumn] = useState<string>('');
+  const [columnMenuEl, setColumnMenuEl] = useState<null | HTMLElement>(null);
+
+  const scrollToRef = useRef(null);
+
+  const parsedLabel = parseLabel(label);
+  const sortAbles: string[] = ['Task', 'Updated at', 'Created at', 'Status', 'Priority', 'Assignees'];
+  const openColumnMenu = Boolean(columnMenuEl);
+
+  const { mutate: onDelete } = useDeleteCustomField(clickedColumn, listId as string);
 
   const handleClose = () => {
     setAnchorEl(null);
@@ -221,164 +232,203 @@ export function Head({
     dispatch(setActiveTabId(pilotTabs.TEMPLATES));
   };
 
+  const handleColumnRightClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>, id: string) => {
+    e.preventDefault();
+    setColumnMenuEl(e.currentTarget);
+    setClickedColumn(id);
+  };
+
+  const handleCloseColumnMenu = () => {
+    setColumnMenuEl(null);
+    setClickedColumn('');
+  };
+
+  const handleRemoveColumn = () => {
+    if (clickedColumn) {
+      const type = hubId ? EntityType.hub : walletId ? EntityType.wallet : EntityType.list;
+      onDelete({
+        columnId: clickedColumn,
+        listId: listId as string,
+        type
+      });
+      setColumnMenuEl(null);
+    }
+  };
+
   return columns.length > 0 ? (
-    <thead className="contents">
-      <tr className="relative contents group">
-        {/* first sticky col */}
-        <th style={{ zIndex: 2 }} className="sticky left-0 flex items-center -mb-2 font-extrabold">
-          <div className="flex items-center "></div>
-          <div className="flex items-center w-full py-2 truncate dBlock group opacity-90 ml-0.5">
-            <div>
-              <RoundedCheckbox
-                onChange={handleCheckedGroupTasks}
-                isChecked={allChecked as boolean}
-                styles={`w-4 h-4 rounded-full ${
-                  selectedTasksArray.length > 0 ? 'opacity-100' : 'opacity-0'
-                } cursor-pointer focus:outline-1 focus:ring-transparent focus:border-2 focus:opacity-100 top-3.5 text-alsoit-purple-300 absolute left-1 group-hover:opacity-100`}
-              />
-            </div>
-            <div
-              className="py-0.5 relative px-2 rounded-tr-md -mb-1 flex items-center space-x-1 text-white dFlex "
-              style={{
-                backgroundColor: headerStatusColor,
-                marginLeft: '38px',
-                height: '25px',
-                gap: '5px'
-              }}
-            >
+    <>
+      <thead className="contents">
+        <tr className="relative contents group">
+          {/* first sticky col */}
+          <th style={{ zIndex: 2 }} className="sticky left-0 flex items-center -mb-2 font-extrabold">
+            <div className="flex items-center "></div>
+            <div className="flex items-center w-full py-2 truncate dBlock group opacity-90 ml-0.5">
               <div>
-                <div className="flex items-center">
-                  <div className="pr-1.5 -ml-1.5">
-                    <CollapseIcon
-                      color={headerStatusColor}
-                      active={collapseTasks}
-                      onToggle={onToggleCollapseTasks}
-                      hoverBg="white"
-                    />
-                  </div>
-                  <span ref={scrollToRef} style={{ fontSize: '11px', WebkitTextStroke: '0.5px', fontWeight: 500 }}>
-                    {parsedLabel.toUpperCase()}
-                  </span>
-                  <div className="items-center pl-2 space-x-1 viewSettings" onClick={(e) => e.stopPropagation()}>
-                    <CiEdit className="w-4 h-4 pr-1 border-r cursor-pointer" style={{ color: 'orange' }} />
-                    <BsThreeDots className="w-4 h-4 cursor-pointer" onClick={(e) => handleClick(e)} />
-                  </div>
-                </div>
+                <RoundedCheckbox
+                  onChange={handleCheckedGroupTasks}
+                  isChecked={allChecked as boolean}
+                  styles={`w-4 h-4 rounded-full ${
+                    selectedTasksArray.length > 0 ? 'opacity-100' : 'opacity-0'
+                  } cursor-pointer focus:outline-1 focus:ring-transparent focus:border-2 focus:opacity-100 top-3.5 text-alsoit-purple-300 absolute left-1 group-hover:opacity-100`}
+                />
               </div>
-              <AlsoitMenuDropdown
-                handleClose={handleCloseStatusDropdown}
-                anchorEl={showStatusDropdown as HTMLDivElement | null}
+              <div
+                className="py-0.5 relative px-2 rounded-tr-md -mb-1 flex items-center space-x-1 text-white dFlex "
+                style={{
+                  backgroundColor: headerStatusColor,
+                  marginLeft: '38px',
+                  height: '25px',
+                  gap: '5px'
+                }}
               >
-                <div className="flex flex-col p-2 px-2 space-y-2">
-                  <p className="text-alsoit-gray-75">Group Options</p>
-                  <div className="flex flex-col space-y-2">
-                    {statusDropdownOptions.map((item, index) => (
-                      <div
-                        className="flex items-center gap-2 p-1 rounded cursor-pointer hover:bg-alsoit-gray-50"
-                        key={index}
-                        onClick={item.handleClick}
-                      >
-                        <p>{item.icon}</p>
-                        <p>{item.label}</p>
-                      </div>
-                    ))}
+                <div>
+                  <div className="flex items-center">
+                    <div className="pr-1.5 -ml-1.5">
+                      <CollapseIcon
+                        color={headerStatusColor}
+                        active={collapseTasks}
+                        onToggle={onToggleCollapseTasks}
+                        hoverBg="white"
+                      />
+                    </div>
+                    <span ref={scrollToRef} style={{ fontSize: '11px', WebkitTextStroke: '0.5px', fontWeight: 500 }}>
+                      {parsedLabel.toUpperCase()}
+                    </span>
+                    <div className="items-center pl-2 space-x-1 viewSettings" onClick={(e) => e.stopPropagation()}>
+                      <CiEdit className="w-4 h-4 pr-1 border-r cursor-pointer" style={{ color: 'orange' }} />
+                      <BsThreeDots className="w-4 h-4 cursor-pointer" onClick={(e) => handleClick(e)} />
+                    </div>
                   </div>
                 </div>
-              </AlsoitMenuDropdown>
+                <AlsoitMenuDropdown
+                  handleClose={handleCloseStatusDropdown}
+                  anchorEl={showStatusDropdown as HTMLDivElement | null}
+                >
+                  <div className="flex flex-col p-2 px-2 space-y-2">
+                    <p className="text-alsoit-gray-75">Group Options</p>
+                    <div className="flex flex-col space-y-2">
+                      {statusDropdownOptions.map((item, index) => (
+                        <div
+                          className="flex items-center gap-2 p-1 rounded cursor-pointer hover:bg-alsoit-gray-50"
+                          key={index}
+                          onClick={item.handleClick}
+                        >
+                          <p>{item.icon}</p>
+                          <p>{item.label}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </AlsoitMenuDropdown>
+              </div>
+              <div
+                className="flex items-center hover:bg-gray-200 p-0.5 rounded-xs space-x-1  border-t-2 border-l-2 border-r-2 border-transparent hover:border-r-gray-600 text-alsoit-gray-200 font-semibold"
+                style={{ fontSize: '11px', WebkitTextStroke: '0.5px' }}
+              >
+                <span onClick={(e) => setOptions(e, columns[0].id, columns[0].value)} className="cursor-pointer">
+                  <span className="mr-1.5">{taskLength}</span>
+                  {!collapseTasks ? columns[0].value.toUpperCase() : null}
+                </span>
+                {sortAbles.includes(columns[0].value) && (
+                  <>
+                    {sortArr.length >= 1 && sortArr.includes(columns[0].value) ? (
+                      ''
+                    ) : (
+                      <RoundedArrowUpDown value={columns[0].value} id={columns[0].id} handleSort={handleSort} />
+                    )}
+                    {sortArr.includes(columns[0].value) && sortAbles.includes(columns[0].value) && (
+                      <SortDirectionCheck
+                        bgColor={baseColor}
+                        sortItemLength={sortArr.length}
+                        sortIndex={sortArr.indexOf(columns[0].value)}
+                        sortValue={columns[0].value}
+                        sortDesc={dirCheck(columns[0].value)?.dir === 'desc'}
+                        handleRemoveSortFn={handleRemoveFilter}
+                        propertyHeaderTxt={headerTxt(columns[0].value)}
+                        handleOrder={handleOrder}
+                      />
+                    )}
+                  </>
+                )}
+              </div>
             </div>
-            <div
-              className="flex items-center hover:bg-gray-200 p-0.5 rounded-xs space-x-1  border-t-2 border-l-2 border-r-2 border-transparent hover:border-r-gray-600 text-alsoit-gray-200 font-semibold"
-              style={{ fontSize: '11px', WebkitTextStroke: '0.5px' }}
-            >
-              <span onClick={(e) => setOptions(e, columns[0].id, columns[0].value)} className="cursor-pointer">
-                <span className="mr-1.5">{taskLength}</span>
-                {!collapseTasks ? columns[0].value.toUpperCase() : null}
-              </span>
-              {sortAbles.includes(columns[0].value) && (
-                <>
-                  {sortArr.length >= 1 && sortArr.includes(columns[0].value) ? (
-                    ''
-                  ) : (
-                    <RoundedArrowUpDown value={columns[0].value} id={columns[0].id} handleSort={handleSort} />
-                  )}
-                  {sortArr.includes(columns[0].value) && sortAbles.includes(columns[0].value) && (
-                    <SortDirectionCheck
-                      bgColor={baseColor}
-                      sortItemLength={sortArr.length}
-                      sortIndex={sortArr.indexOf(columns[0].value)}
-                      sortValue={columns[0].value}
-                      sortDesc={dirCheck(columns[0].value)?.dir === 'desc'}
-                      handleRemoveSortFn={handleRemoveFilter}
-                      propertyHeaderTxt={headerTxt(columns[0].value)}
-                      handleOrder={handleOrder}
+            <FiPlusCircle
+              className="w-4 h-4 mr-2 font-black AddColumnDropdownButton"
+              onClick={handleAddCustomProperty}
+            />
+            {headerId === columns[0].id && (
+              <SortModal
+                handleClose={handleClose}
+                anchorEl={anchorEl}
+                toggleModal={setShowSortModal}
+                handleSortFn={handleSort}
+                setAnchorEl={setAnchorEl}
+              />
+            )}
+          </th>
+          {!collapseTasks
+            ? columns.slice(1).map(({ value, id, color }) => (
+                <th key={id} className="relative w-full py-2 -mb-1.5 font-extrabold opacity-90">
+                  <div
+                    className="text-alsoit-gray-200 font-semibold flex dBlock items-center justify-center w-full h-full my-auto cursor-pointer group hover:bg-gray-200 p-0.5 rounded-xs space-x-1 border-l-2 border-r-2 border-t-2 border-transparent hover:border-r-gray-500 "
+                    style={{ fontSize: '11px', WebkitTextStroke: '0.5px', lineHeight: '13.2px' }}
+                    onContextMenu={(e) => handleColumnRightClick(e, id)}
+                  >
+                    <span className="dNone">
+                      <MdOutlineDragIndicator className="h4 w4" />
+                    </span>
+                    <span onClick={(e) => setOptions(e, id, value)} style={{ color: color ? color : '' }}>
+                      {value.toUpperCase()}
+                    </span>
+                    {sortAbles.includes(value) && (
+                      <span className="ml-0.5">
+                        {sortArr.length >= 1 && sortArr.includes(value) ? (
+                          ''
+                        ) : (
+                          <RoundedArrowUpDown value={value} id={id} handleSort={handleSort} />
+                        )}
+                        {sortArr.includes(value) && sortAbles.includes(value) && (
+                          <SortDirectionCheck
+                            bgColor={baseColor}
+                            sortItemLength={sortArr.length}
+                            sortIndex={sortArr.indexOf(value)}
+                            sortValue={value}
+                            sortDesc={dirCheck(value)?.dir === 'desc'}
+                            handleRemoveSortFn={handleRemoveFilter}
+                            propertyHeaderTxt={headerTxt(value)}
+                            handleOrder={handleOrder}
+                          />
+                        )}
+                      </span>
+                    )}
+                  </div>
+                  <div className="absolute top-0 right-0 block pl-1 idle" style={{ height: tableHeight }}>
+                    <div className="w-0.5 mx-auto bg-gray-100" style={{ height: '75px' }} />
+                  </div>
+                  {headerId === id && sortAbles.includes(value) && (
+                    <SortModal
+                      handleClose={handleClose}
+                      anchorEl={anchorEl}
+                      toggleModal={setShowSortModal}
+                      handleSortFn={handleSort}
+                      setAnchorEl={setAnchorEl}
                     />
                   )}
-                </>
-              )}
-            </div>
+                </th>
+              ))
+            : null}
+        </tr>
+      </thead>
+      <Menu anchorEl={columnMenuEl} open={openColumnMenu} onClose={handleCloseColumnMenu} TransitionComponent={Fade}>
+        <MenuItem>
+          <div className="flex">
+            <TrashIcon />
+            <span className="ml-1 text-red-500" onClick={handleRemoveColumn}>
+              Remove from List
+            </span>
           </div>
-          <FiPlusCircle className="w-4 h-4 mr-2 font-black AddColumnDropdownButton" onClick={handleAddCustomProperty} />
-          {headerId === columns[0].id && (
-            <SortModal
-              handleClose={handleClose}
-              anchorEl={anchorEl}
-              toggleModal={setShowSortModal}
-              handleSortFn={handleSort}
-              setAnchorEl={setAnchorEl}
-            />
-          )}
-        </th>
-        {!collapseTasks
-          ? columns.slice(1).map(({ value, id, color }) => (
-              <th key={id} className="relative w-full py-2 -mb-1.5 font-extrabold opacity-90">
-                <div
-                  className="text-alsoit-gray-200 font-semibold flex dBlock items-center justify-center w-full h-full my-auto cursor-pointer group hover:bg-gray-200 p-0.5 rounded-xs space-x-1 border-l-2 border-r-2 border-t-2 border-transparent hover:border-r-gray-500 "
-                  style={{ fontSize: '11px', WebkitTextStroke: '0.5px', lineHeight: '13.2px' }}
-                >
-                  <span className="dNone">
-                    <MdOutlineDragIndicator className="h4 w4" />
-                  </span>
-                  <span onClick={(e) => setOptions(e, id, value)} style={{ color: color ? color : '' }}>
-                    {value.toUpperCase()}
-                  </span>
-                  {sortAbles.includes(value) && (
-                    <span className="ml-0.5">
-                      {sortArr.length >= 1 && sortArr.includes(value) ? (
-                        ''
-                      ) : (
-                        <RoundedArrowUpDown value={value} id={id} handleSort={handleSort} />
-                      )}
-                      {sortArr.includes(value) && sortAbles.includes(value) && (
-                        <SortDirectionCheck
-                          bgColor={baseColor}
-                          sortItemLength={sortArr.length}
-                          sortIndex={sortArr.indexOf(value)}
-                          sortValue={value}
-                          sortDesc={dirCheck(value)?.dir === 'desc'}
-                          handleRemoveSortFn={handleRemoveFilter}
-                          propertyHeaderTxt={headerTxt(value)}
-                          handleOrder={handleOrder}
-                        />
-                      )}
-                    </span>
-                  )}
-                </div>
-                <div className="absolute top-0 right-0 block pl-1 idle" style={{ height: tableHeight }}>
-                  <div className="w-0.5 mx-auto bg-gray-100" style={{ height: '75px' }} />
-                </div>
-                {headerId === id && sortAbles.includes(value) && (
-                  <SortModal
-                    handleClose={handleClose}
-                    anchorEl={anchorEl}
-                    toggleModal={setShowSortModal}
-                    handleSortFn={handleSort}
-                    setAnchorEl={setAnchorEl}
-                  />
-                )}
-              </th>
-            ))
-          : null}
-      </tr>
-    </thead>
+        </MenuItem>
+      </Menu>
+    </>
   ) : null;
 }

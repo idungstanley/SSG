@@ -80,23 +80,26 @@ function SimpleFormulasField({
 
   const resultParser = (value: string, allColumns: IField[], allFields: ICustomField[]) => {
     const selectedItems = findSelectedItemsInFormula(value, allColumns, allFields);
-    const action = value.split('(')[0];
-    if (selectedItems.length === 2) {
-      setSelectedAction(action);
-      setSelectedItemOne(selectedItems[0]);
-      setSelectedItemTwo(selectedItems[1]);
-    } else {
-      setSelectedItemOne(null);
-      setSelectedItemTwo(null);
-      showAdditionalFormulas();
+    if (selectedItems) {
+      const action = value.split('(')[0];
+      if (selectedItems.length === 2) {
+        setSelectedAction(action);
+        setSelectedItemOne(selectedItems[0]);
+        setSelectedItemTwo(selectedItems[1]);
+      } else {
+        setSelectedItemOne(null);
+        setSelectedItemTwo(null);
+        showAdditionalFormulas();
+      }
+      let strWithCurrentValues = value;
+      let strWithCurrentIds = value;
+      selectedItems.forEach((item) => {
+        strWithCurrentValues = strWithCurrentValues.replaceAll(`field("${item.name}")`, item.value);
+        strWithCurrentIds = strWithCurrentIds.replaceAll(`field("${item.name}")`, item.id);
+      });
+      return { strWithCurrentValues, strWithCurrentIds };
     }
-    let strWithCurrentValues = value;
-    let strWithCurrentIds = value;
-    selectedItems.forEach((item) => {
-      strWithCurrentValues = strWithCurrentValues.replaceAll(`field("${item.name}")`, item.value);
-      strWithCurrentIds = strWithCurrentIds.replaceAll(`field("${item.name}")`, item.id);
-    });
-    return { strWithCurrentValues, strWithCurrentIds };
+    return { strWithCurrentValues: '', strWithCurrentNames: '' };
   };
 
   useEffect(() => {
@@ -121,12 +124,14 @@ function SimpleFormulasField({
     if (selectedItemOne && selectedItemTwo) {
       const value = `${selectedAction}("${selectedItemOne?.id}", "${selectedItemTwo?.id}")`;
       const selectedItems = findSelectedItemsInFormula(value, taskCustomFieldsColumns, taskCustomFields);
-      let strWithCurrentValues = value;
-      selectedItems.forEach((item) => {
-        strWithCurrentValues = strWithCurrentValues.replaceAll(`"${item.id}"`, item.value);
-      });
-      const res = parser.parse(strWithCurrentValues).result as string;
-      setResult(res);
+      if (selectedItems) {
+        let strWithCurrentValues = value;
+        selectedItems.forEach((item) => {
+          strWithCurrentValues = strWithCurrentValues.replaceAll(`"${item.id}"`, item.value);
+        });
+        const res = parser.parse(strWithCurrentValues).result as string;
+        setResult(res);
+      }
     }
   }, [selectedItemOne, selectedItemTwo, selectedAction]);
 

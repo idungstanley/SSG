@@ -81,19 +81,22 @@ function FormulaField({
 
   const resultParser = (value: string, allColumns: IField[], allFields: ICustomField[]) => {
     const selectedItems = findSelectedItemsInFormula(value, allColumns, allFields);
-    const action = value.split('(')[0];
-    if (selectedItems.length <= 2 && BASE_ACTIONS.includes(action)) {
-      setShowAdditionalFormulas(false);
-    } else {
-      setShowAdditionalFormulas(true);
+    if (selectedItems) {
+      const action = value.split('(')[0];
+      if (selectedItems.length <= 2 && BASE_ACTIONS.includes(action)) {
+        setShowAdditionalFormulas(false);
+      } else {
+        setShowAdditionalFormulas(true);
+      }
+      let strWithCurrentValues = value;
+      let strWithCurrentNames = value;
+      selectedItems.forEach((item) => {
+        strWithCurrentValues = strWithCurrentValues.replaceAll(`"${item.id}"`, item.value);
+        strWithCurrentNames = strWithCurrentNames.replaceAll(`"${item.id}"`, `field("${item.name}")`);
+      });
+      return { strWithCurrentValues, strWithCurrentNames };
     }
-    let strWithCurrentValues = value;
-    let strWithCurrentNames = value;
-    selectedItems.forEach((item) => {
-      strWithCurrentValues = strWithCurrentValues.replaceAll(`"${item.id}"`, item.value);
-      strWithCurrentNames = strWithCurrentNames.replaceAll(`"${item.id}"`, `field("${item.name}")`);
-    });
-    return { strWithCurrentValues, strWithCurrentNames };
+    return { strWithCurrentValues: '', strWithCurrentNames: '' };
   };
 
   useEffect(() => {
