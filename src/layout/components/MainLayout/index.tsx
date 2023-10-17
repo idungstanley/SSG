@@ -26,7 +26,7 @@ function MainLayout() {
   const location = useLocation();
   const navigate = useNavigate();
   const { workSpaceId } = useParams();
-  const { fileUploadProps, preferenceState } = useAppSelector((state) => state.task);
+  const { fileUploadProps } = useAppSelector((state) => state.task);
   const queryClient = useQueryClient();
   const dispatch = useAppDispatch();
   const resolution = useResolution();
