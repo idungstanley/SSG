@@ -12,6 +12,7 @@ import { IErrorRequest, ISuccessRequest } from './types';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { newTaskDataRes } from './features/task/interface.tasks';
 import { clearUserFromLS } from './utils/ClearStorage';
+import * as Sentry from '@sentry/react';
 
 const onError = (error: unknown): unknown => {
   const typedError = error as IErrorRequest;
@@ -87,6 +88,19 @@ const queryClient = new QueryClient({
 });
 
 const GOOGLE_CLIENT_ID = process.env.REACT_APP_GOOGLE_CLIENT_ID || '""';
+
+Sentry.init({
+  dsn: 'https://2c43b23dc6ecae2c4614791c031337b4@o4506031818145792.ingest.sentry.io/4506066538659840',
+  integrations: [
+    new Sentry.BrowserTracing({
+      tracePropagationTargets: ['localhost', /^https:\/\/yourserver\.io\/api/]
+    }),
+    new Sentry.Replay()
+  ],
+  tracesSampleRate: 1.0,
+  replaysSessionSampleRate: 0.1,
+  replaysOnErrorSampleRate: 1.0
+});
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <Provider store={store}>
