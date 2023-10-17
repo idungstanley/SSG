@@ -180,7 +180,7 @@ export default function HubItem({
       }}
     >
       <div
-        className={`bg-white truncate items-center group ${item.id !== activeItemId && 'hover:bg-gray-100'} ${
+        className={`bg-white truncate items-center group ${item.id !== activeItemId && 'hover:bg-alsoit-gray-50'} ${
           isOver ? 'bg-primary-100 border-primary-500 shadow-inner shadow-primary-300' : ''
         }`}
         ref={setNodeRef}
