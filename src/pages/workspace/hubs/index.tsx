@@ -11,7 +11,7 @@ import WalletModal from '../wallet/components/modals/WalletModal';
 import ActiveTress from './components/ActiveTree/ActiveTress';
 import { BiSearch } from 'react-icons/bi';
 import { setIsSearchActive } from '../../../features/search/searchSlice';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import {
   setActiveItem,
   setActiveSubHubManagerTabId,
@@ -39,7 +39,8 @@ import { pages } from '../../../app/constants/pages';
 function Hubs() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { listId, hubId, walletId } = useParams();
+  const location = useLocation();
+  const { listId, hubId, walletId, subhubId } = useParams();
 
   const { currentWorkspaceId } = useAppSelector((state) => state.auth);
   const { isSearchActive } = useAppSelector((state) => state.search);
@@ -140,7 +141,9 @@ function Hubs() {
       <PlaceItem
         label={placeHubType == APP_HR ? 'Also HR' : 'Tasks'}
         id={initialActivePlaceId}
-        isActiveLayoutCondition={!activeItemId && !(placeHubType == APP_TASKS)}
+        isActiveLayoutCondition={
+          !(!!listId || !!hubId || !!walletId || !!subhubId) && !location.pathname.includes('everything')
+        }
         icon={
           placeHubType == APP_TASKS ? (
             <BsListCheck className="w-4 h-4" style={{ color: baseColour }} />
