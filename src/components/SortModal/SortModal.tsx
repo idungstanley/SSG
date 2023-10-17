@@ -79,13 +79,6 @@ export default function SortModal({ toggleModal, setAnchorEl, anchorEl, handleCl
         dispatch(setEditCustomProperty(activeTaskColumn as IField));
         dispatch(setActiveTabId(pilotTabs.TEMPLATES));
         dispatch(setEntityForCustom({ id: undefined, type: undefined }));
-        dispatch(
-          setNewCustomPropertyDetails({
-            type: 'Multi Label',
-            name: 'currentProperty.name',
-            color: 'currentProperty.color'
-          })
-        );
       }
     },
     {
