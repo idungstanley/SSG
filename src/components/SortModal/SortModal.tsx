@@ -11,7 +11,6 @@ import {
   SortOption,
   setEditCustomProperty,
   setEntityForCustom,
-  setNewCustomPropertyDetails,
   setSortArr,
   setSortArray
 } from '../../features/task/taskSlice';
@@ -76,10 +75,12 @@ export default function SortModal({ toggleModal, setAnchorEl, anchorEl, handleCl
       icon: <MdEditNote />,
       showArrow: false,
       handleClick: () => {
-        dispatch(setEditCustomProperty(activeTaskColumn as IField));
-        dispatch(setActiveTabId(pilotTabs.TEMPLATES));
-        dispatch(setEntityForCustom({ id: undefined, type: undefined }));
-        handleClose();
+        if (!activeTaskColumn.defaulField) {
+          dispatch(setEditCustomProperty(activeTaskColumn as IField));
+          dispatch(setActiveTabId(pilotTabs.TEMPLATES));
+          dispatch(setEntityForCustom({ id: undefined, type: undefined }));
+          handleClose();
+        }
       }
     },
     {
