@@ -142,7 +142,7 @@ export const data6 = {
 export default function GraphsWrapper() {
   const dispatch = useAppDispatch();
 
-  const { isShowFullMode, showedGraph, isUpdatePosition } = useAppSelector((state) => state.insights);
+  const { isShowFullMode, showedGraphs, isUpdatePosition } = useAppSelector((state) => state.insights);
 
   const renderGraph = (id: string) => {
     switch (id) {
@@ -203,7 +203,7 @@ export default function GraphsWrapper() {
         transition: '0.2s',
         backgroundImage: `url(${renderBackground()})`
       }}
-      className="relative"
+      className="relative pt-3"
     >
       <div
         className="absolute top-10 cursor-pointer"
@@ -213,7 +213,7 @@ export default function GraphsWrapper() {
         {'<|>'}
       </div>
       <section style={{ minHeight: '0', maxHeight: '89vh' }} className="w-full h-full px-4 pb-0 overflow-auto">
-        {showedGraph ? <Fragment>{renderGraph(showedGraph)}</Fragment> : null}
+        {showedGraphs.length ? <Fragment>{showedGraphs.map((graphId) => renderGraph(graphId))}</Fragment> : null}
       </section>
     </div>
   );
