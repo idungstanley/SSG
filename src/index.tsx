@@ -94,7 +94,7 @@ Sentry.init({
   dsn: process.env.REACT_APP_SENTRY_KEY,
   integrations: [
     new Sentry.BrowserTracing({
-      tracePropagationTargets: ['localhost', /^https:\/\/yourserver\.io\/api/]
+      tracePropagationTargets: [/^https:\/\/yourserver\.io\/api/]
     }),
     new Sentry.Replay()
   ],
