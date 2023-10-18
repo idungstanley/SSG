@@ -59,7 +59,7 @@ export const useChangeRole = ({ teamMember, role }: { teamMember: string; role: 
     url: `settings/team-members/${teamMember}/change-role`,
     method: 'POST',
     data: {
-      team_member_role_key: role
+      role
     }
   });
   return data;

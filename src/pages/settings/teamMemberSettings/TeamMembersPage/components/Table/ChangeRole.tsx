@@ -20,10 +20,11 @@ function ChangeRole({ anchor, setAnchor, presentRole, teamMember }: changeRolePr
       queryClient.setQueryData(['team_member', teamMember.id], () => {
         const updatedMember = {
           ...teamMember,
-          role: successData.data.team_member_role
+          role: successData.data.role
         };
         return updatedMember;
       });
+      setAnchor(null);
     }
   });
 
