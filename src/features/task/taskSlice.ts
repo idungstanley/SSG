@@ -25,7 +25,6 @@ import {
 import { DEFAULT_FILTERS_OPTION } from '../../components/TasksHeader/ui/Filter/config/filterConfig';
 import { ITeamMembersAndGroup } from '../settings/teamMembersAndGroups.interfaces';
 import { ItaskViews } from '../hubs/hubs.interfaces';
-import { ITeamMember } from '../workspace/workspace.interfaces';
 
 export interface ICustomField {
   id: string;
