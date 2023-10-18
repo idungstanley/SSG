@@ -14,7 +14,6 @@ import { GetTaskListCount, UseEditListService } from '../../features/list/listSe
 import { setListPaletteColor } from '../../features/list/listSlice';
 import { setActiveItem } from '../../features/workspace/workspaceSlice';
 import Palette from '../ColorPalette';
-import ListIconSelection from '../ColorPalette/component/ListIconSelection';
 import ListIconComponent from '../ItemsListInSidebar/components/ListIconComponent';
 import { useDraggable, useDroppable } from '@dnd-kit/core';
 import { cl } from '../../utils';

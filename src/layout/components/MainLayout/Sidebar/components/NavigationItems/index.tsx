@@ -81,7 +81,7 @@ export default function NavigationItems({
     },
     {
       id: 'notifications',
-      name: 'Notifications',
+      name: 'Inbox',
       href: `/${currentWorkspaceId}/notification`,
       icon: <NotificationIcon />,
       alwaysShow: true
