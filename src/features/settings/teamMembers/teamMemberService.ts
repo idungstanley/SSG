@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import requestNew from '../../../app/requestNew';
-import { ITeamMember } from '../../workspace/teamMembers.intrfaces';
+import { ITeamMember, RoleRes } from '../../workspace/teamMembers.intrfaces';
 import { ITeamMembersAndGroupsReq } from '../teamMembersAndGroups.interfaces';
 
 // Get team members
@@ -51,6 +51,18 @@ export const useGetTeamMember = (teamMemberId: string) => {
       enabled: teamMemberId != null
     }
   );
+};
+
+//Change Team Member Role
+export const useChangeRole = ({ teamMember, role }: { teamMember: string; role: string }) => {
+  const data = requestNew<{ data: RoleRes }>({
+    url: `settings/team-members/${teamMember}/change-role`,
+    method: 'POST',
+    data: {
+      team_member_role_key: role
+    }
+  });
+  return data;
 };
 
 // Deactivate team member service
