@@ -41,8 +41,6 @@ export default function NavigationItem({ item, handleHotkeyClick }: NavigationIt
     dispatch(setActivePlaceName(name));
     dispatch(setShowExtendedBar(true));
     navigate(link);
-    // if (name !== 'Favorites') {
-    // }
   };
   const activeCond = !(!!listId || !!hubId || !!walletId || !!subhubId) && activePlaceName === name;
 
