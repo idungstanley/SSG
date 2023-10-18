@@ -140,14 +140,14 @@ export default function UserSettingsModal({ setShowModal }: UserProps) {
               width="w-5"
               backgroundColour={userData?.color as string | undefined}
             />
-            <span className="absolute -bottom-2 left-3">
+            <span className="absolute bottom-0 left-5">
               <ArrowDownFilled />
             </span>
           </div>
         </ToolTip>
       </div>
       <AlsoitMenuDropdown anchorEl={showSettingsMenu} handleClose={handleCloseSettingsMenu}>
-        <div className="px-1">
+        <div className="p-2">
           {userSettings?.map((i) => (
             <div key={i.id}>
               <div

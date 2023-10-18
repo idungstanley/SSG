@@ -115,7 +115,7 @@ export default function DropdownField({ field, taskId, currentProperty }: Dropdo
               style={{ maxWidth: '195px' }}
             >
               <div className="flex items-center max-w-full">
-                <SearchIcon />
+                <SearchIcon className="h-3 w-3" />
                 <input
                   onChange={handleSearchChange}
                   value={searchValue}

@@ -28,10 +28,10 @@ export function FilterDropdown({ isSplitSubtasks, parentId }: IFilterDropdownPro
           >
             <Icons src={Filter} />
             {!isSplitSubtasks ? (
-              <>
+              <span className="flex items-center gap-2">
                 Filter
                 <ArrowDownFilled />
-              </>
+              </span>
             ) : null}
           </Button>
         </Menu.Button>
@@ -47,15 +47,15 @@ export function FilterDropdown({ isSplitSubtasks, parentId }: IFilterDropdownPro
       >
         <Menu.Items
           style={{ minWidth: '600px', zIndex: '31' }}
-          className="fixed p-2 origin-top-left rounded-md bg-white shadow-lg focus:outline-none"
+          className="fixed p-2 origin-top-left bg-white rounded-md shadow-lg focus:outline-none"
         >
           {/* close */}
           <Menu.Item>
-            <XMarkIcon className="absolute h-5 w-5 right-2 top-2 text-gray-500" aria-hidden="true" />
+            <XMarkIcon className="absolute w-5 h-5 text-gray-500 right-2 top-2" aria-hidden="true" />
           </Menu.Item>
 
           {/* title */}
-          <h1 className="text-black text-lg font-bold">Filters</h1>
+          <h1 className="text-lg font-bold text-black">Filters</h1>
           <FilterList />
         </Menu.Items>
       </Transition>

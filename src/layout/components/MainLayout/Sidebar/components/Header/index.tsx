@@ -52,7 +52,7 @@ export default function Header({
       <Link to="/" className="flex-shrink-0">
         <AlsoitIcon />
       </Link>
-      {!showSidebar && <hr className="w-full my-1 mr-6" />}
+      {!showSidebar && <hr className="w-full my-1 mr-3" />}
       <div
         className={`flex flex-grow flex-shrink-0 ${!showSidebar && 'gap-2 flex-col'} ${
           showSidebar ? 'flex-col space-y-3' : ''

@@ -18,6 +18,7 @@ export function Assignee() {
   );
 
   const { data } = useGetTeamMembers({ page: 1, query: '' });
+
   const {
     filters: { fields: filters }
   } = useAppSelector((state) => state.task);

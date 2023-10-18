@@ -19,6 +19,7 @@ import ArrowDownFilled from '../../../../assets/icons/ArrowDownFilled';
 import { TabsDropDown } from './TabsDropDown';
 import { HourGlassIcon } from '../../../../assets/icons/HourGlass';
 import { ClockIcon } from '../../../../assets/icons/ClockIcon';
+import { setClockType } from '../../../../features/settings/user/userSettingsSlice';
 
 export function RealTime() {
   const dispatch = useAppDispatch();
@@ -101,6 +102,7 @@ export function RealTime() {
             <div
               className="flex w-full items-center space-x-2 p-2 hover:bg-alsoit-purple-50 cursor-pointer rounded-md"
               key={index}
+              onClick={() => dispatch(setClockType(type.value))}
             >
               {type.value === 'timer' ? <HourGlassIcon className="w-4 h-4" /> : <ClockIcon />}
               <span className="capitalize font-semibold">{type.name}</span>
@@ -164,7 +166,7 @@ export function RealTime() {
             </div>
           ) : (
             // Estimated Timer
-            <></>
+            <input type="text" />
           )}
         </div>
         {/* Active Timer Prompt */}
@@ -196,7 +198,7 @@ export function RealTime() {
     <div className="flex justify-center items-center text-alsoit-text-md tracking-widest z-30">
       <div className="flex items-center w-full -space-x-2">
         <div className="w-1/3 relative flex items-center -space-x-2">
-          <TotalTimeIcon className="w-4 h-4" />
+          {timeType === 'timer' ? <HourGlassIcon className="w-4 h-4" /> : <ClockIcon />}
           <ArrowDownFilled
             className="cursor-pointer"
             onClick={() => setDropDown((prev) => ({ ...prev, clockDropDown: !prev.clockDropDown }))}
@@ -213,7 +215,7 @@ export function RealTime() {
             </TabsDropDown>
           )}
         </div>
-        {timeType === TIME_TABS.clock ? (
+        {timeType === TIME_TABS.clock && (
           <div className="flex items-center">
             <div>
               <StartIcon className="w-4 h-4 cursor-pointer" onClick={() => handleStartTime()} />
@@ -225,9 +227,8 @@ export function RealTime() {
               )}`}
             </span>
           </div>
-        ) : (
-          <></>
         )}
+        {timeType === TIME_TABS.timer && <input type="text" />}
       </div>
     </div>
   );

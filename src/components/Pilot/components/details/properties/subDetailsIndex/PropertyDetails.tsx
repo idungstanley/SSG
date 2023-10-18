@@ -94,12 +94,12 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
     setServiceFire(true);
   };
 
-  // const convertNewlinesToBreaks = (text: string) => {
-  //   return text
-  //     .split('\n')
-  //     .map((line, index) => (index === 0 ? line : `<br />${line}`))
-  //     .join('');
-  // };
+  const convertNewlinesToBreaks = (text: string) => {
+    return text
+      .split('\n')
+      .map((line, index) => (index === 0 ? line : `\n\n ${line}`))
+      .join('');
+  };
 
   useEffect(() => {
     if (taskId != undefined && serviceFire) {
@@ -212,9 +212,7 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
               </div>
             ) : (
               <div className="capitalize h-20 overflow-scroll p-1.5">
-                <VerticalScroll>
-                  <ReactMarkDown>{description}</ReactMarkDown>
-                </VerticalScroll>
+                <ReactMarkDown>{convertNewlinesToBreaks(description)}</ReactMarkDown>
               </div>
             )}
           </div>
