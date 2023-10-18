@@ -78,8 +78,7 @@ function CreateCurrencyField() {
         ) : (
           <h1 className="text-alsoit-text-lg font-semibold">Please Select Currency</h1>
         )}
-
-        {anchorEl ? <ArrowUpIcon /> : <ArrowDown />}
+        {anchorEl ? <ArrowUpIcon /> : <ArrowDown className="h-3 w-3" />}
       </button>
       {anchorEl && (
         <div className="absolute right-0 mt-2">

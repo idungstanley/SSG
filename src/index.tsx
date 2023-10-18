@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import ReactDOM from 'react-dom/client';
 import './styles/index.css';
 import { Provider } from 'react-redux';
@@ -12,6 +12,8 @@ import { IErrorRequest, ISuccessRequest } from './types';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { newTaskDataRes } from './features/task/interface.tasks';
 import { clearUserFromLS } from './utils/ClearStorage';
+import * as Sentry from '@sentry/react';
+import { Spinner } from './common';
 
 const onError = (error: unknown): unknown => {
   const typedError = error as IErrorRequest;
@@ -88,11 +90,26 @@ const queryClient = new QueryClient({
 
 const GOOGLE_CLIENT_ID = process.env.REACT_APP_GOOGLE_CLIENT_ID || '""';
 
+Sentry.init({
+  dsn: process.env.REACT_APP_SENTRY_KEY,
+  integrations: [
+    new Sentry.BrowserTracing({
+      tracePropagationTargets: ['localhost', /^https:\/\/yourserver\.io\/api/]
+    }),
+    new Sentry.Replay()
+  ],
+  tracesSampleRate: 1.0,
+  replaysSessionSampleRate: 0.1,
+  replaysOnErrorSampleRate: 1.0
+});
+
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <Provider store={store}>
     <QueryClientProvider client={queryClient}>
       <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
-        <App />
+        <Suspense fallback={<Spinner />}>
+          <App />
+        </Suspense>
 
         {/* // ? delete the line below to remove flower icon in bottom right side of page  */}
         <ReactQueryDevtools position="bottom-right" />

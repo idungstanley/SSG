@@ -3,7 +3,6 @@ import requestNew from '../../../app/requestNew';
 import { IUserRes } from '../../workspace/workspace.interfaces';
 import { setShowConfirmationModal } from './userSettingsSlice';
 import { useAppDispatch } from '../../../app/hooks';
-import { setColourPaletteData } from '../../account/accountSlice';
 import { IPreferenceState } from '../../task/taskSlice';
 // import { useAppDispatch } from '../../../app/hooks';
 interface IUserSettings {

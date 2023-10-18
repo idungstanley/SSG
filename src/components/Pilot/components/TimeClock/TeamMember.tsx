@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import SearchIcon from '../../../../assets/icons/SearchIcon';
 import { teamMember } from '../../../../features/task/interface.tasks';
 import { SlideButton } from '../../../SlideButton';
@@ -8,12 +8,18 @@ import { useGetTimeEntriesMutation } from '../../../../features/task/taskService
 import { useAppSelector } from '../../../../app/hooks';
 import { EntityType } from '../../../../utils/EntityTypes/EntityType';
 
-export function TeamMemberFilter() {
+interface Props {
+  closeModal: () => void;
+}
+
+export function TeamMemberFilter({ closeModal }: Props) {
   const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
   const { timeAssignees } = useAppSelector((state) => state.task);
 
   const [checkedState, setCheckedState] = useState<boolean[]>([]);
   const [teamMemberId, setTeamMemberId] = useState<string[]>([]);
+
+  const modalRef = useRef<HTMLDivElement | null>(null);
 
   const { mutateAsync } = useGetTimeEntriesMutation();
 
@@ -40,6 +46,18 @@ export function TeamMemberFilter() {
   const uniqueTimeData = Array.from(uniqueUsersMap.values());
 
   useEffect(() => {
+    const handleClickAway = (event: MouseEvent) => {
+      if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
+        closeModal();
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickAway);
+
+    return () => document.removeEventListener('mousedown', handleClickAway);
+  }, []);
+
+  useEffect(() => {
     if (teamMemberId.length > 0)
       mutateAsync({
         itemId: activeItemId,
@@ -54,12 +72,13 @@ export function TeamMemberFilter() {
     <div
       className="absolute right-0 top-5 z-40 flex flex-col space-y-1.5 py-1.5 w-56 rounded shadow-xl bg-white"
       onClick={(e) => e.stopPropagation()}
+      ref={modalRef}
     >
       <div className="relative w-full border-b">
         <input
           type="text"
           placeholder="Search"
-          className="w-full rounded-md ring-0 focus:ring-0 border-none bg-white px-5 text-alsoit-text-md"
+          className="w-full px-5 bg-white border-none rounded-md ring-0 focus:ring-0 text-alsoit-text-md"
         />
         <SearchIcon className="absolute w-3 h-3 top-3.5 left-1.5" />
       </div>
@@ -79,7 +98,7 @@ export function TeamMemberFilter() {
                     backgroundColour={entry.user.color}
                   />
                 )}
-                <span className="text-alsoit-text-md font-semibold">{entry.user.name}</span>
+                <span className="font-semibold text-alsoit-text-md">{entry.user.name}</span>
               </div>
               <SlideButton index={index} state={checkedState} changeFn={handleChange} />
             </div>

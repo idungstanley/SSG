@@ -1,11 +1,20 @@
 /* eslint-disable max-len */
-import React from 'react';
+import React, { DetailedHTMLProps, SVGAttributes } from 'react';
 
-export default function AlsoitIcon() {
+interface ArrowDownProps extends DetailedHTMLProps<SVGAttributes<SVGSVGElement>, SVGSVGElement> {
+  active?: boolean;
+  color?: string;
+  dimensions?: {
+    height: number;
+    width: number;
+  };
+}
+
+export default function AlsoitIcon({ active = false, dimensions, color, ...props }: ArrowDownProps) {
   return (
     <svg
-      width="61"
-      height="66"
+      width={dimensions?.width ?? '61'}
+      height={dimensions?.height ?? '66'}
       viewBox="0 0 61 66"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"

@@ -9,6 +9,8 @@ import { setIsSearchActive } from '../../../../../features/search/searchSlice';
 import ArrowRight from '../../../../../assets/icons/ArrowRight';
 import ArrowOpenDown from '../../../../../assets/icons/ArrowOpenDown';
 import Drag from '../../../../../assets/icons/Drag';
+import ActiveBarIdentification from '../../../../../components/tasks/Component/ActiveBarIdentification';
+import ActiveBackground from '../../../../../components/tasks/Component/ActiveBackground';
 
 interface PlaceItemProps {
   label: string;
@@ -35,7 +37,7 @@ export default function PlaceItem({
 }: PlaceItemProps) {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { showSidebar, lightBaseColor, baseColor } = useAppSelector((state) => state.account);
+  const { showSidebar } = useAppSelector((state) => state.account);
   const { hub } = useAppSelector((state) => state.hub);
   const { activeItemId } = useAppSelector((state) => state.workspace);
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
@@ -46,7 +48,6 @@ export default function PlaceItem({
   const isActivePlace = !onClick;
   const placeActive = isActivePlace && isActiveLayoutCondition;
 
-  // const baseColor = '#BF00FFB2';
   const style = {
     transform: transform ? `translate(${transform.x}px, ${transform.y}px)` : undefined,
     transition,
@@ -77,7 +78,7 @@ export default function PlaceItem({
       id={`${label}`}
       className={cl(
         isActivePlace ? 'sticky top-0' : '',
-        'focus:flex hover:bg-gray-100 flex-col w-full group',
+        'focus:flex hover:bg-alsoit-gray-50 flex-col w-full group',
         bottomContent ? 'gap-2' : ''
       )}
       style={style}
@@ -88,20 +89,10 @@ export default function PlaceItem({
           className="relative flex items-center justify-center cursor-pointer"
           style={{ height: '50px', paddingLeft: showSidebar ? '25px' : '20px' }}
         >
-          {placeActive && (
-            <span
-              className="absolute inset-0 z-0 before:content before:absolute before:inset-0"
-              style={{ backgroundColor: lightBaseColor }}
-            />
-          )}
-          {placeActive && (
-            <span
-              className="absolute top-0 bottom-0 left-0 w-0.5 rounded-r-lg"
-              style={{ backgroundColor: baseColor }}
-            />
-          )}
+          <ActiveBackground showBgColor={placeActive as boolean} />
+          <ActiveBarIdentification showBar={placeActive as boolean} />
           <span
-            className="absolute justify-center text-xl text-gray-500 opacity-0 cursor-move left-1 group-hover:opacity-100"
+            className="absolute justify-center text-xl text-gray-500 opacity-0 cursor-move left-1.5 group-hover:opacity-100"
             ref={setNodeRef}
             {...attributes}
             {...listeners}
@@ -111,7 +102,7 @@ export default function PlaceItem({
           <div className="flex items-center justify-between w-full">
             <div
               className={cl(
-                'flex gap-4 items-center content-center self-center ml-0.5',
+                'flex gap-4 items-center content-center self-center ml-2.5',
                 isActivePlace ? 'justify-center text-black font-extrabold' : ''
               )}
             >
@@ -120,10 +111,9 @@ export default function PlaceItem({
                 className={cl(
                   showSidebar ? 'block' : 'hidden',
                   'w-32 text-left cursor-pointer uppercase truncate',
-                  isActivePlace ? 'font-black' : ''
+                  isActivePlace ? 'font-black text-alsoit-purple-300' : ''
                 )}
                 style={{
-                  color: `${isActivePlace ? baseColor : ''}`,
                   fontSize: '13px',
                   lineHeight: '16px',
                   verticalAlign: 'baseline',

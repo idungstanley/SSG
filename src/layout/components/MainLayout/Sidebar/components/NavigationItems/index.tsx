@@ -81,7 +81,7 @@ export default function NavigationItems({
     },
     {
       id: 'notifications',
-      name: 'Notifications',
+      name: 'Inbox',
       href: `/${currentWorkspaceId}/notification`,
       icon: <NotificationIcon />,
       alwaysShow: true
@@ -100,8 +100,9 @@ export default function NavigationItems({
       icon: (
         <AvatarWithInitials
           initials={getInitials(workspaceName ?? '')}
-          height="h-5"
-          width="w-5"
+          height="h-4 font-xs"
+          width="w-4"
+          textSize="8px"
           backgroundColour={workspaceColor}
           roundedStyle="rounded"
           textColor="white"
@@ -212,7 +213,7 @@ export default function NavigationItems({
   return (
     <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={(e) => handleDragEnd(e)}>
       <SortableContext strategy={rectSortingStrategy} items={items}>
-        <section>
+        <section className="mt-5">
           <nav className="flex flex-col mt-1 items.center">
             {(showSidebar ? displayPinnedItems : displayNavItems).map((item) => (
               <NavigationItem
@@ -228,8 +229,8 @@ export default function NavigationItems({
             <div
               onClick={handleToggleMore}
               className={cl(
-                !showSidebar ? 'justify-center pl-5' : 'gap-2 items-center pl-7 justify-between',
-                'flex cursor-pointer gap-2 items-center  p-2 w-full hover:text-gray-500 hover:bg-gray-100 mb-4'
+                !showSidebar ? 'justify-center pl-5' : 'gap-2 items-center pl-9 justify-between',
+                'flex cursor-pointer gap-2 items-center  p-2 w-full hover:text-gray-500 hover:bg-alsoit-gray-50 mb-4'
               )}
               style={{ height: '30px', fontWeight: '600' }}
             >
