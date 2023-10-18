@@ -205,6 +205,7 @@ interface TaskState {
   assignOnHoverTaskId: string;
   assignOnHoverListId: string;
   assignOnHoverState: boolean;
+  f2State: boolean;
   addNewTaskItem: boolean;
   selectedIndex: number | null;
   defaultSubtaskListId: null | string;
@@ -332,6 +333,7 @@ const initialState: TaskState = {
   assignOnHoverTaskId: '',
   assignOnHoverListId: '',
   assignOnHoverState: false,
+  f2State: false,
   addNewTaskItem: false,
   closeTaskListView: true,
   selectedIndex: null,
@@ -592,6 +594,9 @@ export const taskSlice = createSlice({
     setAssignOnHoverState(state, action: PayloadAction<boolean>) {
       state.assignOnHoverState = action.payload;
     },
+    setF2State(state, action: PayloadAction<boolean>) {
+      state.f2State = action.payload;
+    },
     getTaskUpperCase(state, action: PayloadAction<boolean>) {
       state.taskUpperCase = action.payload;
     },
@@ -832,6 +837,7 @@ export const {
   setAssignOnHoverTaskId,
   setAssignOnHoverListId,
   setAssignOnHoverState,
+  setF2State,
   setUpdateEntries,
   setTriggerSaveSettingsModal,
   setSaveSettingOnline,
