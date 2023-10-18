@@ -83,7 +83,6 @@ export default function DateFormat({ date, task, font = 'text-sm', type, isDueDa
             >
               x
             </p>
-            {}
             <p className={cl(isDueDate && isDateInPast(date) ? 'text-alsoit-danger' : 'text-alsoit-gray-300')}>
               {moment(date as MomentInput).format(date_format?.toUpperCase())}
             </p>

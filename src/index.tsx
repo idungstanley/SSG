@@ -91,7 +91,7 @@ const queryClient = new QueryClient({
 const GOOGLE_CLIENT_ID = process.env.REACT_APP_GOOGLE_CLIENT_ID || '""';
 
 Sentry.init({
-  dsn: process.env.REACT_SENTRY_KEY,
+  dsn: process.env.REACT_APP_SENTRY_KEY,
   integrations: [
     new Sentry.BrowserTracing({
       tracePropagationTargets: ['localhost', /^https:\/\/yourserver\.io\/api/]

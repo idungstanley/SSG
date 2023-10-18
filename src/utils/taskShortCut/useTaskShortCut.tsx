@@ -1,7 +1,8 @@
-import React, { Dispatch, SetStateAction, useEffect } from 'react';
+import React, { Dispatch, SetStateAction, startTransition, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { useNavigate } from 'react-router-dom';
 import {
+  setAssignOnHoverState,
   setCopyNewlyCreatedTask,
   setEscapeKey,
   setHilightNewlyCreatedTask,
@@ -31,56 +32,58 @@ export default function useTaskShortCut() {
   const navigate = useNavigate();
 
   const TaskShortcutListener = (event: KeyboardEvent, setTaskShortcut: Dispatch<SetStateAction<boolean>>) => {
-    const handleInputFields = () => {
-      if (
-        document.activeElement?.tagName === 'INPUT' ||
-        document.activeElement?.tagName === 'TEXTAREA' ||
-        document.activeElement?.getAttribute('contenteditable') === 'true'
-      ) {
-        dispatch(setHilightNewlyCreatedTask(false));
-        dispatch(setCopyNewlyCreatedTask(false));
-        return false;
-      } else {
-        return true;
-      }
-    };
+    startTransition(() => {
+      const handleInputFields = () => {
+        if (
+          document.activeElement?.tagName === 'INPUT' ||
+          document.activeElement?.tagName === 'TEXTAREA' ||
+          document.activeElement?.getAttribute('contenteditable') === 'true'
+        ) {
+          dispatch(setHilightNewlyCreatedTask(false));
+          dispatch(setCopyNewlyCreatedTask(false));
+          return false;
+        } else {
+          return true;
+        }
+      };
 
-    if (preferenceState.hotkeys) {
-      if (handleInputFields() == true) {
+      if (preferenceState.hotkeys) {
+        if (handleInputFields() == true) {
+          switch (event.key.toLowerCase()) {
+            case '?':
+              if (event.shiftKey) {
+                setTaskShortcut(true);
+              }
+              break;
+            case 'h':
+              navigate(`/${currentWorkspaceId}`);
+              break;
+            case 'c':
+              dispatch(setActiveTabId('calendar'));
+              break;
+            case 'n':
+              dispatch(setShowExtendedBar(true));
+              break;
+            case '1':
+              dispatch(setHilightNewlyCreatedTask(true));
+              break;
+            case '3':
+              dispatch(setCopyNewlyCreatedTask(true));
+              break;
+            case 'm':
+              dispatch(setAssignOnHoverState(true));
+              break;
+            default:
+          }
+        }
         switch (event.key) {
-          case '?':
-            if (event.shiftKey) {
-              setTaskShortcut(true);
-            }
-            break;
-          case 'h':
-          case 'H':
-            navigate(`/${currentWorkspaceId}`);
-            break;
-          case 'c':
-          case 'C':
-            dispatch(setActiveTabId('calendar'));
-            break;
-          case 'n':
-          case 'N':
-            dispatch(setShowExtendedBar(true));
-            break;
-          case '1':
-            dispatch(setHilightNewlyCreatedTask(true));
-            break;
-          case '3':
-            dispatch(setCopyNewlyCreatedTask(true));
+          case 'Escape':
+            dispatch(setEscapeKey(true));
             break;
           default:
         }
       }
-      switch (event.key) {
-        case 'Escape':
-          dispatch(setEscapeKey(true));
-          break;
-        default:
-      }
-    }
+    });
   };
   return TaskShortcutListener;
 }

@@ -2,16 +2,20 @@ import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { useGetTeamMembers } from '../../../../features/settings/teamMembers/teamMemberService';
 import { generateFilter } from '../Filter/lib/filterUtils';
 import Button from '../../../Buttons/Button';
-import { setAssigneeIds, setFilterFields, setMeMode } from '../../../../features/task/taskSlice';
+import { setAssignOnHoverState, setAssigneeIds, setFilterFields, setMeMode } from '../../../../features/task/taskSlice';
 import Me from '../../../../assets/icons/Me';
 import FilterByAssigneeModal from './FilterByAssigneeModal';
+import { UseTaskAssignService } from '../../../../features/task/taskService';
+import { ITeamMembersAndGroup } from '../../../../features/settings/teamMembersAndGroups.interfaces';
+import { useEffect } from 'react';
 
 export function Assignee() {
   const dispatch = useAppDispatch();
 
   const { currentUserId } = useAppSelector((state) => state.auth);
-
-  const { assigneeIds, meMode } = useAppSelector((state) => state.task);
+  const { assigneeIds, meMode, assignOnHoverTaskId, assignOnHoverState, assignOnHoverListId } = useAppSelector(
+    (state) => state.task
+  );
 
   const { data } = useGetTeamMembers({ page: 1, query: '' });
 
@@ -26,6 +30,29 @@ export function Assignee() {
 
   const currentMemberId = members.find((i) => i.user.id === currentUserId)?.id;
   const currentMemberName = members.find((i) => i.user.id === currentUserId)?.user.name;
+  const currUser = members.find((i) => i.user.id === currentUserId);
+
+  const { mutate: onTaskAssign } = UseTaskAssignService([assignOnHoverTaskId], currUser as ITeamMembersAndGroup, [
+    assignOnHoverListId
+  ]);
+
+  const handleAssignTask = () => {
+    onTaskAssign({
+      taskIds: [assignOnHoverTaskId],
+      team_member_id: currentMemberId as string,
+      teams: false
+    });
+  };
+
+  useEffect(() => {
+    if (assignOnHoverTaskId && assignOnHoverState) {
+      handleAssignTask();
+    }
+
+    if (assignOnHoverTaskId) {
+      dispatch(setAssignOnHoverState(false));
+    }
+  }, [assignOnHoverState, assignOnHoverTaskId]);
 
   if (!currentMemberId || !currentMemberName) {
     return null;
