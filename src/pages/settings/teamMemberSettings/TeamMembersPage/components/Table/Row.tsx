@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { NoSymbolIcon, UserMinusIcon, CheckCircleIcon } from '@heroicons/react/24/outline';
 import {
@@ -10,13 +10,18 @@ import {
 import { displayPrompt, setVisibility } from '../../../../../../features/general/prompt/promptSlice';
 import { AvatarWithInitials, StatusDot, Dropdown } from '../../../../../../components';
 import { OutputDateTime } from '../../../../../../app/helpers';
+import ChangeRole from './ChangeRole';
+import ArrowDown from '../../../../../../assets/icons/ArrowDown';
 
 interface RowProps {
   teamMemberId: string;
+  myRole: string;
 }
 
-export default function Row({ teamMemberId }: RowProps) {
+export default function Row({ teamMemberId, myRole }: RowProps) {
   const dispatch = useDispatch();
+  const canChangeRole = myRole.toLowerCase() === 'owner' || myRole.toLowerCase() === 'admin';
+  const [anchor, setAnchor] = useState<HTMLElement | null>(null);
 
   const { data: teamMember } = useGetTeamMember(teamMemberId);
   const { mutate: deactivateTeamMember } = useDeactivateTeamMember(teamMemberId);
@@ -118,7 +123,17 @@ export default function Row({ teamMemberId }: RowProps) {
           {teamMember.is_deleted ? 'Deactivated' : 'Active'}
         </span>
       </td>
-      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{teamMember.role.name}</td>
+      <td
+        className="whitespace-nowrap px-3 py-4 text-sm text-gray-500 cursor-pointer flex items-center gap-1 mt-2"
+        onClick={(e) => {
+          if (teamMember.role.name.toLowerCase() !== 'owner' && canChangeRole) {
+            setAnchor(e.currentTarget);
+          }
+        }}
+      >
+        {teamMember.role.name}
+        {teamMember.role.name.toLowerCase() !== 'owner' && canChangeRole && <ArrowDown className="w-2 h-2" />}
+      </td>
       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
         {teamMember.last_activity_at ? OutputDateTime(teamMember.last_activity_at, null) : '-'}
       </td>
@@ -155,6 +170,7 @@ export default function Row({ teamMemberId }: RowProps) {
             ]}
           />
         </div>
+        <ChangeRole anchor={anchor} setAnchor={setAnchor} presentRole={teamMember.role.name} teamMember={teamMember} />
       </td>
     </tr>
   ) : null;

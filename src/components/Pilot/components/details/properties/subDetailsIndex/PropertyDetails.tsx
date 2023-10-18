@@ -22,9 +22,6 @@ import { useParams } from 'react-router-dom';
 import { IWalletDetails } from '../../../../../../features/wallet/wallet.interfaces';
 import PlusIcon from '../../../../../../assets/icons/PlusIcon';
 import ReactMarkDown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
-import rehypeRaw from 'rehype-raw';
-import DOMPurify from 'dompurify';
 import { VerticalScroll } from '../../../../../ScrollableContainer/VerticalScroll';
 import { useAppSelector } from '../../../../../../app/hooks';
 import FileIcons from '../../../../../Views/ui/Table/CustomField/Files/FileIcon';
@@ -92,10 +89,16 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
     // const sanitizedDescription = DOMPurify.sanitize(value);
     setDescription(value);
   };
-
   const handleSubmit = async () => {
     handleBlur();
     setServiceFire(true);
+  };
+
+  const convertNewlinesToBreaks = (text: string) => {
+    return text
+      .split('\n')
+      .map((line, index) => (index === 0 ? line : `\n\n ${line}`))
+      .join('');
   };
 
   useEffect(() => {
@@ -200,19 +203,16 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
             {editingDescription ? (
               <div className="w-full h-min">
                 <textarea
+                  autoFocus
                   onChange={(e) => handleDescriptionChange(e.target.value)}
                   value={description}
                   onBlur={handleSubmit}
-                  className="w-full text-alsoit-gray-200 h-20 border-none focus:ring-1 focus:ring-alsoit-gray-75 rounded-md text-alsoit-text-lg font-semibold"
+                  className="w-full text-alsoit-gray-200 h-20 border-none focus:ring-1 focus:ring-alsoit-gray-75 rounded-md text-alsoit-text-lg font-semibold bg-alsoit-gray-50"
                 ></textarea>
               </div>
             ) : (
               <div className="capitalize h-20 overflow-scroll p-1.5">
-                <VerticalScroll>
-                  <ReactMarkDown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>
-                    {description}
-                  </ReactMarkDown>
-                </VerticalScroll>
+                <ReactMarkDown>{convertNewlinesToBreaks(description)}</ReactMarkDown>
               </div>
             )}
           </div>

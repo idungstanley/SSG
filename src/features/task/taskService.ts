@@ -20,6 +20,7 @@ import { QueryClient, useInfiniteQuery, useMutation, useQuery, useQueryClient } 
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import {
   SortOption,
+  setAssignOnHoverState,
   setDuplicateTaskObj,
   setNewTaskPriority,
   setScreenRecording,
@@ -1133,6 +1134,8 @@ export const UseTaskAssignService = (taskIds: string[], user: ITeamMembersAndGro
 
   return useMutation(AssignTask, {
     onSuccess: () => {
+      dispatch(setAssignOnHoverState(false));
+
       const { updatedTasks, updatedSubtasks } = taskAssignessUpdateManager(
         taskIds,
         listIds,

@@ -13,9 +13,13 @@ import { EndTimeEntriesService, StartTimeEntryService } from '../../../../featur
 import { StartIcon } from '../../../../assets/icons/StartIcon';
 import { StopIcon } from '@heroicons/react/24/solid';
 import { runTimer } from '../../../../utils/TimerCounter';
-import { TIME_TABS } from '../../../../utils/Constants/TimeClockConstants';
+import { CLOCK_TYPE, TIME_TABS } from '../../../../utils/Constants/TimeClockConstants';
 import { TotalTimeIcon } from '../../../../assets/icons/TotalTimeIcon';
 import ArrowDownFilled from '../../../../assets/icons/ArrowDownFilled';
+import { TabsDropDown } from './TabsDropDown';
+import { HourGlassIcon } from '../../../../assets/icons/HourGlass';
+import { ClockIcon } from '../../../../assets/icons/ClockIcon';
+import { setClockType } from '../../../../features/settings/user/userSettingsSlice';
 
 export function RealTime() {
   const dispatch = useAppDispatch();
@@ -29,6 +33,9 @@ export function RealTime() {
   const [isRunning, setRunning] = useState(false);
   const [prompt, setPrompt] = useState<boolean>(false);
   const [newTimer, setNewTimer] = useState<boolean>(false);
+  const [dropDown, setDropDown] = useState<{ clockDropDown: boolean }>({
+    clockDropDown: false
+  });
 
   const mutation = EndTimeEntriesService();
   const { mutate } = StartTimeEntryService();
@@ -87,6 +94,25 @@ export function RealTime() {
     setNewTimer(!newTimer);
   };
 
+  const clockTypes = () => {
+    return (
+      <div className="flex flex-col space-y-2">
+        {CLOCK_TYPE.map((type, index) => {
+          return (
+            <div
+              className="flex w-full items-center space-x-2 p-2 hover:bg-alsoit-purple-50 cursor-pointer rounded-md"
+              key={index}
+              onClick={() => dispatch(setClockType(type.value))}
+            >
+              {type.value === 'timer' ? <HourGlassIcon className="w-4 h-4" /> : <ClockIcon />}
+              <span className="capitalize font-semibold">{type.name}</span>
+            </div>
+          );
+        })}
+      </div>
+    );
+  };
+
   useEffect(() => {
     RunTimer;
   }, [isRunning]);
@@ -103,13 +129,27 @@ export function RealTime() {
   ) {
     return (
       <div className="flex justify-center items-center text-alsoit-text-md w-full tracking-widest relative z-30">
-        {timeType === TIME_TABS.clock ? (
-          // clock timer
-          <div className="flex w-full -space-x-1.5">
-            <div className="w-1/3 flex items-center -space-x-2 cursor-pointer">
-              <TotalTimeIcon className="w-4 h-4" />
-              <ArrowDownFilled />
-            </div>
+        <div className="flex w-full -space-x-1.5">
+          <div className="w-1/3 relative flex items-center -space-x-2 cursor-pointer">
+            <TotalTimeIcon className="w-4 h-4" />
+            <ArrowDownFilled
+              className="cursor-pointer"
+              onClick={() => setDropDown((prev) => ({ ...prev, clockDropDown: !prev.clockDropDown }))}
+            />
+            {dropDown.clockDropDown && (
+              <TabsDropDown
+                header="timeclock types"
+                subHeader="select category"
+                styles="w-44 left-0 top-6 px-1.5"
+                subStyles="left-7"
+                closeModal={() => setDropDown((prev) => ({ ...prev, clockDropDown: !prev.clockDropDown }))}
+              >
+                {clockTypes()}
+              </TabsDropDown>
+            )}
+          </div>
+          {timeType === TIME_TABS.clock ? (
+            // clock timer
             <div className="flex items-center">
               <div className="flex items-center">
                 {timerStatus && sameEntity() ? (
@@ -124,11 +164,11 @@ export function RealTime() {
                 ).padStart(2, '0')}`}
               </span>
             </div>
-          </div>
-        ) : (
-          // Estimated Timer
-          <></>
-        )}
+          ) : (
+            // Estimated Timer
+            <input type="text" />
+          )}
+        </div>
         {/* Active Timer Prompt */}
         {prompt && (
           <div className="absolute z-40 flex flex-col p-2 space-y-1 rounded-lg shadow-2xl top-5 bg-alsoit-gray-75 w-72">
@@ -156,12 +196,26 @@ export function RealTime() {
   }
   return (
     <div className="flex justify-center items-center text-alsoit-text-md tracking-widest z-30">
-      {timeType === TIME_TABS.clock ? (
-        <div className="flex items-center w-full -space-x-2">
-          <div className="w-1/3 flex items-center -space-x-2">
-            <TotalTimeIcon className="w-4 h-4" />
-            <ArrowDownFilled />
-          </div>
+      <div className="flex items-center w-full -space-x-2">
+        <div className="w-1/3 relative flex items-center -space-x-2">
+          {timeType === 'timer' ? <HourGlassIcon className="w-4 h-4" /> : <ClockIcon />}
+          <ArrowDownFilled
+            className="cursor-pointer"
+            onClick={() => setDropDown((prev) => ({ ...prev, clockDropDown: !prev.clockDropDown }))}
+          />
+          {dropDown.clockDropDown && (
+            <TabsDropDown
+              header="timeclock types"
+              subHeader="select category"
+              styles="w-44 left-0 top-6 px-1.5"
+              subStyles="left-7"
+              closeModal={() => setDropDown((prev) => ({ ...prev, clockDropDown: !prev.clockDropDown }))}
+            >
+              {clockTypes()}
+            </TabsDropDown>
+          )}
+        </div>
+        {timeType === TIME_TABS.clock && (
           <div className="flex items-center">
             <div>
               <StartIcon className="w-4 h-4 cursor-pointer" onClick={() => handleStartTime()} />
@@ -173,10 +227,9 @@ export function RealTime() {
               )}`}
             </span>
           </div>
-        </div>
-      ) : (
-        <></>
-      )}
+        )}
+        {timeType === TIME_TABS.timer && <input type="text" />}
+      </div>
     </div>
   );
 }

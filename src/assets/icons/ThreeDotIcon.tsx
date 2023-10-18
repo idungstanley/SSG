@@ -1,16 +1,12 @@
 import ICONS_INTERACTIONS from '../../utils/Constants/IconInteractions';
+import { IconProps } from './PlusIcon';
 
 /* eslint-disable max-len */
-interface Props {
-  active?: boolean;
-  dimensions?: {
-    height: number;
-    width: number;
-  };
-}
-export default function ThreeDotIcon({ active, dimensions }: Props) {
+
+export default function ThreeDotIcon({ active, dimensions, ...props }: IconProps) {
   return (
     <svg
+      {...props}
       width={dimensions?.width ?? '12'}
       height={dimensions?.height ?? '4'}
       viewBox="0 0 12 4"

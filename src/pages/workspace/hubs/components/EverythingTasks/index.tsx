@@ -30,9 +30,10 @@ function EverythingTasks() {
   return (
     <div
       className={cl(
-        !showSidebar ? 'overflow-x-hidden w-12 pl-5' : 'pl-6',
-        'relative flex items-center justify-between hover:bg-gray-100'
+        !showSidebar ? 'overflow-x-hidden w-12 pl-5' : 'pl-8',
+        'relative flex items-center justify-between hover:bg-alsoit-gray-50'
       )}
+      style={{ height: '30px' }}
     >
       <ActiveBackground showBgColor={location.pathname.includes('everything')} />
       <ActiveBarIdentification showBar={location.pathname.includes('everything')} />

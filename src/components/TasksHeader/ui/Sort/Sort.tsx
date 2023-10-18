@@ -42,12 +42,12 @@ export function Sort({ isSplitSubtasks }: ISortProps) {
           <Button active={isSplitSubtasks ? false : true} withoutBg={isSplitSubtasks}>
             <Icons src={GroupBy} />
             {!isSplitSubtasks ? (
-              <>
+              <span className="flex items-center gap-2">
                 <p className="block truncate">
                   Group by: <span className="capitalize">{sortType}</span>
                 </p>
                 <ArrowDownFilled active={true} />
-              </>
+              </span>
             ) : null}
           </Button>
         </Listbox.Button>

@@ -155,7 +155,6 @@ export default function HubItem({
     if (!showSidebar) {
       return '7px';
     }
-
     if (type === EntityType.subHub) {
       if (isExtendedBar) {
         return '17px';
@@ -180,7 +179,7 @@ export default function HubItem({
       }}
     >
       <div
-        className={`bg-white truncate items-center group ${item.id !== activeItemId && 'hover:bg-gray-100'} ${
+        className={`bg-white truncate items-center group ${item.id !== activeItemId && 'hover:bg-alsoit-gray-50'} ${
           isOver ? 'bg-primary-100 border-primary-500 shadow-inner shadow-primary-300' : ''
         }`}
         ref={setNodeRef}
@@ -212,17 +211,17 @@ export default function HubItem({
               <div>
                 {showChildren ? (
                   <span className="flex flex-col">
-                    <VscTriangleDown className="flex-shrink-0 h-2" aria-hidden="true" color="rgba(72, 67, 67, 0.64)" />
+                    <VscTriangleDown className="flex-shrink-0 h-2" aria-hidden="true" color="#919191" />
                   </span>
                 ) : (
-                  <VscTriangleRight className="flex-shrink-0 h-2" aria-hidden="true" color="#BBBDC0" />
+                  <VscTriangleRight className="flex-shrink-0 h-2" aria-hidden="true" color="#919191" />
                 )}
               </div>
             ) : (
               renderEmptyArrowBlock()
             )}
 
-            <div className="flex items-center flex-1 min-w-0 gap-1">
+            <div className="flex items-center flex-1 min-w-0 gap-5">
               <div
                 onClick={(e) => handleHubColour(item.id, e)}
                 className="flex items-center justify-center w-6 h-6"
@@ -233,8 +232,9 @@ export default function HubItem({
                 ) : (
                   <AvatarWithInitials
                     initials={getInitials(item.name)}
-                    height="h-5"
-                    width="w-5"
+                    height="h-4"
+                    width="w-4"
+                    textSize="8px"
                     backgroundColour={
                       item.color
                         ? item.color
@@ -248,7 +248,7 @@ export default function HubItem({
                   />
                 )}
               </div>
-              <span className="ml-5 overflow-hidden">
+              <span className="overflow-hidden">
                 <ToolTip title={item.name}>
                   <p
                     className={`capitalize truncate cursor-pointer ${
@@ -276,7 +276,7 @@ export default function HubItem({
             >
               {(placeHubType == APP_HR && !item.parent_id) || placeHubType == APP_TASKS ? (
                 <span onClick={() => handleItemAction(item.id, item.name)} className="cursor-pointer">
-                  <PlusIcon />
+                  <PlusIcon className="hover:text-alsoit-purple-300" />
                 </span>
               ) : null}
               <span
@@ -286,7 +286,7 @@ export default function HubItem({
                 className="cursor-pointer"
                 id="menusettings"
               >
-                <ThreeDotIcon />
+                <ThreeDotIcon className="hover:text-alsoit-purple-300" />
               </span>
             </div>
           )}
