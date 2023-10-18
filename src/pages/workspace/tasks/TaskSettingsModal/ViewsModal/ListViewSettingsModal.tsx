@@ -161,8 +161,8 @@ export default function ListViewSettingsModal({
         <Menu.Button>
           <Button active={true}>
             <Icons src={List} />
-            <span className="mr-2 ml-1">View:</span>
-            <span>{isActive}</span>
+            <span className="ml-1 mr-2">View:</span>
+            <span className="mr-2">{isActive}</span>
             <ArrowDownFilled active={true} />
           </Button>
         </Menu.Button>
@@ -197,7 +197,7 @@ export default function ListViewSettingsModal({
               style={{ background: View.unusing ? '#f6efe3' : '', pointerEvents: View.unusing ? 'none' : 'all' }}
             >
               {View.label !== 'Create New View' ? (
-                <button onClick={View.handleClick} className="flex items-center justify-between w-full  group">
+                <button onClick={View.handleClick} className="flex items-center justify-between w-full group">
                   <p className="flex items-center pl-2 space-x-2 text-md">
                     <span className="p-0.5">{View.icon}</span>
                     <span>{View.label}</span>

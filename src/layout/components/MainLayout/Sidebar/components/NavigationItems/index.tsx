@@ -100,8 +100,9 @@ export default function NavigationItems({
       icon: (
         <AvatarWithInitials
           initials={getInitials(workspaceName ?? '')}
-          height="h-4"
+          height="h-4 font-xs"
           width="w-4"
+          textSize="8px"
           backgroundColour={workspaceColor}
           roundedStyle="rounded"
           textColor="white"

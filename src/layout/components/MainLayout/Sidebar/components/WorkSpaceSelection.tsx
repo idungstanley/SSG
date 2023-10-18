@@ -157,16 +157,19 @@ function WorkSpaceSelection() {
   return status === 'success' ? (
     <div
       className={`${
-        showSidebar ? 'rounded-md border border-alsoit-gray-75 p-0.5 h-8 cursor-pointer flex flex-grow' : ''
+        showSidebar ? 'rounded-md border border-alsoit-gray-100 p-0.5 h-8 cursor-pointer flex flex-grow' : ''
       } `}
       onClick={() => setShowModal((prev) => !prev)}
     >
-      <div className="flex items-center justify-between w-full" onClick={() => dispatch(setFetchAllWorkspace(true))}>
+      <div
+        className="flex items-center justify-between w-full gap-1"
+        onClick={() => dispatch(setFetchAllWorkspace(true))}
+      >
         <div className="flex items-center justify-between space-x-1">
           <AvatarWithInitials
             initials={getInitials(workspaceName ?? '')}
-            height="h-6"
-            width="w-6"
+            height={showSidebar ? 'h-6' : 'h-5'}
+            width={showSidebar ? 'w-6' : 'w-5'}
             backgroundColour={workspaceColor}
             roundedStyle="rounded"
             textColor="white"
