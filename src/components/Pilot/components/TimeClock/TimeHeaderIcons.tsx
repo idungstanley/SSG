@@ -31,7 +31,7 @@ export function HeaderIcons({ extended }: Props) {
   return (
     <div className="flex justify-end space-x-0.5 px-1.5">
       <div
-        className="p-0.5 rounded-md flex items-center justify-between bg-white hover:bg-alsoit-purple-50 cursor-pointer relative"
+        className="p-0.5 rounded-md gap-2 flex items-center justify-between bg-white hover:bg-alsoit-purple-50 cursor-pointer relative"
         onClick={() => setDropDown((prev) => ({ ...prev, show: !prev.show }))}
       >
         <ShowIcon color="gray" className="w-4 h-4" />
@@ -42,32 +42,35 @@ export function HeaderIcons({ extended }: Props) {
             subStyles="left-1/3"
             header="customize this view"
             subHeader="main settings"
+            closeModal={() => setDropDown((prev) => ({ ...prev, show: !prev.show }))}
           >
             <TimeShowDropDown />
           </TabsDropDown>
         )}
       </div>
-      <div className="p-1 rounded-md flex items-center bg-white hover:bg-alsoit-purple-50 cursor-pointer">
+      <div className="flex items-center p-1 bg-white rounded-md cursor-pointer hover:bg-alsoit-purple-50">
         <FilterListIcon active={false} className="w-4 h-4" />
       </div>
-      <div className={'p-1 rounded-md flex items-center bg-white hover:bg-alsoit-purple-50 cursor-pointer '}>
-        <Me active={false} className="w-4 h-4" />
-      </div>
+      {extended && (
+        <div className={'p-1 rounded-md flex items-center bg-white hover:bg-alsoit-purple-50 cursor-pointer '}>
+          <Me active={false} className="w-4 h-4" />
+        </div>
+      )}
       <div
         className={
-          'relative p-1 rounded-md flex items-center justify-between bg-white hover:bg-alsoit-purple-50 cursor-pointer '
+          'relative p-1 rounded-md flex items-center justify-between bg-white gap-2 hover:bg-alsoit-purple-50 cursor-pointer '
         }
         onClick={() => setDropDown((prev) => ({ ...prev, assignee: !prev.assignee }))}
       >
         <AssigneeIcon className="w-4 h-4" active={false} />
         <ArrowDownFilled className="w-4 h-4" />
-        {dropDown.assignee && <TeamMemberFilter />}
+        {dropDown.assignee && (
+          <TeamMemberFilter closeModal={() => setDropDown((prev) => ({ ...prev, assignee: !prev.assignee }))} />
+        )}
       </div>
-      {extended && (
-        <div className="p-1 rounded-md flex items-center bg-white hover:bg-alsoit-purple-50 cursor-pointer">
-          <SearchIcon className="w-4 h-4" />
-        </div>
-      )}
+      <div className="flex items-center p-1 bg-white rounded-md cursor-pointer hover:bg-alsoit-purple-50">
+        <SearchIcon className="w-4 h-4" />
+      </div>
     </div>
   );
 }

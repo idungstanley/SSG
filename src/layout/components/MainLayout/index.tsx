@@ -6,7 +6,7 @@ import Header from './Header';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import AddFileModal from '../../../components/Pilot/components/details/properties/attachments/AddFileModal';
 import { InvalidateQueryFilters, useMutation, useQueryClient } from '@tanstack/react-query';
-import { switchWorkspaceService, useGetUserSettingsKeys } from '../../../features/account/accountService';
+import { switchWorkspaceService, useGetColors, useGetUserSettingsKeys } from '../../../features/account/accountService';
 import { selectCurrentUser, setCurrentWorkspace, switchWorkspace } from '../../../features/auth/authSlice';
 import { setMyWorkspacesSlideOverVisibility } from '../../../features/general/slideOver/slideOverSlice';
 import { useEffect, useState } from 'react';
@@ -26,7 +26,7 @@ function MainLayout() {
   const location = useLocation();
   const navigate = useNavigate();
   const { workSpaceId } = useParams();
-  const { fileUploadProps, preferenceState } = useAppSelector((state) => state.task);
+  const { fileUploadProps } = useAppSelector((state) => state.task);
   const queryClient = useQueryClient();
   const dispatch = useAppDispatch();
   const resolution = useResolution();
@@ -59,24 +59,24 @@ function MainLayout() {
   };
 
   const { data: userData } = useGetUserSettingsKeys(true, key, resolution);
+  useGetColors();
 
   document.addEventListener('keydown', (event) => TaskShortcutListener(event, setTaskShortcut));
+  const storedData = JSON.parse(localStorage.getItem(STORAGE_KEYS.USER_SETTINGS_DATA) || '{}');
 
   useEffect(() => {
     if (userData) {
       const value = userData.value;
-      localStorage.setItem(
-        STORAGE_KEYS.USER_SETTINGS_DATA,
-        JSON.stringify({
-          ...userSettingsData,
-          [STORAGE_KEYS.SIDEBAR_WIDTH]: value.sidebarWidth ? value.sidebarWidth : dimensions.navigationBar.default,
-          [STORAGE_KEYS.PILOT_WIDTH]: value.pilotWidth ? value.pilotWidth : dimensions.pilot.default,
-          [STORAGE_KEYS.EXTENDED_BAR_WIDTH]: value.extendedBarWidth
-            ? value.extendedBarWidth
-            : dimensions.extendedBar.default,
-          [STORAGE_KEYS.HOT_KEYS]: value.hotkeys ? value.hotkeys : []
-        })
-      );
+      const updatedData = {
+        ...storedData,
+        [STORAGE_KEYS.SIDEBAR_WIDTH]: value.sidebarWidth ? value.sidebarWidth : dimensions.navigationBar.default,
+        [STORAGE_KEYS.PILOT_WIDTH]: value.pilotWidth ? value.pilotWidth : dimensions.pilot.default,
+        [STORAGE_KEYS.EXTENDED_BAR_WIDTH]: value.extendedBarWidth
+          ? value.extendedBarWidth
+          : dimensions.extendedBar.default,
+        [STORAGE_KEYS.HOT_KEYS]: value.hotkeys ? value.hotkeys : []
+      };
+      localStorage.setItem(STORAGE_KEYS.USER_SETTINGS_DATA, JSON.stringify(updatedData));
       dispatch(setActiveHotkeyIds(value.hotkeys ? value.hotkeys : []));
       dispatch(SetUserSettingsStore({ ...userSettingsData, ...value }));
     }

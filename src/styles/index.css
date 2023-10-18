@@ -108,6 +108,17 @@ code {
 }
 
 .header-cell {
+  min-width: 150px; /* Adjust the width as needed */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 0.5rem; /* Add padding for better styling */
+  box-sizing: border-box; /* Include padding in width */
+  text-transform: uppercase;
+  width: min-content;
+}
+
+.header-cell-reduced {
   min-width: 100px; /* Adjust the width as needed */
   white-space: nowrap;
   overflow: hidden;
@@ -115,16 +126,7 @@ code {
   padding: 0.5rem; /* Add padding for better styling */
   box-sizing: border-box; /* Include padding in width */
   text-transform: uppercase;
-}
-
-.header-cell-reduced {
-  min-width: 75px; /* Adjust the width as needed */
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  padding: 0.5rem; /* Add padding for better styling */
-  box-sizing: border-box; /* Include padding in width */
-  text-transform: uppercase;
+  width: min-content;
 }
 
 @keyframes grow {

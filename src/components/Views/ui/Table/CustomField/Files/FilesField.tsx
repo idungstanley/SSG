@@ -21,7 +21,7 @@ function FilesField({ taskCustomFields, taskId, fieldId, listId }: filesProps) {
 
   return (
     <div>
-      <div className="flex flex-wrap gap-2 items-center">
+      <div className="flex flex-wrap items-center gap-2">
         {taskFiles.map((file) => {
           return (
             <FileIcons
@@ -35,7 +35,7 @@ function FilesField({ taskCustomFields, taskId, fieldId, listId }: filesProps) {
           );
         })}
         <button
-          className="w-4 h-4 border border-alsoit-gray-200 rounded hover:bg-alsoit-gray-100 flex justify-center items-center"
+          className="flex items-center justify-center w-4 h-4 border rounded border-alsoit-gray-200 hover:bg-alsoit-gray-100"
           onClick={(e) => {
             dispatch(
               setOpenFileUploadModal({

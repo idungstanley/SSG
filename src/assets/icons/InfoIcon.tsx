@@ -1,0 +1,22 @@
+import { DetailedHTMLProps, SVGAttributes } from 'react';
+import ICONS_INTERACTIONS from '../../utils/Constants/IconInteractions';
+
+/* eslint-disable max-len */
+interface Props extends DetailedHTMLProps<SVGAttributes<SVGSVGElement>, SVGSVGElement> {
+  active?: boolean;
+}
+
+export function InfoIcon({ active, ...props }: Props) {
+  return (
+    <svg {...props} viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path
+        d="M10.5297 14.7846C10.3834 14.9282 10.205 15 9.99432 15C9.78368 15 9.60712 14.9282 9.46463 14.7846C9.32214 14.6411 9.2509 14.4632 9.2509 14.2509V9.12229C9.2509 8.91006 9.32404 8.73215 9.47031 8.58857C9.61658 8.44499 9.79503 8.3732 10.0057 8.3732C10.2163 8.3732 10.3929 8.44499 10.5354 8.58857C10.6778 8.73215 10.7491 8.91006 10.7491 9.12229V14.2509C10.7491 14.4632 10.6759 14.6411 10.5297 14.7846Z"
+        fill={active ? ICONS_INTERACTIONS.active : ICONS_INTERACTIONS.default}
+      />
+      <path
+        d="M10.5768 6.39846C10.4176 6.55361 10.2233 6.63118 9.99391 6.63118C9.76455 6.63118 9.57229 6.55158 9.41715 6.39238C9.26198 6.23319 9.1844 6.0389 9.1844 5.80954C9.1844 5.58017 9.264 5.38791 9.4232 5.23275C9.5824 5.07758 9.77669 5 10.0061 5C10.2354 5 10.4277 5.0796 10.5828 5.2388C10.738 5.39801 10.8156 5.5923 10.8156 5.82167C10.8156 6.05103 10.736 6.2433 10.5768 6.39846Z"
+        fill={active ? ICONS_INTERACTIONS.active : ICONS_INTERACTIONS.default}
+      />
+    </svg>
+  );
+}

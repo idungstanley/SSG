@@ -14,7 +14,6 @@ import { GetTaskListCount, UseEditListService } from '../../features/list/listSe
 import { setListPaletteColor } from '../../features/list/listSlice';
 import { setActiveItem } from '../../features/workspace/workspaceSlice';
 import Palette from '../ColorPalette';
-import ListIconSelection from '../ColorPalette/component/ListIconSelection';
 import ListIconComponent from '../ItemsListInSidebar/components/ListIconComponent';
 import { useDraggable, useDroppable } from '@dnd-kit/core';
 import { cl } from '../../utils';
@@ -160,7 +159,7 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
       <section
         className={cl(
           'relative flex items-center justify-between h-8 group',
-          list.id === activeItemId ? 'font-medium' : 'hover:bg-gray-100',
+          list.id === activeItemId ? 'font-medium' : 'hover:bg-alsoit-gray-50',
           isOver ? 'bg-primary-100 border-primary-500 shadow-inner shadow-primary-300' : ''
         )}
         ref={setNodeRef}

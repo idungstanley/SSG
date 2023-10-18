@@ -1,8 +1,14 @@
-import React, { Dispatch, SetStateAction, useEffect } from 'react';
+import React, { Dispatch, SetStateAction, startTransition, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { useNavigate } from 'react-router-dom';
-import { setPreferenceState } from '../../features/task/taskSlice';
-import { setShowExtendedBar } from '../../features/workspace/workspaceSlice';
+import {
+  setAssignOnHoverState,
+  setCopyNewlyCreatedTask,
+  setEscapeKey,
+  setHilightNewlyCreatedTask,
+  setPreferenceState
+} from '../../features/task/taskSlice';
+import { setActiveTabId, setShowExtendedBar } from '../../features/workspace/workspaceSlice';
 
 export default function useTaskShortCut() {
   const { preferenceState, userSettingsProfile } = useAppSelector((state) => state.task);
@@ -26,25 +32,58 @@ export default function useTaskShortCut() {
   const navigate = useNavigate();
 
   const TaskShortcutListener = (event: KeyboardEvent, setTaskShortcut: Dispatch<SetStateAction<boolean>>) => {
-    if (
-      document.activeElement?.tagName === 'INPUT' ||
-      document.activeElement?.tagName === 'TEXTAREA' ||
-      document.activeElement?.getAttribute('contenteditable') === 'true'
-    )
-      return;
+    startTransition(() => {
+      const handleInputFields = () => {
+        if (
+          document.activeElement?.tagName === 'INPUT' ||
+          document.activeElement?.tagName === 'TEXTAREA' ||
+          document.activeElement?.getAttribute('contenteditable') === 'true'
+        ) {
+          dispatch(setHilightNewlyCreatedTask(false));
+          dispatch(setCopyNewlyCreatedTask(false));
+          return false;
+        } else {
+          return true;
+        }
+      };
 
-    if (preferenceState.hotkeys) {
-      if (event.shiftKey && event.key === '?') {
-        setTaskShortcut(true);
+      if (preferenceState.hotkeys) {
+        if (handleInputFields() == true) {
+          switch (event.key.toLowerCase()) {
+            case '?':
+              if (event.shiftKey) {
+                setTaskShortcut(true);
+              }
+              break;
+            case 'h':
+              navigate(`/${currentWorkspaceId}`);
+              break;
+            case 'c':
+              dispatch(setActiveTabId('calendar'));
+              break;
+            case 'n':
+              dispatch(setShowExtendedBar(true));
+              break;
+            case '1':
+              dispatch(setHilightNewlyCreatedTask(true));
+              break;
+            case '3':
+              dispatch(setCopyNewlyCreatedTask(true));
+              break;
+            case 'm':
+              dispatch(setAssignOnHoverState(true));
+              break;
+            default:
+          }
+        }
+        switch (event.key) {
+          case 'Escape':
+            dispatch(setEscapeKey(true));
+            break;
+          default:
+        }
       }
-      if (event.key === 'h' || event.key === 'H') {
-        // window.location.href = '/';
-        navigate(`/${currentWorkspaceId}`);
-      }
-      if (event.key === 'n' || event.key === 'N') {
-        dispatch(setShowExtendedBar(true));
-      }
-    }
+    });
   };
   return TaskShortcutListener;
 }

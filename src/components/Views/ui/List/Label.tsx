@@ -69,9 +69,9 @@ export function Label({
             <CollapseIcon color="#A854F7" active={showTable} onToggle={onClickChevron} hoverBg="white" />
             <h1>{listName ?? 'Loading...'}</h1>
           </div>
-          <button className="flex items-center justify-center h-6 bg-gray-200 rounded-sm">
+          <div className="flex items-center justify-center h-6 bg-gray-200 rounded-sm">
             <ListAddModal handleCheckedGroupTasks={handleCheckedGroupTasks} ListColor={ListColor} />
-          </button>
+          </div>
         </div>
         <p className="ml-3">{hubName}</p>
       </div>

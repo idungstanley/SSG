@@ -23,7 +23,7 @@ function AvatarWithInitials({
   badge
 }: AvatarWithInitialsProps) {
   return (
-    <div className="relative">
+    <div className="relative flex items-center">
       <span
         className={`inline-flex items-center justify-center z-5 ${height} ${width} ${
           roundedStyle === 'circular' && 'rounded-full'
@@ -35,7 +35,7 @@ function AvatarWithInitials({
         </span>
       </span>
       {badge && (
-        <img src={nonWatcherBadge} alt="" className="absolute h-2 w-2 z-5" style={{ left: '25px', bottom: '1px' }} />
+        <img src={nonWatcherBadge} alt="" className="absolute w-2 h-2 z-5" style={{ left: '25px', bottom: '1px' }} />
       )}
     </div>
   );

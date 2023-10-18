@@ -246,6 +246,7 @@ export interface IEntries {
   description: string;
   is_billable: number;
   team_member: teamMember;
+  type: string;
 }
 
 export interface ITimeEntriesRes {

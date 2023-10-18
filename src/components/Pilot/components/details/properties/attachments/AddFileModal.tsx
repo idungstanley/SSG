@@ -5,7 +5,6 @@ import { useUppy, DashboardModal } from '@uppy/react';
 import '@uppy/core/dist/style.css';
 import '@uppy/dashboard/dist/style.css';
 import { InvalidateQueryFilters, useQueryClient } from '@tanstack/react-query';
-import { useEffect } from 'react';
 import { useAppSelector } from '../../../../../../app/hooks';
 import { setShowTaskUploadModal } from '../../../../../../features/task/taskSlice';
 
@@ -54,17 +53,6 @@ export default function AddFileModal({ invalidateQuery, endpoint }: UploadFileMo
     });
   });
 
-  // useEffect(() => {
-  //   uppy.on('upload-progress', () => {
-  //     uppy.close();
-  //   });
-
-  //   return () => {
-  //     uppy.off('upload-success', () => uppy.close());
-  //   };
-  // }, [uppy]);
-
-  // invalidate query
   uppy.on('upload-success', (_file, response) => {
     const { status } = response;
     const { success } = response.body as { success: boolean };

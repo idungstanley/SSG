@@ -46,7 +46,13 @@ export function ManualTags() {
         >
           <LabelIcon className="w-5 h-5 cursor-pointer" active={!!timerDetails.label} />
           {dropDown.label && (
-            <TabsDropDown header="timeclock label" subHeader="select labels" styles="right-0 w-60" subStyles="left-1/3">
+            <TabsDropDown
+              header="timeclock label"
+              subHeader="select labels"
+              styles="right-0 w-60"
+              subStyles="left-1/3"
+              closeModal={() => setDropDown((prev) => ({ ...prev, label: !prev.label }))}
+            >
               <TimeLabel />
             </TabsDropDown>
           )}

@@ -49,7 +49,7 @@ function Preferences() {
 
   return (
     <div className="my-4">
-      <h1 className="font-bold my-2" style={{ fontSize: '15px' }}>
+      <h1 className="my-2 font-bold" style={{ fontSize: '15px' }}>
         Preferences
       </h1>
       <section className="flex items-center border-b-2 border-slate-400">

@@ -1,6 +1,8 @@
 export const TIME_TABS = {
   realTime: 'Real Time',
   manual: 'Manual Time',
+  clock: 'clock',
+  timer: 'timer',
   propertyColumn: 'property_columns',
   nestedEntities: 'nested_entities',
   singleLine: 'single_line_mode',
@@ -20,15 +22,20 @@ export const TIME_ENTITY_SHOW_PROPERTY = [
 ];
 
 export const TIME_INVENTORY_HEADER = [
-  { name: 'user', value: 'team_member', sorted: 'false', isHidden: false },
-  { name: 'duration', value: 'duration', sorted: 'false', isHidden: false },
-  { name: 'start date', value: 'start_date', sorted: 'false', isHidden: false },
-  { name: 'single label', value: 'single_label', sorted: 'false', isHidden: false },
-  { name: 'end date', value: 'end_date', sorted: 'false', isHidden: false },
-  { name: 'tags', value: 'tags', sorted: 'false', isHidden: false }
+  { name: 'user', value: 'team_member', sorted: false, isHidden: false },
+  { name: 'duration', value: 'duration', sorted: false, isHidden: false },
+  { name: 'start date', value: 'start_date', sorted: false, isHidden: false },
+  { name: 'single label', value: 'single_label', sorted: false, isHidden: false },
+  { name: 'end date', value: 'end_date', sorted: false, isHidden: false },
+  { name: 'tags', value: 'tags', sorted: false, isHidden: false }
 ];
 
 export const TIME_LABEL_PROPERTY = [
   { name: 'single label', value: 'single_label' },
   { name: 'multi label', value: 'multi_label' }
+];
+
+export const CLOCK_TYPE = [
+  { name: 'clock', value: 'clock' },
+  { name: 'timer', value: 'timer' }
 ];

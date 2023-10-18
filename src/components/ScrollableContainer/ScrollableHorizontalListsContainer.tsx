@@ -222,7 +222,7 @@ export function ScrollableHorizontalListsContainer({ children, ListColor, ...pro
   return (
     <>
       <div className="relative w-full px-2 overflow-hidden">
-        <div className="scrollbar-hide" ref={contentRef} {...props}>
+        <div className="scrollbar-hide" style={{ overflowY: 'hidden' }} ref={contentRef} {...props}>
           {children}
         </div>
       </div>

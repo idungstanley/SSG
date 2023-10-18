@@ -39,17 +39,20 @@ export default function Toggle() {
   return (
     <div
       onClick={closeOrShowSidebar}
-      className={cl(
-        'z-20 text-indigo-900 cursor-pointer flex items-center',
-        showSidebar ? 'pl-1' : 'pt-1 absolute left-14'
-      )}
-      style={{ top: !showSidebar ? '70px' : '' }}
+      className={cl('z-20 text-indigo-900 cursor-pointer flex items-center', showSidebar ? 'pl-1' : 'pt-1 absolute')}
+      style={{ top: !showSidebar ? '69px' : '', left: !showSidebar ? '55px' : '' }}
     >
       {!showSidebar ? (
-        <ExpandIcon />
+        <ToolTip title="Expand Sidebar">
+          <span>
+            <ExpandIcon />
+          </span>
+        </ToolTip>
       ) : (
         <ToolTip title="Collapse Sidebar">
-          <CompactIcon />
+          <span>
+            <CompactIcon />
+          </span>
         </ToolTip>
       )}
     </div>
