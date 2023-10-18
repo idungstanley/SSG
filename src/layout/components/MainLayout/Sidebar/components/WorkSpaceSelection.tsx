@@ -4,7 +4,6 @@ import { getAllWorkSpaceService, getWorkspaceService } from '../../../../../feat
 import { Spinner } from '../../../../../common';
 import { dimensions } from '../../../../../app/config/dimensions';
 import { setFetchAllWorkspace } from '../../../../../features/workspace/workspaceSlice';
-import { ModalDropdown } from '../../../../../components/Modal/ModalDropdown';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { ReactElement, useEffect, useState } from 'react';
@@ -16,7 +15,6 @@ import { MdOutlineGroupAdd, MdSecurity } from 'react-icons/md';
 import { AiOutlinePlus, AiOutlineSearch } from 'react-icons/ai';
 import { CiSearch } from 'react-icons/ci';
 import { BsPerson, BsPinAngle, BsPinFill } from 'react-icons/bs';
-import { Menu } from '@headlessui/react';
 import { cl } from '../../../../../utils';
 import ArrowDownFilled from '../../../../../assets/icons/ArrowDownFilled';
 import { getInitials } from '../../../../../app/helpers';
