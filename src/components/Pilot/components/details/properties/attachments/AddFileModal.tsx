@@ -53,17 +53,6 @@ export default function AddFileModal({ invalidateQuery, endpoint }: UploadFileMo
     });
   });
 
-  // useEffect(() => {
-  //   uppy.on('upload-progress', () => {
-  //     uppy.close();
-  //   });
-
-  //   return () => {
-  //     uppy.off('upload-success', () => uppy.close());
-  //   };
-  // }, [uppy]);
-
-  // invalidate query
   uppy.on('upload-success', (_file, response) => {
     const { status } = response;
     const { success } = response.body as { success: boolean };
