@@ -110,7 +110,6 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
         <Suspense fallback={<Spinner />}>
           <App />
         </Suspense>
-
         {/* // ? delete the line below to remove flower icon in bottom right side of page  */}
         <ReactQueryDevtools position="bottom-right" />
       </GoogleOAuthProvider>
