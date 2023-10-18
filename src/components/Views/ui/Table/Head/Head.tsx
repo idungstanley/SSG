@@ -371,7 +371,7 @@ export function Head({
           </th>
           {!collapseTasks
             ? columns.slice(1).map((item) => (
-              <th key={item.id} className="relative w-full py-2 -mb-1.5 font-extrabold opacity-90">
+                <th key={item.id} className="relative w-full py-2 -mb-1.5 font-extrabold opacity-90">
                   <div
                     className="text-alsoit-gray-200 font-semibold flex dBlock items-center justify-center w-full h-full my-auto cursor-pointer group hover:bg-gray-200 p-0.5 rounded-xs space-x-1 border-l-2 border-r-2 border-t-2 border-transparent hover:border-r-gray-500 "
                     style={{ fontSize: '11px', WebkitTextStroke: '0.5px', lineHeight: '13.2px' }}
