@@ -31,11 +31,11 @@ export function HeaderIcons({ extended }: Props) {
   return (
     <div className="flex justify-end space-x-0.5 px-1.5">
       <div
-        className="p-0.5 rounded-md gap-2 flex items-center justify-between bg-white hover:bg-alsoit-purple-50 cursor-pointer relative"
+        className="p-0.5 rounded-md gap-2 flex -space-x-1 items-center justify-between bg-white hover:bg-alsoit-purple-50 cursor-pointer relative"
         onClick={() => setDropDown((prev) => ({ ...prev, show: !prev.show }))}
       >
         <ShowIcon color="gray" className="w-4 h-4" />
-        <ArrowDownFilled dimensions={{ width: 4, height: 4 }} />
+        <ArrowDownFilled dimensions={{ width: 8, height: 8 }} />
         {dropDown.show && (
           <TabsDropDown
             styles="w-72 right-0 top-5 px-1.5"
@@ -58,12 +58,12 @@ export function HeaderIcons({ extended }: Props) {
       )}
       <div
         className={
-          'relative p-1 rounded-md flex items-center justify-between bg-white gap-2 hover:bg-alsoit-purple-50 cursor-pointer'
+          'relative p-1 rounded-md flex -space-x-1 items-center justify-between bg-white gap-2 hover:bg-alsoit-purple-50 cursor-pointer'
         }
         onClick={() => setDropDown((prev) => ({ ...prev, assignee: !prev.assignee }))}
       >
         <AssigneeIcon className="w-4 h-4" active={false} />
-        <ArrowDownFilled dimensions={{ width: 4, height: 4 }} />
+        <ArrowDownFilled dimensions={{ width: 8, height: 8 }} />
         {dropDown.assignee && (
           <TeamMemberFilter closeModal={() => setDropDown((prev) => ({ ...prev, assignee: !prev.assignee }))} />
         )}
