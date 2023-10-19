@@ -870,7 +870,7 @@ export const useCurrentTime = ({ workspaceId }: { workspaceId?: string }) => {
             dispatch(
               setTimerLastMemory({
                 hubId: dateString.model === EntityType.hub ? dateString.model_id : null,
-                activeTabId: pilotTabs.TIME_CLOCK,
+                activeTabId: pilotTabs.UTILITIES,
                 subhubId: dateString.model === EntityType.subHub ? dateString.model_id : null,
                 listId: dateString.model === EntityType.list ? dateString.model_id : null,
                 taskId: dateString.model === EntityType.task ? dateString.model_id : null,
