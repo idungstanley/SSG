@@ -30,8 +30,8 @@ import Badges from '../../../badges';
 import DetailsOnHover from '../../../Dropdown/DetailsOnHover/DetailsOnHover';
 import { EntityType } from '../../../../utils/EntityTypes/EntityType';
 import SubtasksIcon from '../../../../assets/icons/SubtasksIcon';
-import SaveIcon from '../../../../assets/icons/SaveIcon.svg';
-import Close from '../../../../assets/icons/Close.svg';
+import SaveIcon from '../../../../assets/icons/SaveIcon';
+import Close from '../../../../assets/icons/Close';
 
 interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   task: Task;
@@ -268,6 +268,9 @@ export function StickyCol({
     }
   });
 
+  const [saveToggle, setSaveToggle] = useState<boolean>(false);
+  const [closeToggle, setCloseToggle] = useState<boolean>(false);
+
   return (
     <>
       {task.id !== '0' && (
@@ -459,18 +462,22 @@ export function StickyCol({
             )}
           >
             <div className="absolute bottom-0 right-0 flex space-x-1 p-1">
-              <ToolTip title="Cancel">
+              <ToolTip
+                onMouseEnter={() => setCloseToggle(true)}
+                onMouseLeave={() => setCloseToggle(false)}
+                title="Cancel"
+              >
                 <div
                   className="border rounded-sm"
                   style={{ borderColor: '#B2B2B280', borderWidth: '0.5px', width: '20px' }}
                   onClick={onClose}
                 >
-                  <img src={Close} alt="Cancel"></img>
+                  <Close active={closeToggle}></Close>
                 </div>
               </ToolTip>
-              <ToolTip title="Save">
+              <ToolTip onMouseEnter={() => setSaveToggle(true)} onMouseLeave={() => setSaveToggle(false)} title="Save">
                 <span onClick={(e) => handleOnSave(e as React.MouseEvent<HTMLButtonElement, MouseEvent>, task.id)}>
-                  <img src={SaveIcon} alt="Save"></img>
+                  <SaveIcon active={saveToggle}></SaveIcon>
                 </span>
               </ToolTip>
             </div>
