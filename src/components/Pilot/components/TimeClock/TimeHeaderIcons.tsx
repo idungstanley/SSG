@@ -49,16 +49,16 @@ export function HeaderIcons({ extended }: Props) {
         )}
       </div>
       <div className="flex items-center p-1 bg-white rounded-md cursor-pointer hover:bg-alsoit-purple-50">
-        <FilterListIcon active={false} className="w-4 h-4" />
+        <FilterListIcon active={false} color="orange" className="w-4 h-4" />
       </div>
       {extended && (
-        <div className={'p-1 rounded-md flex items-center bg-white hover:bg-alsoit-purple-50 cursor-pointer '}>
+        <div className={'p-1 rounded-md flex items-center bg-white hover:bg-alsoit-purple-50 cursor-pointer'}>
           <Me active={false} className="w-4 h-4" />
         </div>
       )}
       <div
         className={
-          'relative p-1 rounded-md flex items-center justify-between bg-white gap-2 hover:bg-alsoit-purple-50 cursor-pointer '
+          'relative p-1 rounded-md flex items-center justify-between bg-white gap-2 hover:bg-alsoit-purple-50 cursor-pointer'
         }
         onClick={() => setDropDown((prev) => ({ ...prev, assignee: !prev.assignee }))}
       >
@@ -69,7 +69,7 @@ export function HeaderIcons({ extended }: Props) {
         )}
       </div>
       <div className="flex items-center p-1 bg-white rounded-md cursor-pointer hover:bg-alsoit-purple-50">
-        <SearchIcon className="w-4 h-4" />
+        <SearchIcon className="w-4 h-4" color="orange" />
       </div>
     </div>
   );
