@@ -29,6 +29,8 @@ import { toast } from 'react-hot-toast';
 import AlsoitMenuDropdown from '../../../../../../components/DropDowns';
 import ColorPalette from '../../../../../../components/ColorPalette/component/ColorPalette';
 import { useNavigate } from 'react-router-dom';
+import { FaFolder } from 'react-icons/fa';
+import ListIconComponent from '../../../../../../components/ItemsListInSidebar/components/ListIconComponent';
 
 export default function CreateList() {
   const dispatch = useAppDispatch();
@@ -133,7 +135,14 @@ export default function CreateList() {
       </div>
       <div className="flex flex-col p-4 space-y-2 border border-gray-200 rounded bg-alsoit-gray-50">
         <div className="relative flex">
-          <Input placeholder="List Name" name="name" value={name} type="text" onChange={handleListChange} />
+          <Input
+            placeholder="List Name"
+            name="name"
+            value={name}
+            type="text"
+            onChange={handleListChange}
+            leadingIcon={<ListIconComponent shape="solid-circle" outterColour={paletteColor as string} />}
+          />
           <div
             className="absolute flex items-center cursor-pointer right-2 top-3"
             onClick={(e) => handleShowPalette(e)}
@@ -141,38 +150,20 @@ export default function CreateList() {
             <Wand />
           </div>
         </div>
-        <div className="flex items-center justify-between w-full h-10 p-1 bg-white border rounded">
-          <span>Manage this List with other application</span>
-          <ArrowDown className="w-3 h-3" />
-        </div>
-        <div className="flex items-center justify-between w-full h-10 p-1 bg-white border rounded">
-          <span>Share with public</span>
-          <Assignee option="share" />
-        </div>
-        <div className="flex flex-col space-y-2">
-          <span className="font-bold">Entity Description</span>
-          <Checkbox
-            checked={true}
-            onChange={() => ({})}
-            description="Host other entities list wallets and lists"
-            height="5"
-            width="5"
-          />
-          <Checkbox
-            checked={false}
-            onChange={() => ({})}
-            description="Ability for all team members to create task"
-            height="5"
-            width="5"
-          />
-          <Checkbox checked={false} onChange={() => ({})} description="Show list to everyone" height="5" width="5" />
-        </div>
         <AlsoitMenuDropdown handleClose={handleClosePalette} anchorEl={showPalette}>
           <ColorPalette handleClick={handlePaletteColor} />
         </AlsoitMenuDropdown>
       </div>
       <div className="flex justify-between pt-2 space-x-3">
-        <Button buttonStyle="white" onClick={onClose} loading={false} label="Cancel" width={20} height="h-7" />
+        <Button
+          buttonStyle="white"
+          onClick={onClose}
+          loading={false}
+          label="Cancel"
+          width={20}
+          height="h-7"
+          labelSize="text-sm"
+        />
         <Button
           buttonStyle="primary"
           onClick={onSubmit}
@@ -180,6 +171,7 @@ export default function CreateList() {
           padding="py-2 px-2"
           height="h-7"
           width="w-fit"
+          labelSize="text-sm"
         />
       </div>
     </div>
