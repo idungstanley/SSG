@@ -479,7 +479,7 @@ export function StickyCol({
             </div>
             <div className="flex flex-col items-start justify-start pt-1 pl-2 space-y-1">
               <p
-                className="flex text-left empty:before:content-[attr(placeholder)]"
+                className="flex text-left empty:before:content-[attr(placeholder)] opacity-100 empty:opacity-50"
                 contentEditable={true}
                 placeholder="Add New Task"
                 ref={inputRef}
