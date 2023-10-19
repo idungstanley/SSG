@@ -44,7 +44,7 @@ export default function ClockInOut() {
       <div className="w-full p-1 my-2 flex flex-col space-y-2 bg-alsoit-gray-50 rounded-lg">
         {getTaskTimeEntries?.data?.time_entries && getTaskTimeEntries?.data?.time_entries.length > 0 ? (
           <>
-            <div className="h-96">
+            <div className="h-min">
               <TimeInventory getTimeEntries={getTaskTimeEntries} />
             </div>
             <div className="flex space-x-1">
