@@ -390,11 +390,35 @@ export const useTaskStatuses = () => {
   }
 };
 
-const deleteCustomField = (data: { columnId?: string; listId: string; type: string }) => {
+const hideCustomFieldColumn = (data: { columnId?: string; listId: string; type: string }) => {
   const { columnId, listId, type } = data;
 
   const response = requestNew({
     url: `custom-fields/${columnId}/model?model=${type}&model_id=${listId}`,
+    method: 'DELETE'
+  });
+  return response;
+};
+
+export const useHideCustomFieldColumn = (columnId: string, listId: string) => {
+  const dispatch = useAppDispatch();
+
+  const { tasks, subtasks } = useAppSelector((state) => state.task);
+
+  return useMutation(hideCustomFieldColumn, {
+    onSuccess: () => {
+      const { updatedTasks, updatedSubtasks } = deleteCustomFieldManager(tasks, subtasks, columnId, listId);
+      dispatch(setTasks(updatedTasks));
+      dispatch(setSubtasks(updatedSubtasks));
+    }
+  });
+};
+
+const deleteCustomField = (data: { columnId?: string; listId: string; type: string }) => {
+  const { columnId, listId, type } = data;
+
+  const response = requestNew({
+    url: `custom-fields/${columnId}?confirm=1`,
     method: 'DELETE'
   });
   return response;
