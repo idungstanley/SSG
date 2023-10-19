@@ -42,6 +42,18 @@ function AssigneeItem({ item, option, entity_id, teams, handleClose, isAssigned 
     selectedListIds.length ? selectedListIds : [selectedTaskParentId]
   );
 
+  const handleAllAssignee = () => {
+    const { id } = item;
+    if (option === 'checklist') {
+      isAssigned ? handleUnAssignChecklistItem(id) : handleAssignChecklist(id);
+    } else if (option === EntityType.task) {
+      isAssigned ? handleUnAssignTask(id) : handleAssignTask(id);
+    } else if (option === 'getTeamId') {
+      dispatch(setCurrTeamMemId(id));
+    }
+    handleClose();
+  };
+
   const handleAssignTask = (id: string) => {
     onTaskAssign({
       taskIds: selectedTasksArray.length ? selectedTasksArray : [entity_id as string],
@@ -75,19 +87,7 @@ function AssigneeItem({ item, option, entity_id, teams, handleClose, isAssigned 
 
   return (
     <div className="flex items-center justify-between cursor-pointer w-full hover:bg-gray-200 h-12 px-4 group">
-      <div
-        className="relative flex items-center space-x-2 cursor-pointer"
-        onClick={() => {
-          handleClose();
-          if (option === 'checklist') {
-            isAssigned ? handleUnAssignChecklistItem(item.id) : handleAssignChecklist(item.id);
-          } else if (option === EntityType.task) {
-            isAssigned ? handleUnAssignTask(item.id) : handleAssignTask(item.id);
-          } else if (option === 'getTeamId') {
-            dispatch(setCurrTeamMemId(item.id));
-          }
-        }}
-      >
+      <div className="relative flex items-center space-x-2 cursor-pointer" onClick={handleAllAssignee}>
         <span className={`${isAssigned ? 'ring ring-green-500 ring-offset-2 rounded-full ' : null}`}>
           {!teams ? (
             <div>
