@@ -161,7 +161,6 @@ function Places() {
   }, []);
 
   return (
-    // <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={(e) => handleDragEnd(e)}>
     <SortableContext strategy={rectSortingStrategy} items={places}>
       <section>
         <ul
@@ -189,7 +188,6 @@ function Places() {
         </ul>
       </section>
     </SortableContext>
-    // </DndContext>
   );
 }
 

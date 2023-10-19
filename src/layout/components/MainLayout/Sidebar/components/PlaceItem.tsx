@@ -37,7 +37,7 @@ export default function PlaceItem({
 }: PlaceItemProps) {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { showSidebar, lightBaseColor, baseColor } = useAppSelector((state) => state.account);
+  const { showSidebar } = useAppSelector((state) => state.account);
   const { hub } = useAppSelector((state) => state.hub);
   const { activeItemId } = useAppSelector((state) => state.workspace);
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({

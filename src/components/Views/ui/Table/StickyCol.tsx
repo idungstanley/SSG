@@ -17,7 +17,8 @@ import {
   setShowTaskNavigation,
   setTaskIdForPilot,
   setDuplicateTaskObj,
-  setSelectedIndexListId
+  setSelectedIndexListId,
+  setF2State
 } from '../../../../features/task/taskSlice';
 import { setActiveItem } from '../../../../features/workspace/workspaceSlice';
 import { UniqueIdentifier, useDraggable, useDroppable } from '@dnd-kit/core';
@@ -26,7 +27,6 @@ import OpenSubtask from '../../../../assets/icons/OpenSubtask';
 import { Capitalize } from '../../../../utils/NoCapWords/Capitalize';
 import RoundedCheckbox from '../../../Checkbox/RoundedCheckbox';
 import ToolTip from '../../../Tooltip/Tooltip';
-import Badges from '../../../badges';
 import DetailsOnHover from '../../../Dropdown/DetailsOnHover/DetailsOnHover';
 import { EntityType } from '../../../../utils/EntityTypes/EntityType';
 import SubtasksIcon from '../../../../assets/icons/SubtasksIcon';
@@ -64,7 +64,6 @@ export function StickyCol({
   task,
   paddingLeft = 0,
   dragElement,
-  isLastSubtaskLevel,
   isBlockedShowChildren,
   ...props
 }: ColProps) {
@@ -88,7 +87,9 @@ export function StickyCol({
     saveSettingOnline,
     duplicateTaskObj,
     separateSubtasksMode,
-    newTaskPriority
+    newTaskPriority,
+    f2State,
+    assignOnHoverTaskId
   } = useAppSelector((state) => state.task);
 
   const [isChecked, setIsChecked] = useState(false);
@@ -129,11 +130,6 @@ export function StickyCol({
     }
   };
 
-  useEffect(() => {
-    const { current } = inputRef;
-    current?.focus();
-  }, [eitableContent]);
-
   const onToggleDisplayingSubTasks = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.stopPropagation();
     setShowSubTasks(!showSubTasks);
@@ -142,6 +138,7 @@ export function StickyCol({
   const editTaskMutation = useMutation(UseUpdateTaskService, {
     onSuccess: () => {
       queryClient.invalidateQueries(['task']);
+      setEitableContent(false);
     }
   });
 
@@ -179,6 +176,19 @@ export function StickyCol({
       task_id: id
     });
   };
+
+  useEffect(() => {
+    const { current } = inputRef;
+    current?.focus();
+
+    dispatch(setF2State(false));
+  }, [eitableContent]);
+
+  useEffect(() => {
+    if (f2State && assignOnHoverTaskId === task.id) {
+      setEitableContent(true);
+    }
+  }, [f2State]);
 
   // listen on shift + arrow down key
   useEffect(() => {

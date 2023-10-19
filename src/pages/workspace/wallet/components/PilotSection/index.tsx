@@ -27,6 +27,7 @@ import CalendarIcon from '../../../../../assets/icons/CalendarIcon';
 import { EntityType } from '../../../../../utils/EntityTypes/EntityType';
 import { ClockIcon } from '../../../../../assets/icons/ClockIcon';
 import { pilotTabs } from '../../../../../app/constants/pilotTabs';
+import EntityManagerIcon from '../../../../../assets/icons/EntityManagerIcon';
 
 const sections = [
   {
@@ -119,7 +120,7 @@ const tabs = [
   {
     id: pilotTabs.ENTITY_MANAGER,
     label: 'Entity Manager',
-    icon: <img src={hubIcon} alt="Hub Icon" className="w-4 h-4" />
+    icon: <EntityManagerIcon />
   },
   {
     id: pilotTabs.TEMPLATES,

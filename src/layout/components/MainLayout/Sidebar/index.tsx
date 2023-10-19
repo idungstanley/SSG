@@ -117,7 +117,7 @@ export default function Sidebar() {
                     <SearchIcon width={13} height={13} />
                     <p className="ml-2">Search</p>
                   </div>
-                  <p className="mr-14">Ctrl+k</p>
+                  <p className="mr-16">Ctrl+k</p>
                 </div>
               </NonInteractiveSearch>
             ) : null}
