@@ -31,7 +31,6 @@ import { setStatusTaskListDetails } from '../../../../../features/list/listSlice
 import { useParams } from 'react-router-dom';
 import { Task } from '../../../../../features/task/interface.tasks';
 import CollapseIcon from '../../collapseIcon/CollapseIcon';
-
 import '../../../../../styles/task.css';
 import { EntityType } from '../../../../../utils/EntityTypes/EntityType';
 import {

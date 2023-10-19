@@ -79,13 +79,13 @@ function AssigneeItem({ item, option, entity_id, teams, handleClose, isAssigned 
         className="relative flex items-center space-x-2 cursor-pointer"
         onClick={() => {
           handleClose();
-          option === 'checklist'
-            ? handleAssignChecklist(item.id)
-            : option === EntityType.task
-            ? handleAssignTask(item.id)
-            : option === 'getTeamId'
-            ? dispatch(setCurrTeamMemId(item.id))
-            : null;
+          if (option === 'checklist') {
+            isAssigned ? handleUnAssignChecklistItem(item.id) : handleAssignChecklist(item.id);
+          } else if (option === EntityType.task) {
+            isAssigned ? handleUnAssignTask(item.id) : handleAssignTask(item.id);
+          } else if (option === 'getTeamId') {
+            dispatch(setCurrTeamMemId(item.id));
+          }
         }}
       >
         <span className={`${isAssigned ? 'ring ring-green-500 ring-offset-2 rounded-full ' : null}`}>
