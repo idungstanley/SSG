@@ -56,9 +56,16 @@ function SimpleFormulasField({
   const [selectedAction, setSelectedAction] = useState<string>('SUM');
   const [additionalFields, setAdditionalFields] = useState<IAdditionalFormulaFields[]>([]);
   const [result, setResult] = useState('-');
+  const [newFormulaState, setNewFormulaState] = useState<string>('');
 
   const onSave = () => {
-    handleSave && handleSave(result, `${selectedAction}("${selectedItemOne?.id}", "${selectedItemTwo?.id}")`);
+    if (handleSave) {
+      if (newFormulaState) {
+        handleSave(result, newFormulaState);
+      } else {
+        handleSave(result, `${selectedAction}("${selectedItemOne?.id}", "${selectedItemTwo?.id}")`);
+      }
+    }
   };
 
   const renderIcon = () => {
@@ -154,7 +161,13 @@ function SimpleFormulasField({
     updatedAdditionalFields.forEach((item) => {
       newFormula = `${item.action}(${newFormula}, "${item.id}")`;
     });
-    handleReturnFormula && handleReturnFormula(newFormula);
+    if (isPilotField && handleReturnFormula) {
+      handleReturnFormula(newFormula);
+    } else {
+      const res = parser.parse(newFormula).result as string;
+      setResult(res);
+      setNewFormulaState(newFormula);
+    }
   };
 
   const isShowAddNewField = useMemo(() => {
@@ -163,11 +176,11 @@ function SimpleFormulasField({
     if (additionalFields.length && !additionalFields[additionalFields.length - 1].id) {
       isEmptyAdditionalField = true;
     }
-    if (isPilotField && selectedItemOne && selectedItemTwo && (!additionalFields.length || !isEmptyAdditionalField)) {
+    if (selectedItemOne && selectedItemTwo && (!additionalFields.length || !isEmptyAdditionalField)) {
       isShow = true;
     }
     return isShow;
-  }, [isPilotField, selectedItemOne, selectedItemTwo, additionalFields]);
+  }, [selectedItemOne, selectedItemTwo, additionalFields]);
 
   return (
     <>
@@ -268,7 +281,7 @@ function SimpleFormulasField({
           />
         </Fragment>
       ))}
-      <div className="flex gap-1 items-end justify-end p-4">
+      <div className="flex gap-1 items-end justify-end px-4">
         {isShowAddNewField ? (
           <button>
             <div className="flex items-center pr-2">
@@ -281,42 +294,42 @@ function SimpleFormulasField({
             </div>
           </button>
         ) : null}
-        {!isPilotField ? (
-          <>
-            <button>
-              <div className="flex items-center pr-2">
-                <label className="switch" onClick={(event) => event.stopPropagation()}>
-                  <input
-                    className="inputShow"
-                    type="checkbox"
-                    checked={false}
-                    onChange={showAdditionalFormulas && showAdditionalFormulas}
-                  />
-                  <div className="slider" />
-                </label>
-                <span className="ml-2 text-xs">Advanced Editor</span>
-              </div>
-            </button>
-            <button
-              className="p-1 bg-white rounded text-alsoit-danger h-6"
-              style={{ width: '79px' }}
-              onClick={handleClose}
-            >
-              Cancel
-            </button>
-            <button
-              style={{ width: '79px' }}
-              className={`${
-                !selectedItemOne || !selectedItemTwo ? 'bg-alsoit-danger' : 'bg-alsoit-success'
-              } text-white rounded h-6`}
-              onClick={onSave}
-              disabled={!selectedItemOne || !selectedItemTwo}
-            >
-              Save
-            </button>
-          </>
-        ) : null}
       </div>
+      {!isPilotField ? (
+        <div className="flex gap-1 items-end justify-end p-4">
+          <button>
+            <div className="flex items-center pr-2">
+              <label className="switch" onClick={(event) => event.stopPropagation()}>
+                <input
+                  className="inputShow"
+                  type="checkbox"
+                  checked={false}
+                  onChange={showAdditionalFormulas && showAdditionalFormulas}
+                />
+                <div className="slider" />
+              </label>
+              <span className="ml-2 text-xs">Advanced Editor</span>
+            </div>
+          </button>
+          <button
+            className="p-1 bg-white rounded text-alsoit-danger h-6"
+            style={{ width: '79px' }}
+            onClick={handleClose}
+          >
+            Cancel
+          </button>
+          <button
+            style={{ width: '79px' }}
+            className={`${
+              !selectedItemOne || !selectedItemTwo ? 'bg-alsoit-danger' : 'bg-alsoit-success'
+            } text-white rounded h-6`}
+            onClick={onSave}
+            disabled={!selectedItemOne || !selectedItemTwo}
+          >
+            Save
+          </button>
+        </div>
+      ) : null}
     </>
   );
 }
