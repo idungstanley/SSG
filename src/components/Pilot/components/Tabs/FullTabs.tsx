@@ -100,7 +100,9 @@ export default function FullTabs({ tabs }: TabsProps) {
                 {tabItems.map((tab) => (
                   <div key={tab.label}>
                     <ToolTip title={tab.label}>
-                      <Tab key={tab.id} id={tab.id} icon={tab.icon} label={tab.label} showTabLabel={showTabLabel} />
+                      <div>
+                        <Tab key={tab.id} id={tab.id} icon={tab.icon} label={tab.label} showTabLabel={showTabLabel} />
+                      </div>
                     </ToolTip>
                   </div>
                 ))}
