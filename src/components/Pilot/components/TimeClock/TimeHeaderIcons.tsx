@@ -35,7 +35,7 @@ export function HeaderIcons({ extended }: Props) {
         onClick={() => setDropDown((prev) => ({ ...prev, show: !prev.show }))}
       >
         <ShowIcon color="gray" className="w-4 h-4" />
-        <ArrowDownFilled className="w-4 h-4" />
+        <ArrowDownFilled dimensions={{ width: 4, height: 4 }} />
         {dropDown.show && (
           <TabsDropDown
             styles="w-72 right-0 top-5 px-1.5"
@@ -63,7 +63,7 @@ export function HeaderIcons({ extended }: Props) {
         onClick={() => setDropDown((prev) => ({ ...prev, assignee: !prev.assignee }))}
       >
         <AssigneeIcon className="w-4 h-4" active={false} />
-        <ArrowDownFilled className="w-4 h-4" />
+        <ArrowDownFilled dimensions={{ width: 4, height: 4 }} />
         {dropDown.assignee && (
           <TeamMemberFilter closeModal={() => setDropDown((prev) => ({ ...prev, assignee: !prev.assignee }))} />
         )}
