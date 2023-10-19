@@ -4,9 +4,10 @@ import { cl } from '../../../../../../../../../utils';
 import { AiFillFlag } from 'react-icons/ai';
 import { UseUpdateTaskPrioritiesServices } from '../../../../../../../../../features/task/taskService';
 import { useAppSelector } from '../../../../../../../../../app/hooks';
+import { priorities } from '../../../../../../../../../app/constants/priorities';
 
 interface priorityType {
-  id: number;
+  id: string;
   title: string;
   handleClick: () => void;
   color: string;
@@ -21,37 +22,37 @@ export default function PriorityFllterModal({ TaskCurrentPriority }: TaskCurrent
   const { currentTaskPriorityId } = useAppSelector((state) => state.task);
   const priorityList: priorityType[] = [
     {
-      id: 1,
+      id: priorities.LOW,
       title: 'Low',
       handleClick: () => {
-        setPriority('low');
+        setPriority(priorities.LOW);
       },
       color: '#d3d3d3',
       bg: 'gray'
     },
     {
-      id: 2,
+      id: priorities.NORMAL,
       title: 'Normal',
       handleClick: () => {
-        setPriority('normal');
+        setPriority(priorities.NORMAL);
       },
       color: '#6fddff',
       bg: 'blue'
     },
     {
-      id: 3,
+      id: priorities.HIGH,
       title: 'High',
       handleClick: () => {
-        setPriority('high');
+        setPriority(priorities.HIGH);
       },
       color: '#f7cb04',
       bg: 'yellow'
     },
     {
-      id: 4,
+      id: priorities.URGENT,
       title: 'Urgent',
       handleClick: () => {
-        setPriority('urgent');
+        setPriority(priorities.URGENT);
       },
       color: '#f32100',
       bg: 'red'
@@ -68,13 +69,13 @@ export default function PriorityFllterModal({ TaskCurrentPriority }: TaskCurrent
   const setPriorityColor = (
     priority: string | null | undefined | [{ id: string; initials: string; colour: string }]
   ) => {
-    if (priority === null || priority === 'low') {
+    if (priority === null || priority === priorities.LOW) {
       return <AiFillFlag className="h-5 w-7  text-gray-400 " aria-hidden="true" />;
-    } else if (priority === 'normal') {
+    } else if (priority === priorities.NORMAL) {
       return <AiFillFlag className="h-5 w-7" style={{ color: '#6fddff' }} aria-hidden="true" />;
-    } else if (priority === 'high') {
+    } else if (priority === priorities.HIGH) {
       return <AiFillFlag className="h-5 w-7  text-yellow-400 " aria-hidden="true" />;
-    } else if (priority === 'urgent') {
+    } else if (priority === priorities.URGENT) {
       return <AiFillFlag className="h-5 w-7  text-red-400 " aria-hidden="true" />;
     }
   };

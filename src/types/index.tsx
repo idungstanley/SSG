@@ -56,12 +56,12 @@ export type itemType =
   | string;
 
 export interface IPilotTab {
-  id: number;
+  id: string;
   label: string;
   icon: JSX.Element;
 }
 
 export interface IPilotSection {
-  id: number;
+  id: string;
   element: JSX.Element;
 }

@@ -31,6 +31,7 @@ import ActiveBarIdentification from './Component/ActiveBarIdentification';
 import ActiveBackground from './Component/ActiveBackground';
 import { useAbsolute } from '../../hooks/useAbsolute';
 import { IHub } from '../../features/hubs/hubs.interfaces';
+import { APP_HR, APP_TASKS } from '../../app/constants/app';
 
 interface TaskItemProps {
   item: {
@@ -51,6 +52,7 @@ interface TaskItemProps {
   isExtendedBar?: boolean;
   handleClick: (id: string, type?: string) => void;
   handleLocation: (id: string, name: string, item: IHub) => void;
+  placeHubType: string;
 }
 export default function HubItem({
   item,
@@ -60,7 +62,8 @@ export default function HubItem({
   zNumber,
   isExtendedBar,
   handleClick,
-  handleLocation
+  handleLocation,
+  placeHubType = APP_TASKS
 }: TaskItemProps) {
   const dispatch = useAppDispatch();
   const { hubId, subhubId } = useParams();
@@ -152,7 +155,6 @@ export default function HubItem({
     if (!showSidebar) {
       return '7px';
     }
-
     if (type === EntityType.subHub) {
       if (isExtendedBar) {
         return '17px';
@@ -177,7 +179,7 @@ export default function HubItem({
       }}
     >
       <div
-        className={`bg-white truncate items-center group ${item.id !== activeItemId && 'hover:bg-gray-100'} ${
+        className={`bg-white truncate items-center group ${item.id !== activeItemId && 'hover:bg-alsoit-gray-50'} ${
           isOver ? 'bg-primary-100 border-primary-500 shadow-inner shadow-primary-300' : ''
         }`}
         ref={setNodeRef}
@@ -196,7 +198,7 @@ export default function HubItem({
           <ActiveBarIdentification showBar={item.id === hubId || item.id === subhubId} />
           {showSidebar && !isExtendedBar ? (
             <div
-              className="absolute left-2 rounded-r-lg opacity-0 cursor-move left-0.5 group-hover:opacity-100"
+              className="absolute rounded-r-lg opacity-0 cursor-move left-2 group-hover:opacity-100"
               ref={draggableRef}
               {...listeners}
               {...attributes}
@@ -204,28 +206,25 @@ export default function HubItem({
               <Drag />
             </div>
           ) : null}
-          <div
-            role="button"
-            className="flex truncate items-center py-1.5 mt-0.5 justify-start overflow-y-hidden text-sm"
-          >
+          <div role="button" className="flex items-center justify-start overflow-y-hidden text-sm truncate">
             {item?.wallets?.length || item?.lists?.length || item.has_descendants ? (
               <div>
                 {showChildren ? (
                   <span className="flex flex-col">
-                    <VscTriangleDown className="flex-shrink-0 h-2" aria-hidden="true" color="rgba(72, 67, 67, 0.64)" />
+                    <VscTriangleDown className="flex-shrink-0 h-2" aria-hidden="true" color="#919191" />
                   </span>
                 ) : (
-                  <VscTriangleRight className="flex-shrink-0 h-2" aria-hidden="true" color="#BBBDC0" />
+                  <VscTriangleRight className="flex-shrink-0 h-2" aria-hidden="true" color="#919191" />
                 )}
               </div>
             ) : (
               renderEmptyArrowBlock()
             )}
 
-            <div className="flex items-center flex-1 min-w-0 gap-1">
+            <div className="flex items-center flex-1 min-w-0 gap-5">
               <div
                 onClick={(e) => handleHubColour(item.id, e)}
-                className="flex items-center justify-center w-5 h-5"
+                className="flex items-center justify-center w-6 h-6"
                 ref={relativeRef}
               >
                 {item.path !== null ? (
@@ -233,8 +232,9 @@ export default function HubItem({
                 ) : (
                   <AvatarWithInitials
                     initials={getInitials(item.name)}
-                    height="h-5"
-                    width="w-5"
+                    height="h-4"
+                    width="w-4"
+                    textSize="8px"
                     backgroundColour={
                       item.color
                         ? item.color
@@ -248,10 +248,12 @@ export default function HubItem({
                   />
                 )}
               </div>
-              <span className="ml-5 overflow-hidden">
+              <span className="overflow-hidden">
                 <ToolTip title={item.name}>
                   <p
-                    className="capitalize truncate cursor-pointer"
+                    className={`capitalize truncate cursor-pointer ${
+                      item.id === hubId || item.id === subhubId ? 'text-alsoit-purple-300' : ''
+                    }`}
                     style={{
                       fontSize: '13px',
                       lineHeight: '15.56px',
@@ -272,9 +274,11 @@ export default function HubItem({
               onClick={(e) => e.stopPropagation()}
               ref={menuRef}
             >
-              <span onClick={() => handleItemAction(item.id, item.name)} className="cursor-pointer">
-                <PlusIcon />
-              </span>
+              {(placeHubType == APP_HR && !item.parent_id) || placeHubType == APP_TASKS ? (
+                <span onClick={() => handleItemAction(item.id, item.name)} className="cursor-pointer">
+                  <PlusIcon className="hover:text-alsoit-purple-300" />
+                </span>
+              ) : null}
               <span
                 onClick={(e) => {
                   handleHubSettings(item.id, item.name, e);
@@ -282,7 +286,7 @@ export default function HubItem({
                 className="cursor-pointer"
                 id="menusettings"
               >
-                <ThreeDotIcon />
+                <ThreeDotIcon className="hover:text-alsoit-purple-300" />
               </span>
             </div>
           )}
@@ -295,7 +299,7 @@ export default function HubItem({
       {showMenuDropdown === item.id && showSidebar ? (
         <MenuDropdown isExtendedBar={isExtendedBar} cords={menuCords} />
       ) : null}
-      {SubMenuId === item.id && showSidebar ? <SubDropdown cords={menuCords} /> : null}
+      {SubMenuId === item.id && showSidebar ? <SubDropdown cords={menuCords} placeHubType={placeHubType} /> : null}
     </div>
   );
 }

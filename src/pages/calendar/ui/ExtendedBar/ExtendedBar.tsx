@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { selectCalendar, setBlacklistIds } from '../../../../features/calendar/slice/calendarSlice';
 import { useGetTeamMembers } from '../../../../features/settings/teamMembers/teamMemberService';
@@ -10,6 +10,7 @@ export function ExtendedBar() {
   const { blacklistIds } = useAppSelector(selectCalendar);
   const [showSearch, setShowSearch] = useState(false);
   const { data } = useGetTeamMembers({ page: 1, query: '' });
+  const { activeItemName } = useAppSelector((state) => state.workspace);
 
   const [query, setQuery] = useState('');
 
@@ -51,9 +52,19 @@ export function ExtendedBar() {
   );
 
   return (
-    <section className="space-y-3 w-full">
+    <section>
+      <div className="relative mt-0 mb-0 h-10 p-2 flex border-b items-center overflow-hidden justify-start bg-alsoit-gray-50 capitalize pl-5">
+        {activeItemName}
+      </div>
+
       {/* header */}
-      <Header onClickXIcon={onClickXIcon} onToggleSearch={onToggleSearch} onReset={onReset} showSearch={showSearch}>
+      <Header
+        onClickXIcon={onClickXIcon}
+        onToggleSearch={onToggleSearch}
+        onReset={onReset}
+        showSearch={showSearch}
+        activeItemName={activeItemName}
+      >
         <input
           value={query}
           onChange={(e) => setQuery(e.target.value)}

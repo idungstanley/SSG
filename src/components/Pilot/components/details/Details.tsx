@@ -5,20 +5,23 @@ import DetailsSubTab from './DetailsSubTab';
 import { useAppSelector } from '../../../../app/hooks';
 import SectionArea from '../SectionArea';
 import { DetailsIcon } from '../../../../assets/icons';
+import { pilotTabs } from '../../../../app/constants/pilotTabs';
 
 export const DetailOptions = [
   {
-    id: 1,
+    id: pilotTabs.PROPERTIES,
     element: <DetailsIndex />
   },
   {
-    id: 2,
+    id: pilotTabs.ATTACHMENTS,
     element: <AddTo />
   }
 ];
 export default function Details() {
   const { activeSubDetailsTabId } = useAppSelector((state) => state.workspace);
+
   const [iconToggle, setIconToggle] = useState<boolean>(false);
+
   const selectedSubSection = useMemo(
     () => DetailOptions.find((option) => option.id === activeSubDetailsTabId),
     [activeSubDetailsTabId]

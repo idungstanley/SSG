@@ -1,11 +1,11 @@
 import SectionArea from '../../../../../../../components/Pilot/components/SectionArea';
 import TimeClockTabs from './subtabs/TimeClock';
-import TimeClockIcon from '../../../../../../../assets/icons/TimeClockIcon';
+import { UtilityIcon } from '../../../../../../../assets/icons/Utility';
 
 export default function TimeClock() {
   return (
     <>
-      <SectionArea label="Time Clock" icon={<TimeClockIcon />} />
+      <SectionArea label="Utilities" icon={<UtilityIcon />} />
       <>
         <TimeClockTabs />
       </>

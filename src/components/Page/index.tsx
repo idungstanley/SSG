@@ -1,4 +1,4 @@
-import { ReactNode, useEffect } from 'react';
+import { ReactNode, useEffect, useMemo } from 'react';
 import { RiArrowLeftSLine, RiArrowRightSLine } from 'react-icons/ri';
 import { STORAGE_KEYS, calculateWidthForContent, dimensions } from '../../app/config/dimensions';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
@@ -9,6 +9,7 @@ import { IPilotSection, IPilotTab } from '../../types';
 import { cl } from '../../utils';
 import { isAllowIncreaseWidth } from '../../utils/widthUtils';
 import Pilot from '../Pilot';
+import { IUserParams } from '../../features/account/account.interfaces';
 
 interface PageProps {
   header?: JSX.Element;
@@ -34,9 +35,9 @@ export default function Page({ header, additionalHeader, children, additional, p
   const { show: showFullPilot } = useAppSelector((state) => state.slideOver.pilotSideOver);
 
   const DEFAULT_PILOT_WIDTH = dimensions.pilot.default;
-  const pilotWidthFromLS = JSON.parse(
-    localStorage.getItem(STORAGE_KEYS.PILOT_WIDTH) ?? `${DEFAULT_PILOT_WIDTH}`
-  ) as number;
+  const pilotWidthFromLS =
+    (JSON.parse(localStorage.getItem(STORAGE_KEYS.USER_SETTINGS_DATA) || '""') as IUserParams).pilotWidth ??
+    DEFAULT_PILOT_WIDTH;
 
   const { blockRef, Dividers } = useResize({
     dimensions: {
@@ -60,7 +61,7 @@ export default function Page({ header, additionalHeader, children, additional, p
       <section className="flex flex-col w-full h-full">
         {additionalHeader}
         {header}
-        <div className="relative grid w-full h-full grid-cols-frAuto">
+        <div className="relative grid h-full grid-cols-frAuto">
           <div className="relative" style={{ width: calculateWidthForContent() }}>
             {children}
           </div>
@@ -108,9 +109,9 @@ function ExtendedBar({ children, name, icon, source }: ExtendedBarProps) {
 
   return (
     <aside
-      style={{ width: showExtendedBar ? userSettingsData?.extendedBarWidth : 0 }}
+      style={{ width: showExtendedBar ? userSettingsData?.extendedBarWidth || dimensions.extendedBar.default : 0 }}
       ref={blockRef}
-      className={cl(showExtendedBar && 'border-r', 'relative w-60 h-full transition-all duration-300')}
+      className={cl(showExtendedBar && 'border-r', 'relative h-full transition-all duration-300')}
     >
       <span
         onClick={handleToggle}

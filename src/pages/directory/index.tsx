@@ -14,18 +14,18 @@ import TemplateItems from './components/TemplateItems';
 
 const tabs = [
   {
-    id: 1,
+    id: 'directory',
     label: 'Directory'
   },
   {
-    id: 2,
+    id: 'new',
     label: 'New'
   }
 ];
 
 function Directory() {
   const { directoryId } = useParams();
-  const [activeTabId, setActiveTabId] = useState(1);
+  const [activeTabId, setActiveTabId] = useState('directory');
 
   const [selectedTemplateId, setSelectedTemplateId] = useState<null | string>(null);
 

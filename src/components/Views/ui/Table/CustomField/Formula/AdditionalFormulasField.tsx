@@ -9,7 +9,7 @@ import { findSelectedItemsInFormula } from './findSelectedItemsInFormula';
 import { TbMathFunction } from 'react-icons/tb';
 
 interface AdditionalFormulasFieldProps {
-  currentFields: IField[];
+  currentFieldColumns: IField[];
   taskCustomFields: ICustomField[];
   prevFormula: string;
   handleSave: (str: string, result: string) => void;
@@ -17,7 +17,7 @@ interface AdditionalFormulasFieldProps {
 }
 
 function AdditionalFormulasField({
-  currentFields,
+  currentFieldColumns,
   taskCustomFields,
   prevFormula,
   handleSave,
@@ -47,18 +47,21 @@ function AdditionalFormulasField({
   }, [inputText]);
 
   const transformFormula = (str: string) => {
-    const selectedItems = findSelectedItemsInFormula(str, currentFields, taskCustomFields);
-    // replace base values in formula
-    const newString = str.replaceAll('true', 'TRUE').replaceAll('false', 'FALSE');
+    const selectedItems = findSelectedItemsInFormula(str, currentFieldColumns, taskCustomFields);
+    if (selectedItems) {
+      // replace base values in formula
+      const newString = str.replaceAll('true', 'TRUE').replaceAll('false', 'FALSE');
 
-    let strWithCurrentValues = newString;
-    let strWithCurrentIds = newString;
-    // replace variables in formula
-    selectedItems.forEach((item) => {
-      strWithCurrentValues = strWithCurrentValues.replaceAll(`field("${item.name}")`, item.value);
-      strWithCurrentIds = strWithCurrentIds.replaceAll(`field("${item.name}")`, `"${item.id}"`);
-    });
-    return { strWithCurrentValues, strWithCurrentIds };
+      let strWithCurrentValues = newString;
+      let strWithCurrentIds = newString;
+      // replace variables in formula
+      selectedItems.forEach((item) => {
+        strWithCurrentValues = strWithCurrentValues.replaceAll(`field("${item.name}")`, item.value);
+        strWithCurrentIds = strWithCurrentIds.replaceAll(`field("${item.name}")`, `"${item.id}"`);
+      });
+      return { strWithCurrentValues, strWithCurrentIds };
+    }
+    return { strWithCurrentValues: '', strWithCurrentIds: '' };
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -87,7 +90,7 @@ function AdditionalFormulasField({
 
   return (
     <div className="h-full" style={{ width: '480px', height: '370px', overflow: 'hidden' }}>
-      <div className="flex align-center border-b-2 px-2">
+      <div className="flex items-center border-b-2 px-2">
         {isError ? <CiWarning size={30} color="red" /> : null}
         <input
           className={`w-full text-xs px-1 base-input border-0 focus:border-0 placeholder:italic ${
@@ -110,10 +113,10 @@ function AdditionalFormulasField({
       <div className="flex">
         <div className="border-r-2 w-full">
           <div style={{ overflowY: 'scroll', maxHeight: '300px' }}>
-            {currentFields.length ? (
+            {currentFieldColumns.length ? (
               <>
                 <p className="text-xs px-2 py-3">Variables</p>
-                {currentFields.map((field) => (
+                {currentFieldColumns.map((field) => (
                   <div
                     key={field.id}
                     className="px-1"

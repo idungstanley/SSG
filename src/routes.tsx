@@ -1,72 +1,86 @@
+import { lazy } from 'react';
 import { createBrowserRouter, Navigate } from 'react-router-dom';
 
 // Layouts
-import MainLayout from './layout/components/MainLayout';
-import UnauthenticatedLayout from './layout/components/UnauthenticatedLayout';
+
+const MainLayout = lazy(() => import('./layout/components/MainLayout'));
+const UnauthenticatedLayout = lazy(() => import('./layout/components/UnauthenticatedLayout'));
 
 // Authentication
-import LoginPage from './pages/workspace/createWorkspace/auth/LoginPage';
-import RegisterPage from './pages/workspace/createWorkspace/auth/RegisterPage';
+const LoginPage = lazy(() => import('./pages/workspace/createWorkspace/auth/LoginPage'));
+const RegisterPage = lazy(() => import('./pages/workspace/createWorkspace/auth/RegisterPage'));
 
 // Main
-import SearchPage from './pages/search/SearchPage';
+const SearchPage = lazy(() => import('./pages/search/SearchPage'));
 
 // Inboxes
-import InboxesPage from './pages/inbox/InboxesPage';
-import InboxPage from './pages/inbox/InboxPage';
-import GeneralSettingsPage from './pages/inbox/inboxSettings/GeneralSettingsPage';
-import PermissionsSettingsPage from './pages/inbox/inboxSettings/PermissionsSettingsPage';
-import TeamMembersSettingsPage from './pages/inbox/inboxSettings/TeamMembersSettingsPage';
-import TeamMemberGroupsSettingsPage from './pages/inbox/inboxSettings/TeamMemberGroupsSettingsPage';
+const InboxesPage = lazy(() => import('./pages/inbox/InboxesPage'));
+const InboxPage = lazy(() => import('./pages/inbox/InboxPage'));
+const GeneralSettingsPage = lazy(() => import('./pages/inbox/inboxSettings/GeneralSettingsPage'));
+const PermissionsSettingsPage = lazy(() => import('./pages/inbox/inboxSettings/PermissionsSettingsPage'));
+const TeamMembersSettingsPage = lazy(() => import('./pages/inbox/inboxSettings/TeamMembersSettingsPage'));
+const TeamMemberGroupsSettingsPage = lazy(() => import('./pages/inbox/inboxSettings/TeamMemberGroupsSettingsPage'));
 
 // Settings
-import PermissionsPage from './pages/settings/PermissionsPage';
-import TeamMembersPage from './pages/settings/teamMemberSettings/TeamMembersPage';
-import TeamMemberInvitesPage from './pages/settings/teamMemberInviteSettings/TeamMemberInvitesPage';
+const PermissionsPage = lazy(() => import('./pages/settings/PermissionsPage'));
+const TeamMembersPage = lazy(() => import('./pages/settings/teamMemberSettings/TeamMembersPage'));
+const TeamMemberInvitesPage = lazy(() => import('./pages/settings/teamMemberInviteSettings/TeamMemberInvitesPage'));
 
 // Team member group settings
-import TeamMemberGroupsPage from './pages/settings/teamMemberGroupSettings/TeamMemberGroupsPage';
-import TeamMemberGroupGeneralSettingsPage from './pages/settings/teamMemberGroupSettings/TeamMemberGroupGeneralSettingsPage';
-import TeamMemberGroupMembersPage from './pages/settings/teamMemberGroupSettings/TeamMemberGroupMembersPage';
-import TeamMemberAcceptInvite from './pages/settings/teamMemberGroupSettings/TeamMemberAcceptInvitePage';
-import SharedPage from './pages/shared';
+const TeamMemberGroupsPage = lazy(() => import('./pages/settings/teamMemberGroupSettings/TeamMemberGroupsPage'));
+const TeamMemberGroupGeneralSettingsPage = lazy(
+  () => import('./pages/settings/teamMemberGroupSettings/TeamMemberGroupGeneralSettingsPage')
+);
+const TeamMemberGroupMembersPage = lazy(
+  () => import('./pages/settings/teamMemberGroupSettings/TeamMemberGroupMembersPage')
+);
+const TeamMemberAcceptInvite = lazy(
+  () => import('./pages/settings/teamMemberGroupSettings/TeamMemberAcceptInvitePage')
+);
+const SharedPage = lazy(() => import('./pages/shared'));
 
 // At workspace
-import Notification from './pages/workspace/notification/Notification';
-import Dashboard from './pages/workspace/dashboard';
-import Active from './pages/inbox/InboxesPage/components/Active';
-import Hidden from './pages/inbox/InboxesPage/components/Hidden';
-import Archived from './pages/inbox/InboxesPage/components/Archive';
-import Restore from './pages/inbox/InboxesPage/components/Restore';
-import Docs from './pages/workspace/docs';
-import RenderTaskModal from './pages/workspace/tasks/component/RenderTaskModal';
-import NotFoundPage from './pages/NotFoundPage/NotFoundPage';
-import Calendar from './pages/calendar';
-import Goals from './pages/workspace/goals';
-import Favorites from './pages/workspace/favorites';
-import Home from './pages/workspace/home/Home';
-import ExplorerPage from './pages/explorer';
-import Directory from './pages/directory';
-import NotificationSettingsPage from './pages/settings/NotificationSettings/GeneralNotification/index';
-import UserSettings from './pages/settings/UserSettings/Pages/Settings';
-import CommunityPage from './pages/community';
-import SideBarSettings from './pages/settings/UserSettings/components/sidebar/SideBar';
-import CreateNewWorkspace from './pages/workspace/createWorkspace/NewWorkSpace';
-import LeaveTypesPage from './pages/calendar/pages/LeaveTypesPage';
+const Notification = lazy(() => import('./pages/workspace/notification/Notification'));
+const Dashboard = lazy(() => import('./pages/workspace/dashboard'));
+const Active = lazy(() => import('./pages/inbox/InboxesPage/components/Active'));
+const Hidden = lazy(() => import('./pages/inbox/InboxesPage/components/Hidden'));
+const Archived = lazy(() => import('./pages/inbox/InboxesPage/components/Archive'));
+const Restore = lazy(() => import('./pages/inbox/InboxesPage/components/Restore'));
+const Docs = lazy(() => import('./pages/workspace/docs'));
+const RenderTaskModal = lazy(() => import('./pages/workspace/tasks/component/RenderTaskModal'));
+const NotFoundPage = lazy(() => import('./pages/NotFoundPage/NotFoundPage'));
+const Calendar = lazy(() => import('./pages/calendar'));
+const Goals = lazy(() => import('./pages/workspace/goals'));
+const Favorites = lazy(() => import('./pages/workspace/favorites'));
+const Home = lazy(() => import('./pages/workspace/home/Home'));
+const ExplorerPage = lazy(() => import('./pages/explorer'));
+const Directory = lazy(() => import('./pages/directory'));
+const NotificationSettingsPage = lazy(() => import('./pages/settings/NotificationSettings/GeneralNotification/index'));
+const UserSettings = lazy(() => import('./pages/settings/UserSettings/Pages/Settings'));
+const CommunityPage = lazy(() => import('./pages/community'));
+const SideBarSettings = lazy(() => import('./pages/settings/UserSettings/components/sidebar/SideBar'));
+const CreateNewWorkspace = lazy(() => import('./pages/workspace/createWorkspace/NewWorkSpace'));
+const LeaveTypesPage = lazy(() => import('./pages/calendar/pages/LeaveTypesPage'));
 import { IUser } from './types';
-import ManagePage from './pages/calendar/pages/ManagePage';
-import WorkspaceSettings from './pages/settings/WorkspaceSettings';
-import TasksIndex from './pages/workspace/tasksIndex';
-import SubscribersSettings from './pages/settings/NotificationSettings/SubscribersSettings';
+const ManagePage = lazy(() => import('./pages/calendar/pages/ManagePage'));
+const WorkspaceSettings = lazy(() => import('./pages/settings/WorkspaceSettings'));
+const TasksIndex = lazy(() => import('./pages/workspace/tasksIndex'));
+const SubscribersSettings = lazy(() => import('./pages/settings/NotificationSettings/SubscribersSettings'));
 import { WallchartPage } from './pages/calendar/pages/WallchartPage';
 import { useAppSelector } from './app/hooks';
-import HubPage from './pages/hub';
+const HubPage = lazy(() => import('./pages/hub'));
 import { ListPage } from './pages/list';
 import { WalletPage } from './pages/wallet';
-import Construction from './pages/settings/UserSettings/Pages/Construction';
-import TaskInvite from './pages/workspace/tasks/taskInvite/TaskInvite';
-import WorkSpaceTable from './pages/settings/WorkspaceSettings/GeneralWorkSpaceSettings/Table';
-import EverythingPage from './pages/everything';
+const Construction = lazy(() => import('./pages/settings/UserSettings/Pages/Construction'));
+const TaskInvite = lazy(() => import('./pages/workspace/tasks/taskInvite/TaskInvite'));
+const WorkSpaceTable = lazy(() => import('./pages/settings/WorkspaceSettings/GeneralWorkSpaceSettings/Table'));
+const EverythingPage = lazy(() => import('./pages/everything'));
+const ForgotPassword = lazy(() => import('./pages/workspace/createWorkspace/auth/ForgotPassword/ForgotPassword'));
+const EmailSentPage = lazy(() => import('./pages/workspace/createWorkspace/auth/ForgotPassword/EmailSentPage'));
+const ResetPassword = lazy(() => import('./pages/workspace/createWorkspace/auth/ForgotPassword/ResetPassword'));
+const AlsoHr = lazy(() => import('./pages/hr'));
+const TimeClockPage = lazy(() => import('./pages/time-clock'));
+const VerifyEmail = lazy(() => import('./pages/workspace/createWorkspace/auth/VerifyEmail/Index'));
 
 const inbox = [
   {
@@ -107,6 +121,11 @@ export const routes = (user: IUser | null) => {
       path: 'accept-invite/:inviteCode',
       element: <TeamMemberAcceptInvite />
     },
+    { path: 'auth/verify-email/:verificationCode', element: <VerifyEmail /> },
+    {
+      path: 'auth/verify-email/:verificationCode',
+      element: <TeamMemberAcceptInvite />
+    },
     {
       path: '/',
       element: user ? (
@@ -144,7 +163,6 @@ export const routes = (user: IUser | null) => {
               path: '',
               element: <WallchartPage />
             },
-
             {
               path: 'types',
               element: <LeaveTypesPage />
@@ -155,8 +173,11 @@ export const routes = (user: IUser | null) => {
             }
           ]
         },
+        { path: 'hr/h/:hubId', element: <AlsoHr /> },
         { path: 'dashboard', element: <Dashboard /> },
         { path: 'tasks', element: <TasksIndex /> },
+        { path: 'insights', element: <TasksIndex /> },
+        { path: 'insights/time-clock', element: <TimeClockPage /> },
         { path: 'favorites', element: <Favorites /> },
         { path: 'goals', element: <Goals /> },
         { path: 'docs', element: <Docs /> },
@@ -183,7 +204,10 @@ export const routes = (user: IUser | null) => {
       children: [
         { path: 'login', element: <LoginPage /> },
         { path: 'register', element: <RegisterPage /> },
-        { path: 'register/:inviteCode', element: <RegisterPage /> }
+        { path: 'register/:inviteCode', element: <RegisterPage /> },
+        { path: 'forgot', element: <ForgotPassword /> },
+        { path: 'recover', element: <EmailSentPage /> },
+        { path: 'reset-password/:resetCode', element: <ResetPassword /> }
       ]
     },
     {

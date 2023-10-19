@@ -2,11 +2,9 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { initialPlaces } from '../../layout/components/MainLayout/Sidebar/components/Places';
 import { IUserParams, IUserState, Place } from './account.interfaces';
 import { STORAGE_KEYS } from '../../app/config/dimensions';
+import { IPaletteData } from '../workspace/workspace.interfaces';
 
 const showPreviewFromLS = localStorage.getItem('showPreview') as string;
-
-// const sidebarFromLS: { sidebarWidth: number; showSidebar: boolean } =
-//   JSON.parse(localStorage.getItem('sidebar') || '""');
 
 const sidebarFromLS = localStorage.getItem('sidebar');
 //get sidebar width from local storage
@@ -16,7 +14,7 @@ const pilotWidthFromLS = JSON.parse(localStorage.getItem(STORAGE_KEYS.PILOT_WIDT
 
 const extendedBarWidthFromLS = JSON.parse(localStorage.getItem(STORAGE_KEYS.EXTENDED_BAR_WIDTH) || '""') as number;
 
-const hotKeysFromLS = JSON.parse(localStorage.getItem(STORAGE_KEYS.HOT_KEYS) || '""') as number[];
+const hotKeysFromLS = JSON.parse(localStorage.getItem(STORAGE_KEYS.HOT_KEYS) || '""') as string[];
 
 const idsFromLS = JSON.parse(localStorage.getItem('placeItem') || '[]') as string[];
 
@@ -49,7 +47,9 @@ interface AccountState {
   lightBaseColor: string;
   userSettingsData?: IUserParams;
   places: Place[];
+  selectListColours: string[];
   calculatedContentWidth: string;
+  colourPaletteData: IPaletteData[];
 }
 
 const initialState: AccountState = {
@@ -73,7 +73,9 @@ const initialState: AccountState = {
     hotkeys: hotKeysFromLS
   },
   places: [...initialPlaces.sort((a, b) => idsFromLS.indexOf(a.id) - idsFromLS.indexOf(b.id))],
-  calculatedContentWidth: ''
+  calculatedContentWidth: '',
+  selectListColours: [],
+  colourPaletteData: []
 };
 
 export const accountSlice = createSlice({
@@ -98,6 +100,12 @@ export const accountSlice = createSlice({
     setShowUploadImage: (state, action: PayloadAction<boolean>) => {
       state.showUploadImage = action.payload;
     },
+    setSelectedListColours: (state, action: PayloadAction<string[]>) => {
+      state.selectListColours = action.payload;
+    },
+    setColourPaletteData: (state, action: PayloadAction<IPaletteData[]>) => {
+      state.colourPaletteData = action.payload;
+    },
     setUserName: (state, action: PayloadAction<string>) => {
       state.userName = action.payload;
     },
@@ -119,7 +127,9 @@ export const {
   setShowUploadImage,
   setUserName,
   SetUserSettingsStore,
-  setCalculatedContentWidth
+  setCalculatedContentWidth,
+  setSelectedListColours,
+  setColourPaletteData
 } = accountSlice.actions;
 
 export default accountSlice.reducer;

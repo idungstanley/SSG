@@ -17,15 +17,20 @@ import { cl } from '../../../../../../../utils';
 import { EntityType } from '../../../../../../../utils/EntityTypes/EntityType';
 import HubItemOverlay from '../../../../../../../components/tasks/HubItemOverLay';
 import { DragOverlay } from '@dnd-kit/core';
+import { pilotTabs } from '../../../../../../../app/constants/pilotTabs';
+import { generateViewsUrl } from '../../../../../../../utils/generateViewsUrl';
+import { IHub } from '../../../../../../../features/hubs/hubs.interfaces';
+import { APP_TASKS } from '../../../../../../../app/constants/app';
 
-export default function SubHubList({ hubs }: ListProps) {
+export default function SubHubList({ hubs, placeHubType }: ListProps) {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const { showExtendedBar, openedEntitiesIds } = useAppSelector((state) => state.workspace);
   const { showSidebar } = useAppSelector((state) => state.account);
 
-  const handleLocation = (id: string, name: string) => {
+  const handleLocation = (id: string, name: string, item: IHub) => {
+    const viewsUrl = generateViewsUrl(id, item, EntityType.hub) as string;
     if (openedEntitiesIds.includes(id)) {
       dispatch(setOpenedEntitiesIds(openedEntitiesIds.filter((item) => item !== id)));
     } else {
@@ -39,8 +44,8 @@ export default function SubHubList({ hubs }: ListProps) {
       })
     );
     dispatch(setShowPilot(true));
-    dispatch(setActiveTabId(4));
-    navigate(`tasks/sh/${id}`, {
+    dispatch(setActiveTabId(pilotTabs.WATCHERS));
+    navigate(viewsUrl, {
       replace: true
     });
     if (!showSidebar) {
@@ -84,8 +89,9 @@ export default function SubHubList({ hubs }: ListProps) {
               type={EntityType.subHub}
               topNumber="80px"
               zNumber="4"
+              placeHubType={placeHubType}
             />
-            {showSidebar && (
+            {showSidebar && placeHubType == APP_TASKS ? (
               <div>
                 {hub.wallets.length && openedEntitiesIds.includes(hub.id) ? (
                   <WList
@@ -100,7 +106,7 @@ export default function SubHubList({ hubs }: ListProps) {
                   <LList list={hub.lists} leftMargin={false} paddingLeft="50" />
                 ) : null}
               </div>
-            )}
+            ) : null}
           </div>
         </div>
       ))}

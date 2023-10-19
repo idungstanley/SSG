@@ -35,20 +35,25 @@ export function Label({
 
   const { selectedTasksArray } = useAppSelector((state) => state.task);
 
+  const allChecked = tasks?.every((value) => selectedTasksArray.includes(value.id));
+
   const handleCheckedGroupTasks = () => {
     const updatedTaskIds: string[] = [...selectedTasksArray];
-
-    tasks?.forEach((task) => {
-      const taskIndex = updatedTaskIds.indexOf(task.id);
-
-      if (taskIndex === -1) {
-        //Add Task not in selectedTasksArray
-        updatedTaskIds.push(task.id);
-      } else {
+    if (allChecked) {
+      tasks?.forEach((task) => {
+        const taskIndex = updatedTaskIds.indexOf(task.id);
         // Remove Task already in selectedTasksArray
         updatedTaskIds.splice(taskIndex, 1);
-      }
-    });
+      });
+    } else {
+      tasks?.forEach((task) => {
+        const taskIndex = updatedTaskIds.indexOf(task.id);
+        if (taskIndex === -1) {
+          updatedTaskIds.push(task.id);
+        }
+      });
+    }
+
     dispatch(setSelectedTasksArray(updatedTaskIds));
   };
 
@@ -64,9 +69,9 @@ export function Label({
             <CollapseIcon color="#A854F7" active={showTable} onToggle={onClickChevron} hoverBg="white" />
             <h1>{listName ?? 'Loading...'}</h1>
           </div>
-          <button className="flex items-center justify-center h-6 bg-gray-200 rounded-sm">
+          <div className="flex items-center justify-center h-6 bg-gray-200 rounded-sm">
             <ListAddModal handleCheckedGroupTasks={handleCheckedGroupTasks} ListColor={ListColor} />
-          </button>
+          </div>
         </div>
         <p className="ml-3">{hubName}</p>
       </div>

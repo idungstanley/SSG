@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { explorerItemType } from '../../types';
 import { logout, switchWorkspace } from '../auth/authSlice';
 
-const selectedSortingId = JSON.parse(localStorage.getItem('selectedSortingId') || '1') as number;
+const selectedSortingId = JSON.parse(localStorage.getItem('selectedSortingId') || '1') as string;
 
 interface IFastPreview {
   show: boolean;
@@ -15,7 +15,7 @@ interface ExplorerState {
 
   selectedFileIds: string[];
   selectedFolderIds: string[];
-  selectedSortingId: number;
+  selectedSortingId: string;
   selectedFolderId: string | null;
   selectedFileId: string | null;
   fastPreview: IFastPreview;
@@ -87,7 +87,7 @@ export const explorerSlice = createSlice({
       state.selectedItemId = null;
       state.selectedItemType = null;
     },
-    setSelectedSorting: (state, action: PayloadAction<number>) => {
+    setSelectedSorting: (state, action: PayloadAction<string>) => {
       state.selectedSortingId = action.payload;
     }
   },

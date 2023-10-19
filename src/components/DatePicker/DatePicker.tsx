@@ -13,6 +13,7 @@ import { setHistoryMemory, setTaskSelectedDate } from '../../features/task/taskS
 import { IUserCalendarParams } from '../../features/task/interface.tasks';
 import { setPickedDateState } from '../../features/workspace/workspaceSlice';
 import AlsoitMenuDropdown from '../DropDowns';
+import { pilotTabs } from '../../app/constants/pilotTabs';
 
 interface DatePickerProps {
   styles?: string;
@@ -53,7 +54,7 @@ export default function DatePicker({
       .format(time_format === '1' ? 'ddd, DD MMM YYYY HH:mm' : 'ddd, DD MMM YYYY h:mm A')
   );
   const [openSideBar, setOpenSideBar] = useState<boolean>(false);
-  const { data } = useGetUserSettingsData({ keys: 'calendar' });
+  const { data } = useGetUserSettingsData({ keys: pilotTabs.CALENDAR });
 
   function isIUserCalendarParams(value: unknown): value is IUserCalendarParams {
     if (typeof value === 'object' && value !== null) {

@@ -14,24 +14,25 @@ import {
   useSensors
 } from '@dnd-kit/core';
 import { arrayMove, rectSortingStrategy, SortableContext, sortableKeyboardCoordinates } from '@dnd-kit/sortable';
+import { pilotTabs } from '../../../../../app/constants/pilotTabs';
 
 export const communicationOptions = [
   {
-    id: 1,
+    id: 'email',
     name: 'email',
     icon: <MdOutlineMarkEmailUnread />,
     isVisible: false
   },
-  { id: 2, name: 'chat', icon: <RiWechatLine />, isVisible: false },
+  { id: 'chat', name: 'chat', icon: <RiWechatLine />, isVisible: false },
   {
-    id: 3,
+    id: 'contact',
     name: 'contact',
     icon: <AiOutlineContacts />,
     isVisible: false
   }
 ];
 export default function CommunicationSubTab() {
-  const idsFromLS: number[] = JSON.parse(localStorage.getItem('subTab') || '[]') as number[];
+  const idsFromLS: string[] = JSON.parse(localStorage.getItem('subTab') || '[]') as string[];
   const { showPilot, activeSubCommunicationTabId } = useAppSelector((state) => state.workspace);
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -77,7 +78,7 @@ export default function CommunicationSubTab() {
               icon={item.icon}
               activeSub={activeSubCommunicationTabId}
               showPilot={showPilot}
-              name={'connect'}
+              name={pilotTabs.CONNECT}
               items={items}
               item={item}
             />

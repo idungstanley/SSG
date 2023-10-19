@@ -9,14 +9,16 @@ export interface selectedUserType {
 export interface formikConfig {
   initValues: {
     name?: string;
-    email: string;
-    password: string;
+    email?: string;
+    password?: string;
+    'confirm password'?: string;
   };
   validationSchema: OptionalObjectSchema<
     {
       name?: RequiredStringSchema<string | undefined, AnyObject>;
-      email: RequiredStringSchema<string | undefined, AnyObject>;
-      password: RequiredStringSchema<string | undefined, AnyObject>;
+      email?: RequiredStringSchema<string | undefined, AnyObject>;
+      password?: RequiredStringSchema<string | undefined, AnyObject>;
+      'confirm password'?: RequiredStringSchema<string | undefined, AnyObject>;
     },
     AnyObject
   >;

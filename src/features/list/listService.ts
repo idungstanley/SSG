@@ -13,6 +13,7 @@ import { EntityType } from '../../utils/EntityTypes/EntityType';
 import { ICustomField, setNewCustomPropertyDetails, setSubtasks, setTasks } from '../task/taskSlice';
 import {
   createCustomFieldColumnManager,
+  deleteCustomFieldManager,
   updateCustomFieldColumnManager,
   updateCustomFieldManager
 } from '../../managers/Task';
@@ -115,12 +116,13 @@ export const UseEditListService = (data: {
   color?: string | null | { innerColour?: string; outerColour?: string };
   shape?: string;
 }) => {
+  const convertToString = JSON.stringify(data.color);
   const response = requestNew<IResponseList>({
     url: `lists/${data.listId}`,
     method: 'PUT',
     data: {
       name: data.listName,
-      color: data.color,
+      color: convertToString,
       shape: data.shape,
       description: data.description
     }
@@ -386,4 +388,52 @@ export const useTaskStatuses = () => {
 
     return data?.data.hub.task_statuses;
   }
+};
+
+const hideCustomFieldColumn = (data: { columnId?: string; listId: string; type: string }) => {
+  const { columnId, listId, type } = data;
+
+  const response = requestNew({
+    url: `custom-fields/${columnId}/model?model=${type}&model_id=${listId}`,
+    method: 'DELETE'
+  });
+  return response;
+};
+
+export const useHideCustomFieldColumn = (columnId: string, listId: string) => {
+  const dispatch = useAppDispatch();
+
+  const { tasks, subtasks } = useAppSelector((state) => state.task);
+
+  return useMutation(hideCustomFieldColumn, {
+    onSuccess: () => {
+      const { updatedTasks, updatedSubtasks } = deleteCustomFieldManager(tasks, subtasks, columnId, listId);
+      dispatch(setTasks(updatedTasks));
+      dispatch(setSubtasks(updatedSubtasks));
+    }
+  });
+};
+
+const deleteCustomField = (data: { columnId?: string; listId: string; type: string }) => {
+  const { columnId, listId, type } = data;
+
+  const response = requestNew({
+    url: `custom-fields/${columnId}?confirm=1`,
+    method: 'DELETE'
+  });
+  return response;
+};
+
+export const useDeleteCustomField = (columnId: string, listId: string) => {
+  const dispatch = useAppDispatch();
+
+  const { tasks, subtasks } = useAppSelector((state) => state.task);
+
+  return useMutation(deleteCustomField, {
+    onSuccess: () => {
+      const { updatedTasks, updatedSubtasks } = deleteCustomFieldManager(tasks, subtasks, columnId, listId);
+      dispatch(setTasks(updatedTasks));
+      dispatch(setSubtasks(updatedSubtasks));
+    }
+  });
 };

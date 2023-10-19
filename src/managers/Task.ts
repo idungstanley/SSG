@@ -1,6 +1,5 @@
-import { useAppSelector } from '../app/hooks';
 import { IList } from '../features/hubs/hubs.interfaces';
-import { IField, IFieldValue } from '../features/list/list.interfaces';
+import { IField, IFieldValue, ITask_statuses } from '../features/list/list.interfaces';
 import { ITeamMembersAndGroup } from '../features/settings/teamMembersAndGroups.interfaces';
 import { IStatus, ITaskFullList } from '../features/task/interface.tasks';
 import { ICustomField } from '../features/task/taskSlice';
@@ -10,7 +9,8 @@ import { findCurrentList, updateListTasksCountManager } from './List';
 export const addNewTaskManager = (
   tasks: Record<string, ITaskFullList[]>,
   taskFromData: ITaskFullList,
-  custom_field_columns: IField[]
+  custom_field_columns: IField[],
+  task_statuses: ITask_statuses[]
 ): Record<string, ITaskFullList[]> => {
   const listId = taskFromData.list_id;
   if (listId) {
@@ -18,6 +18,7 @@ export const addNewTaskManager = (
     const newTask = {
       ...taskFromData,
       custom_field_columns,
+      task_statuses,
       descendants_count: 0
     };
 
@@ -310,6 +311,46 @@ export const updateCustomFieldManager = (
       return task;
     });
   });
+
+  return { updatedTasks, updatedSubtasks };
+};
+
+export const deleteCustomFieldManager = (
+  tasks: Record<string, ITaskFullList[]>,
+  subtasks: Record<string, ITaskFullList[]>,
+  columnId: string,
+  currentListId: string
+) => {
+  const updatedTasks = { ...tasks };
+  const updatedSubtasks = { ...subtasks };
+
+  if (columnId && currentListId) {
+    updatedTasks[currentListId] = updatedTasks[currentListId].map((task) => {
+      const filteredCustomFields = task.custom_fields?.filter((field) => field.id !== columnId) as ICustomField[];
+      const filteredCustomFieldsColumns = task.custom_field_columns?.filter(
+        (field) => field.id !== columnId
+      ) as IField[];
+      return {
+        ...task,
+        custom_fields: [...filteredCustomFields],
+        custom_field_columns: [...filteredCustomFieldsColumns]
+      };
+    });
+
+    Object.keys(updatedSubtasks).map((taskId) => {
+      updatedSubtasks[taskId] = updatedSubtasks[taskId].map((task) => {
+        const filteredCustomFields = task.custom_fields?.filter((field) => field.id !== columnId) as ICustomField[];
+        const filteredCustomFieldsColumns = task.custom_field_columns?.filter(
+          (field) => field.id !== columnId
+        ) as IField[];
+        return {
+          ...task,
+          custom_fields: [...filteredCustomFields],
+          custom_field_columns: [...filteredCustomFieldsColumns]
+        };
+      });
+    });
+  }
 
   return { updatedTasks, updatedSubtasks };
 };

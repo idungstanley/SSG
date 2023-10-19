@@ -143,7 +143,7 @@ export default function CreateList() {
         </div>
         <div className="flex items-center justify-between w-full h-10 p-1 bg-white border rounded">
           <span>Manage this List with other application</span>
-          <ArrowDown />
+          <ArrowDown className="w-3 h-3" />
         </div>
         <div className="flex items-center justify-between w-full h-10 p-1 bg-white border rounded">
           <span>Share with public</span>

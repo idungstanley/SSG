@@ -13,23 +13,23 @@ interface PublishProps {
 
 const options: { id: string; name: expiresIn }[] = [
   {
-    id: '2',
+    id: '1_hour',
     name: '1-hour'
   },
   {
-    id: '3',
+    id: '3_hours',
     name: '3-hours'
   },
   {
-    id: '4',
+    id: 'day',
     name: '24-hours'
   },
   {
-    id: '5',
+    id: '3_days',
     name: '3-days'
   },
   {
-    id: '6',
+    id: '7_days',
     name: '7-days'
   }
 ];

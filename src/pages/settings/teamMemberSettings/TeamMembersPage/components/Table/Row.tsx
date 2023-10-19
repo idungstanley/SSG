@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { NoSymbolIcon, UserMinusIcon, CheckCircleIcon } from '@heroicons/react/24/outline';
 import {
@@ -10,13 +10,18 @@ import {
 import { displayPrompt, setVisibility } from '../../../../../../features/general/prompt/promptSlice';
 import { AvatarWithInitials, StatusDot, Dropdown } from '../../../../../../components';
 import { OutputDateTime } from '../../../../../../app/helpers';
+import ChangeRole from './ChangeRole';
+import ArrowDown from '../../../../../../assets/icons/ArrowDown';
 
 interface RowProps {
   teamMemberId: string;
+  myRole: string;
 }
 
-export default function Row({ teamMemberId }: RowProps) {
+export default function Row({ teamMemberId, myRole }: RowProps) {
   const dispatch = useDispatch();
+  const canChangeRole = myRole.toLowerCase() === 'owner' || myRole.toLowerCase() === 'admin';
+  const [anchor, setAnchor] = useState<HTMLElement | null>(null);
 
   const { data: teamMember } = useGetTeamMember(teamMemberId);
   const { mutate: deactivateTeamMember } = useDeactivateTeamMember(teamMemberId);
@@ -112,13 +117,23 @@ export default function Row({ teamMemberId }: RowProps) {
       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
         <span
           className={`inline-flex rounded-full ${
-            teamMember.is_active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+            !teamMember.is_deleted ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
           }  px-2 text-xs font-semibold leading-5`}
         >
-          {teamMember.is_active ? 'Active' : 'Deactivated'}
+          {teamMember.is_deleted ? 'Deactivated' : 'Active'}
         </span>
       </td>
-      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{teamMember.role.name}</td>
+      <td
+        className="whitespace-nowrap px-3 py-4 text-sm text-gray-500 cursor-pointer flex items-center gap-1 mt-2"
+        onClick={(e) => {
+          if (teamMember.role.name.toLowerCase() !== 'owner' && canChangeRole) {
+            setAnchor(e.currentTarget);
+          }
+        }}
+      >
+        {teamMember.role.name}
+        {teamMember.role.name.toLowerCase() !== 'owner' && canChangeRole && <ArrowDown className="w-2 h-2" />}
+      </td>
       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
         {teamMember.last_activity_at ? OutputDateTime(teamMember.last_activity_at, null) : '-'}
       </td>
@@ -133,10 +148,10 @@ export default function Row({ teamMemberId }: RowProps) {
           <Dropdown
             items={[
               {
-                label: teamMember.is_active ? 'Deactivate' : 'Reactivate',
+                label: teamMember.is_deleted ? 'Reactivate' : 'Deactivate',
                 onClick: () =>
-                  teamMember.is_active ? deactivateTeamMemberConfirmation() : reactivateTeamMemberConfirmation(),
-                icon: teamMember.is_active ? (
+                  !teamMember.is_deleted ? deactivateTeamMemberConfirmation() : reactivateTeamMemberConfirmation(),
+                icon: !teamMember.is_deleted ? (
                   <NoSymbolIcon className="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500" aria-hidden="true" />
                 ) : (
                   <CheckCircleIcon
@@ -155,6 +170,7 @@ export default function Row({ teamMemberId }: RowProps) {
             ]}
           />
         </div>
+        <ChangeRole anchor={anchor} setAnchor={setAnchor} presentRole={teamMember.role.name} teamMember={teamMember} />
       </td>
     </tr>
   ) : null;

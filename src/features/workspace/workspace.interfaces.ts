@@ -1,3 +1,4 @@
+import { IUseSettingsProfile } from '../task/taskSlice';
 export interface IWorkspaceRes {
   data: {
     workspace: {
@@ -74,7 +75,24 @@ export interface IUserRes {
   message: string;
   data: {
     user: IUserData;
+    user_settings: IUseSettingsProfile[];
   };
+}
+export interface IColourRes {
+  success: string;
+  message: string;
+  data: IColourData;
+}
+export interface IPaletteData {
+  id: string;
+  name: string | null;
+  color: string;
+  color_name: string;
+  is_pinned: boolean;
+  count_uses: number;
+}
+export interface IColourData {
+  palette_colors: IPaletteData[];
 }
 
 export interface ITeamMember {
@@ -112,7 +130,7 @@ export interface ITeamMembersRes {
 }
 
 export interface IRecorderLastMemory {
-  activeTabId: number | undefined;
+  activeTabId: string | undefined;
   hubId: string | undefined;
   subhubId: string | undefined;
   listId: string | undefined;
@@ -121,7 +139,7 @@ export interface IRecorderLastMemory {
 }
 
 export interface ITimerLastMemory {
-  activeTabId: number | undefined;
+  activeTabId: string | undefined;
   hubId: string | undefined | null;
   subhubId: string | undefined | null;
   listId: string | undefined | null;

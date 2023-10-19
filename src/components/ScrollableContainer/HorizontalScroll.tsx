@@ -201,15 +201,15 @@ export function HorizontalScroll({ children, ...props }: CustomScrollableContain
 
   return (
     <>
-      <div className="relative w-full p-2 overflow-hidden">
+      <div className="relative w-full p-1 overflow-hidden">
         <div className="scrollbar-hide" ref={contentRef} {...props}>
           {children}
         </div>
       </div>
       {isThumbVisible && (
-        <div className="sticky bottom-0 z-10 grid w-full grid-cols-2 pt-4 pr-2 group">
+        <div className="sticky bottom-0 z-10 grid w-full grid-cols-2 pr-2 group">
           <div />
-          <div className="flex flex-row items-center mb-4 space-x-2">
+          <div className="flex flex-row items-center mb-1 space-x-2">
             {renderScrollArrows()}
             <div className="relative flex flex-grow block w-full h-2">
               <div

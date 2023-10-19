@@ -75,11 +75,20 @@ const calculateWidthForContent = () => {
   ).isPilotMinified as boolean;
 
   const { showSidebar, userSettingsData } = useAppSelector((state) => state.account);
+
   const { show: showFullPilot, id } = useAppSelector((state) => state.slideOver.pilotSideOver);
+
   const { sidebarWidthRD, showExtendedBar } = useAppSelector((state) => state.workspace);
-  const sidebarWidth = showSidebar ? userSettingsData?.sidebarWidth : sidebarWidthRD;
-  const extendedBarWidth = showExtendedBar ? userSettingsData?.extendedBarWidth : 0;
-  const pilotWidth = showFullPilot && id ? userSettingsData?.pilotWidth : !showFullPilot && id ? 50 : undefined;
+
+  const sidebarWidth = showSidebar
+    ? userSettingsData?.sidebarWidth || dimensions.navigationBar.default
+    : sidebarWidthRD;
+
+  const extendedBarWidth = showExtendedBar ? userSettingsData?.extendedBarWidth || dimensions.extendedBar.default : 0;
+
+  const pilotWidth =
+    showFullPilot && id ? userSettingsData?.pilotWidth || dimensions.pilot.default : !showFullPilot && id ? 50 : 0;
+
   const calculatedContentWidth = useMemo(() => {
     return `calc(100vw - ${sidebarWidth}px - ${extendedBarWidth}px - ${pilotWidth}px)`;
   }, [

@@ -62,8 +62,8 @@ export default function NavigationItems({
   const [countOfItemToShow, setCountOfItemToShow] = useState<number>(3);
   const [showDropdown, setShowDropdown] = useState<null | HTMLSpanElement | HTMLDivElement>(null);
 
-  const workspaceName = workspaceData?.data?.workspace.name;
-  const workspaceColor = workspaceData?.data?.workspace.color as string;
+  const workspaceName = workspaceData?.data?.workspace?.name;
+  const workspaceColor = workspaceData?.data?.workspace?.color as string;
 
   const idsFromLS = JSON.parse(localStorage.getItem('navItem') || '[]') as string[];
 
@@ -73,35 +73,36 @@ export default function NavigationItems({
 
   const navigation = [
     {
-      id: '1',
+      id: 'home',
       name: 'Home',
       href: '/',
       icon: <HomeIcon />,
       alwaysShow: true
     },
     {
-      id: '2',
-      name: 'Notifications',
+      id: 'notifications',
+      name: 'Inbox',
       href: `/${currentWorkspaceId}/notification`,
       icon: <NotificationIcon />,
       alwaysShow: true
     },
     {
-      id: '3',
+      id: 'calendar',
       name: 'Calendar',
       href: `/${currentWorkspaceId}/calendar`,
       icon: <CalendarIcon active={false} />,
       alwaysShow: false
     },
     {
-      id: '4',
+      id: 'community',
       name: 'Community',
       href: `/${currentWorkspaceId}/community`,
       icon: (
         <AvatarWithInitials
           initials={getInitials(workspaceName ?? '')}
-          height="h-5"
-          width="w-5"
+          height="h-4 font-xs"
+          width="w-4"
+          textSize="8px"
           backgroundColour={workspaceColor}
           roundedStyle="rounded"
           textColor="white"
@@ -110,28 +111,28 @@ export default function NavigationItems({
       alwaysShow: false
     },
     {
-      id: '5',
+      id: 'template_center',
       name: 'Template Center',
       href: `/${currentWorkspaceId}/directory`,
       icon: <TemplateIcon />,
       alwaysShow: false
     },
     {
-      id: '6',
+      id: 'goals',
       name: 'Goals',
       href: `/${currentWorkspaceId}/goals`,
       icon: <GoalIcon />,
       alwaysShow: false
     },
     {
-      id: '7',
+      id: 'dashboards',
       name: 'Dashboards',
       href: `/${currentWorkspaceId}/dashboard`,
       icon: <DashboardIcon />,
       alwaysShow: false
     },
     {
-      id: '8',
+      id: 'favorites',
       name: 'Favorites',
       href: `/${currentWorkspaceId}/favorites`,
       icon: <FavoriteIcon />,
@@ -212,7 +213,7 @@ export default function NavigationItems({
   return (
     <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={(e) => handleDragEnd(e)}>
       <SortableContext strategy={rectSortingStrategy} items={items}>
-        <section>
+        <section className="mt-5">
           <nav className="flex flex-col mt-1 items.center">
             {(showSidebar ? displayPinnedItems : displayNavItems).map((item) => (
               <NavigationItem
@@ -228,8 +229,8 @@ export default function NavigationItems({
             <div
               onClick={handleToggleMore}
               className={cl(
-                !showSidebar ? 'justify-center pl-5' : 'gap-2 items-center pl-7 justify-between',
-                'flex cursor-pointer gap-2 items-center  p-2 w-full hover:text-gray-500 hover:bg-gray-100 mb-4'
+                !showSidebar ? 'justify-center pl-5' : 'gap-2 items-center pl-9 justify-between',
+                'flex cursor-pointer gap-2 items-center  p-2 w-full hover:text-gray-500 hover:bg-alsoit-gray-50 mb-4'
               )}
               style={{ height: '30px', fontWeight: '600' }}
             >

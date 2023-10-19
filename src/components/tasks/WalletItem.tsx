@@ -28,6 +28,7 @@ import ActiveBackground from './Component/ActiveBackground';
 import ActiveBarIdentification from './Component/ActiveBarIdentification';
 import { useAbsolute } from '../../hooks/useAbsolute';
 import { IWallet } from '../../features/hubs/hubs.interfaces';
+import { APP_TASKS } from '../../app/constants/app';
 
 interface WalletItemProps {
   wallet: {
@@ -108,6 +109,7 @@ export default function WalletItem({
   const renderOpenFolder = () => {
     return (
       <FaFolderOpen
+        className="w-4 h-3"
         color={paletteColor === '' ? wallet.color : (paletteColor as string)}
         onClick={(e) => handleWalletColour(wallet.id, e)}
       />
@@ -117,6 +119,7 @@ export default function WalletItem({
   const renderCloseFolder = () => {
     return (
       <FaFolder
+        className="w-4 h-3"
         color={paletteColor === '' ? wallet.color : (paletteColor as string)}
         onClick={(e) => handleWalletColour(wallet.id, e)}
       />
@@ -184,7 +187,7 @@ export default function WalletItem({
     >
       <section
         className={`bg-white items-center truncate text-sm group ${
-          wallet.id === activeItemId ? 'font-medium' : 'hover:bg-gray-100'
+          wallet.id === activeItemId ? 'font-medium' : 'hover:bg-alsoit-gray-50'
         } ${isOver ? 'bg-primary-100 border-primary-500 shadow-inner shadow-primary-300' : ''}`}
         ref={setNodeRef}
         onClick={() => handleShowSubWallet(wallet.id)}
@@ -205,27 +208,30 @@ export default function WalletItem({
             <Drag />
           </div>
           {/* showsub1 */}
-          <div className="flex items-center" style={{ zIndex: '1' }} ref={relativeRef}>
-            {renderIcons(showSubWallet)}
-          </div>
-          <div
-            onClick={() => handleLocation(wallet.id, wallet.name, wallet as Wallet)}
-            className="truncate cursor-pointer hover:underline hover:decoration-dashed"
-            style={{ marginLeft: '17px' }}
-          >
-            <ToolTip title={wallet.name}>
-              <p
-                className="capitalize truncate cursor-pointer"
-                style={{
-                  fontSize: '13px',
-                  lineHeight: '15.56px',
-                  verticalAlign: 'baseline',
-                  letterSpacing: '0.28px'
-                }}
-              >
-                {wallet.name}
-              </p>
-            </ToolTip>
+          <div className="flex items-center gap-5">
+            <div className="flex items-center" style={{ zIndex: '1' }} ref={relativeRef}>
+              {renderIcons(showSubWallet)}
+            </div>
+            <div
+              onClick={() => handleLocation(wallet.id, wallet.name, wallet as Wallet)}
+              className="truncate cursor-pointer hover:underline hover:decoration-dashed"
+            >
+              <ToolTip title={wallet.name}>
+                <p
+                  className={`capitalize truncate cursor-pointer ${
+                    wallet.id === walletId ? 'text-alsoit-purple-300' : ''
+                  }`}
+                  style={{
+                    fontSize: '13px',
+                    lineHeight: '15.56px',
+                    verticalAlign: 'baseline',
+                    letterSpacing: '0.28px'
+                  }}
+                >
+                  {wallet.name}
+                </p>
+              </ToolTip>
+            </div>
           </div>
           {showSidebar && (
             <div
@@ -249,15 +255,10 @@ export default function WalletItem({
         </div>
       </section>
       {paletteId === wallet.id && show ? (
-        <Palette
-          title="Wallet Colour"
-          activeOutterColor={wallet.color}
-          setPaletteColor={setPaletteColor}
-          cords={cords}
-        />
+        <Palette title="Wallet" activeOutterColor={wallet.color} setPaletteColor={setPaletteColor} cords={cords} />
       ) : null}
       {showMenuDropdown === wallet.id ? <MenuDropdown isExtendedBar={isExtendedBar} cords={menuCords} /> : null}
-      {SubMenuId === wallet.id ? <SubDropdown cords={menuCords} /> : null}
+      {SubMenuId === wallet.id ? <SubDropdown cords={menuCords} placeHubType={APP_TASKS} /> : null}
     </div>
   );
 }

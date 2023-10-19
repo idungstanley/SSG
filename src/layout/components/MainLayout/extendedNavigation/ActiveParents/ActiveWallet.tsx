@@ -12,6 +12,7 @@ import {
 import { EntityType } from '../../../../../utils/EntityTypes/EntityType';
 import { Wallet } from '../../../../../pages/workspace/hubs/components/ActiveTree/activetree.interfaces';
 import { findCurrentWallet } from '../../../../../managers/Wallet';
+import { APP_TASKS } from '../../../../../app/constants/app';
 
 interface WalletIndexProps {
   showHubList: boolean;
@@ -39,7 +40,7 @@ function ActiveWallet({ showHubList }: WalletIndexProps) {
 
   return wallet ? (
     <div id="createWallet" className={`${showHubList ? 'block' : 'hidden'}`}>
-      {!wallet.children.length && !wallet.lists.length ? (
+      {!wallet?.children?.length && !wallet?.lists?.length ? (
         <div className="flex space-x-1 text-xs pl-7 py-1.5 h-8">
           <span className="text-gray-600">
             Create a
@@ -69,7 +70,7 @@ function ActiveWallet({ showHubList }: WalletIndexProps) {
           </div>
         </section>
         {showMenuDropdown === wallet.id ? <MenuDropdown /> : null}
-        {SubMenuId === wallet.id ? <SubDropdown /> : null}
+        {SubMenuId === wallet.id ? <SubDropdown placeHubType={APP_TASKS} /> : null}
       </div>
     </div>
   ) : null;

@@ -4,7 +4,7 @@ import { EllipsisVerticalIcon } from '@heroicons/react/24/solid';
 import { cl } from '../utils';
 
 interface itemType {
-  id?: number;
+  id?: string;
   label: string;
   onClick?: () => void | boolean;
   icon?: string | JSX.Element;
