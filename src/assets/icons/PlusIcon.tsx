@@ -1,7 +1,8 @@
+import { DetailedHTMLProps, SVGAttributes } from 'react';
 import ICONS_INTERACTIONS from '../../utils/Constants/IconInteractions';
 
 /* eslint-disable max-len */
-interface Props {
+export interface IconProps extends DetailedHTMLProps<SVGAttributes<SVGSVGElement>, SVGSVGElement> {
   active?: boolean;
   dimensions?: {
     height: number;
@@ -9,9 +10,10 @@ interface Props {
   };
 }
 
-export default function PlusIcon({ active = false, dimensions }: Props) {
+export default function PlusIcon({ active = false, dimensions, ...props }: IconProps) {
   return (
     <svg
+      {...props}
       width={dimensions?.width ?? '12'}
       height={dimensions?.height ?? '12'}
       viewBox="0 0 12 12"

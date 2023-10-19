@@ -27,6 +27,14 @@ export interface ITeamMember {
   initials: string;
 }
 
+export interface RoleRes {
+  team_member_id: string;
+  role: {
+    key: string;
+    name: string;
+  };
+}
+
 export interface ITeamMembersAndGroupsReq {
   data: {
     team_members: ITeamMember[];
