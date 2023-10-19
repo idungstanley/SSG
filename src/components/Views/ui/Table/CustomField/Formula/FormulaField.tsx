@@ -11,7 +11,7 @@ import SimpleFormulasField from './SimpleFormulasField';
 const BASE_ACTIONS = ['SUM', 'MINUS', 'MULTIPLY', 'DIVIDE'];
 const ALLOWED_TYPES = ['number', 'formula'];
 
-interface DropdownFieldWrapperProps {
+interface IFormulaFieldProps {
   currentCustomFields: ICustomField;
   currentCustomFieldColumn: IField;
   taskCustomFields: ICustomField[];
@@ -29,21 +29,21 @@ function FormulaField({
   parentId,
   taskId,
   fieldId
-}: DropdownFieldWrapperProps) {
+}: IFormulaFieldProps) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [currentFields, setCurrentFields] = useState<IField[]>([]);
+  const [currentFieldColumns, setCurrentFieldColumns] = useState<IField[]>([]);
   const [result, setResult] = useState('-');
   const [isShowAdditionalFormulas, setShowAdditionalFormulas] = useState<boolean>(false);
   const [prevFormula, setPrevFormula] = useState<string>('');
 
   useEffect(() => {
-    const newCurrentFields: IField[] = [];
+    const newCurrentFieldColumns: IField[] = [];
     taskCustomFieldsColumns?.forEach((field) => {
       if (ALLOWED_TYPES.includes(field.type)) {
-        newCurrentFields.push(field);
+        newCurrentFieldColumns.push(field);
       }
     });
-    setCurrentFields(newCurrentFields);
+    setCurrentFieldColumns(newCurrentFieldColumns);
   }, [taskCustomFieldsColumns]);
 
   const { mutate: onUpdate } = useUpdateEntityCustomFieldValue(taskId);
@@ -81,19 +81,22 @@ function FormulaField({
 
   const resultParser = (value: string, allColumns: IField[], allFields: ICustomField[]) => {
     const selectedItems = findSelectedItemsInFormula(value, allColumns, allFields);
-    const action = value.split('(')[0];
-    if (selectedItems.length <= 2 && BASE_ACTIONS.includes(action)) {
-      setShowAdditionalFormulas(false);
-    } else {
-      setShowAdditionalFormulas(true);
+    if (selectedItems) {
+      const action = value.split('(')[0];
+      if (selectedItems.length <= 2 && BASE_ACTIONS.includes(action)) {
+        setShowAdditionalFormulas(false);
+      } else {
+        setShowAdditionalFormulas(true);
+      }
+      let strWithCurrentValues = value;
+      let strWithCurrentNames = value;
+      selectedItems.forEach((item) => {
+        strWithCurrentValues = strWithCurrentValues.replaceAll(`"${item.id}"`, item.value);
+        strWithCurrentNames = strWithCurrentNames.replaceAll(`"${item.id}"`, `field("${item.name}")`);
+      });
+      return { strWithCurrentValues, strWithCurrentNames };
     }
-    let strWithCurrentValues = value;
-    let strWithCurrentNames = value;
-    selectedItems.forEach((item) => {
-      strWithCurrentValues = strWithCurrentValues.replaceAll(`"${item.id}"`, item.value);
-      strWithCurrentNames = strWithCurrentNames.replaceAll(`"${item.id}"`, `field("${item.name}")`);
-    });
-    return { strWithCurrentValues, strWithCurrentNames };
+    return { strWithCurrentValues: '', strWithCurrentNames: '' };
   };
 
   useEffect(() => {
@@ -164,7 +167,7 @@ function FormulaField({
           <SimpleFormulasField
             taskCustomFieldsColumns={taskCustomFieldsColumns}
             taskCustomFields={taskCustomFields}
-            currentFields={currentFields}
+            currentFieldColumns={currentFieldColumns}
             prevFormula={prevFormula}
             showAdditionalFormulas={() => setShowAdditionalFormulas(true)}
             handleSave={handleSaveFormula}
@@ -190,7 +193,7 @@ function FormulaField({
           }}
         >
           <AdditionalFormulasField
-            currentFields={currentFields}
+            currentFieldColumns={currentFieldColumns}
             taskCustomFields={taskCustomFields}
             prevFormula={prevFormula}
             handleSave={handleSaveFormula}
