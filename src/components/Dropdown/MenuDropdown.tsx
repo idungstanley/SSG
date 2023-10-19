@@ -47,12 +47,12 @@ import { EntityType } from '../../utils/EntityTypes/EntityType';
 import { Fade, Menu } from '@mui/material';
 import { Cords } from '../../hooks/useAbsolute';
 import Button from '../Button';
-import { ShareIcon } from '../../assets/icons';
 import ArrowRight from '../../assets/icons/ArrowRight';
 import { VerticalScroll } from '../ScrollableContainer/VerticalScroll';
 import { Capitalize } from '../../utils/NoCapWords/Capitalize';
 import { displayPrompt, setVisibility } from '../../features/general/prompt/promptSlice';
 import { APP_TASKS } from '../../app/constants/app';
+import { AiOutlineShareAlt } from 'react-icons/ai';
 
 interface IMenuDropdownProps {
   isExtendedBar?: boolean;
@@ -376,36 +376,36 @@ export default function MenuDropdown({ isExtendedBar, cords }: IMenuDropdownProp
         vertical: Number(cords?.top) - 150 || 'center',
         horizontal: showSidebar ? Number(userSettingsData?.sidebarWidth) - 100 : sidebarWidthRD
       }}
+      PaperProps={{
+        style: {
+          borderRadius: '12px'
+        }
+      }}
     >
+      <div className="flex items-center justify-center my-2">{showMenuDropdownType?.toUpperCase()} PROPERTIES</div>
       <VerticalScroll>
         <div className="relative h-96">
-          <InlineBorderLabel
-            label="DEFAULT SETTINGS"
-            topElement={
-              <div className="flex items-center justify-center gap-2 mb-2">
-                {showMenuDropdownType?.toUpperCase()} PROPERTIES
-              </div>
-            }
-          />
+          <InlineBorderLabel label="DEFAULT SETTINGS" />
           <GroupMenuOptions items={itemsList} />
           <InlineBorderLabel label="ADVANCE SETTINGS" />
           <GroupMenuOptions items={advanceOption} />
           <InlineBorderLabel label="MORE SETTINGS" />
           <GroupMenuOptions items={moreOptions} />
-          <div className="sticky bottom-0 p-2 bg-white border-t">
-            <Button
-              label="Sharing & Permissions"
-              icon={<ShareIcon active={false} color="white" />}
-              buttonStyle="base"
-              height="h-9"
-            />
-          </div>
         </div>
-        {SubDropdownMenu && <SubDropdown placeHubType={APP_TASKS} />}
-        <EditHubModal />
-        <EditListModal />
-        <EditWalletModal />
       </VerticalScroll>
+      <div className="sticky bottom-0 p-2 bg-white border-t">
+        <Button
+          label="Sharing & Permissions"
+          icon={<AiOutlineShareAlt className="text-white" />}
+          buttonStyle="base"
+          height="h-8"
+          labelSize="text-sm"
+        />
+      </div>
+      {SubDropdownMenu && <SubDropdown placeHubType={APP_TASKS} />}
+      <EditHubModal />
+      <EditListModal />
+      <EditWalletModal />
     </Menu>
   );
 }
@@ -417,7 +417,7 @@ function GroupMenuOptions({ items }: ItemsProps) {
         item.isVisible ? (
           <div key={index}>
             <div
-              className="flex items-center justify-between p-1 py-2 space-x-2 text-sm text-left text-gray-600 rounded-md cursor-pointer hover:bg-alsoit-gray-75"
+              className="flex items-center justify-between p-1 py-2 space-x-2 text-sm text-left text-gray-600 rounded-md cursor-pointer hover:bg-alsoit-gray-50"
               onClick={item.handleClick}
             >
               <div className="flex items-center gap-2">

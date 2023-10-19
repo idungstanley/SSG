@@ -13,7 +13,7 @@ module.exports = {
       colors: {
         ...colors,
         primary: colors.fuchsia,
-        'alsoit-gray-50': '#F4F4F4',
+        'alsoit-gray-50': '#E9E9E9',
         'alsoit-gray-75': '#B2B2B2',
         'alsoit-gray-100': '#919191',
         'alsoit-gray-200': '#626262',
