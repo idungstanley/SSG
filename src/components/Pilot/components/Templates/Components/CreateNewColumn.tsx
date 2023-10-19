@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { cl } from '../../../../../utils';
 import NewColumn from './NewColumn';
-import ShowHide from './ShowHide';
+import ShowHide from './ShowHide/ShowHide';
 
 function CreateNewColumn() {
   const [activeBtn, setActiveBtn] = useState('1');
