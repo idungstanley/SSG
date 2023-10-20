@@ -3,6 +3,9 @@ import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { EntityType } from '../../../../utils/EntityTypes/EntityType';
 import {
   setActiveTimeout,
+  setEstimatedDuration,
+  setEstimatedTimeStatus,
+  setTimeType,
   setTimerInterval,
   setTimerStatus,
   setUpdateTimerDuration
@@ -19,17 +22,19 @@ import ArrowDownFilled from '../../../../assets/icons/ArrowDownFilled';
 import { TabsDropDown } from './TabsDropDown';
 import { HourGlassIcon } from '../../../../assets/icons/HourGlass';
 import { ClockIcon } from '../../../../assets/icons/ClockIcon';
-import { setClockType } from '../../../../features/settings/user/userSettingsSlice';
+import { timeStringToMilliseconds } from '../../../../utils/TimerDuration';
 
 export function RealTime() {
   const dispatch = useAppDispatch();
 
   const { workSpaceId, hubId, subhubId, listId, taskId } = useParams();
   const { activeItemId, activeItemType, timerLastMemory, activeTabId } = useAppSelector((state) => state.workspace);
-  const { duration, timerStatus, period, timerDetails, timeType } = useAppSelector((state) => state.task);
+  const { duration, timerStatus, estimatedTimeStatus, estimatedDuration, period, timerDetails, timeType } =
+    useAppSelector((state) => state.task);
   const { clock_limit, clock_stop_reminder } = useAppSelector((state) => state.userSetting);
 
   const [time, setTime] = useState({ s: 0, m: 0, h: 0 });
+  const [countDown, setCountDown] = useState<string>('00:00:00');
   const [isRunning, setRunning] = useState(false);
   const [prompt, setPrompt] = useState<boolean>(false);
   const [newTimer, setNewTimer] = useState<boolean>(false);
@@ -86,6 +91,8 @@ export function RealTime() {
     }
   };
 
+  const handleChange = (e: string) => setCountDown(e);
+
   const sameEntity = () => activeItemId === (timerLastMemory.taskId || timerLastMemory.hubId || timerLastMemory.listId);
 
   const handleTimeSwitch = () => {
@@ -102,7 +109,7 @@ export function RealTime() {
             <div
               className="flex w-full items-center space-x-2 p-2 hover:bg-alsoit-purple-50 cursor-pointer rounded-md"
               key={index}
-              onClick={() => dispatch(setClockType(type.value))}
+              onClick={() => dispatch(setTimeType(type.value))}
             >
               {type.value === 'timer' ? <HourGlassIcon className="w-4 h-4" /> : <ClockIcon />}
               <span className="capitalize font-semibold">{type.name}</span>
@@ -120,6 +127,31 @@ export function RealTime() {
   useEffect(() => {
     newTimer && start();
   }, [newTimer]);
+
+  useEffect(() => {
+    const { formattedTime, milliseconds } = timeStringToMilliseconds(countDown);
+
+    if (milliseconds > 0 && estimatedTimeStatus) {
+      dispatch(setEstimatedDuration(formattedTime));
+
+      const timer = () =>
+        setInterval(() => {
+          if (estimatedDuration.h === 0 && estimatedDuration.m === 0 && estimatedDuration.s === 0) {
+            clearInterval(timer());
+          } else {
+            const elapsed = { ...estimatedDuration };
+
+            elapsed.s = (elapsed.s - 1 + 60) % 60;
+            elapsed.m = (elapsed.m - (elapsed.s === 59 ? 1 : 0) + 60) % 60;
+            elapsed.h = (elapsed.h - (elapsed.m === 59 && elapsed.s === 59 ? 1 : 0) + 24) % 24;
+            dispatch(setEstimatedDuration(elapsed));
+          }
+        }, 1000);
+      timer();
+
+      return () => clearInterval(timer());
+    }
+  }, [countDown, estimatedTimeStatus]);
 
   if (
     (activeItemType === EntityType.hub || activeItemType === EntityType.list || activeItemType === EntityType.task) &&
@@ -166,7 +198,12 @@ export function RealTime() {
             </div>
           ) : (
             // Estimated Timer
-            <input type="text" />
+            <input
+              type="text"
+              onChange={(e) => handleChange(e.target.value)}
+              className="w-16 h-5 bg-none text-alsoit-text-md text-center tracking-wide px-1.5 border-none hover:ring-0 focus:ring-0"
+              placeholder="05:00:00"
+            />
           )}
         </div>
         {/* Active Timer Prompt */}
@@ -196,7 +233,7 @@ export function RealTime() {
   }
   return (
     <div className="flex justify-center items-center text-alsoit-text-md tracking-widest z-30">
-      <div className="flex items-center w-full -space-x-2">
+      <div className="flex items-center w-full -space-x-1">
         <div className="w-1/3 relative flex items-center -space-x-2">
           {timeType === 'timer' ? <HourGlassIcon className="w-4 h-4" /> : <ClockIcon />}
           <ArrowDownFilled
@@ -228,7 +265,17 @@ export function RealTime() {
             </span>
           </div>
         )}
-        {timeType === TIME_TABS.timer && <input type="text" />}
+        {timeType === TIME_TABS.timer && (
+          <div className="flex items-center">
+            <StartIcon className="w-4 h-4 cursor-pointer" onClick={() => dispatch(setEstimatedTimeStatus(true))} />
+            <input
+              type="text"
+              onChange={(e) => handleChange(e.target.value)}
+              className="w-16 h-5 bg-none text-alsoit-text-md text-center tracking-wide px-1.5 border-none hover:ring-0 focus:ring-0"
+              placeholder="05:00:00"
+            />
+          </div>
+        )}
       </div>
     </div>
   );

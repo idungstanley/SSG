@@ -415,7 +415,7 @@ export const useHideCustomFieldColumn = (columnId: string, listId: string) => {
 };
 
 const deleteCustomField = (data: { columnId?: string; listId: string; type: string }) => {
-  const { columnId, listId, type } = data;
+  const { columnId } = data;
 
   const response = requestNew({
     url: `custom-fields/${columnId}?confirm=1`,
