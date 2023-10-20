@@ -17,8 +17,6 @@ import {
 } from '../../../../../../features/workspace/workspaceSlice';
 import { createListService } from '../../../../../../features/list/listService';
 import { EntityType } from '../../../../../../utils/EntityTypes/EntityType';
-import Assignee from '../../../../tasks/assignTask/Assignee';
-import ArrowDown from '../../../../../../assets/icons/ArrowDown';
 import Wand from '../../../../../../assets/icons/Wand';
 import { ListColourProps } from '../../../../../../components/tasks/ListItem';
 import { createListManager } from '../../../../../../managers/List';
