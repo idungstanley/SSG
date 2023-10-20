@@ -55,6 +55,7 @@ function AssigneeItem({ item, option, entity_id, teams, handleClose, isAssigned 
     item,
     selectedListIds.length ? selectedListIds : [selectedTaskParentId]
   );
+
   const handleUnAssignTask = (id: string) => {
     handleClose();
     onTaskUnassign({
