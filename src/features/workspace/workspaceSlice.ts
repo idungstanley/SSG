@@ -330,14 +330,14 @@ export const wsSlice = createSlice({
       state.timerLastMemory = action.payload;
     },
     resetWorkSpace(state, action: PayloadAction<IRecorderLastMemory | ITimerLastMemory>) {
-      const { activeTabId, hubId, listId } = action.payload;
+      const { activeTabId, hubId, listId, taskId } = action.payload;
       activeTabId
-        ? state.activeTabId === activeTabId
+        ? (state.activeTabId = activeTabId)
         : hubId
-        ? state.activeItemId === hubId
+        ? (state.activeItemId = hubId)
         : listId
-        ? state.activeItemId === listId
-        : '';
+        ? (state.activeItemId = listId)
+        : (state.activeItemId = taskId as string);
     },
     setActivityArray(state, action: PayloadAction<IActivityLog[]>) {
       state.activityArray = action.payload;

@@ -21,6 +21,7 @@ import { setTimerInterval, setTimerStatus, setUpdateTimerDuration } from '../../
 import { runTimer } from '../../../../utils/TimerCounter';
 import { pilotTabs } from '../../../../app/constants/pilotTabs';
 import InsightsIcon from '../../../../assets/icons/InsightsIcon';
+import { StopIcon } from '../../../../assets/icons/StopIcon';
 
 const hoursToMilliseconds = 60 * 60 * 1000;
 const minutesToMilliseconds = 60 * 1000;
@@ -108,7 +109,7 @@ export default function AdditionalHeader({ isInsights }: IAdditionalHeaderProps)
     activeItemId === timerLastMemory.taskId;
 
   const timeBlinkerCheck = () =>
-    (timerStatus && sameEntity() && tabsId !== pilotTabs.TIME_CLOCK) || (!sameEntity() && timerStatus);
+    (timerStatus && sameEntity() && tabsId !== pilotTabs.UTILITIES) || (!sameEntity() && timerStatus);
 
   useEffect(() => {
     const handleVisibilityChange = () => {
@@ -231,10 +232,13 @@ export default function AdditionalHeader({ isInsights }: IAdditionalHeaderProps)
             >
               <AlarmClockIcon active={iconToggle.alarmIcon} />
             </div>
-            <div className="items-center">
-              {`${String(duration.h).padStart(2, '0')}:${String(duration.m).padStart(2, '0')}:${String(
-                duration.s
-              ).padStart(2, '0')}`}
+            <div className="flex space-x-0.5 items-center">
+              <StopIcon className="w-4 h-4 cursor-pointer" onClick={stop} />
+              <span className="tracking-wide">
+                {`${String(duration.h).padStart(2, '0')}:${String(duration.m).padStart(2, '0')}:${String(
+                  duration.s
+                ).padStart(2, '0')}`}
+              </span>
             </div>
             {timerModal ? (
               <div
