@@ -161,7 +161,7 @@ export function StickyCol({
       onAdd({
         name,
         isListParent,
-        id: parentId as string,
+        id: parentId !== '' ? (parentId as string) : (listId as string),
         assignees: [currTeamMemberId] as string[],
         newTaskPriority,
         task_status_id: taskStatusId as string
