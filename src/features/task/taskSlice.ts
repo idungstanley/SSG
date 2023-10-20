@@ -229,6 +229,7 @@ interface TaskState {
   showTaskUploadModal: boolean;
   subtaskDefaultStatusId: string | null;
   timerStatus: boolean;
+  estimatedTimeStatus: boolean;
   timeType: string;
   sortAbleArr: SortOption[];
   sortArr: string[];
@@ -243,6 +244,7 @@ interface TaskState {
   activeTaskColumn: ExtendedListColumnProps;
   timerDetails: ITimerDetails;
   duration: IDuration;
+  estimatedDuration: IDuration;
   recorderDuration: IDuration;
   period: number | undefined;
   recorderPeriod: number | undefined;
@@ -357,6 +359,7 @@ const initialState: TaskState = {
   groupByStatus: 'status',
   showTaskUploadModal: false,
   timerStatus: false,
+  estimatedTimeStatus: false,
   timeType: 'clock',
   sortAbleArr: [],
   sortArr: [],
@@ -371,6 +374,7 @@ const initialState: TaskState = {
   activeTaskColumn: { id: '', field: '', value: '', hidden: false, defaulField: false },
   timerDetails: { description: '', isBillable: false, label: '', tags: '' },
   duration: { s: 0, m: 0, h: 0 },
+  estimatedDuration: { s: 0, m: 0, h: 0 },
   recorderDuration: { s: 0, m: 0, h: 0 },
   period: undefined,
   recorderPeriod: undefined,
@@ -686,6 +690,9 @@ export const taskSlice = createSlice({
     setTimerStatus(state, action: PayloadAction<boolean>) {
       state.timerStatus = action.payload;
     },
+    setEstimatedTimeStatus(state, action: PayloadAction<boolean>) {
+      state.estimatedTimeStatus = action.payload;
+    },
     setTimeType(state, action: PayloadAction<string>) {
       state.timeType = action.payload;
     },
@@ -723,6 +730,9 @@ export const taskSlice = createSlice({
     },
     setUpdateTimerDuration(state, action: PayloadAction<IDuration>) {
       state.duration = action.payload;
+    },
+    setEstimatedDuration(state, action: PayloadAction<IDuration>) {
+      state.estimatedDuration = action.payload;
     },
     setUpdateRecoderDuration(state, action: PayloadAction<IDuration>) {
       state.recorderDuration = action.payload;
@@ -847,6 +857,7 @@ export const {
   setGroupByStatus,
   setShowTaskUploadModal,
   setTimerStatus,
+  setEstimatedTimeStatus,
   setTimeType,
   setTimerDetails,
   setSortArray,
@@ -860,6 +871,7 @@ export const {
   setUpdateCords,
   setActiveTaskColumn,
   setUpdateTimerDuration,
+  setEstimatedDuration,
   setUpdateRecoderDuration,
   setRecorderInterval,
   setStopTimer,
