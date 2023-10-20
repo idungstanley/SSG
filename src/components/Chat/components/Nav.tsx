@@ -5,25 +5,25 @@ import { cl } from '../../../utils';
 
 const navItems = [
   {
-    id: 0,
+    id: 'chats',
     label: 'Chats',
-    icon: <ChatBubbleBottomCenterTextIcon className="h-7 w-7 stroke-current" aria-hidden="true" />
+    icon: <ChatBubbleBottomCenterTextIcon className="stroke-current h-7 w-7" aria-hidden="true" />
   },
   {
-    id: 1,
+    id: 'contacts',
     label: 'Contacts',
-    icon: <UsersIcon className="h-7 w-7 stroke-current" aria-hidden="true" />
+    icon: <UsersIcon className="stroke-current h-7 w-7" aria-hidden="true" />
   }
 ];
 
 interface NavProps {
-  activeTabId: number;
-  setActiveTabId: (i: number) => void;
+  activeTabId: string;
+  setActiveTabId: (i: string) => void;
 }
 
 export default function Nav({ activeTabId, setActiveTabId }: NavProps) {
   return (
-    <div className="h-full flex flex-col items-center border-r w-20 p-2 gap-10 bg-gray-400">
+    <div className="flex flex-col items-center w-20 h-full gap-10 p-2 bg-gray-400 border-r">
       <div className="flex flex-col items-center gap-2">
         {navItems.map((tab) => (
           <ToolTip key={tab.id} title={tab.label}>

@@ -7,11 +7,11 @@ import SectionArea from '../Pilot/components/SectionArea';
 import { SignalIcon } from '@heroicons/react/24/outline';
 
 export default function ChatForPilot() {
-  const [activeTabId, setActiveTabId] = useState(0);
+  const [activeTabId, setActiveTabId] = useState<string>('chat');
 
   const sections = [
-    { id: 0, element: <ChatSection /> },
-    { id: 1, element: <Contacts /> }
+    { id: 'chats', element: <ChatSection /> },
+    { id: 'contacts', element: <Contacts /> }
   ];
 
   const selectedSection = useMemo(() => sections.find((section) => section.id === activeTabId), [activeTabId]);
@@ -20,16 +20,15 @@ export default function ChatForPilot() {
     <>
       <SectionArea label="Connect" icon={<SignalIcon className="w-4 h-4" />} />
 
-      <div className="flex w-full h-full border-r border-l border-b">
+      <div className="flex w-full h-full border-b border-l border-r">
         <Nav activeTabId={activeTabId} setActiveTabId={setActiveTabId} />
 
         {/* main section */}
-        <div className="h-full w-full">
+        <div className="w-full h-full">
           {/* main section depends of active tab */}
           {selectedSection ? selectedSection.element : null}
         </div>
       </div>
-
       <CreateChatSideOver />
     </>
   );
