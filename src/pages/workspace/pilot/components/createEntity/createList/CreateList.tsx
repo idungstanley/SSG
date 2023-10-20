@@ -27,7 +27,6 @@ import { toast } from 'react-hot-toast';
 import AlsoitMenuDropdown from '../../../../../../components/DropDowns';
 import ColorPalette from '../../../../../../components/ColorPalette/component/ColorPalette';
 import { useNavigate } from 'react-router-dom';
-import { FaFolder } from 'react-icons/fa';
 import ListIconComponent from '../../../../../../components/ItemsListInSidebar/components/ListIconComponent';
 
 export default function CreateList() {
