@@ -31,7 +31,7 @@ export default function TimeDropdown({ handleClick, options, activeValue }: Time
           }}
           key={index}
           data-value={option}
-          className={`text-alsoit-text-lg font-semibold py-2 flex space-x-2 items-center px-2 rounded-md ${
+          className={`text-alsoit-text-lg cursor-pointer font-semibold py-2 flex space-x-2 items-center px-2 rounded-md ${
             activeItem === option ? 'bg-alsoit-purple-50' : 'hover:bg-purple-400 hover:text-white'
           }`}
         >

@@ -23,7 +23,6 @@ function GroupAssignee({
   const { CompactView, CompactViewWrap } = useAppSelector((state) => state.task);
   const { selectedTasksArray, selectedListIds, selectedTaskParentId } = useAppSelector((state) => state.task);
 
-  // check if length is greater than 5
   // Define a variable to store the number of remaining items
   let remainingCount = 0;
 
@@ -64,7 +63,7 @@ function GroupAssignee({
     const timeoutId = setTimeout(() => {
       setDisplayed((prev) => ({ ...prev, show: true, index }));
       setHoverInterval(true);
-    }, 1000);
+    }, 2000);
     setHoverTimeout(timeoutId);
     setTimeout(() => {
       setModalLoader(false);
@@ -87,21 +86,6 @@ function GroupAssignee({
     }
   };
 
-  const renderUnassignButton = (userId: string) => {
-    return (
-      <button
-        className="flex items-center justify-center absolute top-0 right-0 w-3 h-3 text-white bg-gray-500 border rounded-full hover:bg-purple-700 "
-        style={{
-          fontSize: '6px',
-          zIndex: 11
-        }}
-        onClick={() => handleUnAssignTask(userId)}
-      >
-        X
-      </button>
-    );
-  };
-
   return (
     <>
       <div className="relative flex items-center justify-center">
@@ -116,7 +100,7 @@ function GroupAssignee({
             }}
             onMouseLeave={() => handleHoverIntervalMouseOut()}
           >
-            <div className=" flex items-center justify-center -ml-2.5 rounded-full relative ">
+            <div className=" flex items-center justify-center -ml-2.5 rounded-full relative group/parent">
               <ToolTip title={newData.name}>
                 <div className="relative cursor-pointer">
                   {!newData.user.avatar_path ? (
@@ -147,11 +131,19 @@ function GroupAssignee({
                     </span>
                   )}
 
-                  {displayed.show && index === displayed?.index ? (
-                    renderUnassignButton(newData.id)
-                  ) : (
-                    <span className="absolute top-0 right-0 w-2 h-2 bg-green-500 border rounded-full" />
-                  )}
+                  <span className="absolute top-0 right-0 w-2 h-2 bg-green-500 border rounded-full group-hover/parent:hidden" />
+
+                  <button
+                    className="items-center justify-center absolute top-0 right-0 w-3 h-3 text-white bg-red-500 border rounded-full hover:bg-purple-700 hidden group-hover/parent:flex"
+                    style={{
+                      fontSize: '6px',
+                      zIndex: 11
+                    }}
+                    onClick={() => handleUnAssignTask(newData.id)}
+                  >
+                    X
+                  </button>
+                  {/* )} */}
                   {hoverInterval && displayed.show && index === displayed?.index && (
                     <PopAssignModal
                       modalLoader={modalLoader}
@@ -164,11 +156,6 @@ function GroupAssignee({
                 </div>
               </ToolTip>
             </div>
-            {displayed.show && index === displayed?.index ? (
-              renderUnassignButton(newData.id)
-            ) : (
-              <span className="absolute top-0 right-0 w-2 h-2 bg-green-500 border rounded-full" />
-            )}
           </div>
         ))}
         {remainingCount > 0 ? (

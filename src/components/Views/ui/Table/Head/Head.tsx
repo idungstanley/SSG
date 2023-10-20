@@ -31,7 +31,6 @@ import { setStatusTaskListDetails } from '../../../../../features/list/listSlice
 import { useParams } from 'react-router-dom';
 import { Task } from '../../../../../features/task/interface.tasks';
 import CollapseIcon from '../../collapseIcon/CollapseIcon';
-
 import '../../../../../styles/task.css';
 import { EntityType } from '../../../../../utils/EntityTypes/EntityType';
 import {
@@ -40,8 +39,6 @@ import {
 } from '../../../../../pages/workspace/tasks/component/views/ListColumns';
 import RoundedCheckbox from '../../../../Checkbox/RoundedCheckbox';
 import { pilotTabs } from '../../../../../app/constants/pilotTabs';
-import { Fade, Menu, MenuItem } from '@mui/material';
-import TrashIcon from '../../../../../assets/icons/TrashIcon';
 import { useDeleteCustomField } from '../../../../../features/list/listService';
 
 interface HeadProps {
@@ -76,25 +73,29 @@ export function Head({
   const dispatch = useAppDispatch();
   const { listId: list_id, hubId, walletId } = useParams();
 
-  const { sortArr, sortAbleArr, selectedTasksArray, selectedIndex, selectedIndexStatus, selectedIndexListId } =
-    useAppSelector((state) => state.task);
+  const {
+    sortArr,
+    sortAbleArr,
+    selectedTasksArray,
+    selectedIndex,
+    selectedIndexStatus,
+    selectedIndexListId,
+    activeTaskColumn
+  } = useAppSelector((state) => state.task);
   const { baseColor } = useAppSelector((state) => state.account);
   const { isManageStatus } = useAppSelector((state) => state.workspace);
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const [headerId, setheaderId] = useState<string>('');
+  const [headerId, setHeaderId] = useState<string>('');
   const [showStatusDropdown, setShowStatusDropdown] = useState<null | SVGElement>(null);
   const [showSortModal, setShowSortModal] = useState<boolean>(false);
-  const [clickedColumn, setClickedColumn] = useState<string>('');
-  const [columnMenuEl, setColumnMenuEl] = useState<null | HTMLElement>(null);
 
   const scrollToRef = useRef(null);
 
   const parsedLabel = parseLabel(label);
   const sortAbles: string[] = ['Task', 'Updated at', 'Created at', 'Status', 'Priority', 'Assignees'];
-  const openColumnMenu = Boolean(columnMenuEl);
 
-  const { mutate: onDelete } = useDeleteCustomField(clickedColumn, listId as string);
+  const { mutate: onDelete } = useDeleteCustomField(activeTaskColumn.id, listId as string);
 
   const handleClose = () => {
     setAnchorEl(null);
@@ -155,7 +156,7 @@ export function Head({
       : title?.toLowerCase();
 
   const handleSort = (header: string, id: string | undefined, order: 'asc' | 'desc') => {
-    setheaderId(id as string);
+    setHeaderId(id as string);
     const existingSortItem = sortAbleArr.findIndex((el) => el.field === headerTxt(header));
     if (existingSortItem !== -1) {
       const updatedSortArray = sortAbleArr.map((el) => (el.field === headerTxt(header) ? { ...el, dir: order } : el));
@@ -170,6 +171,7 @@ export function Head({
     dispatch(setSortArr(sortArr.filter((el) => el !== title)));
     dispatch(setSortArray(sortAbleArr.filter((el) => el.field !== headerTxt(title as string))));
   };
+
   const handleOrder = (e: React.MouseEvent<HTMLDivElement, MouseEvent>, propertyHeaderTxt?: string) => {
     e.stopPropagation();
     const existingSortItem = sortAbleArr?.findIndex((el) => el.field === propertyHeaderTxt);
@@ -185,7 +187,7 @@ export function Head({
 
   const setOptions = (event: React.MouseEvent<HTMLSpanElement, MouseEvent>, item: ExtendedListColumnProps) => {
     dispatch(setActiveTaskColumn(item));
-    setheaderId(item.id);
+    setHeaderId(item.id);
     setShowSortModal(!showSortModal);
     setAnchorEl(event.currentTarget);
   };
@@ -235,26 +237,14 @@ export function Head({
     dispatch(setActiveTabId(pilotTabs.TEMPLATES));
   };
 
-  const handleColumnRightClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>, id: string) => {
-    e.preventDefault();
-    setColumnMenuEl(e.currentTarget);
-    setClickedColumn(id);
-  };
-
-  const handleCloseColumnMenu = () => {
-    setColumnMenuEl(null);
-    setClickedColumn('');
-  };
-
   const handleRemoveColumn = () => {
-    if (clickedColumn) {
+    if (activeTaskColumn.id) {
       const type = hubId ? EntityType.hub : walletId ? EntityType.wallet : EntityType.list;
       onDelete({
-        columnId: clickedColumn,
+        columnId: activeTaskColumn.id,
         listId: listId as string,
         type
       });
-      setColumnMenuEl(null);
     }
   };
 
@@ -375,12 +365,11 @@ export function Head({
                   <div
                     className="text-alsoit-gray-200 font-semibold flex dBlock items-center justify-center w-full h-full my-auto cursor-pointer group hover:bg-gray-200 p-0.5 rounded-xs space-x-1 border-l-2 border-r-2 border-t-2 border-transparent hover:border-r-gray-500 "
                     style={{ fontSize: '11px', WebkitTextStroke: '0.5px', lineHeight: '13.2px' }}
-                    onContextMenu={(e) => handleColumnRightClick(e, item.id)}
                   >
                     <span className="dNone">
                       <MdOutlineDragIndicator className="h4 w4" />
                     </span>
-                    <span onClick={(e) => setOptions(e, item)} style={{ color: item.color ? item.color : '' }}>
+                    <span style={{ color: item.color ? item.color : '' }} onClick={(e) => setOptions(e, item)}>
                       {item.value.toUpperCase()}
                     </span>
                     {sortAbles.includes(item.value) && (
@@ -415,6 +404,7 @@ export function Head({
                       toggleModal={setShowSortModal}
                       handleSortFn={handleSort}
                       setAnchorEl={setAnchorEl}
+                      handleRemoveColumn={handleRemoveColumn}
                     />
                   )}
                 </th>
@@ -422,16 +412,6 @@ export function Head({
             : null}
         </tr>
       </thead>
-      <Menu anchorEl={columnMenuEl} open={openColumnMenu} onClose={handleCloseColumnMenu} TransitionComponent={Fade}>
-        <MenuItem>
-          <div className="flex">
-            <TrashIcon />
-            <span className="ml-1 text-red-500" onClick={handleRemoveColumn}>
-              Remove from List
-            </span>
-          </div>
-        </MenuItem>
-      </Menu>
     </>
   ) : null;
 }
