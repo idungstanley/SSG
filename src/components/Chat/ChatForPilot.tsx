@@ -6,10 +6,15 @@ import Nav from './components/Nav';
 import SectionArea from '../Pilot/components/SectionArea';
 import { SignalIcon } from '@heroicons/react/24/outline';
 
-export default function ChatForPilot() {
-  const [activeTabId, setActiveTabId] = useState<string>('chat');
+interface SectionsProps {
+  id: string;
+  element: JSX.Element;
+}
 
-  const sections = [
+export default function ChatForPilot() {
+  const [activeTabId, setActiveTabId] = useState<string>('chats');
+
+  const sections: SectionsProps[] = [
     { id: 'chats', element: <ChatSection /> },
     { id: 'contacts', element: <Contacts /> }
   ];
