@@ -202,7 +202,7 @@ interface TaskState {
   meMode: boolean;
   autoSave: boolean;
   showTaskNavigation: boolean;
-  assignOnHoverTaskId: string;
+  assignOnHoverTaskId: Task | string;
   assignOnHoverListId: string;
   assignOnHoverState: boolean;
   f2State: boolean;
@@ -589,7 +589,7 @@ export const taskSlice = createSlice({
     setNewTaskPriority(state, action: PayloadAction<string>) {
       state.newTaskPriority = action.payload;
     },
-    setAssignOnHoverTaskId(state, action: PayloadAction<string>) {
+    setAssignOnHoverTaskId(state, action: PayloadAction<string | Task>) {
       state.assignOnHoverTaskId = action.payload;
     },
     setAssignOnHoverListId(state, action: PayloadAction<string>) {

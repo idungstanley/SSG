@@ -5,9 +5,10 @@ import Button from '../../../Buttons/Button';
 import { setAssignOnHoverState, setAssigneeIds, setFilterFields, setMeMode } from '../../../../features/task/taskSlice';
 import Me from '../../../../assets/icons/Me';
 import FilterByAssigneeModal from './FilterByAssigneeModal';
-import { UseTaskAssignService } from '../../../../features/task/taskService';
+import { UseTaskAssignService, UseTaskUnassignService } from '../../../../features/task/taskService';
 import { ITeamMembersAndGroup } from '../../../../features/settings/teamMembersAndGroups.interfaces';
 import { useEffect } from 'react';
+import { Task } from '../../../../features/task/interface.tasks';
 
 export function Assignee() {
   const dispatch = useAppDispatch();
@@ -32,13 +33,33 @@ export function Assignee() {
   const currentMemberName = members.find((i) => i.user.id === currentUserId)?.user.name;
   const currUser = members.find((i) => i.user.id === currentUserId);
 
-  const { mutate: onTaskAssign } = UseTaskAssignService([assignOnHoverTaskId], currUser as ITeamMembersAndGroup, [
-    assignOnHoverListId
-  ]);
+  const { mutate: onTaskAssign } = UseTaskAssignService(
+    [(assignOnHoverTaskId as Task).id],
+    currUser as ITeamMembersAndGroup,
+    [assignOnHoverListId]
+  );
+
+  const { mutate: onTaskUnassign } = UseTaskUnassignService(
+    [(assignOnHoverTaskId as Task).id],
+    currUser as ITeamMembersAndGroup,
+    [assignOnHoverListId]
+  );
 
   const handleAssignTask = () => {
     onTaskAssign({
-      taskIds: [assignOnHoverTaskId],
+      taskIds: [(assignOnHoverTaskId as Task).id],
+      team_member_id: currentMemberId as string,
+      teams: false
+    });
+  };
+
+  const assignedUser = (assignOnHoverTaskId as Task).assignees
+    ?.map(({ id }: { id: string }) => id)
+    .includes(currentMemberId as string);
+
+  const handleUnAssignTask = () => {
+    onTaskUnassign({
+      taskId: (assignOnHoverTaskId as Task).id,
       team_member_id: currentMemberId as string,
       teams: false
     });
@@ -46,7 +67,7 @@ export function Assignee() {
 
   useEffect(() => {
     if (assignOnHoverTaskId && assignOnHoverState) {
-      handleAssignTask();
+      assignedUser ? handleUnAssignTask() : handleAssignTask();
     }
 
     if (assignOnHoverTaskId) {

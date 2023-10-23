@@ -1135,7 +1135,6 @@ export const UseTaskAssignService = (taskIds: string[], user: ITeamMembersAndGro
   return useMutation(AssignTask, {
     onSuccess: () => {
       dispatch(setAssignOnHoverState(false));
-
       const { updatedTasks, updatedSubtasks } = taskAssignessUpdateManager(
         taskIds,
         listIds,
