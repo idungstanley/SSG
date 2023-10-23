@@ -30,6 +30,12 @@ const showSidebar = sidebarFromLS
     ).showSidebar
   : true;
 
+export interface AjustableWidths {
+  pilotWidth?: number;
+  sidebarWidth?: number;
+  extendedBarWidth?: number;
+}
+
 export interface PaletteDropdownProps {
   paletteId?: string | null;
   paletteType?: string | null;
@@ -50,6 +56,9 @@ interface AccountState {
   selectListColours: string[];
   calculatedContentWidth: string;
   colourPaletteData: IPaletteData[];
+  pilotWidth?: number;
+  sidebarWidth?: number;
+  extendedBarWidth?: number;
 }
 
 const initialState: AccountState = {
@@ -65,13 +74,16 @@ const initialState: AccountState = {
   lightBaseColor: '#BF00FF21',
   userSettingsData: {
     showPreview: '',
-    sidebarWidth: sidebarWidthFromLS,
     isFavoritePinned: false,
+    sidebarWidth: sidebarWidthFromLS,
     pilotWidth: pilotWidthFromLS,
-    isPilotMinified: isPilotMinifiedFromLS,
     extendedBarWidth: extendedBarWidthFromLS,
+    isPilotMinified: isPilotMinifiedFromLS,
     hotkeys: hotKeysFromLS
   },
+  sidebarWidth: sidebarWidthFromLS,
+  pilotWidth: pilotWidthFromLS,
+  extendedBarWidth: extendedBarWidthFromLS,
   places: [...initialPlaces.sort((a, b) => idsFromLS.indexOf(a.id) - idsFromLS.indexOf(b.id))],
   calculatedContentWidth: '',
   selectListColours: [],
@@ -90,6 +102,17 @@ export const accountSlice = createSlice({
     },
     SetUserSettingsStore: (state, action: PayloadAction<IUserParams>) => {
       state.userSettingsData = action.payload;
+    },
+    setAdjustableWidths: (state, action: PayloadAction<AjustableWidths>) => {
+      state.sidebarWidth = action.payload.sidebarWidth ? action.payload.sidebarWidth : sidebarWidthFromLS;
+      state.extendedBarWidth = action.payload.extendedBarWidth
+        ? action.payload.extendedBarWidth
+        : extendedBarWidthFromLS;
+      state.pilotWidth = action.payload.pilotWidth
+        ? action.payload.pilotWidth
+        : action.payload.pilotWidth
+        ? action.payload.pilotWidth
+        : pilotWidthFromLS;
     },
     setShowSidebar: (state, action: PayloadAction<boolean>) => {
       state.showSidebar = action.payload;
@@ -129,7 +152,8 @@ export const {
   SetUserSettingsStore,
   setCalculatedContentWidth,
   setSelectedListColours,
-  setColourPaletteData
+  setColourPaletteData,
+  setAdjustableWidths
 } = accountSlice.actions;
 
 export default accountSlice.reducer;

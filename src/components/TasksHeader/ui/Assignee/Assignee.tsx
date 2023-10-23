@@ -5,15 +5,16 @@ import Button from '../../../Buttons/Button';
 import { setAssignOnHoverState, setAssigneeIds, setFilterFields, setMeMode } from '../../../../features/task/taskSlice';
 import Me from '../../../../assets/icons/Me';
 import FilterByAssigneeModal from './FilterByAssigneeModal';
-import { UseTaskAssignService } from '../../../../features/task/taskService';
+import { UseTaskAssignService, UseTaskUnassignService } from '../../../../features/task/taskService';
 import { ITeamMembersAndGroup } from '../../../../features/settings/teamMembersAndGroups.interfaces';
 import { useEffect } from 'react';
+import { Task } from '../../../../features/task/interface.tasks';
 
 export function Assignee() {
   const dispatch = useAppDispatch();
 
   const { currentUserId } = useAppSelector((state) => state.auth);
-  const { assigneeIds, meMode, assignOnHoverTaskId, assignOnHoverState, assignOnHoverListId } = useAppSelector(
+  const { assigneeIds, meMode, assignOnHoverTask, assignOnHoverState, assignOnHoverListId } = useAppSelector(
     (state) => state.task
   );
 
@@ -32,27 +33,47 @@ export function Assignee() {
   const currentMemberName = members.find((i) => i.user.id === currentUserId)?.user.name;
   const currUser = members.find((i) => i.user.id === currentUserId);
 
-  const { mutate: onTaskAssign } = UseTaskAssignService([assignOnHoverTaskId], currUser as ITeamMembersAndGroup, [
-    assignOnHoverListId
-  ]);
+  const { mutate: onTaskAssign } = UseTaskAssignService(
+    [(assignOnHoverTask as Task).id],
+    currUser as ITeamMembersAndGroup,
+    [assignOnHoverListId]
+  );
+
+  const { mutate: onTaskUnassign } = UseTaskUnassignService(
+    [(assignOnHoverTask as Task).id],
+    currUser as ITeamMembersAndGroup,
+    [assignOnHoverListId]
+  );
 
   const handleAssignTask = () => {
     onTaskAssign({
-      taskIds: [assignOnHoverTaskId],
+      taskIds: [(assignOnHoverTask as Task).id],
+      team_member_id: currentMemberId as string,
+      teams: false
+    });
+  };
+
+  const assignedUser = (assignOnHoverTask as Task).assignees
+    ?.map(({ id }: { id: string }) => id)
+    .includes(currentMemberId as string);
+
+  const handleUnAssignTask = () => {
+    onTaskUnassign({
+      taskId: (assignOnHoverTask as Task).id,
       team_member_id: currentMemberId as string,
       teams: false
     });
   };
 
   useEffect(() => {
-    if (assignOnHoverTaskId && assignOnHoverState) {
-      handleAssignTask();
+    if (assignOnHoverTask && assignOnHoverState) {
+      assignedUser ? handleUnAssignTask() : handleAssignTask();
     }
 
-    if (assignOnHoverTaskId) {
+    if (assignOnHoverTask) {
       dispatch(setAssignOnHoverState(false));
     }
-  }, [assignOnHoverState, assignOnHoverTaskId]);
+  }, [assignOnHoverState, assignOnHoverTask]);
 
   if (!currentMemberId || !currentMemberName) {
     return null;

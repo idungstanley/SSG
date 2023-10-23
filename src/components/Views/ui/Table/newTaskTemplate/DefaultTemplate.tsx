@@ -1,5 +1,5 @@
 import { ITaskFullList } from '../../../../../features/task/interface.tasks';
-export const deaultTaskTemplate: ITaskFullList[] = [
+export const defaultTaskTemplate: ITaskFullList[] = [
   {
     archived_at: null,
     assignees: [],
