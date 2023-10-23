@@ -1,9 +1,10 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import requestNew from '../../app/requestNew';
 import { IAccountReq, IUserCalendarParams, IUserParams, IUserSettings, IUserSettingsRes } from './account.interfaces';
-import { setColourPaletteData } from './accountSlice';
+import { SetUserSettingsStore, setColourPaletteData } from './accountSlice';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { IColourRes } from '../workspace/workspace.interfaces';
+import { STORAGE_KEYS } from '../../app/config/dimensions';
 
 // Get all user's workspaces
 export const useGetMyWorkspaces = () => {
@@ -34,7 +35,10 @@ export const switchWorkspaceService = async (data: { workspaceId: string }) => {
 };
 
 export const useGetUserSettingsKeys = (enabled: boolean, key: string, resolution?: string | null) => {
+  const dispatch = useAppDispatch();
   const { isFavoritePinned } = useAppSelector((state) => state.workspace);
+  const { userSettingsData, sidebarWidth, pilotWidth, extendedBarWidth } = useAppSelector((state) => state.account);
+
   return useQuery<IUserSettingsRes, unknown, IUserSettings>(
     ['user-settings', { isFavoritePinned }],
     () =>
@@ -48,7 +52,20 @@ export const useGetUserSettingsKeys = (enabled: boolean, key: string, resolution
       }),
     {
       enabled: enabled,
-      select: (res) => res.data.settings[0]
+      select: (res) => res.data.settings[0],
+      onSuccess(data) {
+        if (data) {
+          const value = data.value;
+          const updatedData = {
+            [STORAGE_KEYS.SIDEBAR_WIDTH]: value.sidebarWidth ? value.sidebarWidth : sidebarWidth,
+            [STORAGE_KEYS.PILOT_WIDTH]: value.pilotWidth ? value.pilotWidth : pilotWidth,
+            [STORAGE_KEYS.EXTENDED_BAR_WIDTH]: value.extendedBarWidth ? value.extendedBarWidth : extendedBarWidth,
+            [STORAGE_KEYS.HOT_KEYS]: value.hotkeys ? value.hotkeys : []
+          };
+          // dispatch(setActiveHotkeyIds(value.hotkeys ? value.hotkeys : []));
+          dispatch(SetUserSettingsStore({ ...userSettingsData, ...updatedData }));
+        }
+      }
     }
   );
 };
