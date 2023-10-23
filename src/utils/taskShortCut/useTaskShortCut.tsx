@@ -5,6 +5,7 @@ import {
   setAssignOnHoverState,
   setCopyNewlyCreatedTask,
   setEscapeKey,
+  setF2State,
   setHilightNewlyCreatedTask,
   setPreferenceState
 } from '../../features/task/taskSlice';
@@ -49,19 +50,22 @@ export default function useTaskShortCut() {
 
       if (preferenceState.hotkeys) {
         if (handleInputFields() == true) {
-          switch (event.key.toLowerCase()) {
+          switch (event.key) {
             case '?':
               if (event.shiftKey) {
                 setTaskShortcut(true);
               }
               break;
             case 'h':
+            case 'H':
               navigate(`/${currentWorkspaceId}`);
               break;
             case 'c':
+            case 'C':
               dispatch(setActiveTabId('calendar'));
               break;
             case 'n':
+            case 'N':
               dispatch(setShowExtendedBar(true));
               break;
             case '1':
@@ -71,9 +75,15 @@ export default function useTaskShortCut() {
               dispatch(setCopyNewlyCreatedTask(true));
               break;
             case 'm':
+            case 'M':
               dispatch(setAssignOnHoverState(true));
               break;
+            case 'F2':
+              dispatch(setF2State(true));
+              break;
+
             default:
+              break;
           }
         }
         switch (event.key) {

@@ -315,6 +315,46 @@ export const updateCustomFieldManager = (
   return { updatedTasks, updatedSubtasks };
 };
 
+export const deleteCustomFieldManager = (
+  tasks: Record<string, ITaskFullList[]>,
+  subtasks: Record<string, ITaskFullList[]>,
+  columnId: string,
+  currentListId: string
+) => {
+  const updatedTasks = { ...tasks };
+  const updatedSubtasks = { ...subtasks };
+
+  if (columnId && currentListId) {
+    updatedTasks[currentListId] = updatedTasks[currentListId].map((task) => {
+      const filteredCustomFields = task.custom_fields?.filter((field) => field.id !== columnId) as ICustomField[];
+      const filteredCustomFieldsColumns = task.custom_field_columns?.filter(
+        (field) => field.id !== columnId
+      ) as IField[];
+      return {
+        ...task,
+        custom_fields: [...filteredCustomFields],
+        custom_field_columns: [...filteredCustomFieldsColumns]
+      };
+    });
+
+    Object.keys(updatedSubtasks).map((taskId) => {
+      updatedSubtasks[taskId] = updatedSubtasks[taskId].map((task) => {
+        const filteredCustomFields = task.custom_fields?.filter((field) => field.id !== columnId) as ICustomField[];
+        const filteredCustomFieldsColumns = task.custom_field_columns?.filter(
+          (field) => field.id !== columnId
+        ) as IField[];
+        return {
+          ...task,
+          custom_fields: [...filteredCustomFields],
+          custom_field_columns: [...filteredCustomFieldsColumns]
+        };
+      });
+    });
+  }
+
+  return { updatedTasks, updatedSubtasks };
+};
+
 const removeTaskFromOldPlace = (
   draggableTask: ITaskFullList,
   newTasks: Record<string, ITaskFullList[]>,

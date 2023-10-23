@@ -12,7 +12,7 @@ export interface User {
 
 export default function ClockInOut() {
   const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
-  const { timeAssigneeFilter: getTaskTimeEntries } = useAppSelector((state) => state.task);
+  const { timeAssigneeFilter: getTaskTimeEntries, timerStatus } = useAppSelector((state) => state.task);
 
   const [page, setPage] = useState<number>(1);
 
@@ -25,14 +25,13 @@ export default function ClockInOut() {
     .map((_, index) => index + 1);
 
   useEffect(() => {
-    if (!getTaskTimeEntries)
-      mutateAsync({
-        itemId: activeItemId,
-        trigger: activeItemType,
-        include_filters: false,
-        page
-      });
-  }, [getTaskTimeEntries]);
+    mutateAsync({
+      itemId: activeItemId,
+      trigger: activeItemType,
+      include_filters: false,
+      page
+    });
+  }, [activeItemId, timerStatus]);
 
   return (
     <div className="px-2 my-1.5 bg-white">
@@ -45,7 +44,7 @@ export default function ClockInOut() {
       <div className="w-full p-1 my-2 flex flex-col space-y-2 bg-alsoit-gray-50 rounded-lg">
         {getTaskTimeEntries?.data?.time_entries && getTaskTimeEntries?.data?.time_entries.length > 0 ? (
           <>
-            <div className="h-96">
+            <div className="h-min">
               <TimeInventory getTimeEntries={getTaskTimeEntries} />
             </div>
             <div className="flex space-x-1">

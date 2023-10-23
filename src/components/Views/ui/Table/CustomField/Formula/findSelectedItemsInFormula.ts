@@ -26,5 +26,8 @@ export const findSelectedItemsInFormula = (str: string, columns: IField[], field
       }
     });
   });
-  return currentFieldsWithValue;
+  if (currentFields.length === currentFieldsWithValue.length) {
+    return currentFieldsWithValue;
+  }
+  return null;
 };
