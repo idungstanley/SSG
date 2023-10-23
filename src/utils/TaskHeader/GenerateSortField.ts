@@ -4,7 +4,7 @@ const HEADER_TITLE = {
   created_at: 'Created at',
   updated_at: 'Updated at',
   start_date: 'Start Date',
-  end_date: 'End Date'
+  due_date: 'End Date'
 };
 
 const HEADER_PARAMS = {
@@ -13,7 +13,7 @@ const HEADER_PARAMS = {
   created_at: 'created_at',
   updated_at: 'updated_at',
   start_date: 'start_date',
-  end_date: 'end_date'
+  due_date: 'due_date'
 };
 
 export const generateSortField = (title: string, isDefault: boolean, id?: string) => {
@@ -28,8 +28,8 @@ export const generateSortField = (title: string, isDefault: boolean, id?: string
       ? HEADER_PARAMS.updated_at
       : title === HEADER_TITLE.start_date
       ? HEADER_PARAMS.start_date
-      : title === HEADER_TITLE.end_date
-      ? HEADER_PARAMS.end_date
+      : title === HEADER_TITLE.due_date
+      ? HEADER_PARAMS.due_date
       : title?.toLowerCase();
   } else {
     return `cus_${id}`;
