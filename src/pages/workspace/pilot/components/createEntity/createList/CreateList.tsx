@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Checkbox, Input } from '../../../../../../components';
+import { Button, Input } from '../../../../../../components';
 import { useMutation } from '@tanstack/react-query';
 import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
 import { setCreateListSlideOverVisibility } from '../../../../../../features/general/slideOver/slideOverSlice';
@@ -17,8 +17,6 @@ import {
 } from '../../../../../../features/workspace/workspaceSlice';
 import { createListService } from '../../../../../../features/list/listService';
 import { EntityType } from '../../../../../../utils/EntityTypes/EntityType';
-import Assignee from '../../../../tasks/assignTask/Assignee';
-import ArrowDown from '../../../../../../assets/icons/ArrowDown';
 import Wand from '../../../../../../assets/icons/Wand';
 import { ListColourProps } from '../../../../../../components/tasks/ListItem';
 import { createListManager } from '../../../../../../managers/List';
@@ -29,7 +27,6 @@ import { toast } from 'react-hot-toast';
 import AlsoitMenuDropdown from '../../../../../../components/DropDowns';
 import ColorPalette from '../../../../../../components/ColorPalette/component/ColorPalette';
 import { useNavigate } from 'react-router-dom';
-import { FaFolder } from 'react-icons/fa';
 import ListIconComponent from '../../../../../../components/ItemsListInSidebar/components/ListIconComponent';
 
 export default function CreateList() {

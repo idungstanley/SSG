@@ -54,13 +54,8 @@ function TextField({ taskCustomFields, taskId, fieldId }: TextFielProps) {
     <div className="w-full h-full flex justify-center items-center">
       {!editMode ? (
         <div className="w-full h-full border-2 border-transparent hover:border-alsoit-gray-50 group/parent p-1">
-          <span className="h-full flex justify-center items-center  cursor-pointer">
-            <h1
-              className="truncate text-alsoit-text-lg font-semibold"
-              onClick={() => {
-                setEditMode(true);
-              }}
-            >
+          <span className="h-full flex justify-center items-center cursor-pointer">
+            <h1 className="truncate text-alsoit-text-lg font-semibold" onClick={() => setEditMode(true)}>
               {currentValue}
             </h1>
             <figure

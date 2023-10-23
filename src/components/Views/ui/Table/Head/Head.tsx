@@ -33,16 +33,14 @@ import { Task } from '../../../../../features/task/interface.tasks';
 import CollapseIcon from '../../collapseIcon/CollapseIcon';
 import '../../../../../styles/task.css';
 import { EntityType } from '../../../../../utils/EntityTypes/EntityType';
-import {
-  ExtendedListColumnProps,
-  listColumnProps
-} from '../../../../../pages/workspace/tasks/component/views/ListColumns';
+import { ExtendedListColumnProps } from '../../../../../pages/workspace/tasks/component/views/ListColumns';
 import RoundedCheckbox from '../../../../Checkbox/RoundedCheckbox';
 import { pilotTabs } from '../../../../../app/constants/pilotTabs';
 import { useDeleteCustomField } from '../../../../../features/list/listService';
+import { generateSortField } from '../../../../../utils/TaskHeader/GenerateSortField';
 
 interface HeadProps {
-  columns: listColumnProps[];
+  columns: ExtendedListColumnProps[];
   tableHeight: string | number;
   label: string;
   collapseTasks: boolean;
@@ -93,7 +91,7 @@ export function Head({
   const scrollToRef = useRef(null);
 
   const parsedLabel = parseLabel(label);
-  const sortAbles: string[] = ['Task', 'Updated at', 'Created at', 'Status', 'Priority', 'Assignees'];
+  const sortAbles: string[] = ['Task', 'Updated at', 'Created at', 'Status', 'Priority', 'Assignees', 'Start Date'];
 
   const { mutate: onDelete } = useDeleteCustomField(activeTaskColumn.id, listId as string);
 
@@ -144,32 +142,31 @@ export function Head({
     dispatch(setSelectedTasksArray(updatedTaskIds));
   };
 
-  const headerTxt = (title: string) =>
-    title === 'Assignees'
-      ? 'assignee'
-      : title === 'Task'
-      ? 'name'
-      : title === 'Created at'
-      ? 'created_at'
-      : title === 'Updated at'
-      ? 'updated_at'
-      : title?.toLowerCase();
-
-  const handleSort = (header: string, id: string | undefined, order: 'asc' | 'desc') => {
+  const handleSort = (header: string, id: string | undefined, order: 'asc' | 'desc', isDefault?: boolean) => {
     setHeaderId(id as string);
-    const existingSortItem = sortAbleArr.findIndex((el) => el.field === headerTxt(header));
+    const existingSortItem = sortAbleArr.findIndex(
+      (el) => el.field === generateSortField(header, isDefault as boolean, id)
+    );
     if (existingSortItem !== -1) {
-      const updatedSortArray = sortAbleArr.map((el) => (el.field === headerTxt(header) ? { ...el, dir: order } : el));
+      const updatedSortArray = sortAbleArr.map((el) =>
+        el.field === generateSortField(header, isDefault as boolean, id) ? { ...el, dir: order } : el
+      );
       dispatch(setSortArray(updatedSortArray));
     } else {
       dispatch(setSortArr([...sortArr, header as string]));
-      dispatch(setSortArray([...sortAbleArr, { dir: order, field: headerTxt(header) }]));
+      dispatch(
+        setSortArray([...sortAbleArr, { dir: order, field: generateSortField(header, isDefault as boolean, id) }])
+      );
     }
   };
 
-  const handleRemoveFilter = (title?: string): void => {
+  const handleRemoveFilter = (title?: string, criteria?: string, isDefault?: boolean, id?: string): void => {
     dispatch(setSortArr(sortArr.filter((el) => el !== title)));
-    dispatch(setSortArray(sortAbleArr.filter((el) => el.field !== headerTxt(title as string))));
+    dispatch(
+      setSortArray(
+        sortAbleArr.filter((el) => el.field !== generateSortField(title as string, isDefault as boolean, id))
+      )
+    );
   };
 
   const handleOrder = (e: React.MouseEvent<HTMLDivElement, MouseEvent>, propertyHeaderTxt?: string) => {
@@ -192,8 +189,8 @@ export function Head({
     setAnchorEl(event.currentTarget);
   };
 
-  const dirCheck = (col: string): SortOption | undefined => {
-    return sortAbleArr.find((el) => el.field === headerTxt(col));
+  const dirCheck = (col: string, isDefault: boolean, id?: string): SortOption | undefined => {
+    return sortAbleArr.find((el) => el.field === generateSortField(col, isDefault, id));
   };
 
   const statusDropdownOptions = [
@@ -327,7 +324,12 @@ export function Head({
                     {sortArr.length >= 1 && sortArr.includes(columns[0].value) ? (
                       ''
                     ) : (
-                      <RoundedArrowUpDown value={columns[0].value} id={columns[0].id} handleSort={handleSort} />
+                      <RoundedArrowUpDown
+                        value={columns[0].value}
+                        id={columns[0].id}
+                        isDefault={columns[0].defaulField}
+                        handleSort={handleSort}
+                      />
                     )}
                     {sortArr.includes(columns[0].value) && sortAbles.includes(columns[0].value) && (
                       <SortDirectionCheck
@@ -335,10 +337,12 @@ export function Head({
                         sortItemLength={sortArr.length}
                         sortIndex={sortArr.indexOf(columns[0].value)}
                         sortValue={columns[0].value}
-                        sortDesc={dirCheck(columns[0].value)?.dir === 'desc'}
+                        sortDesc={dirCheck(columns[0].value, columns[0].defaulField, columns[0].id)?.dir === 'desc'}
                         handleRemoveSortFn={handleRemoveFilter}
-                        propertyHeaderTxt={headerTxt(columns[0].value)}
+                        propertyHeaderTxt={generateSortField(columns[0].value, columns[0].defaulField, columns[0].id)}
+                        isDefault={columns[0].defaulField}
                         handleOrder={handleOrder}
+                        id={columns[0].id}
                       />
                     )}
                   </>
@@ -372,27 +376,33 @@ export function Head({
                     <span style={{ color: item.color ? item.color : '' }} onClick={(e) => setOptions(e, item)}>
                       {item.value.toUpperCase()}
                     </span>
-                    {sortAbles.includes(item.value) && (
-                      <span className="ml-0.5">
-                        {sortArr.length >= 1 && sortArr.includes(item.value) ? (
-                          ''
-                        ) : (
-                          <RoundedArrowUpDown value={item.value} id={item.id} handleSort={handleSort} />
-                        )}
-                        {sortArr.includes(item.value) && sortAbles.includes(item.value) && (
-                          <SortDirectionCheck
-                            bgColor={baseColor}
-                            sortItemLength={sortArr.length}
-                            sortIndex={sortArr.indexOf(item.value)}
-                            sortValue={item.value}
-                            sortDesc={dirCheck(item.value)?.dir === 'desc'}
-                            handleRemoveSortFn={handleRemoveFilter}
-                            propertyHeaderTxt={headerTxt(item.value)}
-                            handleOrder={handleOrder}
-                          />
-                        )}
-                      </span>
-                    )}
+                    {/* {sortAbles.includes(item.value) && ( */}
+                    <span className="ml-0.5">
+                      {sortArr.length >= 1 && sortArr.includes(item.value) ? (
+                        ''
+                      ) : (
+                        <RoundedArrowUpDown
+                          value={item.value}
+                          id={item.id}
+                          handleSort={handleSort}
+                          isDefault={item.defaulField}
+                        />
+                      )}
+                      {sortArr.includes(item.value) && (
+                        <SortDirectionCheck
+                          bgColor={baseColor}
+                          isDefault={item.defaulField}
+                          sortItemLength={sortArr.length}
+                          sortIndex={sortArr.indexOf(item.value)}
+                          sortValue={item.value}
+                          sortDesc={dirCheck(item.value, item.defaulField, item.id)?.dir === 'desc'}
+                          handleRemoveSortFn={handleRemoveFilter}
+                          propertyHeaderTxt={generateSortField(item.value, item.defaulField, item.id)}
+                          id={item.id}
+                          handleOrder={handleOrder}
+                        />
+                      )}
+                    </span>
                   </div>
                   <div className="absolute top-0 right-0 block pl-1 idle" style={{ height: tableHeight }}>
                     <div className="w-0.5 mx-auto bg-gray-100" style={{ height: '75px' }} />
