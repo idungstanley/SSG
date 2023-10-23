@@ -7,6 +7,7 @@ import { useAbsolute } from '../../hooks/useAbsolute';
 import { Fade, Menu } from '@mui/material';
 import { setNewTaskPriority } from '../../features/task/taskSlice';
 import { priorities } from '../../app/constants/priorities';
+import AlsoitMenuDropdown from '../DropDowns';
 
 interface priorityType {
   id: string;
@@ -28,12 +29,17 @@ export default function PriorityDropdown({ taskCurrentPriority }: TaskCurrentPri
 
   const [priority, setPriority] = useState('');
   const [isOpen, setIsOpen] = useState(false);
+  const [showSelectDropdown, setShowSelectDropdown] = useState<null | HTMLSpanElement | HTMLDivElement>(null);
 
   const { isSuccess } = UseUpdateTaskPrioritiesServices({
     task_id_array: selectedTasksArray,
     priorityDataUpdate: priority,
     listIds: selectedListIds.length ? selectedListIds : [selectedTaskParentId]
   });
+
+  const handleClose = () => {
+    setShowSelectDropdown(null);
+  };
 
   if (isSuccess) setPriority('');
 
@@ -101,24 +107,19 @@ export default function PriorityDropdown({ taskCurrentPriority }: TaskCurrentPri
       <div>
         <button
           type="button"
-          onClick={() => setIsOpen(true)}
+          onClick={(event) => {
+            setShowSelectDropdown(event.currentTarget);
+            setIsOpen(true);
+          }}
           className="flex text-sm justify-center items-center focus:outline-none text-gray-400 hover:text-gray-700 w-full"
         >
           <div ref={relativeRef}>{setPriorityColor(taskCurrentPriority)}</div>
         </button>
       </div>
 
-      <Menu
-        id="priority-menu"
-        open={isOpen}
-        onClose={() => setIsOpen(false)}
-        MenuListProps={{
-          'aria-labelledby': 'basic-button'
-        }}
-        TransitionComponent={Fade}
-      >
-        <div style={{ ...cords }} className="fixed overflow-y-auto">
-          <div className="flex-col border px-2 w-fit h-fit py-1 outline-none flex items-center justify-center text-center mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none">
+      <AlsoitMenuDropdown handleClose={handleClose} anchorEl={showSelectDropdown}>
+        <div>
+          <div className="flex-col border px-2 h-fit py-1 outline-none flex items-center justify-center text-center w-fix rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none">
             {priorityList.map((priority) => (
               <button
                 key={priority.id}
@@ -128,6 +129,7 @@ export default function PriorityDropdown({ taskCurrentPriority }: TaskCurrentPri
                   'flex items-center px-4 py-2 text-sm text-gray-600 text-left space-x-2 w-full'
                 )}
                 onClick={() => {
+                  handleClose();
                   priority.handleClick();
                   setIsOpen(false);
                 }}
@@ -140,7 +142,8 @@ export default function PriorityDropdown({ taskCurrentPriority }: TaskCurrentPri
             ))}
           </div>
         </div>
-      </Menu>
+        {/* </Menu> */}
+      </AlsoitMenuDropdown>
     </>
   );
 }
