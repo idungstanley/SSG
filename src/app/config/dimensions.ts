@@ -68,7 +68,7 @@ const STORAGE_KEYS = {
 };
 
 const calculateWidthForContent = () => {
-  const pilotWidthFromLS = JSON.parse(localStorage.getItem(STORAGE_KEYS.PILOT_WIDTH) || '""') as IUserParams;
+  const pilotWidthFromLS = JSON.parse(localStorage.getItem(STORAGE_KEYS.PILOT_WIDTH) || '""') as number;
 
   const extendedBarWidthFromLS =
     (JSON.parse(localStorage.getItem(STORAGE_KEYS.EXTENDED_BAR_WIDTH) || '""') as number) ??
@@ -114,7 +114,6 @@ const calculateWidthForContent = () => {
     extendedBarWidthFromLS,
     sidebarWidthFromLS
   ]);
-  console.log(calculatedContentWidth);
   return calculatedContentWidth;
 };
 
