@@ -31,7 +31,6 @@ import { setStatusTaskListDetails } from '../../../../../features/list/listSlice
 import { useParams } from 'react-router-dom';
 import { Task } from '../../../../../features/task/interface.tasks';
 import CollapseIcon from '../../collapseIcon/CollapseIcon';
-
 import '../../../../../styles/task.css';
 import { EntityType } from '../../../../../utils/EntityTypes/EntityType';
 import {
@@ -366,12 +365,13 @@ export function Head({
                   <div
                     className="text-alsoit-gray-200 font-semibold flex dBlock items-center justify-center w-full h-full my-auto cursor-pointer group hover:bg-gray-200 p-0.5 rounded-xs space-x-1 border-l-2 border-r-2 border-t-2 border-transparent hover:border-r-gray-500 "
                     style={{ fontSize: '11px', WebkitTextStroke: '0.5px', lineHeight: '13.2px' }}
-                    onClick={(e) => setOptions(e, item)}
                   >
                     <span className="dNone">
                       <MdOutlineDragIndicator className="h4 w4" />
                     </span>
-                    <span style={{ color: item.color ? item.color : '' }}>{item.value.toUpperCase()}</span>
+                    <span style={{ color: item.color ? item.color : '' }} onClick={(e) => setOptions(e, item)}>
+                      {item.value.toUpperCase()}
+                    </span>
                     {sortAbles.includes(item.value) && (
                       <span className="ml-0.5">
                         {sortArr.length >= 1 && sortArr.includes(item.value) ? (

@@ -8,8 +8,8 @@ import { MdOutlineDeveloperBoard, MdOutlineDriveFileMove, MdDateRange, MdDeleteF
 import { HiOutlineDocumentDuplicate, HiInbox } from 'react-icons/hi';
 import { TbFolderX } from 'react-icons/tb';
 import { GiStoneStack, GiJusticeStar } from 'react-icons/gi';
+import { HiOutlineUserPlus } from 'react-icons/hi2';
 import { BiMerge, BiEdit } from 'react-icons/bi';
-import { UserPlusIcon } from '@heroicons/react/24/outline';
 import { deleteTask } from '../../../../../features/task/taskService';
 import { useDispatch } from 'react-redux';
 import { EntityType } from '../../../../../utils/EntityTypes/EntityType';
@@ -88,42 +88,42 @@ export default function TaskMenu() {
     {
       id: 'set_watchers',
       label: 'Set watchers',
-      icons: <IoEyeOutline />,
+      icons: <IoEyeOutline color="orange" opacity={0.5} />,
       handleClick: () => ({}),
       isVisible: true
     },
     {
       id: 'set_assignees',
       label: 'Set assignees',
-      icons: <UserPlusIcon />,
+      icons: <HiOutlineUserPlus color="orange" opacity={0.5} />,
       handleClick: () => ({}),
       isVisible: true
     },
     {
       id: 'set_status',
       label: 'Set Status',
-      icons: <MdOutlineDeveloperBoard />,
+      icons: <MdOutlineDeveloperBoard color="orange" opacity={0.5} />,
       handleClick: () => ({}),
       isVisible: true
     },
     {
       id: 'set_status_two',
       label: 'Set Status',
-      icons: <BsTags />,
+      icons: <BsTags color="orange" opacity={0.5} />,
       handleClick: () => ({}),
       isVisible: true
     },
     {
       id: 'set_tags',
       label: 'Set Tags',
-      icons: <TbSubtask />,
+      icons: <TbSubtask color="orange" opacity={0.5} />,
       handleClick: () => ({}),
       isVisible: true
     },
     {
       id: 'convert_to_subtask',
       label: 'Convert to Subtask',
-      icons: <MdOutlineDriveFileMove />,
+      icons: <MdOutlineDriveFileMove color="orange" opacity={0.5} />,
       handleClick: () => ({}),
       isVisible: true
     },
@@ -140,14 +140,14 @@ export default function TaskMenu() {
     {
       id: 'move_tasks',
       label: 'Move tasks or add tasks in multiple Lists',
-      icons: <TbFolderX />,
+      icons: <TbFolderX color="orange" opacity={0.5} />,
       handleClick: () => ({}),
       isVisible: true
     },
     {
       id: 'set_dates',
       label: 'Set Dates',
-      icons: <MdDateRange />,
+      icons: <MdDateRange color="orange" opacity={0.5} />,
       handleClick: () => ({}),
       isVisible: true
     },
@@ -161,35 +161,35 @@ export default function TaskMenu() {
     {
       id: 'dependencies',
       label: 'Dependencies',
-      icons: <GiStoneStack />,
+      icons: <GiStoneStack color="orange" opacity={0.5} />,
       handleClick: () => ({}),
       isVisible: true
     },
     {
       id: 'merge_tasks',
       label: 'Merge tasks',
-      icons: <BiMerge />,
+      icons: <BiMerge color="orange" opacity={0.5} />,
       handleClick: () => ({}),
       isVisible: true
     },
     {
       id: 'task_linking',
       label: 'Task Linking',
-      icons: <GiJusticeStar />,
+      icons: <GiJusticeStar color="orange" opacity={0.5} />,
       handleClick: () => ({}),
       isVisible: true
     },
     {
       id: 'set_custom_fields',
       label: 'Set Custom Fields',
-      icons: <BiEdit />,
+      icons: <BiEdit color="orange" opacity={0.5} />,
       handleClick: () => ({}),
       isVisible: true
     },
     {
       id: 'archive_tasks',
       label: 'Archive tasks',
-      icons: <HiInbox />,
+      icons: <HiInbox color="orange" opacity={0.5} />,
       handleClick: () => ({}),
       isVisible: true
     },
@@ -259,7 +259,7 @@ export default function TaskMenu() {
           ))}
         </div>
         <div className="flex items-center gap-2 pr-5 ">
-          <MdFileCopy className="text-lg text-white" />
+          <MdFileCopy className="text-lg" color="orange" opacity={0.5} />
           <input type="text" placeholder="type '/' for commands" className="h-8 text-xs bg-transparent rounded " />
         </div>
       </div>

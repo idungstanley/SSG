@@ -161,7 +161,7 @@ export function StickyCol({
       onAdd({
         name,
         isListParent,
-        id: parentId as string,
+        id: parentId !== '' ? (parentId as string) : (listId as string),
         assignees: [currTeamMemberId] as string[],
         newTaskPriority,
         task_status_id: taskStatusId as string
@@ -496,7 +496,9 @@ export function StickyCol({
             </div>
             <div className="flex flex-col items-start justify-start pt-1 pl-2 space-y-1">
               <p
-                className="flex text-left empty:before:content-[attr(placeholder)]"
+                className={`flex text-left empty:before:content-[attr(placeholder)] alsoit-gray-300 font-semibold empty:opacity-50 ${
+                  saveSettingOnline?.CompactView ? 'text-alsoit-text-md' : 'text-alsoit-text-lg'
+                }`}
                 contentEditable={true}
                 placeholder="Add New Task"
                 ref={inputRef}
