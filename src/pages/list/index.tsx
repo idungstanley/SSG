@@ -24,7 +24,7 @@ import { useformatSettings } from '../workspace/tasks/TaskSettingsModal/ShowSett
 import { IListDetailRes, IListDetails } from '../../features/list/list.interfaces';
 import { VerticalScroll } from '../../components/ScrollableContainer/VerticalScroll';
 import { generateSubtasksList } from '../../utils/generateLists';
-import { deaultTaskTemplate } from '../../components/Views/ui/Table/newTaskTemplate/DefaultTemplate';
+import { defaultTaskTemplate } from '../../components/Views/ui/Table/newTaskTemplate/DefaultTemplate';
 
 export function ListPage() {
   const dispatch = useAppDispatch();
@@ -201,7 +201,7 @@ export function ListPage() {
               {tasksStore[listId as string] && tasksFromRes.length ? (
                 <List tasks={tasksStore[listId as string]} />
               ) : (
-                <List tasks={deaultTaskTemplate} />
+                <List tasks={defaultTaskTemplate} />
               )}
             </section>
           </VerticalScroll>
