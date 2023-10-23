@@ -58,30 +58,8 @@ function MainLayout() {
     queryClient.invalidateQueries(['workspace']);
   };
 
-  const { data: userData } = useGetUserSettingsKeys(true, key, resolution);
   useGetColors();
-
   document.addEventListener('keydown', (event) => TaskShortcutListener(event, setTaskShortcut));
-  const EXTENDED_BAR_WIDTH = JSON.parse(localStorage.getItem(STORAGE_KEYS.EXTENDED_BAR_WIDTH) || '{}');
-  const SIDEBAR_WIDTH = JSON.parse(localStorage.getItem(STORAGE_KEYS.SIDEBAR_WIDTH) || '{}');
-  const PILOT_WIDTH = JSON.parse(localStorage.getItem(STORAGE_KEYS.PILOT_WIDTH) || '{}');
-
-  // useEffect(() => {
-  //   if (userData) {
-  //     const value = userData.value;
-  //     const updatedData = {
-  //       [STORAGE_KEYS.SIDEBAR_WIDTH]: value.sidebarWidth ? value.sidebarWidth : userSettingsData?.sidebarWidth,
-  //       [STORAGE_KEYS.PILOT_WIDTH]: value.pilotWidth ? value.pilotWidth : userSettingsData?.pilotWidth,
-  //       [STORAGE_KEYS.EXTENDED_BAR_WIDTH]: value.extendedBarWidth
-  //         ? value.extendedBarWidth
-  //         : userSettingsData?.extendedBarWidth,
-  //       [STORAGE_KEYS.HOT_KEYS]: value.hotkeys ? value.hotkeys : []
-  //     };
-  //     localStorage.setItem(STORAGE_KEYS.USER_SETTINGS_DATA, JSON.stringify(updatedData));
-  //     dispatch(setActiveHotkeyIds(value.hotkeys ? value.hotkeys : []));
-  //     dispatch(SetUserSettingsStore({ ...userSettingsData, ...updatedData }));
-  //   }
-  // }, [userData]);
 
   useEffect(() => {
     if (user) {
