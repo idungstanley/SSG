@@ -46,7 +46,7 @@ export function CombinedTime() {
   const activeTrackerCheck = (): boolean => (activeTrackers && activeTrackers?.length > 0 ? true : false);
 
   return (
-    <div className={'flex flex-col w-full bg-alsoit-gray-50 rounded-md h-min'}>
+    <div className={'flex flex-col w-full bg-alsoit-gray-50 rounded-md'}>
       {/* Time Trackers */}
       <div className="absolute w-full -top-0" style={{ whiteSpace: 'nowrap' }}>
         <div className="flex items-center space-x-6 w-full">
