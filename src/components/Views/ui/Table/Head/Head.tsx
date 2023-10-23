@@ -91,7 +91,6 @@ export function Head({
   const scrollToRef = useRef(null);
 
   const parsedLabel = parseLabel(label);
-  const sortAbles: string[] = ['Task', 'Updated at', 'Created at', 'Status', 'Priority', 'Assignees', 'Start Date'];
 
   const { mutate: onDelete } = useDeleteCustomField(activeTaskColumn.id, listId as string);
 
@@ -319,34 +318,32 @@ export function Head({
                   <span className="mr-1.5">{taskLength}</span>
                   {!collapseTasks ? columns[0].value.toUpperCase() : null}
                 </span>
-                {sortAbles.includes(columns[0].value) && (
-                  <>
-                    {sortArr.length >= 1 && sortArr.includes(columns[0].value) ? (
-                      ''
-                    ) : (
-                      <RoundedArrowUpDown
-                        value={columns[0].value}
-                        id={columns[0].id}
-                        isDefault={columns[0].defaulField}
-                        handleSort={handleSort}
-                      />
-                    )}
-                    {sortArr.includes(columns[0].value) && sortAbles.includes(columns[0].value) && (
-                      <SortDirectionCheck
-                        bgColor={baseColor}
-                        sortItemLength={sortArr.length}
-                        sortIndex={sortArr.indexOf(columns[0].value)}
-                        sortValue={columns[0].value}
-                        sortDesc={dirCheck(columns[0].value, columns[0].defaulField, columns[0].id)?.dir === 'desc'}
-                        handleRemoveSortFn={handleRemoveFilter}
-                        propertyHeaderTxt={generateSortField(columns[0].value, columns[0].defaulField, columns[0].id)}
-                        isDefault={columns[0].defaulField}
-                        handleOrder={handleOrder}
-                        id={columns[0].id}
-                      />
-                    )}
-                  </>
-                )}
+                <>
+                  {sortArr.length >= 1 && sortArr.includes(columns[0].value) ? (
+                    ''
+                  ) : (
+                    <RoundedArrowUpDown
+                      value={columns[0].value}
+                      id={columns[0].id}
+                      isDefault={columns[0].defaulField}
+                      handleSort={handleSort}
+                    />
+                  )}
+                  {sortArr.includes(columns[0].value) && (
+                    <SortDirectionCheck
+                      bgColor={baseColor}
+                      sortItemLength={sortArr.length}
+                      sortIndex={sortArr.indexOf(columns[0].value)}
+                      sortValue={columns[0].value}
+                      sortDesc={dirCheck(columns[0].value, columns[0].defaulField, columns[0].id)?.dir === 'desc'}
+                      handleRemoveSortFn={handleRemoveFilter}
+                      propertyHeaderTxt={generateSortField(columns[0].value, columns[0].defaulField, columns[0].id)}
+                      isDefault={columns[0].defaulField}
+                      handleOrder={handleOrder}
+                      id={columns[0].id}
+                    />
+                  )}
+                </>
               </div>
             </div>
             <FiPlusCircle
