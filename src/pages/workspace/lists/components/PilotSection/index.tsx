@@ -26,6 +26,7 @@ import Calendar from '../../../../../components/Pilot/components/Calendar';
 import { EntityType } from '../../../../../utils/EntityTypes/EntityType';
 import { UtilityIcon } from '../../../../../assets/icons/Utility';
 import { pilotTabs } from '../../../../../app/constants/pilotTabs';
+import EntityManagerIcon from '../../../../../assets/icons/EntityManagerIcon';
 
 const sections = [
   {
@@ -109,7 +110,7 @@ const tabs = [
   {
     id: pilotTabs.ENTITY_MANAGER,
     label: 'Entity Manager',
-    icon: <img src={hubIcon} alt="Hub Icon" className="w-4 h-4" />
+    icon: <EntityManagerIcon />
   },
   {
     id: pilotTabs.TEMPLATES,

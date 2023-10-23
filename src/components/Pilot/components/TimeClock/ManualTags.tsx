@@ -35,7 +35,12 @@ export function ManualTags() {
           onBlur={() => setDropDown((prev) => ({ ...prev, memo: !prev.memo }))}
         >
           <MemoIcon className="w-5 h-5 cursor-pointer" active={!!timerDetails.description} />
-          {dropDown.memo && <TimeMemo timerDetails={timerDetails} />}
+          {dropDown.memo && (
+            <TimeMemo
+              timerDetails={timerDetails}
+              closeModal={() => setDropDown((prev) => ({ ...prev, memo: !prev.memo }))}
+            />
+          )}
         </div>
       </ToolTip>
       <ToolTip title="Add Label">

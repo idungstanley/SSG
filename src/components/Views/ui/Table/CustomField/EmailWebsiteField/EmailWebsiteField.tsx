@@ -105,7 +105,7 @@ function EmailWebsiteField({ taskCustomFields, taskId, fieldId, fieldType }: Ema
   return (
     <div className="w-full h-full flex justify-center items-center p-4">
       {!editMode ? (
-        <div className="w-full h-full group/parent">
+        <div className="w-full h-full group/parent" onClick={() => setEditMode(true)}>
           <span
             className={cl(
               'h-full flex items-center  cursor-pointer w-full',
@@ -113,7 +113,7 @@ function EmailWebsiteField({ taskCustomFields, taskId, fieldId, fieldType }: Ema
             )}
           >
             {currentValue === '-' ? (
-              <h1 onClick={() => setEditMode(true)}>-</h1>
+              <h1>-</h1>
             ) : (
               <>
                 {fieldType === 'website' ? (
