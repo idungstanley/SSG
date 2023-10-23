@@ -12,7 +12,7 @@ interface Props {
 }
 
 export function TimeInventory({ getTimeEntries }: Props) {
-  const { timeAssigneeFilter } = useAppSelector((state) => state.task);
+  useAppSelector((state) => state.task);
 
   const [timeEntries, setTimeEntries] = useState<IEntries[] | undefined>(getTimeEntries?.data.time_entries);
 
