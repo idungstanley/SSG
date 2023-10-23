@@ -8,6 +8,7 @@ export interface CalendarState {
   timeInterval: number | string;
   reminderType: string | number;
   reminderInterval: number | string;
+  selectedHubs: SelectedHubs[];
 }
 
 interface NewDayOff extends Pick<DayOff, 'start_date' | 'end_date'> {
@@ -15,3 +16,9 @@ interface NewDayOff extends Pick<DayOff, 'start_date' | 'end_date'> {
 }
 
 export type BlacklistId = string;
+
+interface SelectedHubs {
+  hubId: string;
+  hubName: string | null;
+  hubColor: string | null;
+}

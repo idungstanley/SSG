@@ -71,6 +71,7 @@ import { useAppSelector } from './app/hooks';
 const HubPage = lazy(() => import('./pages/hub'));
 import { ListPage } from './pages/list';
 import { WalletPage } from './pages/wallet';
+import ManageHr from './pages/hr/pages/ManageHr';
 const Construction = lazy(() => import('./pages/settings/UserSettings/Pages/Construction'));
 const TaskInvite = lazy(() => import('./pages/workspace/tasks/taskInvite/TaskInvite'));
 const WorkSpaceTable = lazy(() => import('./pages/settings/WorkspaceSettings/GeneralWorkSpaceSettings/Table'));
@@ -173,7 +174,16 @@ export const routes = (user: IUser | null) => {
             }
           ]
         },
-        { path: 'hr/h/:hubId', element: <AlsoHr /> },
+        {
+          path: 'hr',
+          element: <AlsoHr />,
+          children: [
+            {
+              path: '',
+              element: <ManageHr />
+            }
+          ]
+        },
         { path: 'dashboard', element: <Dashboard /> },
         { path: 'tasks', element: <TasksIndex /> },
         { path: 'insights', element: <TasksIndex /> },
