@@ -161,7 +161,7 @@ export function RealTime() {
   ) {
     return (
       <div className="flex justify-center items-center text-alsoit-text-md w-full tracking-widest relative z-30">
-        <div className="flex w-full -space-x-1.5">
+        <div className="flex w-full">
           <div className="w-1/3 relative flex items-center -space-x-2 cursor-pointer">
             <TotalTimeIcon className="w-4 h-4" />
             <ArrowDownFilled
@@ -233,8 +233,8 @@ export function RealTime() {
   }
   return (
     <div className="flex justify-center items-center text-alsoit-text-md tracking-widest z-30">
-      <div className="flex items-center w-full -space-x-1">
-        <div className="w-1/3 relative flex items-center -space-x-2">
+      <div className="flex items-center w-full">
+        <div className="w-1/3 relative flex items-center">
           {timeType === 'timer' ? <HourGlassIcon className="w-4 h-4" /> : <ClockIcon />}
           <ArrowDownFilled
             className="cursor-pointer"

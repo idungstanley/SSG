@@ -901,7 +901,7 @@ export const StartTimeEntryService = () => {
       return res;
     },
     {
-      onSuccess: () => queryClient.invalidateQueries(['timeclock']),
+      onSuccess: () => queryClient.invalidateQueries(['timeEntries']),
       onError: (res: unknown) => {
         if ((res as { data: { message?: { title?: string } } })?.data?.message?.title === 'Timer already started') {
           dispatch(setTimerStatus(true));
@@ -927,7 +927,7 @@ export const EndTimeEntriesService = () => {
       return response;
     },
     {
-      onSuccess: () => queryClient.invalidateQueries(['timeclock'])
+      onSuccess: () => queryClient.invalidateQueries(['timeEntries'])
     }
   );
 
@@ -1086,7 +1086,7 @@ export function useDeleteTimeEntryMutation() {
 
   return useMutation(deleteTimeEntry, {
     onSuccess: () => {
-      queryClient.invalidateQueries(['timeclock']);
+      queryClient.invalidateQueries(['timeEntries']);
     }
   });
 }
