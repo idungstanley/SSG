@@ -143,29 +143,21 @@ export function Head({
 
   const handleSort = (header: string, id: string | undefined, order: 'asc' | 'desc', isDefault?: boolean) => {
     setHeaderId(id as string);
-    const existingSortItem = sortAbleArr.findIndex(
-      (el) => el.field === generateSortField(header, isDefault as boolean, id)
-    );
+    const existingSortItem = sortAbleArr.findIndex((el) => el.field === generateSortField(isDefault as boolean, id));
     if (existingSortItem !== -1) {
       const updatedSortArray = sortAbleArr.map((el) =>
-        el.field === generateSortField(header, isDefault as boolean, id) ? { ...el, dir: order } : el
+        el.field === generateSortField(isDefault as boolean, id) ? { ...el, dir: order } : el
       );
       dispatch(setSortArray(updatedSortArray));
     } else {
       dispatch(setSortArr([...sortArr, header as string]));
-      dispatch(
-        setSortArray([...sortAbleArr, { dir: order, field: generateSortField(header, isDefault as boolean, id) }])
-      );
+      dispatch(setSortArray([...sortAbleArr, { dir: order, field: generateSortField(isDefault as boolean, id) }]));
     }
   };
 
   const handleRemoveFilter = (title?: string, criteria?: string, isDefault?: boolean, id?: string): void => {
     dispatch(setSortArr(sortArr.filter((el) => el !== title)));
-    dispatch(
-      setSortArray(
-        sortAbleArr.filter((el) => el.field !== generateSortField(title as string, isDefault as boolean, id))
-      )
-    );
+    dispatch(setSortArray(sortAbleArr.filter((el) => el.field !== generateSortField(isDefault as boolean, id))));
   };
 
   const handleOrder = (e: React.MouseEvent<HTMLDivElement, MouseEvent>, propertyHeaderTxt?: string) => {
@@ -189,7 +181,7 @@ export function Head({
   };
 
   const dirCheck = (col: string, isDefault: boolean, id?: string): SortOption | undefined => {
-    return sortAbleArr.find((el) => el.field === generateSortField(col, isDefault, id));
+    return sortAbleArr.find((el) => el.field === generateSortField(isDefault, id));
   };
 
   const statusDropdownOptions = [
@@ -337,7 +329,7 @@ export function Head({
                       sortValue={columns[0].value}
                       sortDesc={dirCheck(columns[0].value, columns[0].defaulField, columns[0].id)?.dir === 'desc'}
                       handleRemoveSortFn={handleRemoveFilter}
-                      propertyHeaderTxt={generateSortField(columns[0].value, columns[0].defaulField, columns[0].id)}
+                      propertyHeaderTxt={generateSortField(columns[0].defaulField, columns[0].id)}
                       isDefault={columns[0].defaulField}
                       handleOrder={handleOrder}
                       id={columns[0].id}
@@ -394,7 +386,7 @@ export function Head({
                           sortValue={item.value}
                           sortDesc={dirCheck(item.value, item.defaulField, item.id)?.dir === 'desc'}
                           handleRemoveSortFn={handleRemoveFilter}
-                          propertyHeaderTxt={generateSortField(item.value, item.defaulField, item.id)}
+                          propertyHeaderTxt={generateSortField(item.defaulField, item.id)}
                           id={item.id}
                           handleOrder={handleOrder}
                         />
