@@ -15,7 +15,7 @@ import {
   THREE_SUBTASKS_LEVELS,
   TWO_SUBTASKS_LEVELS,
   setAssignOnHoverListId,
-  setAssignOnHoverTaskId,
+  setAssignOnHoverTask,
   setDefaultSubtaskId,
   setShowNewTaskField,
   setShowNewTaskId
@@ -137,11 +137,11 @@ export function Row({
         style={style}
         className="relative contents group dNFlex"
         onMouseEnter={() => {
-          dispatch(setAssignOnHoverTaskId(task));
+          dispatch(setAssignOnHoverTask(task));
           dispatch(setAssignOnHoverListId(task.list_id ?? task.parent_id));
         }}
         onMouseLeave={() => {
-          dispatch(setAssignOnHoverTaskId(''));
+          dispatch(setAssignOnHoverTask(''));
         }}
       >
         <StickyCol

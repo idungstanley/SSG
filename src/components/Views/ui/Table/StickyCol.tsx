@@ -89,7 +89,7 @@ export function StickyCol({
     separateSubtasksMode,
     newTaskPriority,
     f2State,
-    assignOnHoverTaskId
+    assignOnHoverTask
   } = useAppSelector((state) => state.task);
 
   const [isChecked, setIsChecked] = useState(false);
@@ -185,7 +185,7 @@ export function StickyCol({
   }, [eitableContent]);
 
   useEffect(() => {
-    if (f2State && assignOnHoverTaskId === task.id) {
+    if (f2State && (assignOnHoverTask as Task).id === task.id) {
       setEitableContent(true);
     }
   }, [f2State]);

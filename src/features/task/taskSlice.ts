@@ -202,7 +202,7 @@ interface TaskState {
   meMode: boolean;
   autoSave: boolean;
   showTaskNavigation: boolean;
-  assignOnHoverTaskId: Task | string;
+  assignOnHoverTask: Task | string;
   assignOnHoverListId: string;
   assignOnHoverState: boolean;
   f2State: boolean;
@@ -332,7 +332,7 @@ const initialState: TaskState = {
   CompactView: false,
   CompactViewWrap: false,
   showTaskNavigation: false,
-  assignOnHoverTaskId: '',
+  assignOnHoverTask: '',
   assignOnHoverListId: '',
   assignOnHoverState: false,
   f2State: false,
@@ -589,8 +589,8 @@ export const taskSlice = createSlice({
     setNewTaskPriority(state, action: PayloadAction<string>) {
       state.newTaskPriority = action.payload;
     },
-    setAssignOnHoverTaskId(state, action: PayloadAction<string | Task>) {
-      state.assignOnHoverTaskId = action.payload;
+    setAssignOnHoverTask(state, action: PayloadAction<string | Task>) {
+      state.assignOnHoverTask = action.payload;
     },
     setAssignOnHoverListId(state, action: PayloadAction<string>) {
       state.assignOnHoverListId = action.payload;
@@ -844,7 +844,7 @@ export const {
   setGetSubTaskId,
   hideTaskColumns,
   setSubtaskDefaultStatusId,
-  setAssignOnHoverTaskId,
+  setAssignOnHoverTask,
   setAssignOnHoverListId,
   setAssignOnHoverState,
   setF2State,

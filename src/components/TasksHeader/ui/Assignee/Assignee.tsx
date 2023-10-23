@@ -14,7 +14,7 @@ export function Assignee() {
   const dispatch = useAppDispatch();
 
   const { currentUserId } = useAppSelector((state) => state.auth);
-  const { assigneeIds, meMode, assignOnHoverTaskId, assignOnHoverState, assignOnHoverListId } = useAppSelector(
+  const { assigneeIds, meMode, assignOnHoverTask, assignOnHoverState, assignOnHoverListId } = useAppSelector(
     (state) => state.task
   );
 
@@ -34,46 +34,46 @@ export function Assignee() {
   const currUser = members.find((i) => i.user.id === currentUserId);
 
   const { mutate: onTaskAssign } = UseTaskAssignService(
-    [(assignOnHoverTaskId as Task).id],
+    [(assignOnHoverTask as Task).id],
     currUser as ITeamMembersAndGroup,
     [assignOnHoverListId]
   );
 
   const { mutate: onTaskUnassign } = UseTaskUnassignService(
-    [(assignOnHoverTaskId as Task).id],
+    [(assignOnHoverTask as Task).id],
     currUser as ITeamMembersAndGroup,
     [assignOnHoverListId]
   );
 
   const handleAssignTask = () => {
     onTaskAssign({
-      taskIds: [(assignOnHoverTaskId as Task).id],
+      taskIds: [(assignOnHoverTask as Task).id],
       team_member_id: currentMemberId as string,
       teams: false
     });
   };
 
-  const assignedUser = (assignOnHoverTaskId as Task).assignees
+  const assignedUser = (assignOnHoverTask as Task).assignees
     ?.map(({ id }: { id: string }) => id)
     .includes(currentMemberId as string);
 
   const handleUnAssignTask = () => {
     onTaskUnassign({
-      taskId: (assignOnHoverTaskId as Task).id,
+      taskId: (assignOnHoverTask as Task).id,
       team_member_id: currentMemberId as string,
       teams: false
     });
   };
 
   useEffect(() => {
-    if (assignOnHoverTaskId && assignOnHoverState) {
+    if (assignOnHoverTask && assignOnHoverState) {
       assignedUser ? handleUnAssignTask() : handleAssignTask();
     }
 
-    if (assignOnHoverTaskId) {
+    if (assignOnHoverTask) {
       dispatch(setAssignOnHoverState(false));
     }
-  }, [assignOnHoverState, assignOnHoverTaskId]);
+  }, [assignOnHoverState, assignOnHoverTask]);
 
   if (!currentMemberId || !currentMemberName) {
     return null;
