@@ -98,7 +98,6 @@ export function VerticalScroll({ children, bgColor, ...props }: CustomScrollable
 
   const handleThumbMousemove = useCallback(
     (e: MouseEvent) => {
-      e.preventDefault();
       e.stopPropagation();
       if (isDragging && contentRef.current && scrollStartPosition) {
         const { scrollHeight: contentHeight, offsetHeight: contentOffsetHeight } = contentRef.current;

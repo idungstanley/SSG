@@ -68,14 +68,15 @@ const STORAGE_KEYS = {
 };
 
 const calculateWidthForContent = () => {
-  const pilotWidthFromLS = JSON.parse(localStorage.getItem(STORAGE_KEYS.PILOT_WIDTH) || '""') as number;
+  const pilotWidthFromLS =
+    (JSON.parse(localStorage.getItem(STORAGE_KEYS.PILOT_WIDTH) || '""') as number) || dimensions.pilot.default;
 
   const extendedBarWidthFromLS =
-    (JSON.parse(localStorage.getItem(STORAGE_KEYS.EXTENDED_BAR_WIDTH) || '""') as number) ??
+    (JSON.parse(localStorage.getItem(STORAGE_KEYS.EXTENDED_BAR_WIDTH) || '""') as number) ||
     dimensions.extendedBar.default;
 
   const sidebarWidthFromLS =
-    (JSON.parse(localStorage.getItem(STORAGE_KEYS.SIDEBAR_WIDTH) || '""') as number) ??
+    (JSON.parse(localStorage.getItem(STORAGE_KEYS.SIDEBAR_WIDTH) || '""') as number) ||
     dimensions.navigationBar.default;
 
   const isPilotMinifiedFromLS = (
@@ -114,6 +115,8 @@ const calculateWidthForContent = () => {
     extendedBarWidthFromLS,
     sidebarWidthFromLS
   ]);
+  console.log(calculatedContentWidth, 'calculatedContentWidth');
+
   return calculatedContentWidth;
 };
 
