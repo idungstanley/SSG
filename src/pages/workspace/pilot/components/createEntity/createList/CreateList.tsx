@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Checkbox, Input } from '../../../../../../components';
+import { Button, Input } from '../../../../../../components';
 import { useMutation } from '@tanstack/react-query';
 import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
 import { setCreateListSlideOverVisibility } from '../../../../../../features/general/slideOver/slideOverSlice';
