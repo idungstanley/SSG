@@ -39,3 +39,9 @@ export const CLOCK_TYPE = [
   { name: 'clock', value: 'clock' },
   { name: 'timer', value: 'timer' }
 ];
+
+export const TIME_INVENTORY_ACTIONS = [
+  { name: 'edit', value: 'edit' },
+  { name: 'duplicate', value: 'duplicate' },
+  { name: 'delete', value: 'delete' }
+];

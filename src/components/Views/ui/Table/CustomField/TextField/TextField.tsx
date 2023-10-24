@@ -53,18 +53,24 @@ function TextField({ taskCustomFields, taskId, fieldId }: TextFielProps) {
   return (
     <div className="w-full h-full flex justify-center items-center">
       {!editMode ? (
-        <div className="w-full h-full border-2 border-transparent hover:border-alsoit-gray-50 group/parent p-1">
-          <span className="h-full flex justify-center items-center cursor-pointer">
-            <h1 className="truncate text-alsoit-text-lg font-semibold" onClick={() => setEditMode(true)}>
-              {currentValue}
-            </h1>
+        <div
+          className="w-full h-full border-2 border-transparent hover:border-alsoit-gray-50 group/parent p-1"
+          onClick={() => {
+            setEditMode(true);
+          }}
+        >
+          <span className="h-full flex justify-center items-center  cursor-pointer">
+            <h1 className="truncate text-alsoit-text-lg font-semibold">{currentValue}</h1>
             <figure
               className={cl(
                 'opacity-0',
                 isCopied === 1 ? '-mt-2' : '-mt-4',
                 activeValue === '-' ? 'group-hover/parent:opacity-0' : 'group-hover/parent:opacity-100'
               )}
-              onClick={handleCopyTexts}
+              onClick={(e) => {
+                handleCopyTexts;
+                e.stopPropagation();
+              }}
             >
               <Copy />
             </figure>
