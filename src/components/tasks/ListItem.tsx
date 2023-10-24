@@ -95,6 +95,7 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
       });
     }
   };
+
   const handleClickScroll = (targetId: string) => {
     navigate(`tasks/l/${list.id}`);
     dispatch(

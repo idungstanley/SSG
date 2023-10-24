@@ -1,10 +1,11 @@
 import { IList } from '../features/hubs/hubs.interfaces';
 import { IField, IFieldValue, ITask_statuses } from '../features/list/list.interfaces';
 import { ITeamMembersAndGroup } from '../features/settings/teamMembersAndGroups.interfaces';
-import { IStatus, ITaskFullList } from '../features/task/interface.tasks';
+import { IParent, IStatus, ITaskFullList } from '../features/task/interface.tasks';
 import { ICustomField } from '../features/task/taskSlice';
 import { Hub } from '../pages/workspace/hubs/components/ActiveTree/activetree.interfaces';
 import { findCurrentList, updateListTasksCountManager } from './List';
+import { colors } from '../components/tags/colors';
 
 export const addNewTaskManager = (
   tasks: Record<string, ITaskFullList[]>,
@@ -139,6 +140,28 @@ export const taskDateUpdateManager = (
         return task;
       });
     }
+    return updatedTasks;
+  }
+  return tasks;
+};
+
+export const taskColourManager = (listId: string, tasks: Record<string, ITaskFullList[]>, color: string) => {
+  if (listId) {
+    // eslint-disable-next-line
+    const updatedTasks = { ...tasks };
+
+    updatedTasks[listId] = updatedTasks[listId].map((task) => {
+      if (listId === task.list_id) {
+        const list = { ...task?.list, color: color };
+        const updatedObj = {
+          ...task,
+          list
+        } as ITaskFullList;
+
+        return updatedObj;
+      }
+      return task;
+    });
     return updatedTasks;
   }
   return tasks;
