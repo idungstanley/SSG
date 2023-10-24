@@ -6,9 +6,11 @@ import { TotalTime } from './TotalTime';
 
 interface Props {
   timeData?: ITimeEntriesRes;
+  dropView: () => void;
+  showLog: boolean;
 }
 
-export function InventoryHeader({ timeData }: Props) {
+export function InventoryHeader({ timeData, dropView, showLog }: Props) {
   return (
     <div className="absolute -top-1.5 -left-1 flex justify-between items-center w-full">
       <div className="flex space-x-1.5 items-center">
@@ -18,16 +20,11 @@ export function InventoryHeader({ timeData }: Props) {
         >
           <div className="flex items-center">
             <div className="cursor-pointer bg-alsoit-gray-100 rounded-xl">
-              <CollapseIcon
-                active
-                onToggle={() => console.log('change this')}
-                iconColor="rgb(244 244 244)"
-                color="#424242"
-              />
+              <CollapseIcon active={showLog} onToggle={() => dropView()} iconColor="rgb(244 244 244)" color="#424242" />
             </div>
           </div>
           <span className="uppercase text-alsoit-gray-50 text-alsoit-text-md">time log</span>
-          <div className="flex space-x-1 items-center bg-alsoit-gray-50 rounded-md p-1">
+          <div className="flex space-x-1 items-center bg-orange-100 rounded-md p-1">
             <span className="capitalize text-alsoit-text-md text-alsoit-gray-100">add</span>
             <ArrowDown className="w-2 h-2 cursor-pointer" />
           </div>

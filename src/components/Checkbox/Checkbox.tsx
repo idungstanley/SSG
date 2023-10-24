@@ -1,5 +1,6 @@
 import { InputHTMLAttributes } from 'react';
 import { cl } from '../../utils';
+import '../../styles/hr.css';
 
 interface CheckboxProps extends InputHTMLAttributes<HTMLInputElement> {
   setChecked: (i: boolean) => void;

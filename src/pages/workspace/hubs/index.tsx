@@ -35,6 +35,7 @@ import { pilotTabs } from '../../../app/constants/pilotTabs';
 import { FaHandsHelping } from 'react-icons/fa';
 import { APP_HR, APP_TASKS } from '../../../app/constants/app';
 import { pages } from '../../../app/constants/pages';
+import AlsoHrIcon from '../../../assets/icons/AlsoHrIcon';
 
 function Hubs() {
   const dispatch = useDispatch();
@@ -147,11 +148,7 @@ function Hubs() {
           location.pathname.includes(APP_TASKS)
         }
         icon={
-          placeHubType == APP_TASKS ? (
-            <BsListCheck className="w-4 h-4" style={{ color: baseColour }} />
-          ) : (
-            <FaHandsHelping className="w-4 h-4" />
-          )
+          placeHubType == APP_TASKS ? <BsListCheck className="w-4 h-4" style={{ color: baseColour }} /> : <AlsoHrIcon />
         }
         midContent={<BiSearch onClick={(e) => toggleSearch(e)} className="w-4 h-4" style={{ color: baseColour }} />}
         searchStatus={isSearchActive}

@@ -34,7 +34,6 @@ export function AddNewItem({ onHideNewItem, initialFilters }: AddNewItemProps) {
         selected="none"
         values={Object.keys(initialFilters)}
       />
-
       <DeleteItem onClick={onHideNewItem} />
     </div>
   );

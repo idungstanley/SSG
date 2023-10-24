@@ -17,7 +17,8 @@ import {
   setShowTaskNavigation,
   setTaskIdForPilot,
   setDuplicateTaskObj,
-  setSelectedIndexListId
+  setSelectedIndexListId,
+  setF2State
 } from '../../../../features/task/taskSlice';
 import { setActiveItem } from '../../../../features/workspace/workspaceSlice';
 import { UniqueIdentifier, useDraggable, useDroppable } from '@dnd-kit/core';
@@ -26,12 +27,11 @@ import OpenSubtask from '../../../../assets/icons/OpenSubtask';
 import { Capitalize } from '../../../../utils/NoCapWords/Capitalize';
 import RoundedCheckbox from '../../../Checkbox/RoundedCheckbox';
 import ToolTip from '../../../Tooltip/Tooltip';
-import Badges from '../../../badges';
 import DetailsOnHover from '../../../Dropdown/DetailsOnHover/DetailsOnHover';
 import { EntityType } from '../../../../utils/EntityTypes/EntityType';
 import SubtasksIcon from '../../../../assets/icons/SubtasksIcon';
-import SaveIcon from '../../../../assets/icons/SaveIcon.svg';
-import Close from '../../../../assets/icons/Close.svg';
+import SaveIcon from '../../../../assets/icons/SaveIcon';
+import Close from '../../../../assets/icons/Close';
 
 interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   task: Task;
@@ -64,7 +64,6 @@ export function StickyCol({
   task,
   paddingLeft = 0,
   dragElement,
-  isLastSubtaskLevel,
   isBlockedShowChildren,
   ...props
 }: ColProps) {
@@ -88,7 +87,9 @@ export function StickyCol({
     saveSettingOnline,
     duplicateTaskObj,
     separateSubtasksMode,
-    newTaskPriority
+    newTaskPriority,
+    f2State,
+    assignOnHoverTask
   } = useAppSelector((state) => state.task);
 
   const [isChecked, setIsChecked] = useState(false);
@@ -129,11 +130,6 @@ export function StickyCol({
     }
   };
 
-  useEffect(() => {
-    const { current } = inputRef;
-    current?.focus();
-  }, [eitableContent]);
-
   const onToggleDisplayingSubTasks = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.stopPropagation();
     setShowSubTasks(!showSubTasks);
@@ -142,6 +138,7 @@ export function StickyCol({
   const editTaskMutation = useMutation(UseUpdateTaskService, {
     onSuccess: () => {
       queryClient.invalidateQueries(['task']);
+      setEitableContent(false);
     }
   });
 
@@ -164,7 +161,7 @@ export function StickyCol({
       onAdd({
         name,
         isListParent,
-        id: parentId as string,
+        id: parentId !== '' ? (parentId as string) : (listId as string),
         assignees: [currTeamMemberId] as string[],
         newTaskPriority,
         task_status_id: taskStatusId as string
@@ -179,6 +176,19 @@ export function StickyCol({
       task_id: id
     });
   };
+
+  useEffect(() => {
+    const { current } = inputRef;
+    current?.focus();
+
+    dispatch(setF2State(false));
+  }, [eitableContent]);
+
+  useEffect(() => {
+    if (f2State && (assignOnHoverTask as Task).id === task.id) {
+      setEitableContent(true);
+    }
+  }, [f2State]);
 
   // listen on shift + arrow down key
   useEffect(() => {
@@ -267,6 +277,9 @@ export function StickyCol({
       // overTask: task
     }
   });
+
+  const [saveToggle, setSaveToggle] = useState<boolean>(false);
+  const [closeToggle, setCloseToggle] = useState<boolean>(false);
 
   return (
     <>
@@ -459,18 +472,22 @@ export function StickyCol({
             )}
           >
             <div className="absolute bottom-0 right-0 flex space-x-1 p-1">
-              <ToolTip title="Cancel">
+              <ToolTip
+                onMouseEnter={() => setCloseToggle(true)}
+                onMouseLeave={() => setCloseToggle(false)}
+                title="Cancel"
+              >
                 <div
                   className="border rounded-sm"
                   style={{ borderColor: '#B2B2B280', borderWidth: '0.5px', width: '20px' }}
                   onClick={onClose}
                 >
-                  <img src={Close} alt="Cancel"></img>
+                  <Close active={closeToggle}></Close>
                 </div>
               </ToolTip>
-              <ToolTip title="Save">
+              <ToolTip onMouseEnter={() => setSaveToggle(true)} onMouseLeave={() => setSaveToggle(false)} title="Save">
                 <span onClick={(e) => handleOnSave(e as React.MouseEvent<HTMLButtonElement, MouseEvent>, task.id)}>
-                  <img src={SaveIcon} alt="Save"></img>
+                  <SaveIcon active={saveToggle}></SaveIcon>
                 </span>
               </ToolTip>
             </div>
@@ -479,7 +496,9 @@ export function StickyCol({
             </div>
             <div className="flex flex-col items-start justify-start pt-1 pl-2 space-y-1">
               <p
-                className="flex text-left empty:before:content-[attr(placeholder)]"
+                className={`flex text-left empty:before:content-[attr(placeholder)] alsoit-gray-300 font-semibold empty:opacity-50 ${
+                  saveSettingOnline?.CompactView ? 'text-alsoit-text-md' : 'text-alsoit-text-lg'
+                }`}
                 contentEditable={true}
                 placeholder="Add New Task"
                 ref={inputRef}

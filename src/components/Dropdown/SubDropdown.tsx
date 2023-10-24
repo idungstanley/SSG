@@ -180,7 +180,8 @@ export default function SubDropdown({ cords, placeHubType }: SubDropdownProps) {
             isVisible:
               showMenuDropdownType === EntityType.list ||
               showMenuDropdownType === 'subwallet3' ||
-              SubMenuType === 'subwallet3'
+              SubMenuType === 'subwallet3' ||
+              SubMenuType === EntityType.list
                 ? false
                 : true
           },
@@ -194,7 +195,7 @@ export default function SubDropdown({ cords, placeHubType }: SubDropdownProps) {
               // dispatch(setLastActiveItem('Task'));
             },
             icon: <PlusIcon className="w-5 text-gray-700 h-7" aria-hidden="true" />,
-            isVisible: showMenuDropdownType === EntityType.list ? true : false
+            isVisible: showMenuDropdownType === EntityType.list || SubMenuType === EntityType.list ? true : false
           },
           {
             title: 'List',
@@ -205,7 +206,7 @@ export default function SubDropdown({ cords, placeHubType }: SubDropdownProps) {
               // dispatch(setshowMenuDropdown({ showMenuDropdown: null, showMenuDropdownType: null }));
             },
             icon: <AddListIcon />,
-            isVisible: showMenuDropdownType === EntityType.list ? false : true
+            isVisible: showMenuDropdownType === EntityType.list || SubMenuType === EntityType.list ? false : true
           },
           {
             title: 'Sprint',
@@ -253,6 +254,11 @@ export default function SubDropdown({ cords, placeHubType }: SubDropdownProps) {
             ? Number(userSettingsData?.sidebarWidth) - 100
             : sidebarWidthRD
       }}
+      PaperProps={{
+        style: {
+          borderRadius: '12px'
+        }
+      }}
     >
       <div className="px-2 origin-top-right bg-white" style={{ minWidth: '200px' }}>
         <div className="w-auto gap-2 mb-1 px-0.5">
@@ -266,7 +272,7 @@ export default function SubDropdown({ cords, placeHubType }: SubDropdownProps) {
               >
                 <div
                   className={`flex items-center gap-1 p-1.5 py-1.5 space-x-2 text-sm text-left text-gray-600  ${
-                    lastActiveItem ? '' : 'hover:bg-alsoit-gray-75 rounded-md cursor-pointer'
+                    lastActiveItem ? '' : 'hover:bg-alsoit-gray-50 rounded-md cursor-pointer'
                   }`}
                   onClick={item.handleClick}
                 >

@@ -64,14 +64,14 @@ function NumberField({ taskCustomFields, taskId, fieldId }: DropdownFieldWrapper
   return (
     <div className="w-full h-full flex justify-center items-center">
       {!editMode ? (
-        <div className="w-full h-full hover:border-2 hover:borer-alsoit-gray-300 group/parent p-1">
+        <div
+          className="w-full h-full hover:border-2 hover:borer-alsoit-gray-300 group/parent p-1"
+          onClick={() => {
+            setEditMode(true);
+          }}
+        >
           <span className="h-full flex justify-center items-center cursor-pointer max-w-full">
-            <h1
-              className="text-alsoit-text-lg font-semibold max-w-full break-words"
-              onClick={() => {
-                setEditMode(true);
-              }}
-            >
+            <h1 className="text-alsoit-text-lg font-semibold max-w-full break-words">
               {formatNumberWithCommas(currentValue)}
             </h1>
             <figure
