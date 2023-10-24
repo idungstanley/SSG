@@ -823,6 +823,9 @@ export const createManualTimeEntry = () => {
 
 export const useCurrentTime = ({ workspaceId }: { workspaceId?: string }) => {
   const dispatch = useAppDispatch();
+
+  const { activeView } = useAppSelector((state) => state.workspace);
+
   const { status, refetch, data } = useQuery(
     ['timeData'],
     async () => {
@@ -874,7 +877,8 @@ export const useCurrentTime = ({ workspaceId }: { workspaceId?: string }) => {
                 subhubId: dateString.model === EntityType.subHub ? dateString.model_id : null,
                 listId: dateString.model === EntityType.list ? dateString.model_id : null,
                 taskId: dateString.model === EntityType.task ? dateString.model_id : null,
-                workSpaceId: workspaceId
+                workSpaceId: workspaceId,
+                viewId: activeView?.id as string
               })
             );
         }
@@ -1421,7 +1425,6 @@ export const useAddFiltersForTask = () => {
           return task;
         });
       });
-
       dispatch(setTasks(updatedTasks));
       dispatch(setSubtasks(updatedSubtasks));
     }

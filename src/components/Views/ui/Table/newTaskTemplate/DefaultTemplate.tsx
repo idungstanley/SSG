@@ -23,6 +23,7 @@ export const defaultTaskTemplate: ITaskFullList[] = [
     list: {
       id: '',
       name: '',
+      color: '',
       parents: { hubs: [], wallets: [], lists: [] }
     },
     list_id: '',

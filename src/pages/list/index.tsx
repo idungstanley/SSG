@@ -1,12 +1,12 @@
 import { useState, useEffect, UIEvent } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import {
   UseUpdateTaskViewSettings,
   getTaskListService,
   useUpdateSubtaskFilters
 } from '../../features/task/taskService';
-import { setActiveItem } from '../../features/workspace/workspaceSlice';
+import { setActiveItem, setActiveView } from '../../features/workspace/workspaceSlice';
 import { UseGetListDetails } from '../../features/list/listService';
 import PilotSection, { pilotConfig } from '../workspace/lists/components/PilotSection';
 import Page from '../../components/Page';
@@ -24,11 +24,14 @@ import { useformatSettings } from '../workspace/tasks/TaskSettingsModal/ShowSett
 import { IListDetailRes, IListDetails } from '../../features/list/list.interfaces';
 import { VerticalScroll } from '../../components/ScrollableContainer/VerticalScroll';
 import { generateSubtasksList } from '../../utils/generateLists';
+import { generateUrlWithViewId } from '../../app/helpers';
+import { IView } from '../../features/hubs/hubs.interfaces';
 import { defaultTaskTemplate } from '../../components/Views/ui/Table/newTaskTemplate/DefaultTemplate';
 
 export function ListPage() {
   const dispatch = useAppDispatch();
   const { listId, taskId } = useParams();
+  const navigate = useNavigate();
 
   const {
     tasks: tasksStore,
@@ -76,6 +79,12 @@ export function ListPage() {
   useEffect(() => {
     if (listDetails) {
       setListDetailsFromRes(listDetails);
+      const currentView = listDetails?.data.list.task_views.find(
+        (view) => view.type === EntityType.list && view.is_required
+      );
+      const newUrl = generateUrlWithViewId(currentView?.id as string);
+      dispatch(setActiveView(currentView as IView));
+      navigate(newUrl);
     }
   }, [listDetails]);
 

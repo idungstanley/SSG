@@ -27,6 +27,7 @@ export default function NewSubTaskTemplate(task?: Task) {
     list: {
       id: '',
       name: '',
+      color: '',
       parents: { hubs: [], wallets: [], lists: [] }
     },
     list_id: '',

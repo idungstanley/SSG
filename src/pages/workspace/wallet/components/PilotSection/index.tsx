@@ -27,6 +27,8 @@ import { EntityType } from '../../../../../utils/EntityTypes/EntityType';
 import { ClockIcon } from '../../../../../assets/icons/ClockIcon';
 import { pilotTabs } from '../../../../../app/constants/pilotTabs';
 import EntityManagerIcon from '../../../../../assets/icons/EntityManagerIcon';
+import PilotViewIcon from '../../../../../assets/icons/PilotViewIcon';
+import Views from '../../../../../components/Pilot/components/Views/Index';
 
 const sections = [
   {
@@ -64,6 +66,10 @@ const sections = [
   {
     id: pilotTabs.ENTITY_MANAGER,
     element: <HubManager />
+  },
+  {
+    id: pilotTabs.VIEWS,
+    element: <Views />
   },
   {
     id: pilotTabs.TEMPLATES,
@@ -120,6 +126,11 @@ const tabs = [
     id: pilotTabs.ENTITY_MANAGER,
     label: 'Entity Manager',
     icon: <EntityManagerIcon />
+  },
+  {
+    id: pilotTabs.VIEWS,
+    label: 'Views',
+    icon: <PilotViewIcon />
   },
   {
     id: pilotTabs.TEMPLATES,
