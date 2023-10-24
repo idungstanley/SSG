@@ -150,6 +150,5 @@ export function findAllIdsBeforeActiveEntity(activeId: string, entities: [Hub | 
 export const generateUrlWithViewId = (viewId: string) => {
   const currentUrl = window.location.pathname;
   const newUrl = currentUrl.split('/v/');
-  localStorage.setItem('activeViewIdLocale', JSON.stringify(viewId));
   return `${newUrl[0]}/v/${viewId}`;
 };

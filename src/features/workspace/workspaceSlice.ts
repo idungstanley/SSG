@@ -17,9 +17,6 @@ const pilotFromLS = JSON.parse(localStorage.getItem('pilot') || '""') as {
   tabOrder: number[];
   showTabLabel: boolean;
 };
-const initialViewId: string | null = (JSON.parse(localStorage.getItem('activeViewIdLocale') as string) || null) as
-  | string
-  | null;
 const showTabLabelFromLS = !!pilotFromLS.showTabLabel;
 const hotkeyIdsFromLS = JSON.parse(localStorage.getItem(STORAGE_KEYS.HOT_KEYS) ?? '[]') as string[];
 
