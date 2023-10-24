@@ -100,7 +100,7 @@ export default function PriorityDropdown({ taskCurrentPriority }: TaskCurrentPri
     }
   };
 
-  const { cords, relativeRef } = useAbsolute(updateCords, 200);
+  const { relativeRef } = useAbsolute(updateCords, 200);
 
   return (
     <>
