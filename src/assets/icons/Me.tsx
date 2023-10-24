@@ -6,7 +6,7 @@ interface meProps extends DetailedHTMLProps<SVGAttributes<SVGSVGElement>, SVGSVG
 
 function Me({ active, ...props }: meProps) {
   return (
-    <svg {...props} viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg {...props} viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" width="20" height="20">
       <g id="me">
         <mask
           id="mask0_10191_2915"
