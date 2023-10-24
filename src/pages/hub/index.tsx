@@ -1,10 +1,10 @@
 import { useEffect, useMemo, Fragment, UIEvent } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import Page from '../../components/Page';
 import { UseGetHubDetails } from '../../features/hubs/hubService';
 import { UseGetFullTaskList, UseUpdateTaskViewSettings } from '../../features/task/taskService';
-import { setActiveItem } from '../../features/workspace/workspaceSlice';
+import { setActiveItem, setActiveViewId } from '../../features/workspace/workspaceSlice';
 import ActiveHub from '../../layout/components/MainLayout/extendedNavigation/ActiveParents/ActiveHub';
 import AdditionalHeader from '../../layout/components/MainLayout/Header/AdditionHeader';
 import PilotSection, { pilotConfig } from '../workspace/hubs/components/PilotSection';
@@ -21,6 +21,7 @@ import { useformatSettings } from '../workspace/tasks/TaskSettingsModal/ShowSett
 import { generateSubtasksList, generateSubtasksArray } from '../../utils/generateLists';
 import { IHubDetails } from '../../features/hubs/hubs.interfaces';
 import { updatePageTitle } from '../../utils/updatePageTitle';
+import { generateUrlWithViewId } from '../../app/helpers';
 
 export default function HubPage() {
   useEffect(() => {
@@ -32,6 +33,7 @@ export default function HubPage() {
 
   const dispatch = useAppDispatch();
   const { hubId, subhubId, taskId } = useParams();
+  const navigate = useNavigate();
 
   const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
   const { tasks: tasksStore, saveSettingLocal, subtasks } = useAppSelector((state) => state.task);
@@ -59,6 +61,10 @@ export default function HubPage() {
           activeItemName: hubName
         })
       );
+      const currentView = hub?.data.hub.task_views.find((view) => view.type === EntityType.list && view.is_required);
+      const newUrl = generateUrlWithViewId(currentView?.id as string);
+      dispatch(setActiveViewId(currentView?.id as string));
+      navigate(newUrl);
     }
 
     dispatch(setSaveSettingList(saveSettingList));

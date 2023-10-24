@@ -35,7 +35,7 @@ export interface IWalletDetails {
   archived_at: null;
   deleted_at: null;
   description: null;
-  task_views?: ItaskViews[];
+  task_views: ItaskViews[];
   directory_items: [];
   checklists: [];
   custom_field_columns: IField[];

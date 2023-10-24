@@ -20,7 +20,7 @@ function GroupAssignee({
   teams: boolean;
   handleClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
 }) {
-  const { CompactView, CompactViewWrap } = useAppSelector((state) => state.task);
+  const { CompactView } = useAppSelector((state) => state.task);
   const { selectedTasksArray, selectedListIds, selectedTaskParentId } = useAppSelector((state) => state.task);
 
   // Define a variable to store the number of remaining items
@@ -163,7 +163,7 @@ function GroupAssignee({
             {data?.length - 3 !== 0 ? (
               <span
                 className="-ml-3 bg-gray-100 border-2 border-white rounded-full "
-                style={{ padding: `${CompactView || CompactViewWrap ? '3px' : '7px'}` }}
+                style={{ padding: `${CompactView ? '3px' : '7px'}` }}
               >
                 +{data?.length - 3}
               </span>

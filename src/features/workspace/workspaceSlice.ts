@@ -16,6 +16,9 @@ const pilotFromLS = JSON.parse(localStorage.getItem('pilot') || '""') as {
   tabOrder: number[];
   showTabLabel: boolean;
 };
+const initialViewId: string | null = (JSON.parse(localStorage.getItem('activeViewIdLocale') as string) || null) as
+  | string
+  | null;
 const showTabLabelFromLS = !!pilotFromLS.showTabLabel;
 const hotkeyIdsFromLS = JSON.parse(localStorage.getItem(STORAGE_KEYS.HOT_KEYS) ?? '[]') as string[];
 
@@ -82,6 +85,7 @@ interface workspaceState {
   isFavoritePinned: boolean;
   activeHotkeyIds: string[];
   nestedTimeEntityId: string | null;
+  activeViewId: string | null;
 }
 
 const initialState: workspaceState = {
@@ -130,8 +134,8 @@ const initialState: workspaceState = {
   createWlLink: false,
   workspaceData: undefined,
   activeSubRecordsTabId: 0,
-  recorderLastMemory: { activeTabId: '', workSpaceId: '', listId: '', hubId: '', subhubId: '', taskId: '' },
-  timerLastMemory: { activeTabId: '', workSpaceId: '', listId: '', hubId: '', subhubId: '', taskId: '' },
+  recorderLastMemory: { activeTabId: '', workSpaceId: '', listId: '', hubId: '', subhubId: '', taskId: '', viewId: '' },
+  timerLastMemory: { activeTabId: '', workSpaceId: '', listId: '', hubId: '', subhubId: '', taskId: '', viewId: '' },
   activityArray: [],
   logType: 'activity',
   activeLogTab: 'activity',
@@ -146,7 +150,8 @@ const initialState: workspaceState = {
   draggableActiveStatusId: null,
   isFavoritePinned: false,
   activeHotkeyIds: hotkeyIdsFromLS,
-  nestedTimeEntityId: null
+  nestedTimeEntityId: null,
+  activeViewId: initialViewId
 };
 
 export const wsSlice = createSlice({
@@ -368,6 +373,9 @@ export const wsSlice = createSlice({
     },
     setNestedTimeEntityId(state, action: PayloadAction<string | null>) {
       state.nestedTimeEntityId = action.payload;
+    },
+    setActiveViewId(state, action: PayloadAction<string>) {
+      state.activeViewId = action.payload;
     }
   }
 });
@@ -433,7 +441,8 @@ export const {
   setWorkSpaceSettingsObj,
   setDraggableActiveStatusId,
   setActiveHotkeyIds,
-  setNestedTimeEntityId
+  setNestedTimeEntityId,
+  setActiveViewId
 } = wsSlice.actions;
 
 export default wsSlice.reducer;
