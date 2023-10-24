@@ -3,6 +3,14 @@ import { IEntries } from '../../../../features/task/interface.tasks';
 import ToolTip from '../../../Tooltip/Tooltip';
 import AvatarWithImage from '../../../avatar/AvatarWithImage';
 import AvatarWithInitials from '../../../avatar/AvatarWithInitials';
+import ThreeDotIcon from '../../../../assets/icons/ThreeDotIcon';
+import { useState } from 'react';
+import { TabsDropDown } from './TabsDropDown';
+import { TIME_INVENTORY_ACTIONS } from '../../../../utils/Constants/TimeClockConstants';
+import EditIcon from '../../../../assets/icons/Edit';
+import { BiDuplicate } from 'react-icons/bi';
+import TrashIcon from '../../../../assets/icons/delete';
+import { useDeleteTimeEntryMutation } from '../../../../features/task/taskService';
 
 interface Props {
   timeEntry: IEntries;
@@ -10,8 +18,34 @@ interface Props {
 }
 
 export function TimeLogEntries({ timeEntry, index }: Props) {
+  const { mutateAsync } = useDeleteTimeEntryMutation();
+
+  const [dropDown, setDropDown] = useState<{ entryAction: boolean }>({ entryAction: false });
+
+  const entryActions = () => {
+    return (
+      <div className="flex flex-col space-y-2">
+        {TIME_INVENTORY_ACTIONS.map((action, index) => (
+          <div
+            key={index}
+            className="flex w-full space-x-2 cursor-pointer py-1.5 hover:bg-alsoit-purple-50 rounded-md px-1"
+            onClick={() => action.value === 'delete' && mutateAsync(timeEntry.id)}
+          >
+            {action.value === 'edit' ? (
+              <EditIcon active dimensions={{ width: 18, height: 18 }} />
+            ) : action.value === 'duplicate' ? (
+              <BiDuplicate className="w-4 h-4" />
+            ) : (
+              <TrashIcon active dimensions={{ width: 18, height: 18 }} />
+            )}
+            <span className="capitalize font-semibold">{action.name}</span>
+          </div>
+        ))}
+      </div>
+    );
+  };
   return (
-    <div className={`flex items-center w-full ${index % 2 === 0 ? 'bg-alsoit-gray-50' : 'bg-white'}`}>
+    <div className={`flex items-center w-full relative group ${index % 2 === 0 ? 'bg-alsoit-gray-50' : 'bg-white'}`}>
       <div className="flex items-center space-x-14">
         {/* User Avatar */}
         <ToolTip title={timeEntry.team_member.user.name}>
@@ -62,6 +96,22 @@ export function TimeLogEntries({ timeEntry, index }: Props) {
         {/* tags */}
         <div className="py-1.5 w-40 flex justify-center items-center gapFixes">-</div>
       </div>
+      <div className="absolute right-2 invisible group-hover:visible">
+        <ThreeDotIcon
+          className="w-4 h-4 cursor-pointer"
+          onClick={() => setDropDown((prev) => ({ ...prev, entryAction: !prev.entryAction }))}
+        />
+      </div>
+      {dropDown.entryAction && (
+        <TabsDropDown
+          closeModal={() => setDropDown((prev) => ({ ...prev, entryAction: !prev.entryAction }))}
+          header="more options"
+          subHeader="field settings"
+          styles="w-44 right-2 top-7"
+        >
+          {entryActions()}
+        </TabsDropDown>
+      )}
     </div>
   );
 }
