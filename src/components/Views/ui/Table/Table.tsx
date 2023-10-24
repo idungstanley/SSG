@@ -117,12 +117,10 @@ export function Table({ heads, data, label, listName, listColor, isBlockedShowCh
 
   return (
     <ScrollableHorizontalListsContainer onScroll={onScroll} ListColor={listColor}>
-      {/* draggable item */}{' '}
-      {draggableItem ? (
-        <DragOverlay>
-          <OverlayRow columns={columns} task={draggableItem} />
-        </DragOverlay>
-      ) : null}
+      {/* draggable item */}
+      <DragOverlay dropAnimation={null}>
+        {draggableItem ? <OverlayRow columns={columns} task={draggableItem} /> : null}
+      </DragOverlay>
       <div className="py-2 table-container" id={label}>
         <table
           onScroll={splitSubTaskMode ? () => null : onScroll}
