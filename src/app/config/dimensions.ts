@@ -114,7 +114,6 @@ const calculateWidthForContent = () => {
     extendedBarWidthFromLS,
     sidebarWidthFromLS
   ]);
-  console.log(calculatedContentWidth);
   return calculatedContentWidth;
 };
 
