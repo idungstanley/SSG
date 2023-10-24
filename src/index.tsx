@@ -40,7 +40,7 @@ const onError = (error: unknown): unknown => {
     title = typedError?.data?.message.title;
     body = typedError?.data?.message.body;
   } else {
-    title = typedError?.statusText || typedError?.message;
+    title = typedError?.statusText || typedError?.message || typedError.data.message.title;
   }
 
   toast.custom((t) => <Toast type="error" title={title} body={body} toastId={t.id} />);

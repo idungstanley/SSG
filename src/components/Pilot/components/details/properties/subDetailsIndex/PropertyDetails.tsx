@@ -50,6 +50,9 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
   const editTaskMutation = useMutation(UseUpdateTaskService, {
     onSuccess: () => {
       queryClient.invalidateQueries(['task']);
+    },
+    onError: () => {
+      console.log('stanley gg');
     }
   });
 
@@ -90,8 +93,12 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
     setDescription(value);
   };
   const handleSubmit = async () => {
-    handleBlur();
-    setServiceFire(true);
+    try {
+      await handleBlur();
+      await setServiceFire(true);
+    } catch {
+      console.log('stanley');
+    }
   };
 
   const convertNewlinesToBreaks = (text: string) => {
@@ -197,7 +204,7 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
         <div id="entity description" className="mt-5">
           <label className="text-xs text-gray-500">Description</label>
           <div
-            className="border bg-gray-100 border-white rounded-md h-20 cursor-text"
+            className="h-20 bg-gray-100 border border-white rounded-md cursor-text"
             onClick={() => setEditingDescription(true)}
           >
             {editingDescription ? (
@@ -207,7 +214,7 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
                   onChange={(e) => handleDescriptionChange(e.target.value)}
                   value={description}
                   onBlur={handleSubmit}
-                  className="w-full text-alsoit-gray-200 h-20 border-none focus:ring-1 focus:ring-alsoit-gray-75 rounded-md text-alsoit-text-lg font-semibold bg-alsoit-gray-50"
+                  className="w-full h-20 font-semibold border-none rounded-md text-alsoit-gray-200 focus:ring-1 focus:ring-alsoit-gray-75 text-alsoit-text-lg bg-alsoit-gray-50"
                 ></textarea>
               </div>
             ) : (

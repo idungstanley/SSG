@@ -5,7 +5,7 @@ import { setIsFavoritePinned, setSidebarWidthRD } from '../../../../features/wor
 import Header from './components/Header';
 import NavigationItems from './components/NavigationItems';
 import Places from './components/Places';
-import { dimensions } from '../../../../app/config/dimensions';
+import { STORAGE_KEYS, dimensions } from '../../../../app/config/dimensions';
 import { useResize } from '../../../../hooks/useResize';
 import { isAllowIncreaseWidth } from '../../../../utils/widthUtils';
 import { NavigationList } from './components/NavigationItems/components/NavigationList';

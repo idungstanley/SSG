@@ -32,6 +32,8 @@ import { EntityType } from '../../../../utils/EntityTypes/EntityType';
 import SubtasksIcon from '../../../../assets/icons/SubtasksIcon';
 import SaveIcon from '../../../../assets/icons/SaveIcon';
 import Close from '../../../../assets/icons/Close';
+import toast from 'react-hot-toast';
+import Toast from '../../../../common/Toast';
 
 interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   task: Task;
@@ -94,6 +96,8 @@ export function StickyCol({
 
   const [isChecked, setIsChecked] = useState(false);
   const [eitableContent, setEitableContent] = useState(false);
+  const [content, setContent] = useState('');
+  const contentRef = useRef();
   const [selectedIndexArray, setSelectedIndexArray] = useState<number[]>([]);
 
   const COL_BG = taskId === task.id ? ACTIVE_COL_BG : DEFAULT_COL_BG;
@@ -150,12 +154,20 @@ export function StickyCol({
       handleEditTask(e as React.KeyboardEvent<HTMLDivElement>, id);
     } else {
       onClickSave();
-      onClose && onClose();
     }
   };
 
+  const inputContent = inputRef.current?.innerText;
+  const title = 'Limit Exceeded';
+  const body = 'The name must not be greater than 2000 characters.';
+  useEffect(() => {
+    if (inputContent && inputContent?.length > 2000) {
+      toast.custom((t) => <Toast type="error" title={title} body={body} toastId={t.id} />);
+    }
+  }, [inputContent]);
+
   const onClickSave = () => {
-    if (inputRef.current?.innerText) {
+    if (inputRef.current?.innerText && inputRef.current?.innerText.length <= 2000) {
       const name = inputRef.current?.innerText;
 
       onAdd({
@@ -166,15 +178,20 @@ export function StickyCol({
         newTaskPriority,
         task_status_id: taskStatusId as string
       });
+      onClose && onClose();
+    } else {
+      toast.custom((t) => <Toast type="error" title={title} body={body} toastId={t.id} />);
     }
   };
 
   const handleEditTask = async (e: React.KeyboardEvent<HTMLDivElement>, id: string) => {
-    e.preventDefault();
-    await editTaskMutation.mutateAsync({
-      name: inputRef.current?.innerText as string,
-      task_id: id
-    });
+    if (inputRef.current?.innerText && inputRef.current?.innerText.length <= 2000) {
+      e.preventDefault();
+      await editTaskMutation.mutateAsync({
+        name: inputRef.current?.innerText as string,
+        task_id: id
+      });
+    }
   };
 
   useEffect(() => {
@@ -289,7 +306,7 @@ export function StickyCol({
           {...props}
         >
           <div
-            className="flex ml-1 items-center h-full space-x-1"
+            className="flex items-center h-full ml-1 space-x-1"
             style={{
               padding: '15px 0',
               paddingLeft: 0,
@@ -446,7 +463,7 @@ export function StickyCol({
           {...props}
         >
           <div
-            className="w-11 flex items-center h-full space-x-1"
+            className="flex items-center h-full space-x-1 w-11"
             style={{
               padding: '15px 0',
               paddingLeft: 0
@@ -471,7 +488,7 @@ export function StickyCol({
               } w-full py-4 p-4 flex items-center`
             )}
           >
-            <div className="absolute bottom-0 right-0 flex space-x-1 p-1">
+            <div className="absolute bottom-0 right-0 flex p-1 space-x-1">
               <ToolTip
                 onMouseEnter={() => setCloseToggle(true)}
                 onMouseLeave={() => setCloseToggle(false)}
@@ -494,9 +511,9 @@ export function StickyCol({
             <div className="pt-1 ml-4">
               <StatusDropdown taskCurrentStatus={task.status} taskStatuses={task.task_statuses} />
             </div>
-            <div className="flex flex-col items-start justify-start pt-1 pl-2 space-y-1">
+            <div className="flex flex-col items-start justify-start pl-2 space-y-1">
               <p
-                className={`flex text-left empty:before:content-[attr(placeholder)] alsoit-gray-300 font-semibold empty:opacity-50 ${
+                className={`flex text-left empty:before:content-[attr(placeholder)] alsoit-gray-300 font-semibold empty:opacity-50 overflow-hidden items-center h-5 w-80 ${
                   saveSettingOnline?.CompactView ? 'text-alsoit-text-md' : 'text-alsoit-text-lg'
                 }`}
                 contentEditable={true}

@@ -2,7 +2,7 @@ import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { HiOutlineUpload } from 'react-icons/hi';
 import { BsFillGrid3X3GapFill } from 'react-icons/bs';
 import { MdHelpOutline, MdTab } from 'react-icons/md';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import BlinkerModal from './RecordBlinkerOptions';
 import headerIcon from '../../../../assets/icons/headerIcon.png';
 import { EndTimeEntriesService, useCurrentTime } from '../../../../features/task/taskService';
@@ -22,6 +22,8 @@ import { runTimer } from '../../../../utils/TimerCounter';
 import { pilotTabs } from '../../../../app/constants/pilotTabs';
 import InsightsIcon from '../../../../assets/icons/InsightsIcon';
 import { StopIcon } from '../../../../assets/icons/StopIcon';
+import { STORAGE_KEYS, dimensions } from '../../../../app/config/dimensions';
+import ToolTip from '../../../../components/Tooltip/Tooltip';
 
 const hoursToMilliseconds = 60 * 60 * 1000;
 const minutesToMilliseconds = 60 * 1000;
@@ -190,16 +192,18 @@ export default function AdditionalHeader({ isInsights }: IAdditionalHeaderProps)
       return (
         <>
           <InsightsIcon />
-          <span className="text-alsoit-text-lg font-bold">INSIGHTS</span>
+          <span className="font-bold truncate text-alsoit-text-lg">INSIGHTS</span>
         </>
       );
     } else {
       return (
         <>
-          <p className="p-1 bg-gray-300 rounded-md ">
+          <p className="p-1 bg-gray-300 rounded-md">
             <img src={headerIcon} alt="" className="w-6 h-6" />
           </p>
-          <span className="text-alsoit-text-lg font-bold">{activeItemName}</span>
+          <ToolTip title={activeItemName}>
+            <span className="font-bold truncate w-72 text-alsoit-text-lg">{activeItemName}</span>
+          </ToolTip>
         </>
       );
     }
@@ -213,7 +217,7 @@ export default function AdditionalHeader({ isInsights }: IAdditionalHeaderProps)
       <div className="relative flex items-center justify-center space-x-2.5">
         {timeBlinkerCheck() && (
           <div
-            className="flex items-center px-2 py-1 space-x-1 border border-alsoit-purple-300 rounded-lg cursor-pointer"
+            className="flex items-center px-2 py-1 space-x-1 border rounded-lg cursor-pointer border-alsoit-purple-300"
             onClick={() => setTimerModal(!timerModal)}
           >
             <div
@@ -287,8 +291,8 @@ export default function AdditionalHeader({ isInsights }: IAdditionalHeaderProps)
         <MdTab className="w-5 h-5" style={{ color: 'orange' }} />
         {screenRecording === 'recording' && tabsId !== pilotTabs.TIME_CLOCK && (
           <div className="relative w-16 flex space-x-0.5" onMouseEnter={() => setRecordBlinker(!recordBlinker)}>
-            <div className="flex items-center justify-start w-5 h-5 border-alsoit-danger rounded-full">
-              <div className="w-3 h-3 bg-alsoit-danger rounded-full pulsate"></div>
+            <div className="flex items-center justify-start w-5 h-5 rounded-full border-alsoit-danger">
+              <div className="w-3 h-3 rounded-full bg-alsoit-danger pulsate"></div>
             </div>
             <div className="w-2/3">
               {`${String(recorderDuration.h).padStart(2, '0')}:${String(recorderDuration.m).padStart(2, '0')}:${String(
@@ -329,7 +333,7 @@ export default function AdditionalHeader({ isInsights }: IAdditionalHeaderProps)
             )}
             {showClock.showMinimal && !clockModal && (
               <HeaderModal toggleFn={setClockModal} styles="top-10 -right-5 h-12 w-28">
-                <span className="bg-alsoit-gray-50 font-semibold text-alsoit-text-lg shadow-lg rounded border-alsoit-border-base border-alsoit-gray-75 text-center">
+                <span className="font-semibold text-center rounded shadow-lg bg-alsoit-gray-50 text-alsoit-text-lg border-alsoit-border-base border-alsoit-gray-75">
                   <p>{dayjs().format('DD MMMM, YYYY')}</p>
                   <p>{dayjs().format('dddd')}</p>
                 </span>
