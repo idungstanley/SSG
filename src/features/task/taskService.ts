@@ -905,7 +905,7 @@ export const StartTimeEntryService = () => {
       return res;
     },
     {
-      onSuccess: () => queryClient.invalidateQueries(['timeclock']),
+      onSuccess: () => queryClient.invalidateQueries(['timeEntries']),
       onError: (res: unknown) => {
         if ((res as { data: { message?: { title?: string } } })?.data?.message?.title === 'Timer already started') {
           dispatch(setTimerStatus(true));
@@ -931,7 +931,7 @@ export const EndTimeEntriesService = () => {
       return response;
     },
     {
-      onSuccess: () => queryClient.invalidateQueries(['timeclock'])
+      onSuccess: () => queryClient.invalidateQueries(['timeEntries'])
     }
   );
 
@@ -1027,6 +1027,36 @@ export function useGetTimeEntriesMutation() {
   });
 }
 
+function fetchTimeEntriesQuery({ queryKey }: { queryKey: [string, TimeEntriesQueryParams] }) {
+  const [, params] = queryKey;
+  return requestNew<ITimeEntriesRes | undefined>({
+    url: 'time-entries',
+    method: 'GET',
+    params
+  });
+}
+
+// Define your custom query key function for timeentries
+function queryKeyFn(queryParams: TimeEntriesQueryParams): [string, TimeEntriesQueryParams] {
+  return ['timeEntries', queryParams];
+}
+interface TimeEntriesQueryParams {
+  id: string | null | undefined;
+  type: string | null | undefined;
+  is_active?: number;
+  page?: number;
+  include_filters?: boolean;
+  team_member_ids?: string[];
+  sorting?: SortOption[];
+}
+
+// Use React Query to fetch time entries
+export function useTimeEntriesQuery(queryParams: TimeEntriesQueryParams) {
+  const queryKey = queryKeyFn(queryParams);
+
+  return useQuery(queryKey, fetchTimeEntriesQuery);
+}
+
 export const UpdateTimeEntriesService = (data: {
   time_entry_id: string | undefined;
   description: string | undefined;
@@ -1047,13 +1077,23 @@ export const UpdateTimeEntriesService = (data: {
   return response;
 };
 
-export const DeleteTimeEntriesService = (data: { timeEntryDeleteTriggerId: string | null }) => {
-  const response = requestNew({
-    url: `time-entries/${data.timeEntryDeleteTriggerId}`,
+const deleteTimeEntry = async (timeEntryId: string) => {
+  const response = await requestNew({
+    url: `time-entries/${timeEntryId}`,
     method: 'DELETE'
   });
   return response;
 };
+
+export function useDeleteTimeEntryMutation() {
+  const queryClient = useQueryClient();
+
+  return useMutation(deleteTimeEntry, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['timeEntries']);
+    }
+  });
+}
 
 //Add watcher to task
 export const AddWatcherService = ({ query }: { query: (string | undefined | null)[] }) => {
@@ -1139,7 +1179,6 @@ export const UseTaskAssignService = (taskIds: string[], user: ITeamMembersAndGro
   return useMutation(AssignTask, {
     onSuccess: () => {
       dispatch(setAssignOnHoverState(false));
-
       const { updatedTasks, updatedSubtasks } = taskAssignessUpdateManager(
         taskIds,
         listIds,
@@ -1386,7 +1425,6 @@ export const useAddFiltersForTask = () => {
           return task;
         });
       });
-
       dispatch(setTasks(updatedTasks));
       dispatch(setSubtasks(updatedSubtasks));
     }

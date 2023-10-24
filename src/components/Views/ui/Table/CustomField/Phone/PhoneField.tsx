@@ -95,7 +95,13 @@ function PhoneField({ taskCustomFields, taskId, fieldId }: PhoneFieldProps) {
   return (
     <div className="w-full h-full flex justify-center items-center">
       {!editMode ? (
-        <div className="w-full h-full group/parent">
+        <div
+          className="w-full h-full group/parent"
+          onClick={() => {
+            setSelectedCountry(PhoneExt[0]);
+            setEditMode(true);
+          }}
+        >
           <span
             className={cl(
               'h-full flex items-center  cursor-pointer w-full',
@@ -103,14 +109,7 @@ function PhoneField({ taskCustomFields, taskId, fieldId }: PhoneFieldProps) {
             )}
           >
             {currentValue === '-' ? (
-              <h1
-                onClick={() => {
-                  setSelectedCountry(PhoneExt[0]);
-                  setEditMode(true);
-                }}
-              >
-                -
-              </h1>
+              <h1>-</h1>
             ) : (
               <>
                 <a href={`tel:${currentValue}`} className="hover:text-alsoit-purple-300 w-full break-words text-center">

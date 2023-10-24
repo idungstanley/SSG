@@ -19,13 +19,14 @@ import TaskQuickAction from '../workspace/tasks/component/taskQuickActions/TaskQ
 import { List } from '../../components/Views/ui/List/List';
 import { Header } from '../../components/TasksHeader';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
-import { ITaskFullList } from '../../features/task/interface.tasks';
+import { ITaskFullList, Task } from '../../features/task/interface.tasks';
 import { useformatSettings } from '../workspace/tasks/TaskSettingsModal/ShowSettingsModal/FormatSettings';
 import { IListDetailRes, IListDetails } from '../../features/list/list.interfaces';
 import { VerticalScroll } from '../../components/ScrollableContainer/VerticalScroll';
 import { generateSubtasksList } from '../../utils/generateLists';
 import { generateUrlWithViewId } from '../../app/helpers';
 import { IView } from '../../features/hubs/hubs.interfaces';
+import { defaultTaskTemplate } from '../../components/Views/ui/Table/newTaskTemplate/DefaultTemplate';
 
 export function ListPage() {
   const dispatch = useAppDispatch();
@@ -208,7 +209,9 @@ export function ListPage() {
 
               {tasksStore[listId as string] && tasksFromRes.length ? (
                 <List tasks={tasksStore[listId as string]} />
-              ) : null}
+              ) : (
+                <List tasks={defaultTaskTemplate} />
+              )}
             </section>
           </VerticalScroll>
         </>

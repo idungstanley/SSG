@@ -12,18 +12,18 @@ interface Props {
 }
 
 export function TimeInventory({ getTimeEntries }: Props) {
-  const { timeAssigneeFilter } = useAppSelector((state) => state.task);
+  useAppSelector((state) => state.task);
 
   const [timeEntries, setTimeEntries] = useState<IEntries[] | undefined>(getTimeEntries?.data.time_entries);
 
-  const [showLog, setShowLogs] = useState<boolean>(false);
+  const [showLog, setShowLogs] = useState<boolean>(true);
 
   const Entries = () =>
     timeEntries?.map((timeEntry, index) => <TimeLogEntries key={index} timeEntry={timeEntry} index={index} />);
 
   useEffect(() => {
-    if (timeAssigneeFilter) setTimeEntries(timeAssigneeFilter.data.time_entries);
-  }, [timeAssigneeFilter]);
+    if (getTimeEntries?.data.time_entries) setTimeEntries(getTimeEntries?.data.time_entries);
+  }, [getTimeEntries]);
 
   return (
     <div className="relative bg-alsoit-gray-50 w-full rounded-md flex flex-col pt-10">
