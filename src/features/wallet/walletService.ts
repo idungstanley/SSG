@@ -2,7 +2,7 @@ import { useDispatch } from 'react-redux';
 import requestNew from '../../app/requestNew';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { setArchiveWallet } from './walletSlice';
-import { closeMenu, setSpaceStatuses } from '../hubs/hubSlice';
+import { closeMenu, setSpaceStatuses, setSpaceViews } from '../hubs/hubSlice';
 import { IWallet, IWalletDetailRes } from './wallet.interfaces';
 import { useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
@@ -145,6 +145,8 @@ export const UseGetWalletDetails = (query: { activeItemId?: string | null; activ
         if (query.activeItemType === EntityType.wallet) {
           dispatch(setSpaceStatuses(walletTaskStatus));
         }
+        const listViews = data.data.wallet.task_views;
+        dispatch(setSpaceViews(listViews));
       },
       cacheTime: 0
     }

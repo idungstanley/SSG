@@ -24,7 +24,7 @@ import {
 } from '../../components/TasksHeader/ui/Filter/types/filters';
 import { DEFAULT_FILTERS_OPTION } from '../../components/TasksHeader/ui/Filter/config/filterConfig';
 import { ITeamMembersAndGroup } from '../settings/teamMembersAndGroups.interfaces';
-import { ItaskViews } from '../hubs/hubs.interfaces';
+import { IView } from '../hubs/hubs.interfaces';
 
 export interface ICustomField {
   id: string;
@@ -174,7 +174,7 @@ interface TaskState {
   selectedTasksArray: string[];
   selectedIndexListId: string | null;
   saveSettingLocal: { [key: string]: boolean } | null;
-  saveSettingList: ItaskViews | undefined;
+  saveSettingList: IView | undefined;
   saveSettingOnline: { [key: string]: boolean } | null;
   duplicateTaskObj: IDuplicateTaskObj;
   currentSelectedDuplicateArr: string[];
@@ -473,7 +473,7 @@ export const taskSlice = createSlice({
     setSaveSettingLocal(state, action: PayloadAction<{ [key: string]: boolean } | null>) {
       state.saveSettingLocal = action.payload;
     },
-    setSaveSettingList(state, action: PayloadAction<ItaskViews | undefined>) {
+    setSaveSettingList(state, action: PayloadAction<IView | undefined>) {
       state.saveSettingList = action.payload;
     },
     setSaveSettingOnline(state, action: PayloadAction<{ [key: string]: boolean } | null>) {

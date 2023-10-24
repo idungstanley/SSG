@@ -824,7 +824,7 @@ export const createManualTimeEntry = () => {
 export const useCurrentTime = ({ workspaceId }: { workspaceId?: string }) => {
   const dispatch = useAppDispatch();
 
-  const { activeViewId } = useAppSelector((state) => state.workspace);
+  const { activeView } = useAppSelector((state) => state.workspace);
 
   const { status, refetch, data } = useQuery(
     ['timeData'],
@@ -878,7 +878,7 @@ export const useCurrentTime = ({ workspaceId }: { workspaceId?: string }) => {
                 listId: dateString.model === EntityType.list ? dateString.model_id : null,
                 taskId: dateString.model === EntityType.task ? dateString.model_id : null,
                 workSpaceId: workspaceId,
-                viewId: activeViewId as string
+                viewId: activeView?.id as string
               })
             );
         }

@@ -6,7 +6,7 @@ import {
   getTaskListService,
   useUpdateSubtaskFilters
 } from '../../features/task/taskService';
-import { setActiveItem, setActiveViewId } from '../../features/workspace/workspaceSlice';
+import { setActiveItem, setActiveView } from '../../features/workspace/workspaceSlice';
 import { UseGetListDetails } from '../../features/list/listService';
 import PilotSection, { pilotConfig } from '../workspace/lists/components/PilotSection';
 import Page from '../../components/Page';
@@ -25,6 +25,7 @@ import { IListDetailRes, IListDetails } from '../../features/list/list.interface
 import { VerticalScroll } from '../../components/ScrollableContainer/VerticalScroll';
 import { generateSubtasksList } from '../../utils/generateLists';
 import { generateUrlWithViewId } from '../../app/helpers';
+import { IView } from '../../features/hubs/hubs.interfaces';
 
 export function ListPage() {
   const dispatch = useAppDispatch();
@@ -81,7 +82,7 @@ export function ListPage() {
         (view) => view.type === EntityType.list && view.is_required
       );
       const newUrl = generateUrlWithViewId(currentView?.id as string);
-      dispatch(setActiveViewId(currentView?.id as string));
+      dispatch(setActiveView(currentView as IView));
       navigate(newUrl);
     }
   }, [listDetails]);

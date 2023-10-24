@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Hub, StatusProps } from '../../pages/workspace/hubs/components/ActiveTree/activetree.interfaces';
 import { matchedStatusProps } from '../../common/Prompt';
-import { ItaskViews } from './hubs.interfaces';
+import { IView } from './hubs.interfaces';
 
 interface HubState {
   hub: Hub[];
@@ -31,7 +31,7 @@ interface HubState {
   createWLID: string | null;
   editHub: boolean;
   spaceStatuses: StatusProps[];
-  spaceViews: ItaskViews[];
+  spaceViews: IView[];
   statusesToMatch: StatusProps[];
   matchedStatus: matchedStatusProps[];
 }
@@ -87,7 +87,7 @@ export const hubSlice = createSlice({
     setSpaceStatuses(state, action: PayloadAction<StatusProps[]>) {
       state.spaceStatuses = action.payload;
     },
-    setSpaceViews(state, action: PayloadAction<ItaskViews[]>) {
+    setSpaceViews(state, action: PayloadAction<IView[]>) {
       state.spaceViews = action.payload;
     },
     setStatusesToMatch(state, action: PayloadAction<StatusProps[]>) {

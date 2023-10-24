@@ -73,7 +73,7 @@ export function StickyCol({
 
   const { currentWorkspaceId } = useAppSelector((state) => state.auth);
   const { dragOverItemId, draggableItemId } = useAppSelector((state) => state.list);
-  const { activeViewId } = useAppSelector((state) => state.workspace);
+  const { activeView } = useAppSelector((state) => state.workspace);
   const {
     currTeamMemberId,
     verticalGrid,
@@ -105,12 +105,12 @@ export function StickyCol({
   const onClickTask = () => {
     if (task.id !== '0') {
       hubId
-        ? navigate(`/${currentWorkspaceId}/tasks/h/${hubId}/t/${task.id}/v/${activeViewId}`, { replace: true })
+        ? navigate(`/${currentWorkspaceId}/tasks/h/${hubId}/t/${task.id}/v/${activeView?.id}`, { replace: true })
         : subhubId
-        ? navigate(`/${currentWorkspaceId}/tasks/sh/${subhubId}/t/${task.id}/v/${activeViewId}`, { replace: true })
+        ? navigate(`/${currentWorkspaceId}/tasks/sh/${subhubId}/t/${task.id}/v/${activeView?.id}`, { replace: true })
         : walletId
-        ? navigate(`/${currentWorkspaceId}/tasks/w/${walletId}/t/${task.id}/v/${activeViewId}`, { replace: true })
-        : navigate(`/${currentWorkspaceId}/tasks/l/${listId || task.list_id}/t/${task.id}/v/${activeViewId}`, {
+        ? navigate(`/${currentWorkspaceId}/tasks/w/${walletId}/t/${task.id}/v/${activeView?.id}`, { replace: true })
+        : navigate(`/${currentWorkspaceId}/tasks/l/${listId || task.list_id}/t/${task.id}/v/${activeView?.id}`, {
             replace: true
           });
       dispatch(

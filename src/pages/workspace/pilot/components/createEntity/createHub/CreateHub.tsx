@@ -38,7 +38,7 @@ export default function CreateHub() {
   const navigate = useNavigate();
 
   const { selectedTreeDetails, currHubId, hub } = useAppSelector((state) => state.hub);
-  const { activeViewId } = useAppSelector((state) => state.workspace);
+  const { activeView } = useAppSelector((state) => state.workspace);
   const { currentWorkspaceId: workSpaceId } = useAppSelector((state) => state.auth);
 
   const [paletteColor, setPaletteColor] = useState<string | ListColourProps | undefined | null>('blue');
@@ -55,7 +55,7 @@ export default function CreateHub() {
     onSuccess: (data) => {
       const listDetails = data?.data.hub;
       const routeVariable = id ? 'tasks/sh' : 'tasks/h';
-      navigate(`/${workSpaceId}/${routeVariable}/${listDetails.id}/v/${activeViewId}`, {
+      navigate(`/${workSpaceId}/${routeVariable}/${listDetails.id}/v/${activeView?.id}`, {
         replace: true
       });
       dispatch(

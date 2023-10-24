@@ -4,7 +4,7 @@ import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import Page from '../../components/Page';
 import { UseGetHubDetails } from '../../features/hubs/hubService';
 import { UseGetFullTaskList, UseUpdateTaskViewSettings } from '../../features/task/taskService';
-import { setActiveItem, setActiveViewId } from '../../features/workspace/workspaceSlice';
+import { setActiveItem, setActiveView } from '../../features/workspace/workspaceSlice';
 import ActiveHub from '../../layout/components/MainLayout/extendedNavigation/ActiveParents/ActiveHub';
 import AdditionalHeader from '../../layout/components/MainLayout/Header/AdditionHeader';
 import PilotSection, { pilotConfig } from '../workspace/hubs/components/PilotSection';
@@ -19,7 +19,7 @@ import { EntityType } from '../../utils/EntityTypes/EntityType';
 import { setSaveSettingList, setSaveSettingOnline, setSubtasks, setTasks } from '../../features/task/taskSlice';
 import { useformatSettings } from '../workspace/tasks/TaskSettingsModal/ShowSettingsModal/FormatSettings';
 import { generateSubtasksList, generateSubtasksArray } from '../../utils/generateLists';
-import { IHubDetails } from '../../features/hubs/hubs.interfaces';
+import { IHubDetails, IView } from '../../features/hubs/hubs.interfaces';
 import { updatePageTitle } from '../../utils/updatePageTitle';
 import { generateUrlWithViewId } from '../../app/helpers';
 
@@ -63,7 +63,7 @@ export default function HubPage() {
       );
       const currentView = hub?.data.hub.task_views.find((view) => view.type === EntityType.list && view.is_required);
       const newUrl = generateUrlWithViewId(currentView?.id as string);
-      dispatch(setActiveViewId(currentView?.id as string));
+      dispatch(setActiveView(currentView as IView));
       navigate(newUrl);
     }
 

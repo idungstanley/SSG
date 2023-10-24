@@ -16,33 +16,55 @@ import timeChartIcon from '../../../../../assets/icons/timeChartIcon.png';
 import mapIcon from '../../../../../assets/icons/mapIcon.png';
 import gantIcon from '../../../../../assets/icons/gantIcon.png';
 import teamIcon from '../../../../../assets/icons/teamIcon.png';
-import { useDublicateView } from '../../../../../features/workspace/workspaceService';
+import { useDublicateView, useUpdateView } from '../../../../../features/workspace/workspaceService';
 import { useParams } from 'react-router-dom';
+import { useAppSelector } from '../../../../../app/hooks';
 
-export default function ViewListThreeDots() {
+const view_settings_ids = {
+  PIN: 'pin',
+  ADD_TO_FAVORITES: 'add_to_favorites',
+  DUBLICATE_AS: 'dublicate_as',
+  TEMPLATES: 'templates',
+  MORE_SETTINGS: 'more_settings'
+};
+
+interface IViewListThreeDotsProps {
+  closeAllModal: () => void;
+}
+
+export default function ViewListThreeDots({ closeAllModal }: IViewListThreeDotsProps) {
   const { viewId } = useParams();
+
+  const { activeView } = useAppSelector((state) => state.workspace);
 
   const [dublicateEl, setDublicateEl] = useState<null | HTMLElement>(null);
 
   const { mutate: onDublicate } = useDublicateView();
+  const { mutate: onUpdate } = useUpdateView();
 
   const viewSettings = [
     {
-      id: 'pin',
+      id: view_settings_ids.PIN,
       icon: <Pin />,
       label: 'Pin',
-      handleClick: () => null,
-      isUnusing: true
+      handleClick: () => {
+        onUpdate({
+          id: activeView?.id as string,
+          data: {
+            is_pinned: activeView?.is_pinned === 1 ? 0 : 1
+          }
+        });
+      }
     },
     {
-      id: 'add_to_favorites',
-      icon: <FavoriteIcon />,
+      id: view_settings_ids.ADD_TO_FAVORITES,
+      icon: <FavoriteIcon color="orange" />,
       label: 'Add to favorites',
       handleClick: () => null,
       isUnusing: true
     },
     {
-      id: 'dublicate_as',
+      id: view_settings_ids.DUBLICATE_AS,
       icon: <DublicateIcon />,
       label: 'Dublicate as',
       isHasArrow: true,
@@ -51,8 +73,8 @@ export default function ViewListThreeDots() {
       }
     },
     {
-      id: 'templates',
-      icon: <TemplatesIcon />,
+      id: view_settings_ids.TEMPLATES,
+      icon: <TemplatesIcon color="orange" />,
       label: 'Templates',
       isHasArrow: true,
       isHasDivider: true,
@@ -60,7 +82,7 @@ export default function ViewListThreeDots() {
       isUnusing: true
     },
     {
-      id: 'more_settings',
+      id: view_settings_ids.MORE_SETTINGS,
       icon: <BsThreeDots />,
       label: 'More settings',
       isHasArrow: true,
@@ -76,6 +98,8 @@ export default function ViewListThreeDots() {
       label: 'List',
       handleClick: () => {
         onDublicate(viewId as string);
+        setDublicateEl(null);
+        closeAllModal();
       }
     },
     {
@@ -134,18 +158,18 @@ export default function ViewListThreeDots() {
       <div className="w-full flex justify-between items-center py-1 px-3">
         <div>View options</div>
         <div className="flex">
-          <CiEdit />
-          <AiOutlineLink />
+          <CiEdit color="orange" />
+          <AiOutlineLink color="orange" />
         </div>
       </div>
-      <div className="text-xs py-1 px-3">This view is required.</div>
+      {activeView?.is_required ? <div className="text-xs py-1 px-3">This view is required.</div> : null}
       {viewSettings.map((setting) => (
         <div
           key={setting.id}
           className={`w-full flex items-center justify-between py-2 px-3 hover:bg-gray-300 cursor-pointer ${
             setting.isHasDivider ? 'border-t-2' : ''
-          }`}
-          style={{ background: setting.isUnusing ? '#f6efe3' : '', pointerEvents: setting.isUnusing ? 'none' : 'all' }}
+          } ${setting.id === view_settings_ids.PIN && activeView?.is_pinned ? 'bg-primary-200' : ''}`}
+          style={{ color: setting.isUnusing ? 'orange' : '' }}
           onClick={(e) => setting.handleClick(e)}
         >
           <div className="flex items-center">
@@ -169,13 +193,16 @@ export default function ViewListThreeDots() {
             <div
               key={option.id}
               className="w-full flex items-center justify-between py-2 px-3 hover:bg-gray-300 cursor-pointer"
-              style={{
-                background: option.isUnusing ? '#f6efe3' : '',
-                pointerEvents: option.isUnusing ? 'none' : 'all'
-              }}
+              style={{ color: option.isUnusing ? 'orange' : '' }}
+              onClick={option.handleClick}
             >
-              <div className="flex items-center" onClick={option.handleClick}>
-                <span className="mr-3">{option.icon}</span>
+              <div className="flex items-center">
+                <span
+                  className="mr-3"
+                  style={{ background: option.isUnusing ? 'orange' : '', opacity: option.isUnusing ? '0.5' : '1' }}
+                >
+                  {option.icon}
+                </span>
                 <span>{option.label}</span>
               </div>
             </div>

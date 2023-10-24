@@ -1,4 +1,4 @@
-import { IList, ItaskViews } from '../hubs/hubs.interfaces';
+import { IList, IView } from '../hubs/hubs.interfaces';
 import { IField, ITask_statuses } from '../list/list.interfaces';
 
 export interface IWallet {
@@ -35,7 +35,7 @@ export interface IWalletDetails {
   archived_at: null;
   deleted_at: null;
   description: null;
-  task_views: ItaskViews[];
+  task_views: IView[];
   directory_items: [];
   checklists: [];
   custom_field_columns: IField[];

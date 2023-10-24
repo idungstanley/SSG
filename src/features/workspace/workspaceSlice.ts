@@ -9,6 +9,7 @@ import {
 } from './workspace.interfaces';
 import { IActivityLog } from '../general/history/history.interfaces';
 import dayjs, { Dayjs } from 'dayjs';
+import { IView } from '../hubs/hubs.interfaces';
 
 const initialActivePlaceId: number | null = (JSON.parse(localStorage.getItem('activePlaceIdLocale') as string) ||
   null) as number | null;
@@ -85,7 +86,7 @@ interface workspaceState {
   isFavoritePinned: boolean;
   activeHotkeyIds: string[];
   nestedTimeEntityId: string | null;
-  activeViewId: string | null;
+  activeView: IView | null;
 }
 
 const initialState: workspaceState = {
@@ -151,7 +152,7 @@ const initialState: workspaceState = {
   isFavoritePinned: false,
   activeHotkeyIds: hotkeyIdsFromLS,
   nestedTimeEntityId: null,
-  activeViewId: initialViewId
+  activeView: null
 };
 
 export const wsSlice = createSlice({
@@ -374,8 +375,8 @@ export const wsSlice = createSlice({
     setNestedTimeEntityId(state, action: PayloadAction<string | null>) {
       state.nestedTimeEntityId = action.payload;
     },
-    setActiveViewId(state, action: PayloadAction<string>) {
-      state.activeViewId = action.payload;
+    setActiveView(state, action: PayloadAction<IView>) {
+      state.activeView = action.payload;
     }
   }
 });
@@ -442,7 +443,7 @@ export const {
   setDraggableActiveStatusId,
   setActiveHotkeyIds,
   setNestedTimeEntityId,
-  setActiveViewId
+  setActiveView
 } = wsSlice.actions;
 
 export default wsSlice.reducer;

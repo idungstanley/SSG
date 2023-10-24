@@ -137,10 +137,16 @@ export default function ViewsModal({
     }
   ];
 
+  const handleCloseAllModal = () => {
+    setDropdownEl(null);
+    setThreeDotsEl(null);
+    setCreateNewViewEl(null);
+  };
+
   const renderThreeDotsMenu = (id: string) => {
     switch (id) {
       case list:
-        return <ViewListThreeDots />;
+        return <ViewListThreeDots closeAllModal={handleCloseAllModal} />;
     }
   };
 
@@ -165,42 +171,56 @@ export default function ViewsModal({
       <Menu anchorEl={dropdownEl} open={!!dropdownEl} onClose={() => setDropdownEl(null)} style={{ marginTop: '10px' }}>
         <div style={{ zIndex: 61 }} className="w-48">
           {viewSettings.map((view) => (
-            <div
-              key={view.id}
-              className={`flex items-center py-2 text-sm text-gray-600 text-left w-full cursor-pointer ${
-                view.id === viewId && view.id !== activeView
-                  ? 'hover:bg-gray-300'
-                  : listView && view.id === activeView
-                  ? 'bg-primary-200'
-                  : ''
-              }`}
-              onClick={() => setActiveView(view.id)}
-              onMouseEnter={() => setViewId(view.id)}
-              style={{ background: view.unusing ? '#f6efe3' : '', pointerEvents: view.unusing ? 'none' : 'all' }}
-            >
+            <div key={view.id} style={{ color: view.unusing ? 'orange' : '' }}>
               {view.label !== 'Create New View' ? (
-                <div className="flex items-center justify-between w-full group">
-                  <div className="flex items-center pl-2 space-x-2 text-md" onClick={view.handleClick}>
-                    <span className="p-0.5">{view.icon}</span>
-                    <span>{view.label}</span>
-                  </div>
+                <div
+                  className={`flex items-center py-2 pl-2 space-x-2 cursor-pointer ${
+                    view.id === viewId && view.id !== activeView
+                      ? 'hover:bg-gray-300'
+                      : listView && view.id === activeView
+                      ? 'bg-primary-200'
+                      : ''
+                  }`}
+                >
                   <div
-                    className={`${
-                      view.id === viewId
-                        ? 'flex items-center pr-2 opacity-0 group-hover:opacity-100'
-                        : 'flex items-center pr-2 opacity-0'
-                    }`}
+                    className="flex items-center justify-between w-full group"
+                    onMouseEnter={() => setViewId(view.id)}
                   >
-                    <BsPinAngle color="#f6efe3" onClick={(event) => event.stopPropagation()} />
-                    <CiEdit color="#f6efe3" onClick={(event) => event.stopPropagation()} />
-                    <BsThreeDots
-                      onClick={view.handleThreeDotsClick ? (e) => view.handleThreeDotsClick(e) : () => null}
-                    />
+                    <div className="flex items-center pl-2 space-x-2 text-md" onClick={() => setActiveView(view.id)}>
+                      <span
+                        className="p-0.5"
+                        style={{ background: view.unusing ? 'orange' : '', opacity: view.unusing ? '0.5' : '1' }}
+                      >
+                        {view.icon}
+                      </span>
+                      <span>{view.label}</span>
+                    </div>
+                    <div
+                      className={`${
+                        view.id === viewId
+                          ? 'flex items-center pr-2 opacity-0 group-hover:opacity-100'
+                          : 'flex items-center pr-2 opacity-0'
+                      }`}
+                    >
+                      <BsPinAngle color="orange" onClick={(event) => event.stopPropagation()} />
+                      <CiEdit color="orange" onClick={(event) => event.stopPropagation()} />
+                      <BsThreeDots
+                        onClick={view.handleThreeDotsClick ? (e) => view.handleThreeDotsClick(e) : () => null}
+                      />
+                    </div>
                   </div>
                 </div>
               ) : (
-                <div onClick={(e) => view.handleClick(e)}>
-                  <div className="flex items-center py-2 pl-2 space-x-2 border-t-2">
+                <div onClick={(e) => view.handleClick(e)} onMouseEnter={() => setViewId(view.id)}>
+                  <div
+                    className={`flex items-center py-2 pl-2 space-x-2 border-t-2 cursor-pointer ${
+                      view.id === viewId && view.id !== activeView
+                        ? 'hover:bg-gray-300'
+                        : listView && view.id === activeView
+                        ? 'bg-primary-200'
+                        : ''
+                    }`}
+                  >
                     <span className="bg-primary-200 p-0.5 ">
                       <AiOutlinePlus className=" text-primary-500" />
                     </span>
@@ -229,7 +249,7 @@ export default function ViewsModal({
           horizontal: 'center'
         }}
       >
-        <CreateNewViewModal />
+        <CreateNewViewModal closeAllModal={handleCloseAllModal} />
       </Menu>
     </>
   );

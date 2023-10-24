@@ -11,6 +11,8 @@ import { useCreateView } from '../../../../../features/workspace/workspaceServic
 import { useParams } from 'react-router-dom';
 import viewList from '../../../../../assets/branding/viewList.svg';
 import { Button } from '../../../../../components';
+import { Capitalize } from '../../../../../utils/NoCapWords/Capitalize';
+import { EntityType } from '../../../../../utils/EntityTypes/EntityType';
 
 interface IViewOption {
   id: string;
@@ -21,8 +23,12 @@ interface IViewOption {
   isUnusing?: boolean;
 }
 
-export default function CreateNewViewModal() {
-  const { listId } = useParams();
+interface ICreateNewViewModalProps {
+  closeAllModal: () => void;
+}
+
+export default function CreateNewViewModal({ closeAllModal }: ICreateNewViewModalProps) {
+  const { hubId, walletId, listId } = useParams();
 
   const [newName, setNewName] = useState<string>('');
   const [isError, setError] = useState<boolean>(false);
@@ -105,11 +111,12 @@ export default function CreateNewViewModal() {
       setError(true);
     } else {
       onCreate({
-        model: activeView.id,
-        model_id: listId as string,
+        model: hubId ? EntityType.hub : walletId ? EntityType.wallet : EntityType.list,
+        model_id: (hubId || walletId || listId) as string,
         type: activeView.id,
-        name: newName
+        name: Capitalize(newName)
       });
+      closeAllModal();
     }
   };
 
@@ -135,13 +142,16 @@ export default function CreateNewViewModal() {
             <div
               key={option.id}
               className="w-full flex items-center justify-between py-2 px-3 hover:bg-gray-300 cursor-pointer"
-              style={{
-                background: option.isUnusing ? '#f6efe3' : '',
-                pointerEvents: option.isUnusing ? 'none' : 'all'
-              }}
+              style={{ color: option.isUnusing ? 'orange' : '' }}
+              onClick={() => setActiveView(option)}
             >
-              <div className="flex items-center" onClick={() => setActiveView(option)}>
-                <span className="mr-3">{option.icon}</span>
+              <div className="flex items-center">
+                <span
+                  className="mr-3"
+                  style={{ background: option.isUnusing ? 'orange' : '', opacity: option.isUnusing ? '0.5' : '1' }}
+                >
+                  {option.icon}
+                </span>
                 <span>{option.label}</span>
               </div>
             </div>
@@ -163,6 +173,7 @@ export default function CreateNewViewModal() {
                 height="h-7"
                 width="w-fit"
                 labelSize="text-sm"
+                disabled={activeView.isUnusing}
               />
             </div>
           </div>
