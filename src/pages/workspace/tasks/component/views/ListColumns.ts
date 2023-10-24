@@ -75,9 +75,9 @@ export const columnsHead: ExtendedListColumnProps[] = [
     defaulField: DEFAULT_FIELD_VAL
   },
   {
-    id: 'end_date',
-    field: 'end_date',
-    value: 'End Date',
+    id: 'due_date',
+    field: 'due_date',
+    value: 'Due Date',
     hidden: true,
     defaulField: DEFAULT_FIELD_VAL
   },

@@ -1421,7 +1421,6 @@ export const useAddFiltersForTask = () => {
           return task;
         });
       });
-
       dispatch(setTasks(updatedTasks));
       dispatch(setSubtasks(updatedSubtasks));
     }
