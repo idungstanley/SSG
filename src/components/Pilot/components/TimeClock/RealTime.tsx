@@ -27,7 +27,7 @@ import { timeStringToMilliseconds } from '../../../../utils/TimerDuration';
 export function RealTime() {
   const dispatch = useAppDispatch();
 
-  const { workSpaceId, hubId, subhubId, listId, taskId } = useParams();
+  const { workSpaceId, hubId, subhubId, listId, taskId, viewId } = useParams();
   const { activeItemId, activeItemType, timerLastMemory, activeTabId } = useAppSelector((state) => state.workspace);
   const { duration, timerStatus, estimatedTimeStatus, estimatedDuration, period, timerDetails, timeType } =
     useAppSelector((state) => state.task);
@@ -56,7 +56,7 @@ export function RealTime() {
     dispatch(setTimerStatus(!timerStatus));
     dispatch(setActiveTimeout({ clockLimit: clock_limit, timeoutReminder: clock_stop_reminder }));
     setRunning(true);
-    dispatch(setTimerLastMemory({ workSpaceId, hubId, subhubId, listId, taskId, activeTabId }));
+    dispatch(setTimerLastMemory({ workSpaceId, hubId, subhubId, listId, taskId, activeTabId, viewId }));
   };
 
   const reset = () => {

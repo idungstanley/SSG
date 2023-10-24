@@ -1,5 +1,5 @@
 import { useEffect, useMemo, Fragment, UIEvent } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import Page from '../../components/Page';
 import { UseGetFullTaskList, UseUpdateTaskViewSettings } from '../../features/task/taskService';
@@ -15,15 +15,18 @@ import { List } from '../../components/Views/ui/List/List';
 import { Header } from '../../components/TasksHeader';
 import { GroupHorizontalScroll } from '../../components/ScrollableContainer/GroupHorizontalScroll';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
-import { setActiveItem } from '../../features/workspace/workspaceSlice';
+import { setActiveItem, setActiveView } from '../../features/workspace/workspaceSlice';
 import { useformatSettings } from '../workspace/tasks/TaskSettingsModal/ShowSettingsModal/FormatSettings';
 import { VerticalScroll } from '../../components/ScrollableContainer/VerticalScroll';
 import { generateSubtasksArray, generateSubtasksList } from '../../utils/generateLists';
 import { IWalletDetails } from '../../features/wallet/wallet.interfaces';
+import { generateUrlWithViewId } from '../../app/helpers';
+import { IView } from '../../features/hubs/hubs.interfaces';
 
 export function WalletPage() {
   const dispatch = useAppDispatch();
   const { walletId, taskId } = useParams();
+  const navigate = useNavigate();
 
   const { tasks: tasksStore, saveSettingLocal, subtasks } = useAppSelector((state) => state.task);
 
@@ -50,6 +53,13 @@ export function WalletPage() {
           activeItemName: wallet.data.wallet.name
         })
       );
+
+      const currentView = wallet?.data.wallet.task_views.find(
+        (view) => view.type === EntityType.list && view.is_required
+      );
+      const newUrl = generateUrlWithViewId(currentView?.id as string);
+      dispatch(setActiveView(currentView as IView));
+      navigate(newUrl);
     }
 
     dispatch(setSaveSettingList(saveSettingList));
