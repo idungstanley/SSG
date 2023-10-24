@@ -92,7 +92,8 @@ export const initialPlaces: Place[] = [
     name: 'Also HR',
     id: pages.ALSO_HR,
     place: <Hubs />,
-    icon: <AlsoHrIcon />
+    icon: <AlsoHrIcon />,
+    link: '/hr'
   },
   {
     name: 'TICKETS',

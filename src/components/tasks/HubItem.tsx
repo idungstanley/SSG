@@ -32,6 +32,11 @@ import ActiveBackground from './Component/ActiveBackground';
 import { useAbsolute } from '../../hooks/useAbsolute';
 import { IHub } from '../../features/hubs/hubs.interfaces';
 import { APP_HR, APP_TASKS } from '../../app/constants/app';
+import { Checkbox } from '../Checkbox/Checkbox';
+import { selectCalendar, setBlacklistIds, setSelectedHubs } from '../../features/calendar/slice/calendarSlice';
+import HubManagerIcon from '../../assets/icons/HubManager';
+import { useGetTeamMembers } from '../../features/settings/teamMembers/teamMemberService';
+import { MembersList } from '../../pages/calendar/ui/ExtendedBar/MembersList';
 
 interface TaskItemProps {
   item: {
@@ -168,10 +173,38 @@ export default function HubItem({
 
   const { cords, relativeRef } = useAbsolute(updateCords, 266);
   const { cords: menuCords, relativeRef: menuRef } = useAbsolute(updateCords, 352);
+  const { selectedHubs, blacklistIds } = useAppSelector(selectCalendar);
+
+  const { data } = useGetTeamMembers({ page: 1, query: '' });
+
+  const members = data?.data.team_members ?? [];
+
+  const onCheckbox = (i: boolean, hubId: string, hubName: string, hubColor: string) => {
+    if (i) {
+      dispatch(setSelectedHubs([...selectedHubs, { hubId, hubName, hubColor }]));
+      dispatch(setBlacklistIds([...members.map((i) => i.id + '_' + hubId)]));
+    } else {
+      dispatch(setSelectedHubs([...selectedHubs.filter((i) => i.hubId !== hubId)]));
+      dispatch(setBlacklistIds([]));
+    }
+  };
+
+  const checkSelectedHubs = (id: string) => {
+    return selectedHubs.filter((i) => i.hubId == id).length > 0;
+  };
+
+  const onCheckboxHr = (i: boolean, id: string, hubId: string) => {
+    if (i) {
+      dispatch(setBlacklistIds([...blacklistIds, id + '_' + hubId]));
+    } else {
+      dispatch(setBlacklistIds([...blacklistIds.filter((i) => i !== id + '_' + hubId)]));
+      dispatch(setSelectedHubs([...selectedHubs.filter((i) => i.hubId !== hubId)]));
+    }
+  };
 
   return (
     <div
-      className={`${openedEntitiesIds.includes(item.id) ? 'sticky bg-white opacity-100' : ''}`}
+      className={`${openedEntitiesIds.includes(item.id) ? 'sticky bg-white opacity-100 hub-item' : ''}`}
       style={{
         top: openedEntitiesIds.includes(item.id) && showSidebar ? topNumber : '',
         zIndex: openedEntitiesIds.includes(item.id) ? zNumber : '2',
@@ -184,14 +217,9 @@ export default function HubItem({
         }`}
         ref={setNodeRef}
         tabIndex={0}
-        onClick={
-          showSidebar || isExtendedBar
-            ? () => handleClick(item.id)
-            : () => handleLocation(item.id, item.name, item as Hub)
-        }
       >
         <div
-          className="relative flex items-center justify-between"
+          className="relative flex items-center justify-start"
           style={{ height: '30px', paddingLeft: paddingLeft() }}
         >
           <ActiveBackground showBgColor={item.id === hubId || item.id === subhubId} />
@@ -206,8 +234,26 @@ export default function HubItem({
               <Drag />
             </div>
           ) : null}
-          <div role="button" className="flex items-center justify-start overflow-y-hidden text-sm truncate">
-            {item?.wallets?.length || item?.lists?.length || item.has_descendants ? (
+          {placeHubType == APP_HR && (
+            <div className="hr-checkbox-wrapper ml-2 flex justify-center items-center">
+              <Checkbox
+                styles="ml-0 mr-0 text-primary-500 focus:ring-primary-500 mx-0 hr-checkbox hr-checkbox-parent"
+                checked={checkSelectedHubs(item.id)}
+                setChecked={(e) => onCheckbox(e, item.id, item.name, item.color as string)}
+              />
+            </div>
+          )}
+          <div
+            role="button"
+            className="flex items-center justify-start overflow-y-hidden text-sm truncate"
+            onClick={
+              showSidebar || isExtendedBar
+                ? () => handleClick(item.id)
+                : () => handleLocation(item.id, item.name, item as Hub)
+            }
+          >
+            {((item?.wallets?.length || item?.lists?.length || item.has_descendants) && placeHubType === APP_TASKS) ||
+            placeHubType === APP_HR ? (
               <div>
                 {showChildren ? (
                   <span className="flex flex-col">
@@ -220,35 +266,38 @@ export default function HubItem({
             ) : (
               renderEmptyArrowBlock()
             )}
-
-            <div className="flex items-center flex-1 min-w-0 gap-5">
-              <div
-                onClick={(e) => handleHubColour(item.id, e)}
-                className="flex items-center justify-center w-6 h-6"
-                ref={relativeRef}
-              >
-                {item.path !== null ? (
-                  <img src={item.path} alt="hubs image" className="w-full h-full rounded" />
-                ) : (
-                  <AvatarWithInitials
-                    initials={getInitials(item.name)}
-                    height="h-4"
-                    width="w-4"
-                    textSize="8px"
-                    backgroundColour={
-                      item.color
-                        ? item.color
-                        : !paletteColor && type === EntityType.hub
-                        ? 'blue'
-                        : !paletteColor && type === EntityType.subHub
-                        ? 'orange'
-                        : (paletteColor as string)
-                    }
-                    roundedStyle="rounded"
-                  />
-                )}
-              </div>
-              <span className="overflow-hidden">
+            <div className={`flex items-center flex-1 min-w-0 ${placeHubType == APP_HR ? 'gap-1' : 'gap-5'}`}>
+              {placeHubType == APP_HR ? (
+                <HubManagerIcon />
+              ) : (
+                <div
+                  onClick={(e) => handleHubColour(item.id, e)}
+                  className="flex items-center justify-center w-6 h-6"
+                  ref={relativeRef}
+                >
+                  {item.path !== null ? (
+                    <img src={item.path} alt="hubs image" className="w-full h-full rounded" />
+                  ) : (
+                    <AvatarWithInitials
+                      initials={getInitials(item.name)}
+                      height="h-4"
+                      width="w-4"
+                      textSize="8px"
+                      backgroundColour={
+                        item.color
+                          ? item.color
+                          : !paletteColor && type === EntityType.hub
+                          ? 'blue'
+                          : !paletteColor && type === EntityType.subHub
+                          ? 'orange'
+                          : (paletteColor as string)
+                      }
+                      roundedStyle="rounded"
+                    />
+                  )}
+                </div>
+              )}
+              <span className="overflow-hidden pr-2">
                 <ToolTip title={item.name}>
                   <p
                     className={`capitalize truncate cursor-pointer ${
@@ -274,7 +323,7 @@ export default function HubItem({
               onClick={(e) => e.stopPropagation()}
               ref={menuRef}
             >
-              {(placeHubType == APP_HR && !item.parent_id) || placeHubType == APP_TASKS ? (
+              {placeHubType === APP_TASKS && !item.parent_id ? (
                 <span onClick={() => handleItemAction(item.id, item.name)} className="cursor-pointer">
                   <PlusIcon className="hover:text-alsoit-purple-300" />
                 </span>
@@ -292,6 +341,10 @@ export default function HubItem({
           )}
         </div>
       </div>
+
+      {placeHubType == APP_HR && showChildren && (
+        <MembersList members={members} onCheckbox={onCheckboxHr} hubId={item.id} place={'menu'} />
+      )}
       <UploadImage endpoint={`hubs/${uploadId}`} invalidateQuery={['hubs'] as InvalidateQueryFilters<unknown>} />
       {paletteId === item.id && show ? (
         <Palette title="Hub" setPaletteColor={setPaletteColor} activeOutterColor={item.color as string} cords={cords} />
