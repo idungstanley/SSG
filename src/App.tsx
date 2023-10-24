@@ -6,7 +6,7 @@ import { useGetSelf } from './features/settings/user/userSettingsServices';
 import { useEffect } from 'react';
 import { useAppSelector, useAppDispatch } from './app/hooks';
 import { setUserData, setUserInfo } from './features/settings/user/userSettingsSlice';
-import { IUseSettingsProfile, setUserSettingsProfile } from './features/task/taskSlice';
+import { setUserSettingsProfile } from './features/task/taskSlice';
 
 function App() {
   const user = useAppSelector(selectCurrentUser);
