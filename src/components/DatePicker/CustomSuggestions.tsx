@@ -51,11 +51,6 @@ export default function CustomSuggestion({ setCustomSuggestion }: CustomSuggesti
     }
   };
 
-  const handleReminder = ({ value, type }: { value?: number; type?: string }) => {
-    value && dispatch(setReminderInterval(value));
-    type && dispatch(setRemindertype(type));
-  };
-
   useEffect(() => {
     dispatch(setTimeInterval(timeIntervalValue));
     dispatch(setReminderInterval(reminderIntervalValue));

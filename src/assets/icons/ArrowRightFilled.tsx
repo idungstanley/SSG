@@ -1,15 +1,6 @@
 import React from 'react';
-import interactions from '../../utils/Constants/IconInteractions';
 
-interface Props {
-  active?: boolean;
-  dimensions?: {
-    height: number;
-    width: number;
-  };
-  color?: string;
-}
-function ArrowRightFilled({ active, dimensions, color }: Props) {
+function ArrowRightFilled() {
   return (
     <svg width="6" height="6" viewBox="0 0 5 6" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path

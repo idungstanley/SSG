@@ -187,7 +187,7 @@ export const UseArchiveListService = (list: { query: string | undefined | null; 
 export const UseGetListDetails = (listId: string | null | undefined) => {
   const dispatch = useAppDispatch();
 
-  const { activeItemType, activeItemId } = useAppSelector((state) => state.workspace);
+  const { activeItemId } = useAppSelector((state) => state.workspace);
   const id = activeItemId === 'list' ? activeItemId : listId;
   return useQuery(
     ['hubs', { listId, id }],
