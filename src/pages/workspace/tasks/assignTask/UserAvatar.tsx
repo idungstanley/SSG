@@ -5,6 +5,7 @@ import { AvatarWithInitials } from '../../../../components';
 import AvatarForOwnerWithImage from '../../../../components/avatar/AvatarForOwnerWithImage';
 import AvatarWithImage from '../../../../components/avatar/AvatarWithImage';
 import { useAppSelector } from '../../../../app/hooks';
+import { ROLES } from '../../../../utils/Constants/RoleConstants';
 
 interface avatarProps {
   user: ITeamMembersAndGroup;
@@ -18,7 +19,7 @@ function UserAvatar({ user, handleClick }: avatarProps) {
     <div>
       {!user.user.avatar_path ? (
         <span onClick={handleClick}>
-          {user.role.key === 'owner' ? (
+          {user.role.key === ROLES.owner ? (
             <AvatarForOwner initials={user.user.initials} backgroundColour={user.user.color} />
           ) : (
             <div className="border-2 border-red-400 rounded-full">
@@ -35,7 +36,7 @@ function UserAvatar({ user, handleClick }: avatarProps) {
       ) : (
         <span onClick={handleClick}>
           <div className="border-2 border-red-400 rounded-full">
-            {user.role.key === 'owner' ? (
+            {user.role.key === ROLES.owner ? (
               <AvatarForOwnerWithImage image_path={user.user.avatar_path} />
             ) : (
               <AvatarWithImage image_path={user.user.avatar_path} height="h-8" width="w-8" />

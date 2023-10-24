@@ -128,7 +128,7 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
       }
     }
   };
-  const handleItemAction = (id: string, name: string | null) => {
+  const handleItemAction = (id: string) => {
     // dispatch(setSelectedTreeDetails({ name, id, type: EntityType.wallet }));
     dispatch(setCreateWlLink(false));
     dispatch(
@@ -260,7 +260,7 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
             ref={menuRef}
           >
             {/* <TaskDropdown /> */}
-            <span onClick={() => handleItemAction(list.id, list.name)} className="cursor-pointer">
+            <span onClick={() => handleItemAction(list.id)} className="cursor-pointer">
               <PlusIcon active />
             </span>
             <span

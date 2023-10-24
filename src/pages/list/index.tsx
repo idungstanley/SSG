@@ -19,7 +19,7 @@ import TaskQuickAction from '../workspace/tasks/component/taskQuickActions/TaskQ
 import { List } from '../../components/Views/ui/List/List';
 import { Header } from '../../components/TasksHeader';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
-import { ITaskFullList, Task } from '../../features/task/interface.tasks';
+import { ITaskFullList } from '../../features/task/interface.tasks';
 import { useformatSettings } from '../workspace/tasks/TaskSettingsModal/ShowSettingsModal/FormatSettings';
 import { IListDetailRes, IListDetails } from '../../features/list/list.interfaces';
 import { VerticalScroll } from '../../components/ScrollableContainer/VerticalScroll';
