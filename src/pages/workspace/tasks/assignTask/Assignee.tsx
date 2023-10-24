@@ -77,7 +77,11 @@ export default function Assignee({
           {userObj ? (
             <div>
               <button className="border-2 border-red-400 rounded-full" onClick={handleClick}>
-                <AvatarWithInitials initials={userObj.user.initials} backgroundColour={userObj.color} badge={true} />
+                <AvatarWithInitials
+                  initials={userObj.user.initials}
+                  backgroundColour={userObj.user.color}
+                  badge={true}
+                />
               </button>
             </div>
           ) : (

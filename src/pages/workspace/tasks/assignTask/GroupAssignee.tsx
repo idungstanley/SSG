@@ -106,7 +106,7 @@ function GroupAssignee({
                   {!newData.user.avatar_path ? (
                     <span onClick={handleClick}>
                       {newData.role.key === 'owner' ? (
-                        <AvatarForOwner initials={newData.user.initials} />
+                        <AvatarForOwner initials={newData.user.initials} backgroundColour={newData.user.color} />
                       ) : (
                         <div className="border-2 border-red-400 rounded-full">
                           <AvatarWithInitials
