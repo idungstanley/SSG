@@ -1,15 +1,12 @@
-import ICONS_INTERACTIONS from '../../utils/Constants/IconInteractions';
-
 /* eslint-disable max-len */
 interface Props {
-  active: boolean;
   dimensions?: {
     height: number;
     width: number;
   };
 }
 
-export default function FileIcon({ active = false, dimensions }: Props) {
+export default function FileIcon({ dimensions }: Props) {
   return (
     <svg
       width={dimensions?.width ?? '20'}

@@ -1,13 +1,6 @@
 /* eslint-disable max-len */
-interface Props {
-  active?: boolean;
-  dimensions?: {
-    height: number;
-    width: number;
-  };
-}
 
-export function ManualTimeIcon({ active = false, dimensions }: Props) {
+export function ManualTimeIcon() {
   return (
     <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
       <mask

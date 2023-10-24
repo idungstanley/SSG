@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Hub } from '../../pages/workspace/hubs/components/ActiveTree/activetree.interfaces';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { setParentHubExt, setSelectedTreeDetails } from '../../features/hubs/hubSlice';
+import { setSelectedTreeDetails } from '../../features/hubs/hubSlice';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
 import { setCurrentItem, setNestedTimeEntityId } from '../../features/workspace/workspaceSlice';
 import SearchHubItem from '../tasks/SearchHubItem';

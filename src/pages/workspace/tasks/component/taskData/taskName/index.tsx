@@ -1,5 +1,4 @@
 import React, { useRef, ReactNode, useState } from 'react';
-import { MdDragIndicator } from 'react-icons/md';
 import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
 import {
   getComfortableView,

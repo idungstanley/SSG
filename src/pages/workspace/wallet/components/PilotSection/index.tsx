@@ -19,7 +19,6 @@ import Checklists from '../../../../../components/Pilot/components/Checklist/Che
 import { VscChecklist, VscScreenFull } from 'react-icons/vsc';
 import RecordScreen from '../../../../../components/Pilot/components/RecordScreen';
 import HubManager from '../../../../../components/Pilot/components/HubManager/HubManager';
-import hubIcon from '../../../../../assets/branding/hub.svg';
 import Templates from '../../../../../components/Pilot/components/Templates';
 import TemplatesIcon from '../../../../../assets/icons/Templates';
 import Calendar from '../../../../../components/Pilot/components/Calendar';

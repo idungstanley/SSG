@@ -36,18 +36,14 @@ export default function Toast({ type = 'success', title, body, showClose = true,
   const taskUrl = `${currentHost}/${currentWorkspaceId}/tasks/l/${list_Id}/t/${task_Id}`;
 
   const HandleCopyTaskUrl = async () => {
-    try {
-      await navigator.clipboard.writeText(taskUrl);
-      setIsCopied(1);
-      setTimeout(() => {
-        setIsCopied(2);
-      }, 1000);
-      setTimeout(() => {
-        setIsCopied(0);
-      }, 2000);
-    } catch (error) {
-      console.warn(`Failed to copy: ${error}`);
-    }
+    await navigator.clipboard.writeText(taskUrl);
+    setIsCopied(1);
+    setTimeout(() => {
+      setIsCopied(2);
+    }, 1000);
+    setTimeout(() => {
+      setIsCopied(0);
+    }, 2000);
 
     dispatch(setCopyNewlyCreatedTask(false));
   };
