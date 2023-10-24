@@ -19,15 +19,16 @@ export default function ChatForPilot() {
     { id: 'contacts', element: <Contacts /> }
   ];
 
-  const selectedSection = useMemo(() => sections.find((section) => section.id === activeTabId), [activeTabId]);
+  const selectedSection = useMemo(
+    () => sections.find((section) => section.id === activeTabId) as SectionsProps,
+    [activeTabId]
+  );
 
   return (
     <>
       <SectionArea label="Connect" icon={<SignalIcon className="w-4 h-4" />} />
-
       <div className="flex w-full h-full border-b border-l border-r">
         <Nav activeTabId={activeTabId} setActiveTabId={setActiveTabId} />
-
         {/* main section */}
         <div className="w-full h-full">
           {/* main section depends of active tab */}

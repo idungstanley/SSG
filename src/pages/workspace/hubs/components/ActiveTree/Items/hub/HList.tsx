@@ -23,7 +23,7 @@ import HubItemOverlay from '../../../../../../../components/tasks/HubItemOverLay
 import { generateViewsUrl } from '../../../../../../../utils/generateViewsUrl';
 import { IHub } from '../../../../../../../features/hubs/hubs.interfaces';
 import { pilotTabs } from '../../../../../../../app/constants/pilotTabs';
-import { APP_TASKS } from '../../../../../../../app/constants/app';
+import { APP_HR, APP_TASKS } from '../../../../../../../app/constants/app';
 
 export default function HList({ hubs, openNewHub, placeHubType }: ListProps) {
   const dispatch = useAppDispatch();
@@ -56,6 +56,9 @@ export default function HList({ hubs, openNewHub, placeHubType }: ListProps) {
   }, [hub]);
 
   const handleLocation = (id: string, name: string, item: IHub) => {
+    if (placeHubType == APP_HR) {
+      return false;
+    }
     const viewsUrl = generateViewsUrl(id, item, EntityType.hub) as string;
     dispatch(setParentHubExt({ id: id, type: EntityType.hub }));
     dispatch(
@@ -119,7 +122,7 @@ export default function HList({ hubs, openNewHub, placeHubType }: ListProps) {
               item={hub}
               handleClick={handleClick}
               showChildren={
-                ((hub?.children?.length || hub?.wallets?.length || hub?.lists?.length) &&
+                ((hub?.children?.length || hub?.wallets?.length || hub?.lists?.length || placeHubType == APP_HR) &&
                   isCanBeOpen(hub.id)) as boolean
               }
               handleLocation={handleLocation}
@@ -128,7 +131,7 @@ export default function HList({ hubs, openNewHub, placeHubType }: ListProps) {
               zNumber="5"
               placeHubType={placeHubType}
             />
-            {hub?.children?.length && isCanBeOpen(hub.id) ? (
+            {hub?.children?.length && isCanBeOpen(hub.id) && placeHubType == APP_TASKS ? (
               <SubHList hubs={hub.children as Hub[]} placeHubType={placeHubType} />
             ) : null}
             {showSidebar && placeHubType == APP_TASKS ? (

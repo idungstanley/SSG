@@ -1,14 +1,12 @@
 import Page from '../../components/Page';
-import { ExtendedBar } from '../calendar/ui/ExtendedBar/ExtendedBar';
-import ManageHr from './pages/ManageHr';
-import AlsoHrIcon from '../../assets/icons/AlsoHrIcon';
 import Header from './ui/Header';
+import { Outlet } from 'react-router-dom';
 
 function AlsoHr() {
   return (
-    <Page header={<Header />} extendedBar={{ children: <ExtendedBar />, name: 'Also HR', icon: <AlsoHrIcon /> }}>
+    <Page header={<Header />}>
       <div className="w-full h-full overflow-y-scroll">
-        <ManageHr />
+        <Outlet />
       </div>
     </Page>
   );
