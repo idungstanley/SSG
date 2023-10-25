@@ -57,7 +57,6 @@ interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
 
 export function StickyCol({
   hoverOn,
-  setHoverOn,
   showSubTasks,
   setShowSubTasks,
   children,
