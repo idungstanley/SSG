@@ -11,6 +11,7 @@ import ToolTip from '../../../../../../components/Tooltip/Tooltip';
 import AlsoitIcon from '../../../../../../assets/icons/AlsoitIcon';
 import PinnedIcon from '../../../../../../assets/icons/PinnedIcon';
 import UnpinnedIcon from '../../../../../../assets/icons/UnpinnedIcon';
+import AlsoitMenuDropdown from '../../../../../../components/DropDowns';
 
 interface HeaderProps {
   handleHotkeyClick: (value: string, e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => void;
@@ -42,8 +43,15 @@ export default function Header({
   activeTabId,
   setActiveTabId
 }: HeaderProps) {
-  const [showModal, setShowModal] = useState<boolean>(false);
+  const [showModal, setShowModal] = useState<HTMLDivElement | null>(null);
   const { showSidebar } = useAppSelector((state) => state.account);
+
+  const handleCloseHotkeys = () => {
+    setShowModal(null);
+  };
+  const handleOpenHotkeys = (event: React.MouseEvent<HTMLDivElement | null, MouseEvent>) => {
+    setShowModal(event.currentTarget);
+  };
   return (
     <div
       className={cl('flex border-b gap-2 px-2', !showSidebar ? 'flex-col pb-3 items-center' : 'items-center py-4')}
@@ -74,21 +82,21 @@ export default function Header({
               />
             )}
             <div className="flex items-center">
-              <UserSettingsModal setShowModal={setShowModal} />
+              <UserSettingsModal setShowModal={handleOpenHotkeys} />
               <Toggle />
             </div>
           </div>
         </div>
-        <Modal setShowModal={setShowModal} showModal={showModal} position="top-20 left-44">
+        <AlsoitMenuDropdown handleClose={handleCloseHotkeys} anchorEl={showModal}>
           {/* hotkeys list */}
-          <div className="z-50 flex flex-col items-start mt-4">
+          <div className="z-50 flex flex-col items-start w-48 p-2">
             {NavigationList.map((tab) => (
               <span
                 onClick={(e) => handleHotkeyClick(tab.id, e)}
                 key={tab.id}
                 className={cl(
                   activeHotkeyIds.includes(tab.id) && 'font-semibold',
-                  'relative flex text-gray-500 items-center rounded-md justify-between py-1 px-2 hover:bg-gray-100 cursor-pointer w-full'
+                  'relative flex text-gray-600 items-center rounded-md justify-between py-1.5 px-2 hover:bg-alsoit-gray-50 cursor-pointer w-full'
                 )}
               >
                 <div className="flex items-center gap-2">
@@ -98,20 +106,32 @@ export default function Header({
                   <span className="block truncate">{tab.name}</span>
                 </div>
                 <span className="flex">
-                  {activeHotkeyIds.includes(tab.id) && <PinnedIcon />}
+                  {activeHotkeyIds.includes(tab.id) && (
+                    <ToolTip title="Unpin Hotkey">
+                      <span>
+                        <PinnedIcon />
+                      </span>
+                    </ToolTip>
+                  )}
                   {!activeHotkeyIds.includes(tab.id) &&
                     (hotkeys.length >= 4 ? (
                       <ToolTip title="Exceeded pin limit">
-                        <UnpinnedIcon />
+                        <span>
+                          <UnpinnedIcon />
+                        </span>
                       </ToolTip>
                     ) : (
-                      <UnpinnedIcon />
+                      <ToolTip title="Pin Hotkey">
+                        <span>
+                          <UnpinnedIcon />
+                        </span>
+                      </ToolTip>
                     ))}
                 </span>
               </span>
             ))}
           </div>
-        </Modal>
+        </AlsoitMenuDropdown>
       </div>
     </div>
   );
