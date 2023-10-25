@@ -1,5 +1,4 @@
 import React, { Fragment, useState } from 'react';
-import { BsToggleOff } from 'react-icons/bs';
 import { useMutation } from '@tanstack/react-query';
 import { AvatarWithInitials } from '../../../../../components';
 import { logoutService } from '../../../../../features/auth/authService';
@@ -11,7 +10,6 @@ import { useAppSelector } from '../../../../../app/hooks';
 import ToolTip from '../../../../../components/Tooltip/Tooltip';
 import ArrowDownFilled from '../../../../../assets/icons/ArrowDownFilled';
 import AlsoitMenuDropdown from '../../../../../components/DropDowns';
-import MySettings from '../../../../../assets/icons/MySettings';
 import NotificationIcon from '../../../../../assets/icons/NotificationIcon';
 import AppsIcon from '../../../../../assets/icons/AppsIcon';
 import RewardsIcon from '../../../../../assets/icons/RewardsIcon';
