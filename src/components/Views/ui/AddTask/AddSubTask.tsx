@@ -37,6 +37,8 @@ export function AddSubTask({
 
   const [showSubTasks, setShowSubTasks] = useState(false);
 
+  const [hoverOn, setHoverOn] = useState(false);
+
   const otherColumns = columns.slice(1);
 
   const onShowAddSubtaskField = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
@@ -61,6 +63,8 @@ export function AddSubTask({
       {/* current task */}
       <tr style={style} className="contents group">
         <StickyCol
+          hoverOn={hoverOn}
+          setHoverOn={setHoverOn}
           showSubTasks={showSubTasks}
           setShowSubTasks={setShowSubTasks}
           style={{ zIndex: 3 }}
