@@ -235,7 +235,7 @@ export default function HubItem({
             </div>
           ) : null}
           {placeHubType == APP_HR && (
-            <div className="hr-checkbox-wrapper ml-2 flex justify-center items-center">
+            <div className="flex items-center justify-center ml-2 hr-checkbox-wrapper">
               <Checkbox
                 styles="ml-0 mr-0 text-primary-500 focus:ring-primary-500 mx-0 hr-checkbox hr-checkbox-parent"
                 checked={checkSelectedHubs(item.id)}
@@ -297,7 +297,7 @@ export default function HubItem({
                   )}
                 </div>
               )}
-              <span className="overflow-hidden pr-2">
+              <span className="pr-2 overflow-hidden">
                 <ToolTip title={item.name}>
                   <p
                     className={`capitalize truncate cursor-pointer ${
@@ -319,7 +319,7 @@ export default function HubItem({
           </div>
           {showSidebar && (
             <div
-              className="relative right-0 flex items-center pr-1 space-x-2 text-black opacity-0 z-1 group-hover:opacity-100 hover:text-fuchsia-500"
+              className="absolute right-0 flex items-center pr-1 space-x-2 text-black opacity-0 z-1 group-hover:opacity-100 hover:text-fuchsia-500"
               onClick={(e) => e.stopPropagation()}
               ref={menuRef}
             >
