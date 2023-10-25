@@ -219,7 +219,7 @@ export default function HubItem({
         tabIndex={0}
       >
         <div
-          className="relative flex items-center justify-start"
+          className="relative flex items-center justify-between"
           style={{ height: '30px', paddingLeft: paddingLeft() }}
         >
           <ActiveBackground showBgColor={item.id === hubId || item.id === subhubId} />
@@ -251,6 +251,7 @@ export default function HubItem({
                 ? () => handleClick(item.id)
                 : () => handleLocation(item.id, item.name, item as Hub)
             }
+            style={{ zIndex: 1 }}
           >
             {((item?.wallets?.length || item?.lists?.length || item.has_descendants) && placeHubType === APP_TASKS) ||
             placeHubType === APP_HR ? (
