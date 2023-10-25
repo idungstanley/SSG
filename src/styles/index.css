@@ -24,6 +24,19 @@ body {
   font-weight: 600;
 }
 
+.parent :not(.selectable-all) {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.selectable-all {
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: all;
+  user-select: text;
+}
+
 html {
   /* zoom: 0.85; */
   scroll-behavior: smooth;
@@ -105,6 +118,11 @@ code {
 .gapFixes {
   margin: 0 !important;
   padding: 0 !important;
+}
+
+.select-text {
+  -webkit-user-select: text;
+  user-select: text;
 }
 
 .header-cell {
@@ -196,8 +214,7 @@ code {
   background-color: red;
 }
 
-.MuiMenu-list
-{
+.MuiMenu-list {
   padding: 0 !important;
 }
 

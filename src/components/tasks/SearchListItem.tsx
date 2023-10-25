@@ -5,7 +5,6 @@ import ListIconComponent from '../ItemsListInSidebar/components/ListIconComponen
 import { cl } from '../../utils';
 import { IList } from '../../features/hubs/hubs.interfaces';
 import {
-  setCurrTeamMemId,
   setCurrentSelectedDuplicateArr,
   setDuplicateTaskObj,
   setSelectedTasksArray
@@ -29,7 +28,7 @@ export default function SearchListItem({ list, paddingLeft }: ListItemProps) {
   const { activeItemId } = useAppSelector((state) => state.workspace);
   const { lightBaseColor, baseColor } = useAppSelector((state) => state.account);
   const { listColour } = useAppSelector((state) => state.list);
-  const { duplicateTaskObj, currentSelectedDuplicateArr } = useAppSelector((state) => state.task);
+  const { duplicateTaskObj } = useAppSelector((state) => state.task);
   const [showSelectDropdown, setShowSelectDropdown] = useState<null | HTMLSpanElement | HTMLDivElement>(null);
 
   const { mutate: duplicateTask } = useDuplicateTask();

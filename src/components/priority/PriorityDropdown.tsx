@@ -109,7 +109,6 @@ export default function PriorityDropdown({ taskCurrentPriority }: TaskCurrentPri
           <div>{setPriorityColor(taskCurrentPriority)}</div>
         </button>
       </div>
-
       <AlsoitMenuDropdown handleClose={handleCloseDropdown} anchorEl={isOpen}>
         <div className="overflow-y-auto">
           <div className="flex flex-col items-center justify-center w-48 px-1 py-1 text-center divide-y divide-gray-100 rounded-md shadow-lg outline-none w-fit h-fit ring-1 ring-black ring-opacity-5 focus:outline-none">

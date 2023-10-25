@@ -20,7 +20,7 @@ import { useQueryClient } from '@tanstack/react-query';
 const MAX_SIDEBAR_WIDTH = dimensions.navigationBar.max;
 const MIN_SIDEBAR_WIDTH = dimensions.navigationBar.min;
 const sidebarWidthFromLS =
-  (JSON.parse(localStorage.getItem(STORAGE_KEYS.SIDEBAR_WIDTH) || '""') as number) ?? dimensions.navigationBar.default;
+  (JSON.parse(localStorage.getItem(STORAGE_KEYS.SIDEBAR_WIDTH) || '""') as number) || dimensions.navigationBar.default;
 
 export default function Sidebar() {
   const dispatch = useAppDispatch();
@@ -71,8 +71,6 @@ export default function Sidebar() {
     },
     [activeHotkeyIds]
   );
-
-  // setUserSettingsData(isMouseUp, key, { ...userSettingsData, sidebarWidth: size, isFavoritePinned }, resolution);
 
   useEffect(() => {
     const { isAllow, allowedSize } = isAllowIncreaseWidth(size, extendedSidebarWidth);

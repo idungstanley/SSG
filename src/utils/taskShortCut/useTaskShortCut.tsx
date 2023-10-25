@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, startTransition, useEffect } from 'react';
+import { Dispatch, SetStateAction, startTransition, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -14,7 +14,6 @@ import { setActiveTabId, setShowExtendedBar } from '../../features/workspace/wor
 export default function useTaskShortCut() {
   const { preferenceState, userSettingsProfile } = useAppSelector((state) => state.task);
   const { currentWorkspaceId } = useAppSelector((state) => state.auth);
-  const { showExtendedBar } = useAppSelector((state) => state.workspace);
 
   const dispatch = useAppDispatch();
 

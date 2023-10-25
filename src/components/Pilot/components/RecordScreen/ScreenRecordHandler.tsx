@@ -56,7 +56,7 @@ export function useScreenRecorder() {
       recorder.start();
       return { recorder, combinedStream: stream };
     } catch (error) {
-      console.error('Error starting screen recording:', error);
+      return error;
     }
   };
 

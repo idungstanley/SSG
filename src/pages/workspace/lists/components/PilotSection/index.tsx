@@ -17,7 +17,6 @@ import Checklists from '../../../../../components/Pilot/components/Checklist/Che
 import { VscChecklist } from 'react-icons/vsc';
 import Details from '../../../../../components/Pilot/components/details/Details';
 import TimeClock from './TimeClock/index';
-import hubIcon from '../../../../../assets/branding/hub.svg';
 import HubManager from '../../../../../components/Pilot/components/HubManager/HubManager';
 import TemplatesIcon from '../../../../../assets/icons/Templates';
 import Templates from '../../../../../components/Pilot/components/Templates';

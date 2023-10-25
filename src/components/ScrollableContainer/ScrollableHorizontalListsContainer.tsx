@@ -43,7 +43,6 @@ export function ScrollableHorizontalListsContainer({
 
   const handleTrackClick = useCallback(
     (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-      e.preventDefault();
       e.stopPropagation();
       const { current: trackCurrent } = scrollTrackRef;
       const { current: contentCurrent } = contentRef;

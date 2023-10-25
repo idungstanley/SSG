@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 interface ChevronProps {
   onToggle: VoidFunction;
@@ -8,11 +8,9 @@ interface ChevronProps {
   iconColor?: string;
 }
 // eslint-disable-next-line react/display-name
-export default function CollapseIcon({ onToggle, active, color, hoverBg, iconColor }: ChevronProps) {
-  const [isHovered, setIsHovered] = useState(false);
-
+export default function CollapseIcon({ onToggle, active, color }: ChevronProps) {
   return (
-    <div onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)} onClick={onToggle}>
+    <div onClick={onToggle}>
       {active ? (
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path
