@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import moment from 'moment';
 import CustomReference from '../customReference/CustomReference';
 import EntitySettings from '../entitySettings/EntitySettings';
@@ -22,7 +22,6 @@ import { useParams } from 'react-router-dom';
 import { IWalletDetails } from '../../../../../../features/wallet/wallet.interfaces';
 import PlusIcon from '../../../../../../assets/icons/PlusIcon';
 import ReactMarkDown from 'react-markdown';
-import { VerticalScroll } from '../../../../../ScrollableContainer/VerticalScroll';
 import { useAppSelector } from '../../../../../../app/hooks';
 import FileIcons from '../../../../../Views/ui/Table/CustomField/Files/FileIcon';
 
@@ -42,7 +41,6 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
   const [editingDescription, setEditingDescription] = useState(false);
   const [title, setTitle] = useState<string>(Details?.name as string);
   const [description, setDescription] = useState<string>(Details?.description ?? '');
-  const [serviceFire, setServiceFire] = useState<boolean>(false);
   const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
 
   const { hubId, walletId, listId, taskId } = useParams();
@@ -50,9 +48,6 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
   const editTaskMutation = useMutation(UseUpdateTaskService, {
     onSuccess: () => {
       queryClient.invalidateQueries(['task']);
-    },
-    onError: () => {
-      console.log('stanley gg');
     }
   });
 
@@ -92,12 +87,40 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
     // const sanitizedDescription = DOMPurify.sanitize(value);
     setDescription(value);
   };
-  const handleSubmit = async () => {
+
+  const handleDetailsSubmit = async (
+    e: React.FormEvent<HTMLFormElement> | React.FocusEvent<HTMLInputElement | HTMLTextAreaElement, Element>
+  ) => {
+    e.preventDefault();
+    handleBlur();
     try {
-      await handleBlur();
-      await setServiceFire(true);
+      if (taskId != undefined) {
+        await editTaskMutation.mutateAsync({
+          name: title,
+          task_id: taskId,
+          description
+        });
+      } else if (walletId != undefined) {
+        await editWalletMutation.mutateAsync({
+          walletName: title,
+          walletId: Details?.id,
+          description
+        });
+      } else if (listId != undefined) {
+        await editListMutation.mutateAsync({
+          listName: title,
+          listId: Details?.id,
+          description
+        });
+      } else if (hubId) {
+        await editHubMutation.mutateAsync({
+          name: title,
+          hubId: Details?.id,
+          description
+        });
+      }
     } catch {
-      console.log('stanley');
+      return;
     }
   };
 
@@ -107,34 +130,6 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
       .map((line, index) => (index === 0 ? line : `\n\n ${line}`))
       .join('');
   };
-
-  useEffect(() => {
-    if (taskId != undefined && serviceFire) {
-      editTaskMutation.mutateAsync({
-        name: title,
-        task_id: taskId,
-        description
-      });
-    } else if (walletId != undefined && serviceFire) {
-      editWalletMutation.mutateAsync({
-        walletName: title,
-        walletId: Details?.id,
-        description
-      });
-    } else if (listId != undefined && serviceFire) {
-      editListMutation.mutateAsync({
-        listName: title,
-        listId: Details?.id,
-        description
-      });
-    } else if (hubId && serviceFire) {
-      editHubMutation.mutateAsync({
-        name: title,
-        hubId: Details?.id,
-        description
-      });
-    }
-  }, [serviceFire]);
 
   return (
     <>
@@ -183,18 +178,18 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
           <label className="text-xs text-gray-500">Title</label>
           <div className="p-1 bg-gray-100 border border-white rounded-md cursor-text">
             {editingTitle ? (
-              <form onSubmit={handleSubmit}>
+              <form onSubmit={(e) => handleDetailsSubmit(e)}>
                 <input
                   type="text"
                   value={title}
                   onChange={handleTitleChange}
-                  onBlur={handleBlur}
+                  onBlur={(e) => handleDetailsSubmit(e)}
                   autoFocus
-                  className="w-full bg-transparent border-none rounded-md outline-none focus:outline-none"
+                  className="w-full bg-transparent border-none rounded-md outline-none focus:outline-none h-fit"
                 />
               </form>
             ) : (
-              <p className="capitalize" onClick={() => setEditingTitle(true)}>
+              <p className="p-1 capitalize break-words " onClick={() => setEditingTitle(true)}>
                 {title}
               </p>
             )}
@@ -213,7 +208,7 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
                   autoFocus
                   onChange={(e) => handleDescriptionChange(e.target.value)}
                   value={description}
-                  onBlur={handleSubmit}
+                  onBlur={(e) => handleDetailsSubmit(e)}
                   className="w-full h-20 font-semibold border-none rounded-md text-alsoit-gray-200 focus:ring-1 focus:ring-alsoit-gray-75 text-alsoit-text-lg bg-alsoit-gray-50"
                 ></textarea>
               </div>
