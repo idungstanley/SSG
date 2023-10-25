@@ -9,6 +9,8 @@ const SPECIAL_KEYS: Partial<FilterKey>[] = ['assignees', 'tags', ...DATE_KEYS];
 
 const getValues = (values: FilterValue[]) => values.map((i) => (isString(i) ? i : i.id));
 
+// function generateFilterValues(params: type) {}
+
 const getKey = (i: string) => i.split(SPECIAL_CHAR)[1] ?? i.split(SPECIAL_CHAR)[0];
 
 const EQ = 'eq';
@@ -18,7 +20,7 @@ export const generateFilters = () => {
     filters: { fields: filters, option: op }
   } = useAppSelector((state) => state.task);
 
-  const assignee = filters.find((i) => i.key === 'assignees');
+  const assignee = filters.filter((i) => i.key === 'assignees');
   const tags = filters.find((i) => i.key === 'tags');
 
   const dates = filters.filter((i) => DATE_KEYS.includes(i.key));
@@ -28,12 +30,6 @@ export const generateFilters = () => {
   return {
     filters: {
       op,
-      assignees:
-        assignee && assignee.operator.key === EQ
-          ? assignee.values.length
-            ? getValues(assignee.values)
-            : assignee.operator.key
-          : null,
       fields: [
         tags
           ? {
@@ -42,6 +38,12 @@ export const generateFilters = () => {
               values: tags.values.length ? getValues(tags.values) : null
             }
           : null,
+
+        ...assignee.map((i) => ({
+          field: 'assignee',
+          op: i.operator.key,
+          values: i.values.length ? getValues(i.values) : null
+        })),
 
         ...dates.map((i) => ({
           field: i.key,
