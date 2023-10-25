@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import requestNew from '../../app/requestNew';
 import { IHubReq, IFavoritesRes, IHubDetailRes, IHubsRes, IHub } from './hubs.interfaces';
-import { closeMenu, setShowFavEditInput, setSpaceStatuses, setTriggerFavUpdate } from './hubSlice';
+import { closeMenu, setShowFavEditInput, setSpaceStatuses, setSpaceViews, setTriggerFavUpdate } from './hubSlice';
 import { setArchiveHub } from './hubSlice';
 import { generateFilters } from '../../components/TasksHeader/lib/generateFilters';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
@@ -257,6 +257,8 @@ export const UseGetHubDetails = (query: {
         if (query.activeItemType === 'hub' || query.activeItemType === 'subhub') {
           dispatch(setSpaceStatuses(data.data.hub.task_statuses));
         }
+        const listViews = data.data.hub.task_views;
+        dispatch(setSpaceViews(listViews));
       },
       cacheTime: 0
     }

@@ -136,6 +136,7 @@ export interface IRecorderLastMemory {
   listId: string | undefined;
   taskId: string | undefined;
   workSpaceId: string | undefined;
+  viewId: string | undefined;
 }
 
 export interface ITimerLastMemory {
@@ -145,6 +146,7 @@ export interface ITimerLastMemory {
   listId: string | undefined | null;
   taskId: string | undefined | null;
   workSpaceId: string | undefined;
+  viewId: string | undefined;
 }
 
 export interface WorkSpaceSettingsRes {

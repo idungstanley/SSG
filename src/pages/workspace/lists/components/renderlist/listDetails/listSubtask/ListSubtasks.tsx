@@ -9,6 +9,7 @@ import {
   setToggleAllSubtaskSplit
 } from '../../../../../../../features/task/taskSlice';
 import ArrowDownFilled from '../../../../../../../assets/icons/ArrowDownFilled';
+import ArrowDrop from '../../../../../../../assets/icons/ArrowDrop';
 
 export const COLLAPSE_ALL_TWO = 'collapse_all_two';
 export const COLLAPSE_ALL_THREE = 'collapse_all_three';
@@ -131,10 +132,10 @@ export default function ListSubtasks({ subtasksTitle }: { subtasksTitle: string 
             <Menu.Button>
               <Button active={toggleAllSubtask}>
                 <SubtaskIcon color={toggleAllSubtask ? '#BF01FE' : '#424242'} />
-                <span className="mr-2 whitespace-nowrap">
+                <span className="whitespace-nowrap">
                   {subtasksTitle}: {activeLabel}
                 </span>
-                <ArrowDownFilled active={toggleAllSubtask} />
+                <ArrowDrop color={toggleAllSubtask ? '#BF01FE' : '#424242'} />
               </Button>
             </Menu.Button>
           </div>
