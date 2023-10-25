@@ -6,7 +6,7 @@ import Header from './Header';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import AddFileModal from '../../../components/Pilot/components/details/properties/attachments/AddFileModal';
 import { InvalidateQueryFilters, useMutation, useQueryClient } from '@tanstack/react-query';
-import { switchWorkspaceService, useGetColors, useGetUserSettingsKeys } from '../../../features/account/accountService';
+import { switchWorkspaceService, useGetColors } from '../../../features/account/accountService';
 import { selectCurrentUser, setCurrentWorkspace, switchWorkspace } from '../../../features/auth/authSlice';
 import { setMyWorkspacesSlideOverVisibility } from '../../../features/general/slideOver/slideOverSlice';
 import { useEffect, useState } from 'react';
@@ -14,22 +14,16 @@ import DragContext from './DragContext/DragContext';
 import { Toaster } from 'react-hot-toast';
 import Favorites from '../../../pages/workspace/favorites';
 import UploadToFile from '../../../components/Views/ui/Table/CustomField/Files/UploadToFileField';
-import useResolution from '../../../hooks/useResolution';
-import { STORAGE_KEYS, dimensions } from '../../../app/config/dimensions';
-import { SetUserSettingsStore } from '../../../features/account/accountSlice';
-import { setActiveHotkeyIds } from '../../../features/workspace/workspaceSlice';
 import TaskShortCutModal from '../../../utils/taskShortCut/TaskShortCutModal';
 import useTaskShortCut from '../../../utils/taskShortCut/useTaskShortCut';
 
 function MainLayout() {
-  const key = 'sidebar';
   const location = useLocation();
   const navigate = useNavigate();
   const { workSpaceId } = useParams();
   const { fileUploadProps } = useAppSelector((state) => state.task);
   const queryClient = useQueryClient();
   const dispatch = useAppDispatch();
-  const resolution = useResolution();
 
   const { currentWorkspaceId } = useAppSelector((state) => state.auth);
   const { userSettingsData } = useAppSelector((state) => state.account);
