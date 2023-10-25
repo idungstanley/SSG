@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import requestNew from '../../app/requestNew';
 import { useDispatch } from 'react-redux';
 import { setArchiveList } from './listSlice';
-import { closeMenu, setSpaceStatuses } from '../hubs/hubSlice';
+import { closeMenu, setSpaceStatuses, setSpaceViews } from '../hubs/hubSlice';
 import { IField, IListDetailRes, taskCountFields } from './list.interfaces';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { useParams } from 'react-router-dom';
@@ -187,7 +187,7 @@ export const UseArchiveListService = (list: { query: string | undefined | null; 
 export const UseGetListDetails = (listId: string | null | undefined) => {
   const dispatch = useAppDispatch();
 
-  const { activeItemType, activeItemId } = useAppSelector((state) => state.workspace);
+  const { activeItemId } = useAppSelector((state) => state.workspace);
   const id = activeItemId === 'list' ? activeItemId : listId;
   return useQuery(
     ['hubs', { listId, id }],
@@ -202,9 +202,9 @@ export const UseGetListDetails = (listId: string | null | undefined) => {
       enabled: !!listId || !!id,
       onSuccess: (data) => {
         const listStatusTypes = data.data.list.task_statuses;
-        if (activeItemType === 'list') {
-          dispatch(setSpaceStatuses(listStatusTypes));
-        }
+        const listViews = data.data.list.task_views;
+        dispatch(setSpaceStatuses(listStatusTypes));
+        dispatch(setSpaceViews(listViews));
       },
       cacheTime: 0
     }

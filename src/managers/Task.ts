@@ -144,6 +144,28 @@ export const taskDateUpdateManager = (
   return tasks;
 };
 
+export const taskColourManager = (listId: string, tasks: Record<string, ITaskFullList[]>, color: string) => {
+  if (listId) {
+    // eslint-disable-next-line
+    const updatedTasks = { ...tasks };
+
+    updatedTasks[listId] = updatedTasks[listId].map((task) => {
+      if (listId === task.list_id) {
+        const list = { ...task?.list, color: color };
+        const updatedObj = {
+          ...task,
+          list
+        } as ITaskFullList;
+
+        return updatedObj;
+      }
+      return task;
+    });
+    return updatedTasks;
+  }
+  return tasks;
+};
+
 export const deleteTaskManager = (taskIds: string[], listIds: string[], tasks: Record<string, ITaskFullList[]>) => {
   if (listIds.length) {
     const updatedTasks: Record<string, ITaskFullList[]> = { ...tasks };

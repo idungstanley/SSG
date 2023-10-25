@@ -26,11 +26,11 @@ export default function SubHubList({ hubs, placeHubType }: ListProps) {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const { showExtendedBar, openedEntitiesIds } = useAppSelector((state) => state.workspace);
+  const { showExtendedBar, openedEntitiesIds, activeView } = useAppSelector((state) => state.workspace);
   const { showSidebar } = useAppSelector((state) => state.account);
 
   const handleLocation = (id: string, name: string, item: IHub) => {
-    const viewsUrl = generateViewsUrl(id, item, EntityType.hub) as string;
+    const viewsUrl = generateViewsUrl(id, activeView?.id as string, item, EntityType.hub) as string;
     if (openedEntitiesIds.includes(id)) {
       dispatch(setOpenedEntitiesIds(openedEntitiesIds.filter((item) => item !== id)));
     } else {

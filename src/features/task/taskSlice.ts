@@ -24,7 +24,7 @@ import {
 } from '../../components/TasksHeader/ui/Filter/types/filters';
 import { DEFAULT_FILTERS_OPTION } from '../../components/TasksHeader/ui/Filter/config/filterConfig';
 import { ITeamMembersAndGroup } from '../settings/teamMembersAndGroups.interfaces';
-import { ItaskViews } from '../hubs/hubs.interfaces';
+import { IView } from '../hubs/hubs.interfaces';
 
 export interface ICustomField {
   id: string;
@@ -174,10 +174,8 @@ interface TaskState {
   selectedTasksArray: string[];
   selectedIndexListId: string | null;
   saveSettingLocal: { [key: string]: boolean } | null;
-  saveSettingList: ItaskViews | undefined;
+  saveSettingList: IView | undefined;
   saveSettingOnline: { [key: string]: boolean } | null;
-  comfortableView: boolean;
-  comfortableViewWrap: boolean;
   duplicateTaskObj: IDuplicateTaskObj;
   currentSelectedDuplicateArr: string[];
   verticalGrid: boolean;
@@ -195,14 +193,13 @@ interface TaskState {
   verticalGridlinesTask: boolean;
   splitSubTaskState: boolean;
   splitSubTaskLevels: string[];
-  CompactViewWrap: boolean;
   triggerSaveSettings: boolean;
   triggerAutoSave: boolean;
   triggerSaveSettingsModal: boolean;
   meMode: boolean;
   autoSave: boolean;
   showTaskNavigation: boolean;
-  assignOnHoverTaskId: string;
+  assignOnHoverTask: Task | string;
   assignOnHoverListId: string;
   assignOnHoverState: boolean;
   f2State: boolean;
@@ -293,8 +290,6 @@ const initialState: TaskState = {
   taskColumns: [],
   hideTask: [],
   currentTaskId: null,
-  comfortableView: true,
-  comfortableViewWrap: false,
   showNewTaskField: false,
   meMode: false,
   escapeKey: false,
@@ -330,9 +325,8 @@ const initialState: TaskState = {
   splitSubTaskLevels: [],
   separateSubtasksMode: false,
   CompactView: false,
-  CompactViewWrap: false,
   showTaskNavigation: false,
-  assignOnHoverTaskId: '',
+  assignOnHoverTask: '',
   assignOnHoverListId: '',
   assignOnHoverState: false,
   f2State: false,
@@ -479,7 +473,7 @@ export const taskSlice = createSlice({
     setSaveSettingLocal(state, action: PayloadAction<{ [key: string]: boolean } | null>) {
       state.saveSettingLocal = action.payload;
     },
-    setSaveSettingList(state, action: PayloadAction<ItaskViews | undefined>) {
+    setSaveSettingList(state, action: PayloadAction<IView | undefined>) {
       state.saveSettingList = action.payload;
     },
     setSaveSettingOnline(state, action: PayloadAction<{ [key: string]: boolean } | null>) {
@@ -539,9 +533,6 @@ export const taskSlice = createSlice({
             })
       };
     },
-    getComfortableView(state, action: PayloadAction<boolean>) {
-      state.comfortableView = action.payload;
-    },
     setTriggerSaveSettings(state, action: PayloadAction<boolean>) {
       state.triggerSaveSettings = action.payload;
     },
@@ -553,9 +544,6 @@ export const taskSlice = createSlice({
     },
     setDragToBecomeSubTask(state, action: PayloadAction<boolean>) {
       state.dragToBecomeSubTask = action.payload;
-    },
-    getComfortableViewWrap(state, action: PayloadAction<boolean>) {
-      state.comfortableViewWrap = action.payload;
     },
     getCompactView(state, action: PayloadAction<boolean>) {
       state.CompactView = action.payload;
@@ -589,8 +577,8 @@ export const taskSlice = createSlice({
     setNewTaskPriority(state, action: PayloadAction<string>) {
       state.newTaskPriority = action.payload;
     },
-    setAssignOnHoverTaskId(state, action: PayloadAction<string>) {
-      state.assignOnHoverTaskId = action.payload;
+    setAssignOnHoverTask(state, action: PayloadAction<string | Task>) {
+      state.assignOnHoverTask = action.payload;
     },
     setAssignOnHoverListId(state, action: PayloadAction<string>) {
       state.assignOnHoverListId = action.payload;
@@ -624,9 +612,6 @@ export const taskSlice = createSlice({
     },
     getVerticalGrid(state, action: PayloadAction<boolean>) {
       state.verticalGrid = action.payload;
-    },
-    getCompactViewWrap(state, action: PayloadAction<boolean>) {
-      state.CompactViewWrap = action.payload;
     },
     setAddNewTaskItem(state, action: PayloadAction<boolean>) {
       state.addNewTaskItem = action.payload;
@@ -800,8 +785,6 @@ export const {
   setHilightNewlyCreatedTask,
   setCopyNewlyCreatedTask,
   getTaskColumns,
-  getComfortableView,
-  getComfortableViewWrap,
   getVerticalGrid,
   setPreferenceState,
   setUserSettingsProfile,
@@ -813,7 +796,6 @@ export const {
   getSplitSubTask,
   getSplitSubTaskLevels,
   getCompactView,
-  getCompactViewWrap,
   setSelectedIndex,
   setSelectedIndexStatus,
   setSelectedListIds,
@@ -844,7 +826,7 @@ export const {
   setGetSubTaskId,
   hideTaskColumns,
   setSubtaskDefaultStatusId,
-  setAssignOnHoverTaskId,
+  setAssignOnHoverTask,
   setAssignOnHoverListId,
   setAssignOnHoverState,
   setF2State,

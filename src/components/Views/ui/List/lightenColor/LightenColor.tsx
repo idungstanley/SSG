@@ -1,4 +1,3 @@
-import React from 'react';
 import colorNames from 'color-name-list';
 import { CommonColors } from './CommonColors';
 

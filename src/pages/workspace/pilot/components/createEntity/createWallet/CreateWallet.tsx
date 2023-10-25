@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Checkbox, Input } from '../../../../../../components';
+import { Button, Input } from '../../../../../../components';
 import { useMutation } from '@tanstack/react-query';
 import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
 import {
@@ -16,9 +16,7 @@ import {
   setShowOverlay
 } from '../../../../../../features/workspace/workspaceSlice';
 import { EntityType } from '../../../../../../utils/EntityTypes/EntityType';
-import ArrowDown from '../../../../../../assets/icons/ArrowDown';
 import Wand from '../../../../../../assets/icons/Wand';
-import Assignee from '../../../../tasks/assignTask/Assignee';
 import { ListColourProps } from '../../../../../../components/tasks/ListItem';
 import { createWalletManager } from '../../../../../../managers/Wallet';
 import { setFilteredResults } from '../../../../../../features/search/searchSlice';

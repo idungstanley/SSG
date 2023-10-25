@@ -1,12 +1,12 @@
 import { useState, useEffect, UIEvent } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import {
   UseUpdateTaskViewSettings,
   getTaskListService,
   useUpdateSubtaskFilters
 } from '../../features/task/taskService';
-import { setActiveItem } from '../../features/workspace/workspaceSlice';
+import { setActiveItem, setActiveView } from '../../features/workspace/workspaceSlice';
 import { UseGetListDetails } from '../../features/list/listService';
 import PilotSection, { pilotConfig } from '../workspace/lists/components/PilotSection';
 import Page from '../../components/Page';
@@ -19,16 +19,19 @@ import TaskQuickAction from '../workspace/tasks/component/taskQuickActions/TaskQ
 import { List } from '../../components/Views/ui/List/List';
 import { Header } from '../../components/TasksHeader';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
-import { ITaskFullList, Task } from '../../features/task/interface.tasks';
+import { ITaskFullList } from '../../features/task/interface.tasks';
 import { useformatSettings } from '../workspace/tasks/TaskSettingsModal/ShowSettingsModal/FormatSettings';
 import { IListDetailRes, IListDetails } from '../../features/list/list.interfaces';
 import { VerticalScroll } from '../../components/ScrollableContainer/VerticalScroll';
 import { generateSubtasksList } from '../../utils/generateLists';
-import { deaultTaskTemplate } from '../../components/Views/ui/Table/newTaskTemplate/DefaultTemplate';
+import { generateUrlWithViewId } from '../../app/helpers';
+import { IView } from '../../features/hubs/hubs.interfaces';
+import { defaultTaskTemplate } from '../../components/Views/ui/Table/newTaskTemplate/DefaultTemplate';
 
 export function ListPage() {
   const dispatch = useAppDispatch();
   const { listId, taskId } = useParams();
+  const navigate = useNavigate();
 
   const {
     tasks: tasksStore,
@@ -76,6 +79,12 @@ export function ListPage() {
   useEffect(() => {
     if (listDetails) {
       setListDetailsFromRes(listDetails);
+      const currentView = listDetails?.data.list.task_views.find(
+        (view) => view.type === EntityType.list && view.is_required
+      );
+      const newUrl = generateUrlWithViewId(currentView?.id as string);
+      dispatch(setActiveView(currentView as IView));
+      navigate(newUrl);
     }
   }, [listDetails]);
 
@@ -196,12 +205,12 @@ export function ListPage() {
           <VerticalScroll onScroll={onScroll}>
             {/* main content */}
             <section style={{ minHeight: '0', maxHeight: '83vh' }} className="w-full h-full p-4 pb-0 space-y-10">
-              <TaskQuickAction listDetailsData={listName} />
+              <TaskQuickAction />
 
               {tasksStore[listId as string] && tasksFromRes.length ? (
                 <List tasks={tasksStore[listId as string]} />
               ) : (
-                <List tasks={deaultTaskTemplate} />
+                <List tasks={defaultTaskTemplate} />
               )}
             </section>
           </VerticalScroll>

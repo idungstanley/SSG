@@ -15,7 +15,7 @@ import {
   THREE_SUBTASKS_LEVELS,
   TWO_SUBTASKS_LEVELS,
   setAssignOnHoverListId,
-  setAssignOnHoverTaskId,
+  setAssignOnHoverTask,
   setDefaultSubtaskId,
   setShowNewTaskField,
   setShowNewTaskId
@@ -137,11 +137,11 @@ export function Row({
         style={style}
         className="relative contents group dNFlex"
         onMouseEnter={() => {
-          dispatch(setAssignOnHoverTaskId(task.id));
+          dispatch(setAssignOnHoverTask(task));
           dispatch(setAssignOnHoverListId(task.list_id ?? task.parent_id));
         }}
         onMouseLeave={() => {
-          dispatch(setAssignOnHoverTaskId(''));
+          dispatch(setAssignOnHoverTask(''));
         }}
       >
         <StickyCol
@@ -156,7 +156,6 @@ export function Row({
           onClose={handleClose as VoidFunction}
           paddingLeft={paddingLeft}
           tags={'tags' in task ? <TaskTag tags={task.tags} entity_id={task.id} entity_type="task" /> : null}
-          isLastSubtaskLevel={level >= MAX_SUBTASKS_LEVEL}
           isBlockedShowChildren={isBlockedShowChildren}
           dragElement={
             <div ref={setNodeRef} {...listeners} {...attributes}>
@@ -202,7 +201,7 @@ export function Row({
             ) : null}
 
             {/* show create subtask field */}
-            {task.descendants_count < 1 && (
+            {task.descendants_count < 1 && level < MAX_SUBTASKS_LEVEL && (
               <ToolTip title="Subtask">
                 <button
                   className="p-1 bg-white border rounded-md opacity-0 group-hover:opacity-100"

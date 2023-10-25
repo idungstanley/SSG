@@ -162,10 +162,10 @@ export interface ITaskFullList {
   checklists?: ICheckListRes[];
   listColor?: unknown;
   list?: {
-    id: string;
-    name: string;
-    parents?: IParent;
-    color?: string;
+    color: string;
+    id?: string | undefined;
+    name?: string | undefined;
+    parents?: IParent | undefined;
   };
 }
 

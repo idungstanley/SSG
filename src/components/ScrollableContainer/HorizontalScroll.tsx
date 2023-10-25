@@ -14,9 +14,21 @@ export function HorizontalScroll({ children, ...props }: CustomScrollableContain
 
   // update size is pilot is visible / invisible
   const { show: showFullPilot } = useAppSelector((state) => state.slideOver.pilotSideOver);
-  const { showMore, currentItemId, showTabLabel, isResize, activeItemId, activePlaceId } = useAppSelector(
-    (state) => state.workspace
-  );
+  const { tasks, subtasks } = useAppSelector((state) => state.task);
+  const {
+    showMore,
+    currentItemId,
+    activeTabId,
+    activeSubDetailsTabId,
+    activeSubTimeClockTabId,
+    activeSubHubManagerTabId,
+    activeSubCommunicationTabId,
+    showTabLabel,
+    isResize,
+    activeItemId,
+    activePlaceId
+  } = useAppSelector((state) => state.workspace);
+  const { sidebarWidth, pilotWidth, extendedBarWidth } = useAppSelector((state) => state.account);
 
   const [thumbWidth, setThumbWidth] = useState(DEFAULT_THUMB_WIDTH);
   const [isThumbVisible, setIsThumbVisible] = useState(true);
@@ -85,7 +97,6 @@ export function HorizontalScroll({ children, ...props }: CustomScrollableContain
 
   const handleThumbMousemove = useCallback(
     (e: MouseEvent) => {
-      e.preventDefault();
       e.stopPropagation();
       if (isDragging && contentRef.current && scrollStartPosition) {
         const { scrollWidth: contentWidth, offsetWidth: contentOffsetWidth } = contentRef.current;
@@ -156,7 +167,18 @@ export function HorizontalScroll({ children, ...props }: CustomScrollableContain
     showMore,
     currentItemId,
     activeItemId,
-    activePlaceId
+    activePlaceId,
+    activeTabId,
+    activeSubDetailsTabId,
+    activeSubTimeClockTabId,
+    activeSubHubManagerTabId,
+    activeSubCommunicationTabId,
+    tasks,
+    subtasks,
+    thumbWidth,
+    sidebarWidth,
+    pilotWidth,
+    extendedBarWidth
   ]);
 
   // Listen for mouse events to handle scrolling by dragging the thumb

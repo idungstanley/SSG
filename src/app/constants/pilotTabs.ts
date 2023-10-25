@@ -8,6 +8,7 @@ export const pilotTabs = {
   CHECKLISTS: 'checklists',
   SCREEN_RECORD: 'screen_record',
   ENTITY_MANAGER: 'entity_manager',
+  VIEWS: 'views',
   TEMPLATES: 'templates',
   CALENDAR: 'calendar',
   PROPERTIES: 'properties',

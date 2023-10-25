@@ -49,7 +49,6 @@ interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   parentId?: string;
   onClose?: VoidFunction;
   isOver?: boolean;
-  isLastSubtaskLevel: boolean;
   isBlockedShowChildren?: boolean;
 }
 
@@ -76,6 +75,7 @@ export function StickyCol({
 
   const { currentWorkspaceId } = useAppSelector((state) => state.auth);
   const { dragOverItemId, draggableItemId } = useAppSelector((state) => state.list);
+  const { activeView } = useAppSelector((state) => state.workspace);
   const {
     currTeamMemberId,
     verticalGrid,
@@ -91,7 +91,7 @@ export function StickyCol({
     separateSubtasksMode,
     newTaskPriority,
     f2State,
-    assignOnHoverTaskId
+    assignOnHoverTask
   } = useAppSelector((state) => state.task);
 
   const [isChecked, setIsChecked] = useState(false);
@@ -107,12 +107,14 @@ export function StickyCol({
   const onClickTask = () => {
     if (task.id !== '0') {
       hubId
-        ? navigate(`/${currentWorkspaceId}/tasks/h/${hubId}/t/${task.id}`, { replace: true })
+        ? navigate(`/${currentWorkspaceId}/tasks/h/${hubId}/t/${task.id}/v/${activeView?.id}`, { replace: true })
         : subhubId
-        ? navigate(`/${currentWorkspaceId}/tasks/sh/${subhubId}/t/${task.id}`, { replace: true })
+        ? navigate(`/${currentWorkspaceId}/tasks/sh/${subhubId}/t/${task.id}/v/${activeView?.id}`, { replace: true })
         : walletId
-        ? navigate(`/${currentWorkspaceId}/tasks/w/${walletId}/t/${task.id}`, { replace: true })
-        : navigate(`/${currentWorkspaceId}/tasks/l/${listId || task.list_id}/t/${task.id}`, { replace: true });
+        ? navigate(`/${currentWorkspaceId}/tasks/w/${walletId}/t/${task.id}/v/${activeView?.id}`, { replace: true })
+        : navigate(`/${currentWorkspaceId}/tasks/l/${listId || task.list_id}/t/${task.id}/v/${activeView?.id}`, {
+            replace: true
+          });
       dispatch(
         setShowPilotSideOver({
           id: task.id,
@@ -200,7 +202,7 @@ export function StickyCol({
   }, [eitableContent]);
 
   useEffect(() => {
-    if (f2State && assignOnHoverTaskId === task.id) {
+    if (f2State && (assignOnHoverTask as Task).id === task.id) {
       setEitableContent(true);
     }
   }, [f2State]);

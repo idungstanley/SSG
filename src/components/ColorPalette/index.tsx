@@ -35,6 +35,8 @@ import AlsoitMenuDropdown from '../DropDowns';
 import ListIconSelection, { listIconDetails } from './component/ListIconSelection';
 import AdvanceColourPalette from './component/AdvanceColourPalette';
 import { CgSortAz } from 'react-icons/cg';
+import { taskColourManager } from '../../managers/Task';
+import { setTasks } from '../../features/task/taskSlice';
 
 interface PaletteProps {
   title?: string;
@@ -71,6 +73,7 @@ export default function PaletteManager({
 
   const { paletteDropdown } = useAppSelector((state) => state.account);
   const { hub } = useAppSelector((state) => state.hub);
+  const { tasks } = useAppSelector((state) => state.task);
   const { selectListColours, colourPaletteData } = useAppSelector((state) => state.account);
 
   const [open, setOpen] = useState<boolean>(true);
@@ -136,8 +139,11 @@ export default function PaletteManager({
 
   const editListColorMutation = useMutation(UseEditListService, {
     onSuccess: (data) => {
+      const updatedTasks = taskColourManager(data.data.list.id, tasks, data.data.list.color);
+
       const list = data.data.list;
       const updatedTree = changeListManager(list.id as string, hub, list);
+      dispatch(setTasks(updatedTasks));
       dispatch(getHub(updatedTree));
       dispatch(setFilteredResults(updatedTree));
     }

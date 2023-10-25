@@ -16,7 +16,7 @@ function findInChildren(hubs: Hub[], id: string, type: string, func: <T>(item: T
     if (newHubsArray[i].wallets.length) {
       newHubsArray[i] = {
         ...newHubsArray[i],
-        wallets: findInWallets(newHubsArray[i].wallets, id, type, func)!
+        wallets: findInWallets(newHubsArray[i].wallets, id, type, func)
       };
     }
   }
@@ -86,13 +86,13 @@ export function findCurrentEntity(type: string, id: string, hubs: Hub[], func: <
     if (newHubsArray[i]?.children?.length) {
       newHubsArray[i] = {
         ...newHubsArray[i],
-        children: findInChildren(newHubsArray[i].children, id, type, func)!
+        children: findInChildren(newHubsArray[i].children, id, type, func)
       };
     }
     if ((type === EntityType.wallet || type === EntityType.list) && newHubsArray[i]?.wallets?.length) {
       newHubsArray[i] = {
         ...newHubsArray[i],
-        wallets: findInWallets(newHubsArray[i].wallets, id, type, func)!
+        wallets: findInWallets(newHubsArray[i].wallets, id, type, func)
       };
     }
     if (type === EntityType.list && newHubsArray[i]?.lists?.length) {

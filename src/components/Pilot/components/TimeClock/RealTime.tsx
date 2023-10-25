@@ -27,7 +27,7 @@ import { timeStringToMilliseconds } from '../../../../utils/TimerDuration';
 export function RealTime() {
   const dispatch = useAppDispatch();
 
-  const { workSpaceId, hubId, subhubId, listId, taskId } = useParams();
+  const { workSpaceId, hubId, subhubId, listId, taskId, viewId } = useParams();
   const { activeItemId, activeItemType, timerLastMemory, activeTabId } = useAppSelector((state) => state.workspace);
   const { duration, timerStatus, estimatedTimeStatus, estimatedDuration, period, timerDetails, timeType } =
     useAppSelector((state) => state.task);
@@ -56,7 +56,7 @@ export function RealTime() {
     dispatch(setTimerStatus(!timerStatus));
     dispatch(setActiveTimeout({ clockLimit: clock_limit, timeoutReminder: clock_stop_reminder }));
     setRunning(true);
-    dispatch(setTimerLastMemory({ workSpaceId, hubId, subhubId, listId, taskId, activeTabId }));
+    dispatch(setTimerLastMemory({ workSpaceId, hubId, subhubId, listId, taskId, activeTabId, viewId }));
   };
 
   const reset = () => {
@@ -161,7 +161,7 @@ export function RealTime() {
   ) {
     return (
       <div className="flex justify-center items-center text-alsoit-text-md w-full tracking-widest relative z-30">
-        <div className="flex w-full -space-x-1.5">
+        <div className="flex w-full">
           <div className="w-1/3 relative flex items-center -space-x-2 cursor-pointer">
             <TotalTimeIcon className="w-4 h-4" />
             <ArrowDownFilled
@@ -233,8 +233,8 @@ export function RealTime() {
   }
   return (
     <div className="flex justify-center items-center text-alsoit-text-md tracking-widest z-30">
-      <div className="flex items-center w-full -space-x-1">
-        <div className="w-1/3 relative flex items-center -space-x-2">
+      <div className="flex items-center w-full">
+        <div className="w-1/3 relative flex items-center">
           {timeType === 'timer' ? <HourGlassIcon className="w-4 h-4" /> : <ClockIcon />}
           <ArrowDownFilled
             className="cursor-pointer"
