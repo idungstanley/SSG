@@ -84,7 +84,6 @@ const calculateWidthForContent = () => {
   ).isPilotMinified as boolean;
 
   const { showSidebar, userSettingsData } = useAppSelector((state) => state.account);
-
   const { show: showFullPilot, id } = useAppSelector((state) => state.slideOver.pilotSideOver);
 
   const { sidebarWidthRD, showExtendedBar } = useAppSelector((state) => state.workspace);

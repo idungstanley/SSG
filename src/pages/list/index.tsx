@@ -19,7 +19,7 @@ import TaskQuickAction from '../workspace/tasks/component/taskQuickActions/TaskQ
 import { List } from '../../components/Views/ui/List/List';
 import { Header } from '../../components/TasksHeader';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
-import { ITaskFullList, Task } from '../../features/task/interface.tasks';
+import { ITaskFullList } from '../../features/task/interface.tasks';
 import { useformatSettings } from '../workspace/tasks/TaskSettingsModal/ShowSettingsModal/FormatSettings';
 import { IListDetailRes, IListDetails } from '../../features/list/list.interfaces';
 import { VerticalScroll } from '../../components/ScrollableContainer/VerticalScroll';
@@ -205,7 +205,7 @@ export function ListPage() {
           <VerticalScroll onScroll={onScroll}>
             {/* main content */}
             <section style={{ minHeight: '0', maxHeight: '83vh' }} className="w-full h-full p-4 pb-0 space-y-10">
-              <TaskQuickAction listDetailsData={listName} />
+              <TaskQuickAction />
 
               {tasksStore[listId as string] && tasksFromRes.length ? (
                 <List tasks={tasksStore[listId as string]} />

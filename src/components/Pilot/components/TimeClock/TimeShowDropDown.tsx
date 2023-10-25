@@ -1,4 +1,4 @@
-import { MouseEvent, useState } from 'react';
+import { useState } from 'react';
 import ArrowRight from '../../../../assets/icons/ArrowRight';
 import { TIME_ENTITY_SHOW_PROPERTY, TIME_TABS } from '../../../../utils/Constants/TimeClockConstants';
 import { TabsDropDown } from './TabsDropDown';
