@@ -24,6 +24,7 @@ import PlusIcon from '../../../../../../assets/icons/PlusIcon';
 import ReactMarkDown from 'react-markdown';
 import { useAppSelector } from '../../../../../../app/hooks';
 import FileIcons from '../../../../../Views/ui/Table/CustomField/Files/FileIcon';
+import { VerticalScroll } from '../../../../../ScrollableContainer/VerticalScroll';
 
 export interface tagItem {
   id: string;
@@ -175,16 +176,18 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
         <div id="entity name">
           <label className="text-xs text-gray-500">Title</label>
           <div className="p-1 bg-gray-100 border border-white rounded-md cursor-text">
-            <p
-              ref={inputRef}
-              className="p-1 capitalize break-words"
-              contentEditable={editingTitle}
-              onKeyDown={(e) => (e.key === 'Enter' ? handleDetailsSubmit(e) : null)}
-              onClick={() => setEditingTitle(true)}
-              onBlur={(e) => handleDetailsSubmit(e)}
-            >
-              {Details?.name}
-            </p>
+            <VerticalScroll>
+              <p
+                ref={inputRef}
+                className="p-1 capitalize break-words max-h-52"
+                contentEditable={editingTitle}
+                onKeyDown={(e) => (e.key === 'Enter' ? handleDetailsSubmit(e) : null)}
+                onClick={() => setEditingTitle(true)}
+                onBlur={(e) => handleDetailsSubmit(e)}
+              >
+                {Details?.name}
+              </p>
+            </VerticalScroll>
           </div>
         </div>
         {/* description */}
