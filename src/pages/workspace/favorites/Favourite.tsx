@@ -49,7 +49,7 @@ function Favourite({ item }: nameType) {
       })
     );
     dispatch(setShowPilot(true));
-    dispatch(setActiveTabId(pilotTabs.WATCHERS));
+    dispatch(setActiveTabId(pilotTabs.DETAILS));
 
     navigate(viewsUrl, {
       replace: true

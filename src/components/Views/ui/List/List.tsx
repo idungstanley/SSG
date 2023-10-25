@@ -121,14 +121,13 @@ export function List({ tasks }: ListProps) {
 
   return (
     <div
-      className="pt-1 border-t-4 border-l-4 border-purple-500 rounded-3xl bg-purple-50 pb-3"
+      className={`pt-1 border-t-4 border-l-4 rounded-tl-3xl  ${!collapseTable && 'rounded-3xl pb-3'}`}
       style={{
         borderColor: ListColor?.outerColour === null ? 'black' : (ListColor?.outerColour as string),
         backgroundColor: LightenColor(
           ListColor?.outerColour === null ? 'black' : (ListColor?.outerColour as string),
           0.95
-        ),
-        overflow: collapseTable ? 'hidden' : 'unset'
+        )
       }}
     >
       <Label

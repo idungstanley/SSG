@@ -68,7 +68,7 @@ const STORAGE_KEYS = {
 };
 
 export const LIMITS = {
-  INPUT_LIMITS: 2000
+  NAME_INPUT_LIMITS: 2000
 };
 
 const calculateWidthForContent = () => {

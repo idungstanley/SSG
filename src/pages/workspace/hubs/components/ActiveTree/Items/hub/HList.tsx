@@ -71,7 +71,7 @@ export default function HList({ hubs, openNewHub, placeHubType }: ListProps) {
       })
     );
     dispatch(setShowPilot(true));
-    dispatch(setActiveTabId(pilotTabs.WATCHERS));
+    dispatch(setActiveTabId(pilotTabs.DETAILS));
     navigate(viewsUrl, {
       replace: true
     });
