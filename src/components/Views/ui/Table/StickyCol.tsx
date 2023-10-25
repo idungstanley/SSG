@@ -34,6 +34,7 @@ import SaveIcon from '../../../../assets/icons/SaveIcon';
 import Close from '../../../../assets/icons/Close';
 import toast from 'react-hot-toast';
 import Toast from '../../../../common/Toast';
+import { LIMITS } from '../../../../app/config/dimensions';
 
 interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   task: Task;
@@ -161,13 +162,13 @@ export function StickyCol({
   const title = 'Limit Exceeded';
   const body = 'The name must not be greater than 2000 characters.';
   useEffect(() => {
-    if (inputContent && inputContent?.length > 2000) {
+    if (inputContent && inputContent?.length > LIMITS.INPUT_LIMITS) {
       toast.custom((t) => <Toast type="error" title={title} body={body} toastId={t.id} />);
     }
   }, [inputContent]);
 
   const onClickSave = () => {
-    if (inputRef.current?.innerText && inputRef.current?.innerText.length <= 2000) {
+    if (inputRef.current?.innerText && inputRef.current?.innerText.length <= LIMITS.INPUT_LIMITS) {
       const name = inputRef.current?.innerText;
 
       onAdd({
@@ -185,7 +186,7 @@ export function StickyCol({
   };
 
   const handleEditTask = async (e: React.KeyboardEvent<HTMLDivElement>, id: string) => {
-    if (inputRef.current?.innerText && inputRef.current?.innerText.length <= 2000) {
+    if (inputRef.current?.innerText && inputRef.current?.innerText.length <= LIMITS.INPUT_LIMITS) {
       e.preventDefault();
       await editTaskMutation.mutateAsync({
         name: inputRef.current?.innerText as string,

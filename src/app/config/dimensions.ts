@@ -67,6 +67,10 @@ const STORAGE_KEYS = {
   HOT_KEYS: 'hotkeys'
 };
 
+export const LIMITS = {
+  INPUT_LIMITS: 2000
+};
+
 const calculateWidthForContent = () => {
   const pilotWidthFromLS =
     (JSON.parse(localStorage.getItem(STORAGE_KEYS.PILOT_WIDTH) || '""') as number) || dimensions.pilot.default;
@@ -79,9 +83,9 @@ const calculateWidthForContent = () => {
     (JSON.parse(localStorage.getItem(STORAGE_KEYS.SIDEBAR_WIDTH) || '""') as number) ||
     dimensions.navigationBar.default;
 
-  const isPilotMinifiedFromLS = (
-    JSON.parse(localStorage.getItem(STORAGE_KEYS.USER_SETTINGS_DATA) || '""') as IUserParams
-  ).isPilotMinified as boolean;
+  const isPilotMinifiedFromLS = (JSON.parse(
+    localStorage.getItem(STORAGE_KEYS.USER_SETTINGS_DATA) || '""'
+  ) as IUserParams).isPilotMinified as boolean;
 
   const { showSidebar, userSettingsData } = useAppSelector((state) => state.account);
   const { show: showFullPilot, id } = useAppSelector((state) => state.slideOver.pilotSideOver);
