@@ -201,7 +201,7 @@ export default function AdditionalHeader({ isInsights }: IAdditionalHeaderProps)
             <img src={headerIcon} alt="" className="w-6 h-6" />
           </p>
           <ToolTip title={activeItemName}>
-            <span className="font-bold truncate w-72 text-alsoit-text-lg">{activeItemName}</span>
+            <span className="font-bold truncate text-alsoit-text-lg">{activeItemName}</span>
           </ToolTip>
         </>
       );
@@ -210,7 +210,7 @@ export default function AdditionalHeader({ isInsights }: IAdditionalHeaderProps)
 
   return (
     <div className="flex items-center justify-between w-full px-4 border-b" style={{ height: '50px' }}>
-      <h1 style={{ height: '50px' }} className="flex items-center ml-4 space-x-3 text-center">
+      <h1 style={{ height: '50px' }} className="w-72 flex items-center ml-4 space-x-3">
         {renderPageTitle()}
       </h1>
       <div className="relative flex items-center justify-center space-x-2.5">

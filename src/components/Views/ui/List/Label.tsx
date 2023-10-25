@@ -79,7 +79,7 @@ export function Label({
         <div className="flex items-center justify-end mr-5">
           <Sort isSplitSubtasks={true} />
           <FilterDropdown isSplitSubtasks={true} parentId={parentId as string} />
-          <AssigneeSplitSubtasks isSplitSubtasks={true} parentId={parentId as string} />
+          <AssigneeSplitSubtasks parentId={parentId as string} />
           <Search isSplitSubtasks={true} parentId={parentId as string} />
         </div>
       ) : null}
