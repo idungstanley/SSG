@@ -2,7 +2,7 @@ import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { HiOutlineUpload } from 'react-icons/hi';
 import { BsFillGrid3X3GapFill } from 'react-icons/bs';
 import { MdHelpOutline, MdTab } from 'react-icons/md';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import BlinkerModal from './RecordBlinkerOptions';
 import headerIcon from '../../../../assets/icons/headerIcon.png';
 import { EndTimeEntriesService, useCurrentTime } from '../../../../features/task/taskService';
@@ -22,7 +22,6 @@ import { runTimer } from '../../../../utils/TimerCounter';
 import { pilotTabs } from '../../../../app/constants/pilotTabs';
 import InsightsIcon from '../../../../assets/icons/InsightsIcon';
 import { StopIcon } from '../../../../assets/icons/StopIcon';
-import { STORAGE_KEYS, dimensions } from '../../../../app/config/dimensions';
 import ToolTip from '../../../../components/Tooltip/Tooltip';
 
 const hoursToMilliseconds = 60 * 60 * 1000;
