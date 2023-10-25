@@ -67,6 +67,10 @@ const STORAGE_KEYS = {
   HOT_KEYS: 'hotkeys'
 };
 
+export const LIMITS = {
+  INPUT_LIMITS: 2000
+};
+
 const calculateWidthForContent = () => {
   const pilotWidthFromLS =
     (JSON.parse(localStorage.getItem(STORAGE_KEYS.PILOT_WIDTH) || '""') as number) || dimensions.pilot.default;
