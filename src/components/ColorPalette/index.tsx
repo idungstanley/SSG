@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { UseEditHubService } from '../../features/hubs/hubService';
 import { UseEditWalletService } from '../../features/wallet/walletService';
@@ -118,7 +118,6 @@ export default function PaletteManager({
     setIsInnerFrameActive((prev) => !prev);
     setIsOutterFrameActive(false);
   };
-  const queryClient = useQueryClient();
 
   const editHubColorMutation = useMutation(UseEditHubService, {
     onSuccess: (data) => {

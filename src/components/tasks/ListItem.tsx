@@ -48,7 +48,7 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
   const { listId } = useParams();
   const queryClient = useQueryClient();
 
-  const { activeItemId } = useAppSelector((state) => state.workspace);
+  const { activeItemId, activeView } = useAppSelector((state) => state.workspace);
   const { showMenuDropdown, SubMenuId } = useAppSelector((state) => state.hub);
   const { paletteDropdown, lightBaseColor, baseColor } = useAppSelector((state) => state.account);
   const { listColour } = useAppSelector((state) => state.list);
@@ -73,7 +73,7 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
 
   // function for the list shape selection
   const handleListLocation = (id: string, name: string) => {
-    const viewsUrl = generateViewsUrl(id, list, EntityType.list) as string;
+    const viewsUrl = generateViewsUrl(id, activeView?.id as string, list, EntityType.list) as string;
     dispatch(
       setActiveItem({
         activeItemType: EntityType.list,
@@ -129,7 +129,7 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
       }
     }
   };
-  const handleItemAction = (id: string, name: string | null) => {
+  const handleItemAction = (id: string) => {
     // dispatch(setSelectedTreeDetails({ name, id, type: EntityType.wallet }));
     dispatch(setCreateWlLink(false));
     dispatch(
@@ -261,7 +261,7 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
             ref={menuRef}
           >
             {/* <TaskDropdown /> */}
-            <span onClick={() => handleItemAction(list.id, list.name)} className="cursor-pointer">
+            <span onClick={() => handleItemAction(list.id)} className="cursor-pointer">
               <PlusIcon active />
             </span>
             <span

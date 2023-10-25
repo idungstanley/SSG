@@ -1,11 +1,10 @@
 import { IList } from '../features/hubs/hubs.interfaces';
 import { IField, IFieldValue, ITask_statuses } from '../features/list/list.interfaces';
 import { ITeamMembersAndGroup } from '../features/settings/teamMembersAndGroups.interfaces';
-import { IParent, IStatus, ITaskFullList } from '../features/task/interface.tasks';
+import { IStatus, ITaskFullList } from '../features/task/interface.tasks';
 import { ICustomField } from '../features/task/taskSlice';
 import { Hub } from '../pages/workspace/hubs/components/ActiveTree/activetree.interfaces';
 import { findCurrentList, updateListTasksCountManager } from './List';
-import { colors } from '../components/tags/colors';
 
 export const addNewTaskManager = (
   tasks: Record<string, ITaskFullList[]>,

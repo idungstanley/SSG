@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { Dialog, Transition } from '@headlessui/react';
 import { useAppSelector } from '../../../../../app/hooks';
 import { Tag, TagId } from '../../../../../features/task/interface.tasks';
 import { useAbsolute } from '../../../../../hooks/useAbsolute';
@@ -22,8 +21,6 @@ export function ManageTagsDropdown({ tagsArr, entityId, entityType }: ManageTags
   const { mutate: onAssign } = useAssignTag(entityId);
   const [searchValue, setSearchValue] = useState('');
 
-  const [isOpen, setIsOpen] = useState(false);
-  const closeModal = () => setIsOpen(false);
   const [showSelectDropdown, setShowSelectDropdown] = useState<null | HTMLSpanElement | HTMLDivElement>(null);
 
   const newTags = tags ? tags.filter((i) => !tagsArr.map((j) => j.id).includes(i.id)) : [];
@@ -40,7 +37,6 @@ export function ManageTagsDropdown({ tagsArr, entityId, entityType }: ManageTags
   const onClickOpenDropdown = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.stopPropagation();
     e.preventDefault();
-    setIsOpen(true);
   };
 
   const { updateCords } = useAppSelector((state) => state.task);

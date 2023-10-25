@@ -72,6 +72,7 @@ const HubPage = lazy(() => import('./pages/hub'));
 import { ListPage } from './pages/list';
 import { WalletPage } from './pages/wallet';
 import ManageHr from './pages/hr/pages/ManageHr';
+import MyOverviewHrPage from './pages/hr/pages/MyOverviewHr';
 const Construction = lazy(() => import('./pages/settings/UserSettings/Pages/Construction'));
 const TaskInvite = lazy(() => import('./pages/workspace/tasks/taskInvite/TaskInvite'));
 const WorkSpaceTable = lazy(() => import('./pages/settings/WorkspaceSettings/GeneralWorkSpaceSettings/Table'));
@@ -179,6 +180,10 @@ export const routes = (user: IUser | null) => {
           element: <AlsoHr />,
           children: [
             {
+              path: 'my-overview',
+              element: <MyOverviewHrPage />
+            },
+            {
               path: '',
               element: <ManageHr />
             }
@@ -192,14 +197,14 @@ export const routes = (user: IUser | null) => {
         { path: 'goals', element: <Goals /> },
         { path: 'docs', element: <Docs /> },
         // old view here now default  =============================
-        { path: 'tasks/h/:hubId', element: <HubPage /> },
-        { path: 'tasks/h/:hubId/t/:taskId', element: <HubPage /> },
-        { path: 'tasks/sh/:subhubId', element: <HubPage /> },
-        { path: 'tasks/sh/:subhubId/t/:taskId', element: <HubPage /> },
-        { path: 'tasks/w/:walletId', element: <WalletPage /> },
-        { path: 'tasks/w/:walletId/t/:taskId', element: <WalletPage /> },
-        { path: 'tasks/l/:listId', element: <ListPage /> },
-        { path: 'tasks/l/:listId/t/:taskId', element: <ListPage /> },
+        { path: 'tasks/h/:hubId/v/:viewId', element: <HubPage /> },
+        { path: 'tasks/h/:hubId/t/:taskId/v/:viewId', element: <HubPage /> },
+        { path: 'tasks/sh/:subhubId/v/:viewId', element: <HubPage /> },
+        { path: 'tasks/sh/:subhubId/t/:taskId/v/:viewId', element: <HubPage /> },
+        { path: 'tasks/w/:walletId/v/:viewId', element: <WalletPage /> },
+        { path: 'tasks/w/:walletId/t/:taskId/v/:viewId', element: <WalletPage /> },
+        { path: 'tasks/l/:listId/v/:viewId', element: <ListPage /> },
+        { path: 'tasks/l/:listId/t/:taskId/v/:viewId', element: <ListPage /> },
         { path: 't/:taskId', element: <RenderTaskModal /> },
         { path: 'everything', element: <EverythingPage /> },
         ...inbox,

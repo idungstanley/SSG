@@ -6,7 +6,6 @@ import { useCreateDropdownField } from '../../../../../../features/list/listServ
 function CreateManualProgress() {
   const [startValue, setStartValue] = useState<string>('');
   const [endValue, setEndValue] = useState<string>('');
-  const [value, setValue] = useState('20');
 
   const { newCustomPropertyDetails, entityForCustom } = useAppSelector((state) => state.task);
 

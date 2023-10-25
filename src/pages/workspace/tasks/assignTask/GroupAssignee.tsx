@@ -1,13 +1,10 @@
 import React, { useState } from 'react';
 import { useAppSelector } from '../../../../app/hooks';
-import { AvatarWithInitials } from '../../../../components';
 import { UseTaskUnassignService } from '../../../../features/task/taskService';
 import PopAssignModal from './popAssignModal';
 import ToolTip from '../../../../components/Tooltip/Tooltip';
-import AvatarForOwner from '../../../../components/avatar/AvatarForOwner';
-import AvatarWithImage from '../../../../components/avatar/AvatarWithImage';
 import { ITeamMembersAndGroup } from '../../../../features/settings/teamMembersAndGroups.interfaces';
-import AvatarForOwnerWithImage from '../../../../components/avatar/AvatarForOwnerWithImage';
+import UserAvatar from './UserAvatar';
 
 function GroupAssignee({
   data,
@@ -20,7 +17,7 @@ function GroupAssignee({
   teams: boolean;
   handleClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
 }) {
-  const { CompactView, CompactViewWrap } = useAppSelector((state) => state.task);
+  const { CompactView } = useAppSelector((state) => state.task);
   const { selectedTasksArray, selectedListIds, selectedTaskParentId } = useAppSelector((state) => state.task);
 
   // Define a variable to store the number of remaining items
@@ -103,33 +100,7 @@ function GroupAssignee({
             <div className=" flex items-center justify-center -ml-2.5 rounded-full relative group/parent">
               <ToolTip title={newData.name}>
                 <div className="relative cursor-pointer">
-                  {!newData.user.avatar_path ? (
-                    <span onClick={handleClick}>
-                      {newData.role.key === 'owner' ? (
-                        <AvatarForOwner initials={newData.user.initials} />
-                      ) : (
-                        <div className="border-2 border-red-400 rounded-full">
-                          <AvatarWithInitials
-                            initials={newData.user && (newData.user.initials as string)}
-                            backgroundColour={newData.user && (newData.user?.color as string)}
-                            badge={true}
-                            height={CompactView ? 'h-6' : 'h-7'}
-                            width={CompactView ? 'w-6' : 'w-7'}
-                          />
-                        </div>
-                      )}
-                    </span>
-                  ) : (
-                    <span onClick={handleClick}>
-                      <div className="border-2 border-red-400 rounded-full">
-                        {newData.role.key === 'owner' ? (
-                          <AvatarForOwnerWithImage image_path={newData.user.avatar_path} />
-                        ) : (
-                          <AvatarWithImage image_path={newData.user.avatar_path} height="h-8" width="w-8" />
-                        )}
-                      </div>
-                    </span>
-                  )}
+                  <UserAvatar user={newData} handleClick={handleClick} />
 
                   <span className="absolute top-0 right-0 w-2 h-2 bg-green-500 border rounded-full group-hover/parent:hidden" />
 
@@ -163,7 +134,7 @@ function GroupAssignee({
             {data?.length - 3 !== 0 ? (
               <span
                 className="-ml-3 bg-gray-100 border-2 border-white rounded-full "
-                style={{ padding: `${CompactView || CompactViewWrap ? '3px' : '7px'}` }}
+                style={{ padding: `${CompactView ? '3px' : '7px'}` }}
               >
                 +{data?.length - 3}
               </span>

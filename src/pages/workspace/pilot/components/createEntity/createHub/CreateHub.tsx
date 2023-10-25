@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Checkbox, Input } from '../../../../../../components';
+import { Button, Input } from '../../../../../../components';
 import { useMutation } from '@tanstack/react-query';
 import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
 import { createHubService, useGetHubChildren } from '../../../../../../features/hubs/hubService';
@@ -17,9 +17,7 @@ import {
   setShowOverlay
 } from '../../../../../../features/workspace/workspaceSlice';
 import { EntityType } from '../../../../../../utils/EntityTypes/EntityType';
-import Assignee from '../../../../tasks/assignTask/Assignee';
 import Wand from '../../../../../../assets/icons/Wand';
-import ArrowDown from '../../../../../../assets/icons/ArrowDown';
 import { ListColourProps } from '../../../../../../components/tasks/ListItem';
 import { displayPrompt, setVisibility } from '../../../../../../features/general/prompt/promptSlice';
 import { createHubManager } from '../../../../../../managers/Hub';
@@ -38,10 +36,11 @@ export default function CreateHub() {
   const navigate = useNavigate();
 
   const { selectedTreeDetails, currHubId, hub } = useAppSelector((state) => state.hub);
+  const { activeView } = useAppSelector((state) => state.workspace);
+  const { currentWorkspaceId: workSpaceId } = useAppSelector((state) => state.auth);
 
   const [paletteColor, setPaletteColor] = useState<string | ListColourProps | undefined | null>('blue');
   const [showPalette, setShowPalette] = useState<null | HTMLDivElement>(null);
-  const { currentWorkspaceId: workSpaceId } = useAppSelector((state) => state.auth);
 
   const { type, id } = selectedTreeDetails;
   const { data } = useGetHubChildren({
@@ -54,7 +53,7 @@ export default function CreateHub() {
     onSuccess: (data) => {
       const listDetails = data?.data.hub;
       const routeVariable = id ? 'tasks/sh' : 'tasks/h';
-      navigate(`/${workSpaceId}/${routeVariable}/${listDetails.id}`, {
+      navigate(`/${workSpaceId}/${routeVariable}/${listDetails.id}/v/${activeView?.id}`, {
         replace: true
       });
       dispatch(

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import '../../../../../styles/usersetting.css';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import { setPreferenceState } from '../../../../../features/task/taskSlice';

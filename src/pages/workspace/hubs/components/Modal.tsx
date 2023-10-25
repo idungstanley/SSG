@@ -62,7 +62,6 @@ function Modal() {
     });
   };
 
-  const { showCreateHubSlideOver } = useAppSelector((state) => state.slideOver);
   return (
     <SlideOver
       show={false}

@@ -11,15 +11,25 @@ import { useAppSelector } from '../../../../../app/hooks';
 import ToolTip from '../../../../../components/Tooltip/Tooltip';
 import ArrowDownFilled from '../../../../../assets/icons/ArrowDownFilled';
 import AlsoitMenuDropdown from '../../../../../components/DropDowns';
+import MySettings from '../../../../../assets/icons/MySettings';
+import NotificationIcon from '../../../../../assets/icons/NotificationIcon';
+import AppsIcon from '../../../../../assets/icons/AppsIcon';
+import RewardsIcon from '../../../../../assets/icons/RewardsIcon';
+import AddRemovePinIcon from '../../../../../assets/icons/AddRemovePinIcon';
+import { IoIosHelpCircleOutline } from 'react-icons/io';
+import { CiDark } from 'react-icons/ci';
+import { AiOutlineLogout } from 'react-icons/ai';
+import { RiUserSettingsLine } from 'react-icons/ri';
 
 interface UserSettingsType {
   id: string;
   title: string;
-  handleClick: () => void;
+  handleClick: (e: React.MouseEvent<HTMLDivElement | null, MouseEvent>) => void;
+  icon?: JSX.Element;
 }
 
 interface UserProps {
-  setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
+  setShowModal: (e: React.MouseEvent<HTMLDivElement | null, MouseEvent>) => void;
 }
 
 export default function UserSettingsModal({ setShowModal }: UserProps) {
@@ -68,40 +78,49 @@ export default function UserSettingsModal({ setShowModal }: UserProps) {
       title: 'My Settings',
       handleClick: () => {
         navigate(`/${currentWorkspaceId}/settings/profile`);
-      }
+      },
+      icon: <RiUserSettingsLine className="w-4 h-4" />
     },
     {
       id: 'notificaitons',
       title: 'Notificaitons',
       handleClick: () => {
         navigate(`/${currentWorkspaceId}/settings/notifications`);
-      }
+      },
+      icon: <NotificationIcon />
     },
     {
       id: 'apps',
       title: 'Apps',
-      handleClick: () => ({})
+      handleClick: () => ({}),
+      icon: <AppsIcon />
     },
 
     {
       id: 'rewards',
       title: 'Rewards',
-      handleClick: () => ({})
+      handleClick: () => ({}),
+      icon: <RewardsIcon />
     },
     {
       id: 'hot_keys',
       title: 'HotKeys',
-      handleClick: () => setShowModal(true)
+      handleClick: (e) => {
+        setShowModal(e);
+      },
+      icon: <AddRemovePinIcon />
     },
     {
       id: 'help',
       title: 'Help',
-      handleClick: () => ({})
+      handleClick: () => ({}),
+      icon: <IoIosHelpCircleOutline className="w-4 h-4" />
     },
     {
       id: 'dark_mode',
       title: 'Dark Mode',
-      handleClick: () => ({})
+      handleClick: () => ({}),
+      icon: <CiDark className="w-4 h-4" />
     },
     {
       id: 'log_out',
@@ -125,7 +144,8 @@ export default function UserSettingsModal({ setShowModal }: UserProps) {
             }
           ])
         );
-      }
+      },
+      icon: <AiOutlineLogout className="w-4 h-3" />
     }
   ];
 
@@ -147,23 +167,29 @@ export default function UserSettingsModal({ setShowModal }: UserProps) {
         </ToolTip>
       </div>
       <AlsoitMenuDropdown anchorEl={showSettingsMenu} handleClose={handleCloseSettingsMenu}>
-        <div className="p-2">
+        <div className="p-2 w-52">
+          <div className="my-2 space-y-2">
+            <p style={{ fontSize: '8px' }}>USER SETTINGS</p>
+            <hr />
+          </div>
           {userSettings?.map((i) => (
             <div key={i.id}>
               <div
-                className="flex items-center w-full px-4 py-2 text-xs text-gray-600 rounded cursor-pointer hover:bg-primary-200 hover:text-primary-500"
-                onClick={i.handleClick}
+                className="flex items-center w-full py-2 text-xs text-gray-600 rounded cursor-pointer px-0.5 hover:bg-alsoit-gray-50 justify-between"
+                onClick={(e) => i.handleClick(e)}
               >
-                <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <p className="w-5 h-5">{i.icon}</p>
                   <p>{i.title}</p>
-                  <span>
-                    {i.id === 'dark_mode' ? (
-                      <button className="flex ml-14 items-center text-gray-400 cursor-pointer p-0.5 rounded-md space-x-1 ">
-                        <BsToggleOff className="w-4 h-4 test-sm" />
-                      </button>
-                    ) : null}
-                  </span>
                 </div>
+                <span>
+                  {i.id === 'dark_mode' ? (
+                    <label className="switch">
+                      <input className="inputShow" type="checkbox" checked={false} onChange={() => ({})} />
+                      <div className="slider checked"></div>
+                    </label>
+                  ) : null}
+                </span>
               </div>
             </div>
           ))}

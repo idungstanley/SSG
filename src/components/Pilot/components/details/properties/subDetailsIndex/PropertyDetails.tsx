@@ -22,7 +22,6 @@ import { useParams } from 'react-router-dom';
 import { IWalletDetails } from '../../../../../../features/wallet/wallet.interfaces';
 import PlusIcon from '../../../../../../assets/icons/PlusIcon';
 import ReactMarkDown from 'react-markdown';
-import { VerticalScroll } from '../../../../../ScrollableContainer/VerticalScroll';
 import { useAppSelector } from '../../../../../../app/hooks';
 import FileIcons from '../../../../../Views/ui/Table/CustomField/Files/FileIcon';
 

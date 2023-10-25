@@ -29,11 +29,11 @@ interface ExtendedBarProps {
 const MIN_SIDEBAR_WIDTH = dimensions.extendedBar.min;
 const MAX_SIDEBAR_WIDTH = dimensions.extendedBar.max;
 const extendedBarWidthFromLS =
-  (JSON.parse(localStorage.getItem(STORAGE_KEYS.EXTENDED_BAR_WIDTH) || '""') as number) ??
+  (JSON.parse(localStorage.getItem(STORAGE_KEYS.EXTENDED_BAR_WIDTH) || '""') as number) ||
   dimensions.extendedBar.default;
 
 const pilotWidthFromLS =
-  (JSON.parse(localStorage.getItem(STORAGE_KEYS.PILOT_WIDTH) || '""') as number) ?? dimensions.pilot.default;
+  (JSON.parse(localStorage.getItem(STORAGE_KEYS.PILOT_WIDTH) || '""') as number) || dimensions.pilot.default;
 
 export default function Page({ header, additionalHeader, children, additional, pilotConfig, extendedBar }: PageProps) {
   const { showOverlay } = useAppSelector((state) => state.workspace);

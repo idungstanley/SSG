@@ -5,7 +5,7 @@ import { RiArrowDownSFill, RiArrowUpSFill } from 'react-icons/ri';
 
 interface SortDirectionProps {
   bgColor: string;
-  handleRemoveSortFn: (value?: string, sortCriteria?: string) => void;
+  handleRemoveSortFn: (value?: string, sortCriteria?: string, isDefault?: boolean, id?: string) => void;
   sortValue?: string;
   sortDesc?: boolean;
   sortItemLength: number;
@@ -13,18 +13,22 @@ interface SortDirectionProps {
   sortCriteria?: string;
   propertyHeaderTxt?: string;
   handleOrder?: (e: React.MouseEvent<HTMLDivElement, MouseEvent>, value?: string) => void;
+  isDefault?: boolean;
+  id?: string;
 }
 
 export default function SortDirectionCheck({
   bgColor,
   handleRemoveSortFn,
+  isDefault,
   sortValue,
   sortDesc,
   sortItemLength,
   sortIndex,
   sortCriteria,
   propertyHeaderTxt,
-  handleOrder
+  handleOrder,
+  id
 }: SortDirectionProps) {
   return sortItemLength >= 1 ? (
     <Tooltip title={sortDesc ? 'Sorting Z - A' : 'Sorting A - Z'} arrow>
@@ -52,7 +56,7 @@ export default function SortDirectionCheck({
           )}
         </div>
         <AiOutlineClose
-          onClick={() => handleRemoveSortFn(sortValue, sortCriteria)}
+          onClick={() => handleRemoveSortFn(sortValue, sortCriteria, isDefault, id)}
           className="w-3 h-3 m-1 font-bold text-white transition-opacity duration-500 opacity-100 sortClose"
         />
       </div>

@@ -16,7 +16,7 @@ export default function ClockInOut() {
   const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
   const { timeAssigneeFilter: getTaskTimeEntries, timerStatus } = useAppSelector((state) => state.task);
 
-  const [page, setPage] = useState<number>(1);
+  const [page] = useState<number>(1);
 
   const { data, isSuccess } = useTimeEntriesQuery({
     id: activeItemId,
@@ -25,8 +25,6 @@ export default function ClockInOut() {
     page
   });
 
-  const firstPage = () => setPage(1);
-  const lastPage = () => setPage((page * 100) / 100);
   const pageLinks = Array(getTaskTimeEntries?.data.pagination.page)
     .fill(0)
     .map((_, index) => index + 1);

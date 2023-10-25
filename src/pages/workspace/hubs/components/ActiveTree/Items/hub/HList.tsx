@@ -29,7 +29,9 @@ export default function HList({ hubs, openNewHub, placeHubType }: ListProps) {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const { showExtendedBar, createEntityType, openedEntitiesIds } = useAppSelector((state) => state.workspace);
+  const { showExtendedBar, createEntityType, openedEntitiesIds, activeView } = useAppSelector(
+    (state) => state.workspace
+  );
   const { entityToCreate, hub } = useAppSelector((state) => state.hub);
   const { showSidebar } = useAppSelector((state) => state.account);
 
@@ -59,7 +61,7 @@ export default function HList({ hubs, openNewHub, placeHubType }: ListProps) {
     if (placeHubType == APP_HR) {
       return false;
     }
-    const viewsUrl = generateViewsUrl(id, item, EntityType.hub) as string;
+    const viewsUrl = generateViewsUrl(id, activeView?.id as string, item, EntityType.hub) as string;
     dispatch(setParentHubExt({ id: id, type: EntityType.hub }));
     dispatch(
       setActiveItem({
