@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useMemo } from 'react';
+import { ReactNode, useEffect } from 'react';
 import { RiArrowLeftSLine, RiArrowRightSLine } from 'react-icons/ri';
 import { STORAGE_KEYS, calculateWidthForContent, dimensions } from '../../app/config/dimensions';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';

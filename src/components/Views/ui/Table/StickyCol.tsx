@@ -96,8 +96,6 @@ export function StickyCol({
 
   const [isChecked, setIsChecked] = useState(false);
   const [eitableContent, setEitableContent] = useState(false);
-  const [content, setContent] = useState('');
-  const contentRef = useRef();
   const [selectedIndexArray, setSelectedIndexArray] = useState<number[]>([]);
 
   const COL_BG = taskId === task.id ? ACTIVE_COL_BG : DEFAULT_COL_BG;
@@ -436,6 +434,7 @@ export function StickyCol({
                           style={{
                             maxWidth: '200px',
                             overflow: 'hidden',
+                            textOverflow: 'ellipsis',
                             whiteSpace: 'nowrap'
                           }}
                         >
@@ -513,12 +512,13 @@ export function StickyCol({
             </div>
             <div className="flex flex-col items-start justify-start pl-2 space-y-1">
               <p
-                className={`flex text-left empty:before:content-[attr(placeholder)] alsoit-gray-300 font-semibold empty:opacity-50 overflow-hidden items-center h-5 w-80 ${
+                className={`flex text-left empty:before:content-[attr(placeholder)] alsoit-gray-300 font-semibold empty:opacity-50 overflow-hidden items-center h-5 ${
                   saveSettingOnline?.CompactView ? 'text-alsoit-text-md' : 'text-alsoit-text-lg'
                 }`}
                 contentEditable={true}
                 placeholder="Add New Task"
                 ref={inputRef}
+                style={{ maxWidth: '200px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}
                 onKeyDown={(e) => (e.key === 'Enter' ? handleOnSave(e, task.id) : null)}
               ></p>
             </div>
