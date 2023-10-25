@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import moment from 'moment';
 import CustomReference from '../customReference/CustomReference';
 import EntitySettings from '../entitySettings/EntitySettings';
@@ -35,11 +35,11 @@ interface PropertyDetailsProps {
 }
 export default function PropertyDetails({ Details }: PropertyDetailsProps) {
   const queryClient = useQueryClient();
+  const inputRef = useRef<HTMLInputElement | null>(null);
 
   const [toggleSubTask, setToggleSubTask] = useState(false);
   const [editingTitle, setEditingTitle] = useState(false);
   const [editingDescription, setEditingDescription] = useState(false);
-  const [title, setTitle] = useState<string>(Details?.name as string);
   const [description, setDescription] = useState<string>(Details?.description ?? '');
   const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
 
@@ -79,9 +79,9 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
     setEditingDescription(false);
   };
 
-  const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setTitle(event.target.value);
-  };
+  // const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   setTitle(event.target.value);
+  // };
 
   const handleDescriptionChange = (value: string) => {
     // const sanitizedDescription = DOMPurify.sanitize(value);
@@ -89,32 +89,34 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
   };
 
   const handleDetailsSubmit = async (
-    e: React.FormEvent<HTMLFormElement> | React.FocusEvent<HTMLInputElement | HTMLTextAreaElement, Element>
+    e:
+      | React.KeyboardEvent<HTMLParagraphElement>
+      | React.FocusEvent<HTMLInputElement | HTMLParagraphElement | HTMLTextAreaElement, Element>
   ) => {
     e.preventDefault();
     handleBlur();
     try {
       if (taskId != undefined) {
         await editTaskMutation.mutateAsync({
-          name: title,
+          name: inputRef.current?.innerText.trim() as string,
           task_id: taskId,
           description
         });
       } else if (walletId != undefined) {
         await editWalletMutation.mutateAsync({
-          walletName: title,
+          walletName: inputRef.current?.innerText.trim(),
           walletId: Details?.id,
           description
         });
       } else if (listId != undefined) {
         await editListMutation.mutateAsync({
-          listName: title,
+          listName: inputRef.current?.innerText.trim(),
           listId: Details?.id,
           description
         });
       } else if (hubId) {
         await editHubMutation.mutateAsync({
-          name: title,
+          name: inputRef.current?.innerText.trim(),
           hubId: Details?.id,
           description
         });
@@ -143,7 +145,7 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
         <section className="z-10 flex items-center justify-center space-x-3">
           <CustomReference />
           <ToolTip title="Share">
-            <Share taskId={Details?.id} taskName={title} />
+            <Share taskId={Details?.id} taskName={Details?.name} />
           </ToolTip>
           <EntitySettings />
         </section>
@@ -177,22 +179,16 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
         <div id="entity name">
           <label className="text-xs text-gray-500">Title</label>
           <div className="p-1 bg-gray-100 border border-white rounded-md cursor-text">
-            {editingTitle ? (
-              <form onSubmit={(e) => handleDetailsSubmit(e)}>
-                <input
-                  type="text"
-                  value={title}
-                  onChange={handleTitleChange}
-                  onBlur={(e) => handleDetailsSubmit(e)}
-                  autoFocus
-                  className="w-full bg-transparent border-none rounded-md outline-none focus:outline-none h-fit"
-                />
-              </form>
-            ) : (
-              <p className="p-1 capitalize break-words " onClick={() => setEditingTitle(true)}>
-                {title}
-              </p>
-            )}
+            <p
+              ref={inputRef}
+              className="p-1 capitalize break-words"
+              contentEditable={editingTitle}
+              onKeyDown={(e) => (e.key === 'Enter' ? handleDetailsSubmit(e) : null)}
+              onClick={() => setEditingTitle(true)}
+              onBlur={(e) => handleDetailsSubmit(e)}
+            >
+              {Details?.name}
+            </p>
           </div>
         </div>
         {/* description */}
@@ -256,11 +252,9 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
             <p>Dec 31 2022</p>
           </div>
         </div>
-
         <div className="mt-2">
           <MoreDetails />
         </div>
-
         {/* create subtask */}
         <div id="create subtask" className="mt-2">
           <div

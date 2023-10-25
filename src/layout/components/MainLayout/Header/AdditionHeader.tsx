@@ -201,7 +201,7 @@ export default function AdditionalHeader({ isInsights }: IAdditionalHeaderProps)
             <img src={headerIcon} alt="" className="w-6 h-6" />
           </p>
           <ToolTip title={activeItemName}>
-            <span className="font-bold truncate w-72 text-alsoit-text-lg">{activeItemName}</span>
+            <span className="font-bold text-left truncate w-72 text-alsoit-text-lg">{activeItemName}</span>
           </ToolTip>
         </>
       );
