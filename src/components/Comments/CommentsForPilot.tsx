@@ -15,8 +15,7 @@ import SectionArea from '../Pilot/components/SectionArea';
 import { ChatBubbleLeftEllipsisIcon } from '@heroicons/react/24/outline';
 
 export default function CommentsForPilot() {
-  const { pilotSideOver } = useAppSelector((state) => state.slideOver);
-  const { type, id } = pilotSideOver;
+  const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
 
   const messageRef = useRef<HTMLInputElement>(null);
 
@@ -25,13 +24,13 @@ export default function CommentsForPilot() {
 
   const [editId, setEditId] = useState<null | string>(null);
 
-  const { mutate: sendComment } = useCreateItemComment(id);
-  const { mutate: editComment } = useEditItemComment(id);
-  const { mutate: deleteComment } = useDeleteItemComment(id);
+  const { mutate: sendComment } = useCreateItemComment(activeItemId);
+  const { mutate: editComment } = useEditItemComment(activeItemId);
+  const { mutate: deleteComment } = useDeleteItemComment(activeItemId);
 
   const { status, data } = useGetItemComments({
-    type,
-    id
+    type: activeItemType as string,
+    id: activeItemId
   });
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement> | React.MouseEvent<SVGSVGElement, MouseEvent>) => {
@@ -51,8 +50,8 @@ export default function CommentsForPilot() {
 
         sendComment({
           message: messageWithUserIds,
-          type: type || 'file',
-          id: id || ''
+          type: activeItemType || 'file',
+          id: activeItemId || ''
         });
 
         messageRef.current.value = '';
