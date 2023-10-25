@@ -5,7 +5,6 @@ import { cl } from '../../../../../../utils';
 import UserSettingsModal from '../../../../../../pages/settings/UserSettings/components/UserSettings/UserSettingsModal';
 import { Link } from 'react-router-dom';
 import Toggle from '../Toggle';
-import { Modal } from '../../../../../../components/Pilot/components/HotKeys/components/Modal';
 import PinnedNavigationItem, { NavigationList } from '../NavigationItems/components/NavigationList';
 import ToolTip from '../../../../../../components/Tooltip/Tooltip';
 import AlsoitIcon from '../../../../../../assets/icons/AlsoitIcon';
