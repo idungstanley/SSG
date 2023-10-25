@@ -40,7 +40,7 @@ const onError = (error: unknown): unknown => {
     title = typedError?.data?.message.title;
     body = typedError?.data?.message.body;
   } else {
-    title = typedError?.statusText || typedError?.message;
+    title = typedError?.statusText || typedError?.message || typedError.data.message.title;
   }
 
   toast.custom((t) => <Toast type="error" title={title} body={body} toastId={t.id} />);
@@ -94,7 +94,7 @@ Sentry.init({
   dsn: process.env.REACT_APP_SENTRY_KEY,
   integrations: [
     new Sentry.BrowserTracing({
-      tracePropagationTargets: ['localhost', /^https:\/\/yourserver\.io\/api/]
+      tracePropagationTargets: [/^https:\/\/yourserver\.io\/api/]
     }),
     new Sentry.Replay()
   ],
@@ -110,7 +110,6 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
         <Suspense fallback={<Spinner />}>
           <App />
         </Suspense>
-
         {/* // ? delete the line below to remove flower icon in bottom right side of page  */}
         <ReactQueryDevtools position="bottom-right" />
       </GoogleOAuthProvider>

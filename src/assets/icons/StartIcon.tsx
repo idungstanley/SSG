@@ -5,7 +5,7 @@ interface Props extends DetailedHTMLProps<SVGAttributes<SVGSVGElement>, SVGSVGEl
   active?: boolean;
 }
 
-export function StartIcon({ active, ...props }: Props) {
+export function StartIcon({ ...props }: Props) {
   return (
     <svg {...props} viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
       <mask

@@ -29,7 +29,7 @@ export interface ITeamMember {
 
 export interface RoleRes {
   team_member_id: string;
-  team_member_role: {
+  role: {
     key: string;
     name: string;
   };

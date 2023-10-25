@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useMemo } from 'react';
+import { ReactNode, useEffect } from 'react';
 import { RiArrowLeftSLine, RiArrowRightSLine } from 'react-icons/ri';
 import { STORAGE_KEYS, calculateWidthForContent, dimensions } from '../../app/config/dimensions';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
@@ -9,7 +9,6 @@ import { IPilotSection, IPilotTab } from '../../types';
 import { cl } from '../../utils';
 import { isAllowIncreaseWidth } from '../../utils/widthUtils';
 import Pilot from '../Pilot';
-import { IUserParams } from '../../features/account/account.interfaces';
 
 interface PageProps {
   header?: JSX.Element;
@@ -29,15 +28,17 @@ interface ExtendedBarProps {
 
 const MIN_SIDEBAR_WIDTH = dimensions.extendedBar.min;
 const MAX_SIDEBAR_WIDTH = dimensions.extendedBar.max;
+const extendedBarWidthFromLS =
+  (JSON.parse(localStorage.getItem(STORAGE_KEYS.EXTENDED_BAR_WIDTH) || '""') as number) ||
+  dimensions.extendedBar.default;
+
+const pilotWidthFromLS =
+  (JSON.parse(localStorage.getItem(STORAGE_KEYS.PILOT_WIDTH) || '""') as number) || dimensions.pilot.default;
 
 export default function Page({ header, additionalHeader, children, additional, pilotConfig, extendedBar }: PageProps) {
   const { showOverlay } = useAppSelector((state) => state.workspace);
+  const { userSettingsData } = useAppSelector((state) => state.account);
   const { show: showFullPilot } = useAppSelector((state) => state.slideOver.pilotSideOver);
-
-  const DEFAULT_PILOT_WIDTH = dimensions.pilot.default;
-  const pilotWidthFromLS =
-    (JSON.parse(localStorage.getItem(STORAGE_KEYS.USER_SETTINGS_DATA) || '""') as IUserParams).pilotWidth ??
-    DEFAULT_PILOT_WIDTH;
 
   const { blockRef, Dividers } = useResize({
     dimensions: {
@@ -69,7 +70,7 @@ export default function Page({ header, additionalHeader, children, additional, p
             className={`${showOverlay ? 'z-50' : 'border-l relative'}`}
             ref={blockRef}
             style={{
-              width: showFullPilot ? pilotWidthFromLS : undefined
+              width: showFullPilot ? pilotWidthFromLS || userSettingsData?.pilotWidth : undefined
             }}
           >
             {showFullPilot ? <Dividers /> : null}
@@ -93,7 +94,7 @@ function ExtendedBar({ children, name, icon, source }: ExtendedBarProps) {
       min: MIN_SIDEBAR_WIDTH,
       max: MAX_SIDEBAR_WIDTH
     },
-    storageKey: 'extendedBarWidth',
+    storageKey: STORAGE_KEYS.EXTENDED_BAR_WIDTH,
     direction: 'XR',
     defaultSize: dimensions.extendedBar.default
   });
@@ -109,7 +110,7 @@ function ExtendedBar({ children, name, icon, source }: ExtendedBarProps) {
 
   return (
     <aside
-      style={{ width: showExtendedBar ? userSettingsData?.extendedBarWidth || dimensions.extendedBar.default : 0 }}
+      style={{ width: showExtendedBar ? extendedBarWidthFromLS || userSettingsData?.extendedBarWidth : undefined }}
       ref={blockRef}
       className={cl(showExtendedBar && 'border-r', 'relative h-full transition-all duration-300')}
     >

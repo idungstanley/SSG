@@ -52,7 +52,7 @@ function LocationField({ taskCustomFields, taskId, fieldId }: LocationProps) {
           types: ['address']
         }}
         defaultValue={location}
-        className="truncate"
+        className="truncate border-0"
       />
       <figure
         className={cl(

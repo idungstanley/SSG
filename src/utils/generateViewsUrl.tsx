@@ -2,7 +2,12 @@ import { IFavorites, IHub, IList, IWallet } from '../features/hubs/hubs.interfac
 import { EntityType } from './EntityTypes/EntityType';
 import { pages } from '../app/constants/pages';
 
-const generateViewsUrl = (id: string, item?: IList | IWallet | IHub | IFavorites, entityType?: string) => {
+const generateViewsUrl = (
+  id: string,
+  viewId: string,
+  item?: IList | IWallet | IHub | IFavorites,
+  entityType?: string
+) => {
   const initialActivePlaceId: string | null = (JSON.parse(localStorage.getItem('activePlaceIdLocale') as string) ||
     null) as string | null;
   let entityTypeAndId = '';
@@ -15,13 +20,13 @@ const generateViewsUrl = (id: string, item?: IList | IWallet | IHub | IFavorites
     } else {
       entityTypeAndId =
         !(item as IHub).parent_id || (item as IFavorites).model_type === EntityType.hub
-          ? `tasks/h/${id}`
-          : `tasks/sh/${id}`;
+          ? `tasks/h/${id}/v/${viewId}`
+          : `tasks/sh/${id}/v/${viewId}`;
     }
   } else if ((item as IWallet).type === EntityType.wallet || (item as IFavorites).model_type === EntityType.wallet) {
-    entityTypeAndId = `tasks/w/${id}`;
+    entityTypeAndId = `tasks/w/${id}/v/${viewId}`;
   } else if ((item as IHub).type === EntityType.list || (item as IFavorites).model_type === EntityType.list) {
-    entityTypeAndId = `tasks/l/${id}`;
+    entityTypeAndId = `tasks/l/${id}/v/${viewId}`;
   }
 
   return entityTypeAndId as string;

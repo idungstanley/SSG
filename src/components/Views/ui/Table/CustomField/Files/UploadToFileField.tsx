@@ -1,6 +1,6 @@
 import Uppy from '@uppy/core';
 import XHRUpload from '@uppy/xhr-upload';
-import { useUppy, DashboardModal } from '@uppy/react';
+import { DashboardModal } from '@uppy/react';
 import '@uppy/core/dist/style.css';
 import '@uppy/dashboard/dist/style.css';
 import { useQueryClient } from '@tanstack/react-query';
@@ -19,26 +19,24 @@ export default function UploadToFile() {
   const { taskId, fieldId, listId, openModal } = fileUploadProps;
 
   // init
-  const uppy = useUppy(() =>
-    new Uppy({
-      debug: true,
-      autoProceed: false,
-      restrictions: {
-        allowedFileTypes: null
-      },
-      meta: {}
-    }).use(XHRUpload, {
-      fieldName: 'file',
-      endpoint: `${process.env.REACT_APP_API_BASE_URL}/api/custom-fields/${fieldId}/file`,
-      headers: currentWorkspaceId
-        ? {
-            Authorization: `Bearer ${accessToken}`,
-            current_workspace_id: currentWorkspaceId
-          }
-        : undefined,
-      method: 'POST'
-    })
-  );
+  const uppy = new Uppy({
+    debug: true,
+    autoProceed: false,
+    restrictions: {
+      allowedFileTypes: null
+    },
+    meta: {}
+  }).use(XHRUpload, {
+    fieldName: 'file',
+    endpoint: `${process.env.REACT_APP_API_BASE_URL}/api/custom-fields/${fieldId}/file`,
+    headers: currentWorkspaceId
+      ? {
+          Authorization: `Bearer ${accessToken}`,
+          current_workspace_id: currentWorkspaceId
+        }
+      : undefined,
+    method: 'POST'
+  });
 
   uppy.on('file-added', (file) => {
     const fileExtension = file.extension || '';

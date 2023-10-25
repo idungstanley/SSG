@@ -32,9 +32,10 @@ import { Modal } from '../../../components/Pilot/components/HotKeys/components/M
 import { Capitalize } from '../../../utils/NoCapWords/Capitalize';
 import EverythingTasks from './components/EverythingTasks';
 import { pilotTabs } from '../../../app/constants/pilotTabs';
-import { FaHandsHelping } from 'react-icons/fa';
 import { APP_HR, APP_TASKS } from '../../../app/constants/app';
 import { pages } from '../../../app/constants/pages';
+import AlsoHrIcon from '../../../assets/icons/AlsoHrIcon';
+import MyOverviewHr from '../hr/components/MyOverviewHr';
 
 function Hubs() {
   const dispatch = useDispatch();
@@ -147,11 +148,7 @@ function Hubs() {
           location.pathname.includes(APP_TASKS)
         }
         icon={
-          placeHubType == APP_TASKS ? (
-            <BsListCheck className="w-4 h-4" style={{ color: baseColour }} />
-          ) : (
-            <FaHandsHelping className="w-4 h-4" />
-          )
+          placeHubType == APP_TASKS ? <BsListCheck className="w-4 h-4" style={{ color: baseColour }} /> : <AlsoHrIcon />
         }
         midContent={<BiSearch onClick={(e) => toggleSearch(e)} className="w-4 h-4" style={{ color: baseColour }} />}
         searchStatus={isSearchActive}
@@ -161,7 +158,8 @@ function Hubs() {
           </div>
         }
       />
-      {placeHubType == APP_TASKS ? <EverythingTasks /> : null}
+      {placeHubType == APP_TASKS && <EverythingTasks />}
+      {placeHubType == APP_HR && <MyOverviewHr />}
       <Modal setShowModal={setShowModal} position="left-44 top-72" showModal={showModal} width="w-64">
         {configForDropdown.map((item, index) => (
           <React.Fragment key={index}>

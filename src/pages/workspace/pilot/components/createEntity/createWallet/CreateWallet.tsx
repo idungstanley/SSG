@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Checkbox, Input } from '../../../../../../components';
+import { Button, Input } from '../../../../../../components';
 import { useMutation } from '@tanstack/react-query';
 import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
 import {
@@ -16,9 +16,7 @@ import {
   setShowOverlay
 } from '../../../../../../features/workspace/workspaceSlice';
 import { EntityType } from '../../../../../../utils/EntityTypes/EntityType';
-import ArrowDown from '../../../../../../assets/icons/ArrowDown';
 import Wand from '../../../../../../assets/icons/Wand';
-import Assignee from '../../../../tasks/assignTask/Assignee';
 import { ListColourProps } from '../../../../../../components/tasks/ListItem';
 import { createWalletManager } from '../../../../../../managers/Wallet';
 import { setFilteredResults } from '../../../../../../features/search/searchSlice';
@@ -28,6 +26,7 @@ import Toast from '../../../../../../common/Toast';
 import AlsoitMenuDropdown from '../../../../../../components/DropDowns';
 import ColorPalette from '../../../../../../components/ColorPalette/component/ColorPalette';
 import { useNavigate } from 'react-router-dom';
+import { FaFolder } from 'react-icons/fa';
 
 export default function CreateWallet() {
   const dispatch = useAppDispatch();
@@ -117,9 +116,16 @@ export default function CreateWallet() {
         <span className="font-bold">Create A Wallet</span>
         <span className="font-medium">Allows you manage all entities within the workspace</span>
       </div>
-      <div className="flex flex-col p-4 space-y-2 border rounded border-alsoit-gray-200 bg-alsoit-gray-50">
+      <div className="flex flex-col p-4 space-y-2 border border-gray-200 rounded bg-alsoit-gray-50">
         <div className="relative flex">
-          <Input placeholder="Wallet Name" name="name" value={name} type="text" onChange={handleWalletChange} />
+          <Input
+            placeholder="Wallet Name"
+            name="name"
+            value={name}
+            type="text"
+            onChange={handleWalletChange}
+            leadingIcon={<FaFolder className="w-5 h-5" color={paletteColor as string} />}
+          />
           <div
             className="absolute flex items-center cursor-pointer right-2 top-3"
             onClick={(e) => handleShowPalette(e)}
@@ -127,32 +133,20 @@ export default function CreateWallet() {
             <Wand />
           </div>
         </div>
-        <div className="flex items-center justify-between w-full h-10 p-1 bg-white border rounded">
-          <span>Manage this Wallet with other application</span>
-          <ArrowDown className="w-3 h-3" />
-        </div>
-        <div className="flex items-center justify-between w-full h-10 p-1 bg-white border rounded">
-          <span>Share with public</span>
-          <Assignee option="share" />
-        </div>
-        <div className="flex flex-col space-y-2">
-          <span className="font-bold">Entity Description</span>
-          <Checkbox
-            checked={true}
-            onChange={() => ({})}
-            description="Host other entities list sub wallets and lists"
-            height="5"
-            width="5"
-          />
-          <Checkbox checked={false} onChange={() => ({})} description="Host other entities" height="5" width="5" />
-          <Checkbox checked={false} onChange={() => ({})} description="Host other entities" height="5" width="5" />
-        </div>
         <AlsoitMenuDropdown handleClose={handleClosePalette} anchorEl={showPalette}>
           <ColorPalette handleClick={handlePaletteColor} />
         </AlsoitMenuDropdown>
       </div>
       <div className="flex justify-between pt-2 space-x-3">
-        <Button buttonStyle="white" onClick={onClose} loading={false} label="Cancel" width={20} height="h-7" />
+        <Button
+          buttonStyle="white"
+          onClick={onClose}
+          loading={false}
+          label="Cancel"
+          width={20}
+          height="h-7"
+          labelSize="text-sm"
+        />
         <Button
           buttonStyle="primary"
           onClick={onSubmit}
@@ -160,6 +154,7 @@ export default function CreateWallet() {
           padding="py-2 px-2"
           height="h-7"
           width="w-fit"
+          labelSize="text-sm"
         />
       </div>
     </div>

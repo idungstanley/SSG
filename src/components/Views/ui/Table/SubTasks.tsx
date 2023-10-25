@@ -46,11 +46,9 @@ export function SubTasks({ listId, parentTask, columns, paddingLeft, level, isSp
 
   return (
     <>
-      {draggableItem ? (
-        <DragOverlay>
-          <OverlayRow columns={columns} task={draggableItem} />
-        </DragOverlay>
-      ) : null}
+      <DragOverlay dropAnimation={null}>
+        {draggableItem ? <OverlayRow columns={columns} task={draggableItem} /> : null}
+      </DragOverlay>
       {Object.keys(subtasks).length ? (
         <>
           {subtasks[parentTask.id]?.map((i) => (

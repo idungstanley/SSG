@@ -17,7 +17,6 @@ import Checklists from '../../../../../components/Pilot/components/Checklist/Che
 import { VscChecklist } from 'react-icons/vsc';
 import Details from '../../../../../components/Pilot/components/details/Details';
 import TimeClock from './TimeClock/index';
-import hubIcon from '../../../../../assets/branding/hub.svg';
 import HubManager from '../../../../../components/Pilot/components/HubManager/HubManager';
 import TemplatesIcon from '../../../../../assets/icons/Templates';
 import Templates from '../../../../../components/Pilot/components/Templates';
@@ -26,6 +25,9 @@ import Calendar from '../../../../../components/Pilot/components/Calendar';
 import { EntityType } from '../../../../../utils/EntityTypes/EntityType';
 import { UtilityIcon } from '../../../../../assets/icons/Utility';
 import { pilotTabs } from '../../../../../app/constants/pilotTabs';
+import EntityManagerIcon from '../../../../../assets/icons/EntityManagerIcon';
+import PilotViewIcon from '../../../../../assets/icons/PilotViewIcon';
+import Views from '../../../../../components/Pilot/components/Views/Index';
 
 const sections = [
   {
@@ -59,6 +61,10 @@ const sections = [
   {
     id: pilotTabs.ENTITY_MANAGER,
     element: <HubManager />
+  },
+  {
+    id: pilotTabs.VIEWS,
+    element: <Views />
   },
   {
     id: pilotTabs.TEMPLATES,
@@ -97,7 +103,7 @@ const tabs = [
     icon: <SignalIcon className="w-4 h-4" />
   },
   {
-    id: 'utilities',
+    id: pilotTabs.UTILITIES,
     label: 'Utilities',
     icon: <UtilityIcon />
   },
@@ -109,7 +115,12 @@ const tabs = [
   {
     id: pilotTabs.ENTITY_MANAGER,
     label: 'Entity Manager',
-    icon: <img src={hubIcon} alt="Hub Icon" className="w-4 h-4" />
+    icon: <EntityManagerIcon />
+  },
+  {
+    id: pilotTabs.VIEWS,
+    label: 'Views',
+    icon: <PilotViewIcon />
   },
   {
     id: pilotTabs.TEMPLATES,
@@ -133,12 +144,10 @@ export default function PilotSection() {
 
   // set data for pilot
   useEffect(() => {
-    const selectedItemId = listId;
-
-    if (selectedItemId) {
+    if (listId) {
       dispatch(
         setShowPilotSideOver({
-          id: selectedItemId,
+          id: listId,
           type: EntityType.list,
           show: true,
           title: activeItemName ?? ''

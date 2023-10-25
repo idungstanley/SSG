@@ -1,11 +1,10 @@
-import React from 'react';
-import ListViewSettingsModal from '../../../../../tasks/TaskSettingsModal/ViewsModal/ListViewSettingsModal';
+import ViewsModal from '../../../../../tasks/TaskSettingsModal/ViewsModal/ViewsModal';
 
 export default function ListViews({ viewsList }: { viewsList: string }) {
   return (
-    <div className="flex items-center justify-start space-x-1 ">
+    <div className="flex items-center justify-start space-x-1">
       <span className="group cursor-pointer gap-2">
-        <ListViewSettingsModal
+        <ViewsModal
           isActive={viewsList}
           list="List"
           table="Table"
