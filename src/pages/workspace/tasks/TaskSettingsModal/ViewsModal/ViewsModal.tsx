@@ -169,7 +169,7 @@ export default function ViewsModal({
       </div>
 
       <Menu anchorEl={dropdownEl} open={!!dropdownEl} onClose={() => setDropdownEl(null)} style={{ marginTop: '10px' }}>
-        <div style={{ zIndex: 61 }} className="w-48">
+        <div className="w-48">
           {viewSettings.map((view) => (
             <div key={view.id} style={{ color: view.unusing ? 'orange' : '' }}>
               {view.label !== 'Create New View' ? (
