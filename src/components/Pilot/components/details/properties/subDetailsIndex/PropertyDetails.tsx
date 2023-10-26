@@ -92,35 +92,35 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
   ) => {
     e.preventDefault();
     handleBlur();
-    try {
-      if (taskId != undefined) {
-        await editTaskMutation.mutateAsync({
-          name: inputRef.current?.innerText.trim() as string,
-          task_id: taskId,
-          description
-        });
-      } else if (walletId != undefined) {
-        await editWalletMutation.mutateAsync({
-          walletName: inputRef.current?.innerText.trim(),
-          walletId: Details?.id,
-          description
-        });
-      } else if (listId != undefined) {
-        await editListMutation.mutateAsync({
-          listName: inputRef.current?.innerText.trim(),
-          listId: Details?.id,
-          description
-        });
-      } else if (hubId) {
-        await editHubMutation.mutateAsync({
-          name: inputRef.current?.innerText.trim(),
-          hubId: Details?.id,
-          description
-        });
-      }
-    } catch {
-      return;
+    // try {
+    if (taskId != undefined) {
+      await editTaskMutation.mutateAsync({
+        name: inputRef.current?.innerText.trim() as string,
+        task_id: taskId,
+        description
+      });
+    } else if (walletId != undefined) {
+      await editWalletMutation.mutateAsync({
+        walletName: inputRef.current?.innerText.trim(),
+        walletId: Details?.id,
+        description
+      });
+    } else if (listId != undefined) {
+      await editListMutation.mutateAsync({
+        listName: inputRef.current?.innerText.trim(),
+        listId: Details?.id,
+        description
+      });
+    } else if (hubId) {
+      await editHubMutation.mutateAsync({
+        name: inputRef.current?.innerText.trim(),
+        hubId: Details?.id,
+        description
+      });
     }
+    // } catch {
+    //   return;
+    // }
   };
 
   const convertNewlinesToBreaks = (text: string) => {

@@ -87,7 +87,7 @@ export default function StatusDropdown({ taskCurrentStatus, statusDropdownType, 
                           taskCurrentStatus?.name.toLowerCase() === statuses.name.toLowerCase()
                             ? `bg-${statuses.color}-200`
                             : '',
-                          'flex items-center px-4 py-2 text-sm text-gray-600 rounded hover:bg-alsoit-gray-75 text-left space-x-2 w-full'
+                          'flex items-center px-4 py-2 text-sm text-gray-600 rounded hover:bg-alsoit-gray-50 text-left space-x-2 w-full'
                         )}
                         onClick={() => {
                           setStatus(statuses.id);
