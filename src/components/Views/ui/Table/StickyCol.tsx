@@ -157,6 +157,7 @@ export function StickyCol({
     if (id !== '0') {
       handleEditTask(e as React.KeyboardEvent<HTMLDivElement>, id);
     } else {
+      onClose && onClose();
       onClickSave();
     }
   };
@@ -190,7 +191,6 @@ export function StickyCol({
         newTaskPriority,
         task_status_id: taskStatusId as string
       });
-      onClose && onClose();
     } else {
       toast.custom((t) => <Toast type="error" title={title} body={body} toastId={t.id} />);
     }
