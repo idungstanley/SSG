@@ -72,14 +72,15 @@ export function Label({
           <div className="flex items-center justify-center h-6 bg-white -mt-1 rounded-[5px] w-12">
             <ListAddModal handleCheckedGroupTasks={handleCheckedGroupTasks} ListColor={ListColor} />
           </div>
+          {showTable && <p className="ml-3 text-white">{hubName}</p>}
         </div>
-        <p className="ml-3">{hubName}</p>
+        {!showTable && <p className="ml-3">{hubName}</p>}
       </div>
       {isSplitSubtasks ? (
         <div className="flex items-center justify-end mr-5">
           <Sort isSplitSubtasks={true} />
           <FilterDropdown isSplitSubtasks={true} parentId={parentId as string} />
-          <AssigneeSplitSubtasks isSplitSubtasks={true} parentId={parentId as string} />
+          <AssigneeSplitSubtasks parentId={parentId as string} />
           <Search isSplitSubtasks={true} parentId={parentId as string} />
         </div>
       ) : null}

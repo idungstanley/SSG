@@ -134,7 +134,7 @@ export default function Recurring() {
             } w-20 rounded-md cursor-pointer py-1 mx-6 flex space-x-1 items-center relative`}
             onClick={() => setDropRecurring((prev) => ({ ...prev, statusUpdate: !prev.statusUpdate }))}
           >
-            <FileIcon active={false} />
+            <FileIcon />
             <div className="uppercase font-semibold text-alsoit-text-sm">
               <span>{statusStr}</span>
             </div>

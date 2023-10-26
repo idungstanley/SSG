@@ -36,11 +36,13 @@ const onError = (error: unknown): unknown => {
     title = 'Oops! An internal server error occurred.';
   } else if (typedError.status === 404) {
     title = 'Oops! Resource not found.';
+  } else if (typedError.status === 422) {
+    title = typedError.data.message.title;
   } else if (typedError?.data?.message) {
     title = typedError?.data?.message.title;
     body = typedError?.data?.message.body;
   } else {
-    title = typedError?.statusText || typedError?.message;
+    title = typedError?.statusText || typedError?.message || typedError.data.message.title;
   }
 
   toast.custom((t) => <Toast type="error" title={title} body={body} toastId={t.id} />);
@@ -79,12 +81,12 @@ const queryClient = new QueryClient({
       staleTime: 86400000 // 24 hours
     }
   },
-  queryCache: new QueryCache({
-    onError
-  }),
   mutationCache: new MutationCache({
     onError,
     onSuccess
+  }),
+  queryCache: new QueryCache({
+    onError
   })
 });
 
@@ -110,7 +112,6 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
         <Suspense fallback={<Spinner />}>
           <App />
         </Suspense>
-
         {/* // ? delete the line below to remove flower icon in bottom right side of page  */}
         <ReactQueryDevtools position="bottom-right" />
       </GoogleOAuthProvider>

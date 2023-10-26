@@ -1,5 +1,5 @@
 import { Fragment, useState } from 'react';
-import { Menu, Transition } from '@headlessui/react';
+import { Menu as HeadMenu } from '@headlessui/react';
 import Button from '../../../../../../../components/Buttons/Button';
 import SubtaskIcon from '../../../../../../../assets/icons/SubtaskIcon';
 import { useAppDispatch, useAppSelector } from '../../../../../../../app/hooks';
@@ -9,6 +9,8 @@ import {
   setToggleAllSubtaskSplit
 } from '../../../../../../../features/task/taskSlice';
 import ArrowDownFilled from '../../../../../../../assets/icons/ArrowDownFilled';
+import ArrowDrop from '../../../../../../../assets/icons/ArrowDrop';
+import { Menu } from '@mui/material';
 
 export const COLLAPSE_ALL_TWO = 'collapse_all_two';
 export const COLLAPSE_ALL_THREE = 'collapse_all_three';
@@ -20,6 +22,15 @@ export const EXPAND = 'expand_';
 interface IOption {
   id: string;
   value: string;
+}
+
+interface IViewSetting {
+  id: string;
+  label: string;
+  isUseDropdown: boolean;
+  handleClick: (id: string) => void;
+  isShow: boolean;
+  subLabel?: undefined;
 }
 
 const dropdownItems = [
@@ -73,6 +84,8 @@ export default function ListSubtasks({ subtasksTitle }: { subtasksTitle: string 
   const [listView] = useState<boolean>(true);
   const [collapseDropdownId, setCollapseDropdownId] = useState<IOption>(dropdownItems[0]);
   const [expandDropdownId, setExpandDropdownId] = useState<IOption>(dropdownItems[0]);
+  const [dropdownEl, setDropdownEl] = useState<null | HTMLElement>(null);
+  const [dropdownLevelsEl, setDropdownLevelsEl] = useState<null | HTMLElement>(null);
 
   const viewSettings = [
     {
@@ -122,126 +135,110 @@ export default function ListSubtasks({ subtasksTitle }: { subtasksTitle: string 
 
   const [activeViewId, setActiveViewId] = useState<string>(viewSettings[0].id);
   const [activeLabel, setActiveLabel] = useState<string>(viewSettings[0].label);
+  const [activeViewSetting, setActiveViewSetting] = useState<IViewSetting>();
 
   return (
-    <div className="flex items-center justify-start space-x-1 ">
-      <span className="gap-2 cursor-pointer group">
-        <Menu>
-          <div className="flex items-center justify-center viewSettingsParent">
-            <Menu.Button>
-              <Button active={toggleAllSubtask}>
-                <SubtaskIcon color={toggleAllSubtask ? '#BF01FE' : '#424242'} />
-                <span className="mr-2 whitespace-nowrap">
-                  {subtasksTitle}: {activeLabel}
-                </span>
-                <ArrowDownFilled active={toggleAllSubtask} />
-              </Button>
-            </Menu.Button>
-          </div>
+    <>
+      <div
+        className="flex items-center justify-center viewSettingsParent"
+        onClick={(e: React.MouseEvent<HTMLDivElement>) => setDropdownEl(e.currentTarget)}
+      >
+        <HeadMenu>
+          <HeadMenu.Button>
+            <Button active={toggleAllSubtask}>
+              <SubtaskIcon color={toggleAllSubtask ? '#BF01FE' : '#424242'} />
+              <span className="whitespace-nowrap">
+                {subtasksTitle}: {activeLabel}
+              </span>
+              <ArrowDrop color={toggleAllSubtask ? '#BF01FE' : '#424242'} />
+            </Button>
+          </HeadMenu.Button>
+        </HeadMenu>
+      </div>
 
-          <Transition
-            as={Fragment}
-            enter="transition ease-out duration-100"
-            enterFrom="transform opacity-0 scale-95"
-            enterTo="transform opacity-100 scale-100"
-            leave="transition ease-in duration-75"
-            leaveFrom="transform opacity-100 scale-100"
-            leaveTo="transform opacity-0 scale-95"
-          >
-            <Menu.Items
-              style={{ zIndex: 61 }}
-              className="absolute w-48 mt-3 origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
-            >
-              {viewSettings.map((view) => (
-                <Fragment key={view.id}>
-                  {view.isShow ? (
-                    <Menu.Item
-                      as="div"
-                      className={`${
-                        view.id !== activeViewId
-                          ? 'flex items-center text-sm text-gray-600 text-left w-full hover:bg-gray-300'
-                          : listView && view.id === activeViewId && !splitSubTaskState
-                          ? 'flex items-center text-sm text-gray-600 text-left w-full bg-primary-200'
-                          : 'flex items-center text-sm text-gray-600 text-left w-full'
-                      }`}
-                      onClick={() => {
-                        setActiveLabel(view.label);
-                        setActiveViewId(view.id);
-                      }}
-                    >
-                      <button
-                        onClick={view.isUseDropdown ? () => null : (view.handleClick as () => void)}
-                        className="flex items-center w-full py-2 group"
+      <Menu anchorEl={dropdownEl} open={!!dropdownEl} onClose={() => setDropdownEl(null)} style={{ marginTop: '10px' }}>
+        <div className="w-48">
+          {viewSettings.map((view) => (
+            <Fragment key={view.id}>
+              {view.isShow ? (
+                <div
+                  className={`${
+                    view.id !== activeViewId
+                      ? 'flex items-center text-sm text-gray-600 text-left w-full hover:bg-gray-300'
+                      : listView && view.id === activeViewId && !splitSubTaskState
+                      ? 'flex items-center text-sm text-gray-600 text-left w-full bg-primary-200'
+                      : 'flex items-center text-sm text-gray-600 text-left w-full'
+                  }`}
+                  onClick={() => {
+                    setActiveLabel(view.label);
+                    setActiveViewId(view.id);
+                  }}
+                >
+                  <button
+                    onClick={view.isUseDropdown ? () => null : (view.handleClick as () => void)}
+                    className="flex items-center w-full py-2 group"
+                  >
+                    <p className="flex items-center pl-2 space-x-2 text-md">
+                      <span>{view.label}</span>
+                      {view?.subLabel ? <span className="text-xs italic">{view.subLabel}</span> : null}
+                    </p>
+
+                    {view.isUseDropdown ? (
+                      <div
+                        className="flex items-center justify-center ml-1 viewSettingsParent"
+                        onClick={(e: React.MouseEvent<HTMLDivElement>) => {
+                          setDropdownLevelsEl(e.currentTarget);
+                          setActiveViewSetting(view);
+                        }}
                       >
-                        <p className="flex items-center pl-2 space-x-2 text-md">
-                          <span>{view.label}</span>
-                          {view?.subLabel ? <span className="text-xs italic">{view.subLabel}</span> : null}
-                        </p>
+                        <HeadMenu>
+                          <HeadMenu.Button>
+                            <Button active={false} withoutBg={true}>
+                              <span className="mr-2 whitespace-nowrap">
+                                {view.id === COLLAPSE ? collapseDropdownId.value : expandDropdownId.value}
+                              </span>
+                              <ArrowDownFilled active={false} />
+                            </Button>
+                          </HeadMenu.Button>
+                        </HeadMenu>
+                      </div>
+                    ) : null}
+                  </button>
+                </div>
+              ) : null}
+            </Fragment>
+          ))}
+        </div>
+      </Menu>
 
-                        {view.isUseDropdown ? (
-                          <Menu>
-                            <div className="flex items-center justify-center ml-1 viewSettingsParent">
-                              <Menu.Button>
-                                <Button active={false} withoutBg={true}>
-                                  <span className="mr-2 whitespace-nowrap">
-                                    {view.id === COLLAPSE ? collapseDropdownId.value : expandDropdownId.value}
-                                  </span>
-                                  <ArrowDownFilled active={false} />
-                                </Button>
-                              </Menu.Button>
-                            </div>
-                            <Transition
-                              as={Fragment}
-                              enter="transition ease-out duration-100"
-                              enterFrom="transform opacity-0 scale-95"
-                              enterTo="transform opacity-100 scale-100"
-                              leave="transition ease-in duration-75"
-                              leaveFrom="transform opacity-100 scale-100"
-                              leaveTo="transform opacity-0 scale-95"
-                            >
-                              <Menu.Items
-                                style={{ zIndex: 61, top: '-15px' }}
-                                className="absolute w-48 mt-3 origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
-                              >
-                                {dropdownItems.map((option) => (
-                                  <Fragment key={view.id}>
-                                    {view.isShow ? (
-                                      <Menu.Item
-                                        as="div"
-                                        className="flex items-center w-full text-sm text-left text-gray-600 hover:bg-gray-300"
-                                      >
-                                        <button
-                                          onClick={() => {
-                                            if (view.id === COLLAPSE) {
-                                              setCollapseDropdownId(option);
-                                            } else {
-                                              setExpandDropdownId(option);
-                                            }
-                                            view.handleClick(option.id);
-                                          }}
-                                          className="flex items-center justify-between w-full py-2 group"
-                                        >
-                                          <p className="flex items-center pl-2 space-x-2 text-md">
-                                            <span>{option.value}</span>
-                                          </p>
-                                        </button>
-                                      </Menu.Item>
-                                    ) : null}
-                                  </Fragment>
-                                ))}
-                              </Menu.Items>
-                            </Transition>
-                          </Menu>
-                        ) : null}
-                      </button>
-                    </Menu.Item>
-                  ) : null}
-                </Fragment>
-              ))}
-            </Menu.Items>
-          </Transition>
-        </Menu>
-      </span>
-    </div>
+      <Menu
+        anchorEl={dropdownLevelsEl}
+        open={!!dropdownLevelsEl && !!activeViewSetting}
+        onClose={() => setDropdownLevelsEl(null)}
+      >
+        <div className="w-20">
+          {dropdownItems.map((option) => (
+            <div key={option.id} className="flex items-center w-full text-sm text-left text-gray-600 hover:bg-gray-300">
+              <button
+                onClick={() => {
+                  if (activeViewSetting?.id === COLLAPSE) {
+                    setCollapseDropdownId(option);
+                  } else {
+                    setExpandDropdownId(option);
+                  }
+                  activeViewSetting?.handleClick(option.id);
+                  setDropdownLevelsEl(null);
+                }}
+                className="flex items-center justify-between w-full py-2 group"
+              >
+                <p className="flex items-center pl-2 space-x-2 text-md">
+                  <span>{option.value}</span>
+                </p>
+              </button>
+            </div>
+          ))}
+        </div>
+      </Menu>
+    </>
   );
 }

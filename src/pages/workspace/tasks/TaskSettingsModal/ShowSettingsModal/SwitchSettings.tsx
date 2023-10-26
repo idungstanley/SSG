@@ -3,6 +3,7 @@ import {
   THREE_SUBTASKS_LEVELS,
   TWO_SUBTASKS_LEVELS,
   getCompactView,
+  getScrollGroupView,
   getSingleLineView,
   getSplitSubTask,
   getSplitSubTaskLevels,
@@ -15,6 +16,7 @@ import {
 export function useSwitchSettings() {
   const dispatch = useAppDispatch();
   const {
+    scrollGroupView,
     singleLineView,
     CompactView,
     verticalGrid,
@@ -46,6 +48,9 @@ export function useSwitchSettings() {
 
   const switchSettings = (viewMode: string) => {
     switch (viewMode) {
+      case 'Scroll By Each Group':
+        dispatch(getScrollGroupView(!scrollGroupView));
+        break;
       case 'Single Line mode':
         dispatch(getSingleLineView(!singleLineView));
         break;

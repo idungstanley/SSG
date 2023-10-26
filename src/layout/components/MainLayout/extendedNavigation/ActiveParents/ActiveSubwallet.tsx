@@ -15,7 +15,7 @@ function ActiveSubWallet({ padding = 'pl-8' }: SubWalletIndexProps) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { activeItemId } = useAppSelector((state) => state.workspace);
+  const { activeItemId, activeView } = useAppSelector((state) => state.workspace);
   const { showMenuDropdown, hub } = useAppSelector((state) => state.hub);
 
   const [wallet, setWallet] = useState<Wallet>();
@@ -27,7 +27,7 @@ function ActiveSubWallet({ padding = 'pl-8' }: SubWalletIndexProps) {
   }, [activeItemId]);
 
   const handleLocation = (id: string, type = 'subWallet') => {
-    navigate(`tasks/w/${id}`);
+    navigate(`tasks/w/${id}/v/${activeView?.id}`);
     dispatch(setActiveItem({ activeItemType: type, activeItemId: id }));
   };
 

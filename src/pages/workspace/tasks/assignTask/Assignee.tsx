@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { UserPlusIcon } from '@heroicons/react/24/solid';
 import { useGetTeamMembers } from '../../../../features/settings/teamMembers/teamMemberService';
-import { AvatarWithInitials } from '../../../../components';
 import GroupAssignee from './GroupAssignee';
 import { ICheckListItems } from '../../../../features/task/interface.tasks';
 import { ImyTaskData, setSelectedTaskParentId, setSelectedTaskType } from '../../../../features/task/taskSlice';
@@ -13,6 +12,7 @@ import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import AssigneeItem from './AssigneeItem';
 import AlsoitMenuDropdown from '../../../../components/DropDowns';
 import { EntityType } from '../../../../utils/EntityTypes/EntityType';
+import UserAvatar from './UserAvatar';
 
 export default function Assignee({
   itemId,
@@ -76,9 +76,7 @@ export default function Assignee({
         <div id="basic-button">
           {userObj ? (
             <div>
-              <button className="border-2 border-red-400 rounded-full" onClick={handleClick}>
-                <AvatarWithInitials initials={userObj.user.initials} backgroundColour={userObj.color} badge={true} />
-              </button>
+              <UserAvatar user={userObj} handleClick={handleClick} />
             </div>
           ) : (
             <span onClick={handleClick}>

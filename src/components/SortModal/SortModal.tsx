@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { Fragment, useEffect, useRef, useState } from 'react';
 import { AiOutlineBgColors } from 'react-icons/ai';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import Menu from '@mui/material/Menu';
@@ -21,13 +21,15 @@ import { TbAlignJustified } from 'react-icons/tb';
 import { setActiveTabId } from '../../features/workspace/workspaceSlice';
 import { pilotTabs } from '../../app/constants/pilotTabs';
 import { IField } from '../../features/list/list.interfaces';
+import { displayPrompt, setVisibility } from '../../features/general/prompt/promptSlice';
 
 type SortModalProps = {
+  anchorEl: HTMLElement | null;
   toggleModal: React.Dispatch<React.SetStateAction<boolean>>;
   handleSortFn: (header: string, id: string, order: 'asc' | 'desc') => void;
-  anchorEl: HTMLElement | null;
-  handleClose: () => void;
   setAnchorEl?: React.Dispatch<React.SetStateAction<HTMLElement | null>>;
+  handleClose: () => void;
+  handleRemoveColumn?: () => void;
 };
 
 type filterSwitch = {
@@ -39,41 +41,55 @@ interface dropdownTypes {
   label: string;
   icon: JSX.Element;
   showArrow: boolean;
+  isHide: boolean;
   handleClick?: () => void;
 }
 
-export default function SortModal({ toggleModal, setAnchorEl, anchorEl, handleClose, handleSortFn }: SortModalProps) {
+export default function SortModal({
+  anchorEl,
+  toggleModal,
+  setAnchorEl,
+  handleClose,
+  handleSortFn,
+  handleRemoveColumn
+}: SortModalProps) {
   const { sortAbleArr, activeTaskColumn, sortArr } = useAppSelector((state) => state.task);
   const DropDownOptions: dropdownTypes[] = [
     {
       label: 'filter by color',
       icon: <IoIosColorFilter />,
-      showArrow: true
+      showArrow: true,
+      isHide: false
     },
     {
       label: 'filter by condition',
       icon: <RiFilter2Line />,
-      showArrow: true
+      showArrow: true,
+      isHide: false
     },
     {
       label: 'filter by values',
       icon: <MdOutlineFilter1 />,
-      showArrow: true
+      showArrow: true,
+      isHide: false
     },
     {
       label: 'Move Columns',
       icon: <HiOutlineSwitchHorizontal />,
-      showArrow: true
+      showArrow: true,
+      isHide: false
     },
     {
       label: 'Ajust Alignment',
       icon: <TbAlignJustified />,
-      showArrow: true
+      showArrow: true,
+      isHide: false
     },
     {
       label: 'Edit Fields',
       icon: <MdEditNote />,
       showArrow: false,
+      isHide: false,
       handleClick: () => {
         if (!activeTaskColumn.defaulField) {
           dispatch(setEditCustomProperty(activeTaskColumn as IField));
@@ -86,17 +102,48 @@ export default function SortModal({ toggleModal, setAnchorEl, anchorEl, handleCl
     {
       label: 'Duplicate',
       icon: <HiOutlineDuplicate />,
-      showArrow: false
+      showArrow: false,
+      isHide: false
     },
     {
       label: 'Hide Columns',
       icon: <BiHide />,
-      showArrow: false
+      showArrow: false,
+      isHide: false
     },
     {
       label: 'Remove From List',
       icon: <MdOutlineDeleteForever className="text-red-500" />,
-      showArrow: false
+      showArrow: false,
+      isHide: activeTaskColumn.defaulField,
+      handleClick: () => {
+        if (!activeTaskColumn.defaulField) {
+          dispatch(
+            displayPrompt(
+              `Delete "${activeTaskColumn.value}" column`,
+              `Would you like delete this "${activeTaskColumn.value}" column?`,
+              [
+                {
+                  label: 'Delete Column',
+                  style: 'danger',
+                  callback: () => {
+                    handleRemoveColumn && handleRemoveColumn();
+                    dispatch(setVisibility(false));
+                  }
+                },
+                {
+                  label: 'Cancel',
+                  style: 'plain',
+                  callback: () => {
+                    dispatch(setVisibility(false));
+                  }
+                }
+              ]
+            )
+          );
+          handleClose();
+        }
+      }
     }
   ];
   const modalRef = useRef<HTMLDivElement>(null);
@@ -256,31 +303,37 @@ export default function SortModal({ toggleModal, setAnchorEl, anchorEl, handleCl
           {/* <div className="flex flex-col space-y-1 capitalize p"> */}
           <>
             {DropDownOptions.map((item, index) => (
-              <div key={index} onClick={item.handleClick}>
-                <div className="flex items-center justify-between h-8 px-1 hover:bg-gray-200 cursor-pointer">
-                  <div className="flex items-center gap-1">
-                    {item.icon}
-                    <span>{item.label}</span>
-                  </div>
-                  {item.showArrow && (
-                    <>
-                      {!filterDropDown[0].toggle ? (
-                        <IoIosArrowForward
-                          className="font-bold text-gray-600"
-                          onClick={(e) => switchBtns(e, 'color')}
-                        />
-                      ) : (
-                        <IoIosArrowDown className="font-bold text-gray-600" onClick={(e) => switchBtns(e, 'color')} />
+              <Fragment key={index}>
+                {!item.isHide ? (
+                  <div onClick={item.handleClick}>
+                    <div className="flex items-center justify-between h-8 px-1 hover:bg-gray-200 cursor-pointer">
+                      <div className="flex items-center gap-1">
+                        {item.icon}
+                        <span>{item.label}</span>
+                      </div>
+                      {item.showArrow && (
+                        <>
+                          {!filterDropDown[0].toggle ? (
+                            <IoIosArrowForward
+                              className="font-bold text-gray-600"
+                              onClick={(e) => switchBtns(e, 'color')}
+                            />
+                          ) : (
+                            <IoIosArrowDown
+                              className="font-bold text-gray-600"
+                              onClick={(e) => switchBtns(e, 'color')}
+                            />
+                          )}
+                        </>
                       )}
-                    </>
-                  )}
-                </div>
-              </div>
+                    </div>
+                  </div>
+                ) : null}
+              </Fragment>
             ))}
           </>
         </div>
       </div>
-      {/* </div> */}
     </Menu>
   );
 }

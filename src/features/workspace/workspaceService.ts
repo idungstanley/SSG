@@ -8,8 +8,16 @@ import {
   IWorkspaceSettingsUpdateRes
 } from './workspace.interfaces';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { setFetchAllWorkspace, setWorkSpaceSetting, setWorkSpaceSettingsObj, setWorkspaceData } from './workspaceSlice';
+import {
+  setActiveView,
+  setFetchAllWorkspace,
+  setWorkSpaceSetting,
+  setWorkSpaceSettingsObj,
+  setWorkspaceData
+} from './workspaceSlice';
 import { IFormData } from '../../components/Pilot/components/RecordScreen/Recording';
+import { setSpaceViews } from '../hubs/hubSlice';
+import { IView } from '../hubs/hubs.interfaces';
 
 interface IData {
   name: string | number;
@@ -236,5 +244,100 @@ export const getActivityLogs = () => {
       }
     });
     return data;
+  });
+};
+
+interface ICreateViewRes {
+  data: {
+    task_view: IView;
+  };
+}
+
+const createView = (data: { model: string; model_id: string; type: string; name: string }) => {
+  const response = requestNew<ICreateViewRes>({
+    url: 'task-views',
+    method: 'POST',
+    data
+  });
+  return response;
+};
+
+export const useCreateView = () => {
+  const dispatch = useAppDispatch();
+
+  const { spaceViews } = useAppSelector((state) => state.hub);
+
+  return useMutation(createView, {
+    onSuccess: (data) => {
+      dispatch(setSpaceViews([...spaceViews, data.data.task_view]));
+    }
+  });
+};
+
+const deleteView = (viewId: string) => {
+  const response = requestNew({
+    url: `task-views/${viewId}`,
+    method: 'DELETE'
+  });
+  return response;
+};
+
+export const useDeleteView = (viewId: string) => {
+  const dispatch = useAppDispatch();
+
+  const { spaceViews } = useAppSelector((state) => state.hub);
+
+  return useMutation(deleteView, {
+    onSuccess: () => {
+      dispatch(setSpaceViews(spaceViews.filter((view) => view.id !== viewId)));
+    }
+  });
+};
+
+const dublicateView = (viewId: string) => {
+  const response = requestNew<ICreateViewRes>({
+    url: `task-views/${viewId}/duplicate`,
+    method: 'POST'
+  });
+  return response;
+};
+
+export const useDublicateView = () => {
+  const dispatch = useAppDispatch();
+
+  const { spaceViews } = useAppSelector((state) => state.hub);
+
+  return useMutation(dublicateView, {
+    onSuccess: (data) => {
+      dispatch(setSpaceViews([...spaceViews, data.data.task_view]));
+    }
+  });
+};
+
+const updateView = (view: { id: string; data: { is_pinned: number } }) => {
+  const response = requestNew<ICreateViewRes>({
+    url: `task-views/${view.id}`,
+    method: 'PUT',
+    data: view.data
+  });
+  return response;
+};
+
+export const useUpdateView = () => {
+  const dispatch = useAppDispatch();
+
+  const { spaceViews } = useAppSelector((state) => state.hub);
+
+  return useMutation(updateView, {
+    onSuccess: (data) => {
+      const newViews = spaceViews.map((view) => {
+        if (view.id === data.data.task_view.id) {
+          return data.data.task_view;
+        }
+        return view;
+      });
+      dispatch(setSpaceViews(newViews));
+      dispatch(setActiveView(data.data.task_view));
+    }
   });
 };

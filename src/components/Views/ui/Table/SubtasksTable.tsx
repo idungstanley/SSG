@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import { ITaskFullList, Task } from '../../../../features/task/interface.tasks';
 import { createHeaders, generateGrid } from '../../lib';
 import { Head } from './Head/Head';
@@ -8,13 +8,11 @@ import { Label } from '../List/Label';
 import { IListColor } from '../List/List';
 import LightenColor from '../List/lightenColor/LightenColor';
 import { ScrollableHorizontalListsContainer } from '../../../ScrollableContainer/ScrollableHorizontalListsContainer';
-import { useScroll } from '../../../../hooks/useScroll';
 import {
   THREE_SUBTASKS_LEVELS,
   TWO_SUBTASKS_LEVELS,
   setShowNewTaskField,
-  setShowNewTaskId,
-  setUpdateCords
+  setShowNewTaskId
 } from '../../../../features/task/taskSlice';
 import { filterSubtasks } from '../../../../utils/filterSubtasks';
 import { listColumnProps } from '../../../../pages/workspace/tasks/component/views/ListColumns';
@@ -38,6 +36,7 @@ export function SubtasksTable({ task, subtasksData, heads, listId, level, breadc
   const [collapseTable, setCollapseTable] = useState(false);
   const [isShowNewLevel, setShowNewLevel] = useState<boolean>(false);
 
+  const tableHeadElement = useRef<HTMLTableElement>(null);
   const columns = createHeaders(heads).filter((i) => !i.hidden);
 
   const taskLength = subtasksData?.length;
@@ -60,8 +59,6 @@ export function SubtasksTable({ task, subtasksData, heads, listId, level, breadc
     dispatch(setShowNewTaskField(true));
   };
 
-  const onScroll = useScroll(() => dispatch(setUpdateCords()));
-
   useEffect(() => {
     const isSecondLevel = splitSubTaskLevels.includes(TWO_SUBTASKS_LEVELS);
     const isThirdLevel = splitSubTaskLevels.includes(THREE_SUBTASKS_LEVELS);
@@ -78,6 +75,12 @@ export function SubtasksTable({ task, subtasksData, heads, listId, level, breadc
   const isSecondLevel = useMemo(() => splitSubTaskLevels.includes(TWO_SUBTASKS_LEVELS), [splitSubTaskLevels]);
   const isThirdLevel = useMemo(() => splitSubTaskLevels.includes(THREE_SUBTASKS_LEVELS), [splitSubTaskLevels]);
 
+  const handleScrollLeft = (value: number) => {
+    if (tableHeadElement.current && value >= 0) {
+      tableHeadElement.current.scrollTo({ left: value });
+    }
+  };
+
   return subtasksData && subtasksData.length ? (
     <div
       className={`${
@@ -85,7 +88,6 @@ export function SubtasksTable({ task, subtasksData, heads, listId, level, breadc
           ? 'border-t-4 border-l-4 border-purple-500 rounded-3xl pb-3'
           : ''
       } bg-purple-50 ml-10 mt-2`}
-      // ref={setNodeRef}
       style={{
         borderColor: ListColor?.outerColour as string,
         backgroundColor: LightenColor(ListColor?.outerColour as string, 0.95),
@@ -104,11 +106,47 @@ export function SubtasksTable({ task, subtasksData, heads, listId, level, breadc
             isSplitSubtasks={true}
             parentId={task.id}
           />
-          <ScrollableHorizontalListsContainer onScroll={onScroll} ListColor={ListColor}>
+          <div
+            className="sticky top-0 mr-2 pl-2 pt-2 table-container overflow-hidden z-10"
+            style={{
+              backgroundColor: LightenColor(
+                ListColor?.outerColour === null ? 'black' : (ListColor?.outerColour as string),
+                0.95
+              )
+            }}
+            ref={tableHeadElement}
+          >
+            <table
+              style={
+                !collapseTasks
+                  ? {
+                      display: 'grid',
+                      gridTemplateColumns: generateGrid(columns.length, true)
+                    }
+                  : undefined
+              }
+              className="w-full"
+            >
+              <Head
+                collapseTasks={collapseTasks}
+                taskLength={taskLength || 0}
+                onToggleCollapseTasks={() => setCollapseTasks((prev) => !prev)}
+                label={subtasksData[0].status.name}
+                headerStatusColor={subtasksData[0].status.color as string}
+                columns={columns}
+                listName={task.list?.name}
+                tableHeight="auto"
+                listId={subtasksData[0].list_id}
+                groupedTask={subtasksData}
+                isSplitSubtask={true}
+                parentId={task.id}
+              />
+            </table>
+          </div>
+          <ScrollableHorizontalListsContainer ListColor={ListColor} returnScrollLeft={handleScrollLeft}>
             {!collapseTable ? (
               <div className="table-container">
                 <table
-                  onScroll={onScroll}
                   style={
                     !collapseTasks
                       ? {
@@ -118,23 +156,7 @@ export function SubtasksTable({ task, subtasksData, heads, listId, level, breadc
                       : undefined
                   }
                   className="w-full"
-                  // ref={tableElement}
                 >
-                  <Head
-                    collapseTasks={collapseTasks}
-                    taskLength={taskLength || 0}
-                    onToggleCollapseTasks={() => setCollapseTasks((prev) => !prev)}
-                    label={subtasksData[0].status.name}
-                    headerStatusColor={subtasksData[0].status.color as string}
-                    columns={columns}
-                    listName={task.list?.name}
-                    tableHeight="auto"
-                    listId={subtasksData[0].list_id}
-                    groupedTask={subtasksData}
-                    isSplitSubtask={true}
-                    parentId={task.id}
-                  />
-
                   {/* rows */}
                   {!collapseTasks ? (
                     <tbody className="contents">
@@ -151,7 +173,6 @@ export function SubtasksTable({ task, subtasksData, heads, listId, level, breadc
                                 isListParent={true}
                                 parentId={task.id}
                                 taskStatusId={statusId}
-                                // handleClose={handleClose}
                                 isSplitSubtask={true}
                                 level={level}
                                 isBlockedShowChildren={level === 1 && isThirdLevel}

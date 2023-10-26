@@ -8,6 +8,9 @@ export interface CalendarState {
   timeInterval: number | string;
   reminderType: string | number;
   reminderInterval: number | string;
+  selectedHubs: SelectedHubs[];
+  savedSelections: SavedSelections[];
+  hrOpenedEntities: HrOpenedEntities[];
 }
 
 interface NewDayOff extends Pick<DayOff, 'start_date' | 'end_date'> {
@@ -15,3 +18,13 @@ interface NewDayOff extends Pick<DayOff, 'start_date' | 'end_date'> {
 }
 
 export type BlacklistId = string;
+
+interface SelectedHubs {
+  hubId: string;
+  hubName: string | null;
+  hubColor: string | null;
+}
+
+export type SavedSelections = string;
+
+export type HrOpenedEntities = string;

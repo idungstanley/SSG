@@ -1,6 +1,13 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../../../app/store';
-import { BlacklistId, CalendarState, NewDayOff } from '../types/calendarSchema';
+import {
+  BlacklistId,
+  CalendarState,
+  HrOpenedEntities,
+  NewDayOff,
+  SavedSelections,
+  SelectedHubs
+} from '../types/calendarSchema';
 
 const initialState: CalendarState = {
   updateCords: Date.now(),
@@ -9,7 +16,10 @@ const initialState: CalendarState = {
   intervalType: 'minutes',
   timeInterval: 15,
   reminderType: 'days',
-  reminderInterval: 2
+  reminderInterval: 2,
+  selectedHubs: [],
+  savedSelections: [],
+  hrOpenedEntities: []
 };
 
 export const calendarSlice = createSlice({
@@ -36,6 +46,15 @@ export const calendarSlice = createSlice({
     },
     setRemindertype(state, action: PayloadAction<string | number>) {
       state.reminderType = action.payload;
+    },
+    setSelectedHubs(state, action: PayloadAction<SelectedHubs[]>) {
+      state.selectedHubs = action.payload;
+    },
+    setSavedSelections(state, action: PayloadAction<SavedSelections[]>) {
+      state.savedSelections = action.payload;
+    },
+    setHrOpenedEntities: (state, action: PayloadAction<HrOpenedEntities[]>) => {
+      state.hrOpenedEntities = action.payload;
     }
   }
 });
@@ -49,7 +68,10 @@ export const {
   setIntervalType,
   setTimeInterval,
   setReminderInterval,
-  setRemindertype
+  setRemindertype,
+  setSelectedHubs,
+  setSavedSelections,
+  setHrOpenedEntities
 } = calendarSlice.actions;
 
 export default calendarSlice.reducer;

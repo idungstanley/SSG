@@ -43,7 +43,7 @@ function ResetPassword() {
           });
         }
       } catch (error) {
-        console.warn(error);
+        return error;
       }
     }
   };

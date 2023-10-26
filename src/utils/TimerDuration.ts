@@ -87,7 +87,10 @@ export function formatTimeString(inputString: string): string {
 
 export function timeStringToMilliseconds(timeString: string) {
   const time = dayjs(timeString, 'HH:mm');
-  return time.diff(dayjs().startOf('day'), 'millisecond');
+  const milliseconds = time.diff(dayjs().startOf('day'), 'millisecond');
+  const formattedTime = { h: time.hour(), m: time.minute(), s: time.second() };
+
+  return { milliseconds, formattedTime };
 }
 
 export default Duration;

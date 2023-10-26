@@ -26,6 +26,8 @@ import { EntityType } from '../../../../../utils/EntityTypes/EntityType';
 import EntityManagerIcon from '../../../../../assets/icons/EntityManagerIcon';
 import { UtilityIcon } from '../../../../../assets/icons/Utility';
 import { pilotTabs } from '../../../../../app/constants/pilotTabs';
+import Views from '../../../../../components/Pilot/components/Views/Index';
+import PilotViewIcon from '../../../../../assets/icons/PilotViewIcon';
 
 const sections = [
   {
@@ -59,6 +61,10 @@ const sections = [
   {
     id: pilotTabs.ENTITY_MANAGER,
     element: <HubManager />
+  },
+  {
+    id: pilotTabs.VIEWS,
+    element: <Views />
   },
   {
     id: pilotTabs.TEMPLATES,
@@ -112,6 +118,11 @@ const tabs = [
     icon: <EntityManagerIcon />
   },
   {
+    id: pilotTabs.VIEWS,
+    label: 'Views',
+    icon: <PilotViewIcon />
+  },
+  {
     id: pilotTabs.TEMPLATES,
     label: 'Templates',
     icon: <TemplatesIcon />
@@ -130,6 +141,8 @@ export default function PilotSection() {
 
   const { hubId } = useParams();
   const { activeItemName } = useAppSelector((state) => state.workspace);
+  const { pilotSideOver } = useAppSelector((state) => state.slideOver);
+  const { show } = pilotSideOver;
 
   // set data for pilot
   useEffect(() => {
@@ -140,7 +153,7 @@ export default function PilotSection() {
         setShowPilotSideOver({
           id: selectedItemId,
           type: EntityType.hub,
-          show: true,
+          show: show,
           title: activeItemName ?? ''
         })
       );

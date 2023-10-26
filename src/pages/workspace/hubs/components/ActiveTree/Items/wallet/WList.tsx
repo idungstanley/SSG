@@ -28,10 +28,10 @@ export default function WList({ wallets, leftMargin, paddingLeft, type, level = 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const { showExtendedBar, openedEntitiesIds } = useAppSelector((state) => state.workspace);
+  const { showExtendedBar, openedEntitiesIds, activeView } = useAppSelector((state) => state.workspace);
 
   const handleLocation = (id: string, name: string, item: IWallet) => {
-    const viewsUrl = generateViewsUrl(id, item) as string;
+    const viewsUrl = generateViewsUrl(id, activeView?.id as string, item) as string;
 
     navigate(viewsUrl, { replace: true });
     if (openedEntitiesIds.includes(id)) {

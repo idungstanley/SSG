@@ -144,6 +144,28 @@ export const taskDateUpdateManager = (
   return tasks;
 };
 
+export const taskColourManager = (listId: string, tasks: Record<string, ITaskFullList[]>, color: string) => {
+  if (listId) {
+    // eslint-disable-next-line
+    const updatedTasks = { ...tasks };
+
+    updatedTasks[listId] = updatedTasks[listId].map((task) => {
+      if (listId === task.list_id) {
+        const list = { ...task?.list, color: color };
+        const updatedObj = {
+          ...task,
+          list
+        } as ITaskFullList;
+
+        return updatedObj;
+      }
+      return task;
+    });
+    return updatedTasks;
+  }
+  return tasks;
+};
+
 export const deleteTaskManager = (taskIds: string[], listIds: string[], tasks: Record<string, ITaskFullList[]>) => {
   if (listIds.length) {
     const updatedTasks: Record<string, ITaskFullList[]> = { ...tasks };
@@ -311,6 +333,46 @@ export const updateCustomFieldManager = (
       return task;
     });
   });
+
+  return { updatedTasks, updatedSubtasks };
+};
+
+export const deleteCustomFieldManager = (
+  tasks: Record<string, ITaskFullList[]>,
+  subtasks: Record<string, ITaskFullList[]>,
+  columnId: string,
+  currentListId: string
+) => {
+  const updatedTasks = { ...tasks };
+  const updatedSubtasks = { ...subtasks };
+
+  if (columnId && currentListId) {
+    updatedTasks[currentListId] = updatedTasks[currentListId].map((task) => {
+      const filteredCustomFields = task.custom_fields?.filter((field) => field.id !== columnId) as ICustomField[];
+      const filteredCustomFieldsColumns = task.custom_field_columns?.filter(
+        (field) => field.id !== columnId
+      ) as IField[];
+      return {
+        ...task,
+        custom_fields: [...filteredCustomFields],
+        custom_field_columns: [...filteredCustomFieldsColumns]
+      };
+    });
+
+    Object.keys(updatedSubtasks).map((taskId) => {
+      updatedSubtasks[taskId] = updatedSubtasks[taskId].map((task) => {
+        const filteredCustomFields = task.custom_fields?.filter((field) => field.id !== columnId) as ICustomField[];
+        const filteredCustomFieldsColumns = task.custom_field_columns?.filter(
+          (field) => field.id !== columnId
+        ) as IField[];
+        return {
+          ...task,
+          custom_fields: [...filteredCustomFields],
+          custom_field_columns: [...filteredCustomFieldsColumns]
+        };
+      });
+    });
+  }
 
   return { updatedTasks, updatedSubtasks };
 };

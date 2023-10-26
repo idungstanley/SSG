@@ -1,10 +1,11 @@
-import React, { Dispatch, SetStateAction, startTransition, useEffect } from 'react';
+import { Dispatch, SetStateAction, startTransition, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { useNavigate } from 'react-router-dom';
 import {
   setAssignOnHoverState,
   setCopyNewlyCreatedTask,
   setEscapeKey,
+  setF2State,
   setHilightNewlyCreatedTask,
   setPreferenceState
 } from '../../features/task/taskSlice';
@@ -13,7 +14,6 @@ import { setActiveTabId, setShowExtendedBar } from '../../features/workspace/wor
 export default function useTaskShortCut() {
   const { preferenceState, userSettingsProfile } = useAppSelector((state) => state.task);
   const { currentWorkspaceId } = useAppSelector((state) => state.auth);
-  const { showExtendedBar } = useAppSelector((state) => state.workspace);
 
   const dispatch = useAppDispatch();
 
@@ -49,19 +49,22 @@ export default function useTaskShortCut() {
 
       if (preferenceState.hotkeys) {
         if (handleInputFields() == true) {
-          switch (event.key.toLowerCase()) {
+          switch (event.key) {
             case '?':
               if (event.shiftKey) {
                 setTaskShortcut(true);
               }
               break;
             case 'h':
+            case 'H':
               navigate(`/${currentWorkspaceId}`);
               break;
             case 'c':
+            case 'C':
               dispatch(setActiveTabId('calendar'));
               break;
             case 'n':
+            case 'N':
               dispatch(setShowExtendedBar(true));
               break;
             case '1':
@@ -71,9 +74,15 @@ export default function useTaskShortCut() {
               dispatch(setCopyNewlyCreatedTask(true));
               break;
             case 'm':
+            case 'M':
               dispatch(setAssignOnHoverState(true));
               break;
+            case 'F2':
+              dispatch(setF2State(true));
+              break;
+
             default:
+              break;
           }
         }
         switch (event.key) {

@@ -8,8 +8,8 @@ interface SectionAreaProps {
 
 export default function SectionArea({ icon, label, children }: SectionAreaProps) {
   return (
-    <div className="py-2 px-2 flex flex-col gap-2 justify-start w-full border-y">
-      <div className="pl-4 flex space-x-2 items-center">
+    <div className="flex flex-col justify-start w-full gap-2 px-2 py-2 border-y">
+      <div className="pl-2.5 flex space-x-2 items-center">
         {icon}
         <p className="font-medium">{label}</p>
       </div>

@@ -3,6 +3,7 @@ import {
   THREE_SUBTASKS_LEVELS,
   TWO_SUBTASKS_LEVELS,
   getCompactView,
+  getScrollGroupView,
   getSingleLineView,
   getSplitSubTask,
   getSplitSubTaskLevels,
@@ -16,6 +17,7 @@ export function useformatSettings() {
   const dispatch = useAppDispatch();
 
   const formatSettings = (settingsOng: { [key: string]: boolean }) => {
+    dispatch(getScrollGroupView(settingsOng.scrollGroupView));
     dispatch(getSingleLineView(settingsOng.singleLineView));
     dispatch(getCompactView(settingsOng.CompactView));
     dispatch(getVerticalGrid(settingsOng.verticalGrid));
