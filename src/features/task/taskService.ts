@@ -885,7 +885,6 @@ export const useCurrentTime = ({ workspaceId }: { workspaceId?: string }) => {
       }
     }
   );
-
   return { status, refetch, data };
 };
 

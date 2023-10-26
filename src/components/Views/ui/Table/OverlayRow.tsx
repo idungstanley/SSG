@@ -20,10 +20,7 @@ export function OverlayRow({ task, columns }: OverlayRowProps) {
   const [hoverOn, setHoverOn] = useState(false);
 
   return (
-    <div
-      style={{ minWidth: 500, display: 'grid', gridTemplateColumns: generateGrid(columns.length) }}
-      className="items-center bg-white h-10 opacity-75"
-    >
+    <div style={{ minWidth: 500, display: 'grid', gridTemplateColumns: generateGrid(columns.length) }}>
       <StickyCol
         hoverOn={hoverOn}
         setHoverOn={setHoverOn}
