@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect, useState } from 'react';
-import { Menu, Transition } from '@headlessui/react';
+import { Menu as HeadMenu } from '@headlessui/react';
 import { BsChevronRight } from 'react-icons/bs';
 import { FiChevronRight } from 'react-icons/fi';
 import { useSwitchSettings } from './SwitchSettings';
@@ -17,6 +17,7 @@ import {
   setTriggerSaveSettings,
   setTriggerSaveSettingsModal
 } from '../../../../../features/task/taskSlice';
+import { Menu } from '@mui/material';
 
 interface IShowHideSettings {
   isActive: string;
@@ -63,6 +64,7 @@ export default function ShowHideSettings({
 
   const [checkedStates, setCheckedStates] = useState<boolean[]>([]);
   const [isAnyactive, setIsAnyactive] = useState<boolean>();
+  const [dropdownEl, setDropdownEl] = useState<null | HTMLElement>(null);
 
   const isActiveColor = isAnyactive ? '#BF01FE' : 'black';
 
@@ -207,29 +209,27 @@ export default function ShowHideSettings({
   };
 
   return (
-    <Menu>
-      <div className={`viewSettingsParent flex justify-center items-center text-${isAnyactive && 'alsoit-purple-50'}`}>
-        <Menu.Button className="flex ml-1">
-          <Button active={isAnyactive as boolean}>
-            <ShowIcon color={isActiveColor} width="21" height="21" /> <span>{isActive}</span>{' '}
-            <ArrowDrop color={isActiveColor} />
-          </Button>
-        </Menu.Button>
+    <>
+      <div
+        className="flex items-center justify-center viewSettingsParent"
+        onClick={(e: React.MouseEvent<HTMLDivElement>) => setDropdownEl(e.currentTarget)}
+      >
+        <HeadMenu>
+          <div
+            className={`viewSettingsParent flex justify-center items-center text-${isAnyactive && 'alsoit-purple-50'}`}
+          >
+            <HeadMenu.Button className="flex ml-1">
+              <Button active={isAnyactive as boolean}>
+                <ShowIcon color={isActiveColor} width="21" height="21" /> <span>{isActive}</span>{' '}
+                <ArrowDrop color={isActiveColor} />
+              </Button>
+            </HeadMenu.Button>
+          </div>
+        </HeadMenu>
       </div>
 
-      <Transition
-        as={Fragment}
-        enter="transition ease-out duration-100"
-        enterFrom="transform opacity-0 scale-95"
-        enterTo="transform opacity-100 scale-100"
-        leave="transition ease-in duration-75"
-        leaveFrom="transform opacity-100 scale-100"
-        leaveTo="transform opacity-0 scale-95"
-      >
-        <Menu.Items
-          style={{ zIndex: 61, height: '372px', width: '247px', overflow: 'auto' }}
-          className="absolute w-64 mt-3 origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
-        >
+      <Menu anchorEl={dropdownEl} open={!!dropdownEl} onClose={() => setDropdownEl(null)} style={{ marginTop: '10px' }}>
+        <div style={{ zIndex: 61, height: '372px', width: '247px', overflow: 'auto' }} className="w-64">
           <p className="flex justify-center pt-3 font-bold text-alsoit-text-sm" style={{ lineHeight: '9.6px' }}>
             CUSTOMIZE THIS VIEW
           </p>
@@ -249,8 +249,7 @@ export default function ShowHideSettings({
 
           {viewSettings.map((view, index) => (
             <Fragment key={view.id}>
-              <Menu.Item
-                as="a"
+              <div
                 className="flex items-center w-full py-2 font-semibold text-left text-alsoit-text-lg "
                 style={{ lineHeight: '15.6px' }}
               >
@@ -304,11 +303,11 @@ export default function ShowHideSettings({
                     </label>
                   </p>
                 </button>
-              </Menu.Item>
+              </div>
             </Fragment>
           ))}
-        </Menu.Items>
-      </Transition>
-    </Menu>
+        </div>
+      </Menu>
+    </>
   );
 }

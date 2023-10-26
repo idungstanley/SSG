@@ -72,7 +72,6 @@ export default function StatusDropdown({ taskCurrentStatus, statusDropdownType, 
           </button>
         </ToolTip>
       </div>
-
       <AlsoitMenuDropdown handleClose={handleCloseStatusDropdown} anchorEl={isOpen as HTMLDivElement | null}>
         <div className="relative z-10">
           <VerticalScroll>
@@ -96,7 +95,7 @@ export default function StatusDropdown({ taskCurrentStatus, statusDropdownType, 
                       >
                         <p>
                           <RiCheckboxBlankFill
-                            className="pl-px text-xs "
+                            className="pl-px text-xs"
                             aria-hidden="true"
                             style={{ color: `${statuses.color}` }}
                           />

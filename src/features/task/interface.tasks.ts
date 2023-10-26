@@ -109,7 +109,7 @@ export interface IStatus {
   model_id: string;
   model_type: string;
   name: string;
-  position: string;
+  position: number;
   type: string;
   updated_at: string;
 }
@@ -118,7 +118,7 @@ export interface Status {
   id: string;
   name: string;
   color: string;
-  position: string;
+  position: number;
   type: 'open' | string;
   model_id: string;
   model_type: 'hub' | string;
