@@ -55,7 +55,7 @@ function SavedSelectionsHr() {
         />
       </div>
       {hrOpenedEntities.includes(sectionName) && savedSelectionsData.length && (
-        <HrSavedSelectionsList savedSelectionsData={savedSelectionsData} sectionName={sectionName} />
+        <HrSavedSelectionsList savedSelectionsData={savedSelectionsData} />
       )}
     </div>
   );

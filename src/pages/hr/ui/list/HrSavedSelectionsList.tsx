@@ -5,14 +5,13 @@ import { selectCalendar, setSavedSelections } from '../../../../features/calenda
 
 interface HrSavedSectionsListProps {
   savedSelectionsData: string[];
-  sectionName: string;
 }
 
-export function HrSavedSelectionsList({ savedSelectionsData, sectionName }: HrSavedSectionsListProps) {
+export function HrSavedSelectionsList({ savedSelectionsData }: HrSavedSectionsListProps) {
   const dispatch = useAppDispatch();
   const { savedSelections } = useAppSelector(selectCalendar);
 
-  const onCheckbox = (e: boolean, currentCheckedName: string, sectionName: string) => {
+  const onCheckbox = (e: boolean, currentCheckedName: string) => {
     if (e) {
       dispatch(setSavedSelections([...savedSelections, currentCheckedName]));
     } else {
@@ -33,7 +32,7 @@ export function HrSavedSelectionsList({ savedSelectionsData, sectionName }: HrSa
               <Checkbox
                 styles="text-primary-500 focus:ring-primary-500 hr-checkbox"
                 checked={savedSelections.includes(savedSelectionItem)}
-                setChecked={(e) => onCheckbox(e, savedSelectionItem, sectionName)}
+                setChecked={(e) => onCheckbox(e, savedSelectionItem)}
               />
             </div>
             <div className="flex">
