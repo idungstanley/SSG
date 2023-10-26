@@ -42,7 +42,7 @@ export default function NewSubTaskTemplate(task?: Task) {
       model_id: '',
       model_type: '',
       name: 'Todo',
-      position: '',
+      position: 0,
       type: '',
       updated_at: ''
     },
