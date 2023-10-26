@@ -72,7 +72,6 @@ export default function StatusDropdown({ taskCurrentStatus, statusDropdownType, 
           </button>
         </ToolTip>
       </div>
-
       <AlsoitMenuDropdown handleClose={handleCloseStatusDropdown} anchorEl={isOpen as HTMLDivElement | null}>
         <div className="relative z-10">
           <VerticalScroll>
@@ -87,7 +86,7 @@ export default function StatusDropdown({ taskCurrentStatus, statusDropdownType, 
                           taskCurrentStatus?.name.toLowerCase() === statuses.name.toLowerCase()
                             ? `bg-${statuses.color}-200`
                             : '',
-                          'flex items-center px-4 py-2 text-sm text-gray-600 rounded hover:bg-alsoit-gray-75 text-left space-x-2 w-full'
+                          'flex items-center px-4 py-2 text-sm text-gray-600 rounded hover:bg-alsoit-gray-50 text-left space-x-2 w-full'
                         )}
                         onClick={() => {
                           setStatus(statuses.id);
@@ -96,7 +95,7 @@ export default function StatusDropdown({ taskCurrentStatus, statusDropdownType, 
                       >
                         <p>
                           <RiCheckboxBlankFill
-                            className="pl-px text-xs "
+                            className="pl-px text-xs"
                             aria-hidden="true"
                             style={{ color: `${statuses.color}` }}
                           />
