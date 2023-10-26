@@ -28,7 +28,7 @@ export function WalletPage() {
   const { walletId, taskId } = useParams();
   const navigate = useNavigate();
 
-  const { tasks: tasksStore, saveSettingLocal, subtasks } = useAppSelector((state) => state.task);
+  const { tasks: tasksStore, saveSettingLocal, subtasks, scrollGroupView } = useAppSelector((state) => state.task);
 
   const formatSettings = useformatSettings();
 
@@ -134,7 +134,7 @@ export function WalletPage() {
                 <Fragment key={listId}>{tasksStore[listId] ? <List tasks={tasksStore[listId]} /> : null}</Fragment>
               ))}
             </section>
-            {Object.keys(lists).length > 1 && <GroupHorizontalScroll />}
+            {Object.keys(lists).length > 1 && scrollGroupView && <GroupHorizontalScroll />}
           </VerticalScroll>
         </>
       </Page>

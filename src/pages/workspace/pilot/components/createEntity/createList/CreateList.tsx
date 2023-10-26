@@ -34,7 +34,7 @@ export default function CreateList() {
   const navigate = useNavigate();
 
   const { selectedTreeDetails, createWLID, hub } = useAppSelector((state) => state.hub);
-  const { createWlLink } = useAppSelector((state) => state.workspace);
+  const { createWlLink, activeView } = useAppSelector((state) => state.workspace);
   const { currentWorkspaceId } = useAppSelector((state) => state.auth);
 
   const [paletteColor, setPaletteColor] = useState<string | ListColourProps | undefined | null>('black');
@@ -43,7 +43,7 @@ export default function CreateList() {
   const createList = useMutation(createListService, {
     onSuccess: (data) => {
       const listDetails = data?.data.list;
-      navigate(`/${currentWorkspaceId}/tasks/l/${listDetails.id}`, {
+      navigate(`/${currentWorkspaceId}/tasks/l/${listDetails.id}/v/${activeView?.id}`, {
         replace: true
       });
       dispatch(

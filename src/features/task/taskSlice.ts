@@ -181,6 +181,7 @@ interface TaskState {
   verticalGrid: boolean;
   showNewTaskField: boolean;
   showNewTaskId: string;
+  scrollGroupView: boolean;
   singleLineView: boolean;
   escapeKey: boolean;
   hilightNewlyCreatedTask: boolean;
@@ -297,6 +298,7 @@ const initialState: TaskState = {
   copyNewlyCreatedTask: false,
   autoSave: false,
   showNewTaskId: '',
+  scrollGroupView: false,
   singleLineView: false,
   saveSettingLocal: null,
   saveSettingList: undefined,
@@ -607,6 +609,9 @@ export const taskSlice = createSlice({
     setSelectedIndexListId(state, action: PayloadAction<string | null>) {
       state.selectedIndexListId = action.payload;
     },
+    getScrollGroupView(state, action: PayloadAction<boolean>) {
+      state.scrollGroupView = action.payload;
+    },
     getSingleLineView(state, action: PayloadAction<boolean>) {
       state.singleLineView = action.payload;
     },
@@ -788,6 +793,7 @@ export const {
   getVerticalGrid,
   setPreferenceState,
   setUserSettingsProfile,
+  getScrollGroupView,
   getSingleLineView,
   getTaskUpperCase,
   setDuplicateTaskObj,
