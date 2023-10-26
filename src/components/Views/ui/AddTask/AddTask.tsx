@@ -13,6 +13,8 @@ import { listColumnProps } from '../../../../pages/workspace/tasks/component/vie
 import { Task } from '../../../../features/task/interface.tasks';
 import TaskPriority from '../../../../pages/workspace/tasks/component/taskData/priority';
 import NewSubTaskTemplate from '../Table/newTaskTemplate/NewSubTaskTemplate';
+import Toast from '../../../../common/Toast';
+import toast from 'react-hot-toast';
 
 interface AddTaskFieldProps {
   parentId: string;
@@ -37,6 +39,9 @@ export function AddTask({ onClose, paddingLeft, parentId, isListParent, columns,
 
   const taskTemplate = NewSubTaskTemplate(task);
 
+  const noTaskNameErrorTitle = 'Empty task name';
+  const noTaskNameErrorbody = 'Please type a task name';
+
   useEffect(() => {
     const minPosition = Math.min(...(list?.data.list.task_statuses.map((status) => status.position) || []));
     const statusObj: ITask_statuses | undefined = list?.data.list.task_statuses.find(
@@ -49,6 +54,11 @@ export function AddTask({ onClose, paddingLeft, parentId, isListParent, columns,
   }, []);
 
   const onClickSave = () => {
+    if (!nameRef.current?.innerText.length)
+      return toast.custom((t) => (
+        <Toast type="error" title={noTaskNameErrorTitle} body={noTaskNameErrorbody} toastId={t.id} />
+      ));
+
     if (nameRef.current) {
       const name = nameRef.current.value;
 
