@@ -36,13 +36,14 @@ export default function CreateWallet() {
   const [paletteColor, setPaletteColor] = useState<string | ListColourProps | undefined | null>('');
   const [showPalette, setShowPalette] = useState<null | HTMLDivElement>(null);
   const { currentWorkspaceId } = useAppSelector((state) => state.auth);
+  const { activeView } = useAppSelector((state) => state.workspace);
 
   const { type, id } = selectedTreeDetails;
 
   const createWallet = useMutation(createWalletService, {
     onSuccess: (data) => {
       const listDetails = data?.data.wallet;
-      navigate(`/${currentWorkspaceId}/tasks/w/${listDetails.id}`, {
+      navigate(`/${currentWorkspaceId}/tasks/w/${listDetails.id}/v/${activeView?.id}`, {
         replace: true
       });
       dispatch(

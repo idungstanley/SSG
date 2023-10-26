@@ -27,10 +27,10 @@ function WalletIndex({ data, showHubList, paddingLeft }: WalletIndexProps) {
   const navigate = useNavigate();
 
   const { currentWorkspaceId } = useAppSelector((state) => state.auth);
-  const { extendedBarOpenedEntitiesIds } = useAppSelector((state) => state.workspace);
+  const { extendedBarOpenedEntitiesIds, activeView } = useAppSelector((state) => state.workspace);
 
   const handleLocation = (id: string, name: string) => {
-    navigate(`/${currentWorkspaceId}/tasks/w/${id}`);
+    navigate(`/${currentWorkspaceId}/tasks/w/${id}/v/${activeView?.id}`);
     dispatch(
       setActiveItem({
         activeItemType: EntityType.wallet,
