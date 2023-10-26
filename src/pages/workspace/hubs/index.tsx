@@ -36,6 +36,7 @@ import { FaHandsHelping } from 'react-icons/fa';
 import { APP_HR, APP_TASKS } from '../../../app/constants/app';
 import { pages } from '../../../app/constants/pages';
 import AlsoHrIcon from '../../../assets/icons/AlsoHrIcon';
+import SavedSelectionsHr from '../hr/components/SavedSelectionsHr';
 
 function Hubs() {
   const dispatch = useDispatch();
@@ -159,6 +160,7 @@ function Hubs() {
         }
       />
       {placeHubType == APP_TASKS ? <EverythingTasks /> : null}
+      {placeHubType == APP_HR && <SavedSelectionsHr />}
       <Modal setShowModal={setShowModal} position="left-44 top-72" showModal={showModal} width="w-64">
         {configForDropdown.map((item, index) => (
           <React.Fragment key={index}>
