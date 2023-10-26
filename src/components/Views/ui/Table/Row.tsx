@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
 import SubtasksIcon from '../../../../assets/icons/SubtasksIcon';
-import { ITaskFullList, Tag, Task } from '../../../../features/task/interface.tasks';
+import { Tag, Task } from '../../../../features/task/interface.tasks';
 import { DEFAULT_LEFT_PADDING } from '../../config';
 import { Col } from './Col';
 import { StickyCol } from './StickyCol';
@@ -14,6 +14,8 @@ import Enhance from '../../../badges/Enhance';
 import {
   THREE_SUBTASKS_LEVELS,
   TWO_SUBTASKS_LEVELS,
+  setAssignOnHoverListId,
+  setAssignOnHoverTask,
   setDefaultSubtaskId,
   setShowNewTaskField,
   setShowNewTaskId
@@ -23,11 +25,9 @@ import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import Dradnddrop from '../../../../assets/icons/Dradnddrop';
 import { listColumnProps } from '../../../../pages/workspace/tasks/component/views/ListColumns';
 import Copy from '../../../../assets/icons/Copy';
-import {
-  EXPAND_ALL_THREE,
-  EXPAND_ALL_TWO
-} from '../../../../pages/workspace/lists/components/renderlist/listDetails/listSubtask/ListSubtasks';
+import { findExpandedLevels } from '../../../../pages/workspace/lists/components/renderlist/listDetails/listSubtask/ListSubtasks';
 import NewSubTaskTemplate from './newTaskTemplate/NewSubTaskTemplate';
+import Badges from '../../../badges';
 
 export const MAX_SUBTASKS_LEVEL = 10;
 
@@ -43,7 +43,7 @@ interface RowProps {
   handleClose?: VoidFunction;
   isSplitSubtask?: boolean;
   level: number;
-  isShowAllChildren?: boolean;
+  isBlockedShowChildren?: boolean;
 }
 
 export function Row({
@@ -58,7 +58,7 @@ export function Row({
   handleClose,
   isSplitSubtask,
   level,
-  isShowAllChildren
+  isBlockedShowChildren
 }: RowProps) {
   const dispatch = useAppDispatch();
 
@@ -69,7 +69,7 @@ export function Row({
   const [isCopied, setIsCopied] = useState<number>(0);
 
   const otherColumns = columns.slice(1);
-  const newSubTask = NewSubTaskTemplate();
+  const newSubTask = NewSubTaskTemplate(task);
 
   const onShowAddSubtaskField = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, taskId: string) => {
     dispatch(setDefaultSubtaskId(task.list_id));
@@ -111,38 +111,47 @@ export function Row({
   };
 
   const showChildren = useMemo(() => {
-    const isOnToggleTwo = toggleAllSubtaskSplit.includes(EXPAND_ALL_TWO);
-    const isOnToggleThree = toggleAllSubtaskSplit.includes(EXPAND_ALL_THREE);
+    const findAllExpandedLevels = findExpandedLevels(toggleAllSubtaskSplit);
+    const isLevelActive = Number(findAllExpandedLevels) >= level;
     if (showSubTasks) {
       return true;
     } else if (toggleAllSubtask && subtasks[task.id]) {
       return true;
-    } else if (isOnToggleTwo && splitSubTaskLevels.includes(TWO_SUBTASKS_LEVELS) && level === 1) {
+    } else if (
+      isLevelActive &&
+      splitSubTaskLevels.includes(TWO_SUBTASKS_LEVELS) &&
+      !splitSubTaskLevels.includes(THREE_SUBTASKS_LEVELS) &&
+      level >= 1
+    ) {
       return true;
-    } else if (isOnToggleThree && splitSubTaskLevels.includes(THREE_SUBTASKS_LEVELS) && level === 2) {
+    } else if (isLevelActive && splitSubTaskLevels.includes(THREE_SUBTASKS_LEVELS) && level >= 2) {
       return true;
     }
     return false;
   }, [showSubTasks, subtasks, toggleAllSubtask, toggleAllSubtaskSplit, splitSubTaskLevels]);
 
-  const showAllChildren = useMemo(() => {
-    const isOnToggleTwo = toggleAllSubtaskSplit.includes(EXPAND_ALL_TWO);
-    const isOnToggleThree = toggleAllSubtaskSplit.includes(EXPAND_ALL_THREE);
-    if (isOnToggleTwo && splitSubTaskLevels.includes(TWO_SUBTASKS_LEVELS) && level === 1) {
-      return true;
-    } else if (isOnToggleThree && splitSubTaskLevels.includes(THREE_SUBTASKS_LEVELS) && level === 2) {
-      return true;
-    }
-    return false;
-  }, [toggleAllSubtaskSplit, splitSubTaskLevels]);
+  const [hoverOn, setHoverOn] = useState(false);
 
   return (
     <>
       {/* current task */}
-
-      <tr style={style} className="relative contents group dNFlex">
+      <tr
+        style={style}
+        className="relative contents group dNFlex"
+        onMouseEnter={() => {
+          dispatch(setAssignOnHoverTask(task));
+          dispatch(setAssignOnHoverListId(task.list_id ?? task.parent_id));
+          setHoverOn(true);
+        }}
+        onMouseLeave={() => {
+          dispatch(setAssignOnHoverTask(''));
+          setHoverOn(false);
+        }}
+      >
         <StickyCol
-          showSubTasks={showSubTasks}
+          hoverOn={hoverOn}
+          setHoverOn={setHoverOn}
+          showSubTasks={showChildren}
           setShowSubTasks={setShowSubTasks}
           style={{ zIndex: 1 }}
           isListParent={isListParent}
@@ -153,8 +162,7 @@ export function Row({
           onClose={handleClose as VoidFunction}
           paddingLeft={paddingLeft}
           tags={'tags' in task ? <TaskTag tags={task.tags} entity_id={task.id} entity_type="task" /> : null}
-          isSplitSubtask={isSplitSubtask}
-          isLastSubtaskLevel={level >= MAX_SUBTASKS_LEVEL}
+          isBlockedShowChildren={isBlockedShowChildren}
           dragElement={
             <div ref={setNodeRef} {...listeners} {...attributes}>
               <div className="text-lg text-gray-400 transition duration-200 opacity-0 cursor-move group-hover:opacity-100">
@@ -164,17 +172,24 @@ export function Row({
           }
         >
           {/* actions */}
-          <div className="absolute right-0 flex items-center justify-center mr-1 space-x-1 opacity-0 group-hover:opacity-100">
+          <div className="flex items-center justify-center mr-1 space-x-1">
+            {level < MAX_SUBTASKS_LEVEL ? <Badges task={task} /> : null}
             {/* Copy */}
             <ToolTip title={isCopied === 0 ? 'Copy Task Name' : 'Copied'}>
-              <button className="p-1 bg-white border rounded-md" onClick={handleCopyTexts}>
+              <button
+                className={`p-1 bg-white border rounded-md ${hoverOn ? 'opacity-100' : 'opacity-0'}`}
+                onClick={handleCopyTexts}
+              >
                 <Copy />
               </button>
             </ToolTip>
-
             {/* effects */}
             <ToolTip title="Apply Effects">
-              <button className="p-1 bg-white border rounded-md" onClick={(e) => e.stopPropagation()}>
+              <button
+                className={`p-1 bg-white border rounded-md ${hoverOn ? 'opacity-100' : 'opacity-0'}`}
+                style={{ backgroundColor: 'orange' }}
+                onClick={(e) => e.stopPropagation()}
+              >
                 <Effect className="w-3 h-3" />
               </button>
             </ToolTip>
@@ -182,23 +197,32 @@ export function Row({
             {/* tags */}
             {'tags' in task ? (
               <ToolTip title="Tags">
-                <button className="bg-white border rounded-md " onClick={(e) => e.preventDefault()}>
+                <div
+                  className={`bg-white border rounded-md ${hoverOn ? 'opacity-100' : 'opacity-0'}`}
+                  onClick={(e) => e.preventDefault()}
+                >
                   <ManageTagsDropdown entityId={task.id} tagsArr={task.tags as Tag[]} entityType="task" />
-                </button>
+                </div>
               </ToolTip>
             ) : null}
 
             {/* show create subtask field */}
-            {task.descendants_count < 1 && (
+            {task.descendants_count < 1 && level < MAX_SUBTASKS_LEVEL && (
               <ToolTip title="Subtask">
-                <button className="p-1 bg-white border rounded-md" onClick={(e) => onShowAddSubtaskField(e, task.id)}>
+                <button
+                  className={`p-1 bg-white border rounded-md ${hoverOn ? 'opacity-100' : 'opacity-0'}`}
+                  onClick={(e) => onShowAddSubtaskField(e, task.id)}
+                >
                   <SubtasksIcon className="w-3 h-3" />
                 </button>
               </ToolTip>
             )}
             <ToolTip title="Enhance View">
-              <button className="p-1 pl-4 bg-white rounded-md" onClick={(e) => e.stopPropagation()}>
-                <Enhance className="w-3 h-3" />
+              <button
+                className={`p-1 pl-4 bg-white rounded-md ${hoverOn ? 'opacity-100' : 'opacity-0'}`}
+                onClick={(e) => e.stopPropagation()}
+              >
+                <Enhance className="w-3 h-3" style={{ color: 'orange' }} />
               </button>
             </ToolTip>
           </div>
@@ -220,24 +244,22 @@ export function Row({
         <AddSubTask
           task={newSubTask}
           columns={columns}
-          paddingLeft={isSplitSubtask ? 0 : DEFAULT_LEFT_PADDING + paddingLeft}
+          paddingLeft={DEFAULT_LEFT_PADDING + paddingLeft}
           isListParent={false}
           listId={listId}
           parentId={isSplitSubtask ? (task.parent_id as string) : task.id}
           taskStatusId={task.status.id}
-          isSplitSubtask={isSplitSubtask}
           handleClose={onCloseAddTaskFIeld}
         />
       ) : null}
 
-      {showChildren || isShowAllChildren ? (
+      {showChildren ? (
         <SubTasks
           paddingLeft={DEFAULT_LEFT_PADDING + paddingLeft}
           listId={listId}
           parentTask={task}
           columns={columns}
           isSplitSubtask={isSplitSubtask}
-          isShowAllChildren={isShowAllChildren || showAllChildren}
           level={level + 1}
         />
       ) : null}

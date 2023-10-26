@@ -7,6 +7,7 @@ import { setShowUploadModal } from '../../../features/general/uploadFile/uploadF
 import { useGetInboxFiles } from '../../../features/inbox/inboxService';
 import FullScreenMessage from '../../CenterMessage/FullScreenMessage';
 import MenuDropdown from '../../Dropdown/MenuDropdown';
+import { IInboxFile } from '../../../features/inbox/inbox.interfaces';
 
 export default function InboxIndex() {
   const dispatch = useDispatch();
@@ -16,7 +17,7 @@ export default function InboxIndex() {
     isArchived: false
   });
 
-  const data = useMemo(() => dt?.pages.flatMap((page) => page.data.inbox_files), [dt]);
+  const data = useMemo(() => dt?.pages.flatMap((page) => page.data.inbox_files) as IInboxFile[], [dt]);
 
   if (status === 'error') {
     return (
@@ -26,7 +27,7 @@ export default function InboxIndex() {
 
   if (status === 'loading') {
     return (
-      <div className="mx-auto w-6 mt-5 justify-center">
+      <div className="justify-center w-6 mx-auto mt-5">
         <Spinner size={8} color="#0F70B7" />
       </div>
     );
@@ -50,7 +51,7 @@ export default function InboxIndex() {
           <li key={item.id} className="flex py-4">
             <FileIcon extensionKey={item.inbox_file_source.file_format.extension} size={8} />
             <div className="ml-3">
-              <p className="text-sm w-40 truncate font-medium text-gray-900">{item.inbox_file_source.display_name}</p>
+              <p className="w-40 text-sm font-medium text-gray-900 truncate">{item.inbox_file_source.display_name}</p>
               <p className="text-sm text-gray-500">{OutputFileSize(item.inbox_file_source.size)}</p>
             </div>
             <MenuDropdown />

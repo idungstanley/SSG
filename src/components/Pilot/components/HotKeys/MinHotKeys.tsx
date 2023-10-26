@@ -12,12 +12,12 @@ interface HotkeysListProps {
   setShowModal: (i: boolean) => void;
 }
 
-const hotkeyIdsFromLS = JSON.parse(localStorage.getItem('hotkeys') ?? '[]') as number[];
+const hotkeyIdsFromLS = JSON.parse(localStorage.getItem('hotkeys') ?? '[]') as string[];
 
 const HOTKEY_LIMIT = 3;
 
 export default function MinHotkeysList({ tabs, showModal, setShowModal }: HotkeysListProps) {
-  const [activeHotkeyIds, setActiveHotkeyIds] = useState<number[]>(hotkeyIdsFromLS);
+  const [activeHotkeyIds, setActiveHotkeyIds] = useState<string[]>(hotkeyIdsFromLS);
   const { activeTabId } = useAppSelector((state) => state.workspace);
   const dispatch = useAppDispatch();
 
@@ -27,7 +27,7 @@ export default function MinHotkeysList({ tabs, showModal, setShowModal }: Hotkey
   );
 
   const handleClick = useCallback(
-    (tabId: number) => {
+    (tabId: string) => {
       const isIncludes = activeHotkeyIds.includes(tabId);
 
       const newHotkeyIds = isIncludes ? [...activeHotkeyIds.filter((i) => i !== tabId)] : [...activeHotkeyIds, tabId];

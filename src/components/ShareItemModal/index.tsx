@@ -8,14 +8,14 @@ import ShareItem from './components/ShareItem';
 import ShareLink from './components/ShareLink';
 
 const tabs = [
-  { name: 'Share selected item', id: 1 },
-  { name: 'Create sharing link', id: 2 }
+  { name: 'Share selected item', id: 'share_selected_item' },
+  { name: 'Create sharing link', id: 'create_sharing_link' }
 ];
 
 export default function ShareItemModal() {
   const dispatch = useAppDispatch();
 
-  const [selectedTabId, setSelectedTabId] = useState(1);
+  const [selectedTabId, setSelectedTabId] = useState('share_selected_item');
 
   const { shareSideOver } = useAppSelector((state) => state.slideOver);
   const { type, show } = shareSideOver;
@@ -84,7 +84,7 @@ export default function ShareItemModal() {
                     ))}
                   </nav>
 
-                  {selectedTabId === 1 ? <ShareItem /> : <ShareLink />}
+                  {selectedTabId === 'share_selected_item' ? <ShareItem /> : <ShareLink />}
                 </div>
               </Dialog.Panel>
             </Transition.Child>

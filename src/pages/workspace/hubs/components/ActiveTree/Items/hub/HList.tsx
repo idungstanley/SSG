@@ -22,12 +22,16 @@ import { DragOverlay } from '@dnd-kit/core';
 import HubItemOverlay from '../../../../../../../components/tasks/HubItemOverLay';
 import { generateViewsUrl } from '../../../../../../../utils/generateViewsUrl';
 import { IHub } from '../../../../../../../features/hubs/hubs.interfaces';
+import { pilotTabs } from '../../../../../../../app/constants/pilotTabs';
+import { APP_HR, APP_TASKS } from '../../../../../../../app/constants/app';
 
-export default function HList({ hubs }: ListProps) {
+export default function HList({ hubs, openNewHub, placeHubType }: ListProps) {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const { showExtendedBar, createEntityType, openedEntitiesIds } = useAppSelector((state) => state.workspace);
+  const { showExtendedBar, createEntityType, openedEntitiesIds, activeView } = useAppSelector(
+    (state) => state.workspace
+  );
   const { entityToCreate, hub } = useAppSelector((state) => state.hub);
   const { showSidebar } = useAppSelector((state) => state.account);
 
@@ -54,7 +58,10 @@ export default function HList({ hubs }: ListProps) {
   }, [hub]);
 
   const handleLocation = (id: string, name: string, item: IHub) => {
-    const viewsUrl = generateViewsUrl(id, item, EntityType.hub) as string;
+    if (placeHubType == APP_HR) {
+      return false;
+    }
+    const viewsUrl = generateViewsUrl(id, activeView?.id as string, item, EntityType.hub) as string;
     dispatch(setParentHubExt({ id: id, type: EntityType.hub }));
     dispatch(
       setActiveItem({
@@ -64,7 +71,7 @@ export default function HList({ hubs }: ListProps) {
       })
     );
     dispatch(setShowPilot(true));
-    dispatch(setActiveTabId(4));
+    dispatch(setActiveTabId(pilotTabs.DETAILS));
     navigate(viewsUrl, {
       replace: true
     });
@@ -84,21 +91,13 @@ export default function HList({ hubs }: ListProps) {
       dispatch(setOpenedEntitiesIds([...openedEntitiesIds.filter((openedId) => !allHubsId.includes(openedId)), id]));
     }
 
-    hub.forEach((item) => {
-      if (item.id === id && !item.children) {
-        const viewsUrl = generateViewsUrl(id, item, EntityType.hub) as string;
-        navigate(viewsUrl, {
-          replace: true
-        });
-      }
-    });
-
     dispatch(
       setCurrentItem({
         currentItemId: id,
         currentItemType: EntityType.hub
       })
     );
+    openNewHub && openNewHub(id);
   };
 
   const isCanBeOpen = (id: string) => {
@@ -125,16 +124,19 @@ export default function HList({ hubs }: ListProps) {
               item={hub}
               handleClick={handleClick}
               showChildren={
-                ((hub?.children?.length || hub?.wallets?.length || hub?.lists?.length) &&
+                ((hub?.children?.length || hub?.wallets?.length || hub?.lists?.length || placeHubType == APP_HR) &&
                   isCanBeOpen(hub.id)) as boolean
               }
               handleLocation={handleLocation}
               type={EntityType.hub}
               topNumber="50px"
               zNumber="5"
+              placeHubType={placeHubType}
             />
-            {hub?.children?.length && isCanBeOpen(hub.id) ? <SubHList hubs={hub.children as Hub[]} /> : null}
-            {showSidebar && (
+            {hub?.children?.length && isCanBeOpen(hub.id) && placeHubType == APP_TASKS ? (
+              <SubHList hubs={hub.children as Hub[]} placeHubType={placeHubType} />
+            ) : null}
+            {showSidebar && placeHubType == APP_TASKS ? (
               <div>
                 {hub?.wallets?.length && isCanBeOpen(hub.id) ? (
                   <WList
@@ -149,7 +151,7 @@ export default function HList({ hubs }: ListProps) {
                   <LList list={hub.lists} leftMargin={false} paddingLeft="48" />
                 ) : null}
               </div>
-            )}
+            ) : null}
           </div>
         </div>
       ))}

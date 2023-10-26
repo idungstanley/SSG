@@ -5,7 +5,7 @@ import { setIsFavoritePinned, setSidebarWidthRD } from '../../../../features/wor
 import Header from './components/Header';
 import NavigationItems from './components/NavigationItems';
 import Places from './components/Places';
-import { dimensions } from '../../../../app/config/dimensions';
+import { STORAGE_KEYS, dimensions } from '../../../../app/config/dimensions';
 import { useResize } from '../../../../hooks/useResize';
 import { isAllowIncreaseWidth } from '../../../../utils/widthUtils';
 import { NavigationList } from './components/NavigationItems/components/NavigationList';
@@ -19,6 +19,8 @@ import { useQueryClient } from '@tanstack/react-query';
 
 const MAX_SIDEBAR_WIDTH = dimensions.navigationBar.max;
 const MIN_SIDEBAR_WIDTH = dimensions.navigationBar.min;
+const sidebarWidthFromLS =
+  (JSON.parse(localStorage.getItem(STORAGE_KEYS.SIDEBAR_WIDTH) || '""') as number) || dimensions.navigationBar.default;
 
 export default function Sidebar() {
   const dispatch = useAppDispatch();
@@ -70,8 +72,6 @@ export default function Sidebar() {
     [activeHotkeyIds]
   );
 
-  // setUserSettingsData(isMouseUp, key, { ...userSettingsData, sidebarWidth: size, isFavoritePinned }, resolution);
-
   useEffect(() => {
     const { isAllow, allowedSize } = isAllowIncreaseWidth(size, extendedSidebarWidth);
     dispatch(setSidebarWidthRD(isAllow ? size : showExtendedBar ? allowedSize - size : size));
@@ -85,7 +85,7 @@ export default function Sidebar() {
       {/* sidebar */}
       <section
         style={{
-          width: showSidebar ? userSettingsData?.sidebarWidth : sidebarWidthRD
+          width: showSidebar ? sidebarWidthFromLS || userSettingsData?.sidebarWidth : sidebarWidthRD
         }}
         ref={blockRef}
         className={`relative flex flex-col border-r ${isDrag ? 'border-gray-500' : 'border-gray-300'}`}
@@ -110,14 +110,14 @@ export default function Sidebar() {
                 }
               >
                 <div
-                  className="absolute flex items-center justify-between w-auto w-full font-bold tracking-wider text-gray-400 grow left-6 hover:text-fuchsia-500"
-                  style={{ fontSize: '13px' }}
+                  className="absolute flex items-center justify-between w-auto w-full font-bold tracking-wider text-gray-500 grow hover:text-fuchsia-500"
+                  style={{ fontSize: '13px', left: '34px' }}
                 >
                   <div className="flex items-center justify-between">
-                    <SearchIcon />
+                    <SearchIcon width={13} height={13} />
                     <p className="ml-2">Search</p>
                   </div>
-                  <p className="mr-14">Ctrl+k</p>
+                  <p className="mr-16">Ctrl+k</p>
                 </div>
               </NonInteractiveSearch>
             ) : null}

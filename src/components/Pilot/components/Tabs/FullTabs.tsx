@@ -26,7 +26,7 @@ interface TabsProps {
   tabs: IPilotTab[];
 }
 
-const pilotFromLS = JSON.parse(localStorage.getItem('pilot') || '""') as { tabOrder: number[]; showTabLabel: boolean };
+const pilotFromLS = JSON.parse(localStorage.getItem('pilot') || '""') as { tabOrder: string[]; showTabLabel: boolean };
 const tabIdsFromLS = pilotFromLS.tabOrder || [];
 
 const MIN = 100;
@@ -87,7 +87,7 @@ export default function FullTabs({ tabs }: TabsProps) {
             ref={showTabLabel ? blockRef : null}
             className={cl('relative col-span-1 flex items-center')}
           >
-            {showTabLabel ? <Dividers /> : null}
+            {/* {showTabLabel ? <Dividers /> : null} */}
             <nav
               ref={navRef}
               className={cl(
@@ -100,7 +100,9 @@ export default function FullTabs({ tabs }: TabsProps) {
                 {tabItems.map((tab) => (
                   <div key={tab.label}>
                     <ToolTip title={tab.label}>
-                      <Tab key={tab.id} id={tab.id} icon={tab.icon} label={tab.label} showTabLabel={showTabLabel} />
+                      <div className="h-full">
+                        <Tab key={tab.id} id={tab.id} icon={tab.icon} label={tab.label} showTabLabel={showTabLabel} />
+                      </div>
                     </ToolTip>
                   </div>
                 ))}

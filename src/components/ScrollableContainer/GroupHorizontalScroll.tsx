@@ -31,7 +31,6 @@ export function GroupHorizontalScroll() {
 
   const handleTrackClick = useCallback(
     (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-      e.preventDefault();
       e.stopPropagation();
       const { current: trackCurrent } = scrollTrackRef;
       const { current: contentCurrent } = contentRef;
@@ -199,20 +198,20 @@ export function GroupHorizontalScroll() {
   return (
     <>
       <div
-        className="fixed bottom-0 w-full overflow-hidden p-2"
+        className="fixed bottom-0 w-full p-2 overflow-hidden"
         style={{ width: `${groupScroll.offsetWidth + 50}px`, background: 'white', zIndex: 11 }}
       >
-        <div style={{ width: `${groupScroll.offsetWidth}px` }} className="h-1 absolute scrollbar-hide" ref={contentRef}>
+        <div style={{ width: `${groupScroll.offsetWidth}px` }} className="absolute h-1 scrollbar-hide" ref={contentRef}>
           <div style={{ width: `${groupScroll.scrollWidth}px` }} />
         </div>
         {isThumbVisible && (
-          <div className="sticky -top-1 z-3 pt-2 mr-2 pr-12 pl-6 group grid w-full grid-cols-2">
+          <div className="sticky grid w-full grid-cols-2 pt-2 pl-6 pr-12 mr-2 -top-1 z-3 group">
             <div />
-            <div className="flex items-center flex-row space-x-2">
+            <div className="flex flex-row items-center space-x-2">
               {renderScrollArrows()}
               <div className="relative flex flex-grow block w-full h-2">
                 <div
-                  className="absolute top-0 -bottom-7 bg-transparent cursor-pointer rounded-xl w-full h-2 -right-12"
+                  className="absolute top-0 w-full h-2 bg-transparent cursor-pointer -bottom-7 rounded-xl -right-12"
                   ref={scrollTrackRef}
                   onClick={handleTrackClick}
                 ></div>

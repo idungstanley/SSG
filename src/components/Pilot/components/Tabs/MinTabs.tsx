@@ -10,7 +10,7 @@ interface TabsProps {
   isMinified: boolean;
 }
 
-const pilotFromLS = JSON.parse(localStorage.getItem('pilot') || '""') as { tabOrder: number[]; showTabLabel: boolean };
+const pilotFromLS = JSON.parse(localStorage.getItem('pilot') || '""') as { tabOrder: string[]; showTabLabel: boolean };
 
 const tabIdsFromLS = pilotFromLS.tabOrder || [];
 
@@ -22,7 +22,7 @@ export default function MinTabs({ tabs, isMinified }: TabsProps) {
     [tabs, tabIdsFromLS]
   );
 
-  const handleClick = (tabId: number) => {
+  const handleClick = (tabId: string) => {
     dispatch(setActiveTabId(activeTabId === tabId ? undefined : tabId));
   };
 
@@ -31,19 +31,21 @@ export default function MinTabs({ tabs, isMinified }: TabsProps) {
       {tabItems.map((tab) => (
         <div key={tab.label}>
           <ToolTip title={tab.label}>
-            <button
-              key={tab.id}
-              title={tab.label}
-              onClick={() => handleClick(tab.id)}
-              className={cl(
-                'px-2 py-2 border border-opacity-0 hover:border-opacity-100 rounded-lg',
-                activeTabId === tab.id ? 'border-primary-500 bg-primary-500 text-gray-100' : 'text-gray-600',
-                'flex items-center justify-center'
-              )}
-              aria-current={activeTabId === tab.id ? 'page' : undefined}
-            >
-              {tab.icon}
-            </button>
+            <div>
+              <button
+                key={tab.id}
+                title={tab.label}
+                onClick={() => handleClick(tab.id)}
+                className={cl(
+                  'px-2 py-2 border border-opacity-0 hover:border-opacity-100 rounded-lg',
+                  activeTabId === tab.id ? 'border-primary-500 bg-primary-500 text-gray-100' : 'text-gray-600',
+                  'flex items-center justify-center'
+                )}
+                aria-current={activeTabId === tab.id ? 'page' : undefined}
+              >
+                {tab.icon}
+              </button>
+            </div>
           </ToolTip>
         </div>
       ))}

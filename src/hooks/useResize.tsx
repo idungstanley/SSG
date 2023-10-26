@@ -5,6 +5,7 @@ import { useAppDispatch, useAppSelector } from '../app/hooks';
 import { setIsResize } from '../features/workspace/workspaceSlice';
 import { setUserSettingsKeys } from '../features/account/accountService';
 import useResolution from './useResolution';
+import { AjustableWidths, setAdjustableWidths } from '../features/account/accountSlice';
 
 interface UseResizeProps {
   dimensions: { min: number; max: number };
@@ -39,7 +40,6 @@ export function useResize({ dimensions, direction, defaultSize, storageKey }: Us
       dispatch(setIsResize(true));
       const mouseX = e.clientX;
       const widthFromLeftToCurrentBlock = Math.round(blockRef.current.getBoundingClientRect().right);
-
       const currentBlockWidth = blockRef.current.offsetWidth;
 
       const newBlockWidth =
@@ -102,14 +102,13 @@ export function useResize({ dimensions, direction, defaultSize, storageKey }: Us
       document.removeEventListener('mouseup', handleMouseUp);
 
       // save to backend
+      const updateUserSettings = { ...userSettingsData, [storageKey]: newSize };
       updateAdjustWidth.mutateAsync({
-        value: { ...userSettingsData, [storageKey]: newSize },
+        value: updateUserSettings,
         resolution
       });
-
-      // add current size to localStorage
+      dispatch(setAdjustableWidths({ [storageKey]: newSize } as AjustableWidths));
       localStorage.setItem(storageKey, JSON.stringify(newSize));
-
       setIsDrag(false);
       dispatch(setIsResize(false));
     }

@@ -5,8 +5,8 @@ import { filterByAssignee, filterBySearchValue, sortTasks } from '../../../Tasks
 import { Table } from '../Table/Table';
 import { Label } from './Label';
 import { AddTask } from '../AddTask/AddTask';
-import { getTaskColumns, setCurrTeamMemId } from '../../../../features/task/taskSlice';
-import { columnsHead, listColumnProps } from '../../../../pages/workspace/tasks/component/views/ListColumns';
+import { getTaskColumns, setCurrTeamMemId, setEscapeKey } from '../../../../features/task/taskSlice';
+import { ExtendedListColumnProps, columnsHead } from '../../../../pages/workspace/tasks/component/views/ListColumns';
 import { cl } from '../../../../utils';
 import { IField, IListDetailRes } from '../../../../features/list/list.interfaces';
 import { Hub } from '../../../../pages/workspace/hubs/components/ActiveTree/activetree.interfaces';
@@ -25,7 +25,7 @@ export interface IListColor {
   outerColour: string | null;
 }
 
-const unique = (arr: listColumnProps[]) => [...new Set(arr)];
+const unique = (arr: ExtendedListColumnProps[]) => [...new Set(arr)];
 
 export function List({ tasks }: ListProps) {
   const dispatch = useAppDispatch();
@@ -36,6 +36,7 @@ export function List({ tasks }: ListProps) {
     splitSubTaskState: splitSubTaskMode,
     subtasks,
     tasks: storeTasks,
+    escapeKey,
     separateSubtasksMode
   } = useAppSelector((state) => state.task);
   const { parentHubExt, hub } = useAppSelector((state) => state.hub);
@@ -45,6 +46,14 @@ export function List({ tasks }: ListProps) {
   const [showNewTaskField, setShowNewTaskField] = useState(false);
   const [parentHub, setParentHub] = useState<Hub>();
   const [fullTasksLists, setFullTasksLists] = useState<ITaskFullList[]>([]);
+
+  // reset showNewTaskField with eskLey
+  useEffect(() => {
+    if (escapeKey) {
+      setShowNewTaskField(false);
+    }
+    dispatch(setEscapeKey(false));
+  }, [escapeKey, showNewTaskField]);
 
   useEffect(() => {
     if (parentHubExt.id) {
@@ -60,13 +69,12 @@ export function List({ tasks }: ListProps) {
 
   const generateColumns = useMemo(() => {
     const customFieldNames = tasks[0].custom_field_columns.map((i) => ({
+      ...i,
       value: i.name,
-      id: i.id,
-      field: i.type,
       hidden: false,
-      color: i.color
+      field: i.type
     }));
-    const uniqueColumns = unique([...columnsHead, ...customFieldNames]);
+    const uniqueColumns = unique([...columnsHead, ...customFieldNames] as ExtendedListColumnProps[]);
     dispatch(getTaskColumns(uniqueColumns));
     return uniqueColumns;
   }, [tasks]);
@@ -113,19 +121,18 @@ export function List({ tasks }: ListProps) {
 
   return (
     <div
-      className="pt-1 border-t-4 border-l-4 border-purple-500 rounded-3xl bg-purple-50"
+      className={`pt-1 border-t-4 border-l-4 rounded-tl-3xl  ${!collapseTable && 'rounded-3xl pb-3'}`}
       style={{
         borderColor: ListColor?.outerColour === null ? 'black' : (ListColor?.outerColour as string),
         backgroundColor: LightenColor(
           ListColor?.outerColour === null ? 'black' : (ListColor?.outerColour as string),
           0.95
-        ),
-        overflow: collapseTable ? 'hidden' : 'unset'
+        )
       }}
     >
       <Label
         listName={tasks[0].list?.name}
-        hubName={parentHub?.name}
+        hubName={splitSubTaskMode ? `${parentHub?.name as string} > ${tasks[0].list?.name}` : parentHub?.name}
         tasks={tasks}
         ListColor={ListColor}
         showTable={collapseTable}
@@ -170,6 +177,7 @@ export function List({ tasks }: ListProps) {
                         listColor={ListColor}
                         heads={hideTask.length ? hideTask : generateColumns}
                         data={[task]}
+                        isBlockedShowChildren={true}
                       />
                       <SubtasksTable
                         task={task}
@@ -177,6 +185,7 @@ export function List({ tasks }: ListProps) {
                         listId={task.list_id}
                         heads={hideTask.length ? hideTask : generateColumns}
                         level={1}
+                        breadcrumbs={`${parentHub?.name as string} > ${task.list?.name}`}
                       />
                     </Fragment>
                   ))}

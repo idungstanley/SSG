@@ -20,7 +20,6 @@ interface RowProps {
   parentId?: string;
   isListParent: boolean;
   taskStatusId?: string;
-  isSplitSubtask?: boolean;
   handleClose?: () => void | void;
 }
 
@@ -32,12 +31,13 @@ export function AddSubTask({
   parentId,
   taskStatusId,
   isListParent,
-  isSplitSubtask,
   handleClose
 }: RowProps) {
   const { subtaskDefaultStatusId } = useAppSelector((state) => state.task);
 
   const [showSubTasks, setShowSubTasks] = useState(false);
+
+  const [hoverOn, setHoverOn] = useState(false);
 
   const otherColumns = columns.slice(1);
 
@@ -63,6 +63,8 @@ export function AddSubTask({
       {/* current task */}
       <tr style={style} className="contents group">
         <StickyCol
+          hoverOn={hoverOn}
+          setHoverOn={setHoverOn}
           showSubTasks={showSubTasks}
           setShowSubTasks={setShowSubTasks}
           style={{ zIndex: 3 }}
@@ -73,7 +75,6 @@ export function AddSubTask({
           onClose={handleClose}
           paddingLeft={paddingLeft}
           tags={'tags' in task ? <Tags tags={task.tags} taskId={task.id} /> : null}
-          isSplitSubtask={isSplitSubtask}
           dragElement={
             <span ref={setNodeRef} {...listeners} {...attributes}>
               <MdDragIndicator
@@ -82,7 +83,6 @@ export function AddSubTask({
               />
             </span>
           }
-          isLastSubtaskLevel={false}
         >
           {/* actions */}
           <div className="absolute opacity-0 group-hover:opacity-100 top-0 bottom-0 right-0 flex space-x-1 items-center justify-center">

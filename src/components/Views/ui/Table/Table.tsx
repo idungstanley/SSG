@@ -5,6 +5,7 @@ import { ITaskFullList, Task } from '../../../../features/task/interface.tasks';
 import {
   setCurrTaskListId,
   setCurrTeamMemId,
+  setEscapeKey,
   setStatusId,
   setSubtaskDefaultStatusId,
   setUpdateCords
@@ -26,13 +27,19 @@ interface TableProps {
   label: string;
   listName?: string;
   listColor?: IListColor;
+  isBlockedShowChildren?: boolean;
 }
 
-export function Table({ heads, data, label, listName, listColor }: TableProps) {
+export function Table({ heads, data, label, listName, listColor, isBlockedShowChildren }: TableProps) {
   const dispatch = useAppDispatch();
 
   const { draggableItemId } = useAppSelector((state) => state.list);
-  const { statusId, defaultSubtaskListId, splitSubTaskState: splitSubTaskMode } = useAppSelector((state) => state.task);
+  const {
+    statusId,
+    defaultSubtaskListId,
+    splitSubTaskState: splitSubTaskMode,
+    escapeKey
+  } = useAppSelector((state) => state.task);
 
   const [listId, setListId] = useState<string>('');
   const [tableHeight, setTableHeight] = useState<string | number>('auto');
@@ -53,6 +60,14 @@ export function Table({ heads, data, label, listName, listColor }: TableProps) {
   });
 
   const dataSpread = showNewTaskField ? newTaskObj : data;
+
+  // reset showNewTaskField with eskLey
+  useEffect(() => {
+    if (escapeKey) {
+      setShowNewTaskField(false);
+    }
+    dispatch(setEscapeKey(false));
+  }, [escapeKey, showNewTaskField]);
 
   // get exact statusID
   useEffect(() => {
@@ -102,12 +117,10 @@ export function Table({ heads, data, label, listName, listColor }: TableProps) {
 
   return (
     <ScrollableHorizontalListsContainer onScroll={onScroll} ListColor={listColor}>
-      {/* draggable item */}{' '}
-      {draggableItem ? (
-        <DragOverlay>
-          <OverlayRow columns={columns} task={draggableItem} />
-        </DragOverlay>
-      ) : null}
+      {/* draggable item */}
+      <DragOverlay dropAnimation={null}>
+        {draggableItem ? <OverlayRow columns={columns} task={draggableItem} /> : null}
+      </DragOverlay>
       <div className="py-2 table-container" id={label}>
         <table
           onScroll={splitSubTaskMode ? () => null : onScroll}
@@ -151,6 +164,7 @@ export function Table({ heads, data, label, listName, listColor }: TableProps) {
                       taskStatusId={statusId}
                       handleClose={handleClose}
                       level={0}
+                      isBlockedShowChildren={isBlockedShowChildren}
                     />
                   ) : null
                 )

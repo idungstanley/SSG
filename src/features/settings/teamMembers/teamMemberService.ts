@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import requestNew from '../../../app/requestNew';
-import { ITeamMember } from '../../workspace/teamMembers.intrfaces';
+import { ITeamMember, RoleRes } from '../../workspace/teamMembers.intrfaces';
 import { ITeamMembersAndGroupsReq } from '../teamMembersAndGroups.interfaces';
 
 // Get team members
@@ -53,11 +53,23 @@ export const useGetTeamMember = (teamMemberId: string) => {
   );
 };
 
+//Change Team Member Role
+export const useChangeRole = ({ teamMember, role }: { teamMember: string; role: string }) => {
+  const data = requestNew<{ data: RoleRes }>({
+    url: `settings/team-members/${teamMember}/change-role`,
+    method: 'POST',
+    data: {
+      role
+    }
+  });
+  return data;
+};
+
 // Deactivate team member service
 export const deactivateTeamMemberService = async (data: { teamMemberId: string }) => {
   const response = requestNew<{ data: { team_member: ITeamMember } }>({
-    url: `/settings/team-members/${data.teamMemberId}/deactivate`,
-    method: 'POST'
+    url: `/settings/team-members/${data.teamMemberId}?status=disabled`,
+    method: 'DELETE'
   });
   return response;
 };

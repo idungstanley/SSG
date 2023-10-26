@@ -6,9 +6,6 @@ import Menu from '../HotKeys/components/Dropdown';
 import { setActiveTabId } from '../../../../features/workspace/workspaceSlice';
 import CompactIcon from '../../../../assets/icons/CompactIcon';
 import ExpandIcon from '../../../../assets/icons/ExpandIcon';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { setUserSettingsKeys } from '../../../../features/account/accountService';
-import useResolution from '../../../../hooks/useResolution';
 import { STORAGE_KEYS } from '../../../../app/config/dimensions';
 
 interface HeaderProps {
@@ -20,23 +17,11 @@ interface HeaderProps {
 
 export default function Header({ menu, children, isMinified, additionalNavItems }: HeaderProps) {
   const dispatch = useAppDispatch();
-  const queryClient = useQueryClient();
-  const resolution = useResolution();
 
   const { pilotSideOver } = useAppSelector((state) => state.slideOver);
   const { userSettingsData } = useAppSelector((state) => state.account);
 
-  const postIsPilotMinified = useMutation(setUserSettingsKeys, {
-    onSuccess: () => {
-      queryClient.invalidateQueries(['user-settings']);
-    }
-  });
-
   const togglePilot = () => {
-    postIsPilotMinified.mutateAsync({
-      value: { ...userSettingsData, isPilotMinified: isMinified },
-      resolution: resolution
-    });
     localStorage.setItem(
       STORAGE_KEYS.USER_SETTINGS_DATA,
       JSON.stringify({

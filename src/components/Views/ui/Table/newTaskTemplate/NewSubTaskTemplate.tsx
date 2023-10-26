@@ -1,14 +1,16 @@
-import React from 'react';
-import { ITaskFullList } from '../../../../../features/task/interface.tasks';
+import { ITaskFullList, Task } from '../../../../../features/task/interface.tasks';
+import { useAppSelector } from '../../../../../app/hooks';
 
-export default function NewSubTaskTemplate() {
+export default function NewSubTaskTemplate(task?: Task) {
+  const { newTaskPriority } = useAppSelector((state) => state.task);
+
   const newSubTask: ITaskFullList = {
     archived_at: null,
     assignees: [],
     avatar_path: '',
     created_at: '',
     custom_fields: [],
-    custom_field_columns: [],
+    custom_field_columns: task?.custom_field_columns || [],
     deleted_at: null,
     closed_subtasks_count: 0,
     descendants_count: 0,
@@ -16,6 +18,7 @@ export default function NewSubTaskTemplate() {
     checklist_done_items_count: 0,
     has_attachments: false,
     description: null,
+    filters: null,
     directory_items: [],
     end_date: null,
     group_assignees: [],
@@ -24,12 +27,13 @@ export default function NewSubTaskTemplate() {
     list: {
       id: '',
       name: '',
+      color: '',
       parents: { hubs: [], wallets: [], lists: [] }
     },
     list_id: '',
     name: 'Add Subtask',
     parent_id: null,
-    priority: 'normal',
+    priority: newTaskPriority,
     start_date: null,
     status: {
       color: '#AEADAE',
@@ -43,7 +47,7 @@ export default function NewSubTaskTemplate() {
       updated_at: ''
     },
     tags: [],
-    task_statuses: [],
+    task_statuses: task?.task_statuses || [],
     updated_at: ''
   };
   return newSubTask;

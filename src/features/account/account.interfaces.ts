@@ -22,7 +22,7 @@ export interface IUserParams {
   isPilotMinified?: boolean;
   isFavoritePinned?: boolean;
   extendedBarWidth?: number;
-  hotkeys?: number[];
+  hotkeys?: string[];
 }
 
 export interface IUserCalendarParams {

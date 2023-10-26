@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { Fragment, useEffect, useRef, useState } from 'react';
 import { AiOutlineBgColors } from 'react-icons/ai';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import Menu from '@mui/material/Menu';
@@ -7,18 +7,29 @@ import { BiHide, BiSearch } from 'react-icons/bi';
 import { BsSortAlphaDown, BsSortAlphaUp } from 'react-icons/bs';
 import { IoIosArrowDown, IoIosArrowForward, IoIosArrowUp, IoIosColorFilter } from 'react-icons/io';
 import SortDirectionCheck from '../../pages/workspace/tasks/component/views/listLevel/component/SortDirectionCheck';
-import { SortOption, setSortArr, setSortArray } from '../../features/task/taskSlice';
+import {
+  SortOption,
+  setEditCustomProperty,
+  setEntityForCustom,
+  setSortArr,
+  setSortArray
+} from '../../features/task/taskSlice';
 import { RiFilter2Line } from 'react-icons/ri';
 import { MdEditNote, MdOutlineDeleteForever, MdOutlineFilter1 } from 'react-icons/md';
 import { HiOutlineDuplicate, HiOutlineSwitchHorizontal } from 'react-icons/hi';
 import { TbAlignJustified } from 'react-icons/tb';
+import { setActiveTabId } from '../../features/workspace/workspaceSlice';
+import { pilotTabs } from '../../app/constants/pilotTabs';
+import { IField } from '../../features/list/list.interfaces';
+import { displayPrompt, setVisibility } from '../../features/general/prompt/promptSlice';
 
 type SortModalProps = {
+  anchorEl: HTMLElement | null;
   toggleModal: React.Dispatch<React.SetStateAction<boolean>>;
   handleSortFn: (header: string, id: string, order: 'asc' | 'desc') => void;
-  anchorEl: HTMLElement | null;
-  handleClose: () => void;
   setAnchorEl?: React.Dispatch<React.SetStateAction<HTMLElement | null>>;
+  handleClose: () => void;
+  handleRemoveColumn?: () => void;
 };
 
 type filterSwitch = {
@@ -26,58 +37,117 @@ type filterSwitch = {
   toggle: boolean;
 };
 
-const DropDownOptions = [
-  {
-    label: 'filter by color',
-    icon: <IoIosColorFilter />,
-    showArrow: true
-  },
-  {
-    label: 'filter by condition',
-    icon: <RiFilter2Line />,
-    showArrow: true
-  },
-  {
-    label: 'filter by values',
-    icon: <MdOutlineFilter1 />,
-    showArrow: true
-  },
-  {
-    label: 'Move Columns',
-    icon: <HiOutlineSwitchHorizontal />,
-    showArrow: true
-  },
-  {
-    label: 'Ajust Alignment',
-    icon: <TbAlignJustified />,
-    showArrow: true
-  },
-  {
-    label: 'Edit Fields',
-    icon: <MdEditNote />,
-    showArrow: false
-  },
-  {
-    label: 'Duplicate',
-    icon: <HiOutlineDuplicate />,
-    showArrow: false
-  },
-  {
-    label: 'Hide Columns',
-    icon: <BiHide />,
-    showArrow: false
-  },
-  {
-    label: 'Remove From List',
-    icon: <MdOutlineDeleteForever className="text-red-500" />,
-    showArrow: false
-  }
-];
+interface dropdownTypes {
+  label: string;
+  icon: JSX.Element;
+  showArrow: boolean;
+  isHide: boolean;
+  handleClick?: () => void;
+}
 
-export default function SortModal({ toggleModal, setAnchorEl, anchorEl, handleClose, handleSortFn }: SortModalProps) {
+export default function SortModal({
+  anchorEl,
+  toggleModal,
+  setAnchorEl,
+  handleClose,
+  handleSortFn,
+  handleRemoveColumn
+}: SortModalProps) {
+  const { sortAbleArr, activeTaskColumn, sortArr } = useAppSelector((state) => state.task);
+  const DropDownOptions: dropdownTypes[] = [
+    {
+      label: 'filter by color',
+      icon: <IoIosColorFilter />,
+      showArrow: true,
+      isHide: false
+    },
+    {
+      label: 'filter by condition',
+      icon: <RiFilter2Line />,
+      showArrow: true,
+      isHide: false
+    },
+    {
+      label: 'filter by values',
+      icon: <MdOutlineFilter1 />,
+      showArrow: true,
+      isHide: false
+    },
+    {
+      label: 'Move Columns',
+      icon: <HiOutlineSwitchHorizontal />,
+      showArrow: true,
+      isHide: false
+    },
+    {
+      label: 'Ajust Alignment',
+      icon: <TbAlignJustified />,
+      showArrow: true,
+      isHide: false
+    },
+    {
+      label: 'Edit Fields',
+      icon: <MdEditNote />,
+      showArrow: false,
+      isHide: false,
+      handleClick: () => {
+        if (!activeTaskColumn.defaulField) {
+          dispatch(setEditCustomProperty(activeTaskColumn as IField));
+          dispatch(setActiveTabId(pilotTabs.TEMPLATES));
+          dispatch(setEntityForCustom({ id: undefined, type: undefined }));
+          handleClose();
+        }
+      }
+    },
+    {
+      label: 'Duplicate',
+      icon: <HiOutlineDuplicate />,
+      showArrow: false,
+      isHide: false
+    },
+    {
+      label: 'Hide Columns',
+      icon: <BiHide />,
+      showArrow: false,
+      isHide: false
+    },
+    {
+      label: 'Remove From List',
+      icon: <MdOutlineDeleteForever className="text-red-500" />,
+      showArrow: false,
+      isHide: activeTaskColumn.defaulField,
+      handleClick: () => {
+        if (!activeTaskColumn.defaulField) {
+          dispatch(
+            displayPrompt(
+              `Delete "${activeTaskColumn.value}" column`,
+              `Would you like delete this "${activeTaskColumn.value}" column?`,
+              [
+                {
+                  label: 'Delete Column',
+                  style: 'danger',
+                  callback: () => {
+                    handleRemoveColumn && handleRemoveColumn();
+                    dispatch(setVisibility(false));
+                  }
+                },
+                {
+                  label: 'Cancel',
+                  style: 'plain',
+                  callback: () => {
+                    dispatch(setVisibility(false));
+                  }
+                }
+              ]
+            )
+          );
+          handleClose();
+        }
+      }
+    }
+  ];
   const modalRef = useRef<HTMLDivElement>(null);
   const dispatch = useAppDispatch();
-  const { sortAbleArr, activeTaskColumn, sortArr } = useAppSelector((state) => state.task);
   const { baseColor } = useAppSelector((state) => state.account);
   const [sortDropDown, setSortDropDown] = useState<boolean>(false);
   const [sortItems, getSortItems] = useState<SortOption[]>([]);
@@ -87,7 +157,7 @@ export default function SortModal({ toggleModal, setAnchorEl, anchorEl, handleCl
     { title: 'condition', toggle: false },
     { title: 'value', toggle: false }
   ]);
-  const header = activeTaskColumn.header;
+  const header = activeTaskColumn.value;
   const headerTxt =
     header === 'Assignees'
       ? 'assignee'
@@ -205,12 +275,12 @@ export default function SortModal({ toggleModal, setAnchorEl, anchorEl, handleCl
                   <IoIosArrowUp
                     className="text-gray-600"
                     style={{ color: getOrder?.dir === 'asc' ? baseColor : '' }}
-                    onClick={() => handleSortFn(activeTaskColumn.header, activeTaskColumn.id, 'asc')}
+                    onClick={() => handleSortFn(activeTaskColumn.value, activeTaskColumn.id, 'asc')}
                   />
                   <IoIosArrowDown
                     className="text-gray-600"
                     style={{ color: getOrder?.dir === 'desc' ? baseColor : '' }}
-                    onClick={() => handleSortFn(activeTaskColumn.header, activeTaskColumn.id, 'desc')}
+                    onClick={() => handleSortFn(activeTaskColumn.value, activeTaskColumn.id, 'desc')}
                   />
                 </div>
               </div>
@@ -233,31 +303,37 @@ export default function SortModal({ toggleModal, setAnchorEl, anchorEl, handleCl
           {/* <div className="flex flex-col space-y-1 capitalize p"> */}
           <>
             {DropDownOptions.map((item, index) => (
-              <div key={index}>
-                <div className="flex items-center justify-between h-8 px-1 hover:bg-gray-200">
-                  <div className="flex items-center gap-1">
-                    {item.icon}
-                    <span>{item.label}</span>
-                  </div>
-                  {item.showArrow && (
-                    <>
-                      {!filterDropDown[0].toggle ? (
-                        <IoIosArrowForward
-                          className="font-bold text-gray-600"
-                          onClick={(e) => switchBtns(e, 'color')}
-                        />
-                      ) : (
-                        <IoIosArrowDown className="font-bold text-gray-600" onClick={(e) => switchBtns(e, 'color')} />
+              <Fragment key={index}>
+                {!item.isHide ? (
+                  <div onClick={item.handleClick}>
+                    <div className="flex items-center justify-between h-8 px-1 hover:bg-gray-200 cursor-pointer">
+                      <div className="flex items-center gap-1">
+                        {item.icon}
+                        <span>{item.label}</span>
+                      </div>
+                      {item.showArrow && (
+                        <>
+                          {!filterDropDown[0].toggle ? (
+                            <IoIosArrowForward
+                              className="font-bold text-gray-600"
+                              onClick={(e) => switchBtns(e, 'color')}
+                            />
+                          ) : (
+                            <IoIosArrowDown
+                              className="font-bold text-gray-600"
+                              onClick={(e) => switchBtns(e, 'color')}
+                            />
+                          )}
+                        </>
                       )}
-                    </>
-                  )}
-                </div>
-              </div>
+                    </div>
+                  </div>
+                ) : null}
+              </Fragment>
             ))}
           </>
         </div>
       </div>
-      {/* </div> */}
     </Menu>
   );
 }

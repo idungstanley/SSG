@@ -131,7 +131,7 @@ export function CustomMonthLine({ setOptions }: Props) {
             onClick={() => setDropDown((prev) => ({ ...prev, ordinalDays: !prev.ordinalDays }))}
           >
             <span>{ordinalDay}</span>
-            {dropDown.ordinalDays ? <ArrowUp /> : <ArrowDown dimensions={{ height: 7, width: 7 }} />}
+            {dropDown.ordinalDays ? <ArrowUp /> : <ArrowDown className="w-2 h-2" />}
           </div>
           {dropDown.ordinalDays && ordinalDaysList()}
         </div>
@@ -143,7 +143,7 @@ export function CustomMonthLine({ setOptions }: Props) {
             onClick={() => setDropDown((prev) => ({ ...prev, ordinalWeeks: !prev.ordinalWeeks }))}
           >
             <span>{ordinalWeek}</span>
-            {dropDown.ordinalWeeks ? <ArrowUp /> : <ArrowDown dimensions={{ height: 7, width: 7 }} />}
+            {dropDown.ordinalWeeks ? <ArrowUp /> : <ArrowDown className="w-2 h-2" />}
           </div>
           {dropDown.ordinalWeeks && ordinalWeeksList()}
           <WeekLineOption extended={true} setOptions={setOptions} />

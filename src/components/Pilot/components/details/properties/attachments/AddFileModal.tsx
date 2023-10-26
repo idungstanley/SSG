@@ -1,11 +1,10 @@
 import { useDispatch } from 'react-redux';
 import Uppy from '@uppy/core';
 import XHRUpload from '@uppy/xhr-upload';
-import { useUppy, DashboardModal } from '@uppy/react';
+import { DashboardModal } from '@uppy/react';
 import '@uppy/core/dist/style.css';
 import '@uppy/dashboard/dist/style.css';
 import { InvalidateQueryFilters, useQueryClient } from '@tanstack/react-query';
-import { useEffect } from 'react';
 import { useAppSelector } from '../../../../../../app/hooks';
 import { setShowTaskUploadModal } from '../../../../../../features/task/taskSlice';
 
@@ -22,44 +21,31 @@ export default function AddFileModal({ invalidateQuery, endpoint }: UploadFileMo
   const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
 
   // init
-  const uppy = useUppy(() =>
-    new Uppy({
-      debug: true,
-      autoProceed: false,
-      meta: {}
-    }).use(XHRUpload, {
-      fieldName: 'files[0]',
-      allowedMetaFields: ['id', 'type'],
-      endpoint: `${process.env.REACT_APP_API_BASE_URL}/api/${endpoint}`,
-      headers: currentWorkspaceId
-        ? {
-            Authorization: `Bearer ${accessToken}`,
-            current_workspace_id: currentWorkspaceId
-          }
-        : undefined,
-      method: 'POST'
-    })
-  );
+  const uppy = new Uppy({
+    debug: true,
+    autoProceed: true,
+    meta: {}
+  }).use(XHRUpload, {
+    fieldName: 'files[0]',
+    formData: true,
+    allowedMetaFields: ['id', 'type'],
+    endpoint: `${process.env.REACT_APP_API_BASE_URL}/api/${endpoint}`,
+    headers: currentWorkspaceId
+      ? {
+          Authorization: `Bearer ${accessToken}`,
+          current_workspace_id: currentWorkspaceId
+        }
+      : undefined,
+    method: 'POST'
+  });
 
   uppy.on('file-added', (file) => {
-    // Set metadata for the file using uppy.setFileMeta
     uppy.setFileMeta(file.id, {
       id: activeItemId,
       type: activeItemType
     });
   });
 
-  useEffect(() => {
-    uppy.on('upload-progress', () => {
-      uppy.close();
-    });
-
-    return () => {
-      uppy.off('upload-success', () => uppy.close());
-    };
-  }, [uppy]);
-
-  // invalidate query
   uppy.on('upload-success', (_file, response) => {
     const { status } = response;
     const { success } = response.body as { success: boolean };

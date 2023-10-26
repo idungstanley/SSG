@@ -1,0 +1,22 @@
+export const pilotTabs = {
+  DETAILS: 'details',
+  LOGS: 'logs',
+  COMMENTS: 'comments',
+  WATCHERS: 'watchers',
+  CONNECT: 'connect',
+  TIME_CLOCK: 'time_clock',
+  CHECKLISTS: 'checklists',
+  SCREEN_RECORD: 'screen_record',
+  ENTITY_MANAGER: 'entity_manager',
+  VIEWS: 'views',
+  TEMPLATES: 'templates',
+  CALENDAR: 'calendar',
+  PROPERTIES: 'properties',
+  ATTACHMENTS: 'attachments',
+  PERMISSIONS: 'permissions',
+  CREATE_HUB: 'create_hub',
+  CREATE_WALLET: 'create_wallet',
+  CREATE_LIST: 'create_list',
+  UTILITIES: 'utilities',
+  AUTOMATION: 'automation'
+};

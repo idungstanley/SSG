@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import requestNew from '../../app/requestNew';
 import { useDispatch } from 'react-redux';
 import { setArchiveList } from './listSlice';
-import { closeMenu, setSpaceStatuses } from '../hubs/hubSlice';
+import { closeMenu, setSpaceStatuses, setSpaceViews } from '../hubs/hubSlice';
 import { IField, IListDetailRes, taskCountFields } from './list.interfaces';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { useParams } from 'react-router-dom';
@@ -13,6 +13,7 @@ import { EntityType } from '../../utils/EntityTypes/EntityType';
 import { ICustomField, setNewCustomPropertyDetails, setSubtasks, setTasks } from '../task/taskSlice';
 import {
   createCustomFieldColumnManager,
+  deleteCustomFieldManager,
   updateCustomFieldColumnManager,
   updateCustomFieldManager
 } from '../../managers/Task';
@@ -115,12 +116,13 @@ export const UseEditListService = (data: {
   color?: string | null | { innerColour?: string; outerColour?: string };
   shape?: string;
 }) => {
+  const convertToString = JSON.stringify(data.color);
   const response = requestNew<IResponseList>({
     url: `lists/${data.listId}`,
     method: 'PUT',
     data: {
       name: data.listName,
-      color: data.color,
+      color: convertToString,
       shape: data.shape,
       description: data.description
     }
@@ -185,7 +187,7 @@ export const UseArchiveListService = (list: { query: string | undefined | null; 
 export const UseGetListDetails = (listId: string | null | undefined) => {
   const dispatch = useAppDispatch();
 
-  const { activeItemType, activeItemId } = useAppSelector((state) => state.workspace);
+  const { activeItemId } = useAppSelector((state) => state.workspace);
   const id = activeItemId === 'list' ? activeItemId : listId;
   return useQuery(
     ['hubs', { listId, id }],
@@ -200,9 +202,9 @@ export const UseGetListDetails = (listId: string | null | undefined) => {
       enabled: !!listId || !!id,
       onSuccess: (data) => {
         const listStatusTypes = data.data.list.task_statuses;
-        if (activeItemType === 'list') {
-          dispatch(setSpaceStatuses(listStatusTypes));
-        }
+        const listViews = data.data.list.task_views;
+        dispatch(setSpaceStatuses(listStatusTypes));
+        dispatch(setSpaceViews(listViews));
       },
       cacheTime: 0
     }
@@ -386,4 +388,52 @@ export const useTaskStatuses = () => {
 
     return data?.data.hub.task_statuses;
   }
+};
+
+const hideCustomFieldColumn = (data: { columnId?: string; listId: string; type: string }) => {
+  const { columnId, listId, type } = data;
+
+  const response = requestNew({
+    url: `custom-fields/${columnId}/model?model=${type}&model_id=${listId}`,
+    method: 'DELETE'
+  });
+  return response;
+};
+
+export const useHideCustomFieldColumn = (columnId: string, listId: string) => {
+  const dispatch = useAppDispatch();
+
+  const { tasks, subtasks } = useAppSelector((state) => state.task);
+
+  return useMutation(hideCustomFieldColumn, {
+    onSuccess: () => {
+      const { updatedTasks, updatedSubtasks } = deleteCustomFieldManager(tasks, subtasks, columnId, listId);
+      dispatch(setTasks(updatedTasks));
+      dispatch(setSubtasks(updatedSubtasks));
+    }
+  });
+};
+
+const deleteCustomField = (data: { columnId?: string; listId: string; type: string }) => {
+  const { columnId } = data;
+
+  const response = requestNew({
+    url: `custom-fields/${columnId}?confirm=1`,
+    method: 'DELETE'
+  });
+  return response;
+};
+
+export const useDeleteCustomField = (columnId: string, listId: string) => {
+  const dispatch = useAppDispatch();
+
+  const { tasks, subtasks } = useAppSelector((state) => state.task);
+
+  return useMutation(deleteCustomField, {
+    onSuccess: () => {
+      const { updatedTasks, updatedSubtasks } = deleteCustomFieldManager(tasks, subtasks, columnId, listId);
+      dispatch(setTasks(updatedTasks));
+      dispatch(setSubtasks(updatedSubtasks));
+    }
+  });
 };

@@ -1,76 +1,98 @@
+import { IField } from '../../../../../features/list/list.interfaces';
+
 export interface listColumnProps {
   id: string;
   field: string;
   value: string;
   hidden: boolean;
   color?: string | null;
+  defaulField: boolean;
 }
 
-export const columnsHead: listColumnProps[] = [
+type OptionalIFields<T> = {
+  [K in keyof T]?: T[K];
+};
+
+export type ExtendedListColumnProps = listColumnProps & OptionalIFields<IField>;
+
+const DEFAULT_FIELD_VAL = true;
+
+export const columnsHead: ExtendedListColumnProps[] = [
   {
-    id: '1',
+    id: 'name',
     field: 'name',
     value: 'Task',
-    hidden: false
+    hidden: false,
+    defaulField: DEFAULT_FIELD_VAL
   },
   {
-    id: '2',
+    id: 'assignees',
     field: 'assignees',
     value: 'Assignees',
-    hidden: false
+    hidden: false,
+    defaulField: DEFAULT_FIELD_VAL
   },
   {
-    id: '3',
+    id: 'tags',
     field: 'tags',
     value: 'Tags',
-    hidden: true
+    hidden: true,
+    defaulField: DEFAULT_FIELD_VAL
   },
   {
-    id: '4',
+    id: 'priority',
     field: 'priority',
     value: 'Priority',
-    hidden: false
+    hidden: false,
+    defaulField: DEFAULT_FIELD_VAL
   },
   {
-    id: '5',
+    id: 'created_at',
     field: 'created_at',
     value: 'Created at',
-    hidden: true
+    hidden: true,
+    defaulField: DEFAULT_FIELD_VAL
   },
   {
-    id: '6',
+    id: 'description',
     field: 'description',
     value: 'Description',
-    hidden: true
+    hidden: true,
+    defaulField: DEFAULT_FIELD_VAL
   },
   {
-    id: '7',
+    id: 'status',
     field: 'status',
     value: 'Status',
-    hidden: false
+    hidden: false,
+    defaulField: DEFAULT_FIELD_VAL
   },
   {
-    id: '8',
+    id: 'start_date',
     field: 'start_date',
     value: 'Start Date',
-    hidden: false
+    hidden: false,
+    defaulField: DEFAULT_FIELD_VAL
   },
   {
-    id: '9',
-    field: 'end_date',
-    value: 'End Date',
-    hidden: true
+    id: 'due_date',
+    field: 'due_date',
+    value: 'Due Date',
+    hidden: true,
+    defaulField: DEFAULT_FIELD_VAL
   },
   {
-    id: '10',
+    id: 'updated_at',
     field: 'updated_at',
     value: 'Updated at',
-    hidden: true
+    hidden: true,
+    defaulField: DEFAULT_FIELD_VAL
   },
   {
-    id: '11',
+    id: 'archived_at',
     field: 'archived_at',
     value: 'Archived at',
-    hidden: true
+    hidden: true,
+    defaulField: DEFAULT_FIELD_VAL
   }
 ];

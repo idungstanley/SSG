@@ -1,32 +1,12 @@
 import React from 'react';
-import interactions from '../../utils/Constants/IconInteractions';
 
-interface ArrowDownProps {
-  active?: boolean;
-}
-function ArrowRightFilled({ active = false }: ArrowDownProps) {
+function ArrowRightFilled() {
   return (
-    <svg width="21" height="20" viewBox="0 0 21 20" fill="none" rotate={'90deg'} xmlns="http://www.w3.org/2000/svg">
-      <g id="arrow_drop_down">
-        <mask
-          id="mask0_10220_2885"
-          style={{ maskType: 'alpha' }}
-          maskUnits="userSpaceOnUse"
-          x="0"
-          y="0"
-          width="21"
-          height="20"
-        >
-          <rect id="Bounding box" x="0.5" width="20" height="20" fill={active ? '#BF01FE' : '#424242'} />
-        </mask>
-        <g mask="url(#mask0_10220_2885)">
-          <path
-            id="arrow_drop_down_2"
-            d="M10.0242 11.4102L8.59145 9.97756C8.3671 9.7532 8.31181 9.49252 8.42559 9.19552C8.53937 8.89851 8.76026 8.75 9.08826 8.75H12.0065C12.3206 8.75 12.5346 8.89851 12.6484 9.19552C12.7621 9.49252 12.7068 9.7532 12.4825 9.97756L11.0498 11.4102C10.9771 11.4829 10.8959 11.5382 10.8062 11.5761C10.7165 11.6141 10.6267 11.633 10.537 11.633C10.4472 11.633 10.3575 11.6141 10.2677 11.5761C10.178 11.5382 10.0968 11.4829 10.0242 11.4102Z"
-            fill={active ? interactions.active : interactions.default}
-          />
-        </g>
-      </g>
+    <svg width="6" height="6" viewBox="0 0 5 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path
+        d="M1.61786 5.80083L4.70844 3.41194C4.75823 3.37344 4.7982 3.32567 4.8256 3.27192C4.853 3.21817 4.86719 3.15971 4.86719 3.10056C4.86719 3.0414 4.853 2.98294 4.8256 2.92919C4.7982 2.87544 4.75823 2.82768 4.70844 2.78917L1.61786 0.400281C1.32286 0.172296 0.867188 0.361315 0.867188 0.711667V5.49013C0.867188 5.84048 1.32286 6.0295 1.61786 5.80083Z"
+        fill="#919191"
+      />
     </svg>
   );
 }

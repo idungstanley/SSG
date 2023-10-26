@@ -54,14 +54,14 @@ function MoneyField({ taskCustomFields, taskId, fieldId, entityCustomProperty }:
   return (
     <div className="flex items-center justify-center w-full h-full">
       {!editMode ? (
-        <div className="w-full h-full p-1 border-2 border-transparent hover:border-alsoit-gray-50 group/parent">
+        <div
+          className="w-full h-full p-1 border-2 border-transparent hover:border-alsoit-gray-50 group/parent"
+          onClick={() => {
+            setEditMode(true);
+          }}
+        >
           <span className="flex items-center justify-center h-full cursor-pointer">
-            <h1
-              className="font-semibold truncate text-alsoit-text-lg"
-              onClick={() => {
-                setEditMode(true);
-              }}
-            >
+            <h1 className="font-semibold truncate text-alsoit-text-lg">
               {currentValue === '-' ? currentValue : `${avtiveCurrency + formatNumberWithCommas(currentValue)}`}
             </h1>
           </span>

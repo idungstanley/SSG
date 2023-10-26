@@ -17,7 +17,6 @@ import {
 import { EntityType } from '../../utils/EntityTypes/EntityType';
 import ActiveTreeSearch from '../ActiveTree/ActiveTreeSearch';
 import Button from '../Button';
-import { EntityManagerTabsId, PilotTabsId } from '../../utils/PilotUtils';
 import { setVisibility } from '../../features/general/prompt/promptSlice';
 import { Capitalize } from '../../utils/NoCapWords/Capitalize';
 import { Fade, Menu } from '@mui/material';
@@ -26,6 +25,8 @@ import { BsFiletypeDoc } from 'react-icons/bs';
 import AddHubIcon from '../../assets/icons/AddHub';
 import AddWalletIcon from '../../assets/icons/AddWallet';
 import AddListIcon from '../../assets/icons/AddList';
+import { pilotTabs } from '../../app/constants/pilotTabs';
+import { APP_HR } from '../../app/constants/app';
 
 interface itemsType {
   title: string;
@@ -42,9 +43,10 @@ interface optionsProps {
 
 interface SubDropdownProps {
   cords?: Cords;
+  placeHubType: string;
 }
 
-export default function SubDropdown({ cords }: SubDropdownProps) {
+export default function SubDropdown({ cords, placeHubType }: SubDropdownProps) {
   const dispatch = useDispatch();
   const { listId, hubId, walletId } = useParams();
 
@@ -109,18 +111,18 @@ export default function SubDropdown({ cords }: SubDropdownProps) {
         }
         dispatch(setShowOverlay(true));
         dispatch(setShowIndependentPilot(true));
-        dispatch(setActiveTabId(PilotTabsId.entityManager));
+        dispatch(setActiveTabId(pilotTabs.ENTITY_MANAGER));
         dispatch(setVisibility(false));
         dispatch(setShowTreeInput(false));
         dispatch(setSubDropdownMenu(false));
         dispatch(setshowMenuDropdown({ showMenuDropdown: null, showMenuDropdownType: null }));
         dispatch(setLastActiveItem(''));
         if (entityToCreate === EntityType.hub || entityToCreate === EntityType.subHub) {
-          dispatch(setActiveSubHubManagerTabId(EntityManagerTabsId.hub));
+          dispatch(setActiveSubHubManagerTabId(pilotTabs.CREATE_HUB));
         } else if (entityToCreate === EntityType.wallet) {
-          dispatch(setActiveSubHubManagerTabId(EntityManagerTabsId.wallet));
+          dispatch(setActiveSubHubManagerTabId(pilotTabs.CREATE_WALLET));
         } else if (entityToCreate === EntityType.list) {
-          dispatch(setActiveSubHubManagerTabId(EntityManagerTabsId.list));
+          dispatch(setActiveSubHubManagerTabId(pilotTabs.CREATE_LIST));
         }
         dispatch(
           getSubMenu({
@@ -132,95 +134,111 @@ export default function SubDropdown({ cords }: SubDropdownProps) {
     }
   ];
 
-  const itemsList: itemsType[] = [
-    {
-      title: 'Sub Hub',
-      handleClick: () => {
-        dispatch(setEntityToCreate(EntityType.subHub));
-        dispatch(setLastActiveItem('Sub Hub'));
-        // dispatch(setSubDropdownMenu(false));
-        // dispatch(setshowMenuDropdown({ showMenuDropdown: null, showMenuDropdownType: null }));
-      },
-      icon: <AddHubIcon />,
-      isVisible: showMenuDropdownType === EntityType.hub ? true : false || SubMenuType === EntityType.hub ? true : false
-    },
-    {
-      title:
-        SubMenuType === EntityType.wallet ||
-        SubMenuType === 'subwallet2' ||
-        showMenuDropdownType === EntityType.wallet ||
-        showMenuDropdownType === 'subwallet2' ||
-        showMenuDropdownType === EntityType.subWallet
-          ? 'Sub Wallet'
-          : 'Wallet',
-      handleClick: () => {
-        dispatch(setEntityToCreate(EntityType.wallet));
-        dispatch(setLastActiveItem(selectedTreeDetails.type === EntityType.wallet ? 'Sub Wallet' : 'Wallet'));
-        // dispatch(setSubDropdownMenu(false));
-        // dispatch(setshowMenuDropdown({ showMenuDropdown: null, showMenuDropdownType: null }));
-      },
-      icon: <AddWalletIcon />,
-      isVisible:
-        showMenuDropdownType === EntityType.list ||
-        showMenuDropdownType === 'subwallet3' ||
-        SubMenuType === 'subwallet3'
-          ? false
-          : true
-    },
-    {
-      title: 'Task',
-      handleClick: () => {
-        dispatch(setCreateTaskSlideOverVisibility(true));
-        dispatch(setSubDropdownMenu(false));
-        dispatch(setshowMenuDropdown({ showMenuDropdown: null, showMenuDropdownType: null }));
-        // navigate(`/${currentWorkspaceId}/tasks`);
-        // dispatch(setLastActiveItem('Task'));
-      },
-      icon: <PlusIcon className="w-5 text-gray-700 h-7" aria-hidden="true" />,
-      isVisible: showMenuDropdownType === EntityType.list ? true : false
-    },
-    {
-      title: 'List',
-      handleClick: () => {
-        dispatch(setLastActiveItem('List'));
-        dispatch(setEntityToCreate(EntityType.list));
-        // dispatch(setSubDropdownMenu(false));
-        // dispatch(setshowMenuDropdown({ showMenuDropdown: null, showMenuDropdownType: null }));
-      },
-      icon: <AddListIcon />,
-      isVisible: showMenuDropdownType === EntityType.list ? false : true
-    },
-    {
-      title: 'Sprint',
-      handleClick: () => ({}),
-      icon: <SwatchIcon className="w-5 text-gray-700 h-7" aria-hidden="true" />,
-      isVisible: true
-    },
-    {
-      title: 'Docs',
-      handleClick: () => ({}),
-      icon: <BsFiletypeDoc className="w-5 text-gray-700 h-7" aria-hidden="true" />,
-      isVisible: false
-    },
-    {
-      title: 'Folder',
-      handleClick: () => ({}),
-      icon: <LinkIcon className="w-4 h-4" aria-hidden="true" />,
-      isVisible: false
-    },
-    {
-      title: 'From Template',
-      handleClick: () => ({}),
-      icon: <DocumentDuplicateIcon className="w-4 h-4" aria-hidden="true" />,
-      isVisible: true
-    },
-    {
-      title: 'Import',
-      handleClick: () => ({}),
-      icon: <StarIcon className="w-4 h-4" aria-hidden="true" />,
-      isVisible: true
-    }
-  ];
+  const itemsList: itemsType[] =
+    placeHubType == APP_HR
+      ? [
+          {
+            title: 'Sub Hub',
+            handleClick: () => {
+              dispatch(setEntityToCreate(EntityType.subHub));
+              dispatch(setLastActiveItem('Sub Hub'));
+            },
+            icon: <AddHubIcon />,
+            isVisible:
+              showMenuDropdownType === EntityType.hub ? true : false || SubMenuType === EntityType.hub ? true : false
+          }
+        ]
+      : [
+          {
+            title: 'Sub Hub',
+            handleClick: () => {
+              dispatch(setEntityToCreate(EntityType.subHub));
+              dispatch(setLastActiveItem('Sub Hub'));
+              // dispatch(setSubDropdownMenu(false));
+              // dispatch(setshowMenuDropdown({ showMenuDropdown: null, showMenuDropdownType: null }));
+            },
+            icon: <AddHubIcon />,
+            isVisible:
+              showMenuDropdownType === EntityType.hub ? true : false || SubMenuType === EntityType.hub ? true : false
+          },
+          {
+            title:
+              SubMenuType === EntityType.wallet ||
+              SubMenuType === 'subwallet2' ||
+              showMenuDropdownType === EntityType.wallet ||
+              showMenuDropdownType === 'subwallet2' ||
+              showMenuDropdownType === EntityType.subWallet
+                ? 'Sub Wallet'
+                : 'Wallet',
+            handleClick: () => {
+              dispatch(setEntityToCreate(EntityType.wallet));
+              dispatch(setLastActiveItem(selectedTreeDetails.type === EntityType.wallet ? 'Sub Wallet' : 'Wallet'));
+              // dispatch(setSubDropdownMenu(false));
+              // dispatch(setshowMenuDropdown({ showMenuDropdown: null, showMenuDropdownType: null }));
+            },
+            icon: <AddWalletIcon />,
+            isVisible:
+              showMenuDropdownType === EntityType.list ||
+              showMenuDropdownType === 'subwallet3' ||
+              SubMenuType === 'subwallet3' ||
+              SubMenuType === EntityType.list
+                ? false
+                : true
+          },
+          {
+            title: 'Task',
+            handleClick: () => {
+              dispatch(setCreateTaskSlideOverVisibility(true));
+              dispatch(setSubDropdownMenu(false));
+              dispatch(setshowMenuDropdown({ showMenuDropdown: null, showMenuDropdownType: null }));
+              // navigate(`/${currentWorkspaceId}/tasks`);
+              // dispatch(setLastActiveItem('Task'));
+            },
+            icon: <PlusIcon className="w-5 text-gray-700 h-7" aria-hidden="true" />,
+            isVisible: showMenuDropdownType === EntityType.list || SubMenuType === EntityType.list ? true : false
+          },
+          {
+            title: 'List',
+            handleClick: () => {
+              dispatch(setLastActiveItem('List'));
+              dispatch(setEntityToCreate(EntityType.list));
+              // dispatch(setSubDropdownMenu(false));
+              // dispatch(setshowMenuDropdown({ showMenuDropdown: null, showMenuDropdownType: null }));
+            },
+            icon: <AddListIcon />,
+            isVisible: showMenuDropdownType === EntityType.list || SubMenuType === EntityType.list ? false : true
+          },
+          {
+            title: 'Sprint',
+            handleClick: () => ({}),
+            icon: <SwatchIcon className="w-5 text-gray-700 h-7" aria-hidden="true" />,
+            isVisible: true
+          },
+          {
+            title: 'Docs',
+            handleClick: () => ({}),
+            icon: <BsFiletypeDoc className="w-5 text-gray-700 h-7" aria-hidden="true" />,
+            isVisible: false
+          },
+          {
+            title: 'Folder',
+            handleClick: () => ({}),
+            icon: <LinkIcon className="w-4 h-4" aria-hidden="true" />,
+            isVisible: false
+          },
+          {
+            title: 'From Template',
+            handleClick: () => ({}),
+            icon: <DocumentDuplicateIcon className="w-4 h-4" aria-hidden="true" />,
+            isVisible: true
+          },
+          {
+            title: 'Import',
+            handleClick: () => ({}),
+            icon: <StarIcon className="w-4 h-4" aria-hidden="true" />,
+            isVisible: true
+          }
+        ];
 
   return (
     <Menu
@@ -236,6 +254,11 @@ export default function SubDropdown({ cords }: SubDropdownProps) {
             ? Number(userSettingsData?.sidebarWidth) - 100
             : sidebarWidthRD
       }}
+      PaperProps={{
+        style: {
+          borderRadius: '12px'
+        }
+      }}
     >
       <div className="px-2 origin-top-right bg-white" style={{ minWidth: '200px' }}>
         <div className="w-auto gap-2 mb-1 px-0.5">
@@ -249,7 +272,7 @@ export default function SubDropdown({ cords }: SubDropdownProps) {
               >
                 <div
                   className={`flex items-center gap-1 p-1.5 py-1.5 space-x-2 text-sm text-left text-gray-600  ${
-                    lastActiveItem ? '' : 'hover:bg-alsoit-gray-75 rounded-md cursor-pointer'
+                    lastActiveItem ? '' : 'hover:bg-alsoit-gray-50 rounded-md cursor-pointer'
                   }`}
                   onClick={item.handleClick}
                 >

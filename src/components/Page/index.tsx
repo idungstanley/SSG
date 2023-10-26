@@ -28,15 +28,17 @@ interface ExtendedBarProps {
 
 const MIN_SIDEBAR_WIDTH = dimensions.extendedBar.min;
 const MAX_SIDEBAR_WIDTH = dimensions.extendedBar.max;
+const extendedBarWidthFromLS =
+  (JSON.parse(localStorage.getItem(STORAGE_KEYS.EXTENDED_BAR_WIDTH) || '""') as number) ||
+  dimensions.extendedBar.default;
+
+const pilotWidthFromLS =
+  (JSON.parse(localStorage.getItem(STORAGE_KEYS.PILOT_WIDTH) || '""') as number) || dimensions.pilot.default;
 
 export default function Page({ header, additionalHeader, children, additional, pilotConfig, extendedBar }: PageProps) {
   const { showOverlay } = useAppSelector((state) => state.workspace);
+  const { userSettingsData } = useAppSelector((state) => state.account);
   const { show: showFullPilot } = useAppSelector((state) => state.slideOver.pilotSideOver);
-
-  const DEFAULT_PILOT_WIDTH = dimensions.pilot.default;
-  const pilotWidthFromLS = JSON.parse(
-    localStorage.getItem(STORAGE_KEYS.PILOT_WIDTH) ?? `${DEFAULT_PILOT_WIDTH}`
-  ) as number;
 
   const { blockRef, Dividers } = useResize({
     dimensions: {
@@ -60,7 +62,7 @@ export default function Page({ header, additionalHeader, children, additional, p
       <section className="flex flex-col w-full h-full">
         {additionalHeader}
         {header}
-        <div className="relative grid w-full h-full grid-cols-frAuto">
+        <div className="relative grid h-full grid-cols-frAuto">
           <div className="relative" style={{ width: calculateWidthForContent() }}>
             {children}
           </div>
@@ -68,7 +70,7 @@ export default function Page({ header, additionalHeader, children, additional, p
             className={`${showOverlay ? 'z-50' : 'border-l relative'}`}
             ref={blockRef}
             style={{
-              width: showFullPilot ? pilotWidthFromLS : undefined
+              width: showFullPilot ? pilotWidthFromLS || userSettingsData?.pilotWidth : undefined
             }}
           >
             {showFullPilot ? <Dividers /> : null}
@@ -92,7 +94,7 @@ function ExtendedBar({ children, name, icon, source }: ExtendedBarProps) {
       min: MIN_SIDEBAR_WIDTH,
       max: MAX_SIDEBAR_WIDTH
     },
-    storageKey: 'extendedBarWidth',
+    storageKey: STORAGE_KEYS.EXTENDED_BAR_WIDTH,
     direction: 'XR',
     defaultSize: dimensions.extendedBar.default
   });
@@ -108,9 +110,9 @@ function ExtendedBar({ children, name, icon, source }: ExtendedBarProps) {
 
   return (
     <aside
-      style={{ width: showExtendedBar ? userSettingsData?.extendedBarWidth : 0 }}
+      style={{ width: showExtendedBar ? extendedBarWidthFromLS || userSettingsData?.extendedBarWidth : undefined }}
       ref={blockRef}
-      className={cl(showExtendedBar && 'border-r', 'relative w-60 h-full transition-all duration-300')}
+      className={cl(showExtendedBar && 'border-r', 'relative h-full transition-all duration-300')}
     >
       <span
         onClick={handleToggle}

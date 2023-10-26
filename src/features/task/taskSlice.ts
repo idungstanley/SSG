@@ -1,17 +1,21 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { listColumnProps } from '../../pages/workspace/tasks/component/views/ListColumns';
+import { ExtendedListColumnProps, listColumnProps } from '../../pages/workspace/tasks/component/views/ListColumns';
 import { IField, IFieldValue, ITask_statuses } from '../list/list.interfaces';
 import {
+  Header,
   IDuration,
   IExtraFields,
   IHistoryFilterMemory,
   IParent,
   ISelectedDate,
   ITaskFullList,
+  ITimeEntriesRes,
   ITimerDetails,
   Status,
+  Tag,
   Task,
-  TaskKey
+  TaskKey,
+  teamMember
 } from './interface.tasks';
 import {
   FilterFieldsWithOption,
@@ -20,8 +24,7 @@ import {
 } from '../../components/TasksHeader/ui/Filter/types/filters';
 import { DEFAULT_FILTERS_OPTION } from '../../components/TasksHeader/ui/Filter/config/filterConfig';
 import { ITeamMembersAndGroup } from '../settings/teamMembersAndGroups.interfaces';
-import { Header } from '../../components/Pilot/components/TimeClock/ClockLog';
-import { ItaskViews } from '../hubs/hubs.interfaces';
+import { IView } from '../hubs/hubs.interfaces';
 
 export interface ICustomField {
   id: string;
@@ -90,6 +93,7 @@ export interface ImyTaskData {
   custom_fields: ICustomField[];
   custom_field_columns: IField[];
   list?: { id: string; name: string; parent: IParent; color?: string };
+  tags: Tag[];
 }
 
 export interface ImyTaskData2 {
@@ -127,6 +131,29 @@ interface entityForCustom {
   type: string | undefined;
 }
 
+interface fileUploadPropsType {
+  openModal: boolean;
+  fieldId?: string;
+  listId?: string;
+  taskId?: string;
+}
+
+export interface IPreferenceState {
+  flyoutToast: boolean;
+  dontPostWithEnter: boolean;
+  markdown: boolean;
+  hotkeys: boolean;
+  notepad: boolean;
+}
+
+export interface IUseSettingsProfile {
+  hotkeys: string;
+  is_json: number;
+  key: string;
+  resolution: null;
+  value: boolean;
+}
+
 export const TWO_SUBTASKS_LEVELS = 'two_levels';
 export const THREE_SUBTASKS_LEVELS = 'three_levels';
 
@@ -137,6 +164,8 @@ interface TaskState {
   watchersData: string[];
   removeWatcherId: null | string;
   currTeamMemberId: null | string;
+  preferenceState: IPreferenceState;
+  userSettingsProfile: IUseSettingsProfile[];
   myTaskData: ImyTaskData[];
   taskColumns: listColumnProps[];
   hideTask: listColumnProps[];
@@ -145,31 +174,35 @@ interface TaskState {
   selectedTasksArray: string[];
   selectedIndexListId: string | null;
   saveSettingLocal: { [key: string]: boolean } | null;
-  saveSettingList: ItaskViews | undefined;
+  saveSettingList: IView | undefined;
   saveSettingOnline: { [key: string]: boolean } | null;
-  comfortableView: boolean;
-  comfortableViewWrap: boolean;
   duplicateTaskObj: IDuplicateTaskObj;
   currentSelectedDuplicateArr: string[];
   verticalGrid: boolean;
   showNewTaskField: boolean;
   showNewTaskId: string;
   singleLineView: boolean;
+  escapeKey: boolean;
+  hilightNewlyCreatedTask: boolean;
+  copyNewlyCreatedTask: boolean;
   toggleAllSubtask: boolean;
-  toggleAllSubtaskSplit: string[];
+  toggleAllSubtaskSplit: string;
   separateSubtasksMode: boolean;
   CompactView: boolean;
   taskUpperCase: boolean;
   verticalGridlinesTask: boolean;
   splitSubTaskState: boolean;
   splitSubTaskLevels: string[];
-  CompactViewWrap: boolean;
   triggerSaveSettings: boolean;
   triggerAutoSave: boolean;
   triggerSaveSettingsModal: boolean;
   meMode: boolean;
   autoSave: boolean;
   showTaskNavigation: boolean;
+  assignOnHoverTask: Task | string;
+  assignOnHoverListId: string;
+  assignOnHoverState: boolean;
+  f2State: boolean;
   addNewTaskItem: boolean;
   selectedIndex: number | null;
   defaultSubtaskListId: null | string;
@@ -193,6 +226,8 @@ interface TaskState {
   showTaskUploadModal: boolean;
   subtaskDefaultStatusId: string | null;
   timerStatus: boolean;
+  estimatedTimeStatus: boolean;
+  timeType: string;
   sortAbleArr: SortOption[];
   sortArr: string[];
   timeSortStatus: boolean;
@@ -203,9 +238,10 @@ interface TaskState {
   recorder: MediaRecorder | null;
   stream: MediaStream | null;
   updateCords: number;
-  activeTaskColumn: ActiveTaskColumnProps;
+  activeTaskColumn: ExtendedListColumnProps;
   timerDetails: ITimerDetails;
   duration: IDuration;
+  estimatedDuration: IDuration;
   recorderDuration: IDuration;
   period: number | undefined;
   recorderPeriod: number | undefined;
@@ -218,9 +254,12 @@ interface TaskState {
   assigneeIds: string[];
   selectedDate: ISelectedDate | null;
   HistoryFilterMemory: IHistoryFilterMemory | null;
+  timeAssigneeFilter: ITimeEntriesRes | undefined;
+  timeAssignees: teamMember[] | undefined;
   filters: FilterFieldsWithOption;
   subtasksfilters: Record<string, FilterFieldsWithOption>;
   isFiltersUpdated: boolean;
+  isSubtasksFiltersUpdated: boolean;
   statusId: string;
   currTaskListId: string;
   entityForCustom: entityForCustom;
@@ -229,6 +268,7 @@ interface TaskState {
   newCustomPropertyDetails: customPropertyInfo;
   editCustomProperty: IField | undefined;
   dragToBecomeSubTask: boolean;
+  fileUploadProps: fileUploadPropsType;
 }
 
 const initialState: TaskState = {
@@ -237,15 +277,24 @@ const initialState: TaskState = {
   currentTaskIdForPilot: null,
   watchersData: [],
   currTeamMemberId: null,
+  preferenceState: {
+    flyoutToast: false,
+    dontPostWithEnter: false,
+    markdown: false,
+    hotkeys: false,
+    notepad: false
+  },
+  userSettingsProfile: [],
   removeWatcherId: null,
   myTaskData: [],
   taskColumns: [],
   hideTask: [],
   currentTaskId: null,
-  comfortableView: true,
-  comfortableViewWrap: false,
   showNewTaskField: false,
   meMode: false,
+  escapeKey: false,
+  hilightNewlyCreatedTask: false,
+  copyNewlyCreatedTask: false,
   autoSave: false,
   showNewTaskId: '',
   singleLineView: false,
@@ -270,14 +319,17 @@ const initialState: TaskState = {
   triggerAutoSave: false,
   triggerSaveSettingsModal: false,
   toggleAllSubtask: false,
-  toggleAllSubtaskSplit: [],
+  toggleAllSubtaskSplit: '',
   verticalGridlinesTask: false,
   splitSubTaskState: false,
   splitSubTaskLevels: [],
   separateSubtasksMode: false,
   CompactView: false,
-  CompactViewWrap: false,
   showTaskNavigation: false,
+  assignOnHoverTask: '',
+  assignOnHoverListId: '',
+  assignOnHoverState: false,
+  f2State: false,
   addNewTaskItem: false,
   closeTaskListView: true,
   selectedIndex: null,
@@ -301,6 +353,8 @@ const initialState: TaskState = {
   groupByStatus: 'status',
   showTaskUploadModal: false,
   timerStatus: false,
+  estimatedTimeStatus: false,
+  timeType: 'clock',
   sortAbleArr: [],
   sortArr: [],
   timeSortStatus: false,
@@ -311,9 +365,10 @@ const initialState: TaskState = {
   stream: null,
   recorder: null,
   updateCords: Date.now(),
-  activeTaskColumn: { id: '', header: '' },
-  timerDetails: { description: '', isBillable: false },
+  activeTaskColumn: { id: '', field: '', value: '', hidden: false, defaulField: false },
+  timerDetails: { description: '', isBillable: false, label: '', tags: '' },
   duration: { s: 0, m: 0, h: 0 },
+  estimatedDuration: { s: 0, m: 0, h: 0 },
   recorderDuration: { s: 0, m: 0, h: 0 },
   period: undefined,
   recorderPeriod: undefined,
@@ -327,8 +382,11 @@ const initialState: TaskState = {
   },
   subtasksfilters: {},
   isFiltersUpdated: true,
+  isSubtasksFiltersUpdated: false,
   selectedDate: null,
   HistoryFilterMemory: null,
+  timeAssigneeFilter: undefined,
+  timeAssignees: undefined,
   statusId: '',
   currTaskListId: '',
   entityForCustom: { id: undefined, type: undefined },
@@ -345,7 +403,13 @@ const initialState: TaskState = {
     }
   },
   editCustomProperty: undefined,
-  dragToBecomeSubTask: false
+  dragToBecomeSubTask: false,
+  fileUploadProps: {
+    fieldId: undefined,
+    taskId: undefined,
+    listId: undefined,
+    openModal: false
+  }
 };
 
 export const taskSlice = createSlice({
@@ -367,8 +431,26 @@ export const taskSlice = createSlice({
     setSubtasksFilters(state, action: PayloadAction<Record<string, FilterFieldsWithOption>>) {
       state.subtasksfilters = action.payload;
     },
+    setPreferenceState(state, action: PayloadAction<IPreferenceState>) {
+      state.preferenceState = action.payload;
+    },
+    setUserSettingsProfile(state, action: PayloadAction<IUseSettingsProfile[]>) {
+      state.userSettingsProfile = action.payload;
+    },
     setFiltersUpdated(state, action: PayloadAction<boolean>) {
       state.isFiltersUpdated = action.payload;
+    },
+    setSubtasksFiltersUpdated(state, action: PayloadAction<boolean>) {
+      state.isSubtasksFiltersUpdated = action.payload;
+    },
+    setEscapeKey(state, action: PayloadAction<boolean>) {
+      state.escapeKey = action.payload;
+    },
+    setHilightNewlyCreatedTask(state, action: PayloadAction<boolean>) {
+      state.hilightNewlyCreatedTask = action.payload;
+    },
+    setCopyNewlyCreatedTask(state, action: PayloadAction<boolean>) {
+      state.copyNewlyCreatedTask = action.payload;
     },
     setAssigneeIds(state, action: PayloadAction<string[]>) {
       state.assigneeIds = action.payload;
@@ -391,7 +473,7 @@ export const taskSlice = createSlice({
     setSaveSettingLocal(state, action: PayloadAction<{ [key: string]: boolean } | null>) {
       state.saveSettingLocal = action.payload;
     },
-    setSaveSettingList(state, action: PayloadAction<ItaskViews | undefined>) {
+    setSaveSettingList(state, action: PayloadAction<IView | undefined>) {
       state.saveSettingList = action.payload;
     },
     setSaveSettingOnline(state, action: PayloadAction<{ [key: string]: boolean } | null>) {
@@ -451,9 +533,6 @@ export const taskSlice = createSlice({
             })
       };
     },
-    getComfortableView(state, action: PayloadAction<boolean>) {
-      state.comfortableView = action.payload;
-    },
     setTriggerSaveSettings(state, action: PayloadAction<boolean>) {
       state.triggerSaveSettings = action.payload;
     },
@@ -465,9 +544,6 @@ export const taskSlice = createSlice({
     },
     setDragToBecomeSubTask(state, action: PayloadAction<boolean>) {
       state.dragToBecomeSubTask = action.payload;
-    },
-    getComfortableViewWrap(state, action: PayloadAction<boolean>) {
-      state.comfortableViewWrap = action.payload;
     },
     getCompactView(state, action: PayloadAction<boolean>) {
       state.CompactView = action.payload;
@@ -485,9 +561,9 @@ export const taskSlice = createSlice({
     setSeparateSubtasksMode(state, action: PayloadAction<boolean>) {
       state.separateSubtasksMode = action.payload;
       state.toggleAllSubtask = false;
-      state.toggleAllSubtaskSplit = [];
+      state.toggleAllSubtaskSplit = '';
     },
-    setToggleAllSubtaskSplit(state, action: PayloadAction<string[]>) {
+    setToggleAllSubtaskSplit(state, action: PayloadAction<string>) {
       state.toggleAllSubtaskSplit = action.payload;
       state.toggleAllSubtask = false;
       state.separateSubtasksMode = false;
@@ -500,6 +576,18 @@ export const taskSlice = createSlice({
     },
     setNewTaskPriority(state, action: PayloadAction<string>) {
       state.newTaskPriority = action.payload;
+    },
+    setAssignOnHoverTask(state, action: PayloadAction<string | Task>) {
+      state.assignOnHoverTask = action.payload;
+    },
+    setAssignOnHoverListId(state, action: PayloadAction<string>) {
+      state.assignOnHoverListId = action.payload;
+    },
+    setAssignOnHoverState(state, action: PayloadAction<boolean>) {
+      state.assignOnHoverState = action.payload;
+    },
+    setF2State(state, action: PayloadAction<boolean>) {
+      state.f2State = action.payload;
     },
     getTaskUpperCase(state, action: PayloadAction<boolean>) {
       state.taskUpperCase = action.payload;
@@ -525,13 +613,10 @@ export const taskSlice = createSlice({
     getVerticalGrid(state, action: PayloadAction<boolean>) {
       state.verticalGrid = action.payload;
     },
-    getCompactViewWrap(state, action: PayloadAction<boolean>) {
-      state.CompactViewWrap = action.payload;
-    },
     setAddNewTaskItem(state, action: PayloadAction<boolean>) {
       state.addNewTaskItem = action.payload;
     },
-    setActiveTaskColumn(state, action: PayloadAction<ActiveTaskColumnProps>) {
+    setActiveTaskColumn(state, action: PayloadAction<ExtendedListColumnProps>) {
       state.activeTaskColumn = action.payload;
     },
     setShowTaskNavigation(state, action: PayloadAction<boolean>) {
@@ -590,6 +675,12 @@ export const taskSlice = createSlice({
     setTimerStatus(state, action: PayloadAction<boolean>) {
       state.timerStatus = action.payload;
     },
+    setEstimatedTimeStatus(state, action: PayloadAction<boolean>) {
+      state.estimatedTimeStatus = action.payload;
+    },
+    setTimeType(state, action: PayloadAction<string>) {
+      state.timeType = action.payload;
+    },
     setSortArray(state, action: PayloadAction<SortOption[]>) {
       state.sortAbleArr = action.payload;
     },
@@ -625,6 +716,9 @@ export const taskSlice = createSlice({
     setUpdateTimerDuration(state, action: PayloadAction<IDuration>) {
       state.duration = action.payload;
     },
+    setEstimatedDuration(state, action: PayloadAction<IDuration>) {
+      state.estimatedDuration = action.payload;
+    },
     setUpdateRecoderDuration(state, action: PayloadAction<IDuration>) {
       state.recorderDuration = action.payload;
     },
@@ -649,6 +743,12 @@ export const taskSlice = createSlice({
     setHistoryMemory(state, action: PayloadAction<IHistoryFilterMemory | null>) {
       state.HistoryFilterMemory = action.payload;
     },
+    setTimeAssigneeFilter(state, action: PayloadAction<ITimeEntriesRes | undefined>) {
+      state.timeAssigneeFilter = action.payload;
+    },
+    setTimeAssignee(state, action: PayloadAction<teamMember[] | undefined>) {
+      state.timeAssignees = action.payload;
+    },
     setEntityForCustom(state, action: PayloadAction<entityForCustom>) {
       state.entityForCustom = action.payload;
     },
@@ -660,6 +760,9 @@ export const taskSlice = createSlice({
     },
     setEditCustomProperty(state, action: PayloadAction<IField | undefined>) {
       state.editCustomProperty = action.payload;
+    },
+    setOpenFileUploadModal(state, action: PayloadAction<fileUploadPropsType>) {
+      state.fileUploadProps = action.payload;
     }
   }
 });
@@ -671,16 +774,20 @@ export const {
   setFilterOption,
   setSubtasksFilters,
   setFiltersUpdated,
+  setSubtasksFiltersUpdated,
   setAssigneeIds,
   setStatusId,
   setCurrTaskListId,
   setSearchValue,
   setTaskIdForPilot,
   setCurrTeamMemId,
+  setEscapeKey,
+  setHilightNewlyCreatedTask,
+  setCopyNewlyCreatedTask,
   getTaskColumns,
-  getComfortableView,
-  getComfortableViewWrap,
   getVerticalGrid,
+  setPreferenceState,
+  setUserSettingsProfile,
   getSingleLineView,
   getTaskUpperCase,
   setDuplicateTaskObj,
@@ -689,7 +796,6 @@ export const {
   getSplitSubTask,
   getSplitSubTaskLevels,
   getCompactView,
-  getCompactViewWrap,
   setSelectedIndex,
   setSelectedIndexStatus,
   setSelectedListIds,
@@ -720,6 +826,10 @@ export const {
   setGetSubTaskId,
   hideTaskColumns,
   setSubtaskDefaultStatusId,
+  setAssignOnHoverTask,
+  setAssignOnHoverListId,
+  setAssignOnHoverState,
+  setF2State,
   setUpdateEntries,
   setTriggerSaveSettingsModal,
   setSaveSettingOnline,
@@ -729,6 +839,8 @@ export const {
   setGroupByStatus,
   setShowTaskUploadModal,
   setTimerStatus,
+  setEstimatedTimeStatus,
+  setTimeType,
   setTimerDetails,
   setSortArray,
   setSortArr,
@@ -741,6 +853,7 @@ export const {
   setUpdateCords,
   setActiveTaskColumn,
   setUpdateTimerDuration,
+  setEstimatedDuration,
   setUpdateRecoderDuration,
   setRecorderInterval,
   setStopTimer,
@@ -749,10 +862,13 @@ export const {
   setSortType,
   setTaskSelectedDate,
   setHistoryMemory,
+  setTimeAssigneeFilter,
+  setTimeAssignee,
   setEntityForCustom,
   setCustomSuggetionsField,
   setNewCustomPropertyDetails,
   setEditCustomProperty,
-  setDragToBecomeSubTask
+  setDragToBecomeSubTask,
+  setOpenFileUploadModal
 } = taskSlice.actions;
 export default taskSlice.reducer;

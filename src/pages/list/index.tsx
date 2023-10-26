@@ -1,8 +1,12 @@
 import { useState, useEffect, UIEvent } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { UseUpdateTaskViewSettings, getTaskListService } from '../../features/task/taskService';
-import { setActiveItem } from '../../features/workspace/workspaceSlice';
+import {
+  UseUpdateTaskViewSettings,
+  getTaskListService,
+  useUpdateSubtaskFilters
+} from '../../features/task/taskService';
+import { setActiveItem, setActiveView } from '../../features/workspace/workspaceSlice';
 import { UseGetListDetails } from '../../features/list/listService';
 import PilotSection, { pilotConfig } from '../workspace/lists/components/PilotSection';
 import Page from '../../components/Page';
@@ -20,15 +24,26 @@ import { useformatSettings } from '../workspace/tasks/TaskSettingsModal/ShowSett
 import { IListDetailRes, IListDetails } from '../../features/list/list.interfaces';
 import { VerticalScroll } from '../../components/ScrollableContainer/VerticalScroll';
 import { generateSubtasksList } from '../../utils/generateLists';
+import { generateUrlWithViewId } from '../../app/helpers';
+import { IView } from '../../features/hubs/hubs.interfaces';
+import { defaultTaskTemplate } from '../../components/Views/ui/Table/newTaskTemplate/DefaultTemplate';
 
 export function ListPage() {
   const dispatch = useAppDispatch();
   const { listId, taskId } = useParams();
+  const navigate = useNavigate();
 
-  const { tasks: tasksStore, saveSettingLocal, subtasks } = useAppSelector((state) => state.task);
+  const {
+    tasks: tasksStore,
+    saveSettingLocal,
+    subtasks,
+    splitSubTaskState: isSplitMode,
+    filters: { option }
+  } = useAppSelector((state) => state.task);
 
   const [tasksFromRes, setTasksFromRes] = useState<ITaskFullList[]>([]);
   const [listDetailsFromRes, setListDetailsFromRes] = useState<IListDetailRes>();
+  const [isFiltersChecked, setFiltersChecked] = useState<boolean>(false);
 
   const formatSettings = useformatSettings();
 
@@ -64,6 +79,12 @@ export function ListPage() {
   useEffect(() => {
     if (listDetails) {
       setListDetailsFromRes(listDetails);
+      const currentView = listDetails?.data.list.task_views.find(
+        (view) => view.type === EntityType.list && view.is_required
+      );
+      const newUrl = generateUrlWithViewId(currentView?.id as string);
+      dispatch(setActiveView(currentView as IView));
+      navigate(newUrl);
     }
   }, [listDetails]);
 
@@ -121,6 +142,33 @@ export function ListPage() {
     }
   }, [tasksFromRes, listDetailsFromRes]);
 
+  const { mutate: updateSubtaskFilter } = useUpdateSubtaskFilters();
+  useEffect(() => {
+    if (Object.keys(tasksStore).length && Object.keys(subtasks).length && isSplitMode && !isFiltersChecked) {
+      Object.keys(tasksStore).forEach((listId) => {
+        tasksStore[listId].forEach((task) => {
+          if (task.filters) {
+            updateSubtaskFilter({
+              parentId: task.filters?.model_id as string,
+              filters: { op: option, fields: task.filters.data }
+            });
+          }
+        });
+      });
+      Object.keys(subtasks).forEach((listId) => {
+        subtasks[listId].forEach((task) => {
+          if (task.filters) {
+            updateSubtaskFilter({
+              parentId: task.filters.model_id as string,
+              filters: { op: option, fields: task.filters.data }
+            });
+          }
+        });
+      });
+      setFiltersChecked(true);
+    }
+  }, [tasksStore, subtasks, isFiltersChecked, isSplitMode]);
+
   // infinite scroll
   const onScroll = (e: UIEvent<HTMLDivElement>) => {
     handleScroll(e);
@@ -157,11 +205,13 @@ export function ListPage() {
           <VerticalScroll onScroll={onScroll}>
             {/* main content */}
             <section style={{ minHeight: '0', maxHeight: '83vh' }} className="w-full h-full p-4 pb-0 space-y-10">
-              <TaskQuickAction listDetailsData={listName} />
+              <TaskQuickAction />
 
               {tasksStore[listId as string] && tasksFromRes.length ? (
                 <List tasks={tasksStore[listId as string]} />
-              ) : null}
+              ) : (
+                <List tasks={defaultTaskTemplate} />
+              )}
             </section>
           </VerticalScroll>
         </>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useAppSelector } from '../../../app/hooks';
 import { UseUpdateFavService } from '../../../features/hubs/hubService';
 import FavModal from './FavModal';
@@ -12,6 +12,7 @@ import { FiList } from 'react-icons/fi';
 import { getInitials } from '../../../app/helpers';
 import { EntityType } from '../../../utils/EntityTypes/EntityType';
 import { generateViewsUrl } from '../../../utils/generateViewsUrl';
+import { pilotTabs } from '../../../app/constants/pilotTabs';
 
 interface nameType {
   item: {
@@ -27,6 +28,7 @@ function Favourite({ item }: nameType) {
   const navigate = useNavigate();
 
   const { showFavEditInput, triggerFavUpdate, favUpdateName } = useAppSelector((state) => state.hub);
+  const { activeView } = useAppSelector((state) => state.workspace);
 
   const [favName, setFavName] = useState<string>(item.name);
 
@@ -37,7 +39,7 @@ function Favourite({ item }: nameType) {
   });
 
   const handleLocation = () => {
-    const viewsUrl = generateViewsUrl(item.model_id, item) as string;
+    const viewsUrl = generateViewsUrl(item.model_id, activeView?.id as string, item) as string;
 
     dispatch(
       setActiveItem({
@@ -47,7 +49,7 @@ function Favourite({ item }: nameType) {
       })
     );
     dispatch(setShowPilot(true));
-    dispatch(setActiveTabId(4));
+    dispatch(setActiveTabId(pilotTabs.DETAILS));
 
     navigate(viewsUrl, {
       replace: true

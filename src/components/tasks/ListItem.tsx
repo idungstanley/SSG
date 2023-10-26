@@ -6,15 +6,15 @@ import { setPaletteDropDown } from '../../features/account/accountSlice';
 import {
   closeMenu,
   getPrevName,
+  getSubMenu,
   setListIdCreateTask,
   setSideBarCreateTaskListId,
   setshowMenuDropdown
 } from '../../features/hubs/hubSlice';
 import { GetTaskListCount, UseEditListService } from '../../features/list/listService';
 import { setListPaletteColor } from '../../features/list/listSlice';
-import { setActiveItem } from '../../features/workspace/workspaceSlice';
+import { setActiveItem, setCreateWlLink } from '../../features/workspace/workspaceSlice';
 import Palette from '../ColorPalette';
-import ListIconSelection from '../ColorPalette/component/ListIconSelection';
 import ListIconComponent from '../ItemsListInSidebar/components/ListIconComponent';
 import { useDraggable, useDroppable } from '@dnd-kit/core';
 import { cl } from '../../utils';
@@ -29,6 +29,9 @@ import ActiveBarIdentification from './Component/ActiveBarIdentification';
 import { useAbsolute } from '../../hooks/useAbsolute';
 import { generateViewsUrl } from '../../utils/generateViewsUrl';
 import { taskCountFields } from '../../features/list/list.interfaces';
+import PlusIcon from '../../assets/icons/PlusIcon';
+import SubDropdown from '../Dropdown/SubDropdown';
+import { APP_TASKS } from '../../app/constants/app';
 
 interface ListItemProps {
   list: IList;
@@ -45,8 +48,8 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
   const { listId } = useParams();
   const queryClient = useQueryClient();
 
-  const { activeItemId } = useAppSelector((state) => state.workspace);
-  const { showMenuDropdown } = useAppSelector((state) => state.hub);
+  const { activeItemId, activeView } = useAppSelector((state) => state.workspace);
+  const { showMenuDropdown, SubMenuId } = useAppSelector((state) => state.hub);
   const { paletteDropdown, lightBaseColor, baseColor } = useAppSelector((state) => state.account);
   const { listColour } = useAppSelector((state) => state.list);
   const { updateCords } = useAppSelector((state) => state.task);
@@ -70,7 +73,7 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
 
   // function for the list shape selection
   const handleListLocation = (id: string, name: string) => {
-    const viewsUrl = generateViewsUrl(id, list, EntityType.list) as string;
+    const viewsUrl = generateViewsUrl(id, activeView?.id as string, list, EntityType.list) as string;
     dispatch(
       setActiveItem({
         activeItemType: EntityType.list,
@@ -92,6 +95,7 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
       });
     }
   };
+
   const handleClickScroll = (targetId: string) => {
     navigate(`tasks/l/${list.id}`);
     dispatch(
@@ -124,6 +128,16 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
         dispatch(closeMenu());
       }
     }
+  };
+  const handleItemAction = (id: string) => {
+    // dispatch(setSelectedTreeDetails({ name, id, type: EntityType.wallet }));
+    dispatch(setCreateWlLink(false));
+    dispatch(
+      getSubMenu({
+        SubMenuId: id,
+        SubMenuType: EntityType.list
+      })
+    );
   };
 
   const handleListColour = (id: string, e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
@@ -160,7 +174,7 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
       <section
         className={cl(
           'relative flex items-center justify-between h-8 group',
-          list.id === activeItemId ? 'font-medium' : 'hover:bg-gray-100',
+          list.id === activeItemId ? 'font-medium' : 'hover:bg-alsoit-gray-50',
           isOver ? 'bg-primary-100 border-primary-500 shadow-inner shadow-primary-300' : ''
         )}
         ref={setNodeRef}
@@ -247,6 +261,9 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
             ref={menuRef}
           >
             {/* <TaskDropdown /> */}
+            <span onClick={() => handleItemAction(list.id)} className="cursor-pointer">
+              <PlusIcon active />
+            </span>
             <span
               className="cursor-pointer"
               id="menusettings"
@@ -259,16 +276,18 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
       </section>
       {paletteId === list.id && show ? (
         <Palette
-          topContent={<ListIconSelection handleSelection={handleSelection} activeShape={activeShape} />}
+          // topContent={<ListIconSelection handleSelection={handleSelection} activeShape={activeShape} />}
           title="List"
           listComboColour={listComboColour}
           shape={activeShape}
           cords={cords}
           activeInnerColor={innerColour}
           activeOutterColor={outerColour}
+          handleShapeSelection={handleSelection}
         />
       ) : null}
       {showMenuDropdown === list.id ? <MenuDropdown cords={menuCords} /> : null}
+      {SubMenuId === list.id ? <SubDropdown cords={menuCords} placeHubType={APP_TASKS} /> : null}
     </div>
   );
 }

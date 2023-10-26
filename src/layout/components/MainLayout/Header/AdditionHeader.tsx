@@ -19,11 +19,19 @@ import { toast } from 'react-hot-toast';
 import SaveFilterToast from '../../../../components/TasksHeader/ui/Filter/ui/Toast';
 import { setTimerInterval, setTimerStatus, setUpdateTimerDuration } from '../../../../features/task/taskSlice';
 import { runTimer } from '../../../../utils/TimerCounter';
+import { pilotTabs } from '../../../../app/constants/pilotTabs';
+import InsightsIcon from '../../../../assets/icons/InsightsIcon';
+import { StopIcon } from '../../../../assets/icons/StopIcon';
+import ToolTip from '../../../../components/Tooltip/Tooltip';
 
 const hoursToMilliseconds = 60 * 60 * 1000;
 const minutesToMilliseconds = 60 * 1000;
 
-export default function AdditionalHeader() {
+interface IAdditionalHeaderProps {
+  isInsights?: boolean;
+}
+
+export default function AdditionalHeader({ isInsights }: IAdditionalHeaderProps) {
   const { workSpaceId: workspaceId } = useParams();
   const dispatch = useAppDispatch();
   const userTimeZoneFromLS: string | null = localStorage.getItem('userTimeZone');
@@ -55,7 +63,7 @@ export default function AdditionalHeader() {
   });
   const [timerefetched, setTimeRefetch] = useState<boolean>(false);
 
-  const { refetch, status, data } = useCurrentTime({ workspaceId });
+  const { refetch, data } = useCurrentTime({ workspaceId });
   const { mutate } = EndTimeEntriesService();
 
   const RunTimer = runTimer({ isRunning: timerefetched });
@@ -101,7 +109,8 @@ export default function AdditionalHeader() {
     activeItemId === timerLastMemory.listId ||
     activeItemId === timerLastMemory.taskId;
 
-  const timeBlinkerCheck = () => (timerStatus && sameEntity() && tabsId !== 6) || (!sameEntity() && timerStatus);
+  const timeBlinkerCheck = () =>
+    (timerStatus && sameEntity() && tabsId !== pilotTabs.UTILITIES) || (!sameEntity() && timerStatus);
 
   useEffect(() => {
     const handleVisibilityChange = () => {
@@ -177,18 +186,37 @@ export default function AdditionalHeader() {
     RunTimer;
   }, [timerefetched]);
 
+  const renderPageTitle = () => {
+    if (isInsights) {
+      return (
+        <>
+          <InsightsIcon />
+          <span className="font-bold truncate text-alsoit-text-lg">INSIGHTS</span>
+        </>
+      );
+    } else {
+      return (
+        <>
+          <p className="p-1 bg-gray-300 rounded-md">
+            <img src={headerIcon} alt="" className="w-6 h-6" />
+          </p>
+          <ToolTip title={activeItemName}>
+            <span className="font-bold text-left truncate w-72 text-alsoit-text-lg">{activeItemName}</span>
+          </ToolTip>
+        </>
+      );
+    }
+  };
+
   return (
     <div className="flex items-center justify-between w-full px-4 border-b" style={{ height: '50px' }}>
       <h1 style={{ height: '50px' }} className="flex items-center ml-4 space-x-3 text-center">
-        <p className="p-1 bg-gray-300 rounded-md ">
-          <img src={headerIcon} alt="" className="w-6 h-6" />
-        </p>
-        <span className="text-alsoit-text-lg font-bold">{activeItemName}</span>
+        {renderPageTitle()}
       </h1>
       <div className="relative flex items-center justify-center space-x-2.5">
         {timeBlinkerCheck() && (
           <div
-            className="flex items-center px-2 py-1 space-x-1 border border-alsoit-purple-300 rounded-lg cursor-pointer"
+            className="flex items-center px-2 py-1 space-x-1 border rounded-lg cursor-pointer border-alsoit-purple-300"
             onClick={() => setTimerModal(!timerModal)}
           >
             <div
@@ -207,10 +235,13 @@ export default function AdditionalHeader() {
             >
               <AlarmClockIcon active={iconToggle.alarmIcon} />
             </div>
-            <div className="items-center">
-              {`${String(duration.h).padStart(2, '0')}:${String(duration.m).padStart(2, '0')}:${String(
-                duration.s
-              ).padStart(2, '0')}`}
+            <div className="flex space-x-0.5 items-center">
+              <StopIcon className="w-4 h-4 cursor-pointer" onClick={stop} />
+              <span className="tracking-wide">
+                {`${String(duration.h).padStart(2, '0')}:${String(duration.m).padStart(2, '0')}:${String(
+                  duration.s
+                ).padStart(2, '0')}`}
+              </span>
             </div>
             {timerModal ? (
               <div
@@ -257,10 +288,10 @@ export default function AdditionalHeader() {
           </div>
         )}
         <MdTab className="w-5 h-5" style={{ color: 'orange' }} />
-        {screenRecording === 'recording' && tabsId !== 6 && (
+        {screenRecording === 'recording' && tabsId !== pilotTabs.TIME_CLOCK && (
           <div className="relative w-16 flex space-x-0.5" onMouseEnter={() => setRecordBlinker(!recordBlinker)}>
-            <div className="flex items-center justify-start w-5 h-5 border-alsoit-danger rounded-full">
-              <div className="w-3 h-3 bg-alsoit-danger rounded-full pulsate"></div>
+            <div className="flex items-center justify-start w-5 h-5 rounded-full border-alsoit-danger">
+              <div className="w-3 h-3 rounded-full bg-alsoit-danger pulsate"></div>
             </div>
             <div className="w-2/3">
               {`${String(recorderDuration.h).padStart(2, '0')}:${String(recorderDuration.m).padStart(2, '0')}:${String(
@@ -301,7 +332,7 @@ export default function AdditionalHeader() {
             )}
             {showClock.showMinimal && !clockModal && (
               <HeaderModal toggleFn={setClockModal} styles="top-10 -right-5 h-12 w-28">
-                <span className="bg-alsoit-gray-50 font-semibold text-alsoit-text-lg shadow-lg rounded border-alsoit-border-base border-alsoit-gray-75 text-center">
+                <span className="font-semibold text-center rounded shadow-lg bg-alsoit-gray-50 text-alsoit-text-lg border-alsoit-border-base border-alsoit-gray-75">
                   <p>{dayjs().format('DD MMMM, YYYY')}</p>
                   <p>{dayjs().format('dddd')}</p>
                 </span>

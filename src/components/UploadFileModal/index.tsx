@@ -1,7 +1,7 @@
 import { useDispatch } from 'react-redux';
 import Uppy from '@uppy/core';
 import XHRUpload from '@uppy/xhr-upload';
-import { useUppy, DashboardModal } from '@uppy/react';
+import { DashboardModal } from '@uppy/react';
 import '@uppy/core/dist/style.css';
 import '@uppy/dashboard/dist/style.css';
 import { InvalidateQueryFilters, useQueryClient } from '@tanstack/react-query';
@@ -21,22 +21,20 @@ export default function UploadFileModal({ invalidateQuery, endpoint }: UploadFil
   const { showUploadModal } = useAppSelector((state) => state.upload);
 
   // init
-  const uppy = useUppy(() =>
-    new Uppy({
-      debug: true,
-      autoProceed: true,
-      meta: {}
-    }).use(XHRUpload, {
-      endpoint: '',
-      bundle: false,
-      headers: currentWorkspaceId
-        ? {
-            Authorization: `Bearer ${accessToken}`,
-            current_workspace_id: currentWorkspaceId
-          }
-        : undefined
-    })
-  );
+  const uppy = new Uppy({
+    debug: true,
+    autoProceed: true,
+    meta: {}
+  }).use(XHRUpload, {
+    endpoint: '',
+    bundle: false,
+    headers: currentWorkspaceId
+      ? {
+          Authorization: `Bearer ${accessToken}`,
+          current_workspace_id: currentWorkspaceId
+        }
+      : undefined
+  });
 
   const { xhrUpload } = uppy.getState();
 

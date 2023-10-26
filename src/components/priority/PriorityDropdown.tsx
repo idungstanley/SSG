@@ -3,12 +3,12 @@ import { cl } from '../../utils';
 import { AiFillFlag } from 'react-icons/ai';
 import { UseUpdateTaskPrioritiesServices } from '../../features/task/taskService';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { useAbsolute } from '../../hooks/useAbsolute';
-import { Fade, Menu } from '@mui/material';
 import { setNewTaskPriority } from '../../features/task/taskSlice';
+import { priorities } from '../../app/constants/priorities';
+import AlsoitMenuDropdown from '../DropDowns';
 
 interface priorityType {
-  id: number;
+  id: string;
   title: string;
   handleClick: () => void;
   color: string;
@@ -19,19 +19,12 @@ interface TaskCurrentPriorityProps {
   taskCurrentPriority: string | [{ id: string; initials: string; color: string }] | null | undefined;
 }
 
-const LOW = 'low';
-const NORMAL = 'normal';
-const HIGH = 'high';
-const URGENT = 'urgent';
-
 export default function PriorityDropdown({ taskCurrentPriority }: TaskCurrentPriorityProps) {
   const dispatch = useAppDispatch();
-  const { selectedTasksArray, updateCords, selectedListIds, selectedTaskParentId } = useAppSelector(
-    (state) => state.task
-  );
+  const { selectedTasksArray, selectedListIds, selectedTaskParentId } = useAppSelector((state) => state.task);
 
   const [priority, setPriority] = useState('');
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState<HTMLButtonElement | null>(null);
 
   const { isSuccess } = UseUpdateTaskPrioritiesServices({
     task_id_array: selectedTasksArray,
@@ -41,45 +34,52 @@ export default function PriorityDropdown({ taskCurrentPriority }: TaskCurrentPri
 
   if (isSuccess) setPriority('');
 
+  const handleCloseDropdown = () => {
+    setIsOpen(null);
+  };
+  const handleOpenDropdown = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    setIsOpen(event.currentTarget);
+  };
+
   const priorityList: priorityType[] = [
     {
-      id: 1,
+      id: priorities.LOW,
       title: 'Low',
       color: '#d3d3d3',
       bg: 'gray',
       handleClick: () => {
-        setPriority(LOW);
-        dispatch(setNewTaskPriority(LOW));
+        setPriority(priorities.LOW);
+        dispatch(setNewTaskPriority(priorities.LOW));
       }
     },
     {
-      id: 2,
+      id: priorities.NORMAL,
       title: 'Normal',
       color: '#6fddff',
       bg: 'blue',
       handleClick: () => {
-        setPriority(NORMAL);
-        dispatch(setNewTaskPriority(NORMAL));
+        setPriority(priorities.NORMAL);
+        dispatch(setNewTaskPriority(priorities.NORMAL));
       }
     },
     {
-      id: 3,
+      id: priorities.HIGH,
       title: 'High',
       color: '#f7cb04',
       bg: 'yellow',
       handleClick: () => {
-        setPriority(HIGH);
-        dispatch(setNewTaskPriority(HIGH));
+        setPriority(priorities.HIGH);
+        dispatch(setNewTaskPriority(priorities.HIGH));
       }
     },
     {
-      id: 4,
+      id: priorities.URGENT,
       title: 'Urgent',
       color: '#f32100',
       bg: 'red',
       handleClick: () => {
-        setPriority(URGENT);
-        dispatch(setNewTaskPriority(URGENT));
+        setPriority(priorities.URGENT);
+        dispatch(setNewTaskPriority(priorities.URGENT));
       }
     }
   ];
@@ -87,64 +87,53 @@ export default function PriorityDropdown({ taskCurrentPriority }: TaskCurrentPri
   const setPriorityColor = (
     priority: string | null | undefined | [{ id: string; initials: string; color: string }]
   ) => {
-    if (priority === LOW) {
-      return <AiFillFlag className="h-5 w-7  text-gray-400" aria-hidden="true" />;
-    } else if (priority === NORMAL) {
+    if (priority === priorities.LOW) {
+      return <AiFillFlag className="h-5 text-gray-400 w-7" aria-hidden="true" />;
+    } else if (priority === priorities.NORMAL) {
       return <AiFillFlag className="h-5 w-7" style={{ color: '#6fddff' }} aria-hidden="true" />;
-    } else if (priority === HIGH) {
-      return <AiFillFlag className="h-5 w-7  text-yellow-400 " aria-hidden="true" />;
-    } else if (priority === URGENT) {
-      return <AiFillFlag className="h-5 w-7  text-red-400 " aria-hidden="true" />;
+    } else if (priority === priorities.HIGH) {
+      return <AiFillFlag className="h-5 text-yellow-400 w-7 " aria-hidden="true" />;
+    } else if (priority === priorities.URGENT) {
+      return <AiFillFlag className="h-5 text-red-400 w-7" aria-hidden="true" />;
     }
   };
-
-  const { cords, relativeRef } = useAbsolute(updateCords, 200);
 
   return (
     <>
       <div>
         <button
           type="button"
-          onClick={() => setIsOpen(true)}
-          className="flex text-sm justify-center items-center focus:outline-none text-gray-400 hover:text-gray-700 w-full"
+          onClick={(e) => handleOpenDropdown(e)}
+          className="flex items-center justify-center w-full text-sm text-gray-400 focus:outline-none hover:text-gray-700"
         >
-          <div ref={relativeRef}>{setPriorityColor(taskCurrentPriority)}</div>
+          <div>{setPriorityColor(taskCurrentPriority)}</div>
         </button>
       </div>
-
-      <Menu
-        id="priority-menu"
-        open={isOpen}
-        onClose={() => setIsOpen(false)}
-        MenuListProps={{
-          'aria-labelledby': 'basic-button'
-        }}
-        TransitionComponent={Fade}
-      >
-        <div style={{ ...cords }} className="fixed overflow-y-auto">
-          <div className="flex-col border px-2 w-fit h-fit py-1 outline-none flex items-center justify-center text-center mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none">
+      <AlsoitMenuDropdown handleClose={handleCloseDropdown} anchorEl={isOpen}>
+        <div className="overflow-y-auto">
+          <div className="flex flex-col items-center justify-center w-48 px-1 py-1 text-center divide-y divide-gray-100 rounded-md shadow-lg outline-none w-fit h-fit ring-1 ring-black ring-opacity-5 focus:outline-none">
             {priorityList.map((priority) => (
               <button
                 key={priority.id}
                 type="button"
                 className={cl(
                   taskCurrentPriority === priority.title ? `bg-${priority.bg}-200` : '',
-                  'flex items-center px-4 py-2 text-sm text-gray-600 text-left space-x-2 w-full'
+                  'flex items-center px-4 py-1 hover:bg-alsoit-gray-50 text-sm text-gray-600 text-left space-x-2 w-full rounded-md'
                 )}
                 onClick={() => {
                   priority.handleClick();
-                  setIsOpen(false);
+                  setIsOpen(null);
                 }}
               >
                 <p>
-                  <AiFillFlag className="h-5 w-7  " aria-hidden="true" style={{ color: `${priority.color}` }} />
+                  <AiFillFlag className="h-5 w-7 " aria-hidden="true" style={{ color: `${priority.color}` }} />
                 </p>
                 <p>{priority.title}</p>
               </button>
             ))}
           </div>
         </div>
-      </Menu>
+      </AlsoitMenuDropdown>
     </>
   );
 }

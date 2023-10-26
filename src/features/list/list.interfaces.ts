@@ -1,5 +1,5 @@
 import { ListColourProps } from '../../components/tasks/ListItem';
-import { IList, ItaskViews } from '../hubs/hubs.interfaces';
+import { IList, IView } from '../hubs/hubs.interfaces';
 import { ICheckListRes, customPropertiesProps } from './../task/interface.tasks';
 
 export type Options = { id: string; color: string; name: string }[] | null;
@@ -16,6 +16,23 @@ export interface IField {
   properties?: customPropertiesProps;
 }
 
+interface fileProp {
+  id: string;
+  path: string;
+  size: number;
+  name: string;
+  display_name: string;
+  file_format: fileFormat;
+}
+
+interface fileFormat {
+  extension: string;
+  icon_name: string;
+  key: string;
+  mime: string;
+  name: string;
+}
+
 export interface IFieldValue {
   color?: string | null;
   id: string;
@@ -27,6 +44,7 @@ export interface IFieldValue {
   model_id?: string;
   value: string;
   name: string;
+  file?: fileProp;
 }
 
 export interface taskCountFields {
@@ -67,7 +85,7 @@ export interface IListDetails {
   wallet_id: string | null;
   parent_id: null | string;
   updated_at: string;
-  task_views?: ItaskViews[];
+  task_views: IView[];
   task_statuses: ITask_statuses[];
   created_at: string;
   archived_at: null | string;

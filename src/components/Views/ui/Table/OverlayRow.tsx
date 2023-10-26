@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { MdDragIndicator } from 'react-icons/md';
 import SubtasksIcon from '../../../../assets/icons/SubtasksIcon';
 import { Tag, Task } from '../../../../features/task/interface.tasks';
@@ -16,6 +17,7 @@ interface OverlayRowProps {
 
 export function OverlayRow({ task, columns }: OverlayRowProps) {
   const otherColumns = columns.slice(1);
+  const [hoverOn, setHoverOn] = useState(false);
 
   return (
     <div
@@ -23,6 +25,8 @@ export function OverlayRow({ task, columns }: OverlayRowProps) {
       className="items-center bg-white h-10 opacity-75"
     >
       <StickyCol
+        hoverOn={hoverOn}
+        setHoverOn={setHoverOn}
         showSubTasks={false}
         setShowSubTasks={() => ({})}
         style={{ zIndex: 10 }}
@@ -38,7 +42,6 @@ export function OverlayRow({ task, columns }: OverlayRowProps) {
             />
           </span>
         }
-        isLastSubtaskLevel={false}
       >
         {/* actions */}
         <div className="absolute opacity-0 group-hover:opacity-100 top-0 bottom-0 right-0 flex space-x-1 items-center justify-center">

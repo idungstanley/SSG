@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { Fragment, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { selectCalendar, setBlacklistIds } from '../../../../features/calendar/slice/calendarSlice';
 import { useGetTeamMembers } from '../../../../features/settings/teamMembers/teamMemberService';
@@ -7,42 +7,26 @@ import { MembersList } from './MembersList';
 
 export function ExtendedBar() {
   const dispatch = useAppDispatch();
-  const { blacklistIds } = useAppSelector(selectCalendar);
-  const [showSearch, setShowSearch] = useState(false);
+  const { blacklistIds, selectedHubs } = useAppSelector(selectCalendar);
   const { data } = useGetTeamMembers({ page: 1, query: '' });
 
-  const [query, setQuery] = useState('');
+  const [query] = useState('');
 
   const members = data?.data.team_members ?? [];
 
-  const onCheckbox = (i: boolean, id: string) => {
+  const onCheckbox = (i: boolean, id: string, hubId: string) => {
     if (i) {
-      dispatch(setBlacklistIds([...blacklistIds.filter((i) => i !== id)]));
+      dispatch(setBlacklistIds([...blacklistIds.filter((i) => i !== id + '_' + hubId)]));
     } else {
-      dispatch(setBlacklistIds([...blacklistIds, id]));
+      dispatch(setBlacklistIds([...blacklistIds, id + '_' + hubId]));
     }
   };
 
-  const onReset = (e: boolean) => {
+  const onReset = (e: boolean, hubId: string) => {
     if (e) {
       dispatch(setBlacklistIds([]));
     } else {
-      dispatch(setBlacklistIds([...members.map((i) => i.id)]));
-    }
-  };
-
-  const onToggleSearch = () => {
-    setShowSearch((prev) => !prev);
-    if (query.length) {
-      setQuery('');
-    }
-  };
-
-  const onClickXIcon = () => {
-    if (query.length) {
-      setQuery('');
-    } else {
-      setShowSearch(false);
+      dispatch(setBlacklistIds([...members.map((i) => i.id + '_' + hubId)]));
     }
   };
 
@@ -51,20 +35,21 @@ export function ExtendedBar() {
   );
 
   return (
-    <section className="space-y-3 w-full">
-      {/* header */}
-      <Header onClickXIcon={onClickXIcon} onToggleSearch={onToggleSearch} onReset={onReset} showSearch={showSearch}>
-        <input
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          type="text"
-          className="py-1.5 w-full text-gray-900 border-0 ring-0 focus:ring-0  focus:outline-0 appearance-none"
-          placeholder="Search..."
-        />
-      </Header>
+    <section>
+      {Object.keys(selectedHubs).map((keyName, i) => (
+        <Fragment key={keyName}>
+          {/* header */}
+          <Header onReset={onReset} activeItemName={selectedHubs[i].hubName} hubId={selectedHubs[i].hubId} />
 
-      {/* list */}
-      <MembersList members={filteredMembers} onCheckbox={onCheckbox} />
+          {/* list */}
+          <MembersList
+            members={filteredMembers}
+            onCheckbox={onCheckbox}
+            hubId={selectedHubs[i].hubId}
+            place="sidebar"
+          />
+        </Fragment>
+      ))}
     </section>
   );
 }

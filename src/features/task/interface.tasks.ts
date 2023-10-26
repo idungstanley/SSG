@@ -1,10 +1,37 @@
 import dayjs, { Dayjs } from 'dayjs';
-import { teamGroups, teamMember } from '../../pages/workspace/tasks/timeclock/entryLists/EntryList';
 import { ICustomField, ImyTaskData } from './taskSlice';
 import { ITeamMembersAndGroup } from '../settings/teamMembersAndGroups.interfaces';
-import { Header } from '../../components/Pilot/components/TimeClock/ClockLog';
 import { IField, ITask_statuses } from '../list/list.interfaces';
 import { RecurFrequency, TypeOptionsProps } from '../../components/DatePicker/RecurringTypes';
+import { FilterWithId } from '../../components/TasksHeader/ui/Filter/types/filters';
+import { ITeamMember } from '../workspace/workspace.interfaces';
+
+interface fileFormat {
+  key: string;
+  extension: string;
+  name: string;
+  mime: string;
+  icon_name: string;
+}
+
+interface physicalFile {
+  id: string;
+  name: string;
+  display_name: string;
+  size: number;
+  file_format: fileFormat;
+}
+
+export interface IAttachmentsRes {
+  data: {
+    attachments: {
+      id: string;
+      physical_file: physicalFile;
+      path: string;
+      team_member: ITeamMember;
+    }[];
+  };
+}
 
 export interface UpdateTaskProps {
   task_id_array?: string[];
@@ -112,6 +139,7 @@ export interface ITaskFullList {
   priority: string | null | [{ id: string; initials: string; color: string; name: string }];
   status: IStatus;
   has_descendants: boolean;
+  filters: { model: string; model_id: string; data: FilterWithId[] } | null;
   descendants?: ITaskFullList[];
   descendants_count: number;
   closed_subtasks_count: number;
@@ -134,10 +162,10 @@ export interface ITaskFullList {
   checklists?: ICheckListRes[];
   listColor?: unknown;
   list?: {
-    id: string;
-    name: string;
-    parents?: IParent;
-    color?: string;
+    color: string;
+    id?: string | undefined;
+    name?: string | undefined;
+    parents?: IParent | undefined;
   };
 }
 
@@ -192,6 +220,24 @@ export interface ITaskRes {
   };
 }
 
+export interface teamMember {
+  id: string;
+  user: {
+    id: string;
+    initials: string;
+    name: string;
+    color: string;
+    avatar_path: string;
+  };
+}
+
+export interface teamGroups {
+  id: string;
+  name: string;
+  color: string;
+  initials: string;
+}
+
 export interface IEntries {
   id: string;
   duration: number;
@@ -200,6 +246,7 @@ export interface IEntries {
   description: string;
   is_billable: number;
   team_member: teamMember;
+  type: string;
 }
 
 export interface ITimeEntriesRes {
@@ -221,7 +268,16 @@ export interface ITimeEntriesRes {
 export interface ITimerDetails {
   isBillable: boolean;
   description: string;
+  label?: string;
+  tags?: string;
 }
+
+export type Header = {
+  title: string;
+  hidden: boolean;
+  value: string;
+  sorted: boolean;
+};
 
 export interface IDuration {
   s: number;

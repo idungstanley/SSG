@@ -2,11 +2,9 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { initialPlaces } from '../../layout/components/MainLayout/Sidebar/components/Places';
 import { IUserParams, IUserState, Place } from './account.interfaces';
 import { STORAGE_KEYS } from '../../app/config/dimensions';
+import { IPaletteData } from '../workspace/workspace.interfaces';
 
 const showPreviewFromLS = localStorage.getItem('showPreview') as string;
-
-// const sidebarFromLS: { sidebarWidth: number; showSidebar: boolean } =
-//   JSON.parse(localStorage.getItem('sidebar') || '""');
 
 const sidebarFromLS = localStorage.getItem('sidebar');
 //get sidebar width from local storage
@@ -16,7 +14,7 @@ const pilotWidthFromLS = JSON.parse(localStorage.getItem(STORAGE_KEYS.PILOT_WIDT
 
 const extendedBarWidthFromLS = JSON.parse(localStorage.getItem(STORAGE_KEYS.EXTENDED_BAR_WIDTH) || '""') as number;
 
-const hotKeysFromLS = JSON.parse(localStorage.getItem(STORAGE_KEYS.HOT_KEYS) || '""') as number[];
+const hotKeysFromLS = JSON.parse(localStorage.getItem(STORAGE_KEYS.HOT_KEYS) || '""') as string[];
 
 const idsFromLS = JSON.parse(localStorage.getItem('placeItem') || '[]') as string[];
 
@@ -31,6 +29,12 @@ const showSidebar = sidebarFromLS
       }
     ).showSidebar
   : true;
+
+export interface AjustableWidths {
+  pilotWidth?: number;
+  sidebarWidth?: number;
+  extendedBarWidth?: number;
+}
 
 export interface PaletteDropdownProps {
   paletteId?: string | null;
@@ -49,7 +53,12 @@ interface AccountState {
   lightBaseColor: string;
   userSettingsData?: IUserParams;
   places: Place[];
+  selectListColours: string[];
   calculatedContentWidth: string;
+  colourPaletteData: IPaletteData[];
+  pilotWidth?: number;
+  sidebarWidth?: number;
+  extendedBarWidth?: number;
 }
 
 const initialState: AccountState = {
@@ -65,15 +74,20 @@ const initialState: AccountState = {
   lightBaseColor: '#BF00FF21',
   userSettingsData: {
     showPreview: '',
-    sidebarWidth: sidebarWidthFromLS,
     isFavoritePinned: false,
+    sidebarWidth: sidebarWidthFromLS,
     pilotWidth: pilotWidthFromLS,
-    isPilotMinified: isPilotMinifiedFromLS,
     extendedBarWidth: extendedBarWidthFromLS,
+    isPilotMinified: isPilotMinifiedFromLS,
     hotkeys: hotKeysFromLS
   },
+  sidebarWidth: sidebarWidthFromLS,
+  pilotWidth: pilotWidthFromLS,
+  extendedBarWidth: extendedBarWidthFromLS,
   places: [...initialPlaces.sort((a, b) => idsFromLS.indexOf(a.id) - idsFromLS.indexOf(b.id))],
-  calculatedContentWidth: ''
+  calculatedContentWidth: '',
+  selectListColours: [],
+  colourPaletteData: []
 };
 
 export const accountSlice = createSlice({
@@ -89,6 +103,17 @@ export const accountSlice = createSlice({
     SetUserSettingsStore: (state, action: PayloadAction<IUserParams>) => {
       state.userSettingsData = action.payload;
     },
+    setAdjustableWidths: (state, action: PayloadAction<AjustableWidths>) => {
+      state.sidebarWidth = action.payload.sidebarWidth ? action.payload.sidebarWidth : sidebarWidthFromLS;
+      state.extendedBarWidth = action.payload.extendedBarWidth
+        ? action.payload.extendedBarWidth
+        : extendedBarWidthFromLS;
+      state.pilotWidth = action.payload.pilotWidth
+        ? action.payload.pilotWidth
+        : action.payload.pilotWidth
+        ? action.payload.pilotWidth
+        : pilotWidthFromLS;
+    },
     setShowSidebar: (state, action: PayloadAction<boolean>) => {
       state.showSidebar = action.payload;
     },
@@ -97,6 +122,12 @@ export const accountSlice = createSlice({
     },
     setShowUploadImage: (state, action: PayloadAction<boolean>) => {
       state.showUploadImage = action.payload;
+    },
+    setSelectedListColours: (state, action: PayloadAction<string[]>) => {
+      state.selectListColours = action.payload;
+    },
+    setColourPaletteData: (state, action: PayloadAction<IPaletteData[]>) => {
+      state.colourPaletteData = action.payload;
     },
     setUserName: (state, action: PayloadAction<string>) => {
       state.userName = action.payload;
@@ -119,7 +150,10 @@ export const {
   setShowUploadImage,
   setUserName,
   SetUserSettingsStore,
-  setCalculatedContentWidth
+  setCalculatedContentWidth,
+  setSelectedListColours,
+  setColourPaletteData,
+  setAdjustableWidths
 } = accountSlice.actions;
 
 export default accountSlice.reducer;

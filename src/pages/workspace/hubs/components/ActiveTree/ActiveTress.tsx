@@ -16,7 +16,11 @@ import {
 import { setActiveItem, setOpenedEntitiesIds } from '../../../../../features/workspace/workspaceSlice';
 import { IHub } from '../../../../../features/hubs/hubs.interfaces';
 
-export default function ActiveTress() {
+interface HubProps {
+  placeHubType: string;
+}
+
+export default function ActiveTress({ placeHubType }: HubProps) {
   const dispatch = useAppDispatch();
   const location = useLocation();
 
@@ -27,16 +31,17 @@ export default function ActiveTress() {
 
   const [hubs, setHubs] = useState<Hub[]>([]);
   const [activeEntityExt, setActiveEntityExt] = useState<{ id: string; type: string }>();
+  const [newHubId, setNewHubId] = useState<string>('');
 
   const { data: allHubs } = useGetAllHubs();
-  const { data: allHubTree } = useGetActiveHubChildren({ hub_id: hubId ?? null, hubs: allHubs?.hubs as IHub[] });
+  const { data: allHubTree } = useGetActiveHubChildren({ hub_id: newHubId || hubId, hubs: allHubs?.hubs as IHub[] });
 
   useEffect(() => {
     if (allHubTree?.tree.length && allHubs && hubs.length) {
-      const currentHubId = hubId || allHubTree.tree[0].parent_id;
+      const currentHubId = allHubTree.tree[0].parent_id || hubId;
       const currentItem = hubs.find((item) => item.id === currentHubId);
       if (!currentItem?.children) {
-        setHubs(() => [...CreateTree(allHubTree.tree, currentHubId as string, hubs as Hub[])]);
+        setHubs(() => [...CreateTree(allHubTree.tree, currentHubId as string, hubs as Hub[], placeHubType)]);
       }
     }
   }, [allHubTree, allHubs, hubs]);
@@ -84,9 +89,13 @@ export default function ActiveTress() {
     }
   }, [hubs]);
 
+  const handleOpenNewHub = (id: string) => {
+    setNewHubId(id);
+  };
+
   return (
-    <div className="flex flex-col gap-2">
-      <HList hubs={filteredResults} />
+    <div className="flex flex-col">
+      <HList hubs={filteredResults} openNewHub={handleOpenNewHub} placeHubType={placeHubType} />
     </div>
   );
 }

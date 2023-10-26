@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import moment from 'moment';
 import CustomReference from '../customReference/CustomReference';
 import EntitySettings from '../entitySettings/EntitySettings';
@@ -10,7 +10,7 @@ import ToolTip from '../../../../../Tooltip/Tooltip';
 import { ITaskFullList } from '../../../../../../features/task/interface.tasks';
 import { IHubDetails } from '../../../../../../features/hubs/hubs.interfaces';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { UseUpdateTaskService } from '../../../../../../features/task/taskService';
+import { UseUpdateTaskService, useGetAttachments } from '../../../../../../features/task/taskService';
 import Status from '../status/Status';
 import Priority from '../priority/Priority';
 import { UseEditHubService } from '../../../../../../features/hubs/hubService';
@@ -21,9 +21,9 @@ import { IListDetails } from '../../../../../../features/list/list.interfaces';
 import { useParams } from 'react-router-dom';
 import { IWalletDetails } from '../../../../../../features/wallet/wallet.interfaces';
 import PlusIcon from '../../../../../../assets/icons/PlusIcon';
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.bubble.css';
-import DOMPurify from 'dompurify';
+import ReactMarkDown from 'react-markdown';
+import { useAppSelector } from '../../../../../../app/hooks';
+import FileIcons from '../../../../../Views/ui/Table/CustomField/Files/FileIcon';
 import { VerticalScroll } from '../../../../../ScrollableContainer/VerticalScroll';
 
 export interface tagItem {
@@ -33,17 +33,16 @@ export interface tagItem {
 }
 interface PropertyDetailsProps {
   Details?: IHubDetails | ITaskFullList | IListDetails | IWalletDetails;
-  type?: string;
 }
-export default function PropertyDetails({ Details, type }: PropertyDetailsProps) {
+export default function PropertyDetails({ Details }: PropertyDetailsProps) {
   const queryClient = useQueryClient();
+  const inputRef = useRef<HTMLInputElement | null>(null);
 
   const [toggleSubTask, setToggleSubTask] = useState(false);
   const [editingTitle, setEditingTitle] = useState(false);
   const [editingDescription, setEditingDescription] = useState(false);
-  const [title, setTitle] = useState<string>(Details?.name as string);
   const [description, setDescription] = useState<string>(Details?.description ?? '');
-  const [serviceFire, setServiceFire] = useState<boolean>(false);
+  const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
 
   const { hubId, walletId, listId, taskId } = useParams();
 
@@ -71,51 +70,65 @@ export default function PropertyDetails({ Details, type }: PropertyDetailsProps)
     }
   });
 
+  const { data: attachments } = useGetAttachments({
+    activeItemId,
+    activeItemType
+  });
+
   const handleBlur = () => {
     setEditingTitle(false);
     setEditingDescription(false);
   };
 
-  const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setTitle(event.target.value);
-  };
   const handleDescriptionChange = (value: string) => {
-    const sanitizedDescription = DOMPurify.sanitize(value);
-    setDescription(sanitizedDescription);
+    // const sanitizedDescription = DOMPurify.sanitize(value);
+    setDescription(value);
   };
 
-  const handleSubmit = async () => {
+  const handleDetailsSubmit = async (
+    e:
+      | React.KeyboardEvent<HTMLParagraphElement>
+      | React.FocusEvent<HTMLInputElement | HTMLParagraphElement | HTMLTextAreaElement, Element>
+  ) => {
+    e.preventDefault();
     handleBlur();
-    setServiceFire(true);
+    try {
+      if (taskId != undefined) {
+        await editTaskMutation.mutateAsync({
+          name: inputRef.current?.innerText.trim() as string,
+          task_id: taskId,
+          description
+        });
+      } else if (walletId != undefined) {
+        await editWalletMutation.mutateAsync({
+          walletName: inputRef.current?.innerText.trim(),
+          walletId: Details?.id,
+          description
+        });
+      } else if (listId != undefined) {
+        await editListMutation.mutateAsync({
+          listName: inputRef.current?.innerText.trim(),
+          listId: Details?.id,
+          description
+        });
+      } else if (hubId) {
+        await editHubMutation.mutateAsync({
+          name: inputRef.current?.innerText.trim(),
+          hubId: Details?.id,
+          description
+        });
+      }
+    } catch {
+      return;
+    }
   };
 
-  useEffect(() => {
-    if (taskId != undefined && serviceFire) {
-      editTaskMutation.mutateAsync({
-        name: title,
-        task_id: taskId,
-        description
-      });
-    } else if (walletId != undefined && serviceFire) {
-      editWalletMutation.mutateAsync({
-        walletName: title,
-        walletId: Details?.id,
-        description
-      });
-    } else if (listId != undefined && serviceFire) {
-      editListMutation.mutateAsync({
-        listName: title,
-        listId: Details?.id,
-        description
-      });
-    } else if (hubId && serviceFire) {
-      editHubMutation.mutateAsync({
-        name: title,
-        hubId: Details?.id,
-        description
-      });
-    }
-  }, [serviceFire]);
+  const convertNewlinesToBreaks = (text: string) => {
+    return text
+      .split('\n')
+      .map((line, index) => (index === 0 ? line : `\n\n ${line}`))
+      .join('');
+  };
 
   return (
     <>
@@ -126,10 +139,10 @@ export default function PropertyDetails({ Details, type }: PropertyDetailsProps)
             <Priority details={Details} />
           </ToolTip>
         </section>
-        <section className="z-0 flex items-center justify-center space-x-3">
+        <section className="z-10 flex items-center justify-center space-x-3">
           <CustomReference />
           <ToolTip title="Share">
-            <Share taskId={Details?.id} taskName={title} />
+            <Share taskId={Details?.id} taskName={Details?.name} />
           </ToolTip>
           <EntitySettings />
         </section>
@@ -138,7 +151,7 @@ export default function PropertyDetails({ Details, type }: PropertyDetailsProps)
         <ToolTip title="Assignees">
           <Assignees />
         </ToolTip>
-        <span className=" text-gray-300">|</span>
+        <span className="text-gray-300 ">|</span>
         <ToolTip title="Subscribers">
           <Subscribers />
         </ToolTip>
@@ -152,7 +165,7 @@ export default function PropertyDetails({ Details, type }: PropertyDetailsProps)
           ? 'tags' in Details && (
               <div id="tags" className="mt-2">
                 <label className="text-xs text-gray-500">Tags</label>
-                <div className="border p-1 bg-gray-100 border-white rounded-md">
+                <div className="p-1 bg-gray-100 border border-white rounded-md">
                   {/* <p> {groupTags(Details?.tags)}</p> */}
                 </div>
               </div>
@@ -162,75 +175,85 @@ export default function PropertyDetails({ Details, type }: PropertyDetailsProps)
         {/* name */}
         <div id="entity name">
           <label className="text-xs text-gray-500">Title</label>
-          <div className="border p-1 bg-gray-100 border-white rounded-md cursor-text">
-            {editingTitle ? (
-              <form onSubmit={handleSubmit}>
-                <input
-                  type="text"
-                  value={title}
-                  onChange={handleTitleChange}
-                  onBlur={handleBlur}
-                  autoFocus
-                  className="bg-transparent border-none rounded-md outline-none focus:outline-none w-full"
-                />
-              </form>
-            ) : (
-              <p className="capitalize" onClick={() => setEditingTitle(true)}>
-                {title}
+          <div className="p-1 bg-gray-100 border border-white rounded-md cursor-text">
+            <VerticalScroll>
+              <p
+                ref={inputRef}
+                className="p-1 capitalize break-words max-h-52"
+                contentEditable={editingTitle}
+                onKeyDown={(e) => (e.key === 'Enter' ? handleDetailsSubmit(e) : null)}
+                onClick={() => setEditingTitle(true)}
+                onBlur={(e) => handleDetailsSubmit(e)}
+              >
+                {Details?.name}
               </p>
-            )}
+            </VerticalScroll>
           </div>
         </div>
         {/* description */}
         <div id="entity description" className="mt-5">
           <label className="text-xs text-gray-500">Description</label>
           <div
-            className="border p-1 bg-gray-100 border-white rounded-md h-20 cursor-text"
+            className="h-20 bg-gray-100 border border-white rounded-md cursor-text"
             onClick={() => setEditingDescription(true)}
           >
             {editingDescription ? (
-              <div>
-                <ReactQuill
+              <div className="w-full h-min">
+                <textarea
+                  autoFocus
+                  onChange={(e) => handleDescriptionChange(e.target.value)}
                   value={description}
-                  onChange={handleDescriptionChange}
-                  onBlur={handleSubmit}
-                  style={{
-                    height: '80px',
-                    width: '100%',
-                    overflowY: 'auto',
-                    border: '1px solid #ccc'
-                  }}
-                  theme="bubble"
-                />
+                  onBlur={(e) => handleDetailsSubmit(e)}
+                  className="w-full h-20 font-semibold border-none rounded-md text-alsoit-gray-200 focus:ring-1 focus:ring-alsoit-gray-75 text-alsoit-text-lg bg-alsoit-gray-50"
+                ></textarea>
               </div>
             ) : (
-              <div className="capitalize h-36 overflow-scroll">
-                <VerticalScroll>
-                  <div className="h-20" dangerouslySetInnerHTML={{ __html: description }} />
-                </VerticalScroll>
+              <div className="capitalize h-20 overflow-scroll p-1.5">
+                <ReactMarkDown>{convertNewlinesToBreaks(description)}</ReactMarkDown>
               </div>
             )}
           </div>
         </div>
+        {/* Attachments */}
+        <div className="my-4">
+          <label className="text-xs text-gray-500 ">Attachments</label>
+          <div className="flex flex-wrap items-center gap-2 my-2">
+            {attachments?.data.attachments?.length ? (
+              attachments?.data.attachments.map((file) => {
+                return (
+                  <FileIcons
+                    fileExtension={file.physical_file.file_format.extension}
+                    filePath={file.path}
+                    key={file.id}
+                    fileName={file.physical_file.display_name}
+                    height="h-10"
+                    width="w-10"
+                  />
+                );
+              })
+            ) : (
+              <h1>No Attachments found</h1>
+            )}
+          </div>
+        </div>
+
         {/* created time */}
         <div id="created time" className="mt-2">
           <label className="text-xs text-gray-500">Created</label>
-          <div className="border p-1 bg-gray-100 border-white rounded-md">
+          <div className="p-1 bg-gray-100 border border-white rounded-md">
             <p>{moment(Details?.created_at).format('MMM DD, hh:mm a')}</p>
           </div>
         </div>
         {/* due date */}
         <div id="due date" className="mt-2">
           <label className="text-xs text-gray-500">Due Date</label>
-          <div className="border p-1 bg-gray-100 border-white rounded-md">
+          <div className="p-1 bg-gray-100 border border-white rounded-md">
             <p>Dec 31 2022</p>
           </div>
         </div>
-
         <div className="mt-2">
           <MoreDetails />
         </div>
-
         {/* create subtask */}
         <div id="create subtask" className="mt-2">
           <div
@@ -238,7 +261,7 @@ export default function PropertyDetails({ Details, type }: PropertyDetailsProps)
             onClick={() => setToggleSubTask(!toggleSubTask)}
           >
             <PlusIcon active dimensions={{ width: 9, height: 9 }} />
-            <button className="text-xs text-gray-500  ">Subtask</button>
+            <button className="text-xs text-gray-500 ">Subtask</button>
           </div>
         </div>
       </section>

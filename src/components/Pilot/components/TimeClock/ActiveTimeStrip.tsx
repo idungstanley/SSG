@@ -4,6 +4,7 @@ import ToolTip from '../../../Tooltip/Tooltip';
 import AvatarWithImage from '../../../avatar/AvatarWithImage';
 import AvatarWithInitials from '../../../avatar/AvatarWithInitials';
 import { RealTime } from './RealTime';
+import { ManualTags } from './ManualTags';
 
 interface Props {
   timeData?: IEntries[];
@@ -27,12 +28,13 @@ export function ActiveTimeStrip({ timeData }: Props) {
             )}
           </ToolTip>
         </span>
-        <span className="text-alsoit-text-xi font-semibold w-20 flex justify-center items-center">
+        <span className="text-alsoit-text-xi font-semibold w-24 flex items-center">
           <RealTime />
         </span>
-        <span className="text-alsoit-text-xi font-semibold w-20 flex justify-center items-center">
+        <span className="text-alsoit-text-md font-semibold w-24 flex justify-center items-center">
           {dayjs(entry.start_date).format('ddd D, HH:mm a')}
         </span>
+        <ManualTags />
       </div>
     ));
 

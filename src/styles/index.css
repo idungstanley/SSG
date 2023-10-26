@@ -24,6 +24,19 @@ body {
   font-weight: 600;
 }
 
+.parent :not(.selectable-all) {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.selectable-all {
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: all;
+  user-select: text;
+}
+
 html {
   /* zoom: 0.85; */
   scroll-behavior: smooth;
@@ -102,6 +115,38 @@ code {
   border-top-left-radius: 8px;
 }
 
+.gapFixes {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.select-text {
+  -webkit-user-select: text;
+  user-select: text;
+}
+
+.header-cell {
+  min-width: 150px; /* Adjust the width as needed */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 0.5rem; /* Add padding for better styling */
+  box-sizing: border-box; /* Include padding in width */
+  text-transform: uppercase;
+  width: min-content;
+}
+
+.header-cell-reduced {
+  min-width: 100px; /* Adjust the width as needed */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 0.5rem; /* Add padding for better styling */
+  box-sizing: border-box; /* Include padding in width */
+  text-transform: uppercase;
+  width: min-content;
+}
+
 @keyframes grow {
   from {
     width: 40px;
@@ -167,6 +212,10 @@ code {
   width: 1px;
   height: 46%;
   background-color: red;
+}
+
+.MuiMenu-list {
+  padding: 0 !important;
 }
 
 .minute {

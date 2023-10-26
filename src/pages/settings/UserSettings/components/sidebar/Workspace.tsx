@@ -13,7 +13,7 @@ function Workspace() {
   const { activeTab } = useAppSelector((state) => state.userSetting);
   const workspaceOptions = [
     {
-      id: 1,
+      id: 'settings',
       title: 'Settings',
       onClick: () => {
         dispatch(setActiveTab('Settings'));
@@ -21,7 +21,7 @@ function Workspace() {
       }
     },
     {
-      id: 2,
+      id: 'people',
       title: 'People',
       onClick: () => {
         dispatch(setActiveTab('People'));
@@ -29,11 +29,11 @@ function Workspace() {
       }
     },
     {
-      id: 3,
+      id: 'teams',
       title: 'Teams',
       child: [
         {
-          id: 1,
+          id: 'team_member_invites',
           title: 'Team Member Invites',
           onClick: () => {
             dispatch(setActiveTab('Team Member Invites'));
@@ -41,7 +41,7 @@ function Workspace() {
           }
         },
         {
-          id: 2,
+          id: 'team_member_groups',
           title: 'Team Member Groups',
           onClick: () => {
             dispatch(setActiveTab('Team Member Groups'));
@@ -49,7 +49,7 @@ function Workspace() {
           }
         },
         {
-          id: 3,
+          id: 'permissions',
           title: 'Permissions',
           onClick: () => {
             dispatch(setActiveTab('Permissions'));
@@ -59,7 +59,7 @@ function Workspace() {
       ]
     },
     {
-      id: 4,
+      id: 'spaces',
       title: 'Spaces',
       onClick: () => {
         dispatch(setActiveTab('Spaces'));
@@ -67,7 +67,7 @@ function Workspace() {
       }
     },
     {
-      id: 5,
+      id: 'imports_exports',
       title: 'Imports/Exports',
       onClick: () => {
         dispatch(setActiveTab('Imports/Exports'));
@@ -75,7 +75,7 @@ function Workspace() {
       }
     },
     {
-      id: 6,
+      id: 'apps',
       title: 'Apps',
       onClick: () => {
         dispatch(setActiveTab('Apps'));
@@ -83,7 +83,7 @@ function Workspace() {
       }
     },
     {
-      id: 7,
+      id: 'integrations',
       title: 'Integrations',
       onClick: () => {
         dispatch(setActiveTab('Integrations'));
@@ -91,7 +91,7 @@ function Workspace() {
       }
     },
     {
-      id: 8,
+      id: 'upgrade',
       title: 'Upgrade',
       onClick: () => {
         dispatch(setActiveTab('Upgrade'));
@@ -99,7 +99,7 @@ function Workspace() {
       }
     },
     {
-      id: 9,
+      id: 'trash',
       title: 'Trash',
       onClick: () => {
         dispatch(setActiveTab('Trash'));
@@ -107,7 +107,7 @@ function Workspace() {
       }
     },
     {
-      id: 10,
+      id: 'security_permissions',
       title: 'Security & Permissions',
       onClick: () => {
         dispatch(setActiveTab('Security & Permissions'));

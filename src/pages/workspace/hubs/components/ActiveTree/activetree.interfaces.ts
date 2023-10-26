@@ -34,6 +34,8 @@ export interface InputData {
 
 export interface ListProps {
   hubs: Hub[];
+  openNewHub?: (id: string) => void;
+  placeHubType: string;
 }
 
 export interface ItemProps {

@@ -20,13 +20,13 @@ export function VerticalScroll({ children, bgColor, ...props }: CustomScrollable
     activeSubTimeClockTabId,
     activeSubHubManagerTabId,
     activeSubCommunicationTabId,
-    activeSubChecklistTabId,
     showTabLabel,
     isResize,
     activeItemId,
     activePlaceId
   } = useAppSelector((state) => state.workspace);
   const { tasks, subtasks } = useAppSelector((state) => state.task);
+  const { sidebarWidth, pilotWidth, extendedBarWidth } = useAppSelector((state) => state.account);
 
   const [thumbHeight, setThumbHeight] = useState(DEFAULT_THUMB_HEIGHT);
   const [isThumbVisible, setIsThumbVisible] = useState(true);
@@ -98,7 +98,6 @@ export function VerticalScroll({ children, bgColor, ...props }: CustomScrollable
 
   const handleThumbMousemove = useCallback(
     (e: MouseEvent) => {
-      e.preventDefault();
       e.stopPropagation();
       if (isDragging && contentRef.current && scrollStartPosition) {
         const { scrollHeight: contentHeight, offsetHeight: contentOffsetHeight } = contentRef.current;
@@ -165,10 +164,12 @@ export function VerticalScroll({ children, bgColor, ...props }: CustomScrollable
     activeSubTimeClockTabId,
     activeSubHubManagerTabId,
     activeSubCommunicationTabId,
-    activeSubChecklistTabId,
     tasks,
     subtasks,
-    thumbHeight
+    thumbHeight,
+    sidebarWidth,
+    pilotWidth,
+    extendedBarWidth
   ]);
 
   // Listen for mouse events to handle scrolling by dragging the thumb

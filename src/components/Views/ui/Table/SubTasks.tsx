@@ -15,18 +15,9 @@ interface SubTasksProps {
   paddingLeft: number;
   level: number;
   isSplitSubtask?: boolean;
-  isShowAllChildren?: boolean;
 }
 
-export function SubTasks({
-  listId,
-  parentTask,
-  columns,
-  paddingLeft,
-  level,
-  isSplitSubtask,
-  isShowAllChildren
-}: SubTasksProps) {
+export function SubTasks({ listId, parentTask, columns, paddingLeft, level, isSplitSubtask }: SubTasksProps) {
   const dispatch = useAppDispatch();
 
   const { draggableItemId } = useAppSelector((state) => state.list);
@@ -55,11 +46,9 @@ export function SubTasks({
 
   return (
     <>
-      {draggableItem ? (
-        <DragOverlay>
-          <OverlayRow columns={columns} task={draggableItem} />
-        </DragOverlay>
-      ) : null}
+      <DragOverlay dropAnimation={null}>
+        {draggableItem ? <OverlayRow columns={columns} task={draggableItem} /> : null}
+      </DragOverlay>
       {Object.keys(subtasks).length ? (
         <>
           {subtasks[parentTask.id]?.map((i) => (
@@ -72,7 +61,6 @@ export function SubTasks({
               isListParent={false}
               level={level}
               isSplitSubtask={isSplitSubtask}
-              isShowAllChildren={isShowAllChildren}
             />
           ))}
         </>

@@ -2,6 +2,43 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import requestNew from '../../app/requestNew';
 import { IUser } from './authSlice';
 
+//Verify Email address
+export const useVerifyEmailService = ({ verificationCode }: { verificationCode: string | undefined }) => {
+  const data = requestNew({
+    url: `auth/verify-email?code=${verificationCode}`,
+    method: 'GET'
+  });
+  return data;
+};
+
+// Forgot password
+export const UseForgotPassword = (data: { email: string | null | undefined }) => {
+  const { email } = data;
+  const response = requestNew({
+    url: 'auth/forgot-password',
+    method: 'POST',
+    data: {
+      email
+    }
+  });
+  return response;
+};
+
+// Reset password
+export const UseResetPassword = (data: { code: string; password?: string; password_confirmation?: string }) => {
+  const { code, password, password_confirmation } = data;
+  const response = requestNew({
+    url: 'auth/reset-password',
+    method: 'POST',
+    data: {
+      reset_password_code: code,
+      password,
+      password_confirmation
+    }
+  });
+  return response;
+};
+
 // Login
 const loginService = (data: { email: string; password: string }) => {
   const response = requestNew<{

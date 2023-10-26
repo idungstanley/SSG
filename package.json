@@ -18,9 +18,12 @@
     "@heroicons/react": "^2.0.13",
     "@lexical/rich-text": "^0.12.2",
     "@mui/material": "^5.14.2",
+    "@material-ui/styles": "^4.11.5",
+    "@mui/styles": "^5.14.12",
     "@react-google-maps/api": "^2.18.1",
     "@react-oauth/google": "^0.7.0",
     "@reduxjs/toolkit": "^1.6.2",
+    "@sentry/react": "^7.74.1",
     "@tanstack/react-query": "^4.0.8",
     "@types/cypress": "^1.1.3",
     "@types/hot-formula-parser": "^4.0.1",
@@ -34,6 +37,7 @@
     "@uppy/xhr-upload": "^3.2.0",
     "axios": "^0.24.0",
     "buffer": "^6.0.3",
+    "chart.js": "^4.4.0",
     "color-name-list": "^10.13.0",
     "dayjs": "^1.11.7",
     "dotenv": "^10.0.0",
@@ -42,13 +46,12 @@
     "eslint-plugin-cypress": "^2.13.3",
     "formik": "^2.2.9",
     "hot-formula-parser": "^4.0.0",
-    "isomorphic-dompurify": "^1.9.0",
     "js-file-download": "^0.4.12",
     "moment-timezone": "^0.5.43",
     "ntc-ts": "^0.0.8",
     "pusher-js": "^8.0.0",
-    "quill": "^1.3.7",
     "react": "^18.2.0",
+    "react-chartjs-2": "^5.2.0",
     "react-color": "^2.19.3",
     "react-compound-timer": "^1.2.0",
     "react-dnd": "^16.0.1",
@@ -58,19 +61,21 @@
     "react-hot-toast": "^2.2.0",
     "react-icons": "^4.7.1",
     "react-infinite-scroll-hook": "^4.0.3",
-    "react-quill": "^2.0.0",
+    "react-markdown": "^9.0.0",
     "react-redux": "^7.2.6",
     "react-router-dom": "^6.13.0",
     "react-scripts": "5.0.1",
     "react-timer-wrapper": "^0.4.1",
     "react-top-loading-bar": "^2.1.0",
+    "source-map-explorer": "^2.5.3",
     "title-case": "^3.0.3",
     "uppy": "^2.4.1",
     "yup": "^0.32.11"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts --max_old_space_size=4096 build",
+    "analyze": "source-map-explorer 'build/static/js/*.js'",
+    "start": "react-scripts --max-old-space-size=4096 start",
+    "build": "react-scripts --max_old_space_size=4096 build && yarn sentry:sourcemaps",
     "test": "cypress open",
     "test:headless": "cypress run --headless",
     "test:report": "cypress run --reporter",
@@ -85,7 +90,8 @@
     "ts:check": "clear && tsc --allowJS false --pretty --strict true",
     "format:check": "clear && prettier --check 'src/**/*.{ts,tsx,js}' --config .prettierrc.json",
     "format:fix": "clear && prettier --write 'src/**/*.{ts,tsx,js}' --config .prettierrc.json",
-    "lint:fix": "clear && eslint 'src/**/*.{ts,tsx,js}' --config .eslintrc.json --fix"
+    "lint:fix": "clear && eslint 'src/**/*.{ts,tsx,js}' --config .eslintrc.json --fix",
+    "sentry:sourcemaps": "sentry-cli sourcemaps inject --org elastic-service-ltd --project javascript-react ./build && sentry-cli sourcemaps upload --org elastic-service-ltd --project javascript-react ./build"
   },
   "browserslist": {
     "production": [
@@ -109,8 +115,8 @@
     "@types/googlemaps": "^3.43.3",
     "@types/jest": "^29.2.4",
     "@types/node": "^20.2.5",
-    "@types/react": "^18.2.8",
-    "@types/react-dom": "^18.2.4",
+    "@types/react": "^18.2.28",
+    "@types/react-dom": "^18.2.13",
     "@types/react-redux": "^7.1.24",
     "@types/react-router-dom": "5.3.3",
     "@types/recordrtc": "^5.6.11",
@@ -126,5 +132,8 @@
     "prettier": "^2.8.4",
     "tailwindcss": "^3.3.2",
     "typescript": "^5.0.4"
+  },
+  "resolutions": {
+    "@typescript-eslint/typescript-estree": "^5.59.2"
   }
 }

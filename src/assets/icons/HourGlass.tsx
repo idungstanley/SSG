@@ -1,12 +1,11 @@
 import { DetailedHTMLProps, SVGAttributes } from 'react';
-import interactions from '../../utils/Constants/IconInteractions';
 
 /* eslint-disable max-len */
 interface Props extends DetailedHTMLProps<SVGAttributes<SVGSVGElement>, SVGSVGElement> {
   active?: boolean;
 }
 
-export function HourGlassIcon({ active, ...props }: Props) {
+export function HourGlassIcon({ ...props }: Props) {
   return (
     <svg {...props} viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
       <mask

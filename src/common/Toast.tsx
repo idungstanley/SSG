@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ExclamationCircleIcon } from '@heroicons/react/24/solid';
 import toast from 'react-hot-toast';
 import { cl } from '../utils';
@@ -6,9 +6,9 @@ import Success from '../assets/icons/Success';
 import ToastClose from '../assets/icons/ToastClose';
 import Checkbox from '../assets/icons/Checkbox';
 import CopyUrl from '../assets/icons/CopyUrl';
-import { useAppSelector } from '../app/hooks';
+import { useAppDispatch, useAppSelector } from '../app/hooks';
 import { useNavigate } from 'react-router-dom';
-import { ImyTaskData } from '../features/task/taskSlice';
+import { ImyTaskData, setCopyNewlyCreatedTask, setHilightNewlyCreatedTask } from '../features/task/taskSlice';
 
 interface ToastProps {
   title: string;
@@ -25,31 +25,40 @@ export default function Toast({ type = 'success', title, body, showClose = true,
     return null;
   }
 
+  const dispatch = useAppDispatch();
   const [isCopied, setIsCopied] = useState<number>(0);
   const { currentWorkspaceId } = useAppSelector((state) => state.auth);
+  const { hilightNewlyCreatedTask, copyNewlyCreatedTask } = useAppSelector((state) => state.task);
+
   const currentHost = window.location.host;
   const task_Id = taskData?.id;
   const list_Id = taskData?.list_id;
   const taskUrl = `${currentHost}/${currentWorkspaceId}/tasks/l/${list_Id}/t/${task_Id}`;
 
   const HandleCopyTaskUrl = async () => {
-    try {
-      await navigator.clipboard.writeText(taskUrl);
-      setIsCopied(1);
-      setTimeout(() => {
-        setIsCopied(2);
-      }, 1000);
-      setTimeout(() => {
-        setIsCopied(0);
-      }, 2000);
-    } catch (error) {
-      console.warn(`Failed to copy: ${error}`);
-    }
+    await navigator.clipboard.writeText(taskUrl);
+    setIsCopied(1);
+    setTimeout(() => {
+      setIsCopied(2);
+    }, 1000);
+    setTimeout(() => {
+      setIsCopied(0);
+    }, 2000);
+
+    dispatch(setCopyNewlyCreatedTask(false));
   };
 
   const handleHighlight = () => {
     navigate(`/${currentWorkspaceId}/tasks/l/${list_Id}/t/${task_Id}`);
+
+    dispatch(setHilightNewlyCreatedTask(false));
   };
+
+  useEffect(() => {
+    if (hilightNewlyCreatedTask) handleHighlight();
+
+    if (copyNewlyCreatedTask) HandleCopyTaskUrl();
+  }, [hilightNewlyCreatedTask, copyNewlyCreatedTask]);
 
   return (
     <div
@@ -73,9 +82,9 @@ export default function Toast({ type = 'success', title, body, showClose = true,
             </div>
             <div style={{ width: '80%' }}>
               <div>
-                <p className="text-alsoit-text-lg font-semibold text-alsoit-gray-300 font-semibold my-1">{title}</p>
+                <p className="text-alsoit-text-lg font-semibold text-alsoit-gray-300  my-1">{title}</p>
                 {body != null && body !== '' && (
-                  <p className="text-alsoit-text-lg font-semibold text-alsoit-gray-300 font-semibold my-1">{body}</p>
+                  <p className="text-alsoit-text-lg font-semibold text-alsoit-gray-300  my-1">{body}</p>
                 )}
               </div>
               {taskData && (
