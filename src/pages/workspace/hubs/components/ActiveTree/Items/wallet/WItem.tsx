@@ -3,16 +3,18 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { cl } from '../../../../../../../utils';
 import { FaFolder, FaFolderOpen } from 'react-icons/fa';
 import { VscTriangleDown, VscTriangleRight } from 'react-icons/vsc';
+import { useAppSelector } from '../../../../../../../app/hooks';
 
 export default function WItem({ id, name, parentId }: { id: string; name: string; parentId: string | null }) {
   const { walletId } = useParams();
-
   const navigate = useNavigate();
+
+  const { activeView } = useAppSelector((state) => state.workspace);
 
   const onClick = (id: string) => {
     const isActive = walletId === id;
 
-    navigate(`tasks/w/${isActive ? parentId || '' : id}`, {
+    navigate(`tasks/w/${isActive ? parentId || '' : id}/v/${activeView?.id}`, {
       replace: true
     });
   };

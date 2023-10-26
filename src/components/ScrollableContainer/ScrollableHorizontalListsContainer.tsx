@@ -8,11 +8,17 @@ import LightenColor from '../Views/ui/List/lightenColor/LightenColor';
 interface CustomScrollableContainerProps extends HTMLAttributes<HTMLDivElement> {
   children: ReactNode;
   ListColor?: IListColor;
+  returnScrollLeft?: (value: number) => void;
 }
 const DEFAULT_THUMB_WIDTH = 20;
 const ARROWS_WRAPPER_WIDTH = 35;
 
-export function ScrollableHorizontalListsContainer({ children, ListColor, ...props }: CustomScrollableContainerProps) {
+export function ScrollableHorizontalListsContainer({
+  children,
+  ListColor,
+  returnScrollLeft,
+  ...props
+}: CustomScrollableContainerProps) {
   const dispatch = useAppDispatch();
 
   // update size is pilot is visible / invisible
@@ -76,6 +82,12 @@ export function ScrollableHorizontalListsContainer({ children, ListColor, ...pro
     if (contentRef.current) setInitialScrollTop(contentRef.current.scrollLeft);
     setIsDragging(true);
   }, []);
+
+  useEffect(() => {
+    if (contentRef.current) {
+      returnScrollLeft && returnScrollLeft(contentRef.current.scrollLeft);
+    }
+  }, [contentRef.current?.scrollLeft]);
 
   const handleThumbMouseup = useCallback(
     (e: MouseEvent) => {

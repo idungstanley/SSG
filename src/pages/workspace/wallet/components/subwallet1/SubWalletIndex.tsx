@@ -30,7 +30,7 @@ function SubWalletIndex({ paddingLeft = '30', parentId }: SubWalletIndexProps) {
 
   const { currentWorkspaceId } = useAppSelector((state) => state.auth);
   const { hub } = useAppSelector((state) => state.hub);
-  const { activeItemId, extendedBarOpenedEntitiesIds } = useAppSelector((state) => state.workspace);
+  const { activeItemId, extendedBarOpenedEntitiesIds, activeView } = useAppSelector((state) => state.workspace);
   const { draggableItemId } = useAppSelector((state) => state.list);
   const { showMenuDropdown } = useAppSelector((state) => state.hub);
 
@@ -46,7 +46,7 @@ function SubWalletIndex({ paddingLeft = '30', parentId }: SubWalletIndexProps) {
   }, [activeItemId, parentId]);
 
   const handleLocation = (id: string, type = 'subwallet2') => {
-    navigate(`/${currentWorkspaceId}/tasks/w/${id}`);
+    navigate(`/${currentWorkspaceId}/tasks/w/${id}/v/${activeView?.id}`);
     dispatch(setActiveItem({ activeItemType: type, activeItemId: id }));
   };
 

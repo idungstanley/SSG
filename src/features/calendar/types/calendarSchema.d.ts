@@ -9,6 +9,8 @@ export interface CalendarState {
   reminderType: string | number;
   reminderInterval: number | string;
   selectedHubs: SelectedHubs[];
+  savedSelections: SavedSelections[];
+  hrOpenedEntities: HrOpenedEntities[];
 }
 
 interface NewDayOff extends Pick<DayOff, 'start_date' | 'end_date'> {
@@ -22,3 +24,7 @@ interface SelectedHubs {
   hubName: string | null;
   hubColor: string | null;
 }
+
+export type SavedSelections = string;
+
+export type HrOpenedEntities = string;

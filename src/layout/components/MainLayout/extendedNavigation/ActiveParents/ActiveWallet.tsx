@@ -22,7 +22,7 @@ function ActiveWallet({ showHubList }: WalletIndexProps) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { activeItemId } = useAppSelector((state) => state.workspace);
+  const { activeItemId, activeView } = useAppSelector((state) => state.workspace);
   const { SubMenuId, showMenuDropdown, hub } = useAppSelector((state) => state.hub);
 
   const [wallet, setWallet] = useState<Wallet>();
@@ -34,7 +34,7 @@ function ActiveWallet({ showHubList }: WalletIndexProps) {
   }, [activeItemId]);
 
   const handleLocation = (id: string, name: string, type = EntityType.wallet) => {
-    navigate(`tasks/w/${id}`);
+    navigate(`tasks/w/${id}/v/${activeView?.id}`);
     dispatch(setActiveItem({ activeItemType: type, activeItemId: id, activeItemName: name }));
   };
 
