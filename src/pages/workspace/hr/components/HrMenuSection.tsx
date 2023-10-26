@@ -35,14 +35,10 @@ export function HrMenuSection({ handleSavedSelections, sectionName, savedSelecti
       ) : (
         renderEmptyArrowBlock()
       )}
-      <SaveSelection active={false} />
-      <p
-        className={`block text-xs tracking-wider capitalize truncate ${
-          location.pathname.includes('saved-selections') ? 'text-alsoit-purple-300' : ''
-        }`}
-      >
-        {sectionName}
-      </p>
+      <div style={{ marginLeft: '-3px' }}>
+        <SaveSelection active={false} />
+      </div>
+      <p className="block text-xs tracking-wider capitalize truncate">{sectionName}</p>
     </div>
   );
 }
