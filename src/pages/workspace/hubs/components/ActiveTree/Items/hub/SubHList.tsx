@@ -44,7 +44,7 @@ export default function SubHubList({ hubs, placeHubType }: ListProps) {
       })
     );
     dispatch(setShowPilot(true));
-    dispatch(setActiveTabId(pilotTabs.WATCHERS));
+    dispatch(setActiveTabId(pilotTabs.DETAILS));
     navigate(viewsUrl, {
       replace: true
     });

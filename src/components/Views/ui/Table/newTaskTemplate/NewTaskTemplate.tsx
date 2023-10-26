@@ -1,4 +1,3 @@
-import React from 'react';
 import { Task } from '../../../../../features/task/interface.tasks';
 import { useAppSelector } from '../../../../../app/hooks';
 import { IField, ITask_statuses } from '../../../../../features/list/list.interfaces';

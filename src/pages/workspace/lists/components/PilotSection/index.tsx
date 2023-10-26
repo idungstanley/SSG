@@ -17,7 +17,6 @@ import Checklists from '../../../../../components/Pilot/components/Checklist/Che
 import { VscChecklist } from 'react-icons/vsc';
 import Details from '../../../../../components/Pilot/components/details/Details';
 import TimeClock from './TimeClock/index';
-import hubIcon from '../../../../../assets/branding/hub.svg';
 import HubManager from '../../../../../components/Pilot/components/HubManager/HubManager';
 import TemplatesIcon from '../../../../../assets/icons/Templates';
 import Templates from '../../../../../components/Pilot/components/Templates';
@@ -142,6 +141,8 @@ export default function PilotSection() {
 
   const { listId } = useParams();
   const { activeItemName } = useAppSelector((state) => state.workspace);
+  const { pilotSideOver } = useAppSelector((state) => state.slideOver);
+  const { show } = pilotSideOver;
 
   // set data for pilot
   useEffect(() => {
@@ -150,7 +151,7 @@ export default function PilotSection() {
         setShowPilotSideOver({
           id: listId,
           type: EntityType.list,
-          show: true,
+          show: show,
           title: activeItemName ?? ''
         })
       );

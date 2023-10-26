@@ -97,7 +97,6 @@ export function HorizontalScroll({ children, ...props }: CustomScrollableContain
 
   const handleThumbMousemove = useCallback(
     (e: MouseEvent) => {
-      e.preventDefault();
       e.stopPropagation();
       if (isDragging && contentRef.current && scrollStartPosition) {
         const { scrollWidth: contentWidth, offsetWidth: contentOffsetWidth } = contentRef.current;

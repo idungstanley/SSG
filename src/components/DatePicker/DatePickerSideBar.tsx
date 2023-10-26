@@ -30,7 +30,7 @@ export function DatePickerSideBar({ currentDate, setOpenSideBar }: DatePickerSid
   const [showRecurring, setRecurring] = useState<boolean>(false);
   const { HistoryFilterMemory, customSuggestionField } = useAppSelector((state) => state.task);
   let selectedStartOfWeek: Dayjs | null = null;
-  let selectedEndOfWeek: Dayjs | null = null;
+  // let selectedEndOfWeek: Dayjs | null = null;
 
   const customSuggestion = (field: extraFields) => {
     if (field.type === 'week') {
@@ -69,14 +69,14 @@ export function DatePickerSideBar({ currentDate, setOpenSideBar }: DatePickerSid
     if (!selectedStartOfWeek) {
       // If no start of week is selected, set the next week as the selected week
       selectedStartOfWeek = nextWeekStart;
-      selectedEndOfWeek = nextWeekEnd;
+      // selectedEndOfWeek = nextWeekEnd;
       dispatch(setTaskSelectedDate({ from: nextWeekStart, to: nextWeekEnd }));
     } else {
       // If start of week is already selected, reset the selection
       selectedStartOfWeek = null;
-      selectedEndOfWeek = null;
+      // selectedEndOfWeek = null;
       selectedStartOfWeek = nextWeekStart;
-      selectedEndOfWeek = nextWeekEnd;
+      // selectedEndOfWeek = nextWeekEnd;
       dispatch(setTaskSelectedDate({ from: nextWeekStart, to: nextWeekEnd }));
     }
   };

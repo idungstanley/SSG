@@ -14,7 +14,7 @@ export default function DayDatePicker() {
   };
 
   return (
-    <div onClick={(e) => handleClick()}>
+    <div onClick={() => handleClick()}>
       <div className={'text-sm font-medium text-gray-400'}>
         <div className="flex items-center cursor-pointer group/parent">
           <CalenderIcon />

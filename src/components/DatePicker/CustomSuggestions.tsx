@@ -24,7 +24,6 @@ export default function CustomSuggestion({ setCustomSuggestion }: CustomSuggesti
     weekErr: ''
   });
   const [timeIntervalValue, setIntervalValue] = useState<string | number>(15);
-  const [timeIntervalType, setTimeIntervaltype] = useState<string | number>('minutes');
   const [reminderIntervalValue, setReminderIntervalValue] = useState<string | number>(10);
   const [reminderTypeValue, setReminderType] = useState<string | number>('minutes');
   const [timeToggle, setTimeToggle] = useState(false);
@@ -49,11 +48,6 @@ export default function CustomSuggestion({ setCustomSuggestion }: CustomSuggesti
         ? setError({ ...error, monthErr: 'Months depth can not be less than 1' })
         : setError({ ...error, weekErr: 'Week depth can not be less than 1' });
     }
-  };
-
-  const handleReminder = ({ value, type }: { value?: number; type?: string }) => {
-    value && dispatch(setReminderInterval(value));
-    type && dispatch(setRemindertype(type));
   };
 
   useEffect(() => {
@@ -123,7 +117,7 @@ export default function CustomSuggestion({ setCustomSuggestion }: CustomSuggesti
             toggle={timeTypeToggle}
             toggleFn={setTimeTypeToggle}
             valueArr={intervalTypeArr}
-            valueFn={setTimeIntervaltype}
+            valueFn={setIntervalValue}
           />
           <Interval
             data={timeInterval}

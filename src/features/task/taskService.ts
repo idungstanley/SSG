@@ -1361,7 +1361,7 @@ export function useCreateTaskRecuring() {
         queryClient.invalidateQueries(['recurring']);
       },
       onError(err: { statusText: string }) {
-        console.error(err.statusText);
+        throw err.statusText;
       }
     }
   );

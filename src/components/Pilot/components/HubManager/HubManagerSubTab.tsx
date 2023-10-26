@@ -16,7 +16,6 @@ import SubtabDrag from '../../../../pages/workspace/pilot/components/SubtabDnd';
 import { useAppSelector } from '../../../../app/hooks';
 import CalendarIcon from '../../../../assets/icons/CalendarIcon';
 import StatusMgIcon from '../../../../assets/icons/StatusMgIcon';
-import { dimensions } from '../../../../app/config/dimensions';
 import { pilotTabs } from '../../../../app/constants/pilotTabs';
 
 export const HubManagerOptions = [
@@ -52,12 +51,8 @@ export const HubManagerOptions = [
   }
 ];
 
-const DEFAULT_PILOT_WIDTH = dimensions.pilot.default;
-const pilotWidthFromLS = DEFAULT_PILOT_WIDTH;
-
 export default function HubManagerSubTab() {
   const { showPilot, activeSubHubManagerTabId } = useAppSelector((state) => state.workspace);
-  const { show: showFullPilot } = useAppSelector((state) => state.slideOver.pilotSideOver);
 
   const idsFromLS = JSON.parse(localStorage.getItem('subTab') || '[]') as string[];
 

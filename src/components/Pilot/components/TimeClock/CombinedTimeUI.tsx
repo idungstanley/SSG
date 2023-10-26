@@ -24,7 +24,6 @@ export function CombinedTime() {
   const dispatch = useAppDispatch();
 
   const { activeItemId, activeItemType, activeClockTab } = useAppSelector((state) => state.workspace);
-  const { currentUserId } = useAppSelector((state) => state.auth);
   const { timerStatus, timeAssigneeFilter: getTimeEntries } = useAppSelector((state) => state.task);
 
   const [dropDown, setDropDown] = useState<{ tabDrop: boolean; activeTimeDrop: boolean }>({
@@ -38,12 +37,6 @@ export function CombinedTime() {
     trigger: activeItemType === EntityType.subHub ? EntityType.hub : activeItemType,
     is_active: 1
   });
-
-  const activeTrackers = getCurrent?.data.time_entries.filter(
-    (tracker) => tracker.team_member.user.id !== currentUserId
-  );
-
-  const activeTrackerCheck = (): boolean => (activeTrackers && activeTrackers?.length > 0 ? true : false);
 
   return (
     <div className={'flex flex-col w-full bg-alsoit-gray-50 rounded-md'}>

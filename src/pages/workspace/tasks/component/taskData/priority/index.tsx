@@ -8,8 +8,6 @@ import {
 import { useAppDispatch } from '../../../../../../app/hooks';
 import { renderDataProps } from '../DataRenderFunc';
 import { EntityType } from '../../../../../../utils/EntityTypes/EntityType';
-import AlsoitMenuDropdown from '../../../../../../components/DropDowns';
-import { useState } from 'react';
 
 export default function TaskPriority({ task }: renderDataProps) {
   const dispatch = useAppDispatch();

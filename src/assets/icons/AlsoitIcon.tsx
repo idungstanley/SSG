@@ -2,15 +2,13 @@
 import React, { DetailedHTMLProps, SVGAttributes } from 'react';
 
 interface ArrowDownProps extends DetailedHTMLProps<SVGAttributes<SVGSVGElement>, SVGSVGElement> {
-  active?: boolean;
-  color?: string;
   dimensions?: {
     height: number;
     width: number;
   };
 }
 
-export default function AlsoitIcon({ active = false, dimensions, color, ...props }: ArrowDownProps) {
+export default function AlsoitIcon({ dimensions }: ArrowDownProps) {
   return (
     <svg
       width={dimensions?.width ?? '61'}

@@ -32,10 +32,10 @@ import { Modal } from '../../../components/Pilot/components/HotKeys/components/M
 import { Capitalize } from '../../../utils/NoCapWords/Capitalize';
 import EverythingTasks from './components/EverythingTasks';
 import { pilotTabs } from '../../../app/constants/pilotTabs';
-import { FaHandsHelping } from 'react-icons/fa';
 import { APP_HR, APP_TASKS } from '../../../app/constants/app';
 import { pages } from '../../../app/constants/pages';
 import AlsoHrIcon from '../../../assets/icons/AlsoHrIcon';
+import MyOverviewHr from '../hr/components/MyOverviewHr';
 import SavedSelectionsHr from '../hr/components/SavedSelectionsHr';
 
 function Hubs() {
@@ -159,7 +159,8 @@ function Hubs() {
           </div>
         }
       />
-      {placeHubType == APP_TASKS ? <EverythingTasks /> : null}
+      {placeHubType == APP_TASKS && <EverythingTasks />}
+      {placeHubType == APP_HR && <MyOverviewHr />}
       {placeHubType == APP_HR && <SavedSelectionsHr />}
       <Modal setShowModal={setShowModal} position="left-44 top-72" showModal={showModal} width="w-64">
         {configForDropdown.map((item, index) => (

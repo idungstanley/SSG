@@ -32,12 +32,17 @@ import { EntityType } from '../../../../utils/EntityTypes/EntityType';
 import SubtasksIcon from '../../../../assets/icons/SubtasksIcon';
 import SaveIcon from '../../../../assets/icons/SaveIcon';
 import Close from '../../../../assets/icons/Close';
+import toast from 'react-hot-toast';
+import Toast from '../../../../common/Toast';
+import { LIMITS } from '../../../../app/config/dimensions';
 
 interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   task: Task;
   children?: ReactNode;
   taskIndex?: number;
   showSubTasks?: boolean;
+  hoverOn?: boolean;
+  setHoverOn: (i: boolean) => void;
   setShowSubTasks: (i: boolean) => void;
   paddingLeft?: number;
   taskStatusId?: string;
@@ -51,6 +56,7 @@ interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
 }
 
 export function StickyCol({
+  hoverOn,
   showSubTasks,
   setShowSubTasks,
   children,
@@ -152,12 +158,20 @@ export function StickyCol({
       handleEditTask(e as React.KeyboardEvent<HTMLDivElement>, id);
     } else {
       onClickSave();
-      onClose && onClose();
     }
   };
 
+  const inputContent = inputRef.current?.innerText;
+  const title = 'Limit Exceeded';
+  const body = 'The name must not be greater than 2000 characters.';
+  useEffect(() => {
+    if (inputContent && inputContent?.length > LIMITS.NAME_INPUT_LIMITS) {
+      toast.custom((t) => <Toast type="error" title={title} body={body} toastId={t.id} />);
+    }
+  }, [inputContent]);
+
   const onClickSave = () => {
-    if (inputRef.current?.innerText) {
+    if (inputRef.current?.innerText && inputRef.current?.innerText.length <= LIMITS.NAME_INPUT_LIMITS) {
       const name = inputRef.current?.innerText;
 
       onAdd({
@@ -168,15 +182,20 @@ export function StickyCol({
         newTaskPriority,
         task_status_id: taskStatusId as string
       });
+      onClose && onClose();
+    } else {
+      toast.custom((t) => <Toast type="error" title={title} body={body} toastId={t.id} />);
     }
   };
 
   const handleEditTask = async (e: React.KeyboardEvent<HTMLDivElement>, id: string) => {
-    e.preventDefault();
-    await editTaskMutation.mutateAsync({
-      name: inputRef.current?.innerText as string,
-      task_id: id
-    });
+    if (inputRef.current?.innerText && inputRef.current?.innerText.length <= LIMITS.NAME_INPUT_LIMITS) {
+      e.preventDefault();
+      await editTaskMutation.mutateAsync({
+        name: inputRef.current?.innerText as string,
+        task_id: id
+      });
+    }
   };
 
   useEffect(() => {
@@ -283,6 +302,29 @@ export function StickyCol({
   const [saveToggle, setSaveToggle] = useState<boolean>(false);
   const [closeToggle, setCloseToggle] = useState<boolean>(false);
 
+  const [width, setWidth] = useState(0);
+  const [hoverWidth, setHoverWidth] = useState(0);
+  const badgeRef = useRef<HTMLDivElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
+  const divRef = useRef<HTMLDivElement>(null);
+  const observer = useRef<ResizeObserver | null>(null);
+
+  useEffect(() => {
+    if (!contentRef.current || !divRef.current || !badgeRef.current) return;
+    const ref = contentRef.current;
+    observer.current = new ResizeObserver(() => {
+      const content = ref ? (task.descendants_count > 0 ? ref.clientWidth - 70 : ref.clientWidth - 30) : 0;
+      const full = divRef.current ? divRef.current.clientWidth : 0;
+      const badge = badgeRef.current ? badgeRef.current.clientWidth + 30 : 0;
+      setWidth(Math.round((content / full) * 100));
+      setHoverWidth(Math.round(((content - badge) / content) * 100));
+    });
+    observer.current.observe(ref);
+    return () => {
+      observer.current?.unobserve(ref);
+    };
+  });
+
   return (
     <>
       {task.id !== '0' && (
@@ -291,7 +333,7 @@ export function StickyCol({
           {...props}
         >
           <div
-            className="flex ml-1 items-center h-full space-x-1"
+            className="flex items-center h-full ml-1 space-x-1"
             style={{
               padding: '15px 0',
               paddingLeft: 0,
@@ -317,6 +359,7 @@ export function StickyCol({
             </div>
           </div>
           <div
+            ref={contentRef}
             style={{
               paddingLeft,
               height:
@@ -384,15 +427,18 @@ export function StickyCol({
                 </button>
               </ToolTip>
             ) : null}
-            <div className="flex flex-col items-start justify-start flex-grow pl-2 space-y-1">
+            <div ref={divRef} className="flex flex-col items-start justify-start flex-grow pl-2 space-y-1 max-w-full">
               <div
-                className="flex items-center w-full text-left"
+                className={'flex items-center text-left'}
+                style={{
+                  maxWidth: `${hoverOn ? `${hoverWidth}%` : `${width}%`}`
+                }}
                 onKeyDown={(e) => (e.key === 'Enter' && eitableContent ? handleEditTask(e, task.id) : null)}
               >
                 <div
                   className={`font-semibold alsoit-gray-300 ${
                     saveSettingOnline?.CompactView ? 'text-alsoit-text-md' : 'text-alsoit-text-lg'
-                  }`}
+                  } max-w-full`}
                 >
                   {saveSettingOnline?.singleLineView ? (
                     <div contentEditable={eitableContent} suppressContentEditableWarning={true} ref={inputRef}>
@@ -402,9 +448,8 @@ export function StickyCol({
                             <div
                               className={`font-semibold alsoit-gray-300 ${
                                 saveSettingOnline?.CompactView ? 'text-alsoit-text-md' : 'text-alsoit-text-lg'
-                              }`}
+                              } w-full`}
                               style={{
-                                maxWidth: '200px',
                                 overflow: 'hidden',
                                 textOverflow: 'ellipsis',
                                 whiteSpace: 'nowrap'
@@ -421,6 +466,7 @@ export function StickyCol({
                           style={{
                             maxWidth: '200px',
                             overflow: 'hidden',
+                            textOverflow: 'ellipsis',
                             whiteSpace: 'nowrap'
                           }}
                         >
@@ -432,7 +478,11 @@ export function StickyCol({
                     <div>{taskUpperCase ? task.name.toUpperCase() : Capitalize(task.name)}</div>
                   )}
                 </div>
-                <div onClick={(e) => e.stopPropagation()} className="flex items-center justify-between flex-grow pl-3">
+                <div
+                  ref={badgeRef}
+                  onClick={(e) => e.stopPropagation()}
+                  className="flex items-center justify-between flex-grow pl-2"
+                >
                   {children}
                 </div>
               </div>
@@ -448,7 +498,7 @@ export function StickyCol({
           {...props}
         >
           <div
-            className="w-11 flex items-center h-full space-x-1"
+            className="flex items-center h-full space-x-1 w-11"
             style={{
               padding: '15px 0',
               paddingLeft: 0
@@ -473,7 +523,7 @@ export function StickyCol({
               } w-full py-4 p-4 flex items-center`
             )}
           >
-            <div className="absolute bottom-0 right-0 flex space-x-1 p-1">
+            <div className="absolute bottom-0 right-0 flex p-1 space-x-1">
               <ToolTip
                 onMouseEnter={() => setCloseToggle(true)}
                 onMouseLeave={() => setCloseToggle(false)}
@@ -496,14 +546,15 @@ export function StickyCol({
             <div className="pt-1 ml-4">
               <StatusDropdown taskCurrentStatus={task.status} taskStatuses={task.task_statuses} />
             </div>
-            <div className="flex flex-col items-start justify-start pt-1 pl-2 space-y-1">
+            <div className="flex flex-col items-start justify-start pl-2 space-y-1">
               <p
-                className={`flex text-left empty:before:content-[attr(placeholder)] alsoit-gray-300 font-semibold empty:opacity-50 ${
+                className={`flex text-left empty:before:content-[attr(placeholder)] alsoit-gray-300 font-semibold empty:opacity-50 overflow-hidden items-center h-5 ${
                   saveSettingOnline?.CompactView ? 'text-alsoit-text-md' : 'text-alsoit-text-lg'
                 }`}
                 contentEditable={true}
                 placeholder="Add New Task"
                 ref={inputRef}
+                style={{ maxWidth: '200px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}
                 onKeyDown={(e) => (e.key === 'Enter' ? handleOnSave(e, task.id) : null)}
               ></p>
             </div>

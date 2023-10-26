@@ -1,6 +1,5 @@
-import { Listbox, Transition } from '@headlessui/react';
-import { CheckIcon } from '@heroicons/react/24/outline';
-import { Fragment } from 'react';
+import { useState } from 'react';
+import { Menu as HeadMenu } from '@headlessui/react';
 import { RiCheckboxBlankFill } from 'react-icons/ri';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { TaskKey } from '../../../../features/task/interface.tasks';
@@ -8,7 +7,9 @@ import { setSortType } from '../../../../features/task/taskSlice';
 import Button from '../../../Buttons/Button';
 import Icons from '../../../Icons/Icons';
 import GroupBy from '../../../../assets/icons/layers.svg';
-import ArrowDownFilled from '../../../../assets/icons/ArrowDownFilled';
+import { Menu } from '@mui/material';
+import { Capitalize } from '../../../../utils/NoCapWords/Capitalize';
+import ArrowDrop from '../../../../assets/icons/ArrowDrop';
 
 type Key = Extract<TaskKey, 'status' | 'assignees' | 'priority'>;
 type Option = Record<Key, { icon: JSX.Element }>;
@@ -33,58 +34,48 @@ export function Sort({ isSplitSubtasks }: ISortProps) {
   const dispatch = useAppDispatch();
   const { sortType } = useAppSelector((state) => state.task);
 
+  const [dropdownEl, setDropdownEl] = useState<null | HTMLElement>(null);
+
   const setOption = (i: TaskKey) => dispatch(setSortType(i));
 
   return (
-    <Listbox value={sortType} onChange={setOption}>
-      <div className="relative">
-        <Listbox.Button className="relative w-full rounded-md outline-none cursor-pointer">
-          <Button active={isSplitSubtasks ? false : true} withoutBg={isSplitSubtasks}>
-            <Icons src={GroupBy} />
-            {!isSplitSubtasks ? (
-              <span className="flex items-center gap-2">
-                <p className="block truncate">
-                  Group by: <span className="capitalize">{sortType}</span>
-                </p>
-                <ArrowDownFilled active={true} />
-              </span>
-            ) : null}
-          </Button>
-        </Listbox.Button>
-        <Transition as={Fragment} leave="transition ease-in duration-100" leaveFrom="opacity-100" leaveTo="opacity-0">
-          <Listbox.Options className="absolute z-10 py-1 mt-1 overflow-auto text-base bg-white rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-            {Object.keys(options).map((option) => (
-              <Listbox.Option
-                key={option}
-                className={({ active }) =>
-                  `relative cursor-default select-none py-2 pl-10 pr-4 ${
-                    active ? 'bg-primary-100 text-primary-500' : 'text-gray-500'
-                  }`
-                }
-                value={option}
-              >
-                {({ selected }) => (
-                  <>
-                    <div className="flex items-center w-full space-x-3">
-                      {options[option as Key].icon}
-
-                      <span className={`block truncate capitalize ${selected ? 'font-medium' : 'font-normal'}`}>
-                        {option}
-                      </span>
-                    </div>
-
-                    {selected ? (
-                      <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-primary-500">
-                        <CheckIcon className="w-5 h-5" aria-hidden="true" />
-                      </span>
-                    ) : null}
-                  </>
-                )}
-              </Listbox.Option>
-            ))}
-          </Listbox.Options>
-        </Transition>
+    <>
+      <div className="relative" onClick={(e: React.MouseEvent<HTMLDivElement>) => setDropdownEl(e.currentTarget)}>
+        <HeadMenu>
+          <HeadMenu.Button className="relative w-full rounded-md outline-none cursor-pointer">
+            <Button active={isSplitSubtasks ? false : true} withoutBg={isSplitSubtasks}>
+              <Icons src={GroupBy} />
+              {!isSplitSubtasks ? (
+                <span className="flex items-center">
+                  <p className="block truncate">
+                    Group by: <span className="capitalize">{sortType}</span>
+                  </p>
+                  <ArrowDrop color="#BF01FE" />
+                </span>
+              ) : null}
+            </Button>
+          </HeadMenu.Button>
+        </HeadMenu>
       </div>
-    </Listbox>
+
+      <Menu anchorEl={dropdownEl} open={!!dropdownEl} onClose={() => setDropdownEl(null)} style={{ marginTop: '10px' }}>
+        <div className="w-48">
+          {Object.keys(options).map((option) => (
+            <div
+              key={option}
+              className={`${
+                sortType !== option
+                  ? 'flex items-center text-sm text-gray-600 text-left w-full hover:bg-gray-300'
+                  : 'flex items-center text-sm text-gray-600 text-left w-full bg-primary-200'
+              }`}
+            >
+              <button onClick={() => setOption(option as TaskKey)} className="flex items-center w-full py-2 group">
+                <p className="flex items-center pl-2 space-x-2 text-md">{Capitalize(option)}</p>
+              </button>
+            </div>
+          ))}
+        </div>
+      </Menu>
+    </>
   );
 }
