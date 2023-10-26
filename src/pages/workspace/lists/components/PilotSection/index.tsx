@@ -141,6 +141,8 @@ export default function PilotSection() {
 
   const { listId } = useParams();
   const { activeItemName } = useAppSelector((state) => state.workspace);
+  const { pilotSideOver } = useAppSelector((state) => state.slideOver);
+  const { show } = pilotSideOver;
 
   // set data for pilot
   useEffect(() => {
@@ -149,7 +151,7 @@ export default function PilotSection() {
         setShowPilotSideOver({
           id: listId,
           type: EntityType.list,
-          show: true,
+          show: show,
           title: activeItemName ?? ''
         })
       );
