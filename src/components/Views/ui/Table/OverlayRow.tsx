@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { MdDragIndicator } from 'react-icons/md';
 import SubtasksIcon from '../../../../assets/icons/SubtasksIcon';
 import { Tag, Task } from '../../../../features/task/interface.tasks';
 import { tagItem } from '../../../../pages/workspace/tasks/component/taskData/DataRenderFunc';
@@ -9,6 +8,7 @@ import { generateGrid } from '../../lib';
 import { Col } from './Col';
 import { StickyCol } from './StickyCol';
 import { listColumnProps } from '../../../../pages/workspace/tasks/component/views/ListColumns';
+import Dradnddrop from '../../../../assets/icons/Dradnddrop';
 
 interface OverlayRowProps {
   task: Task;
@@ -20,10 +20,7 @@ export function OverlayRow({ task, columns }: OverlayRowProps) {
   const [hoverOn, setHoverOn] = useState(false);
 
   return (
-    <div
-      style={{ minWidth: 500, display: 'grid', gridTemplateColumns: generateGrid(columns.length) }}
-      className="items-center bg-white h-10 opacity-75"
-    >
+    <div style={{ minWidth: 500, display: 'grid', gridTemplateColumns: generateGrid(columns.length) }}>
       <StickyCol
         hoverOn={hoverOn}
         setHoverOn={setHoverOn}
@@ -36,10 +33,9 @@ export function OverlayRow({ task, columns }: OverlayRowProps) {
         tags={'tags' in task ? <TaskTag tags={task.tags as tagItem[]} entity_id={task.id} entity_type="task" /> : null}
         dragElement={
           <span>
-            <MdDragIndicator
-              className="text-lg text-gray-400 transition duration-200 opacity-0 cursor-move group-hover:opacity-100"
-              style={{ marginLeft: '-2px', marginRight: '-2.5px' }}
-            />
+            <div className="text-lg text-gray-400 transition duration-200 opacity-0 cursor-move group-hover:opacity-100">
+              <Dradnddrop />
+            </div>
           </span>
         }
       >
