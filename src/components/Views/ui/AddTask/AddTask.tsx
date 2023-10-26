@@ -54,7 +54,7 @@ export function AddTask({ onClose, paddingLeft, parentId, isListParent, columns,
   }, []);
 
   const onClickSave = () => {
-    if (!nameRef.current?.innerText.length)
+    if (!!nameRef.current?.value === false)
       return toast.custom((t) => (
         <Toast type="error" title={noTaskNameErrorTitle} body={noTaskNameErrorbody} toastId={t.id} />
       ));
