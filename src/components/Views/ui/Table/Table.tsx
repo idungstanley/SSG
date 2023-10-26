@@ -122,9 +122,8 @@ export function Table({ heads, data, label, listName, listColor, isBlockedShowCh
   return (
     <>
       <div
-        className="sticky top-0 mr-2 pl-2 pt-2 table-container overflow-hidden"
+        className="sticky top-0 mr-2 pl-2 pt-2 table-container overflow-hidden z-10"
         style={{
-          zIndex: 100,
           backgroundColor: LightenColor(
             listColor?.outerColour === null ? 'black' : (listColor?.outerColour as string),
             0.95
