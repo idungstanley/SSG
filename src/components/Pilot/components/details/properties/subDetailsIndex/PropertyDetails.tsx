@@ -21,10 +21,11 @@ import { IListDetails } from '../../../../../../features/list/list.interfaces';
 import { useParams } from 'react-router-dom';
 import { IWalletDetails } from '../../../../../../features/wallet/wallet.interfaces';
 import PlusIcon from '../../../../../../assets/icons/PlusIcon';
-import ReactMarkDown from 'react-markdown';
 import { useAppSelector } from '../../../../../../app/hooks';
 import FileIcons from '../../../../../Views/ui/Table/CustomField/Files/FileIcon';
 import { VerticalScroll } from '../../../../../ScrollableContainer/VerticalScroll';
+import { CKEditor } from '@ckeditor/ckeditor5-react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 export interface tagItem {
   id: string;
@@ -34,6 +35,7 @@ export interface tagItem {
 interface PropertyDetailsProps {
   Details?: IHubDetails | ITaskFullList | IListDetails | IWalletDetails;
 }
+
 export default function PropertyDetails({ Details }: PropertyDetailsProps) {
   const queryClient = useQueryClient();
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -81,16 +83,23 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
   };
 
   const handleDescriptionChange = (value: string) => {
-    // const sanitizedDescription = DOMPurify.sanitize(value);
-    setDescription(value);
+    const pattern = /<a[^>]*>/gi;
+
+    const modifiedString = value.replace(pattern, (match) => {
+      return match.replace('>', ' class="text-blue-500 underline">');
+    });
+    console.log(modifiedString);
+
+    setDescription(modifiedString);
   };
 
   const handleDetailsSubmit = async (
     e:
       | React.KeyboardEvent<HTMLParagraphElement>
-      | React.FocusEvent<HTMLInputElement | HTMLParagraphElement | HTMLTextAreaElement, Element>
+      | React.FocusEvent<HTMLInputElement | HTMLParagraphElement | HTMLTextAreaElement | Element>
+      | undefined = undefined
   ) => {
-    e.preventDefault();
+    e && e.preventDefault();
     handleBlur();
     try {
       if (taskId != undefined) {
@@ -122,13 +131,12 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
       return;
     }
   };
-
-  const convertNewlinesToBreaks = (text: string) => {
-    return text
-      .split('\n')
-      .map((line, index) => (index === 0 ? line : `\n\n ${line}`))
-      .join('');
-  };
+  // const convertNewlinesToBreaks = (text: string) => {
+  //   return text
+  //     .split('\n')
+  //     .map((line, index) => (index === 0 ? line : `\n\n ${line}`))
+  //     .join('');
+  // };
 
   return (
     <>
@@ -198,18 +206,17 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
             onClick={() => setEditingDescription(true)}
           >
             {editingDescription ? (
-              <div className="w-full h-min">
-                <textarea
-                  autoFocus
-                  onChange={(e) => handleDescriptionChange(e.target.value)}
-                  value={description}
-                  onBlur={(e) => handleDetailsSubmit(e)}
-                  className="w-full h-20 font-semibold border-none rounded-md text-alsoit-gray-200 focus:ring-1 focus:ring-alsoit-gray-75 text-alsoit-text-lg bg-alsoit-gray-50"
-                ></textarea>
+              <div className="w-full h-40 overflow-y-scroll">
+                <CKEditor
+                  editor={ClassicEditor}
+                  data={description}
+                  onChange={(event, editor) => handleDescriptionChange(editor.getData())}
+                  onBlur={() => handleDetailsSubmit()}
+                />
               </div>
             ) : (
-              <div className="capitalize h-20 overflow-scroll p-1.5">
-                <ReactMarkDown>{convertNewlinesToBreaks(description)}</ReactMarkDown>
+              <div className="h-20 overflow-scroll p-1.5">
+                <div dangerouslySetInnerHTML={{ __html: description }} />
               </div>
             )}
           </div>
