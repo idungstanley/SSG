@@ -54,13 +54,14 @@ export function AddTask({ onClose, paddingLeft, parentId, isListParent, columns,
   }, []);
 
   const onClickSave = () => {
-    if (!nameRef.current?.innerText.length)
-      return toast.custom((t) => (
-        <Toast type="error" title={noTaskNameErrorTitle} body={noTaskNameErrorbody} toastId={t.id} />
-      ));
-
     if (nameRef.current) {
       const name = nameRef.current.value;
+      const isNameEmpty = !!name;
+
+      if (!isNameEmpty)
+        return toast.custom((t) => (
+          <Toast type="error" title={noTaskNameErrorTitle} body={noTaskNameErrorbody} toastId={t.id} />
+        ));
 
       onAdd({
         name,
