@@ -45,6 +45,7 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
   const [editingDescription, setEditingDescription] = useState(false);
   const [description, setDescription] = useState<string>(Details?.description ?? '');
   const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
+  const { taskInputValue } = useAppSelector((state) => state.task);
 
   const { hubId, walletId, listId, taskId } = useParams();
 
@@ -193,7 +194,7 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
                 onClick={() => setEditingTitle(true)}
                 onBlur={(e) => handleDetailsSubmit(e)}
               >
-                {Details?.name}
+                {taskInputValue}
               </p>
             </VerticalScroll>
           </div>

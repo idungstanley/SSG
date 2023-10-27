@@ -18,7 +18,8 @@ import {
   setTaskIdForPilot,
   setDuplicateTaskObj,
   setSelectedIndexListId,
-  setF2State
+  setF2State,
+  setTaskInputValue
 } from '../../../../features/task/taskSlice';
 import { setActiveItem } from '../../../../features/workspace/workspaceSlice';
 import { UniqueIdentifier, useDraggable, useDroppable } from '@dnd-kit/core';
@@ -95,7 +96,8 @@ export function StickyCol({
     separateSubtasksMode,
     newTaskPriority,
     f2State,
-    assignOnHoverTask
+    assignOnHoverTask,
+    taskInputValue
   } = useAppSelector((state) => state.task);
 
   const [isChecked, setIsChecked] = useState(false);
@@ -107,6 +109,10 @@ export function StickyCol({
   const { mutate: onAdd } = useAddTask(task);
 
   const inputRef = useRef<HTMLInputElement | null>(null);
+
+  useEffect(() => {
+    dispatch(setTaskInputValue(task.name));
+  }, [taskId]);
 
   const onClickTask = () => {
     if (task.id !== '0') {
@@ -435,7 +441,7 @@ export function StickyCol({
                 </button>
               </ToolTip>
             ) : null}
-            <div ref={divRef} className="flex flex-col items-start justify-start flex-grow pl-2 space-y-1 max-w-full">
+            <div ref={divRef} className="flex flex-col items-start justify-start flex-grow max-w-full pl-2 space-y-1">
               <div
                 className={'flex items-center text-left'}
                 style={{
@@ -463,10 +469,12 @@ export function StickyCol({
                                 whiteSpace: 'nowrap'
                               }}
                             >
-                              {taskUpperCase ? task.name.toUpperCase() : Capitalize(task.name)}
+                              {taskUpperCase ? taskInputValue.toUpperCase() : Capitalize(taskInputValue)}
                             </div>
                           }
-                          content={<div>{taskUpperCase ? task.name.toUpperCase() : Capitalize(task.name)}</div>}
+                          content={
+                            <div>{taskUpperCase ? taskInputValue.toUpperCase() : Capitalize(taskInputValue)}</div>
+                          }
                           additionalStyles={{ backgroundColor: 'black', color: 'white' }}
                         />
                       ) : (
@@ -478,7 +486,7 @@ export function StickyCol({
                             whiteSpace: 'nowrap'
                           }}
                         >
-                          {taskUpperCase ? task.name.toUpperCase() : Capitalize(task.name)}
+                          {taskUpperCase ? taskInputValue.toUpperCase() : Capitalize(taskInputValue)}
                         </div>
                       )}
                     </div>
