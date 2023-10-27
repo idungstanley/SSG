@@ -78,7 +78,8 @@ export function Head({
     selectedIndex,
     selectedIndexStatus,
     selectedIndexListId,
-    activeTaskColumn
+    activeTaskColumn,
+    subtasks
   } = useAppSelector((state) => state.task);
   const { baseColor } = useAppSelector((state) => state.account);
   const { isManageStatus } = useAppSelector((state) => state.workspace);
@@ -134,6 +135,7 @@ export function Head({
       groupedTask?.forEach((task) => {
         const taskIndex = updatedTaskIds.indexOf(task.id);
         if (taskIndex === -1) {
+          console.log(subtasks);
           updatedTaskIds.push(task.id);
         }
       });

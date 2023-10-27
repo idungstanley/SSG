@@ -49,6 +49,7 @@ export default function ShowHideSettings({
   const dispatch = useAppDispatch();
 
   const {
+    scrollGroupView,
     singleLineView,
     triggerSaveSettingsModal,
     CompactView,
@@ -71,6 +72,7 @@ export default function ShowHideSettings({
   const switchSettings = useSwitchSettings();
 
   const saveSettingsObj: { [key: string]: boolean } = {
+    scrollGroupView,
     singleLineView,
     CompactView,
     verticalGrid,
@@ -169,6 +171,7 @@ export default function ShowHideSettings({
     const handleCheckboxChange = () => {
       setCheckedStates((prev: boolean[]) => {
         const newState = [...prev];
+        const scrollGroupViewIndex = viewSettings.findIndex((item) => item.label === 'Scroll By Each Group');
         const singleLineIndex = viewSettings.findIndex((item) => item.label === 'Single Line mode');
         const TitleVerticalGridLineIndex = viewSettings.findIndex((item) => item.label === 'Title Vertical Grid Line');
         const CompactView = viewSettings.findIndex((item) => item.label === 'Compact mode');
@@ -178,6 +181,7 @@ export default function ShowHideSettings({
         const splitSubtaskThreeState = viewSettings.findIndex((item) => item.label === 'Split 3 level of subtasks');
 
         if (saveSettingList !== undefined && saveSettingList?.view_settings !== null) {
+          newState[scrollGroupViewIndex] = saveSettingOnline?.scrollGroupView as boolean;
           newState[singleLineIndex] = saveSettingOnline?.singleLineView as boolean;
           newState[TitleVerticalGridLineIndex] = saveSettingOnline?.verticalGridlinesTask as boolean;
           newState[CompactView] = saveSettingOnline?.CompactView as boolean;

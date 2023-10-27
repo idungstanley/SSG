@@ -36,6 +36,8 @@ const onError = (error: unknown): unknown => {
     title = 'Oops! An internal server error occurred.';
   } else if (typedError.status === 404) {
     title = 'Oops! Resource not found.';
+  } else if (typedError.status === 422) {
+    title = typedError.data.message.title;
   } else if (typedError?.data?.message) {
     title = typedError?.data?.message.title;
     body = typedError?.data?.message.body;
@@ -79,12 +81,12 @@ const queryClient = new QueryClient({
       staleTime: 86400000 // 24 hours
     }
   },
-  queryCache: new QueryCache({
-    onError
-  }),
   mutationCache: new MutationCache({
     onError,
     onSuccess
+  }),
+  queryCache: new QueryCache({
+    onError
   })
 });
 

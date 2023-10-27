@@ -36,6 +36,8 @@ import { APP_HR, APP_TASKS } from '../../../app/constants/app';
 import { pages } from '../../../app/constants/pages';
 import AlsoHrIcon from '../../../assets/icons/AlsoHrIcon';
 import MyOverviewHr from '../hr/components/MyOverviewHr';
+import SavedSelectionsHr from '../hr/components/SavedSelectionsHr';
+import EverythingHr from '../hr/components/EverithingHr';
 
 function Hubs() {
   const dispatch = useDispatch();
@@ -159,7 +161,13 @@ function Hubs() {
         }
       />
       {placeHubType == APP_TASKS && <EverythingTasks />}
-      {placeHubType == APP_HR && <MyOverviewHr />}
+      {placeHubType == APP_HR && (
+        <div>
+          <MyOverviewHr />
+          <SavedSelectionsHr />
+          <EverythingHr />
+        </div>
+      )}
       <Modal setShowModal={setShowModal} position="left-44 top-72" showModal={showModal} width="w-64">
         {configForDropdown.map((item, index) => (
           <React.Fragment key={index}>

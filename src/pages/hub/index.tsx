@@ -36,7 +36,7 @@ export default function HubPage() {
   const navigate = useNavigate();
 
   const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
-  const { tasks: tasksStore, saveSettingLocal, subtasks } = useAppSelector((state) => state.task);
+  const { tasks: tasksStore, saveSettingLocal, subtasks, scrollGroupView } = useAppSelector((state) => state.task);
   const formatSettings = useformatSettings();
 
   const { data: hub } = UseGetHubDetails({ activeItemId: hubId, activeItemType: EntityType.hub });
@@ -137,7 +137,7 @@ export default function HubPage() {
             ))}
           </section>
         </VerticalScroll>
-        {Object.keys(lists).length > 1 && <GroupHorizontalScroll />}
+        {Object.keys(lists).length > 1 && scrollGroupView && <GroupHorizontalScroll />}
       </Page>
     </>
   );

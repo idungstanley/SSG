@@ -135,7 +135,7 @@ export const mockLists = {
         id: '14e31b19-d26d-4c03-8833-433cfb68d1fa',
         name: 'To do',
         color: '#a5a5a5',
-        position: '0',
+        position: 0,
         type: 'open',
         model_id: '07e19589',
         model: 'hub',

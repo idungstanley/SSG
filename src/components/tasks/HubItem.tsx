@@ -245,7 +245,9 @@ export default function HubItem({
           )}
           <div
             role="button"
-            className="flex items-center justify-start overflow-y-hidden text-sm truncate"
+            className={`flex items-center justify-start overflow-y-hidden text-sm truncate ${
+              placeHubType == APP_HR ? 'w-full' : ''
+            }`}
             onClick={
               showSidebar || isExtendedBar
                 ? () => handleClick(item.id)

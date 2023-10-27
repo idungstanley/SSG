@@ -73,6 +73,7 @@ import { ListPage } from './pages/list';
 import { WalletPage } from './pages/wallet';
 import ManageHr from './pages/hr/pages/ManageHr';
 import MyOverviewHrPage from './pages/hr/pages/MyOverviewHr';
+import EverythingHr from './pages/hr/pages/EverythingHr';
 const Construction = lazy(() => import('./pages/settings/UserSettings/Pages/Construction'));
 const TaskInvite = lazy(() => import('./pages/workspace/tasks/taskInvite/TaskInvite'));
 const WorkSpaceTable = lazy(() => import('./pages/settings/WorkspaceSettings/GeneralWorkSpaceSettings/Table'));
@@ -182,6 +183,10 @@ export const routes = (user: IUser | null) => {
             {
               path: 'my-overview',
               element: <MyOverviewHrPage />
+            },
+            {
+              path: 'everything-hr',
+              element: <EverythingHr />
             },
             {
               path: '',

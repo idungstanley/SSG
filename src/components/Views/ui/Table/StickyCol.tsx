@@ -157,11 +157,15 @@ export function StickyCol({
     if (id !== '0') {
       handleEditTask(e as React.KeyboardEvent<HTMLDivElement>, id);
     } else {
+      onClose && onClose();
       onClickSave();
     }
   };
 
   const inputContent = inputRef.current?.innerText;
+  const noTaskNameErrorTitle = 'Empty task name';
+  const noTaskNameErrorbody = 'Please type a task name';
+
   const title = 'Limit Exceeded';
   const body = 'The name must not be greater than 2000 characters.';
   useEffect(() => {
@@ -171,6 +175,11 @@ export function StickyCol({
   }, [inputContent]);
 
   const onClickSave = () => {
+    if (!inputRef.current?.innerText.length)
+      return toast.custom((t) => (
+        <Toast type="error" title={noTaskNameErrorTitle} body={noTaskNameErrorbody} toastId={t.id} />
+      ));
+
     if (inputRef.current?.innerText && inputRef.current?.innerText.length <= LIMITS.NAME_INPUT_LIMITS) {
       const name = inputRef.current?.innerText;
 
@@ -182,7 +191,6 @@ export function StickyCol({
         newTaskPriority,
         task_status_id: taskStatusId as string
       });
-      onClose && onClose();
     } else {
       toast.custom((t) => <Toast type="error" title={title} body={body} toastId={t.id} />);
     }
