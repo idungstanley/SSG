@@ -3,12 +3,14 @@ import { useAppSelector } from '../../../../../../app/hooks';
 import { Spinner } from '../../../../../../common';
 import { useGetExplorerFile, useGetFileBuffers } from '../../../../../../features/explorer/explorerService';
 import FullScreenMessage from '../../../../../../components/CenterMessage/FullScreenMessage';
-import FileViewer from 'react-file-viewer';
+import DocViewer, { DocViewerRenderers } from '@cyntler/react-doc-viewer';
 
 const contentType = [
   'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
   'application/pdf',
-  'image/jpeg'
+  'image/jpeg',
+  'application/msword',
+  'text/plain'
 ];
 
 export default function FilePreview() {
@@ -20,7 +22,13 @@ export default function FilePreview() {
 
   const { data: headers, status } = useGetFileBuffers(
     selectedFileId,
-    extension === 'word' ? contentType[0] : extension === 'pdf' ? contentType[1] : contentType[2]
+    extension === 'word'
+      ? contentType[0]
+      : extension === 'pdf'
+      ? contentType[1]
+      : extension === 'image'
+      ? contentType[2]
+      : contentType[4]
   );
 
   return (
@@ -33,16 +41,16 @@ export default function FilePreview() {
           <Spinner size={8} color="#0F70B7" />
         </div>
       ) : status === 'success' ? (
-        extension === 'image' ? (
-          <img src={headers} className="max-h-204" alt="img" />
-        ) : extension === 'pdf' ? (
-          <iframe width="100%" height="100%" src={headers} itemType="application/pdf" className="internal">
-            <embed src={headers} type="application/pdf" />
-          </iframe>
-        ) : extension === 'word' ? (
-          <div className="h-204">
-            <FileViewer fileType="docx" filePath={headers} />
-          </div>
+        extension === 'image' || extension === 'pdf' || extension === 'text' ? (
+          <DocViewer
+            documents={[{ uri: headers }]}
+            pluginRenderers={DocViewerRenderers}
+            config={{
+              header: {
+                disableHeader: true
+              }
+            }}
+          />
         ) : (
           <FullScreenMessage title="Unsupported file extension." description="Sorry :(" />
         )

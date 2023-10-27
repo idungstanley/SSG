@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@cyntler/react-doc-viewer": "^1.14.0",
     "@cypress/react": "^7.0.3",
     "@dnd-kit/core": "^6.0.7",
     "@dnd-kit/sortable": "^7.0.2",
@@ -55,7 +56,6 @@
     "react-compound-timer": "^1.2.0",
     "react-dnd": "^16.0.1",
     "react-dom": "^18.2.0",
-    "react-file-viewer": "^1.2.1",
     "react-google-autocomplete": "^2.7.3",
     "react-hot-toast": "^2.2.0",
     "react-icons": "^4.7.1",
