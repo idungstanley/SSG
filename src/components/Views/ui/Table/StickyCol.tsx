@@ -80,7 +80,7 @@ export function StickyCol({
 
   const { currentWorkspaceId } = useAppSelector((state) => state.auth);
   const { dragOverItemId, draggableItemId } = useAppSelector((state) => state.list);
-  const { activeView } = useAppSelector((state) => state.workspace);
+  const { activeView, activeItemId } = useAppSelector((state) => state.workspace);
   const {
     currTeamMemberId,
     verticalGrid,
@@ -111,8 +111,12 @@ export function StickyCol({
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
-    dispatch(setTaskInputValue(task.name));
+    if (task.id === activeItemId) {
+      dispatch(setTaskInputValue(task.name));
+    }
   }, [taskId]);
+
+  const TASK_NAME = task.id === activeItemId ? taskInputValue : task.name;
 
   const onClickTask = () => {
     if (task.id !== '0') {
@@ -469,12 +473,10 @@ export function StickyCol({
                                 whiteSpace: 'nowrap'
                               }}
                             >
-                              {taskUpperCase ? taskInputValue.toUpperCase() : Capitalize(taskInputValue)}
+                              {taskUpperCase ? TASK_NAME.toUpperCase() : Capitalize(TASK_NAME)}
                             </div>
                           }
-                          content={
-                            <div>{taskUpperCase ? taskInputValue.toUpperCase() : Capitalize(taskInputValue)}</div>
-                          }
+                          content={<div>{taskUpperCase ? TASK_NAME.toUpperCase() : Capitalize(TASK_NAME)}</div>}
                           additionalStyles={{ backgroundColor: 'black', color: 'white' }}
                         />
                       ) : (
@@ -486,7 +488,7 @@ export function StickyCol({
                             whiteSpace: 'nowrap'
                           }}
                         >
-                          {taskUpperCase ? taskInputValue.toUpperCase() : Capitalize(taskInputValue)}
+                          {taskUpperCase ? TASK_NAME.toUpperCase() : Capitalize(TASK_NAME)}
                         </div>
                       )}
                     </div>

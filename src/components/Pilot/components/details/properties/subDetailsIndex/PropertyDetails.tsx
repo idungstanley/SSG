@@ -21,11 +21,13 @@ import { IListDetails } from '../../../../../../features/list/list.interfaces';
 import { useParams } from 'react-router-dom';
 import { IWalletDetails } from '../../../../../../features/wallet/wallet.interfaces';
 import PlusIcon from '../../../../../../assets/icons/PlusIcon';
-import { useAppSelector } from '../../../../../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
 import FileIcons from '../../../../../Views/ui/Table/CustomField/Files/FileIcon';
 import { VerticalScroll } from '../../../../../ScrollableContainer/VerticalScroll';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import { setTaskInputValue } from '../../../../../../features/task/taskSlice';
+import { EntityType } from '../../../../../../utils/EntityTypes/EntityType';
 
 export interface tagItem {
   id: string;
@@ -38,6 +40,7 @@ interface PropertyDetailsProps {
 
 export default function PropertyDetails({ Details }: PropertyDetailsProps) {
   const queryClient = useQueryClient();
+  const dispatch = useAppDispatch();
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   const [toggleSubTask, setToggleSubTask] = useState(false);
@@ -138,6 +141,10 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
   //     .map((line, index) => (index === 0 ? line : `\n\n ${line}`))
   //     .join('');
   // };
+  const handleContentEditableInput = (event: React.FormEvent<HTMLParagraphElement>) => {
+    const newContent = event.currentTarget.innerText;
+    dispatch(setTaskInputValue(newContent));
+  };
 
   return (
     <>
@@ -169,7 +176,6 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
       </section>
       <section className="p-2" key={Details?.id}>
         {/* tags */}
-
         {Details
           ? 'tags' in Details && (
               <div id="tags" className="mt-2">
@@ -193,8 +199,10 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
                 onKeyDown={(e) => (e.key === 'Enter' ? handleDetailsSubmit(e) : null)}
                 onClick={() => setEditingTitle(true)}
                 onBlur={(e) => handleDetailsSubmit(e)}
+                onInput={(e) => handleContentEditableInput(e)}
+                suppressContentEditableWarning={true}
               >
-                {taskInputValue}
+                {activeItemType === EntityType.task ? taskInputValue : Details?.name}
               </p>
             </VerticalScroll>
           </div>
