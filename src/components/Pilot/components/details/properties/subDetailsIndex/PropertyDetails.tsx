@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import moment from 'moment';
 import CustomReference from '../customReference/CustomReference';
 import EntitySettings from '../entitySettings/EntitySettings';
@@ -10,7 +10,11 @@ import ToolTip from '../../../../../Tooltip/Tooltip';
 import { ITaskFullList } from '../../../../../../features/task/interface.tasks';
 import { IHubDetails } from '../../../../../../features/hubs/hubs.interfaces';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { UseUpdateTaskService, useGetAttachments } from '../../../../../../features/task/taskService';
+import {
+  UseUpdateTaskService,
+  useDeleteAttachment,
+  useGetAttachments
+} from '../../../../../../features/task/taskService';
 import Status from '../status/Status';
 import Priority from '../priority/Priority';
 import { UseEditHubService } from '../../../../../../features/hubs/hubService';
@@ -21,10 +25,11 @@ import { IListDetails } from '../../../../../../features/list/list.interfaces';
 import { useParams } from 'react-router-dom';
 import { IWalletDetails } from '../../../../../../features/wallet/wallet.interfaces';
 import PlusIcon from '../../../../../../assets/icons/PlusIcon';
-import ReactMarkDown from 'react-markdown';
-import { VerticalScroll } from '../../../../../ScrollableContainer/VerticalScroll';
 import { useAppSelector } from '../../../../../../app/hooks';
 import FileIcons from '../../../../../Views/ui/Table/CustomField/Files/FileIcon';
+import { VerticalScroll } from '../../../../../ScrollableContainer/VerticalScroll';
+import { CKEditor } from '@ckeditor/ckeditor5-react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 export interface tagItem {
   id: string;
@@ -34,18 +39,29 @@ export interface tagItem {
 interface PropertyDetailsProps {
   Details?: IHubDetails | ITaskFullList | IListDetails | IWalletDetails;
 }
+
 export default function PropertyDetails({ Details }: PropertyDetailsProps) {
   const queryClient = useQueryClient();
+  const inputRef = useRef<HTMLInputElement | null>(null);
+  // const [fileId, setFileId] = useState<string | undefined>(undefined);
 
   const [toggleSubTask, setToggleSubTask] = useState(false);
   const [editingTitle, setEditingTitle] = useState(false);
   const [editingDescription, setEditingDescription] = useState(false);
-  const [title, setTitle] = useState<string>(Details?.name as string);
   const [description, setDescription] = useState<string>(Details?.description ?? '');
-  const [serviceFire, setServiceFire] = useState<boolean>(false);
   const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
 
   const { hubId, walletId, listId, taskId } = useParams();
+
+  const deleteAttachment = useMutation(useDeleteAttachment, {
+    onSuccess: () => {
+      // const remainingAttachments = attachments?.data.attachments.filter((item) => {
+      //   return item.id !== fileId;
+      // });
+      const ITEMS_QUERY_KEY = ['attachments'];
+      queryClient.invalidateQueries(ITEMS_QUERY_KEY);
+    }
+  });
 
   const editTaskMutation = useMutation(UseUpdateTaskService, {
     onSuccess: () => {
@@ -81,53 +97,68 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
     setEditingDescription(false);
   };
 
-  const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setTitle(event.target.value);
-  };
-
   const handleDescriptionChange = (value: string) => {
-    // const sanitizedDescription = DOMPurify.sanitize(value);
-    setDescription(value);
+    const pattern = /<a[^>]*>/gi;
+
+    const modifiedString = value.replace(pattern, (match) => {
+      return match.replace('>', ' class="text-blue-500 underline">');
+    });
+    console.log(modifiedString);
+
+    setDescription(modifiedString);
   };
-  const handleSubmit = async () => {
+
+  const handleDetailsSubmit = async (
+    e:
+      | React.KeyboardEvent<HTMLParagraphElement>
+      | React.FocusEvent<HTMLInputElement | HTMLParagraphElement | HTMLTextAreaElement | Element>
+      | undefined = undefined
+  ) => {
+    e && e.preventDefault();
     handleBlur();
-    setServiceFire(true);
-  };
-
-  const convertNewlinesToBreaks = (text: string) => {
-    return text
-      .split('\n')
-      .map((line, index) => (index === 0 ? line : `\n\n ${line}`))
-      .join('');
-  };
-
-  useEffect(() => {
-    if (taskId != undefined && serviceFire) {
-      editTaskMutation.mutateAsync({
-        name: title,
-        task_id: taskId,
-        description
-      });
-    } else if (walletId != undefined && serviceFire) {
-      editWalletMutation.mutateAsync({
-        walletName: title,
-        walletId: Details?.id,
-        description
-      });
-    } else if (listId != undefined && serviceFire) {
-      editListMutation.mutateAsync({
-        listName: title,
-        listId: Details?.id,
-        description
-      });
-    } else if (hubId && serviceFire) {
-      editHubMutation.mutateAsync({
-        name: title,
-        hubId: Details?.id,
-        description
-      });
+    try {
+      if (taskId != undefined) {
+        await editTaskMutation.mutateAsync({
+          name: inputRef.current?.innerText.trim() as string,
+          task_id: taskId,
+          description
+        });
+      } else if (walletId != undefined) {
+        await editWalletMutation.mutateAsync({
+          walletName: inputRef.current?.innerText.trim(),
+          walletId: Details?.id,
+          description
+        });
+      } else if (listId != undefined) {
+        await editListMutation.mutateAsync({
+          listName: inputRef.current?.innerText.trim(),
+          listId: Details?.id,
+          description
+        });
+      } else if (hubId) {
+        await editHubMutation.mutateAsync({
+          name: inputRef.current?.innerText.trim(),
+          hubId: Details?.id,
+          description
+        });
+      }
+    } catch {
+      return;
     }
-  }, [serviceFire]);
+  };
+  // const convertNewlinesToBreaks = (text: string) => {
+  //   return text
+  //     .split('\n')
+  //     .map((line, index) => (index === 0 ? line : `\n\n ${line}`))
+  //     .join('');
+  // };
+
+  const handleRemoveAttachment = async (id: string) => {
+    // setFileId(id);
+    await deleteAttachment.mutateAsync({
+      id
+    });
+  };
 
   return (
     <>
@@ -141,7 +172,7 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
         <section className="z-10 flex items-center justify-center space-x-3">
           <CustomReference />
           <ToolTip title="Share">
-            <Share taskId={Details?.id} taskName={title} />
+            <Share taskId={Details?.id} taskName={Details?.name} />
           </ToolTip>
           <EntitySettings />
         </section>
@@ -175,44 +206,39 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
         <div id="entity name">
           <label className="text-xs text-gray-500">Title</label>
           <div className="p-1 bg-gray-100 border border-white rounded-md cursor-text">
-            {editingTitle ? (
-              <form onSubmit={handleSubmit}>
-                <input
-                  type="text"
-                  value={title}
-                  onChange={handleTitleChange}
-                  onBlur={handleBlur}
-                  autoFocus
-                  className="w-full bg-transparent border-none rounded-md outline-none focus:outline-none"
-                />
-              </form>
-            ) : (
-              <p className="capitalize" onClick={() => setEditingTitle(true)}>
-                {title}
+            <VerticalScroll>
+              <p
+                ref={inputRef}
+                className="p-1 capitalize break-words max-h-52"
+                contentEditable={editingTitle}
+                onKeyDown={(e) => (e.key === 'Enter' ? handleDetailsSubmit(e) : null)}
+                onClick={() => setEditingTitle(true)}
+                onBlur={(e) => handleDetailsSubmit(e)}
+              >
+                {Details?.name}
               </p>
-            )}
+            </VerticalScroll>
           </div>
         </div>
         {/* description */}
         <div id="entity description" className="mt-5">
           <label className="text-xs text-gray-500">Description</label>
           <div
-            className="border bg-gray-100 border-white rounded-md h-20 cursor-text"
+            className="h-20 bg-gray-100 border border-white rounded-md cursor-text"
             onClick={() => setEditingDescription(true)}
           >
             {editingDescription ? (
-              <div className="w-full h-min">
-                <textarea
-                  autoFocus
-                  onChange={(e) => handleDescriptionChange(e.target.value)}
-                  value={description}
-                  onBlur={handleSubmit}
-                  className="w-full text-alsoit-gray-200 h-20 border-none focus:ring-1 focus:ring-alsoit-gray-75 rounded-md text-alsoit-text-lg font-semibold bg-alsoit-gray-50"
-                ></textarea>
+              <div className="w-full h-40 overflow-y-scroll">
+                <CKEditor
+                  editor={ClassicEditor}
+                  data={description}
+                  onChange={(event, editor) => handleDescriptionChange(editor.getData())}
+                  onBlur={() => handleDetailsSubmit()}
+                />
               </div>
             ) : (
-              <div className="capitalize h-20 overflow-scroll p-1.5">
-                <ReactMarkDown>{convertNewlinesToBreaks(description)}</ReactMarkDown>
+              <div className="h-20 overflow-scroll p-1.5">
+                <div dangerouslySetInnerHTML={{ __html: description }} />
               </div>
             )}
           </div>
@@ -224,14 +250,24 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
             {attachments?.data.attachments?.length ? (
               attachments?.data.attachments.map((file) => {
                 return (
-                  <FileIcons
-                    fileExtension={file.physical_file.file_format.extension}
-                    filePath={file.path}
-                    key={file.id}
-                    fileName={file.physical_file.display_name}
-                    height="h-10"
-                    width="w-10"
-                  />
+                  <div key={file.id} className="group/parent">
+                    <button
+                      className="items-center justify-center absolute w-5 h-5 text-white bg-black rounded-full hover:bg-red-500 hidden group-hover/parent:flex -mt-4 ml-6"
+                      style={{
+                        fontSize: '6px'
+                      }}
+                      onClick={() => handleRemoveAttachment(file.id)}
+                    >
+                      X
+                    </button>
+                    <FileIcons
+                      fileExtension={file.physical_file.file_format.extension}
+                      filePath={file.path}
+                      fileName={file.physical_file.display_name}
+                      height="h-10"
+                      width="w-10"
+                    />
+                  </div>
                 );
               })
             ) : (
@@ -254,11 +290,9 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
             <p>Dec 31 2022</p>
           </div>
         </div>
-
         <div className="mt-2">
           <MoreDetails />
         </div>
-
         {/* create subtask */}
         <div id="create subtask" className="mt-2">
           <div

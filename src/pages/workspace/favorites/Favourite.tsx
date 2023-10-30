@@ -28,6 +28,7 @@ function Favourite({ item }: nameType) {
   const navigate = useNavigate();
 
   const { showFavEditInput, triggerFavUpdate, favUpdateName } = useAppSelector((state) => state.hub);
+  const { activeView } = useAppSelector((state) => state.workspace);
 
   const [favName, setFavName] = useState<string>(item.name);
 
@@ -38,7 +39,7 @@ function Favourite({ item }: nameType) {
   });
 
   const handleLocation = () => {
-    const viewsUrl = generateViewsUrl(item.model_id, item) as string;
+    const viewsUrl = generateViewsUrl(item.model_id, activeView?.id as string, item) as string;
 
     dispatch(
       setActiveItem({
@@ -48,7 +49,7 @@ function Favourite({ item }: nameType) {
       })
     );
     dispatch(setShowPilot(true));
-    dispatch(setActiveTabId(pilotTabs.WATCHERS));
+    dispatch(setActiveTabId(pilotTabs.DETAILS));
 
     navigate(viewsUrl, {
       replace: true

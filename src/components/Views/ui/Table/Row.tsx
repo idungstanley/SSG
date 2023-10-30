@@ -15,7 +15,7 @@ import {
   THREE_SUBTASKS_LEVELS,
   TWO_SUBTASKS_LEVELS,
   setAssignOnHoverListId,
-  setAssignOnHoverTaskId,
+  setAssignOnHoverTask,
   setDefaultSubtaskId,
   setShowNewTaskField,
   setShowNewTaskId
@@ -130,6 +130,8 @@ export function Row({
     return false;
   }, [showSubTasks, subtasks, toggleAllSubtask, toggleAllSubtaskSplit, splitSubTaskLevels]);
 
+  const [hoverOn, setHoverOn] = useState(false);
+
   return (
     <>
       {/* current task */}
@@ -137,14 +139,18 @@ export function Row({
         style={style}
         className="relative contents group dNFlex"
         onMouseEnter={() => {
-          dispatch(setAssignOnHoverTaskId(task.id));
+          dispatch(setAssignOnHoverTask(task));
           dispatch(setAssignOnHoverListId(task.list_id ?? task.parent_id));
+          setHoverOn(true);
         }}
         onMouseLeave={() => {
-          dispatch(setAssignOnHoverTaskId(''));
+          dispatch(setAssignOnHoverTask(''));
+          setHoverOn(false);
         }}
       >
         <StickyCol
+          hoverOn={hoverOn}
+          setHoverOn={setHoverOn}
           showSubTasks={showChildren}
           setShowSubTasks={setShowSubTasks}
           style={{ zIndex: 1 }}
@@ -156,7 +162,6 @@ export function Row({
           onClose={handleClose as VoidFunction}
           paddingLeft={paddingLeft}
           tags={'tags' in task ? <TaskTag tags={task.tags} entity_id={task.id} entity_type="task" /> : null}
-          isLastSubtaskLevel={level >= MAX_SUBTASKS_LEVEL}
           isBlockedShowChildren={isBlockedShowChildren}
           dragElement={
             <div ref={setNodeRef} {...listeners} {...attributes}>
@@ -172,7 +177,7 @@ export function Row({
             {/* Copy */}
             <ToolTip title={isCopied === 0 ? 'Copy Task Name' : 'Copied'}>
               <button
-                className="p-1 bg-white border rounded-md opacity-0 group-hover:opacity-100"
+                className={`p-1 bg-white border rounded-md ${hoverOn ? 'opacity-100' : 'opacity-0'}`}
                 onClick={handleCopyTexts}
               >
                 <Copy />
@@ -181,7 +186,7 @@ export function Row({
             {/* effects */}
             <ToolTip title="Apply Effects">
               <button
-                className="p-1 bg-white border rounded-md opacity-0 group-hover:opacity-100"
+                className={`p-1 bg-white border rounded-md ${hoverOn ? 'opacity-100' : 'opacity-0'}`}
                 style={{ backgroundColor: 'orange' }}
                 onClick={(e) => e.stopPropagation()}
               >
@@ -193,7 +198,7 @@ export function Row({
             {'tags' in task ? (
               <ToolTip title="Tags">
                 <div
-                  className="bg-white border rounded-md opacity-0 group-hover:opacity-100"
+                  className={`bg-white border rounded-md ${hoverOn ? 'opacity-100' : 'opacity-0'}`}
                   onClick={(e) => e.preventDefault()}
                 >
                   <ManageTagsDropdown entityId={task.id} tagsArr={task.tags as Tag[]} entityType="task" />
@@ -202,10 +207,10 @@ export function Row({
             ) : null}
 
             {/* show create subtask field */}
-            {task.descendants_count < 1 && (
+            {task.descendants_count < 1 && level < MAX_SUBTASKS_LEVEL && (
               <ToolTip title="Subtask">
                 <button
-                  className="p-1 bg-white border rounded-md opacity-0 group-hover:opacity-100"
+                  className={`p-1 bg-white border rounded-md ${hoverOn ? 'opacity-100' : 'opacity-0'}`}
                   onClick={(e) => onShowAddSubtaskField(e, task.id)}
                 >
                   <SubtasksIcon className="w-3 h-3" />
@@ -214,7 +219,7 @@ export function Row({
             )}
             <ToolTip title="Enhance View">
               <button
-                className="p-1 pl-4 bg-white rounded-md opacity-0 group-hover:opacity-100"
+                className={`p-1 pl-4 bg-white rounded-md ${hoverOn ? 'opacity-100' : 'opacity-0'}`}
                 onClick={(e) => e.stopPropagation()}
               >
                 <Enhance className="w-3 h-3" style={{ color: 'orange' }} />

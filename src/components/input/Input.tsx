@@ -39,6 +39,7 @@ function Input({
       trailingClick();
     }
   };
+
   return (
     <div className="w-full">
       {label && (
@@ -53,8 +54,8 @@ function Input({
         {leadingIcon && (
           <div className="absolute inset-y-0 left-0 flex items-center pl-1.5 pointer-events-none">{leadingIcon}</div>
         )}
-
         <input
+          maxLength={2000}
           type={type}
           id={name}
           name={name}

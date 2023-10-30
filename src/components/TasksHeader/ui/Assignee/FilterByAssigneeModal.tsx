@@ -1,6 +1,5 @@
-import React, { Fragment, useRef, useState } from 'react';
-import { Menu, Transition } from '@headlessui/react';
-import ArrowDownFilled from '../../../../assets/icons/ArrowDownFilled';
+import React, { useRef, useState } from 'react';
+import { Menu as HeadMenu } from '@headlessui/react';
 import { useGetTeamMembers } from '../../../../features/settings/teamMembers/teamMemberService';
 import { useAppSelector, useAppDispatch } from '../../../../app/hooks';
 import AvatarWithInitials from '../../../avatar/AvatarWithInitials';
@@ -11,6 +10,8 @@ import { EllipsisHorizontalIcon, MagnifyingGlassIcon } from '@heroicons/react/24
 import AssigneeIcon from '../../../../assets/icons/Assignee';
 import { VerticalScroll } from '../../../ScrollableContainer/VerticalScroll';
 import AvatarWithImage from '../../../avatar/AvatarWithImage';
+import { Menu } from '@mui/material';
+import ArrowDrop from '../../../../assets/icons/ArrowDrop';
 
 const unassigned = {
   color: '#626262',
@@ -44,6 +45,7 @@ export default function FilterByAssigneeModal() {
   } = useAppSelector((state) => state.task);
 
   const [searchValue, setSearchValue] = useState<string>('');
+  const [dropdownEl, setDropdownEl] = useState<null | HTMLElement>(null);
 
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -113,27 +115,22 @@ export default function FilterByAssigneeModal() {
   };
 
   return (
-    <Menu as="div" className="relative inline-block text-left group">
-      <div className="relative">
-        <Menu.Button className="flex items-center">
-          <AssigneeIcon active={isAssignee && !meMode} />
-          <span>Assignee</span>
-          <ArrowDownFilled active={isAssignee && !meMode} />
-        </Menu.Button>
-      </div>
-      <Transition
-        as={Fragment}
-        enter="transition ease-out duration-100"
-        enterFrom="transform opacity-0 scale-95"
-        enterTo="transform opacity-100 scale-100"
-        leave="transition ease-in duration-75"
-        leaveFrom="transform opacity-100 scale-100"
-        leaveTo="transform opacity-0 scale-95"
+    <>
+      <div
+        className="flex items-center justify-center viewSettingsParent"
+        onClick={(e: React.MouseEvent<HTMLDivElement>) => setDropdownEl(e.currentTarget)}
       >
-        <Menu.Items
-          className="fixed mt-2 overflow-scroll origin-top-right bg-white rounded-md shadow-lg w-72 ring-1 ring-black ring-opacity-5 focus:outline-none"
-          style={{ zIndex: 3 }}
-        >
+        <HeadMenu>
+          <HeadMenu.Button className="flex items-center">
+            <AssigneeIcon active={isAssignee && !meMode} width={20} />
+            <span>Assignee</span>
+            <ArrowDrop color={isAssignee && !meMode ? '#BF01FE' : '#424242'} />
+          </HeadMenu.Button>
+        </HeadMenu>
+      </div>
+
+      <Menu anchorEl={dropdownEl} open={!!dropdownEl} onClose={() => setDropdownEl(null)} style={{ marginTop: '10px' }}>
+        <div className="w-72">
           <div className="container px-4 py-2 mx-auto">
             <div className="relative flex items-center w-full text-gray-500">
               <MagnifyingGlassIcon className="w-5 h-5" />
@@ -187,8 +184,8 @@ export default function FilterByAssigneeModal() {
               ))}
             </div>
           </VerticalScroll>
-        </Menu.Items>
-      </Transition>
-    </Menu>
+        </div>
+      </Menu>
+    </>
   );
 }

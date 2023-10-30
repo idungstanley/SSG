@@ -19,7 +19,7 @@ export default function EverythingPage() {
   const dispatch = useAppDispatch();
 
   const { hub } = useAppSelector((state) => state.hub);
-  const { tasks: tasksStore } = useAppSelector((state) => state.task);
+  const { tasks: tasksStore, scrollGroupView } = useAppSelector((state) => state.task);
 
   const [allHubsId, setAllHubsId] = useState<string[]>([]);
   const [currentHubIdInOrder, setCurrentHubIdInOrder] = useState<string>('');
@@ -86,7 +86,7 @@ export default function EverythingPage() {
             ))}
           </section>
         </VerticalScroll>
-        {Object.keys(lists).length > 1 && <GroupHorizontalScroll />}
+        {Object.keys(lists).length > 1 && scrollGroupView && <GroupHorizontalScroll />}
       </Page>
     </>
   );

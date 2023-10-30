@@ -24,7 +24,7 @@ import {
 } from '../../components/TasksHeader/ui/Filter/types/filters';
 import { DEFAULT_FILTERS_OPTION } from '../../components/TasksHeader/ui/Filter/config/filterConfig';
 import { ITeamMembersAndGroup } from '../settings/teamMembersAndGroups.interfaces';
-import { ItaskViews } from '../hubs/hubs.interfaces';
+import { IView } from '../hubs/hubs.interfaces';
 
 export interface ICustomField {
   id: string;
@@ -174,15 +174,14 @@ interface TaskState {
   selectedTasksArray: string[];
   selectedIndexListId: string | null;
   saveSettingLocal: { [key: string]: boolean } | null;
-  saveSettingList: ItaskViews | undefined;
+  saveSettingList: IView | undefined;
   saveSettingOnline: { [key: string]: boolean } | null;
-  comfortableView: boolean;
-  comfortableViewWrap: boolean;
   duplicateTaskObj: IDuplicateTaskObj;
   currentSelectedDuplicateArr: string[];
   verticalGrid: boolean;
   showNewTaskField: boolean;
   showNewTaskId: string;
+  scrollGroupView: boolean;
   singleLineView: boolean;
   escapeKey: boolean;
   hilightNewlyCreatedTask: boolean;
@@ -195,16 +194,16 @@ interface TaskState {
   verticalGridlinesTask: boolean;
   splitSubTaskState: boolean;
   splitSubTaskLevels: string[];
-  CompactViewWrap: boolean;
   triggerSaveSettings: boolean;
   triggerAutoSave: boolean;
   triggerSaveSettingsModal: boolean;
   meMode: boolean;
   autoSave: boolean;
   showTaskNavigation: boolean;
-  assignOnHoverTaskId: string;
+  assignOnHoverTask: Task | string;
   assignOnHoverListId: string;
   assignOnHoverState: boolean;
+  f2State: boolean;
   addNewTaskItem: boolean;
   selectedIndex: number | null;
   defaultSubtaskListId: null | string;
@@ -228,6 +227,7 @@ interface TaskState {
   showTaskUploadModal: boolean;
   subtaskDefaultStatusId: string | null;
   timerStatus: boolean;
+  estimatedTimeStatus: boolean;
   timeType: string;
   sortAbleArr: SortOption[];
   sortArr: string[];
@@ -242,6 +242,7 @@ interface TaskState {
   activeTaskColumn: ExtendedListColumnProps;
   timerDetails: ITimerDetails;
   duration: IDuration;
+  estimatedDuration: IDuration;
   recorderDuration: IDuration;
   period: number | undefined;
   recorderPeriod: number | undefined;
@@ -290,8 +291,6 @@ const initialState: TaskState = {
   taskColumns: [],
   hideTask: [],
   currentTaskId: null,
-  comfortableView: true,
-  comfortableViewWrap: false,
   showNewTaskField: false,
   meMode: false,
   escapeKey: false,
@@ -299,6 +298,7 @@ const initialState: TaskState = {
   copyNewlyCreatedTask: false,
   autoSave: false,
   showNewTaskId: '',
+  scrollGroupView: false,
   singleLineView: false,
   saveSettingLocal: null,
   saveSettingList: undefined,
@@ -327,11 +327,11 @@ const initialState: TaskState = {
   splitSubTaskLevels: [],
   separateSubtasksMode: false,
   CompactView: false,
-  CompactViewWrap: false,
   showTaskNavigation: false,
-  assignOnHoverTaskId: '',
+  assignOnHoverTask: '',
   assignOnHoverListId: '',
   assignOnHoverState: false,
+  f2State: false,
   addNewTaskItem: false,
   closeTaskListView: true,
   selectedIndex: null,
@@ -355,6 +355,7 @@ const initialState: TaskState = {
   groupByStatus: 'status',
   showTaskUploadModal: false,
   timerStatus: false,
+  estimatedTimeStatus: false,
   timeType: 'clock',
   sortAbleArr: [],
   sortArr: [],
@@ -369,6 +370,7 @@ const initialState: TaskState = {
   activeTaskColumn: { id: '', field: '', value: '', hidden: false, defaulField: false },
   timerDetails: { description: '', isBillable: false, label: '', tags: '' },
   duration: { s: 0, m: 0, h: 0 },
+  estimatedDuration: { s: 0, m: 0, h: 0 },
   recorderDuration: { s: 0, m: 0, h: 0 },
   period: undefined,
   recorderPeriod: undefined,
@@ -473,7 +475,7 @@ export const taskSlice = createSlice({
     setSaveSettingLocal(state, action: PayloadAction<{ [key: string]: boolean } | null>) {
       state.saveSettingLocal = action.payload;
     },
-    setSaveSettingList(state, action: PayloadAction<ItaskViews | undefined>) {
+    setSaveSettingList(state, action: PayloadAction<IView | undefined>) {
       state.saveSettingList = action.payload;
     },
     setSaveSettingOnline(state, action: PayloadAction<{ [key: string]: boolean } | null>) {
@@ -533,9 +535,6 @@ export const taskSlice = createSlice({
             })
       };
     },
-    getComfortableView(state, action: PayloadAction<boolean>) {
-      state.comfortableView = action.payload;
-    },
     setTriggerSaveSettings(state, action: PayloadAction<boolean>) {
       state.triggerSaveSettings = action.payload;
     },
@@ -547,9 +546,6 @@ export const taskSlice = createSlice({
     },
     setDragToBecomeSubTask(state, action: PayloadAction<boolean>) {
       state.dragToBecomeSubTask = action.payload;
-    },
-    getComfortableViewWrap(state, action: PayloadAction<boolean>) {
-      state.comfortableViewWrap = action.payload;
     },
     getCompactView(state, action: PayloadAction<boolean>) {
       state.CompactView = action.payload;
@@ -583,14 +579,17 @@ export const taskSlice = createSlice({
     setNewTaskPriority(state, action: PayloadAction<string>) {
       state.newTaskPriority = action.payload;
     },
-    setAssignOnHoverTaskId(state, action: PayloadAction<string>) {
-      state.assignOnHoverTaskId = action.payload;
+    setAssignOnHoverTask(state, action: PayloadAction<string | Task>) {
+      state.assignOnHoverTask = action.payload;
     },
     setAssignOnHoverListId(state, action: PayloadAction<string>) {
       state.assignOnHoverListId = action.payload;
     },
     setAssignOnHoverState(state, action: PayloadAction<boolean>) {
       state.assignOnHoverState = action.payload;
+    },
+    setF2State(state, action: PayloadAction<boolean>) {
+      state.f2State = action.payload;
     },
     getTaskUpperCase(state, action: PayloadAction<boolean>) {
       state.taskUpperCase = action.payload;
@@ -610,14 +609,14 @@ export const taskSlice = createSlice({
     setSelectedIndexListId(state, action: PayloadAction<string | null>) {
       state.selectedIndexListId = action.payload;
     },
+    getScrollGroupView(state, action: PayloadAction<boolean>) {
+      state.scrollGroupView = action.payload;
+    },
     getSingleLineView(state, action: PayloadAction<boolean>) {
       state.singleLineView = action.payload;
     },
     getVerticalGrid(state, action: PayloadAction<boolean>) {
       state.verticalGrid = action.payload;
-    },
-    getCompactViewWrap(state, action: PayloadAction<boolean>) {
-      state.CompactViewWrap = action.payload;
     },
     setAddNewTaskItem(state, action: PayloadAction<boolean>) {
       state.addNewTaskItem = action.payload;
@@ -681,6 +680,9 @@ export const taskSlice = createSlice({
     setTimerStatus(state, action: PayloadAction<boolean>) {
       state.timerStatus = action.payload;
     },
+    setEstimatedTimeStatus(state, action: PayloadAction<boolean>) {
+      state.estimatedTimeStatus = action.payload;
+    },
     setTimeType(state, action: PayloadAction<string>) {
       state.timeType = action.payload;
     },
@@ -718,6 +720,9 @@ export const taskSlice = createSlice({
     },
     setUpdateTimerDuration(state, action: PayloadAction<IDuration>) {
       state.duration = action.payload;
+    },
+    setEstimatedDuration(state, action: PayloadAction<IDuration>) {
+      state.estimatedDuration = action.payload;
     },
     setUpdateRecoderDuration(state, action: PayloadAction<IDuration>) {
       state.recorderDuration = action.payload;
@@ -785,11 +790,10 @@ export const {
   setHilightNewlyCreatedTask,
   setCopyNewlyCreatedTask,
   getTaskColumns,
-  getComfortableView,
-  getComfortableViewWrap,
   getVerticalGrid,
   setPreferenceState,
   setUserSettingsProfile,
+  getScrollGroupView,
   getSingleLineView,
   getTaskUpperCase,
   setDuplicateTaskObj,
@@ -798,7 +802,6 @@ export const {
   getSplitSubTask,
   getSplitSubTaskLevels,
   getCompactView,
-  getCompactViewWrap,
   setSelectedIndex,
   setSelectedIndexStatus,
   setSelectedListIds,
@@ -829,9 +832,10 @@ export const {
   setGetSubTaskId,
   hideTaskColumns,
   setSubtaskDefaultStatusId,
-  setAssignOnHoverTaskId,
+  setAssignOnHoverTask,
   setAssignOnHoverListId,
   setAssignOnHoverState,
+  setF2State,
   setUpdateEntries,
   setTriggerSaveSettingsModal,
   setSaveSettingOnline,
@@ -841,6 +845,7 @@ export const {
   setGroupByStatus,
   setShowTaskUploadModal,
   setTimerStatus,
+  setEstimatedTimeStatus,
   setTimeType,
   setTimerDetails,
   setSortArray,
@@ -854,6 +859,7 @@ export const {
   setUpdateCords,
   setActiveTaskColumn,
   setUpdateTimerDuration,
+  setEstimatedDuration,
   setUpdateRecoderDuration,
   setRecorderInterval,
   setStopTimer,

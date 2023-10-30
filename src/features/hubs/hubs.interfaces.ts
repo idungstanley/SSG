@@ -17,10 +17,11 @@ export interface IHub {
   description: string;
 }
 
-export interface ItaskViews {
+export interface IView {
   created_at: string;
   id: string;
   is_required: number;
+  is_pinned: number;
   name: string;
   team_member_id: null;
   type: string;
@@ -44,7 +45,7 @@ export interface IHubDetails {
   tags?: [];
   status: Status;
   priority?: string | null | undefined;
-  task_views: ItaskViews[];
+  task_views: IView[];
   task_statuses: ITask_statuses[];
   custom_field_columns: IField[];
 }

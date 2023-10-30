@@ -9,6 +9,7 @@ import {
 } from './workspace.interfaces';
 import { IActivityLog } from '../general/history/history.interfaces';
 import dayjs, { Dayjs } from 'dayjs';
+import { IView } from '../hubs/hubs.interfaces';
 
 const initialActivePlaceId: number | null = (JSON.parse(localStorage.getItem('activePlaceIdLocale') as string) ||
   null) as number | null;
@@ -82,6 +83,7 @@ interface workspaceState {
   isFavoritePinned: boolean;
   activeHotkeyIds: string[];
   nestedTimeEntityId: string | null;
+  activeView: IView | null;
 }
 
 const initialState: workspaceState = {
@@ -130,8 +132,8 @@ const initialState: workspaceState = {
   createWlLink: false,
   workspaceData: undefined,
   activeSubRecordsTabId: 0,
-  recorderLastMemory: { activeTabId: '', workSpaceId: '', listId: '', hubId: '', subhubId: '', taskId: '' },
-  timerLastMemory: { activeTabId: '', workSpaceId: '', listId: '', hubId: '', subhubId: '', taskId: '' },
+  recorderLastMemory: { activeTabId: '', workSpaceId: '', listId: '', hubId: '', subhubId: '', taskId: '', viewId: '' },
+  timerLastMemory: { activeTabId: '', workSpaceId: '', listId: '', hubId: '', subhubId: '', taskId: '', viewId: '' },
   activityArray: [],
   logType: 'activity',
   activeLogTab: 'activity',
@@ -146,7 +148,8 @@ const initialState: workspaceState = {
   draggableActiveStatusId: null,
   isFavoritePinned: false,
   activeHotkeyIds: hotkeyIdsFromLS,
-  nestedTimeEntityId: null
+  nestedTimeEntityId: null,
+  activeView: null
 };
 
 export const wsSlice = createSlice({
@@ -330,14 +333,14 @@ export const wsSlice = createSlice({
       state.timerLastMemory = action.payload;
     },
     resetWorkSpace(state, action: PayloadAction<IRecorderLastMemory | ITimerLastMemory>) {
-      const { activeTabId, hubId, listId } = action.payload;
+      const { activeTabId, hubId, listId, taskId } = action.payload;
       activeTabId
-        ? state.activeTabId === activeTabId
+        ? (state.activeTabId = activeTabId)
         : hubId
-        ? state.activeItemId === hubId
+        ? (state.activeItemId = hubId)
         : listId
-        ? state.activeItemId === listId
-        : '';
+        ? (state.activeItemId = listId)
+        : (state.activeItemId = taskId as string);
     },
     setActivityArray(state, action: PayloadAction<IActivityLog[]>) {
       state.activityArray = action.payload;
@@ -368,6 +371,9 @@ export const wsSlice = createSlice({
     },
     setNestedTimeEntityId(state, action: PayloadAction<string | null>) {
       state.nestedTimeEntityId = action.payload;
+    },
+    setActiveView(state, action: PayloadAction<IView>) {
+      state.activeView = action.payload;
     }
   }
 });
@@ -433,7 +439,8 @@ export const {
   setWorkSpaceSettingsObj,
   setDraggableActiveStatusId,
   setActiveHotkeyIds,
-  setNestedTimeEntityId
+  setNestedTimeEntityId,
+  setActiveView
 } = wsSlice.actions;
 
 export default wsSlice.reducer;

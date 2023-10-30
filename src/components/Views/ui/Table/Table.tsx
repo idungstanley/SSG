@@ -7,10 +7,8 @@ import {
   setCurrTeamMemId,
   setEscapeKey,
   setStatusId,
-  setSubtaskDefaultStatusId,
-  setUpdateCords
+  setSubtaskDefaultStatusId
 } from '../../../../features/task/taskSlice';
-import { useScroll } from '../../../../hooks/useScroll';
 import { listColumnProps } from '../../../../pages/workspace/tasks/component/views/ListColumns';
 import { generateGrid } from '../../lib';
 import { ScrollableHorizontalListsContainer } from '../../../ScrollableContainer/ScrollableHorizontalListsContainer';
@@ -20,6 +18,7 @@ import { Row } from './Row';
 import { ITask_statuses } from '../../../../features/list/list.interfaces';
 import { IListColor } from '../List/List';
 import NewTaskTemplate from './newTaskTemplate/NewTaskTemplate';
+import LightenColor from '../List/lightenColor/LightenColor';
 
 interface TableProps {
   heads: listColumnProps[];
@@ -47,6 +46,7 @@ export function Table({ heads, data, label, listName, listColor, isBlockedShowCh
   const [collapseTasks, setCollapseTasks] = useState(false);
 
   const tableElement = useRef<HTMLTableElement>(null);
+  const tableHeadElement = useRef<HTMLTableElement>(null);
   const taskLength = data.length;
 
   const columns = heads.filter((i) => !i.hidden);
@@ -111,21 +111,27 @@ export function Table({ heads, data, label, listName, listColor, isBlockedShowCh
     setShowNewTaskField(true);
   };
 
-  const onScroll = useScroll(() => dispatch(setUpdateCords()));
-
   const draggableItem = draggableItemId ? data.find((i) => i.id === draggableItemId) : null;
 
+  const handleScrollLeft = (value: number) => {
+    if (tableHeadElement.current && value >= 0) {
+      tableHeadElement.current.scrollTo({ left: value });
+    }
+  };
+
   return (
-    <ScrollableHorizontalListsContainer onScroll={onScroll} ListColor={listColor}>
-      {/* draggable item */}{' '}
-      {draggableItem ? (
-        <DragOverlay>
-          <OverlayRow columns={columns} task={draggableItem} />
-        </DragOverlay>
-      ) : null}
-      <div className="py-2 table-container" id={label}>
+    <>
+      <div
+        className="sticky top-0 mr-2 pl-2 pt-2 table-container overflow-hidden z-10"
+        style={{
+          backgroundColor: LightenColor(
+            listColor?.outerColour === null ? 'black' : (listColor?.outerColour as string),
+            0.95
+          )
+        }}
+        ref={tableHeadElement}
+      >
         <table
-          onScroll={splitSubTaskMode ? () => null : onScroll}
           style={
             !collapseTasks
               ? {
@@ -135,7 +141,6 @@ export function Table({ heads, data, label, listName, listColor, isBlockedShowCh
               : undefined
           }
           className="w-full"
-          ref={tableElement}
         >
           <Head
             collapseTasks={collapseTasks}
@@ -149,43 +154,67 @@ export function Table({ heads, data, label, listName, listColor, isBlockedShowCh
             listId={data[0].list_id}
             groupedTask={data}
           />
-          {/* rows */}
-          {!collapseTasks ? (
-            <tbody className="contents">
-              {dataSpread.length ? (
-                dataSpread.map((task, index) =>
-                  'tags' in task ? (
-                    <Row
-                      key={task.id}
-                      columns={columns}
-                      task={task as ITaskFullList}
-                      listId={task.list_id as string}
-                      taskIndex={index}
-                      isListParent={true}
-                      parentId={listId}
-                      taskStatusId={statusId}
-                      handleClose={handleClose}
-                      level={0}
-                      isBlockedShowChildren={isBlockedShowChildren}
-                    />
-                  ) : null
-                )
-              ) : (
-                <h1 className="p-5 text-center">No tasks</h1>
-              )}
-            </tbody>
-          ) : null}
-
-          {/* add subtask button */}
-          {!showNewTaskField && !splitSubTaskMode ? (
-            <tbody className="h-5">
-              <tr onClick={() => handleToggleNewTask()} className="absolute left-0 p-1.5 pl-16 text-left w-fit text-xs">
-                <td className="font-semibold cursor-pointer alsoit-gray-300">+ New Task</td>
-              </tr>
-            </tbody>
-          ) : null}
         </table>
       </div>
-    </ScrollableHorizontalListsContainer>
+      <ScrollableHorizontalListsContainer ListColor={listColor} returnScrollLeft={handleScrollLeft}>
+        {/* draggable item */}
+        <DragOverlay dropAnimation={null}>
+          {draggableItem ? <OverlayRow columns={columns} task={draggableItem} /> : null}
+        </DragOverlay>
+        <div className="table-container" id={label}>
+          <table
+            style={
+              !collapseTasks
+                ? {
+                    display: 'grid',
+                    gridTemplateColumns: generateGrid(columns.length)
+                  }
+                : undefined
+            }
+            className="w-full"
+            ref={tableElement}
+          >
+            {/* rows */}
+            {!collapseTasks ? (
+              <tbody className="contents">
+                {dataSpread.length ? (
+                  dataSpread.map((task, index) =>
+                    'tags' in task ? (
+                      <Row
+                        key={task.id}
+                        columns={columns}
+                        task={task as ITaskFullList}
+                        listId={task.list_id as string}
+                        taskIndex={index}
+                        isListParent={true}
+                        parentId={listId}
+                        taskStatusId={statusId}
+                        handleClose={handleClose}
+                        level={0}
+                        isBlockedShowChildren={isBlockedShowChildren}
+                      />
+                    ) : null
+                  )
+                ) : (
+                  <h1 className="p-5 text-center">No tasks</h1>
+                )}
+              </tbody>
+            ) : null}
+
+            {/* add subtask button */}
+            {!showNewTaskField && !splitSubTaskMode ? (
+              <tbody className="h-5">
+                <tr
+                  onClick={() => handleToggleNewTask()}
+                  className="absolute left-0 p-1.5 pl-16 text-left w-fit text-xs"
+                >
+                  <td className="font-semibold cursor-pointer alsoit-gray-300">+ New Task</td>
+                </tr>
+              </tbody>
+            ) : null}
+          </table>
+        </div>
+      </ScrollableHorizontalListsContainer>
+    </>
   );
 }

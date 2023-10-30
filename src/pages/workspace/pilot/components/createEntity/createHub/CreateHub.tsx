@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Checkbox, Input } from '../../../../../../components';
+import { Button, Input } from '../../../../../../components';
 import { useMutation } from '@tanstack/react-query';
 import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
 import { createHubService, useGetHubChildren } from '../../../../../../features/hubs/hubService';
@@ -17,9 +17,7 @@ import {
   setShowOverlay
 } from '../../../../../../features/workspace/workspaceSlice';
 import { EntityType } from '../../../../../../utils/EntityTypes/EntityType';
-import Assignee from '../../../../tasks/assignTask/Assignee';
 import Wand from '../../../../../../assets/icons/Wand';
-import ArrowDown from '../../../../../../assets/icons/ArrowDown';
 import { ListColourProps } from '../../../../../../components/tasks/ListItem';
 import { displayPrompt, setVisibility } from '../../../../../../features/general/prompt/promptSlice';
 import { createHubManager } from '../../../../../../managers/Hub';
@@ -38,10 +36,11 @@ export default function CreateHub() {
   const navigate = useNavigate();
 
   const { selectedTreeDetails, currHubId, hub } = useAppSelector((state) => state.hub);
-
-  const [paletteColor, setPaletteColor] = useState<string | ListColourProps | undefined | null>('');
-  const [showPalette, setShowPalette] = useState<null | HTMLDivElement>(null);
+  const { activeView } = useAppSelector((state) => state.workspace);
   const { currentWorkspaceId: workSpaceId } = useAppSelector((state) => state.auth);
+
+  const [paletteColor, setPaletteColor] = useState<string | ListColourProps | undefined | null>('blue');
+  const [showPalette, setShowPalette] = useState<null | HTMLDivElement>(null);
 
   const { type, id } = selectedTreeDetails;
   const { data } = useGetHubChildren({
@@ -54,7 +53,7 @@ export default function CreateHub() {
     onSuccess: (data) => {
       const listDetails = data?.data.hub;
       const routeVariable = id ? 'tasks/sh' : 'tasks/h';
-      navigate(`/${workSpaceId}/${routeVariable}/${listDetails.id}`, {
+      navigate(`/${workSpaceId}/${routeVariable}/${listDetails.id}/v/${activeView?.id}`, {
         replace: true
       });
       dispatch(
@@ -171,7 +170,16 @@ export default function CreateHub() {
       </div>
       <div className="flex flex-col p-4 space-y-2 border border-gray-200 rounded bg-alsoit-gray-50">
         <div className="relative flex">
-          <Input placeholder="Hub Name" name="name" value={name} type="text" onChange={handleHubChange} />
+          <Input
+            placeholder="Hub Name"
+            name="name"
+            value={name}
+            type="text"
+            onChange={handleHubChange}
+            leadingIcon={
+              <span className="w-6 h-6 p-2 rounded" style={{ backgroundColor: paletteColor as string }}></span>
+            }
+          />
           <div
             className="absolute flex items-center cursor-pointer right-2 top-3"
             onClick={(e) => handleShowPalette(e)}
@@ -179,32 +187,20 @@ export default function CreateHub() {
             <Wand />
           </div>
         </div>
-        <div className="flex items-center justify-between w-full h-10 p-1 bg-white border rounded">
-          <span>Manage this Hub with other application</span>
-          <ArrowDown className="w-3 h-3" />
-        </div>
-        <div className="flex items-center justify-between w-full h-10 p-1 bg-white border rounded">
-          <span>Share with public</span>
-          <Assignee option="share" />
-        </div>
-        <div className="flex flex-col space-y-2">
-          <span className="font-bold">Entity Description</span>
-          <Checkbox
-            checked={true}
-            onChange={() => ({})}
-            description="Host other entities list wallets and lists"
-            height="5"
-            width="5"
-          />
-          <Checkbox checked={false} onChange={() => ({})} description="Host other entities" height="5" width="5" />
-          <Checkbox checked={false} onChange={() => ({})} description="Host other entities" height="5" width="5" />
-        </div>
         <AlsoitMenuDropdown handleClose={handleClosePalette} anchorEl={showPalette}>
           <ColorPalette handleClick={handlePaletteColor} />
         </AlsoitMenuDropdown>
       </div>
       <div className="flex justify-between pt-2 space-x-3">
-        <Button buttonStyle="white" onClick={onClose} loading={false} label="Cancel" width={20} height="h-7" />
+        <Button
+          buttonStyle="white"
+          onClick={onClose}
+          loading={false}
+          label="Cancel"
+          width={20}
+          height="h-7"
+          labelSize="text-sm"
+        />
         <Button
           buttonStyle="primary"
           onClick={onSubmit}
@@ -212,6 +208,7 @@ export default function CreateHub() {
           padding="py-2 px-2"
           height="h-7"
           width="w-fit"
+          labelSize="text-sm"
         />
       </div>
     </div>

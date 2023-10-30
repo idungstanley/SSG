@@ -22,14 +22,16 @@ interface physicalFile {
   file_format: fileFormat;
 }
 
+export interface attachmentData {
+  id: string;
+  physical_file: physicalFile;
+  path: string;
+  team_member: ITeamMember;
+}
+
 export interface IAttachmentsRes {
   data: {
-    attachments: {
-      id: string;
-      physical_file: physicalFile;
-      path: string;
-      team_member: ITeamMember;
-    }[];
+    attachments: attachmentData[];
   };
 }
 
@@ -109,7 +111,7 @@ export interface IStatus {
   model_id: string;
   model_type: string;
   name: string;
-  position: string;
+  position: number;
   type: string;
   updated_at: string;
 }
@@ -118,7 +120,7 @@ export interface Status {
   id: string;
   name: string;
   color: string;
-  position: string;
+  position: number;
   type: 'open' | string;
   model_id: string;
   model_type: 'hub' | string;
@@ -162,10 +164,10 @@ export interface ITaskFullList {
   checklists?: ICheckListRes[];
   listColor?: unknown;
   list?: {
-    id: string;
-    name: string;
-    parents?: IParent;
-    color?: string;
+    color: string;
+    id?: string | undefined;
+    name?: string | undefined;
+    parents?: IParent | undefined;
   };
 }
 

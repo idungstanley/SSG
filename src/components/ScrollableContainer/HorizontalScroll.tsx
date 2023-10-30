@@ -14,9 +14,21 @@ export function HorizontalScroll({ children, ...props }: CustomScrollableContain
 
   // update size is pilot is visible / invisible
   const { show: showFullPilot } = useAppSelector((state) => state.slideOver.pilotSideOver);
-  const { showMore, currentItemId, showTabLabel, isResize, activeItemId, activePlaceId } = useAppSelector(
-    (state) => state.workspace
-  );
+  const { tasks, subtasks } = useAppSelector((state) => state.task);
+  const {
+    showMore,
+    currentItemId,
+    activeTabId,
+    activeSubDetailsTabId,
+    activeSubTimeClockTabId,
+    activeSubHubManagerTabId,
+    activeSubCommunicationTabId,
+    showTabLabel,
+    isResize,
+    activeItemId,
+    activePlaceId
+  } = useAppSelector((state) => state.workspace);
+  const { sidebarWidth, pilotWidth, extendedBarWidth } = useAppSelector((state) => state.account);
 
   const [thumbWidth, setThumbWidth] = useState(DEFAULT_THUMB_WIDTH);
   const [isThumbVisible, setIsThumbVisible] = useState(true);
@@ -85,7 +97,6 @@ export function HorizontalScroll({ children, ...props }: CustomScrollableContain
 
   const handleThumbMousemove = useCallback(
     (e: MouseEvent) => {
-      e.preventDefault();
       e.stopPropagation();
       if (isDragging && contentRef.current && scrollStartPosition) {
         const { scrollWidth: contentWidth, offsetWidth: contentOffsetWidth } = contentRef.current;
@@ -156,7 +167,18 @@ export function HorizontalScroll({ children, ...props }: CustomScrollableContain
     showMore,
     currentItemId,
     activeItemId,
-    activePlaceId
+    activePlaceId,
+    activeTabId,
+    activeSubDetailsTabId,
+    activeSubTimeClockTabId,
+    activeSubHubManagerTabId,
+    activeSubCommunicationTabId,
+    tasks,
+    subtasks,
+    thumbWidth,
+    sidebarWidth,
+    pilotWidth,
+    extendedBarWidth
   ]);
 
   // Listen for mouse events to handle scrolling by dragging the thumb
@@ -201,15 +223,15 @@ export function HorizontalScroll({ children, ...props }: CustomScrollableContain
 
   return (
     <>
-      <div className="relative w-full p-2 overflow-hidden">
+      <div className="relative w-full p-1 overflow-hidden">
         <div className="scrollbar-hide" ref={contentRef} {...props}>
           {children}
         </div>
       </div>
       {isThumbVisible && (
-        <div className="sticky bottom-0 z-10 grid w-full grid-cols-2 pt-4 pr-2 group">
+        <div className="sticky bottom-0 z-10 grid w-full grid-cols-2 pr-2 group">
           <div />
-          <div className="flex flex-row items-center mb-4 space-x-2">
+          <div className="flex flex-row items-center mb-1 space-x-2">
             {renderScrollArrows()}
             <div className="relative flex flex-grow block w-full h-2">
               <div
