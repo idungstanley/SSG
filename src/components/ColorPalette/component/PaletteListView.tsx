@@ -39,9 +39,9 @@ export default function PaletteListView() {
 
   return (
     <VerticalScroll>
-      <div className="w-full h-56 table-container">
-        <table className="w-full" style={{ display: 'grid', gridTemplateColumns: '20px 60px 82px 115px auto' }}>
-          <tr className="w-full h-6 text-xs text-left contents group">
+      <div className="w-full h-56 table-container" style={{ fontSize: '10px' }}>
+        <table className="w-full" style={{ display: 'grid', gridTemplateColumns: '20px 50px 82px 115px auto' }}>
+          <tr className="w-full h-6 text-left contents group">
             <th className="p-2 text-center">
               <RoundedCheckbox
                 onChange={handleGroupSelect}
@@ -171,7 +171,7 @@ function Row({ item, key }: { item: IPaletteData; key: number }) {
   ];
 
   return (
-    <tr className="w-full bg-white contents group" key={key}>
+    <tr className="w-full bg-white contents group" key={key} style={{ fontSize: '10px' }}>
       <td className="p-2">
         <RoundedCheckbox
           onChange={onChange}
