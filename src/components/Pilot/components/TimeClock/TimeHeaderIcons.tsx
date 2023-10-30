@@ -10,11 +10,7 @@ import { TimeShowDropDown } from './TimeShowDropDown';
 import { useAppSelector } from '../../../../app/hooks';
 import { TeamMemberFilter } from './TeamMember';
 
-interface Props {
-  extended?: boolean;
-}
-
-export function HeaderIcons({ extended }: Props) {
+export function HeaderIcons() {
   const { nestedTimeEntityId } = useAppSelector((state) => state.workspace);
 
   const [dropDown, setDropDown] = useState<{ show: boolean; filter: boolean; assignee: boolean; me: boolean }>({
@@ -35,7 +31,6 @@ export function HeaderIcons({ extended }: Props) {
         onClick={() => setDropDown((prev) => ({ ...prev, show: !prev.show }))}
       >
         <ShowIcon color="gray" className="w-4 h-4" />
-        <ArrowDownFilled dimensions={{ width: 8, height: 8 }} />
         {dropDown.show && (
           <TabsDropDown
             styles="w-72 right-0 top-5 px-1.5"
@@ -51,11 +46,9 @@ export function HeaderIcons({ extended }: Props) {
       <div className="flex items-center p-1 bg-white rounded-md cursor-pointer hover:bg-alsoit-purple-50">
         <FilterListIcon active={false} color="orange" className="w-4 h-4" />
       </div>
-      {extended && (
-        <div className={'p-1 rounded-md flex items-center bg-white hover:bg-alsoit-purple-50 cursor-pointer'}>
-          <Me active={false} className="w-4 h-4" />
-        </div>
-      )}
+      <div className={'p-1 rounded-md flex items-center bg-white hover:bg-alsoit-purple-50 cursor-pointer'}>
+        <Me active={false} className="w-4 h-4" />
+      </div>
       <div
         className={
           'relative p-1 rounded-md flex -space-x-1 items-center justify-between bg-white gap-2 hover:bg-alsoit-purple-50 cursor-pointer'

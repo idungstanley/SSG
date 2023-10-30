@@ -5,7 +5,7 @@ export function TotalTime({ totalDuration }: { totalDuration?: number }) {
   if (totalDuration) {
     const duration = dayjs.duration(totalDuration * 1000);
     return (
-      <div className="flex items-center justify-center w-full tracking-widest text-alsoit-text-md z-30">
+      <div className="flex items-center justify-center text-center w-full tracking-widest text-alsoit-text-md z-30">
         <div className="w-1/3">
           <TotalTimeIcon className="w-4 h-4" />
         </div>
@@ -18,7 +18,7 @@ export function TotalTime({ totalDuration }: { totalDuration?: number }) {
     );
   }
   return (
-    <span className="flex items-center justify-center w-12 tracking-wide text-alsoit-text-md z-30">{`${String(
+    <span className="flex items-center justify-center w-full tracking-wide text-alsoit-text-md z-30">{`${String(
       0
     ).padStart(2, '0')}:${String(0).padStart(2, '0')}:${String(0).padStart(2, '0')}`}</span>
   );

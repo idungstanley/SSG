@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import ArrowDown from '../../../../assets/icons/ArrowDown';
-import { GetTimeEntriesService } from '../../../../features/task/taskService';
+import { useTimeEntriesQuery } from '../../../../features/task/taskService';
 import { EntityType } from '../../../../utils/EntityTypes/EntityType';
 import CollapseIcon from '../../../Views/ui/collapseIcon/CollapseIcon';
 import ArrowUp from '../../../../assets/icons/ArrowUp';
@@ -32,9 +32,9 @@ export function CombinedTime() {
   });
 
   // Get currently active timers
-  const { data: getCurrent } = GetTimeEntriesService({
-    itemId: activeItemId,
-    trigger: activeItemType === EntityType.subHub ? EntityType.hub : activeItemType,
+  const { data: getCurrent } = useTimeEntriesQuery({
+    id: activeItemId,
+    type: activeItemType === EntityType.subHub ? EntityType.hub : activeItemType,
     is_active: 1
   });
 
@@ -87,7 +87,7 @@ export function CombinedTime() {
                     </TabsDropDown>
                   )}
                 </label>
-                <div className="flex items-center relative border bg-white rounded px-1.5 border-alsoit-success w-20 h-6">
+                <div className="flex items-center relative border bg-white rounded px-1.5 border-alsoit-success w-20 h-6 mt-1.5">
                   <TotalTime totalDuration={getTimeEntries?.data.total_duration} />
                   <span className="absolute -top-1.5 bg-white px-0.5 text-alsoit-text-sm">Total Time</span>
                 </div>
@@ -96,7 +96,7 @@ export function CombinedTime() {
               <div className="w-3/6">
                 {activeClockTab === TIME_TABS.realTime && (
                   <div className="flex items-center space-x-0.5">
-                    <div className="relative flex items-center px-0.5 py-1 bg-white border rounded border-alsoit-success w-36 h-6">
+                    <div className="relative flex items-center px-0.5 py-1 bg-white border rounded border-alsoit-success w-36 h-6 mt-1">
                       <RealTime />
                       <span className="absolute -top-1.5 left-1.5 bg-white px-0.5 text-alsoit-text-sm">My Time</span>
                     </div>
@@ -111,8 +111,8 @@ export function CombinedTime() {
       {/* Manual Time */}
       {activeClockTab === TIME_TABS.manual && <ManualTime />}
       {/* Active Time Log entries */}
-      <div className="pt-7 px-1.5 w-full">
-        {timerStatus && (
+      {timerStatus && (
+        <div className="pt-7 px-1.5 w-full h-max">
           <div className="flex flex-col">
             <div className="flex items-center space-x-2 w-full">
               <span className="flex items-center justify-center w-20 font-semibold uppercase text-alsoit-text-xi">
@@ -127,8 +127,8 @@ export function CombinedTime() {
             </div>
             <ActiveTimeStrip timeData={getCurrent?.data.time_entries} />
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 }

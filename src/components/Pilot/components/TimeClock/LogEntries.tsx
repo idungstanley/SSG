@@ -1,16 +1,14 @@
 import dayjs from 'dayjs';
 import { IEntries } from '../../../../features/task/interface.tasks';
-import ToolTip from '../../../Tooltip/Tooltip';
 import AvatarWithImage from '../../../avatar/AvatarWithImage';
 import AvatarWithInitials from '../../../avatar/AvatarWithInitials';
 import ThreeDotIcon from '../../../../assets/icons/ThreeDotIcon';
 import { useState } from 'react';
-import { TabsDropDown } from './TabsDropDown';
 import { TIME_INVENTORY_ACTIONS } from '../../../../utils/Constants/TimeClockConstants';
+import { useDeleteTimeEntryMutation } from '../../../../features/task/taskService';
 import EditIcon from '../../../../assets/icons/Edit';
 import { BiDuplicate } from 'react-icons/bi';
-import TrashIcon from '../../../../assets/icons/delete';
-import { useDeleteTimeEntryMutation } from '../../../../features/task/taskService';
+import TrashIcon from '../../../../assets/icons/TrashIcon';
 
 interface Props {
   timeEntry: IEntries;
@@ -24,7 +22,7 @@ export function TimeLogEntries({ timeEntry, index }: Props) {
 
   const entryActions = () => {
     return (
-      <div className="flex flex-col space-y-2">
+      <div className="absolute right-0 shadow-lg w-28 bg-white flex flex-col space-y-2">
         {TIME_INVENTORY_ACTIONS.map((action, index) => (
           <div
             key={index}
@@ -36,7 +34,7 @@ export function TimeLogEntries({ timeEntry, index }: Props) {
             ) : action.value === 'duplicate' ? (
               <BiDuplicate className="w-4 h-4" />
             ) : (
-              <TrashIcon active dimensions={{ width: 18, height: 18 }} />
+              <TrashIcon />
             )}
             <span className="capitalize font-semibold">{action.name}</span>
           </div>
@@ -44,74 +42,41 @@ export function TimeLogEntries({ timeEntry, index }: Props) {
       </div>
     );
   };
+
   return (
-    <div className={`flex items-center w-full relative group ${index % 2 === 0 ? 'bg-alsoit-gray-50' : 'bg-white'}`}>
-      <div className="flex items-center space-x-14">
-        {/* User Avatar */}
-        <ToolTip title={timeEntry.team_member.user.name}>
-          <div className="py-1.5 w-14 flex justify-center">
-            {timeEntry.team_member.user.avatar_path ? (
-              <AvatarWithImage
-                image_path={timeEntry.team_member.user.avatar_path}
-                height="h-7"
-                width="w-7"
-                roundedStyle="circular"
-              />
-            ) : (
-              <ToolTip title={timeEntry.team_member.user.name}>
-                <AvatarWithInitials
-                  initials={timeEntry.team_member.user.initials}
-                  height="h-7"
-                  width="w-7"
-                  textSize="7px"
-                  backgroundColour={timeEntry.team_member.user.color}
-                />
-              </ToolTip>
-            )}
-          </div>
-        </ToolTip>
-        {/* Duration */}
-        <div className="py-1.5 w-14 text-alsoit-text-sm text-center tracking-wide relative">
-          <div
-            className={`absolute text-alsoit-text-sm capitalize -top-0.5 -left-9 font-light px-0.5 ${
-              index % 2 === 0 ? 'bg-white' : 'bg-alsoit-gray-50'
-            } rounded-md`}
-          >
-            {timeEntry.type === 'real' ? 'real time' : timeEntry.type}
-          </div>
-          {dayjs.duration(timeEntry.duration, 'seconds').format('HH:mm:ss')}
+    <tr
+      key={index}
+      className="h-9 flex items-center border-b cursor-pointer hover:bg-alsoit-purple-50 mr-5 group bg-white px-2"
+    >
+      <td className="sticky left-0 bg-white group-hover:bg-alsoit-purple-50 z-40 space-x-2.5 border-r w-[15rem] h-full">
+        <div className="flex items-center space-x-2.5 h-full">
+          {timeEntry.team_member.user.avatar_path ? (
+            <AvatarWithImage image_path={timeEntry.team_member.user.avatar_path} height="h-6" width="w-6" />
+          ) : (
+            <AvatarWithInitials
+              initials={timeEntry.team_member.user.initials}
+              backgroundColour={timeEntry.team_member.user.color}
+              width="w-6"
+              height="h-6"
+            />
+          )}
+          <span>{timeEntry.team_member.user.name}</span>
         </div>
-      </div>
-      <div className={`flex justify-around space-x-9 h-10 ${index % 2 === 0 ? 'bg-alsoit-gray-50' : 'bg-white'}`}>
-        {/* Start Date */}
-        <div className="py-1.5 w-40 text-alsoit-text-sm flex justify-center items-center">
-          {dayjs(timeEntry.start_date).format('ddd DD, MMM')}
-        </div>
-        {/* single label */}
-        <div className="py-1.5 w-40 flex justify-center items-center gapFixes">-</div>
-        {/* End Date */}
-        <div className="py-1.5 w-40 flex justify-center items-center text-alsoit-text-sm gapFixes">
-          {dayjs(timeEntry.end_date).format('ddd DD, MMM')}
-        </div>
-        {/* tags */}
-        <div className="py-1.5 w-40 flex justify-center items-center gapFixes">-</div>
-      </div>
-      <div className="absolute right-2 invisible group-hover:visible">
-        <ThreeDotIcon
-          className="w-4 h-4 cursor-pointer"
-          onClick={() => setDropDown((prev) => ({ ...prev, entryAction: !prev.entryAction }))}
-        />
-      </div>
-      {dropDown.entryAction && (
-        <TabsDropDown
-          closeModal={() => setDropDown((prev) => ({ ...prev, entryAction: !prev.entryAction }))}
-          header="more options"
-          subHeader="field settings"
-          styles="w-44 right-2 top-7"
-        >
-          {entryActions()}
-        </TabsDropDown>
-      )}
-    </div>
+      </td>
+      <td className="w-20 border-r h-9 flex items-center justify-center text-alsoit-text-md text-center relative">
+        {dayjs.duration(timeEntry.duration, 'seconds').format('HH:mm:ss')}
+        <span className="absolute top-0.5 right-0.5 bg-alsoit-gray-50 rounded-md px-1 capitalize text-alsoit-text-sm">
+          {timeEntry.type === 'real' ? 'real time' : timeEntry.type}
+        </span>
+      </td>
+      <td className="w-20 text-alsoit-text-md text-center">{dayjs(timeEntry.start_date).format('ddd DD, MMM')}</td>
+      <td className="w-20 flex items-center justify-center">-</td>
+      <td className="w-20 text-alsoit-text-md text-center">{dayjs(timeEntry.end_date).format('ddd DD, MMM')}</td>
+      <td className="w-20 flex items-center justify-center">-</td>
+      <td className="invisible group-hover:visible relative">
+        <ThreeDotIcon onClick={() => setDropDown((prev) => ({ ...prev, entryAction: !prev.entryAction }))} />
+        {dropDown.entryAction && entryActions()}
+      </td>
+    </tr>
   );
 }

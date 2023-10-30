@@ -88,7 +88,6 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
     const modifiedString = value.replace(pattern, (match) => {
       return match.replace('>', ' class="text-blue-500 underline">');
     });
-    console.log(modifiedString);
 
     setDescription(modifiedString);
   };
@@ -131,12 +130,6 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
       return;
     }
   };
-  // const convertNewlinesToBreaks = (text: string) => {
-  //   return text
-  //     .split('\n')
-  //     .map((line, index) => (index === 0 ? line : `\n\n ${line}`))
-  //     .join('');
-  // };
 
   return (
     <>

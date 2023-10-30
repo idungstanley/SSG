@@ -245,6 +245,7 @@ interface TaskState {
   estimatedDuration: IDuration;
   recorderDuration: IDuration;
   period: number | undefined;
+  countDownPeriod: number | undefined;
   recorderPeriod: number | undefined;
   activeTimeOut: {
     clockLimit: number;
@@ -373,6 +374,7 @@ const initialState: TaskState = {
   estimatedDuration: { s: 0, m: 0, h: 0 },
   recorderDuration: { s: 0, m: 0, h: 0 },
   period: undefined,
+  countDownPeriod: undefined,
   recorderPeriod: undefined,
   activeTimeOut: { clockLimit: 0, timeoutReminder: 0 },
   sortType: 'status',
@@ -736,6 +738,9 @@ export const taskSlice = createSlice({
     setTimerInterval(state, action: PayloadAction<number | undefined>) {
       state.period = action.payload;
     },
+    setCountDownPeriod(state, action: PayloadAction<number | undefined>) {
+      state.countDownPeriod = action.payload;
+    },
     setRecorderInterval(state, action: PayloadAction<number | undefined>) {
       state.recorderPeriod = action.payload;
     },
@@ -864,6 +869,7 @@ export const {
   setRecorderInterval,
   setStopTimer,
   setTimerInterval,
+  setCountDownPeriod,
   setActiveTimeout,
   setSortType,
   setTaskSelectedDate,
