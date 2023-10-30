@@ -3,7 +3,6 @@ import { useAppSelector } from '../../../../../../app/hooks';
 import { Spinner } from '../../../../../../common';
 import { useGetExplorerFile, useGetFileBuffers } from '../../../../../../features/explorer/explorerService';
 import FullScreenMessage from '../../../../../../components/CenterMessage/FullScreenMessage';
-import DocViewer, { DocViewerRenderers } from '@cyntler/react-doc-viewer';
 
 const contentType = [
   'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
@@ -41,16 +40,12 @@ export default function FilePreview() {
           <Spinner size={8} color="#0F70B7" />
         </div>
       ) : status === 'success' ? (
-        extension === 'image' || extension === 'pdf' || extension === 'text' ? (
-          <DocViewer
-            documents={[{ uri: headers }]}
-            pluginRenderers={DocViewerRenderers}
-            config={{
-              header: {
-                disableHeader: true
-              }
-            }}
-          />
+        extension === 'pdf' || extension === 'text' ? (
+          <iframe width="100%" height="100%" src={headers} itemType="application/pdf" className="internal">
+            <embed src={headers} type="application/pdf" />
+          </iframe>
+        ) : extension === 'image' ? (
+          <img src={headers} className="max-h-204" alt="img" />
         ) : (
           <FullScreenMessage title="Unsupported file extension." description="Sorry :(" />
         )
