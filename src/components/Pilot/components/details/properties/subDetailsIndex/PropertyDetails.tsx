@@ -88,7 +88,6 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
     const modifiedString = value.replace(pattern, (match) => {
       return match.replace('>', ' class="text-blue-500 underline">');
     });
-    console.log(modifiedString);
 
     setDescription(modifiedString);
   };
@@ -210,7 +209,7 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
                 <CKEditor
                   editor={ClassicEditor}
                   data={description}
-                  onChange={(event, editor) => handleDescriptionChange(editor.getData())}
+                  onChange={(_event, editor) => handleDescriptionChange(editor.getData())}
                   onBlur={() => handleDetailsSubmit()}
                 />
               </div>
