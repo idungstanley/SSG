@@ -59,7 +59,9 @@ export default function TeamMemberInvitesPage() {
           </div>
         )}
 
-        {status === 'success' && data.data.team_member_invites.length !== 0 && <Table />}
+        {status === 'success' && data.data.team_member_invites.length !== 0 && (
+          <Table data={data.data.team_member_invites} />
+        )}
       </main>
 
       <InviteTeamMemberSlideOver />

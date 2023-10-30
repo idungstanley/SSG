@@ -10,7 +10,11 @@ import ToolTip from '../../../../../Tooltip/Tooltip';
 import { ITaskFullList } from '../../../../../../features/task/interface.tasks';
 import { IHubDetails } from '../../../../../../features/hubs/hubs.interfaces';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { UseUpdateTaskService, useGetAttachments } from '../../../../../../features/task/taskService';
+import {
+  UseUpdateTaskService,
+  useDeleteAttachment,
+  useGetAttachments
+} from '../../../../../../features/task/taskService';
 import Status from '../status/Status';
 import Priority from '../priority/Priority';
 import { UseEditHubService } from '../../../../../../features/hubs/hubService';
@@ -39,6 +43,7 @@ interface PropertyDetailsProps {
 export default function PropertyDetails({ Details }: PropertyDetailsProps) {
   const queryClient = useQueryClient();
   const inputRef = useRef<HTMLInputElement | null>(null);
+  // const [fileId, setFileId] = useState<string | undefined>(undefined);
 
   const [toggleSubTask, setToggleSubTask] = useState(false);
   const [editingTitle, setEditingTitle] = useState(false);
@@ -47,6 +52,16 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
   const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
 
   const { hubId, walletId, listId, taskId } = useParams();
+
+  const deleteAttachment = useMutation(useDeleteAttachment, {
+    onSuccess: () => {
+      // const remainingAttachments = attachments?.data.attachments.filter((item) => {
+      //   return item.id !== fileId;
+      // });
+      const ITEMS_QUERY_KEY = ['attachments'];
+      queryClient.invalidateQueries(ITEMS_QUERY_KEY);
+    }
+  });
 
   const editTaskMutation = useMutation(UseUpdateTaskService, {
     onSuccess: () => {
@@ -138,6 +153,13 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
   //     .join('');
   // };
 
+  const handleRemoveAttachment = async (id: string) => {
+    // setFileId(id);
+    await deleteAttachment.mutateAsync({
+      id
+    });
+  };
+
   return (
     <>
       <div className="flex items-center justify-between p-2">
@@ -228,14 +250,24 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
             {attachments?.data.attachments?.length ? (
               attachments?.data.attachments.map((file) => {
                 return (
-                  <FileIcons
-                    fileExtension={file.physical_file.file_format.extension}
-                    filePath={file.path}
-                    key={file.id}
-                    fileName={file.physical_file.display_name}
-                    height="h-10"
-                    width="w-10"
-                  />
+                  <div key={file.id} className="group/parent">
+                    <button
+                      className="items-center justify-center absolute w-5 h-5 text-white bg-black rounded-full hover:bg-red-500 hidden group-hover/parent:flex -mt-4 ml-6"
+                      style={{
+                        fontSize: '6px'
+                      }}
+                      onClick={() => handleRemoveAttachment(file.id)}
+                    >
+                      X
+                    </button>
+                    <FileIcons
+                      fileExtension={file.physical_file.file_format.extension}
+                      filePath={file.path}
+                      fileName={file.physical_file.display_name}
+                      height="h-10"
+                      width="w-10"
+                    />
+                  </div>
                 );
               })
             ) : (

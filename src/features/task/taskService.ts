@@ -66,6 +66,14 @@ import { setDragOverList, setDragOverTask, setDraggableItem } from '../list/list
 import { FilterWithId, FiltersOption } from '../../components/TasksHeader/ui/Filter/types/filters';
 import { pilotTabs } from '../../app/constants/pilotTabs';
 
+export const useDeleteAttachment = ({ id }: { id: string }) => {
+  const data = requestNew({
+    url: `attachments/${id}`,
+    method: 'DELETE'
+  });
+  return data;
+};
+
 export const useGetAttachments = (query: {
   activeItemId: string | null | undefined;
   activeItemType?: string | null;
