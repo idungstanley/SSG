@@ -22,14 +22,16 @@ interface physicalFile {
   file_format: fileFormat;
 }
 
+export interface attachmentData {
+  id: string;
+  physical_file: physicalFile;
+  path: string;
+  team_member: ITeamMember;
+}
+
 export interface IAttachmentsRes {
   data: {
-    attachments: {
-      id: string;
-      physical_file: physicalFile;
-      path: string;
-      team_member: ITeamMember;
-    }[];
+    attachments: attachmentData[];
   };
 }
 
