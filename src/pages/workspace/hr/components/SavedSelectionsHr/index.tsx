@@ -1,3 +1,4 @@
+import React from 'react';
 import { Checkbox } from '../../../../../components/Checkbox/Checkbox';
 import {
   selectCalendar,
@@ -5,7 +6,6 @@ import {
   setSavedSelections
 } from '../../../../../features/calendar/slice/calendarSlice';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
-import React from 'react';
 import { HrSavedSelectionsList } from '../../../../hr/ui/list/HrSavedSelectionsList';
 import { HrMenuSection } from '../HrMenuSection';
 

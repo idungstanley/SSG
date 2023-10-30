@@ -52,7 +52,7 @@ export const filterConfig: FilterOption = {
   priority: { values: [...priorityValues], operators: [operators.eq, operators.ne] },
   status: { values: [], operators: [operators.eq, operators.ne] }, // dynamic
   assignees: { operators: [operators.eq, operators.ne, operators.ns, operators.set], values: [] }, // dynamic
-  tags: { operators: [operators.eq, operators.ns, operators.set], values: [] }, // dynamic
+  tags: { operators: [operators.eq, operators.ns, operators.set, operators.ne], values: [] }, // dynamic
   start_date: {
     operators: [
       operators.ns,

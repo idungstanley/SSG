@@ -12,6 +12,7 @@ import { AvatarWithInitials, StatusDot, Dropdown } from '../../../../../../compo
 import { OutputDateTime } from '../../../../../../app/helpers';
 import ChangeRole from './ChangeRole';
 import ArrowDown from '../../../../../../assets/icons/ArrowDown';
+import { ROLES } from '../../../../../../utils/Constants/RoleConstants';
 
 interface RowProps {
   teamMemberId: string;
@@ -20,7 +21,7 @@ interface RowProps {
 
 export default function Row({ teamMemberId, myRole }: RowProps) {
   const dispatch = useDispatch();
-  const canChangeRole = myRole.toLowerCase() === 'owner' || myRole.toLowerCase() === 'admin';
+  const canChangeRole = myRole ? myRole.toLowerCase() === ROLES.owner || myRole.toLowerCase() === ROLES.admin : null;
   const [anchor, setAnchor] = useState<HTMLElement | null>(null);
 
   const { data: teamMember } = useGetTeamMember(teamMemberId);
