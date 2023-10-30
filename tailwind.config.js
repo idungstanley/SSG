@@ -40,7 +40,8 @@ module.exports = {
       },
       height: {
         204: '51rem',
-        13: '3.125rem'
+        13: '3.125rem',
+        7.5: '30px'
       },
       maxHeight: {
         204: '51rem'
@@ -50,7 +51,8 @@ module.exports = {
         5: '16rem'
       },
       width: {
-        134: '26.8rem'
+        134: '26.8rem',
+        7.5: '30px'
       },
       minWidth: {
         134: '26.8rem'
@@ -60,7 +62,7 @@ module.exports = {
       ...defaultTheme.fontSize, // add default tailwind classes
       'alsoit-text-sm': '0.5rem', // 8px
       'alsoit-text-md': '0.625rem', // 10px
-      'alsoit-text-xi': '11px',  //11px
+      'alsoit-text-xi': '11px', //11px
       'alsoit-text-lg': '0.813rem' // 13px
     },
     borderWidth: {

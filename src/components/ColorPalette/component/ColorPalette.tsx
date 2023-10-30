@@ -3,6 +3,8 @@ import { cl } from '../../../utils';
 import DefaultColour from '../../../assets/icons/DefaultColour';
 import { useAppSelector } from '../../../app/hooks';
 import { VerticalScroll } from '../../ScrollableContainer/VerticalScroll';
+import ThreeDotIcon from '../../../assets/icons/ThreeDotIcon';
+import { BsPinAngle } from 'react-icons/bs';
 
 interface PaletteProps {
   handleClick: (value: string | null | ListColourProps) => void;
@@ -12,24 +14,34 @@ interface PaletteProps {
 export default function ColorPalette({ handleClick, activeColor }: PaletteProps) {
   const { colourPaletteData } = useAppSelector((state) => state.account);
   const colorBoxes = colourPaletteData.map((c) => (
-    <div
-      key={c.id}
-      className={cl(activeColor === c.color ? 'border rounded-md flex items-center justify-center w-9 h-9' : '')}
-      style={{ borderColor: activeColor === c.color ? `${c.color}` : '' }}
-      onClick={() => handleClick(c.color)}
-    >
-      {c.color === null ? (
-        <DefaultColour />
-      ) : (
-        <div
-          style={{
-            backgroundColor: `${c.color}`,
-            height: activeColor === c.color ? '30px' : '24px',
-            width: activeColor === c.color ? '30px' : '24px'
-          }}
-          className="rounded-md"
-        ></div>
-      )}
+    <div key={c.id} className="group">
+      <div
+        className={cl(
+          activeColor === c.color ? 'border rounded-md  w-9 h-9' : '',
+          'relative group-hover:border group-hover:w-9 group-hover:h-9 rounded-md flex items-center justify-center group-hover:border-alsoit-gray-75'
+        )}
+        style={{ borderColor: activeColor === c.color ? `${c.color}` : 'border-alsoit-gray-75' }}
+        onClick={() => handleClick(c.color)}
+      >
+        {c.color === null ? (
+          <DefaultColour />
+        ) : (
+          <div
+            style={{
+              backgroundColor: `${c.color}`
+            }}
+            className={cl(
+              'group-hover:w-7.5 group-hover:h-7.5 rounded-md w-6 h-6',
+              activeColor === c.color && 'w-7.5 h-7.5'
+            )}
+          ></div>
+        )}
+        {}
+        <span className="absolute flex flex-col gap-1 opacity-0 cursor-pointer right-1 group-hover:opacity-100">
+          <ThreeDotIcon color="white" />
+          <BsPinAngle className="text-sm text-white" />
+        </span>
+      </div>
     </div>
   ));
 

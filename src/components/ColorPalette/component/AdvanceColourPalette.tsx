@@ -101,7 +101,8 @@ export default function AdvanceColourPalette({ show }: { show: boolean }) {
       padding: '5px',
       fontSize: '10px',
       color: '#000',
-      borderRadius: '5px'
+      borderRadius: '5px',
+      height: '25px'
     }
   };
 
@@ -198,8 +199,9 @@ export default function AdvanceColourPalette({ show }: { show: boolean }) {
           type="text"
           name="name"
           value={colorInputValue}
+          isBorder={false}
           label="LIBRARY COLOUR NAME"
-          height="h-10"
+          height="h-8"
           onChange={(e) => setColorInputValue(e.target.value)}
         />
         <div className="flex items-center justify-between gap-2">
@@ -208,7 +210,7 @@ export default function AdvanceColourPalette({ show }: { show: boolean }) {
             width="w-20"
             label="Cancel"
             labelSize="text-xs"
-            customClasses="hover:bg-red-600 bg-white text-red-600 border-red-200"
+            customClasses="hover:bg-red-500 bg-white text-red-600 border-red-200"
             padding="p-1"
             buttonStyle="custom"
             onClick={() => ({})}

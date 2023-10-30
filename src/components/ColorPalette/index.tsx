@@ -242,10 +242,13 @@ export default function PaletteManager({
           )}
           {!isSearch && selectListColours.length === 0 && paletteViews.BOARD && (
             <div className="flex items-center justify-between mb-2">
-              <div className="flex items-center h-8 p-2 rounded-br-lg bg-alsoit-gray-75 w-28">
-                <p className="justify-center bg-['#b2b2b2'] text-white" style={{ fontSize: '10px' }}>
-                  COLOUR LIBRARY
-                </p>
+              <div className="flex gap-1 uppercase items-center-justify-between">
+                <div className="flex items-center h-8 p-2 rounded-br-lg bg-alsoit-gray-75 w-28">
+                  <p className="justify-center bg-['#b2b2b2'] text-white" style={{ fontSize: '10px' }}>
+                    COLOUR LIBRARY
+                  </p>
+                </div>
+                <div className="flex items-center">{title}</div>
               </div>
               <div className="flex items-center gap-1 px-2">
                 {views.map((item, index) => (
@@ -291,24 +294,34 @@ export default function PaletteManager({
           )}
           <div className="pl-2">
             {isSearch && (
-              <div className="my-2">
+              <div className="flex items-center gap-1 my-2">
                 <Input
                   placeholder="Search"
-                  bgColor="bg-gray-200"
-                  borderRadius="rounded-md py-0.5"
+                  bgColor="bg-white"
+                  borderRadius="rounded-md py-0.5 h-6"
                   type="text"
                   name="search"
-                  leadingIcon={<CiSearch />}
+                  leadingIcon={<CiSearch style={{ color: 'rgb(191, 0, 255)' }} />}
                   trailingIcon={
                     <ToolTip title="Close Search">
                       <span>
-                        <AiFillCloseCircle style={{ color: 'rgb(191, 0, 255)' }} />
+                        <AiFillCloseCircle className="text-sm" style={{ color: 'rgb(191, 0, 255)' }} />
                       </span>
                     </ToolTip>
                   }
                   trailingClick={handleCloseSearch}
                   onChange={() => null}
                 />
+                {activeOutterColor === null ? (
+                  <DefaultColour dimensions={{ width: 26, height: 26 }} />
+                ) : (
+                  <span
+                    className="w-6 h-6 p-2 rounded"
+                    style={{
+                      backgroundColor: isInnerFrameActive ? activeInnerColor : activeOutterColor
+                    }}
+                  ></span>
+                )}
               </div>
             )}
             {topContent}
@@ -370,7 +383,7 @@ export default function PaletteManager({
               width="w-20"
               label="Cancel"
               labelSize="text-xs"
-              customClasses="hover:bg-red-600 bg-white text-red-600 border-red-200"
+              customClasses="hover:bg-red-500 bg-white text-red-600 border-red-200"
               padding="p-1"
               buttonStyle="custom"
               onClick={handleCancel}
