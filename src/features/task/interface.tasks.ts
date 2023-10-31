@@ -136,6 +136,7 @@ export interface ITaskFullList {
   description: string | null;
   avatar_path: string | null;
   list_id: string;
+  root_task_ids?: string[];
   parent_id: string | null;
   parentName?: string;
   priority: string | null | [{ id: string; initials: string; color: string; name: string }];

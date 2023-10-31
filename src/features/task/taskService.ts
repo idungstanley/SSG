@@ -23,6 +23,7 @@ import {
   setAssignOnHoverState,
   setDuplicateTaskObj,
   setNewTaskPriority,
+  setRootTaskIds,
   setScreenRecording,
   setScreenRecordingMedia,
   setSelectedListIds,
@@ -454,17 +455,22 @@ export const UseGetFullTaskList = ({
 };
 
 export const getOneTaskServices = ({ task_id }: { task_id: string | undefined | null }) => {
+  const dispatch = useAppDispatch();
   return useQuery(
     ['task', { task_id: task_id }],
     async () => {
       const data = await requestNew<ITaskRes | undefined>({
         url: `tasks/${task_id}`,
-        method: 'GET'
+        method: 'GET',
+        params: { include_root_ids: 1 }
       });
       return data;
     },
     {
       // enabled: false
+      onSuccess: (data) => {
+        dispatch(setRootTaskIds(data?.data.task.root_task_ids));
+      },
       enabled: task_id != null
     }
   );
