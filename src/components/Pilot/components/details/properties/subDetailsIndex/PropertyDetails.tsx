@@ -103,7 +103,6 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
     const modifiedString = value.replace(pattern, (match) => {
       return match.replace('>', ' class="text-blue-500 underline">');
     });
-    console.log(modifiedString);
 
     setDescription(modifiedString);
   };

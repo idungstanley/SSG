@@ -32,8 +32,8 @@ export default function ExplorerPage() {
         <div className="flex flex-col w-full h-full">
           {/* Breadcrumb */}
           <BreadcrumbSection />
-          {/* files list & file preview */}
 
+          {/* files list & file preview */}
           <DragContext>
             <Main />
           </DragContext>

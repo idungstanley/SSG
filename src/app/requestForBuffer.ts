@@ -4,7 +4,7 @@ const requestForBuffer = async (options: Record<string, unknown>) => {
   const accessToken = JSON.parse(localStorage.getItem('accessToken') || '""') as string;
   const currentWorkspaceId = JSON.parse(localStorage.getItem('currentWorkspaceId') || '""') as string;
 
-  const baseURL = `${process.env.REACT_APP_API_BASE_URL}/api/af/`;
+  const baseURL = `${process.env.REACT_APP_API_BASE_URL}/api/`;
 
   const headers = accessToken
     ? {
