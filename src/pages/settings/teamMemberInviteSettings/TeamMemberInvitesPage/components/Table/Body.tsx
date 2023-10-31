@@ -8,7 +8,7 @@ interface TableProps {
 
 export default function Body({ data }: TableProps) {
   return (
-    <tbody className="divide-y divide-gray-200 bg-white">
+    <tbody className="bg-white divide-y divide-gray-200">
       {data &&
         data.map((teamMemberInvite) => <Row teamMemberInviteId={teamMemberInvite.id} key={teamMemberInvite.id} />)}
     </tbody>
