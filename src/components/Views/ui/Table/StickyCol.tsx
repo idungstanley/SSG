@@ -53,6 +53,7 @@ interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   onClose?: VoidFunction;
   isOver?: boolean;
   isBlockedShowChildren?: boolean;
+  toggleRootTasks?: boolean;
 }
 
 export function StickyCol({
@@ -70,6 +71,7 @@ export function StickyCol({
   paddingLeft = 0,
   dragElement,
   isBlockedShowChildren,
+  toggleRootTasks,
   ...props
 }: ColProps) {
   const dispatch = useAppDispatch();
@@ -421,7 +423,7 @@ export function StickyCol({
               <div className="w-4" />
             ) : (
               <button onClick={onToggleDisplayingSubTasks} className="pl-1">
-                {showSubTasks || toggleAllSubtask ? (
+                {showSubTasks || toggleAllSubtask || toggleRootTasks ? (
                   <div className={`${task.descendants_count > 0 ? 'w-3 h-3' : 'opacity-0 w-3 h-3'}`}>
                     <CloseSubtask />
                   </div>

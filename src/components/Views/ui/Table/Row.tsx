@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo } from 'react';
 import SubtasksIcon from '../../../../assets/icons/SubtasksIcon';
 import { Tag, Task } from '../../../../features/task/interface.tasks';
 import { DEFAULT_LEFT_PADDING } from '../../config';
@@ -133,18 +133,14 @@ export function Row({
       return true;
     } else if (isLevelActive && splitSubTaskLevels.includes(THREE_SUBTASKS_LEVELS) && level >= 2) {
       return true;
+    } else if (rootTaskIds?.includes(task.id)) {
+      return true;
     }
     return false;
-  }, [showSubTasks, subtasks, toggleAllSubtask, toggleAllSubtaskSplit, splitSubTaskLevels]);
+  }, [showSubTasks, subtasks, toggleAllSubtask, toggleAllSubtaskSplit, splitSubTaskLevels, rootTaskIds]);
 
   const [hoverOn, setHoverOn] = useState(false);
-  useEffect(() => {
-    rootTaskIds?.map((item) => {
-      if (item === task.id) {
-        setShowSubTasks(!showChildren);
-      }
-    });
-  }, []);
+  const toggleRootTasks = rootTaskIds?.includes(task.id);
 
   return (
     <>
@@ -168,6 +164,7 @@ export function Row({
           showSubTasks={showChildren}
           setShowSubTasks={setShowSubTasks}
           style={{ zIndex: 1 }}
+          toggleRootTasks={toggleRootTasks}
           isListParent={isListParent}
           task={task}
           taskIndex={taskIndex}
