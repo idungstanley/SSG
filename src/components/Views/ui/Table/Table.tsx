@@ -153,6 +153,7 @@ export function Table({ heads, data, label, listName, listColor, isBlockedShowCh
             tableHeight={tableHeight}
             listId={data[0].list_id}
             groupedTask={data}
+            listColor={listColor}
           />
         </table>
       </div>
