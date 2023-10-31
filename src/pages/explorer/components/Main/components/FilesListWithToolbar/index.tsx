@@ -11,10 +11,13 @@ import { InvalidateQueryFilters } from '@tanstack/react-query';
 
 export default function FilesListWithToolbar() {
   const { folderId } = useParams();
-  const { data } = useGetExplorerFiles(folderId);
+
   const { selectedSortingId, selectedFolderId } = useAppSelector((state) => state.explorer);
 
   const [query, setQuery] = useState('');
+
+  const { data } = useGetExplorerFiles(folderId);
+
   const debouncedQuery = useDebounce(query, 500);
 
   const items: IStringifiedFile[] =

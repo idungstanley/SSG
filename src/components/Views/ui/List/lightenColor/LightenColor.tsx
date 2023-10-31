@@ -1,7 +1,4 @@
-import colorNames from 'color-name-list';
 import { CommonColors } from './CommonColors';
-
-type RgbTuple = [number, number, number];
 
 export default function LightenColor(color: string, lightenAmount: number): string {
   function getColorCode(input: string): string {
@@ -9,14 +6,6 @@ export default function LightenColor(color: string, lightenAmount: number): stri
 
     if (CommonColors[normalizedInput]) {
       return CommonColors[normalizedInput];
-    }
-
-    if (colorNames[normalizedInput]) {
-      const rgb = colorNames[normalizedInput] as RgbTuple;
-      const hex = `#${rgb[0].toString(16).padStart(2, '0')}${rgb[1].toString(16).padStart(2, '0')}${rgb[2]
-        .toString(16)
-        .padStart(2, '0')}`;
-      return hex;
     }
 
     if (/^#?([a-f\d]{6})$/i.test(normalizedInput)) {

@@ -103,7 +103,6 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
     const modifiedString = value.replace(pattern, (match) => {
       return match.replace('>', ' class="text-blue-500 underline">');
     });
-    console.log(modifiedString);
 
     setDescription(modifiedString);
   };
@@ -232,7 +231,7 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
                 <CKEditor
                   editor={ClassicEditor}
                   data={description}
-                  onChange={(event, editor) => handleDescriptionChange(editor.getData())}
+                  onChange={(_event, editor) => handleDescriptionChange(editor.getData())}
                   onBlur={() => handleDetailsSubmit()}
                 />
               </div>
@@ -252,7 +251,7 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
                 return (
                   <div key={file.id} className="group/parent">
                     <button
-                      className="items-center justify-center absolute w-5 h-5 text-white bg-black rounded-full hover:bg-red-500 hidden group-hover/parent:flex -mt-4 ml-6"
+                      className="absolute items-center justify-center hidden w-5 h-5 ml-6 -mt-4 text-white bg-black rounded-full hover:bg-red-500 group-hover/parent:flex"
                       style={{
                         fontSize: '6px'
                       }}
