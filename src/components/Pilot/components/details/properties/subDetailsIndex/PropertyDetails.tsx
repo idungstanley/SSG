@@ -166,12 +166,17 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
     <div className="m-3 text-gray-500 rounded-md bg-alsoit-gray-50">
       <div className="flex justify-between h-8">
         <div className="flex items-center justify-between gap-2 uppercase">
-          <div className="flex items-center justify-between gap-2 p-2 rounded-tl-lg rounded-br-lg bg-alsoit-gray-75 w-fit">
-            <IoCaretDownCircle
-              className={cl(toggleDetails ? '' : 'transform -rotate-90', 'text-base text-white cursor-pointer')}
-              onClick={() => setToggleDetails((prev) => !prev)}
-            />
-            <p className="justify-center bg-['#b2b2b2'] text-white" style={{ fontSize: '10px' }}>
+          <div
+            className="flex items-center justify-between gap-2 p-2 rounded-tl-lg rounded-br-lg bg-alsoit-gray-75 grow"
+            style={{ maxWidth: '150px' }}
+          >
+            <span className="w-4 h-4">
+              <IoCaretDownCircle
+                className={cl(toggleDetails ? '' : 'transform -rotate-90', 'text-base text-white cursor-pointer')}
+                onClick={() => setToggleDetails((prev) => !prev)}
+              />
+            </span>
+            <p className="justify-center bg-['#b2b2b2'] text-white truncate" style={{ fontSize: '10px' }}>
               {Details?.name}
             </p>
           </div>
