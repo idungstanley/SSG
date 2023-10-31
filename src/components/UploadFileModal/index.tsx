@@ -7,7 +7,6 @@ import '@uppy/dashboard/dist/style.css';
 import { InvalidateQueryFilters, useQueryClient } from '@tanstack/react-query';
 import { useAppSelector } from '../../app/hooks';
 import { setShowUploadModal } from '../../features/general/uploadFile/uploadFileSlice';
-import { useEffect } from 'react';
 
 interface UploadFileModalProps {
   invalidateQuery: InvalidateQueryFilters<unknown>;
@@ -19,6 +18,7 @@ export default function UploadFileModal({ invalidateQuery, endpoint }: UploadFil
   const dispatch = useDispatch();
   const { currentWorkspaceId, accessToken } = useAppSelector((state) => state.auth);
   const { showUploadModal } = useAppSelector((state) => state.upload);
+  const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
 
   // init
   const uppy = new Uppy({
@@ -26,8 +26,8 @@ export default function UploadFileModal({ invalidateQuery, endpoint }: UploadFil
     autoProceed: true,
     meta: {}
   }).use(XHRUpload, {
-    endpoint: '',
     bundle: false,
+    endpoint: `${process.env.REACT_APP_API_BASE_URL}/api/${endpoint}`,
     headers: currentWorkspaceId
       ? {
           Authorization: `Bearer ${accessToken}`,
@@ -36,17 +36,12 @@ export default function UploadFileModal({ invalidateQuery, endpoint }: UploadFil
       : undefined
   });
 
-  const { xhrUpload } = uppy.getState();
-
-  // setup data
-  useEffect(() => {
-    uppy.setState({
-      xhrUpload: {
-        ...xhrUpload,
-        endpoint: `${process.env.REACT_APP_API_BASE_URL}/api/${endpoint}`
-      }
+  uppy.on('file-added', (file) => {
+    uppy.setFileMeta(file.id, {
+      id: activeItemId,
+      type: activeItemType
     });
-  }, [endpoint]);
+  });
 
   // invalidate query
   uppy.on('upload-success', (_file, response) => {

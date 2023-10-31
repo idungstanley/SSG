@@ -1,8 +1,7 @@
 import React from 'react';
-import FileViewer from 'react-file-viewer';
 import FullScreenMessage from '../components/CenterMessage/FullScreenMessage';
 
-const docks = ['docx', 'doc', 'pdf'];
+const docks = ['pdf', 'txt'];
 const images = ['jpg', 'png'];
 
 interface FilePreviewProps {
@@ -16,7 +15,9 @@ function FilePreview({ fileData, fileExtension }: FilePreviewProps) {
       {images.includes(fileExtension) ? (
         <img className="rounded-lg" src={fileData} alt="img" />
       ) : docks.includes(fileExtension) ? (
-        <FileViewer fileType={fileExtension} filePath={fileData} />
+        <iframe width="100%" height="100%" src={fileData} itemType="application/pdf" className="internal">
+          <embed src={fileData} type="application/pdf" />
+        </iframe>
       ) : (
         <FullScreenMessage title="Unsupported file extension." description="Sorry :(" />
       )}
