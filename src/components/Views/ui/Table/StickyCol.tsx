@@ -95,7 +95,8 @@ export function StickyCol({
     separateSubtasksMode,
     newTaskPriority,
     f2State,
-    assignOnHoverTask
+    assignOnHoverTask,
+    rootTaskIds
   } = useAppSelector((state) => state.task);
 
   const [isChecked, setIsChecked] = useState(false);
@@ -142,6 +143,14 @@ export function StickyCol({
     e.stopPropagation();
     setShowSubTasks(!showSubTasks);
   };
+
+  useEffect(() => {
+    rootTaskIds?.map((item) => {
+      if (item === task.id) {
+        setShowSubTasks(!showSubTasks);
+      }
+    });
+  }, []);
 
   const editTaskMutation = useMutation(UseUpdateTaskService, {
     onSuccess: () => {
@@ -442,7 +451,7 @@ export function StickyCol({
                 </button>
               </ToolTip>
             ) : null}
-            <div ref={divRef} className="flex flex-col items-start justify-start flex-grow pl-2 space-y-1 max-w-full">
+            <div ref={divRef} className="flex flex-col items-start justify-start flex-grow max-w-full pl-2 space-y-1">
               <div
                 className="flex items-center text-left"
                 style={{
