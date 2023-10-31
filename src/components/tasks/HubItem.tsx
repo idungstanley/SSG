@@ -34,7 +34,6 @@ import { IHub } from '../../features/hubs/hubs.interfaces';
 import { APP_HR, APP_TASKS } from '../../app/constants/app';
 import { Checkbox } from '../Checkbox/Checkbox';
 import { selectCalendar, setBlacklistIds, setSelectedHubs } from '../../features/calendar/slice/calendarSlice';
-import HubManagerIcon from '../../assets/icons/HubManager';
 import { useGetTeamMembers } from '../../features/settings/teamMembers/teamMemberService';
 import { MembersList } from '../../pages/calendar/ui/ExtendedBar/MembersList';
 
@@ -270,36 +269,32 @@ export default function HubItem({
               renderEmptyArrowBlock()
             )}
             <div className={`flex items-center flex-1 min-w-0 ${placeHubType == APP_HR ? 'gap-1' : 'gap-5'}`}>
-              {placeHubType == APP_HR ? (
-                <HubManagerIcon />
-              ) : (
-                <div
-                  onClick={(e) => handleHubColour(item.id, e)}
-                  className="flex items-center justify-center w-6 h-6"
-                  ref={relativeRef}
-                >
-                  {item.path !== null ? (
-                    <img src={item.path} alt="hubs image" className="w-full h-full rounded" />
-                  ) : (
-                    <AvatarWithInitials
-                      initials={getInitials(item.name)}
-                      height="h-4"
-                      width="w-4"
-                      textSize="8px"
-                      backgroundColour={
-                        item.color
-                          ? item.color
-                          : !paletteColor && type === EntityType.hub
-                          ? 'blue'
-                          : !paletteColor && type === EntityType.subHub
-                          ? 'orange'
-                          : (paletteColor as string)
-                      }
-                      roundedStyle="rounded"
-                    />
-                  )}
-                </div>
-              )}
+              <div
+                onClick={(e) => handleHubColour(item.id, e)}
+                className="flex items-center justify-center w-6 h-6"
+                ref={relativeRef}
+              >
+                {item.path !== null ? (
+                  <img src={item.path} alt="hubs image" className="w-full h-full rounded" />
+                ) : (
+                  <AvatarWithInitials
+                    initials={getInitials(item.name)}
+                    height="h-4"
+                    width="w-4"
+                    textSize="8px"
+                    backgroundColour={
+                      item.color
+                        ? item.color
+                        : !paletteColor && type === EntityType.hub
+                        ? 'blue'
+                        : !paletteColor && type === EntityType.subHub
+                        ? 'orange'
+                        : (paletteColor as string)
+                    }
+                    roundedStyle="rounded"
+                  />
+                )}
+              </div>
               <span className="pr-2 overflow-hidden">
                 <ToolTip title={item.name}>
                   <p

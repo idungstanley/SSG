@@ -1,10 +1,4 @@
-import {
-  ChatBubbleLeftEllipsisIcon,
-  DocumentTextIcon,
-  EyeIcon,
-  InformationCircleIcon,
-  SignalIcon
-} from '@heroicons/react/24/outline';
+import { ChatBubbleLeftEllipsisIcon, DocumentTextIcon, EyeIcon, SignalIcon } from '@heroicons/react/24/outline';
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
@@ -28,6 +22,7 @@ import { UtilityIcon } from '../../../../../assets/icons/Utility';
 import { pilotTabs } from '../../../../../app/constants/pilotTabs';
 import Views from '../../../../../components/Pilot/components/Views/Index';
 import PilotViewIcon from '../../../../../assets/icons/PilotViewIcon';
+import { DetailsIcon } from '../../../../../assets/icons';
 
 const sections = [
   {
@@ -80,7 +75,7 @@ const tabs = [
   {
     id: pilotTabs.DETAILS,
     label: 'Details',
-    icon: <InformationCircleIcon className="w-4 h-4" />
+    icon: <DetailsIcon active={false} dimensions={{ width: 15, height: 15 }} />
   },
   {
     id: pilotTabs.LOGS,

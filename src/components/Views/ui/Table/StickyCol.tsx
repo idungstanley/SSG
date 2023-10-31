@@ -333,6 +333,13 @@ export function StickyCol({
     };
   });
 
+  const renderContentWidth = () => {
+    if (saveSettingOnline?.singleLineView) {
+      return hoverOn ? `${hoverWidth}%` : `${width}%`;
+    }
+    return '100%';
+  };
+
   return (
     <>
       {task.id !== '0' && (
@@ -437,9 +444,9 @@ export function StickyCol({
             ) : null}
             <div ref={divRef} className="flex flex-col items-start justify-start flex-grow pl-2 space-y-1 max-w-full">
               <div
-                className={'flex items-center text-left'}
+                className="flex items-center text-left"
                 style={{
-                  maxWidth: `${hoverOn ? `${hoverWidth}%` : `${width}%`}`
+                  maxWidth: renderContentWidth()
                 }}
                 onKeyDown={(e) => (e.key === 'Enter' && eitableContent ? handleEditTask(e, task.id) : null)}
               >
