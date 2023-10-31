@@ -36,7 +36,7 @@ export function LogHeaders() {
             key={index}
             className={
               index === 0
-                ? 'sticky left-0 w-[15rem] px-2 bg-alsoit-gray-50 z-40 border-b'
+                ? 'sticky left-0 w-[15rem] px-2 bg-alsoit-gray-50 z-20 border-b'
                 : 'w-20 border-b flex justify-between items-center'
             }
             style={{ whiteSpace: 'nowrap' }}

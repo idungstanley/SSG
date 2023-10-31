@@ -26,13 +26,13 @@ export function ManualTime() {
   // };
   const handleDateClose = () => setAnchorEl(null);
   const handleSubmit = () => {
-    if (data.endDate.length > 0) {
+    if (selectedDate?.to) {
       mutateAsync({
         description: timerDetails.description,
-        end_date: data.endDate,
+        end_date: selectedDate.to.format('YYYY-MM-DD HH:mm:ss'),
         id: activeItemId,
         isBillable: timerDetails.isBillable,
-        start_date: data.startDate,
+        start_date: selectedDate?.from?.format('YYYY-MM-DD HH:mm:ss'),
         type: activeItemType
       });
     } else {

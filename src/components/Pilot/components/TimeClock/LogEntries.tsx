@@ -9,6 +9,11 @@ import { useDeleteTimeEntryMutation } from '../../../../features/task/taskServic
 import EditIcon from '../../../../assets/icons/Edit';
 import { BiDuplicate } from 'react-icons/bi';
 import TrashIcon from '../../../../assets/icons/TrashIcon';
+import RoundedCheckbox from '../../../Checkbox/RoundedCheckbox';
+import { RealTimeIcon } from '../../../../assets/icons/RealTimeIcon';
+import { ManualTimeIcon } from '../../../../assets/icons/ManualTimeIcon';
+import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
+import { setTimeEntriesIdArr } from '../../../../features/task/taskSlice';
 
 interface Props {
   timeEntry: IEntries;
@@ -16,9 +21,15 @@ interface Props {
 }
 
 export function TimeLogEntries({ timeEntry, index }: Props) {
+  const dispatch = useAppDispatch();
+
+  const { timeEntriesIdArr } = useAppSelector((state) => state.task);
+
   const { mutateAsync } = useDeleteTimeEntryMutation();
 
   const [dropDown, setDropDown] = useState<{ entryAction: boolean }>({ entryAction: false });
+
+  const btnCheckFn = timeEntriesIdArr.includes(timeEntry.id);
 
   const entryActions = () => {
     return (
@@ -44,11 +55,15 @@ export function TimeLogEntries({ timeEntry, index }: Props) {
   };
 
   return (
-    <tr
-      key={index}
-      className="h-9 flex items-center border-b cursor-pointer hover:bg-alsoit-purple-50 mr-5 group bg-white px-2"
-    >
-      <td className="sticky left-0 bg-white group-hover:bg-alsoit-purple-50 z-40 space-x-2.5 border-r w-[15rem] h-full">
+    <tr key={index} className="h-12 flex items-center border-b cursor-pointer hover:bg-alsoit-purple-50 group bg-white">
+      <td className="sticky left-0 bg-white group-hover:bg-alsoit-purple-50 z-20 flex items-center space-x-2.5 border-r w-[15rem] h-full">
+        <div className="h-full w-4 bg-alsoit-gray-50 flex items-center mr-2">
+          <RoundedCheckbox
+            isChecked={btnCheckFn}
+            onChange={() => dispatch(setTimeEntriesIdArr(Array.from(new Set([...timeEntriesIdArr, timeEntry.id]))))}
+            styles="w-2 h-2 rounded-lg checked:bg-alsoit-purple-300 focus:bg-alsoit-purple-300 active:bg-alsoit-purple-300 invisible group-hover:visible"
+          />
+        </div>
         <div className="flex items-center space-x-2.5 h-full">
           {timeEntry.team_member.user.avatar_path ? (
             <AvatarWithImage image_path={timeEntry.team_member.user.avatar_path} height="h-6" width="w-6" />
@@ -65,8 +80,9 @@ export function TimeLogEntries({ timeEntry, index }: Props) {
       </td>
       <td className="w-20 border-r h-9 flex items-center justify-center text-alsoit-text-md text-center relative">
         {dayjs.duration(timeEntry.duration, 'seconds').format('HH:mm:ss')}
-        <span className="absolute top-0.5 right-0.5 bg-alsoit-gray-50 rounded-md px-1 capitalize text-alsoit-text-sm">
-          {timeEntry.type === 'real' ? 'real time' : timeEntry.type}
+        <span className="absolute flex items-center space-x-1 top-0 right-0.5 bg-alsoit-gray-50 rounded-md px-1 capitalize text-alsoit-text-sm">
+          {timeEntry.type === 'real' ? <RealTimeIcon className="w-3 h-3" /> : <ManualTimeIcon />}
+          <span>{timeEntry.type === 'real' ? 'real time' : timeEntry.type}</span>
         </span>
       </td>
       <td className="w-20 text-alsoit-text-md text-center">{dayjs(timeEntry.start_date).format('ddd DD, MMM')}</td>

@@ -47,7 +47,7 @@ export default function ClockInOut() {
         }`}
       >
         {/* Timer section */}
-        <CombinedTime />
+        <CombinedTime timeData={data} />
       </div>
       {/* Clock Log */}
       <div className="w-full p-1 my-2 flex flex-col space-y-2 bg-alsoit-gray-50 rounded-lg">

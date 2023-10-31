@@ -9,9 +9,13 @@ import { TabsDropDown } from './TabsDropDown';
 import { TimeShowDropDown } from './TimeShowDropDown';
 import { useAppSelector } from '../../../../app/hooks';
 import { TeamMemberFilter } from './TeamMember';
+import { useGetTimeEntriesMutation } from '../../../../features/task/taskService';
 
 export function HeaderIcons() {
-  const { nestedTimeEntityId } = useAppSelector((state) => state.workspace);
+  const { nestedTimeEntityId, activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
+  const { currentTeamMemberId } = useAppSelector((state) => state.task);
+
+  const { mutateAsync } = useGetTimeEntriesMutation();
 
   const [dropDown, setDropDown] = useState<{ show: boolean; filter: boolean; assignee: boolean; me: boolean }>({
     assignee: false,
@@ -47,7 +51,18 @@ export function HeaderIcons() {
         <FilterListIcon active={false} color="orange" className="w-4 h-4" />
       </div>
       <div className={'p-1 rounded-md flex items-center bg-white hover:bg-alsoit-purple-50 cursor-pointer'}>
-        <Me active={false} className="w-4 h-4" />
+        <Me
+          active={false}
+          className="w-4 h-4"
+          onClick={() =>
+            mutateAsync({
+              itemId: activeItemId,
+              trigger: activeItemType,
+              include_filters: true,
+              team_member_ids: currentTeamMemberId as string[]
+            })
+          }
+        />
       </div>
       <div
         className={

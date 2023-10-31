@@ -258,6 +258,8 @@ interface TaskState {
   HistoryFilterMemory: IHistoryFilterMemory | null;
   timeAssigneeFilter: ITimeEntriesRes | undefined;
   timeAssignees: teamMember[] | undefined;
+  currentTeamMemberId: (string | undefined)[];
+  timeEntriesIdArr: string[];
   filters: FilterFieldsWithOption;
   subtasksfilters: Record<string, FilterFieldsWithOption>;
   isFiltersUpdated: boolean;
@@ -391,6 +393,8 @@ const initialState: TaskState = {
   HistoryFilterMemory: null,
   timeAssigneeFilter: undefined,
   timeAssignees: undefined,
+  currentTeamMemberId: [],
+  timeEntriesIdArr: [],
   statusId: '',
   currTaskListId: '',
   entityForCustom: { id: undefined, type: undefined },
@@ -759,6 +763,12 @@ export const taskSlice = createSlice({
     setTimeAssignee(state, action: PayloadAction<teamMember[] | undefined>) {
       state.timeAssignees = action.payload;
     },
+    setCurrentTeamMemberId(state, action: PayloadAction<(string | undefined)[]>) {
+      state.currentTeamMemberId = action.payload;
+    },
+    setTimeEntriesIdArr(state, action: PayloadAction<string[]>) {
+      state.timeEntriesIdArr = action.payload;
+    },
     setEntityForCustom(state, action: PayloadAction<entityForCustom>) {
       state.entityForCustom = action.payload;
     },
@@ -875,6 +885,8 @@ export const {
   setTaskSelectedDate,
   setHistoryMemory,
   setTimeAssigneeFilter,
+  setCurrentTeamMemberId,
+  setTimeEntriesIdArr,
   setTimeAssignee,
   setEntityForCustom,
   setCustomSuggetionsField,

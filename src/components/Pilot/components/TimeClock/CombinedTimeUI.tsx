@@ -17,14 +17,19 @@ import duration from 'dayjs/plugin/duration';
 import { ActiveTimeStrip } from './ActiveTimeStrip';
 import { TabsDropDown } from './TabsDropDown';
 import { TotalTime } from './TotalTime';
+import { ITimeEntriesRes } from '../../../../features/task/interface.tasks';
 
 dayjs.extend(duration);
 
-export function CombinedTime() {
+interface Props {
+  timeData: ITimeEntriesRes | undefined;
+}
+
+export function CombinedTime({ timeData }: Props) {
   const dispatch = useAppDispatch();
 
   const { activeItemId, activeItemType, activeClockTab } = useAppSelector((state) => state.workspace);
-  const { timerStatus, timeAssigneeFilter: getTimeEntries } = useAppSelector((state) => state.task);
+  const { timerStatus } = useAppSelector((state) => state.task);
 
   const [dropDown, setDropDown] = useState<{ tabDrop: boolean; activeTimeDrop: boolean }>({
     tabDrop: false,
@@ -88,7 +93,7 @@ export function CombinedTime() {
                   )}
                 </label>
                 <div className="flex items-center relative border bg-white rounded px-1.5 border-alsoit-success w-20 h-6 mt-1.5">
-                  <TotalTime totalDuration={getTimeEntries?.data.total_duration} />
+                  <TotalTime totalDuration={timeData?.data.total_duration} />
                   <span className="absolute -top-1.5 bg-white px-0.5 text-alsoit-text-sm">Total Time</span>
                 </div>
               </div>
