@@ -132,28 +132,6 @@ export const UseSaveTaskFilters = () => {
   return mutation;
 };
 
-export const moveTask = (data: { taskId: TaskId; moveAfterId?: string; listId?: string; overType: string }) => {
-  const { taskId, listId, overType, moveAfterId } = data;
-  let requestData = {};
-  if (overType === EntityType.list) {
-    requestData = {
-      list_id: listId
-    };
-  } else if (overType === EntityType.task && moveAfterId) {
-    requestData = {
-      move_after_id: moveAfterId
-    };
-  } else {
-    requestData = { parent_id: listId };
-  }
-  const response = requestNew({
-    url: 'tasks/' + taskId + '/move',
-    method: 'POST',
-    data: requestData
-  });
-  return response;
-};
-
 export const useSaveData = () => {
   const mutation = useMutation(
     async ({ key, value }: { key: string; value: IUserCalendarParams } | ITimeEntryParams) => {
@@ -184,6 +162,87 @@ export const useGetUserSettingsData = ({ keys }: { keys: string }) => {
 
     return data;
   });
+};
+
+export const multipleTaskMove = (data: {
+  taskIds: TaskId[];
+  moveAfterId?: string;
+  listId?: string;
+  overType: string;
+}) => {
+  const { taskIds, listId, overType, moveAfterId } = data;
+  let requestData = {};
+  if (overType === EntityType.list) {
+    requestData = {
+      list_id: listId
+    };
+  } else if (overType === EntityType.task && moveAfterId) {
+    requestData = {
+      move_after_id: moveAfterId
+    };
+  } else {
+    requestData = { parent_id: listId };
+  }
+  const response = requestNew({
+    url: 'tasks/multiple/move',
+    method: 'POST',
+    data: { ...requestData, ids: taskIds }
+  });
+  return response;
+};
+
+export const useMultipleTaskMove = () => {
+  const dispatch = useDispatch();
+
+  const { draggableTask, dragOverList } = useAppSelector((state) => state.list);
+  const { tasks, subtasks, selectedTasksArray } = useAppSelector((state) => state.task);
+  const { hub } = useAppSelector((state) => state.hub);
+
+  return useMutation(multipleTaskMove, {
+    onSuccess: () => {
+      if (dragOverList) {
+        // move to list
+        const { updatedTasks, updatedSubtasks, updatedTree } = taskMoveToListManager(
+          draggableTask as ITaskFullList,
+          dragOverList as IList,
+          tasks,
+          subtasks,
+          hub,
+          selectedTasksArray
+        );
+        dispatch(setTasks(updatedTasks));
+        dispatch(setSubtasks(updatedSubtasks));
+        dispatch(getHub(updatedTree));
+        dispatch(setFilteredResults(updatedTree));
+      }
+      dispatch(setSelectedTasksArray([]));
+      dispatch(setDraggableItem(null));
+      dispatch(setDragOverList(null));
+      dispatch(setDragOverTask(null));
+    }
+  });
+};
+
+export const moveTask = (data: { taskId: TaskId; moveAfterId?: string; listId?: string; overType: string }) => {
+  const { taskId, listId, overType, moveAfterId } = data;
+  let requestData = {};
+  if (overType === EntityType.list) {
+    requestData = {
+      list_id: listId
+    };
+  } else if (overType === EntityType.task && moveAfterId) {
+    requestData = {
+      move_after_id: moveAfterId
+    };
+  } else {
+    requestData = { parent_id: listId };
+  }
+  const response = requestNew({
+    url: 'tasks/' + taskId + '/move',
+    method: 'POST',
+    data: requestData
+  });
+  return response;
 };
 
 export const useMoveTask = () => {

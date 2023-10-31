@@ -8,7 +8,7 @@ import {
   setDraggableItem,
   setDraggableTask
 } from '../../../../features/list/listSlice';
-import { useMoveTask } from '../../../../features/task/taskService';
+import { useMoveTask, useMultipleTaskMove } from '../../../../features/task/taskService';
 import { setPlaces } from '../../../../features/account/accountSlice';
 import { arrayMove } from '@dnd-kit/sortable';
 import { useMoveListService } from '../../../../features/list/listService';
@@ -30,10 +30,11 @@ export default function DragContext({ children }: DragContextProps) {
   const dispatch = useAppDispatch();
 
   // needed for invalidation
-  const { dragToBecomeSubTask } = useAppSelector((state) => state.task);
+  const { dragToBecomeSubTask, selectedTasksArray } = useAppSelector((state) => state.task);
   const { places } = useAppSelector((state) => state.account);
 
   const { mutate: onMove } = useMoveTask();
+  const { mutate: onMultipleTaskMove } = useMultipleTaskMove();
   const { mutate: onMoveList } = useMoveListService();
   const { mutate: onMoveHub } = useMoveHubsService();
   const { mutate: onMoveWallet } = useMoveWalletsService();
@@ -75,11 +76,19 @@ export default function DragContext({ children }: DragContextProps) {
     if (isTaskToList) {
       // drag and drop tasks
       if (overId && activeId) {
-        onMove({
-          taskId: activeId,
-          listId: overId,
-          overType: EntityType.list
-        });
+        if (selectedTasksArray.length && selectedTasksArray.includes(activeId)) {
+          onMultipleTaskMove({
+            taskIds: selectedTasksArray,
+            listId: overId,
+            overType: EntityType.list
+          });
+        } else {
+          onMove({
+            taskId: activeId,
+            listId: overId,
+            overType: EntityType.list
+          });
+        }
       }
     }
     if (isListToHub) {
