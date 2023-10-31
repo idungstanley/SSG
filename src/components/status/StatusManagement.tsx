@@ -32,6 +32,8 @@ import { setMatchData } from '../../features/general/prompt/promptSlice';
 import { BOARD_SECTIONS } from '../../utils/StatusManagement/Constant';
 import { useGetStatusTemplates } from '../../features/statusManager/statusManagerService';
 import { COLLECTION_TYPES } from '../../features/statusManager/statusManager.interface';
+import { useParams } from 'react-router-dom';
+import { EntityType } from '../../utils/EntityTypes/EntityType';
 
 interface ErrorResponse {
   data: {
@@ -54,6 +56,7 @@ export const groupStylesMapping: Record<string, GroupStyles> = {
 export default function CustomStatus() {
   const dispatch = useAppDispatch();
   const createStatusTypes = useMutation(statusTypesService);
+  const { listId, hubId, walletId } = useParams();
 
   const { matchData } = useAppSelector((state) => state.prompt);
   const { templateCollections } = useAppSelector((state) => state.statusManager);
@@ -78,6 +81,9 @@ export default function CustomStatus() {
       : spaceStatuses
   );
 
+  const itemType = listId ? EntityType.list : hubId ? EntityType.hub : walletId ? EntityType.wallet : activeItemType;
+  const itemId = listId || hubId || walletId || activeItemId;
+
   const [boardSections, setBoardSections] = useState<BoardSectionsType>(initialBoardSections);
 
   const [is_default_name, setIsDefaultName] = useState<string | null>(boardSections['open'][0]?.name || null); // Initialize with the name of the item at position 0 or null if no item
@@ -92,7 +98,7 @@ export default function CustomStatus() {
   useGetStatusTemplates();
 
   useEffect(() => {
-    createModelIdAndTypeHandler(activeItemId, activeItemType, setModelData, modelData);
+    createModelIdAndTypeHandler(itemId, itemType, setModelData, modelData);
     setBoardSections(initialBoardSections);
   }, [spaceStatuses, activeItemId, activeItemType]);
 
