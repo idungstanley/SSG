@@ -435,7 +435,7 @@ function GroupMenuOptions({ items }: ItemsProps) {
 
 export function InlineBorderLabel({ label, topElement }: InlineBorderProps) {
   return (
-    <div className="relative items-center">
+    <div className="relative items-center justify-center">
       {topElement}
       <div className="flex items-center py-1">
         <div className="flex-grow border-t border-gray-400"></div>

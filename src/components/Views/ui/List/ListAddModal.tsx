@@ -2,14 +2,7 @@ import * as React from 'react';
 import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import {
-  AiOutlineCaretDown,
-  AiOutlineLink,
-  AiOutlinePlus,
-  AiOutlineSetting,
-  AiOutlineShareAlt,
-  AiOutlineStar
-} from 'react-icons/ai';
+import { AiOutlineLink, AiOutlinePlus, AiOutlineSetting, AiOutlineShareAlt, AiOutlineStar } from 'react-icons/ai';
 import { GrEdit } from 'react-icons/gr';
 import { HiOutlineDuplicate, HiOutlineInformationCircle, HiOutlineMail } from 'react-icons/hi';
 import { MdOutlineSendToMobile } from 'react-icons/md';
@@ -18,6 +11,7 @@ import { BsArchive, BsCheck2All } from 'react-icons/bs';
 import { RiDeleteBin6Line } from 'react-icons/ri';
 import { IoIosArrowForward } from 'react-icons/io';
 import { IListColor } from './List';
+import ArrowDownFilled from '../../../../assets/icons/ArrowDownFilled';
 
 export default function ListAddModal({
   handleCheckedGroupTasks,
@@ -125,6 +119,7 @@ export default function ListAddModal({
   return (
     <div>
       <Button
+        sx={{ fontFamily: 'montserrat', textTransform: 'none', fontSize: '13px', fontWeight: 600 }}
         id="basic-button"
         aria-controls={open ? 'basic-menu' : undefined}
         aria-haspopup="true"
@@ -134,7 +129,7 @@ export default function ListAddModal({
         <span style={{ color: ListColor?.outerColour === null ? 'black' : (ListColor?.outerColour as string) }}>
           Add
         </span>
-        <AiOutlineCaretDown className="w-3 h-3 pl-1 text-gray-500 " />
+        <ArrowDownFilled className="ml-1 w-1.5" />
       </Button>
       <Menu
         id="basic-menu"

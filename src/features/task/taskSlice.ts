@@ -273,11 +273,13 @@ interface TaskState {
   editCustomProperty: IField | undefined;
   dragToBecomeSubTask: boolean;
   fileUploadProps: fileUploadPropsType;
+  rootTaskIds?: string[];
 }
 
 const initialState: TaskState = {
   tasks: {},
   subtasks: {},
+  rootTaskIds: [],
   currentTaskIdForPilot: null,
   watchersData: [],
   currTeamMemberId: null,
@@ -429,6 +431,9 @@ export const taskSlice = createSlice({
     },
     setSubtasks(state, action: PayloadAction<Record<string, ITaskFullList[]>>) {
       state.subtasks = action.payload;
+    },
+    setRootTaskIds(state, action: PayloadAction<string[] | undefined>) {
+      state.rootTaskIds = action.payload;
     },
     setFilterFields(state, action: PayloadAction<FilterWithId[]>) {
       state.filters = { ...state.filters, fields: action.payload };
@@ -893,6 +898,7 @@ export const {
   setNewCustomPropertyDetails,
   setEditCustomProperty,
   setDragToBecomeSubTask,
-  setOpenFileUploadModal
+  setOpenFileUploadModal,
+  setRootTaskIds
 } = taskSlice.actions;
 export default taskSlice.reducer;
