@@ -95,8 +95,7 @@ export function StickyCol({
     separateSubtasksMode,
     newTaskPriority,
     f2State,
-    assignOnHoverTask,
-    rootTaskIds
+    assignOnHoverTask
   } = useAppSelector((state) => state.task);
 
   const [isChecked, setIsChecked] = useState(false);
@@ -143,14 +142,6 @@ export function StickyCol({
     e.stopPropagation();
     setShowSubTasks(!showSubTasks);
   };
-
-  useEffect(() => {
-    rootTaskIds?.map((item) => {
-      if (item === task.id) {
-        setShowSubTasks(!showSubTasks);
-      }
-    });
-  }, []);
 
   const editTaskMutation = useMutation(UseUpdateTaskService, {
     onSuccess: () => {
