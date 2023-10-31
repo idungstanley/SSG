@@ -11,7 +11,7 @@ interface PriorityProps {
 
 export default function Priority({ details }: PriorityProps) {
   return details ? (
-    <div className=" p-1 ml-1">
+    <div className="p-1">
       {'priority' in details ? <PriorityDropdown taskCurrentPriority={details.priority} /> : null}
     </div>
   ) : null;

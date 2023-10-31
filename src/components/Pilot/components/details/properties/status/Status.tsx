@@ -18,12 +18,12 @@ export default function Status({ details }: StatusDetailsProps) {
   const dispatch = useAppDispatch();
 
   const [complete, setComplete] = useState('');
-  const [iconToggle, setIconToggle] = useState<{ arrow: boolean; check: boolean }>({
-    arrow: false,
-    check: false
-  });
+  // const [iconToggle, setIconToggle] = useState<{ arrow: boolean; check: boolean }>({
+  //   arrow: false,
+  //   check: false
+  // });
 
-  const StatusData = details ? ('status' in details ? details?.status : null) : null;
+  // const StatusData = details ? ('status' in details ? details?.status : null) : null;
 
   const { isSuccess } = UseUpdateTaskStatusService({
     task_id: details?.id as string,
@@ -34,22 +34,6 @@ export default function Status({ details }: StatusDetailsProps) {
 
   const handleStatusModal = () => {
     dispatch(setUpdateStatusModalId(details?.id || ''));
-  };
-
-  const renderStatusBg = () => {
-    const statusName = StatusData?.name;
-    switch (statusName) {
-      case 'to do':
-        return 'gray';
-      case 'in progress':
-        return 'purple';
-      case 'archived':
-        return 'yellow';
-      case 'completed':
-        return 'green';
-      default:
-        return 'gray';
-    }
   };
 
   const handleStatusMessage = (status: string | null | undefined) => {
@@ -68,30 +52,29 @@ export default function Status({ details }: StatusDetailsProps) {
         {details && 'status' in details ? (
           <ToolTip title="Current status">
             <button
-              className={`p-2 bg-${renderStatusBg}-300 text-black text-xs border-white rounded-l-md capitalize cursor-pointer object-contain h-8`}
+              className="flex items-center object-contain h-6 p-2 text-xs text-white capitalize border-white rounded-md cursor-pointer w-fit"
               onClick={() => handleStatusModal()}
+              style={{ backgroundColor: details.status.color }}
             >
               {handleStatusMessage(details.status.name)}
             </button>
           </ToolTip>
         ) : null}
-        <ToolTip title="Next status">
-          <button className={`p-2 bg-${renderStatusBg}-300 text-black text-xs rounded-r-md border-white h-8`}>
-            <div
-              onMouseEnter={() => setIconToggle((prev) => ({ ...prev, arrow: true }))}
-              onMouseLeave={() => setIconToggle((prev) => ({ ...prev, arrow: false }))}
+        {details && 'status' in details ? (
+          <ToolTip title="Next status">
+            <button
+              className="flex items-center justify-center w-6 h-6 text-xs text-white border-white rounded-md"
+              style={{ backgroundColor: details.status.color }}
             >
-              <MdArrowRight
-                className={iconToggle.arrow ? 'text-alsoit-purple-300 w-4 h-4' : 'text-alsoit-gray-200 w-4 h-4'}
-              />
-            </div>
-          </button>
-        </ToolTip>
+              <MdArrowRight className="w-4 h-4" />
+            </button>
+          </ToolTip>
+        ) : null}
       </div>
       <div>
         <ToolTip title="Set to complete">
           <button
-            className="p-2 text-xs border border-gray-300 rounded-md hover:border-green-300"
+            className="flex items-center justify-center w-6 h-6 text-xs border border-gray-300 rounded-md hover:border-green-300"
             onClick={() => setComplete('completed')}
           >
             <AiOutlineCheck className="hover:border-green-300" />

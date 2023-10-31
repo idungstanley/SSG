@@ -197,12 +197,12 @@ export default function PaletteManager({
           handleClick={handleClick}
         />
       ),
-      icon: <GridViews color={selectedViews === paletteViews.BOARD ? 'white' : 'rgb(191, 0, 255)'} />
+      icon: <GridViews color={selectedViews === paletteViews.BOARD ? 'rgb(191, 0, 255)' : '#424242'} />
     },
     {
       label: paletteViews.LIST,
       element: <PaletteListView />,
-      icon: <FormatListBullet color={selectedViews === paletteViews.LIST ? 'white' : 'rgb(191, 0, 255)'} />
+      icon: <FormatListBullet color={selectedViews === paletteViews.LIST ? 'rgb(191, 0, 255)' : '#424242'} />
     }
   ];
 
@@ -229,7 +229,7 @@ export default function PaletteManager({
     >
       <div
         className="overflow-y-auto text-gray-500 rounded-full drop-shadow-2xl"
-        style={{ borderRadius: '5px', minWidth: '400px' }}
+        style={{ borderRadius: '5px', maxWidth: '332px', fontSize: '10px' }}
       >
         <div className="z-50 flex flex-col w-full">
           {selectListColours.length > 0 && selectedViews === paletteViews.LIST && (
@@ -242,15 +242,20 @@ export default function PaletteManager({
           )}
           {!isSearch && selectListColours.length === 0 && paletteViews.BOARD && (
             <div className="flex items-center justify-between mb-2">
-              <div className="flex items-center p-2 bg-alsoit-gray-75 h-9">
-                <p className="justify-center bg-['#b2b2b2'] text-white">COLOUR LIBRARY</p>
+              <div className="flex gap-1 uppercase items-center-justify-between">
+                <div className="flex items-center h-8 p-2 rounded-br-lg bg-alsoit-gray-75 w-28">
+                  <p className="justify-center bg-['#b2b2b2'] text-white" style={{ fontSize: '10px' }}>
+                    COLOUR LIBRARY
+                  </p>
+                </div>
+                <div className="flex items-center">{title}</div>
               </div>
               <div className="flex items-center gap-1 px-2">
                 {views.map((item, index) => (
                   <div
                     key={index}
                     className={`rounded p-1 cursor-pointer ${
-                      selectedViews === item.label ? 'bg-alsoit-purple-300' : 'rounded bg-white shadow-md'
+                      selectedViews === item.label ? 'bg-primary-200' : 'rounded bg-white shadow-md'
                     }`}
                     onClick={() => setSelectedViews(item.label)}
                   >
@@ -287,33 +292,43 @@ export default function PaletteManager({
               </div>
             </div>
           )}
-          <div className="px-2 mx-2">
+          <div className="pl-2">
             {isSearch && (
-              <div>
+              <div className="flex items-center gap-1 my-2">
                 <Input
                   placeholder="Search"
-                  bgColor="bg-gray-200"
-                  borderRadius="rounded-md py-0.5"
+                  bgColor="bg-white"
+                  borderRadius="rounded-md py-0.5 h-6"
                   type="text"
                   name="search"
-                  leadingIcon={<CiSearch />}
+                  leadingIcon={<CiSearch style={{ color: 'rgb(191, 0, 255)' }} />}
                   trailingIcon={
                     <ToolTip title="Close Search">
                       <span>
-                        <AiFillCloseCircle style={{ color: 'rgb(191, 0, 255)' }} />
+                        <AiFillCloseCircle className="text-sm" style={{ color: 'rgb(191, 0, 255)' }} />
                       </span>
                     </ToolTip>
                   }
                   trailingClick={handleCloseSearch}
                   onChange={() => null}
                 />
+                {activeOutterColor === null ? (
+                  <DefaultColour dimensions={{ width: 26, height: 26 }} />
+                ) : (
+                  <span
+                    className="w-6 h-6 p-2 rounded"
+                    style={{
+                      backgroundColor: isInnerFrameActive ? activeInnerColor : activeOutterColor
+                    }}
+                  ></span>
+                )}
               </div>
             )}
             {topContent}
             {paletteType === EntityType.list && (
               <div className="flex items-center justify-between pb-1 mt-1 mb-1">
                 <div
-                  className={`relative flex w-fit items-center justify-between gap-2 p-1 px-2.5 text-xs  rounded-md hover:text-primary-600 border border-gray-300 hover:bg-primary-100 ${
+                  className={`relative flex w-fit items-center justify-between gap-2 p-1 px-2.5 rounded-md hover:text-primary-600 border border-gray-300 hover:bg-primary-100 ${
                     showListShapeSelection && 'text-white bg-alsoit-purple-300'
                   } ${shape && !showListShapeSelection ? 'bg-primary-200 text-alsoit-purple-300' : 'text-gray-500'}`}
                   onClick={(e) => handleOpenListShapeSelection(e)}
@@ -339,16 +354,17 @@ export default function PaletteManager({
                 />
               </div>
             )}
+
             {selectedElement && selectedElement}
             <div
-              className={cl('flex gap-1 items-center mt-2', displayColorPicker ? 'justify-left' : 'justify-between')}
+              className={cl('flex gap-1 items-center mt-1', displayColorPicker ? 'justify-left' : 'justify-between')}
             >
               <ToolTip title="Advanced color options">
                 <span
                   className="flex items-center gap-2 p-1 rounded cursor-pointer hover:bg-primary-200"
                   onClick={() => setDisplayColorPicker((prev) => !prev)}
                 >
-                  <p className={`truncate text-xs w-fit ${displayColorPicker ? 'text-primary-600' : null}`}>
+                  <p className={`truncate w-fit ${displayColorPicker ? 'text-primary-600' : null}`}>
                     ADVANCED COLOR OPTIONS
                   </p>
                   {displayColorPicker ? (
@@ -367,7 +383,7 @@ export default function PaletteManager({
               width="w-20"
               label="Cancel"
               labelSize="text-xs"
-              customClasses="hover:bg-red-600 bg-white text-red-600 border-red-200"
+              customClasses="hover:bg-red-500 bg-white text-red-600 border-red-200"
               padding="p-1"
               buttonStyle="custom"
               onClick={handleCancel}

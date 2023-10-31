@@ -32,7 +32,7 @@ export default function Details() {
       <div onMouseEnter={() => setIconToggle(true)} onMouseLeave={() => setIconToggle(false)}>
         <SectionArea
           label="Details"
-          icon={<DetailsIcon active={iconToggle} dimensions={{ width: 20, height: 20 }} />}
+          icon={<DetailsIcon active={iconToggle} dimensions={{ width: 18, height: 18 }} />}
         />
       </div>
       <section className="flex flex-col overflow-y-scroll h-fit mb-11 ">

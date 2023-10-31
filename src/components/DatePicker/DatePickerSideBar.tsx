@@ -165,7 +165,7 @@ export function DatePickerSideBar({ currentDate, setOpenSideBar }: DatePickerSid
           className="flex items-center space-x-2 font-extrabold cursor-pointer text-alsoit-text-lg"
         >
           <span>Recurring</span>
-          <ArrowDown active />
+          <ArrowDown active className="w-4 h-4" />
         </div>
         <div className="flex items-center space-x-2">
           <div
