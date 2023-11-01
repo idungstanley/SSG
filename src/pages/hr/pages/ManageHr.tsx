@@ -1,25 +1,31 @@
-import { useGetTeamMembers } from '../../../features/settings/teamMembers/teamMemberService';
-import HrListMembers from '../ui/HrListMembers';
-import { checkIsOwner } from '../../calendar/lib/userUtils';
+//import { useGetTeamMembers } from '../../../features/settings/teamMembers/teamMemberService';
+//import HrListMembers from '../ui/HrListMembers';
+//import { checkIsOwner } from '../../calendar/lib/userUtils';
 import { Fragment, useState } from 'react';
 import { useAppSelector } from '../../../app/hooks';
-import { selectCalendar } from '../../../features/calendar/slice/calendarSlice';
-import { AddItem } from '../ui/AddItem';
+//import { selectCalendar } from '../../../features/calendar/slice/calendarSlice';
+//import { AddItem } from '../ui/AddItem';
 import { cl } from '../../../utils';
+import { useGetHrTeamMembers } from '../../../features/hr/hrTeamMembersService';
+import { selectCalendar } from '../../../features/calendar/slice/calendarSlice';
 
 export default function ManageHr() {
-  const { blacklistIds } = useAppSelector(selectCalendar);
-  const { data } = useGetTeamMembers({ page: 1, query: '' });
-  const members = data?.data.team_members ?? [];
+  const { selectedHubs } = useAppSelector(selectCalendar);
+  console.log(selectedHubs[0]);
+  const data2 = useGetHrTeamMembers();
+  console.log(data2);
+  //const { blacklistIds } = useAppSelector(selectCalendar);
+  //const { data } = useGetTeamMembers({ page: 1, query: '' });
+  //const members = data?.data.team_members ?? [];
   const { activeItemName } = useAppSelector((state) => state.workspace);
 
-  const isOwner = checkIsOwner(members);
+  //const isOwner = checkIsOwner(members);
 
-  const filteredMembers = members.filter((i) => !blacklistIds.includes(i.id));
+  //const filteredMembers = members.filter((i) => !blacklistIds.includes(i.id));
 
-  if (!isOwner) {
-    return <div>You have no right to do this</div>;
-  }
+  // if (!isOwner) {
+  //   return <div>You have no right to do this</div>;
+  // }
 
   const [showNewDayField, setShowNewDayField] = useState(false);
 
@@ -53,9 +59,7 @@ export default function ManageHr() {
               </div>
             </div>
             {showNewDayField ? (
-              <div className="pl-2">
-                <AddItem onClose={() => handleClose()} members={members} />
-              </div>
+              <div className="pl-2">{/*<AddItem onClose={() => handleClose()} members={members} />*/}</div>
             ) : null}
             {!showNewDayField && (
               <div className="h-5 font-semibold alsoit-gray-300">
@@ -78,11 +82,11 @@ export default function ManageHr() {
                   </tr>
                 </thead>
                 <tbody className="bg-white">
-                  {Object.keys(filteredMembers).map((memberData, key) => (
-                    <Fragment key={key}>
-                      <HrListMembers member={filteredMembers[key]} />
-                    </Fragment>
-                  ))}
+                  {/*{Object.keys(filteredMembers).map((memberData, key) => (*/}
+                  {/*  <Fragment key={key}>*/}
+                  {/*    <HrListMembers member={filteredMembers[key]} />*/}
+                  {/*  </Fragment>*/}
+                  {/*))}*/}
                 </tbody>
               </table>
             </section>
