@@ -129,25 +129,8 @@ export function Head({
 
   const allChecked = groupedTask?.every((value) => selectedTasksArray.includes(value.id));
 
-  // const handleCheckedGroupTasks = () => {
-  //   const updatedTaskIds: string[] = [...selectedTasksArray];
-  //   if (allChecked) {
-  //     groupedTask?.forEach((task) => {
-  //       const taskIndex = updatedTaskIds.indexOf(task.id);
-  //       updatedTaskIds.splice(taskIndex, 1);
-  //     });
-  //   } else {
-  //     groupedTask?.forEach((task) => {
-  //       const taskIndex = updatedTaskIds.indexOf(task.id);
-  //       if (taskIndex === -1) {
-  //         updatedTaskIds.push(task.id);
-  //       }
-  //     });
-  //   }
-  //   dispatch(setSelectedTasksArray(updatedTaskIds));
-  // };
   const subtaskIds = (tasks: Task[]) => {
-    return tasks.map((task) => console.log('taskId', task.id));
+    return tasks.map((task) => task.id);
   };
 
   const returnSubTaskIds = (taskRootIds: string[]) => {
@@ -170,8 +153,10 @@ export function Head({
           Object.keys(taskRootIds).map((item) => {
             if (item === task.id) {
               const subTaskArray = returnSubTaskIds(taskRootIds[item]);
-              console.log(subTaskArray);
-              // updatedTaskIds.push(...subTaskArray);
+
+              const flatArray = subTaskArray.flat() as string[];
+
+              updatedTaskIds.push(...flatArray);
             }
           });
           updatedTaskIds.push(task.id);
