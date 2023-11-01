@@ -18,5 +18,7 @@ export const pilotTabs = {
   CREATE_WALLET: 'create_wallet',
   CREATE_LIST: 'create_list',
   UTILITIES: 'utilities',
-  AUTOMATION: 'automation'
+  AUTOMATION: 'automation',
+  CALENDAR_SETTINGS: 'calendar_settings',
+  STATUS_MANAGEMENT: 'status_management'
 };

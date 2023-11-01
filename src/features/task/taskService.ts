@@ -59,13 +59,15 @@ import {
 import { ITeamMembersAndGroup } from '../settings/teamMembersAndGroups.interfaces';
 import { useDispatch } from 'react-redux';
 import { updateListTasksCountManager } from '../../managers/List';
-import { getHub } from '../hubs/hubSlice';
+import { getHub, setStatusesToMatch } from '../hubs/hubSlice';
 import { setFilteredResults } from '../search/searchSlice';
 import { addNewSubtaskManager } from '../../managers/Subtask';
 import { IList } from '../hubs/hubs.interfaces';
 import { setDragOverList, setDragOverTask, setDraggableItem } from '../list/listSlice';
 import { FilterWithId, FiltersOption } from '../../components/TasksHeader/ui/Filter/types/filters';
 import { pilotTabs } from '../../app/constants/pilotTabs';
+import { StatusProps } from '../../pages/workspace/hubs/components/ActiveTree/activetree.interfaces';
+import { setMatchData } from '../general/prompt/promptSlice';
 
 export const useDeleteAttachment = ({ id }: { id: string }) => {
   const data = requestNew({
@@ -133,28 +135,6 @@ export const UseSaveTaskFilters = () => {
   return mutation;
 };
 
-export const moveTask = (data: { taskId: TaskId; moveAfterId?: string; listId?: string; overType: string }) => {
-  const { taskId, listId, overType, moveAfterId } = data;
-  let requestData = {};
-  if (overType === EntityType.list) {
-    requestData = {
-      list_id: listId
-    };
-  } else if (overType === EntityType.task && moveAfterId) {
-    requestData = {
-      move_after_id: moveAfterId
-    };
-  } else {
-    requestData = { parent_id: listId };
-  }
-  const response = requestNew({
-    url: 'tasks/' + taskId + '/move',
-    method: 'POST',
-    data: requestData
-  });
-  return response;
-};
-
 export const useSaveData = () => {
   const mutation = useMutation(
     async ({ key, value }: { key: string; value: IUserCalendarParams } | ITimeEntryParams) => {
@@ -186,6 +166,124 @@ export const useGetUserSettingsData = ({ keys }: { keys: string }) => {
     return data;
   });
 };
+
+export const multipleTaskMove = (data: {
+  taskIds: TaskId[];
+  moveAfterId?: string;
+  listId?: string;
+  overType: string;
+  status_matches?: { from: string; to: string }[];
+}) => {
+  const { taskIds, listId, overType, moveAfterId } = data;
+  let requestData = {};
+  if (overType === EntityType.list) {
+    requestData = {
+      list_id: listId
+    };
+  } else if (overType === EntityType.task && moveAfterId) {
+    requestData = {
+      move_after_id: moveAfterId
+    };
+  } else {
+    requestData = { parent_id: listId };
+  }
+  const response = requestNew({
+    url: 'tasks/multiple/move',
+    method: 'POST',
+    data: { ...requestData, ids: taskIds, status_matches: data.status_matches }
+  });
+  return response;
+};
+
+interface ErrorMultipleMoveResponse {
+  data: {
+    data: {
+      allowed_statuses: StatusProps[];
+      match_status: StatusProps[];
+    };
+  };
+}
+
+export const useMultipleTaskMove = () => {
+  const dispatch = useDispatch();
+
+  const { draggableTask, dragOverList } = useAppSelector((state) => state.list);
+  const { tasks, subtasks, selectedTasksArray } = useAppSelector((state) => state.task);
+  const { hub } = useAppSelector((state) => state.hub);
+
+  return useMutation(multipleTaskMove, {
+    onSuccess: () => {
+      if (dragOverList) {
+        // move to list
+        const { updatedTasks, updatedSubtasks, updatedTree } = taskMoveToListManager(
+          draggableTask as ITaskFullList,
+          dragOverList as IList,
+          tasks,
+          subtasks,
+          hub,
+          selectedTasksArray
+        );
+        dispatch(setTasks(updatedTasks));
+        dispatch(setSubtasks(updatedSubtasks));
+        dispatch(getHub(updatedTree));
+        dispatch(setFilteredResults(updatedTree));
+      }
+      dispatch(setSelectedTasksArray([]));
+      dispatch(setDraggableItem(null));
+      dispatch(setDragOverList(null));
+      dispatch(setDragOverTask(null));
+    },
+    onError: (err: ErrorMultipleMoveResponse) => {
+      const matchData = err.data.data.match_status;
+      if (matchData) {
+        dispatch(setMatchData(matchData));
+        dispatch(setStatusesToMatch(err.data.data.allowed_statuses));
+      }
+    }
+  });
+};
+
+export const moveTask = (data: {
+  taskId: TaskId;
+  moveAfterId?: string;
+  listId?: string;
+  overType: string;
+  status_from?: string;
+  status_to?: string;
+}) => {
+  const { taskId, listId, overType, moveAfterId } = data;
+  let requestData = {};
+  if (overType === EntityType.list) {
+    requestData = {
+      list_id: listId
+    };
+  } else if (overType === EntityType.task && moveAfterId) {
+    requestData = {
+      move_after_id: moveAfterId
+    };
+  } else {
+    requestData = { parent_id: listId };
+  }
+  const response = requestNew({
+    url: 'tasks/' + taskId + '/move',
+    method: 'POST',
+    data: {
+      ...requestData,
+      status_from: data.status_from,
+      status_to: data.status_to
+    }
+  });
+  return response;
+};
+
+interface ErrorMoveResponse {
+  data: {
+    data: {
+      available_task_statuses: StatusProps[];
+      status: StatusProps;
+    };
+  };
+}
 
 export const useMoveTask = () => {
   const dispatch = useDispatch();
@@ -227,6 +325,13 @@ export const useMoveTask = () => {
       dispatch(setDraggableItem(null));
       dispatch(setDragOverList(null));
       dispatch(setDragOverTask(null));
+    },
+    onError: (err: ErrorMoveResponse) => {
+      const matchData = err.data.data.status;
+      if (matchData) {
+        dispatch(setMatchData([matchData]));
+        dispatch(setStatusesToMatch(err.data.data.available_task_statuses));
+      }
     }
   });
 };

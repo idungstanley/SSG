@@ -40,7 +40,13 @@ export default function SelectDropdown({ options, index }: SelectDropdownProps) 
     <div className="w-40 px-4 py-2 border rounded focus:outline-none focus:ring focus:border-blue-300">
       <div className="flex items-center justify-between gap-2" onClick={handleShowSelectOption}>
         <p className="truncate">{selectItem ? selectItem : 'Select Option'}</p>
-        <ArrowCaretUp active={!!showSelectDropdown} />
+        {showSelectDropdown ? (
+          <ArrowCaretUp active={!!showSelectDropdown} />
+        ) : (
+          <span style={{ transform: 'rotate(180deg)' }}>
+            <ArrowCaretUp active={false} />
+          </span>
+        )}
       </div>
       <AlsoitMenuDropdown anchorEl={showSelectDropdown} handleClose={handleCloseSelectOption}>
         <div className="flex flex-col w-48 p-2 space-y-2">

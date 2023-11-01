@@ -46,6 +46,7 @@ export const promptSlice = createSlice({
       state.title = '';
       state.body = '';
       state.options = [];
+      state.matchData = [];
     }
   }
 });
