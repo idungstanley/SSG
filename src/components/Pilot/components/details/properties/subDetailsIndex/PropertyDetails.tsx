@@ -127,12 +127,6 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
       return;
     }
   };
-  // const convertNewlinesToBreaks = (text: string) => {
-  //   return text
-  //     .split('\n')
-  //     .map((line, index) => (index === 0 ? line : `\n\n ${line}`))
-  //     .join('');
-  // };
 
   return (
     <div className="m-3 text-gray-500 rounded-md bg-alsoit-gray-50">

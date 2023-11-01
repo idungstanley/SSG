@@ -1,8 +1,9 @@
+import { DetailedHTMLProps, SVGAttributes } from 'react';
 import ICONS_INTERACTIONS from '../../utils/Constants/IconInteractions';
 
 /* eslint-disable max-len */
-interface Props {
-  active: boolean;
+interface Props extends DetailedHTMLProps<SVGAttributes<SVGSVGElement>, SVGSVGElement> {
+  active?: boolean;
   dimensions?: {
     height: number;
     width: number;
@@ -10,14 +11,15 @@ interface Props {
   color?: string;
 }
 
-export default function PlusCircle({ active, dimensions, color }: Props) {
+export default function PlusCircle({ active, dimensions, color, ...props }: Props) {
   return (
     <svg
       width={dimensions?.width ?? '20'}
       height={dimensions?.height ?? '20'}
-      viewBox="0 0 20 20"
+      viewBox="0 0 24 24"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      {...props}
     >
       <mask
         id="mask0_190_61718"

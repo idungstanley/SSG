@@ -21,6 +21,7 @@ import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import {
   SortOption,
   setAssignOnHoverState,
+  setCurrentTeamMemberId,
   setDuplicateTaskObj,
   setNewTaskPriority,
   setRootTaskIds,
@@ -934,7 +935,7 @@ export const createManualTimeEntry = () => {
       return response;
     },
     {
-      onSuccess: () => queryClient.invalidateQueries(['timeclock'])
+      onSuccess: () => queryClient.invalidateQueries(['timeEntries'])
     }
   );
   return { data, isError, isLoading, mutateAsync, isSuccess };
@@ -1135,12 +1136,17 @@ async function fetchTimeEntries({
 
 export function useGetTimeEntriesMutation() {
   const dispatch = useAppDispatch();
+  const { currentUserId } = useAppSelector((state) => state.auth);
   return useMutation(fetchTimeEntries, {
     onSuccess(data) {
       const teammembers = data?.data.time_entries.map((member) => member.team_member);
+      const currentTeamMember = teammembers?.map((member) => {
+        if (member.user.id === currentUserId) return member.id;
+      });
 
       dispatch(setTimeAssigneeFilter(data));
       dispatch(setTimeAssignee(teammembers));
+      currentTeamMember && dispatch(setCurrentTeamMemberId(currentTeamMember));
     }
   });
 }
