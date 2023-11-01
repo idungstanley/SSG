@@ -27,7 +27,7 @@ export interface attachmentData {
   id: string;
   physical_file: physicalFile;
   path: string;
-  team_member: ITeamMember;
+  team_member: ITeamMembersAndGroup;
 }
 
 export interface IAttachmentsRes {
