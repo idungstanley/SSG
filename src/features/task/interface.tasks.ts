@@ -4,7 +4,6 @@ import { ITeamMembersAndGroup } from '../settings/teamMembersAndGroups.interface
 import { IField, ITask_statuses } from '../list/list.interfaces';
 import { RecurFrequency, TypeOptionsProps } from '../../components/DatePicker/RecurringTypes';
 import { FilterWithId } from '../../components/TasksHeader/ui/Filter/types/filters';
-import { ITeamMember } from '../workspace/workspace.interfaces';
 
 interface fileFormat {
   key: string;
