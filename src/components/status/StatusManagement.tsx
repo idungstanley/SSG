@@ -56,7 +56,7 @@ export const groupStylesMapping: Record<string, GroupStyles> = {
 export default function CustomStatus() {
   const dispatch = useAppDispatch();
   const createStatusTypes = useMutation(statusTypesService);
-  const { listId, hubId, walletId } = useParams();
+  const { listId, hubId, subhubId, walletId } = useParams();
 
   const { matchData } = useAppSelector((state) => state.prompt);
   const { templateCollections } = useAppSelector((state) => state.statusManager);
@@ -81,8 +81,14 @@ export default function CustomStatus() {
       : spaceStatuses
   );
 
-  const itemType = listId ? EntityType.list : hubId ? EntityType.hub : walletId ? EntityType.wallet : activeItemType;
-  const itemId = listId || hubId || walletId || activeItemId;
+  const itemType = listId
+    ? EntityType.list
+    : hubId || subhubId
+    ? EntityType.hub
+    : walletId
+    ? EntityType.wallet
+    : activeItemType;
+  const itemId = listId || hubId || subhubId || walletId || activeItemId;
 
   const [boardSections, setBoardSections] = useState<BoardSectionsType>(initialBoardSections);
 
@@ -185,11 +191,13 @@ export default function CustomStatus() {
   const statusData = extractValuesFromArray(AddDefault);
   const model = statusTaskListDetails.listId ? 'list' : (modelData?.modelType as string);
   const model_id = statusTaskListDetails.listId || (modelData?.modelId as string);
+  const from_model = spaceStatuses[0].model;
+  const from_model_id = spaceStatuses[0].model_id;
 
   const handleStatusId = () => {
-    const modelTypeIsSameEntity = statusData.some((item) => item.model_type === model);
+    const modelTypeIsSameEntity = statusData.some((item) => item.model === model);
     const modelIdIsSameEntity = statusData.some((item) => item.model_id === model_id);
-    if (activeItemId === model_id && modelTypeIsSameEntity) {
+    if (itemId === model_id && modelTypeIsSameEntity) {
       if (modelIdIsSameEntity) {
         return statusData.map((item, index) => {
           return { ...item, position: index };
@@ -201,7 +209,12 @@ export default function CustomStatus() {
       }
     } else {
       return statusData.map((item, index) => {
-        return { ...item, id: null, is_default: index === 0 ? 1 : 0, position: index }; // Set the id to null
+        return {
+          ...item,
+          id: null,
+          is_default: index === 0 ? 1 : 0,
+          position: index
+        }; // Set the id to null
       });
     }
   };
@@ -210,8 +223,8 @@ export default function CustomStatus() {
     await createStatusTypes.mutateAsync({
       model_id: model_id,
       model: model,
-      from_model: activeItemType,
-      from_model_id: activeItemId,
+      from_model: from_model || activeItemType,
+      from_model_id: from_model_id || activeItemId,
       statuses: handleStatusId(),
       status_matches: matchedStatus
     });
@@ -250,8 +263,8 @@ export default function CustomStatus() {
       await createStatusTypes.mutateAsync({
         model_id: model_id,
         model: model,
-        from_model: modelData.modelType as string,
-        from_model_id: modelData.modelId as string,
+        from_model: from_model || activeItemType,
+        from_model_id: from_model_id || activeItemId,
         statuses: handleStatusId()
       });
     } catch (err) {
