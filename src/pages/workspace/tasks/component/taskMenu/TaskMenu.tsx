@@ -8,7 +8,7 @@ import { MdOutlineDeveloperBoard, MdOutlineDriveFileMove, MdDateRange, MdDeleteF
 import { HiOutlineDocumentDuplicate, HiInbox } from 'react-icons/hi';
 import { TbFolderX } from 'react-icons/tb';
 import { GiStoneStack, GiJusticeStar } from 'react-icons/gi';
-import { HiOutlineUserPlus } from 'react-icons/hi2';
+// import { HiOutlineUserPlus } from 'react-icons/hi2';
 import { BiMerge, BiEdit } from 'react-icons/bi';
 import { deleteTask } from '../../../../../features/task/taskService';
 import { useDispatch } from 'react-redux';
@@ -29,6 +29,7 @@ import ToolTip from '../../../../../components/Tooltip/Tooltip';
 import ActiveTreeSearch from '../../../../../components/ActiveTree/ActiveTreeSearch';
 import AlsoitMenuDropdown from '../../../../../components/DropDowns';
 import { deleteTaskManager } from '../../../../../managers/Task';
+import Assignee from '../../assignTask/Assignee';
 
 export default function TaskMenu() {
   const dispatch = useDispatch();
@@ -95,7 +96,8 @@ export default function TaskMenu() {
     {
       id: 'set_assignees',
       label: 'Set assignees',
-      icons: <HiOutlineUserPlus color="orange" opacity={0.5} />,
+      icons: <Assignee option="task" />,
+      // icons: <HiOutlineUserPlus color="orange" opacity={0.5} />,
       handleClick: () => ({}),
       isVisible: true
     },

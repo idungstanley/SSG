@@ -177,7 +177,7 @@ export default function UserSettingsModal({ setShowModal }: UserProps) {
                 onClick={(e) => i.handleClick(e)}
               >
                 <div className="flex items-center gap-2">
-                  <p className="w-5 h-5">{i.icon}</p>
+                  <p className="flex items-center w-5 h-5">{i.icon}</p>
                   <p>{i.title}</p>
                 </div>
                 <span>
