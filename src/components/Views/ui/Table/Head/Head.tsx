@@ -82,7 +82,9 @@ export function Head({
     selectedIndex,
     selectedIndexStatus,
     selectedIndexListId,
-    activeTaskColumn
+    activeTaskColumn,
+    subtasks,
+    taskRootIds
   } = useAppSelector((state) => state.task);
   const { baseColor } = useAppSelector((state) => state.account);
   const { isManageStatus } = useAppSelector((state) => state.workspace);
@@ -127,6 +129,33 @@ export function Head({
 
   const allChecked = groupedTask?.every((value) => selectedTasksArray.includes(value.id));
 
+  // const handleCheckedGroupTasks = () => {
+  //   const updatedTaskIds: string[] = [...selectedTasksArray];
+  //   if (allChecked) {
+  //     groupedTask?.forEach((task) => {
+  //       const taskIndex = updatedTaskIds.indexOf(task.id);
+  //       updatedTaskIds.splice(taskIndex, 1);
+  //     });
+  //   } else {
+  //     groupedTask?.forEach((task) => {
+  //       const taskIndex = updatedTaskIds.indexOf(task.id);
+  //       if (taskIndex === -1) {
+  //         updatedTaskIds.push(task.id);
+  //       }
+  //     });
+  //   }
+  //   dispatch(setSelectedTasksArray(updatedTaskIds));
+  // };
+  const subtaskIds = (tasks: Task[]) => {
+    return tasks.map((task) => console.log('taskId', task.id));
+  };
+
+  const returnSubTaskIds = (taskRootIds: string[]) => {
+    return taskRootIds.map((id) => {
+      if (subtasks[id]) return subtaskIds(subtasks[id]);
+    });
+  };
+
   const handleCheckedGroupTasks = () => {
     const updatedTaskIds: string[] = [...selectedTasksArray];
     if (allChecked) {
@@ -138,6 +167,13 @@ export function Head({
       groupedTask?.forEach((task) => {
         const taskIndex = updatedTaskIds.indexOf(task.id);
         if (taskIndex === -1) {
+          Object.keys(taskRootIds).map((item) => {
+            if (item === task.id) {
+              const subTaskArray = returnSubTaskIds(taskRootIds[item]);
+              console.log(subTaskArray);
+              // updatedTaskIds.push(...subTaskArray);
+            }
+          });
           updatedTaskIds.push(task.id);
         }
       });

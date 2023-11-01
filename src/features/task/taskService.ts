@@ -767,7 +767,8 @@ export const useSubTasks = (parentId: string, subtasks: Record<string, ITaskFull
         url: 'tasks/list',
         method: 'POST',
         data: {
-          parent_id: parentId
+          parent_id: parentId,
+          include_root_ids: 1
         }
       }),
     {

@@ -79,6 +79,7 @@ export interface ImyTaskData {
   has_attachments: boolean;
   end_date: string | null;
   status: Status;
+  root_task_ids?: string[] | null;
   assignees: ITeamMembersAndGroup[];
   group_assignees?: {
     color: string;
@@ -160,6 +161,7 @@ export const THREE_SUBTASKS_LEVELS = 'three_levels';
 interface TaskState {
   tasks: Record<string, ITaskFullList[]>;
   subtasks: Record<string, ITaskFullList[]>;
+  taskRootIds: Record<string, string[]>;
   currentTaskIdForPilot: string | null;
   watchersData: string[];
   removeWatcherId: null | string;
@@ -275,6 +277,7 @@ interface TaskState {
 const initialState: TaskState = {
   tasks: {},
   subtasks: {},
+  taskRootIds: {},
   currentTaskIdForPilot: null,
   watchersData: [],
   currTeamMemberId: null,
@@ -423,6 +426,9 @@ export const taskSlice = createSlice({
     },
     setSubtasks(state, action: PayloadAction<Record<string, ITaskFullList[]>>) {
       state.subtasks = action.payload;
+    },
+    setTaskRootIds(state, action: PayloadAction<Record<string, string[]>>) {
+      state.taskRootIds = action.payload;
     },
     setFilterFields(state, action: PayloadAction<FilterWithId[]>) {
       state.filters = { ...state.filters, fields: action.payload };
@@ -775,6 +781,7 @@ export const taskSlice = createSlice({
 export const {
   setTasks,
   setSubtasks,
+  setTaskRootIds,
   setFilterFields,
   setFilterOption,
   setSubtasksFilters,
