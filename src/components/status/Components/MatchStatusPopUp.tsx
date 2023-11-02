@@ -12,6 +12,12 @@ export interface matchedStatusProps {
   name: string;
 }
 
+interface optionsProps {
+  label: string | null;
+  style: string | null;
+  callback: () => void;
+}
+
 interface MatchPopUpProps {
   show: boolean;
   setShow: React.Dispatch<React.SetStateAction<boolean>>;
@@ -24,11 +30,6 @@ interface MatchPopUpProps {
 export default function MatchStatusPopUp({ show, setShow, options, validationMessage, title, body }: MatchPopUpProps) {
   const { matchData } = useAppSelector((state) => state.prompt);
 
-  interface optionsProps {
-    label: string | null;
-    style: string | null;
-    callback: () => void;
-  }
   return (
     <Transition.Root show={show} as={Fragment}>
       <Dialog as="div" className="fixed inset-0 z-50 overflow-y-auto" onClose={setShow}>

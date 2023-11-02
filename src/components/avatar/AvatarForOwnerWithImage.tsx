@@ -18,14 +18,12 @@ function AvatarForOwnerWithImage({
   return (
     <AssigneeCloth>
       <div className="absolute" style={{ left: '2px', top: '2px' }}>
-        <span className={`${height} ${width} ${roundedStyle} flex items-center justify-center bg-red-500 `}>
-          <img
-            className={` ${height} ${width} ${roundedStyle === 'circular' && 'rounded-full'} ${
-              roundedStyle === 'rounded' && 'rounded'
-            }`}
-            src={image_path}
-          />
-        </span>
+        <img
+          className={` ${height} ${width} ${roundedStyle === 'circular' && 'rounded-full'} ${
+            roundedStyle === 'rounded' && 'rounded'
+          }`}
+          src={image_path}
+        />
         <img src={OwnerBadge} alt="" className="absolute h-2 w-2 z-5" style={{ left: '23px', bottom: '1px' }} />
       </div>
     </AssigneeCloth>
