@@ -2,10 +2,10 @@ import { useEffect, useState } from 'react';
 import { IEntries, ITimeEntriesRes } from '../../../../features/task/interface.tasks';
 import { HorizontalScroll } from '../../../ScrollableContainer/HorizontalScroll';
 import { InventoryHeader } from './InventoryHeader';
-import { TimeLogEntries } from './LogEntries';
-import { LogHeaders } from './LogHeaders';
 import { useAppSelector } from '../../../../app/hooks';
 import { VerticalScroll } from '../../../ScrollableContainer/VerticalScroll';
+import { LogHeaders } from './LogHeaders';
+import { TimeLogEntries } from './LogEntries';
 
 interface Props {
   getTimeEntries?: ITimeEntriesRes;
@@ -19,7 +19,9 @@ export function TimeInventory({ getTimeEntries }: Props) {
   const [showLog, setShowLogs] = useState<boolean>(true);
 
   const Entries = () =>
-    timeEntries?.map((timeEntry, index) => <TimeLogEntries key={index} timeEntry={timeEntry} index={index} />);
+    timeEntries?.map((timeEntry, index) => {
+      return <TimeLogEntries key={index} index={index} timeEntry={timeEntry} />;
+    });
 
   useEffect(() => {
     if (getTimeEntries?.data.time_entries) setTimeEntries(getTimeEntries?.data.time_entries);
@@ -28,19 +30,23 @@ export function TimeInventory({ getTimeEntries }: Props) {
   return (
     <div className="relative bg-alsoit-gray-50 w-full rounded-md flex flex-col pt-10">
       <InventoryHeader timeData={getTimeEntries} showLog={!showLog} dropView={() => setShowLogs(!showLog)} />
-      <div className="w-full bg-white">
-        <HorizontalScroll>
+      <div className="w-full h-72">
+        <VerticalScroll>
           {showLog && (
             <>
-              <div className="flex flex-col h-72">
-                <VerticalScroll>
-                  <LogHeaders />
-                  <div className="flex flex-col w-full">{Entries()}</div>
-                </VerticalScroll>
+              <div className="max-h-72 w-full">
+                <HorizontalScroll>
+                  <table className="w-full h-full border-separate">
+                    <thead className="w-full">
+                      <LogHeaders />
+                    </thead>
+                    <tbody className="w-full">{Entries()}</tbody>
+                  </table>
+                </HorizontalScroll>
               </div>
             </>
           )}
-        </HorizontalScroll>
+        </VerticalScroll>
       </div>
     </div>
   );

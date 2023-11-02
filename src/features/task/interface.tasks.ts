@@ -17,6 +17,7 @@ interface fileFormat {
 interface physicalFile {
   id: string;
   name: string;
+  created_at: string;
   display_name: string;
   size: number;
   file_format: fileFormat;

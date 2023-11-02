@@ -8,7 +8,7 @@ export interface ITeamMembersAndGroup {
   is_online: boolean;
   updated_at: string;
   user: {
-    color: string | undefined;
+    color?: string;
     name: string;
     id: string;
     email: string;
@@ -17,7 +17,7 @@ export interface ITeamMembersAndGroup {
     timezone: string;
   };
   initials: string;
-  colour: string;
+  colour?: string;
   role: {
     key: string;
     name: string;

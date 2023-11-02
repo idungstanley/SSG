@@ -208,7 +208,7 @@ export function Head({
         dispatch(setIsManageStatus(!isManageStatus));
         dispatch(setActiveTabId(pilotTabs.ENTITY_MANAGER));
         setShowStatusDropdown(null);
-        dispatch(setActiveSubHubManagerTabId('status_management'));
+        dispatch(setActiveSubHubManagerTabId(pilotTabs.STATUS_MANAGEMENT));
         dispatch(setStatusTaskListDetails({ listId, listName }));
       }
     }
