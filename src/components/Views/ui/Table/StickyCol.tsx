@@ -116,9 +116,9 @@ export function StickyCol({
     if (task.id === activeItemId) {
       dispatch(setTaskInputValue(task.name));
     }
-  }, [taskId]);
+  }, [taskId, task.id, activeItemId]);
 
-  const TASK_NAME = task.id === activeItemId && taskInputValue ? taskInputValue : task.name;
+  const TASK_NAME = task.id === taskId && taskInputValue ? taskInputValue : task.name;
 
   const onClickTask = () => {
     if (task.id !== '0') {
@@ -230,6 +230,10 @@ export function StickyCol({
       setEitableContent(true);
     }
   }, [f2State]);
+
+  const handleSetEditable = () => {
+    setEitableContent(true);
+  };
 
   // listen on shift + arrow down key
   useEffect(() => {
@@ -399,7 +403,7 @@ export function StickyCol({
                   : ''
             }}
             onClick={onClickTask}
-            onDoubleClick={() => setEitableContent(true)}
+            onDoubleClick={() => handleSetEditable()}
             className={cl(
               COL_BG,
               ` ${isChecked && 'tdListV'} ${verticalGrid && 'border-r'} ${
@@ -502,7 +506,7 @@ export function StickyCol({
                       )}
                     </div>
                   ) : (
-                    <div>{taskUpperCase ? task.name.toUpperCase() : Capitalize(task.name)}</div>
+                    <div>{taskUpperCase ? TASK_NAME.toUpperCase() : Capitalize(TASK_NAME)}</div>
                   )}
                 </div>
                 <div
