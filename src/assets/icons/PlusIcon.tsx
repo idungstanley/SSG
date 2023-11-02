@@ -8,6 +8,7 @@ export interface IconProps extends DetailedHTMLProps<SVGAttributes<SVGSVGElement
     height: number;
     width: number;
   };
+  color?: string;
 }
 
 export default function PlusIcon({ active = false, dimensions, ...props }: IconProps) {

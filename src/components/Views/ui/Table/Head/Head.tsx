@@ -38,6 +38,8 @@ import RoundedCheckbox from '../../../../Checkbox/RoundedCheckbox';
 import { pilotTabs } from '../../../../../app/constants/pilotTabs';
 import { useDeleteCustomField } from '../../../../../features/list/listService';
 import { generateSortField } from '../../../../../utils/TaskHeader/GenerateSortField';
+import LightenColor from '../../List/lightenColor/LightenColor';
+import { IListColor } from '../../List/List';
 
 interface HeadProps {
   columns: ExtendedListColumnProps[];
@@ -51,6 +53,7 @@ interface HeadProps {
   groupedTask?: Task[];
   isSplitSubtask?: boolean;
   parentId?: string;
+  listColor?: IListColor;
   onToggleCollapseTasks: VoidFunction;
 }
 
@@ -66,6 +69,7 @@ export function Head({
   groupedTask,
   isSplitSubtask,
   parentId,
+  listColor,
   onToggleCollapseTasks
 }: HeadProps) {
   const dispatch = useAppDispatch();
@@ -78,8 +82,7 @@ export function Head({
     selectedIndex,
     selectedIndexStatus,
     selectedIndexListId,
-    activeTaskColumn,
-    subtasks
+    activeTaskColumn
   } = useAppSelector((state) => state.task);
   const { baseColor } = useAppSelector((state) => state.account);
   const { isManageStatus } = useAppSelector((state) => state.workspace);
@@ -135,7 +138,6 @@ export function Head({
       groupedTask?.forEach((task) => {
         const taskIndex = updatedTaskIds.indexOf(task.id);
         if (taskIndex === -1) {
-          console.log(subtasks);
           updatedTaskIds.push(task.id);
         }
       });
@@ -206,7 +208,7 @@ export function Head({
         dispatch(setIsManageStatus(!isManageStatus));
         dispatch(setActiveTabId(pilotTabs.ENTITY_MANAGER));
         setShowStatusDropdown(null);
-        dispatch(setActiveSubHubManagerTabId('status_management'));
+        dispatch(setActiveSubHubManagerTabId(pilotTabs.STATUS_MANAGEMENT));
         dispatch(setStatusTaskListDetails({ listId, listName }));
       }
     }
@@ -243,7 +245,16 @@ export function Head({
       <thead className="contents">
         <tr className="relative contents group">
           {/* first sticky col */}
-          <th style={{ zIndex: 2 }} className="sticky left-0 flex items-center -mb-2 font-extrabold">
+          <th
+            style={{
+              zIndex: 2,
+              backgroundColor: LightenColor(
+                listColor?.outerColour === null ? 'black' : (listColor?.outerColour as string),
+                0.95
+              )
+            }}
+            className="sticky left-0 flex items-center -mb-2 font-extrabold"
+          >
             <div className="flex items-center "></div>
             <div className="flex items-center w-full py-2 truncate dBlock group opacity-90 ml-0.5">
               <div>

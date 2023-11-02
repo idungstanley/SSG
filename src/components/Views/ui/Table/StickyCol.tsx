@@ -54,6 +54,7 @@ interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   onClose?: VoidFunction;
   isOver?: boolean;
   isBlockedShowChildren?: boolean;
+  toggleRootTasks?: boolean;
 }
 
 export function StickyCol({
@@ -71,6 +72,7 @@ export function StickyCol({
   paddingLeft = 0,
   dragElement,
   isBlockedShowChildren,
+  toggleRootTasks,
   ...props
 }: ColProps) {
   const dispatch = useAppDispatch();
@@ -116,7 +118,7 @@ export function StickyCol({
     }
   }, [taskId]);
 
-  const TASK_NAME = task.id === activeItemId ? taskInputValue : task.name;
+  const TASK_NAME = task.id === activeItemId && taskInputValue ? taskInputValue : task.name;
 
   const onClickTask = () => {
     if (task.id !== '0') {
@@ -343,6 +345,13 @@ export function StickyCol({
     };
   });
 
+  const renderContentWidth = () => {
+    if (saveSettingOnline?.singleLineView) {
+      return hoverOn ? `${hoverWidth}%` : `${width}%`;
+    }
+    return '100%';
+  };
+
   return (
     <>
       {task.id !== '0' && (
@@ -424,7 +433,7 @@ export function StickyCol({
               <div className="w-4" />
             ) : (
               <button onClick={onToggleDisplayingSubTasks} className="pl-1">
-                {showSubTasks || toggleAllSubtask ? (
+                {showSubTasks || toggleAllSubtask || toggleRootTasks ? (
                   <div className={`${task.descendants_count > 0 ? 'w-3 h-3' : 'opacity-0 w-3 h-3'}`}>
                     <CloseSubtask />
                   </div>
@@ -447,9 +456,9 @@ export function StickyCol({
             ) : null}
             <div ref={divRef} className="flex flex-col items-start justify-start flex-grow max-w-full pl-2 space-y-1">
               <div
-                className={'flex items-center text-left'}
+                className="flex items-center text-left"
                 style={{
-                  maxWidth: `${hoverOn ? `${hoverWidth}%` : `${width}%`}`
+                  maxWidth: renderContentWidth()
                 }}
                 onKeyDown={(e) => (e.key === 'Enter' && eitableContent ? handleEditTask(e, task.id) : null)}
               >

@@ -1,19 +1,16 @@
 import React from 'react';
 import Row from './Row';
-import { useGetTeamMemberInvites } from '../../../../../../features/settings/teamMemberInvites/teamMemberInviteService';
-import { useAppSelector } from '../../../../../../app/hooks';
+import { IInvite } from '../../../../../../features/settings/teamMemberInvites/teamMemberInvites.interface';
 
-export default function Body() {
-  const { teamMemberInvitesPaginationPage } = useAppSelector((state) => state.teamMemberInvite);
+interface TableProps {
+  data: IInvite[];
+}
 
-  const { status, data } = useGetTeamMemberInvites(teamMemberInvitesPaginationPage);
-
+export default function Body({ data }: TableProps) {
   return (
-    <tbody className="divide-y divide-gray-200 bg-white">
-      {status === 'success' &&
-        data.data.team_member_invites.map((teamMemberInvite) => (
-          <Row teamMemberInviteId={teamMemberInvite.id} key={teamMemberInvite.id} />
-        ))}
+    <tbody className="bg-white divide-y divide-gray-200">
+      {data &&
+        data.map((teamMemberInvite) => <Row teamMemberInviteId={teamMemberInvite.id} key={teamMemberInvite.id} />)}
     </tbody>
   );
 }

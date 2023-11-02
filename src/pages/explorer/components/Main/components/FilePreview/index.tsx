@@ -3,12 +3,13 @@ import { useAppSelector } from '../../../../../../app/hooks';
 import { Spinner } from '../../../../../../common';
 import { useGetExplorerFile, useGetFileBuffers } from '../../../../../../features/explorer/explorerService';
 import FullScreenMessage from '../../../../../../components/CenterMessage/FullScreenMessage';
-import FileViewer from 'react-file-viewer';
 
 const contentType = [
   'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
   'application/pdf',
-  'image/jpeg'
+  'image/jpeg',
+  'application/msword',
+  'text/plain'
 ];
 
 export default function FilePreview() {
@@ -20,7 +21,13 @@ export default function FilePreview() {
 
   const { data: headers, status } = useGetFileBuffers(
     selectedFileId,
-    extension === 'word' ? contentType[0] : extension === 'pdf' ? contentType[1] : contentType[2]
+    extension === 'word'
+      ? contentType[0]
+      : extension === 'pdf'
+      ? contentType[1]
+      : extension === 'image'
+      ? contentType[2]
+      : contentType[4]
   );
 
   return (
@@ -33,16 +40,12 @@ export default function FilePreview() {
           <Spinner size={8} color="#0F70B7" />
         </div>
       ) : status === 'success' ? (
-        extension === 'image' ? (
-          <img src={headers} className="max-h-204" alt="img" />
-        ) : extension === 'pdf' ? (
+        extension === 'pdf' || extension === 'text' ? (
           <iframe width="100%" height="100%" src={headers} itemType="application/pdf" className="internal">
             <embed src={headers} type="application/pdf" />
           </iframe>
-        ) : extension === 'word' ? (
-          <div className="h-204">
-            <FileViewer fileType="docx" filePath={headers} />
-          </div>
+        ) : extension === 'image' ? (
+          <img src={headers} className="max-h-204" alt="img" />
         ) : (
           <FullScreenMessage title="Unsupported file extension." description="Sorry :(" />
         )

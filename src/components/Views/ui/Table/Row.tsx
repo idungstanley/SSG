@@ -62,8 +62,15 @@ export function Row({
 }: RowProps) {
   const dispatch = useAppDispatch();
 
-  const { showNewTaskField, showNewTaskId, toggleAllSubtask, toggleAllSubtaskSplit, splitSubTaskLevels, subtasks } =
-    useAppSelector((state) => state.task);
+  const {
+    showNewTaskField,
+    showNewTaskId,
+    toggleAllSubtask,
+    toggleAllSubtaskSplit,
+    splitSubTaskLevels,
+    subtasks,
+    rootTaskIds
+  } = useAppSelector((state) => state.task);
 
   const [showSubTasks, setShowSubTasks] = useState(false);
   const [isCopied, setIsCopied] = useState<number>(0);
@@ -126,11 +133,14 @@ export function Row({
       return true;
     } else if (isLevelActive && splitSubTaskLevels.includes(THREE_SUBTASKS_LEVELS) && level >= 2) {
       return true;
+    } else if ((rootTaskIds as string[])?.includes(task.id)) {
+      return true;
     }
     return false;
-  }, [showSubTasks, subtasks, toggleAllSubtask, toggleAllSubtaskSplit, splitSubTaskLevels]);
+  }, [showSubTasks, subtasks, toggleAllSubtask, toggleAllSubtaskSplit, splitSubTaskLevels, rootTaskIds]);
 
   const [hoverOn, setHoverOn] = useState(false);
+  const toggleRootTasks = (rootTaskIds as string[])?.includes(task.id);
 
   return (
     <>
@@ -154,6 +164,7 @@ export function Row({
           showSubTasks={showChildren}
           setShowSubTasks={setShowSubTasks}
           style={{ zIndex: 1 }}
+          toggleRootTasks={toggleRootTasks}
           isListParent={isListParent}
           task={task}
           taskIndex={taskIndex}

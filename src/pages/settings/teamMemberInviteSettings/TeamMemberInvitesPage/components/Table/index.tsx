@@ -2,8 +2,13 @@ import React from 'react';
 import Header from './Header';
 import Body from './Body';
 import Pagination from './Pagination';
+import { IInvite } from '../../../../../../features/settings/teamMemberInvites/teamMemberInvites.interface';
 
-export default function Table() {
+interface TableProps {
+  data: IInvite[];
+}
+
+export default function Table({ data }: TableProps) {
   return (
     <div>
       <div className="flex flex-col">
@@ -12,7 +17,7 @@ export default function Table() {
             <div className="shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
               <table className="min-w-full divide-y divide-gray-300">
                 <Header />
-                <Body />
+                <Body data={data} />
               </table>
               <Pagination />
             </div>
