@@ -1,7 +1,8 @@
 import React, { Fragment } from 'react';
 import { Menu, Transition } from '@headlessui/react';
-import { AtSymbolIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import { XMarkIcon } from '@heroicons/react/24/outline';
 import { useGetTeamMembers } from '../../../../../features/settings/teamMembers/teamMemberService';
+import ChatEmail from '../../../../../assets/icons/ChatEmail';
 
 interface DropdownForMentionProps {
   selectedUsers: { id: string; name: string }[];
@@ -17,13 +18,15 @@ export default function DropdownForMention({ setSelectedUsers, selectedUsers }: 
   const usersWithoutSelected = data?.data.team_members.filter((i) => !selectedUserIds.includes(i.user.id));
 
   return (
-    <Menu as="div" className="relative inline-block text-left">
-      <div>
-        <Menu.Button className="flex items-center rounded-full bg-gray-100 text-gray-400 hover:text-gray-600 focus:outline-none ring-0 focus:ring-0">
-          <span className="sr-only">Open options</span>
-          <AtSymbolIcon className="h-5 w-5" aria-hidden="true" />
-        </Menu.Button>
-      </div>
+    <Menu as="div">
+      <Menu.Button>
+        <div
+          className="flex justify-center bg-white items-center h-6 cursor-pointer rounded-md"
+          style={{ minWidth: '24px' }}
+        >
+          <ChatEmail />
+        </div>
+      </Menu.Button>
 
       <Transition
         as={Fragment}
@@ -34,7 +37,7 @@ export default function DropdownForMention({ setSelectedUsers, selectedUsers }: 
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       >
-        <Menu.Items className="absolute right-0 z-10 mt-2 pt-2 w-56 bottom-8 rounded-md bg-white shadow-lg focus:outline-none">
+        <Menu.Items className="absolute left-0 z-10 mt-2 pt-2 w-56 bottom-8 rounded-md bg-white shadow-lg focus:outline-none">
           {selectedUsers?.length ? (
             <div className="flex w-48 gap-2 p-2 overflow-x-scroll">
               {selectedUsers.map((user) => (
