@@ -191,8 +191,8 @@ export default function CustomStatus() {
   const statusData = extractValuesFromArray(AddDefault);
   const model = statusTaskListDetails.listId ? 'list' : (modelData?.modelType as string);
   const model_id = statusTaskListDetails.listId || (modelData?.modelId as string);
-  const from_model = spaceStatuses[0].model;
-  const from_model_id = spaceStatuses[0].model_id;
+  // const from_model = spaceStatuses[0].model;
+  // const from_model_id = spaceStatuses[0].model_id;
 
   const handleStatusId = () => {
     const modelTypeIsSameEntity = statusData.some((item) => item.model === model);
@@ -223,8 +223,8 @@ export default function CustomStatus() {
     await createStatusTypes.mutateAsync({
       model_id: model_id,
       model: model,
-      from_model: from_model || activeItemType,
-      from_model_id: from_model_id || activeItemId,
+      from_model: modelData.modelType,
+      from_model_id: modelData.modelId,
       statuses: handleStatusId(),
       status_matches: matchedStatus
     });
