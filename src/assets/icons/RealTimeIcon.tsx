@@ -1,8 +1,13 @@
-/* eslint-disable max-len */
+import { DetailedHTMLProps, SVGAttributes } from 'react';
 
-export function RealTimeIcon() {
+/* eslint-disable max-len */
+interface Props extends DetailedHTMLProps<SVGAttributes<SVGSVGElement>, SVGSVGElement> {
+  color?: string;
+}
+
+export function RealTimeIcon({ ...props }: Props) {
   return (
-    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg {...props} width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
       <mask
         id="mask0_3605_24992"
         style={{ maskType: 'alpha' }}

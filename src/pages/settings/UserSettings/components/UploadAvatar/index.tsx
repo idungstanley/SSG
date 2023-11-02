@@ -1,7 +1,7 @@
 import { useDispatch } from 'react-redux';
 import Uppy from '@uppy/core';
 import XHRUpload from '@uppy/xhr-upload';
-import { DashboardModal } from '@uppy/react';
+import { useUppy, DashboardModal } from '@uppy/react';
 import Webcam from '@uppy/webcam';
 import '@uppy/core/dist/style.css';
 import '@uppy/dashboard/dist/style.css';
@@ -22,40 +22,42 @@ export default function UploadAvatar({ invalidateQuery, endpoint }: UploadFileMo
   const { showAvatarUpload } = useAppSelector((state) => state.userSetting);
 
   // init
-  const uppy = new Uppy({
-    debug: true,
-    autoProceed: true,
-    meta: {},
-    restrictions: {
-      maxFileSize: null,
-      minFileSize: null,
-      maxTotalFileSize: null,
-      maxNumberOfFiles: 1,
-      minNumberOfFiles: null,
-      allowedFileTypes: ['image/*']
-    }
-  })
-    .use(XHRUpload, {
-      allowedMetaFields: ['image', 'path'],
-      endpoint: '',
-      bundle: false,
-      headers: currentWorkspaceId
-        ? {
-            Authorization: `Bearer ${accessToken}`,
-            current_workspace_id: currentWorkspaceId
-          }
-        : undefined,
-      method: 'POST',
-      formData: true,
-      fieldName: 'avatar'
+  const uppy = useUppy(() =>
+    new Uppy({
+      debug: true,
+      autoProceed: true,
+      meta: {},
+      restrictions: {
+        maxFileSize: null,
+        minFileSize: null,
+        maxTotalFileSize: null,
+        maxNumberOfFiles: 1,
+        minNumberOfFiles: null,
+        allowedFileTypes: ['image/*']
+      }
     })
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-    .use(Webcam, {
-      mirror: true,
-      facingMode: 'user',
-      showRecordingLength: false,
-      modes: ['picture']
-    });
+      .use(XHRUpload, {
+        allowedMetaFields: ['image', 'path'],
+        endpoint: '',
+        bundle: false,
+        headers: currentWorkspaceId
+          ? {
+              Authorization: `Bearer ${accessToken}`,
+              current_workspace_id: currentWorkspaceId
+            }
+          : undefined,
+        method: 'POST',
+        formData: true,
+        fieldName: 'avatar'
+      })
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+      .use(Webcam, {
+        mirror: true,
+        facingMode: 'user',
+        showRecordingLength: false,
+        modes: ['picture']
+      })
+  );
 
   const { xhrUpload } = uppy.getState();
 

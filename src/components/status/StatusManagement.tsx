@@ -53,7 +53,7 @@ export const groupStylesMapping: Record<string, GroupStyles> = {
   // Add more model_type values and their styles as needed
 };
 
-export default function CustomStatus() {
+export default function StatusManagement() {
   const dispatch = useAppDispatch();
   const createStatusTypes = useMutation(statusTypesService);
   const { listId, hubId, subhubId, walletId } = useParams();

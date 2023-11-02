@@ -38,13 +38,13 @@ export const HubManagerOptions = [
     isVisible: false
   },
   {
-    id: 'calendar_settings',
+    id: pilotTabs.CALENDAR_SETTINGS,
     name: 'Calendar Settings',
     icon: <CalendarIcon active={false} />,
     isVisible: false
   },
   {
-    id: 'status_management',
+    id: pilotTabs.STATUS_MANAGEMENT,
     name: 'Status Management',
     icon: <StatusMgIcon />,
     isVisible: false
