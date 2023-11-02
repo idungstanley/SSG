@@ -30,7 +30,7 @@ export function TimeInventory({ getTimeEntries }: Props) {
   return (
     <div className="relative bg-alsoit-gray-50 w-full rounded-md flex flex-col pt-10">
       <InventoryHeader timeData={getTimeEntries} showLog={!showLog} dropView={() => setShowLogs(!showLog)} />
-      <div className="w-full h-72">
+      <div className="w-full max-h-72">
         <VerticalScroll>
           {showLog && (
             <>

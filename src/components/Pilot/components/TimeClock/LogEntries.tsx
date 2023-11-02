@@ -55,8 +55,11 @@ export function TimeLogEntries({ timeEntry, index }: Props) {
   };
 
   return (
-    <tr key={index} className="h-12 flex items-center border-b cursor-pointer hover:bg-alsoit-purple-50 group bg-white">
-      <td className="sticky left-0 bg-white group-hover:bg-alsoit-purple-50 z-20 flex items-center space-x-2.5 border-r w-[15rem] h-full">
+    <tr
+      key={index}
+      className="h-12 flex items-center border-b border-alsoit-gray-75 cursor-pointer hover:bg-alsoit-gray-50 group bg-white"
+    >
+      <td className="sticky left-0 bg-white group-hover:bg-alsoit-gray-50 z-20 flex items-center space-x-2.5 border-r border-alsoit-gray-75 w-[15rem] h-full">
         <div className="h-full w-4 bg-alsoit-gray-50 flex items-center mr-2">
           <RoundedCheckbox
             isChecked={btnCheckFn}
@@ -78,16 +81,23 @@ export function TimeLogEntries({ timeEntry, index }: Props) {
           <span>{timeEntry.team_member.user.name}</span>
         </div>
       </td>
-      <td className="w-20 border-r h-9 flex items-center justify-center text-alsoit-text-md text-center relative">
-        {dayjs.duration(timeEntry.duration, 'seconds').format('HH:mm:ss')}
-        <span className="absolute flex items-center space-x-1 top-0 right-0.5 bg-alsoit-gray-50 rounded-md px-1 capitalize text-alsoit-text-sm">
+      <td className="w-20 border-r border-alsoit-gray-75 h-full flex items-center justify-center text-alsoit-text-md text-center relative">
+        <span className="tracking-widest">{dayjs.duration(timeEntry.duration, 'seconds').format('HH:mm:ss')}</span>
+        <span
+          className="absolute flex items-center space-x-1 top-0.5 right-0.5 bg-alsoit-gray-50 rounded-md px-1 capitalize"
+          style={{ fontSize: 6 }}
+        >
           {timeEntry.type === 'real' ? <RealTimeIcon className="w-3 h-3" /> : <ManualTimeIcon />}
           <span>{timeEntry.type === 'real' ? 'real time' : timeEntry.type}</span>
         </span>
       </td>
-      <td className="w-20 text-alsoit-text-md text-center">{dayjs(timeEntry.start_date).format('ddd DD, MMM')}</td>
-      <td className="w-20 flex items-center justify-center">-</td>
-      <td className="w-20 text-alsoit-text-md text-center">{dayjs(timeEntry.end_date).format('ddd DD, MMM')}</td>
+      <td className="w-20 flex items-center justify-center text-alsoit-text-md  h-full border-r border-alsoit-gray-75">
+        {dayjs(timeEntry.start_date).format('ddd DD, MMM')}
+      </td>
+      <td className="w-20 flex items-center justify-center h-full border-r border-alsoit-gray-75">-</td>
+      <td className="w-20 text-alsoit-text-md flex items-center justify-center h-full border-r border-alsoit-gray-75">
+        {dayjs(timeEntry.end_date).format('ddd DD, MMM')}
+      </td>
       <td className="w-20 flex items-center justify-center">-</td>
       <td className="invisible group-hover:visible relative">
         <ThreeDotIcon onClick={() => setDropDown((prev) => ({ ...prev, entryAction: !prev.entryAction }))} />

@@ -39,10 +39,10 @@ export default function ClockInOut() {
   }, [isSuccess, timerStatus]);
 
   return (
-    <div className="px-2 my-1.5 bg-white">
+    <div className="px-4 my-1.5 bg-white">
       {/* Clock Counter */}
       <div
-        className={`bg-alsoit-gray-50 rounded-t-lg py-0.5 flex flex-col space-y-2 relative ${
+        className={`bg-alsoit-gray-50 rounded-t-lg py-1.5 flex flex-col space-y-2 relative ${
           activeClockTab === TIME_TABS.realTime && !timerStatus ? 'h-8' : timerStatus ? 'h-min' : 'h-min'
         }`}
       >
