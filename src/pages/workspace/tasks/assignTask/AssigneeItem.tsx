@@ -13,7 +13,6 @@ import { TrashIcon } from '@heroicons/react/24/outline';
 import { Capitalize } from '../../../../utils/NoCapWords/Capitalize';
 import { EntityType } from '../../../../utils/EntityTypes/EntityType';
 import { AssigneeType } from '../../../../features/task/interface.tasks';
-// import { setAssignChecklistItem } from '../../../../features/task/checklist/checklistSlice';
 
 interface AssigneeItem {
   item: ITeamMembersAndGroup;
