@@ -191,8 +191,6 @@ export default function StatusManagement() {
   const statusData = extractValuesFromArray(AddDefault);
   const model = statusTaskListDetails.listId ? 'list' : (modelData?.modelType as string);
   const model_id = statusTaskListDetails.listId || (modelData?.modelId as string);
-  // const from_model = spaceStatuses[0].model;
-  // const from_model_id = spaceStatuses[0].model_id;
 
   const handleStatusId = () => {
     const modelTypeIsSameEntity = statusData.some((item) => item.model === model);
