@@ -31,7 +31,7 @@ export function ChatStickyCol({ hoverOn, setHoverOn, children, chat }: ColProps)
 
   return (
     <td className="sticky left-0 z-10 flex items-center justify-start text-sm font-medium text-gray-900 cursor-pointer text-start">
-      <div className="flex items-center h-full ml-1 space-x-1">
+      <div className={`flex items-center h-full mr-1 space-x-1 ${hoverOn ? 'opacity-1' : 'opacity-0'}`}>
         <RoundedCheckbox
           onChange={onChange}
           isChecked={isChecked}

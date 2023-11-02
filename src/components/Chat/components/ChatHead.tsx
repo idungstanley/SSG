@@ -90,10 +90,7 @@ export function ChatHead({ columns, tableHeight, collapseTasks, listColor, onTog
           <th
             style={{
               zIndex: 2,
-              backgroundColor: LightenColor(
-                listColor?.outerColour === null ? 'black' : (listColor?.outerColour as string),
-                0.95
-              )
+              backgroundColor: listColor?.outerColour as string
             }}
             className="sticky left-0 flex items-center -mb-2 font-extrabold"
           >

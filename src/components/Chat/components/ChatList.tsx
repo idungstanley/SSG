@@ -9,6 +9,13 @@ import { ScrollableHorizontalListsContainer } from '../../ScrollableContainer/Sc
 import { ChatRow } from './ChatRow';
 import { ChatHead } from './ChatHead';
 import { generateChatGrid } from '../../Views/lib/generateGrid';
+import ShowIcon from '../../../assets/icons/ShowIcon';
+import ChatFilter from '../../../assets/icons/ChatFilter';
+import ChatMe from '../../../assets/icons/ChatMe';
+import ChatAssign from '../../../assets/icons/ChatAssign';
+import ArrowDrop from '../../../assets/icons/ArrowDrop';
+import ChatSearch from '../../../assets/icons/ChatSearch';
+import ListAddModal from '../../Views/ui/List/ListAddModal';
 
 const heads: ExtendedListColumnProps[] = [
   {
@@ -81,7 +88,7 @@ export default function ChatsList() {
     }
   };
 
-  const listColor = { outerColour: '#B2B2B2' };
+  const listColor = { outerColour: '#F4F4F4' };
 
   if (isLoading)
     return (
@@ -102,54 +109,95 @@ export default function ChatsList() {
     />
   ) : (
     <>
-      <div className="sticky top-0 mr-2 pl-2 pt-2 table-container overflow-hidden z-10" ref={tableHeadElement}>
-        <table
-          style={
-            !collapseTasks
-              ? {
-                  display: 'grid',
-                  gridTemplateColumns: generateChatGrid(columns.length)
+      <div className="h-full gap-1 p-2 bg-white">
+        <div style={{ background: '#F4F4F4' }}>
+          {/* header */}
+          <div className="flex items-center justify-between border-b pb-2">
+            <div className="flex items-center gap-2">
+              <div
+                className="py-1 relative px-2 rounded-tl-md rounded-br-md flex items-center space-x-1 text-white dFlex"
+                style={{
+                  backgroundColor: 'rgb(165, 165, 165)',
+                  gap: '5px'
+                }}
+              >
+                CHAT
+                <div className="flex items-center justify-center h-6 bg-white rounded-[5px] w-12">
+                  <ListAddModal handleCheckedGroupTasks={() => null} ListColor={{ outerColour: null }} />
+                </div>
+              </div>
+            </div>
+
+            <div className="flex gap-2">
+              <div className="flex justify-center bg-white items-center h-6 w-6 rounded-md">
+                <ShowIcon color="orange" width="21" height="21" />
+              </div>
+              <div className="flex justify-center bg-white items-center h-6 w-6 rounded-md">
+                <ChatFilter />
+              </div>
+              <div className="flex justify-center bg-white items-center h-6 w-6 rounded-md">
+                <ChatMe />
+              </div>
+              <div className="flex justify-center bg-white items-center h-6 w-12 rounded-md">
+                <ChatAssign />
+                <ArrowDrop color="orange" />
+              </div>
+              <div className="flex justify-center bg-white items-center h-6 w-6 rounded-md mr-2">
+                <ChatSearch />
+              </div>
+            </div>
+          </div>
+          <div>
+            <div className="sticky top-0 mr-2 px-2 pt-2 table-container overflow-hidden z-10" ref={tableHeadElement}>
+              <table
+                style={
+                  !collapseTasks
+                    ? {
+                        display: 'grid',
+                        gridTemplateColumns: generateChatGrid(columns.length)
+                      }
+                    : undefined
                 }
-              : undefined
-          }
-          className="w-full"
-        >
-          <ChatHead
-            collapseTasks={collapseTasks}
-            onToggleCollapseTasks={() => setCollapseTasks((prev) => !prev)}
-            headerStatusColor="#B2B2B2"
-            columns={columns}
-            listName="CHAT"
-            tableHeight={tableHeight}
-            listColor={listColor}
-          />
-        </table>
-      </div>
-      <ScrollableHorizontalListsContainer ListColor={listColor} returnScrollLeft={handleScrollLeft}>
-        <div className="table-container">
-          <table
-            style={
-              !collapseTasks
-                ? {
-                    display: 'grid',
-                    gridTemplateColumns: generateChatGrid(columns.length)
+                className="w-full"
+              >
+                <ChatHead
+                  collapseTasks={collapseTasks}
+                  onToggleCollapseTasks={() => setCollapseTasks((prev) => !prev)}
+                  headerStatusColor="#B2B2B2"
+                  columns={columns}
+                  listName="CHAT"
+                  tableHeight={tableHeight}
+                  listColor={listColor}
+                />
+              </table>
+            </div>
+            <ScrollableHorizontalListsContainer ListColor={listColor} returnScrollLeft={handleScrollLeft}>
+              <div className="table-container">
+                <table
+                  style={
+                    !collapseTasks
+                      ? {
+                          display: 'grid',
+                          gridTemplateColumns: generateChatGrid(columns.length)
+                        }
+                      : undefined
                   }
-                : undefined
-            }
-            className="w-full"
-            ref={tableElement}
-          >
-            {/* rows */}
-            {!collapseTasks ? (
-              <tbody className="contents">
-                {data.map((chat) => (
-                  <ChatRow key={chat.id} chat={chat} columns={columns} />
-                ))}
-              </tbody>
-            ) : null}
-          </table>
+                  className="w-full"
+                  ref={tableElement}
+                >
+                  {!collapseTasks ? (
+                    <tbody className="contents">
+                      {data.map((chat) => (
+                        <ChatRow key={chat.id} chat={chat} columns={columns} />
+                      ))}
+                    </tbody>
+                  ) : null}
+                </table>
+              </div>
+            </ScrollableHorizontalListsContainer>
+          </div>
         </div>
-      </ScrollableHorizontalListsContainer>
+      </div>
     </>
   );
 }
