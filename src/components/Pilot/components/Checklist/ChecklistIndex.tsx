@@ -1,19 +1,21 @@
 import React, { useState } from 'react';
-import { UseCreateChecklistService, UseGetAllClistService } from '../../../../features/task/checklist/checklistService';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { UseCreateChecklistService } from '../../../../features/task/checklist/checklistService';
+import { useMutation } from '@tanstack/react-query';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
-import { setShowChecklistInput } from '../../../../features/task/checklist/checklistSlice';
+import { setCreateNewChecklist, setShowChecklistInput } from '../../../../features/task/checklist/checklistSlice';
 import { MdCancel } from 'react-icons/md';
 import Disclosures from './Disclosure';
 import { VscChecklist } from 'react-icons/vsc';
 import { UseGetHubDetails } from '../../../../features/hubs/hubService';
 import { UseGetWalletDetails } from '../../../../features/wallet/walletService';
 import { UseGetListDetails } from '../../../../features/list/listService';
-import { EntityType } from '../../../../utils/EntityTypes/EntityType';
+// import { EntityType } from '../../../../utils/EntityTypes/EntityType';
+import { getOneTaskServices } from '../../../../features/task/taskService';
+import { useParams } from 'react-router-dom';
 
 export default function ChecklistIndex() {
   const dispatch = useAppDispatch();
-  const queryClient = useQueryClient();
+  const { hubId, walletId, listId, taskId } = useParams();
 
   const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
 
@@ -21,9 +23,9 @@ export default function ChecklistIndex() {
 
   //Create Checklist
   const createChecklist = useMutation(UseCreateChecklistService, {
-    onSuccess: () => {
-      queryClient.invalidateQueries();
+    onSuccess: (data) => {
       dispatch(setShowChecklistInput(false));
+      dispatch(setCreateNewChecklist(data.data.checklist));
     }
   });
 
@@ -36,22 +38,21 @@ export default function ChecklistIndex() {
   };
 
   // Get Checklists
-  const { data: checkListData } = UseGetAllClistService({
-    task_id: activeItemId,
-    activeItemType: activeItemType
+  getOneTaskServices({
+    task_id: taskId
   });
 
-  const { data: hub } = UseGetHubDetails({
-    activeItemId,
+  UseGetHubDetails({
+    activeItemId: hubId,
     activeItemType
   });
-  const { data: wallet } = UseGetWalletDetails({
-    activeItemId,
+  UseGetWalletDetails({
+    activeItemId: walletId,
     activeItemType
   });
-  const { data: list } = UseGetListDetails(activeItemId);
+  UseGetListDetails(listId);
 
-  const { showChecklistInput } = useAppSelector((state) => state.checklist);
+  const { showChecklistInput, checklists } = useAppSelector((state) => state.checklist);
 
   return (
     <div className="p">
@@ -83,9 +84,9 @@ export default function ChecklistIndex() {
           <MdCancel className="w-4 h-4 cursor-pointer" onClick={() => dispatch(setShowChecklistInput(false))} />
         </form>
       )}
-      {activeItemType === EntityType.task && (
+      <Disclosures item={checklists} />
+      {/* {activeItemType === EntityType.task && (
         <div>
-          <Disclosures item={checkListData?.data.task.checklists} />
         </div>
       )}
       {activeItemType === EntityType.hub && (
@@ -102,7 +103,7 @@ export default function ChecklistIndex() {
         <div>
           <Disclosures item={list?.data.list.checklists} />
         </div>
-      )}
+      )} */}
     </div>
   );
 }

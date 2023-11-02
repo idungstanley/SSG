@@ -4,6 +4,9 @@ export interface ITeamMembersAndGroup {
   name?: string;
   is_active?: boolean;
   invited_at: boolean;
+  created_at: string;
+  is_online: boolean;
+  updated_at: string;
   user: {
     color: string | undefined;
     name: string;
@@ -11,6 +14,7 @@ export interface ITeamMembersAndGroup {
     email: string;
     initials: string;
     avatar_path?: string | null;
+    timezone: string;
   };
   initials: string;
   colour: string;

@@ -5,20 +5,24 @@ import PopAssignModal from './popAssignModal';
 import ToolTip from '../../../../components/Tooltip/Tooltip';
 import { ITeamMembersAndGroup } from '../../../../features/settings/teamMembersAndGroups.interfaces';
 import UserAvatar from './UserAvatar';
+import { UseChecklistItemUnassignee } from '../../../../features/task/checklist/checklistService';
 
 function GroupAssignee({
   data,
   itemId,
   teams,
-  handleClick
+  handleClick,
+  option
 }: {
   data: ITeamMembersAndGroup[];
   itemId?: string;
   teams: boolean;
   handleClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  option?: string;
 }) {
   const { CompactView } = useAppSelector((state) => state.task);
   const { selectedTasksArray, selectedListIds, selectedTaskParentId } = useAppSelector((state) => state.task);
+  const [assigneeId, setAssigneeId] = useState('');
 
   // Define a variable to store the number of remaining items
   let remainingCount = 0;
@@ -52,6 +56,17 @@ function GroupAssignee({
       taskId: itemId as string,
       team_member_id: id,
       teams
+    });
+  };
+
+  const { mutate: onCheklistItemUnassign } = UseChecklistItemUnassignee(itemId as string, assigneeId);
+
+  const handleUnAssignChecklistItem = (id: string) => {
+    handleClose();
+    setAssigneeId(id);
+    onCheklistItemUnassign({
+      itemId: itemId,
+      team_member_id: id
     });
   };
 
@@ -110,7 +125,9 @@ function GroupAssignee({
                       fontSize: '6px',
                       zIndex: 11
                     }}
-                    onClick={() => handleUnAssignTask(newData.id)}
+                    onClick={() =>
+                      option === 'checklist' ? handleUnAssignChecklistItem(newData.id) : handleUnAssignTask(newData.id)
+                    }
                   >
                     X
                   </button>
