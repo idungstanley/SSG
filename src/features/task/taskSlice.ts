@@ -245,6 +245,7 @@ interface TaskState {
   estimatedDuration: IDuration;
   recorderDuration: IDuration;
   period: number | undefined;
+  countDownPeriod: number | undefined;
   recorderPeriod: number | undefined;
   activeTimeOut: {
     clockLimit: number;
@@ -257,6 +258,8 @@ interface TaskState {
   HistoryFilterMemory: IHistoryFilterMemory | null;
   timeAssigneeFilter: ITimeEntriesRes | undefined;
   timeAssignees: teamMember[] | undefined;
+  currentTeamMemberId: (string | undefined)[];
+  timeEntriesIdArr: string[];
   filters: FilterFieldsWithOption;
   subtasksfilters: Record<string, FilterFieldsWithOption>;
   isFiltersUpdated: boolean;
@@ -375,6 +378,7 @@ const initialState: TaskState = {
   estimatedDuration: { s: 0, m: 0, h: 0 },
   recorderDuration: { s: 0, m: 0, h: 0 },
   period: undefined,
+  countDownPeriod: undefined,
   recorderPeriod: undefined,
   activeTimeOut: { clockLimit: 0, timeoutReminder: 0 },
   sortType: 'status',
@@ -391,6 +395,8 @@ const initialState: TaskState = {
   HistoryFilterMemory: null,
   timeAssigneeFilter: undefined,
   timeAssignees: undefined,
+  currentTeamMemberId: [],
+  timeEntriesIdArr: [],
   statusId: '',
   currTaskListId: '',
   entityForCustom: { id: undefined, type: undefined },
@@ -741,6 +747,9 @@ export const taskSlice = createSlice({
     setTimerInterval(state, action: PayloadAction<number | undefined>) {
       state.period = action.payload;
     },
+    setCountDownPeriod(state, action: PayloadAction<number | undefined>) {
+      state.countDownPeriod = action.payload;
+    },
     setRecorderInterval(state, action: PayloadAction<number | undefined>) {
       state.recorderPeriod = action.payload;
     },
@@ -758,6 +767,12 @@ export const taskSlice = createSlice({
     },
     setTimeAssignee(state, action: PayloadAction<teamMember[] | undefined>) {
       state.timeAssignees = action.payload;
+    },
+    setCurrentTeamMemberId(state, action: PayloadAction<(string | undefined)[]>) {
+      state.currentTeamMemberId = action.payload;
+    },
+    setTimeEntriesIdArr(state, action: PayloadAction<string[]>) {
+      state.timeEntriesIdArr = action.payload;
     },
     setEntityForCustom(state, action: PayloadAction<entityForCustom>) {
       state.entityForCustom = action.payload;
@@ -869,11 +884,14 @@ export const {
   setRecorderInterval,
   setStopTimer,
   setTimerInterval,
+  setCountDownPeriod,
   setActiveTimeout,
   setSortType,
   setTaskSelectedDate,
   setHistoryMemory,
   setTimeAssigneeFilter,
+  setCurrentTeamMemberId,
+  setTimeEntriesIdArr,
   setTimeAssignee,
   setEntityForCustom,
   setCustomSuggetionsField,

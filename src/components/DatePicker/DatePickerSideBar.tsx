@@ -107,7 +107,7 @@ export function DatePickerSideBar({ currentDate, setOpenSideBar }: DatePickerSid
   };
 
   const handleTabSwitch = () => {
-    dispatch(setActiveSubHubManagerTabId('calendar_settings'));
+    dispatch(setActiveSubHubManagerTabId(pilotTabs.CALENDAR_SETTINGS));
     dispatch(setActiveTabId(pilotTabs.ENTITY_MANAGER));
   };
 
