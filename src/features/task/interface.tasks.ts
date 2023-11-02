@@ -146,7 +146,6 @@ export interface ITaskFullList {
   filters: { model: string; model_id: string; data: FilterWithId[] } | null;
   descendants?: ITaskFullList[];
   descendants_count: number;
-  root_task_ids?: string[] | null;
   closed_subtasks_count: number;
   checklist_items_count: number;
   checklist_done_items_count: number;
