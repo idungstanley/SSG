@@ -9,11 +9,7 @@ import ToolTip from '../../../../../Tooltip/Tooltip';
 import { ITaskFullList } from '../../../../../../features/task/interface.tasks';
 import { IHubDetails } from '../../../../../../features/hubs/hubs.interfaces';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import {
-  UseUpdateTaskService,
-  useDeleteAttachment,
-  useGetAttachments
-} from '../../../../../../features/task/taskService';
+import { UseUpdateTaskService } from '../../../../../../features/task/taskService';
 import Status from '../status/Status';
 import Priority from '../priority/Priority';
 import { UseEditHubService } from '../../../../../../features/hubs/hubService';
@@ -24,8 +20,6 @@ import { IListDetails } from '../../../../../../features/list/list.interfaces';
 import { useParams } from 'react-router-dom';
 import { IWalletDetails } from '../../../../../../features/wallet/wallet.interfaces';
 import PlusIcon from '../../../../../../assets/icons/PlusIcon';
-import { useAppSelector } from '../../../../../../app/hooks';
-import FileIcons from '../../../../../Views/ui/Table/CustomField/Files/FileIcon';
 import { VerticalScroll } from '../../../../../ScrollableContainer/VerticalScroll';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
@@ -53,19 +47,8 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
   const [editingDescription, setEditingDescription] = useState(false);
   const [toggleDetails, setToggleDetails] = useState<boolean>(true);
   const [description, setDescription] = useState<string>(Details?.description ?? '');
-  const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
 
   const { hubId, walletId, listId, taskId } = useParams();
-
-  const deleteAttachment = useMutation(useDeleteAttachment, {
-    onSuccess: () => {
-      // const remainingAttachments = attachments?.data.attachments.filter((item) => {
-      //   return item.id !== fileId;
-      // });
-      const ITEMS_QUERY_KEY = ['attachments'];
-      queryClient.invalidateQueries(ITEMS_QUERY_KEY);
-    }
-  });
 
   const editTaskMutation = useMutation(UseUpdateTaskService, {
     onSuccess: () => {
@@ -89,11 +72,6 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
     onSuccess: () => {
       queryClient.invalidateQueries(['wallet-details']);
     }
-  });
-
-  const { data: attachments } = useGetAttachments({
-    activeItemId,
-    activeItemType
   });
 
   const handleBlur = () => {
@@ -149,29 +127,22 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
       return;
     }
   };
-  // const convertNewlinesToBreaks = (text: string) => {
-  //   return text
-  //     .split('\n')
-  //     .map((line, index) => (index === 0 ? line : `\n\n ${line}`))
-  //     .join('');
-  // };
-
-  const handleRemoveAttachment = async (id: string) => {
-    await deleteAttachment.mutateAsync({
-      id
-    });
-  };
 
   return (
     <div className="m-3 text-gray-500 rounded-md bg-alsoit-gray-50">
       <div className="flex justify-between h-8">
         <div className="flex items-center justify-between gap-2 uppercase">
-          <div className="flex items-center justify-between gap-2 p-2 rounded-tl-lg rounded-br-lg bg-alsoit-gray-75 w-fit">
-            <IoCaretDownCircle
-              className={cl(toggleDetails ? '' : 'transform -rotate-90', 'text-base text-white cursor-pointer')}
-              onClick={() => setToggleDetails((prev) => !prev)}
-            />
-            <p className="justify-center bg-['#b2b2b2'] text-white" style={{ fontSize: '10px' }}>
+          <div
+            className="flex items-center justify-between gap-2 p-2 rounded-tl-lg rounded-br-lg bg-alsoit-gray-75 grow"
+            style={{ maxWidth: '150px' }}
+          >
+            <span className="w-4 h-4">
+              <IoCaretDownCircle
+                className={cl(toggleDetails ? '' : 'transform -rotate-90', 'text-base text-white cursor-pointer')}
+                onClick={() => setToggleDetails((prev) => !prev)}
+              />
+            </span>
+            <p className="justify-center bg-['#b2b2b2'] text-white truncate" style={{ fontSize: '10px' }}>
               {Details?.name}
             </p>
           </div>
@@ -270,38 +241,6 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
                   </div>
                 )
               : null}
-            {/* Attachments */}
-            <div className="my-4">
-              <label className="text-xs text-gray-500 ">Attachments</label>
-              <div className="flex flex-wrap items-center gap-2 my-2">
-                {attachments?.data.attachments?.length ? (
-                  attachments?.data.attachments.map((file) => {
-                    return (
-                      <div key={file.id} className="group/parent">
-                        <button
-                          className="absolute items-center justify-center hidden w-5 h-5 ml-6 -mt-4 text-white bg-black rounded-full hover:bg-red-500 group-hover/parent:flex"
-                          style={{
-                            fontSize: '6px'
-                          }}
-                          onClick={() => handleRemoveAttachment(file.id)}
-                        >
-                          X
-                        </button>
-                        <FileIcons
-                          fileExtension={file.physical_file.file_format.extension}
-                          filePath={file.path}
-                          fileName={file.physical_file.display_name}
-                          height="h-10"
-                          width="w-10"
-                        />
-                      </div>
-                    );
-                  })
-                ) : (
-                  <h1>No Attachments found</h1>
-                )}
-              </div>
-            </div>
             {/* due date */}
             <div id="due date" className="mt-2">
               <label className="text-xs text-gray-500">Due Date</label>

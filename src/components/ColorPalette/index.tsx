@@ -52,7 +52,7 @@ interface PaletteProps {
   handleShapeSelection?: (value: string) => void;
 }
 
-const paletteViews = {
+export const paletteViews = {
   BOARD: 'Board',
   LIST: 'List'
 };

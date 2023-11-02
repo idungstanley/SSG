@@ -28,11 +28,11 @@ export default function ManageHr() {
   };
 
   return (
-    <div className="w-full p-4 h-full">
-      <div className="mx-auto h-full">
+    <div className="w-full h-full p-4">
+      <div className="h-full mx-auto">
         <div className="w-full">
           <div
-            className="pt-1 border-t-4 border-l-4 border-purple-500 rounded-3xl bg-purple-50 pb-3"
+            className="pt-1 pb-3 border-t-4 border-l-4 border-purple-500 rounded-3xl bg-purple-50"
             style={{
               borderColor: '#9747FF'
             }}
@@ -68,13 +68,13 @@ export default function ManageHr() {
               <table className="w-full mt-5">
                 <thead>
                   <tr>
-                    <td className="items-center text-center pb-1">Employee</td>
-                    <td className="items-center text-center pb-1">Role</td>
-                    <td className="items-center text-center pb-1">Work Location</td>
-                    <td className="items-center text-center pb-1">Start Date</td>
-                    <td className="items-center text-center pb-1">Salary</td>
-                    <td className="items-center text-center pb-1">Time Taken Off</td>
-                    <td className="items-center text-center pb-1">Allowance</td>
+                    <td className="items-center pb-1 text-center">Employee</td>
+                    <td className="items-center pb-1 text-center">Role</td>
+                    <td className="items-center pb-1 text-center">Work Location</td>
+                    <td className="items-center pb-1 text-center">Start Date</td>
+                    <td className="items-center pb-1 text-center">Salary</td>
+                    <td className="items-center pb-1 text-center">Time Taken Off</td>
+                    <td className="items-center pb-1 text-center">Allowance</td>
                   </tr>
                 </thead>
                 <tbody className="bg-white">

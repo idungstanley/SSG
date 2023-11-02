@@ -32,6 +32,8 @@ import { setMatchData } from '../../features/general/prompt/promptSlice';
 import { BOARD_SECTIONS } from '../../utils/StatusManagement/Constant';
 import { useGetStatusTemplates } from '../../features/statusManager/statusManagerService';
 import { COLLECTION_TYPES } from '../../features/statusManager/statusManager.interface';
+import { useParams } from 'react-router-dom';
+import { EntityType } from '../../utils/EntityTypes/EntityType';
 
 interface ErrorResponse {
   data: {
@@ -51,9 +53,10 @@ export const groupStylesMapping: Record<string, GroupStyles> = {
   // Add more model_type values and their styles as needed
 };
 
-export default function CustomStatus() {
+export default function StatusManagement() {
   const dispatch = useAppDispatch();
   const createStatusTypes = useMutation(statusTypesService);
+  const { listId, hubId, subhubId, walletId } = useParams();
 
   const { matchData } = useAppSelector((state) => state.prompt);
   const { templateCollections } = useAppSelector((state) => state.statusManager);
@@ -78,6 +81,15 @@ export default function CustomStatus() {
       : spaceStatuses
   );
 
+  const itemType = listId
+    ? EntityType.list
+    : hubId || subhubId
+    ? EntityType.hub
+    : walletId
+    ? EntityType.wallet
+    : activeItemType;
+  const itemId = listId || hubId || subhubId || walletId || activeItemId;
+
   const [boardSections, setBoardSections] = useState<BoardSectionsType>(initialBoardSections);
 
   const [is_default_name, setIsDefaultName] = useState<string | null>(boardSections['open'][0]?.name || null); // Initialize with the name of the item at position 0 or null if no item
@@ -92,7 +104,7 @@ export default function CustomStatus() {
   useGetStatusTemplates();
 
   useEffect(() => {
-    createModelIdAndTypeHandler(activeItemId, activeItemType, setModelData, modelData);
+    createModelIdAndTypeHandler(itemId, itemType, setModelData, modelData);
     setBoardSections(initialBoardSections);
   }, [spaceStatuses, activeItemId, activeItemType]);
 
@@ -179,11 +191,13 @@ export default function CustomStatus() {
   const statusData = extractValuesFromArray(AddDefault);
   const model = statusTaskListDetails.listId ? 'list' : (modelData?.modelType as string);
   const model_id = statusTaskListDetails.listId || (modelData?.modelId as string);
+  const from_model = spaceStatuses[0].model;
+  const from_model_id = spaceStatuses[0].model_id;
 
   const handleStatusId = () => {
-    const modelTypeIsSameEntity = statusData.some((item) => item.model_type === model);
+    const modelTypeIsSameEntity = statusData.some((item) => item.model === model);
     const modelIdIsSameEntity = statusData.some((item) => item.model_id === model_id);
-    if (activeItemId === model_id && modelTypeIsSameEntity) {
+    if (itemId === model_id && modelTypeIsSameEntity) {
       if (modelIdIsSameEntity) {
         return statusData.map((item, index) => {
           return { ...item, position: index };
@@ -195,7 +209,12 @@ export default function CustomStatus() {
       }
     } else {
       return statusData.map((item, index) => {
-        return { ...item, id: null, is_default: index === 0 ? 1 : 0, position: index }; // Set the id to null
+        return {
+          ...item,
+          id: null,
+          is_default: index === 0 ? 1 : 0,
+          position: index
+        }; // Set the id to null
       });
     }
   };
@@ -204,8 +223,8 @@ export default function CustomStatus() {
     await createStatusTypes.mutateAsync({
       model_id: model_id,
       model: model,
-      from_model: activeItemType,
-      from_model_id: activeItemId,
+      from_model: from_model || activeItemType,
+      from_model_id: from_model_id || activeItemId,
       statuses: handleStatusId(),
       status_matches: matchedStatus
     });
@@ -244,8 +263,8 @@ export default function CustomStatus() {
       await createStatusTypes.mutateAsync({
         model_id: model_id,
         model: model,
-        from_model: modelData.modelType as string,
-        from_model_id: modelData.modelId as string,
+        from_model: from_model || activeItemType,
+        from_model_id: from_model_id || activeItemId,
         statuses: handleStatusId()
       });
     } catch (err) {
