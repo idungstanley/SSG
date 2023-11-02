@@ -112,6 +112,16 @@ export function Head({
     setShowStatusDropdown(null);
   };
 
+  const subtaskIds = (tasks: Task[]) => {
+    return tasks.map((task) => task.id);
+  };
+
+  const returnSubTaskIds = (taskRootIds: string[]) => {
+    return taskRootIds.map((id) => {
+      if (subtasks[id]) return subtaskIds(subtasks[id]);
+    });
+  };
+
   useEffect(() => {
     if (selectedIndex !== null) {
       const updatedTaskIds: string[] = [...selectedTasksArray];
@@ -128,16 +138,7 @@ export function Head({
   }, [selectedIndex]);
 
   const allChecked = groupedTask?.every((value) => selectedTasksArray.includes(value.id));
-
-  const subtaskIds = (tasks: Task[]) => {
-    return tasks.map((task) => task.id);
-  };
-
-  const returnSubTaskIds = (taskRootIds: string[]) => {
-    return taskRootIds.map((id) => {
-      if (subtasks[id]) return subtaskIds(subtasks[id]);
-    });
-  };
+  // const [allSubTaskCheckedState, setAllSubTaskCheckedState] = useState(false);
 
   const handleCheckedGroupTasks = () => {
     const updatedTaskIds: string[] = [...selectedTasksArray];
@@ -145,6 +146,20 @@ export function Head({
       groupedTask?.forEach((task) => {
         const taskIndex = updatedTaskIds.indexOf(task.id);
         updatedTaskIds.splice(taskIndex, 1);
+
+        Object.keys(taskRootIds).map((item) => {
+          if (item === task.id) {
+            const subTaskArray = returnSubTaskIds(taskRootIds[item]);
+            const flatArray = subTaskArray.flat() as string[];
+
+            for (const value of flatArray) {
+              const subTaskIndex = updatedTaskIds.indexOf(value);
+              if (subTaskIndex !== -1) {
+                updatedTaskIds.splice(subTaskIndex, 1);
+              }
+            }
+          }
+        });
       });
     } else {
       groupedTask?.forEach((task) => {
