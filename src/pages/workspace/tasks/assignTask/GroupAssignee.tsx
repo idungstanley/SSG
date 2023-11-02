@@ -18,7 +18,7 @@ function GroupAssignee({
   handleClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
 }) {
   const { CompactView } = useAppSelector((state) => state.task);
-  const { selectedTasksArray, selectedListIds, selectedTaskParentId } = useAppSelector((state) => state.task);
+  const { selectedTasksArray, assignOnHoverListId } = useAppSelector((state) => state.task);
 
   // Define a variable to store the number of remaining items
   let remainingCount = 0;
@@ -44,7 +44,7 @@ function GroupAssignee({
   const { mutate: onTaskUnassign } = UseTaskUnassignService(
     selectedTasksArray.length ? selectedTasksArray : [itemId as string],
     data[displayed.index],
-    selectedListIds.length ? selectedListIds : [selectedTaskParentId]
+    [assignOnHoverListId]
   );
 
   const handleUnAssignTask = (id: string) => {
