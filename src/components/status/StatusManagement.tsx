@@ -263,8 +263,8 @@ export default function CustomStatus() {
       await createStatusTypes.mutateAsync({
         model_id: model_id,
         model: model,
-        from_model: from_model || activeItemType,
-        from_model_id: from_model_id || activeItemId,
+        from_model: modelData.modelType,
+        from_model_id: modelData.modelId,
         statuses: handleStatusId()
       });
     } catch (err) {
