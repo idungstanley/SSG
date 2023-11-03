@@ -10,7 +10,7 @@ import {
   useSensors
 } from '@dnd-kit/core';
 import { arrayMove, sortableKeyboardCoordinates } from '@dnd-kit/sortable';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { StatusProps } from '../../pages/workspace/hubs/components/ActiveTree/activetree.interfaces';
 import { BoardSectionsType, GroupStyles, ModelType, StatusType } from '../../utils/StatusManagement/Types';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
@@ -55,7 +55,8 @@ export const groupStylesMapping: Record<string, GroupStyles> = {
 
 export default function StatusManagement() {
   const dispatch = useAppDispatch();
-  const createStatusTypes = useMutation(statusTypesService);
+  const queryClient = useQueryClient();
+
   const { listId, hubId, subhubId, walletId } = useParams();
 
   const { matchData } = useAppSelector((state) => state.prompt);
@@ -73,6 +74,11 @@ export default function StatusManagement() {
   });
   const [matchingStatusValidation, setMatchingStatusValidation] = useState<string | null>(null);
 
+  const createStatusTypes = useMutation(statusTypesService, {
+    onSuccess: () => {
+      queryClient.invalidateQueries([activeItemType === EntityType.list ? 'hubs' : 'hub-details']);
+    }
+  });
   const selectedTemplateStatus = templateCollections.find((item) => item.name === activeTemplateStatus);
 
   const initialBoardSections = initializeBoard(
