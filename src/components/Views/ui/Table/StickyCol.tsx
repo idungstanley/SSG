@@ -18,7 +18,8 @@ import {
   setTaskIdForPilot,
   setDuplicateTaskObj,
   setSelectedIndexListId,
-  setF2State
+  setF2State,
+  setTaskRootIds
 } from '../../../../features/task/taskSlice';
 import { setActiveItem } from '../../../../features/workspace/workspaceSlice';
 import { UniqueIdentifier, useDraggable, useDroppable } from '@dnd-kit/core';
@@ -97,6 +98,7 @@ export function StickyCol({
     separateSubtasksMode,
     newTaskPriority,
     f2State,
+    taskRootIds,
     assignOnHoverTask
   } = useAppSelector((state) => state.task);
 
@@ -143,6 +145,21 @@ export function StickyCol({
   const onToggleDisplayingSubTasks = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.stopPropagation();
     setShowSubTasks(!showSubTasks);
+
+    if (!task.parent_id) {
+      dispatch(setTaskRootIds({ ...taskRootIds, [task.id]: [task.id] }));
+    } else {
+      const updateTaskRootIds = { ...taskRootIds };
+
+      for (const key of task.root_task_ids as string[]) {
+        if (updateTaskRootIds[key]) {
+          const taskRootIdsArray = [...(task.root_task_ids as string[]), task.id];
+
+          updateTaskRootIds[key] = taskRootIdsArray;
+        }
+      }
+      dispatch(setTaskRootIds(updateTaskRootIds));
+    }
   };
 
   const editTaskMutation = useMutation(UseUpdateTaskService, {
