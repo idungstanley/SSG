@@ -1,19 +1,19 @@
 import { useMemo, useState } from 'react';
-import { useCommunity } from '../../features/community/communityService';
 import Diagram from './components/Diagram';
 import Header from './components/Header';
 import Search from './components/Search';
 import { ShowDetailsToggle, ShowGuestsToggle } from './components/Toggles';
 import UsersList from './components/UsersList';
 import { useSplitTeamMembers } from './lib/useSplitTeamMembers';
+import { useGetTeamMembers } from '../../features/settings/teamMembers/teamMemberService';
 
 export default function CommunityPage() {
-  const { data } = useCommunity();
+  const { data } = useGetTeamMembers({ page: 1, query: '' });
 
   const [query, setQuery] = useState('');
   const [showGuests, setShowGuests] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
-  const teamMembers = data?.team_members ?? [];
+  const teamMembers = data?.data.team_members ?? [];
 
   const { online, offline } = useMemo(() => useSplitTeamMembers(teamMembers), [teamMembers]);
 

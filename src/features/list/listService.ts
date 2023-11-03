@@ -187,10 +187,10 @@ export const UseArchiveListService = (list: { query: string | undefined | null; 
 export const UseGetListDetails = (listId: string | null | undefined) => {
   const dispatch = useAppDispatch();
 
-  const { activeItemId } = useAppSelector((state) => state.workspace);
-  const id = activeItemId === 'list' ? activeItemId : listId;
+  const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
+  const id = activeItemType === 'list' ? activeItemId : listId;
   return useQuery(
-    ['hubs', { listId, id }],
+    ['hubs', 'update-list', { listId, id }],
     async () => {
       const data = await requestNew<IListDetailRes>({
         url: `lists/${listId}`,
@@ -199,7 +199,7 @@ export const UseGetListDetails = (listId: string | null | undefined) => {
       return data;
     },
     {
-      enabled: !!listId || !!id,
+      enabled: !!listId,
       onSuccess: (data) => {
         const listStatusTypes = data.data.list.task_statuses;
         const listViews = data.data.list.task_views;
@@ -227,7 +227,6 @@ const clearEntityCustomFieldValue = (data: { taskId?: string; fieldId: string })
 
 export const useClearEntityCustomFieldValue = () => {
   const queryClient = useQueryClient();
-
   const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
   const { filters } = generateFilters();
 
