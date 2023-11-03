@@ -8,7 +8,6 @@ export interface ITeamMembersAndGroup {
   is_online: boolean;
   invited_at: string;
   created_at: string;
-  is_online: boolean;
   updated_at: string;
   user: {
     color?: string;
