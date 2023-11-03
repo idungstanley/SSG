@@ -30,6 +30,7 @@ import ActiveTreeSearch from '../../../../../components/ActiveTree/ActiveTreeSea
 import AlsoitMenuDropdown from '../../../../../components/DropDowns';
 import { deleteTaskManager } from '../../../../../managers/Task';
 import Assignee from '../../assignTask/Assignee';
+import { ManageTagsDropdown } from '../../../../../components/Tag/ui/ManageTagsDropdown/ui/ManageTagsDropdown';
 
 export default function TaskMenu() {
   const dispatch = useDispatch();
@@ -111,7 +112,7 @@ export default function TaskMenu() {
     {
       id: 'set_status_two',
       label: 'Set Status',
-      icons: <BsTags color="orange" opacity={0.5} />,
+      icons: <ManageTagsDropdown entityId="" tagsArr={[]} entityType="task" icon={<BsTags />} />,
       handleClick: () => ({}),
       isVisible: true
     },

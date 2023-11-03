@@ -1,71 +1,68 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Dialog } from '@headlessui/react';
+import React, { useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { BiTrash } from 'react-icons/bi';
-import { AiOutlineEllipsis } from 'react-icons/ai';
 import { HiOutlinePencil } from 'react-icons/hi';
 import { BsDroplet } from 'react-icons/bs';
 import { useDispatch } from 'react-redux';
 import { useAppSelector } from '../../app/hooks';
 import { displayPrompt, setVisibility } from '../../features/general/prompt/promptSlice';
-import { UseDeleteTagsService } from '../../features/workspace/tags/tagService';
+import { UseDeleteTagsService, useUpdateTag } from '../../features/workspace/tags/tagService';
 import {
   setCurrentTagId,
   setCurrentTaskIdForTag,
   setRenameTagId,
   setShowTagColorDialogBox
 } from '../../features/workspace/tags/tagSlice';
-import ColorPallete from './ColorsPalets';
+import { TagItem } from '../../pages/workspace/tasks/component/taskData/DataRenderFunc';
+import { Menu } from '@mui/material';
+import { SelectColor } from '../Tag/ui/ManageTagsDropdown/ui/SelectColor';
+import { EntityType } from '../../utils/EntityTypes/EntityType';
 
-interface itemsType {
+interface ItemsType {
   id: string;
   title: string;
   icon: JSX.Element;
   handleClick: () => void;
-  bg: string;
 }
 
 interface EditTagModalProps {
-  tagId: string | null | undefined;
+  tag: TagItem;
   taskId: string | null | undefined;
+  onClose: () => void;
 }
 
-export default function EditTagModal({ tagId, taskId }: EditTagModalProps) {
+export default function EditTagModal({ tag, taskId, onClose }: EditTagModalProps) {
   const dispatch = useDispatch();
   const queryClient = useQueryClient();
+
+  const { color: initialColor } = tag;
   const { showTagColorDialogueBox } = useAppSelector((state) => state.tag);
-  const [isOpen, setIsOpen] = useState(false);
-  const buttonRef = useRef<HTMLButtonElement>(null);
 
-  useEffect(() => {
-    const buttonElement = buttonRef.current;
-    if (buttonElement && isOpen) {
-      const buttonRect = buttonElement.getBoundingClientRect();
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [color, setColor] = useState(initialColor);
 
-      // Calculate the top and left positions for the modal
-      const top = buttonRect.bottom;
-      const left = buttonRect.left;
-
-      // Set the top and left positions for the modal
-      const modalElement = document.getElementById('edit-tag-modal');
-      if (modalElement) {
-        modalElement.style.top = `${top}px`;
-        modalElement.style.left = `${left}px`;
-      }
-    }
-  }, [isOpen]);
-
+  const { mutate: onUpdate } = useUpdateTag(tag.id, EntityType.task);
   const deleteTagMutation = useMutation(UseDeleteTagsService, {
     onSuccess: () => {
       dispatch(setVisibility(false));
       queryClient.invalidateQueries(['task']);
     }
   });
-  const EditTagOptions: itemsType[] = [
+
+  const updateTag = (data: { name?: string; color?: string }) => {
+    onUpdate({
+      id: tag.id,
+      name: data.name?.trim(),
+      color: data.color
+    });
+  };
+
+  const EditTagOptions: ItemsType[] = [
     {
       id: 'delete',
       title: 'Delete',
       handleClick: () => {
+        onClose();
         dispatch(
           displayPrompt('Delete Tag', 'Would you like delete this tag from the workspace?', [
             {
@@ -74,7 +71,7 @@ export default function EditTagModal({ tagId, taskId }: EditTagModalProps) {
               callback: () => {
                 deleteTagMutation.mutateAsync({
                   trigger: 1,
-                  tag_id: tagId
+                  tag_id: tag.id
                 });
               }
             },
@@ -88,64 +85,62 @@ export default function EditTagModal({ tagId, taskId }: EditTagModalProps) {
           ])
         );
       },
-      icon: <BiTrash />,
-      bg: 'red'
+      icon: <BiTrash />
     },
     {
       id: 'rename',
       title: 'Rename',
       handleClick: () => {
-        dispatch(setRenameTagId(tagId));
+        dispatch(setRenameTagId(tag.id));
         dispatch(setCurrentTaskIdForTag(taskId));
       },
-      icon: <HiOutlinePencil />,
-      bg: 'blue'
+      icon: <HiOutlinePencil />
     },
     {
       id: 'change_color',
       title: 'Change Color',
       handleClick: () => {
         dispatch(setShowTagColorDialogBox(!showTagColorDialogueBox));
-        dispatch(setCurrentTagId(tagId));
+        dispatch(setCurrentTagId(tag.id));
       },
-      icon: <BsDroplet />,
-      bg: 'purple'
+      icon: <BsDroplet />
     }
   ];
 
-  function openModal() {
-    setIsOpen(true);
-  }
+  const handleClickColor = (i: string) => {
+    setColor(i);
+    updateTag({ color: i });
+    setAnchorEl(null);
+  };
+
   return (
     <>
-      <div className="relative inline-block text-left">
-        <button ref={buttonRef} type="button" onClick={openModal} className="flex text-sm font-bold">
-          <AiOutlineEllipsis className="cursor-pointer" />
-        </button>
-      </div>
-      <Dialog open={isOpen} onClose={() => setIsOpen(false)} className="relative z-50">
-        <div
-          id="edit-tag-modal"
-          className="fixed z-20 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none"
-        >
-          {EditTagOptions.map((item) => (
-            <div key={item.id}>
-              {item.title !== 'Change Color' ? (
-                <div className={`p-2 cursor-pointer hover:bg-${item.bg}-200`} onClick={item.handleClick}>
+      <div className="w-48 p-1">
+        {EditTagOptions.map((item) => (
+          <div key={item.id}>
+            {item.title !== 'Change Color' ? (
+              <div className="p-2 cursor-pointer rounded-md hover:bg-gray-300" onClick={item.handleClick}>
+                <div className="flex items-center space-x-2 text-xs text-gray-600">
+                  {item.icon}
+                  <p>{item.title}</p>
+                </div>
+              </div>
+            ) : (
+              <div onClick={(e: React.MouseEvent<HTMLDivElement>) => setAnchorEl(e.currentTarget)}>
+                <div className="p-2 cursor-pointer rounded-md hover:bg-gray-300">
                   <div className="flex items-center space-x-2 text-xs text-gray-600">
                     {item.icon}
                     <p>{item.title}</p>
                   </div>
                 </div>
-              ) : (
-                <div className="w-full">
-                  <ColorPallete tag_id={tagId} />
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
-      </Dialog>
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+      <Menu anchorEl={anchorEl} open={!!anchorEl} onClose={() => setAnchorEl(null)} style={{ marginLeft: '30px' }}>
+        <SelectColor onClick={handleClickColor} color={color} />
+      </Menu>
     </>
   );
 }

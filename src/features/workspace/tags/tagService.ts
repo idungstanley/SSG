@@ -48,6 +48,33 @@ export const useAddTag = () => {
   });
 };
 
+const multipleAssignTag = (data: { tagId: TagId; entityIds: string[] }) => {
+  const { tagId, entityIds } = data;
+
+  const response = requestNew({
+    url: 'tasks/multiple/tags',
+    method: 'POST',
+    data: {
+      tag_ids: [tagId],
+      ids: entityIds,
+      color: 'purple'
+    }
+  });
+  return response;
+};
+
+export const useMultipleAssignTag = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation(multipleAssignTag, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['task']);
+      queryClient.invalidateQueries(['sub-tasks']);
+      queryClient.invalidateQueries(['checklist']);
+    }
+  });
+};
+
 const assignTag = (data: { tagId: TagId; entityId: string; entityType: string }) => {
   const { tagId, entityId, entityType } = data;
 
