@@ -18,7 +18,8 @@ import {
   setTaskIdForPilot,
   setDuplicateTaskObj,
   setSelectedIndexListId,
-  setF2State
+  setF2State,
+  setTaskRootIds
 } from '../../../../features/task/taskSlice';
 import { setActiveItem } from '../../../../features/workspace/workspaceSlice';
 import { UniqueIdentifier, useDraggable, useDroppable } from '@dnd-kit/core';
@@ -53,6 +54,7 @@ interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   onClose?: VoidFunction;
   isOver?: boolean;
   isBlockedShowChildren?: boolean;
+  toggleRootTasks?: boolean;
 }
 
 export function StickyCol({
@@ -70,6 +72,7 @@ export function StickyCol({
   paddingLeft = 0,
   dragElement,
   isBlockedShowChildren,
+  toggleRootTasks,
   ...props
 }: ColProps) {
   const dispatch = useAppDispatch();
@@ -95,6 +98,7 @@ export function StickyCol({
     separateSubtasksMode,
     newTaskPriority,
     f2State,
+    taskRootIds,
     assignOnHoverTask
   } = useAppSelector((state) => state.task);
 
@@ -141,6 +145,21 @@ export function StickyCol({
   const onToggleDisplayingSubTasks = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.stopPropagation();
     setShowSubTasks(!showSubTasks);
+
+    if (!task.parent_id) {
+      dispatch(setTaskRootIds({ ...taskRootIds, [task.id]: [task.id] }));
+    } else {
+      const updateTaskRootIds = { ...taskRootIds };
+
+      for (const key of task.root_task_ids as string[]) {
+        if (updateTaskRootIds[key]) {
+          const taskRootIdsArray = [...(task.root_task_ids as string[]), task.id];
+
+          updateTaskRootIds[key] = taskRootIdsArray;
+        }
+      }
+      dispatch(setTaskRootIds(updateTaskRootIds));
+    }
   };
 
   const editTaskMutation = useMutation(UseUpdateTaskService, {
@@ -333,6 +352,13 @@ export function StickyCol({
     };
   });
 
+  const renderContentWidth = () => {
+    if (saveSettingOnline?.singleLineView) {
+      return hoverOn ? `${hoverWidth}%` : `${width}%`;
+    }
+    return '100%';
+  };
+
   return (
     <>
       {task.id !== '0' && (
@@ -414,7 +440,7 @@ export function StickyCol({
               <div className="w-4" />
             ) : (
               <button onClick={onToggleDisplayingSubTasks} className="pl-1">
-                {showSubTasks || toggleAllSubtask ? (
+                {showSubTasks || toggleAllSubtask || toggleRootTasks ? (
                   <div className={`${task.descendants_count > 0 ? 'w-3 h-3' : 'opacity-0 w-3 h-3'}`}>
                     <CloseSubtask />
                   </div>
@@ -435,11 +461,11 @@ export function StickyCol({
                 </button>
               </ToolTip>
             ) : null}
-            <div ref={divRef} className="flex flex-col items-start justify-start flex-grow pl-2 space-y-1 max-w-full">
+            <div ref={divRef} className="flex flex-col items-start justify-start flex-grow max-w-full pl-2 space-y-1">
               <div
-                className={'flex items-center text-left'}
+                className="flex items-center text-left"
                 style={{
-                  maxWidth: `${hoverOn ? `${hoverWidth}%` : `${width}%`}`
+                  maxWidth: renderContentWidth()
                 }}
                 onKeyDown={(e) => (e.key === 'Enter' && eitableContent ? handleEditTask(e, task.id) : null)}
               >

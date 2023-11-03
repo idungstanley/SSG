@@ -101,7 +101,7 @@ export interface ITeamMember {
     id: string;
     name: string;
     email: string;
-    avatar_path: null | string;
+    avatar_path?: null | string;
     initials: string;
     color?: string;
   };

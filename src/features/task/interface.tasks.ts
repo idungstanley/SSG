@@ -4,7 +4,6 @@ import { ITeamMembersAndGroup } from '../settings/teamMembersAndGroups.interface
 import { IField, ITask_statuses } from '../list/list.interfaces';
 import { RecurFrequency, TypeOptionsProps } from '../../components/DatePicker/RecurringTypes';
 import { FilterWithId } from '../../components/TasksHeader/ui/Filter/types/filters';
-import { ITeamMember } from '../workspace/workspace.interfaces';
 
 interface fileFormat {
   key: string;
@@ -17,6 +16,7 @@ interface fileFormat {
 interface physicalFile {
   id: string;
   name: string;
+  created_at: string;
   display_name: string;
   size: number;
   file_format: fileFormat;
@@ -26,7 +26,7 @@ export interface attachmentData {
   id: string;
   physical_file: physicalFile;
   path: string;
-  team_member: ITeamMember;
+  team_member: ITeamMembersAndGroup;
 }
 
 export interface IAttachmentsRes {
@@ -136,6 +136,7 @@ export interface ITaskFullList {
   description: string | null;
   avatar_path: string | null;
   list_id: string;
+  root_task_ids?: string[];
   parent_id: string | null;
   parentName?: string;
   priority: string | null | [{ id: string; initials: string; color: string; name: string }];

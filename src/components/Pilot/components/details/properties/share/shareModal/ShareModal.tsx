@@ -40,15 +40,15 @@ export default function ShareModal({ taskId, taskName }: { taskId?: string; task
     <>
       <div onClick={(e: React.MouseEvent<HTMLDivElement>) => setAnchorEl(e.currentTarget)}>
         <HeadMenu>
-          <HeadMenu.Button className="flex text-sm items-center gap-1 px-0.5">
+          <HeadMenu.Button className="flex items-center gap-1 p-0.5 text-sm text-white rounded-md bg-alsoit-purple-300">
             <BsShare className="text-xs h-2.5" />
-            <p className="text-gray-400 text-alsoit-text-lg">Share</p>
+            <p className="text-alsoit-text-lg">Share</p>
           </HeadMenu.Button>
         </HeadMenu>
       </div>
       <Menu anchorEl={anchorEl} open={!!anchorEl} onClose={() => setAnchorEl(null)} style={{ marginTop: '60px' }}>
         <div className="p-2" style={{ zIndex: '100', width: '540px' }}>
-          <h1 className="text-black pt-1" style={{ fontSize: '18px' }}>
+          <h1 className="pt-1 text-black" style={{ fontSize: '18px' }}>
             Share this task
           </h1>
           <br />
@@ -59,7 +59,7 @@ export default function ShareModal({ taskId, taskName }: { taskId?: string; task
           <div id="inviteInput" className="flex items-center w-12/12">
             <input type="text" placeholder="Invite by name or email" style={{ width: '80%', height: '30px' }} />
             <p
-              className="flex justify-center items-center text-white bg-purple-500"
+              className="flex items-center justify-center text-white bg-purple-500"
               style={{ width: '20%', height: '30px' }}
             >
               Invite
@@ -67,8 +67,8 @@ export default function ShareModal({ taskId, taskName }: { taskId?: string; task
           </div>
 
           <div id="shareWithEveryOne" style={{ fontSize: '14px' }}>
-            <div id="iconText" className="flex justify-between items-center py-1 ">
-              <div className="flex justify-between items-center gap-2">
+            <div id="iconText" className="flex items-center justify-between py-1 ">
+              <div className="flex items-center justify-between gap-2">
                 <p>
                   <TfiWorld />
                 </p>
@@ -79,8 +79,8 @@ export default function ShareModal({ taskId, taskName }: { taskId?: string; task
               </div>
               <input type="checkbox" />
             </div>
-            <div id="private" className="flex justify-between items-center">
-              <div className="flex justify-between items-center gap-2 py-1">
+            <div id="private" className="flex items-center justify-between">
+              <div className="flex items-center justify-between gap-2 py-1">
                 <p>
                   <BiLinkAlt />
                 </p>
@@ -89,17 +89,17 @@ export default function ShareModal({ taskId, taskName }: { taskId?: string; task
                   <BsInfoLg />
                 </p>
               </div>
-              <button className="border-2 p-1 rounded text-sm">Copy link</button>
+              <button className="p-1 text-sm border-2 rounded">Copy link</button>
             </div>
 
-            <div id="branch" className="flex justify-between items-center pb-2">
-              <div className="flex justify-between items-center gap-2">
+            <div id="branch" className="flex items-center justify-between pb-2">
+              <div className="flex items-center justify-between gap-2">
                 <p>
                   <AiOutlineBranches />
                 </p>
                 <p>Create Branch</p>
               </div>
-              <p className=" cursor-pointer bg-bl z-50">
+              <p className="z-50 cursor-pointer bg-bl">
                 <button
                   className={`${
                     !isBranchCopied

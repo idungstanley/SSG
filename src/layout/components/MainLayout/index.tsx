@@ -16,11 +16,13 @@ import Favorites from '../../../pages/workspace/favorites';
 import UploadToFile from '../../../components/Views/ui/Table/CustomField/Files/UploadToFileField';
 import TaskShortCutModal from '../../../utils/taskShortCut/TaskShortCutModal';
 import useTaskShortCut from '../../../utils/taskShortCut/useTaskShortCut';
+import { getOneTaskServices } from '../../../features/task/taskService';
 
 function MainLayout() {
   const location = useLocation();
   const navigate = useNavigate();
   const { workSpaceId } = useParams();
+  const { taskId } = useParams();
   const { fileUploadProps } = useAppSelector((state) => state.task);
   const queryClient = useQueryClient();
   const dispatch = useAppDispatch();
@@ -53,6 +55,7 @@ function MainLayout() {
   };
 
   useGetColors();
+  getOneTaskServices({ task_id: taskId });
   document.addEventListener('keydown', (event) => TaskShortcutListener(event, setTaskShortcut));
 
   useEffect(() => {
