@@ -31,17 +31,26 @@ export function MembersList({ members, onCheckbox, hubId, place }: MembersListPr
           </div>
 
           <div className="flex">
-            <div className={`group flex gap-2 items-center justify-start ${place === 'menu' ? 'ml-4' : ''}`}>
+            <div
+              className={`group flex gap-2 items-center justify-start rounded-full ${place === 'menu' ? 'ml-4' : ''}`}
+              style={{ border: '.5px solid #F7A100', padding: '1px' }}
+            >
               <div
                 title={member.user.name}
                 className={`bg-gray-200 relative ${
                   place === 'menu' ? 'w-5 h-5' : 'w-7 h-7'
                 } rounded-full p-2 flex items-center justify-center transform transition`}
                 style={{
-                  backgroundColor: member.user.color ? member.user.color : ''
+                  backgroundColor: member.user.color ? member.user.color : 'gray'
                 }}
               >
-                {member.user.avatar_path ? (
+                {member.is_online && (
+                  <span
+                    className="absolute z-10 border-2 border-white w-3 h-3 rounded-full bg-green-500"
+                    style={{ top: '-4px', right: '-4px' }}
+                  />
+                )}
+                {member.user.avatar_path && (
                   <div className="border-2 border-red-400 rounded-full">
                     <AvatarWithImage
                       image_path={member.user.avatar_path}
@@ -49,10 +58,6 @@ export function MembersList({ members, onCheckbox, hubId, place }: MembersListPr
                       width={place === 'menu' ? 'w-5' : 'w-7'}
                     />
                   </div>
-                ) : (
-                  <span className="text-white font-medium" style={{ fontSize: place === 'menu' ? '10px' : '14px' }}>
-                    {member.user.initials}
-                  </span>
                 )}
               </div>
             </div>
