@@ -4,15 +4,9 @@ import { BiTrash } from 'react-icons/bi';
 import { HiOutlinePencil } from 'react-icons/hi';
 import { BsDroplet } from 'react-icons/bs';
 import { useDispatch } from 'react-redux';
-import { useAppSelector } from '../../app/hooks';
 import { displayPrompt, setVisibility } from '../../features/general/prompt/promptSlice';
 import { UseDeleteTagsService, useUpdateTag } from '../../features/workspace/tags/tagService';
-import {
-  setCurrentTagId,
-  setCurrentTaskIdForTag,
-  setRenameTagId,
-  setShowTagColorDialogBox
-} from '../../features/workspace/tags/tagSlice';
+import { setCurrentTaskIdForTag, setRenameTagId } from '../../features/workspace/tags/tagSlice';
 import { TagItem } from '../../pages/workspace/tasks/component/taskData/DataRenderFunc';
 import { Menu } from '@mui/material';
 import { SelectColor } from '../Tag/ui/ManageTagsDropdown/ui/SelectColor';
@@ -36,7 +30,6 @@ export default function EditTagModal({ tag, taskId, onClose }: EditTagModalProps
   const queryClient = useQueryClient();
 
   const { color: initialColor } = tag;
-  const { showTagColorDialogueBox } = useAppSelector((state) => state.tag);
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [color, setColor] = useState(initialColor);
@@ -99,10 +92,7 @@ export default function EditTagModal({ tag, taskId, onClose }: EditTagModalProps
     {
       id: 'change_color',
       title: 'Change Color',
-      handleClick: () => {
-        dispatch(setShowTagColorDialogBox(!showTagColorDialogueBox));
-        dispatch(setCurrentTagId(tag.id));
-      },
+      handleClick: () => null,
       icon: <BsDroplet />
     }
   ];
