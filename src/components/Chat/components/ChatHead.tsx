@@ -96,23 +96,21 @@ export function ChatHead({ columns, tableHeight, collapseTasks, listColor, onTog
           >
             <div className="flex justify-center items-center w-full py-2 truncate dBlock group opacity-90 ml-0.5">
               <div
-                className="flex items-center hover:bg-gray-200 p-0.5 rounded-xs space-x-1  border-t-2 border-l-2 border-r-2 border-transparent hover:border-r-gray-600 text-alsoit-gray-200 font-semibold"
+                className="w-full flex justify-center items-center p-0.5 hover:bg-gray-200 ml-4 rounded-xs space-x-1 border-t-2 border-l-2 border-transparent hover:border-r-gray-600 text-alsoit-gray-200 font-semibold"
                 style={{ fontSize: '11px', WebkitTextStroke: '0.5px' }}
               >
                 <span onClick={(e) => setOptions(e, columns[0])} className="cursor-pointer">
                   {!collapseTasks ? columns[0].value.toUpperCase() : null}
                 </span>
                 <>
-                  {sortArr.length >= 1 && sortArr.includes(columns[0].value) ? (
-                    ''
-                  ) : (
+                  {!sortArr.length && !sortArr.includes(columns[0].value) ? (
                     <RoundedArrowUpDown
                       value={columns[0].value}
                       id={columns[0].id}
                       isDefault={columns[0].defaulField}
                       handleSort={handleSort}
                     />
-                  )}
+                  ) : null}
                   {sortArr.includes(columns[0].value) && (
                     <SortDirectionCheck
                       bgColor={baseColor}
