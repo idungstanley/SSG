@@ -7,8 +7,6 @@ import CommentsForPilot from '../../../../../components/Comments/CommentsForPilo
 import History from '../../../../../components/Pilot/components/History';
 import WatchersForPilot from '../../../../../components/Watchers/WatchersForPilot';
 import { setShowPilotSideOver } from '../../../../../features/general/slideOver/slideOverSlice';
-import { VscChecklist } from 'react-icons/vsc';
-import Checklists from '../../../../../components/Pilot/components/Checklist/Checklist';
 import Details from '../../../../../components/Pilot/components/details/Details';
 import TimeClock from './components/TimeClock';
 import HubManager from '../../../../../components/Pilot/components/HubManager/HubManager';
@@ -48,10 +46,6 @@ const sections = [
   {
     id: pilotTabs.UTILITIES,
     element: <TimeClock />
-  },
-  {
-    id: pilotTabs.CHECKLISTS,
-    element: <Checklists />
   },
   {
     id: pilotTabs.ENTITY_MANAGER,
@@ -103,11 +97,6 @@ const tabs = [
     icon: <UtilityIcon />
   },
   {
-    id: pilotTabs.CHECKLISTS,
-    label: 'Checklists',
-    icon: <VscChecklist className="w-4 h-4" />
-  },
-  {
     id: pilotTabs.ENTITY_MANAGER,
     label: 'Entity Manager',
     icon: <EntityManagerIcon />
@@ -142,7 +131,6 @@ export default function PilotSection() {
   // set data for pilot
   useEffect(() => {
     const selectedItemId = hubId;
-
     if (selectedItemId) {
       dispatch(
         setShowPilotSideOver({

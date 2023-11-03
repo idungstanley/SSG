@@ -66,7 +66,7 @@ export default function SubtabDrag({ id, item, items, icon, showPilot, activeSub
   };
 
   return (
-    <section className="flex flex-col w-full bg-gray-100 divide-x" key={id} style={style}>
+    <section className="relative flex items-center w-full bg-gray-100" key={id} style={style}>
       <div
         key={id}
         onClick={() => handleClick(id)}
@@ -78,7 +78,7 @@ export default function SubtabDrag({ id, item, items, icon, showPilot, activeSub
         <span
           className={`${!showPilot && 'text-xs'} ${
             id === activeSub && !showPilot && 'bg-green-500 p-2 rounded'
-          } flex items-center gap-1`}
+          } flex items-center gap-1 w-full`}
         >
           <span className="focus:cursor-move" ref={setNodeRef} {...attributes} {...listeners}>
             {icon ? icon : <img src={source} alt="Hub Icon" className="w-2 h-2" />}
@@ -86,6 +86,7 @@ export default function SubtabDrag({ id, item, items, icon, showPilot, activeSub
           {item && <p className="truncate">{item.name}</p>}
         </span>
       </div>
+      <span className="absolute right-0 text-gray-300">|</span>
     </section>
   );
 }
