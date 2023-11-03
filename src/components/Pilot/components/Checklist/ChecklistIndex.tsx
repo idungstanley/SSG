@@ -85,25 +85,6 @@ export default function ChecklistIndex() {
         </form>
       )}
       <Disclosures item={checklists} />
-      {/* {activeItemType === EntityType.task && (
-        <div>
-        </div>
-      )}
-      {activeItemType === EntityType.hub && (
-        <div>
-          <Disclosures item={hub?.data.hub.checklists} />
-        </div>
-      )}
-      {activeItemType === EntityType.wallet && (
-        <div>
-          <Disclosures item={wallet?.data.wallet.checklists} />
-        </div>
-      )}
-      {activeItemType === EntityType.list && (
-        <div>
-          <Disclosures item={list?.data.list.checklists} />
-        </div>
-      )} */}
     </div>
   );
 }
