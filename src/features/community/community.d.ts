@@ -1,11 +1,11 @@
-import { ITeamMember } from '../workspace/workspace.interfaces';
+import { ITeamMembersAndGroup } from '../settings/teamMembersAndGroups.interfaces';
 
 interface GraphItem {
   hour: number;
   count: number;
 }
 
-export interface TeamMemberWithStatus extends ITeamMember {
+export interface TeamMemberWithStatus extends ITeamMembersAndGroup {
   is_online: boolean;
 }
 
