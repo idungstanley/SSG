@@ -117,7 +117,11 @@ function GroupAssignee({
                 <div className="relative cursor-pointer">
                   <UserAvatar user={newData} handleClick={handleClick} />
 
-                  <span className="absolute top-0 right-0 w-2 h-2 bg-green-500 border rounded-full group-hover/parent:hidden" />
+                  <span
+                    className={`absolute top-0 right-0 w-2 h-2 bg-green-500 border rounded-full group-hover/parent:hidden ${
+                      newData.is_online ? 'bg-green-500' : 'bg-red-500'
+                    }`}
+                  />
 
                   <button
                     className="items-center justify-center absolute top-0 right-0 w-3 h-3 text-white bg-red-500 border rounded-full hover:bg-purple-700 hidden group-hover/parent:flex"

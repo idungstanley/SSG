@@ -14,6 +14,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { deletePaletteColour, editPaletteColour } from '../../../features/account/accountService';
 import PinnedIcon from '../../../assets/icons/PinnedIcon';
 import { InlineBorderLabel } from '../../Dropdown/MenuDropdown';
+import ToolTip from '../../Tooltip/Tooltip';
 
 export default function PaletteListView() {
   const dispatch = useAppDispatch();
@@ -40,7 +41,7 @@ export default function PaletteListView() {
 
   return (
     <VerticalScroll>
-      <div className="h-56 table-container" style={{ fontSize: '10px', width: '300px' }}>
+      <div className="h-56 table-container text-[#424242]" style={{ fontSize: '10px', width: '300px' }}>
         <table className="w-full" style={{ display: 'grid', gridTemplateColumns: '10px 50px 60px 85px auto' }}>
           <tr className="w-full h-6 text-left contents group">
             <th className="flex items-center justify-center">
@@ -52,12 +53,12 @@ export default function PaletteListView() {
                 }`}
               />
             </th>
-            <th className="flex items-center ml-1 border-b border-gray-300 justify-left">
+            <th className="flex items-center ml-1 border-gray-300 justify-left">
               <span className="flex items-center justify-between">COLOUR</span>
             </th>
-            <th className="flex items-center py-2 ml-1 border-b border-gray-300 justify-left">HEX CODE</th>
-            <th className="flex items-center py-2 ml-1 border-b border-gray-300 justify-left">COLOUR NAME</th>
-            <th className="flex items-center py-2 ml-1 border-b border-gray-300 justify-left">LIBRARY NAME</th>
+            <th className="flex items-center py-2 ml-1 border-gray-300 justify-left">HEX CODE</th>
+            <th className="flex items-center py-2 ml-1 border-gray-300 justify-left">COLOUR NAME</th>
+            <th className="flex items-center py-2 ml-1 border-gray-300 justify-left">LIBRARY NAME</th>
           </tr>
           {colourPaletteData.map((item, index) => item !== null && <Row item={item} key={index} />)}
         </table>
@@ -215,23 +216,29 @@ function Row({ item, key }: { item: IPaletteData; key: number }) {
         </div>
         <div className="absolute flex flex-col items-center gap-1 opacity-0 cursor-pointer right-1 group-hover:opacity-100">
           {is_pinned ? (
-            <span onClick={(e) => handleEditLibraryName(e, false)}>
-              <PinnedIcon />
-            </span>
+            <ToolTip placement="left-end" title="Unpin colour">
+              <span onClick={(e) => handleEditLibraryName(e, false)}>
+                <PinnedIcon />
+              </span>
+            </ToolTip>
           ) : (
-            <span onClick={(e) => handleEditLibraryName(e, true)}>
-              <UnpinnedIcon />
-            </span>
+            <ToolTip placement="left-end" title="Pin colour">
+              <span onClick={(e) => handleEditLibraryName(e, true)}>
+                <UnpinnedIcon />
+              </span>
+            </ToolTip>
           )}
-          <div onClick={(e) => handleOpenEditDropdown(e)}>
-            <ThreeDotIcon />
-          </div>
+          <ToolTip placement="left-start" title="More settings">
+            <div onClick={(e) => handleOpenEditDropdown(e)}>
+              <ThreeDotIcon />
+            </div>
+          </ToolTip>
         </div>
       </td>
       <AlsoitMenuDropdown anchorEl={showEditDropdown} handleClose={handleCloseEditDropwdown}>
         <div className="flex flex-col h-full w-36" style={{ fontSize: '10px' }}>
           <InlineBorderLabel
-            label="CHOOSE OPTIONS"
+            label="CHOOSE OPTION"
             topElement={<p className="flex items-center justify-center">MORE SETTINGS</p>}
           />
           <div className="px-2 pb-2">
