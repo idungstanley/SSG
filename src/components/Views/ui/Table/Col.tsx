@@ -69,7 +69,12 @@ export function Col({ value, field, fieldId, task, ...props }: ColProps) {
           dispatch(setSelectedTaskType(task?.parent_id ? EntityType.subtask : EntityType.task));
         }}
       >
-        <StatusDropdown taskCurrentStatus={task.status} taskStatuses={task.task_statuses} statusDropdownType="name" />
+        <StatusDropdown
+          task={task}
+          taskCurrentStatus={task.status}
+          taskStatuses={task.task_statuses}
+          statusDropdownType="name"
+        />
       </div>
     ) : (
       <></>

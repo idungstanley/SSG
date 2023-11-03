@@ -435,7 +435,7 @@ export function StickyCol({
               </button>
             )}
             <div onClick={() => dispatch(setCurrentTaskStatusId(task.id as string))}>
-              <StatusDropdown taskCurrentStatus={task.status} taskStatuses={task.task_statuses} />
+              <StatusDropdown task={task} taskCurrentStatus={task.status} taskStatuses={task.task_statuses} />
             </div>
             {separateSubtasksMode && task?.parentName && !paddingLeft ? (
               <ToolTip title={task.parentName}>
@@ -561,7 +561,7 @@ export function StickyCol({
               </ToolTip>
             </div>
             <div className="pt-1 ml-4">
-              <StatusDropdown taskCurrentStatus={task.status} taskStatuses={task.task_statuses} />
+              <StatusDropdown task={task} taskCurrentStatus={task.status} taskStatuses={task.task_statuses} />
             </div>
             <div className="flex flex-col items-start justify-start pl-2 space-y-1">
               <p
