@@ -263,3 +263,13 @@ input:focus {
   border: none !important;
   outline: none !important;
 }
+
+.text-outline {
+  text-shadow:
+    -1px -1px 0 #797676,  
+    1px -1px 0 #797676,
+    -1px 1px 0 #797676,
+    1px 1px 0 #797676;
+  color: white;
+  font-size: 8px;
+}

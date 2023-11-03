@@ -55,51 +55,50 @@ export function TimeLogEntries({ timeEntry, index }: Props) {
   };
 
   return (
-    <tr
-      key={index}
-      className="h-12 flex items-center border-b border-alsoit-gray-75 cursor-pointer hover:bg-alsoit-gray-50 group bg-white"
-    >
-      <td className="sticky left-0 bg-white group-hover:bg-alsoit-gray-50 z-20 flex items-center space-x-2.5 border-r border-alsoit-gray-75 w-[15rem] h-full">
-        <div className="h-full w-4 bg-alsoit-gray-50 flex items-center mr-2">
-          <RoundedCheckbox
-            isChecked={btnCheckFn}
-            onChange={() => dispatch(setTimeEntriesIdArr(Array.from(new Set([...timeEntriesIdArr, timeEntry.id]))))}
-            styles="w-2 h-2 rounded-lg checked:bg-alsoit-purple-300 focus:bg-alsoit-purple-300 active:bg-alsoit-purple-300 invisible group-hover:visible"
-          />
-        </div>
-        <div className="flex items-center space-x-2.5 h-full">
-          {timeEntry.team_member.user.avatar_path ? (
-            <AvatarWithImage image_path={timeEntry.team_member.user.avatar_path} height="h-6" width="w-6" />
-          ) : (
-            <AvatarWithInitials
-              initials={timeEntry.team_member.user.initials}
-              backgroundColour={timeEntry.team_member.user.color}
-              width="w-6"
-              height="h-6"
+    <tr key={index} className="h-12 flex items-center group bg-white relative">
+      <div className="flex items-center h-full border-b border-alsoit-gray-75 cursor-pointer hover:bg-alsoit-gray-50">
+        <td className="sticky left-0 bg-white group-hover:bg-alsoit-gray-50 z-20 flex items-center space-x-2.5 border-r border-alsoit-gray-75 w-[15rem] h-full">
+          <div className="h-full w-4 bg-alsoit-gray-50 flex items-center mr-2">
+            <RoundedCheckbox
+              isChecked={btnCheckFn}
+              onChange={() => dispatch(setTimeEntriesIdArr(Array.from(new Set([...timeEntriesIdArr, timeEntry.id]))))}
+              styles="w-2 h-2 rounded-lg checked:bg-alsoit-purple-300 focus:bg-alsoit-purple-300 active:bg-alsoit-purple-300 invisible group-hover:visible"
             />
-          )}
-          <span>{timeEntry.team_member.user.name}</span>
-        </div>
-      </td>
-      <td className="w-20 border-r border-alsoit-gray-75 h-full flex items-center justify-center text-alsoit-text-md text-center relative">
-        <span className="tracking-widest">{dayjs.duration(timeEntry.duration, 'seconds').format('HH:mm:ss')}</span>
-        <span
-          className="absolute flex items-center space-x-1 top-0.5 right-0.5 bg-alsoit-gray-50 rounded-md px-1 capitalize"
-          style={{ fontSize: 6 }}
-        >
-          {timeEntry.type === 'real' ? <RealTimeIcon className="w-3 h-3" /> : <ManualTimeIcon />}
-          <span>{timeEntry.type === 'real' ? 'real time' : timeEntry.type}</span>
-        </span>
-      </td>
-      <td className="w-20 flex items-center justify-center text-alsoit-text-md  h-full border-r border-alsoit-gray-75">
-        {dayjs(timeEntry.start_date).format('ddd DD, MMM')}
-      </td>
-      <td className="w-20 flex items-center justify-center h-full border-r border-alsoit-gray-75">-</td>
-      <td className="w-20 text-alsoit-text-md flex items-center justify-center h-full border-r border-alsoit-gray-75">
-        {dayjs(timeEntry.end_date).format('ddd DD, MMM')}
-      </td>
-      <td className="w-20 flex items-center justify-center">-</td>
-      <td className="invisible group-hover:visible relative">
+          </div>
+          <div className="flex items-center space-x-2.5 h-full">
+            {timeEntry.team_member.user.avatar_path ? (
+              <AvatarWithImage image_path={timeEntry.team_member.user.avatar_path} height="h-6" width="w-6" />
+            ) : (
+              <AvatarWithInitials
+                initials={timeEntry.team_member.user.initials}
+                backgroundColour={timeEntry.team_member.user.color}
+                width="w-6"
+                height="h-6"
+              />
+            )}
+            <span>{timeEntry.team_member.user.name}</span>
+          </div>
+        </td>
+        <td className="w-20 border-r border-alsoit-gray-75 h-full flex items-center justify-center text-alsoit-text-md text-center relative">
+          <span className="tracking-widest">{dayjs.duration(timeEntry.duration, 'seconds').format('HH:mm:ss')}</span>
+          <span
+            className="absolute flex items-center space-x-1 top-0.5 right-0.5 bg-alsoit-gray-50 rounded-md px-1 capitalize"
+            style={{ fontSize: 6 }}
+          >
+            {timeEntry.type === 'real' ? <RealTimeIcon className="w-3 h-3" /> : <ManualTimeIcon />}
+            <span>{timeEntry.type === 'real' ? 'real time' : timeEntry.type}</span>
+          </span>
+        </td>
+        <td className="w-20 flex items-center justify-center text-alsoit-text-md  h-full border-r border-alsoit-gray-75">
+          {dayjs(timeEntry.start_date).format('ddd DD, MMM')}
+        </td>
+        <td className="w-20 flex items-center justify-center h-full border-r border-alsoit-gray-75">-</td>
+        <td className="w-20 text-alsoit-text-md flex items-center justify-center h-full border-r border-alsoit-gray-75">
+          {dayjs(timeEntry.end_date).format('ddd DD, MMM')}
+        </td>
+        <td className="w-20 flex items-center justify-center">-</td>
+      </div>
+      <td className="invisible bg-white h-full flex items-center w-full group-hover:visible sticky -right-2 px-1.5 border-y cursor-pointer border-alsoit-gray-75">
         <ThreeDotIcon onClick={() => setDropDown((prev) => ({ ...prev, entryAction: !prev.entryAction }))} />
         {dropDown.entryAction && entryActions()}
       </td>
