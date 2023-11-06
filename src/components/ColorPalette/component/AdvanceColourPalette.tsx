@@ -108,14 +108,14 @@ export default function AdvanceColourPalette({ show }: { show: boolean }) {
   };
 
   return show ? (
-    <div className="px-4 py-2 border-t border-gray-500 ">
+    <div className="px-4 border-alsoit-gray-75 border-t-[0.5px]">
       <div className="flex flex-col justify-center w-full gap-2 text-[#424242]">
         <div className={cl(isAdvanceSearch && 'w-full', 'flex items-center justify-between p-1')}>
           {!isAdvanceSearch && <p>ADVANCED COLOUR PALETTE</p>}
           <span className={cl(isAdvanceSearch && 'w-full', 'flex items-center justify-between gap-2')}>
             {!isAdvanceSearch && (
               <ToolTip title="Search Advance Colours">
-                <span className="p-1.5 bg-white rounded" onClick={() => setIsAdvanceSearch(true)}>
+                <span className="p-1 bg-white rounded" onClick={() => setIsAdvanceSearch(true)}>
                   <SearchIcon color="#919191" className="w-4 h-4" />
                 </span>
               </ToolTip>
@@ -205,12 +205,12 @@ export default function AdvanceColourPalette({ show }: { show: boolean }) {
           height="h-8"
           onChange={(e) => setColorInputValue(e.target.value)}
         />
-        <div className="flex items-center justify-between gap-2">
+        <div className="flex items-center justify-between gap-2 mt-5 mb-4">
           <CancelButton onClick={() => ({})} />
           <div className="flex items-center gap-2">
             <Button
               height="h-6"
-              customClasses="hover:bg-green-700 bg-green-500 text-white w-[79px]"
+              customClasses="hover:bg-green-700 bg-[#00CC25] text-white w-[80px]"
               label="Replace"
               labelSize="text-[10px]"
               padding="p-1"
@@ -219,7 +219,7 @@ export default function AdvanceColourPalette({ show }: { show: boolean }) {
             />
             <Button
               height="h-6"
-              customClasses="hover:bg-green-700 bg-green-500 text-white w-[79px]"
+              customClasses="hover:bg-green-700 bg-[#00CC25] text-white w-[80px]"
               label="Save as new"
               labelSize="text-[10px]"
               padding="p-1"
