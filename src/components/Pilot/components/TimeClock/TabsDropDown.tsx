@@ -29,7 +29,7 @@ export function TabsDropDown({ children, closeModal, header, subHeader, styles, 
   return (
     <div
       onClick={(e) => e.stopPropagation()}
-      className={`absolute z-40 flex flex-col p-2 space-y-3 bg-white rounded-md shadow-xl ${styles}`}
+      className={`fixed z-40 flex flex-col p-2 space-y-3 bg-white rounded-md shadow-xl ${styles}`}
       ref={modalRef}
     >
       <div className="flex flex-col space-y-3.5">

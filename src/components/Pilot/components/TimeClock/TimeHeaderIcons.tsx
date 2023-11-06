@@ -33,15 +33,15 @@ export function HeaderIcons({ fullContent }: Props) {
   }, [nestedTimeEntityId]);
 
   return (
-    <div className="flex justify-end space-x-1 px-1.5">
+    <div className="flex justify-end space-x-1 px-1.5 relative">
       <div
-        className="p-0.5 rounded-md gap-2 flex -space-x-1 items-center justify-between bg-white hover:bg-alsoit-purple-50 cursor-pointer relative"
+        className="p-0.5 rounded-md gap-2 flex -space-x-1 items-center justify-between bg-white hover:bg-alsoit-purple-50 cursor-pointer"
         onClick={() => setDropDown((prev) => ({ ...prev, show: !prev.show }))}
       >
         <ShowIcon color="gray" className="w-4 h-4" />
         {dropDown.show && (
           <TabsDropDown
-            styles="w-72 right-0 top-5 px-1.5"
+            styles="w-72 right-0 top-0 px-1.5"
             subStyles="left-1/3"
             header="customize this view"
             subHeader="main settings"
