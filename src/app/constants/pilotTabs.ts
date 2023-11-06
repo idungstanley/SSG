@@ -22,5 +22,8 @@ export const pilotTabs = {
   CALENDAR_SETTINGS: 'calendar_settings',
   STATUS_MANAGEMENT: 'status_management',
   SUBTASK: 'subtask',
-  TIES: 'ties'
+  TIES: 'ties',
+  EMAIL: 'email',
+  CHAT: 'chat',
+  VOICE_CALL: 'voice_call'
 };

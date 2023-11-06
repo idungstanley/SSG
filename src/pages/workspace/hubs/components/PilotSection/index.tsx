@@ -2,7 +2,6 @@ import { ChatBubbleLeftEllipsisIcon, DocumentTextIcon, EyeIcon, SignalIcon } fro
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
-import ChatForPilot from '../../../../../components/Chat/ChatForPilot';
 import CommentsForPilot from '../../../../../components/Comments/CommentsForPilot';
 import History from '../../../../../components/Pilot/components/History';
 import WatchersForPilot from '../../../../../components/Watchers/WatchersForPilot';
@@ -21,6 +20,7 @@ import { pilotTabs } from '../../../../../app/constants/pilotTabs';
 import Views from '../../../../../components/Pilot/components/Views/Index';
 import PilotViewIcon from '../../../../../assets/icons/PilotViewIcon';
 import { DetailsIcon } from '../../../../../assets/icons';
+import Commnunication from '../../../pilot/components/communication/Communication';
 
 const sections = [
   {
@@ -41,7 +41,7 @@ const sections = [
   },
   {
     id: pilotTabs.CONNECT,
-    element: <ChatForPilot />
+    element: <Commnunication />
   },
   {
     id: pilotTabs.UTILITIES,
