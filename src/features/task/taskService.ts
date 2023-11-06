@@ -1,6 +1,7 @@
 import requestNew from '../../app/requestNew';
 import {
   IAttachmentsRes,
+  ICheckListRes,
   IFullTaskRes,
   ITaskCreateProps,
   ITaskFullList,
@@ -67,6 +68,7 @@ import { IList } from '../hubs/hubs.interfaces';
 import { setDragOverList, setDragOverTask, setDraggableItem } from '../list/listSlice';
 import { FilterWithId, FiltersOption } from '../../components/TasksHeader/ui/Filter/types/filters';
 import { pilotTabs } from '../../app/constants/pilotTabs';
+import { setChecklists } from './checklist/checklistSlice';
 import { StatusProps } from '../../pages/workspace/hubs/components/ActiveTree/activetree.interfaces';
 import { setMatchData } from '../general/prompt/promptSlice';
 
@@ -576,8 +578,10 @@ export const getOneTaskServices = ({ task_id }: { task_id: string | undefined | 
       // enabled: false
       onSuccess: (data) => {
         dispatch(setRootTaskIds(data?.data.task.root_task_ids));
+        dispatch(setChecklists(data?.data.task.checklists as ICheckListRes[]));
       },
-      enabled: task_id != null
+      enabled: task_id != null,
+      cacheTime: 0
     }
   );
 };

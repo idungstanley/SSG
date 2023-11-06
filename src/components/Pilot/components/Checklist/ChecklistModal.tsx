@@ -26,8 +26,8 @@ interface ChecklistModalProps {
 export default function ChecklistModal({ options, checklistId, checklistItemId, focus }: ChecklistModalProps) {
   const dispatch = useAppDispatch();
 
-  const { mutate: onChecklistDelete } = useDeleteChecklist();
-  const { mutate: onChecklistItemDelete } = useDeleteChecklistItem();
+  const { mutate: onChecklistDelete } = useDeleteChecklist(checklistId);
+  const { mutate: onChecklistItemDelete } = useDeleteChecklistItem(checklistId, checklistItemId as string);
 
   const { openedDisclosureId } = useAppSelector((state) => state.checklist);
 

@@ -73,19 +73,52 @@ export interface TaskDataGroupingsAssigneeProps {
   };
 }
 
+export interface ICreateChecklistRes {
+  data: {
+    checklist: ICheckListRes;
+  };
+}
+
 export interface TaskAssignee {
   id: string;
   color: string;
   name: string;
   initials: string;
-  avatar_path: null;
+  avatar_path: null | string;
+}
+
+export interface AssigneeType {
+  id: string;
+  color: string;
+  created_at: string;
+  is_online: boolean;
+  role: {
+    key: string;
+    name: string;
+  };
+  updated_at: string;
+  user: {
+    avatar_path: null | string;
+    color: string;
+    email: string;
+    id: string;
+    initials: string;
+    name: string;
+    timezone: string;
+  };
+}
+
+export interface IChecklistItemRes {
+  data: {
+    checklist_item: ICheckListItems;
+  };
 }
 
 export interface ICheckListItems {
   id: string;
   name: string;
   is_done: number;
-  assignees: [{ id: string; initials: string; color: string; name: string; avatar_path: string | null }];
+  assignees: AssigneeType[];
   group_assignees: [];
   tags: [];
 }
