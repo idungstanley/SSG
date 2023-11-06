@@ -10,6 +10,7 @@ import {
 import { IActivityLog } from '../general/history/history.interfaces';
 import dayjs, { Dayjs } from 'dayjs';
 import { IView } from '../hubs/hubs.interfaces';
+import { pilotTabs } from '../../app/constants/pilotTabs';
 
 const initialActivePlaceId: number | null = (JSON.parse(localStorage.getItem('activePlaceIdLocale') as string) ||
   null) as number | null;
@@ -58,6 +59,7 @@ interface workspaceState {
   activeSubHubManagerTabId: string | null;
   activeStatusManagementTabId: string | null;
   activeSubDetailsTabId: string | null;
+  activeSubLogsTabId: string | null;
   activeSubTimeClockTabId: string | null;
   activeClockTab: string;
   showExtendedBar: boolean;
@@ -118,6 +120,7 @@ const initialState: workspaceState = {
   sidebarWidthRD: dimensions.navigationBar.default,
   activeHotKeyTabId: 0,
   activeSubDetailsTabId: 'properties',
+  activeSubLogsTabId: pilotTabs.HISTORY_LOG,
   activeSubTimeClockTabId: 'time_clock',
   activeClockTab: 'Real Time',
   activeStatusManagementTabId: 'custom',
@@ -287,6 +290,9 @@ export const wsSlice = createSlice({
     setActiveSubDetailsTabId(state, action: PayloadAction<string | null>) {
       state.activeSubDetailsTabId = action.payload;
     },
+    setActiveSubLogsTabId(state, action: PayloadAction<string | null>) {
+      state.activeSubLogsTabId = action.payload;
+    },
     setActiveSubHubManagerTabId(state, action: PayloadAction<string | null>) {
       state.activeSubHubManagerTabId = action.payload;
     },
@@ -440,7 +446,8 @@ export const {
   setDraggableActiveStatusId,
   setActiveHotkeyIds,
   setNestedTimeEntityId,
-  setActiveView
+  setActiveView,
+  setActiveSubLogsTabId
 } = wsSlice.actions;
 
 export default wsSlice.reducer;
