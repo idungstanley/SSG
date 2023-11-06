@@ -1,8 +1,11 @@
+import { GraphItem } from '../community/community';
+
 export interface ITeamMembersAndGroup {
   color: string | undefined;
   id: string;
   name?: string;
   is_active?: boolean;
+  is_online: boolean;
   invited_at: string;
   user: {
     color?: string;
@@ -24,6 +27,7 @@ export interface ITeamMembersAndGroupsReq {
   data: {
     team_member_groups: ITeamMembersAndGroup[];
     team_members: ITeamMembersAndGroup[];
+    graph: GraphItem[];
     pagination: {
       page: number;
       per_page: number;
