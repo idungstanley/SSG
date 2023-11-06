@@ -4,7 +4,7 @@ import { RiCheckboxBlankFill } from 'react-icons/ri';
 import { useAppSelector } from '../../app/hooks';
 import { UseUpdateTaskStatusService } from '../../features/task/taskService';
 import { useAbsolute } from '../../hooks/useAbsolute';
-import { Status } from '../../features/task/interface.tasks';
+import { Status, Task } from '../../features/task/interface.tasks';
 import StatusIconComp from '../../assets/icons/StatusIconComp';
 import ToolTip from '../Tooltip/Tooltip';
 import AlsoitMenuDropdown from '../DropDowns';
@@ -15,9 +15,15 @@ interface StatusDropdownProps {
   taskCurrentStatus: Status;
   statusDropdownType?: string;
   taskStatuses?: ITask_statuses[];
+  task: Task;
 }
 
-export default function StatusDropdown({ taskCurrentStatus, statusDropdownType, taskStatuses }: StatusDropdownProps) {
+export default function StatusDropdown({
+  taskCurrentStatus,
+  statusDropdownType,
+  taskStatuses,
+  task
+}: StatusDropdownProps) {
   const { currentTaskStatusId } = useAppSelector((state) => state.task);
   const { updateCords } = useAppSelector((state) => state.task);
 
@@ -72,43 +78,45 @@ export default function StatusDropdown({ taskCurrentStatus, statusDropdownType, 
           </button>
         </ToolTip>
       </div>
-      <AlsoitMenuDropdown handleClose={handleCloseStatusDropdown} anchorEl={isOpen as HTMLDivElement | null}>
-        <div className="relative z-10">
-          <VerticalScroll>
-            <div style={{ ...cords }} className="max-h-52">
-              <div className="flex flex-col items-center justify-center w-48 p-1 text-center bg-white divide-y divide-gray-100 shadow-lg outline-none h-fit ring-1 ring-black ring-opacity-5 focus:outline-none">
-                {sortedStatuses.length
-                  ? sortedStatuses.map((statuses) => (
-                      <button
-                        key={statuses.id}
-                        type="button"
-                        className={cl(
-                          taskCurrentStatus?.name.toLowerCase() === statuses.name.toLowerCase()
-                            ? `bg-${statuses.color}-200`
-                            : '',
-                          'flex items-center px-4 py-2 text-sm text-gray-600 rounded hover:bg-alsoit-gray-50 text-left space-x-2 w-full'
-                        )}
-                        onClick={() => {
-                          setStatus(statuses.id);
-                          setIsOpen(null);
-                        }}
-                      >
-                        <p>
-                          <RiCheckboxBlankFill
-                            className="pl-px text-xs"
-                            aria-hidden="true"
-                            style={{ color: `${statuses.color}` }}
-                          />
-                        </p>
-                        <p>{statuses.name}</p>
-                      </button>
-                    ))
-                  : null}
+      {task.id !== '0' && (
+        <AlsoitMenuDropdown handleClose={handleCloseStatusDropdown} anchorEl={isOpen as HTMLDivElement | null}>
+          <div className="relative z-10">
+            <VerticalScroll>
+              <div style={{ ...cords }} className="max-h-52">
+                <div className="flex flex-col items-center justify-center w-48 p-1 text-center bg-white divide-y divide-gray-100 shadow-lg outline-none h-fit ring-1 ring-black ring-opacity-5 focus:outline-none">
+                  {sortedStatuses.length
+                    ? sortedStatuses.map((statuses) => (
+                        <button
+                          key={statuses.id}
+                          type="button"
+                          className={cl(
+                            taskCurrentStatus?.name.toLowerCase() === statuses.name.toLowerCase()
+                              ? `bg-${statuses.color}-200`
+                              : '',
+                            'flex items-center px-4 py-2 text-sm text-gray-600 rounded hover:bg-alsoit-gray-50 text-left space-x-2 w-full'
+                          )}
+                          onClick={() => {
+                            setStatus(statuses.id);
+                            setIsOpen(null);
+                          }}
+                        >
+                          <p>
+                            <RiCheckboxBlankFill
+                              className="pl-px text-xs"
+                              aria-hidden="true"
+                              style={{ color: `${statuses.color}` }}
+                            />
+                          </p>
+                          <p>{statuses.name}</p>
+                        </button>
+                      ))
+                    : null}
+                </div>
               </div>
-            </div>
-          </VerticalScroll>
-        </div>
-      </AlsoitMenuDropdown>
+            </VerticalScroll>
+          </div>
+        </AlsoitMenuDropdown>
+      )}
     </>
   );
 }
