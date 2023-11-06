@@ -57,7 +57,7 @@ export const createTeamMemberGroupService = async (data: { name: string }) => {
   const response = requestNew({
     url: 'settings/team-member-groups',
     method: 'POST',
-    params: {
+    data: {
       name: data.name
     }
   });
@@ -69,7 +69,7 @@ export const updateTeamMemberGroupService = async (data: { name: string; teamMem
   const response = requestNew({
     url: `settings/team-member-groups/${data.teamMemberGroupId}`,
     method: 'PUT',
-    params: {
+    data: {
       name: data.name
     }
   });

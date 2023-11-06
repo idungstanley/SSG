@@ -462,6 +462,17 @@ export const useDuplicateTask = (task?: Task) => {
   });
 };
 
+export const archiveTask = (data: { selectedTasksArray: string[] }) => {
+  const request = requestNew({
+    url: 'tasks/multiple/archive',
+    method: 'POST',
+    data: {
+      ids: data.selectedTasksArray
+    }
+  });
+  return request;
+};
+
 export const deleteTask = (data: { selectedTasksArray: string[] }) => {
   const request = requestNew({
     url: 'tasks/multiple/delete',
@@ -532,15 +543,13 @@ export const UseGetFullTaskList = ({
       return requestNew<IFullTaskRes>({
         url: 'tasks/full-list',
         method: 'POST',
-        params: {
+        data: {
+          filters,
+          sorting: sortArrUpdate,
           expand_all: toggleAllSubtask || separateSubtasksMode || splitSubTaskState ? 1 : 0,
           page: pageParam,
           hub_id,
           wallet_id
-        },
-        data: {
-          filters,
-          sorting: sortArrUpdate
         }
       });
     },
@@ -617,7 +626,7 @@ export const UseCreateCheckList = ({ task_id, trigger }: { task_id: string; trig
       const data = await requestNew({
         url: `tasks/${task_id}/checklist`,
         method: 'POST',
-        params: {
+        data: {
           name: 'Checklist'
         }
       });
@@ -661,7 +670,7 @@ export const UseUpdateTaskStatusService = ({ task_id, statusDataUpdate }: Update
       const data = requestNew<ITaskRes>({
         url: `tasks/${task_id}`,
         method: 'PUT',
-        params: {
+        data: {
           task_status_id: statusDataUpdate
         }
       });
@@ -851,14 +860,12 @@ export const getTaskListService = (listId: string | null | undefined) => {
       return requestNew<ITaskListRes>({
         url: 'tasks/list',
         method: 'POST',
-        params: {
+        data: {
+          sorting: sortArrUpdate,
+          filters,
           expand_all: toggleAllSubtask || separateSubtasksMode || splitSubTaskState ? 1 : 0,
           list_id: listId,
           page: pageParam
-        },
-        data: {
-          sorting: sortArrUpdate,
-          filters
         }
       });
     },
@@ -899,7 +906,7 @@ export const createTimeEntriesService = (data: { queryKey: (string | undefined)[
   const response = requestNew({
     url: 'time-entries/start',
     method: 'POST',
-    params: {
+    data: {
       type: EntityType.task,
       id: taskID
     }
@@ -1021,7 +1028,7 @@ export const StartTimeEntryService = () => {
       const res = await requestNew({
         url: 'time-entries/start',
         method: 'POST',
-        params: {
+        data: {
           type: query.type,
           id: query.taskId
         }
@@ -1047,7 +1054,7 @@ export const EndTimeEntriesService = () => {
       const response = await requestNew({
         url: 'time-entries/stop',
         method: 'POST',
-        params: {
+        data: {
           description: data.description,
           isbillable: data.is_Billable
         }
@@ -1196,7 +1203,7 @@ export const UpdateTimeEntriesService = (data: {
   const response = requestNew({
     url: `time-entries/${data.time_entry_id}`,
     method: 'PUT',
-    params: {
+    data: {
       description: data.description,
       is_billable: data.isBillable,
       start_date: data.start_date,
@@ -1233,7 +1240,7 @@ export const AddWatcherService = ({ query }: { query: (string | undefined | null
       const data = await requestNew({
         url: 'watch',
         method: 'POST',
-        params: {
+        data: {
           type: EntityType.task,
           id: query[1],
           team_member_ids: [query[0]]
@@ -1260,7 +1267,7 @@ export const RemoveWatcherService = ({ query }: { query: (string | null | undefi
       const data = await requestNew({
         url: 'watch/remove',
         method: 'POST',
-        params: {
+        data: {
           type: EntityType.task,
           id: query[1],
           team_member_ids: [query[0]]
@@ -1565,11 +1572,9 @@ const updateSubtaskFilters = (data: { parentId: string; filters: { op: FiltersOp
   const response = requestNew<IFullTaskRes>({
     url: 'tasks/list',
     method: 'POST',
-    params: {
-      parent_id: data.parentId
-    },
     data: {
-      filters
+      filters,
+      parent_id: data.parentId
     }
   });
   return response;

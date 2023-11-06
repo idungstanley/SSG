@@ -10,12 +10,12 @@ import { TbFolderX } from 'react-icons/tb';
 import { GiStoneStack, GiJusticeStar } from 'react-icons/gi';
 // import { HiOutlineUserPlus } from 'react-icons/hi2';
 import { BiMerge, BiEdit } from 'react-icons/bi';
-import { deleteTask } from '../../../../../features/task/taskService';
+import { archiveTask, deleteTask } from '../../../../../features/task/taskService';
 import { useDispatch } from 'react-redux';
 import { EntityType } from '../../../../../utils/EntityTypes/EntityType';
 
 import { displayPrompt, setVisibility } from '../../../../../features/general/prompt/promptSlice';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   setSelectedListIds,
   setSelectedTasksArray,
@@ -33,6 +33,7 @@ import Assignee from '../../assignTask/Assignee';
 
 export default function TaskMenu() {
   const dispatch = useDispatch();
+  const queryClient = useQueryClient();
 
   const {
     selectedTasksArray,
@@ -73,6 +74,14 @@ export default function TaskMenu() {
       } else {
         dispatch(setSubtasks(updatedTasks));
       }
+      dispatch(setSelectedTasksArray([]));
+    }
+  });
+
+  const useArchiveTask = useMutation(archiveTask, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['task']);
+      queryClient.invalidateQueries(['sub-tasks']);
       dispatch(setSelectedTasksArray([]));
     }
   });
@@ -198,8 +207,31 @@ export default function TaskMenu() {
     {
       id: 'archive_tasks',
       label: 'Archive tasks',
-      icons: <HiInbox color="orange" opacity={0.5} />,
-      handleClick: () => ({}),
+      icons: <HiInbox />,
+      handleClick: () => {
+        dispatch(
+          displayPrompt('Archive tasks', 'Would you like archive these tasks from the workspace?', [
+            {
+              label: 'Archive tasks',
+              style: 'warning',
+              callback: () => {
+                useArchiveTask.mutateAsync({
+                  selectedTasksArray: selectedTasksArray
+                });
+                dispatch(setVisibility(false));
+                dispatch(setShowTaskNavigation(false));
+              }
+            },
+            {
+              label: 'Cancel',
+              style: 'plain',
+              callback: () => {
+                dispatch(setVisibility(false));
+              }
+            }
+          ])
+        );
+      },
       isVisible: true
     },
     {

@@ -185,7 +185,7 @@ export const UseAssignTagService = ({
   const response = requestNew({
     url,
     method: 'POST',
-    params: {
+    data: {
       type: entity_type,
       id: currentTaskIdForTag
     }
@@ -207,7 +207,7 @@ export const UseUnAssignTagService = ({
   const response = requestNew({
     url,
     method: 'POST',
-    params: {
+    data: {
       type: entity_type,
       id: currentTaskIdForTag
     }
@@ -229,7 +229,7 @@ export const UseUnAssignTagFromTask = ({
       const data = await requestNew({
         url: `tags/${tagId}/unassign`,
         method: 'POST',
-        params: {
+        data: {
           type: EntityType.task,
           id: currentTaskIdForTag
         }

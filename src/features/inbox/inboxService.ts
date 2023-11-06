@@ -124,7 +124,7 @@ export const fileInboxFileService = async (data: { folderIds: string[]; inboxFil
   const response = requestNew<{ data: { inbox_file: { id: string; inbox_id: string } } }>({
     url: `inbox-files/${data.inboxFileId}/file`,
     method: 'POST',
-    params: {
+    data: {
       selected_folder_ids: data.folderIds
     }
   });
@@ -145,7 +145,7 @@ const assignOrUnassignInboxFile = (data: { isAssigned: boolean; inboxId: string;
   const response = requestNew<{ data: { copied_to_inbox_id: string } }>({
     url,
     method: 'POST',
-    params
+    data: params
   });
   return response;
 };
