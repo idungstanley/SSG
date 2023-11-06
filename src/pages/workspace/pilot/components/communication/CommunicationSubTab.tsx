@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
-import { AiOutlineContacts } from 'react-icons/ai';
-import { MdOutlineMarkEmailUnread } from 'react-icons/md';
-import { RiWechatLine } from 'react-icons/ri';
+import { MdAlternateEmail, MdOutlineCall } from 'react-icons/md';
 import { useAppSelector } from '../../../../../app/hooks';
 import SubtabDrag from '../SubtabDnd';
 import {
@@ -15,19 +13,27 @@ import {
 } from '@dnd-kit/core';
 import { arrayMove, rectSortingStrategy, SortableContext, sortableKeyboardCoordinates } from '@dnd-kit/sortable';
 import { pilotTabs } from '../../../../../app/constants/pilotTabs';
+import { BsChatLeftText } from 'react-icons/bs';
+import CommentIcon from '../../../../../assets/icons/CommentIcon';
 
 export const communicationOptions = [
   {
-    id: 'email',
-    name: 'email',
-    icon: <MdOutlineMarkEmailUnread />,
+    id: pilotTabs.EMAIL,
+    name: 'Email',
+    icon: <MdAlternateEmail className="w-4 h-4" />,
     isVisible: false
   },
-  { id: 'chat', name: 'chat', icon: <RiWechatLine />, isVisible: false },
+  { id: pilotTabs.CHAT, name: 'Chat', icon: <BsChatLeftText className="w-4 h-4" />, isVisible: false },
   {
-    id: 'contact',
-    name: 'contact',
-    icon: <AiOutlineContacts />,
+    id: pilotTabs.VOICE_CALL,
+    name: 'Voice Call',
+    icon: <MdOutlineCall className="w-4 h-4" />,
+    isVisible: false
+  },
+  {
+    id: pilotTabs.COMMENTS,
+    name: 'Comment',
+    icon: <CommentIcon />,
     isVisible: false
   }
 ];
@@ -70,7 +76,7 @@ export default function CommunicationSubTab() {
   return (
     <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={(e) => handleDragEnd(e)}>
       <SortableContext strategy={rectSortingStrategy} items={items}>
-        <div className={`flex  bg-primary-200 pb-0.5 ${showPilot ? 'flex-row' : 'flex-col border'}`}>
+        <div className="grid  bg-primary-200 pb-0.5 grid-cols-4">
           {items.map((item) => (
             <SubtabDrag
               key={item.id}
