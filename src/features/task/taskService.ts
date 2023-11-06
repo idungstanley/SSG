@@ -56,6 +56,7 @@ import {
   taskMoveToSubtaskManager,
   taskPriorityUpdateManager,
   taskStatusUpdateManager,
+  taskWatchersUpdateManager,
   updateTaskSubtasksCountManager
 } from '../../managers/Task';
 import { ITeamMembersAndGroup } from '../settings/teamMembersAndGroups.interfaces';
@@ -1278,13 +1279,40 @@ export const RemoveWatcherService = ({ query }: { query: (string | null | undefi
   );
 };
 
+// Assign Watchers
+const watchersAssignTask = ({ ids, team_member_ids }: { ids: string[]; team_member_ids: string[] | null }) => {
+  const request = requestNew({
+    url: 'tasks/multiple/watchers',
+    method: 'POST',
+    data: { ids, team_member_ids }
+  });
+  return request;
+};
+
+export const UseTaskWatchersAssignService = (taskIds: string[], user: ITeamMembersAndGroup, listIds: string[]) => {
+  const dispatch = useAppDispatch();
+  const { tasks, subtasks } = useAppSelector((state) => state.task);
+
+  return useMutation(watchersAssignTask, {
+    onSuccess: () => {
+      dispatch(setAssignOnHoverState(false));
+      const { updatedTasks, updatedSubtasks } = taskWatchersUpdateManager(taskIds, listIds, tasks, subtasks, user);
+      dispatch(setTasks(updatedTasks as Record<string, ITaskFullList[]>));
+      dispatch(setSubtasks(updatedSubtasks as Record<string, ITaskFullList[]>));
+      dispatch(setToggleAssignCurrentTaskId(null));
+      dispatch(setSelectedTasksArray([]));
+      dispatch(setSelectedListIds([]));
+    }
+  });
+};
+
 // Assign Checklist Item
 const AssignTask = ({
-  taskIds,
+  ids,
   team_member_id,
   teams
 }: {
-  taskIds: string[];
+  ids: string[];
   team_member_id: string | null;
   teams: boolean;
 }) => {
@@ -1292,7 +1320,7 @@ const AssignTask = ({
     url: teams ? '/group-assignee/assign' : '/tasks/multiple/assignees',
     method: 'POST',
     data: {
-      ids: taskIds,
+      ids: ids,
       ...(teams ? { team_member_group_id: team_member_id } : { team_member_ids: [team_member_id] }),
       type: EntityType.task
     }
