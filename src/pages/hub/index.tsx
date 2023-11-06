@@ -140,17 +140,6 @@ export default function HubPage() {
             ))}
           </section>
         </VerticalScroll>
-        <VerticalScroll onScroll={onScroll}>
-          <section
-            style={{ minHeight: '0', maxHeight: '83vh' }}
-            className="w-full h-full py-4 pl-5 pr-1 pb-0 space-y-10"
-          >
-            {/* lists */}
-            {Object.keys(lists).map((listId) => (
-              <Fragment key={listId}>{tasksStore[listId] ? <List tasks={tasksStore[listId]} /> : null}</Fragment>
-            ))}
-          </section>
-        </VerticalScroll>
         {Object.keys(lists).length > 1 && scrollGroupView && <GroupHorizontalScroll />}
       </Page>
     </>
