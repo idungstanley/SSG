@@ -17,7 +17,8 @@ import {
   updateCustomFieldColumnManager,
   updateCustomFieldManager
 } from '../../managers/Task';
-import { customPropertiesProps } from '../task/interface.tasks';
+import { ICheckListRes, customPropertiesProps } from '../task/interface.tasks';
+import { setChecklists } from '../task/checklist/checklistSlice';
 
 interface TaskCountProps {
   data: {
@@ -205,6 +206,7 @@ export const UseGetListDetails = (listId: string | null | undefined) => {
         const listViews = data.data.list.task_views;
         dispatch(setSpaceStatuses(listStatusTypes));
         dispatch(setSpaceViews(listViews));
+        dispatch(setChecklists(data?.data.list.checklists as ICheckListRes[]));
       },
       cacheTime: 0
     }

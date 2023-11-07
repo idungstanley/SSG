@@ -3,8 +3,6 @@ import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import FullScreenMessage from '../../../CenterMessage/FullScreenMessage';
 import { InitialsAvatar, Spinner } from '../../../../common';
 import { useGetItemHistory } from '../../../../features/general/history/historyService';
-import SectionArea from '../SectionArea';
-import { DocumentTextIcon } from '@heroicons/react/24/outline';
 import { BsFilter, BsThreeDots } from 'react-icons/bs';
 import { BiSearch } from 'react-icons/bi';
 import { AiFillPlusCircle } from 'react-icons/ai';
@@ -42,10 +40,7 @@ export default function History() {
 
   return (
     <div className="flex flex-col space-x-0.5">
-      <div className="flex items-center space-x-4 border-b-2 py-1">
-        <div className="w-1/5">
-          <SectionArea label="Logs" icon={<DocumentTextIcon className="w-4 h-4" />} />
-        </div>
+      <div className="flex items-center py-1 space-x-4 border-b-2">
         {/* search Component */}
         <div className="relative flex items-center w-3/5">
           <input
@@ -68,7 +63,7 @@ export default function History() {
             }}
           >
             <BsFilter />
-            <span className="capitalize text-xs">filter</span>
+            <span className="text-xs capitalize">filter</span>
             {showModal.filterLogModal && <HistoryfilterModal logData={logs} toggleFn={setShow} />}
           </div>
           {/* three dots icon */}
@@ -134,7 +129,7 @@ export default function History() {
                   return (
                     <tr
                       key={activityLog.id}
-                      className="flex items-center w-full px-1 py-1 space-x-6 border-b border-t border-blueGray-300"
+                      className="flex items-center w-full px-1 py-1 space-x-6 border-t border-b border-blueGray-300"
                     >
                       <td>
                         {user ? (

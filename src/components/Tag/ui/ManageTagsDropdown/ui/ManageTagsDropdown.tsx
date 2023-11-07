@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useAppSelector } from '../../../../../app/hooks';
 import { Tag, TagId } from '../../../../../features/task/interface.tasks';
 import { useAbsolute } from '../../../../../hooks/useAbsolute';
-import { useAssignTag, useTags } from '../../../../../features/workspace/tags/tagService';
+import { useAssignTag, useMultipleAssignTag, useTags } from '../../../../../features/workspace/tags/tagService';
 // import { TagList } from '../../TagList';
 import { TagItem } from './TagItem';
 import { SearchAndAddNewTag } from './SearchAndAddNewTag';
@@ -14,29 +14,32 @@ interface ManageTagsDropdownProps {
   tagsArr: Tag[];
   entityId: string;
   entityType: string;
+  icon?: React.ReactNode;
 }
 
-export function ManageTagsDropdown({ tagsArr, entityId, entityType }: ManageTagsDropdownProps) {
+export function ManageTagsDropdown({ tagsArr, entityId, entityType, icon }: ManageTagsDropdownProps) {
+  const { selectedTasksArray } = useAppSelector((state) => state.task);
+
+  const [searchValue, setSearchValue] = useState('');
+  const [showSelectDropdown, setShowSelectDropdown] = useState<null | HTMLSpanElement | HTMLDivElement>(null);
+
   const { data: tags } = useTags();
   const { mutate: onAssign } = useAssignTag(entityId);
-  const [searchValue, setSearchValue] = useState('');
-
-  const [showSelectDropdown, setShowSelectDropdown] = useState<null | HTMLSpanElement | HTMLDivElement>(null);
+  const { mutate: onMultipleAssign } = useMultipleAssignTag();
 
   const newTags = tags ? tags.filter((i) => !tagsArr.map((j) => j.id).includes(i.id)) : [];
   const filteredTags = newTags.filter((tag) => tag.name.toLowerCase().includes(searchValue.toLowerCase()));
 
   const onClickAssign = (id: TagId) => {
-    onAssign({ tagId: id, entityId: entityId, entityType: entityType });
+    if (selectedTasksArray.length) {
+      onMultipleAssign({ tagId: id, entityIds: selectedTasksArray });
+    } else {
+      onAssign({ tagId: id, entityId, entityType });
+    }
   };
 
   const handleClose = () => {
     setShowSelectDropdown(null);
-  };
-
-  const onClickOpenDropdown = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    e.stopPropagation();
-    e.preventDefault();
   };
 
   const { updateCords } = useAppSelector((state) => state.task);
@@ -44,30 +47,32 @@ export function ManageTagsDropdown({ tagsArr, entityId, entityType }: ManageTags
 
   return (
     <>
-      <div>
-        <button
-          type="button"
-          onClick={(event) => {
-            setShowSelectDropdown(event.currentTarget);
-            onClickOpenDropdown(event);
-          }}
-          className="p-1 border rounded-md bg-transparent text-gray-400 hover:text-gray-700 bg-white"
-        >
-          <span ref={relativeRef}>
-            <TagIcon className="w-3 h-3" />
-          </span>
-        </button>
+      <div onClick={(event) => setShowSelectDropdown(event.currentTarget)}>
+        {icon ? (
+          <button type="button">
+            <span ref={relativeRef}>{icon}</span>
+          </button>
+        ) : (
+          <button
+            type="button"
+            className="p-1 border rounded-md bg-transparent text-gray-400 hover:text-gray-700 bg-white"
+          >
+            <span ref={relativeRef}>
+              <TagIcon className="w-3 h-3" />
+            </span>
+          </button>
+        )}
       </div>
 
       <AlsoitMenuDropdown handleClose={handleClose} anchorEl={showSelectDropdown}>
-        <div style={{ ...cords }} className="">
-          <div className="flex-col pr-5 border bg-white px-2 w-72 h-fit py-1 outline-none flex items-start text-left rounded-md shadow-lg divide-y divide-gray-100 focus:outline-none">
+        <div style={{ ...cords }}>
+          <div className="flex-col border bg-white px-2 w-60 h-fit py-1 outline-none flex items-start text-left rounded-md shadow-lg divide-y divide-gray-100 focus:outline-none">
             {/* task tags */}
             {tagsArr.length ? (
-              <div className="flex flex-wrap items-center py-2">
-                <div className="flex flex-wrap items-center justify-start gap-2">
-                  <TaskTag tags={tagsArr} entity_id={entityId} entity_type="task" />
-                </div>
+              <div className="flex flex-wrap items-center justify-start gap-3 py-2">
+                {tagsArr.map((tag) => (
+                  <TaskTag key={tag.id} tag={tag} entity_id={entityId} entity_type="task" />
+                ))}
               </div>
             ) : null}
 

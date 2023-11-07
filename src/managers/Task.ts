@@ -177,6 +177,55 @@ export const deleteTaskManager = (taskIds: string[], listIds: string[], tasks: R
   return tasks;
 };
 
+export const taskWatchersUpdateManager = (
+  taskIds: string[],
+  listIds: string[],
+  tasks: Record<string, ITaskFullList[]>,
+  subtasks: Record<string, ITaskFullList[]>,
+  userData: ITeamMembersAndGroup
+) => {
+  if (listIds.length) {
+    const updatedTasks = { ...tasks };
+    const updatedSubtasks = { ...subtasks };
+    const uniqListIds = [...new Set(listIds)];
+
+    uniqListIds.forEach((id) => {
+      if (updatedTasks[id]) {
+        updatedTasks[id] = updatedTasks[id].map((task) => {
+          if (taskIds.includes(task.id)) {
+            const updatedWatchers = [...task.watchers, userData];
+            return {
+              ...task,
+              watchers: task.watchers.length
+                ? (updatedWatchers as ITeamMembersAndGroup[])
+                : ([userData] as ITeamMembersAndGroup[])
+            };
+          }
+          return task;
+        });
+      }
+
+      if (updatedSubtasks[id]) {
+        updatedSubtasks[id] = updatedSubtasks[id].map((task) => {
+          if (taskIds.includes(task.id)) {
+            const updatedWatchers = [...task.watchers, userData];
+            return {
+              ...task,
+              watchers: task.watchers.length
+                ? (updatedWatchers as ITeamMembersAndGroup[])
+                : ([userData] as ITeamMembersAndGroup[])
+            };
+          }
+          return task;
+        });
+      }
+    });
+    return { updatedTasks, updatedSubtasks };
+  }
+
+  return tasks;
+};
+
 export const taskAssignessUpdateManager = (
   taskIds: string[],
   listIds: string[],

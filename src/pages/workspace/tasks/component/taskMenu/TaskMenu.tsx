@@ -2,20 +2,20 @@ import React, { useEffect, useState, Fragment } from 'react';
 import { MdFileCopy } from 'react-icons/md';
 import { useAppSelector } from '../../../../../app/hooks';
 import { IoEyeOutline } from 'react-icons/io5';
-import { BsTags } from 'react-icons/bs';
+import { BsBox, BsTags } from 'react-icons/bs';
 import { TbSubtask } from 'react-icons/tb';
 import { MdOutlineDeveloperBoard, MdOutlineDriveFileMove, MdDateRange, MdDeleteForever } from 'react-icons/md';
 import { HiOutlineDocumentDuplicate, HiInbox } from 'react-icons/hi';
 import { TbFolderX } from 'react-icons/tb';
 import { GiStoneStack, GiJusticeStar } from 'react-icons/gi';
-// import { HiOutlineUserPlus } from 'react-icons/hi2';
+import { HiOutlineUserPlus } from 'react-icons/hi2';
 import { BiMerge, BiEdit } from 'react-icons/bi';
-import { deleteTask } from '../../../../../features/task/taskService';
+import { archiveTask, deleteTask } from '../../../../../features/task/taskService';
 import { useDispatch } from 'react-redux';
 import { EntityType } from '../../../../../utils/EntityTypes/EntityType';
 
 import { displayPrompt, setVisibility } from '../../../../../features/general/prompt/promptSlice';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   setSelectedListIds,
   setSelectedTasksArray,
@@ -30,9 +30,11 @@ import ActiveTreeSearch from '../../../../../components/ActiveTree/ActiveTreeSea
 import AlsoitMenuDropdown from '../../../../../components/DropDowns';
 import { deleteTaskManager } from '../../../../../managers/Task';
 import Assignee from '../../assignTask/Assignee';
+import { ManageTagsDropdown } from '../../../../../components/Tag/ui/ManageTagsDropdown/ui/ManageTagsDropdown';
 
 export default function TaskMenu() {
   const dispatch = useDispatch();
+  const queryClient = useQueryClient();
 
   const {
     selectedTasksArray,
@@ -77,6 +79,14 @@ export default function TaskMenu() {
     }
   });
 
+  const useArchiveTask = useMutation(archiveTask, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['task']);
+      queryClient.invalidateQueries(['sub-tasks']);
+      dispatch(setSelectedTasksArray([]));
+    }
+  });
+
   const handleShowSelectDropdown = (event: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
     setShowSelectDropdown(event.currentTarget);
   };
@@ -89,15 +99,14 @@ export default function TaskMenu() {
     {
       id: 'set_watchers',
       label: 'Set watchers',
-      icons: <IoEyeOutline color="orange" opacity={0.5} />,
+      icons: <Assignee option="task" icon={<IoEyeOutline />} isAdditionalHeader={true} isWatchers={true} />,
       handleClick: () => ({}),
       isVisible: true
     },
     {
       id: 'set_assignees',
       label: 'Set assignees',
-      icons: <Assignee option="task" />,
-      // icons: <HiOutlineUserPlus color="orange" opacity={0.5} />,
+      icons: <Assignee option="task" isAdditionalHeader={true} icon={<HiOutlineUserPlus />} />,
       handleClick: () => ({}),
       isVisible: true
     },
@@ -109,22 +118,22 @@ export default function TaskMenu() {
       isVisible: true
     },
     {
-      id: 'set_status_two',
-      label: 'Set Status',
-      icons: <BsTags color="orange" opacity={0.5} />,
-      handleClick: () => ({}),
-      isVisible: true
-    },
-    {
-      id: 'set_tags',
+      id: 'set_Tags',
       label: 'Set Tags',
-      icons: <TbSubtask color="orange" opacity={0.5} />,
+      icons: <ManageTagsDropdown entityId="" tagsArr={[]} entityType="task" icon={<BsTags />} />,
       handleClick: () => ({}),
       isVisible: true
     },
     {
       id: 'convert_to_subtask',
-      label: 'Convert to Subtask',
+      label: 'Convert to subtasks',
+      icons: <TbSubtask color="orange" opacity={0.5} />,
+      handleClick: () => ({}),
+      isVisible: true
+    },
+    {
+      id: 'move_tasks_or_add_tasks_in multiple_lists',
+      label: 'Move tasks or add tasks in multiple Lists',
       icons: <MdOutlineDriveFileMove color="orange" opacity={0.5} />,
       handleClick: () => ({}),
       isVisible: true
@@ -140,8 +149,8 @@ export default function TaskMenu() {
       isVisible: true
     },
     {
-      id: 'move_tasks',
-      label: 'Move tasks or add tasks in multiple Lists',
+      id: 'remove_tasks_from_this_lists',
+      label: 'Remove tasks from this List',
       icons: <TbFolderX color="orange" opacity={0.5} />,
       handleClick: () => ({}),
       isVisible: true
@@ -157,6 +166,13 @@ export default function TaskMenu() {
       id: 'priority',
       label: 'Priority',
       icons: <PriorityDropdown taskCurrentPriority="low" />,
+      handleClick: () => ({}),
+      isVisible: true
+    },
+    {
+      id: 'set_task_type',
+      label: 'Set task type',
+      icons: <BsBox color="orange" opacity={0.5} />,
       handleClick: () => ({}),
       isVisible: true
     },
@@ -191,8 +207,31 @@ export default function TaskMenu() {
     {
       id: 'archive_tasks',
       label: 'Archive tasks',
-      icons: <HiInbox color="orange" opacity={0.5} />,
-      handleClick: () => ({}),
+      icons: <HiInbox />,
+      handleClick: () => {
+        dispatch(
+          displayPrompt('Archive tasks', 'Would you like archive these tasks from the workspace?', [
+            {
+              label: 'Archive tasks',
+              style: 'warning',
+              callback: () => {
+                useArchiveTask.mutateAsync({
+                  selectedTasksArray: selectedTasksArray
+                });
+                dispatch(setVisibility(false));
+                dispatch(setShowTaskNavigation(false));
+              }
+            },
+            {
+              label: 'Cancel',
+              style: 'plain',
+              callback: () => {
+                dispatch(setVisibility(false));
+              }
+            }
+          ])
+        );
+      },
       isVisible: true
     },
     {
@@ -261,7 +300,11 @@ export default function TaskMenu() {
           ))}
         </div>
         <div className="flex items-center gap-2 pr-5 ">
-          <MdFileCopy className="text-lg" color="orange" opacity={0.5} />
+          <ToolTip className="pt-2" title="Copy to clipboard" placement="bottom">
+            <div>
+              <MdFileCopy className="text-lg" color="orange" opacity={0.5} />
+            </div>
+          </ToolTip>
           <input type="text" placeholder="type '/' for commands" className="h-8 text-xs bg-transparent rounded " />
         </div>
       </div>

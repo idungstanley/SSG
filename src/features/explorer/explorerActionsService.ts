@@ -15,7 +15,7 @@ export const pasteService = async (data: {
   const response = requestNew({
     url,
     method: 'POST',
-    params: {
+    data: {
       file_ids: fileIds,
       folder_ids: folderIds
     }
@@ -42,7 +42,7 @@ const renameItemService = (data: { type: string | null; id: string | null; name:
   return requestNew({
     url,
     method: 'POST',
-    params: {
+    data: {
       name: data.name
     }
   });
@@ -64,7 +64,7 @@ const createFolder = (data: { folderName: string; parentId?: string }) => {
   const response = requestNew({
     url: 'folders',
     method: 'POST',
-    params: {
+    data: {
       name: data.folderName,
       parent_id: data.parentId
     }

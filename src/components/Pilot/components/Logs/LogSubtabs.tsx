@@ -12,47 +12,33 @@ import {
 import { arrayMove, rectSortingStrategy, SortableContext, sortableKeyboardCoordinates } from '@dnd-kit/sortable';
 import { useAppSelector } from '../../../../app/hooks';
 import { pilotTabs } from '../../../../app/constants/pilotTabs';
-import AttachFileIcon from '../../../../assets/icons/AttachFileIcon';
-import CkecklistIcon from '../../../../assets/icons/CkecklistIcon';
-import SubtaskIcon from '../../../../assets/icons/SubtaskIcon';
-import TiesIcon from '../../../../assets/icons/TiesIcon';
-import PropertyIcons from '../../../../assets/icons/PropertyIcons';
+import ActivityLogIcon from '../../../../assets/icons/ActivityLogIcon';
+import LogsIcons from '../../../../assets/icons/LogsIcons';
+import { SiGooglephotos } from 'react-icons/si';
 
-export const detailOptions = [
+export const logOptions = [
   {
-    id: pilotTabs.PROPERTIES,
-    name: 'Properties',
-    icon: <PropertyIcons />,
+    id: pilotTabs.HISTORY_LOG,
+    name: 'History logs',
+    icon: <SiGooglephotos className="w-4 h-4" />,
     isVisible: false
   },
   {
-    id: pilotTabs.SUBTASK,
-    name: 'Subtask',
-    icon: <SubtaskIcon />,
+    id: pilotTabs.ACTIVITY_LOG,
+    name: 'Activity logs',
+    icon: <ActivityLogIcon />,
     isVisible: false
   },
   {
-    id: pilotTabs.CHECKLISTS,
-    name: 'Checklist',
-    icon: <CkecklistIcon />,
-    isVisible: false
-  },
-  {
-    id: pilotTabs.ATTACHMENTS,
-    name: 'Attachments',
-    icon: <AttachFileIcon />,
-    isVisible: false
-  },
-  {
-    id: pilotTabs.TIES,
-    name: 'Ties',
-    icon: <TiesIcon />,
+    id: pilotTabs.CUSTOM_LOG,
+    name: 'Custom logs',
+    icon: <LogsIcons />,
     isVisible: false
   }
 ];
 
-export default function DetailsSubTab() {
-  const { showPilot, activeSubDetailsTabId } = useAppSelector((state) => state.workspace);
+export default function LogSubtabs() {
+  const { showPilot, activeSubLogsTabId } = useAppSelector((state) => state.workspace);
 
   const idsFromLS = JSON.parse(localStorage.getItem('subTab') || '[]') as string[];
 
@@ -63,7 +49,7 @@ export default function DetailsSubTab() {
     })
   );
 
-  const [items, setItems] = useState(detailOptions.sort((a, b) => idsFromLS.indexOf(a.id) - idsFromLS.indexOf(b.id)));
+  const [items, setItems] = useState(logOptions.sort((a, b) => idsFromLS.indexOf(a.id) - idsFromLS.indexOf(b.id)));
 
   const handleDragEnd = (e: DragEndEvent) => {
     const { active, over } = e;
@@ -91,17 +77,17 @@ export default function DetailsSubTab() {
     <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={(e) => handleDragEnd(e)}>
       <SortableContext strategy={rectSortingStrategy} items={items}>
         <section>
-          <div className="grid  bg-primary-200 pb-0.5 grid-cols-5">
-            {detailOptions.map((item) => (
+          <div className="grid  bg-primary-200 pb-0.5 grid-cols-3">
+            {logOptions.map((item) => (
               <SubtabDrag
                 key={item.id}
                 id={item.id}
                 icon={item.icon}
-                activeSub={activeSubDetailsTabId}
+                activeSub={activeSubLogsTabId}
                 showPilot={showPilot}
-                name={pilotTabs.DETAILS}
+                name={pilotTabs.LOGS}
                 item={item}
-                items={detailOptions}
+                items={logOptions}
               />
             ))}
           </div>

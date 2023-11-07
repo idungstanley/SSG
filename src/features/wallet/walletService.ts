@@ -8,6 +8,8 @@ import { useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { generateFilters } from '../../components/TasksHeader/lib/generateFilters';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
+import { setChecklists } from '../task/checklist/checklistSlice';
+import { ICheckListRes } from '../task/interface.tasks';
 
 interface IResponseWallet {
   data: {
@@ -80,7 +82,7 @@ export const UseEditWalletService = (data: {
   const response = requestNew<IResponseWallet>({
     url: `wallets/${data.walletId}`,
     method: 'PUT',
-    params: {
+    data: {
       name: data.walletName,
       color: data.color,
       description: data.description
@@ -147,6 +149,7 @@ export const UseGetWalletDetails = (query: { activeItemId?: string | null; activ
         }
         const listViews = data.data.wallet.task_views;
         dispatch(setSpaceViews(listViews));
+        dispatch(setChecklists(data?.data.wallet.checklists as ICheckListRes[]));
       },
       cacheTime: 0
     }
