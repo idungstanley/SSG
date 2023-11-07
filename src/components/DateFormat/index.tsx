@@ -10,6 +10,8 @@ import { EntityType } from '../../utils/EntityTypes/EntityType';
 import { setPickedDateState } from '../../features/workspace/workspaceSlice';
 import { isDateInPast } from './CheckDate';
 import { cl } from '../../utils';
+import { formatForDatabase } from '../../utils/calendar';
+import { Dayjs } from 'dayjs';
 
 interface dateFormatProps {
   date: string | undefined;
@@ -35,13 +37,13 @@ export default function DateFormat({ date, task, font = 'text-sm', type, isDueDa
   useMultipleUpdateTasksDate({
     ids: selectedTasksArray,
     type: type as string,
-    date: resetDate ? '' : (selectedDate?.date.format('YYYY-MM-DD HH:mm:ss') as string),
+    date: resetDate ? '' : formatForDatabase(selectedDate?.date as Dayjs),
     listIds: selectedListIds.length ? selectedListIds : [selectedTaskParentId]
   });
 
   UseUpdateTaskDateService({
     task_id: taskId as string,
-    taskDate: resetDate ? '' : (selectedDate?.date.format('YYYY-MM-DD HH:mm:ss') as string),
+    taskDate: resetDate ? '' : formatForDatabase(selectedDate?.date as Dayjs),
     listIds: selectedListIds.length ? selectedListIds : [selectedTaskParentId],
     type: type as string,
     setTaskId,
