@@ -8,7 +8,7 @@ import { MdOutlineDeveloperBoard, MdOutlineDriveFileMove, MdDateRange, MdDeleteF
 import { HiOutlineDocumentDuplicate, HiInbox } from 'react-icons/hi';
 import { TbFolderX } from 'react-icons/tb';
 import { GiStoneStack, GiJusticeStar } from 'react-icons/gi';
-// import { HiOutlineUserPlus } from 'react-icons/hi2';
+import { HiOutlineUserPlus } from 'react-icons/hi2';
 import { BiMerge, BiEdit } from 'react-icons/bi';
 import { archiveTask, deleteTask } from '../../../../../features/task/taskService';
 import { useDispatch } from 'react-redux';
@@ -99,15 +99,14 @@ export default function TaskMenu() {
     {
       id: 'set_watchers',
       label: 'Set watchers',
-      icons: <IoEyeOutline color="orange" opacity={0.5} />,
+      icons: <Assignee option="task" icon={<IoEyeOutline />} isAdditionalHeader={true} isWatchers={true} />,
       handleClick: () => ({}),
       isVisible: true
     },
     {
       id: 'set_assignees',
       label: 'Set assignees',
-      icons: <Assignee option="task" />,
-      // icons: <HiOutlineUserPlus color="orange" opacity={0.5} />,
+      icons: <Assignee option="task" isAdditionalHeader={true} icon={<HiOutlineUserPlus />} />,
       handleClick: () => ({}),
       isVisible: true
     },

@@ -5,7 +5,11 @@ import {
   UseChecklistItemAssignee,
   UseChecklistItemUnassignee
 } from '../../../../features/task/checklist/checklistService';
-import { UseTaskAssignService, UseTaskUnassignService } from '../../../../features/task/taskService';
+import {
+  UseTaskAssignService,
+  UseTaskUnassignService,
+  UseTaskWatchersAssignService
+} from '../../../../features/task/taskService';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { setCurrTeamMemId } from '../../../../features/task/taskSlice';
 import AvatarWithImage from '../../../../components/avatar/AvatarWithImage';
@@ -21,9 +25,10 @@ interface AssigneeItem {
   teams: boolean;
   handleClose: () => void;
   isAssigned?: boolean;
+  isWatchers?: boolean;
 }
 
-function AssigneeItem({ item, option, entity_id, teams, handleClose, isAssigned }: AssigneeItem) {
+function AssigneeItem({ item, option, entity_id, teams, handleClose, isAssigned, isWatchers }: AssigneeItem) {
   const dispatch = useAppDispatch();
 
   const { selectedTasksArray, selectedListIds, selectedTaskParentId } = useAppSelector((state) => state.task);
@@ -42,6 +47,11 @@ function AssigneeItem({ item, option, entity_id, teams, handleClose, isAssigned 
     item as ITeamMembersAndGroup,
     selectedListIds.length ? selectedListIds : [selectedTaskParentId]
   );
+  const { mutate: onWatchersTaskAssign } = UseTaskWatchersAssignService(
+    selectedTasksArray.length ? selectedTasksArray : [entity_id as string],
+    item as ITeamMembersAndGroup,
+    selectedListIds.length ? selectedListIds : [selectedTaskParentId]
+  );
 
   const handleAllAssignee = () => {
     const { id } = item;
@@ -56,11 +66,18 @@ function AssigneeItem({ item, option, entity_id, teams, handleClose, isAssigned 
   };
 
   const handleAssignTask = (id: string) => {
-    onTaskAssign({
-      taskIds: selectedTasksArray.length ? selectedTasksArray : [entity_id as string],
-      team_member_id: id,
-      teams
-    });
+    if (isWatchers) {
+      onWatchersTaskAssign({
+        ids: selectedTasksArray.length ? selectedTasksArray : [entity_id as string],
+        team_member_ids: [id]
+      });
+    } else {
+      onTaskAssign({
+        ids: selectedTasksArray.length ? selectedTasksArray : [entity_id as string],
+        team_member_id: id,
+        teams
+      });
+    }
   };
 
   const { mutate: onTaskUnassign } = UseTaskUnassignService(

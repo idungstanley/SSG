@@ -18,12 +18,18 @@ export default function Assignee({
   itemId,
   option,
   assigneeChecklistItem,
-  task
+  task,
+  icon,
+  isAdditionalHeader,
+  isWatchers
 }: {
   itemId?: string;
   option: string;
   assigneeChecklistItem?: ICheckListItems;
   task?: ImyTaskData | undefined;
+  icon?: React.ReactNode;
+  isAdditionalHeader?: boolean;
+  isWatchers?: boolean;
 }) {
   const dispatch = useAppDispatch();
 
@@ -70,26 +76,49 @@ export default function Assignee({
     event.stopPropagation();
   };
 
+  const renderIcon = () => {
+    if (isAdditionalHeader) {
+      return (
+        <span onClick={handleClick}>
+          {icon ? (
+            icon
+          ) : (
+            <UserPlusIcon
+              className="items-center justify-center text-xl text-gray-400 cursor-pointer"
+              style={{
+                width: '26px'
+              }}
+              aria-hidden="true"
+            />
+          )}
+        </span>
+      );
+    } else {
+      if (userObj) {
+        return (
+          <div>
+            <UserAvatar user={userObj} handleClick={handleClick} />
+          </div>
+        );
+      }
+      return (
+        <span onClick={handleClick}>
+          <UserPlusIcon
+            className="items-center justify-center text-xl text-gray-400 cursor-pointer"
+            style={{
+              width: '26px'
+            }}
+            aria-hidden="true"
+          />
+        </span>
+      );
+    }
+  };
+
   return (
     <>
       {option === 'getTeamId' ? (
-        <div id="basic-button">
-          {userObj ? (
-            <div>
-              <UserAvatar user={userObj} handleClick={handleClick} />
-            </div>
-          ) : (
-            <span onClick={handleClick}>
-              <UserPlusIcon
-                className="items-center justify-center text-xl text-gray-400 cursor-pointer"
-                style={{
-                  width: '26px'
-                }}
-                aria-hidden="true"
-              />
-            </span>
-          )}
-        </div>
+        <div id="basic-button">{renderIcon()}</div>
       ) : (
         <>
           {assignees?.length ? (
@@ -103,15 +132,7 @@ export default function Assignee({
               />
             </div>
           ) : (
-            <span onClick={handleClick}>
-              <UserPlusIcon
-                className="items-center justify-center text-xl text-gray-400 cursor-pointer"
-                style={{
-                  width: '26px'
-                }}
-                aria-hidden="true"
-              />
-            </span>
+            renderIcon()
           )}
         </>
       )}
@@ -152,6 +173,7 @@ export default function Assignee({
                     teams={teams}
                     handleClose={handleClose}
                     isAssigned={assignedUser?.includes(item.id) || checklistAssignedUserId?.includes(item.id)}
+                    isWatchers={isWatchers}
                   />
                 );
               })
@@ -165,6 +187,7 @@ export default function Assignee({
                     teams={teams}
                     handleClose={handleClose}
                     isAssigned={assignedUser?.includes(item.id) || checklistAssignedUserId?.includes(item.id)}
+                    isWatchers={isWatchers}
                   />
                 );
               })}
