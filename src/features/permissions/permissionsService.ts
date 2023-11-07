@@ -28,7 +28,6 @@ export const useGetFilteredTeamMembers = (currentUserId?: string | null, activeM
 
 export const useGetItemAccess = (data: { id?: string | null; type?: explorerItemType }) => {
   const { id, type } = data;
-
   return useQuery<IDataAccessRes, unknown, IPermissions>(
     [`${type}-permissions`, id],
     async () =>

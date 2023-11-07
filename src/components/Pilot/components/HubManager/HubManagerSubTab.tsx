@@ -17,6 +17,7 @@ import { useAppSelector } from '../../../../app/hooks';
 import CalendarIcon from '../../../../assets/icons/CalendarIcon';
 import StatusMgIcon from '../../../../assets/icons/StatusMgIcon';
 import { pilotTabs } from '../../../../app/constants/pilotTabs';
+import { TbShield } from 'react-icons/tb';
 
 export const HubManagerOptions = [
   {
@@ -47,6 +48,12 @@ export const HubManagerOptions = [
     id: pilotTabs.STATUS_MANAGEMENT,
     name: 'Status Management',
     icon: <StatusMgIcon />,
+    isVisible: false
+  },
+  {
+    id: pilotTabs.PERMISSIONS,
+    name: 'Permissions and Sharing',
+    icon: <TbShield className="w-4 h-4" />,
     isVisible: false
   }
 ];
