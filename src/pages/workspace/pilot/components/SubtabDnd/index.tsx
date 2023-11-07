@@ -3,7 +3,8 @@ import { useDispatch } from 'react-redux';
 import {
   setActiveSubCommunicationTabId,
   setActiveSubDetailsTabId,
-  setActiveSubHubManagerTabId
+  setActiveSubHubManagerTabId,
+  setActiveSubLogsTabId
 } from '../../../../../features/workspace/workspaceSlice';
 import useFindNeighbors, { NeighborsProps } from '../../../../../hooks/useFindNeighbors';
 import { pilotTabs } from '../../../../../app/constants/pilotTabs';
@@ -49,6 +50,8 @@ export default function SubtabDrag({ id, item, items, icon, showPilot, activeSub
       dispatch(setActiveSubDetailsTabId(id));
     } else if (name === 'hubmanager') {
       dispatch(setActiveSubHubManagerTabId(id));
+    } else if (name === pilotTabs.LOGS) {
+      dispatch(setActiveSubLogsTabId(id));
     }
   };
 

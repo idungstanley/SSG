@@ -8,7 +8,6 @@ import {
 } from '@heroicons/react/24/outline';
 import { TbShield } from 'react-icons/tb';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
-import ChatForPilot from '../../../../components/Chat/ChatForPilot';
 import CommentsForPilot from '../../../../components/Comments/CommentsForPilot';
 import History from '../../../../components/Pilot/components/History';
 import Permissions from '../../../../components/Pilot/components/Permissions';
@@ -17,6 +16,7 @@ import { useGetExplorerFile, useGetExplorerFolder } from '../../../../features/e
 import { setShowPilotSideOver } from '../../../../features/general/slideOver/slideOverSlice';
 import Details from './components/Details';
 import { pilotTabs } from '../../../../app/constants/pilotTabs';
+import Commnunication from '../../../workspace/pilot/components/communication/Communication';
 
 const sections = [
   {
@@ -41,7 +41,7 @@ const sections = [
   },
   {
     id: pilotTabs.CONNECT,
-    element: <ChatForPilot />
+    element: <Commnunication />
   }
 ];
 

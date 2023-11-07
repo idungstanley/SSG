@@ -32,6 +32,8 @@ export default function HList({ hubs, openNewHub, placeHubType }: ListProps) {
   const { showExtendedBar, createEntityType, openedEntitiesIds, activeView } = useAppSelector(
     (state) => state.workspace
   );
+  const { show: showFullPilot } = useAppSelector((state) => state.slideOver.pilotSideOver);
+
   const { entityToCreate, hub } = useAppSelector((state) => state.hub);
   const { showSidebar } = useAppSelector((state) => state.account);
 
@@ -71,7 +73,9 @@ export default function HList({ hubs, openNewHub, placeHubType }: ListProps) {
       })
     );
     dispatch(setShowPilot(true));
-    dispatch(setActiveTabId(pilotTabs.DETAILS));
+    if (showFullPilot) {
+      dispatch(setActiveTabId(pilotTabs.DETAILS));
+    }
     navigate(viewsUrl, {
       replace: true
     });
