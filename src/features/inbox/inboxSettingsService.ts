@@ -36,7 +36,7 @@ export const updateInboxWorkspaceAccessLevelService = async (data: {
   const response = requestNew({
     url: `inboxes/${data.inboxId}/access/change-workspace-access-level`,
     method: 'POST',
-    params: {
+    data: {
       access_level_key: data.accessLevelKey
     }
   });
@@ -48,7 +48,7 @@ export const removeTeamMemberInboxAccessService = async (data: { inboxId?: strin
   const response = requestNew({
     url: `inboxes/${data.inboxId}/access/remove-access`,
     method: 'POST',
-    params: {
+    data: {
       access_type: 'member',
       access_to_id: data.teamMemberId
     }
@@ -64,7 +64,7 @@ export const removeTeamMemberGroupInboxAccessService = async (data: {
   const response = requestNew({
     url: `inboxes/${data.inboxId}/access/remove-access`,
     method: 'POST',
-    params: {
+    data: {
       access_type: 'member-group',
       access_to_id: data.teamMemberGroupId
     }
@@ -76,7 +76,7 @@ const removeTeamMemberOrGroupAccess = (data: { inboxId?: string; accessToId: str
   const response = requestNew({
     url: `inboxes/${data.inboxId}/access/remove-access`,
     method: 'POST',
-    params: {
+    data: {
       access_type: data.isGroups ? 'member-group' : 'member',
       access_to_id: data.accessToId
     }
@@ -103,7 +103,7 @@ export const addTeamMemberInboxAccessService = async (data: {
   const response = requestNew({
     url: `inboxes/${data.inboxId}/access/add-access`,
     method: 'POST',
-    params: {
+    data: {
       access_type: 'member',
       access_to_id: data.teamMemberId,
       access_level_key: data.accessLevelKey
@@ -121,7 +121,7 @@ export const addTeamMemberGroupInboxAccessService = async (data: {
   const response = requestNew({
     url: `inboxes/${data.inboxId}/access/add-access`,
     method: 'POST',
-    params: {
+    data: {
       access_type: 'member-group',
       access_to_id: data.teamMemberGroupId,
       access_level_key: data.accessLevelKey
@@ -139,7 +139,7 @@ const addTeamMemberOrGroupAccess = (data: {
   const response = requestNew({
     url: `inboxes/${data.inboxId}/access/add-access`,
     method: 'POST',
-    params: {
+    data: {
       access_type: data.isGroups ? 'member-group' : 'member',
       access_to_id: data.accessToId,
       access_level_key: data.accessLevelKey

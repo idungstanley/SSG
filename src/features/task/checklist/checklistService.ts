@@ -173,7 +173,7 @@ const UnassignChecklistItem = ({
   const request = requestNew({
     url: '/assignee/unassign',
     method: 'POST',
-    params: {
+    data: {
       team_member_id: team_member_id,
       id: itemId,
       type: 'checklist_item'
