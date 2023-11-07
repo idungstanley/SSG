@@ -13,6 +13,7 @@ import { Hub } from '../../../../pages/workspace/hubs/components/ActiveTree/acti
 import { findCurrentHub } from '../../../../managers/Hub';
 import LightenColor from './lightenColor/LightenColor';
 import { SubtasksTable } from '../Table/SubtasksTable';
+import { useParams } from 'react-router-dom';
 
 interface ListProps {
   tasks: Task[];
@@ -46,6 +47,8 @@ export function List({ tasks }: ListProps) {
   const [showNewTaskField, setShowNewTaskField] = useState(false);
   const [parentHub, setParentHub] = useState<Hub>();
   const [fullTasksLists, setFullTasksLists] = useState<ITaskFullList[]>([]);
+
+  const { listId } = useParams();
 
   // reset showNewTaskField with eskLey
   useEffect(() => {
@@ -143,7 +146,7 @@ export function List({ tasks }: ListProps) {
           {showNewTaskField ? (
             <div className="pl-2">
               <AddTask
-                parentId={tasks[0]?.list_id as string}
+                parentId={tasks[0]?.list_id || (listId as string)}
                 isListParent={true}
                 task={tasks?.[0]}
                 onClose={() => handleClose()}

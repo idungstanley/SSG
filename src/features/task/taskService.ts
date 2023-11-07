@@ -396,7 +396,7 @@ export const useAddTask = (task: Task) => {
         const updatedTasks = addNewTaskManager(
           tasks,
           data.data.task as ITaskFullList,
-          task.custom_field_columns,
+          task.custom_field_columns || [],
           task.task_statuses
         );
         dispatch(setTasks(updatedTasks));
