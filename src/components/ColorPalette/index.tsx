@@ -304,8 +304,8 @@ export default function PaletteManager({
                   type="text"
                   name="search"
                   leadingIcon={
-                    <span className=" cursor-pointer">
-                      <CiSearch className="hover:fill-[#8601B2]" style={{ color: 'rgb(191, 0, 255)' }} />
+                    <span>
+                      <CiSearch style={{ color: 'rgb(191, 0, 255)' }} />
                     </span>
                   }
                   trailingIcon={
