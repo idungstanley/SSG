@@ -172,7 +172,15 @@ export function Row({
           taskStatusId={taskStatusId as string}
           onClose={handleClose as VoidFunction}
           paddingLeft={paddingLeft}
-          tags={'tags' in task ? <TaskTag tags={task.tags} entity_id={task.id} entity_type="task" /> : null}
+          tags={
+            'tags' in task ? (
+              <div className="flex gap-3">
+                {task.tags.map((tag) => (
+                  <TaskTag key={tag.id} tag={tag} entity_id={task.id} entity_type="task" />
+                ))}
+              </div>
+            ) : null
+          }
           isBlockedShowChildren={isBlockedShowChildren}
           dragElement={
             <div ref={setNodeRef} {...listeners} {...attributes}>
