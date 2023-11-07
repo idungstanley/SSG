@@ -203,6 +203,7 @@ export interface ITaskFullList {
     name?: string | undefined;
     parents?: IParent | undefined;
   };
+  watchers: ITeamMembersAndGroup[];
 }
 
 export interface IGroupingAssignee {

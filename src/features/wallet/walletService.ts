@@ -82,7 +82,7 @@ export const UseEditWalletService = (data: {
   const response = requestNew<IResponseWallet>({
     url: `wallets/${data.walletId}`,
     method: 'PUT',
-    params: {
+    data: {
       name: data.walletName,
       color: data.color,
       description: data.description

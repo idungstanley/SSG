@@ -48,6 +48,33 @@ export const useAddTag = () => {
   });
 };
 
+const multipleAssignTag = (data: { tagId: TagId; entityIds: string[] }) => {
+  const { tagId, entityIds } = data;
+
+  const response = requestNew({
+    url: 'tasks/multiple/tags',
+    method: 'POST',
+    data: {
+      tag_ids: [tagId],
+      ids: entityIds,
+      color: 'purple'
+    }
+  });
+  return response;
+};
+
+export const useMultipleAssignTag = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation(multipleAssignTag, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['task']);
+      queryClient.invalidateQueries(['sub-tasks']);
+      queryClient.invalidateQueries(['checklist']);
+    }
+  });
+};
+
 const assignTag = (data: { tagId: TagId; entityId: string; entityType: string }) => {
   const { tagId, entityId, entityType } = data;
 
@@ -185,7 +212,7 @@ export const UseAssignTagService = ({
   const response = requestNew({
     url,
     method: 'POST',
-    params: {
+    data: {
       type: entity_type,
       id: currentTaskIdForTag
     }
@@ -207,7 +234,7 @@ export const UseUnAssignTagService = ({
   const response = requestNew({
     url,
     method: 'POST',
-    params: {
+    data: {
       type: entity_type,
       id: currentTaskIdForTag
     }
@@ -229,7 +256,7 @@ export const UseUnAssignTagFromTask = ({
       const data = await requestNew({
         url: `tags/${tagId}/unassign`,
         method: 'POST',
-        params: {
+        data: {
           type: EntityType.task,
           id: currentTaskIdForTag
         }

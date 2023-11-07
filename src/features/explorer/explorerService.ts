@@ -115,7 +115,7 @@ const multipleDeleteFiles = (fileIds: string[]) => {
   const response = requestNew({
     url: 'explorer/multiple-delete',
     method: 'POST',
-    params: {
+    data: {
       file_ids: fileIds
     }
   });

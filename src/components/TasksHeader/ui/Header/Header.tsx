@@ -90,13 +90,20 @@ export function Header({ isInsights }: IHeader) {
           />
         </div>
       </section>
-      {selectedTasksArray.length > 0 && (
-        <div className="z-50 w-full">
-          <span className="transition duration-300 ease-in-out w-12/12 ">
+
+      <div
+        className="z-50 w-full overflow-hidden"
+        style={{
+          maxHeight: selectedTasksArray.length > 0 ? '90px' : '0',
+          transition: 'max-height 0.3s ease-in-out' // Adjust the transition duration as needed
+        }}
+      >
+        {selectedTasksArray.length > 0 && (
+          <span className="w-12/12">
             <TaskMenu />
           </span>
-        </div>
-      )}
+        )}
+      </div>
     </>
   );
 }

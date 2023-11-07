@@ -283,7 +283,7 @@ const addToFavorite = (data: {
   const response = requestNew({
     url: '/favorites',
     method: 'POST',
-    params: {
+    data: {
       type: newType,
       id: query
     }
@@ -348,7 +348,7 @@ export const UseUpdateFavService = ({
       const data = requestNew({
         url: `/favorites/${favId}`,
         method: 'PUT',
-        params: {
+        data: {
           name: name
         }
       });

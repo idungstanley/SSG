@@ -28,11 +28,6 @@ import { cl } from '../../../../../../utils';
 import { MdOutlineVisibility } from 'react-icons/md';
 import MoveItemIcon from '../../../../../../assets/icons/MoveItemIcon';
 
-export interface tagItem {
-  id: string;
-  name: string;
-  color: string;
-}
 interface PropertyDetailsProps {
   Details?: IHubDetails | ITaskFullList | IListDetails | IWalletDetails;
 }
