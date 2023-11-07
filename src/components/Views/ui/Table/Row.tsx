@@ -150,7 +150,7 @@ export function Row({
         className="relative contents group dNFlex"
         onMouseEnter={() => {
           dispatch(setAssignOnHoverTask(task));
-          dispatch(setAssignOnHoverListId(task.list_id ?? task.parent_id));
+          dispatch(setAssignOnHoverListId(task.parent_id ?? task.list_id));
           setHoverOn(true);
         }}
         onMouseLeave={() => {
