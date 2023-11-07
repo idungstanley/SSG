@@ -33,9 +33,19 @@ export function Label({
 }: LabelProps) {
   const dispatch = useAppDispatch();
 
-  const { selectedTasksArray } = useAppSelector((state) => state.task);
+  const { selectedTasksArray, taskRootIds, subtasks } = useAppSelector((state) => state.task);
 
   const allChecked = tasks?.every((value) => selectedTasksArray.includes(value.id));
+
+  const subtaskIds = (tasks: Task[]) => {
+    return tasks.map((task) => task.id);
+  };
+
+  const returnSubTaskIds = (taskRootIds: string[]) => {
+    return taskRootIds.map((id) => {
+      if (subtasks[id]) return subtaskIds(subtasks[id]);
+    });
+  };
 
   const handleCheckedGroupTasks = () => {
     const updatedTaskIds: string[] = [...selectedTasksArray];
@@ -44,11 +54,34 @@ export function Label({
         const taskIndex = updatedTaskIds.indexOf(task.id);
         // Remove Task already in selectedTasksArray
         updatedTaskIds.splice(taskIndex, 1);
+
+        Object.keys(taskRootIds).map((item) => {
+          if (item === task.id) {
+            const subTaskArray = returnSubTaskIds(taskRootIds[item]);
+            const flatArray = subTaskArray.flat() as string[];
+
+            for (const value of flatArray) {
+              const subTaskIndex = updatedTaskIds.indexOf(value);
+              if (subTaskIndex !== -1) {
+                updatedTaskIds.splice(subTaskIndex, 1);
+              }
+            }
+          }
+        });
       });
     } else {
       tasks?.forEach((task) => {
         const taskIndex = updatedTaskIds.indexOf(task.id);
         if (taskIndex === -1) {
+          Object.keys(taskRootIds).map((item) => {
+            if (item === task.id) {
+              const subTaskArray = returnSubTaskIds(taskRootIds[item]);
+
+              const flatArray = subTaskArray.flat() as string[];
+
+              updatedTaskIds.push(...flatArray);
+            }
+          });
           updatedTaskIds.push(task.id);
         }
       });

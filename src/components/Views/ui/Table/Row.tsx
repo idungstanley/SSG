@@ -133,14 +133,14 @@ export function Row({
       return true;
     } else if (isLevelActive && splitSubTaskLevels.includes(THREE_SUBTASKS_LEVELS) && level >= 2) {
       return true;
-    } else if (rootTaskIds?.includes(task.id)) {
+    } else if ((rootTaskIds as string[])?.includes(task.id)) {
       return true;
     }
     return false;
   }, [showSubTasks, subtasks, toggleAllSubtask, toggleAllSubtaskSplit, splitSubTaskLevels, rootTaskIds]);
 
   const [hoverOn, setHoverOn] = useState(false);
-  const toggleRootTasks = rootTaskIds?.includes(task.id);
+  const toggleRootTasks = (rootTaskIds as string[])?.includes(task.id);
 
   return (
     <>

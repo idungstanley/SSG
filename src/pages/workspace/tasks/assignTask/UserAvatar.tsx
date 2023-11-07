@@ -10,9 +10,11 @@ import { ROLES } from '../../../../utils/Constants/RoleConstants';
 interface avatarProps {
   user: ITeamMembersAndGroup;
   handleClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  width?: string;
+  height?: string;
 }
 
-function UserAvatar({ user, handleClick }: avatarProps) {
+function UserAvatar({ user, handleClick, width = 'w-8', height = 'h-8' }: avatarProps) {
   const { CompactView } = useAppSelector((state) => state.task);
 
   return (
@@ -39,7 +41,7 @@ function UserAvatar({ user, handleClick }: avatarProps) {
             {user.role.key === ROLES.owner ? (
               <AvatarForOwnerWithImage image_path={user.user.avatar_path} />
             ) : (
-              <AvatarWithImage image_path={user.user.avatar_path} height="h-8" width="w-8" />
+              <AvatarWithImage image_path={user.user.avatar_path} height={height} width={width} />
             )}
           </div>
         </span>

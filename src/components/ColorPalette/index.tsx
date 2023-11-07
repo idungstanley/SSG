@@ -37,6 +37,7 @@ import AdvanceColourPalette from './component/AdvanceColourPalette';
 import { CgSortAz } from 'react-icons/cg';
 import { taskColourManager } from '../../managers/Task';
 import { setTasks } from '../../features/task/taskSlice';
+import CancelButton from '../CancelButton';
 
 interface PaletteProps {
   title?: string;
@@ -52,7 +53,7 @@ interface PaletteProps {
   handleShapeSelection?: (value: string) => void;
 }
 
-const paletteViews = {
+export const paletteViews = {
   BOARD: 'Board',
   LIST: 'List'
 };
@@ -220,17 +221,15 @@ export default function PaletteManager({
       }}
       PaperProps={{
         style: {
-          borderRadius: '12px',
+          borderRadius: '5px',
           backgroundColor: '#f4f4f4',
-          padding: '0px'
+          padding: '0px',
+          boxShadow: '0px 0px 5px #00000040'
         }
       }}
       className="MuiMenu-list"
     >
-      <div
-        className="overflow-y-auto text-gray-500 rounded-full drop-shadow-2xl"
-        style={{ borderRadius: '5px', maxWidth: '332px', fontSize: '10px' }}
-      >
+      <div className="overflow-y-auto text-alsoit-gray-100" style={{ maxWidth: '332px', fontSize: '11px' }}>
         <div className="z-50 flex flex-col w-full">
           {selectListColours.length > 0 && selectedViews === paletteViews.LIST && (
             <SelectionMenu
@@ -243,19 +242,22 @@ export default function PaletteManager({
           {!isSearch && selectListColours.length === 0 && paletteViews.BOARD && (
             <div className="flex items-center justify-between mb-2">
               <div className="flex gap-1 uppercase items-center-justify-between">
-                <div className="flex items-center h-8 p-2 rounded-br-lg bg-alsoit-gray-75 w-28">
-                  <p className="justify-center bg-['#b2b2b2'] text-white" style={{ fontSize: '10px' }}>
+                <div className="flex items-center h-8 p-1 rounded-br-lg bg-alsoit-gray-75 w-[114px]">
+                  <p
+                    className="bg-['#b2b2b2'] text-white justify-center tracking-wide"
+                    style={{ fontSize: '11px', lineHeight: '13.2px' }}
+                  >
                     COLOUR LIBRARY
                   </p>
                 </div>
                 <div className="flex items-center">{title}</div>
               </div>
-              <div className="flex items-center gap-1 px-2">
+              <div className="flex items-center gap-0.5 pr-[6px] pl-6">
                 {views.map((item, index) => (
                   <div
                     key={index}
                     className={`rounded p-1 cursor-pointer ${
-                      selectedViews === item.label ? 'bg-primary-200' : 'rounded bg-white shadow-md'
+                      selectedViews === item.label ? 'bg-primary-200' : 'rounded bg-white'
                     }`}
                     onClick={() => setSelectedViews(item.label)}
                   >
@@ -265,17 +267,17 @@ export default function PaletteManager({
                   </div>
                 ))}
                 <ToolTip title="View">
-                  <span className="p-1 bg-white rounded shadow-md" onClick={() => ({})}>
+                  <span className="p-1 bg-white rounded cursor-pointer" onClick={() => ({})}>
                     <AiOutlineEye className="w-4 h-4" />
                   </span>
                 </ToolTip>
                 <ToolTip title="Sort">
-                  <span className="p-1 bg-white rounded shadow-md" onClick={() => ({})}>
+                  <span className="p-1 bg-white rounded cursor-pointer" onClick={() => ({})}>
                     <CgSortAz className="w-4 h-4" />
                   </span>
                 </ToolTip>
                 <ToolTip title="Open Search">
-                  <span className="p-1 bg-white rounded shadow-md" onClick={() => setIsSearch(true)}>
+                  <span className="p-1 bg-white rounded cursor-pointer" onClick={() => setIsSearch(true)}>
                     <SearchIcon className="w-4 h-4" />
                   </span>
                 </ToolTip>
@@ -303,7 +305,7 @@ export default function PaletteManager({
                   name="search"
                   leadingIcon={<CiSearch style={{ color: 'rgb(191, 0, 255)' }} />}
                   trailingIcon={
-                    <ToolTip title="Close Search">
+                    <ToolTip title="Cancel search">
                       <span>
                         <AiFillCloseCircle className="text-sm" style={{ color: 'rgb(191, 0, 255)' }} />
                       </span>
@@ -359,38 +361,27 @@ export default function PaletteManager({
             <div
               className={cl('flex gap-1 items-center mt-1', displayColorPicker ? 'justify-left' : 'justify-between')}
             >
-              <ToolTip title="Advanced color options">
-                <span
-                  className="flex items-center gap-2 p-1 rounded cursor-pointer hover:bg-primary-200"
-                  onClick={() => setDisplayColorPicker((prev) => !prev)}
-                >
-                  <p className={`truncate w-fit ${displayColorPicker ? 'text-primary-600' : null}`}>
-                    ADVANCED COLOR OPTIONS
-                  </p>
-                  {displayColorPicker ? (
-                    <RiArrowUpSLine className="text-base text-primary-600" />
-                  ) : (
-                    <RiArrowDownSLine className="text-base" />
-                  )}
-                </span>
-              </ToolTip>
+              <span
+                className="flex items-center gap-2 p-1 rounded cursor-pointer hover:bg-primary-200"
+                onClick={() => setDisplayColorPicker((prev) => !prev)}
+              >
+                <p className={`truncate w-fit ${displayColorPicker ? 'text-primary-600' : 'text-[#424242]'}`}>
+                  ADVANCED COLOUR OPTIONS
+                </p>
+                {displayColorPicker ? (
+                  <RiArrowUpSLine className="text-base text-primary-600" />
+                ) : (
+                  <RiArrowDownSLine className="text-base" />
+                )}
+              </span>
             </div>
           </div>
           <AdvanceColourPalette show={displayColorPicker} />
           <div className="flex items-center justify-end gap-2 p-1 mx-3 mb-2">
+            <CancelButton onClick={handleCancel} />
             <Button
               height="h-6"
-              width="w-20"
-              label="Cancel"
-              labelSize="text-xs"
-              customClasses="hover:bg-red-500 bg-white text-red-600 border-red-200"
-              padding="p-1"
-              buttonStyle="custom"
-              onClick={handleCancel}
-            />
-            <Button
-              height="h-6"
-              customClasses="hover:bg-green-700 text-gray-500 border-gray-400"
+              customClasses="hover:bg-[#2BD54A] text-gray-500 border-gray-400"
               label={'Update ' + title}
               labelSize="text-xs truncate"
               padding="p-1"

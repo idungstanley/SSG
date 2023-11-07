@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { ManualTags } from './ManualTags';
 import DatePicker from '../../../DatePicker/DatePicker';
 import { useAppSelector } from '../../../../app/hooks';
 import { formatTimeString, parseAndUpdateTime } from '../../../../utils/TimerDuration';
@@ -7,6 +6,7 @@ import dayjs from 'dayjs';
 import { createManualTimeEntry } from '../../../../features/task/taskService';
 import toast from 'react-hot-toast';
 import SaveFilterToast from '../../../TasksHeader/ui/Filter/ui/Toast';
+import ArrowDown from '../../../../assets/icons/ArrowDown';
 
 export function ManualTime() {
   const { HistoryFilterMemory, selectedDate, timerDetails } = useAppSelector((state) => state.task);
@@ -21,19 +21,18 @@ export function ManualTime() {
 
   const { mutateAsync } = createManualTimeEntry();
 
-  const handleChange = ({ value, target }: { value: string; target: string }) => {
-    setData((prev) => ({ ...prev, [target]: value }));
-  };
+  // const handleChange = ({ value, target }: { value: string; target: string }) => {
+  //   setData((prev) => ({ ...prev, [target]: value }));
+  // };
   const handleDateClose = () => setAnchorEl(null);
   const handleSubmit = () => {
-    if (data.endDate.length > 0) {
-      // alert(data.endDate);
+    if (selectedDate?.to) {
       mutateAsync({
         description: timerDetails.description,
-        end_date: data.endDate,
+        end_date: selectedDate.to.format('YYYY-MM-DD HH:mm:ss'),
         id: activeItemId,
         isBillable: timerDetails.isBillable,
-        start_date: data.startDate,
+        start_date: selectedDate?.from?.format('YYYY-MM-DD HH:mm:ss'),
         type: activeItemType
       });
     } else {
@@ -72,35 +71,36 @@ export function ManualTime() {
   }, [data.memo]);
 
   return (
-    <div className="flex flex-col space-y-2 w-full pt-7">
-      <div className="flex items-center px-2 space-x-2">
-        <label htmlFor="timeDetails" className="flex flex-col space-y-1.5 w-1/3">
-          <span className="uppercase text-alsoit-gray-100 text-alsoit-text-xi">Enter Time</span>
-          <input
-            type="text"
-            className="w-full py-0.5 px-1.5 text-alsoit-gray-75 text-alsoit-text-md rounded-sm ring-0 hover:ring-0 focus:ring-0 border-none"
-            placeholder={data.memo}
-            onChange={(e) => handleChange({ value: e.target.value, target: 'memo' })}
-          />
-        </label>
-        <label htmlFor="detailsDate" className="flex flex-col space-y-1.5">
-          <span className="uppercase text-alsoit-gray-100 text-alsoit-text-xi">Date</span>
-          {/* change this value */}
+    <div className="flex flex-col space-y-4 w-full pt-7 pb-1.5">
+      <div className="flex items-center px-2 pt-5 justify-between w-full">
+        <label htmlFor="timeDetails" className="flex flex-col space-y-1.5 w-1/2">
           <span
-            className="w-32 h-7 p-1.5 text-alsoit-gray-100 text-alsoit-text-md rounded-sm bg-white relative"
+            className="w-11/12 h-9 flex items-center justify-between p-1.5 text-alsoit-gray-100 text-alsoit-text-md rounded-md bg-white relative"
             onClick={(e) => setAnchorEl(e.currentTarget)}
           >
-            {selectedDate?.from?.format('ddd DD, MMM | ') ?? 'Now'}
-            {HistoryFilterMemory?.time?.from ?? ''}
-            {anchorEl && <DatePicker anchorEl={anchorEl} handleClose={handleDateClose} styles="flex" />}
+            <span>
+              {selectedDate?.from?.format('ddd DD, MMM | ') ?? 'Now'}
+              {HistoryFilterMemory?.time?.from ?? ''}
+            </span>
+            <ArrowDown className="w-3 h-3" />
+            {anchorEl && <DatePicker anchorEl={anchorEl} handleClose={handleDateClose} styles="flex" range />}
           </span>
         </label>
-        <label htmlFor="manualTags" className="flex flex-col space-y-1.5 w-1/3">
-          <div className="py-2" />
-          <ManualTags />
+        <label htmlFor="detailsDate" className="flex flex-col space-y-1.5 w-1/2">
+          <span
+            className="w-11/12 h-9 flex items-center justify-between p-1.5 text-alsoit-gray-100 text-alsoit-text-md rounded-md bg-white relative"
+            onClick={(e) => setAnchorEl(e.currentTarget)}
+          >
+            <span>
+              {selectedDate?.to?.format('ddd DD, MMM | ') ?? 'Now'}
+              {HistoryFilterMemory?.time?.to ?? ''}
+            </span>
+            <ArrowDown className="w-3 h-3" />
+            {anchorEl && <DatePicker anchorEl={anchorEl} handleClose={handleDateClose} styles="flex" range />}
+          </span>
         </label>
       </div>
-      <div className="flex justify-end px-2.5">
+      <div className="flex justify-end pr-6">
         <button
           className="bg-alsoit-success py-1.5 px-8 capitalize text-alsoit-text-xi font-semibold text-white rounded-lg tracking-wide"
           onClick={handleSubmit}

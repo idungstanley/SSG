@@ -62,7 +62,6 @@ export const createModelIdAndTypeHandler = (
     // Handle unexpected or unsupported types, example task types
     model = { ...previousData };
   }
-
   return model;
 };
 

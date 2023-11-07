@@ -10,7 +10,7 @@ import {
   useSensors
 } from '@dnd-kit/core';
 import { arrayMove, sortableKeyboardCoordinates } from '@dnd-kit/sortable';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { StatusProps } from '../../pages/workspace/hubs/components/ActiveTree/activetree.interfaces';
 import { BoardSectionsType, GroupStyles, ModelType, StatusType } from '../../utils/StatusManagement/Types';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
@@ -32,6 +32,8 @@ import { setMatchData } from '../../features/general/prompt/promptSlice';
 import { BOARD_SECTIONS } from '../../utils/StatusManagement/Constant';
 import { useGetStatusTemplates } from '../../features/statusManager/statusManagerService';
 import { COLLECTION_TYPES } from '../../features/statusManager/statusManager.interface';
+import { useParams } from 'react-router-dom';
+import { EntityType } from '../../utils/EntityTypes/EntityType';
 
 interface ErrorResponse {
   data: {
@@ -51,9 +53,11 @@ export const groupStylesMapping: Record<string, GroupStyles> = {
   // Add more model_type values and their styles as needed
 };
 
-export default function CustomStatus() {
+export default function StatusManagement() {
   const dispatch = useAppDispatch();
-  const createStatusTypes = useMutation(statusTypesService);
+  const queryClient = useQueryClient();
+
+  const { listId, hubId, subhubId, walletId } = useParams();
 
   const { matchData } = useAppSelector((state) => state.prompt);
   const { templateCollections } = useAppSelector((state) => state.statusManager);
@@ -70,6 +74,11 @@ export default function CustomStatus() {
   });
   const [matchingStatusValidation, setMatchingStatusValidation] = useState<string | null>(null);
 
+  const createStatusTypes = useMutation(statusTypesService, {
+    onSuccess: () => {
+      queryClient.invalidateQueries([activeItemType === EntityType.list ? 'hubs' : 'hub-details']);
+    }
+  });
   const selectedTemplateStatus = templateCollections.find((item) => item.name === activeTemplateStatus);
 
   const initialBoardSections = initializeBoard(
@@ -77,6 +86,15 @@ export default function CustomStatus() {
       ? (selectedTemplateStatus?.items as StatusType[])
       : spaceStatuses
   );
+
+  const itemType = listId
+    ? EntityType.list
+    : hubId || subhubId
+    ? EntityType.hub
+    : walletId
+    ? EntityType.wallet
+    : activeItemType;
+  const itemId = listId || hubId || subhubId || walletId || activeItemId;
 
   const [boardSections, setBoardSections] = useState<BoardSectionsType>(initialBoardSections);
 
@@ -92,7 +110,7 @@ export default function CustomStatus() {
   useGetStatusTemplates();
 
   useEffect(() => {
-    createModelIdAndTypeHandler(activeItemId, activeItemType, setModelData, modelData);
+    createModelIdAndTypeHandler(itemId, itemType, setModelData, modelData);
     setBoardSections(initialBoardSections);
   }, [spaceStatuses, activeItemId, activeItemType]);
 
@@ -181,9 +199,9 @@ export default function CustomStatus() {
   const model_id = statusTaskListDetails.listId || (modelData?.modelId as string);
 
   const handleStatusId = () => {
-    const modelTypeIsSameEntity = statusData.some((item) => item.model_type === model);
+    const modelTypeIsSameEntity = statusData.some((item) => item.model === model);
     const modelIdIsSameEntity = statusData.some((item) => item.model_id === model_id);
-    if (activeItemId === model_id && modelTypeIsSameEntity) {
+    if (itemId === model_id && modelTypeIsSameEntity) {
       if (modelIdIsSameEntity) {
         return statusData.map((item, index) => {
           return { ...item, position: index };
@@ -195,7 +213,12 @@ export default function CustomStatus() {
       }
     } else {
       return statusData.map((item, index) => {
-        return { ...item, id: null, is_default: index === 0 ? 1 : 0, position: index }; // Set the id to null
+        return {
+          ...item,
+          id: null,
+          is_default: index === 0 ? 1 : 0,
+          position: index
+        }; // Set the id to null
       });
     }
   };
@@ -204,8 +227,8 @@ export default function CustomStatus() {
     await createStatusTypes.mutateAsync({
       model_id: model_id,
       model: model,
-      from_model: activeItemType,
-      from_model_id: activeItemId,
+      from_model: modelData.modelType,
+      from_model_id: modelData.modelId,
       statuses: handleStatusId(),
       status_matches: matchedStatus
     });
@@ -244,8 +267,8 @@ export default function CustomStatus() {
       await createStatusTypes.mutateAsync({
         model_id: model_id,
         model: model,
-        from_model: modelData.modelType as string,
-        from_model_id: modelData.modelId as string,
+        from_model: modelData.modelType,
+        from_model_id: modelData.modelId,
         statuses: handleStatusId()
       });
     } catch (err) {

@@ -14,8 +14,8 @@ const HubsOptions = [
   { id: pilotTabs.CREATE_HUB, element: <CreateHub /> },
   { id: pilotTabs.CREATE_WALLET, element: <CreateWallet /> },
   { id: pilotTabs.CREATE_LIST, element: <CreateList /> },
-  { id: 'calendar_settings', element: <CustomSuggestion /> },
-  { id: 'status_management', element: <StatusManagement /> }
+  { id: pilotTabs.CALENDAR_SETTINGS, element: <CustomSuggestion /> },
+  { id: pilotTabs.STATUS_MANAGEMENT, element: <StatusManagement /> }
 ];
 
 export default function HubManager() {

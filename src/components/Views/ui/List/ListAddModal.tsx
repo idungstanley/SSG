@@ -6,7 +6,7 @@ import { AiOutlineLink, AiOutlinePlus, AiOutlineSetting, AiOutlineShareAlt, AiOu
 import { GrEdit } from 'react-icons/gr';
 import { HiOutlineDuplicate, HiOutlineInformationCircle, HiOutlineMail } from 'react-icons/hi';
 import { MdOutlineSendToMobile } from 'react-icons/md';
-import { CiEdit } from 'react-icons/ci';
+import { CiCircleCheck, CiEdit } from 'react-icons/ci';
 import { BsArchive, BsCheck2All } from 'react-icons/bs';
 import { RiDeleteBin6Line } from 'react-icons/ri';
 import { IoIosArrowForward } from 'react-icons/io';
@@ -77,6 +77,13 @@ export default function ListAddModal({
       icon: <HiOutlineMail />,
       arrowRight: null,
       label: 'Email to List',
+      handleClick: () => null
+    },
+    {
+      id: 'show_closed',
+      icon: <CiCircleCheck />,
+      arrowRight: null,
+      label: 'Show closed',
       handleClick: () => null
     },
     {

@@ -12,6 +12,7 @@ import AvatarWithImage from '../../../../components/avatar/AvatarWithImage';
 import { TrashIcon } from '@heroicons/react/24/outline';
 import { Capitalize } from '../../../../utils/NoCapWords/Capitalize';
 import { EntityType } from '../../../../utils/EntityTypes/EntityType';
+import { AssigneeType } from '../../../../features/task/interface.tasks';
 
 interface AssigneeItem {
   item: ITeamMembersAndGroup;
@@ -27,7 +28,7 @@ function AssigneeItem({ item, option, entity_id, teams, handleClose, isAssigned 
 
   const { selectedTasksArray, selectedListIds, selectedTaskParentId } = useAppSelector((state) => state.task);
 
-  const { mutate: onCheklistItemAssign } = UseChecklistItemAssignee();
+  const { mutate: onCheklistItemAssign } = UseChecklistItemAssignee(entity_id as string, item as AssigneeType);
 
   const handleAssignChecklist = (id: string) => {
     onCheklistItemAssign({
@@ -38,7 +39,7 @@ function AssigneeItem({ item, option, entity_id, teams, handleClose, isAssigned 
 
   const { mutate: onTaskAssign } = UseTaskAssignService(
     selectedTasksArray.length ? selectedTasksArray : [entity_id as string],
-    item,
+    item as ITeamMembersAndGroup,
     selectedListIds.length ? selectedListIds : [selectedTaskParentId]
   );
 
@@ -64,7 +65,7 @@ function AssigneeItem({ item, option, entity_id, teams, handleClose, isAssigned 
 
   const { mutate: onTaskUnassign } = UseTaskUnassignService(
     selectedTasksArray.length ? selectedTasksArray : [entity_id as string],
-    item,
+    item as ITeamMembersAndGroup,
     selectedListIds.length ? selectedListIds : [selectedTaskParentId]
   );
 
@@ -77,7 +78,7 @@ function AssigneeItem({ item, option, entity_id, teams, handleClose, isAssigned 
     });
   };
 
-  const { mutate: onCheklistItemUnassign } = UseChecklistItemUnassignee();
+  const { mutate: onCheklistItemUnassign } = UseChecklistItemUnassignee(entity_id as string, item.id);
   const handleUnAssignChecklistItem = (id: string) => {
     handleClose();
     onCheklistItemUnassign({

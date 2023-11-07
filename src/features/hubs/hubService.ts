@@ -10,6 +10,8 @@ import { generateFilters } from '../../components/TasksHeader/lib/generateFilter
 import { EntityType } from '../../utils/EntityTypes/EntityType';
 import { Hub, List, StatusProps, Wallet } from '../../pages/workspace/hubs/components/ActiveTree/activetree.interfaces';
 import { matchedStatusProps } from '../../common/Prompt';
+import { setChecklists } from '../task/checklist/checklistSlice';
+import { ICheckListRes } from '../task/interface.tasks';
 
 interface IResponseHub {
   data: {
@@ -259,6 +261,7 @@ export const UseGetHubDetails = (query: {
         }
         const listViews = data.data.hub.task_views;
         dispatch(setSpaceViews(listViews));
+        dispatch(setChecklists(data?.data.hub.checklists as ICheckListRes[]));
       },
       cacheTime: 0
     }

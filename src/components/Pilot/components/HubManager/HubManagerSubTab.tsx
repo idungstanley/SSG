@@ -38,13 +38,13 @@ export const HubManagerOptions = [
     isVisible: false
   },
   {
-    id: 'calendar_settings',
+    id: pilotTabs.CALENDAR_SETTINGS,
     name: 'Calendar Settings',
     icon: <CalendarIcon active={false} />,
     isVisible: false
   },
   {
-    id: 'status_management',
+    id: pilotTabs.STATUS_MANAGEMENT,
     name: 'Status Management',
     icon: <StatusMgIcon />,
     isVisible: false
@@ -93,7 +93,7 @@ export default function HubManagerSubTab() {
     <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={(e) => handleDragEnd(e)}>
       <SortableContext strategy={rectSortingStrategy} items={items}>
         <section>
-          <div className="flex w-full bg-primary-200 pb-0.5 flex-row">
+          <div className="grid w-full bg-primary-200 pb-0.5 grid-cols-5">
             {HubManagerOptions.map((item) => (
               <SubtabDrag
                 key={item.id}

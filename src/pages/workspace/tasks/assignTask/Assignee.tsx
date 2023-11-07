@@ -50,7 +50,7 @@ export default function Assignee({
 
   const teamMembers = teams ? data?.data.team_member_groups : data?.data.team_members;
 
-  const assignees = task?.assignees;
+  const assignees = option === 'checklist' ? assigneeChecklistItem?.assignees : task?.assignees;
 
   const assignedUser = assignees?.map(({ id }: { id: string }) => id);
 
@@ -99,6 +99,7 @@ export default function Assignee({
                 itemId={itemId as string}
                 teams={teams}
                 handleClick={handleClick}
+                option={option}
               />
             </div>
           ) : (

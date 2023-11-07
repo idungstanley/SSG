@@ -30,8 +30,13 @@ export function ListBoxItem({ value, selected }: ListBoxItemProps) {
   // just string
   if (isString(value)) {
     return (
-      <>
-        <span className={cl('block whitespace-nowrap capitalize', isSelected ? 'font-medium' : 'font-normal')}>
+      <div className="flex gap-2 font-semibold">
+        <span
+          className={cl(
+            'block whitespace-nowrap capitalize font-black',
+            isSelected ? 'text-primary-600' : 'text-alsoit-gray-300'
+          )}
+        >
           {stringifyValue(value).replaceAll('_', ' ')}
         </span>
         {isSelected ? (
@@ -39,7 +44,7 @@ export function ListBoxItem({ value, selected }: ListBoxItemProps) {
             <CheckIcon className="h-5 w-5" aria-hidden="true" />
           </span>
         ) : null}
-      </>
+      </div>
     );
   }
 
@@ -47,7 +52,12 @@ export function ListBoxItem({ value, selected }: ListBoxItemProps) {
   if ('key' in value) {
     return (
       <>
-        <span className={cl('block whitespace-nowrap capitalize', isSelected ? 'font-medium' : 'font-normal')}>
+        <span
+          className={cl(
+            'block whitespace-nowrap capitalize font-semibold',
+            isSelected ? 'text-primary-600' : 'text-alsoit-gray-300'
+          )}
+        >
           {isString(value) ? stringifyValue(value) : stringifyValue(value.value)}
         </span>
         {isSelected ? (
@@ -62,7 +72,12 @@ export function ListBoxItem({ value, selected }: ListBoxItemProps) {
   // is FilterValue
   return (
     <>
-      <span className={cl('block whitespace-nowrap capitalize', isSelected ? 'font-medium' : 'font-normal')}>
+      <span
+        className={cl(
+          'block whitespace-nowrap capitalize font-semibold',
+          isSelected ? 'text-primary-600' : 'text-alsoit-gray-300'
+        )}
+      >
         {stringifyValue(
           (
             value as {
