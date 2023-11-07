@@ -5,6 +5,7 @@ import { useAppSelector } from '../../../app/hooks';
 import { VerticalScroll } from '../../ScrollableContainer/VerticalScroll';
 import ThreeDotIcon from '../../../assets/icons/ThreeDotIcon';
 import { BsPinAngle } from 'react-icons/bs';
+import ToolTip from '../../Tooltip/Tooltip';
 
 interface PaletteProps {
   handleClick: (value: string | null | ListColourProps) => void;
@@ -38,8 +39,16 @@ export default function ColorPalette({ handleClick, activeColor }: PaletteProps)
         )}
         {}
         <span className="absolute flex flex-col gap-1 opacity-0 cursor-pointer right-1 group-hover:opacity-100">
-          <ThreeDotIcon color="white" />
-          <BsPinAngle className="text-sm text-white" />
+          <ToolTip placement="top" className="mb-5" title="More options">
+            <span>
+              <ThreeDotIcon color="white" />
+            </span>
+          </ToolTip>
+          <ToolTip placement="right" title="Pin Colour">
+            <span>
+              <BsPinAngle className="text-sm text-white" />
+            </span>
+          </ToolTip>
         </span>
       </div>
     </div>

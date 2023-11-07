@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { MdAddToPhotos } from 'react-icons/md';
 import SubtabDrag from '../../../../pages/workspace/pilot/components/SubtabDnd';
 import {
   closestCenter,
@@ -11,21 +10,43 @@ import {
   useSensors
 } from '@dnd-kit/core';
 import { arrayMove, rectSortingStrategy, SortableContext, sortableKeyboardCoordinates } from '@dnd-kit/sortable';
-import { BsClipboardData } from 'react-icons/bs';
 import { useAppSelector } from '../../../../app/hooks';
 import { pilotTabs } from '../../../../app/constants/pilotTabs';
+import AttachFileIcon from '../../../../assets/icons/AttachFileIcon';
+import CkecklistIcon from '../../../../assets/icons/CkecklistIcon';
+import SubtaskIcon from '../../../../assets/icons/SubtaskIcon';
+import TiesIcon from '../../../../assets/icons/TiesIcon';
+import PropertyIcons from '../../../../assets/icons/PropertyIcons';
 
 export const detailOptions = [
   {
     id: pilotTabs.PROPERTIES,
     name: 'Properties',
-    icon: <BsClipboardData />,
+    icon: <PropertyIcons />,
+    isVisible: false
+  },
+  {
+    id: pilotTabs.SUBTASK,
+    name: 'Subtask',
+    icon: <SubtaskIcon />,
+    isVisible: false
+  },
+  {
+    id: pilotTabs.CHECKLISTS,
+    name: 'Checklist',
+    icon: <CkecklistIcon />,
     isVisible: false
   },
   {
     id: pilotTabs.ATTACHMENTS,
     name: 'Attachments',
-    icon: <MdAddToPhotos />,
+    icon: <AttachFileIcon />,
+    isVisible: false
+  },
+  {
+    id: pilotTabs.TIES,
+    name: 'Ties',
+    icon: <TiesIcon />,
     isVisible: false
   }
 ];
@@ -70,7 +91,7 @@ export default function DetailsSubTab() {
     <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={(e) => handleDragEnd(e)}>
       <SortableContext strategy={rectSortingStrategy} items={items}>
         <section>
-          <div className="flex  bg-primary-200 pb-0.5 flex-row">
+          <div className="grid  bg-primary-200 pb-0.5 grid-cols-5">
             {detailOptions.map((item) => (
               <SubtabDrag
                 key={item.id}

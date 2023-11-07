@@ -104,6 +104,7 @@ export interface ITeamMember {
     avatar_path?: null | string;
     initials: string;
     color?: string;
+    timezone: string;
   };
   role: {
     key: string;
@@ -115,6 +116,7 @@ export interface ITeamMember {
   color: string;
   initials: string;
   is_active: boolean;
+  is_online: boolean;
   created_at: string;
   updated_at: string;
 }

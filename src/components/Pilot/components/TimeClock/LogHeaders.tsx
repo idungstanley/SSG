@@ -41,13 +41,15 @@ export function LogHeaders() {
             }
             style={{ whiteSpace: 'nowrap' }}
           >
-            <span
-              className={`uppercase text-alsoit-text-md ${
-                index === 0 ? 'float-left clear-both' : 'text-center'
-              } font-semibold`}
-            >
-              {header.name}
-            </span>
+            {!header.isHidden && (
+              <span
+                className={`uppercase text-alsoit-text-md ${
+                  index === 0 ? 'float-left clear-both' : 'text-center'
+                } font-semibold`}
+              >
+                {header.name}
+              </span>
+            )}
             {index === 1 && <PlusCircle className="cursor-pointer" />}
           </th>
         );

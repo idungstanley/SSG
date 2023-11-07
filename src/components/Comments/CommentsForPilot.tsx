@@ -11,8 +11,6 @@ import Dropdown from './components/Dropdown';
 import { selectedUserType } from './components/componentType';
 import { mentionTeamMemberInMessageReg } from '../../regex';
 import { useAppSelector } from '../../app/hooks';
-import SectionArea from '../Pilot/components/SectionArea';
-import { ChatBubbleLeftEllipsisIcon } from '@heroicons/react/24/outline';
 
 export default function CommentsForPilot() {
   const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
@@ -77,9 +75,7 @@ export default function CommentsForPilot() {
 
   return (
     <>
-      <SectionArea label="Comments" icon={<ChatBubbleLeftEllipsisIcon className="w-4 h-4" />} />
-
-      <div className="flex h-full flex-col">
+      <div className="flex flex-col h-full">
         <Form messageRef={messageRef} handleSubmit={handleSubmit} setShowDropdown={setShowDropdown} />
         <Dropdown
           show={showDropdown}

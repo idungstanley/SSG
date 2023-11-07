@@ -1,9 +1,14 @@
+import { GraphItem } from '../community/community';
+
 export interface ITeamMembersAndGroup {
   color: string | undefined;
   id: string;
   name?: string;
   is_active?: boolean;
+  is_online: boolean;
   invited_at: string;
+  created_at: string;
+  updated_at: string;
   user: {
     color?: string;
     name: string;
@@ -11,6 +16,7 @@ export interface ITeamMembersAndGroup {
     email: string;
     initials: string;
     avatar_path?: string | null;
+    timezone: string;
   };
   initials: string;
   colour?: string;
@@ -24,6 +30,7 @@ export interface ITeamMembersAndGroupsReq {
   data: {
     team_member_groups: ITeamMembersAndGroup[];
     team_members: ITeamMembersAndGroup[];
+    graph: GraphItem[];
     pagination: {
       page: number;
       per_page: number;
