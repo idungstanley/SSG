@@ -40,7 +40,12 @@ import {
   removeEntityChildrenIdsOfWallet
 } from '../../managers/Wallet';
 import { deleteHubManager, findAllEntitiesIdsOfHub, removeEntityChildrenIdsOfHub } from '../../managers/Hub';
-import { setExtendedBarOpenedEntitiesIds, setOpenedEntitiesIds } from '../../features/workspace/workspaceSlice';
+import {
+  setActiveSubHubManagerTabId,
+  setActiveTabId,
+  setExtendedBarOpenedEntitiesIds,
+  setOpenedEntitiesIds
+} from '../../features/workspace/workspaceSlice';
 import ExpandAllIcon from '../../assets/icons/ExpandAllIcon';
 import CollapseAllIcon from '../../assets/icons/CollapseAllIcon';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
@@ -53,6 +58,7 @@ import { Capitalize } from '../../utils/NoCapWords/Capitalize';
 import { displayPrompt, setVisibility } from '../../features/general/prompt/promptSlice';
 import { APP_TASKS } from '../../app/constants/app';
 import { AiOutlineShareAlt } from 'react-icons/ai';
+import { pilotTabs } from '../../app/constants/pilotTabs';
 
 interface IMenuDropdownProps {
   isExtendedBar?: boolean;
@@ -367,6 +373,11 @@ export default function MenuDropdown({ isExtendedBar, cords }: IMenuDropdownProp
     }
   ];
 
+  const handleSharingnPermissions = () => {
+    dispatch(setActiveTabId(pilotTabs.ENTITY_MANAGER));
+    dispatch(setActiveSubHubManagerTabId(pilotTabs.PERMISSIONS));
+  };
+
   return (
     <Menu
       open={open}
@@ -400,6 +411,7 @@ export default function MenuDropdown({ isExtendedBar, cords }: IMenuDropdownProp
           buttonStyle="base"
           height="h-8"
           labelSize="text-sm"
+          onClick={handleSharingnPermissions}
         />
       </div>
       {SubDropdownMenu && <SubDropdown placeHubType={APP_TASKS} />}
