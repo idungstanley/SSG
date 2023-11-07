@@ -10,7 +10,7 @@ import { TbFolderX } from 'react-icons/tb';
 import { GiStoneStack, GiJusticeStar } from 'react-icons/gi';
 import { HiOutlineUserPlus } from 'react-icons/hi2';
 import { BiMerge, BiEdit } from 'react-icons/bi';
-import { archiveTask, deleteTask } from '../../../../../features/task/taskService';
+import { archiveTask, deleteTask, unarchiveTask } from '../../../../../features/task/taskService';
 import { useDispatch } from 'react-redux';
 import { EntityType } from '../../../../../utils/EntityTypes/EntityType';
 
@@ -28,7 +28,7 @@ import PriorityDropdown from '../../../../../components/priority/PriorityDropdow
 import ToolTip from '../../../../../components/Tooltip/Tooltip';
 import ActiveTreeSearch from '../../../../../components/ActiveTree/ActiveTreeSearch';
 import AlsoitMenuDropdown from '../../../../../components/DropDowns';
-import { deleteTaskManager } from '../../../../../managers/Task';
+import { deleteTaskManager, findCurrentTaskManager } from '../../../../../managers/Task';
 import Assignee from '../../assignTask/Assignee';
 import { ManageTagsDropdown } from '../../../../../components/Tag/ui/ManageTagsDropdown/ui/ManageTagsDropdown';
 
@@ -41,11 +41,13 @@ export default function TaskMenu() {
     duplicateTaskObj,
     selectedListIds,
     selectedTaskParentId,
-    tasks: taskData
+    tasks: taskData,
+    subtasks
   } = useAppSelector((state) => state.task);
 
   const [isVisible, setIsVisible] = useState(false);
   const [showSelectDropdown, setShowSelectDropdown] = useState<null | HTMLSpanElement | HTMLDivElement>(null);
+  const [isArchivedTasks, setArchivedTasks] = useState<boolean>(false);
 
   useEffect(() => {
     if (selectedTasksArray.length) {
@@ -60,6 +62,19 @@ export default function TaskMenu() {
       handleClose();
     }
   }, [duplicateTaskObj.popDuplicateTaskModal]);
+
+  useEffect(() => {
+    if (selectedTasksArray.length) {
+      let isArchived = true;
+      selectedTasksArray.forEach((id) => {
+        const currentTask = findCurrentTaskManager(id, taskData, subtasks);
+        if (!currentTask?.archived_at) {
+          isArchived = false;
+        }
+      });
+      setArchivedTasks(isArchived);
+    }
+  }, [selectedTasksArray]);
 
   const useDeleteTask = useMutation(deleteTask, {
     onSuccess: () => {
@@ -80,6 +95,14 @@ export default function TaskMenu() {
   });
 
   const useArchiveTask = useMutation(archiveTask, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['task']);
+      queryClient.invalidateQueries(['sub-tasks']);
+      dispatch(setSelectedTasksArray([]));
+    }
+  });
+
+  const useUnarchiveTask = useMutation(unarchiveTask, {
     onSuccess: () => {
       queryClient.invalidateQueries(['task']);
       queryClient.invalidateQueries(['sub-tasks']);
@@ -118,7 +141,7 @@ export default function TaskMenu() {
       isVisible: true
     },
     {
-      id: 'set_Tags',
+      id: 'set_tags',
       label: 'Set Tags',
       icons: <ManageTagsDropdown entityId="" tagsArr={[]} entityType="task" icon={<BsTags />} />,
       handleClick: () => ({}),
@@ -205,31 +228,41 @@ export default function TaskMenu() {
       isVisible: true
     },
     {
-      id: 'archive_tasks',
-      label: 'Archive tasks',
+      id: isArchivedTasks ? 'unarchive_tasks' : 'archive_tasks',
+      label: isArchivedTasks ? 'Unarchive tasks' : 'Archive tasks',
       icons: <HiInbox />,
       handleClick: () => {
         dispatch(
-          displayPrompt('Archive tasks', 'Would you like archive these tasks from the workspace?', [
-            {
-              label: 'Archive tasks',
-              style: 'warning',
-              callback: () => {
-                useArchiveTask.mutateAsync({
-                  selectedTasksArray: selectedTasksArray
-                });
-                dispatch(setVisibility(false));
-                dispatch(setShowTaskNavigation(false));
+          displayPrompt(
+            `${isArchivedTasks ? 'Unarchive' : 'Archive'} tasks`,
+            `Would you like ${isArchivedTasks ? 'unarchive' : 'archive'} these tasks from the workspace?`,
+            [
+              {
+                label: `${isArchivedTasks ? 'Unarchive' : 'Archive'} tasks`,
+                style: 'warning',
+                callback: () => {
+                  if (isArchivedTasks) {
+                    useUnarchiveTask.mutateAsync({
+                      selectedTasksArray: selectedTasksArray
+                    });
+                  } else {
+                    useArchiveTask.mutateAsync({
+                      selectedTasksArray: selectedTasksArray
+                    });
+                  }
+                  dispatch(setVisibility(false));
+                  dispatch(setShowTaskNavigation(false));
+                }
+              },
+              {
+                label: 'Cancel',
+                style: 'plain',
+                callback: () => {
+                  dispatch(setVisibility(false));
+                }
               }
-            },
-            {
-              label: 'Cancel',
-              style: 'plain',
-              callback: () => {
-                dispatch(setVisibility(false));
-              }
-            }
-          ])
+            ]
+          )
         );
       },
       isVisible: true
