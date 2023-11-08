@@ -48,7 +48,8 @@ export default function NewSubTaskTemplate(task?: Task) {
     },
     tags: [],
     task_statuses: task?.task_statuses || [],
-    updated_at: ''
+    updated_at: '',
+    watchers: []
   };
   return newSubTask;
 }

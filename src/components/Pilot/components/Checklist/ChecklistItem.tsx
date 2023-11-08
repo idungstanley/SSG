@@ -1,22 +1,19 @@
 import React, { useState, useRef } from 'react';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import {
-  UseCreatelistItemService,
-  UseUpdateChecklistItemService
-} from '../../../../features/task/checklist/checklistService';
+import { useMutation } from '@tanstack/react-query';
+import { UseCreatelistItemService, useEditChecklistItem } from '../../../../features/task/checklist/checklistService';
 import ChecklistModal from './ChecklistModal';
 import { lessOptions } from './ModalOptions';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import {
   setClickChecklistId,
   setClickChecklistItemId,
+  setCreateChecklistItem,
   setToggleAssignChecklistItemId,
-  setTriggerItemtUpdate
+  seteditChecklistItem
 } from '../../../../features/task/checklist/checklistSlice';
 import { setCurrentTaskIdForTag } from '../../../../features/workspace/tags/tagSlice';
 import { ICheckListItems } from '../../../../features/task/interface.tasks';
 import Assignee from '../../../../pages/workspace/tasks/assignTask/Assignee';
-import TaskTag from '../../../../pages/workspace/tasks/component/taskData/taskTag';
 import { ManageTagsDropdown } from '../../../Tag/ui/ManageTagsDropdown/ui/ManageTagsDropdown';
 
 export interface checkListItemProps {
@@ -26,18 +23,32 @@ export interface checkListItemProps {
 
 function ChecklistItem({ Item, checklistId }: checkListItemProps) {
   const inputRef = useRef<HTMLInputElement | null>(null);
-  const queryClient = useQueryClient();
   const dispatch = useAppDispatch();
   const [newItem, setNewItem] = useState<string>('');
-  const [itemId, setItemId] = useState<string>('');
-  const [done, setDone] = useState<number>(0);
-  const [editName, setEditName] = useState<string | undefined>('');
+  const [name, setName] = useState('');
 
-  const { triggerItemUpdate, showChecklistItemInput, clickedChecklistId } = useAppSelector((state) => state.checklist);
+  const { showChecklistItemInput, clickedChecklistId } = useAppSelector((state) => state.checklist);
 
   const createChecklist = useMutation(UseCreatelistItemService, {
-    onSuccess: () => {
-      queryClient.invalidateQueries();
+    onSuccess: (data) => {
+      dispatch(
+        setCreateChecklistItem({
+          checklistId,
+          checklistItem: data.data.checklist_item
+        })
+      );
+    }
+  });
+
+  const editChecklistItem = useMutation(useEditChecklistItem, {
+    onSuccess: (data) => {
+      dispatch(
+        seteditChecklistItem({
+          checklistId,
+          checklistItem: data.data.checklist_item
+        })
+      );
+      setName('');
     }
   });
 
@@ -49,26 +60,22 @@ function ChecklistItem({ Item, checklistId }: checkListItemProps) {
     setNewItem('');
   };
 
-  UseUpdateChecklistItemService({
-    checklist_id: checklistId,
-    name: editName,
-    triggerItemUpdate: triggerItemUpdate,
-    itemId: itemId,
-    done
-  });
-
-  const isDone = (id: string, done: number, name: string) => {
-    setItemId(id);
-    setEditName(name);
-    done === 0 ? setDone(1) : setDone(0);
-    dispatch(setTriggerItemtUpdate(true));
+  const isDone = async (id: string, done: number, name: string) => {
+    await editChecklistItem.mutateAsync({
+      itemId: id,
+      name,
+      checklist_id: checklistId,
+      done: done === 1 ? 0 : 1
+    });
   };
 
-  const handleEditItemName = (id: string, done: number) => {
-    setEditName(inputRef.current?.innerText);
-    setItemId(id);
-    setDone(done);
-    dispatch(setTriggerItemtUpdate(true));
+  const handleEditItemName = async (id: string, done: number) => {
+    await editChecklistItem.mutateAsync({
+      itemId: id,
+      name: name,
+      checklist_id: checklistId,
+      done
+    });
   };
 
   const focusItem = () => {
@@ -98,10 +105,9 @@ function ChecklistItem({ Item, checklistId }: checkListItemProps) {
             <div className="group flex items-center text-gray-500 hover:text-gray-700 hover:bg-gray-50 py-0.5 h-auto">
               <input
                 type="checkbox"
-                checked={item.is_done ? true : false}
+                checked={item.is_done === 1 ? true : false}
                 className="rounded-lg mx-3 text-green-500 border-green-800"
                 onChange={() => {
-                  setItemId(item.id);
                   isDone(item.id, item.is_done, item.name);
                 }}
               />
@@ -110,6 +116,14 @@ function ChecklistItem({ Item, checklistId }: checkListItemProps) {
                 suppressContentEditableWarning={true}
                 contentEditable={true}
                 onKeyDown={(e) => (e.key === 'Enter' ? handleEditItemName(item.id, item.is_done) : null)}
+                onInput={(e) => {
+                  if (e instanceof KeyboardEvent && (e.key === 'Enter' || e.keyCode === 13)) {
+                    e.preventDefault();
+                    return;
+                  }
+
+                  setName(e.currentTarget.textContent as string);
+                }}
                 className="cursor-text"
               >
                 {item.name}
@@ -123,12 +137,6 @@ function ChecklistItem({ Item, checklistId }: checkListItemProps) {
               >
                 <Assignee itemId={item.id} option="checklist" assigneeChecklistItem={item} />
               </div>
-
-              {item.tags.length > 0 && (
-                <div className="mr-4">
-                  <TaskTag taskColField={item.tags} entity_type="checklist_item" entity_id={item.id} />
-                </div>
-              )}
 
               <span onClick={() => dispatch(setCurrentTaskIdForTag(item.id))}>
                 <ManageTagsDropdown tagsArr={item.tags} entityId={item.id} entityType="checklist_item" />

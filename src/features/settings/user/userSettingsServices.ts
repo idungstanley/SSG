@@ -103,7 +103,7 @@ const changePassword = ({ oldPassword, newPassword, confirmPassword }: IPassword
   const request = requestNew({
     url: '/auth/account/change-password',
     method: 'PUT',
-    params: {
+    data: {
       current_password: oldPassword,
       password: newPassword,
       password_confirmation: confirmPassword

@@ -69,8 +69,6 @@ export default function AddTo({ locationn }: { locationn?: string }) {
     activeItemType
   });
 
-  console.log(attachments);
-
   const handleRemoveAttachment = async (id: string) => {
     await deleteAttachment.mutateAsync({
       id
