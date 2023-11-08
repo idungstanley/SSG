@@ -5,12 +5,12 @@ export interface IWallet {
   id: string;
   name: string;
   hub_id: string;
-  parent_id: null;
+  parent_id: string;
   color?: string;
   updated_at: string;
   created_at: string;
-  archived_at: null;
-  deleted_at: null;
+  archived_at: null | string;
+  deleted_at: null | string;
   children: IWallet[];
   lists: IList[];
   description: string;

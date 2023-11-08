@@ -44,8 +44,8 @@ export const createWalletManager = (type: string, hubs: Hub[], newWalletFromData
     const newWallet = {
       ...newWalletFromData,
       type: EntityType.wallet,
-      children: [],
-      lists: []
+      children: newWalletFromData.children ? newWalletFromData.children : [],
+      lists: newWalletFromData.lists ? newWalletFromData.lists : []
     };
     if (type.includes('hub')) {
       const newParent = { ...parent } as Hub;
@@ -112,4 +112,15 @@ export const findCurrentWallet = (id: string, hubs: Hub[]) => {
   };
   findCurrentEntity(EntityType.wallet, id, hubs, findWallet as <IWallet>(item: IWallet) => IWallet);
   return currentEntity as Wallet;
+};
+
+export const walletMoveManager = (newParentType: string, walletId: string, parentId: string, hubs: Hub[]) => {
+  const currentWallet = findCurrentWallet(walletId, hubs);
+  let updatedTree = deleteWalletManager(walletId, hubs);
+  const newWallet = {
+    ...currentWallet,
+    parent_id: parentId
+  };
+  updatedTree = createWalletManager(newParentType, updatedTree, newWallet);
+  return updatedTree;
 };
