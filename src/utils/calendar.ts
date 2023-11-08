@@ -341,3 +341,7 @@ export function generateMonthsInYear(year: number) {
   }
   return monthsArray;
 }
+
+export function formatForDatabase(date: Dayjs) {
+  return dayjs(date).format('YYYY-MM-DD HH:mm:ss');
+}

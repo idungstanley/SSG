@@ -76,7 +76,6 @@ export function ScrollableHorizontalListsContainer({
   }, []);
 
   const handleThumbMousedown = useCallback((e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    e.preventDefault();
     e.stopPropagation();
     setScrollStartPosition(e.clientX);
     if (contentRef.current) setInitialScrollTop(contentRef.current.scrollLeft);
@@ -91,7 +90,6 @@ export function ScrollableHorizontalListsContainer({
 
   const handleThumbMouseup = useCallback(
     (e: MouseEvent) => {
-      e.preventDefault();
       e.stopPropagation();
       if (isDragging) {
         setIsDragging(false);
@@ -102,7 +100,6 @@ export function ScrollableHorizontalListsContainer({
 
   const handleThumbMousemove = useCallback(
     (e: MouseEvent) => {
-      e.preventDefault();
       e.stopPropagation();
       if (isDragging && contentRef.current && scrollStartPosition) {
         const { scrollWidth: contentWidth, offsetWidth: contentOffsetWidth } = contentRef.current;

@@ -8,7 +8,7 @@ import { Search } from '../Search/Search';
 import { Sort } from '../Sort/Sort';
 import ListSettingsModal from '../listSettings/ListSettingsModal';
 import { AiOutlineHome, AiOutlineSave, AiOutlineUser } from 'react-icons/ai';
-import { ReactNode } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import { MdOutlinePrivacyTip } from 'react-icons/md';
 import { BiLock } from 'react-icons/bi';
 import { HiDownload } from 'react-icons/hi';
@@ -21,6 +21,18 @@ interface IHeader {
 
 export function Header({ isInsights }: IHeader) {
   const { selectedTasksArray } = useAppSelector((state) => state.task);
+
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    if (selectedTasksArray.length) {
+      setIsVisible(true);
+    } else {
+      setTimeout(() => {
+        setIsVisible(false);
+      }, 900);
+    }
+  }, [selectedTasksArray]);
 
   const items = [
     {
@@ -91,18 +103,10 @@ export function Header({ isInsights }: IHeader) {
         </div>
       </section>
 
-      <div
-        className="z-50 w-full overflow-hidden"
-        style={{
-          maxHeight: selectedTasksArray.length > 0 ? '90px' : '0',
-          transition: 'max-height 0.3s ease-in-out' // Adjust the transition duration as needed
-        }}
-      >
-        {selectedTasksArray.length > 0 && (
-          <span className="w-12/12">
-            <TaskMenu />
-          </span>
-        )}
+      <div className={`z-50 w-full overflow-hidden relative ${isVisible ? 'transition-height' : 'h-0'}`}>
+        <div className="w-12/12">
+          <TaskMenu />
+        </div>
       </div>
     </>
   );

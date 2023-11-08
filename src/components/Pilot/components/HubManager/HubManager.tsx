@@ -9,13 +9,15 @@ import CustomSuggestion from '../../../DatePicker/CustomSuggestions';
 import EntityManagerIcon from '../../../../assets/icons/EntityManagerIcon';
 import StatusManagement from '../../../status/StatusManagement';
 import { pilotTabs } from '../../../../app/constants/pilotTabs';
+import Permissions from '../PermissionSharing';
 
 const HubsOptions = [
   { id: pilotTabs.CREATE_HUB, element: <CreateHub /> },
   { id: pilotTabs.CREATE_WALLET, element: <CreateWallet /> },
   { id: pilotTabs.CREATE_LIST, element: <CreateList /> },
   { id: pilotTabs.CALENDAR_SETTINGS, element: <CustomSuggestion /> },
-  { id: pilotTabs.STATUS_MANAGEMENT, element: <StatusManagement /> }
+  { id: pilotTabs.STATUS_MANAGEMENT, element: <StatusManagement /> },
+  { id: pilotTabs.PERMISSIONS, element: <Permissions /> }
 ];
 
 export default function HubManager() {
