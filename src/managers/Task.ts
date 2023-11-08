@@ -681,3 +681,31 @@ export const taskMoveToListManager = (
     updatedTree
   };
 };
+
+export const findCurrentTaskManager = (
+  id: string,
+  tasks: Record<string, ITaskFullList[]>,
+  subtasks: Record<string, ITaskFullList[]>
+): ITaskFullList | null => {
+  let currentTask: ITaskFullList | null = null;
+
+  Object.keys(tasks).map((listId) => {
+    tasks[listId].map((task) => {
+      if (task.id === id) {
+        currentTask = task;
+      }
+    });
+  });
+
+  if (!currentTask) {
+    Object.keys(subtasks).map((listId) => {
+      subtasks[listId].map((task) => {
+        if (task.id === id) {
+          currentTask = task;
+        }
+      });
+    });
+  }
+
+  return currentTask;
+};

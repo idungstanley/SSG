@@ -475,6 +475,17 @@ export const archiveTask = (data: { selectedTasksArray: string[] }) => {
   return request;
 };
 
+export const unarchiveTask = (data: { selectedTasksArray: string[] }) => {
+  const request = requestNew({
+    url: 'tasks/multiple/unarchive',
+    method: 'POST',
+    data: {
+      ids: data.selectedTasksArray
+    }
+  });
+  return request;
+};
+
 export const deleteTask = (data: { selectedTasksArray: string[] }) => {
   const request = requestNew({
     url: 'tasks/multiple/delete',
