@@ -156,7 +156,9 @@ export function ScrollableHorizontalListsContainer({
         };
       }
     };
-    calculateThumbSize();
+    setTimeout(() => {
+      calculateThumbSize();
+    }, 100);
     window.addEventListener('resize', calculateThumbSize);
     return () => {
       window.removeEventListener('resize', calculateThumbSize);
@@ -174,6 +176,9 @@ export function ScrollableHorizontalListsContainer({
     showExtendedBar,
     showSidebar
   ]);
+
+  console.log('thumbWidth', thumbWidth);
+  console.log('showFullPilot', showFullPilot);
 
   // Listen for mouse events to handle scrolling by dragging the thumb
   useEffect(() => {
