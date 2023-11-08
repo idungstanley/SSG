@@ -50,6 +50,7 @@ import Duration from '../../utils/TimerDuration';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
 import {
   addNewTaskManager,
+  multipleTasksDateUpdateManager,
   taskAssignessUpdateManager,
   taskDateUpdateManager,
   taskMoveToListManager,
@@ -700,12 +701,13 @@ export const UseUpdateTaskStatusService = ({ task_id, statusDataUpdate }: Update
     }
   );
 };
+
 export const UseUpdateTaskDateService = ({
   task_id,
   taskDate,
   listIds,
-  setTaskId,
   type,
+  setTaskId,
   setResetDate
 }: {
   task_id: string;
@@ -755,6 +757,47 @@ export const UseUpdateTaskDateService = ({
     }
   );
 };
+
+export const useMultipleUpdateTasksDate = (data: { ids: string[]; type: string; date: string; listIds: string[] }) => {
+  const dispatch = useAppDispatch();
+
+  const { pickedDateState } = useAppSelector((state) => state.workspace);
+  const { tasks, subtasks } = useAppSelector((state) => state.task);
+
+  const { ids, type, date, listIds } = data;
+  return useQuery(
+    ['task', { ids, date }],
+    async () => {
+      const data = requestNew<ITaskRes>({
+        url: 'tasks/multiple/dates',
+        method: 'POST',
+        data: {
+          ids,
+          [type]: date
+        }
+      });
+      return data;
+    },
+    {
+      enabled: !!ids.length && !!date && !!type && !!pickedDateState,
+      cacheTime: 0,
+      onSuccess: () => {
+        dispatch(setPickedDateState(false));
+        const { updatedTasks, updatedSubtasks } = multipleTasksDateUpdateManager(
+          ids as string[],
+          listIds as string[],
+          tasks,
+          subtasks,
+          type as string,
+          date as string
+        );
+        dispatch(setTasks(updatedTasks as Record<string, ITaskFullList[]>));
+        dispatch(setSubtasks(updatedSubtasks as Record<string, ITaskFullList[]>));
+      }
+    }
+  );
+};
+
 export const UseUpdateTaskViewSettings = ({
   task_views_id,
   taskDate

@@ -2,11 +2,12 @@ import { useEffect, useState } from 'react';
 import DatePicker from '../../../DatePicker/DatePicker';
 import { useAppSelector } from '../../../../app/hooks';
 import { formatTimeString, parseAndUpdateTime } from '../../../../utils/TimerDuration';
-import dayjs from 'dayjs';
+import dayjs, { Dayjs } from 'dayjs';
 import { createManualTimeEntry } from '../../../../features/task/taskService';
 import toast from 'react-hot-toast';
 import SaveFilterToast from '../../../TasksHeader/ui/Filter/ui/Toast';
 import ArrowDown from '../../../../assets/icons/ArrowDown';
+import { formatForDatabase } from '../../../../utils/calendar';
 
 export function ManualTime() {
   const { HistoryFilterMemory, selectedDate, timerDetails } = useAppSelector((state) => state.task);
@@ -29,10 +30,10 @@ export function ManualTime() {
     if (selectedDate?.to) {
       mutateAsync({
         description: timerDetails.description,
-        end_date: selectedDate.to.format('YYYY-MM-DD HH:mm:ss'),
+        end_date: formatForDatabase(selectedDate.to as Dayjs),
         id: activeItemId,
         isBillable: timerDetails.isBillable,
-        start_date: selectedDate?.from?.format('YYYY-MM-DD HH:mm:ss'),
+        start_date: formatForDatabase(selectedDate?.from as Dayjs),
         type: activeItemType
       });
     } else {

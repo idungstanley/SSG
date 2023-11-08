@@ -31,6 +31,8 @@ import AlsoitMenuDropdown from '../../../../../components/DropDowns';
 import { deleteTaskManager } from '../../../../../managers/Task';
 import Assignee from '../../assignTask/Assignee';
 import { ManageTagsDropdown } from '../../../../../components/Tag/ui/ManageTagsDropdown/ui/ManageTagsDropdown';
+import { AiFillFlag } from 'react-icons/ai';
+import DateFormat from '../../../../../components/DateFormat';
 
 export default function TaskMenu() {
   const dispatch = useDispatch();
@@ -45,6 +47,7 @@ export default function TaskMenu() {
   } = useAppSelector((state) => state.task);
 
   const [isVisible, setIsVisible] = useState(false);
+  const [isHideTooltip, setHideTooltip] = useState<boolean>(false);
   const [showSelectDropdown, setShowSelectDropdown] = useState<null | HTMLSpanElement | HTMLDivElement>(null);
 
   useEffect(() => {
@@ -132,7 +135,7 @@ export default function TaskMenu() {
       isVisible: true
     },
     {
-      id: 'move_tasks_or_add_tasks_in multiple_lists',
+      id: 'move_tasks_or_add_tasks_in_multiple_lists',
       label: 'Move tasks or add tasks in multiple Lists',
       icons: <MdOutlineDriveFileMove color="orange" opacity={0.5} />,
       handleClick: () => ({}),
@@ -158,14 +161,14 @@ export default function TaskMenu() {
     {
       id: 'set_dates',
       label: 'Set Dates',
-      icons: <MdDateRange color="orange" opacity={0.5} />,
+      icons: <DateFormat date="" icon={<MdDateRange className="h-5 w-5 text-white" />} />,
       handleClick: () => ({}),
       isVisible: true
     },
     {
       id: 'priority',
       label: 'Priority',
-      icons: <PriorityDropdown taskCurrentPriority="low" />,
+      icons: <PriorityDropdown taskCurrentPriority="low" icon={<AiFillFlag className="h-4 w-5 text-white" />} />,
       handleClick: () => ({}),
       isVisible: true
     },
@@ -287,10 +290,13 @@ export default function TaskMenu() {
         <div className="flex">
           {TaskIcons.map((menu) => (
             <Fragment key={menu.id}>
-              <ToolTip className="pt-2" title={menu.label} placement="bottom">
+              <ToolTip className="pt-2" title={isHideTooltip ? '' : menu.label} placement="bottom">
                 <p
                   className="flex items-center px-2 mt-0 text-lg text-white cursor-pointer"
-                  onClick={(e) => menu.handleClick(e)}
+                  onClick={(e) => {
+                    menu.handleClick(e);
+                    setHideTooltip(!isHideTooltip);
+                  }}
                   key={menu.id}
                 >
                   {menu.icons}

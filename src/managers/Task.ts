@@ -146,6 +146,49 @@ export const taskDateUpdateManager = (
   return tasks;
 };
 
+export const multipleTasksDateUpdateManager = (
+  taskIds: string[],
+  listIds: string[],
+  tasks: Record<string, ITaskFullList[]>,
+  subtasks: Record<string, ITaskFullList[]>,
+  dateType: string,
+  newDate: string
+) => {
+  if (listIds.length) {
+    const updatedTasks = { ...tasks };
+    const updatedSubtasks = { ...subtasks };
+    const uniqListIds = [...new Set(listIds)];
+
+    uniqListIds.forEach((id) => {
+      if (updatedTasks[id]) {
+        updatedTasks[id] = updatedTasks[id].map((task) => {
+          if (taskIds.includes(task.id)) {
+            return {
+              ...task,
+              [dateType]: newDate
+            };
+          }
+          return task;
+        });
+      }
+
+      if (updatedSubtasks[id]) {
+        updatedSubtasks[id] = updatedSubtasks[id].map((task) => {
+          if (taskIds.includes(task.id)) {
+            return {
+              ...task,
+              [dateType]: newDate
+            };
+          }
+          return task;
+        });
+      }
+    });
+    return { updatedTasks, updatedSubtasks };
+  }
+  return { tasks, subtasks };
+};
+
 export const taskColourManager = (listId: string, tasks: Record<string, ITaskFullList[]>, color: string) => {
   if (listId) {
     // eslint-disable-next-line
