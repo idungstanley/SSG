@@ -1,7 +1,7 @@
 import { IList } from '../features/hubs/hubs.interfaces';
 import { IField, IFieldValue, ITask_statuses } from '../features/list/list.interfaces';
 import { ITeamMembersAndGroup } from '../features/settings/teamMembersAndGroups.interfaces';
-import { IStatus, ITaskFullList } from '../features/task/interface.tasks';
+import { IStatus, ITaskFullList, TaskId } from '../features/task/interface.tasks';
 import { ICustomField } from '../features/task/taskSlice';
 import { Hub } from '../pages/workspace/hubs/components/ActiveTree/activetree.interfaces';
 import { findCurrentList, updateListTasksCountManager } from './List';
@@ -174,6 +174,55 @@ export const deleteTaskManager = (taskIds: string[], listIds: string[], tasks: R
     }
     return updatedTasks;
   }
+  return tasks;
+};
+
+export const taskWatchersUpdateManager = (
+  taskIds: string[],
+  listIds: string[],
+  tasks: Record<string, ITaskFullList[]>,
+  subtasks: Record<string, ITaskFullList[]>,
+  userData: ITeamMembersAndGroup
+) => {
+  if (listIds.length) {
+    const updatedTasks = { ...tasks };
+    const updatedSubtasks = { ...subtasks };
+    const uniqListIds = [...new Set(listIds)];
+
+    uniqListIds.forEach((id) => {
+      if (updatedTasks[id]) {
+        updatedTasks[id] = updatedTasks[id].map((task) => {
+          if (taskIds.includes(task.id)) {
+            const updatedWatchers = [...task.watchers, userData];
+            return {
+              ...task,
+              watchers: task.watchers.length
+                ? (updatedWatchers as ITeamMembersAndGroup[])
+                : ([userData] as ITeamMembersAndGroup[])
+            };
+          }
+          return task;
+        });
+      }
+
+      if (updatedSubtasks[id]) {
+        updatedSubtasks[id] = updatedSubtasks[id].map((task) => {
+          if (taskIds.includes(task.id)) {
+            const updatedWatchers = [...task.watchers, userData];
+            return {
+              ...task,
+              watchers: task.watchers.length
+                ? (updatedWatchers as ITeamMembersAndGroup[])
+                : ([userData] as ITeamMembersAndGroup[])
+            };
+          }
+          return task;
+        });
+      }
+    });
+    return { updatedTasks, updatedSubtasks };
+  }
+
   return tasks;
 };
 
@@ -381,7 +430,8 @@ const removeTaskFromOldPlace = (
   draggableTask: ITaskFullList,
   newTasks: Record<string, ITaskFullList[]>,
   newSubtasks: Record<string, ITaskFullList[]>,
-  hub: Hub[]
+  hub: Hub[],
+  selectedTasksArray?: TaskId[]
 ) => {
   let newTree = [...hub];
 
@@ -389,8 +439,14 @@ const removeTaskFromOldPlace = (
     // search in subtasks
     const filteredArray: ITaskFullList[] = [];
     newSubtasks[draggableTask.parent_id].forEach((task) => {
-      if (task.id !== draggableTask.id) {
-        filteredArray.push(task);
+      if (selectedTasksArray) {
+        if (!selectedTasksArray.includes(task.id)) {
+          filteredArray.push(task);
+        }
+      } else {
+        if (task.id !== draggableTask.id) {
+          filteredArray.push(task);
+        }
       }
     });
     if (filteredArray.length) {
@@ -406,7 +462,7 @@ const removeTaskFromOldPlace = (
         if (sub.id === draggableTask.parent_id) {
           return {
             ...sub,
-            descendants_count: sub.descendants_count - 1
+            descendants_count: sub.descendants_count - (selectedTasksArray ? selectedTasksArray.length : 1)
           };
         }
         return sub;
@@ -416,7 +472,7 @@ const removeTaskFromOldPlace = (
       if (task.id === draggableTask.parent_id) {
         return {
           ...task,
-          descendants_count: task.descendants_count - 1
+          descendants_count: task.descendants_count - (selectedTasksArray ? selectedTasksArray.length : 1)
         };
       }
       return task;
@@ -425,8 +481,14 @@ const removeTaskFromOldPlace = (
     // search in tasks
     const filteredArray: ITaskFullList[] = [];
     newTasks[draggableTask.list_id].forEach((task) => {
-      if (task.id !== draggableTask.id) {
-        filteredArray.push(task);
+      if (selectedTasksArray) {
+        if (!selectedTasksArray.includes(task.id)) {
+          filteredArray.push(task);
+        }
+      } else {
+        if (task.id !== draggableTask.id) {
+          filteredArray.push(task);
+        }
       }
     });
     if (filteredArray.length) {
@@ -520,7 +582,8 @@ export const taskMoveToListManager = (
   dragOverList: IList,
   tasks: Record<string, ITaskFullList[]>,
   subtasks: Record<string, ITaskFullList[]>,
-  hub: Hub[]
+  hub: Hub[],
+  selectedTasksArray?: TaskId[]
 ) => {
   let updatedTasks = { ...tasks };
   let updatedSubtasks = { ...subtasks };
@@ -531,7 +594,8 @@ export const taskMoveToListManager = (
     draggableTask,
     updatedTasks,
     updatedSubtasks,
-    updatedTree
+    updatedTree,
+    selectedTasksArray
   );
   updatedTasks = newTasks;
   updatedSubtasks = newSubtasks;
@@ -560,7 +624,11 @@ export const taskMoveToListManager = (
   }
   const listId = dragOverList.id;
   const currentList = findCurrentList(listId, updatedTree);
-  updatedTree = updateListTasksCountManager(listId as string, updatedTree, currentList.tasks_count + 1);
+  updatedTree = updateListTasksCountManager(
+    listId as string,
+    updatedTree,
+    currentList.tasks_count + (selectedTasksArray ? selectedTasksArray.length : 1)
+  );
 
   return {
     updatedTasks,

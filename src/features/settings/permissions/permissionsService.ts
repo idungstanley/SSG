@@ -96,7 +96,7 @@ export const changeRolePermissionService = (data: {
   const response = requestNew<{ data: { updated_permissions: IPermission[] } }>({
     url: 'settings/permissions/change-role-permission',
     method: 'POST',
-    params: {
+    data: {
       team_member_role_key: data.teamMemberRoleKey,
       workspace_permission_key: data.workspacePermissionKey,
       permission_allowed: data.isPermissionAllowed

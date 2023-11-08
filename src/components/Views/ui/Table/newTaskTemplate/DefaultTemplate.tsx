@@ -44,6 +44,7 @@ export const defaultTaskTemplate: ITaskFullList[] = [
     },
     tags: [],
     task_statuses: [],
-    updated_at: ''
+    updated_at: '',
+    watchers: []
   }
 ];

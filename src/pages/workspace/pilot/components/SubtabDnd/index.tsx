@@ -3,7 +3,8 @@ import { useDispatch } from 'react-redux';
 import {
   setActiveSubCommunicationTabId,
   setActiveSubDetailsTabId,
-  setActiveSubHubManagerTabId
+  setActiveSubHubManagerTabId,
+  setActiveSubLogsTabId
 } from '../../../../../features/workspace/workspaceSlice';
 import useFindNeighbors, { NeighborsProps } from '../../../../../hooks/useFindNeighbors';
 import { pilotTabs } from '../../../../../app/constants/pilotTabs';
@@ -49,6 +50,8 @@ export default function SubtabDrag({ id, item, items, icon, showPilot, activeSub
       dispatch(setActiveSubDetailsTabId(id));
     } else if (name === 'hubmanager') {
       dispatch(setActiveSubHubManagerTabId(id));
+    } else if (name === pilotTabs.LOGS) {
+      dispatch(setActiveSubLogsTabId(id));
     }
   };
 
@@ -66,7 +69,7 @@ export default function SubtabDrag({ id, item, items, icon, showPilot, activeSub
   };
 
   return (
-    <section className="flex flex-col w-full bg-gray-100 divide-x" key={id} style={style}>
+    <section className="relative flex items-center w-full bg-gray-100" key={id} style={style}>
       <div
         key={id}
         onClick={() => handleClick(id)}
@@ -78,14 +81,15 @@ export default function SubtabDrag({ id, item, items, icon, showPilot, activeSub
         <span
           className={`${!showPilot && 'text-xs'} ${
             id === activeSub && !showPilot && 'bg-green-500 p-2 rounded'
-          } flex items-center gap-1`}
+          } flex items-center gap-1 w-full`}
         >
-          <span className="focus:cursor-move" ref={setNodeRef} {...attributes} {...listeners}>
+          <span className="pl-3 focus:cursor-move" ref={setNodeRef} {...attributes} {...listeners}>
             {icon ? icon : <img src={source} alt="Hub Icon" className="w-2 h-2" />}
           </span>
           {item && <p className="truncate">{item.name}</p>}
         </span>
       </div>
+      <span className="absolute right-0 text-gray-300">|</span>
     </section>
   );
 }

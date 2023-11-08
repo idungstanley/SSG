@@ -17,8 +17,8 @@ const COMMON_WIDTH = 1550;
 
 const PILOT_WIDTH = {
   DEFAULT: 22,
-  MAX: 28,
-  MIN: 20
+  MAX: 34.27,
+  MIN: 26
 } as const;
 
 const NAVIGATION_BAR_WIDTH = {

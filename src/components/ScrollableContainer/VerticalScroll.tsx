@@ -210,8 +210,8 @@ export function VerticalScroll({ children, bgColor, ...props }: CustomScrollable
   };
 
   return (
-    <div className={`relative flex w-full pr-1 overflow-hidden ${bgColor}`}>
-      <div className="mr-1 scrollbar-hide grow" ref={contentRef} {...props}>
+    <div className={`relative flex w-full overflow-hidden ${bgColor} ${isThumbVisible ? 'pr-1' : ''}`}>
+      <div className={`scrollbar-hide grow ${isThumbVisible ? 'mr-1' : ''} `} ref={contentRef} {...props}>
         {children}
       </div>
       {isThumbVisible && (

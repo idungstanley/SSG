@@ -1,20 +1,10 @@
-import {
-  ChatBubbleLeftEllipsisIcon,
-  DocumentTextIcon,
-  EyeIcon,
-  InformationCircleIcon,
-  SignalIcon
-} from '@heroicons/react/24/outline';
+import { ChatBubbleLeftEllipsisIcon, DocumentTextIcon, EyeIcon, SignalIcon } from '@heroicons/react/24/outline';
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
-import ChatForPilot from '../../../../../components/Chat/ChatForPilot';
 import CommentsForPilot from '../../../../../components/Comments/CommentsForPilot';
-import History from '../../../../../components/Pilot/components/History';
 import WatchersForPilot from '../../../../../components/Watchers/WatchersForPilot';
 import { setShowPilotSideOver } from '../../../../../features/general/slideOver/slideOverSlice';
-import { VscChecklist } from 'react-icons/vsc';
-import Checklists from '../../../../../components/Pilot/components/Checklist/Checklist';
 import Details from '../../../../../components/Pilot/components/details/Details';
 import TimeClock from './components/TimeClock';
 import HubManager from '../../../../../components/Pilot/components/HubManager/HubManager';
@@ -28,6 +18,9 @@ import { UtilityIcon } from '../../../../../assets/icons/Utility';
 import { pilotTabs } from '../../../../../app/constants/pilotTabs';
 import Views from '../../../../../components/Pilot/components/Views/Index';
 import PilotViewIcon from '../../../../../assets/icons/PilotViewIcon';
+import { DetailsIcon } from '../../../../../assets/icons';
+import Commnunication from '../../../pilot/components/communication/Communication';
+import Logs from '../../../../../components/Pilot/components/Logs/Logs';
 
 const sections = [
   {
@@ -36,7 +29,7 @@ const sections = [
   },
   {
     id: pilotTabs.LOGS,
-    element: <History />
+    element: <Logs />
   },
   {
     id: pilotTabs.COMMENTS,
@@ -48,15 +41,11 @@ const sections = [
   },
   {
     id: pilotTabs.CONNECT,
-    element: <ChatForPilot />
+    element: <Commnunication />
   },
   {
     id: pilotTabs.UTILITIES,
     element: <TimeClock />
-  },
-  {
-    id: pilotTabs.CHECKLISTS,
-    element: <Checklists />
   },
   {
     id: pilotTabs.ENTITY_MANAGER,
@@ -80,7 +69,7 @@ const tabs = [
   {
     id: pilotTabs.DETAILS,
     label: 'Details',
-    icon: <InformationCircleIcon className="w-4 h-4" />
+    icon: <DetailsIcon active={false} dimensions={{ width: 15, height: 15 }} />
   },
   {
     id: pilotTabs.LOGS,
@@ -106,11 +95,6 @@ const tabs = [
     id: pilotTabs.UTILITIES,
     label: 'Utilities',
     icon: <UtilityIcon />
-  },
-  {
-    id: pilotTabs.CHECKLISTS,
-    label: 'Checklists',
-    icon: <VscChecklist className="w-4 h-4" />
   },
   {
     id: pilotTabs.ENTITY_MANAGER,
@@ -147,7 +131,6 @@ export default function PilotSection() {
   // set data for pilot
   useEffect(() => {
     const selectedItemId = hubId;
-
     if (selectedItemId) {
       dispatch(
         setShowPilotSideOver({

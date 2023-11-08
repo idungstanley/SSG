@@ -55,7 +55,7 @@ const changeNotificationSetting = (data: INotification) => {
   const request = requestNew({
     url: 'notification-settings',
     method: 'POST',
-    params: {
+    data: {
       category,
       type,
       notification_type,

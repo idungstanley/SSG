@@ -1,6 +1,7 @@
 import requestNew from '../../app/requestNew';
 import {
   IAttachmentsRes,
+  ICheckListRes,
   IFullTaskRes,
   ITaskCreateProps,
   ITaskFullList,
@@ -21,8 +22,10 @@ import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import {
   SortOption,
   setAssignOnHoverState,
+  setCurrentTeamMemberId,
   setDuplicateTaskObj,
   setNewTaskPriority,
+  setRootTaskIds,
   setScreenRecording,
   setScreenRecordingMedia,
   setSelectedListIds,
@@ -53,18 +56,30 @@ import {
   taskMoveToSubtaskManager,
   taskPriorityUpdateManager,
   taskStatusUpdateManager,
+  taskWatchersUpdateManager,
   updateTaskSubtasksCountManager
 } from '../../managers/Task';
 import { ITeamMembersAndGroup } from '../settings/teamMembersAndGroups.interfaces';
 import { useDispatch } from 'react-redux';
 import { updateListTasksCountManager } from '../../managers/List';
-import { getHub } from '../hubs/hubSlice';
+import { getHub, setStatusesToMatch } from '../hubs/hubSlice';
 import { setFilteredResults } from '../search/searchSlice';
 import { addNewSubtaskManager } from '../../managers/Subtask';
 import { IList } from '../hubs/hubs.interfaces';
 import { setDragOverList, setDragOverTask, setDraggableItem } from '../list/listSlice';
 import { FilterWithId, FiltersOption } from '../../components/TasksHeader/ui/Filter/types/filters';
 import { pilotTabs } from '../../app/constants/pilotTabs';
+import { setChecklists } from './checklist/checklistSlice';
+import { StatusProps } from '../../pages/workspace/hubs/components/ActiveTree/activetree.interfaces';
+import { setMatchData } from '../general/prompt/promptSlice';
+
+export const useDeleteAttachment = ({ id }: { id: string }) => {
+  const data = requestNew({
+    url: `attachments/${id}`,
+    method: 'DELETE'
+  });
+  return data;
+};
 
 export const useGetAttachments = (query: {
   activeItemId: string | null | undefined;
@@ -124,28 +139,6 @@ export const UseSaveTaskFilters = () => {
   return mutation;
 };
 
-export const moveTask = (data: { taskId: TaskId; moveAfterId?: string; listId?: string; overType: string }) => {
-  const { taskId, listId, overType, moveAfterId } = data;
-  let requestData = {};
-  if (overType === EntityType.list) {
-    requestData = {
-      list_id: listId
-    };
-  } else if (overType === EntityType.task && moveAfterId) {
-    requestData = {
-      move_after_id: moveAfterId
-    };
-  } else {
-    requestData = { parent_id: listId };
-  }
-  const response = requestNew({
-    url: 'tasks/' + taskId + '/move',
-    method: 'POST',
-    data: requestData
-  });
-  return response;
-};
-
 export const useSaveData = () => {
   const mutation = useMutation(
     async ({ key, value }: { key: string; value: IUserCalendarParams } | ITimeEntryParams) => {
@@ -177,6 +170,124 @@ export const useGetUserSettingsData = ({ keys }: { keys: string }) => {
     return data;
   });
 };
+
+export const multipleTaskMove = (data: {
+  taskIds: TaskId[];
+  moveAfterId?: string;
+  listId?: string;
+  overType: string;
+  status_matches?: { from: string; to: string }[];
+}) => {
+  const { taskIds, listId, overType, moveAfterId } = data;
+  let requestData = {};
+  if (overType === EntityType.list) {
+    requestData = {
+      list_id: listId
+    };
+  } else if (overType === EntityType.task && moveAfterId) {
+    requestData = {
+      move_after_id: moveAfterId
+    };
+  } else {
+    requestData = { parent_id: listId };
+  }
+  const response = requestNew({
+    url: 'tasks/multiple/move',
+    method: 'POST',
+    data: { ...requestData, ids: taskIds, status_matches: data.status_matches }
+  });
+  return response;
+};
+
+interface ErrorMultipleMoveResponse {
+  data: {
+    data: {
+      allowed_statuses: StatusProps[];
+      match_status: StatusProps[];
+    };
+  };
+}
+
+export const useMultipleTaskMove = () => {
+  const dispatch = useDispatch();
+
+  const { draggableTask, dragOverList } = useAppSelector((state) => state.list);
+  const { tasks, subtasks, selectedTasksArray } = useAppSelector((state) => state.task);
+  const { hub } = useAppSelector((state) => state.hub);
+
+  return useMutation(multipleTaskMove, {
+    onSuccess: () => {
+      if (dragOverList) {
+        // move to list
+        const { updatedTasks, updatedSubtasks, updatedTree } = taskMoveToListManager(
+          draggableTask as ITaskFullList,
+          dragOverList as IList,
+          tasks,
+          subtasks,
+          hub,
+          selectedTasksArray
+        );
+        dispatch(setTasks(updatedTasks));
+        dispatch(setSubtasks(updatedSubtasks));
+        dispatch(getHub(updatedTree));
+        dispatch(setFilteredResults(updatedTree));
+      }
+      dispatch(setSelectedTasksArray([]));
+      dispatch(setDraggableItem(null));
+      dispatch(setDragOverList(null));
+      dispatch(setDragOverTask(null));
+    },
+    onError: (err: ErrorMultipleMoveResponse) => {
+      const matchData = err.data.data.match_status;
+      if (matchData) {
+        dispatch(setMatchData(matchData));
+        dispatch(setStatusesToMatch(err.data.data.allowed_statuses));
+      }
+    }
+  });
+};
+
+export const moveTask = (data: {
+  taskId: TaskId;
+  moveAfterId?: string;
+  listId?: string;
+  overType: string;
+  status_from?: string;
+  status_to?: string;
+}) => {
+  const { taskId, listId, overType, moveAfterId } = data;
+  let requestData = {};
+  if (overType === EntityType.list) {
+    requestData = {
+      list_id: listId
+    };
+  } else if (overType === EntityType.task && moveAfterId) {
+    requestData = {
+      move_after_id: moveAfterId
+    };
+  } else {
+    requestData = { parent_id: listId };
+  }
+  const response = requestNew({
+    url: 'tasks/' + taskId + '/move',
+    method: 'POST',
+    data: {
+      ...requestData,
+      status_from: data.status_from,
+      status_to: data.status_to
+    }
+  });
+  return response;
+};
+
+interface ErrorMoveResponse {
+  data: {
+    data: {
+      available_task_statuses: StatusProps[];
+      status: StatusProps;
+    };
+  };
+}
 
 export const useMoveTask = () => {
   const dispatch = useDispatch();
@@ -218,6 +329,13 @@ export const useMoveTask = () => {
       dispatch(setDraggableItem(null));
       dispatch(setDragOverList(null));
       dispatch(setDragOverTask(null));
+    },
+    onError: (err: ErrorMoveResponse) => {
+      const matchData = err.data.data.status;
+      if (matchData) {
+        dispatch(setMatchData([matchData]));
+        dispatch(setStatusesToMatch(err.data.data.available_task_statuses));
+      }
     }
   });
 };
@@ -345,6 +463,17 @@ export const useDuplicateTask = (task?: Task) => {
   });
 };
 
+export const archiveTask = (data: { selectedTasksArray: string[] }) => {
+  const request = requestNew({
+    url: 'tasks/multiple/archive',
+    method: 'POST',
+    data: {
+      ids: data.selectedTasksArray
+    }
+  });
+  return request;
+};
+
 export const deleteTask = (data: { selectedTasksArray: string[] }) => {
   const request = requestNew({
     url: 'tasks/multiple/delete',
@@ -415,15 +544,13 @@ export const UseGetFullTaskList = ({
       return requestNew<IFullTaskRes>({
         url: 'tasks/full-list',
         method: 'POST',
-        params: {
+        data: {
+          filters,
+          sorting: sortArrUpdate,
           expand_all: toggleAllSubtask || separateSubtasksMode || splitSubTaskState ? 1 : 0,
           page: pageParam,
           hub_id,
           wallet_id
-        },
-        data: {
-          filters,
-          sorting: sortArrUpdate
         }
       });
     },
@@ -446,18 +573,25 @@ export const UseGetFullTaskList = ({
 };
 
 export const getOneTaskServices = ({ task_id }: { task_id: string | undefined | null }) => {
+  const dispatch = useAppDispatch();
   return useQuery(
     ['task', { task_id: task_id }],
     async () => {
       const data = await requestNew<ITaskRes | undefined>({
         url: `tasks/${task_id}`,
-        method: 'GET'
+        method: 'GET',
+        params: { include_root_ids: 1 }
       });
       return data;
     },
     {
       // enabled: false
-      enabled: task_id != null
+      onSuccess: (data) => {
+        dispatch(setRootTaskIds(data?.data.task.root_task_ids));
+        dispatch(setChecklists(data?.data.task.checklists as ICheckListRes[]));
+      },
+      enabled: task_id != null,
+      cacheTime: 0
     }
   );
 };
@@ -493,7 +627,7 @@ export const UseCreateCheckList = ({ task_id, trigger }: { task_id: string; trig
       const data = await requestNew({
         url: `tasks/${task_id}/checklist`,
         method: 'POST',
-        params: {
+        data: {
           name: 'Checklist'
         }
       });
@@ -537,7 +671,7 @@ export const UseUpdateTaskStatusService = ({ task_id, statusDataUpdate }: Update
       const data = requestNew<ITaskRes>({
         url: `tasks/${task_id}`,
         method: 'PUT',
-        params: {
+        data: {
           task_status_id: statusDataUpdate
         }
       });
@@ -727,14 +861,12 @@ export const getTaskListService = (listId: string | null | undefined) => {
       return requestNew<ITaskListRes>({
         url: 'tasks/list',
         method: 'POST',
-        params: {
+        data: {
+          sorting: sortArrUpdate,
+          filters,
           expand_all: toggleAllSubtask || separateSubtasksMode || splitSubTaskState ? 1 : 0,
           list_id: listId,
           page: pageParam
-        },
-        data: {
-          sorting: sortArrUpdate,
-          filters
         }
       });
     },
@@ -759,7 +891,8 @@ export const useSubTasks = (parentId: string, subtasks: Record<string, ITaskFull
         url: 'tasks/list',
         method: 'POST',
         data: {
-          parent_id: parentId
+          parent_id: parentId,
+          include_root_ids: 1
         }
       }),
     {
@@ -774,7 +907,7 @@ export const createTimeEntriesService = (data: { queryKey: (string | undefined)[
   const response = requestNew({
     url: 'time-entries/start',
     method: 'POST',
-    params: {
+    data: {
       type: EntityType.task,
       id: taskID
     }
@@ -815,7 +948,7 @@ export const createManualTimeEntry = () => {
       return response;
     },
     {
-      onSuccess: () => queryClient.invalidateQueries(['timeclock'])
+      onSuccess: () => queryClient.invalidateQueries(['timeEntries'])
     }
   );
   return { data, isError, isLoading, mutateAsync, isSuccess };
@@ -896,7 +1029,7 @@ export const StartTimeEntryService = () => {
       const res = await requestNew({
         url: 'time-entries/start',
         method: 'POST',
-        params: {
+        data: {
           type: query.type,
           id: query.taskId
         }
@@ -922,7 +1055,7 @@ export const EndTimeEntriesService = () => {
       const response = await requestNew({
         url: 'time-entries/stop',
         method: 'POST',
-        params: {
+        data: {
           description: data.description,
           isbillable: data.is_Billable
         }
@@ -1016,12 +1149,17 @@ async function fetchTimeEntries({
 
 export function useGetTimeEntriesMutation() {
   const dispatch = useAppDispatch();
+  const { currentUserId } = useAppSelector((state) => state.auth);
   return useMutation(fetchTimeEntries, {
     onSuccess(data) {
       const teammembers = data?.data.time_entries.map((member) => member.team_member);
+      const currentTeamMember = teammembers?.map((member) => {
+        if (member.user.id === currentUserId) return member.id;
+      });
 
       dispatch(setTimeAssigneeFilter(data));
       dispatch(setTimeAssignee(teammembers));
+      currentTeamMember && dispatch(setCurrentTeamMemberId(currentTeamMember));
     }
   });
 }
@@ -1066,7 +1204,7 @@ export const UpdateTimeEntriesService = (data: {
   const response = requestNew({
     url: `time-entries/${data.time_entry_id}`,
     method: 'PUT',
-    params: {
+    data: {
       description: data.description,
       is_billable: data.isBillable,
       start_date: data.start_date,
@@ -1103,7 +1241,7 @@ export const AddWatcherService = ({ query }: { query: (string | undefined | null
       const data = await requestNew({
         url: 'watch',
         method: 'POST',
-        params: {
+        data: {
           type: EntityType.task,
           id: query[1],
           team_member_ids: [query[0]]
@@ -1130,7 +1268,7 @@ export const RemoveWatcherService = ({ query }: { query: (string | null | undefi
       const data = await requestNew({
         url: 'watch/remove',
         method: 'POST',
-        params: {
+        data: {
           type: EntityType.task,
           id: query[1],
           team_member_ids: [query[0]]
@@ -1148,13 +1286,40 @@ export const RemoveWatcherService = ({ query }: { query: (string | null | undefi
   );
 };
 
+// Assign Watchers
+const watchersAssignTask = ({ ids, team_member_ids }: { ids: string[]; team_member_ids: string[] | null }) => {
+  const request = requestNew({
+    url: 'tasks/multiple/watchers',
+    method: 'POST',
+    data: { ids, team_member_ids }
+  });
+  return request;
+};
+
+export const UseTaskWatchersAssignService = (taskIds: string[], user: ITeamMembersAndGroup, listIds: string[]) => {
+  const dispatch = useAppDispatch();
+  const { tasks, subtasks } = useAppSelector((state) => state.task);
+
+  return useMutation(watchersAssignTask, {
+    onSuccess: () => {
+      dispatch(setAssignOnHoverState(false));
+      const { updatedTasks, updatedSubtasks } = taskWatchersUpdateManager(taskIds, listIds, tasks, subtasks, user);
+      dispatch(setTasks(updatedTasks as Record<string, ITaskFullList[]>));
+      dispatch(setSubtasks(updatedSubtasks as Record<string, ITaskFullList[]>));
+      dispatch(setToggleAssignCurrentTaskId(null));
+      dispatch(setSelectedTasksArray([]));
+      dispatch(setSelectedListIds([]));
+    }
+  });
+};
+
 // Assign Checklist Item
 const AssignTask = ({
-  taskIds,
+  ids,
   team_member_id,
   teams
 }: {
-  taskIds: string[];
+  ids: string[];
   team_member_id: string | null;
   teams: boolean;
 }) => {
@@ -1162,7 +1327,7 @@ const AssignTask = ({
     url: teams ? '/group-assignee/assign' : '/tasks/multiple/assignees',
     method: 'POST',
     data: {
-      ids: taskIds,
+      ids: ids,
       ...(teams ? { team_member_group_id: team_member_id } : { team_member_ids: [team_member_id] }),
       type: EntityType.task
     }
@@ -1435,11 +1600,9 @@ const updateSubtaskFilters = (data: { parentId: string; filters: { op: FiltersOp
   const response = requestNew<IFullTaskRes>({
     url: 'tasks/list',
     method: 'POST',
-    params: {
-      parent_id: data.parentId
-    },
     data: {
-      filters
+      filters,
+      parent_id: data.parentId
     }
   });
   return response;

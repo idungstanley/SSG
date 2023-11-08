@@ -127,7 +127,7 @@ export default function ColumnTypeDropdown() {
           className="bg-white flex gap-4 items-center justify-between cursor-pointer w-full px-2"
           style={{ height: '30px', borderRadius: '6px' }}
         >
-          <p className="text-black text-alsoit-gray-300-md font-semibold">
+          <p className="text-black text-alsoit-gray-300-md font-semibold w-full truncate">
             {Capitalize(newCustomPropertyDetails.type)}
           </p>
           <ArrowDown className="w-4 h-4" />
