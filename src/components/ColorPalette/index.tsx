@@ -84,6 +84,7 @@ export default function PaletteManager({
   const [selectedViews, setSelectedViews] = useState<string>(paletteViews.BOARD);
   const [isSearch, setIsSearch] = useState<boolean>(false);
   const [showListShapeSelection, setShowListShapeSelection] = useState<null | HTMLDivElement>(null);
+  const [color, setColor] = useState<string | ListColourProps | null>(null);
   const { paletteId, paletteType } = paletteDropdown;
 
   const closeMenu = () => {
@@ -91,6 +92,10 @@ export default function PaletteManager({
     dispatch(setPaletteDropDown({ ...paletteDropdown, show: false }));
     dispatch(setListPaletteColor({ innerColour: 'white', outerColour: 'black' }));
     dispatch(setSelectedListColours([]));
+  };
+
+  const handleSelectColor = (color: string | null | ListColourProps) => {
+    setColor(color);
   };
 
   const handleCancel = () => {
@@ -158,7 +163,7 @@ export default function PaletteManager({
     dispatch(setSelectedListColours([]));
   };
 
-  const handleClick = (color?: string | ListColourProps | null) => {
+  const handleClick = () => {
     if (paletteType === EntityType.hub) {
       editHubColorMutation.mutateAsync({
         hubId: paletteId,
@@ -194,8 +199,8 @@ export default function PaletteManager({
       label: paletteViews.BOARD,
       element: (
         <ColorPalette
-          activeColor={isInnerFrameActive ? activeInnerColor : activeOutterColor}
-          handleClick={handleClick}
+          activeColor={color ? (color as string) : isInnerFrameActive ? activeInnerColor : activeOutterColor}
+          handleClick={handleSelectColor}
         />
       ),
       icon: <GridViews color={selectedViews === paletteViews.BOARD ? 'rgb(191, 0, 255)' : '#424242'} />
@@ -392,6 +397,8 @@ export default function PaletteManager({
               labelSize="text-xs truncate"
               padding="p-1"
               buttonStyle="custom"
+              onClick={handleClick}
+              disabled={color === null}
             />
           </div>
           {bottomContent}
