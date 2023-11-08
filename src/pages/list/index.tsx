@@ -103,7 +103,7 @@ export function ListPage() {
     } else {
       dispatch(setSaveSettingOnline(saveSettingLocal));
     }
-  }, [listDetails]);
+  }, [listDetails, saveSettingList]);
 
   useEffect(() => {
     if (tasksFromRes.length && listId && listDetailsFromRes?.data.list.custom_field_columns) {
