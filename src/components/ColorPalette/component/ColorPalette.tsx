@@ -18,8 +18,8 @@ export default function ColorPalette({ handleClick, activeColor }: PaletteProps)
     <div key={c.id} className="group">
       <div
         className={cl(
-          activeColor === c.color ? 'border rounded-md  w-9 h-9' : '',
-          'relative group-hover:border group-hover:w-9 group-hover:h-9 rounded-md flex items-center justify-center group-hover:border-alsoit-gray-75'
+          activeColor === c.color ? 'border rounded-md ' : '',
+          'relative group-hover:border group-hover:w-9 w-9 h-9 group-hover:h-9 rounded-md flex items-center justify-center group-hover:border-alsoit-gray-75'
         )}
         style={{ borderColor: activeColor === c.color ? `${c.color}` : 'border-alsoit-gray-75' }}
         onClick={() => handleClick(c.color)}
