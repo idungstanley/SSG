@@ -1,8 +1,13 @@
-/* eslint-disable max-len */
+import { DetailedHTMLProps, SVGAttributes } from 'react';
 
-export function ManualTimeIcon() {
+/* eslint-disable max-len */
+interface Props extends DetailedHTMLProps<SVGAttributes<SVGElement>, SVGSVGElement> {
+  active?: boolean;
+}
+
+export function ManualTimeIcon({ ...props }: Props) {
   return (
-    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg {...props} viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
       <mask
         id="mask0_3605_24993"
         style={{ maskType: 'alpha' }}

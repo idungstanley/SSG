@@ -53,7 +53,7 @@ export function CombinedTime({ timeData }: Props) {
               <div className="flex items-center space-x-1.5">
                 <label
                   htmlFor="timeClockTrackers"
-                  className="relative flex items-center justify-between px-1 cursor-pointer rounded-tl-lg rounded-br-lg w-32 py-2 bg-alsoit-gray-75"
+                  className="relative flex items-center justify-between px-1 cursor-pointer rounded-tl-lg rounded-br-lg w-32 py-2 bg-alsoit-gray-75 z-50"
                   onClick={() => setDropDown((prev) => ({ ...prev, tabDrop: !prev.tabDrop }))}
                 >
                   <div className="cursor-pointer bg-alsoit-gray-100 rounded-xl">
@@ -76,7 +76,7 @@ export function CombinedTime({ timeData }: Props) {
                     >
                       {[
                         { entry: TIME_TABS.realTime, icon: <RealTimeIcon /> },
-                        { entry: TIME_TABS.manual, icon: <ManualTimeIcon /> }
+                        { entry: TIME_TABS.manual, icon: <ManualTimeIcon className="w-5 h-5" /> }
                       ].map((item, index) => (
                         <div
                           key={index}

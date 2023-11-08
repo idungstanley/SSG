@@ -67,60 +67,65 @@ export function TimeInventory({ getTimeEntries }: Props) {
     <div className="relative bg-alsoit-gray-50 w-full rounded-md flex flex-col pt-10">
       <InventoryHeader timeData={getTimeEntries} showLog={!showLog} dropView={() => setShowLogs(!showLog)} />
       <div className="w-full max-h-72 relative">
-        {checkSelection?.length && checkSelection.length > 0 ? (
-          <div className={`time-entries-bar ${isVisible ? 'animated-component' : ''}`}>
-            <div className="flex space-x-1.5 items-center px-2">
-              <RoundedCheckbox
-                isChecked={checkSelection?.length === getTimeEntries?.data.time_entries.length}
-                onChange={() => handleClick()}
-                styles="w-3 h-3 rounded-lg checked:bg-alsoit-purple-300 focus:bg-alsoit-purple-300 active:bg-alsoit-purple-300 group-hover:visible"
-              />
-              <span className="flex space-x-1 items-center">
-                <span className="text-alsoit-text-md text-alsoit-gray-50">{checkSelection?.length}</span>
-                <span className="text-alsoit-text-md text-alsoit-gray-50">selected</span>
-              </span>
-            </div>
-            <div className="flex space-x-2.5 w-1/3 h-9 items-center">
-              <div>
-                <BespokeEntryIcon className="w-4 h-4" />
+        <div className="w-full max-h-72 relative">
+          <div className={`time-entries-bar ${isVisible ? '' : 'time-entries-bar-out'}`}>
+            <div
+              className="flex justify-between items-center"
+              style={{ transition: 'transform 1s ease', height: '35px' }}
+            >
+              <div className="flex space-x-1.5 items-center px-2">
+                <RoundedCheckbox
+                  isChecked={checkSelection?.length === getTimeEntries?.data.time_entries.length}
+                  onChange={() => handleClick()}
+                  styles="w-3 h-3 rounded-lg checked:bg-alsoit-purple-300 focus:bg-alsoit-purple-300 active:bg-alsoit-purple-300 group-hover:visible"
+                />
+                <span className="flex space-x-1 items-center">
+                  <span className="text-alsoit-text-md text-alsoit-gray-50">{checkSelection?.length}</span>
+                  <span className="text-alsoit-text-md text-alsoit-gray-50">selected</span>
+                </span>
               </div>
-              <div>
-                <TagIcon fixed active />
+              <div className="flex space-x-2.5 w-1/3 h-9 items-center">
+                <div>
+                  <BespokeEntryIcon className="w-4 h-4" />
+                </div>
+                <div>
+                  <TagIcon fixed active />
+                </div>
+                <div>
+                  <DependenciesIcon className="w-4 h-4" />
+                </div>
+                <div>
+                  <MoveItemIcon active fixed />
+                </div>
+                <div>
+                  <CalendarIcon active fixed />
+                </div>
+                <div>
+                  <PriorityIcon className="w-4 h-4" />
+                </div>
+                <div>
+                  <DuplicateIcon className="w-4 h-4" />
+                </div>
+                <div>
+                  <EditSquareIcon className="w-4 h-4" />
+                </div>
+                <div>
+                  <TrashIcon className="w-4 h-4" />
+                </div>
               </div>
-              <div>
-                <DependenciesIcon className="w-4 h-4" />
-              </div>
-              <div>
-                <MoveItemIcon active fixed />
-              </div>
-              <div>
-                <CalendarIcon active fixed />
-              </div>
-              <div>
-                <PriorityIcon className="w-4 h-4" />
-              </div>
-              <div>
-                <DuplicateIcon className="w-4 h-4" />
-              </div>
-              <div>
-                <EditSquareIcon className="w-4 h-4" />
-              </div>
-              <div>
-                <TrashIcon className="w-4 h-4" />
-              </div>
-            </div>
-            <div className="w-1/3 flex space-x-2 items-center justify-end">
-              <input
-                type="text"
-                className="border-alsoit-gray-50 text-alsoit-text-md bg-black text-alsoit-gray-50 w-36 h-6 rounded-md"
-                placeholder="type '/' for commands"
-              />
-              <div className="flex items-center h-6 mt-1.5">
-                <CancelIcon active fixed dimensions={{ width: 25, height: 25 }} />
+              <div className="w-1/3 flex space-x-2 items-center justify-end">
+                <input
+                  type="text"
+                  className="border-alsoit-gray-50 text-alsoit-text-md bg-black text-alsoit-gray-50 w-36 h-6 rounded-md"
+                  placeholder="type '/' for commands"
+                />
+                <div className="flex items-center h-6 mt-1.5">
+                  <CancelIcon active fixed dimensions={{ width: 25, height: 25 }} />
+                </div>
               </div>
             </div>
           </div>
-        ) : null}
+        </div>
         <VerticalScroll>
           {showLog && (
             <>
