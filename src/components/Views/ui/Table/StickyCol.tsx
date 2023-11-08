@@ -565,7 +565,7 @@ export function StickyCol({
               >
                 <div
                   className="border rounded-sm"
-                  style={{ borderColor: '#B2B2B280', borderWidth: '0.5px', width: '20px' }}
+                  style={{ borderColor: '#B2B2B2CC', borderWidth: '0.5px', height: '20px', width: '20px' }}
                   onClick={onClose}
                 >
                   <Close active={closeToggle}></Close>
