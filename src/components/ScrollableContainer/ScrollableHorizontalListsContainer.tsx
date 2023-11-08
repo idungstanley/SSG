@@ -177,9 +177,6 @@ export function ScrollableHorizontalListsContainer({
     showSidebar
   ]);
 
-  console.log('thumbWidth', thumbWidth);
-  console.log('showFullPilot', showFullPilot);
-
   // Listen for mouse events to handle scrolling by dragging the thumb
   useEffect(() => {
     document.addEventListener('mousemove', handleThumbMousemove);
