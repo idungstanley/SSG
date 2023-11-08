@@ -211,9 +211,9 @@ export default function HubItem({
       }}
     >
       <div
-        className={`bg-white truncate items-center group ${item.id !== activeItemId && 'hover:bg-alsoit-gray-50'} ${
-          isOver ? 'bg-primary-100 border-primary-500 shadow-inner shadow-primary-300' : ''
-        }`}
+        className={`bg-white w-full truncate items-center group ${
+          item.id !== activeItemId && 'hover:bg-alsoit-gray-50'
+        } ${isOver ? 'bg-primary-100 border-primary-500 shadow-inner shadow-primary-300' : ''}`}
         ref={setNodeRef}
         tabIndex={0}
       >
@@ -221,103 +221,105 @@ export default function HubItem({
           className="relative flex items-center justify-between"
           style={{ height: '30px', paddingLeft: paddingLeft() }}
         >
-          <ActiveBackground showBgColor={item.id === hubId || item.id === subhubId} />
-          <ActiveBarIdentification showBar={item.id === hubId || item.id === subhubId} />
-          {showSidebar && !isExtendedBar ? (
-            <div
-              className="absolute rounded-r-lg opacity-0 cursor-move left-2 group-hover:opacity-100"
-              ref={draggableRef}
-              {...listeners}
-              {...attributes}
-            >
-              <Drag />
-            </div>
-          ) : null}
-          {placeHubType == APP_HR && (
-            <div className="flex items-center justify-center ml-2 hr-checkbox-wrapper">
-              <Checkbox
-                styles="ml-0 mr-0 text-primary-500 focus:ring-primary-500 mx-0 hr-checkbox hr-checkbox-parent"
-                checked={checkSelectedHubs(item.id)}
-                setChecked={(e) => onCheckbox(e, item.id, item.name, item.color as string)}
-              />
-            </div>
-          )}
-          <div
-            role="button"
-            className={`flex items-center justify-start overflow-y-hidden text-sm truncate ${
-              placeHubType == APP_HR ? 'w-full' : ''
-            }`}
-            onClick={
-              showSidebar || isExtendedBar
-                ? () => handleClick(item.id)
-                : () => handleLocation(item.id, item.name, item as Hub)
-            }
-            style={{ zIndex: 1 }}
-          >
-            {((item?.wallets?.length || item?.lists?.length || item.has_descendants) && placeHubType === APP_TASKS) ||
-            placeHubType === APP_HR ? (
-              <div>
-                {showChildren ? (
-                  <span className="flex flex-col">
-                    <VscTriangleDown className="flex-shrink-0 h-2" aria-hidden="true" color="#919191" />
-                  </span>
-                ) : (
-                  <VscTriangleRight className="flex-shrink-0 h-2" aria-hidden="true" color="#919191" />
-                )}
-              </div>
-            ) : (
-              renderEmptyArrowBlock()
-            )}
-            <div className={`flex items-center flex-1 min-w-0 ${placeHubType == APP_HR ? 'gap-1' : 'gap-5'}`}>
+          <div className="flex items-center justify-between w-10/12">
+            <ActiveBackground showBgColor={item.id === hubId || item.id === subhubId} />
+            <ActiveBarIdentification showBar={item.id === hubId || item.id === subhubId} />
+            {showSidebar && !isExtendedBar ? (
               <div
-                onClick={(e) => handleHubColour(item.id, e)}
-                className="flex items-center justify-center w-6 h-6"
-                ref={relativeRef}
+                className="absolute rounded-r-lg opacity-0 cursor-move left-2 group-hover:opacity-100"
+                ref={draggableRef}
+                {...listeners}
+                {...attributes}
               >
-                {item.path !== null ? (
-                  <img src={item.path} alt="hubs image" className="w-full h-full rounded" />
-                ) : (
-                  <AvatarWithInitials
-                    initials={getInitials(item.name)}
-                    height="h-4"
-                    width="w-4"
-                    textSize="8px"
-                    backgroundColour={
-                      item.color
-                        ? item.color
-                        : !paletteColor && type === EntityType.hub
-                        ? 'blue'
-                        : !paletteColor && type === EntityType.subHub
-                        ? 'orange'
-                        : (paletteColor as string)
-                    }
-                    roundedStyle="rounded"
-                  />
-                )}
+                <Drag />
               </div>
-              <span className="pr-2 overflow-hidden">
-                <ToolTip title={item.name}>
-                  <p
-                    className={`capitalize truncate cursor-pointer ${
-                      item.id === hubId || item.id === subhubId ? 'text-alsoit-purple-300' : ''
-                    }`}
-                    style={{
-                      fontSize: '13px',
-                      lineHeight: '15.56px',
-                      verticalAlign: 'baseline',
-                      letterSpacing: '0.28px'
-                    }}
-                    onClick={() => handleLocation(item.id, item.name, item as Hub)}
-                  >
-                    {item.name}
-                  </p>
-                </ToolTip>
-              </span>
+            ) : null}
+            {placeHubType == APP_HR && (
+              <div className="flex items-center justify-center ml-2 hr-checkbox-wrapper">
+                <Checkbox
+                  styles="ml-0 mr-0 text-primary-500 focus:ring-primary-500 mx-0 hr-checkbox hr-checkbox-parent"
+                  checked={checkSelectedHubs(item.id)}
+                  setChecked={(e) => onCheckbox(e, item.id, item.name, item.color as string)}
+                />
+              </div>
+            )}
+            <div
+              role="button"
+              className={`flex items-center justify-start overflow-y-hidden text-sm truncate ${
+                placeHubType == APP_HR ? 'w-full' : ''
+              }`}
+              onClick={
+                showSidebar || isExtendedBar
+                  ? () => handleClick(item.id)
+                  : () => handleLocation(item.id, item.name, item as Hub)
+              }
+              style={{ zIndex: 1 }}
+            >
+              {((item?.wallets?.length || item?.lists?.length || item.has_descendants) && placeHubType === APP_TASKS) ||
+              placeHubType === APP_HR ? (
+                <div>
+                  {showChildren ? (
+                    <span className="flex flex-col">
+                      <VscTriangleDown className="flex-shrink-0 h-2" aria-hidden="true" color="#919191" />
+                    </span>
+                  ) : (
+                    <VscTriangleRight className="flex-shrink-0 h-2" aria-hidden="true" color="#919191" />
+                  )}
+                </div>
+              ) : (
+                renderEmptyArrowBlock()
+              )}
+              <div className={`flex items-center flex-1 min-w-0 ${placeHubType == APP_HR ? 'gap-1' : 'gap-5'}`}>
+                <div
+                  onClick={(e) => handleHubColour(item.id, e)}
+                  className="flex items-center justify-center w-6 h-6"
+                  ref={relativeRef}
+                >
+                  {item.path !== null ? (
+                    <img src={item.path} alt="hubs image" className="w-full h-full rounded" />
+                  ) : (
+                    <AvatarWithInitials
+                      initials={getInitials(item.name)}
+                      height="h-4"
+                      width="w-4"
+                      textSize="8px"
+                      backgroundColour={
+                        item.color
+                          ? item.color
+                          : !paletteColor && type === EntityType.hub
+                          ? 'blue'
+                          : !paletteColor && type === EntityType.subHub
+                          ? 'orange'
+                          : (paletteColor as string)
+                      }
+                      roundedStyle="rounded"
+                    />
+                  )}
+                </div>
+                <span className="pr-2 overflow-hidden">
+                  <ToolTip title={item.name}>
+                    <p
+                      className={`capitalize truncate cursor-pointer ${
+                        item.id === hubId || item.id === subhubId ? 'text-alsoit-purple-300' : ''
+                      }`}
+                      style={{
+                        fontSize: '13px',
+                        lineHeight: '15.56px',
+                        verticalAlign: 'baseline',
+                        letterSpacing: '0.28px'
+                      }}
+                      onClick={() => handleLocation(item.id, item.name, item as Hub)}
+                    >
+                      {item.name}
+                    </p>
+                  </ToolTip>
+                </span>
+              </div>
             </div>
           </div>
           {showSidebar && (
             <div
-              className="absolute right-0 flex items-center pr-1 space-x-2 text-black opacity-0 z-1 group-hover:opacity-100 hover:text-fuchsia-500"
+              className="flex items-center pr-1 space-x-2 text-black opacity-0 z-1 group-hover:opacity-100 hover:text-fuchsia-500"
               onClick={(e) => e.stopPropagation()}
               ref={menuRef}
             >
