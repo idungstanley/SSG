@@ -22,7 +22,9 @@ export const addNewTaskManager = (
       descendants_count: 0
     };
 
-    updatedTasks[listId] = [...updatedTasks[listId], newTask];
+    updatedTasks[listId] = updatedTasks[listId] ? [...updatedTasks[listId], newTask] : [newTask];
+
+    // console.log(updatedTasks);
 
     return updatedTasks;
   }
