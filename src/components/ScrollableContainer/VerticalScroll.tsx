@@ -1,6 +1,7 @@
 import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/outline';
 import React, { useState, useEffect, useRef, useCallback, ReactNode, HTMLAttributes } from 'react';
 import { useAppSelector } from '../../app/hooks';
+// import { setGroupScrollSettings } from '../../features/general/slideOver/slideOverSlice';
 
 interface CustomScrollableContainerProps extends HTMLAttributes<HTMLDivElement> {
   children: ReactNode;
@@ -10,6 +11,8 @@ const DEFAULT_THUMB_HEIGHT = 20;
 const ARROWS_WRAPPER_HEIGHT = 27;
 
 export function VerticalScroll({ children, bgColor, ...props }: CustomScrollableContainerProps) {
+  // const dispatch = useAppDispatch();
+
   // update size is pilot is visible / invisible
   const { show: showFullPilot } = useAppSelector((state) => state.slideOver.pilotSideOver);
   const {
@@ -37,12 +40,10 @@ export function VerticalScroll({ children, bgColor, ...props }: CustomScrollable
 
   const contentRef = useRef<HTMLDivElement>(null);
   const scrollTrackRef = useRef<HTMLDivElement>(null);
-  const scrollThumbRef = useRef<HTMLDivElement>(null);
   const observer = useRef<ResizeObserver | null>(null);
 
   const handleTrackClick = useCallback(
     (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-      e.preventDefault();
       e.stopPropagation();
       const { current: trackCurrent } = scrollTrackRef;
       const { current: contentCurrent } = contentRef;
@@ -64,7 +65,7 @@ export function VerticalScroll({ children, bgColor, ...props }: CustomScrollable
   );
 
   const handleThumbPosition = useCallback(() => {
-    if (!contentRef.current || !scrollTrackRef.current || !scrollThumbRef.current) {
+    if (!contentRef.current || !scrollTrackRef.current) {
       return;
     }
     const { scrollTop: contentTop, scrollHeight: contentHeight } = contentRef.current;
@@ -73,12 +74,9 @@ export function VerticalScroll({ children, bgColor, ...props }: CustomScrollable
     newTop = (+contentTop / +contentHeight) * trackHeight;
     newTop = Math.min(newTop, trackHeight - thumbHeight) - ARROWS_WRAPPER_HEIGHT;
     setTopPosition(newTop);
-    const thumb = scrollThumbRef.current;
-    thumb.style.top = `${newTop}px`;
   }, []);
 
   const handleThumbMousedown = useCallback((e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    e.preventDefault();
     e.stopPropagation();
     setScrollStartPosition(e.clientY);
     if (contentRef.current) setInitialScrollTop(contentRef.current.scrollTop);
@@ -87,7 +85,6 @@ export function VerticalScroll({ children, bgColor, ...props }: CustomScrollable
 
   const handleThumbMouseup = useCallback(
     (e: MouseEvent) => {
-      e.preventDefault();
       e.stopPropagation();
       if (isDragging) {
         setIsDragging(false);
@@ -123,10 +120,10 @@ export function VerticalScroll({ children, bgColor, ...props }: CustomScrollable
   useEffect(() => {
     const handleResize = (ref: HTMLDivElement, trackSize: number) => {
       const { clientHeight, scrollHeight } = ref;
-      const showScrollHeight = scrollHeight - 10;
+      // const showScrollHeight = scrollHeight - 10;
       const THUMB_HEIGHT = (clientHeight / scrollHeight) * trackSize;
-      setThumbHeight(Math.max(THUMB_HEIGHT, DEFAULT_THUMB_HEIGHT));
-      setIsThumbVisible(showScrollHeight > clientHeight); // Check if the content height is greater than the track height
+      setThumbHeight(Math.max(THUMB_HEIGHT + 28, DEFAULT_THUMB_HEIGHT));
+      setIsThumbVisible(scrollHeight > clientHeight); // Check if the content height is greater than the track height
     };
 
     const calculateThumbSize = () => {
@@ -222,7 +219,7 @@ export function VerticalScroll({ children, bgColor, ...props }: CustomScrollable
           <div />
           <div className="flex flex-col items-center h-full mb-4">
             {renderScrollArrows()}
-            <div className="relative flex items-center flex-grow block w-2">
+            <div className="relative flex items-center flex-grow w-2">
               <div
                 className="absolute top-0 w-2 bg-transparent cursor-pointer -bottom-7 rounded-xl"
                 ref={scrollTrackRef}
@@ -230,7 +227,6 @@ export function VerticalScroll({ children, bgColor, ...props }: CustomScrollable
               ></div>
               <div
                 className="absolute bg-alsoit-gray-75 hover:bg-alsoit-gray-300 cursor-pointer rounded-xl w-2 hover:w-3 hover:-left-0.5"
-                ref={scrollThumbRef}
                 onMouseDown={handleThumbMousedown}
                 style={{
                   height: `${thumbHeight}px`,
