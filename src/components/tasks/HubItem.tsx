@@ -36,6 +36,7 @@ import { Checkbox } from '../Checkbox/Checkbox';
 import { selectCalendar, setBlacklistIds, setSelectedHubs } from '../../features/calendar/slice/calendarSlice';
 import { useGetTeamMembers } from '../../features/settings/teamMembers/teamMemberService';
 import { MembersList } from '../../pages/calendar/ui/ExtendedBar/MembersList';
+import { STORAGE_KEYS, dimensions } from '../../app/config/dimensions';
 
 interface TaskItemProps {
   item: {
@@ -109,6 +110,7 @@ export default function HubItem({
   };
 
   const handleHubSettings = (id: string, name: string, e: React.MouseEvent<HTMLSpanElement, MouseEvent>): void => {
+    e.preventDefault();
     dispatch(setSelectedTreeDetails({ name, id, type: EntityType.hub }));
     dispatch(setCreateWLID(id));
     dispatch(setCreateWlLink(false));
@@ -201,9 +203,13 @@ export default function HubItem({
     }
   };
 
+  const sidebarWidthFromLS =
+    (JSON.parse(localStorage.getItem(STORAGE_KEYS.SIDEBAR_WIDTH) || '""') as number) ||
+    dimensions.navigationBar.default;
+
   return (
     <div
-      className={`${openedEntitiesIds.includes(item.id) ? 'sticky bg-white opacity-100 hub-item' : ''}`}
+      className={`w-full ${openedEntitiesIds.includes(item.id) ? 'sticky bg-white opacity-100 hub-item' : ''}`}
       style={{
         top: openedEntitiesIds.includes(item.id) && showSidebar ? topNumber : '',
         zIndex: openedEntitiesIds.includes(item.id) ? zNumber : '2',
@@ -221,7 +227,7 @@ export default function HubItem({
           className="relative flex items-center justify-between"
           style={{ height: '30px', paddingLeft: paddingLeft() }}
         >
-          <div className="flex items-center justify-between w-10/12">
+          <div className="flex items-center justify-between">
             <ActiveBackground showBgColor={item.id === hubId || item.id === subhubId} />
             <ActiveBarIdentification showBar={item.id === hubId || item.id === subhubId} />
             {showSidebar && !isExtendedBar ? (
@@ -296,10 +302,13 @@ export default function HubItem({
                     />
                   )}
                 </div>
-                <span className="pr-2 overflow-hidden">
+                <span
+                  className="pr-2 overflow-hidden"
+                  style={{ width: sidebarWidthFromLS - 135 - Number(paddingLeft) }}
+                >
                   <ToolTip title={item.name}>
                     <p
-                      className={`capitalize truncate cursor-pointer ${
+                      className={`capitalize text-left truncate cursor-pointer ${
                         item.id === hubId || item.id === subhubId ? 'text-alsoit-purple-300' : ''
                       }`}
                       style={{
@@ -319,7 +328,7 @@ export default function HubItem({
           </div>
           {showSidebar && (
             <div
-              className="flex items-center pr-1 space-x-2 text-black opacity-0 z-1 group-hover:opacity-100 hover:text-fuchsia-500"
+              className="z-10 flex items-center pr-1 space-x-2 text-black opacity-0 group-hover:opacity-100 hover:text-fuchsia-500"
               onClick={(e) => e.stopPropagation()}
               ref={menuRef}
             >
