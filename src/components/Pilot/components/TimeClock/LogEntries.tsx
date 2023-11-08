@@ -31,6 +31,14 @@ export function TimeLogEntries({ timeEntry, index }: Props) {
 
   const btnCheckFn = timeEntriesIdArr.includes(timeEntry.id);
 
+  const handleCheck = (id: string) => {
+    if (timeEntriesIdArr.includes(id)) {
+      const filteredEntriesId = timeEntriesIdArr.filter((ids) => ids !== id);
+      return dispatch(setTimeEntriesIdArr(filteredEntriesId));
+    }
+    dispatch(setTimeEntriesIdArr(Array.from(new Set([...timeEntriesIdArr, id]))));
+  };
+
   const entryActions = () => {
     return (
       <div className="absolute right-0 shadow-lg w-28 bg-white flex flex-col space-y-2">
@@ -56,13 +64,23 @@ export function TimeLogEntries({ timeEntry, index }: Props) {
 
   return (
     <tr key={index} className="h-12 flex items-center group bg-white relative">
-      <div className="flex items-center h-full border-b border-alsoit-gray-75 cursor-pointer hover:bg-alsoit-gray-50">
-        <td className="sticky left-0 bg-white group-hover:bg-alsoit-gray-50 z-20 flex items-center space-x-2.5 border-r border-alsoit-gray-75 w-[15rem] h-full">
+      <div
+        className={`flex items-center h-full border-b border-alsoit-gray-75 cursor-pointer ${
+          btnCheckFn ? 'bg-alsoit-purple-50' : ''
+        } hover:bg-alsoit-gray-50`}
+      >
+        <td
+          className={`sticky left-0 ${
+            btnCheckFn ? 'bg-alsoit-purple-50' : 'bg-white'
+          } group-hover:bg-alsoit-gray-50 z-20 flex items-center space-x-2.5 border-r border-alsoit-gray-75 w-[15rem] h-full`}
+        >
           <div className="h-full w-4 bg-alsoit-gray-50 flex items-center mr-2">
             <RoundedCheckbox
               isChecked={btnCheckFn}
-              onChange={() => dispatch(setTimeEntriesIdArr(Array.from(new Set([...timeEntriesIdArr, timeEntry.id]))))}
-              styles="w-2 h-2 rounded-lg checked:bg-alsoit-purple-300 focus:bg-alsoit-purple-300 active:bg-alsoit-purple-300 invisible group-hover:visible"
+              onChange={() => handleCheck(timeEntry.id)}
+              styles={`w-2 h-2 rounded-lg checked:bg-alsoit-purple-300 focus:bg-alsoit-purple-300 active:bg-alsoit-purple-300 ${
+                btnCheckFn ? 'visible' : 'invisible'
+              } group-hover:visible`}
             />
           </div>
           <div className="flex items-center space-x-2.5 h-full">
