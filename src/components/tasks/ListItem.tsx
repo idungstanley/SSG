@@ -216,7 +216,7 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
                 verticalAlign: 'baseline',
                 letterSpacing: '0.28px',
                 color: listId === list.id ? (baseColor as string) : undefined,
-                width: sidebarWidthFromLS - 135 - Number(paddingLeft)
+                width: sidebarWidthFromLS - 135
               }}
               className="pl-4 text-left capitalize truncate cursor-pointer"
             >
