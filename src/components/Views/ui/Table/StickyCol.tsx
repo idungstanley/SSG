@@ -382,6 +382,11 @@ export function StickyCol({
           {...props}
         >
           <div
+            ref={droppabbleRef}
+            className="absolute h-full"
+            style={{ left: '30px', background: 'transparent', height: '100%', width: '100%', zIndex: -1 }}
+          />
+          <div
             className="flex items-center h-full ml-1 space-x-1"
             style={{
               padding: '15px 0',
@@ -434,21 +439,16 @@ export function StickyCol({
                 : 'border-t relative'
             )}
           >
-            <div
-              ref={droppabbleRef}
-              className="absolute w-2 h-full"
-              style={{ left: '30px', background: 'transparent', height: '100%', width: '30px', zIndex: -1 }}
-            />
             {dragToBecomeSubTask && isOver && draggableItemId !== dragOverItemId && (
               <span
                 className={cl(
                   dragToBecomeSubTask && isOver && draggableItemId !== dragOverItemId
-                    ? 'absolute content-start z-50 flex items-center left-12 w-full bottom-0 gap-0'
+                    ? 'absolute content-start z-50 flex items-center left-12 w-full bottom-0'
                     : ''
                 )}
               >
                 <span className="border-solid z-50 border-alsoit-purple-300 border-l-[8px] border-y-transparent border-y-[4px] border-r-0 m-0" />
-                <span className={cl('h-0.5 bg-alsoit-purple-300 w-full m-0')}></span>
+                <span className={cl('h-0.5 bg-alsoit-purple-300 w-full ml-auto')}></span>
               </span>
             )}
             {isBlockedShowChildren ? (

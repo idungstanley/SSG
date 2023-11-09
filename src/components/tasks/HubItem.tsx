@@ -159,16 +159,16 @@ export default function HubItem({
 
   const paddingLeft = () => {
     if (!showSidebar) {
-      return '7px';
+      return '7';
     }
     if (type === EntityType.subHub) {
       if (isExtendedBar) {
-        return '17px';
+        return '17';
       } else {
-        return '25px';
+        return '25';
       }
     } else {
-      return '17px';
+      return '17';
     }
   };
 
@@ -225,7 +225,7 @@ export default function HubItem({
       >
         <div
           className="relative flex items-center justify-between"
-          style={{ height: '30px', paddingLeft: paddingLeft() }}
+          style={{ height: '30px', paddingLeft: `${paddingLeft()}px` }}
         >
           <div className="flex items-center justify-between">
             <ActiveBackground showBgColor={item.id === hubId || item.id === subhubId} />
@@ -304,7 +304,7 @@ export default function HubItem({
                 </div>
                 <span
                   className="pr-2 overflow-hidden"
-                  style={{ width: sidebarWidthFromLS - 135 - Number(paddingLeft) }}
+                  style={{ width: sidebarWidthFromLS - 135 - Number(paddingLeft()) }}
                 >
                   <ToolTip title={item.name}>
                     <p
