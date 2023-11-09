@@ -21,8 +21,9 @@ function Profile() {
   const dispatch = useAppDispatch();
   const queryClient = useQueryClient();
 
-  const { name, email, time_format, date_format, start_week, currentUserModal, showAvatarUpload, userData } =
-    useAppSelector((state) => state.userSetting);
+  const { name, email, time_format, date_format, start_week, showAvatarUpload, userData } = useAppSelector(
+    (state) => state.userSetting
+  );
   const { paletteDropdown } = useAppSelector((state) => state.account);
   const { updateCords } = useAppSelector((state) => state.task);
 

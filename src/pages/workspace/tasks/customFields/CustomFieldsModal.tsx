@@ -88,8 +88,6 @@ export default function CustomFieldsModal() {
     }
   });
 
-  console.log('active', activeField);
-
   return (
     <>
       <div onClick={(e: React.MouseEvent<HTMLDivElement>) => setAnchorEl(e.currentTarget)}>
