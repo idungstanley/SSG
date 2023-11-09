@@ -9,7 +9,7 @@ import { HiOutlineDocumentDuplicate, HiInbox } from 'react-icons/hi';
 import { TbFolderX } from 'react-icons/tb';
 import { GiStoneStack, GiJusticeStar } from 'react-icons/gi';
 import { HiOutlineUserPlus } from 'react-icons/hi2';
-import { BiMerge, BiEdit } from 'react-icons/bi';
+import { BiMerge } from 'react-icons/bi';
 import { archiveTask, deleteTask, unarchiveTask } from '../../../../../features/task/taskService';
 import { useDispatch } from 'react-redux';
 import { EntityType } from '../../../../../utils/EntityTypes/EntityType';
@@ -33,6 +33,7 @@ import Assignee from '../../assignTask/Assignee';
 import { ManageTagsDropdown } from '../../../../../components/Tag/ui/ManageTagsDropdown/ui/ManageTagsDropdown';
 import { AiFillFlag } from 'react-icons/ai';
 import DateFormat from '../../../../../components/DateFormat';
+import CustomFieldsModal from '../../customFields/CustomFieldsModal';
 
 export default function TaskMenu() {
   const dispatch = useDispatch();
@@ -226,7 +227,7 @@ export default function TaskMenu() {
     {
       id: 'set_custom_fields',
       label: 'Set Custom Fields',
-      icons: <BiEdit color="orange" opacity={0.5} />,
+      icons: <CustomFieldsModal />,
       handleClick: () => ({}),
       isVisible: true
     },
