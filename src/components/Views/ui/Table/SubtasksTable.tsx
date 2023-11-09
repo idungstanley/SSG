@@ -143,6 +143,7 @@ export function SubtasksTable({ task, subtasksData, heads, listId, level, breadc
                 groupedTask={subtasksData}
                 isSplitSubtask={true}
                 parentId={task.id}
+                listColor={ListColor}
               />
             </table>
           </div>
