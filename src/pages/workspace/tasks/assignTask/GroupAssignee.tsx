@@ -104,8 +104,8 @@ function GroupAssignee({
         {displayedData.map((newData, index) => (
           <div
             key={newData.id}
-            className={`scaleBigger cursor-pointer ${index === 0 ? ' z-30   ' : ''} ${index === 1 ? 'z-20 ' : ''} ${
-              index === 2 ? 'z-10' : 'z-0'
+            className={`scaleBigger cursor-pointer ${index === 0 ? ' z-3   ' : ''} ${index === 1 ? 'z-2 ' : ''} ${
+              index === 2 ? 'z-1' : 'z-0'
             }  `}
             onMouseEnter={(e) => {
               handleHoverIntervalMouseIn(index, e);
