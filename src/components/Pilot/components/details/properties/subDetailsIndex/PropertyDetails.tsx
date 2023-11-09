@@ -207,10 +207,7 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
             {/* description */}
             <div id="entity description" className="mt-5">
               <label className="text-xs text-gray-500">Description</label>
-              <div
-                className="h-20 bg-white bg-gray-100 rounded-md cursor-text"
-                onClick={() => setEditingDescription(true)}
-              >
+              <div className="h-20 bg-gray-100 rounded-md cursor-text" onClick={() => setEditingDescription(true)}>
                 {editingDescription ? (
                   <div className="w-full h-40 overflow-y-scroll rounded-md">
                     <CKEditor
@@ -239,7 +236,7 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
             {/* due date */}
             <div id="due date" className="mt-2">
               <label className="text-xs text-gray-500">Due Date</label>
-              <div className="p-1 bg-white bg-gray-100 rounded-md">
+              <div className="p-1 bg-gray-100 rounded-md">
                 <p>Dec 31 2022</p>
               </div>
             </div>

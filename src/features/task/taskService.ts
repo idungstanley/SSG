@@ -497,6 +497,20 @@ export const deleteTask = (data: { selectedTasksArray: string[] }) => {
   return request;
 };
 
+export const addNewField = (data: { ids: string[]; custom_field_id: string; values: string }) => {
+  const { ids, custom_field_id, values } = data;
+  const request = requestNew({
+    url: 'tasks/multiple/custom-fields',
+    method: 'POST',
+    data: {
+      ids,
+      custom_field_id,
+      values: [{ value: values }]
+    }
+  });
+  return request;
+};
+
 export const createTaskService = (data: {
   name: string;
   task_status_id?: string;

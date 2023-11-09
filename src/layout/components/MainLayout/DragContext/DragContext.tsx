@@ -58,7 +58,6 @@ export default function DragContext({ children }: DragContextProps) {
   };
 
   const onDragEnd = (e: DragEndEvent) => {
-    dispatch(setDragOverItem(null));
     const { over, active } = e;
     const overId = over?.id as string;
     const activeId = active?.id as string;
@@ -103,7 +102,6 @@ export default function DragContext({ children }: DragContextProps) {
         hubId: overId,
         type: EntityType.hub
       });
-      dispatch(setDraggableItem(null));
     }
     if (isListToWallet) {
       onMoveList({
@@ -111,7 +109,6 @@ export default function DragContext({ children }: DragContextProps) {
         hubId: overId,
         type: EntityType.wallet
       });
-      dispatch(setDraggableItem(null));
     }
     if (isTaskToTask) {
       if (activeId !== overId) {
