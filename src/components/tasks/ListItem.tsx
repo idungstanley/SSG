@@ -13,7 +13,7 @@ import {
 } from '../../features/hubs/hubSlice';
 import { GetTaskListCount, UseEditListService } from '../../features/list/listService';
 import { setListPaletteColor } from '../../features/list/listSlice';
-import { setActiveItem, setCreateWlLink } from '../../features/workspace/workspaceSlice';
+import { setActiveItem, setCreateWlLink, setEntityForPermissions } from '../../features/workspace/workspaceSlice';
 import Palette from '../ColorPalette';
 import ListIconComponent from '../ItemsListInSidebar/components/ListIconComponent';
 import { useDraggable, useDroppable } from '@dnd-kit/core';
@@ -267,7 +267,10 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
             <span
               className="cursor-pointer"
               id="menusettings"
-              onClick={(e) => handleListSettings(list.id, list.name, e)}
+              onClick={(e) => {
+                handleListSettings(list.id, list.name, e);
+                dispatch(setEntityForPermissions(list));
+              }}
             >
               <ThreeDotIcon />
             </span>

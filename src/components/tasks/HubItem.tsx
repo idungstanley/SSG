@@ -14,7 +14,7 @@ import AvatarWithInitials from '../avatar/AvatarWithInitials';
 import Palette from '../ColorPalette';
 import UploadImage from '../ColorPalette/component/UploadImage';
 import { InvalidateQueryFilters } from '@tanstack/react-query';
-import { setCreateWlLink } from '../../features/workspace/workspaceSlice';
+import { setCreateWlLink, setEntityForPermissions } from '../../features/workspace/workspaceSlice';
 import { ListColourProps } from './ListItem';
 import { useParams } from 'react-router-dom';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
@@ -26,7 +26,7 @@ import { useDraggable, useDroppable } from '@dnd-kit/core';
 import Drag from '../../assets/icons/Drag';
 import { getInitials } from '../../app/helpers';
 import ToolTip from '../Tooltip/Tooltip';
-import { Hub, List, Wallet } from '../../pages/workspace/hubs/components/ActiveTree/activetree.interfaces';
+import { Hub } from '../../pages/workspace/hubs/components/ActiveTree/activetree.interfaces';
 import ActiveBarIdentification from './Component/ActiveBarIdentification';
 import ActiveBackground from './Component/ActiveBackground';
 import { useAbsolute } from '../../hooks/useAbsolute';
@@ -38,17 +38,7 @@ import { useGetTeamMembers } from '../../features/settings/teamMembers/teamMembe
 import { MembersList } from '../../pages/calendar/ui/ExtendedBar/MembersList';
 
 interface TaskItemProps {
-  item: {
-    id: string;
-    name: string;
-    path?: string | null;
-    color?: string | null;
-    parent_id?: string | null;
-    children?: Hub[];
-    has_descendants: boolean;
-    wallets?: Wallet[];
-    lists?: List[];
-  };
+  item: Hub;
   showChildren: boolean;
   type: string;
   topNumber?: string;
@@ -329,6 +319,7 @@ export default function HubItem({
               <span
                 onClick={(e) => {
                   handleHubSettings(item.id, item.name, e);
+                  dispatch(setEntityForPermissions(item));
                 }}
                 className="cursor-pointer"
                 id="menusettings"

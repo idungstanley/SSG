@@ -68,6 +68,7 @@ export interface IWallet {
   type: string;
   name: string;
   hub_id: string;
+  color?: string;
   parent_id: null | string;
   updated_at: string;
   tasks_count: number;
