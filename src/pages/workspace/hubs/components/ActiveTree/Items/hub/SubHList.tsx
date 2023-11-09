@@ -56,8 +56,8 @@ export default function SubHubList({ hubs, placeHubType }: ListProps) {
     }
   };
 
-  const handleClick = (id: string) => {
-    if (openedEntitiesIds.includes(id)) {
+  const handleClick = (id: string, type?: string) => {
+    if (openedEntitiesIds.includes(id) && type !== 'isOver') {
       dispatch(setOpenedEntitiesIds(openedEntitiesIds.filter((subhubId) => subhubId !== id)));
     } else {
       dispatch(setOpenedEntitiesIds([...openedEntitiesIds, id]));
