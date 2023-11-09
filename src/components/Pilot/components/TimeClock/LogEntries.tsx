@@ -103,7 +103,7 @@ export function TimeLogEntries({ timeEntry, index }: Props) {
             className="absolute flex items-center space-x-1 top-0.5 right-0.5 bg-alsoit-gray-50 rounded-md px-1 capitalize"
             style={{ fontSize: 6 }}
           >
-            {timeEntry.type === 'real' ? <RealTimeIcon className="w-3 h-3" /> : <ManualTimeIcon />}
+            {timeEntry.type === 'real' ? <RealTimeIcon className="w-3 h-3" /> : <ManualTimeIcon className="w-3 h-3" />}
             <span>{timeEntry.type === 'real' ? 'real time' : timeEntry.type}</span>
           </span>
         </td>

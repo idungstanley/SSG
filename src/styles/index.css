@@ -271,11 +271,10 @@ input:focus {
 }
 
 .time-entries-bar {
+  transition: transform 1s ease;
+  transform: translateY(0%);
   width: 100%;
   height: 35px;
-  display: flex !important;
-  justify-content: space-between;
-  align-items: center;
   background-color: black;
   animation: dropIn 1s;
   transform-origin: top center;
@@ -286,6 +285,12 @@ input:focus {
   border-top-right-radius: 8px;
 }
 
+.time-entries-bar-out {
+  transition: transform 1s ease, opacity 1s ease;
+  transform: translateY(-50%);
+  opacity: 0;
+}
+
 @keyframes dropIn {
   0% {
     transform: scaleY(0);
@@ -293,21 +298,4 @@ input:focus {
   100% {
     transform: scaleY(1);
   }
-}
-
-/* Define the keyframes animation for exit */
-@keyframes dropOut {
-  0% {
-    transform: scaleY(1);
-  }
-  100% {
-    transform: scaleY(0);
-  }
-}
-
-/* Apply the animation class */
-.animated-component {
-  animation-duration: 1s;
-  animation-timing-function: ease;
-  animation-fill-mode: both;
 }
