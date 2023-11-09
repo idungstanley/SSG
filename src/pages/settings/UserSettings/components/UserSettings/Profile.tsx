@@ -1,17 +1,51 @@
 import CurrentUser from './CurrentUser';
 import Region from './Region';
 import { useAppSelector, useAppDispatch } from '../../../../../app/hooks';
-import { setShowConfirmationModal, setUserInfo } from '../../../../../features/settings/user/userSettingsSlice';
-import CurrentUserModal from './CurrentUserModal';
+import {
+  setCurrentUserModal,
+  setShowAvatarUpload,
+  setShowConfirmationModal,
+  setUserInfo
+} from '../../../../../features/settings/user/userSettingsSlice';
 import UploadAvatar from '../UploadAvatar';
-import { InvalidateQueryFilters } from '@tanstack/react-query';
+import { InvalidateQueryFilters, useMutation, useQueryClient } from '@tanstack/react-query';
+import PaletteManager from '../../../../../components/ColorPalette';
+import { UseRemoveAvatar } from '../../../../../features/settings/user/userSettingsServices';
+import { useState } from 'react';
+import { ListColourProps } from '../../../../../components/tasks/ListItem';
+import { useGetColors } from '../../../../../features/account/accountService';
+import { useAbsolute } from '../../../../../hooks/useAbsolute';
+import { setPaletteDropDown } from '../../../../../features/account/accountSlice';
 
 function Profile() {
-  const { name, email, time_format, date_format, start_week, currentUserModal, showAvatarUpload } = useAppSelector(
-    (state) => state.userSetting
+  const dispatch = useAppDispatch();
+  const queryClient = useQueryClient();
+
+  const { name, email, time_format, date_format, start_week, currentUserModal, showAvatarUpload, userData } =
+    useAppSelector((state) => state.userSetting);
+  const { paletteDropdown } = useAppSelector((state) => state.account);
+  const { updateCords } = useAppSelector((state) => state.task);
+
+  const [paletteColor, setPaletteColor] = useState<string | ListColourProps | null | undefined>(
+    userData?.color as string
   );
 
-  const dispatch = useAppDispatch();
+  const { show } = paletteDropdown;
+
+  useGetColors();
+  const deleteAvatarMutation = useMutation(UseRemoveAvatar, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['self']);
+      dispatch(setCurrentUserModal(false));
+    }
+  });
+
+  const { cords, relativeRef } = useAbsolute(updateCords, 266);
+
+  const handleUpdateColor = (c: string | ListColourProps | null | undefined) => {
+    setPaletteColor(c);
+    dispatch(setUserInfo({ color: c as string }));
+  };
 
   return (
     <div className="w-full bg-white m-2 rounded-lg">
@@ -22,14 +56,40 @@ function Profile() {
         <section>
           <div className="flex justify-center my-2">
             <div>
-              <CurrentUser />
+              <CurrentUser paletteColor={paletteColor} />
             </div>
           </div>
-          {currentUserModal && (
-            <div className="flex justify-center w-full">
-              <CurrentUserModal />
-            </div>
-          )}
+          <div className="flex justify-center w-full" ref={relativeRef}>
+            {show && (
+              <>
+                <PaletteManager
+                  setPaletteColor={handleUpdateColor}
+                  cords={{ top: cords.top - 20, left: cords.left - 40 }}
+                  bottomContent={
+                    <div className="p-2">
+                      <div
+                        className="cursor-pointer w-full flex justify-center text-blue-600 border border-blue-500 p-1 rounded hover:bg-blue-600 hover:text-white"
+                        onClick={() => {
+                          dispatch(setShowAvatarUpload(true));
+                          dispatch(setPaletteDropDown({ show: false, paletteId: null }));
+                        }}
+                      >
+                        <button className="text-xs">Add custom avatar</button>
+                      </div>
+                      {userData?.avatar_path && (
+                        <div
+                          className="cursor-pointer w-full flex justify-center text-red-600 border border-red-500 p-1 rounded hover:bg-red-600 hover:text-white my-1"
+                          onClick={() => deleteAvatarMutation.mutateAsync()}
+                        >
+                          <button className="text-xs">Remove Avatar</button>
+                        </div>
+                      )}
+                    </div>
+                  }
+                />
+              </>
+            )}
+          </div>
 
           <section>
             <h1 className="font-semibold my-2" style={{ fontSize: '15px' }}>
