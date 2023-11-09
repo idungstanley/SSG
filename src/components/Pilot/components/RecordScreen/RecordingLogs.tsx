@@ -1,19 +1,18 @@
 import { MouseEvent, useRef, useState } from 'react';
 import AvatarWithInitials from '../../../avatar/AvatarWithInitials';
 import { RiPlayFill, RiStopFill } from 'react-icons/ri';
-import moment from 'moment';
-import { getUploadAttatchment } from '../../../../features/workspace/workspaceService';
-import { useAppSelector } from '../../../../app/hooks';
 import { VideoControlModal } from './VideoControlModal';
 import AdaptiveModal from '../../../Dropdown/AdaptiveModal/AdaptiveModal';
 import AvatarWithImage from '../../../avatar/AvatarWithImage';
 import PopAssignModal from '../../../../pages/workspace/tasks/assignTask/popAssignModal';
+import { IAttachments } from '../../../../features/workspace/workspace.interfaces';
+import dayjs from 'dayjs';
 
-export default function VideoEntries() {
-  const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
+interface Props {
+  timeData?: IAttachments;
+}
 
-  const { data } = getUploadAttatchment({ id: activeItemId as string, type: activeItemType });
-
+export default function VideoEntries({ timeData: data }: Props) {
   const [playToggle, setPlayToggle] = useState<boolean>(false);
   const [hoverIndex, setHoverIndex] = useState<number | undefined>();
   const [controlModal, setModal] = useState<boolean>(false);
@@ -85,11 +84,12 @@ export default function VideoEntries() {
         </tr>
       </thead>
       <tbody>
-        <div className="relative overflow-y-auto max-h-204">
+        <div className="relative overflow-y-auto max-h-40">
           {data?.data.attachments.map((videoFile, index) => {
             const { created_at, updated_at, file_format } = videoFile.physical_file;
             const { color, initials, avatar_path } = videoFile.team_member.user;
-            const duration = new Date(updated_at).getTime() - new Date(created_at).getTime();
+            const duration = dayjs(updated_at).diff(created_at);
+            const videoDuration = dayjs.duration(duration).format('HH:mm:ss');
             return (
               <tr key={videoFile.id} className="relative flex items-center p-2 space-x-8 border-b">
                 <td
@@ -149,7 +149,7 @@ export default function VideoEntries() {
                   )}
                 </td>
                 <td>{file_format.extension}</td>
-                <td>{moment(duration).format('HH:mm:ss')}</td>
+                <td>{videoDuration}</td>
               </tr>
             );
           })}
