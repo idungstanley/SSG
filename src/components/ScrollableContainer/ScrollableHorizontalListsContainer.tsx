@@ -156,7 +156,9 @@ export function ScrollableHorizontalListsContainer({
         };
       }
     };
-    calculateThumbSize();
+    setTimeout(() => {
+      calculateThumbSize();
+    }, 100);
     window.addEventListener('resize', calculateThumbSize);
     return () => {
       window.removeEventListener('resize', calculateThumbSize);
