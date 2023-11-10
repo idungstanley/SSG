@@ -1,6 +1,10 @@
 import React, { useMemo } from 'react';
 import TodoTabs from './TodoTabs';
 
+interface activeSelectedTab {
+  id: string;
+  content: JSX.Element;
+}
 export default function MyWorkTabs({ activeTab }: { activeTab: string }) {
   const tabs = [
     {
@@ -21,11 +25,11 @@ export default function MyWorkTabs({ activeTab }: { activeTab: string }) {
     }
   ];
 
-  const activeSelectedTab = useMemo(() => tabs.find((tab) => tab.id == activeTab), [activeTab]);
+  const activeSelectedTab = useMemo(() => tabs.find((tab) => tab.id == activeTab), [activeTab]) as activeSelectedTab;
 
   return (
     <>
-      <div>{activeSelectedTab && activeSelectedTab.content}</div>
+      <div>{activeSelectedTab.content}</div>
     </>
   );
 }
