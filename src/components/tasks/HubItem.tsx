@@ -272,10 +272,10 @@ export default function HubItem({
             ) : null}
             {placeHubType == APP_HR && (
               <div
-              className={`flex items-center justify-center ml-2 hr-checkbox-wrapper ${parentCheckboxCondition(
-                item.id
-              )}`}
-            >
+                className={`flex items-center justify-center ml-2 hr-checkbox-wrapper ${parentCheckboxCondition(
+                  item.id
+                )}`}
+              >
                 <Checkbox
                   styles="ml-0 mr-0 text-primary-500 focus:ring-primary-500 mx-0 hr-checkbox hr-checkbox-parent"
                   checked={checkSelectedHubs(item.id)}
