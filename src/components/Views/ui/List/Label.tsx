@@ -95,7 +95,7 @@ export function Label({
       <div className="flex items-center">
         <div
           className="flex items-center justify-between space-x-5 bg-purple-500 -mt-1 p-1 pr-7 rounded-tl-2xl -ml-0.5 h-7 rounded-br-[5px]"
-          style={{ backgroundColor: ListColor?.outerColour === null ? 'black' : (ListColor?.outerColour as string) }}
+          style={{ backgroundColor: !ListColor?.outerColour ? 'black' : (ListColor?.outerColour as string) }}
         >
           <div className="flex items-center pl-2 space-x-2 text-sm text-white w-fit -mt-1">
             <img src={statusbox} alt="" className="pr-1 border-r cursor-pointer" onClick={handleCheckedGroupTasks} />
