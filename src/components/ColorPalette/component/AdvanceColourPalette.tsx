@@ -15,6 +15,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { AddColour } from '../../../features/account/accountService';
 import { FORMATTED_COLOR } from './PaletteListView';
 import { getColorName } from 'ntc-ts';
+import CancelButton from '../../CancelButton';
 
 export default function AdvanceColourPalette({ show }: { show: boolean }) {
   //Hooks
@@ -98,24 +99,24 @@ export default function AdvanceColourPalette({ show }: { show: boolean }) {
     input: {
       border: '1px',
       width: '70px',
-      padding: '5px',
-      fontSize: '10px',
-      color: '#000',
+      padding: '6px',
+      fontSize: '11px',
+      color: '#424242',
       borderRadius: '5px',
-      height: '25px'
+      height: '23px'
     }
   };
 
   return show ? (
-    <div className="px-4 py-2 border-t border-gray-500">
-      <div className="flex flex-col justify-center w-full gap-2">
+    <div className="px-2 border-alsoit-gray-75 border-t-[0.5px]">
+      <div className="flex flex-col justify-center w-full gap-2 text-[#424242]">
         <div className={cl(isAdvanceSearch && 'w-full', 'flex items-center justify-between p-1')}>
-          {!isAdvanceSearch && <p>ADVANCE COLOUR PALETTE</p>}
+          {!isAdvanceSearch && <p>ADVANCED COLOUR PALETTE</p>}
           <span className={cl(isAdvanceSearch && 'w-full', 'flex items-center justify-between gap-2')}>
             {!isAdvanceSearch && (
-              <ToolTip title="Search Advance Colour">
-                <span className="p-1.5 bg-white rounded" onClick={() => setIsAdvanceSearch(true)}>
-                  <SearchIcon className="w-4 h-4" />
+              <ToolTip title="Search Advance Colours">
+                <span className="p-1 bg-white rounded hover:bg-[#F9E6FF]" onClick={() => setIsAdvanceSearch(true)}>
+                  <SearchIcon color="#919191" className="w-4 h-4" />
                 </span>
               </ToolTip>
             )}
@@ -123,15 +124,17 @@ export default function AdvanceColourPalette({ show }: { show: boolean }) {
               <div className="grow">
                 <Input
                   placeholder="Search"
-                  bgColor="bg-gray-200"
                   borderRadius="rounded-md py-0.5"
                   type="text"
                   name="Advance Search. . ."
-                  leadingIcon={<CiSearch />}
+                  leadingIcon={<CiSearch style={{ color: 'rgb(191, 0, 255)' }} />}
                   trailingIcon={
                     <ToolTip title="Close Advance Search">
                       <span>
-                        <AiFillCloseCircle style={{ color: 'rgb(191, 0, 255)' }} />
+                        <AiFillCloseCircle
+                          className="text-sm hover:fill-[#8601B2]"
+                          style={{ color: 'rgb(191, 0, 255)' }}
+                        />
                       </span>
                     </ToolTip>
                   }
@@ -144,28 +147,28 @@ export default function AdvanceColourPalette({ show }: { show: boolean }) {
           </span>
         </div>
         <div className="flex flex-col items-center w-full gap-2">
-          <HuePicker width="100%" style={{ borderRadius: '10px' }} color={rgb} onChange={updateColor} />
+          <HuePicker width="100%" style={{ borderRadius: '20px' }} color={rgb} onChange={updateColor} />
           <AlphaPicker width="100%" color={rgb} onChange={updateColor} />
         </div>
         <div className="flex items-center gap-1 mt-4">
           <span
-            className="relative flex w-fit items-center justify-between gap-2 p-1 px-2.5 text-xs text-gray-500 bg-white rounded-md hover:text-primary-600 hover:bg-primary-100"
+            className="relative flex w-fit items-center justify-between gap-2 p-1 px-2.5 text-xs bg-white rounded-md hover:bg-primary-100 cursor-pointer border-alsoit-border-sm"
             onClick={() => setShowColorTypes((prev) => !prev)}
           >
             <p className="uppercase">{colorType}</p>
-            <ArrowDownFilled color={showColorTypes ? 'white' : undefined} />
+            <ArrowDownFilled color="#919191" />
             {showColorTypes && color && (
               <span className="absolute left-0 z-20 p-1 px-1 bg-white border rounded-md -right-5 top-6">
                 {Object.keys(filteredObject).map((colorFormat, colorIndex) => (
                   <span
                     key={colorIndex}
-                    className="flex items-center h-6 gap-2 p-1 text-gray-500 uppercase rounded hover:bg-primary-200"
+                    className="flex items-center h-6 gap-2 p-1 text-gray-500 uppercase rounded hover:bg-gray-100"
                     onClick={() => setColorType(colorFormat)}
                   >
                     <RoundedCheckbox
                       onChange={() => ({})}
                       isChecked={colorFormat === colorType}
-                      styles="w-2 h-2 rounded-full cursor-pointer focus:outline-1 focus:ring-transparent  focus:border-2 focus:opacity-100 group-hover:opacity-100 text-alsoit-purple-300"
+                      styles="w-2 h-2 rounded-full cursor-pointer focus:outline-1 focus:ring-transparent focus:border-2 focus:opacity-100 group-hover:opacity-100 text-alsoit-purple-300"
                     />
                     <p>{colorFormat}</p>
                   </span>
@@ -173,20 +176,20 @@ export default function AdvanceColourPalette({ show }: { show: boolean }) {
               </span>
             )}
           </span>
-          <div className="grid w-full grid-cols-3 -mt-4 text-xs grow">
-            <div className="flex flex-col items-center justify-center">
-              <p className="uppercase">{colorType} CODE</p>
-              <span className="w-full bg-white border h-7 rounded-l-md">
+          <div className="flex -mt-3 grow rounded cursor-pointer">
+            <div className="flex flex-col items-center justify-center text-alsoit-gray-100 w-full">
+              <p className="uppercase text-[8px] text-left pr-5">{colorType} CODE</p>
+              <span className="w-full bg-white border h-[25px] rounded-l">
                 <EditableInput value={handleColorTypeSwitch()} style={inputStyles} onChange={onChange} />
               </span>
             </div>
-            <div className="flex flex-col items-center justify-center">
-              <p className="w-full pl-2 text-left">NAME</p>
-              <span className="flex items-center w-full pl-1 bg-white border-y h-7">{colorName}</span>
+            <div className="flex flex-col items-center justify-center w-full">
+              <p className="w-full pl-2 text-left text-alsoit-gray-100 text-[8px]">NAME</p>
+              <span className="flex items-center w-full pl-2 bg-white border-y h-[25px]">{colorName}</span>
             </div>
-            <div className="flex flex-col items-center justify-center">
-              <p className="w-full pl-2 text-left">OPACITY</p>
-              <span className="flex items-center w-full pl-1 bg-white border rounded-r-md h-7">
+            <div className="flex flex-col items-center justify-center ">
+              <p className="w-full pl-1 text-left text-alsoit-gray-100 text-[8px] pr-2">OPACITY</p>
+              <span className="flex items-center w-full pl-2 bg-white border rounded-r h-[25px]">
                 {color && color.rgb && color.rgb.a !== undefined && Math.floor(color.rgb.a * 100)}%
               </span>
             </div>
@@ -204,32 +207,23 @@ export default function AdvanceColourPalette({ show }: { show: boolean }) {
           height="h-8"
           onChange={(e) => setColorInputValue(e.target.value)}
         />
-        <div className="flex items-center justify-between gap-2">
-          <Button
-            height="h-6"
-            width="w-20"
-            label="Cancel"
-            labelSize="text-xs"
-            customClasses="hover:bg-red-500 bg-white text-red-600 border-red-200"
-            padding="p-1"
-            buttonStyle="custom"
-            onClick={() => ({})}
-          />
+        <div className="flex items-center justify-between gap-2 mt-5 mb-4">
+          <CancelButton onClick={() => ({})} />
           <div className="flex items-center gap-2">
             <Button
               height="h-6"
-              customClasses="hover:bg-green-700 bg-green-500 text-white"
+              customClasses="hover:bg-green-700 bg-[#00CC25] text-white w-[80px]"
               label="Replace"
-              labelSize="text-xs"
+              labelSize="text-[10px]"
               padding="p-1"
               buttonStyle="custom"
               onClick={handleAddColor}
             />
             <Button
               height="h-6"
-              customClasses="hover:bg-green-700 bg-green-500 text-white"
+              customClasses="hover:bg-green-700 bg-[#00CC25] text-white w-[80px]"
               label="Save as new"
-              labelSize="text-xs"
+              labelSize="text-[10px]"
               padding="p-1"
               buttonStyle="custom"
               onClick={handleAddColor}

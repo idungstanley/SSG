@@ -21,9 +21,9 @@ interface DatePickerProps {
   setShowDatePickerOption?: boolean;
   height?: string;
   anchorEl?: null | HTMLElement;
-  handleClose?: () => void;
   width?: string;
   toggleFn?: Dispatch<SetStateAction<boolean>>;
+  handleClose?: () => void;
 }
 
 export type DateString = {
@@ -35,10 +35,10 @@ export default function DatePicker({
   width,
   height,
   range,
-  handleClose,
   anchorEl,
   setShowDatePickerOption,
-  toggleFn
+  toggleFn,
+  handleClose
 }: DatePickerProps) {
   dayjs.extend(timezone);
   dayjs.extend(utc);

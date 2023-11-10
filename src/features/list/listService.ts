@@ -1,8 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import requestNew from '../../app/requestNew';
 import { useDispatch } from 'react-redux';
-import { setArchiveList } from './listSlice';
-import { closeMenu, setSpaceStatuses, setSpaceViews } from '../hubs/hubSlice';
+import { setArchiveList, setDragOverItem, setDraggableItem } from './listSlice';
+import { closeMenu, getHub, setSpaceStatuses, setSpaceViews } from '../hubs/hubSlice';
 import { IField, IListDetailRes, taskCountFields } from './list.interfaces';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { useParams } from 'react-router-dom';
@@ -17,7 +17,11 @@ import {
   updateCustomFieldColumnManager,
   updateCustomFieldManager
 } from '../../managers/Task';
-import { customPropertiesProps } from '../task/interface.tasks';
+import { ICheckListRes, customPropertiesProps } from '../task/interface.tasks';
+import { setChecklists } from '../task/checklist/checklistSlice';
+import { setFilteredResults } from '../search/searchSlice';
+import { listMoveManager } from '../../managers/List';
+import { findCurrentHub } from '../../managers/Hub';
 
 interface TaskCountProps {
   data: {
@@ -65,26 +69,20 @@ const moveList = (data: { listId: string; hubId: string; type: string }) => {
 };
 
 export const useMoveListService = () => {
-  const queryClient = useQueryClient();
-  const { hubId, walletId, listId } = useParams();
+  const dispatch = useDispatch();
 
-  const id = hubId ?? walletId ?? listId;
-  const type = hubId ? EntityType.hub : walletId ? EntityType.wallet : EntityType.list;
-
-  const { sortAbleArr } = useAppSelector((state) => state.task);
-  const sortArrUpdate = sortAbleArr.length <= 0 ? null : sortAbleArr;
-
-  const { filters } = generateFilters();
+  const { draggableItemId, dragOverItemId } = useAppSelector((state) => state.list);
+  const { hub } = useAppSelector((state) => state.hub);
 
   return useMutation(moveList, {
     onSuccess: () => {
-      queryClient.invalidateQueries(['hub']);
-      queryClient.invalidateQueries(['sub-hub']);
-      queryClient.invalidateQueries(['lists']);
-      queryClient.invalidateQueries(['task', { listId, sortArrUpdate, filters }]);
-      queryClient.invalidateQueries(['task', id, type]);
-      queryClient.invalidateQueries(['retrieve', id ?? 'root', 'tree']);
-      queryClient.invalidateQueries(['retrieve', id ?? 'root', undefined]);
+      const droppableEl = findCurrentHub(dragOverItemId as string, hub);
+      const type = droppableEl.id ? EntityType.hub : EntityType.wallet;
+      const updatedTree = listMoveManager(type, draggableItemId as string, dragOverItemId as string, hub);
+      dispatch(getHub(updatedTree));
+      dispatch(setFilteredResults(updatedTree));
+      dispatch(setDraggableItem(null));
+      dispatch(setDragOverItem(null));
     }
   });
 };
@@ -187,10 +185,10 @@ export const UseArchiveListService = (list: { query: string | undefined | null; 
 export const UseGetListDetails = (listId: string | null | undefined) => {
   const dispatch = useAppDispatch();
 
-  const { activeItemId } = useAppSelector((state) => state.workspace);
-  const id = activeItemId === 'list' ? activeItemId : listId;
+  const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
+  const id = activeItemType === 'list' ? activeItemId : listId;
   return useQuery(
-    ['hubs', { listId, id }],
+    ['hubs', 'update-list', { listId, id }],
     async () => {
       const data = await requestNew<IListDetailRes>({
         url: `lists/${listId}`,
@@ -199,12 +197,13 @@ export const UseGetListDetails = (listId: string | null | undefined) => {
       return data;
     },
     {
-      enabled: !!listId || !!id,
+      enabled: !!listId,
       onSuccess: (data) => {
         const listStatusTypes = data.data.list.task_statuses;
         const listViews = data.data.list.task_views;
         dispatch(setSpaceStatuses(listStatusTypes));
         dispatch(setSpaceViews(listViews));
+        dispatch(setChecklists(data?.data.list.checklists as ICheckListRes[]));
       },
       cacheTime: 0
     }
@@ -227,7 +226,6 @@ const clearEntityCustomFieldValue = (data: { taskId?: string; fieldId: string })
 
 export const useClearEntityCustomFieldValue = () => {
   const queryClient = useQueryClient();
-
   const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
   const { filters } = generateFilters();
 

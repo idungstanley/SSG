@@ -1,38 +1,38 @@
-import React, { useState, useRef } from 'react';
+import React, { useRef } from 'react';
 import { BiCaretRight } from 'react-icons/bi';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
-import { UseUpdateChecklistService } from '../../../../features/task/checklist/checklistService';
-import { setOpenedDisclosureId, setTriggerChecklistUpdate } from '../../../../features/task/checklist/checklistSlice';
+import { useEditChecklist } from '../../../../features/task/checklist/checklistService';
+import { setEditChecklist, setOpenedDisclosureId } from '../../../../features/task/checklist/checklistSlice';
 import ChecklistItem from './ChecklistItem';
 import ChecklistModal from './ChecklistModal';
 import { completeOptions } from './ModalOptions';
 import { ICheckListRes } from '../../../../features/task/interface.tasks';
 import { Spinner } from '../../../../common';
+import { useMutation } from '@tanstack/react-query';
 
 function Disclosures({ item }: { item?: ICheckListRes[] | undefined }) {
   const dispatch = useAppDispatch();
-  const [checklistName, setChecklistName] = useState<string | undefined>('');
-  const [checklistId, setChecklistId] = useState<string>('');
   const inputRef = useRef<HTMLInputElement | null>(null);
 
-  const { triggerChecklistUpdate, openedDisclosureId } = useAppSelector((state) => state.checklist);
+  const { openedDisclosureId } = useAppSelector((state) => state.checklist);
 
   const handleItemClick = (id: string) => {
     dispatch(setOpenedDisclosureId(id));
   };
 
-  const handleEdit = (id: string) => {
-    setChecklistName(inputRef.current?.innerText);
-    dispatch(setTriggerChecklistUpdate(true));
-    setChecklistId(id);
+  const editChecklist = useMutation(useEditChecklist, {
+    onSuccess: (data) => {
+      dispatch(setEditChecklist(data.data.checklist));
+    }
+  });
+
+  const handleEdit = async (id: string) => {
+    await editChecklist.mutateAsync({
+      checklist_id: id,
+      name: inputRef.current?.innerText
+    });
     inputRef.current?.blur();
   };
-
-  UseUpdateChecklistService({
-    checklist_id: checklistId,
-    name: checklistName,
-    triggerUpdate: triggerChecklistUpdate
-  });
 
   const focusItem = () => {
     inputRef.current?.focus();

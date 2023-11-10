@@ -1,63 +1,74 @@
-import { useEffect } from 'react';
-import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
-import { FilterListIcon } from '../../../../assets/icons/FilterListIcon';
-import { InfoIcon } from '../../../../assets/icons/InfoIcon';
-import { SortIcon } from '../../../../assets/icons/SortIcon';
-import { SortOption, setTimeSortArr } from '../../../../features/task/taskSlice';
-import { TIME_INVENTORY_HEADER } from '../../../../utils/Constants/TimeClockConstants';
+import { useEffect, useState } from 'react';
+import { useAppSelector } from '../../../../app/hooks';
+import {
+  TIME_INVENTORY_CUSTOM_PROPERTIES,
+  TIME_INVENTORY_HEADER
+} from '../../../../utils/Constants/TimeClockConstants';
 import { useGetTimeEntriesMutation } from '../../../../features/task/taskService';
 import { EntityType } from '../../../../utils/EntityTypes/EntityType';
+import PlusCircle from '../../../../assets/icons/AddCircle';
+import { TabsDropDown } from './TabsDropDown';
 
 export function LogHeaders() {
-  const dispatch = useAppDispatch();
+  // const dispatch = useAppDispatch();
 
   const { timeSortArr } = useAppSelector((state) => state.task);
   const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
 
+  const [dropDown, setDropDown] = useState<{ customProperties: boolean }>({
+    customProperties: false
+  });
+
   const { mutateAsync } = useGetTimeEntriesMutation();
 
-  const handleClick = ({ field }: { field: string }) => {
-    const newData: SortOption[] = timeSortArr.map((data) => {
-      if (data.field === field) {
-        return { field, dir: data.dir === 'asc' ? 'desc' : 'asc' };
-      }
-      return data;
-    });
+  // const handleClick = ({ field }: { field: string }) => {
+  //   const newData: SortOption[] = timeSortArr.map((data) => {
+  //     if (data.field === field) {
+  //       return { field, dir: data.dir === 'asc' ? 'desc' : 'asc' };
+  //     }
+  //     return data;
+  //   });
 
-    if (!newData.some((data) => data.field === field)) {
-      newData.push({ field, dir: 'asc' });
-    }
+  //   if (!newData.some((data) => data.field === field)) {
+  //     newData.push({ field, dir: 'asc' });
+  //   }
 
-    dispatch(setTimeSortArr(newData));
-  };
+  //   dispatch(setTimeSortArr(newData));
+  // };
 
-  const headers = () =>
-    TIME_INVENTORY_HEADER.map((header, index) => {
-      return (
-        <div
-          key={index}
-          className={`${
-            index <= 1 ? 'header-cell-reduced' : 'header-cell'
-          } cursor-grab text-alsoit-text-md flex space-x-1 items-center group`}
-        >
-          <span>{header.name}</span>
-          <div className="flex space-x-0.5 items-center invisible group-hover:visible">
-            <div className="rounded-full bg-white">
-              <InfoIcon className="w-4 h-4 hover:bg-alsoit-purple-50 hover:cursor-pointer" />
-            </div>
-            <div className={`${header.sorted ? 'bg-alsoit-purple-50' : 'bg-white'} rounded-full`}>
-              <SortIcon
-                className="w-4 h-4 hover:bg-alsoit-purple-50 hover:cursor-pointer"
-                onClick={() => handleClick({ field: header.value })}
+  const headers = () => (
+    <tr className="w-full flex space-x-0.5">
+      {TIME_INVENTORY_HEADER.map((header, index) => {
+        return (
+          <th
+            key={index}
+            className={
+              index === 0
+                ? 'sticky left-0 w-[15rem] px-2 bg-alsoit-gray-50 z-20 border-b'
+                : 'w-20 border-b flex justify-between items-center'
+            }
+            style={{ whiteSpace: 'nowrap' }}
+          >
+            {!header.isHidden && (
+              <span
+                className={`uppercase text-alsoit-text-md ${
+                  index === 0 ? 'float-left clear-both' : 'text-center'
+                } font-semibold`}
+              >
+                {header.name}
+              </span>
+            )}
+            {index === 1 && (
+              <PlusCircle
+                className="cursor-pointer"
+                onClick={() => setDropDown((prev) => ({ ...prev, customProperties: !prev.customProperties }))}
               />
-            </div>
-            <div className="rounded-full bg-white">
-              <FilterListIcon className="w-4 h-4 hover:bg-alsoit-purple-50 hover:cursor-pointer" />
-            </div>
-          </div>
-        </div>
-      );
-    });
+            )}
+          </th>
+        );
+      })}
+    </tr>
+  );
 
   useEffect(() => {
     mutateAsync({
@@ -71,6 +82,24 @@ export function LogHeaders() {
   return (
     <div className="overflow-x-visible w-full">
       <div className="flex space-x-2">{headers()}</div>
+      {dropDown.customProperties && (
+        <TabsDropDown
+          header="custom property"
+          subHeader="select property"
+          closeModal={() => setDropDown((prev) => ({ ...prev, customProperties: !prev.customProperties }))}
+          styles="w-44 left-36"
+          subStyles="left-8"
+        >
+          {TIME_INVENTORY_CUSTOM_PROPERTIES.map((entity) => (
+            <div
+              className="flex w-full p-1.5 space-y-2 text-orange-500 capitalize cursor-pointer hover:bg-alsoit-gray-50"
+              key={entity.value}
+            >
+              {entity.name}
+            </div>
+          ))}
+        </TabsDropDown>
+      )}
     </div>
   );
 }

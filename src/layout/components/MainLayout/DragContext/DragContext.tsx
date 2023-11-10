@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { ReactNode, useState } from 'react';
 import { DndContext, DragEndEvent, DragOverEvent, DragStartEvent, UniqueIdentifier } from '@dnd-kit/core';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import {
@@ -8,7 +8,7 @@ import {
   setDraggableItem,
   setDraggableTask
 } from '../../../../features/list/listSlice';
-import { useMoveTask } from '../../../../features/task/taskService';
+import { useMoveTask, useMultipleTaskMove } from '../../../../features/task/taskService';
 import { setPlaces } from '../../../../features/account/accountSlice';
 import { arrayMove } from '@dnd-kit/sortable';
 import { useMoveListService } from '../../../../features/list/listService';
@@ -18,6 +18,9 @@ import { EntityType } from '../../../../utils/EntityTypes/EntityType';
 import { setDragToBecomeSubTask } from '../../../../features/task/taskSlice';
 import { ITaskFullList } from '../../../../features/task/interface.tasks';
 import { IList } from '../../../../features/hubs/hubs.interfaces';
+import MatchStatusPopUp from '../../../../components/status/Components/MatchStatusPopUp';
+import { setMatchedStatus, setStatusesToMatch } from '../../../../features/hubs/hubSlice';
+import { setMatchData } from '../../../../features/general/prompt/promptSlice';
 
 interface DragContextProps {
   children: ReactNode;
@@ -30,10 +33,14 @@ export default function DragContext({ children }: DragContextProps) {
   const dispatch = useAppDispatch();
 
   // needed for invalidation
-  const { dragToBecomeSubTask } = useAppSelector((state) => state.task);
+  const { dragToBecomeSubTask, selectedTasksArray } = useAppSelector((state) => state.task);
   const { places } = useAppSelector((state) => state.account);
+  const { matchData } = useAppSelector((state) => state.prompt);
+  const { matchedStatus, statusesToMatch } = useAppSelector((state) => state.hub);
+  const { draggableTask, dragOverList } = useAppSelector((state) => state.list);
 
   const { mutate: onMove } = useMoveTask();
+  const { mutate: onMultipleTaskMove } = useMultipleTaskMove();
   const { mutate: onMoveList } = useMoveListService();
   const { mutate: onMoveHub } = useMoveHubsService();
   const { mutate: onMoveWallet } = useMoveWalletsService();
@@ -51,7 +58,6 @@ export default function DragContext({ children }: DragContextProps) {
   };
 
   const onDragEnd = (e: DragEndEvent) => {
-    dispatch(setDragOverItem(null));
     const { over, active } = e;
     const overId = over?.id as string;
     const activeId = active?.id as string;
@@ -75,11 +81,19 @@ export default function DragContext({ children }: DragContextProps) {
     if (isTaskToList) {
       // drag and drop tasks
       if (overId && activeId) {
-        onMove({
-          taskId: activeId,
-          listId: overId,
-          overType: EntityType.list
-        });
+        if (selectedTasksArray.length && selectedTasksArray.includes(activeId)) {
+          onMultipleTaskMove({
+            taskIds: selectedTasksArray,
+            listId: overId,
+            overType: EntityType.list
+          });
+        } else {
+          onMove({
+            taskId: activeId,
+            listId: overId,
+            overType: EntityType.list
+          });
+        }
       }
     }
     if (isListToHub) {
@@ -88,7 +102,6 @@ export default function DragContext({ children }: DragContextProps) {
         hubId: overId,
         type: EntityType.hub
       });
-      dispatch(setDraggableItem(null));
     }
     if (isListToWallet) {
       onMoveList({
@@ -96,7 +109,6 @@ export default function DragContext({ children }: DragContextProps) {
         hubId: overId,
         type: EntityType.wallet
       });
-      dispatch(setDraggableItem(null));
     }
     if (isTaskToTask) {
       if (activeId !== overId) {
@@ -182,9 +194,76 @@ export default function DragContext({ children }: DragContextProps) {
     }
   };
 
+  const [matchingStatusValidation, setMatchingStatusValidation] = useState<string>('');
+
+  const clearMatchData = () => {
+    setMatchingStatusValidation('');
+    dispatch(setMatchData([]));
+    dispatch(setMatchedStatus([]));
+    dispatch(setStatusesToMatch([]));
+  };
+
+  const matchStatusArray = [
+    {
+      label: 'Save Changes',
+      style: 'danger',
+      callback: async () => {
+        if (matchedStatus.length !== matchData.length) {
+          setMatchingStatusValidation('Whoops! Select a status for every conflicting status');
+          setTimeout(() => {
+            setMatchingStatusValidation('');
+          }, 3000);
+        } else {
+          if (selectedTasksArray.length && selectedTasksArray.includes(draggableTask?.id as string)) {
+            const mathesArray: { from: string; to: string }[] = [];
+            matchedStatus.forEach((item, index) => {
+              const currentId = statusesToMatch.find((status) => matchedStatus[index].name === status.name)
+                ?.id as string;
+              mathesArray.push({ from: item.id as string, to: currentId });
+            });
+            onMultipleTaskMove({
+              taskIds: selectedTasksArray,
+              listId: dragOverList?.id as string,
+              overType: EntityType.list,
+              status_matches: mathesArray
+            });
+          } else {
+            let newId = '';
+            if (statusesToMatch.length) {
+              newId = statusesToMatch.find((status) => matchedStatus[0].name === status.name)?.id as string;
+            }
+            onMove({
+              taskId: draggableTask?.id as string,
+              listId: dragOverList?.id as string,
+              overType: EntityType.list,
+              status_from: matchData[0].id as string,
+              status_to: newId
+            });
+          }
+          clearMatchData();
+        }
+      }
+    },
+    {
+      label: 'Cancel',
+      style: 'plain',
+      callback: () => {
+        clearMatchData();
+      }
+    }
+  ];
+
   return (
     <DndContext onDragStart={onDragStart} onDragEnd={onDragEnd} onDragOver={onDragOver}>
       {children}
+      <MatchStatusPopUp
+        validationMessage={matchingStatusValidation}
+        options={matchStatusArray}
+        title="Match Statuses"
+        body={`You changed statuses in your List. ${matchData?.length} status will be affected. How should we handle these statuses?`}
+        setShow={() => dispatch(setStatusesToMatch([]))}
+        show={!!statusesToMatch.length}
+      />
     </DndContext>
   );
 }

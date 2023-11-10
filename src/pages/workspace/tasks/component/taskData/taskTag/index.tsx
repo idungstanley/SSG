@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState } from 'react';
-import { tagItem, renderDataProps } from '../DataRenderFunc';
+import { TagItem, renderDataProps } from '../DataRenderFunc';
 import { useAppSelector } from '../../../../../../app/hooks';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { UseUpdateTagService, UseUnAssignTagService } from '../../../../../../features/workspace/tags/tagService';
@@ -8,7 +8,7 @@ import EditTagModal from '../../../../../../components/tags/EditTagModal';
 import { IoCloseSharp } from 'react-icons/io5';
 
 export default function TaskTag({ taskColField, entity_id, entity_type }: renderDataProps) {
-  const groupTags = (arr: tagItem[]) => {
+  const groupTags = (arr: TagItem[]) => {
     const { renameTagId, currentTaskIdForTag } = useAppSelector((state) => state.tag);
     const queryClient = useQueryClient();
 
@@ -38,7 +38,7 @@ export default function TaskTag({ taskColField, entity_id, entity_type }: render
 
     return (
       <div key={arr.length} className="flex items-center -mr-5 drop-shadow-xl">
-        {arr.map((item: tagItem) => {
+        {arr.map((item: TagItem) => {
           return (
             <div key={item.id}>
               {Array.isArray(item) ? (
@@ -68,7 +68,7 @@ export default function TaskTag({ taskColField, entity_id, entity_type }: render
                           {item.name.length > 10 ? item.name.slice(0, 5) : item.name}
                         </p>
                       </div>
-                      <EditTagModal taskId={entity_id} tagId={item?.id} />
+                      <EditTagModal taskId={entity_id} tag={item} onClose={() => null} />
                       <button
                         className="pr-2 font-bold text-gray-300"
                         style={{ fontSize: '9px' }}

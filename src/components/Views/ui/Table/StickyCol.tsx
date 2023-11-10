@@ -18,7 +18,8 @@ import {
   setTaskIdForPilot,
   setDuplicateTaskObj,
   setSelectedIndexListId,
-  setF2State
+  setF2State,
+  setTaskRootIds
 } from '../../../../features/task/taskSlice';
 import { setActiveItem } from '../../../../features/workspace/workspaceSlice';
 import { UniqueIdentifier, useDraggable, useDroppable } from '@dnd-kit/core';
@@ -97,6 +98,7 @@ export function StickyCol({
     separateSubtasksMode,
     newTaskPriority,
     f2State,
+    taskRootIds,
     assignOnHoverTask
   } = useAppSelector((state) => state.task);
 
@@ -143,6 +145,21 @@ export function StickyCol({
   const onToggleDisplayingSubTasks = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.stopPropagation();
     setShowSubTasks(!showSubTasks);
+
+    if (!task.parent_id) {
+      dispatch(setTaskRootIds({ ...taskRootIds, [task.id]: [task.id] }));
+    } else {
+      const updateTaskRootIds = { ...taskRootIds };
+
+      for (const key of task.root_task_ids as string[]) {
+        if (updateTaskRootIds[key]) {
+          const taskRootIdsArray = [...(task.root_task_ids as string[]), task.id];
+
+          updateTaskRootIds[key] = taskRootIdsArray;
+        }
+      }
+      dispatch(setTaskRootIds(updateTaskRootIds));
+    }
   };
 
   const editTaskMutation = useMutation(UseUpdateTaskService, {
@@ -323,7 +340,22 @@ export function StickyCol({
     if (!contentRef.current || !divRef.current || !badgeRef.current) return;
     const ref = contentRef.current;
     observer.current = new ResizeObserver(() => {
-      const content = ref ? (task.descendants_count > 0 ? ref.clientWidth - 70 : ref.clientWidth - 30) : 0;
+      const contentWidth = () => {
+        if (task.has_attachments && task.has_descendants && task.description) {
+          return ref.clientWidth - 160;
+        } else if (
+          (task.has_attachments && task.has_descendants) ||
+          (task.has_attachments && task.description) ||
+          (task.description && task.has_descendants)
+        ) {
+          return ref.clientWidth - 100;
+        } else if (task.has_descendants || task.has_attachments || task.description) {
+          return ref.clientWidth - 70;
+        } else {
+          return ref.clientWidth - 30;
+        }
+      };
+      const content = contentWidth();
       const full = divRef.current ? divRef.current.clientWidth : 0;
       const badge = badgeRef.current ? badgeRef.current.clientWidth + 30 : 0;
       setWidth(Math.round((content / full) * 100));
@@ -349,6 +381,11 @@ export function StickyCol({
           className="sticky left-0 z-10 flex items-center justify-start text-sm font-medium text-gray-900 cursor-pointer text-start"
           {...props}
         >
+          <div
+            ref={droppabbleRef}
+            className="absolute h-full"
+            style={{ left: '30px', background: 'transparent', height: '100%', width: '100%', zIndex: -1 }}
+          />
           <div
             className="flex items-center h-full ml-1 space-x-1"
             style={{
@@ -402,21 +439,16 @@ export function StickyCol({
                 : 'border-t relative'
             )}
           >
-            <div
-              ref={droppabbleRef}
-              className="absolute w-2 h-full"
-              style={{ left: '30px', background: 'transparent', height: '100%', width: '30px', zIndex: -1 }}
-            />
             {dragToBecomeSubTask && isOver && draggableItemId !== dragOverItemId && (
               <span
                 className={cl(
                   dragToBecomeSubTask && isOver && draggableItemId !== dragOverItemId
-                    ? 'absolute content-start z-50 flex items-center left-12 w-full bottom-0 gap-0'
+                    ? 'absolute content-start z-50 flex items-center left-12 w-full bottom-0'
                     : ''
                 )}
               >
                 <span className="border-solid z-50 border-alsoit-purple-300 border-l-[8px] border-y-transparent border-y-[4px] border-r-0 m-0" />
-                <span className={cl('h-0.5 bg-alsoit-purple-300 w-full m-0')}></span>
+                <span className={cl('h-0.5 bg-alsoit-purple-300 w-full ml-auto')}></span>
               </span>
             )}
             {isBlockedShowChildren ? (
@@ -435,7 +467,7 @@ export function StickyCol({
               </button>
             )}
             <div onClick={() => dispatch(setCurrentTaskStatusId(task.id as string))}>
-              <StatusDropdown taskCurrentStatus={task.status} taskStatuses={task.task_statuses} />
+              <StatusDropdown task={task} taskCurrentStatus={task.status} taskStatuses={task.task_statuses} />
             </div>
             {separateSubtasksMode && task?.parentName && !paddingLeft ? (
               <ToolTip title={task.parentName}>
@@ -492,7 +524,9 @@ export function StickyCol({
                       )}
                     </div>
                   ) : (
-                    <div>{taskUpperCase ? task.name.toUpperCase() : Capitalize(task.name)}</div>
+                    <div style={{ wordBreak: 'break-word' }}>
+                      {taskUpperCase ? task.name.toUpperCase() : Capitalize(task.name)}
+                    </div>
                   )}
                 </div>
                 <div
@@ -548,7 +582,7 @@ export function StickyCol({
               >
                 <div
                   className="border rounded-sm"
-                  style={{ borderColor: '#B2B2B280', borderWidth: '0.5px', width: '20px' }}
+                  style={{ borderColor: '#B2B2B2CC', borderWidth: '0.5px', height: '20px', width: '20px' }}
                   onClick={onClose}
                 >
                   <Close active={closeToggle}></Close>
@@ -561,7 +595,7 @@ export function StickyCol({
               </ToolTip>
             </div>
             <div className="pt-1 ml-4">
-              <StatusDropdown taskCurrentStatus={task.status} taskStatuses={task.task_statuses} />
+              <StatusDropdown task={task} taskCurrentStatus={task.status} taskStatuses={task.task_statuses} />
             </div>
             <div className="flex flex-col items-start justify-start pl-2 space-y-1">
               <p

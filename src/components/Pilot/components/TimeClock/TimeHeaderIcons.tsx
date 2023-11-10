@@ -9,13 +9,17 @@ import { TabsDropDown } from './TabsDropDown';
 import { TimeShowDropDown } from './TimeShowDropDown';
 import { useAppSelector } from '../../../../app/hooks';
 import { TeamMemberFilter } from './TeamMember';
+import { useGetTimeEntriesMutation } from '../../../../features/task/taskService';
 
 interface Props {
-  extended?: boolean;
+  fullContent?: boolean;
 }
 
-export function HeaderIcons({ extended }: Props) {
-  const { nestedTimeEntityId } = useAppSelector((state) => state.workspace);
+export function HeaderIcons({ fullContent }: Props) {
+  const { nestedTimeEntityId, activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
+  const { currentTeamMemberId } = useAppSelector((state) => state.task);
+
+  const { mutateAsync } = useGetTimeEntriesMutation();
 
   const [dropDown, setDropDown] = useState<{ show: boolean; filter: boolean; assignee: boolean; me: boolean }>({
     assignee: false,
@@ -29,16 +33,15 @@ export function HeaderIcons({ extended }: Props) {
   }, [nestedTimeEntityId]);
 
   return (
-    <div className="flex justify-end space-x-0.5 px-1.5">
+    <div className="flex justify-end space-x-1 px-1.5 relative">
       <div
-        className="p-0.5 rounded-md gap-2 flex -space-x-1 items-center justify-between bg-white hover:bg-alsoit-purple-50 cursor-pointer relative"
+        className="p-0.5 rounded-md gap-2 flex -space-x-1 items-center justify-between bg-white hover:bg-alsoit-purple-50 cursor-pointer"
         onClick={() => setDropDown((prev) => ({ ...prev, show: !prev.show }))}
       >
         <ShowIcon color="gray" className="w-4 h-4" />
-        <ArrowDownFilled dimensions={{ width: 8, height: 8 }} />
         {dropDown.show && (
           <TabsDropDown
-            styles="w-72 right-0 top-5 px-1.5"
+            styles="w-72 right-0 top-0 px-1.5"
             subStyles="left-1/3"
             header="customize this view"
             subHeader="main settings"
@@ -51,19 +54,30 @@ export function HeaderIcons({ extended }: Props) {
       <div className="flex items-center p-1 bg-white rounded-md cursor-pointer hover:bg-alsoit-purple-50">
         <FilterListIcon active={false} color="orange" className="w-4 h-4" />
       </div>
-      {extended && (
+      {fullContent && (
         <div className={'p-1 rounded-md flex items-center bg-white hover:bg-alsoit-purple-50 cursor-pointer'}>
-          <Me active={false} className="w-4 h-4" />
+          <Me
+            active={false}
+            className="w-4 h-4"
+            onClick={() =>
+              mutateAsync({
+                itemId: activeItemId,
+                trigger: activeItemType,
+                include_filters: true,
+                team_member_ids: currentTeamMemberId as string[]
+              })
+            }
+          />
         </div>
       )}
       <div
         className={
-          'relative p-1 rounded-md flex -space-x-1 items-center justify-between bg-white gap-2 hover:bg-alsoit-purple-50 cursor-pointer'
+          'relative p-0.5 rounded-md flex -space-x-1 items-center justify-between bg-white gap-2 hover:bg-alsoit-purple-50 cursor-pointer'
         }
         onClick={() => setDropDown((prev) => ({ ...prev, assignee: !prev.assignee }))}
       >
         <AssigneeIcon className="w-4 h-4" active={false} />
-        <ArrowDownFilled dimensions={{ width: 8, height: 8 }} />
+        <ArrowDownFilled dimensions={{ width: 6, height: 6 }} />
         {dropDown.assignee && (
           <TeamMemberFilter closeModal={() => setDropDown((prev) => ({ ...prev, assignee: !prev.assignee }))} />
         )}

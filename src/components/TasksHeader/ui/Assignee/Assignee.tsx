@@ -47,7 +47,7 @@ export function Assignee() {
 
   const handleAssignTask = () => {
     onTaskAssign({
-      taskIds: [(assignOnHoverTask as Task).id],
+      ids: [(assignOnHoverTask as Task).id],
       team_member_id: currentMemberId as string,
       teams: false
     });

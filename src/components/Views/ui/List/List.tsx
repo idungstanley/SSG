@@ -13,6 +13,7 @@ import { Hub } from '../../../../pages/workspace/hubs/components/ActiveTree/acti
 import { findCurrentHub } from '../../../../managers/Hub';
 import LightenColor from './lightenColor/LightenColor';
 import { SubtasksTable } from '../Table/SubtasksTable';
+import { useParams } from 'react-router-dom';
 
 interface ListProps {
   tasks: Task[];
@@ -47,6 +48,8 @@ export function List({ tasks }: ListProps) {
   const [parentHub, setParentHub] = useState<Hub>();
   const [fullTasksLists, setFullTasksLists] = useState<ITaskFullList[]>([]);
 
+  const { listId } = useParams();
+
   // reset showNewTaskField with eskLey
   useEffect(() => {
     if (escapeKey) {
@@ -61,19 +64,20 @@ export function List({ tasks }: ListProps) {
     }
   }, [parentHubExt]);
 
-  const ListColor: IListColor = tasks[0].list?.color
+  const ListColor: IListColor = tasks[0]?.list?.color
     ? JSON.parse(tasks[0].list?.color as string)
     : {
         outerColour: '#A854F7'
       };
 
   const generateColumns = useMemo(() => {
-    const customFieldNames = tasks[0].custom_field_columns.map((i) => ({
-      ...i,
-      value: i.name,
-      hidden: false,
-      field: i.type
-    }));
+    const customFieldNames =
+      tasks[0]?.custom_field_columns.map((i) => ({
+        ...i,
+        value: i.name,
+        hidden: false,
+        field: i.type
+      })) ?? [];
     const uniqueColumns = unique([...columnsHead, ...customFieldNames] as ExtendedListColumnProps[]);
     dispatch(getTaskColumns(uniqueColumns));
     return uniqueColumns;
@@ -122,15 +126,12 @@ export function List({ tasks }: ListProps) {
     <div
       className={`pt-1 border-t-4 border-l-4 rounded-tl-3xl  ${!collapseTable && 'rounded-3xl pb-3'}`}
       style={{
-        borderColor: ListColor?.outerColour === null ? 'black' : (ListColor?.outerColour as string),
-        backgroundColor: LightenColor(
-          ListColor?.outerColour === null ? 'black' : (ListColor?.outerColour as string),
-          0.95
-        )
+        borderColor: !ListColor?.outerColour ? 'black' : (ListColor?.outerColour as string),
+        backgroundColor: LightenColor(!ListColor?.outerColour ? 'black' : (ListColor?.outerColour as string), 0.95)
       }}
     >
       <Label
-        listName={tasks[0].list?.name}
+        listName={tasks[0]?.list?.name}
         hubName={splitSubTaskMode ? `${parentHub?.name as string} > ${tasks[0].list?.name}` : parentHub?.name}
         tasks={tasks}
         ListColor={ListColor}
@@ -142,9 +143,9 @@ export function List({ tasks }: ListProps) {
           {showNewTaskField ? (
             <div className="pl-2">
               <AddTask
-                parentId={tasks[0].list_id as string}
+                parentId={tasks[0]?.list_id || (listId as string)}
                 isListParent={true}
-                task={tasks[0]}
+                task={tasks?.[0]}
                 onClose={() => handleClose()}
               />
             </div>
@@ -160,7 +161,7 @@ export function List({ tasks }: ListProps) {
             <Fragment key={key}>
               {!splitSubTaskMode ? (
                 <Table
-                  listName={tasks[0].list?.name}
+                  listName={tasks[0]?.list?.name}
                   label={key}
                   listColor={ListColor}
                   heads={hideTask.length ? hideTask : generateColumns}
