@@ -124,10 +124,7 @@ export function Table({ heads, data, label, listName, listColor, isBlockedShowCh
       <div
         className="sticky top-0 mr-2 pl-2 pt-2 table-container overflow-hidden z-10"
         style={{
-          backgroundColor: LightenColor(
-            listColor?.outerColour === null ? 'black' : (listColor?.outerColour as string),
-            0.95
-          )
+          backgroundColor: LightenColor(!listColor?.outerColour ? 'black' : (listColor?.outerColour as string), 0.95)
         }}
         ref={tableHeadElement}
       >

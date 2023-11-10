@@ -110,7 +110,7 @@ export function SubtasksTable({ task, subtasksData, heads, listId, level, breadc
             className="sticky top-0 mr-2 pl-2 pt-2 table-container overflow-hidden z-10"
             style={{
               backgroundColor: LightenColor(
-                ListColor?.outerColour === null ? 'black' : (ListColor?.outerColour as string),
+                !ListColor?.outerColour ? 'black' : (ListColor?.outerColour as string),
                 0.95
               )
             }}
