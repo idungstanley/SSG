@@ -67,7 +67,7 @@ import { getHub, setStatusesToMatch } from '../hubs/hubSlice';
 import { setFilteredResults } from '../search/searchSlice';
 import { addNewSubtaskManager } from '../../managers/Subtask';
 import { IList } from '../hubs/hubs.interfaces';
-import { setDragOverList, setDragOverTask, setDraggableItem } from '../list/listSlice';
+import { setDragOverItem, setDragOverList, setDragOverTask, setDraggableItem } from '../list/listSlice';
 import { FilterWithId, FiltersOption } from '../../components/TasksHeader/ui/Filter/types/filters';
 import { pilotTabs } from '../../app/constants/pilotTabs';
 import { setChecklists } from './checklist/checklistSlice';
@@ -328,6 +328,7 @@ export const useMoveTask = () => {
         dispatch(setFilteredResults(updatedTree));
       }
       dispatch(setDraggableItem(null));
+      dispatch(setDragOverItem(null));
       dispatch(setDragOverList(null));
       dispatch(setDragOverTask(null));
     },
