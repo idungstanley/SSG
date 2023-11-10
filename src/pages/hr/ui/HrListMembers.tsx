@@ -1,43 +1,40 @@
-interface MemberProperties {
-  member: {
-    color: string | undefined;
-    id: string;
-    name?: string;
-    is_active?: boolean;
-    invited_at: string;
-    user: {
-      color?: string;
-      name: string;
-      id: string;
-      email: string;
-      initials: string;
-      avatar_path?: string | null;
-    };
-    initials: string;
-    colour?: string;
-    role: {
-      key: string;
-      name: string;
-    };
-  };
+import { IHrTeamMemberInterface } from '../../../features/hr/hrTeamMembers.interface';
+import { useAppSelector } from '../../../app/hooks';
+import { selectCalendar } from '../../../features/calendar/slice/calendarSlice';
+import dayjs from 'dayjs';
+
+interface MembersProperties {
+  hrListItems: IHrTeamMemberInterface[];
 }
 
-export default function HrListMembers({ member }: MemberProperties) {
-  //STATIC DEMO DATA
+export default function HrListMembers({ hrListItems }: MembersProperties) {
+  const { hrTeamMembers } = useAppSelector(selectCalendar);
+
+  const checkSelectedMembers = (id: string, hubId: string) => {
+    return hrTeamMembers.filter((hrTeamMember) => hrTeamMember.uuid == id + hubId).length > 0;
+  };
 
   return (
     <>
-      <tr className="border-b-2" style={{ borderColor: '#B2B2B2' }}>
-        <td className="p-5 border-r-2" style={{ borderColor: '#B2B2B2' }}>
-          {member.user.name}
-        </td>
-        <td className="p-5 text-center">Administrator</td>
-        <td className="p-5 text-center">London</td>
-        <td className="p-5 text-center">12/05/2017</td>
-        <td className="p-5 text-center">£40,000 PA</td>
-        <td className="p-5 text-center">22 Days</td>
-        <td className="p-5 text-center">13 Days</td>
-      </tr>
+      {hrListItems.map(
+        (hrListItem: IHrTeamMemberInterface, key: number) =>
+          checkSelectedMembers(hrListItem.team_member.id, hrListItem.hub_id) && (
+            <tr key={key} style={{ borderBottom: '0.5px solid #B2B2B2' }}>
+              <td className="p-5 w-1/4" style={{ borderRight: '0.5px solid #B2B2B2' }}>
+                {hrListItem.team_member.user.name}
+              </td>
+              <td className="p-5 text-center w-1/6">{hrListItem.hr_role}</td>
+              <td className="p-5 text-center w-1/6">{hrListItem.location}</td>
+              <td className="p-5 text-center w-1/12">{dayjs(hrListItem.start_date).format('DD/MM/YYYY')}</td>
+              <td className="p-5 text-center w-1/12">
+                {hrListItem.salary_currency}
+                {hrListItem.salary} PA
+              </td>
+              <td className="p-5 text-center w-1/12">22 Days</td>
+              <td className="p-5 text-center w-1/12">{hrListItem.allowance} Days</td>
+            </tr>
+          )
+      )}
     </>
   );
 }

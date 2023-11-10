@@ -1,38 +1,27 @@
 import EverythingIcon from '../../../../../assets/icons/EverythingIcon';
 import React from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import ActiveBackground from '../../../../../components/tasks/Component/ActiveBackground';
-import ActiveBarIdentification from '../../../../../components/tasks/Component/ActiveBarIdentification';
+import ICONS_INTERACTIONS from '../../../../../utils/Constants/IconInteractions';
+import { Checkbox } from '../../../../../components/Checkbox/Checkbox';
 
 function EverythingHr() {
-  const navigate = useNavigate();
-  const location = useLocation();
-
-  const handleLoadMyOverview = () => {
-    navigate('hr/everything-hr', {
-      replace: true
-    });
+  const handleCheckEverything = (e: boolean) => {
+    console.log(e);
   };
 
   return (
     <div
       className="relative flex items-center justify-start hover:bg-alsoit-gray-50"
-      style={{ height: '30px', paddingLeft: '53px' }}
+      style={{ height: '30px', paddingLeft: '39px' }}
     >
-      <ActiveBackground showBgColor={location.pathname.includes('everything-hr')} />
-      <ActiveBarIdentification showBar={location.pathname.includes('everything-hr')} />
-      <div
-        className="flex items-center flex-1 min-w-0 gap-1 cursor-pointer"
-        style={{ zIndex: 1 }}
-        onClick={handleLoadMyOverview}
-      >
-        <EverythingIcon color={location.pathname.includes('everything-hr') ? '#BF01FE' : undefined} />
+      <div className="flex items-center flex-1 min-w-0 gap-1 cursor-pointer" style={{ zIndex: 1 }}>
+        <Checkbox
+          styles="ml-0 mr-0 text-primary-500 focus:ring-primary-500 mx-0 hr-checkbox hr-checkbox-parent"
+          checked={false}
+          setChecked={(e) => handleCheckEverything(e)}
+        />
+        <EverythingIcon color={ICONS_INTERACTIONS.default} />
 
-        <p
-          className={`block text-xs tracking-wider capitalize truncate ${
-            location.pathname.includes('everything-hr') ? 'text-alsoit-purple-300' : ''
-          }`}
-        >
+        <p className="block text-xs tracking-wider capitalize truncate" style={{ paddingLeft: '3px' }}>
           Everything
         </p>
       </div>
