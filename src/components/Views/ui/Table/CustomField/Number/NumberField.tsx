@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ICustomField } from '../../../../../../features/task/taskSlice';
 import { useUpdateEntityCustomFieldValue } from '../../../../../../features/list/listService';
 import Copy from '../../../../../../assets/icons/Copy';
@@ -18,12 +18,19 @@ function formatNumberWithCommas(number: number | string) {
 }
 
 function NumberField({ taskCustomFields, taskId, fieldId }: DropdownFieldWrapperProps) {
-  const activeValue = taskCustomFields?.values[0].value ? taskCustomFields?.values[0].value : '-';
+  const [activeValue, setActiveValue] = useState('');
   const [currentValue, setCurrentValue] = useState<string>(activeValue);
   const [editMode, setEditMode] = useState(false);
   const [isCopied, setIsCopied] = useState<number>(0);
 
   const { mutate: onUpdate } = useUpdateEntityCustomFieldValue(taskId);
+
+  useEffect(() => {
+    if (taskCustomFields) {
+      setActiveValue(taskCustomFields?.values[0].value ? taskCustomFields?.values[0].value : '-');
+      setCurrentValue(taskCustomFields?.values[0].value ? taskCustomFields?.values[0].value : '-');
+    }
+  }, [taskCustomFields]);
 
   const handleInputBlur = () => {
     setEditMode(false);

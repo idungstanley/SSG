@@ -76,7 +76,6 @@ export function ScrollableHorizontalListsContainer({
   }, []);
 
   const handleThumbMousedown = useCallback((e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    e.preventDefault();
     e.stopPropagation();
     setScrollStartPosition(e.clientX);
     if (contentRef.current) setInitialScrollTop(contentRef.current.scrollLeft);
@@ -91,7 +90,6 @@ export function ScrollableHorizontalListsContainer({
 
   const handleThumbMouseup = useCallback(
     (e: MouseEvent) => {
-      e.preventDefault();
       e.stopPropagation();
       if (isDragging) {
         setIsDragging(false);
@@ -102,7 +100,6 @@ export function ScrollableHorizontalListsContainer({
 
   const handleThumbMousemove = useCallback(
     (e: MouseEvent) => {
-      e.preventDefault();
       e.stopPropagation();
       if (isDragging && contentRef.current && scrollStartPosition) {
         const { scrollWidth: contentWidth, offsetWidth: contentOffsetWidth } = contentRef.current;
@@ -159,7 +156,9 @@ export function ScrollableHorizontalListsContainer({
         };
       }
     };
-    calculateThumbSize();
+    setTimeout(() => {
+      calculateThumbSize();
+    }, 100);
     window.addEventListener('resize', calculateThumbSize);
     return () => {
       window.removeEventListener('resize', calculateThumbSize);
@@ -241,10 +240,7 @@ export function ScrollableHorizontalListsContainer({
         <div
           className="sticky bottom-0 grid w-full grid-cols-2 pt-4 pr-2 group bg-purple-50 rounded-3xl"
           style={{
-            backgroundColor: LightenColor(
-              ListColor?.outerColour === null ? 'black' : (ListColor?.outerColour as string),
-              0.95
-            ),
+            backgroundColor: LightenColor(!ListColor?.outerColour ? 'black' : (ListColor?.outerColour as string), 0.95),
             zIndex: 2
           }}
         >

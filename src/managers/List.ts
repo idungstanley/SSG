@@ -71,3 +71,14 @@ export const findCurrentList = (id: string, hubs: Hub[]) => {
   findCurrentEntity(EntityType.list, id, hubs, findList as <IList>(item: IList) => IList);
   return currentEntity as List;
 };
+
+export const listMoveManager = (newParentType: string, listId: string, parentId: string, hubs: Hub[]) => {
+  const currentList = findCurrentList(listId, hubs);
+  let updatedTree = deleteListManager(listId, hubs);
+  const newList = {
+    ...currentList,
+    parent_id: parentId
+  };
+  updatedTree = createListManager(newParentType, updatedTree, newList);
+  return updatedTree;
+};

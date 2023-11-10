@@ -1,4 +1,4 @@
-import { ICheckListRes } from './../interface.tasks';
+import { AssigneeType, ICheckListItems, ICheckListRes } from './../interface.tasks';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface checklistState {
@@ -12,6 +12,11 @@ interface checklistState {
   showChecklistItemInput: boolean;
   openChecklistModal: boolean;
   openedDisclosureId: string[];
+}
+
+interface CreateItemProps {
+  checklistId: string;
+  checklistItem: ICheckListItems;
 }
 
 const initialState: checklistState = {
@@ -33,7 +38,127 @@ export const checklistSlice = createSlice({
   reducers: {
     setChecklists(state, action: PayloadAction<ICheckListRes[]>) {
       state.checklists = action.payload;
-      // alert('yoo');
+    },
+    setCreateNewChecklist(state, action: PayloadAction<ICheckListRes>) {
+      if (state.checklists) {
+        state.checklists = [...state.checklists, action.payload];
+      } else {
+        state.checklists = [action.payload];
+      }
+    },
+    setEditChecklist(state, action: PayloadAction<ICheckListRes>) {
+      state.checklists = state.checklists?.map((checklist) => {
+        if (checklist.id === action.payload.id) {
+          return action.payload;
+        }
+        return checklist;
+      });
+    },
+    setCreateChecklistItem(state, action: PayloadAction<CreateItemProps>) {
+      const { checklistId, checklistItem } = action.payload;
+
+      const findChecklist = state.checklists?.find((checklist) => checklist.id === checklistId);
+
+      if (findChecklist) {
+        findChecklist.items.push(checklistItem);
+
+        state.checklists = state.checklists?.map((checklist) => {
+          if (checklist.id === checklistId) {
+            return findChecklist;
+          }
+          return checklist;
+        });
+      }
+    },
+    seteditChecklistItem(state, action: PayloadAction<CreateItemProps>) {
+      const { checklistId, checklistItem } = action.payload;
+
+      const findChecklist = state.checklists?.find((checklist) => checklist.id === checklistId);
+
+      if (findChecklist) {
+        const updatedItems = findChecklist.items.map((item) => {
+          if (item.id === checklistItem.id) {
+            return checklistItem;
+          }
+          return item;
+        });
+        const updateChecklist = { ...findChecklist, items: updatedItems };
+        state.checklists = state.checklists?.map((checklist) => {
+          if (checklist.id === checklistId) {
+            return updateChecklist;
+          }
+          return checklist;
+        });
+      }
+    },
+    setDeleteChecklistItem(state, action: PayloadAction<{ checklistId: string; itemId: string }>) {
+      const { checklistId, itemId } = action.payload;
+
+      const findChecklist = state.checklists?.find((checklist) => checklist.id === checklistId);
+
+      if (findChecklist) {
+        const updatedItems = findChecklist.items.filter((item) => {
+          return item.id !== itemId;
+        });
+        const updateChecklist = { ...findChecklist, items: updatedItems };
+        state.checklists = state.checklists?.map((checklist) => {
+          if (checklist.id === checklistId) {
+            return updateChecklist;
+          }
+          return checklist;
+        });
+      }
+    },
+    setDeleteChecklist(state, action: PayloadAction<string>) {
+      state.checklists = state.checklists?.filter((item) => {
+        return item.id !== action.payload;
+      });
+    },
+    setAssignChecklistItem(state, action: PayloadAction<{ itemId: string; assignee: AssigneeType }>) {
+      let checklistToUpdate = null;
+      let updatedItemArr = null;
+      if (state.checklists) {
+        for (let index = 0; index < state.checklists?.length; index++) {
+          const itemToUpdate = state.checklists[index].items.find((i) => i.id === action.payload.itemId);
+          if (itemToUpdate) {
+            checklistToUpdate = state.checklists[index];
+            itemToUpdate.assignees.push(action.payload.assignee);
+            updatedItemArr = state.checklists[index].items.map((item) => {
+              if (item.id === itemToUpdate.id) {
+                return itemToUpdate;
+              }
+              return item;
+            });
+          }
+        }
+        const updatedChecklist = { ...checklistToUpdate, items: updatedItemArr };
+        setEditChecklist(updatedChecklist as ICheckListRes);
+      }
+    },
+    setUnassignChecklistItem(state, action: PayloadAction<{ itemId: string; assigneeId: string }>) {
+      let checklistToUpdate = null;
+      let updatedItemArr = null;
+      if (state.checklists) {
+        for (let index = 0; index < state.checklists?.length; index++) {
+          const itemToUpdate = state.checklists[index].items.find((i) => i.id === action.payload.itemId);
+          if (itemToUpdate) {
+            checklistToUpdate = state.checklists[index];
+            const updateItemAssignee = itemToUpdate.assignees.filter((item) => {
+              return item.id !== action.payload.assigneeId;
+            });
+            itemToUpdate.assignees = updateItemAssignee;
+            updatedItemArr = state.checklists[index].items.map((item) => {
+              if (item.id === itemToUpdate.id) {
+                return itemToUpdate;
+              }
+              return item;
+            });
+            // itemToUpdate.assignees.push(action.payload.assignee);
+          }
+        }
+        const updateChecklist = { ...checklistToUpdate, items: updatedItemArr };
+        setEditChecklist(updateChecklist as ICheckListRes);
+      }
     },
     setTriggerChecklistUpdate(state, action: PayloadAction<boolean>) {
       state.triggerChecklistUpdate = action.payload;
@@ -81,7 +206,15 @@ export const {
   setShowChecklistInput,
   setShowChecklistItemInput,
   setOpenChecklistModal,
-  setOpenedDisclosureId
+  setOpenedDisclosureId,
+  setCreateNewChecklist,
+  setEditChecklist,
+  setCreateChecklistItem,
+  seteditChecklistItem,
+  setDeleteChecklist,
+  setDeleteChecklistItem,
+  setAssignChecklistItem,
+  setUnassignChecklistItem
 } = checklistSlice.actions;
 
 export default checklistSlice.reducer;

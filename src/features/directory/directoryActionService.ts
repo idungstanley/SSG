@@ -8,7 +8,7 @@ const createDirectory = (data: { name: string; parentId?: string }) => {
   const response = requestNew({
     url: 'directories',
     method: 'POST',
-    params: {
+    data: {
       name,
       parent_id: parentId
     }

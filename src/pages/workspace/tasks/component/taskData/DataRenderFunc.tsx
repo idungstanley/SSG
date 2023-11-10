@@ -1,7 +1,7 @@
 import { ImyTaskData } from '../../../../../features/task/taskSlice';
 import { ITaskFullList, TaskValue } from '../../../../../features/task/interface.tasks';
 
-export interface tagItem {
+export interface TagItem {
   id: string;
   name: string;
   color: string;

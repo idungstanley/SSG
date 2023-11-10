@@ -49,11 +49,11 @@ export function CombinedTime({ timeData }: Props) {
       <div className="absolute w-full -top-0" style={{ whiteSpace: 'nowrap' }}>
         <div className="flex items-center space-x-6 w-full">
           <div className="absolute w-full -top-0 overflow-x-visible" style={{ whiteSpace: 'nowrap' }}>
-            <div className="flex items-center space-x-6 w-full">
+            <div className="flex items-center justify-between space-x-6 w-full">
               <div className="flex items-center space-x-1.5">
                 <label
                   htmlFor="timeClockTrackers"
-                  className="relative flex items-center justify-between px-1 cursor-pointer rounded-tl-lg rounded-br-lg w-32 py-2 bg-alsoit-gray-75"
+                  className="relative flex items-center justify-between px-1 cursor-pointer rounded-tl-lg rounded-br-lg w-32 py-2 bg-alsoit-gray-75 z-50"
                   onClick={() => setDropDown((prev) => ({ ...prev, tabDrop: !prev.tabDrop }))}
                 >
                   <div className="cursor-pointer bg-alsoit-gray-100 rounded-xl">
@@ -76,7 +76,7 @@ export function CombinedTime({ timeData }: Props) {
                     >
                       {[
                         { entry: TIME_TABS.realTime, icon: <RealTimeIcon /> },
-                        { entry: TIME_TABS.manual, icon: <ManualTimeIcon /> }
+                        { entry: TIME_TABS.manual, icon: <ManualTimeIcon className="w-5 h-5" /> }
                       ].map((item, index) => (
                         <div
                           key={index}
@@ -94,16 +94,20 @@ export function CombinedTime({ timeData }: Props) {
                 </label>
                 <div className="flex items-center relative border bg-white rounded px-1.5 border-alsoit-gray-300 w-20 h-6 mt-1.5">
                   <TotalTime totalDuration={timeData?.data.total_duration} />
-                  <span className="absolute -top-1.5 bg-white px-0.5 text-alsoit-text-sm">Total Time</span>
+                  <span className="absolute -top-2 py-0.5 bg-none text-outline px-0.5 text-alsoit-text-sm">
+                    Total Time
+                  </span>
                 </div>
               </div>
               {/* Counter and Icons */}
-              <div className="w-3/6 pr-1.5">
+              <div className="w-3/6 flex justify-end pr-1.5">
                 {activeClockTab === TIME_TABS.realTime && (
                   <div className="flex items-center space-x-0.5">
-                    <div className="relative flex items-center px-0.5 py-1 bg-white border rounded border-alsoit-gray-300 w-36 h-6 mt-1">
+                    <div className="relative flex items-center px-0.5 py-1.5 w-24 bg-white border rounded border-alsoit-gray-300 h-6 mt-1">
                       <RealTime />
-                      <span className="absolute -top-1 left-1.5 bg-white px-0.5 text-alsoit-text-sm">My Time</span>
+                      <span className="absolute -top-1.5 left-1.5 bg-none text-outline px-0.5 text-alsoit-text-sm">
+                        My Time
+                      </span>
                     </div>
                     <HeaderIcons />
                   </div>

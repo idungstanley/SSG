@@ -5,13 +5,18 @@ import {
   UseChecklistItemAssignee,
   UseChecklistItemUnassignee
 } from '../../../../features/task/checklist/checklistService';
-import { UseTaskAssignService, UseTaskUnassignService } from '../../../../features/task/taskService';
+import {
+  UseTaskAssignService,
+  UseTaskUnassignService,
+  UseTaskWatchersAssignService
+} from '../../../../features/task/taskService';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { setCurrTeamMemId } from '../../../../features/task/taskSlice';
 import AvatarWithImage from '../../../../components/avatar/AvatarWithImage';
 import { TrashIcon } from '@heroicons/react/24/outline';
 import { Capitalize } from '../../../../utils/NoCapWords/Capitalize';
 import { EntityType } from '../../../../utils/EntityTypes/EntityType';
+import { AssigneeType } from '../../../../features/task/interface.tasks';
 
 interface AssigneeItem {
   item: ITeamMembersAndGroup;
@@ -20,14 +25,15 @@ interface AssigneeItem {
   teams: boolean;
   handleClose: () => void;
   isAssigned?: boolean;
+  isWatchers?: boolean;
 }
 
-function AssigneeItem({ item, option, entity_id, teams, handleClose, isAssigned }: AssigneeItem) {
+function AssigneeItem({ item, option, entity_id, teams, handleClose, isAssigned, isWatchers }: AssigneeItem) {
   const dispatch = useAppDispatch();
 
   const { selectedTasksArray, selectedListIds, selectedTaskParentId } = useAppSelector((state) => state.task);
 
-  const { mutate: onCheklistItemAssign } = UseChecklistItemAssignee();
+  const { mutate: onCheklistItemAssign } = UseChecklistItemAssignee(entity_id as string, item as AssigneeType);
 
   const handleAssignChecklist = (id: string) => {
     onCheklistItemAssign({
@@ -38,7 +44,12 @@ function AssigneeItem({ item, option, entity_id, teams, handleClose, isAssigned 
 
   const { mutate: onTaskAssign } = UseTaskAssignService(
     selectedTasksArray.length ? selectedTasksArray : [entity_id as string],
-    item,
+    item as ITeamMembersAndGroup,
+    selectedListIds.length ? selectedListIds : [selectedTaskParentId]
+  );
+  const { mutate: onWatchersTaskAssign } = UseTaskWatchersAssignService(
+    selectedTasksArray.length ? selectedTasksArray : [entity_id as string],
+    item as ITeamMembersAndGroup,
     selectedListIds.length ? selectedListIds : [selectedTaskParentId]
   );
 
@@ -55,16 +66,23 @@ function AssigneeItem({ item, option, entity_id, teams, handleClose, isAssigned 
   };
 
   const handleAssignTask = (id: string) => {
-    onTaskAssign({
-      taskIds: selectedTasksArray.length ? selectedTasksArray : [entity_id as string],
-      team_member_id: id,
-      teams
-    });
+    if (isWatchers) {
+      onWatchersTaskAssign({
+        ids: selectedTasksArray.length ? selectedTasksArray : [entity_id as string],
+        team_member_ids: [id]
+      });
+    } else {
+      onTaskAssign({
+        ids: selectedTasksArray.length ? selectedTasksArray : [entity_id as string],
+        team_member_id: id,
+        teams
+      });
+    }
   };
 
   const { mutate: onTaskUnassign } = UseTaskUnassignService(
     selectedTasksArray.length ? selectedTasksArray : [entity_id as string],
-    item,
+    item as ITeamMembersAndGroup,
     selectedListIds.length ? selectedListIds : [selectedTaskParentId]
   );
 
@@ -77,7 +95,7 @@ function AssigneeItem({ item, option, entity_id, teams, handleClose, isAssigned 
     });
   };
 
-  const { mutate: onCheklistItemUnassign } = UseChecklistItemUnassignee();
+  const { mutate: onCheklistItemUnassign } = UseChecklistItemUnassignee(entity_id as string, item.id);
   const handleUnAssignChecklistItem = (id: string) => {
     handleClose();
     onCheklistItemUnassign({

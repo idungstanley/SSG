@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import SubtasksIcon from '../../../../assets/icons/SubtasksIcon';
 import { Tag, Task } from '../../../../features/task/interface.tasks';
-import { tagItem } from '../../../../pages/workspace/tasks/component/taskData/DataRenderFunc';
 import { ManageTagsDropdown } from '../../../Tag/ui/ManageTagsDropdown/ui/ManageTagsDropdown';
 import TaskTag from '../../../Tag/ui/TaskTag';
 import { generateGrid } from '../../lib';
@@ -30,7 +29,15 @@ export function OverlayRow({ task, columns }: OverlayRowProps) {
         task={task}
         isListParent={false}
         paddingLeft={0}
-        tags={'tags' in task ? <TaskTag tags={task.tags as tagItem[]} entity_id={task.id} entity_type="task" /> : null}
+        tags={
+          'tags' in task ? (
+            <div className="flex gap-3">
+              {task.tags.map((tag) => (
+                <TaskTag key={tag.id} tag={tag} entity_id={task.id} entity_type="task" />
+              ))}
+            </div>
+          ) : null
+        }
         dragElement={
           <span>
             <div className="text-lg text-gray-400 transition duration-200 opacity-0 cursor-move group-hover:opacity-100">
