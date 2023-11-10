@@ -37,11 +37,28 @@ export const TIME_LABEL_PROPERTY = [
 
 export const CLOCK_TYPE = [
   { name: 'clock', value: 'clock' },
-  { name: 'timer', value: 'timer' }
+  { name: 'timer', value: 'timer' },
+  { name: 'automatic', value: 'automatic' }
 ];
 
 export const TIME_INVENTORY_ACTIONS = [
   { name: 'edit', value: 'edit' },
   { name: 'duplicate', value: 'duplicate' },
   { name: 'delete', value: 'delete' }
+];
+
+export const TIME_INVENTORY_CUSTOM_PROPERTIES = [
+  { name: 'map', value: 'map' },
+  { name: 'community', value: 'community' },
+  { name: 'progress', value: 'progress' },
+  { name: 'text', value: 'text' },
+  { name: 'labels', value: 'labels' },
+  { name: 'boolean', value: 'boolean' },
+  { name: 'formulas', value: 'formulas' },
+  { name: 'attachment', value: 'attachment' },
+  { name: 'id generator', value: 'id_generator' },
+  { name: 'date', value: 'date' },
+  { name: 'rating', value: 'rating' },
+  { name: 'currency', value: 'currency' },
+  { name: 'contacts', value: 'contacts' }
 ];

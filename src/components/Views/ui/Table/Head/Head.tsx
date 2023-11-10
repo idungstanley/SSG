@@ -285,7 +285,7 @@ export function Head({
             style={{
               zIndex: 2,
               backgroundColor: LightenColor(
-                listColor?.outerColour === null ? 'black' : (listColor?.outerColour as string),
+                !listColor?.outerColour ? 'black' : (listColor?.outerColour as string),
                 0.95
               )
             }}

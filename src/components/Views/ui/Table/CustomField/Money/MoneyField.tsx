@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ICustomField } from '../../../../../../features/task/taskSlice';
 import { IField } from '../../../../../../features/list/list.interfaces';
 import { useUpdateEntityCustomFieldValue } from '../../../../../../features/list/listService';
@@ -13,11 +13,18 @@ interface MoneyField {
 
 function MoneyField({ taskCustomFields, taskId, fieldId, entityCustomProperty }: MoneyField) {
   const avtiveCurrency = entityCustomProperty?.properties?.symbol;
-  const activeValue = taskCustomFields?.values[0].value ? taskCustomFields?.values[0].value : '-';
+  const [activeValue, setActiveValue] = useState('');
   const [currentValue, setCurrentValue] = useState<string>(activeValue);
   const [editMode, setEditMode] = useState(false);
 
   const { mutate: onUpdate } = useUpdateEntityCustomFieldValue(taskId);
+
+  useEffect(() => {
+    if (taskCustomFields) {
+      setActiveValue(taskCustomFields?.values[0].value ? taskCustomFields?.values[0].value : '-');
+      setCurrentValue(taskCustomFields?.values[0].value ? taskCustomFields?.values[0].value : '-');
+    }
+  }, [taskCustomFields]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value.replace(avtiveCurrency as string, '').trim();

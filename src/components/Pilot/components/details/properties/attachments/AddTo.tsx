@@ -23,7 +23,7 @@ import { useDeleteAttachment, useGetAttachments } from '../../../../../../featur
 import FileIcons from '../../../../../Views/ui/Table/CustomField/Files/FileIcon';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import moment from 'moment-timezone';
-import UserAvatar from '../../../../../../pages/workspace/tasks/assignTask/UserAvatar';
+// import UserAvatar from '../../../../../../pages/workspace/tasks/assignTask/UserAvatar';
 
 interface statusType {
   id: string;
@@ -68,8 +68,6 @@ export default function AddTo({ locationn }: { locationn?: string }) {
     activeItemId,
     activeItemType
   });
-
-  console.log(attachments);
 
   const handleRemoveAttachment = async (id: string) => {
     await deleteAttachment.mutateAsync({
@@ -254,7 +252,7 @@ export default function AddTo({ locationn }: { locationn?: string }) {
                   </button>
                   <div className="flex" style={{ fontSize: '10px' }}>
                     <div className="absolute -left-1">
-                      <UserAvatar user={file.team_member} width="w-6" height="h-6" />
+                      {/* <UserAvatar user={file.team_member} width="w-6" height="h-6" /> */}
                     </div>
                     <div className="flex flex-col items-center justify-center">
                       <FileIcons

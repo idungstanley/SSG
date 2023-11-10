@@ -125,3 +125,14 @@ export const findCurrentHub = (id: string, hubs: Hub[]) => {
   findCurrentEntity(EntityType.hub, id, hubs, findHub as <IHub>(item: IHub) => IHub);
   return currentEntity as Hub;
 };
+
+export const hubMoveManager = (hubId: string, parentId: string, hubs: Hub[]) => {
+  const currentHub = findCurrentHub(hubId, hubs);
+  let updatedTree = deleteHubManager(hubId, hubs);
+  const newHub = {
+    ...currentHub,
+    parent_id: parentId
+  };
+  updatedTree = createHubManager(updatedTree, newHub);
+  return updatedTree;
+};

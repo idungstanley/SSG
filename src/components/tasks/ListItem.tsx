@@ -32,6 +32,7 @@ import { taskCountFields } from '../../features/list/list.interfaces';
 import PlusIcon from '../../assets/icons/PlusIcon';
 import SubDropdown from '../Dropdown/SubDropdown';
 import { APP_TASKS } from '../../app/constants/app';
+import { STORAGE_KEYS, dimensions } from '../../app/config/dimensions';
 
 interface ListItemProps {
   list: IList;
@@ -169,6 +170,10 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
   const { cords, relativeRef } = useAbsolute(updateCords, 275);
   const { cords: menuCords, relativeRef: menuRef } = useAbsolute(updateCords, 352);
 
+  const sidebarWidthFromLS =
+    (JSON.parse(localStorage.getItem(STORAGE_KEYS.SIDEBAR_WIDTH) || '""') as number) ||
+    dimensions.navigationBar.default;
+
   return (
     <div className="relative">
       <section
@@ -210,9 +215,10 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
                 lineHeight: '15.56px',
                 verticalAlign: 'baseline',
                 letterSpacing: '0.28px',
-                color: listId === list.id ? (baseColor as string) : undefined
+                color: listId === list.id ? (baseColor as string) : undefined,
+                width: sidebarWidthFromLS - 135
               }}
-              className="pl-4 capitalize truncate cursor-pointer"
+              className="pl-4 text-left capitalize truncate cursor-pointer"
             >
               {list.name}
             </div>

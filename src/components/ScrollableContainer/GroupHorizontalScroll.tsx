@@ -65,7 +65,6 @@ export function GroupHorizontalScroll() {
   }, []);
 
   const handleThumbMousedown = useCallback((e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    e.preventDefault();
     e.stopPropagation();
     setScrollStartPosition(e.clientX);
     if (contentRef.current) setInitialScrollTop(contentRef.current.scrollLeft);
@@ -74,7 +73,6 @@ export function GroupHorizontalScroll() {
 
   const handleThumbMouseup = useCallback(
     (e: MouseEvent) => {
-      e.preventDefault();
       e.stopPropagation();
       if (isDragging) {
         setIsDragging(false);
@@ -85,7 +83,6 @@ export function GroupHorizontalScroll() {
 
   const handleThumbMousemove = useCallback(
     (e: MouseEvent) => {
-      e.preventDefault();
       e.stopPropagation();
       if (isDragging && contentRef.current && scrollStartPosition) {
         const { scrollWidth: contentWidth, offsetWidth: contentOffsetWidth } = contentRef.current;

@@ -34,10 +34,10 @@ import SelectionMenu from './component/SelectionMenu';
 import AlsoitMenuDropdown from '../DropDowns';
 import ListIconSelection, { listIconDetails } from './component/ListIconSelection';
 import AdvanceColourPalette from './component/AdvanceColourPalette';
-import { CgSortAz } from 'react-icons/cg';
 import { taskColourManager } from '../../managers/Task';
 import { setTasks } from '../../features/task/taskSlice';
 import CancelButton from '../CancelButton';
+import Filter from '../../assets/icons/filter_alt.svg';
 
 interface PaletteProps {
   title?: string;
@@ -84,6 +84,7 @@ export default function PaletteManager({
   const [selectedViews, setSelectedViews] = useState<string>(paletteViews.BOARD);
   const [isSearch, setIsSearch] = useState<boolean>(false);
   const [showListShapeSelection, setShowListShapeSelection] = useState<null | HTMLDivElement>(null);
+  const [color, setColor] = useState<string | ListColourProps | null>(null);
   const { paletteId, paletteType } = paletteDropdown;
 
   const closeMenu = () => {
@@ -91,6 +92,10 @@ export default function PaletteManager({
     dispatch(setPaletteDropDown({ ...paletteDropdown, show: false }));
     dispatch(setListPaletteColor({ innerColour: 'white', outerColour: 'black' }));
     dispatch(setSelectedListColours([]));
+  };
+
+  const handleSelectColor = (color: string | null | ListColourProps) => {
+    setColor(color);
   };
 
   const handleCancel = () => {
@@ -158,7 +163,7 @@ export default function PaletteManager({
     dispatch(setSelectedListColours([]));
   };
 
-  const handleClick = (color?: string | ListColourProps | null) => {
+  const handleClick = () => {
     if (paletteType === EntityType.hub) {
       editHubColorMutation.mutateAsync({
         hubId: paletteId,
@@ -194,8 +199,8 @@ export default function PaletteManager({
       label: paletteViews.BOARD,
       element: (
         <ColorPalette
-          activeColor={isInnerFrameActive ? activeInnerColor : activeOutterColor}
-          handleClick={handleClick}
+          activeColor={color ? (color as string) : isInnerFrameActive ? activeInnerColor : activeOutterColor}
+          handleClick={handleSelectColor}
         />
       ),
       icon: <GridViews color={selectedViews === paletteViews.BOARD ? 'rgb(191, 0, 255)' : '#424242'} />
@@ -244,7 +249,7 @@ export default function PaletteManager({
               <div className="flex gap-1 uppercase items-center-justify-between">
                 <div className="flex items-center h-8 p-1 rounded-br-lg bg-alsoit-gray-75 w-[114px]">
                   <p
-                    className="bg-['#b2b2b2'] text-white justify-center tracking-wide"
+                    className="bg-['#b2b2b2'] text-white justify-center tracking-wide font-medium"
                     style={{ fontSize: '11px', lineHeight: '13.2px' }}
                   >
                     COLOUR LIBRARY
@@ -268,17 +273,17 @@ export default function PaletteManager({
                 ))}
                 <ToolTip title="View">
                   <span className="p-1 bg-white rounded cursor-pointer" onClick={() => ({})}>
-                    <AiOutlineEye className="w-4 h-4" />
+                    <AiOutlineEye className="w-4 h-4 fill-[#424242]" />
                   </span>
                 </ToolTip>
                 <ToolTip title="Sort">
-                  <span className="p-1 bg-white rounded cursor-pointer" onClick={() => ({})}>
-                    <CgSortAz className="w-4 h-4" />
+                  <span className="bg-white rounded cursor-pointer p-[2px]" onClick={() => ({})}>
+                    <img src={Filter} alt="Filter" />
                   </span>
                 </ToolTip>
                 <ToolTip title="Open Search">
                   <span className="p-1 bg-white rounded cursor-pointer" onClick={() => setIsSearch(true)}>
-                    <SearchIcon className="w-4 h-4" />
+                    <SearchIcon color="#424242" className="w-4 h-4" />
                   </span>
                 </ToolTip>
                 {activeOutterColor === null ? (
@@ -303,11 +308,18 @@ export default function PaletteManager({
                   borderRadius="rounded-md py-0.5 h-6"
                   type="text"
                   name="search"
-                  leadingIcon={<CiSearch style={{ color: 'rgb(191, 0, 255)' }} />}
+                  leadingIcon={
+                    <span>
+                      <CiSearch style={{ color: 'rgb(191, 0, 255)' }} />
+                    </span>
+                  }
                   trailingIcon={
                     <ToolTip title="Cancel search">
                       <span>
-                        <AiFillCloseCircle className="text-sm" style={{ color: 'rgb(191, 0, 255)' }} />
+                        <AiFillCloseCircle
+                          className="text-sm hover:fill-[#8601B2]"
+                          style={{ color: 'rgb(191, 0, 255)' }}
+                        />
                       </span>
                     </ToolTip>
                   }
@@ -376,7 +388,6 @@ export default function PaletteManager({
               </span>
             </div>
           </div>
-          <AdvanceColourPalette show={displayColorPicker} />
           <div className="flex items-center justify-end gap-2 p-1 mx-3 mb-2">
             <CancelButton onClick={handleCancel} />
             <Button
@@ -386,10 +397,13 @@ export default function PaletteManager({
               labelSize="text-xs truncate"
               padding="p-1"
               buttonStyle="custom"
+              onClick={handleClick}
+              disabled={color === null}
             />
           </div>
           {bottomContent}
         </div>
+        <AdvanceColourPalette show={displayColorPicker} />
       </div>
     </Menu>
   );

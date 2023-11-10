@@ -17,9 +17,10 @@ interface priorityType {
 
 interface TaskCurrentPriorityProps {
   taskCurrentPriority: string | [{ id: string; initials: string; color: string }] | null | undefined;
+  icon?: React.ReactNode;
 }
 
-export default function PriorityDropdown({ taskCurrentPriority }: TaskCurrentPriorityProps) {
+export default function PriorityDropdown({ taskCurrentPriority, icon }: TaskCurrentPriorityProps) {
   const dispatch = useAppDispatch();
   const { selectedTasksArray, selectedListIds, selectedTaskParentId } = useAppSelector((state) => state.task);
 
@@ -106,7 +107,7 @@ export default function PriorityDropdown({ taskCurrentPriority }: TaskCurrentPri
           onClick={(e) => handleOpenDropdown(e)}
           className="flex items-center justify-center w-full text-sm text-gray-400 focus:outline-none hover:text-gray-700"
         >
-          <div>{setPriorityColor(taskCurrentPriority)}</div>
+          <div>{icon ? icon : setPriorityColor(taskCurrentPriority)}</div>
         </button>
       </div>
       <AlsoitMenuDropdown handleClose={handleCloseDropdown} anchorEl={isOpen}>

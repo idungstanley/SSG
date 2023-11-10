@@ -7,7 +7,7 @@ interface CustomScrollableContainerProps extends HTMLAttributes<HTMLDivElement> 
   children: ReactNode;
 }
 const DEFAULT_THUMB_WIDTH = 20;
-const ARROWS_WRAPPER_WIDTH = 35;
+const ARROWS_WRAPPER_WIDTH = 27;
 
 export function HorizontalScroll({ children, ...props }: CustomScrollableContainerProps) {
   const dispatch = useAppDispatch();
@@ -43,7 +43,6 @@ export function HorizontalScroll({ children, ...props }: CustomScrollableContain
 
   const handleTrackClick = useCallback(
     (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-      e.preventDefault();
       e.stopPropagation();
       const { current: trackCurrent } = scrollTrackRef;
       const { current: contentCurrent } = contentRef;
@@ -77,7 +76,6 @@ export function HorizontalScroll({ children, ...props }: CustomScrollableContain
   }, []);
 
   const handleThumbMousedown = useCallback((e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    e.preventDefault();
     e.stopPropagation();
     setScrollStartPosition(e.clientX);
     if (contentRef.current) setInitialScrollTop(contentRef.current.scrollLeft);
@@ -86,7 +84,6 @@ export function HorizontalScroll({ children, ...props }: CustomScrollableContain
 
   const handleThumbMouseup = useCallback(
     (e: MouseEvent) => {
-      e.preventDefault();
       e.stopPropagation();
       if (isDragging) {
         setIsDragging(false);
@@ -233,7 +230,7 @@ export function HorizontalScroll({ children, ...props }: CustomScrollableContain
           <div />
           <div className="flex flex-row items-center mb-1 space-x-2">
             {renderScrollArrows()}
-            <div className="relative flex flex-grow block w-full h-2">
+            <div className="relative flex flex-grow w-full h-2">
               <div
                 className="absolute top-0 w-full h-2 bg-transparent cursor-pointer -bottom-7 rounded-xl -right-12"
                 ref={scrollTrackRef}
