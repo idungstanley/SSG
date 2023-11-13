@@ -17,6 +17,7 @@ import UploadToFile from '../../../components/Views/ui/Table/CustomField/Files/U
 import TaskShortCutModal from '../../../utils/taskShortCut/TaskShortCutModal';
 import useTaskShortCut from '../../../utils/taskShortCut/useTaskShortCut';
 import { getOneTaskServices } from '../../../features/task/taskService';
+import { CreateTaskShortCutModal } from '../../../utils/taskShortCut/CreateTaskShortCutModal';
 
 function MainLayout() {
   const location = useLocation();
@@ -29,6 +30,7 @@ function MainLayout() {
 
   const { currentWorkspaceId } = useAppSelector((state) => state.auth);
   const { userSettingsData } = useAppSelector((state) => state.account);
+  const { createTask } = useAppSelector((state) => state.task);
   const [taskShortcut, setTaskShortcut] = useState(false);
 
   const user = useAppSelector(selectCurrentUser);
@@ -96,6 +98,7 @@ function MainLayout() {
         </div>
       </DragContext>
       {taskShortcut && <TaskShortCutModal setTaskShortcutModal={setTaskShortcut} />}
+      {createTask && <CreateTaskShortCutModal />}
     </div>
   ) : null;
 }

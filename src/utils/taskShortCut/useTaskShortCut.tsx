@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import {
   setAssignOnHoverState,
   setCopyNewlyCreatedTask,
+  setCreateTaskShortCut,
   setEscapeKey,
   setF2State,
   setHilightNewlyCreatedTask,
@@ -79,6 +80,10 @@ export default function useTaskShortCut() {
               break;
             case 'F2':
               dispatch(setF2State(true));
+              break;
+            case 't':
+            case 'T':
+              dispatch(setCreateTaskShortCut(true));
               break;
 
             default:
