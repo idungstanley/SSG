@@ -5,7 +5,7 @@ import { DEFAULT_LEFT_PADDING } from '../../config';
 import { Col } from './Col';
 import { StickyCol } from './StickyCol';
 import { SubTasks } from './SubTasks';
-import { useDraggable } from '@dnd-kit/core';
+import { useDraggable, useDroppable } from '@dnd-kit/core';
 import { ManageTagsDropdown } from '../../../Tag/ui/ManageTagsDropdown/ui/ManageTagsDropdown';
 import { AddSubTask } from '../AddTask/AddSubTask';
 import TaskTag from '../../../Tag/ui/TaskTag';
@@ -104,6 +104,14 @@ export function Row({
     }
   });
 
+  const { isOver, setNodeRef: droppabbleRef } = useDroppable({
+    id: task.id,
+    data: {
+      isOverTask: true
+      // overTask: task
+    }
+  });
+
   const handleCopyTexts = async () => {
     await navigator.clipboard.writeText(task.name);
     setIsCopied(1);
@@ -167,6 +175,7 @@ export function Row({
           toggleRootTasks={toggleRootTasks}
           isListParent={isListParent}
           task={task}
+          isOver={isOver}
           taskIndex={taskIndex}
           parentId={parentId as string}
           taskStatusId={taskStatusId as string}
@@ -188,6 +197,13 @@ export function Row({
                 <Dradnddrop />
               </div>
             </div>
+          }
+          droppableElement={
+            <div
+              ref={droppabbleRef}
+              className="absolute h-full"
+              style={{ left: '30px', background: 'transparent', height: '100%', width: '100%', zIndex: -1 }}
+            />
           }
         >
           {/* actions */}

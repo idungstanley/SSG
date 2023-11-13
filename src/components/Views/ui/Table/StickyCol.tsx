@@ -22,7 +22,7 @@ import {
   setTaskRootIds
 } from '../../../../features/task/taskSlice';
 import { setActiveItem } from '../../../../features/workspace/workspaceSlice';
-import { UniqueIdentifier, useDraggable, useDroppable } from '@dnd-kit/core';
+// import { UniqueIdentifier, useDraggable, useDroppable } from '@dnd-kit/core';
 import CloseSubtask from '../../../../assets/icons/CloseSubtask';
 import OpenSubtask from '../../../../assets/icons/OpenSubtask';
 import { Capitalize } from '../../../../utils/NoCapWords/Capitalize';
@@ -36,6 +36,7 @@ import Close from '../../../../assets/icons/Close';
 import toast from 'react-hot-toast';
 import Toast from '../../../../common/Toast';
 import { LIMITS } from '../../../../app/config/dimensions';
+// import { useDroppable } from '@dnd-kit/core';
 
 interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   task: Task;
@@ -55,6 +56,7 @@ interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   isOver?: boolean;
   isBlockedShowChildren?: boolean;
   toggleRootTasks?: boolean;
+  droppableElement?: ReactNode;
 }
 
 export function StickyCol({
@@ -73,6 +75,8 @@ export function StickyCol({
   dragElement,
   isBlockedShowChildren,
   toggleRootTasks,
+  droppableElement,
+  isOver,
   ...props
 }: ColProps) {
   const dispatch = useAppDispatch();
@@ -310,21 +314,21 @@ export function StickyCol({
     setIsChecked(isChecked);
   };
 
-  const { attributes, listeners, setNodeRef } = useDraggable({
-    id: task?.id as UniqueIdentifier,
-    data: {
-      isTask: true,
-      movingTask: task
-    }
-  });
+  // const { attributes, listeners, setNodeRef } = useDraggable({
+  //   id: task?.id as UniqueIdentifier,
+  //   data: {
+  //     isTask: true,
+  //     movingTask: task
+  //   }
+  // });
 
-  const { isOver, setNodeRef: droppabbleRef } = useDroppable({
-    id: task.id,
-    data: {
-      isOverTask: true
-      // overTask: task
-    }
-  });
+  // const { isOver, setNodeRef: droppabbleRef } = useDroppable({
+  //   id: task.id,
+  //   data: {
+  //     isOverTask: true
+  //     // overTask: task
+  //   }
+  // });
 
   const [saveToggle, setSaveToggle] = useState<boolean>(false);
   const [closeToggle, setCloseToggle] = useState<boolean>(false);
@@ -381,11 +385,7 @@ export function StickyCol({
           className="sticky left-0 z-10 flex items-center justify-start text-sm font-medium text-gray-900 cursor-pointer text-start"
           {...props}
         >
-          <div
-            ref={droppabbleRef}
-            className="absolute h-full"
-            style={{ left: '30px', background: 'transparent', height: '100%', width: '100%', zIndex: -1 }}
-          />
+          {droppableElement}
           <div
             className="flex items-center h-full ml-1 space-x-1"
             style={{
@@ -408,9 +408,7 @@ export function StickyCol({
                 selectedTasksArray.length > 0 ? 'opacity-100' : 'opacity-0'
               } cursor-pointer focus:outline-1 focus:ring-transparent  focus:border-2 focus:opacity-100 group-hover:opacity-100 text-alsoit-purple-300`}
             />
-            <div ref={setNodeRef} {...attributes} {...listeners} className="pr-2">
-              {dragElement}
-            </div>
+            <div className="pr-2">{dragElement}</div>
           </div>
           <div
             ref={contentRef}
