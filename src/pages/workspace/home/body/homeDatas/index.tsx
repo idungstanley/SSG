@@ -1,3 +1,4 @@
+import CommentsTabs from '../myWorkTabs/commentsTabs';
 import TodoTabs from '../myWorkTabs/todoTabs';
 import Today from '../myWorkTabs/todoTabs/Today';
 import Next from '../myWorkTabs/todoTabs/next';
@@ -32,14 +33,14 @@ export const myWorkTabs = [
   },
   {
     id: 'comments',
-    content: <h1>comments</h1>
+    content: <CommentsTabs />
   },
   {
     id: 'done',
-    content: <h1>done</h1>
+    content: <h1></h1>
   },
   {
     id: 'delegated',
-    content: <h1 className="">delegated</h1>
+    content: <h1 className=""></h1>
   }
 ];

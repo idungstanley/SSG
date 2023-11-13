@@ -7,12 +7,14 @@ export default function OpenTodoTabs({
   openTab,
   setOpenTab,
   title,
-  NoDueDate
+  NoDueDate,
+  NoReminder
 }: {
   openTab: boolean;
   setOpenTab: React.Dispatch<React.SetStateAction<boolean>>;
   NoDueDate?: boolean;
   title: string;
+  NoReminder?: boolean;
 }) {
   return (
     <div className="flex items-center group">
@@ -22,7 +24,7 @@ export default function OpenTodoTabs({
       <div className="flex space-x-3 pb-5 justify-between w-full text-alsoit-gray-100 pl-7 opacity-0 group-hover:opacity-100">
         <div className="flex items-center">
           <p className="cursor-pointer hover:bg-alsoit-gray-50 p-1 pr-3 rounded-md">+ Task</p>
-          <p className="cursor-pointer hover:bg-alsoit-gray-50 p-1 pr-3 rounded-md">+ Reminder</p>
+          {!NoReminder && <p className="cursor-pointer hover:bg-alsoit-gray-50 p-1 pr-3 rounded-md">+ Reminder</p>}
         </div>
         {!NoDueDate && (
           <div className="flex items-center cursor-pointer hover:bg-alsoit-gray-50 p-1 pr-3 rounded-md">
