@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, Fragment } from 'react';
 import SubtasksIcon from '../../../../assets/icons/SubtasksIcon';
 import { Tag, Task } from '../../../../features/task/interface.tasks';
 import { DEFAULT_LEFT_PADDING } from '../../config';
@@ -143,7 +143,7 @@ export function Row({
   const toggleRootTasks = (rootTaskIds as string[])?.includes(task.id);
 
   return (
-    <>
+    <Fragment>
       {/* current task */}
       <tr
         style={style}
@@ -282,6 +282,6 @@ export function Row({
           level={level + 1}
         />
       ) : null}
-    </>
+    </Fragment>
   );
 }
