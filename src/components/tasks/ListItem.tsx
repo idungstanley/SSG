@@ -286,7 +286,7 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
           title="List"
           listComboColour={listComboColour}
           shape={activeShape}
-          cords={cords}
+          cords={{ top: cords.top, left: 10 }}
           activeInnerColor={innerColour}
           activeOutterColor={outerColour}
           handleShapeSelection={handleSelection}

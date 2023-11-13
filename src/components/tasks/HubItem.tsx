@@ -356,7 +356,12 @@ export default function HubItem({
       )}
       <UploadImage endpoint={`hubs/${uploadId}`} invalidateQuery={['hubs'] as InvalidateQueryFilters<unknown>} />
       {paletteId === item.id && show ? (
-        <Palette title="Hub" setPaletteColor={setPaletteColor} activeOutterColor={item.color as string} cords={cords} />
+        <Palette
+          title="Hub"
+          setPaletteColor={setPaletteColor}
+          activeOutterColor={item.color as string}
+          cords={{ top: cords.top, left: 10 }}
+        />
       ) : null}
       {showMenuDropdown === item.id && showSidebar ? (
         <MenuDropdown isExtendedBar={isExtendedBar} cords={menuCords} />
