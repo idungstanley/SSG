@@ -33,7 +33,7 @@ import { useAbsolute } from '../../hooks/useAbsolute';
 import { IHub } from '../../features/hubs/hubs.interfaces';
 import { APP_HR, APP_TASKS } from '../../app/constants/app';
 import { Checkbox } from '../Checkbox/Checkbox';
-import { selectCalendar, setBlacklistIds, setSelectedHubs } from '../../features/calendar/slice/calendarSlice';
+import { selectCalendar, setHrTeamMembers, setSelectedHubs } from '../../features/calendar/slice/calendarSlice';
 import { useGetTeamMembers } from '../../features/settings/teamMembers/teamMemberService';
 import { MembersList } from '../../pages/calendar/ui/ExtendedBar/MembersList';
 import { STORAGE_KEYS, dimensions } from '../../app/config/dimensions';
@@ -174,7 +174,7 @@ export default function HubItem({
 
   const { cords, relativeRef } = useAbsolute(updateCords, 266);
   const { cords: menuCords, relativeRef: menuRef } = useAbsolute(updateCords, 352);
-  const { selectedHubs, blacklistIds } = useAppSelector(selectCalendar);
+  const { selectedHubs, hrTeamMembers } = useAppSelector(selectCalendar);
 
   const { data } = useGetTeamMembers({ page: 1, query: '' });
 
@@ -182,26 +182,56 @@ export default function HubItem({
 
   const onCheckbox = (i: boolean, hubId: string, hubName: string, hubColor: string) => {
     if (i) {
+      const currentHubMembers = members.map((el) => ({
+        uuid: el['id'] + hubId,
+        id: el['id'],
+        hubId: hubId
+      }));
       dispatch(setSelectedHubs([...selectedHubs, { hubId, hubName, hubColor }]));
-      dispatch(setBlacklistIds([...members.map((i) => i.id + '_' + hubId)]));
+      dispatch(setHrTeamMembers([...hrTeamMembers, ...currentHubMembers]));
     } else {
       dispatch(setSelectedHubs([...selectedHubs.filter((i) => i.hubId !== hubId)]));
-      dispatch(setBlacklistIds([]));
+      dispatch(setHrTeamMembers([...hrTeamMembers.filter((hrTeamMember) => hrTeamMember.hubId != hubId)]));
     }
+  };
+
+  const parentCheckboxCondition = (hubId: string) => {
+    const filteredMembers = hrTeamMembers.filter((item) => item.hubId === hubId).length;
+    if (filteredMembers == members.length) {
+      return 'hr-checked-full';
+    } else if (!filteredMembers) {
+      return '';
+    }
+
+    return 'hr-checked-partial';
   };
 
   const checkSelectedHubs = (id: string) => {
     return selectedHubs.filter((i) => i.hubId == id).length > 0;
   };
 
-  const onCheckboxHr = (i: boolean, id: string, hubId: string) => {
+  const checkSelectedMembers = (hubId: string) => {
+    return hrTeamMembers.filter((i) => i.hubId == hubId).length > 0;
+  };
+
+  const onCheckboxHr = (i: boolean, id: string, hubId: string, uuid: string) => {
     if (i) {
-      dispatch(setBlacklistIds([...blacklistIds, id + '_' + hubId]));
+      if (!checkSelectedHubs(hubId)) {
+        dispatch(setSelectedHubs([...selectedHubs, { hubId, hubName: item.name, hubColor: item.color as string }]));
+      }
+      dispatch(setHrTeamMembers([...hrTeamMembers, { uuid, id, hubId }]));
     } else {
-      dispatch(setBlacklistIds([...blacklistIds.filter((i) => i !== id + '_' + hubId)]));
-      dispatch(setSelectedHubs([...selectedHubs.filter((i) => i.hubId !== hubId)]));
+      dispatch(setHrTeamMembers([...hrTeamMembers.filter((hrTeamMember) => hrTeamMember.uuid != uuid)]));
     }
   };
+
+  useEffect(() => {
+    selectedHubs.map((listItem) => {
+      if (!checkSelectedMembers(listItem.hubId)) {
+        dispatch(setSelectedHubs([...selectedHubs.filter((i) => i.hubId !== listItem.hubId)]));
+      }
+    });
+  }, [hrTeamMembers]);
 
   const sidebarWidthFromLS =
     (JSON.parse(localStorage.getItem(STORAGE_KEYS.SIDEBAR_WIDTH) || '""') as number) ||
@@ -224,7 +254,7 @@ export default function HubItem({
         tabIndex={0}
       >
         <div
-          className="relative flex items-center justify-between"
+          className={`relative flex items-center justify-between ${placeHubType == APP_HR ? 'hr-hub-item' : ''}`}
           style={{ height: '30px', paddingLeft: `${paddingLeft()}px` }}
         >
           <div className="flex items-center justify-between">
@@ -241,7 +271,11 @@ export default function HubItem({
               </div>
             ) : null}
             {placeHubType == APP_HR && (
-              <div className="flex items-center justify-center ml-2 hr-checkbox-wrapper">
+              <div
+                className={`flex items-center justify-center ml-2 hr-checkbox-wrapper ${parentCheckboxCondition(
+                  item.id
+                )}`}
+              >
                 <Checkbox
                   styles="ml-0 mr-0 text-primary-500 focus:ring-primary-500 mx-0 hr-checkbox hr-checkbox-parent"
                   checked={checkSelectedHubs(item.id)}
@@ -332,7 +366,7 @@ export default function HubItem({
               onClick={(e) => e.stopPropagation()}
               ref={menuRef}
             >
-              {placeHubType === APP_TASKS && !item.parent_id ? (
+              {!item.parent_id ? (
                 <span onClick={() => handleItemAction(item.id, item.name)} className="cursor-pointer">
                   <PlusIcon className="hover:text-alsoit-purple-300" />
                 </span>
