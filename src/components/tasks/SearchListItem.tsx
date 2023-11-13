@@ -9,7 +9,7 @@ import {
   setDuplicateTaskObj,
   setSelectedTasksArray
 } from '../../features/task/taskSlice';
-import { useDuplicateTask } from '../../features/task/taskService';
+import { useDuplicateTask, useMultipleDuplicateTasks } from '../../features/task/taskService';
 import DuplicateTaskAdvanceModal from '../../pages/workspace/tasks/component/taskMenu/DuplicateTaskAdvanceModal';
 
 interface ListItemProps {
@@ -28,19 +28,27 @@ export default function SearchListItem({ list, paddingLeft }: ListItemProps) {
   const { activeItemId } = useAppSelector((state) => state.workspace);
   const { lightBaseColor, baseColor } = useAppSelector((state) => state.account);
   const { listColour } = useAppSelector((state) => state.list);
-  const { duplicateTaskObj } = useAppSelector((state) => state.task);
+  const { duplicateTaskObj, selectedTasksArray } = useAppSelector((state) => state.task);
   const [showSelectDropdown, setShowSelectDropdown] = useState<null | HTMLSpanElement | HTMLDivElement>(null);
 
   const { mutate: duplicateTask } = useDuplicateTask();
+  const { mutate: multipleDuplicateTasks } = useMultipleDuplicateTasks(list);
 
   const handleClick = () => {
     dispatch(setDuplicateTaskObj({ ...duplicateTaskObj, popDuplicateTaskModal: false }));
 
-    duplicateTask({
-      ...duplicateTaskObj,
-      list_id: list.id
-    });
-    dispatch(setSelectedTasksArray([]));
+    if (selectedTasksArray.length > 1) {
+      multipleDuplicateTasks({
+        ...duplicateTaskObj,
+        ids: selectedTasksArray,
+        list_id: list.id
+      });
+    } else {
+      duplicateTask({
+        ...duplicateTaskObj,
+        list_id: list.id
+      });
+    }
   };
 
   const handleAdvance = (e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
