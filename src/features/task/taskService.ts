@@ -1523,16 +1523,18 @@ export function useMediaStream() {
     const recorder = new MediaRecorder(combinedStream);
     dispatch(setScreenRecordingMedia({ recorder, stream: combinedStream }));
     if (blob && currentWorkspaceId && accessToken && activeItemId && activeItemType) {
-      mutate({
-        blob,
-        currentWorkspaceId,
-        accessToken,
-        activeItemId,
-        activeItemType
-      });
-
-      // Invalidate React Query
-      queryClient.invalidateQueries(['attachments']);
+      mutate(
+        {
+          blob,
+          currentWorkspaceId,
+          accessToken,
+          activeItemId,
+          activeItemType
+        },
+        {
+          onSuccess: () => queryClient.invalidateQueries(['attachments'])
+        }
+      );
     }
 
     dispatch(setScreenRecording('idle'));
