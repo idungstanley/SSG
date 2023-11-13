@@ -14,7 +14,7 @@ import { setPaletteDropDown } from '../../features/account/accountSlice';
 import Palette from '../ColorPalette';
 import MenuDropdown from '../Dropdown/MenuDropdown';
 import SubDropdown from '../Dropdown/SubDropdown';
-import { setCreateWlLink } from '../../features/workspace/workspaceSlice';
+import { setCreateWlLink, setEntityForPermissions } from '../../features/workspace/workspaceSlice';
 import { ListColourProps } from './ListItem';
 import { useParams } from 'react-router-dom';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
@@ -23,7 +23,7 @@ import ThreeDotIcon from '../../assets/icons/ThreeDotIcon';
 import { useDraggable, useDroppable } from '@dnd-kit/core';
 import Drag from '../../assets/icons/Drag';
 import ToolTip from '../Tooltip/Tooltip';
-import { List, Wallet } from '../../pages/workspace/hubs/components/ActiveTree/activetree.interfaces';
+import { Wallet } from '../../pages/workspace/hubs/components/ActiveTree/activetree.interfaces';
 import ActiveBackground from './Component/ActiveBackground';
 import ActiveBarIdentification from './Component/ActiveBarIdentification';
 import { useAbsolute } from '../../hooks/useAbsolute';
@@ -32,15 +32,7 @@ import { APP_TASKS } from '../../app/constants/app';
 import { STORAGE_KEYS, dimensions } from '../../app/config/dimensions';
 
 interface WalletItemProps {
-  wallet: {
-    id: string;
-    name: string;
-    color?: string;
-    parent_id?: string | null;
-    hub_id?: string;
-    children: Wallet[];
-    lists: List[];
-  };
+  wallet: Wallet;
   showSubWallet: boolean;
   paddingLeft: string | number;
   walletType: string;
@@ -253,7 +245,10 @@ export default function WalletItem({
               </span>
               <span
                 className="cursor-pointer"
-                onClick={(e) => handleWalletSettings(wallet.id, wallet.name, e)}
+                onClick={(e) => {
+                  handleWalletSettings(wallet.id, wallet.name, e);
+                  dispatch(setEntityForPermissions(wallet));
+                }}
                 id="menusettings"
               >
                 <ThreeDotIcon />
@@ -263,7 +258,12 @@ export default function WalletItem({
         </div>
       </section>
       {paletteId === wallet.id && show ? (
-        <Palette title="Wallet" activeOutterColor={wallet.color} setPaletteColor={setPaletteColor} cords={cords} />
+        <Palette
+          title="Wallet"
+          activeOutterColor={wallet.color}
+          setPaletteColor={setPaletteColor}
+          cords={{ top: cords.top, left: 10 }}
+        />
       ) : null}
       {showMenuDropdown === wallet.id ? <MenuDropdown isExtendedBar={isExtendedBar} cords={menuCords} /> : null}
       {SubMenuId === wallet.id ? <SubDropdown cords={menuCords} placeHubType={APP_TASKS} /> : null}
