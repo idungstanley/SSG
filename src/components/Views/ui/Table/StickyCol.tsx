@@ -57,6 +57,7 @@ interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   isBlockedShowChildren?: boolean;
   toggleRootTasks?: boolean;
   droppableElement?: ReactNode;
+  styles?: { opacity: number };
 }
 
 export function StickyCol({
@@ -77,6 +78,7 @@ export function StickyCol({
   toggleRootTasks,
   droppableElement,
   isOver,
+  styles,
   ...props
 }: ColProps) {
   const dispatch = useAppDispatch();
@@ -383,6 +385,7 @@ export function StickyCol({
       {task.id !== '0' && (
         <td
           className="sticky left-0 z-10 flex items-center justify-start text-sm font-medium text-gray-900 cursor-pointer text-start"
+          style={styles}
           {...props}
         >
           {droppableElement}

@@ -122,7 +122,9 @@ export function Row({
 
   // hide element if is currently grabbing
   const style = {
-    opacity: transform ? 0 : 100
+    opacity: transform ? 0.3 : 100,
+    zIndex: 1,
+    pointerEvents: transform ? 'none' : ''
   };
 
   const showChildren = useMemo(() => {
@@ -154,7 +156,6 @@ export function Row({
     <>
       {/* current task */}
       <tr
-        style={style}
         className="relative contents group dNFlex"
         onMouseEnter={() => {
           dispatch(setAssignOnHoverTask(task));
@@ -171,11 +172,12 @@ export function Row({
           setHoverOn={setHoverOn}
           showSubTasks={showChildren}
           setShowSubTasks={setShowSubTasks}
-          style={{ zIndex: 1 }}
+          // style={{ zIndex: 1 }}
           toggleRootTasks={toggleRootTasks}
           isListParent={isListParent}
           task={task}
           isOver={isOver}
+          styles={style}
           taskIndex={taskIndex}
           parentId={parentId as string}
           taskStatusId={taskStatusId as string}
@@ -271,6 +273,7 @@ export function Row({
             value={task[col.field as keyof Task]}
             key={col.id}
             style={{ zIndex: 0 }}
+            styles={style}
           />
         ))}
       </tr>
