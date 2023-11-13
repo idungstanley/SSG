@@ -222,7 +222,7 @@ export default function PaletteManager({
       TransitionComponent={Fade}
       anchorOrigin={{
         vertical: cords?.top || 'center',
-        horizontal: 10
+        horizontal: cords?.left || 10
       }}
       PaperProps={{
         style: {

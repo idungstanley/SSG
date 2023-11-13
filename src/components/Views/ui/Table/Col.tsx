@@ -261,7 +261,12 @@ export function Col({ value, field, fieldId, task, ...props }: ColProps) {
         }}
       >
         {dragOverItemId === task.id && draggableItemId !== dragOverItemId && dragToBecomeSubTask && (
-          <span className={cl('absolute h-0.5 bg-alsoit-purple-300 w-full bottom-px right-0')}></span>
+          <span
+            className={cl('absolute content-start z-50 flex items-center w-full right-0')}
+            style={{ bottom: '2px' }}
+          >
+            <span className={cl('h-0.5 bg-alsoit-purple-300 w-full ml-auto')}></span>
+          </span>
         )}
         {field in fields ? fields[field] : String(value)}
       </td>
