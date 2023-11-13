@@ -7,7 +7,7 @@ export default function Overdue() {
 
   return (
     <div>
-      <OpenTodoTabs openTab={openTab} setOpenTab={setOpenTab} />
+      <OpenTodoTabs openTab={openTab} title="Overdue" setOpenTab={setOpenTab} />
 
       {openTab && <DefaultBoxTemp title="No overdue tasks or Reminders scheduled." />}
     </div>

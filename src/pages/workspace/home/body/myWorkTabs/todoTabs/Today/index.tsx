@@ -7,8 +7,7 @@ export default function Today() {
 
   return (
     <div>
-      <OpenTodoTabs openTab={openTab} setOpenTab={setOpenTab} NoDueDate={true} />
-
+      <OpenTodoTabs openTab={openTab} title="Today" setOpenTab={setOpenTab} NoDueDate={true} />
       <AllDoneForTheDay
         allDoneState={openTab}
         title="Woohoo, youre all done!"
