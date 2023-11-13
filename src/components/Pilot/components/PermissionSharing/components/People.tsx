@@ -3,55 +3,83 @@ import UserAvatar from '../../../../../pages/workspace/tasks/assignTask/UserAvat
 import Toggle from './Toggle';
 import RoleDropdown from './RoleDropdown';
 import ArrowDown from '../../../../../assets/icons/ArrowDown';
+import { ITeamMembersAndGroup } from '../../../../../features/settings/teamMembersAndGroups.interfaces';
+import { useCreateOrEditPermission } from '../../../../../features/workspace/workspaceService';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useAppSelector } from '../../../../../app/hooks';
+import { Capitalize } from '../../../../../utils/NoCapWords/Capitalize';
 
-// To be removed
-const user = {
-  color: 'green',
-  id: '12345',
-  name: 'Stanley Nicholas',
-  is_active: true,
-  is_online: true,
-  invited_at: 'string',
-  created_at: 'string',
-  updated_at: 'string',
-  user: {
-    color: 'blue',
-    name: 'Stanley Nicholas',
-    id: 'string',
-    email: 'string',
-    initials: 'SN',
-    avatar_path: null,
-    timezone: 'string'
-  },
-  initials: 'SN',
-  colour: 'string',
-  role: {
-    key: 'string',
-    name: 'string'
-  }
-};
-
-function People({ showToggle }: { showToggle: boolean }) {
+function People({
+  showToggle,
+  teamMember,
+  enabled,
+  role
+}: {
+  showToggle: boolean;
+  teamMember?: ITeamMembersAndGroup;
+  enabled: boolean;
+  role?: string;
+}) {
   const [anchor, setAnchor] = useState<HTMLElement | null>(null);
+  const queryClient = useQueryClient();
+  const [currentRole, setRole] = useState<string>(role ? role : 'full');
+  const { entityForPermissions } = useAppSelector((state) => state.workspace);
+
+  const changePermission = useMutation(useCreateOrEditPermission, {
+    onSuccess: () => {
+      queryClient.invalidateQueries([`${entityForPermissions?.type ?? 'hub'}-permissions`, entityForPermissions?.id]);
+    }
+  });
+
+  const handleAddPerson = async (enable: boolean) => {
+    const model = entityForPermissions?.type ? entityForPermissions.type : 'hub';
+    const model_id = entityForPermissions?.id;
+    const teamsObj = {
+      access_level: 'full',
+      id: teamMember?.id as string
+    };
+    if (enable) {
+      await changePermission.mutateAsync({
+        model,
+        model_id: model_id as string,
+        teamMembersArr: [teamsObj]
+      });
+    }
+  };
+
+  const handleChangeRole = async (role: string) => {
+    const model = entityForPermissions?.type ? entityForPermissions.type : 'hub';
+    const model_id = entityForPermissions?.id;
+    const teamsObj = {
+      access_level: role.toLowerCase(),
+      id: teamMember?.id as string
+    };
+    await changePermission.mutateAsync({
+      model,
+      model_id: model_id as string,
+      teamMembersArr: [teamsObj]
+    });
+    setRole(role);
+  };
 
   return (
     <div>
       <div className="flex justify-between items-center">
         <div className="flex gap-2 items-center">
-          <UserAvatar user={user} width="w-4" height="h-4" />
-          <h2>{user.name}</h2>
+          <UserAvatar user={teamMember as ITeamMembersAndGroup} />
+          <h2>{teamMember?.name || teamMember?.user.name}</h2>
         </div>
         <div className="flex gap-2 items-center">
           <span
-            className="border border-alsoit-gray-100 text-alsoit-text-md rounded w-12 flex justify-center items-center gap-1 cursor-pointer"
+            className="border border-alsoit-gray-100 text-alsoit-text-md rounded flex justify-center items-center gap-1 cursor-pointer px-1"
             onClick={(e) => setAnchor(e.currentTarget)}
           >
-            Full <ArrowDown className="w-2 h-2" />
+            {Capitalize(currentRole)} <ArrowDown className="w-2 h-2" />
           </span>
-          {showToggle && <Toggle />}
+          {showToggle && <Toggle handleToggle={handleAddPerson} isEnabled={enabled} />}
         </div>
       </div>
-      <RoleDropdown anchor={anchor} setAnchor={setAnchor} />
+      <RoleDropdown anchor={anchor} setAnchor={setAnchor} handleSeletRole={handleChangeRole} />
     </div>
   );
 }
