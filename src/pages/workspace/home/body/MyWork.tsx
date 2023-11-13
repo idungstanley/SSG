@@ -1,33 +1,15 @@
 import React, { useState } from 'react';
 import MyWorkTabs from './myWorkTabs';
+import { myWorkTabsHeader } from './homeDatas';
 
 export default function MyWork() {
   const [activeTab, setActiveTab] = useState('todo');
-
-  const tabs = [
-    {
-      id: 'todo',
-      label: 'To do'
-    },
-    {
-      id: 'comments',
-      label: 'Comments'
-    },
-    {
-      id: 'done',
-      label: 'Done'
-    },
-    {
-      id: 'delegated',
-      label: 'Delegated'
-    }
-  ];
 
   return (
     <div className="mt-10">
       <h1 className="text-lg font-bold text-black py-4">My Work</h1>
       <div className="flex space-x-3 border-b">
-        {tabs.map((tab) => (
+        {myWorkTabsHeader.map((tab) => (
           <p
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
