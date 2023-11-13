@@ -1,36 +1,45 @@
 import React from 'react';
 import { AvatarWithInitials } from '../../../../../components';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
-import { setCurrentUserModal } from '../../../../../features/settings/user/userSettingsSlice';
+import { ListColourProps } from '../../../../../components/tasks/ListItem';
+import { setPaletteDropDown } from '../../../../../features/account/accountSlice';
 
-export default function CurrentUser() {
-  const { color, userData } = useAppSelector((state) => state.userSetting);
+interface ContentUserProps {
+  paletteColor: string | ListColourProps | null | undefined;
+}
+
+export default function CurrentUser({ paletteColor }: ContentUserProps) {
   const dispatch = useAppDispatch();
+
+  const { color, userData } = useAppSelector((state) => state.userSetting);
+
   return (
-    <div className="text-left ">
-      {userData?.avatar_path === null || userData?.avatar_path === undefined ? (
-        <div className="flex justify-center cursor-pointer" onClick={() => dispatch(setCurrentUserModal(true))}>
-          <AvatarWithInitials
-            initials="ND"
-            height="h-44"
-            width="w-44"
-            roundedStyle="circular"
-            backgroundColour={color}
-            textSize="12px"
-          />
-        </div>
-      ) : (
-        <div className="flex justify-center">
-          <div className="w-44 h-44 rounded-full">
-            <img
-              className="w-full h-full rounded-full cursor-pointer"
-              src={userData.avatar_path}
-              alt=""
-              onClick={() => dispatch(setCurrentUserModal(true))}
+    <div className="text-left">
+      <div onClick={() => dispatch(setPaletteDropDown({ show: true, paletteId: 'avatar' }))}>
+        {userData?.avatar_path === null || userData?.avatar_path === undefined ? (
+          <div className="flex justify-center cursor-pointer">
+            <AvatarWithInitials
+              initials={userData?.initials as string}
+              height="h-44"
+              width="w-44"
+              roundedStyle="circular"
+              backgroundColour={(paletteColor as string) || color}
+              textSize="32px"
             />
           </div>
-        </div>
-      )}
+        ) : (
+          <div className="flex justify-center">
+            <div className="relative w-44 h-44 rounded-full overflow-hidden">
+              <img
+                style={{ transform: 'translate(-50%, -50%)' }}
+                className="absolute top-1/2 left-1/2 w-auto min-w-max h-full cursor-pointer"
+                src={userData.avatar_path}
+                alt="user-avatar"
+              />
+            </div>
+          </div>
+        )}
+      </div>
       <div className="flex justify-center">
         <p className="font-extrabold text-left" style={{ fontSize: '15px' }}>
           {userData?.name?.toUpperCase()}

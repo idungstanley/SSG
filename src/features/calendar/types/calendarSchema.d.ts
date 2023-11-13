@@ -11,6 +11,7 @@ export interface CalendarState {
   selectedHubs: SelectedHubs[];
   savedSelections: SavedSelections[];
   hrOpenedEntities: HrOpenedEntities[];
+  hrTeamMembers: HrTeamMembers[];
 }
 
 interface NewDayOff extends Pick<DayOff, 'start_date' | 'end_date'> {
@@ -23,6 +24,12 @@ interface SelectedHubs {
   hubId: string;
   hubName: string | null;
   hubColor: string | null;
+}
+
+interface HrTeamMembers {
+  uuid: string;
+  id: string;
+  hubId: string;
 }
 
 export type SavedSelections = string;

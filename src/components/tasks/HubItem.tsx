@@ -14,7 +14,7 @@ import AvatarWithInitials from '../avatar/AvatarWithInitials';
 import Palette from '../ColorPalette';
 import UploadImage from '../ColorPalette/component/UploadImage';
 import { InvalidateQueryFilters } from '@tanstack/react-query';
-import { setCreateWlLink } from '../../features/workspace/workspaceSlice';
+import { setCreateWlLink, setEntityForPermissions } from '../../features/workspace/workspaceSlice';
 import { ListColourProps } from './ListItem';
 import { useParams } from 'react-router-dom';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
@@ -26,30 +26,20 @@ import { useDraggable, useDroppable } from '@dnd-kit/core';
 import Drag from '../../assets/icons/Drag';
 import { getInitials } from '../../app/helpers';
 import ToolTip from '../Tooltip/Tooltip';
-import { Hub, List, Wallet } from '../../pages/workspace/hubs/components/ActiveTree/activetree.interfaces';
+import { Hub } from '../../pages/workspace/hubs/components/ActiveTree/activetree.interfaces';
 import ActiveBarIdentification from './Component/ActiveBarIdentification';
 import ActiveBackground from './Component/ActiveBackground';
 import { useAbsolute } from '../../hooks/useAbsolute';
 import { IHub } from '../../features/hubs/hubs.interfaces';
 import { APP_HR, APP_TASKS } from '../../app/constants/app';
 import { Checkbox } from '../Checkbox/Checkbox';
-import { selectCalendar, setBlacklistIds, setSelectedHubs } from '../../features/calendar/slice/calendarSlice';
+import { selectCalendar, setHrTeamMembers, setSelectedHubs } from '../../features/calendar/slice/calendarSlice';
 import { useGetTeamMembers } from '../../features/settings/teamMembers/teamMemberService';
 import { MembersList } from '../../pages/calendar/ui/ExtendedBar/MembersList';
 import { STORAGE_KEYS, dimensions } from '../../app/config/dimensions';
 
 interface TaskItemProps {
-  item: {
-    id: string;
-    name: string;
-    path?: string | null;
-    color?: string | null;
-    parent_id?: string | null;
-    children?: Hub[];
-    has_descendants: boolean;
-    wallets?: Wallet[];
-    lists?: List[];
-  };
+  item: Hub;
   showChildren: boolean;
   type: string;
   topNumber?: string;
@@ -174,7 +164,7 @@ export default function HubItem({
 
   const { cords, relativeRef } = useAbsolute(updateCords, 266);
   const { cords: menuCords, relativeRef: menuRef } = useAbsolute(updateCords, 352);
-  const { selectedHubs, blacklistIds } = useAppSelector(selectCalendar);
+  const { selectedHubs, hrTeamMembers } = useAppSelector(selectCalendar);
 
   const { data } = useGetTeamMembers({ page: 1, query: '' });
 
@@ -182,26 +172,56 @@ export default function HubItem({
 
   const onCheckbox = (i: boolean, hubId: string, hubName: string, hubColor: string) => {
     if (i) {
+      const currentHubMembers = members.map((el) => ({
+        uuid: el['id'] + hubId,
+        id: el['id'],
+        hubId: hubId
+      }));
       dispatch(setSelectedHubs([...selectedHubs, { hubId, hubName, hubColor }]));
-      dispatch(setBlacklistIds([...members.map((i) => i.id + '_' + hubId)]));
+      dispatch(setHrTeamMembers([...hrTeamMembers, ...currentHubMembers]));
     } else {
       dispatch(setSelectedHubs([...selectedHubs.filter((i) => i.hubId !== hubId)]));
-      dispatch(setBlacklistIds([]));
+      dispatch(setHrTeamMembers([...hrTeamMembers.filter((hrTeamMember) => hrTeamMember.hubId != hubId)]));
     }
+  };
+
+  const parentCheckboxCondition = (hubId: string) => {
+    const filteredMembers = hrTeamMembers.filter((item) => item.hubId === hubId).length;
+    if (filteredMembers == members.length) {
+      return 'hr-checked-full';
+    } else if (!filteredMembers) {
+      return '';
+    }
+
+    return 'hr-checked-partial';
   };
 
   const checkSelectedHubs = (id: string) => {
     return selectedHubs.filter((i) => i.hubId == id).length > 0;
   };
 
-  const onCheckboxHr = (i: boolean, id: string, hubId: string) => {
+  const checkSelectedMembers = (hubId: string) => {
+    return hrTeamMembers.filter((i) => i.hubId == hubId).length > 0;
+  };
+
+  const onCheckboxHr = (i: boolean, id: string, hubId: string, uuid: string) => {
     if (i) {
-      dispatch(setBlacklistIds([...blacklistIds, id + '_' + hubId]));
+      if (!checkSelectedHubs(hubId)) {
+        dispatch(setSelectedHubs([...selectedHubs, { hubId, hubName: item.name, hubColor: item.color as string }]));
+      }
+      dispatch(setHrTeamMembers([...hrTeamMembers, { uuid, id, hubId }]));
     } else {
-      dispatch(setBlacklistIds([...blacklistIds.filter((i) => i !== id + '_' + hubId)]));
-      dispatch(setSelectedHubs([...selectedHubs.filter((i) => i.hubId !== hubId)]));
+      dispatch(setHrTeamMembers([...hrTeamMembers.filter((hrTeamMember) => hrTeamMember.uuid != uuid)]));
     }
   };
+
+  useEffect(() => {
+    selectedHubs.map((listItem) => {
+      if (!checkSelectedMembers(listItem.hubId)) {
+        dispatch(setSelectedHubs([...selectedHubs.filter((i) => i.hubId !== listItem.hubId)]));
+      }
+    });
+  }, [hrTeamMembers]);
 
   const sidebarWidthFromLS =
     (JSON.parse(localStorage.getItem(STORAGE_KEYS.SIDEBAR_WIDTH) || '""') as number) ||
@@ -224,7 +244,7 @@ export default function HubItem({
         tabIndex={0}
       >
         <div
-          className="relative flex items-center justify-between"
+          className={`relative flex items-center justify-between ${placeHubType == APP_HR ? 'hr-hub-item' : ''}`}
           style={{ height: '30px', paddingLeft: `${paddingLeft()}px` }}
         >
           <div className="flex items-center justify-between">
@@ -241,7 +261,11 @@ export default function HubItem({
               </div>
             ) : null}
             {placeHubType == APP_HR && (
-              <div className="flex items-center justify-center ml-2 hr-checkbox-wrapper">
+              <div
+                className={`flex items-center justify-center ml-2 hr-checkbox-wrapper ${parentCheckboxCondition(
+                  item.id
+                )}`}
+              >
                 <Checkbox
                   styles="ml-0 mr-0 text-primary-500 focus:ring-primary-500 mx-0 hr-checkbox hr-checkbox-parent"
                   checked={checkSelectedHubs(item.id)}
@@ -332,7 +356,7 @@ export default function HubItem({
               onClick={(e) => e.stopPropagation()}
               ref={menuRef}
             >
-              {placeHubType === APP_TASKS && !item.parent_id ? (
+              {!item.parent_id ? (
                 <span onClick={() => handleItemAction(item.id, item.name)} className="cursor-pointer">
                   <PlusIcon className="hover:text-alsoit-purple-300" />
                 </span>
@@ -340,6 +364,7 @@ export default function HubItem({
               <span
                 onClick={(e) => {
                   handleHubSettings(item.id, item.name, e);
+                  dispatch(setEntityForPermissions(item));
                 }}
                 className="cursor-pointer"
                 id="menusettings"
@@ -356,7 +381,12 @@ export default function HubItem({
       )}
       <UploadImage endpoint={`hubs/${uploadId}`} invalidateQuery={['hubs'] as InvalidateQueryFilters<unknown>} />
       {paletteId === item.id && show ? (
-        <Palette title="Hub" setPaletteColor={setPaletteColor} activeOutterColor={item.color as string} cords={cords} />
+        <Palette
+          title="Hub"
+          setPaletteColor={setPaletteColor}
+          activeOutterColor={item.color as string}
+          cords={{ top: cords.top, left: 10 }}
+        />
       ) : null}
       {showMenuDropdown === item.id && showSidebar ? (
         <MenuDropdown isExtendedBar={isExtendedBar} cords={menuCords} />

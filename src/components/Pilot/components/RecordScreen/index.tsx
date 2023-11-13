@@ -2,15 +2,25 @@ import Recording from './Recording';
 import VideoEntries from './RecordingLogs';
 import { VerticalScroll } from '../../../ScrollableContainer/VerticalScroll';
 import CollapseIcon from '../../../Views/ui/collapseIcon/CollapseIcon';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ClockIcon } from '../../../../assets/icons/ClockIcon';
+import { useAppSelector } from '../../../../app/hooks';
+import { getUploadAttatchment } from '../../../../features/workspace/workspaceService';
 
 export default function RecordScreen() {
+  const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
+
+  const { data } = getUploadAttatchment({ id: activeItemId as string, type: activeItemType });
+
   const [showLogs, setShowLogs] = useState<boolean>(false);
 
-  const handleShowLogs = () => {
-    setShowLogs(!showLogs);
-  };
+  useEffect(() => {
+    if (data) {
+      if (data?.data.attachments.length > 0) {
+        setShowLogs(data?.data.attachments.length > 0);
+      }
+    }
+  }, [data]);
 
   return (
     <section className="p-2 mt-6 bg-white relative">
@@ -29,15 +39,15 @@ export default function RecordScreen() {
         <label htmlFor="video-entries" className="relative w-full">
           <div className="absolute -top-2 -left-2 w-28 bg-alsoit-gray-100 p-1.5 rounded-t-sm flex gap-2">
             <div className="cursor-pointer">
-              <CollapseIcon color="#A854F7" active={showLogs} onToggle={() => handleShowLogs()} hoverBg="white" />
+              <CollapseIcon color="#A854F7" active={showLogs} onToggle={() => setShowLogs(!showLogs)} hoverBg="white" />
             </div>
             <span className="font-semibold text-alsoit-gray-50 text-alsoit-text-md uppercase">Record Logs</span>
           </div>
         </label>
         {showLogs && (
           <VerticalScroll>
-            <div className="h-96 mt-6">
-              <VideoEntries />
+            <div className="h-min mt-6">
+              <VideoEntries timeData={data} />
             </div>
           </VerticalScroll>
         )}

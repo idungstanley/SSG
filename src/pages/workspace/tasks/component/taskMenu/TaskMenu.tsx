@@ -4,7 +4,7 @@ import { useAppSelector } from '../../../../../app/hooks';
 import { IoEyeOutline } from 'react-icons/io5';
 import { BsBox, BsTags } from 'react-icons/bs';
 import { TbSubtask } from 'react-icons/tb';
-import { MdOutlineDeveloperBoard, MdOutlineDriveFileMove, MdDateRange, MdDeleteForever } from 'react-icons/md';
+import { MdOutlineDriveFileMove, MdDateRange, MdDeleteForever } from 'react-icons/md';
 import { HiOutlineDocumentDuplicate, HiInbox } from 'react-icons/hi';
 import { TbFolderX } from 'react-icons/tb';
 import { GiStoneStack, GiJusticeStar } from 'react-icons/gi';
@@ -34,6 +34,7 @@ import { ManageTagsDropdown } from '../../../../../components/Tag/ui/ManageTagsD
 import { AiFillFlag } from 'react-icons/ai';
 import DateFormat from '../../../../../components/DateFormat';
 import CustomFieldsModal from '../../customFields/CustomFieldsModal';
+import MultipleStatuses from '../../multipleStatuses/MultipleStatuses';
 
 export default function TaskMenu() {
   const dispatch = useDispatch();
@@ -140,7 +141,7 @@ export default function TaskMenu() {
     {
       id: 'set_status',
       label: 'Set Status',
-      icons: <MdOutlineDeveloperBoard color="orange" opacity={0.5} />,
+      icons: <MultipleStatuses />,
       handleClick: () => ({}),
       isVisible: true
     },

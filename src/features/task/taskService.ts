@@ -73,6 +73,7 @@ import { pilotTabs } from '../../app/constants/pilotTabs';
 import { setChecklists } from './checklist/checklistSlice';
 import { StatusProps } from '../../pages/workspace/hubs/components/ActiveTree/activetree.interfaces';
 import { setMatchData } from '../general/prompt/promptSlice';
+import { MultipleTaskStatuses } from '../../pages/workspace/tasks/multipleStatuses/MultipleStatuses';
 
 export const useDeleteAttachment = ({ id }: { id: string }) => {
   const data = requestNew({
@@ -496,6 +497,55 @@ export const deleteTask = (data: { selectedTasksArray: string[] }) => {
     }
   });
   return request;
+};
+
+interface ITasksStatusesRes {
+  data: {
+    statuses: MultipleTaskStatuses[];
+  };
+}
+
+export const getTasksStatuses = (selectedTasksArray: string[], anchorEl: HTMLElement | null) => {
+  return useQuery(
+    [selectedTasksArray],
+    async () => {
+      const request = await requestNew<ITasksStatusesRes>({
+        url: 'tasks/multiple/get-statuses',
+        method: 'POST',
+        data: {
+          ids: selectedTasksArray
+        }
+      });
+      return request?.data.statuses;
+    },
+    {
+      enabled: !!selectedTasksArray.length && !!anchorEl,
+      cacheTime: 0
+    }
+  );
+};
+
+export const multipleUpdateStatus = (data: { ids: string[]; status: string }) => {
+  const { ids, status } = data;
+  const response = requestNew({
+    url: 'tasks/multiple/statuses',
+    method: 'POST',
+    data: {
+      ids,
+      status
+    }
+  });
+  return response;
+};
+
+export const useMultipleUpdateStatus = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation(multipleUpdateStatus, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['task']);
+    }
+  });
 };
 
 export const addNewField = (data: { ids: string[]; custom_field_id: string; values: string }) => {
@@ -1523,16 +1573,18 @@ export function useMediaStream() {
     const recorder = new MediaRecorder(combinedStream);
     dispatch(setScreenRecordingMedia({ recorder, stream: combinedStream }));
     if (blob && currentWorkspaceId && accessToken && activeItemId && activeItemType) {
-      mutate({
-        blob,
-        currentWorkspaceId,
-        accessToken,
-        activeItemId,
-        activeItemType
-      });
-
-      // Invalidate React Query
-      queryClient.invalidateQueries(['attachments']);
+      mutate(
+        {
+          blob,
+          currentWorkspaceId,
+          accessToken,
+          activeItemId,
+          activeItemType
+        },
+        {
+          onSuccess: () => queryClient.invalidateQueries(['attachments'])
+        }
+      );
     }
 
     dispatch(setScreenRecording('idle'));
