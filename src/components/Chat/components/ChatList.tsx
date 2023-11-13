@@ -61,9 +61,9 @@ export default function ChatsList() {
   const { pilotSideOver } = useAppSelector((state) => state.slideOver);
   const { type, id } = pilotSideOver;
 
-  const [collapseTasks, setCollapseTasks] = useState(false);
   const [tableHeight, setTableHeight] = useState<string | number>('auto');
 
+  const collapseTasks = false;
   const columns = heads.filter((i) => !i.hidden);
 
   const tableHeadElement = useRef<HTMLTableElement>(null);
@@ -96,8 +96,6 @@ export default function ChatsList() {
         <Spinner size={8} color="#0F70B7" />
       </div>
     );
-
-  console.log(data);
 
   return !data?.length ? (
     <FullScreenMessage
@@ -150,19 +148,14 @@ export default function ChatsList() {
           <div>
             <div className="sticky top-0 mr-2 px-2 pt-2 table-container overflow-hidden z-10" ref={tableHeadElement}>
               <table
-                style={
-                  !collapseTasks
-                    ? {
-                        display: 'grid',
-                        gridTemplateColumns: generateChatGrid(columns.length)
-                      }
-                    : undefined
-                }
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: generateChatGrid(columns.length)
+                }}
                 className="w-full"
               >
                 <ChatHead
                   collapseTasks={collapseTasks}
-                  onToggleCollapseTasks={() => setCollapseTasks((prev) => !prev)}
                   headerStatusColor="#B2B2B2"
                   columns={columns}
                   listName="CHAT"
@@ -174,14 +167,10 @@ export default function ChatsList() {
             <ScrollableHorizontalListsContainer ListColor={listColor} returnScrollLeft={handleScrollLeft}>
               <div className="table-container">
                 <table
-                  style={
-                    !collapseTasks
-                      ? {
-                          display: 'grid',
-                          gridTemplateColumns: generateChatGrid(columns.length)
-                        }
-                      : undefined
-                  }
+                  style={{
+                    display: 'grid',
+                    gridTemplateColumns: generateChatGrid(columns.length)
+                  }}
                   className="w-full"
                   ref={tableElement}
                 >

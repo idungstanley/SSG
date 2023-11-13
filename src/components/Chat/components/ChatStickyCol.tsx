@@ -12,10 +12,9 @@ interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   chat: IChatFromList;
   children?: ReactNode;
   hoverOn?: boolean;
-  setHoverOn: (i: boolean) => void;
 }
 
-export function ChatStickyCol({ hoverOn, setHoverOn, children, chat }: ColProps) {
+export function ChatStickyCol({ hoverOn, children, chat }: ColProps) {
   const dispatch = useAppDispatch();
 
   const [isChecked, setIsChecked] = useState(false);

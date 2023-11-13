@@ -7,7 +7,7 @@ import Pusher from 'pusher-js';
 import { useGetChat } from '../../../../features/chat/chatService';
 import ChatsList from '../ChatList';
 import MessagesList from './components/MessagesList';
-import { setActiveChat, setShowMembersInChatSideOver } from '../../../../features/chat/chatSlice';
+import { setActiveChat } from '../../../../features/chat/chatSlice';
 import CreateMessage from './components/CreateMessage';
 import { IMessage } from '../../../../features/chat/chat.interfaces';
 import TeamMembersInChat from '../TeamMembersInChat';

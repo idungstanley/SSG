@@ -5,7 +5,6 @@ import { ExtendedListColumnProps } from '../../../pages/workspace/tasks/componen
 import { IListColor } from '../../Views/ui/List/List';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import { generateSortField } from '../../../utils/TaskHeader/GenerateSortField';
-import LightenColor from '../../Views/ui/List/lightenColor/LightenColor';
 import RoundedArrowUpDown from '../../../pages/workspace/tasks/component/views/listLevel/component/RoundedArrowUpDown';
 import SortDirectionCheck from '../../../pages/workspace/tasks/component/views/listLevel/component/SortDirectionCheck';
 import { SortOption, setActiveTaskColumn, setSortArr, setSortArray } from '../../../features/task/taskSlice';
@@ -18,10 +17,9 @@ interface HeadProps {
   headerStatusColor?: string;
   listName?: string;
   listColor?: IListColor;
-  onToggleCollapseTasks: VoidFunction;
 }
 
-export function ChatHead({ columns, tableHeight, collapseTasks, listColor, onToggleCollapseTasks }: HeadProps) {
+export function ChatHead({ columns, tableHeight, collapseTasks, listColor }: HeadProps) {
   const dispatch = useAppDispatch();
 
   const { sortArr, sortAbleArr } = useAppSelector((state) => state.task);
@@ -76,10 +74,6 @@ export function ChatHead({ columns, tableHeight, collapseTasks, listColor, onTog
 
   const dirCheck = (col: string, isDefault: boolean, id?: string): SortOption | undefined => {
     return sortAbleArr.find((el) => el.field === generateSortField(isDefault, id));
-  };
-
-  const handleRemoveColumn = () => {
-    console.log('remove');
   };
 
   return columns.length > 0 ? (
@@ -190,7 +184,7 @@ export function ChatHead({ columns, tableHeight, collapseTasks, listColor, onTog
                       toggleModal={setShowSortModal}
                       handleSortFn={handleSort}
                       setAnchorEl={setAnchorEl}
-                      handleRemoveColumn={handleRemoveColumn}
+                      handleRemoveColumn={() => null}
                     />
                   )}
                 </th>

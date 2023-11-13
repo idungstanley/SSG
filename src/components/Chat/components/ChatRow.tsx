@@ -35,7 +35,7 @@ export function ChatRow({ chat, columns }: IChatRowProps) {
       onMouseEnter={() => setHoverOn(true)}
       onMouseLeave={() => setHoverOn(false)}
     >
-      <ChatStickyCol chat={chat} hoverOn={hoverOn} setHoverOn={setHoverOn}>
+      <ChatStickyCol chat={chat} hoverOn={hoverOn}>
         {/* actions */}
         <div className="flex items-center justify-center mr-1 space-x-1">
           {/* Copy */}
