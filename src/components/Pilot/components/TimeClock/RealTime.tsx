@@ -177,7 +177,7 @@ export function RealTime() {
               <TabsDropDown
                 header="timeclock types"
                 subHeader="select category"
-                styles="w-44 left-0 top-6 px-1.5"
+                styles="w-44 right-16 top-56 px-1.5"
                 subStyles="left-7"
                 closeModal={() => setDropDown((prev) => ({ ...prev, clockDropDown: !prev.clockDropDown }))}
               >
@@ -233,8 +233,8 @@ export function RealTime() {
     );
   }
   return (
-    <div className="flex justify-center items-center text-alsoit-text-md tracking-widest z-30">
-      <div className="flex items-center w-full">
+    <div className="flex justify-center items-center text-alsoit-text-md tracking-widest z-30 relative">
+      <div className="flex items-center w-full relative">
         <div className="w-1/3 relative flex items-center">
           {timeType === 'timer' ? (
             <HourGlassIcon className="w-4 h-4" />
@@ -249,7 +249,7 @@ export function RealTime() {
             <TabsDropDown
               header="timeclock types"
               subHeader="select category"
-              styles="w-44 left-0 top-6 px-1.5"
+              styles="w-44 right-16 top-56 px-1.5"
               subStyles="left-7"
               closeModal={() => setDropDown((prev) => ({ ...prev, clockDropDown: !prev.clockDropDown }))}
             >

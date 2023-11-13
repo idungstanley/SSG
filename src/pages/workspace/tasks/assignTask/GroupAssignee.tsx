@@ -21,7 +21,7 @@ function GroupAssignee({
   option?: string;
 }) {
   const { CompactView } = useAppSelector((state) => state.task);
-  const { selectedTasksArray, selectedListIds, selectedTaskParentId } = useAppSelector((state) => state.task);
+  const { selectedTasksArray, assignOnHoverListId } = useAppSelector((state) => state.task);
   const [assigneeId, setAssigneeId] = useState('');
 
   // Define a variable to store the number of remaining items
@@ -48,7 +48,7 @@ function GroupAssignee({
   const { mutate: onTaskUnassign } = UseTaskUnassignService(
     selectedTasksArray.length ? selectedTasksArray : [itemId as string],
     data[displayed.index],
-    selectedListIds.length ? selectedListIds : [selectedTaskParentId]
+    [assignOnHoverListId]
   );
 
   const handleUnAssignTask = (id: string) => {
@@ -104,8 +104,8 @@ function GroupAssignee({
         {displayedData.map((newData, index) => (
           <div
             key={newData.id}
-            className={`scaleBigger cursor-pointer ${index === 0 ? ' z-30   ' : ''} ${index === 1 ? 'z-20 ' : ''} ${
-              index === 2 ? 'z-10' : 'z-0'
+            className={`scaleBigger cursor-pointer ${index === 0 ? ' z-3   ' : ''} ${index === 1 ? 'z-2 ' : ''} ${
+              index === 2 ? 'z-1' : 'z-0'
             }  `}
             onMouseEnter={(e) => {
               handleHoverIntervalMouseIn(index, e);

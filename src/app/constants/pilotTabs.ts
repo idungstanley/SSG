@@ -25,5 +25,8 @@ export const pilotTabs = {
   TIES: 'ties',
   EMAIL: 'email',
   CHAT: 'chat',
-  VOICE_CALL: 'voice_call'
+  VOICE_CALL: 'voice_call',
+  HISTORY_LOG: 'history_log',
+  ACTIVITY_LOG: 'activity_log',
+  CUSTOM_LOG: 'custom_log'
 };

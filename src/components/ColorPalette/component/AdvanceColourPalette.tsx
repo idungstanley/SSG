@@ -99,7 +99,7 @@ export default function AdvanceColourPalette({ show }: { show: boolean }) {
     input: {
       border: '1px',
       width: '70px',
-      padding: '5px',
+      padding: '6px',
       fontSize: '11px',
       color: '#424242',
       borderRadius: '5px',
@@ -108,14 +108,14 @@ export default function AdvanceColourPalette({ show }: { show: boolean }) {
   };
 
   return show ? (
-    <div className="px-4 py-2 border-t border-gray-500 ">
+    <div className="px-2 border-alsoit-gray-75 border-t-[0.5px]">
       <div className="flex flex-col justify-center w-full gap-2 text-[#424242]">
         <div className={cl(isAdvanceSearch && 'w-full', 'flex items-center justify-between p-1')}>
           {!isAdvanceSearch && <p>ADVANCED COLOUR PALETTE</p>}
           <span className={cl(isAdvanceSearch && 'w-full', 'flex items-center justify-between gap-2')}>
             {!isAdvanceSearch && (
               <ToolTip title="Search Advance Colours">
-                <span className="p-1.5 bg-white rounded" onClick={() => setIsAdvanceSearch(true)}>
+                <span className="p-1 bg-white rounded hover:bg-[#F9E6FF]" onClick={() => setIsAdvanceSearch(true)}>
                   <SearchIcon color="#919191" className="w-4 h-4" />
                 </span>
               </ToolTip>
@@ -124,15 +124,17 @@ export default function AdvanceColourPalette({ show }: { show: boolean }) {
               <div className="grow">
                 <Input
                   placeholder="Search"
-                  bgColor="bg-gray-200"
                   borderRadius="rounded-md py-0.5"
                   type="text"
                   name="Advance Search. . ."
-                  leadingIcon={<CiSearch />}
+                  leadingIcon={<CiSearch style={{ color: 'rgb(191, 0, 255)' }} />}
                   trailingIcon={
                     <ToolTip title="Close Advance Search">
                       <span>
-                        <AiFillCloseCircle style={{ color: 'rgb(191, 0, 255)' }} />
+                        <AiFillCloseCircle
+                          className="text-sm hover:fill-[#8601B2]"
+                          style={{ color: 'rgb(191, 0, 255)' }}
+                        />
                       </span>
                     </ToolTip>
                   }
@@ -174,20 +176,20 @@ export default function AdvanceColourPalette({ show }: { show: boolean }) {
               </span>
             )}
           </span>
-          <div className="grid grid-cols-3 -mt-3 grow rounded-sm">
-            <div className="flex flex-col items-center justify-center text-alsoit-gray-100">
+          <div className="flex -mt-3 grow rounded cursor-pointer">
+            <div className="flex flex-col items-center justify-center text-alsoit-gray-100 w-full">
               <p className="uppercase text-[8px] text-left pr-5">{colorType} CODE</p>
-              <span className="w-full bg-white border h-[25px] rounded-l-md">
+              <span className="w-full bg-white border h-[25px] rounded-l">
                 <EditableInput value={handleColorTypeSwitch()} style={inputStyles} onChange={onChange} />
               </span>
             </div>
-            <div className="flex flex-col items-center justify-center">
+            <div className="flex flex-col items-center justify-center w-full">
               <p className="w-full pl-2 text-left text-alsoit-gray-100 text-[8px]">NAME</p>
-              <span className="flex items-center w-full pl-1 bg-white border-y h-[25px]">{colorName}</span>
+              <span className="flex items-center w-full pl-2 bg-white border-y h-[25px]">{colorName}</span>
             </div>
-            <div className="flex flex-col items-center justify-center">
-              <p className="w-full pl-2 text-left text-alsoit-gray-100 text-[8px]">OPACITY</p>
-              <span className="flex items-center w-full pl-1 bg-white border rounded-r-md h-[25px]">
+            <div className="flex flex-col items-center justify-center ">
+              <p className="w-full pl-1 text-left text-alsoit-gray-100 text-[8px] pr-2">OPACITY</p>
+              <span className="flex items-center w-full pl-2 bg-white border rounded-r h-[25px]">
                 {color && color.rgb && color.rgb.a !== undefined && Math.floor(color.rgb.a * 100)}%
               </span>
             </div>
@@ -205,12 +207,12 @@ export default function AdvanceColourPalette({ show }: { show: boolean }) {
           height="h-8"
           onChange={(e) => setColorInputValue(e.target.value)}
         />
-        <div className="flex items-center justify-between gap-2">
+        <div className="flex items-center justify-between gap-2 mt-5 mb-4">
           <CancelButton onClick={() => ({})} />
           <div className="flex items-center gap-2">
             <Button
               height="h-6"
-              customClasses="hover:bg-green-700 bg-green-500 text-white w-[79px]"
+              customClasses="hover:bg-green-700 bg-[#00CC25] text-white w-[80px]"
               label="Replace"
               labelSize="text-[10px]"
               padding="p-1"
@@ -219,7 +221,7 @@ export default function AdvanceColourPalette({ show }: { show: boolean }) {
             />
             <Button
               height="h-6"
-              customClasses="hover:bg-green-700 bg-green-500 text-white w-[79px]"
+              customClasses="hover:bg-green-700 bg-[#00CC25] text-white w-[80px]"
               label="Save as new"
               labelSize="text-[10px]"
               padding="p-1"

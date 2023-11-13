@@ -46,7 +46,7 @@ function Input({
     <div className="w-full">
       {label && (
         <div className="flex justify-between mb-1">
-          <label htmlFor={name} className="block text-sm text-gray-700">
+          <label htmlFor={name} className="block text-gray-700">
             {label}
           </label>
           {cornerHint && <span className="text-sm text-gray-500">{cornerHint}</span>}
@@ -68,7 +68,7 @@ function Input({
               : 'border-transparent focus:border-transparent focus:ring-0 focus:outline-none'
           } ${
             borderRadius ? borderRadius : name === 'search' && !borderRadius ? 'rounded-md py-0.5' : 'rounded-md py-2'
-          } shadow-sm placeholder-gray-400   sm:text-sm ${bgColor} ${height}`}
+          }  placeholder-gray-400   sm:text-sm ${bgColor} ${height}`}
           placeholder={placeholder}
           value={value}
           onChange={onChange}

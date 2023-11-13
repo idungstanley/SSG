@@ -3,7 +3,7 @@ import Menu from '@mui/material/Menu';
 
 interface dropdownProps {
   handleClose: () => void;
-  anchorEl?: HTMLDivElement | null | HTMLSpanElement;
+  anchorEl?: HTMLElement | null;
   children: React.ReactNode | JSX.Element;
 }
 

@@ -14,7 +14,6 @@ import {
 import { setCurrentTaskIdForTag } from '../../../../features/workspace/tags/tagSlice';
 import { ICheckListItems } from '../../../../features/task/interface.tasks';
 import Assignee from '../../../../pages/workspace/tasks/assignTask/Assignee';
-import TaskTag from '../../../../pages/workspace/tasks/component/taskData/taskTag';
 import { ManageTagsDropdown } from '../../../Tag/ui/ManageTagsDropdown/ui/ManageTagsDropdown';
 
 export interface checkListItemProps {
@@ -138,12 +137,6 @@ function ChecklistItem({ Item, checklistId }: checkListItemProps) {
               >
                 <Assignee itemId={item.id} option="checklist" assigneeChecklistItem={item} />
               </div>
-
-              {item.tags.length > 0 && (
-                <div className="mr-4">
-                  <TaskTag taskColField={item.tags} entity_type="checklist_item" entity_id={item.id} />
-                </div>
-              )}
 
               <span onClick={() => dispatch(setCurrentTaskIdForTag(item.id))}>
                 <ManageTagsDropdown tagsArr={item.tags} entityId={item.id} entityType="checklist_item" />

@@ -2,14 +2,16 @@ import { useDispatch } from 'react-redux';
 import requestNew from '../../app/requestNew';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { setArchiveWallet } from './walletSlice';
-import { closeMenu, setSpaceStatuses, setSpaceViews } from '../hubs/hubSlice';
+import { closeMenu, getHub, setSpaceStatuses, setSpaceViews } from '../hubs/hubSlice';
 import { IWallet, IWalletDetailRes } from './wallet.interfaces';
-import { useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { generateFilters } from '../../components/TasksHeader/lib/generateFilters';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
 import { setChecklists } from '../task/checklist/checklistSlice';
 import { ICheckListRes } from '../task/interface.tasks';
+import { findCurrentHub } from '../../managers/Hub';
+import { walletMoveManager } from '../../managers/Wallet';
+import { setFilteredResults } from '../search/searchSlice';
+import { setDragOverItem, setDraggableItem } from '../list/listSlice';
 
 interface IResponseWallet {
   data: {
@@ -32,23 +34,20 @@ const moveWallet = (data: { parent_id?: string; walletId?: string; hubId?: strin
 };
 
 export const useMoveWalletsService = () => {
-  const queryClient = useQueryClient();
-  const { hubId, walletId, listId } = useParams();
+  const dispatch = useDispatch();
 
-  const id = hubId ?? walletId ?? listId;
-  const type = hubId ? EntityType.hub : walletId ? EntityType.wallet : EntityType.list;
-
-  const { sortAbleArr } = useAppSelector((state) => state.task);
-  const sortArrUpdate = sortAbleArr.length <= 0 ? null : sortAbleArr;
-
-  const { filters } = generateFilters();
+  const { draggableItemId, dragOverItemId } = useAppSelector((state) => state.list);
+  const { hub } = useAppSelector((state) => state.hub);
 
   return useMutation(moveWallet, {
     onSuccess: () => {
-      queryClient.invalidateQueries(['task', { listId, sortArrUpdate, filters }]);
-      queryClient.invalidateQueries(['task', id, type]);
-      queryClient.invalidateQueries(['retrieve', id ?? 'root', 'tree']);
-      queryClient.invalidateQueries(['retrieve', id ?? 'root', undefined]);
+      const droppableEl = findCurrentHub(dragOverItemId as string, hub);
+      const type = droppableEl.id ? EntityType.hub : EntityType.wallet;
+      const updatedTree = walletMoveManager(type, draggableItemId as string, dragOverItemId as string, hub);
+      dispatch(getHub(updatedTree));
+      dispatch(setFilteredResults(updatedTree));
+      dispatch(setDraggableItem(null));
+      dispatch(setDragOverItem(null));
     }
   });
 };
@@ -82,7 +81,7 @@ export const UseEditWalletService = (data: {
   const response = requestNew<IResponseWallet>({
     url: `wallets/${data.walletId}`,
     method: 'PUT',
-    params: {
+    data: {
       name: data.walletName,
       color: data.color,
       description: data.description

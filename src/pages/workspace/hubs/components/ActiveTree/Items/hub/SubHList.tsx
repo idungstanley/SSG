@@ -28,6 +28,7 @@ export default function SubHubList({ hubs, placeHubType }: ListProps) {
 
   const { showExtendedBar, openedEntitiesIds, activeView } = useAppSelector((state) => state.workspace);
   const { showSidebar } = useAppSelector((state) => state.account);
+  const { show: showFullPilot } = useAppSelector((state) => state.slideOver.pilotSideOver);
 
   const handleLocation = (id: string, name: string, item: IHub) => {
     const viewsUrl = generateViewsUrl(id, activeView?.id as string, item, EntityType.hub) as string;
@@ -44,7 +45,9 @@ export default function SubHubList({ hubs, placeHubType }: ListProps) {
       })
     );
     dispatch(setShowPilot(true));
-    dispatch(setActiveTabId(pilotTabs.DETAILS));
+    if (showFullPilot) {
+      dispatch(setActiveTabId(pilotTabs.DETAILS));
+    }
     navigate(viewsUrl, {
       replace: true
     });
@@ -53,8 +56,8 @@ export default function SubHubList({ hubs, placeHubType }: ListProps) {
     }
   };
 
-  const handleClick = (id: string) => {
-    if (openedEntitiesIds.includes(id)) {
+  const handleClick = (id: string, type?: string) => {
+    if (openedEntitiesIds.includes(id) && type !== 'isOver') {
       dispatch(setOpenedEntitiesIds(openedEntitiesIds.filter((subhubId) => subhubId !== id)));
     } else {
       dispatch(setOpenedEntitiesIds([...openedEntitiesIds, id]));

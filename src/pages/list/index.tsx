@@ -103,7 +103,7 @@ export function ListPage() {
     } else {
       dispatch(setSaveSettingOnline(saveSettingLocal));
     }
-  }, [listDetails]);
+  }, [listDetails, saveSettingList]);
 
   useEffect(() => {
     if (tasksFromRes.length && listId && listDetailsFromRes?.data.list.custom_field_columns) {
@@ -207,7 +207,7 @@ export function ListPage() {
             <section style={{ minHeight: '0', maxHeight: '83vh' }} className="w-full h-full p-4 pb-0 space-y-10">
               <TaskQuickAction />
 
-              {tasksStore[listId as string] && tasksFromRes.length ? (
+              {tasksStore[listId as string]?.length ? (
                 <List tasks={tasksStore[listId as string]} />
               ) : (
                 <List tasks={defaultTaskTemplate} />

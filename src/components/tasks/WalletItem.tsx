@@ -29,6 +29,7 @@ import ActiveBarIdentification from './Component/ActiveBarIdentification';
 import { useAbsolute } from '../../hooks/useAbsolute';
 import { IWallet } from '../../features/hubs/hubs.interfaces';
 import { APP_TASKS } from '../../app/constants/app';
+import { STORAGE_KEYS, dimensions } from '../../app/config/dimensions';
 
 interface WalletItemProps {
   wallet: Wallet;
@@ -168,6 +169,10 @@ export default function WalletItem({
   const { cords, relativeRef } = useAbsolute(updateCords, 230);
   const { cords: menuCords, relativeRef: menuRef } = useAbsolute(updateCords, 352);
 
+  const sidebarWidthFromLS =
+    (JSON.parse(localStorage.getItem(STORAGE_KEYS.SIDEBAR_WIDTH) || '""') as number) ||
+    dimensions.navigationBar.default;
+
   return (
     <div
       className={`${openedEntitiesIds.includes(wallet.id) ? 'sticky bg-white' : ''}`}
@@ -186,43 +191,46 @@ export default function WalletItem({
       >
         <div
           id="walletLeft"
-          className="relative flex items-center flex-1 truncate"
+          className="relative flex items-center justify-between"
           style={{ paddingLeft: `${paddingLeft}px`, height: '30px' }}
         >
-          <ActiveBackground showBgColor={wallet.id === walletId} />
-          <ActiveBarIdentification showBar={wallet.id === walletId} />
-          <div
-            className="absolute left-2 rounded-r-lg w-0.5 opacity-0 group-hover:opacity-100 cursor-move"
-            ref={draggableRef}
-            {...listeners}
-            {...attributes}
-          >
-            <Drag />
-          </div>
-          {/* showsub1 */}
-          <div className="flex items-center gap-5">
-            <div className="flex items-center" style={{ zIndex: '1' }} ref={relativeRef}>
-              {renderIcons(showSubWallet)}
-            </div>
+          <div className="flex items-center justify-between">
+            <ActiveBackground showBgColor={wallet.id === walletId} />
+            <ActiveBarIdentification showBar={wallet.id === walletId} />
             <div
-              onClick={() => handleLocation(wallet.id, wallet.name, wallet as Wallet)}
-              className="truncate cursor-pointer hover:underline hover:decoration-dashed"
+              className="absolute left-2 rounded-r-lg w-0.5 opacity-0 group-hover:opacity-100 cursor-move"
+              ref={draggableRef}
+              {...listeners}
+              {...attributes}
             >
-              <ToolTip title={wallet.name}>
-                <p
-                  className={`capitalize truncate cursor-pointer ${
-                    wallet.id === walletId ? 'text-alsoit-purple-300' : ''
-                  }`}
-                  style={{
-                    fontSize: '13px',
-                    lineHeight: '15.56px',
-                    verticalAlign: 'baseline',
-                    letterSpacing: '0.28px'
-                  }}
-                >
-                  {wallet.name}
-                </p>
-              </ToolTip>
+              <Drag />
+            </div>
+            {/* showsub1 */}
+            <div className="flex items-center gap-5">
+              <div className="flex items-center" style={{ zIndex: '1' }} ref={relativeRef}>
+                {renderIcons(showSubWallet)}
+              </div>
+              <div
+                onClick={() => handleLocation(wallet.id, wallet.name, wallet as Wallet)}
+                className="truncate cursor-pointer hover:underline hover:decoration-dashed"
+                style={{ width: sidebarWidthFromLS - 135 - Number(paddingLeft) }}
+              >
+                <ToolTip title={wallet.name}>
+                  <p
+                    className={`capitalize truncate cursor-pointer text-left ${
+                      wallet.id === walletId ? 'text-alsoit-purple-300' : ''
+                    }`}
+                    style={{
+                      fontSize: '13px',
+                      lineHeight: '15.56px',
+                      verticalAlign: 'baseline',
+                      letterSpacing: '0.28px'
+                    }}
+                  >
+                    {wallet.name}
+                  </p>
+                </ToolTip>
+              </div>
             </div>
           </div>
           {showSidebar && (

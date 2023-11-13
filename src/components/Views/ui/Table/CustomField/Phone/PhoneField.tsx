@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { ICustomField } from '../../../../../../features/task/taskSlice';
 import { useUpdateEntityCustomFieldValue } from '../../../../../../features/list/listService';
 import { cl } from '../../../../../../utils';
@@ -20,7 +20,7 @@ function PhoneField({ taskCustomFields, taskId, fieldId }: PhoneFieldProps) {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [searchValue, setSearchValue] = useState<string>('');
   const [showAllCodes, setShowAllcodes] = React.useState<null | HTMLElement>(null);
-  const activeValue = taskCustomFields?.values[0].value ? taskCustomFields?.values[0].value : '-';
+  const [activeValue, setActiveValue] = useState('');
   const [currentValue, setCurrentValue] = useState<string>(activeValue);
   const [editMode, setEditMode] = useState(false);
   const [isCopied, setIsCopied] = useState<number>(0);
@@ -31,6 +31,13 @@ function PhoneField({ taskCustomFields, taskId, fieldId }: PhoneFieldProps) {
   const inputRef = useRef<HTMLInputElement>(null);
 
   const { mutate: onUpdate } = useUpdateEntityCustomFieldValue(taskId);
+
+  useEffect(() => {
+    if (taskCustomFields) {
+      setActiveValue(taskCustomFields?.values[0].value ? taskCustomFields?.values[0].value : '-');
+      setCurrentValue(taskCustomFields?.values[0].value ? taskCustomFields?.values[0].value : '-');
+    }
+  }, [taskCustomFields]);
 
   const filteredPhpneExt = PhoneExt.filter((option) => option.name.toLowerCase().includes(searchValue.toLowerCase()));
 

@@ -3,7 +3,6 @@ import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import CommentsForPilot from '../../../../../components/Comments/CommentsForPilot';
-import History from '../../../../../components/Pilot/components/History';
 import WatchersForPilot from '../../../../../components/Watchers/WatchersForPilot';
 import { setShowPilotSideOver } from '../../../../../features/general/slideOver/slideOverSlice';
 import Details from '../../../../../components/Pilot/components/details/Details';
@@ -21,6 +20,7 @@ import Views from '../../../../../components/Pilot/components/Views/Index';
 import PilotViewIcon from '../../../../../assets/icons/PilotViewIcon';
 import { DetailsIcon } from '../../../../../assets/icons';
 import Commnunication from '../../../pilot/components/communication/Communication';
+import Logs from '../../../../../components/Pilot/components/Logs/Logs';
 
 const sections = [
   {
@@ -29,7 +29,7 @@ const sections = [
   },
   {
     id: pilotTabs.LOGS,
-    element: <History />
+    element: <Logs />
   },
   {
     id: pilotTabs.COMMENTS,

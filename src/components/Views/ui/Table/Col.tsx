@@ -36,6 +36,7 @@ import PeopleField from './CustomField/PeopleField/PeopleField';
 import FilesField from './CustomField/Files/FilesField';
 import LocationField from './CustomField/Location/LocationField';
 import ManualProgress from './CustomField/Progress/ManualProgress';
+import moment, { MomentInput } from 'moment-timezone';
 
 interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   value: TaskValue;
@@ -48,6 +49,7 @@ export function Col({ value, field, fieldId, task, ...props }: ColProps) {
   const dispatch = useAppDispatch();
   const { taskId } = useParams();
 
+  const { date_format } = useAppSelector((state) => state.userSetting);
   const { dragOverItemId, draggableItemId } = useAppSelector((state) => state.list);
   const { dragToBecomeSubTask, verticalGrid, selectedTasksArray, saveSettingOnline } = useAppSelector(
     (state) => state.task
@@ -137,6 +139,7 @@ export function Col({ value, field, fieldId, task, ...props }: ColProps) {
       />
     ),
     date: <DateField />,
+    archived_at: <>{value ? <>{moment(value as MomentInput).format(date_format?.toUpperCase())}</> : '-'}</>,
     time: (
       <TimeField
         taskId={task.id}
