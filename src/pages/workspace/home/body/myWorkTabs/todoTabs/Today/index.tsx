@@ -1,16 +1,13 @@
 import React, { useState } from 'react';
-import OpenSubtask from '../../../../../../../assets/icons/OpenSubtask';
 import AllDoneForTheDay from '../../AllDoneForTheDay';
-import CloseSubtask from '../../../../../../../assets/icons/CloseSubtask';
+import OpenTodoTabs from '../OpenTodoTabs';
 
 export default function Today() {
   const [openTab, setOpenTab] = useState<boolean>(false);
 
   return (
-    <div onClick={() => setOpenTab(!openTab)}>
-      <div className="flex pb-5 items-center cursor-pointer space-x-3">
-        <p>{!openTab ? <OpenSubtask /> : <CloseSubtask />}</p> <h1>Today</h1>
-      </div>
+    <div>
+      <OpenTodoTabs openTab={openTab} title="Today" setOpenTab={setOpenTab} NoDueDate={true} />
       <AllDoneForTheDay
         allDoneState={openTab}
         title="Woohoo, youre all done!"
