@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import TodoTabs from './TodoTabs';
+import TodoTabs from './todoTabs';
 
 interface activeSelectedTab {
   id: string;
@@ -21,7 +21,7 @@ export default function MyWorkTabs({ activeTab }: { activeTab: string }) {
     },
     {
       id: 'delegated',
-      content: <h1>delegated</h1>
+      content: <h1 className="">delegated</h1>
     }
   ];
 
