@@ -172,7 +172,6 @@ export function Row({
           setHoverOn={setHoverOn}
           showSubTasks={showChildren}
           setShowSubTasks={setShowSubTasks}
-          // style={{ zIndex: 1 }}
           toggleRootTasks={toggleRootTasks}
           isListParent={isListParent}
           task={task}
@@ -183,6 +182,7 @@ export function Row({
           taskStatusId={taskStatusId as string}
           onClose={handleClose as VoidFunction}
           paddingLeft={paddingLeft}
+          level={level + 1}
           tags={
             'tags' in task ? (
               <div className="flex gap-3">

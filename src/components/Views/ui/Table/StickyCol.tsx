@@ -58,6 +58,7 @@ interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   toggleRootTasks?: boolean;
   droppableElement?: ReactNode;
   styles?: { opacity: number };
+  level?: number;
 }
 
 export function StickyCol({
@@ -79,6 +80,7 @@ export function StickyCol({
   droppableElement,
   isOver,
   styles,
+  level,
   ...props
 }: ColProps) {
   const dispatch = useAppDispatch();
@@ -316,22 +318,6 @@ export function StickyCol({
     setIsChecked(isChecked);
   };
 
-  // const { attributes, listeners, setNodeRef } = useDraggable({
-  //   id: task?.id as UniqueIdentifier,
-  //   data: {
-  //     isTask: true,
-  //     movingTask: task
-  //   }
-  // });
-
-  // const { isOver, setNodeRef: droppabbleRef } = useDroppable({
-  //   id: task.id,
-  //   data: {
-  //     isOverTask: true
-  //     // overTask: task
-  //   }
-  // });
-
   const [saveToggle, setSaveToggle] = useState<boolean>(false);
   const [closeToggle, setCloseToggle] = useState<boolean>(false);
 
@@ -380,6 +366,14 @@ export function StickyCol({
     return '100%';
   };
 
+  const handleDroppable = () => {
+    if (task.parent_id === draggableItemId && level) {
+      return false;
+    } else {
+      return true;
+    }
+  };
+
   return (
     <>
       {task.id !== '0' && (
@@ -388,7 +382,7 @@ export function StickyCol({
           style={styles}
           {...props}
         >
-          {droppableElement}
+          {handleDroppable() && droppableElement}
           <div
             className="flex items-center h-full ml-1 space-x-1"
             style={{
