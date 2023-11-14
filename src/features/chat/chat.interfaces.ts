@@ -2,6 +2,8 @@ interface ITeamMember {
   id: string;
   user: {
     id: string;
+    color: string;
+    initials: string;
     name: string;
     email: string;
     avatar_path: null | string;
@@ -10,8 +12,7 @@ interface ITeamMember {
     key: string;
     name: string;
   };
-  colour: string;
-  initials: string;
+  color: string;
   created_at: string;
   updated_at: string;
 }

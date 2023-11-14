@@ -84,7 +84,13 @@ const sendMessageToChat = (data: { chatId: string | null; message: string }) => 
 };
 
 export const useSendMessageToChat = () => {
-  return useMutation(sendMessageToChat);
+  const queryClient = useQueryClient();
+
+  return useMutation(sendMessageToChat, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['chat']);
+    }
+  });
 };
 
 const addTeamMemberToChat = (data: { chatId: string | null; teamMemberId: string }) => {
