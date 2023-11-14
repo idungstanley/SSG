@@ -9,19 +9,22 @@ import {
   setDuplicateTaskObj,
   setSelectedTasksArray
 } from '../../features/task/taskSlice';
-import { useDuplicateTask, useMultipleDuplicateTasks } from '../../features/task/taskService';
+import { useDuplicateTask, useMultipleDuplicateTasks, useMultipleTaskMove } from '../../features/task/taskService';
 import DuplicateTaskAdvanceModal from '../../pages/workspace/tasks/component/taskMenu/DuplicateTaskAdvanceModal';
+import { TASK_DUPLICATE, TASK_MOVE } from '../../pages/workspace/tasks/component/taskMenu/TaskMenu';
+import { EntityType } from '../../utils/EntityTypes/EntityType';
 
 interface ListItemProps {
   list: IList;
   paddingLeft: string | number;
   parentId?: string | null;
+  option?: string;
 }
 export interface ListColourProps {
   innerColour?: string;
   outerColour?: string;
 }
-export default function SearchListItem({ list, paddingLeft }: ListItemProps) {
+export default function SearchListItem({ list, paddingLeft, option }: ListItemProps) {
   const dispatch = useAppDispatch();
   const { listId } = useParams();
 
@@ -33,20 +36,30 @@ export default function SearchListItem({ list, paddingLeft }: ListItemProps) {
 
   const { mutate: duplicateTask } = useDuplicateTask();
   const { mutate: multipleDuplicateTasks } = useMultipleDuplicateTasks(list);
+  const { mutate: onMultipleTaskMove } = useMultipleTaskMove(list, 'id_only');
 
   const handleClick = () => {
-    dispatch(setDuplicateTaskObj({ ...duplicateTaskObj, popDuplicateTaskModal: false }));
+    if (option === TASK_DUPLICATE) {
+      if (selectedTasksArray.length > 1) {
+        dispatch(setDuplicateTaskObj({ ...duplicateTaskObj, popDuplicateTaskModal: false }));
+        multipleDuplicateTasks({
+          ...duplicateTaskObj,
+          ids: selectedTasksArray,
+          list_id: list.id
+        });
+      } else {
+        duplicateTask({
+          ...duplicateTaskObj,
+          list_id: list.id
+        });
+      }
+    }
 
-    if (selectedTasksArray.length > 1) {
-      multipleDuplicateTasks({
-        ...duplicateTaskObj,
-        ids: selectedTasksArray,
-        list_id: list.id
-      });
-    } else {
-      duplicateTask({
-        ...duplicateTaskObj,
-        list_id: list.id
+    if (option === TASK_MOVE) {
+      onMultipleTaskMove({
+        taskIds: selectedTasksArray,
+        listId: list.id,
+        overType: EntityType.list
       });
     }
   };

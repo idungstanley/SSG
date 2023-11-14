@@ -7,6 +7,8 @@ import { EntityType } from '../../../../../../../utils/EntityTypes/EntityType';
 import SearchHubItem from '../../../../../../../components/tasks/SearchHubItem';
 import SearchWList from '../wallet/SearchWList';
 import SearchLList from '../list/SearchLList';
+import { OPTIONS_WITH_AVAILABLE_LISTS } from '../../../../../tasks/component/taskMenu/TaskMenu';
+import { unavailableStyles } from '../../../../../../../components/ActiveTree/ActiveTreeList';
 
 interface ISearchSubHListProps {
   hubs: Hub[];
@@ -74,8 +76,8 @@ export default function SearchSubHList({ hubs, handleTabClick, option }: ISearch
           <div
             className="relative flex flex-col"
             style={
-              lastActiveItem === 'Sub Hub' && option !== 'taskDuplicate'
-                ? { opacity: '0.5', pointerEvents: 'none' }
+              lastActiveItem === 'Sub Hub' && !OPTIONS_WITH_AVAILABLE_LISTS.includes(option as string)
+                ? unavailableStyles
                 : {}
             }
           >
@@ -92,8 +94,8 @@ export default function SearchSubHList({ hubs, handleTabClick, option }: ISearch
             />
             <div
               style={
-                lastActiveItem === 'Wallet' && option !== 'taskDuplicate'
-                  ? { opacity: '0.5', pointerEvents: 'none' }
+                lastActiveItem === 'Wallet' && !OPTIONS_WITH_AVAILABLE_LISTS.includes(option as string)
+                  ? unavailableStyles
                   : {}
               }
             >
@@ -108,9 +110,9 @@ export default function SearchSubHList({ hubs, handleTabClick, option }: ISearch
                 />
               ) : null}
             </div>
-            <div style={option !== 'taskDuplicate' ? { opacity: '0.5', pointerEvents: 'none' } : {}}>
+            <div style={!OPTIONS_WITH_AVAILABLE_LISTS.includes(option as string) ? unavailableStyles : {}}>
               {hub.lists.length && isCanBeOpen(hub.id) && !showExtendedBar ? (
-                <SearchLList list={hub.lists} leftMargin={false} paddingLeft="50" />
+                <SearchLList option={option} list={hub.lists} leftMargin={false} paddingLeft="50" />
               ) : null}
             </div>
           </div>
