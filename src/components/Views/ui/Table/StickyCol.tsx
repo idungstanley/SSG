@@ -107,8 +107,7 @@ export function StickyCol({
     newTaskPriority,
     f2State,
     taskRootIds,
-    assignOnHoverTask,
-    subtasks
+    assignOnHoverTask
   } = useAppSelector((state) => state.task);
 
   const [isChecked, setIsChecked] = useState(false);
@@ -367,36 +366,13 @@ export function StickyCol({
     return '100%';
   };
 
-  const subtaskIds = (tasks: Task[]) => {
-    return tasks?.map((task) => task.id);
-  };
-
-  const returnSubTaskIds = (taskRootIds: string[]) => {
-    return taskRootIds?.map((id) => {
-      if (subtasks[id]) return subtaskIds(subtasks[id]);
-    });
-  };
-
   const handleDroppable = () => {
-    const rootSubIds = taskRootIds[draggableItemId as string];
-    const subTaskArray = returnSubTaskIds(rootSubIds);
-    const flatArray = subTaskArray?.flat() as string[];
-
-    console.log(subTaskArray, 'subTaskArray');
-    console.log(flatArray, 'flatArray');
-    if (task.id === draggableItemId && flatArray.length) {
-      for (const value of flatArray) {
-        if (task.id === value) {
-          return false;
-        }
-      }
-      // return false;
+    if (task.parent_id === draggableItemId && level) {
+      return false;
     } else {
       return true;
     }
   };
-
-  console.log(level);
 
   return (
     <>
