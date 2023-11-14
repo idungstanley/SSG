@@ -188,7 +188,7 @@ export const UseGetListDetails = (listId: string | null | undefined) => {
   const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
   const id = activeItemType === 'list' ? activeItemId : listId;
   return useQuery(
-    ['hubs', 'update-list', { listId, id }],
+    ['hubs', 'update-list', 'list', { listId, id }],
     async () => {
       const data = await requestNew<IListDetailRes>({
         url: `lists/${listId}`,

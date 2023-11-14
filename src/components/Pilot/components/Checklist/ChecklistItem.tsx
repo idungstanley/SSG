@@ -154,9 +154,11 @@ function ChecklistItem({ Item, checklistId }: checkListItemProps) {
                 <Assignee itemId={item.id} option="checklist" assigneeChecklistItem={item} />
               </div>
 
-              <span onClick={() => dispatch(setCurrentTaskIdForTag(item.id))} className="w-1/4 flex justify-center">
+              <span onClick={() => dispatch(setCurrentTaskIdForTag(item.id))} className="w-1/4">
                 {item.tags.map((tag) => (
-                  <TaskTag key={tag.id} tag={tag} entity_id={item.id} entity_type="task" />
+                  <div key={tag.id} className="my-0.5 w-full flex justify-center">
+                    <TaskTag tag={tag} entity_id={item.id} entity_type="checklist_item" />
+                  </div>
                 ))}
               </span>
             </div>
