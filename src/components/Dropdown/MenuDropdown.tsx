@@ -20,11 +20,6 @@ import { getHub, setArchiveHub, setSubDropdownMenu, setshowMenuDropdown } from '
 import EditHubModal from '../../pages/workspace/hubs/components/EditHubModal';
 import SubDropdown from './SubDropdown';
 import { ArchiveHubService, useCreateFavorite, UseDeleteHubService } from '../../features/hubs/hubService';
-// import {
-//   setEditHubSlideOverVisibility,
-//   setEditListSlideOverVisibility,
-//   setEditWalletSlideOverVisibility
-// } from '../../features/general/slideOver/slideOverSlice';
 import EditListModal from '../../pages/workspace/lists/components/modals/EditListModal';
 import EditWalletModal from '../../pages/workspace/wallet/components/modals/EditWalletModal';
 import { setArchiveWallet } from '../../features/wallet/walletSlice';
