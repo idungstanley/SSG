@@ -145,7 +145,7 @@ export function useResize({ dimensions, direction, defaultSize, storageKey }: Us
 
     return (
       <div
-        style={{ cursor: 'col-resize' }}
+        style={{ cursor: direction === 'YB' ? 'row-resize' : 'col-resize' }}
         onMouseDown={handleMouseDown}
         className={cl('z-10 absolute group transition-all duration-200', params[direction].root)}
       >
