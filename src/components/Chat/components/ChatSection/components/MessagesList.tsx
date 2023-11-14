@@ -50,13 +50,17 @@ export default function MessagesList({ messages }: MessagesListProps) {
               <div className="flex group flex-col justify-start gap-1 p-2 rounded-xl border">
                 {/* top */}
                 <div className="flex items-center justify-between text-sm text-gray-600">
-                  {!isCurrentUser(message.team_member.user.id) ? (
-                    <>
-                      <p>{message.team_member.user.name}</p>
-                      <DropdownMenuForMessage />
-                    </>
-                  ) : null}
+                  {/* {!isCurrentUser(message.team_member.user.id) ? <p>{message.team_member.user.name}</p> : null} */}
+                  <p>{message.team_member.user.name}</p>
+                  <DropdownMenuForMessage message={message} />
                 </div>
+
+                {message?.reply_on ? (
+                  <div className="px-2 py-1 bg-gray-300 rounded-md">
+                    <div>{message.reply_on.team_member.user.name}</div>
+                    <div>{message.reply_on.message}</div>
+                  </div>
+                ) : null}
 
                 <div className="flex justify-between">
                   {/* message */}

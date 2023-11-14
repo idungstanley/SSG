@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { itemType } from '../../types';
+import { IMessage } from './chat.interfaces';
 
 interface ISelectedItem {
   id: string;
@@ -12,6 +13,7 @@ interface ChatState {
   showCreateChatSideOver: boolean;
   selectedItem: ISelectedItem | null;
   activeChat: string;
+  selectedMessage: IMessage | null;
 }
 
 const initialState: ChatState = {
@@ -19,7 +21,8 @@ const initialState: ChatState = {
   showMembersInChatSideOver: false,
   showCreateChatSideOver: false,
   selectedItem: null,
-  activeChat: ''
+  activeChat: '',
+  selectedMessage: null
 };
 
 export const chatSlice = createSlice({
@@ -41,11 +44,20 @@ export const chatSlice = createSlice({
     },
     setActiveChat: (state, action: PayloadAction<string>) => {
       state.activeChat = action.payload;
+    },
+    setSelectedMessage: (state, action: PayloadAction<IMessage | null>) => {
+      state.selectedMessage = action.payload;
     }
   }
 });
 
-export const { setShowChat, setShowMembersInChatSideOver, setShowCreateChatSideOver, setSelectedItem, setActiveChat } =
-  chatSlice.actions;
+export const {
+  setShowChat,
+  setShowMembersInChatSideOver,
+  setShowCreateChatSideOver,
+  setSelectedItem,
+  setActiveChat,
+  setSelectedMessage
+} = chatSlice.actions;
 
 export default chatSlice.reducer;
