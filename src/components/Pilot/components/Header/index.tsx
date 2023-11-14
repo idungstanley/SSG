@@ -19,16 +19,9 @@ export default function Header({ menu, children, isMinified, additionalNavItems 
   const dispatch = useAppDispatch();
 
   const { pilotSideOver } = useAppSelector((state) => state.slideOver);
-  const { userSettingsData } = useAppSelector((state) => state.account);
 
   const togglePilot = () => {
-    localStorage.setItem(
-      STORAGE_KEYS.USER_SETTINGS_DATA,
-      JSON.stringify({
-        ...userSettingsData,
-        isPilotMinified: isMinified
-      })
-    );
+    localStorage.setItem(STORAGE_KEYS.IS_PILOT_MINIFIED, JSON.stringify(isMinified));
     dispatch(setActiveTabId());
     dispatch(setShowPilotSideOver({ ...pilotSideOver, show: isMinified }));
   };
