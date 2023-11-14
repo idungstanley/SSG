@@ -39,6 +39,7 @@ interface WalletItemProps {
   topNumber?: number;
   zNumber?: string;
   isExtendedBar?: boolean;
+  level?: number;
   handleShowSubWallet: (id: string, type?: string) => void;
   handleLocation: (id: string, name: string, item: IWallet) => void;
 }
@@ -49,6 +50,7 @@ export default function WalletItem({
   walletType,
   topNumber = 0,
   zNumber,
+  level,
   isExtendedBar,
   handleShowSubWallet,
   handleLocation
@@ -266,7 +268,7 @@ export default function WalletItem({
         />
       ) : null}
       {showMenuDropdown === wallet.id ? <MenuDropdown isExtendedBar={isExtendedBar} cords={menuCords} /> : null}
-      {SubMenuId === wallet.id ? <SubDropdown cords={menuCords} placeHubType={APP_TASKS} /> : null}
+      {SubMenuId === wallet.id ? <SubDropdown walletLevel={level} cords={menuCords} placeHubType={APP_TASKS} /> : null}
     </div>
   );
 }

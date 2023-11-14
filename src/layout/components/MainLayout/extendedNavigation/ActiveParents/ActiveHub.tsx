@@ -2,7 +2,7 @@ import React from 'react';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import { AvatarWithInitials } from '../../../../../components';
 import SubWalletIndex from '../../../../../pages/workspace/wallet/components/subwallet1/SubWalletIndex';
-import Sub2WalletIndex from '../../../../../pages/workspace/wallet/components/subwallet2/Sub2WalletIndex';
+import Sub2WalletIndex from '../../../../../pages/workspace/wallet/components/subwallet2/SubWalletIndex';
 import ActiveWallet from './ActiveWallet';
 import ActiveSubWallet from './ActiveSubwallet';
 import SHubDropdownList from '../../../../../components/ItemsListInSidebar/components/SHubDropdownList';

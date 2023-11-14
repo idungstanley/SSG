@@ -43,13 +43,13 @@ interface optionsProps {
 
 interface SubDropdownProps {
   cords?: Cords;
+  walletLevel?: number;
   placeHubType: string;
 }
 
-export default function SubDropdown({ cords, placeHubType }: SubDropdownProps) {
+export default function SubDropdown({ cords, placeHubType, walletLevel }: SubDropdownProps) {
   const dispatch = useDispatch();
   const { listId, hubId, walletId } = useParams();
-
   const { showMenuDropdownType, showMenuDropdown, selectedTreeDetails, entityToCreate, SubMenuType } = useAppSelector(
     (state) => state.hub
   );
@@ -162,14 +162,7 @@ export default function SubDropdown({ cords, placeHubType }: SubDropdownProps) {
               showMenuDropdownType === EntityType.hub ? true : false || SubMenuType === EntityType.hub ? true : false
           },
           {
-            title:
-              SubMenuType === EntityType.wallet ||
-              SubMenuType === 'subwallet2' ||
-              showMenuDropdownType === EntityType.wallet ||
-              showMenuDropdownType === 'subwallet2' ||
-              showMenuDropdownType === EntityType.subWallet
-                ? 'Sub Wallet'
-                : 'Wallet',
+            title: (walletLevel as number) > 1 ? 'Sub Wallet' : 'Wallet',
             handleClick: () => {
               dispatch(setEntityToCreate(EntityType.wallet));
               dispatch(setLastActiveItem(selectedTreeDetails.type === EntityType.wallet ? 'Sub Wallet' : 'Wallet'));
@@ -178,10 +171,7 @@ export default function SubDropdown({ cords, placeHubType }: SubDropdownProps) {
             },
             icon: <AddWalletIcon />,
             isVisible:
-              showMenuDropdownType === EntityType.list ||
-              showMenuDropdownType === 'subwallet3' ||
-              SubMenuType === 'subwallet3' ||
-              SubMenuType === EntityType.list
+              showMenuDropdownType === EntityType.list || (walletLevel as number) > 2 || SubMenuType === EntityType.list
                 ? false
                 : true
           },
