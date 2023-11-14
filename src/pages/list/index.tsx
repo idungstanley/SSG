@@ -63,6 +63,8 @@ export function ListPage() {
   // get list tasks
   const { data, hasNextPage, fetchNextPage, isFetching } = getTaskListService(listId);
 
+  const hasTasks = data?.pages[0].data.tasks.length;
+
   useEffect(() => {
     if (listId) {
       dispatch(setTasks({}));
@@ -210,7 +212,7 @@ export function ListPage() {
               {tasksStore[listId as string]?.length ? (
                 <List tasks={tasksStore[listId as string]} />
               ) : (
-                <List tasks={defaultTaskTemplate} />
+                !isFetching && !hasTasks && <List tasks={defaultTaskTemplate} />
               )}
             </section>
           </VerticalScroll>
