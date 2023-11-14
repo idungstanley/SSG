@@ -230,7 +230,6 @@ export function Row({
                 <Effect className="w-3 h-3" />
               </button>
             </ToolTip>
-
             {/* tags */}
             {'tags' in task ? (
               <ToolTip title="Tags">
@@ -242,7 +241,6 @@ export function Row({
                 </div>
               </ToolTip>
             ) : null}
-
             {/* show create subtask field */}
             {task.descendants_count < 1 && level < MAX_SUBTASKS_LEVEL && (
               <ToolTip title="Subtask">
