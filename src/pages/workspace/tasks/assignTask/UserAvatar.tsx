@@ -26,8 +26,8 @@ function UserAvatar({ user, handleClick, width = 'w-8', height = 'h-8' }: avatar
           ) : (
             <div className="border-2 border-red-400 rounded-full">
               <AvatarWithInitials
-                initials={user.user && (user.user.initials as string)}
-                backgroundColour={user.user && (user.user?.color as string)}
+                initials={(user.user && (user.user.initials as string)) ?? user.initials}
+                backgroundColour={(user.user && (user.user?.color as string)) ?? user.color}
                 badge={true}
                 height={CompactView ? 'h-6' : 'h-7'}
                 width={CompactView ? 'w-6' : 'w-7'}

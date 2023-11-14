@@ -31,6 +31,7 @@ function MyOverviewHr() {
           className={`block text-xs tracking-wider capitalize truncate ${
             location.pathname.includes('my-overview') ? 'text-alsoit-purple-300' : ''
           }`}
+          style={{ paddingLeft: '3px' }}
         >
           My Overview
         </p>

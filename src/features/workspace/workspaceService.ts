@@ -3,6 +3,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
   IAllWorkspacesRes,
   IAttachments,
+  IPermissionsRes,
   IWorkspaceRes,
   IWorkspaceSettingsRes,
   IWorkspaceSettingsUpdateRes
@@ -26,6 +27,101 @@ interface IData {
   color: string | null;
 }
 
+interface teamMembersArr {
+  access_level: string;
+  id: string;
+}
+
+// Remove permission
+export const useRemovePermission = ({
+  model,
+  model_id,
+  teamMembers,
+  teamMemberGroups
+}: {
+  model: string;
+  model_id: string;
+  teamMembers?: { id: string }[];
+  teamMemberGroups?: { id: string }[];
+}) => {
+  const data = requestNew<IPermissionsRes>({
+    url: 'permissions/delete',
+    method: 'POST',
+    data: {
+      model,
+      model_id,
+      team_member_ids: teamMembers,
+      team_member_group_ids: teamMemberGroups
+    }
+  });
+  return data;
+};
+
+//Make Punlic/Private
+export const useMakePulicOrPrivate = ({
+  model,
+  model_id,
+  route
+}: {
+  model: string;
+  model_id: string;
+  route: string;
+}) => {
+  const data = requestNew<IPermissionsRes>({
+    url: `permissions/${route}`,
+    method: 'PUT',
+    data: {
+      model,
+      model_id
+    }
+  });
+  return data;
+};
+
+//Create or edit permission
+export const useCreateOrEditPermission = ({
+  model,
+  model_id,
+  teamMembersArr,
+  teamMemberGroups
+}: {
+  model: string;
+  model_id: string;
+  teamMembersArr?: teamMembersArr[] | undefined;
+  teamMemberGroups?: teamMembersArr[] | undefined;
+}) => {
+  const data = requestNew<IPermissionsRes>({
+    url: 'permissions',
+    method: 'POST',
+    data: {
+      model,
+      model_id,
+      team_members: teamMembersArr,
+      team_member_group: teamMemberGroups
+    }
+  });
+  return data;
+};
+
+export const useGetEntityPermissions = (data: { id?: string | null; type?: string }) => {
+  const { id, type } = data;
+  return useQuery<IPermissionsRes>(
+    [`${type}-permissions`, id],
+    async () =>
+      requestNew({
+        url: 'permissions',
+        method: 'GET',
+        params: {
+          model: type,
+          model_id: id
+        }
+      }),
+    {
+      enabled: (!!id && type === 'hub') || type === 'wallet' || type === 'list'
+    }
+  );
+};
+
 export const createWorkspaceService = (data: IData) => {
   const response = requestNew<IWorkspaceRes>({
     url: 'workspace',
@@ -39,36 +135,6 @@ export const createWorkspaceService = (data: IData) => {
   });
   return response;
 };
-//   blob: Blob,
-//   currentWorkspaceId: string | null | undefined,
-//   accessToken: string | null,
-//   activeItemId: string | null | undefined,
-//   queryClient: QueryClient,
-//   activeItemType: string | null | undefined
-// ) => {
-//   try {
-//     const formData: IFormData = new FormData();
-//     formData.append('files[0]', blob, 'recording.webm');
-//     formData.append('title', 'My Recording Title');
-//     formData.append('type', `${activeItemType}`);
-//     formData.append('id', `${activeItemId}`);
-//     const options: RequestInit = {
-//       method: 'POST',
-//       body: formData as BodyInit,
-//       headers: currentWorkspaceId
-//         ? {
-//             Authorization: `Bearer ${accessToken}`,
-//             current_workspace_id: currentWorkspaceId
-//           }
-//         : undefined
-//     };
-
-//     await fetch(`${process.env.REACT_APP_API_BASE_URL}/api/attachments`, options);
-//     // queryClient.invalidateQueries(['welcome']);
-//   } catch (error) {
-//     return error;
-//   }
-// };
 
 export const useUploadRecording = () => {
   const uploadRecordingMutation = useMutation(

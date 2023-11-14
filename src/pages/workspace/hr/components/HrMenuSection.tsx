@@ -35,10 +35,12 @@ export function HrMenuSection({ handleSavedSelections, sectionName, savedSelecti
       ) : (
         renderEmptyArrowBlock()
       )}
-      <div style={{ marginLeft: '-3px' }}>
+      <div style={{ marginLeft: '-2px' }}>
         <SaveSelection active={false} />
       </div>
-      <p className="block text-xs tracking-wider capitalize truncate">{sectionName}</p>
+      <p className="block text-xs tracking-wider capitalize truncate" style={{ paddingLeft: '2.5px' }}>
+        {sectionName}
+      </p>
     </div>
   );
 }
