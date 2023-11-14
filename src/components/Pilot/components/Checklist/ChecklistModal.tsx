@@ -1,6 +1,4 @@
-import React, { Fragment } from 'react';
-import { Menu, Transition } from '@headlessui/react';
-import { BsThreeDots } from 'react-icons/bs';
+import React from 'react';
 import {
   setClickChecklistId,
   setClickChecklistItemId,
@@ -9,25 +7,38 @@ import {
   setToggleAssignChecklistItemId
 } from '../../../../features/task/checklist/checklistSlice';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
-import { useDeleteChecklist, useDeleteChecklistItem } from '../../../../features/task/checklist/checklistService';
+import {
+  useConvertChecklistToTask,
+  useDeleteChecklist,
+  useDeleteChecklistItem
+} from '../../../../features/task/checklist/checklistService';
+import AlsoitMenuDropdown from '../../../DropDowns';
 
 interface ChecklistModalProps {
   checklistId: string;
   checklistItemId?: string;
-  focus: () => void;
   options: {
     id: string;
     handleClick: () => void;
     name: string;
     icon: JSX.Element;
   }[];
+  anchor: HTMLElement | null;
+  setAnchor: React.Dispatch<React.SetStateAction<HTMLElement | null>>;
 }
 
-export default function ChecklistModal({ options, checklistId, checklistItemId, focus }: ChecklistModalProps) {
+export default function ChecklistModal({
+  options,
+  checklistId,
+  checklistItemId,
+  anchor,
+  setAnchor
+}: ChecklistModalProps) {
   const dispatch = useAppDispatch();
 
   const { mutate: onChecklistDelete } = useDeleteChecklist(checklistId);
   const { mutate: onChecklistItemDelete } = useDeleteChecklistItem(checklistId, checklistItemId as string);
+  const { mutate: convertToTask } = useConvertChecklistToTask(checklistId);
 
   const { openedDisclosureId } = useAppSelector((state) => state.checklist);
 
@@ -44,7 +55,13 @@ export default function ChecklistModal({ options, checklistId, checklistItemId, 
     });
   };
 
-  const handleOptions = (option: { name: string }) => {
+  const handleConvertToTask = () => {
+    convertToTask({
+      query: checklistId
+    });
+  };
+
+  const handleOptions = (option: { name: string; id: string }) => {
     if (option.name === 'Delete Checklist') {
       handleDelChecklist();
     } else if (option.name === 'Delete Item') {
@@ -53,8 +70,8 @@ export default function ChecklistModal({ options, checklistId, checklistItemId, 
       dispatch(setToggleAssignChecklistItemId(checklistItemId));
       dispatch(setClickChecklistId(checklistId));
       dispatch(setClickChecklistItemId(checklistItemId));
-    } else if (option.name === 'Rename') {
-      focus();
+    } else if (option.id === 'convert_to_task') {
+      handleConvertToTask();
     } else if (option.name === 'New Item') {
       dispatch(setClickChecklistId(checklistId));
       dispatch(setShowChecklistItemInput(true));
@@ -65,42 +82,25 @@ export default function ChecklistModal({ options, checklistId, checklistItemId, 
   };
 
   return (
-    <Menu as="div" className="group relative inline-block text-left">
+    <AlsoitMenuDropdown handleClose={() => setAnchor(null)} anchorEl={anchor}>
       <div>
-        <Menu.Button className="flex text-sm text-gray-400">
-          <BsThreeDots className="cursor-pointer opacity-0 group-hover:opacity-100" />
-        </Menu.Button>
+        {options.map((option) => {
+          return (
+            <div key={option.id} className="flex items-center text-gray-600 hover:bg-gray-300">
+              <button
+                type="button"
+                className="flex items-center w-11/12 px-4 py-2 space-x-2 text-sm text-left"
+                onClick={() => {
+                  handleOptions(option);
+                }}
+              >
+                <span className="w-4 h-4">{option.icon}</span>
+                <p>{option.name}</p>
+              </button>
+            </div>
+          );
+        })}
       </div>
-      <Transition
-        as={Fragment}
-        enter="transition ease-out duration-100"
-        enterFrom="transform opacity-0 scale-95"
-        enterTo="transform opacity-100 scale-100"
-        leave="transition ease-in duration-75"
-        leaveFrom="transform opacity-100 scale-100"
-        leaveTo="transform opacity-0 scale-95"
-      >
-        <Menu.Items className="fixed right-8 z-50 w-56 mt-2 origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-          {options.map((option) => (
-            <Menu.Item key={option.id}>
-              {() => (
-                <div className="flex items-center text-gray-600 hover:bg-gray-300">
-                  <button
-                    type="button"
-                    className="flex items-center w-11/12 px-4 py-2 space-x-2 text-sm text-left"
-                    onClick={() => {
-                      handleOptions(option);
-                    }}
-                  >
-                    <span className="w-4 h-4">{option.icon}</span>
-                    <p>{option.name}</p>
-                  </button>
-                </div>
-              )}
-            </Menu.Item>
-          ))}
-        </Menu.Items>
-      </Transition>
-    </Menu>
+    </AlsoitMenuDropdown>
   );
 }
