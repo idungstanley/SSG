@@ -17,6 +17,8 @@ import UploadToFile from '../../../components/Views/ui/Table/CustomField/Files/U
 import TaskShortCutModal from '../../../utils/taskShortCut/TaskShortCutModal';
 import useTaskShortCut from '../../../utils/taskShortCut/useTaskShortCut';
 import { getOneTaskServices } from '../../../features/task/taskService';
+import { setActiveTabId } from '../../../features/workspace/workspaceSlice';
+import { pilotTabs } from '../../../app/constants/pilotTabs';
 
 function MainLayout() {
   const location = useLocation();
@@ -66,6 +68,16 @@ function MainLayout() {
     } else {
       localStorage.setItem('visitingRoute', location.pathname);
       navigate('/auth/login');
+    }
+  }, []);
+
+  useEffect(() => {
+    const queryParams = new URLSearchParams(location.search);
+    // Check for comment url
+    const isComment = queryParams.get('comment_id');
+    if (isComment) {
+      // Open comments on pilot
+      dispatch(setActiveTabId(pilotTabs.COMMENTS));
     }
   }, []);
 

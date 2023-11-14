@@ -50,6 +50,7 @@ import Duration from '../../utils/TimerDuration';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
 import {
   addNewTaskManager,
+  findCurrentTaskManager,
   multipleTasksDateUpdateManager,
   taskAssignessUpdateManager,
   taskDateUpdateManager,
@@ -210,7 +211,7 @@ interface ErrorMultipleMoveResponse {
   };
 }
 
-export const useMultipleTaskMove = () => {
+export const useMultipleTaskMove = (list?: IList, type?: 'id_only') => {
   const dispatch = useDispatch();
 
   const { draggableTask, dragOverList } = useAppSelector((state) => state.list);
@@ -219,6 +220,29 @@ export const useMultipleTaskMove = () => {
 
   return useMutation(multipleTaskMove, {
     onSuccess: () => {
+      if (type === 'id_only') {
+        let newTasks = { ...tasks };
+        let newSubtasks = { ...subtasks };
+        let newTree = [...hub];
+        selectedTasksArray.forEach((id) => {
+          const currentTask = findCurrentTaskManager(id, tasks, subtasks);
+          const { updatedTasks, updatedSubtasks, updatedTree } = taskMoveToListManager(
+            currentTask as ITaskFullList,
+            list as IList,
+            newTasks,
+            newSubtasks,
+            newTree,
+            selectedTasksArray
+          );
+          newTasks = updatedTasks;
+          newSubtasks = updatedSubtasks;
+          newTree = updatedTree;
+        });
+        dispatch(setTasks(newTasks));
+        dispatch(setSubtasks(newSubtasks));
+        dispatch(getHub(newTree));
+        dispatch(setFilteredResults(newTree));
+      }
       if (dragOverList) {
         // move to list
         const { updatedTasks, updatedSubtasks, updatedTree } = taskMoveToListManager(
@@ -462,6 +486,71 @@ export const useDuplicateTask = (task?: Task) => {
       const updatedTree = updateListTasksCountManager(listId as string, hub, updatedTasks[listId].length);
       dispatch(getHub(updatedTree));
       dispatch(setFilteredResults(updatedTree));
+      dispatch(setSelectedTasksArray([]));
+    }
+  });
+};
+
+const multipleDuplicateTasks = (data: { ids: string[]; list_id: string; is_everything: boolean; copy?: string[] }) => {
+  const { ids, list_id, is_everything, copy } = data;
+
+  const custom_is_everything = copy?.includes('everything');
+
+  const response = requestNew({
+    url: 'tasks/multiple/duplicate',
+    method: 'POST',
+    data: {
+      ids,
+      list_id,
+      is_everything: copy?.length ? custom_is_everything : is_everything
+    }
+  });
+  return response;
+};
+
+export const useMultipleDuplicateTasks = (list: IList) => {
+  const dispatch = useAppDispatch();
+
+  const { duplicateTaskObj, tasks, subtasks, selectedTasksArray } = useAppSelector((state) => state.task);
+  const { hub } = useAppSelector((state) => state.hub);
+
+  return useMutation(multipleDuplicateTasks, {
+    onSuccess: () => {
+      dispatch(setDuplicateTaskObj({ ...duplicateTaskObj, popDuplicateTaskModal: true }));
+      let updatedTasks = { ...tasks };
+      let updatedSubtasks = { ...subtasks };
+      selectedTasksArray.forEach((id) => {
+        let currentTask = findCurrentTaskManager(id, tasks, subtasks);
+        if (currentTask) {
+          currentTask = {
+            ...currentTask,
+            list: list,
+            list_id: list.id
+          };
+          if (currentTask.parent_id) {
+            updatedSubtasks = addNewSubtaskManager(
+              updatedSubtasks,
+              currentTask as ITaskFullList,
+              currentTask?.custom_field_columns || [],
+              currentTask?.task_statuses || []
+            );
+          } else {
+            updatedTasks = addNewTaskManager(
+              updatedTasks,
+              currentTask as ITaskFullList,
+              currentTask?.custom_field_columns || [],
+              currentTask?.task_statuses || []
+            );
+          }
+        }
+      });
+      dispatch(setTasks(updatedTasks));
+      dispatch(setSubtasks(updatedSubtasks));
+      const listId = list.id;
+      const updatedTree = updateListTasksCountManager(listId as string, hub, updatedTasks[listId].length);
+      dispatch(getHub(updatedTree));
+      dispatch(setFilteredResults(updatedTree));
+      dispatch(setSelectedTasksArray([]));
     }
   });
 };

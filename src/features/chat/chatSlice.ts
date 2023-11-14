@@ -11,13 +11,15 @@ interface ChatState {
   showMembersInChatSideOver: boolean;
   showCreateChatSideOver: boolean;
   selectedItem: ISelectedItem | null;
+  activeChat: string;
 }
 
 const initialState: ChatState = {
   showChat: false,
   showMembersInChatSideOver: false,
   showCreateChatSideOver: false,
-  selectedItem: null
+  selectedItem: null,
+  activeChat: ''
 };
 
 export const chatSlice = createSlice({
@@ -35,13 +37,15 @@ export const chatSlice = createSlice({
     },
     setSelectedItem: (state, action: PayloadAction<ISelectedItem | null>) => {
       state.selectedItem = action.payload;
-
       state.showChat = !!state.selectedItem;
+    },
+    setActiveChat: (state, action: PayloadAction<string>) => {
+      state.activeChat = action.payload;
     }
   }
 });
 
-export const { setShowChat, setShowMembersInChatSideOver, setShowCreateChatSideOver, setSelectedItem } =
+export const { setShowChat, setShowMembersInChatSideOver, setShowCreateChatSideOver, setSelectedItem, setActiveChat } =
   chatSlice.actions;
 
 export default chatSlice.reducer;

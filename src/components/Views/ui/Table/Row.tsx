@@ -5,7 +5,7 @@ import { DEFAULT_LEFT_PADDING } from '../../config';
 import { Col } from './Col';
 import { StickyCol } from './StickyCol';
 import { SubTasks } from './SubTasks';
-import { useDraggable } from '@dnd-kit/core';
+import { useDraggable, useDroppable } from '@dnd-kit/core';
 import { ManageTagsDropdown } from '../../../Tag/ui/ManageTagsDropdown/ui/ManageTagsDropdown';
 import { AddSubTask } from '../AddTask/AddSubTask';
 import TaskTag from '../../../Tag/ui/TaskTag';
@@ -104,6 +104,14 @@ export function Row({
     }
   });
 
+  const { isOver, setNodeRef: droppabbleRef } = useDroppable({
+    id: task.id,
+    data: {
+      isOverTask: true
+      // overTask: task
+    }
+  });
+
   const handleCopyTexts = async () => {
     await navigator.clipboard.writeText(task.name);
     setIsCopied(1);
@@ -114,7 +122,9 @@ export function Row({
 
   // hide element if is currently grabbing
   const style = {
-    opacity: transform ? 0 : 100
+    opacity: transform ? 0.3 : 100,
+    zIndex: 1,
+    pointerEvents: transform ? 'none' : ''
   };
 
   const showChildren = useMemo(() => {
@@ -146,7 +156,6 @@ export function Row({
     <>
       {/* current task */}
       <tr
-        style={style}
         className="relative contents group dNFlex"
         onMouseEnter={() => {
           dispatch(setAssignOnHoverTask(task));
@@ -163,15 +172,17 @@ export function Row({
           setHoverOn={setHoverOn}
           showSubTasks={showChildren}
           setShowSubTasks={setShowSubTasks}
-          style={{ zIndex: 1 }}
           toggleRootTasks={toggleRootTasks}
           isListParent={isListParent}
           task={task}
+          isOver={isOver}
+          styles={style}
           taskIndex={taskIndex}
           parentId={parentId as string}
           taskStatusId={taskStatusId as string}
           onClose={handleClose as VoidFunction}
           paddingLeft={paddingLeft}
+          level={level + 1}
           tags={
             'tags' in task ? (
               <div className="flex gap-3">
@@ -188,6 +199,13 @@ export function Row({
                 <Dradnddrop />
               </div>
             </div>
+          }
+          droppableElement={
+            <div
+              ref={droppabbleRef}
+              className="absolute h-full"
+              style={{ left: '30px', background: 'transparent', height: '100%', width: '100%', zIndex: -1 }}
+            />
           }
         >
           {/* actions */}
@@ -212,7 +230,6 @@ export function Row({
                 <Effect className="w-3 h-3" />
               </button>
             </ToolTip>
-
             {/* tags */}
             {'tags' in task ? (
               <ToolTip title="Tags">
@@ -224,7 +241,6 @@ export function Row({
                 </div>
               </ToolTip>
             ) : null}
-
             {/* show create subtask field */}
             {task.descendants_count < 1 && level < MAX_SUBTASKS_LEVEL && (
               <ToolTip title="Subtask">
@@ -255,6 +271,7 @@ export function Row({
             value={task[col.field as keyof Task]}
             key={col.id}
             style={{ zIndex: 0 }}
+            styles={style}
           />
         ))}
       </tr>

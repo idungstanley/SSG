@@ -42,32 +42,32 @@ function Permissions() {
   return (
     <div className="w-full">
       <SectionArea label="Permissions" icon={<TbShield className="w-4 h-4" />} />
-      <div className="bg-alsoit-gray-50 rounded-md  m-auto p-2 mt-2" style={{ width: '98%' }}>
-        <h1 className="text-lg font-semibold w-full text-center">Share this Space</h1>
-        <h2 className="text-md font-semibold w-full text-center">
+      <div className="p-2 m-auto mt-2 rounded-md bg-alsoit-gray-50" style={{ width: '98%' }}>
+        <h1 className="w-full text-lg font-semibold text-center">Share this Space</h1>
+        <h2 className="w-full font-semibold text-center text-md">
           Sharing {entityForPermissions?.name} {entityType} with all views
         </h2>
         <div className="w-full my-4">
           {!invite ? (
             <div
-              className="border h-8 flex w-11/12 bg-white m-auto items-center justify-between rounded-md cursor-pointer"
+              className="flex items-center justify-between w-11/12 h-8 m-auto bg-white border rounded-md cursor-pointer"
               onClick={() => setInvite(!invite)}
             >
               <span className="ml-2 text-alsoit-text-lg">Invite by name or email</span>
-              <button className="bg-alsoit-purple-300 h-full rounded-r-md w-1/6 text-white">Invite</button>
+              <button className="w-1/6 h-full text-white bg-alsoit-purple-300 rounded-r-md">Invite</button>
             </div>
           ) : (
-            <div className="w-11/12 m-auto h-8 rounded-md flex justify-between items-center bg-white px-2 border border-alsoit-danger shadow-md shadow-alsoit-danger">
+            <div className="flex items-center justify-between w-11/12 h-8 px-2 m-auto bg-white border rounded-md shadow-md border-alsoit-danger shadow-alsoit-danger">
               <SearchIcon className="w-4 h-4" />
               <input
                 type="text"
-                className="w-full h-7 border-0 outline-0 ring-0 focus:border-0 focus:outline-0 focus:ring-0 text-alsoit-text-lg"
+                className="w-full border-0 h-7 outline-0 ring-0 focus:border-0 focus:outline-0 focus:ring-0 text-alsoit-text-lg"
                 placeholder="Invite by name or email"
                 onChange={(e) => setSearchParams(e.target.value)}
                 value={searchParams}
               />
               <span
-                className="w-4 h-4 p-1 rounded-2xl bg-red-500 text-white text-alsoit-text-sm flex justify-center items-center cursor-pointer"
+                className="flex items-center justify-center w-4 h-4 p-1 text-white bg-red-500 cursor-pointer rounded-2xl text-alsoit-text-sm"
                 onClick={() => {
                   setInvite(!invite);
                   setSearchParams('');

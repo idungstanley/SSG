@@ -24,7 +24,7 @@ interface WrapperProps {
 function Wrapper({ children }: WrapperProps) {
   const { pathname } = useLocation();
 
-  const isSignUpPath = pathname.split('/')[2] === 'signup';
+  const isSignUpPath = pathname.split('/')[2] === 'register';
   const selectedData = data[isSignUpPath ? 1 : 0];
 
   return (
