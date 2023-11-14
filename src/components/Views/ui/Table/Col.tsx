@@ -43,9 +43,10 @@ interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   field: Pick<listColumnProps, 'field'>['field'];
   task: Task;
   fieldId: string;
+  styles?: { opacity: number };
 }
 
-export function Col({ value, field, fieldId, task, ...props }: ColProps) {
+export function Col({ value, field, fieldId, task, styles, ...props }: ColProps) {
   const dispatch = useAppDispatch();
   const { taskId } = useParams();
 
@@ -257,7 +258,8 @@ export function Col({ value, field, fieldId, task, ...props }: ColProps) {
               ? '32px'
               : !saveSettingOnline?.singleLineView && saveSettingOnline?.CompactView && task.name.length < 30
               ? '32px'
-              : ''
+              : '',
+          ...styles
         }}
       >
         {dragOverItemId === task.id && draggableItemId !== dragOverItemId && dragToBecomeSubTask && (

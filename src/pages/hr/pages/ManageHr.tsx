@@ -83,13 +83,13 @@ export default function ManageHr() {
   };
 
   return (
-    <div className="w-full p-4 h-full">
-      <div className="mx-auto h-full">
+    <div className="w-full h-full p-4">
+      <div className="h-full mx-auto">
         {selectedHubs.length ? (
           selectedHubs.map((listItem, key) => (
             <div className="w-full" key={key}>
               <div
-                className="pt-1 border-t-4 border-l-4 rounded-3xl bg-purple-50 pb-3 mb-5"
+                className="pt-1 pb-3 mb-5 border-t-4 border-l-4 rounded-3xl bg-purple-50"
                 style={{
                   borderColor: listItem.hubColor ? listItem.hubColor : 'gray',
                   transition: '.3s'
@@ -124,13 +124,13 @@ export default function ManageHr() {
                     <table className="w-full mt-5">
                       <thead>
                         <tr>
-                          <td className="items-center text-center pb-1">Employee</td>
-                          <td className="items-center text-center pb-1">Role</td>
-                          <td className="items-center text-center pb-1">Work Location</td>
-                          <td className="items-center text-center pb-1">Start Date</td>
-                          <td className="items-center text-center pb-1">Salary</td>
-                          <td className="items-center text-center pb-1">Time Taken Off</td>
-                          <td className="items-center text-center pb-1">Allowance</td>
+                          <td className="items-center pb-1 text-center">Employee</td>
+                          <td className="items-center pb-1 text-center">Role</td>
+                          <td className="items-center pb-1 text-center">Work Location</td>
+                          <td className="items-center pb-1 text-center">Start Date</td>
+                          <td className="items-center pb-1 text-center">Salary</td>
+                          <td className="items-center pb-1 text-center">Time Taken Off</td>
+                          <td className="items-center pb-1 text-center">Allowance</td>
                         </tr>
                       </thead>
                       <tbody className="bg-white">
@@ -143,7 +143,7 @@ export default function ManageHr() {
             </div>
           ))
         ) : (
-          <div className="flex w-full h-full items-center justify-center">
+          <div className="flex items-center justify-center w-full h-full">
             <div className="flex">
               <DetailsIcon active={false} />
               <h2 className="pl-2">Selected nothing</h2>

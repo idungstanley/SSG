@@ -94,9 +94,9 @@ function ShareWith({ privateMode, entityPermission }: { privateMode: boolean; en
         <Disclosure>
           {({ open }) => (
             <>
-              <div className="flex justify-between items-center  py-2 hover:bg-alsoit-gray-75 rounded-md">
-                <Disclosure.Button className="flex w-full justify-between items-center gap-2 text-left text-sm font-medium text-purple-900 focus:outline-none focus-visible:ring focus-visible:ring-purple-500/75">
-                  <div className="flex gap-2 items-center">
+              <div className="flex items-center justify-between py-2 rounded-md hover:bg-alsoit-gray-75">
+                <Disclosure.Button className="flex items-center justify-between w-full gap-2 text-sm font-medium text-left text-purple-900 focus:outline-none focus-visible:ring focus-visible:ring-purple-500/75">
+                  <div className="flex items-center gap-2">
                     <AiFillCaretRight className={`${open ? 'rotate-90 transform' : ''} h-3 w-3`} />
                     <span>New Hub</span>
                   </div>
@@ -107,7 +107,7 @@ function ShareWith({ privateMode, entityPermission }: { privateMode: boolean; en
               </div>
               <Disclosure.Panel className="text-sm text-gray-500">
                 {/* // To be removed */}
-                <h3 className="text-alsoit-text-lg my-2">
+                <h3 className="my-2 text-alsoit-text-lg">
                   {allTeamsandMembers.length} {allTeamsandMembers.length > 1 ? 'person invited' : 'people invited'}
                 </h3>
                 <div>
@@ -123,18 +123,18 @@ function ShareWith({ privateMode, entityPermission }: { privateMode: boolean; en
           <Disclosure>
             {({ open }) => (
               <>
-                <Disclosure.Button className="flex w-full justify-between items-center gap-2 text-left text-sm font-medium text-purple-900 focus:outline-none focus-visible:ring focus-visible:ring-purple-500/75 py-2 hover:bg-alsoit-gray-75 rounded-md">
-                  <div className="flex gap-2 items-center">
+                <Disclosure.Button className="flex items-center justify-between w-full gap-2 py-2 text-sm font-medium text-left text-purple-900 rounded-md focus:outline-none focus-visible:ring focus-visible:ring-purple-500/75 hover:bg-alsoit-gray-75">
+                  <div className="flex items-center gap-2">
                     <AiFillCaretRight className={`${open ? 'rotate-90 transform' : ''} h-3 w-3`} />
                     <span>People</span>
                   </div>
                 </Disclosure.Button>
                 <Disclosure.Panel className="px-4 pt-4 pb-2 text-sm text-gray-500">
-                  <div className="w-full flex justify-between">
-                    <h3 className="text-alsoit-text-lg my-2">
+                  <div className="flex justify-between w-full">
+                    <h3 className="my-2 text-alsoit-text-lg">
                       {totalInvited} {totalInvited > 1 ? 'people invited' : 'person invited'}
                     </h3>
-                    <div className="flex gap-2 items-center">
+                    <div className="flex items-center gap-2">
                       <button
                         className="text-alsoit-text-lg rounded flex justify-center items-center gap-0.5"
                         onClick={(e) => setAnchor(e.currentTarget)}
@@ -142,7 +142,7 @@ function ShareWith({ privateMode, entityPermission }: { privateMode: boolean; en
                         Edit all <ArrowDown className="w-2 h-2" />
                       </button>
                       <button
-                        className="text-alsoit-text-lg text-alsoit-danger rounded flex justify-center items-center"
+                        className="flex items-center justify-center rounded text-alsoit-text-lg text-alsoit-danger"
                         onClick={handleRemoveAll}
                       >
                         Remove all
