@@ -36,6 +36,10 @@ import DateFormat from '../../../../../components/DateFormat';
 import CustomFieldsModal from '../../customFields/CustomFieldsModal';
 import MultipleStatuses from '../../multipleStatuses/MultipleStatuses';
 
+export const TASK_DUPLICATE = 'task_duplicate';
+export const TASK_MOVE = 'task_move';
+export const OPTIONS_WITH_AVAILABLE_LISTS = [TASK_DUPLICATE, TASK_MOVE];
+
 export default function TaskMenu() {
   const dispatch = useDispatch();
   const queryClient = useQueryClient();
@@ -53,6 +57,7 @@ export default function TaskMenu() {
   const [isHideTooltip, setHideTooltip] = useState<boolean>(false);
   const [showSelectDropdown, setShowSelectDropdown] = useState<null | HTMLSpanElement | HTMLDivElement>(null);
   const [isArchivedTasks, setArchivedTasks] = useState<boolean>(false);
+  const [activeTreeType, setActiveTreeType] = useState<string>('');
 
   useEffect(() => {
     if (selectedTasksArray.length) {
@@ -63,10 +68,10 @@ export default function TaskMenu() {
   }, [selectedTasksArray]);
 
   useEffect(() => {
-    if (!duplicateTaskObj.popDuplicateTaskModal) {
+    if (!duplicateTaskObj.popDuplicateTaskModal || !selectedTasksArray.length) {
       handleClose();
     }
-  }, [duplicateTaskObj.popDuplicateTaskModal]);
+  }, [duplicateTaskObj.popDuplicateTaskModal, selectedTasksArray]);
 
   useEffect(() => {
     if (selectedTasksArray.length) {
@@ -161,9 +166,13 @@ export default function TaskMenu() {
     },
     {
       id: 'move_tasks_or_add_tasks_in_multiple_lists',
-      label: 'Move tasks or add tasks in multiple Lists',
-      icons: <MdOutlineDriveFileMove color="orange" opacity={0.5} />,
-      handleClick: () => ({}),
+      // label: 'Move tasks or add tasks in multiple Lists',
+      label: 'Move tasks',
+      icons: <MdOutlineDriveFileMove />,
+      handleClick: (e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
+        handleShowSelectDropdown(e);
+        setActiveTreeType(TASK_MOVE);
+      },
       isVisible: true
     },
     {
@@ -172,7 +181,7 @@ export default function TaskMenu() {
       icons: <HiOutlineDocumentDuplicate />,
       handleClick: (e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
         handleShowSelectDropdown(e);
-        // setToggleDuplicateMoal(!toggleDuplicateMoal);
+        setActiveTreeType(TASK_DUPLICATE);
       },
       isVisible: true
     },
@@ -352,7 +361,7 @@ export default function TaskMenu() {
       <div className="absolute z-50">
         {
           <AlsoitMenuDropdown handleClose={handleClose} anchorEl={showSelectDropdown}>
-            <ActiveTreeSearch option="taskDuplicate" />
+            <ActiveTreeSearch option={activeTreeType} />
           </AlsoitMenuDropdown>
         }
       </div>

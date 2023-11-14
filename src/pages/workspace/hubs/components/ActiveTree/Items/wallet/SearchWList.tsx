@@ -5,6 +5,8 @@ import { setCurrentItem } from '../../../../../../../features/workspace/workspac
 import { EntityType } from '../../../../../../../utils/EntityTypes/EntityType';
 import SearchWalletItem from '../../../../../../../components/tasks/SearchWalletItem';
 import SearchLList from '../list/SearchLList';
+import { OPTIONS_WITH_AVAILABLE_LISTS } from '../../../../../tasks/component/taskMenu/TaskMenu';
+import { unavailableStyles } from '../../../../../../../components/ActiveTree/ActiveTreeList';
 
 interface IWListProps {
   wallets: Wallet[];
@@ -71,9 +73,14 @@ export default function SearchWList({
               level={level + 1}
             />
           ) : null}
-          <div style={option !== 'taskDuplicate' ? { opacity: '0.5', pointerEvents: 'none' } : {}}>
+          <div style={!OPTIONS_WITH_AVAILABLE_LISTS.includes(option as string) ? unavailableStyles : {}}>
             {wallet.lists.length && showSubWallet.includes(wallet.id) && !showExtendedBar ? (
-              <SearchLList list={wallet.lists} leftMargin={false} paddingLeft={Number(paddingLeft) + 32} />
+              <SearchLList
+                option={option}
+                list={wallet.lists}
+                leftMargin={false}
+                paddingLeft={Number(paddingLeft) + 32}
+              />
             ) : null}
           </div>
         </div>

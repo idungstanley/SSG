@@ -211,7 +211,7 @@ interface ErrorMultipleMoveResponse {
   };
 }
 
-export const useMultipleTaskMove = () => {
+export const useMultipleTaskMove = (list?: IList, type?: 'id_only') => {
   const dispatch = useDispatch();
 
   const { draggableTask, dragOverList } = useAppSelector((state) => state.list);
@@ -220,6 +220,29 @@ export const useMultipleTaskMove = () => {
 
   return useMutation(multipleTaskMove, {
     onSuccess: () => {
+      if (type === 'id_only') {
+        let newTasks = { ...tasks };
+        let newSubtasks = { ...subtasks };
+        let newTree = [...hub];
+        selectedTasksArray.forEach((id) => {
+          const currentTask = findCurrentTaskManager(id, tasks, subtasks);
+          const { updatedTasks, updatedSubtasks, updatedTree } = taskMoveToListManager(
+            currentTask as ITaskFullList,
+            list as IList,
+            newTasks,
+            newSubtasks,
+            newTree,
+            selectedTasksArray
+          );
+          newTasks = updatedTasks;
+          newSubtasks = updatedSubtasks;
+          newTree = updatedTree;
+        });
+        dispatch(setTasks(newTasks));
+        dispatch(setSubtasks(newSubtasks));
+        dispatch(getHub(newTree));
+        dispatch(setFilteredResults(newTree));
+      }
       if (dragOverList) {
         // move to list
         const { updatedTasks, updatedSubtasks, updatedTree } = taskMoveToListManager(
