@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Sub2WalletIndex from '../subwallet2/Sub2WalletIndex';
+import Sub2WalletIndex from '../subwallet2/SubWalletIndex';
 import { useDispatch } from 'react-redux';
 import { setActiveItem, setExtendedBarOpenedEntitiesIds } from '../../../../../features/workspace/workspaceSlice';
 import MenuDropdown from '../../../../../components/Dropdown/MenuDropdown';
@@ -13,6 +13,7 @@ import OverlayList from '../../../../../components/tasks/OverlayList';
 import HubItemOverlay from '../../../../../components/tasks/HubItemOverLay';
 import { List, Wallet } from '../../../hubs/components/ActiveTree/activetree.interfaces';
 import { findCurrentWallet } from '../../../../../managers/Wallet';
+import { EntityType } from '../../../../../utils/EntityTypes/EntityType';
 
 interface SubWalletIndexProps {
   paddingLeft?: string | number;
@@ -45,7 +46,7 @@ function SubWalletIndex({ paddingLeft = '30', parentId }: SubWalletIndexProps) {
     }
   }, [activeItemId, parentId]);
 
-  const handleLocation = (id: string, type = 'subwallet2') => {
+  const handleLocation = (id: string, type = EntityType.subWallet) => {
     navigate(`/${currentWorkspaceId}/tasks/w/${id}/v/${activeView?.id}`);
     dispatch(setActiveItem({ activeItemType: type, activeItemId: id }));
   };
@@ -77,7 +78,7 @@ function SubWalletIndex({ paddingLeft = '30', parentId }: SubWalletIndexProps) {
         <div key={wallet.id}>
           <WalletItem
             wallet={wallet as Wallet}
-            walletType="subwallet2"
+            walletType={EntityType.subWallet}
             handleLocation={handleLocation}
             handleShowSubWallet={handleShowSubWallet}
             paddingLeft={paddingLeft}

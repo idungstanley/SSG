@@ -63,6 +63,7 @@ import { pilotTabs } from '../../app/constants/pilotTabs';
 interface IMenuDropdownProps {
   isExtendedBar?: boolean;
   cords?: Cords;
+  walletLevel?: number;
 }
 
 interface itemsType {
@@ -81,7 +82,7 @@ interface InlineBorderProps {
   topElement?: JSX.Element;
 }
 
-export default function MenuDropdown({ isExtendedBar, cords }: IMenuDropdownProps) {
+export default function MenuDropdown({ isExtendedBar, cords, walletLevel }: IMenuDropdownProps) {
   const dispatch = useDispatch();
 
   const { SubDropdownMenu, archiveHub, showMenuDropdown, showMenuDropdownType, hub } = useAppSelector(
@@ -414,7 +415,7 @@ export default function MenuDropdown({ isExtendedBar, cords }: IMenuDropdownProp
           onClick={handleSharingnPermissions}
         />
       </div>
-      {SubDropdownMenu && <SubDropdown placeHubType={APP_TASKS} />}
+      {SubDropdownMenu && <SubDropdown walletLevel={walletLevel} placeHubType={APP_TASKS} />}
       <EditHubModal />
       <EditListModal />
       <EditWalletModal />

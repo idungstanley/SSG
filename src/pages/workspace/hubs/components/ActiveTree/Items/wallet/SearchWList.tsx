@@ -54,7 +54,7 @@ export default function SearchWList({
         <div key={wallet.id} style={{ marginLeft: leftMargin ? 20 : 0 }}>
           <SearchWalletItem
             wallet={wallet}
-            walletType={level === 1 ? EntityType.wallet : level === 2 ? 'subwallet2' : 'subwallet3'}
+            walletType={level === 1 ? EntityType.wallet : EntityType.subWallet}
             handleShowSubWallet={handleShowSubWallet}
             handleTabClick={handleTabClick}
             showSubWallet={showSubWallet.includes(wallet.id)}
@@ -65,7 +65,7 @@ export default function SearchWList({
               wallets={wallet.children}
               option={option}
               leftMargin={false}
-              type="subwallet2"
+              type={EntityType.subWallet}
               handleTabClick={handleTabClick}
               paddingLeft={Number(paddingLeft) + 15}
               level={level + 1}
