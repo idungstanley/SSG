@@ -4,17 +4,23 @@ import { useNavigate } from 'react-router-dom';
 import {
   setAssignOnHoverState,
   setCopyNewlyCreatedTask,
-  setCreateTaskShortCut,
   setEscapeKey,
   setF2State,
   setHilightNewlyCreatedTask,
   setPreferenceState
 } from '../../features/task/taskSlice';
-import { setActiveTabId, setShowExtendedBar } from '../../features/workspace/workspaceSlice';
+import {
+  setActiveSubHubManagerTabId,
+  setActiveTabId,
+  setShowExtendedBar
+} from '../../features/workspace/workspaceSlice';
+import { setShowPilotSideOver } from '../../features/general/slideOver/slideOverSlice';
+import { pilotTabs } from '../../app/constants/pilotTabs';
 
 export default function useTaskShortCut() {
   const { preferenceState, userSettingsProfile } = useAppSelector((state) => state.task);
   const { currentWorkspaceId } = useAppSelector((state) => state.auth);
+  const { activeItemId, activeItemName, activeItemType } = useAppSelector((state) => state.workspace);
 
   const dispatch = useAppDispatch();
 
@@ -31,6 +37,19 @@ export default function useTaskShortCut() {
   }, [userSettingsProfile]);
 
   const navigate = useNavigate();
+
+  const handleCreateTaskShortcut = () => {
+    dispatch(setActiveTabId(pilotTabs.ENTITY_MANAGER));
+    dispatch(setActiveSubHubManagerTabId(pilotTabs.CREATE_TASK));
+    dispatch(
+      setShowPilotSideOver({
+        show: true,
+        id: activeItemId as string,
+        title: activeItemName as string,
+        type: activeItemType as string
+      })
+    );
+  };
 
   const TaskShortcutListener = (event: KeyboardEvent, setTaskShortcut: Dispatch<SetStateAction<boolean>>) => {
     startTransition(() => {
@@ -83,7 +102,7 @@ export default function useTaskShortCut() {
               break;
             case 't':
             case 'T':
-              dispatch(setCreateTaskShortCut(true));
+              handleCreateTaskShortcut();
               break;
 
             default:

@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { setCreateTaskShortCut, setNewTaskPriority } from '../../features/task/taskSlice';
+import { setCreateTaskShortCut, setCurrentTeamMemberId, setNewTaskPriority } from '../../features/task/taskSlice';
 import { TabsDropDown } from '../../components/Pilot/components/TimeClock/TabsDropDown';
 import CalendarIcon from '../../assets/icons/CalendarIcon';
 import { PriorityIcon } from '../../assets/icons/PriorityIcon';
@@ -27,7 +27,7 @@ type ListArrType = {
 };
 
 export function CreateTaskShortCutModal() {
-  const { tasks: taskData, assigneeIds, newTaskPriority } = useAppSelector((state) => state.task);
+  const { tasks: taskData, newTaskPriority, currentTeamMemberId } = useAppSelector((state) => state.task);
   const dispatch = useAppDispatch();
   const listIndex = Object.keys(taskData)[0];
   const task = taskData[listIndex][0];
@@ -35,13 +35,16 @@ export function CreateTaskShortCutModal() {
   const [listObj, setListObj] = useState<ListArrType | undefined>();
   const [listArr, setListArr] = useState<ListArrType[] | undefined>();
   const [listId, setListId] = useState<string>('');
+  const [taskStatus, setTaskStatus] = useState<ITask_statuses[]>([]);
   const [priority, setPriority] = useState<string | undefined>();
+  const [currentTaskStatus, setCurrentTaskStatus] = useState<ITask_statuses | undefined>();
   const [value, setValue] = useState<{ [key: string]: string }>();
   const [teams, setTeam] = useState(false);
-  const [dropDown, setDropDown] = useState<{ assignee: boolean; priority: boolean; list: boolean }>({
+  const [dropDown, setDropDown] = useState<{ assignee: boolean; priority: boolean; list: boolean; status: boolean }>({
     assignee: false,
     priority: false,
-    list: false
+    list: false,
+    status: false
   });
 
   const { mutate: onAdd } = useAddTask(listId ? taskData[listId][0] : task);
@@ -61,8 +64,8 @@ export function CreateTaskShortCutModal() {
       id: listObj?.id as string,
       isListParent: true,
       name: value?.task_name as string,
-      task_status_id: statusObj?.id as string,
-      assignees: assigneeIds,
+      task_status_id: currentTaskStatus?.id ?? (statusObj?.id as string),
+      assignees: currentTeamMemberId as string[],
       newTaskPriority: newTaskPriority
     });
     dispatch(setCreateTaskShortCut(false));
@@ -127,6 +130,12 @@ export function CreateTaskShortCutModal() {
         return acc;
       }, {})
     );
+
+    const uniqueStatusArray = Array.from([
+      ...new Set(Object.values(taskData).flatMap((arr) => arr.flatMap((list) => list.task_statuses)))
+    ]);
+
+    setTaskStatus(uniqueStatusArray);
     setListArr(uniqueArray);
   }, []);
 
@@ -184,18 +193,34 @@ export function CreateTaskShortCutModal() {
               onChange={handleChange}
             />
             <div className="flex w-full space-x-1.5 items-center">
-              <div className="flex space-x-1.5 border-2 rounded-lg items-center capitalize w-20 p-1.5">
-                <StatusIconComp color="gray" />
-                <span>status</span>
+              <div
+                className="flex space-x-1.5 border-2 rounded-lg items-center capitalize w-max p-1.5 relative cursor-pointer"
+                onClick={() => setDropDown((prev) => ({ ...prev, status: !prev.status }))}
+              >
+                <StatusIconComp color={currentTaskStatus?.color ?? 'gray'} />
+                {dropDown.status && (
+                  <div className="flex flex-col space-y-2 shadow-lg rounded-md absolute top-9 left-0 bg-white px-2 py-1 w-32">
+                    {taskStatus.map((status) => (
+                      <div
+                        key={status.id}
+                        className="flex items-center space-x-2 py-2 cursor-pointer hover:bg-alsoit-gray-50 rounded-md px-1"
+                        onClick={() => setCurrentTaskStatus(status)}
+                      >
+                        <StatusIconComp color={status.color} />
+                        <span>{status.name}</span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+                <span>{currentTaskStatus?.name ?? 'status'}</span>
               </div>
               <div
-                className="flex space-x-1.5 border-2 rounded-lg text-center capitalize w-min p-1.5 cursor-pointer"
-                onClick={(e) => e.preventDefault()}
+                className={`${
+                  currentTeamMemberId.length > 0 && 'bg-alsoit-purple-50'
+                } flex space-x-1.5 border-2 rounded-lg text-center capitalize w-min p-1.5 cursor-pointer`}
+                onClick={() => setDropDown((prev) => ({ ...prev, assignee: !prev.assignee }))}
               >
-                <div
-                  className="w-4 h-4 relative overflow-y-visible"
-                  onClick={() => setDropDown((prev) => ({ ...prev, assignee: !prev.assignee }))}
-                >
+                <div className="w-4 h-4 relative overflow-y-visible">
                   <AssigneeIcon className="w-4 h-4" />
                   {dropDown.assignee && (
                     <div
@@ -228,6 +253,7 @@ export function CreateTaskShortCutModal() {
                             <div
                               key={user.id}
                               className="flex w-full space-x-2.5 text-start py-2.5 px-1 rounded-md cursor-pointer hover:bg-alsoit-gray-50"
+                              onClick={() => dispatch(setCurrentTeamMemberId([user.id]))}
                             >
                               {user.user.avatar_path ? (
                                 <AvatarWithImage image_path={user.user.avatar_path} height="h-5" width="w-5" />
@@ -247,13 +273,13 @@ export function CreateTaskShortCutModal() {
                     </div>
                   )}
                 </div>
-                <span>assignee</span>
+                <span className={`${currentTeamMemberId.length > 0 && 'text-alsoit-purple-300'}`}>assignee</span>
               </div>
-              <div className="flex space-x-1.5 items-center border-2 rounded-lg text-center capitalize w-20 p-1.5">
+              <div className="flex space-x-1.5 items-center border-2 border-orange-300 rounded-lg text-center capitalize w-20 p-1.5">
                 <div className="w-4 h-4">
-                  <CalendarIcon active={false} dimensions={{ width: 15, height: 15 }} />
+                  <CalendarIcon active={false} dimensions={{ width: 15, height: 15 }} color="orange" />
                 </div>
-                <span>date</span>
+                <span className="text-orange-400">date</span>
               </div>
               <div
                 className="flex space-x-1.5 border-2 rounded-lg items-center capitalize w-20 p-1.5 relative"
