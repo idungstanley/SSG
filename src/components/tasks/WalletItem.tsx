@@ -267,7 +267,14 @@ export default function WalletItem({
           cords={{ top: cords.top, left: 10 }}
         />
       ) : null}
-      {showMenuDropdown === wallet.id ? <MenuDropdown isExtendedBar={isExtendedBar} cords={menuCords} /> : null}
+      {showMenuDropdown === wallet.id ? (
+        <MenuDropdown
+          entityType={EntityType.wallet}
+          item={wallet as Wallet}
+          isExtendedBar={isExtendedBar}
+          cords={menuCords}
+        />
+      ) : null}
       {SubMenuId === wallet.id ? <SubDropdown walletLevel={level} cords={menuCords} placeHubType={APP_TASKS} /> : null}
     </div>
   );
