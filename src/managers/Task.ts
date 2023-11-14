@@ -26,7 +26,6 @@ export const addNewTaskManager = (
 
     return updatedTasks;
   }
-
   return tasks;
 };
 

@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-  setClickChecklistId,
   setClickChecklistItemId,
   setOpenedDisclosureId,
   setShowChecklistItemInput,
@@ -40,7 +39,7 @@ export default function ChecklistModal({
   const { mutate: onChecklistItemDelete } = useDeleteChecklistItem(checklistId, checklistItemId as string);
   const { mutate: convertToTask } = useConvertChecklistToTask(checklistId);
 
-  const { openedDisclosureId } = useAppSelector((state) => state.checklist);
+  const { openedDisclosureId, clickedChecklistId } = useAppSelector((state) => state.checklist);
 
   const handleDelChecklist = () => {
     onChecklistDelete({
@@ -64,19 +63,19 @@ export default function ChecklistModal({
   const handleOptions = (option: { name: string; id: string }) => {
     if (option.name === 'Delete Checklist') {
       handleDelChecklist();
+      setAnchor(null);
     } else if (option.name === 'Delete Item') {
       handleChecklistItemDel();
     } else if (option.name === 'Assign to' || option.name === 'Unassign') {
       dispatch(setToggleAssignChecklistItemId(checklistItemId));
-      dispatch(setClickChecklistId(checklistId));
       dispatch(setClickChecklistItemId(checklistItemId));
     } else if (option.id === 'convert_to_task') {
       handleConvertToTask();
-    } else if (option.name === 'New Item') {
-      dispatch(setClickChecklistId(checklistId));
+    } else if (option.id === 'new_item') {
+      setAnchor(null);
       dispatch(setShowChecklistItemInput(true));
-      if (!openedDisclosureId.includes(checklistId)) {
-        dispatch(setOpenedDisclosureId(checklistId));
+      if (!openedDisclosureId.includes(clickedChecklistId)) {
+        dispatch(setOpenedDisclosureId(clickedChecklistId));
       }
     }
   };

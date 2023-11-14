@@ -8,6 +8,7 @@ import {
   setClickChecklistId,
   setClickChecklistItemId,
   setCreateChecklistItem,
+  setShowChecklistItemInput,
   setToggleAssignChecklistItemId,
   seteditChecklistItem
 } from '../../../../features/task/checklist/checklistSlice';
@@ -30,7 +31,9 @@ function ChecklistItem({ Item, checklistId }: checkListItemProps) {
   const [name, setName] = useState('');
   const [anchor, setAnchor] = useState<HTMLElement | null>(null);
 
-  const { showChecklistItemInput, clickedChecklistId } = useAppSelector((state) => state.checklist);
+  const { showChecklistItemInput, clickedChecklistId, clickedChecklistItemId } = useAppSelector(
+    (state) => state.checklist
+  );
 
   const createChecklist = useMutation(UseCreatelistItemService, {
     onSuccess: (data) => {
@@ -89,12 +92,18 @@ function ChecklistItem({ Item, checklistId }: checkListItemProps) {
           <input
             autoFocus
             type="text"
-            className="h-8 my-1 border-none hover:border-none hover:outline-none focus:outline-none rounded w-full"
+            className="h-8 my-1 border-none hover:border-none hover:outline-none focus:outline-none ring-0 focus:ring-0 rounded w-full text-alsoit-text-lg"
             placeholder="Add New Checklist Item"
             onChange={(e) => setNewItem(e.target.value)}
             value={newItem}
             onKeyDown={(e) => (e.key === 'Enter' ? handleSubmit() : null)}
           />
+          <span
+            className="w-4 h-4 rounded-full border border-alsoit-gray-200 text-alsoit-text-lg flex justify-center items-center cursor-pointer hover:bg-alsoit-danger hover:text-white"
+            onClick={() => dispatch(setShowChecklistItemInput(false))}
+          >
+            X
+          </span>
         </span>
       )}
 
@@ -129,17 +138,14 @@ function ChecklistItem({ Item, checklistId }: checkListItemProps) {
                   {item.name}
                 </div>
                 <div className="opacity-0 group-hover:opacity-100 flex items-center">
-                  <div onClick={(e) => setAnchor(e.currentTarget)}>
+                  <div
+                    onClick={(e) => {
+                      dispatch(setClickChecklistItemId(item.id));
+                      setAnchor(e.currentTarget);
+                    }}
+                  >
                     <ThreeDotIcon />
                   </div>
-
-                  <ChecklistModal
-                    anchor={anchor}
-                    setAnchor={setAnchor}
-                    options={lessOptions}
-                    checklistId={checklistId}
-                    checklistItemId={item.id}
-                  />
                   <ManageTagsDropdown tagsArr={item.tags} entityId={item.id} entityType="checklist_item" />
                 </div>
               </div>
@@ -162,6 +168,15 @@ function ChecklistItem({ Item, checklistId }: checkListItemProps) {
                 ))}
               </span>
             </div>
+            {clickedChecklistItemId === item.id && (
+              <ChecklistModal
+                anchor={anchor}
+                setAnchor={setAnchor}
+                options={lessOptions}
+                checklistId={checklistId}
+                checklistItemId={item.id}
+              />
+            )}
           </div>
         );
       })}

@@ -2,7 +2,11 @@ import React, { useRef, useState } from 'react';
 import { BiCaretRight } from 'react-icons/bi';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { useEditChecklist } from '../../../../features/task/checklist/checklistService';
-import { setEditChecklist, setOpenedDisclosureId } from '../../../../features/task/checklist/checklistSlice';
+import {
+  setClickChecklistId,
+  setEditChecklist,
+  setOpenedDisclosureId
+} from '../../../../features/task/checklist/checklistSlice';
 import ChecklistItem from './ChecklistItem';
 import ChecklistModal from './ChecklistModal';
 import { completeOptions } from './ModalOptions';
@@ -16,7 +20,7 @@ function Disclosures({ item }: { item?: ICheckListRes[] | undefined }) {
   const [anchor, setAnchor] = useState<HTMLElement | null>(null);
   const inputRef = useRef<HTMLInputElement | null>(null);
 
-  const { openedDisclosureId } = useAppSelector((state) => state.checklist);
+  const { openedDisclosureId, clickedChecklistId } = useAppSelector((state) => state.checklist);
 
   const handleItemClick = (id: string) => {
     dispatch(setOpenedDisclosureId(id));
@@ -66,15 +70,22 @@ function Disclosures({ item }: { item?: ICheckListRes[] | undefined }) {
                       ({done.length}/{checklist.items.length})
                     </label>
                     <div className="mx-2">
-                      <div onClick={(e) => setAnchor(e.currentTarget)}>
+                      <div
+                        onClick={(e) => {
+                          setAnchor(e.currentTarget);
+                          dispatch(setClickChecklistId(checklist.id));
+                        }}
+                      >
                         <ThreeDotIcon />
                       </div>
-                      <ChecklistModal
-                        options={completeOptions}
-                        checklistId={checklist.id}
-                        anchor={anchor}
-                        setAnchor={setAnchor}
-                      />
+                      {checklist.id === clickedChecklistId && (
+                        <ChecklistModal
+                          options={completeOptions}
+                          checklistId={checklist.id}
+                          anchor={anchor}
+                          setAnchor={setAnchor}
+                        />
+                      )}
                     </div>
                   </div>
                   {openedDisclosureId.includes(checklist.id) && (
