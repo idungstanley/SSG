@@ -72,12 +72,14 @@ export const useDeleteChat = () => {
   });
 };
 
-const sendMessageToChat = (data: { chatId: string | null; message: string }) => {
+const sendMessageToChat = (data: { chatId: string | null; message: string; selectedMessage: IMessage | null }) => {
+  const { chatId, message, selectedMessage } = data;
   const request = requestNew({
-    url: `chats/${data.chatId}/message`,
+    url: `chats/${chatId}/message`,
     method: 'POST',
     data: {
-      message: data.message
+      message: message,
+      reply_on_id: selectedMessage ? selectedMessage?.id : ''
     }
   });
   return request;
