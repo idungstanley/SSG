@@ -71,7 +71,7 @@ export default function CreateMessage({ chatId }: CreateMessageProps) {
           >
             <div className="absolute h-full bg-alsoit-purple-300 left-0 top-0" style={{ width: '2px' }} />
             <div className="ml-2 text-alsoit-purple-300 text-sm">{selectedMessage.team_member.user.name}</div>
-            <div className="ml-2">{generateMessageWithUserNames(selectedMessage)}</div>
+            <div className="ml-2 text-alsoit-gray-75">{generateMessageWithUserNames(selectedMessage)}</div>
           </div>
           <div className="cursor-pointer" onClick={() => dispatch(setSelectedMessage(null))}>
             <ChatRemoveReply />

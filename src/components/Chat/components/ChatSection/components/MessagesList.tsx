@@ -53,7 +53,7 @@ export default function MessagesList({ messages }: MessagesListProps) {
                   <div className="relative w-full p-1 bg-alsoit-purple-50 shadow-sm sm:text-sm overflow-hidden">
                     <div className="absolute h-full bg-alsoit-purple-300 left-0 top-0" style={{ width: '2px' }} />
                     <div className="ml-2 text-alsoit-purple-300 text-sm">{message.reply_on.team_member.user.name}</div>
-                    <div className="ml-2">{generateMessageWithUserNames(message.reply_on)}</div>
+                    <div className="ml-2 text-alsoit-gray-75">{generateMessageWithUserNames(message.reply_on)}</div>
                   </div>
                 ) : null}
 
