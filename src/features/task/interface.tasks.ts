@@ -120,7 +120,7 @@ export interface ICheckListItems {
   is_done: number;
   assignees: AssigneeType[];
   group_assignees: [];
-  tags: [];
+  tags: Tag[];
 }
 
 export interface ICheckListRes {
