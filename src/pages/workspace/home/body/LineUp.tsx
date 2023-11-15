@@ -9,8 +9,8 @@ import { ImyTaskData, setTasks } from '../../../../features/task/taskSlice';
 import AlsoitMenuDropdown from '../../../../components/DropDowns';
 import StatusDropdown from '../../../../components/status/StatusDropdown';
 import Assignee from '../../tasks/assignTask/Assignee';
-import { FaSearch } from 'react-icons/fa';
 import { Task } from '../../../../features/task/interface.tasks';
+import SearchIcon from '../../../../assets/icons/SearchIcon';
 
 export default function LineUp() {
   // const [allHubsId, setAllHubsId] = useState<string[]>([]);
@@ -106,7 +106,8 @@ export default function LineUp() {
       <AlsoitMenuDropdown anchorEl={anchorEl} handleClose={() => setAnchorEl(null)}>
         <div className="sticky top-0 z-50 bg-white">
           <div className="flex items-center p-2 w-full border-b border-b-gray-300">
-            <FaSearch />
+            <SearchIcon width={13} height={13} />
+
             <input type="text" placeholder="Search tasks" className="w-full p-2 outline-none border-0" />
           </div>
 
