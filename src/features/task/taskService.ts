@@ -673,6 +673,59 @@ export const createTaskService = (data: {
   return response;
 };
 
+export const UseGetEverythingTasks = () => {
+  const queryClient = useQueryClient();
+
+  const { draggableItemId } = useAppSelector((state) => state.list);
+
+  const { sortAbleArr, toggleAllSubtask, separateSubtasksMode, splitSubTaskState, isFiltersUpdated } = useAppSelector(
+    (state) => state.task
+  );
+  const sortArrUpdate = sortAbleArr.length <= 0 ? null : sortAbleArr;
+
+  const { filters } = generateFilters();
+
+  return useInfiniteQuery(
+    [
+      'task',
+      filters,
+      isFiltersUpdated,
+      sortArrUpdate,
+      draggableItemId,
+      toggleAllSubtask,
+      separateSubtasksMode,
+      splitSubTaskState
+    ],
+    async ({ pageParam = 0 }: { pageParam?: number }) => {
+      return requestNew<IFullTaskRes>({
+        url: 'tasks/everything',
+        method: 'POST',
+        data: {
+          filters,
+          sorting: sortArrUpdate,
+          expand_all: toggleAllSubtask || separateSubtasksMode || splitSubTaskState ? 1 : 0,
+          page: pageParam
+        }
+      });
+    },
+    {
+      keepPreviousData: true,
+      enabled: location.pathname.includes('everything') && !draggableItemId && isFiltersUpdated,
+      onSuccess: (data) => {
+        data.pages.map((page) => page.data.tasks.map((task) => queryClient.setQueryData(['task', task.id], task)));
+      },
+      getNextPageParam: (lastPage) => {
+        if (lastPage?.data?.paginator.has_more_pages) {
+          return Number(lastPage.data.paginator.page) + 1;
+        }
+
+        return false;
+      },
+      cacheTime: 0
+    }
+  );
+};
+
 export const UseGetFullTaskList = ({
   itemId,
   itemType
