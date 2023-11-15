@@ -36,6 +36,7 @@ import Close from '../../../../assets/icons/Close';
 import toast from 'react-hot-toast';
 import Toast from '../../../../common/Toast';
 import { LIMITS } from '../../../../app/config/dimensions';
+import Linkify from 'linkify-react';
 // import { useDroppable } from '@dnd-kit/core';
 
 interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
@@ -499,7 +500,9 @@ export function StickyCol({
                                 whiteSpace: 'nowrap'
                               }}
                             >
-                              {taskUpperCase ? task.name.toUpperCase() : Capitalize(task.name)}
+                              <Linkify options={{ target: '_blank', className: 'text-blue-400' }}>
+                                {taskUpperCase ? task.name.toUpperCase() : Capitalize(task.name)}
+                              </Linkify>
                             </div>
                           }
                           content={<div>{taskUpperCase ? task.name.toUpperCase() : Capitalize(task.name)}</div>}
@@ -514,7 +517,9 @@ export function StickyCol({
                             whiteSpace: 'nowrap'
                           }}
                         >
-                          {taskUpperCase ? task.name.toUpperCase() : Capitalize(task.name)}
+                          <Linkify options={{ target: '_blank', className: 'text-blue-400' }}>
+                            {taskUpperCase ? task.name.toUpperCase() : Capitalize(task.name)}
+                          </Linkify>
                         </div>
                       )}
                     </div>
