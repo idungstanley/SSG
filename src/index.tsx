@@ -22,7 +22,8 @@ const onError = (error: unknown): unknown => {
 
   if (!error) {
     title = 'Oops! An internal server error occurred.';
-    toast.custom((t) => <Toast type="error" title={title} body={body} toastId={t.id} />);
+    toast.custom((t) => <Toast type="error" title={title} body={body} toastId={t.id} />, { duration: 3000 });
+
     return;
   }
 
@@ -45,7 +46,7 @@ const onError = (error: unknown): unknown => {
     title = typedError?.statusText || typedError?.message || typedError.data.message.title;
   }
 
-  toast.custom((t) => <Toast type="error" title={title} body={body} toastId={t.id} />);
+  toast.custom((t) => <Toast type="error" title={title} body={body} toastId={t.id} />, { duration: 3000 });
 };
 
 const onSuccess = (data: unknown): unknown => {
@@ -69,6 +70,13 @@ const onSuccess = (data: unknown): unknown => {
   toast.custom((t) => (
     <Toast type="success" title={title} body={body} toastId={t.id} taskData={typedTaskData.data.task} />
   ));
+
+  toast.custom(
+    (t) => <Toast type="success" title={title} body={body} toastId={t.id} taskData={typedTaskData.data.task} />,
+    {
+      duration: 3000
+    }
+  );
 };
 
 const queryClient = new QueryClient({
