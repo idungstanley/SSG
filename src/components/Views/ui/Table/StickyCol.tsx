@@ -367,6 +367,8 @@ export function StickyCol({
     return '100%';
   };
 
+  console.log(width);
+
   const handleDroppable = () => {
     if (task.parent_id === draggableItemId && level) {
       return false;
@@ -427,7 +429,7 @@ export function StickyCol({
               COL_BG,
               ` ${isChecked && 'tdListV'} ${verticalGrid && 'border-r'} ${
                 verticalGridlinesTask && 'border-r'
-              } relative w-full py-4 flex items-center`,
+              } relative w-full h-full flex items-center`,
               isOver && draggableItemId !== dragOverItemId && !dragToBecomeSubTask
                 ? 'border-b-2 border-alsoit-purple-300'
                 : dragToBecomeSubTask && isOver && draggableItemId !== dragOverItemId
@@ -532,7 +534,7 @@ export function StickyCol({
                 <div
                   ref={badgeRef}
                   onClick={(e) => e.stopPropagation()}
-                  className="flex items-center justify-between flex-grow pl-2"
+                  className="flex items-center justify-between pl-2 min-h-fit"
                 >
                   {children}
                 </div>
@@ -571,7 +573,7 @@ export function StickyCol({
               COL_BG,
               `relative border-t ${verticalGrid && 'border-r'} ${
                 verticalGridlinesTask && 'border-r'
-              } w-full py-4 p-4 flex items-center`
+              } w-full h-full flex items-center`
             )}
           >
             <div className="absolute bottom-0 right-0 flex p-1 space-x-1">
@@ -582,15 +584,28 @@ export function StickyCol({
               >
                 <div
                   className="border rounded-sm"
-                  style={{ borderColor: '#B2B2B2CC', borderWidth: '0.5px', height: '20px', width: '20px' }}
+                  style={{
+                    borderColor: '#B2B2B2CC',
+                    borderWidth: '0.5px',
+                    height: saveSettingOnline?.CompactView ? '15px' : '20px',
+                    width: saveSettingOnline?.CompactView ? '15px' : '20px'
+                  }}
                   onClick={onClose}
                 >
-                  <Close active={closeToggle}></Close>
+                  <Close
+                    height={saveSettingOnline?.CompactView ? '15px' : '20px'}
+                    width={saveSettingOnline?.CompactView ? '15px' : '20px'}
+                    active={closeToggle}
+                  ></Close>
                 </div>
               </ToolTip>
               <ToolTip onMouseEnter={() => setSaveToggle(true)} onMouseLeave={() => setSaveToggle(false)} title="Save">
                 <span onClick={(e) => handleOnSave(e as React.MouseEvent<HTMLButtonElement, MouseEvent>, task.id)}>
-                  <SaveIcon active={saveToggle}></SaveIcon>
+                  <SaveIcon
+                    height={saveSettingOnline?.CompactView ? '15px' : '20px'}
+                    width={saveSettingOnline?.CompactView ? '15px' : '20px'}
+                    active={saveToggle}
+                  ></SaveIcon>
                 </span>
               </ToolTip>
             </div>
