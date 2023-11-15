@@ -1,12 +1,12 @@
 import React from 'react';
 import Button from '@mui/material/Button';
-import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { AiOutlinePlus } from 'react-icons/ai';
 import { IoIosArrowForward } from 'react-icons/io';
 import ArrowDownFilled from '../../../assets/icons/ArrowDownFilled';
 import { useAppDispatch } from '../../../app/hooks';
 import { setShowCreateChatSideOver } from '../../../features/chat/chatSlice';
+import AlsoitMenuDropdown from '../../DropDowns';
 
 export default function ChatAddModal() {
   const dispatch = useAppDispatch();
@@ -40,16 +40,7 @@ export default function ChatAddModal() {
         <span style={{ color: 'black' }}>Add</span>
         <ArrowDownFilled className="ml-1 w-1.5" />
       </Button>
-      <Menu
-        id="basic-menu"
-        anchorEl={anchorEl}
-        open={!!anchorEl}
-        onClose={() => setAnchorEl(null)}
-        MenuListProps={{
-          'aria-labelledby': 'basic-button',
-          style: { minWidth: '200px' }
-        }}
-      >
+      <AlsoitMenuDropdown anchorEl={anchorEl} handleClose={() => setAnchorEl(null)}>
         {items.map((item) => (
           <div key={item.id}>
             <MenuItem
@@ -67,7 +58,7 @@ export default function ChatAddModal() {
             </MenuItem>
           </div>
         ))}
-      </Menu>
+      </AlsoitMenuDropdown>
     </div>
   );
 }
