@@ -29,6 +29,7 @@ import { MdOutlineVisibility } from 'react-icons/md';
 import MoveItemIcon from '../../../../../../assets/icons/MoveItemIcon';
 import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
 import { setEditingPilotDetailsTitle } from '../../../../../../features/workspace/workspaceSlice';
+import Linkify from 'linkify-react';
 
 interface PropertyDetailsProps {
   Details?: IHubDetails | ITaskFullList | IListDetails | IWalletDetails;
@@ -77,9 +78,9 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
     setEditingDescription(false);
   };
 
-  const handleEditTitle = () => {
-    dispatch(setEditingPilotDetailsTitle(true));
-  };
+  // const handleEditTitle = () => {
+  //   dispatch(setEditingPilotDetailsTitle(true));
+  // };
 
   const handleDescriptionChange = (value: string) => {
     const pattern = /<a[^>]*>/gi;
@@ -170,24 +171,32 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
             <section className="flex items-center space-x-1">
               <Status details={Details} />
               <ToolTip title="Priority">
-                <Priority details={Details} />
+                <span>
+                  <Priority details={Details} />
+                </span>
               </ToolTip>
             </section>
             <section className="z-10 flex items-center justify-center space-x-3">
               <CustomReference />
               <ToolTip title="Share">
-                <Share taskId={Details?.id} taskName={Details?.name} />
+                <span>
+                  <Share taskId={Details?.id} taskName={Details?.name} />
+                </span>
               </ToolTip>
               <EntitySettings />
             </section>
           </div>
           <section className="flex items-center mt-3 ml-2 space-x-2">
             <ToolTip title="Assignees">
-              <Assignees />
+              <span>
+                <Assignees />
+              </span>
             </ToolTip>
             <span className="text-gray-300 ">|</span>
             <ToolTip title="Subscribers">
-              <Subscribers />
+              <span>
+                <Subscribers />
+              </span>
             </ToolTip>
             <span className="text-gray-300">|</span>
             <MdOutlineVisibility className="text-xl" />
@@ -203,10 +212,10 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
                     className="p-1 capitalize break-words max-h-52"
                     contentEditable={editingPilotDetailsTitle}
                     onKeyDown={(e) => (e.key === 'Enter' ? handleDetailsSubmit(e) : null)}
-                    onClick={() => handleEditTitle()}
+                    // onClick={() => handleEditTitle()}
                     onBlur={(e) => handleDetailsSubmit(e)}
                   >
-                    {Details?.name}
+                    <Linkify options={{ target: '_blank', className: 'text-blue-400' }}>{Details?.name}</Linkify>
                   </p>
                 </VerticalScroll>
               </div>
