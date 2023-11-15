@@ -5,7 +5,7 @@ interface assigneeCloth {
   height?: string;
   width?: string;
 }
-export default function AssigneeCloth({ height = '23', width = '23', children }: assigneeCloth) {
+export default function AssigneeCloth({ height = '32', width = '32', children }: assigneeCloth) {
   return (
     <div className="relative flex">
       <svg width={width} height={height} viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
