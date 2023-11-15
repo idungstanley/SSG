@@ -62,7 +62,11 @@ export default function ActiveTreeSearch({ closeDropdown, option }: ActiveTreeSe
   }, [hubs, allHubs]);
 
   useEffect(() => {
-    if (OPTIONS_WITH_AVAILABLE_LISTS.includes(option as string) || option === TIME_TABS.nestedEntities) {
+    if (
+      OPTIONS_WITH_AVAILABLE_LISTS.includes(option as string) ||
+      option === TIME_TABS.nestedEntities ||
+      option === pilotTabs.CREATE_TASK
+    ) {
       setToggleTree(true);
     }
   }, []);
@@ -98,30 +102,32 @@ export default function ActiveTreeSearch({ closeDropdown, option }: ActiveTreeSe
 
   return (
     <div className="relative">
-      {!OPTIONS_WITH_AVAILABLE_LISTS.includes(option as string) && option !== TIME_TABS.nestedEntities && (
-        <button
-          type="button"
-          className="relative flex items-center w-full p-1 px-1 mt-2 mb-1 transition duration-300 rounded-md cursor-pointer group"
-        >
-          <div
-            className="absolute flex items-center justify-between w-auto w-full tracking-wider grow left-2"
-            style={{ fontSize: '13px' }}
+      {!OPTIONS_WITH_AVAILABLE_LISTS.includes(option as string) &&
+        option !== TIME_TABS.nestedEntities &&
+        option !== pilotTabs.CREATE_TASK && (
+          <button
+            type="button"
+            className="relative flex items-center w-full p-1 px-1 mt-2 mb-1 transition duration-300 rounded-md cursor-pointer group"
           >
-            <div className="flex items-center justify-between" onClick={() => fetchAndToggle()}>
-              <CiSearch className="mr-2 text-lg hover:text-fuchsia-500" />
-              <p className="whitespace-nowrap">
-                {selectedTreeDetails.name ? selectedTreeDetails.name : 'Choose Location'}
-              </p>
+            <div
+              className="absolute flex items-center justify-between w-auto w-full tracking-wider grow left-2"
+              style={{ fontSize: '13px' }}
+            >
+              <div className="flex items-center justify-between" onClick={() => fetchAndToggle()}>
+                <CiSearch className="mr-2 text-lg hover:text-fuchsia-500" />
+                <p className="whitespace-nowrap">
+                  {selectedTreeDetails.name ? selectedTreeDetails.name : 'Choose Location'}
+                </p>
+              </div>
+              <BiRightArrowCircle className="mr-6 text-lg hover:text-fuchsia-500" onClick={() => directToPilot()} />
             </div>
-            <BiRightArrowCircle className="mr-6 text-lg hover:text-fuchsia-500" onClick={() => directToPilot()} />
-          </div>
-          <input
-            className="w-full h-8 pl-3 text-xs border-gray-400 rounded-2xl group-hover:border-fuchsia-500 group-hover:text-primary-400"
-            disabled
-            type="text"
-          />
-        </button>
-      )}
+            <input
+              className="w-full h-8 pl-3 text-xs border-gray-400 rounded-2xl group-hover:border-fuchsia-500 group-hover:text-primary-400"
+              disabled
+              type="text"
+            />
+          </button>
+        )}
       {toggleTree && (
         <ActiveTreeDataFormater
           data={hubs}

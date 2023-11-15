@@ -43,6 +43,10 @@ export default function ActiveTreeList({ hubs, openNewHub, setToggleTree, option
     if (option === TIME_TABS.nestedEntities) {
       dispatch(setNestedTimeEntityId(id));
     }
+
+    // if (option === pilotTabs.CREATE_TASK) {
+    //   e.stopPropagation();
+    // }
   };
 
   const handleClick = (id: string) => {

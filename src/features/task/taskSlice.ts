@@ -24,7 +24,7 @@ import {
 } from '../../components/TasksHeader/ui/Filter/types/filters';
 import { DEFAULT_FILTERS_OPTION } from '../../components/TasksHeader/ui/Filter/config/filterConfig';
 import { ITeamMembersAndGroup } from '../settings/teamMembersAndGroups.interfaces';
-import { IView } from '../hubs/hubs.interfaces';
+import { IList, IView } from '../hubs/hubs.interfaces';
 
 export interface ICustomField {
   id: string;
@@ -172,6 +172,7 @@ interface TaskState {
   taskColumns: listColumnProps[];
   hideTask: listColumnProps[];
   currentTaskId: string | null;
+  activeTreeSelectedTask: IList | undefined;
   newTaskPriority: string;
   selectedTasksArray: string[];
   selectedIndexListId: string | null;
@@ -300,6 +301,7 @@ const initialState: TaskState = {
   taskColumns: [],
   hideTask: [],
   currentTaskId: null,
+  activeTreeSelectedTask: undefined,
   showNewTaskField: false,
   meMode: false,
   escapeKey: false,
@@ -658,6 +660,9 @@ export const taskSlice = createSlice({
     setCurrentTaskId(state, action: PayloadAction<string | null>) {
       state.currentTaskId = action.payload;
     },
+    setActiveTreeSelectedTask(state, action: PayloadAction<IList | undefined>) {
+      state.activeTreeSelectedTask = action.payload;
+    },
     setCloseTaskListView(state, action: PayloadAction<boolean>) {
       state.closeTaskListView = action.payload;
     },
@@ -849,6 +854,7 @@ export const {
   setNewTaskPriority,
   setRmWatcher,
   setCurrentTaskId,
+  setActiveTreeSelectedTask,
   setDefaultSubtaskId,
   setToggleAllSubtask,
   setToggleAllSubtaskSplit,
