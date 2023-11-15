@@ -30,6 +30,7 @@ import MoveItemIcon from '../../../../../../assets/icons/MoveItemIcon';
 import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
 import { setEditingPilotDetailsTitle } from '../../../../../../features/workspace/workspaceSlice';
 import Linkify from 'linkify-react';
+import { Capitalize } from '../../../../../../utils/NoCapWords/Capitalize';
 
 interface PropertyDetailsProps {
   Details?: IHubDetails | ITaskFullList | IListDetails | IWalletDetails;
@@ -209,13 +210,15 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
                 <VerticalScroll>
                   <p
                     ref={inputRef}
-                    className="p-1 capitalize break-words max-h-52"
+                    className="p-1 break-words max-h-52"
                     contentEditable={editingPilotDetailsTitle}
                     onKeyDown={(e) => (e.key === 'Enter' ? handleDetailsSubmit(e) : null)}
                     // onClick={() => handleEditTitle()}
                     onBlur={(e) => handleDetailsSubmit(e)}
                   >
-                    <Linkify options={{ target: '_blank', className: 'text-blue-400' }}>{Details?.name}</Linkify>
+                    <Linkify options={{ target: '_blank', className: 'text-blue-400' }}>
+                      {Details?.name && Capitalize(Details?.name)}
+                    </Linkify>
                   </p>
                 </VerticalScroll>
               </div>
