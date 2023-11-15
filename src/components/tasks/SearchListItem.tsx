@@ -5,6 +5,7 @@ import ListIconComponent from '../ItemsListInSidebar/components/ListIconComponen
 import { cl } from '../../utils';
 import { IList } from '../../features/hubs/hubs.interfaces';
 import {
+  setActiveTreeSelectedTask,
   setCurrentSelectedDuplicateArr,
   setDuplicateTaskObj,
   setSelectedTasksArray
@@ -13,6 +14,7 @@ import { useDuplicateTask, useMultipleDuplicateTasks, useMultipleTaskMove } from
 import DuplicateTaskAdvanceModal from '../../pages/workspace/tasks/component/taskMenu/DuplicateTaskAdvanceModal';
 import { TASK_DUPLICATE, TASK_MOVE } from '../../pages/workspace/tasks/component/taskMenu/TaskMenu';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
+import { pilotTabs } from '../../app/constants/pilotTabs';
 
 interface ListItemProps {
   list: IList;
@@ -38,7 +40,7 @@ export default function SearchListItem({ list, paddingLeft, option }: ListItemPr
   const { mutate: multipleDuplicateTasks } = useMultipleDuplicateTasks(list);
   const { mutate: onMultipleTaskMove } = useMultipleTaskMove(list, 'id_only');
 
-  const handleClick = () => {
+  const handleClick = (list: IList) => {
     if (option === TASK_DUPLICATE) {
       if (selectedTasksArray.length > 1) {
         dispatch(setDuplicateTaskObj({ ...duplicateTaskObj, popDuplicateTaskModal: false }));
@@ -61,6 +63,10 @@ export default function SearchListItem({ list, paddingLeft, option }: ListItemPr
         listId: list.id,
         overType: EntityType.list
       });
+    }
+
+    if (option === pilotTabs.CREATE_TASK) {
+      dispatch(setActiveTreeSelectedTask(list));
     }
   };
 
@@ -98,7 +104,10 @@ export default function SearchListItem({ list, paddingLeft, option }: ListItemPr
         {list.id === listId && (
           <span className="absolute top-0 bottom-0 left-0 rounded-r-lg w-0.5" style={{ backgroundColor: baseColor }} />
         )}
-        <div className="flex items-center space-x-1 overflow-hidden capitalize cursor-pointer" onClick={handleClick}>
+        <div
+          className="flex items-center space-x-1 overflow-hidden capitalize cursor-pointer"
+          onClick={() => handleClick(list)}
+        >
           <div>
             <ListIconComponent
               shape={activeShape ? activeShape : 'solid-circle'}
