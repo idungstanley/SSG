@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { EllipsisHorizontalIcon } from '@heroicons/react/24/outline';
 import { Menu as HeadMenu } from '@headlessui/react';
-import { Menu } from '@mui/material';
 import ChatReply from '../../../../../assets/icons/ChatReply';
 import { useAppDispatch } from '../../../../../app/hooks';
 import { setSelectedMessage } from '../../../../../features/chat/chatSlice';
 import { IMessage } from '../../../../../features/chat/chat.interfaces';
+import AlsoitMenuDropdown from '../../../../DropDowns';
 
 interface IDropdownMenuForMessageProps {
   message: IMessage;
@@ -32,15 +32,14 @@ export default function DropdownMenuForMessage({ message }: IDropdownMenuForMess
       <div onClick={(e: React.MouseEvent<HTMLDivElement>) => setAnchorEl(e.currentTarget)}>
         <HeadMenu as="div" className="relative inline-block text-left">
           <HeadMenu.Button className="flex opacity-0 group-hover:opacity-100 transition-all duration-150 items-center rounded-full text-gray-400 hover:text-gray-600 focus:outline-none ring-0 focus:ring-0">
-            <span className="sr-only">Open options</span>
             <EllipsisHorizontalIcon className="h-5 w-5" aria-hidden="true" />
           </HeadMenu.Button>
         </HeadMenu>
       </div>
-      <Menu anchorEl={anchorEl} open={!!anchorEl} onClose={() => setAnchorEl(null)}>
+      <AlsoitMenuDropdown anchorEl={anchorEl} handleClose={() => setAnchorEl(null)}>
         <div className="p-1" style={{ minWidth: '147px' }}>
-          <div className="flex justify-center pt-3 font-bold text-alsoit-text-sm" style={{ lineHeight: '9.6px' }}>
-            Dropdown
+          <div className="flex justify-center pt-3 font-bold" style={{ lineHeight: '9.6px' }}>
+            DROPDOWN
           </div>
           <div className="relative flex flex-col justify-center mb-2">
             <div className="pt-3 border-b-2 " />
@@ -62,7 +61,7 @@ export default function DropdownMenuForMessage({ message }: IDropdownMenuForMess
             </div>
           ))}
         </div>
-      </Menu>
+      </AlsoitMenuDropdown>
     </>
   );
 }

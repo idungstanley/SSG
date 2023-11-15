@@ -1,12 +1,12 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import moment from 'moment';
 import { IMessage } from '../../../../../features/chat/chat.interfaces';
 import { useChatScroll } from '../../../../../hooks';
 import AvatarWithInitials from '../../../../avatar/AvatarWithInitials';
 import DropdownMenuForMessage from './DropdownMenuForMessage';
-import { mentionTeamMemberInMessageReg } from '../../../../../regex';
 import { useAppSelector } from '../../../../../app/hooks';
 import { cl } from '../../../../../utils';
+import { generateMessageWithUserNames } from './CreateMessage';
 
 interface MessagesListProps {
   messages: IMessage[];
@@ -39,12 +39,6 @@ export default function MessagesList({ messages }: MessagesListProps) {
               initials={message.team_member.user.initials}
               backgroundColour={message.team_member.user.color}
             />
-            {/* {isCurrentUser(message.team_member.user.id) ? (
-              <AvatarWithInitials
-                initials={message.team_member.user.initials}
-                backgroundColour={message.team_member.user.color}
-              />
-            ) : null} */}
 
             <div className="w-3/4" style={{ background: '#F4F4F4' }}>
               <div className="flex group flex-col justify-start gap-1 p-2 rounded-xl border">
@@ -56,23 +50,17 @@ export default function MessagesList({ messages }: MessagesListProps) {
                 </div>
 
                 {message?.reply_on ? (
-                  <div className="px-2 py-1 bg-gray-300 rounded-md">
-                    <div>{message.reply_on.team_member.user.name}</div>
-                    <div>{message.reply_on.message}</div>
+                  <div className="relative w-full p-1 bg-alsoit-purple-50 shadow-sm sm:text-sm overflow-hidden">
+                    <div className="absolute h-full bg-alsoit-purple-300 left-0 top-0" style={{ width: '2px' }} />
+                    <div className="ml-2 text-alsoit-purple-300 text-sm">{message.reply_on.team_member.user.name}</div>
+                    <div className="ml-2">{generateMessageWithUserNames(message.reply_on)}</div>
                   </div>
                 ) : null}
 
                 <div className="flex justify-between">
                   {/* message */}
                   <div className="flex items-center">
-                    <p className="text-alsoit-purple-300">
-                      {message.mention_users?.map((user) => (
-                        <span key={user.id} className="pr-3 py-1 text-xs">
-                          @{user.name}
-                        </span>
-                      ))}
-                      {message.message.replaceAll(mentionTeamMemberInMessageReg, '')}
-                    </p>
+                    <p className="text-alsoit-purple-300">{generateMessageWithUserNames(message)}</p>
                   </div>
 
                   {/* bottom */}

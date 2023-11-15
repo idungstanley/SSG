@@ -5,8 +5,19 @@ import ChatEmoticons from '../../../../../assets/icons/ChatEmoticons';
 import ChatFile from '../../../../../assets/icons/ChatFile';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import { setSelectedMessage } from '../../../../../features/chat/chatSlice';
-import CreateTaskTaskCancel from '../../../../../assets/icons/CreateTaskTaskCancel';
-import { IMessage } from '../../../../../features/chat/chat.interfaces';
+import { IMessage, IReplyOn } from '../../../../../features/chat/chat.interfaces';
+import ChatRemoveReply from '../../../../../assets/icons/ChatRemoveReply';
+
+export const generateMessageWithUserNames = (messageData: IMessage | IReplyOn) => {
+  if (messageData.mention_users.length) {
+    let newMessage = messageData.message;
+    messageData.mention_users.forEach((user) => {
+      newMessage = newMessage.replace(`[${user.id}]`, `${user.name}`);
+    });
+    return newMessage;
+  }
+  return messageData.message;
+};
 
 interface CreateMessageProps {
   chatId: string | null;
@@ -51,20 +62,26 @@ export default function CreateMessage({ chatId }: CreateMessageProps) {
   };
 
   return (
-    <div style={{ background: '#919191' }}>
+    <>
       {selectedMessage ? (
-        <div className="px-4 pt-2">
-          <div className="flex items-center p-1 bg-gray-300 w-full rounded-md border-gray-300 shadow-sm sm:text-sm">
-            <div className="mr-2 cursor-pointer" onClick={() => dispatch(setSelectedMessage(null))}>
-              <CreateTaskTaskCancel />
-            </div>
-            {selectedMessage.message}
+        <div className="flex justify-between px-4 pt-4 pb-2 bg-alsoit-gray-50">
+          <div
+            className="relative p-1 bg-white rounded-md border-gray-300 shadow-sm sm:text-sm overflow-hidden"
+            style={{ minWidth: '217px', maxWidth: '90%' }}
+          >
+            <div className="absolute h-full bg-alsoit-purple-300 left-0 top-0" style={{ width: '2px' }} />
+            <div className="ml-2 text-alsoit-purple-300 text-sm">{selectedMessage.team_member.user.name}</div>
+            <div className="ml-2">{generateMessageWithUserNames(selectedMessage)}</div>
+          </div>
+          <div className="cursor-pointer" onClick={() => dispatch(setSelectedMessage(null))}>
+            <ChatRemoveReply />
           </div>
         </div>
       ) : null}
       <form
         className="relative flex gap-2 items-center p-2 rounded-bl-md rounded-br-md"
         onSubmit={(e) => sendMessage(e)}
+        style={{ background: '#919191' }}
       >
         <div
           className="flex justify-center bg-white items-center h-6 cursor-pointer rounded-md"
@@ -98,6 +115,6 @@ export default function CreateMessage({ chatId }: CreateMessageProps) {
           Send
         </button>
       </form>
-    </div>
+    </>
   );
 }
