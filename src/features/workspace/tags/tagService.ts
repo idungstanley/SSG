@@ -1,9 +1,11 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-// import { useAppDispatch } from '../../../app/hooks';
+import { useAppDispatch } from '../../../app/hooks';
 import requestNew from '../../../app/requestNew';
 import { AddTagRes, ITagRes, TagsRes } from './tag.interfaces';
 import { Tag, TagId, TaskId } from '../../task/interface.tasks';
 import { EntityType } from '../../../utils/EntityTypes/EntityType';
+import { useAppSelector } from '../../../app/hooks';
+import { setAssignTagsToChecklistItem } from '../../task/checklist/checklistSlice';
 
 export const useTags = () => {
   return useQuery(
@@ -56,8 +58,7 @@ const multipleAssignTag = (data: { tagId: TagId; entityIds: string[] }) => {
     method: 'POST',
     data: {
       tag_ids: [tagId],
-      ids: entityIds,
-      color: 'purple'
+      ids: entityIds
     }
   });
   return response;
@@ -83,21 +84,30 @@ const assignTag = (data: { tagId: TagId; entityId: string; entityType: string })
     method: 'POST',
     data: {
       type: entityType,
-      id: entityId,
-      color: 'purple'
+      id: entityId
     }
   });
   return response;
 };
 
-export const useAssignTag = (taskId: string) => {
+export const useAssignTag = (taskId: string, type: string) => {
   const queryClient = useQueryClient();
+  const dispatch = useAppDispatch();
+  const { assignTag: tag } = useAppSelector((state) => state.checklist);
 
   return useMutation(assignTag, {
     onSuccess: () => {
-      queryClient.invalidateQueries(['task']);
-      queryClient.invalidateQueries(['sub-tasks', taskId]);
-      queryClient.invalidateQueries(['checklist']);
+      if (type === 'checklist_item') {
+        dispatch(
+          setAssignTagsToChecklistItem({
+            itemId: taskId,
+            tag: tag as Tag
+          })
+        );
+      } else {
+        queryClient.invalidateQueries(['task']);
+        queryClient.invalidateQueries(['sub-tasks', taskId]);
+      }
     }
   });
 };

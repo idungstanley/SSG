@@ -592,7 +592,7 @@ export function StickyCol({
             <div className="pt-1 ml-4">
               <StatusDropdown task={task} taskCurrentStatus={task.status} taskStatuses={task.task_statuses} />
             </div>
-            <div className="flex flex-col items-start justify-start pl-2 space-y-1">
+            <div className="flex flex-col items-start justify-start pl-2 space-y-1 w-full">
               <p
                 className={`flex text-left empty:before:content-[attr(placeholder)] alsoit-gray-300 font-semibold empty:opacity-50 overflow-hidden items-center h-5 ${
                   saveSettingOnline?.CompactView ? 'text-alsoit-text-md' : 'text-alsoit-text-lg'
@@ -600,7 +600,7 @@ export function StickyCol({
                 contentEditable={true}
                 placeholder="Add New Task"
                 ref={inputRef}
-                style={{ maxWidth: '200px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}
+                style={{ maxWidth: '90%', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}
                 onKeyDown={(e) => (e.key === 'Enter' ? handleOnSave(e, task.id) : null)}
               ></p>
             </div>

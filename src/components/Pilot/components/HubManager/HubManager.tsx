@@ -10,11 +10,13 @@ import EntityManagerIcon from '../../../../assets/icons/EntityManagerIcon';
 import StatusManagement from '../../../status/StatusManagement';
 import { pilotTabs } from '../../../../app/constants/pilotTabs';
 import Permissions from '../PermissionSharing';
+import { CreateTask } from '../../../../pages/workspace/pilot/components/createEntity/createTask/CreateTask';
 
 const HubsOptions = [
   { id: pilotTabs.CREATE_HUB, element: <CreateHub /> },
   { id: pilotTabs.CREATE_WALLET, element: <CreateWallet /> },
   { id: pilotTabs.CREATE_LIST, element: <CreateList /> },
+  { id: pilotTabs.CREATE_TASK, element: <CreateTask /> },
   { id: pilotTabs.CALENDAR_SETTINGS, element: <CustomSuggestion /> },
   { id: pilotTabs.STATUS_MANAGEMENT, element: <StatusManagement /> },
   { id: pilotTabs.PERMISSIONS, element: <Permissions /> }
@@ -31,7 +33,7 @@ export default function HubManager() {
   return (
     <>
       <SectionArea label="Entity Manager" icon={<EntityManagerIcon />} />
-      <section className="flex flex-col overflow-y-scroll h-fit mb-11 ">
+      <section className="flex flex-col overflow-y-scroll h-[650px] mb-11 ">
         <HubManagerSubTab />
         <div>{selectedSubSection ? selectedSubSection.element : null}</div>
       </section>

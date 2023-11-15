@@ -38,7 +38,9 @@ export default function MinTabs({ tabs, isMinified }: TabsProps) {
                 onClick={() => handleClick(tab.id)}
                 className={cl(
                   'px-2 py-2 border border-opacity-0 hover:border-opacity-100 rounded-lg',
-                  activeTabId === tab.id ? 'border-primary-500 bg-primary-500 text-gray-100' : 'text-gray-600',
+                  activeTabId === tab.id
+                    ? 'border-alsoit-purple-300 bg-alsoit-purple-300 text-gray-100'
+                    : 'text-gray-600',
                   'flex items-center justify-center'
                 )}
                 aria-current={activeTabId === tab.id ? 'page' : undefined}

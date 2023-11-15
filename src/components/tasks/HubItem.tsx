@@ -389,7 +389,7 @@ export default function HubItem({
         />
       ) : null}
       {showMenuDropdown === item.id && showSidebar ? (
-        <MenuDropdown isExtendedBar={isExtendedBar} cords={menuCords} />
+        <MenuDropdown item={item as Hub} isExtendedBar={isExtendedBar} cords={menuCords} />
       ) : null}
       {SubMenuId === item.id && showSidebar ? <SubDropdown cords={menuCords} placeHubType={placeHubType} /> : null}
     </div>

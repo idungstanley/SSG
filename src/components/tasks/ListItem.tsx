@@ -295,7 +295,9 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
           handleShapeSelection={handleSelection}
         />
       ) : null}
-      {showMenuDropdown === list.id ? <MenuDropdown cords={menuCords} /> : null}
+      {showMenuDropdown === list.id ? (
+        <MenuDropdown item={list as IList} entityType={EntityType.list} cords={menuCords} />
+      ) : null}
       {SubMenuId === list.id ? <SubDropdown cords={menuCords} placeHubType={APP_TASKS} /> : null}
     </div>
   );

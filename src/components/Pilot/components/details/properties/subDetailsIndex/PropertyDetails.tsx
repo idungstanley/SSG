@@ -27,6 +27,8 @@ import { IoCaretDownCircle } from 'react-icons/io5';
 import { cl } from '../../../../../../utils';
 import { MdOutlineVisibility } from 'react-icons/md';
 import MoveItemIcon from '../../../../../../assets/icons/MoveItemIcon';
+import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
+import { setEditingPilotDetailsTitle } from '../../../../../../features/workspace/workspaceSlice';
 
 interface PropertyDetailsProps {
   Details?: IHubDetails | ITaskFullList | IListDetails | IWalletDetails;
@@ -34,16 +36,17 @@ interface PropertyDetailsProps {
 
 export default function PropertyDetails({ Details }: PropertyDetailsProps) {
   const queryClient = useQueryClient();
+  const dispatch = useAppDispatch();
   const inputRef = useRef<HTMLInputElement | null>(null);
   // const [fileId, setFileId] = useState<string | undefined>(undefined);
 
   const [toggleSubTask, setToggleSubTask] = useState(false);
-  const [editingTitle, setEditingTitle] = useState(false);
   const [editingDescription, setEditingDescription] = useState(false);
   const [toggleDetails, setToggleDetails] = useState<boolean>(true);
   const [description, setDescription] = useState<string>(Details?.description ?? '');
-
   const { hubId, walletId, listId, taskId } = useParams();
+
+  const { editingPilotDetailsTitle } = useAppSelector((state) => state.workspace);
 
   const editTaskMutation = useMutation(UseUpdateTaskService, {
     onSuccess: () => {
@@ -70,8 +73,12 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
   });
 
   const handleBlur = () => {
-    setEditingTitle(false);
+    dispatch(setEditingPilotDetailsTitle(false));
     setEditingDescription(false);
+  };
+
+  const handleEditTitle = () => {
+    dispatch(setEditingPilotDetailsTitle(true));
   };
 
   const handleDescriptionChange = (value: string) => {
@@ -194,9 +201,9 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
                   <p
                     ref={inputRef}
                     className="p-1 capitalize break-words max-h-52"
-                    contentEditable={editingTitle}
+                    contentEditable={editingPilotDetailsTitle}
                     onKeyDown={(e) => (e.key === 'Enter' ? handleDetailsSubmit(e) : null)}
-                    onClick={() => setEditingTitle(true)}
+                    onClick={() => handleEditTitle()}
                     onBlur={(e) => handleDetailsSubmit(e)}
                   >
                     {Details?.name}
