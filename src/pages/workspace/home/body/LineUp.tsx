@@ -6,9 +6,10 @@ import { generateLists } from '../../../../utils';
 import { UseGetHubDetails } from '../../../../features/hubs/hubService';
 import { IHubDetails } from '../../../../features/hubs/hubs.interfaces';
 import { setTasks } from '../../../../features/task/taskSlice';
-import StatusDropdown from '../../../../components/status/StatusDropdown';
 import { Task } from '../../../../features/task/interface.tasks';
 import LineUpModal from './lineUp/lineUpModal';
+import LineUpTasks from './lineUp/LineUpTasks';
+import AddLineUpTask from './lineUp/AddLineUpTask';
 
 export default function LineUp() {
   // const [allHubsId, setAllHubsId] = useState<string[]>([]);
@@ -69,38 +70,10 @@ export default function LineUp() {
           </div>
         )}
       </div>
-      {!lineUp.length && (
-        <div
-          className="group p-1.5 rounded-md bg-alsoit-gray-50 cursor-pointer"
-          onClick={(event) => setAnchorEl(event.currentTarget)}
-        >
-          <p className="flex rounded-sm justify-center p-2 border-2 w-full h-full border-alsoit-gray-75 border-dotted text-alsoit-gray-100 group-hover:border-alsoit-purple-300 group-hover:text-alsoit-purple-300">
-            + Add your most Important tasks here.
-          </p>
-        </div>
-      )}
+      {!lineUp.length && <AddLineUpTask setAnchorEl={setAnchorEl} />}
 
       <div className="flex items-center overflow-x-scroll space-x-2" style={{ maxWidth: '900px' }}>
-        {lineUp.map((task) => (
-          <div key={task.id} className="bg-alsoit-gray-50 rounded-sm p-1 pt-2 px-2" style={{ minWidth: '253px' }}>
-            <div className="group flex justify-between space-x-4 shadow-md bg-white p-1 pl-4 rounded-sm ">
-              <div className="flex items-center space-x-4">
-                <div className="pointer-events-none">
-                  <StatusDropdown task={task} taskCurrentStatus={task.status} taskStatuses={task.task_statuses} />
-                </div>
-                <h1 className="mb-1 truncate" style={{ maxWidth: '150px' }}>
-                  {task.name}
-                </h1>
-              </div>
-              <p
-                className="opacity-0 group-hover:opacity-100 pr-2 cursor-pointer"
-                onClick={() => handleRemoveLineUpTask(task)}
-              >
-                x
-              </p>
-            </div>
-          </div>
-        ))}
+        <LineUpTasks lineUp={lineUp} handleRemoveLineUpTask={handleRemoveLineUpTask} />
       </div>
 
       <LineUpModal anchorEl={anchorEl} setAnchorEl={setAnchorEl} handleLineUpTasks={handleLineUpTasks} />
