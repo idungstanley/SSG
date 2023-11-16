@@ -5,12 +5,10 @@ import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { generateLists } from '../../../../utils';
 import { UseGetHubDetails } from '../../../../features/hubs/hubService';
 import { IHubDetails } from '../../../../features/hubs/hubs.interfaces';
-import { ImyTaskData, setTasks } from '../../../../features/task/taskSlice';
-import AlsoitMenuDropdown from '../../../../components/DropDowns';
+import { setTasks } from '../../../../features/task/taskSlice';
 import StatusDropdown from '../../../../components/status/StatusDropdown';
-import Assignee from '../../tasks/assignTask/Assignee';
 import { Task } from '../../../../features/task/interface.tasks';
-import SearchIcon from '../../../../assets/icons/SearchIcon';
+import LineUpModal from './lineUp/lineUpModal';
 
 export default function LineUp() {
   // const [allHubsId, setAllHubsId] = useState<string[]>([]);
@@ -84,13 +82,15 @@ export default function LineUp() {
 
       <div className="flex items-center overflow-x-scroll space-x-2" style={{ maxWidth: '900px' }}>
         {lineUp.map((task) => (
-          <div key={task.id} className="bg-alsoit-gray-50 rounded-sm p-1 pt-2 px-2" style={{ width: '320px' }}>
+          <div key={task.id} className="bg-alsoit-gray-50 rounded-sm p-1 pt-2 px-2" style={{ minWidth: '253px' }}>
             <div className="group flex justify-between space-x-4 shadow-md bg-white p-1 pl-4 rounded-sm ">
               <div className="flex items-center space-x-4">
                 <div className="pointer-events-none">
                   <StatusDropdown task={task} taskCurrentStatus={task.status} taskStatuses={task.task_statuses} />
                 </div>
-                <h1 className="mb-1">{task.name}</h1>
+                <h1 className="mb-1 truncate" style={{ maxWidth: '150px' }}>
+                  {task.name}
+                </h1>
               </div>
               <p
                 className="opacity-0 group-hover:opacity-100 pr-2 cursor-pointer"
@@ -103,43 +103,7 @@ export default function LineUp() {
         ))}
       </div>
 
-      <AlsoitMenuDropdown anchorEl={anchorEl} handleClose={() => setAnchorEl(null)}>
-        <div className="sticky top-0 z-50 bg-white">
-          <div className="flex items-center p-2 w-full border-b border-b-gray-300">
-            <SearchIcon width={13} height={13} />
-
-            <input type="text" placeholder="Search tasks" className="w-full p-2 outline-none border-0" />
-          </div>
-
-          <p className="flex justify-between p-3">
-            <span>Recents</span>
-            <span className="text-alsoit-purple-300">Browse tasks</span>
-          </p>
-        </div>
-        <div className="h-80">
-          {Object.keys(tasksStore).map((listId) => (
-            <div key={listId} className="group p-2">
-              {tasksStore[listId].map((task) => (
-                <div
-                  key={task.id}
-                  className="flex justify-between p-2 space-x-2 cursor-pointer  hover:bg-alsoit-gray-50 rounded-md"
-                  onClick={() => handleLineUpTasks(task)}
-                >
-                  <div className="flex items-center space-x-2">
-                    <div className="pointer-events-none">
-                      <StatusDropdown task={task} taskCurrentStatus={task.status} taskStatuses={task.task_statuses} />
-                    </div>
-                    <h1 className="mb-1">{task.name} </h1>
-                  </div>
-                  <div className="pointer-events-none">
-                    <Assignee task={task as ImyTaskData} itemId={task.id} option={`${EntityType.task}`} />
-                  </div>
-                </div>
-              ))}
-            </div>
-          ))}
-        </div>
-      </AlsoitMenuDropdown>
+      <LineUpModal anchorEl={anchorEl} setAnchorEl={setAnchorEl} handleLineUpTasks={handleLineUpTasks} />
     </div>
   );
 }
