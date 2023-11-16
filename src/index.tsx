@@ -109,7 +109,13 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <Provider store={store}>
     <QueryClientProvider client={queryClient}>
       <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
-        <Suspense fallback={<Spinner />}>
+        <Suspense
+          fallback={
+            <p className="flex items-center justify-center w-full h-full">
+              <Spinner />
+            </p>
+          }
+        >
           <App />
         </Suspense>
         {/* // ? delete the line below to remove flower icon in bottom right side of page  */}

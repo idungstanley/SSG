@@ -78,9 +78,9 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
     setEditingDescription(false);
   };
 
-  // const handleEditTitle = () => {
-  //   dispatch(setEditingPilotDetailsTitle(true));
-  // };
+  const handleEditTitle = () => {
+    dispatch(setEditingPilotDetailsTitle(true));
+  };
 
   const handleDescriptionChange = (value: string) => {
     const pattern = /<a[^>]*>/gi;
@@ -212,7 +212,7 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
                     className="p-1 capitalize break-words max-h-52"
                     contentEditable={editingPilotDetailsTitle}
                     onKeyDown={(e) => (e.key === 'Enter' ? handleDetailsSubmit(e) : null)}
-                    // onClick={() => handleEditTitle()}
+                    onDoubleClick={() => handleEditTitle()}
                     onBlur={(e) => handleDetailsSubmit(e)}
                   >
                     <Linkify options={{ target: '_blank', className: 'text-blue-400' }}>{Details?.name}</Linkify>
