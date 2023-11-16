@@ -7,6 +7,7 @@ import { IChatFromList } from '../../../features/chat/chat.interfaces';
 import { setActiveChat } from '../../../features/chat/chatSlice';
 import { DEFAULT_COL_BG } from '../../Views/config';
 import { getInitials } from '../../../app/helpers';
+import AvatarWithInitials from '../../avatar/AvatarWithInitials';
 
 interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   chat: IChatFromList;
@@ -46,10 +47,8 @@ export function ChatStickyCol({ hoverOn, children, chat }: ColProps) {
           <div className="flex items-center w-full text-left">
             <div className="flex items-center font-semibold alsoit-gray-300 text-alsoit-text-lg max-w-full">
               {/* avatar */}
-              <span className="flex items-center justify-center w-6 h-6 p-1 pb-1 mr-1 text-md font-medium text-white uppercase bg-indigo-600 rounded-full cursor-pointer">
-                {getInitials(chat.name)}
-              </span>
-              <div>{Capitalize(chat.name)}</div>
+              <AvatarWithInitials initials={getInitials(chat.name)} />
+              <div className="ml-1">{Capitalize(chat.name)}</div>
             </div>
             <div
               ref={badgeRef}

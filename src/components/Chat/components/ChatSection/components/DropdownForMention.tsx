@@ -1,8 +1,12 @@
-import React, { Fragment } from 'react';
-import { Menu, Transition } from '@headlessui/react';
+import { useState } from 'react';
+import { Menu as HeadMenu } from '@headlessui/react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import { useGetTeamMembers } from '../../../../../features/settings/teamMembers/teamMemberService';
 import ChatEmail from '../../../../../assets/icons/ChatEmail';
+import { setShowMembersInChatSideOver } from '../../../../../features/chat/chatSlice';
+import { useAppDispatch } from '../../../../../app/hooks';
+import Button from '../../../../Button';
+import AlsoitMenuDropdown from '../../../../DropDowns';
 
 interface DropdownForMentionProps {
   selectedUsers: { id: string; name: string }[];
@@ -10,6 +14,10 @@ interface DropdownForMentionProps {
 }
 
 export default function DropdownForMention({ setSelectedUsers, selectedUsers }: DropdownForMentionProps) {
+  const dispatch = useAppDispatch();
+
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+
   const { data } = useGetTeamMembers({
     page: 0,
     query: ''
@@ -18,26 +26,22 @@ export default function DropdownForMention({ setSelectedUsers, selectedUsers }: 
   const usersWithoutSelected = data?.data.team_members.filter((i) => !selectedUserIds.includes(i.user.id));
 
   return (
-    <Menu as="div">
-      <Menu.Button>
-        <div
-          className="flex justify-center bg-white items-center h-6 cursor-pointer rounded-md"
-          style={{ minWidth: '24px' }}
-        >
-          <ChatEmail />
-        </div>
-      </Menu.Button>
+    <>
+      <div onClick={(e: React.MouseEvent<HTMLDivElement>) => setAnchorEl(e.currentTarget)}>
+        <HeadMenu as="div">
+          <HeadMenu.Button>
+            <div
+              className="flex justify-center bg-white items-center h-6 cursor-pointer rounded-md"
+              style={{ minWidth: '24px' }}
+            >
+              <ChatEmail />
+            </div>
+          </HeadMenu.Button>
+        </HeadMenu>
+      </div>
 
-      <Transition
-        as={Fragment}
-        enter="transition ease-out duration-100"
-        enterFrom="transform opacity-0 scale-95"
-        enterTo="transform opacity-100 scale-100"
-        leave="transition ease-in duration-75"
-        leaveFrom="transform opacity-100 scale-100"
-        leaveTo="transform opacity-0 scale-95"
-      >
-        <Menu.Items className="absolute left-0 z-10 mt-2 pt-2 w-56 bottom-8 rounded-md bg-white shadow-lg focus:outline-none">
+      <AlsoitMenuDropdown anchorEl={anchorEl} handleClose={() => setAnchorEl(null)}>
+        <div className="pt-4 w-56">
           {selectedUsers?.length ? (
             <div className="flex w-48 gap-2 p-2 overflow-x-scroll">
               {selectedUsers.map((user) => (
@@ -54,6 +58,22 @@ export default function DropdownForMention({ setSelectedUsers, selectedUsers }: 
               ))}
             </div>
           ) : null}
+
+          <div className="flex justify-center">
+            <Button
+              buttonStyle="primary"
+              onClick={() => {
+                dispatch(setShowMembersInChatSideOver(true));
+                setAnchorEl(null);
+              }}
+              label="Invite new"
+              padding="py-2 px-2"
+              height="h-7"
+              width="w-fit"
+              labelSize="text-sm"
+            />
+          </div>
+
           {usersWithoutSelected?.length ? (
             <div className="w-full py-2 rounded-md max-h-60 focus:outline-none">
               {usersWithoutSelected?.map((user) => (
@@ -69,8 +89,8 @@ export default function DropdownForMention({ setSelectedUsers, selectedUsers }: 
               ))}
             </div>
           ) : null}
-        </Menu.Items>
-      </Transition>
-    </Menu>
+        </div>
+      </AlsoitMenuDropdown>
+    </>
   );
 }
