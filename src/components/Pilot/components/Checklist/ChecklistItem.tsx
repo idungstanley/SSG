@@ -1,23 +1,23 @@
 import React, { useState, useRef } from 'react';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import {
-  UseCreatelistItemService,
-  UseUpdateChecklistItemService
-} from '../../../../features/task/checklist/checklistService';
+import { useMutation } from '@tanstack/react-query';
+import { UseCreatelistItemService, useEditChecklistItem } from '../../../../features/task/checklist/checklistService';
 import ChecklistModal from './ChecklistModal';
 import { lessOptions } from './ModalOptions';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import {
   setClickChecklistId,
   setClickChecklistItemId,
+  setCreateChecklistItem,
+  setShowChecklistItemInput,
   setToggleAssignChecklistItemId,
-  setTriggerItemtUpdate
+  seteditChecklistItem
 } from '../../../../features/task/checklist/checklistSlice';
 import { setCurrentTaskIdForTag } from '../../../../features/workspace/tags/tagSlice';
 import { ICheckListItems } from '../../../../features/task/interface.tasks';
 import Assignee from '../../../../pages/workspace/tasks/assignTask/Assignee';
-import TaskTag from '../../../../pages/workspace/tasks/component/taskData/taskTag';
 import { ManageTagsDropdown } from '../../../Tag/ui/ManageTagsDropdown/ui/ManageTagsDropdown';
+import TaskTag from '../../../Tag/ui/TaskTag';
+import ThreeDotIcon from '../../../../assets/icons/ThreeDotIcon';
 
 export interface checkListItemProps {
   Item: ICheckListItems[];
@@ -26,18 +26,35 @@ export interface checkListItemProps {
 
 function ChecklistItem({ Item, checklistId }: checkListItemProps) {
   const inputRef = useRef<HTMLInputElement | null>(null);
-  const queryClient = useQueryClient();
   const dispatch = useAppDispatch();
   const [newItem, setNewItem] = useState<string>('');
-  const [itemId, setItemId] = useState<string>('');
-  const [done, setDone] = useState<number>(0);
-  const [editName, setEditName] = useState<string | undefined>('');
+  const [name, setName] = useState('');
+  const [anchor, setAnchor] = useState<HTMLElement | null>(null);
 
-  const { triggerItemUpdate, showChecklistItemInput, clickedChecklistId } = useAppSelector((state) => state.checklist);
+  const { showChecklistItemInput, clickedChecklistId, clickedChecklistItemId } = useAppSelector(
+    (state) => state.checklist
+  );
 
   const createChecklist = useMutation(UseCreatelistItemService, {
-    onSuccess: () => {
-      queryClient.invalidateQueries();
+    onSuccess: (data) => {
+      dispatch(
+        setCreateChecklistItem({
+          checklistId,
+          checklistItem: data.data.checklist_item
+        })
+      );
+    }
+  });
+
+  const editChecklistItem = useMutation(useEditChecklistItem, {
+    onSuccess: (data) => {
+      dispatch(
+        seteditChecklistItem({
+          checklistId,
+          checklistItem: data.data.checklist_item
+        })
+      );
+      setName('');
     }
   });
 
@@ -49,70 +66,88 @@ function ChecklistItem({ Item, checklistId }: checkListItemProps) {
     setNewItem('');
   };
 
-  UseUpdateChecklistItemService({
-    checklist_id: checklistId,
-    name: editName,
-    triggerItemUpdate: triggerItemUpdate,
-    itemId: itemId,
-    done
-  });
-
-  const isDone = (id: string, done: number, name: string) => {
-    setItemId(id);
-    setEditName(name);
-    done === 0 ? setDone(1) : setDone(0);
-    dispatch(setTriggerItemtUpdate(true));
+  const isDone = async (id: string, done: number, name: string) => {
+    await editChecklistItem.mutateAsync({
+      itemId: id,
+      name,
+      checklist_id: checklistId,
+      done: done === 1 ? 0 : 1
+    });
   };
 
-  const handleEditItemName = (id: string, done: number) => {
-    setEditName(inputRef.current?.innerText);
-    setItemId(id);
-    setDone(done);
-    dispatch(setTriggerItemtUpdate(true));
-  };
-
-  const focusItem = () => {
-    inputRef.current?.focus();
+  const handleEditItemName = async (id: string, done: number) => {
+    await editChecklistItem.mutateAsync({
+      itemId: id,
+      name: name,
+      checklist_id: checklistId,
+      done
+    });
   };
 
   return (
-    <div>
+    <div className="w-full">
       {showChecklistItemInput && clickedChecklistId === checklistId && (
         <span className="flex items-center">
-          <label className="mr-2 text-xl">+</label>
+          <label className="text-xl">+</label>
           <input
             autoFocus
             type="text"
-            className="h-8 my-1 border-none hover:border-none hover:outline-none focus:outline-none rounded w-full"
+            className="h-8 my-1 border-none hover:border-none hover:outline-none focus:outline-none ring-0 focus:ring-0 rounded w-full text-alsoit-text-lg"
             placeholder="Add New Checklist Item"
             onChange={(e) => setNewItem(e.target.value)}
             value={newItem}
             onKeyDown={(e) => (e.key === 'Enter' ? handleSubmit() : null)}
           />
+          <span
+            className="w-4 h-4 rounded-full border border-alsoit-gray-200 text-alsoit-text-lg flex justify-center items-center cursor-pointer hover:bg-alsoit-danger hover:text-white"
+            onClick={() => dispatch(setShowChecklistItemInput(false))}
+          >
+            X
+          </span>
         </span>
       )}
 
       {Item.map((item) => {
         return (
-          <div key={item.id} className="bg-white p-1 mb-0.5">
-            <div className="group flex items-center text-gray-500 hover:text-gray-700 hover:bg-gray-50 py-0.5 h-auto">
-              <input
-                type="checkbox"
-                checked={item.is_done ? true : false}
-                className="rounded-lg mx-3 text-green-500 border-green-800"
-                onChange={() => {
-                  setItemId(item.id);
-                  isDone(item.id, item.is_done, item.name);
-                }}
-              />
-              <div
-                ref={inputRef}
-                suppressContentEditableWarning={true}
-                contentEditable={true}
-                onKeyDown={(e) => (e.key === 'Enter' ? handleEditItemName(item.id, item.is_done) : null)}
-                className="cursor-text"
-              >
-                {item.name}
+          <div key={item.id} className="p-1 mb-0.5">
+            <div className="group flex items-center text-gray-500 bg-white py-0.5 h-auto">
+              <div className="w-2/4 flex items-center gap-1">
+                <input
+                  type="checkbox"
+                  checked={item.is_done === 1 ? true : false}
+                  className="rounded-lg mx-3 text-green-500 border-green-800"
+                  onChange={() => {
+                    isDone(item.id, item.is_done, item.name);
+                  }}
+                />
+                <div
+                  ref={inputRef}
+                  suppressContentEditableWarning={true}
+                  contentEditable={true}
+                  onKeyDown={(e) => (e.key === 'Enter' ? handleEditItemName(item.id, item.is_done) : null)}
+                  onInput={(e) => {
+                    if (e instanceof KeyboardEvent && (e.key === 'Enter' || e.keyCode === 13)) {
+                      e.preventDefault();
+                      return;
+                    }
+
+                    setName(e.currentTarget.textContent as string);
+                  }}
+                  className="cursor-text"
+                >
+                  {item.name}
+                </div>
+                <div className="opacity-0 group-hover:opacity-100 flex items-center">
+                  <div
+                    onClick={(e) => {
+                      dispatch(setClickChecklistItemId(item.id));
+                      setAnchor(e.currentTarget);
+                    }}
+                  >
+                    <ThreeDotIcon />
+                  </div>
+                  <ManageTagsDropdown tagsArr={item.tags} entityId={item.id} entityType="checklist_item" />
+                </div>
               </div>
               <div
                 onClick={() => {
@@ -120,28 +155,28 @@ function ChecklistItem({ Item, checklistId }: checkListItemProps) {
                   dispatch(setClickChecklistId(checklistId));
                   dispatch(setClickChecklistItemId(item.id));
                 }}
+                className="w-1/4 flex justify-center"
               >
                 <Assignee itemId={item.id} option="checklist" assigneeChecklistItem={item} />
               </div>
 
-              {item.tags.length > 0 && (
-                <div className="mr-4">
-                  <TaskTag taskColField={item.tags} entity_type="checklist_item" entity_id={item.id} />
-                </div>
-              )}
-
-              <span onClick={() => dispatch(setCurrentTaskIdForTag(item.id))}>
-                <ManageTagsDropdown tagsArr={item.tags} entityId={item.id} entityType="checklist_item" />
+              <span onClick={() => dispatch(setCurrentTaskIdForTag(item.id))} className="w-1/4">
+                {item.tags.map((tag) => (
+                  <div key={tag.id} className="my-0.5 w-full flex justify-center">
+                    <TaskTag tag={tag} entity_id={item.id} entity_type="checklist_item" />
+                  </div>
+                ))}
               </span>
-              <div className="mx-1">
-                <ChecklistModal
-                  options={lessOptions}
-                  checklistId={checklistId}
-                  checklistItemId={item.id}
-                  focus={focusItem}
-                />
-              </div>
             </div>
+            {clickedChecklistItemId === item.id && (
+              <ChecklistModal
+                anchor={anchor}
+                setAnchor={setAnchor}
+                options={lessOptions}
+                checklistId={checklistId}
+                checklistItemId={item.id}
+              />
+            )}
           </div>
         );
       })}

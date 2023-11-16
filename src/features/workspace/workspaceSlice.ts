@@ -9,7 +9,9 @@ import {
 } from './workspace.interfaces';
 import { IActivityLog } from '../general/history/history.interfaces';
 import dayjs, { Dayjs } from 'dayjs';
-import { IView } from '../hubs/hubs.interfaces';
+import { IList, IView } from '../hubs/hubs.interfaces';
+import { Hub, Wallet } from '../../pages/workspace/hubs/components/ActiveTree/activetree.interfaces';
+import { pilotTabs } from '../../app/constants/pilotTabs';
 
 const initialActivePlaceId: number | null = (JSON.parse(localStorage.getItem('activePlaceIdLocale') as string) ||
   null) as number | null;
@@ -29,6 +31,7 @@ interface workspaceState {
   pilotWidth: number;
   fetchAllWorkspace: boolean;
   isManageStatus: boolean;
+  editingPilotDetailsTitle: boolean;
   showWallet: boolean;
   extendedSidebarWidth: number;
   isResize: boolean;
@@ -58,6 +61,7 @@ interface workspaceState {
   activeSubHubManagerTabId: string | null;
   activeStatusManagementTabId: string | null;
   activeSubDetailsTabId: string | null;
+  activeSubLogsTabId: string | null;
   activeSubTimeClockTabId: string | null;
   activeClockTab: string;
   showExtendedBar: boolean;
@@ -84,6 +88,7 @@ interface workspaceState {
   activeHotkeyIds: string[];
   nestedTimeEntityId: string | null;
   activeView: IView | null;
+  entityForPermissions?: IList | Wallet | Hub;
 }
 
 const initialState: workspaceState = {
@@ -93,6 +98,7 @@ const initialState: workspaceState = {
   activePlaceId: initialActivePlaceId,
   activePlaceName: null,
   pilotWidth: 400,
+  editingPilotDetailsTitle: false,
   isResize: false,
   showOverlay: false,
   showTabLabel: showTabLabelFromLS,
@@ -118,6 +124,7 @@ const initialState: workspaceState = {
   sidebarWidthRD: dimensions.navigationBar.default,
   activeHotKeyTabId: 0,
   activeSubDetailsTabId: 'properties',
+  activeSubLogsTabId: pilotTabs.HISTORY_LOG,
   activeSubTimeClockTabId: 'time_clock',
   activeClockTab: 'Real Time',
   activeStatusManagementTabId: 'custom',
@@ -149,7 +156,8 @@ const initialState: workspaceState = {
   isFavoritePinned: false,
   activeHotkeyIds: hotkeyIdsFromLS,
   nestedTimeEntityId: null,
-  activeView: null
+  activeView: null,
+  entityForPermissions: undefined
 };
 
 export const wsSlice = createSlice({
@@ -253,6 +261,9 @@ export const wsSlice = createSlice({
     setShowWallet(state, action: PayloadAction<boolean>) {
       state.showWallet = action.payload;
     },
+    setEditingPilotDetailsTitle(state, action: PayloadAction<boolean>) {
+      state.editingPilotDetailsTitle = action.payload;
+    },
     setRecording: (state, action: PayloadAction<{ id: string | null; type: string | null }>) => {
       state.getRecording = action.payload;
     },
@@ -286,6 +297,9 @@ export const wsSlice = createSlice({
     },
     setActiveSubDetailsTabId(state, action: PayloadAction<string | null>) {
       state.activeSubDetailsTabId = action.payload;
+    },
+    setActiveSubLogsTabId(state, action: PayloadAction<string | null>) {
+      state.activeSubLogsTabId = action.payload;
     },
     setActiveSubHubManagerTabId(state, action: PayloadAction<string | null>) {
       state.activeSubHubManagerTabId = action.payload;
@@ -374,6 +388,9 @@ export const wsSlice = createSlice({
     },
     setActiveView(state, action: PayloadAction<IView>) {
       state.activeView = action.payload;
+    },
+    setEntityForPermissions(state, action: PayloadAction<IList | Wallet | Hub | undefined>) {
+      state.entityForPermissions = action.payload;
     }
   }
 });
@@ -440,7 +457,10 @@ export const {
   setDraggableActiveStatusId,
   setActiveHotkeyIds,
   setNestedTimeEntityId,
-  setActiveView
+  setActiveView,
+  setEntityForPermissions,
+  setActiveSubLogsTabId,
+  setEditingPilotDetailsTitle
 } = wsSlice.actions;
 
 export default wsSlice.reducer;

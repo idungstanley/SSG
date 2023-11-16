@@ -55,3 +55,7 @@
   clip-path: polygon(75% 0%, 100% 50%, 75% 100%, 0% 100%, 25% 50%, 0% 0%);
 }
 
+.transition-height {
+  max-height: 90px;
+  transition: max-height 0.1s ease-in-out;
+}

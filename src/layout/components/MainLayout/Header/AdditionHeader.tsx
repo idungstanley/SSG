@@ -113,6 +113,8 @@ export default function AdditionalHeader({ isInsights }: IAdditionalHeaderProps)
     (timerStatus && sameEntity() && tabsId !== pilotTabs.UTILITIES) || (!sameEntity() && timerStatus);
 
   useEffect(() => {
+    const userZone = dayjs.tz.guess();
+    localStorage.setItem('userTimeZone', userZone);
     const handleVisibilityChange = () => {
       if (document.visibilityState === 'visible') {
         setIsVisible(true);
@@ -151,7 +153,8 @@ export default function AdditionalHeader({ isInsights }: IAdditionalHeaderProps)
   }, [data]);
 
   useEffect(() => {
-    if (dayjs.tz.guess() !== zone && (!userTimeZoneFromLS || userTimeZoneFromLS !== dayjs.tz.guess())) {
+    const autoZone = dayjs.tz.guess();
+    if (autoZone !== zone && (userTimeZoneFromLS !== autoZone || !userTimeZoneFromLS)) {
       toast.custom(
         (t) => (
           <SaveFilterToast
@@ -159,7 +162,7 @@ export default function AdditionalHeader({ isInsights }: IAdditionalHeaderProps)
             body="Would you want to use the current timezone for this location?"
             toastId={t.id}
             extended="timeZone"
-            extendedState={dayjs.tz.guess()}
+            extendedState={autoZone}
           />
         ),
         {

@@ -5,6 +5,8 @@ import { setCurrentItem } from '../../../../../../../features/workspace/workspac
 import { EntityType } from '../../../../../../../utils/EntityTypes/EntityType';
 import SearchWalletItem from '../../../../../../../components/tasks/SearchWalletItem';
 import SearchLList from '../list/SearchLList';
+import { OPTIONS_WITH_AVAILABLE_LISTS } from '../../../../../tasks/component/taskMenu/TaskMenu';
+import { unavailableStyles } from '../../../../../../../components/ActiveTree/ActiveTreeList';
 
 interface IWListProps {
   wallets: Wallet[];
@@ -54,7 +56,7 @@ export default function SearchWList({
         <div key={wallet.id} style={{ marginLeft: leftMargin ? 20 : 0 }}>
           <SearchWalletItem
             wallet={wallet}
-            walletType={level === 1 ? EntityType.wallet : level === 2 ? 'subwallet2' : 'subwallet3'}
+            walletType={level === 1 ? EntityType.wallet : EntityType.subWallet}
             handleShowSubWallet={handleShowSubWallet}
             handleTabClick={handleTabClick}
             showSubWallet={showSubWallet.includes(wallet.id)}
@@ -65,15 +67,20 @@ export default function SearchWList({
               wallets={wallet.children}
               option={option}
               leftMargin={false}
-              type="subwallet2"
+              type={EntityType.subWallet}
               handleTabClick={handleTabClick}
               paddingLeft={Number(paddingLeft) + 15}
               level={level + 1}
             />
           ) : null}
-          <div style={option !== 'taskDuplicate' ? { opacity: '0.5', pointerEvents: 'none' } : {}}>
+          <div style={!OPTIONS_WITH_AVAILABLE_LISTS.includes(option as string) ? unavailableStyles : {}}>
             {wallet.lists.length && showSubWallet.includes(wallet.id) && !showExtendedBar ? (
-              <SearchLList list={wallet.lists} leftMargin={false} paddingLeft={Number(paddingLeft) + 32} />
+              <SearchLList
+                option={option}
+                list={wallet.lists}
+                leftMargin={false}
+                paddingLeft={Number(paddingLeft) + 32}
+              />
             ) : null}
           </div>
         </div>

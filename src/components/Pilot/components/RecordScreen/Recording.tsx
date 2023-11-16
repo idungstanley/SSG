@@ -108,9 +108,9 @@ export default function Recording() {
           <div className="screenRecording flex space-x-2">
             <button onClick={() => handleToggleMute()} className="flex items-center justify-center">
               {!isMuted ? (
-                <IoVolumeMute className="w-7 h-7 text-alsoit-purple-300" />
-              ) : (
                 <IoVolumeHigh className="w-7 h-7 text-alsoit-purple-300" />
+              ) : (
+                <IoVolumeMute className="w-7 h-7 text-alsoit-purple-300" />
               )}
             </button>
             <button onClick={stopRecording} className="flex space-x-2 items-center justify-center">

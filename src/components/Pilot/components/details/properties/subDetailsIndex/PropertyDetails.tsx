@@ -30,12 +30,10 @@ import MoveItemIcon from '../../../../../../assets/icons/MoveItemIcon';
 import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
 import { EntityType } from '../../../../../../utils/EntityTypes/EntityType';
 import { setTaskInputValue } from '../../../../../../features/task/taskSlice';
+import { setEditingPilotDetailsTitle } from '../../../../../../features/workspace/workspaceSlice';
+import Linkify from 'linkify-react';
+import { Capitalize } from '../../../../../../utils/NoCapWords/Capitalize';
 
-export interface tagItem {
-  id: string;
-  name: string;
-  color: string;
-}
 interface PropertyDetailsProps {
   Details?: IHubDetails | ITaskFullList | IListDetails | IWalletDetails;
 }
@@ -47,21 +45,15 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
   // const [fileId, setFileId] = useState<string | undefined>(undefined);
 
   const [toggleSubTask, setToggleSubTask] = useState(false);
-  const [editingTitle, setEditingTitle] = useState(false);
   const [offset, setOffset] = useState<number | null>(null);
-
-  const [editingDescription, setEditingDescription] = useState(false);
   const [toggleDetails, setToggleDetails] = useState<boolean>(true);
   const [description, setDescription] = useState<string>(Details?.description ?? '');
   const { activeItemType } = useAppSelector((state) => state.workspace);
   const { taskInputValue } = useAppSelector((state) => state.task);
 
   const { hubId, walletId, listId, taskId } = useParams();
+  const { editingPilotDetailsTitle } = useAppSelector((state) => state.workspace);
 
-  const handleBlur = () => {
-    setEditingTitle(false);
-    setEditingDescription(false);
-  };
   const editTaskMutation = useMutation(UseUpdateTaskService, {
     onSuccess: () => {
       queryClient.invalidateQueries(['task']);
@@ -85,6 +77,14 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
       queryClient.invalidateQueries(['wallet-details']);
     }
   });
+
+  const handleBlur = () => {
+    dispatch(setEditingPilotDetailsTitle(false));
+  };
+
+  const handleEditTitle = () => {
+    dispatch(setEditingPilotDetailsTitle(true));
+  };
 
   const handleDescriptionChange = (value: string) => {
     const pattern = /<a[^>]*>/gi;
@@ -196,24 +196,32 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
             <section className="flex items-center space-x-1">
               <Status details={Details} />
               <ToolTip title="Priority">
-                <Priority details={Details} />
+                <span>
+                  <Priority details={Details} />
+                </span>
               </ToolTip>
             </section>
             <section className="z-10 flex items-center justify-center space-x-3">
               <CustomReference />
               <ToolTip title="Share">
-                <Share taskId={Details?.id} taskName={Details?.name} />
+                <span>
+                  <Share taskId={Details?.id} taskName={Details?.name} />
+                </span>
               </ToolTip>
               <EntitySettings />
             </section>
           </div>
           <section className="flex items-center mt-3 ml-2 space-x-2">
             <ToolTip title="Assignees">
-              <Assignees />
+              <span>
+                <Assignees />
+              </span>
             </ToolTip>
             <span className="text-gray-300 ">|</span>
             <ToolTip title="Subscribers">
-              <Subscribers />
+              <span>
+                <Subscribers />
+              </span>
             </ToolTip>
             <span className="text-gray-300">|</span>
             <MdOutlineVisibility className="text-xl" />
@@ -226,15 +234,19 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
                 <VerticalScroll>
                   <p
                     ref={inputRef}
-                    className="p-1 capitalize break-words max-h-52"
-                    contentEditable={editingTitle}
+                    className="p-1 break-words max-h-52"
+                    contentEditable={editingPilotDetailsTitle}
                     onKeyDown={(e) => (e.key === 'Enter' ? handleDetailsSubmit(e) : null)}
-                    onClick={() => setEditingTitle(true)}
+                    onDoubleClick={() => handleEditTitle()}
                     onBlur={(e) => handleDetailsSubmit(e)}
                     onInput={(e) => handleContentEditableInput(e)}
                     suppressContentEditableWarning={true}
                   >
-                    {activeItemType === EntityType.task && taskInputValue ? taskInputValue : Details?.name}
+                    <Linkify options={{ target: '_blank', className: 'text-blue-400' }}>
+                      {activeItemType === EntityType.task && taskInputValue
+                        ? taskInputValue
+                        : Details?.name && Capitalize(Details?.name as string)}
+                    </Linkify>
                   </p>
                 </VerticalScroll>
               </div>
@@ -242,24 +254,15 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
             {/* description */}
             <div id="entity description" className="mt-5">
               <label className="text-xs text-gray-500">Description</label>
-              <div
-                className="h-20 bg-white bg-gray-100 rounded-md cursor-text"
-                onClick={() => setEditingDescription(true)}
-              >
-                {editingDescription ? (
-                  <div className="w-full h-40 overflow-y-scroll rounded-md">
-                    <CKEditor
-                      editor={ClassicEditor}
-                      data={description}
-                      onChange={(event, editor) => handleDescriptionChange(editor.getData())}
-                      onBlur={() => handleDetailsSubmit()}
-                    />
-                  </div>
-                ) : (
-                  <div className="h-20 overflow-scroll p-1.5">
-                    <div dangerouslySetInnerHTML={{ __html: description }} />
-                  </div>
-                )}
+              <div className="h-20 bg-gray-100 rounded-md cursor-text">
+                <div className="w-full h-40 overflow-y-scroll rounded-md">
+                  <CKEditor
+                    editor={ClassicEditor}
+                    data={description}
+                    onChange={(event, editor) => handleDescriptionChange(editor.getData())}
+                    onBlur={() => handleDetailsSubmit()}
+                  />
+                </div>
               </div>
             </div>
             {/* tags */}
@@ -274,7 +277,7 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
             {/* due date */}
             <div id="due date" className="mt-2">
               <label className="text-xs text-gray-500">Due Date</label>
-              <div className="p-1 bg-white bg-gray-100 rounded-md">
+              <div className="p-1 bg-gray-100 rounded-md">
                 <p>Dec 31 2022</p>
               </div>
             </div>

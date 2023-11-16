@@ -1,4 +1,19 @@
+import { ITeamMembersAndGroup } from '../settings/teamMembersAndGroups.interfaces';
 import { IUseSettingsProfile } from '../task/taskSlice';
+
+export type TeamMemberGroupsPermissions = {
+  access_level: string;
+  team_member?: ITeamMembersAndGroup;
+  team_member_groups?: ITeamMembersAndGroup;
+};
+
+export interface IPermissionsRes {
+  data: {
+    is_public: number;
+    team_member_groups: TeamMemberGroupsPermissions[];
+    team_members: TeamMemberGroupsPermissions[];
+  };
+}
 export interface IWorkspaceRes {
   data: {
     workspace: {
@@ -104,6 +119,7 @@ export interface ITeamMember {
     avatar_path?: null | string;
     initials: string;
     color?: string;
+    timezone: string;
   };
   role: {
     key: string;
@@ -115,6 +131,7 @@ export interface ITeamMember {
   color: string;
   initials: string;
   is_active: boolean;
+  is_online: boolean;
   created_at: string;
   updated_at: string;
 }

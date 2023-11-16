@@ -14,7 +14,7 @@ import { setPaletteDropDown } from '../../features/account/accountSlice';
 import Palette from '../ColorPalette';
 import MenuDropdown from '../Dropdown/MenuDropdown';
 import SubDropdown from '../Dropdown/SubDropdown';
-import { setCreateWlLink } from '../../features/workspace/workspaceSlice';
+import { setCreateWlLink, setEntityForPermissions } from '../../features/workspace/workspaceSlice';
 import { ListColourProps } from './ListItem';
 import { useParams } from 'react-router-dom';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
@@ -23,29 +23,23 @@ import ThreeDotIcon from '../../assets/icons/ThreeDotIcon';
 import { useDraggable, useDroppable } from '@dnd-kit/core';
 import Drag from '../../assets/icons/Drag';
 import ToolTip from '../Tooltip/Tooltip';
-import { List, Wallet } from '../../pages/workspace/hubs/components/ActiveTree/activetree.interfaces';
+import { Wallet } from '../../pages/workspace/hubs/components/ActiveTree/activetree.interfaces';
 import ActiveBackground from './Component/ActiveBackground';
 import ActiveBarIdentification from './Component/ActiveBarIdentification';
 import { useAbsolute } from '../../hooks/useAbsolute';
 import { IWallet } from '../../features/hubs/hubs.interfaces';
 import { APP_TASKS } from '../../app/constants/app';
+import { STORAGE_KEYS, dimensions } from '../../app/config/dimensions';
 
 interface WalletItemProps {
-  wallet: {
-    id: string;
-    name: string;
-    color?: string;
-    parent_id?: string | null;
-    hub_id?: string;
-    children: Wallet[];
-    lists: List[];
-  };
+  wallet: Wallet;
   showSubWallet: boolean;
   paddingLeft: string | number;
   walletType: string;
   topNumber?: number;
   zNumber?: string;
   isExtendedBar?: boolean;
+  level?: number;
   handleShowSubWallet: (id: string, type?: string) => void;
   handleLocation: (id: string, name: string, item: IWallet) => void;
 }
@@ -56,6 +50,7 @@ export default function WalletItem({
   walletType,
   topNumber = 0,
   zNumber,
+  level,
   isExtendedBar,
   handleShowSubWallet,
   handleLocation
@@ -131,14 +126,22 @@ export default function WalletItem({
       if (showSubWallet) {
         return (
           <>
-            <VscTriangleDown className="flex-shrink-0 h-2" aria-hidden="true" color="rgba(72, 67, 67, 0.64)" />
+            <VscTriangleDown
+              className="flex-shrink-0 h-2 hover:fill-[#BF01FE] cursor-pointer"
+              aria-hidden="true"
+              color="rgba(72, 67, 67, 0.64)"
+            />
             {renderOpenFolder()}
           </>
         );
       } else {
         return (
           <>
-            <VscTriangleRight className="flex-shrink-0 h-2" aria-hidden="true" color="rgba(72, 67, 67, 0.64)" />
+            <VscTriangleRight
+              className="flex-shrink-0 h-2 hover:fill-[#BF01FE] cursor-pointer"
+              aria-hidden="true"
+              color="rgba(72, 67, 67, 0.64)"
+            />
             {renderCloseFolder()}
           </>
         );
@@ -176,6 +179,10 @@ export default function WalletItem({
   const { cords, relativeRef } = useAbsolute(updateCords, 230);
   const { cords: menuCords, relativeRef: menuRef } = useAbsolute(updateCords, 352);
 
+  const sidebarWidthFromLS =
+    (JSON.parse(localStorage.getItem(STORAGE_KEYS.SIDEBAR_WIDTH) || '""') as number) ||
+    dimensions.navigationBar.default;
+
   return (
     <div
       className={`${openedEntitiesIds.includes(wallet.id) ? 'sticky bg-white' : ''}`}
@@ -194,71 +201,96 @@ export default function WalletItem({
       >
         <div
           id="walletLeft"
-          className="relative flex items-center flex-1 truncate"
+          className="relative flex items-center justify-between"
           style={{ paddingLeft: `${paddingLeft}px`, height: '30px' }}
         >
-          <ActiveBackground showBgColor={wallet.id === walletId} />
-          <ActiveBarIdentification showBar={wallet.id === walletId} />
-          <div
-            className="absolute left-2 rounded-r-lg w-0.5 opacity-0 group-hover:opacity-100 cursor-move"
-            ref={draggableRef}
-            {...listeners}
-            {...attributes}
-          >
-            <Drag />
-          </div>
-          {/* showsub1 */}
-          <div className="flex items-center gap-5">
-            <div className="flex items-center" style={{ zIndex: '1' }} ref={relativeRef}>
-              {renderIcons(showSubWallet)}
-            </div>
+          <div className="flex items-center justify-between">
+            <ActiveBackground showBgColor={wallet.id === walletId} />
+            <ActiveBarIdentification showBar={wallet.id === walletId} />
             <div
-              onClick={() => handleLocation(wallet.id, wallet.name, wallet as Wallet)}
-              className="truncate cursor-pointer hover:underline hover:decoration-dashed"
+              className="absolute left-2 rounded-r-lg w-0.5 opacity-0 group-hover:opacity-100 cursor-move"
+              ref={draggableRef}
+              {...listeners}
+              {...attributes}
             >
-              <ToolTip title={wallet.name}>
-                <p
-                  className={`capitalize truncate cursor-pointer ${
-                    wallet.id === walletId ? 'text-alsoit-purple-300' : ''
-                  }`}
-                  style={{
-                    fontSize: '13px',
-                    lineHeight: '15.56px',
-                    verticalAlign: 'baseline',
-                    letterSpacing: '0.28px'
-                  }}
-                >
-                  {wallet.name}
-                </p>
-              </ToolTip>
+              <Drag />
+            </div>
+            {/* showsub1 */}
+            <div className="flex items-center gap-5">
+              <div className="flex items-center" style={{ zIndex: '1' }} ref={relativeRef}>
+                {renderIcons(showSubWallet)}
+              </div>
+              <div
+                onClick={() => handleLocation(wallet.id, wallet.name, wallet as Wallet)}
+                className="truncate cursor-pointer hover:underline hover:decoration-dashed"
+                style={{ width: sidebarWidthFromLS - 135 - Number(paddingLeft) }}
+              >
+                <ToolTip title={wallet.name}>
+                  <p
+                    className={`capitalize truncate cursor-pointer text-left ${
+                      wallet.id === walletId ? 'text-alsoit-purple-300' : ''
+                    }`}
+                    style={{
+                      fontSize: '13px',
+                      lineHeight: '15.56px',
+                      verticalAlign: 'baseline',
+                      letterSpacing: '0.28px'
+                    }}
+                  >
+                    {wallet.name}
+                  </p>
+                </ToolTip>
+              </div>
             </div>
           </div>
           {showSidebar && (
             <div
               id="walletRight"
-              className="relative flex items-center pr-1 ml-auto space-x-2 opacity-0 z-1 group-hover:opacity-100 hover:text-fuchsia-500"
+              className="relative flex items-center pr-1 ml-auto space-x-2 opacity-0 z-1 group-hover:opacity-100"
               onClick={(e) => e.stopPropagation()}
               ref={menuRef}
             >
-              <span onClick={() => handleItemAction(wallet.id, wallet.name)} className="cursor-pointer">
-                <PlusIcon active />
-              </span>
-              <span
-                className="cursor-pointer"
-                onClick={(e) => handleWalletSettings(wallet.id, wallet.name, e)}
-                id="menusettings"
-              >
-                <ThreeDotIcon />
-              </span>
+              <ToolTip title="Create subwallet and list">
+                <span
+                  onClick={() => handleItemAction(wallet.id, wallet.name)}
+                  className="cursor-pointer hover:text-alsoit-purple-300"
+                >
+                  <PlusIcon />
+                </span>
+              </ToolTip>
+              <ToolTip title="Wallet settings">
+                <span
+                  className="cursor-pointer hover:text-alsoit-purple-300"
+                  onClick={(e) => {
+                    handleWalletSettings(wallet.id, wallet.name, e);
+                    dispatch(setEntityForPermissions(wallet));
+                  }}
+                  id="menusettings"
+                >
+                  <ThreeDotIcon />
+                </span>
+              </ToolTip>
             </div>
           )}
         </div>
       </section>
       {paletteId === wallet.id && show ? (
-        <Palette title="Wallet" activeOutterColor={wallet.color} setPaletteColor={setPaletteColor} cords={cords} />
+        <Palette
+          title="Wallet"
+          activeOutterColor={wallet.color}
+          setPaletteColor={setPaletteColor}
+          cords={{ top: cords.top, left: 10 }}
+        />
       ) : null}
-      {showMenuDropdown === wallet.id ? <MenuDropdown isExtendedBar={isExtendedBar} cords={menuCords} /> : null}
-      {SubMenuId === wallet.id ? <SubDropdown cords={menuCords} placeHubType={APP_TASKS} /> : null}
+      {showMenuDropdown === wallet.id ? (
+        <MenuDropdown
+          entityType={EntityType.wallet}
+          item={wallet as Wallet}
+          isExtendedBar={isExtendedBar}
+          cords={menuCords}
+        />
+      ) : null}
+      {SubMenuId === wallet.id ? <SubDropdown walletLevel={level} cords={menuCords} placeHubType={APP_TASKS} /> : null}
     </div>
   );
 }

@@ -24,7 +24,7 @@ import {
 } from '../../components/TasksHeader/ui/Filter/types/filters';
 import { DEFAULT_FILTERS_OPTION } from '../../components/TasksHeader/ui/Filter/config/filterConfig';
 import { ITeamMembersAndGroup } from '../settings/teamMembersAndGroups.interfaces';
-import { IView } from '../hubs/hubs.interfaces';
+import { IList, IView } from '../hubs/hubs.interfaces';
 
 export interface ICustomField {
   id: string;
@@ -79,6 +79,7 @@ export interface ImyTaskData {
   has_attachments: boolean;
   end_date: string | null;
   status: Status;
+  root_task_ids?: string[] | null;
   assignees: ITeamMembersAndGroup[];
   group_assignees?: {
     color: string;
@@ -160,6 +161,7 @@ export const THREE_SUBTASKS_LEVELS = 'three_levels';
 interface TaskState {
   tasks: Record<string, ITaskFullList[]>;
   subtasks: Record<string, ITaskFullList[]>;
+  taskRootIds: Record<string, string[]>;
   currentTaskIdForPilot: string | null;
   watchersData: string[];
   removeWatcherId: null | string;
@@ -170,6 +172,7 @@ interface TaskState {
   taskColumns: listColumnProps[];
   hideTask: listColumnProps[];
   currentTaskId: string | null;
+  activeTreeSelectedTask: IList | undefined;
   newTaskPriority: string;
   selectedTasksArray: string[];
   selectedIndexListId: string | null;
@@ -204,6 +207,7 @@ interface TaskState {
   assignOnHoverListId: string;
   assignOnHoverState: boolean;
   f2State: boolean;
+  createTask: boolean;
   addNewTaskItem: boolean;
   selectedIndex: number | null;
   defaultSubtaskListId: null | string;
@@ -280,6 +284,7 @@ interface TaskState {
 const initialState: TaskState = {
   tasks: {},
   subtasks: {},
+  taskRootIds: {},
   rootTaskIds: [],
   currentTaskIdForPilot: null,
   watchersData: [],
@@ -297,6 +302,7 @@ const initialState: TaskState = {
   taskColumns: [],
   hideTask: [],
   currentTaskId: null,
+  activeTreeSelectedTask: undefined,
   showNewTaskField: false,
   meMode: false,
   escapeKey: false,
@@ -338,6 +344,7 @@ const initialState: TaskState = {
   assignOnHoverListId: '',
   assignOnHoverState: false,
   f2State: false,
+  createTask: false,
   addNewTaskItem: false,
   closeTaskListView: true,
   selectedIndex: null,
@@ -433,6 +440,9 @@ export const taskSlice = createSlice({
     },
     setSubtasks(state, action: PayloadAction<Record<string, ITaskFullList[]>>) {
       state.subtasks = action.payload;
+    },
+    setTaskRootIds(state, action: PayloadAction<Record<string, string[]>>) {
+      state.taskRootIds = action.payload;
     },
     setRootTaskIds(state, action: PayloadAction<string[] | undefined>) {
       state.rootTaskIds = action.payload;
@@ -604,6 +614,9 @@ export const taskSlice = createSlice({
     setF2State(state, action: PayloadAction<boolean>) {
       state.f2State = action.payload;
     },
+    setCreateTaskShortCut(state, action: PayloadAction<boolean>) {
+      state.createTask = action.payload;
+    },
     getTaskUpperCase(state, action: PayloadAction<boolean>) {
       state.taskUpperCase = action.payload;
     },
@@ -648,6 +661,9 @@ export const taskSlice = createSlice({
     },
     setCurrentTaskId(state, action: PayloadAction<string | null>) {
       state.currentTaskId = action.payload;
+    },
+    setActiveTreeSelectedTask(state, action: PayloadAction<IList | undefined>) {
+      state.activeTreeSelectedTask = action.payload;
     },
     setCloseTaskListView(state, action: PayloadAction<boolean>) {
       state.closeTaskListView = action.payload;
@@ -800,6 +816,7 @@ export const taskSlice = createSlice({
 export const {
   setTasks,
   setSubtasks,
+  setTaskRootIds,
   setFilterFields,
   setFilterOption,
   setSubtasksFilters,
@@ -842,6 +859,7 @@ export const {
   setNewTaskPriority,
   setRmWatcher,
   setCurrentTaskId,
+  setActiveTreeSelectedTask,
   setDefaultSubtaskId,
   setToggleAllSubtask,
   setToggleAllSubtaskSplit,
@@ -861,6 +879,7 @@ export const {
   setAssignOnHoverListId,
   setAssignOnHoverState,
   setF2State,
+  setCreateTaskShortCut,
   setUpdateEntries,
   setTriggerSaveSettingsModal,
   setSaveSettingOnline,

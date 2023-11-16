@@ -1,15 +1,23 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useAppSelector } from '../../../../app/hooks';
-import { TIME_INVENTORY_HEADER } from '../../../../utils/Constants/TimeClockConstants';
+import {
+  TIME_INVENTORY_CUSTOM_PROPERTIES,
+  TIME_INVENTORY_HEADER
+} from '../../../../utils/Constants/TimeClockConstants';
 import { useGetTimeEntriesMutation } from '../../../../features/task/taskService';
 import { EntityType } from '../../../../utils/EntityTypes/EntityType';
 import PlusCircle from '../../../../assets/icons/AddCircle';
+import { TabsDropDown } from './TabsDropDown';
 
 export function LogHeaders() {
   // const dispatch = useAppDispatch();
 
   const { timeSortArr } = useAppSelector((state) => state.task);
   const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
+
+  const [dropDown, setDropDown] = useState<{ customProperties: boolean }>({
+    customProperties: false
+  });
 
   const { mutateAsync } = useGetTimeEntriesMutation();
 
@@ -41,14 +49,21 @@ export function LogHeaders() {
             }
             style={{ whiteSpace: 'nowrap' }}
           >
-            <span
-              className={`uppercase text-alsoit-text-md ${
-                index === 0 ? 'float-left clear-both' : 'text-center'
-              } font-semibold`}
-            >
-              {header.name}
-            </span>
-            {index === 1 && <PlusCircle className="cursor-pointer" />}
+            {!header.isHidden && (
+              <span
+                className={`uppercase text-alsoit-text-md ${
+                  index === 0 ? 'float-left clear-both' : 'text-center'
+                } font-semibold`}
+              >
+                {header.name}
+              </span>
+            )}
+            {index === 1 && (
+              <PlusCircle
+                className="cursor-pointer"
+                onClick={() => setDropDown((prev) => ({ ...prev, customProperties: !prev.customProperties }))}
+              />
+            )}
           </th>
         );
       })}
@@ -67,6 +82,24 @@ export function LogHeaders() {
   return (
     <div className="overflow-x-visible w-full">
       <div className="flex space-x-2">{headers()}</div>
+      {dropDown.customProperties && (
+        <TabsDropDown
+          header="custom property"
+          subHeader="select property"
+          closeModal={() => setDropDown((prev) => ({ ...prev, customProperties: !prev.customProperties }))}
+          styles="w-44 left-36"
+          subStyles="left-8"
+        >
+          {TIME_INVENTORY_CUSTOM_PROPERTIES.map((entity) => (
+            <div
+              className="flex w-full p-1.5 space-y-2 text-orange-500 capitalize cursor-pointer hover:bg-alsoit-gray-50"
+              key={entity.value}
+            >
+              {entity.name}
+            </div>
+          ))}
+        </TabsDropDown>
+      )}
     </div>
   );
 }

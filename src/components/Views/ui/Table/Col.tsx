@@ -36,18 +36,21 @@ import PeopleField from './CustomField/PeopleField/PeopleField';
 import FilesField from './CustomField/Files/FilesField';
 import LocationField from './CustomField/Location/LocationField';
 import ManualProgress from './CustomField/Progress/ManualProgress';
+import moment, { MomentInput } from 'moment-timezone';
 
 interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   value: TaskValue;
   field: Pick<listColumnProps, 'field'>['field'];
   task: Task;
   fieldId: string;
+  styles?: { opacity: number };
 }
 
-export function Col({ value, field, fieldId, task, ...props }: ColProps) {
+export function Col({ value, field, fieldId, task, styles, ...props }: ColProps) {
   const dispatch = useAppDispatch();
   const { taskId } = useParams();
 
+  const { date_format } = useAppSelector((state) => state.userSetting);
   const { dragOverItemId, draggableItemId } = useAppSelector((state) => state.list);
   const { dragToBecomeSubTask, verticalGrid, selectedTasksArray, saveSettingOnline } = useAppSelector(
     (state) => state.task
@@ -69,7 +72,12 @@ export function Col({ value, field, fieldId, task, ...props }: ColProps) {
           dispatch(setSelectedTaskType(task?.parent_id ? EntityType.subtask : EntityType.task));
         }}
       >
-        <StatusDropdown taskCurrentStatus={task.status} taskStatuses={task.task_statuses} statusDropdownType="name" />
+        <StatusDropdown
+          task={task}
+          taskCurrentStatus={task.status}
+          taskStatuses={task.task_statuses}
+          statusDropdownType="name"
+        />
       </div>
     ) : (
       <></>
@@ -132,6 +140,7 @@ export function Col({ value, field, fieldId, task, ...props }: ColProps) {
       />
     ),
     date: <DateField />,
+    archived_at: <>{value ? <>{moment(value as MomentInput).format(date_format?.toUpperCase())}</> : '-'}</>,
     time: (
       <TimeField
         taskId={task.id}
@@ -246,14 +255,20 @@ export function Col({ value, field, fieldId, task, ...props }: ColProps) {
             saveSettingOnline?.singleLineView && !saveSettingOnline?.CompactView
               ? '42px'
               : saveSettingOnline?.CompactView && saveSettingOnline?.singleLineView
-              ? '32px'
+              ? '25px'
               : !saveSettingOnline?.singleLineView && saveSettingOnline?.CompactView && task.name.length < 30
-              ? '32px'
-              : ''
+              ? '25px'
+              : '',
+          ...styles
         }}
       >
         {dragOverItemId === task.id && draggableItemId !== dragOverItemId && dragToBecomeSubTask && (
-          <span className={cl('absolute h-0.5 bg-alsoit-purple-300 w-full bottom-px right-0')}></span>
+          <span
+            className={cl('absolute content-start z-50 flex items-center w-full right-0')}
+            style={{ bottom: '2px' }}
+          >
+            <span className={cl('h-0.5 bg-alsoit-purple-300 w-full ml-auto')}></span>
+          </span>
         )}
         {field in fields ? fields[field] : String(value)}
       </td>

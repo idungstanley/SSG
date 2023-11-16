@@ -4,12 +4,23 @@ import { useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import requestNew from '../../app/requestNew';
 import { IHubReq, IFavoritesRes, IHubDetailRes, IHubsRes, IHub } from './hubs.interfaces';
-import { closeMenu, setShowFavEditInput, setSpaceStatuses, setSpaceViews, setTriggerFavUpdate } from './hubSlice';
+import {
+  closeMenu,
+  getHub,
+  setShowFavEditInput,
+  setSpaceStatuses,
+  setSpaceViews,
+  setTriggerFavUpdate
+} from './hubSlice';
 import { setArchiveHub } from './hubSlice';
-import { generateFilters } from '../../components/TasksHeader/lib/generateFilters';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
 import { Hub, List, StatusProps, Wallet } from '../../pages/workspace/hubs/components/ActiveTree/activetree.interfaces';
 import { matchedStatusProps } from '../../common/Prompt';
+import { setChecklists } from '../task/checklist/checklistSlice';
+import { ICheckListRes } from '../task/interface.tasks';
+import { hubMoveManager } from '../../managers/Hub';
+import { setFilteredResults } from '../search/searchSlice';
+import { setDragOverItem, setDraggableItem } from '../list/listSlice';
 
 interface IResponseHub {
   data: {
@@ -30,26 +41,18 @@ const moveHub = (data: { parent_id: string; hubId: string }) => {
 };
 
 export const useMoveHubsService = () => {
-  const queryClient = useQueryClient();
-  const { hubId, walletId, listId } = useParams();
+  const dispatch = useDispatch();
 
-  const id = hubId ?? walletId ?? listId;
-  const type = hubId ? EntityType.hub : walletId ? EntityType.wallet : EntityType.list;
-
-  const { sortAbleArr } = useAppSelector((state) => state.task);
-  const sortArrUpdate = sortAbleArr.length <= 0 ? null : sortAbleArr;
-
-  const { filters } = generateFilters();
+  const { draggableItemId, dragOverItemId } = useAppSelector((state) => state.list);
+  const { hub } = useAppSelector((state) => state.hub);
 
   return useMutation(moveHub, {
     onSuccess: () => {
-      queryClient.invalidateQueries(['hub']);
-      queryClient.invalidateQueries(['sub-hub']);
-      queryClient.invalidateQueries(['task']);
-      queryClient.invalidateQueries(['task', { listId, sortArrUpdate, filters }]);
-      queryClient.invalidateQueries(['task', id, type]);
-      queryClient.invalidateQueries(['retrieve', id ?? 'root', 'tree']);
-      queryClient.invalidateQueries(['retrieve', id ?? 'root', undefined]);
+      const updatedTree = hubMoveManager(draggableItemId as string, dragOverItemId as string, hub);
+      dispatch(getHub(updatedTree));
+      dispatch(setFilteredResults(updatedTree));
+      dispatch(setDraggableItem(null));
+      dispatch(setDragOverItem(null));
     }
   });
 };
@@ -243,7 +246,7 @@ export const UseGetHubDetails = (query: {
 
   const fetch = currentWorkspaceId === workSpaceId;
   return useQuery(
-    ['hub-details', { query }],
+    ['hub-details', 'hub', { query }],
     async () => {
       const data = await requestNew<IHubDetailRes>({
         url: `hubs/${query.activeItemId}/details`,
@@ -259,6 +262,7 @@ export const UseGetHubDetails = (query: {
         }
         const listViews = data.data.hub.task_views;
         dispatch(setSpaceViews(listViews));
+        dispatch(setChecklists(data?.data.hub.checklists as ICheckListRes[]));
       },
       cacheTime: 0
     }
@@ -280,7 +284,7 @@ const addToFavorite = (data: {
   const response = requestNew({
     url: '/favorites',
     method: 'POST',
-    params: {
+    data: {
       type: newType,
       id: query
     }
@@ -345,7 +349,7 @@ export const UseUpdateFavService = ({
       const data = requestNew({
         url: `/favorites/${favId}`,
         method: 'PUT',
-        params: {
+        data: {
           name: name
         }
       });

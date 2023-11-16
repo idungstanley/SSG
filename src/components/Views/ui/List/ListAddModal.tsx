@@ -133,9 +133,7 @@ export default function ListAddModal({
         aria-expanded={open ? 'true' : undefined}
         onClick={handleClick}
       >
-        <span style={{ color: ListColor?.outerColour === null ? 'black' : (ListColor?.outerColour as string) }}>
-          Add
-        </span>
+        <span style={{ color: !ListColor?.outerColour ? 'black' : (ListColor?.outerColour as string) }}>Add</span>
         <ArrowDownFilled className="ml-1 w-1.5" />
       </Button>
       <Menu

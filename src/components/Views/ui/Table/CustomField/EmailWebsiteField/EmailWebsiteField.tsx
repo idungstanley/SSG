@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ICustomField } from '../../../../../../features/task/taskSlice';
 import { useUpdateEntityCustomFieldValue } from '../../../../../../features/list/listService';
 import { cl } from '../../../../../../utils';
@@ -22,13 +22,20 @@ const websitePattern = /^(?:(https?:\/\/|www\.)[\w.-]+\.[a-zA-Z]{2,}(?:\.[a-zA-Z
 
 function EmailWebsiteField({ taskCustomFields, taskId, fieldId, fieldType }: EmailFieldProps) {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const activeValue = taskCustomFields?.values[0].value ? taskCustomFields?.values[0].value : '-';
+  const [activeValue, setActiveValue] = useState('');
   const [currentValue, setCurrentValue] = useState<string>(activeValue);
   const [editMode, setEditMode] = useState(false);
   const [isValidValue, setIsValidValue] = useState(false);
   const [isCopied, setIsCopied] = useState<number>(0);
 
   const { mutate: onUpdate } = useUpdateEntityCustomFieldValue(taskId);
+
+  useEffect(() => {
+    if (taskCustomFields) {
+      setActiveValue(taskCustomFields?.values[0].value ? taskCustomFields?.values[0].value : '-');
+      setCurrentValue(taskCustomFields?.values[0].value ? taskCustomFields?.values[0].value : '-');
+    }
+  }, [taskCustomFields]);
 
   const isValidEntry = (entry: string) => {
     const validateParams = fieldType === 'email' ? emailPattern.test(entry) : websitePattern.test(entry);

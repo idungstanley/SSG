@@ -51,9 +51,9 @@ function WalletModal() {
         (showMenuDropdownType === EntityType.subHub ? showMenuDropdown : null),
       walletId:
         (showMenuDropdownType === EntityType.wallet && !createWLID ? showMenuDropdown : null) ||
-        (showMenuDropdownType === 'subwallet2' ? showMenuDropdown : null) ||
+        (showMenuDropdownType === EntityType.subWallet ? showMenuDropdown : null) ||
         (SubMenuType === EntityType.wallet ? SubMenuId : null) ||
-        (SubMenuType === 'subwallet2' ? SubMenuId : null)
+        (SubMenuType === EntityType.subWallet ? SubMenuId : null)
     });
   };
 

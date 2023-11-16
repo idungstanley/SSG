@@ -1,6 +1,7 @@
 import requestNew from '../../app/requestNew';
 import {
   IAttachmentsRes,
+  ICheckListRes,
   IFullTaskRes,
   ITaskCreateProps,
   ITaskFullList,
@@ -49,12 +50,15 @@ import Duration from '../../utils/TimerDuration';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
 import {
   addNewTaskManager,
+  findCurrentTaskManager,
+  multipleTasksDateUpdateManager,
   taskAssignessUpdateManager,
   taskDateUpdateManager,
   taskMoveToListManager,
   taskMoveToSubtaskManager,
   taskPriorityUpdateManager,
   taskStatusUpdateManager,
+  taskWatchersUpdateManager,
   updateTaskSubtasksCountManager
 } from '../../managers/Task';
 import { ITeamMembersAndGroup } from '../settings/teamMembersAndGroups.interfaces';
@@ -64,11 +68,13 @@ import { getHub, setStatusesToMatch } from '../hubs/hubSlice';
 import { setFilteredResults } from '../search/searchSlice';
 import { addNewSubtaskManager } from '../../managers/Subtask';
 import { IList } from '../hubs/hubs.interfaces';
-import { setDragOverList, setDragOverTask, setDraggableItem } from '../list/listSlice';
+import { setDragOverItem, setDragOverList, setDragOverTask, setDraggableItem } from '../list/listSlice';
 import { FilterWithId, FiltersOption } from '../../components/TasksHeader/ui/Filter/types/filters';
 import { pilotTabs } from '../../app/constants/pilotTabs';
+import { setChecklists } from './checklist/checklistSlice';
 import { StatusProps } from '../../pages/workspace/hubs/components/ActiveTree/activetree.interfaces';
 import { setMatchData } from '../general/prompt/promptSlice';
+import { MultipleTaskStatuses } from '../../pages/workspace/tasks/multipleStatuses/MultipleStatuses';
 
 export const useDeleteAttachment = ({ id }: { id: string }) => {
   const data = requestNew({
@@ -205,7 +211,7 @@ interface ErrorMultipleMoveResponse {
   };
 }
 
-export const useMultipleTaskMove = () => {
+export const useMultipleTaskMove = (list?: IList, type?: 'id_only') => {
   const dispatch = useDispatch();
 
   const { draggableTask, dragOverList } = useAppSelector((state) => state.list);
@@ -214,6 +220,29 @@ export const useMultipleTaskMove = () => {
 
   return useMutation(multipleTaskMove, {
     onSuccess: () => {
+      if (type === 'id_only') {
+        let newTasks = { ...tasks };
+        let newSubtasks = { ...subtasks };
+        let newTree = [...hub];
+        selectedTasksArray.forEach((id) => {
+          const currentTask = findCurrentTaskManager(id, tasks, subtasks);
+          const { updatedTasks, updatedSubtasks, updatedTree } = taskMoveToListManager(
+            currentTask as ITaskFullList,
+            list as IList,
+            newTasks,
+            newSubtasks,
+            newTree,
+            selectedTasksArray
+          );
+          newTasks = updatedTasks;
+          newSubtasks = updatedSubtasks;
+          newTree = updatedTree;
+        });
+        dispatch(setTasks(newTasks));
+        dispatch(setSubtasks(newSubtasks));
+        dispatch(getHub(newTree));
+        dispatch(setFilteredResults(newTree));
+      }
       if (dragOverList) {
         // move to list
         const { updatedTasks, updatedSubtasks, updatedTree } = taskMoveToListManager(
@@ -324,6 +353,7 @@ export const useMoveTask = () => {
         dispatch(setFilteredResults(updatedTree));
       }
       dispatch(setDraggableItem(null));
+      dispatch(setDragOverItem(null));
       dispatch(setDragOverList(null));
       dispatch(setDragOverTask(null));
     },
@@ -394,7 +424,7 @@ export const useAddTask = (task: Task) => {
         const updatedTasks = addNewTaskManager(
           tasks,
           data.data.task as ITaskFullList,
-          task.custom_field_columns,
+          task.custom_field_columns || [],
           task.task_statuses
         );
         dispatch(setTasks(updatedTasks));
@@ -456,8 +486,95 @@ export const useDuplicateTask = (task?: Task) => {
       const updatedTree = updateListTasksCountManager(listId as string, hub, updatedTasks[listId].length);
       dispatch(getHub(updatedTree));
       dispatch(setFilteredResults(updatedTree));
+      dispatch(setSelectedTasksArray([]));
     }
   });
+};
+
+const multipleDuplicateTasks = (data: { ids: string[]; list_id: string; is_everything: boolean; copy?: string[] }) => {
+  const { ids, list_id, is_everything, copy } = data;
+
+  const custom_is_everything = copy?.includes('everything');
+
+  const response = requestNew({
+    url: 'tasks/multiple/duplicate',
+    method: 'POST',
+    data: {
+      ids,
+      list_id,
+      is_everything: copy?.length ? custom_is_everything : is_everything
+    }
+  });
+  return response;
+};
+
+export const useMultipleDuplicateTasks = (list: IList) => {
+  const dispatch = useAppDispatch();
+
+  const { duplicateTaskObj, tasks, subtasks, selectedTasksArray } = useAppSelector((state) => state.task);
+  const { hub } = useAppSelector((state) => state.hub);
+
+  return useMutation(multipleDuplicateTasks, {
+    onSuccess: () => {
+      dispatch(setDuplicateTaskObj({ ...duplicateTaskObj, popDuplicateTaskModal: true }));
+      let updatedTasks = { ...tasks };
+      let updatedSubtasks = { ...subtasks };
+      selectedTasksArray.forEach((id) => {
+        let currentTask = findCurrentTaskManager(id, tasks, subtasks);
+        if (currentTask) {
+          currentTask = {
+            ...currentTask,
+            list: list,
+            list_id: list.id
+          };
+          if (currentTask.parent_id) {
+            updatedSubtasks = addNewSubtaskManager(
+              updatedSubtasks,
+              currentTask as ITaskFullList,
+              currentTask?.custom_field_columns || [],
+              currentTask?.task_statuses || []
+            );
+          } else {
+            updatedTasks = addNewTaskManager(
+              updatedTasks,
+              currentTask as ITaskFullList,
+              currentTask?.custom_field_columns || [],
+              currentTask?.task_statuses || []
+            );
+          }
+        }
+      });
+      dispatch(setTasks(updatedTasks));
+      dispatch(setSubtasks(updatedSubtasks));
+      const listId = list.id;
+      const updatedTree = updateListTasksCountManager(listId as string, hub, updatedTasks[listId].length);
+      dispatch(getHub(updatedTree));
+      dispatch(setFilteredResults(updatedTree));
+      dispatch(setSelectedTasksArray([]));
+    }
+  });
+};
+
+export const archiveTask = (data: { selectedTasksArray: string[] }) => {
+  const request = requestNew({
+    url: 'tasks/multiple/archive',
+    method: 'POST',
+    data: {
+      ids: data.selectedTasksArray
+    }
+  });
+  return request;
+};
+
+export const unarchiveTask = (data: { selectedTasksArray: string[] }) => {
+  const request = requestNew({
+    url: 'tasks/multiple/unarchive',
+    method: 'POST',
+    data: {
+      ids: data.selectedTasksArray
+    }
+  });
+  return request;
 };
 
 export const deleteTask = (data: { selectedTasksArray: string[] }) => {
@@ -466,6 +583,69 @@ export const deleteTask = (data: { selectedTasksArray: string[] }) => {
     method: 'POST',
     data: {
       ids: data.selectedTasksArray
+    }
+  });
+  return request;
+};
+
+interface ITasksStatusesRes {
+  data: {
+    statuses: MultipleTaskStatuses[];
+  };
+}
+
+export const getTasksStatuses = (selectedTasksArray: string[], anchorEl: HTMLElement | null) => {
+  return useQuery(
+    [selectedTasksArray],
+    async () => {
+      const request = await requestNew<ITasksStatusesRes>({
+        url: 'tasks/multiple/get-statuses',
+        method: 'POST',
+        data: {
+          ids: selectedTasksArray
+        }
+      });
+      return request?.data.statuses;
+    },
+    {
+      enabled: !!selectedTasksArray.length && !!anchorEl,
+      cacheTime: 0
+    }
+  );
+};
+
+export const multipleUpdateStatus = (data: { ids: string[]; status: string }) => {
+  const { ids, status } = data;
+  const response = requestNew({
+    url: 'tasks/multiple/statuses',
+    method: 'POST',
+    data: {
+      ids,
+      status
+    }
+  });
+  return response;
+};
+
+export const useMultipleUpdateStatus = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation(multipleUpdateStatus, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['task']);
+    }
+  });
+};
+
+export const addNewField = (data: { ids: string[]; custom_field_id: string; values: string }) => {
+  const { ids, custom_field_id, values } = data;
+  const request = requestNew({
+    url: 'tasks/multiple/custom-fields',
+    method: 'POST',
+    data: {
+      ids,
+      custom_field_id,
+      values: [{ value: values }]
     }
   });
   return request;
@@ -491,6 +671,59 @@ export const createTaskService = (data: {
     }
   });
   return response;
+};
+
+export const UseGetEverythingTasks = () => {
+  const queryClient = useQueryClient();
+
+  const { draggableItemId } = useAppSelector((state) => state.list);
+
+  const { sortAbleArr, toggleAllSubtask, separateSubtasksMode, splitSubTaskState, isFiltersUpdated } = useAppSelector(
+    (state) => state.task
+  );
+  const sortArrUpdate = sortAbleArr.length <= 0 ? null : sortAbleArr;
+
+  const { filters } = generateFilters();
+
+  return useInfiniteQuery(
+    [
+      'task',
+      filters,
+      isFiltersUpdated,
+      sortArrUpdate,
+      draggableItemId,
+      toggleAllSubtask,
+      separateSubtasksMode,
+      splitSubTaskState
+    ],
+    async ({ pageParam = 0 }: { pageParam?: number }) => {
+      return requestNew<IFullTaskRes>({
+        url: 'tasks/everything',
+        method: 'POST',
+        data: {
+          filters,
+          sorting: sortArrUpdate,
+          expand_all: toggleAllSubtask || separateSubtasksMode || splitSubTaskState ? 1 : 0,
+          page: pageParam
+        }
+      });
+    },
+    {
+      keepPreviousData: true,
+      enabled: location.pathname.includes('everything') && !draggableItemId && isFiltersUpdated,
+      onSuccess: (data) => {
+        data.pages.map((page) => page.data.tasks.map((task) => queryClient.setQueryData(['task', task.id], task)));
+      },
+      getNextPageParam: (lastPage) => {
+        if (lastPage?.data?.paginator.has_more_pages) {
+          return Number(lastPage.data.paginator.page) + 1;
+        }
+
+        return false;
+      },
+      cacheTime: 0
+    }
+  );
 };
 
 export const UseGetFullTaskList = ({
@@ -530,15 +763,13 @@ export const UseGetFullTaskList = ({
       return requestNew<IFullTaskRes>({
         url: 'tasks/full-list',
         method: 'POST',
-        params: {
+        data: {
+          filters,
+          sorting: sortArrUpdate,
           expand_all: toggleAllSubtask || separateSubtasksMode || splitSubTaskState ? 1 : 0,
           page: pageParam,
           hub_id,
           wallet_id
-        },
-        data: {
-          filters,
-          sorting: sortArrUpdate
         }
       });
     },
@@ -576,8 +807,10 @@ export const getOneTaskServices = ({ task_id }: { task_id: string | undefined | 
       // enabled: false
       onSuccess: (data) => {
         dispatch(setRootTaskIds(data?.data.task.root_task_ids));
+        dispatch(setChecklists(data?.data.task.checklists as ICheckListRes[]));
       },
-      enabled: task_id != null
+      enabled: task_id != null,
+      cacheTime: 0
     }
   );
 };
@@ -613,7 +846,7 @@ export const UseCreateCheckList = ({ task_id, trigger }: { task_id: string; trig
       const data = await requestNew({
         url: `tasks/${task_id}/checklist`,
         method: 'POST',
-        params: {
+        data: {
           name: 'Checklist'
         }
       });
@@ -657,7 +890,7 @@ export const UseUpdateTaskStatusService = ({ task_id, statusDataUpdate }: Update
       const data = requestNew<ITaskRes>({
         url: `tasks/${task_id}`,
         method: 'PUT',
-        params: {
+        data: {
           task_status_id: statusDataUpdate
         }
       });
@@ -686,12 +919,13 @@ export const UseUpdateTaskStatusService = ({ task_id, statusDataUpdate }: Update
     }
   );
 };
+
 export const UseUpdateTaskDateService = ({
   task_id,
   taskDate,
   listIds,
-  setTaskId,
   type,
+  setTaskId,
   setResetDate
 }: {
   task_id: string;
@@ -741,6 +975,47 @@ export const UseUpdateTaskDateService = ({
     }
   );
 };
+
+export const useMultipleUpdateTasksDate = (data: { ids: string[]; type: string; date: string; listIds: string[] }) => {
+  const dispatch = useAppDispatch();
+
+  const { pickedDateState } = useAppSelector((state) => state.workspace);
+  const { tasks, subtasks } = useAppSelector((state) => state.task);
+
+  const { ids, type, date, listIds } = data;
+  return useQuery(
+    ['task', { ids, date }],
+    async () => {
+      const data = requestNew<ITaskRes>({
+        url: 'tasks/multiple/dates',
+        method: 'POST',
+        data: {
+          ids,
+          [type]: date
+        }
+      });
+      return data;
+    },
+    {
+      enabled: !!ids.length && !!date && !!type && !!pickedDateState,
+      cacheTime: 0,
+      onSuccess: () => {
+        dispatch(setPickedDateState(false));
+        const { updatedTasks, updatedSubtasks } = multipleTasksDateUpdateManager(
+          ids as string[],
+          listIds as string[],
+          tasks,
+          subtasks,
+          type as string,
+          date as string
+        );
+        dispatch(setTasks(updatedTasks as Record<string, ITaskFullList[]>));
+        dispatch(setSubtasks(updatedSubtasks as Record<string, ITaskFullList[]>));
+      }
+    }
+  );
+};
+
 export const UseUpdateTaskViewSettings = ({
   task_views_id,
   taskDate
@@ -847,14 +1122,12 @@ export const getTaskListService = (listId: string | null | undefined) => {
       return requestNew<ITaskListRes>({
         url: 'tasks/list',
         method: 'POST',
-        params: {
+        data: {
+          sorting: sortArrUpdate,
+          filters,
           expand_all: toggleAllSubtask || separateSubtasksMode || splitSubTaskState ? 1 : 0,
           list_id: listId,
           page: pageParam
-        },
-        data: {
-          sorting: sortArrUpdate,
-          filters
         }
       });
     },
@@ -879,7 +1152,8 @@ export const useSubTasks = (parentId: string, subtasks: Record<string, ITaskFull
         url: 'tasks/list',
         method: 'POST',
         data: {
-          parent_id: parentId
+          parent_id: parentId,
+          include_root_ids: 1
         }
       }),
     {
@@ -894,7 +1168,7 @@ export const createTimeEntriesService = (data: { queryKey: (string | undefined)[
   const response = requestNew({
     url: 'time-entries/start',
     method: 'POST',
-    params: {
+    data: {
       type: EntityType.task,
       id: taskID
     }
@@ -1016,7 +1290,7 @@ export const StartTimeEntryService = () => {
       const res = await requestNew({
         url: 'time-entries/start',
         method: 'POST',
-        params: {
+        data: {
           type: query.type,
           id: query.taskId
         }
@@ -1042,7 +1316,7 @@ export const EndTimeEntriesService = () => {
       const response = await requestNew({
         url: 'time-entries/stop',
         method: 'POST',
-        params: {
+        data: {
           description: data.description,
           isbillable: data.is_Billable
         }
@@ -1191,7 +1465,7 @@ export const UpdateTimeEntriesService = (data: {
   const response = requestNew({
     url: `time-entries/${data.time_entry_id}`,
     method: 'PUT',
-    params: {
+    data: {
       description: data.description,
       is_billable: data.isBillable,
       start_date: data.start_date,
@@ -1228,7 +1502,7 @@ export const AddWatcherService = ({ query }: { query: (string | undefined | null
       const data = await requestNew({
         url: 'watch',
         method: 'POST',
-        params: {
+        data: {
           type: EntityType.task,
           id: query[1],
           team_member_ids: [query[0]]
@@ -1255,7 +1529,7 @@ export const RemoveWatcherService = ({ query }: { query: (string | null | undefi
       const data = await requestNew({
         url: 'watch/remove',
         method: 'POST',
-        params: {
+        data: {
           type: EntityType.task,
           id: query[1],
           team_member_ids: [query[0]]
@@ -1273,13 +1547,40 @@ export const RemoveWatcherService = ({ query }: { query: (string | null | undefi
   );
 };
 
+// Assign Watchers
+const watchersAssignTask = ({ ids, team_member_ids }: { ids: string[]; team_member_ids: string[] | null }) => {
+  const request = requestNew({
+    url: 'tasks/multiple/watchers',
+    method: 'POST',
+    data: { ids, team_member_ids }
+  });
+  return request;
+};
+
+export const UseTaskWatchersAssignService = (taskIds: string[], user: ITeamMembersAndGroup, listIds: string[]) => {
+  const dispatch = useAppDispatch();
+  const { tasks, subtasks } = useAppSelector((state) => state.task);
+
+  return useMutation(watchersAssignTask, {
+    onSuccess: () => {
+      dispatch(setAssignOnHoverState(false));
+      const { updatedTasks, updatedSubtasks } = taskWatchersUpdateManager(taskIds, listIds, tasks, subtasks, user);
+      dispatch(setTasks(updatedTasks as Record<string, ITaskFullList[]>));
+      dispatch(setSubtasks(updatedSubtasks as Record<string, ITaskFullList[]>));
+      dispatch(setToggleAssignCurrentTaskId(null));
+      dispatch(setSelectedTasksArray([]));
+      dispatch(setSelectedListIds([]));
+    }
+  });
+};
+
 // Assign Checklist Item
 const AssignTask = ({
-  taskIds,
+  ids,
   team_member_id,
   teams
 }: {
-  taskIds: string[];
+  ids: string[];
   team_member_id: string | null;
   teams: boolean;
 }) => {
@@ -1287,7 +1588,7 @@ const AssignTask = ({
     url: teams ? '/group-assignee/assign' : '/tasks/multiple/assignees',
     method: 'POST',
     data: {
-      ids: taskIds,
+      ids: ids,
       ...(teams ? { team_member_group_id: team_member_id } : { team_member_ids: [team_member_id] }),
       type: EntityType.task
     }
@@ -1414,16 +1715,18 @@ export function useMediaStream() {
     const recorder = new MediaRecorder(combinedStream);
     dispatch(setScreenRecordingMedia({ recorder, stream: combinedStream }));
     if (blob && currentWorkspaceId && accessToken && activeItemId && activeItemType) {
-      mutate({
-        blob,
-        currentWorkspaceId,
-        accessToken,
-        activeItemId,
-        activeItemType
-      });
-
-      // Invalidate React Query
-      queryClient.invalidateQueries(['attachments']);
+      mutate(
+        {
+          blob,
+          currentWorkspaceId,
+          accessToken,
+          activeItemId,
+          activeItemType
+        },
+        {
+          onSuccess: () => queryClient.invalidateQueries(['attachments'])
+        }
+      );
     }
 
     dispatch(setScreenRecording('idle'));
@@ -1560,11 +1863,9 @@ const updateSubtaskFilters = (data: { parentId: string; filters: { op: FiltersOp
   const response = requestNew<IFullTaskRes>({
     url: 'tasks/list',
     method: 'POST',
-    params: {
-      parent_id: data.parentId
-    },
     data: {
-      filters
+      filters,
+      parent_id: data.parentId
     }
   });
   return response;

@@ -5,7 +5,7 @@ export const pilotTabs = {
   WATCHERS: 'watchers',
   CONNECT: 'connect',
   TIME_CLOCK: 'time_clock',
-  CHECKLISTS: 'checklists',
+  CHECKLISTS: 'checklist',
   SCREEN_RECORD: 'screen_record',
   ENTITY_MANAGER: 'entity_manager',
   VIEWS: 'views',
@@ -17,8 +17,17 @@ export const pilotTabs = {
   CREATE_HUB: 'create_hub',
   CREATE_WALLET: 'create_wallet',
   CREATE_LIST: 'create_list',
+  CREATE_TASK: 'create_task',
   UTILITIES: 'utilities',
   AUTOMATION: 'automation',
   CALENDAR_SETTINGS: 'calendar_settings',
-  STATUS_MANAGEMENT: 'status_management'
+  STATUS_MANAGEMENT: 'status_management',
+  SUBTASK: 'subtask',
+  TIES: 'ties',
+  EMAIL: 'email',
+  CHAT: 'chat',
+  VOICE_CALL: 'voice_call',
+  HISTORY_LOG: 'history_log',
+  ACTIVITY_LOG: 'activity_log',
+  CUSTOM_LOG: 'custom_log'
 };

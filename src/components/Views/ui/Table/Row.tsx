@@ -5,7 +5,7 @@ import { DEFAULT_LEFT_PADDING } from '../../config';
 import { Col } from './Col';
 import { StickyCol } from './StickyCol';
 import { SubTasks } from './SubTasks';
-import { useDraggable } from '@dnd-kit/core';
+import { useDraggable, useDroppable } from '@dnd-kit/core';
 import { ManageTagsDropdown } from '../../../Tag/ui/ManageTagsDropdown/ui/ManageTagsDropdown';
 import { AddSubTask } from '../AddTask/AddSubTask';
 import TaskTag from '../../../Tag/ui/TaskTag';
@@ -69,7 +69,8 @@ export function Row({
     toggleAllSubtaskSplit,
     splitSubTaskLevels,
     subtasks,
-    rootTaskIds
+    rootTaskIds,
+    saveSettingOnline
   } = useAppSelector((state) => state.task);
 
   const [showSubTasks, setShowSubTasks] = useState(false);
@@ -104,6 +105,14 @@ export function Row({
     }
   });
 
+  const { isOver, setNodeRef: droppabbleRef } = useDroppable({
+    id: task.id,
+    data: {
+      isOverTask: true
+      // overTask: task
+    }
+  });
+
   const handleCopyTexts = async () => {
     await navigator.clipboard.writeText(task.name);
     setIsCopied(1);
@@ -114,7 +123,17 @@ export function Row({
 
   // hide element if is currently grabbing
   const style = {
-    opacity: transform ? 0 : 100
+    opacity: transform ? 0.3 : 100,
+    zIndex: 1,
+    pointerEvents: transform ? 'none' : '',
+    height:
+      saveSettingOnline?.singleLineView && !saveSettingOnline?.CompactView
+        ? '42px'
+        : saveSettingOnline?.CompactView && saveSettingOnline?.singleLineView
+        ? '25px'
+        : !saveSettingOnline?.singleLineView && saveSettingOnline?.CompactView && task.name.length < 30
+        ? '25px'
+        : ''
   };
 
   const showChildren = useMemo(() => {
@@ -146,11 +165,10 @@ export function Row({
     <>
       {/* current task */}
       <tr
-        style={style}
         className="relative contents group dNFlex"
         onMouseEnter={() => {
           dispatch(setAssignOnHoverTask(task));
-          dispatch(setAssignOnHoverListId(task.list_id ?? task.parent_id));
+          dispatch(setAssignOnHoverListId(task.parent_id ?? task.list_id));
           setHoverOn(true);
         }}
         onMouseLeave={() => {
@@ -163,16 +181,26 @@ export function Row({
           setHoverOn={setHoverOn}
           showSubTasks={showChildren}
           setShowSubTasks={setShowSubTasks}
-          style={{ zIndex: 1 }}
           toggleRootTasks={toggleRootTasks}
           isListParent={isListParent}
           task={task}
+          isOver={isOver}
+          styles={style}
           taskIndex={taskIndex}
           parentId={parentId as string}
           taskStatusId={taskStatusId as string}
           onClose={handleClose as VoidFunction}
           paddingLeft={paddingLeft}
-          tags={'tags' in task ? <TaskTag tags={task.tags} entity_id={task.id} entity_type="task" /> : null}
+          level={level + 1}
+          tags={
+            'tags' in task ? (
+              <div className="flex gap-3">
+                {task.tags.map((tag) => (
+                  <TaskTag key={tag.id} tag={tag} entity_id={task.id} entity_type="task" />
+                ))}
+              </div>
+            ) : null
+          }
           isBlockedShowChildren={isBlockedShowChildren}
           dragElement={
             <div ref={setNodeRef} {...listeners} {...attributes}>
@@ -180,6 +208,13 @@ export function Row({
                 <Dradnddrop />
               </div>
             </div>
+          }
+          droppableElement={
+            <div
+              ref={droppabbleRef}
+              className="absolute h-full"
+              style={{ left: '30px', background: 'transparent', height: '100%', width: '100%', zIndex: -1 }}
+            />
           }
         >
           {/* actions */}
@@ -191,7 +226,10 @@ export function Row({
                 className={`p-1 bg-white border rounded-md ${hoverOn ? 'opacity-100' : 'opacity-0'}`}
                 onClick={handleCopyTexts}
               >
-                <Copy />
+                <Copy
+                  width={saveSettingOnline?.CompactView ? '8px' : '12px'}
+                  height={saveSettingOnline?.CompactView ? '8px' : '12px'}
+                />
               </button>
             </ToolTip>
             {/* effects */}
@@ -201,22 +239,20 @@ export function Row({
                 style={{ backgroundColor: 'orange' }}
                 onClick={(e) => e.stopPropagation()}
               >
-                <Effect className="w-3 h-3" />
+                <Effect className={saveSettingOnline?.CompactView ? 'w-2 h-2' : 'w-3 h-3'} />
               </button>
             </ToolTip>
-
             {/* tags */}
             {'tags' in task ? (
               <ToolTip title="Tags">
                 <div
-                  className={`bg-white border rounded-md ${hoverOn ? 'opacity-100' : 'opacity-0'}`}
+                  className={`bg-white rounded-md ${hoverOn ? 'opacity-100' : 'opacity-0'}`}
                   onClick={(e) => e.preventDefault()}
                 >
                   <ManageTagsDropdown entityId={task.id} tagsArr={task.tags as Tag[]} entityType="task" />
                 </div>
               </ToolTip>
             ) : null}
-
             {/* show create subtask field */}
             {task.descendants_count < 1 && level < MAX_SUBTASKS_LEVEL && (
               <ToolTip title="Subtask">
@@ -224,7 +260,7 @@ export function Row({
                   className={`p-1 bg-white border rounded-md ${hoverOn ? 'opacity-100' : 'opacity-0'}`}
                   onClick={(e) => onShowAddSubtaskField(e, task.id)}
                 >
-                  <SubtasksIcon className="w-3 h-3" />
+                  <SubtasksIcon className={saveSettingOnline?.CompactView ? 'w-2 h-2' : 'w-3 h-3'} />
                 </button>
               </ToolTip>
             )}
@@ -233,7 +269,10 @@ export function Row({
                 className={`p-1 pl-4 bg-white rounded-md ${hoverOn ? 'opacity-100' : 'opacity-0'}`}
                 onClick={(e) => e.stopPropagation()}
               >
-                <Enhance className="w-3 h-3" style={{ color: 'orange' }} />
+                <Enhance
+                  className={saveSettingOnline?.CompactView ? 'w-2 h-2' : 'w-3 h-3'}
+                  style={{ color: 'orange' }}
+                />
               </button>
             </ToolTip>
           </div>
@@ -247,6 +286,7 @@ export function Row({
             value={task[col.field as keyof Task]}
             key={col.id}
             style={{ zIndex: 0 }}
+            styles={style}
           />
         ))}
       </tr>

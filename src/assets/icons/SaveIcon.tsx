@@ -2,11 +2,13 @@ import ICONS_INTERACTIONS from '../../utils/Constants/IconInteractions';
 
 interface Props {
   active: boolean;
+  height?: string;
+  width?: string;
 }
 
-export default function SaveIcon({ active = false }: Props) {
+export default function SaveIcon({ active = false, height = '20px', width = '20px' }: Props) {
   return (
-    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg width={width} height={height} viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
       <rect x="0.25" y="0.25" width="19.5" height="19.5" rx="2.75" fill="white" />
       <path
         d="M8.30765 13.7387L15.0656 6.98075L14.3205 6.20673L8.31567 12.1987L5.8365 9.7484L5.09131 10.4936L8.30765 13.7387ZM7.55446 14.5047L4.32531 11.2756C4.20994 11.1602 4.12687 11.0376 4.07612 10.9078C4.02537 10.778 4 10.6399 4 10.4936C4 10.3472 4.02537 10.2105 4.07612 10.0833C4.12687 9.95619 4.20994 9.83493 4.32531 9.71954L5.06248 8.9824C5.17785 8.86701 5.30044 8.78528 5.43025 8.73721C5.56006 8.68913 5.69547 8.66508 5.8365 8.66508C5.97751 8.66508 6.11292 8.68565 6.24273 8.72679C6.37253

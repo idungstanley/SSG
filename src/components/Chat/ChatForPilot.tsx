@@ -3,8 +3,6 @@ import CreateChatSideOver from './components/CreateChatSideOver';
 import ChatSection from './components/ChatSection';
 import Contacts from './components/Contacts';
 import Nav from './components/Nav';
-import SectionArea from '../Pilot/components/SectionArea';
-import { SignalIcon } from '@heroicons/react/24/outline';
 
 interface SectionsProps {
   id: string;
@@ -26,8 +24,7 @@ export default function ChatForPilot() {
 
   return (
     <>
-      <SectionArea label="Connect" icon={<SignalIcon className="w-4 h-4" />} />
-      <div className="flex w-full h-full border-b border-l border-r">
+      <div className="w-full h-full border-b border-l border-r">
         <Nav activeTabId={activeTabId} setActiveTabId={setActiveTabId} />
         {/* main section */}
         <div className="w-full h-full">

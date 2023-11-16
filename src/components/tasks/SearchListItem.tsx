@@ -5,42 +5,69 @@ import ListIconComponent from '../ItemsListInSidebar/components/ListIconComponen
 import { cl } from '../../utils';
 import { IList } from '../../features/hubs/hubs.interfaces';
 import {
+  setActiveTreeSelectedTask,
   setCurrentSelectedDuplicateArr,
   setDuplicateTaskObj,
   setSelectedTasksArray
 } from '../../features/task/taskSlice';
-import { useDuplicateTask } from '../../features/task/taskService';
+import { useDuplicateTask, useMultipleDuplicateTasks, useMultipleTaskMove } from '../../features/task/taskService';
 import DuplicateTaskAdvanceModal from '../../pages/workspace/tasks/component/taskMenu/DuplicateTaskAdvanceModal';
+import { TASK_DUPLICATE, TASK_MOVE } from '../../pages/workspace/tasks/component/taskMenu/TaskMenu';
+import { EntityType } from '../../utils/EntityTypes/EntityType';
+import { pilotTabs } from '../../app/constants/pilotTabs';
 
 interface ListItemProps {
   list: IList;
   paddingLeft: string | number;
   parentId?: string | null;
+  option?: string;
 }
 export interface ListColourProps {
   innerColour?: string;
   outerColour?: string;
 }
-export default function SearchListItem({ list, paddingLeft }: ListItemProps) {
+export default function SearchListItem({ list, paddingLeft, option }: ListItemProps) {
   const dispatch = useAppDispatch();
   const { listId } = useParams();
 
   const { activeItemId } = useAppSelector((state) => state.workspace);
   const { lightBaseColor, baseColor } = useAppSelector((state) => state.account);
   const { listColour } = useAppSelector((state) => state.list);
-  const { duplicateTaskObj } = useAppSelector((state) => state.task);
+  const { duplicateTaskObj, selectedTasksArray } = useAppSelector((state) => state.task);
   const [showSelectDropdown, setShowSelectDropdown] = useState<null | HTMLSpanElement | HTMLDivElement>(null);
 
   const { mutate: duplicateTask } = useDuplicateTask();
+  const { mutate: multipleDuplicateTasks } = useMultipleDuplicateTasks(list);
+  const { mutate: onMultipleTaskMove } = useMultipleTaskMove(list, 'id_only');
 
-  const handleClick = () => {
-    dispatch(setDuplicateTaskObj({ ...duplicateTaskObj, popDuplicateTaskModal: false }));
+  const handleClick = (list: IList) => {
+    if (option === TASK_DUPLICATE) {
+      if (selectedTasksArray.length > 1) {
+        dispatch(setDuplicateTaskObj({ ...duplicateTaskObj, popDuplicateTaskModal: false }));
+        multipleDuplicateTasks({
+          ...duplicateTaskObj,
+          ids: selectedTasksArray,
+          list_id: list.id
+        });
+      } else {
+        duplicateTask({
+          ...duplicateTaskObj,
+          list_id: list.id
+        });
+      }
+    }
 
-    duplicateTask({
-      ...duplicateTaskObj,
-      list_id: list.id
-    });
-    dispatch(setSelectedTasksArray([]));
+    if (option === TASK_MOVE) {
+      onMultipleTaskMove({
+        taskIds: selectedTasksArray,
+        listId: list.id,
+        overType: EntityType.list
+      });
+    }
+
+    if (option === pilotTabs.CREATE_TASK) {
+      dispatch(setActiveTreeSelectedTask(list));
+    }
   };
 
   const handleAdvance = (e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
@@ -77,7 +104,10 @@ export default function SearchListItem({ list, paddingLeft }: ListItemProps) {
         {list.id === listId && (
           <span className="absolute top-0 bottom-0 left-0 rounded-r-lg w-0.5" style={{ backgroundColor: baseColor }} />
         )}
-        <div className="flex items-center space-x-1 overflow-hidden capitalize cursor-pointer" onClick={handleClick}>
+        <div
+          className="flex items-center space-x-1 overflow-hidden capitalize cursor-pointer"
+          onClick={() => handleClick(list)}
+        >
           <div>
             <ListIconComponent
               shape={activeShape ? activeShape : 'solid-circle'}

@@ -8,9 +8,7 @@ import {
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
-import ChatForPilot from '../../../../../components/Chat/ChatForPilot';
 import CommentsForPilot from '../../../../../components/Comments/CommentsForPilot';
-import History from '../../../../../components/Pilot/components/History';
 import WatchersForPilot from '../../../../../components/Watchers/WatchersForPilot';
 import { setShowPilotSideOver } from '../../../../../features/general/slideOver/slideOverSlice';
 import Checklists from '../../../../../components/Pilot/components/Checklist/Checklist';
@@ -28,6 +26,8 @@ import { pilotTabs } from '../../../../../app/constants/pilotTabs';
 import EntityManagerIcon from '../../../../../assets/icons/EntityManagerIcon';
 import PilotViewIcon from '../../../../../assets/icons/PilotViewIcon';
 import Views from '../../../../../components/Pilot/components/Views/Index';
+import Commnunication from '../../../pilot/components/communication/Communication';
+import Logs from '../../../../../components/Pilot/components/Logs/Logs';
 
 const sections = [
   {
@@ -36,7 +36,7 @@ const sections = [
   },
   {
     id: pilotTabs.LOGS,
-    element: <History />
+    element: <Logs />
   },
   {
     id: pilotTabs.COMMENTS,
@@ -48,7 +48,7 @@ const sections = [
   },
   {
     id: pilotTabs.CONNECT,
-    element: <ChatForPilot />
+    element: <Commnunication />
   },
   {
     id: pilotTabs.UTILITIES,

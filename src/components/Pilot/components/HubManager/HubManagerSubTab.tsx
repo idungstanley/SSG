@@ -17,6 +17,8 @@ import { useAppSelector } from '../../../../app/hooks';
 import CalendarIcon from '../../../../assets/icons/CalendarIcon';
 import StatusMgIcon from '../../../../assets/icons/StatusMgIcon';
 import { pilotTabs } from '../../../../app/constants/pilotTabs';
+import { TbShield } from 'react-icons/tb';
+import PlusIcon from '../../../../assets/icons/PlusIcon';
 
 export const HubManagerOptions = [
   {
@@ -38,6 +40,12 @@ export const HubManagerOptions = [
     isVisible: false
   },
   {
+    id: pilotTabs.CREATE_TASK,
+    name: 'Create Task',
+    icon: <PlusIcon />,
+    isVisible: false
+  },
+  {
     id: pilotTabs.CALENDAR_SETTINGS,
     name: 'Calendar Settings',
     icon: <CalendarIcon active={false} />,
@@ -47,6 +55,12 @@ export const HubManagerOptions = [
     id: pilotTabs.STATUS_MANAGEMENT,
     name: 'Status Management',
     icon: <StatusMgIcon />,
+    isVisible: false
+  },
+  {
+    id: pilotTabs.PERMISSIONS,
+    name: 'Permissions and Sharing',
+    icon: <TbShield className="w-4 h-4" />,
     isVisible: false
   }
 ];
@@ -93,7 +107,7 @@ export default function HubManagerSubTab() {
     <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={(e) => handleDragEnd(e)}>
       <SortableContext strategy={rectSortingStrategy} items={items}>
         <section>
-          <div className="flex w-full bg-primary-200 pb-0.5 flex-row">
+          <div className="grid w-full bg-primary-200 pb-0.5 grid-cols-5">
             {HubManagerOptions.map((item) => (
               <SubtabDrag
                 key={item.id}

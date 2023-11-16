@@ -19,10 +19,11 @@ import {
   setDuplicateTaskObj,
   setSelectedIndexListId,
   setF2State,
-  setTaskInputValue
+  setTaskInputValue,
+  setTaskRootIds
 } from '../../../../features/task/taskSlice';
 import { setActiveItem } from '../../../../features/workspace/workspaceSlice';
-import { UniqueIdentifier, useDraggable, useDroppable } from '@dnd-kit/core';
+// import { UniqueIdentifier, useDraggable, useDroppable } from '@dnd-kit/core';
 import CloseSubtask from '../../../../assets/icons/CloseSubtask';
 import OpenSubtask from '../../../../assets/icons/OpenSubtask';
 import { Capitalize } from '../../../../utils/NoCapWords/Capitalize';
@@ -36,6 +37,8 @@ import Close from '../../../../assets/icons/Close';
 import toast from 'react-hot-toast';
 import Toast from '../../../../common/Toast';
 import { LIMITS } from '../../../../app/config/dimensions';
+import Linkify from 'linkify-react';
+// import { useDroppable } from '@dnd-kit/core';
 
 interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   task: Task;
@@ -55,6 +58,9 @@ interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   isOver?: boolean;
   isBlockedShowChildren?: boolean;
   toggleRootTasks?: boolean;
+  droppableElement?: ReactNode;
+  styles?: { opacity: number };
+  level?: number;
 }
 
 export function StickyCol({
@@ -73,6 +79,10 @@ export function StickyCol({
   dragElement,
   isBlockedShowChildren,
   toggleRootTasks,
+  droppableElement,
+  isOver,
+  styles,
+  level,
   ...props
 }: ColProps) {
   const dispatch = useAppDispatch();
@@ -82,7 +92,7 @@ export function StickyCol({
 
   const { currentWorkspaceId } = useAppSelector((state) => state.auth);
   const { dragOverItemId, draggableItemId } = useAppSelector((state) => state.list);
-  const { activeView, activeItemId } = useAppSelector((state) => state.workspace);
+  const { activeView, activeItemId, editingPilotDetailsTitle } = useAppSelector((state) => state.workspace);
   const {
     currTeamMemberId,
     verticalGrid,
@@ -98,8 +108,9 @@ export function StickyCol({
     separateSubtasksMode,
     newTaskPriority,
     f2State,
-    assignOnHoverTask,
-    taskInputValue
+    taskInputValue,
+    taskRootIds,
+    assignOnHoverTask
   } = useAppSelector((state) => state.task);
 
   const [isChecked, setIsChecked] = useState(false);
@@ -118,7 +129,7 @@ export function StickyCol({
     }
   }, [taskId, task.id, activeItemId]);
 
-  const TASK_NAME = task.id === taskId && taskInputValue ? taskInputValue : task.name;
+  const TASK_NAME = task.id === taskId && taskInputValue && editingPilotDetailsTitle ? taskInputValue : task.name;
 
   const onClickTask = () => {
     if (task.id !== '0') {
@@ -153,6 +164,21 @@ export function StickyCol({
   const onToggleDisplayingSubTasks = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.stopPropagation();
     setShowSubTasks(!showSubTasks);
+
+    if (!task.parent_id) {
+      dispatch(setTaskRootIds({ ...taskRootIds, [task.id]: [task.id] }));
+    } else {
+      const updateTaskRootIds = { ...taskRootIds };
+
+      for (const key of task.root_task_ids as string[]) {
+        if (updateTaskRootIds[key]) {
+          const taskRootIdsArray = [...(task.root_task_ids as string[]), task.id];
+
+          updateTaskRootIds[key] = taskRootIdsArray;
+        }
+      }
+      dispatch(setTaskRootIds(updateTaskRootIds));
+    }
   };
 
   const editTaskMutation = useMutation(UseUpdateTaskService, {
@@ -307,22 +333,6 @@ export function StickyCol({
     setIsChecked(isChecked);
   };
 
-  const { attributes, listeners, setNodeRef } = useDraggable({
-    id: task?.id as UniqueIdentifier,
-    data: {
-      isTask: true,
-      movingTask: task
-    }
-  });
-
-  const { isOver, setNodeRef: droppabbleRef } = useDroppable({
-    id: task.id,
-    data: {
-      isOverTask: true
-      // overTask: task
-    }
-  });
-
   const [saveToggle, setSaveToggle] = useState<boolean>(false);
   const [closeToggle, setCloseToggle] = useState<boolean>(false);
 
@@ -337,7 +347,22 @@ export function StickyCol({
     if (!contentRef.current || !divRef.current || !badgeRef.current) return;
     const ref = contentRef.current;
     observer.current = new ResizeObserver(() => {
-      const content = ref ? (task.descendants_count > 0 ? ref.clientWidth - 70 : ref.clientWidth - 30) : 0;
+      const contentWidth = () => {
+        if (task.has_attachments && task.has_descendants && task.description) {
+          return ref.clientWidth - 160;
+        } else if (
+          (task.has_attachments && task.has_descendants) ||
+          (task.has_attachments && task.description) ||
+          (task.description && task.has_descendants)
+        ) {
+          return ref.clientWidth - 100;
+        } else if (task.has_descendants || task.has_attachments || task.description) {
+          return ref.clientWidth - 70;
+        } else {
+          return ref.clientWidth - 30;
+        }
+      };
+      const content = contentWidth();
       const full = divRef.current ? divRef.current.clientWidth : 0;
       const badge = badgeRef.current ? badgeRef.current.clientWidth + 30 : 0;
       setWidth(Math.round((content / full) * 100));
@@ -356,13 +381,25 @@ export function StickyCol({
     return '100%';
   };
 
+  console.log(width);
+
+  const handleDroppable = () => {
+    if (task.parent_id === draggableItemId && level) {
+      return false;
+    } else {
+      return true;
+    }
+  };
+
   return (
     <>
       {task.id !== '0' && (
         <td
           className="sticky left-0 z-10 flex items-center justify-start text-sm font-medium text-gray-900 cursor-pointer text-start"
+          style={styles}
           {...props}
         >
+          {handleDroppable() && droppableElement}
           <div
             className="flex items-center h-full ml-1 space-x-1"
             style={{
@@ -385,9 +422,7 @@ export function StickyCol({
                 selectedTasksArray.length > 0 ? 'opacity-100' : 'opacity-0'
               } cursor-pointer focus:outline-1 focus:ring-transparent  focus:border-2 focus:opacity-100 group-hover:opacity-100 text-alsoit-purple-300`}
             />
-            <div ref={setNodeRef} {...attributes} {...listeners} className="pr-2">
-              {dragElement}
-            </div>
+            <div className="pr-2">{dragElement}</div>
           </div>
           <div
             ref={contentRef}
@@ -408,7 +443,7 @@ export function StickyCol({
               COL_BG,
               ` ${isChecked && 'tdListV'} ${verticalGrid && 'border-r'} ${
                 verticalGridlinesTask && 'border-r'
-              } relative w-full py-4 flex items-center`,
+              } relative w-full h-full flex items-center`,
               isOver && draggableItemId !== dragOverItemId && !dragToBecomeSubTask
                 ? 'border-b-2 border-alsoit-purple-300'
                 : dragToBecomeSubTask && isOver && draggableItemId !== dragOverItemId
@@ -416,21 +451,16 @@ export function StickyCol({
                 : 'border-t relative'
             )}
           >
-            <div
-              ref={droppabbleRef}
-              className="absolute w-2 h-full"
-              style={{ left: '30px', background: 'transparent', height: '100%', width: '30px', zIndex: -1 }}
-            />
             {dragToBecomeSubTask && isOver && draggableItemId !== dragOverItemId && (
               <span
                 className={cl(
                   dragToBecomeSubTask && isOver && draggableItemId !== dragOverItemId
-                    ? 'absolute content-start z-50 flex items-center left-12 w-full bottom-0 gap-0'
+                    ? 'absolute content-start z-50 flex items-center left-12 w-full bottom-0'
                     : ''
                 )}
               >
                 <span className="border-solid z-50 border-alsoit-purple-300 border-l-[8px] border-y-transparent border-y-[4px] border-r-0 m-0" />
-                <span className={cl('h-0.5 bg-alsoit-purple-300 w-full m-0')}></span>
+                <span className={cl('h-0.5 bg-alsoit-purple-300 w-full ml-auto')}></span>
               </span>
             )}
             {isBlockedShowChildren ? (
@@ -449,7 +479,7 @@ export function StickyCol({
               </button>
             )}
             <div onClick={() => dispatch(setCurrentTaskStatusId(task.id as string))}>
-              <StatusDropdown taskCurrentStatus={task.status} taskStatuses={task.task_statuses} />
+              <StatusDropdown task={task} taskCurrentStatus={task.status} taskStatuses={task.task_statuses} />
             </div>
             {separateSubtasksMode && task?.parentName && !paddingLeft ? (
               <ToolTip title={task.parentName}>
@@ -486,7 +516,9 @@ export function StickyCol({
                                 whiteSpace: 'nowrap'
                               }}
                             >
-                              {taskUpperCase ? TASK_NAME.toUpperCase() : Capitalize(TASK_NAME)}
+                              <Linkify options={{ target: '_blank', className: 'text-blue-400' }}>
+                                {taskUpperCase ? TASK_NAME.toUpperCase() : Capitalize(TASK_NAME)}
+                              </Linkify>
                             </div>
                           }
                           content={<div>{taskUpperCase ? TASK_NAME.toUpperCase() : Capitalize(TASK_NAME)}</div>}
@@ -501,18 +533,22 @@ export function StickyCol({
                             whiteSpace: 'nowrap'
                           }}
                         >
-                          {taskUpperCase ? TASK_NAME.toUpperCase() : Capitalize(TASK_NAME)}
+                          <Linkify options={{ target: '_blank', className: 'text-blue-400' }}>
+                            {taskUpperCase ? TASK_NAME.toUpperCase() : Capitalize(TASK_NAME)}
+                          </Linkify>
                         </div>
                       )}
                     </div>
                   ) : (
-                    <div>{taskUpperCase ? TASK_NAME.toUpperCase() : Capitalize(TASK_NAME)}</div>
+                    <div style={{ wordBreak: 'break-word' }}>
+                      {taskUpperCase ? TASK_NAME.toUpperCase() : Capitalize(TASK_NAME)}
+                    </div>
                   )}
                 </div>
                 <div
                   ref={badgeRef}
                   onClick={(e) => e.stopPropagation()}
-                  className="flex items-center justify-between flex-grow pl-2"
+                  className="flex items-center justify-between pl-2 min-h-fit"
                 >
                   {children}
                 </div>
@@ -551,7 +587,7 @@ export function StickyCol({
               COL_BG,
               `relative border-t ${verticalGrid && 'border-r'} ${
                 verticalGridlinesTask && 'border-r'
-              } w-full py-4 p-4 flex items-center`
+              } w-full h-full flex items-center`
             )}
           >
             <div className="absolute bottom-0 right-0 flex p-1 space-x-1">
@@ -562,22 +598,35 @@ export function StickyCol({
               >
                 <div
                   className="border rounded-sm"
-                  style={{ borderColor: '#B2B2B280', borderWidth: '0.5px', width: '20px' }}
+                  style={{
+                    borderColor: '#B2B2B2CC',
+                    borderWidth: '0.5px',
+                    height: saveSettingOnline?.CompactView ? '15px' : '20px',
+                    width: saveSettingOnline?.CompactView ? '15px' : '20px'
+                  }}
                   onClick={onClose}
                 >
-                  <Close active={closeToggle}></Close>
+                  <Close
+                    height={saveSettingOnline?.CompactView ? '15px' : '20px'}
+                    width={saveSettingOnline?.CompactView ? '15px' : '20px'}
+                    active={closeToggle}
+                  ></Close>
                 </div>
               </ToolTip>
               <ToolTip onMouseEnter={() => setSaveToggle(true)} onMouseLeave={() => setSaveToggle(false)} title="Save">
                 <span onClick={(e) => handleOnSave(e as React.MouseEvent<HTMLButtonElement, MouseEvent>, task.id)}>
-                  <SaveIcon active={saveToggle}></SaveIcon>
+                  <SaveIcon
+                    height={saveSettingOnline?.CompactView ? '15px' : '20px'}
+                    width={saveSettingOnline?.CompactView ? '15px' : '20px'}
+                    active={saveToggle}
+                  ></SaveIcon>
                 </span>
               </ToolTip>
             </div>
             <div className="pt-1 ml-4">
-              <StatusDropdown taskCurrentStatus={task.status} taskStatuses={task.task_statuses} />
+              <StatusDropdown task={task} taskCurrentStatus={task.status} taskStatuses={task.task_statuses} />
             </div>
-            <div className="flex flex-col items-start justify-start pl-2 space-y-1">
+            <div className="flex flex-col items-start justify-start w-full pl-2 space-y-1">
               <p
                 className={`flex text-left empty:before:content-[attr(placeholder)] alsoit-gray-300 font-semibold empty:opacity-50 overflow-hidden items-center h-5 ${
                   saveSettingOnline?.CompactView ? 'text-alsoit-text-md' : 'text-alsoit-text-lg'
@@ -585,7 +634,7 @@ export function StickyCol({
                 contentEditable={true}
                 placeholder="Add New Task"
                 ref={inputRef}
-                style={{ maxWidth: '200px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}
+                style={{ maxWidth: '90%', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}
                 onKeyDown={(e) => (e.key === 'Enter' ? handleOnSave(e, task.id) : null)}
               ></p>
             </div>

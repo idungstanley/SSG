@@ -13,7 +13,7 @@ import {
 } from '../../features/hubs/hubSlice';
 import { GetTaskListCount, UseEditListService } from '../../features/list/listService';
 import { setListPaletteColor } from '../../features/list/listSlice';
-import { setActiveItem, setCreateWlLink } from '../../features/workspace/workspaceSlice';
+import { setActiveItem, setCreateWlLink, setEntityForPermissions } from '../../features/workspace/workspaceSlice';
 import Palette from '../ColorPalette';
 import ListIconComponent from '../ItemsListInSidebar/components/ListIconComponent';
 import { useDraggable, useDroppable } from '@dnd-kit/core';
@@ -32,6 +32,7 @@ import { taskCountFields } from '../../features/list/list.interfaces';
 import PlusIcon from '../../assets/icons/PlusIcon';
 import SubDropdown from '../Dropdown/SubDropdown';
 import { APP_TASKS } from '../../app/constants/app';
+import { STORAGE_KEYS, dimensions } from '../../app/config/dimensions';
 
 interface ListItemProps {
   list: IList;
@@ -169,6 +170,10 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
   const { cords, relativeRef } = useAbsolute(updateCords, 275);
   const { cords: menuCords, relativeRef: menuRef } = useAbsolute(updateCords, 352);
 
+  const sidebarWidthFromLS =
+    (JSON.parse(localStorage.getItem(STORAGE_KEYS.SIDEBAR_WIDTH) || '""') as number) ||
+    dimensions.navigationBar.default;
+
   return (
     <div className="relative">
       <section
@@ -210,9 +215,10 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
                 lineHeight: '15.56px',
                 verticalAlign: 'baseline',
                 letterSpacing: '0.28px',
-                color: listId === list.id ? (baseColor as string) : undefined
+                color: listId === list.id ? (baseColor as string) : undefined,
+                width: sidebarWidthFromLS - 135
               }}
-              className="pl-4 capitalize truncate cursor-pointer"
+              className="pl-4 text-left capitalize truncate cursor-pointer"
             >
               {list.name}
             </div>
@@ -261,16 +267,23 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
             ref={menuRef}
           >
             {/* <TaskDropdown /> */}
-            <span onClick={() => handleItemAction(list.id)} className="cursor-pointer">
-              <PlusIcon active />
-            </span>
-            <span
-              className="cursor-pointer"
-              id="menusettings"
-              onClick={(e) => handleListSettings(list.id, list.name, e)}
-            >
-              <ThreeDotIcon />
-            </span>
+            <ToolTip title="Create task">
+              <span onClick={() => handleItemAction(list.id)} className="cursor-pointer hover:text-alsoit-purple-300">
+                <PlusIcon />
+              </span>
+            </ToolTip>
+            <ToolTip title="List settings">
+              <span
+                className="cursor-pointer hover:text-alsoit-purple-300"
+                id="menusettings"
+                onClick={(e) => {
+                  handleListSettings(list.id, list.name, e);
+                  dispatch(setEntityForPermissions(list));
+                }}
+              >
+                <ThreeDotIcon />
+              </span>
+            </ToolTip>
           </div>
         </div>
       </section>
@@ -280,13 +293,15 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
           title="List"
           listComboColour={listComboColour}
           shape={activeShape}
-          cords={cords}
+          cords={{ top: cords.top, left: 10 }}
           activeInnerColor={innerColour}
           activeOutterColor={outerColour}
           handleShapeSelection={handleSelection}
         />
       ) : null}
-      {showMenuDropdown === list.id ? <MenuDropdown cords={menuCords} /> : null}
+      {showMenuDropdown === list.id ? (
+        <MenuDropdown item={list as IList} entityType={EntityType.list} cords={menuCords} />
+      ) : null}
       {SubMenuId === list.id ? <SubDropdown cords={menuCords} placeHubType={APP_TASKS} /> : null}
     </div>
   );

@@ -90,7 +90,10 @@ export function SubtasksTable({ task, subtasksData, heads, listId, level, breadc
       } bg-purple-50 ml-10 mt-2`}
       style={{
         borderColor: ListColor?.outerColour as string,
-        backgroundColor: LightenColor(ListColor?.outerColour as string, 0.95),
+        backgroundColor: LightenColor(
+          ListColor?.outerColour === null ? 'black' : (ListColor?.outerColour as string),
+          0.95
+        ),
         overflow: collapseTable ? 'hidden' : 'unset'
       }}
     >
@@ -110,7 +113,7 @@ export function SubtasksTable({ task, subtasksData, heads, listId, level, breadc
             className="sticky top-0 mr-2 pl-2 pt-2 table-container overflow-hidden z-10"
             style={{
               backgroundColor: LightenColor(
-                ListColor?.outerColour === null ? 'black' : (ListColor?.outerColour as string),
+                !ListColor?.outerColour ? 'black' : (ListColor?.outerColour as string),
                 0.95
               )
             }}
@@ -140,6 +143,7 @@ export function SubtasksTable({ task, subtasksData, heads, listId, level, breadc
                 groupedTask={subtasksData}
                 isSplitSubtask={true}
                 parentId={task.id}
+                listColor={ListColor}
               />
             </table>
           </div>

@@ -3,9 +3,9 @@ import { ClockIcon } from '@heroicons/react/24/outline';
 import moment from 'moment';
 import { CiMail } from 'react-icons/ci';
 import { Spinner } from '../../../../common';
-import { useCommunity } from '../../../../features/community/communityService';
 import Menu from '@mui/material/Menu';
 import { AvatarWithInitials } from '../../../../components';
+import { useGetTeamMembers } from '../../../../features/settings/teamMembers/teamMemberService';
 
 export function PopAssignModal({
   modalLoader,
@@ -19,8 +19,8 @@ export function PopAssignModal({
   anchorEl: HTMLDivElement | null;
   handleClose: () => void;
 }) {
-  const { data } = useCommunity();
-  const filteredUser = useMemo(() => data?.team_members.filter((users) => users.id === currHoveredOnUser), [data]);
+  const { data } = useGetTeamMembers({ page: 1, query: '' });
+  const filteredUser = useMemo(() => data?.data.team_members.filter((users) => users.id === currHoveredOnUser), [data]);
 
   const open = Boolean(anchorEl);
   return (

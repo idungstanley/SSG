@@ -47,7 +47,7 @@ export function Assignee() {
 
   const handleAssignTask = () => {
     onTaskAssign({
-      taskIds: [(assignOnHoverTask as Task).id],
+      ids: [(assignOnHoverTask as Task).id],
       team_member_id: currentMemberId as string,
       teams: false
     });
@@ -118,7 +118,7 @@ export function Assignee() {
   };
 
   return (
-    <div className="flex items-center rounded-2xl h-8 cursor-pointer">
+    <div className="flex items-center h-8 cursor-pointer rounded-2xl">
       <Button active={forMe && meMode} onClick={onToggleMe}>
         <Me active={forMe && meMode} className="w-5 h-5" />
         <span>Me</span>

@@ -13,7 +13,6 @@ import { setTimerLastMemory } from '../../../../features/workspace/workspaceSlic
 import { useParams } from 'react-router-dom';
 import { EndTimeEntriesService, StartTimeEntryService } from '../../../../features/task/taskService';
 import { StartIcon } from '../../../../assets/icons/StartIcon';
-import { StopIcon } from '@heroicons/react/24/solid';
 import { runTimer } from '../../../../utils/TimerCounter';
 import { CLOCK_TYPE, TIME_TABS } from '../../../../utils/Constants/TimeClockConstants';
 import { TotalTimeIcon } from '../../../../assets/icons/TotalTimeIcon';
@@ -23,6 +22,7 @@ import { HourGlassIcon } from '../../../../assets/icons/HourGlass';
 import { ClockIcon } from '../../../../assets/icons/ClockIcon';
 import { runCountDown } from '../../../../utils/timeCountDown';
 import { IDuration } from '../../../../features/task/interface.tasks';
+import { StopIcon } from '../../../../assets/icons/StopIcon';
 
 export function RealTime() {
   const dispatch = useAppDispatch();
@@ -132,7 +132,11 @@ export function RealTime() {
               key={index}
               onClick={() => dispatch(setTimeType(type.value))}
             >
-              {type.value === 'timer' ? <HourGlassIcon className="w-4 h-4" /> : <ClockIcon />}
+              {type.value === 'timer' ? (
+                <HourGlassIcon className="w-4 h-4" />
+              ) : (
+                <ClockIcon dimensions={{ width: 12, height: 12 }} />
+              )}
               <span className="capitalize font-semibold">{type.name}</span>
             </div>
           );
@@ -162,17 +166,18 @@ export function RealTime() {
     return (
       <div className="flex justify-center items-center text-alsoit-text-md w-full tracking-widest relative z-30">
         <div className="flex w-full">
-          <div className="w-1/3 relative flex items-center -space-x-2 cursor-pointer">
+          <div className="w-1/3 relative flex items-center cursor-pointer">
             <TotalTimeIcon className="w-4 h-4" />
             <ArrowDownFilled
-              className="cursor-pointer"
+              color={dropDown.clockDropDown ? '#BF01FE' : ''}
+              className="cursor-pointer mt-1"
               onClick={() => setDropDown((prev) => ({ ...prev, clockDropDown: !prev.clockDropDown }))}
             />
             {dropDown.clockDropDown && (
               <TabsDropDown
                 header="timeclock types"
                 subHeader="select category"
-                styles="w-44 left-0 top-6 px-1.5"
+                styles="w-44 right-16 top-56 px-1.5"
                 subStyles="left-7"
                 closeModal={() => setDropDown((prev) => ({ ...prev, clockDropDown: !prev.clockDropDown }))}
               >
@@ -182,7 +187,7 @@ export function RealTime() {
           </div>
           {timeType === TIME_TABS.clock ? (
             // clock timer
-            <div className="flex items-center">
+            <div className="flex items-center space-x-0.5">
               <div className="flex items-center">
                 {timerStatus && sameEntity() ? (
                   <StopIcon className="w-4 h-4 cursor-pointer" onClick={() => stop()} />
@@ -228,19 +233,23 @@ export function RealTime() {
     );
   }
   return (
-    <div className="flex justify-center items-center text-alsoit-text-md tracking-widest z-30">
-      <div className="flex items-center w-full">
+    <div className="flex justify-center items-center text-alsoit-text-md tracking-widest z-30 relative">
+      <div className="flex items-center w-full relative">
         <div className="w-1/3 relative flex items-center">
-          {timeType === 'timer' ? <HourGlassIcon className="w-4 h-4" /> : <ClockIcon />}
+          {timeType === 'timer' ? (
+            <HourGlassIcon className="w-4 h-4" />
+          ) : (
+            <ClockIcon dimensions={{ width: 12, height: 12 }} />
+          )}
           <ArrowDownFilled
-            className="cursor-pointer"
+            className="cursor-pointer mt-1"
             onClick={() => setDropDown((prev) => ({ ...prev, clockDropDown: !prev.clockDropDown }))}
           />
           {dropDown.clockDropDown && (
             <TabsDropDown
               header="timeclock types"
               subHeader="select category"
-              styles="w-44 left-0 top-6 px-1.5"
+              styles="w-44 right-16 top-56 px-1.5"
               subStyles="left-7"
               closeModal={() => setDropDown((prev) => ({ ...prev, clockDropDown: !prev.clockDropDown }))}
             >

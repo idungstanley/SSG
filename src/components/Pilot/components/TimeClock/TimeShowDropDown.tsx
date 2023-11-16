@@ -22,12 +22,12 @@ export function TimeShowDropDown() {
     setDropDown({ ...dropDown, [target]: !dropDown[target] });
   };
   const node = () => (
-    <div className="bg-orange-100">
+    <div>
       {TIME_ENTITY_SHOW_PROPERTY.map((property, index) => (
         <div
           key={index}
           className={`flex flex-col space-y-3 ${
-            index === 3 ? 'border-b-2 pb-2' : property.value === TIME_TABS.nestedEntities ? 'bg-white' : ''
+            index === 3 ? 'border-b-2 pb-2' : property.value !== TIME_TABS.nestedEntities ? 'text-orange-500' : ''
           }`}
           onClick={(e) => e.stopPropagation()}
         >

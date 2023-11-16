@@ -68,13 +68,15 @@ export interface IWallet {
   type: string;
   name: string;
   hub_id: string;
-  parent_id: null | string;
+  color?: string;
+  parent_id: string;
   updated_at: string;
   tasks_count: number;
   created_at: string;
   archived_at: null | string;
   deleted_at: null | string;
   has_descendants: boolean;
+  description: string;
 }
 
 export interface IList {

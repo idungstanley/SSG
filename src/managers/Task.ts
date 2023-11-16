@@ -22,11 +22,10 @@ export const addNewTaskManager = (
       descendants_count: 0
     };
 
-    updatedTasks[listId] = [...updatedTasks[listId], newTask];
+    updatedTasks[listId] = updatedTasks[listId] ? [...updatedTasks[listId], newTask] : [newTask];
 
     return updatedTasks;
   }
-
   return tasks;
 };
 
@@ -144,6 +143,49 @@ export const taskDateUpdateManager = (
   return tasks;
 };
 
+export const multipleTasksDateUpdateManager = (
+  taskIds: string[],
+  listIds: string[],
+  tasks: Record<string, ITaskFullList[]>,
+  subtasks: Record<string, ITaskFullList[]>,
+  dateType: string,
+  newDate: string
+) => {
+  if (listIds.length) {
+    const updatedTasks = { ...tasks };
+    const updatedSubtasks = { ...subtasks };
+    const uniqListIds = [...new Set(listIds)];
+
+    uniqListIds.forEach((id) => {
+      if (updatedTasks[id]) {
+        updatedTasks[id] = updatedTasks[id].map((task) => {
+          if (taskIds.includes(task.id)) {
+            return {
+              ...task,
+              [dateType]: newDate
+            };
+          }
+          return task;
+        });
+      }
+
+      if (updatedSubtasks[id]) {
+        updatedSubtasks[id] = updatedSubtasks[id].map((task) => {
+          if (taskIds.includes(task.id)) {
+            return {
+              ...task,
+              [dateType]: newDate
+            };
+          }
+          return task;
+        });
+      }
+    });
+    return { updatedTasks, updatedSubtasks };
+  }
+  return { tasks, subtasks };
+};
+
 export const taskColourManager = (listId: string, tasks: Record<string, ITaskFullList[]>, color: string) => {
   if (listId) {
     // eslint-disable-next-line
@@ -174,6 +216,55 @@ export const deleteTaskManager = (taskIds: string[], listIds: string[], tasks: R
     }
     return updatedTasks;
   }
+  return tasks;
+};
+
+export const taskWatchersUpdateManager = (
+  taskIds: string[],
+  listIds: string[],
+  tasks: Record<string, ITaskFullList[]>,
+  subtasks: Record<string, ITaskFullList[]>,
+  userData: ITeamMembersAndGroup
+) => {
+  if (listIds.length) {
+    const updatedTasks = { ...tasks };
+    const updatedSubtasks = { ...subtasks };
+    const uniqListIds = [...new Set(listIds)];
+
+    uniqListIds.forEach((id) => {
+      if (updatedTasks[id]) {
+        updatedTasks[id] = updatedTasks[id].map((task) => {
+          if (taskIds.includes(task.id)) {
+            const updatedWatchers = [...task.watchers, userData];
+            return {
+              ...task,
+              watchers: task.watchers.length
+                ? (updatedWatchers as ITeamMembersAndGroup[])
+                : ([userData] as ITeamMembersAndGroup[])
+            };
+          }
+          return task;
+        });
+      }
+
+      if (updatedSubtasks[id]) {
+        updatedSubtasks[id] = updatedSubtasks[id].map((task) => {
+          if (taskIds.includes(task.id)) {
+            const updatedWatchers = [...task.watchers, userData];
+            return {
+              ...task,
+              watchers: task.watchers.length
+                ? (updatedWatchers as ITeamMembersAndGroup[])
+                : ([userData] as ITeamMembersAndGroup[])
+            };
+          }
+          return task;
+        });
+      }
+    });
+    return { updatedTasks, updatedSubtasks };
+  }
+
   return tasks;
 };
 
@@ -586,4 +677,32 @@ export const taskMoveToListManager = (
     updatedSubtasks,
     updatedTree
   };
+};
+
+export const findCurrentTaskManager = (
+  id: string,
+  tasks: Record<string, ITaskFullList[]>,
+  subtasks: Record<string, ITaskFullList[]>
+): ITaskFullList | null => {
+  let currentTask: ITaskFullList | null = null;
+
+  Object.keys(tasks).map((listId) => {
+    tasks[listId].map((task) => {
+      if (task.id === id) {
+        currentTask = task;
+      }
+    });
+  });
+
+  if (!currentTask) {
+    Object.keys(subtasks).map((listId) => {
+      subtasks[listId].map((task) => {
+        if (task.id === id) {
+          currentTask = task;
+        }
+      });
+    });
+  }
+
+  return currentTask;
 };
