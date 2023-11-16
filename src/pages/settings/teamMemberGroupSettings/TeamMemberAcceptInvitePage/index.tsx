@@ -7,6 +7,8 @@ import NotFoundPage from '../../../NotFoundPage/NotFoundPage';
 import { Button } from '../../../../components';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import ProgressBar from '../../../../layout/components/MainLayout/ProgressBar';
+import { Toaster } from 'react-hot-toast';
+
 export default function TeamMemberAcceptInvite() {
   const queryClient = useQueryClient();
   const { inviteCode } = useParams();
@@ -29,15 +31,20 @@ export default function TeamMemberAcceptInvite() {
   }, [inviteCode]);
 
   const handleAcceptInvite = async () => {
-    await acceptInvite.mutateAsync({
-      invite: inviteCode
-    });
+    try {
+      await acceptInvite.mutateAsync({
+        invite: inviteCode
+      });
+    } catch {
+      return;
+    }
   };
 
   return inviteCode ? (
     token ? (
       <main className="flex flex-col justify-center flex-grow w-full min-h-full px-4 mx-auto text-center bg-white max-w-7xl sm:px-6 lg:px-8">
         <ProgressBar />
+        <Toaster position="bottom-left" />
         <p className="mt-2 text-base text-gray-500">Click on this button to proceed into workspace</p>
         <div className="mt-6">
           <Button
