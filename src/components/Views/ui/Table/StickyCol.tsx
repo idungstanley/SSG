@@ -367,8 +367,6 @@ export function StickyCol({
     return '100%';
   };
 
-  console.log(width);
-
   const handleDroppable = () => {
     if (task.parent_id === draggableItemId && level) {
       return false;
