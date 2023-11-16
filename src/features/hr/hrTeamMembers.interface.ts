@@ -4,6 +4,8 @@ export interface IHrTeamMemberInterface {
   team_member: {
     id: string;
     color: string | null;
+    role: string;
+    is_online: boolean;
     created_at: string;
     updated_at: string;
     user: {

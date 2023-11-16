@@ -25,8 +25,8 @@ export function HrSavedSelectionsList({ savedSelectionsData }: HrSavedSectionsLi
         {savedSelectionsData.map((savedSelectionItem) => (
           <li
             key={savedSelectionItem}
-            className="py-2 grid grid-cols-autoFr items-center space-x-3"
-            style={{ paddingLeft: '17px' }}
+            className="grid grid-cols-autoFr items-center space-x-3"
+            style={{ paddingLeft: '17px', height: '30px' }}
           >
             <div className="hr-checkbox-wrapper flex justify-center items-center">
               <Checkbox

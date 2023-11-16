@@ -24,9 +24,9 @@ export function MembersList({ members, onCheckbox, hubId, place }: MembersListPr
     <ul>
       {members.map((member) => (
         <li
-          className="py-2 grid grid-cols-autoFr items-center space-x-3 cursor-pointer hover:bg-alsoit-gray-50"
+          className="grid grid-cols-autoFr items-center space-x-3 cursor-pointer hover:bg-alsoit-gray-50"
           key={member.id}
-          style={{ paddingLeft: place === 'menu' ? '25px' : '0' }}
+          style={{ padding: place === 'menu' ? '3px 0 3px 25px' : '0' }}
         >
           <div
             className={`hr-checkbox-wrapper flex justify-center items-center ${
