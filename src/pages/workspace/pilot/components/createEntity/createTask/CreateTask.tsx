@@ -2,7 +2,7 @@ import { AiFillFlag } from 'react-icons/ai';
 import AssigneeIcon from '../../../../../../assets/icons/Assignee';
 import { DependenciesIcon } from '../../../../../../assets/icons/DepenciesIcon';
 import StatusIconComp from '../../../../../../assets/icons/StatusIconComp';
-import { ChangeEvent, useEffect, useState } from 'react';
+import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { AssigneeDropDown } from './TaskAssigneeDropDown';
 import { priorityType } from '../../../../../../components/priority/PriorityDropdown';
 import { priorities } from '../../../../../../app/constants/priorities';
@@ -38,6 +38,8 @@ export function CreateTask() {
   const [currentTaskStatus, setCurrentTaskStatus] = useState<ITask_statuses | undefined>();
   const [selectedList, setSelectedList] = useState<IList | undefined>();
   const [value, setValue] = useState<{ [key: string]: string }>();
+
+  const entityRef = useRef<HTMLDivElement | null>(null);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setValue({ ...value, [e.target.name]: e.target.value });
@@ -116,6 +118,15 @@ export function CreateTask() {
 
   useEffect(() => {
     if (activeTreeSelectedTask) setSelectedList(activeTreeSelectedTask);
+    const handleClickAway = (e: MouseEvent) => {
+      if (entityRef.current && !entityRef.current.contains(e.target as Node)) {
+        setDropdown((prev) => ({ ...prev, entity: false }));
+      }
+    };
+
+    document.addEventListener('click', handleClickAway);
+
+    return () => document.removeEventListener('click', handleClickAway);
   }, [activeTreeSelectedTask]);
 
   return (
@@ -132,8 +143,7 @@ export function CreateTask() {
         <div className="flex space-x-2 items-center">
           <div
             onClick={() => setDropdown((prev) => ({ ...prev, entity: !prev.entity }))}
-            // onBlur={() => setDropdown((prev) => ({ ...prev, entity: false }))}
-            // tabIndex={0}
+            ref={entityRef}
             className="flex items-center space-x-1.5 border rounded-md w-max p-1.5 cursor-pointer relative"
           >
             <div className="w-4 h-4">
@@ -144,7 +154,7 @@ export function CreateTask() {
                 <ActiveTreeSearch option={pilotTabs.CREATE_TASK} />
               </div>
             )}
-            <span>{selectedList?.name ?? 'Entity'}</span>
+            <span className="truncate w-16">{selectedList?.name ?? 'Entity'}</span>
           </div>
         </div>
         {/* Task Properties */}
