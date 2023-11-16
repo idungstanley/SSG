@@ -132,8 +132,8 @@ export function CreateTask() {
         <div className="flex space-x-2 items-center">
           <div
             onClick={() => setDropdown((prev) => ({ ...prev, entity: !prev.entity }))}
-            onBlur={() => setDropdown((prev) => ({ ...prev, entity: false }))}
-            tabIndex={0}
+            // onBlur={() => setDropdown((prev) => ({ ...prev, entity: false }))}
+            // tabIndex={0}
             className="flex items-center space-x-1.5 border rounded-md w-max p-1.5 cursor-pointer relative"
           >
             <div className="w-4 h-4">
