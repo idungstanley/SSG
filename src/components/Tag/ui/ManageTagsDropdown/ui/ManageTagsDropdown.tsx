@@ -1,14 +1,14 @@
 import { useState } from 'react';
-import { useAppSelector } from '../../../../../app/hooks';
-import { Tag, TagId } from '../../../../../features/task/interface.tasks';
+import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
+import { Tag } from '../../../../../features/task/interface.tasks';
 import { useAbsolute } from '../../../../../hooks/useAbsolute';
 import { useAssignTag, useMultipleAssignTag, useTags } from '../../../../../features/workspace/tags/tagService';
-// import { TagList } from '../../TagList';
 import { TagItem } from './TagItem';
 import { SearchAndAddNewTag } from './SearchAndAddNewTag';
 import TaskTag from '../../TaskTag';
 import TagIcon from '../../../../../assets/icons/TagIcon';
 import AlsoitMenuDropdown from '../../../../DropDowns';
+import { setAssignTag } from '../../../../../features/task/checklist/checklistSlice';
 
 interface ManageTagsDropdownProps {
   tagsArr: Tag[];
@@ -18,23 +18,25 @@ interface ManageTagsDropdownProps {
 }
 
 export function ManageTagsDropdown({ tagsArr, entityId, entityType, icon }: ManageTagsDropdownProps) {
-  const { selectedTasksArray } = useAppSelector((state) => state.task);
+  const dispatch = useAppDispatch();
+  const { selectedTasksArray, saveSettingOnline } = useAppSelector((state) => state.task);
 
   const [searchValue, setSearchValue] = useState('');
   const [showSelectDropdown, setShowSelectDropdown] = useState<null | HTMLSpanElement | HTMLDivElement>(null);
 
   const { data: tags } = useTags();
-  const { mutate: onAssign } = useAssignTag(entityId);
+  const { mutate: onAssign } = useAssignTag(entityId, entityType);
   const { mutate: onMultipleAssign } = useMultipleAssignTag();
 
   const newTags = tags ? tags.filter((i) => !tagsArr.map((j) => j.id).includes(i.id)) : [];
   const filteredTags = newTags.filter((tag) => tag.name.toLowerCase().includes(searchValue.toLowerCase()));
 
-  const onClickAssign = (id: TagId) => {
+  const onClickAssign = (tag: Tag) => {
+    dispatch(setAssignTag(tag));
     if (selectedTasksArray.length) {
-      onMultipleAssign({ tagId: id, entityIds: selectedTasksArray });
+      onMultipleAssign({ tagId: tag.id, entityIds: selectedTasksArray });
     } else {
-      onAssign({ tagId: id, entityId, entityType });
+      onAssign({ tagId: tag.id, entityId, entityType });
     }
   };
 
@@ -58,7 +60,7 @@ export function ManageTagsDropdown({ tagsArr, entityId, entityType, icon }: Mana
             className="p-1 border rounded-md bg-transparent text-gray-400 hover:text-gray-700 bg-white"
           >
             <span ref={relativeRef}>
-              <TagIcon className="w-3 h-3" />
+              <TagIcon className={saveSettingOnline?.CompactView ? 'w-2 h-2' : 'w-3 h-3'} />
             </span>
           </button>
         )}
@@ -71,7 +73,7 @@ export function ManageTagsDropdown({ tagsArr, entityId, entityType, icon }: Mana
             {tagsArr.length ? (
               <div className="flex flex-wrap items-center justify-start gap-3 py-2">
                 {tagsArr.map((tag) => (
-                  <TaskTag key={tag.id} tag={tag} entity_id={entityId} entity_type="task" />
+                  <TaskTag key={tag.id} tag={tag} entity_id={entityId} entity_type={entityType} />
                 ))}
               </div>
             ) : null}
@@ -90,7 +92,9 @@ export function ManageTagsDropdown({ tagsArr, entityId, entityType, icon }: Mana
                   entityId={entityId}
                   key={tag.id}
                   tag={tag}
-                  onClick={(id) => onClickAssign(id)}
+                  onClick={() => {
+                    onClickAssign(tag);
+                  }}
                   entityType={entityType}
                 />
               ))

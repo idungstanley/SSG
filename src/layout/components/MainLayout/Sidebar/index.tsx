@@ -28,9 +28,7 @@ export default function Sidebar() {
 
   const { extendedSidebarWidth, sidebarWidthRD, showExtendedBar } = useAppSelector((state) => state.workspace);
   const { showSidebar, userSettingsData } = useAppSelector((state) => state.account);
-
   const [commandSearchModal, setCommandSearchModal] = useState<boolean>(false);
-
   const { blockRef, Dividers, size, isDrag } = useResize({
     dimensions: {
       min: MIN_SIDEBAR_WIDTH,

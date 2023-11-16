@@ -1,5 +1,4 @@
 import React from 'react';
-import { MdPersonOutline } from 'react-icons/md';
 import { CgProfile } from 'react-icons/cg';
 import { BsPencil } from 'react-icons/bs';
 import { RiDeleteBin6Line } from 'react-icons/ri';
@@ -14,20 +13,8 @@ export const completeOptions = [
     icon: <FiPlus />
   },
   {
-    id: 'assign_all',
-    name: 'Assign all',
-    handleClick: () => ({}),
-    icon: <MdPersonOutline />
-  },
-  {
-    id: 'unassign_all',
-    name: 'Unassign all',
-    handleClick: () => ({}),
-    icon: <MdOutlineNoAccounts />
-  },
-  {
-    id: 'rename',
-    name: 'Rename',
+    id: 'convert_to_task',
+    name: 'Convert to task',
     handleClick: () => ({}),
     icon: <BsPencil />
   },

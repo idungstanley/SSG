@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { DocumentDuplicateIcon, StarIcon, PlusIcon, LinkIcon, SwatchIcon } from '@heroicons/react/24/outline';
 import { useAppSelector } from '../../app/hooks';
 import { useDispatch } from 'react-redux';
-import { setCreateTaskSlideOverVisibility } from '../../features/general/slideOver/slideOverSlice';
+import { setShowPilotSideOver } from '../../features/general/slideOver/slideOverSlice';
 import { getSubMenu, setEntityToCreate, setSubDropdownMenu, setshowMenuDropdown } from '../../features/hubs/hubSlice';
 import { useParams } from 'react-router-dom';
 import {
@@ -43,19 +43,18 @@ interface optionsProps {
 
 interface SubDropdownProps {
   cords?: Cords;
+  walletLevel?: number;
   placeHubType: string;
 }
 
-export default function SubDropdown({ cords, placeHubType }: SubDropdownProps) {
+export default function SubDropdown({ cords, placeHubType, walletLevel }: SubDropdownProps) {
   const dispatch = useDispatch();
   const { listId, hubId, walletId } = useParams();
-
   const { showMenuDropdownType, showMenuDropdown, selectedTreeDetails, entityToCreate, SubMenuType } = useAppSelector(
     (state) => state.hub
   );
-  const { showTreeInput, lastActiveItem, activeItemId, activeItemType, sidebarWidthRD } = useAppSelector(
-    (state) => state.workspace
-  );
+  const { showTreeInput, lastActiveItem, activeItemId, activeItemType, sidebarWidthRD, activeItemName } =
+    useAppSelector((state) => state.workspace);
   const { lightBaseColor, showSidebar, userSettingsData } = useAppSelector((state) => state.account);
 
   const [open, setOpen] = useState<boolean>(true);
@@ -162,14 +161,7 @@ export default function SubDropdown({ cords, placeHubType }: SubDropdownProps) {
               showMenuDropdownType === EntityType.hub ? true : false || SubMenuType === EntityType.hub ? true : false
           },
           {
-            title:
-              SubMenuType === EntityType.wallet ||
-              SubMenuType === 'subwallet2' ||
-              showMenuDropdownType === EntityType.wallet ||
-              showMenuDropdownType === 'subwallet2' ||
-              showMenuDropdownType === EntityType.subWallet
-                ? 'Sub Wallet'
-                : 'Wallet',
+            title: (walletLevel as number) > 1 ? 'Sub Wallet' : 'Wallet',
             handleClick: () => {
               dispatch(setEntityToCreate(EntityType.wallet));
               dispatch(setLastActiveItem(selectedTreeDetails.type === EntityType.wallet ? 'Sub Wallet' : 'Wallet'));
@@ -178,17 +170,24 @@ export default function SubDropdown({ cords, placeHubType }: SubDropdownProps) {
             },
             icon: <AddWalletIcon />,
             isVisible:
-              showMenuDropdownType === EntityType.list ||
-              showMenuDropdownType === 'subwallet3' ||
-              SubMenuType === 'subwallet3' ||
-              SubMenuType === EntityType.list
+              showMenuDropdownType === EntityType.list || (walletLevel as number) > 2 || SubMenuType === EntityType.list
                 ? false
                 : true
           },
           {
             title: 'Task',
             handleClick: () => {
-              dispatch(setCreateTaskSlideOverVisibility(true));
+              // dispatch(setCreateTaskSlideOverVisibility(true));
+              dispatch(setActiveTabId(pilotTabs.ENTITY_MANAGER));
+              dispatch(setActiveSubHubManagerTabId(pilotTabs.CREATE_TASK));
+              dispatch(
+                setShowPilotSideOver({
+                  show: true,
+                  id: activeItemId as string,
+                  title: activeItemName as string,
+                  type: activeItemType as string
+                })
+              );
               dispatch(setSubDropdownMenu(false));
               dispatch(setshowMenuDropdown({ showMenuDropdown: null, showMenuDropdownType: null }));
               // navigate(`/${currentWorkspaceId}/tasks`);

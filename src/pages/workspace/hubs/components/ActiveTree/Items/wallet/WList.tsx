@@ -83,8 +83,9 @@ export default function WList({ wallets, leftMargin, paddingLeft, type, level = 
         <div key={wallet.id} style={{ marginLeft: leftMargin ? 20 : 0 }}>
           <WalletItem
             wallet={wallet}
-            walletType={level === 1 ? EntityType.wallet : level === 2 ? 'subwallet2' : 'subwallet3'}
+            walletType={level === 1 ? EntityType.wallet : EntityType.subWallet}
             handleLocation={handleLocation}
+            level={level}
             handleShowSubWallet={handleShowSubWallet}
             showSubWallet={openedEntitiesIds.includes(wallet.id)}
             paddingLeft={paddingLeft}
@@ -95,7 +96,7 @@ export default function WList({ wallets, leftMargin, paddingLeft, type, level = 
             <WList
               wallets={wallet.children}
               leftMargin={false}
-              type={level === 1 ? 'subwallet2' : 'subwallet3'}
+              type={level === 1 ? EntityType.wallet : EntityType.subWallet}
               paddingLeft={Number(paddingLeft) + 15}
               level={level + 1}
               topNumber={topNumber + 30}

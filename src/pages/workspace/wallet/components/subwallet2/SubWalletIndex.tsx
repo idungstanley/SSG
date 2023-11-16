@@ -13,6 +13,7 @@ import OverlayList from '../../../../../components/tasks/OverlayList';
 import HubItemOverlay from '../../../../../components/tasks/HubItemOverLay';
 import { List, Wallet } from '../../../hubs/components/ActiveTree/activetree.interfaces';
 import { findCurrentWallet } from '../../../../../managers/Wallet';
+import { EntityType } from '../../../../../utils/EntityTypes/EntityType';
 
 interface SubWalletIndexProps {
   paddingLeft?: string | number;
@@ -44,7 +45,7 @@ function SubWalletIndex({ paddingLeft = '40', parentId }: SubWalletIndexProps) {
     }
   }, [activeItemId, parentId]);
 
-  const handleLocation = (id: string, type = 'subwallet3') => {
+  const handleLocation = (id: string, type = EntityType.subWallet) => {
     navigate(`/${currentWorkspaceId}/tasks/w/${id}/v/${activeView?.id}`);
     dispatch(setActiveItem({ activeItemType: type, activeItemId: id }));
   };
@@ -76,7 +77,7 @@ function SubWalletIndex({ paddingLeft = '40', parentId }: SubWalletIndexProps) {
         <div key={wallet.id}>
           <WalletItem
             wallet={wallet as Wallet}
-            walletType="subwallet3"
+            walletType={EntityType.subWallet}
             handleLocation={handleLocation}
             handleShowSubWallet={handleShowSubWallet}
             paddingLeft={paddingLeft}

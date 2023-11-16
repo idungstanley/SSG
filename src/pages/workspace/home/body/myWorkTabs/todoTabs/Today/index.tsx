@@ -3,7 +3,7 @@ import AllDoneForTheDay from '../../AllDoneForTheDay';
 import OpenTodoTabs from '../OpenTodoTabs';
 
 export default function Today() {
-  const [openTab, setOpenTab] = useState<boolean>(false);
+  const [openTab, setOpenTab] = useState<boolean>(true);
 
   return (
     <div>

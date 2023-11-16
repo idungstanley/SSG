@@ -24,7 +24,7 @@ import {
 } from '../../components/TasksHeader/ui/Filter/types/filters';
 import { DEFAULT_FILTERS_OPTION } from '../../components/TasksHeader/ui/Filter/config/filterConfig';
 import { ITeamMembersAndGroup } from '../settings/teamMembersAndGroups.interfaces';
-import { IView } from '../hubs/hubs.interfaces';
+import { IList, IView } from '../hubs/hubs.interfaces';
 
 export interface ICustomField {
   id: string;
@@ -172,6 +172,7 @@ interface TaskState {
   taskColumns: listColumnProps[];
   hideTask: listColumnProps[];
   currentTaskId: string | null;
+  activeTreeSelectedTask: IList | undefined;
   newTaskPriority: string;
   selectedTasksArray: string[];
   selectedIndexListId: string | null;
@@ -206,6 +207,7 @@ interface TaskState {
   assignOnHoverListId: string;
   assignOnHoverState: boolean;
   f2State: boolean;
+  createTask: boolean;
   addNewTaskItem: boolean;
   selectedIndex: number | null;
   defaultSubtaskListId: null | string;
@@ -299,6 +301,7 @@ const initialState: TaskState = {
   taskColumns: [],
   hideTask: [],
   currentTaskId: null,
+  activeTreeSelectedTask: undefined,
   showNewTaskField: false,
   meMode: false,
   escapeKey: false,
@@ -340,6 +343,7 @@ const initialState: TaskState = {
   assignOnHoverListId: '',
   assignOnHoverState: false,
   f2State: false,
+  createTask: false,
   addNewTaskItem: false,
   closeTaskListView: true,
   selectedIndex: null,
@@ -608,6 +612,9 @@ export const taskSlice = createSlice({
     setF2State(state, action: PayloadAction<boolean>) {
       state.f2State = action.payload;
     },
+    setCreateTaskShortCut(state, action: PayloadAction<boolean>) {
+      state.createTask = action.payload;
+    },
     getTaskUpperCase(state, action: PayloadAction<boolean>) {
       state.taskUpperCase = action.payload;
     },
@@ -652,6 +659,9 @@ export const taskSlice = createSlice({
     },
     setCurrentTaskId(state, action: PayloadAction<string | null>) {
       state.currentTaskId = action.payload;
+    },
+    setActiveTreeSelectedTask(state, action: PayloadAction<IList | undefined>) {
+      state.activeTreeSelectedTask = action.payload;
     },
     setCloseTaskListView(state, action: PayloadAction<boolean>) {
       state.closeTaskListView = action.payload;
@@ -844,6 +854,7 @@ export const {
   setNewTaskPriority,
   setRmWatcher,
   setCurrentTaskId,
+  setActiveTreeSelectedTask,
   setDefaultSubtaskId,
   setToggleAllSubtask,
   setToggleAllSubtaskSplit,
@@ -863,6 +874,7 @@ export const {
   setAssignOnHoverListId,
   setAssignOnHoverState,
   setF2State,
+  setCreateTaskShortCut,
   setUpdateEntries,
   setTriggerSaveSettingsModal,
   setSaveSettingOnline,

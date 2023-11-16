@@ -1,23 +1,34 @@
 /* eslint-disable no-console */
-import React, { Fragment, useEffect, useRef, useState } from 'react';
-import { ArrowLeftIcon } from '@heroicons/react/24/outline';
+import React, { useEffect, useRef, useState } from 'react';
 import { Spinner } from '../../../../common';
 import FullScreenMessage from '../../../CenterMessage/FullScreenMessage';
-import { useAppDispatch } from '../../../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import Pusher from 'pusher-js';
 import { useGetChat } from '../../../../features/chat/chatService';
 import ChatsList from '../ChatList';
 import MessagesList from './components/MessagesList';
-import { setShowMembersInChatSideOver } from '../../../../features/chat/chatSlice';
+import { setActiveChat } from '../../../../features/chat/chatSlice';
 import CreateMessage from './components/CreateMessage';
 import { IMessage } from '../../../../features/chat/chat.interfaces';
 import TeamMembersInChat from '../TeamMembersInChat';
+import ShowIcon from '../../../../assets/icons/ShowIcon';
+import ChatFilter from '../../../../assets/icons/ChatFilter';
+import ChatAssign from '../../../../assets/icons/ChatAssign';
+import ChatMe from '../../../../assets/icons/ChatMe';
+import ChatSearch from '../../../../assets/icons/ChatSearch';
+import ChatArrowLeft from '../../../../assets/icons/ChatArrowLeft';
+import ArrowDrop from '../../../../assets/icons/ArrowDrop';
+import { Capitalize } from '../../../../utils/NoCapWords/Capitalize';
 
 export default function ChatSection() {
   const dispatch = useAppDispatch();
-  const socket = useRef<Pusher | null>(null);
+
+  const { activeChat } = useAppSelector((state) => state.chat);
 
   const [selectedChatId, setSelectedChatId] = useState<string | null>(null);
+
+  const socket = useRef<Pusher | null>(null);
+
   const { data, status } = useGetChat(selectedChatId);
 
   const chat = data?.chat;
@@ -33,6 +44,7 @@ export default function ChatSection() {
   const handleDisconnect = () => {
     socket.current?.disconnect();
     setSelectedChatId(null);
+    dispatch(setActiveChat(''));
   };
 
   const connect = (id: string) => {
@@ -78,17 +90,19 @@ export default function ChatSection() {
     }
   };
 
-  const handleClickChat = (id: string) => {
-    setSelectedChatId((prev) => (prev === id ? null : id));
-    connect(id);
-  };
+  useEffect(() => {
+    if (activeChat) {
+      setSelectedChatId(activeChat);
+      connect(activeChat);
+    }
+  }, [activeChat]);
 
   const allMessages = messages ? [...messages, ...incomingData] : [...incomingData];
 
   return (
     <>
       {!selectedChatId ? (
-        <ChatsList selectChat={handleClickChat} />
+        <ChatsList />
       ) : status === 'loading' ? (
         <div className="mx-auto w-6 mt-5 justify-center">
           <Spinner size={8} color="#0F70B7" />
@@ -96,30 +110,55 @@ export default function ChatSection() {
       ) : status === 'error' ? (
         <FullScreenMessage title="Oops, an error occurred :(" description="Please try again later." />
       ) : messages && chat ? (
-        <div className="grid grid-rows-autoFrAuto h-full gap-1">
-          {/* header */}
-          <div className="flex items-center justify-between p-2 border-b">
-            <div className="flex items-center gap-2">
-              <ArrowLeftIcon
-                onClick={handleDisconnect}
-                className="h-5 w-5 text-gray-600 cursor-pointer"
-                aria-hidden="true"
-              />
-              <p className="font-semibold text-indigo-600">{chat.name}</p>
+        <div className="grid grid-rows-autoFrAuto h-full gap-1 p-2 bg-white">
+          <div style={{ background: '#F4F4F4' }}>
+            {/* header */}
+            <div className="flex items-center justify-between border-b pb-2">
+              <div className="flex items-center gap-2">
+                <p
+                  className="py-0.5 relative px-2 rounded-tl-md rounded-br-md flex items-center space-x-1 text-white dFlex"
+                  style={{
+                    backgroundColor: 'rgb(165, 165, 165)',
+                    height: '25px',
+                    gap: '5px'
+                  }}
+                >
+                  {Capitalize(chat.name)}
+                </p>
+                <div
+                  onClick={handleDisconnect}
+                  className="flex justify-center bg-white items-center h-6 w-6 cursor-pointer rounded-md"
+                >
+                  <ChatArrowLeft />
+                </div>
+              </div>
+
+              <div className="flex gap-2">
+                <div className="flex justify-center bg-white items-center h-6 w-6 rounded-md">
+                  <ShowIcon color="orange" width="21" height="21" />
+                </div>
+                <div className="flex justify-center bg-white items-center h-6 w-6 rounded-md">
+                  <ChatFilter />
+                </div>
+                <div className="flex justify-center bg-white items-center h-6 w-6 rounded-md">
+                  <ChatMe />
+                </div>
+                <div className="flex justify-center bg-white items-center h-6 w-12 rounded-md">
+                  <ChatAssign />
+                  <ArrowDrop color="orange" />
+                </div>
+                <div className="flex justify-center bg-white items-center h-6 w-6 rounded-md mr-2">
+                  <ChatSearch />
+                </div>
+              </div>
             </div>
 
-            <button
-              type="button"
-              onClick={() => dispatch(setShowMembersInChatSideOver(true))}
-              className="inline-flex items-center rounded border border-transparent bg-indigo-100 px-2.5 py-1.5 text-xs font-medium text-indigo-700 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-            >
-              Members
-            </button>
+            <div className="px-2">
+              <MessagesList messages={allMessages} />
+            </div>
+
+            <CreateMessage chatId={selectedChatId} />
           </div>
-
-          <MessagesList messages={allMessages} />
-
-          <CreateMessage chatId={selectedChatId} />
         </div>
       ) : null}
 

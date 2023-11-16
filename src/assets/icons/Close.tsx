@@ -2,11 +2,13 @@ import ICONS_INTERACTIONS from '../../utils/Constants/IconInteractions';
 
 interface Props {
   active: boolean;
+  width?: string;
+  height?: string;
 }
 
-export default function Close({ active = false }: Props) {
+export default function Close({ active = false, width = '20', height = '20' }: Props) {
   return (
-    <svg width="20" height="20" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg width={width} height={height} viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
       <mask
         id="mask0_190_61850"
         style={{ maskType: 'alpha' }}

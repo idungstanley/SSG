@@ -246,7 +246,7 @@ export const UseGetHubDetails = (query: {
 
   const fetch = currentWorkspaceId === workSpaceId;
   return useQuery(
-    ['hub-details', { query }],
+    ['hub-details', 'hub', { query }],
     async () => {
       const data = await requestNew<IHubDetailRes>({
         url: `hubs/${query.activeItemId}/details`,

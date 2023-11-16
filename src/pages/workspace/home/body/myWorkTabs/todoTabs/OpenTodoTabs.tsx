@@ -3,19 +3,15 @@ import OpenSubtask from '../../../../../../assets/icons/OpenSubtask';
 import CloseSubtask from '../../../../../../assets/icons/CloseSubtask';
 import { HiArrowLongUp } from 'react-icons/hi2';
 
-export default function OpenTodoTabs({
-  openTab,
-  setOpenTab,
-  title,
-  NoDueDate,
-  NoReminder
-}: {
+interface IOpenTodoTabs {
   openTab: boolean;
   setOpenTab: React.Dispatch<React.SetStateAction<boolean>>;
   NoDueDate?: boolean;
   title: string;
   NoReminder?: boolean;
-}) {
+}
+
+export default function OpenTodoTabs({ openTab, setOpenTab, title, NoDueDate, NoReminder }: IOpenTodoTabs) {
   return (
     <div className="flex items-center group">
       <div className="flex pb-5 items-center cursor-pointer space-x-3" onClick={() => setOpenTab(!openTab)}>

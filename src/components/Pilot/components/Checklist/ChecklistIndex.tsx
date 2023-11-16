@@ -5,7 +5,6 @@ import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { setCreateNewChecklist, setShowChecklistInput } from '../../../../features/task/checklist/checklistSlice';
 import { MdCancel } from 'react-icons/md';
 import Disclosures from './Disclosure';
-import { VscChecklist } from 'react-icons/vsc';
 import { UseGetHubDetails } from '../../../../features/hubs/hubService';
 import { UseGetWalletDetails } from '../../../../features/wallet/walletService';
 import { UseGetListDetails } from '../../../../features/list/listService';
@@ -56,16 +55,6 @@ export default function ChecklistIndex() {
 
   return (
     <div className="p">
-      <div className="border-2 flex items-center text-center py-1 bg-white">
-        <VscChecklist className="w-4 h-4 ml-2" />
-        <h1 className="text-base-xl mx-4">Checklists</h1>
-        <button
-          className="p-0.5 border-blue-400 border-solid border-2 rounded-lg text-xs"
-          onClick={() => dispatch(setShowChecklistInput(true))}
-        >
-          ADD
-        </button>
-      </div>
       {showChecklistInput && (
         <form
           onSubmit={(e) => {

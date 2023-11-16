@@ -31,6 +31,7 @@ interface workspaceState {
   pilotWidth: number;
   fetchAllWorkspace: boolean;
   isManageStatus: boolean;
+  editingPilotDetailsTitle: boolean;
   showWallet: boolean;
   extendedSidebarWidth: number;
   isResize: boolean;
@@ -97,6 +98,7 @@ const initialState: workspaceState = {
   activePlaceId: initialActivePlaceId,
   activePlaceName: null,
   pilotWidth: 400,
+  editingPilotDetailsTitle: false,
   isResize: false,
   showOverlay: false,
   showTabLabel: showTabLabelFromLS,
@@ -258,6 +260,9 @@ export const wsSlice = createSlice({
     },
     setShowWallet(state, action: PayloadAction<boolean>) {
       state.showWallet = action.payload;
+    },
+    setEditingPilotDetailsTitle(state, action: PayloadAction<boolean>) {
+      state.editingPilotDetailsTitle = action.payload;
     },
     setRecording: (state, action: PayloadAction<{ id: string | null; type: string | null }>) => {
       state.getRecording = action.payload;
@@ -454,7 +459,8 @@ export const {
   setNestedTimeEntityId,
   setActiveView,
   setEntityForPermissions,
-  setActiveSubLogsTabId
+  setActiveSubLogsTabId,
+  setEditingPilotDetailsTitle
 } = wsSlice.actions;
 
 export default wsSlice.reducer;

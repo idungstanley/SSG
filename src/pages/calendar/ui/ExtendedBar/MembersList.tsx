@@ -24,7 +24,7 @@ export function MembersList({ members, onCheckbox, hubId, place }: MembersListPr
     <ul>
       {members.map((member) => (
         <li
-          className="grid grid-cols-autoFr items-center space-x-3 cursor-pointer hover:bg-alsoit-gray-50"
+          className="grid items-center py-2 space-x-3 cursor-pointer grid-cols-autoFr hover:bg-alsoit-gray-50"
           key={member.id}
           style={{ padding: place === 'menu' ? '3px 0 3px 25px' : '0' }}
         >

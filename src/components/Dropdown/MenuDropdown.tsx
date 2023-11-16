@@ -20,11 +20,6 @@ import { getHub, setArchiveHub, setSubDropdownMenu, setshowMenuDropdown } from '
 import EditHubModal from '../../pages/workspace/hubs/components/EditHubModal';
 import SubDropdown from './SubDropdown';
 import { ArchiveHubService, useCreateFavorite, UseDeleteHubService } from '../../features/hubs/hubService';
-import {
-  setEditHubSlideOverVisibility,
-  setEditListSlideOverVisibility,
-  setEditWalletSlideOverVisibility
-} from '../../features/general/slideOver/slideOverSlice';
 import EditListModal from '../../pages/workspace/lists/components/modals/EditListModal';
 import EditWalletModal from '../../pages/workspace/wallet/components/modals/EditWalletModal';
 import { setArchiveWallet } from '../../features/wallet/walletSlice';
@@ -41,10 +36,14 @@ import {
 } from '../../managers/Wallet';
 import { deleteHubManager, findAllEntitiesIdsOfHub, removeEntityChildrenIdsOfHub } from '../../managers/Hub';
 import {
+  setActiveItem,
+  setActiveSubDetailsTabId,
   setActiveSubHubManagerTabId,
   setActiveTabId,
+  setEditingPilotDetailsTitle,
   setExtendedBarOpenedEntitiesIds,
-  setOpenedEntitiesIds
+  setOpenedEntitiesIds,
+  setShowPilot
 } from '../../features/workspace/workspaceSlice';
 import ExpandAllIcon from '../../assets/icons/ExpandAllIcon';
 import CollapseAllIcon from '../../assets/icons/CollapseAllIcon';
@@ -59,10 +58,16 @@ import { displayPrompt, setVisibility } from '../../features/general/prompt/prom
 import { APP_TASKS } from '../../app/constants/app';
 import { AiOutlineShareAlt } from 'react-icons/ai';
 import { pilotTabs } from '../../app/constants/pilotTabs';
+import { generateViewsUrl } from '../../utils/generateViewsUrl';
+import { useNavigate } from 'react-router-dom';
+import { IFavorites, IHub, IList, IWallet } from '../../features/hubs/hubs.interfaces';
 
 interface IMenuDropdownProps {
   isExtendedBar?: boolean;
   cords?: Cords;
+  walletLevel?: number;
+  item?: IList | IWallet | IHub | IFavorites;
+  entityType?: string;
 }
 
 interface itemsType {
@@ -81,13 +86,14 @@ interface InlineBorderProps {
   topElement?: JSX.Element;
 }
 
-export default function MenuDropdown({ isExtendedBar, cords }: IMenuDropdownProps) {
+export default function MenuDropdown({ isExtendedBar, cords, walletLevel, item, entityType }: IMenuDropdownProps) {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const { SubDropdownMenu, archiveHub, showMenuDropdown, showMenuDropdownType, hub } = useAppSelector(
     (state) => state.hub
   );
-  const { openedEntitiesIds, sidebarWidthRD } = useAppSelector((state) => state.workspace);
+  const { openedEntitiesIds, sidebarWidthRD, activeView } = useAppSelector((state) => state.workspace);
   const { archiveWallet } = useAppSelector((state) => state.wallet);
   const { archiveList } = useAppSelector((state) => state.list);
   const { showSidebar, userSettingsData } = useAppSelector((state) => state.account);
@@ -168,13 +174,26 @@ export default function MenuDropdown({ isExtendedBar, cords }: IMenuDropdownProp
     {
       title: 'Rename',
       handleClick: () => {
-        if (showMenuDropdownType?.includes(EntityType.hub)) {
-          dispatch(setEditHubSlideOverVisibility(true));
-        } else if (showMenuDropdownType?.includes(EntityType.wallet)) {
-          dispatch(setEditWalletSlideOverVisibility(true));
-        } else {
-          dispatch(setEditListSlideOverVisibility(true));
-        }
+        dispatch(setActiveTabId(pilotTabs.DETAILS));
+        dispatch(setActiveSubDetailsTabId(pilotTabs.PROPERTIES));
+        const viewsUrl = generateViewsUrl(
+          showMenuDropdown as string,
+          activeView?.id as string,
+          item,
+          entityType || (showMenuDropdownType as string)
+        ) as string;
+        dispatch(
+          setActiveItem({
+            activeItemId: showMenuDropdown as string,
+            activeItemType: (entityType as string) || (showMenuDropdownType as string)
+          })
+        );
+        dispatch(setEditingPilotDetailsTitle(true));
+        dispatch(setShowPilot(true));
+        navigate(viewsUrl, {
+          replace: true
+        });
+        dispatch(setshowMenuDropdown({ showMenuDropdown: null, showMenuDropdownType: null }));
       },
       icon: <PencilIcon className="w-4 h-4" aria-hidden="true" />,
       isVisible: true
@@ -414,7 +433,7 @@ export default function MenuDropdown({ isExtendedBar, cords }: IMenuDropdownProp
           onClick={handleSharingnPermissions}
         />
       </div>
-      {SubDropdownMenu && <SubDropdown placeHubType={APP_TASKS} />}
+      {SubDropdownMenu && <SubDropdown walletLevel={walletLevel} placeHubType={APP_TASKS} />}
       <EditHubModal />
       <EditListModal />
       <EditWalletModal />
