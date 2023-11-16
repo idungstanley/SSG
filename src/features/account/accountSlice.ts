@@ -104,15 +104,11 @@ export const accountSlice = createSlice({
       state.userSettingsData = action.payload;
     },
     setAdjustableWidths: (state, action: PayloadAction<AjustableWidths>) => {
-      state.sidebarWidth = action.payload.sidebarWidth ? action.payload.sidebarWidth : sidebarWidthFromLS;
-      state.extendedBarWidth = action.payload.extendedBarWidth
-        ? action.payload.extendedBarWidth
-        : extendedBarWidthFromLS;
-      state.pilotWidth = action.payload.pilotWidth
-        ? action.payload.pilotWidth
-        : action.payload.pilotWidth
-        ? action.payload.pilotWidth
-        : pilotWidthFromLS;
+      // state.sidebarWidth = action.payload.sidebarWidth ? action.payload.sidebarWidth : sidebarWidthFromLS;
+      // state.extendedBarWidth = action.payload.extendedBarWidth
+      //   ? action.payload.extendedBarWidth
+      //   : extendedBarWidthFromLS;
+      state.pilotWidth = action.payload.pilotWidth;
     },
     setShowSidebar: (state, action: PayloadAction<boolean>) => {
       state.showSidebar = action.payload;
