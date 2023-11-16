@@ -11,8 +11,14 @@ import {
 } from '../../features/task/taskSlice';
 import { useDuplicateTask, useMultipleDuplicateTasks, useMultipleTaskMove } from '../../features/task/taskService';
 import DuplicateTaskAdvanceModal from '../../pages/workspace/tasks/component/taskMenu/DuplicateTaskAdvanceModal';
-import { TASK_DUPLICATE, TASK_MOVE } from '../../pages/workspace/tasks/component/taskMenu/TaskMenu';
+import {
+  BROWSE_TASKS_FROM_HOME,
+  TASK_DUPLICATE,
+  TASK_MOVE
+} from '../../pages/workspace/tasks/component/taskMenu/TaskMenu';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
+import OpenSubtask from '../../assets/icons/OpenSubtask';
+import CloseSubtask from '../../assets/icons/CloseSubtask';
 
 interface ListItemProps {
   list: IList;
@@ -32,6 +38,8 @@ export default function SearchListItem({ list, paddingLeft, option }: ListItemPr
   const { lightBaseColor, baseColor } = useAppSelector((state) => state.account);
   const { listColour } = useAppSelector((state) => state.list);
   const { duplicateTaskObj, selectedTasksArray } = useAppSelector((state) => state.task);
+
+  const [openList, setOpenList] = useState(false);
   const [showSelectDropdown, setShowSelectDropdown] = useState<null | HTMLSpanElement | HTMLDivElement>(null);
 
   const { mutate: duplicateTask } = useDuplicateTask();
@@ -39,6 +47,7 @@ export default function SearchListItem({ list, paddingLeft, option }: ListItemPr
   const { mutate: onMultipleTaskMove } = useMultipleTaskMove(list, 'id_only');
 
   const handleClick = () => {
+    setOpenList(!openList);
     if (option === TASK_DUPLICATE) {
       if (selectedTasksArray.length > 1) {
         dispatch(setDuplicateTaskObj({ ...duplicateTaskObj, popDuplicateTaskModal: false }));
@@ -99,6 +108,11 @@ export default function SearchListItem({ list, paddingLeft, option }: ListItemPr
           <span className="absolute top-0 bottom-0 left-0 rounded-r-lg w-0.5" style={{ backgroundColor: baseColor }} />
         )}
         <div className="flex items-center space-x-1 overflow-hidden capitalize cursor-pointer" onClick={handleClick}>
+          {option === BROWSE_TASKS_FROM_HOME && (
+            <div className="flex items-center cursor-pointer space-x-3">
+              <p>{!openList ? <OpenSubtask /> : <CloseSubtask />}</p>
+            </div>
+          )}
           <div>
             <ListIconComponent
               shape={activeShape ? activeShape : 'solid-circle'}
@@ -118,12 +132,14 @@ export default function SearchListItem({ list, paddingLeft, option }: ListItemPr
             className="flex items-center justify-between pl-4 capitalize truncate cursor-pointer"
           >
             <p>{list.name}</p>
-            <p
-              className="border-b-2 border-dotted border-black hover:text-alsoit-purple-300"
-              onClick={(e) => handleAdvance(e)}
-            >
-              Advanced
-            </p>
+            {option === TASK_DUPLICATE && (
+              <p
+                className="border-b-2 border-dotted border-black hover:text-alsoit-purple-300"
+                onClick={(e) => handleAdvance(e)}
+              >
+                Advanced
+              </p>
+            )}
           </div>
         </div>
 

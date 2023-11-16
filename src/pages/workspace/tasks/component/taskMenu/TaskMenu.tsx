@@ -38,7 +38,8 @@ import MultipleStatuses from '../../multipleStatuses/MultipleStatuses';
 
 export const TASK_DUPLICATE = 'task_duplicate';
 export const TASK_MOVE = 'task_move';
-export const OPTIONS_WITH_AVAILABLE_LISTS = [TASK_DUPLICATE, TASK_MOVE];
+export const BROWSE_TASKS_FROM_HOME = 'browse_tasks_from_home';
+export const OPTIONS_WITH_AVAILABLE_LISTS = [TASK_DUPLICATE, TASK_MOVE, BROWSE_TASKS_FROM_HOME];
 
 export default function TaskMenu() {
   const dispatch = useDispatch();

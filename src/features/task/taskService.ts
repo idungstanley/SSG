@@ -3,6 +3,7 @@ import {
   IAttachmentsRes,
   ICheckListRes,
   IFullTaskRes,
+  ILineUpTaskRes,
   ITaskCreateProps,
   ITaskFullList,
   ITaskListRes,
@@ -1570,6 +1571,37 @@ export const UseTaskWatchersAssignService = (taskIds: string[], user: ITeamMembe
       dispatch(setToggleAssignCurrentTaskId(null));
       dispatch(setSelectedTasksArray([]));
       dispatch(setSelectedListIds([]));
+    }
+  });
+};
+
+export const GetAddLineUpTask = () => {
+  return useQuery(['lineup_tasks'], async () => {
+    const data = await requestNew<ILineUpTaskRes | undefined>({
+      url: '/tasks/lineup',
+      method: 'GET'
+    });
+    return data;
+  });
+};
+
+const AddLineUpTask = ({ taskId, team_member_id }: { taskId: string; team_member_id: string }) => {
+  const request = requestNew({
+    url: `/tasks/${taskId}/lineup`,
+    method: 'POST',
+    data: {
+      team_member_ids: team_member_id
+    }
+  });
+  return request;
+};
+
+export const UseAddLineUpTask = () => {
+  // const dispatch = useAppDispatch();
+  // const { tasks, subtasks } = useAppSelector((state) => state.task);
+  return useMutation(AddLineUpTask, {
+    onSuccess: (data) => {
+      console.log(data);
     }
   });
 };

@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { UseGetFullTaskList } from '../../../../features/task/taskService';
+import { GetAddLineUpTask, UseGetFullTaskList } from '../../../../features/task/taskService';
 import { EntityType } from '../../../../utils/EntityTypes/EntityType';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { generateLists } from '../../../../utils';
@@ -18,6 +18,11 @@ export default function LineUp() {
   const { tasks: tasksStore } = useAppSelector((state) => state.task);
 
   const [lineUp, setLineUp] = useState<Task[]>([]);
+  const { data: lineUpTaskRes } = GetAddLineUpTask();
+
+  useEffect(() => {
+    setLineUp((lineUpTaskRes?.data.tasks as Task[]) ?? []);
+  }, [lineUpTaskRes]);
 
   const dispatch = useAppDispatch();
 
@@ -73,7 +78,7 @@ export default function LineUp() {
       {!lineUp.length && <AddLineUpTask setAnchorEl={setAnchorEl} />}
 
       <div className="flex items-center overflow-x-scroll space-x-2" style={{ maxWidth: '900px' }}>
-        <LineUpTasks lineUp={lineUp} handleRemoveLineUpTask={handleRemoveLineUpTask} />
+        <LineUpTasks handleRemoveLineUpTask={handleRemoveLineUpTask} lineUp={lineUp} />
       </div>
 
       <LineUpModal anchorEl={anchorEl} setAnchorEl={setAnchorEl} handleLineUpTasks={handleLineUpTasks} />
