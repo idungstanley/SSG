@@ -126,14 +126,22 @@ export default function WalletItem({
       if (showSubWallet) {
         return (
           <>
-            <VscTriangleDown className="flex-shrink-0 h-2" aria-hidden="true" color="rgba(72, 67, 67, 0.64)" />
+            <VscTriangleDown
+              className="flex-shrink-0 h-2 hover:fill-[#BF01FE] cursor-pointer"
+              aria-hidden="true"
+              color="rgba(72, 67, 67, 0.64)"
+            />
             {renderOpenFolder()}
           </>
         );
       } else {
         return (
           <>
-            <VscTriangleRight className="flex-shrink-0 h-2" aria-hidden="true" color="rgba(72, 67, 67, 0.64)" />
+            <VscTriangleRight
+              className="flex-shrink-0 h-2 hover:fill-[#BF01FE] cursor-pointer"
+              aria-hidden="true"
+              color="rgba(72, 67, 67, 0.64)"
+            />
             {renderCloseFolder()}
           </>
         );
@@ -238,23 +246,30 @@ export default function WalletItem({
           {showSidebar && (
             <div
               id="walletRight"
-              className="relative flex items-center pr-1 ml-auto space-x-2 opacity-0 z-1 group-hover:opacity-100 hover:text-fuchsia-500"
+              className="relative flex items-center pr-1 ml-auto space-x-2 opacity-0 z-1 group-hover:opacity-100"
               onClick={(e) => e.stopPropagation()}
               ref={menuRef}
             >
-              <span onClick={() => handleItemAction(wallet.id, wallet.name)} className="cursor-pointer">
-                <PlusIcon active />
-              </span>
-              <span
-                className="cursor-pointer"
-                onClick={(e) => {
-                  handleWalletSettings(wallet.id, wallet.name, e);
-                  dispatch(setEntityForPermissions(wallet));
-                }}
-                id="menusettings"
-              >
-                <ThreeDotIcon />
-              </span>
+              <ToolTip title="Create subwallet and list">
+                <span
+                  onClick={() => handleItemAction(wallet.id, wallet.name)}
+                  className="cursor-pointer hover:text-alsoit-purple-300"
+                >
+                  <PlusIcon />
+                </span>
+              </ToolTip>
+              <ToolTip title="Wallet settings">
+                <span
+                  className="cursor-pointer hover:text-alsoit-purple-300"
+                  onClick={(e) => {
+                    handleWalletSettings(wallet.id, wallet.name, e);
+                    dispatch(setEntityForPermissions(wallet));
+                  }}
+                  id="menusettings"
+                >
+                  <ThreeDotIcon />
+                </span>
+              </ToolTip>
             </div>
           )}
         </div>
