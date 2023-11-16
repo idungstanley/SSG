@@ -9,13 +9,15 @@ interface IActiveTreeDataFormaterProps {
   openNewHub: (id: string) => void;
   setToggleTree?: React.Dispatch<React.SetStateAction<boolean>>;
   option?: string;
+  checklistId?: string;
 }
 
 export default function ActiveTreeDataFormater({
   data,
   openNewHub,
   setToggleTree,
-  option
+  option,
+  checklistId
 }: IActiveTreeDataFormaterProps) {
   return data.length ? (
     <div
@@ -25,7 +27,13 @@ export default function ActiveTreeDataFormater({
       <div className="sticky top-0 z-50 pt-3 bg-white">
         <Input leadingIcon={<CiSearch />} placeholder="Choose Location" name="search" onChange={() => ({})} />
       </div>
-      <ActiveTreeList hubs={data} openNewHub={openNewHub} setToggleTree={setToggleTree} option={option} />
+      <ActiveTreeList
+        hubs={data}
+        openNewHub={openNewHub}
+        setToggleTree={setToggleTree}
+        option={option}
+        checklistId={checklistId}
+      />
     </div>
   ) : null;
 }

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   setClickChecklistItemId,
   setOpenedDisclosureId,
@@ -7,11 +7,12 @@ import {
 } from '../../../../features/task/checklist/checklistSlice';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import {
-  useConvertChecklistToTask,
+  // useConvertChecklistToTask,
   useDeleteChecklist,
   useDeleteChecklistItem
 } from '../../../../features/task/checklist/checklistService';
 import AlsoitMenuDropdown from '../../../DropDowns';
+import ActiveTreeSearch from '../../../ActiveTree/ActiveTreeSearch';
 
 interface ChecklistModalProps {
   checklistId: string;
@@ -34,10 +35,11 @@ export default function ChecklistModal({
   setAnchor
 }: ChecklistModalProps) {
   const dispatch = useAppDispatch();
+  const [activeTree, setActiveTree] = useState<HTMLElement | null>(null);
 
   const { mutate: onChecklistDelete } = useDeleteChecklist(checklistId);
   const { mutate: onChecklistItemDelete } = useDeleteChecklistItem(checklistId, checklistItemId as string);
-  const { mutate: convertToTask } = useConvertChecklistToTask(checklistId);
+  // const { mutate: convertToTask } = useConvertChecklistToTask(checklistId);
 
   const { openedDisclosureId, clickedChecklistId } = useAppSelector((state) => state.checklist);
 
@@ -54,13 +56,11 @@ export default function ChecklistModal({
     });
   };
 
-  const handleConvertToTask = () => {
-    convertToTask({
-      query: checklistId
-    });
+  const handleConvertToTask = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    setActiveTree(e.currentTarget);
   };
 
-  const handleOptions = (option: { name: string; id: string }) => {
+  const handleOptions = (option: { name: string; id: string }, e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     if (option.name === 'Delete Checklist') {
       handleDelChecklist();
       setAnchor(null);
@@ -70,7 +70,7 @@ export default function ChecklistModal({
       dispatch(setToggleAssignChecklistItemId(checklistItemId));
       dispatch(setClickChecklistItemId(checklistItemId));
     } else if (option.id === 'convert_to_task') {
-      handleConvertToTask();
+      handleConvertToTask(e);
     } else if (option.id === 'new_item') {
       setAnchor(null);
       dispatch(setShowChecklistItemInput(true));
@@ -89,8 +89,8 @@ export default function ChecklistModal({
               <button
                 type="button"
                 className="flex items-center w-11/12 px-4 py-2 space-x-2 text-sm text-left"
-                onClick={() => {
-                  handleOptions(option);
+                onClick={(e) => {
+                  handleOptions(option, e);
                 }}
               >
                 <span className="w-4 h-4">{option.icon}</span>
@@ -100,6 +100,11 @@ export default function ChecklistModal({
           );
         })}
       </div>
+      <AlsoitMenuDropdown handleClose={() => setActiveTree(null)} anchorEl={activeTree}>
+        <div style={{ width: '170px' }}>
+          <ActiveTreeSearch option={'convert_checklist'} checklistId={checklistId} />
+        </div>
+      </AlsoitMenuDropdown>
     </AlsoitMenuDropdown>
   );
 }
