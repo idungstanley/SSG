@@ -10,12 +10,15 @@ import { cl } from '../../../utils';
 import { AlphaPicker, HuePicker } from 'react-color';
 import { ColorResult } from '../Type';
 import { EditableInput } from 'react-color/lib/components/common';
-import Button from '../../Button';
+// import Button from '../../Button';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { AddColour } from '../../../features/account/accountService';
 import { FORMATTED_COLOR } from './PaletteListView';
 import { getColorName } from 'ntc-ts';
-import CancelButton from '../../CancelButton';
+// import CancelButton from '../../CancelButton';
+import ClosePalette from '../../../assets/icons/ClosePalette';
+import SavePalette from '../../../assets/icons/SavePalette';
+import ReplacePalette from '../../../assets/icons/ReplacePalette';
 
 export default function AdvanceColourPalette({ show }: { show: boolean }) {
   //Hooks
@@ -106,6 +109,8 @@ export default function AdvanceColourPalette({ show }: { show: boolean }) {
       height: '23px'
     }
   };
+
+  const [onHover, setOnHover] = useState('white');
 
   return show ? (
     <div className="px-2 border-alsoit-gray-75 border-t-[0.5px]">
@@ -207,28 +212,31 @@ export default function AdvanceColourPalette({ show }: { show: boolean }) {
           height="h-8"
           onChange={(e) => setColorInputValue(e.target.value)}
         />
-        <div className="flex items-center justify-between gap-2 mt-5 mb-4">
-          <CancelButton onClick={() => ({})} />
-          <div className="flex items-center gap-2">
-            <Button
-              height="h-6"
-              customClasses="hover:bg-green-700 bg-[#00CC25] text-white w-[80px]"
-              label="Replace"
-              labelSize="text-[10px]"
-              padding="p-1"
-              buttonStyle="custom"
-              onClick={handleAddColor}
-            />
-            <Button
-              height="h-6"
-              customClasses="hover:bg-green-700 bg-[#00CC25] text-white w-[80px]"
-              label="Save as new"
-              labelSize="text-[10px]"
-              padding="p-1"
-              buttonStyle="custom"
-              onClick={handleAddColor}
-            />
-          </div>
+        <div className="flex items-center justify-end gap-2 p-1 mb-2 cursor-pointer">
+          <ToolTip title="Cancel">
+            <span
+              onClick={() => ({})}
+              onMouseEnter={() => {
+                setOnHover('#FF3738');
+              }}
+              onMouseLeave={() => {
+                setOnHover('white');
+              }}
+              className="text-[#FF3738] hover:text-white"
+            >
+              <ClosePalette fill={onHover} />
+            </span>
+          </ToolTip>
+          <ToolTip title="Replace selected library color">
+            <span onClick={handleAddColor} className="text-white hover:text-[#96EAA6]">
+              <ReplacePalette />
+            </span>
+          </ToolTip>
+          <ToolTip title="Save as a new library color">
+            <span onClick={handleAddColor}>
+              <SavePalette />
+            </span>
+          </ToolTip>
         </div>
       </div>
     </div>
