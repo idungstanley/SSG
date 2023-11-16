@@ -15,7 +15,7 @@ import ChatMe from '../../../assets/icons/ChatMe';
 import ChatAssign from '../../../assets/icons/ChatAssign';
 import ArrowDrop from '../../../assets/icons/ArrowDrop';
 import ChatSearch from '../../../assets/icons/ChatSearch';
-import ListAddModal from '../../Views/ui/List/ListAddModal';
+import ChatAddModal from './ChatAddModal';
 
 const heads: ExtendedListColumnProps[] = [
   {
@@ -121,7 +121,7 @@ export default function ChatsList() {
               >
                 CHAT
                 <div className="flex items-center justify-center h-6 bg-white rounded-[5px] w-12">
-                  <ListAddModal handleCheckedGroupTasks={() => null} ListColor={{ outerColour: null }} />
+                  <ChatAddModal />
                 </div>
               </div>
             </div>

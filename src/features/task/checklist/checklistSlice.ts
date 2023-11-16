@@ -1,4 +1,4 @@
-import { AssigneeType, ICheckListItems, ICheckListRes } from './../interface.tasks';
+import { AssigneeType, ICheckListItems, ICheckListRes, Tag } from './../interface.tasks';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface checklistState {
@@ -12,6 +12,7 @@ interface checklistState {
   showChecklistItemInput: boolean;
   openChecklistModal: boolean;
   openedDisclosureId: string[];
+  assignTag?: Tag;
 }
 
 interface CreateItemProps {
@@ -29,7 +30,8 @@ const initialState: checklistState = {
   showChecklistInput: false,
   openChecklistModal: false,
   openedDisclosureId: [],
-  checklists: []
+  checklists: [],
+  assignTag: undefined
 };
 
 export const checklistSlice = createSlice({
@@ -160,6 +162,51 @@ export const checklistSlice = createSlice({
         setEditChecklist(updateChecklist as ICheckListRes);
       }
     },
+    setAssignTagsToChecklistItem(state, action: PayloadAction<{ itemId: string; tag: Tag }>) {
+      let checklistToUpdate = null;
+      let updatedItemArr = null;
+      if (state.checklists) {
+        for (let index = 0; index < state.checklists?.length; index++) {
+          const itemToUpdate = state.checklists[index].items.find((i) => i.id === action.payload.itemId);
+          if (itemToUpdate) {
+            checklistToUpdate = state.checklists[index];
+            itemToUpdate.tags.push(action.payload.tag);
+            updatedItemArr = state.checklists[index].items.map((item) => {
+              if (item.id === itemToUpdate.id) {
+                return itemToUpdate;
+              }
+              return item;
+            });
+          }
+        }
+        const updatedChecklist = { ...checklistToUpdate, items: updatedItemArr };
+        setEditChecklist(updatedChecklist as ICheckListRes);
+      }
+    },
+    setUnassignTagChecklistItem(state, action: PayloadAction<{ itemId: string; tagId: string }>) {
+      let checklistToUpdate = null;
+      let updatedItemArr = null;
+      if (state.checklists) {
+        for (let index = 0; index < state.checklists?.length; index++) {
+          const itemToUpdate = state.checklists[index].items.find((i) => i.id === action.payload.itemId);
+          if (itemToUpdate) {
+            checklistToUpdate = state.checklists[index];
+            const updateItemAssignee = itemToUpdate.tags.filter((item) => {
+              return item.id !== action.payload.tagId;
+            });
+            itemToUpdate.tags = updateItemAssignee;
+            updatedItemArr = state.checklists[index].items.map((item) => {
+              if (item.id === itemToUpdate.id) {
+                return itemToUpdate;
+              }
+              return item;
+            });
+          }
+        }
+        const updateChecklist = { ...checklistToUpdate, items: updatedItemArr };
+        setEditChecklist(updateChecklist as ICheckListRes);
+      }
+    },
     setTriggerChecklistUpdate(state, action: PayloadAction<boolean>) {
       state.triggerChecklistUpdate = action.payload;
     },
@@ -192,11 +239,16 @@ export const checklistSlice = createSlice({
         newArr = [...state.openedDisclosureId, action.payload];
       }
       state.openedDisclosureId = newArr;
+    },
+    setAssignTag(state, action: PayloadAction<Tag>) {
+      state.assignTag = action.payload;
     }
   }
 });
 
 export const {
+  setUnassignTagChecklistItem,
+  setAssignTag,
   setChecklists,
   setTriggerChecklistUpdate,
   setTriggerItemtUpdate,
@@ -214,7 +266,8 @@ export const {
   setDeleteChecklist,
   setDeleteChecklistItem,
   setAssignChecklistItem,
-  setUnassignChecklistItem
+  setUnassignChecklistItem,
+  setAssignTagsToChecklistItem
 } = checklistSlice.actions;
 
 export default checklistSlice.reducer;

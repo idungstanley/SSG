@@ -1,8 +1,13 @@
 import React from 'react';
 
-function Copy() {
+interface CopyProps {
+  width?: string;
+  height?: string;
+}
+
+function Copy({ width = '12px', height = '12px' }: CopyProps) {
   return (
-    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg width={width} height={height} viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
         d="M3.19922 5.57859C3.19922 4.39083 3.19922 3.79653 3.60942 3.42777C4.01915 3.05859 4.67949 3.05859 5.99922 3.05859H7.39922C8.71895 3.05859 9.37929 3.05859 9.78902 3.42777C10.1992 3.79653 10.1992 4.39083 10.1992 5.57859V7.67859C10.1992 8.86635 10.1992 9.46065 9.78902 9.82941C9.37929 10.1986 8.71895 10.1986 7.39922 10.1986H5.99922C4.67949 10.1986 4.01915 10.1986 3.60942 9.82941C3.19922 9.46065 3.19922 8.86635 3.19922 7.67859V5.57859Z"
         stroke="#626262"

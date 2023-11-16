@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { DocumentDuplicateIcon, StarIcon, PlusIcon, LinkIcon, SwatchIcon } from '@heroicons/react/24/outline';
 import { useAppSelector } from '../../app/hooks';
 import { useDispatch } from 'react-redux';
-import { setCreateTaskSlideOverVisibility } from '../../features/general/slideOver/slideOverSlice';
+import { setShowPilotSideOver } from '../../features/general/slideOver/slideOverSlice';
 import { getSubMenu, setEntityToCreate, setSubDropdownMenu, setshowMenuDropdown } from '../../features/hubs/hubSlice';
 import { useParams } from 'react-router-dom';
 import {
@@ -53,9 +53,8 @@ export default function SubDropdown({ cords, placeHubType, walletLevel }: SubDro
   const { showMenuDropdownType, showMenuDropdown, selectedTreeDetails, entityToCreate, SubMenuType } = useAppSelector(
     (state) => state.hub
   );
-  const { showTreeInput, lastActiveItem, activeItemId, activeItemType, sidebarWidthRD } = useAppSelector(
-    (state) => state.workspace
-  );
+  const { showTreeInput, lastActiveItem, activeItemId, activeItemType, sidebarWidthRD, activeItemName } =
+    useAppSelector((state) => state.workspace);
   const { lightBaseColor, showSidebar, userSettingsData } = useAppSelector((state) => state.account);
 
   const [open, setOpen] = useState<boolean>(true);
@@ -178,7 +177,17 @@ export default function SubDropdown({ cords, placeHubType, walletLevel }: SubDro
           {
             title: 'Task',
             handleClick: () => {
-              dispatch(setCreateTaskSlideOverVisibility(true));
+              // dispatch(setCreateTaskSlideOverVisibility(true));
+              dispatch(setActiveTabId(pilotTabs.ENTITY_MANAGER));
+              dispatch(setActiveSubHubManagerTabId(pilotTabs.CREATE_TASK));
+              dispatch(
+                setShowPilotSideOver({
+                  show: true,
+                  id: activeItemId as string,
+                  title: activeItemName as string,
+                  type: activeItemType as string
+                })
+              );
               dispatch(setSubDropdownMenu(false));
               dispatch(setshowMenuDropdown({ showMenuDropdown: null, showMenuDropdownType: null }));
               // navigate(`/${currentWorkspaceId}/tasks`);

@@ -27,9 +27,10 @@ interface TableProps {
   listName?: string;
   listColor?: IListColor;
   isBlockedShowChildren?: boolean;
+  selectionArr?: ITaskFullList[];
 }
 
-export function Table({ heads, data, label, listName, listColor, isBlockedShowChildren }: TableProps) {
+export function Table({ heads, data, label, listName, listColor, isBlockedShowChildren, selectionArr }: TableProps) {
   const dispatch = useAppDispatch();
 
   const { draggableItemId } = useAppSelector((state) => state.list);
@@ -44,12 +45,23 @@ export function Table({ heads, data, label, listName, listColor, isBlockedShowCh
   const [tableHeight, setTableHeight] = useState<string | number>('auto');
   const [showNewTaskField, setShowNewTaskField] = useState(false);
   const [collapseTasks, setCollapseTasks] = useState(false);
+  const [selectedRow, setSelectedRow] = useState<number>(0);
 
   const tableElement = useRef<HTMLTableElement>(null);
   const tableHeadElement = useRef<HTMLTableElement>(null);
   const taskLength = data.length;
 
   const columns = heads.filter((i) => !i.hidden);
+
+  const handleKeyDown = (e: KeyboardEvent) => {
+    if (selectionArr) {
+      if (e.key === 'ArrowUp' && selectedRow !== null) {
+        setSelectedRow(selectedRow > 0 ? selectedRow - 1 : 0);
+      } else if (e.key === 'ArrowDown' && selectedRow !== null) {
+        setSelectedRow(selectedRow < selectionArr.length - 1 ? selectedRow + 1 : selectionArr.length - 1);
+      }
+    }
+  };
 
   // New task template
   const newTaskObj = NewTaskTemplate({
@@ -60,6 +72,19 @@ export function Table({ heads, data, label, listName, listColor, isBlockedShowCh
   });
 
   const dataSpread = showNewTaskField ? newTaskObj : data;
+
+  useEffect(() => {
+    const tableElement = document.getElementById('tasksTable');
+    if (tableElement) {
+      window.addEventListener('keydown', handleKeyDown);
+    }
+
+    return () => {
+      if (tableElement) {
+        tableElement.removeEventListener('keydown', handleKeyDown);
+      }
+    };
+  }, []);
 
   // reset showNewTaskField with eskLey
   useEffect(() => {
@@ -171,6 +196,8 @@ export function Table({ heads, data, label, listName, listColor, isBlockedShowCh
             }
             className="w-full"
             ref={tableElement}
+            id="tasksTable"
+            tabIndex={0}
           >
             {/* rows */}
             {!collapseTasks ? (

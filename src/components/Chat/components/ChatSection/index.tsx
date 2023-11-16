@@ -99,7 +99,6 @@ export default function ChatSection() {
 
   const allMessages = messages ? [...messages, ...incomingData] : [...incomingData];
 
-  console.log('chat', chat);
   return (
     <>
       {!selectedChatId ? (

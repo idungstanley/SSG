@@ -62,6 +62,15 @@ export function CreateTask() {
     });
   };
 
+  const priorityColor = (): string =>
+    priority === priorities.LOW
+      ? 'gray'
+      : priority === priorities.NORMAL
+      ? 'blue'
+      : priority === priorities.HIGH
+      ? 'yellow'
+      : 'red';
+
   const priorityList: priorityType[] = [
     {
       id: priorities.LOW,
@@ -123,6 +132,8 @@ export function CreateTask() {
         <div className="flex space-x-2 items-center">
           <div
             onClick={() => setDropdown((prev) => ({ ...prev, entity: !prev.entity }))}
+            onBlur={() => setDropdown((prev) => ({ ...prev, entity: false }))}
+            tabIndex={0}
             className="flex items-center space-x-1.5 border rounded-md w-max p-1.5 cursor-pointer relative"
           >
             <div className="w-4 h-4">
@@ -142,20 +153,22 @@ export function CreateTask() {
             type="text"
             name="task_name"
             onChange={handleChange}
-            className="w-full border-0 text-alsoit-gray-75 text-alsoit-text-xi p-2 focus:ring-0"
+            className="w-full rounded-lg text-alsoit-gray-75 text-alsoit-text-xi p-2"
             placeholder="Enter task Name"
           />
           <input
             type="text"
             name="description"
             onChange={handleChange}
-            className="w-full border-0 text-alsoit-gray-75 text-alsoit-text-md p-2 focus:ring-0"
+            className="w-full rounded-lg text-alsoit-gray-75 text-alsoit-text-md p-2"
             placeholder="Task Description"
           />
         </div>
         <div className="w-full flex space-x-2 px-2 items-center">
           <div
             onClick={() => setDropdown((prev) => ({ ...prev, status: !prev.status }))}
+            onBlur={() => setDropdown((prev) => ({ ...prev, status: false }))}
+            tabIndex={0}
             className="flex items-center space-x-1.5 border rounded-md w-max p-1.5 cursor-pointer capitalize relative"
           >
             <StatusIconComp color={currentTaskStatus?.color ?? 'gray'} />
@@ -164,6 +177,8 @@ export function CreateTask() {
           </div>
           <div
             onClick={() => setDropdown((prev) => ({ ...prev, assignee: !prev.assignee }))}
+            onBlur={() => setDropdown((prev) => ({ ...prev, assignee: false }))}
+            tabIndex={0}
             className={`${
               currentTeamMemberId.length > 0 && 'bg-alsoit-purple-50'
             } flex space-x-1.5 border-2 rounded-lg text-center capitalize w-min p-1.5 cursor-pointer relative`}
@@ -174,9 +189,11 @@ export function CreateTask() {
           </div>
           <div
             onClick={() => setDropdown((prev) => ({ ...prev, priority: !prev.priority }))}
+            onBlur={() => setDropdown((prev) => ({ ...prev, priority: false }))}
+            tabIndex={0}
             className="flex items-center space-x-1.5 border rounded-md w-max p-1.5 cursor-pointer capitalize relative"
           >
-            <AiFillFlag className="w-4 h-4" style={{ color: 'skyblue' }} />
+            <AiFillFlag className="w-4 h-4" style={{ color: priorityColor() }} />
             {dropDown.priority && (
               <div className="absolute bg-white shadow-lg top-9 w-24 p-2 rounded-lg">
                 {priorityList.map((priority) => (

@@ -69,7 +69,8 @@ export function Row({
     toggleAllSubtaskSplit,
     splitSubTaskLevels,
     subtasks,
-    rootTaskIds
+    rootTaskIds,
+    saveSettingOnline
   } = useAppSelector((state) => state.task);
 
   const [showSubTasks, setShowSubTasks] = useState(false);
@@ -124,7 +125,15 @@ export function Row({
   const style = {
     opacity: transform ? 0.3 : 100,
     zIndex: 1,
-    pointerEvents: transform ? 'none' : ''
+    pointerEvents: transform ? 'none' : '',
+    height:
+      saveSettingOnline?.singleLineView && !saveSettingOnline?.CompactView
+        ? '42px'
+        : saveSettingOnline?.CompactView && saveSettingOnline?.singleLineView
+        ? '25px'
+        : !saveSettingOnline?.singleLineView && saveSettingOnline?.CompactView && task.name.length < 30
+        ? '25px'
+        : ''
   };
 
   const showChildren = useMemo(() => {
@@ -217,7 +226,10 @@ export function Row({
                 className={`p-1 bg-white border rounded-md ${hoverOn ? 'opacity-100' : 'opacity-0'}`}
                 onClick={handleCopyTexts}
               >
-                <Copy />
+                <Copy
+                  width={saveSettingOnline?.CompactView ? '8px' : '12px'}
+                  height={saveSettingOnline?.CompactView ? '8px' : '12px'}
+                />
               </button>
             </ToolTip>
             {/* effects */}
@@ -227,14 +239,14 @@ export function Row({
                 style={{ backgroundColor: 'orange' }}
                 onClick={(e) => e.stopPropagation()}
               >
-                <Effect className="w-3 h-3" />
+                <Effect className={saveSettingOnline?.CompactView ? 'w-2 h-2' : 'w-3 h-3'} />
               </button>
             </ToolTip>
             {/* tags */}
             {'tags' in task ? (
               <ToolTip title="Tags">
                 <div
-                  className={`bg-white border rounded-md ${hoverOn ? 'opacity-100' : 'opacity-0'}`}
+                  className={`bg-white rounded-md ${hoverOn ? 'opacity-100' : 'opacity-0'}`}
                   onClick={(e) => e.preventDefault()}
                 >
                   <ManageTagsDropdown entityId={task.id} tagsArr={task.tags as Tag[]} entityType="task" />
@@ -248,7 +260,7 @@ export function Row({
                   className={`p-1 bg-white border rounded-md ${hoverOn ? 'opacity-100' : 'opacity-0'}`}
                   onClick={(e) => onShowAddSubtaskField(e, task.id)}
                 >
-                  <SubtasksIcon className="w-3 h-3" />
+                  <SubtasksIcon className={saveSettingOnline?.CompactView ? 'w-2 h-2' : 'w-3 h-3'} />
                 </button>
               </ToolTip>
             )}
@@ -257,7 +269,10 @@ export function Row({
                 className={`p-1 pl-4 bg-white rounded-md ${hoverOn ? 'opacity-100' : 'opacity-0'}`}
                 onClick={(e) => e.stopPropagation()}
               >
-                <Enhance className="w-3 h-3" style={{ color: 'orange' }} />
+                <Enhance
+                  className={saveSettingOnline?.CompactView ? 'w-2 h-2' : 'w-3 h-3'}
+                  style={{ color: 'orange' }}
+                />
               </button>
             </ToolTip>
           </div>

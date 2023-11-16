@@ -12,6 +12,29 @@ import { useAppDispatch } from '../../../app/hooks';
 import { AssigneeType, IChecklistItemRes, ICreateChecklistRes } from '../interface.tasks';
 import { setToggleAssignCurrentTaskId } from '../taskSlice';
 
+// Delete Checklist
+const convertToTask = (data: { query: string | null }) => {
+  const checklist_id = data.query;
+  const request = requestNew({
+    url: `checklists/${checklist_id}/convert`,
+    method: 'POST',
+    data: {
+      list_id: 'a850da9f'
+    }
+  });
+  return request;
+};
+
+export const useConvertChecklistToTask = (id: string) => {
+  const diapatch = useAppDispatch();
+
+  return useMutation(convertToTask, {
+    onSuccess: () => {
+      diapatch(setDeleteChecklist(id));
+    }
+  });
+};
+
 export const UseCreateChecklistService = ({
   item_id,
   name,

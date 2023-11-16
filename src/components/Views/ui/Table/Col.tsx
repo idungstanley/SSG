@@ -255,9 +255,9 @@ export function Col({ value, field, fieldId, task, styles, ...props }: ColProps)
             saveSettingOnline?.singleLineView && !saveSettingOnline?.CompactView
               ? '42px'
               : saveSettingOnline?.CompactView && saveSettingOnline?.singleLineView
-              ? '32px'
+              ? '25px'
               : !saveSettingOnline?.singleLineView && saveSettingOnline?.CompactView && task.name.length < 30
-              ? '32px'
+              ? '25px'
               : '',
           ...styles
         }}
