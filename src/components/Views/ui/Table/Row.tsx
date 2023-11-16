@@ -44,6 +44,7 @@ interface RowProps {
   isSplitSubtask?: boolean;
   level: number;
   isBlockedShowChildren?: boolean;
+  selectedRow: boolean;
 }
 
 export function Row({
@@ -58,7 +59,8 @@ export function Row({
   handleClose,
   isSplitSubtask,
   level,
-  isBlockedShowChildren
+  isBlockedShowChildren,
+  selectedRow
 }: RowProps) {
   const dispatch = useAppDispatch();
 
@@ -165,7 +167,7 @@ export function Row({
     <>
       {/* current task */}
       <tr
-        className="relative contents group dNFlex"
+        className={`relative contents group dNFlex ${selectedRow && 'bg-alsoit-purple-50'}`}
         onMouseEnter={() => {
           dispatch(setAssignOnHoverTask(task));
           dispatch(setAssignOnHoverListId(task.parent_id ?? task.list_id));

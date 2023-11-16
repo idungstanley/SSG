@@ -210,6 +210,7 @@ interface TaskState {
   createTask: boolean;
   addNewTaskItem: boolean;
   selectedIndex: number | null;
+  keyBoardSelectedIndex: number;
   defaultSubtaskListId: null | string;
   selectedIndexStatus: string | null;
   selectedListIds: string[];
@@ -347,6 +348,7 @@ const initialState: TaskState = {
   addNewTaskItem: false,
   closeTaskListView: true,
   selectedIndex: null,
+  keyBoardSelectedIndex: 0,
   subtaskDefaultStatusId: null,
   defaultSubtaskListId: null,
   selectedIndexStatus: null,
@@ -504,6 +506,9 @@ export const taskSlice = createSlice({
     },
     setSelectedIndex(state, action: PayloadAction<number | null>) {
       state.selectedIndex = action.payload;
+    },
+    setKeyBoardSelectedIndex(state, action: PayloadAction<number>) {
+      state.keyBoardSelectedIndex = action.payload;
     },
     setSelectedIndexStatus(state, action: PayloadAction<string>) {
       state.selectedIndexStatus = action.payload;
@@ -840,6 +845,7 @@ export const {
   getSplitSubTaskLevels,
   getCompactView,
   setSelectedIndex,
+  setKeyBoardSelectedIndex,
   setSelectedIndexStatus,
   setSelectedListIds,
   setSaveSettingLocal,

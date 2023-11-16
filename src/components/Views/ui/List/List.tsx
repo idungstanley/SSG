@@ -166,6 +166,7 @@ export function List({ tasks }: ListProps) {
                   listColor={ListColor}
                   heads={hideTask.length ? hideTask : generateColumns}
                   data={sortedTasks[key]}
+                  selectionArr={fullTasksLists}
                 />
               ) : (
                 <>

@@ -38,31 +38,20 @@ export function Table({ heads, data, label, listName, listColor, isBlockedShowCh
     statusId,
     defaultSubtaskListId,
     splitSubTaskState: splitSubTaskMode,
-    escapeKey
+    escapeKey,
+    keyBoardSelectedIndex
   } = useAppSelector((state) => state.task);
 
   const [listId, setListId] = useState<string>('');
   const [tableHeight, setTableHeight] = useState<string | number>('auto');
   const [showNewTaskField, setShowNewTaskField] = useState(false);
   const [collapseTasks, setCollapseTasks] = useState(false);
-  const [selectedRow, setSelectedRow] = useState<number>(0);
 
   const tableElement = useRef<HTMLTableElement>(null);
   const tableHeadElement = useRef<HTMLTableElement>(null);
   const taskLength = data.length;
 
   const columns = heads.filter((i) => !i.hidden);
-
-  const handleKeyDown = (e: KeyboardEvent) => {
-    if (selectionArr) {
-      if (e.key === 'ArrowUp' && selectedRow !== null) {
-        setSelectedRow(selectedRow > 0 ? selectedRow - 1 : 0);
-      } else if (e.key === 'ArrowDown' && selectedRow !== null) {
-        setSelectedRow(selectedRow < selectionArr.length - 1 ? selectedRow + 1 : selectionArr.length - 1);
-      }
-    }
-  };
-
   // New task template
   const newTaskObj = NewTaskTemplate({
     data,
@@ -72,19 +61,6 @@ export function Table({ heads, data, label, listName, listColor, isBlockedShowCh
   });
 
   const dataSpread = showNewTaskField ? newTaskObj : data;
-
-  useEffect(() => {
-    const tableElement = document.getElementById('tasksTable');
-    if (tableElement) {
-      window.addEventListener('keydown', handleKeyDown);
-    }
-
-    return () => {
-      if (tableElement) {
-        tableElement.removeEventListener('keydown', handleKeyDown);
-      }
-    };
-  }, []);
 
   // reset showNewTaskField with eskLey
   useEffect(() => {
@@ -126,6 +102,14 @@ export function Table({ heads, data, label, listName, listColor, isBlockedShowCh
       setTableHeight(tableElement.current.offsetHeight);
     }
   }, []);
+
+  const checkSelectedRow = (id: string) => {
+    if (selectionArr) {
+      if (selectionArr[keyBoardSelectedIndex]) {
+        return keyBoardSelectedIndex >= 0 ? id === selectionArr[keyBoardSelectedIndex].id : false;
+      }
+    }
+  };
 
   const handleClose = () => {
     setShowNewTaskField(false);
@@ -208,6 +192,7 @@ export function Table({ heads, data, label, listName, listColor, isBlockedShowCh
                       <Row
                         key={task.id}
                         columns={columns}
+                        selectedRow={checkSelectedRow(task.id) as boolean}
                         task={task as ITaskFullList}
                         listId={task.list_id as string}
                         taskIndex={index}
