@@ -94,7 +94,7 @@ export function Label({
     <div className="flex items-center justify-between">
       <div className="flex items-center">
         <div
-          className="flex items-center justify-between space-x-5 bg-purple-500 -mt-1 p-1 pr-7 rounded-tl-2xl -ml-0.5 h-7 rounded-br-[5px]"
+          className="flex items-center justify-between space-x-5 bg-purple-500 -mt-1 p-1 pr-7 rounded-tl-lg -ml-1 h-7 rounded-br-[5px]"
           style={{ backgroundColor: !ListColor?.outerColour ? 'black' : (ListColor?.outerColour as string) }}
         >
           <div className="flex items-center pl-2 space-x-2 text-sm text-white w-fit -mt-1">

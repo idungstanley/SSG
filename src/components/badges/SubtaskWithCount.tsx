@@ -1,9 +1,14 @@
 import React from 'react';
 
-export default function SubtaskWithCount() {
+interface DescriptionProps {
+  width?: string;
+  height?: string;
+}
+
+export default function SubtaskWithCount({ width = '24px', height = '12px' }: DescriptionProps) {
   return (
     <div>
-      <svg width="24" height="12" viewBox="0 0 24 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <svg width={width} height={height} viewBox="0 0 24 12" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path
           d="M2.29883 3.83961V2.15961C2.29883 2.12647 2.32569 2.09961 2.35883 2.09961H7.03883C7.07197 2.09961 7.09883 2.12647 7.09883 2.15961V3.83961C7.09883 3.87275 7.07197 3.89961 7.03883 3.89961H2.35883C2.32569 3.89961 2.29883 3.87275 2.29883 3.83961Z"
           stroke="#424242"

@@ -3,7 +3,7 @@ import React from 'react';
 function Drag() {
   return (
     <svg
-      className="drag-svg hover:text-alsoit-purple-300"
+      className="drag-svg text-[#919191] hover:text-alsoit-purple-300"
       width="10"
       height="14"
       viewBox="0 0 10 14"

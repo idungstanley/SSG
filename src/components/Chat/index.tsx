@@ -15,6 +15,9 @@ import TeamMembersInChat from './components/TeamMembersInChat';
 
 export default function Chat() {
   const dispatch = useAppDispatch();
+
+  const { activeChat } = useAppSelector((state) => state.chat);
+
   const socket = useRef<Pusher | null>(null);
   const { showChat, selectedItem } = useAppSelector((state) => state.chat);
 
@@ -77,10 +80,12 @@ export default function Chat() {
     }
   };
 
-  const handleClickChat = (id: string) => {
-    setSelectedChatId((prev) => (prev === id ? null : id));
-    connect(id);
-  };
+  useEffect(() => {
+    if (activeChat) {
+      setSelectedChatId(activeChat);
+      connect(activeChat);
+    }
+  }, [activeChat]);
 
   const handleHideChat = () => {
     socket.current?.disconnect();
@@ -127,7 +132,7 @@ export default function Chat() {
 
                         <XMarkIcon onClick={handleHideChat} className="h-6 w-6 cursor-pointer" aria-hidden="true" />
                       </div>
-                      <ChatsList selectChat={handleClickChat} />
+                      <ChatsList />
 
                       {messages && chat ? (
                         <div className="flex flex-col justify-between mt-3">

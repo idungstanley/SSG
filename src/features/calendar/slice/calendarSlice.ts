@@ -4,6 +4,7 @@ import {
   BlacklistId,
   CalendarState,
   HrOpenedEntities,
+  HrTeamMembers,
   NewDayOff,
   SavedSelections,
   SelectedHubs
@@ -19,7 +20,8 @@ const initialState: CalendarState = {
   reminderInterval: 2,
   selectedHubs: [],
   savedSelections: [],
-  hrOpenedEntities: []
+  hrOpenedEntities: [],
+  hrTeamMembers: []
 };
 
 export const calendarSlice = createSlice({
@@ -55,6 +57,9 @@ export const calendarSlice = createSlice({
     },
     setHrOpenedEntities: (state, action: PayloadAction<HrOpenedEntities[]>) => {
       state.hrOpenedEntities = action.payload;
+    },
+    setHrTeamMembers(state, action: PayloadAction<HrTeamMembers[]>) {
+      state.hrTeamMembers = action.payload;
     }
   }
 });
@@ -71,7 +76,8 @@ export const {
   setRemindertype,
   setSelectedHubs,
   setSavedSelections,
-  setHrOpenedEntities
+  setHrOpenedEntities,
+  setHrTeamMembers
 } = calendarSlice.actions;
 
 export default calendarSlice.reducer;

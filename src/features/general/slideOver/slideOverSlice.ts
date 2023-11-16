@@ -1,3 +1,4 @@
+import { STORAGE_KEYS } from '../../../app/config/dimensions';
 import { itemType, explorerItemType } from './../../../types/index';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
@@ -47,6 +48,8 @@ type GroupScrollSettings = {
   thumbWidth?: number;
   leftPosition?: number;
 };
+
+const isPilotMinified = JSON.parse(localStorage.getItem(STORAGE_KEYS.IS_PILOT_MINIFIED) || '""') || false;
 
 interface SideOverState {
   showCreateInboxSlideOver: boolean;
@@ -108,7 +111,7 @@ const initialState: SideOverState = {
   watchersSideOver: { show: false },
   commentsSideOver: { show: false },
   shareSideOver: { show: false },
-  pilotSideOver: { show: false },
+  pilotSideOver: { show: isPilotMinified },
   pilotSideOverHub: { show: true },
   itemActionForSideOver: null,
   showFilterByAssigneeSlideOver: false,
