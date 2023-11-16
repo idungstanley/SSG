@@ -19,7 +19,7 @@ interface ManageTagsDropdownProps {
 
 export function ManageTagsDropdown({ tagsArr, entityId, entityType, icon }: ManageTagsDropdownProps) {
   const dispatch = useAppDispatch();
-  const { selectedTasksArray } = useAppSelector((state) => state.task);
+  const { selectedTasksArray, saveSettingOnline } = useAppSelector((state) => state.task);
 
   const [searchValue, setSearchValue] = useState('');
   const [showSelectDropdown, setShowSelectDropdown] = useState<null | HTMLSpanElement | HTMLDivElement>(null);
@@ -60,7 +60,7 @@ export function ManageTagsDropdown({ tagsArr, entityId, entityType, icon }: Mana
             className="p-1 border rounded-md bg-transparent text-gray-400 hover:text-gray-700 bg-white"
           >
             <span ref={relativeRef}>
-              <TagIcon className="w-3 h-3" />
+              <TagIcon className={saveSettingOnline?.CompactView ? 'w-2 h-2' : 'w-3 h-3'} />
             </span>
           </button>
         )}

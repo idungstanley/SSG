@@ -1,6 +1,7 @@
 import React from 'react';
 import watcherBadge from '../../assets/icons/watcherBadge.svg';
 import AssigneeCloth from '../../assets/icons/assigneeCloth';
+import { useAppSelector } from '../../app/hooks';
 
 interface AvatarWithInitialsProps {
   initials: string;
@@ -21,9 +22,11 @@ function AvatarForOwner({
   roundedStyle = 'circular',
   textSize = '10px'
 }: AvatarWithInitialsProps) {
+  const { CompactView } = useAppSelector((state) => state.task);
+
   return (
-    <AssigneeCloth>
-      <div className="absolute" style={{ left: '2px', top: '2px' }}>
+    <AssigneeCloth height={CompactView ? '23' : '32'} width={CompactView ? '23' : '32'}>
+      <div className="absolute" style={CompactView ? { left: '1.5px' } : { left: '2px', top: '2px' }}>
         <span
           className={`inline-flex items-center justify-center z-10 relative ${height} ${width} ${
             roundedStyle === 'circular' && 'rounded-full'
@@ -34,7 +37,12 @@ function AvatarForOwner({
             {initials}
           </span>
         </span>
-        <img src={watcherBadge} alt="" className="absolute h-2 w-2 z-5" style={{ left: '23px', bottom: '1px' }} />
+        <img
+          src={watcherBadge}
+          alt=""
+          className="absolute h-2 w-2 z-5"
+          style={CompactView ? { left: '17px', bottom: '0.5px' } : { left: '23px', bottom: '1px' }}
+        />
       </div>
     </AssigneeCloth>
   );

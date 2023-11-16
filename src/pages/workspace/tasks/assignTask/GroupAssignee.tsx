@@ -115,7 +115,12 @@ function GroupAssignee({
             <div className=" flex items-center justify-center -ml-2.5 rounded-full relative group/parent">
               <ToolTip title={newData.name}>
                 <div className="relative cursor-pointer">
-                  <UserAvatar user={newData} handleClick={handleClick} />
+                  <UserAvatar
+                    user={newData}
+                    handleClick={handleClick}
+                    width={CompactView ? 'w-5' : 'w-7'}
+                    height={CompactView ? 'h-5' : 'h-7'}
+                  />
 
                   <span
                     className={`absolute top-0 right-0 w-2 h-2 bg-green-500 border rounded-full group-hover/parent:hidden ${
