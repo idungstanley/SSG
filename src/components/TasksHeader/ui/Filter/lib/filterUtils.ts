@@ -97,17 +97,6 @@ export const selectOrDeselectAllFilter = (
     return i;
   });
 
-export const undoChanges = ({ prevState, id }: { prevState: FilterValue[]; id: FilterId }, filters: FilterWithId[]) =>
-  filters.map((i) => {
-    if (i.id === id) {
-      const newFilter = { ...i };
-
-      return { ...newFilter, values: [...prevState] };
-    }
-
-    return i;
-  });
-
 export const filterUniqueValues = (
   initialValues: FilterValue[],
   existingValues: FilterWithId[],
