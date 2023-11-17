@@ -202,6 +202,7 @@ export function Table({ heads, data, label, listName, listColor, isBlockedShowCh
                         handleClose={handleClose}
                         level={0}
                         isBlockedShowChildren={isBlockedShowChildren}
+                        selectionArr={selectionArr}
                       />
                     ) : null
                   )
