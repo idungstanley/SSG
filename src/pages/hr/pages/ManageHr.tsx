@@ -1,5 +1,5 @@
 import { useGetTeamMembers } from '../../../features/settings/teamMembers/teamMemberService';
-import { checkIsOwner } from '../../calendar/lib/userUtils';
+//import { checkIsOwner } from '../../calendar/lib/userUtils';
 import { useAppSelector } from '../../../app/hooks';
 import { selectCalendar } from '../../../features/calendar/slice/calendarSlice';
 import { AddItem } from '../ui/AddItem';
@@ -54,13 +54,13 @@ export default function ManageHr() {
 
   const selectedHrTeamMembers = groupedHrMembersData.data ? groupedHrMembersData.data : [];
 
-  const isOwner = checkIsOwner(members);
+  //const isOwner = checkIsOwner(members);
 
   const filteredMembers = members.filter((i) => !blacklistIds.includes(i.id));
 
-  if (!isOwner) {
-    return <div>You have no right to do this</div>;
-  }
+  // if (!isOwner) {
+  //   return <div>You have no right to do this</div>;
+  // }
 
   const [showNewDayField, setShowNewDayField] = useState('');
 

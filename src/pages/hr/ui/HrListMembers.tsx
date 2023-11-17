@@ -70,8 +70,8 @@ export default function HrListMembers({ hrListItems, allEmployeeData, onChecked 
                       className="bg-gray-200 relative rounded-full flex items-center justify-center transform transition"
                       style={{
                         backgroundColor: hrListItem.team_member.user.color ? hrListItem.team_member.user.color : '',
-                        width: '28px',
-                        height: '28px',
+                        width: '29px',
+                        height: '29px',
                         outline: '0.5px solid rgb(247, 161, 0)',
                         padding: '1px'
                       }}
@@ -79,7 +79,7 @@ export default function HrListMembers({ hrListItems, allEmployeeData, onChecked 
                       {hrListItem.team_member.is_online && (
                         <span
                           className="absolute z-10 border-white rounded-full bg-green-500"
-                          style={{ top: '-2px', right: '-2px', width: '7.5px', height: '7.5px', borderWidth: '1px' }}
+                          style={{ top: '-1px', right: '-1px', width: '9px', height: '9px', borderWidth: '1px' }}
                         />
                       )}
                       {hrListItem.team_member.user.avatar_path ? (

@@ -1,6 +1,7 @@
 .hr-checkbox-wrapper {
     width: 14px;
     height: 14px;
+    min-height: 14px;
     border-radius: 1px;
     border: 1px solid #DFDFDF;
     transition: .3s;
@@ -40,6 +41,10 @@
     background-repeat: no-repeat;
     background-image: none;
     opacity: 1;
+}
+
+.hr-checkbox-wrapper.hr-member-checked, .hr-checkbox-wrapper.hr-checked-full, .hr-checkbox-wrapper.hr-checked-partial {
+    border-color: transparent;
 }
 
 .hr-checkbox[type='checkbox']:checked:hover, .hr-checkbox[type='checkbox']:checked:focus, .hub-item:hover .hr-checkbox:checked[type='checkbox'] {

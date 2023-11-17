@@ -95,7 +95,9 @@ export function AddItem({ onClose, members, hubId }: AddDayFieldProps) {
           </div>
           <div className="w-2/4 text-center">
             <h3 className="w-full text-center py-2">Start Date</h3>
-            <DayDatePicker />
+            <div className="relative">
+              <DayDatePicker />
+            </div>
           </div>
         </div>
         <div className="flex justify-between w-full">
