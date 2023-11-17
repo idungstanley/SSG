@@ -18,9 +18,10 @@ interface hubsProps {
   openNewHub: (id: string) => void;
   setToggleTree?: React.Dispatch<React.SetStateAction<boolean>>;
   option?: string;
+  checklistId?: string;
 }
 
-export default function ActiveTreeList({ hubs, openNewHub, setToggleTree, option }: hubsProps) {
+export default function ActiveTreeList({ hubs, openNewHub, setToggleTree, option, checklistId }: hubsProps) {
   const dispatch = useAppDispatch();
 
   const { lastActiveItem } = useAppSelector((state) => state.workspace);
@@ -91,7 +92,12 @@ export default function ActiveTreeList({ hubs, openNewHub, setToggleTree, option
               type={EntityType.hub}
             />
             {hub?.children?.length && isCanBeOpen(hub.id) ? (
-              <SearchSubHList option={option} hubs={hub.children as Hub[]} handleTabClick={handleTabClick} />
+              <SearchSubHList
+                option={option}
+                hubs={hub.children as Hub[]}
+                handleTabClick={handleTabClick}
+                checklistId={checklistId}
+              />
             ) : null}
             <div
               style={
@@ -109,12 +115,19 @@ export default function ActiveTreeList({ hubs, openNewHub, setToggleTree, option
                   type="wallet"
                   paddingLeft="33"
                   handleTabClick={handleTabClick}
+                  checklistId={checklistId}
                 />
               ) : null}
             </div>
             <div style={!OPTIONS_WITH_AVAILABLE_LISTS.includes(option as string) ? unavailableStyles : {}}>
               {hub?.lists?.length && showChildren && isCanBeOpen(hub.id) ? (
-                <SearchLList option={option} list={hub.lists} leftMargin={false} paddingLeft="48" />
+                <SearchLList
+                  option={option}
+                  list={hub.lists}
+                  leftMargin={false}
+                  paddingLeft="48"
+                  checklistId={checklistId}
+                />
               ) : null}
             </div>
           </div>

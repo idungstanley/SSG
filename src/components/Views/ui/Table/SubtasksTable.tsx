@@ -170,6 +170,7 @@ export function SubtasksTable({ task, subtasksData, heads, listId, level, breadc
                             'tags' in task ? (
                               <Row
                                 key={task.id}
+                                selectedRow={false}
                                 columns={columns}
                                 task={task as ITaskFullList}
                                 taskIndex={index}
