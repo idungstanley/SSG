@@ -218,6 +218,7 @@ export function Row({
               style={{ left: '30px', background: 'transparent', height: '100%', width: '100%', zIndex: -1 }}
             />
           }
+          selectedRow={selectedRow}
         >
           {/* actions */}
           <div className="flex items-center justify-center mr-1 space-x-1">
@@ -289,6 +290,7 @@ export function Row({
             key={col.id}
             style={{ zIndex: 0 }}
             styles={style}
+            selectedRow={selectedRow}
           />
         ))}
       </tr>

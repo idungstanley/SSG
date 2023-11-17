@@ -60,6 +60,7 @@ interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   droppableElement?: ReactNode;
   styles?: { opacity: number };
   level?: number;
+  selectedRow: boolean;
 }
 
 export function StickyCol({
@@ -82,6 +83,7 @@ export function StickyCol({
   isOver,
   styles,
   level,
+  selectedRow,
   ...props
 }: ColProps) {
   const dispatch = useAppDispatch();
@@ -115,7 +117,7 @@ export function StickyCol({
   const [eitableContent, setEitableContent] = useState(false);
   const [selectedIndexArray, setSelectedIndexArray] = useState<number[]>([]);
 
-  const COL_BG = taskId === task.id ? ACTIVE_COL_BG : DEFAULT_COL_BG;
+  const COL_BG = taskId === task.id ? ACTIVE_COL_BG : selectedRow ? 'bg-alsoit-purple-50' : DEFAULT_COL_BG;
 
   const { mutate: onAdd } = useAddTask(task);
 
@@ -367,8 +369,6 @@ export function StickyCol({
     return '100%';
   };
 
-  console.log(width);
-
   const handleDroppable = () => {
     if (task.parent_id === draggableItemId && level) {
       return false;
@@ -381,7 +381,9 @@ export function StickyCol({
     <>
       {task.id !== '0' && (
         <td
-          className="sticky left-0 z-10 flex items-center justify-start text-sm font-medium text-gray-900 cursor-pointer text-start"
+          className={`sticky left-0 z-10 flex items-center justify-start text-sm font-medium text-gray-900 cursor-pointer text-start ${
+            selectedRow && 'bg-alsoit-purple-50'
+          }`}
           style={styles}
           {...props}
         >

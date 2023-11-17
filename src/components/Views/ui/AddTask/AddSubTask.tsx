@@ -83,6 +83,7 @@ export function AddSubTask({
               />
             </span>
           }
+          selectedRow={false}
         >
           {/* actions */}
           <div className="absolute opacity-0 group-hover:opacity-100 top-0 bottom-0 right-0 flex space-x-1 items-center justify-center">
@@ -106,6 +107,7 @@ export function AddSubTask({
             value={task[col.field as keyof Task]}
             key={col.id}
             style={{ zIndex: 2 }}
+            selectedRow={false}
           />
         ))}
       </tr>
