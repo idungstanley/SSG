@@ -14,6 +14,7 @@ interface IWListProps {
   paddingLeft: string | number;
   type: string;
   option?: string;
+  checklistId?: string;
   level?: number;
   handleTabClick: (
     e: React.MouseEvent<HTMLParagraphElement, MouseEvent>,
@@ -29,7 +30,8 @@ export default function SearchWList({
   option,
   paddingLeft,
   level = 1,
-  handleTabClick
+  handleTabClick,
+  checklistId
 }: IWListProps) {
   const dispatch = useAppDispatch();
   const { showExtendedBar } = useAppSelector((state) => state.workspace);
@@ -66,6 +68,7 @@ export default function SearchWList({
             <SearchWList
               wallets={wallet.children}
               option={option}
+              checklistId={checklistId}
               leftMargin={false}
               type={EntityType.subWallet}
               handleTabClick={handleTabClick}
@@ -80,6 +83,7 @@ export default function SearchWList({
                 list={wallet.lists}
                 leftMargin={false}
                 paddingLeft={Number(paddingLeft) + 32}
+                checklistId={checklistId}
               />
             ) : null}
           </div>

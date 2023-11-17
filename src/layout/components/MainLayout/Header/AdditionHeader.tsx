@@ -23,6 +23,8 @@ import { pilotTabs } from '../../../../app/constants/pilotTabs';
 import InsightsIcon from '../../../../assets/icons/InsightsIcon';
 import { StopIcon } from '../../../../assets/icons/StopIcon';
 import ToolTip from '../../../../components/Tooltip/Tooltip';
+import { pages } from '../../../../app/constants/pages';
+import AlsoHrIcon from '../../../../assets/icons/AlsoHrIcon';
 
 const hoursToMilliseconds = 60 * 60 * 1000;
 const minutesToMilliseconds = 60 * 1000;
@@ -40,7 +42,7 @@ export default function AdditionalHeader({ isInsights }: IAdditionalHeaderProps)
   const { screenRecording, duration, recorderDuration, timerStatus, period, timerDetails, activeTimeOut } =
     useAppSelector((state) => state.task);
   const { timezone: zone, date_format, time_format, is_clock_time } = useAppSelector((state) => state.userSetting);
-  const { activeItemName } = useAppSelector((state) => state.workspace);
+  const { activeItemName, activePlaceId } = useAppSelector((state) => state.workspace);
 
   const [recordBlinker, setRecordBlinker] = useState<boolean>(false);
   const [timerModal, setTimerModal] = useState<boolean>(false);
@@ -197,6 +199,13 @@ export default function AdditionalHeader({ isInsights }: IAdditionalHeaderProps)
           <span className="font-bold truncate text-alsoit-text-lg">INSIGHTS</span>
         </>
       );
+    } else if (activePlaceId === pages.ALSO_HR) {
+      return (
+        <>
+          <AlsoHrIcon />
+          <span className="font-bold truncate text-alsoit-text-lg">ALSO HR</span>
+        </>
+      );
     } else {
       return (
         <>
@@ -213,7 +222,10 @@ export default function AdditionalHeader({ isInsights }: IAdditionalHeaderProps)
 
   return (
     <div className="flex items-center justify-between w-full px-4 border-b" style={{ height: '50px' }}>
-      <h1 style={{ height: '50px' }} className="flex items-center ml-4 space-x-3">
+      <h1
+        style={{ height: '50px' }}
+        className={`flex items-center ml-0 ${activePlaceId === pages.ALSO_HR ? '' : 'ml-4 space-x-3'}`}
+      >
         {renderPageTitle()}
       </h1>
       <div className="relative flex items-center justify-center space-x-2.5">

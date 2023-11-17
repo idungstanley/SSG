@@ -8,14 +8,24 @@ import {
   setUnassignChecklistItem
 } from './checklistSlice';
 import { useMutation } from '@tanstack/react-query';
-import { useAppDispatch } from '../../../app/hooks';
-import { AssigneeType, IChecklistItemRes, ICreateChecklistRes } from '../interface.tasks';
-import { setToggleAssignCurrentTaskId } from '../taskSlice';
+import { useAppDispatch, useAppSelector } from '../../../app/hooks';
+import {
+  AssigneeType,
+  IChecklistItemRes,
+  ICreateChecklistRes,
+  ITaskFullList,
+  newTaskDataRes
+} from '../interface.tasks';
+import { setTasks, setToggleAssignCurrentTaskId } from '../taskSlice';
+import { addNewTaskManager } from '../../../managers/Task';
+import { updateListTasksCountManager } from '../../../managers/List';
+import { getHub } from '../../hubs/hubSlice';
+import { setFilteredResults } from '../../search/searchSlice';
 
 // Delete Checklist
 const convertToTask = (data: { query: string | null }) => {
   const checklist_id = data.query;
-  const request = requestNew({
+  const request = requestNew<newTaskDataRes>({
     url: `checklists/${checklist_id}/convert`,
     method: 'POST',
     data: {
@@ -26,11 +36,24 @@ const convertToTask = (data: { query: string | null }) => {
 };
 
 export const useConvertChecklistToTask = (id: string) => {
-  const diapatch = useAppDispatch();
-
+  const dispatch = useAppDispatch();
+  const { tasks } = useAppSelector((state) => state.task);
+  const { hub } = useAppSelector((state) => state.hub);
   return useMutation(convertToTask, {
-    onSuccess: () => {
-      diapatch(setDeleteChecklist(id));
+    onSuccess: (data) => {
+      const task = data.data.task;
+      dispatch(setDeleteChecklist(id));
+      const updatedTasks = addNewTaskManager(
+        tasks,
+        data.data.task as ITaskFullList,
+        task.custom_field_columns || [],
+        task.task_statuses
+      );
+      dispatch(setTasks(updatedTasks));
+      const listId = data.data.task.list_id;
+      const updatedTree = updateListTasksCountManager(listId as string, hub, updatedTasks[listId].length);
+      dispatch(getHub(updatedTree));
+      dispatch(setFilteredResults(updatedTree));
     }
   });
 };

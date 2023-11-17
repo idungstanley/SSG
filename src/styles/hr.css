@@ -1,6 +1,7 @@
 .hr-checkbox-wrapper {
     width: 14px;
     height: 14px;
+    min-height: 14px;
     border-radius: 1px;
     border: 1px solid #DFDFDF;
     transition: .3s;
@@ -42,6 +43,10 @@
     opacity: 1;
 }
 
+.hr-checkbox-wrapper.hr-member-checked, .hr-checkbox-wrapper.hr-checked-full, .hr-checkbox-wrapper.hr-checked-partial {
+    border-color: transparent;
+}
+
 .hr-checkbox[type='checkbox']:checked:hover, .hr-checkbox[type='checkbox']:checked:focus, .hub-item:hover .hr-checkbox:checked[type='checkbox'] {
     border-color: transparent;
     background-color: #BF01FE;
@@ -64,4 +69,48 @@
 
 .hub-item:hover .hr-checkbox-wrapper, .hr-checkbox-wrapper.hr-member-checked, .hr-checked-full, .hr-checked-partial, .hr-hub-item .hr-checkbox-wrapper:hover, .hr-hub-item:hover .hr-checkbox-wrapper, .hr-member-item:hover .hr-member-item-settings {
     opacity: 1;
+}
+
+.hr-table .hr-border-white-top {
+    border-top: 0.5px solid #fff;
+}
+
+.hr-table .hr-border-white-right {
+    border-right: 0.5px solid #fff;
+}
+
+.hr-table .hr-border-white-bottom {
+    border-bottom: 0.5px solid #919191;
+}
+
+.hr-table .hr-border-white-left {
+    border-left: 2px solid #fff;
+}
+
+.hr-table .hr-border-purple-top {
+    border-top: 0.5px solid #BF01FE;
+}
+
+.hr-table .hr-border-purple-right {
+    border-right: 0.5px solid #BF01FE;
+}
+
+.hr-table .hr-border-purple-bottom {
+    border-bottom: 0.5px solid #BF01FE!important;
+}
+
+.hr-table .hr-border-purple-left {
+    border-left: 2px solid #BF01FE;
+}
+
+.hr-table .hr-border-gray-bottom {
+    border-bottom: 0.5px solid #919191;
+}
+
+.hr-table tr:last-child .hr-border-gray-bottom {
+    border-bottom: 0.5px solid #fff!important;
+}
+
+.hr-table tr:last-child .hr-border-purple-bottom {
+    border-bottom: 0.5px solid #BF01FE!important;
 }

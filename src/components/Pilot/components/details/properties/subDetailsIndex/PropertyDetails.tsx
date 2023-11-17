@@ -21,8 +21,6 @@ import { useParams } from 'react-router-dom';
 import { IWalletDetails } from '../../../../../../features/wallet/wallet.interfaces';
 import PlusIcon from '../../../../../../assets/icons/PlusIcon';
 import { VerticalScroll } from '../../../../../ScrollableContainer/VerticalScroll';
-// import { CKEditor } from '@ckeditor/ckeditor5-react';
-// import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { IoCaretDownCircle } from 'react-icons/io5';
 import { cl } from '../../../../../../utils';
 import { MdOutlineVisibility } from 'react-icons/md';
@@ -45,8 +43,8 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
   const [toggleSubTask, setToggleSubTask] = useState(false);
   const [editingDescription, setEditingDescription] = useState(false);
   const [toggleDetails, setToggleDetails] = useState<boolean>(true);
-  const { hubId, walletId, listId, taskId } = useParams();
 
+  const { hubId, walletId, listId, taskId } = useParams();
   const { editingPilotDetailsTitle } = useAppSelector((state) => state.workspace);
 
   const editTaskMutation = useMutation(UseUpdateTaskService, {

@@ -16,7 +16,13 @@ import { Header } from '../../components/TasksHeader';
 import { VerticalScroll } from '../../components/ScrollableContainer/VerticalScroll';
 import { GroupHorizontalScroll } from '../../components/ScrollableContainer/GroupHorizontalScroll';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
-import { setSaveSettingList, setSaveSettingOnline, setSubtasks, setTasks } from '../../features/task/taskSlice';
+import {
+  setKeyBoardSelectedIndex,
+  setSaveSettingList,
+  setSaveSettingOnline,
+  setSubtasks,
+  setTasks
+} from '../../features/task/taskSlice';
 import { useformatSettings } from '../workspace/tasks/TaskSettingsModal/ShowSettingsModal/FormatSettings';
 import { generateSubtasksList, generateSubtasksArray } from '../../utils/generateLists';
 import { IHubDetails, IView } from '../../features/hubs/hubs.interfaces';
@@ -36,7 +42,13 @@ export default function HubPage() {
   const navigate = useNavigate();
 
   const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
-  const { tasks: tasksStore, saveSettingLocal, subtasks, scrollGroupView } = useAppSelector((state) => state.task);
+  const {
+    tasks: tasksStore,
+    saveSettingLocal,
+    subtasks,
+    scrollGroupView,
+    keyBoardSelectedIndex
+  } = useAppSelector((state) => state.task);
   const formatSettings = useformatSettings();
 
   const { data: hub } = UseGetHubDetails({ activeItemId: hubId, activeItemType: EntityType.hub });
@@ -84,6 +96,24 @@ export default function HubPage() {
 
   const tasks = useMemo(() => (data ? data.pages.flatMap((page) => page.data.tasks) : []), [data]);
   const lists = useMemo(() => generateLists(tasks, hub?.data.hub as IHubDetails), [tasks, hub]);
+
+  const combinedArr = Object.values(lists).flatMap((lists) => lists);
+
+  const handleKeyDown = (e: KeyboardEvent) => {
+    if (e.key === 'ArrowUp' && keyBoardSelectedIndex !== null) {
+      const newIndex = Math.max(0, keyBoardSelectedIndex - 1);
+      dispatch(setKeyBoardSelectedIndex(newIndex));
+    } else if (e.key === 'ArrowDown' && keyBoardSelectedIndex !== null) {
+      const newIndex = Math.min(combinedArr.length - 1, keyBoardSelectedIndex + 1);
+      dispatch(setKeyBoardSelectedIndex(newIndex));
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [keyBoardSelectedIndex]);
 
   useEffect(() => {
     if (Object.keys(lists).length) {
@@ -136,7 +166,9 @@ export default function HubPage() {
           >
             {/* lists */}
             {Object.keys(lists).map((listId) => (
-              <Fragment key={listId}>{tasksStore[listId] ? <List tasks={tasksStore[listId]} /> : null}</Fragment>
+              <Fragment key={listId}>
+                {tasksStore[listId] ? <List tasks={tasksStore[listId]} combinedTasksArr={combinedArr} /> : null}
+              </Fragment>
             ))}
           </section>
         </VerticalScroll>
