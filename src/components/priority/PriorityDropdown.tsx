@@ -41,49 +41,6 @@ export default function PriorityDropdown({ taskCurrentPriority, icon }: TaskCurr
     setIsOpen(event.currentTarget);
   };
 
-  // const priorityList: priorityType[] = [
-  //   {
-  //     id: priorities.LOW,
-  //     title: 'Low',
-  //     color: '#d3d3d3',
-  //     bg: 'gray',
-  //     handleClick: () => {
-  //       setPriority(priorities.LOW);
-  //       dispatch(setNewTaskPriority(priorities.LOW));
-  //     }
-  //   },
-  //   {
-  //     id: priorities.NORMAL,
-  //     title: 'Normal',
-  //     color: '#6fddff',
-  //     bg: 'blue',
-  //     handleClick: () => {
-  //       setPriority(priorities.NORMAL);
-  //       dispatch(setNewTaskPriority(priorities.NORMAL));
-  //     }
-  //   },
-  //   {
-  //     id: priorities.HIGH,
-  //     title: 'High',
-  //     color: '#f7cb04',
-  //     bg: 'yellow',
-  //     handleClick: () => {
-  //       setPriority(priorities.HIGH);
-  //       dispatch(setNewTaskPriority(priorities.HIGH));
-  //     }
-  //   },
-  //   {
-  //     id: priorities.URGENT,
-  //     title: 'Urgent',
-  //     color: '#f32100',
-  //     bg: 'red',
-  //     handleClick: () => {
-  //       setPriority(priorities.URGENT);
-  //       dispatch(setNewTaskPriority(priorities.URGENT));
-  //     }
-  //   }
-  // ];
-
   const setPriorityColor = (
     priority: string | null | undefined | [{ id: string; initials: string; color: string }]
   ) => {
