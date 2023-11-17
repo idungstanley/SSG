@@ -256,6 +256,11 @@ export interface ITaskRes {
     task: ITaskFullList;
   };
 }
+export interface ILineUpTaskRes {
+  data: {
+    tasks: ITaskFullList[];
+  };
+}
 
 export interface teamMember {
   id: string;

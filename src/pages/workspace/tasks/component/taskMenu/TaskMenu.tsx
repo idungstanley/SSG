@@ -39,8 +39,15 @@ import { pilotTabs } from '../../../../../app/constants/pilotTabs';
 
 export const TASK_DUPLICATE = 'task_duplicate';
 export const TASK_MOVE = 'task_move';
+export const BROWSE_TASKS_FROM_HOME = 'browse_tasks_from_home';
 export const CONVERT_CHECKLIST = 'convert_checklist';
-export const OPTIONS_WITH_AVAILABLE_LISTS = [TASK_DUPLICATE, TASK_MOVE, pilotTabs.CREATE_TASK, CONVERT_CHECKLIST];
+export const OPTIONS_WITH_AVAILABLE_LISTS = [
+  TASK_DUPLICATE,
+  BROWSE_TASKS_FROM_HOME,
+  TASK_MOVE,
+  pilotTabs.CREATE_TASK,
+  CONVERT_CHECKLIST
+];
 
 export default function TaskMenu() {
   const dispatch = useDispatch();
