@@ -15,6 +15,9 @@ import TeamMembersInChat from './components/TeamMembersInChat';
 
 export default function Chat() {
   const dispatch = useAppDispatch();
+
+  const { activeChat } = useAppSelector((state) => state.chat);
+
   const socket = useRef<Pusher | null>(null);
   const { showChat, selectedItem } = useAppSelector((state) => state.chat);
 
@@ -48,7 +51,7 @@ export default function Chat() {
         wssPort: Number(process.env.REACT_APP_WEBSOCKET_PORT),
         disableStats: true,
         authEndpoint: '/api/sockets/connect',
-        forceTLS: true,
+        forceTLS: false,
         auth: {
           headers: {
             'X-CSRF-Token': 'iTcXX4EKprDuuxIWtloqmr7yBqRlEjM8C7JydcdB',
@@ -77,10 +80,12 @@ export default function Chat() {
     }
   };
 
-  const handleClickChat = (id: string) => {
-    setSelectedChatId((prev) => (prev === id ? null : id));
-    connect(id);
-  };
+  useEffect(() => {
+    if (activeChat) {
+      setSelectedChatId(activeChat);
+      connect(activeChat);
+    }
+  }, [activeChat]);
 
   const handleHideChat = () => {
     socket.current?.disconnect();
@@ -90,6 +95,10 @@ export default function Chat() {
 
   // old messages with new from websocket
   const allMessages = messages ? [...messages, ...incomingData] : [...incomingData];
+
+  const uniqueAllMessages = Array.from(new Set(allMessages.map((message) => message.id))).map((id) => {
+    return allMessages.find((message) => message.id === id)!;
+  });
 
   return (
     <>
@@ -127,7 +136,7 @@ export default function Chat() {
 
                         <XMarkIcon onClick={handleHideChat} className="h-6 w-6 cursor-pointer" aria-hidden="true" />
                       </div>
-                      <ChatsList selectChat={handleClickChat} />
+                      <ChatsList />
 
                       {messages && chat ? (
                         <div className="flex flex-col justify-between mt-3">
@@ -146,7 +155,7 @@ export default function Chat() {
                         </div>
                       ) : null}
 
-                      {selectedChatId ? <MessagesList messages={allMessages} /> : null}
+                      {selectedChatId ? <MessagesList messages={uniqueAllMessages} /> : null}
 
                       {selectedChatId ? <CreateMessage chatId={selectedChatId} /> : null}
                     </div>

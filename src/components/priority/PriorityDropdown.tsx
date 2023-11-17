@@ -7,7 +7,7 @@ import { setNewTaskPriority } from '../../features/task/taskSlice';
 import { priorities } from '../../app/constants/priorities';
 import AlsoitMenuDropdown from '../DropDowns';
 
-interface priorityType {
+export interface priorityType {
   id: string;
   title: string;
   handleClick: () => void;

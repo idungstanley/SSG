@@ -30,6 +30,7 @@ import MoveItemIcon from '../../../../../../assets/icons/MoveItemIcon';
 import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
 import { setEditingPilotDetailsTitle } from '../../../../../../features/workspace/workspaceSlice';
 import Linkify from 'linkify-react';
+import { Capitalize } from '../../../../../../utils/NoCapWords/Capitalize';
 
 interface PropertyDetailsProps {
   Details?: IHubDetails | ITaskFullList | IListDetails | IWalletDetails;
@@ -76,26 +77,13 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
   });
 
   const handleBlur = () => {
-    dispatch(setEditingPilotDetailsTitle(false));
     setEditingDescription(false);
+    dispatch(setEditingPilotDetailsTitle(false));
   };
 
   const handleEditTitle = () => {
     dispatch(setEditingPilotDetailsTitle(true));
   };
-
-  // const insertNewline = () => {
-  //   const textArea = textAreaRef?.current;
-  //   if (textArea) {
-  //     const cursorPosition = textArea.selectionStart as number;
-  //     const textBeforeCursor = textArea.value.slice(0, cursorPosition);
-  //     const textAfterCursor = textArea.value.slice(cursorPosition);
-
-  //     const newText = `${textBeforeCursor}\n${textAfterCursor}`;
-
-  //     textArea.value = newText;
-  //   }
-  // };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
     if (event.key === 'Enter') {
@@ -152,6 +140,8 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
       return;
     }
   };
+
+  console.log(textAreaRef.current?.innerText.trim());
 
   return (
     <div className="m-3 text-gray-500 rounded-md bg-alsoit-gray-50">
@@ -231,13 +221,17 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
                 <VerticalScroll>
                   <p
                     ref={inputRef}
-                    className="p-1 capitalize break-words max-h-52"
+                    className="p-1 break-words max-h-52"
                     contentEditable={editingPilotDetailsTitle}
                     onKeyDown={(e) => (e.key === 'Enter' ? handleDetailsSubmit(e) : null)}
                     onDoubleClick={() => handleEditTitle()}
                     onBlur={(e) => handleDetailsSubmit(e)}
                   >
-                    <Linkify options={{ target: '_blank', className: 'text-blue-400' }}>{Details?.name}</Linkify>
+                    <div>
+                      <Linkify options={{ target: '_blank', className: 'text-blue-400' }}>
+                        {Details?.name && Capitalize(Details?.name)}
+                      </Linkify>
+                    </div>
                   </p>
                 </VerticalScroll>
               </div>
@@ -245,15 +239,23 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
             {/* description */}
             <div id="entity description" className="mt-5">
               <label className="text-xs text-gray-500">Description</label>
-              <div
-                className="h-20 bg-white rounded-md cursor-text p-1.5"
-                onDoubleClick={() => setEditingDescription(true)}
-                ref={textAreaRef}
-                contentEditable={editingDescription}
-                onBlur={() => handleDetailsSubmit()}
-                onKeyDown={(e) => (e.key === 'Enter' ? handleKeyDown(e) : null)}
-              >
-                <Linkify options={{ target: '_blank', className: 'text-blue-400' }}>{Details?.description}</Linkify>
+              <div className="p-1 bg-white border border-white rounded-md cursor-text">
+                <VerticalScroll>
+                  <div
+                    className="p-1 break-words max-h-52"
+                    onDoubleClick={() => setEditingDescription(true)}
+                    ref={textAreaRef}
+                    contentEditable={editingDescription}
+                    onBlur={() => handleDetailsSubmit()}
+                    onKeyDown={(e) => (e.key === 'Enter' ? handleKeyDown(e) : null)}
+                  >
+                    <div>
+                      <Linkify options={{ target: '_blank', className: 'text-blue-400' }}>
+                        {Details?.description}
+                      </Linkify>
+                    </div>
+                  </div>
+                </VerticalScroll>
               </div>
             </div>
             {/* tags */}

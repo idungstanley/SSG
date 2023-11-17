@@ -24,11 +24,8 @@ export const addNewTaskManager = (
 
     updatedTasks[listId] = updatedTasks[listId] ? [...updatedTasks[listId], newTask] : [newTask];
 
-    // console.log(updatedTasks);
-
     return updatedTasks;
   }
-
   return tasks;
 };
 

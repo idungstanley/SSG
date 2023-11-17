@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { CSSProperties, useState } from 'react';
 import { Hub } from '../../pages/workspace/hubs/components/ActiveTree/activetree.interfaces';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { setSelectedTreeDetails } from '../../features/hubs/hubSlice';
@@ -9,6 +9,9 @@ import SearchSubHList from '../../pages/workspace/hubs/components/ActiveTree/Ite
 import SearchWList from '../../pages/workspace/hubs/components/ActiveTree/Items/wallet/SearchWList';
 import SearchLList from '../../pages/workspace/hubs/components/ActiveTree/Items/list/SearchLList';
 import { TIME_TABS } from '../../utils/Constants/TimeClockConstants';
+import { OPTIONS_WITH_AVAILABLE_LISTS } from '../../pages/workspace/tasks/component/taskMenu/TaskMenu';
+
+export const unavailableStyles: CSSProperties = { opacity: '0.5', pointerEvents: 'none' };
 
 interface hubsProps {
   hubs: Hub[];
@@ -16,6 +19,7 @@ interface hubsProps {
   setToggleTree?: React.Dispatch<React.SetStateAction<boolean>>;
   option?: string;
 }
+
 export default function ActiveTreeList({ hubs, openNewHub, setToggleTree, option }: hubsProps) {
   const dispatch = useAppDispatch();
 
@@ -30,7 +34,7 @@ export default function ActiveTreeList({ hubs, openNewHub, setToggleTree, option
     name: string,
     type: string
   ) => {
-    if (option !== 'taskDuplicate') {
+    if (!OPTIONS_WITH_AVAILABLE_LISTS.includes(option as string)) {
       e.stopPropagation();
       dispatch(setSelectedTreeDetails({ name, id, type }));
       setToggleTree?.(false);
@@ -39,6 +43,10 @@ export default function ActiveTreeList({ hubs, openNewHub, setToggleTree, option
     if (option === TIME_TABS.nestedEntities) {
       dispatch(setNestedTimeEntityId(id));
     }
+
+    // if (option === pilotTabs.CREATE_TASK) {
+    //   e.stopPropagation();
+    // }
   };
 
   const handleClick = (id: string) => {
@@ -87,8 +95,9 @@ export default function ActiveTreeList({ hubs, openNewHub, setToggleTree, option
             ) : null}
             <div
               style={
-                (lastActiveItem === 'Sub Hub' || lastActiveItem === 'Wallet') && option !== 'taskDuplicate'
-                  ? { opacity: '0.5', pointerEvents: 'none' }
+                (lastActiveItem === 'Sub Hub' || lastActiveItem === 'Wallet') &&
+                !OPTIONS_WITH_AVAILABLE_LISTS.includes(option as string)
+                  ? unavailableStyles
                   : {}
               }
             >
@@ -103,9 +112,9 @@ export default function ActiveTreeList({ hubs, openNewHub, setToggleTree, option
                 />
               ) : null}
             </div>
-            <div style={option !== 'taskDuplicate' ? { opacity: '0.5', pointerEvents: 'none' } : {}}>
+            <div style={!OPTIONS_WITH_AVAILABLE_LISTS.includes(option as string) ? unavailableStyles : {}}>
               {hub?.lists?.length && showChildren && isCanBeOpen(hub.id) ? (
-                <SearchLList list={hub.lists} leftMargin={false} paddingLeft="48" />
+                <SearchLList option={option} list={hub.lists} leftMargin={false} paddingLeft="48" />
               ) : null}
             </div>
           </div>

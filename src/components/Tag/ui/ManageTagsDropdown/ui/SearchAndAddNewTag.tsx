@@ -17,7 +17,7 @@ export function SearchAndAddNewTag({ searchValue, setSearchValue, entityId, enti
   const { selectedTasksArray } = useAppSelector((state) => state.task);
 
   const { data: tags } = useTags();
-  const { mutate: onAssign } = useAssignTag(entityId);
+  const { mutate: onAssign } = useAssignTag(entityId, entityType);
   const { mutate: onMultipleAssign } = useMultipleAssignTag();
   const { mutateAsync: onAdd } = useAddTag();
 

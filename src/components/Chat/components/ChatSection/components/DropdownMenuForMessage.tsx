@@ -1,60 +1,67 @@
-import React, { Fragment } from 'react';
+import React, { useState } from 'react';
 import { EllipsisHorizontalIcon } from '@heroicons/react/24/outline';
-import { Menu, Transition } from '@headlessui/react';
-import { cl } from '../../../../../utils';
+import { Menu as HeadMenu } from '@headlessui/react';
+import ChatReply from '../../../../../assets/icons/ChatReply';
+import { useAppDispatch } from '../../../../../app/hooks';
+import { setSelectedMessage } from '../../../../../features/chat/chatSlice';
+import { IMessage } from '../../../../../features/chat/chat.interfaces';
+import AlsoitMenuDropdown from '../../../../DropDowns';
 
-export default function DropdownMenuForMessage() {
+interface IDropdownMenuForMessageProps {
+  message: IMessage;
+}
+
+export default function DropdownMenuForMessage({ message }: IDropdownMenuForMessageProps) {
+  const dispatch = useAppDispatch();
+
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+
   const options = [
     {
-      title: 'Account settings',
-      onClick: () => ({})
-    },
-    {
-      title: 'Support',
-      onClick: () => ({})
-    },
-    {
-      title: 'License',
-      onClick: () => ({})
+      title: 'Reply',
+      icon: <ChatReply />,
+      onClick: () => {
+        dispatch(setSelectedMessage(message));
+        setAnchorEl(null);
+      }
     }
   ];
 
   return (
-    <Menu as="div" className="relative inline-block text-left">
-      <div>
-        <Menu.Button className="flex opacity-0 group-hover:opacity-100 transition-all duration-150 items-center rounded-full text-gray-400 hover:text-gray-600 focus:outline-none ring-0 focus:ring-0">
-          <span className="sr-only">Open options</span>
-          <EllipsisHorizontalIcon className="h-5 w-5" aria-hidden="true" />
-        </Menu.Button>
+    <>
+      <div onClick={(e: React.MouseEvent<HTMLDivElement>) => setAnchorEl(e.currentTarget)}>
+        <HeadMenu as="div" className="relative inline-block text-left">
+          <HeadMenu.Button className="flex opacity-0 group-hover:opacity-100 transition-all duration-150 items-center rounded-full text-gray-400 hover:text-gray-600 focus:outline-none ring-0 focus:ring-0">
+            <EllipsisHorizontalIcon className="h-5 w-5" aria-hidden="true" />
+          </HeadMenu.Button>
+        </HeadMenu>
       </div>
-
-      <Transition
-        as={Fragment}
-        enter="transition ease-out duration-100"
-        enterFrom="transform opacity-0 scale-95"
-        enterTo="transform opacity-100 scale-100"
-        leave="transition ease-in duration-75"
-        leaveFrom="transform opacity-100 scale-100"
-        leaveTo="transform opacity-0 scale-95"
-      >
-        <Menu.Items className="absolute right-0 w-56 py-1 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+      <AlsoitMenuDropdown anchorEl={anchorEl} handleClose={() => setAnchorEl(null)}>
+        <div className="p-1" style={{ minWidth: '147px' }}>
+          <div className="flex justify-center pt-3 font-bold" style={{ lineHeight: '9.6px' }}>
+            DROPDOWN
+          </div>
+          <div className="relative flex flex-col justify-center mb-2">
+            <div className="pt-3 border-b-2 " />
+            <span
+              className="absolute px-1 font-bold text-center whitespace-nowrap text-gray-400 bg-white border border-gray-100 text-alsoit-text-sm left-1/2 -translate-x-1/2"
+              style={{ lineHeight: '9.6px', top: '7px' }}
+            >
+              DROPDOWN OPTIONS
+            </span>
+          </div>
           {options.map((option) => (
-            <Menu.Item key={option.title}>
-              {({ active }) => (
-                <button
-                  onClick={option.onClick}
-                  className={cl(
-                    active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                    'block px-4 py-2 text-sm w-full text-left'
-                  )}
-                >
-                  {option.title}
-                </button>
-              )}
-            </Menu.Item>
+            <div
+              key={option.title}
+              onClick={option.onClick}
+              className="flex items-center px-2 py-1 hover:bg-alsoit-gray-50 text-sm text-gray-600 text-left space-x-2 w-full rounded-md cursor-pointer"
+            >
+              <span className="mr-2">{option.icon}</span>
+              {option.title}
+            </div>
           ))}
-        </Menu.Items>
-      </Transition>
-    </Menu>
+        </div>
+      </AlsoitMenuDropdown>
+    </>
   );
 }

@@ -76,6 +76,8 @@ export default function Assignee({
     event.stopPropagation();
   };
 
+  const { saveSettingOnline } = useAppSelector((state) => state.task);
+
   const renderIcon = () => {
     if (isAdditionalHeader) {
       return (
@@ -106,7 +108,7 @@ export default function Assignee({
           <UserPlusIcon
             className="items-center justify-center text-xl text-gray-400 cursor-pointer"
             style={{
-              width: '26px'
+              width: saveSettingOnline?.CompactView ? '20px' : '26px'
             }}
             aria-hidden="true"
           />

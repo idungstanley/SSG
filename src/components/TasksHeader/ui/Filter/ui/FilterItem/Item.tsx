@@ -6,17 +6,10 @@ import {
   setSubtasksFiltersUpdated
 } from '../../../../../../features/task/taskSlice';
 import { ADDITIONAL_OPERATORS, unitValues } from '../../config/filterConfig';
-import {
-  FilterId,
-  FilterOption,
-  FilterValue,
-  FilterWithId,
-  onChangeProps,
-  onSelectOrDeselectAllProps
-} from '../../types/filters';
+import { FilterId, FilterOption, FilterWithId, onChangeProps, onSelectOrDeselectAllProps } from '../../types/filters';
 import { Label } from './Label';
 import { ListBox } from '../ListBox';
-import { filterUniqueValues, modifyFilters, selectOrDeselectAllFilter, undoChanges } from '../../lib/filterUtils';
+import { filterUniqueValues, modifyFilters, selectOrDeselectAllFilter } from '../../lib/filterUtils';
 import { DeleteItem } from './DeleteItem';
 import { useState } from 'react';
 import { useAddFiltersForTask, useUpdateSubtaskFilters } from '../../../../../../features/task/taskService';
@@ -59,10 +52,12 @@ export function Item({ filter, initialFilters }: ItemProps) {
     const newFilters = modifyFilters(data, filters);
     dispatch(setFilterFields(newFilters));
     if (isSplitMode && selectedTaskParentId) {
-      dispatch(setSubtasksFiltersUpdated(false));
+      dispatch(setFiltersUpdated(false));
+      dispatch(setSubtasksFiltersUpdated(true));
       setSubtasksFilters(newFilters);
     } else {
-      dispatch(setFiltersUpdated(false));
+      dispatch(setSubtasksFiltersUpdated(false));
+      dispatch(setFiltersUpdated(true));
     }
   };
 
@@ -70,21 +65,12 @@ export function Item({ filter, initialFilters }: ItemProps) {
     const newFilters = selectOrDeselectAllFilter({ type, newValues: initialFilters[key].values, id }, filters);
     dispatch(setFilterFields(newFilters));
     if (isSplitMode && selectedTaskParentId) {
-      dispatch(setSubtasksFiltersUpdated(false));
+      dispatch(setFiltersUpdated(false));
+      dispatch(setSubtasksFiltersUpdated(true));
       setSubtasksFilters(newFilters);
     } else {
-      dispatch(setFiltersUpdated(false));
-    }
-  };
-
-  const onUndoChanges = (prevState: FilterValue[]) => {
-    const newFilters = undoChanges({ prevState, id }, filters);
-    dispatch(setFilterFields(newFilters));
-    if (isSplitMode && selectedTaskParentId) {
       dispatch(setSubtasksFiltersUpdated(false));
-      setSubtasksFilters(newFilters);
-    } else {
-      dispatch(setFiltersUpdated(false));
+      dispatch(setFiltersUpdated(true));
     }
   };
 
@@ -135,9 +121,7 @@ export function Item({ filter, initialFilters }: ItemProps) {
           selected={values}
           values={filterUniqueValues(initialFilters[key].values, filters, id, key)}
           onSelectOrDeselectAll={onSelectOrDeselectAll}
-          onUndoChanges={onUndoChanges}
           showSearch
-          controlledOptionsDisplay
           filterKey={key}
         >
           {/* show additional option only for number of values 2 or more */}
