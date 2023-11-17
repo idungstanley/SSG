@@ -42,12 +42,9 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const textAreaRef = useRef<HTMLInputElement | null>(null);
 
-  // const [fileId, setFileId] = useState<string | undefined>(undefined);
-
   const [toggleSubTask, setToggleSubTask] = useState(false);
   const [editingDescription, setEditingDescription] = useState(false);
   const [toggleDetails, setToggleDetails] = useState<boolean>(true);
-  // const [description, setDescription] = useState<string>(Details?.description ?? '');
   const { hubId, walletId, listId, taskId } = useParams();
 
   const { editingPilotDetailsTitle } = useAppSelector((state) => state.workspace);
@@ -92,16 +89,6 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
     }
   };
 
-  // const handleDescriptionChange = (value: string) => {
-  //   const pattern = /<a[^>]*>/gi;
-
-  //   const modifiedString = value.replace(pattern, (match) => {
-  //     return match.replace('>', ' class="text-blue-500 underline">');
-  //   });
-
-  //   setDescription(modifiedString);
-  // };
-
   const handleDetailsSubmit = async (
     e:
       | React.KeyboardEvent<HTMLParagraphElement>
@@ -140,8 +127,6 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
       return;
     }
   };
-
-  console.log(textAreaRef.current?.innerText.trim());
 
   return (
     <div className="m-3 text-gray-500 rounded-md bg-alsoit-gray-50">
@@ -224,14 +209,17 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
                     className="p-1 break-words max-h-52"
                     contentEditable={editingPilotDetailsTitle}
                     onKeyDown={(e) => (e.key === 'Enter' ? handleDetailsSubmit(e) : null)}
+                    suppressContentEditableWarning={true}
                     onDoubleClick={() => handleEditTitle()}
                     onBlur={(e) => handleDetailsSubmit(e)}
                   >
-                    <div>
+                    {editingPilotDetailsTitle ? (
+                      <div>{Details?.name && Capitalize(Details?.name)}</div>
+                    ) : (
                       <Linkify options={{ target: '_blank', className: 'text-blue-400' }}>
-                        {Details?.name && Capitalize(Details?.name)}
+                        {inputRef.current?.innerText.trim()}
                       </Linkify>
-                    </div>
+                    )}
                   </p>
                 </VerticalScroll>
               </div>
@@ -242,18 +230,21 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
               <div className="p-1 bg-white border border-white rounded-md cursor-text">
                 <VerticalScroll>
                   <div
-                    className="p-1 break-words max-h-52"
+                    className="h-20 p-1 break-words max-h-52"
                     onDoubleClick={() => setEditingDescription(true)}
                     ref={textAreaRef}
+                    suppressContentEditableWarning={true}
                     contentEditable={editingDescription}
                     onBlur={() => handleDetailsSubmit()}
                     onKeyDown={(e) => (e.key === 'Enter' ? handleKeyDown(e) : null)}
                   >
-                    <div>
+                    {editingDescription ? (
+                      <div>{Details?.description}</div>
+                    ) : (
                       <Linkify options={{ target: '_blank', className: 'text-blue-400' }}>
-                        {Details?.description}
+                        {textAreaRef.current?.innerText.trim()}
                       </Linkify>
-                    </div>
+                    )}
                   </div>
                 </VerticalScroll>
               </div>
