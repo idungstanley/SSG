@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { TagItem } from '../../../pages/workspace/tasks/component/taskData/DataRenderFunc';
-import { useAppSelector } from '../../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { UseUpdateTagService, UseUnAssignTagService } from '../../../features/workspace/tags/tagService';
 import EditTagModal from '../../tags/EditTagModal';
 import { IoCloseSharp } from 'react-icons/io5';
 import { Menu } from '@mui/material';
 import { AiOutlineEllipsis } from 'react-icons/ai';
+import { setUnassignTagChecklistItem } from '../../../features/task/checklist/checklistSlice';
 
 interface taskTageProps {
   tag: TagItem;
@@ -16,6 +17,7 @@ interface taskTageProps {
 
 export default function TaskTag({ tag, entity_id, entity_type }: taskTageProps) {
   const queryClient = useQueryClient();
+  const dispatch = useAppDispatch();
 
   const { renameTagId, currentTaskIdForTag } = useAppSelector((state) => state.tag);
 
@@ -24,9 +26,18 @@ export default function TaskTag({ tag, entity_id, entity_type }: taskTageProps) 
 
   const unAssignTagMutation = useMutation(UseUnAssignTagService, {
     onSuccess: () => {
-      queryClient.invalidateQueries(['task']);
-      queryClient.invalidateQueries(['sub-tasks']);
-      queryClient.invalidateQueries(['checklist']);
+      if (entity_type === 'checklist_item') {
+        dispatch(
+          setUnassignTagChecklistItem({
+            itemId: entity_id as string,
+            tagId: tag.id
+          })
+        );
+      } else {
+        queryClient.invalidateQueries(['task']);
+        queryClient.invalidateQueries(['sub-tasks']);
+        queryClient.invalidateQueries(['checklist']);
+      }
     }
   });
 

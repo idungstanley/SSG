@@ -12,8 +12,8 @@ import { IField, IListDetailRes } from '../../../../features/list/list.interface
 import { Hub } from '../../../../pages/workspace/hubs/components/ActiveTree/activetree.interfaces';
 import { findCurrentHub } from '../../../../managers/Hub';
 import LightenColor from './lightenColor/LightenColor';
-import { SubtasksTable } from '../Table/SubtasksTable';
 import { useParams } from 'react-router-dom';
+import { SubtasksTable } from '../Table/SubtasksTable';
 
 interface ListProps {
   tasks: Task[];
@@ -124,7 +124,7 @@ export function List({ tasks }: ListProps) {
 
   return (
     <div
-      className={`pt-1 border-t-4 border-l-4 rounded-tl-3xl  ${!collapseTable && 'rounded-3xl pb-3'}`}
+      className={`pt-1 border-t-4 border-l-4 rounded-tl-lg  ${!collapseTable && 'rounded-lg pb-3'}`}
       style={{
         borderColor: !ListColor?.outerColour ? 'black' : (ListColor?.outerColour as string),
         backgroundColor: LightenColor(!ListColor?.outerColour ? 'black' : (ListColor?.outerColour as string), 0.95)
@@ -166,6 +166,7 @@ export function List({ tasks }: ListProps) {
                   listColor={ListColor}
                   heads={hideTask.length ? hideTask : generateColumns}
                   data={sortedTasks[key]}
+                  selectionArr={fullTasksLists}
                 />
               ) : (
                 <>

@@ -4,7 +4,7 @@ import { useAppSelector } from '../../../../../app/hooks';
 import { IoEyeOutline } from 'react-icons/io5';
 import { BsBox, BsTags } from 'react-icons/bs';
 import { TbSubtask } from 'react-icons/tb';
-import { MdOutlineDeveloperBoard, MdOutlineDriveFileMove, MdDateRange, MdDeleteForever } from 'react-icons/md';
+import { MdOutlineDriveFileMove, MdDateRange, MdDeleteForever } from 'react-icons/md';
 import { HiOutlineDocumentDuplicate, HiInbox } from 'react-icons/hi';
 import { TbFolderX } from 'react-icons/tb';
 import { GiStoneStack, GiJusticeStar } from 'react-icons/gi';
@@ -34,6 +34,13 @@ import { ManageTagsDropdown } from '../../../../../components/Tag/ui/ManageTagsD
 import { AiFillFlag } from 'react-icons/ai';
 import DateFormat from '../../../../../components/DateFormat';
 import CustomFieldsModal from '../../customFields/CustomFieldsModal';
+import MultipleStatuses from '../../multipleStatuses/MultipleStatuses';
+import { pilotTabs } from '../../../../../app/constants/pilotTabs';
+
+export const TASK_DUPLICATE = 'task_duplicate';
+export const TASK_MOVE = 'task_move';
+export const CONVERT_CHECKLIST = 'convert_checklist';
+export const OPTIONS_WITH_AVAILABLE_LISTS = [TASK_DUPLICATE, TASK_MOVE, pilotTabs.CREATE_TASK, CONVERT_CHECKLIST];
 
 export default function TaskMenu() {
   const dispatch = useDispatch();
@@ -52,6 +59,7 @@ export default function TaskMenu() {
   const [isHideTooltip, setHideTooltip] = useState<boolean>(false);
   const [showSelectDropdown, setShowSelectDropdown] = useState<null | HTMLSpanElement | HTMLDivElement>(null);
   const [isArchivedTasks, setArchivedTasks] = useState<boolean>(false);
+  const [activeTreeType, setActiveTreeType] = useState<string>('');
 
   useEffect(() => {
     if (selectedTasksArray.length) {
@@ -62,10 +70,10 @@ export default function TaskMenu() {
   }, [selectedTasksArray]);
 
   useEffect(() => {
-    if (!duplicateTaskObj.popDuplicateTaskModal) {
+    if (!duplicateTaskObj.popDuplicateTaskModal || !selectedTasksArray.length) {
       handleClose();
     }
-  }, [duplicateTaskObj.popDuplicateTaskModal]);
+  }, [duplicateTaskObj.popDuplicateTaskModal, selectedTasksArray]);
 
   useEffect(() => {
     if (selectedTasksArray.length) {
@@ -87,7 +95,6 @@ export default function TaskMenu() {
         selectedListIds.length ? selectedListIds : [selectedTaskParentId],
         taskData
       );
-      // const selectedTaskType === EntityType.task ? taskData : subtasks;
 
       if (EntityType.task) {
         dispatch(setTasks(updatedTasks));
@@ -140,7 +147,7 @@ export default function TaskMenu() {
     {
       id: 'set_status',
       label: 'Set Status',
-      icons: <MdOutlineDeveloperBoard color="orange" opacity={0.5} />,
+      icons: <MultipleStatuses />,
       handleClick: () => ({}),
       isVisible: true
     },
@@ -160,9 +167,13 @@ export default function TaskMenu() {
     },
     {
       id: 'move_tasks_or_add_tasks_in_multiple_lists',
-      label: 'Move tasks or add tasks in multiple Lists',
-      icons: <MdOutlineDriveFileMove color="orange" opacity={0.5} />,
-      handleClick: () => ({}),
+      // label: 'Move tasks or add tasks in multiple Lists',
+      label: 'Move tasks',
+      icons: <MdOutlineDriveFileMove />,
+      handleClick: (e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
+        handleShowSelectDropdown(e);
+        setActiveTreeType(TASK_MOVE);
+      },
       isVisible: true
     },
     {
@@ -171,7 +182,7 @@ export default function TaskMenu() {
       icons: <HiOutlineDocumentDuplicate />,
       handleClick: (e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
         handleShowSelectDropdown(e);
-        // setToggleDuplicateMoal(!toggleDuplicateMoal);
+        setActiveTreeType(TASK_DUPLICATE);
       },
       isVisible: true
     },
@@ -351,7 +362,7 @@ export default function TaskMenu() {
       <div className="absolute z-50">
         {
           <AlsoitMenuDropdown handleClose={handleClose} anchorEl={showSelectDropdown}>
-            <ActiveTreeSearch option="taskDuplicate" />
+            <ActiveTreeSearch option={activeTreeType} />
           </AlsoitMenuDropdown>
         }
       </div>

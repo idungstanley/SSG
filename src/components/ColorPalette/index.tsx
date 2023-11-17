@@ -23,7 +23,6 @@ import SearchIcon from '../../assets/icons/SearchIcon';
 import FormatListBullet from '../../assets/icons/FormatListBullet';
 import Input from '../input/Input';
 import { CiSearch } from 'react-icons/ci';
-import Button from '../Button';
 import ArrowDownFilled from '../../assets/icons/ArrowDownFilled';
 import PaletteListView from './component/PaletteListView';
 import ToolTip from '../Tooltip/Tooltip';
@@ -36,8 +35,9 @@ import ListIconSelection, { listIconDetails } from './component/ListIconSelectio
 import AdvanceColourPalette from './component/AdvanceColourPalette';
 import { taskColourManager } from '../../managers/Task';
 import { setTasks } from '../../features/task/taskSlice';
-import CancelButton from '../CancelButton';
 import Filter from '../../assets/icons/filter_alt.svg';
+import ClosePalette from '../../assets/icons/ClosePalette';
+import SavePalette from '../../assets/icons/SavePalette';
 
 interface PaletteProps {
   title?: string;
@@ -214,6 +214,7 @@ export default function PaletteManager({
 
   const selectedElement = views.find((items) => items.label === selectedViews)?.element;
   const activeShapeName = listIconDetails.find((item) => item.shape === shape);
+  const [onHover, setOnHover] = useState('white');
 
   return (
     <Menu
@@ -222,7 +223,7 @@ export default function PaletteManager({
       TransitionComponent={Fade}
       anchorOrigin={{
         vertical: cords?.top || 'center',
-        horizontal: 10
+        horizontal: cords?.left || 10
       }}
       PaperProps={{
         style: {
@@ -247,7 +248,7 @@ export default function PaletteManager({
           {!isSearch && selectListColours.length === 0 && paletteViews.BOARD && (
             <div className="flex items-center justify-between mb-2">
               <div className="flex gap-1 uppercase items-center-justify-between">
-                <div className="flex items-center h-8 p-1 rounded-br-lg bg-alsoit-gray-75 w-[114px]">
+                <div className="flex items-center h-8 p-1 rounded-br-md bg-alsoit-gray-75 w-[114px]">
                   <p
                     className="bg-['#b2b2b2'] text-white justify-center tracking-wide font-medium"
                     style={{ fontSize: '11px', lineHeight: '13.2px' }}
@@ -389,17 +390,25 @@ export default function PaletteManager({
             </div>
           </div>
           <div className="flex items-center justify-end gap-2 p-1 mx-3 mb-2">
-            <CancelButton onClick={handleCancel} />
-            <Button
-              height="h-6"
-              customClasses="hover:bg-[#2BD54A] text-gray-500 border-gray-400"
-              label={'Update ' + title}
-              labelSize="text-xs truncate"
-              padding="p-1"
-              buttonStyle="custom"
-              onClick={handleClick}
-              disabled={color === null}
-            />
+            <ToolTip title="Cancel">
+              <span
+                onClick={handleCancel}
+                className="cursor-pointer text-[#FF3738] hover:text-white"
+                onMouseEnter={() => {
+                  setOnHover('#FF3738');
+                }}
+                onMouseLeave={() => {
+                  setOnHover('white');
+                }}
+              >
+                <ClosePalette fill={onHover} />
+              </span>
+            </ToolTip>
+            <ToolTip title="Update Hub">
+              <span className="cursor-pointer" onClick={handleClick}>
+                <SavePalette />
+              </span>
+            </ToolTip>
           </div>
           {bottomContent}
         </div>

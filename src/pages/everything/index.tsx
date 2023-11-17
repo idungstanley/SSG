@@ -1,8 +1,7 @@
-import { useState, useEffect, useMemo, UIEvent, Fragment } from 'react';
+import { useEffect, useMemo, UIEvent, Fragment } from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import Page from '../../components/Page';
-import { UseGetHubDetails } from '../../features/hubs/hubService';
-import { UseGetFullTaskList } from '../../features/task/taskService';
+import { UseGetEverythingTasks } from '../../features/task/taskService';
 import AdditionalHeader from '../../layout/components/MainLayout/Header/AdditionHeader';
 import PilotSection, { pilotConfig } from '../workspace/hubs/components/PilotSection';
 import FilterByAssigneesSliderOver from '../workspace/lists/components/renderlist/filters/FilterByAssigneesSliderOver';
@@ -11,35 +10,17 @@ import { generateLists } from '../../utils';
 import { Header } from '../../components/TasksHeader';
 import { VerticalScroll } from '../../components/ScrollableContainer/VerticalScroll';
 import { GroupHorizontalScroll } from '../../components/ScrollableContainer/GroupHorizontalScroll';
-import { EntityType } from '../../utils/EntityTypes/EntityType';
-import { setTasks } from '../../features/task/taskSlice';
-import { IHubDetails } from '../../features/hubs/hubs.interfaces';
+import { setKeyBoardSelectedIndex, setTasks } from '../../features/task/taskSlice';
 
 export default function EverythingPage() {
   const dispatch = useAppDispatch();
 
-  const { hub } = useAppSelector((state) => state.hub);
-  const { tasks: tasksStore, scrollGroupView } = useAppSelector((state) => state.task);
+  const { tasks: tasksStore, scrollGroupView, keyBoardSelectedIndex } = useAppSelector((state) => state.task);
 
-  const [allHubsId, setAllHubsId] = useState<string[]>([]);
-  const [currentHubIdInOrder, setCurrentHubIdInOrder] = useState<string>('');
-
-  const { data: hubsData } = UseGetHubDetails({ activeItemId: currentHubIdInOrder, activeItemType: EntityType.hub });
-
-  const { data, hasNextPage, fetchNextPage, isFetching } = UseGetFullTaskList({
-    itemId: currentHubIdInOrder,
-    itemType: EntityType.hub
-  });
-
-  useEffect(() => {
-    if (hub.length) {
-      setAllHubsId(hub.map((item) => item.id));
-      setCurrentHubIdInOrder(hub[0].id);
-    }
-  }, [hub]);
+  const { data, hasNextPage, fetchNextPage } = UseGetEverythingTasks();
 
   const tasks = useMemo(() => (data ? data.pages.flatMap((page) => page.data.tasks) : []), [data]);
-  const lists = useMemo(() => generateLists(tasks, hubsData?.data.hub as IHubDetails), [tasks, hubsData]);
+  const lists = useMemo(() => generateLists(tasks), [tasks]);
 
   useEffect(() => {
     if (Object.keys(lists).length) {
@@ -47,9 +28,27 @@ export default function EverythingPage() {
     }
   }, [lists]);
 
+  const combinedArr = Object.values(tasksStore).flatMap((lists) => lists);
+
+  const handleKeyDown = (e: KeyboardEvent) => {
+    if (e.key === 'ArrowUp' && keyBoardSelectedIndex !== null) {
+      const newIndex = Math.max(0, keyBoardSelectedIndex - 1);
+      dispatch(setKeyBoardSelectedIndex(newIndex));
+    } else if (e.key === 'ArrowDown' && keyBoardSelectedIndex !== null) {
+      const newIndex = Math.min(combinedArr.length - 1, keyBoardSelectedIndex + 1);
+      dispatch(setKeyBoardSelectedIndex(newIndex));
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [keyBoardSelectedIndex]);
+
   // infinite scroll
   const onScroll = (e: UIEvent<HTMLDivElement>) => {
-    if (!isFetching && allHubsId.length) handleScroll(e);
+    handleScroll(e);
   };
 
   const handleScroll = (e: UIEvent<HTMLDivElement>) => {
@@ -60,9 +59,6 @@ export default function EverythingPage() {
     if (scrollDifference <= range) {
       if (hasNextPage) {
         fetchNextPage();
-      } else {
-        setAllHubsId((prev) => prev.slice(1));
-        setCurrentHubIdInOrder(allHubsId[1]);
       }
     }
   };

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { CSSProperties, useState } from 'react';
 import { Hub } from '../../pages/workspace/hubs/components/ActiveTree/activetree.interfaces';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { setSelectedTreeDetails } from '../../features/hubs/hubSlice';
@@ -9,14 +9,19 @@ import SearchSubHList from '../../pages/workspace/hubs/components/ActiveTree/Ite
 import SearchWList from '../../pages/workspace/hubs/components/ActiveTree/Items/wallet/SearchWList';
 import SearchLList from '../../pages/workspace/hubs/components/ActiveTree/Items/list/SearchLList';
 import { TIME_TABS } from '../../utils/Constants/TimeClockConstants';
+import { OPTIONS_WITH_AVAILABLE_LISTS } from '../../pages/workspace/tasks/component/taskMenu/TaskMenu';
+
+export const unavailableStyles: CSSProperties = { opacity: '0.5', pointerEvents: 'none' };
 
 interface hubsProps {
   hubs: Hub[];
   openNewHub: (id: string) => void;
   setToggleTree?: React.Dispatch<React.SetStateAction<boolean>>;
   option?: string;
+  checklistId?: string;
 }
-export default function ActiveTreeList({ hubs, openNewHub, setToggleTree, option }: hubsProps) {
+
+export default function ActiveTreeList({ hubs, openNewHub, setToggleTree, option, checklistId }: hubsProps) {
   const dispatch = useAppDispatch();
 
   const { lastActiveItem } = useAppSelector((state) => state.workspace);
@@ -30,7 +35,7 @@ export default function ActiveTreeList({ hubs, openNewHub, setToggleTree, option
     name: string,
     type: string
   ) => {
-    if (option !== 'taskDuplicate') {
+    if (!OPTIONS_WITH_AVAILABLE_LISTS.includes(option as string)) {
       e.stopPropagation();
       dispatch(setSelectedTreeDetails({ name, id, type }));
       setToggleTree?.(false);
@@ -39,6 +44,10 @@ export default function ActiveTreeList({ hubs, openNewHub, setToggleTree, option
     if (option === TIME_TABS.nestedEntities) {
       dispatch(setNestedTimeEntityId(id));
     }
+
+    // if (option === pilotTabs.CREATE_TASK) {
+    //   e.stopPropagation();
+    // }
   };
 
   const handleClick = (id: string) => {
@@ -83,12 +92,18 @@ export default function ActiveTreeList({ hubs, openNewHub, setToggleTree, option
               type={EntityType.hub}
             />
             {hub?.children?.length && isCanBeOpen(hub.id) ? (
-              <SearchSubHList option={option} hubs={hub.children as Hub[]} handleTabClick={handleTabClick} />
+              <SearchSubHList
+                option={option}
+                hubs={hub.children as Hub[]}
+                handleTabClick={handleTabClick}
+                checklistId={checklistId}
+              />
             ) : null}
             <div
               style={
-                (lastActiveItem === 'Sub Hub' || lastActiveItem === 'Wallet') && option !== 'taskDuplicate'
-                  ? { opacity: '0.5', pointerEvents: 'none' }
+                (lastActiveItem === 'Sub Hub' || lastActiveItem === 'Wallet') &&
+                !OPTIONS_WITH_AVAILABLE_LISTS.includes(option as string)
+                  ? unavailableStyles
                   : {}
               }
             >
@@ -100,12 +115,19 @@ export default function ActiveTreeList({ hubs, openNewHub, setToggleTree, option
                   type="wallet"
                   paddingLeft="33"
                   handleTabClick={handleTabClick}
+                  checklistId={checklistId}
                 />
               ) : null}
             </div>
-            <div style={option !== 'taskDuplicate' ? { opacity: '0.5', pointerEvents: 'none' } : {}}>
+            <div style={!OPTIONS_WITH_AVAILABLE_LISTS.includes(option as string) ? unavailableStyles : {}}>
               {hub?.lists?.length && showChildren && isCanBeOpen(hub.id) ? (
-                <SearchLList list={hub.lists} leftMargin={false} paddingLeft="48" />
+                <SearchLList
+                  option={option}
+                  list={hub.lists}
+                  leftMargin={false}
+                  paddingLeft="48"
+                  checklistId={checklistId}
+                />
               ) : null}
             </div>
           </div>

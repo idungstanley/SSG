@@ -30,7 +30,7 @@ const pilotFromLS = JSON.parse(localStorage.getItem('pilot') || '""') as { tabOr
 const tabIdsFromLS = pilotFromLS.tabOrder || [];
 
 const MIN = 100;
-const MAX = 200;
+const MAX = 250;
 
 export default function FullTabs({ tabs }: TabsProps) {
   const [tabItems, setTabItems] = useState(

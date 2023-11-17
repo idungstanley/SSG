@@ -18,6 +18,7 @@ import CalendarIcon from '../../../../assets/icons/CalendarIcon';
 import StatusMgIcon from '../../../../assets/icons/StatusMgIcon';
 import { pilotTabs } from '../../../../app/constants/pilotTabs';
 import { TbShield } from 'react-icons/tb';
+import PlusIcon from '../../../../assets/icons/PlusIcon';
 
 export const HubManagerOptions = [
   {
@@ -36,6 +37,12 @@ export const HubManagerOptions = [
     id: pilotTabs.CREATE_LIST,
     name: 'Create List',
     icon: <AddListIcon />,
+    isVisible: false
+  },
+  {
+    id: pilotTabs.CREATE_TASK,
+    name: 'Create Task',
+    icon: <PlusIcon />,
     isVisible: false
   },
   {

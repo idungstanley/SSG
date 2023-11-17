@@ -43,9 +43,11 @@ interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   field: Pick<listColumnProps, 'field'>['field'];
   task: Task;
   fieldId: string;
+  styles?: { opacity: number };
+  selectedRow: boolean;
 }
 
-export function Col({ value, field, fieldId, task, ...props }: ColProps) {
+export function Col({ value, field, fieldId, task, styles, selectedRow, ...props }: ColProps) {
   const dispatch = useAppDispatch();
   const { taskId } = useParams();
 
@@ -55,7 +57,7 @@ export function Col({ value, field, fieldId, task, ...props }: ColProps) {
     (state) => state.task
   );
 
-  const COL_BG = taskId === task.id ? ACTIVE_COL_BG : DEFAULT_COL_BG;
+  const COL_BG = taskId === task.id ? ACTIVE_COL_BG : selectedRow ? 'bg-alsoit-purple-50' : DEFAULT_COL_BG;
   const isSelected = selectedTasksArray.includes(task.id);
 
   // fields config
@@ -254,14 +256,20 @@ export function Col({ value, field, fieldId, task, ...props }: ColProps) {
             saveSettingOnline?.singleLineView && !saveSettingOnline?.CompactView
               ? '42px'
               : saveSettingOnline?.CompactView && saveSettingOnline?.singleLineView
-              ? '32px'
+              ? '25px'
               : !saveSettingOnline?.singleLineView && saveSettingOnline?.CompactView && task.name.length < 30
-              ? '32px'
-              : ''
+              ? '25px'
+              : '',
+          ...styles
         }}
       >
         {dragOverItemId === task.id && draggableItemId !== dragOverItemId && dragToBecomeSubTask && (
-          <span className={cl('absolute h-0.5 bg-alsoit-purple-300 w-full bottom-px right-0')}></span>
+          <span
+            className={cl('absolute content-start z-50 flex items-center w-full right-0')}
+            style={{ bottom: '2px' }}
+          >
+            <span className={cl('h-0.5 bg-alsoit-purple-300 w-full ml-auto')}></span>
+          </span>
         )}
         {field in fields ? fields[field] : String(value)}
       </td>

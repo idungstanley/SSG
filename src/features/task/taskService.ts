@@ -50,6 +50,7 @@ import Duration from '../../utils/TimerDuration';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
 import {
   addNewTaskManager,
+  findCurrentTaskManager,
   multipleTasksDateUpdateManager,
   taskAssignessUpdateManager,
   taskDateUpdateManager,
@@ -73,6 +74,7 @@ import { pilotTabs } from '../../app/constants/pilotTabs';
 import { setChecklists } from './checklist/checklistSlice';
 import { StatusProps } from '../../pages/workspace/hubs/components/ActiveTree/activetree.interfaces';
 import { setMatchData } from '../general/prompt/promptSlice';
+import { MultipleTaskStatuses } from '../../pages/workspace/tasks/multipleStatuses/MultipleStatuses';
 
 export const useDeleteAttachment = ({ id }: { id: string }) => {
   const data = requestNew({
@@ -209,7 +211,7 @@ interface ErrorMultipleMoveResponse {
   };
 }
 
-export const useMultipleTaskMove = () => {
+export const useMultipleTaskMove = (list?: IList, type?: 'id_only') => {
   const dispatch = useDispatch();
 
   const { draggableTask, dragOverList } = useAppSelector((state) => state.list);
@@ -218,6 +220,29 @@ export const useMultipleTaskMove = () => {
 
   return useMutation(multipleTaskMove, {
     onSuccess: () => {
+      if (type === 'id_only') {
+        let newTasks = { ...tasks };
+        let newSubtasks = { ...subtasks };
+        let newTree = [...hub];
+        selectedTasksArray.forEach((id) => {
+          const currentTask = findCurrentTaskManager(id, tasks, subtasks);
+          const { updatedTasks, updatedSubtasks, updatedTree } = taskMoveToListManager(
+            currentTask as ITaskFullList,
+            list as IList,
+            newTasks,
+            newSubtasks,
+            newTree,
+            selectedTasksArray
+          );
+          newTasks = updatedTasks;
+          newSubtasks = updatedSubtasks;
+          newTree = updatedTree;
+        });
+        dispatch(setTasks(newTasks));
+        dispatch(setSubtasks(newSubtasks));
+        dispatch(getHub(newTree));
+        dispatch(setFilteredResults(newTree));
+      }
       if (dragOverList) {
         // move to list
         const { updatedTasks, updatedSubtasks, updatedTree } = taskMoveToListManager(
@@ -461,6 +486,71 @@ export const useDuplicateTask = (task?: Task) => {
       const updatedTree = updateListTasksCountManager(listId as string, hub, updatedTasks[listId].length);
       dispatch(getHub(updatedTree));
       dispatch(setFilteredResults(updatedTree));
+      dispatch(setSelectedTasksArray([]));
+    }
+  });
+};
+
+const multipleDuplicateTasks = (data: { ids: string[]; list_id: string; is_everything: boolean; copy?: string[] }) => {
+  const { ids, list_id, is_everything, copy } = data;
+
+  const custom_is_everything = copy?.includes('everything');
+
+  const response = requestNew({
+    url: 'tasks/multiple/duplicate',
+    method: 'POST',
+    data: {
+      ids,
+      list_id,
+      is_everything: copy?.length ? custom_is_everything : is_everything
+    }
+  });
+  return response;
+};
+
+export const useMultipleDuplicateTasks = (list: IList) => {
+  const dispatch = useAppDispatch();
+
+  const { duplicateTaskObj, tasks, subtasks, selectedTasksArray } = useAppSelector((state) => state.task);
+  const { hub } = useAppSelector((state) => state.hub);
+
+  return useMutation(multipleDuplicateTasks, {
+    onSuccess: () => {
+      dispatch(setDuplicateTaskObj({ ...duplicateTaskObj, popDuplicateTaskModal: true }));
+      let updatedTasks = { ...tasks };
+      let updatedSubtasks = { ...subtasks };
+      selectedTasksArray.forEach((id) => {
+        let currentTask = findCurrentTaskManager(id, tasks, subtasks);
+        if (currentTask) {
+          currentTask = {
+            ...currentTask,
+            list: list,
+            list_id: list.id
+          };
+          if (currentTask.parent_id) {
+            updatedSubtasks = addNewSubtaskManager(
+              updatedSubtasks,
+              currentTask as ITaskFullList,
+              currentTask?.custom_field_columns || [],
+              currentTask?.task_statuses || []
+            );
+          } else {
+            updatedTasks = addNewTaskManager(
+              updatedTasks,
+              currentTask as ITaskFullList,
+              currentTask?.custom_field_columns || [],
+              currentTask?.task_statuses || []
+            );
+          }
+        }
+      });
+      dispatch(setTasks(updatedTasks));
+      dispatch(setSubtasks(updatedSubtasks));
+      const listId = list.id;
+      const updatedTree = updateListTasksCountManager(listId as string, hub, updatedTasks[listId].length);
+      dispatch(getHub(updatedTree));
+      dispatch(setFilteredResults(updatedTree));
+      dispatch(setSelectedTasksArray([]));
     }
   });
 };
@@ -498,6 +588,55 @@ export const deleteTask = (data: { selectedTasksArray: string[] }) => {
   return request;
 };
 
+interface ITasksStatusesRes {
+  data: {
+    statuses: MultipleTaskStatuses[];
+  };
+}
+
+export const getTasksStatuses = (selectedTasksArray: string[], anchorEl: HTMLElement | null) => {
+  return useQuery(
+    [selectedTasksArray],
+    async () => {
+      const request = await requestNew<ITasksStatusesRes>({
+        url: 'tasks/multiple/get-statuses',
+        method: 'POST',
+        data: {
+          ids: selectedTasksArray
+        }
+      });
+      return request?.data.statuses;
+    },
+    {
+      enabled: !!selectedTasksArray.length && !!anchorEl,
+      cacheTime: 0
+    }
+  );
+};
+
+export const multipleUpdateStatus = (data: { ids: string[]; status: string }) => {
+  const { ids, status } = data;
+  const response = requestNew({
+    url: 'tasks/multiple/statuses',
+    method: 'POST',
+    data: {
+      ids,
+      status
+    }
+  });
+  return response;
+};
+
+export const useMultipleUpdateStatus = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation(multipleUpdateStatus, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['task']);
+    }
+  });
+};
+
 export const addNewField = (data: { ids: string[]; custom_field_id: string; values: string }) => {
   const { ids, custom_field_id, values } = data;
   const request = requestNew({
@@ -532,6 +671,59 @@ export const createTaskService = (data: {
     }
   });
   return response;
+};
+
+export const UseGetEverythingTasks = () => {
+  const queryClient = useQueryClient();
+
+  const { draggableItemId } = useAppSelector((state) => state.list);
+
+  const { sortAbleArr, toggleAllSubtask, separateSubtasksMode, splitSubTaskState, isFiltersUpdated } = useAppSelector(
+    (state) => state.task
+  );
+  const sortArrUpdate = sortAbleArr.length <= 0 ? null : sortAbleArr;
+
+  const { filters } = generateFilters();
+
+  return useInfiniteQuery(
+    [
+      'task',
+      filters,
+      isFiltersUpdated,
+      sortArrUpdate,
+      draggableItemId,
+      toggleAllSubtask,
+      separateSubtasksMode,
+      splitSubTaskState
+    ],
+    async ({ pageParam = 0 }: { pageParam?: number }) => {
+      return requestNew<IFullTaskRes>({
+        url: 'tasks/everything',
+        method: 'POST',
+        data: {
+          filters,
+          sorting: sortArrUpdate,
+          expand_all: toggleAllSubtask || separateSubtasksMode || splitSubTaskState ? 1 : 0,
+          page: pageParam
+        }
+      });
+    },
+    {
+      keepPreviousData: true,
+      enabled: location.pathname.includes('everything') && !draggableItemId && isFiltersUpdated,
+      onSuccess: (data) => {
+        data.pages.map((page) => page.data.tasks.map((task) => queryClient.setQueryData(['task', task.id], task)));
+      },
+      getNextPageParam: (lastPage) => {
+        if (lastPage?.data?.paginator.has_more_pages) {
+          return Number(lastPage.data.paginator.page) + 1;
+        }
+
+        return false;
+      },
+      cacheTime: 0
+    }
+  );
 };
 
 export const UseGetFullTaskList = ({
@@ -1523,16 +1715,18 @@ export function useMediaStream() {
     const recorder = new MediaRecorder(combinedStream);
     dispatch(setScreenRecordingMedia({ recorder, stream: combinedStream }));
     if (blob && currentWorkspaceId && accessToken && activeItemId && activeItemType) {
-      mutate({
-        blob,
-        currentWorkspaceId,
-        accessToken,
-        activeItemId,
-        activeItemType
-      });
-
-      // Invalidate React Query
-      queryClient.invalidateQueries(['attachments']);
+      mutate(
+        {
+          blob,
+          currentWorkspaceId,
+          accessToken,
+          activeItemId,
+          activeItemType
+        },
+        {
+          onSuccess: () => queryClient.invalidateQueries(['attachments'])
+        }
+      );
     }
 
     dispatch(setScreenRecording('idle'));

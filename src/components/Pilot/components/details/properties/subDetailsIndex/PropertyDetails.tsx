@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useLayoutEffect, useRef, useState } from 'react';
 import moment from 'moment';
 import CustomReference from '../customReference/CustomReference';
 import EntitySettings from '../entitySettings/EntitySettings';
@@ -27,6 +27,12 @@ import { IoCaretDownCircle } from 'react-icons/io5';
 import { cl } from '../../../../../../utils';
 import { MdOutlineVisibility } from 'react-icons/md';
 import MoveItemIcon from '../../../../../../assets/icons/MoveItemIcon';
+import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
+import { EntityType } from '../../../../../../utils/EntityTypes/EntityType';
+import { setTaskInputValue } from '../../../../../../features/task/taskSlice';
+import { setEditingPilotDetailsTitle } from '../../../../../../features/workspace/workspaceSlice';
+import Linkify from 'linkify-react';
+import { Capitalize } from '../../../../../../utils/NoCapWords/Capitalize';
 
 interface PropertyDetailsProps {
   Details?: IHubDetails | ITaskFullList | IListDetails | IWalletDetails;
@@ -34,16 +40,19 @@ interface PropertyDetailsProps {
 
 export default function PropertyDetails({ Details }: PropertyDetailsProps) {
   const queryClient = useQueryClient();
+  const dispatch = useAppDispatch();
   const inputRef = useRef<HTMLInputElement | null>(null);
   // const [fileId, setFileId] = useState<string | undefined>(undefined);
 
   const [toggleSubTask, setToggleSubTask] = useState(false);
-  const [editingTitle, setEditingTitle] = useState(false);
-  const [editingDescription, setEditingDescription] = useState(false);
+  const [offset, setOffset] = useState<number | null>(null);
   const [toggleDetails, setToggleDetails] = useState<boolean>(true);
   const [description, setDescription] = useState<string>(Details?.description ?? '');
+  const { activeItemType } = useAppSelector((state) => state.workspace);
+  const { taskInputValue } = useAppSelector((state) => state.task);
 
   const { hubId, walletId, listId, taskId } = useParams();
+  const { editingPilotDetailsTitle } = useAppSelector((state) => state.workspace);
 
   const editTaskMutation = useMutation(UseUpdateTaskService, {
     onSuccess: () => {
@@ -70,8 +79,11 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
   });
 
   const handleBlur = () => {
-    setEditingTitle(false);
-    setEditingDescription(false);
+    dispatch(setEditingPilotDetailsTitle(false));
+  };
+
+  const handleEditTitle = () => {
+    dispatch(setEditingPilotDetailsTitle(true));
   };
 
   const handleDescriptionChange = (value: string) => {
@@ -123,6 +135,27 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
     }
   };
 
+  useLayoutEffect(() => {
+    if (offset && inputRef.current) {
+      const newRange = document.createRange();
+      newRange.setStart(inputRef.current.childNodes[0], offset as number);
+      const selection = document.getSelection();
+      if (selection) {
+        selection.removeAllRanges();
+        selection.addRange(newRange);
+      }
+    }
+  });
+
+  const handleContentEditableInput = (event: React.FormEvent<HTMLParagraphElement>) => {
+    const range = document.getSelection()?.getRangeAt(0);
+    if (range) {
+      setOffset(range.startOffset);
+    }
+    const newContent = event.currentTarget.textContent;
+    dispatch(setTaskInputValue(newContent as string));
+  };
+
   return (
     <div className="m-3 text-gray-500 rounded-md bg-alsoit-gray-50">
       <div className="flex justify-between h-8">
@@ -163,24 +196,32 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
             <section className="flex items-center space-x-1">
               <Status details={Details} />
               <ToolTip title="Priority">
-                <Priority details={Details} />
+                <span>
+                  <Priority details={Details} />
+                </span>
               </ToolTip>
             </section>
             <section className="z-10 flex items-center justify-center space-x-3">
               <CustomReference />
               <ToolTip title="Share">
-                <Share taskId={Details?.id} taskName={Details?.name} />
+                <span>
+                  <Share taskId={Details?.id} taskName={Details?.name} />
+                </span>
               </ToolTip>
               <EntitySettings />
             </section>
           </div>
           <section className="flex items-center mt-3 ml-2 space-x-2">
             <ToolTip title="Assignees">
-              <Assignees />
+              <span>
+                <Assignees />
+              </span>
             </ToolTip>
             <span className="text-gray-300 ">|</span>
             <ToolTip title="Subscribers">
-              <Subscribers />
+              <span>
+                <Subscribers />
+              </span>
             </ToolTip>
             <span className="text-gray-300">|</span>
             <MdOutlineVisibility className="text-xl" />
@@ -193,13 +234,19 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
                 <VerticalScroll>
                   <p
                     ref={inputRef}
-                    className="p-1 capitalize break-words max-h-52"
-                    contentEditable={editingTitle}
+                    className="p-1 break-words max-h-52"
+                    contentEditable={editingPilotDetailsTitle}
                     onKeyDown={(e) => (e.key === 'Enter' ? handleDetailsSubmit(e) : null)}
-                    onClick={() => setEditingTitle(true)}
+                    onDoubleClick={() => handleEditTitle()}
                     onBlur={(e) => handleDetailsSubmit(e)}
+                    onInput={(e) => handleContentEditableInput(e)}
+                    suppressContentEditableWarning={true}
                   >
-                    {Details?.name}
+                    <Linkify options={{ target: '_blank', className: 'text-blue-400' }}>
+                      {activeItemType === EntityType.task && taskInputValue
+                        ? taskInputValue
+                        : Details?.name && Capitalize(Details?.name as string)}
+                    </Linkify>
                   </p>
                 </VerticalScroll>
               </div>
@@ -207,21 +254,15 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
             {/* description */}
             <div id="entity description" className="mt-5">
               <label className="text-xs text-gray-500">Description</label>
-              <div className="h-20 bg-gray-100 rounded-md cursor-text" onClick={() => setEditingDescription(true)}>
-                {editingDescription ? (
-                  <div className="w-full h-40 overflow-y-scroll rounded-md">
-                    <CKEditor
-                      editor={ClassicEditor}
-                      data={description}
-                      onChange={(event, editor) => handleDescriptionChange(editor.getData())}
-                      onBlur={() => handleDetailsSubmit()}
-                    />
-                  </div>
-                ) : (
-                  <div className="h-20 overflow-scroll p-1.5">
-                    <div dangerouslySetInnerHTML={{ __html: description }} />
-                  </div>
-                )}
+              <div className="h-20 bg-gray-100 rounded-md cursor-text">
+                <div className="w-full h-40 overflow-y-scroll rounded-md">
+                  <CKEditor
+                    editor={ClassicEditor}
+                    data={description}
+                    onChange={(event, editor) => handleDescriptionChange(editor.getData())}
+                    onBlur={() => handleDetailsSubmit()}
+                  />
+                </div>
               </div>
             </div>
             {/* tags */}

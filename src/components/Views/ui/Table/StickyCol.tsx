@@ -19,10 +19,11 @@ import {
   setDuplicateTaskObj,
   setSelectedIndexListId,
   setF2State,
+  setTaskInputValue,
   setTaskRootIds
 } from '../../../../features/task/taskSlice';
 import { setActiveItem } from '../../../../features/workspace/workspaceSlice';
-import { UniqueIdentifier, useDraggable, useDroppable } from '@dnd-kit/core';
+// import { UniqueIdentifier, useDraggable, useDroppable } from '@dnd-kit/core';
 import CloseSubtask from '../../../../assets/icons/CloseSubtask';
 import OpenSubtask from '../../../../assets/icons/OpenSubtask';
 import { Capitalize } from '../../../../utils/NoCapWords/Capitalize';
@@ -36,6 +37,8 @@ import Close from '../../../../assets/icons/Close';
 import toast from 'react-hot-toast';
 import Toast from '../../../../common/Toast';
 import { LIMITS } from '../../../../app/config/dimensions';
+import Linkify from 'linkify-react';
+// import { useDroppable } from '@dnd-kit/core';
 
 interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   task: Task;
@@ -55,6 +58,10 @@ interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   isOver?: boolean;
   isBlockedShowChildren?: boolean;
   toggleRootTasks?: boolean;
+  droppableElement?: ReactNode;
+  styles?: { opacity: number };
+  level?: number;
+  selectedRow: boolean;
 }
 
 export function StickyCol({
@@ -73,6 +80,11 @@ export function StickyCol({
   dragElement,
   isBlockedShowChildren,
   toggleRootTasks,
+  droppableElement,
+  isOver,
+  styles,
+  level,
+  selectedRow,
   ...props
 }: ColProps) {
   const dispatch = useAppDispatch();
@@ -82,7 +94,7 @@ export function StickyCol({
 
   const { currentWorkspaceId } = useAppSelector((state) => state.auth);
   const { dragOverItemId, draggableItemId } = useAppSelector((state) => state.list);
-  const { activeView } = useAppSelector((state) => state.workspace);
+  const { activeView, activeItemId, editingPilotDetailsTitle } = useAppSelector((state) => state.workspace);
   const {
     currTeamMemberId,
     verticalGrid,
@@ -98,6 +110,7 @@ export function StickyCol({
     separateSubtasksMode,
     newTaskPriority,
     f2State,
+    taskInputValue,
     taskRootIds,
     assignOnHoverTask
   } = useAppSelector((state) => state.task);
@@ -106,11 +119,19 @@ export function StickyCol({
   const [eitableContent, setEitableContent] = useState(false);
   const [selectedIndexArray, setSelectedIndexArray] = useState<number[]>([]);
 
-  const COL_BG = taskId === task.id ? ACTIVE_COL_BG : DEFAULT_COL_BG;
+  const COL_BG = taskId === task.id ? ACTIVE_COL_BG : selectedRow ? 'bg-alsoit-purple-50' : DEFAULT_COL_BG;
 
   const { mutate: onAdd } = useAddTask(task);
 
   const inputRef = useRef<HTMLInputElement | null>(null);
+
+  useEffect(() => {
+    if (task.id === activeItemId) {
+      dispatch(setTaskInputValue(task.name));
+    }
+  }, [taskId, task.id, activeItemId]);
+
+  const TASK_NAME = task.id === taskId && taskInputValue && editingPilotDetailsTitle ? taskInputValue : task.name;
 
   const onClickTask = () => {
     if (task.id !== '0') {
@@ -238,6 +259,10 @@ export function StickyCol({
     }
   }, [f2State]);
 
+  const handleSetEditable = () => {
+    setEitableContent(true);
+  };
+
   // listen on shift + arrow down key
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -310,22 +335,6 @@ export function StickyCol({
     setIsChecked(isChecked);
   };
 
-  const { attributes, listeners, setNodeRef } = useDraggable({
-    id: task?.id as UniqueIdentifier,
-    data: {
-      isTask: true,
-      movingTask: task
-    }
-  });
-
-  const { isOver, setNodeRef: droppabbleRef } = useDroppable({
-    id: task.id,
-    data: {
-      isOverTask: true
-      // overTask: task
-    }
-  });
-
   const [saveToggle, setSaveToggle] = useState<boolean>(false);
   const [closeToggle, setCloseToggle] = useState<boolean>(false);
 
@@ -374,18 +383,25 @@ export function StickyCol({
     return '100%';
   };
 
+  const handleDroppable = () => {
+    if (task.parent_id === draggableItemId && level) {
+      return false;
+    } else {
+      return true;
+    }
+  };
+
   return (
     <>
       {task.id !== '0' && (
         <td
-          className="sticky left-0 z-10 flex items-center justify-start text-sm font-medium text-gray-900 cursor-pointer text-start"
+          className={`sticky left-0 z-10 flex items-center justify-start text-sm font-medium text-gray-900 cursor-pointer text-start ${
+            selectedRow && 'bg-alsoit-purple-50'
+          }`}
+          style={styles}
           {...props}
         >
-          <div
-            ref={droppabbleRef}
-            className="absolute h-full"
-            style={{ left: '30px', background: 'transparent', height: '100%', width: '100%', zIndex: -1 }}
-          />
+          {handleDroppable() && droppableElement}
           <div
             className="flex items-center h-full ml-1 space-x-1"
             style={{
@@ -408,9 +424,7 @@ export function StickyCol({
                 selectedTasksArray.length > 0 ? 'opacity-100' : 'opacity-0'
               } cursor-pointer focus:outline-1 focus:ring-transparent  focus:border-2 focus:opacity-100 group-hover:opacity-100 text-alsoit-purple-300`}
             />
-            <div ref={setNodeRef} {...attributes} {...listeners} className="pr-2">
-              {dragElement}
-            </div>
+            <div className="pr-2">{dragElement}</div>
           </div>
           <div
             ref={contentRef}
@@ -426,12 +440,12 @@ export function StickyCol({
                   : ''
             }}
             onClick={onClickTask}
-            onDoubleClick={() => setEitableContent(true)}
+            onDoubleClick={() => handleSetEditable()}
             className={cl(
               COL_BG,
               ` ${isChecked && 'tdListV'} ${verticalGrid && 'border-r'} ${
                 verticalGridlinesTask && 'border-r'
-              } relative w-full py-4 flex items-center`,
+              } relative w-full h-full flex items-center`,
               isOver && draggableItemId !== dragOverItemId && !dragToBecomeSubTask
                 ? 'border-b-2 border-alsoit-purple-300'
                 : dragToBecomeSubTask && isOver && draggableItemId !== dragOverItemId
@@ -504,10 +518,12 @@ export function StickyCol({
                                 whiteSpace: 'nowrap'
                               }}
                             >
-                              {taskUpperCase ? task.name.toUpperCase() : Capitalize(task.name)}
+                              <Linkify options={{ target: '_blank', className: 'text-blue-400' }}>
+                                {taskUpperCase ? TASK_NAME.toUpperCase() : Capitalize(TASK_NAME)}
+                              </Linkify>
                             </div>
                           }
-                          content={<div>{taskUpperCase ? task.name.toUpperCase() : Capitalize(task.name)}</div>}
+                          content={<div>{taskUpperCase ? TASK_NAME.toUpperCase() : Capitalize(TASK_NAME)}</div>}
                           additionalStyles={{ backgroundColor: 'black', color: 'white' }}
                         />
                       ) : (
@@ -519,20 +535,22 @@ export function StickyCol({
                             whiteSpace: 'nowrap'
                           }}
                         >
-                          {taskUpperCase ? task.name.toUpperCase() : Capitalize(task.name)}
+                          <Linkify options={{ target: '_blank', className: 'text-blue-400' }}>
+                            {taskUpperCase ? TASK_NAME.toUpperCase() : Capitalize(TASK_NAME)}
+                          </Linkify>
                         </div>
                       )}
                     </div>
                   ) : (
                     <div style={{ wordBreak: 'break-word' }}>
-                      {taskUpperCase ? task.name.toUpperCase() : Capitalize(task.name)}
+                      {taskUpperCase ? TASK_NAME.toUpperCase() : Capitalize(TASK_NAME)}
                     </div>
                   )}
                 </div>
                 <div
                   ref={badgeRef}
                   onClick={(e) => e.stopPropagation()}
-                  className="flex items-center justify-between flex-grow pl-2"
+                  className="flex items-center justify-between pl-2 min-h-fit"
                 >
                   {children}
                 </div>
@@ -571,7 +589,7 @@ export function StickyCol({
               COL_BG,
               `relative border-t ${verticalGrid && 'border-r'} ${
                 verticalGridlinesTask && 'border-r'
-              } w-full py-4 p-4 flex items-center`
+              } w-full h-full flex items-center`
             )}
           >
             <div className="absolute bottom-0 right-0 flex p-1 space-x-1">
@@ -582,22 +600,35 @@ export function StickyCol({
               >
                 <div
                   className="border rounded-sm"
-                  style={{ borderColor: '#B2B2B2CC', borderWidth: '0.5px', height: '20px', width: '20px' }}
+                  style={{
+                    borderColor: '#B2B2B2CC',
+                    borderWidth: '0.5px',
+                    height: saveSettingOnline?.CompactView ? '15px' : '20px',
+                    width: saveSettingOnline?.CompactView ? '15px' : '20px'
+                  }}
                   onClick={onClose}
                 >
-                  <Close active={closeToggle}></Close>
+                  <Close
+                    height={saveSettingOnline?.CompactView ? '15px' : '20px'}
+                    width={saveSettingOnline?.CompactView ? '15px' : '20px'}
+                    active={closeToggle}
+                  ></Close>
                 </div>
               </ToolTip>
               <ToolTip onMouseEnter={() => setSaveToggle(true)} onMouseLeave={() => setSaveToggle(false)} title="Save">
                 <span onClick={(e) => handleOnSave(e as React.MouseEvent<HTMLButtonElement, MouseEvent>, task.id)}>
-                  <SaveIcon active={saveToggle}></SaveIcon>
+                  <SaveIcon
+                    height={saveSettingOnline?.CompactView ? '15px' : '20px'}
+                    width={saveSettingOnline?.CompactView ? '15px' : '20px'}
+                    active={saveToggle}
+                  ></SaveIcon>
                 </span>
               </ToolTip>
             </div>
             <div className="pt-1 ml-4">
               <StatusDropdown task={task} taskCurrentStatus={task.status} taskStatuses={task.task_statuses} />
             </div>
-            <div className="flex flex-col items-start justify-start pl-2 space-y-1">
+            <div className="flex flex-col items-start justify-start w-full pl-2 space-y-1">
               <p
                 className={`flex text-left empty:before:content-[attr(placeholder)] alsoit-gray-300 font-semibold empty:opacity-50 overflow-hidden items-center h-5 ${
                   saveSettingOnline?.CompactView ? 'text-alsoit-text-md' : 'text-alsoit-text-lg'
@@ -605,7 +636,7 @@ export function StickyCol({
                 contentEditable={true}
                 placeholder="Add New Task"
                 ref={inputRef}
-                style={{ maxWidth: '200px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}
+                style={{ maxWidth: '90%', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}
                 onKeyDown={(e) => (e.key === 'Enter' ? handleOnSave(e, task.id) : null)}
               ></p>
             </div>

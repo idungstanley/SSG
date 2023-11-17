@@ -43,7 +43,7 @@ export default function List({ chatId }: ListProps) {
           {members.map((member) => (
             <li key={member.id} className="flex py-4 w-full items-center justify-between">
               <div className="flex">
-                <AvatarWithInitials initials={member.initials} backgroundColour={member.colour} />
+                <AvatarWithInitials initials={member.user.initials} backgroundColour={member.color} />
 
                 <div className="ml-3">
                   <p className="text-sm font-medium text-gray-900">{member.user.name}</p>
