@@ -267,19 +267,23 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
             ref={menuRef}
           >
             {/* <TaskDropdown /> */}
-            <span onClick={() => handleItemAction(list.id)} className="cursor-pointer">
-              <PlusIcon active />
-            </span>
-            <span
-              className="cursor-pointer"
-              id="menusettings"
-              onClick={(e) => {
-                handleListSettings(list.id, list.name, e);
-                dispatch(setEntityForPermissions(list));
-              }}
-            >
-              <ThreeDotIcon />
-            </span>
+            <ToolTip title="Create task">
+              <span onClick={() => handleItemAction(list.id)} className="cursor-pointer hover:text-alsoit-purple-300">
+                <PlusIcon />
+              </span>
+            </ToolTip>
+            <ToolTip title="List settings">
+              <span
+                className="cursor-pointer hover:text-alsoit-purple-300"
+                id="menusettings"
+                onClick={(e) => {
+                  handleListSettings(list.id, list.name, e);
+                  dispatch(setEntityForPermissions(list));
+                }}
+              >
+                <ThreeDotIcon />
+              </span>
+            </ToolTip>
           </div>
         </div>
       </section>

@@ -51,7 +51,7 @@ export default function Chat() {
         wssPort: Number(process.env.REACT_APP_WEBSOCKET_PORT),
         disableStats: true,
         authEndpoint: '/api/sockets/connect',
-        forceTLS: true,
+        forceTLS: false,
         auth: {
           headers: {
             'X-CSRF-Token': 'iTcXX4EKprDuuxIWtloqmr7yBqRlEjM8C7JydcdB',
@@ -95,6 +95,10 @@ export default function Chat() {
 
   // old messages with new from websocket
   const allMessages = messages ? [...messages, ...incomingData] : [...incomingData];
+
+  const uniqueAllMessages = Array.from(new Set(allMessages.map((message) => message.id))).map((id) => {
+    return allMessages.find((message) => message.id === id)!;
+  });
 
   return (
     <>
@@ -151,7 +155,7 @@ export default function Chat() {
                         </div>
                       ) : null}
 
-                      {selectedChatId ? <MessagesList messages={allMessages} /> : null}
+                      {selectedChatId ? <MessagesList messages={uniqueAllMessages} /> : null}
 
                       {selectedChatId ? <CreateMessage chatId={selectedChatId} /> : null}
                     </div>

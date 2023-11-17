@@ -2,7 +2,7 @@ import { AiFillFlag } from 'react-icons/ai';
 import AssigneeIcon from '../../../../../../assets/icons/Assignee';
 import { DependenciesIcon } from '../../../../../../assets/icons/DepenciesIcon';
 import StatusIconComp from '../../../../../../assets/icons/StatusIconComp';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import { AssigneeDropDown } from './TaskAssigneeDropDown';
 import { priorityType } from '../../../../../../components/priority/PriorityDropdown';
 import { priorities } from '../../../../../../app/constants/priorities';
@@ -12,21 +12,31 @@ import { ITask_statuses } from '../../../../../../features/list/list.interfaces'
 import { TaskStatus } from './TaskStatusDropDown';
 import { useAddTask } from '../../../../../../features/task/taskService';
 import { UseGetListDetails } from '../../../../../../features/list/listService';
+import ActiveTreeSearch from '../../../../../../components/ActiveTree/ActiveTreeSearch';
+import { pilotTabs } from '../../../../../../app/constants/pilotTabs';
+import { IList } from '../../../../../../features/hubs/hubs.interfaces';
 
 export function CreateTask() {
   const dispatch = useAppDispatch();
-  const { currentTeamMemberId, tasks: taskData, newTaskPriority } = useAppSelector((state) => state.task);
+  const {
+    currentTeamMemberId,
+    tasks: taskData,
+    newTaskPriority,
+    activeTreeSelectedTask
+  } = useAppSelector((state) => state.task);
 
   const listIndex = Object.keys(taskData)[0];
   const task = taskData[listIndex][0];
 
-  const [dropDown, setDropdown] = useState<{ assignee: boolean; priority: boolean; status: boolean }>({
+  const [dropDown, setDropdown] = useState<{ assignee: boolean; priority: boolean; status: boolean; entity: boolean }>({
     assignee: false,
     priority: false,
-    status: false
+    status: false,
+    entity: false
   });
   const [priority, setPriority] = useState<string | undefined>();
   const [currentTaskStatus, setCurrentTaskStatus] = useState<ITask_statuses | undefined>();
+  const [selectedList, setSelectedList] = useState<IList | undefined>();
   const [value, setValue] = useState<{ [key: string]: string }>();
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -34,7 +44,7 @@ export function CreateTask() {
   };
 
   const { mutate: onAdd } = useAddTask(task);
-  const { data: list } = UseGetListDetails(listIndex);
+  const { data: list } = UseGetListDetails(selectedList?.id ?? listIndex);
 
   const handleClick = () => {
     const minPosition = Math.min(...(list?.data.list.task_statuses.map((status) => status.position) || []));
@@ -43,7 +53,7 @@ export function CreateTask() {
     );
 
     onAdd({
-      id: task.list?.id as string,
+      id: selectedList?.id ?? (task.list?.id as string),
       isListParent: true,
       name: value?.task_name as string,
       task_status_id: currentTaskStatus?.id ?? (statusObj?.id as string),
@@ -94,6 +104,11 @@ export function CreateTask() {
       }
     }
   ];
+
+  useEffect(() => {
+    if (activeTreeSelectedTask) setSelectedList(activeTreeSelectedTask);
+  }, [activeTreeSelectedTask]);
+
   return (
     <div
       className="h-auto p-2 overflow-y-visible bg-white border-b rounded-xl shadow-md"
@@ -106,11 +121,19 @@ export function CreateTask() {
       <div className="flex flex-col space-y-2 px-1.5 py-2 border-b overflow-y-visible">
         {/* active tree */}
         <div className="flex space-x-2 items-center">
-          <div className="flex items-center space-x-1.5 border rounded-md w-max p-1.5 cursor-pointer">
+          <div
+            onClick={() => setDropdown((prev) => ({ ...prev, entity: !prev.entity }))}
+            className="flex items-center space-x-1.5 border rounded-md w-max p-1.5 cursor-pointer relative"
+          >
             <div className="w-4 h-4">
               <DependenciesIcon className="w-4 h-4" color="gray" />
             </div>
-            <span>Entity</span>
+            {dropDown.entity && (
+              <div onClick={(e) => e.stopPropagation()} className="absolute top-9 left-0 w-min h-max z-50 bg-white">
+                <ActiveTreeSearch option={pilotTabs.CREATE_TASK} />
+              </div>
+            )}
+            <span>{selectedList?.name ?? 'Entity'}</span>
           </div>
         </div>
         {/* Task Properties */}

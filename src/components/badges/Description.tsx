@@ -1,9 +1,14 @@
 import React from 'react';
 
-export default function Description() {
+interface DescriptionProps {
+  width?: string;
+  height?: string;
+}
+
+export default function Description({ width = '12px', height = '12px' }: DescriptionProps) {
   return (
     <div>
-      <svg width="13" height="12" viewBox="0 0 13 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <svg width={width} height={height} viewBox="0 0 13 12" fill="none" xmlns="http://www.w3.org/2000/svg">
         <mask
           id="mask0_11563_16536"
           style={{ maskType: 'alpha' }}

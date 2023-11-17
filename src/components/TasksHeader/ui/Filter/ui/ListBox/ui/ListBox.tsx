@@ -9,24 +9,18 @@ import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outlin
 import { filterValueBySearchQuery } from '../../../lib/filterUtils';
 import { Input } from './Input';
 import { Date } from './Date';
-// import { isDefined } from '../../../../../../../utils/typeGuards';
 import { AdditionalListBox } from './AdditionalListBox';
-import toast from 'react-hot-toast';
-import SaveFilterToast from '../../Toast';
 import { useAppDispatch, useAppSelector } from '../../../../../../../app/hooks';
 import { setFiltersUpdated, setSubtasksFiltersUpdated } from '../../../../../../../features/task/taskSlice';
-// import { MenuItem } from '@mui/material';
 
 interface ListBoxProps {
   values: FilterValue[] | Operator[] | string[] | Unit[];
   selected: FilterValue[] | Operator | string | Unit;
   showSearch?: boolean;
-  controlledOptionsDisplay?: true;
   filterKey?: FilterKey;
   children?: ReactNode;
   setSelected: (i: FilterValue[] | Operator | string) => void;
   onSelectOrDeselectAll?: (data: Pick<onSelectOrDeselectAllProps, 'type'>) => void;
-  onUndoChanges?: (i: FilterValue[]) => void;
 }
 
 const DEFAULT_PREV_STATE = {
@@ -38,12 +32,10 @@ export function ListBox({
   values,
   selected,
   showSearch,
-  controlledOptionsDisplay,
   filterKey,
   children,
   setSelected,
-  onSelectOrDeselectAll,
-  onUndoChanges
+  onSelectOrDeselectAll
 }: ListBoxProps) {
   const dispatch = useAppDispatch();
 
@@ -59,9 +51,7 @@ export function ListBox({
   const showSelectAll = !!onSelectOrDeselectAll;
 
   useEffect(() => {
-    if (!showSelectAll) {
-      return;
-    }
+    if (!showSelectAll) return;
 
     const selectedValues = selected as FilterValue[];
     const availableValues = values as FilterValue[];
@@ -87,36 +77,6 @@ export function ListBox({
       onSelectOrDeselectAll({ type: selectAll });
       setSelectAll(selectAll === 'select' ? 'deselect' : 'select');
     }
-  };
-
-  const onClickCancel = () => {
-    if (onUndoChanges) {
-      onUndoChanges(prevState.state);
-    }
-  };
-
-  const onClickConfirm = () => {
-    setAnchorEl(null);
-    resetPrevState();
-    if (isSplitMode && selectedTaskParentId) {
-      dispatch(setSubtasksFiltersUpdated(true));
-    } else {
-      dispatch(setFiltersUpdated(true));
-    }
-    toast.custom(
-      (t) => (
-        <SaveFilterToast
-          title="This view has unsaved Changes"
-          body="Please Kindly save changes or cancel to discard"
-          toastId={t.id}
-          extended="taskFilter"
-        />
-      ),
-      {
-        position: 'bottom-right',
-        duration: Infinity
-      }
-    );
   };
 
   const onClickField = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -203,29 +163,18 @@ export function ListBox({
             )}
             style={{ minWidth: '150px' }}
             onClick={() => {
+              if (isSplitMode && selectedTaskParentId) {
+                dispatch(setSubtasksFiltersUpdated(true));
+              } else {
+                dispatch(setFiltersUpdated(true));
+              }
               setSelected(value as string);
-              controlledOptionsDisplay ? null : handleClose();
+              handleClose();
             }}
           >
             <ListBoxItem selected={selected} value={value} />
           </button>
         ))}
-
-        {/* buttons to manage dropdown visibility */}
-        {controlledOptionsDisplay ? (
-          <div className="w-full flex items-center justify-between space-x-2 mt-3 px-2">
-            <button
-              disabled={!prevState.isSet}
-              onClick={onClickCancel}
-              className="border bg-gray-200 px-4 py-2 text-xs text-gray-700"
-            >
-              Cancel
-            </button>
-            <button onClick={onClickConfirm} className="border bg-primary-200 px-4 py-2 text-xs text-primary-700">
-              Confirm
-            </button>
-          </div>
-        ) : null}
       </Menu>
     </div>
   );

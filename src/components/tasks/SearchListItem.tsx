@@ -5,6 +5,7 @@ import ListIconComponent from '../ItemsListInSidebar/components/ListIconComponen
 import { cl } from '../../utils';
 import { IList } from '../../features/hubs/hubs.interfaces';
 import {
+  setActiveTreeSelectedTask,
   setCurrentSelectedDuplicateArr,
   setDuplicateTaskObj,
   setSelectedTasksArray
@@ -19,6 +20,7 @@ import {
 import { EntityType } from '../../utils/EntityTypes/EntityType';
 import OpenSubtask from '../../assets/icons/OpenSubtask';
 import CloseSubtask from '../../assets/icons/CloseSubtask';
+import { pilotTabs } from '../../app/constants/pilotTabs';
 
 interface ListItemProps {
   list: IList;
@@ -70,6 +72,10 @@ export default function SearchListItem({ list, paddingLeft, option }: ListItemPr
         listId: list.id,
         overType: EntityType.list
       });
+    }
+
+    if (option === pilotTabs.CREATE_TASK) {
+      dispatch(setActiveTreeSelectedTask(list));
     }
   };
 

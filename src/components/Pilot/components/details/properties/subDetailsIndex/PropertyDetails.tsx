@@ -43,7 +43,6 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
   // const [fileId, setFileId] = useState<string | undefined>(undefined);
 
   const [toggleSubTask, setToggleSubTask] = useState(false);
-  const [editingDescription, setEditingDescription] = useState(false);
   const [toggleDetails, setToggleDetails] = useState<boolean>(true);
   const [description, setDescription] = useState<string>(Details?.description ?? '');
   const { hubId, walletId, listId, taskId } = useParams();
@@ -76,12 +75,11 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
 
   const handleBlur = () => {
     dispatch(setEditingPilotDetailsTitle(false));
-    setEditingDescription(false);
   };
 
-  // const handleEditTitle = () => {
-  //   dispatch(setEditingPilotDetailsTitle(true));
-  // };
+  const handleEditTitle = () => {
+    dispatch(setEditingPilotDetailsTitle(true));
+  };
 
   const handleDescriptionChange = (value: string) => {
     const pattern = /<a[^>]*>/gi;
@@ -213,7 +211,7 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
                     className="p-1 break-words max-h-52"
                     contentEditable={editingPilotDetailsTitle}
                     onKeyDown={(e) => (e.key === 'Enter' ? handleDetailsSubmit(e) : null)}
-                    // onClick={() => handleEditTitle()}
+                    onDoubleClick={() => handleEditTitle()}
                     onBlur={(e) => handleDetailsSubmit(e)}
                   >
                     <Linkify options={{ target: '_blank', className: 'text-blue-400' }}>
@@ -226,21 +224,15 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
             {/* description */}
             <div id="entity description" className="mt-5">
               <label className="text-xs text-gray-500">Description</label>
-              <div className="h-20 bg-gray-100 rounded-md cursor-text" onClick={() => setEditingDescription(true)}>
-                {editingDescription ? (
-                  <div className="w-full h-40 overflow-y-scroll rounded-md">
-                    <CKEditor
-                      editor={ClassicEditor}
-                      data={description}
-                      onChange={(event, editor) => handleDescriptionChange(editor.getData())}
-                      onBlur={() => handleDetailsSubmit()}
-                    />
-                  </div>
-                ) : (
-                  <div className="h-20 overflow-scroll p-1.5">
-                    <div dangerouslySetInnerHTML={{ __html: description }} />
-                  </div>
-                )}
+              <div className="h-20 bg-gray-100 rounded-md cursor-text">
+                <div className="w-full h-40 overflow-y-scroll rounded-md">
+                  <CKEditor
+                    editor={ClassicEditor}
+                    data={description}
+                    onChange={(event, editor) => handleDescriptionChange(editor.getData())}
+                    onBlur={() => handleDetailsSubmit()}
+                  />
+                </div>
               </div>
             </div>
             {/* tags */}

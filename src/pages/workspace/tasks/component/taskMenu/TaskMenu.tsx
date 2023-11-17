@@ -35,11 +35,12 @@ import { AiFillFlag } from 'react-icons/ai';
 import DateFormat from '../../../../../components/DateFormat';
 import CustomFieldsModal from '../../customFields/CustomFieldsModal';
 import MultipleStatuses from '../../multipleStatuses/MultipleStatuses';
+import { pilotTabs } from '../../../../../app/constants/pilotTabs';
 
 export const TASK_DUPLICATE = 'task_duplicate';
 export const TASK_MOVE = 'task_move';
 export const BROWSE_TASKS_FROM_HOME = 'browse_tasks_from_home';
-export const OPTIONS_WITH_AVAILABLE_LISTS = [TASK_DUPLICATE, TASK_MOVE, BROWSE_TASKS_FROM_HOME];
+export const OPTIONS_WITH_AVAILABLE_LISTS = [TASK_DUPLICATE, TASK_MOVE, BROWSE_TASKS_FROM_HOME, pilotTabs.CREATE_TASK];
 
 export default function TaskMenu() {
   const dispatch = useDispatch();

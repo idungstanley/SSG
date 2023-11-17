@@ -5,18 +5,31 @@ import ChatEmoticons from '../../../../../assets/icons/ChatEmoticons';
 import ChatFile from '../../../../../assets/icons/ChatFile';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import { setSelectedMessage } from '../../../../../features/chat/chatSlice';
-import { IMessage, IReplyOn } from '../../../../../features/chat/chat.interfaces';
+import { IMentionUser, IMessage, IReplyOn } from '../../../../../features/chat/chat.interfaces';
 import ChatRemoveReply from '../../../../../assets/icons/ChatRemoveReply';
 
-export const generateMessageWithUserNames = (messageData: IMessage | IReplyOn) => {
+interface IParsedMessage {
+  value: string;
+  user?: IMentionUser;
+}
+
+export const generateMessageWithUserNames = (messageData: IMessage | IReplyOn): IParsedMessage[] => {
   if (messageData.mention_users.length) {
-    let newMessage = messageData.message;
-    messageData.mention_users.forEach((user) => {
-      newMessage = newMessage.replace(`[${user.id}]`, `${user.name}`);
+    const newMessage = messageData.message;
+    const splitedMessage = newMessage.split(' ');
+    const parsedMessage: IParsedMessage[] = [];
+    splitedMessage.forEach((part) => {
+      if (part.includes('@')) {
+        const currentId = part.replace('@[', '').replace(']', '');
+        const currentUser = messageData.mention_users.find((user) => user.id === currentId);
+        parsedMessage.push({ value: `@${currentUser?.name} `, user: currentUser });
+      } else {
+        parsedMessage.push({ value: `${part} ` });
+      }
     });
-    return newMessage;
+    return parsedMessage;
   }
-  return messageData.message;
+  return [{ value: messageData.message }];
 };
 
 interface CreateMessageProps {
@@ -71,7 +84,11 @@ export default function CreateMessage({ chatId }: CreateMessageProps) {
           >
             <div className="absolute h-full bg-alsoit-purple-300 left-0 top-0" style={{ width: '2px' }} />
             <div className="ml-2 text-alsoit-purple-300 text-sm">{selectedMessage.team_member.user.name}</div>
-            <div className="ml-2 text-alsoit-gray-75">{generateMessageWithUserNames(selectedMessage)}</div>
+            <div className="ml-2 text-alsoit-gray-75">
+              {generateMessageWithUserNames(selectedMessage).map((item, index) => (
+                <span key={index}>{item.value}</span>
+              ))}
+            </div>
           </div>
           <div className="cursor-pointer" onClick={() => dispatch(setSelectedMessage(null))}>
             <ChatRemoveReply />
