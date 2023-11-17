@@ -19,9 +19,10 @@ interface ISearchSubHListProps {
     name: string,
     type: string
   ) => void;
+  checklistId?: string;
 }
 
-export default function SearchSubHList({ hubs, handleTabClick, option }: ISearchSubHListProps) {
+export default function SearchSubHList({ hubs, handleTabClick, option, checklistId }: ISearchSubHListProps) {
   const dispatch = useAppDispatch();
   const { hubId, walletId, listId } = useParams();
   const { currentItemId, showExtendedBar } = useAppSelector((state) => state.workspace);
@@ -112,7 +113,13 @@ export default function SearchSubHList({ hubs, handleTabClick, option }: ISearch
             </div>
             <div style={!OPTIONS_WITH_AVAILABLE_LISTS.includes(option as string) ? unavailableStyles : {}}>
               {hub.lists.length && isCanBeOpen(hub.id) && !showExtendedBar ? (
-                <SearchLList option={option} list={hub.lists} leftMargin={false} paddingLeft="50" />
+                <SearchLList
+                  option={option}
+                  list={hub.lists}
+                  leftMargin={false}
+                  paddingLeft="50"
+                  checklistId={checklistId}
+                />
               ) : null}
             </div>
           </div>

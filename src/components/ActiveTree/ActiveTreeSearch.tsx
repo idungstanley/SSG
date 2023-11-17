@@ -19,9 +19,10 @@ import { OPTIONS_WITH_AVAILABLE_LISTS } from '../../pages/workspace/tasks/compon
 interface ActiveTreeSearchProps {
   closeDropdown?: React.Dispatch<React.SetStateAction<boolean>>;
   option?: string;
+  checklistId?: string;
 }
 
-export default function ActiveTreeSearch({ closeDropdown, option }: ActiveTreeSearchProps) {
+export default function ActiveTreeSearch({ closeDropdown, option, checklistId }: ActiveTreeSearchProps) {
   const dispatch = useAppDispatch();
   const { hubId } = useParams();
 
@@ -130,6 +131,7 @@ export default function ActiveTreeSearch({ closeDropdown, option }: ActiveTreeSe
           openNewHub={handleOpenNewHub}
           setToggleTree={setToggleTree}
           option={option}
+          checklistId={checklistId}
         />
       )}
     </div>

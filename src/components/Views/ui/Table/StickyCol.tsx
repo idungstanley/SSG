@@ -19,6 +19,7 @@ import {
   setDuplicateTaskObj,
   setSelectedIndexListId,
   setF2State,
+  setTaskInputValue,
   setTaskRootIds
 } from '../../../../features/task/taskSlice';
 import { setActiveItem } from '../../../../features/workspace/workspaceSlice';
@@ -93,7 +94,7 @@ export function StickyCol({
 
   const { currentWorkspaceId } = useAppSelector((state) => state.auth);
   const { dragOverItemId, draggableItemId } = useAppSelector((state) => state.list);
-  const { activeView } = useAppSelector((state) => state.workspace);
+  const { activeView, activeItemId, editingPilotDetailsTitle } = useAppSelector((state) => state.workspace);
   const {
     currTeamMemberId,
     verticalGrid,
@@ -109,6 +110,7 @@ export function StickyCol({
     separateSubtasksMode,
     newTaskPriority,
     f2State,
+    taskInputValue,
     taskRootIds,
     assignOnHoverTask
   } = useAppSelector((state) => state.task);
@@ -122,6 +124,14 @@ export function StickyCol({
   const { mutate: onAdd } = useAddTask(task);
 
   const inputRef = useRef<HTMLInputElement | null>(null);
+
+  useEffect(() => {
+    if (task.id === activeItemId) {
+      dispatch(setTaskInputValue(task.name));
+    }
+  }, [taskId, task.id, activeItemId]);
+
+  const TASK_NAME = task.id === taskId && taskInputValue && editingPilotDetailsTitle ? taskInputValue : task.name;
 
   const onClickTask = () => {
     if (task.id !== '0') {
@@ -248,6 +258,10 @@ export function StickyCol({
       setEitableContent(true);
     }
   }, [f2State]);
+
+  const handleSetEditable = () => {
+    setEitableContent(true);
+  };
 
   // listen on shift + arrow down key
   useEffect(() => {
@@ -426,7 +440,7 @@ export function StickyCol({
                   : ''
             }}
             onClick={onClickTask}
-            onDoubleClick={() => setEitableContent(true)}
+            onDoubleClick={() => handleSetEditable()}
             className={cl(
               COL_BG,
               ` ${isChecked && 'tdListV'} ${verticalGrid && 'border-r'} ${
@@ -505,11 +519,11 @@ export function StickyCol({
                               }}
                             >
                               <Linkify options={{ target: '_blank', className: 'text-blue-400' }}>
-                                {taskUpperCase ? task.name.toUpperCase() : Capitalize(task.name)}
+                                {taskUpperCase ? TASK_NAME.toUpperCase() : Capitalize(TASK_NAME)}
                               </Linkify>
                             </div>
                           }
-                          content={<div>{taskUpperCase ? task.name.toUpperCase() : Capitalize(task.name)}</div>}
+                          content={<div>{taskUpperCase ? TASK_NAME.toUpperCase() : Capitalize(TASK_NAME)}</div>}
                           additionalStyles={{ backgroundColor: 'black', color: 'white' }}
                         />
                       ) : (
@@ -522,14 +536,14 @@ export function StickyCol({
                           }}
                         >
                           <Linkify options={{ target: '_blank', className: 'text-blue-400' }}>
-                            {taskUpperCase ? task.name.toUpperCase() : Capitalize(task.name)}
+                            {taskUpperCase ? TASK_NAME.toUpperCase() : Capitalize(TASK_NAME)}
                           </Linkify>
                         </div>
                       )}
                     </div>
                   ) : (
                     <div style={{ wordBreak: 'break-word' }}>
-                      {taskUpperCase ? task.name.toUpperCase() : Capitalize(task.name)}
+                      {taskUpperCase ? TASK_NAME.toUpperCase() : Capitalize(TASK_NAME)}
                     </div>
                   )}
                 </div>
@@ -614,7 +628,7 @@ export function StickyCol({
             <div className="pt-1 ml-4">
               <StatusDropdown task={task} taskCurrentStatus={task.status} taskStatuses={task.task_statuses} />
             </div>
-            <div className="flex flex-col items-start justify-start pl-2 space-y-1 w-full">
+            <div className="flex flex-col items-start justify-start w-full pl-2 space-y-1">
               <p
                 className={`flex text-left empty:before:content-[attr(placeholder)] alsoit-gray-300 font-semibold empty:opacity-50 overflow-hidden items-center h-5 ${
                   saveSettingOnline?.CompactView ? 'text-alsoit-text-md' : 'text-alsoit-text-lg'

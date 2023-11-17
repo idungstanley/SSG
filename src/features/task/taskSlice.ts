@@ -278,6 +278,7 @@ interface TaskState {
   editCustomProperty: IField | undefined;
   dragToBecomeSubTask: boolean;
   fileUploadProps: fileUploadPropsType;
+  taskInputValue?: string;
   rootTaskIds?: string[];
 }
 
@@ -428,7 +429,8 @@ const initialState: TaskState = {
     taskId: undefined,
     listId: undefined,
     openModal: false
-  }
+  },
+  taskInputValue: ''
 };
 
 export const taskSlice = createSlice({
@@ -809,6 +811,9 @@ export const taskSlice = createSlice({
     },
     setOpenFileUploadModal(state, action: PayloadAction<fileUploadPropsType>) {
       state.fileUploadProps = action.payload;
+    },
+    setTaskInputValue(state, action: PayloadAction<string | undefined>) {
+      state.taskInputValue = action.payload;
     }
   }
 });
@@ -924,6 +929,7 @@ export const {
   setEditCustomProperty,
   setDragToBecomeSubTask,
   setOpenFileUploadModal,
+  setTaskInputValue,
   setRootTaskIds
 } = taskSlice.actions;
 export default taskSlice.reducer;

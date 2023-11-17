@@ -6,7 +6,7 @@ function EverythingHr() {
   return (
     <div
       className="relative flex items-center justify-start hover:bg-alsoit-gray-50"
-      style={{ height: '30px', paddingLeft: '39px' }}
+      style={{ height: '30px', paddingLeft: '53px' }}
     >
       <div className="flex items-center flex-1 min-w-0 gap-1 cursor-pointer" style={{ zIndex: 1 }}>
         <EverythingIcon color={ICONS_INTERACTIONS.default} />
