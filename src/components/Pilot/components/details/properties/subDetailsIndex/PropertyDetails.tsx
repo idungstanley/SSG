@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useLayoutEffect, useRef, useState } from 'react';
 import moment from 'moment';
 import CustomReference from '../customReference/CustomReference';
 import EntitySettings from '../entitySettings/EntitySettings';
@@ -28,6 +28,8 @@ import { cl } from '../../../../../../utils';
 import { MdOutlineVisibility } from 'react-icons/md';
 import MoveItemIcon from '../../../../../../assets/icons/MoveItemIcon';
 import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
+import { EntityType } from '../../../../../../utils/EntityTypes/EntityType';
+import { setTaskInputValue } from '../../../../../../features/task/taskSlice';
 import { setEditingPilotDetailsTitle } from '../../../../../../features/workspace/workspaceSlice';
 import Linkify from 'linkify-react';
 import { Capitalize } from '../../../../../../utils/NoCapWords/Capitalize';
@@ -43,10 +45,13 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
   // const [fileId, setFileId] = useState<string | undefined>(undefined);
 
   const [toggleSubTask, setToggleSubTask] = useState(false);
+  const [offset, setOffset] = useState<number | null>(null);
   const [toggleDetails, setToggleDetails] = useState<boolean>(true);
   const [description, setDescription] = useState<string>(Details?.description ?? '');
-  const { hubId, walletId, listId, taskId } = useParams();
+  const { activeItemType } = useAppSelector((state) => state.workspace);
+  const { taskInputValue } = useAppSelector((state) => state.task);
 
+  const { hubId, walletId, listId, taskId } = useParams();
   const { editingPilotDetailsTitle } = useAppSelector((state) => state.workspace);
 
   const editTaskMutation = useMutation(UseUpdateTaskService, {
@@ -128,6 +133,27 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
     } catch {
       return;
     }
+  };
+
+  useLayoutEffect(() => {
+    if (offset && inputRef.current) {
+      const newRange = document.createRange();
+      newRange.setStart(inputRef.current.childNodes[0], offset as number);
+      const selection = document.getSelection();
+      if (selection) {
+        selection.removeAllRanges();
+        selection.addRange(newRange);
+      }
+    }
+  });
+
+  const handleContentEditableInput = (event: React.FormEvent<HTMLParagraphElement>) => {
+    const range = document.getSelection()?.getRangeAt(0);
+    if (range) {
+      setOffset(range.startOffset);
+    }
+    const newContent = event.currentTarget.textContent;
+    dispatch(setTaskInputValue(newContent as string));
   };
 
   return (
@@ -213,9 +239,13 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
                     onKeyDown={(e) => (e.key === 'Enter' ? handleDetailsSubmit(e) : null)}
                     onDoubleClick={() => handleEditTitle()}
                     onBlur={(e) => handleDetailsSubmit(e)}
+                    onInput={(e) => handleContentEditableInput(e)}
+                    suppressContentEditableWarning={true}
                   >
                     <Linkify options={{ target: '_blank', className: 'text-blue-400' }}>
-                      {Details?.name && Capitalize(Details?.name)}
+                      {activeItemType === EntityType.task && taskInputValue
+                        ? taskInputValue
+                        : Details?.name && Capitalize(Details?.name as string)}
                     </Linkify>
                   </p>
                 </VerticalScroll>
