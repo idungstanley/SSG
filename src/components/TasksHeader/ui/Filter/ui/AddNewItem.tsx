@@ -4,7 +4,7 @@ import { FilterKey, FilterOption } from '../types/filters';
 import { ListBox } from './ListBox';
 import { DeleteItem } from './FilterItem/DeleteItem';
 import { Label } from './FilterItem/Label';
-import { setFilterFields, setFiltersUpdated, setSubtasksFiltersUpdated } from '../../../../../features/task/taskSlice';
+import { setFilterFields } from '../../../../../features/task/taskSlice';
 
 interface AddNewItemProps {
   onHideNewItem: VoidFunction;
@@ -20,8 +20,6 @@ export function AddNewItem({ onHideNewItem, initialFilters }: AddNewItemProps) {
 
   const onAdd = (key: FilterKey) => {
     dispatch(setFilterFields([...filters, generateFilter(key)]));
-    dispatch(setFiltersUpdated(false));
-    dispatch(setSubtasksFiltersUpdated(false));
     onHideNewItem();
   };
 
