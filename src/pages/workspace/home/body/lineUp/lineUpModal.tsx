@@ -1,12 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
 import AlsoitMenuDropdown from '../../../../../components/DropDowns';
 import SearchIcon from '../../../../../assets/icons/SearchIcon';
 import StatusDropdown from '../../../../../components/status/StatusDropdown';
 import Assignee from '../../../tasks/assignTask/Assignee';
 import { ImyTaskData } from '../../../../../features/task/taskSlice';
-import { useAppSelector } from '../../../../../app/hooks';
 import { EntityType } from '../../../../../utils/EntityTypes/EntityType';
 import { Task } from '../../../../../features/task/interface.tasks';
+import ActiveTreeSearch from '../../../../../components/ActiveTree/ActiveTreeSearch';
+import { BROWSE_TASKS_FROM_HOME } from '../../../tasks/component/taskMenu/TaskMenu';
+import { GetRecentsTask, UseAddLineUpTask } from '../../../../../features/task/taskService';
+import { useGetTeamMembers } from '../../../../../features/settings/teamMembers/teamMemberService';
+import { useAppSelector } from '../../../../../app/hooks';
 
 interface ILineUpModal {
   anchorEl: HTMLElement | null;
@@ -15,10 +19,32 @@ interface ILineUpModal {
 }
 
 export default function LineUpModal({ anchorEl, setAnchorEl, handleLineUpTasks }: ILineUpModal) {
-  const { tasks: tasksStore } = useAppSelector((state) => state.task);
+  const [browseTasks, setBrowseTasks] = useState(false);
+  const { currentUserId } = useAppSelector((state) => state.auth);
+
+  const { data: teamMember } = useGetTeamMembers({ page: 1, query: '' });
+
+  const { data: recentTasks } = GetRecentsTask();
+
+  const { mutate: onAddLineUp } = UseAddLineUpTask();
+  const members = teamMember?.data.team_members ?? [];
+  const currentMemberId = members.find((i) => i.user.id === currentUserId)?.id as string;
+
+  const handleAddLineUpTask = (task: Task) => {
+    onAddLineUp({
+      taskId: task.id,
+      team_member_id: currentMemberId
+    });
+
+    handleLineUpTasks(task);
+  };
+
+  const handleBrowseTask = () => {
+    setBrowseTasks(true);
+  };
 
   return (
-    <div className="">
+    <div>
       <AlsoitMenuDropdown anchorEl={anchorEl} handleClose={() => setAnchorEl(null)}>
         <div className="sticky top-0 z-50 bg-white">
           <div className="flex items-center p-2 w-full border-b border-b-gray-300">
@@ -27,19 +53,32 @@ export default function LineUpModal({ anchorEl, setAnchorEl, handleLineUpTasks }
             <input type="text" placeholder="Search tasks" className="w-full p-2 outline-none border-0" />
           </div>
 
-          <p className="flex justify-between p-3">
-            <span>Recents</span>
-            <span className="text-alsoit-purple-300">Browse tasks</span>
-          </p>
+          <div className="flex justify-between p-3">
+            <div>
+              {!browseTasks ? (
+                <p>Recents</p>
+              ) : (
+                <p className="text-alsoit-purple-300 cursor-pointer" onClick={() => setBrowseTasks(false)}>
+                  Recents/Search
+                </p>
+              )}
+            </div>
+            {!browseTasks && (
+              <span className="text-alsoit-purple-300 cursor-pointer" onClick={() => handleBrowseTask()}>
+                Browse tasks
+              </span>
+            )}
+          </div>
         </div>
-        <div className="h-80 w-134">
-          {Object.keys(tasksStore).map((listId) => (
-            <div key={listId} className="group p-2">
-              {tasksStore[listId].map((task) => (
+
+        <div className="max-h-96 w-134">
+          {!browseTasks && (
+            <div className="group p-2">
+              {recentTasks?.data.tasks.map((task) => (
                 <div
                   key={task.id}
                   className="flex justify-between p-2 space-x-2 cursor-pointer  hover:bg-alsoit-gray-50 rounded-md"
-                  onClick={() => handleLineUpTasks(task)}
+                  onClick={() => handleAddLineUpTask(task)}
                 >
                   <div className="flex items-center space-x-2">
                     <div className="pointer-events-none">
@@ -55,7 +94,8 @@ export default function LineUpModal({ anchorEl, setAnchorEl, handleLineUpTasks }
                 </div>
               ))}
             </div>
-          ))}
+          )}
+          {browseTasks && <ActiveTreeSearch option={BROWSE_TASKS_FROM_HOME} />}
         </div>
       </AlsoitMenuDropdown>
     </div>

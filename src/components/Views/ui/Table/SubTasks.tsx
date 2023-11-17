@@ -54,6 +54,7 @@ export function SubTasks({ listId, parentTask, columns, paddingLeft, level, isSp
           {subtasks[parentTask.id]?.map((i) => (
             <Row
               key={i.id}
+              selectedRow={false}
               paddingLeft={paddingLeft}
               listId={listId}
               columns={columns}

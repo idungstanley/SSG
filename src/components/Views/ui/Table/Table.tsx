@@ -29,9 +29,10 @@ interface TableProps {
   listName?: string;
   listColor?: IListColor;
   isBlockedShowChildren?: boolean;
+  selectionArr?: ITaskFullList[];
 }
 
-export function Table({ heads, data, label, listName, listColor, isBlockedShowChildren }: TableProps) {
+export function Table({ heads, data, label, listName, listColor, isBlockedShowChildren, selectionArr }: TableProps) {
   const dispatch = useAppDispatch();
 
   const { draggableItemId } = useAppSelector((state) => state.list);
@@ -40,7 +41,8 @@ export function Table({ heads, data, label, listName, listColor, isBlockedShowCh
     defaultSubtaskListId,
     splitSubTaskState: splitSubTaskMode,
     escapeKey,
-    sortType
+    sortType,
+    keyBoardSelectedIndex
   } = useAppSelector((state) => state.task);
 
   const [listId, setListId] = useState<string>('');
@@ -53,7 +55,6 @@ export function Table({ heads, data, label, listName, listColor, isBlockedShowCh
   const taskLength = data.length;
 
   const columns = heads.filter((i) => !i.hidden);
-
   // New task template
   const newTaskObj = NewTaskTemplate({
     data,
@@ -104,6 +105,14 @@ export function Table({ heads, data, label, listName, listColor, isBlockedShowCh
       setTableHeight(tableElement.current.offsetHeight);
     }
   }, []);
+
+  const checkSelectedRow = (id: string) => {
+    if (selectionArr) {
+      if (selectionArr[keyBoardSelectedIndex]) {
+        return keyBoardSelectedIndex >= 0 ? id === selectionArr[keyBoardSelectedIndex].id : false;
+      }
+    }
+  };
 
   const handleClose = () => {
     setShowNewTaskField(false);
@@ -184,6 +193,8 @@ export function Table({ heads, data, label, listName, listColor, isBlockedShowCh
             }
             className="w-full"
             ref={tableElement}
+            id="tasksTable"
+            tabIndex={0}
           >
             {/* rows */}
             {!collapseTasks ? (
@@ -194,6 +205,7 @@ export function Table({ heads, data, label, listName, listColor, isBlockedShowCh
                       <Row
                         key={task.id}
                         columns={columns}
+                        selectedRow={checkSelectedRow(task.id) as boolean}
                         task={task as ITaskFullList}
                         listId={task.list_id as string}
                         taskIndex={index}
@@ -203,6 +215,7 @@ export function Table({ heads, data, label, listName, listColor, isBlockedShowCh
                         handleClose={handleClose}
                         level={0}
                         isBlockedShowChildren={isBlockedShowChildren}
+                        selectionArr={selectionArr}
                       />
                     ) : null
                   )

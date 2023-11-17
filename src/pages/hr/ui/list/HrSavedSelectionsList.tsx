@@ -25,8 +25,8 @@ export function HrSavedSelectionsList({ savedSelectionsData }: HrSavedSectionsLi
         {savedSelectionsData.map((savedSelectionItem) => (
           <li
             key={savedSelectionItem}
-            className="py-2 grid grid-cols-autoFr items-center space-x-3"
-            style={{ paddingLeft: '17px' }}
+            className="grid grid-cols-autoFr items-center space-x-3"
+            style={{ paddingLeft: '17px', height: '30px' }}
           >
             <div className="hr-checkbox-wrapper flex justify-center items-center">
               <Checkbox
@@ -36,21 +36,27 @@ export function HrSavedSelectionsList({ savedSelectionsData }: HrSavedSectionsLi
               />
             </div>
             <div className="flex">
-              <div className="group flex gap-2 items-center justify-start ml-4">
+              <div className="group flex gap-2 items-center justify-start">
                 <div
                   title={savedSelectionItem}
-                  className="bg-gray-200 relative w-5 h-5 rounded-full p-2 flex items-center justify-center transform transition"
+                  className="bg-gray-200 relative p-2 flex items-center justify-center transform transition ml-1"
                   style={{
-                    backgroundColor: '#B2B2B2'
+                    backgroundColor: '#B2B2B2',
+                    borderRadius: '3px',
+                    width: '15px',
+                    height: '15px'
                   }}
                 >
-                  <span className="text-black font-medium" style={{ fontSize: '10px' }}>
-                    D
+                  <span className="text-black font-medium" style={{ fontSize: '10px', color: '#424242' }}>
+                    {savedSelectionItem.substring(0, 1)}
                   </span>
                 </div>
               </div>
               <div className="ml-2">
-                <h3 className="text-sm font-semibold leading-6 text-gray-900 text-left" style={{ fontSize: '13px' }}>
+                <h3
+                  className="text-sm font-semibold leading-6 text-left"
+                  style={{ fontSize: '13px', color: '#424242' }}
+                >
                   {savedSelectionItem}
                 </h3>
               </div>

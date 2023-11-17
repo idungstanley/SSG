@@ -1,6 +1,6 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useRef, useEffect } from 'react';
 import SubtasksIcon from '../../../../assets/icons/SubtasksIcon';
-import { Tag, Task } from '../../../../features/task/interface.tasks';
+import { ITaskFullList, Tag, Task } from '../../../../features/task/interface.tasks';
 import { DEFAULT_LEFT_PADDING } from '../../config';
 import { Col } from './Col';
 import { StickyCol } from './StickyCol';
@@ -44,6 +44,8 @@ interface RowProps {
   isSplitSubtask?: boolean;
   level: number;
   isBlockedShowChildren?: boolean;
+  selectedRow: boolean;
+  selectionArr?: ITaskFullList[];
 }
 
 export function Row({
@@ -58,7 +60,9 @@ export function Row({
   handleClose,
   isSplitSubtask,
   level,
-  isBlockedShowChildren
+  isBlockedShowChildren,
+  selectedRow,
+  selectionArr
 }: RowProps) {
   const dispatch = useAppDispatch();
 
@@ -70,11 +74,14 @@ export function Row({
     splitSubTaskLevels,
     subtasks,
     rootTaskIds,
-    saveSettingOnline
+    saveSettingOnline,
+    keyBoardSelectedIndex
   } = useAppSelector((state) => state.task);
 
   const [showSubTasks, setShowSubTasks] = useState(false);
   const [isCopied, setIsCopied] = useState<number>(0);
+
+  const rowRef = useRef<HTMLTableRowElement | null>(null);
 
   const otherColumns = columns.slice(1);
   const newSubTask = NewSubTaskTemplate(task);
@@ -161,10 +168,24 @@ export function Row({
   const [hoverOn, setHoverOn] = useState(false);
   const toggleRootTasks = (rootTaskIds as string[])?.includes(task.id);
 
+  useEffect(() => {
+    const selectedTaskRow = rowRef.current?.querySelector(
+      `tr[data-select="${selectionArr && selectionArr[keyBoardSelectedIndex]?.id}"]`
+    );
+
+    if (selectedTaskRow) {
+      requestAnimationFrame(() => {
+        selectedTaskRow.scrollIntoView({ behavior: 'smooth', block: 'end' });
+      });
+    }
+  }, [keyBoardSelectedIndex, selectionArr]);
+
   return (
     <>
       {/* current task */}
       <tr
+        ref={rowRef}
+        data-select={task.id}
         className="relative contents group dNFlex"
         onMouseEnter={() => {
           dispatch(setAssignOnHoverTask(task));
@@ -216,6 +237,7 @@ export function Row({
               style={{ left: '30px', background: 'transparent', height: '100%', width: '100%', zIndex: -1 }}
             />
           }
+          selectedRow={selectedRow}
         >
           {/* actions */}
           <div className="flex items-center justify-center mr-1 space-x-1">
@@ -287,6 +309,7 @@ export function Row({
             key={col.id}
             style={{ zIndex: 0 }}
             styles={style}
+            selectedRow={selectedRow}
           />
         ))}
       </tr>

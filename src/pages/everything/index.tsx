@@ -10,12 +10,12 @@ import { generateLists } from '../../utils';
 import { Header } from '../../components/TasksHeader';
 import { VerticalScroll } from '../../components/ScrollableContainer/VerticalScroll';
 import { GroupHorizontalScroll } from '../../components/ScrollableContainer/GroupHorizontalScroll';
-import { setTasks } from '../../features/task/taskSlice';
+import { setKeyBoardSelectedIndex, setTasks } from '../../features/task/taskSlice';
 
 export default function EverythingPage() {
   const dispatch = useAppDispatch();
 
-  const { tasks: tasksStore, scrollGroupView } = useAppSelector((state) => state.task);
+  const { tasks: tasksStore, scrollGroupView, keyBoardSelectedIndex } = useAppSelector((state) => state.task);
 
   const { data, hasNextPage, fetchNextPage } = UseGetEverythingTasks();
 
@@ -27,6 +27,24 @@ export default function EverythingPage() {
       dispatch(setTasks({ ...tasksStore, ...lists }));
     }
   }, [lists]);
+
+  const combinedArr = Object.values(tasksStore).flatMap((lists) => lists);
+
+  const handleKeyDown = (e: KeyboardEvent) => {
+    if (e.key === 'ArrowUp' && keyBoardSelectedIndex !== null) {
+      const newIndex = Math.max(0, keyBoardSelectedIndex - 1);
+      dispatch(setKeyBoardSelectedIndex(newIndex));
+    } else if (e.key === 'ArrowDown' && keyBoardSelectedIndex !== null) {
+      const newIndex = Math.min(combinedArr.length - 1, keyBoardSelectedIndex + 1);
+      dispatch(setKeyBoardSelectedIndex(newIndex));
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [keyBoardSelectedIndex]);
 
   // infinite scroll
   const onScroll = (e: UIEvent<HTMLDivElement>) => {
@@ -59,7 +77,7 @@ export default function EverythingPage() {
             {/* lists */}
             {Object.keys(tasksStore).map((listId) => (
               <Fragment key={listId}>
-                <List tasks={tasksStore[listId]} />
+                <List tasks={tasksStore[listId]} combinedTasksArr={combinedArr} />
               </Fragment>
             ))}
           </section>
