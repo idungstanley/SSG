@@ -95,32 +95,34 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
       | React.FocusEvent<HTMLInputElement | HTMLParagraphElement | HTMLTextAreaElement | Element>
       | undefined = undefined
   ) => {
+    const name = inputRef.current?.innerText.trim() as string;
+    const description = textAreaRef.current?.innerText.trim() as string;
     e && e.preventDefault();
     handleBlur();
     try {
       if (taskId != undefined) {
         await editTaskMutation.mutateAsync({
-          name: inputRef.current?.innerText.trim() as string,
+          name: name,
           task_id: taskId,
-          description: textAreaRef.current?.innerText.trim() as string
+          description: description as string
         });
       } else if (walletId != undefined) {
         await editWalletMutation.mutateAsync({
-          walletName: inputRef.current?.innerText.trim(),
+          walletName: name,
           walletId: Details?.id,
-          description: textAreaRef.current?.innerText.trim() as string
+          description: description as string
         });
       } else if (listId != undefined) {
         await editListMutation.mutateAsync({
-          listName: inputRef.current?.innerText.trim(),
+          listName: name,
           listId: Details?.id,
-          description: textAreaRef.current?.innerText.trim() as string
+          description: description as string
         });
       } else if (hubId) {
         await editHubMutation.mutateAsync({
-          name: inputRef.current?.innerText.trim(),
+          name: name,
           hubId: Details?.id,
-          description: textAreaRef.current?.innerText.trim() as string
+          description: description as string
         });
       }
     } catch {
