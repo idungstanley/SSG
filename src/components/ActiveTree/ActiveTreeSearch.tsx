@@ -63,11 +63,7 @@ export default function ActiveTreeSearch({ closeDropdown, option, checklistId }:
   }, [hubs, allHubs]);
 
   useEffect(() => {
-    if (
-      OPTIONS_WITH_AVAILABLE_LISTS.includes(option as string) ||
-      option === TIME_TABS.nestedEntities ||
-      option === pilotTabs.CREATE_TASK
-    ) {
+    if (OPTIONS_WITH_AVAILABLE_LISTS.includes(option as string) || option === TIME_TABS.nestedEntities) {
       setToggleTree(true);
     }
   }, []);

@@ -44,6 +44,7 @@ interface RowProps {
   isSplitSubtask?: boolean;
   level: number;
   isBlockedShowChildren?: boolean;
+  selectedRow: boolean;
 }
 
 export function Row({
@@ -58,7 +59,8 @@ export function Row({
   handleClose,
   isSplitSubtask,
   level,
-  isBlockedShowChildren
+  isBlockedShowChildren,
+  selectedRow
 }: RowProps) {
   const dispatch = useAppDispatch();
 
@@ -165,7 +167,7 @@ export function Row({
     <>
       {/* current task */}
       <tr
-        className="relative contents group dNFlex"
+        className={`relative contents group dNFlex ${selectedRow && 'bg-alsoit-purple-50'}`}
         onMouseEnter={() => {
           dispatch(setAssignOnHoverTask(task));
           dispatch(setAssignOnHoverListId(task.parent_id ?? task.list_id));
@@ -216,6 +218,7 @@ export function Row({
               style={{ left: '30px', background: 'transparent', height: '100%', width: '100%', zIndex: -1 }}
             />
           }
+          selectedRow={selectedRow}
         >
           {/* actions */}
           <div className="flex items-center justify-center mr-1 space-x-1">
@@ -287,6 +290,7 @@ export function Row({
             key={col.id}
             style={{ zIndex: 0 }}
             styles={style}
+            selectedRow={selectedRow}
           />
         ))}
       </tr>
