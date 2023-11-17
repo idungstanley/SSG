@@ -77,7 +77,7 @@ export default function EverythingPage() {
             {/* lists */}
             {Object.keys(tasksStore).map((listId) => (
               <Fragment key={listId}>
-                <List tasks={tasksStore[listId]} />
+                <List tasks={tasksStore[listId]} combinedTasksArr={combinedArr} />
               </Fragment>
             ))}
           </section>
