@@ -39,7 +39,8 @@ import { pilotTabs } from '../../../../../app/constants/pilotTabs';
 
 export const TASK_DUPLICATE = 'task_duplicate';
 export const TASK_MOVE = 'task_move';
-export const OPTIONS_WITH_AVAILABLE_LISTS = [TASK_DUPLICATE, TASK_MOVE, pilotTabs.CREATE_TASK];
+export const CONVERT_CHECKLIST = 'convert_checklist';
+export const OPTIONS_WITH_AVAILABLE_LISTS = [TASK_DUPLICATE, TASK_MOVE, pilotTabs.CREATE_TASK, CONVERT_CHECKLIST];
 
 export default function TaskMenu() {
   const dispatch = useDispatch();
@@ -94,7 +95,6 @@ export default function TaskMenu() {
         selectedListIds.length ? selectedListIds : [selectedTaskParentId],
         taskData
       );
-      // const selectedTaskType === EntityType.task ? taskData : subtasks;
 
       if (EntityType.task) {
         dispatch(setTasks(updatedTasks));

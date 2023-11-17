@@ -6,12 +6,14 @@ export default function SearchLList({
   list,
   leftMargin,
   paddingLeft,
-  option
+  option,
+  checklistId
 }: {
   list: List[];
   leftMargin: boolean;
   paddingLeft: string | number;
   option?: string;
+  checklistId?: string;
 }) {
   return (
     <>
@@ -22,6 +24,7 @@ export default function SearchLList({
             list={list}
             paddingLeft={paddingLeft}
             parentId={list.parent_id || list.hub_id || list.wallet_id}
+            checklistId={checklistId}
           />
         </div>
       ))}

@@ -12,21 +12,23 @@ import {
 } from '../../features/task/taskSlice';
 import { useDuplicateTask, useMultipleDuplicateTasks, useMultipleTaskMove } from '../../features/task/taskService';
 import DuplicateTaskAdvanceModal from '../../pages/workspace/tasks/component/taskMenu/DuplicateTaskAdvanceModal';
-import { TASK_DUPLICATE, TASK_MOVE } from '../../pages/workspace/tasks/component/taskMenu/TaskMenu';
+import { CONVERT_CHECKLIST, TASK_DUPLICATE, TASK_MOVE } from '../../pages/workspace/tasks/component/taskMenu/TaskMenu';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
 import { pilotTabs } from '../../app/constants/pilotTabs';
+import { useConvertChecklistToTask } from '../../features/task/checklist/checklistService';
 
 interface ListItemProps {
   list: IList;
   paddingLeft: string | number;
   parentId?: string | null;
   option?: string;
+  checklistId?: string;
 }
 export interface ListColourProps {
   innerColour?: string;
   outerColour?: string;
 }
-export default function SearchListItem({ list, paddingLeft, option }: ListItemProps) {
+export default function SearchListItem({ list, paddingLeft, option, checklistId }: ListItemProps) {
   const dispatch = useAppDispatch();
   const { listId } = useParams();
 
@@ -39,6 +41,7 @@ export default function SearchListItem({ list, paddingLeft, option }: ListItemPr
   const { mutate: duplicateTask } = useDuplicateTask();
   const { mutate: multipleDuplicateTasks } = useMultipleDuplicateTasks(list);
   const { mutate: onMultipleTaskMove } = useMultipleTaskMove(list, 'id_only');
+  const { mutate: convertToTask } = useConvertChecklistToTask(checklistId as string);
 
   const handleClick = (list: IList) => {
     if (option === TASK_DUPLICATE) {
@@ -67,6 +70,12 @@ export default function SearchListItem({ list, paddingLeft, option }: ListItemPr
 
     if (option === pilotTabs.CREATE_TASK) {
       dispatch(setActiveTreeSelectedTask(list));
+    }
+
+    if (option === CONVERT_CHECKLIST && checklistId) {
+      convertToTask({
+        query: checklistId
+      });
     }
   };
 
