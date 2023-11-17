@@ -21,8 +21,8 @@ import { useParams } from 'react-router-dom';
 import { IWalletDetails } from '../../../../../../features/wallet/wallet.interfaces';
 import PlusIcon from '../../../../../../assets/icons/PlusIcon';
 import { VerticalScroll } from '../../../../../ScrollableContainer/VerticalScroll';
-import { CKEditor } from '@ckeditor/ckeditor5-react';
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+// import { CKEditor } from '@ckeditor/ckeditor5-react';
+// import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { IoCaretDownCircle } from 'react-icons/io5';
 import { cl } from '../../../../../../utils';
 import { MdOutlineVisibility } from 'react-icons/md';
@@ -39,12 +39,14 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
   const queryClient = useQueryClient();
   const dispatch = useAppDispatch();
   const inputRef = useRef<HTMLInputElement | null>(null);
+  const textAreaRef = useRef<HTMLInputElement | null>(null);
+
   // const [fileId, setFileId] = useState<string | undefined>(undefined);
 
   const [toggleSubTask, setToggleSubTask] = useState(false);
   const [editingDescription, setEditingDescription] = useState(false);
   const [toggleDetails, setToggleDetails] = useState<boolean>(true);
-  const [description, setDescription] = useState<string>(Details?.description ?? '');
+  // const [description, setDescription] = useState<string>(Details?.description ?? '');
   const { hubId, walletId, listId, taskId } = useParams();
 
   const { editingPilotDetailsTitle } = useAppSelector((state) => state.workspace);
@@ -78,19 +80,39 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
     setEditingDescription(false);
   };
 
-  // const handleEditTitle = () => {
-  //   dispatch(setEditingPilotDetailsTitle(true));
+  const handleEditTitle = () => {
+    dispatch(setEditingPilotDetailsTitle(true));
+  };
+
+  // const insertNewline = () => {
+  //   const textArea = textAreaRef?.current;
+  //   if (textArea) {
+  //     const cursorPosition = textArea.selectionStart as number;
+  //     const textBeforeCursor = textArea.value.slice(0, cursorPosition);
+  //     const textAfterCursor = textArea.value.slice(cursorPosition);
+
+  //     const newText = `${textBeforeCursor}\n${textAfterCursor}`;
+
+  //     textArea.value = newText;
+  //   }
   // };
 
-  const handleDescriptionChange = (value: string) => {
-    const pattern = /<a[^>]*>/gi;
-
-    const modifiedString = value.replace(pattern, (match) => {
-      return match.replace('>', ' class="text-blue-500 underline">');
-    });
-
-    setDescription(modifiedString);
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    if (event.key === 'Enter') {
+      event.preventDefault(); // Prevents the default behavior (e.g., line break in contentEditable)
+      document.execCommand('insertText', false, '\n');
+    }
   };
+
+  // const handleDescriptionChange = (value: string) => {
+  //   const pattern = /<a[^>]*>/gi;
+
+  //   const modifiedString = value.replace(pattern, (match) => {
+  //     return match.replace('>', ' class="text-blue-500 underline">');
+  //   });
+
+  //   setDescription(modifiedString);
+  // };
 
   const handleDetailsSubmit = async (
     e:
@@ -105,25 +127,25 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
         await editTaskMutation.mutateAsync({
           name: inputRef.current?.innerText.trim() as string,
           task_id: taskId,
-          description
+          description: textAreaRef.current?.innerText.trim() as string
         });
       } else if (walletId != undefined) {
         await editWalletMutation.mutateAsync({
           walletName: inputRef.current?.innerText.trim(),
           walletId: Details?.id,
-          description
+          description: textAreaRef.current?.innerText.trim() as string
         });
       } else if (listId != undefined) {
         await editListMutation.mutateAsync({
           listName: inputRef.current?.innerText.trim(),
           listId: Details?.id,
-          description
+          description: textAreaRef.current?.innerText.trim() as string
         });
       } else if (hubId) {
         await editHubMutation.mutateAsync({
           name: inputRef.current?.innerText.trim(),
           hubId: Details?.id,
-          description
+          description: textAreaRef.current?.innerText.trim() as string
         });
       }
     } catch {
@@ -212,7 +234,7 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
                     className="p-1 capitalize break-words max-h-52"
                     contentEditable={editingPilotDetailsTitle}
                     onKeyDown={(e) => (e.key === 'Enter' ? handleDetailsSubmit(e) : null)}
-                    // onClick={() => handleEditTitle()}
+                    onDoubleClick={() => handleEditTitle()}
                     onBlur={(e) => handleDetailsSubmit(e)}
                   >
                     <Linkify options={{ target: '_blank', className: 'text-blue-400' }}>{Details?.name}</Linkify>
@@ -223,21 +245,15 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
             {/* description */}
             <div id="entity description" className="mt-5">
               <label className="text-xs text-gray-500">Description</label>
-              <div className="h-20 bg-gray-100 rounded-md cursor-text" onClick={() => setEditingDescription(true)}>
-                {editingDescription ? (
-                  <div className="w-full h-40 overflow-y-scroll rounded-md">
-                    <CKEditor
-                      editor={ClassicEditor}
-                      data={description}
-                      onChange={(event, editor) => handleDescriptionChange(editor.getData())}
-                      onBlur={() => handleDetailsSubmit()}
-                    />
-                  </div>
-                ) : (
-                  <div className="h-20 overflow-scroll p-1.5">
-                    <div dangerouslySetInnerHTML={{ __html: description }} />
-                  </div>
-                )}
+              <div
+                className="h-20 bg-white rounded-md cursor-text p-1.5"
+                onDoubleClick={() => setEditingDescription(true)}
+                ref={textAreaRef}
+                contentEditable={editingDescription}
+                onBlur={() => handleDetailsSubmit()}
+                onKeyDown={(e) => (e.key === 'Enter' ? handleKeyDown(e) : null)}
+              >
+                <Linkify options={{ target: '_blank', className: 'text-blue-400' }}>{Details?.description}</Linkify>
               </div>
             </div>
             {/* tags */}

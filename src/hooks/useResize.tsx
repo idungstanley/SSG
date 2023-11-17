@@ -116,7 +116,6 @@ export function useResize({ dimensions, direction, defaultSize, storageKey }: Us
 
   const handleMouseDown = useCallback(() => {
     document.body.style.userSelect = 'none'; // disable selecting text
-
     const handleMouseMove =
       direction === 'XL' ? handleMouseMoveXL : direction === 'XR' ? handleMouseMoveXR : handleMouseMoveY;
 
