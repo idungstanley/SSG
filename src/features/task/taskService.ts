@@ -1585,6 +1585,16 @@ export const GetAddLineUpTask = () => {
   });
 };
 
+export const GetRecentsTask = () => {
+  return useQuery(['recent_tasks'], async () => {
+    const data = await requestNew<ILineUpTaskRes | undefined>({
+      url: '/tasks/recent',
+      method: 'GET'
+    });
+    return data;
+  });
+};
+
 const AddLineUpTask = ({ taskId, team_member_id }: { taskId: string; team_member_id: string }) => {
   const request = requestNew({
     url: `/tasks/${taskId}/lineup`,
@@ -1597,11 +1607,11 @@ const AddLineUpTask = ({ taskId, team_member_id }: { taskId: string; team_member
 };
 
 export const UseAddLineUpTask = () => {
-  // const dispatch = useAppDispatch();
-  // const { tasks, subtasks } = useAppSelector((state) => state.task);
+  const queryClient = useQueryClient();
+
   return useMutation(AddLineUpTask, {
-    onSuccess: (data) => {
-      console.log(data);
+    onSuccess: () => {
+      queryClient.invalidateQueries(['lineup_tasks']);
     }
   });
 };

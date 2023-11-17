@@ -4,11 +4,13 @@ import SearchIcon from '../../../../../assets/icons/SearchIcon';
 import StatusDropdown from '../../../../../components/status/StatusDropdown';
 import Assignee from '../../../tasks/assignTask/Assignee';
 import { ImyTaskData } from '../../../../../features/task/taskSlice';
-import { useAppSelector } from '../../../../../app/hooks';
 import { EntityType } from '../../../../../utils/EntityTypes/EntityType';
 import { Task } from '../../../../../features/task/interface.tasks';
 import ActiveTreeSearch from '../../../../../components/ActiveTree/ActiveTreeSearch';
 import { BROWSE_TASKS_FROM_HOME } from '../../../tasks/component/taskMenu/TaskMenu';
+import { GetRecentsTask, UseAddLineUpTask } from '../../../../../features/task/taskService';
+import { useGetTeamMembers } from '../../../../../features/settings/teamMembers/teamMemberService';
+import { useAppSelector } from '../../../../../app/hooks';
 
 interface ILineUpModal {
   anchorEl: HTMLElement | null;
@@ -18,7 +20,24 @@ interface ILineUpModal {
 
 export default function LineUpModal({ anchorEl, setAnchorEl, handleLineUpTasks }: ILineUpModal) {
   const [browseTasks, setBrowseTasks] = useState(false);
-  const { tasks: tasksStore } = useAppSelector((state) => state.task);
+  const { currentUserId } = useAppSelector((state) => state.auth);
+
+  const { data: teamMember } = useGetTeamMembers({ page: 1, query: '' });
+
+  const { data: recentTasks } = GetRecentsTask();
+
+  const { mutate: onAddLineUp } = UseAddLineUpTask();
+  const members = teamMember?.data.team_members ?? [];
+  const currentMemberId = members.find((i) => i.user.id === currentUserId)?.id as string;
+
+  const handleAddLineUpTask = (task: Task) => {
+    onAddLineUp({
+      taskId: task.id,
+      team_member_id: currentMemberId
+    });
+
+    handleLineUpTasks(task);
+  };
 
   const handleBrowseTask = () => {
     setBrowseTasks(true);
@@ -53,30 +72,29 @@ export default function LineUpModal({ anchorEl, setAnchorEl, handleLineUpTasks }
         </div>
 
         <div className="max-h-96 w-134">
-          {!browseTasks &&
-            Object.keys(tasksStore).map((listId) => (
-              <div key={listId} className="group p-2">
-                {tasksStore[listId].map((task) => (
-                  <div
-                    key={task.id}
-                    className="flex justify-between p-2 space-x-2 cursor-pointer  hover:bg-alsoit-gray-50 rounded-md"
-                    onClick={() => handleLineUpTasks(task)}
-                  >
-                    <div className="flex items-center space-x-2">
-                      <div className="pointer-events-none">
-                        <StatusDropdown task={task} taskCurrentStatus={task.status} taskStatuses={task.task_statuses} />
-                      </div>
-                      <h1 className="mb-1 truncate " style={{ maxWidth: '290PX' }}>
-                        {task.name}{' '}
-                      </h1>
-                    </div>
+          {!browseTasks && (
+            <div className="group p-2">
+              {recentTasks?.data.tasks.map((task) => (
+                <div
+                  key={task.id}
+                  className="flex justify-between p-2 space-x-2 cursor-pointer  hover:bg-alsoit-gray-50 rounded-md"
+                  onClick={() => handleAddLineUpTask(task)}
+                >
+                  <div className="flex items-center space-x-2">
                     <div className="pointer-events-none">
-                      <Assignee task={task as ImyTaskData} itemId={task.id} option={`${EntityType.task}`} />
+                      <StatusDropdown task={task} taskCurrentStatus={task.status} taskStatuses={task.task_statuses} />
                     </div>
+                    <h1 className="mb-1 truncate " style={{ maxWidth: '290PX' }}>
+                      {task.name}{' '}
+                    </h1>
                   </div>
-                ))}
-              </div>
-            ))}
+                  <div className="pointer-events-none">
+                    <Assignee task={task as ImyTaskData} itemId={task.id} option={`${EntityType.task}`} />
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
           {browseTasks && <ActiveTreeSearch option={BROWSE_TASKS_FROM_HOME} />}
         </div>
       </AlsoitMenuDropdown>
