@@ -5,11 +5,18 @@ import { IStatus, Task, TaskKey, TaskValue } from '../../../features/task/interf
 const stringifyValue = (value: unknown) => (typeof value === 'object' ? JSON.stringify(value) : String(value));
 
 const UNASSIGNED = 'unassigned';
+const TASKS = 'tasks';
+export const sortTypesConsts = {
+  STATUS: 'status',
+  ASSIGNEES: 'assignees',
+  PRIORITY: 'priority',
+  NONE: 'none'
+};
 export const sortTasks = (key: TaskKey, tasks: Task[]) => {
   tasks.sort((a, b) => a.status.position - b.status.position);
   const sortedTasks: Record<string, Task[]> = {};
   tasks.forEach((task) => {
-    if ('tags' in task) {
+    if ('tags' in task && key !== 'none') {
       const values = key === 'status' ? (task[key] as IStatus)?.name : task[key];
       if (Array.isArray(values)) {
         if (values.length > 0) {
@@ -38,6 +45,13 @@ export const sortTasks = (key: TaskKey, tasks: Task[]) => {
         } else {
           sortedTasks[stringValue] = [task];
         }
+      }
+    }
+    if (key === 'none') {
+      if (sortedTasks[TASKS]) {
+        sortedTasks[TASKS].push(task);
+      } else {
+        sortedTasks[TASKS] = [task];
       }
     }
   });
