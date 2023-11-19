@@ -217,7 +217,7 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
                       <div>{Details?.name && Capitalize(Details?.name)}</div>
                     ) : (
                       <Linkify options={{ target: '_blank', className: 'text-blue-400' }}>
-                        {inputRef.current?.innerText.trim()}
+                        <div>{Details?.name && Capitalize(Details?.name)}</div>
                       </Linkify>
                     )}
                   </p>
@@ -242,7 +242,7 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
                       <div>{Details?.description}</div>
                     ) : (
                       <Linkify options={{ target: '_blank', className: 'text-blue-400' }}>
-                        {textAreaRef.current?.innerText.trim()}
+                        {Details?.description}
                       </Linkify>
                     )}
                   </div>
