@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import moment from 'moment';
 import CustomReference from '../customReference/CustomReference';
 import EntitySettings from '../entitySettings/EntitySettings';
@@ -21,15 +21,11 @@ import { useParams } from 'react-router-dom';
 import { IWalletDetails } from '../../../../../../features/wallet/wallet.interfaces';
 import PlusIcon from '../../../../../../assets/icons/PlusIcon';
 import { VerticalScroll } from '../../../../../ScrollableContainer/VerticalScroll';
-import { CKEditor } from '@ckeditor/ckeditor5-react';
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { IoCaretDownCircle } from 'react-icons/io5';
 import { cl } from '../../../../../../utils';
 import { MdOutlineVisibility } from 'react-icons/md';
 import MoveItemIcon from '../../../../../../assets/icons/MoveItemIcon';
 import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
-import { EntityType } from '../../../../../../utils/EntityTypes/EntityType';
-import { setTaskInputValue } from '../../../../../../features/task/taskSlice';
 import { setEditingPilotDetailsTitle } from '../../../../../../features/workspace/workspaceSlice';
 import Linkify from 'linkify-react';
 import { Capitalize } from '../../../../../../utils/NoCapWords/Capitalize';
@@ -42,14 +38,11 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
   const queryClient = useQueryClient();
   const dispatch = useAppDispatch();
   const inputRef = useRef<HTMLInputElement | null>(null);
-  // const [fileId, setFileId] = useState<string | undefined>(undefined);
+  const textAreaRef = useRef<HTMLInputElement | null>(null);
 
   const [toggleSubTask, setToggleSubTask] = useState(false);
-  const [offset, setOffset] = useState<number | null>(null);
+  const [editingDescription, setEditingDescription] = useState(false);
   const [toggleDetails, setToggleDetails] = useState<boolean>(true);
-  const [description, setDescription] = useState<string>(Details?.description ?? '');
-  const { activeItemType } = useAppSelector((state) => state.workspace);
-  const { taskInputValue } = useAppSelector((state) => state.task);
 
   const { hubId, walletId, listId, taskId } = useParams();
   const { editingPilotDetailsTitle } = useAppSelector((state) => state.workspace);
@@ -79,6 +72,7 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
   });
 
   const handleBlur = () => {
+    setEditingDescription(false);
     dispatch(setEditingPilotDetailsTitle(false));
   };
 
@@ -86,14 +80,11 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
     dispatch(setEditingPilotDetailsTitle(true));
   };
 
-  const handleDescriptionChange = (value: string) => {
-    const pattern = /<a[^>]*>/gi;
-
-    const modifiedString = value.replace(pattern, (match) => {
-      return match.replace('>', ' class="text-blue-500 underline">');
-    });
-
-    setDescription(modifiedString);
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    if (event.key === 'Enter') {
+      event.preventDefault(); // Prevents the default behavior (e.g., line break in contentEditable)
+      document.execCommand('insertText', false, '\n');
+    }
   };
 
   const handleDetailsSubmit = async (
@@ -102,58 +93,39 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
       | React.FocusEvent<HTMLInputElement | HTMLParagraphElement | HTMLTextAreaElement | Element>
       | undefined = undefined
   ) => {
+    const name = inputRef.current?.innerText.trim() as string;
+    const description = textAreaRef.current?.innerText.trim() as string;
     e && e.preventDefault();
     handleBlur();
     try {
       if (taskId != undefined) {
         await editTaskMutation.mutateAsync({
-          name: inputRef.current?.innerText.trim() as string,
+          name: name,
           task_id: taskId,
-          description
+          description: description as string
         });
       } else if (walletId != undefined) {
         await editWalletMutation.mutateAsync({
-          walletName: inputRef.current?.innerText.trim(),
+          walletName: name,
           walletId: Details?.id,
-          description
+          description: description as string
         });
       } else if (listId != undefined) {
         await editListMutation.mutateAsync({
-          listName: inputRef.current?.innerText.trim(),
+          listName: name,
           listId: Details?.id,
-          description
+          description: description as string
         });
       } else if (hubId) {
         await editHubMutation.mutateAsync({
-          name: inputRef.current?.innerText.trim(),
+          name: name,
           hubId: Details?.id,
-          description
+          description: description as string
         });
       }
     } catch {
       return;
     }
-  };
-
-  useLayoutEffect(() => {
-    if (offset && inputRef.current) {
-      const newRange = document.createRange();
-      newRange.setStart(inputRef.current.childNodes[0], offset as number);
-      const selection = document.getSelection();
-      if (selection) {
-        selection.removeAllRanges();
-        selection.addRange(newRange);
-      }
-    }
-  });
-
-  const handleContentEditableInput = (event: React.FormEvent<HTMLParagraphElement>) => {
-    const range = document.getSelection()?.getRangeAt(0);
-    if (range) {
-      setOffset(range.startOffset);
-    }
-    const newContent = event.currentTarget.textContent;
-    dispatch(setTaskInputValue(newContent as string));
   };
 
   return (
@@ -237,16 +209,17 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
                     className="p-1 break-words max-h-52"
                     contentEditable={editingPilotDetailsTitle}
                     onKeyDown={(e) => (e.key === 'Enter' ? handleDetailsSubmit(e) : null)}
+                    suppressContentEditableWarning={true}
                     onDoubleClick={() => handleEditTitle()}
                     onBlur={(e) => handleDetailsSubmit(e)}
-                    onInput={(e) => handleContentEditableInput(e)}
-                    suppressContentEditableWarning={true}
                   >
-                    <Linkify options={{ target: '_blank', className: 'text-blue-400' }}>
-                      {activeItemType === EntityType.task && taskInputValue
-                        ? taskInputValue
-                        : Details?.name && Capitalize(Details?.name as string)}
-                    </Linkify>
+                    {editingPilotDetailsTitle ? (
+                      <div>{Details?.name && Capitalize(Details?.name)}</div>
+                    ) : (
+                      <Linkify options={{ target: '_blank', className: 'text-blue-400' }}>
+                        {inputRef.current?.innerText.trim()}
+                      </Linkify>
+                    )}
                   </p>
                 </VerticalScroll>
               </div>
@@ -254,15 +227,26 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
             {/* description */}
             <div id="entity description" className="mt-5">
               <label className="text-xs text-gray-500">Description</label>
-              <div className="h-20 bg-gray-100 rounded-md cursor-text">
-                <div className="w-full h-40 overflow-y-scroll rounded-md">
-                  <CKEditor
-                    editor={ClassicEditor}
-                    data={description}
-                    onChange={(event, editor) => handleDescriptionChange(editor.getData())}
+              <div className="p-1 bg-white border border-white rounded-md cursor-text">
+                <VerticalScroll>
+                  <div
+                    className="h-20 p-1 break-words max-h-52"
+                    onDoubleClick={() => setEditingDescription(true)}
+                    ref={textAreaRef}
+                    suppressContentEditableWarning={true}
+                    contentEditable={editingDescription}
                     onBlur={() => handleDetailsSubmit()}
-                  />
-                </div>
+                    onKeyDown={(e) => (e.key === 'Enter' ? handleKeyDown(e) : null)}
+                  >
+                    {editingDescription ? (
+                      <div>{Details?.description}</div>
+                    ) : (
+                      <Linkify options={{ target: '_blank', className: 'text-blue-400' }}>
+                        {textAreaRef.current?.innerText.trim()}
+                      </Linkify>
+                    )}
+                  </div>
+                </VerticalScroll>
               </div>
             </div>
             {/* tags */}

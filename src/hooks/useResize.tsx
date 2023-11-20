@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useRef, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import { cl } from '../utils';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
@@ -6,7 +6,8 @@ import { setIsResize } from '../features/workspace/workspaceSlice';
 import { setUserSettingsKeys } from '../features/account/accountService';
 import useResolution from './useResolution';
 import { AjustableWidths, setAdjustableWidths } from '../features/account/accountSlice';
-import { STORAGE_KEYS } from '../app/config/dimensions';
+// import { STORAGE_KEYS } from '../app/config/dimensions';
+import debounce from './debounce';
 
 interface UseResizeProps {
   dimensions: { min: number; max: number };
@@ -56,27 +57,26 @@ export function useResize({ dimensions, direction, defaultSize, storageKey }: Us
     }
   }, []);
 
-  const handleMouseMoveXL = useCallback((e: MouseEvent) => {
-    if (blockRef.current) {
-      const isXDirection = direction === 'XL' || direction === 'XR';
-      const newSize = isXDirection ? blockRef.current.offsetWidth : blockRef.current.offsetHeight;
-      setSize(newSize);
-
-      dispatch(setAdjustableWidths({ [storageKey]: newSize } as AjustableWidths));
-      setIsDrag(true);
-      dispatch(setIsResize(true));
-      const mouseX = e.clientX;
-      const widthFromLeftToCurrentBlock = Math.round(blockRef.current.getBoundingClientRect().left);
-
-      const currentBlockWidth = blockRef.current.offsetWidth;
-
-      const newBlockWidth = widthFromLeftToCurrentBlock - mouseX + currentBlockWidth;
-
-      const adjustedWidth = Math.max(min, Math.min(newBlockWidth, max));
-
-      blockRef.current.style.width = `${adjustedWidth}px`;
-    }
-  }, []);
+  const handleMouseMoveXL = useCallback(
+    debounce((e: MouseEvent) => {
+      if (blockRef.current) {
+        // const computedStyle = window.getComputedStyle(blockRef.current);
+        const isXDirection = direction === 'XL' || direction === 'XR';
+        setIsDrag(true);
+        dispatch(setIsResize(true));
+        const mouseX = e.clientX;
+        const widthFromLeftToCurrentBlock = Math.round(blockRef.current.getBoundingClientRect().left);
+        const currentBlockWidth = blockRef.current.getBoundingClientRect().width;
+        const newBlockWidth = widthFromLeftToCurrentBlock - mouseX + currentBlockWidth;
+        const adjustedWidth = Math.max(min, Math.min(newBlockWidth, max));
+        blockRef.current.style.width = `${adjustedWidth}px`;
+        const newSize = isXDirection ? blockRef.current.offsetWidth : blockRef.current.offsetHeight;
+        setSize(newSize);
+        dispatch(setAdjustableWidths({ [storageKey]: newSize } as AjustableWidths));
+      }
+    }, 15),
+    []
+  );
 
   const handleMouseMoveY = useCallback((e: MouseEvent) => {
     if (blockRef.current) {
@@ -129,7 +129,6 @@ export function useResize({ dimensions, direction, defaultSize, storageKey }: Us
 
   const handleMouseDown = useCallback(() => {
     document.body.style.userSelect = 'none'; // disable selecting text
-
     const handleMouseMove =
       direction === 'XL' ? handleMouseMoveXL : direction === 'XR' ? handleMouseMoveXR : handleMouseMoveY;
 
@@ -137,54 +136,54 @@ export function useResize({ dimensions, direction, defaultSize, storageKey }: Us
     document.addEventListener('mouseup', handleMouseUp);
   }, []);
 
-  const calculateWidthForContent = () => {
-    const { showSidebar, userSettingsData, sidebarWidth, pilotWidth, extendedBarWidth } = useAppSelector(
-      (state) => state.account
-    );
+  // const calculateWidthForContent = () => {
+  //   const { showSidebar, userSettingsData, sidebarWidth, pilotWidth, extendedBarWidth } = useAppSelector(
+  //     (state) => state.account
+  //   );
 
-    const { show: showFullPilot, id } = useAppSelector((state) => state.slideOver.pilotSideOver);
+  //   const { show: showFullPilot, id } = useAppSelector((state) => state.slideOver.pilotSideOver);
 
-    const { sidebarWidthRD, showExtendedBar } = useAppSelector((state) => state.workspace);
+  //   const { sidebarWidthRD, showExtendedBar } = useAppSelector((state) => state.workspace);
 
-    // const pilotWidthFromLS = JSON.parse(localStorage.getItem(STORAGE_KEYS.PILOT_WIDTH) || '""') as number;
+  //   // const pilotWidthFromLS = JSON.parse(localStorage.getItem(STORAGE_KEYS.PILOT_WIDTH) || '""') as number;
 
-    const extendedBarWidthFromLS = JSON.parse(localStorage.getItem(STORAGE_KEYS.EXTENDED_BAR_WIDTH) || '""') as number;
+  //   const extendedBarWidthFromLS = JSON.parse(localStorage.getItem(STORAGE_KEYS.EXTENDED_BAR_WIDTH) || '""') as number;
 
-    const sidebarWidthFromLS = JSON.parse(localStorage.getItem(STORAGE_KEYS.SIDEBAR_WIDTH) || '""') as number;
+  //   const sidebarWidthFromLS = JSON.parse(localStorage.getItem(STORAGE_KEYS.SIDEBAR_WIDTH) || '""') as number;
 
-    const sidebarWidthRT = showSidebar ? sidebarWidthFromLS : sidebarWidthRD;
+  //   const sidebarWidthRT = showSidebar ? sidebarWidthFromLS : sidebarWidthRD;
 
-    const extendedBarWidthRT = showExtendedBar ? extendedBarWidthFromLS || userSettingsData?.extendedBarWidth : 0;
+  //   const extendedBarWidthRT = showExtendedBar ? extendedBarWidthFromLS || userSettingsData?.extendedBarWidth : 0;
 
-    const pilotWidthRT =
-      showFullPilot && id && storageKey === STORAGE_KEYS.PILOT_WIDTH
-        ? size || userSettingsData?.pilotWidth
-        : !showFullPilot && id
-        ? 50
-        : 0;
+  //   const pilotWidthRT =
+  //     showFullPilot && id && storageKey === STORAGE_KEYS.PILOT_WIDTH
+  //       ? size || userSettingsData?.pilotWidth
+  //       : !showFullPilot && id
+  //       ? 50
+  //       : 0;
 
-    const calculatedContentWidth = useMemo(() => {
-      return `calc(100vw - ${sidebarWidthRT}px - ${extendedBarWidthRT}px - ${pilotWidthRT}px)`;
-    }, [
-      pilotWidth,
-      sidebarWidth,
-      size,
-      extendedBarWidthRT,
-      sidebarWidthRT,
-      pilotWidthRT,
-      storageKey,
-      extendedBarWidth,
-      userSettingsData?.sidebarWidth,
-      showFullPilot,
-      showSidebar,
-      userSettingsData?.pilotWidth,
-      userSettingsData?.extendedBarWidth,
-      userSettingsData?.isPilotMinified,
-      showExtendedBar,
-      userSettingsData
-    ]);
-    return calculatedContentWidth;
-  };
+  //   const calculatedContentWidth = useMemo(() => {
+  //     return `calc(100vw - ${sidebarWidthRT}px - ${extendedBarWidthRT}px - ${pilotWidthRT}px)`;
+  //   }, [
+  //     pilotWidth,
+  //     sidebarWidth,
+  //     size,
+  //     extendedBarWidthRT,
+  //     sidebarWidthRT,
+  //     pilotWidthRT,
+  //     storageKey,
+  //     extendedBarWidth,
+  //     userSettingsData?.sidebarWidth,
+  //     showFullPilot,
+  //     showSidebar,
+  //     userSettingsData?.pilotWidth,
+  //     userSettingsData?.extendedBarWidth,
+  //     userSettingsData?.isPilotMinified,
+  //     showExtendedBar,
+  //     userSettingsData
+  //   ]);
+  //   return calculatedContentWidth;
+  // };
 
   function Dividers() {
     const params = {
@@ -235,7 +234,6 @@ export function useResize({ dimensions, direction, defaultSize, storageKey }: Us
     Dividers, // dragging border
     size,
     isDrag,
-    isMouseUp,
-    calculateWidthForContent
+    isMouseUp
   };
 }

@@ -1,6 +1,6 @@
 import { ReactNode, useEffect } from 'react';
 import { RiArrowLeftSLine, RiArrowRightSLine } from 'react-icons/ri';
-import { STORAGE_KEYS, dimensions } from '../../app/config/dimensions';
+import { STORAGE_KEYS, calculateWidthForContent, dimensions } from '../../app/config/dimensions';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { setExtendedSidebarWidth, setShowExtendedBar } from '../../features/workspace/workspaceSlice';
 import { useResize } from '../../hooks/useResize';
@@ -40,7 +40,7 @@ export default function Page({ header, additionalHeader, children, additional, p
   const { userSettingsData } = useAppSelector((state) => state.account);
   const { show: showFullPilot } = useAppSelector((state) => state.slideOver.pilotSideOver);
 
-  const { blockRef, Dividers, calculateWidthForContent } = useResize({
+  const { blockRef, Dividers } = useResize({
     dimensions: {
       min: dimensions.pilot.min,
       max: dimensions.pilot.max
