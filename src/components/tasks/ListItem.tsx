@@ -54,6 +54,7 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
   const { paletteDropdown, lightBaseColor, baseColor } = useAppSelector((state) => state.account);
   const { listColour } = useAppSelector((state) => state.list);
   const { updateCords } = useAppSelector((state) => state.task);
+  const { currentWorkspaceId } = useAppSelector((state) => state.auth);
 
   const [getCount, setGetCount] = useState<boolean>(false);
   const [activeShape, setActiveShape] = useState(list.shape);
@@ -82,7 +83,7 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
         activeItemName: name
       })
     );
-    navigate(viewsUrl, {
+    navigate(`/${currentWorkspaceId}/${viewsUrl}`, {
       replace: true
     });
   };
