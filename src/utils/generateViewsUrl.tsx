@@ -18,10 +18,7 @@ const generateViewsUrl = (
     if (initialActivePlaceId == pages.ALSO_HR) {
       entityTypeAndId = `hr/h/${id}`;
     } else {
-      entityTypeAndId =
-        !(item as IHub).parent_id || (item as IFavorites).model_type === EntityType.hub
-          ? `tasks/h/${id}/v/${viewId}`
-          : `tasks/sh/${id}/v/${viewId}`;
+      entityTypeAndId = `tasks/h/${id}/v/${viewId}`;
     }
   } else if ((item as IWallet).type === EntityType.wallet || (item as IFavorites).model_type === EntityType.wallet) {
     entityTypeAndId = `tasks/w/${id}/v/${viewId}`;

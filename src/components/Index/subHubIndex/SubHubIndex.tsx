@@ -25,18 +25,18 @@ export default function SubHubIndex({ data }: ISubHubIndexProps) {
   const { extendedBarOpenedEntitiesIds } = useAppSelector((state) => state.workspace);
 
   const handleLocation = (id: string, name: string) => {
-    navigate(`/${currentWorkspaceId}/tasks/sh/${id}`);
+    navigate(`/${currentWorkspaceId}/tasks/h/${id}`);
     dispatch(
       setActiveItem({
         activeItemId: id,
-        activeItemType: EntityType.subHub,
+        activeItemType: EntityType.hub,
         activeItemName: name
       })
     );
     dispatch(
       setShowPilotSideOver({
         id: id,
-        type: EntityType.subHub,
+        type: EntityType.hub,
         show: true,
         title: name
       })

@@ -90,7 +90,7 @@ export function StickyCol({
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const { taskId, hubId, subhubId, walletId, listId } = useParams();
+  const { taskId, hubId, walletId, listId } = useParams();
 
   const { currentWorkspaceId } = useAppSelector((state) => state.auth);
   const { dragOverItemId, draggableItemId } = useAppSelector((state) => state.list);
@@ -137,8 +137,6 @@ export function StickyCol({
     if (task.id !== '0') {
       hubId
         ? navigate(`/${currentWorkspaceId}/tasks/h/${hubId}/t/${task.id}/v/${activeView?.id}`, { replace: true })
-        : subhubId
-        ? navigate(`/${currentWorkspaceId}/tasks/sh/${subhubId}/t/${task.id}/v/${activeView?.id}`, { replace: true })
         : walletId
         ? navigate(`/${currentWorkspaceId}/tasks/w/${walletId}/t/${task.id}/v/${activeView?.id}`, { replace: true })
         : navigate(`/${currentWorkspaceId}/tasks/l/${listId || task.list_id}/t/${task.id}/v/${activeView?.id}`, {
