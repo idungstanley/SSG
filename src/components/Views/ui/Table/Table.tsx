@@ -104,7 +104,7 @@ export function Table({ heads, data, label, listName, listColor, isBlockedShowCh
   }, []);
 
   const checkSelectedRow = (id: string) => {
-    if (selectionArr) {
+    if (selectionArr && keyBoardSelectedIndex) {
       if (selectionArr[keyBoardSelectedIndex]) {
         return keyBoardSelectedIndex >= 0 ? id === selectionArr[keyBoardSelectedIndex].id : false;
       }
