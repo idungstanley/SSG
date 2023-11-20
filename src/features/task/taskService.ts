@@ -1606,6 +1606,17 @@ const AddLineUpTask = ({ taskId, team_member_id }: { taskId: string; team_member
   return request;
 };
 
+export const RemoveLineUpTask = ({ taskId, team_member_id }: { taskId: string; team_member_id?: string }) => {
+  const request = requestNew({
+    url: `/tasks/${taskId}/lineup`,
+    method: 'DELETE',
+    data: {
+      team_member_id
+    }
+  });
+  return request;
+};
+
 export const UseAddLineUpTask = () => {
   const queryClient = useQueryClient();
 

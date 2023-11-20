@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { GetAddLineUpTask } from '../../../../features/task/taskService';
+import { GetAddLineUpTask, RemoveLineUpTask } from '../../../../features/task/taskService';
 import { Task } from '../../../../features/task/interface.tasks';
 import LineUpModal from './lineUp/lineUpModal';
 import LineUpTasks from './lineUp/LineUpTasks';
 import AddLineUpTask from './lineUp/AddLineUpTask';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 export default function LineUp() {
   const [lineUp, setLineUp] = useState<Task[]>([]);
+  const queryClient = useQueryClient();
   const { data: lineUpTaskRes } = GetAddLineUpTask();
 
   useEffect(() => {
@@ -14,6 +16,12 @@ export default function LineUp() {
   }, [lineUpTaskRes]);
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+
+  const useDeleteLineUpTask = useMutation(RemoveLineUpTask, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['lineup_tasks']);
+    }
+  });
 
   const handleLineUpTasks = (task: Task) => {
     let updateLineUpTask = [...lineUp];
@@ -29,9 +37,9 @@ export default function LineUp() {
   };
 
   const handleRemoveLineUpTask = (task: Task) => {
-    const updateLineUpTask = lineUp.filter((lineUpTask) => lineUpTask.id !== task.id);
-
-    setLineUp(updateLineUpTask);
+    useDeleteLineUpTask.mutateAsync({
+      taskId: task.id
+    });
   };
 
   return (
