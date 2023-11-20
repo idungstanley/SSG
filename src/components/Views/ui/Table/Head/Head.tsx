@@ -8,6 +8,7 @@ import {
   setActiveTaskColumn,
   setEditCustomProperty,
   setEntityForCustom,
+  setListForCustom,
   setSelectedTasksArray,
   setSortArr,
   setSortArray
@@ -261,6 +262,7 @@ export function Head({
       type = hubId ? EntityType.hub : walletId ? EntityType.wallet : EntityType.list;
     }
     dispatch(setEntityForCustom({ id, type }));
+    dispatch(setListForCustom(listId as string));
     dispatch(setEditCustomProperty(undefined));
     dispatch(setActiveTabId(pilotTabs.TEMPLATES));
   };
