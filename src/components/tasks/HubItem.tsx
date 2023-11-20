@@ -145,7 +145,7 @@ export default function HubItem({
 
   const paddingLeft = () => {
     if (!showSidebar) {
-      return '7';
+      return '18';
     }
     if (type === EntityType.subHub) {
       if (isExtendedBar) {
