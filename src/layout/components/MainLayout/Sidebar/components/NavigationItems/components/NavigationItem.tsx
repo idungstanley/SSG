@@ -26,7 +26,7 @@ interface NavigationItemProps {
 export default function NavigationItem({ item, handleHotkeyClick }: NavigationItemProps) {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { listId, hubId, walletId, subhubId } = useParams();
+  const { listId, hubId, walletId } = useParams();
 
   const { showSidebar } = useAppSelector((state) => state.account);
   const { notificationCount } = useAppSelector((state) => state.notification);
@@ -41,7 +41,7 @@ export default function NavigationItem({ item, handleHotkeyClick }: NavigationIt
     dispatch(setActivePlaceName(name));
     navigate(link);
   };
-  const activeCond = !(!!listId || !!hubId || !!walletId || !!subhubId) && activePlaceName === name;
+  const activeCond = !(!!listId || !!hubId || !!walletId) && activePlaceName === name;
 
   const style = {
     transform: transform ? `translate(${transform.x}px, ${transform.y}px)` : undefined,

@@ -61,7 +61,7 @@ export default function HubItem({
   placeHubType = APP_TASKS
 }: TaskItemProps) {
   const dispatch = useAppDispatch();
-  const { hubId, subhubId } = useParams();
+  const { hubId } = useParams();
 
   const { activeItemId, openedEntitiesIds } = useAppSelector((state) => state.workspace);
   const { paletteDropdown } = useAppSelector((state) => state.account);
@@ -248,8 +248,8 @@ export default function HubItem({
           style={{ height: '30px', paddingLeft: `${paddingLeft()}px` }}
         >
           <div className="flex items-center justify-between">
-            <ActiveBackground showBgColor={item.id === hubId || item.id === subhubId} />
-            <ActiveBarIdentification showBar={item.id === hubId || item.id === subhubId} />
+            <ActiveBackground showBgColor={item.id === hubId} />
+            <ActiveBarIdentification showBar={item.id === hubId} />
             {showSidebar && !isExtendedBar ? (
               <div
                 className="absolute rounded-r-lg opacity-0 cursor-move left-2 group-hover:opacity-100"
@@ -341,7 +341,7 @@ export default function HubItem({
                   <ToolTip title={item.name}>
                     <p
                       className={`capitalize text-left truncate cursor-pointer ${
-                        item.id === hubId || item.id === subhubId ? 'text-alsoit-purple-300' : ''
+                        item.id === hubId ? 'text-alsoit-purple-300' : ''
                       }`}
                       style={{
                         fontSize: '13px',
