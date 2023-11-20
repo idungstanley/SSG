@@ -83,7 +83,7 @@ export function Header({ isInsights }: IHeader) {
 
   return (
     <>
-      <section className="flex items-center justify-between w-full p-1 border-b" style={{ height: '50px' }}>
+      <section className="flex items-center justify-between w-full p-4 border-b" style={{ height: '50px' }}>
         <div className="flex items-center">{renderChangeView()}</div>
         <div className="flex items-center justify-end">
           <Sort />
