@@ -34,7 +34,7 @@ export default function NewTaskTemplate({ data, label, custom_field_columns, tas
       priority: newTaskPriority,
       short_id: '',
       start_date: null,
-      status: { name: label, color: data[0].status.color },
+      status: { name: label, color: data?.[0].status?.color },
       tags: [],
       task_statuses,
       time_entries_duration: 0,

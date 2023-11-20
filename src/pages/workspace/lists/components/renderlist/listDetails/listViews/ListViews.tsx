@@ -9,7 +9,7 @@ export default function ListViews({ viewsList }: { viewsList: string }) {
           list="List"
           table="Table"
           board="Board"
-          calender="Calender"
+          calendar="Calendar"
           timeChart="TimeChart"
           map="Map"
           gantt="Gantt"

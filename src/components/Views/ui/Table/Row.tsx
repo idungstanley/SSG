@@ -170,7 +170,7 @@ export function Row({
 
   useEffect(() => {
     const selectedTaskRow = rowRef.current?.querySelector(
-      `tr[data-select="${selectionArr && selectionArr[keyBoardSelectedIndex]?.id}"]`
+      `tr[data-select="${selectionArr && keyBoardSelectedIndex && selectionArr[keyBoardSelectedIndex]?.id}"]`
     );
 
     if (selectedTaskRow) {

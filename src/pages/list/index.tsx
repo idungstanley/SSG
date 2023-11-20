@@ -81,6 +81,8 @@ export function ListPage() {
     } else if (e.key === 'ArrowDown' && keyBoardSelectedIndex !== null) {
       const newIndex = Math.min(combinedArr.length - 1, keyBoardSelectedIndex + 1);
       dispatch(setKeyBoardSelectedIndex(newIndex));
+    } else if (e.key === 'ArrowUp' || (e.key === 'ArrowDown' && keyBoardSelectedIndex === null)) {
+      dispatch(setKeyBoardSelectedIndex(0));
     }
   };
 

@@ -66,7 +66,7 @@ export function Col({ value, field, fieldId, task, styles, selectedRow, ...props
     status: value ? (
       <div
         className="top-0 flex flex-col items-center justify-center w-full h-full px-1 text-xs font-medium text-center text-white capitalize bg-green-500"
-        style={{ backgroundColor: task.status.color }}
+        style={{ backgroundColor: task?.status?.color }}
         onClick={() => {
           dispatch(setCurrentTaskStatusId(task.id as string));
           dispatch(setSelectedTaskParentId((task.parent_id || task.list_id) as string));
