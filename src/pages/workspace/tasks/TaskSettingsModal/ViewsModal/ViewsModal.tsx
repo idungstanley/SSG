@@ -6,14 +6,6 @@ import { getCompactView } from '../../../../../features/task/taskSlice';
 import { AiOutlinePlus } from 'react-icons/ai';
 import { FiChevronRight } from 'react-icons/fi';
 import { CiEdit } from 'react-icons/ci';
-import listIcon from '../../../../../assets/icons/listIcon.png';
-import tableIcon from '../../../../../assets/icons/tableIcon.png';
-import boardIcon from '../../../../../assets/icons/boardIcon.png';
-import calenderIcon from '../../../../../assets/icons/calenderIcon.png';
-import timeChartIcon from '../../../../../assets/icons/timeChartIcon.png';
-import mapIcon from '../../../../../assets/icons/mapIcon.png';
-import gantIcon from '../../../../../assets/icons/gantIcon.png';
-import teamIcon from '../../../../../assets/icons/teamIcon.png';
 import Button from '../../../../../components/Buttons/Button';
 import Icons from '../../../../../components/Icons/Icons';
 import List from '../../../../../assets/icons/list.svg';
@@ -21,13 +13,23 @@ import ArrowDrop from '../../../../../assets/icons/ArrowDrop';
 import { Menu } from '@mui/material';
 import ViewListThreeDots from './ViewListThreeDots';
 import CreateNewViewModal from './CreateNewViewModal';
+import TeamIcon from '../../../../../assets/icons/TeamIcon';
+import GanttIcon from '../../../../../assets/icons/GanttIcon';
+import MapIcon from '../../../../../assets/icons/MapIcon';
+import TimeChartIcon from '../../../../../assets/icons/TimeChartIcon';
+import CalendarViewIcon from '../../../../../assets/icons/CalendarViewIcon';
+import BoardIcon from '../../../../../assets/icons/BoardIcon';
+import TableIcon from '../../../../../assets/icons/TableIcon';
+import ListViewIcon from '../../../../../assets/icons/ListViewIcon';
+import DropdownTitle from '../../../../../components/DropDowns/DropdownTitle';
+import DropdownSubtitle from '../../../../../components/DropDowns/DropdownSubtitle';
 
 export default function ViewsModal({
   isActive,
   list,
   table,
   board,
-  calender,
+  calendar,
   timeChart,
   map,
   gantt,
@@ -37,7 +39,7 @@ export default function ViewsModal({
   list: string;
   table: string;
   board: string;
-  calender: string;
+  calendar: string;
   timeChart: string;
   map: string;
   gantt: string;
@@ -56,7 +58,7 @@ export default function ViewsModal({
   const viewSettings = [
     {
       id: list,
-      icon: <img src={listIcon} alt="listIcon" />,
+      icon: <ListViewIcon color="orange" />,
       label: list,
       handleClick: () => null,
       handleThreeDotsClick: (e: React.MouseEvent<SVGElement, MouseEvent>) => {
@@ -66,7 +68,7 @@ export default function ViewsModal({
     },
     {
       id: table,
-      icon: <img src={tableIcon} alt="tableIcon" />,
+      icon: <TableIcon color="orange" />,
       label: table,
       handleClick: () => {
         dispatch(getCompactView(false));
@@ -75,7 +77,7 @@ export default function ViewsModal({
     },
     {
       id: board,
-      icon: <img src={boardIcon} alt="boardIcon" />,
+      icon: <BoardIcon color="orange" />,
       label: board,
       handleClick: () => {
         dispatch(getCompactView(false));
@@ -83,9 +85,9 @@ export default function ViewsModal({
       unusing: true
     },
     {
-      id: calender,
-      icon: <img src={calenderIcon} alt="calenderIcon" />,
-      label: calender,
+      id: calendar,
+      icon: <CalendarViewIcon color="orange" />,
+      label: calendar,
       handleClick: () => {
         dispatch(getCompactView(false));
       },
@@ -93,7 +95,7 @@ export default function ViewsModal({
     },
     {
       id: timeChart,
-      icon: <img src={timeChartIcon} alt="timeChartIcon" />,
+      icon: <TimeChartIcon color="orange" />,
       label: timeChart,
       handleClick: () => {
         dispatch(getCompactView(true));
@@ -102,7 +104,7 @@ export default function ViewsModal({
     },
     {
       id: map,
-      icon: <img src={mapIcon} alt="mapIcon" />,
+      icon: <MapIcon color="orange" />,
       label: map,
       handleClick: () => {
         dispatch(getCompactView(false));
@@ -111,7 +113,7 @@ export default function ViewsModal({
     },
     {
       id: gantt,
-      icon: <img src={gantIcon} alt="gantIcon" />,
+      icon: <GanttIcon color="orange" />,
       label: gantt,
       handleClick: () => {
         dispatch(getCompactView(false));
@@ -120,7 +122,7 @@ export default function ViewsModal({
     },
     {
       id: team,
-      icon: <img src={teamIcon} alt="teamIcon" />,
+      icon: <TeamIcon color="orange" />,
       label: team,
       handleClick: () => {
         dispatch(getCompactView(false));
@@ -170,6 +172,8 @@ export default function ViewsModal({
 
       <Menu anchorEl={dropdownEl} open={!!dropdownEl} onClose={() => setDropdownEl(null)} style={{ marginTop: '10px' }}>
         <div className="w-48">
+          <DropdownTitle content="VIEW TYPES" />
+          <DropdownSubtitle content="CHANGE VIEW" />
           {viewSettings.map((view) => (
             <div key={view.id} style={{ color: view.unusing ? 'orange' : '' }}>
               {view.label !== 'Create New View' ? (
@@ -186,13 +190,8 @@ export default function ViewsModal({
                     className="flex items-center justify-between w-full group"
                     onMouseEnter={() => setViewId(view.id)}
                   >
-                    <div className="flex items-center pl-2 space-x-2 text-md" onClick={() => setActiveView(view.id)}>
-                      <span
-                        className="p-0.5"
-                        style={{ background: view.unusing ? 'orange' : '', opacity: view.unusing ? '0.5' : '1' }}
-                      >
-                        {view.icon}
-                      </span>
+                    <div className="flex items-center space-x-2 text-md" onClick={() => setActiveView(view.id)}>
+                      <span>{view.icon}</span>
                       <span>{view.label}</span>
                     </div>
                     <div
