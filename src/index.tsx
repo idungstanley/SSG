@@ -67,10 +67,6 @@ const onSuccess = (data: unknown): unknown => {
     title = 'Success';
   }
 
-  toast.custom((t) => (
-    <Toast type="success" title={title} body={body} toastId={t.id} taskData={typedTaskData.data.task} />
-  ));
-
   toast.custom(
     (t) => <Toast type="success" title={title} body={body} toastId={t.id} taskData={typedTaskData.data.task} />,
     {
