@@ -43,7 +43,7 @@ function Hubs() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
-  const { listId, hubId, walletId, subhubId } = useParams();
+  const { listId, hubId, walletId } = useParams();
 
   const { currentWorkspaceId } = useAppSelector((state) => state.auth);
   const { isSearchActive } = useAppSelector((state) => state.search);
@@ -145,7 +145,7 @@ function Hubs() {
         label={placeHubType == APP_HR ? 'Also HR' : 'Tasks'}
         id={initialActivePlaceId}
         isActiveLayoutCondition={
-          !(!!listId || !!hubId || !!walletId || !!subhubId) &&
+          !(!!listId || !!hubId || !!walletId) &&
           !location.pathname.includes('everything') &&
           location.pathname.includes(APP_TASKS)
         }

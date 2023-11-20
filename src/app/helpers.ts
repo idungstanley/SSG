@@ -102,7 +102,14 @@ export function getInitials(str: string) {
 export function findFirstActiveEntityExt(location: Location) {
   const shortType = location.pathname.split('/')[3];
   const id = location.pathname.split('/')[4];
-  const longType = shortType === 'h' ? EntityType.hub : shortType === 'w' ? EntityType.wallet : EntityType.list;
+  const longType =
+    shortType === 'h'
+      ? EntityType.hub
+      : shortType === 'sh'
+      ? EntityType.subHub
+      : shortType === 'w'
+      ? EntityType.wallet
+      : EntityType.list;
   return { id, type: longType };
 }
 

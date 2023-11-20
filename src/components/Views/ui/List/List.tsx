@@ -20,6 +20,7 @@ interface ListProps {
   subtasksCustomeFields?: IField[];
   customProperty?: IField[];
   listDetails?: IListDetailRes;
+  combinedTasksArr?: ITaskFullList[];
 }
 
 export interface IListColor {
@@ -28,7 +29,7 @@ export interface IListColor {
 
 const unique = (arr: ExtendedListColumnProps[]) => [...new Set(arr)];
 
-export function List({ tasks }: ListProps) {
+export function List({ tasks, combinedTasksArr }: ListProps) {
   const dispatch = useAppDispatch();
 
   const {
@@ -166,7 +167,7 @@ export function List({ tasks }: ListProps) {
                   listColor={ListColor}
                   heads={hideTask.length ? hideTask : generateColumns}
                   data={sortedTasks[key]}
-                  selectionArr={fullTasksLists}
+                  selectionArr={combinedTasksArr}
                 />
               ) : (
                 <>

@@ -62,7 +62,7 @@ export default function StatusDropdown({
   return (
     <>
       <div>
-        <ToolTip title={taskCurrentStatus.name}>
+        <ToolTip title={taskCurrentStatus?.name}>
           <button
             type="button"
             onClick={(e) => handleOpenStatusDropdown(e)}
@@ -70,9 +70,9 @@ export default function StatusDropdown({
           >
             <div ref={relativeRef} className="mb-1">
               {statusDropdownType === 'name' ? (
-                taskCurrentStatus.name
+                taskCurrentStatus?.name
               ) : (
-                <StatusIconComp color={taskCurrentStatus.color} />
+                <StatusIconComp color={taskCurrentStatus?.color} />
               )}
             </div>
           </button>

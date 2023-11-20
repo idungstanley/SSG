@@ -204,8 +204,6 @@ export const routes = (user: IUser | null) => {
         // old view here now default  =============================
         { path: 'tasks/h/:hubId/v/:viewId', element: <HubPage /> },
         { path: 'tasks/h/:hubId/t/:taskId/v/:viewId', element: <HubPage /> },
-        { path: 'tasks/sh/:subhubId/v/:viewId', element: <HubPage /> },
-        { path: 'tasks/sh/:subhubId/t/:taskId/v/:viewId', element: <HubPage /> },
         { path: 'tasks/w/:walletId/v/:viewId', element: <WalletPage /> },
         { path: 'tasks/w/:walletId/t/:taskId/v/:viewId', element: <WalletPage /> },
         { path: 'tasks/l/:listId/v/:viewId', element: <ListPage /> },
@@ -213,8 +211,6 @@ export const routes = (user: IUser | null) => {
         // Without view id
         { path: 'tasks/h/:hubId', element: <HubPage /> },
         { path: 'tasks/h/:hubId/t/:taskId', element: <HubPage /> },
-        { path: 'tasks/sh/:subhubId', element: <HubPage /> },
-        { path: 'tasks/sh/:subhubId/t/:taskId', element: <HubPage /> },
         { path: 'tasks/w/:walletId', element: <WalletPage /> },
         { path: 'tasks/w/:walletId/t/:taskId', element: <WalletPage /> },
         { path: 'tasks/l/:listId', element: <ListPage /> },

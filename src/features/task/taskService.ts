@@ -3,6 +3,7 @@ import {
   IAttachmentsRes,
   ICheckListRes,
   IFullTaskRes,
+  ILineUpTaskRes,
   ITaskCreateProps,
   ITaskFullList,
   ITaskListRes,
@@ -1268,7 +1269,6 @@ export const useCurrentTime = ({ workspaceId }: { workspaceId?: string }) => {
               setTimerLastMemory({
                 hubId: dateString.model === EntityType.hub ? dateString.model_id : null,
                 activeTabId: pilotTabs.UTILITIES,
-                subhubId: dateString.model === EntityType.subHub ? dateString.model_id : null,
                 listId: dateString.model === EntityType.list ? dateString.model_id : null,
                 taskId: dateString.model === EntityType.task ? dateString.model_id : null,
                 workSpaceId: workspaceId,
@@ -1570,6 +1570,58 @@ export const UseTaskWatchersAssignService = (taskIds: string[], user: ITeamMembe
       dispatch(setToggleAssignCurrentTaskId(null));
       dispatch(setSelectedTasksArray([]));
       dispatch(setSelectedListIds([]));
+    }
+  });
+};
+
+export const GetAddLineUpTask = () => {
+  return useQuery(['lineup_tasks'], async () => {
+    const data = await requestNew<ILineUpTaskRes | undefined>({
+      url: '/tasks/lineup',
+      method: 'GET'
+    });
+    return data;
+  });
+};
+
+export const GetRecentsTask = () => {
+  return useQuery(['recent_tasks'], async () => {
+    const data = await requestNew<ILineUpTaskRes | undefined>({
+      url: '/tasks/recent',
+      method: 'GET'
+    });
+    return data;
+  });
+};
+
+const AddLineUpTask = ({ taskId, team_member_id }: { taskId: string; team_member_id: string }) => {
+  const request = requestNew({
+    url: `/tasks/${taskId}/lineup`,
+    method: 'POST',
+    data: {
+      team_member_ids: team_member_id
+    }
+  });
+  return request;
+};
+
+export const RemoveLineUpTask = ({ taskId, team_member_id }: { taskId: string; team_member_id?: string }) => {
+  const request = requestNew({
+    url: `/tasks/${taskId}/lineup`,
+    method: 'DELETE',
+    data: {
+      team_member_id
+    }
+  });
+  return request;
+};
+
+export const UseAddLineUpTask = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation(AddLineUpTask, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['lineup_tasks']);
     }
   });
 };

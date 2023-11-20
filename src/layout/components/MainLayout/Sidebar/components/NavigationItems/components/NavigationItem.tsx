@@ -1,6 +1,6 @@
 import React from 'react';
 import { useAppDispatch, useAppSelector } from '../../../../../../../app/hooks';
-import { setActivePlaceName, setShowExtendedBar } from '../../../../../../../features/workspace/workspaceSlice';
+import { setActivePlaceName } from '../../../../../../../features/workspace/workspaceSlice';
 import { cl } from '../../../../../../../utils';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useSortable } from '@dnd-kit/sortable';
@@ -26,7 +26,7 @@ interface NavigationItemProps {
 export default function NavigationItem({ item, handleHotkeyClick }: NavigationItemProps) {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { listId, hubId, walletId, subhubId } = useParams();
+  const { listId, hubId, walletId } = useParams();
 
   const { showSidebar } = useAppSelector((state) => state.account);
   const { notificationCount } = useAppSelector((state) => state.notification);
@@ -39,10 +39,9 @@ export default function NavigationItem({ item, handleHotkeyClick }: NavigationIt
   useGetNotificationCountService();
   const handleClick = (name: string | null, link: string) => {
     dispatch(setActivePlaceName(name));
-    dispatch(setShowExtendedBar(true));
     navigate(link);
   };
-  const activeCond = !(!!listId || !!hubId || !!walletId || !!subhubId) && activePlaceName === name;
+  const activeCond = !(!!listId || !!hubId || !!walletId) && activePlaceName === name;
 
   const style = {
     transform: transform ? `translate(${transform.x}px, ${transform.y}px)` : undefined,

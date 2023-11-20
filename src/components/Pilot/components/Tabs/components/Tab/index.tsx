@@ -28,7 +28,7 @@ export default function Tab({ id, label, icon, showTabLabel }: TabProps) {
   };
 
   const handleClick = (tabId: string) => {
-    dispatch(setActiveTabId(activeTabId === tabId ? undefined : tabId));
+    dispatch(setActiveTabId(tabId));
   };
 
   const isActiveTab = id === activeTabId;
