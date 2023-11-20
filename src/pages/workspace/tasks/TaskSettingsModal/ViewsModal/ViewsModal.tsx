@@ -21,6 +21,8 @@ import CalendarViewIcon from '../../../../../assets/icons/CalendarViewIcon';
 import BoardIcon from '../../../../../assets/icons/BoardIcon';
 import TableIcon from '../../../../../assets/icons/TableIcon';
 import ListViewIcon from '../../../../../assets/icons/ListViewIcon';
+import DropdownTitle from '../../../../../components/DropDowns/DropdownTitle';
+import DropdownSubtitle from '../../../../../components/DropDowns/DropdownSubtitle';
 
 export default function ViewsModal({
   isActive,
@@ -170,6 +172,8 @@ export default function ViewsModal({
 
       <Menu anchorEl={dropdownEl} open={!!dropdownEl} onClose={() => setDropdownEl(null)} style={{ marginTop: '10px' }}>
         <div className="w-48">
+          <DropdownTitle content="VIEW TYPES" />
+          <DropdownSubtitle content="CHANGE VIEW" />
           {viewSettings.map((view) => (
             <div key={view.id} style={{ color: view.unusing ? 'orange' : '' }}>
               {view.label !== 'Create New View' ? (
