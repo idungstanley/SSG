@@ -24,7 +24,7 @@ import {
 } from '../../components/TasksHeader/ui/Filter/types/filters';
 import { DEFAULT_FILTERS_OPTION } from '../../components/TasksHeader/ui/Filter/config/filterConfig';
 import { ITeamMembersAndGroup } from '../settings/teamMembersAndGroups.interfaces';
-import { IView } from '../hubs/hubs.interfaces';
+import { IList, IView } from '../hubs/hubs.interfaces';
 
 export interface ICustomField {
   id: string;
@@ -172,6 +172,7 @@ interface TaskState {
   taskColumns: listColumnProps[];
   hideTask: listColumnProps[];
   currentTaskId: string | null;
+  activeTreeSelectedTask: IList | undefined;
   newTaskPriority: string;
   selectedTasksArray: string[];
   selectedIndexListId: string | null;
@@ -206,8 +207,10 @@ interface TaskState {
   assignOnHoverListId: string;
   assignOnHoverState: boolean;
   f2State: boolean;
+  createTask: boolean;
   addNewTaskItem: boolean;
   selectedIndex: number | null;
+  keyBoardSelectedIndex: number;
   defaultSubtaskListId: null | string;
   selectedIndexStatus: string | null;
   selectedListIds: string[];
@@ -275,6 +278,7 @@ interface TaskState {
   editCustomProperty: IField | undefined;
   dragToBecomeSubTask: boolean;
   fileUploadProps: fileUploadPropsType;
+  taskInputValue?: string;
   rootTaskIds?: string[];
 }
 
@@ -299,6 +303,7 @@ const initialState: TaskState = {
   taskColumns: [],
   hideTask: [],
   currentTaskId: null,
+  activeTreeSelectedTask: undefined,
   showNewTaskField: false,
   meMode: false,
   escapeKey: false,
@@ -340,9 +345,11 @@ const initialState: TaskState = {
   assignOnHoverListId: '',
   assignOnHoverState: false,
   f2State: false,
+  createTask: false,
   addNewTaskItem: false,
   closeTaskListView: true,
   selectedIndex: null,
+  keyBoardSelectedIndex: 0,
   subtaskDefaultStatusId: null,
   defaultSubtaskListId: null,
   selectedIndexStatus: null,
@@ -422,7 +429,8 @@ const initialState: TaskState = {
     taskId: undefined,
     listId: undefined,
     openModal: false
-  }
+  },
+  taskInputValue: ''
 };
 
 export const taskSlice = createSlice({
@@ -500,6 +508,9 @@ export const taskSlice = createSlice({
     },
     setSelectedIndex(state, action: PayloadAction<number | null>) {
       state.selectedIndex = action.payload;
+    },
+    setKeyBoardSelectedIndex(state, action: PayloadAction<number>) {
+      state.keyBoardSelectedIndex = action.payload;
     },
     setSelectedIndexStatus(state, action: PayloadAction<string>) {
       state.selectedIndexStatus = action.payload;
@@ -608,6 +619,9 @@ export const taskSlice = createSlice({
     setF2State(state, action: PayloadAction<boolean>) {
       state.f2State = action.payload;
     },
+    setCreateTaskShortCut(state, action: PayloadAction<boolean>) {
+      state.createTask = action.payload;
+    },
     getTaskUpperCase(state, action: PayloadAction<boolean>) {
       state.taskUpperCase = action.payload;
     },
@@ -652,6 +666,9 @@ export const taskSlice = createSlice({
     },
     setCurrentTaskId(state, action: PayloadAction<string | null>) {
       state.currentTaskId = action.payload;
+    },
+    setActiveTreeSelectedTask(state, action: PayloadAction<IList | undefined>) {
+      state.activeTreeSelectedTask = action.payload;
     },
     setCloseTaskListView(state, action: PayloadAction<boolean>) {
       state.closeTaskListView = action.payload;
@@ -794,6 +811,9 @@ export const taskSlice = createSlice({
     },
     setOpenFileUploadModal(state, action: PayloadAction<fileUploadPropsType>) {
       state.fileUploadProps = action.payload;
+    },
+    setTaskInputValue(state, action: PayloadAction<string | undefined>) {
+      state.taskInputValue = action.payload;
     }
   }
 });
@@ -830,6 +850,7 @@ export const {
   getSplitSubTaskLevels,
   getCompactView,
   setSelectedIndex,
+  setKeyBoardSelectedIndex,
   setSelectedIndexStatus,
   setSelectedListIds,
   setSaveSettingLocal,
@@ -844,6 +865,7 @@ export const {
   setNewTaskPriority,
   setRmWatcher,
   setCurrentTaskId,
+  setActiveTreeSelectedTask,
   setDefaultSubtaskId,
   setToggleAllSubtask,
   setToggleAllSubtaskSplit,
@@ -863,6 +885,7 @@ export const {
   setAssignOnHoverListId,
   setAssignOnHoverState,
   setF2State,
+  setCreateTaskShortCut,
   setUpdateEntries,
   setTriggerSaveSettingsModal,
   setSaveSettingOnline,
@@ -906,6 +929,7 @@ export const {
   setEditCustomProperty,
   setDragToBecomeSubTask,
   setOpenFileUploadModal,
+  setTaskInputValue,
   setRootTaskIds
 } = taskSlice.actions;
 export default taskSlice.reducer;

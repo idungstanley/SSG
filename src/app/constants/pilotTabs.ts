@@ -17,6 +17,7 @@ export const pilotTabs = {
   CREATE_HUB: 'create_hub',
   CREATE_WALLET: 'create_wallet',
   CREATE_LIST: 'create_list',
+  CREATE_TASK: 'create_task',
   UTILITIES: 'utilities',
   AUTOMATION: 'automation',
   CALENDAR_SETTINGS: 'calendar_settings',

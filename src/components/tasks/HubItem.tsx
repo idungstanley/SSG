@@ -261,16 +261,16 @@ export default function HubItem({
               </div>
             ) : null}
             {placeHubType == APP_HR && (
-              <div
-                className={`flex items-center justify-center ml-2 hr-checkbox-wrapper ${parentCheckboxCondition(
-                  item.id
-                )}`}
-              >
-                <Checkbox
-                  styles="ml-0 mr-0 text-primary-500 focus:ring-primary-500 mx-0 hr-checkbox hr-checkbox-parent"
-                  checked={checkSelectedHubs(item.id)}
-                  setChecked={(e) => onCheckbox(e, item.id, item.name, item.color as string)}
-                />
+              <div className="pl-2">
+                <div
+                  className={`flex items-center justify-center hr-checkbox-wrapper ${parentCheckboxCondition(item.id)}`}
+                >
+                  <Checkbox
+                    styles="ml-0 mr-0 text-primary-500 focus:ring-primary-500 mx-0 hr-checkbox hr-checkbox-parent"
+                    checked={checkSelectedHubs(item.id)}
+                    setChecked={(e) => onCheckbox(e, item.id, item.name, item.color as string)}
+                  />
+                </div>
               </div>
             )}
             <div
@@ -290,10 +290,18 @@ export default function HubItem({
                 <div>
                   {showChildren ? (
                     <span className="flex flex-col">
-                      <VscTriangleDown className="flex-shrink-0 h-2" aria-hidden="true" color="#919191" />
+                      <VscTriangleDown
+                        className="flex-shrink-0 h-2 hover:fill-[#BF01FE]"
+                        aria-hidden="true"
+                        color="#919191"
+                      />
                     </span>
                   ) : (
-                    <VscTriangleRight className="flex-shrink-0 h-2" aria-hidden="true" color="#919191" />
+                    <VscTriangleRight
+                      className="flex-shrink-0 h-2 hover:fill-[#BF01FE]"
+                      aria-hidden="true"
+                      color="#919191"
+                    />
                   )}
                 </div>
               ) : (
@@ -352,25 +360,28 @@ export default function HubItem({
           </div>
           {showSidebar && (
             <div
-              className="z-10 flex items-center pr-1 space-x-2 text-black opacity-0 group-hover:opacity-100 hover:text-fuchsia-500"
+              className="z-10 flex items-center pr-1 space-x-2 text-black opacity-0 group-hover:opacity-100"
               onClick={(e) => e.stopPropagation()}
               ref={menuRef}
             >
-              {!item.parent_id ? (
+              <ToolTip title={!item.parent_id ? 'Create Subhub, wallet and list' : 'Create wallet, list'}>
                 <span onClick={() => handleItemAction(item.id, item.name)} className="cursor-pointer">
                   <PlusIcon className="hover:text-alsoit-purple-300" />
                 </span>
-              ) : null}
-              <span
-                onClick={(e) => {
-                  handleHubSettings(item.id, item.name, e);
-                  dispatch(setEntityForPermissions(item));
-                }}
-                className="cursor-pointer"
-                id="menusettings"
-              >
-                <ThreeDotIcon className="hover:text-alsoit-purple-300" />
-              </span>
+              </ToolTip>
+
+              <ToolTip title={!item.parent_id ? 'Hub settings' : 'Subhub settings'}>
+                <span
+                  onClick={(e) => {
+                    handleHubSettings(item.id, item.name, e);
+                    dispatch(setEntityForPermissions(item));
+                  }}
+                  className="cursor-pointer"
+                  id="menusettings"
+                >
+                  <ThreeDotIcon className="hover:text-alsoit-purple-300" />
+                </span>
+              </ToolTip>
             </div>
           )}
         </div>

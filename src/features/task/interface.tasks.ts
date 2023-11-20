@@ -120,7 +120,7 @@ export interface ICheckListItems {
   is_done: number;
   assignees: AssigneeType[];
   group_assignees: [];
-  tags: [];
+  tags: Tag[];
 }
 
 export interface ICheckListRes {
@@ -254,6 +254,11 @@ export interface KeyItemTypes {
 export interface ITaskRes {
   data: {
     task: ITaskFullList;
+  };
+}
+export interface ILineUpTaskRes {
+  data: {
+    tasks: ITaskFullList[];
   };
 }
 

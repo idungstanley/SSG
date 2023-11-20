@@ -13,7 +13,7 @@ export interface BadgeTask extends TdHTMLAttributes<HTMLTableCellElement> {
   task: Task;
 }
 export default function Badges({ task }: BadgeTask) {
-  const { showNewTaskField } = useAppSelector((state) => state.task);
+  const { showNewTaskField, saveSettingOnline } = useAppSelector((state) => state.task);
 
   const dispatch = useAppDispatch();
 
@@ -36,7 +36,10 @@ export default function Badges({ task }: BadgeTask) {
             content={<p>{task.description}</p>}
             hoverElement={
               <button className="p-1 border rounded-md bg-white ">
-                <Description />
+                <Description
+                  width={saveSettingOnline?.CompactView ? '8px' : '12px'}
+                  height={saveSettingOnline?.CompactView ? '8px' : '12px'}
+                />
               </button>
             }
             additionalStyles={{ minHeight: '150px', minWidth: '300px' }}
@@ -46,7 +49,10 @@ export default function Badges({ task }: BadgeTask) {
         {task.has_attachments && (
           <ToolTip title="Attach File">
             <button className="p-1 border rounded-md bg-white">
-              <AttachFile />
+              <AttachFile
+                width={saveSettingOnline?.CompactView ? '8px' : '12px'}
+                height={saveSettingOnline?.CompactView ? '8px' : '12px'}
+              />
             </button>
           </ToolTip>
         )}
@@ -57,8 +63,11 @@ export default function Badges({ task }: BadgeTask) {
               className="relative p-1 border rounded-md bg-white"
               onClick={(e) => onShowAddSubtaskField(e, task.id)}
             >
-              <SubtaskWithCount />
-              <p className="alsoit-text-sm h-2 w-2 absolute left-5 " style={{ fontSize: '9px', bottom: '12.5px' }}>
+              <SubtaskWithCount
+                width={saveSettingOnline?.CompactView ? '24px' : '24px'}
+                height={saveSettingOnline?.CompactView ? '8px' : '12px'}
+              />
+              <p className="alsoit-text-sm h-2 w-2 absolute left-5 " style={{ fontSize: '9px', bottom: '11.5px' }}>
                 {task.descendants_count}
               </p>
             </button>

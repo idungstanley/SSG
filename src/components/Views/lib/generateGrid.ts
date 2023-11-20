@@ -12,3 +12,10 @@ export const generateGrid = (columnsCount: number, isSplitSubtask?: boolean) => 
     .map(() => `minmax(${DEFAULT_COL_WIDTH}px, 1fr)`)
     .join(' ')}`;
 };
+
+export const generateChatGrid = (columnsCount: number) => {
+  return `minmax(40%, 90%) minmax(162px, 1fr) ${[...Array(columnsCount)]
+    .slice(2)
+    .map(() => `minmax(${DEFAULT_COL_WIDTH}px, 1fr)`)
+    .join(' ')}`;
+};

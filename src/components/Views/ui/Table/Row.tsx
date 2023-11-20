@@ -1,6 +1,6 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useRef, useEffect } from 'react';
 import SubtasksIcon from '../../../../assets/icons/SubtasksIcon';
-import { Tag, Task } from '../../../../features/task/interface.tasks';
+import { ITaskFullList, Tag, Task } from '../../../../features/task/interface.tasks';
 import { DEFAULT_LEFT_PADDING } from '../../config';
 import { Col } from './Col';
 import { StickyCol } from './StickyCol';
@@ -44,6 +44,8 @@ interface RowProps {
   isSplitSubtask?: boolean;
   level: number;
   isBlockedShowChildren?: boolean;
+  selectedRow: boolean;
+  selectionArr?: ITaskFullList[];
 }
 
 export function Row({
@@ -58,7 +60,9 @@ export function Row({
   handleClose,
   isSplitSubtask,
   level,
-  isBlockedShowChildren
+  isBlockedShowChildren,
+  selectedRow,
+  selectionArr
 }: RowProps) {
   const dispatch = useAppDispatch();
 
@@ -69,11 +73,15 @@ export function Row({
     toggleAllSubtaskSplit,
     splitSubTaskLevels,
     subtasks,
-    rootTaskIds
+    rootTaskIds,
+    saveSettingOnline,
+    keyBoardSelectedIndex
   } = useAppSelector((state) => state.task);
 
   const [showSubTasks, setShowSubTasks] = useState(false);
   const [isCopied, setIsCopied] = useState<number>(0);
+
+  const rowRef = useRef<HTMLTableRowElement | null>(null);
 
   const otherColumns = columns.slice(1);
   const newSubTask = NewSubTaskTemplate(task);
@@ -124,7 +132,15 @@ export function Row({
   const style = {
     opacity: transform ? 0.3 : 100,
     zIndex: 1,
-    pointerEvents: transform ? 'none' : ''
+    pointerEvents: transform ? 'none' : '',
+    height:
+      saveSettingOnline?.singleLineView && !saveSettingOnline?.CompactView
+        ? '42px'
+        : saveSettingOnline?.CompactView && saveSettingOnline?.singleLineView
+        ? '25px'
+        : !saveSettingOnline?.singleLineView && saveSettingOnline?.CompactView && task.name.length < 30
+        ? '25px'
+        : ''
   };
 
   const showChildren = useMemo(() => {
@@ -152,10 +168,24 @@ export function Row({
   const [hoverOn, setHoverOn] = useState(false);
   const toggleRootTasks = (rootTaskIds as string[])?.includes(task.id);
 
+  useEffect(() => {
+    const selectedTaskRow = rowRef.current?.querySelector(
+      `tr[data-select="${selectionArr && selectionArr[keyBoardSelectedIndex]?.id}"]`
+    );
+
+    if (selectedTaskRow) {
+      requestAnimationFrame(() => {
+        selectedTaskRow.scrollIntoView({ behavior: 'smooth', block: 'end' });
+      });
+    }
+  }, [keyBoardSelectedIndex, selectionArr]);
+
   return (
     <>
       {/* current task */}
       <tr
+        ref={rowRef}
+        data-select={task.id}
         className="relative contents group dNFlex"
         onMouseEnter={() => {
           dispatch(setAssignOnHoverTask(task));
@@ -207,6 +237,7 @@ export function Row({
               style={{ left: '30px', background: 'transparent', height: '100%', width: '100%', zIndex: -1 }}
             />
           }
+          selectedRow={selectedRow}
         >
           {/* actions */}
           <div className="flex items-center justify-center mr-1 space-x-1">
@@ -217,7 +248,10 @@ export function Row({
                 className={`p-1 bg-white border rounded-md ${hoverOn ? 'opacity-100' : 'opacity-0'}`}
                 onClick={handleCopyTexts}
               >
-                <Copy />
+                <Copy
+                  width={saveSettingOnline?.CompactView ? '8px' : '12px'}
+                  height={saveSettingOnline?.CompactView ? '8px' : '12px'}
+                />
               </button>
             </ToolTip>
             {/* effects */}
@@ -227,14 +261,14 @@ export function Row({
                 style={{ backgroundColor: 'orange' }}
                 onClick={(e) => e.stopPropagation()}
               >
-                <Effect className="w-3 h-3" />
+                <Effect className={saveSettingOnline?.CompactView ? 'w-2 h-2' : 'w-3 h-3'} />
               </button>
             </ToolTip>
             {/* tags */}
             {'tags' in task ? (
               <ToolTip title="Tags">
                 <div
-                  className={`bg-white border rounded-md ${hoverOn ? 'opacity-100' : 'opacity-0'}`}
+                  className={`bg-white rounded-md ${hoverOn ? 'opacity-100' : 'opacity-0'}`}
                   onClick={(e) => e.preventDefault()}
                 >
                   <ManageTagsDropdown entityId={task.id} tagsArr={task.tags as Tag[]} entityType="task" />
@@ -248,7 +282,7 @@ export function Row({
                   className={`p-1 bg-white border rounded-md ${hoverOn ? 'opacity-100' : 'opacity-0'}`}
                   onClick={(e) => onShowAddSubtaskField(e, task.id)}
                 >
-                  <SubtasksIcon className="w-3 h-3" />
+                  <SubtasksIcon className={saveSettingOnline?.CompactView ? 'w-2 h-2' : 'w-3 h-3'} />
                 </button>
               </ToolTip>
             )}
@@ -257,7 +291,10 @@ export function Row({
                 className={`p-1 pl-4 bg-white rounded-md ${hoverOn ? 'opacity-100' : 'opacity-0'}`}
                 onClick={(e) => e.stopPropagation()}
               >
-                <Enhance className="w-3 h-3" style={{ color: 'orange' }} />
+                <Enhance
+                  className={saveSettingOnline?.CompactView ? 'w-2 h-2' : 'w-3 h-3'}
+                  style={{ color: 'orange' }}
+                />
               </button>
             </ToolTip>
           </div>
@@ -272,6 +309,7 @@ export function Row({
             key={col.id}
             style={{ zIndex: 0 }}
             styles={style}
+            selectedRow={selectedRow}
           />
         ))}
       </tr>

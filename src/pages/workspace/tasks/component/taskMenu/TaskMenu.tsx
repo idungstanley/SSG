@@ -35,6 +35,19 @@ import { AiFillFlag } from 'react-icons/ai';
 import DateFormat from '../../../../../components/DateFormat';
 import CustomFieldsModal from '../../customFields/CustomFieldsModal';
 import MultipleStatuses from '../../multipleStatuses/MultipleStatuses';
+import { pilotTabs } from '../../../../../app/constants/pilotTabs';
+
+export const TASK_DUPLICATE = 'task_duplicate';
+export const TASK_MOVE = 'task_move';
+export const BROWSE_TASKS_FROM_HOME = 'browse_tasks_from_home';
+export const CONVERT_CHECKLIST = 'convert_checklist';
+export const OPTIONS_WITH_AVAILABLE_LISTS = [
+  TASK_DUPLICATE,
+  BROWSE_TASKS_FROM_HOME,
+  TASK_MOVE,
+  pilotTabs.CREATE_TASK,
+  CONVERT_CHECKLIST
+];
 
 export default function TaskMenu() {
   const dispatch = useDispatch();
@@ -53,6 +66,7 @@ export default function TaskMenu() {
   const [isHideTooltip, setHideTooltip] = useState<boolean>(false);
   const [showSelectDropdown, setShowSelectDropdown] = useState<null | HTMLSpanElement | HTMLDivElement>(null);
   const [isArchivedTasks, setArchivedTasks] = useState<boolean>(false);
+  const [activeTreeType, setActiveTreeType] = useState<string>('');
 
   useEffect(() => {
     if (selectedTasksArray.length) {
@@ -63,10 +77,10 @@ export default function TaskMenu() {
   }, [selectedTasksArray]);
 
   useEffect(() => {
-    if (!duplicateTaskObj.popDuplicateTaskModal) {
+    if (!duplicateTaskObj.popDuplicateTaskModal || !selectedTasksArray.length) {
       handleClose();
     }
-  }, [duplicateTaskObj.popDuplicateTaskModal]);
+  }, [duplicateTaskObj.popDuplicateTaskModal, selectedTasksArray]);
 
   useEffect(() => {
     if (selectedTasksArray.length) {
@@ -88,7 +102,6 @@ export default function TaskMenu() {
         selectedListIds.length ? selectedListIds : [selectedTaskParentId],
         taskData
       );
-      // const selectedTaskType === EntityType.task ? taskData : subtasks;
 
       if (EntityType.task) {
         dispatch(setTasks(updatedTasks));
@@ -161,9 +174,13 @@ export default function TaskMenu() {
     },
     {
       id: 'move_tasks_or_add_tasks_in_multiple_lists',
-      label: 'Move tasks or add tasks in multiple Lists',
-      icons: <MdOutlineDriveFileMove color="orange" opacity={0.5} />,
-      handleClick: () => ({}),
+      // label: 'Move tasks or add tasks in multiple Lists',
+      label: 'Move tasks',
+      icons: <MdOutlineDriveFileMove />,
+      handleClick: (e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
+        handleShowSelectDropdown(e);
+        setActiveTreeType(TASK_MOVE);
+      },
       isVisible: true
     },
     {
@@ -172,7 +189,7 @@ export default function TaskMenu() {
       icons: <HiOutlineDocumentDuplicate />,
       handleClick: (e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
         handleShowSelectDropdown(e);
-        // setToggleDuplicateMoal(!toggleDuplicateMoal);
+        setActiveTreeType(TASK_DUPLICATE);
       },
       isVisible: true
     },
@@ -352,7 +369,7 @@ export default function TaskMenu() {
       <div className="absolute z-50">
         {
           <AlsoitMenuDropdown handleClose={handleClose} anchorEl={showSelectDropdown}>
-            <ActiveTreeSearch option="taskDuplicate" />
+            <ActiveTreeSearch option={activeTreeType} />
           </AlsoitMenuDropdown>
         }
       </div>

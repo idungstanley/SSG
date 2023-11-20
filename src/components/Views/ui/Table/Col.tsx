@@ -44,9 +44,10 @@ interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   task: Task;
   fieldId: string;
   styles?: { opacity: number };
+  selectedRow: boolean;
 }
 
-export function Col({ value, field, fieldId, task, styles, ...props }: ColProps) {
+export function Col({ value, field, fieldId, task, styles, selectedRow, ...props }: ColProps) {
   const dispatch = useAppDispatch();
   const { taskId } = useParams();
 
@@ -56,7 +57,7 @@ export function Col({ value, field, fieldId, task, styles, ...props }: ColProps)
     (state) => state.task
   );
 
-  const COL_BG = taskId === task.id ? ACTIVE_COL_BG : DEFAULT_COL_BG;
+  const COL_BG = taskId === task.id ? ACTIVE_COL_BG : selectedRow ? 'bg-alsoit-purple-50' : DEFAULT_COL_BG;
   const isSelected = selectedTasksArray.includes(task.id);
 
   // fields config
@@ -255,9 +256,9 @@ export function Col({ value, field, fieldId, task, styles, ...props }: ColProps)
             saveSettingOnline?.singleLineView && !saveSettingOnline?.CompactView
               ? '42px'
               : saveSettingOnline?.CompactView && saveSettingOnline?.singleLineView
-              ? '32px'
+              ? '25px'
               : !saveSettingOnline?.singleLineView && saveSettingOnline?.CompactView && task.name.length < 30
-              ? '32px'
+              ? '25px'
               : '',
           ...styles
         }}

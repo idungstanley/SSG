@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useLayoutEffect, useRef, useState } from 'react';
 import moment from 'moment';
 import CustomReference from '../customReference/CustomReference';
 import EntitySettings from '../entitySettings/EntitySettings';
@@ -28,8 +28,11 @@ import { cl } from '../../../../../../utils';
 import { MdOutlineVisibility } from 'react-icons/md';
 import MoveItemIcon from '../../../../../../assets/icons/MoveItemIcon';
 import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
+import { EntityType } from '../../../../../../utils/EntityTypes/EntityType';
+import { setTaskInputValue } from '../../../../../../features/task/taskSlice';
 import { setEditingPilotDetailsTitle } from '../../../../../../features/workspace/workspaceSlice';
 import Linkify from 'linkify-react';
+import { Capitalize } from '../../../../../../utils/NoCapWords/Capitalize';
 
 interface PropertyDetailsProps {
   Details?: IHubDetails | ITaskFullList | IListDetails | IWalletDetails;
@@ -42,10 +45,13 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
   // const [fileId, setFileId] = useState<string | undefined>(undefined);
 
   const [toggleSubTask, setToggleSubTask] = useState(false);
+  const [offset, setOffset] = useState<number | null>(null);
   const [toggleDetails, setToggleDetails] = useState<boolean>(true);
   const [description, setDescription] = useState<string>(Details?.description ?? '');
-  const { hubId, walletId, listId, taskId } = useParams();
+  const { activeItemType } = useAppSelector((state) => state.workspace);
+  const { taskInputValue } = useAppSelector((state) => state.task);
 
+  const { hubId, walletId, listId, taskId } = useParams();
   const { editingPilotDetailsTitle } = useAppSelector((state) => state.workspace);
 
   const editTaskMutation = useMutation(UseUpdateTaskService, {
@@ -129,6 +135,27 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
     }
   };
 
+  useLayoutEffect(() => {
+    if (offset && inputRef.current) {
+      const newRange = document.createRange();
+      newRange.setStart(inputRef.current.childNodes[0], offset as number);
+      const selection = document.getSelection();
+      if (selection) {
+        selection.removeAllRanges();
+        selection.addRange(newRange);
+      }
+    }
+  });
+
+  const handleContentEditableInput = (event: React.FormEvent<HTMLParagraphElement>) => {
+    const range = document.getSelection()?.getRangeAt(0);
+    if (range) {
+      setOffset(range.startOffset);
+    }
+    const newContent = event.currentTarget.textContent;
+    dispatch(setTaskInputValue(newContent as string));
+  };
+
   return (
     <div className="m-3 text-gray-500 rounded-md bg-alsoit-gray-50">
       <div className="flex justify-between h-8">
@@ -207,13 +234,19 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
                 <VerticalScroll>
                   <p
                     ref={inputRef}
-                    className="p-1 capitalize break-words max-h-52"
+                    className="p-1 break-words max-h-52"
                     contentEditable={editingPilotDetailsTitle}
                     onKeyDown={(e) => (e.key === 'Enter' ? handleDetailsSubmit(e) : null)}
                     onDoubleClick={() => handleEditTitle()}
                     onBlur={(e) => handleDetailsSubmit(e)}
+                    onInput={(e) => handleContentEditableInput(e)}
+                    suppressContentEditableWarning={true}
                   >
-                    <Linkify options={{ target: '_blank', className: 'text-blue-400' }}>{Details?.name}</Linkify>
+                    <Linkify options={{ target: '_blank', className: 'text-blue-400' }}>
+                      {activeItemType === EntityType.task && taskInputValue
+                        ? taskInputValue
+                        : Details?.name && Capitalize(Details?.name as string)}
+                    </Linkify>
                   </p>
                 </VerticalScroll>
               </div>
