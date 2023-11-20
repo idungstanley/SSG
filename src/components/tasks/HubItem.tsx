@@ -149,12 +149,12 @@ export default function HubItem({
     }
     if (type === EntityType.subHub) {
       if (isExtendedBar) {
-        return '17';
+        return '30';
       } else {
-        return '25';
+        return '38';
       }
     } else {
-      return '17';
+      return '30';
     }
   };
 
@@ -223,6 +223,16 @@ export default function HubItem({
     (JSON.parse(localStorage.getItem(STORAGE_KEYS.SIDEBAR_WIDTH) || '""') as number) ||
     dimensions.navigationBar.default;
 
+  const isShowArrow = () => {
+    if (
+      (item?.wallets?.length || item?.lists?.length || item.has_descendants) &&
+      (placeHubType === APP_TASKS || placeHubType === APP_HR)
+    ) {
+      return true;
+    }
+    return false;
+  };
+
   return (
     <div
       className={`w-full ${openedEntitiesIds.includes(item.id) ? 'sticky bg-white opacity-100 hub-item' : ''}`}
@@ -286,7 +296,9 @@ export default function HubItem({
               >
                 <div
                   onClick={(e) => handleHubColour(item.id, e)}
-                  className="flex items-center justify-center w-6 h-6"
+                  className={`flex items-center justify-center w-6 h-6 ${
+                    isShowArrow() && 'opacity-100 group-hover:opacity-0'
+                  }`}
                   ref={relativeRef}
                 >
                   {item.path !== null ? (
@@ -310,24 +322,19 @@ export default function HubItem({
                     />
                   )}
                 </div>
-                {(item?.wallets?.length || item?.lists?.length || item.has_descendants) &&
-                  (placeHubType === APP_TASKS || placeHubType === APP_HR) && (
-                    <div
-                      className={`absolute flex justify-center items-center w-6 h-6 ${
-                        item.id === activeItemId ? 'bg-primary-100' : 'bg-alsoit-gray-50'
-                      } opacity-0 group-hover:opacity-100`}
-                    >
-                      <div className="group/open flex justify-center items-center w-4 h-4 rounded hover:bg-gray-300">
-                        <VscTriangleRight
-                          className={`flex-shrink-0 h-2 group-hover/open:fill-[#BF01FE] duration-200 ${
-                            showChildren ? 'rotate-90' : 'rotate-0'
-                          }`}
-                          aria-hidden="true"
-                          color="#919191"
-                        />
-                      </div>
+                {isShowArrow() && (
+                  <div className="absolute flex justify-center items-center w-6 h-6 opacity-0 group-hover:opacity-100">
+                    <div className="group/open flex justify-center items-center w-4 h-4 rounded hover:bg-gray-300">
+                      <VscTriangleRight
+                        className={`flex-shrink-0 h-2 group-hover/open:fill-[#BF01FE] duration-200 ${
+                          showChildren ? 'rotate-90' : 'rotate-0'
+                        }`}
+                        aria-hidden="true"
+                        color="#919191"
+                      />
                     </div>
-                  )}
+                  </div>
+                )}
                 <span
                   className="pr-2 overflow-hidden"
                   style={{ width: sidebarWidthFromLS - 135 - Number(paddingLeft()) }}
@@ -394,7 +401,7 @@ export default function HubItem({
         />
       ) : null}
       {showMenuDropdown === item.id && showSidebar ? (
-        <MenuDropdown item={item as Hub} isExtendedBar={isExtendedBar} cords={menuCords} />
+        <MenuDropdown item={item as Hub} entityType={EntityType.hub} isExtendedBar={isExtendedBar} cords={menuCords} />
       ) : null}
       {SubMenuId === item.id && showSidebar ? <SubDropdown cords={menuCords} placeHubType={placeHubType} /> : null}
     </div>
