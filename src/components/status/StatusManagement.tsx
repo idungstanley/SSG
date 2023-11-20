@@ -57,7 +57,7 @@ export default function StatusManagement() {
   const dispatch = useAppDispatch();
   const queryClient = useQueryClient();
 
-  const { listId, hubId, subhubId, walletId } = useParams();
+  const { listId, hubId, walletId } = useParams();
 
   const { matchData } = useAppSelector((state) => state.prompt);
   const { templateCollections } = useAppSelector((state) => state.statusManager);
@@ -87,14 +87,8 @@ export default function StatusManagement() {
       : spaceStatuses
   );
 
-  const itemType = listId
-    ? EntityType.list
-    : hubId || subhubId
-    ? EntityType.hub
-    : walletId
-    ? EntityType.wallet
-    : activeItemType;
-  const itemId = listId || hubId || subhubId || walletId || activeItemId;
+  const itemType = listId ? EntityType.list : hubId ? EntityType.hub : walletId ? EntityType.wallet : activeItemType;
+  const itemId = listId || hubId || walletId || activeItemId;
 
   const [boardSections, setBoardSections] = useState<BoardSectionsType>(initialBoardSections);
 

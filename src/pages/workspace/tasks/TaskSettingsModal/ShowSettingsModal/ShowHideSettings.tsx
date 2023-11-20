@@ -222,7 +222,7 @@ export default function ShowHideSettings({
           <div
             className={`viewSettingsParent flex justify-center items-center text-${isAnyactive && 'alsoit-purple-50'}`}
           >
-            <HeadMenu.Button className="flex ml-1">
+            <HeadMenu.Button className="flex">
               <Button active={isAnyactive as boolean}>
                 <ShowIcon color={isActiveColor} width="21" height="21" /> <span>{isActive}</span>{' '}
                 <ArrowDrop color={isActiveColor} />
