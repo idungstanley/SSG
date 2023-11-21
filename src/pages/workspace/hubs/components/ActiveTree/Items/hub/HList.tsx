@@ -24,6 +24,7 @@ import { generateViewsUrl } from '../../../../../../../utils/generateViewsUrl';
 import { IHub } from '../../../../../../../features/hubs/hubs.interfaces';
 import { pilotTabs } from '../../../../../../../app/constants/pilotTabs';
 import { APP_HR, APP_TASKS } from '../../../../../../../app/constants/app';
+import { setStatusTaskListDetails } from '../../../../../../../features/list/listSlice';
 
 export default function HList({ hubs, openNewHub, placeHubType }: ListProps) {
   const dispatch = useAppDispatch();
@@ -34,7 +35,7 @@ export default function HList({ hubs, openNewHub, placeHubType }: ListProps) {
   );
   const { show: showFullPilot } = useAppSelector((state) => state.slideOver.pilotSideOver);
 
-  const { entityToCreate, hub } = useAppSelector((state) => state.hub);
+  const { entityToCreate, hub, parentHubExt } = useAppSelector((state) => state.hub);
   const { showSidebar } = useAppSelector((state) => state.account);
 
   const [openedNewHubId, setOpenedNewHubId] = useState<string>('');
@@ -63,6 +64,7 @@ export default function HList({ hubs, openNewHub, placeHubType }: ListProps) {
     if (placeHubType == APP_HR) {
       return false;
     }
+    dispatch(setStatusTaskListDetails({ listId: undefined, listName: undefined }));
     const viewsUrl = generateViewsUrl(id, activeView?.id as string, item, EntityType.hub) as string;
     dispatch(setParentHubExt({ id: id, type: EntityType.hub }));
     dispatch(
@@ -123,7 +125,7 @@ export default function HList({ hubs, openNewHub, placeHubType }: ListProps) {
       ) : null}
       {hubsWithEntity.map((hub) => (
         <div key={hub.id} className={cl(!showSidebar && 'overflow-hidden w-12')}>
-          <div className="relative flex flex-col">
+          <div className={`relative flex flex-col ${parentHubExt.id == hub.id ? 'nav-item-parent' : ''}`}>
             <HubItem
               item={hub}
               handleClick={handleClick}

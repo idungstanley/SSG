@@ -12,7 +12,7 @@ import {
   setshowMenuDropdown
 } from '../../features/hubs/hubSlice';
 import { GetTaskListCount, UseEditListService } from '../../features/list/listService';
-import { setListPaletteColor } from '../../features/list/listSlice';
+import { setListPaletteColor, setStatusTaskListDetails } from '../../features/list/listSlice';
 import { setActiveItem, setCreateWlLink, setEntityForPermissions } from '../../features/workspace/workspaceSlice';
 import Palette from '../ColorPalette';
 import ListIconComponent from '../ItemsListInSidebar/components/ListIconComponent';
@@ -75,6 +75,7 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
 
   // function for the list shape selection
   const handleListLocation = (id: string, name: string) => {
+    dispatch(setStatusTaskListDetails({ listId: undefined, listName: undefined }));
     const viewsUrl = generateViewsUrl(id, activeView?.id as string, list, EntityType.list) as string;
     dispatch(
       setActiveItem({
@@ -176,7 +177,13 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
     dimensions.navigationBar.default;
 
   return (
-    <div className="relative">
+    <div
+      className="relative nav-item"
+      data-id={list.id}
+      data-url={generateViewsUrl(list.id, activeView?.id as string, list, EntityType.list) as string}
+      data-parent={list.parent_id}
+      data-name={list.name}
+    >
       <section
         className={cl(
           'relative flex items-center justify-between h-8 group',
