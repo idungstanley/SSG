@@ -30,6 +30,7 @@ import { useAbsolute } from '../../hooks/useAbsolute';
 import { IWallet } from '../../features/hubs/hubs.interfaces';
 import { APP_TASKS } from '../../app/constants/app';
 import { STORAGE_KEYS, dimensions } from '../../app/config/dimensions';
+import { generateViewsUrl } from '../../utils/generateViewsUrl';
 
 interface WalletItemProps {
   wallet: Wallet;
@@ -58,7 +59,7 @@ export default function WalletItem({
   const dispatch = useAppDispatch();
   const { walletId } = useParams();
 
-  const { activeItemId, openedEntitiesIds } = useAppSelector((state) => state.workspace);
+  const { activeItemId, openedEntitiesIds, activeView } = useAppSelector((state) => state.workspace);
   const { showMenuDropdown, SubMenuId } = useAppSelector((state) => state.hub);
   const { paletteDropdown, showSidebar } = useAppSelector((state) => state.account);
   const { updateCords } = useAppSelector((state) => state.task);
@@ -185,12 +186,16 @@ export default function WalletItem({
 
   return (
     <div
-      className={`${openedEntitiesIds.includes(wallet.id) ? 'sticky bg-white' : ''}`}
+      className={`nav-item ${openedEntitiesIds.includes(wallet.id) ? 'sticky bg-white' : ''}`}
       style={{
         top: openedEntitiesIds.includes(wallet.id) && showSidebar ? topNumber : '',
         zIndex: openedEntitiesIds.includes(wallet.id) ? zNumber : '2',
         opacity: transform ? 0 : 100
       }}
+      data-id={wallet.id}
+      data-url={generateViewsUrl(wallet.id, activeView?.id as string, wallet, EntityType.wallet) as string}
+      data-parent={wallet.parent_id}
+      data-name={wallet.name}
     >
       <section
         className={`bg-white items-center truncate text-sm group ${
