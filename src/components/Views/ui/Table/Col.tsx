@@ -53,9 +53,15 @@ export function Col({ value, field, fieldId, task, styles, selectedRow, ...props
 
   const { date_format } = useAppSelector((state) => state.userSetting);
   const { dragOverItemId, draggableItemId } = useAppSelector((state) => state.list);
-  const { dragToBecomeSubTask, verticalGrid, selectedTasksArray, saveSettingOnline, taskColumnIndex } = useAppSelector(
-    (state) => state.task
-  );
+  const {
+    dragToBecomeSubTask,
+    verticalGrid,
+    selectedTasksArray,
+    saveSettingOnline,
+    taskColumnIndex,
+    taskColumns,
+    KeyBoardSelectedTaskData
+  } = useAppSelector((state) => state.task);
 
   const COL_BG = taskId === task.id ? ACTIVE_COL_BG : selectedRow ? 'bg-alsoit-purple-50' : DEFAULT_COL_BG;
   const isSelected = selectedTasksArray.includes(task.id);
@@ -236,8 +242,9 @@ export function Col({ value, field, fieldId, task, styles, selectedRow, ...props
     )
   };
 
-  const columnIndex = Object.keys(fields).indexOf(field);
-  // console.log(Object.keys(fields).indexOf('assignees'));
+  const columnIndex = taskColumns.map((columns): boolean => {
+    return !columns.hidden && columns.field === field && task.id === KeyBoardSelectedTaskData?.id ? true : false;
+  });
 
   return (
     <>
@@ -247,8 +254,8 @@ export function Col({ value, field, fieldId, task, styles, selectedRow, ...props
             ? 'border-b-2 border-alsoit-purple-300'
             : dragOverItemId === task.id && draggableItemId !== dragOverItemId && dragToBecomeSubTask
             ? 'mb-0.5'
-            : taskColumnIndex === columnIndex
-            ? 'border border-alsoit-danger'
+            : columnIndex[taskColumnIndex]
+            ? 'border border-alsoit-gray-200'
             : 'border-t',
           COL_BG,
           `relative flex ${isSelected && 'tdListVNoSticky'} ${

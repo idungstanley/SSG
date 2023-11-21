@@ -37,28 +37,35 @@ export default function EverythingPage() {
   const combinedArr = Object.values(tasksStore).flatMap((lists) => lists);
 
   const handleKeyDown = (e: KeyboardEvent) => {
-    if (e.key === 'ArrowUp' && keyBoardSelectedIndex !== null) {
-      const newIndex = Math.max(0, keyBoardSelectedIndex - 1);
-      dispatch(setKeyBoardSelectedIndex(newIndex));
-    } else if (e.key === 'ArrowDown' && keyBoardSelectedIndex !== null) {
-      const newIndex = Math.min(combinedArr.length - 1, keyBoardSelectedIndex + 1);
-      dispatch(setKeyBoardSelectedIndex(newIndex));
-    } else if (e.key === 'ArrowUp' || (e.key === 'ArrowDown' && keyBoardSelectedIndex === null)) {
-      dispatch(setKeyBoardSelectedIndex(0));
+    if (e.key === 'ArrowUp') {
+      if (keyBoardSelectedIndex !== null) {
+        const newIndex = Math.max(0, keyBoardSelectedIndex - 1);
+        dispatch(setKeyBoardSelectedIndex(newIndex));
+      } else {
+        dispatch(setKeyBoardSelectedIndex(0));
+      }
+    } else if (e.key === 'ArrowDown') {
+      if (keyBoardSelectedIndex !== null) {
+        const newIndex = Math.min(combinedArr.length - 1, keyBoardSelectedIndex + 1);
+        dispatch(setKeyBoardSelectedIndex(newIndex));
+      } else {
+        dispatch(setKeyBoardSelectedIndex(0));
+      }
     } else if (e.key === 'ArrowLeft' && taskColumnIndex !== null) {
       const newIndex = Math.max(0, taskColumnIndex - 1);
       dispatch(setTaskColumnIndex(newIndex));
-    } else if (e.key === 'ArrowRight' && taskColumnIndex !== null) {
+    }
+
+    if (e.key === 'ArrowRight' && taskColumnIndex !== null) {
       const newIndex = Math.min(taskColumns.length - 1, taskColumnIndex + 1);
       dispatch(setTaskColumnIndex(newIndex));
     }
   };
-
   useEffect(() => {
     window.addEventListener('keydown', handleKeyDown);
 
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [keyBoardSelectedIndex]);
+  }, [keyBoardSelectedIndex, taskColumns, taskColumnIndex]);
 
   // infinite scroll
   const onScroll = (e: UIEvent<HTMLDivElement>) => {

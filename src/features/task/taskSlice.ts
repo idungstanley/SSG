@@ -211,6 +211,7 @@ interface TaskState {
   addNewTaskItem: boolean;
   selectedIndex: number | null;
   keyBoardSelectedIndex: number;
+  KeyBoardSelectedTaskData: ITaskFullList | null;
   taskColumnIndex: number;
   defaultSubtaskListId: null | string;
   selectedIndexStatus: string | null;
@@ -351,6 +352,7 @@ const initialState: TaskState = {
   closeTaskListView: true,
   selectedIndex: null,
   keyBoardSelectedIndex: 0,
+  KeyBoardSelectedTaskData: null,
   taskColumnIndex: 0,
   subtaskDefaultStatusId: null,
   defaultSubtaskListId: null,
@@ -513,6 +515,9 @@ export const taskSlice = createSlice({
     },
     setKeyBoardSelectedIndex(state, action: PayloadAction<number>) {
       state.keyBoardSelectedIndex = action.payload;
+    },
+    setKeyBoardSelectedTaskData(state, action: PayloadAction<ITaskFullList>) {
+      state.KeyBoardSelectedTaskData = action.payload;
     },
     setTaskColumnIndex(state, action: PayloadAction<number>) {
       state.taskColumnIndex = action.payload;
@@ -856,6 +861,7 @@ export const {
   getCompactView,
   setSelectedIndex,
   setKeyBoardSelectedIndex,
+  setKeyBoardSelectedTaskData,
   setTaskColumnIndex,
   setSelectedIndexStatus,
   setSelectedListIds,
