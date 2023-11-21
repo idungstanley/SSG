@@ -37,6 +37,7 @@ import { selectCalendar, setHrTeamMembers, setSelectedHubs } from '../../feature
 import { useGetTeamMembers } from '../../features/settings/teamMembers/teamMemberService';
 import { MembersList } from '../../pages/calendar/ui/ExtendedBar/MembersList';
 import { STORAGE_KEYS, dimensions } from '../../app/config/dimensions';
+import { generateViewsUrl } from '../../utils/generateViewsUrl';
 
 interface TaskItemProps {
   item: Hub;
@@ -63,7 +64,7 @@ export default function HubItem({
   const dispatch = useAppDispatch();
   const { hubId } = useParams();
 
-  const { activeItemId, openedEntitiesIds } = useAppSelector((state) => state.workspace);
+  const { activeItemId, openedEntitiesIds, activeView } = useAppSelector((state) => state.workspace);
   const { paletteDropdown } = useAppSelector((state) => state.account);
   const { showSidebar } = useAppSelector((state) => state.account);
   const { showMenuDropdown, SubMenuId } = useAppSelector((state) => state.hub);
@@ -235,12 +236,16 @@ export default function HubItem({
 
   return (
     <div
-      className={`w-full ${openedEntitiesIds.includes(item.id) ? 'sticky bg-white opacity-100 hub-item' : ''}`}
+      className={`w-full nav-item ${openedEntitiesIds.includes(item.id) ? 'sticky bg-white opacity-100 hub-item' : ''}`}
       style={{
         top: openedEntitiesIds.includes(item.id) && showSidebar ? topNumber : '',
         zIndex: openedEntitiesIds.includes(item.id) ? zNumber : '2',
         opacity: transform ? 0 : 100
       }}
+      data-id={item.id}
+      data-url={generateViewsUrl(item.id, activeView?.id as string, item, EntityType.hub) as string}
+      data-parent={item.parent_id}
+      data-name={item.name}
     >
       <div
         className={`bg-white w-full truncate items-center group ${

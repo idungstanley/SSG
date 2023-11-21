@@ -35,7 +35,7 @@ export default function HList({ hubs, openNewHub, placeHubType }: ListProps) {
   );
   const { show: showFullPilot } = useAppSelector((state) => state.slideOver.pilotSideOver);
 
-  const { entityToCreate, hub } = useAppSelector((state) => state.hub);
+  const { entityToCreate, hub, parentHubExt } = useAppSelector((state) => state.hub);
   const { showSidebar } = useAppSelector((state) => state.account);
 
   const [openedNewHubId, setOpenedNewHubId] = useState<string>('');
@@ -125,7 +125,7 @@ export default function HList({ hubs, openNewHub, placeHubType }: ListProps) {
       ) : null}
       {hubsWithEntity.map((hub) => (
         <div key={hub.id} className={cl(!showSidebar && 'overflow-hidden w-12')}>
-          <div className="relative flex flex-col">
+          <div className={`relative flex flex-col ${parentHubExt.id == hub.id ? 'nav-item-parent' : ''}`}>
             <HubItem
               item={hub}
               handleClick={handleClick}
