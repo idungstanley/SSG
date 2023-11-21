@@ -103,7 +103,7 @@ export default function WList({ wallets, leftMargin, paddingLeft, type, level = 
             />
           ) : null}
           {wallet.lists.length && openedEntitiesIds.includes(wallet.id) && !showExtendedBar ? (
-            <LList list={wallet.lists} leftMargin={false} paddingLeft={Number(paddingLeft) + 32} />
+            <LList list={wallet.lists} leftMargin={false} paddingLeft={Number(paddingLeft) + 18} />
           ) : null}
         </div>
       ))}

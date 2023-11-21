@@ -12,7 +12,7 @@ import {
   setshowMenuDropdown
 } from '../../features/hubs/hubSlice';
 import { GetTaskListCount, UseEditListService } from '../../features/list/listService';
-import { setListPaletteColor } from '../../features/list/listSlice';
+import { setListPaletteColor, setStatusTaskListDetails } from '../../features/list/listSlice';
 import { setActiveItem, setCreateWlLink, setEntityForPermissions } from '../../features/workspace/workspaceSlice';
 import Palette from '../ColorPalette';
 import ListIconComponent from '../ItemsListInSidebar/components/ListIconComponent';
@@ -54,6 +54,7 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
   const { paletteDropdown, lightBaseColor, baseColor } = useAppSelector((state) => state.account);
   const { listColour } = useAppSelector((state) => state.list);
   const { updateCords } = useAppSelector((state) => state.task);
+  const { currentWorkspaceId } = useAppSelector((state) => state.auth);
 
   const [getCount, setGetCount] = useState<boolean>(false);
   const [activeShape, setActiveShape] = useState(list.shape);
@@ -74,6 +75,7 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
 
   // function for the list shape selection
   const handleListLocation = (id: string, name: string) => {
+    dispatch(setStatusTaskListDetails({ listId: undefined, listName: undefined }));
     const viewsUrl = generateViewsUrl(id, activeView?.id as string, list, EntityType.list) as string;
     dispatch(
       setActiveItem({
@@ -82,7 +84,7 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
         activeItemName: name
       })
     );
-    navigate(viewsUrl, {
+    navigate(`/${currentWorkspaceId}/${viewsUrl}`, {
       replace: true
     });
   };
