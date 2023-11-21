@@ -34,6 +34,7 @@ import { useGetStatusTemplates } from '../../features/statusManager/statusManage
 import { COLLECTION_TYPES } from '../../features/statusManager/statusManager.interface';
 import { useParams } from 'react-router-dom';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
+import { setStatusTaskListDetails } from '../../features/list/listSlice';
 
 interface ErrorResponse {
   data: {
@@ -76,6 +77,7 @@ export default function StatusManagement() {
 
   const createStatusTypes = useMutation(statusTypesService, {
     onSuccess: () => {
+      dispatch(setStatusTaskListDetails({ listId: undefined, listName: undefined }));
       queryClient.invalidateQueries([
         activeItemType === EntityType.list
           ? 'hubs'
@@ -266,6 +268,7 @@ export default function StatusManagement() {
       style: 'plain',
       callback: () => {
         setShowMatchStatusPopup(false);
+        dispatch(setStatusTaskListDetails({ listId: undefined, listName: undefined }));
         dispatch(setMatchedStatus([]));
         setMatchingStatusValidation(null);
       }
