@@ -76,7 +76,13 @@ export default function StatusManagement() {
 
   const createStatusTypes = useMutation(statusTypesService, {
     onSuccess: () => {
-      queryClient.invalidateQueries([activeItemType === EntityType.list ? 'hubs' : 'hub-details']);
+      queryClient.invalidateQueries([
+        activeItemType === EntityType.list
+          ? 'hubs'
+          : activeItemType === EntityType.wallet
+          ? 'wallet-details'
+          : 'hub-details'
+      ]);
     }
   });
   const selectedTemplateStatus = templateCollections.find((item) => item.name === activeTemplateStatus);
@@ -206,14 +212,24 @@ export default function StatusManagement() {
         });
       }
     } else {
-      return statusData.map((item, index) => {
-        return {
-          ...item,
-          id: null,
-          is_default: index === 0 ? 1 : 0,
-          position: index
-        }; // Set the id to null
-      });
+      if (statusTaskListDetails.listId) {
+        return statusData.map((item, index) => {
+          return {
+            ...item,
+            is_default: index === 0 ? 1 : 0,
+            position: index
+          }; // Set the id to null
+        });
+      } else {
+        return statusData.map((item, index) => {
+          return {
+            ...item,
+            id: null,
+            is_default: index === 0 ? 1 : 0,
+            position: index
+          }; // Set the id to null
+        });
+      }
     }
   };
 
