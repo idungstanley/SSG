@@ -16,6 +16,10 @@ export default function SlideToggle({ activeSlide = 1, fullCount, setActiveSlide
     }
   }, [active]);
 
+  useEffect(() => {
+    setActive(activeSlide);
+  }, [activeSlide]);
+
   return (
     <div className="flex flex-col items-center bg-gray-200" style={{ padding: '0 2px', borderRadius: '10px' }}>
       <button

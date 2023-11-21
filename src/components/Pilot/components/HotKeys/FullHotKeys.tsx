@@ -51,7 +51,7 @@ export default function FullHotkeysList({ tabs, showModal, setShowModal }: Hotke
       const itemWidth = HOTKEY_WIDTH + MARGIN_WIDTH;
       const newSlides = calculateSlides(activeHotkeyIds, itemWidth, pilotWidth - SLIDE_TOGGLE_WIDTH);
       setSlidesCount(newSlides.length);
-      return tabs.filter((i) => newSlides[activeSlide - 1].includes(i.id));
+      return tabs.filter((i) => newSlides[newSlides[activeSlide - 1] ? activeSlide - 1 : 0].includes(i.id));
     } else {
       return tabs.filter((i) => activeHotkeyIds.includes(i.id));
     }
