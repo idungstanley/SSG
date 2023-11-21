@@ -5,8 +5,8 @@ import { cl } from '../../../../utils';
 import Menu from '../HotKeys/components/Dropdown';
 import { setActiveTabId } from '../../../../features/workspace/workspaceSlice';
 import CompactIcon from '../../../../assets/icons/CompactIcon';
-import ExpandIcon from '../../../../assets/icons/ExpandIcon';
 import { STORAGE_KEYS } from '../../../../app/config/dimensions';
+import GroupIcon from '../../../../assets/icons/GroupIcon';
 
 interface HeaderProps {
   isMinified: boolean;
@@ -29,14 +29,14 @@ export default function Header({ menu, children, isMinified, additionalNavItems 
   return (
     <div
       className={cl(
-        'w-full grid grid-cols-frAuto grid-rows-1 items-center',
-        isMinified ? 'col-span-3 border-none' : 'p-2 col-span-1 border-b'
+        'w-full grid grid-cols-frAuto grid-rows-1 items-center bg-white',
+        isMinified ? 'col-span-3 border-none' : 'col-span-1 border-b'
       )}
       style={{ height: isMinified ? '' : '50px' }}
     >
       {children}
       <div
-        className={`relative flex items-center gap-3 ${isMinified ? 'border-b' : ''}`}
+        className={`relative flex items-center ${isMinified ? 'border-b' : ''}`}
         style={{ height: isMinified ? '50px' : undefined }}
       >
         {/* other components */}
@@ -45,14 +45,34 @@ export default function Header({ menu, children, isMinified, additionalNavItems 
         <div
           className={cl(
             'relative flex items-center',
-            isMinified ? 'justify-center w-full flex-col-reverse gap-2' : 'border-l pl-1 flex-col divide-y'
+            isMinified ? 'justify-center w-full flex-wrap gap-1 flex-col' : 'flex-col'
           )}
         >
-          {menu}
           {/* show / hide pilot toggle */}
-          <button type="button" onClick={togglePilot} className="text-gray-400">
-            {isMinified ? <CompactIcon /> : <ExpandIcon />}
+          <button
+            type="button"
+            onClick={togglePilot}
+            className="text-gray-400 flex justify-center items-center bg-alsoit-gray-125 hover:bg-alsoit-gray-50 transition duration-300"
+            style={{
+              margin: isMinified ? '0' : '7px 12px 2px 0',
+              borderRadius: '3px',
+              width: '20px',
+              height: '20px'
+            }}
+          >
+            {isMinified ? <CompactIcon /> : <GroupIcon />}
           </button>
+          <div
+            className="flex justify-center items-center bg-alsoit-gray-125 hover:bg-alsoit-gray-50 transition duration-300"
+            style={{
+              margin: isMinified ? '0' : '1px 12px 5px 0',
+              borderRadius: '3px',
+              width: '20px',
+              height: '20px'
+            }}
+          >
+            {menu}
+          </div>
         </div>
       </div>
     </div>
