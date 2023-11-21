@@ -61,7 +61,6 @@ export function Table({ heads, data, label, listName, listColor, isBlockedShowCh
     task_statuses: data[0].task_statuses || []
   });
 
-  console.log(newTaskObj);
   const dataSpread = showNewTaskField ? newTaskObj : data;
 
   // reset showNewTaskField with eskLey
