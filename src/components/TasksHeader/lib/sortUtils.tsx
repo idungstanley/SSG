@@ -13,7 +13,7 @@ export const sortTypesConsts = {
   NONE: 'none'
 };
 export const sortTasks = (key: TaskKey, tasks: Task[]) => {
-  tasks.sort((a, b) => a.status.position - b.status.position);
+  tasks.sort((a, b) => a?.status?.position - b?.status?.position);
   const sortedTasks: Record<string, Task[]> = {};
   tasks.forEach((task) => {
     if ('tags' in task && key !== 'none') {

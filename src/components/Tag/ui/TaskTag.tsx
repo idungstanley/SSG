@@ -61,7 +61,7 @@ export default function TaskTag({ tag, entity_id, entity_type }: taskTageProps) 
 
   return (
     <>
-      <div className="flex flex-wrap items-center justify-start gap-2 -mr-5 drop-shadow-xl">
+      <div className="flex flex-wrap items-center justify-start gap-2 -mr-3 drop-shadow-xl">
         {renameTagId === tag.id && currentTaskIdForTag === entity_id ? (
           <form onSubmit={(e) => handleEditTagSubmit(e, tag.id)}>
             <input
@@ -77,11 +77,11 @@ export default function TaskTag({ tag, entity_id, entity_type }: taskTageProps) 
             className="flex items-center text-white p-0.5 h-4 text-center space-x-1"
             style={{
               backgroundColor: `${tag.color}`,
-              clipPath: 'polygon(75% 0%, 100% 50%, 75% 100%, 0% 100%, 15% 50%, 0% 0%)'
+              clipPath: 'polygon(93% 0%, 100% 50%, 93% 100%, 0% 100%, 7% 50%, 0% 0%)'
             }}
           >
             <div className="flex items-center font-bold truncate">
-              <p className="pl-4" style={{ fontSize: '7px' }}>
+              <p className="pl-2" style={{ fontSize: '7px' }}>
                 {tag.name.length > 10 ? tag.name.slice(0, 5) : tag.name}
               </p>
             </div>
@@ -95,7 +95,7 @@ export default function TaskTag({ tag, entity_id, entity_type }: taskTageProps) 
               </button>
             </div>
             <button
-              className="pr-2 font-bold text-gray-300"
+              className="pr-1 font-bold text-gray-300"
               style={{ fontSize: '9px' }}
               onClick={() =>
                 unAssignTagMutation.mutateAsync({

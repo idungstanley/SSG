@@ -1,10 +1,6 @@
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
-import { HiOutlineUpload } from 'react-icons/hi';
-import { BsFillGrid3X3GapFill } from 'react-icons/bs';
-import { MdHelpOutline, MdTab } from 'react-icons/md';
 import { useEffect, useState } from 'react';
 import BlinkerModal from './RecordBlinkerOptions';
-import headerIcon from '../../../../assets/icons/headerIcon.png';
 import { EndTimeEntriesService, useCurrentTime } from '../../../../features/task/taskService';
 import dayjs from 'dayjs';
 import HeaderModal from '../../../../components/Header/HeaderModal';
@@ -25,6 +21,21 @@ import { StopIcon } from '../../../../assets/icons/StopIcon';
 import ToolTip from '../../../../components/Tooltip/Tooltip';
 import { pages } from '../../../../app/constants/pages';
 import AlsoHrIcon from '../../../../assets/icons/AlsoHrIcon';
+import { EntityType } from '../../../../utils/EntityTypes/EntityType';
+import { findCurrentHub } from '../../../../managers/Hub';
+import { findCurrentWallet } from '../../../../managers/Wallet';
+import { findCurrentList } from '../../../../managers/List';
+import { ListColourProps } from '../../../../components/tasks/ListItem';
+import { Hub, List } from '../../../../pages/workspace/hubs/components/ActiveTree/activetree.interfaces';
+import { AvatarWithInitials } from '../../../../components';
+import { getInitials } from '../../../../app/helpers';
+import { Capitalize } from '../../../../utils/NoCapWords/Capitalize';
+import { FaFolderOpen } from 'react-icons/fa';
+import ListIconComponent from '../../../../components/ItemsListInSidebar/components/ListIconComponent';
+import NewWindowIcon from '../../../../assets/icons/NewWindowIcon';
+import UploadHeaderIcon from '../../../../assets/icons/UploadHeaderIcon';
+import FourSquareIcon from '../../../../assets/icons/FourSquareIcon';
+import QuestionIcon from '../../../../assets/icons/QuestionIcon';
 
 const hoursToMilliseconds = 60 * 60 * 1000;
 const minutesToMilliseconds = 60 * 1000;
@@ -34,7 +45,7 @@ interface IAdditionalHeaderProps {
 }
 
 export default function AdditionalHeader({ isInsights }: IAdditionalHeaderProps) {
-  const { workSpaceId: workspaceId } = useParams();
+  const { workSpaceId: workspaceId, hubId, subhubId, walletId, listId } = useParams();
   const dispatch = useAppDispatch();
   const userTimeZoneFromLS: string | null = localStorage.getItem('userTimeZone');
 
@@ -43,6 +54,8 @@ export default function AdditionalHeader({ isInsights }: IAdditionalHeaderProps)
     useAppSelector((state) => state.task);
   const { timezone: zone, date_format, time_format, is_clock_time } = useAppSelector((state) => state.userSetting);
   const { activeItemName, activePlaceId } = useAppSelector((state) => state.workspace);
+  const { hub } = useAppSelector((state) => state.hub);
+  const { listColour } = useAppSelector((state) => state.list);
 
   const [recordBlinker, setRecordBlinker] = useState<boolean>(false);
   const [timerModal, setTimerModal] = useState<boolean>(false);
@@ -67,6 +80,80 @@ export default function AdditionalHeader({ isInsights }: IAdditionalHeaderProps)
 
   const { refetch, data } = useCurrentTime({ workspaceId });
   const { mutate } = EndTimeEntriesService();
+
+  const activeEntityId = hubId || subhubId || walletId || listId;
+
+  const generateHeaderImage = (activeEntityId: string) => {
+    let currentItem = null;
+    if (hubId || subhubId) {
+      currentItem = findCurrentHub(activeEntityId as string, hub);
+      return generateHubImage(currentItem, hubId ? EntityType.hub : EntityType.subHub);
+    } else if (walletId) {
+      currentItem = findCurrentWallet(activeEntityId as string, hub);
+      return (
+        <>
+          <FaFolderOpen className="w-7 h-5" color={currentItem.color || 'black'} />
+          {generateEntityName(currentItem.name)}
+        </>
+      );
+    } else if (listId) {
+      currentItem = findCurrentList(activeEntityId as string, hub);
+      return generateListIcon(currentItem);
+    } else {
+      return <div className="w-7 h-7" />;
+    }
+  };
+
+  const generateEntityName = (name: string) => {
+    return (
+      <ToolTip title={activeItemName}>
+        <span className="font-bold text-left truncate w-72 text-alsoit-text-lg">
+          {activeItemName || name ? Capitalize(activeItemName ? activeItemName : name) : ''}
+        </span>
+      </ToolTip>
+    );
+  };
+
+  const generateHubImage = (item: Hub, type: string) => {
+    return (
+      <>
+        <div className="flex items-center justify-center w-7 h-7">
+          {item.path !== null ? (
+            <img src={item.path} alt="hubs image" className="w-full h-full rounded" />
+          ) : (
+            <AvatarWithInitials
+              initials={getInitials(item.name)}
+              height="h-7"
+              width="w-7"
+              textSize="14px"
+              roundedStyle="rounded"
+              backgroundColour={item.color ? item.color : type === EntityType.hub ? 'blue' : 'orange'}
+            />
+          )}
+        </div>
+        {generateEntityName(item.name)}
+      </>
+    );
+  };
+
+  const generateListIcon = (item: List) => {
+    if (item.color) {
+      const color: ListColourProps = JSON.parse(item.color as string) as ListColourProps;
+      const innerColour = item?.color ? (color.innerColour as string) : (listColour as ListColourProps)?.innerColour;
+      const outerColour = item?.color ? (color.outerColour as string) : (listColour as ListColourProps)?.outerColour;
+      return (
+        <>
+          <ListIconComponent
+            shape={item.shape ? item.shape : 'solid-circle'}
+            innerColour={innerColour}
+            outterColour={outerColour}
+            isHeader={true}
+          />
+          {generateEntityName(item.name)}
+        </>
+      );
+    }
+  };
 
   const RunTimer = runTimer({ isRunning: timerefetched });
 
@@ -124,9 +211,7 @@ export default function AdditionalHeader({ isInsights }: IAdditionalHeaderProps)
         setIsVisible(false);
       }
     };
-
     document.addEventListener('visibilitychange', handleVisibilityChange);
-
     return () => {
       document.removeEventListener('visibilitychange', handleVisibilityChange);
     };
@@ -207,16 +292,7 @@ export default function AdditionalHeader({ isInsights }: IAdditionalHeaderProps)
         </>
       );
     } else {
-      return (
-        <>
-          <p className="p-1 bg-gray-300 rounded-md">
-            <img src={headerIcon} alt="" className="w-6 h-6" />
-          </p>
-          <ToolTip title={activeItemName}>
-            <span className="font-bold text-left truncate w-72 text-alsoit-text-lg">{activeItemName}</span>
-          </ToolTip>
-        </>
-      );
+      return generateHeaderImage(activeEntityId as string);
     }
   };
 
@@ -224,7 +300,7 @@ export default function AdditionalHeader({ isInsights }: IAdditionalHeaderProps)
     <div className="flex items-center justify-between w-full px-4 border-b" style={{ height: '50px' }}>
       <h1
         style={{ height: '50px' }}
-        className={`flex items-center ml-0 ${activePlaceId === pages.ALSO_HR ? '' : 'ml-4 space-x-3'}`}
+        className={`flex items-center ml-0 ${activePlaceId === pages.ALSO_HR ? '' : 'space-x-3'}`}
       >
         {renderPageTitle()}
       </h1>
@@ -302,7 +378,7 @@ export default function AdditionalHeader({ isInsights }: IAdditionalHeaderProps)
             )}
           </div>
         )}
-        <MdTab className="w-5 h-5" style={{ color: 'orange' }} />
+        <NewWindowIcon color="orange" />
         {screenRecording === 'recording' && tabsId !== pilotTabs.TIME_CLOCK && (
           <div className="relative w-16 flex space-x-0.5" onMouseEnter={() => setRecordBlinker(!recordBlinker)}>
             <div className="flex items-center justify-start w-5 h-5 rounded-full border-alsoit-danger">
@@ -320,25 +396,25 @@ export default function AdditionalHeader({ isInsights }: IAdditionalHeaderProps)
             )}
           </div>
         )}
-        <HiOutlineUpload className="w-5 h-5" style={{ color: 'orange' }} />
-        <BsFillGrid3X3GapFill className="w-5 h-5" style={{ color: 'orange' }} />
-        <MdHelpOutline className="w-5 h-5" style={{ color: 'orange' }} />
+        <UploadHeaderIcon color="orange" />
+        <FourSquareIcon color="orange" />
+        <QuestionIcon color="orange" />
         {is_clock_time === 1 && (
           <div
-            className="relative w-16 font-semibold text-alsoit-text-lg text-alsoit-text border-alsoit-border-base border-alsoit-text rounded-md p-0.5 flex justify-center flex-col space-y-0 cursor-pointer"
+            className="relative font-semibold text-alsoit-text-lg text-alsoit-text p-0.5 flex justify-center cursor-pointer"
             onClick={() => setClockModal(!clockModal)}
             onMouseEnter={() => setShowClock((prev) => ({ ...prev, showMinimal: true }))}
             onMouseLeave={() => setShowClock((prev) => ({ ...prev, showMinimal: false }))}
           >
-            <span className="text-center text-alsoit-text-md">
-              {time_format === '0'
-                ? moment(HeaderClock, `${date_format?.toLocaleUpperCase()} HH:mm a`).format('h:mm a')
-                : moment(HeaderClock, `${date_format?.toLocaleUpperCase()} HH:mm a`).format('HH:mm')}
-            </span>
-            <span className="text-center text-alsoit-text-md">
+            <span className="text-center text-alsoit-text-lg mr-1">
               {moment(HeaderClock, `${date_format?.toLocaleUpperCase()} HH:mm`).format(
                 date_format?.toUpperCase() ?? 'MM-DD-YYYY'
               )}
+            </span>
+            <span className="text-center text-alsoit-text-lg">
+              {time_format === '0'
+                ? moment(HeaderClock, `${date_format?.toLocaleUpperCase()} HH:mm a`).format('h:mm a')
+                : moment(HeaderClock, `${date_format?.toLocaleUpperCase()} HH:mm a`).format('HH:mm')}
             </span>
             {clockModal && (
               <HeaderModal clickAway={true} toggleFn={setClockModal} styles="top-10 right-32 w-44">
@@ -346,8 +422,8 @@ export default function AdditionalHeader({ isInsights }: IAdditionalHeaderProps)
               </HeaderModal>
             )}
             {showClock.showMinimal && !clockModal && (
-              <HeaderModal toggleFn={setClockModal} styles="top-10 -right-5 h-12 w-28">
-                <span className="font-semibold text-center rounded shadow-lg bg-alsoit-gray-50 text-alsoit-text-lg border-alsoit-border-base border-alsoit-gray-75">
+              <HeaderModal toggleFn={setClockModal} styles="top-10 -right-1 w-36">
+                <span className="font-semibold text-center text-alsoit-text-lg border-alsoit-border-base">
                   <p>{dayjs().format('DD MMMM, YYYY')}</p>
                   <p>{dayjs().format('dddd')}</p>
                 </span>

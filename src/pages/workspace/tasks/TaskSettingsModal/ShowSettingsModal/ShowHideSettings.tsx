@@ -18,6 +18,8 @@ import {
   setTriggerSaveSettingsModal
 } from '../../../../../features/task/taskSlice';
 import { Menu } from '@mui/material';
+import DropdownTitle from '../../../../../components/DropDowns/DropdownTitle';
+import DropdownSubtitle from '../../../../../components/DropDowns/DropdownSubtitle';
 
 interface IShowHideSettings {
   isActive: string;
@@ -222,7 +224,7 @@ export default function ShowHideSettings({
           <div
             className={`viewSettingsParent flex justify-center items-center text-${isAnyactive && 'alsoit-purple-50'}`}
           >
-            <HeadMenu.Button className="flex ml-1">
+            <HeadMenu.Button className="flex">
               <Button active={isAnyactive as boolean}>
                 <ShowIcon color={isActiveColor} width="21" height="21" /> <span>{isActive}</span>{' '}
                 <ArrowDrop color={isActiveColor} />
@@ -234,18 +236,8 @@ export default function ShowHideSettings({
 
       <Menu anchorEl={dropdownEl} open={!!dropdownEl} onClose={() => setDropdownEl(null)} style={{ marginTop: '10px' }}>
         <div style={{ zIndex: 61, height: '372px', width: '247px', overflow: 'auto' }} className="w-64">
-          <p className="flex justify-center pt-3 font-bold text-alsoit-text-sm" style={{ lineHeight: '9.6px' }}>
-            CUSTOMIZE THIS VIEW
-          </p>
-          <div className="relative flex flex-col justify-center mb-2">
-            <p className="pt-3 border-b-2 "></p>
-            <span
-              className="absolute px-1 font-bold text-center text-gray-400 bg-white border border-gray-100 text-alsoit-text-sm left-1/3"
-              style={{ lineHeight: '9.6px', top: '7px' }}
-            >
-              MAIN SETTINGS
-            </span>
-          </div>
+          <DropdownTitle content="CUSTOMIZE THIS VIEW" />
+          <DropdownSubtitle content="MAIN SETTINGS" />
           <div className="flex items-center justify-between mx-auto mt-4" style={{ width: '93%' }}>
             <p className="text-sm">Property Column </p>
             <BsChevronRight />

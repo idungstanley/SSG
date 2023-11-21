@@ -54,9 +54,9 @@ export default function Status({ details }: StatusDetailsProps) {
             <button
               className="flex items-center object-contain h-6 p-2 text-xs text-white capitalize border-white rounded-md cursor-pointer w-fit"
               onClick={() => handleStatusModal()}
-              style={{ backgroundColor: details.status.color }}
+              style={{ backgroundColor: details?.status?.color }}
             >
-              {handleStatusMessage(details.status.name)}
+              {handleStatusMessage(details?.status?.name)}
             </button>
           </ToolTip>
         ) : null}
@@ -64,7 +64,7 @@ export default function Status({ details }: StatusDetailsProps) {
           <ToolTip title="Next status">
             <button
               className="flex items-center justify-center w-6 h-6 text-xs text-white border-white rounded-md"
-              style={{ backgroundColor: details.status.color }}
+              style={{ backgroundColor: details?.status?.color }}
             >
               <MdArrowRight className="w-4 h-4" />
             </button>
