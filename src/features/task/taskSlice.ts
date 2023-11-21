@@ -211,7 +211,9 @@ interface TaskState {
   createTask: boolean;
   addNewTaskItem: boolean;
   selectedIndex: number | null;
-  keyBoardSelectedIndex: number | null;
+  keyBoardSelectedIndex: number;
+  KeyBoardSelectedTaskData: ITaskFullList | null;
+  taskColumnIndex: number;
   defaultSubtaskListId: null | string;
   selectedIndexStatus: string | null;
   selectedListIds: string[];
@@ -273,6 +275,7 @@ interface TaskState {
   statusId: string;
   currTaskListId: string;
   entityForCustom: entityForCustom;
+  listForCustom: string;
   customSuggestionField: IExtraFields[];
   newTaskData: ImyTaskData | undefined;
   newCustomPropertyDetails: customPropertyInfo;
@@ -362,7 +365,9 @@ const initialState: TaskState = {
   addNewTaskItem: false,
   closeTaskListView: true,
   selectedIndex: null,
-  keyBoardSelectedIndex: null,
+  keyBoardSelectedIndex: 0,
+  KeyBoardSelectedTaskData: null,
+  taskColumnIndex: 0,
   subtaskDefaultStatusId: null,
   defaultSubtaskListId: null,
   selectedIndexStatus: null,
@@ -423,6 +428,7 @@ const initialState: TaskState = {
   statusId: '',
   currTaskListId: '',
   entityForCustom: { id: undefined, type: undefined },
+  listForCustom: '',
   customSuggestionField: [],
   newTaskData: undefined,
   newCustomPropertyDetails: {
@@ -524,6 +530,12 @@ export const taskSlice = createSlice({
     },
     setKeyBoardSelectedIndex(state, action: PayloadAction<number>) {
       state.keyBoardSelectedIndex = action.payload;
+    },
+    setKeyBoardSelectedTaskData(state, action: PayloadAction<ITaskFullList>) {
+      state.KeyBoardSelectedTaskData = action.payload;
+    },
+    setTaskColumnIndex(state, action: PayloadAction<number>) {
+      state.taskColumnIndex = action.payload;
     },
     setSelectedIndexStatus(state, action: PayloadAction<string>) {
       state.selectedIndexStatus = action.payload;
@@ -816,6 +828,9 @@ export const taskSlice = createSlice({
     setEntityForCustom(state, action: PayloadAction<entityForCustom>) {
       state.entityForCustom = action.payload;
     },
+    setListForCustom(state, action: PayloadAction<string>) {
+      state.listForCustom = action.payload;
+    },
     setCustomSuggetionsField(state, action: PayloadAction<IExtraFields>) {
       state.customSuggestionField = [...state.customSuggestionField, action.payload];
     },
@@ -867,6 +882,8 @@ export const {
   getCompactView,
   setSelectedIndex,
   setKeyBoardSelectedIndex,
+  setKeyBoardSelectedTaskData,
+  setTaskColumnIndex,
   setSelectedIndexStatus,
   setSelectedListIds,
   setSaveSettingLocal,
@@ -940,6 +957,7 @@ export const {
   setTimeEntriesIdArr,
   setTimeAssignee,
   setEntityForCustom,
+  setListForCustom,
   setCustomSuggetionsField,
   setNewCustomPropertyDetails,
   setEditCustomProperty,

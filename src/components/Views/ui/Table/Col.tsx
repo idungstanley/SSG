@@ -57,9 +57,12 @@ export function Col({ value, field, fieldId, task, styles, selectedRow, ...props
     dragToBecomeSubTask,
     newTaskStatus,
     verticalGrid,
+    currentTaskStatusId,
     selectedTasksArray,
     saveSettingOnline,
-    currentTaskStatusId
+    taskColumnIndex,
+    taskColumns,
+    KeyBoardSelectedTaskData
   } = useAppSelector((state) => state.task);
 
   const COL_BG = taskId === task.id ? ACTIVE_COL_BG : selectedRow ? 'bg-alsoit-purple-50' : DEFAULT_COL_BG;
@@ -241,6 +244,10 @@ export function Col({ value, field, fieldId, task, styles, selectedRow, ...props
     )
   };
 
+  const columnIndex = taskColumns.map((columns): boolean => {
+    return !columns.hidden && columns.field === field && task.id === KeyBoardSelectedTaskData?.id ? true : false;
+  });
+
   return (
     <>
       <td
@@ -249,6 +256,8 @@ export function Col({ value, field, fieldId, task, styles, selectedRow, ...props
             ? 'border-b-2 border-alsoit-purple-300'
             : dragOverItemId === task.id && draggableItemId !== dragOverItemId && dragToBecomeSubTask
             ? 'mb-0.5'
+            : columnIndex[taskColumnIndex]
+            ? 'border border-alsoit-gray-200'
             : 'border-t',
           COL_BG,
           `relative flex ${isSelected && 'tdListVNoSticky'} ${

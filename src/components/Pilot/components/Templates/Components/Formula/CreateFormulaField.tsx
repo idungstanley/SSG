@@ -7,7 +7,7 @@ import { ICustomField } from '../../../../../../features/task/taskSlice';
 import { IField } from '../../../../../../features/list/list.interfaces';
 
 function CreateFormulaField() {
-  const { newCustomPropertyDetails, entityForCustom, tasks } = useAppSelector((state) => state.task);
+  const { newCustomPropertyDetails, entityForCustom, listForCustom, tasks } = useAppSelector((state) => state.task);
 
   const [currentFormula, setCurrentFormula] = useState<string>('');
 
@@ -48,9 +48,9 @@ function CreateFormulaField() {
   return (
     <div>
       <SimpleFormulasField
-        taskCustomFieldsColumns={tasks[entityForCustom.id as string][0].custom_field_columns as IField[]}
-        taskCustomFields={tasks[entityForCustom.id as string][0].custom_fields as ICustomField[]}
-        currentFieldColumns={tasks[entityForCustom.id as string][0].custom_field_columns}
+        taskCustomFieldsColumns={tasks[listForCustom as string][0].custom_field_columns as IField[]}
+        taskCustomFields={tasks[listForCustom as string][0].custom_fields as ICustomField[]}
+        currentFieldColumns={tasks[listForCustom as string][0].custom_field_columns}
         handleReturnFormula={handleReturnFormula}
         isPilotField={true}
       />

@@ -104,11 +104,11 @@ export default function SubHubList({ hubs, placeHubType }: ListProps) {
                     leftMargin={false}
                     topNumber={hub.parent_id ? 110 : 80}
                     type="wallet"
-                    paddingLeft="35"
+                    paddingLeft="50"
                   />
                 ) : null}
                 {hub.lists.length && openedEntitiesIds.includes(hub.id) && !showExtendedBar ? (
-                  <LList list={hub.lists} leftMargin={false} paddingLeft="50" />
+                  <LList list={hub.lists} leftMargin={false} paddingLeft="60" />
                 ) : null}
               </div>
             ) : null}

@@ -5,7 +5,12 @@ import { filterByAssignee, filterBySearchValue, sortTasks } from '../../../Tasks
 import { Table } from '../Table/Table';
 import { Label } from './Label';
 import { AddTask } from '../AddTask/AddTask';
-import { getTaskColumns, setCurrTeamMemId, setEscapeKey } from '../../../../features/task/taskSlice';
+import {
+  getTaskColumns,
+  setCurrTeamMemId,
+  setEscapeKey,
+  setKeyBoardSelectedTaskData
+} from '../../../../features/task/taskSlice';
 import { ExtendedListColumnProps, columnsHead } from '../../../../pages/workspace/tasks/component/views/ListColumns';
 import { cl } from '../../../../utils';
 import { IField, IListDetailRes } from '../../../../features/list/list.interfaces';
@@ -39,7 +44,8 @@ export function List({ tasks, combinedTasksArr }: ListProps) {
     subtasks,
     tasks: storeTasks,
     escapeKey,
-    separateSubtasksMode
+    separateSubtasksMode,
+    keyBoardSelectedIndex
   } = useAppSelector((state) => state.task);
   const { parentHubExt, hub } = useAppSelector((state) => state.hub);
 
@@ -58,6 +64,10 @@ export function List({ tasks, combinedTasksArr }: ListProps) {
     }
     dispatch(setEscapeKey(false));
   }, [escapeKey, showNewTaskField]);
+
+  useEffect(() => {
+    if (combinedTasksArr) dispatch(setKeyBoardSelectedTaskData(combinedTasksArr[keyBoardSelectedIndex]));
+  }, [keyBoardSelectedIndex]);
 
   useEffect(() => {
     if (parentHubExt.id) {

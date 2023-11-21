@@ -113,6 +113,7 @@ export interface IFavorites {
   id: string;
   model_type: string;
   model_id: string;
+  color?: string | null;
 }
 
 export interface IFavoritesRes {
