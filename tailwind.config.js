@@ -16,6 +16,7 @@ module.exports = {
         'alsoit-gray-50': '#E9E9E9',
         'alsoit-gray-75': '#B2B2B2',
         'alsoit-gray-100': '#919191',
+        'alsoit-gray-125': '#F4F4F4',
         'alsoit-gray-200': '#626262',
         'alsoit-gray-300': '#424242',
         'alsoit-purple-50': '#F9E6FF',

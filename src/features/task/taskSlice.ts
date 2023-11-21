@@ -274,6 +274,7 @@ interface TaskState {
   statusId: string;
   currTaskListId: string;
   entityForCustom: entityForCustom;
+  listForCustom: string;
   customSuggestionField: IExtraFields[];
   newTaskData: ImyTaskData | undefined;
   newCustomPropertyDetails: customPropertyInfo;
@@ -414,6 +415,7 @@ const initialState: TaskState = {
   statusId: '',
   currTaskListId: '',
   entityForCustom: { id: undefined, type: undefined },
+  listForCustom: '',
   customSuggestionField: [],
   newTaskData: undefined,
   newCustomPropertyDetails: {
@@ -810,6 +812,9 @@ export const taskSlice = createSlice({
     setEntityForCustom(state, action: PayloadAction<entityForCustom>) {
       state.entityForCustom = action.payload;
     },
+    setListForCustom(state, action: PayloadAction<string>) {
+      state.listForCustom = action.payload;
+    },
     setCustomSuggetionsField(state, action: PayloadAction<IExtraFields>) {
       state.customSuggestionField = [...state.customSuggestionField, action.payload];
     },
@@ -936,6 +941,7 @@ export const {
   setTimeEntriesIdArr,
   setTimeAssignee,
   setEntityForCustom,
+  setListForCustom,
   setCustomSuggetionsField,
   setNewCustomPropertyDetails,
   setEditCustomProperty,

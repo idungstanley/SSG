@@ -137,6 +137,9 @@ function SimpleFormulasField({
     // update result after change any item
     if (selectedItemOne && selectedItemTwo) {
       const value = `${selectedAction}("${selectedItemOne?.id}", "${selectedItemTwo?.id}")`;
+      if (isPilotField && handleReturnFormula) {
+        handleReturnFormula(value);
+      }
       const selectedItems = findSelectedItemsInFormula(value, taskCustomFieldsColumns, taskCustomFields);
       if (selectedItems) {
         let strWithCurrentValues = value;

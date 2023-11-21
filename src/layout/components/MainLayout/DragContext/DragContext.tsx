@@ -232,13 +232,15 @@ export default function DragContext({ children }: DragContextProps) {
             if (statusesToMatch.length) {
               newId = statusesToMatch.find((status) => matchedStatus[0].name === status.name)?.id as string;
             }
-            onMove({
-              taskId: draggableTask?.id as string,
-              listId: dragOverList?.id as string,
-              overType: EntityType.list,
-              status_from: matchData[0].id as string,
-              status_to: newId
-            });
+            if (draggableTask?.id && dragOverList?.id) {
+              onMove({
+                taskId: draggableTask?.id as string,
+                listId: dragOverList?.id as string,
+                overType: EntityType.list,
+                status_from: matchData[0].id as string,
+                status_to: newId
+              });
+            }
           }
           clearMatchData();
         }
@@ -262,7 +264,7 @@ export default function DragContext({ children }: DragContextProps) {
         title="Match Statuses"
         body={`You changed statuses in your List. ${matchData?.length} status will be affected. How should we handle these statuses?`}
         setShow={() => dispatch(setStatusesToMatch([]))}
-        show={!!statusesToMatch.length}
+        show={!!statusesToMatch.length && !!dragOverList?.id}
       />
     </DndContext>
   );
