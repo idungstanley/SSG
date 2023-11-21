@@ -21,6 +21,7 @@ import {
   setSaveSettingList,
   setSaveSettingOnline,
   setSubtasks,
+  setTaskColumnIndex,
   setTasks
 } from '../../features/task/taskSlice';
 import { useformatSettings } from '../workspace/tasks/TaskSettingsModal/ShowSettingsModal/FormatSettings';
@@ -47,7 +48,9 @@ export default function HubPage() {
     saveSettingLocal,
     subtasks,
     scrollGroupView,
-    keyBoardSelectedIndex
+    keyBoardSelectedIndex,
+    taskColumnIndex,
+    taskColumns
   } = useAppSelector((state) => state.task);
   const formatSettings = useformatSettings();
 
@@ -100,14 +103,28 @@ export default function HubPage() {
   const combinedArr = Object.values(lists).flatMap((lists) => lists);
 
   const handleKeyDown = (e: KeyboardEvent) => {
-    if (e.key === 'ArrowUp' && keyBoardSelectedIndex !== null) {
-      const newIndex = Math.max(0, keyBoardSelectedIndex - 1);
-      dispatch(setKeyBoardSelectedIndex(newIndex));
-    } else if (e.key === 'ArrowDown' && keyBoardSelectedIndex !== null) {
-      const newIndex = Math.min(combinedArr.length - 1, keyBoardSelectedIndex + 1);
-      dispatch(setKeyBoardSelectedIndex(newIndex));
-    } else if (e.key === 'ArrowUp' || (e.key === 'ArrowDown' && keyBoardSelectedIndex === null)) {
-      dispatch(setKeyBoardSelectedIndex(0));
+    if (e.key === 'ArrowUp') {
+      if (keyBoardSelectedIndex !== null) {
+        const newIndex = Math.max(0, keyBoardSelectedIndex - 1);
+        dispatch(setKeyBoardSelectedIndex(newIndex));
+      } else {
+        dispatch(setKeyBoardSelectedIndex(0));
+      }
+    } else if (e.key === 'ArrowDown') {
+      if (keyBoardSelectedIndex !== null) {
+        const newIndex = Math.min(combinedArr.length - 1, keyBoardSelectedIndex + 1);
+        dispatch(setKeyBoardSelectedIndex(newIndex));
+      } else {
+        dispatch(setKeyBoardSelectedIndex(0));
+      }
+    } else if (e.key === 'ArrowLeft' && taskColumnIndex !== null) {
+      const newIndex = Math.max(0, taskColumnIndex - 1);
+      dispatch(setTaskColumnIndex(newIndex));
+    }
+
+    if (e.key === 'ArrowRight' && taskColumnIndex !== null) {
+      const newIndex = Math.min(taskColumns.length - 1, taskColumnIndex + 1);
+      dispatch(setTaskColumnIndex(newIndex));
     }
   };
 
@@ -115,7 +132,7 @@ export default function HubPage() {
     window.addEventListener('keydown', handleKeyDown);
 
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [keyBoardSelectedIndex]);
+  }, [keyBoardSelectedIndex, taskColumns, taskColumnIndex]);
 
   useEffect(() => {
     if (Object.keys(lists).length) {
