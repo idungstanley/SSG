@@ -520,7 +520,11 @@ export function StickyCol({
                               </Linkify>
                             </div>
                           }
-                          content={<div>{taskUpperCase ? TASK_NAME.toUpperCase() : Capitalize(TASK_NAME)}</div>}
+                          content={
+                            <Linkify options={{ target: '_blank', className: 'text-blue-400' }}>
+                              <div>{taskUpperCase ? TASK_NAME.toUpperCase() : Capitalize(TASK_NAME)}</div>
+                            </Linkify>
+                          }
                           additionalStyles={{ backgroundColor: 'black', color: 'white' }}
                         />
                       ) : (
@@ -528,13 +532,11 @@ export function StickyCol({
                           style={{
                             maxWidth: '200px',
                             overflow: 'hidden',
-                            textOverflow: 'ellipsis',
+                            // textOverflow: 'ellipsis',
                             whiteSpace: 'nowrap'
                           }}
                         >
-                          <Linkify options={{ target: '_blank', className: 'text-blue-400' }}>
-                            {taskUpperCase ? TASK_NAME.toUpperCase() : Capitalize(TASK_NAME)}
-                          </Linkify>
+                          {taskUpperCase ? TASK_NAME.toUpperCase() : Capitalize(TASK_NAME)}
                         </div>
                       )}
                     </div>
