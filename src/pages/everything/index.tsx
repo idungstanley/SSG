@@ -10,12 +10,18 @@ import { generateLists } from '../../utils';
 import { Header } from '../../components/TasksHeader';
 import { VerticalScroll } from '../../components/ScrollableContainer/VerticalScroll';
 import { GroupHorizontalScroll } from '../../components/ScrollableContainer/GroupHorizontalScroll';
-import { setKeyBoardSelectedIndex, setTasks } from '../../features/task/taskSlice';
+import { setKeyBoardSelectedIndex, setTaskColumnIndex, setTasks } from '../../features/task/taskSlice';
 
 export default function EverythingPage() {
   const dispatch = useAppDispatch();
 
-  const { tasks: tasksStore, scrollGroupView, keyBoardSelectedIndex } = useAppSelector((state) => state.task);
+  const {
+    tasks: tasksStore,
+    scrollGroupView,
+    keyBoardSelectedIndex,
+    taskColumns,
+    taskColumnIndex
+  } = useAppSelector((state) => state.task);
 
   const { data, hasNextPage, fetchNextPage } = UseGetEverythingTasks();
 
@@ -39,6 +45,12 @@ export default function EverythingPage() {
       dispatch(setKeyBoardSelectedIndex(newIndex));
     } else if (e.key === 'ArrowUp' || (e.key === 'ArrowDown' && keyBoardSelectedIndex === null)) {
       dispatch(setKeyBoardSelectedIndex(0));
+    } else if (e.key === 'ArrowLeft' && taskColumnIndex !== null) {
+      const newIndex = Math.max(0, taskColumnIndex - 1);
+      dispatch(setTaskColumnIndex(newIndex));
+    } else if (e.key === 'ArrowRight' && taskColumnIndex !== null) {
+      const newIndex = Math.min(taskColumns.length - 1, taskColumnIndex + 1);
+      dispatch(setTaskColumnIndex(newIndex));
     }
   };
 

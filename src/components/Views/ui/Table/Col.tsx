@@ -53,7 +53,7 @@ export function Col({ value, field, fieldId, task, styles, selectedRow, ...props
 
   const { date_format } = useAppSelector((state) => state.userSetting);
   const { dragOverItemId, draggableItemId } = useAppSelector((state) => state.list);
-  const { dragToBecomeSubTask, verticalGrid, selectedTasksArray, saveSettingOnline } = useAppSelector(
+  const { dragToBecomeSubTask, verticalGrid, selectedTasksArray, saveSettingOnline, taskColumnIndex } = useAppSelector(
     (state) => state.task
   );
 
@@ -236,6 +236,9 @@ export function Col({ value, field, fieldId, task, styles, selectedRow, ...props
     )
   };
 
+  const columnIndex = Object.keys(fields).indexOf(field);
+  // console.log(Object.keys(fields).indexOf('assignees'));
+
   return (
     <>
       <td
@@ -244,6 +247,8 @@ export function Col({ value, field, fieldId, task, styles, selectedRow, ...props
             ? 'border-b-2 border-alsoit-purple-300'
             : dragOverItemId === task.id && draggableItemId !== dragOverItemId && dragToBecomeSubTask
             ? 'mb-0.5'
+            : taskColumnIndex === columnIndex
+            ? 'border border-alsoit-danger'
             : 'border-t',
           COL_BG,
           `relative flex ${isSelected && 'tdListVNoSticky'} ${
