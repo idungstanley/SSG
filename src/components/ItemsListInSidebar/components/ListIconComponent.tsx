@@ -10,6 +10,7 @@ interface Props {
   outterFrameClick?: () => void;
   isInnerFrameActive?: boolean;
   isOutterFrameActive?: boolean;
+  isHeader?: boolean;
 }
 
 export default function ListIconComponent({
@@ -20,7 +21,8 @@ export default function ListIconComponent({
   innerFrameClick,
   outterFrameClick,
   isOutterFrameActive,
-  isInnerFrameActive
+  isInnerFrameActive,
+  isHeader
 }: Props) {
   return (
     <>
@@ -80,7 +82,7 @@ export default function ListIconComponent({
       ) : (
         <div className="flex items-center justify-center">
           <span
-            className={`flex items-center justify-center w-3 h-3 ${
+            className={`flex items-center justify-center ${isHeader ? 'w-6 h-6' : 'w-3 h-3'} ${
               shape === COLOUR_SHAPES.TwoCircle ||
               shape === COLOUR_SHAPES.SquareInCircle ||
               shape === COLOUR_SHAPES.SolidCircle
@@ -98,9 +100,9 @@ export default function ListIconComponent({
             <span
               className={`${
                 shape === COLOUR_SHAPES.TwoSquare || shape === COLOUR_SHAPES.SquareInCircle
-                  ? 'w-1.5 h-1.5'
+                  ? `${isHeader ? 'w-3 h-3' : 'w-1.5 h-1.5'}`
                   : shape === COLOUR_SHAPES.TwoCircle || shape === COLOUR_SHAPES.CircleInSquare
-                  ? 'rounded-full w-1.5 h-1.5'
+                  ? `rounded-full ${isHeader ? 'w-3 h-3' : 'w-1.5 h-1.5'}`
                   : ''
               }`}
               style={{

@@ -4,7 +4,7 @@ import { IStatus, Task, TaskKey, TaskValue } from '../../../features/task/interf
 const stringifyValue = (value: unknown) => (typeof value === 'object' ? JSON.stringify(value) : String(value));
 
 export const sortTasks = (key: TaskKey, tasks: Task[]) => {
-  tasks.sort((a, b) => a.status.position - b.status.position);
+  tasks.sort((a, b) => a?.status?.position - b?.status?.position);
   const sortedTasks: Record<string, Task[]> = {};
   tasks.forEach((task) => {
     if ('tags' in task) {

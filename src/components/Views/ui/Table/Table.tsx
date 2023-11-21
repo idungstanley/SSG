@@ -74,8 +74,8 @@ export function Table({ heads, data, label, listName, listColor, isBlockedShowCh
   useEffect(() => {
     setListId(data[0].list_id);
     dispatch(setCurrTaskListId(data[0].list_id));
-    const statusObj: ITask_statuses | undefined = (data[0].task_statuses as ITask_statuses[]).find(
-      (statusObj: ITask_statuses) => statusObj?.name === dataSpread[0].status.name
+    const statusObj: ITask_statuses | undefined = (data?.[0].task_statuses as ITask_statuses[]).find(
+      (statusObj: ITask_statuses) => statusObj?.name === dataSpread?.[0].status?.name
     );
 
     if (statusObj) {
@@ -85,12 +85,12 @@ export function Table({ heads, data, label, listName, listColor, isBlockedShowCh
 
     // get default list_status_id
     const minPosition = Math.min(
-      ...((data[0].task_statuses as ITask_statuses[]).map((status) => status.position) || [])
+      ...((data?.[0].task_statuses as ITask_statuses[]).map((status) => status?.position) || [])
     );
 
     const defaultStatusObj: ITask_statuses | undefined = (data[0].task_statuses as ITask_statuses[]).find(
       (statusObj: ITask_statuses) =>
-        statusObj?.is_default === 1 ? statusObj?.is_default : statusObj.position === minPosition
+        statusObj?.is_default === 1 ? statusObj?.is_default : statusObj?.position === minPosition
     );
 
     if (listId === defaultSubtaskListId) dispatch(setSubtaskDefaultStatusId(defaultStatusObj?.id as string));
@@ -104,7 +104,7 @@ export function Table({ heads, data, label, listName, listColor, isBlockedShowCh
   }, []);
 
   const checkSelectedRow = (id: string) => {
-    if (selectionArr) {
+    if (selectionArr && keyBoardSelectedIndex) {
       if (selectionArr[keyBoardSelectedIndex]) {
         return keyBoardSelectedIndex >= 0 ? id === selectionArr[keyBoardSelectedIndex].id : false;
       }
@@ -153,7 +153,7 @@ export function Table({ heads, data, label, listName, listColor, isBlockedShowCh
             taskLength={taskLength}
             onToggleCollapseTasks={() => setCollapseTasks((prev) => !prev)}
             label={label}
-            headerStatusColor={data[0].status.color as string}
+            headerStatusColor={data?.[0].status?.color as string}
             columns={columns}
             listName={listName}
             tableHeight={tableHeight}

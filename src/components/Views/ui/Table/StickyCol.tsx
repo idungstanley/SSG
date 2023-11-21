@@ -393,8 +393,7 @@ export function StickyCol({
     <>
       {task.id !== '0' && (
         <td
-          className={`sticky left-0 z-10 flex items-center justify-start text-sm font-medium text-gray-900 cursor-pointer text-start ${
-            selectedRow && 'bg-alsoit-purple-50'
+          className={`sticky left-0 z-10 flex items-center justify-start text-sm font-medium text-gray-900 cursor-pointer text-start
           }`}
           style={styles}
           {...props}
@@ -521,7 +520,11 @@ export function StickyCol({
                               </Linkify>
                             </div>
                           }
-                          content={<div>{taskUpperCase ? TASK_NAME.toUpperCase() : Capitalize(TASK_NAME)}</div>}
+                          content={
+                            <Linkify options={{ target: '_blank', className: 'text-blue-400' }}>
+                              <div>{taskUpperCase ? TASK_NAME.toUpperCase() : Capitalize(TASK_NAME)}</div>
+                            </Linkify>
+                          }
                           additionalStyles={{ backgroundColor: 'black', color: 'white' }}
                         />
                       ) : (
@@ -529,13 +532,11 @@ export function StickyCol({
                           style={{
                             maxWidth: '200px',
                             overflow: 'hidden',
-                            textOverflow: 'ellipsis',
+                            // textOverflow: 'ellipsis',
                             whiteSpace: 'nowrap'
                           }}
                         >
-                          <Linkify options={{ target: '_blank', className: 'text-blue-400' }}>
-                            {taskUpperCase ? TASK_NAME.toUpperCase() : Capitalize(TASK_NAME)}
-                          </Linkify>
+                          {taskUpperCase ? TASK_NAME.toUpperCase() : Capitalize(TASK_NAME)}
                         </div>
                       )}
                     </div>
@@ -590,7 +591,7 @@ export function StickyCol({
               } w-full h-full flex items-center`
             )}
           >
-            <div className="absolute bottom-0 right-0 flex p-1 space-x-1">
+            <div className="absolute bottom-0 right-0 flex p-1 space-x-1" style={{ zIndex: 1 }}>
               <ToolTip
                 onMouseEnter={() => setCloseToggle(true)}
                 onMouseLeave={() => setCloseToggle(false)}
@@ -628,7 +629,7 @@ export function StickyCol({
             </div>
             <div className="flex flex-col items-start justify-start w-full pl-2 space-y-1">
               <p
-                className={`flex text-left empty:before:content-[attr(placeholder)] alsoit-gray-300 font-semibold empty:opacity-50 overflow-hidden items-center h-5 ${
+                className={`w-full flex text-left empty:before:content-[attr(placeholder)] alsoit-gray-300 font-semibold empty:opacity-50 overflow-hidden items-center h-5 ${
                   saveSettingOnline?.CompactView ? 'text-alsoit-text-md' : 'text-alsoit-text-lg'
                 }`}
                 contentEditable={true}

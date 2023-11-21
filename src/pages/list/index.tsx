@@ -14,7 +14,14 @@ import AdditionalHeader from '../../layout/components/MainLayout/Header/Addition
 import ActiveHub from '../../layout/components/MainLayout/extendedNavigation/ActiveParents/ActiveHub';
 import hubIcon from '../../assets/branding/hub.png';
 import FilterByAssigneesSliderOver from '../workspace/lists/components/renderlist/filters/FilterByAssigneesSliderOver';
-import { setSaveSettingList, setSaveSettingOnline, setSubtasks, setTasks } from '../../features/task/taskSlice';
+import {
+  setKeyBoardSelectedIndex,
+  setSaveSettingList,
+  setSaveSettingOnline,
+  setSubtasks,
+  setTaskColumnIndex,
+  setTasks
+} from '../../features/task/taskSlice';
 import TaskQuickAction from '../workspace/tasks/component/taskQuickActions/TaskQuickAction';
 import { List } from '../../components/Views/ui/List/List';
 import { Header } from '../../components/TasksHeader';
@@ -38,7 +45,10 @@ export function ListPage() {
     saveSettingLocal,
     subtasks,
     splitSubTaskState: isSplitMode,
-    filters: { option }
+    filters: { option },
+    keyBoardSelectedIndex,
+    taskColumnIndex,
+    taskColumns
   } = useAppSelector((state) => state.task);
 
   const [tasksFromRes, setTasksFromRes] = useState<ITaskFullList[]>([]);
@@ -64,6 +74,39 @@ export function ListPage() {
   const { data, hasNextPage, fetchNextPage, isFetching } = getTaskListService(listId);
 
   const hasTasks = data?.pages[0].data.tasks.length;
+
+  const combinedArr = Object.values(tasksFromRes).flatMap((lists) => lists);
+
+  const handleKeyDown = (e: KeyboardEvent) => {
+    if (e.key === 'ArrowUp') {
+      if (keyBoardSelectedIndex !== null) {
+        const newIndex = Math.max(0, keyBoardSelectedIndex - 1);
+        dispatch(setKeyBoardSelectedIndex(newIndex));
+      } else {
+        dispatch(setKeyBoardSelectedIndex(0));
+      }
+    } else if (e.key === 'ArrowDown') {
+      if (keyBoardSelectedIndex !== null) {
+        const newIndex = Math.min(combinedArr.length - 1, keyBoardSelectedIndex + 1);
+        dispatch(setKeyBoardSelectedIndex(newIndex));
+      } else {
+        dispatch(setKeyBoardSelectedIndex(0));
+      }
+    } else if (e.key === 'ArrowLeft' && taskColumnIndex !== null) {
+      const newIndex = Math.max(0, taskColumnIndex - 1);
+      dispatch(setTaskColumnIndex(newIndex));
+    }
+
+    if (e.key === 'ArrowRight' && taskColumnIndex !== null) {
+      const newIndex = Math.min(taskColumns.length - 1, taskColumnIndex + 1);
+      dispatch(setTaskColumnIndex(newIndex));
+    }
+  };
+  useEffect(() => {
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [keyBoardSelectedIndex, taskColumns, taskColumnIndex]);
 
   useEffect(() => {
     if (listId) {
@@ -210,7 +253,7 @@ export function ListPage() {
               <TaskQuickAction />
 
               {tasksStore[listId as string]?.length ? (
-                <List tasks={tasksStore[listId as string]} />
+                <List tasks={tasksStore[listId as string]} combinedTasksArr={combinedArr} />
               ) : (
                 !isFetching && !hasTasks && <List tasks={defaultTaskTemplate} />
               )}

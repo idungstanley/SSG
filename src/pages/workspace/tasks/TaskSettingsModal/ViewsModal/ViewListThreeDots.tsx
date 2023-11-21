@@ -8,17 +8,17 @@ import Pin from '../../../../../assets/icons/Pin';
 import { AiOutlineLink } from 'react-icons/ai';
 import TemplatesIcon from '../../../../../assets/icons/Templates';
 import { Menu } from '@mui/material';
-import listIcon from '../../../../../assets/icons/listIcon.png';
-import tableIcon from '../../../../../assets/icons/tableIcon.png';
-import boardIcon from '../../../../../assets/icons/boardIcon.png';
-import calenderIcon from '../../../../../assets/icons/calenderIcon.png';
-import timeChartIcon from '../../../../../assets/icons/timeChartIcon.png';
-import mapIcon from '../../../../../assets/icons/mapIcon.png';
-import gantIcon from '../../../../../assets/icons/gantIcon.png';
-import teamIcon from '../../../../../assets/icons/teamIcon.png';
 import { useDublicateView, useUpdateView } from '../../../../../features/workspace/workspaceService';
 import { useParams } from 'react-router-dom';
 import { useAppSelector } from '../../../../../app/hooks';
+import TeamIcon from '../../../../../assets/icons/TeamIcon';
+import MapIcon from '../../../../../assets/icons/MapIcon';
+import TimeChartIcon from '../../../../../assets/icons/TimeChartIcon';
+import CalendarViewIcon from '../../../../../assets/icons/CalendarViewIcon';
+import BoardIcon from '../../../../../assets/icons/BoardIcon';
+import TableIcon from '../../../../../assets/icons/TableIcon';
+import ListViewIcon from '../../../../../assets/icons/ListViewIcon';
+import GanttIcon from '../../../../../assets/icons/GanttIcon';
 
 const view_settings_ids = {
   PIN: 'pin',
@@ -94,7 +94,7 @@ export default function ViewListThreeDots({ closeAllModal }: IViewListThreeDotsP
   const dublicateOptions = [
     {
       id: 'list',
-      icon: <img src={listIcon} alt="listIcon" />,
+      icon: <ListViewIcon color="orange" />,
       label: 'List',
       handleClick: () => {
         onDublicate(viewId as string);
@@ -104,49 +104,49 @@ export default function ViewListThreeDots({ closeAllModal }: IViewListThreeDotsP
     },
     {
       id: 'table',
-      icon: <img src={tableIcon} alt="tableIcon" />,
+      icon: <TableIcon color="orange" />,
       label: 'Table',
       handleClick: () => null,
       isUnusing: true
     },
     {
       id: 'board',
-      icon: <img src={boardIcon} alt="boardIcon" />,
+      icon: <BoardIcon color="orange" />,
       label: 'Board',
       handleClick: () => null,
       isUnusing: true
     },
     {
       id: 'calender',
-      icon: <img src={calenderIcon} alt="calenderIcon" />,
+      icon: <CalendarViewIcon color="orange" />,
       label: 'Calender',
       handleClick: () => null,
       isUnusing: true
     },
     {
       id: 'timeChart',
-      icon: <img src={timeChartIcon} alt="timeChartIcon" />,
+      icon: <TimeChartIcon color="orange" />,
       label: 'TimeChart',
       handleClick: () => null,
       isUnusing: true
     },
     {
       id: 'map',
-      icon: <img src={mapIcon} alt="mapIcon" />,
+      icon: <MapIcon color="orange" />,
       label: 'Map',
       handleClick: () => null,
       isUnusing: true
     },
     {
       id: 'gantt',
-      icon: <img src={gantIcon} alt="gantIcon" />,
+      icon: <GanttIcon color="orange" />,
       label: 'Gantt',
       handleClick: () => null,
       isUnusing: true
     },
     {
       id: 'team',
-      icon: <img src={teamIcon} alt="teamIcon" />,
+      icon: <TeamIcon color="orange" />,
       label: 'Team',
       handleClick: () => null,
       isUnusing: true
@@ -197,12 +197,7 @@ export default function ViewListThreeDots({ closeAllModal }: IViewListThreeDotsP
               onClick={option.handleClick}
             >
               <div className="flex items-center">
-                <span
-                  className="mr-3"
-                  style={{ background: option.isUnusing ? 'orange' : '', opacity: option.isUnusing ? '0.5' : '1' }}
-                >
-                  {option.icon}
-                </span>
+                <span className="mr-3">{option.icon}</span>
                 <span>{option.label}</span>
               </div>
             </div>
