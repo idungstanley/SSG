@@ -8,6 +8,7 @@ import { useCreateOrEditPermission } from '../../../../../features/workspace/wor
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAppSelector } from '../../../../../app/hooks';
 import { Capitalize } from '../../../../../utils/NoCapWords/Capitalize';
+import { useParams } from 'react-router-dom';
 
 function People({
   showToggle,
@@ -23,40 +24,47 @@ function People({
   const [anchor, setAnchor] = useState<HTMLElement | null>(null);
   const queryClient = useQueryClient();
   const [currentRole, setRole] = useState<string>(role ? role : 'full');
+  const { listId, hubId, walletId } = useParams();
   const { entityForPermissions } = useAppSelector((state) => state.workspace);
+  const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
+
+  const currentActiveId = hubId ?? walletId ?? listId;
+
+  const entityType = entityForPermissions
+    ? entityForPermissions.type
+      ? entityForPermissions.type
+      : 'hub'
+    : activeItemType;
+  const entityId = entityForPermissions ? entityForPermissions.id : activeItemId ?? currentActiveId;
 
   const changePermission = useMutation(useCreateOrEditPermission, {
     onSuccess: () => {
-      queryClient.invalidateQueries([`${entityForPermissions?.type ?? 'hub'}-permissions`, entityForPermissions?.id]);
+      queryClient.invalidateQueries([`${entityType}-permissions`, entityId]);
     }
   });
 
   const handleAddPerson = async (enable: boolean) => {
-    const model = entityForPermissions?.type ? entityForPermissions.type : 'hub';
-    const model_id = entityForPermissions?.id;
     const teamsObj = {
       access_level: 'full',
       id: teamMember?.id as string
     };
     if (enable) {
       await changePermission.mutateAsync({
-        model,
-        model_id: model_id as string,
+        model: entityType as string,
+        model_id: entityId as string,
         teamMembersArr: [teamsObj]
       });
     }
   };
 
   const handleChangeRole = async (role: string) => {
-    const model = entityForPermissions?.type ? entityForPermissions.type : 'hub';
-    const model_id = entityForPermissions?.id;
     const teamsObj = {
       access_level: role.toLowerCase(),
       id: teamMember?.id as string
     };
     await changePermission.mutateAsync({
-      model,
-      model_id: model_id as string,
+      model: entityType as string,
+      model_id: entityId as string,
       teamMembersArr: [teamsObj]
     });
     setRole(role);

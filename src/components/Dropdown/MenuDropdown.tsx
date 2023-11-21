@@ -41,8 +41,10 @@ import {
   setActiveSubHubManagerTabId,
   setActiveTabId,
   setEditingPilotDetailsTitle,
+  setEntityForPermissions,
   setExtendedBarOpenedEntitiesIds,
   setOpenedEntitiesIds,
+  setShowOverlay,
   setShowPilot
 } from '../../features/workspace/workspaceSlice';
 import ExpandAllIcon from '../../assets/icons/ExpandAllIcon';
@@ -93,7 +95,7 @@ export default function MenuDropdown({ isExtendedBar, cords, walletLevel, item, 
   const { SubDropdownMenu, archiveHub, showMenuDropdown, showMenuDropdownType, hub } = useAppSelector(
     (state) => state.hub
   );
-  const { openedEntitiesIds, sidebarWidthRD, activeView } = useAppSelector((state) => state.workspace);
+  const { openedEntitiesIds, sidebarWidthRD, activeView, activeItemId } = useAppSelector((state) => state.workspace);
   const { archiveWallet } = useAppSelector((state) => state.wallet);
   const { archiveList } = useAppSelector((state) => state.list);
   const { showSidebar, userSettingsData } = useAppSelector((state) => state.account);
@@ -393,8 +395,13 @@ export default function MenuDropdown({ isExtendedBar, cords, walletLevel, item, 
   ];
 
   const handleSharingnPermissions = () => {
+    dispatch(setshowMenuDropdown({ showMenuDropdown: null, showMenuDropdownType: null }));
     dispatch(setActiveTabId(pilotTabs.ENTITY_MANAGER));
     dispatch(setActiveSubHubManagerTabId(pilotTabs.PERMISSIONS));
+    dispatch(setEntityForPermissions(item as IHub | IList | IWallet));
+    if (activeItemId !== item?.id) {
+      dispatch(setShowOverlay(true));
+    }
   };
 
   return (

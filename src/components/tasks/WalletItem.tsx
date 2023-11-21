@@ -14,7 +14,7 @@ import { setPaletteDropDown } from '../../features/account/accountSlice';
 import Palette from '../ColorPalette';
 import MenuDropdown from '../Dropdown/MenuDropdown';
 import SubDropdown from '../Dropdown/SubDropdown';
-import { setCreateWlLink, setEntityForPermissions } from '../../features/workspace/workspaceSlice';
+import { setCreateWlLink } from '../../features/workspace/workspaceSlice';
 import { ListColourProps } from './ListItem';
 import { useParams } from 'react-router-dom';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
@@ -263,7 +263,6 @@ export default function WalletItem({
                   className="cursor-pointer hover:text-alsoit-purple-300"
                   onClick={(e) => {
                     handleWalletSettings(wallet.id, wallet.name, e);
-                    dispatch(setEntityForPermissions(wallet));
                   }}
                   id="menusettings"
                 >
