@@ -38,7 +38,7 @@ export default function HubPage() {
   }, []);
 
   const dispatch = useAppDispatch();
-  const { hubId, subhubId, taskId } = useParams();
+  const { hubId, taskId } = useParams();
   const navigate = useNavigate();
 
   const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
@@ -90,7 +90,7 @@ export default function HubPage() {
   }, [hub]);
 
   const { data, hasNextPage, fetchNextPage, isFetching } = UseGetFullTaskList({
-    itemId: hubId || subhubId,
+    itemId: hubId,
     itemType: EntityType.hub
   });
 
@@ -106,6 +106,8 @@ export default function HubPage() {
     } else if (e.key === 'ArrowDown' && keyBoardSelectedIndex !== null) {
       const newIndex = Math.min(combinedArr.length - 1, keyBoardSelectedIndex + 1);
       dispatch(setKeyBoardSelectedIndex(newIndex));
+    } else if (e.key === 'ArrowUp' || (e.key === 'ArrowDown' && keyBoardSelectedIndex === null)) {
+      dispatch(setKeyBoardSelectedIndex(0));
     }
   };
 

@@ -1269,7 +1269,6 @@ export const useCurrentTime = ({ workspaceId }: { workspaceId?: string }) => {
               setTimerLastMemory({
                 hubId: dateString.model === EntityType.hub ? dateString.model_id : null,
                 activeTabId: pilotTabs.UTILITIES,
-                subhubId: dateString.model === EntityType.subHub ? dateString.model_id : null,
                 listId: dateString.model === EntityType.list ? dateString.model_id : null,
                 taskId: dateString.model === EntityType.task ? dateString.model_id : null,
                 workSpaceId: workspaceId,
@@ -1601,6 +1600,17 @@ const AddLineUpTask = ({ taskId, team_member_id }: { taskId: string; team_member
     method: 'POST',
     data: {
       team_member_ids: team_member_id
+    }
+  });
+  return request;
+};
+
+export const RemoveLineUpTask = ({ taskId, team_member_id }: { taskId: string; team_member_id?: string }) => {
+  const request = requestNew({
+    url: `/tasks/${taskId}/lineup`,
+    method: 'DELETE',
+    data: {
+      team_member_id
     }
   });
   return request;

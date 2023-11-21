@@ -6,6 +6,8 @@ import { useAppDispatch } from '../../../../../app/hooks';
 import { setSelectedMessage } from '../../../../../features/chat/chatSlice';
 import { IMessage } from '../../../../../features/chat/chat.interfaces';
 import AlsoitMenuDropdown from '../../../../DropDowns';
+import DropdownTitle from '../../../../DropDowns/DropdownTitle';
+import DropdownSubtitle from '../../../../DropDowns/DropdownSubtitle';
 
 interface IDropdownMenuForMessageProps {
   message: IMessage;
@@ -38,18 +40,8 @@ export default function DropdownMenuForMessage({ message }: IDropdownMenuForMess
       </div>
       <AlsoitMenuDropdown anchorEl={anchorEl} handleClose={() => setAnchorEl(null)}>
         <div className="p-1" style={{ minWidth: '147px' }}>
-          <div className="flex justify-center pt-3 font-bold" style={{ lineHeight: '9.6px' }}>
-            DROPDOWN
-          </div>
-          <div className="relative flex flex-col justify-center mb-2">
-            <div className="pt-3 border-b-2 " />
-            <span
-              className="absolute px-1 font-bold text-center whitespace-nowrap text-gray-400 bg-white border border-gray-100 text-alsoit-text-sm left-1/2 -translate-x-1/2"
-              style={{ lineHeight: '9.6px', top: '7px' }}
-            >
-              DROPDOWN OPTIONS
-            </span>
-          </div>
+          <DropdownTitle content="DROPDOWN" />
+          <DropdownSubtitle content="DROPDOWN OPTIONS" />
           {options.map((option) => (
             <div
               key={option.title}

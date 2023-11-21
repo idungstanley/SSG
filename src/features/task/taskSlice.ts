@@ -210,7 +210,7 @@ interface TaskState {
   createTask: boolean;
   addNewTaskItem: boolean;
   selectedIndex: number | null;
-  keyBoardSelectedIndex: number;
+  keyBoardSelectedIndex: number | null;
   defaultSubtaskListId: null | string;
   selectedIndexStatus: string | null;
   selectedListIds: string[];
@@ -349,7 +349,7 @@ const initialState: TaskState = {
   addNewTaskItem: false,
   closeTaskListView: true,
   selectedIndex: null,
-  keyBoardSelectedIndex: 0,
+  keyBoardSelectedIndex: null,
   subtaskDefaultStatusId: null,
   defaultSubtaskListId: null,
   selectedIndexStatus: null,

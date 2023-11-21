@@ -1,18 +1,18 @@
 import { useState } from 'react';
-import listIcon from '../../../../../assets/icons/listIcon.png';
-import tableIcon from '../../../../../assets/icons/tableIcon.png';
-import boardIcon from '../../../../../assets/icons/boardIcon.png';
-import calenderIcon from '../../../../../assets/icons/calenderIcon.png';
-import timeChartIcon from '../../../../../assets/icons/timeChartIcon.png';
-import mapIcon from '../../../../../assets/icons/mapIcon.png';
-import gantIcon from '../../../../../assets/icons/gantIcon.png';
-import teamIcon from '../../../../../assets/icons/teamIcon.png';
 import { useCreateView } from '../../../../../features/workspace/workspaceService';
 import { useParams } from 'react-router-dom';
 import viewList from '../../../../../assets/branding/viewList.svg';
 import { Button } from '../../../../../components';
 import { Capitalize } from '../../../../../utils/NoCapWords/Capitalize';
 import { EntityType } from '../../../../../utils/EntityTypes/EntityType';
+import TeamIcon from '../../../../../assets/icons/TeamIcon';
+import MapIcon from '../../../../../assets/icons/MapIcon';
+import TimeChartIcon from '../../../../../assets/icons/TimeChartIcon';
+import CalendarViewIcon from '../../../../../assets/icons/CalendarViewIcon';
+import BoardIcon from '../../../../../assets/icons/BoardIcon';
+import TableIcon from '../../../../../assets/icons/TableIcon';
+import ListViewIcon from '../../../../../assets/icons/ListViewIcon';
+import GanttIcon from '../../../../../assets/icons/GanttIcon';
 
 interface IViewOption {
   id: string;
@@ -38,7 +38,7 @@ export default function CreateNewViewModal({ closeAllModal }: ICreateNewViewModa
   const dublicateOptions = [
     {
       id: 'list',
-      icon: <img src={listIcon} alt="listIcon" />,
+      icon: <ListViewIcon color="orange" />,
       label: 'List',
       imageUrl: viewList,
       description:
@@ -46,7 +46,7 @@ export default function CreateNewViewModal({ closeAllModal }: ICreateNewViewModa
     },
     {
       id: 'table',
-      icon: <img src={tableIcon} alt="tableIcon" />,
+      icon: <TableIcon color="orange" />,
       label: 'Table',
       imageUrl: viewList,
       description: 'Easily manage, update, and organize your tasks with Table view.',
@@ -54,7 +54,7 @@ export default function CreateNewViewModal({ closeAllModal }: ICreateNewViewModa
     },
     {
       id: 'board',
-      icon: <img src={boardIcon} alt="boardIcon" />,
+      icon: <BoardIcon color="orange" />,
       label: 'Board',
       imageUrl: viewList,
       description: 'Build your perfect Board and easily drag-and-drop tasks between columns.',
@@ -62,7 +62,7 @@ export default function CreateNewViewModal({ closeAllModal }: ICreateNewViewModa
     },
     {
       id: 'calender',
-      icon: <img src={calenderIcon} alt="calenderIcon" />,
+      icon: <CalendarViewIcon color="orange" />,
       label: 'Calender',
       imageUrl: viewList,
       description: 'Calendar view is your place for planning, scheduling, and resource management.',
@@ -70,7 +70,7 @@ export default function CreateNewViewModal({ closeAllModal }: ICreateNewViewModa
     },
     {
       id: 'timeChart',
-      icon: <img src={timeChartIcon} alt="timeChartIcon" />,
+      icon: <TimeChartIcon color="orange" />,
       label: 'TimeChart',
       imageUrl: viewList,
       description:
@@ -79,7 +79,7 @@ export default function CreateNewViewModal({ closeAllModal }: ICreateNewViewModa
     },
     {
       id: 'map',
-      icon: <img src={mapIcon} alt="mapIcon" />,
+      icon: <MapIcon color="orange" />,
       label: 'Map',
       imageUrl: viewList,
       description:
@@ -88,7 +88,7 @@ export default function CreateNewViewModal({ closeAllModal }: ICreateNewViewModa
     },
     {
       id: 'gantt',
-      icon: <img src={gantIcon} alt="gantIcon" />,
+      icon: <GanttIcon color="orange" />,
       label: 'Gantt',
       imageUrl: viewList,
       description: 'Plan time, manage resources, visualize dependencies and more with Gantt view.',
@@ -96,7 +96,7 @@ export default function CreateNewViewModal({ closeAllModal }: ICreateNewViewModa
     },
     {
       id: 'team',
-      icon: <img src={teamIcon} alt="teamIcon" />,
+      icon: <TeamIcon color="orange" />,
       label: 'Team',
       imageUrl: viewList,
       description: 'Monitor what people are working on, what has been done, and who needs more tasks with Team view',
@@ -146,12 +146,7 @@ export default function CreateNewViewModal({ closeAllModal }: ICreateNewViewModa
               onClick={() => setActiveView(option)}
             >
               <div className="flex items-center">
-                <span
-                  className="mr-3"
-                  style={{ background: option.isUnusing ? 'orange' : '', opacity: option.isUnusing ? '0.5' : '1' }}
-                >
-                  {option.icon}
-                </span>
+                <span className="mr-3">{option.icon}</span>
                 <span>{option.label}</span>
               </div>
             </div>
