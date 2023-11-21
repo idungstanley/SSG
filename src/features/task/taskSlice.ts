@@ -174,6 +174,7 @@ interface TaskState {
   currentTaskId: string | null;
   activeTreeSelectedTask: IList | undefined;
   newTaskPriority: string;
+  newTaskStatus: ITask_statuses | null;
   selectedTasksArray: string[];
   selectedIndexListId: string | null;
   saveSettingLocal: { [key: string]: boolean } | null;
@@ -329,6 +330,18 @@ const initialState: TaskState = {
   verticalGrid: false,
   taskUpperCase: false,
   newTaskPriority: 'normal',
+  newTaskStatus: {
+    color: '',
+    created_at: '',
+    id: '',
+    model_id: '',
+    model_type: '',
+    is_default: 0,
+    name: '',
+    position: 0,
+    type: '',
+    updated_at: ''
+  },
   currentSelectedDuplicateArr: [],
   triggerSaveSettings: false,
   triggerAutoSave: false,
@@ -606,6 +619,9 @@ export const taskSlice = createSlice({
     },
     setNewTaskPriority(state, action: PayloadAction<string>) {
       state.newTaskPriority = action.payload;
+    },
+    setNewTaskStatus(state, action: PayloadAction<ITask_statuses | null>) {
+      state.newTaskStatus = action.payload;
     },
     setAssignOnHoverTask(state, action: PayloadAction<string | Task>) {
       state.assignOnHoverTask = action.payload;
@@ -930,6 +946,7 @@ export const {
   setDragToBecomeSubTask,
   setOpenFileUploadModal,
   setTaskInputValue,
-  setRootTaskIds
+  setRootTaskIds,
+  setNewTaskStatus
 } = taskSlice.actions;
 export default taskSlice.reducer;
