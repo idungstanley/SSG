@@ -72,7 +72,10 @@ export default function TimeSubTab() {
     <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={(e) => handleDragEnd(e)}>
       <SortableContext strategy={rectSortingStrategy} items={items}>
         <section>
-          <div className="grid bg-primary-200 pb-0.5 grid-cols-2">
+          <div
+            className="grid px-1 grid-cols-2"
+            style={{ borderBottom: `3px solid ${activeSubTimeClockTabId ? '#ebd1fc' : 'transparent'}` }}
+          >
             {timeClockOptions.map((item) => (
               <SubtabDrag
                 key={item.id}

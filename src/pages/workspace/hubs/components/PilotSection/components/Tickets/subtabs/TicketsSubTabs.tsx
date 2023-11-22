@@ -69,7 +69,10 @@ export default function TicketsSubTabs() {
     <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={(e) => handleDragEnd(e)}>
       <SortableContext strategy={rectSortingStrategy} items={items}>
         <section>
-          <div className="grid bg-primary-200 pb-0.5 grid-cols-2">
+          <div
+            className="grid px-1 grid-cols-2"
+            style={{ borderBottom: `3px solid ${activeSubComingTabId ? '#ebd1fc' : 'transparent'}` }}
+          >
             {ticketsOptions.map((item) => (
               <SubtabDrag
                 key={item.id}

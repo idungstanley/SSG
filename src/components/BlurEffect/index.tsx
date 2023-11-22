@@ -1,3 +1,5 @@
+import { CSSProperties } from 'react';
+
 interface BlurEffectProps {
   top: string;
   right: string;
@@ -6,6 +8,7 @@ interface BlurEffectProps {
   width: string;
   height: string;
   backgroundImage: string;
+  style?: CSSProperties;
 }
 
 export default function BlurEffect({
@@ -15,7 +18,8 @@ export default function BlurEffect({
   left = 'auto',
   width = '55px',
   height = '45px',
-  backgroundImage = 'linear-gradient(to right, transparent , white)'
+  backgroundImage = 'linear-gradient(to right, transparent , white)',
+  style
 }: BlurEffectProps) {
   return (
     <div
@@ -27,7 +31,8 @@ export default function BlurEffect({
         left: left,
         width: width,
         height: height,
-        backgroundImage: backgroundImage
+        backgroundImage: backgroundImage,
+        ...style
       }}
     >
       &nbsp;
