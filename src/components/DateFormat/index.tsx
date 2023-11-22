@@ -75,7 +75,7 @@ export default function DateFormat({ date, task, font = 'text-sm', type, isDueDa
 
   return (
     <div onClick={(e) => handleClick(e)}>
-      <span className={`text-sm font-medium text-gray-400 ${font}`} style={{ fontSize: font }}>
+      <span className={`text-sm font-bold text-gray-400 ${font}`} style={{ fontSize: font }}>
         {showDataPicker && (
           <DatePicker
             styles="flex justify-center"
