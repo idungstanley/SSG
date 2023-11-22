@@ -75,12 +75,12 @@ export default function SubtabDrag({ id, item, items, icon, showPilot, activeSub
         <span
           className={`${!showPilot && 'text-xs'} ${
             id === activeSub && !showPilot && 'bg-green-500 p-2 rounded'
-          } flex items-center gap-1 w-full`}
+          } flex items-center gap-1 w-full overflow-hidden`}
         >
           <span className="focus:cursor-move" ref={setNodeRef} {...attributes} {...listeners}>
             {icon ? icon : <img src={source} alt="Hub Icon" className="w-2 h-2" />}
           </span>
-          {item && <p className={`${isDragging ? 'truncate' : ''} whitespace-nowrap`}>{item.name}</p>}
+          {item && <p className="whitespace-nowrap">{item.name}</p>}
         </span>
         <BlurEffect
           top="0"
