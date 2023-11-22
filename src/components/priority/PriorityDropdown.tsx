@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { cl } from '../../utils';
-import { AiFillFlag } from 'react-icons/ai';
+// import { AiFillFlag } from 'react-icons/ai';
 import { UseUpdateTaskPrioritiesServices } from '../../features/task/taskService';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { setNewTaskPriority } from '../../features/task/taskSlice';
 import { priorities } from '../../app/constants/priorities';
 import AlsoitMenuDropdown from '../DropDowns';
+import Priority from '../../assets/icons/Priority';
 
 export interface priorityType {
   id: string;
@@ -46,7 +47,7 @@ export default function PriorityDropdown({ taskCurrentPriority, icon }: TaskCurr
     {
       id: priorities.LOW,
       title: 'Low',
-      color: '#d3d3d3',
+      color: '#A5A5A5',
       bg: 'gray',
       handleClick: () => {
         setPriority(priorities.LOW);
@@ -56,7 +57,7 @@ export default function PriorityDropdown({ taskCurrentPriority, icon }: TaskCurr
     {
       id: priorities.NORMAL,
       title: 'Normal',
-      color: '#6fddff',
+      color: '#99BBEE',
       bg: 'blue',
       handleClick: () => {
         setPriority(priorities.NORMAL);
@@ -66,7 +67,7 @@ export default function PriorityDropdown({ taskCurrentPriority, icon }: TaskCurr
     {
       id: priorities.HIGH,
       title: 'High',
-      color: '#f7cb04',
+      color: '#F7A100',
       bg: 'yellow',
       handleClick: () => {
         setPriority(priorities.HIGH);
@@ -76,7 +77,7 @@ export default function PriorityDropdown({ taskCurrentPriority, icon }: TaskCurr
     {
       id: priorities.URGENT,
       title: 'Urgent',
-      color: '#f32100',
+      color: '#FF0E0F',
       bg: 'red',
       handleClick: () => {
         setPriority(priorities.URGENT);
@@ -89,13 +90,17 @@ export default function PriorityDropdown({ taskCurrentPriority, icon }: TaskCurr
     priority: string | null | undefined | [{ id: string; initials: string; color: string }]
   ) => {
     if (priority === priorities.LOW) {
-      return <AiFillFlag className="h-5 text-gray-400 w-7" aria-hidden="true" />;
+      return <Priority fill="#A5A5A5" />;
+      // <AiFillFlag className="h-5 text-gray-400 w-7" aria-hidden="true" />;
     } else if (priority === priorities.NORMAL) {
-      return <AiFillFlag className="h-5 w-7" style={{ color: '#6fddff' }} aria-hidden="true" />;
+      return <Priority fill="#99BBEE" />;
+      //  <AiFillFlag className="h-5 w-7" style={{ color: '#6fddff' }} aria-hidden="true" />;
     } else if (priority === priorities.HIGH) {
-      return <AiFillFlag className="h-5 text-yellow-400 w-7 " aria-hidden="true" />;
+      return <Priority fill="#F7A100" />;
+      // <AiFillFlag className="h-5 text-yellow-400 w-7 " aria-hidden="true" />;
     } else if (priority === priorities.URGENT) {
-      return <AiFillFlag className="h-5 text-red-400 w-7" aria-hidden="true" />;
+      return <Priority fill="#FF0E0F" />;
+      // <AiFillFlag className="h-5 text-red-400 w-7" aria-hidden="true" />;
     }
   };
 
@@ -127,7 +132,7 @@ export default function PriorityDropdown({ taskCurrentPriority, icon }: TaskCurr
                 }}
               >
                 <p>
-                  <AiFillFlag className="h-5 w-7 " aria-hidden="true" style={{ color: `${priority.color}` }} />
+                  <Priority fill={`${priority.color}`} />
                 </p>
                 <p>{priority.title}</p>
               </button>
