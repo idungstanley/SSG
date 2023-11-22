@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { cl } from '../../utils';
-// import { AiFillFlag } from 'react-icons/ai';
 import { UseUpdateTaskPrioritiesServices } from '../../features/task/taskService';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { setNewTaskPriority } from '../../features/task/taskSlice';
@@ -91,16 +90,12 @@ export default function PriorityDropdown({ taskCurrentPriority, icon }: TaskCurr
   ) => {
     if (priority === priorities.LOW) {
       return <Priority fill="#A5A5A5" />;
-      // <AiFillFlag className="h-5 text-gray-400 w-7" aria-hidden="true" />;
     } else if (priority === priorities.NORMAL) {
       return <Priority fill="#99BBEE" />;
-      //  <AiFillFlag className="h-5 w-7" style={{ color: '#6fddff' }} aria-hidden="true" />;
     } else if (priority === priorities.HIGH) {
       return <Priority fill="#F7A100" />;
-      // <AiFillFlag className="h-5 text-yellow-400 w-7 " aria-hidden="true" />;
     } else if (priority === priorities.URGENT) {
       return <Priority fill="#FF0E0F" />;
-      // <AiFillFlag className="h-5 text-red-400 w-7" aria-hidden="true" />;
     }
   };
 
