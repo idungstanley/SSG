@@ -20,7 +20,8 @@ import {
   setSelectedIndexListId,
   setF2State,
   setTaskInputValue,
-  setTaskRootIds
+  setTaskRootIds,
+  setRootTaskIds
 } from '../../../../features/task/taskSlice';
 import { setActiveItem } from '../../../../features/workspace/workspaceSlice';
 // import { UniqueIdentifier, useDraggable, useDroppable } from '@dnd-kit/core';
@@ -165,11 +166,11 @@ export function StickyCol({
     e.stopPropagation();
     setShowSubTasks(!showSubTasks);
 
+    dispatch(setRootTaskIds(undefined));
     if (!task.parent_id) {
       dispatch(setTaskRootIds({ ...taskRootIds, [task.id]: [task.id] }));
     } else {
       const updateTaskRootIds = { ...taskRootIds };
-
       for (const key of task.root_task_ids as string[]) {
         if (updateTaskRootIds[key]) {
           const taskRootIdsArray = [...(task.root_task_ids as string[]), task.id];
@@ -395,7 +396,7 @@ export function StickyCol({
         <td
           className={`sticky left-0 z-10 flex items-center justify-start text-sm font-medium text-gray-900 cursor-pointer text-start
           }`}
-          style={styles}
+          style={{ ...styles, zIndex: '1' }}
           {...props}
         >
           {handleDroppable() && droppableElement}
@@ -408,8 +409,6 @@ export function StickyCol({
                 saveSettingOnline?.singleLineView && !saveSettingOnline?.CompactView
                   ? '42px'
                   : saveSettingOnline?.CompactView && saveSettingOnline?.singleLineView
-                  ? '25px'
-                  : !saveSettingOnline?.singleLineView && saveSettingOnline?.CompactView && task.name.length < 30
                   ? '25px'
                   : ''
             }}
@@ -431,8 +430,6 @@ export function StickyCol({
                 saveSettingOnline?.singleLineView && !saveSettingOnline?.CompactView
                   ? '42px'
                   : saveSettingOnline?.CompactView && saveSettingOnline?.singleLineView
-                  ? '25px'
-                  : !saveSettingOnline?.singleLineView && saveSettingOnline?.CompactView && task.name.length < 30
                   ? '25px'
                   : ''
             }}
@@ -478,7 +475,7 @@ export function StickyCol({
               </button>
             )}
             <div onClick={() => dispatch(setCurrentTaskStatusId(task.id as string))}>
-              <StatusDropdown task={task} taskCurrentStatus={task.status} taskStatuses={task.task_statuses} />
+              <StatusDropdown taskCurrentStatus={task.status} taskStatuses={task.task_statuses} />
             </div>
             {separateSubtasksMode && task?.parentName && !paddingLeft ? (
               <ToolTip title={task.parentName}>
@@ -499,9 +496,12 @@ export function StickyCol({
                   className={`font-semibold alsoit-gray-300 ${
                     saveSettingOnline?.CompactView ? 'text-alsoit-text-md' : 'text-alsoit-text-lg'
                   } max-w-full`}
+                  contentEditable={eitableContent}
+                  suppressContentEditableWarning={true}
+                  ref={inputRef}
                 >
                   {saveSettingOnline?.singleLineView ? (
-                    <div contentEditable={eitableContent} suppressContentEditableWarning={true} ref={inputRef}>
+                    <div>
                       {!eitableContent ? (
                         <DetailsOnHover
                           hoverElement={
@@ -532,7 +532,6 @@ export function StickyCol({
                           style={{
                             maxWidth: '200px',
                             overflow: 'hidden',
-                            // textOverflow: 'ellipsis',
                             whiteSpace: 'nowrap'
                           }}
                         >
@@ -541,7 +540,7 @@ export function StickyCol({
                       )}
                     </div>
                   ) : (
-                    <div style={{ wordBreak: 'break-word' }}>
+                    <div style={{ wordBreak: 'break-word', overflow: 'hidden' }}>
                       {taskUpperCase ? TASK_NAME.toUpperCase() : Capitalize(TASK_NAME)}
                     </div>
                   )}
@@ -625,7 +624,7 @@ export function StickyCol({
               </ToolTip>
             </div>
             <div className="pt-1 ml-4">
-              <StatusDropdown task={task} taskCurrentStatus={task.status} taskStatuses={task.task_statuses} />
+              <StatusDropdown taskCurrentStatus={task.status} taskStatuses={task.task_statuses} />
             </div>
             <div className="flex flex-col items-start justify-start w-full pl-2 space-y-1">
               <p

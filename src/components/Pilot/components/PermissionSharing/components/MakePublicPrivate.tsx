@@ -1,38 +1,46 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { FaLock, FaLockOpen } from 'react-icons/fa';
 import { useAppSelector } from '../../../../../app/hooks';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useMakePulicOrPrivate } from '../../../../../features/workspace/workspaceService';
+import { useParams } from 'react-router-dom';
 
-function MakePublicPrivate({ isPublic }: { isPublic: number }) {
+function MakePublicPrivate({ isPublic }: { isPublic?: number }) {
   const queryClient = useQueryClient();
-  const [privateMode, setPrivateMode] = useState<boolean>(isPublic === 0 ? false : true);
+  const { listId, hubId, walletId } = useParams();
   const { entityForPermissions } = useAppSelector((state) => state.workspace);
+  const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
+
+  const currentActiveId = hubId ?? walletId ?? listId;
+
+  const entityType = entityForPermissions
+    ? entityForPermissions.type
+      ? entityForPermissions.type
+      : 'hub'
+    : activeItemType;
+  const entityId = entityForPermissions ? entityForPermissions.id : activeItemId ?? currentActiveId;
 
   const makePrublicoeprivate = useMutation(useMakePulicOrPrivate, {
     onSuccess: () => {
-      setPrivateMode(!privateMode);
-      queryClient.invalidateQueries([`${entityForPermissions?.type ?? 'hub'}-permissions`, entityForPermissions?.id]);
+      queryClient.invalidateQueries([`${entityType}-permissions`, entityId]);
     }
   });
 
   const handlePublicorPrivate = async (route: string) => {
-    const model = entityForPermissions?.type ? entityForPermissions.type : 'hub';
-    const model_id = entityForPermissions?.id;
     await makePrublicoeprivate.mutateAsync({
-      model,
-      model_id: model_id as string,
+      model: entityType as string,
+      model_id: entityId as string,
       route
     });
   };
 
   return (
     <>
-      {privateMode ? (
+      {isPublic !== 0 ? (
         <button
           className="w-11/12 m-auto py-1 flex justify-center items-center border border-alsoit-gray-100 rounded gap-1"
           onClick={() => {
-            handlePublicorPrivate('public');
+            handlePublicorPrivate('private');
           }}
         >
           <FaLockOpen />

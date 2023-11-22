@@ -9,8 +9,8 @@ import CustomSuggestion from '../../../DatePicker/CustomSuggestions';
 import EntityManagerIcon from '../../../../assets/icons/EntityManagerIcon';
 import StatusManagement from '../../../status/StatusManagement';
 import { pilotTabs } from '../../../../app/constants/pilotTabs';
-import Permissions from '../PermissionSharing';
 import { CreateTask } from '../../../../pages/workspace/pilot/components/createEntity/createTask/CreateTask';
+import Permissions from '../PermissionSharing';
 
 const HubsOptions = [
   { id: pilotTabs.CREATE_HUB, element: <CreateHub /> },
