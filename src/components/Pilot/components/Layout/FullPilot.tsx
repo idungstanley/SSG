@@ -4,9 +4,15 @@ import { useAppSelector } from '../../../../app/hooks';
 import FullHotkeysList from '../HotKeys/FullHotKeys';
 import FullTabs from '../Tabs/FullTabs';
 import Header from '../Header';
-import { ShareIcon, EditPageIcon, PrintIcon, CopyIcon, UploadIcon } from '../../../../assets/icons';
 import { VerticalScroll } from '../../../ScrollableContainer/VerticalScroll';
 import useAdjustedHeight from '../../../../hooks/useAdjustedHeight';
+import PilotNavIcon from '../../../../assets/icons/PilotNavIcon';
+import ToolbarNav from '../ToolbarNav';
+import EditDocumentIcon from '../../../../assets/icons/EditDocumentIcon';
+import DownloadIcon from '../../../../assets/icons/DownloadIcon';
+import FileCopyIcon from '../../../../assets/icons/FileCopyIcon';
+import SharePilotIcon from '../../../../assets/icons/SharePilotIcon';
+import PrintPilotIcon from '../../../../assets/icons/PrintPilotIcon';
 
 interface FullPilotProps {
   featureTabs: IPilotTab[];
@@ -18,8 +24,7 @@ interface FullPilotProps {
 export default function FullPilot({ featureTabs, activeSection, setShowModal, showModal }: FullPilotProps) {
   const { showOverlay } = useAppSelector((state) => state.workspace);
   const adjustedHeight = useAdjustedHeight(100);
-  const { show: showFullPilot, title } = useAppSelector((state) => state.slideOver.pilotSideOver);
-  const { activeItemType } = useAppSelector((state) => state.workspace);
+  const { show: showFullPilot } = useAppSelector((state) => state.slideOver.pilotSideOver);
 
   return (
     <VerticalScroll bgColor="bg-white">
@@ -39,21 +44,102 @@ export default function FullPilot({ featureTabs, activeSection, setShowModal, sh
             menu={<Header.Menu setShowModal={setShowModal} />}
             additionalNavItems={
               <>
-                <EditPageIcon className="w-3 h-3" stroke="orange" />
+                <div
+                  className="flex"
+                  style={{
+                    padding: '4px 5px 3px 0',
+                    borderRight: '0.3px solid #B2B2B2',
+                    marginRight: '5px',
+                    gap: '0.35rem'
+                  }}
+                >
+                  <div
+                    className="flex justify-center items-center bg-alsoit-gray-125 hover:bg-alsoit-gray-50 transition duration-300"
+                    style={{
+                      borderRadius: '3.6px',
+                      width: '24px',
+                      height: '24px'
+                    }}
+                  >
+                    <EditDocumentIcon style={{ width: '16.43', height: '18.2' }} />
+                  </div>
 
-                <UploadIcon className="w-3 h-3" stroke="orange" />
+                  <div
+                    className="flex justify-center items-center bg-alsoit-gray-125 hover:bg-alsoit-gray-50 transition duration-300"
+                    style={{
+                      borderRadius: '3.6px',
+                      width: '24px',
+                      height: '24px'
+                    }}
+                  >
+                    <DownloadIcon style={{ width: '15', height: '15.7' }} />
+                  </div>
 
-                <CopyIcon className="w-4 h-4" stroke="orange" />
+                  <div
+                    className="flex justify-center items-center bg-alsoit-gray-125 hover:bg-alsoit-gray-50 transition duration-300"
+                    style={{
+                      borderRadius: '3.6px',
+                      width: '24px',
+                      height: '24px'
+                    }}
+                  >
+                    <FileCopyIcon style={{ width: '15.02', height: '18.2' }} />
+                  </div>
 
-                <ShareIcon dimensions={{ width: 16, height: 16 }} active={false} color="orange" />
+                  <div
+                    className="flex justify-center items-center bg-alsoit-gray-125 hover:bg-alsoit-gray-50 transition duration-300"
+                    style={{
+                      borderRadius: '3.6px',
+                      width: '24px',
+                      height: '24px'
+                    }}
+                  >
+                    <SharePilotIcon style={{ width: '16.3', height: '18.7' }} />
+                  </div>
 
-                <PrintIcon className="w-3 h-3" stroke="orange" />
+                  <div
+                    className="flex justify-center items-center bg-alsoit-gray-125 hover:bg-alsoit-gray-50 transition duration-300"
+                    style={{
+                      borderRadius: '3.6px',
+                      width: '24px',
+                      height: '24px',
+                      paddingTop: '2px'
+                    }}
+                  >
+                    <PrintPilotIcon />
+                  </div>
+                </div>
               </>
             }
           >
-            <p className="text-xs font-semibold capitalize truncate">
-              {activeItemType} | <span className="font-normal">{title}</span>
-            </p>
+            <div
+              className="flex overflow-hidden relative"
+              style={{
+                padding: '18px 10px 15px 8px',
+                maxWidth: '98%'
+              }}
+            >
+              <div>
+                <PilotNavIcon />
+              </div>
+              <div className="flex" style={{ paddingLeft: '8px', marginTop: '-2px' }}>
+                <ToolbarNav />
+              </div>
+              <div
+                style={{
+                  position: 'absolute',
+                  bottom: '0',
+                  top: '0',
+                  left: 'auto',
+                  right: '-5px',
+                  height: '45px',
+                  width: '55px',
+                  backgroundImage: 'linear-gradient(to right, transparent , white)'
+                }}
+              >
+                &nbsp;
+              </div>
+            </div>
           </Header>
 
           <FullHotkeysList tabs={featureTabs} setShowModal={setShowModal} showModal={showModal} />

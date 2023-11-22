@@ -61,6 +61,8 @@ import { pilotTabs } from '../../app/constants/pilotTabs';
 import { generateViewsUrl } from '../../utils/generateViewsUrl';
 import { useNavigate } from 'react-router-dom';
 import { IFavorites, IHub, IList, IWallet } from '../../features/hubs/hubs.interfaces';
+import AlsoitMenuDropdown from '../DropDowns';
+import EntitySettingsDropdown from './EntitySettingsDropdown';
 
 interface IMenuDropdownProps {
   isExtendedBar?: boolean;
@@ -75,7 +77,8 @@ interface itemsType {
   icon: JSX.Element;
   isVisible: boolean;
   rightIcon?: JSX.Element;
-  handleClick: () => void;
+  isUnusing?: boolean;
+  handleClick: (e: React.MouseEvent<HTMLDivElement>) => void;
 }
 
 interface ItemsProps {
@@ -98,6 +101,7 @@ export default function MenuDropdown({ isExtendedBar, cords, walletLevel, item, 
   const { archiveList } = useAppSelector((state) => state.list);
   const { showSidebar, userSettingsData } = useAppSelector((state) => state.account);
 
+  const [settingsEl, setSettingsEl] = useState<null | HTMLElement>(null);
   const [open, setOpen] = useState<boolean>(true);
 
   const closeMenu = () => {
@@ -231,8 +235,9 @@ export default function MenuDropdown({ isExtendedBar, cords, walletLevel, item, 
     {
       title: 'Hide in sidebar',
       handleClick: () => ({}),
-      icon: <EyeSlashIcon className="w-4 h-4" aria-hidden="true" />,
-      isVisible: true
+      icon: <EyeSlashIcon color="orange" className="w-4 h-4" aria-hidden="true" />,
+      isVisible: true,
+      isUnusing: true
     },
     {
       title: 'Archive',
@@ -319,13 +324,16 @@ export default function MenuDropdown({ isExtendedBar, cords, walletLevel, item, 
     {
       title: 'Templates',
       handleClick: () => ({}),
-      icon: <SparklesIcon className="w-4 h-6 text-gray-700" aria-hidden="true" />,
+      icon: <SparklesIcon color="orange" className="w-4 h-6" aria-hidden="true" />,
+      rightIcon: <ArrowRight color="orange" />,
       isVisible: true,
-      rightIcon: <ArrowRight />
+      isUnusing: true
     },
     {
       title: `${Capitalize(showMenuDropdownType as string)} settings`,
-      handleClick: () => ({}),
+      handleClick: (e: React.MouseEvent<HTMLDivElement>) => {
+        setSettingsEl(e.currentTarget);
+      },
       icon: <CogIcon className="w-5 h-6 text-gray-700" aria-hidden="true" />,
       isVisible: true,
       rightIcon: <ArrowRight />
@@ -398,46 +406,57 @@ export default function MenuDropdown({ isExtendedBar, cords, walletLevel, item, 
   };
 
   return (
-    <Menu
-      open={open}
-      onClose={closeMenu}
-      TransitionComponent={Fade}
-      anchorOrigin={{
-        vertical: Number(cords?.top) - 150 || 'center',
-        horizontal: showSidebar ? Number(userSettingsData?.sidebarWidth) - 100 : sidebarWidthRD
-      }}
-      PaperProps={{
-        style: {
-          borderRadius: '12px'
-        }
-      }}
-    >
-      <div className="flex items-center justify-center my-2">{showMenuDropdownType?.toUpperCase()} PROPERTIES</div>
-      <VerticalScroll>
-        <div className="relative h-96">
-          <InlineBorderLabel label="DEFAULT SETTINGS" />
-          <GroupMenuOptions items={itemsList} />
-          <InlineBorderLabel label="ADVANCE SETTINGS" />
-          <GroupMenuOptions items={advanceOption} />
-          <InlineBorderLabel label="MORE SETTINGS" />
-          <GroupMenuOptions items={moreOptions} />
+    <>
+      <Menu
+        open={open}
+        onClose={closeMenu}
+        TransitionComponent={Fade}
+        anchorOrigin={{
+          vertical: Number(cords?.top) - 150 || 'center',
+          horizontal: showSidebar ? Number(userSettingsData?.sidebarWidth) - 100 : sidebarWidthRD
+        }}
+        PaperProps={{
+          style: {
+            borderRadius: '12px'
+          }
+        }}
+      >
+        <div className="flex items-center justify-center my-2">{showMenuDropdownType?.toUpperCase()} PROPERTIES</div>
+        <VerticalScroll>
+          <div className="relative h-96">
+            <InlineBorderLabel label="DEFAULT SETTINGS" />
+            <GroupMenuOptions items={itemsList} />
+            <InlineBorderLabel label="ADVANCE SETTINGS" />
+            <GroupMenuOptions items={advanceOption} />
+            <InlineBorderLabel label="MORE SETTINGS" />
+            <GroupMenuOptions items={moreOptions} />
+          </div>
+        </VerticalScroll>
+        <div className="sticky bottom-0 p-2 bg-white border-t">
+          <Button
+            label="Sharing & Permissions"
+            icon={<AiOutlineShareAlt className="text-white" />}
+            buttonStyle="base"
+            height="h-8"
+            labelSize="text-sm"
+            onClick={handleSharingnPermissions}
+          />
         </div>
-      </VerticalScroll>
-      <div className="sticky bottom-0 p-2 bg-white border-t">
-        <Button
-          label="Sharing & Permissions"
-          icon={<AiOutlineShareAlt className="text-white" />}
-          buttonStyle="base"
-          height="h-8"
-          labelSize="text-sm"
-          onClick={handleSharingnPermissions}
-        />
-      </div>
-      {SubDropdownMenu && <SubDropdown walletLevel={walletLevel} placeHubType={APP_TASKS} />}
-      <EditHubModal />
-      <EditListModal />
-      <EditWalletModal />
-    </Menu>
+        {SubDropdownMenu && <SubDropdown walletLevel={walletLevel} placeHubType={APP_TASKS} />}
+        <EditHubModal />
+        <EditListModal />
+        <EditWalletModal />
+      </Menu>
+      {item && entityType ? (
+        <AlsoitMenuDropdown
+          anchorEl={settingsEl}
+          handleClose={() => setSettingsEl(null)}
+          style={{ marginTop: '-30px', marginLeft: '180px' }}
+        >
+          <EntitySettingsDropdown item={item} entityType={entityType} />
+        </AlsoitMenuDropdown>
+      ) : null}
+    </>
   );
 }
 
@@ -449,11 +468,11 @@ function GroupMenuOptions({ items }: ItemsProps) {
           <div key={index}>
             <div
               className="flex items-center justify-between p-1 py-2 space-x-2 text-sm text-left text-gray-600 rounded-md cursor-pointer hover:bg-alsoit-gray-50"
-              onClick={item.handleClick}
+              onClick={(e: React.MouseEvent<HTMLDivElement>) => item.handleClick(e)}
             >
               <div className="flex items-center gap-2">
                 <span className="flex items-center w-5 h-5">{item.icon}</span>
-                <p>{item.title}</p>
+                <p style={{ color: item.isUnusing ? 'orange' : '' }}>{item.title}</p>
               </div>
               {item.rightIcon && <span>{item.rightIcon}</span>}
             </div>
