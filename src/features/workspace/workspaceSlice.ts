@@ -9,8 +9,7 @@ import {
 } from './workspace.interfaces';
 import { IActivityLog } from '../general/history/history.interfaces';
 import dayjs, { Dayjs } from 'dayjs';
-import { IList, IView } from '../hubs/hubs.interfaces';
-import { Hub, Wallet } from '../../pages/workspace/hubs/components/ActiveTree/activetree.interfaces';
+import { IHub, IList, IView, IWallet } from '../hubs/hubs.interfaces';
 import { pilotTabs } from '../../app/constants/pilotTabs';
 
 const initialActivePlaceId: number | null = (JSON.parse(localStorage.getItem('activePlaceIdLocale') as string) ||
@@ -88,7 +87,7 @@ interface workspaceState {
   activeHotkeyIds: string[];
   nestedTimeEntityId: string | null;
   activeView: IView | null;
-  entityForPermissions?: IList | Wallet | Hub;
+  entityForPermissions?: IList | IWallet | IHub;
 }
 
 const initialState: workspaceState = {
@@ -389,7 +388,7 @@ export const wsSlice = createSlice({
     setActiveView(state, action: PayloadAction<IView>) {
       state.activeView = action.payload;
     },
-    setEntityForPermissions(state, action: PayloadAction<IList | Wallet | Hub | undefined>) {
+    setEntityForPermissions(state, action: PayloadAction<IList | IWallet | IHub | undefined>) {
       state.entityForPermissions = action.payload;
     }
   }

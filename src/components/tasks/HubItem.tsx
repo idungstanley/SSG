@@ -14,7 +14,7 @@ import AvatarWithInitials from '../avatar/AvatarWithInitials';
 import Palette from '../ColorPalette';
 import UploadImage from '../ColorPalette/component/UploadImage';
 import { InvalidateQueryFilters } from '@tanstack/react-query';
-import { setCreateWlLink, setEntityForPermissions } from '../../features/workspace/workspaceSlice';
+import { setCreateWlLink } from '../../features/workspace/workspaceSlice';
 import { ListColourProps } from './ListItem';
 import { useParams } from 'react-router-dom';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
@@ -380,7 +380,6 @@ export default function HubItem({
                 <span
                   onClick={(e) => {
                     handleHubSettings(item.id, item.name, e);
-                    dispatch(setEntityForPermissions(item));
                   }}
                   className="cursor-pointer"
                   id="menusettings"
