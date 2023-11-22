@@ -1,14 +1,7 @@
-import {
-  ChatBubbleLeftEllipsisIcon,
-  DocumentTextIcon,
-  EyeIcon,
-  InformationCircleIcon,
-  SignalIcon
-} from '@heroicons/react/24/outline';
+import { DocumentTextIcon, EyeIcon, InformationCircleIcon, SignalIcon } from '@heroicons/react/24/outline';
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
-import CommentsForPilot from '../../../../../components/Comments/CommentsForPilot';
 import WatchersForPilot from '../../../../../components/Watchers/WatchersForPilot';
 import { setShowPilotSideOver } from '../../../../../features/general/slideOver/slideOverSlice';
 import Checklists from '../../../../../components/Pilot/components/Checklist/Checklist';
@@ -48,10 +41,6 @@ const sections = [
     id: pilotTabs.LOGS,
     element: <Logs />
   },
-  // {
-  //   id: pilotTabs.COMMENTS,
-  //   element: <CommentsForPilot />
-  // },
   {
     id: pilotTabs.WATCHERS,
     element: <WatchersForPilot />
@@ -117,11 +106,6 @@ const tabs = [
     label: 'Logs',
     icon: <DocumentTextIcon className="w-4 h-4" />
   },
-  // {
-  //   id: pilotTabs.COMMENTS,
-  //   label: 'Comments',
-  //   icon: <ChatBubbleLeftEllipsisIcon className="w-4 h-4" />
-  // },
   {
     id: pilotTabs.WATCHERS,
     label: 'Watchers',
