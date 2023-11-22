@@ -47,7 +47,7 @@ export default function FullHotkeysList({ tabs, showModal, setShowModal }: Hotke
   }, [pilotWidth]);
 
   const hotkeys = useMemo(() => {
-    if (pilotWidth) {
+    if (pilotWidth && activeHotkeyIds.length) {
       const itemWidth = HOTKEY_WIDTH + MARGIN_WIDTH;
       const newSlides = calculateSlides(activeHotkeyIds, itemWidth, pilotWidth - SLIDE_TOGGLE_WIDTH);
       setSlidesCount(newSlides.length);
