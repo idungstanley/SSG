@@ -20,7 +20,8 @@ import {
   setSelectedIndexListId,
   setF2State,
   setTaskInputValue,
-  setTaskRootIds
+  setTaskRootIds,
+  setRootTaskIds
 } from '../../../../features/task/taskSlice';
 import { setActiveItem } from '../../../../features/workspace/workspaceSlice';
 // import { UniqueIdentifier, useDraggable, useDroppable } from '@dnd-kit/core';
@@ -165,11 +166,11 @@ export function StickyCol({
     e.stopPropagation();
     setShowSubTasks(!showSubTasks);
 
+    dispatch(setRootTaskIds(undefined));
     if (!task.parent_id) {
       dispatch(setTaskRootIds({ ...taskRootIds, [task.id]: [task.id] }));
     } else {
       const updateTaskRootIds = { ...taskRootIds };
-
       for (const key of task.root_task_ids as string[]) {
         if (updateTaskRootIds[key]) {
           const taskRootIdsArray = [...(task.root_task_ids as string[]), task.id];
