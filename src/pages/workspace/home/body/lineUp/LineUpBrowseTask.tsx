@@ -38,12 +38,12 @@ export default function LineUpBrowseTask({ listId }: { listId: string }) {
           tasks?.map((task) => (
             <div
               key={task.id}
-              className="flex items-center space-x-3 py-1 cursor-pointer hover:bg-alsoit-gray-50 px-2 rounded-md"
+              className="flex items-center px-2 py-1 space-x-3 rounded-md cursor-pointer hover:bg-alsoit-gray-50"
               style={{ marginLeft: '70px' }}
               onClick={() => handleAddLineUpTask(task.id)}
             >
               <div className="pointer-events-none">
-                <StatusDropdown task={task} taskCurrentStatus={task.status} taskStatuses={task.task_statuses} />
+                <StatusDropdown taskCurrentStatus={task.status} taskStatuses={task.task_statuses} />
               </div>
               <div className="mb-1 truncate " style={{ maxWidth: '220px' }}>
                 {task?.name}
@@ -52,7 +52,7 @@ export default function LineUpBrowseTask({ listId }: { listId: string }) {
           ))}
       </div>
       {hasNextPage && (
-        <p className="flex justify-center text-alsoit-purple-300 p-3 cursor-pointer" onClick={() => fetchNextPage()}>
+        <p className="flex justify-center p-3 cursor-pointer text-alsoit-purple-300" onClick={() => fetchNextPage()}>
           Show more tasks
         </p>
       )}

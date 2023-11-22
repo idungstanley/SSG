@@ -6,6 +6,7 @@ import {
   setCurrTaskListId,
   setCurrTeamMemId,
   setEscapeKey,
+  setNewTaskStatus,
   setStatusId,
   setSubtaskDefaultStatusId
 } from '../../../../features/task/taskSlice';
@@ -118,6 +119,7 @@ export function Table({ heads, data, label, listName, listColor, isBlockedShowCh
 
   const handleToggleNewTask = () => {
     setShowNewTaskField(true);
+    dispatch(setNewTaskStatus(null));
   };
 
   const draggableItem = draggableItemId ? data.find((i) => i.id === draggableItemId) : null;
@@ -131,7 +133,7 @@ export function Table({ heads, data, label, listName, listColor, isBlockedShowCh
   return (
     <>
       <div
-        className="sticky top-0 mr-2 pl-2 pt-2 table-container overflow-hidden z-10"
+        className="sticky top-0 z-10 pt-2 pl-2 mr-2 overflow-hidden table-container"
         style={{
           backgroundColor: LightenColor(!listColor?.outerColour ? 'black' : (listColor?.outerColour as string), 0.95)
         }}

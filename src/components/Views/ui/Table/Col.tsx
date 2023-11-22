@@ -55,7 +55,9 @@ export function Col({ value, field, fieldId, task, styles, selectedRow, ...props
   const { dragOverItemId, draggableItemId } = useAppSelector((state) => state.list);
   const {
     dragToBecomeSubTask,
+    newTaskStatus,
     verticalGrid,
+    currentTaskStatusId,
     selectedTasksArray,
     saveSettingOnline,
     taskColumnIndex,
@@ -71,20 +73,20 @@ export function Col({ value, field, fieldId, task, styles, selectedRow, ...props
     priority: <TaskPriority task={task as ImyTaskData} />,
     status: value ? (
       <div
-        className="top-0 flex flex-col items-center justify-center w-full h-full px-1 text-xs font-medium text-center text-white capitalize bg-green-500"
-        style={{ backgroundColor: task?.status?.color }}
+        className="top-0 flex flex-col items-center justify-center w-full h-full px-1 text-xs font-medium text-center text-white capitalize"
+        style={{
+          backgroundColor:
+            task.id === '0' || task.id === currentTaskStatusId
+              ? newTaskStatus?.color || task?.status?.color
+              : task?.status?.color
+        }}
         onClick={() => {
           dispatch(setCurrentTaskStatusId(task.id as string));
           dispatch(setSelectedTaskParentId((task.parent_id || task.list_id) as string));
           dispatch(setSelectedTaskType(task?.parent_id ? EntityType.subtask : EntityType.task));
         }}
       >
-        <StatusDropdown
-          task={task}
-          taskCurrentStatus={task.status}
-          taskStatuses={task.task_statuses}
-          statusDropdownType="name"
-        />
+        <StatusDropdown taskCurrentStatus={task.status} taskStatuses={task.task_statuses} statusDropdownType="name" />
       </div>
     ) : (
       <></>
