@@ -163,7 +163,9 @@ export default function WalletItem({
 
   return (
     <div
-      className={`nav-item ${openedEntitiesIds.includes(wallet.id) ? 'sticky bg-white' : ''}`}
+      className={`nav-item ${wallet.id === walletId ? 'active-nav-item' : ''} ${
+        openedEntitiesIds.includes(wallet.id) ? 'sticky bg-white' : ''
+      }`}
       style={{
         top: openedEntitiesIds.includes(wallet.id) && showSidebar ? topNumber : '',
         zIndex: openedEntitiesIds.includes(wallet.id) ? zNumber : '2',

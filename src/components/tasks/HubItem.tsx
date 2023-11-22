@@ -236,7 +236,9 @@ export default function HubItem({
 
   return (
     <div
-      className={`w-full nav-item ${openedEntitiesIds.includes(item.id) ? 'sticky bg-white opacity-100 hub-item' : ''}`}
+      className={`w-full nav-item ${item.id === hubId ? 'active-nav-item' : ''} ${
+        openedEntitiesIds.includes(item.id) ? 'sticky bg-white opacity-100 hub-item' : ''
+      }`}
       style={{
         top: openedEntitiesIds.includes(item.id) && showSidebar ? topNumber : '',
         zIndex: openedEntitiesIds.includes(item.id) ? zNumber : '2',
