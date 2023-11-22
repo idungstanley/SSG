@@ -8,6 +8,8 @@ import { SlideButton } from '../../../../SlideButton';
 import { setHistoryMemory } from '../../../../../features/task/taskSlice';
 import dayjs from 'dayjs';
 import DatePicker from '../../../../DatePicker/DatePicker';
+import { TabsDropDown } from '../../TimeClock/TabsDropDown';
+import RoundedCheckbox from '../../../../Checkbox/RoundedCheckbox';
 
 interface HistoryfiltermodalProps {
   logData: IActivityLog[];
@@ -21,10 +23,15 @@ export function HistoryfilterModal({ logData, toggleFn }: HistoryfiltermodalProp
     { id: 3, main: 'user', subType: 'date' },
     { id: 4, main: 'type', subType: 'date' }
   ];
+
   const { HistoryFilterMemory, selectedDate } = useAppSelector((state) => state.task);
+
   const [checkedStates, setCheckedStates] = useState<boolean[]>([]);
   const [dateEntries, setEntries] = useState<boolean>(false);
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+  const [dropDown, setDropDown] = useState<{ user: boolean }>({
+    user: false
+  });
 
   const modalRef = useRef<HTMLDivElement>(null);
 
@@ -111,19 +118,36 @@ export function HistoryfilterModal({ logData, toggleFn }: HistoryfiltermodalProp
                   </div>
                 ) : keys.main === 'user' ? (
                   <div className="flex px-6">
-                    <select
-                      name="user"
-                      id="loguser"
-                      className="w-36 rounded-lg border-gray-400 text-gray-500 text-xs ml-1 px-2 custom-select"
-                      onChange={(e) => dispatch(setHistoryMemory({ ...HistoryFilterMemory, user: e.target.value }))}
+                    <div
+                      onClick={() => setDropDown((prev) => ({ ...prev, user: !prev.user }))}
+                      className="flex items-center space-x-2.5 w-32 text-alsoit-text-md border border-alsoit-purple-300 p-1 rounded-md relative"
                     >
-                      <option value="">Select user</option>
-                      {Array.from(new Set(logData.map((data) => data.created_by.user.name))).map((userName) => (
-                        <option key={userName} value={userName} selected={HistoryFilterMemory?.user === userName ?? ''}>
-                          {userName}
-                        </option>
-                      ))}
-                    </select>
+                      {HistoryFilterMemory?.user ?? 'Select User'}
+                      {dropDown.user && (
+                        <TabsDropDown
+                          closeModal={() => setDropDown((prev) => ({ ...prev, user: false }))}
+                          header="select user"
+                          subHeader="filter logs by user"
+                          styles="w-44 left-1/2 top-1/3"
+                          subStyles="left-8"
+                        >
+                          {Array.from(new Set(logData.map((data) => data.created_by.user.name))).map((userName) => (
+                            <div
+                              key={userName}
+                              className="flex items-center space-x-2 cursor-pointer p-2 hover:bg-alsoit-gray-50"
+                              onClick={() => dispatch(setHistoryMemory({ ...HistoryFilterMemory, user: userName }))}
+                            >
+                              <RoundedCheckbox
+                                isChecked={HistoryFilterMemory?.user === userName}
+                                onChange={() => dispatch(setHistoryMemory({ ...HistoryFilterMemory, user: userName }))}
+                                styles="w-3 h-3 rounded-full checked:bg-alsoit-purple-300"
+                              />
+                              <span>{userName ?? 'Select User'}</span>
+                            </div>
+                          ))}
+                        </TabsDropDown>
+                      )}
+                    </div>
                   </div>
                 ) : (
                   <span>hello</span>
