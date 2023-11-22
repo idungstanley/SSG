@@ -1,6 +1,4 @@
 import { useAppSelector } from '../../../../../../../../app/hooks';
-import { ClockIcon } from '../../../../../../../../assets/icons/ClockIcon';
-import { ScreenRecordIcon } from '../../../../../../../../assets/icons/ScreenRecordIcon';
 import { pilotTabs } from '../../../../../../../../app/constants/pilotTabs';
 import {
   DndContext,
@@ -14,24 +12,25 @@ import {
 import { SortableContext, arrayMove, rectSortingStrategy, sortableKeyboardCoordinates } from '@dnd-kit/sortable';
 import { useState } from 'react';
 import SubtabDrag from '../../../../../../pilot/components/SubtabDnd';
+import { IoTimeOutline } from 'react-icons/io5';
 
-export const timeClockOptions = [
+export const automationsOptions = [
   {
-    id: pilotTabs.TIME_CLOCK,
-    name: 'Timeclock',
-    icon: <ClockIcon />,
+    id: pilotTabs.COMING_SOON,
+    name: 'Coming soon',
+    icon: <IoTimeOutline />,
     isVisible: false
   },
   {
-    id: pilotTabs.SCREEN_RECORD,
-    name: 'Screen Record',
-    icon: <ScreenRecordIcon />,
+    id: pilotTabs.COMING_SOON_2,
+    name: 'Coming soon',
+    icon: <IoTimeOutline />,
     isVisible: false
   }
 ];
 
-export default function TimeSubTab() {
-  const { showPilot, activeSubTimeClockTabId } = useAppSelector((state) => state.workspace);
+export default function AutomationsSubTabs() {
+  const { showPilot, activeSubComingTabId } = useAppSelector((state) => state.workspace);
 
   const idsFromLS = JSON.parse(localStorage.getItem('subTab') || '[]') as string[];
 
@@ -43,7 +42,7 @@ export default function TimeSubTab() {
   );
 
   const [items, setItems] = useState(
-    timeClockOptions.sort((a, b) => idsFromLS.indexOf(a.id) - idsFromLS.indexOf(b.id))
+    automationsOptions.sort((a, b) => idsFromLS.indexOf(a.id) - idsFromLS.indexOf(b.id))
   );
 
   const handleDragEnd = (e: DragEndEvent) => {
@@ -73,16 +72,16 @@ export default function TimeSubTab() {
       <SortableContext strategy={rectSortingStrategy} items={items}>
         <section>
           <div className="grid bg-primary-200 pb-0.5 grid-cols-2">
-            {timeClockOptions.map((item) => (
+            {automationsOptions.map((item) => (
               <SubtabDrag
                 key={item.id}
                 id={item.id}
                 icon={item.icon}
-                activeSub={activeSubTimeClockTabId}
+                activeSub={activeSubComingTabId}
                 showPilot={showPilot}
-                name={pilotTabs.UTILITIES}
+                name={pilotTabs.COMING_SOON}
                 item={item}
-                items={timeClockOptions}
+                items={automationsOptions}
               />
             ))}
           </div>

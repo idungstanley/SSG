@@ -19,7 +19,7 @@ export const pilotTabs = {
   CREATE_LIST: 'create_list',
   CREATE_TASK: 'create_task',
   UTILITIES: 'utilities',
-  AUTOMATION: 'automation',
+  AUTOMATIONS: 'automations',
   CALENDAR_SETTINGS: 'calendar_settings',
   STATUS_MANAGEMENT: 'status_management',
   SUBTASK: 'subtask',
@@ -29,5 +29,11 @@ export const pilotTabs = {
   VOICE_CALL: 'voice_call',
   HISTORY_LOG: 'history_log',
   ACTIVITY_LOG: 'activity_log',
-  CUSTOM_LOG: 'custom_log'
+  CUSTOM_LOG: 'custom_log',
+  LIBRARY: 'library',
+  COMING_SOON: 'coming_soon',
+  COMING_SOON_2: 'coming_soon_2',
+  DEEP_LINKS: 'deep_links',
+  FORMS: 'forms',
+  TICKETS: 'tickets'
 };

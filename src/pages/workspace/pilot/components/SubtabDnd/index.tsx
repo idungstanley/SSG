@@ -1,10 +1,12 @@
 import { useSortable } from '@dnd-kit/sortable';
 import { useDispatch } from 'react-redux';
 import {
+  setActiveSubComingTabId,
   setActiveSubCommunicationTabId,
   setActiveSubDetailsTabId,
   setActiveSubHubManagerTabId,
-  setActiveSubLogsTabId
+  setActiveSubLogsTabId,
+  setActiveSubTimeClockTabId
 } from '../../../../../features/workspace/workspaceSlice';
 import useFindNeighbors, { NeighborsProps } from '../../../../../hooks/useFindNeighbors';
 import { pilotTabs } from '../../../../../app/constants/pilotTabs';
@@ -52,6 +54,10 @@ export default function SubtabDrag({ id, item, items, icon, showPilot, activeSub
       dispatch(setActiveSubHubManagerTabId(id));
     } else if (name === pilotTabs.LOGS) {
       dispatch(setActiveSubLogsTabId(id));
+    } else if (name === pilotTabs.UTILITIES) {
+      dispatch(setActiveSubTimeClockTabId(id));
+    } else if (name === pilotTabs.COMING_SOON) {
+      dispatch(setActiveSubComingTabId(id));
     }
   };
 
@@ -89,7 +95,9 @@ export default function SubtabDrag({ id, item, items, icon, showPilot, activeSub
           {item && <p className="truncate">{item.name}</p>}
         </span>
       </div>
-      <span className="absolute right-0 text-gray-300">|</span>
+      {id !== activeSub && id !== leftItem?.id && id !== items[items.length - 1].id ? (
+        <span className="absolute right-0 bg-gray-300" style={{ width: '1px', height: '15px' }} />
+      ) : null}
     </section>
   );
 }

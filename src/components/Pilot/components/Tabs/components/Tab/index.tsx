@@ -58,7 +58,9 @@ export default function Tab({ id, label, icon, showTabLabel }: TabProps) {
           showTabLabel ? 'justify-start w-full' : 'justify-center'
         )}
       >
-        {icon}
+        <span className="flex justify-center" style={{ width: '20px' }}>
+          {icon}
+        </span>
         {showTabLabel ? <p className="truncate">{label}</p> : null}
       </div>
       <div />

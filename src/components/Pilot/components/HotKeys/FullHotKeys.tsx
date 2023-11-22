@@ -47,7 +47,7 @@ export default function FullHotkeysList({ tabs, showModal, setShowModal }: Hotke
   }, [pilotWidth]);
 
   const hotkeys = useMemo(() => {
-    if (pilotWidth) {
+    if (pilotWidth && activeHotkeyIds.length) {
       const itemWidth = HOTKEY_WIDTH + MARGIN_WIDTH;
       const newSlides = calculateSlides(activeHotkeyIds, itemWidth, pilotWidth - SLIDE_TOGGLE_WIDTH);
       setSlidesCount(newSlides.length);
@@ -118,7 +118,9 @@ export default function FullHotkeysList({ tabs, showModal, setShowModal }: Hotke
               )}
             >
               <div className="flex items-center gap-2">
-                <span className={cl(activeHotkeyIds.includes(tab.id) && 'text-black')}>{tab.icon}</span>
+                <span className="flex justify-center" style={{ width: '20px' }}>
+                  {tab.icon}
+                </span>
                 <span className="block truncate">{tab.label}</span>
               </div>
 
