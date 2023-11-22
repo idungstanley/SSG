@@ -108,11 +108,7 @@ export const accountSlice = createSlice({
       state.extendedBarWidth = action.payload.extendedBarWidth
         ? action.payload.extendedBarWidth
         : extendedBarWidthFromLS;
-      state.pilotWidth = action.payload.pilotWidth
-        ? action.payload.pilotWidth
-        : action.payload.pilotWidth
-        ? action.payload.pilotWidth
-        : pilotWidthFromLS;
+      state.pilotWidth = action.payload.pilotWidth ? action.payload.pilotWidth : pilotWidthFromLS;
     },
     setShowSidebar: (state, action: PayloadAction<boolean>) => {
       state.showSidebar = action.payload;

@@ -1,5 +1,5 @@
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { CheckIcon } from '@heroicons/react/24/outline';
-import React, { useCallback, useMemo } from 'react';
 import { IPilotTab } from '../../../../types';
 import { cl } from '../../../../utils';
 import { Modal } from './components/Modal';
@@ -10,6 +10,8 @@ import { STORAGE_KEYS } from '../../../../app/config/dimensions';
 import { setUserSettingsKeys } from '../../../../features/account/accountService';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import useResolution from '../../../../hooks/useResolution';
+import SlideToggle from '../../../SlideToggle';
+import { calculateSlides } from '../../../../utils/calculateSlides';
 
 interface HotkeysListProps {
   tabs: IPilotTab[];
@@ -25,7 +27,10 @@ export default function FullHotkeysList({ tabs, showModal, setShowModal }: Hotke
   const resolution = useResolution();
 
   const { activeTabId, activeHotkeyIds } = useAppSelector((state) => state.workspace);
-  const { userSettingsData } = useAppSelector((state) => state.account);
+  const { userSettingsData, pilotWidth } = useAppSelector((state) => state.account);
+
+  const [activeSlide, setActiveSlide] = useState<number>(1);
+  const [slidesCount, setSlidesCount] = useState<number>(0);
 
   const saveHotKeysToBE = useMutation(setUserSettingsKeys, {
     onSuccess: () => {
@@ -33,7 +38,24 @@ export default function FullHotkeysList({ tabs, showModal, setShowModal }: Hotke
     }
   });
 
-  const hotkeys = useMemo(() => tabs.filter((i) => activeHotkeyIds.includes(i.id)), [activeHotkeyIds, tabs]);
+  const HOTKEY_WIDTH = 30;
+  const MARGIN_WIDTH = 20;
+  const SLIDE_TOGGLE_WIDTH = 40;
+
+  useEffect(() => {
+    setActiveSlide(1);
+  }, [pilotWidth]);
+
+  const hotkeys = useMemo(() => {
+    if (pilotWidth) {
+      const itemWidth = HOTKEY_WIDTH + MARGIN_WIDTH;
+      const newSlides = calculateSlides(activeHotkeyIds, itemWidth, pilotWidth - SLIDE_TOGGLE_WIDTH);
+      setSlidesCount(newSlides.length);
+      return tabs.filter((i) => newSlides[newSlides[activeSlide - 1] ? activeSlide - 1 : 0].includes(i.id));
+    } else {
+      return tabs.filter((i) => activeHotkeyIds.includes(i.id));
+    }
+  }, [activeHotkeyIds, tabs, activeSlide, pilotWidth]);
 
   const handleClick = useCallback(
     (tabId: string) => {
@@ -55,8 +77,10 @@ export default function FullHotkeysList({ tabs, showModal, setShowModal }: Hotke
     <>
       {activeHotkeyIds.length !== 0 ? (
         <div className="flex items-center p-1 border-b">
-          {/* unknown */}
-          <div className="flex flex-row flex-wrap w-full col-span-1 gap-2">
+          <div className="pl-1 pr-2">
+            <SlideToggle activeSlide={activeSlide} fullCount={slidesCount} setActiveSlide={setActiveSlide} />
+          </div>
+          <div className="flex flex-row w-full col-span-1">
             {hotkeys.map((hotkey) => (
               <div key={hotkey.label}>
                 <ToolTip title={hotkey.label}>
@@ -65,8 +89,9 @@ export default function FullHotkeysList({ tabs, showModal, setShowModal }: Hotke
                     title={hotkey.label}
                     className={cl(
                       activeTabId === hotkey.id ? 'text-primary-500 bg-primary-200' : 'text-gray-600',
-                      'flex items-center justify-center border px-4 py-1 rounded-md'
+                      'mx-2 my-1 flex items-center justify-center border px-1 py-1 rounded-md'
                     )}
+                    style={{ width: '30px', height: '30px' }}
                     key={hotkey.id}
                   >
                     {hotkey.icon}
