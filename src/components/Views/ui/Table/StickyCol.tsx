@@ -396,7 +396,7 @@ export function StickyCol({
         <td
           className={`sticky left-0 z-10 flex items-center justify-start text-sm font-medium text-gray-900 cursor-pointer text-start
           }`}
-          style={styles}
+          style={{ ...styles, zIndex: '1' }}
           {...props}
         >
           {handleDroppable() && droppableElement}
@@ -409,8 +409,6 @@ export function StickyCol({
                 saveSettingOnline?.singleLineView && !saveSettingOnline?.CompactView
                   ? '42px'
                   : saveSettingOnline?.CompactView && saveSettingOnline?.singleLineView
-                  ? '25px'
-                  : !saveSettingOnline?.singleLineView && saveSettingOnline?.CompactView && task.name.length < 30
                   ? '25px'
                   : ''
             }}
@@ -432,8 +430,6 @@ export function StickyCol({
                 saveSettingOnline?.singleLineView && !saveSettingOnline?.CompactView
                   ? '42px'
                   : saveSettingOnline?.CompactView && saveSettingOnline?.singleLineView
-                  ? '25px'
-                  : !saveSettingOnline?.singleLineView && saveSettingOnline?.CompactView && task.name.length < 30
                   ? '25px'
                   : ''
             }}
@@ -500,9 +496,12 @@ export function StickyCol({
                   className={`font-semibold alsoit-gray-300 ${
                     saveSettingOnline?.CompactView ? 'text-alsoit-text-md' : 'text-alsoit-text-lg'
                   } max-w-full`}
+                  contentEditable={eitableContent}
+                  suppressContentEditableWarning={true}
+                  ref={inputRef}
                 >
                   {saveSettingOnline?.singleLineView ? (
-                    <div contentEditable={eitableContent} suppressContentEditableWarning={true} ref={inputRef}>
+                    <div>
                       {!eitableContent ? (
                         <DetailsOnHover
                           hoverElement={
@@ -533,7 +532,6 @@ export function StickyCol({
                           style={{
                             maxWidth: '200px',
                             overflow: 'hidden',
-                            // textOverflow: 'ellipsis',
                             whiteSpace: 'nowrap'
                           }}
                         >
@@ -542,7 +540,7 @@ export function StickyCol({
                       )}
                     </div>
                   ) : (
-                    <div style={{ wordBreak: 'break-word' }}>
+                    <div style={{ wordBreak: 'break-word', overflow: 'hidden' }}>
                       {taskUpperCase ? TASK_NAME.toUpperCase() : Capitalize(TASK_NAME)}
                     </div>
                   )}

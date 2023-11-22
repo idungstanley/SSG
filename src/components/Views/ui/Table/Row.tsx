@@ -131,16 +131,14 @@ export function Row({
   // hide element if is currently grabbing
   const style = {
     opacity: transform ? 0.3 : 100,
-    zIndex: 1,
     pointerEvents: transform ? 'none' : '',
     height:
       saveSettingOnline?.singleLineView && !saveSettingOnline?.CompactView
         ? '42px'
         : saveSettingOnline?.CompactView && saveSettingOnline?.singleLineView
         ? '25px'
-        : !saveSettingOnline?.singleLineView && saveSettingOnline?.CompactView && task.name.length < 30
-        ? '25px'
-        : ''
+        : '',
+    maxHeight: 'max-content'
   };
 
   const showChildren = useMemo(() => {
