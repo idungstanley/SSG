@@ -108,7 +108,7 @@ export default function ModalPilotNav({
   return (
     <div
       id="pilot_nav_modal"
-      className="bg-white fixed pl-4 py-3 pilot-modal-wrapper"
+      className="bg-white fixed py-3 pilot-modal-wrapper"
       style={{
         width: '204px',
         height: 'auto',
@@ -120,7 +120,7 @@ export default function ModalPilotNav({
         boxShadow: '0px 0px 5px 0px #00000040'
       }}
     >
-      <div className="my-2 space-y-2 text-center font-semibold pr-4 relative ">
+      <div className="my-2 space-y-2 text-center font-semibold relative">
         <span
           className="absolute right-0 hover:rotate-90 transition duration-500"
           style={{ top: '-12px', right: '5px' }}
@@ -128,10 +128,21 @@ export default function ModalPilotNav({
         >
           <Close active={false} width="15" height="15" />
         </span>
-        <p style={{ fontSize: '12px', color: 'orange' }}>Tree search</p>
-        <hr />
-        <div className="relative modal-search">
-          <SearchIcon active={false} color="#919191" width="11.34" height="11.36" className="absolute top-1/3 left-2" />
+        <div className="flex w-full justify-center relative px-5">
+          <p className="uppercase" style={{ color: '#424242', fontSize: '8px' }}>
+            Breadcrumbs
+          </p>
+        </div>
+        <div className="flex w-full justify-center relative">
+          <span className="absolute w-full z-0" style={{ top: '8px' }}>
+            <hr />
+          </span>
+          <p className="px-2 z-10 uppercase" style={{ fontSize: '8px', background: '#fff', color: '#B2B2B2' }}>
+            Select page
+          </p>
+        </div>
+        <div className="relative modal-search px-5">
+          <SearchIcon active={false} color="#919191" width="11.34" height="11.36" className="absolute top-1/3 left-7" />
           <input
             className="rounded w-full font-normal pl-6"
             style={{ border: '1px solid #B2B2B2', height: '30px', color: '#919191', fontSize: '12px' }}
@@ -141,15 +152,15 @@ export default function ModalPilotNav({
             onChange={handleSearchInputChange}
           />
           {searchQuery && (
-            <span className="absolute top-1/3 right-1" onClick={() => setSearchQuery('')}>
+            <span className="absolute top-1/3 right-6" onClick={() => setSearchQuery('')}>
               <Close active={false} width="10" height="10" />
             </span>
           )}
         </div>
       </div>
-      <div className="overflow-hidden" style={{ maxHeight: '165px' }}>
+      <div className="overflow-hidden pl-5" style={{ maxHeight: '150px' }}>
         <VerticalScroll>
-          <div ref={ref} style={{ maxHeight: '165px' }}>
+          <div ref={ref} style={{ maxHeight: '150px' }}>
             {filteredNavTree.map(
               (item) =>
                 item.nesting >= currentNestedLevel[0].nesting && (
@@ -159,6 +170,9 @@ export default function ModalPilotNav({
                       activeNavItem == item.id ? 'font-semibold' : 'font-medium'
                     } `}
                     onClick={() => modalItemClick(item.url)}
+                    style={{
+                      maxWidth: '164px'
+                    }}
                   >
                     <span
                       className={`modal-item ${item.nesting == 1 ? paddingLeftFirst : ''} ${
