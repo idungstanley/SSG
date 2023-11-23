@@ -114,7 +114,7 @@ export default function ToolbarNav() {
 
   return (
     <>
-      <div className="flex items-center w-4 h-4 overflow-hidden rounded-full">
+      <div className="flex items-center w-4 h-4 overflow-hidden rounded-full mr-1">
         <ActiveEntityAvatar width="w-4" height="h-4" size="8px" />
       </div>
       {toolbarNavTree.map((item) => (
