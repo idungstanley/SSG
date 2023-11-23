@@ -47,10 +47,10 @@ export default function LineUpModal({ anchorEl, setAnchorEl, handleLineUpTasks }
     <div>
       <AlsoitMenuDropdown anchorEl={anchorEl} handleClose={() => setAnchorEl(null)}>
         <div className="sticky top-0 z-50 bg-white">
-          <div className="flex items-center p-2 w-full border-b border-b-gray-300">
+          <div className="flex items-center w-full p-2 border-b border-b-gray-300">
             <SearchIcon width={13} height={13} />
 
-            <input type="text" placeholder="Search tasks" className="w-full p-2 outline-none border-0" />
+            <input type="text" placeholder="Search tasks" className="w-full p-2 border-0 outline-none" />
           </div>
 
           <div className="flex justify-between p-3">
@@ -58,13 +58,13 @@ export default function LineUpModal({ anchorEl, setAnchorEl, handleLineUpTasks }
               {!browseTasks ? (
                 <p>Recents</p>
               ) : (
-                <p className="text-alsoit-purple-300 cursor-pointer" onClick={() => setBrowseTasks(false)}>
+                <p className="cursor-pointer text-alsoit-purple-300" onClick={() => setBrowseTasks(false)}>
                   Recents/Search
                 </p>
               )}
             </div>
             {!browseTasks && (
-              <span className="text-alsoit-purple-300 cursor-pointer" onClick={() => handleBrowseTask()}>
+              <span className="cursor-pointer text-alsoit-purple-300" onClick={() => handleBrowseTask()}>
                 Browse tasks
               </span>
             )}
@@ -73,19 +73,19 @@ export default function LineUpModal({ anchorEl, setAnchorEl, handleLineUpTasks }
 
         <div className="max-h-96 w-134">
           {!browseTasks && (
-            <div className="group p-2">
+            <div className="p-2 group">
               {recentTasks?.data.tasks.map((task) => (
                 <div
                   key={task.id}
-                  className="flex justify-between p-2 space-x-2 cursor-pointer  hover:bg-alsoit-gray-50 rounded-md"
+                  className="flex justify-between p-2 space-x-2 rounded-md cursor-pointer hover:bg-alsoit-gray-50"
                   onClick={() => handleAddLineUpTask(task)}
                 >
                   <div className="flex items-center space-x-2">
                     <div className="pointer-events-none">
-                      <StatusDropdown task={task} taskCurrentStatus={task.status} taskStatuses={task.task_statuses} />
+                      <StatusDropdown taskCurrentStatus={task.status} taskStatuses={task.task_statuses} />
                     </div>
                     <h1 className="mb-1 truncate " style={{ maxWidth: '290PX' }}>
-                      {task.name}{' '}
+                      {task.name}
                     </h1>
                   </div>
                   <div className="pointer-events-none">

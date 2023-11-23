@@ -1,5 +1,5 @@
 import { Switch } from '@headlessui/react';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 interface toggleProps {
   handleToggle: (enabled: boolean) => void;
@@ -9,13 +9,20 @@ interface toggleProps {
 function Toggle({ handleToggle, isEnabled }: toggleProps) {
   const [enabled, setEnabled] = useState(isEnabled);
 
+  const toggleHandler = () => {
+    const newEnabledState = !enabled;
+    setEnabled(newEnabledState);
+    handleToggle(newEnabledState);
+  };
+
+  useEffect(() => {
+    setEnabled(isEnabled);
+  }, [isEnabled]);
+
   return (
     <Switch
       checked={enabled}
-      onChange={() => {
-        setEnabled(!enabled);
-        handleToggle(!enabled);
-      }}
+      onChange={toggleHandler}
       className={`${enabled ? 'bg-alsoit-purple-300' : 'bg-teal-700'}
           relative inline-flex h-[18px] w-[33px] shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2  focus-visible:ring-white/75`}
     >

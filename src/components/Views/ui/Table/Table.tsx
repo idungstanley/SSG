@@ -6,6 +6,7 @@ import {
   setCurrTaskListId,
   setCurrTeamMemId,
   setEscapeKey,
+  setNewTaskStatus,
   setStatusId,
   setSubtaskDefaultStatusId
 } from '../../../../features/task/taskSlice';
@@ -19,6 +20,8 @@ import { ITask_statuses } from '../../../../features/list/list.interfaces';
 import { IListColor } from '../List/List';
 import NewTaskTemplate from './newTaskTemplate/NewTaskTemplate';
 import LightenColor from '../List/lightenColor/LightenColor';
+import { generatePriority } from '../../../../app/helpers';
+import { sortTypesConsts } from '../../../TasksHeader/lib/sortUtils';
 
 interface TableProps {
   heads: listColumnProps[];
@@ -39,6 +42,7 @@ export function Table({ heads, data, label, listName, listColor, isBlockedShowCh
     defaultSubtaskListId,
     splitSubTaskState: splitSubTaskMode,
     escapeKey,
+    sortType,
     keyBoardSelectedIndex
   } = useAppSelector((state) => state.task);
 
@@ -74,8 +78,8 @@ export function Table({ heads, data, label, listName, listColor, isBlockedShowCh
   useEffect(() => {
     setListId(data[0].list_id);
     dispatch(setCurrTaskListId(data[0].list_id));
-    const statusObj: ITask_statuses | undefined = (data[0].task_statuses as ITask_statuses[]).find(
-      (statusObj: ITask_statuses) => statusObj?.name === dataSpread[0].status.name
+    const statusObj: ITask_statuses | undefined = (data?.[0].task_statuses as ITask_statuses[]).find(
+      (statusObj: ITask_statuses) => statusObj?.name === dataSpread?.[0].status?.name
     );
 
     if (statusObj) {
@@ -85,12 +89,12 @@ export function Table({ heads, data, label, listName, listColor, isBlockedShowCh
 
     // get default list_status_id
     const minPosition = Math.min(
-      ...((data[0].task_statuses as ITask_statuses[]).map((status) => status.position) || [])
+      ...((data?.[0].task_statuses as ITask_statuses[]).map((status) => status?.position) || [])
     );
 
     const defaultStatusObj: ITask_statuses | undefined = (data[0].task_statuses as ITask_statuses[]).find(
       (statusObj: ITask_statuses) =>
-        statusObj?.is_default === 1 ? statusObj?.is_default : statusObj.position === minPosition
+        statusObj?.is_default === 1 ? statusObj?.is_default : statusObj?.position === minPosition
     );
 
     if (listId === defaultSubtaskListId) dispatch(setSubtaskDefaultStatusId(defaultStatusObj?.id as string));
@@ -104,7 +108,7 @@ export function Table({ heads, data, label, listName, listColor, isBlockedShowCh
   }, []);
 
   const checkSelectedRow = (id: string) => {
-    if (selectionArr) {
+    if (selectionArr && keyBoardSelectedIndex) {
       if (selectionArr[keyBoardSelectedIndex]) {
         return keyBoardSelectedIndex >= 0 ? id === selectionArr[keyBoardSelectedIndex].id : false;
       }
@@ -118,6 +122,7 @@ export function Table({ heads, data, label, listName, listColor, isBlockedShowCh
 
   const handleToggleNewTask = () => {
     setShowNewTaskField(true);
+    dispatch(setNewTaskStatus(null));
   };
 
   const draggableItem = draggableItemId ? data.find((i) => i.id === draggableItemId) : null;
@@ -128,10 +133,21 @@ export function Table({ heads, data, label, listName, listColor, isBlockedShowCh
     }
   };
 
+  const generateHeaderColor = () => {
+    if (sortType === sortTypesConsts.STATUS) {
+      return data[0].status.color;
+      // data?.[0].status?.color as string;
+    } else if (sortType === sortTypesConsts.PRIORITY) {
+      return generatePriority(label);
+    } else {
+      return '#919191';
+    }
+  };
+
   return (
     <>
       <div
-        className="sticky top-0 mr-2 pl-2 pt-2 table-container overflow-hidden z-10"
+        className="sticky top-0 z-10 pt-2 pl-2 mr-2 overflow-hidden table-container"
         style={{
           backgroundColor: LightenColor(!listColor?.outerColour ? 'black' : (listColor?.outerColour as string), 0.95)
         }}
@@ -153,7 +169,7 @@ export function Table({ heads, data, label, listName, listColor, isBlockedShowCh
             taskLength={taskLength}
             onToggleCollapseTasks={() => setCollapseTasks((prev) => !prev)}
             label={label}
-            headerStatusColor={data[0].status.color as string}
+            headerStatusColor={generateHeaderColor() ?? ''}
             columns={columns}
             listName={listName}
             tableHeight={tableHeight}

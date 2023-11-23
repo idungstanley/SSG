@@ -20,10 +20,10 @@ import {
   setSelectedIndexListId,
   setF2State,
   setTaskInputValue,
-  setTaskRootIds
+  setTaskRootIds,
+  setRootTaskIds
 } from '../../../../features/task/taskSlice';
 import { setActiveItem } from '../../../../features/workspace/workspaceSlice';
-// import { UniqueIdentifier, useDraggable, useDroppable } from '@dnd-kit/core';
 import CloseSubtask from '../../../../assets/icons/CloseSubtask';
 import OpenSubtask from '../../../../assets/icons/OpenSubtask';
 import { Capitalize } from '../../../../utils/NoCapWords/Capitalize';
@@ -37,8 +37,6 @@ import Close from '../../../../assets/icons/Close';
 import toast from 'react-hot-toast';
 import Toast from '../../../../common/Toast';
 import { LIMITS } from '../../../../app/config/dimensions';
-import Linkify from 'linkify-react';
-// import { useDroppable } from '@dnd-kit/core';
 
 interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   task: Task;
@@ -90,7 +88,7 @@ export function StickyCol({
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const { taskId, hubId, subhubId, walletId, listId } = useParams();
+  const { taskId, hubId, walletId, listId } = useParams();
 
   const { currentWorkspaceId } = useAppSelector((state) => state.auth);
   const { dragOverItemId, draggableItemId } = useAppSelector((state) => state.list);
@@ -137,8 +135,6 @@ export function StickyCol({
     if (task.id !== '0') {
       hubId
         ? navigate(`/${currentWorkspaceId}/tasks/h/${hubId}/t/${task.id}/v/${activeView?.id}`, { replace: true })
-        : subhubId
-        ? navigate(`/${currentWorkspaceId}/tasks/sh/${subhubId}/t/${task.id}/v/${activeView?.id}`, { replace: true })
         : walletId
         ? navigate(`/${currentWorkspaceId}/tasks/w/${walletId}/t/${task.id}/v/${activeView?.id}`, { replace: true })
         : navigate(`/${currentWorkspaceId}/tasks/l/${listId || task.list_id}/t/${task.id}/v/${activeView?.id}`, {
@@ -167,11 +163,11 @@ export function StickyCol({
     e.stopPropagation();
     setShowSubTasks(!showSubTasks);
 
+    dispatch(setRootTaskIds(undefined));
     if (!task.parent_id) {
       dispatch(setTaskRootIds({ ...taskRootIds, [task.id]: [task.id] }));
     } else {
       const updateTaskRootIds = { ...taskRootIds };
-
       for (const key of task.root_task_ids as string[]) {
         if (updateTaskRootIds[key]) {
           const taskRootIdsArray = [...(task.root_task_ids as string[]), task.id];
@@ -395,10 +391,9 @@ export function StickyCol({
     <>
       {task.id !== '0' && (
         <td
-          className={`sticky left-0 z-10 flex items-center justify-start text-sm font-medium text-gray-900 cursor-pointer text-start ${
-            selectedRow && 'bg-alsoit-purple-50'
+          className={`sticky left-0 z-10 flex items-center justify-start text-sm font-medium text-gray-900 cursor-pointer text-start
           }`}
-          style={styles}
+          style={{ ...styles, zIndex: '1' }}
           {...props}
         >
           {handleDroppable() && droppableElement}
@@ -411,8 +406,6 @@ export function StickyCol({
                 saveSettingOnline?.singleLineView && !saveSettingOnline?.CompactView
                   ? '42px'
                   : saveSettingOnline?.CompactView && saveSettingOnline?.singleLineView
-                  ? '25px'
-                  : !saveSettingOnline?.singleLineView && saveSettingOnline?.CompactView && task.name.length < 30
                   ? '25px'
                   : ''
             }}
@@ -434,8 +427,6 @@ export function StickyCol({
                 saveSettingOnline?.singleLineView && !saveSettingOnline?.CompactView
                   ? '42px'
                   : saveSettingOnline?.CompactView && saveSettingOnline?.singleLineView
-                  ? '25px'
-                  : !saveSettingOnline?.singleLineView && saveSettingOnline?.CompactView && task.name.length < 30
                   ? '25px'
                   : ''
             }}
@@ -481,7 +472,7 @@ export function StickyCol({
               </button>
             )}
             <div onClick={() => dispatch(setCurrentTaskStatusId(task.id as string))}>
-              <StatusDropdown task={task} taskCurrentStatus={task.status} taskStatuses={task.task_statuses} />
+              <StatusDropdown taskCurrentStatus={task.status} taskStatuses={task.task_statuses} />
             </div>
             {separateSubtasksMode && task?.parentName && !paddingLeft ? (
               <ToolTip title={task.parentName}>
@@ -502,9 +493,12 @@ export function StickyCol({
                   className={`font-semibold alsoit-gray-300 ${
                     saveSettingOnline?.CompactView ? 'text-alsoit-text-md' : 'text-alsoit-text-lg'
                   } max-w-full`}
+                  contentEditable={eitableContent}
+                  suppressContentEditableWarning={true}
+                  ref={inputRef}
                 >
                   {saveSettingOnline?.singleLineView ? (
-                    <div contentEditable={eitableContent} suppressContentEditableWarning={true} ref={inputRef}>
+                    <div>
                       {!eitableContent ? (
                         <DetailsOnHover
                           hoverElement={
@@ -518,9 +512,7 @@ export function StickyCol({
                                 whiteSpace: 'nowrap'
                               }}
                             >
-                              <Linkify options={{ target: '_blank', className: 'text-blue-400' }}>
-                                {taskUpperCase ? TASK_NAME.toUpperCase() : Capitalize(TASK_NAME)}
-                              </Linkify>
+                              {taskUpperCase ? TASK_NAME.toUpperCase() : Capitalize(TASK_NAME)}
                             </div>
                           }
                           content={<div>{taskUpperCase ? TASK_NAME.toUpperCase() : Capitalize(TASK_NAME)}</div>}
@@ -531,18 +523,15 @@ export function StickyCol({
                           style={{
                             maxWidth: '200px',
                             overflow: 'hidden',
-                            textOverflow: 'ellipsis',
                             whiteSpace: 'nowrap'
                           }}
                         >
-                          <Linkify options={{ target: '_blank', className: 'text-blue-400' }}>
-                            {taskUpperCase ? TASK_NAME.toUpperCase() : Capitalize(TASK_NAME)}
-                          </Linkify>
+                          {taskUpperCase ? TASK_NAME.toUpperCase() : Capitalize(TASK_NAME)}
                         </div>
                       )}
                     </div>
                   ) : (
-                    <div style={{ wordBreak: 'break-word' }}>
+                    <div style={{ wordBreak: 'break-word', overflow: 'hidden' }}>
                       {taskUpperCase ? TASK_NAME.toUpperCase() : Capitalize(TASK_NAME)}
                     </div>
                   )}
@@ -592,7 +581,7 @@ export function StickyCol({
               } w-full h-full flex items-center`
             )}
           >
-            <div className="absolute bottom-0 right-0 flex p-1 space-x-1">
+            <div className="absolute bottom-0 right-0 flex p-1 space-x-1" style={{ zIndex: 1 }}>
               <ToolTip
                 onMouseEnter={() => setCloseToggle(true)}
                 onMouseLeave={() => setCloseToggle(false)}
@@ -626,11 +615,11 @@ export function StickyCol({
               </ToolTip>
             </div>
             <div className="pt-1 ml-4">
-              <StatusDropdown task={task} taskCurrentStatus={task.status} taskStatuses={task.task_statuses} />
+              <StatusDropdown taskCurrentStatus={task.status} taskStatuses={task.task_statuses} />
             </div>
             <div className="flex flex-col items-start justify-start w-full pl-2 space-y-1">
               <p
-                className={`flex text-left empty:before:content-[attr(placeholder)] alsoit-gray-300 font-semibold empty:opacity-50 overflow-hidden items-center h-5 ${
+                className={`w-full flex text-left empty:before:content-[attr(placeholder)] alsoit-gray-300 font-semibold empty:opacity-50 overflow-hidden items-center h-5 ${
                   saveSettingOnline?.CompactView ? 'text-alsoit-text-md' : 'text-alsoit-text-lg'
                 }`}
                 contentEditable={true}

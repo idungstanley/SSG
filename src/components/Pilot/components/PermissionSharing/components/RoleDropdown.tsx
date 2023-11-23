@@ -18,7 +18,10 @@ function RoleDropdown({ anchor, setAnchor, handleSeletRole }: dropdownProps) {
               <div
                 key={type.name}
                 className="text-left my-1 p-1 hover:bg-alsoit-gray-50 rounded-md cursor-pointer"
-                onClick={() => handleSeletRole(type.name)}
+                onClick={() => {
+                  handleSeletRole(type.name);
+                  setAnchor(null);
+                }}
               >
                 <h3 className="text-alsoit-text-lg font-semibold">{type.name}</h3>
                 <p className="text-alsoit-text-md font-semibold">{type.description}</p>

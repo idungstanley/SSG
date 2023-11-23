@@ -1,5 +1,6 @@
 import React from 'react';
 import nonWatcherBadge from '../../assets/icons/nonWatcherBadge.svg';
+import { useAppSelector } from '../../app/hooks';
 
 interface AvatarWithInitialsProps {
   initials: string;
@@ -22,6 +23,8 @@ function AvatarWithInitials({
   textSize = '10px',
   badge
 }: AvatarWithInitialsProps) {
+  const { CompactView } = useAppSelector((state) => state.task);
+
   return (
     <div className="relative flex items-center">
       <span
@@ -35,7 +38,12 @@ function AvatarWithInitials({
         </span>
       </span>
       {badge && (
-        <img src={nonWatcherBadge} alt="" className="absolute w-2 h-2 z-5" style={{ left: '25px', bottom: '1px' }} />
+        <img
+          src={nonWatcherBadge}
+          alt=""
+          className="absolute w-2 h-2 z-5"
+          style={CompactView ? { left: '18px' } : { left: '25px', bottom: '1px' }}
+        />
       )}
     </div>
   );

@@ -62,7 +62,7 @@ export const pilotOptions = [
     isVisible: false
   },
   {
-    id: pilotTabs.AUTOMATION,
+    id: pilotTabs.AUTOMATIONS,
     name: 'Automation',
     source: automationIcon,
     isVisible: false

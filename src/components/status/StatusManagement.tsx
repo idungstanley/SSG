@@ -34,6 +34,7 @@ import { useGetStatusTemplates } from '../../features/statusManager/statusManage
 import { COLLECTION_TYPES } from '../../features/statusManager/statusManager.interface';
 import { useParams } from 'react-router-dom';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
+import { setStatusTaskListDetails } from '../../features/list/listSlice';
 
 interface ErrorResponse {
   data: {
@@ -57,7 +58,7 @@ export default function StatusManagement() {
   const dispatch = useAppDispatch();
   const queryClient = useQueryClient();
 
-  const { listId, hubId, subhubId, walletId } = useParams();
+  const { listId, hubId, walletId } = useParams();
 
   const { matchData } = useAppSelector((state) => state.prompt);
   const { templateCollections } = useAppSelector((state) => state.statusManager);
@@ -76,7 +77,14 @@ export default function StatusManagement() {
 
   const createStatusTypes = useMutation(statusTypesService, {
     onSuccess: () => {
-      queryClient.invalidateQueries([activeItemType === EntityType.list ? 'hubs' : 'hub-details']);
+      dispatch(setStatusTaskListDetails({ listId: undefined, listName: undefined }));
+      queryClient.invalidateQueries([
+        activeItemType === EntityType.list
+          ? 'hubs'
+          : activeItemType === EntityType.wallet
+          ? 'wallet-details'
+          : 'hub-details'
+      ]);
     }
   });
   const selectedTemplateStatus = templateCollections.find((item) => item.name === activeTemplateStatus);
@@ -87,14 +95,8 @@ export default function StatusManagement() {
       : spaceStatuses
   );
 
-  const itemType = listId
-    ? EntityType.list
-    : hubId || subhubId
-    ? EntityType.hub
-    : walletId
-    ? EntityType.wallet
-    : activeItemType;
-  const itemId = listId || hubId || subhubId || walletId || activeItemId;
+  const itemType = listId ? EntityType.list : hubId ? EntityType.hub : walletId ? EntityType.wallet : activeItemType;
+  const itemId = listId || hubId || walletId || activeItemId;
 
   const [boardSections, setBoardSections] = useState<BoardSectionsType>(initialBoardSections);
 
@@ -212,14 +214,24 @@ export default function StatusManagement() {
         });
       }
     } else {
-      return statusData.map((item, index) => {
-        return {
-          ...item,
-          id: null,
-          is_default: index === 0 ? 1 : 0,
-          position: index
-        }; // Set the id to null
-      });
+      if (statusTaskListDetails.listId) {
+        return statusData.map((item, index) => {
+          return {
+            ...item,
+            is_default: index === 0 ? 1 : 0,
+            position: index
+          }; // Set the id to null
+        });
+      } else {
+        return statusData.map((item, index) => {
+          return {
+            ...item,
+            id: null,
+            is_default: index === 0 ? 1 : 0,
+            position: index
+          }; // Set the id to null
+        });
+      }
     }
   };
 
@@ -256,6 +268,7 @@ export default function StatusManagement() {
       style: 'plain',
       callback: () => {
         setShowMatchStatusPopup(false);
+        dispatch(setStatusTaskListDetails({ listId: undefined, listName: undefined }));
         dispatch(setMatchedStatus([]));
         setMatchingStatusValidation(null);
       }

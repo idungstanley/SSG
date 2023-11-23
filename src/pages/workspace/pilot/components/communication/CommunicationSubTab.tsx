@@ -76,7 +76,10 @@ export default function CommunicationSubTab() {
   return (
     <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={(e) => handleDragEnd(e)}>
       <SortableContext strategy={rectSortingStrategy} items={items}>
-        <div className="grid  bg-primary-200 pb-0.5 grid-cols-4">
+        <div
+          className="grid px-1 grid-cols-4"
+          style={{ borderBottom: `3px solid ${activeSubCommunicationTabId ? '#ebd1fc' : 'transparent'}` }}
+        >
           {items.map((item) => (
             <SubtabDrag
               key={item.id}

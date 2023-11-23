@@ -9,6 +9,7 @@ import { findCurrentHub } from '../managers/Hub';
 import { Hub, List, Wallet } from '../pages/workspace/hubs/components/ActiveTree/activetree.interfaces';
 import { findCurrentWallet } from '../managers/Wallet';
 import { findCurrentList } from '../managers/List';
+import { priorityArr } from '../utils/PriorityArr';
 
 export async function GetFileWithHeaders(type: string, id: string) {
   const baseUrl = `${process.env.REACT_APP_API_BASE_URL}/api/af`;
@@ -102,7 +103,14 @@ export function getInitials(str: string) {
 export function findFirstActiveEntityExt(location: Location) {
   const shortType = location.pathname.split('/')[3];
   const id = location.pathname.split('/')[4];
-  const longType = shortType === 'h' ? EntityType.hub : shortType === 'w' ? EntityType.wallet : EntityType.list;
+  const longType =
+    shortType === 'h'
+      ? EntityType.hub
+      : shortType === 'sh'
+      ? EntityType.subHub
+      : shortType === 'w'
+      ? EntityType.wallet
+      : EntityType.list;
   return { id, type: longType };
 }
 
@@ -151,4 +159,14 @@ export const generateUrlWithViewId = (viewId: string) => {
   const currentUrl = window.location.pathname;
   const newUrl = currentUrl.split('/v/');
   return `${newUrl[0]}/v/${viewId}`;
+};
+
+export const generatePriority = (priorityName: string) => {
+  const { priorityList } = priorityArr();
+
+  const priority = priorityList.find((item) => {
+    return item.title.toLowerCase() === priorityName.toLowerCase();
+  });
+
+  return priority?.color;
 };

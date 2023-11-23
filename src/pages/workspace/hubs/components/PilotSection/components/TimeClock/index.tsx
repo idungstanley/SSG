@@ -6,9 +6,7 @@ export default function TimeClock() {
   return (
     <>
       <SectionArea label="Utilities" icon={<UtilityIcon />} />
-      <>
-        <TimeClockTabs />
-      </>
+      <TimeClockTabs />
     </>
   );
 }

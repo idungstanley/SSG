@@ -26,6 +26,7 @@ import {
   setCurrentTeamMemberId,
   setDuplicateTaskObj,
   setNewTaskPriority,
+  setNewTaskStatus,
   setRootTaskIds,
   setScreenRecording,
   setScreenRecordingMedia,
@@ -402,6 +403,7 @@ export const useAddTask = (task: Task) => {
 
   return useMutation(addTask, {
     onSuccess: (data) => {
+      dispatch(setNewTaskStatus(null));
       dispatch(setNewTaskPriority('normal'));
       if (data.data.task.parent_id) {
         // add subtask
@@ -412,7 +414,6 @@ export const useAddTask = (task: Task) => {
           task.task_statuses
         );
         dispatch(setSubtasks(updatedSubtasks));
-
         const parentId = data.data.task.parent_id;
         const updatedTasks = updateTaskSubtasksCountManager(
           parentId as string,
@@ -883,7 +884,9 @@ export const UseUpdateTaskService = ({
 export const UseUpdateTaskStatusService = ({ task_id, statusDataUpdate }: UpdateTaskProps) => {
   const dispatch = useAppDispatch();
 
-  const { selectedTaskParentId, tasks, subtasks, selectedTaskType } = useAppSelector((state) => state.task);
+  const { selectedTaskParentId, tasks, subtasks, selectedTaskType, currentTaskStatusId } = useAppSelector(
+    (state) => state.task
+  );
 
   return useQuery(
     ['task', { task_id, statusDataUpdate }],
@@ -898,7 +901,7 @@ export const UseUpdateTaskStatusService = ({ task_id, statusDataUpdate }: Update
       return data;
     },
     {
-      enabled: !!task_id && !!statusDataUpdate,
+      enabled: !!task_id && !!statusDataUpdate && currentTaskStatusId != '0',
       cacheTime: 0,
       onSuccess: (data) => {
         if (selectedTaskParentId) {
@@ -1269,7 +1272,6 @@ export const useCurrentTime = ({ workspaceId }: { workspaceId?: string }) => {
               setTimerLastMemory({
                 hubId: dateString.model === EntityType.hub ? dateString.model_id : null,
                 activeTabId: pilotTabs.UTILITIES,
-                subhubId: dateString.model === EntityType.subHub ? dateString.model_id : null,
                 listId: dateString.model === EntityType.list ? dateString.model_id : null,
                 taskId: dateString.model === EntityType.task ? dateString.model_id : null,
                 workSpaceId: workspaceId,
@@ -1601,6 +1603,17 @@ const AddLineUpTask = ({ taskId, team_member_id }: { taskId: string; team_member
     method: 'POST',
     data: {
       team_member_ids: team_member_id
+    }
+  });
+  return request;
+};
+
+export const RemoveLineUpTask = ({ taskId, team_member_id }: { taskId: string; team_member_id?: string }) => {
+  const request = requestNew({
+    url: `/tasks/${taskId}/lineup`,
+    method: 'DELETE',
+    data: {
+      team_member_id
     }
   });
   return request;

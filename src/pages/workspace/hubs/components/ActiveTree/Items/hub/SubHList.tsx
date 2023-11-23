@@ -21,6 +21,7 @@ import { pilotTabs } from '../../../../../../../app/constants/pilotTabs';
 import { generateViewsUrl } from '../../../../../../../utils/generateViewsUrl';
 import { IHub } from '../../../../../../../features/hubs/hubs.interfaces';
 import { APP_TASKS } from '../../../../../../../app/constants/app';
+import { setStatusTaskListDetails } from '../../../../../../../features/list/listSlice';
 
 export default function SubHubList({ hubs, placeHubType }: ListProps) {
   const dispatch = useAppDispatch();
@@ -31,6 +32,7 @@ export default function SubHubList({ hubs, placeHubType }: ListProps) {
   const { show: showFullPilot } = useAppSelector((state) => state.slideOver.pilotSideOver);
 
   const handleLocation = (id: string, name: string, item: IHub) => {
+    dispatch(setStatusTaskListDetails({ listId: undefined, listName: undefined }));
     const viewsUrl = generateViewsUrl(id, activeView?.id as string, item, EntityType.hub) as string;
     if (openedEntitiesIds.includes(id)) {
       dispatch(setOpenedEntitiesIds(openedEntitiesIds.filter((item) => item !== id)));
@@ -102,11 +104,11 @@ export default function SubHubList({ hubs, placeHubType }: ListProps) {
                     leftMargin={false}
                     topNumber={hub.parent_id ? 110 : 80}
                     type="wallet"
-                    paddingLeft="35"
+                    paddingLeft="50"
                   />
                 ) : null}
                 {hub.lists.length && openedEntitiesIds.includes(hub.id) && !showExtendedBar ? (
-                  <LList list={hub.lists} leftMargin={false} paddingLeft="50" />
+                  <LList list={hub.lists} leftMargin={false} paddingLeft="60" />
                 ) : null}
               </div>
             ) : null}

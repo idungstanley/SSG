@@ -29,13 +29,32 @@ export default function CurrentUser({ paletteColor }: ContentUserProps) {
           </div>
         ) : (
           <div className="flex justify-center">
-            <div className="relative w-44 h-44 rounded-full overflow-hidden">
-              <img
-                style={{ transform: 'translate(-50%, -50%)' }}
-                className="absolute top-1/2 left-1/2 w-auto min-w-max h-full cursor-pointer"
+            <div className="relative flex justify-center items-center w-44 h-44 rounded-full overflow-hidden">
+              <div
+                className="absolute w-full h-full"
+                style={{
+                  backgroundImage: `url(${userData.avatar_path})`,
+                  backgroundPosition: 'center',
+                  backgroundSize: 'cover',
+                  filter: 'blur(5px)'
+                }}
+              />
+              <div
+                className="w-full h-full"
+                style={{
+                  backgroundImage: `url(${userData.avatar_path})`,
+                  backgroundPosition: 'center',
+                  backgroundSize: 'contain',
+                  backgroundRepeat: 'no-repeat',
+                  zIndex: 1
+                }}
+              />
+              {/* <img
+                // style={{ transform: 'translate(-50%, -50%)' }}
+                // className="absolute top-1/2 left-1/2 w-auto min-w-max h-full cursor-pointer"
                 src={userData.avatar_path}
                 alt="user-avatar"
-              />
+              /> */}
             </div>
           </div>
         )}

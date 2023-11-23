@@ -27,8 +27,9 @@ import { MdOutlineVisibility } from 'react-icons/md';
 import MoveItemIcon from '../../../../../../assets/icons/MoveItemIcon';
 import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
 import { setEditingPilotDetailsTitle } from '../../../../../../features/workspace/workspaceSlice';
-import Linkify from 'linkify-react';
+// import Linkify from 'linkify-react';
 import { Capitalize } from '../../../../../../utils/NoCapWords/Capitalize';
+import LinkifyText from '../../../../../../utils/LinkifyText';
 
 interface PropertyDetailsProps {
   Details?: IHubDetails | ITaskFullList | IListDetails | IWalletDetails;
@@ -202,50 +203,62 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
             {/* name */}
             <div id="entity name">
               <label className="text-xs text-gray-500">Title</label>
-              <div className="p-1 bg-white border border-white rounded-md cursor-text">
+              <div className="p-1 break-words bg-white border border-white rounded-md cursor-text">
                 <VerticalScroll>
-                  <p
-                    ref={inputRef}
-                    className="p-1 break-words max-h-52"
-                    contentEditable={editingPilotDetailsTitle}
-                    onKeyDown={(e) => (e.key === 'Enter' ? handleDetailsSubmit(e) : null)}
-                    suppressContentEditableWarning={true}
-                    onDoubleClick={() => handleEditTitle()}
-                    onBlur={(e) => handleDetailsSubmit(e)}
-                  >
-                    {editingPilotDetailsTitle ? (
-                      <div>{Details?.name && Capitalize(Details?.name)}</div>
-                    ) : (
-                      <Linkify options={{ target: '_blank', className: 'text-blue-400' }}>
-                        {inputRef.current?.innerText.trim()}
-                      </Linkify>
-                    )}
-                  </p>
+                  {editingPilotDetailsTitle ? (
+                    <div
+                      ref={inputRef}
+                      className="p-1 max-h-32"
+                      contentEditable={editingPilotDetailsTitle}
+                      onKeyDown={(e) => (e.key === 'Enter' ? handleDetailsSubmit(e) : null)}
+                      suppressContentEditableWarning={true}
+                      onBlur={(e) => handleDetailsSubmit(e)}
+                    >
+                      {Details?.name && Capitalize(Details?.name)}
+                    </div>
+                  ) : (
+                    <div className="w-full p-1 max-h-32" onDoubleClick={() => handleEditTitle()}>
+                      <LinkifyText
+                        checker={editingPilotDetailsTitle}
+                        text={
+                          (Details?.name && Details?.name?.length > 0 && inputRef.current?.innerText) ||
+                          ((Details?.name && Capitalize(Details?.name)) as string)
+                        }
+                      />
+                    </div>
+                  )}
                 </VerticalScroll>
               </div>
             </div>
             {/* description */}
             <div id="entity description" className="mt-5">
               <label className="text-xs text-gray-500">Description</label>
-              <div className="p-1 bg-white border border-white rounded-md cursor-text">
+              <div className="p-1 break-words bg-white border border-white rounded-md cursor-text">
                 <VerticalScroll>
-                  <div
-                    className="h-20 p-1 break-words max-h-52"
-                    onDoubleClick={() => setEditingDescription(true)}
-                    ref={textAreaRef}
-                    suppressContentEditableWarning={true}
-                    contentEditable={editingDescription}
-                    onBlur={() => handleDetailsSubmit()}
-                    onKeyDown={(e) => (e.key === 'Enter' ? handleKeyDown(e) : null)}
-                  >
-                    {editingDescription ? (
-                      <div>{Details?.description}</div>
-                    ) : (
-                      <Linkify options={{ target: '_blank', className: 'text-blue-400' }}>
-                        {textAreaRef.current?.innerText.trim()}
-                      </Linkify>
-                    )}
-                  </div>
+                  {editingDescription ? (
+                    <div
+                      ref={textAreaRef}
+                      onKeyDown={(e) => (e.key === 'Enter' ? handleKeyDown(e) : null)}
+                      onBlur={(e) => handleDetailsSubmit(e)}
+                      className="w-full py-2 space-y-1 max-h-52"
+                      suppressContentEditableWarning={true}
+                      contentEditable={editingDescription}
+                    >
+                      {Details?.description}
+                    </div>
+                  ) : (
+                    <div className="w-full h-20 max-h-52" onDoubleClick={() => setEditingDescription(true)}>
+                      <LinkifyText
+                        checker={editingDescription}
+                        text={
+                          (Details?.description &&
+                            Details?.description?.length > 0 &&
+                            textAreaRef.current?.innerText) ||
+                          (Details?.description as string)
+                        }
+                      />
+                    </div>
+                  )}
                 </VerticalScroll>
               </div>
             </div>
