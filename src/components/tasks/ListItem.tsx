@@ -176,7 +176,7 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
 
   return (
     <div
-      className="relative nav-item"
+      className={`relative nav-item ${list.id === listId ? 'active-nav-item' : ''}`}
       data-id={list.id}
       data-url={generateViewsUrl(list.id, activeView?.id as string, list, EntityType.list) as string}
       data-parent={list.parent_id}
