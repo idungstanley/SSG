@@ -107,7 +107,10 @@ export default function HubManagerSubTab() {
     <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={(e) => handleDragEnd(e)}>
       <SortableContext strategy={rectSortingStrategy} items={items}>
         <section>
-          <div className="grid w-full bg-primary-200 pb-0.5 grid-cols-5">
+          <div
+            className="grid px-1 grid-cols-7"
+            style={{ borderBottom: `3px solid ${activeSubHubManagerTabId ? '#ebd1fc' : 'transparent'}` }}
+          >
             {HubManagerOptions.map((item) => (
               <SubtabDrag
                 key={item.id}

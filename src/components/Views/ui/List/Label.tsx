@@ -94,7 +94,7 @@ export function Label({
     <div className="flex items-center justify-between">
       <div className="flex items-center">
         <div
-          className="flex items-center justify-between space-x-5 bg-purple-500 -mt-1 p-1 pr-7 rounded-tl-lg -ml-1 h-7 rounded-br-[5px]"
+          className="flex items-center justify-between space-x-5 -mt-1 p-1 pr-7 rounded-tl-lg -ml-1 h-7 rounded-br-[5px]"
           style={{ backgroundColor: !ListColor?.outerColour ? 'black' : (ListColor?.outerColour as string) }}
         >
           <div className="flex items-center pl-2 space-x-2 text-sm text-white w-fit -mt-1">
@@ -106,7 +106,7 @@ export function Label({
               }
             />
             <CollapseIcon color="#A854F7" active={showTable} onToggle={onClickChevron} hoverBg="white" />
-            <h1>{listName ?? 'Loading...'}</h1>
+            <h1 className="w-16 truncate">{listName ?? 'Loading...'}</h1>
           </div>
           <div className="flex items-center justify-center h-6 bg-white -mt-1 rounded-[5px] w-12">
             <ListAddModal handleCheckedGroupTasks={handleCheckedGroupTasks} ListColor={ListColor} />

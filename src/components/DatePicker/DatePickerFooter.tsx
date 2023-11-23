@@ -15,6 +15,7 @@ export default function DatePickerFooter({ closeDateModal, time }: DatePickerFoo
   const { mutateAsync } = useSaveData();
   const handleSubmit = () => {
     mutateAsync({ key: pilotTabs.CALENDAR, value: { selectedDate, HistoryFilterMemory } });
+    closeDateModal();
   };
 
   return (
@@ -36,7 +37,7 @@ export default function DatePickerFooter({ closeDateModal, time }: DatePickerFoo
               borderRadius: '8px'
             }}
           >
-            Close
+            Cancel
           </Button>
           <Button
             onClick={handleSubmit}

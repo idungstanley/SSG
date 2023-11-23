@@ -52,7 +52,7 @@ export default function Header({ menu, children, isMinified, additionalNavItems 
           <button
             type="button"
             onClick={togglePilot}
-            className="text-gray-400 flex justify-center items-center bg-alsoit-gray-125 hover:bg-alsoit-gray-50 transition duration-300"
+            className="text-gray-400 flex justify-center items-center hover:bg-alsoit-gray-125 transition duration-500"
             style={{
               margin: isMinified ? '0' : '7px 12px 2px 0',
               borderRadius: '3px',
@@ -63,7 +63,7 @@ export default function Header({ menu, children, isMinified, additionalNavItems 
             {isMinified ? <CompactIcon /> : <GroupIcon />}
           </button>
           <div
-            className="flex justify-center items-center bg-alsoit-gray-125 hover:bg-alsoit-gray-50 transition duration-300"
+            className="flex justify-center items-center hover:bg-alsoit-gray-125 transition duration-500"
             style={{
               margin: isMinified ? '0' : '1px 12px 5px 0',
               borderRadius: '3px',

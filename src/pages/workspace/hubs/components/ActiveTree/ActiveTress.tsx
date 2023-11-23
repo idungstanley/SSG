@@ -94,7 +94,7 @@ export default function ActiveTress({ placeHubType }: HubProps) {
   };
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col top-level-nav">
       <HList hubs={filteredResults} openNewHub={handleOpenNewHub} placeHubType={placeHubType} />
     </div>
   );

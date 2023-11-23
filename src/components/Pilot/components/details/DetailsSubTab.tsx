@@ -91,7 +91,10 @@ export default function DetailsSubTab() {
     <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={(e) => handleDragEnd(e)}>
       <SortableContext strategy={rectSortingStrategy} items={items}>
         <section>
-          <div className="grid  bg-primary-200 pb-0.5 grid-cols-5">
+          <div
+            className="grid px-1 grid-cols-5"
+            style={{ borderBottom: `3px solid ${activeSubDetailsTabId ? '#ebd1fc' : 'transparent'}` }}
+          >
             {detailOptions.map((item) => (
               <SubtabDrag
                 key={item.id}

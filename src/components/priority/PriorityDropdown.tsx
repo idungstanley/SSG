@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { cl } from '../../utils';
 import { UseUpdateTaskPrioritiesServices } from '../../features/task/taskService';
-import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { setNewTaskPriority } from '../../features/task/taskSlice';
+import { useAppSelector } from '../../app/hooks';
+
 import { priorities } from '../../app/constants/priorities';
 import AlsoitMenuDropdown from '../DropDowns';
+import { priorityArr } from '../../utils/PriorityArr';
 import Priority from '../../assets/icons/Priority';
 
 export interface priorityType {
@@ -21,10 +22,8 @@ interface TaskCurrentPriorityProps {
 }
 
 export default function PriorityDropdown({ taskCurrentPriority, icon }: TaskCurrentPriorityProps) {
-  const dispatch = useAppDispatch();
+  const { priority, priorityList, setPriority } = priorityArr();
   const { selectedTasksArray, selectedListIds, selectedTaskParentId } = useAppSelector((state) => state.task);
-
-  const [priority, setPriority] = useState('');
   const [isOpen, setIsOpen] = useState<HTMLButtonElement | null>(null);
 
   const { isSuccess } = UseUpdateTaskPrioritiesServices({
@@ -41,49 +40,6 @@ export default function PriorityDropdown({ taskCurrentPriority, icon }: TaskCurr
   const handleOpenDropdown = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     setIsOpen(event.currentTarget);
   };
-
-  const priorityList: priorityType[] = [
-    {
-      id: priorities.LOW,
-      title: 'Low',
-      color: '#A5A5A5',
-      bg: 'gray',
-      handleClick: () => {
-        setPriority(priorities.LOW);
-        dispatch(setNewTaskPriority(priorities.LOW));
-      }
-    },
-    {
-      id: priorities.NORMAL,
-      title: 'Normal',
-      color: '#99BBEE',
-      bg: 'blue',
-      handleClick: () => {
-        setPriority(priorities.NORMAL);
-        dispatch(setNewTaskPriority(priorities.NORMAL));
-      }
-    },
-    {
-      id: priorities.HIGH,
-      title: 'High',
-      color: '#F7A100',
-      bg: 'yellow',
-      handleClick: () => {
-        setPriority(priorities.HIGH);
-        dispatch(setNewTaskPriority(priorities.HIGH));
-      }
-    },
-    {
-      id: priorities.URGENT,
-      title: 'Urgent',
-      color: '#FF0E0F',
-      bg: 'red',
-      handleClick: () => {
-        setPriority(priorities.URGENT);
-        dispatch(setNewTaskPriority(priorities.URGENT));
-      }
-    }
-  ];
 
   const setPriorityColor = (
     priority: string | null | undefined | [{ id: string; initials: string; color: string }]
