@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
+import { useEffect, useState } from 'react';
+import { useAppSelector } from '../../../../app/hooks';
 import FullScreenMessage from '../../../CenterMessage/FullScreenMessage';
 import { InitialsAvatar, Spinner } from '../../../../common';
 import { useGetItemHistory } from '../../../../features/general/history/historyService';
@@ -9,9 +9,6 @@ import { AiFillPlusCircle } from 'react-icons/ai';
 import moment from 'moment';
 import AvatarWithImage from '../../../avatar/AvatarWithImage';
 import AvatarWithInitials from '../../../avatar/AvatarWithInitials';
-import { SiGooglephotos } from 'react-icons/si';
-import ClipHistory from '../../../../assets/icons/ClipHistory.svg';
-import { setActiveLogTab } from '../../../../features/workspace/workspaceSlice';
 import { HistoryColModal, HistoryfilterModal } from './Modals';
 
 export type componentModals = {
@@ -21,26 +18,26 @@ export type componentModals = {
 
 export default function History() {
   const [showModal, setShow] = useState<componentModals>({ showHideColModal: false, filterLogModal: false });
-  const dispatch = useAppDispatch();
+  // const dispatch = useAppDispatch();
 
   // ! implement pagination
   const { status, getItemHistory } = useGetItemHistory();
-  const { activityArray: logs, activeLogTab } = useAppSelector((state) => state.workspace);
+  const { activityArray: logs, activeSubLogsTabId } = useAppSelector((state) => state.workspace);
   const { pilotSideOver } = useAppSelector((state) => state.slideOver);
   const { selectedDate } = useAppSelector((state) => state.task);
 
-  const handleClick = (type: 'activity' | 'history') => {
-    getItemHistory({ logType: type });
-    dispatch(setActiveLogTab(type));
-  };
+  // const handleClick = (type: 'activity' | 'history') => {
+  //   getItemHistory({ logType: type });
+  //   dispatch(setActiveLogTab(type));
+  // };
 
   useEffect(() => {
-    getItemHistory({ logType: activeLogTab });
-  }, [pilotSideOver.id]);
+    getItemHistory({ logType: activeSubLogsTabId });
+  }, [pilotSideOver.id, activeSubLogsTabId]);
 
   return (
     <div className="flex flex-col space-x-0.5">
-      <div className="flex items-center py-1 space-x-4 border-b-2">
+      <div className="flex items-center py-1 justify-between border-b-2">
         {/* search Component */}
         <div className="relative flex items-center w-3/5">
           <input
@@ -50,7 +47,7 @@ export default function History() {
           />
           <BiSearch className="absolute w-4 h-4 left-2" />
         </div>
-        <div className="flex w-1/5 items-center space-x-0.5">
+        <div className="flex w-1/5 items-center justify-end space-x-0.5 px-2.5">
           {/* Filter box component */}
           <div
             className={
@@ -73,7 +70,7 @@ export default function History() {
           </div>
         </div>
       </div>
-      <div className="flex w-full space-x-1">
+      {/* <div className="flex w-full space-x-1">
         <div
           className={`rounded-2xl w-1/2 flex justify-center items-center ${
             activeLogTab === 'activity' ? 'bg-purple-200' : 'bg-gray-300'
@@ -90,8 +87,8 @@ export default function History() {
         >
           <img src={ClipHistory} alt="clipHistory_icon" />
         </div>
-      </div>
-      <div className="relative w-full h-full mt-2">
+      </div> */}
+      <div className="relative w-full h-96 mt-2">
         {/* status checking */}
         {status === 'error' ? (
           <FullScreenMessage title="Oops, an error occurred :(" description="Please try again later." />
@@ -104,7 +101,7 @@ export default function History() {
             <FullScreenMessage title="No logs yet" description="Do any action." />
           ) : (
             <>
-              <table className="absolute left-0 flex flex-col w-full overflow-y-scroll border-l-4 border-yellow-600 rounded-lg top-2">
+              <table className="absolute left-0 flex flex-col w-full overflow-y-scroll border-l-4 border-yellow-600 rounded-lg top-2 h-max">
                 <thead className="w-full px-1 pb-1 border-b-2 border-blueGray-300">
                   <tr className="flex items-center justify-between w-full">
                     <div className="flex w-2/3 space-x-10 capitalize">
