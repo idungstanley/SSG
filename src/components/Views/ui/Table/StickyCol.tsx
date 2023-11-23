@@ -24,7 +24,6 @@ import {
   setRootTaskIds
 } from '../../../../features/task/taskSlice';
 import { setActiveItem } from '../../../../features/workspace/workspaceSlice';
-// import { UniqueIdentifier, useDraggable, useDroppable } from '@dnd-kit/core';
 import CloseSubtask from '../../../../assets/icons/CloseSubtask';
 import OpenSubtask from '../../../../assets/icons/OpenSubtask';
 import { Capitalize } from '../../../../utils/NoCapWords/Capitalize';
@@ -38,8 +37,6 @@ import Close from '../../../../assets/icons/Close';
 import toast from 'react-hot-toast';
 import Toast from '../../../../common/Toast';
 import { LIMITS } from '../../../../app/config/dimensions';
-import Linkify from 'linkify-react';
-// import { useDroppable } from '@dnd-kit/core';
 
 interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   task: Task;
@@ -95,7 +92,7 @@ export function StickyCol({
 
   const { currentWorkspaceId } = useAppSelector((state) => state.auth);
   const { dragOverItemId, draggableItemId } = useAppSelector((state) => state.list);
-  const { activeView, activeItemId, editingPilotDetailsTitle } = useAppSelector((state) => state.workspace);
+  const { activeView, activeItemId } = useAppSelector((state) => state.workspace);
   const {
     currTeamMemberId,
     verticalGrid,
@@ -111,7 +108,6 @@ export function StickyCol({
     separateSubtasksMode,
     newTaskPriority,
     f2State,
-    taskInputValue,
     taskRootIds,
     assignOnHoverTask
   } = useAppSelector((state) => state.task);
@@ -131,8 +127,6 @@ export function StickyCol({
       dispatch(setTaskInputValue(task.name));
     }
   }, [taskId, task.id, activeItemId]);
-
-  const TASK_NAME = task.id === taskId && taskInputValue && editingPilotDetailsTitle ? taskInputValue : task.name;
 
   const onClickTask = () => {
     if (task.id !== '0') {
@@ -515,16 +509,10 @@ export function StickyCol({
                                 whiteSpace: 'nowrap'
                               }}
                             >
-                              <Linkify options={{ target: '_blank', className: 'text-blue-400' }}>
-                                {taskUpperCase ? TASK_NAME.toUpperCase() : Capitalize(TASK_NAME)}
-                              </Linkify>
+                              {taskUpperCase ? task.name.toUpperCase() : Capitalize(task.name)}
                             </div>
                           }
-                          content={
-                            <Linkify options={{ target: '_blank', className: 'text-blue-400' }}>
-                              <div>{taskUpperCase ? TASK_NAME.toUpperCase() : Capitalize(TASK_NAME)}</div>
-                            </Linkify>
-                          }
+                          content={<div>{taskUpperCase ? task.name.toUpperCase() : Capitalize(task.name)}</div>}
                           additionalStyles={{ backgroundColor: 'black', color: 'white' }}
                         />
                       ) : (
@@ -535,13 +523,13 @@ export function StickyCol({
                             whiteSpace: 'nowrap'
                           }}
                         >
-                          {taskUpperCase ? TASK_NAME.toUpperCase() : Capitalize(TASK_NAME)}
+                          {taskUpperCase ? task.name.toUpperCase() : Capitalize(task.name)}
                         </div>
                       )}
                     </div>
                   ) : (
                     <div style={{ wordBreak: 'break-word', overflow: 'hidden' }}>
-                      {taskUpperCase ? TASK_NAME.toUpperCase() : Capitalize(TASK_NAME)}
+                      {taskUpperCase ? task.name.toUpperCase() : Capitalize(task.name)}
                     </div>
                   )}
                 </div>

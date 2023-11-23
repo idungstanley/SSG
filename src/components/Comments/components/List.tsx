@@ -5,8 +5,6 @@ import FullScreenMessage from '../../CenterMessage/FullScreenMessage';
 import { IMentionUser } from '../../../features/chat/chat.interfaces';
 import { mentionTeamMemberInMessageReg } from '../../../regex';
 import { IComment } from '../../../features/general/comments/comments.interfaces';
-import Linkify from 'linkify-react';
-
 interface ListType {
   status: string;
   comments?: IComment[];
@@ -24,11 +22,7 @@ export default function List({ status, comments, onEdit, onDelete }: ListType) {
       <ul className="border-b divide-y divide-gray-200">
         {comments.map((item) => (
           <li key={item.id} className="flex items-center justify-between py-4">
-            <p>
-              <Linkify options={{ target: '_blank', className: 'text-blue-400' }}>
-                {item.message.replaceAll(mentionTeamMemberInMessageReg, '')}
-              </Linkify>
-            </p>
+            <p>{item.message.replaceAll(mentionTeamMemberInMessageReg, '')}</p>
             <div className="flex items-center gap-3">
               <div className="flex gap-2">
                 {item.mention_users?.map((user) => (

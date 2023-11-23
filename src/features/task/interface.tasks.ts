@@ -388,10 +388,9 @@ export type Task = ImyTaskData | ITaskFullList;
 
 export type TaskValue = ValueOf<Task>;
 
-export type TaskKey = keyof Pick<
-  ITaskFullList,
-  'status' | 'priority' | 'assignees' | 'tags' | 'start_date' | 'end_date' | 'created_at'
->;
+export type TaskKey =
+  | keyof Pick<ITaskFullList, 'status' | 'priority' | 'assignees' | 'tags' | 'start_date' | 'end_date' | 'created_at'>
+  | 'none';
 
 // remove this
 export type TaskKeyof = keyof Task;
