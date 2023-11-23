@@ -62,6 +62,7 @@ interface workspaceState {
   activeSubDetailsTabId: string | null;
   activeSubLogsTabId: string | null;
   activeSubTimeClockTabId: string | null;
+  activeSubComingTabId: string | null;
   activeClockTab: string;
   showExtendedBar: boolean;
   activePlaceNameForNavigation: string | null;
@@ -125,6 +126,7 @@ const initialState: workspaceState = {
   activeSubDetailsTabId: 'properties',
   activeSubLogsTabId: pilotTabs.HISTORY_LOG,
   activeSubTimeClockTabId: 'time_clock',
+  activeSubComingTabId: pilotTabs.COMING_SOON,
   activeClockTab: 'Real Time',
   activeStatusManagementTabId: 'custom',
   activeSubHubManagerTabId: 'create_hub',
@@ -312,6 +314,9 @@ export const wsSlice = createSlice({
     setActiveSubTimeClockTabId(state, action: PayloadAction<string | null>) {
       state.activeSubTimeClockTabId = action.payload;
     },
+    setActiveSubComingTabId(state, action: PayloadAction<string | null>) {
+      state.activeSubComingTabId = action.payload;
+    },
     setActiveClockTab(state, action: PayloadAction<string>) {
       state.activeClockTab = action.payload;
     },
@@ -416,6 +421,7 @@ export const {
   setActiveSubCommunicationTabId,
   setActiveSubDetailsTabId,
   setActiveSubTimeClockTabId,
+  setActiveSubComingTabId,
   setActiveClockTab,
   setPilotWidth,
   setShowPilotListView,

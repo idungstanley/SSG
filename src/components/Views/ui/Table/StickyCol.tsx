@@ -24,7 +24,6 @@ import {
   setRootTaskIds
 } from '../../../../features/task/taskSlice';
 import { setActiveItem } from '../../../../features/workspace/workspaceSlice';
-// import { UniqueIdentifier, useDraggable, useDroppable } from '@dnd-kit/core';
 import CloseSubtask from '../../../../assets/icons/CloseSubtask';
 import OpenSubtask from '../../../../assets/icons/OpenSubtask';
 import { Capitalize } from '../../../../utils/NoCapWords/Capitalize';
@@ -38,8 +37,6 @@ import Close from '../../../../assets/icons/Close';
 import toast from 'react-hot-toast';
 import Toast from '../../../../common/Toast';
 import { LIMITS } from '../../../../app/config/dimensions';
-import Linkify from 'linkify-react';
-// import { useDroppable } from '@dnd-kit/core';
 
 interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   task: Task;
@@ -515,16 +512,10 @@ export function StickyCol({
                                 whiteSpace: 'nowrap'
                               }}
                             >
-                              <Linkify options={{ target: '_blank', className: 'text-blue-400' }}>
-                                {taskUpperCase ? TASK_NAME.toUpperCase() : Capitalize(TASK_NAME)}
-                              </Linkify>
+                              {taskUpperCase ? TASK_NAME.toUpperCase() : Capitalize(TASK_NAME)}
                             </div>
                           }
-                          content={
-                            <Linkify options={{ target: '_blank', className: 'text-blue-400' }}>
-                              <div>{taskUpperCase ? TASK_NAME.toUpperCase() : Capitalize(TASK_NAME)}</div>
-                            </Linkify>
-                          }
+                          content={<div>{taskUpperCase ? TASK_NAME.toUpperCase() : Capitalize(TASK_NAME)}</div>}
                           additionalStyles={{ backgroundColor: 'black', color: 'white' }}
                         />
                       ) : (

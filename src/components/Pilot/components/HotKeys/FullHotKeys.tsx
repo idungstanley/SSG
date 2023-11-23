@@ -109,21 +109,27 @@ export default function FullHotkeysList({ tabs, showModal, setShowModal }: Hotke
         {/* hotkeys list */}
         <div className="z-50 flex flex-col items-start mt-4">
           {tabs.map((tab) => (
-            <button
+            <div
               onClick={() => handleClick(tab.id)}
               key={tab.id}
               className={cl(
                 activeHotkeyIds.includes(tab.id) && 'font-semibold',
-                'relative flex gap-10 text-gray-500 items-center rounded-md justify-between py-1 px-2 hover:bg-gray-100 cursor-pointer w-full'
+                'relative flex text-gray-500 items-center rounded-md justify-between py-1 px-2 hover:bg-gray-100 cursor-pointer w-full'
               )}
             >
               <div className="flex items-center gap-2">
-                <span className={cl(activeHotkeyIds.includes(tab.id) && 'text-black')}>{tab.icon}</span>
+                <span className="flex justify-center" style={{ width: '20px' }}>
+                  {tab.icon}
+                </span>
                 <span className="block truncate">{tab.label}</span>
               </div>
 
-              {activeHotkeyIds.includes(tab.id) && <CheckIcon className="w-4 h-4" aria-hidden="true" />}
-            </button>
+              {activeHotkeyIds.includes(tab.id) && (
+                <span className="w-4">
+                  <CheckIcon className="w-4 h-4" aria-hidden="true" />
+                </span>
+              )}
+            </div>
           ))}
         </div>
       </Modal>
