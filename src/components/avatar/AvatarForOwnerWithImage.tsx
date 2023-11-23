@@ -9,9 +9,9 @@ interface AvatarWithInitialsProps {
   width?: string;
   roundedStyle?: string;
 }
-const { CompactView } = useAppSelector((state) => state.task);
 
 function AvatarForOwnerWithImage({ image_path, roundedStyle = 'circular' }: AvatarWithInitialsProps) {
+  const { CompactView } = useAppSelector((state) => state.task);
   return (
     <AssigneeCloth height={CompactView ? '18' : '32'} width={CompactView ? '18' : '32'}>
       <div className="absolute" style={CompactView ? { left: '1px', top: '1px' } : { left: '2px', top: '2px' }}>
@@ -24,7 +24,7 @@ function AvatarForOwnerWithImage({ image_path, roundedStyle = 'circular' }: Avat
         <img
           src={OwnerBadge}
           alt=""
-          className="absolute h-2 w-2 z-5"
+          className="absolute w-2 h-2 z-5"
           style={CompactView ? { left: '16px', bottom: '0.5px' } : { left: '23px', bottom: '1px' }}
         />
       </div>
