@@ -55,7 +55,7 @@ export default function FullPilot({ featureTabs, activeSection, setShowModal, sh
                   }}
                 >
                   <div
-                    className="flex justify-center items-center bg-alsoit-gray-125 hover:bg-alsoit-gray-50 transition duration-300"
+                    className="flex justify-center items-center hover:bg-alsoit-gray-125 transition duration-500"
                     style={{
                       borderRadius: '3.6px',
                       width: '24px',
@@ -66,7 +66,7 @@ export default function FullPilot({ featureTabs, activeSection, setShowModal, sh
                   </div>
 
                   <div
-                    className="flex justify-center items-center bg-alsoit-gray-125 hover:bg-alsoit-gray-50 transition duration-300"
+                    className="flex justify-center items-center hover:bg-alsoit-gray-125 transition duration-500"
                     style={{
                       borderRadius: '3.6px',
                       width: '24px',
@@ -77,7 +77,7 @@ export default function FullPilot({ featureTabs, activeSection, setShowModal, sh
                   </div>
 
                   <div
-                    className="flex justify-center items-center bg-alsoit-gray-125 hover:bg-alsoit-gray-50 transition duration-300"
+                    className="flex justify-center items-center hover:bg-alsoit-gray-125 transition duration-500"
                     style={{
                       borderRadius: '3.6px',
                       width: '24px',
@@ -88,7 +88,7 @@ export default function FullPilot({ featureTabs, activeSection, setShowModal, sh
                   </div>
 
                   <div
-                    className="flex justify-center items-center bg-alsoit-gray-125 hover:bg-alsoit-gray-50 transition duration-300"
+                    className="flex justify-center items-center hover:bg-alsoit-gray-125 transition duration-500"
                     style={{
                       borderRadius: '3.6px',
                       width: '24px',
@@ -99,7 +99,7 @@ export default function FullPilot({ featureTabs, activeSection, setShowModal, sh
                   </div>
 
                   <div
-                    className="flex justify-center items-center bg-alsoit-gray-125 hover:bg-alsoit-gray-50 transition duration-300"
+                    className="flex justify-center items-center hover:bg-alsoit-gray-125 transition duration-500"
                     style={{
                       borderRadius: '3.6px',
                       width: '24px',
@@ -120,10 +120,10 @@ export default function FullPilot({ featureTabs, activeSection, setShowModal, sh
                 maxWidth: '98%'
               }}
             >
-              <div>
+              <div className="flex items-center">
                 <PilotNavIcon />
               </div>
-              <div className="flex" style={{ paddingLeft: '8px', marginTop: '-2px' }}>
+              <div className="flex" style={{ paddingLeft: '2px', marginTop: '-2px' }}>
                 <ToolbarNav />
               </div>
               <BlurEffect
@@ -131,7 +131,7 @@ export default function FullPilot({ featureTabs, activeSection, setShowModal, sh
                 right="-5px"
                 bottom="0"
                 left="auto"
-                width="55px"
+                width="20px"
                 height="45px"
                 backgroundImage="linear-gradient(to right, transparent , white)"
               />
