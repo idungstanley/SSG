@@ -85,7 +85,7 @@ export default function LineUpModal({ anchorEl, setAnchorEl, handleLineUpTasks }
                       <StatusDropdown taskCurrentStatus={task.status} taskStatuses={task.task_statuses} />
                     </div>
                     <h1 className="mb-1 truncate " style={{ maxWidth: '290PX' }}>
-                      {task.name}{' '}
+                      {task.name}
                     </h1>
                   </div>
                   <div className="pointer-events-none">
