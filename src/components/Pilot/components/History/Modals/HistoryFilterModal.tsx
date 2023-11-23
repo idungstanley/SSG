@@ -46,7 +46,7 @@ export function HistoryfilterModal({ logData, toggleFn }: HistoryfiltermodalProp
         className="flex flex-col space-y-2 bg-white absolute top-5 -right-7 shadow-2xl rounded-lg z-30 p-2 overflow-visible"
         style={{ height: '175px', width: '385px' }}
         onClick={(e) => {
-          e.stopPropagation(); // Stop event propagation
+          e.stopPropagation();
         }}
         ref={modalRef}
       >
@@ -64,7 +64,7 @@ export function HistoryfilterModal({ logData, toggleFn }: HistoryfiltermodalProp
           {filterKeys.map((keys, index) => (
             <div
               key={index}
-              className="flex w-full space-x-2 items-center"
+              className="flex w-full space-x-4 items-center"
               onClick={(e: React.MouseEvent<HTMLDivElement>) => keys.main === 'date' && setAnchorEl(e.currentTarget)}
             >
               <p className="flex space-x-2 capitalize w-1/5">
@@ -110,26 +110,21 @@ export function HistoryfilterModal({ logData, toggleFn }: HistoryfiltermodalProp
                     </label>
                   </div>
                 ) : keys.main === 'user' ? (
-                  <select
-                    name="user"
-                    id="loguser"
-                    className="w-36 rounded-lg border-gray-400 text-gray-500 text-xs ml-1 px-2 custom-select"
-                    onChange={(e) => dispatch(setHistoryMemory({ ...HistoryFilterMemory, user: e.target.value }))}
-                  >
-                    <option value="">Select user</option>
-                    {logData.map((data) => {
-                      const { user } = data.created_by;
-                      return (
-                        <option
-                          value={user.name}
-                          key={user.avatar_path}
-                          selected={HistoryFilterMemory?.user === user.name ?? ''}
-                        >
-                          {user.name}
+                  <div className="flex px-6">
+                    <select
+                      name="user"
+                      id="loguser"
+                      className="w-36 rounded-lg border-gray-400 text-gray-500 text-xs ml-1 px-2 custom-select"
+                      onChange={(e) => dispatch(setHistoryMemory({ ...HistoryFilterMemory, user: e.target.value }))}
+                    >
+                      <option value="">Select user</option>
+                      {Array.from(new Set(logData.map((data) => data.created_by.user.name))).map((userName) => (
+                        <option key={userName} value={userName} selected={HistoryFilterMemory?.user === userName ?? ''}>
+                          {userName}
                         </option>
-                      );
-                    })}
-                  </select>
+                      ))}
+                    </select>
+                  </div>
                 ) : (
                   <span>hello</span>
                 ))}

@@ -14,7 +14,7 @@ import { setPaletteDropDown } from '../../features/account/accountSlice';
 import Palette from '../ColorPalette';
 import MenuDropdown from '../Dropdown/MenuDropdown';
 import SubDropdown from '../Dropdown/SubDropdown';
-import { setCreateWlLink, setEntityForPermissions } from '../../features/workspace/workspaceSlice';
+import { setCreateWlLink } from '../../features/workspace/workspaceSlice';
 import { ListColourProps } from './ListItem';
 import { useParams } from 'react-router-dom';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
@@ -163,7 +163,9 @@ export default function WalletItem({
 
   return (
     <div
-      className={`nav-item ${openedEntitiesIds.includes(wallet.id) ? 'sticky bg-white' : ''}`}
+      className={`nav-item ${wallet.id === walletId ? 'active-nav-item' : ''} ${
+        openedEntitiesIds.includes(wallet.id) ? 'sticky bg-white' : ''
+      }`}
       style={{
         top: openedEntitiesIds.includes(wallet.id) && showSidebar ? topNumber : '',
         zIndex: openedEntitiesIds.includes(wallet.id) ? zNumber : '2',
@@ -262,7 +264,6 @@ export default function WalletItem({
                   className="cursor-pointer hover:text-alsoit-purple-300"
                   onClick={(e) => {
                     handleWalletSettings(wallet.id, wallet.name, e);
-                    dispatch(setEntityForPermissions(wallet));
                   }}
                   id="menusettings"
                 >

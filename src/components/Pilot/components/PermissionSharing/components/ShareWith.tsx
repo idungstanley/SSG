@@ -7,14 +7,35 @@ import RoleDropdown from './RoleDropdown';
 import ArrowDown from '../../../../../assets/icons/ArrowDown';
 import { IPermissionsRes } from '../../../../../features/workspace/workspace.interfaces';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useCreateOrEditPermission, useRemovePermission } from '../../../../../features/workspace/workspaceService';
+import {
+  useCreateOrEditPermission,
+  useMakePulicOrPrivate,
+  useRemovePermission
+} from '../../../../../features/workspace/workspaceService';
 import { useAppSelector } from '../../../../../app/hooks';
+import { UseGetHubDetails } from '../../../../../features/hubs/hubService';
+import { UseGetWalletDetails } from '../../../../../features/wallet/walletService';
+import { UseGetListDetails } from '../../../../../features/list/listService';
+import { getOneTaskServices } from '../../../../../features/task/taskService';
+import { EntityType } from '../../../../../utils/EntityTypes/EntityType';
+import { useParams } from 'react-router-dom';
 
-function ShareWith({ privateMode, entityPermission }: { privateMode: boolean; entityPermission: IPermissionsRes }) {
+function ShareWith({ publicMode, entityPermission }: { publicMode: number; entityPermission: IPermissionsRes }) {
+  const { listId, hubId, walletId } = useParams();
   const [anchor, setAnchor] = useState<HTMLElement | null>(null);
   const queryClient = useQueryClient();
 
   const { entityForPermissions } = useAppSelector((state) => state.workspace);
+  const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
+
+  const currentActiveId = hubId ?? walletId ?? listId;
+
+  const entityType = entityForPermissions
+    ? entityForPermissions.type
+      ? entityForPermissions.type
+      : 'hub'
+    : activeItemType;
+  const entityId = entityForPermissions ? entityForPermissions.id : activeItemId ?? currentActiveId;
 
   const teamMembers = [...entityPermission.data.team_members].map((i) => {
     return { ...i, teams: false };
@@ -22,6 +43,17 @@ function ShareWith({ privateMode, entityPermission }: { privateMode: boolean; en
   const teamMembersGroup = entityPermission.data.team_member_groups.map((i) => {
     return { ...i, teams: true };
   });
+
+  const parentTeamMembers = [...(entityPermission?.data?.parent?.team_members ?? [])].map((i) => {
+    return { ...i, teams: false };
+  });
+
+  const parentGroups =
+    entityPermission?.data?.parent?.team_member_groups?.map((i) => {
+      return { ...i, teams: true };
+    }) || [];
+
+  const allParentTeams = [...parentTeamMembers, ...parentGroups];
 
   const allTeamsandMembers = [...teamMembers, ...teamMembersGroup];
 
@@ -31,17 +63,11 @@ function ShareWith({ privateMode, entityPermission }: { privateMode: boolean; en
 
   const removePermissions = useMutation(useRemovePermission, {
     onSuccess: () => {
-      queryClient.invalidateQueries([`${entityForPermissions?.type ?? 'hub'}-permissions`, entityForPermissions?.id]);
+      queryClient.invalidateQueries([`${entityType}-permissions`, entityId]);
     }
   });
 
-  const handleToggle = (enabled: boolean) => {
-    if (enabled) return 'To be implemented';
-  };
-
   const handleRemoveAll = async () => {
-    const model = entityForPermissions?.type ? entityForPermissions.type : 'hub';
-    const model_id = entityForPermissions?.id;
     const teamsArr = allTeamsandMembers
       .map((item) => {
         if (!item.teams) {
@@ -58,20 +84,19 @@ function ShareWith({ privateMode, entityPermission }: { privateMode: boolean; en
       .filter((item) => item !== undefined);
     await removePermissions.mutateAsync({
       teamMembers: teamsArr as { id: string }[],
-      model,
-      model_id: model_id as string,
+      model: entityType as string,
+      model_id: entityId as string,
       teamMemberGroups: groupsArr as { id: string }[]
     });
   };
 
   const handleSeletRole = async (role: string) => {
-    const model = entityForPermissions?.type ? entityForPermissions.type : 'hub';
-    const model_id = entityForPermissions?.id;
     const teamsArr = allTeamsandMembers.map((item) => {
       if (!item.teams) {
         return { access_level: role.toLowerCase(), id: item.team_member?.id as string };
       }
     });
+
     const groupsArr = allTeamsandMembers
       .map((item) => {
         if (!item.teams) {
@@ -80,60 +105,113 @@ function ShareWith({ privateMode, entityPermission }: { privateMode: boolean; en
       })
       .filter((item) => item !== undefined);
     await changePermission.mutateAsync({
-      model,
-      model_id: model_id as string,
+      model: entityType as string,
+      model_id: entityId as string,
       teamMembersArr: teamsArr as { access_level: string; id: string }[],
       teamMemberGroups: groupsArr as { access_level: string; id: string }[]
     });
   };
 
+  const makePrublicoeprivate = useMutation(useMakePulicOrPrivate, {
+    onSuccess: () => {
+      queryClient.invalidateQueries([`${entityType}-permissions`, entityId]);
+    }
+  });
+
+  const makePrivateOrPublic = async (enabled: boolean) => {
+    await makePrublicoeprivate.mutateAsync({
+      model: entityType as string,
+      model_id: entityId as string,
+      route: enabled ? 'public' : 'private'
+    });
+  };
+
+  const { parent_id, parent_type, parent } = entityPermission.data;
+
+  const { data: hub } = UseGetHubDetails({
+    activeItemId: parent_id,
+    activeItemType: parent_type
+  });
+  const { data: wallet } = UseGetWalletDetails({
+    activeItemId: parent_id,
+    activeItemType: parent_type
+  });
+  const { data: list } = UseGetListDetails(parent_type === EntityType.list ? parent_id : null);
+
+  const { data: task } = getOneTaskServices({ task_id: parent_type === EntityType.task ? parent_id : null });
+
+  const parent_name = hub?.data.hub.name ?? wallet?.data.wallet.name ?? list?.data.list.name ?? task?.data.task.name;
+
   return (
     <div className="w-full">
       <h1>Share With</h1>
       <div className="mt-2">
-        <Disclosure>
-          {({ open }) => (
-            <>
-              <div className="flex items-center justify-between py-2 rounded-md hover:bg-alsoit-gray-75">
-                <Disclosure.Button className="flex items-center justify-between w-full gap-2 text-sm font-medium text-left text-purple-900 focus:outline-none focus-visible:ring focus-visible:ring-purple-500/75">
-                  <div className="flex items-center gap-2">
-                    <AiFillCaretRight className={`${open ? 'rotate-90 transform' : ''} h-3 w-3`} />
-                    <span>New Hub</span>
-                  </div>
-                </Disclosure.Button>
-                <div>
-                  <Toggle handleToggle={handleToggle} isEnabled={false} />
-                </div>
-              </div>
-              <Disclosure.Panel className="text-sm text-gray-500">
-                {/* // To be removed */}
-                <h3 className="my-2 text-alsoit-text-lg">
-                  {allTeamsandMembers.length} {allTeamsandMembers.length > 1 ? 'person invited' : 'people invited'}
-                </h3>
-                <div>
-                  <h4>To be implemented</h4>
-                </div>
-              </Disclosure.Panel>
-            </>
-          )}
-        </Disclosure>
-      </div>
-      <div>
-        {privateMode && (
+        {parent && (
           <Disclosure>
             {({ open }) => (
               <>
-                <Disclosure.Button className="flex items-center justify-between w-full gap-2 py-2 text-sm font-medium text-left text-purple-900 rounded-md focus:outline-none focus-visible:ring focus-visible:ring-purple-500/75 hover:bg-alsoit-gray-75">
-                  <div className="flex items-center gap-2">
-                    <AiFillCaretRight className={`${open ? 'rotate-90 transform' : ''} h-3 w-3`} />
-                    <span>People</span>
+                <div className="flex items-center justify-between py-2 rounded-md hover:bg-alsoit-gray-75">
+                  {publicMode === 1 ? (
+                    <Disclosure.Button className="flex items-center justify-between w-full gap-2 text-sm font-medium text-left text-purple-900 focus:outline-none focus-visible:ring focus-visible:ring-purple-500/75">
+                      <div className="flex items-center gap-2">
+                        <AiFillCaretRight className={`${open ? 'rotate-90 transform' : ''} h-3 w-3`} />
+                        <span>{parent_name}</span>
+                      </div>
+                    </Disclosure.Button>
+                  ) : (
+                    <button className="flex items-center justify-between w-full gap-2 text-sm font-medium text-left text-purple-900 focus:outline-none focus-visible:ring focus-visible:ring-purple-500/75">
+                      <div className="flex items-center gap-2">
+                        <AiFillCaretRight className={'h-3 w-3 text-alsoit-gray-75'} />
+                        <span>{parent_name}</span>
+                      </div>
+                    </button>
+                  )}
+
+                  <div>
+                    <Toggle handleToggle={makePrivateOrPublic} isEnabled={publicMode === 1 ? true : false} />
                   </div>
-                </Disclosure.Button>
-                <Disclosure.Panel className="px-4 pt-4 pb-2 text-sm text-gray-500">
-                  <div className="flex justify-between w-full">
+                </div>
+                {publicMode === 1 && (
+                  <Disclosure.Panel className="text-sm text-gray-500">
                     <h3 className="my-2 text-alsoit-text-lg">
-                      {totalInvited} {totalInvited > 1 ? 'people invited' : 'person invited'}
+                      {allParentTeams.length} {allParentTeams.length > 1 ? 'person' : 'people'}
                     </h3>
+                    <div>
+                      {allParentTeams.map((team) => {
+                        return (
+                          <People
+                            key={team.team_member?.id ?? team.team_member_groups?.id}
+                            teamMember={team.team_member}
+                            showToggle={false}
+                            enabled={false}
+                            role={team.access_level}
+                          />
+                        );
+                      })}
+                    </div>
+                  </Disclosure.Panel>
+                )}
+              </>
+            )}
+          </Disclosure>
+        )}
+      </div>
+      <div>
+        <Disclosure>
+          {({ open }) => (
+            <>
+              <Disclosure.Button className="flex items-center justify-between w-full gap-2 py-2 text-sm font-medium text-left text-purple-900 rounded-md focus:outline-none focus-visible:ring focus-visible:ring-purple-500/75 hover:bg-alsoit-gray-75">
+                <div className="flex items-center gap-2">
+                  <AiFillCaretRight className={`${open ? 'rotate-90 transform' : ''} h-3 w-3`} />
+                  <span>People</span>
+                </div>
+              </Disclosure.Button>
+              <Disclosure.Panel className="px-4 pt-4 pb-2 text-sm text-gray-500">
+                <div className="flex justify-between w-full">
+                  <h3 className="my-2 text-alsoit-text-lg">
+                    {totalInvited} {totalInvited > 1 ? 'people invited' : 'person invited'}
+                  </h3>
+                  {totalInvited > 0 && (
                     <div className="flex items-center gap-2">
                       <button
                         className="text-alsoit-text-lg rounded flex justify-center items-center gap-0.5"
@@ -148,25 +226,25 @@ function ShareWith({ privateMode, entityPermission }: { privateMode: boolean; en
                         Remove all
                       </button>
                     </div>
-                  </div>
-                  <div>
-                    {allTeamsandMembers.map((team) => {
-                      return (
-                        <People
-                          key={team.team_member?.id ?? team.team_member_groups?.id}
-                          teamMember={team.team_member}
-                          showToggle={false}
-                          enabled={false}
-                          role={team.access_level}
-                        />
-                      );
-                    })}
-                  </div>
-                </Disclosure.Panel>
-              </>
-            )}
-          </Disclosure>
-        )}
+                  )}
+                </div>
+                <div>
+                  {allTeamsandMembers.map((team) => {
+                    return (
+                      <People
+                        key={team.team_member?.id ?? team.team_member_groups?.id}
+                        teamMember={team.team_member}
+                        showToggle={false}
+                        enabled={false}
+                        role={team.access_level}
+                      />
+                    );
+                  })}
+                </div>
+              </Disclosure.Panel>
+            </>
+          )}
+        </Disclosure>
 
         <RoleDropdown anchor={anchor} setAnchor={setAnchor} handleSeletRole={handleSeletRole} />
       </div>

@@ -11,8 +11,15 @@ export const LogOptions = [
     id: pilotTabs.HISTORY_LOG,
     element: <History />
   },
-  { id: pilotTabs.ACTIVITY_LOG, element: <></> },
-  { id: pilotTabs.CUSTOM_LOG, element: <></> }
+  { id: pilotTabs.ACTIVITY_LOG, element: <History /> },
+  {
+    id: pilotTabs.CUSTOM_LOG,
+    element: (
+      <div className="w-full h-36 text-center py-4">
+        <span className="w-10/12 h-full mx-auto">Coming soon!</span>
+      </div>
+    )
+  }
 ];
 export default function Logs() {
   const { activeSubLogsTabId } = useAppSelector((state) => state.workspace);

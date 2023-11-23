@@ -13,6 +13,7 @@ import DownloadIcon from '../../../../assets/icons/DownloadIcon';
 import FileCopyIcon from '../../../../assets/icons/FileCopyIcon';
 import SharePilotIcon from '../../../../assets/icons/SharePilotIcon';
 import PrintPilotIcon from '../../../../assets/icons/PrintPilotIcon';
+import BlurEffect from '../../../BlurEffect';
 
 interface FullPilotProps {
   featureTabs: IPilotTab[];
@@ -54,7 +55,7 @@ export default function FullPilot({ featureTabs, activeSection, setShowModal, sh
                   }}
                 >
                   <div
-                    className="flex justify-center items-center bg-alsoit-gray-125 hover:bg-alsoit-gray-50 transition duration-300"
+                    className="flex justify-center items-center hover:bg-alsoit-gray-125 transition duration-500"
                     style={{
                       borderRadius: '3.6px',
                       width: '24px',
@@ -65,7 +66,7 @@ export default function FullPilot({ featureTabs, activeSection, setShowModal, sh
                   </div>
 
                   <div
-                    className="flex justify-center items-center bg-alsoit-gray-125 hover:bg-alsoit-gray-50 transition duration-300"
+                    className="flex justify-center items-center hover:bg-alsoit-gray-125 transition duration-500"
                     style={{
                       borderRadius: '3.6px',
                       width: '24px',
@@ -76,7 +77,7 @@ export default function FullPilot({ featureTabs, activeSection, setShowModal, sh
                   </div>
 
                   <div
-                    className="flex justify-center items-center bg-alsoit-gray-125 hover:bg-alsoit-gray-50 transition duration-300"
+                    className="flex justify-center items-center hover:bg-alsoit-gray-125 transition duration-500"
                     style={{
                       borderRadius: '3.6px',
                       width: '24px',
@@ -87,7 +88,7 @@ export default function FullPilot({ featureTabs, activeSection, setShowModal, sh
                   </div>
 
                   <div
-                    className="flex justify-center items-center bg-alsoit-gray-125 hover:bg-alsoit-gray-50 transition duration-300"
+                    className="flex justify-center items-center hover:bg-alsoit-gray-125 transition duration-500"
                     style={{
                       borderRadius: '3.6px',
                       width: '24px',
@@ -98,7 +99,7 @@ export default function FullPilot({ featureTabs, activeSection, setShowModal, sh
                   </div>
 
                   <div
-                    className="flex justify-center items-center bg-alsoit-gray-125 hover:bg-alsoit-gray-50 transition duration-300"
+                    className="flex justify-center items-center hover:bg-alsoit-gray-125 transition duration-500"
                     style={{
                       borderRadius: '3.6px',
                       width: '24px',
@@ -119,26 +120,21 @@ export default function FullPilot({ featureTabs, activeSection, setShowModal, sh
                 maxWidth: '98%'
               }}
             >
-              <div>
+              <div className="flex items-center">
                 <PilotNavIcon />
               </div>
-              <div className="flex" style={{ paddingLeft: '8px', marginTop: '-2px' }}>
+              <div className="flex" style={{ paddingLeft: '2px', marginTop: '-2px' }}>
                 <ToolbarNav />
               </div>
-              <div
-                style={{
-                  position: 'absolute',
-                  bottom: '0',
-                  top: '0',
-                  left: 'auto',
-                  right: '-5px',
-                  height: '45px',
-                  width: '55px',
-                  backgroundImage: 'linear-gradient(to right, transparent , white)'
-                }}
-              >
-                &nbsp;
-              </div>
+              <BlurEffect
+                top="0"
+                right="-5px"
+                bottom="0"
+                left="auto"
+                width="20px"
+                height="45px"
+                backgroundImage="linear-gradient(to right, transparent , white)"
+              />
             </div>
           </Header>
 

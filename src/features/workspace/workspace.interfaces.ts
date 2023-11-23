@@ -12,6 +12,13 @@ export interface IPermissionsRes {
     is_public: number;
     team_member_groups: TeamMemberGroupsPermissions[];
     team_members: TeamMemberGroupsPermissions[];
+    parent_id: string | null;
+    parent_type: string | null;
+    parent: {
+      is_public: number;
+      team_member_groups: TeamMemberGroupsPermissions[];
+      team_members: TeamMemberGroupsPermissions[];
+    };
   };
 }
 export interface IWorkspaceRes {

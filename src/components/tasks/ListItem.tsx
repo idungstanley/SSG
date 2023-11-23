@@ -13,7 +13,7 @@ import {
 } from '../../features/hubs/hubSlice';
 import { GetTaskListCount, UseEditListService } from '../../features/list/listService';
 import { setListPaletteColor, setStatusTaskListDetails } from '../../features/list/listSlice';
-import { setActiveItem, setCreateWlLink, setEntityForPermissions } from '../../features/workspace/workspaceSlice';
+import { setActiveItem, setCreateWlLink } from '../../features/workspace/workspaceSlice';
 import Palette from '../ColorPalette';
 import ListIconComponent from '../ItemsListInSidebar/components/ListIconComponent';
 import { useDraggable, useDroppable } from '@dnd-kit/core';
@@ -109,7 +109,6 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
     );
     const element = document.getElementById(targetId);
     if (element) {
-      // 👇 Will scroll smoothly to the top of the next section
       element.scrollIntoView({ behavior: 'smooth' });
     }
   };
@@ -133,7 +132,6 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
     }
   };
   const handleItemAction = (id: string) => {
-    // dispatch(setSelectedTreeDetails({ name, id, type: EntityType.wallet }));
     dispatch(setCreateWlLink(false));
     dispatch(
       getSubMenu({
@@ -178,7 +176,7 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
 
   return (
     <div
-      className="relative nav-item"
+      className={`relative nav-item ${list.id === listId ? 'active-nav-item' : ''}`}
       data-id={list.id}
       data-url={generateViewsUrl(list.id, activeView?.id as string, list, EntityType.list) as string}
       data-parent={list.parent_id}
@@ -286,7 +284,6 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
                 id="menusettings"
                 onClick={(e) => {
                   handleListSettings(list.id, list.name, e);
-                  dispatch(setEntityForPermissions(list));
                 }}
               >
                 <ThreeDotIcon />

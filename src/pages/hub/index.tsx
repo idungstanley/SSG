@@ -154,9 +154,9 @@ export default function HubPage() {
   const handleScroll = (e: UIEvent<HTMLDivElement>) => {
     if (hasNextPage && !isFetching) {
       const container = e.target as HTMLElement;
-      const twoThirdsOfScroll = 0.66;
+      const scrollPositionForLoading = 0.9;
       const scrollDifference =
-        container?.scrollHeight * twoThirdsOfScroll - container.scrollTop - container.clientHeight;
+        container?.scrollHeight * scrollPositionForLoading - container.scrollTop - container.clientHeight;
       const range = 1;
       if (scrollDifference <= range) {
         fetchNextPage();

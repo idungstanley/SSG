@@ -14,7 +14,7 @@ import AvatarWithInitials from '../avatar/AvatarWithInitials';
 import Palette from '../ColorPalette';
 import UploadImage from '../ColorPalette/component/UploadImage';
 import { InvalidateQueryFilters } from '@tanstack/react-query';
-import { setCreateWlLink, setEntityForPermissions } from '../../features/workspace/workspaceSlice';
+import { setCreateWlLink } from '../../features/workspace/workspaceSlice';
 import { ListColourProps } from './ListItem';
 import { useParams } from 'react-router-dom';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
@@ -236,7 +236,9 @@ export default function HubItem({
 
   return (
     <div
-      className={`w-full nav-item ${openedEntitiesIds.includes(item.id) ? 'sticky bg-white opacity-100 hub-item' : ''}`}
+      className={`w-full nav-item ${item.id === hubId ? 'active-nav-item' : ''} ${
+        openedEntitiesIds.includes(item.id) ? 'sticky bg-white opacity-100 hub-item' : ''
+      }`}
       style={{
         top: openedEntitiesIds.includes(item.id) && showSidebar ? topNumber : '',
         zIndex: openedEntitiesIds.includes(item.id) ? zNumber : '2',
@@ -380,7 +382,6 @@ export default function HubItem({
                 <span
                   onClick={(e) => {
                     handleHubSettings(item.id, item.name, e);
-                    dispatch(setEntityForPermissions(item));
                   }}
                   className="cursor-pointer"
                   id="menusettings"
