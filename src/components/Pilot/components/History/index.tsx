@@ -1,15 +1,13 @@
 import { useEffect, useState } from 'react';
 import { useAppSelector } from '../../../../app/hooks';
 import FullScreenMessage from '../../../CenterMessage/FullScreenMessage';
-import { InitialsAvatar, Spinner } from '../../../../common';
+import { Spinner } from '../../../../common';
 import { useGetItemHistory } from '../../../../features/general/history/historyService';
 import { BsFilter, BsThreeDots } from 'react-icons/bs';
 import { BiSearch } from 'react-icons/bi';
 import { AiFillPlusCircle } from 'react-icons/ai';
-import moment from 'moment';
-import AvatarWithImage from '../../../avatar/AvatarWithImage';
-import AvatarWithInitials from '../../../avatar/AvatarWithInitials';
 import { HistoryColModal, HistoryfilterModal } from './Modals';
+import { LogEntries } from './Modals/Components/LogEntries';
 
 export type componentModals = {
   showHideColModal: boolean;
@@ -18,18 +16,19 @@ export type componentModals = {
 
 export default function History() {
   const [showModal, setShow] = useState<componentModals>({ showHideColModal: false, filterLogModal: false });
-  // const dispatch = useAppDispatch();
+  const [isFiltered] = useState<{ date: boolean }>({
+    date: false
+  });
 
   // ! implement pagination
   const { status, getItemHistory } = useGetItemHistory();
   const { activityArray: logs, activeSubLogsTabId } = useAppSelector((state) => state.workspace);
   const { pilotSideOver } = useAppSelector((state) => state.slideOver);
-  const { selectedDate } = useAppSelector((state) => state.task);
+  const { selectedDate, HistoryFilterMemory } = useAppSelector((state) => state.task);
 
-  // const handleClick = (type: 'activity' | 'history') => {
-  //   getItemHistory({ logType: type });
-  //   dispatch(setActiveLogTab(type));
-  // };
+  const filteredUserLogs = logs.filter((log) => {
+    return log.created_by.user.name === HistoryFilterMemory?.user;
+  });
 
   useEffect(() => {
     getItemHistory({ logType: activeSubLogsTabId });
@@ -116,48 +115,13 @@ export default function History() {
                   </tr>
                 </thead>
                 {/* logs list */}
-                {logs.map((activityLog) => {
-                  const { created_at, category, model, created_by } = activityLog;
-                  const { user } = created_by;
-                  const startDate = moment(created_at);
-                  const currentDate = moment(new Date().toISOString());
-                  const duration = moment.duration(currentDate.diff(startDate));
-                  const time = moment(created_at.substring(11, 19), 'HH:mm:ss').format('h:mm A');
-                  return (
-                    <tr
-                      key={activityLog.id}
-                      className="flex items-center w-full px-1 py-1 space-x-6 border-t border-b border-blueGray-300"
-                    >
-                      <td>
-                        {user ? (
-                          user.avatar_path ? (
-                            <AvatarWithImage
-                              image_path={user.avatar_path}
-                              height="h-5"
-                              width="w-5"
-                              roundedStyle="circular"
-                            />
-                          ) : (
-                            <InitialsAvatar size={6} colour={user.color} initials={user.initials} />
-                          )
-                        ) : (
-                          <AvatarWithInitials initials="UN" height="h-5" width="w-5" roundedStyle="circular" />
-                        )}
-                      </td>
-                      <td className="text-xs">
-                        <span>{duration.humanize()} ago</span>
-                      </td>
-                      <td>
-                        <span className="text-xs">{time}</span>
-                      </td>
-                      {user && (
-                        <td className="text-xs text-gray-400 capitalize">
-                          {user.name} {category} {model}
-                        </td>
-                      )}
-                    </tr>
-                  );
-                })}
+                {filteredUserLogs.length ? (
+                  <LogEntries logsArr={filteredUserLogs} />
+                ) : isFiltered ? (
+                  <></>
+                ) : (
+                  <LogEntries logsArr={logs} />
+                )}
               </table>
             </>
           )
