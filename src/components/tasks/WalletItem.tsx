@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { FaFolder, FaFolderOpen } from 'react-icons/fa';
-import { VscTriangleDown, VscTriangleRight } from 'react-icons/vsc';
+import { VscTriangleRight } from 'react-icons/vsc';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import {
   closeMenu,
@@ -14,7 +14,7 @@ import { setPaletteDropDown } from '../../features/account/accountSlice';
 import Palette from '../ColorPalette';
 import MenuDropdown from '../Dropdown/MenuDropdown';
 import SubDropdown from '../Dropdown/SubDropdown';
-import { setCreateWlLink, setEntityForPermissions } from '../../features/workspace/workspaceSlice';
+import { setCreateWlLink } from '../../features/workspace/workspaceSlice';
 import { ListColourProps } from './ListItem';
 import { useParams } from 'react-router-dom';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
@@ -30,6 +30,7 @@ import { useAbsolute } from '../../hooks/useAbsolute';
 import { IWallet } from '../../features/hubs/hubs.interfaces';
 import { APP_TASKS } from '../../app/constants/app';
 import { STORAGE_KEYS, dimensions } from '../../app/config/dimensions';
+import { generateViewsUrl } from '../../utils/generateViewsUrl';
 
 interface WalletItemProps {
   wallet: Wallet;
@@ -58,7 +59,7 @@ export default function WalletItem({
   const dispatch = useAppDispatch();
   const { walletId } = useParams();
 
-  const { activeItemId, openedEntitiesIds } = useAppSelector((state) => state.workspace);
+  const { activeItemId, openedEntitiesIds, activeView } = useAppSelector((state) => state.workspace);
   const { showMenuDropdown, SubMenuId } = useAppSelector((state) => state.hub);
   const { paletteDropdown, showSidebar } = useAppSelector((state) => state.account);
   const { updateCords } = useAppSelector((state) => state.task);
@@ -121,36 +122,6 @@ export default function WalletItem({
     );
   };
 
-  const renderIcons = (showSubWallet: boolean) => {
-    if (wallet?.children.length || wallet?.lists.length) {
-      if (showSubWallet) {
-        return (
-          <>
-            <VscTriangleDown
-              className="flex-shrink-0 h-2 hover:fill-[#BF01FE] cursor-pointer"
-              aria-hidden="true"
-              color="rgba(72, 67, 67, 0.64)"
-            />
-            {renderOpenFolder()}
-          </>
-        );
-      } else {
-        return (
-          <>
-            <VscTriangleRight
-              className="flex-shrink-0 h-2 hover:fill-[#BF01FE] cursor-pointer"
-              aria-hidden="true"
-              color="rgba(72, 67, 67, 0.64)"
-            />
-            {renderCloseFolder()}
-          </>
-        );
-      }
-    } else {
-      return <div style={{ paddingLeft: '14px' }}>{renderCloseFolder()}</div>;
-    }
-  };
-
   const { isOver, setNodeRef } = useDroppable({
     id: wallet.id,
     data: {
@@ -183,14 +154,27 @@ export default function WalletItem({
     (JSON.parse(localStorage.getItem(STORAGE_KEYS.SIDEBAR_WIDTH) || '""') as number) ||
     dimensions.navigationBar.default;
 
+  const isShowArrow = () => {
+    if (wallet?.children.length || wallet?.lists.length || wallet.has_descendants) {
+      return true;
+    }
+    return false;
+  };
+
   return (
     <div
-      className={`${openedEntitiesIds.includes(wallet.id) ? 'sticky bg-white' : ''}`}
+      className={`nav-item ${wallet.id === walletId ? 'active-nav-item' : ''} ${
+        openedEntitiesIds.includes(wallet.id) ? 'sticky bg-white' : ''
+      }`}
       style={{
         top: openedEntitiesIds.includes(wallet.id) && showSidebar ? topNumber : '',
         zIndex: openedEntitiesIds.includes(wallet.id) ? zNumber : '2',
         opacity: transform ? 0 : 100
       }}
+      data-id={wallet.id}
+      data-url={generateViewsUrl(wallet.id, activeView?.id as string, wallet, EntityType.wallet) as string}
+      data-parent={wallet.parent_id}
+      data-name={wallet.name}
     >
       <section
         className={`bg-white items-center truncate text-sm group ${
@@ -215,11 +199,28 @@ export default function WalletItem({
             >
               <Drag />
             </div>
-            {/* showsub1 */}
-            <div className="flex items-center gap-5">
-              <div className="flex items-center" style={{ zIndex: '1' }} ref={relativeRef}>
-                {renderIcons(showSubWallet)}
+            <div className="relative flex items-center gap-5">
+              <div
+                className={`flex items-center justify-center w-6 h-6 ${
+                  isShowArrow() && 'opacity-100 group-hover:opacity-0'
+                }`}
+                ref={relativeRef}
+              >
+                {showSubWallet ? renderOpenFolder() : renderCloseFolder()}
               </div>
+              {isShowArrow() && (
+                <div className="absolute flex justify-center items-center w-6 h-6 opacity-0 group-hover:opacity-100">
+                  <div className="group/open cursor-pointer flex justify-center items-center w-4 h-4 rounded hover:bg-gray-300">
+                    <VscTriangleRight
+                      className={`flex-shrink-0 h-2 group-hover/open:fill-[#BF01FE] duration-200 ${
+                        showSubWallet ? 'rotate-90' : 'rotate-0'
+                      }`}
+                      aria-hidden="true"
+                      color="#919191"
+                    />
+                  </div>
+                </div>
+              )}
               <div
                 onClick={() => handleLocation(wallet.id, wallet.name, wallet as Wallet)}
                 className="truncate cursor-pointer hover:underline hover:decoration-dashed"
@@ -263,7 +264,6 @@ export default function WalletItem({
                   className="cursor-pointer hover:text-alsoit-purple-300"
                   onClick={(e) => {
                     handleWalletSettings(wallet.id, wallet.name, e);
-                    dispatch(setEntityForPermissions(wallet));
                   }}
                   id="menusettings"
                 >

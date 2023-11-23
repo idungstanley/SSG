@@ -11,6 +11,7 @@ import HubItemOverlay from '../../tasks/HubItemOverLay';
 import { EntityType } from '../../../utils/EntityTypes/EntityType';
 import { Hub } from '../../../pages/workspace/hubs/components/ActiveTree/activetree.interfaces';
 import { APP_TASKS } from '../../../app/constants/app';
+import { setStatusTaskListDetails } from '../../../features/list/listSlice';
 
 interface ISubHubIndexProps {
   data: Hub[];
@@ -25,6 +26,8 @@ export default function SubHubIndex({ data }: ISubHubIndexProps) {
   const { extendedBarOpenedEntitiesIds } = useAppSelector((state) => state.workspace);
 
   const handleLocation = (id: string, name: string) => {
+    dispatch(setStatusTaskListDetails({ listId: undefined, listName: undefined }));
+
     navigate(`/${currentWorkspaceId}/tasks/h/${id}`);
     dispatch(
       setActiveItem({

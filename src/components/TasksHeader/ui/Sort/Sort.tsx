@@ -11,7 +11,7 @@ import { Menu } from '@mui/material';
 import { Capitalize } from '../../../../utils/NoCapWords/Capitalize';
 import ArrowDrop from '../../../../assets/icons/ArrowDrop';
 
-type Key = Extract<TaskKey, 'status' | 'assignees' | 'priority'>;
+type Key = Extract<TaskKey, 'status' | 'assignees' | 'priority' | 'none'>;
 type Option = Record<Key, { icon: JSX.Element }>;
 
 const options: Option = {
@@ -22,6 +22,9 @@ const options: Option = {
     icon: <RiCheckboxBlankFill className="w-5 h-5 text-gray-400" aria-hidden="true" />
   },
   priority: {
+    icon: <RiCheckboxBlankFill className="w-5 h-5 text-gray-400" aria-hidden="true" />
+  },
+  none: {
     icon: <RiCheckboxBlankFill className="w-5 h-5 text-gray-400" aria-hidden="true" />
   }
 };

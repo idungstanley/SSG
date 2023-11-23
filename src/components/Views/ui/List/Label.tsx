@@ -8,7 +8,7 @@ import { FilterDropdown } from '../../../TasksHeader/ui/Filter/FilterDropdown';
 import { Search } from '../../../TasksHeader/ui/Search/Search';
 import { Sort } from '../../../TasksHeader/ui/Sort/Sort';
 import { AssigneeSplitSubtasks } from '../../../TasksHeader/ui/Assignee/AssigneeSplitSubtasks';
-import statusbox from '../../../.././assets/icons/statusbox.svg';
+import RoundedCheckbox from '../../../Checkbox/RoundedCheckbox';
 
 interface LabelProps {
   showTable: boolean;
@@ -35,7 +35,7 @@ export function Label({
 
   const { selectedTasksArray, taskRootIds, subtasks } = useAppSelector((state) => state.task);
 
-  const allChecked = tasks?.every((value) => selectedTasksArray.includes(value.id));
+  const allChecked = tasks ? tasks.every((value) => selectedTasksArray.includes(value.id)) : false;
 
   const subtaskIds = (tasks: Task[]) => {
     return tasks.map((task) => task.id);
@@ -98,7 +98,13 @@ export function Label({
           style={{ backgroundColor: !ListColor?.outerColour ? 'black' : (ListColor?.outerColour as string) }}
         >
           <div className="flex items-center pl-2 space-x-2 text-sm text-white w-fit -mt-1">
-            <img src={statusbox} alt="" className="pr-1 border-r cursor-pointer" onClick={handleCheckedGroupTasks} />
+            <RoundedCheckbox
+              onChange={handleCheckedGroupTasks}
+              isChecked={allChecked}
+              styles={
+                'w-4 h-4 rounded-full cursor-pointer focus:outline-1 focus:ring-transparent focus:border-2 text-alsoit-purple-300'
+              }
+            />
             <CollapseIcon color="#A854F7" active={showTable} onToggle={onClickChevron} hoverBg="white" />
             <h1 className="max-w-34 truncate">{listName ?? 'Loading...'}</h1>
           </div>

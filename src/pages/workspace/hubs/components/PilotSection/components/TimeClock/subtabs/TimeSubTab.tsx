@@ -1,11 +1,21 @@
 import { useAppSelector } from '../../../../../../../../app/hooks';
-import { useDispatch } from 'react-redux';
-import { setActiveSubTimeClockTabId } from '../../../../../../../../features/workspace/workspaceSlice';
 import { ClockIcon } from '../../../../../../../../assets/icons/ClockIcon';
 import { ScreenRecordIcon } from '../../../../../../../../assets/icons/ScreenRecordIcon';
 import { pilotTabs } from '../../../../../../../../app/constants/pilotTabs';
+import {
+  DndContext,
+  DragEndEvent,
+  KeyboardSensor,
+  PointerSensor,
+  closestCenter,
+  useSensor,
+  useSensors
+} from '@dnd-kit/core';
+import { SortableContext, arrayMove, rectSortingStrategy, sortableKeyboardCoordinates } from '@dnd-kit/sortable';
+import { useState } from 'react';
+import SubtabDrag from '../../../../../../pilot/components/SubtabDnd';
 
-export const TimeClockOptions = [
+export const timeClockOptions = [
   {
     id: pilotTabs.TIME_CLOCK,
     name: 'Timeclock',
@@ -19,34 +29,68 @@ export const TimeClockOptions = [
     isVisible: false
   }
 ];
-export default function TimeSubTab() {
-  const dispatch = useDispatch();
 
+export default function TimeSubTab() {
   const { showPilot, activeSubTimeClockTabId } = useAppSelector((state) => state.workspace);
 
+  const idsFromLS = JSON.parse(localStorage.getItem('subTab') || '[]') as string[];
+
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates
+    })
+  );
+
+  const [items, setItems] = useState(
+    timeClockOptions.sort((a, b) => idsFromLS.indexOf(a.id) - idsFromLS.indexOf(b.id))
+  );
+
+  const handleDragEnd = (e: DragEndEvent) => {
+    const { active, over } = e;
+
+    if (active.id !== over?.id) {
+      const findActive = items.find((i) => i.id === active.id);
+      const findOver = items.find((i) => i.id === over?.id);
+
+      if (findActive && findOver) {
+        setItems((items) => {
+          const oldIndex = items.indexOf(findActive);
+          const newIndex = items.indexOf(findOver);
+
+          const sortArray = arrayMove(items, oldIndex, newIndex);
+
+          localStorage.setItem('subTab', JSON.stringify([...sortArray.map((i) => i.id)]));
+
+          return sortArray;
+        });
+      }
+    }
+  };
+
   return (
-    <section>
-      <div className={`flex bg-white pt-0.5 ${showPilot ? 'flex-row' : 'flex-col'}`}>
-        {TimeClockOptions.map((item) => (
-          <section className={'flex flex-col w-full bg-white border-b-2 border-b-alsoit-purple-50'} key={item.id}>
-            <div
-              onClick={() => dispatch(setActiveSubTimeClockTabId(item.id))}
-              className={`relative flex px-2 flex-grow py-2 font-medium text-alsoit-gray-200 transition cursor-pointer group hover:text-alsoit-gray-300 ${
-                item.id === activeSubTimeClockTabId && showPilot ? 'rounded-t-lg bg-alsoit-purple-50' : ' bg-white'
-              }`}
-            >
-              <div
-                className={`${!showPilot && 'text-alsoit-text-md'} ${
-                  item.id === activeSubTimeClockTabId && !showPilot && 'bg-alsoit-success p-2 rounded'
-                } flex items-center space-x-1.5 justify-start`}
-              >
-                <span>{item.icon}</span>
-                <span className="font-semibold">{item.name}</span>
-              </div>
-            </div>
-          </section>
-        ))}
-      </div>
-    </section>
+    <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={(e) => handleDragEnd(e)}>
+      <SortableContext strategy={rectSortingStrategy} items={items}>
+        <section>
+          <div
+            className="grid px-1 grid-cols-2"
+            style={{ borderBottom: `3px solid ${activeSubTimeClockTabId ? '#ebd1fc' : 'transparent'}` }}
+          >
+            {timeClockOptions.map((item) => (
+              <SubtabDrag
+                key={item.id}
+                id={item.id}
+                icon={item.icon}
+                activeSub={activeSubTimeClockTabId}
+                showPilot={showPilot}
+                name={pilotTabs.UTILITIES}
+                item={item}
+                items={timeClockOptions}
+              />
+            ))}
+          </div>
+        </section>
+      </SortableContext>
+    </DndContext>
   );
 }

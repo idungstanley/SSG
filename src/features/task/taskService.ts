@@ -27,6 +27,7 @@ import {
   setDuplicateTaskObj,
   setGlobalSearchResult,
   setNewTaskPriority,
+  setNewTaskStatus,
   setRootTaskIds,
   setScreenRecording,
   setScreenRecordingMedia,
@@ -403,6 +404,7 @@ export const useAddTask = (task: Task) => {
 
   return useMutation(addTask, {
     onSuccess: (data) => {
+      dispatch(setNewTaskStatus(null));
       dispatch(setNewTaskPriority('normal'));
       if (data.data.task.parent_id) {
         // add subtask
@@ -413,7 +415,6 @@ export const useAddTask = (task: Task) => {
           task.task_statuses
         );
         dispatch(setSubtasks(updatedSubtasks));
-
         const parentId = data.data.task.parent_id;
         const updatedTasks = updateTaskSubtasksCountManager(
           parentId as string,
@@ -884,7 +885,9 @@ export const UseUpdateTaskService = ({
 export const UseUpdateTaskStatusService = ({ task_id, statusDataUpdate }: UpdateTaskProps) => {
   const dispatch = useAppDispatch();
 
-  const { selectedTaskParentId, tasks, subtasks, selectedTaskType } = useAppSelector((state) => state.task);
+  const { selectedTaskParentId, tasks, subtasks, selectedTaskType, currentTaskStatusId } = useAppSelector(
+    (state) => state.task
+  );
 
   return useQuery(
     ['task', { task_id, statusDataUpdate }],
@@ -899,7 +902,7 @@ export const UseUpdateTaskStatusService = ({ task_id, statusDataUpdate }: Update
       return data;
     },
     {
-      enabled: !!task_id && !!statusDataUpdate,
+      enabled: !!task_id && !!statusDataUpdate && currentTaskStatusId != '0',
       cacheTime: 0,
       onSuccess: (data) => {
         if (selectedTaskParentId) {

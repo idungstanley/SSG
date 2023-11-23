@@ -53,9 +53,17 @@ export function Col({ value, field, fieldId, task, styles, selectedRow, ...props
 
   const { date_format } = useAppSelector((state) => state.userSetting);
   const { dragOverItemId, draggableItemId } = useAppSelector((state) => state.list);
-  const { dragToBecomeSubTask, verticalGrid, selectedTasksArray, saveSettingOnline } = useAppSelector(
-    (state) => state.task
-  );
+  const {
+    dragToBecomeSubTask,
+    newTaskStatus,
+    verticalGrid,
+    currentTaskStatusId,
+    selectedTasksArray,
+    saveSettingOnline,
+    taskColumnIndex,
+    taskColumns,
+    KeyBoardSelectedTaskData
+  } = useAppSelector((state) => state.task);
 
   const COL_BG = taskId === task.id ? ACTIVE_COL_BG : selectedRow ? 'bg-alsoit-purple-50' : DEFAULT_COL_BG;
   const isSelected = selectedTasksArray.includes(task.id);
@@ -65,20 +73,20 @@ export function Col({ value, field, fieldId, task, styles, selectedRow, ...props
     priority: <TaskPriority task={task as ImyTaskData} />,
     status: value ? (
       <div
-        className="top-0 flex flex-col items-center justify-center w-full h-full px-1 text-xs font-medium text-center text-white capitalize bg-green-500"
-        style={{ backgroundColor: task?.status?.color }}
+        className="top-0 flex flex-col items-center justify-center w-full h-full px-1 text-xs font-medium text-center text-white capitalize"
+        style={{
+          backgroundColor:
+            task.id === '0' || task.id === currentTaskStatusId
+              ? newTaskStatus?.color || task?.status?.color
+              : task?.status?.color
+        }}
         onClick={() => {
           dispatch(setCurrentTaskStatusId(task.id as string));
           dispatch(setSelectedTaskParentId((task.parent_id || task.list_id) as string));
           dispatch(setSelectedTaskType(task?.parent_id ? EntityType.subtask : EntityType.task));
         }}
       >
-        <StatusDropdown
-          task={task}
-          taskCurrentStatus={task.status}
-          taskStatuses={task.task_statuses}
-          statusDropdownType="name"
-        />
+        <StatusDropdown taskCurrentStatus={task.status} taskStatuses={task.task_statuses} statusDropdownType="name" />
       </div>
     ) : (
       <></>
@@ -236,6 +244,10 @@ export function Col({ value, field, fieldId, task, styles, selectedRow, ...props
     )
   };
 
+  const columnIndex = taskColumns.map((columns): boolean => {
+    return !columns.hidden && columns.field === field && task.id === KeyBoardSelectedTaskData?.id ? true : false;
+  });
+
   return (
     <>
       <td
@@ -244,6 +256,8 @@ export function Col({ value, field, fieldId, task, styles, selectedRow, ...props
             ? 'border-b-2 border-alsoit-purple-300'
             : dragOverItemId === task.id && draggableItemId !== dragOverItemId && dragToBecomeSubTask
             ? 'mb-0.5'
+            : columnIndex[taskColumnIndex]
+            ? 'border border-alsoit-gray-200'
             : 'border-t',
           COL_BG,
           `relative flex ${isSelected && 'tdListVNoSticky'} ${
