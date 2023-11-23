@@ -29,7 +29,7 @@ import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
 import { setEditingPilotDetailsTitle } from '../../../../../../features/workspace/workspaceSlice';
 // import Linkify from 'linkify-react';
 import { Capitalize } from '../../../../../../utils/NoCapWords/Capitalize';
-import LinkifyText from '../../../../../../utils/LinkifyTest';
+import LinkifyText from '../../../../../../utils/LinkifyText';
 
 interface PropertyDetailsProps {
   Details?: IHubDetails | ITaskFullList | IListDetails | IWalletDetails;
@@ -247,7 +247,7 @@ export default function PropertyDetails({ Details }: PropertyDetailsProps) {
                       {Details?.description}
                     </div>
                   ) : (
-                    <div className="w-full max-h-52" onDoubleClick={() => setEditingDescription(true)}>
+                    <div className="w-full h-20 max-h-52" onDoubleClick={() => setEditingDescription(true)}>
                       <LinkifyText
                         checker={editingDescription}
                         text={
