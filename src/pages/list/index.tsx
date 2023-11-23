@@ -35,6 +35,7 @@ import { generateUrlWithViewId } from '../../app/helpers';
 import { IView } from '../../features/hubs/hubs.interfaces';
 import { defaultTaskTemplate } from '../../components/Views/ui/Table/newTaskTemplate/DefaultTemplate';
 import { setShowPilotSideOver } from '../../features/general/slideOver/slideOverSlice';
+import { Spinner } from '../../common';
 
 export function ListPage() {
   const dispatch = useAppDispatch();
@@ -75,7 +76,7 @@ export function ListPage() {
   });
 
   // get list tasks
-  const { data, hasNextPage, fetchNextPage, isFetching } = getTaskListService(listId);
+  const { data, hasNextPage, fetchNextPage, isFetching, isLoading } = getTaskListService(listId);
 
   const hasTasks = data?.pages[0].data.tasks.length;
 
@@ -275,18 +276,27 @@ export function ListPage() {
       >
         <>
           <Header />
-          <VerticalScroll onScroll={onScroll}>
-            {/* main content */}
-            <section style={{ minHeight: '0', maxHeight: '83vh' }} className="w-full h-full p-4 pb-0 space-y-10">
-              <TaskQuickAction />
 
-              {tasksStore[listId as string]?.length ? (
-                <List tasks={tasksStore[listId as string]} combinedTasksArr={combinedArr} />
-              ) : (
-                !isFetching && !hasTasks && <List tasks={defaultTaskTemplate} />
-              )}
-            </section>
-          </VerticalScroll>
+          {isLoading || isFetching ? (
+            <div
+              className="flex items-center justify-center w-full h-full mx-auto mt-5"
+              style={{ minHeight: '0', maxHeight: '83vh' }}
+            >
+              <Spinner color="#0F70B7" />
+            </div>
+          ) : (
+            <VerticalScroll onScroll={onScroll}>
+              {/* main content */}
+              <section style={{ minHeight: '0', maxHeight: '83vh' }} className="w-full h-full p-4 pb-0 space-y-10">
+                <TaskQuickAction />
+                {tasksStore[listId as string]?.length ? (
+                  <List tasks={tasksStore[listId as string]} combinedTasksArr={combinedArr} />
+                ) : (
+                  !isFetching && !hasTasks && <List tasks={defaultTaskTemplate} />
+                )}
+              </section>
+            </VerticalScroll>
+          )}
         </>
       </Page>
     </>
