@@ -11,7 +11,7 @@ export const calculateSlides = (items: unknown[], itemWidth: number, fullWidth: 
       }
     } else {
       slidesList.push(slideList);
-      filledWidth = 0;
+      filledWidth = itemWidth;
       slideList = [item];
     }
   });

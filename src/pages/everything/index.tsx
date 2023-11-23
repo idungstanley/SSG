@@ -23,7 +23,7 @@ export default function EverythingPage() {
     taskColumnIndex
   } = useAppSelector((state) => state.task);
 
-  const { data, hasNextPage, fetchNextPage } = UseGetEverythingTasks();
+  const { data, hasNextPage, fetchNextPage, isFetching } = UseGetEverythingTasks();
 
   const tasks = useMemo(() => (data ? data.pages.flatMap((page) => page.data.tasks) : []), [data]);
   const lists = useMemo(() => generateLists(tasks), [tasks]);
@@ -73,13 +73,16 @@ export default function EverythingPage() {
   };
 
   const handleScroll = (e: UIEvent<HTMLDivElement>) => {
-    const container = e.target as HTMLElement;
-    const twoThirdsOfScroll = 0.66;
-    const scrollDifference = container?.scrollHeight * twoThirdsOfScroll - container.scrollTop - container.clientHeight;
-    const range = 1;
-    if (scrollDifference <= range) {
-      if (hasNextPage) {
-        fetchNextPage();
+    if (hasNextPage && !isFetching) {
+      const container = e.target as HTMLElement;
+      const scrollPositionForLoading = 0.9;
+      const scrollDifference =
+        container?.scrollHeight * scrollPositionForLoading - container.scrollTop - container.clientHeight;
+      const range = 1;
+      if (scrollDifference <= range) {
+        if (hasNextPage) {
+          fetchNextPage();
+        }
       }
     }
   };
