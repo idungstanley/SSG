@@ -32,6 +32,7 @@ export default function ToolbarNav() {
 
   for (let i = 0; i < activeItems.length; i++) {
     const element = activeItems[i] as HTMLElement;
+
     toolbarNavItems.push({
       id: element.getAttribute('data-id'),
       name: element.getAttribute('data-name'),

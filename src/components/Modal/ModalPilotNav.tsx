@@ -1,6 +1,10 @@
 import * as React from 'react';
 import Close from '../../assets/icons/Close';
 import BlurEffect from '../BlurEffect';
+import { VerticalScroll } from '../ScrollableContainer/VerticalScroll';
+import { useChatScroll } from '../../hooks';
+import SearchIcon from '../../assets/icons/SearchIcon';
+import { useState } from 'react';
 
 interface ToolbarNavInterface {
   id: string | null;
@@ -23,6 +27,9 @@ export default function ModalPilotNav({
   activeNavItem,
   activeArrowItem
 }: ModalPilotNavProps) {
+  const ref = useChatScroll(modalNavTree);
+  const [searchQuery, setSearchQuery] = useState('');
+
   const removeElementsAfterKey = (arr: ToolbarNavInterface[], key: string | null): ToolbarNavInterface[] => {
     const index = key ? arr.findIndex((item) => item.id === key) : -1;
     if (index !== -1) {
@@ -55,6 +62,16 @@ export default function ModalPilotNav({
     }
   });
 
+  const filteredNavTree = modalNavTree.filter(
+    (item) =>
+      item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (item.url && item.url.toLowerCase().includes(searchQuery.toLowerCase()))
+  );
+
+  const handleSearchInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(event.target.value);
+  };
+
   const currentNestedLevel = modalNavTree.filter((item) => item.id == activeArrowItem);
 
   let paddingLeftFirst = 'pl-1';
@@ -72,61 +89,101 @@ export default function ModalPilotNav({
     paddingLeftThird = 'pl-0';
   }
 
+  const pilotModal = document.getElementById('pilot_nav_modal');
+
+  document.addEventListener('mousedown', (event) => {
+    const clickedElement = event.target as HTMLElement;
+
+    if (
+      pilotModal &&
+      !pilotModal.contains(clickedElement) &&
+      !clickedElement.classList.contains('modal-item') &&
+      !clickedElement.classList.contains('pilot-modal-wrapper') &&
+      !clickedElement.classList.contains('modal-search')
+    ) {
+      //modalItemClick(null);
+    }
+  });
+
   return (
     <div
-      className="bg-white fixed px-4 py-3"
+      id="pilot_nav_modal"
+      className="bg-white fixed pl-4 py-3 pilot-modal-wrapper"
       style={{
         width: '204px',
         height: 'auto',
         maxHeight: '272px',
+        minHeight: '100px',
         top: '40px',
         zIndex: '51',
         borderRadius: '10px',
         boxShadow: '0px 0px 5px 0px #00000040'
       }}
     >
-      <div className="my-2 space-y-2 text-center font-semibold relative">
+      <div className="my-2 space-y-2 text-center font-semibold pr-4 relative ">
         <span
           className="absolute right-0 hover:rotate-90 transition duration-500"
-          style={{ top: '-10px' }}
+          style={{ top: '-12px', right: '5px' }}
           onClick={() => modalItemClick(null)}
         >
           <Close active={false} width="15" height="15" />
         </span>
         <p style={{ fontSize: '12px', color: 'orange' }}>Tree search</p>
         <hr />
+        <div className="relative modal-search">
+          <SearchIcon active={false} color="#919191" width="11.34" height="11.36" className="absolute top-1/3 left-2" />
+          <input
+            className="rounded w-full font-normal pl-6"
+            style={{ border: '1px solid #B2B2B2', height: '30px', color: '#919191', fontSize: '12px' }}
+            type="text"
+            placeholder="Search"
+            value={searchQuery}
+            onChange={handleSearchInputChange}
+          />
+          {searchQuery && (
+            <span className="absolute top-1/3 right-1" onClick={() => setSearchQuery('')}>
+              <Close active={false} width="10" height="10" />
+            </span>
+          )}
+        </div>
       </div>
-      {modalNavTree.map(
-        (item) =>
-          item.nesting >= currentNestedLevel[0].nesting && (
-            <p
-              key={item.id}
-              className={`text-alsoit-gray-300 hover:bg-alsoit-gray-125 transition duration-300 overflow-hidden relative rounded py-1 pl-2 ${
-                activeNavItem == item.id ? 'font-semibold' : 'font-medium'
-              } `}
-              onClick={() => modalItemClick(item.url)}
-            >
-              <span
-                className={`${item.nesting == 1 ? paddingLeftFirst : ''} ${
-                  item.nesting == 2 ? paddingLeftSecond : ''
-                } ${item.nesting == 3 ? paddingLeftThird : ''}`}
-              >
-                {item.name}
-              </span>
-              {item.name.length > 25 && (
-                <BlurEffect
-                  top="0"
-                  right="-5px"
-                  bottom="0"
-                  left="auto"
-                  width="25px"
-                  height="24px"
-                  backgroundImage="linear-gradient(to right, transparent , white)"
-                />
-              )}
-            </p>
-          )
-      )}
+      <div className="overflow-hidden" style={{ maxHeight: '165px' }}>
+        <VerticalScroll>
+          <div ref={ref} style={{ maxHeight: '165px' }}>
+            {filteredNavTree.map(
+              (item) =>
+                item.nesting >= currentNestedLevel[0].nesting && (
+                  <p
+                    key={item.id}
+                    className={`text-alsoit-gray-300 hover:bg-alsoit-gray-125 transition duration-300 overflow-hidden relative rounded py-1 pl-2 ${
+                      activeNavItem == item.id ? 'font-semibold' : 'font-medium'
+                    } `}
+                    onClick={() => modalItemClick(item.url)}
+                  >
+                    <span
+                      className={`modal-item ${item.nesting == 1 ? paddingLeftFirst : ''} ${
+                        item.nesting == 2 ? paddingLeftSecond : ''
+                      } ${item.nesting == 3 ? paddingLeftThird : ''}`}
+                    >
+                      {item.name}
+                    </span>
+                    {item.name.length > 25 && (
+                      <BlurEffect
+                        top="0"
+                        right="-5px"
+                        bottom="0"
+                        left="auto"
+                        width="25px"
+                        height="24px"
+                        backgroundImage="linear-gradient(to right, transparent , white)"
+                      />
+                    )}
+                  </p>
+                )
+            )}
+          </div>
+        </VerticalScroll>
+      </div>
     </div>
   );
 }
