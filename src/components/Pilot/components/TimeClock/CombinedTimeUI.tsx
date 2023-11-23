@@ -15,7 +15,6 @@ import { ManualTime } from './ManualTime';
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 import { ActiveTimeStrip } from './ActiveTimeStrip';
-// import { TabsDropDown } from './TabsDropDown';
 import { TotalTime } from './TotalTime';
 import { ITimeEntriesRes } from '../../../../features/task/interface.tasks';
 import DropdownWithHeader from './components/DropdownWithHeader';

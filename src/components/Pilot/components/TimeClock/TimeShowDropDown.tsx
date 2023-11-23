@@ -42,21 +42,6 @@ export function TimeShowDropDown() {
             >
               <div className="flex items-center capitalize font-semibold">{property.name}</div>
               <ArrowRight />
-              {/* {dropDown[TIME_TABS.nestedEntities] && property.value === TIME_TABS.nestedEntities && (
-                <TabsDropDown
-                  styles="w-44 -right-10 top-5 px-1.5 h-max-24"
-                  subStyles="left-12"
-                  header="shared entity"
-                  subHeader="select entity"
-                  closeModal={() =>
-                    setDropDown((prev) => ({ ...prev, [TIME_TABS.nestedEntities]: !prev[TIME_TABS.nestedEntities] }))
-                  }
-                >
-                  <VerticalScroll>
-                    <ActiveTreeSearch option={TIME_TABS.nestedEntities} />
-                  </VerticalScroll>
-                </TabsDropDown>
-              )} */}
             </div>
           ) : (
             <div

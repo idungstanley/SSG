@@ -8,7 +8,6 @@ import { setTimerDetails } from '../../../../features/task/taskSlice';
 import ToolTip from '../../../Tooltip/Tooltip';
 import { TimeMemo } from './TimeMemo';
 import { TimeLabel } from './TimeLabel';
-// import { TabsDropDown } from './TabsDropDown';
 import DropdownWithHeader from './components/DropdownWithHeader';
 
 export function ManualTags() {
