@@ -21,7 +21,7 @@ export type componentModals = {
 
 export default function History() {
   const [showModal, setShow] = useState<componentModals>({ showHideColModal: false, filterLogModal: false });
-  const [showLog, setShowlog] = useState<boolean>(false);
+  const [showLog, setShowlog] = useState<boolean>(true);
 
   // ! implement pagination
   const { status, getItemHistory } = useGetItemHistory();
