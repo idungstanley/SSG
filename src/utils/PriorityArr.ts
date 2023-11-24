@@ -11,7 +11,7 @@ export const priorityArr = () => {
     {
       id: priorities.LOW,
       title: 'Low',
-      color: '#d3d3d3',
+      color: '#A5A5A5',
       bg: 'gray',
       handleClick: () => {
         setPriority(priorities.LOW);
@@ -21,7 +21,7 @@ export const priorityArr = () => {
     {
       id: priorities.NORMAL,
       title: 'Normal',
-      color: '#6fddff',
+      color: '#99BBEE',
       bg: 'blue',
       handleClick: () => {
         setPriority(priorities.NORMAL);
@@ -31,7 +31,7 @@ export const priorityArr = () => {
     {
       id: priorities.HIGH,
       title: 'High',
-      color: '#f7cb04',
+      color: '#F7A100',
       bg: 'yellow',
       handleClick: () => {
         setPriority(priorities.HIGH);
@@ -41,7 +41,7 @@ export const priorityArr = () => {
     {
       id: priorities.URGENT,
       title: 'Urgent',
-      color: '#f32100',
+      color: '#FF0E0F',
       bg: 'red',
       handleClick: () => {
         setPriority(priorities.URGENT);

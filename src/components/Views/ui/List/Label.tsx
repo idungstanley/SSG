@@ -106,14 +106,14 @@ export function Label({
               }
             />
             <CollapseIcon color="#A854F7" active={showTable} onToggle={onClickChevron} hoverBg="white" />
-            <h1 className="w-16 truncate">{listName ?? 'Loading...'}</h1>
+            <h1 className="max-w-34 truncate">{listName ?? 'Loading...'}</h1>
           </div>
           <div className="flex items-center justify-center h-6 bg-white -mt-1 rounded-[5px] w-12">
             <ListAddModal handleCheckedGroupTasks={handleCheckedGroupTasks} ListColor={ListColor} />
           </div>
-          {showTable && <p className="ml-3 text-white">{hubName}</p>}
+          {showTable && <p className="ml-3 max-w-34 truncate text-white">{hubName}</p>}
         </div>
-        {!showTable && <p className="ml-3">{hubName}</p>}
+        {!showTable && <p className="ml-3 max-w-34 truncate">{hubName}</p>}
       </div>
       {isSplitSubtasks ? (
         <div className="flex items-center justify-end mr-5">
