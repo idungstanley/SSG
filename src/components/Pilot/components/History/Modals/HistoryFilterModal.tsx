@@ -24,7 +24,8 @@ export function HistoryfilterModal({ logData, toggleFn }: HistoryfiltermodalProp
     { id: 4, main: 'type', subType: 'date' }
   ];
 
-  const { HistoryFilterMemory, selectedDate } = useAppSelector((state) => state.task);
+  const { HistoryFilterMemory } = useAppSelector((state) => state.task);
+  const { activityFilterDate } = useAppSelector((state) => state.workspace);
 
   const [checkedStates, setCheckedStates] = useState<boolean[]>([]);
   const [dateEntries, setEntries] = useState<boolean>(false);
@@ -94,23 +95,24 @@ export function HistoryfilterModal({ logData, toggleFn }: HistoryfiltermodalProp
                           toggleFn={setEntries}
                           anchorEl={anchorEl}
                           handleClose={handleClose}
+                          dateFilter
                         />
                       )}
                       <div className="flex items-center justify-evenly w-full">
-                        {selectedDate?.from && (
+                        {activityFilterDate?.start && (
                           <span
                             className="flex items-center border border-purple-400 rounded-md p-1"
                             style={{ fontSize: '8px' }}
                           >
-                            From: {dayjs(selectedDate?.from).format('ddd, MM DD, YYYY')}
+                            From: {dayjs(activityFilterDate?.start).format('ddd, MMM DD')}
                           </span>
                         )}
-                        {selectedDate?.to && (
+                        {activityFilterDate?.end && (
                           <span
                             className="flex items-center border border-purple-400 rounded-md p-1"
                             style={{ fontSize: '8px' }}
                           >
-                            Due By: {dayjs(selectedDate?.to).format('ddd, MM DD, YYYY')}
+                            Due By: {dayjs(activityFilterDate?.end).format('ddd, MMM DD')}
                           </span>
                         )}
                       </div>

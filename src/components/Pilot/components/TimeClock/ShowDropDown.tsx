@@ -6,7 +6,7 @@ import ActiveTreeSearch from '../../../ActiveTree/ActiveTreeSearch';
 import { VerticalScroll } from '../../../ScrollableContainer/VerticalScroll';
 import { SlideButton } from '../../../SlideButton';
 
-export function TimeShowDropDown() {
+export function ShowDropDown() {
   const [dropDown, setDropDown] = useState<{ [key: string]: boolean }>({
     nested_entities: false
   });

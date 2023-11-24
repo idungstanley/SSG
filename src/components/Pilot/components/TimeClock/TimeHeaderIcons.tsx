@@ -6,16 +6,17 @@ import Me from '../../../../assets/icons/Me';
 import SearchIcon from '../../../../assets/icons/SearchIcon';
 import ShowIcon from '../../../../assets/icons/ShowIcon';
 import { TabsDropDown } from './TabsDropDown';
-import { TimeShowDropDown } from './TimeShowDropDown';
+import { ShowDropDown } from './ShowDropDown';
 import { useAppSelector } from '../../../../app/hooks';
 import { TeamMemberFilter } from './TeamMember';
 import { useGetTimeEntriesMutation } from '../../../../features/task/taskService';
 
 interface Props {
   fullContent?: boolean;
+  dateFilter?: boolean;
 }
 
-export function HeaderIcons({ fullContent }: Props) {
+export function HeaderIcons({ fullContent, dateFilter }: Props) {
   const { nestedTimeEntityId, activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
   const { currentTeamMemberId } = useAppSelector((state) => state.task);
 
@@ -47,7 +48,7 @@ export function HeaderIcons({ fullContent }: Props) {
             subHeader="main settings"
             closeModal={() => setDropDown((prev) => ({ ...prev, show: !prev.show }))}
           >
-            <TimeShowDropDown />
+            <ShowDropDown />
           </TabsDropDown>
         )}
       </div>
@@ -70,18 +71,20 @@ export function HeaderIcons({ fullContent }: Props) {
           />
         </div>
       )}
-      <div
-        className={
-          'relative p-0.5 rounded-md flex -space-x-1 items-center justify-between bg-white gap-2 hover:bg-alsoit-purple-50 cursor-pointer'
-        }
-        onClick={() => setDropDown((prev) => ({ ...prev, assignee: !prev.assignee }))}
-      >
-        <AssigneeIcon className="w-4 h-4" active={false} />
-        <ArrowDownFilled dimensions={{ width: 6, height: 6 }} />
-        {dropDown.assignee && (
-          <TeamMemberFilter closeModal={() => setDropDown((prev) => ({ ...prev, assignee: !prev.assignee }))} />
-        )}
-      </div>
+      {!dateFilter && (
+        <div
+          className={
+            'relative p-0.5 rounded-md flex -space-x-1 items-center justify-between bg-white gap-2 hover:bg-alsoit-purple-50 cursor-pointer'
+          }
+          onClick={() => setDropDown((prev) => ({ ...prev, assignee: !prev.assignee }))}
+        >
+          <AssigneeIcon className="w-4 h-4" active={false} />
+          <ArrowDownFilled dimensions={{ width: 6, height: 6 }} />
+          {dropDown.assignee && (
+            <TeamMemberFilter closeModal={() => setDropDown((prev) => ({ ...prev, assignee: !prev.assignee }))} />
+          )}
+        </div>
+      )}
       <div className="flex items-center p-1 bg-white rounded-md cursor-pointer hover:bg-alsoit-purple-50">
         <SearchIcon className="w-4 h-4" color="orange" />
       </div>
