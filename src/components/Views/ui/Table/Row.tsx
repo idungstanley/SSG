@@ -184,13 +184,13 @@ export function Row({
         ref={rowRef}
         data-select={task.id}
         className="relative contents group dNFlex"
-        onMouseEnter={() => {
-          dispatch(setAssignOnHoverTask(task));
-          dispatch(setAssignOnHoverListId(task.parent_id ?? task.list_id));
-        }}
-        onMouseLeave={() => {
-          dispatch(setAssignOnHoverTask(''));
-        }}
+        // onMouseEnter={() => {
+        //   dispatch(setAssignOnHoverTask(task));
+        //   dispatch(setAssignOnHoverListId(task.parent_id ?? task.list_id));
+        // }}
+        // onMouseLeave={() => {
+        //   dispatch(setAssignOnHoverTask(''));
+        // }}
       >
         <StickyCol
           showSubTasks={showChildren}

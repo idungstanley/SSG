@@ -107,25 +107,27 @@ function NewFormulaField({ field, currentFieldColumns, index, returnNewData }: A
             </Button>
           </div>
           <Menu anchorEl={anchorEl} open={!!anchorEl} onClose={() => setAnchorEl(null)}>
-            {currentFieldColumns.length ? (
-              <>
-                {currentFieldColumns.map((field) => (
-                  <div
-                    key={field.id}
-                    className="flex px-2 py-1 w-44 cursor-pointer hover:bg-gray-100"
-                    onClick={() => {
-                      setSelectedFieldId(field.id);
-                      setAnchorEl(null);
-                    }}
-                  >
-                    <span className="flex justify-center align-center mx-1 w-5 h-5">{renderItemIcon(field)}</span>
-                    {field.name}
-                  </div>
-                ))}
-              </>
-            ) : (
-              <></>
-            )}
+            <div key="fieldId">
+              {currentFieldColumns.length ? (
+                <>
+                  {currentFieldColumns.map((field) => (
+                    <div
+                      key={field.id}
+                      className="flex px-2 py-1 w-44 cursor-pointer hover:bg-gray-100"
+                      onClick={() => {
+                        setSelectedFieldId(field.id);
+                        setAnchorEl(null);
+                      }}
+                    >
+                      <span className="flex justify-center align-center mx-1 w-5 h-5">{renderItemIcon(field)}</span>
+                      {field.name}
+                    </div>
+                  ))}
+                </>
+              ) : (
+                <></>
+              )}
+            </div>
           </Menu>
         </div>
         <div onClick={() => returnNewData(null, index)}>

@@ -176,7 +176,7 @@ export default function GraphContainer({ id, title, children, isPieChart }: IGra
           horizontal: 'center'
         }}
       >
-        <div style={{ width: '1000px', height: '600px' }} className="relative rounded-xl p-6">
+        <div key="graphModal" style={{ width: '1000px', height: '600px' }} className="relative rounded-xl p-6">
           <div className="text-center text-2xl mb-4">{title}</div>
           <div className="absolute top-3 right-8 flex items-center" style={{ transform: 'scale(1.5)' }}>
             {containerSettings.map((item) => (
@@ -204,29 +204,31 @@ export default function GraphContainer({ id, title, children, isPieChart }: IGra
             onClose={() => setResizeDropdownFullEl(null)}
             TransitionComponent={Fade}
           >
-            <MenuItem
-              onClick={() => {
-                setFullMode(false);
-                setResizeDropdownFullEl(null);
-              }}
-            >
-              <span className="w-5 flex justify-center mr-2">
-                <GraphResizeIcon />
-              </span>
-              Minimized
-            </MenuItem>
-            <MenuItem style={{ background: '#f6efe3' }}>
-              <span className="w-5 flex justify-center mr-2">
-                <PilotIcon />
-              </span>
-              Pilot
-            </MenuItem>
-            <MenuItem style={{ background: '#f6efe3' }}>
-              <span className="w-5 flex justify-center mr-2">
-                <PilotExtended />
-              </span>
-              Extended Pilot
-            </MenuItem>
+            <div key="graphResize">
+              <MenuItem
+                onClick={() => {
+                  setFullMode(false);
+                  setResizeDropdownFullEl(null);
+                }}
+              >
+                <span className="w-5 flex justify-center mr-2">
+                  <GraphResizeIcon />
+                </span>
+                Minimized
+              </MenuItem>
+              <MenuItem style={{ background: '#f6efe3' }}>
+                <span className="w-5 flex justify-center mr-2">
+                  <PilotIcon />
+                </span>
+                Pilot
+              </MenuItem>
+              <MenuItem style={{ background: '#f6efe3' }}>
+                <span className="w-5 flex justify-center mr-2">
+                  <PilotExtended />
+                </span>
+                Extended Pilot
+              </MenuItem>
+            </div>
           </Menu>
           {/* Settings dropdown */}
           <Menu
@@ -235,18 +237,20 @@ export default function GraphContainer({ id, title, children, isPieChart }: IGra
             onClose={() => setSettingDropdownFullEl(null)}
             TransitionComponent={Fade}
           >
-            <MenuItem className="flex items-center" style={{ background: '#f6efe3' }}>
-              <span className="w-5 flex justify-center mr-2">
-                <DublicateIcon />
-              </span>
-              Duplicate
-            </MenuItem>
-            <MenuItem className="flex items-center" style={{ background: '#f6efe3', color: '#FF0E0F' }}>
-              <span className="w-5 flex justify-center mr-2">
-                <TrashIcon />
-              </span>
-              Delete Graph
-            </MenuItem>
+            <div key="graphSettings">
+              <MenuItem className="flex items-center" style={{ background: '#f6efe3' }}>
+                <span className="w-5 flex justify-center mr-2">
+                  <DublicateIcon />
+                </span>
+                Duplicate
+              </MenuItem>
+              <MenuItem className="flex items-center" style={{ background: '#f6efe3', color: '#FF0E0F' }}>
+                <span className="w-5 flex justify-center mr-2">
+                  <TrashIcon />
+                </span>
+                Delete Graph
+              </MenuItem>
+            </div>
           </Menu>
         </div>
       </Menu>

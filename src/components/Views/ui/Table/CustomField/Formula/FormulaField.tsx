@@ -164,15 +164,17 @@ function FormulaField({
             }
           }}
         >
-          <SimpleFormulasField
-            taskCustomFieldsColumns={taskCustomFieldsColumns}
-            taskCustomFields={taskCustomFields}
-            currentFieldColumns={currentFieldColumns}
-            prevFormula={prevFormula}
-            showAdditionalFormulas={() => setShowAdditionalFormulas(true)}
-            handleSave={handleSaveFormula}
-            handleClose={handleClose}
-          />
+          <div key="simpleFormulasField">
+            <SimpleFormulasField
+              taskCustomFieldsColumns={taskCustomFieldsColumns}
+              taskCustomFields={taskCustomFields}
+              currentFieldColumns={currentFieldColumns}
+              prevFormula={prevFormula}
+              showAdditionalFormulas={() => setShowAdditionalFormulas(true)}
+              handleSave={handleSaveFormula}
+              handleClose={handleClose}
+            />
+          </div>
         </Menu>
       )}
       {anchorEl && isShowAdditionalFormulas && (
@@ -192,13 +194,15 @@ function FormulaField({
             }
           }}
         >
-          <AdditionalFormulasField
-            currentFieldColumns={currentFieldColumns}
-            taskCustomFields={taskCustomFields}
-            prevFormula={prevFormula}
-            handleSave={handleSaveFormula}
-            handleClose={() => setShowAdditionalFormulas(false)}
-          />
+          <div key="additionalFormulasField">
+            <AdditionalFormulasField
+              currentFieldColumns={currentFieldColumns}
+              taskCustomFields={taskCustomFields}
+              prevFormula={prevFormula}
+              handleSave={handleSaveFormula}
+              handleClose={() => setShowAdditionalFormulas(false)}
+            />
+          </div>
         </Menu>
       )}
     </div>

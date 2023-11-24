@@ -46,7 +46,7 @@ export function FilterDropdown({ isSplitSubtasks, parentId }: IFilterDropdownPro
       </div>
 
       <Menu anchorEl={dropdownEl} open={!!dropdownEl} onClose={() => setDropdownEl(null)} style={{ marginTop: '10px' }}>
-        <div style={{ minWidth: '600px' }} className="relative p-2">
+        <div key="filterDropdown" style={{ minWidth: '600px' }} className="relative p-2">
           {/* title */}
           <h1 className="text-lg font-bold text-black">Filters</h1>
           <FilterList />

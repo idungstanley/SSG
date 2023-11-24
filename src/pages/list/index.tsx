@@ -277,7 +277,7 @@ export function ListPage() {
         <>
           <Header />
 
-          {isLoading || isFetching ? (
+          {(isLoading || isFetching) && !hasTasks ? (
             <div
               className="flex items-center justify-center w-full h-full mx-auto mt-5"
               style={{ minHeight: '0', maxHeight: '83vh' }}

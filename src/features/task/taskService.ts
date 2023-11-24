@@ -712,7 +712,6 @@ export const UseGetEverythingTasks = () => {
       });
     },
     {
-      keepPreviousData: true,
       enabled: location.pathname.includes('everything') && !draggableItemId && isFiltersUpdated,
       onSuccess: (data) => {
         data.pages.map((page) => page.data.tasks.map((task) => queryClient.setQueryData(['task', task.id], task)));
@@ -777,7 +776,6 @@ export const UseGetFullTaskList = ({
       });
     },
     {
-      keepPreviousData: true,
       enabled: (!!hub_id || !!wallet_id) && !draggableItemId && isFiltersUpdated,
       onSuccess: (data) => {
         data.pages.map((page) => page.data.tasks.map((task) => queryClient.setQueryData(['task', task.id], task)));

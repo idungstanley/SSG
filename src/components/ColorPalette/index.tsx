@@ -235,7 +235,11 @@ export default function PaletteManager({
       }}
       className="MuiMenu-list"
     >
-      <div className="overflow-y-auto text-alsoit-gray-100" style={{ maxWidth: '332px', fontSize: '11px' }}>
+      <div
+        key="colorPalette"
+        className="overflow-y-auto text-alsoit-gray-100"
+        style={{ maxWidth: '332px', fontSize: '11px' }}
+      >
         <div className="z-50 flex flex-col w-full">
           {selectListColours.length > 0 && selectedViews === paletteViews.LIST && (
             <SelectionMenu

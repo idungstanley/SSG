@@ -1,4 +1,4 @@
-import { useEffect, useMemo, UIEvent, Fragment } from 'react';
+import { useEffect, useMemo, UIEvent, Fragment, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import Page from '../../components/Page';
 import { UseGetEverythingTasks } from '../../features/task/taskService';
@@ -15,6 +15,7 @@ import { setShowPilotSideOver } from '../../features/general/slideOver/slideOver
 import { setActiveItem } from '../../features/workspace/workspaceSlice';
 import { useNavigate } from 'react-router-dom';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
+import { Spinner } from '../../common';
 
 export default function EverythingPage() {
   const dispatch = useAppDispatch();
@@ -32,14 +33,14 @@ export default function EverythingPage() {
   const { activeView } = useAppSelector((state) => state.workspace);
   const { currentWorkspaceId } = useAppSelector((state) => state.auth);
 
-  const { data, hasNextPage, fetchNextPage, isFetching } = UseGetEverythingTasks();
+  const { data, hasNextPage, fetchNextPage, isFetching, isLoading } = UseGetEverythingTasks();
 
   const tasks = useMemo(() => (data ? data.pages.flatMap((page) => page.data.tasks) : []), [data]);
   const lists = useMemo(() => generateLists(tasks), [tasks]);
 
   useEffect(() => {
     if (Object.keys(lists).length) {
-      dispatch(setTasks({ ...tasksStore, ...lists }));
+      dispatch(setTasks(lists));
     }
   }, [lists]);
 
@@ -129,17 +130,28 @@ export default function EverythingPage() {
         additional={<FilterByAssigneesSliderOver />}
       >
         <Header />
-        <VerticalScroll onScroll={onScroll}>
-          <section style={{ minHeight: '0', maxHeight: '83vh' }} className="w-full h-full p-4 pb-0 space-y-10">
-            {/* lists */}
-            {Object.keys(tasksStore).map((listId) => (
-              <Fragment key={listId}>
-                <List tasks={tasksStore[listId]} combinedTasksArr={combinedArr} />
-              </Fragment>
-            ))}
-          </section>
-        </VerticalScroll>
-        {Object.keys(lists).length > 1 && scrollGroupView && <GroupHorizontalScroll />}
+        {(isLoading || isFetching) && !Object.keys(lists).length ? (
+          <div
+            className="flex items-center justify-center w-full h-full mx-auto mt-5"
+            style={{ minHeight: '0', maxHeight: '83vh' }}
+          >
+            <Spinner color="#0F70B7" />
+          </div>
+        ) : (
+          <>
+            <VerticalScroll onScroll={onScroll}>
+              <section style={{ minHeight: '0', maxHeight: '83vh' }} className="w-full h-full p-4 pb-0 space-y-10">
+                {/* lists */}
+                {Object.keys(tasksStore).map((listId) => (
+                  <Fragment key={listId}>
+                    <List tasks={tasksStore[listId]} combinedTasksArr={combinedArr} />
+                  </Fragment>
+                ))}
+              </section>
+            </VerticalScroll>
+            {Object.keys(lists).length > 1 && scrollGroupView && <GroupHorizontalScroll />}
+          </>
+        )}
       </Page>
     </>
   );

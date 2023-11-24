@@ -84,12 +84,12 @@ export function WalletPage() {
 
   useEffect(() => {
     if (Object.keys(lists).length) {
-      dispatch(setTasks({ ...tasksStore, ...lists }));
+      dispatch(setTasks(lists));
 
       const newSubtasksArr = generateSubtasksArray(lists);
       if (newSubtasksArr.length) {
         const newSubtasks = generateSubtasksList(newSubtasksArr, wallet?.data.wallet as IWalletDetails);
-        dispatch(setSubtasks({ ...subtasks, ...newSubtasks }));
+        dispatch(setSubtasks(newSubtasks));
       }
     }
   }, [lists]);
@@ -127,7 +127,7 @@ export function WalletPage() {
       >
         <>
           <Header />
-          {isLoading || isFetching ? (
+          {(isLoading || isFetching) && !Object.keys(lists).length ? (
             <div
               className="flex items-center justify-center w-full h-full mx-auto mt-5"
               style={{ minHeight: '0', maxHeight: '83vh' }}
