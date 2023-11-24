@@ -11,7 +11,6 @@ import { Header } from '../../components/TasksHeader';
 import { VerticalScroll } from '../../components/ScrollableContainer/VerticalScroll';
 import { GroupHorizontalScroll } from '../../components/ScrollableContainer/GroupHorizontalScroll';
 import { setKeyBoardSelectedIndex, setTaskColumnIndex, setTasks } from '../../features/task/taskSlice';
-import { VerticalScrollNoCallback } from '../../components/ScrollableContainer/VerticalScrollNoCallback';
 
 export default function EverythingPage() {
   const dispatch = useAppDispatch();
@@ -62,9 +61,9 @@ export default function EverythingPage() {
       dispatch(setTaskColumnIndex(newIndex));
     }
   };
+
   useEffect(() => {
     window.addEventListener('keydown', handleKeyDown);
-
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [keyBoardSelectedIndex, taskColumns, taskColumnIndex]);
 
@@ -97,23 +96,8 @@ export default function EverythingPage() {
         additional={<FilterByAssigneesSliderOver />}
       >
         <Header />
-        {location.search.includes('no-callback') ? (
-          <VerticalScrollNoCallback onScroll={onScroll}>
-            <section style={{ minHeight: '0', maxHeight: '83vh' }} className="w-full h-full p-4 pb-0 space-y-10">
-              {/* lists */}
-              {Object.keys(tasksStore).map((listId) => (
-                <Fragment key={listId}>
-                  <List tasks={tasksStore[listId]} combinedTasksArr={combinedArr} />
-                </Fragment>
-              ))}
-            </section>
-          </VerticalScrollNoCallback>
-        ) : location.search.includes('basic') ? (
-          <section
-            style={{ minHeight: '0', maxHeight: '83vh', overflowY: 'auto' }}
-            className="w-full h-full p-4 pb-0 space-y-10"
-            onScroll={onScroll}
-          >
+        <VerticalScroll onScroll={onScroll}>
+          <section style={{ minHeight: '0', maxHeight: '83vh' }} className="w-full h-full p-4 pb-0 space-y-10">
             {/* lists */}
             {Object.keys(tasksStore).map((listId) => (
               <Fragment key={listId}>
@@ -121,18 +105,7 @@ export default function EverythingPage() {
               </Fragment>
             ))}
           </section>
-        ) : (
-          <VerticalScroll onScroll={onScroll}>
-            <section style={{ minHeight: '0', maxHeight: '83vh' }} className="w-full h-full p-4 pb-0 space-y-10">
-              {/* lists */}
-              {Object.keys(tasksStore).map((listId) => (
-                <Fragment key={listId}>
-                  <List tasks={tasksStore[listId]} combinedTasksArr={combinedArr} />
-                </Fragment>
-              ))}
-            </section>
-          </VerticalScroll>
-        )}
+        </VerticalScroll>
         {Object.keys(lists).length > 1 && scrollGroupView && <GroupHorizontalScroll />}
       </Page>
     </>

@@ -163,7 +163,6 @@ export function Row({
     return false;
   }, [showSubTasks, subtasks, toggleAllSubtask, toggleAllSubtaskSplit, splitSubTaskLevels, rootTaskIds]);
 
-  const [hoverOn, setHoverOn] = useState(false);
   const toggleRootTasks = (rootTaskIds as string[])?.includes(task.id);
 
   useEffect(() => {
@@ -188,16 +187,12 @@ export function Row({
         onMouseEnter={() => {
           dispatch(setAssignOnHoverTask(task));
           dispatch(setAssignOnHoverListId(task.parent_id ?? task.list_id));
-          setHoverOn(true);
         }}
         onMouseLeave={() => {
           dispatch(setAssignOnHoverTask(''));
-          setHoverOn(false);
         }}
       >
         <StickyCol
-          hoverOn={hoverOn}
-          setHoverOn={setHoverOn}
           showSubTasks={showChildren}
           setShowSubTasks={setShowSubTasks}
           toggleRootTasks={toggleRootTasks}
@@ -240,7 +235,7 @@ export function Row({
           {/* actions */}
           <ToolTip title={isCopied === 0 ? 'Copy Task Name' : 'Copied'}>
             <button
-              className={`relative ${hoverOn ? 'opacity-100' : 'opacity-0'} ${
+              className={`relative opacity-0 group-hover:opacity-100 ${
                 saveSettingOnline?.CompactView ? 'bottom-1' : 'bottom-2'
               }`}
               onClick={handleCopyTexts}
@@ -254,7 +249,7 @@ export function Row({
             {/* effects */}
             <ToolTip title="Apply Effects">
               <button
-                className={`p-1 bg-white border rounded-md ${hoverOn ? 'opacity-100' : 'opacity-0'}`}
+                className="p-1 bg-white border rounded-md opacity-0 group-hover:opacity-100"
                 style={{ backgroundColor: 'orange' }}
                 onClick={(e) => e.stopPropagation()}
               >
@@ -265,7 +260,7 @@ export function Row({
             {'tags' in task ? (
               <ToolTip title="Tags">
                 <div
-                  className={`bg-white rounded-md ${hoverOn ? 'opacity-100' : 'opacity-0'}`}
+                  className="bg-white rounded-md opacity-0 group-hover:opacity-100"
                   onClick={(e) => e.preventDefault()}
                 >
                   <ManageTagsDropdown entityId={task.id} tagsArr={task.tags as Tag[]} entityType="task" />
@@ -276,7 +271,7 @@ export function Row({
             {task.descendants_count < 1 && level < MAX_SUBTASKS_LEVEL && (
               <ToolTip title="Subtask">
                 <button
-                  className={`p-1 bg-white border rounded-md ${hoverOn ? 'opacity-100' : 'opacity-0'}`}
+                  className="p-1 bg-white border rounded-md opacity-0 group-hover:opacity-100"
                   onClick={(e) => onShowAddSubtaskField(e, task.id)}
                 >
                   <SubtasksIcon className={saveSettingOnline?.CompactView ? 'w-2 h-2' : 'w-3 h-3'} />
@@ -285,7 +280,7 @@ export function Row({
             )}
             <ToolTip title="Enhance View">
               <button
-                className={`p-1 pl-4 bg-white rounded-md ${hoverOn ? 'opacity-100' : 'opacity-0'}`}
+                className="p-1 pl-4 bg-white rounded-md opacity-0 group-hover:opacity-100"
                 onClick={(e) => e.stopPropagation()}
               >
                 <Enhance
