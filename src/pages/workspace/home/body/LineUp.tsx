@@ -5,11 +5,12 @@ import LineUpModal from './lineUp/lineUpModal';
 import LineUpTasks from './lineUp/LineUpTasks';
 import AddLineUpTask from './lineUp/AddLineUpTask';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { Spinner } from '../../../../common';
 
 export default function LineUp() {
   const [lineUp, setLineUp] = useState<Task[]>([]);
   const queryClient = useQueryClient();
-  const { data: lineUpTaskRes } = GetAddLineUpTask();
+  const { data: lineUpTaskRes, isLoading } = GetAddLineUpTask();
 
   useEffect(() => {
     setLineUp((lineUpTaskRes?.data.tasks as Task[]) ?? []);
@@ -53,9 +54,14 @@ export default function LineUp() {
           </div>
         )}
       </div>
-      {!lineUp.length && <AddLineUpTask setAnchorEl={setAnchorEl} />}
+      {isLoading && (
+        <div className="justify-center w-6 mx-auto mt-5">
+          <Spinner size={8} color="#0F70B7" />
+        </div>
+      )}
+      {!lineUp.length && !isLoading && <AddLineUpTask setAnchorEl={setAnchorEl} />}
 
-      <div className="flex items-center space-x-2 overflow-x-scroll" style={{ maxWidth: '900px' }}>
+      <div className="flex items-center space-x-2 overflow-x-scroll overflow-y-hidden" style={{ maxWidth: '900px' }}>
         <LineUpTasks handleRemoveLineUpTask={handleRemoveLineUpTask} lineUp={lineUp} />
       </div>
 
