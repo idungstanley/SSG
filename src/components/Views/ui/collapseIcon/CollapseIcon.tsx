@@ -1,7 +1,7 @@
 import React from 'react';
 
 interface ChevronProps {
-  onToggle: VoidFunction;
+  onToggle?: VoidFunction;
   active: boolean;
   color?: string;
   hoverBg?: string;

@@ -17,12 +17,12 @@ import { runTimer } from '../../../../utils/TimerCounter';
 import { CLOCK_TYPE, TIME_TABS } from '../../../../utils/Constants/TimeClockConstants';
 import { TotalTimeIcon } from '../../../../assets/icons/TotalTimeIcon';
 import ArrowDownFilled from '../../../../assets/icons/ArrowDownFilled';
-import { TabsDropDown } from './TabsDropDown';
 import { HourGlassIcon } from '../../../../assets/icons/HourGlass';
 import { ClockIcon } from '../../../../assets/icons/ClockIcon';
 import { runCountDown } from '../../../../utils/timeCountDown';
 import { IDuration } from '../../../../features/task/interface.tasks';
 import { StopIcon } from '../../../../assets/icons/StopIcon';
+import DropdownWithHeader from './components/DropdownWithHeader';
 
 export function RealTime() {
   const dispatch = useAppDispatch();
@@ -40,9 +40,7 @@ export function RealTime() {
   const [isRunning, setRunning] = useState(false);
   const [prompt, setPrompt] = useState<boolean>(false);
   const [newTimer, setNewTimer] = useState<boolean>(false);
-  const [dropDown, setDropDown] = useState<{ clockDropDown: boolean }>({
-    clockDropDown: false
-  });
+  const [anchor, setAnchor] = useState<HTMLElement | null>(null);
   const [validation, setValidation] = useState<{ timer: boolean }>({
     timer: false
   });
@@ -128,9 +126,12 @@ export function RealTime() {
         {CLOCK_TYPE.map((type, index) => {
           return (
             <div
-              className="flex w-full items-center space-x-2 p-2 hover:bg-alsoit-purple-50 cursor-pointer rounded-md"
+              className="flex w-full items-center space-x-2 px-2 py-1 hover:bg-alsoit-purple-50 cursor-pointer rounded-md"
               key={index}
-              onClick={() => dispatch(setTimeType(type.value))}
+              onClick={() => {
+                dispatch(setTimeType(type.value));
+                setAnchor(null);
+              }}
             >
               {type.value === 'timer' ? (
                 <HourGlassIcon className="w-4 h-4" />
@@ -168,22 +169,17 @@ export function RealTime() {
         <div className="flex w-full">
           <div className="w-1/3 relative flex items-center cursor-pointer">
             <TotalTimeIcon className="w-4 h-4" />
-            <ArrowDownFilled
-              color={dropDown.clockDropDown ? '#BF01FE' : ''}
-              className="cursor-pointer mt-1"
-              onClick={() => setDropDown((prev) => ({ ...prev, clockDropDown: !prev.clockDropDown }))}
-            />
-            {dropDown.clockDropDown && (
-              <TabsDropDown
-                header="timeclock types"
-                subHeader="select category"
-                styles="w-44 right-16 top-56 px-1.5"
-                subStyles="left-7"
-                closeModal={() => setDropDown((prev) => ({ ...prev, clockDropDown: !prev.clockDropDown }))}
-              >
-                {clockTypes()}
-              </TabsDropDown>
-            )}
+            <div onClick={(e) => setAnchor(e.currentTarget)}>
+              <ArrowDownFilled color={anchor ? '#BF01FE' : ''} className="cursor-pointer mt-1" />
+            </div>
+            <DropdownWithHeader
+              header="timeclock types"
+              subHeader="select category"
+              anchor={anchor}
+              setAnchor={setAnchor}
+            >
+              {clockTypes()}
+            </DropdownWithHeader>
           </div>
           {timeType === TIME_TABS.clock ? (
             // clock timer
@@ -241,21 +237,18 @@ export function RealTime() {
           ) : (
             <ClockIcon dimensions={{ width: 12, height: 12 }} />
           )}
-          <ArrowDownFilled
-            className="cursor-pointer mt-1"
-            onClick={() => setDropDown((prev) => ({ ...prev, clockDropDown: !prev.clockDropDown }))}
-          />
-          {dropDown.clockDropDown && (
-            <TabsDropDown
-              header="timeclock types"
-              subHeader="select category"
-              styles="w-44 right-16 top-56 px-1.5"
-              subStyles="left-7"
-              closeModal={() => setDropDown((prev) => ({ ...prev, clockDropDown: !prev.clockDropDown }))}
-            >
-              {clockTypes()}
-            </TabsDropDown>
-          )}
+          <div onClick={(e) => setAnchor(e.currentTarget)}>
+            <ArrowDownFilled className="cursor-pointer mt-1" />
+          </div>
+
+          <DropdownWithHeader
+            header="timeclock types"
+            subHeader="select category"
+            anchor={anchor}
+            setAnchor={setAnchor}
+          >
+            {clockTypes()}
+          </DropdownWithHeader>
         </div>
         {timeType === TIME_TABS.clock && (
           <div className="flex items-center">

@@ -14,6 +14,7 @@ import { RealTimeIcon } from '../../../../assets/icons/RealTimeIcon';
 import { ManualTimeIcon } from '../../../../assets/icons/ManualTimeIcon';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { setTimeEntriesIdArr } from '../../../../features/task/taskSlice';
+import DropdownWithHeader from './components/DropdownWithHeader';
 
 interface Props {
   timeEntry: IEntries;
@@ -26,8 +27,7 @@ export function TimeLogEntries({ timeEntry, index }: Props) {
   const { timeEntriesIdArr } = useAppSelector((state) => state.task);
 
   const { mutateAsync } = useDeleteTimeEntryMutation();
-
-  const [dropDown, setDropDown] = useState<{ entryAction: boolean }>({ entryAction: false });
+  const [anchor, setAnchor] = useState<HTMLElement | null>(null);
 
   const btnCheckFn = timeEntriesIdArr.includes(timeEntry.id);
 
@@ -41,24 +41,28 @@ export function TimeLogEntries({ timeEntry, index }: Props) {
 
   const entryActions = () => {
     return (
-      <div className="absolute right-0 shadow-lg w-28 bg-white flex flex-col space-y-2">
-        {TIME_INVENTORY_ACTIONS.map((action, index) => (
-          <div
-            key={index}
-            className="flex w-full space-x-2 cursor-pointer py-1.5 hover:bg-alsoit-purple-50 rounded-md px-1"
-            onClick={() => action.value === 'delete' && mutateAsync(timeEntry.id)}
-          >
-            {action.value === 'edit' ? (
-              <EditIcon active dimensions={{ width: 18, height: 18 }} />
-            ) : action.value === 'duplicate' ? (
-              <BiDuplicate className="w-4 h-4" />
-            ) : (
-              <TrashIcon />
-            )}
-            <span className="capitalize font-semibold">{action.name}</span>
-          </div>
-        ))}
-      </div>
+      <DropdownWithHeader header="Timeclock actions" subHeader="select labels" anchor={anchor} setAnchor={setAnchor}>
+        <div className="right-0 shadow-lg w-28 bg-white flex flex-col space-y-2">
+          {TIME_INVENTORY_ACTIONS.map((action, index) => (
+            <div
+              key={index}
+              className="flex items-center w-full space-x-2 cursor-pointer py-1.5 hover:bg-alsoit-purple-50 rounded-md px-1"
+              onClick={() => action.value === 'delete' && mutateAsync(timeEntry.id)}
+            >
+              <div className="w-5 h-5">
+                {action.value === 'edit' ? (
+                  <EditIcon active dimensions={{ width: 16, height: 16 }} />
+                ) : action.value === 'duplicate' ? (
+                  <BiDuplicate className="w-4 h-4" />
+                ) : (
+                  <TrashIcon className="w-5 h-5 text-alsoit-grey-300" />
+                )}
+              </div>
+              <span className="capitalize font-semibold">{action.name}</span>
+            </div>
+          ))}
+        </div>
+      </DropdownWithHeader>
     );
   };
 
@@ -117,8 +121,11 @@ export function TimeLogEntries({ timeEntry, index }: Props) {
         <td className="w-20 flex items-center justify-center">-</td>
       </div>
       <td className="invisible bg-white h-full flex items-center w-full group-hover:visible sticky -right-2 px-1.5 border-y cursor-pointer border-alsoit-gray-75">
-        <ThreeDotIcon onClick={() => setDropDown((prev) => ({ ...prev, entryAction: !prev.entryAction }))} />
-        {dropDown.entryAction && entryActions()}
+        <div onClick={(e) => setAnchor(e.currentTarget)}>
+          <ThreeDotIcon />
+        </div>
+        <div>{entryActions()}</div>
+        {/* {dropDown.entryAction && entryActions()} */}
       </td>
     </tr>
   );
