@@ -6,7 +6,6 @@ import FullTabs from '../Tabs/FullTabs';
 import Header from '../Header';
 import { VerticalScroll } from '../../../ScrollableContainer/VerticalScroll';
 import useAdjustedHeight from '../../../../hooks/useAdjustedHeight';
-import PilotNavIcon from '../../../../assets/icons/PilotNavIcon';
 import ToolbarNav from '../ToolbarNav';
 import EditDocumentIcon from '../../../../assets/icons/EditDocumentIcon';
 import DownloadIcon from '../../../../assets/icons/DownloadIcon';
@@ -120,10 +119,7 @@ export default function FullPilot({ featureTabs, activeSection, setShowModal, sh
                 maxWidth: '98%'
               }}
             >
-              <div className="flex items-center">
-                <PilotNavIcon />
-              </div>
-              <div className="flex" style={{ paddingLeft: '2px', marginTop: '-2px' }}>
+              <div className="flex items-center" style={{ paddingLeft: '2px', marginTop: '-2px' }}>
                 <ToolbarNav />
               </div>
               <BlurEffect

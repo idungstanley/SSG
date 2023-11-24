@@ -29,6 +29,8 @@ import { generateSubtasksList, generateSubtasksArray } from '../../utils/generat
 import { IHubDetails, IView } from '../../features/hubs/hubs.interfaces';
 import { updatePageTitle } from '../../utils/updatePageTitle';
 import { generateUrlWithViewId } from '../../app/helpers';
+import { Spinner } from '../../common';
+import { setShowPilotSideOver } from '../../features/general/slideOver/slideOverSlice';
 
 export default function HubPage() {
   useEffect(() => {
@@ -42,7 +44,8 @@ export default function HubPage() {
   const { hubId, taskId } = useParams();
   const navigate = useNavigate();
 
-  const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
+  const { activeItemId, activeItemType, activeView } = useAppSelector((state) => state.workspace);
+  const { currentWorkspaceId } = useAppSelector((state) => state.auth);
   const {
     tasks: tasksStore,
     saveSettingLocal,
@@ -50,7 +53,8 @@ export default function HubPage() {
     scrollGroupView,
     keyBoardSelectedIndex,
     taskColumnIndex,
-    taskColumns
+    taskColumns,
+    KeyBoardSelectedTaskData
   } = useAppSelector((state) => state.task);
   const formatSettings = useformatSettings();
 
@@ -92,7 +96,7 @@ export default function HubPage() {
     }
   }, [hub]);
 
-  const { data, hasNextPage, fetchNextPage, isFetching } = UseGetFullTaskList({
+  const { data, hasNextPage, fetchNextPage, isFetching, isLoading } = UseGetFullTaskList({
     itemId: hubId,
     itemType: EntityType.hub
   });
@@ -126,13 +130,45 @@ export default function HubPage() {
       const newIndex = Math.min(taskColumns.length - 1, taskColumnIndex + 1);
       dispatch(setTaskColumnIndex(newIndex));
     }
-  };
 
+    if (e.key === 'Enter' && KeyBoardSelectedTaskData !== null) {
+      dispatch(
+        setShowPilotSideOver({
+          show: true,
+          id: KeyBoardSelectedTaskData.id,
+          title: KeyBoardSelectedTaskData.name,
+          type: 'task'
+        })
+      );
+      navigate(
+        `/${currentWorkspaceId}/tasks/l/${KeyBoardSelectedTaskData.list_id}/t/${KeyBoardSelectedTaskData.id}/v/${activeView?.id}`,
+        {
+          replace: true
+        }
+      );
+      // navigate(
+      //   generateViewsUrl(
+      //     KeyBoardSelectedTaskData.id,
+      //     activeView?.id as string,
+      //     hub?.data.hub,
+      //     EntityType.task
+      //   ) as string,
+      //   { replace: true }
+      // );
+      dispatch(
+        setActiveItem({
+          activeItemId: KeyBoardSelectedTaskData.id,
+          activeItemType: 'task',
+          activeItemName: KeyBoardSelectedTaskData.name
+        })
+      );
+    }
+  };
   useEffect(() => {
     window.addEventListener('keydown', handleKeyDown);
 
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [keyBoardSelectedIndex, taskColumns, taskColumnIndex]);
+  }, [keyBoardSelectedIndex, taskColumns, taskColumnIndex, KeyBoardSelectedTaskData]);
 
   useEffect(() => {
     if (Object.keys(lists).length) {
@@ -178,20 +214,31 @@ export default function HubPage() {
         additional={<FilterByAssigneesSliderOver />}
       >
         <Header />
-        <VerticalScroll onScroll={onScroll}>
-          <section
+        {isLoading || isFetching ? (
+          <div
+            className="flex items-center justify-center w-full h-full mx-auto mt-5"
             style={{ minHeight: '0', maxHeight: '83vh' }}
-            className="w-full h-full py-4 pb-0 pl-5 pr-1 space-y-10"
           >
-            {/* lists */}
-            {Object.keys(lists).map((listId) => (
-              <Fragment key={listId}>
-                {tasksStore[listId] ? <List tasks={tasksStore[listId]} combinedTasksArr={combinedArr} /> : null}
-              </Fragment>
-            ))}
-          </section>
-        </VerticalScroll>
-        {Object.keys(lists).length > 1 && scrollGroupView && <GroupHorizontalScroll />}
+            <Spinner color="#0F70B7" />
+          </div>
+        ) : (
+          <>
+            <VerticalScroll onScroll={onScroll}>
+              <section
+                style={{ minHeight: '0', maxHeight: '83vh' }}
+                className="w-full h-full py-4 pb-0 pl-5 pr-1 space-y-10"
+              >
+                {/* lists */}
+                {Object.keys(lists).map((listId) => (
+                  <Fragment key={listId}>
+                    {tasksStore[listId] ? <List tasks={tasksStore[listId]} combinedTasksArr={combinedArr} /> : null}
+                  </Fragment>
+                ))}
+              </section>
+            </VerticalScroll>
+            {Object.keys(lists).length > 1 && scrollGroupView && <GroupHorizontalScroll />}
+          </>
+        )}
       </Page>
     </>
   );
