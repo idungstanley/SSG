@@ -29,6 +29,7 @@ import { generateSubtasksList, generateSubtasksArray } from '../../utils/generat
 import { IHubDetails, IView } from '../../features/hubs/hubs.interfaces';
 import { updatePageTitle } from '../../utils/updatePageTitle';
 import { generateUrlWithViewId } from '../../app/helpers';
+import { Spinner } from '../../common';
 
 export default function HubPage() {
   useEffect(() => {
@@ -92,7 +93,7 @@ export default function HubPage() {
     }
   }, [hub]);
 
-  const { data, hasNextPage, fetchNextPage, isFetching } = UseGetFullTaskList({
+  const { data, hasNextPage, fetchNextPage, isFetching, isLoading } = UseGetFullTaskList({
     itemId: hubId,
     itemType: EntityType.hub
   });
@@ -178,20 +179,31 @@ export default function HubPage() {
         additional={<FilterByAssigneesSliderOver />}
       >
         <Header />
-        <VerticalScroll onScroll={onScroll}>
-          <section
+        {isLoading || isFetching ? (
+          <div
+            className="flex items-center justify-center w-full h-full mx-auto mt-5"
             style={{ minHeight: '0', maxHeight: '83vh' }}
-            className="w-full h-full py-4 pb-0 pl-5 pr-1 space-y-10"
           >
-            {/* lists */}
-            {Object.keys(lists).map((listId) => (
-              <Fragment key={listId}>
-                {tasksStore[listId] ? <List tasks={tasksStore[listId]} combinedTasksArr={combinedArr} /> : null}
-              </Fragment>
-            ))}
-          </section>
-        </VerticalScroll>
-        {Object.keys(lists).length > 1 && scrollGroupView && <GroupHorizontalScroll />}
+            <Spinner color="#0F70B7" />
+          </div>
+        ) : (
+          <>
+            <VerticalScroll onScroll={onScroll}>
+              <section
+                style={{ minHeight: '0', maxHeight: '83vh' }}
+                className="w-full h-full py-4 pb-0 pl-5 pr-1 space-y-10"
+              >
+                {/* lists */}
+                {Object.keys(lists).map((listId) => (
+                  <Fragment key={listId}>
+                    {tasksStore[listId] ? <List tasks={tasksStore[listId]} combinedTasksArr={combinedArr} /> : null}
+                  </Fragment>
+                ))}
+              </section>
+            </VerticalScroll>
+            {Object.keys(lists).length > 1 && scrollGroupView && <GroupHorizontalScroll />}
+          </>
+        )}
       </Page>
     </>
   );
