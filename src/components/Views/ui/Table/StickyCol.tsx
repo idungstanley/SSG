@@ -451,7 +451,7 @@ export function StickyCol({
                         <DetailsOnHover
                           hoverElement={
                             <div
-                              className={`${TASK_NAME.length > 20 ? 'truncate' : ''} font-semibold alsoit-gray-300 ${
+                              className={`${task.name.length > 20 ? 'truncate' : ''} font-semibold alsoit-gray-300 ${
                                 saveSettingOnline?.CompactView ? 'trantext-alsoit-text-md' : 'text-alsoit-text-lg'
                               }`}
                               style={{ maxWidth: '90%', whiteSpace: 'nowrap' }}
@@ -483,7 +483,7 @@ export function StickyCol({
                 <div
                   onClick={(e) => e.stopPropagation()}
                   className={`opacity-0 group-hover:opacity-100 ${
-                    TASK_NAME.length > 20 ? 'absolute right-0' : ''
+                    task.name.length > 20 ? 'absolute right-0' : ''
                   } ${COL_BG} h-full flex items-center justify-between pl-2 min-h-fit`}
                 >
                   {children}
