@@ -34,6 +34,7 @@ import { generateSubtasksList } from '../../utils/generateLists';
 import { generateUrlWithViewId } from '../../app/helpers';
 import { IView } from '../../features/hubs/hubs.interfaces';
 import { defaultTaskTemplate } from '../../components/Views/ui/Table/newTaskTemplate/DefaultTemplate';
+import { setShowPilotSideOver } from '../../features/general/slideOver/slideOverSlice';
 import { Spinner } from '../../common';
 
 export function ListPage() {
@@ -49,8 +50,11 @@ export function ListPage() {
     filters: { option },
     keyBoardSelectedIndex,
     taskColumnIndex,
-    taskColumns
+    taskColumns,
+    KeyBoardSelectedTaskData
   } = useAppSelector((state) => state.task);
+  const { activeView } = useAppSelector((state) => state.workspace);
+  const { currentWorkspaceId } = useAppSelector((state) => state.auth);
 
   const [tasksFromRes, setTasksFromRes] = useState<ITaskFullList[]>([]);
   const [listDetailsFromRes, setListDetailsFromRes] = useState<IListDetailRes>();
@@ -102,12 +106,36 @@ export function ListPage() {
       const newIndex = Math.min(taskColumns.length - 1, taskColumnIndex + 1);
       dispatch(setTaskColumnIndex(newIndex));
     }
+
+    if (e.key === 'Enter' && KeyBoardSelectedTaskData !== null) {
+      dispatch(
+        setShowPilotSideOver({
+          show: true,
+          id: KeyBoardSelectedTaskData.id,
+          title: KeyBoardSelectedTaskData.name,
+          type: 'task'
+        })
+      );
+      dispatch(
+        setActiveItem({
+          activeItemId: KeyBoardSelectedTaskData.id,
+          activeItemType: 'task',
+          activeItemName: KeyBoardSelectedTaskData.name
+        })
+      );
+      navigate(
+        `/${currentWorkspaceId}/tasks/l/${KeyBoardSelectedTaskData.list_id}/t/${KeyBoardSelectedTaskData.id}/v/${activeView?.id}`,
+        {
+          replace: true
+        }
+      );
+    }
   };
   useEffect(() => {
     window.addEventListener('keydown', handleKeyDown);
 
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [keyBoardSelectedIndex, taskColumns, taskColumnIndex]);
+  }, [keyBoardSelectedIndex, taskColumns, taskColumnIndex, KeyBoardSelectedTaskData]);
 
   useEffect(() => {
     if (listId) {

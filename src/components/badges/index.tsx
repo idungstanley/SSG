@@ -11,20 +11,24 @@ import Checklist from './Checklist';
 
 export interface BadgeTask extends TdHTMLAttributes<HTMLTableCellElement> {
   task: Task;
+  setShowSubtasks: (i: boolean) => void;
+  showSubtasks: boolean;
 }
-export default function Badges({ task }: BadgeTask) {
+export default function Badges({ task, setShowSubtasks, showSubtasks }: BadgeTask) {
   const { showNewTaskField, saveSettingOnline } = useAppSelector((state) => state.task);
 
   const dispatch = useAppDispatch();
 
   const onShowAddSubtaskField = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, taskId: string) => {
     dispatch(setDefaultSubtaskId(task.list_id));
-    if (showNewTaskField) {
+    if (showNewTaskField || showSubtasks) {
       dispatch(setShowNewTaskId(''));
       dispatch(setShowNewTaskField(false));
+      setShowSubtasks(false);
     } else {
       dispatch(setShowNewTaskId(taskId));
       dispatch(setShowNewTaskField(true));
+      setShowSubtasks(true);
     }
   };
 

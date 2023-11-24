@@ -15,9 +15,9 @@ import { ManualTime } from './ManualTime';
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 import { ActiveTimeStrip } from './ActiveTimeStrip';
-import { TabsDropDown } from './TabsDropDown';
 import { TotalTime } from './TotalTime';
 import { ITimeEntriesRes } from '../../../../features/task/interface.tasks';
+import DropdownWithHeader from './components/DropdownWithHeader';
 
 dayjs.extend(duration);
 
@@ -31,10 +31,7 @@ export function CombinedTime({ timeData }: Props) {
   const { activeItemId, activeItemType, activeClockTab } = useAppSelector((state) => state.workspace);
   const { timerStatus } = useAppSelector((state) => state.task);
 
-  const [dropDown, setDropDown] = useState<{ tabDrop: boolean; activeTimeDrop: boolean }>({
-    tabDrop: false,
-    activeTimeDrop: false
-  });
+  const [anchor, setAnchor] = useState<HTMLElement | null>(null);
 
   // Get currently active timers
   const { data: getCurrent } = useTimeEntriesQuery({
@@ -54,44 +51,38 @@ export function CombinedTime({ timeData }: Props) {
                 <label
                   htmlFor="timeClockTrackers"
                   className="relative flex items-center justify-between px-1 cursor-pointer rounded-tl-lg rounded-br-lg w-32 py-2 bg-alsoit-gray-75 z-50"
-                  onClick={() => setDropDown((prev) => ({ ...prev, tabDrop: !prev.tabDrop }))}
+                  onClick={(e) => setAnchor(e.currentTarget)}
                 >
                   <div className="cursor-pointer bg-alsoit-gray-100 rounded-xl">
-                    <CollapseIcon
-                      active={!timerStatus}
-                      onToggle={() => setDropDown((prev) => ({ ...prev, activeTimeDrop: !prev.activeTimeDrop }))}
-                      iconColor="rgb(145 145 145)"
-                      color="rgb(145 145 145)"
-                    />
+                    <CollapseIcon active={!timerStatus} iconColor="rgb(145 145 145)" color="rgb(145 145 145)" />
                   </div>
-                  {/* Active Tracker Name */}
                   <span className="text-alsoit-text-md text-alsoit-gray-50 uppercase truncate">{activeClockTab}</span>
-                  {dropDown.tabDrop ? <ArrowUp className="w-3 h-3" /> : <ArrowDown color="#FFF" className="w-2 h-2" />}
-                  {dropDown.tabDrop && (
-                    <TabsDropDown
-                      header="time category"
-                      subHeader="select category"
-                      styles="w-44 top-7 left-7"
-                      closeModal={() => setDropDown((prev) => ({ ...prev, tabDrop: !prev.tabDrop }))}
-                    >
-                      {[
-                        { entry: TIME_TABS.realTime, icon: <RealTimeIcon /> },
-                        { entry: TIME_TABS.manual, icon: <ManualTimeIcon className="w-5 h-5" /> }
-                      ].map((item, index) => (
-                        <div
-                          key={index}
-                          className="cursor-pointer p-2.5 hover:bg-alsoit-gray-50"
-                          onClick={() => dispatch(setActiveClockTab(item.entry))}
-                        >
-                          <div className="flex space-x-1.5 w-full">
-                            {item.icon}
-                            <span>{item.entry}</span>
-                          </div>
-                        </div>
-                      ))}
-                    </TabsDropDown>
-                  )}
+                  {anchor ? <ArrowUp className="w-3 h-3" /> : <ArrowDown color="#FFF" className="w-2 h-2" />}
                 </label>
+                <DropdownWithHeader
+                  header="time category"
+                  subHeader="select category"
+                  anchor={anchor}
+                  setAnchor={setAnchor}
+                >
+                  <div>
+                    {[
+                      { entry: TIME_TABS.realTime, icon: <RealTimeIcon /> },
+                      { entry: TIME_TABS.manual, icon: <ManualTimeIcon className="w-5 h-5" /> }
+                    ].map((item, index) => (
+                      <div
+                        key={index}
+                        className="cursor-pointer p-2.5 hover:bg-alsoit-gray-50"
+                        onClick={() => dispatch(setActiveClockTab(item.entry))}
+                      >
+                        <div className="flex space-x-1.5 w-full">
+                          {item.icon}
+                          <span>{item.entry}</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </DropdownWithHeader>
                 <div className="flex items-center relative border bg-white rounded px-1.5 border-alsoit-gray-300 w-20 h-6 mt-1.5">
                   <TotalTime totalDuration={timeData?.data.total_duration} />
                   <span className="absolute -top-2 py-0.5 bg-none text-outline px-0.5 text-alsoit-text-sm">

@@ -29,6 +29,12 @@
   border-bottom: 1px solid #bf01fe;
 }
 
+.input:focus {
+  outline: none !important;
+  border: 1px solid white;
+  box-shadow: 0 0 0px white;
+}
+
 /* Style left border of the first column */
 .table-container table .tdListV {
   border-left: 4px solid #bf01fe;
