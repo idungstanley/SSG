@@ -8,7 +8,7 @@ import { FilterDropdown } from '../../../TasksHeader/ui/Filter/FilterDropdown';
 import { Search } from '../../../TasksHeader/ui/Search/Search';
 import { Sort } from '../../../TasksHeader/ui/Sort/Sort';
 import { AssigneeSplitSubtasks } from '../../../TasksHeader/ui/Assignee/AssigneeSplitSubtasks';
-import statusbox from '../../../.././assets/icons/statusbox.svg';
+import RoundedCheckbox from '../../../Checkbox/RoundedCheckbox';
 
 interface LabelProps {
   showTable: boolean;
@@ -35,7 +35,7 @@ export function Label({
 
   const { selectedTasksArray, taskRootIds, subtasks } = useAppSelector((state) => state.task);
 
-  const allChecked = tasks?.every((value) => selectedTasksArray.includes(value.id));
+  const allChecked = tasks ? tasks.every((value) => selectedTasksArray.includes(value.id)) : false;
 
   const subtaskIds = (tasks: Task[]) => {
     return tasks.map((task) => task.id);
@@ -94,20 +94,26 @@ export function Label({
     <div className="flex items-center justify-between">
       <div className="flex items-center">
         <div
-          className="flex items-center justify-between space-x-5 bg-purple-500 -mt-1 p-1 pr-7 rounded-tl-lg -ml-1 h-7 rounded-br-[5px]"
+          className="flex items-center justify-between space-x-5 -mt-1 p-1 pr-7 rounded-tl-lg -ml-1 h-7 rounded-br-[5px]"
           style={{ backgroundColor: !ListColor?.outerColour ? 'black' : (ListColor?.outerColour as string) }}
         >
           <div className="flex items-center pl-2 space-x-2 text-sm text-white w-fit -mt-1">
-            <img src={statusbox} alt="" className="pr-1 border-r cursor-pointer" onClick={handleCheckedGroupTasks} />
+            <RoundedCheckbox
+              onChange={handleCheckedGroupTasks}
+              isChecked={allChecked}
+              styles={
+                'w-4 h-4 rounded-full cursor-pointer focus:outline-1 focus:ring-transparent focus:border-2 text-alsoit-purple-300'
+              }
+            />
             <CollapseIcon color="#A854F7" active={showTable} onToggle={onClickChevron} hoverBg="white" />
-            <h1>{listName ?? 'Loading...'}</h1>
+            <h1 className="max-w-34 truncate">{listName ?? 'Loading...'}</h1>
           </div>
           <div className="flex items-center justify-center h-6 bg-white -mt-1 rounded-[5px] w-12">
             <ListAddModal handleCheckedGroupTasks={handleCheckedGroupTasks} ListColor={ListColor} />
           </div>
-          {showTable && <p className="ml-3 text-white">{hubName}</p>}
+          {showTable && <p className="ml-3 max-w-34 truncate text-white">{hubName}</p>}
         </div>
-        {!showTable && <p className="ml-3">{hubName}</p>}
+        {!showTable && <p className="ml-3 max-w-34 truncate">{hubName}</p>}
       </div>
       {isSplitSubtasks ? (
         <div className="flex items-center justify-end mr-5">

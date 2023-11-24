@@ -21,6 +21,7 @@ import {
   setSaveSettingList,
   setSaveSettingOnline,
   setSubtasks,
+  setTaskColumnIndex,
   setTasks
 } from '../../features/task/taskSlice';
 import { useformatSettings } from '../workspace/tasks/TaskSettingsModal/ShowSettingsModal/FormatSettings';
@@ -28,6 +29,8 @@ import { generateSubtasksList, generateSubtasksArray } from '../../utils/generat
 import { IHubDetails, IView } from '../../features/hubs/hubs.interfaces';
 import { updatePageTitle } from '../../utils/updatePageTitle';
 import { generateUrlWithViewId } from '../../app/helpers';
+import { Spinner } from '../../common';
+import { setShowPilotSideOver } from '../../features/general/slideOver/slideOverSlice';
 
 export default function HubPage() {
   useEffect(() => {
@@ -41,13 +44,17 @@ export default function HubPage() {
   const { hubId, taskId } = useParams();
   const navigate = useNavigate();
 
-  const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
+  const { activeItemId, activeItemType, activeView } = useAppSelector((state) => state.workspace);
+  const { currentWorkspaceId } = useAppSelector((state) => state.auth);
   const {
     tasks: tasksStore,
     saveSettingLocal,
     subtasks,
     scrollGroupView,
-    keyBoardSelectedIndex
+    keyBoardSelectedIndex,
+    taskColumnIndex,
+    taskColumns,
+    KeyBoardSelectedTaskData
   } = useAppSelector((state) => state.task);
   const formatSettings = useformatSettings();
 
@@ -89,7 +96,7 @@ export default function HubPage() {
     }
   }, [hub]);
 
-  const { data, hasNextPage, fetchNextPage, isFetching } = UseGetFullTaskList({
+  const { data, hasNextPage, fetchNextPage, isFetching, isLoading } = UseGetFullTaskList({
     itemId: hubId,
     itemType: EntityType.hub
   });
@@ -100,22 +107,68 @@ export default function HubPage() {
   const combinedArr = Object.values(lists).flatMap((lists) => lists);
 
   const handleKeyDown = (e: KeyboardEvent) => {
-    if (e.key === 'ArrowUp' && keyBoardSelectedIndex !== null) {
-      const newIndex = Math.max(0, keyBoardSelectedIndex - 1);
-      dispatch(setKeyBoardSelectedIndex(newIndex));
-    } else if (e.key === 'ArrowDown' && keyBoardSelectedIndex !== null) {
-      const newIndex = Math.min(combinedArr.length - 1, keyBoardSelectedIndex + 1);
-      dispatch(setKeyBoardSelectedIndex(newIndex));
-    } else if (e.key === 'ArrowUp' || (e.key === 'ArrowDown' && keyBoardSelectedIndex === null)) {
-      dispatch(setKeyBoardSelectedIndex(0));
+    if (e.key === 'ArrowUp') {
+      if (keyBoardSelectedIndex !== null) {
+        const newIndex = Math.max(0, keyBoardSelectedIndex - 1);
+        dispatch(setKeyBoardSelectedIndex(newIndex));
+      } else {
+        dispatch(setKeyBoardSelectedIndex(0));
+      }
+    } else if (e.key === 'ArrowDown') {
+      if (keyBoardSelectedIndex !== null) {
+        const newIndex = Math.min(combinedArr.length - 1, keyBoardSelectedIndex + 1);
+        dispatch(setKeyBoardSelectedIndex(newIndex));
+      } else {
+        dispatch(setKeyBoardSelectedIndex(0));
+      }
+    } else if (e.key === 'ArrowLeft' && taskColumnIndex !== null) {
+      const newIndex = Math.max(0, taskColumnIndex - 1);
+      dispatch(setTaskColumnIndex(newIndex));
+    }
+
+    if (e.key === 'ArrowRight' && taskColumnIndex !== null) {
+      const newIndex = Math.min(taskColumns.length - 1, taskColumnIndex + 1);
+      dispatch(setTaskColumnIndex(newIndex));
+    }
+
+    if (e.key === 'Enter' && KeyBoardSelectedTaskData !== null) {
+      dispatch(
+        setShowPilotSideOver({
+          show: true,
+          id: KeyBoardSelectedTaskData.id,
+          title: KeyBoardSelectedTaskData.name,
+          type: 'task'
+        })
+      );
+      navigate(
+        `/${currentWorkspaceId}/tasks/l/${KeyBoardSelectedTaskData.list_id}/t/${KeyBoardSelectedTaskData.id}/v/${activeView?.id}`,
+        {
+          replace: true
+        }
+      );
+      // navigate(
+      //   generateViewsUrl(
+      //     KeyBoardSelectedTaskData.id,
+      //     activeView?.id as string,
+      //     hub?.data.hub,
+      //     EntityType.task
+      //   ) as string,
+      //   { replace: true }
+      // );
+      dispatch(
+        setActiveItem({
+          activeItemId: KeyBoardSelectedTaskData.id,
+          activeItemType: 'task',
+          activeItemName: KeyBoardSelectedTaskData.name
+        })
+      );
     }
   };
-
   useEffect(() => {
     window.addEventListener('keydown', handleKeyDown);
 
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [keyBoardSelectedIndex]);
+  }, [keyBoardSelectedIndex, taskColumns, taskColumnIndex, KeyBoardSelectedTaskData]);
 
   useEffect(() => {
     if (Object.keys(lists).length) {
@@ -137,9 +190,9 @@ export default function HubPage() {
   const handleScroll = (e: UIEvent<HTMLDivElement>) => {
     if (hasNextPage && !isFetching) {
       const container = e.target as HTMLElement;
-      const twoThirdsOfScroll = 0.66;
+      const scrollPositionForLoading = 0.9;
       const scrollDifference =
-        container?.scrollHeight * twoThirdsOfScroll - container.scrollTop - container.clientHeight;
+        container?.scrollHeight * scrollPositionForLoading - container.scrollTop - container.clientHeight;
       const range = 1;
       if (scrollDifference <= range) {
         fetchNextPage();
@@ -161,20 +214,31 @@ export default function HubPage() {
         additional={<FilterByAssigneesSliderOver />}
       >
         <Header />
-        <VerticalScroll onScroll={onScroll}>
-          <section
+        {isLoading || isFetching ? (
+          <div
+            className="flex items-center justify-center w-full h-full mx-auto mt-5"
             style={{ minHeight: '0', maxHeight: '83vh' }}
-            className="w-full h-full py-4 pb-0 pl-5 pr-1 space-y-10"
           >
-            {/* lists */}
-            {Object.keys(lists).map((listId) => (
-              <Fragment key={listId}>
-                {tasksStore[listId] ? <List tasks={tasksStore[listId]} combinedTasksArr={combinedArr} /> : null}
-              </Fragment>
-            ))}
-          </section>
-        </VerticalScroll>
-        {Object.keys(lists).length > 1 && scrollGroupView && <GroupHorizontalScroll />}
+            <Spinner color="#0F70B7" />
+          </div>
+        ) : (
+          <>
+            <VerticalScroll onScroll={onScroll}>
+              <section
+                style={{ minHeight: '0', maxHeight: '83vh' }}
+                className="w-full h-full py-4 pb-0 pl-5 pr-1 space-y-10"
+              >
+                {/* lists */}
+                {Object.keys(lists).map((listId) => (
+                  <Fragment key={listId}>
+                    {tasksStore[listId] ? <List tasks={tasksStore[listId]} combinedTasksArr={combinedArr} /> : null}
+                  </Fragment>
+                ))}
+              </section>
+            </VerticalScroll>
+            {Object.keys(lists).length > 1 && scrollGroupView && <GroupHorizontalScroll />}
+          </>
+        )}
       </Page>
     </>
   );

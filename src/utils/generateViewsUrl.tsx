@@ -1,11 +1,11 @@
-import { IFavorites, IHub, IList, IWallet } from '../features/hubs/hubs.interfaces';
+import { IFavorites, IHub, IHubDetails, IList, IWallet } from '../features/hubs/hubs.interfaces';
 import { EntityType } from './EntityTypes/EntityType';
 import { pages } from '../app/constants/pages';
 
 const generateViewsUrl = (
   id: string,
   viewId: string,
-  item?: IList | IWallet | IHub | IFavorites,
+  item?: IList | IWallet | IHub | IFavorites | IHubDetails | undefined,
   entityType?: string
 ) => {
   const initialActivePlaceId: string | null = (JSON.parse(localStorage.getItem('activePlaceIdLocale') as string) ||
@@ -20,9 +20,17 @@ const generateViewsUrl = (
     } else {
       entityTypeAndId = `tasks/h/${id}/v/${viewId}`;
     }
-  } else if ((item as IWallet).type === EntityType.wallet || (item as IFavorites).model_type === EntityType.wallet) {
+  } else if (
+    entityType === EntityType.wallet ||
+    (item as IWallet).type === EntityType.wallet ||
+    (item as IFavorites).model_type === EntityType.wallet
+  ) {
     entityTypeAndId = `tasks/w/${id}/v/${viewId}`;
-  } else if ((item as IHub).type === EntityType.list || (item as IFavorites).model_type === EntityType.list) {
+  } else if (
+    entityType === EntityType.list ||
+    (item as IHub).type === EntityType.list ||
+    (item as IFavorites).model_type === EntityType.list
+  ) {
     entityTypeAndId = `tasks/l/${id}/v/${viewId}`;
   }
 

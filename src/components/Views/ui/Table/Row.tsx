@@ -131,16 +131,14 @@ export function Row({
   // hide element if is currently grabbing
   const style = {
     opacity: transform ? 0.3 : 100,
-    zIndex: 1,
     pointerEvents: transform ? 'none' : '',
     height:
       saveSettingOnline?.singleLineView && !saveSettingOnline?.CompactView
         ? '42px'
         : saveSettingOnline?.CompactView && saveSettingOnline?.singleLineView
         ? '25px'
-        : !saveSettingOnline?.singleLineView && saveSettingOnline?.CompactView && task.name.length < 30
-        ? '25px'
-        : ''
+        : '',
+    maxHeight: 'max-content'
   };
 
   const showChildren = useMemo(() => {
@@ -240,20 +238,21 @@ export function Row({
           selectedRow={selectedRow}
         >
           {/* actions */}
+          <ToolTip title={isCopied === 0 ? 'Copy Task Name' : 'Copied'}>
+            <button
+              className={`relative ${hoverOn ? 'opacity-100' : 'opacity-0'} ${
+                saveSettingOnline?.CompactView ? 'bottom-1' : 'bottom-2'
+              }`}
+              onClick={handleCopyTexts}
+            >
+              <Copy />
+            </button>
+          </ToolTip>
           <div className="flex items-center justify-center mr-1 space-x-1">
-            {level < MAX_SUBTASKS_LEVEL ? <Badges task={task} /> : null}
+            {level < MAX_SUBTASKS_LEVEL ? (
+              <Badges setShowSubtasks={setShowSubTasks} showSubtasks={showSubTasks} task={task} />
+            ) : null}
             {/* Copy */}
-            <ToolTip title={isCopied === 0 ? 'Copy Task Name' : 'Copied'}>
-              <button
-                className={`p-1 bg-white border rounded-md ${hoverOn ? 'opacity-100' : 'opacity-0'}`}
-                onClick={handleCopyTexts}
-              >
-                <Copy
-                  width={saveSettingOnline?.CompactView ? '8px' : '12px'}
-                  height={saveSettingOnline?.CompactView ? '8px' : '12px'}
-                />
-              </button>
-            </ToolTip>
             {/* effects */}
             <ToolTip title="Apply Effects">
               <button

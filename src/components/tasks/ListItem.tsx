@@ -12,8 +12,8 @@ import {
   setshowMenuDropdown
 } from '../../features/hubs/hubSlice';
 import { GetTaskListCount, UseEditListService } from '../../features/list/listService';
-import { setListPaletteColor } from '../../features/list/listSlice';
-import { setActiveItem, setCreateWlLink, setEntityForPermissions } from '../../features/workspace/workspaceSlice';
+import { setListPaletteColor, setStatusTaskListDetails } from '../../features/list/listSlice';
+import { setActiveItem, setCreateWlLink } from '../../features/workspace/workspaceSlice';
 import Palette from '../ColorPalette';
 import ListIconComponent from '../ItemsListInSidebar/components/ListIconComponent';
 import { useDraggable, useDroppable } from '@dnd-kit/core';
@@ -54,6 +54,7 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
   const { paletteDropdown, lightBaseColor, baseColor } = useAppSelector((state) => state.account);
   const { listColour } = useAppSelector((state) => state.list);
   const { updateCords } = useAppSelector((state) => state.task);
+  const { currentWorkspaceId } = useAppSelector((state) => state.auth);
 
   const [getCount, setGetCount] = useState<boolean>(false);
   const [activeShape, setActiveShape] = useState(list.shape);
@@ -74,6 +75,7 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
 
   // function for the list shape selection
   const handleListLocation = (id: string, name: string) => {
+    dispatch(setStatusTaskListDetails({ listId: undefined, listName: undefined }));
     const viewsUrl = generateViewsUrl(id, activeView?.id as string, list, EntityType.list) as string;
     dispatch(
       setActiveItem({
@@ -82,7 +84,7 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
         activeItemName: name
       })
     );
-    navigate(viewsUrl, {
+    navigate(`/${currentWorkspaceId}/${viewsUrl}`, {
       replace: true
     });
   };
@@ -107,7 +109,6 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
     );
     const element = document.getElementById(targetId);
     if (element) {
-      // 👇 Will scroll smoothly to the top of the next section
       element.scrollIntoView({ behavior: 'smooth' });
     }
   };
@@ -131,7 +132,6 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
     }
   };
   const handleItemAction = (id: string) => {
-    // dispatch(setSelectedTreeDetails({ name, id, type: EntityType.wallet }));
     dispatch(setCreateWlLink(false));
     dispatch(
       getSubMenu({
@@ -175,7 +175,13 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
     dimensions.navigationBar.default;
 
   return (
-    <div className="relative">
+    <div
+      className={`relative nav-item ${list.id === listId ? 'active-nav-item' : ''}`}
+      data-id={list.id}
+      data-url={generateViewsUrl(list.id, activeView?.id as string, list, EntityType.list) as string}
+      data-parent={list.parent_id}
+      data-name={list.name}
+    >
       <section
         className={cl(
           'relative flex items-center justify-between h-8 group',
@@ -278,7 +284,6 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
                 id="menusettings"
                 onClick={(e) => {
                   handleListSettings(list.id, list.name, e);
-                  dispatch(setEntityForPermissions(list));
                 }}
               >
                 <ThreeDotIcon />

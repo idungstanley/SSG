@@ -4,12 +4,14 @@ import utc from 'dayjs/plugin/utc';
 import advancedFormat from 'dayjs/plugin/advancedFormat';
 import weekOfYear from 'dayjs/plugin/weekOfYear';
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
+import isBetween from 'dayjs/plugin/isBetween';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
 dayjs.extend(weekOfYear);
 dayjs.extend(advancedFormat);
 dayjs.extend(isSameOrBefore);
+dayjs.extend(isBetween);
 
 export interface DateObject {
   currentMonth: boolean;
@@ -344,4 +346,12 @@ export function generateMonthsInYear(year: number) {
 
 export function formatForDatabase(date: Dayjs) {
   return dayjs(date).format('YYYY-MM-DD HH:mm:ss');
+}
+
+export function isDateBetween(checkDateStr: string, startDateStr: string, endDateStr: string) {
+  const checkDate = dayjs(checkDateStr);
+  const startDate = dayjs(startDateStr);
+  const endDate = dayjs(endDateStr);
+
+  return checkDate.isBetween(startDate, endDate, null, '[]'); // '[]' includes both start and end dates
 }

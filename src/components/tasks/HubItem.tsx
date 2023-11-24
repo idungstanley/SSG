@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { VscTriangleDown, VscTriangleRight } from 'react-icons/vsc';
+import { VscTriangleRight } from 'react-icons/vsc';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import {
   closeMenu,
@@ -14,7 +14,7 @@ import AvatarWithInitials from '../avatar/AvatarWithInitials';
 import Palette from '../ColorPalette';
 import UploadImage from '../ColorPalette/component/UploadImage';
 import { InvalidateQueryFilters } from '@tanstack/react-query';
-import { setCreateWlLink, setEntityForPermissions } from '../../features/workspace/workspaceSlice';
+import { setCreateWlLink } from '../../features/workspace/workspaceSlice';
 import { ListColourProps } from './ListItem';
 import { useParams } from 'react-router-dom';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
@@ -37,6 +37,7 @@ import { selectCalendar, setHrTeamMembers, setSelectedHubs } from '../../feature
 import { useGetTeamMembers } from '../../features/settings/teamMembers/teamMemberService';
 import { MembersList } from '../../pages/calendar/ui/ExtendedBar/MembersList';
 import { STORAGE_KEYS, dimensions } from '../../app/config/dimensions';
+import { generateViewsUrl } from '../../utils/generateViewsUrl';
 
 interface TaskItemProps {
   item: Hub;
@@ -63,7 +64,7 @@ export default function HubItem({
   const dispatch = useAppDispatch();
   const { hubId } = useParams();
 
-  const { activeItemId, openedEntitiesIds } = useAppSelector((state) => state.workspace);
+  const { activeItemId, openedEntitiesIds, activeView } = useAppSelector((state) => state.workspace);
   const { paletteDropdown } = useAppSelector((state) => state.account);
   const { showSidebar } = useAppSelector((state) => state.account);
   const { showMenuDropdown, SubMenuId } = useAppSelector((state) => state.hub);
@@ -118,10 +119,6 @@ export default function HubItem({
     }
   };
 
-  const renderEmptyArrowBlock = () => {
-    return <div className="pl-3.5" />;
-  };
-
   const { isOver, setNodeRef } = useDroppable({
     id: item.id,
     data: {
@@ -149,16 +146,16 @@ export default function HubItem({
 
   const paddingLeft = () => {
     if (!showSidebar) {
-      return '7';
+      return '18';
     }
     if (type === EntityType.subHub) {
       if (isExtendedBar) {
-        return '17';
+        return '30';
       } else {
-        return '25';
+        return '38';
       }
     } else {
-      return '17';
+      return '30';
     }
   };
 
@@ -227,14 +224,30 @@ export default function HubItem({
     (JSON.parse(localStorage.getItem(STORAGE_KEYS.SIDEBAR_WIDTH) || '""') as number) ||
     dimensions.navigationBar.default;
 
+  const isShowArrow = () => {
+    if (
+      (item?.wallets?.length || item?.lists?.length || item.has_descendants) &&
+      (placeHubType === APP_TASKS || placeHubType === APP_HR)
+    ) {
+      return true;
+    }
+    return false;
+  };
+
   return (
     <div
-      className={`w-full ${openedEntitiesIds.includes(item.id) ? 'sticky bg-white opacity-100 hub-item' : ''}`}
+      className={`w-full nav-item ${item.id === hubId ? 'active-nav-item' : ''} ${
+        openedEntitiesIds.includes(item.id) ? 'sticky bg-white opacity-100 hub-item' : ''
+      }`}
       style={{
         top: openedEntitiesIds.includes(item.id) && showSidebar ? topNumber : '',
         zIndex: openedEntitiesIds.includes(item.id) ? zNumber : '2',
         opacity: transform ? 0 : 100
       }}
+      data-id={item.id}
+      data-url={generateViewsUrl(item.id, activeView?.id as string, item, EntityType.hub) as string}
+      data-parent={item.parent_id}
+      data-name={item.name}
     >
       <div
         className={`bg-white w-full truncate items-center group ${
@@ -285,32 +298,14 @@ export default function HubItem({
               }
               style={{ zIndex: 1 }}
             >
-              {((item?.wallets?.length || item?.lists?.length || item.has_descendants) && placeHubType === APP_TASKS) ||
-              placeHubType === APP_HR ? (
-                <div>
-                  {showChildren ? (
-                    <span className="flex flex-col">
-                      <VscTriangleDown
-                        className="flex-shrink-0 h-2 hover:fill-[#BF01FE]"
-                        aria-hidden="true"
-                        color="#919191"
-                      />
-                    </span>
-                  ) : (
-                    <VscTriangleRight
-                      className="flex-shrink-0 h-2 hover:fill-[#BF01FE]"
-                      aria-hidden="true"
-                      color="#919191"
-                    />
-                  )}
-                </div>
-              ) : (
-                renderEmptyArrowBlock()
-              )}
-              <div className={`flex items-center flex-1 min-w-0 ${placeHubType == APP_HR ? 'gap-1' : 'gap-5'}`}>
+              <div
+                className={`relative flex items-center flex-1 min-w-0 ${placeHubType == APP_HR ? 'gap-1' : 'gap-2'}`}
+              >
                 <div
                   onClick={(e) => handleHubColour(item.id, e)}
-                  className="flex items-center justify-center w-6 h-6"
+                  className={`flex items-center justify-center w-6 h-6 ${
+                    isShowArrow() && 'opacity-100 group-hover:opacity-0'
+                  }`}
                   ref={relativeRef}
                 >
                   {item.path !== null ? (
@@ -334,6 +329,19 @@ export default function HubItem({
                     />
                   )}
                 </div>
+                {isShowArrow() && (
+                  <div className="absolute flex justify-center items-center w-6 h-6 opacity-0 group-hover:opacity-100">
+                    <div className="group/open flex justify-center items-center w-4 h-4 rounded hover:bg-gray-300">
+                      <VscTriangleRight
+                        className={`flex-shrink-0 h-2 group-hover/open:fill-[#BF01FE] duration-200 ${
+                          showChildren ? 'rotate-90' : 'rotate-0'
+                        }`}
+                        aria-hidden="true"
+                        color="#919191"
+                      />
+                    </div>
+                  </div>
+                )}
                 <span
                   className="pr-2 overflow-hidden"
                   style={{ width: sidebarWidthFromLS - 135 - Number(paddingLeft()) }}
@@ -374,7 +382,6 @@ export default function HubItem({
                 <span
                   onClick={(e) => {
                     handleHubSettings(item.id, item.name, e);
-                    dispatch(setEntityForPermissions(item));
                   }}
                   className="cursor-pointer"
                   id="menusettings"
@@ -400,7 +407,7 @@ export default function HubItem({
         />
       ) : null}
       {showMenuDropdown === item.id && showSidebar ? (
-        <MenuDropdown item={item as Hub} isExtendedBar={isExtendedBar} cords={menuCords} />
+        <MenuDropdown item={item as Hub} entityType={EntityType.hub} isExtendedBar={isExtendedBar} cords={menuCords} />
       ) : null}
       {SubMenuId === item.id && showSidebar ? <SubDropdown cords={menuCords} placeHubType={placeHubType} /> : null}
     </div>

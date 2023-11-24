@@ -57,7 +57,7 @@ export const NavigationList = [
   },
   {
     id: 'favorites',
-    name: 'Favorites',
+    name: 'Favourites',
     icon: <FavoriteIcon />,
     alwaysShow: false
   }

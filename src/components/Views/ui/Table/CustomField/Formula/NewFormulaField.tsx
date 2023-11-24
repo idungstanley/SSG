@@ -25,7 +25,7 @@ interface AdditionalFormulasFieldProps {
 
 function NewFormulaField({ field, currentFieldColumns, index, returnNewData }: AdditionalFormulasFieldProps) {
   // menu positions
-  const [anchorTwo, setAnchorTwo] = useState<null | HTMLElement>(null);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [anchorAction, setAnchorAction] = useState<null | HTMLElement>(null);
   // main states
   const [selectedFieldId, setSelectedFieldId] = useState<string>(field.id);
@@ -100,13 +100,13 @@ function NewFormulaField({ field, currentFieldColumns, index, returnNewData }: A
           </Menu>
         </div>
         <div className="w-full">
-          <div onClick={(e: React.MouseEvent<HTMLDivElement>) => setAnchorTwo(e.currentTarget)}>
+          <div onClick={(e: React.MouseEvent<HTMLDivElement>) => setAnchorEl(e.currentTarget)}>
             <Button active={!!field.id}>
               <span className="whitespace-nowrap w-full pl-1">{renderName(selectedFieldId)}</span>
               <ArrowDownFilled active={!!selectedFieldId} />
             </Button>
           </div>
-          <Menu anchorEl={anchorTwo} open={!!anchorTwo} onClose={() => setAnchorTwo(null)}>
+          <Menu anchorEl={anchorEl} open={!!anchorEl} onClose={() => setAnchorEl(null)}>
             {currentFieldColumns.length ? (
               <>
                 {currentFieldColumns.map((field) => (
@@ -115,7 +115,7 @@ function NewFormulaField({ field, currentFieldColumns, index, returnNewData }: A
                     className="flex px-2 py-1 w-44 cursor-pointer hover:bg-gray-100"
                     onClick={() => {
                       setSelectedFieldId(field.id);
-                      setAnchorTwo(null);
+                      setAnchorEl(null);
                     }}
                   >
                     <span className="flex justify-center align-center mx-1 w-5 h-5">{renderItemIcon(field)}</span>

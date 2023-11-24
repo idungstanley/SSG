@@ -3,11 +3,12 @@ import requestNew from '../../../app/requestNew';
 import { IHistoryRes } from './history.interfaces';
 import { setActivityArray } from '../../workspace/workspaceSlice';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
+import { pilotTabs } from '../../../app/constants/pilotTabs';
 
 // ...
 
 type GetItemHistoryData = {
-  logType: 'activity' | 'history';
+  logType: string | null;
 };
 
 export const useGetItemHistory = () => {
@@ -15,13 +16,14 @@ export const useGetItemHistory = () => {
   const { activeItemType, activeItemId } = useAppSelector((state) => state.workspace);
 
   const getItemHistory = async (data: GetItemHistoryData) => {
+    const type = data.logType === pilotTabs.ACTIVITY_LOG ? 'activity' : 'history';
     const response = await requestNew<IHistoryRes>({
       url: 'activity-logs/list',
       method: 'POST',
       data: {
         model: activeItemType,
         model_id: activeItemId,
-        type: data.logType !== undefined ? data.logType : null
+        type
       }
     });
 

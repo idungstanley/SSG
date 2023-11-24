@@ -19,6 +19,7 @@ import {
   setSaveSettingList,
   setSaveSettingOnline,
   setSubtasks,
+  setTaskColumnIndex,
   setTasks
 } from '../../features/task/taskSlice';
 import TaskQuickAction from '../workspace/tasks/component/taskQuickActions/TaskQuickAction';
@@ -33,6 +34,8 @@ import { generateSubtasksList } from '../../utils/generateLists';
 import { generateUrlWithViewId } from '../../app/helpers';
 import { IView } from '../../features/hubs/hubs.interfaces';
 import { defaultTaskTemplate } from '../../components/Views/ui/Table/newTaskTemplate/DefaultTemplate';
+import { setShowPilotSideOver } from '../../features/general/slideOver/slideOverSlice';
+import { Spinner } from '../../common';
 
 export function ListPage() {
   const dispatch = useAppDispatch();
@@ -45,8 +48,13 @@ export function ListPage() {
     subtasks,
     splitSubTaskState: isSplitMode,
     filters: { option },
-    keyBoardSelectedIndex
+    keyBoardSelectedIndex,
+    taskColumnIndex,
+    taskColumns,
+    KeyBoardSelectedTaskData
   } = useAppSelector((state) => state.task);
+  const { activeView } = useAppSelector((state) => state.workspace);
+  const { currentWorkspaceId } = useAppSelector((state) => state.auth);
 
   const [tasksFromRes, setTasksFromRes] = useState<ITaskFullList[]>([]);
   const [listDetailsFromRes, setListDetailsFromRes] = useState<IListDetailRes>();
@@ -68,29 +76,66 @@ export function ListPage() {
   });
 
   // get list tasks
-  const { data, hasNextPage, fetchNextPage, isFetching } = getTaskListService(listId);
+  const { data, hasNextPage, fetchNextPage, isFetching, isLoading } = getTaskListService(listId);
 
   const hasTasks = data?.pages[0].data.tasks.length;
 
   const combinedArr = Object.values(tasksFromRes).flatMap((lists) => lists);
 
   const handleKeyDown = (e: KeyboardEvent) => {
-    if (e.key === 'ArrowUp' && keyBoardSelectedIndex !== null) {
-      const newIndex = Math.max(0, keyBoardSelectedIndex - 1);
-      dispatch(setKeyBoardSelectedIndex(newIndex));
-    } else if (e.key === 'ArrowDown' && keyBoardSelectedIndex !== null) {
-      const newIndex = Math.min(combinedArr.length - 1, keyBoardSelectedIndex + 1);
-      dispatch(setKeyBoardSelectedIndex(newIndex));
-    } else if (e.key === 'ArrowUp' || (e.key === 'ArrowDown' && keyBoardSelectedIndex === null)) {
-      dispatch(setKeyBoardSelectedIndex(0));
+    if (e.key === 'ArrowUp') {
+      if (keyBoardSelectedIndex !== null) {
+        const newIndex = Math.max(0, keyBoardSelectedIndex - 1);
+        dispatch(setKeyBoardSelectedIndex(newIndex));
+      } else {
+        dispatch(setKeyBoardSelectedIndex(0));
+      }
+    } else if (e.key === 'ArrowDown') {
+      if (keyBoardSelectedIndex !== null) {
+        const newIndex = Math.min(combinedArr.length - 1, keyBoardSelectedIndex + 1);
+        dispatch(setKeyBoardSelectedIndex(newIndex));
+      } else {
+        dispatch(setKeyBoardSelectedIndex(0));
+      }
+    } else if (e.key === 'ArrowLeft' && taskColumnIndex !== null) {
+      const newIndex = Math.max(0, taskColumnIndex - 1);
+      dispatch(setTaskColumnIndex(newIndex));
+    }
+
+    if (e.key === 'ArrowRight' && taskColumnIndex !== null) {
+      const newIndex = Math.min(taskColumns.length - 1, taskColumnIndex + 1);
+      dispatch(setTaskColumnIndex(newIndex));
+    }
+
+    if (e.key === 'Enter' && KeyBoardSelectedTaskData !== null) {
+      dispatch(
+        setShowPilotSideOver({
+          show: true,
+          id: KeyBoardSelectedTaskData.id,
+          title: KeyBoardSelectedTaskData.name,
+          type: 'task'
+        })
+      );
+      dispatch(
+        setActiveItem({
+          activeItemId: KeyBoardSelectedTaskData.id,
+          activeItemType: 'task',
+          activeItemName: KeyBoardSelectedTaskData.name
+        })
+      );
+      navigate(
+        `/${currentWorkspaceId}/tasks/l/${KeyBoardSelectedTaskData.list_id}/t/${KeyBoardSelectedTaskData.id}/v/${activeView?.id}`,
+        {
+          replace: true
+        }
+      );
     }
   };
-
   useEffect(() => {
     window.addEventListener('keydown', handleKeyDown);
 
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [keyBoardSelectedIndex]);
+  }, [keyBoardSelectedIndex, taskColumns, taskColumnIndex, KeyBoardSelectedTaskData]);
 
   useEffect(() => {
     if (listId) {
@@ -206,9 +251,9 @@ export function ListPage() {
   const handleScroll = (e: UIEvent<HTMLDivElement>) => {
     if (hasNextPage && !isFetching) {
       const container = e.target as HTMLElement;
-      const twoThirdsOfScroll = 0.66;
+      const scrollPositionForLoading = 0.9;
       const scrollDifference =
-        container?.scrollHeight * twoThirdsOfScroll - container.scrollTop - container.clientHeight;
+        container?.scrollHeight * scrollPositionForLoading - container.scrollTop - container.clientHeight;
       const range = 1;
       if (scrollDifference <= range) {
         fetchNextPage();
@@ -231,18 +276,27 @@ export function ListPage() {
       >
         <>
           <Header />
-          <VerticalScroll onScroll={onScroll}>
-            {/* main content */}
-            <section style={{ minHeight: '0', maxHeight: '83vh' }} className="w-full h-full p-4 pb-0 space-y-10">
-              <TaskQuickAction />
 
-              {tasksStore[listId as string]?.length ? (
-                <List tasks={tasksStore[listId as string]} combinedTasksArr={combinedArr} />
-              ) : (
-                !isFetching && !hasTasks && <List tasks={defaultTaskTemplate} />
-              )}
-            </section>
-          </VerticalScroll>
+          {isLoading || isFetching ? (
+            <div
+              className="flex items-center justify-center w-full h-full mx-auto mt-5"
+              style={{ minHeight: '0', maxHeight: '83vh' }}
+            >
+              <Spinner color="#0F70B7" />
+            </div>
+          ) : (
+            <VerticalScroll onScroll={onScroll}>
+              {/* main content */}
+              <section style={{ minHeight: '0', maxHeight: '83vh' }} className="w-full h-full p-4 pb-0 space-y-10">
+                <TaskQuickAction />
+                {tasksStore[listId as string]?.length ? (
+                  <List tasks={tasksStore[listId as string]} combinedTasksArr={combinedArr} />
+                ) : (
+                  !isFetching && !hasTasks && <List tasks={defaultTaskTemplate} />
+                )}
+              </section>
+            </VerticalScroll>
+          )}
         </>
       </Page>
     </>
