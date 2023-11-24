@@ -251,7 +251,7 @@ export function ListPage() {
   const handleScroll = (e: UIEvent<HTMLDivElement>) => {
     if (hasNextPage && !isFetching) {
       const container = e.target as HTMLElement;
-      const scrollPositionForLoading = 0.9;
+      const scrollPositionForLoading = 0.7;
       const scrollDifference =
         container?.scrollHeight * scrollPositionForLoading - container.scrollTop - container.clientHeight;
       const range = 1;
