@@ -276,7 +276,7 @@ export function RealTime() {
               // value={timeCounter(timer)}
               onChange={(e) => handleChange(e.target.value)}
               className="w-16 h-5 bg-none text-alsoit-text-md text-center tracking-wide px-1.5 border-none hover:ring-0 focus:ring-0"
-              placeholder="05:00:00"
+              placeholder="HH:mm:ss"
             />
           </div>
         )}
