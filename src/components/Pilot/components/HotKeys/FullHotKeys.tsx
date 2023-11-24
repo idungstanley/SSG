@@ -39,7 +39,7 @@ export default function FullHotkeysList({ tabs, showModal, setShowModal }: Hotke
   });
 
   const HOTKEY_WIDTH = 30;
-  const MARGIN_WIDTH = 20;
+  const MARGIN_WIDTH = 16;
   const SLIDE_TOGGLE_WIDTH = 40;
 
   useEffect(() => {

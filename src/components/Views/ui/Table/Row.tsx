@@ -14,8 +14,6 @@ import Enhance from '../../../badges/Enhance';
 import {
   THREE_SUBTASKS_LEVELS,
   TWO_SUBTASKS_LEVELS,
-  setAssignOnHoverListId,
-  setAssignOnHoverTask,
   setDefaultSubtaskId,
   setShowNewTaskField,
   setShowNewTaskId

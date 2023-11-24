@@ -29,7 +29,7 @@ export function WalletPage() {
   const { walletId, taskId } = useParams();
   const navigate = useNavigate();
 
-  const { tasks: tasksStore, saveSettingLocal, subtasks, scrollGroupView } = useAppSelector((state) => state.task);
+  const { tasks: tasksStore, saveSettingLocal, scrollGroupView } = useAppSelector((state) => state.task);
 
   const formatSettings = useformatSettings();
 

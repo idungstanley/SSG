@@ -49,7 +49,6 @@ export default function HubPage() {
   const {
     tasks: tasksStore,
     saveSettingLocal,
-    subtasks,
     scrollGroupView,
     keyBoardSelectedIndex,
     taskColumnIndex,
