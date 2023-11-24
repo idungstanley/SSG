@@ -162,6 +162,7 @@ interface TaskState {
   tasks: Record<string, ITaskFullList[]>;
   subtasks: Record<string, ITaskFullList[]>;
   taskRootIds: Record<string, string[]>;
+  globalSearchResult: Task[] | null;
   currentTaskIdForPilot: string | null;
   watchersData: string[];
   removeWatcherId: null | string;
@@ -302,6 +303,7 @@ const initialState: TaskState = {
     notepad: false
   },
   userSettingsProfile: [],
+  globalSearchResult: null,
   removeWatcherId: null,
   myTaskData: [],
   taskColumns: [],
@@ -467,6 +469,9 @@ export const taskSlice = createSlice({
     },
     setRootTaskIds(state, action: PayloadAction<string[] | undefined>) {
       state.rootTaskIds = action.payload;
+    },
+    setGlobalSearchResult(state, action: PayloadAction<Task[] | null>) {
+      state.globalSearchResult = action.payload;
     },
     setFilterFields(state, action: PayloadAction<FilterWithId[]>) {
       state.filters = { ...state.filters, fields: action.payload };
@@ -859,6 +864,7 @@ export const {
   setFiltersUpdated,
   setSubtasksFiltersUpdated,
   setAssigneeIds,
+  setGlobalSearchResult,
   setStatusId,
   setCurrTaskListId,
   setSearchValue,
