@@ -244,7 +244,9 @@ export function Row({
             </button>
           </ToolTip>
           <div className="flex items-center justify-center mr-1 space-x-1">
-            {level < MAX_SUBTASKS_LEVEL ? <Badges task={task} /> : null}
+            {level < MAX_SUBTASKS_LEVEL ? (
+              <Badges setShowSubtasks={setShowSubTasks} showSubtasks={showSubTasks} task={task} />
+            ) : null}
             {/* Copy */}
             {/* effects */}
             <ToolTip title="Apply Effects">

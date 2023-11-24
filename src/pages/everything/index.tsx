@@ -11,17 +11,26 @@ import { Header } from '../../components/TasksHeader';
 import { VerticalScroll } from '../../components/ScrollableContainer/VerticalScroll';
 import { GroupHorizontalScroll } from '../../components/ScrollableContainer/GroupHorizontalScroll';
 import { setKeyBoardSelectedIndex, setTaskColumnIndex, setTasks } from '../../features/task/taskSlice';
+import { setShowPilotSideOver } from '../../features/general/slideOver/slideOverSlice';
+import { setActiveItem } from '../../features/workspace/workspaceSlice';
+import { useNavigate } from 'react-router-dom';
+import { EntityType } from '../../utils/EntityTypes/EntityType';
 
 export default function EverythingPage() {
   const dispatch = useAppDispatch();
+
+  const navigate = useNavigate();
 
   const {
     tasks: tasksStore,
     scrollGroupView,
     keyBoardSelectedIndex,
     taskColumns,
-    taskColumnIndex
+    taskColumnIndex,
+    KeyBoardSelectedTaskData
   } = useAppSelector((state) => state.task);
+  const { activeView } = useAppSelector((state) => state.workspace);
+  const { currentWorkspaceId } = useAppSelector((state) => state.auth);
 
   const { data, hasNextPage, fetchNextPage, isFetching } = UseGetEverythingTasks();
 
@@ -60,12 +69,36 @@ export default function EverythingPage() {
       const newIndex = Math.min(taskColumns.length - 1, taskColumnIndex + 1);
       dispatch(setTaskColumnIndex(newIndex));
     }
+
+    if (e.key === 'Enter' && KeyBoardSelectedTaskData !== null) {
+      dispatch(
+        setShowPilotSideOver({
+          show: true,
+          id: KeyBoardSelectedTaskData.id,
+          title: KeyBoardSelectedTaskData.name,
+          type: EntityType.task
+        })
+      );
+      navigate(
+        `/${currentWorkspaceId}/tasks/l/${KeyBoardSelectedTaskData.list_id}/t/${KeyBoardSelectedTaskData.id}/v/${activeView?.id}`,
+        {
+          replace: true
+        }
+      );
+      dispatch(
+        setActiveItem({
+          activeItemId: KeyBoardSelectedTaskData.id,
+          activeItemType: EntityType.task,
+          activeItemName: KeyBoardSelectedTaskData.name
+        })
+      );
+    }
   };
 
   useEffect(() => {
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [keyBoardSelectedIndex, taskColumns, taskColumnIndex]);
+  }, [keyBoardSelectedIndex, taskColumns, taskColumnIndex, KeyBoardSelectedTaskData]);
 
   // infinite scroll
   const onScroll = (e: UIEvent<HTMLDivElement>) => {

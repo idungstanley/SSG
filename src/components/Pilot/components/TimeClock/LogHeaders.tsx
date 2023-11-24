@@ -7,34 +7,14 @@ import {
 import { useGetTimeEntriesMutation } from '../../../../features/task/taskService';
 import { EntityType } from '../../../../utils/EntityTypes/EntityType';
 import PlusCircle from '../../../../assets/icons/AddCircle';
-import { TabsDropDown } from './TabsDropDown';
+import DropdownWithHeader from './components/DropdownWithHeader';
 
 export function LogHeaders() {
-  // const dispatch = useAppDispatch();
-
   const { timeSortArr } = useAppSelector((state) => state.task);
   const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
-
-  const [dropDown, setDropDown] = useState<{ customProperties: boolean }>({
-    customProperties: false
-  });
+  const [anchor, setAnchor] = useState<HTMLElement | null>(null);
 
   const { mutateAsync } = useGetTimeEntriesMutation();
-
-  // const handleClick = ({ field }: { field: string }) => {
-  //   const newData: SortOption[] = timeSortArr.map((data) => {
-  //     if (data.field === field) {
-  //       return { field, dir: data.dir === 'asc' ? 'desc' : 'asc' };
-  //     }
-  //     return data;
-  //   });
-
-  //   if (!newData.some((data) => data.field === field)) {
-  //     newData.push({ field, dir: 'asc' });
-  //   }
-
-  //   dispatch(setTimeSortArr(newData));
-  // };
 
   const headers = () => (
     <tr className="w-full flex space-x-0.5">
@@ -59,10 +39,9 @@ export function LogHeaders() {
               </span>
             )}
             {index === 1 && (
-              <PlusCircle
-                className="cursor-pointer"
-                onClick={() => setDropDown((prev) => ({ ...prev, customProperties: !prev.customProperties }))}
-              />
+              <div onClick={(e) => setAnchor(e.currentTarget)}>
+                <PlusCircle className="cursor-pointer" />
+              </div>
             )}
           </th>
         );
@@ -82,24 +61,16 @@ export function LogHeaders() {
   return (
     <div className="overflow-x-visible w-full">
       <div className="flex space-x-2">{headers()}</div>
-      {dropDown.customProperties && (
-        <TabsDropDown
-          header="custom property"
-          subHeader="select property"
-          closeModal={() => setDropDown((prev) => ({ ...prev, customProperties: !prev.customProperties }))}
-          styles="w-44 left-36"
-          subStyles="left-8"
-        >
-          {TIME_INVENTORY_CUSTOM_PROPERTIES.map((entity) => (
-            <div
-              className="flex w-full p-1.5 space-y-2 text-orange-500 capitalize cursor-pointer hover:bg-alsoit-gray-50"
-              key={entity.value}
-            >
-              {entity.name}
-            </div>
-          ))}
-        </TabsDropDown>
-      )}
+      <DropdownWithHeader anchor={anchor} setAnchor={setAnchor} header="custom property" subHeader="select property">
+        {TIME_INVENTORY_CUSTOM_PROPERTIES.map((entity) => (
+          <div
+            className="flex w-full p-1.5 space-y-2 text-orange-500 capitalize cursor-pointer hover:bg-alsoit-gray-50"
+            key={entity.value}
+          >
+            {entity.name}
+          </div>
+        ))}
+      </DropdownWithHeader>
     </div>
   );
 }

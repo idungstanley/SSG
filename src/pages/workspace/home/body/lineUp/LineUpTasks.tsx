@@ -1,6 +1,16 @@
-import React from 'react';
-import StatusDropdown from '../../../../../components/status/StatusDropdown';
+import React, { useEffect, useState } from 'react';
 import { Task } from '../../../../../features/task/interface.tasks';
+import { SortableContext, arrayMove, rectSortingStrategy, sortableKeyboardCoordinates } from '@dnd-kit/sortable';
+import LineUpTasksItem from './LineUpTasksItem';
+import {
+  DndContext,
+  DragEndEvent,
+  KeyboardSensor,
+  PointerSensor,
+  closestCenter,
+  useSensor,
+  useSensors
+} from '@dnd-kit/core';
 
 interface ILineUpTasks {
   lineUp: Task[];
@@ -8,24 +18,52 @@ interface ILineUpTasks {
 }
 
 export default function LineUpTasks({ lineUp, handleRemoveLineUpTask }: ILineUpTasks) {
-  return lineUp.map((task) => (
-    <div key={task.id} className="p-1 px-2 pt-2 rounded-sm bg-alsoit-gray-50" style={{ minWidth: '253px' }}>
-      <div className="flex justify-between p-1 pl-4 space-x-4 bg-white rounded-sm shadow-md group ">
-        <div className="flex items-center space-x-4">
-          <div className="pointer-events-none">
-            <StatusDropdown taskCurrentStatus={task.status} taskStatuses={task.task_statuses} />
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates
+    })
+  );
+
+  const idsFromLS = JSON.parse(localStorage.getItem('lineUpTasks') || '[]') as string[];
+
+  const [items, setItems] = useState(lineUp?.sort((a, b) => idsFromLS?.indexOf(a.id) - idsFromLS?.indexOf(b.id)));
+
+  useEffect(() => {
+    setItems(lineUp?.sort((a, b) => idsFromLS?.indexOf(a.id) - idsFromLS?.indexOf(b.id)));
+  }, [lineUp]);
+
+  const handleDragEnd = (e: DragEndEvent) => {
+    const { active, over } = e;
+
+    if (active.id !== over?.id) {
+      const findActive = items.find((i) => i.id === active.id);
+      const findOver = items.find((i) => i.id === over?.id);
+
+      if (findActive && findOver) {
+        setItems((items) => {
+          const oldIndex = items.indexOf(findActive);
+          const newIndex = items.indexOf(findOver);
+
+          const sortArray = arrayMove(items, oldIndex, newIndex);
+
+          localStorage.setItem('lineUpTasks', JSON.stringify([...sortArray.map((i) => i.id)]));
+
+          return sortArray;
+        });
+      }
+    }
+  };
+
+  return (
+    <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={(e) => handleDragEnd(e)}>
+      <SortableContext strategy={rectSortingStrategy} items={items}>
+        {lineUp.map((task) => (
+          <div key={task.id}>
+            <LineUpTasksItem handleRemoveLineUpTask={handleRemoveLineUpTask} task={task} />
           </div>
-          <h1 className="mb-1 truncate" style={{ maxWidth: '150px' }}>
-            {task.name}
-          </h1>
-        </div>
-        <p
-          className="pr-2 opacity-0 cursor-pointer group-hover:opacity-100"
-          onClick={() => handleRemoveLineUpTask(task)}
-        >
-          x
-        </p>
-      </div>
-    </div>
-  ));
+        ))}
+      </SortableContext>
+    </DndContext>
+  );
 }

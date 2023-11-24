@@ -82,7 +82,7 @@ export default function FullTabs({ tabs }: TabsProps) {
       {showTabLabel ? (
         <VerticalScroll>
           <div style={{ height: size }}>
-            <div ref={blockRef} className={cl('relative h-fit col-span-1 border-r flex items-center')}>
+            <div ref={blockRef} className={cl('relative h-fit col-span-1 border-r-0 flex items-center')}>
               <nav ref={navRef} className={cl('relative h-full grid grid-cols-1 divide-y grow')} aria-label="Tabs">
                 <SortableProvider disableOverflow={disableOverflow} items={tabItems} setItems={setTabItems}>
                   {tabItems.map((tab) => (
