@@ -3,7 +3,6 @@ import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { EntityType } from '../../../../utils/EntityTypes/EntityType';
 import {
   setActiveTimeout,
-  setEstimatedTimeStatus,
   setTimeType,
   setTimerInterval,
   setTimerStatus,
@@ -22,6 +21,7 @@ import { ClockIcon } from '../../../../assets/icons/ClockIcon';
 import { runCountDown } from '../../../../utils/timeCountDown';
 import { IDuration } from '../../../../features/task/interface.tasks';
 import { StopIcon } from '../../../../assets/icons/StopIcon';
+import Timer from './components/EstimatedTime';
 import DropdownWithHeader from './components/DropdownWithHeader';
 
 export function RealTime() {
@@ -41,10 +41,6 @@ export function RealTime() {
   const [prompt, setPrompt] = useState<boolean>(false);
   const [newTimer, setNewTimer] = useState<boolean>(false);
   const [anchor, setAnchor] = useState<HTMLElement | null>(null);
-  const [validation, setValidation] = useState<{ timer: boolean }>({
-    timer: false
-  });
-
   const mutation = EndTimeEntriesService();
   const { mutate } = StartTimeEntryService();
 
@@ -102,7 +98,7 @@ export function RealTime() {
 
   const handleChange = (e: string) => {
     setCountDown(e);
-    hasNonZeroParts(e) && setValidation((prev) => ({ ...prev, timer: true }));
+    hasNonZeroParts(e);
   };
 
   const sameEntity = () => activeItemId === (timerLastMemory.taskId || timerLastMemory.hubId || timerLastMemory.listId);
@@ -231,7 +227,7 @@ export function RealTime() {
   return (
     <div className="flex justify-center items-center text-alsoit-text-md tracking-widest z-30 relative">
       <div className="flex items-center w-full relative">
-        <div className="w-1/3 relative flex items-center">
+        <div className="relative flex items-center">
           {timeType === 'timer' ? (
             <HourGlassIcon className="w-4 h-4" />
           ) : (
@@ -260,17 +256,7 @@ export function RealTime() {
         )}
         {timeType === TIME_TABS.timer && (
           <div className="flex items-center">
-            <StartIcon
-              className={`w-4 h-4 ${validation.timer ? 'opacity-100 cursor-pointer' : 'opacity-30 cursor-not-allowed'}`}
-              onClick={() => validation.timer && dispatch(setEstimatedTimeStatus(true))}
-            />
-            <input
-              type="text"
-              // value={timeCounter(timer)}
-              onChange={(e) => handleChange(e.target.value)}
-              className="w-16 h-5 bg-none text-alsoit-text-md text-center tracking-wide px-1.5 border-none hover:ring-0 focus:ring-0"
-              placeholder="05:00:00"
-            />
+            <Timer />
           </div>
         )}
       </div>
