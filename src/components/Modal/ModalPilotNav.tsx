@@ -108,7 +108,7 @@ export default function ModalPilotNav({
   return (
     <div
       id="pilot_nav_modal"
-      className="bg-white fixed py-3 pilot-modal-wrapper"
+      className="bg-white fixed pb-3 pilot-modal-wrapper"
       style={{
         width: '204px',
         height: 'auto',
@@ -120,10 +120,10 @@ export default function ModalPilotNav({
         boxShadow: '0px 0px 5px 0px #00000040'
       }}
     >
-      <div className="my-2 space-y-2 text-center font-semibold relative">
+      <div className="mb-2 mt-2 text-center font-semibold relative">
         <span
           className="absolute right-0 hover:rotate-90 transition duration-500"
-          style={{ top: '-12px', right: '5px' }}
+          style={{ top: '0', right: '5px', zIndex: '51' }}
           onClick={() => modalItemClick(null)}
         >
           <Close active={false} width="15" height="15" />

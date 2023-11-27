@@ -90,7 +90,7 @@ export default function FullHotkeysList({ tabs, showModal, setShowModal }: Hotke
                       title={hotkey.label}
                       className={cl(
                         activeTabId === hotkey.id ? 'text-primary-500 bg-primary-200' : 'text-gray-600',
-                        'mx-2 my-1 flex items-center justify-center border px-1 py-1 rounded-md'
+                        'mx-2 my-1 flex items-center justify-center border-0 px-1 py-1 rounded-md'
                       )}
                       style={{ width: '30px', height: '30px' }}
                       key={hotkey.id}

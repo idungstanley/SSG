@@ -51,7 +51,7 @@ interface AccountState {
   scrollTop: string | number;
   baseColor: string;
   lightBaseColor: string;
-  userSettingsData?: IUserParams;
+  userSettingsData: IUserParams;
   places: Place[];
   selectListColours: string[];
   calculatedContentWidth: string;
@@ -104,11 +104,22 @@ export const accountSlice = createSlice({
       state.userSettingsData = action.payload;
     },
     setAdjustableWidths: (state, action: PayloadAction<AjustableWidths>) => {
-      state.sidebarWidth = action.payload.sidebarWidth ? action.payload.sidebarWidth : sidebarWidthFromLS;
-      state.extendedBarWidth = action.payload.extendedBarWidth
+      state.userSettingsData.sidebarWidth = action.payload.sidebarWidth
+        ? action.payload.sidebarWidth
+        : sidebarWidthFromLS;
+      state.userSettingsData.extendedBarWidth = action.payload.extendedBarWidth
         ? action.payload.extendedBarWidth
         : extendedBarWidthFromLS;
-      state.pilotWidth = action.payload.pilotWidth ? action.payload.pilotWidth : pilotWidthFromLS;
+      state.userSettingsData.pilotWidth = action.payload.pilotWidth;
+    },
+    setAdjustablePilotWidths: (state, action: PayloadAction<number>) => {
+      state.pilotWidth = action.payload;
+    },
+    setAdjustableSidebarWidths: (state, action: PayloadAction<number>) => {
+      state.sidebarWidth = action.payload;
+    },
+    setAdjustableExtendedBarWidths: (state, action: PayloadAction<number>) => {
+      state.extendedBarWidth = action.payload;
     },
     setShowSidebar: (state, action: PayloadAction<boolean>) => {
       state.showSidebar = action.payload;
@@ -149,7 +160,10 @@ export const {
   setCalculatedContentWidth,
   setSelectedListColours,
   setColourPaletteData,
-  setAdjustableWidths
+  setAdjustableWidths,
+  setAdjustableExtendedBarWidths,
+  setAdjustablePilotWidths,
+  setAdjustableSidebarWidths
 } = accountSlice.actions;
 
 export default accountSlice.reducer;
