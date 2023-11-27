@@ -131,7 +131,7 @@ const initialState: workspaceState = {
   activeClockTab: 'Real Time',
   activeStatusManagementTabId: 'custom',
   activeSubHubManagerTabId: 'create_hub',
-  activeSubCommunicationTabId: 'email',
+  activeSubCommunicationTabId: 'chat',
   fetchAllWorkspace: false,
   showAddHotKeyDropdown: false,
   showExtendedBar: false,

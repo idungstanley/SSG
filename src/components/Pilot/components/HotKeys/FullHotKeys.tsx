@@ -39,7 +39,7 @@ export default function FullHotkeysList({ tabs, showModal, setShowModal }: Hotke
   });
 
   const HOTKEY_WIDTH = 30;
-  const MARGIN_WIDTH = 20;
+  const MARGIN_WIDTH = 16;
   const SLIDE_TOGGLE_WIDTH = 40;
 
   useEffect(() => {
@@ -84,18 +84,20 @@ export default function FullHotkeysList({ tabs, showModal, setShowModal }: Hotke
             {hotkeys.map((hotkey) => (
               <div key={hotkey.label}>
                 <ToolTip title={hotkey.label}>
-                  <button
-                    onClick={() => dispatch(setActiveTabId(activeTabId === hotkey.id ? undefined : hotkey.id))}
-                    title={hotkey.label}
-                    className={cl(
-                      activeTabId === hotkey.id ? 'text-primary-500 bg-primary-200' : 'text-gray-600',
-                      'mx-2 my-1 flex items-center justify-center border-0 px-1 py-1 rounded-md'
-                    )}
-                    style={{ width: '30px', height: '30px' }}
-                    key={hotkey.id}
-                  >
-                    {hotkey.icon}
-                  </button>
+                  <div>
+                    <button
+                      onClick={() => dispatch(setActiveTabId(activeTabId === hotkey.id ? undefined : hotkey.id))}
+                      title={hotkey.label}
+                      className={cl(
+                        activeTabId === hotkey.id ? 'text-primary-500 bg-primary-200' : 'text-gray-600',
+                        'mx-2 my-1 flex items-center justify-center border-0 px-1 py-1 rounded-md'
+                      )}
+                      style={{ width: '30px', height: '30px' }}
+                      key={hotkey.id}
+                    >
+                      {hotkey.icon}
+                    </button>
+                  </div>
                 </ToolTip>
               </div>
             ))}

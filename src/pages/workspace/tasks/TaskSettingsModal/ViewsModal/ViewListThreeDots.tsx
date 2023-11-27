@@ -188,7 +188,7 @@ export default function ViewListThreeDots({ closeAllModal }: IViewListThreeDotsP
         onClose={() => setDublicateEl(null)}
         style={{ marginLeft: '170px' }}
       >
-        <div style={{ width: '180px' }}>
+        <div style={{ width: '180px' }} key="dublicateEl">
           {dublicateOptions.map((option) => (
             <div
               key={option.id}
