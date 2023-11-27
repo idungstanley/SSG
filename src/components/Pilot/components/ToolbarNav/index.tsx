@@ -17,7 +17,7 @@ interface ToolbarNavInterface {
 export default function ToolbarNav() {
   const navigate = useNavigate();
   const { currentWorkspaceId } = useAppSelector((state) => state.auth);
-  const { activeItemName } = useAppSelector((state) => state.workspace);
+  const { activeItemName, activeItemType } = useAppSelector((state) => state.workspace);
   const toolbarNavItems: ToolbarNavInterface[] = [];
   const [modalOpened, setModalOpened] = useState<string>('');
   const [modalNavTree, setModalNavTree] = useState<ToolbarNavInterface[]>([]);
@@ -112,9 +112,13 @@ export default function ToolbarNav() {
     handleLocation(url);
   };
 
+  console.log(activeItemType);
+
   return (
     <>
-      <div className="flex items-center w-4 h-4 overflow-hidden rounded-full mr-1">
+      <div
+        className={`flex items-center w-4 h-4 overflow-hidden mr-1 ${activeItemType == 'list' ? 'rounded-full' : ''}`}
+      >
         <ActiveEntityAvatar width="w-4" height="h-4" size="8px" />
       </div>
       {toolbarNavTree.map((item) => (
