@@ -1,20 +1,22 @@
-import dayjs from 'dayjs';
+import dayjs, { Dayjs } from 'dayjs';
 import { useEffect, useMemo, useState } from 'react';
 import { changeDateMonth, getCalendarRows } from '../../utils/calendar';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { setSelectedDate } from '../../features/workspace/workspaceSlice';
+import { setActivityFilterDate, setSelectedDate } from '../../features/workspace/workspaceSlice';
 import { setHistoryMemory, setTaskSelectedDate } from '../../features/task/taskSlice';
 import CircleArrowLeft from '../../assets/icons/CircleArrowLeft';
 import CircleArrowRight from '../../assets/icons/CircleArrowRight';
 import RecurringIcon from '../../assets/icons/Recurring';
+import { FilterListIcon } from '../../assets/icons/FilterListIcon';
 
 type Props = {
   range?: boolean;
   miniMode?: boolean;
   fullCalendar?: boolean;
+  dateFilter?: boolean;
 };
 
-export default function MiniDatePicker({ range, miniMode, fullCalendar }: Props) {
+export default function MiniDatePicker({ range, miniMode, fullCalendar, dateFilter }: Props) {
   const dispatch = useAppDispatch();
   const [today] = useState(dayjs());
   const [shownDate, setShownDate] = useState<dayjs.Dayjs>(today);
@@ -23,11 +25,29 @@ export default function MiniDatePicker({ range, miniMode, fullCalendar }: Props)
     leftIcon: true
   });
   const [hoveredDate, setHoveredDate] = useState<dayjs.Dayjs | null>(null);
+
   const { HistoryFilterMemory, selectedDate: taskTime } = useAppSelector((state) => state.task);
-  const { selectedDate } = useAppSelector((state) => state.workspace);
+  const { selectedDate, activityFilterDate } = useAppSelector((state) => state.workspace);
   const { start_week } = useAppSelector((state) => state.userSetting);
 
   const handleClick = (date: dayjs.Dayjs) => {
+    if (dateFilter && dayjs.isDayjs(activityFilterDate?.start) && dayjs.isDayjs(activityFilterDate?.end))
+      return dispatch(setActivityFilterDate({ start: date }));
+
+    if (
+      dateFilter &&
+      activityFilterDate !== null &&
+      dayjs.isDayjs(activityFilterDate?.start) &&
+      !activityFilterDate.end
+    ) {
+      return dispatch(setActivityFilterDate({ start: activityFilterDate?.start as Dayjs, end: date }));
+    } else if (
+      dateFilter &&
+      (activityFilterDate === null || (activityFilterDate !== null && dayjs.isDayjs(activityFilterDate?.end)))
+    ) {
+      return dispatch(setActivityFilterDate({ start: date, end: activityFilterDate?.end as Dayjs }));
+    }
+
     if (!selectedDate?.dateType || (taskTime?.from && !range)) {
       dispatch(setSelectedDate({ date: date, dateType: 'due' }));
       dispatch(setTaskSelectedDate({ from: date }));
@@ -103,6 +123,12 @@ export default function MiniDatePicker({ range, miniMode, fullCalendar }: Props)
     setShownDate(changeDateMonth(shownDate, isNextMonth));
   };
 
+  const filterFloat = () => (
+    <div className="absolute -top-2 right-0 w-3 h-3">
+      <FilterListIcon />
+    </div>
+  );
+
   useEffect(() => {
     if (taskTime?.from) {
       setShownDate(taskTime.from);
@@ -161,7 +187,7 @@ export default function MiniDatePicker({ range, miniMode, fullCalendar }: Props)
               {cells.map(({ text, value }, i) => (
                 <div
                   key={`${text}-${i}`}
-                  className={`w-5 h-5 flex justify-center items-center rounded-md p-4 text-alsoit-text-lg font-semibold cursor-pointer ${
+                  className={`w-5 h-5 flex justify-center items-center rounded-md p-4 text-alsoit-text-lg font-semibold cursor-pointer relative ${
                     isStartDate(value)
                       ? 'bg-blue-600 text-white'
                       : isEndDate(value) && range
@@ -181,6 +207,11 @@ export default function MiniDatePicker({ range, miniMode, fullCalendar }: Props)
                   onMouseLeave={() => setHoveredDate(null)}
                 >
                   {text}
+                  {value == activityFilterDate?.start
+                    ? filterFloat()
+                    : value == activityFilterDate?.end
+                    ? filterFloat()
+                    : null}
                 </div>
               ))}
             </div>

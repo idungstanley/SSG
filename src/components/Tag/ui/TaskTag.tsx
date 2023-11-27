@@ -111,7 +111,9 @@ export default function TaskTag({ tag, entity_id, entity_type }: taskTageProps) 
         )}
       </div>
       <Menu anchorEl={anchorEl} open={!!anchorEl} onClose={() => setAnchorEl(null)}>
-        <EditTagModal taskId={entity_id} tag={tag} onClose={() => setAnchorEl(null)} />
+        <div key="editTagModal">
+          <EditTagModal taskId={entity_id} tag={tag} onClose={() => setAnchorEl(null)} />
+        </div>
       </Menu>
     </>
   );

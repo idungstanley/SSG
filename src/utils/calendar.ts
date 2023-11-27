@@ -348,10 +348,8 @@ export function formatForDatabase(date: Dayjs) {
   return dayjs(date).format('YYYY-MM-DD HH:mm:ss');
 }
 
-export function isDateBetween(checkDateStr: string, startDateStr: string, endDateStr: string) {
+export function isDateBetween(checkDateStr: string, startDate: Dayjs, endDate: Dayjs) {
   const checkDate = dayjs(checkDateStr);
-  const startDate = dayjs(startDateStr);
-  const endDate = dayjs(endDateStr);
 
-  return checkDate.isBetween(startDate, endDate, null, '[]'); // '[]' includes both start and end dates
+  return checkDate.isBetween(startDate, endDate, null, '[]');
 }

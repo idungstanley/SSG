@@ -140,12 +140,12 @@ export default function Assignee({
       )}
       <AlsoitMenuDropdown handleClose={handleClose} anchorEl={anchorEl as HTMLDivElement | null}>
         <div className="overflow-scroll" style={{ maxHeight: '400px' }}>
-          <section className="relative sticky z-10 flex items-center bg-white top-2">
+          <section className="relative sticky z-10 flex items-center bg-white top-1">
             <AiOutlineSearch className="absolute w-5 h-5 right-3" />
             <input
               type="text"
               placeholder="Search..."
-              className="w-11/12 p-2 m-auto border-0 rounded-md focus:outline-none"
+              className="w-11/12 p-2 m-auto border-0 rounded-md focus:outline-none focus:ring-0"
               onKeyDown={handleKeyDown}
               onChange={(e) => searchItem(e.target.value)}
             />
