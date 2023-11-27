@@ -1,18 +1,22 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { initialPlaces } from '../../layout/components/MainLayout/Sidebar/components/Places';
 import { IUserParams, IUserState, Place } from './account.interfaces';
-import { STORAGE_KEYS } from '../../app/config/dimensions';
+import { dimensions, STORAGE_KEYS } from '../../app/config/dimensions';
 import { IPaletteData } from '../workspace/workspace.interfaces';
 
 const showPreviewFromLS = localStorage.getItem('showPreview') as string;
 
 const sidebarFromLS = localStorage.getItem('sidebar');
 //get sidebar width from local storage
-const sidebarWidthFromLS = JSON.parse(localStorage.getItem(STORAGE_KEYS.SIDEBAR_WIDTH) || '""') as number;
+const sidebarWidthFromLS =
+  (JSON.parse(localStorage.getItem(STORAGE_KEYS.SIDEBAR_WIDTH) || '""') as number) || dimensions.navigationBar.default;
 
-const pilotWidthFromLS = JSON.parse(localStorage.getItem(STORAGE_KEYS.PILOT_WIDTH) || '""') as number;
+const pilotWidthFromLS =
+  (JSON.parse(localStorage.getItem(STORAGE_KEYS.PILOT_WIDTH) || '""') as number) || dimensions.pilot.default;
 
-const extendedBarWidthFromLS = JSON.parse(localStorage.getItem(STORAGE_KEYS.EXTENDED_BAR_WIDTH) || '""') as number;
+const extendedBarWidthFromLS =
+  (JSON.parse(localStorage.getItem(STORAGE_KEYS.EXTENDED_BAR_WIDTH) || '""') as number) ||
+  dimensions.extendedBar.default;
 
 const hotKeysFromLS = JSON.parse(localStorage.getItem(STORAGE_KEYS.HOT_KEYS) || '""') as string[];
 
