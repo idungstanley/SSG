@@ -259,7 +259,7 @@ export default function SubDropdown({ cords, placeHubType, walletLevel }: SubDro
         }
       }}
     >
-      <div className="px-2 origin-top-right bg-white" style={{ minWidth: '200px' }}>
+      <div key="subDropdown" className="px-2 origin-top-right bg-white" style={{ minWidth: '200px' }}>
         <div className="w-auto gap-2 mb-1 px-0.5">
           {itemsList.map((item, index) =>
             (lastActiveItem === '' || lastActiveItem === item.title) && item.isVisible ? (

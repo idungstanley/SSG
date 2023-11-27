@@ -87,23 +87,27 @@ const calculateWidthForContent = () => {
     JSON.parse(localStorage.getItem(STORAGE_KEYS.USER_SETTINGS_DATA) || '""') as IUserParams
   ).isPilotMinified as boolean;
 
-  const { showSidebar, userSettingsData } = useAppSelector((state) => state.account);
+  const { showSidebar, userSettingsData, sidebarWidth, pilotWidth, extendedBarWidth } = useAppSelector(
+    (state) => state.account
+  );
   const { show: showFullPilot, id } = useAppSelector((state) => state.slideOver.pilotSideOver);
 
   const { sidebarWidthRD, showExtendedBar } = useAppSelector((state) => state.workspace);
 
-  const sidebarWidth = showSidebar ? sidebarWidthFromLS || userSettingsData?.sidebarWidth : sidebarWidthRD;
+  const sidebarWidthRT = showSidebar ? sidebarWidth || userSettingsData?.sidebarWidth : sidebarWidthRD;
 
-  const extendedBarWidth = showExtendedBar ? extendedBarWidthFromLS || userSettingsData?.extendedBarWidth : 0;
+  const extendedBarWidthRT = showExtendedBar ? extendedBarWidth || userSettingsData?.extendedBarWidth : 0;
 
-  const pilotWidth =
-    showFullPilot && id ? pilotWidthFromLS || userSettingsData?.pilotWidth : !showFullPilot && id ? 50 : 0;
+  const pilotWidthRT = showFullPilot && id ? pilotWidth || userSettingsData?.pilotWidth : !showFullPilot && id ? 50 : 0;
 
   const calculatedContentWidth = useMemo(() => {
-    return `calc(100vw - ${sidebarWidth}px - ${extendedBarWidth}px - ${pilotWidth}px)`;
+    return `calc(100vw - ${sidebarWidthRT}px - ${extendedBarWidthRT}px - ${pilotWidthRT}px)`;
   }, [
     pilotWidth,
     sidebarWidth,
+    extendedBarWidthRT,
+    sidebarWidthRT,
+    pilotWidthRT,
     extendedBarWidth,
     pilotWidthFromLS,
     userSettingsData?.sidebarWidth,

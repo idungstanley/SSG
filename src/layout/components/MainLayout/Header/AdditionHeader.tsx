@@ -127,7 +127,7 @@ export default function AdditionalHeader({ isInsights }: IAdditionalHeaderProps)
               width="w-7"
               textSize="14px"
               roundedStyle="rounded"
-              backgroundColour={item.color ? item.color : type === EntityType.hub ? 'blue' : 'orange'}
+              backgroundColour={item.color ? item.color : type === EntityType.hub ? 'orange' : 'blue'}
             />
           )}
         </div>

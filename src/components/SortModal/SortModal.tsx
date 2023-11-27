@@ -236,7 +236,7 @@ export default function SortModal({
         }
       }}
     >
-      <div className="flex flex-col" style={{ zIndex: '9999' }}>
+      <div key="sortModal" className="flex flex-col" style={{ zIndex: '9999' }}>
         <div className="sticky top-0 z-50 pt-2 bg-white">
           <Input
             name="SearchInput"

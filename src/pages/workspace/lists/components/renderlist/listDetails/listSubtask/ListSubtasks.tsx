@@ -157,7 +157,7 @@ export default function ListSubtasks({ subtasksTitle }: { subtasksTitle: string 
       </div>
 
       <Menu anchorEl={dropdownEl} open={!!dropdownEl} onClose={() => setDropdownEl(null)} style={{ marginTop: '10px' }}>
-        <div className="w-48">
+        <div className="w-48" key="viewSettings">
           {viewSettings.map((view) => (
             <Fragment key={view.id}>
               {view.isShow ? (
@@ -216,7 +216,7 @@ export default function ListSubtasks({ subtasksTitle }: { subtasksTitle: string 
         open={!!dropdownLevelsEl && !!activeViewSetting}
         onClose={() => setDropdownLevelsEl(null)}
       >
-        <div className="w-20">
+        <div className="w-20" key="ListSubtaks">
           {dropdownItems.map((option) => (
             <div key={option.id} className="flex items-center w-full text-sm text-left text-gray-600 hover:bg-gray-300">
               <button
