@@ -110,7 +110,28 @@ export default function ToolbarNav() {
   const modalItemClick = (url: string | null) => {
     setModalOpened('');
     handleLocation(url);
+
+    const activeParentBgElements = document.querySelectorAll('.pilot-nav-parent.bg-alsoit-gray-125');
+
+    activeParentBgElements.forEach((element) => {
+      element.classList.remove('bg-alsoit-gray-125');
+    });
   };
+
+  const arrows = document.querySelectorAll('.pilot-nav-arrow');
+
+  arrows.forEach((arrow) => {
+    const parent = arrow.closest('.pilot-nav-parent');
+    if (parent) {
+      arrow.addEventListener('mouseover', () => {
+        parent.classList.add('bg-alsoit-gray-125');
+      });
+
+      arrow.addEventListener('mouseleave', () => {
+        parent.classList.remove('bg-alsoit-gray-125');
+      });
+    }
+  });
 
   return (
     <>
@@ -120,24 +141,24 @@ export default function ToolbarNav() {
       {toolbarNavTree.map((item) => (
         <div
           key={item.name}
-          className={`flex text-xs font-semibold capitalize truncate items-center text-alsoit-gray-300 overflow-visible whitespace-nowrap rounded py-1 ${
-            lastItem != item ? 'hover:bg-alsoit-gray-125 transition duration-500' : ''
-          }`}
+          className="flex text-xs font-semibold capitalize truncate items-center text-alsoit-gray-300 overflow-visible whitespace-nowrap rounded transition duration-500 pilot-nav-parent"
           style={{
-            paddingLeft: '5px'
+            paddingLeft: '2.5px'
           }}
         >
           <p
-            className={`${lastItem != item ? 'cursor-pointer' : ''}`}
-            style={{ fontSize: '13px' }}
+            className={`py-2 transition duration-500 rounded pilot-nav-child ${
+              lastItem != item ? 'cursor-pointer hover:bg-alsoit-gray-125' : ''
+            }`}
+            style={{ fontSize: '13px', paddingLeft: '2.5px', paddingRight: '2.5px' }}
             onClick={() => handleLocation(item.url)}
           >
             {item.name}
           </p>
           {lastItem !== item && (
             <span
-              className="relative overflow-visible cursor-pointer"
-              style={{ padding: '0 5px 0 5px' }}
+              className="relative overflow-visible cursor-pointer rounded pilot-nav-arrow"
+              style={{ padding: '13px 5px 13px 2.5px' }}
               onClick={() => arrowClick(item.name)}
             >
               <ArrowRightPilot active={modalOpened == item.name} />
