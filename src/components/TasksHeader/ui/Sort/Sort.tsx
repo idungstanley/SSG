@@ -62,7 +62,7 @@ export function Sort({ isSplitSubtasks }: ISortProps) {
       </div>
 
       <Menu anchorEl={dropdownEl} open={!!dropdownEl} onClose={() => setDropdownEl(null)} style={{ marginTop: '10px' }}>
-        <div className="w-48">
+        <div className="w-48" key="sort">
           {Object.keys(options).map((option) => (
             <div
               key={option}

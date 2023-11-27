@@ -29,7 +29,7 @@ export function WalletPage() {
   const { walletId, taskId } = useParams();
   const navigate = useNavigate();
 
-  const { tasks: tasksStore, saveSettingLocal, subtasks, scrollGroupView } = useAppSelector((state) => state.task);
+  const { tasks: tasksStore, saveSettingLocal, scrollGroupView } = useAppSelector((state) => state.task);
 
   const formatSettings = useformatSettings();
 
@@ -84,12 +84,12 @@ export function WalletPage() {
 
   useEffect(() => {
     if (Object.keys(lists).length) {
-      dispatch(setTasks({ ...tasksStore, ...lists }));
+      dispatch(setTasks(lists));
 
       const newSubtasksArr = generateSubtasksArray(lists);
       if (newSubtasksArr.length) {
         const newSubtasks = generateSubtasksList(newSubtasksArr, wallet?.data.wallet as IWalletDetails);
-        dispatch(setSubtasks({ ...subtasks, ...newSubtasks }));
+        dispatch(setSubtasks(newSubtasks));
       }
     }
   }, [lists]);
@@ -102,7 +102,7 @@ export function WalletPage() {
   const handleScroll = (e: UIEvent<HTMLDivElement>) => {
     if (hasNextPage && !isFetching) {
       const container = e.target as HTMLElement;
-      const twoThirdsOfScroll = 0.9;
+      const twoThirdsOfScroll = 0.7;
       const scrollDifference =
         container?.scrollHeight * twoThirdsOfScroll - container.scrollTop - container.clientHeight;
       const range = 1;
@@ -127,7 +127,7 @@ export function WalletPage() {
       >
         <>
           <Header />
-          {isLoading || isFetching ? (
+          {(isLoading || isFetching) && !Object.keys(lists).length ? (
             <div
               className="flex items-center justify-center w-full h-full mx-auto mt-5"
               style={{ minHeight: '0', maxHeight: '83vh' }}
