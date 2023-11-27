@@ -19,6 +19,7 @@ import StatusMgIcon from '../../../../assets/icons/StatusMgIcon';
 import { pilotTabs } from '../../../../app/constants/pilotTabs';
 import { TbShield } from 'react-icons/tb';
 import PlusIcon from '../../../../assets/icons/PlusIcon';
+import PropertyIcons from '../../../../assets/icons/PropertyIcons';
 
 export const HubManagerOptions = [
   {
@@ -52,16 +53,22 @@ export const HubManagerOptions = [
     isVisible: false
   },
   {
-    id: pilotTabs.STATUS_MANAGEMENT,
-    name: 'Status Management',
-    icon: <StatusMgIcon />,
-    isVisible: false
-  },
-  {
     id: pilotTabs.PERMISSIONS,
     name: 'Permissions and Sharing',
     icon: <TbShield className="w-4 h-4" />,
-    isVisible: false
+    isVisible: true
+  },
+  {
+    id: pilotTabs.PROPERTIES,
+    name: 'Properties',
+    icon: <PropertyIcons />,
+    isVisible: true
+  },
+  {
+    id: pilotTabs.STATUS_MANAGEMENT,
+    name: 'Statuses',
+    icon: <StatusMgIcon />,
+    isVisible: true
   }
 ];
 
@@ -108,7 +115,7 @@ export default function HubManagerSubTab() {
       <SortableContext strategy={rectSortingStrategy} items={items}>
         <section>
           <div
-            className="grid px-1 grid-cols-7"
+            className="grid grid-cols-3 px-1"
             style={{ borderBottom: `3px solid ${activeSubHubManagerTabId ? '#ebd1fc' : 'transparent'}` }}
           >
             {HubManagerOptions.map((item) => (
