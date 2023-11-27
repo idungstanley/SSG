@@ -24,6 +24,7 @@ interface DatePickerProps {
   width?: string;
   toggleFn?: Dispatch<SetStateAction<boolean>>;
   handleClose?: () => void;
+  dateFilter?: boolean;
 }
 
 export type DateString = {
@@ -38,7 +39,8 @@ export default function DatePicker({
   anchorEl,
   setShowDatePickerOption,
   toggleFn,
-  handleClose
+  handleClose,
+  dateFilter
 }: DatePickerProps) {
   dayjs.extend(timezone);
   dayjs.extend(utc);
@@ -122,7 +124,7 @@ export default function DatePicker({
               !range && setShowDatePickerOption ? dispatch(setPickedDateState(true)) : null;
             }}
           >
-            <MiniDatePicker range={range} miniMode={openSideBar} fullCalendar />
+            <MiniDatePicker range={range} miniMode={openSideBar} fullCalendar dateFilter={dateFilter} />
           </div>
           <DatePickerFooter miniMode={openSideBar} closeDateModal={closeDateModal} time={time} />
         </div>

@@ -104,16 +104,16 @@ export default function ChatSection() {
       {!selectedChatId ? (
         <ChatsList />
       ) : status === 'loading' ? (
-        <div className="mx-auto w-6 mt-5 justify-center">
+        <div className="justify-center w-6 mx-auto mt-5">
           <Spinner size={8} color="#0F70B7" />
         </div>
       ) : status === 'error' ? (
         <FullScreenMessage title="Oops, an error occurred :(" description="Please try again later." />
       ) : messages && chat ? (
-        <div className="grid grid-rows-autoFrAuto h-full gap-1 p-2 bg-white">
+        <div className="grid h-full gap-1 p-2 bg-white grid-rows-autoFrAuto">
           <div style={{ background: '#F4F4F4' }}>
             {/* header */}
-            <div className="flex items-center justify-between border-b pb-2">
+            <div className="flex items-center justify-between pb-2 border-b">
               <div className="flex items-center gap-2">
                 <p
                   className="py-0.5 relative px-2 rounded-tl-md rounded-br-md flex items-center space-x-1 text-white dFlex"
@@ -127,27 +127,27 @@ export default function ChatSection() {
                 </p>
                 <div
                   onClick={handleDisconnect}
-                  className="flex justify-center bg-white items-center h-6 w-6 cursor-pointer rounded-md"
+                  className="flex items-center justify-center w-6 h-6 bg-white rounded-md cursor-pointer"
                 >
                   <ChatArrowLeft />
                 </div>
               </div>
 
               <div className="flex gap-2">
-                <div className="flex justify-center bg-white items-center h-6 w-6 rounded-md">
+                <div className="flex items-center justify-center w-6 h-6 bg-white rounded-md">
                   <ShowIcon color="orange" width="21" height="21" />
                 </div>
-                <div className="flex justify-center bg-white items-center h-6 w-6 rounded-md">
+                <div className="flex items-center justify-center w-6 h-6 bg-white rounded-md">
                   <ChatFilter />
                 </div>
-                <div className="flex justify-center bg-white items-center h-6 w-6 rounded-md">
+                <div className="flex items-center justify-center w-6 h-6 bg-white rounded-md">
                   <ChatMe />
                 </div>
-                <div className="flex justify-center bg-white items-center h-6 w-12 rounded-md">
+                <div className="flex items-center justify-center w-12 h-6 bg-white rounded-md">
                   <ChatAssign />
                   <ArrowDrop color="orange" />
                 </div>
-                <div className="flex justify-center bg-white items-center h-6 w-6 rounded-md mr-2">
+                <div className="flex items-center justify-center w-6 h-6 mr-2 bg-white rounded-md">
                   <ChatSearch />
                 </div>
               </div>

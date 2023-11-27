@@ -428,31 +428,33 @@ export default function MenuDropdown({ isExtendedBar, cords, walletLevel, item, 
           }
         }}
       >
-        <div className="flex items-center justify-center my-2">{showMenuDropdownType?.toUpperCase()} PROPERTIES</div>
-        <VerticalScroll>
-          <div className="relative h-96">
-            <InlineBorderLabel label="DEFAULT SETTINGS" />
-            <GroupMenuOptions items={itemsList} />
-            <InlineBorderLabel label="ADVANCE SETTINGS" />
-            <GroupMenuOptions items={advanceOption} />
-            <InlineBorderLabel label="MORE SETTINGS" />
-            <GroupMenuOptions items={moreOptions} />
+        <div key="menuDropdown">
+          <div className="flex items-center justify-center my-2">{showMenuDropdownType?.toUpperCase()} PROPERTIES</div>
+          <VerticalScroll>
+            <div className="relative h-96">
+              <InlineBorderLabel label="DEFAULT SETTINGS" />
+              <GroupMenuOptions items={itemsList} />
+              <InlineBorderLabel label="ADVANCE SETTINGS" />
+              <GroupMenuOptions items={advanceOption} />
+              <InlineBorderLabel label="MORE SETTINGS" />
+              <GroupMenuOptions items={moreOptions} />
+            </div>
+          </VerticalScroll>
+          <div className="sticky bottom-0 p-2 bg-white border-t">
+            <Button
+              label="Sharing & Permissions"
+              icon={<AiOutlineShareAlt className="text-white" />}
+              buttonStyle="base"
+              height="h-8"
+              labelSize="text-sm"
+              onClick={handleSharingnPermissions}
+            />
           </div>
-        </VerticalScroll>
-        <div className="sticky bottom-0 p-2 bg-white border-t">
-          <Button
-            label="Sharing & Permissions"
-            icon={<AiOutlineShareAlt className="text-white" />}
-            buttonStyle="base"
-            height="h-8"
-            labelSize="text-sm"
-            onClick={handleSharingnPermissions}
-          />
+          {SubDropdownMenu && <SubDropdown walletLevel={walletLevel} placeHubType={APP_TASKS} />}
+          <EditHubModal />
+          <EditListModal />
+          <EditWalletModal />
         </div>
-        {SubDropdownMenu && <SubDropdown walletLevel={walletLevel} placeHubType={APP_TASKS} />}
-        <EditHubModal />
-        <EditListModal />
-        <EditWalletModal />
       </Menu>
       {item && entityType ? (
         <AlsoitMenuDropdown

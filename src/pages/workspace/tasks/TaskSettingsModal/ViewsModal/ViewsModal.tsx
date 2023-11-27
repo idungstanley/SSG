@@ -171,7 +171,7 @@ export default function ViewsModal({
       </div>
 
       <Menu anchorEl={dropdownEl} open={!!dropdownEl} onClose={() => setDropdownEl(null)} style={{ marginTop: '10px' }}>
-        <div className="w-48">
+        <div className="w-48" key="viewTypes">
           <DropdownTitle content="VIEW TYPES" />
           <DropdownSubtitle content="CHANGE VIEW" />
           {viewSettings.map((view) => (
@@ -233,7 +233,7 @@ export default function ViewsModal({
       </Menu>
       {/* three dots menu */}
       <Menu anchorEl={threeDotsEl} open={!!threeDotsEl} onClose={() => setThreeDotsEl(null)}>
-        {renderThreeDotsMenu(threeDotsId)}
+        <div key="threeDotsEl">{renderThreeDotsMenu(threeDotsId)}</div>
       </Menu>
       {/* create new menu */}
       <Menu
@@ -248,7 +248,9 @@ export default function ViewsModal({
           horizontal: 'center'
         }}
       >
-        <CreateNewViewModal closeAllModal={handleCloseAllModal} />
+        <div key="CreateNewViewModal">
+          <CreateNewViewModal closeAllModal={handleCloseAllModal} />
+        </div>
       </Menu>
     </>
   );

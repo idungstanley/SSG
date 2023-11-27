@@ -74,6 +74,7 @@ interface workspaceState {
   activityArray: IActivityLog[];
   logType: 'activity' | 'history';
   activeLogTab: 'activity' | 'history';
+  activityFilterDate: { start: Dayjs; end?: Dayjs } | null;
   selectedDate: { date: Dayjs; dateType?: string } | null;
   showTreeInput: boolean;
   workspaceData: undefined | IWorkspaceRes;
@@ -130,7 +131,7 @@ const initialState: workspaceState = {
   activeClockTab: 'Real Time',
   activeStatusManagementTabId: 'custom',
   activeSubHubManagerTabId: 'create_hub',
-  activeSubCommunicationTabId: 'email',
+  activeSubCommunicationTabId: 'chat',
   fetchAllWorkspace: false,
   showAddHotKeyDropdown: false,
   showExtendedBar: false,
@@ -145,6 +146,7 @@ const initialState: workspaceState = {
   activityArray: [],
   logType: 'activity',
   activeLogTab: 'activity',
+  activityFilterDate: null,
   selectedDate: { date: dayjs() },
   showTreeInput: false,
   lastActiveItem: '',
@@ -369,6 +371,9 @@ export const wsSlice = createSlice({
     setActiveLogTab(state, action: PayloadAction<'activity' | 'history'>) {
       state.activeLogTab = action.payload;
     },
+    setActivityFilterDate(state, action: PayloadAction<{ start: Dayjs; end?: Dayjs } | null>) {
+      state.activityFilterDate = action.payload;
+    },
     setSelectedDate(state, action: PayloadAction<{ date: Dayjs; dateType?: string } | null>) {
       state.selectedDate = action.payload;
     },
@@ -446,6 +451,7 @@ export const {
   setActivityArray,
   setLogType,
   setActiveLogTab,
+  setActivityFilterDate,
   setSelectedDate,
   setShowTreeInput,
   setShowIndependentPilot,

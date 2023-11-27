@@ -58,7 +58,7 @@ export default function DropdownWithoutHeader({
         }
       }}
     >
-      <div className="absolute w-full text-base text-left transform bg-white">
+      <div key="dorpdownWithoutHeader" className="absolute w-full text-base text-left transform bg-white">
         {/* item list to show in dropdown*/}
         {items.map((item, index) => (
           <React.Fragment key={index}>

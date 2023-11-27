@@ -130,7 +130,7 @@ export default function FilterByAssigneeModal() {
       </div>
 
       <Menu anchorEl={dropdownEl} open={!!dropdownEl} onClose={() => setDropdownEl(null)} style={{ marginTop: '10px' }}>
-        <div className="w-72">
+        <div className="w-72" key="filterByAssignModal">
           <div className="container px-4 py-2 mx-auto">
             <div className="relative flex items-center w-full text-gray-500">
               <MagnifyingGlassIcon className="w-5 h-5" />

@@ -129,52 +129,54 @@ export function ListBox({
         }}
         style={{ maxHeight: '372px' }}
       >
-        {/* search */}
-        {showSearch ? (
-          <div className="w-full flex items-center gap-2 p-y border-b border-gray-400 mb-2">
-            <MagnifyingGlassIcon className="w-4 h-4" />
-            <input
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              type="text"
-              className="p-0 m-0 w-full text-gray-900 border-0 ring-0 focus:ring-0 focus:outline-0 appearance-none"
-              placeholder="Search..."
-              autoFocus
-            />
-          </div>
-        ) : null}
+        <div key="listBox">
+          {/* search */}
+          {showSearch ? (
+            <div className="w-full flex items-center gap-2 p-y border-b border-gray-400 mb-2">
+              <MagnifyingGlassIcon className="w-4 h-4" />
+              <input
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                type="text"
+                className="p-0 m-0 w-full text-gray-900 border-0 ring-0 focus:ring-0 focus:outline-0 appearance-none"
+                placeholder="Search..."
+                autoFocus
+              />
+            </div>
+          ) : null}
 
-        {/* additional options */}
-        {showSelectAll ? (
-          <div className="flex w-full p-1 justify-between items-center">
-            <button onClick={onToggleSelect} className="text-primary-500 text-xs">
-              {selectAll === 'select' ? 'Select All' : 'Deselect All'}
+          {/* additional options */}
+          {showSelectAll ? (
+            <div className="flex w-full p-1 justify-between items-center">
+              <button onClick={onToggleSelect} className="text-primary-500 text-xs">
+                {selectAll === 'select' ? 'Select All' : 'Deselect All'}
+              </button>
+            </div>
+          ) : null}
+
+          {/* list items */}
+          {filteredValues.map((value, index) => (
+            <button
+              key={index}
+              className={cl(
+                'relative cursor-pointer text-left select-none py-2 pr-10 pl-4 w-full whitespace-nowrap rounded-md flex gap-2 font-semibold',
+                'hover:bg-primary-100 hover:text-primary-700'
+              )}
+              style={{ minWidth: '150px' }}
+              onClick={() => {
+                if (isSplitMode && selectedTaskParentId) {
+                  dispatch(setSubtasksFiltersUpdated(true));
+                } else {
+                  dispatch(setFiltersUpdated(true));
+                }
+                setSelected(value as string);
+                handleClose();
+              }}
+            >
+              <ListBoxItem selected={selected} value={value} />
             </button>
-          </div>
-        ) : null}
-
-        {/* list items */}
-        {filteredValues.map((value, index) => (
-          <button
-            key={index}
-            className={cl(
-              'relative cursor-pointer text-left select-none py-2 pr-10 pl-4 w-full whitespace-nowrap rounded-md flex gap-2 font-semibold',
-              'hover:bg-primary-100 hover:text-primary-700'
-            )}
-            style={{ minWidth: '150px' }}
-            onClick={() => {
-              if (isSplitMode && selectedTaskParentId) {
-                dispatch(setSubtasksFiltersUpdated(true));
-              } else {
-                dispatch(setFiltersUpdated(true));
-              }
-              setSelected(value as string);
-              handleClose();
-            }}
-          >
-            <ListBoxItem selected={selected} value={value} />
-          </button>
-        ))}
+          ))}
+        </div>
       </Menu>
     </div>
   );
