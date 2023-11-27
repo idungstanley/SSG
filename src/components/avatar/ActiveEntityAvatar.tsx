@@ -62,7 +62,7 @@ export default function ActiveEntityAvatar({ width = 'w-4', height = 'h-4', size
               width={height as string}
               textSize={size as string}
               roundedStyle="rounded"
-              backgroundColour={item.color ? item.color : type === EntityType.hub ? 'blue' : 'orange'}
+              backgroundColour={item.color ? item.color : type === EntityType.hub ? 'orange' : 'blue'}
             />
           )}
         </div>

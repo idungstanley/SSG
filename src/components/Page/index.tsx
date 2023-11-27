@@ -1,4 +1,4 @@
-import { ReactNode, useEffect } from 'react';
+import { ReactNode, useEffect, useMemo } from 'react';
 import { RiArrowLeftSLine, RiArrowRightSLine } from 'react-icons/ri';
 import { STORAGE_KEYS, calculateWidthForContent, dimensions } from '../../app/config/dimensions';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
@@ -9,6 +9,7 @@ import { IPilotSection, IPilotTab } from '../../types';
 import { cl } from '../../utils';
 import { isAllowIncreaseWidth } from '../../utils/widthUtils';
 import Pilot from '../Pilot';
+import selectWidth from '../../utils/selectWidth';
 
 interface PageProps {
   header?: JSX.Element;
@@ -40,7 +41,7 @@ export default function Page({ header, additionalHeader, children, additional, p
   const { userSettingsData } = useAppSelector((state) => state.account);
   const { show: showFullPilot } = useAppSelector((state) => state.slideOver.pilotSideOver);
 
-  const { blockRef, Dividers } = useResize({
+  const { size, blockRef, Dividers } = useResize({
     dimensions: {
       min: dimensions.pilot.min,
       max: dimensions.pilot.max
@@ -48,6 +49,41 @@ export default function Page({ header, additionalHeader, children, additional, p
     storageKey: STORAGE_KEYS.PILOT_WIDTH,
     direction: 'XL'
   });
+
+  const calculateWidthForHeader = () => {
+    const extendedBarWidthFromLS =
+      (JSON.parse(localStorage.getItem(STORAGE_KEYS.EXTENDED_BAR_WIDTH) || '""') as number) ||
+      dimensions.extendedBar.default;
+
+    const sidebarWidthFromLS =
+      (JSON.parse(localStorage.getItem(STORAGE_KEYS.SIDEBAR_WIDTH) || '""') as number) ||
+      dimensions.navigationBar.default;
+
+    const { showSidebar, userSettingsData, sidebarWidth, extendedBarWidth } = useAppSelector((state) => state.account);
+    const { sidebarWidthRD, showExtendedBar } = useAppSelector((state) => state.workspace);
+
+    const sidebarWidthRT = showSidebar ? sidebarWidth || userSettingsData?.sidebarWidth : sidebarWidthRD;
+
+    const extendedBarWidthRT = showExtendedBar ? extendedBarWidth || userSettingsData?.extendedBarWidth : 0;
+
+    const calculatedContentWidth = useMemo(() => {
+      return `calc(100vw - ${sidebarWidthRT}px - ${extendedBarWidthRT}px)`;
+    }, [
+      sidebarWidth,
+      extendedBarWidthRT,
+      sidebarWidthRT,
+      extendedBarWidth,
+      userSettingsData?.sidebarWidth,
+      showSidebar,
+      userSettingsData?.extendedBarWidth,
+      userSettingsData?.isPilotMinified,
+      showExtendedBar,
+      userSettingsData,
+      extendedBarWidthFromLS,
+      sidebarWidthFromLS
+    ]);
+    return calculatedContentWidth;
+  };
 
   return (
     <main className="grid w-full h-full grid-cols-autoFr">
@@ -59,7 +95,7 @@ export default function Page({ header, additionalHeader, children, additional, p
       ) : (
         <div></div>
       )}
-      <section className="flex flex-col w-full h-full">
+      <section className="flex flex-col h-full" style={{ width: calculateWidthForHeader() }}>
         {additionalHeader}
         {header}
         <div className="relative grid h-full grid-cols-frAuto">
@@ -70,7 +106,7 @@ export default function Page({ header, additionalHeader, children, additional, p
             className={`${showOverlay ? 'z-50' : 'border-l relative'}`}
             ref={blockRef}
             style={{
-              width: showFullPilot ? pilotWidthFromLS || userSettingsData?.pilotWidth : undefined
+              width: showFullPilot ? selectWidth(size, pilotWidthFromLS) || userSettingsData?.pilotWidth : undefined
             }}
           >
             {showFullPilot ? <Dividers /> : null}
@@ -95,8 +131,7 @@ function ExtendedBar({ children, name, icon, source }: ExtendedBarProps) {
       max: MAX_SIDEBAR_WIDTH
     },
     storageKey: STORAGE_KEYS.EXTENDED_BAR_WIDTH,
-    direction: 'XR',
-    defaultSize: dimensions.extendedBar.default
+    direction: 'XR'
   });
 
   const handleToggle = () => {
@@ -110,7 +145,11 @@ function ExtendedBar({ children, name, icon, source }: ExtendedBarProps) {
 
   return (
     <aside
-      style={{ width: showExtendedBar ? extendedBarWidthFromLS || userSettingsData?.extendedBarWidth : undefined }}
+      style={{
+        width: showExtendedBar
+          ? selectWidth(size, extendedBarWidthFromLS) || userSettingsData?.extendedBarWidth
+          : undefined
+      }}
       ref={blockRef}
       className={cl(showExtendedBar && 'border-r', 'relative h-full transition-all duration-300')}
     >

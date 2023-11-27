@@ -72,26 +72,28 @@ export default function DropdownOptions() {
           }
         }}
       >
-        <div className="w-full mt-2 flex justify-center">
-          <h1 className="text-alsoit-text-lg font-semibold">DROPDOWN</h1>
-        </div>
-        <hr />
-        <div className="px-1 py-1">
-          {items.map((item) => (
-            // <MenuItem onClick={handleClose} key={item.name}>
-            <button
-              key={item.name}
-              onClick={() => {
-                dispatch(setNewCustomPropertyDetails({ ...newCustomPropertyDetails, type: item.name }));
-                handleClose();
-              }}
-              style={{ width: '174px' }}
-              className=" group flex gap-4 w-full items-center rounded-md px-2 py-2 text-alsoit-text-lg font-semibold h-10 hover:bg-alsoit-gray-50"
-            >
-              {item.name}
-            </button>
-            // </MenuItem>
-          ))}
+        <div key="templateDropdown">
+          <div className="w-full mt-2 flex justify-center">
+            <h1 className="text-alsoit-text-lg font-semibold">DROPDOWN</h1>
+          </div>
+          <hr />
+          <div className="px-1 py-1">
+            {items.map((item) => (
+              // <MenuItem onClick={handleClose} key={item.name}>
+              <button
+                key={item.name}
+                onClick={() => {
+                  dispatch(setNewCustomPropertyDetails({ ...newCustomPropertyDetails, type: item.name }));
+                  handleClose();
+                }}
+                style={{ width: '174px' }}
+                className=" group flex gap-4 w-full items-center rounded-md px-2 py-2 text-alsoit-text-lg font-semibold h-10 hover:bg-alsoit-gray-50"
+              >
+                {item.name}
+              </button>
+              // </MenuItem>
+            ))}
+          </div>
         </div>
       </Menu>
     </div>

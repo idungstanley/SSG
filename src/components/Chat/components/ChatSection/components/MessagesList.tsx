@@ -61,7 +61,7 @@ export default function MessagesList({ messages }: MessagesListProps) {
                 />
 
                 <div className="w-3/4" style={{ background: '#F4F4F4' }}>
-                  <div className="flex group flex-col justify-start gap-1 p-2 rounded-xl border">
+                  <div className="flex flex-col justify-start gap-1 p-2 border group rounded-xl">
                     {/* top */}
                     <div className="flex items-center justify-between text-sm text-gray-600">
                       {!isCurrentUser(message.team_member.user.id) ? (
@@ -73,9 +73,9 @@ export default function MessagesList({ messages }: MessagesListProps) {
                     </div>
 
                     {message?.reply_on ? (
-                      <div className="relative w-full p-1 bg-alsoit-purple-50 shadow-sm sm:text-sm overflow-hidden">
-                        <div className="absolute h-full bg-alsoit-purple-300 left-0 top-0" style={{ width: '2px' }} />
-                        <div className="ml-2 text-alsoit-purple-300 text-sm">
+                      <div className="relative w-full p-1 overflow-hidden shadow-sm bg-alsoit-purple-50 sm:text-sm">
+                        <div className="absolute top-0 left-0 h-full bg-alsoit-purple-300" style={{ width: '2px' }} />
+                        <div className="ml-2 text-sm text-alsoit-purple-300">
                           {message.reply_on.team_member.user.name}
                         </div>
                         <div className="ml-2 text-alsoit-gray-75">
@@ -128,8 +128,8 @@ export default function MessagesList({ messages }: MessagesListProps) {
               </div>
             </div>
 
-            <div className="top-4 right-0">
-              <span className="text-sm text-black border rounded bg-gray-200 flex justify-end p-1">Online</span>
+            <div className="right-0 top-4">
+              <span className="flex justify-end p-1 text-sm text-black bg-gray-200 border rounded">Online</span>
             </div>
           </section>
 
@@ -137,18 +137,18 @@ export default function MessagesList({ messages }: MessagesListProps) {
             <span className="text-3xl subpixel-antialiased text-black text-decoration-thickness:1px;">
               {activeUserPopup?.name}
             </span>
-            <div className="space-x-2 flex items-center">
+            <div className="flex items-center space-x-2">
               <CiMail className="w-4 h-4 mx-0.5 text-black" />
-              <span className="text-black text-sm subpixel-antialiased">{activeUserPopup?.email}</span>
+              <span className="text-sm subpixel-antialiased text-black">{activeUserPopup?.email}</span>
             </div>
-            <div className="space-x-2 flex items-center">
+            <div className="flex items-center space-x-2">
               <ClockIcon className="w-4 h-4 mx-0.5 text-black" />
-              <span className="text-black text-sm subpixel-antialiased">
+              <span className="text-sm subpixel-antialiased text-black">
                 {moment.utc(new Date()).format('MMMM Do YYYY, h:mm:ss a')}
               </span>
             </div>
-            <div className="w-full flex justify-center">
-              <button className="w-full text-black hover:bg-gray-200 border rounded py-2">View profile</button>
+            <div className="flex justify-center w-full">
+              <button className="w-full py-2 text-black border rounded hover:bg-gray-200">View profile</button>
             </div>
           </div>
         </div>

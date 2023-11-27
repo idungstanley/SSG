@@ -235,7 +235,11 @@ export default function ShowHideSettings({
       </div>
 
       <Menu anchorEl={dropdownEl} open={!!dropdownEl} onClose={() => setDropdownEl(null)} style={{ marginTop: '10px' }}>
-        <div style={{ zIndex: 61, height: '372px', width: '247px', overflow: 'auto' }} className="w-64">
+        <div
+          key="showHideSettings"
+          style={{ zIndex: 61, height: '372px', width: '247px', overflow: 'auto' }}
+          className="w-64"
+        >
           <DropdownTitle content="CUSTOMIZE THIS VIEW" />
           <DropdownSubtitle content="MAIN SETTINGS" />
           <div className="flex items-center justify-between mx-auto mt-4" style={{ width: '93%' }}>

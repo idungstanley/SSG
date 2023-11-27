@@ -41,7 +41,7 @@ export default function MultipleStatuses() {
         <MdOutlineDeveloperBoard />
       </div>
       <Menu anchorEl={anchorEl} open={!!anchorEl} onClose={() => setAnchorEl(null)} style={{ marginTop: '10px' }}>
-        <div className="relative z-10">
+        <div className="relative z-10" key="multipleStatuses">
           <VerticalScroll>
             <div className="max-h-52">
               <div className="flex flex-col items-center justify-center w-48 p-1 text-center bg-white divide-y divide-gray-100 shadow-lg outline-none h-fit ring-1 ring-black ring-opacity-5 focus:outline-none">

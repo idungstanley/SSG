@@ -133,7 +133,13 @@ function Permissions() {
                 <CopyLink />
               </div>
               <div className="w-11/12 m-auto">
-                {data && <ShareWith publicMode={data?.data.is_public} entityPermission={data as IPermissionsRes} />}
+                {data && (
+                  <ShareWith
+                    publicMode={data?.data.is_public}
+                    entityPermission={data as IPermissionsRes}
+                    teamsAndGroups={teamMembersAndGroup}
+                  />
+                )}
               </div>
               <MakePublicPrivate isPublic={data?.data.is_public} />
             </>
