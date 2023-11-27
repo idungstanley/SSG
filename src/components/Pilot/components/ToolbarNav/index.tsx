@@ -112,8 +112,6 @@ export default function ToolbarNav() {
     handleLocation(url);
   };
 
-  console.log(activeItemType);
-
   return (
     <>
       <div
