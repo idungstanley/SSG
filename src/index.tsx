@@ -67,10 +67,6 @@ const onSuccess = (data: unknown): unknown => {
     title = 'Success';
   }
 
-  toast.custom((t) => (
-    <Toast type="success" title={title} body={body} toastId={t.id} taskData={typedTaskData.data.task} />
-  ));
-
   toast.custom(
     (t) => <Toast type="success" title={title} body={body} toastId={t.id} taskData={typedTaskData.data.task} />,
     {
@@ -119,9 +115,9 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
       <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
         <Suspense
           fallback={
-            <p className="flex items-center justify-center w-full h-full">
+            <div className="flex items-center justify-center w-full h-full">
               <Spinner />
-            </p>
+            </div>
           }
         >
           <App />

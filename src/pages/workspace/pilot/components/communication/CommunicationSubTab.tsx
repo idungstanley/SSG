@@ -17,23 +17,23 @@ import { BsChatLeftText } from 'react-icons/bs';
 import CommentIcon from '../../../../../assets/icons/CommentIcon';
 
 export const communicationOptions = [
+  { id: pilotTabs.CHAT, name: 'Chat', icon: <BsChatLeftText className="w-4 h-4" />, isVisible: false },
+  {
+    id: pilotTabs.COMMENTS,
+    name: 'Comment',
+    icon: <CommentIcon />,
+    isVisible: false
+  },
   {
     id: pilotTabs.EMAIL,
     name: 'Email',
     icon: <MdAlternateEmail className="w-4 h-4" />,
     isVisible: false
   },
-  { id: pilotTabs.CHAT, name: 'Chat', icon: <BsChatLeftText className="w-4 h-4" />, isVisible: false },
   {
     id: pilotTabs.VOICE_CALL,
     name: 'Voice Call',
     icon: <MdOutlineCall className="w-4 h-4" />,
-    isVisible: false
-  },
-  {
-    id: pilotTabs.COMMENTS,
-    name: 'Comment',
-    icon: <CommentIcon />,
     isVisible: false
   }
 ];
@@ -76,7 +76,10 @@ export default function CommunicationSubTab() {
   return (
     <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={(e) => handleDragEnd(e)}>
       <SortableContext strategy={rectSortingStrategy} items={items}>
-        <div className="grid  bg-primary-200 pb-0.5 grid-cols-4">
+        <div
+          className="grid px-1 grid-cols-4"
+          style={{ borderBottom: `3px solid ${activeSubCommunicationTabId ? '#ebd1fc' : 'transparent'}` }}
+        >
           {items.map((item) => (
             <SubtabDrag
               key={item.id}

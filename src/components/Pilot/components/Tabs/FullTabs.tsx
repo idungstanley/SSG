@@ -11,7 +11,7 @@ import { arrayMove } from '@dnd-kit/sortable';
 import { rectSortingStrategy } from '@dnd-kit/sortable';
 import { SortableContext } from '@dnd-kit/sortable';
 import { sortableKeyboardCoordinates } from '@dnd-kit/sortable';
-import { ReactNode, useCallback, useRef, useState } from 'react';
+import { ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useResize } from '../../../../hooks/useResize';
 import { IPilotTab } from '../../../../types';
 import { cl } from '../../../../utils';
@@ -19,8 +19,9 @@ import ShowTabsLabelToggle from './components/ShowTabsLabelToggle';
 import Tab from './components/Tab';
 import { VerticalScroll } from '../../../ScrollableContainer/VerticalScroll';
 import { useAppSelector } from '../../../../app/hooks';
-import { HorizontalScroll } from '../../../ScrollableContainer/HorizontalScroll';
 import ToolTip from '../../../Tooltip/Tooltip';
+import SlideToggle from '../../../SlideToggle';
+import { calculateSlides } from '../../../../utils/calculateSlides';
 
 interface TabsProps {
   tabs: IPilotTab[];
@@ -29,15 +30,25 @@ interface TabsProps {
 const pilotFromLS = JSON.parse(localStorage.getItem('pilot') || '""') as { tabOrder: string[]; showTabLabel: boolean };
 const tabIdsFromLS = pilotFromLS.tabOrder || [];
 
-const MIN = 100;
-const MAX = 250;
+const MIN = 99;
+const MAX = 264;
 
 export default function FullTabs({ tabs }: TabsProps) {
+  const { showTabLabel } = useAppSelector((state) => state.workspace);
+  const { pilotWidth } = useAppSelector((state) => state.account);
+
   const [tabItems, setTabItems] = useState(
     tabs.sort((a, b) => tabIdsFromLS.indexOf(a.id) - tabIdsFromLS.indexOf(b.id)) // set tabs position as in localStorage
   );
-  const { showTabLabel } = useAppSelector((state) => state.workspace);
+  const [activeSlide, setActiveSlide] = useState<number>(1);
+  const [slidesCount, setSlidesCount] = useState<number>(0);
+
   const navRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    setActiveSlide(1);
+  }, [pilotWidth]);
+
   const disableOverflow = (disable: boolean) => {
     if (navRef.current) {
       navRef.current.style.overflow = disable ? 'hidden' : 'auto';
@@ -53,12 +64,25 @@ export default function FullTabs({ tabs }: TabsProps) {
     direction: 'YB'
   });
 
+  const TAB_WIDTH = 60;
+  const SLIDE_TOGGLE_WIDTH = 40;
+
+  const showingTabItems = useMemo(() => {
+    if (pilotWidth && tabItems.length && !showTabLabel) {
+      const newSlides = calculateSlides(tabItems, TAB_WIDTH, pilotWidth - SLIDE_TOGGLE_WIDTH);
+      setSlidesCount(newSlides.length);
+      return newSlides[newSlides[activeSlide - 1] ? activeSlide - 1 : 0] as IPilotTab[];
+    } else {
+      return tabItems.sort((a, b) => tabIdsFromLS.indexOf(a.id) - tabIdsFromLS.indexOf(b.id));
+    }
+  }, [tabIdsFromLS, tabItems, activeSlide, pilotWidth]);
+
   return (
     <>
       {showTabLabel ? (
         <VerticalScroll>
           <div style={{ height: size }}>
-            <div ref={blockRef} className={cl('relative h-fit col-span-1 border-r flex items-center')}>
+            <div ref={blockRef} className={cl('relative h-fit col-span-1 border-r-0 flex items-center')}>
               <nav ref={navRef} className={cl('relative h-full grid grid-cols-1 divide-y grow')} aria-label="Tabs">
                 <SortableProvider disableOverflow={disableOverflow} items={tabItems} setItems={setTabItems}>
                   {tabItems.map((tab) => (
@@ -72,13 +96,16 @@ export default function FullTabs({ tabs }: TabsProps) {
           </div>
         </VerticalScroll>
       ) : (
-        <HorizontalScroll>
-          <div style={{ height: 'auto' }} ref={null} className={cl('relative col-span-1 flex items-center')}>
-            <nav ref={navRef} className={cl('relative h-fit divide-x border flex mr-10')} aria-label="Tabs">
+        <>
+          <div style={{ height: 'auto' }} ref={null} className={cl('relative col-span-1 flex items-center p-1')}>
+            <nav ref={navRef} className={cl('relative h-fit divide-x flex')} aria-label="Tabs">
+              <div className="pl-1 pr-2">
+                <SlideToggle activeSlide={activeSlide} fullCount={slidesCount} setActiveSlide={setActiveSlide} />
+              </div>
               <SortableProvider disableOverflow={disableOverflow} items={tabItems} setItems={setTabItems}>
-                {tabItems.map((tab) => (
+                {showingTabItems.map((tab) => (
                   <div key={tab.label}>
-                    <ToolTip title={tab.label}>
+                    <ToolTip title={tab.label} enterDelay={300}>
                       <div className="h-full">
                         <Tab key={tab.id} id={tab.id} icon={tab.icon} label={tab.label} showTabLabel={showTabLabel} />
                       </div>
@@ -89,7 +116,7 @@ export default function FullTabs({ tabs }: TabsProps) {
             </nav>
           </div>
           <ShowTabsLabelToggle />
-        </HorizontalScroll>
+        </>
       )}
     </>
   );

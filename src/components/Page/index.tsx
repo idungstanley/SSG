@@ -9,6 +9,7 @@ import { IPilotSection, IPilotTab } from '../../types';
 import { cl } from '../../utils';
 import { isAllowIncreaseWidth } from '../../utils/widthUtils';
 import Pilot from '../Pilot';
+import selectWidth from '../../utils/selectWidth';
 
 interface PageProps {
   header?: JSX.Element;
@@ -40,7 +41,7 @@ export default function Page({ header, additionalHeader, children, additional, p
   const { userSettingsData } = useAppSelector((state) => state.account);
   const { show: showFullPilot } = useAppSelector((state) => state.slideOver.pilotSideOver);
 
-  const { blockRef, Dividers } = useResize({
+  const { size, blockRef, Dividers } = useResize({
     dimensions: {
       min: dimensions.pilot.min,
       max: dimensions.pilot.max
@@ -70,7 +71,7 @@ export default function Page({ header, additionalHeader, children, additional, p
             className={`${showOverlay ? 'z-50' : 'border-l relative'}`}
             ref={blockRef}
             style={{
-              width: showFullPilot ? pilotWidthFromLS || userSettingsData?.pilotWidth : undefined
+              width: showFullPilot ? selectWidth(size, pilotWidthFromLS) || userSettingsData?.pilotWidth : undefined
             }}
           >
             {showFullPilot ? <Dividers /> : null}
@@ -95,8 +96,7 @@ function ExtendedBar({ children, name, icon, source }: ExtendedBarProps) {
       max: MAX_SIDEBAR_WIDTH
     },
     storageKey: STORAGE_KEYS.EXTENDED_BAR_WIDTH,
-    direction: 'XR',
-    defaultSize: dimensions.extendedBar.default
+    direction: 'XR'
   });
 
   const handleToggle = () => {
@@ -110,7 +110,11 @@ function ExtendedBar({ children, name, icon, source }: ExtendedBarProps) {
 
   return (
     <aside
-      style={{ width: showExtendedBar ? extendedBarWidthFromLS || userSettingsData?.extendedBarWidth : undefined }}
+      style={{
+        width: showExtendedBar
+          ? selectWidth(size, extendedBarWidthFromLS) || userSettingsData?.extendedBarWidth
+          : undefined
+      }}
       ref={blockRef}
       className={cl(showExtendedBar && 'border-r', 'relative h-full transition-all duration-300')}
     >

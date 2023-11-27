@@ -39,7 +39,7 @@ export default function FullHotkeysList({ tabs, showModal, setShowModal }: Hotke
   });
 
   const HOTKEY_WIDTH = 30;
-  const MARGIN_WIDTH = 20;
+  const MARGIN_WIDTH = 16;
   const SLIDE_TOGGLE_WIDTH = 40;
 
   useEffect(() => {
@@ -47,7 +47,7 @@ export default function FullHotkeysList({ tabs, showModal, setShowModal }: Hotke
   }, [pilotWidth]);
 
   const hotkeys = useMemo(() => {
-    if (pilotWidth) {
+    if (pilotWidth && activeHotkeyIds.length) {
       const itemWidth = HOTKEY_WIDTH + MARGIN_WIDTH;
       const newSlides = calculateSlides(activeHotkeyIds, itemWidth, pilotWidth - SLIDE_TOGGLE_WIDTH);
       setSlidesCount(newSlides.length);
@@ -84,18 +84,20 @@ export default function FullHotkeysList({ tabs, showModal, setShowModal }: Hotke
             {hotkeys.map((hotkey) => (
               <div key={hotkey.label}>
                 <ToolTip title={hotkey.label}>
-                  <button
-                    onClick={() => dispatch(setActiveTabId(activeTabId === hotkey.id ? undefined : hotkey.id))}
-                    title={hotkey.label}
-                    className={cl(
-                      activeTabId === hotkey.id ? 'text-primary-500 bg-primary-200' : 'text-gray-600',
-                      'mx-2 my-1 flex items-center justify-center border px-1 py-1 rounded-md'
-                    )}
-                    style={{ width: '30px', height: '30px' }}
-                    key={hotkey.id}
-                  >
-                    {hotkey.icon}
-                  </button>
+                  <div>
+                    <button
+                      onClick={() => dispatch(setActiveTabId(activeTabId === hotkey.id ? undefined : hotkey.id))}
+                      title={hotkey.label}
+                      className={cl(
+                        activeTabId === hotkey.id ? 'text-primary-500 bg-primary-200' : 'text-gray-600',
+                        'mx-2 my-1 flex items-center justify-center border-0 px-1 py-1 rounded-md'
+                      )}
+                      style={{ width: '30px', height: '30px' }}
+                      key={hotkey.id}
+                    >
+                      {hotkey.icon}
+                    </button>
+                  </div>
                 </ToolTip>
               </div>
             ))}
@@ -109,21 +111,27 @@ export default function FullHotkeysList({ tabs, showModal, setShowModal }: Hotke
         {/* hotkeys list */}
         <div className="z-50 flex flex-col items-start mt-4">
           {tabs.map((tab) => (
-            <button
+            <div
               onClick={() => handleClick(tab.id)}
               key={tab.id}
               className={cl(
                 activeHotkeyIds.includes(tab.id) && 'font-semibold',
-                'relative flex gap-10 text-gray-500 items-center rounded-md justify-between py-1 px-2 hover:bg-gray-100 cursor-pointer w-full'
+                'relative flex text-gray-500 items-center rounded-md justify-between py-1 px-2 hover:bg-gray-100 cursor-pointer w-full'
               )}
             >
               <div className="flex items-center gap-2">
-                <span className={cl(activeHotkeyIds.includes(tab.id) && 'text-black')}>{tab.icon}</span>
+                <span className="flex justify-center" style={{ width: '20px' }}>
+                  {tab.icon}
+                </span>
                 <span className="block truncate">{tab.label}</span>
               </div>
 
-              {activeHotkeyIds.includes(tab.id) && <CheckIcon className="w-4 h-4" aria-hidden="true" />}
-            </button>
+              {activeHotkeyIds.includes(tab.id) && (
+                <span className="w-4">
+                  <CheckIcon className="w-4 h-4" aria-hidden="true" />
+                </span>
+              )}
+            </div>
           ))}
         </div>
       </Modal>

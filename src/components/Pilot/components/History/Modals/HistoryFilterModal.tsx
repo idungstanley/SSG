@@ -8,6 +8,8 @@ import { SlideButton } from '../../../../SlideButton';
 import { setHistoryMemory } from '../../../../../features/task/taskSlice';
 import dayjs from 'dayjs';
 import DatePicker from '../../../../DatePicker/DatePicker';
+import RoundedCheckbox from '../../../../Checkbox/RoundedCheckbox';
+import DropdownWithHeader from '../../TimeClock/components/DropdownWithHeader';
 
 interface HistoryfiltermodalProps {
   logData: IActivityLog[];
@@ -21,10 +23,14 @@ export function HistoryfilterModal({ logData, toggleFn }: HistoryfiltermodalProp
     { id: 3, main: 'user', subType: 'date' },
     { id: 4, main: 'type', subType: 'date' }
   ];
-  const { HistoryFilterMemory, selectedDate } = useAppSelector((state) => state.task);
+
+  const { HistoryFilterMemory } = useAppSelector((state) => state.task);
+  const { activityFilterDate } = useAppSelector((state) => state.workspace);
+
   const [checkedStates, setCheckedStates] = useState<boolean[]>([]);
   const [dateEntries, setEntries] = useState<boolean>(false);
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+  const [anchor, setAnchor] = useState<HTMLElement | null>(null);
 
   const modalRef = useRef<HTMLDivElement>(null);
 
@@ -46,7 +52,7 @@ export function HistoryfilterModal({ logData, toggleFn }: HistoryfiltermodalProp
         className="flex flex-col space-y-2 bg-white absolute top-5 -right-7 shadow-2xl rounded-lg z-30 p-2 overflow-visible"
         style={{ height: '175px', width: '385px' }}
         onClick={(e) => {
-          e.stopPropagation(); // Stop event propagation
+          e.stopPropagation();
         }}
         ref={modalRef}
       >
@@ -64,7 +70,7 @@ export function HistoryfilterModal({ logData, toggleFn }: HistoryfiltermodalProp
           {filterKeys.map((keys, index) => (
             <div
               key={index}
-              className="flex w-full space-x-2 items-center"
+              className="flex w-full space-x-4 items-center"
               onClick={(e: React.MouseEvent<HTMLDivElement>) => keys.main === 'date' && setAnchorEl(e.currentTarget)}
             >
               <p className="flex space-x-2 capitalize w-1/5">
@@ -87,49 +93,59 @@ export function HistoryfilterModal({ logData, toggleFn }: HistoryfiltermodalProp
                           toggleFn={setEntries}
                           anchorEl={anchorEl}
                           handleClose={handleClose}
+                          dateFilter
                         />
                       )}
                       <div className="flex items-center justify-evenly w-full">
-                        {selectedDate?.from && (
+                        {activityFilterDate?.start && (
                           <span
                             className="flex items-center border border-purple-400 rounded-md p-1"
                             style={{ fontSize: '8px' }}
                           >
-                            From: {dayjs(selectedDate?.from).format('ddd, MM DD, YYYY')}
+                            From: {dayjs(activityFilterDate?.start).format('ddd, MMM DD')}
                           </span>
                         )}
-                        {selectedDate?.to && (
+                        {activityFilterDate?.end && (
                           <span
                             className="flex items-center border border-purple-400 rounded-md p-1"
                             style={{ fontSize: '8px' }}
                           >
-                            Due By: {dayjs(selectedDate?.to).format('ddd, MM DD, YYYY')}
+                            Due By: {dayjs(activityFilterDate?.end).format('ddd, MMM DD')}
                           </span>
                         )}
                       </div>
                     </label>
                   </div>
                 ) : keys.main === 'user' ? (
-                  <select
-                    name="user"
-                    id="loguser"
-                    className="w-36 rounded-lg border-gray-400 text-gray-500 text-xs ml-1 px-2 custom-select"
-                    onChange={(e) => dispatch(setHistoryMemory({ ...HistoryFilterMemory, user: e.target.value }))}
-                  >
-                    <option value="">Select user</option>
-                    {logData.map((data) => {
-                      const { user } = data.created_by;
-                      return (
-                        <option
-                          value={user.name}
-                          key={user.avatar_path}
-                          selected={HistoryFilterMemory?.user === user.name ?? ''}
+                  <div className="flex px-6">
+                    <div
+                      onClick={(e) => setAnchor(e.currentTarget)}
+                      className="flex items-center space-x-2.5 w-32 text-alsoit-text-md border border-alsoit-purple-300 p-1 rounded-md relative"
+                    >
+                      {HistoryFilterMemory?.user ?? 'Select User'}
+                    </div>
+                    <DropdownWithHeader
+                      header="select user"
+                      subHeader="filter logs by user"
+                      anchor={anchor}
+                      setAnchor={setAnchor}
+                    >
+                      {Array.from(new Set(logData.map((data) => data.created_by.user.name))).map((userName) => (
+                        <div
+                          key={userName}
+                          className="flex items-center space-x-2 cursor-pointer p-2 hover:bg-alsoit-gray-50"
+                          onClick={() => dispatch(setHistoryMemory({ ...HistoryFilterMemory, user: userName }))}
                         >
-                          {user.name}
-                        </option>
-                      );
-                    })}
-                  </select>
+                          <RoundedCheckbox
+                            isChecked={HistoryFilterMemory?.user === userName}
+                            onChange={() => dispatch(setHistoryMemory({ ...HistoryFilterMemory, user: userName }))}
+                            styles="w-3 h-3 rounded-full checked:bg-alsoit-purple-300"
+                          />
+                          <span>{userName ?? 'Select User'}</span>
+                        </div>
+                      ))}
+                    </DropdownWithHeader>
+                  </div>
                 ) : (
                   <span>hello</span>
                 ))}

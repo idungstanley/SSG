@@ -62,6 +62,7 @@ interface workspaceState {
   activeSubDetailsTabId: string | null;
   activeSubLogsTabId: string | null;
   activeSubTimeClockTabId: string | null;
+  activeSubComingTabId: string | null;
   activeClockTab: string;
   showExtendedBar: boolean;
   activePlaceNameForNavigation: string | null;
@@ -73,6 +74,7 @@ interface workspaceState {
   activityArray: IActivityLog[];
   logType: 'activity' | 'history';
   activeLogTab: 'activity' | 'history';
+  activityFilterDate: { start: Dayjs; end?: Dayjs } | null;
   selectedDate: { date: Dayjs; dateType?: string } | null;
   showTreeInput: boolean;
   workspaceData: undefined | IWorkspaceRes;
@@ -125,10 +127,11 @@ const initialState: workspaceState = {
   activeSubDetailsTabId: 'properties',
   activeSubLogsTabId: pilotTabs.HISTORY_LOG,
   activeSubTimeClockTabId: 'time_clock',
+  activeSubComingTabId: pilotTabs.COMING_SOON,
   activeClockTab: 'Real Time',
   activeStatusManagementTabId: 'custom',
   activeSubHubManagerTabId: 'create_hub',
-  activeSubCommunicationTabId: 'email',
+  activeSubCommunicationTabId: 'chat',
   fetchAllWorkspace: false,
   showAddHotKeyDropdown: false,
   showExtendedBar: false,
@@ -143,6 +146,7 @@ const initialState: workspaceState = {
   activityArray: [],
   logType: 'activity',
   activeLogTab: 'activity',
+  activityFilterDate: null,
   selectedDate: { date: dayjs() },
   showTreeInput: false,
   lastActiveItem: '',
@@ -312,6 +316,9 @@ export const wsSlice = createSlice({
     setActiveSubTimeClockTabId(state, action: PayloadAction<string | null>) {
       state.activeSubTimeClockTabId = action.payload;
     },
+    setActiveSubComingTabId(state, action: PayloadAction<string | null>) {
+      state.activeSubComingTabId = action.payload;
+    },
     setActiveClockTab(state, action: PayloadAction<string>) {
       state.activeClockTab = action.payload;
     },
@@ -363,6 +370,9 @@ export const wsSlice = createSlice({
     },
     setActiveLogTab(state, action: PayloadAction<'activity' | 'history'>) {
       state.activeLogTab = action.payload;
+    },
+    setActivityFilterDate(state, action: PayloadAction<{ start: Dayjs; end?: Dayjs } | null>) {
+      state.activityFilterDate = action.payload;
     },
     setSelectedDate(state, action: PayloadAction<{ date: Dayjs; dateType?: string } | null>) {
       state.selectedDate = action.payload;
@@ -416,6 +426,7 @@ export const {
   setActiveSubCommunicationTabId,
   setActiveSubDetailsTabId,
   setActiveSubTimeClockTabId,
+  setActiveSubComingTabId,
   setActiveClockTab,
   setPilotWidth,
   setShowPilotListView,
@@ -440,6 +451,7 @@ export const {
   setActivityArray,
   setLogType,
   setActiveLogTab,
+  setActivityFilterDate,
   setSelectedDate,
   setShowTreeInput,
   setShowIndependentPilot,

@@ -25,6 +25,7 @@ import {
   setAssignOnHoverState,
   setCurrentTeamMemberId,
   setDuplicateTaskObj,
+  setGlobalSearchResult,
   setNewTaskPriority,
   setNewTaskStatus,
   setRootTaskIds,
@@ -711,7 +712,6 @@ export const UseGetEverythingTasks = () => {
       });
     },
     {
-      keepPreviousData: true,
       enabled: location.pathname.includes('everything') && !draggableItemId && isFiltersUpdated,
       onSuccess: (data) => {
         data.pages.map((page) => page.data.tasks.map((task) => queryClient.setQueryData(['task', task.id], task)));
@@ -776,7 +776,6 @@ export const UseGetFullTaskList = ({
       });
     },
     {
-      keepPreviousData: true,
       enabled: (!!hub_id || !!wallet_id) && !draggableItemId && isFiltersUpdated,
       onSuccess: (data) => {
         data.pages.map((page) => page.data.tasks.map((task) => queryClient.setQueryData(['task', task.id], task)));
@@ -1573,6 +1572,26 @@ export const UseTaskWatchersAssignService = (taskIds: string[], user: ITeamMembe
       dispatch(setToggleAssignCurrentTaskId(null));
       dispatch(setSelectedTasksArray([]));
       dispatch(setSelectedListIds([]));
+    }
+  });
+};
+
+const GlobalSearch = ({ searchValue }: { searchValue: string }) => {
+  const request = requestNew<IFullTaskRes>({
+    url: '/search/tasks',
+    method: 'POST',
+    data: {
+      search: searchValue
+    }
+  });
+  return request;
+};
+
+export const UseGlobalSearch = () => {
+  const dispatch = useAppDispatch();
+  return useMutation(GlobalSearch, {
+    onSuccess: (data) => {
+      dispatch(setGlobalSearchResult(data.data.tasks));
     }
   });
 };

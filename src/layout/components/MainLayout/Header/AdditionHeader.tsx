@@ -107,7 +107,7 @@ export default function AdditionalHeader({ isInsights }: IAdditionalHeaderProps)
   const generateEntityName = (name: string) => {
     return (
       <ToolTip title={activeItemName}>
-        <span className="font-bold text-left truncate w-72 text-alsoit-text-lg">
+        <span className="font-bold text-left truncate w-72 text-alsoit-text-lg w-auto">
           {activeItemName || name ? Capitalize(activeItemName ? activeItemName : name) : ''}
         </span>
       </ToolTip>
@@ -127,7 +127,7 @@ export default function AdditionalHeader({ isInsights }: IAdditionalHeaderProps)
               width="w-7"
               textSize="14px"
               roundedStyle="rounded"
-              backgroundColour={item.color ? item.color : type === EntityType.hub ? 'blue' : 'orange'}
+              backgroundColour={item.color ? item.color : type === EntityType.hub ? 'orange' : 'blue'}
             />
           )}
         </div>

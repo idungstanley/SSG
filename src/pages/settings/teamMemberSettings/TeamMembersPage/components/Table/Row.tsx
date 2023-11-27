@@ -118,10 +118,10 @@ export default function Row({ teamMemberId, myRole }: RowProps) {
       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
         <span
           className={`inline-flex rounded-full ${
-            !teamMember.is_deleted ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+            teamMember.deleted_status !== 'disabled' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
           }  px-2 text-xs font-semibold leading-5`}
         >
-          {teamMember.is_deleted ? 'Deactivated' : 'Active'}
+          {teamMember.deleted_status === 'disabled' ? 'Deactivated' : 'Active'}
         </span>
       </td>
       <td

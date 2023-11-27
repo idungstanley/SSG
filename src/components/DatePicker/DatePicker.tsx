@@ -24,6 +24,7 @@ interface DatePickerProps {
   width?: string;
   toggleFn?: Dispatch<SetStateAction<boolean>>;
   handleClose?: () => void;
+  dateFilter?: boolean;
 }
 
 export type DateString = {
@@ -38,7 +39,8 @@ export default function DatePicker({
   anchorEl,
   setShowDatePickerOption,
   toggleFn,
-  handleClose
+  handleClose,
+  dateFilter
 }: DatePickerProps) {
   dayjs.extend(timezone);
   dayjs.extend(utc);
@@ -91,7 +93,6 @@ export default function DatePicker({
 
   return (
     <AlsoitMenuDropdown handleClose={closeDateModal} anchorEl={anchorEl}>
-      {/* <Modal open={true} hideBackdrop> */}
       <section
         onClick={(e) => e.stopPropagation()}
         ref={sectionRef}
@@ -99,7 +100,7 @@ export default function DatePicker({
           styles ??
           'absolute z-50 mt-1 shadow-2xl bg-white rounded-md ring-1 ring-black ring-opacity-5 focus:outline-none top-56 right-12 flex justify-center'
         }
-        style={{ height: height ?? 'min-content', width: openSideBar ? width ?? '570px' : '430px' }}
+        style={{ height: height ?? '450px', width: openSideBar ? width ?? '570px' : '430px' }}
       >
         {openSideBar && (
           <div className="w-5/12 h-full">
@@ -123,12 +124,11 @@ export default function DatePicker({
               !range && setShowDatePickerOption ? dispatch(setPickedDateState(true)) : null;
             }}
           >
-            <MiniDatePicker range={range} miniMode={openSideBar} fullCalendar />
+            <MiniDatePicker range={range} miniMode={openSideBar} fullCalendar dateFilter={dateFilter} />
           </div>
           <DatePickerFooter miniMode={openSideBar} closeDateModal={closeDateModal} time={time} />
         </div>
       </section>
-      {/* </Modal> */}
     </AlsoitMenuDropdown>
   );
 }
