@@ -5,7 +5,17 @@ import { useAppDispatch, useAppSelector } from '../app/hooks';
 import { setIsResize } from '../features/workspace/workspaceSlice';
 import { setUserSettingsKeys } from '../features/account/accountService';
 import useResolution from './useResolution';
-import { AjustableWidths, setAdjustableWidths } from '../features/account/accountSlice';
+import {
+  AjustableWidths,
+  setAdjustableExtendedBarWidths,
+  setAdjustablePilotWidths,
+  setAdjustableSidebarWidths,
+  setAdjustableWidths
+} from '../features/account/accountSlice';
+// import { STORAGE_KEYS } from '../app/config/dimensions';
+// import debounce from './debounce';
+import { STORAGE_KEYS } from '../app/config/dimensions';
+import { debounce } from 'lodash';
 
 interface UseResizeProps {
   dimensions: { min: number; max: number };
@@ -34,44 +44,61 @@ export function useResize({ dimensions, direction, defaultSize, storageKey }: Us
     }
   });
 
-  const handleMouseMoveXR = useCallback((e: MouseEvent) => {
-    if (blockRef.current) {
-      setIsDrag(true);
-      dispatch(setIsResize(true));
-      const mouseX = e.clientX;
-      const widthFromLeftToCurrentBlock = Math.round(blockRef.current.getBoundingClientRect().right);
-      const currentBlockWidth = blockRef.current.offsetWidth;
+  const handleMouseMoveXR = useCallback(
+    debounce((e: MouseEvent) => {
+      if (blockRef.current) {
+        const isXDirection = direction === 'XR';
+        setIsDrag(true);
+        dispatch(setIsResize(true));
+        const mouseX = e.clientX;
+        const widthFromLeftToCurrentBlock = Math.round(blockRef.current.getBoundingClientRect().right);
+        const currentBlockWidth = blockRef.current.offsetWidth;
+        const newBlockWidth =
+          widthFromLeftToCurrentBlock -
+          (widthFromLeftToCurrentBlock - currentBlockWidth) -
+          (widthFromLeftToCurrentBlock - mouseX);
+        const adjustedWidth = Math.max(min, Math.min(newBlockWidth, max));
+        blockRef.current.style.width = `${adjustedWidth}px`;
+        const newSize = isXDirection ? blockRef.current.offsetWidth : blockRef.current.offsetHeight;
+        setSize(newSize);
+        {
+          storageKey === STORAGE_KEYS.EXTENDED_BAR_WIDTH && dispatch(setAdjustableExtendedBarWidths(newSize));
+        }
+        {
+          storageKey === STORAGE_KEYS.SIDEBAR_WIDTH && dispatch(setAdjustableSidebarWidths(newSize));
+        }
+      }
+    }, 15),
+    []
+  );
 
-      const newBlockWidth =
-        widthFromLeftToCurrentBlock -
-        (widthFromLeftToCurrentBlock - currentBlockWidth) -
-        (widthFromLeftToCurrentBlock - mouseX);
-
-      const adjustedWidth = Math.max(min, Math.min(newBlockWidth, max));
-
-      blockRef.current.style.width = `${adjustedWidth}px`;
-    }
-  }, []);
-
-  const handleMouseMoveXL = useCallback((e: MouseEvent) => {
-    if (blockRef.current) {
-      setIsDrag(true);
-      dispatch(setIsResize(true));
-      const mouseX = e.clientX;
-      const widthFromLeftToCurrentBlock = Math.round(blockRef.current.getBoundingClientRect().left);
-
-      const currentBlockWidth = blockRef.current.offsetWidth;
-
-      const newBlockWidth = widthFromLeftToCurrentBlock - mouseX + currentBlockWidth;
-
-      const adjustedWidth = Math.max(min, Math.min(newBlockWidth, max));
-
-      blockRef.current.style.width = `${adjustedWidth}px`;
-    }
-  }, []);
+  const handleMouseMoveXL = useCallback(
+    debounce((e: MouseEvent) => {
+      if (blockRef.current) {
+        // const computedStyle = window.getComputedStyle(blockRef.current);
+        const isXDirection = direction === 'XL';
+        setIsDrag(true);
+        dispatch(setIsResize(true));
+        const mouseX = e.clientX;
+        const widthFromLeftToCurrentBlock = Math.round(blockRef.current.getBoundingClientRect().left);
+        const currentBlockWidth = blockRef.current.getBoundingClientRect().width;
+        const newBlockWidth = widthFromLeftToCurrentBlock - mouseX + currentBlockWidth;
+        const adjustedWidth = Math.max(min, Math.min(newBlockWidth, max));
+        blockRef.current.style.width = `${adjustedWidth}px`;
+        const newSize = isXDirection ? blockRef.current.offsetWidth : blockRef.current.offsetHeight;
+        setSize(newSize);
+        {
+          storageKey === STORAGE_KEYS.PILOT_WIDTH && dispatch(setAdjustablePilotWidths(newSize));
+        }
+        dispatch(setAdjustableWidths({ [storageKey]: newSize } as AjustableWidths));
+      }
+    }, 15),
+    []
+  );
 
   const handleMouseMoveY = useCallback((e: MouseEvent) => {
     if (blockRef.current) {
+      const isXDirection = direction === 'XL' || direction === 'XR';
       setIsDrag(true);
       dispatch(setIsResize(true));
       const mouseY = e.clientY;
@@ -82,6 +109,18 @@ export function useResize({ dimensions, direction, defaultSize, storageKey }: Us
       const adjustedHeight = Math.max(min, Math.min(newBlockHeight, max));
 
       blockRef.current.style.height = `${adjustedHeight}px`;
+      const newSize = isXDirection ? blockRef.current.offsetWidth : blockRef.current.offsetHeight;
+      setSize(newSize);
+
+      {
+        storageKey === STORAGE_KEYS.PILOT_WIDTH && dispatch(setAdjustablePilotWidths(newSize));
+      }
+      {
+        storageKey === STORAGE_KEYS.EXTENDED_BAR_WIDTH && dispatch(setAdjustableExtendedBarWidths(newSize));
+      }
+      {
+        storageKey === STORAGE_KEYS.SIDEBAR_WIDTH && dispatch(setAdjustableSidebarWidths(newSize));
+      }
     }
   }, []);
 
@@ -107,6 +146,15 @@ export function useResize({ dimensions, direction, defaultSize, storageKey }: Us
         value: updateUserSettings,
         resolution
       });
+      {
+        storageKey === STORAGE_KEYS.PILOT_WIDTH && dispatch(setAdjustablePilotWidths(newSize));
+      }
+      {
+        storageKey === STORAGE_KEYS.EXTENDED_BAR_WIDTH && dispatch(setAdjustableExtendedBarWidths(newSize));
+      }
+      {
+        storageKey === STORAGE_KEYS.SIDEBAR_WIDTH && dispatch(setAdjustableSidebarWidths(newSize));
+      }
       dispatch(setAdjustableWidths({ [storageKey]: newSize } as AjustableWidths));
       localStorage.setItem(storageKey, JSON.stringify(newSize));
       setIsDrag(false);

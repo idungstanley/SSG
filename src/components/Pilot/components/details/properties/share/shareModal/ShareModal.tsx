@@ -47,7 +47,7 @@ export default function ShareModal({ taskId, taskName }: { taskId?: string; task
         </HeadMenu>
       </div>
       <Menu anchorEl={anchorEl} open={!!anchorEl} onClose={() => setAnchorEl(null)} style={{ marginTop: '60px' }}>
-        <div className="p-2" style={{ zIndex: '100', width: '540px' }}>
+        <div key="shareModal" className="p-2" style={{ zIndex: '100', width: '540px' }}>
           <h1 className="pt-1 text-black" style={{ fontSize: '18px' }}>
             Share this task
           </h1>

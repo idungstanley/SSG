@@ -129,7 +129,9 @@ export default function EditTagModal({ tag, taskId, onClose }: EditTagModalProps
         ))}
       </div>
       <Menu anchorEl={anchorEl} open={!!anchorEl} onClose={() => setAnchorEl(null)} style={{ marginLeft: '30px' }}>
-        <SelectColor onClick={handleClickColor} color={color} />
+        <div key="editTagModal">
+          <SelectColor onClick={handleClickColor} color={color} />
+        </div>
       </Menu>
     </>
   );

@@ -9,6 +9,7 @@ import { Search } from '../../../TasksHeader/ui/Search/Search';
 import { Sort } from '../../../TasksHeader/ui/Sort/Sort';
 import { AssigneeSplitSubtasks } from '../../../TasksHeader/ui/Assignee/AssigneeSplitSubtasks';
 import RoundedCheckbox from '../../../Checkbox/RoundedCheckbox';
+import ActiveEntityAvatar from '../../../avatar/ActiveEntityAvatar';
 
 interface LabelProps {
   showTable: boolean;
@@ -111,9 +112,23 @@ export function Label({
           <div className="flex items-center justify-center h-6 bg-white -mt-1 rounded-[5px] w-12">
             <ListAddModal handleCheckedGroupTasks={handleCheckedGroupTasks} ListColor={ListColor} />
           </div>
-          {showTable && <p className="ml-3 max-w-34 truncate text-white">{hubName}</p>}
+          {showTable && (
+            <p className="flex items-center space-x-2 ml-3 max-w-34 truncate text-white">
+              <p>
+                <ActiveEntityAvatar width="w-4" height="h-4" size="8px" />
+              </p>
+              <p>{hubName}</p>
+            </p>
+          )}
         </div>
-        {!showTable && <p className="ml-3 max-w-34 truncate">{hubName}</p>}
+        {!showTable && (
+          <p className="flex items-center space-x-2 ml-3 max-w-34 truncate">
+            <p>
+              <ActiveEntityAvatar width="w-4" height="h-4" size="8px" />
+            </p>
+            <p>{hubName}</p>
+          </p>
+        )}
       </div>
       {isSplitSubtasks ? (
         <div className="flex items-center justify-end mr-5">

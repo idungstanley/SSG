@@ -343,7 +343,7 @@ export default function TaskMenu() {
           {TaskIcons.map((menu) => (
             <Fragment key={menu.id}>
               <ToolTip className="pt-2" title={isHideTooltip ? '' : menu.label} placement="bottom">
-                <p
+                <div
                   className="flex items-center px-2 mt-0 text-lg text-white cursor-pointer"
                   onClick={(e) => {
                     menu.handleClick(e);
@@ -352,7 +352,7 @@ export default function TaskMenu() {
                   key={menu.id}
                 >
                   {menu.icons}
-                </p>
+                </div>
               </ToolTip>
             </Fragment>
           ))}
