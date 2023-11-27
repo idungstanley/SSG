@@ -376,7 +376,7 @@ export function StickyCol({
                   : saveSettingOnline?.CompactView && saveSettingOnline?.singleLineView
                   ? '25px'
                   : '',
-              maxWidth: saveSettingOnline?.singleLineView ? '90%' : '100%'
+              maxWidth: saveSettingOnline?.singleLineView ? 'calc(100% - 40px)' : '100%'
             }}
             onClick={onClickTask}
             onDoubleClick={() => handleSetEditable()}
