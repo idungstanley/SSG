@@ -1,7 +1,5 @@
-import { ChevronDoubleDownIcon, ChevronDoubleUpIcon } from '@heroicons/react/24/outline';
-import { memo } from 'react';
+import React, { memo } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
-import { cl } from '../../../../../../utils';
 import { setShowTabLabel } from '../../../../../../features/workspace/workspaceSlice';
 
 const pilotFromLS = JSON.parse(localStorage.getItem('pilot') || '""') as { tabOrder: number[]; showTabLabel: boolean };
@@ -23,16 +21,10 @@ function ShowTabsLabelToggle() {
   };
 
   return show ? (
-    <button
-      type="button"
-      onClick={toggleShowTabLabel}
-      className={cl(
-        'border bg-white absolute flex items-center justify-center text-gray-600',
-        showTabLabel ? 'right-6 top-0 w-4 h-4' : 'w-4 h-4 right-1 top-2'
-      )}
-    >
-      {showTabLabel ? <ChevronDoubleUpIcon className="w-4 h-4" /> : <ChevronDoubleDownIcon className="w-4 h-4" />}
-    </button>
+    <label className="switch">
+      <input className="inputShow" type="checkbox" checked={showTabLabel} onChange={() => toggleShowTabLabel} />
+      <div className={`slider ${showTabLabel ? 'checked' : ''} `}></div>
+    </label>
   ) : null;
 }
 

@@ -2,7 +2,6 @@ import { ReactNode } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { setShowPilotSideOver } from '../../../../features/general/slideOver/slideOverSlice';
 import { cl } from '../../../../utils';
-import Menu from '../HotKeys/components/Dropdown';
 import { setActiveTabId } from '../../../../features/workspace/workspaceSlice';
 import CompactIcon from '../../../../assets/icons/CompactIcon';
 import { STORAGE_KEYS } from '../../../../app/config/dimensions';
@@ -63,12 +62,8 @@ export default function Header({ menu, children, isMinified, additionalNavItems 
             {isMinified ? <CompactIcon /> : <GroupIcon />}
           </button>
           <div
-            className="flex justify-center items-center hover:bg-alsoit-gray-125 transition duration-500"
             style={{
-              margin: isMinified ? '0' : '1px 12px 5px 0',
-              borderRadius: '3px',
-              width: '20px',
-              height: '20px'
+              margin: isMinified ? '0' : '1px 12px 5px 0'
             }}
           >
             {menu}
@@ -78,5 +73,3 @@ export default function Header({ menu, children, isMinified, additionalNavItems 
     </div>
   );
 }
-
-Header.Menu = Menu;
