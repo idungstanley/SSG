@@ -226,7 +226,7 @@ export default function HubPage() {
             <VerticalScroll onScroll={onScroll}>
               <section
                 style={{ minHeight: '0', maxHeight: '83vh' }}
-                className="w-full h-full py-4 pb-0 pl-5 pr-1 space-y-10"
+                className="w-full h-full py-4 pb-0 pl-5 space-y-10"
               >
                 {/* lists */}
                 {Object.keys(lists).map((listId) => (
