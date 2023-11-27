@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import * as React from 'react';
 import { useState } from 'react';
 import ModalPilotNav from '../../../Modal/ModalPilotNav';
+import ActiveEntityAvatar from '../../../avatar/ActiveEntityAvatar';
 
 interface ToolbarNavInterface {
   id: string | null;
@@ -32,6 +33,7 @@ export default function ToolbarNav() {
 
   for (let i = 0; i < activeItems.length; i++) {
     const element = activeItems[i] as HTMLElement;
+
     toolbarNavItems.push({
       id: element.getAttribute('data-id'),
       name: element.getAttribute('data-name'),
@@ -112,6 +114,9 @@ export default function ToolbarNav() {
 
   return (
     <>
+      <div className="flex items-center w-4 h-4 overflow-hidden rounded-full mr-1">
+        <ActiveEntityAvatar width="w-4" height="h-4" size="8px" />
+      </div>
       {toolbarNavTree.map((item) => (
         <div
           key={item.name}
@@ -148,6 +153,14 @@ export default function ToolbarNav() {
           )}
         </div>
       ))}
+      {!toolbarNavTree.length && (
+        <div
+          className="capitalize text-xs font-semibold truncate items-center text-alsoit-gray-300 overflow-visible whitespace-nowrap rounded py-1 hover:bg-alsoit-gray-125 transition duration-500"
+          style={{ paddingLeft: '5px', paddingRight: '5px' }}
+        >
+          {activeItemName}
+        </div>
+      )}
     </>
   );
 }

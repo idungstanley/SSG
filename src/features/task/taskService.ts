@@ -25,6 +25,7 @@ import {
   setAssignOnHoverState,
   setCurrentTeamMemberId,
   setDuplicateTaskObj,
+  setGlobalSearchResult,
   setNewTaskPriority,
   setNewTaskStatus,
   setRootTaskIds,
@@ -1573,6 +1574,26 @@ export const UseTaskWatchersAssignService = (taskIds: string[], user: ITeamMembe
       dispatch(setToggleAssignCurrentTaskId(null));
       dispatch(setSelectedTasksArray([]));
       dispatch(setSelectedListIds([]));
+    }
+  });
+};
+
+const GlobalSearch = ({ searchValue }: { searchValue: string }) => {
+  const request = requestNew<IFullTaskRes>({
+    url: '/search/tasks',
+    method: 'POST',
+    data: {
+      search: searchValue
+    }
+  });
+  return request;
+};
+
+export const UseGlobalSearch = () => {
+  const dispatch = useAppDispatch();
+  return useMutation(GlobalSearch, {
+    onSuccess: (data) => {
+      dispatch(setGlobalSearchResult(data.data.tasks));
     }
   });
 };

@@ -34,6 +34,8 @@ import { generateSubtasksList } from '../../utils/generateLists';
 import { generateUrlWithViewId } from '../../app/helpers';
 import { IView } from '../../features/hubs/hubs.interfaces';
 import { defaultTaskTemplate } from '../../components/Views/ui/Table/newTaskTemplate/DefaultTemplate';
+import { setShowPilotSideOver } from '../../features/general/slideOver/slideOverSlice';
+import { Spinner } from '../../common';
 
 export function ListPage() {
   const dispatch = useAppDispatch();
@@ -48,8 +50,11 @@ export function ListPage() {
     filters: { option },
     keyBoardSelectedIndex,
     taskColumnIndex,
-    taskColumns
+    taskColumns,
+    KeyBoardSelectedTaskData
   } = useAppSelector((state) => state.task);
+  const { activeView } = useAppSelector((state) => state.workspace);
+  const { currentWorkspaceId } = useAppSelector((state) => state.auth);
 
   const [tasksFromRes, setTasksFromRes] = useState<ITaskFullList[]>([]);
   const [listDetailsFromRes, setListDetailsFromRes] = useState<IListDetailRes>();
@@ -71,7 +76,7 @@ export function ListPage() {
   });
 
   // get list tasks
-  const { data, hasNextPage, fetchNextPage, isFetching } = getTaskListService(listId);
+  const { data, hasNextPage, fetchNextPage, isFetching, isLoading } = getTaskListService(listId);
 
   const hasTasks = data?.pages[0].data.tasks.length;
 
@@ -101,12 +106,36 @@ export function ListPage() {
       const newIndex = Math.min(taskColumns.length - 1, taskColumnIndex + 1);
       dispatch(setTaskColumnIndex(newIndex));
     }
+
+    if (e.key === 'Enter' && KeyBoardSelectedTaskData !== null) {
+      dispatch(
+        setShowPilotSideOver({
+          show: true,
+          id: KeyBoardSelectedTaskData.id,
+          title: KeyBoardSelectedTaskData.name,
+          type: 'task'
+        })
+      );
+      dispatch(
+        setActiveItem({
+          activeItemId: KeyBoardSelectedTaskData.id,
+          activeItemType: 'task',
+          activeItemName: KeyBoardSelectedTaskData.name
+        })
+      );
+      navigate(
+        `/${currentWorkspaceId}/tasks/l/${KeyBoardSelectedTaskData.list_id}/t/${KeyBoardSelectedTaskData.id}/v/${activeView?.id}`,
+        {
+          replace: true
+        }
+      );
+    }
   };
   useEffect(() => {
     window.addEventListener('keydown', handleKeyDown);
 
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [keyBoardSelectedIndex, taskColumns, taskColumnIndex]);
+  }, [keyBoardSelectedIndex, taskColumns, taskColumnIndex, KeyBoardSelectedTaskData]);
 
   useEffect(() => {
     if (listId) {
@@ -247,18 +276,27 @@ export function ListPage() {
       >
         <>
           <Header />
-          <VerticalScroll onScroll={onScroll}>
-            {/* main content */}
-            <section style={{ minHeight: '0', maxHeight: '83vh' }} className="w-full h-full p-4 pb-0 space-y-10">
-              <TaskQuickAction />
 
-              {tasksStore[listId as string]?.length ? (
-                <List tasks={tasksStore[listId as string]} combinedTasksArr={combinedArr} />
-              ) : (
-                !isFetching && !hasTasks && <List tasks={defaultTaskTemplate} />
-              )}
-            </section>
-          </VerticalScroll>
+          {isLoading || isFetching ? (
+            <div
+              className="flex items-center justify-center w-full h-full mx-auto mt-5"
+              style={{ minHeight: '0', maxHeight: '83vh' }}
+            >
+              <Spinner color="#0F70B7" />
+            </div>
+          ) : (
+            <VerticalScroll onScroll={onScroll}>
+              {/* main content */}
+              <section style={{ minHeight: '0', maxHeight: '83vh' }} className="w-full h-full p-4 pb-0 space-y-10">
+                <TaskQuickAction />
+                {tasksStore[listId as string]?.length ? (
+                  <List tasks={tasksStore[listId as string]} combinedTasksArr={combinedArr} />
+                ) : (
+                  !isFetching && !hasTasks && <List tasks={defaultTaskTemplate} />
+                )}
+              </section>
+            </VerticalScroll>
+          )}
         </>
       </Page>
     </>
