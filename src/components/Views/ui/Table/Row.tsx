@@ -280,13 +280,11 @@ export function Row({
             )}
             <ToolTip title="Enhance View">
               <button
-                className="p-1 pl-4 bg-white rounded-md opacity-0 group-hover:opacity-100"
+                className="p-1 bg-white rounded-md  opacity-0 group-opacity-100"
                 onClick={(e) => e.stopPropagation()}
+                style={{ backgroundColor: 'orange' }}
               >
-                <Enhance
-                  className={saveSettingOnline?.CompactView ? 'w-2 h-2' : 'w-3 h-3'}
-                  style={{ color: 'orange' }}
-                />
+                <Enhance className={saveSettingOnline?.CompactView ? 'w-2 h-2' : 'w-3 h-3 font-white'} />
               </button>
             </ToolTip>
           </div>
