@@ -35,7 +35,7 @@ export function useScreenRecorder() {
 
       combinedStream.getAudioTracks().map((tracks) => (tracks.enabled = !isMuted));
 
-      const recorder = new MediaRecorder(combinedStream);
+      const recorder = new MediaRecorder(combinedStream, { mimeType: 'video/webm' });
       const chunks: Blob[] = [];
 
       recorder.ondataavailable = (event) => {
@@ -45,7 +45,7 @@ export function useScreenRecorder() {
       };
 
       recorder.onstop = () => {
-        const blob = new Blob(chunks, { type: 'video/webm' });
+        const blob = new Blob(chunks, { type: 'video/mp4' });
         handleStopStream({ blob });
         setRecordedBlob(blob);
         setIsRecording(false);
