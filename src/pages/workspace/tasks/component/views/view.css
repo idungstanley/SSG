@@ -175,6 +175,11 @@ textarea {
   height: 20px;
 }
 
+.switch.small {
+  width: 16px;
+  height: 9px;
+}
+
 .switch input {
   opacity: 0;
   width: 0;
@@ -203,15 +208,26 @@ textarea {
   height: 16px;
   width: 16px;
   left: 2px;
-  bottom: 2px;
+  top: 50%;
+  transform: translateY(-50%);
   background-color: white;
   border-radius: 50%;
   transition: transform 0.2s ease;
 }
 
-input:checked + .slider:before {
-  transform: translateX(20px);
+.switch.small .slider:before {
+  height: 7px;
+  width: 7px;
 }
+
+input:checked + .slider:before {
+  transform: translate(20px, -50%);
+}
+
+.switch.small input:checked + .slider:before {
+  transform: translate(6px, -50%);
+}
+
 .pulsate {
   animation: pulse-animation 1s infinite;
 }
