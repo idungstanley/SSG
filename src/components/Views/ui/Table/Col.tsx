@@ -67,10 +67,13 @@ export function Col({ value, field, fieldId, task, styles, selectedRow, ...props
 
   const COL_BG = taskId === task.id ? ACTIVE_COL_BG : selectedRow ? 'bg-alsoit-purple-50' : DEFAULT_COL_BG;
   const isSelected = selectedTasksArray.includes(task.id);
+  const columnIndex = taskColumns.map((columns): boolean => {
+    return !columns.hidden && columns.field === field && task.id === KeyBoardSelectedTaskData?.id ? true : false;
+  });
 
   // fields config
   const fields: Record<string, JSX.Element> = {
-    priority: <TaskPriority task={task as ImyTaskData} />,
+    priority: <TaskPriority task={task as ImyTaskData} activeColumn={columnIndex} />,
     status: value ? (
       <div
         className="top-0 flex flex-col items-center justify-center w-full h-full px-1 text-xs font-medium text-center text-white capitalize"
@@ -86,7 +89,13 @@ export function Col({ value, field, fieldId, task, styles, selectedRow, ...props
           dispatch(setSelectedTaskType(task?.parent_id ? EntityType.subtask : EntityType.task));
         }}
       >
-        <StatusDropdown taskCurrentStatus={task.status} taskStatuses={task.task_statuses} statusDropdownType="name" />
+        <StatusDropdown
+          taskCurrentStatus={task.status}
+          taskStatuses={task.task_statuses}
+          statusDropdownType="name"
+          task={task}
+          activeColumn={columnIndex}
+        />
       </div>
     ) : (
       <></>
@@ -177,6 +186,7 @@ export function Col({ value, field, fieldId, task, styles, selectedRow, ...props
         task={task as ImyTaskData}
         itemId={task.id}
         option={`${task.id !== '0' ? EntityType.task : 'getTeamId'}`}
+        activeColumn={columnIndex}
       />
     ),
     progress_manual: (
@@ -243,10 +253,6 @@ export function Col({ value, field, fieldId, task, styles, selectedRow, ...props
       />
     )
   };
-
-  const columnIndex = taskColumns.map((columns): boolean => {
-    return !columns.hidden && columns.field === field && task.id === KeyBoardSelectedTaskData?.id ? true : false;
-  });
 
   return (
     <>
