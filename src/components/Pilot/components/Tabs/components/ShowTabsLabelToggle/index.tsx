@@ -6,7 +6,6 @@ const pilotFromLS = JSON.parse(localStorage.getItem('pilot') || '""') as { tabOr
 
 function ShowTabsLabelToggle() {
   const dispatch = useAppDispatch();
-  const { show } = useAppSelector((state) => state.slideOver.pilotSideOver);
   const { showTabLabel } = useAppSelector((state) => state.workspace);
 
   const toggleShowTabLabel = () => {
@@ -20,12 +19,12 @@ function ShowTabsLabelToggle() {
     dispatch(setShowTabLabel(!showTabLabel));
   };
 
-  return show ? (
-    <label className="switch">
-      <input className="inputShow" type="checkbox" checked={showTabLabel} onChange={() => toggleShowTabLabel} />
-      <div className={`slider ${showTabLabel ? 'checked' : ''} `}></div>
+  return (
+    <label className="switch pilot-modal-toggle" style={{ width: '24px', height: '12.63px' }}>
+      <input className="inputShow" type="checkbox" checked={!showTabLabel} onChange={() => toggleShowTabLabel()} />
+      <div className={`slider ${!showTabLabel ? 'checked' : ''} `}></div>
     </label>
-  ) : null;
+  );
 }
 
 export default memo(ShowTabsLabelToggle);

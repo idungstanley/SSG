@@ -1,37 +1,21 @@
 import React, { useState } from 'react';
-import { FireIcon, ChevronDoubleRightIcon, EyeIcon } from '@heroicons/react/24/outline';
 import AlsoitMenuDropdown from '../../../../../DropDowns';
 import ThreeDotIcon from '../../../../../../assets/icons/ThreeDotIcon';
-import Close from '../../../../../../assets/icons/Close';
-import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
-import { setShowTabLabel } from '../../../../../../features/workspace/workspaceSlice';
 import ShowTabsLabelToggle from '../../../Tabs/components/ShowTabsLabelToggle';
-
-const pilotFromLS = JSON.parse(localStorage.getItem('pilot') || '""') as { tabOrder: number[]; showTabLabel: boolean };
+import EditIcon from '../../../../../../assets/icons/Edit';
+import SelectAllIcon from '../../../../../../assets/icons/SelectAllIcon';
+import DeleteForeverIcon from '../../../../../../assets/icons/DeleteForeverIcon';
+import PermissionIcon from '../../../../../../assets/icons/PermissionIcon';
 
 interface HotKeysProps {
   setShowModal: (i: boolean) => void;
 }
 
 export default function Menu({ setShowModal }: HotKeysProps) {
-  const dispatch = useAppDispatch();
   const [showPilotToolbarMenu, setShowPilotToolbarMenu] = useState<null | HTMLDivElement>(null);
-  const { showTabLabel } = useAppSelector((state) => state.workspace);
 
   const handleOpenSettingsMenu = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     setShowPilotToolbarMenu(event.currentTarget);
-  };
-
-  const toggleShowTabLabel = () => {
-    localStorage.setItem(
-      'pilot',
-      JSON.stringify({
-        ...pilotFromLS,
-        showTabLabel: !showTabLabel
-      })
-    );
-    dispatch(setShowTabLabel(!showTabLabel));
-    console.log(showTabLabel);
   };
 
   const handleClosePilotToolbarMenu = () => {
@@ -41,28 +25,41 @@ export default function Menu({ setShowModal }: HotKeysProps) {
   const dropdownConfig = [
     {
       id: 'add_remove_hot_key',
-      icon: <FireIcon className="w-4 h-4 " />,
-      label: 'Add / remove Hot Keys',
+      icon: <EditIcon active={false} />,
+      label: 'Edit',
+      handleClick: () => ({})
+    },
+    {
+      id: 'add_remove_hot_key',
+      icon: <SelectAllIcon />,
+      label: 'Select',
       handleClick: () => setShowModal(true)
     },
     {
-      id: 'show_hide_pilot_feature',
-      icon: <EyeIcon className="w-4 h-4 " />,
-      label: 'Show or Hide Pilot Feature',
+      id: 'remove',
+      icon: <DeleteForeverIcon />,
+      label: 'Remove',
+      handleClick: () => ({})
+    },
+    {
+      id: 'permissions',
+      icon: <PermissionIcon />,
+      label: 'Permissions',
       handleClick: () => ({})
     },
     {
       id: 'compact_view',
-      icon: <ChevronDoubleRightIcon className="w-4 h-4 " />,
-      label: 'Compact View',
-      handleClick: () => toggleShowTabLabel()
+      label: 'Hot keys',
+      handleClick: () => ({})
     }
   ];
 
   return (
     <>
       <div
-        className="flex justify-center items-center hover:bg-alsoit-gray-125 transition duration-500 cursor-pointer"
+        className={`flex justify-center items-center hover:bg-alsoit-gray-125 transition duration-500 cursor-pointer ${
+          showPilotToolbarMenu ? 'bg-alsoit-purple-50' : ''
+        }`}
         style={{
           borderRadius: '3px',
           width: '20px',
@@ -72,53 +69,84 @@ export default function Menu({ setShowModal }: HotKeysProps) {
           handleOpenSettingsMenu(e);
         }}
       >
-        <ThreeDotIcon />
+        <ThreeDotIcon active={!!showPilotToolbarMenu} />
       </div>
 
-      <AlsoitMenuDropdown anchorEl={showPilotToolbarMenu} handleClose={handleClosePilotToolbarMenu}>
-        <div className="py-2 w-52 relative">
-          <span
-            className="absolute right-0 hover:rotate-90 transition duration-500 cursor-pointer z-10"
-            style={{ top: '5px', right: '5px' }}
-            onClick={() => handleClosePilotToolbarMenu()}
-          >
-            <Close active={false} width="15" height="15" />
-          </span>
+      <AlsoitMenuDropdown
+        anchorEl={showPilotToolbarMenu}
+        handleClose={handleClosePilotToolbarMenu}
+        popupStyles={{
+          width: '145px',
+          height: '222px',
+          marginLeft: '4px',
+          marginTop: '4px',
+          boxShadow: '0px 0px 5px 0px #00000040'
+        }}
+      >
+        <div className="w-52 relative" style={{ width: '145px', paddingTop: '9px', paddingBottom: '8px' }}>
           <div className="flex w-full justify-center relative px-2">
             <p className="uppercase" style={{ color: '#424242', fontSize: '8px' }}>
-              Toolbar settings
+              MORE SETTINGS
             </p>
           </div>
           <div className="flex w-full justify-center relative px-2">
-            <span className="absolute w-full z-0" style={{ top: '8px' }}>
+            <span className="absolute w-full z-0" style={{ top: '10px' }}>
               <hr />
             </span>
             <p
               className="px-2 z-10 uppercase"
-              style={{ fontSize: '8px', background: '#fff', color: '#B2B2B2', paddingTop: '2px' }}
+              style={{ fontSize: '8px', background: '#fff', color: '#B2B2B2', paddingTop: '4px' }}
             >
-              Choose setting
+              CHOOSE OPTION
             </p>
           </div>
           {dropdownConfig?.map((i) => (
-            <div key={i.id} className="px-2">
+            <div key={i.id}>
+              {i.id == 'compact_view' && (
+                <div className="flex w-full justify-center relative px-2">
+                  <span className="absolute w-full z-0" style={{ top: '9px' }}>
+                    <hr />
+                  </span>
+                  <p
+                    className="px-2 z-10 uppercase"
+                    style={{ fontSize: '8px', background: '#fff', color: '#B2B2B2', paddingTop: '4px' }}
+                  >
+                    HOT KEYS SETTINGS
+                  </p>
+                </div>
+              )}
               <div
-                className="flex items-center w-full text-xs text-gray-600 rounded cursor-pointer px-0.5 hover:bg-alsoit-gray-125 justify-between transition duration-500"
+                className="flex items-center w-full text-xs text-gray-600 rounded cursor-pointer hover:bg-alsoit-gray-125 justify-between transition duration-500"
                 style={{
-                  padding: '6px 3px'
+                  margin: '3px 7px 0 14px',
+                  padding: '4px 10px 5px 2px',
+                  maxWidth: i.id === 'compact_view' ? '123px' : '120px'
                 }}
                 onClick={() => i.handleClick()}
               >
-                <div className="flex items-center pl-1">
-                  <p className="flex items-center w-5 h-5">{i.icon}</p>
+                <div
+                  className="flex items-center pl-1"
+                  style={{
+                    paddingTop: i.id === 'compact_view' ? '0' : '0'
+                  }}
+                >
+                  {i.icon && <p className="flex items-center w-5 h-5">{i.icon}</p>}
                   <p
-                    className="font-medium"
-                    style={{ fontSize: '12px', color: i.id == 'show_hide_pilot_feature' ? 'orange' : '' }}
+                    className="font-medium alsoit-gray-300"
+                    style={{
+                      fontSize: '13px',
+                      paddingLeft: '5px',
+                      color: i.id == 'show_hide_pilot_feature' ? 'orange' : ''
+                    }}
                   >
                     {i.label}
                   </p>
                 </div>
-                <span>{i.id === 'compact_view' ? <ShowTabsLabelToggle /> : null}</span>
+                {i.id === 'compact_view' ? (
+                  <span style={{ paddingTop: '5px' }}>
+                    <ShowTabsLabelToggle />
+                  </span>
+                ) : null}
               </div>
             </div>
           ))}

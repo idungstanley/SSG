@@ -6,10 +6,15 @@ interface dropdownProps {
   anchorEl?: HTMLElement | null;
   children: React.ReactNode | JSX.Element;
   style?: React.CSSProperties;
+  popupStyles?: React.CSSProperties;
 }
 
-export default function AlsoitMenuDropdown({ handleClose, anchorEl, children, style }: dropdownProps) {
+export default function AlsoitMenuDropdown({ handleClose, anchorEl, children, style, popupStyles }: dropdownProps) {
   const open = Boolean(anchorEl);
+  const paperStyle = {
+    borderRadius: '5px',
+    ...popupStyles
+  };
   return (
     <Menu
       id="basic-menu"
@@ -21,9 +26,7 @@ export default function AlsoitMenuDropdown({ handleClose, anchorEl, children, st
         'aria-labelledby': 'basic-button'
       }}
       PaperProps={{
-        style: {
-          borderRadius: '10px'
-        }
+        style: paperStyle
       }}
     >
       {children}
