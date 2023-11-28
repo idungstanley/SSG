@@ -135,8 +135,11 @@ export function List({ tasks, combinedTasksArr }: ListProps) {
 
   return (
     <div
-      className={`pt-1 border-t-4 border-l-4 rounded-tl-lg  ${!collapseTable && 'rounded-lg pb-3'}`}
+      className={`pt-1 ${!collapseTable && 'rounded-lg pb-3'}`}
       style={{
+        borderLeftWidth: '3px',
+        borderTopWidth: '3px',
+        borderTopLeftRadius: '4px',
         borderColor: !ListColor?.outerColour ? 'black' : (ListColor?.outerColour as string),
         backgroundColor: LightenColor(!ListColor?.outerColour ? 'black' : (ListColor?.outerColour as string), 0.95)
       }}
@@ -162,7 +165,7 @@ export function List({ tasks, combinedTasksArr }: ListProps) {
             </div>
           ) : null}
           {!showNewTaskField ? (
-            <div className="h-5 font-semibold alsoit-gray-300">
+            <div className="h-5 font-semibold mt-2 text-alsoit-gray-200 z-50">
               <button onClick={() => setShowNewTaskField(true)} className={cl('p-1.5 pl-14 text-left w-fit text-xs')}>
                 + NEW TASK
               </button>
