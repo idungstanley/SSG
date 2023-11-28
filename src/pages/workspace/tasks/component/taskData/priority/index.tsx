@@ -8,8 +8,15 @@ import {
 import { useAppDispatch } from '../../../../../../app/hooks';
 import { renderDataProps } from '../DataRenderFunc';
 import { EntityType } from '../../../../../../utils/EntityTypes/EntityType';
+import { Task } from '../../../../../../features/task/interface.tasks';
 
-export default function TaskPriority({ task }: renderDataProps) {
+type PickedTask = Pick<renderDataProps, 'task'>;
+
+interface TaskPriorityProps extends PickedTask {
+  activeColumn?: boolean[];
+}
+
+export default function TaskPriority({ task, activeColumn }: TaskPriorityProps) {
   const dispatch = useAppDispatch();
 
   const handleTaskPriority = (task: ImyTaskData) => {
@@ -20,10 +27,10 @@ export default function TaskPriority({ task }: renderDataProps) {
 
   return (
     <div
-      className="relative mt-2 border-gray-300 border-dotted "
+      className="relative border-gray-300 border-dotted w-full h-full"
       onClick={() => handleTaskPriority(task as ImyTaskData)}
     >
-      <PriorityDropdown taskCurrentPriority={task?.priority} />
+      <PriorityDropdown taskCurrentPriority={task?.priority} task={task as Task} activeColumn={activeColumn} />
     </div>
   );
 }
