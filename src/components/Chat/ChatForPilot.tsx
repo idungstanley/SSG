@@ -106,7 +106,7 @@ export default function ChatForPilot() {
                 <ChatFilter />
               </div>
               <div
-                className="flex justify-between items-center px-1 py-0.5 bg-alsoit-gray-125 items-center rounded-md"
+                className="flex justify-between px-1 py-0.5 bg-alsoit-gray-125 items-center rounded-md"
                 style={{ minHeight: '24px', color: 'orange', fontSize: '10px' }}
               >
                 Archived
