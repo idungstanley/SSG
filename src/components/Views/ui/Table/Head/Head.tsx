@@ -305,9 +305,11 @@ export function Head({
                 />
               </div>
               <div
-                className="py-0.5 relative px-2 rounded-tr-md -mb-1 flex items-center space-x-1 text-white dFlex"
+                className="py-0.5 relative pr-4 pl-2.5 -mb-1 flex items-center space-x-1 text-white dFlex"
                 style={{
                   backgroundColor: headerStatusColor,
+                  borderTopRightRadius: '4px',
+                  borderTopLeftRadius: '4px',
                   marginLeft: '38px',
                   height: '25px',
                   gap: '5px'
