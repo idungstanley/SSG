@@ -10,7 +10,6 @@ import { ManageTagsDropdown } from '../../../Tag/ui/ManageTagsDropdown/ui/Manage
 import { AddSubTask } from '../AddTask/AddSubTask';
 import TaskTag from '../../../Tag/ui/TaskTag';
 import Effect from '../../../../assets/icons/Effect';
-import Enhance from '../../../badges/Enhance';
 import {
   THREE_SUBTASKS_LEVELS,
   TWO_SUBTASKS_LEVELS,
@@ -26,6 +25,8 @@ import Copy from '../../../../assets/icons/Copy';
 import { findExpandedLevels } from '../../../../pages/workspace/lists/components/renderlist/listDetails/listSubtask/ListSubtasks';
 import NewSubTaskTemplate from './newTaskTemplate/NewSubTaskTemplate';
 import Badges from '../../../badges';
+// import ThreeDotIcon from '../../../../assets/icons/ThreeDotIcon';
+import TaskSettingsDropDown from './TaskSettingsDropdown';
 
 export const MAX_SUBTASKS_LEVEL = 10;
 
@@ -78,6 +79,7 @@ export function Row({
 
   const [showSubTasks, setShowSubTasks] = useState(false);
   const [isCopied, setIsCopied] = useState<number>(0);
+  // const [dropdownEl, setDropdownEl] = useState<null | HTMLElement>(null);
 
   const rowRef = useRef<HTMLTableRowElement | null>(null);
 
@@ -125,6 +127,11 @@ export function Row({
       setIsCopied(0);
     }, 1000);
   };
+
+  // const handleSettings = (e: React.MouseEvent<HTMLSpanElement, MouseEvent>): void => {
+  //   e.preventDefault();
+  //   setDropdownEl(e.currentTarget);
+  // };
 
   // hide element if is currently grabbing
   const style = {
@@ -278,15 +285,12 @@ export function Row({
                 </button>
               </ToolTip>
             )}
-            <ToolTip title="Enhance View">
-              <button
-                className="p-1 bg-white rounded-md  opacity-0 group-opacity-100"
-                onClick={(e) => e.stopPropagation()}
-                style={{ backgroundColor: 'orange' }}
-              >
-                <Enhance className={saveSettingOnline?.CompactView ? 'w-2 h-2' : 'w-3 h-3 font-white'} />
+            {/* <ToolTip title="Settings">
+              <button className="p-1 opacity-0 group-hover:opacity-100" onClick={(e) => handleSettings(e)}>
+                <ThreeDotIcon />
               </button>
-            </ToolTip>
+            </ToolTip> */}
+            <TaskSettingsDropDown />
           </div>
         </StickyCol>
 
