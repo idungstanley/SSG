@@ -1,4 +1,4 @@
-import { MouseEvent, useRef, useState } from 'react';
+import { MouseEvent, useEffect, useRef, useState } from 'react';
 import AvatarWithInitials from '../../../avatar/AvatarWithInitials';
 import { RiPlayFill, RiStopFill } from 'react-icons/ri';
 import { VideoControlModal } from './VideoControlModal';
@@ -7,6 +7,7 @@ import AvatarWithImage from '../../../avatar/AvatarWithImage';
 import PopAssignModal from '../../../../pages/workspace/tasks/assignTask/popAssignModal';
 import { IAttachments } from '../../../../features/workspace/workspace.interfaces';
 import dayjs from 'dayjs';
+import { attachmentData } from '../../../../features/task/interface.tasks';
 
 interface Props {
   timeData?: IAttachments;
@@ -20,6 +21,7 @@ export default function VideoEntries({ timeData: data }: Props) {
   const [anchorEls, setAnchorEls] = useState<(HTMLTableCellElement | null)[]>(
     new Array(data?.data.attachments.length).fill(null)
   );
+  const [videoAttachments, setVideoAttachments] = useState<attachmentData[]>([]);
 
   const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
   const targetElementRef = useRef<HTMLTableCellElement>(null);
@@ -73,6 +75,15 @@ export default function VideoEntries({ timeData: data }: Props) {
     }
   };
 
+  useEffect(() => {
+    if (data) {
+      const validAttachments = data?.data.attachments.filter((attachment) => {
+        return ['webm', 'mp4', 'mov'].includes(attachment.physical_file.file_format.extension);
+      });
+      setVideoAttachments(validAttachments);
+    }
+  }, [data]);
+
   return (
     <table className="w-full p-1 mx-auto">
       <thead>
@@ -85,7 +96,7 @@ export default function VideoEntries({ timeData: data }: Props) {
       </thead>
       <tbody>
         <div className="relative overflow-y-auto max-h-40">
-          {data?.data.attachments.map((videoFile, index) => {
+          {videoAttachments.map((videoFile, index) => {
             const { created_at, updated_at, file_format } = videoFile.physical_file;
             const { color, initials, avatar_path } = videoFile.team_member.user;
             const duration = dayjs(updated_at).diff(created_at);
