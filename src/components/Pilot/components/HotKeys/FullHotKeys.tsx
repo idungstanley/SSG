@@ -76,23 +76,22 @@ export default function FullHotkeysList({ tabs, showModal, setShowModal }: Hotke
   return (
     <>
       {activeHotkeyIds.length !== 0 ? (
-        <div className="flex items-center p-1 border-b">
-          <div className="pl-1 pr-2">
+        <div className="flex items-center border-b bg-alsoit-gray-125">
+          <div className="pr-2" style={{ paddingLeft: '5px' }}>
             <SlideToggle activeSlide={activeSlide} fullCount={slidesCount} setActiveSlide={setActiveSlide} />
           </div>
           <div className="flex flex-row w-full col-span-1">
             {hotkeys.map((hotkey) => (
               <div key={hotkey.label}>
-                <ToolTip title={hotkey.label}>
+                <ToolTip placement="right" title={hotkey.label}>
                   <div>
                     <button
                       onClick={() => dispatch(setActiveTabId(activeTabId === hotkey.id ? undefined : hotkey.id))}
-                      title={hotkey.label}
                       className={cl(
                         activeTabId === hotkey.id ? 'text-primary-500 bg-primary-200' : 'text-gray-600',
-                        'mx-2 my-1 flex items-center justify-center border-0 px-1 py-1 rounded-md transition duration-500 hover:bg-alsoit-gray-125'
+                        'flex items-center justify-center border-0 rounded-md transition duration-500 hover:bg-white'
                       )}
-                      style={{ width: '30px', height: '30px' }}
+                      style={{ width: '32px', height: '30px', margin: '0 12px 0 3px' }}
                       key={hotkey.id}
                     >
                       {hotkey.icon}

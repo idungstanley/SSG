@@ -99,22 +99,22 @@ const tabs = [
   {
     id: pilotTabs.DETAILS,
     label: 'Details',
-    icon: <InformationCircleIcon className="w-4 h-4" />
+    icon: <InformationCircleIcon className="w-5 h-5" />
   },
   {
     id: pilotTabs.LOGS,
     label: 'Logs',
-    icon: <DocumentTextIcon className="w-4 h-4" />
+    icon: <DocumentTextIcon className="w-5 h-5" />
   },
   {
     id: pilotTabs.WATCHERS,
     label: 'Watchers',
-    icon: <EyeIcon className="w-4 h-4" />
+    icon: <EyeIcon className="w-5 h-5" />
   },
   {
     id: pilotTabs.CONNECT,
     label: 'Connect',
-    icon: <SignalIcon className="w-4 h-4" />
+    icon: <SignalIcon className="w-5 h-5" />
   },
   {
     id: pilotTabs.UTILITIES,
@@ -124,7 +124,7 @@ const tabs = [
   {
     id: pilotTabs.CHECKLISTS,
     label: 'Checklist',
-    icon: <VscChecklist className="w-4 h-4" />
+    icon: <VscChecklist className="w-5 h-5" />
   },
   {
     id: pilotTabs.ENTITY_MANAGER,
