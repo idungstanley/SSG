@@ -41,8 +41,7 @@ export default function SubtaskWithCount({ width = '24px', height = '12px' }: De
           strokeLinecap="round"
           strokeLinejoin="round"
         />
-        <rect x="13.8984" y="1.5" width="9" height="9" rx="1.5" fill="#F4F4F4" />
-        <rect x="0.848828" y="0.05" width="22.9" height="11.9" rx="0.95" stroke="#B2B2B2" strokeWidth="0.1" />
+        <rect x="13.8984" y="1.5" width="15" height="20" rx="1.5" fill="#F4F4F4" />
       </svg>
     </div>
   );
