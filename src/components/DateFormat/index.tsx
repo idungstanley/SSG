@@ -8,7 +8,7 @@ import { Task } from '../../features/task/interface.tasks';
 import { setSelectedTaskParentId, setSelectedTaskType } from '../../features/task/taskSlice';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
 import { setPickedDateState } from '../../features/workspace/workspaceSlice';
-import { isDateInPast } from './CheckDate';
+import { isDateInPast, isDateSame } from './CheckDate';
 import { cl } from '../../utils';
 import { formatForDatabase } from '../../utils/calendar';
 import { Dayjs } from 'dayjs';
@@ -98,7 +98,11 @@ export default function DateFormat({ date, task, font = 'text-sm', type, isDueDa
                   x
                 </p>
                 <p className={cl(isDueDate && isDateInPast(date) ? 'text-alsoit-danger' : 'text-alsoit-gray-300')}>
-                  {moment(date as MomentInput).format(date_format?.toUpperCase())}
+                  {isDateSame(date)
+                    ? 'Today'
+                    : moment(date as MomentInput).format(
+                        date_format?.replace('mm', 'mmm').replace('ddd', 'dd').replaceAll('/', ' ').toUpperCase()
+                      )}
                 </p>
               </div>
             ) : (
