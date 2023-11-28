@@ -67,7 +67,7 @@ export default function PriorityDropdown({ taskCurrentPriority, icon }: TaskCurr
         </button>
       </div>
       <AlsoitMenuDropdown handleClose={handleCloseDropdown} anchorEl={isOpen}>
-        <div className="overflow-y-auto">
+        <div className="overflow-y-auto" key="priority">
           <div className="flex flex-col items-center justify-center w-48 px-1 py-1 text-center divide-y divide-gray-100 rounded-md shadow-lg outline-none w-fit h-fit ring-1 ring-black ring-opacity-5 focus:outline-none">
             {priorityList.map((priority) => (
               <button

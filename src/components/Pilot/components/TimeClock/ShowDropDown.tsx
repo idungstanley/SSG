@@ -6,7 +6,7 @@ import { VerticalScroll } from '../../../ScrollableContainer/VerticalScroll';
 import { SlideButton } from '../../../SlideButton';
 import DropdownWithHeader from './components/DropdownWithHeader';
 
-export function TimeShowDropDown() {
+export function ShowDropDown() {
   const [dropDown, setDropDown] = useState<{ [key: string]: boolean }>({
     nested_entities: false
   });

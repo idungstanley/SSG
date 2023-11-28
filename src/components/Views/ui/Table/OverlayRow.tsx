@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import SubtasksIcon from '../../../../assets/icons/SubtasksIcon';
 import { Tag, Task } from '../../../../features/task/interface.tasks';
 import { ManageTagsDropdown } from '../../../Tag/ui/ManageTagsDropdown/ui/ManageTagsDropdown';
@@ -16,13 +15,10 @@ interface OverlayRowProps {
 
 export function OverlayRow({ task, columns }: OverlayRowProps) {
   const otherColumns = columns.slice(1);
-  const [hoverOn, setHoverOn] = useState(false);
 
   return (
     <div style={{ minWidth: 500, display: 'grid', gridTemplateColumns: generateGrid(columns.length) }}>
       <StickyCol
-        hoverOn={hoverOn}
-        setHoverOn={setHoverOn}
         showSubTasks={false}
         setShowSubTasks={() => ({})}
         style={{ zIndex: 10 }}

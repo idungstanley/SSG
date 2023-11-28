@@ -17,23 +17,23 @@ import { BsChatLeftText } from 'react-icons/bs';
 import CommentIcon from '../../../../../assets/icons/CommentIcon';
 
 export const communicationOptions = [
+  { id: pilotTabs.CHAT, name: 'Chat', icon: <BsChatLeftText className="w-4 h-4" />, isVisible: false },
+  {
+    id: pilotTabs.COMMENTS,
+    name: 'Comment',
+    icon: <CommentIcon />,
+    isVisible: false
+  },
   {
     id: pilotTabs.EMAIL,
     name: 'Email',
     icon: <MdAlternateEmail className="w-4 h-4" />,
     isVisible: false
   },
-  { id: pilotTabs.CHAT, name: 'Chat', icon: <BsChatLeftText className="w-4 h-4" />, isVisible: false },
   {
     id: pilotTabs.PHONE,
     name: 'Phone',
     icon: <MdOutlineCall className="w-4 h-4" />,
-    isVisible: false
-  },
-  {
-    id: pilotTabs.COMMENTS,
-    name: 'Comment',
-    icon: <CommentIcon />,
     isVisible: false
   }
 ];

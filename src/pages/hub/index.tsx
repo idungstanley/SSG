@@ -49,7 +49,6 @@ export default function HubPage() {
   const {
     tasks: tasksStore,
     saveSettingLocal,
-    subtasks,
     scrollGroupView,
     keyBoardSelectedIndex,
     taskColumnIndex,
@@ -172,12 +171,12 @@ export default function HubPage() {
 
   useEffect(() => {
     if (Object.keys(lists).length) {
-      dispatch(setTasks({ ...tasksStore, ...lists }));
+      dispatch(setTasks(lists));
 
       const newSubtasksArr = generateSubtasksArray(lists);
       if (newSubtasksArr.length) {
         const newSubtasks = generateSubtasksList(newSubtasksArr, hub?.data.hub as IHubDetails);
-        dispatch(setSubtasks({ ...subtasks, ...newSubtasks }));
+        dispatch(setSubtasks(newSubtasks));
       }
     }
   }, [lists]);
@@ -190,7 +189,7 @@ export default function HubPage() {
   const handleScroll = (e: UIEvent<HTMLDivElement>) => {
     if (hasNextPage && !isFetching) {
       const container = e.target as HTMLElement;
-      const scrollPositionForLoading = 0.9;
+      const scrollPositionForLoading = 0.7;
       const scrollDifference =
         container?.scrollHeight * scrollPositionForLoading - container.scrollTop - container.clientHeight;
       const range = 1;
@@ -214,7 +213,7 @@ export default function HubPage() {
         additional={<FilterByAssigneesSliderOver />}
       >
         <Header />
-        {isLoading || isFetching ? (
+        {(isLoading || isFetching) && !Object.keys(lists).length ? (
           <div
             className="flex items-center justify-center w-full h-full mx-auto mt-5"
             style={{ minHeight: '0', maxHeight: '83vh' }}
@@ -226,7 +225,7 @@ export default function HubPage() {
             <VerticalScroll onScroll={onScroll}>
               <section
                 style={{ minHeight: '0', maxHeight: '83vh' }}
-                className="w-full h-full py-4 pb-0 pl-5 pr-1 space-y-10"
+                className="w-full h-full py-4 pb-0 pl-5 space-y-10"
               >
                 {/* lists */}
                 {Object.keys(lists).map((listId) => (

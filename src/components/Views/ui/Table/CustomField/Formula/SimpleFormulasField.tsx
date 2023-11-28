@@ -198,25 +198,27 @@ function SimpleFormulasField({
             </Button>
           </div>
           <Menu anchorEl={anchorOne} open={!!anchorOne} onClose={() => setAnchorOne(null)}>
-            {currentFieldColumns.length ? (
-              <>
-                {currentFieldColumns.map((field) => (
-                  <div
-                    key={field.id}
-                    className="flex px-2 py-1 w-44 cursor-pointer hover:bg-gray-100"
-                    onClick={() => {
-                      setSelectedItemOne({ id: field.id, name: field.name, value: '' });
-                      setAnchorOne(null);
-                    }}
-                  >
-                    <span className="flex justify-center align-center mx-1 w-5 h-5">{renderItemIcon(field)}</span>
-                    {field.name}
-                  </div>
-                ))}
-              </>
-            ) : (
-              <></>
-            )}
+            <div key="itemOne">
+              {currentFieldColumns.length ? (
+                <>
+                  {currentFieldColumns.map((field) => (
+                    <div
+                      key={field.id}
+                      className="flex px-2 py-1 w-44 cursor-pointer hover:bg-gray-100"
+                      onClick={() => {
+                        setSelectedItemOne({ id: field.id, name: field.name, value: '' });
+                        setAnchorOne(null);
+                      }}
+                    >
+                      <span className="flex justify-center align-center mx-1 w-5 h-5">{renderItemIcon(field)}</span>
+                      {field.name}
+                    </div>
+                  ))}
+                </>
+              ) : (
+                <></>
+              )}
+            </div>
           </Menu>
         </div>
         <div>
@@ -251,25 +253,27 @@ function SimpleFormulasField({
             </Button>
           </div>
           <Menu anchorEl={anchorTwo} open={!!anchorTwo} onClose={() => setAnchorTwo(null)}>
-            {currentFieldColumns.length ? (
-              <>
-                {currentFieldColumns.map((field) => (
-                  <div
-                    key={field.id}
-                    className="flex px-2 py-1 w-44 cursor-pointer hover:bg-gray-100"
-                    onClick={() => {
-                      setSelectedItemTwo({ id: field.id, name: field.name, value: '' });
-                      setAnchorTwo(null);
-                    }}
-                  >
-                    <span className="flex justify-center align-center mx-1 w-5 h-5">{renderItemIcon(field)}</span>
-                    {field.name}
-                  </div>
-                ))}
-              </>
-            ) : (
-              <></>
-            )}
+            <div key="ItemTwo">
+              {currentFieldColumns.length ? (
+                <>
+                  {currentFieldColumns.map((field) => (
+                    <div
+                      key={field.id}
+                      className="flex px-2 py-1 w-44 cursor-pointer hover:bg-gray-100"
+                      onClick={() => {
+                        setSelectedItemTwo({ id: field.id, name: field.name, value: '' });
+                        setAnchorTwo(null);
+                      }}
+                    >
+                      <span className="flex justify-center align-center mx-1 w-5 h-5">{renderItemIcon(field)}</span>
+                      {field.name}
+                    </div>
+                  ))}
+                </>
+              ) : (
+                <></>
+              )}
+            </div>
           </Menu>
         </div>
       </div>

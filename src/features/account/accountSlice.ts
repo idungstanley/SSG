@@ -1,18 +1,22 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { initialPlaces } from '../../layout/components/MainLayout/Sidebar/components/Places';
 import { IUserParams, IUserState, Place } from './account.interfaces';
-import { STORAGE_KEYS } from '../../app/config/dimensions';
+import { dimensions, STORAGE_KEYS } from '../../app/config/dimensions';
 import { IPaletteData } from '../workspace/workspace.interfaces';
 
 const showPreviewFromLS = localStorage.getItem('showPreview') as string;
 
 const sidebarFromLS = localStorage.getItem('sidebar');
 //get sidebar width from local storage
-const sidebarWidthFromLS = JSON.parse(localStorage.getItem(STORAGE_KEYS.SIDEBAR_WIDTH) || '""') as number;
+const sidebarWidthFromLS =
+  (JSON.parse(localStorage.getItem(STORAGE_KEYS.SIDEBAR_WIDTH) || '""') as number) || dimensions.navigationBar.default;
 
-const pilotWidthFromLS = JSON.parse(localStorage.getItem(STORAGE_KEYS.PILOT_WIDTH) || '""') as number;
+const pilotWidthFromLS =
+  (JSON.parse(localStorage.getItem(STORAGE_KEYS.PILOT_WIDTH) || '""') as number) || dimensions.pilot.default;
 
-const extendedBarWidthFromLS = JSON.parse(localStorage.getItem(STORAGE_KEYS.EXTENDED_BAR_WIDTH) || '""') as number;
+const extendedBarWidthFromLS =
+  (JSON.parse(localStorage.getItem(STORAGE_KEYS.EXTENDED_BAR_WIDTH) || '""') as number) ||
+  dimensions.extendedBar.default;
 
 const hotKeysFromLS = JSON.parse(localStorage.getItem(STORAGE_KEYS.HOT_KEYS) || '""') as string[];
 
@@ -51,7 +55,7 @@ interface AccountState {
   scrollTop: string | number;
   baseColor: string;
   lightBaseColor: string;
-  userSettingsData?: IUserParams;
+  userSettingsData: IUserParams;
   places: Place[];
   selectListColours: string[];
   calculatedContentWidth: string;
@@ -104,11 +108,22 @@ export const accountSlice = createSlice({
       state.userSettingsData = action.payload;
     },
     setAdjustableWidths: (state, action: PayloadAction<AjustableWidths>) => {
-      state.sidebarWidth = action.payload.sidebarWidth ? action.payload.sidebarWidth : sidebarWidthFromLS;
-      state.extendedBarWidth = action.payload.extendedBarWidth
+      state.userSettingsData.sidebarWidth = action.payload.sidebarWidth
+        ? action.payload.sidebarWidth
+        : sidebarWidthFromLS;
+      state.userSettingsData.extendedBarWidth = action.payload.extendedBarWidth
         ? action.payload.extendedBarWidth
         : extendedBarWidthFromLS;
-      state.pilotWidth = action.payload.pilotWidth ? action.payload.pilotWidth : pilotWidthFromLS;
+      state.userSettingsData.pilotWidth = action.payload.pilotWidth;
+    },
+    setAdjustablePilotWidths: (state, action: PayloadAction<number>) => {
+      state.pilotWidth = action.payload;
+    },
+    setAdjustableSidebarWidths: (state, action: PayloadAction<number>) => {
+      state.sidebarWidth = action.payload;
+    },
+    setAdjustableExtendedBarWidths: (state, action: PayloadAction<number>) => {
+      state.extendedBarWidth = action.payload;
     },
     setShowSidebar: (state, action: PayloadAction<boolean>) => {
       state.showSidebar = action.payload;
@@ -149,7 +164,10 @@ export const {
   setCalculatedContentWidth,
   setSelectedListColours,
   setColourPaletteData,
-  setAdjustableWidths
+  setAdjustableWidths,
+  setAdjustableExtendedBarWidths,
+  setAdjustablePilotWidths,
+  setAdjustableSidebarWidths
 } = accountSlice.actions;
 
 export default accountSlice.reducer;

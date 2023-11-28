@@ -77,7 +77,7 @@ export default function SubtabDrag({ id, item, items, icon, showPilot, activeSub
             id === activeSub && !showPilot && 'bg-green-500 p-2 rounded'
           } flex items-center gap-1 w-full overflow-hidden`}
         >
-          <span className="focus:cursor-move" ref={setNodeRef} {...attributes} {...listeners}>
+          <span className="pl-1 focus:cursor-move" ref={setNodeRef} {...attributes} {...listeners}>
             {icon ? icon : <img src={source} alt="Hub Icon" className="w-2 h-2" />}
           </span>
           {item && <p className="whitespace-nowrap">{item.name}</p>}
