@@ -14,28 +14,40 @@ import {
 import { arrayMove, rectSortingStrategy, SortableContext, sortableKeyboardCoordinates } from '@dnd-kit/sortable';
 import { pilotTabs } from '../../../../../app/constants/pilotTabs';
 import { BsChatLeftText } from 'react-icons/bs';
-import CommentIcon from '../../../../../assets/icons/CommentIcon';
+// import CommentIcon from '../../../../../assets/icons/CommentIcon';
 
 export const communicationOptions = [
-  { id: pilotTabs.CHAT, name: 'Chat', icon: <BsChatLeftText className="w-4 h-4" />, isVisible: true },
-  {
-    id: pilotTabs.COMMENTS,
-    name: 'Comment',
-    icon: <CommentIcon />,
-    isVisible: true
-  },
   {
     id: pilotTabs.EMAIL,
     name: 'Email',
     icon: <MdAlternateEmail className="w-4 h-4" />,
-    isVisible: true
+    isVisible: false
   },
+  { id: pilotTabs.CHAT, name: 'Chat', icon: <BsChatLeftText className="w-4 h-4" />, isVisible: true },
   {
-    id: pilotTabs.VOICE_CALL,
-    name: 'Voice Call',
+    id: pilotTabs.PHONE,
+    name: 'Phone',
     icon: <MdOutlineCall className="w-4 h-4" />,
-    isVisible: true
+    isVisible: false
   }
+  // {
+  //   id: pilotTabs.COMMENTS,
+  //   name: 'Comment',
+  //   icon: <CommentIcon />,
+  //   isVisible: true
+  // },
+  // {
+  //   id: pilotTabs.EMAIL,
+  //   name: 'Email',
+  //   icon: <MdAlternateEmail className="w-4 h-4" />,
+  //   isVisible: true
+  // }
+  // // {
+  // //   id: pilotTabs.VOICE_CALL,
+  // //   name: 'Voice Call',
+  // //   icon: <MdOutlineCall className="w-4 h-4" />,
+  // //   isVisible: true
+  // // }
 ];
 export default function CommunicationSubTab() {
   const idsFromLS: string[] = JSON.parse(localStorage.getItem('subTab') || '[]') as string[];
