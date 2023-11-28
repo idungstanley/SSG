@@ -25,8 +25,8 @@ export const communicationOptions = [
   },
   { id: pilotTabs.CHAT, name: 'Chat', icon: <BsChatLeftText className="w-4 h-4" />, isVisible: false },
   {
-    id: pilotTabs.VOICE_CALL,
-    name: 'Voice Call',
+    id: pilotTabs.PHONE,
+    name: 'Phone',
     icon: <MdOutlineCall className="w-4 h-4" />,
     isVisible: false
   },
