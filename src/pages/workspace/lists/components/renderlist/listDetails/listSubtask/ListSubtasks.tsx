@@ -9,8 +9,8 @@ import {
   setToggleAllSubtaskSplit
 } from '../../../../../../../features/task/taskSlice';
 import ArrowDownFilled from '../../../../../../../assets/icons/ArrowDownFilled';
-import ArrowDrop from '../../../../../../../assets/icons/ArrowDrop';
 import { Menu } from '@mui/material';
+import ArrowOpenDown from '../../../../../../../assets/icons/ArrowOpenDown';
 
 export const COLLAPSE_ALL_TWO = 'collapse_all_two';
 export const COLLAPSE_ALL_THREE = 'collapse_all_three';
@@ -134,7 +134,7 @@ export default function ListSubtasks({ subtasksTitle }: { subtasksTitle: string 
   ];
 
   const [activeViewId, setActiveViewId] = useState<string>(viewSettings[0].id);
-  const [activeLabel, setActiveLabel] = useState<string>(viewSettings[0].label);
+  // const [activeLabel, setActiveLabel] = useState<string>(viewSettings[0].label);
   const [activeViewSetting, setActiveViewSetting] = useState<IViewSetting>();
 
   return (
@@ -147,10 +147,10 @@ export default function ListSubtasks({ subtasksTitle }: { subtasksTitle: string 
           <HeadMenu.Button>
             <Button active={toggleAllSubtask}>
               <SubtaskIcon color={toggleAllSubtask ? '#BF01FE' : '#424242'} />
-              <span className="whitespace-nowrap">
-                {subtasksTitle}: {activeLabel}
+              <span className="whitespace-nowrap">{subtasksTitle}</span>
+              <span className="px-1">
+                <ArrowOpenDown color="black" />
               </span>
-              <ArrowDrop color={toggleAllSubtask ? '#BF01FE' : '#424242'} />
             </Button>
           </HeadMenu.Button>
         </HeadMenu>
@@ -170,7 +170,7 @@ export default function ListSubtasks({ subtasksTitle }: { subtasksTitle: string 
                       : 'flex items-center text-sm text-gray-600 text-left w-full'
                   }`}
                   onClick={() => {
-                    setActiveLabel(view.label);
+                    // setActiveLabel(view.label);
                     setActiveViewId(view.id);
                   }}
                 >
