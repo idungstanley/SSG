@@ -1,8 +1,10 @@
 import { Fragment, ReactNode, useEffect, useState } from 'react';
-import { BsChevronRight, BsThreeDotsVertical } from 'react-icons/bs';
+import { BsThreeDotsVertical } from 'react-icons/bs';
 import Button from '../../../Buttons/Button';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { useSwitchSettings } from '../../../../pages/workspace/tasks/TaskSettingsModal/ShowSettingsModal/SwitchSettings';
+import DropdownTitle from '../../../DropDowns/DropdownTitle';
+import DropdownSubtitle from '../../../DropDowns/DropdownSubtitle';
 import {
   THREE_SUBTASKS_LEVELS,
   TWO_SUBTASKS_LEVELS,
@@ -118,9 +120,9 @@ export default function ListSettingsModal({ itemsArray }: IShowHideSettings) {
       </div>
 
       <AlsoitMenuDropdown handleClose={handleCloseDropdown} anchorEl={isOpen}>
-        <div className="flex justify-between items-center mx-auto mt-4" style={{ width: '93%' }}>
-          <p className="text-sm">VIEW SETTINGS</p>
-          <BsChevronRight />
+        <div className="items-center mx-auto font-bold" style={{ width: '93%' }}>
+          <DropdownTitle content="VIEW" />
+          <DropdownSubtitle content="SETTINGS" />
         </div>
 
         {itemsArray.map((view, index) => (
@@ -131,8 +133,8 @@ export default function ListSettingsModal({ itemsArray }: IShowHideSettings) {
             >
               <button className={'flex justify-between items-center w-full group '}>
                 <div className="flex items-center space-x-2 pl-2 text-md whitespace-nowrap">
-                  <p className="flex items-center space-x-2 pl-2 text-md whitespace-nowrap">{view.icon}</p>
-                  <p>{view.label}</p>
+                  <p className="flex items-center space-x-2 pl-1 text-md whitespace-nowrap">{view.icon}</p>
+                  <p className="pr-2">{view.label}</p>
                 </div>
                 <p className="flex items-center pr-2 ">
                   <label className="switch" onClick={(event) => event.stopPropagation()}>
